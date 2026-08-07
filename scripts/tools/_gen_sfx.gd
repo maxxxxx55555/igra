@@ -30,6 +30,13 @@ func _ready() -> void:
 	# equipment
 	made += _flashlight_on()
 	made += _flashlight_off()
+	made += _click()
+	made += _shoot()
+	made += _hit()
+	made += _hurt()
+	made += _jump()
+	made += _reload()
+	made += _step()
 	# S9.3 monster cues
 	made += _shadow_teleport()
 	made += _crawler_scratch()
@@ -233,6 +240,61 @@ func _wind_ambient() -> int:
 	return _save("amb_wind", true)
 
 # ---------------- equipment ----------------
+
+## UI click: short high tick.
+func _click() -> int:
+	_new(0.08)
+	_noise(0.0, 0.04, 0.50, 6000.0, 0.005, 0.0003)
+	_tone(0.0, 3200.0, 0.25, 0.008, 0.0004)
+	return _save("sfx_click")
+
+## Gunshot: low thump + noise crack.
+func _shoot() -> int:
+	_new(0.20)
+	_tone(0.0, 120.0, 0.60, 0.06, 0.001)
+	_noise(0.0, 0.08, 0.55, 8000.0, 0.015, 0.0002)
+	_noise(0.02, 0.10, 0.30, 4000.0, 0.04, 0.001)
+	return _save("sfx_shoot")
+
+## Melee hit: impact thump + ring.
+func _hit() -> int:
+	_new(0.15)
+	_tone(0.0, 180.0, 0.55, 0.08, 0.001)
+	_tone(0.0, 800.0, 0.30, 0.04, 0.0015)
+	_noise(0.0, 0.10, 0.40, 5000.0, 0.025, 0.0008)
+	return _save("sfx_hit")
+
+## Player hurt: short low tone + noise.
+func _hurt() -> int:
+	_new(0.18)
+	_tone(0.0, 220.0, 0.45, 0.10, 0.001)
+	_tone(0.0, 440.0, 0.20, 0.06, 0.002)
+	_noise(0.0, 0.12, 0.30, 2000.0, 0.05, 0.001)
+	return _save("sfx_hurt")
+
+## Jump: quick whoosh up.
+func _jump() -> int:
+	_new(0.15)
+	_sweep(0.0, 0.10, 200.0, 800.0, 0.35, 0.7)
+	_noise(0.0, 0.10, 0.30, 3000.0, 0.03, 0.001)
+	return _save("sfx_jump")
+
+## Reload: mechanical clack + spring.
+func _reload() -> int:
+	_new(0.30)
+	_noise(0.0, 0.05, 0.45, 7000.0, 0.006, 0.0003)
+	_tone(0.08, 400.0, 0.30, 0.04, 0.001)
+	_noise(0.15, 0.06, 0.40, 5000.0, 0.008, 0.0004)
+	_tone(0.22, 300.0, 0.25, 0.03, 0.001)
+	return _save("sfx_reload")
+
+## Generic footstep (fallback).
+func _step() -> int:
+	_new(0.12)
+	_tone(0.0, 55.0, 0.50, 0.05, 0.001)
+	_tone(0.0, 200.0, 0.35, 0.04, 0.0015)
+	_noise(0.0, 0.12, 0.40, 1500.0, 0.03, 0.001)
+	return _save("sfx_step")
 
 ## Flashlight on: switch snap + short high tick.
 func _flashlight_on() -> int:
