@@ -71,6 +71,10 @@ func _ready() -> void:
 	enemy_hp_bar.visible = false
 	prompt.visible = false
 	_setup_weight_bar()
+	$BtnPause.pressed.connect(_on_pause)
+	_add_map_button()
+	EventBus.game_state_changed.connect(_on_game_state)
+	_on_game_state(int(GameManager.current_state))
 
 func _setup_weight_bar() -> void:
 	var w := $WeightBar
@@ -116,19 +120,6 @@ func _set_weight_color(w: Control, ratio: float) -> void:
 		w.modulate = Color(0.788, 0.635, 0.290)
 	else:
 		w.modulate = Color(0.706, 0.271, 0.184)
-	$BtnPause.pressed.connect(_on_pause)
-
-	var stealth_label := Label.new()
-	stealth_label.name = "StealthLabel"
-	stealth_label.text = "СКРЫТНО"
-	stealth_label.add_theme_color_override("font_color", Color(0.682, 0.714, 0.749))
-	stealth_label.add_theme_font_size_override("font_size", 14)
-	stealth_label.position = Vector2(10, 60)
-	$BottomRight.add_child(stealth_label)
-
-	_add_map_button()
-	EventBus.game_state_changed.connect(_on_game_state)
-	_on_game_state(int(GameManager.current_state))
 
 func _on_game_state(state: int) -> void:
 	visible = state == GameManager.GameState.PLAYING or state == GameManager.GameState.PAUSED
