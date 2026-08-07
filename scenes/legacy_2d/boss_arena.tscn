@@ -1,0 +1,93 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/player_fps.tscn" id="1_player"]
+[ext_resource type="Script" path="res://scripts/boss/boss_controller.gd" id="2_boss"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/minion.tscn" id="3_minion"]
+[ext_resource type="Script" path="res://scripts/systems/wave_manager.gd" id="4_waves"]
+
+[sub_resource type="Environment" id="ArenaEnv"]
+background_color = Color(0.05, 0.0, 0.0, 1)
+ambient_light_color = Color(0.2, 0.05, 0.05, 1)
+ambient_light_energy = 0.4
+fog_enabled = true
+fog_light_color = Color(0.1, 0.0, 0.0, 1)
+fog_density = 0.05
+
+[sub_resource type="SphereShape3D" id="lava_shape"]
+radius = 3.0
+
+[node name="BossArena" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("ArenaEnv")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.707107, 0.707107, 0, -0.707107, -0.707107, 0, 10, 0)
+light_color = Color(1, 0.2, 0.2, 1)
+light_energy = 0.8
+shadow_enabled = false
+
+[node name="PlayerFPS" parent="." instance=ExtResource("1_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Boss" type="CharacterBody3D" parent="."]
+script = ExtResource("2_boss")
+minion_scene = ExtResource("3_minion")
+max_hp = 1000.0
+rush_speed = 8.0
+normal_speed = 4.0
+attack_damage = 25.0
+attack_cooldown = 2.0
+minions_per_wave = 4
+minion_spawn_cooldown = 10.0
+
+[node name="SpawnPoints" type="Node3D" parent="Boss"]
+
+[node name="Spawn1" type="Marker3D" parent="Boss/SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, -10)
+
+[node name="Spawn2" type="Marker3D" parent="Boss/SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, -10)
+
+[node name="Spawn3" type="Marker3D" parent="Boss/SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
+
+[node name="ArenaHazards" type="Node3D" parent="."]
+
+[node name="LavaPool1" type="Area3D" parent="ArenaHazards"]
+position = Vector3(-5, 0, -5)
+
+[node name="LavaCollision1" type="CollisionShape3D" parent="ArenaHazards/LavaPool1"]
+shape = SubResource("lava_shape")
+
+[node name="LavaDamage1" type="Timer" parent="ArenaHazards/LavaPool1"]
+wait_time = 1.0
+autostart = true
+one_shot = false
+
+[node name="LavaPool2" type="Area3D" parent="ArenaHazards"]
+position = Vector3(5, 0, 5)
+
+[node name="LavaCollision2" type="CollisionShape3D" parent="ArenaHazards/LavaPool2"]
+shape = SubResource("lava_shape")
+
+[node name="LavaDamage2" type="Timer" parent="ArenaHazards/LavaPool2"]
+wait_time = 1.0
+autostart = true
+one_shot = false
+
+[node name="ArenaFloor" type="StaticBody3D" parent="."]
+
+[node name="ArenaFloorCollision" type="CollisionShape3D" parent="ArenaFloor"]
+
+[node name="WaveManager" type="Node3D" parent="."]
+script = ExtResource("4_waves")
+
+[node name="Spawn1" type="Marker3D" parent="WaveManager"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, -10)
+
+[node name="Spawn2" type="Marker3D" parent="WaveManager"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, -10)
+
+[node name="Spawn3" type="Marker3D" parent="WaveManager"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)

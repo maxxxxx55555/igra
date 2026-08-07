@@ -1,0 +1,66 @@
+# Locale: ja  -- THE_LAST_STREETLIGHT
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: ja\n"
+
+msgid "cancel"
+msgstr "キャンセル"
+
+msgid "confirm"
+msgstr "確認"
+
+msgid "hud_coins"
+msgstr "コイン"
+
+msgid "hud_district"
+msgstr "地区"
+
+msgid "hud_lives"
+msgstr "ライフ"
+
+msgid "hud_power"
+msgstr "電力"
+
+msgid "interact_shop"
+msgstr "ショップ"
+
+msgid "interact_switch"
+msgstr "スイッチ"
+
+msgid "menu_host"
+msgstr "LANホスト"
+
+msgid "menu_join"
+msgstr "LAN参加"
+
+msgid "menu_play"
+msgstr "プレイ"
+
+msgid "menu_quit"
+msgstr "終了"
+
+msgid "msg_caught"
+msgstr "捕まりました!"
+
+msgid "msg_lose"
+msgstr "失敗..."
+
+msgid "msg_saved"
+msgstr "セーブしました"
+
+msgid "msg_win"
+msgstr "全地区点灯!"
+
+msgid "shop_battery"
+msgstr "バッテリー+25%"
+
+msgid "shop_medkit"
+msgstr "救急キット"
+
+msgid "shop_not_enough"
+msgstr "コイン不足"
+
+msgid "shop_stamina"
+msgstr "スタミナ"
+

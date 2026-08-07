@@ -1,0 +1,49 @@
+﻿{
+    "autosave_on_purchase":  true,
+    "reward_per_quest":  50,
+    "reward_per_secret":  25,
+    "reward_per_enemy":  5,
+    "items":  [
+                  {
+                      "price":  30,
+                      "category":  "consumable",
+                      "id":  "medkit"
+                  },
+                  {
+                      "price":  20,
+                      "category":  "consumable",
+                      "id":  "ammo_pack"
+                  },
+                  {
+                      "price":  80,
+                      "category":  "weapon_mod",
+                      "id":  "scope_lens"
+                  },
+                  {
+                      "price":  60,
+                      "category":  "crafting",
+                      "id":  "radio_part"
+                  },
+                  {
+                      "price":  150,
+                      "category":  "special",
+                      "id":  "ancient_key"
+                  },
+                  {
+                      "price":  25,
+                      "category":  "crafting",
+                      "id":  "filter"
+                  },
+                  {
+                      "price":  90,
+                      "category":  "consumable",
+                      "id":  "serum"
+                  },
+                  {
+                      "price":  15,
+                      "category":  "crafting",
+                      "id":  "battery"
+                  }
+              ],
+    "starting_coins":  50
+}

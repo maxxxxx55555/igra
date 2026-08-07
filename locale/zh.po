@@ -1,0 +1,66 @@
+# Locale: zh  -- THE_LAST_STREETLIGHT
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: zh\n"
+
+msgid "cancel"
+msgstr "取消"
+
+msgid "confirm"
+msgstr "确认"
+
+msgid "hud_coins"
+msgstr "金币"
+
+msgid "hud_district"
+msgstr "区域"
+
+msgid "hud_lives"
+msgstr "生命"
+
+msgid "hud_power"
+msgstr "电力"
+
+msgid "interact_shop"
+msgstr "商店"
+
+msgid "interact_switch"
+msgstr "开关"
+
+msgid "menu_host"
+msgstr "创建LAN"
+
+msgid "menu_join"
+msgstr "加入LAN"
+
+msgid "menu_play"
+msgstr "开始"
+
+msgid "menu_quit"
+msgstr "退出"
+
+msgid "msg_caught"
+msgstr "被抓住了!"
+
+msgid "msg_lose"
+msgstr "失败..."
+
+msgid "msg_saved"
+msgstr "已保存"
+
+msgid "msg_win"
+msgstr "所有区域已点亮!"
+
+msgid "shop_battery"
+msgstr "电池+25%"
+
+msgid "shop_medkit"
+msgstr "医疗包"
+
+msgid "shop_not_enough"
+msgstr "金币不足"
+
+msgid "shop_stamina"
+msgstr "体力"
+

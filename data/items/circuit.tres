@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/inventory/item_data.gd" id="1"]
+[resource]
+script = ExtResource("1")
+id = &"circuit"
+display_name = "Плата"
+description = "Целая печатная плата. Дорогое лакомство для крафта."
+rarity = 2
+weight = 0.2
+stackable = true
+max_stack = 20
+consumable = false

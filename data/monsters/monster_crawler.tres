@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="MonsterData" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/enemies/monster_data.gd" id="1"]
+[resource]
+script = ExtResource("1")
+id = &"crawler"
+display_name = "Ползун"
+description = "Юркая тварь. Бросается на любой шум — не бегай рядом с ней."
+move_speed = 90.0
+chase_speed = 170.0
+collision_radius = 10.0
+detect_radius = 180.0
+vision_cone_deg = 360.0
+vision_range = 180.0
+noise_sensitivity = 1.6
+lose_time = 2.0
+max_hp = 25.0
+melee_damage = 6.0
+melee_range = 22.0
+body_color = Color(0.35, 0.2, 0.15, 1)

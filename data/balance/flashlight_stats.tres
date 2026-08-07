@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="FlashlightStats" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/player/flashlight_stats.gd" id="1_fs"]
+[resource]
+script = ExtResource("1_fs")
+cone_angle_deg = 52.0
+cone_length_px = 260.0
+energy_on = 1.1
+energy_ambient = 0.0
+drain_per_sec = 2.2
+stability = 1.0
+flicker_battery_threshold = 30.0
+flicker_intensity = 0.35
+blackout_chance_per_sec = 0.4
+edge_feather = 0.35
+radial_falloff = 0.20

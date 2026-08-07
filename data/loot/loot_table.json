@@ -1,0 +1,92 @@
+﻿[
+    {
+        "item_id":  "transistor",
+        "weight":  12,
+        "min_qty":  1,
+        "max_qty":  2
+    },
+    {
+        "item_id":  "gear",
+        "weight":  15,
+        "min_qty":  1,
+        "max_qty":  3
+    },
+    {
+        "item_id":  "circuit",
+        "weight":  10,
+        "min_qty":  1,
+        "max_qty":  2
+    },
+    {
+        "item_id":  "wiring",
+        "weight":  14,
+        "min_qty":  1,
+        "max_qty":  3
+    },
+    {
+        "item_id":  "gas_canister",
+        "weight":  8,
+        "min_qty":  1,
+        "max_qty":  1
+    },
+    {
+        "item_id":  "ancient_key",
+        "weight":  2,
+        "min_qty":  1,
+        "max_qty":  1
+    },
+    {
+        "item_id":  "radio_part",
+        "weight":  9,
+        "min_qty":  1,
+        "max_qty":  2
+    },
+    {
+        "item_id":  "serum",
+        "weight":  6,
+        "min_qty":  1,
+        "max_qty":  1
+    },
+    {
+        "item_id":  "motor",
+        "weight":  7,
+        "min_qty":  1,
+        "max_qty":  1
+    },
+    {
+        "item_id":  "scope_lens",
+        "weight":  5,
+        "min_qty":  1,
+        "max_qty":  1
+    },
+    {
+        "item_id":  "medkit",
+        "weight":  18,
+        "min_qty":  1,
+        "max_qty":  2
+    },
+    {
+        "item_id":  "ammo_pack",
+        "weight":  20,
+        "min_qty":  1,
+        "max_qty":  3
+    },
+    {
+        "item_id":  "battery",
+        "weight":  16,
+        "min_qty":  1,
+        "max_qty":  2
+    },
+    {
+        "item_id":  "filter",
+        "weight":  11,
+        "min_qty":  1,
+        "max_qty":  1
+    },
+    {
+        "item_id":  "coins",
+        "weight":  25,
+        "min_qty":  5,
+        "max_qty":  25
+    }
+]

@@ -1,0 +1,35 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/quest_tracker_hud.gd" id="1_q"]
+
+[node name="QuestTrackerHUD" type="Control"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_q")
+
+[node name="QPanel" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 980.0
+offset_top = 240.0
+offset_right = 1260.0
+offset_bottom = 360.0
+
+[node name="QTitle" type="Label" parent="QPanel"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 6.0
+offset_right = 272.0
+offset_bottom = 30.0
+theme_override_colors/font_color = Color(1, 0.85, 0.3, 1)
+
+[node name="QObj" type="Label" parent="QPanel"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 32.0
+offset_right = 272.0
+offset_bottom = 115.0
+autowrap_mode = 2

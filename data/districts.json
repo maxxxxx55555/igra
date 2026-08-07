@@ -1,0 +1,7 @@
+{
+  "downtown": {"name": "Centr goroda", "color": [0.3, 0.3, 0.4], "fog_density": 0.03, "ambient": [0.1, 0.1, 0.15], "enemy_types": ["watcher", "shadow"], "room_count": 6},
+  "industrial": {"name": "Zavodskoj rajon", "color": [0.4, 0.3, 0.2], "fog_density": 0.05, "ambient": [0.15, 0.1, 0.05], "enemy_types": ["tank", "runner", "watcher"], "room_count": 8},
+  "residential": {"name": "Spalnyj rajon", "color": [0.25, 0.3, 0.35], "fog_density": 0.02, "ambient": [0.08, 0.1, 0.12], "enemy_types": ["shadow", "crawler", "phantom"], "room_count": 7},
+  "harbor": {"name": "Port", "color": [0.2, 0.25, 0.3], "fog_density": 0.06, "ambient": [0.05, 0.08, 0.12], "enemy_types": ["sniper", "tank", "swarm"], "room_count": 9},
+  "underground": {"name": "Podzemelje", "color": [0.15, 0.1, 0.15], "fog_density": 0.08, "ambient": [0.05, 0.03, 0.06], "enemy_types": ["phantom", "crawler", "shadow", "swarm"], "room_count": 10}
+}

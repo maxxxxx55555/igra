@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="MonsterData" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/enemies/monster_data.gd" id="1"]
+[resource]
+script = ExtResource("1")
+id = &"boss"
+display_name = "Сердце Тьмы"
+description = "Источник катастрофы на электростанции. Свет его не берёт."
+move_speed = 70.0
+chase_speed = 120.0
+collision_radius = 22.0
+detect_radius = 360.0
+vision_cone_deg = 360.0
+vision_range = 360.0
+noise_sensitivity = 1.3
+lose_time = 8.0
+light_vulnerable = false
+max_hp = 400.0
+melee_damage = 25.0
+melee_range = 40.0
+body_color = Color(0.25, 0.05, 0.1, 1)

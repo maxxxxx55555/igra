@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ShopItem" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/economy/shop_item.gd" id="1"]
+[resource]
+script = ExtResource("1")
+id = &"coin_pack_6000"
+kind = 0
+display_name = "6000 монет"
+price_coins = 0
+coins_granted = 6000
+iap_product_id = "tls_coins_6000"
+iap_price_label = "799"

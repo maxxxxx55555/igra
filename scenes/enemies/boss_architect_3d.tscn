@@ -1,0 +1,28 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/enemies/boss_3d.gd" id="1"]
+
+[sub_resource type="CapsuleShape3D" id="col_shape"]
+radius = 0.6
+height = 2.0
+
+[sub_resource type="SphereShape3D" id="detect_area"]
+radius = 20.0
+
+[node name="BossArchitect" type="CharacterBody3D"]
+script = ExtResource("1")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("col_shape")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+path_desired_distance = 0.5
+target_desired_distance = 0.5
+
+[node name="DetectArea" type="Area3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DetectArea"]
+shape = SubResource("detect_area")
+
+[node name="LightDetect" type="Area3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LightDetect"]
+shape = SubResource("detect_area")

@@ -1,0 +1,20 @@
+.godot/
+bin/
+*.import
+*.pyc
+__pycache__/
+.aider*
+.env
+*.log
+verify_shot.png
+*.uid
+.godot/
+
+.backup/
+.freebuff/
+_BACKUPS/
+builds/
+
+
+# мусор от поломанных фикс-скриптов
+*.bak

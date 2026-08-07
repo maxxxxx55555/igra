@@ -1,0 +1,231 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/player/player_3d.gd" id="1"]
+[ext_resource type="Resource" path="res://data/balance/player_stats.tres" id="2"]
+[ext_resource type="Resource" path="res://data/balance/flashlight_stats.tres" id="3"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/step_concrete.wav" id="4_step"]
+
+[sub_resource type="CapsuleShape3D" id="capsule_shape"]
+radius = 0.3
+height = 1.8
+
+[sub_resource type="StandardMaterial3D" id="body_mat"]
+albedo_color = Color(0.290, 0.310, 0.341, 0.0)
+transparency = 1
+
+[sub_resource type="StandardMaterial3D" id="torso_mat"]
+albedo_color = Color(0.125, 0.141, 0.165, 1.0)
+
+[sub_resource type="StandardMaterial3D" id="head_mat"]
+albedo_color = Color(0.165, 0.149, 0.133, 1.0)
+
+[sub_resource type="StandardMaterial3D" id="hood_mat"]
+albedo_color = Color(0.094, 0.106, 0.125, 1.0)
+
+[sub_resource type="StandardMaterial3D" id="limb_mat"]
+albedo_color = Color(0.110, 0.125, 0.145, 1.0)
+
+[sub_resource type="StandardMaterial3D" id="flashlight_mat"]
+albedo_color = Color(0.227, 0.227, 0.227, 1.0)
+
+[sub_resource type="BoxMesh" id="torso_mesh"]
+size = Vector3(0.45, 0.6, 0.3)
+material = SubResource("torso_mat")
+
+[sub_resource type="SphereMesh" id="head_mesh"]
+radius = 0.18
+height = 0.36
+material = SubResource("head_mat")
+
+[sub_resource type="BoxMesh" id="arm_mesh"]
+size = Vector3(0.12, 0.55, 0.12)
+material = SubResource("limb_mat")
+
+[sub_resource type="BoxMesh" id="leg_mesh"]
+size = Vector3(0.14, 0.6, 0.14)
+material = SubResource("limb_mat")
+
+[sub_resource type="CylinderMesh" id="flashlight_cyl_mesh"]
+top_radius = 0.025
+bottom_radius = 0.025
+height = 0.2
+material = SubResource("flashlight_mat")
+
+[sub_resource type="CapsuleMesh" id="body_mesh"]
+material = SubResource("body_mat")
+radius = 0.3
+mid_height = 0.9
+
+[sub_resource type="CylinderMesh" id="cone_mesh"]
+top_radius = 0.0
+bottom_radius = 1.2
+height = 2.5
+
+[sub_resource type="Shader" id="cone_shader"]
+resource_local_to_scene = true
+code = "shader_type spatial;
+render_mode blend_add, unshaded, shadows_disabled;
+
+uniform vec4 cone_color : source_color = vec4(1.0, 0.81, 0.48, 1.0);
+
+void fragment() {
+    float along = clamp((VERTEX.y + 1.25) / 2.5, 0.0, 1.0);
+    vec3 warm = vec3(1.0, 0.81, 0.48);
+    vec3 hot = vec3(1.0, 0.95, 0.82);
+    vec3 col = mix(warm, hot, 1.0 - along);
+    ALBEDO = col * 2.5;
+    ALPHA = (1.0 - along) * 0.85;
+}"
+
+[sub_resource type="ShaderMaterial" id="cone_mat"]
+resource_local_to_scene = true
+shader = SubResource("cone_shader")
+
+[sub_resource type="BoxMesh" id="backpack_mesh"]
+size = Vector3(0.4, 0.5, 0.3)
+
+[sub_resource type="StandardMaterial3D" id="backpack_mat"]
+albedo_color = Color(0.125, 0.141, 0.165, 1.0)
+
+[sub_resource type="CylinderMesh" id="hand_mesh"]
+top_radius = 0.025
+bottom_radius = 0.025
+height = 0.2
+
+[sub_resource type="StandardMaterial3D" id="hand_mat"]
+albedo_color = Color(0.227, 0.227, 0.227, 1.0)
+
+[sub_resource type="ParticleProcessMaterial" id="dust_mat"]
+emission_shape = 2
+emission_box_extents = Vector3(0.25, 0.15, 1.0)
+color = Color(1.0, 0.85, 0.627, 1.0)
+
+[sub_resource type="StandardMaterial3D" id="dust_mesh_mat"]
+blend_mode = 1
+vertex_color_use_as_albedo = true
+
+[sub_resource type="QuadMesh" id="dust_mesh"]
+size = Vector2(0.12, 0.12)
+material = SubResource("dust_mesh_mat")
+
+[sub_resource type="QuadMesh" id="marker_mesh"]
+size = Vector2(0.18, 0.18)
+
+[sub_resource type="StandardMaterial3D" id="marker_mat"]
+albedo_color = Color(0.788, 0.635, 0.290, 1.0)
+emission_enabled = true
+emission = Color(0.788, 0.635, 0.290, 1.0)
+emission_energy_multiplier = 4.0
+billboard_mode = 1
+blend_mode = 1
+no_depth_test = true
+transparency = 1
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1")
+stats = ExtResource("2")
+flashlight_stats = ExtResource("3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("capsule_shape")
+
+[node name="ModelPivot" type="Node3D" parent="."]
+
+[node name="BodyMesh" type="MeshInstance3D" parent="ModelPivot"]
+mesh = SubResource("body_mesh")
+
+[node name="Backpack" type="MeshInstance3D" parent="ModelPivot"]
+mesh = SubResource("backpack_mesh")
+material = SubResource("backpack_mat")
+position = Vector3(0, 0.35, -0.35)
+scale = Vector3(1, 0.6, 1)
+
+[node name="HumanBody" type="Node3D" parent="ModelPivot"]
+
+[node name="Torso" type="MeshInstance3D" parent="ModelPivot/HumanBody"]
+mesh = SubResource("torso_mesh")
+position = Vector3(0, 0.5, 0)
+
+[node name="Head" type="MeshInstance3D" parent="ModelPivot/HumanBody"]
+mesh = SubResource("head_mesh")
+position = Vector3(0, 0.85, 0)
+
+[node name="Hood" type="MeshInstance3D" parent="ModelPivot/HumanBody"]
+mesh = SubResource("head_mesh")
+position = Vector3(0, 0.88, 0.03)
+scale = Vector3(1.15, 0.7, 1.25)
+material_override = SubResource("hood_mat")
+
+[node name="LeftArm" type="MeshInstance3D" parent="ModelPivot/HumanBody"]
+mesh = SubResource("arm_mesh")
+position = Vector3(-0.28, 0.5, 0)
+
+[node name="RightArm" type="MeshInstance3D" parent="ModelPivot/HumanBody"]
+mesh = SubResource("arm_mesh")
+position = Vector3(0.28, 0.5, 0)
+
+[node name="LeftLeg" type="MeshInstance3D" parent="ModelPivot/HumanBody"]
+mesh = SubResource("leg_mesh")
+position = Vector3(-0.12, 0.0, 0)
+
+[node name="RightLeg" type="MeshInstance3D" parent="ModelPivot/HumanBody"]
+mesh = SubResource("leg_mesh")
+position = Vector3(0.12, 0.0, 0)
+
+[node name="Marker" type="MeshInstance3D" parent="."]
+mesh = SubResource("marker_mesh")
+material = SubResource("marker_mat")
+position = Vector3(0, 1.3, 0)
+
+[node name="FlashlightPivot" type="Node3D" parent="ModelPivot"]
+position = Vector3(0.25, 1.45, 0)
+rotation = Vector3(-0.6, 0, 0)
+
+[node name="Flashlight" type="SpotLight3D" parent="ModelPivot/FlashlightPivot"]
+light_color = Color(1.0, 0.82, 0.48, 1.0)
+light_energy = 24.0
+light_indirect_energy = 0.5
+spot_angle = 35.0
+spot_attenuation = 1.0
+spot_range = 16.0
+shadow_enabled = false
+
+[node name="HandLight" type="MeshInstance3D" parent="ModelPivot/FlashlightPivot"]
+mesh = SubResource("hand_mesh")
+material = SubResource("hand_mat")
+position = Vector3(0, 0, 0)
+
+[node name="ConeMesh" type="MeshInstance3D" parent="ModelPivot/FlashlightPivot"]
+mesh = SubResource("cone_mesh")
+material = SubResource("cone_mat")
+position = Vector3(0, 0, -1.25)
+rotation = Vector3(1.5708, 0, 0)
+
+[node name="Dust" type="GPUParticles3D" parent="ModelPivot/FlashlightPivot"]
+emitting = false
+amount = 60
+lifetime = 3.0
+preprocess = 0.0
+speed_scale = 1.0
+randomness = 0.5
+process_material = SubResource("dust_mat")
+draw_pass_1 = SubResource("dust_mesh")
+
+[node name="PlayerGlow" type="OmniLight3D" parent="ModelPivot"]
+light_color = Color(0.788, 0.635, 0.290, 1.0)
+light_energy = 0.0
+light_indirect_energy = 0.0
+shadow_enabled = false
+position = Vector3(0, 1.0, 0)
+omni_range = 3.5
+
+[node name="GroundRay" type="RayCast3D" parent="."]
+hit_from_inside = true
+target_position = Vector3(0, -2, 0)
+collision_mask = 1
+
+[node name="Footsteps" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("4_step")
+volume_db = -6.0
+max_distance = 20.0
+

@@ -1,0 +1,10 @@
+{
+  "watcher":  {"name":"Nabljudatel","hp":60,"dmg":10,"tip":"Boitsja sveta. Podmanivaj fonarem.","unlocked":false},
+  "shadow":   {"name":"Ten","hp":40,"dmg":8,"tip":"Atakuet iz zasad. Slushaj shagi.","unlocked":false},
+  "runner":   {"name":"Begun","hp":25,"dmg":12,"tip":"Bystryj, no hrupkij. Streljaj na operezenie.","unlocked":false},
+  "tank":     {"name":"Razrushitel","hp":200,"dmg":40,"tip":"Medlennyj. Obhodi so spiny i stav lovushki.","unlocked":false},
+  "sniper":   {"name":"Snajper","hp":40,"dmg":25,"tip":"Stoit na meste. Zakroj los ukrytiem.","unlocked":false},
+  "crawler":  {"name":"Polzun","hp":30,"dmg":15,"tip":"Nizkij - celjsja vniz.","unlocked":false},
+  "phantom":  {"name":"Fantom","hp":50,"dmg":18,"tip":"Teleportiruetsja. Sledi za zvukom.","unlocked":false},
+  "swarm":    {"name":"Roj","hp":10,"dmg":5,"tip":"Slaby po odnom - opasny tolpoj.","unlocked":false}
+}

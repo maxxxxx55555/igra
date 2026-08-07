@@ -1,0 +1,66 @@
+# Locale: en  -- THE_LAST_STREETLIGHT
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: en\n"
+
+msgid "cancel"
+msgstr "Cancel"
+
+msgid "confirm"
+msgstr "Confirm"
+
+msgid "hud_coins"
+msgstr "Coins"
+
+msgid "hud_district"
+msgstr "District"
+
+msgid "hud_lives"
+msgstr "Lives"
+
+msgid "hud_power"
+msgstr "Power"
+
+msgid "interact_shop"
+msgstr "Shop"
+
+msgid "interact_switch"
+msgstr "Power switch"
+
+msgid "menu_host"
+msgstr "Host LAN"
+
+msgid "menu_join"
+msgstr "Join LAN"
+
+msgid "menu_play"
+msgstr "Play"
+
+msgid "menu_quit"
+msgstr "Quit"
+
+msgid "msg_caught"
+msgstr "You were caught!"
+
+msgid "msg_lose"
+msgstr "You failed..."
+
+msgid "msg_saved"
+msgstr "Game saved"
+
+msgid "msg_win"
+msgstr "All districts powered!"
+
+msgid "shop_battery"
+msgstr "Battery +25%"
+
+msgid "shop_medkit"
+msgstr "Medkit"
+
+msgid "shop_not_enough"
+msgstr "Not enough coins"
+
+msgid "shop_stamina"
+msgstr "Stamina"
+

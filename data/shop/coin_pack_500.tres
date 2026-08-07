@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ShopItem" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/economy/shop_item.gd" id="1"]
+[resource]
+script = ExtResource("1")
+id = &"coin_pack_500"
+kind = 0
+display_name = "500 монет"
+description = "Пакет монет (донат)."
+price_coins = 0
+coins_granted = 500
+iap_product_id = "tls_coins_500"
+iap_price_label = "99"

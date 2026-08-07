@@ -1,0 +1,391 @@
+{
+  "BTN_RESUME": {
+    "en": "Resume", "ru": "Продолжить", "es": "Continuar", "de": "Fortsetzen",
+    "fr": "Reprendre", "it": "Riprendi", "pt_BR": "Continuar", "tr": "Devam Et",
+    "ja": "再開", "ko": "계속하기", "zh": "继续", "zh_TW": "繼續", "ar": "متابعة"
+  },
+  "BTN_SAVE": {
+    "en": "Save", "ru": "Сохранить", "es": "Guardar", "de": "Speichern",
+    "fr": "Sauvegarder", "it": "Salva", "pt_BR": "Salvar", "tr": "Kaydet",
+    "ja": "セーブ", "ko": "저장", "zh": "保存", "zh_TW": "儲存", "ar": "حفظ"
+  },
+  "BTN_LOAD": {
+    "en": "Load", "ru": "Загрузить", "es": "Cargar", "de": "Laden",
+    "fr": "Charger", "it": "Carica", "pt_BR": "Carregar", "tr": "Yükle",
+    "ja": "ロード", "ko": "불러오기", "zh": "读取", "zh_TW": "讀取", "ar": "تحميل"
+  },
+  "BTN_MAIN_MENU": {
+    "en": "Main Menu", "ru": "Главное меню", "es": "Menú principal", "de": "Hauptmenü",
+    "fr": "Menu principal", "it": "Menu principale", "pt_BR": "Menu principal", "tr": "Ana Menü",
+    "ja": "メインメニュー", "ko": "메인 메뉴", "zh": "主菜单", "zh_TW": "主選單", "ar": "القائمة الرئيسية"
+  },
+  "BTN_RESTART": {
+    "en": "Restart", "ru": "Начать заново", "es": "Reiniciar", "de": "Neu starten",
+    "fr": "Recommencer", "it": "Ricomincia", "pt_BR": "Recomeçar", "tr": "Yeniden Başlat",
+    "ja": "リスタート", "ko": "다시 시작", "zh": "重新开始", "zh_TW": "重新開始", "ar": "إعادة البدء"
+  },
+  "MAIN_SETTINGS": {
+    "en": "Settings", "ru": "Настройки", "es": "Ajustes", "de": "Einstellungen",
+    "fr": "Paramètres", "it": "Impostazioni", "pt_BR": "Configurações", "tr": "Ayarlar",
+    "ja": "設定", "ko": "설정", "zh": "设置", "zh_TW": "設定", "ar": "الإعدادات"
+  },
+  "SETTINGS_PAUSE": {
+    "en": "Paused", "ru": "Пауза", "es": "Pausa", "de": "Pause",
+    "fr": "Pause", "it": "Pausa", "pt_BR": "Pausado", "tr": "Duraklatıldı",
+    "ja": "一時停止", "ko": "일시 정지", "zh": "已暂停", "zh_TW": "已暫停", "ar": "إيقاف مؤقت"
+  },
+  "DEATH_TITLE": {
+    "en": "YOU DIED", "ru": "ВЫ ПОГИБЛИ", "es": "HAS MUERTO", "de": "DU BIST GESTORBEN",
+    "fr": "VOUS ÊTES MORT", "it": "SEI MORTO", "pt_BR": "VOCÊ MORREU", "tr": "ÖLDÜN",
+    "ja": "死亡", "ko": "사망했습니다", "zh": "你死了", "zh_TW": "你死了", "ar": "لقد مُت"
+  },
+  "DEATH_BY": {
+    "en": "The darkness took you", "ru": "Тьма забрала вас", "es": "La oscuridad te consumió",
+    "de": "Die Dunkelheit hat dich geholt", "fr": "Les ténèbres vous ont emporté",
+    "it": "L'oscurità ti ha preso", "pt_BR": "A escuridão te levou", "tr": "Karanlık seni aldı",
+    "ja": "闇に飲み込まれた", "ko": "어둠이 당신을 삼켰습니다", "zh": "黑暗吞噬了你",
+    "zh_TW": "黑暗吞噬了你", "ar": "ابتلعك الظلام"
+  },
+  "DEATH_MAIN_MENU": {
+    "en": "Main Menu", "ru": "Главное меню", "es": "Menú principal", "de": "Hauptmenü",
+    "fr": "Menu principal", "it": "Menu principale", "pt_BR": "Menu principal", "tr": "Ana Menü",
+    "ja": "メインメニュー", "ko": "메인 메뉴", "zh": "主菜单", "zh_TW": "主選單", "ar": "القائمة الرئيسية"
+  },
+  "SETTINGS_AUDIO": {
+    "en": "Audio", "ru": "Звук", "es": "Audio", "de": "Audio",
+    "fr": "Audio", "it": "Audio", "pt_BR": "Áudio", "tr": "Ses",
+    "ja": "サウンド", "ko": "오디오", "zh": "音频", "zh_TW": "音訊", "ar": "الصوت"
+  },
+  "SETTINGS_GRAPHICS": {
+    "en": "Graphics", "ru": "Графика", "es": "Gráficos", "de": "Grafik",
+    "fr": "Graphismes", "it": "Grafica", "pt_BR": "Gráficos", "tr": "Grafikler",
+    "ja": "グラフィック", "ko": "그래픽", "zh": "画面", "zh_TW": "畫面", "ar": "الرسومات"
+  },
+  "SETTINGS_ACCESSIBILITY": {
+    "en": "Accessibility", "ru": "Доступность", "es": "Accesibilidad", "de": "Barrierefreiheit",
+    "fr": "Accessibilité", "it": "Accessibilità", "pt_BR": "Acessibilidade", "tr": "Erişilebilirlik",
+    "ja": "アクセシビリティ", "ko": "접근성", "zh": "无障碍", "zh_TW": "無障礙", "ar": "إمكانية الوصول"
+  },
+  "settings": {
+    "en": "Settings", "ru": "Настройки", "es": "Ajustes", "de": "Einstellungen",
+    "fr": "Paramètres", "it": "Impostazioni", "pt_BR": "Configurações", "tr": "Ayarlar",
+    "ja": "設定", "ko": "설정", "zh": "设置", "zh_TW": "設定", "ar": "الإعدادات"
+  },
+  "TUT_WAKE_UP": {
+    "en": "You wake up. The city has gone dark.",
+    "ru": "Вы приходите в себя. Город погрузился во тьму.",
+    "es": "Despiertas. La ciudad se ha quedado a oscuras.",
+    "de": "Du wachst auf. Die Stadt liegt im Dunkeln.",
+    "fr": "Vous vous réveillez. La ville est plongée dans le noir.",
+    "it": "Ti svegli. La città è sprofondata nel buio.",
+    "pt_BR": "Você acorda. A cidade mergulhou na escuridão.",
+    "tr": "Uyanıyorsun. Şehir karanlığa gömüldü.",
+    "ja": "目を覚ました。街は闇に沈んでいる。",
+    "ko": "잠에서 깼습니다. 도시는 어둠에 잠겼습니다.",
+    "zh": "你醒了。城市陷入黑暗。",
+    "zh_TW": "你醒了。城市陷入黑暗。",
+    "ar": "تستيقظ. لقد غرقت المدينة في الظلام."
+  },
+  "TUT_FIND_FLASHLIGHT": {
+    "en": "Find the flashlight. Press F to switch it on.",
+    "ru": "Найдите фонарик. Нажмите F, чтобы включить его.",
+    "es": "Encuentra la linterna. Pulsa F para encenderla.",
+    "de": "Finde die Taschenlampe. Drücke F zum Einschalten.",
+    "fr": "Trouvez la lampe torche. Appuyez sur F pour l'allumer.",
+    "it": "Trova la torcia. Premi F per accenderla.",
+    "pt_BR": "Encontre a lanterna. Pressione F para ligá-la.",
+    "tr": "El fenerini bul. Açmak için F tuşuna bas.",
+    "ja": "懐中電灯を探せ。Fキーで点灯する。",
+    "ko": "손전등을 찾으세요. F 키를 눌러 켭니다.",
+    "zh": "找到手电筒。按 F 键打开。",
+    "zh_TW": "找到手電筒。按 F 鍵開啟。",
+    "ar": "ابحث عن المصباح. اضغط F لتشغيله."
+  },
+  "TUT_LIGHT_SHIELD": {
+    "en": "Light is your shield. Monsters fear the beam.",
+    "ru": "Свет — ваш щит. Монстры боятся луча.",
+    "es": "La luz es tu escudo. Los monstruos temen al haz.",
+    "de": "Licht ist dein Schild. Monster fürchten den Strahl.",
+    "fr": "La lumière est votre bouclier. Les monstres craignent le faisceau.",
+    "it": "La luce è il tuo scudo. I mostri temono il fascio.",
+    "pt_BR": "A luz é seu escudo. Os monstros temem o feixe.",
+    "tr": "Işık kalkanındır. Canavarlar ışından korkar.",
+    "ja": "光は盾だ。怪物は光線を恐れる。",
+    "ko": "빛은 당신의 방패입니다. 괴물은 빛줄기를 두려워합니다.",
+    "zh": "光是你的盾牌。怪物惧怕光束。",
+    "zh_TW": "光是你的盾牌。怪物懼怕光束。",
+    "ar": "الضوء درعك. الوحوش تخاف من الشعاع."
+  },
+  "TUT_FIRST_SHADOW": {
+    "en": "A Shadow is close. Hold it in the beam.",
+    "ru": "Тень рядом. Удерживайте её в луче.",
+    "es": "Una Sombra está cerca. Mantenla en el haz.",
+    "de": "Ein Schatten ist nah. Halte ihn im Lichtstrahl.",
+    "fr": "Une Ombre est proche. Gardez-la dans le faisceau.",
+    "it": "Un'Ombra è vicina. Tienila nel fascio di luce.",
+    "pt_BR": "Uma Sombra está perto. Mantenha-a no feixe.",
+    "tr": "Bir Gölge yakında. Onu ışında tut.",
+    "ja": "シャドウが近い。光線で捉え続けろ。",
+    "ko": "그림자가 가까이 있습니다. 빛줄기 안에 붙잡으세요.",
+    "zh": "暗影就在附近。用光束锁住它。",
+    "zh_TW": "暗影就在附近。用光束鎖住它。",
+    "ar": "الظل قريب. أبقِه داخل الشعاع."
+  },
+  "TUT_TO_GARAGE": {
+    "en": "Head to the garage. The generator is there.",
+    "ru": "Идите к гаражу. Генератор находится там.",
+    "es": "Ve al garaje. El generador está allí.",
+    "de": "Geh zur Garage. Dort steht der Generator.",
+    "fr": "Dirigez-vous vers le garage. Le générateur s'y trouve.",
+    "it": "Vai al garage. Il generatore è lì.",
+    "pt_BR": "Vá até a garagem. O gerador está lá.",
+    "tr": "Garaja git. Jeneratör orada.",
+    "ja": "ガレージへ向かえ。発電機はそこにある。",
+    "ko": "차고로 가세요. 발전기가 그곳에 있습니다.",
+    "zh": "前往车库。发电机在那里。",
+    "zh_TW": "前往車庫。發電機在那裡。",
+    "ar": "توجه إلى المرآب. المولد هناك."
+  },
+  "TUT_GENERATOR": {
+    "en": "Start the generator to bring the district back.",
+    "ru": "Запустите генератор, чтобы вернуть свет району.",
+    "es": "Arranca el generador para devolver la luz al distrito.",
+    "de": "Starte den Generator, um den Bezirk zurückzuholen.",
+    "fr": "Démarrez le générateur pour ranimer le quartier.",
+    "it": "Avvia il generatore per far tornare la luce nel distretto.",
+    "pt_BR": "Ligue o gerador para trazer o distrito de volta.",
+    "tr": "Bölgeyi geri getirmek için jeneratörü çalıştır.",
+    "ja": "発電機を起動して地区に電気を戻せ。",
+    "ko": "발전기를 가동해 구역을 되살리세요.",
+    "zh": "启动发电机，让街区重获光明。",
+    "zh_TW": "啟動發電機，讓街區重獲光明。",
+    "ar": "شغّل المولد لإعادة الحياة إلى الحي."
+  },
+  "TUT_GENERATOR_STEP1": {
+    "en": "Connect the cables in the right order.",
+    "ru": "Соедините кабели в правильном порядке.",
+    "es": "Conecta los cables en el orden correcto.",
+    "de": "Verbinde die Kabel in der richtigen Reihenfolge.",
+    "fr": "Branchez les câbles dans le bon ordre.",
+    "it": "Collega i cavi nell'ordine corretto.",
+    "pt_BR": "Conecte os cabos na ordem certa.",
+    "tr": "Kabloları doğru sırayla bağla.",
+    "ja": "ケーブルを正しい順序で接続せよ。",
+    "ko": "케이블을 올바른 순서로 연결하세요.",
+    "zh": "按正确顺序连接电缆。",
+    "zh_TW": "按正確順序連接電纜。",
+    "ar": "وصّل الكابلات بالترتيب الصحيح."
+  },
+  "TUT_BATTERY_FOUND": {
+    "en": "A battery! It recharges the flashlight.",
+    "ru": "Батарейка! Она заряжает фонарик.",
+    "es": "¡Una batería! Recarga la linterna.",
+    "de": "Eine Batterie! Sie lädt die Taschenlampe auf.",
+    "fr": "Une pile ! Elle recharge la lampe torche.",
+    "it": "Una batteria! Ricarica la torcia.",
+    "pt_BR": "Uma bateria! Ela recarrega a lanterna.",
+    "tr": "Bir pil! El fenerini şarj eder.",
+    "ja": "電池だ！懐中電灯を充電できる。",
+    "ko": "배터리다! 손전등을 충전할 수 있습니다.",
+    "zh": "电池！可以给手电筒充电。",
+    "zh_TW": "電池！可以為手電筒充電。",
+    "ar": "بطارية! إنها تشحن المصباح."
+  },
+  "TUT_COMPLETE": {
+    "en": "Tutorial complete. Guard the light.",
+    "ru": "Обучение завершено. Берегите свет.",
+    "es": "Tutorial completado. Protege la luz.",
+    "de": "Tutorial abgeschlossen. Beschütze das Licht.",
+    "fr": "Tutoriel terminé. Protégez la lumière.",
+    "it": "Tutorial completato. Proteggi la luce.",
+    "pt_BR": "Tutorial concluído. Proteja a luz.",
+    "tr": "Eğitim tamamlandı. Işığı koru.",
+    "ja": "チュートリアル完了。光を守れ。",
+    "ko": "튜토리얼 완료. 빛을 지키세요.",
+    "zh": "教程完成。守护光明。",
+    "zh_TW": "教學完成。守護光明。",
+    "ar": "اكتمل التدريب. احرس الضوء."
+  },
+  "Skip Tutorial": {
+    "en": "Skip Tutorial", "ru": "Пропустить обучение", "es": "Saltar tutorial",
+    "de": "Tutorial überspringen", "fr": "Passer le tutoriel", "it": "Salta il tutorial",
+    "pt_BR": "Pular tutorial", "tr": "Eğitimi Atla", "ja": "チュートリアルをスキップ",
+    "ko": "튜토리얼 건너뛰기", "zh": "跳过教程", "zh_TW": "跳過教學", "ar": "تخطي التدريب"
+  },
+  "Connected. Waiting for host...": {
+    "en": "Connected. Waiting for host...", "ru": "Подключено. Ожидание хоста...",
+    "es": "Conectado. Esperando al anfitrión...", "de": "Verbunden. Warte auf Host...",
+    "fr": "Connecté. En attente de l'hôte...", "it": "Connesso. In attesa dell'host...",
+    "pt_BR": "Conectado. Aguardando o anfitrião...", "tr": "Bağlanıldı. Sunucu bekleniyor...",
+    "ja": "接続済み。ホストを待っています...", "ko": "연결됨. 호스트를 기다리는 중...",
+    "zh": "已连接。等待房主...", "zh_TW": "已連線。等待房主...", "ar": "تم الاتصال. في انتظار المضيف..."
+  },
+  "Host closed the game": {
+    "en": "Host closed the game", "ru": "Хост завершил игру",
+    "es": "El anfitrión cerró la partida", "de": "Der Host hat das Spiel beendet",
+    "fr": "L'hôte a fermé la partie", "it": "L'host ha chiuso la partita",
+    "pt_BR": "O anfitrião encerrou a partida", "tr": "Sunucu oyunu kapattı",
+    "ja": "ホストがゲームを終了しました", "ko": "호스트가 게임을 종료했습니다",
+    "zh": "房主已关闭游戏", "zh_TW": "房主已關閉遊戲", "ar": "أنهى المضيف اللعبة"
+  },
+  "Language": {
+    "en": "Language", "ru": "Язык", "es": "Idioma", "de": "Sprache",
+    "fr": "Langue", "it": "Lingua", "pt_BR": "Idioma", "tr": "Dil",
+    "ja": "言語", "ko": "언어", "zh": "语言", "zh_TW": "語言", "ar": "اللغة"
+  },
+  "Difficulty": {
+    "en": "Difficulty", "ru": "Сложность", "es": "Dificultad", "de": "Schwierigkeit",
+    "fr": "Difficulté", "it": "Difficoltà", "pt_BR": "Dificuldade", "tr": "Zorluk",
+    "ja": "難易度", "ko": "난이도", "zh": "难度", "zh_TW": "難度", "ar": "الصعوبة"
+  },
+  "Auto-save": {
+    "en": "Auto-save", "ru": "Автосохранение", "es": "Autoguardado", "de": "Autospeichern",
+    "fr": "Sauvegarde auto", "it": "Salvataggio automatico", "pt_BR": "Salvamento automático",
+    "tr": "Otomatik Kayıt", "ja": "オートセーブ", "ko": "자동 저장", "zh": "自动存档",
+    "zh_TW": "自動存檔", "ar": "حفظ تلقائي"
+  },
+  "Hints": {
+    "en": "Hints", "ru": "Подсказки", "es": "Pistas", "de": "Hinweise",
+    "fr": "Indices", "it": "Suggerimenti", "pt_BR": "Dicas", "tr": "İpuçları",
+    "ja": "ヒント", "ko": "힌트", "zh": "提示", "zh_TW": "提示", "ar": "التلميحات"
+  },
+  "Hardcore Mode": {
+    "en": "Hardcore Mode", "ru": "Хардкорный режим", "es": "Modo hardcore",
+    "de": "Hardcore-Modus", "fr": "Mode hardcore", "it": "Modalità hardcore",
+    "pt_BR": "Modo hardcore", "tr": "Hardcore Modu", "ja": "ハードコアモード",
+    "ko": "하드코어 모드", "zh": "硬核模式", "zh_TW": "硬核模式", "ar": "الوضع الصعب"
+  },
+  "Objective Markers": {
+    "en": "Objective Markers", "ru": "Маркеры целей", "es": "Marcadores de objetivo",
+    "de": "Zielmarkierungen", "fr": "Marqueurs d'objectif", "it": "Indicatori obiettivo",
+    "pt_BR": "Marcadores de objetivo", "tr": "Hedef İşaretleri", "ja": "目標マーカー",
+    "ko": "목표 표시", "zh": "目标标记", "zh_TW": "目標標記", "ar": "علامات الأهداف"
+  },
+  "Resolution": {
+    "en": "Resolution", "ru": "Разрешение", "es": "Resolución", "de": "Auflösung",
+    "fr": "Résolution", "it": "Risoluzione", "pt_BR": "Resolução", "tr": "Çözünürlük",
+    "ja": "解像度", "ko": "해상도", "zh": "分辨率", "zh_TW": "解析度", "ar": "الدقة"
+  },
+  "VSync": {
+    "en": "VSync", "ru": "Верт. синхронизация", "es": "Sincronización vertical",
+    "de": "V-Sync", "fr": "Synchro verticale", "it": "Sincronia verticale",
+    "pt_BR": "Sincronização vertical", "tr": "Dikey Eşitleme", "ja": "垂直同期",
+    "ko": "수직 동기화", "zh": "垂直同步", "zh_TW": "垂直同步", "ar": "المزامنة الرأسية"
+  },
+  "FPS Cap": {
+    "en": "FPS Cap", "ru": "Ограничение FPS", "es": "Límite de FPS", "de": "FPS-Limit",
+    "fr": "Limite de FPS", "it": "Limite FPS", "pt_BR": "Limite de FPS", "tr": "FPS Sınırı",
+    "ja": "FPS上限", "ko": "FPS 제한", "zh": "帧率上限", "zh_TW": "幀率上限", "ar": "حد الإطارات"
+  },
+  "Graphics Tier": {
+    "en": "Graphics Tier", "ru": "Уровень графики", "es": "Nivel gráfico",
+    "de": "Grafikstufe", "fr": "Niveau graphique", "it": "Livello grafico",
+    "pt_BR": "Nível gráfico", "tr": "Grafik Seviyesi", "ja": "グラフィック品質",
+    "ko": "그래픽 등급", "zh": "画质等级", "zh_TW": "畫質等級", "ar": "مستوى الرسومات"
+  },
+  "Shadow Quality": {
+    "en": "Shadow Quality", "ru": "Качество теней", "es": "Calidad de sombras",
+    "de": "Schattenqualität", "fr": "Qualité des ombres", "it": "Qualità delle ombre",
+    "pt_BR": "Qualidade das sombras", "tr": "Gölge Kalitesi", "ja": "影の品質",
+    "ko": "그림자 품질", "zh": "阴影质量", "zh_TW": "陰影品質", "ar": "جودة الظلال"
+  },
+  "Texture Quality": {
+    "en": "Texture Quality", "ru": "Качество текстур", "es": "Calidad de texturas",
+    "de": "Texturqualität", "fr": "Qualité des textures", "it": "Qualità delle texture",
+    "pt_BR": "Qualidade das texturas", "tr": "Doku Kalitesi", "ja": "テクスチャ品質",
+    "ko": "텍스처 품질", "zh": "贴图质量", "zh_TW": "貼圖品質", "ar": "جودة الملمس"
+  },
+  "Effects Quality": {
+    "en": "Effects Quality", "ru": "Качество эффектов", "es": "Calidad de efectos",
+    "de": "Effektqualität", "fr": "Qualité des effets", "it": "Qualità degli effetti",
+    "pt_BR": "Qualidade dos efeitos", "tr": "Efekt Kalitesi", "ja": "エフェクト品質",
+    "ko": "효과 품질", "zh": "特效质量", "zh_TW": "特效品質", "ar": "جودة التأثيرات"
+  },
+  "Draw Distance": {
+    "en": "Draw Distance", "ru": "Дальность прорисовки", "es": "Distancia de dibujado",
+    "de": "Sichtweite", "fr": "Distance d'affichage", "it": "Distanza di visuale",
+    "pt_BR": "Distância de desenho", "tr": "Görüş Mesafesi", "ja": "描画距離",
+    "ko": "시야 거리", "zh": "视野距离", "zh_TW": "視野距離", "ar": "مدى الرؤية"
+  },
+  "HUD Opacity": {
+    "en": "HUD Opacity", "ru": "Прозрачность интерфейса", "es": "Opacidad del HUD",
+    "de": "HUD-Deckkraft", "fr": "Opacité de l'ATH", "it": "Opacità dell'HUD",
+    "pt_BR": "Opacidade do HUD", "tr": "HUD Şeffaflığı", "ja": "HUDの不透明度",
+    "ko": "HUD 불투명도", "zh": "界面透明度", "zh_TW": "介面透明度", "ar": "شفافية الواجهة"
+  },
+  "Voice Volume": {
+    "en": "Voice Volume", "ru": "Громкость голоса", "es": "Volumen de voces",
+    "de": "Sprachlautstärke", "fr": "Volume des voix", "it": "Volume delle voci",
+    "pt_BR": "Volume das vozes", "tr": "Ses Seviyesi (Konuşma)", "ja": "ボイス音量",
+    "ko": "음성 볼륨", "zh": "语音音量", "zh_TW": "語音音量", "ar": "مستوى الأصوات"
+  },
+  "Sensitivity": {
+    "en": "Sensitivity", "ru": "Чувствительность", "es": "Sensibilidad",
+    "de": "Empfindlichkeit", "fr": "Sensibilité", "it": "Sensibilità",
+    "pt_BR": "Sensibilidade", "tr": "Hassasiyet", "ja": "感度",
+    "ko": "감도", "zh": "灵敏度", "zh_TW": "靈敏度", "ar": "الحساسية"
+  },
+  "Deadzone": {
+    "en": "Deadzone", "ru": "Мёртвая зона", "es": "Zona muerta", "de": "Totzone",
+    "fr": "Zone morte", "it": "Zona morta", "pt_BR": "Zona morta", "tr": "Ölü Bölge",
+    "ja": "デッドゾーン", "ko": "데드존", "zh": "死区", "zh_TW": "死區", "ar": "المنطقة الميتة"
+  },
+  "Crouch Input": {
+    "en": "Crouch Input", "ru": "Управление приседанием", "es": "Control de agacharse",
+    "de": "Ducken-Steuerung", "fr": "Commande d'accroupissement", "it": "Comando accovacciamento",
+    "pt_BR": "Controle de agachar", "tr": "Eğilme Kontrolü", "ja": "しゃがみ操作",
+    "ko": "웅크리기 조작", "zh": "蹲下操作", "zh_TW": "蹲下操作", "ar": "التحكم بالانحناء"
+  },
+  "Dodge Gesture": {
+    "en": "Dodge Gesture", "ru": "Жест уклонения", "es": "Gesto de esquiva",
+    "de": "Ausweich-Geste", "fr": "Geste d'esquive", "it": "Gesto di schivata",
+    "pt_BR": "Gesto de esquiva", "tr": "Kaçınma Hareketi", "ja": "回避ジェスチャー",
+    "ko": "회피 제스처", "zh": "闪避手势", "zh_TW": "閃避手勢", "ar": "إيماءة المراوغة"
+  },
+  "Auto-aim Assist": {
+    "en": "Auto-aim Assist", "ru": "Помощь в прицеливании", "es": "Ayuda de apuntado",
+    "de": "Zielhilfe", "fr": "Aide à la visée", "it": "Assistenza alla mira",
+    "pt_BR": "Assistência de mira", "tr": "Nişan Yardımı", "ja": "エイムアシスト",
+    "ko": "조준 보조", "zh": "自动瞄准辅助", "zh_TW": "自動瞄準輔助", "ar": "مساعدة التصويب"
+  },
+  "Button Size": {
+    "en": "Button Size", "ru": "Размер кнопок", "es": "Tamaño de botones",
+    "de": "Schaltflächengröße", "fr": "Taille des boutons", "it": "Dimensione dei pulsanti",
+    "pt_BR": "Tamanho dos botões", "tr": "Düğme Boyutu", "ja": "ボタンサイズ",
+    "ko": "버튼 크기", "zh": "按钮大小", "zh_TW": "按鈕大小", "ar": "حجم الأزرار"
+  },
+  "Text Size": {
+    "en": "Text Size", "ru": "Размер текста", "es": "Tamaño del texto",
+    "de": "Textgröße", "fr": "Taille du texte", "it": "Dimensione del testo",
+    "pt_BR": "Tamanho do texto", "tr": "Yazı Boyutu", "ja": "文字サイズ",
+    "ko": "글자 크기", "zh": "文字大小", "zh_TW": "文字大小", "ar": "حجم النص"
+  },
+  "High Contrast": {
+    "en": "High Contrast", "ru": "Высокая контрастность", "es": "Alto contraste",
+    "de": "Hoher Kontrast", "fr": "Contraste élevé", "it": "Contrasto elevato",
+    "pt_BR": "Alto contraste", "tr": "Yüksek Kontrast", "ja": "ハイコントラスト",
+    "ko": "고대비", "zh": "高对比度", "zh_TW": "高對比度", "ar": "تباين عالٍ"
+  },
+  "Colorblind Mode": {
+    "en": "Colorblind Mode", "ru": "Режим для дальтоников", "es": "Modo daltónico",
+    "de": "Farbenblind-Modus", "fr": "Mode daltonien", "it": "Modalità daltonici",
+    "pt_BR": "Modo daltônico", "tr": "Renk Körlüğü Modu", "ja": "色覚サポート",
+    "ko": "색맹 모드", "zh": "色盲模式", "zh_TW": "色盲模式", "ar": "وضع عمى الألوان"
+  },
+  "Arachnophobia Mode": {
+    "en": "Arachnophobia Mode", "ru": "Режим арахнофобии", "es": "Modo aracnofobia",
+    "de": "Arachnophobie-Modus", "fr": "Mode arachnophobie", "it": "Modalità aracnofobia",
+    "pt_BR": "Modo aracnofobia", "tr": "Araknofobi Modu", "ja": "クモ恐怖症モード",
+    "ko": "거미 공포증 모드", "zh": "蜘蛛恐惧症模式", "zh_TW": "蜘蛛恐懼症模式",
+    "ar": "وضع رهاب العناكب"
+  },
+  "Dyslexia Font (OpenDyslexic)": {
+    "en": "Dyslexia Font (OpenDyslexic)", "ru": "Шрифт для дислексии (OpenDyslexic)",
+    "es": "Fuente para dislexia (OpenDyslexic)", "de": "Legasthenie-Schrift (OpenDyslexic)",
+    "fr": "Police dyslexie (OpenDyslexic)", "it": "Font per dislessia (OpenDyslexic)",
+    "pt_BR": "Fonte para dislexia (OpenDyslexic)", "tr": "Disleksi Yazı Tipi (OpenDyslexic)",
+    "ja": "ディスレクシア用フォント (OpenDyslexic)", "ko": "난독증 글꼴 (OpenDyslexic)",
+    "zh": "阅读障碍字体 (OpenDyslexic)", "zh_TW": "閱讀障礙字體 (OpenDyslexic)",
+    "ar": "خط عسر القراءة (OpenDyslexic)"
+  }
+}

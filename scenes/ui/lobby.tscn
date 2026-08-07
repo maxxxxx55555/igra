@@ -1,0 +1,49 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/lobby_menu.gd" id="1_script"]
+
+[node name="Lobby" type="Control" layout_mode=3 anchors_preset=15 anchor_right=1.0 anchor_bottom=1.0 grow_horizontal=2 grow_vertical=2]
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="." layout_mode=1 anchors_preset=15 anchor_right=1.0 anchor_bottom=1.0 grow_horizontal=2 grow_vertical=2 color=Color(0.02, 0.02, 0.05, 1)]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." layout_mode=1 anchors_preset=8 anchor_left=0.5 anchor_top=0.5 anchor_right=0.5 anchor_bottom=0.5 offset_left=-200.0 offset_top=-200.0 offset_right=200.0 offset_bottom=200.0 grow_horizontal=2 grow_vertical=2]
+
+[node name="Title" type="Label" parent="VBoxContainer" layout_mode=2]
+text = "MULTIPLAYER LOBBY"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color = Color(1, 0.8, 0.2, 1)
+
+[node name="NameInput" type="LineEdit" parent="VBoxContainer" layout_mode=2]
+placeholder_text = "Your Name"
+text = "Player"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" layout_mode=2]
+[node name="HostButton" type="Button" parent="VBoxContainer/HBoxContainer" layout_mode=2]
+text = "Create Server"
+size_flags_horizontal = 3
+
+[node name="RefreshButton" type="Button" parent="VBoxContainer/HBoxContainer" layout_mode=2]
+text = "Refresh"
+size_flags_horizontal = 3
+
+[node name="HostList" type="ItemList" parent="VBoxContainer" layout_mode=2 custom_minimum_size=Vector2(0, 150)]
+size_flags_vertical = 3
+
+[node name="JoinButton" type="Button" parent="VBoxContainer" layout_mode=2]
+text = "Join Selected"
+disabled = true
+
+[node name="StartButton" type="Button" parent="VBoxContainer" layout_mode=2]
+text = "Start Game"
+disabled = true
+
+[node name="BackButton" type="Button" parent="VBoxContainer" layout_mode=2]
+text = "Back"
+
+[node name="StatusLabel" type="Label" parent="VBoxContainer" layout_mode=2]
+text = "Scanning for servers..."
+horizontal_alignment = 1
+autowrap_mode = 3
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)

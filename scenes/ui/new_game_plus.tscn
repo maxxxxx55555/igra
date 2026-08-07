@@ -1,0 +1,43 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/new_game_plus_ui.gd" id="1_script"]
+
+[node name="NewGamePlusUI" type="Control" layout_mode=1 anchors_preset=15 anchor_right=1.0 anchor_bottom=1.0 grow_horizontal=2 grow_vertical=2]
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="." layout_mode=1 anchors_preset=15 anchor_right=1.0 anchor_bottom=1.0 grow_horizontal=2 grow_vertical=2]
+color = Color(0.02, 0.02, 0.05, 0.92)
+
+[node name="MarginContainer" type="MarginContainer" parent="." layout_mode=1 anchors_preset=15 anchor_right=1.0 anchor_bottom=1.0 grow_horizontal=2 grow_vertical=2]
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" layout_mode=1 anchors_preset=15 anchor_right=1.0 anchor_bottom=1.0 grow_horizontal=2 grow_vertical=2]
+theme_override_constants/separation = 12
+
+[node name="NGLabel" type="Label" parent="MarginContainer/VBoxContainer" layout_mode=2]
+text = "New Game+ Level: 0 / 3"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(1, 0.8, 0.2, 1)
+
+[node name="CurrentLevel" type="Label" parent="MarginContainer/VBoxContainer" layout_mode=2]
+text = "Current Run: Base Game"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 16
+
+[node name="MultiplierLabel" type="Label" parent="MarginContainer/VBoxContainer" layout_mode=2]
+text = "XP: x1.00\nEnemy HP: x1.00\nEnemy Damage: x1.00\nPlayer Damage: x1.00\nLoot Chance: x1.00"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+
+[node name="ActivateButton" type="Button" parent="MarginContainer/VBoxContainer" layout_mode=2]
+text = "Activate New Game+"
+custom_minimum_size = Vector2(200, 40)
+
+[node name="BackButton" type="Button" parent="MarginContainer/VBoxContainer" layout_mode=2]
+text = "Back"
+custom_minimum_size = Vector2(100, 40)

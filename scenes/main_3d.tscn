@@ -1,0 +1,120 @@
+﻿[gd_scene load_steps=25 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/environment/world_env.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud_3d.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/player/player_3d.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/ui/splash.tscn" id="5"]
+[ext_resource type="Script" path="res://scripts/core/camera_follow_3d.gd" id="6"]
+[ext_resource type="Script" path="res://scripts/world/street_builder.gd" id="7"]
+[ext_resource type="PackedScene" path="res://scenes/ui/screens.tscn" id="8"]
+[ext_resource type="Script" path="res://scripts/post_process_overlay.gd" id="9"]
+[ext_resource type="Script" path="res://scripts/world_env_setup.gd" id="10"]
+[ext_resource type="Script" path="res://scripts/main_3d.gd" id="11"]
+[ext_resource type="Script" path="res://scripts/stress_test.gd" id="13"]
+[ext_resource type="Script" path="res://scripts/fog_setup.gd" id="14"]
+[ext_resource type="Script" path="res://scripts/effects/screen_shake.gd" id="15"]
+[ext_resource type="Script" path="res://scripts/world/streetlight_spawner.gd" id="16"]
+[ext_resource type="Script" path="res://scripts/visual/night_env.gd" id="17_NightE"]
+[ext_resource type="Script" path="res://scripts/ui/hud_main.gd" id="18_HUDScr"]
+[ext_resource type="Script" path="res://scripts/ui/ending_screen.gd" id="19_Ending"]
+[ext_resource type="Script" path="res://scripts/net/lan_menu.gd" id="20_LANMen"]
+[ext_resource type="Script" path="res://scripts/world/power_switch.gd" id="21_PowerS"]
+[ext_resource type="Script" path="res://scripts/world/district_trigger.gd" id="22_Distri"]
+[ext_resource type="Script" path="res://scripts/visual/emissive_windows.gd" id="23_Emissi"]
+
+[sub_resource type="ParticleProcessMaterial" id="ash_mat"]
+emission_shape = 2
+emission_box_extents = Vector3(15, 5, 25)
+color = Color(0.416, 0.384, 0.345, 0.6)
+gravity = Vector3(0, -0.2, -0.5)
+
+[sub_resource type="SphereMesh" id="ash_mesh"]
+radius = 0.025
+height = 0.05
+radial_segments = 6
+rings = 3
+
+[sub_resource type="StandardMaterial3D" id="ash_mesh_mat"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.416, 0.384, 0.345, 0.45)
+
+[node name="Main3D" type="Node3D"]
+script = ExtResource("11")
+
+[node name="WorldEnvironment" parent="." instance=ExtResource("1")]
+
+[node name="Moon" type="DirectionalLight3D" parent="."]
+light_color = Color(0.416, 0.478, 0.584, 1.0)
+light_energy = 0.35
+rotation_degrees = Vector3(-45, -30, 0)
+shadow_enabled = true
+shadow_bias = 0.1
+shadow_normal_bias = 2.0
+
+[node name="Player" parent="." instance=ExtResource("4")]
+position = Vector3(0, 1.05, 0)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+script = ExtResource("6")
+position = Vector3(0, 6, 5)
+fov = 50.0
+near = 0.1
+far = 100.0
+current = true
+height = 7.0
+distance = 5.0
+
+[node name="HUD" parent="." instance=ExtResource("2")]
+
+[node name="StreetBuilder" type="Node3D" parent="."]
+script = ExtResource("7")
+
+[node name="Ash" type="GPUParticles3D" parent="."]
+emitting = true
+amount = 80
+lifetime = 6.0
+preprocess = 3.0
+speed_scale = 1.0
+process_material = SubResource("ash_mat")
+draw_pass_1 = SubResource("ash_mesh")
+position = Vector3(0, 5, 0)
+
+[node name="AudioAmbient" type="AudioStreamPlayer3D" parent="."]
+bus = &"Ambient"
+
+[node name="AudioSFX" type="AudioStreamPlayer3D" parent="."]
+bus = &"SFX"
+
+[node name="Splash" parent="." instance=ExtResource("5")]
+show_splash = true
+
+[node name="Screens" parent="." instance=ExtResource("8")]
+
+[node name="PostProcessOverlay" type="CanvasLayer" parent="."]
+script = ExtResource("9")
+
+[node name="WorldEnvSetup" type="Node" parent="."]
+script = ExtResource("10")
+
+[node name="StressTest" type="Node" parent="."]
+script = ExtResource("13")
+
+[node name="FogSetup" type="Node3D" parent="."]
+script = ExtResource("14")
+
+[node name="ScreenShake" type="Node" parent="."]
+script = ExtResource("15")
+
+[node name="StreetLightSpawner" type="Node3D" parent="."]
+script = ExtResource("16")
+
+[node name="NightEnv" type="Node3D" parent="."]
+script = ExtResource("17_NightE")
+
+[node name="EndingScreen" type="CanvasLayer" parent="."]
+script = ExtResource("19_Ending")
+
+[node name="LANMenu" type="CanvasLayer" parent="."]
+script = ExtResource("20_LANMen")

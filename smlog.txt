@@ -1,0 +1,146 @@
+SCRIPT ERROR: Invalid assignment of property or key 'text' with value of type 'String' on a base object of type 'Nil'.
+   at: SaveSlotEntry.setup (res://scripts/ui/save_slot_entry.gd:14)
+   GDScript backtrace (most recent call first):
+       [0] setup (res://scripts/ui/save_slot_entry.gd:14)
+       [1] _refresh_slots (res://scripts/ui/save_slots_ui.gd:24)
+       [2] _ready (res://scripts/ui/save_slots_ui.gd:15)
+ERROR: Node not found: "VBoxContainer/SlotLabel" (relative to "/root/SaveSlotsUI/MarginContainer/VBoxContainer/SlotContainer/@PanelContainer@17").
+   at: get_node (scene/main/node.cpp:1975)
+   GDScript backtrace (most recent call first):
+       [0] @implicit_ready (res://scripts/ui/save_slot_entry.gd:4)
+       [1] _refresh_slots (res://scripts/ui/save_slots_ui.gd:25)
+       [2] _ready (res://scripts/ui/save_slots_ui.gd:15)
+ERROR: Node not found: "VBoxContainer/InfoLabel" (relative to "/root/SaveSlotsUI/MarginContainer/VBoxContainer/SlotContainer/@PanelContainer@17").
+   at: get_node (scene/main/node.cpp:1975)
+   GDScript backtrace (most recent call first):
+       [0] @implicit_ready (res://scripts/ui/save_slot_entry.gd:5)
+       [1] _refresh_slots (res://scripts/ui/save_slots_ui.gd:25)
+       [2] _ready (res://scripts/ui/save_slots_ui.gd:15)
+ERROR: Node not found: "VBoxContainer/HBoxContainer/LoadButton" (relative to "/root/SaveSlotsUI/MarginContainer/VBoxContainer/SlotContainer/@PanelContainer@17").
+   at: get_node (scene/main/node.cpp:1975)
+   GDScript backtrace (most recent call first):
+       [0] @implicit_ready (res://scripts/ui/save_slot_entry.gd:6)
+       [1] _refresh_slots (res://scripts/ui/save_slots_ui.gd:25)
+       [2] _ready (res://scripts/ui/save_slots_ui.gd:15)
+ERROR: Node not found: "VBoxContainer/HBoxContainer/SaveButton" (relative to "/root/SaveSlotsUI/MarginContainer/VBoxContainer/SlotContainer/@PanelContainer@17").
+   at: get_node (scene/main/node.cpp:1975)
+   GDScript backtrace (most recent call first):
+       [0] @implicit_ready (res://scripts/ui/save_slot_entry.gd:7)
+       [1] _refresh_slots (res://scripts/ui/save_slots_ui.gd:25)
+       [2] _ready (res://scripts/ui/save_slots_ui.gd:15)
+ERROR: Node not found: "VBoxContainer/HBoxContainer/DeleteButton" (relative to "/root/SaveSlotsUI/MarginContainer/VBoxContainer/SlotContainer/@PanelContainer@17").
+   at: get_node (scene/main/node.cpp:1975)
+   GDScript backtrace (most recent call first):
+       [0] @implicit_ready (res://scripts/ui/save_slot_entry.gd:8)
+       [1] _refresh_slots (res://scripts/ui/save_slots_ui.gd:25)
+       [2] _ready (res://scripts/ui/save_slots_ui.gd:15)
+SCRIPT ERROR: Invalid assignment of property or key 'text' with value of type 'String' on a base object of type 'Nil'.
+   at: SaveSlotEntry.setup (res://scripts/ui/save_slot_entry.gd:14)
+   GDScript backtrace (most recent call first):
+       [0] setup (res://scripts/ui/save_slot_entry.gd:14)
+       [1] _refresh_slots (res://scripts/ui/save_slots_ui.gd:24)
+       [2] _ready (res://scripts/ui/save_slots_ui.gd:15)
+ERROR: Node not found: "VBoxContainer/SlotLabel" (relative to "/root/SaveSlotsUI/MarginContainer/VBoxContainer/SlotContainer/@PanelContainer@18").
+   at: get_node (scene/main/node.cpp:1975)
+   GDScript backtrace (most recent call first):
+       [0] @implicit_ready (res://scripts/ui/save_slot_entry.gd:4)
+       [1] _refresh_slots (res://scripts/ui/save_slots_ui.gd:25)
+       [2] _ready (res://scripts/ui/save_slots_ui.gd:15)
+ERROR: Node not found: "VBoxContainer/InfoLabel" (relative to "/root/SaveSlotsUI/MarginContainer/VBoxContainer/SlotContainer/@PanelContainer@18").
+   at: get_node (scene/main/node.cpp:1975)
+   GDScript backtrace (most recent call first):
+       [0] @implicit_ready (res://scripts/ui/save_slot_entry.gd:5)
+       [1] _refresh_slots (res://scripts/ui/save_slots_ui.gd:25)
+       [2] _ready (res://scripts/ui/save_slots_ui.gd:15)
+ERROR: Node not found: "VBoxContainer/HBoxContainer/LoadButton" (relative to "/root/SaveSlotsUI/MarginContainer/VBoxContainer/SlotContainer/@PanelContainer@18").
+   at: get_node (scene/main/node.cpp:1975)
+   GDScript backtrace (most recent call first):
+       [0] @implicit_ready (res://scripts/ui/save_slot_entry.gd:6)
+       [1] _refresh_slots (res://scripts/ui/save_slots_ui.gd:25)
+       [2] _ready (res://scripts/ui/save_slots_ui.gd:15)
+ERROR: Node not found: "VBoxContainer/HBoxContainer/SaveButton" (relative to "/root/SaveSlotsUI/MarginContainer/VBoxContainer/SlotContainer/@PanelContainer@18").
+   at: get_node (scene/main/node.cpp:1975)
+   GDScript backtrace (most recent call first):
+       [0] @implicit_ready (res://scripts/ui/save_slot_entry.gd:7)
+       [1] _refresh_slots (res://scripts/ui/save_slots_ui.gd:25)
+       [2] _ready (res://scripts/ui/save_slots_ui.gd:15)
+ERROR: Node not found: "VBoxContainer/HBoxContainer/DeleteButton" (relative to "/root/SaveSlotsUI/MarginContainer/VBoxContainer/SlotContainer/@PanelContainer@18").
+   at: get_node (scene/main/node.cpp:1975)
+   GDScript backtrace (most recent call first):
+       [0] @implicit_ready (res://scripts/ui/save_slot_entry.gd:8)
+       [1] _refresh_slots (res://scripts/ui/save_slots_ui.gd:25)
+       [2] _ready (res://scripts/ui/save_slots_ui.gd:15)
+SCRIPT ERROR: Invalid assignment of property or key 'text' with value of type 'String' on a base object of type 'Nil'.
+   at: SaveSlotEntry.setup (res://scripts/ui/save_slot_entry.gd:14)
+   GDScript backtrace (most recent call first):
+       [0] setup (res://scripts/ui/save_slot_entry.gd:14)
+       [1] _refresh_slots (res://scripts/ui/save_slots_ui.gd:24)
+       [2] _ready (res://scripts/ui/save_slots_ui.gd:15)
+ERROR: Node not found: "VBoxContainer/SlotLabel" (relative to "/root/SaveSlotsUI/MarginContainer/VBoxContainer/SlotContainer/@PanelContainer@19").
+   at: get_node (scene/main/node.cpp:1975)
+   GDScript backtrace (most recent call first):
+       [0] @implicit_ready (res://scripts/ui/save_slot_entry.gd:4)
+       [1] _refresh_slots (res://scripts/ui/save_slots_ui.gd:25)
+       [2] _ready (res://scripts/ui/save_slots_ui.gd:15)
+ERROR: Node not found: "VBoxContainer/InfoLabel" (relative to "/root/SaveSlotsUI/MarginContainer/VBoxContainer/SlotContainer/@PanelContainer@19").
+   at: get_node (scene/main/node.cpp:1975)
+   GDScript backtrace (most recent call first):
+       [0] @implicit_ready (res://scripts/ui/save_slot_entry.gd:5)
+       [1] _refresh_slots (res://scripts/ui/save_slots_ui.gd:25)
+       [2] _ready (res://scripts/ui/save_slots_ui.gd:15)
+ERROR: Node not found: "VBoxContainer/HBoxContainer/LoadButton" (relative to "/root/SaveSlotsUI/MarginContainer/VBoxContainer/SlotContainer/@PanelContainer@19").
+   at: get_node (scene/main/node.cpp:1975)
+   GDScript backtrace (most recent call first):
+       [0] @implicit_ready (res://scripts/ui/save_slot_entry.gd:6)
+       [1] _refresh_slots (res://scripts/ui/save_slots_ui.gd:25)
+       [2] _ready (res://scripts/ui/save_slots_ui.gd:15)
+ERROR: Node not found: "VBoxContainer/HBoxContainer/SaveButton" (relative to "/root/SaveSlotsUI/MarginContainer/VBoxContainer/SlotContainer/@PanelContainer@19").
+   at: get_node (scene/main/node.cpp:1975)
+   GDScript backtrace (most recent call first):
+       [0] @implicit_ready (res://scripts/ui/save_slot_entry.gd:7)
+       [1] _refresh_slots (res://scripts/ui/save_slots_ui.gd:25)
+       [2] _ready (res://scripts/ui/save_slots_ui.gd:15)
+ERROR: Node not found: "VBoxContainer/HBoxContainer/DeleteButton" (relative to "/root/SaveSlotsUI/MarginContainer/VBoxContainer/SlotContainer/@PanelContainer@19").
+   at: get_node (scene/main/node.cpp:1975)
+   GDScript backtrace (most recent call first):
+       [0] @implicit_ready (res://scripts/ui/save_slot_entry.gd:8)
+       [1] _refresh_slots (res://scripts/ui/save_slots_ui.gd:25)
+       [2] _ready (res://scripts/ui/save_slots_ui.gd:15)
+SCRIPT ERROR: Invalid assignment of property or key 'text' with value of type 'String' on a base object of type 'Nil'.
+   at: SaveSlotEntry.setup (res://scripts/ui/save_slot_entry.gd:14)
+   GDScript backtrace (most recent call first):
+       [0] setup (res://scripts/ui/save_slot_entry.gd:14)
+       [1] _refresh_slots (res://scripts/ui/save_slots_ui.gd:24)
+       [2] _ready (res://scripts/ui/save_slots_ui.gd:15)
+ERROR: Node not found: "VBoxContainer/SlotLabel" (relative to "/root/SaveSlotsUI/MarginContainer/VBoxContainer/SlotContainer/@PanelContainer@20").
+   at: get_node (scene/main/node.cpp:1975)
+   GDScript backtrace (most recent call first):
+       [0] @implicit_ready (res://scripts/ui/save_slot_entry.gd:4)
+       [1] _refresh_slots (res://scripts/ui/save_slots_ui.gd:25)
+       [2] _ready (res://scripts/ui/save_slots_ui.gd:15)
+ERROR: Node not found: "VBoxContainer/InfoLabel" (relative to "/root/SaveSlotsUI/MarginContainer/VBoxContainer/SlotContainer/@PanelContainer@20").
+   at: get_node (scene/main/node.cpp:1975)
+   GDScript backtrace (most recent call first):
+       [0] @implicit_ready (res://scripts/ui/save_slot_entry.gd:5)
+       [1] _refresh_slots (res://scripts/ui/save_slots_ui.gd:25)
+       [2] _ready (res://scripts/ui/save_slots_ui.gd:15)
+ERROR: Node not found: "VBoxContainer/HBoxContainer/LoadButton" (relative to "/root/SaveSlotsUI/MarginContainer/VBoxContainer/SlotContainer/@PanelContainer@20").
+   at: get_node (scene/main/node.cpp:1975)
+   GDScript backtrace (most recent call first):
+       [0] @implicit_ready (res://scripts/ui/save_slot_entry.gd:6)
+       [1] _refresh_slots (res://scripts/ui/save_slots_ui.gd:25)
+       [2] _ready (res://scripts/ui/save_slots_ui.gd:15)
+ERROR: Node not found: "VBoxContainer/HBoxContainer/SaveButton" (relative to "/root/SaveSlotsUI/MarginContainer/VBoxContainer/SlotContainer/@PanelContainer@20").
+   at: get_node (scene/main/node.cpp:1975)
+   GDScript backtrace (most recent call first):
+       [0] @implicit_ready (res://scripts/ui/save_slot_entry.gd:7)
+       [1] _refresh_slots (res://scripts/ui/save_slots_ui.gd:25)
+       [2] _ready (res://scripts/ui/save_slots_ui.gd:15)
+ERROR: Node not found: "VBoxContainer/HBoxContainer/DeleteButton" (relative to "/root/SaveSlotsUI/MarginContainer/VBoxContainer/SlotContainer/@PanelContainer@20").
+   at: get_node (scene/main/node.cpp:1975)
+   GDScript backtrace (most recent call first):
+       [0] @implicit_ready (res://scripts/ui/save_slot_entry.gd:8)
+       [1] _refresh_slots (res://scripts/ui/save_slots_ui.gd:25)
+       [2] _ready (res://scripts/ui/save_slots_ui.gd:15)
+WARNING: 4 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)

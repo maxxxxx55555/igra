@@ -1,0 +1,36 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/street_builder.gd" id="1_sb"]
+[ext_resource type="Script" path="res://scripts/world/power_switch.gd" id="2_ps"]
+[ext_resource type="Script" path="res://scripts/world/district_trigger.gd" id="3_dt"]
+[ext_resource type="Script" path="res://scripts/visual/emissive_windows.gd" id="4_ew"]
+[ext_resource type="Script" path="res://scripts/world/street_props.gd" id="5_cp"]
+
+[sub_resource type="BoxShape3D" id="box_1"]
+size = Vector3(80, 20, 80)
+
+[node name="district_school" type="Node3D"]
+
+[node name="StreetBuilder" type="Node3D" parent="."]
+script = ExtResource("1_sb")
+district_id = &"school"
+
+[node name="PowerSwitch" type="Node3D" parent="."]
+script = ExtResource("2_ps")
+district_id = &"school"
+position = Vector3(8, 0, 8)
+
+[node name="DistrictTrigger" type="Area3D" parent="."]
+script = ExtResource("3_dt")
+district_id = &"school"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DistrictTrigger"]
+shape = SubResource("box_1")
+
+[node name="EmissiveWindows" type="MultiMeshInstance3D" parent="."]
+script = ExtResource("4_ew")
+seed_value = 4662
+
+[node name="Props" type="Node3D" parent="."]
+script = ExtResource("5_cp")
+street_builder_path = NodePath("../StreetBuilder")

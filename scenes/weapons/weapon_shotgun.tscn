@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_shotgun.gd" id="1_kkkk"]
+
+[node name="WeaponShotgun" type="Node3D"]
+script = ExtResource("1_kkkk")
+
+[node name="Rays" type="Node3D" parent="."]
+
+[node name="RayCast3D" type="RayCast3D" parent="Rays"]
+target_position = Vector3(0, 0, -10)
+
+[node name="RayCast3D2" type="RayCast3D" parent="Rays"]
+target_position = Vector3(0.1, 0.05, -10)
+
+[node name="RayCast3D3" type="RayCast3D" parent="Rays"]
+target_position = Vector3(-0.1, 0.05, -10)
+
+[node name="RayCast3D4" type="RayCast3D" parent="Rays"]
+target_position = Vector3(0.05, -0.05, -10)
+
+[node name="RayCast3D5" type="RayCast3D" parent="Rays"]
+target_position = Vector3(-0.05, -0.05, -10)
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+bus = &"SFX"
+

@@ -1,0 +1,20 @@
+﻿{
+    "lines":  [
+                  {
+                      "id":  "greet",
+                      "text":  "[Текст приветствия engineer]",
+                      "trigger":  "on_interact"
+                  },
+                  {
+                      "id":  "quest",
+                      "text":  "[Квестовая реплика engineer]",
+                      "trigger":  "on_quest_start"
+                  },
+                  {
+                      "id":  "bye",
+                      "text":  "[Прощание engineer]",
+                      "trigger":  "on_exit"
+                  }
+              ],
+    "npc_id":  "engineer"
+}

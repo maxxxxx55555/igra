@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="MonsterData" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/enemies/monster_data.gd" id="1"]
+[resource]
+script = ExtResource("1")
+id = &"watcher"
+display_name = "Наблюдатель"
+description = "Неподвижный часовой с узким сектором обзора. Заметив — поднимает тревогу."
+move_speed = 0.0
+chase_speed = 0.0
+collision_radius = 13.0
+detect_radius = 300.0
+vision_cone_deg = 50.0
+vision_range = 320.0
+noise_sensitivity = 0.5
+lose_time = 4.0
+max_hp = 50.0
+melee_damage = 0.0
+melee_range = 0.0
+body_color = Color(0.2, 0.25, 0.35, 1)

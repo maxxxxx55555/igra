@@ -1,0 +1,28 @@
+﻿{
+    "reward_per_enemy":  5,
+    "shop_items":  [
+                       {
+                           "id":  "medkit",
+                           "price":  30
+                       },
+                       {
+                           "id":  "ammo_pack",
+                           "price":  20
+                       },
+                       {
+                           "id":  "scope_lens",
+                           "price":  80
+                       },
+                       {
+                           "id":  "radio_part",
+                           "price":  60
+                       },
+                       {
+                           "id":  "ancient_key",
+                           "price":  120
+                       }
+                   ],
+    "reward_per_quest":  50,
+    "autosave_on_purchase":  true,
+    "reward_per_secret":  25
+}

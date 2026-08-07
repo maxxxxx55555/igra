@@ -1,0 +1,22 @@
+﻿{
+  "first_light": {"title": "Первый свет", "description": "Активируйте первый фонарь", "icon": "lamp", "reward": 50},
+  "electrician": {"title": "Электрик", "description": "Восстановите 1 район до FULL", "icon": "wrench", "reward": 100},
+  "lamplighter": {"title": "Светоч", "description": "Восстановите все 11 районов до FULL", "icon": "sun", "reward": 500},
+  "librarian": {"title": "Библиотекарь", "description": "Соберите все документы", "icon": "book", "reward": 200},
+  "shadow_hunter": {"title": "Охотник на теней", "description": "Убейте 50 Shadow", "icon": "skull", "reward": 150},
+  "quiet_mouse": {"title": "Тихий как мышь", "description": "Пройдите District 3 без внимания", "icon": "mouse", "reward": 200},
+  "combo_master": {"title": "Мастер комбо", "description": "Выполните 10 combo-3 подряд", "icon": "fist", "reward": 180},
+  "overload": {"title": "Перегруз", "description": "Носите >39 кг 5 минут", "icon": "weight", "reward": 120},
+  "photographer": {"title": "Фотограф", "description": "Сделайте 10 фото в фоторежиме", "icon": "camera", "reward": 70},
+  "seeker": {"title": "Искатель", "description": "Найдите 10 секретов", "icon": "magnify", "reward": 160},
+  "economist": {"title": "Эконом", "description": "Накопите 5000 монет", "icon": "coin", "reward": 140},
+  "unscratched": {"title": "Без царапин", "description": "Пройдите District 4 без урона", "icon": "shield", "reward": 250},
+  "architect": {"title": "Архитектор", "description": "Победите босса The Architect", "icon": "crown", "reward": 500},
+  "truth": {"title": "Истина", "description": "Получите секретную концовку", "icon": "eye", "reward": 300, "secret": true},
+  "darkness": {"title": "Тьма", "description": "Получите плохую концовку", "icon": "moon", "reward": 100, "secret": true},
+  "speedrunner": {"title": "Спидраннер", "description": "Пройдите игру за <4 часа", "icon": "clock", "reward": 200, "secret": true},
+  "collector": {"title": "Коллекционер", "description": "Соберите все скины фонарика", "icon": "palette", "reward": 250, "secret": true},
+  "ironman": {"title": "Железный человек", "description": "Пройдите в Hardcore-режиме", "icon": "heart", "reward": 300, "secret": true},
+  "summer_sleep": {"title": "Сон в летнюю ночь", "description": "Поспите в кровати (District 1)", "icon": "bed", "reward": 80, "secret": true},
+  "who_there": {"title": "Кто там?", "description": "Услышьте галлюцинацию 5 раз", "icon": "ear", "reward": 90, "secret": true}
+}

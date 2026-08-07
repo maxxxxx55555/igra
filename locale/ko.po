@@ -1,0 +1,66 @@
+# Locale: ko  -- THE_LAST_STREETLIGHT
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: ko\n"
+
+msgid "cancel"
+msgstr "취소"
+
+msgid "confirm"
+msgstr "확인"
+
+msgid "hud_coins"
+msgstr "코인"
+
+msgid "hud_district"
+msgstr "구역"
+
+msgid "hud_lives"
+msgstr "생명"
+
+msgid "hud_power"
+msgstr "전력"
+
+msgid "interact_shop"
+msgstr "상점"
+
+msgid "interact_switch"
+msgstr "스위치"
+
+msgid "menu_host"
+msgstr "LAN 호스트"
+
+msgid "menu_join"
+msgstr "LAN 참가"
+
+msgid "menu_play"
+msgstr "플레이"
+
+msgid "menu_quit"
+msgstr "종료"
+
+msgid "msg_caught"
+msgstr "잡혔습니다!"
+
+msgid "msg_lose"
+msgstr "실패..."
+
+msgid "msg_saved"
+msgstr "저장됨"
+
+msgid "msg_win"
+msgstr "모든 구역 점등!"
+
+msgid "shop_battery"
+msgstr "배터리 +25%"
+
+msgid "shop_medkit"
+msgstr "구급함"
+
+msgid "shop_not_enough"
+msgstr "코인 부족"
+
+msgid "shop_stamina"
+msgstr "스태미나"
+

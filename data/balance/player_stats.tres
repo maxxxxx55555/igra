@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="PlayerStats" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/player/player_stats.gd" id="1_stats"]
+[resource]
+script = ExtResource("1_stats")
+walk_speed = 170.0
+run_speed = 300.0
+stealth_speed = 90.0
+stamina_max = 100.0
+stamina_drain_per_sec = 22.0
+stamina_regen_per_sec = 14.0
+noise_idle = 0.0
+noise_walk = 120.0
+noise_run = 260.0
+noise_stealth = 40.0
+noise_emit_interval = 0.25
+max_hp = 100.0
+weight_speed_mult = 1.0

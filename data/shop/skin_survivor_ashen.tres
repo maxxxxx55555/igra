@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ShopItem" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/economy/shop_item.gd" id="1"]
+[resource]
+script = ExtResource("1")
+id = &"skin_survivor_ashen"
+kind = 2
+display_name = "Скин Пепельный"
+description = "Косметика. Не влияет на характеристики."
+price_coins = 2000

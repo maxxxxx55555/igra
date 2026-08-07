@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/inventory/item_data.gd" id="1"]
+[resource]
+script = ExtResource("1")
+id = &"transistor"
+display_name = "Транзистор"
+description = "Мелкая деталь. Крафт и квесты."
+rarity = 1
+weight = 0.05
+stackable = true
+max_stack = 40
+consumable = false

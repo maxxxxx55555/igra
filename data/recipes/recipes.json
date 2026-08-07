@@ -1,0 +1,14 @@
+{
+  "medkit": {"name": "Medkit", "needs": {"scrap": 1, "gear": 1}, "gives": "medkit", "time": 3.0},
+  "ammo_pistol": {"name": "Pistol Ammo", "needs": {"scrap": 2, "cable": 1}, "gives": "ammo_pistol", "time": 2.0},
+  "ammo_shotgun": {"name": "Shotgun Ammo", "needs": {"scrap": 3, "wiring": 1}, "gives": "ammo_shotgun", "time": 2.5},
+  "ammo_rifle": {"name": "Rifle Ammo", "needs": {"scrap": 4, "circuit": 1}, "gives": "ammo_rifle", "time": 3.0},
+  "flashlight_upgrade": {"name": "Flashlight Upgrade", "needs": {"battery": 2, "scrap": 3, "scope_lens": 1}, "gives": "flashlight_upgrade", "time": 5.0},
+  "molotov": {"name": "Molotov", "needs": {"gas_canister": 1, "scrap": 1, "cable": 1}, "gives": "molotov", "time": 2.0},
+  "pipe_bomb": {"name": "Pipe Bomb", "needs": {"scrap": 2, "fuse": 1, "gas_canister": 1}, "gives": "pipe_bomb", "time": 4.0},
+  "armor_patch": {"name": "Armor Patch", "needs": {"scrap": 2, "wiring": 1}, "gives": "armor_patch", "time": 3.0},
+  "stim_shot": {"name": "Stim Shot", "needs": {"serum": 1, "battery": 1, "scrap": 1}, "gives": "stim_shot", "time": 4.0},
+  "noise_trap": {"name": "Noise Trap", "needs": {"scrap": 2, "radio_part": 1, "battery": 1}, "gives": "noise_trap", "time": 3.5},
+  "emp_grenade": {"name": "EMP Grenade", "needs": {"circuit": 2, "battery": 2, "transistor": 1}, "gives": "emp_grenade", "time": 5.0},
+  "repair_kit": {"name": "Repair Kit", "needs": {"scrap": 3, "gear": 1, "wiring": 1}, "gives": "repair_kit", "time": 3.0}
+}

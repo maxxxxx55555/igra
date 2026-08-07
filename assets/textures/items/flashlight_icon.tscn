@@ -1,0 +1,17 @@
+[gd_scene format=3]
+
+[node name="FlashlightIcon" type="Node2D"]
+
+[node name="Body" type="ColorRect" parent="."]
+offset_left=-6.0
+offset_top=-12.0
+offset_right=6.0
+offset_bottom=12.0
+color=Color(0.8, 0.7, 0.3, 1.0)
+
+[node name="Light" type="ColorRect" parent="."]
+offset_left=-4.0
+offset_top=-14.0
+offset_right=4.0
+offset_bottom=-8.0
+color=Color(1.0, 0.95, 0.6, 1.0)

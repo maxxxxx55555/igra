@@ -1,0 +1,11 @@
+﻿{
+    "ng_plus_enemy_mult":  1.5,
+    "ng_plus_xp_mult":  1.2,
+    "unique_achievements":  [
+                                "ng_plus_start",
+                                "ng_plus_complete",
+                                "all_secrets",
+                                "all_docs",
+                                "pacifist"
+                            ]
+}

@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="MonsterData" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/enemies/monster_data.gd" id="1"]
+[resource]
+script = ExtResource("1")
+id = &"shadow"
+display_name = "Тень"
+description = "Сгусток темноты. Не выносит света — в луче фонарика корчится и гибнет."
+move_speed = 60.0
+chase_speed = 110.0
+collision_radius = 11.0
+detect_radius = 200.0
+vision_cone_deg = 360.0
+vision_range = 200.0
+noise_sensitivity = 0.8
+lose_time = 2.5
+light_vulnerable = true
+light_damage_per_sec = 25.0
+fears_lit_district = true
+max_hp = 30.0
+melee_damage = 8.0
+melee_range = 24.0
+body_color = Color(0.15, 0.1, 0.2, 1)

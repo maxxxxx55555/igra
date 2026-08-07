@@ -1,0 +1,66 @@
+# Locale: pl  -- THE_LAST_STREETLIGHT
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: pl\n"
+
+msgid "cancel"
+msgstr "Anuluj"
+
+msgid "confirm"
+msgstr "Potwierdź"
+
+msgid "hud_coins"
+msgstr "Monety"
+
+msgid "hud_district"
+msgstr "Dzielnica"
+
+msgid "hud_lives"
+msgstr "Życia"
+
+msgid "hud_power"
+msgstr "Energia"
+
+msgid "interact_shop"
+msgstr "Sklep"
+
+msgid "interact_switch"
+msgstr "Przełącznik"
+
+msgid "menu_host"
+msgstr "Stwórz LAN"
+
+msgid "menu_join"
+msgstr "Dołącz LAN"
+
+msgid "menu_play"
+msgstr "Graj"
+
+msgid "menu_quit"
+msgstr "Wyjdź"
+
+msgid "msg_caught"
+msgstr "Złapano!"
+
+msgid "msg_lose"
+msgstr "Porażka..."
+
+msgid "msg_saved"
+msgstr "Zapisano"
+
+msgid "msg_win"
+msgstr "Wszystkie dzielnice zasilone!"
+
+msgid "shop_battery"
+msgstr "Bateria +25%"
+
+msgid "shop_medkit"
+msgstr "Apteczka"
+
+msgid "shop_not_enough"
+msgstr "Za mało monet"
+
+msgid "shop_stamina"
+msgstr "Wytrzymałość"
+

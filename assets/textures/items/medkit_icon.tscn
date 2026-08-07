@@ -1,0 +1,24 @@
+[gd_scene format=3]
+
+[node name="MedkitIcon" type="Node2D"]
+
+[node name="Background" type="ColorRect" parent="."]
+offset_left=-16.0
+offset_top=-16.0
+offset_right=16.0
+offset_bottom=16.0
+color=Color(0.6, 0.1, 0.1, 1.0)
+
+[node name="Cross" type="ColorRect" parent="."]
+offset_left=-8.0
+offset_top=-3.0
+offset_right=8.0
+offset_bottom=3.0
+color=Color(1.0, 1.0, 1.0, 1.0)
+
+[node name="CrossV" type="ColorRect" parent="."]
+offset_left=-3.0
+offset_top=-8.0
+offset_right=3.0
+offset_bottom=8.0
+color=Color(1.0, 1.0, 1.0, 1.0)

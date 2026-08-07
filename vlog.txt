@@ -1,0 +1,11 @@
+ERROR: Node not found: "MarginContainer/VBoxContainer/SlotContainer" (relative to "/root/SaveSlotsCopy").
+   at: get_node (scene/main/node.cpp:1975)
+   GDScript backtrace (most recent call first):
+       [0] @implicit_ready (res://scripts/ui/save_slots_ui.gd:4)
+SCRIPT ERROR: Cannot call method 'get_children' on a null value.
+   at: SaveSlotsUI._refresh_slots (res://scripts/ui/save_slots_ui.gd:19)
+   GDScript backtrace (most recent call first):
+       [0] _refresh_slots (res://scripts/ui/save_slots_ui.gd:19)
+       [1] _ready (res://scripts/ui/save_slots_ui.gd:15)
+WARNING: 4 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)

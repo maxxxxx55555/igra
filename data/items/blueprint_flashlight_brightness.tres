@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/inventory/item_data.gd" id="1"]
+[resource]
+script = ExtResource("1")
+id = &"blueprint_flashlight_brightness"
+display_name = "Чертёж: яркость"
+description = "Схема улучшения луча. Применится автоматически."
+rarity = 2
+weight = 0.1
+stackable = false
+max_stack = 1
+consumable = false

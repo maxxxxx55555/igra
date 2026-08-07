@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3]
+[ext_resource type="Script" path="res://scripts/world/puzzle_base.gd" id="1_pz"]
+[sub_resource type="CircleShape2D" id="Circle_pz"]
+radius = 18.0
+[node name="Puzzle" type="Area2D"]
+script = ExtResource("1_pz")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("Circle_pz")

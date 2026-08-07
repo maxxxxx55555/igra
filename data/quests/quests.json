@@ -1,0 +1,18 @@
+{
+  "main_01": {"title": "Probuzhdenie", "desc": "Najdi vyhod iz podvala", "type": "main", "objectives": [{"id": "find_exit", "text": "Najdi vyhod", "target": 1}], "reward": {"xp": 50, "coins": 20}, "next": "main_02"},
+  "main_02": {"title": "Pervyj svet", "desc": "Vosstanovi energiju v rajone Centr", "type": "main", "objectives": [{"id": "restore_power", "text": "Vklyuchi generator", "target": 1}], "reward": {"xp": 100, "coins": 50}, "next": "main_03"},
+  "main_03": {"title": "Zavodskoj rajon", "desc": "Otkroj zavodskoj rajon", "type": "main", "objectives": [{"id": "reach_industrial", "text": "Dobersis do zavoda", "target": 1}], "reward": {"xp": 150, "coins": 80}, "next": "main_04"},
+  "main_04": {"title": "Teni v tumane", "desc": "Uznaj pravdu o Tenjah", "type": "main", "objectives": [{"id": "find_documents", "text": "Najdi 3 dokumenta", "target": 3}], "reward": {"xp": 200, "coins": 100}, "next": "main_05"},
+  "main_05": {"title": "Poslednij fonar", "desc": "Dobersis do glavnogo fonarja goroda", "type": "main", "objectives": [{"id": "reach_lighthouse", "text": "Dobersis do fonarja", "target": 1}], "reward": {"xp": 300, "coins": 200}, "next": "boss_quest"},
+  "boss_quest": {"title": "Hranitel", "desc": "Pobedi Poslednego Hranitelja", "type": "main", "objectives": [{"id": "kill_boss", "text": "Ubij bossa", "target": 1}], "reward": {"xp": 1000, "coins": 500}, "next": ""},
+  "side_01": {"title": "Propavshij patrul", "desc": "Najdi 5 znakov patrulja", "type": "side", "objectives": [{"id": "find_badges", "text": "Najdi znaki", "target": 5}], "reward": {"xp": 80, "coins": 40}},
+  "side_02": {"title": "Aptechki dlja vyzhivshih", "desc": "Sobere 3 aptechki", "type": "side", "objectives": [{"id": "collect_medkits", "text": "Sobere aptechki", "target": 3}], "reward": {"xp": 60, "coins": 30}},
+  "side_03": {"title": "Zachistka podvala", "desc": "Ubij 10 vragov v podvale", "type": "side", "objectives": [{"id": "kill_enemies", "text": "Ubij vragov", "target": 10}], "reward": {"xp": 120, "coins": 60}},
+  "side_04": {"title": "Tajnik kontrabandista", "desc": "Najdi tajnik s oruzhiem", "type": "side", "objectives": [{"id": "find_stash", "text": "Najdi tajnik", "target": 1}], "reward": {"xp": 100, "coins": 100}},
+  "side_05": {"title": "Radiovolny", "desc": "Najdi 4 radio i poslushaj", "type": "side", "objectives": [{"id": "find_radios", "text": "Najdi radio", "target": 4}], "reward": {"xp": 90, "coins": 45}},
+  "side_06": {"title": "Fotoohota", "desc": "Sfotografiruj 5 anomalij", "type": "side", "objectives": [{"id": "photo_anomalies", "text": "Sdelaj foto", "target": 5}], "reward": {"xp": 70, "coins": 35}},
+  "side_07": {"title": "Kollektsioner", "desc": "Sobere 8 monet starogo goroda", "type": "side", "objectives": [{"id": "collect_coins", "text": "Sobere monety", "target": 8}], "reward": {"xp": 110, "coins": 55}},
+  "side_08": {"title": "Elektrik", "desc": "Pochini 3 raspreddelitelnyh shhita", "type": "side", "objectives": [{"id": "fix_panels", "text": "Pochini shhity", "target": 3}], "reward": {"xp": 130, "coins": 65}},
+  "side_09": {"title": "Vyzhivshij", "desc": "Projdi uroven bez urona", "type": "side", "objectives": [{"id": "no_damage", "text": "Bez urona", "target": 1}], "reward": {"xp": 200, "coins": 100}},
+  "side_10": {"title": "Master krafa", "desc": "Sozdaj 5 predmetov", "type": "side", "objectives": [{"id": "craft_items", "text": "Sozdaj predmety", "target": 5}], "reward": {"xp": 95, "coins": 50}}
+}

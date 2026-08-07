@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="DistrictData" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/world/district_data.gd" id="1"]
+[resource]
+script = ExtResource("1")
+id = &"school"
+display_name = "Школа"
+stage = 0
+powered_by = [&"residential"]
+map_position = Vector2(420, 60)

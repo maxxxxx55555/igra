@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/world/streetlight.gd" id="1_sl"]
+[node name="Streetlight" type="PointLight2D"]
+script = ExtResource("1_sl")

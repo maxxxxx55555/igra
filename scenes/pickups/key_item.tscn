@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/gameplay/key_item.gd" id="1_hhhh"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_key"]
+size = Vector3(0.3, 0.3, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_key"]
+size = Vector3(0.3, 0.3, 0.1)
+
+[node name="KeyItem" type="Area3D" groups=["pickup"]]
+script = ExtResource("1_hhhh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_key")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_key")
+

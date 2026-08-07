@@ -1,0 +1,20 @@
+﻿{
+    "lines":  [
+                  {
+                      "id":  "greet",
+                      "text":  "[Текст приветствия merchant]",
+                      "trigger":  "on_interact"
+                  },
+                  {
+                      "id":  "quest",
+                      "text":  "[Квестовая реплика merchant]",
+                      "trigger":  "on_quest_start"
+                  },
+                  {
+                      "id":  "bye",
+                      "text":  "[Прощание merchant]",
+                      "trigger":  "on_exit"
+                  }
+              ],
+    "npc_id":  "merchant"
+}

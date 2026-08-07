@@ -1,0 +1,23 @@
+{
+  "health_kit": {
+    "needs": {
+      "herb": 2,
+      "bandage": 1
+    },
+    "gives": "health_kit"
+  },
+  "ammo_box": {
+    "needs": {
+      "scrap": 3,
+      "powder": 1
+    },
+    "gives": "ammo_box"
+  },
+  "flashlight_upgrade": {
+    "needs": {
+      "battery": 2,
+      "scrap": 2
+    },
+    "gives": "flashlight_upgrade"
+  }
+}

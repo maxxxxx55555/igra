@@ -1,0 +1,7 @@
+{
+  "outskirts": {"name": "Okraina", "level": "level_01", "weather": "fog", "enemies": ["watcher","shadow"], "power": 0, "max_power": 2, "unlocked": true, "story": "Zdes vse nachalos. Fonari eshhe gorjat."},
+  "industrial": {"name": "Promzona", "level": "level_02", "weather": "rain", "enemies": ["tank","runner","watcher"], "power": 0, "max_power": 3, "unlocked": false, "story": "Zavody molchat. No chto-to dvizhetsja v cehah."},
+  "substation": {"name": "Podstancija", "level": "level_02", "weather": "clear", "enemies": ["sniper","shadow"], "power": 0, "max_power": 2, "unlocked": false, "story": "Glavnyj uzel energii. Bez nee gorod mertv."},
+  "residential": {"name": "Zhiloy kvartal", "level": "level_03", "weather": "fog", "enemies": ["phantom","crawler","shadow"], "power": 0, "max_power": 3, "unlocked": false, "story": "Kvartiry polny tenjami i vospominanijami."},
+  "center": {"name": "Centr i Arena", "level": "level_03", "weather": "rain", "enemies": ["phantom","tank","swarm"], "power": 0, "max_power": 4, "unlocked": false, "story": "Zdes zhivet Hranitel. Poslednij fonar goroda."}
+}

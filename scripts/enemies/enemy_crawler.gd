@@ -1,0 +1,2 @@
+﻿class_name EnemyCrawler
+extends EnemyBase

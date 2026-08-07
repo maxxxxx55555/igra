@@ -1,0 +1,74 @@
+﻿extends CharacterBody3D
+class_name Boss
+
+# ── Фазы ──
+enum Phase { RUSH, MINIONS, RAGE }
+var current_phase: Phase = Phase.RUSH
+var max_hp: float = 1000.0
+var hp: float = 1000.0
+
+# ── Музыка по фазам ──
+@export var music_rush: AudioStream
+@export var music_minions: AudioStream
+@export var music_rage: AudioStream
+@onready var music_player: AudioStreamPlayer = $MusicPlayer
+
+# ── Паттерны ──
+@export var rush_speed: float = 8.0
+@export var minion_scene: PackedScene
+@export var minions_per_wave: int = 3
+@export var rage_speed_mult: float = 1.8
+@export var rage_damage_mult: float = 1.5
+
+func _ready() -> void:
+    _enter_phase(Phase.RUSH)
+
+func take_damage(amount: float) -> void:
+    hp -= amount
+    _check_phase_transition()
+    if hp <= 0:
+        die()
+
+func _check_phase_transition() -> void:
+    var pct := hp / max_hp
+    if pct < 0.33 and current_phase != Phase.RAGE:
+        _enter_phase(Phase.RAGE)
+    elif pct < 0.66 and current_phase == Phase.RUSH:
+        _enter_phase(Phase.MINIONS)
+
+func _enter_phase(phase: Phase) -> void:
+    current_phase = phase
+    match phase:
+        Phase.RUSH:
+            _play_music(music_rush)
+            _pattern_rush()
+        Phase.MINIONS:
+            _play_music(music_minions)
+            _pattern_minions()
+        Phase.RAGE:
+            _play_music(music_rage)
+            _pattern_rage()
+
+func _play_music(stream: AudioStream) -> void:
+    if stream:
+        music_player.stream = stream
+        music_player.play()
+
+func _pattern_rush() -> void:
+    velocity = Vector3.ZERO  # TODO: рывки в сторону игрока со скоростью rush_speed
+
+func _pattern_minions() -> void:
+    for i in range(minions_per_wave):
+        if minion_scene:
+            var m = minion_scene.instantiate()
+            get_parent().add_child(m)
+            m.global_position = global_position + Vector3(i * 2.0, 0, 0)
+
+func _pattern_rage() -> void:
+    rush_speed *= rage_speed_mult
+    # TODO: урон атак * rage_damage_mult
+
+func die() -> void:
+    music_player.stop()
+    # TODO: victory_screen переход
+    queue_free()

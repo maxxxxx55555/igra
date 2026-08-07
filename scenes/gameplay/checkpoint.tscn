@@ -1,0 +1,31 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/gameplay/checkpoint.gd" id="1_gggg"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1"]
+size = Vector3(2, 2, 2)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_1"]
+emission_shape = 1
+emission_sphere_radius = 0.8
+
+[sub_resource type="QuadMesh" id="QuadMesh_1"]
+size = Vector2(0.2, 0.2)
+
+[node name="Checkpoint" type="Area3D"]
+script = ExtResource("1_gggg")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_1")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+light_color = Color(0, 0.8, 1, 1)
+omni_range = 5.0
+shadow_enabled = false
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+amount = 20
+one_shot = false
+process_material = SubResource("ParticleProcessMaterial_1")
+draw_pass_1 = SubResource("QuadMesh_1")
+

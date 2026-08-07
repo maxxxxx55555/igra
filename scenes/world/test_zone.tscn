@@ -1,0 +1,223 @@
+[gd_scene load_steps=8 format=3]
+
+[sub_resource type="BoxMesh" id="floor_mesh"]
+size = Vector3(20, 0.1, 20)
+
+[sub_resource type="StandardMaterial3D" id="floor_mat"]
+albedo_color = Color(0.227, 0.247, 0.278, 1.0)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="wall_mesh"]
+size = Vector3(0.2, 3.5, 20)
+
+[sub_resource type="StandardMaterial3D" id="wall_mat"]
+albedo_color = Color(0.165, 0.200, 0.251, 1.0)
+
+[sub_resource type="BoxShape3D" id="wall_shape"]
+size = Vector3(0.2, 3.5, 20)
+
+[sub_resource type="NavigationMesh" id="nav_mesh"]
+cell_size = 0.25
+cell_height = 0.25
+agent_radius = 0.3
+agent_height = 1.8
+agent_max_slope = 45.0
+agent_max_climb = 0.5
+geometry/parsed_geometry_type = 2
+
+[sub_resource type="BoxMesh" id="car_mesh"]
+size = Vector3(4, 1.5, 2)
+
+[sub_resource type="StandardMaterial3D" id="car_mat"]
+albedo_color = Color(0.165, 0.125, 0.094, 1.0)
+roughness = 0.7
+
+[sub_resource type="BoxShape3D" id="car_shape"]
+size = Vector3(4, 1.5, 2)
+
+[sub_resource type="BoxMesh" id="crate_mesh"]
+size = Vector3(0.8, 0.8, 0.8)
+
+[sub_resource type="StandardMaterial3D" id="crate_mat"]
+albedo_color = Color(0.200, 0.188, 0.165, 1.0)
+
+[sub_resource type="BoxShape3D" id="crate_shape"]
+size = Vector3(0.8, 0.8, 0.8)
+
+[sub_resource type="BoxMesh" id="debris_mesh"]
+size = Vector3(0.4, 0.3, 0.4)
+
+[sub_resource type="StandardMaterial3D" id="debris_mat"]
+albedo_color = Color(0.125, 0.141, 0.165, 1.0)
+
+[sub_resource type="BoxShape3D" id="debris_shape"]
+size = Vector3(0.4, 0.3, 0.4)
+
+[sub_resource type="BoxMesh" id="puddle_mesh"]
+size = Vector3(3, 0.01, 2)
+
+[sub_resource type="StandardMaterial3D" id="puddle_mat"]
+albedo_color = Color(0.102, 0.145, 0.188, 1.0)
+metallic = 0.6
+roughness = 0.2
+
+[sub_resource type="BoxMesh" id="bldg1_mesh"]
+size = Vector3(3, 8, 3)
+
+[sub_resource type="BoxMesh" id="bldg2_mesh"]
+size = Vector3(2.5, 6, 2.5)
+
+[sub_resource type="BoxMesh" id="bldg3_mesh"]
+size = Vector3(4, 12, 3)
+
+[sub_resource type="BoxMesh" id="bldg4_mesh"]
+size = Vector3(2, 5, 3)
+
+[sub_resource type="StandardMaterial3D" id="bldg_mat"]
+albedo_color = Color(0.039, 0.055, 0.078, 1.0)
+
+[node name="TestDistrict" type="Node3D"]
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+mesh = SubResource("floor_mesh")
+material = SubResource("floor_mat")
+position = Vector3(10, 0, 10)
+
+[node name="WallNorth" type="StaticBody3D" parent="."]
+[node name="Mesh" type="MeshInstance3D" parent="WallNorth"]
+mesh = SubResource("wall_mesh")
+material = SubResource("wall_mat")
+position = Vector3(10, 1.75, 0)
+[node name="Collision" type="CollisionShape3D" parent="WallNorth"]
+shape = SubResource("wall_shape")
+position = Vector3(10, 1.75, 0)
+
+[node name="WallSouth" type="StaticBody3D" parent="."]
+[node name="Mesh" type="MeshInstance3D" parent="WallSouth"]
+mesh = SubResource("wall_mesh")
+material = SubResource("wall_mat")
+position = Vector3(10, 1.75, 20)
+[node name="Collision" type="CollisionShape3D" parent="WallSouth"]
+shape = SubResource("wall_shape")
+position = Vector3(10, 1.75, 20)
+
+[node name="WallEast" type="StaticBody3D" parent="."]
+[node name="Mesh" type="MeshInstance3D" parent="WallEast"]
+mesh = SubResource("wall_mesh")
+material = SubResource("wall_mat")
+rotation = Vector3(0, 1.5708, 0)
+position = Vector3(20, 1.75, 10)
+[node name="Collision" type="CollisionShape3D" parent="WallEast"]
+shape = SubResource("wall_shape")
+rotation = Vector3(0, 1.5708, 0)
+position = Vector3(20, 1.75, 10)
+
+[node name="WallWest" type="StaticBody3D" parent="."]
+[node name="Mesh" type="MeshInstance3D" parent="WallWest"]
+mesh = SubResource("wall_mesh")
+material = SubResource("wall_mat")
+rotation = Vector3(0, 1.5708, 0)
+position = Vector3(0, 1.75, 10)
+[node name="Collision" type="CollisionShape3D" parent="WallWest"]
+shape = SubResource("wall_shape")
+rotation = Vector3(0, 1.5708, 0)
+position = Vector3(0, 1.75, 10)
+
+[node name="Navigation" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("nav_mesh")
+position = Vector3(10, 0, 10)
+
+[node name="AmbientLight" type="OmniLight3D" parent="."]
+light_color = Color(0.102, 0.133, 0.200, 1.0)
+light_energy = 0.3
+light_indirect_energy = 0.5
+shadow_enabled = false
+position = Vector3(10, 5, 10)
+
+[node name="SpawnPoint" type="Marker3D" parent="."]
+position = Vector3(8, 0, 8)
+
+[node name="EnemySpawn" type="Marker3D" parent="."]
+position = Vector3(15, 0, 15)
+
+[node name="PuzzleSpawn" type="Marker3D" parent="."]
+position = Vector3(10, 0, 10)
+
+[node name="PropsGroup" type="Node3D" parent="."]
+position = Vector3(8, 0, 2)
+rotation = Vector3(0, 0.35, 0)
+
+[node name="Car" type="StaticBody3D" parent="PropsGroup"]
+position = Vector3(0, 0.75, 0)
+[node name="CarMesh" type="MeshInstance3D" parent="PropsGroup/Car"]
+mesh = SubResource("car_mesh")
+material = SubResource("car_mat")
+[node name="CarCollision" type="CollisionShape3D" parent="PropsGroup/Car"]
+shape = SubResource("car_shape")
+
+[node name="Crate0" type="StaticBody3D" parent="PropsGroup"]
+position = Vector3(-0.5, 0.4, 1)
+[node name="Crate0Mesh" type="MeshInstance3D" parent="PropsGroup/Crate0"]
+mesh = SubResource("crate_mesh")
+material = SubResource("crate_mat")
+[node name="Crate0Collision" type="CollisionShape3D" parent="PropsGroup/Crate0"]
+shape = SubResource("crate_shape")
+
+[node name="Crate1" type="StaticBody3D" parent="PropsGroup"]
+position = Vector3(1.5, 0.4, 2)
+[node name="Crate1Mesh" type="MeshInstance3D" parent="PropsGroup/Crate1"]
+mesh = SubResource("crate_mesh")
+material = SubResource("crate_mat")
+[node name="Crate1Collision" type="CollisionShape3D" parent="PropsGroup/Crate1"]
+shape = SubResource("crate_shape")
+
+[node name="Crate2" type="StaticBody3D" parent="PropsGroup"]
+position = Vector3(-1, 0.4, -0.5)
+[node name="Crate2Mesh" type="MeshInstance3D" parent="PropsGroup/Crate2"]
+mesh = SubResource("crate_mesh")
+material = SubResource("crate_mat")
+[node name="Crate2Collision" type="CollisionShape3D" parent="PropsGroup/Crate2"]
+shape = SubResource("crate_shape")
+
+[node name="Debris0" type="StaticBody3D" parent="PropsGroup"]
+position = Vector3(2.5, 0.15, 0.5)
+[node name="Debris0Mesh" type="MeshInstance3D" parent="PropsGroup/Debris0"]
+mesh = SubResource("debris_mesh")
+material = SubResource("debris_mat")
+[node name="Debris0Collision" type="CollisionShape3D" parent="PropsGroup/Debris0"]
+shape = SubResource("debris_shape")
+
+[node name="Debris1" type="StaticBody3D" parent="PropsGroup"]
+position = Vector3(0.8, 0.15, -0.8)
+[node name="Debris1Mesh" type="MeshInstance3D" parent="PropsGroup/Debris1"]
+mesh = SubResource("debris_mesh")
+material = SubResource("debris_mat")
+[node name="Debris1Collision" type="CollisionShape3D" parent="PropsGroup/Debris1"]
+shape = SubResource("debris_shape")
+
+[node name="Puddle" type="MeshInstance3D" parent="."]
+mesh = SubResource("puddle_mesh")
+material = SubResource("puddle_mat")
+position = Vector3(8, 0.01, 4.5)
+
+[node name="Buildings" type="Node3D" parent="."]
+
+[node name="Bldg1" type="MeshInstance3D" parent="Buildings"]
+mesh = SubResource("bldg1_mesh")
+material = SubResource("bldg_mat")
+position = Vector3(-15, 4, -28)
+
+[node name="Bldg2" type="MeshInstance3D" parent="Buildings"]
+mesh = SubResource("bldg2_mesh")
+material = SubResource("bldg_mat")
+position = Vector3(35, 3, -25)
+
+[node name="Bldg3" type="MeshInstance3D" parent="Buildings"]
+mesh = SubResource("bldg3_mesh")
+material = SubResource("bldg_mat")
+position = Vector3(-8, 6, -38)
+
+[node name="Bldg4" type="MeshInstance3D" parent="Buildings"]
+mesh = SubResource("bldg4_mesh")
+material = SubResource("bldg_mat")
+position = Vector3(42, 2.5, 32)

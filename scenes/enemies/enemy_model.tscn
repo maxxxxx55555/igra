@@ -1,0 +1,33 @@
+[gd_scene format=3]
+
+[sub_resource type="CapsuleMesh" id="body_mesh"]
+radius = 0.3
+height = 1.6
+
+[node name="EnemyModel" type="Node3D"]
+
+[node name="Body" type="CSGMesh3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("body_mesh")
+
+[node name="Head" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+radius = 0.2
+
+[node name="EyeL" type="CSGSphere3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08, 0.05, 0.15)
+radius = 0.03
+
+[node name="EyeR" type="CSGSphere3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08, 0.05, 0.15)
+radius = 0.03
+
+[node name="ArmL" type="CSGCylinder3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -0.4, 1.2, 0.2)
+radius = 0.08
+height = 0.6
+
+[node name="ArmR" type="CSGCylinder3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.4, 1.2, 0.2)
+radius = 0.08
+height = 0.6
