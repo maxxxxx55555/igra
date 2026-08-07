@@ -1,31 +1,66 @@
-key,ru,en
-ui_play,Играть,Play
-ui_settings,Настройки,Settings
-ui_exit,Выход,Exit
-hud_hp,HP,HP
-hud_ammo,Патроны,Ammo
-quest_collect,Собрать,Collect
-quest_kill,Убить,Kill
-quest_explore,Исследовать,Explore
-dialogue_hello,Привет,Hello
-ui_resume,Продолжить,Resume
-ui_save,Сохранить,Save
-ui_load,Загрузить,Load
-ui_back,Назад,Back
-ui_apply,Применить,Apply
-ui_reset,Сбросить,Reset
-ui_volume,Громкость,Volume
-ui_sensitivity,Чувствительность,Sensitivity
-ui_language,Язык,Language
-ui_vsync,V-Sync,V-Sync
-ui_show_fps,Показать FPS,Show FPS
-hud_weapon,Оружие,Weapon
-shop_title,Магазин,Shop
-shop_buy,Купить,Buy
-shop_remove_ads,Убрать рекламу,Remove Ads
-shop_coin_pack,1000 монет,1000 Coins
-shop_premium_skin,Премиум скин,Premium Skin
-tutorial_move,WASD — движение,WASD — move
-tutorial_shoot,ЛКМ — стрельба,LMB — shoot
-tutorial_flashlight,F — фонарик,F — flashlight
-tutorial_interact,E — подобрать,E — interact
+key,ru,en,tr,zh,zh_tw,de,fr,es,pt,it,pl,ja,ko
+ui_play,Играть,Play,Oyna,开始游戏,開始遊戲,Spielen,Jouer,Jugar,Jogar,Gioca,Graj,プレイ,게임 시작
+ui_settings,Настройки,Settings,Ayarlar,设置,設定,Einstellungen,Paramètres,Configuración,Configurações,Impostazioni,Ustawienia,設定,설정
+ui_exit,Выход,Exit,Çıkış,退出,退出,Beenden,Quitter,Salir,Sair,Uscita,Wyjście,終了,종료
+ui_resume,Продолжить,Resume,Devam,继续,繼續,Weiter,Reprendre,Continuar,Continuar,Riprendi,Wznow,再開,계속
+ui_save,Сохранить,Save,Kaydet,保存,保存,Speichern,Sauvegarder,Guardar,Guardar,Salva,Zapisz,保存,저장
+ui_load,Загрузить,Load,Yükle,加载,載入,Laden,Charger,Cargar,Carregar,Carica,Załaduj,読み込み,로드
+ui_back,Назад,Back,Geri,返回,返回,Zurück,Retour,Volver,Voltar,Indietro,Wróć,戻る,뒤로
+ui_close,Закрыть,Close,Kapat,关闭,關閉,Schließen,Fermer,Cerrar,Fechar,Chiudi,Zamknij,閉じる,닫기
+ui_apply,Применить,Apply,Uygula,应用,應用,Anwenden,Appliquer,Aplicar,Aplicare,Applica,Zastosuj,適用,적용
+ui_reset,Сбросить,Reset,Sıfırla,重置,重置,Zurücksetzen,Réinitialiser,Restablecer,Ripristinare,Reimposta,Resetuj,リセット,초기화
+ui_yes,Да,Yes,Evet,是,是,Ja,Oui,Sí,Sim,Sì,Tak,はい,예
+ui_no,Нет,No,Hayır,否,否,Nein,Non,No,Não,No,Nie,いいえ,아니오
+ui_confirm,Подтвердить,Confirm,Onayla,确认,確認,Bestätigen,Confirmer,Confirmar,Confermare,Conferma,Potwierdź,確認,확인
+hud_hp,Здоровье,HP,Sağlık,生命值,生命值,Leben,PV,Saúde,HP,Salute,Zdrowie,HP,HP
+hud_ammo,Патроны,Ammo,Mermi,弹药,彈藥,Munition,Munición,Munição,Munizioni,Ammunicja,Amunicja,弾薬,탄약
+hud_weapon,Оружие,Weapon,Silah,武器,武器,Waffe,Arme,Arma,Arma,Arma,Bron,武器,무기
+hud_stamina,Выносливость,Stamina,Dayanıklılık,耐力,耐力,Ausdauer,Endurance,Resistencia,Resistenza,Stamina,Wytrzymałość,スタミナ,스태미나
+hud_battery,Батарея,Battery,Pil,电池,電池,Batterie,Batterie,Batería,Bateria,Batteria,Bateria,バッテリー,배터리
+shop_title,Магазин,Shop,Dükkan,商店,商店,Geschäft,Boutique,Tienda,Loja,Negozio,Sklep,ショップ,상점
+shop_buy,Купить,Buy,Al,购买,購買,Kauen,Acheter,Comprar,Comprar,Comprare,Kupić,購入,구매
+quest_collect,Собрать,Collect,Topla,收集,收集,Sammeln,Collecter,Recolectar,Coletare,Racogli,Zebrać,集める,수집
+quest_kill,Убить,Kill,Öldür,击杀,殺害,Töten,Tuer,Matar,Matar,Uccidere,Zabić,殺す,처치
+quest_explore,Исследовать,Explore,Araştır,探索,探索,Erkunden,Explorer,Explorar,Explorare,Esplorare,Badać,探検,탐험
+dialogue_hello,Привет,Hello,Merhaba,你好,你好,Hallo,Bonjour,Hola,Olá,Ciao,Cześć,こんにちは,안녕하세요
+tutorial_move,WASD — движение,WASD — move,WASD — hareket,WASD移动,WASD移動,WASD — Bewegung,WASD — déplacement,WASD — movimiento,WASD — movimento,WASD — movimento,WASD — ruch,WASD移動,WASD이동
+tutorial_shoot,ЛКМ — стрельба,LMB — shoot,Sol tık — ateş,LMB射击,LMB射撃,LMB — Schuss,LMB — tir,LMB — disparo,LMB — tiro,LMB — sparo,LMB — strzał,左クリック射撃,왼쪽클릭사격
+tutorial_flashlight,F — фонарик,F — flashlight,F — el feneri,F手电筒,F手電筒,F — Taschenlampe,F — lampe de poche,F — linterna,F — lanterna,F — torcia,F — latarkka,F懐中電灯,F손전등
+tutorial_interact,E — подобрать,E — interact,E — etkileşim,E互动,E互動,E — interagieren,E — interagir,E — interactuar,E — interagir,E — interagisci,E — interakcja,E操作,E상호작용
+stats_title,Статистика,Statistics,İstatistikler,统计,統計,Statistiques,Estadísticas,Estatísticas,Statistiche,Statystyki,統計,통계
+stats_time_played,Время игры,Time Played,Oynama Süresi,游戏时间,遊戲時間,Spielzeit,Temps de jeu,Tiempo jugado,Tempo jogado,Tempo di gioco,Czas gry,プレイ時間,플레이 시간
+stats_enemies_killed,Враги убиты,Enemies Killed,Öldürülen Düşmanlar,击杀敌人,擊殺敵人,Getötete Feinde,Ennemis tués,Enemigos matados,Inimigos morti,Nemici uccisi,Wrogowie zabici,敵撃破,적 처치
+stats_shots_fired,Выстрелы,Shots Fired,Ateş Edilen,开枪数,開槍數,Abgegebene Schüsse,Tirs tirés,Disparos disparados,Tiros disparados,Spari effettuati,Oddane strzały,発射数,발사 수
+stats_jumps,Прыжки,Jumps,Zıplamalar,跳跃数,跳躍數,Sprünge,Sauts,Saltos,Salti,Salti,Skoki,ジャンプ,점프
+stats_deaths,Смерти,Deaths,Ölümler,死亡次数,死亡次數,Tode,Morts,Muertes,Morti,Morti,Śmierci,死亡数,사망 수
+stats_saves,Сохранения,Saves,Kayıtlar,存档数,存檔數,Saves,Sauvegardades,Guardados,Gravações,Salvataggi,Zapisy,セーブ数,세이브 수
+stats_distance,Расстояние,Distance,Mesafe,行走距离,行走距離,Entfernement,Distance,Distancia,Distância,Distanza,Dystans,移動距離,이동 거리
+stats_puzzles,Пазлы решены,Puzzles Solved,Çözülen Bulmacalar,解谜数,解謎數,Gelöste Rätsel,Énigmes résolues,Puzzles resueltos,Puzzles resolvidos,Puzzle risolti,Rozwiązane łamigłówki,パズル解法,퍼즐 해결
+stats_photos,Фото,Photos,Fotoğraflar,照片,照片,Fotos,Photos,Fotos,Fotos,Foto,Zdjęcia,写真,사진
+stats_coins,Монеты earned,Coins Earned,Kazanılan Madeni Paralar,赚取金币,賺取金幣,Münzen verdient,Pièces gagnées,Monedas ganhadas,Moedas ganhas,Monete guadagnate,Zdobyte monety,獲得コイン,획득 코인
+stats_districts,Районы восстановлены,Districts Restored,Kurtarılan Bölgeler,已修复区域,已修復區域,Wiederhergestellte Bezirke,Quartiers restaurés,Distritos restaurados,Distritos restaurados,Riquadrizi restaurati,Odtworzone dzielnice,修復済み地区,복구된 구역
+stats_quests,Квесты выполнены,Quests Completed,Tamamlanan Görevler,完成任务,完成任務,Abgeschlossene Quests,Quêtes terminées,Misiones completadas,Quests concluídas,Missioni completate,Ukończone questy,クвест完了,퀘스트 완료
+stats_crafts,Вещи скрафчены,Items Crafted,Üretilen Eşyalar,制作物,製作物,Hergestellte Gegenstände,Objets craftés,Objetos fabricados,Itens fabricados,Oggetti creati,Wytworzone przedmioty,クラフト数,제작 수
+stats_fuses,Предохранители,Fuses,Kullanılan Sigortar,保险丝,保險絲,Sikungen,Fusibles,Fusibles,Fusíveis,Fusibili,Bezpieczniki,ヒューズ,퓨즈
+stats_batteries,Батарейки найдены,Batteries Found,Bulunan Piller,找到电池,找到電池,Gefundene Batterien,Piles trouvées,Pilas encontradas,Pilhas encontradas,Batterie trovate,Znalezione baterie,見つけたバッテリー,발견한 배터리
+stats_enemies_light,Убиты светом,Killed by Light,Işıkla Öldürülen,光击杀,光擊殺,Durch Licht getötet,Tués par la lumière,Muertos por luz,Mortos por luz,Uccisi dalla luce,Zabici przez światło,光で撃破,빛으로 처치
+stats_items_used,Предметы использованы,Items Used,Kullanılan Eşyalar,使用物品,使用物品,Verwendete Gegenstände,Objets utilisés,Objetos usados,Itens usados,Oggetti usati,Użyte przedmioty,使用アイテム,사용한 아이템
+stats_level,Уровень,Level,Seviye,等级,等級,Stufe,Niveau,Nivel,Nível,Livello,Poziom,レベル,레벨
+stats_xp,Опыт,XP,Tecrübe,经验值,經驗值,Erfahrung,XP,Experiencia,XP,Esperienza,XP,経험치,경험치
+tutorial_attack,ЛКМ — атака,LMB — attack,Sol tık — saldırı,LMB攻击,LMB攻擊,LMB — Angriff,LMB — attaque,LMB — ataque,LMB — ataque,LMB — attacco,LMB — atak,左クリック攻撃,왼쪽클릭공격
+tutorial_dodge,Dodge,Dodge,Kaçınme,闪避,闪避,Ausweichen,Esquive,Esquivar,Esquiva,Esaurisci,Szus,回避,회피
+tutorial_crouch,Присесть,Crouch,Eğilme,蹲下,蹲下,Ducken,S'accroupir,Agacharse,Agachar-se,Schivati,Kucznij,しゃがむ,숙이기
+ad_reward_title,Получить награду,Get Reward,Ödül Al,获取奖励,獲取獎勵,Belohnung erhalten,Obtenir récompense,Recibir recompensa,Receber recompensa,Ricevi ricompensa,Odbierz nagrodę,報酬を取得,보상 받기
+ad_watch,Смотреть рекламу,Watch Ad,Reklam İzle,看广告,看廣告,Werbung schauen,Regarder l'annonce,Ver anúncio,Ver anúncio,Guarda annuncio,Oglądaj reklamę,広告を見る,광고 보기
+ad_skip,Пропустить,Skip,Atla,跳过,跳过,Überspringen,Passer,Saltar,Salta,Salta,Pomiń,スキップ,건너뛰기
+confirm_quit,Выйти из игры?,Quit Game?,Oyundan Çık?,退出游戏,退出游戏,Spiel beenden?,Quitter le jeu?,¿Salir del juego?,Sair do gioco?,Uscire dal gioco?,Wyjść z gry?,ゲームを終了しますか？,게임을 종료하시겠습니까?
+yes,Да,Yes,Evet,是,是,Ja,Oui,Sí,Sim,Sì,Tak,はい,예
+no,Нет,No,Hayır,否,否,Nein,Non,No,Não,No,Nie,いいえ,아니오
+stats_time_played,Время игры,Time Played,Oynama Süresi,游戏时间,遊戲時間,Spielzeit,Temps de jeu,Tiempo jugado,Tempo jogado,Tempo di gioco,Czas gry,プレイ時間,플레이 시간
+stats_lives,Жизни,Lives,Canlar,生命,生命,Leben,Vidas,Vidas,Vidas,Vite,Ŷycia,ライフ,생명
+stats_secrets,Секреты,Secrets,Gizli,秘密,秘密,Geheimnisse,Secrets,Secretos,Segreti,Segreti,Tajemnice,秘密,비밀
+ad_cooldown,Подождите,Wait,Bekleyin,等待等待,Warten,Attendre,Esperar,Aspettare,Attendere,Czekaj,お待ちください,잠시 기다려주세요
+daily_event_title,Ежедневное событие,Daily Event,Günlük Etkinlik,每日活动,Täglicher Event,Événement quotidien,Evento diario,Evento quotidiano,Evento codzienny,日間イベント,일일 이벤트
+daily_streak,Серия,Daily Streak,Günlük Seri,每日连击,Tägliche Serie,Série quotidienne,Racha diaria,Serie quotidienne,Serie quotidienne,日간 스트릭,일일 연승
+photo_album_title,Фотоальбом,Photo Album,Fotoğraf Albümü,相册,Album photo,Album photo,Álbum de photos,Album photo,Album foto,アルバム,앨범
+boss_health,Здоровье босса,Boss Health,Boss Sağlığı,ボス生命值,Boss-Leben,Vida del boss,Vie du boss,Szef życie,보스 체력,ボスHP,보스 HP

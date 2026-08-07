@@ -1,69 +1,37 @@
-﻿
-extends Node3D
+﻿extends WeaponBase
+class_name WeaponShotgun
 
-@export 
-var damage_per_pellet: int = 8
+@export var pellet_damage: int = 8
+@export var pellet_count: int = 5
+@export var spread_degrees: float = 15.0
 
-@export 
-var pellets: int = 5
-
-@export 
-var fire_rate: float = 0.8
-
-@export 
-var ammo: int = 6
-
-@export 
-var reload_time: float = 2.5
-
-@export 
-var spread_degrees: float = 15.0
-
-@onready 
-var rays: Node3D = $Rays
-
-@onready 
-var sfx: AudioStreamPlayer3D = $AudioStreamPlayer3D
-
-var _ammo: int
-
-var _can_fire: bool = true
-
-var _reloading: bool = false
+@onready var _rays: Node3D = $Rays
+@onready var _sfx: AudioStreamPlayer3D = $AudioStreamPlayer3D
 
 func _ready() -> void:
-	_ammo = ammo
-	if sfx and ResourceLoader.exists("res://assets/audio/sfx/sfx_shoot.wav"):
-		sfx.stream = load("res://assets/audio/sfx/sfx_shoot.wav")
+	super._ready()
+	damage = pellet_damage
+	if _sfx and ResourceLoader.exists("res://assets/audio/sfx/sfx_shoot.wav"):
+		_sfx.stream = load("res://assets/audio/sfx/sfx_shoot.wav")
 
-func fire() -> void:
-	if not _can_fire or _reloading or _ammo <= 0:
-		return
-	_ammo -= 1
-	_can_fire = false
-	
-	var ray_list := rays.get_children() as Array[RayCast3D]
-	for ray in ray_list:
-		ray.force_raycast_update()
-		if ray.is_colliding():
-			var target := ray.get_collider()
-			if target.has_method("take_damage"):
-				target.take_damage(damage_per_pellet)
-			elif target.has_node("HealthComponent"):
-				target.get_node("HealthComponent").take_damage(damage_per_pellet)
-	if sfx:
-		sfx.pitch_scale = 0.9
-		sfx.play()
-	await get_tree().create_timer(fire_rate).timeout
-	_can_fire = true
-	if _ammo <= 0:
-		_reload()
-
-func _reload() -> void:
-	_reloading = true
-	await get_tree().create_timer(reload_time).timeout
-	_ammo = ammo
-	_reloading = false
-
-func get_ammo() -> int:
-	return _ammo
+func fire(from_pos: Vector3 = Vector3.ZERO, direction: Vector3 = Vector3.FORWARD) -> bool:
+	if not can_fire():
+		return false
+	_fire_timer = fire_rate
+	current_ammo -= 1
+	ammo_changed.emit(current_ammo, max_ammo)
+	if _rays:
+		var ray_list := _rays.get_children() as Array[RayCast3D]
+		for ray in ray_list:
+			ray.force_raycast_update()
+			if ray.is_colliding():
+				var target := ray.get_collider()
+				if target and target.has_method("take_damage"):
+					target.take_damage(pellet_damage)
+				elif target and target.has_node("HealthComponent"):
+					target.get_node("HealthComponent").take_damage(pellet_damage)
+	if _sfx:
+		_sfx.pitch_scale = 0.9
+		_sfx.play()
+	fired.emit()
+	return true

@@ -118,8 +118,10 @@ func _build_ui() -> void:
 		var si := i
 		slot.gui_input.connect(func(event: InputEvent):
 			if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-				_show_toast("equip placeholder")
-		)
+				if InventoryManager and InventoryManager.has_method("use_item"):
+					InventoryManager.use_item(si)
+					_show_toast("Item used")
+				)
 
 	var grid_y := slot_y + slot_keys.size() * 50 + 10
 	var grid_label := Label.new()

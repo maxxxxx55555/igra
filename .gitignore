@@ -18,3 +18,20 @@ builds/
 
 # мусор от поломанных фикс-скриптов
 *.bak
+
+# Build artifacts
+*.apk
+*.aab
+*.keystore
+*.p12
+tools/debug.keystore
+docs/ANDROID_BUILD.md.bak
+
+# Dump files
+p3_dump.txt
+finish_game.log
+findings.md.bak
+.tls_bak/
+en_keys.txt
+audio_refs*.txt
+missing_audio.txt

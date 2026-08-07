@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://scripts/ui/confirm_quit.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/ui/ad_reward_ui.gd" id="1"]
 
-[node name="ConfirmQuit" type="Control"]
+[node name="AdRewardUI" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,18 +23,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -180.0
-offset_top = -100.0
-offset_right = 180.0
-offset_bottom = 100.0
-
-[node name="Style" type="StyleBoxFlat" parent="Panel"]
-unique_name_in_owner = true
-bg_color = Color(0.0784, 0.1059, 0.1412, 1)
-border_color = Color(0.1647, 0.2, 0.251, 1)
-set_border_width_all = 1
-set_corner_radius_all = 0
-set_content_margin_all = 16
+offset_left = -200.0
+offset_top = -120.0
+offset_right = 200.0
+offset_bottom = 120.0
 
 [node name="VBox" type="VBoxContainer" parent="Panel"]
 layout_mode = 2
@@ -43,22 +35,34 @@ alignment = 1
 
 [node name="Title" type="Label" parent="Panel/VBox"]
 layout_mode = 2
-text = "Выйти из игры?"
+text = "REWARD"
+horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.7882, 0.6353, 0.2902, 1)
+theme_override_font_sizes/font_size = 18
+
+[node name="RewardLabel" type="Label" parent="Panel/VBox"]
+layout_mode = 2
+text = "+100 coins"
 horizontal_alignment = 1
 theme_override_colors/font_color = Color(0.8471, 0.8235, 0.7686, 1)
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 22
 
 [node name="HBox" type="HBoxContainer" parent="Panel/VBox"]
 layout_mode = 2
 alignment = 1
 theme_override_constants/separation = 20
 
-[node name="Yes" type="Button" parent="Panel/VBox/HBox"]
+[node name="WatchBtn" type="Button" parent="Panel/VBox/HBox"]
 layout_mode = 2
-custom_minimum_size = Vector2(100, 36)
-text = "ДА"
+custom_minimum_size = Vector2(120, 40)
+text = "WATCH AD"
 
-[node name="No" type="Button" parent="Panel/VBox/HBox"]
+[node name="SkipBtn" type="Button" parent="Panel/VBox/HBox"]
 layout_mode = 2
-custom_minimum_size = Vector2(100, 36)
-text = "НЕТ"
+custom_minimum_size = Vector2(120, 40)
+text = "SKIP"
+
+[node name="CloseBtn" type="Button" parent="Panel/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(80, 30)
+text = "CLOSE"

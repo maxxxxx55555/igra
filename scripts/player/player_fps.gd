@@ -38,11 +38,23 @@ func _input(event: InputEvent) -> void:
         rotate_y(-event.relative.x * mouse_sensitivity)
         camera.rotate_x(-event.relative.y * mouse_sensitivity)
         camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
-    if event.is_action_pressed("toggle_flashlight"):
+    if event.is_action_pressed("flashlight_toggle"):
         _flashlight_on = !_flashlight_on
         if flashlight: flashlight.visible = _flashlight_on
-    if event.is_action_pressed("ui_cancel"):
+    if event.is_action_pressed("ui_pause"):
         Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+    if event is InputEventKey and event.pressed:
+        if event.is_action_pressed("quick_slot_1"): _use_slot(0)
+        elif event.is_action_pressed("quick_slot_2"): _use_slot(1)
+        elif event.is_action_pressed("quick_slot_3"): _use_slot(2)
+        elif event.is_action_pressed("quick_slot_4"): _use_slot(3)
+        elif event.is_action_pressed("quick_slot_5"): _use_slot(4)
+        elif event.is_action_pressed("quick_slot_6"): _use_slot(5)
+
+func _use_slot(index: int) -> void:
+    var hud := get_tree().root.find_child("HUD3D", true, false)
+    if hud and hud.has_method("_use_quick_slot"):
+        hud._use_quick_slot(index)
 
 func _physics_process(delta: float) -> void:
     if not is_on_floor():
@@ -53,9 +65,9 @@ func _physics_process(delta: float) -> void:
         if Input.is_action_just_pressed("jump"): _jump_buffer = JUMP_BUFFER_TIME
     if _jump_buffer > 0 and (_coyote_timer > 0 or is_on_floor()):
         velocity.y = jump_velocity; _jump_buffer = 0; _coyote_timer = 0
-    var input_dir := Input.get_vector("left", "right", "forward", "back")
+    var input_dir := Input.get_vector("move_left", "move_right", "move_up", "move_down")
     var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-    var current_speed := sprint_speed if Input.is_action_pressed("sprint") else speed
+    var current_speed := sprint_speed if Input.is_action_pressed("run") else speed
     if direction:
         velocity.x = direction.x * current_speed
         velocity.z = direction.z * current_speed

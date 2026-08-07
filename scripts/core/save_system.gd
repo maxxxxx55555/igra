@@ -8,6 +8,9 @@ const MAX_SLOTS: int = 4
 var _pending_player_pos: Vector3 = Vector3.INF
 var _autosave_timer: float = AUTOSAVE_INTERVAL
 var _quest_data: Dictionary = {}
+var _photos: Array = []
+var _daily_streak: int = 0
+var _last_daily_time: int = 0
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -49,6 +52,9 @@ func _save() -> void:
 		"quests": _quest_data,
 		"xp": XpManager.save_data(),
 		"skill_tree": SkillTreeManager.save_data(),
+		"photos": _photos,
+		"daily_streak": _daily_streak,
+		"last_daily_time": _last_daily_time,
 	}
 	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	if file == null:
@@ -84,6 +90,9 @@ func load_all() -> bool:
 	var pp = data.get("player_pos", null)
 	_pending_player_pos = Vector3(pp[0], pp[1], pp[2]) if (pp is Array and pp.size() >= 3) else Vector3.INF
 	_quest_data = data.get("quests", {})
+	_photos = data.get("photos", [])
+	_daily_streak = int(data.get("daily_streak", 0))
+	_last_daily_time = int(data.get("last_daily_time", 0))
 	SkillTreeManager.load_data(data.get("skill_tree", {}))
 	XpManager.load_data(data.get("xp", {}))
 	return true
@@ -95,9 +104,11 @@ func reset_all() -> void:
 	ShopService.from_dict({})
 	InventoryManager.from_dict({})
 	Encyclopedia.from_dict({})
-	ProgressTracker.from_dict({})
 	_pending_player_pos = Vector3.INF
 	_quest_data = {}
+	_photos = []
+	_daily_streak = 0
+	_last_daily_time = 0
 	Endings.reset()
 
 func consume_pending_player_pos() -> Vector3:
@@ -110,6 +121,31 @@ func set_quest_data(data: Dictionary) -> void:
 
 func get_quest_data() -> Dictionary:
 	return _quest_data.duplicate()
+
+func add_photo(photo_id: String) -> bool:
+	if photo_id in _photos:
+		return false
+	_photos.append(photo_id)
+	_save()
+	return true
+
+func get_photos() -> Array:
+	return _photos.duplicate()
+
+func get_photo_count() -> int:
+	return _photos.size()
+
+func get_daily_streak() -> int:
+	return _daily_streak
+
+func increment_daily_streak() -> void:
+	var now := Time.get_unix_time_from_system()
+	var last := _last_daily_time
+	if now - last > 86400 * 2:
+		_daily_streak = 0
+	_daily_streak += 1
+	_last_daily_time = now
+	_save()
 
 func _read_player_pos() -> Array:
 	var p := get_tree().get_first_node_in_group("player")
@@ -162,6 +198,9 @@ func save_slot(slot: int) -> bool:
 		"quests": _quest_data,
 		"xp": XpManager.save_data(),
 		"skill_tree": SkillTreeManager.save_data(),
+		"photos": _photos,
+		"daily_streak": _daily_streak,
+		"last_daily_time": _last_daily_time,
 		"timestamp": Time.get_unix_time_from_system()
 	}
 	
@@ -203,6 +242,9 @@ func load_slot(slot: int) -> bool:
 	var pp = data.get("player_pos", null)
 	_pending_player_pos = Vector3(pp[0], pp[1], pp[2]) if (pp is Array and pp.size() >= 3) else Vector3.INF
 	_quest_data = data.get("quests", {})
+	_photos = data.get("photos", [])
+	_daily_streak = int(data.get("daily_streak", 0))
+	_last_daily_time = int(data.get("last_daily_time", 0))
 	
 	# Load skill tree
 	if SkillTreeManager:

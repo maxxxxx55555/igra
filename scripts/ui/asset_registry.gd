@@ -27,8 +27,15 @@ static func has(rel: String) -> bool:
     return ResourceLoader.exists(ART + rel)
 
 static func _placeholder(rel: String) -> Texture2D:
-    var img := Image.create(32, 32, false, Image.FORMAT_RGBA8)
-    img.fill(_color_for(rel))
+    var img := Image.create(64, 64, false, Image.FORMAT_RGBA8)
+    var bg := _color_for(rel)
+    img.fill(bg)
+    for x in range(64):
+        for y in range(64):
+            if x == 0 or x == 63 or y == 0 or y == 63:
+                img.set_pixel(x, y, Color("c9a24a"))
+            if x == y or x == 63 - y:
+                img.set_pixel(x, y, Color("b4452f"))
     return ImageTexture.create_from_image(img)
 
 static func _color_for(rel: String) -> Color:
