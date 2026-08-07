@@ -8,6 +8,7 @@ enum Phase { RUSH, MINIONS, RAGE }
 @export var max_hp: float = 800.0
 @export var rush_speed: float = 6.0
 @export var minion_scene: PackedScene
+var _minion_fallback: PackedScene = preload("res://scenes/enemies/boss_minion.tscn")
 @export var minions_per_wave: int = 3
 @export var rage_speed_mult: float = 1.8
 @export var rage_damage_mult: float = 1.5
@@ -109,10 +110,11 @@ func _enter_phase(phase: Phase) -> void:
 	EventBus.boss_phase_changed.emit(phase)
 
 func _spawn_minions() -> void:
-	if not minion_scene:
+	var scene := minion_scene if minion_scene else _minion_fallback
+	if not scene:
 		return
 	for i in range(minions_per_wave):
-		var m = minion_scene.instantiate()
+		var m = scene.instantiate()
 		get_parent().add_child(m)
 		m.global_position = global_position + Vector3(i * 2.0 - minions_per_wave, 0, 2.0)
 
