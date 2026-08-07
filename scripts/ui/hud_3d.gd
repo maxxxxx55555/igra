@@ -61,11 +61,7 @@ func _ready() -> void:
 	EventBus.player_stamina_changed.connect(_on_stam)
 	EventBus.player_battery_changed.connect(_on_bat)
 	EventBus.player_interact_available.connect(func(avail: bool): prompt.visible = avail)
-	EventBus.inventory_weight_changed.connect(func(r: float):
-		var w := $WeightBar
-		w.value = r * 100
-		w.modulate = Color(0.373, 0.541, 0.306) if r < 0.5 else (Color(0.788, 0.635, 0.290) if r < 0.8 else Color(0.706, 0.271, 0.184)))
-
+	EventBus.inventory_weight_changed.connect(_on_weight_changed)
 	EventBus.inventory_notice.connect(func(msg: String): _show_notice(msg))
 	EventBus.monster_spotted.connect(_on_monster_spotted)
 	EventBus.enemy_hp_updated.connect(_on_enemy_hp_updated)
@@ -74,6 +70,52 @@ func _ready() -> void:
 	enemy_name_label.visible = false
 	enemy_hp_bar.visible = false
 	prompt.visible = false
+	_setup_weight_bar()
+
+func _setup_weight_bar() -> void:
+	var w := $WeightBar
+	if not w:
+		return
+	var inv := get_tree().root.get_node_or_null("InventoryManager")
+	if inv and inv.has_method("weight_ratio"):
+		var ratio: float = inv.weight_ratio()
+		w.value = ratio * 100.0
+		_set_weight_color(w, ratio)
+	var poll := Timer.new()
+	poll.name = "WeightPollTimer"
+	poll.wait_time = 0.2
+	poll.autostart = true
+	poll.timeout.connect(_poll_weight)
+	add_child(poll)
+
+func _poll_weight() -> void:
+	var w := $WeightBar
+	if not w:
+		return
+	var inv := get_tree().root.get_node_or_null("InventoryManager")
+	if inv and inv.has_method("weight_ratio"):
+		var ratio: float = inv.weight_ratio()
+		w.value = ratio * 100.0
+		_set_weight_color(w, ratio)
+
+func _on_weight_changed(weight: float) -> void:
+	var w := $WeightBar
+	if not w:
+		return
+	var ratio := weight
+	var inv := get_tree().root.get_node_or_null("InventoryManager")
+	if inv and inv.has_method("weight_ratio"):
+		ratio = inv.weight_ratio()
+	w.value = clampf(ratio * 100.0, 0.0, 100.0)
+	_set_weight_color(w, ratio)
+
+func _set_weight_color(w: Control, ratio: float) -> void:
+	if ratio < 0.5:
+		w.modulate = Color(0.373, 0.541, 0.306)
+	elif ratio < 0.8:
+		w.modulate = Color(0.788, 0.635, 0.290)
+	else:
+		w.modulate = Color(0.706, 0.271, 0.184)
 	$BtnPause.pressed.connect(_on_pause)
 
 	var stealth_label := Label.new()
@@ -342,11 +384,22 @@ func _setup_slot_placeholders() -> void:
 			var cnt: int = inv.count_of(item_id)
 			if cnt > 0:
 				badge.text = str(cnt)
+		var si := i
+		slot.gui_input.connect(func(event: InputEvent):
+			if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+				_use_quick_slot(si)
+		)
 	var slot0 := get_node("BottomCenter/Slot0")
 	if slot0:
 		var border := slot0.get_node_or_null("Border")
 		if border:
 			border.color = Color(0.788, 0.635, 0.290)
+
+func _use_quick_slot(index: int) -> void:
+	var inv := get_tree().root.get_node_or_null("InventoryManager")
+	if not inv or not inv.has_method("use_item"):
+		return
+	inv.use_item(index)
 
 func _add_map_button() -> void:
 	var btn := Button.new()
