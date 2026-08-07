@@ -1,4 +1,4 @@
-; Engine configuration file.
+﻿; Engine configuration file.
 ; It's best edited using the editor UI and not directly,
 ; since the parameters that go here are not all obvious.
 ;
@@ -67,8 +67,6 @@ FlashlightUpgradeManager="*res://scripts/systems/flashlight_upgrade_manager.gd"
 WorkbenchManager="*res://scripts/systems/workbench_manager.gd"
 EndingsManager="*res://scripts/systems/endings_manager.gd"
 TutorialSystem="*res://scripts/ui/tutorial_system.gd"
-RewardsManager="*res://scripts/economy/rewards_manager.gd"
-RandomEvents="*res://scripts/systems/random_events.gd"
 #ScreenFlowManager="*res://scripts/ui/screen_flow_manager.gd"
 
 [display]
