@@ -12,11 +12,12 @@ const SCREEN_LIST: Array[String] = [
 const BRASS: Color = Color(0.788, 0.635, 0.290)
 const BRASS_DIM: Color = Color(0.541, 0.451, 0.220)
 const STEEL_TEXT: Color = Color(0.682, 0.714, 0.749)
-const BONE_TEXT: Color = Color(0.847, 0.824, 0.769)
+const BONE_TEXT: Color = Color(0.682, 0.714, 0.749)
 const EMPER: Color = Color(0.706, 0.271, 0.184)
 const STAMINA_GREEN: Color = Color(0.373, 0.541, 0.306)
-const PANEL_COLOR: Color = Color(0.078, 0.106, 0.141, 0.94)
+const PANEL_COLOR: Color = Color(0.078, 0.106, 0.141)
 const PANEL_EDGE: Color = Color(0.165, 0.200, 0.251)
+const BG_COLOR: Color = Color(0.047, 0.063, 0.086)
 const OUTLINE_COLOR: Color = Color(0.047, 0.063, 0.086, 1.0)
 const SHADOW_COLOR: Color = Color(0.0, 0.0, 0.0, 0.5)
 var _active_screen: String = ""
@@ -26,16 +27,36 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	layer = 25
 	_build_menu_bg()
+	EventBus.game_state_changed.connect(_on_game_state)
+	_on_game_state(int(GameManager.current_state))
 	_build_all_screens()
 
 func _build_menu_bg() -> void:
 	var bg_full := ColorRect.new()
 	bg_full.name = "MenuBG"
-	bg_full.color = Color(0.047, 0.063, 0.086, 1.0)
+	bg_full.color = BG_COLOR
 	bg_full.mouse_filter = Control.MOUSE_FILTER_STOP
 	bg_full.visible = false
 	add_child(bg_full)
 	bg_full.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
+func _on_game_state(state: int) -> void:
+	var menu_visible := state == GameManager.GameState.MENU
+	var pause_visible := state == GameManager.GameState.PAUSED
+	for d in _screen_data.values():
+		var name: String = d.card.name
+		var keep_visible := (menu_visible and name == "MainMenu_Card") or (pause_visible and name == "Pause_Card")
+		d.underlay.visible = keep_visible
+		d.card.visible = keep_visible
+	var bg_node := find_child("MenuBG", true, false) as ColorRect
+	if bg_node:
+		bg_node.visible = menu_visible or pause_visible
+	if menu_visible:
+		_active_screen = "MainMenu"
+	elif pause_visible:
+		_active_screen = "Pause"
+	else:
+		_active_screen = ""
 
 func is_any_open() -> bool:
 	return _active_screen != ""
@@ -288,7 +309,7 @@ func build_MainMenu(card: ColorRect, cw: float, ch: float, d: Dictionary) -> voi
 	card.color = Color(0.047, 0.063, 0.086)
 	var bg := ColorRect.new()
 	bg.name = "MenuBG"
-	bg.color = Color(0.047, 0.063, 0.086, 1.0)
+	bg.color = BG_COLOR
 	bg.size = Vector2(cw, ch)
 	bg.position = Vector2(0, 0)
 	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE

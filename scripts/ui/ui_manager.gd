@@ -30,16 +30,18 @@ var _toast: Label
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_layer = CanvasLayer.new()
-	_layer.layer = 10
+	_layer.layer = 15
 	add_child(_layer)
 	_minimap = _mk_overlay("res://scripts/ui/minimap.gd", "Minimap")
+	_minimap.get_parent().layer = 20
 	_weather_overlay = _mk_overlay("res://scripts/ui/weather_overlay.gd", "WeatherOverlay")
 	_photo = _mk_overlay("res://scripts/ui/photo_mode.gd", "PhotoMode")
 	_quest_hud = _mk_overlay("res://scripts/ui/quest_tracker_hud.gd", "QuestHUD")
 	_quest_hud.visible = false
 	EventBus.game_state_changed.connect(_on_game_state)
 	EventBus.game_started.connect(func() -> void: close(&"main_menu"))
-	_on_game_state(GameManager.current_state)
+	EventBus.toast_requested.connect(func(msg: String, _type: String) -> void: show_notification(msg))
+	_on_game_state(int(GameManager.current_state))
 
 func _mk_overlay(path: String, node_name: String) -> Control:
 	var c := Control.new()
@@ -148,23 +150,28 @@ func _get_screen(id: StringName) -> Control:
 func _set_hud(visible: bool) -> void:
 	EventBus.hud_visibility_changed.emit(visible)
 func _on_game_state(state: int) -> void:
-	# Игровые накладки (трекер квестов, миникарта, погода) видны только в игре:
-	# в меню и на экранах смерти/победы они висели поверх кнопок.
 	var in_game := state == GameManager.GameState.PLAYING
-	for n in [_quest_hud, _minimap, _weather_overlay]:
+	var paused := state == GameManager.GameState.PAUSED
+	for n in [_quest_hud, _weather_overlay]:
 		if is_instance_valid(n):
-			n.visible = in_game
+			n.visible = in_game or paused
+	if is_instance_valid(_minimap):
+		_minimap.visible = false
 	match state:
 		GameManager.GameState.MENU:
+			_set_hud(false)
 			open(&"main_menu")
 		GameManager.GameState.PLAYING:
-			# Меню закрывалось только по EventBus.game_started. Любой другой путь
-			# в PLAYING (загрузка, отладка, конец катсцены) оставлял главное меню
-			# висеть поверх игры.
-			for id in [&"main_menu", &"death", &"win"]:
+			for id in [&"main_menu", &"pause", &"death", &"win"]:
 				close(id)
+			_set_hud(true)
+		GameManager.GameState.PAUSED:
+			_set_hud(false)
+			open(&"pause")
 		GameManager.GameState.DEAD:
+			_set_hud(false)
 			open(&"death")
 		GameManager.GameState.WIN:
+			_set_hud(false)
 			open(&"win")
 

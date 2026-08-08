@@ -51,7 +51,7 @@ signal flashlight_depleted
 signal flashlight_state_changed(on: bool)
 signal game_over
 signal game_started
-signal game_state_changed(state: String)
+signal game_state_changed(state: int)
 signal game_won
 signal hud_visibility_changed(visible: bool)
 signal interaction_done(object_id: String)
