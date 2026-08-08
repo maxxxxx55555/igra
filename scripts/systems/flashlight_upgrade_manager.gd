@@ -24,9 +24,9 @@ const BRANCH_DESC: Dictionary = {
 const BASE_COSTS: Dictionary = {
 	"brightness": [100, 250, 500, 1000, 2000],
 	"range": [100, 250, 500, 1000, 2000],
-	"stability": [150, 300, 600, 1200, 2400],
+	"stability": [100, 250, 500, 1000, 2000],
 	"angle": [100, 250, 500, 1000, 2000],
-	"battery": [150, 300, 600, 1200, 2400]
+	"battery": [100, 250, 500, 1000, 2000]
 }
 
 const LEVEL_BONUSES: Dictionary = {
