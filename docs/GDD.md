@@ -14,12 +14,12 @@
 |------|----------|
 | Название | THE LAST STREETLIGHT («Последний фонарь») |
 | Жанр | Survival horror, экшен, стелс, головоломки |
-| Камера | **От первого лица (FPS)** — `player_fps.tscn`, камера в глазах персонажа |
+| Камера | **FPS — канон, TPS — опция** — `player_fps.tscn` (основной, камера в глазах), `player_3d.gd` (вид от третьего лица, опционально) |
 | Движок | Godot 4.7, GDScript 2.0 (строгая типизация) |
 | Платформа | Android (основная), Desktop (опционально). Офлайн |
 | Мир | Единая карта из 11 районов. НЕ процедурный, НЕ бесконечный |
 | Хронометраж | 8–12 ч (одна концовка), 15+ ч (все концовки/секреты) |
-| Языки | 13 языков через I18n: RU (основной), EN, TR, ZH, ZH_TW, DE, FR, ES, PT, IT, PL, JA, KO. 198 ключей на локаль, ~2574 всего |
+| Языки | 13 языков через I18n: RU (основной), EN, TR, ZH, ZH_TW, DE, FR, ES, pt_BR, IT, ar, JA, KO. 198 ключей на локаль, ~2574 всего |
 
 ### 1.1. Логлайн
 Город погружён в **вечную ночь** после эксперимента «Проект Архитектор».
@@ -275,11 +275,11 @@ warehouses → industrial → substation → power_station`
 - 3D: HUD/экраны процедурные (Theme/ColorRect/шейдеры) — PNG-арт опционален,
   но стилистика идентична.
 
-### 11.6. 3D-грейд (Mobile renderer)
-- Tonemap AgX, glow только для костров, depth fog `#1a2133` (density 0.012–0.015).
-- SSAO/SSIL/Volumetric fog — ВЫКЛ на mobile. Moon shadow 2048² (вкл).
-- Луч фонарика: SpotLight3D + аддитивный конус-меш (ShaderMaterial blend_add, unshaded).
-- ЛУТ: тёплый отлив светов, холодный — теней.
+### 11.6. 3D-грейд (Mobile renderer — OpenGL Compatibility)
+- Tonemap ACES (AgX недоступен в Compatibility), bloom/glow только для костров и эмиссивов.
+- Depth fog `#1a2133` (density 0.012–0.015). SSAO/SSIL/Volumetric — ВЫКЛ на mobile.
+- Moon shadow 2048² (вкл). Луч фонарика: SpotLight3D + аддитивный конус-меш (blend_add, unshaded).
+- ЛУТ: тёплый отлив светов, холодный — теней. ETC2/ASTC текстуры, Basis Universal.
 
 ---
 
@@ -367,7 +367,7 @@ res://components/  — HealthComponent, AttackComponent и т.п.
 res://shaders/     — .gdshader
 ```
 
-### 16.2. Автолоады (46)
+### 16.2. Автолоады (48)
 `ThemeSetup, MapController, LANNetwork, PowerGrid, SaveLoad, EventBus, Bootstrap,
 ShotTool, WorldBootstrap, UISFX, LightGrid, Shop, DayNight, DistrictThemes,
 DistrictAtmosphere, GameManager, SaveSystem, InputService, ItemDatabase,
@@ -376,7 +376,7 @@ UIManager, WeatherSystem, SettingsManager, ProgressTracker, AudioManager,
 AchievementManager, MusicManager, LocalizationManager, QuestManager,
 DistrictManager, PuzzleSystem, LANDiscovery, NetworkManager, SkillTreeManager,
 XpManager, NewGamePlus, NoisePropagation, FlashlightUpgradeManager,
-WorkbenchManager, EndingsManager, TutorialSystem`
+WorkbenchManager, EndingsManager, TutorialSystem, RewardsManager, RandomEvents`
 
 ### 16.3. Правила кода
 - Строгая типизация, `@export`, `@onready`, сигналы вместо прямых вызовов
@@ -608,20 +608,20 @@ post_process.
 - [x] LAN discovery/multiplayer, New Game+, tutorial
 - [x] Оптимизация: ETC2, LOD, LightGrid, 60 FPS
 - [x] Достижения (20+), скины, оружие (пистолет/автомат/дробовик)
+- [x] Быстрые слоты (6 штук на HUD, drag из инвентаря)
+- [x] Фотоальбом (процедурные фото + fallback, 3 категории)
+- [x] Ежедневные события (таймер, бонус-множитель)
+- [x] Рекламные награды (смотреть/пропустить, провайдер-фасад)
+- [x] Toast-уведомления
+- [x] Экран статистики игрока
+- [x] Подтверждение выхода
+- [x] Футстепы по 6 поверхностям (RayCast вниз)
 
 ### 25.2. Нужно доделать
-- [ ] 13 локализаций (сейчас 5) — RU/EN/TR/ZH/ZH_TW/DE/FR/ES/PT/IT/PL/JA/KO
-- [ ] Быстрые слоты (6 штук на HUD)
-- [ ] Фотоальбом (200 фото, 3 категории)
-- [ ] Ежедневные события (таймер, бонус-множитель)
-- [ ] Рекламные награды (мотреть/пропустить)
-- [ ] Toast-уведомления
-- [ ] Экран статистики игрока
-- [ ] Подтверждение выхода
-- [ ] Адаптивная музыка (5 слоёв с crossfade)
-- [ ] Футстепы по 6 поверхностям (RayCast)
-- [ ] Android APK: arm64, keystore, debug OFF
-- [ ] Все 8 гейтов (16.4) зелёные; doctor.ps1 COMPILE OK
+- [ ] Адаптивная музыка: 5 слоёв crossfade (Ambient_Dark/Lit, Threat_Low/High, Action_Sting)
+- [ ] Android APK: arm64, keystore, debug OFF, собрать и проверить на устройстве
+- [ ] Все 8 гейтов (16.4) зелёные; doctor.ps1 COMPILE OK (без скрытых parse-ошибок)
+- [ ] Полная локализация `screens.gd` (~1900 строк, хардкод RU) через `tr()`
 
 Вся механика ниже УЖЕ существует в репозитории (проверено сборкой 4.7,
 без ошибок парсинга):
