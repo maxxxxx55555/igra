@@ -5,6 +5,7 @@
   "multiplayer": "多人遊戲",
   "credits": "製作名單",
   "quit": "離開",
+  "menu_subtitle": "永恆黑夜中的倖存者。讓城市重獲光明。",
   "loading": "載入中...",
   "tip1": "保持手電筒開啟 - 敵人畏懼光芒。",
   "tip2": "換彈需要1.5秒。",
@@ -193,5 +194,6 @@
   "High Contrast": "高對比度",
   "Colorblind Mode": "色盲模式",
   "Arachnophobia Mode": "蜘蛛恐懼症模式",
-  "Dyslexia Font (OpenDyslexic)": "閱讀障礙字體 (OpenDyslexic)"
+  "Dyslexia Font (OpenDyslexic)": "閱讀障礙字體 (OpenDyslexic)",
+  "ad_reward_title": "觀看廣告獲得獎勵？", "ad_watch": "觀看廣告 (+100 金幣)", "ad_skip": "跳過 (-100 金幣)", "ui_close": "關閉"
 }

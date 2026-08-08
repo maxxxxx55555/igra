@@ -39,7 +39,7 @@ func _setup_visuals() -> void:
 		col.shape = shape
 	var mesh := $MeshInstance3D
 	if mesh and not mesh.mesh:
-		var m := CapsuleMesh3D.new()
+		var m := CapsuleMesh.new()
 		m.radius = 0.4
 		m.height = 1.6
 		m.radial_segments = 8

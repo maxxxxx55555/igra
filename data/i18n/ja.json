@@ -5,6 +5,7 @@
   "multiplayer": "マルチプレイ",
   "credits": "クレジット",
   "quit": "終了",
+  "menu_subtitle": "永遠の夜の生存者。街に光を取り戻せ。",
   "loading": "読み込み中...",
   "tip1": "ライトを点けろ - 敵は光を恐れる。",
   "tip2": "リロードは1.5秒かかる。",
@@ -193,5 +194,6 @@
   "High Contrast": "ハイコントラスト",
   "Colorblind Mode": "色覚サポート",
   "Arachnophobia Mode": "クモ恐怖症モード",
-  "Dyslexia Font (OpenDyslexic)": "ディスレクシア用フォント (OpenDyslexic)"
+  "Dyslexia Font (OpenDyslexic)": "ディスレクシア用フォント (OpenDyslexic)",
+  "ad_reward_title": "報酬の広告を見ますか？", "ad_watch": "広告を見る (+100コイン)", "ad_skip": "スキップ (-100コイン)", "ui_close": "閉じる"
 }

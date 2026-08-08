@@ -5,6 +5,7 @@
   "multiplayer": "Multigiocatore",
   "credits": "Crediti",
   "quit": "Esci",
+  "menu_subtitle": "Un sopravvissuto nella notte eterna. Riporta la luce in città.",
   "loading": "Caricamento...",
   "tip1": "Tieni la torcia accesa - i nemici temono la luce.",
   "tip2": "Ricaricare richiede 1,5 secondi.",
@@ -193,5 +194,6 @@
   "High Contrast": "Contrasto elevato",
   "Colorblind Mode": "Modalità daltonici",
   "Arachnophobia Mode": "Modalità aracnofobia",
-  "Dyslexia Font (OpenDyslexic)": "Font per dislessia (OpenDyslexic)"
+  "Dyslexia Font (OpenDyslexic)": "Font per dislessia (OpenDyslexic)",
+  "ad_reward_title": "Guardare annuncio per ricompensa?", "ad_watch": "Guarda annuncio (+100 monete)", "ad_skip": "Salta (-100 monete)", "ui_close": "Chiudi"
 }

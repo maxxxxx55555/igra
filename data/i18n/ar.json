@@ -5,6 +5,7 @@
   "multiplayer": "جماعي",
   "credits": "الشكر",
   "quit": "خروج",
+  "menu_subtitle": "ناجٍ في ليلٍ أبدي. أعد النور إلى المدينة.",
   "loading": "جارٍ التحميل...",
   "tip1": "أبقِ المصباح مضاءً - الأعداء يخشون الضوء.",
   "tip2": "إعادة التعمير تستغرق 1.5 ثانية.",
@@ -193,5 +194,6 @@
   "High Contrast": "تباين عالٍ",
   "Colorblind Mode": "وضع عمى الألوان",
   "Arachnophobia Mode": "وضع رهاب العناكب",
-  "Dyslexia Font (OpenDyslexic)": "خط عسر القراءة (OpenDyslexic)"
+  "Dyslexia Font (OpenDyslexic)": "خط عسر القراءة (OpenDyslexic)",
+  "ad_reward_title": "هل تريد مشاهدة إعلان مقابل مكافأة؟", "ad_watch": "شاهد الإعلان (+100 عملة)", "ad_skip": "تخطي (-100 عملة)", "ui_close": "إغلاق"
 }

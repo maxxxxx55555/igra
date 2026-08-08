@@ -40,7 +40,7 @@ func _setup_visuals() -> void:
 		col.shape = shape
 	var mesh := $Mesh
 	if mesh:
-		var m := CylinderMesh3D.new()
+		var m := CylinderMesh.new()
 		m.top_radius = 0.7
 		m.bottom_radius = 0.7
 		m.height = 2.0

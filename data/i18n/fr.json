@@ -5,6 +5,7 @@
   "multiplayer": "Multijoueur",
   "credits": "Credits",
   "quit": "Quitter",
+  "menu_subtitle": "Un survivant dans une nuit éternelle. Rends sa lumière à la ville.",
   "loading": "Chargement...",
   "tip1": "Garde la lampe - les ennemis craignent la lumiere.",
   "tip2": "Recharger prend 1.5 secondes.",
@@ -193,5 +194,6 @@
   "High Contrast": "Contraste élevé",
   "Colorblind Mode": "Mode daltonien",
   "Arachnophobia Mode": "Mode arachnophobie",
-  "Dyslexia Font (OpenDyslexic)": "Police dyslexie (OpenDyslexic)"
+  "Dyslexia Font (OpenDyslexic)": "Police dyslexie (OpenDyslexic)",
+  "ad_reward_title": "Regarder une pub pour une récompense ?", "ad_watch": "Regarder la pub (+100 pièces)", "ad_skip": "Passer (-100 pièces)", "ui_close": "Fermer"
 }

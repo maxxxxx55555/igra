@@ -5,6 +5,7 @@
   "multiplayer": "Coklu Oyuncu",
   "credits": "Emegi Gecenler",
   "quit": "Cikis",
+  "menu_subtitle": "Sonsuz bir gecede hayatta kalan. Şehrin ışığını geri getir.",
   "loading": "Yukleniyor...",
   "tip1": "Feneri acik tut - dusmanlar isiktan korkar.",
   "tip2": "Sarj etmek 1,5 saniye surer.",
@@ -193,5 +194,6 @@
   "High Contrast": "Yüksek Kontrast",
   "Colorblind Mode": "Renk Körlüğü Modu",
   "Arachnophobia Mode": "Araknofobi Modu",
-  "Dyslexia Font (OpenDyslexic)": "Disleksi Yazı Tipi (OpenDyslexic)"
+  "Dyslexia Font (OpenDyslexic)": "Disleksi Yazı Tipi (OpenDyslexic)",
+  "ad_reward_title": "Ödül için reklam izle?", "ad_watch": "Reklam İzle (+100 jeton)", "ad_skip": "Atla (-100 jeton)", "ui_close": "Kapat"
 }

@@ -1,18 +1,19 @@
-# THE LAST STREETLIGHT polish
+# THE LAST STREETLIGHT completion
 
 ## Goal
-Audit the current Godot project, implement the smallest safe final polish pass through one idempotent `final_polish.ps1`, verify headless compile and doctor, then commit the result.
+Verify the real Godot build against `docs/GDD.md`, define an evidence-based completion scope, then finish the game in approved playable slices with runtime, quality-gate, and Android verification.
 
 ## Phases
-- [in_progress] Audit documents, screens, scripts, assets, and baseline compile
-- [pending] Implement `final_polish.ps1` as the sole polish entry point
-- [pending] Run polish and repair compile failures
-- [pending] Run doctor, review diff, and commit
+- [in_progress] Audit the real startup flow, playable runtime, GDD, scenes, scripts, assets, and current worktree
+- [pending] Agree on the first completion milestone and quality bar
+- [pending] Write the approved design and implementation plan
+- [pending] Implement the milestone with runnable checks
+- [pending] Verify desktop runtime, quality gates, Android export, and GDD coverage
 
 ## Next Step
-Read the project documents and current runtime entry points.
+Capture and inspect a fresh real-startup build, then map observed gameplay to the GDD.
 
 ## Errors Encountered
 | Error | Attempt | Resolution |
 |---|---:|---|
-| None | 0 | - |
+| Compile gate reported `bad=0` while Godot emitted parser errors | 1 | Fixed invalid mesh class names and duplicate `_step`; future verification must inspect the full process output, not only the gate counter. |

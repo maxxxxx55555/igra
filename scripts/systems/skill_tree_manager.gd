@@ -210,7 +210,7 @@ func _apply_skill_effect(skill_id: StringName, level: int) -> void:
 			# Add regen to player stats
 			pass
 		"stamina_boost":
-			if player.has_method("set_max_stamina"):
+			if player.has_method("set_max_stamina") and player.stats:
 				player.set_max_stamina(player.stats.stamina_max + 30)
 		"battery_capacity":
 			if player.has_method("set_max_battery"):

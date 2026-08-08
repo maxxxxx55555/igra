@@ -5,6 +5,7 @@
   "multiplayer": "Mehrspieler",
   "credits": "Abspann",
   "quit": "Beenden",
+  "menu_subtitle": "Ein Überlebender in der ewigen Nacht. Bring das Licht in die Stadt zurück.",
   "loading": "Laden...",
   "tip1": "Lass die Taschenlampe an - Feinde fuerchten Licht.",
   "tip2": "Nachladen dauert 1.5 Sekunden.",
@@ -193,5 +194,6 @@
   "High Contrast": "Hoher Kontrast",
   "Colorblind Mode": "Farbenblind-Modus",
   "Arachnophobia Mode": "Arachnophobie-Modus",
-  "Dyslexia Font (OpenDyslexic)": "Legasthenie-Schrift (OpenDyslexic)"
+  "Dyslexia Font (OpenDyslexic)": "Legasthenie-Schrift (OpenDyslexic)",
+  "ad_reward_title": "Werbung für Belohnung ansehen?", "ad_watch": "Werbung ansehen (+100 Münzen)", "ad_skip": "Überspringen (-100 Münzen)", "ui_close": "Schließen"
 }

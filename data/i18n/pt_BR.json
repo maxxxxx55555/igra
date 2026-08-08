@@ -5,6 +5,7 @@
   "multiplayer": "Multijogador",
   "credits": "Creditos",
   "quit": "Sair",
+  "menu_subtitle": "Um sobrevivente numa noite eterna. Traga a luz de volta à cidade.",
   "loading": "Carregando...",
   "tip1": "Mantenha a lanterna - inimigos temem a luz.",
   "tip2": "Recarregar leva 1,5 segundos.",
@@ -193,5 +194,6 @@
   "High Contrast": "Alto contraste",
   "Colorblind Mode": "Modo daltônico",
   "Arachnophobia Mode": "Modo aracnofobia",
-  "Dyslexia Font (OpenDyslexic)": "Fonte para dislexia (OpenDyslexic)"
+  "Dyslexia Font (OpenDyslexic)": "Fonte para dislexia (OpenDyslexic)",
+  "ad_reward_title": "Assistir anúncio por recompensa?", "ad_watch": "Assistir anúncio (+100 moedas)", "ad_skip": "Pular (-100 moedas)", "ui_close": "Fechar"
 }

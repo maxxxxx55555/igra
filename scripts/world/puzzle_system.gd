@@ -59,10 +59,10 @@ func _grant_reward(id: String) -> void:
 			CoinWallet.add_coins(data["amount"])
 			EventBus.toast_requested.emit("+" + str(data["amount"]) + " coins", "finding")
 		"battery":
-			EventBus.item_picked_up.emit("battery", data["amount"])
+			EventBus.item_picked_up.emit(&"battery")
 			EventBus.toast_requested.emit("Battery found!", "finding")
 		"medkit":
-			EventBus.item_picked_up.emit("medkit", data["amount"])
+			EventBus.item_picked_up.emit(&"medkit")
 			EventBus.toast_requested.emit("Medkit found!", "finding")
 		"ending":
 			EventBus.toast_requested.emit("Reactor online!", "achievement")

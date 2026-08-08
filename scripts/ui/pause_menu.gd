@@ -17,15 +17,15 @@ func _build() -> void:
     vb.add_theme_constant_override("separation", 12)
     panel.add_child(vb)
     var t := Label.new()
-    t.text = "ПАУЗА"
+    t.text = LocalizationManager.t("paused")
     t.add_theme_font_size_override("font_size", ThemeProvider.FONT_SIZE_TITLE)
     t.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
     t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
     vb.add_child(t)
-    _btn(vb, "Продолжить", func() -> void: UIManager.close(&"pause"); GameManager.resume_game())
-    _btn(vb, "Настройки", func() -> void: UIManager.open(&"settings"))
-    _btn(vb, "Карта электросети", func() -> void: UIManager.open(&"city_map"))
-    _btn(vb, "В главное меню", func() -> void: GameManager.return_to_menu())
+    _btn(vb, LocalizationManager.t("resume"), func() -> void: UIManager.close(&"pause"); GameManager.resume_game())
+    _btn(vb, LocalizationManager.t("settings"), func() -> void: UIManager.open(&"settings"))
+    _btn(vb, LocalizationManager.t("POWER_GRID_TITLE"), func() -> void: UIManager.open(&"city_map"))
+    _btn(vb, LocalizationManager.t("back_menu"), func() -> void: GameManager.return_to_menu())
 func _btn(p: Node, text: String, cb: Callable) -> void:
     var b := Button.new()
     b.text = text

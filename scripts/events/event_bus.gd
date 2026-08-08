@@ -32,7 +32,7 @@ signal enemy_attack(damage: int)
 signal enemy_died(position: Vector3)
 signal enemy_killed(monster_id: StringName)
 signal enemy_spawned(enemy: Node3D)
-signal item_picked_up(item_data: Resource)
+signal item_picked_up(item_id: StringName)
 signal player_died
 
 signal achievement_unlocked(achievement_id: String)
@@ -83,7 +83,7 @@ signal puzzle_started(puzzle_id: String)
 signal quest_completed(quest_id: String)
 signal radar_marker_added(marker_id: String, position: Vector3)
 signal secret_found(secret_id: String)
-signal settings_changed
+signal settings_changed(key: String, value: Variant)
 signal shop_toggle_requested
 signal skin_unlocked(skin_id: String)
 signal streetlight_activated(streetlight_id: String)

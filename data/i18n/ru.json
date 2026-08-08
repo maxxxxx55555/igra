@@ -5,6 +5,7 @@
   "multiplayer": "Сетевая игра",
   "credits": "Титры",
   "quit": "Выход",
+  "menu_subtitle": "Выживший в вечной ночи. Верни городу свет.",
   "loading": "Загрузка...",
   "tip1": "Держи фонарик включённым — враги боятся света.",
   "tip2": "Перезарядка занимает 1,5 секунды.",
@@ -193,5 +194,6 @@
   "High Contrast": "Высокая контрастность",
   "Colorblind Mode": "Режим для дальтоников",
   "Arachnophobia Mode": "Режим арахнофобии",
-  "Dyslexia Font (OpenDyslexic)": "Шрифт для дислексии (OpenDyslexic)"
+  "Dyslexia Font (OpenDyslexic)": "Шрифт для дислексии (OpenDyslexic)",
+  "ad_reward_title": "Посмотреть рекламу за награду?", "ad_watch": "Смотреть рекламу (+100 монет)", "ad_skip": "Пропустить (-100 монет)", "ui_close": "Закрыть"
 }

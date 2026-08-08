@@ -5,6 +5,7 @@
   "multiplayer": "Duo Ren",
   "credits": "Zhi Xie",
   "quit": "Tui Chu",
+  "menu_subtitle": "永恒黑夜中的幸存者。让城市重获光明。",
   "loading": "Jia Zai Zhong...",
   "tip1": "Bao Chi Shou Dian - Di Ren Pa Guang.",
   "tip2": "Huan Dan Xu Yao 1.5 Miao.",
@@ -193,5 +194,6 @@
   "High Contrast": "高对比度",
   "Colorblind Mode": "色盲模式",
   "Arachnophobia Mode": "蜘蛛恐惧症模式",
-  "Dyslexia Font (OpenDyslexic)": "阅读障碍字体 (OpenDyslexic)"
+  "Dyslexia Font (OpenDyslexic)": "阅读障碍字体 (OpenDyslexic)",
+  "ad_reward_title": "观看广告获得奖励？", "ad_watch": "观看广告 (+100 金币)", "ad_skip": "跳过 (-100 金币)", "ui_close": "关闭"
 }

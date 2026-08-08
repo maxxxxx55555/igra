@@ -5,6 +5,7 @@
   "multiplayer": "Multijugador",
   "credits": "Creditos",
   "quit": "Salir",
+  "menu_subtitle": "Un superviviente en la noche eterna. Devuelve la luz a la ciudad.",
   "loading": "Cargando...",
   "tip1": "Manten la linterna - los enemigos temen la luz.",
   "tip2": "Recargar tarda 1.5 segundos.",
@@ -193,5 +194,6 @@
   "High Contrast": "Alto contraste",
   "Colorblind Mode": "Modo daltónico",
   "Arachnophobia Mode": "Modo aracnofobia",
-  "Dyslexia Font (OpenDyslexic)": "Fuente para dislexia (OpenDyslexic)"
+  "Dyslexia Font (OpenDyslexic)": "Fuente para dislexia (OpenDyslexic)",
+  "ad_reward_title": "¿Ver anuncio por recompensa?", "ad_watch": "Ver anuncio (+100 monedas)", "ad_skip": "Saltar (-100 monedas)", "ui_close": "Cerrar"
 }

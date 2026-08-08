@@ -41,20 +41,20 @@ func _build() -> void:
     title.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
     vb.add_child(title)
     var sub := Label.new()
-    sub.text = "Выживший в вечной ночи. Верни городу свет."
+    sub.text = LocalizationManager.t("menu_subtitle")
     sub.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
     sub.autowrap_mode = TextServer.AUTOWRAP_WORD
     vb.add_child(sub)
-    _add_btn(vb, "Новая игра", func() -> void: GameManager.start_new_game())
+    _add_btn(vb, LocalizationManager.t("new_game"), func() -> void: GameManager.start_new_game())
     var cont := Button.new()
-    cont.text = "Продолжить"
+    cont.text = LocalizationManager.t("continue")
     cont.focus_mode = Control.FOCUS_NONE
     cont.disabled = SaveSystem and SaveSystem.has_save()
     cont.pressed.connect(func() -> void: GameManager.continue_game())
     vb.add_child(cont)
-    _add_btn(vb, "Настройки", func() -> void: UIManager.open(&"settings"))
-    _add_btn(vb, "Мультиплеер (LAN)", func() -> void: get_tree().change_scene_to_file("res://scenes/ui/lobby.tscn"))
-    _add_btn(vb, "Выход", func() -> void: get_tree().quit())
+    _add_btn(vb, LocalizationManager.t("settings"), func() -> void: UIManager.open(&"settings"))
+    _add_btn(vb, LocalizationManager.t("multiplayer"), func() -> void: get_tree().change_scene_to_file("res://scenes/ui/lobby.tscn"))
+    _add_btn(vb, LocalizationManager.t("quit"), func() -> void: get_tree().quit())
 func _add_btn(parent: Node, text: String, cb: Callable) -> void:
     var b := Button.new()
     b.text = text

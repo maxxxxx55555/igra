@@ -5,6 +5,7 @@
   "multiplayer": "멀티플레이",
   "credits": "제작진",
   "quit": "종료",
+  "menu_subtitle": "영원한 밤의 생존자. 도시에 빛을 되돌리세요.",
   "loading": "로딩 중...",
   "tip1": "손전등을 켜라 - 적은 빛을 두려워한다.",
   "tip2": "재장전은 1.5초 걸린다.",
@@ -193,5 +194,6 @@
   "High Contrast": "고대비",
   "Colorblind Mode": "색맹 모드",
   "Arachnophobia Mode": "거미 공포증 모드",
-  "Dyslexia Font (OpenDyslexic)": "난독증 글꼴 (OpenDyslexic)"
+  "Dyslexia Font (OpenDyslexic)": "난독증 글꼴 (OpenDyslexic)",
+  "ad_reward_title": "보상 광고를 시청하시겠습니까?", "ad_watch": "광고 시청 (+100코인)", "ad_skip": "건너뛰기 (-100코인)", "ui_close": "닫기"
 }

@@ -36,7 +36,7 @@ func _ready() -> void:
 	made += _hurt()
 	made += _jump()
 	made += _reload()
-	made += _step()
+	made += _step_fallback()
 	# S9.3 monster cues
 	made += _shadow_teleport()
 	made += _crawler_scratch()
@@ -289,7 +289,7 @@ func _reload() -> int:
 	return _save("sfx_reload")
 
 ## Generic footstep (fallback).
-func _step() -> int:
+func _step_fallback() -> int:
 	_new(0.12)
 	_tone(0.0, 55.0, 0.50, 0.05, 0.001)
 	_tone(0.0, 200.0, 0.35, 0.04, 0.0015)
