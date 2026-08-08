@@ -12,9 +12,10 @@ var _was_in_light: bool = false
 
 func _ready() -> void:
 	detect_range = 12.0
+	hear_range = 12.0
 	max_hp = 120.0
 	super._ready()
-	_base_speed = 3.5
+	_base_speed = 0.9
 	attack_damage = 35.0
 	attack_range = 2.5
 	attack_cooldown = 2.5
@@ -23,6 +24,7 @@ func _ready() -> void:
 	peripheral_range = 0.0
 	peripheral_angle = 0.0
 	chase_speed = _base_speed
+	noise_threshold = 0.3
 	stun_duration = 0.0
 	flee_duration = 0.0
 	add_to_group("hunters")

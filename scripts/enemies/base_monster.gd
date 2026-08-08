@@ -13,6 +13,7 @@ enum State { IDLE, PATROL, INVESTIGATE, CHASE, ATTACK, FLEE, STUN, DEAD }
 @export var attack_cooldown: float = 1.5
 @export var attack_range: float = 1.5
 @export var detect_range: float = 10.0
+@export var hear_range: float = 10.0
 @export var vision_range: float = 10.0
 @export var vision_angle: float = 90.0
 @export var peripheral_range: float = 0.0
@@ -299,6 +300,9 @@ func _state_dead(delta: float) -> void:
 
 func _detect_ambient() -> void:
 	if player_ref and is_instance_valid(player_ref):
+		var distance_to_player: float = global_position.distance_to(player_ref.global_position)
+		if distance_to_player > hear_range and not _can_see_player():
+			return
 		var noise_val: float = 0.0
 		if player_ref.has_method("get_noise_level"):
 			noise_val = player_ref.get_noise_level()
@@ -430,11 +434,17 @@ func _request_damage(amount: float) -> void:
 		return
 	take_damage(clampf(amount, 0.0, 200.0))
 
+func apply_stun(duration: float = 2.0) -> void:
+	stun(duration)
+
 func stun(duration: float = 2.0) -> void:
 	if ai_state == State.DEAD:
 		return
 	_stun_timer = duration
 	_change_state(State.STUN)
+
+func get_facing_dir() -> Vector3:
+	return -global_transform.basis.z.normalized()
 
 
 func _trigger_flee() -> void:

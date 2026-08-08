@@ -1,4 +1,4 @@
-﻿extends Node
+extends Node
 enum Ev { BLACKOUT, SURGE, DISTRESS, ACCIDENT }
 const EV_COUNT: int = 4
 const NAMES := {
@@ -14,7 +14,7 @@ func _ready() -> void:
     process_mode = Node.PROCESS_MODE_ALWAYS
     _timer = randf_range(min_interval, max_interval)
 func _process(delta: float) -> void:
-    if not GameManager.is_playing():
+    if not (is_instance_valid(GameManager) and GameManager.is_playing()):
         return
     _timer -= delta
     if _timer <= 0.0:

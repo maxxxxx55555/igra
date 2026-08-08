@@ -6,14 +6,17 @@ var _combo_timer: float = 0.0
 
 func _ready() -> void:
 	detect_range = 15.0
+	hear_range = 15.0
 	max_hp = 200.0
 	super._ready()
-	_base_speed = 2.0
+	_base_speed = 0.7
 	attack_damage = 25.0
 	attack_range = 1.8
 	attack_cooldown = 1.2
 	vision_range = 5.0
+	vision_angle = 180.0
 	chase_speed = _base_speed
+	noise_threshold = 0.3
 	armor = 0.3
 	stun_duration = 2.0
 	flee_duration = 0.0

@@ -1,4 +1,4 @@
-﻿class_name MusicDirector
+class_name MusicDirector
 extends Node
 
 ## Адаптивная музыка: слоёный микс с плавными переходами по игровой ситуации.
@@ -17,20 +17,31 @@ enum Mood { MENU, AMBIENT, TENSION, BATTLE, BOSS, VICTORY }
 
 #region Constants
 const TRACKS: Dictionary = {
-	Mood.MENU: "res://assets/audio/music/music_menu_dark.wav",
-	Mood.AMBIENT: "res://assets/audio/music/music_ambient.wav",
-	Mood.TENSION: "res://assets/audio/music/music_tension.wav",
-	Mood.BATTLE: "res://assets/audio/music/music_battle.wav",
-	Mood.BOSS: "res://assets/audio/music/music_boss_dark.wav",
-	Mood.VICTORY: "res://assets/audio/music/music_victory.wav",
+	Mood.MENU: "res://assets/audio/music/Ambient_Dark.ogg",
+	Mood.AMBIENT: "res://assets/audio/music/Ambient_Dark.ogg",
+	Mood.TENSION: "res://assets/audio/music/Threat_Low.ogg",
+	Mood.BATTLE: "res://assets/audio/music/Action_Sting.ogg",
+	Mood.BOSS: "res://assets/audio/music/Threat_High.ogg",
+	Mood.VICTORY: "res://assets/audio/music/Ambient_Lit.ogg",
+}
+const LAYERS: Dictionary = {
+	&"Ambient_Dark": "res://assets/audio/music/Ambient_Dark.ogg",
+	&"Ambient_Lit": "res://assets/audio/music/Ambient_Lit.ogg",
+	&"Threat_Low": "res://assets/audio/music/Threat_Low.ogg",
+	&"Threat_High": "res://assets/audio/music/Threat_High.ogg",
+	&"Action_Sting": "res://assets/audio/music/Action_Sting.ogg",
 }
 ## Эмбиент по районам: у каждого района своя фоновая тема.
 const AMBIENT_BY_DISTRICT: Dictionary = {
-	&"suburbs": "res://assets/audio/music/music_ambient.wav",
-	&"residential": "res://assets/audio/music/music_ambient.wav",
-	&"old_town": "res://assets/audio/music/music_ambient_dark.wav",
+	&"suburbs": "res://assets/audio/music/Ambient_Dark.ogg",
+	&"residential": "res://assets/audio/music/Ambient_Lit.ogg",
+	&"old_town": "res://assets/audio/music/Ambient_Dark.ogg",
+	&"downtown": "res://assets/audio/music/Ambient_Lit.ogg",
+	&"harbor": "res://assets/audio/music/Ambient_Dark.ogg",
+	&"industrial": "res://assets/audio/music/Ambient_Dark.ogg",
+	&"park": "res://assets/audio/music/Ambient_Lit.ogg",
 }
-const FADE_TIME: float = 2.2          ## Длительность перекрёстного затухания, с
+const FADE_TIME: float = 2.0          ## Длительность перекрёстного затухания, с
 const FULL_DB: float = -8.0           ## Рабочая громкость музыки
 const MUTE_DB: float = -60.0
 const EVAL_INTERVAL: float = 0.5      ## Как часто пересчитывать настроение, с
@@ -67,6 +78,9 @@ func _ready() -> void:
 	EventBus.player_detected.connect(func(_id: StringName) -> void: _combat_hold = CALM_DELAY)
 	EventBus.enemy_attack.connect(func(_d: int) -> void: _combat_hold = CALM_DELAY)
 	EventBus.district_entered.connect(_on_district_entered)
+	EventBus.district_stage_changed.connect(_on_district_stage_changed)
+	EventBus.player_detected.connect(_on_threat_low)
+	EventBus.enemy_attack.connect(_on_combat_started)
 	set_mood(Mood.MENU, true)
 
 func _process(delta: float) -> void:
@@ -140,6 +154,20 @@ func _load(m: Mood) -> AudioStream:
 	return s
 
 ## Смена района: подменяем эмбиент-трек; если он сейчас звучит — плавный кроссфейд.
+func _on_district_stage_changed(_district_id: StringName, stage: int) -> void:
+	if stage >= 2:
+		set_mood(Mood.VICTORY if mood == Mood.VICTORY else Mood.AMBIENT, false, true)
+	else:
+		set_mood(Mood.AMBIENT, false, true)
+
+func _on_threat_low(_monster_id: StringName) -> void:
+	_combat_hold = CALM_DELAY
+	set_mood(Mood.TENSION)
+
+func _on_combat_started(_damage: int) -> void:
+	_combat_hold = CALM_DELAY
+	set_mood(Mood.BATTLE)
+
 func _on_district_entered(district_id: StringName) -> void:
 	var path: String = AMBIENT_BY_DISTRICT.get(district_id, "")
 	if path == "" or path == _ambient_path:
@@ -152,8 +180,8 @@ func _on_district_entered(district_id: StringName) -> void:
 func _evaluate() -> void:
 	if mood == Mood.VICTORY:
 		return
-	if not GameManager.is_playing():
-		if GameManager.is_menu() and mood != Mood.MENU:
+	if not (is_instance_valid(GameManager) and GameManager.is_playing()):
+		if (is_instance_valid(GameManager) and GameManager.is_menu()) and mood != Mood.MENU:
 			set_mood(Mood.MENU)
 		return
 	if _boss_active:

@@ -53,7 +53,7 @@ func _process(delta: float) -> void:
 		7:
 			if _t >= 10.5:
 				_phase = 8
-				print("[gtest] state: ", GameManager.current_state, " cache: ", UIManager._cache.keys())
+				print("[gtest] state: ", (GameManager.current_state if GameManager != null else 0), " cache: ", UIManager._cache.keys())
 				var d = UIManager._cache.get(&"death")
 				print("[gtest] death screen visible: ", d != null and d.visible)
 				GameManager.trigger_win()

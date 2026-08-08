@@ -1,4 +1,4 @@
-﻿extends Node
+extends Node
 var secrets: int = 0
 var kills: int = 0
 var shadow_kills: int = 0
@@ -15,7 +15,7 @@ func _ready() -> void:
     EventBus.puzzle_solved.connect(func(_a, _b): puzzles += 1; _post())
     EventBus.district_restored.connect(func(_a, _b): _unlock_doc(DOC_ON_DISTRICT); _post())
 func _process(delta: float) -> void:
-    if GameManager.is_playing():
+    if (is_instance_valid(GameManager) and GameManager.is_playing()):
         time_played += delta
 func _on_kill(id: StringName) -> void:
     kills += 1

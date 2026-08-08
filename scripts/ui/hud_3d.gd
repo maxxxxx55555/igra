@@ -74,7 +74,7 @@ func _ready() -> void:
 	$BtnPause.pressed.connect(_on_pause)
 	_add_map_button()
 	EventBus.game_state_changed.connect(_on_game_state)
-	_on_game_state(int(GameManager.current_state))
+	_on_game_state(int((GameManager.current_state if GameManager != null else 0)))
 
 func _setup_weight_bar() -> void:
 	var w := $WeightBar

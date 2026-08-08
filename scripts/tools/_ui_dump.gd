@@ -20,7 +20,7 @@ func _ready() -> void:
 	# состояние раньше бессмысленно, поэтому идём по реальной шкале загрузки.
 	for t in [1.0, 3.5, 6.0]:
 		await get_tree().create_timer(t if t == 1.0 else 2.5).timeout
-		print("[ui] ===== t=%.1fs  state=%d =====" % [t, GameManager.current_state])
+		print("[ui] ===== t=%.1fs  state=%d =====" % [t, (GameManager.current_state if GameManager != null else 0)])
 		_dump()
 	GameManager._change_state(GameManager.GameState.PLAYING)
 	var screens := get_tree().root.find_child("Screens", true, false)

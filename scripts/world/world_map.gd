@@ -48,7 +48,7 @@ func _ready() -> void:
     for district_id in district_ids:
         _build_district_objects(district_id)
         _build_district_trigger(district_id)
-    if GameManager.is_playing():
+    if (is_instance_valid(GameManager) and GameManager.is_playing()):
         _spawn_blueprints()
         _spawn_player_at_layout()
         _restore_player_pos()
@@ -132,7 +132,7 @@ func _build_district_walls(district_id: StringName) -> void:
 func _build_district_objects(district_id: StringName) -> void:
     var layout := _layout_of(district_id)
     var stage: int = PowerGrid.get_stage(district_id)
-    var playing: bool = GameManager.is_playing()
+    var playing: bool = (is_instance_valid(GameManager) and GameManager.is_playing())
     for y in layout.size():
         var row: String = layout[y]
         for x in row.length():

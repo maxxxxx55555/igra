@@ -1,4 +1,4 @@
-﻿extends CharacterBody3D
+extends CharacterBody3D
 
 enum State { IDLE, WALK, RUN, STEALTH, CROUCH }
 
@@ -259,7 +259,7 @@ func _ready() -> void:
         isv.dodge_requested.connect(_handle_dodge)
         isv.interact_requested.connect(_handle_interact)
     var gm := get_node_or_null("/root/GameManager")
-    if gm and gm.has_method("is_playing") and gm.is_playing():
+    if gm and gm.has_method("is_playing") and (is_instance_valid(gm) and gm.is_playing()):
         call_deferred("_on_game_started")
 
 func _buffer_jump() -> void:
@@ -309,7 +309,7 @@ func _physics_process(delta: float) -> void:
             _sync_remote(delta)
             return
         _sync_broadcast()
-    if GameManager.is_playing():
+    if (is_instance_valid(GameManager) and GameManager.is_playing()):
         if _play_t0 < 0.0: _play_t0 = Time.get_ticks_msec()
         var _el = Time.get_ticks_msec() - _play_t0
         if _el > 2500 and _el < 6000:
@@ -600,6 +600,8 @@ func _apply_blackout(enabled: bool) -> void:
     world_environment.environment.ambient_light_energy = 0.02 if enabled else 0.12
 
 func toggle_flashlight() -> void:
+	if flashlight_enabled:
+		_emit_boss_finisher_if_strobe_targeted()
     if battery <= 0.0:
         return
     var now: float = Time.get_ticks_msec() / 1000.0
@@ -718,6 +720,9 @@ func set_battery_params(max_val: float) -> void:
 func _handle_attack() -> void:
     if _stun_timer > 0.0 or not _can_attack or not gameplay_active:
         return
+    if stamina < 5.0:
+        EventBus.inventory_notice.emit(tr("ATTACK_DISABLED"))
+        return
     if stamina < COMBO_DATA[mini(_combo_count, 2)]["stam"]:
         return
     if _attack_phase != "none":
@@ -781,7 +786,7 @@ func _on_attack_hit(body: Node) -> void:
     if body.has_method("get_facing_dir"):
         var to_attacker: Vector3 = (global_position - body.global_position).normalized()
         var facing: Vector3 = body.get_facing_dir()
-        if to_attacker.dot(facing) < -0.7:
+        if rad_to_deg(acos(clampf(to_attacker.dot(facing), -1.0, 1.0))) > 120.0:
             from_behind = 1.5
     var final_dmg: float = cd3["dmg"] * (1.0 + bonus) * from_behind
     body.take_damage(final_dmg)
@@ -801,6 +806,13 @@ func apply_stun(duration: float = 0.3) -> void:
     _stun_timer = duration
 
 
+func _emit_boss_finisher_if_strobe_targeted() -> void:
+    var boss := get_tree().get_first_node_in_group("boss")
+    if boss == null or not is_instance_valid(boss):
+        return
+    if boss.has_method("_is_in_flashlight") and boss._is_in_flashlight():
+        EventBus.boss_finisher_triggered.emit()
+
 func _handle_dodge(dir: Vector2) -> void:
     if _dodge_cooldown > 0.0 or _stun_timer > 0.0 or not gameplay_active:
         return
@@ -813,6 +825,9 @@ func _handle_dodge(dir: Vector2) -> void:
     if d.length_squared() < 0.01:
         d = look_dir
     velocity = d * stats.run_speed * 3.0
+    var anim := get_node_or_null("AnimationPlayer") as AnimationPlayer
+    if anim and anim.has_animation("dodge"):
+        anim.play("dodge")
     var dust_particles := GPUParticles3D.new()
     dust_particles.one_shot = true
     dust_particles.emitting = true

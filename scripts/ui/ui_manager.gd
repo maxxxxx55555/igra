@@ -1,4 +1,4 @@
-﻿extends Node
+extends Node
 const SCREENS: Dictionary = {
 	&"main_menu":       "res://scripts/ui/main_menu.gd",
 	&"pause":           "res://scripts/ui/pause_menu.gd",
@@ -41,7 +41,7 @@ func _ready() -> void:
 	EventBus.game_state_changed.connect(_on_game_state)
 	EventBus.game_started.connect(func() -> void: close(&"main_menu"))
 	EventBus.toast_requested.connect(func(msg: String, _type: String) -> void: show_notification(msg))
-	_on_game_state(int(GameManager.current_state))
+	_on_game_state(int((GameManager.current_state if GameManager != null else 0)))
 
 func _mk_overlay(path: String, node_name: String) -> Control:
 	var c := Control.new()
@@ -68,14 +68,14 @@ func show_notification(msg: String) -> void:
 	tw.tween_interval(2.0)
 	tw.tween_callback(func() -> void: _toast.visible = false)
 func is_hud_blocked() -> bool:
-	return (not _open_blocking.is_empty()) or (not GameManager.is_playing())
+	return (not _open_blocking.is_empty()) or (not (is_instance_valid(GameManager) and GameManager.is_playing()))
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.is_action_pressed("ui_pause"):
 			if _is_open(&"pause"):
 				close(&"pause")
 				GameManager.resume_game()
-			elif GameManager.is_playing():
+			elif (is_instance_valid(GameManager) and GameManager.is_playing()):
 				open(&"pause")
 				GameManager.pause_game()
 		elif event.is_action_pressed("photo_mode"):

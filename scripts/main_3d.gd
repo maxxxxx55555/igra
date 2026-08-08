@@ -1,4 +1,4 @@
-﻿extends Node3D
+extends Node3D
 
 func _ready() -> void:
 
@@ -30,7 +30,7 @@ func _ready() -> void:
 
 func _auto_start_from_main() -> void:
 	var GM = get_node_or_null("/root/GameManager")
-	if GM and GM.has_method("is_playing") and GM.is_playing():
+	if GM and GM.has_method("is_playing") and (is_instance_valid(GM) and GM.is_playing()):
 		return
 	# Главное меню открывает UIManager по событию game_state_changed(MENU).
 	# Раньше здесь ещё искали узел Screens по пути "/root/Screens" — его там

@@ -94,5 +94,6 @@ signal weather_changed(weather_id: String)
 signal xp_gained(amount: int)
 signal zone_reached(zone_id: String)
 signal boss_phase_changed(phase: int)
+signal boss_finisher_triggered
 signal toast_requested(text: String, type: String)
 signal player_healed(amount: int)

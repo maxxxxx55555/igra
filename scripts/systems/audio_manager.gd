@@ -1,4 +1,4 @@
-﻿# AudioManager — autoload 18. ПРОЦЕДУРНЫЙ звук (дождь/гром/шаги/гул/щелчки/рык),
+# AudioManager — autoload 18. ПРОЦЕДУРНЫЙ звук (дождь/гром/шаги/гул/щелчки/рык),
 # без внешних аудиофайлов. Громкость через бусы SFX/Master.
 extends Node
 
@@ -126,7 +126,7 @@ func _make_player() -> AudioStreamPlayer:
     return p
 
 func _process(delta: float) -> void:
-    if not GameManager.is_playing():
+    if not (is_instance_valid(GameManager) and GameManager.is_playing()):
         return
     var moving := (_last_state == 1 or _last_state == 2)
     if moving:

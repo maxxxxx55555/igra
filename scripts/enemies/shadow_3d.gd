@@ -10,13 +10,15 @@ var _teleport_cooldown: float = 0.0
 
 func _ready() -> void:
 	detect_range = 15.0
+	hear_range = 15.0
 	max_hp = 30.0
 	super._ready()
 	_base_speed = PATROL_SPEED
+	speed = 1.2
 	attack_damage = 15.0
 	attack_range = 1.5
 	attack_cooldown = 1.5
-	light_damage_per_sec = 0.0
+	light_damage_per_sec = 10.0
 	vision_range = 0.0
 	vision_angle = 0.0
 	peripheral_range = 15.0

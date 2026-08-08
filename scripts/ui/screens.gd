@@ -1,4 +1,4 @@
-﻿extends CanvasLayer
+extends CanvasLayer
 signal panel_ready(name: String)
 const SCREEN_LIST: Array[String] = [
 	"MainMenu", "Loading", "Pause", "Settings", "Inventory",
@@ -28,7 +28,7 @@ func _ready() -> void:
 	layer = 25
 	_build_menu_bg()
 	EventBus.game_state_changed.connect(_on_game_state)
-	_on_game_state(int(GameManager.current_state))
+	_on_game_state(int((GameManager.current_state if GameManager != null else 0)))
 	_build_all_screens()
 
 func _build_menu_bg() -> void:

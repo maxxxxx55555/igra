@@ -1,4 +1,5 @@
-﻿extends Control
+extends Control
+
 func _ready() -> void:
     _build()
 func _build() -> void:
@@ -22,7 +23,7 @@ func _build() -> void:
     t.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
     t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
     vb.add_child(t)
-    var s := ProgressTracker.get_stats()
+    var s: Dictionary = (ProgressTracker.get_stats() if is_instance_valid(ProgressTracker) else {})
     _line(vb, "Восстановлено районов", "%d / %d" % [s["districts"], PowerGrid.all_districts().size()])
     _line(vb, "Найдено секретов", "%d" % s["secrets"])
     _line(vb, "Повержено существ", "%d" % s["kills"])
