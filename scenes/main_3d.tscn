@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3]
+﻿[gd_scene load_steps=25 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/environment/world_env.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud_3d.tscn" id="2"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://scripts/post_process_overlay.gd" id="9"]
 [ext_resource type="Script" path="res://scripts/world_env_setup.gd" id="10"]
 [ext_resource type="Script" path="res://scripts/main_3d.gd" id="11"]
+[ext_resource type="Script" path="res://scripts/stress_test.gd" id="13"]
 [ext_resource type="Script" path="res://scripts/fog_setup.gd" id="14"]
 [ext_resource type="Script" path="res://scripts/effects/screen_shake.gd" id="15"]
 [ext_resource type="Script" path="res://scripts/world/streetlight_spawner.gd" id="16"]
@@ -96,6 +97,9 @@ script = ExtResource("9")
 
 [node name="WorldEnvSetup" type="Node" parent="."]
 script = ExtResource("10")
+
+[node name="StressTest" type="Node" parent="."]
+script = ExtResource("13")
 
 [node name="FogSetup" type="Node3D" parent="."]
 script = ExtResource("14")
