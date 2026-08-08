@@ -195,5 +195,10 @@
   "Colorblind Mode": "Farbenblind-Modus",
   "Arachnophobia Mode": "Arachnophobie-Modus",
   "Dyslexia Font (OpenDyslexic)": "Legasthenie-Schrift (OpenDyslexic)",
-  "ad_reward_title": "Werbung für Belohnung ansehen?", "ad_watch": "Werbung ansehen (+100 Münzen)", "ad_skip": "Überspringen (-100 Münzen)", "ui_close": "Schließen"
+  "ad_reward_title": "Werbung für Belohnung ansehen?", "ad_watch": "Werbung ansehen (+100 Münzen)", "ad_skip": "Überspringen (-100 Münzen)", "ui_close": "Schließen",
+  "FTUE_OBJECTIVES_TITLE": "ZIEL",
+  "FTUE_REPAIR_GENERATOR": "Repariere den Generator",
+  "FTUE_INTERACT_GENERATOR": "Generator aktivieren",
+  "FTUE_STREET_LIT": "Die Straße ist beleuchtet",
+  "FTUE_OBJECTIVE_UPDATED": "Ziel aktualisiert: Stelle den nächsten Bezirk wieder her"
 }

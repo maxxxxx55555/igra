@@ -11,6 +11,7 @@ var _objectives_vbox: VBoxContainer
 
 func _ready() -> void:
     process_mode = Node.PROCESS_MODE_ALWAYS
+    EventBus.inventory_notice.connect(_on_objective_notice)
     _settings = get_node_or_null("/root/SettingsManager")
     _build_ui()
     
@@ -71,6 +72,23 @@ func _make_stylebox() -> StyleBoxFlat:
     sb.corner_radius_bottom_left = 4
     sb.corner_radius_bottom_right = 4
     return sb
+
+func _on_objective_notice(message: String) -> void:
+    if message.is_empty():
+        return
+    _set_single_objective(message)
+
+func _set_single_objective(message: String) -> void:
+    for c in _objectives_vbox.get_children():
+        c.queue_free()
+    _container.visible = true
+    _title_lbl.text = tr("FTUE_OBJECTIVES_TITLE")
+    var label := Label.new()
+    label.text = message
+    label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+    label.add_theme_font_size_override("font_size", 13)
+    label.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT)
+    _objectives_vbox.add_child(label)
 
 func _on_settings_changed(key: String, value: Variant) -> void:
     if key == "hints" or key == "objective_markers":

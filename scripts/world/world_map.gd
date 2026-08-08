@@ -162,6 +162,57 @@ func _spawn_blueprints() -> void:
         var district_id: StringName = b["district"]
         var cell: Vector2i = b["cell"]
         _spawn_pickup(_cell_world(district_id, cell.x, cell.y), b["item"])
+func _setup_ftue_suburbs() -> void:
+    return
+    var suburbs_stage: int = PowerGrid.get_stage(&"suburbs")
+    if suburbs_stage != DistrictData.Stage.DARK:
+        return
+    var player := get_tree().get_first_node_in_group("player")
+    if player == null:
+        return
+    var generator_pos := _cell_world(&"suburbs", 5, 3)
+    var generator := _find_or_create_ftue_generator(generator_pos)
+    if generator == null:
+        return
+    if generator.has_method("set_ftue_objective"):
+        generator.set_ftue_objective(tr("FTUE_REPAIR_GENERATOR"))
+    _show_ftue_objective(tr("FTUE_REPAIR_GENERATOR"))
+    if not generator.has_method("interact"):
+        generator.set_script(load("res://scripts/world/ftue_generator.gd"))
+        generator.set("completed", false)
+
+func _find_or_create_ftue_generator(pos: Vector2) -> Node:
+    for child in spawns.get_children():
+        if child.is_in_group("ftue_generator"):
+            return child
+    var generator := Area2D.new()
+    generator.name = "FTUEGenerator"
+    generator.position = pos
+    generator.add_to_group("interactable")
+    generator.add_to_group("ftue_generator")
+    generator.set_meta("district_id", &"suburbs")
+    generator.set_meta("action_name", tr("FTUE_INTERACT_GENERATOR"))
+    generator.set_meta("ftue_objective", tr("FTUE_REPAIR_GENERATOR"))
+    var shape := CollisionShape2D.new()
+    var circle := CircleShape2D.new()
+    circle.radius = 24.0
+    shape.shape = circle
+    generator.add_child(shape)
+    generator.set_meta("activated", false)
+    spawns.add_child(generator)
+    return generator
+
+func _activate_ftue_generator(generator: Node) -> void:
+    if bool(generator.get_meta("activated", false)):
+        return
+    generator.set_meta("activated", true)
+    if PowerGrid.advance_district(&"suburbs", DistrictData.Stage.STREETS):
+        EventBus.toast_requested.emit(tr("FTUE_STREET_LIT"), "objective")
+        _show_ftue_objective(tr("FTUE_OBJECTIVE_UPDATED"))
+
+func _show_ftue_objective(text: String) -> void:
+    EventBus.inventory_notice.emit(text)
+
 func _spawn_player_at_layout() -> void:
     for district_id in DISTRICT_LAYOUTS.keys():
         var layout := _layout_of(district_id)

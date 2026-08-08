@@ -195,5 +195,10 @@
   "Colorblind Mode": "色覚サポート",
   "Arachnophobia Mode": "クモ恐怖症モード",
   "Dyslexia Font (OpenDyslexic)": "ディスレクシア用フォント (OpenDyslexic)",
-  "ad_reward_title": "報酬の広告を見ますか？", "ad_watch": "広告を見る (+100コイン)", "ad_skip": "スキップ (-100コイン)", "ui_close": "閉じる"
+  "ad_reward_title": "報酬の広告を見ますか？", "ad_watch": "広告を見る (+100コイン)", "ad_skip": "スキップ (-100コイン)", "ui_close": "閉じる",
+  "FTUE_OBJECTIVES_TITLE": "目的",
+  "FTUE_REPAIR_GENERATOR": "発電機を修理する",
+  "FTUE_INTERACT_GENERATOR": "発電機を起動する",
+  "FTUE_STREET_LIT": "通りに明かりが戻った",
+  "FTUE_OBJECTIVE_UPDATED": "目的更新：次の地区を復旧する"
 }

@@ -106,7 +106,7 @@ var _strobe_cooldown: float = 0.0
 @onready var right_arm: MeshInstance3D = $ModelPivot/HumanBody/RightArm
 @onready var left_leg: MeshInstance3D = $ModelPivot/HumanBody/LeftLeg
 @onready var right_leg: MeshInstance3D = $ModelPivot/HumanBody/RightLeg
-@onready var interact_ray: RayCast3D = $InteractRay
+@onready var interact_ray: RayCast3D = get_node_or_null("InteractRay") as RayCast3D
 
 ## Камера внутри конуса? Тогда конус превращается в засвет во весь экран.
 ## Проверяем геометрией, а не флагом: не зависит от порядка инициализации камеры.
@@ -257,6 +257,7 @@ func _ready() -> void:
         isv.jump_requested.connect(_buffer_jump)
         isv.flashlight_requested.connect(toggle_flashlight)
         isv.dodge_requested.connect(_handle_dodge)
+        isv.interact_requested.connect(_handle_interact)
     var gm := get_node_or_null("/root/GameManager")
     if gm and gm.has_method("is_playing") and gm.is_playing():
         call_deferred("_on_game_started")
@@ -625,6 +626,13 @@ func _try_strobe() -> void:
         var angle: float = rad_to_deg(acos(clampf(forward.dot(to_enemy.normalized()), -1.0, 1.0)))
         if angle <= flashlight.spot_angle * 0.5 and enemy.has_method("apply_stun"):
             enemy.apply_stun(STROBE_DURATION)
+
+func _handle_interact() -> void:
+    if interact_ray == null or not interact_ray.is_colliding():
+        return
+    var target := interact_ray.get_collider()
+    if target != null and target.has_method("interact"):
+        target.interact(self)
 
 func _process(delta: float) -> void:
     if _strobe_cooldown > 0.0:

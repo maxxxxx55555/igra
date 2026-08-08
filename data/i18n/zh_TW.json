@@ -195,5 +195,10 @@
   "Colorblind Mode": "色盲模式",
   "Arachnophobia Mode": "蜘蛛恐懼症模式",
   "Dyslexia Font (OpenDyslexic)": "閱讀障礙字體 (OpenDyslexic)",
-  "ad_reward_title": "觀看廣告獲得獎勵？", "ad_watch": "觀看廣告 (+100 金幣)", "ad_skip": "跳過 (-100 金幣)", "ui_close": "關閉"
+  "ad_reward_title": "觀看廣告獲得獎勵？", "ad_watch": "觀看廣告 (+100 金幣)", "ad_skip": "跳過 (-100 金幣)", "ui_close": "關閉",
+  "FTUE_OBJECTIVES_TITLE": "目標",
+  "FTUE_REPAIR_GENERATOR": "修理發電機",
+  "FTUE_INTERACT_GENERATOR": "啟動發電機",
+  "FTUE_STREET_LIT": "街道亮起來了",
+  "FTUE_OBJECTIVE_UPDATED": "目標更新：恢復下一個區域"
 }

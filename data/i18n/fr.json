@@ -195,5 +195,10 @@
   "Colorblind Mode": "Mode daltonien",
   "Arachnophobia Mode": "Mode arachnophobie",
   "Dyslexia Font (OpenDyslexic)": "Police dyslexie (OpenDyslexic)",
-  "ad_reward_title": "Regarder une pub pour une récompense ?", "ad_watch": "Regarder la pub (+100 pièces)", "ad_skip": "Passer (-100 pièces)", "ui_close": "Fermer"
+  "ad_reward_title": "Regarder une pub pour une récompense ?", "ad_watch": "Regarder la pub (+100 pièces)", "ad_skip": "Passer (-100 pièces)", "ui_close": "Fermer",
+  "FTUE_OBJECTIVES_TITLE": "OBJECTIF",
+  "FTUE_REPAIR_GENERATOR": "Répare le générateur",
+  "FTUE_INTERACT_GENERATOR": "Activer le générateur",
+  "FTUE_STREET_LIT": "La rue est éclairée",
+  "FTUE_OBJECTIVE_UPDATED": "Objectif mis à jour : restaure le prochain quartier"
 }
