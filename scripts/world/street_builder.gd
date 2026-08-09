@@ -16,14 +16,41 @@ var _road_mm: MultiMeshInstance3D
 var _sidewalk_mm: MultiMeshInstance3D
 var _marking_mm: MultiMeshInstance3D
 
+const _TEX_ASPHALT   := "res://assets/textures/environment/asphalt.png"
+const _TEX_CONCRETE  := "res://assets/textures/environment/concrete.png"
+
 func _ready() -> void:
 	_ensure_mm()
 	if prop_seed == 0:
 		prop_seed = hash(str(district_id))
-	_init_mm(_road_mm, _make_box_mesh(Color(0.15, 0.15, 0.15)))
-	_init_mm(_sidewalk_mm, _make_box_mesh(Color(0.4, 0.4, 0.4)))
-	_init_mm(_marking_mm, _make_box_mesh(Color(0.9, 0.9, 0.9)))
+	_init_mm(_road_mm,     _make_road_mesh())
+	_init_mm(_sidewalk_mm, _make_sidewalk_mesh())
+	_init_mm(_marking_mm,  _make_box_mesh(Color(0.9, 0.9, 0.9)))
 	call_deferred("build")
+
+func _make_road_mesh() -> BoxMesh:
+	var m := BoxMesh.new()
+	m.size = Vector3(tile_size, 0.1, tile_size)
+	var mat := StandardMaterial3D.new()
+	mat.albedo_color = Color(0.15, 0.15, 0.15)
+	var tex: Texture2D = load(_TEX_ASPHALT)
+	if tex:
+		mat.albedo_texture = tex
+	mat.roughness = 0.9
+	m.material = mat
+	return m
+
+func _make_sidewalk_mesh() -> BoxMesh:
+	var m := BoxMesh.new()
+	m.size = Vector3(tile_size, 0.1, tile_size)
+	var mat := StandardMaterial3D.new()
+	mat.albedo_color = Color(0.4, 0.4, 0.4)
+	var tex: Texture2D = load(_TEX_CONCRETE)
+	if tex:
+		mat.albedo_texture = tex
+	mat.roughness = 0.9
+	m.material = mat
+	return m
 
 func _make_box_mesh(color: Color) -> BoxMesh:
 	var m := BoxMesh.new()

@@ -14,6 +14,20 @@ var _trunk: CylinderMesh
 var _leaf: SphereMesh
 var _cone: CylinderMesh
 
+const _TEX_BRICK       := "res://assets/textures/environment/brick.png"
+const _TEX_RUSTY_METAL := "res://assets/textures/environment/rusty_metal.png"
+
+## Returns a StandardMaterial3D with albedo_texture loaded from path.
+## Falls back to albedo_color if the texture file is missing.
+static func _wall_material(tex_path: String, fallback_color: Color) -> StandardMaterial3D:
+	var mat := StandardMaterial3D.new()
+	mat.albedo_color = fallback_color
+	var tex: Texture2D = load(tex_path)
+	if tex:
+		mat.albedo_texture = tex
+	mat.roughness = 0.9
+	return mat
+
 func _ready() -> void:
 	_rng.seed = random_seed if random_seed != 0 else hash(str(global_position))
 	_init_meshes()
@@ -121,3 +135,14 @@ func _spawn_cone(center: Vector3, road: Dictionary) -> void:
 	c.material_override = m
 	c.position = center + _side_offset(road, 2.4)
 	add_child(c)
+
+## Convenience: build a wall MeshInstance3D with brick or rusty_metal texture.
+## Call from a building-spawner script: CityStreetProps.make_wall_mesh(...)
+static func make_wall_mesh(use_brick: bool) -> MeshInstance3D:
+	var mi := MeshInstance3D.new()
+	mi.mesh = BoxMesh.new()
+	mi.material_override = _wall_material(
+		_TEX_BRICK if use_brick else _TEX_RUSTY_METAL,
+		Color(0.45, 0.32, 0.25) if use_brick else Color(0.35, 0.22, 0.18)
+	)
+	return mi
