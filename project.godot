@@ -18,6 +18,9 @@ config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://assets/ui/icon.png"
 
 [autoload]
+FadeTransition="*res://scripts/ui/fade_transition.gd"
+ObjectPool="*res://scripts/systems/object_pool.gd"
+LightLimiter="*res://scripts/systems/light_limiter.gd"
 
 ThemeSetup="*res://scripts/theme_setup.gd"
 MapController="*res://scripts/ui/map_controller.gd"
