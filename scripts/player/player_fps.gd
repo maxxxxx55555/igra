@@ -1,5 +1,6 @@
 extends CharacterBody3D
 ## FPS player controller: movement, interaction, flashlight and health wiring.
+## + head bob (амплитуда 0.03), recoil, screen shake, footstep dust.
 
 signal health_changed(new_health: int)
 signal died
@@ -20,10 +21,21 @@ const COYOTE_TIME: float = 0.1
 const JUMP_BUFFER_TIME: float = 0.1
 const STEP_INTERVAL: float = 0.4
 
+# Head bob
+const BOB_AMPLITUDE: float = 0.03
+const BOB_FREQUENCY: float = 2.0
+var _bob_time: float = 0.0
+var _camera_base_y: float = 0.0
+
 var _coyote_timer: float = 0.0
 var _jump_buffer: float = 0.0
 var _step_timer: float = 0.0
 var _flashlight_on: bool = true
+
+# Effects
+var _recoil: Node = null
+var _screen_shake: Node = null
+var _footstep_dust: Node = null
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -33,6 +45,33 @@ func _ready() -> void:
 	if game_manager != null:
 		game_manager.set("player", self)
 	_on_health_changed(int(health.get("health")))
+	_camera_base_y = camera.position.y
+	_setup_effects()
+
+func _setup_effects() -> void:
+	# Recoil
+	var recoil_script: Script = load("res://scripts/effects/recoil.gd")
+	if recoil_script:
+		_recoil = Node.new()
+		_recoil.set_script(recoil_script)
+		_recoil.name = "Recoil"
+		add_child(_recoil)
+		_recoil.setup(camera)
+	# Screen shake
+	var shake_script: Script = load("res://scripts/effects/screen_shake.gd")
+	if shake_script:
+		_screen_shake = Node.new()
+		_screen_shake.set_script(shake_script)
+		_screen_shake.name = "ScreenShake"
+		add_child(_screen_shake)
+		_screen_shake.setup(camera)
+	# Footstep dust
+	var dust_script: Script = load("res://scripts/effects/footstep_dust.gd")
+	if dust_script:
+		_footstep_dust = Node3D.new()
+		_footstep_dust.set_script(dust_script)
+		_footstep_dust.name = "FootstepDust"
+		add_child(_footstep_dust)
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
@@ -65,6 +104,11 @@ func _use_slot(index: int) -> void:
 	if hud != null and hud.has_method("_use_quick_slot"):
 		hud.call("_use_quick_slot", index)
 
+## Вызывается из AttackComponent / Weapon при выстреле.
+func on_shoot() -> void:
+	if _recoil:
+		_recoil.add_recoil()
+
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
@@ -83,20 +127,35 @@ func _physics_process(delta: float) -> void:
 	var direction: Vector3 = (transform.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized()
 	var sprinting: bool = Input.is_action_pressed("run") or Input.is_action_pressed("sprint")
 	var current_speed: float = sprint_speed if sprinting else speed
-	if not direction.is_zero_approx():
+	var is_moving: bool = not direction.is_zero_approx()
+	if is_moving:
 		velocity.x = direction.x * current_speed
 		velocity.z = direction.z * current_speed
 		_step_timer -= delta
 		if _step_timer <= 0.0 and is_on_floor():
 			_step_timer = STEP_INTERVAL
+			_on_step()
 	else:
 		velocity.x = move_toward(velocity.x, 0.0, speed)
 		velocity.z = move_toward(velocity.z, 0.0, speed)
+	# Head bob
+	if is_moving and is_on_floor():
+		_bob_time += delta * BOB_FREQUENCY * (sprint_speed / speed if sprinting else 1.0)
+		camera.position.y = _camera_base_y + sin(_bob_time * TAU) * BOB_AMPLITUDE
+	else:
+		_bob_time = 0.0
+		camera.position.y = move_toward(camera.position.y, _camera_base_y, delta * 4.0)
 	move_and_slide()
 	if Input.is_action_just_pressed("interact") and interact_ray.is_colliding():
 		var collider: Object = interact_ray.get_collider()
 		if collider != null and collider.has_method("interact"):
 			collider.call("interact", self)
+
+func _on_step() -> void:
+	if _footstep_dust:
+		var dust := _footstep_dust.duplicate()
+		get_parent().add_child(dust)
+		dust.puff(global_position)
 
 func _on_health_changed(new_health: int) -> void:
 	health_changed.emit(new_health)

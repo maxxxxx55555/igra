@@ -1,8 +1,75 @@
-# THE LAST STREETLIGHT — ФИНАЛ (код + визуал референса + звук)
-Сборка БЕЗ Python: part1.ps1..part6.ps1 в одну папку tls_build (UTF-8), затем в cmd папки:
-  copy /b part1.ps1+part2.ps1+part3.ps1+part4.ps1+part5.ps1+part6.ps1 build_all.ps1
-  powershell -ExecutionPolicy Bypass -File build_all.ps1
-Открой THE_LAST_STREETLIGHT/project.godot в Godot 4.7 Stable -> F5. Рендерер GL Compatibility.
-Визуал в стиле референса работает СРАЗУ (программно). Опционально сохрани PNG-арт
-(tile_floor/tile_wall/player_top/coin_icon/menu_bg.png) в assets/art/ — подхватится сам.
-Мир НЕ процедурный и НЕ бесконечный (канон): одна фиксированная карта из 11 районов.
+# THE LAST STREETLIGHT
+
+3D FPS survival horror. Godot 4.7, GL Compatibility. Android + PC.
+
+## Запуск
+
+1. Открой `project.godot` в **Godot 4.7 Stable**.
+2. Нажми **F5** (или кнопку Run).
+3. Рендерер: **GL Compatibility** (уже настроен).
+
+## Сборка APK (Android)
+
+### Требования
+- Godot 4.7 с Android Export Template
+- Android SDK (min SDK 29, target SDK 34)
+- JDK 17+
+- Keystore (debug: `tls_debug.keystore`)
+
+### Команды
+```bash
+# Экспорт APK через Godot CLI:
+godot --headless --export-debug "Android" build/TLS.apk
+
+# Или через редактор:
+# Project → Export → Android → Export Project
+```
+
+### Параметры сборки
+| Параметр | Значение |
+|---|---|
+| Min SDK | 29 |
+| Target SDK | 34 |
+| 3D Scale | 0.85 |
+| FPS Cap | 60 |
+| Renderer | GL Compatibility |
+
+## Структура проекта
+
+```
+scenes/          — сцены (.tscn)
+scripts/         — GDScript (.gd)
+  core/          — EventBus, GameManager
+  ui/            — HUD, меню, настройки
+  player/        — player_fps.gd
+  enemies/       — base_monster.gd
+  effects/       — recoil, screen_shake, vfx
+  systems/       — object_pool, light_limiter, settings_manager
+  components/    — visibility_enabler
+assets/          — текстуры, звуки, шрифты, UI
+data/            — i18n, конфиги
+docs/            — GDD, арт-библия, прогресс
+```
+
+## Автоскриншоты
+
+```bash
+# Скриншот через shot_tool.gd (запускается с флагом --shot):
+godot --path . res://scenes/main_3d.tscn -- --shot
+
+# Скриншот через autoshot.gd (SceneTree-режим):
+godot --headless --script res://scripts/tools/autoshot.gd
+```
+
+Скриншот сохраняется в `C:/Users/Maxsim/Desktop/shot1.png`.
+
+## Обязательные проверки перед коммитом
+
+```bash
+godot --headless --path . res://scenes/tools/compile_gate_scene.tscn
+godot --headless --path . res://scenes/tools/signal_arity_check_scene.tscn
+godot --headless --path . res://scenes/tools/i18n_check_scene.tscn
+godot --headless --path . res://scenes/tools/asset_check_scene.tscn
+```
+
+Все должны завершиться с кодом 0.
