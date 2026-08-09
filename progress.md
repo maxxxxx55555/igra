@@ -1,5 +1,11 @@
 # Progress
 
-## 2026-08-06
-- Started audit of THE LAST STREETLIGHT.
-- Loaded repository instructions and planning workflow.
+## 2026-08-09
+- Прочитаны обязательные Screenpipe skills и проектные инструкции.
+- Восстановлен контекст: канон `docs/GDD.md` v4, стартовый аудит `docs/GDD_CONFORMANCE.md`.
+- Создан `task_plan.md` с 9 фазами финальной доводки.
+- Первый запуск shell заблокирован отсутствующим `C:\Users\Maxsim\AppData\Local\Microsoft\WindowsApps\bash.exe`; попытка вызвать PowerShell через bash тоже не прошла. Код пока не изменялся.
+- Прочитан `scripts/systems/music_manager.gd`: обнаружены два наложенных варианта архитектуры, лишние поля/методы в конце файла, ссылки на `.wav`, отсутствует явная runtime-логика пяти одновременно управляемых слоёв. Это кандидат на отдельную surgical-фазу после проверки ассетов и EventBus.
+
+## Next
+Найти рабочий способ запуска PowerShell/Git/Godot в текущем harness; затем выполнить фактическую инвентаризацию и gate baseline до любых игровых правок.

@@ -182,14 +182,13 @@ position = Vector3(0.25, 1.45, 0)
 rotation = Vector3(-0.6, 0, 0)
 
 [node name="Flashlight" type="SpotLight3D" parent="ModelPivot/FlashlightPivot"]
-light_color = Color(0.788235, 0.635294, 0.290196, 1.0)
-light_energy = 2.0
+light_color = Color(1.0, 0.82, 0.48, 1.0)
+light_energy = 24.0
 light_indirect_energy = 0.5
-spot_angle = 45.0
+spot_angle = 35.0
 spot_attenuation = 1.0
-spot_range = 8.0
-shadow_enabled = true
-shadow_bias = 0.02
+spot_range = 16.0
+shadow_enabled = false
 
 [node name="HandLight" type="MeshInstance3D" parent="ModelPivot/FlashlightPivot"]
 mesh = SubResource("hand_mesh")
@@ -224,11 +223,6 @@ omni_range = 3.5
 hit_from_inside = true
 target_position = Vector3(0, -2, 0)
 collision_mask = 1
-
-[node name="InteractRay" type="RayCast3D" parent="."]
-target_position = Vector3(0, 0, -3)
-collision_mask = 1
-enabled = true
 
 [node name="Footsteps" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("4_step")

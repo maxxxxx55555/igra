@@ -59,6 +59,7 @@ func reload() -> bool:
 
 func _on_ammo_changed(current: int, max: int) -> void:
 	ammo_changed.emit(current, max)
+	EventBus.ammo_changed.emit(current, max)
 
 func add_weapon(weapon: WeaponBase, slot: int = -1) -> void:
 	if slot >= 0 and slot < weapon_slots.size():

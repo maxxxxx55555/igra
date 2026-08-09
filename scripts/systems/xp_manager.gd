@@ -1,4 +1,4 @@
-extends Node
+﻿extends Node
 
 signal xp_gained(amount: int)
 signal level_up(new_level: int)

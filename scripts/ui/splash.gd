@@ -1,4 +1,4 @@
-extends CanvasLayer
+﻿extends CanvasLayer
 
 @export var show_splash: bool = true
 
@@ -8,7 +8,7 @@ func _ready() -> void:
 	if not show_splash:
 		queue_free()
 		return
-	if GameManager and GameManager.has_method("is_playing") and (is_instance_valid(GameManager) and GameManager.is_playing()):
+	if GameManager and GameManager.has_method("is_playing") and GameManager.is_playing():
 		queue_free()
 		return
 	$Timer.timeout.connect(_dismiss)

@@ -195,10 +195,5 @@
   "Colorblind Mode": "وضع عمى الألوان",
   "Arachnophobia Mode": "وضع رهاب العناكب",
   "Dyslexia Font (OpenDyslexic)": "خط عسر القراءة (OpenDyslexic)",
-  "ad_reward_title": "هل تريد مشاهدة إعلان مقابل مكافأة؟", "ad_watch": "شاهد الإعلان (+100 عملة)", "ad_skip": "تخطي (-100 عملة)", "ui_close": "إغلاق",
-  "FTUE_OBJECTIVES_TITLE": "الهدف",
-  "FTUE_REPAIR_GENERATOR": "أصلح المولد",
-  "FTUE_INTERACT_GENERATOR": "شغّل المولد",
-  "FTUE_STREET_LIT": "أضيء الشارع",
-  "FTUE_OBJECTIVE_UPDATED": "تم تحديث الهدف: أصلح المنطقة التالية"
+  "ad_reward_title": "هل تريد مشاهدة إعلان مقابل مكافأة؟", "ad_watch": "شاهد الإعلان (+100 عملة)", "ad_skip": "تخطي (-100 عملة)", "ui_close": "إغلاق"
 }

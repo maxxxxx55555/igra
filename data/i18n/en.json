@@ -195,10 +195,5 @@
   "Colorblind Mode": "Colorblind Mode",
   "Arachnophobia Mode": "Arachnophobia Mode",
   "Dyslexia Font (OpenDyslexic)": "Dyslexia Font (OpenDyslexic)",
-  "ad_reward_title": "Watch ad for reward?", "ad_watch": "Watch Ad (+100 coins)", "ad_skip": "Skip (-100 coins)", "ui_close": "Close",
-  "FTUE_OBJECTIVES_TITLE": "OBJECTIVE",
-  "FTUE_REPAIR_GENERATOR": "Repair the generator",
-  "FTUE_INTERACT_GENERATOR": "Activate generator",
-  "FTUE_STREET_LIT": "Street lit",
-  "FTUE_OBJECTIVE_UPDATED": "Objective updated: restore the next district"
+  "ad_reward_title": "Watch ad for reward?", "ad_watch": "Watch Ad (+100 coins)", "ad_skip": "Skip (-100 coins)", "ui_close": "Close"
 }

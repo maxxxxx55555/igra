@@ -1,4 +1,4 @@
-extends Control
+﻿extends Control
 const ACH := {
     "first_light": "Первый свет",
     "district_one": "Один район спасён",

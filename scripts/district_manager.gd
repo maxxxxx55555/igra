@@ -1,11 +1,11 @@
 ﻿extends Node
 
 const DISTRICTS: Array[String] = [
-	"suburb", "residential", "park", "school", "hospital",
-	"policestation", "warehouse", "gasstation", "industrial", "substation", "powerplant"
+	"suburbs", "residential", "park", "school", "hospital",
+	"gas_station", "police", "warehouses", "industrial", "substation", "power_station"
 ]
 
-var current_district: String = "suburb"
+var current_district: String = "suburbs"
 var district_stages: Dictionary = {}
 
 func _ready() -> void:

@@ -55,6 +55,8 @@
 | §25.1 | Checklist items marked implemented must be independently evidenced, not trusted as proof | PARTIAL | `C:\Users\Maxsim\Desktop\TLS_Build\THE_LAST_STREETLIGHT\docs\GDD.md:537-567` self-claims implementation; project autoload evidence only partial | Convert checklist into gate-backed evidence; do not treat GDD self-claims as implementation proof |
 | §25.2 | Remaining work: adaptive music, Android APK, all gates/doctor, full screens.gd localization | DONE | `C:\Users\Maxsim\Desktop\TLS_Build\THE_LAST_STREETLIGHT\docs\GDD.md:569-575` explicitly lists remaining work; `music_manager.gd:1-10` confirms current non-canonical mood implementation | Track these as confirmed gaps; address in separate implementation PRs |
 
+| §26 | Security: save integrity, economy clamps, release gating, watchdog, LAN clamps | PARTIAL | `C:\Users\Maxsim\Desktop\TLS_Build\THE_LAST_STREETLIGHT\scripts\systems\integrity_guard.gd:1-100`; `project.godot:[autoload]`; `scripts\economy\coin_wallet.gd` | Save SHA-256/atomic backup, debug gating audit, and LAN RPC clamps remain to be implemented and verified |
+
 ## Summary
 
 This matrix deliberately uses conservative statuses: a feature is not marked DONE merely because §25 claims it exists or because an autoload name exists. Exact implementation evidence must be tied to source/data lines or a passing dedicated gate. Gates were not run, per request.

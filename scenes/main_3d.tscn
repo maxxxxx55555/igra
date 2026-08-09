@@ -1,8 +1,8 @@
-﻿[gd_scene load_steps=25 format=3]
+[gd_scene load_steps=25 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/environment/world_env.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud_3d.tscn" id="2"]
-[ext_resource type="PackedScene" path="res://scenes/player/player_3d.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/player/player_fps.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/ui/splash.tscn" id="5"]
 [ext_resource type="Script" path="res://scripts/core/camera_follow_3d.gd" id="6"]
 [ext_resource type="Script" path="res://scripts/world/street_builder.gd" id="7"]
@@ -10,7 +10,6 @@
 [ext_resource type="Script" path="res://scripts/post_process_overlay.gd" id="9"]
 [ext_resource type="Script" path="res://scripts/world_env_setup.gd" id="10"]
 [ext_resource type="Script" path="res://scripts/main_3d.gd" id="11"]
-[ext_resource type="Script" path="res://scripts/stress_test.gd" id="13"]
 [ext_resource type="Script" path="res://scripts/fog_setup.gd" id="14"]
 [ext_resource type="Script" path="res://scripts/effects/screen_shake.gd" id="15"]
 [ext_resource type="Script" path="res://scripts/world/streetlight_spawner.gd" id="16"]
@@ -21,7 +20,6 @@
 [ext_resource type="Script" path="res://scripts/world/power_switch.gd" id="21_PowerS"]
 [ext_resource type="Script" path="res://scripts/world/district_trigger.gd" id="22_Distri"]
 [ext_resource type="Script" path="res://scripts/visual/emissive_windows.gd" id="23_Emissi"]
-[ext_resource type="Script" path="res://scripts/world/ftue_generator_3d.gd" id="24_ftue"]
 
 [sub_resource type="ParticleProcessMaterial" id="ash_mat"]
 emission_shape = 2
@@ -41,18 +39,6 @@ shading_mode = 0
 vertex_color_use_as_albedo = true
 albedo_color = Color(0.416, 0.384, 0.345, 0.45)
 
-[sub_resource type="BoxShape3D" id="ftue_generator_shape"]
-size = Vector3(1, 2, 1)
-
-[sub_resource type="BoxMesh" id="ftue_generator_mesh"]
-size = Vector3(1, 2, 1)
-
-[sub_resource type="StandardMaterial3D" id="ftue_generator_material"]
-albedo_color = Color(0.078, 0.106, 0.141, 1)
-emission_enabled = true
-emission = Color(0.788, 0.635, 0.29, 1)
-emission_energy_multiplier = 2.0
-
 [node name="Main3D" type="Node3D"]
 script = ExtResource("11")
 
@@ -69,21 +55,10 @@ shadow_normal_bias = 2.0
 [node name="Player" parent="." instance=ExtResource("4")]
 position = Vector3(0, 1.05, 0)
 
-[node name="FTUEGenerator" type="Area3D" parent="."]
-position = Vector3(5, 1, 0)
-script = ExtResource("24_ftue")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="FTUEGenerator"]
-shape = SubResource("ftue_generator_shape")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="FTUEGenerator"]
-mesh = SubResource("ftue_generator_mesh")
-material_override = SubResource("ftue_generator_material")
-
 [node name="Camera3D" type="Camera3D" parent="."]
 script = ExtResource("6")
 position = Vector3(0, 6, 5)
-fov = 80.0
+fov = 50.0
 near = 0.1
 far = 100.0
 current = true
@@ -121,9 +96,6 @@ script = ExtResource("9")
 
 [node name="WorldEnvSetup" type="Node" parent="."]
 script = ExtResource("10")
-
-[node name="StressTest" type="Node" parent="."]
-script = ExtResource("13")
 
 [node name="FogSetup" type="Node3D" parent="."]
 script = ExtResource("14")

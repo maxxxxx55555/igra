@@ -1,4 +1,4 @@
-extends Control
+﻿extends Control
 const SIZE := Vector2(180, 180)
 const SCALE := 0.06
 const DISTRICT_OFFSETS: Dictionary = {
@@ -35,9 +35,7 @@ func _process(delta: float) -> void:
     _tick += delta
     if _tick >= 0.1: _tick = 0.0; queue_redraw()
 func _draw() -> void:
-    if not is_instance_valid(GameManager) or GameManager == null:
-        return
-    if not (is_instance_valid(GameManager) and (is_instance_valid(GameManager) and GameManager.is_playing())): return
+    if not GameManager.is_playing(): return
     var r := get_rect()
     draw_circle(r.size * 0.5, r.size.x * 0.5, ThemeProvider.COLOR_BG_PANEL)
     draw_arc(r.size * 0.5, r.size.x * 0.5 - 1, 0.0, TAU, 32, ThemeProvider.COLOR_BORDER, 2.0, true)

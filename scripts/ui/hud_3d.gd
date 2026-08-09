@@ -17,6 +17,7 @@ var _enemy_hp_tween: Tween
 @onready var stam_val: Label = $TopLeft/Stam/StamVal
 @onready var bat_fill: ColorRect = $TopLeft/Bat/BatF
 @onready var bat_val: Label = $TopLeft/Bat/BatVal
+@onready var ammo_val: Label = $AmmoCounter/AmmoVal
 @onready var prompt: Label = $PromptLabel
 @onready var notice: Label = $NoticeLabel
 @onready var vignette: ColorRect = get_tree().root.find_child("VignetteOverlay", true, false)
@@ -60,6 +61,7 @@ func _ready() -> void:
 	EventBus.player_health_changed.connect(_on_damage_vignette)
 	EventBus.player_stamina_changed.connect(_on_stam)
 	EventBus.player_battery_changed.connect(_on_bat)
+	EventBus.ammo_changed.connect(_on_ammo_changed)
 	EventBus.player_interact_available.connect(func(avail: bool): prompt.visible = avail)
 	EventBus.inventory_weight_changed.connect(_on_weight_changed)
 	EventBus.inventory_notice.connect(func(msg: String): _show_notice(msg))
@@ -74,7 +76,7 @@ func _ready() -> void:
 	$BtnPause.pressed.connect(_on_pause)
 	_add_map_button()
 	EventBus.game_state_changed.connect(_on_game_state)
-	_on_game_state(int((GameManager.current_state if GameManager != null else 0)))
+	_on_game_state(int(GameManager.current_state))
 
 func _setup_weight_bar() -> void:
 	var w := $WeightBar
@@ -272,6 +274,9 @@ func _on_bat(ratio: float) -> void:
 	_bat = ratio
 	_tween_fill(bat_fill, ratio)
 	bat_val.text = str(int(ratio * 100))
+
+func _on_ammo_changed(current: int, max_ammo: int) -> void:
+	ammo_val.text = "%d / %d" % [current, max_ammo]
 
 func _tween_fill(cr: ColorRect, ratio: float) -> void:
 	var target: float = clampf(ratio, 0.0, 1.0) * BAR_W

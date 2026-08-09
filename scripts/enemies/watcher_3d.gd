@@ -6,10 +6,9 @@ const RAGE_SPEED_MULT: float = 1.25
 
 func _ready() -> void:
 	detect_range = 12.0
-	hear_range = 8.0
 	max_hp = 80.0
 	super._ready()
-	_base_speed = 1.0
+	_base_speed = 2.5
 	attack_damage = 12.0
 	attack_range = 1.8
 	attack_cooldown = 1.8
@@ -18,7 +17,6 @@ func _ready() -> void:
 	peripheral_range = 4.0
 	peripheral_angle = 45.0
 	chase_speed = _base_speed
-	noise_threshold = 0.3
 	stun_duration = 2.0
 	flee_duration = 0.0
 	add_to_group("watchers")

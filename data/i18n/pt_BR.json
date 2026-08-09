@@ -195,10 +195,5 @@
   "Colorblind Mode": "Modo daltônico",
   "Arachnophobia Mode": "Modo aracnofobia",
   "Dyslexia Font (OpenDyslexic)": "Fonte para dislexia (OpenDyslexic)",
-  "ad_reward_title": "Assistir anúncio por recompensa?", "ad_watch": "Assistir anúncio (+100 moedas)", "ad_skip": "Pular (-100 moedas)", "ui_close": "Fechar",
-  "FTUE_OBJECTIVES_TITLE": "OBJETIVO",
-  "FTUE_REPAIR_GENERATOR": "Conserte o gerador",
-  "FTUE_INTERACT_GENERATOR": "Ative o gerador",
-  "FTUE_STREET_LIT": "A rua está iluminada",
-  "FTUE_OBJECTIVE_UPDATED": "Objetivo atualizado: restaure o próximo distrito"
+  "ad_reward_title": "Assistir anúncio por recompensa?", "ad_watch": "Assistir anúncio (+100 moedas)", "ad_skip": "Pular (-100 moedas)", "ui_close": "Fechar"
 }

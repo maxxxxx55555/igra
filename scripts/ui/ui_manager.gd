@@ -1,4 +1,4 @@
-extends Node
+﻿extends Node
 const SCREENS: Dictionary = {
 	&"main_menu":       "res://scripts/ui/main_menu.gd",
 	&"pause":           "res://scripts/ui/pause_menu.gd",
@@ -30,18 +30,16 @@ var _toast: Label
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_layer = CanvasLayer.new()
-	_layer.layer = 15
+	_layer.layer = 10
 	add_child(_layer)
 	_minimap = _mk_overlay("res://scripts/ui/minimap.gd", "Minimap")
-	_minimap.get_parent().layer = 20
 	_weather_overlay = _mk_overlay("res://scripts/ui/weather_overlay.gd", "WeatherOverlay")
 	_photo = _mk_overlay("res://scripts/ui/photo_mode.gd", "PhotoMode")
 	_quest_hud = _mk_overlay("res://scripts/ui/quest_tracker_hud.gd", "QuestHUD")
 	_quest_hud.visible = false
 	EventBus.game_state_changed.connect(_on_game_state)
 	EventBus.game_started.connect(func() -> void: close(&"main_menu"))
-	EventBus.toast_requested.connect(func(msg: String, _type: String) -> void: show_notification(msg))
-	_on_game_state(int((GameManager.current_state if GameManager != null else 0)))
+	_on_game_state(GameManager.current_state)
 
 func _mk_overlay(path: String, node_name: String) -> Control:
 	var c := Control.new()
@@ -68,14 +66,14 @@ func show_notification(msg: String) -> void:
 	tw.tween_interval(2.0)
 	tw.tween_callback(func() -> void: _toast.visible = false)
 func is_hud_blocked() -> bool:
-	return (not _open_blocking.is_empty()) or (not (is_instance_valid(GameManager) and GameManager.is_playing()))
+	return (not _open_blocking.is_empty()) or (not GameManager.is_playing())
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.is_action_pressed("ui_pause"):
 			if _is_open(&"pause"):
 				close(&"pause")
 				GameManager.resume_game()
-			elif (is_instance_valid(GameManager) and GameManager.is_playing()):
+			elif GameManager.is_playing():
 				open(&"pause")
 				GameManager.pause_game()
 		elif event.is_action_pressed("photo_mode"):
@@ -150,28 +148,23 @@ func _get_screen(id: StringName) -> Control:
 func _set_hud(visible: bool) -> void:
 	EventBus.hud_visibility_changed.emit(visible)
 func _on_game_state(state: int) -> void:
+	# Игровые накладки (трекер квестов, миникарта, погода) видны только в игре:
+	# в меню и на экранах смерти/победы они висели поверх кнопок.
 	var in_game := state == GameManager.GameState.PLAYING
-	var paused := state == GameManager.GameState.PAUSED
-	for n in [_quest_hud, _weather_overlay]:
+	for n in [_quest_hud, _minimap, _weather_overlay]:
 		if is_instance_valid(n):
-			n.visible = in_game or paused
-	if is_instance_valid(_minimap):
-		_minimap.visible = false
+			n.visible = in_game
 	match state:
 		GameManager.GameState.MENU:
-			_set_hud(false)
 			open(&"main_menu")
 		GameManager.GameState.PLAYING:
-			for id in [&"main_menu", &"pause", &"death", &"win"]:
+			# Меню закрывалось только по EventBus.game_started. Любой другой путь
+			# в PLAYING (загрузка, отладка, конец катсцены) оставлял главное меню
+			# висеть поверх игры.
+			for id in [&"main_menu", &"death", &"win"]:
 				close(id)
-			_set_hud(true)
-		GameManager.GameState.PAUSED:
-			_set_hud(false)
-			open(&"pause")
 		GameManager.GameState.DEAD:
-			_set_hud(false)
 			open(&"death")
 		GameManager.GameState.WIN:
-			_set_hud(false)
 			open(&"win")
 

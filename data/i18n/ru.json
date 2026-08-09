@@ -195,10 +195,5 @@
   "Colorblind Mode": "Режим для дальтоников",
   "Arachnophobia Mode": "Режим арахнофобии",
   "Dyslexia Font (OpenDyslexic)": "Шрифт для дислексии (OpenDyslexic)",
-  "ad_reward_title": "Посмотреть рекламу за награду?", "ad_watch": "Смотреть рекламу (+100 монет)", "ad_skip": "Пропустить (-100 монет)", "ui_close": "Закрыть",
-  "FTUE_OBJECTIVES_TITLE": "ЦЕЛЬ",
-  "FTUE_REPAIR_GENERATOR": "Почини генератор",
-  "FTUE_INTERACT_GENERATOR": "Запусти генератор",
-  "FTUE_STREET_LIT": "Улица освещена",
-  "FTUE_OBJECTIVE_UPDATED": "Цель обновлена: восстанови следующий район"
+  "ad_reward_title": "Посмотреть рекламу за награду?", "ad_watch": "Смотреть рекламу (+100 монет)", "ad_skip": "Пропустить (-100 монет)", "ui_close": "Закрыть"
 }

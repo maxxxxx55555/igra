@@ -1,6 +1,5 @@
 extends Node
 
-
 ## Puzzle system — manages puzzle states, completion, and rewards.
 
 signal puzzle_solved(puzzle_id: String)

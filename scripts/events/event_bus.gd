@@ -51,7 +51,7 @@ signal flashlight_depleted
 signal flashlight_state_changed(on: bool)
 signal game_over
 signal game_started
-signal game_state_changed(state: int)
+signal game_state_changed(state: String)
 signal game_won
 signal hud_visibility_changed(visible: bool)
 signal interaction_done(object_id: String)
@@ -94,6 +94,5 @@ signal weather_changed(weather_id: String)
 signal xp_gained(amount: int)
 signal zone_reached(zone_id: String)
 signal boss_phase_changed(phase: int)
-signal boss_finisher_triggered
 signal toast_requested(text: String, type: String)
 signal player_healed(amount: int)

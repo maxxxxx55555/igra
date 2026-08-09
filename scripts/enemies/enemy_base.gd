@@ -44,7 +44,7 @@ func _ready() -> void:
         state = State.PATROL
     queue_redraw()
 func _physics_process(delta: float) -> void:
-    if not (is_instance_valid(GameManager) and GameManager.is_playing()):
+    if not GameManager.is_playing():
         return
     _t += delta
     if state == State.DEAD or data == null:

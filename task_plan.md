@@ -1,19 +1,29 @@
-# THE LAST STREETLIGHT completion
+# THE LAST STREETLIGHT — финальная доводка игрового процесса
 
 ## Goal
-Verify the real Godot build against `docs/GDD.md`, define an evidence-based completion scope, then finish the game in approved playable slices with runtime, quality-gate, and Android verification.
+Довести игровой процесс до проверяемого соответствия канону `docs/GDD.md` v4 без параллельных систем, с обязательными зелёными gate-сценами и коммитом каждого завершённого этапа.
 
 ## Phases
-- [in_progress] Audit the real startup flow, playable runtime, GDD, scenes, scripts, assets, and current worktree
-- [pending] Agree on the first completion milestone and quality bar
-- [pending] Write the approved design and implementation plan
-- [pending] Implement the milestone with runnable checks
-- [pending] Verify desktop runtime, quality gates, Android export, and GDD coverage
+- [in_progress] Phase 1 — инвентаризация репозитория, состояния Git, инструментов и фактических расхождений
+- [pending] Phase 2 — базовый игровой цикл: boot → районы → материалы → пазлы/генератор → STREETS → свет → сохранение/победа
+- [pending] Phase 3 — игрок, фонарь, управление PC/Android, HUD и accessibility
+- [pending] Phase 4 — combat: оружие, комбо, dodge, stamina, враги, Architect, death/respawn
+- [pending] Phase 5 — progression: economy, inventory, workbench, quests, journal, skills, achievements, album/events
+- [pending] Phase 6 — story, endings, screens/UI и полная локализация
+- [pending] Phase 7 — audio: пять адаптивных слоёв, ambience, footsteps, budgets
+- [pending] Phase 8 — save integrity, security/release/mobile budgets
+- [pending] Phase 9 — gates, doctor, runtime smoke test, Android build if SDK exists, final audit
 
 ## Next Step
-Capture and inspect a fresh real-startup build, then map observed gameplay to the GDD.
+Проверить доступные команды Windows и состояние проекта через PowerShell, затем составить точную карту файлов и расхождений.
 
 ## Errors Encountered
 | Error | Attempt | Resolution |
 |---|---:|---|
-| Compile gate reported `bad=0` while Godot emitted parser errors | 1 | Fixed invalid mesh class names and duplicate `_step`; future verification must inspect the full process output, not only the gate counter. |
+| bash launcher points to missing WindowsApps\bash.exe | 1 | Использовать `powershell.exe` через доступный инструмент; если launcher блокирует и его — сообщить об ограничении среды |
+
+## Decisions
+- Канон: `docs/GDD.md` v4; `docs/GDD_CONFORMANCE.md` используется как стартовый аудит, но не как доказательство реализации.
+- Правки только surgical; новые дублирующие менеджеры запрещены.
+- После каждого изменения `.gd/.tscn/.tres/project.godot` запускать 4 обязательных gate-сцены.
+- Push не выполнять без отдельной команды пользователя.

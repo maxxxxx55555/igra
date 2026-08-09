@@ -20,7 +20,7 @@ func _ready() -> void:
 	EventBus.secret_found.connect(func(_a): _save())
 
 func _process(delta: float) -> void:
-	if not (is_instance_valid(GameManager) and GameManager.is_playing()):
+	if not GameManager.is_playing():
 		return
 	_autosave_timer -= delta
 	if _autosave_timer <= 0.0:

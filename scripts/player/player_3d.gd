@@ -1,4 +1,4 @@
-extends CharacterBody3D
+﻿extends CharacterBody3D
 
 enum State { IDLE, WALK, RUN, STEALTH, CROUCH }
 
@@ -17,8 +17,6 @@ enum State { IDLE, WALK, RUN, STEALTH, CROUCH }
 @export var jump_buffer_time: float = 0.1
 @export var mouse_sens: float = 0.003
 @export var fps_eye_height: float = 1.7
-@export var crouch_capsule_height: float = 1.2
-@export var standing_capsule_height: float = 1.8
 
 var current_state: State = State.IDLE
 var hp: float = 100.0
@@ -39,7 +37,6 @@ var cone_amber_ok: bool = false
 var _cone_shader_code: String = ""
 var move_selftest_vel: float = 0.0
 var visibility: float = 1.0
-var _standing_collision_y: float = 0.0
 var _combo_timer: float = 0.0
 var _combo_count: int = 0
 var _dodge_cooldown: float = 0.0
@@ -77,10 +74,7 @@ const CROUCH_NOISE_MULT: float = 0.3
 const CROUCH_VISIBILITY_MULT: float = 0.5
 
 const DEBUG_FLASHLIGHT: bool = true
-const BATTERY_DRAIN_PER_SEC: float = 100.0 / 200.0
-const STROBE_DURATION: float = 1.5
-const STROBE_COOLDOWN: float = 10.0
-const STROBE_DOUBLE_TAP_WINDOW: float = 0.35
+const BATTERY_DRAIN_PER_SEC: float = 100.0 / 300.0
 
 var _battery_log_timer: float = 0.0
 var _coyote_timer: float = 0.0
@@ -91,8 +85,6 @@ var _fps_cam: Camera3D = null
 var _net_active: bool = false
 var _remote_pos: Vector3 = Vector3.ZERO
 var _remote_rot: float = 0.0
-var _flashlight_tap_timer: float = 0.0
-var _strobe_cooldown: float = 0.0
 
 @onready var pivot: Node3D = $ModelPivot
 @onready var flashlight_pivot: Node3D = $ModelPivot/FlashlightPivot
@@ -106,7 +98,6 @@ var _strobe_cooldown: float = 0.0
 @onready var right_arm: MeshInstance3D = $ModelPivot/HumanBody/RightArm
 @onready var left_leg: MeshInstance3D = $ModelPivot/HumanBody/LeftLeg
 @onready var right_leg: MeshInstance3D = $ModelPivot/HumanBody/RightLeg
-@onready var interact_ray: RayCast3D = get_node_or_null("InteractRay") as RayCast3D
 
 ## Камера внутри конуса? Тогда конус превращается в засвет во весь экран.
 ## Проверяем геометрией, а не флагом: не зависит от порядка инициализации камеры.
@@ -171,9 +162,6 @@ func get_cone_code() -> String:
     return _cone_shader_code
 
 func _ready() -> void:
-    var collision := get_node_or_null("CollisionShape3D") as CollisionShape3D
-    if collision:
-        _standing_collision_y = collision.position.y
     process_mode = Node.PROCESS_MODE_INHERIT
     can_move = true
 
@@ -257,9 +245,8 @@ func _ready() -> void:
         isv.jump_requested.connect(_buffer_jump)
         isv.flashlight_requested.connect(toggle_flashlight)
         isv.dodge_requested.connect(_handle_dodge)
-        isv.interact_requested.connect(_handle_interact)
     var gm := get_node_or_null("/root/GameManager")
-    if gm and gm.has_method("is_playing") and (is_instance_valid(gm) and gm.is_playing()):
+    if gm and gm.has_method("is_playing") and gm.is_playing():
         call_deferred("_on_game_started")
 
 func _buffer_jump() -> void:
@@ -289,13 +276,13 @@ func _input(event: InputEvent) -> void:
     if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
         rotation.y -= event.relative.x * mouse_sens
         _pitch -= event.relative.y * mouse_sens
-        _pitch = clampf(_pitch, -PI / 2.0, PI / 2.0)
+        _pitch = clampf(_pitch, -1.5, 1.5)
     if event is InputEventScreenDrag:
         var vp_w: float = get_viewport().get_visible_rect().size.x if get_viewport() else 1000.0
         if event.position.x < vp_w * 0.35:
             return
         rotation.y -= event.relative.x * mouse_sens
-        _pitch = clampf(_pitch - event.relative.y * mouse_sens, -PI / 2.0, PI / 2.0)
+        _pitch = clampf(_pitch - event.relative.y * mouse_sens, -1.5, 1.5)
     if event is InputEventScreenTouch and event.pressed:
         var vp_w2: float = get_viewport().get_visible_rect().size.x if get_viewport() else 1000.0
         if event.position.x >= vp_w2 * 0.35:
@@ -309,7 +296,7 @@ func _physics_process(delta: float) -> void:
             _sync_remote(delta)
             return
         _sync_broadcast()
-    if (is_instance_valid(GameManager) and GameManager.is_playing()):
+    if GameManager.is_playing():
         if _play_t0 < 0.0: _play_t0 = Time.get_ticks_msec()
         var _el = Time.get_ticks_msec() - _play_t0
         if _el > 2500 and _el < 6000:
@@ -393,10 +380,9 @@ func _physics_process(delta: float) -> void:
         State.STEALTH: speed_noise = 0.3
         State.WALK: speed_noise = 0.4
         State.RUN: speed_noise = 0.8
-        State.CROUCH: speed_noise = 0.8 * CROUCH_NOISE_MULT
+        State.CROUCH: speed_noise = 0.15
         _: speed_noise = 0.0
     noise_level = speed_noise + overload_noise_penalty
-    visibility = CROUCH_VISIBILITY_MULT if current_state == State.CROUCH else 1.0
     var noise_radius: float = 0.0
     match current_state:
         State.STEALTH: noise_radius = 1.0
@@ -409,7 +395,6 @@ func _physics_process(delta: float) -> void:
     var weight_speed_mult := 1.0 - weight_ratio * 0.5
     var crouch_speed_mult := CROUCH_SPEED_MULT if current_state == State.CROUCH else 1.0
     var final_speed: float = speed * weight_speed_mult * crouch_speed_mult
-    _update_capsule_height(current_state == State.CROUCH)
 
 
 
@@ -439,8 +424,7 @@ func _physics_process(delta: float) -> void:
         look_dir = Vector3(dir.x, 0, dir.z).normalized()
         _walk_t += delta * speed * 0.5
         if enable_walk_sway:
-            var speed_ratio: float = clampf(final_speed / maxf(1.0, stats.run_speed), 0.0, 1.0)
-            var sway := sin(_walk_t * (6.0 + 4.0 * speed_ratio)) * (0.1 * speed_ratio)
+            var sway := sin(_walk_t * 8.0) * 0.04
             torso.rotation.z = sway
             left_arm.rotation.x = sin(_walk_t * 8.0) * 0.15
             right_arm.rotation.x = sin(_walk_t * 8.0 + PI) * 0.15
@@ -523,19 +507,6 @@ func _notification(what: int) -> void:
         if _footstep_dust_node and is_instance_valid(_footstep_dust_node):
             _footstep_dust_node.queue_free()
 
-func _update_capsule_height(crouched: bool) -> void:
-    var collision := get_node_or_null("CollisionShape3D") as CollisionShape3D
-    if collision == null or collision.shape == null:
-        return
-    var capsule := collision.shape as CapsuleShape3D
-    if capsule == null:
-        return
-    var target_height: float = crouch_capsule_height if crouched else standing_capsule_height
-    if is_equal_approx(capsule.height, target_height):
-        return
-    capsule.height = target_height
-    collision.position.y = _standing_collision_y + (target_height - standing_capsule_height) * 0.5
-
 func _speed_for(state: State) -> float:
     match state:
         State.RUN: return stats.run_speed
@@ -591,56 +562,12 @@ func _update_battery(delta: float) -> void:
         EventBus.flashlight_state_changed.emit(false)
         flashlight.visible = false
         dust.emitting = false
-        _apply_blackout(true)
-
-func _apply_blackout(enabled: bool) -> void:
-    var world_environment := get_tree().current_scene.find_child("WorldEnvironment", true, false) as WorldEnvironment
-    if world_environment == null or world_environment.environment == null:
-        return
-    world_environment.environment.ambient_light_energy = 0.02 if enabled else 0.12
 
 func toggle_flashlight() -> void:
-	if flashlight_enabled:
-		_emit_boss_finisher_if_strobe_targeted()
     if battery <= 0.0:
         return
-    var now: float = Time.get_ticks_msec() / 1000.0
-    if _flashlight_tap_timer > 0.0 and now - _flashlight_tap_timer <= STROBE_DOUBLE_TAP_WINDOW:
-        _flashlight_tap_timer = 0.0
-        _try_strobe()
-        return
-    _flashlight_tap_timer = now
     flashlight_enabled = not flashlight_enabled
     EventBus.flashlight_state_changed.emit(flashlight_enabled)
-
-func _try_strobe() -> void:
-    if _strobe_cooldown > 0.0 or battery <= 0.0:
-        return
-    _strobe_cooldown = STROBE_COOLDOWN
-    var forward: Vector3 = -global_transform.basis.z
-    for enemy in get_tree().get_nodes_in_group("enemies"):
-        if not is_instance_valid(enemy) or not enemy is Node3D:
-            continue
-        var to_enemy: Vector3 = (enemy as Node3D).global_position - global_position
-        var distance: float = to_enemy.length()
-        if distance > flashlight.spot_range or distance <= 0.01:
-            continue
-        var angle: float = rad_to_deg(acos(clampf(forward.dot(to_enemy.normalized()), -1.0, 1.0)))
-        if angle <= flashlight.spot_angle * 0.5 and enemy.has_method("apply_stun"):
-            enemy.apply_stun(STROBE_DURATION)
-
-func _handle_interact() -> void:
-    if interact_ray == null or not interact_ray.is_colliding():
-        return
-    var target := interact_ray.get_collider()
-    if target != null and target.has_method("interact"):
-        target.interact(self)
-
-func _process(delta: float) -> void:
-    if _strobe_cooldown > 0.0:
-        _strobe_cooldown = maxf(0.0, _strobe_cooldown - delta)
-    if _flashlight_tap_timer > 0.0 and Time.get_ticks_msec() / 1000.0 - _flashlight_tap_timer > STROBE_DOUBLE_TAP_WINDOW:
-        _flashlight_tap_timer = 0.0
 
 func get_noise_level() -> float:
     var weather_mod := 0.0
@@ -720,9 +647,6 @@ func set_battery_params(max_val: float) -> void:
 func _handle_attack() -> void:
     if _stun_timer > 0.0 or not _can_attack or not gameplay_active:
         return
-    if stamina < 5.0:
-        EventBus.inventory_notice.emit(tr("ATTACK_DISABLED"))
-        return
     if stamina < COMBO_DATA[mini(_combo_count, 2)]["stam"]:
         return
     if _attack_phase != "none":
@@ -786,7 +710,7 @@ func _on_attack_hit(body: Node) -> void:
     if body.has_method("get_facing_dir"):
         var to_attacker: Vector3 = (global_position - body.global_position).normalized()
         var facing: Vector3 = body.get_facing_dir()
-        if rad_to_deg(acos(clampf(to_attacker.dot(facing), -1.0, 1.0))) > 120.0:
+        if to_attacker.dot(facing) < -0.7:
             from_behind = 1.5
     var final_dmg: float = cd3["dmg"] * (1.0 + bonus) * from_behind
     body.take_damage(final_dmg)
@@ -806,13 +730,6 @@ func apply_stun(duration: float = 0.3) -> void:
     _stun_timer = duration
 
 
-func _emit_boss_finisher_if_strobe_targeted() -> void:
-    var boss := get_tree().get_first_node_in_group("boss")
-    if boss == null or not is_instance_valid(boss):
-        return
-    if boss.has_method("_is_in_flashlight") and boss._is_in_flashlight():
-        EventBus.boss_finisher_triggered.emit()
-
 func _handle_dodge(dir: Vector2) -> void:
     if _dodge_cooldown > 0.0 or _stun_timer > 0.0 or not gameplay_active:
         return
@@ -825,9 +742,6 @@ func _handle_dodge(dir: Vector2) -> void:
     if d.length_squared() < 0.01:
         d = look_dir
     velocity = d * stats.run_speed * 3.0
-    var anim := get_node_or_null("AnimationPlayer") as AnimationPlayer
-    if anim and anim.has_animation("dodge"):
-        anim.play("dodge")
     var dust_particles := GPUParticles3D.new()
     dust_particles.one_shot = true
     dust_particles.emitting = true

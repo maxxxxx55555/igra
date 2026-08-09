@@ -195,10 +195,5 @@
   "Colorblind Mode": "Renk Körlüğü Modu",
   "Arachnophobia Mode": "Araknofobi Modu",
   "Dyslexia Font (OpenDyslexic)": "Disleksi Yazı Tipi (OpenDyslexic)",
-  "ad_reward_title": "Ödül için reklam izle?", "ad_watch": "Reklam İzle (+100 jeton)", "ad_skip": "Atla (-100 jeton)", "ui_close": "Kapat",
-  "FTUE_OBJECTIVES_TITLE": "HEDEF",
-  "FTUE_REPAIR_GENERATOR": "Jeneratörü onar",
-  "FTUE_INTERACT_GENERATOR": "Jeneratörü çalıştır",
-  "FTUE_STREET_LIT": "Sokak aydınlandı",
-  "FTUE_OBJECTIVE_UPDATED": "Hedef güncellendi: sonraki bölgeyi geri getir"
+  "ad_reward_title": "Ödül için reklam izle?", "ad_watch": "Reklam İzle (+100 jeton)", "ad_skip": "Atla (-100 jeton)", "ui_close": "Kapat"
 }

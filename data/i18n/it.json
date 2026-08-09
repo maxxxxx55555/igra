@@ -195,10 +195,5 @@
   "Colorblind Mode": "Modalità daltonici",
   "Arachnophobia Mode": "Modalità aracnofobia",
   "Dyslexia Font (OpenDyslexic)": "Font per dislessia (OpenDyslexic)",
-  "ad_reward_title": "Guardare annuncio per ricompensa?", "ad_watch": "Guarda annuncio (+100 monete)", "ad_skip": "Salta (-100 monete)", "ui_close": "Chiudi",
-  "FTUE_OBJECTIVES_TITLE": "OBIETTIVO",
-  "FTUE_REPAIR_GENERATOR": "Ripara il generatore",
-  "FTUE_INTERACT_GENERATOR": "Attiva il generatore",
-  "FTUE_STREET_LIT": "La strada è illuminata",
-  "FTUE_OBJECTIVE_UPDATED": "Obiettivo aggiornato: ripristina il prossimo distretto"
+  "ad_reward_title": "Guardare annuncio per ricompensa?", "ad_watch": "Guarda annuncio (+100 monete)", "ad_skip": "Salta (-100 monete)", "ui_close": "Chiudi"
 }

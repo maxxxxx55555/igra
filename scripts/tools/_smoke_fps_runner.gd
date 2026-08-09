@@ -16,7 +16,7 @@ func _process(delta: float) -> void:
 	_t += delta
 	if _phase == 1 and _t > 1.5:
 		var gm := get_node_or_null("/root/GameManager")
-		print("[SMOKE] menu_state: ", gm != null and gm.has_method("is_menu") and (is_instance_valid(gm) and gm.is_menu()))
+		print("[SMOKE] menu_state: ", gm != null and gm.has_method("is_menu") and gm.is_menu())
 		if gm and gm.has_method("start_new_game"):
 			gm.start_new_game()
 			_phase = 2
@@ -32,7 +32,7 @@ func _process(delta: float) -> void:
 func _report() -> void:
 	_phase = 3
 	var gm := get_node_or_null("/root/GameManager")
-	var playing: bool = gm != null and gm.has_method("is_playing") and (is_instance_valid(gm) and gm.is_playing())
+	var playing: bool = gm != null and gm.has_method("is_playing") and gm.is_playing()
 	var player := get_tree().get_first_node_in_group("player")
 	var p_ok := player != null and player.is_inside_tree()
 	var cam: Camera3D = null

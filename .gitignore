@@ -35,3 +35,7 @@ findings.md.bak
 en_keys.txt
 audio_refs*.txt
 missing_audio.txt
+
+The string is missing*
+void
+phase1_compile_gate.exitcode.txt

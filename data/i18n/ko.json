@@ -195,10 +195,5 @@
   "Colorblind Mode": "색맹 모드",
   "Arachnophobia Mode": "거미 공포증 모드",
   "Dyslexia Font (OpenDyslexic)": "난독증 글꼴 (OpenDyslexic)",
-  "ad_reward_title": "보상 광고를 시청하시겠습니까?", "ad_watch": "광고 시청 (+100코인)", "ad_skip": "건너뛰기 (-100코인)", "ui_close": "닫기",
-  "FTUE_OBJECTIVES_TITLE": "목표",
-  "FTUE_REPAIR_GENERATOR": "발전기를 수리하세요",
-  "FTUE_INTERACT_GENERATOR": "발전기를 작동하세요",
-  "FTUE_STREET_LIT": "거리에 불이 켜졌습니다",
-  "FTUE_OBJECTIVE_UPDATED": "목표 업데이트: 다음 구역을 복구하세요"
+  "ad_reward_title": "보상 광고를 시청하시겠습니까?", "ad_watch": "광고 시청 (+100코인)", "ad_skip": "건너뛰기 (-100코인)", "ui_close": "닫기"
 }
