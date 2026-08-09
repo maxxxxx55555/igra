@@ -1,4 +1,4 @@
-﻿class_name MusicDirector
+class_name MusicDirector
 extends Node
 
 ## Адаптивная музыка: слоёный микс с плавными переходами по игровой ситуации.
