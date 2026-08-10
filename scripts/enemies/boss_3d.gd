@@ -19,18 +19,13 @@ var _minions: Array[Node] = []
 var _minion_seq: int = 0
 var _music_started: bool = false
 
+func _init() -> void:
+	monster_id = &"boss"
+
 func _ready() -> void:
-	detect_range = 20.0
-	max_hp = 800.0
 	super._ready()
-	_base_speed = 3.0
-	attack_damage = 40.0
-	attack_range = 3.0
 	attack_cooldown = 2.0
-	vision_range = 20.0
-	chase_speed = _base_speed
 	light_flee = false
-	armor = 0.2
 	add_to_group("boss")
 	_add_silhouette()
 

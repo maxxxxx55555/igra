@@ -2,6 +2,7 @@
 extends CharacterBody3D
 
 const _HIT_SFX := preload("res://assets/audio/sfx/sfx_hit.wav")
+const _ROSTER := preload("res://data/balance/enemy_stats.tres")
 
 enum State { IDLE, PATROL, INVESTIGATE, CHASE, ATTACK, FLEE, STUN, DEAD }
 
@@ -53,6 +54,7 @@ var _net_sync_timer: float = 0.0
 var _telegraph: Node = null
 
 func _ready() -> void:
+	_apply_roster_stats()
 	_apply_ng_scaling()
 	_ensure_hp()
 	_nav_agent = get_node_or_null("NavigationAgent3D")
@@ -116,6 +118,28 @@ func _build_visual() -> void:
 	head.position = Vector3(0, 1.65, 0)
 	root.add_child(head)
 	head.owner = root.owner
+
+## Применяет канон-статы из data/balance/enemy_stats.tres по monster_id.
+## Наследники задают monster_id (либо ai_id который мапится через
+## EnemyRosterData.AI_TO_ROSTER). Нечисловые поля (поведение, сопротивления,
+## weak_spot) остаются в `roster_entry` для внешних систем (loot, encyclopedia).
+var roster_entry: Dictionary = {}
+
+func _apply_roster_stats() -> void:
+	roster_entry = _ROSTER.get_entry_for_ai(monster_id)
+	if roster_entry.is_empty():
+		return
+	max_hp = float(roster_entry.get("hp", max_hp))
+	attack_damage = float(roster_entry.get("damage", attack_damage))
+	armor = float(roster_entry.get("armor", armor)) / 100.0
+	var spd: float = float(roster_entry.get("speed", 0.0))
+	if spd > 0.0:
+		_base_speed = spd
+		chase_speed = spd
+		speed = spd
+	attack_range = float(roster_entry.get("attack_range", attack_range))
+	detect_range = float(roster_entry.get("detect_range", detect_range))
+	vision_range = maxf(vision_range, detect_range)
 
 ## hp инициализируется здесь, а не только в _ready(): монстр попадает в группы
 ## ещё до входа в дерево, и урон, прилетевший раньше _ready(), бил по hp = 0

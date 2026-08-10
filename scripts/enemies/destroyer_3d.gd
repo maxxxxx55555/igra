@@ -4,17 +4,11 @@ extends "res://scripts/enemies/base_monster.gd"
 var _combo_step: int = 0
 var _combo_timer: float = 0.0
 
+func _init() -> void:
+	monster_id = &"destroyer"
+
 func _ready() -> void:
-	detect_range = 15.0
-	max_hp = 200.0
 	super._ready()
-	_base_speed = 2.0
-	attack_damage = 25.0
-	attack_range = 1.8
-	attack_cooldown = 1.2
-	vision_range = 5.0
-	chase_speed = _base_speed
-	armor = 0.3
 	stun_duration = 2.0
 	flee_duration = 0.0
 	add_to_group("destroyers")

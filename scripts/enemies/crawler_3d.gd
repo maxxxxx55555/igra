@@ -7,21 +7,17 @@ const LEAP_WINDUP: float = 0.5
 var _leap_windup: float = 0.0
 var _leaping: bool = false
 
+func _init() -> void:
+	monster_id = &"crawler"
+
 func _ready() -> void:
-	detect_range = 10.0
-	max_hp = 50.0
 	super._ready()
-	_base_speed = 3.2
-	attack_damage = 20.0
-	attack_range = 1.5
 	attack_cooldown = 2.0
-	vision_range = 6.0
 	vision_angle = 120.0
 	peripheral_range = 2.0
 	peripheral_angle = 60.0
 	chase_speed = LEAP_SPEED * 0.6
 	light_flee = false
-	armor = 0.0
 	add_to_group("crawlers")
 	# S9.3: scraping on asphalt, audible at 10 m.
 	_set_cues({
