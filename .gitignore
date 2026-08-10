@@ -39,3 +39,8 @@ missing_audio.txt
 The string is missing*
 void
 phase1_compile_gate.exitcode.txt
+
+# Headless Godot run dumps
+run_log.txt
+*.exitcode.txt
+run_log*.txt

@@ -41,18 +41,25 @@
 
 ## Шрифты (OFL-совместимые)
 
+> **Канон-саммит 2026-08-10: листы UI/UX побеждают.** Bebas Neue Bold — основной
+> заголовочный, Roboto Condensed — основной текстовый. Chakra/Saira/Rajdhani
+> — stored, не подключаются к Theme (`[вижн]`). См. GDD.md §11.3 и Приложение V.
+
 | Назначение | Шрифт | Начертание |
 |------------|-------|------------|
-| Заголовки экранов | Chakra Petch | Bold |
-| Заголовки панелей | Saira Condensed | Bold |
-| Основной текст | Rajdhani | Regular / SemiBold |
-| Второстепенный текст | Saira Condensed | Regular |
+| Заголовки экранов | **Bebas Neue** | Bold |
+| Заголовки панелей | **Bebas Neue** | Bold (меньший кегль) |
+| Основной текст | **Roboto Condensed** | Regular |
+| Второстепенный текст | **Roboto Condensed** | Regular (приглушённый цвет) |
 | Цифры (статы, таймеры, кол-во) | Share Tech Mono | Regular |
+| Моно-хакер/радио | Share Tech Mono | Regular |
 
 ### Запреты
-- Inter, Roboto, Arial — запрещены.
+- Inter, Roboto (обычный, не Condensed), Arial — запрещены.
 - Системные шрифты по умолчанию — запрещены.
 - Рукописные/декоративные шрифты для тела текста — запрещены.
+- Chakra Petch, Saira Condensed, Rajdhani — stored в `assets/fonts/`, но **не
+  подключаются к Theme** (`[вижн]` по канон-саммиту).
 
 ## Панели и окна
 
