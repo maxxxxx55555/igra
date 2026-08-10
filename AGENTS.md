@@ -48,3 +48,7 @@ NEVER commit secrets/tokens/keys in any file.
 PR rules
 One task = one branch = one PR. List changed files + gate results.
 Do not mix docs and code changes in one PR.
+
+== ALWAYS ==
+Apply .opencode/skills/ on EVERY task; state which skills you use before starting.
+
