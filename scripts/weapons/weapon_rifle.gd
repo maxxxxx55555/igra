@@ -25,7 +25,7 @@ func fire(from_pos: Vector3 = Vector3.ZERO, direction: Vector3 = Vector3.FORWARD
 		if _ray.is_colliding():
 			var target := _ray.get_collider()
 			if target and target.has_method("take_damage"):
-				target.take_damage(hitscan_damage)
+				target.take_damage(hitscan_damage, Vector3.ZERO, EnemyRosterData.DamageType.BULLET)
 			elif target and target.has_node("HealthComponent"):
 				target.get_node("HealthComponent").take_damage(hitscan_damage)
 	if _sfx:

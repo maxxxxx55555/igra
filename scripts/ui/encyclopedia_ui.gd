@@ -1,6 +1,15 @@
 ﻿extends Control
+
 func _ready() -> void:
     _build()
+    if not LocalizationManager.language_changed.is_connected(_on_lang_changed):
+        LocalizationManager.language_changed.connect(_on_lang_changed)
+
+func _on_lang_changed(_lang: String) -> void:
+    for c in get_children():
+        c.queue_free()
+    _build()
+
 func _build() -> void:
     mouse_filter = Control.MOUSE_FILTER_STOP
     set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -16,7 +25,7 @@ func _build() -> void:
     var vb := VBoxContainer.new()
     panel.add_child(vb)
     var t := Label.new()
-    t.text = "ЭНЦИКЛОПЕДИЯ СУЩЕСТВ"
+    t.text = LocalizationManager.t("enc_title")
     t.add_theme_font_size_override("font_size", ThemeProvider.FONT_SIZE_TITLE)
     t.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
     t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -43,13 +52,13 @@ func _build() -> void:
         nm.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER if unlocked else ThemeProvider.COLOR_TEXT_DIM)
         cv.add_child(nm)
         var ds := Label.new()
-        ds.text = data.description if unlocked else "Встреть существо, чтобы открыть запись."
+        ds.text = data.description if unlocked else LocalizationManager.t("enc_locked")
         ds.add_theme_font_size_override("font_size", 11)
         ds.autowrap_mode = TextServer.AUTOWRAP_WORD
         ds.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
         cv.add_child(ds)
     var b := Button.new()
-    b.text = "Закрыть"
+    b.text = LocalizationManager.t("ui_close")
     b.focus_mode = Control.FOCUS_NONE
     b.pressed.connect(func() -> void: UIManager.close(&"encyclopedia"))
     vb.add_child(b)

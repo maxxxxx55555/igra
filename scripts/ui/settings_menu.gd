@@ -1,6 +1,13 @@
 ﻿extends Control
 func _ready() -> void:
 	_build()
+	if not LocalizationManager.language_changed.is_connected(_on_lang_changed):
+		LocalizationManager.language_changed.connect(_on_lang_changed)
+
+func _on_lang_changed(_lang: String) -> void:
+	for c in get_children():
+		c.queue_free()
+	_build()
 
 func _build() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP

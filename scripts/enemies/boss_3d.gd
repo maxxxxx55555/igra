@@ -181,7 +181,7 @@ func _switch_to_p3() -> void:
 	_summon_timer = 0.0
 	_beam_timer = 0.0
 
-func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO) -> void:
+func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, type: EnemyRosterData.DamageType = EnemyRosterData.DamageType.BULLET) -> void:
 	if _net_active and not is_multiplayer_authority():
 		_request_damage.rpc_id(1, amount)
 		return
@@ -190,7 +190,11 @@ func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO) -> void:
 		return
 	if phase == Phase.P2 and not _is_in_light():
 		return
-	var final_dmg: float = amount * (1.0 - armor)
+	var mult: float = 1.0
+	if roster_entry.has("resistances"):
+		var res: Dictionary = roster_entry["resistances"]
+		mult = float(res.get(int(type), 1.0))
+	var final_dmg: float = amount * mult * (1.0 - armor)
 	hp -= final_dmg
 	AudioManager.play_sound_3d(_HIT_SFX, global_position, -6.0)
 	if hp <= 0.0:

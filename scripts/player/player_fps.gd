@@ -161,7 +161,7 @@ func _on_health_changed(new_health: int) -> void:
 	health_changed.emit(new_health)
 	EventBus.player_health_changed.emit(float(health.call("get_health_ratio")))
 
-func take_damage(amount: float, source: String = "") -> void:
+func take_damage(amount: float, source: String = "", _type: EnemyRosterData.DamageType = EnemyRosterData.DamageType.BLUNT) -> void:
 	health.call("take_damage", roundi(amount))
 	if not source.is_empty():
 		var death_screen: Node = get_tree().root.get_node_or_null("DeathScreen")

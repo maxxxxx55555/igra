@@ -576,7 +576,7 @@ func get_noise_level() -> float:
         weather_mod = ws.get_noise_modifier()
     return noise_level + weather_mod
 
-func take_damage(amount: float) -> void:
+func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, _type: EnemyRosterData.DamageType = EnemyRosterData.DamageType.BLUNT) -> void:
     if _net_active and not is_multiplayer_authority():
         # Урон по puppet-копии: переслать владельцу, локально не применять
         # (иначе HP затрётся синком, а HUD/game_over сработают на чужой машине).
@@ -597,7 +597,7 @@ func _request_player_damage(amount: float) -> void:
         return
     if multiplayer.get_remote_sender_id() != 1:
         return # урон транслирует только сервер
-    take_damage(clampf(amount, 0.0, 200.0))
+    take_damage(clampf(amount, 0.0, 200.0), Vector3.ZERO, EnemyRosterData.DamageType.BLUNT)
 
 func heal(amount: float) -> void:
     if _net_active and not is_multiplayer_authority():
@@ -713,7 +713,7 @@ func _on_attack_hit(body: Node) -> void:
         if to_attacker.dot(facing) < -0.7:
             from_behind = 1.5
     var final_dmg: float = cd3["dmg"] * (1.0 + bonus) * from_behind
-    body.take_damage(final_dmg)
+	body.take_damage(final_dmg, global_position, EnemyRosterData.DamageType.BLUNT)
     if cd3["knockback"] > 0.0 and body is Node3D:
         var kb_dir: Vector3 = (body.global_position - global_position).normalized()
         kb_dir.y = 0.0

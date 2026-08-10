@@ -22,6 +22,6 @@ func attack(target: Node3D) -> bool:
     if dist > attack_range:
         return false
     if target.has_method("take_damage"):
-        target.take_damage(attack_damage)
+        target.take_damage(attack_damage, Vector3.ZERO, EnemyRosterData.DamageType.BULLET)
     _cooldown_timer = attack_cooldown
     return true

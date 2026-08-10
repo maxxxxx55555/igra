@@ -36,7 +36,7 @@ func _explode() -> void:
 		var body := result.collider as Node3D
 		if body.is_in_group("enemy") or body.is_in_group("player"):
 			if body.has_method("take_damage"):
-				body.take_damage(explosion_damage)
+				body.take_damage(explosion_damage, global_position, EnemyRosterData.DamageType.FIRE)
 			elif body.has_node("HealthComponent"):
 				body.get_node("HealthComponent").take_damage(explosion_damage)
 

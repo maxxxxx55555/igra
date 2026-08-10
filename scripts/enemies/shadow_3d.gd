@@ -102,7 +102,7 @@ func _shadow_attack() -> void:
 	player_ref.take_damage(attack_damage)
 	EventBus.enemy_attack.emit(attack_damage)
 
-func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO) -> void:
-	super.take_damage(amount, _src_pos)
+func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, type: EnemyRosterData.DamageType = EnemyRosterData.DamageType.BULLET) -> void:
+	super.take_damage(amount, _src_pos, type)
 	if hp <= 0.0:
 		queue_free()

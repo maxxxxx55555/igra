@@ -53,6 +53,13 @@ var _remote_rot: float = 0.0
 var _net_sync_timer: float = 0.0
 var _telegraph: Node = null
 
+# --- status effects (P7-data2) ---
+# applied_statuses: {Status: {"t": float, "dps": float, "power": float}}
+var _statuses: Dictionary = {}
+var _status_immune: Dictionary = {}
+var _status_tick: float = 0.0
+var _status_node: Node = null
+
 func _ready() -> void:
 	_apply_roster_stats()
 	_apply_ng_scaling()
@@ -253,7 +260,7 @@ func _handle_light_reaction(delta: float) -> void:
 	_light_exposure_timer += delta
 	if light_damage_per_sec > 0.0 and _light_exposure_timer >= 1.0:
 		_light_exposure_timer = 0.0
-		take_damage(light_damage_per_sec, Vector3.ZERO)
+		take_damage(light_damage_per_sec, Vector3.ZERO, EnemyRosterData.DamageType.FIRE)
 
 func _is_in_light() -> bool:
 	return _is_in_flashlight
@@ -430,14 +437,18 @@ func _on_detect_body_exited(body: Node) -> void:
 		if ai_state == State.CHASE or ai_state == State.ATTACK:
 			_change_state(State.PATROL)
 
-func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO) -> void:
+func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, type: EnemyRosterData.DamageType = EnemyRosterData.DamageType.BULLET) -> void:
 	if _net_active and not is_multiplayer_authority():
 		_request_damage.rpc_id(1, amount)
 		return
 	_ensure_hp()
 	if ai_state == State.DEAD:
 		return
-	var reduced: float = amount * (1.0 - armor)
+	var mult: float = 1.0
+	if roster_entry.has("resistances"):
+		var res: Dictionary = roster_entry["resistances"]
+		mult = float(res.get(int(type), 1.0))
+	var reduced: float = amount * mult * (1.0 - armor)
 	hp -= reduced
 	AudioManager.play_sound_3d(_HIT_SFX, global_position, -6.0)
 	_hit_flash()
@@ -467,7 +478,7 @@ func _hit_flash() -> void:
 func _request_damage(amount: float) -> void:
 	if _net_active and not is_multiplayer_authority():
 		return
-	take_damage(clampf(amount, 0.0, 200.0))
+		take_damage(clampf(amount, 0.0, 200.0), Vector3.ZERO, EnemyRosterData.DamageType.BULLET)
 
 func stun(duration: float = 2.0) -> void:
 	if ai_state == State.DEAD:

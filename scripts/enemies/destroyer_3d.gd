@@ -77,8 +77,8 @@ func _try_break_nearby_lights() -> void:
 
 				return
 
-func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO) -> void:
-	super.take_damage(amount, _src_pos)
+func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, type: EnemyRosterData.DamageType = EnemyRosterData.DamageType.BULLET) -> void:
+	super.take_damage(amount, _src_pos, type)
 	if _combo_step >= 3 and _combo_timer > 0.0:
 		stun(stun_duration)
 
