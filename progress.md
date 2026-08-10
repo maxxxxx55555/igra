@@ -30,3 +30,15 @@
 - Скачаны OFL-шрифты: BebasNeue-Regular.ttf (35K), RobotoCondensed-Regular.ttf (42K) в assets/fonts/
 - Создан assets/ui/theme_tls.tres: default=RobotoCondensed 18, header (Label+BebasNeue 32, янтарь #e2a33c)
 - project.godot не тронут — подключение отдельным блоком
+
+- P7-data: data/balance/enemy_stats.tres + EnemyRosterData; base_monster читает статы по monster_id; hunter/destroyer/watcher/crawler/boss очищены от хардкода; compile+sig+i18n gates OK
+
+- P7-data2 (damage types + status engine + legacy quarantine):
+  * take_damage(amount, src_pos, type: DamageType): enum уже был в EnemyRosterData; множитель из field 'resistances' enemy_stats.tres (0=иммун, 1=нейтр, >1=слабость)
+  * Все вызовы прописаны: weapon_rifle/shotgun/attack_component=BULLET, player_3d melee=BLUNT, flashlight=FIRE, barrel=FIRE, NPC-attacks left default
+  * Networking: _request_damage rpc прокидывает int(type)
+  * scripts/enemies/status_effects.gd (NEW, class StatusEffects): DoT BLEED/BURN/POISON tick 1s, SLOW=speed_multiplier(), STUN/FEAR через стейты; 2s immunity после конца
+  * base_monster: spawn StatusEffects-node, apply_status(status,duration,dps,power), _inflict_statuses() из field 'inflicts' roster'a
+  * take_damage overrides honour type в boss_3d/destroyer_3d/shadow_3d/hunter_3d
+  * Карантин: legacy 2D enemies + levels + boss 2d → legacy_quarantine/{enemies2d,levels,scenes}; class_name снят, extends переписан на res://-path; gates green (compile/signal/i18n/asset)
+  * known-bad: у игрока нет apply_status (weapon DoT на монстр есть, монстр→игрок — no-op), PowerGrid-как-ELECTRIC не наносит урон (это прогресс-система), падение урона нет (BLUNT-в-GDD — только 'padeniye pri HP=0'), lightщubl = FIRE (в балансе shadow рассасывается от света)
