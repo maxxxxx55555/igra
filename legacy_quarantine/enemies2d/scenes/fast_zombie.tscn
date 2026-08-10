@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://scripts/enemies/fast_zombie.gd" id="1_llll"]
+[ext_resource type="Script" path="res://legacy_quarantine/enemies2d/fast_zombie.gd" id="1_llll"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_2"]
 radius = 0.35

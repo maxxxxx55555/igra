@@ -1,5 +1,4 @@
-﻿class_name EnemyWatcher
-extends EnemyBase
+extends "res://legacy_quarantine/enemies2d/enemy_base.gd"
 var _alarm_timer: float = 0.0
 func _ready() -> void:
     super._ready()

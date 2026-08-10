@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3]
-[ext_resource type="PackedScene" path="res://scenes/enemies/enemy_base.tscn" id="1_base"]
-[ext_resource type="Script" path="res://scripts/enemies/enemy_crawler.gd" id="2_s"]
+[ext_resource type="PackedScene" path="res://legacy_quarantine/enemies2d/scenes/enemy_base.tscn" id="1_base"]
+[ext_resource type="Script" path="res://legacy_quarantine/enemies2d/enemy_crawler.gd" id="2_s"]
 [node name="Enemy" instance=ExtResource("1_base")]
 script = ExtResource("2_s")
 monster_id = &"crawler"

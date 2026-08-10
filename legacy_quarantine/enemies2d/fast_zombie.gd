@@ -1,4 +1,4 @@
-﻿
+
 extends CharacterBody3D
 
 enum State { PATROL, CHASE, ATTACK, DEAD }

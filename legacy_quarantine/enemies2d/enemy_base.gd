@@ -1,4 +1,3 @@
-class_name EnemyBase
 extends CharacterBody2D
 enum State { IDLE, PATROL, CHASE, FLEE, STUN, DEAD }
 @export var monster_id: StringName = &""

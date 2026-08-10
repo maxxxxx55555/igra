@@ -1,4 +1,3 @@
-class_name EnemyFPS
 extends CharacterBody3D
 
 enum State { IDLE, PATROL, CHASE, ATTACK, DEAD }

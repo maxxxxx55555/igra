@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3]
 
-[ext_resource type="Script" path="res://scripts/levels/level_03.gd" id="1_nnnn"]
+[ext_resource type="Script" path="res://legacy_quarantine/levels/levels/level_03.gd" id="1_nnnn"]
 [ext_resource type="PackedScene" path="res://scenes/ui/game_over.tscn" id="2_gameover"]
 [ext_resource type="PackedScene" path="res://scenes/ui/victory_screen.tscn" id="3_victory"]
 

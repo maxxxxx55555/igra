@@ -1,11 +1,11 @@
-﻿
+
 extends Node3D
 
 @export 
-var enemy_scene: PackedScene = preload("res://scenes/enemies/enemy_fps.tscn")
+var enemy_scene: PackedScene = preload("res://legacy_quarantine/enemies2d/scenes/enemy_fps.tscn")
 
 @export 
-var fast_zombie_scene: PackedScene = preload("res://scenes/enemies/fast_zombie.tscn")
+var fast_zombie_scene: PackedScene = preload("res://legacy_quarantine/enemies2d/scenes/fast_zombie.tscn")
 
 @export 
 var checkpoint_scene: PackedScene

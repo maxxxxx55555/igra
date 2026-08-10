@@ -1,6 +1,6 @@
 extends Node3D
 
-@export var enemy_scene: PackedScene = preload("res://scenes/enemy_fps.tscn")
+@export var enemy_scene: PackedScene = preload("res://legacy_quarantine/enemies2d/scenes/enemy_fps.tscn")
 @export var player_scene: PackedScene = preload("res://scenes/player_fps.tscn")
 
 func _ready() -> void:

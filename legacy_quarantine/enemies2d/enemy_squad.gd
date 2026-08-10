@@ -1,6 +1,6 @@
-﻿
 
-extends EnemyFPS
+
+extends "res://legacy_quarantine/enemies2d/enemy_fps.gd"
 
 @export 
 
@@ -9,7 +9,7 @@ var squad_id: String = "squad_1"
 @export 
 
 var communicate_range: float = 15.0
-var _squad_members: Array[EnemyFPS] = []
+var _squad_members: Array = []
 
 func _ready() -> void:
 	super._ready()
@@ -17,7 +17,7 @@ func _ready() -> void:
 
 func _find_squad() -> void:
 	for node in get_tree().get_nodes_in_group("enemy"):
-		if node != self and node is EnemyFPS and node.squad_id == squad_id:
+		if node != self and node != self and node.squad_id == squad_id:
 			_squad_members.append(node)
 
 func _update_target() -> void:

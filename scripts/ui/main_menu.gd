@@ -48,7 +48,7 @@ func _build() -> void:
 	vb.add_theme_constant_override("separation", 14)
 	panel.add_child(vb)
 	var title := Label.new()
-	title.text = "THE LAST\nSTREETLIGHT"
+	title.text = LocalizationManager.t("menu_title")
 	title.add_theme_font_size_override("font_size", ThemeProvider.FONT_SIZE_HUGE)
 	title.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

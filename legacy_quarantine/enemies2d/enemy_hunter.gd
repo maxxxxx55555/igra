@@ -1,5 +1,4 @@
-﻿class_name EnemyHunter
-extends EnemyBase
+extends "res://legacy_quarantine/enemies2d/enemy_base.gd"
 func _on_lost_player() -> void:
     if _noise_pos != Vector2.INF:
         nav.target_position = _noise_pos

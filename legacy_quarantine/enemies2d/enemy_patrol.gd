@@ -1,4 +1,4 @@
-﻿extends CharacterBody3D
+extends CharacterBody3D
 
 @export var speed: float = 3.5
 @export var patrol_points: Array[NodePath]
