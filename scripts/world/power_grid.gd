@@ -52,7 +52,7 @@ func advance_district(id: StringName, new_stage: int) -> bool:
         if d != null and not is_unlocked(id):
             EventBus.inventory_notice.emit(tr("FIRST_RESTORE") % missing_prerequisite_name(id))
         return false
-    d.stage = new_stage
+    d.stage = new_stage as DistrictData.Stage
     EventBus.district_stage_changed.emit(id, new_stage)
     EventBus.power_grid_updated.emit()
     # Фонари на улицах загораются на стадии STREETS — этого события ждёт
@@ -97,7 +97,7 @@ func _set_stage_direct(id: StringName, new_stage: int) -> void:
     var d := get_district(id)
     if d == null:
         return
-    d.stage = new_stage
+    d.stage = new_stage as DistrictData.Stage
     EventBus.district_stage_changed.emit(id, new_stage)
     EventBus.power_grid_updated.emit()
     power_changed.emit(id, new_stage > DistrictData.Stage.DARK)

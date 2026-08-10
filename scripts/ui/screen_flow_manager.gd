@@ -181,11 +181,11 @@ func transition_to(target: GameFlowState) -> void:
 	_exit_state(current_state)
 	
 	# Fade transition
-	var fade_done: bool = false
+	var fade_done: Array = [false]
 	if _fade and _fade.has_method("fade_out"):
-		_fade.fade_out(0.3).finished.connect(func(): fade_done = true)
+		_fade.fade_out(0.3).finished.connect(func(): fade_done[0] = true)
 	else:
-		fade_done = true
+		fade_done[0] = true
 	
 	await _wait_for_fade()
 	

@@ -9,10 +9,10 @@ func _ready() -> void:
 	_apply()
 
 func _unquote(s: String) -> String:
-	var t := s.strip_edges()
-	if t.length() >= 2 and t.begins_with('"') and t.ends_with('"'):
-		t = t.substr(1, t.length() - 2)
-	return t.replace("\\n", "\n")
+	var key := s.strip_edges()
+	if key.length() >= 2 and key.begins_with('"') and key.ends_with('"'):
+		key = key.substr(1, key.length() - 2)
+	return key.replace("\\n", "\n")
 
 func _godot_loc(code: String) -> String:
 	if code == "zh":

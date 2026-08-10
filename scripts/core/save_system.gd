@@ -144,7 +144,7 @@ func increment_daily_streak() -> void:
 	if now - last > 86400 * 2:
 		_daily_streak = 0
 	_daily_streak += 1
-	_last_daily_time = now
+	_last_daily_time = int(now)
 	_save()
 
 func _read_player_pos() -> Array:

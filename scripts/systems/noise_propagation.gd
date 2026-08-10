@@ -34,10 +34,10 @@ func get_noise_at(pos: Vector2) -> float:
 			total += src["intensity"] * falloff * (1.0 - age * 0.2)
 	return clampf(total, 0.0, 1.0)
 
-func get_sources_in_range(pos: Vector2, range: float) -> Array:
+func get_sources_in_range(pos: Vector2, radius: float) -> Array:
 	var result: Array = []
 	for src in _sources:
-		if src["pos"].distance_to(pos) <= range:
+		if src["pos"].distance_to(pos) <= radius:
 			result.append(src)
 	return result
 
