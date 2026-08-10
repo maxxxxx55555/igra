@@ -1,0 +1,15 @@
+[gd_resource type="Theme" load_steps=3 format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/BebasNeue-Regular.ttf" id="1_bebas"]
+[ext_resource type="FontFile" path="res://assets/fonts/RobotoCondensed-Regular.ttf" id="2_roboto"]
+
+[resource]
+default_font = ExtResource("2_roboto")
+default_font_size = 18
+Label/colors/font_color = Color(0.8117647, 0.7882353, 0.72156864, 1)
+Label/font_sizes/font_size = 18
+Label/fonts/font = ExtResource("2_roboto")
+header/base_type = &"Label"
+header/colors/font_color = Color(0.8862745, 0.6392157, 0.23529412, 1)
+header/font_sizes/font_size = 32
+header/fonts/font = ExtResource("1_bebas")
