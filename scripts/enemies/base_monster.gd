@@ -50,6 +50,7 @@ var _net_active: bool = false
 var _remote_pos: Vector3 = Vector3.ZERO
 var _remote_rot: float = 0.0
 var _net_sync_timer: float = 0.0
+var _telegraph: Node = null
 
 func _ready() -> void:
 	_apply_ng_scaling()
@@ -78,6 +79,11 @@ func _ready() -> void:
 	_net_active = multiplayer != null and multiplayer.multiplayer_peer != null
 	if _net_active:
 		set_multiplayer_authority(1)
+	_telegraph = get_node_or_null("MonsterTelegraph")
+	if _telegraph == null:
+		_telegraph = load("res://scripts/enemies/monster_telegraph.gd").new()
+		_telegraph.name = "MonsterTelegraph"
+		add_child(_telegraph)
 	_build_visual()
 
 func _build_visual() -> void:
@@ -310,9 +316,18 @@ func _detect_ambient() -> void:
 			_change_state(State.CHASE)
 
 func _perform_attack() -> void:
+	if not player_ref or not is_instance_valid(player_ref) or not player_ref.has_method("take_damage"):
+		return
+	if _telegraph:
+		_telegraph.warn(_deal_damage)
+	else:
+		_deal_damage()
+
+func _deal_damage() -> void:
 	if player_ref and is_instance_valid(player_ref) and player_ref.has_method("take_damage"):
-		player_ref.take_damage(attack_damage)
-		EventBus.enemy_attack.emit(attack_damage)
+		if global_position.distance_to(player_ref.global_position) <= attack_range + 0.5:
+			player_ref.take_damage(attack_damage)
+			EventBus.enemy_attack.emit(attack_damage)
 
 
 func _can_see_player() -> bool:
