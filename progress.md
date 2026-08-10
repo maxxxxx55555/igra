@@ -26,3 +26,7 @@
 
 ## 2026-08-09 — БЛОК 5: QA и релиз
 [Previous content preserved...]
+## 2026-08-10 — P7-art: fonts + base theme
+- Скачаны OFL-шрифты: BebasNeue-Regular.ttf (35K), RobotoCondensed-Regular.ttf (42K) в assets/fonts/
+- Создан assets/ui/theme_tls.tres: default=RobotoCondensed 18, header (Label+BebasNeue 32, янтарь #e2a33c)
+- project.godot не тронут — подключение отдельным блоком
