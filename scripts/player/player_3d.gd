@@ -713,7 +713,7 @@ func _on_attack_hit(body: Node) -> void:
         if to_attacker.dot(facing) < -0.7:
             from_behind = 1.5
     var final_dmg: float = cd3["dmg"] * (1.0 + bonus) * from_behind
-	body.take_damage(final_dmg, global_position, EnemyRosterData.DamageType.BLUNT)
+    body.take_damage(final_dmg, global_position, EnemyRosterData.DamageType.BLUNT)
     if cd3["knockback"] > 0.0 and body is Node3D:
         var kb_dir: Vector3 = (body.global_position - global_position).normalized()
         kb_dir.y = 0.0

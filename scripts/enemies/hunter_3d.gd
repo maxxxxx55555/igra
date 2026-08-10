@@ -52,6 +52,8 @@ func _state_chase(delta: float) -> void:
 	var spd: float = chase_speed
 	if _slow_active:
 		spd *= 0.5
+	if _status_node:
+		spd *= _status_node.speed_multiplier()
 	if _rage_active:
 		spd *= RAGE_SPEED_MULT
 	_move_to(spd)

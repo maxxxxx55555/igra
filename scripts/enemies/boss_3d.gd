@@ -183,7 +183,7 @@ func _switch_to_p3() -> void:
 
 func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, type: EnemyRosterData.DamageType = EnemyRosterData.DamageType.BULLET) -> void:
 	if _net_active and not is_multiplayer_authority():
-		_request_damage.rpc_id(1, amount)
+		_request_damage.rpc_id(1, amount, int(type))
 		return
 	_ensure_hp()
 	if ai_state == State.DEAD:

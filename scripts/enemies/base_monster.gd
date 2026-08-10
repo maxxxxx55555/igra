@@ -54,11 +54,32 @@ var _net_sync_timer: float = 0.0
 var _telegraph: Node = null
 
 # --- status effects (P7-data2) ---
-# applied_statuses: {Status: {"t": float, "dps": float, "power": float}}
-var _statuses: Dictionary = {}
-var _status_immune: Dictionary = {}
-var _status_tick: float = 0.0
 var _status_node: Node = null
+
+## Параметры статусов, которые монстр накладывает при попадании (inflicts ростера).
+const _STATUS_PARAMS: Dictionary = {
+	EnemyRosterData.Status.BLEED: {"duration": 4.0, "dps": 2.0},
+	EnemyRosterData.Status.BURN: {"duration": 3.0, "dps": 3.0},
+	EnemyRosterData.Status.POISON: {"duration": 5.0, "dps": 1.5},
+	EnemyRosterData.Status.SLOW: {"duration": 2.0, "power": 0.5},
+	EnemyRosterData.Status.STUN: {"duration": 1.5},
+	EnemyRosterData.Status.FEAR: {"duration": 3.0},
+}
+
+## Публичный вход для статусов НА монстра (оружие, стробоскоп, UV).
+func apply_status(status: int, duration: float, dps: float = 0.0, power: float = 0.0) -> void:
+	if _status_node:
+		_status_node.apply(status, duration, dps, power)
+
+## Накладывает на цель статусы из поля inflicts ростера (если цель их поддерживает).
+## ponytail: у игрока пока нет apply_status — вызов graceful no-op, проводка на монстрах есть.
+func _inflict_statuses(target: Node) -> void:
+	var inf: Array = roster_entry.get("inflicts", [])
+	if inf.is_empty() or not target.has_method("apply_status"):
+		return
+	for s in inf:
+		var p: Dictionary = _STATUS_PARAMS.get(int(s), {"duration": 2.0})
+		target.apply_status(int(s), float(p.get("duration", 2.0)), float(p.get("dps", 0.0)), float(p.get("power", 0.0)))
 
 func _ready() -> void:
 	_apply_roster_stats()
@@ -85,6 +106,9 @@ func _ready() -> void:
 	_detect_area.body_exited.connect(_on_detect_body_exited)
 	add_to_group("enemies")
 	add_to_group("monsters")
+	_status_node = load("res://scripts/enemies/status_effects.gd").new()
+	_status_node.mob = self
+	add_child(_status_node)
 	_net_active = multiplayer != null and multiplayer.multiplayer_peer != null
 	if _net_active:
 		set_multiplayer_authority(1)
@@ -301,6 +325,8 @@ func _state_chase(delta: float) -> void:
 	var spd: float = chase_speed
 	if _slow_active:
 		spd *= 0.5
+	if _status_node:
+		spd *= _status_node.speed_multiplier()
 	if _rage_active:
 		spd *= 1.3
 	_move_to(spd)
@@ -358,6 +384,7 @@ func _deal_damage() -> void:
 	if player_ref and is_instance_valid(player_ref) and player_ref.has_method("take_damage"):
 		if global_position.distance_to(player_ref.global_position) <= attack_range + 0.5:
 			player_ref.take_damage(attack_damage)
+			_inflict_statuses(player_ref)
 			EventBus.enemy_attack.emit(attack_damage)
 
 
@@ -439,7 +466,7 @@ func _on_detect_body_exited(body: Node) -> void:
 
 func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, type: EnemyRosterData.DamageType = EnemyRosterData.DamageType.BULLET) -> void:
 	if _net_active and not is_multiplayer_authority():
-		_request_damage.rpc_id(1, amount)
+		_request_damage.rpc_id(1, amount, int(type))
 		return
 	_ensure_hp()
 	if ai_state == State.DEAD:
@@ -475,10 +502,10 @@ func _hit_flash() -> void:
 			tw.tween_callback(func(): mesh.material_override = mesh.material_override.duplicate()).set_delay(0.1)
 
 @rpc("any_peer", "reliable")
-func _request_damage(amount: float) -> void:
+func _request_damage(amount: float, type: int = int(EnemyRosterData.DamageType.BULLET)) -> void:
 	if _net_active and not is_multiplayer_authority():
 		return
-		take_damage(clampf(amount, 0.0, 200.0), Vector3.ZERO, EnemyRosterData.DamageType.BULLET)
+	take_damage(clampf(amount, 0.0, 200.0), Vector3.ZERO, type as EnemyRosterData.DamageType)
 
 func stun(duration: float = 2.0) -> void:
 	if ai_state == State.DEAD:
