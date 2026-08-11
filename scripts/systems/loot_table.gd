@@ -10,7 +10,7 @@ func roll() -> Array[Dictionary]:
 			result.append({
 				"item_id": entry.item_id,
 				"quantity": entry.quantity,
-				"rarity": entry.rarity
+				"rarity": entry.rarity,
 			})
 	return result
 
@@ -18,4 +18,7 @@ class LootEntry:
 	var item_id: String
 	var quantity: int
 	var chance: float
+	# Legacy string-based rarity — keeps loading old .tres without breakage.
+	# New pipelines should use ItemData.Rarity enum directly; conversion lives in
+	# item_database.gd / inventory. ponytail: string→enum bridge maps to COMMON/RARE only.
 	var rarity: String

@@ -3,6 +3,17 @@ extends Node
 var slots: Array = []
 var current_weight: float = 0.0
 var _net_active: bool = false
+
+## GDD §V.5 9.5: слоты экипировки. Однослотовые, без мультистайлов.
+## Значение — { "item_id": StringName, "count": int } или null.
+var equipment: Dictionary = {
+	ItemData.EquipSlot.HEAD: null,
+	ItemData.EquipSlot.BODY: null,
+	ItemData.EquipSlot.LEGS: null,
+	ItemData.EquipSlot.HOLSTER: null,
+	ItemData.EquipSlot.BACKPACK: null,
+}
+
 func _ready() -> void:
 	_net_active = multiplayer != null and multiplayer.multiplayer_peer != null
 	if stats == null:
@@ -114,6 +125,50 @@ func count_of(item_id: StringName) -> int:
 	return total
 func weight_ratio() -> float:
 	return clampf(current_weight / maxf(0.001, stats.capacity_kg), 0.0, 1.0)
+
+## GDD §V.5 9.8 — сортировка предметов.
+## mode: "type" | "weight" | "rarity" | "recent"
+func sort_slots(mode: String = "type") -> void:
+	var keyed: Array = []
+	for i in slots.size():
+		var s = slots[i]
+		if s == null:
+			continue
+		var d := ItemDatabase.get_item(s["item_id"])
+		var key: float = 0.0
+		match mode:
+			"weight":
+				key = (0.0 - (d.weight if d else 0.0)) * 1000.0
+			"rarity":
+				key = (float(int(d.rarity if d else 0)) * 1000.0) + (0.0 - (d.weight if d else 0.0))
+			"recent":
+				pass # ponytail: пока не храним timestamp входа; сортировка по «новизне» запоминаем как возможность.
+			_: # "type"
+				key = float(_type_priority(d))
+		keyed.append({"key": key, "slot_idx": i, "item": s})
+	keyed.sort_custom(func(a, b): return a["key"] < b["key"])
+	var new_slots: Array = []
+	for i in slots.size(): new_slots.append(null)
+	var tgt := 0
+	for e in keyed:
+		new_slots[tgt] = e["item"]
+		tgt += 1
+	slots = new_slots
+	_recompute_weight()
+	EventBus.inventory_changed.emit()
+
+func _type_priority(d: ItemData) -> int:
+	if d == null:
+		return 999
+	if d.consumable:
+		return 0
+	match d.equip_slot:
+		ItemData.EquipSlot.HEAD: return 10
+		ItemData.EquipSlot.BODY: return 11
+		ItemData.EquipSlot.LEGS: return 12
+		ItemData.EquipSlot.HOLSTER: return 13
+		ItemData.EquipSlot.BACKPACK: return 14
+	return 50
 func to_dict() -> Dictionary:
 	var data: Array = []
 	for s in slots:
@@ -121,7 +176,13 @@ func to_dict() -> Dictionary:
 			data.append(null)
 		else:
 			data.append({"item_id": String(s["item_id"]), "count": s["count"]})
-	return {"slots": data}
+	# Сериализация экипировки: int(slot) → item_id
+	var equip_ids: Dictionary = {}
+	for slot in equipment:
+		if equipment[slot] != null:
+			equip_ids[str(int(slot))] = String(equipment[slot]["item_id"])
+	return {"slots": data, "equipment": equip_ids}
+
 func from_dict(d: Dictionary) -> void:
 	_init_empty_slots()
 	var saved: Array = d.get("slots", []) as Array
@@ -131,8 +192,67 @@ func from_dict(d: Dictionary) -> void:
 			slots[i] = null
 		elif s is Dictionary:
 			slots[i] = {"item_id": StringName(s.get("item_id", "")), "count": int(s.get("count", 0))}
+	# Восстановление экипировки
+	for k in d.get("equipment", {}).keys():
+		for slot in equipment:
+			if str(int(slot)) == str(k):
+				var item_id: StringName = StringName(String(d["equipment"][k]))
+				if ItemDatabase.get_item(item_id):
+					equipment[slot] = {"item_id": item_id, "count": 1}
 	_recompute_weight()
 	EventBus.inventory_changed.emit()
+func equip_item(slot_index: int) -> bool:
+	if slot_index < 0 or slot_index >= slots.size():
+		return false
+	var s = slots[slot_index]
+	if s == null:
+		return false
+	var data := ItemDatabase.get_item(s["item_id"])
+	if data == null or data.equip_slot == ItemData.EquipSlot.NONE:
+		EventBus.inventory_notice.emit("Przedmet nie może być ekwipowany")
+		return false
+	# Если в слоте что-то есть — убрать в инвентарь.
+	var cur = equipment.get(data.equip_slot)
+	if cur != null and cur is Dictionary:
+		var cur_id: StringName = cur.get("item_id", &"")
+		var cur_data := ItemDatabase.get_item(cur_id)
+		if cur_data != null:
+			var ok := try_add(cur_id, int(cur.get("count", 1)))
+			if not ok:
+				EventBus.inventory_notice.emit("Нет места в рюкзаке для снятого предмета")
+				return false
+	equipment[data.equip_slot] = {"item_id": s["item_id"], "count": s["count"]}
+	slots[slot_index] = null
+	_recompute_weight()
+	EventBus.inventory_changed.emit()
+	if _net_active and is_multiplayer_authority():
+		_sync_inventory.rpc(to_dict())
+	elif _net_active:
+		_request_equip.rpc_id(1, slot_index)
+	return true
+
+func unequip_item(slot: ItemData.EquipSlot) -> bool:
+	var cur = equipment.get(slot)
+	if cur == null:
+		return false
+	var cur_id: StringName = cur.get("item_id", &"")
+	var ok := try_add(cur_id, int(cur.get("count", 1)))
+	if not ok:
+		EventBus.inventory_notice.emit("Нет места в рюкзаке")
+		return false
+	equipment[slot] = null
+	_recompute_weight()
+	EventBus.inventory_changed.emit()
+	if _net_active and is_multiplayer_authority():
+		_sync_inventory.rpc(to_dict())
+	elif _net_active:
+		_request_unequip.rpc_id(1, int(slot))
+	return true
+
+func get_equipped(slot: ItemData.EquipSlot) -> Dictionary:
+	var cur = equipment.get(slot)
+	return (cur as Dictionary) if cur is Dictionary else {}
+
 func _first_empty_slot() -> int:
 	for i in slots.size():
 		if slots[i] == null:
@@ -173,6 +293,20 @@ func _request_use(slot_index: int) -> void:
 	if not is_multiplayer_authority():
 		return
 	use_item(slot_index)
+	_sync_inventory.rpc(to_dict())
+
+@rpc("any_peer", "reliable")
+func _request_equip(slot_index: int) -> void:
+	if not is_multiplayer_authority():
+		return
+	equip_item(slot_index)
+	_sync_inventory.rpc(to_dict())
+
+@rpc("any_peer", "reliable")
+func _request_unequip(slot: int) -> void:
+	if not is_multiplayer_authority():
+		return
+	unequip_item(slot as ItemData.EquipSlot)
 	_sync_inventory.rpc(to_dict())
 
 @rpc("any_peer", "reliable")
