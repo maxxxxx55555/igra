@@ -1,5 +1,36 @@
 # Progress
 
+## 2026-08-10 — ФАЗА 2 / M1: HUD-модули (срезы 1, 2, 3)
+
+### Срез 1 — Crosshair color change (commit `b8d977c`)
+- `scenes/ui/hud_3d.tscn`: добавлен `ColorRect "Crosshair"` (4×4 px, center, brass 0.85 alpha).
+- `scripts/ui/hud_3d.gd`: `_update_crosshair(state)`, `_on_crosshair_state()`, словарь `_CROSSHAIR_NAMES` (default/enemy/disabled).
+- `scripts/events/event_bus.gd`: новый сигнал `crosshair_state_changed(state)`.
+- `scripts/player/player_fps.gd`: `_UpdateCrosshairAim()` каждый `_physics_process` — emits при RayCast collider in group("monster"/"enemy") / has_method("interact") / иначе.
+
+### Срез 2 — Damage Direction Indicator (commit `d9f39d5`)
+- `scripts/events/event_bus.gd`: новый `signal player_damage_direction(amount, src_pos)`.
+- `scripts/effects/damage_indicator.gd`: полная перепайка — была vignette-only, теперь radial-pointer (procedural ImageTexture) на кромке экрана по направлению на источник урона; сохранена старая vignette.
+- `scripts/player/player_3d.gd`: `take_damage(... src_pos ...)` emits `player_damage_direction`.
+- **`scripts/*`**: нормализация indent (space→tab) в **71 файле** (AGENTS.md «TAB indentation») — parse error'ов больше нет.
+
+### Срез 3 — Toast timestamps (commit `bddbded`)
+- `scripts/ui/toast_manager.gd`: toast показывает `[HH:MM]` перед иконкой + аккуратные цвета.
+- Изначально plan был Status icons для игрока, но оказалось что `StatusEffects` живёт только на монстрах (P7-data2 «ponytail: no player apply_status»). Ставим на следующие волны.
+
+### Gates после Ф2 срезов
+- compile bad=0, signal fails=0, i18n fails=0, asset fails=4 (Android warnings).
+- headless editor: 0 ERROR.
+
+### Skipped (оставлено на следующие сессии)
+- Шум/заметность бары (§3.10/§3.11) — нужен diagnostic HUD-bar по существующим NoisePropagation/Visibility.
+- Status icons (§3.12) — нужен Player-side apply_status (см. P7-data2).
+- Сравнение оружия (§V.5 9.9), слоты экипировки, сортировка по редкости — инвентарь-ядро.
+- Лог сообщений с историей (§3.14 частично покрыто — toast имеет timestamp; история — отдельно).
+- Групповое AI поведение (§7.12) — BehaviorTree расширение.
+
+---
+
 ## 2026-08-10 — ФАЗА 0 (Ф0): foundation cleanup
 
 ### Что сделано (commit `ec85ba5`)
