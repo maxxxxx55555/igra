@@ -1,4 +1,4 @@
-﻿extends Control
+extends Control
 @onready var grid: GridContainer = $Panel/VBox/Grid
 @onready var weight_label: Label = $Panel/VBox/WeightLabel
 const RARITY_COLORS := [Color("8c8a82"), Color("5fa86a"), Color("e8a13a")]

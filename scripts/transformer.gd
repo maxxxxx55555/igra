@@ -1,4 +1,4 @@
-﻿class_name Transformer
+class_name Transformer
 extends Node3D
 
 @onready var voltage_dial: Node3D = %VoltageDial

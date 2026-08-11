@@ -1,4 +1,4 @@
-﻿extends Control
+extends Control
 
 func _ready() -> void:
     _build()

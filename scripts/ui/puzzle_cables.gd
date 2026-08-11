@@ -1,4 +1,4 @@
-﻿extends Control
+extends Control
 
 signal puzzle_solved
 signal puzzle_failed

@@ -1,4 +1,4 @@
-﻿extends Node
+extends Node
 
 signal theme_changed(district_id: StringName)
 

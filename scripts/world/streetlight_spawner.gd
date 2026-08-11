@@ -1,4 +1,4 @@
-﻿extends Node3D
+extends Node3D
 class_name StreetLightSpawner
 
 @export var street_builder_path: NodePath = ^"StreetBuilder"

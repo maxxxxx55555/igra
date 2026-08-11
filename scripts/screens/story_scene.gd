@@ -1,4 +1,4 @@
-﻿class_name StoryScene
+class_name StoryScene
 extends CanvasLayer
 
 @onready var story_label: RichTextLabel = %StoryLabel

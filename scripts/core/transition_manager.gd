@@ -1,4 +1,4 @@
-﻿extends CanvasLayer
+extends CanvasLayer
 
 enum Phase { IDLE, FADE_IN, HOLD, FADE_OUT }
 

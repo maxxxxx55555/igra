@@ -1,4 +1,4 @@
-﻿class_name ShadowMonster
+class_name ShadowMonster
 extends "res://scripts/enemies/base_monster.gd"
 
 const CHASE_SPEED: float = 4.0

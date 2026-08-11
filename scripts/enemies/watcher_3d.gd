@@ -1,4 +1,4 @@
-﻿class_name WatcherMonster
+class_name WatcherMonster
 extends "res://scripts/enemies/base_monster.gd"
 
 const SCREAM_RANGE: float = 15.0

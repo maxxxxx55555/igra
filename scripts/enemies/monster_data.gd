@@ -1,4 +1,4 @@
-﻿class_name MonsterData
+class_name MonsterData
 extends Resource
 @export var id: StringName
 @export var display_name: String

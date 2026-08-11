@@ -1,4 +1,4 @@
-﻿extends CharacterBody3D
+extends CharacterBody3D
 
 enum State { IDLE, WALK, RUN, STEALTH, CROUCH }
 

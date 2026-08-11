@@ -1,4 +1,4 @@
-﻿class_name ShopItem
+class_name ShopItem
 extends Resource
 enum Kind { COIN_PACK, UPGRADE, SKIN, BUNDLE }
 @export var id: StringName

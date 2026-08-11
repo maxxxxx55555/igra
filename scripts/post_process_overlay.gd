@@ -1,4 +1,4 @@
-﻿extends CanvasLayer
+extends CanvasLayer
 
 var _grain: ColorRect = null
 var _vignette: ColorRect = null

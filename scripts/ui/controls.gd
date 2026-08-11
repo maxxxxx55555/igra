@@ -1,4 +1,4 @@
-﻿extends Control
+extends Control
 @onready var btn_run: Button = $BtnRun
 @onready var btn_stealth: Button = $BtnStealth
 @onready var btn_interact: Button = $BtnInteract

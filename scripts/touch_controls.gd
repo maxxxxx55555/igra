@@ -1,4 +1,4 @@
-﻿class_name TouchControls
+class_name TouchControls
 extends CanvasLayer
 
 @onready var joystick_area: Control = %JoystickArea

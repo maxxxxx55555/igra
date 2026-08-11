@@ -1,4 +1,4 @@
-﻿extends Node
+extends Node
 
 func spawn(effect_name: String, pos: Vector3, normal: Vector3 = Vector3.UP) -> void:
 	var scene_path := "res://scenes/effects/" + effect_name + ".tscn"

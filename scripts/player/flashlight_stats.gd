@@ -1,4 +1,4 @@
-﻿class_name FlashlightStats
+class_name FlashlightStats
 extends Resource
 @export var cone_angle_deg: float = 52.0
 @export var cone_length_px: float = 260.0

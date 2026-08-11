@@ -1,4 +1,4 @@
-﻿extends Control
+extends Control
 var active: bool = false
 var _shots: int = 0
 func _ready() -> void:

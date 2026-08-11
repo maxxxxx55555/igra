@@ -1,4 +1,4 @@
-﻿extends Node
+extends Node
 const REWARD_SECRET: int = 50
 const REWARD_DISTRICT_RESTORED: int = 200
 const REWARD_ACHIEVEMENT: int = 100

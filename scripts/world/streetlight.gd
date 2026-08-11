@@ -1,4 +1,4 @@
-﻿extends PointLight2D
+extends PointLight2D
 @export var district_id: StringName
 @export var lit_energy: float = 0.9
 @export var lit_color: Color = Color("f2c879")

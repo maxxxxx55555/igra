@@ -1,4 +1,4 @@
-﻿extends Node2D
+extends Node2D
 var look_dir: Vector2 = Vector2.DOWN
 var _sprite: Texture2D = null
 const BODY_COLOR := Color("2b2f36")

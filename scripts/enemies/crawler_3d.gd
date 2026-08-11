@@ -1,4 +1,4 @@
-﻿class_name CrawlerMonster
+class_name CrawlerMonster
 extends "res://scripts/enemies/base_monster.gd"
 
 const LEAP_SPEED: float = 8.0

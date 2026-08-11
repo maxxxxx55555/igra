@@ -1,4 +1,4 @@
-﻿# scripts/core/event_bus.gd — владелец: 03 Technical Director / 05 Senior Godot Developer
+# scripts/core/event_bus.gd — владелец: 03 Technical Director / 05 Senior Godot Developer
 # Глобальная шина сигналов (автозагрузка). Единственный канал межмодульной связи.
 # ВАЖНО: без @warning_ignore_* — в 4.7.stable они не распознаются (ломали компиляцию).
 extends Node

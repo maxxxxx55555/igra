@@ -1,4 +1,4 @@
-﻿class_name DestroyerMonster
+class_name DestroyerMonster
 extends "res://scripts/enemies/base_monster.gd"
 
 var _combo_step: int = 0

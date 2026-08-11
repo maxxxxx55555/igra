@@ -1,4 +1,4 @@
-﻿extends Node
+extends Node
 const _DATA: Array = [
     preload("res://data/monsters/monster_shadow.tres"),
     preload("res://data/monsters/monster_crawler.tres"),

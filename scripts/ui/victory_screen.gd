@@ -1,4 +1,4 @@
-﻿extends CanvasLayer
+extends CanvasLayer
 ## A1: Victory - titry + statistika + Novaja igra+
 
 @onready var title: Label = $Panel/Title

@@ -1,4 +1,4 @@
-﻿extends Node
+extends Node
 signal coins_changed(new_amount: int)
 signal purchase_failed(reason: String)
 @export var start_coins: int = 0

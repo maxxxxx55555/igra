@@ -1,4 +1,4 @@
-﻿extends Control
+extends Control
 
 @export var radar_enabled: bool = true
 @export var radar_radius_px: float = 82.0

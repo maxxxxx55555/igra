@@ -1,4 +1,4 @@
-﻿extends Node
+extends Node
 
 const LEADERBOARD_PATH: String = "user://leaderboard.json"
 var entries: Array[Dictionary] = []

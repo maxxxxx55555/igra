@@ -1,4 +1,4 @@
-﻿extends WeaponBase
+extends WeaponBase
 class_name WeaponRifle
 
 @export var hitscan_damage: int = 12

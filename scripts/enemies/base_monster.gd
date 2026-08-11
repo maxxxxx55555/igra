@@ -1,4 +1,4 @@
-﻿class_name BaseMonster
+class_name BaseMonster
 extends CharacterBody3D
 
 const _HIT_SFX := preload("res://assets/audio/sfx/sfx_hit.wav")

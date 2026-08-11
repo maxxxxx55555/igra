@@ -1,4 +1,4 @@
-﻿class_name PauseScreen
+class_name PauseScreen
 extends CanvasLayer
 
 @onready var resume_button: Button = %ResumeButton

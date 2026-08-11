@@ -1,4 +1,4 @@
-﻿class_name PlayerStats
+class_name PlayerStats
 extends Resource
 @export var walk_speed: float = 170.0
 @export var run_speed: float = 300.0

@@ -1,4 +1,4 @@
-﻿class_name DistrictLayouts
+class_name DistrictLayouts
 extends RefCounted
 
 const TILE_SIZE: int = 32

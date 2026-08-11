@@ -1,4 +1,4 @@
-﻿extends Node
+extends Node
 
 signal interact_requested()
 signal attack_requested()

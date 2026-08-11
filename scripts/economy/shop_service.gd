@@ -1,4 +1,4 @@
-﻿extends Node
+extends Node
 const CATALOG: Array = [
 	# IAP-паки монет (донат) исключены — донат и реклама отключены.
 	preload("res://data/shop/upgrade_flashlight_brightness.tres"),

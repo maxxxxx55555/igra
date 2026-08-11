@@ -1,4 +1,4 @@
-﻿extends Control
+extends Control
 func _ready() -> void:
 	_build()
 	if not LocalizationManager.language_changed.is_connected(_on_lang_changed):

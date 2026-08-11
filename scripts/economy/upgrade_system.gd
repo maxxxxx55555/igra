@@ -1,4 +1,4 @@
-﻿# scripts/economy/upgrade_system.gd — владелец: 05 Senior Godot Developer / 15 Economy Designer
+# scripts/economy/upgrade_system.gd — владелец: 05 Senior Godot Developer / 15 Economy Designer
 # Автозагрузка 11. ФИНАЛ: тернарники -> if/else (нет INCOMPATIBLE_TERNARY), ключи/значения
 # приведены к явным типам (нет Variant-нюансов). Поведение не изменено.
 extends Node

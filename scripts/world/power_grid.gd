@@ -1,4 +1,4 @@
-﻿extends Node
+extends Node
 ## Autoload "PowerGrid". Owns the 11 district progress stages, victory and
 ## the binary switch view used by PowerSwitch/puzzle interactables.
 

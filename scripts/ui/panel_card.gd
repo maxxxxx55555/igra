@@ -1,4 +1,4 @@
-﻿class_name PanelCard
+class_name PanelCard
 extends PanelContainer
 
 @export var card_title: String = ""

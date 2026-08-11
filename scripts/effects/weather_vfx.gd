@@ -1,4 +1,4 @@
-﻿extends Node3D
+extends Node3D
 class_name WeatherVFX
 
 enum Weather { CLEAR, OVERCAST, RAIN, SNOW, FOG }

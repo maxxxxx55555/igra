@@ -1,4 +1,4 @@
-﻿extends Node
+extends Node
 
 const LOCALES: PackedStringArray = ["en","ru","es","fr","de","it","pt","ja","ko","zh","ar","tr","pl"]
 

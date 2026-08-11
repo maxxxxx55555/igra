@@ -1,4 +1,4 @@
-﻿extends Control
+extends Control
 
 @onready var _vbox: VBoxContainer = get_node_or_null("VBox")
 

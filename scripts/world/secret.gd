@@ -1,4 +1,4 @@
-﻿extends Area2D
+extends Area2D
 @export var item_id: StringName = &"battery"
 @export var amount: int = 1
 @export var secret_id: StringName = &""

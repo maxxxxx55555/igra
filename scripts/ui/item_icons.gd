@@ -1,4 +1,4 @@
-﻿extends Node
+extends Node
 
 static func draw_icon(parent: Control, item_id: StringName, size: float) -> void:
 	var tex_path: String = "res://assets/textures/items/%s.png" % String(item_id)

@@ -1,4 +1,4 @@
-﻿extends WeaponBase
+extends WeaponBase
 class_name WeaponShotgun
 
 @export var pellet_damage: int = 8

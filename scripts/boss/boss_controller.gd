@@ -1,4 +1,4 @@
-﻿extends CharacterBody3D
+extends CharacterBody3D
 class_name BossController
 
 # BOSS — 3 фазы: Rush / Minions / Rage

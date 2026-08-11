@@ -1,4 +1,4 @@
-﻿extends Node
+extends Node
 var secrets: int = 0
 var kills: int = 0
 var shadow_kills: int = 0

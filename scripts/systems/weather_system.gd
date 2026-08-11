@@ -1,4 +1,4 @@
-﻿extends Node
+extends Node
 enum Weather { CLEAR, RAIN, FOG, STORM, WIND }
 const WEATHER_COUNT: int = 5
 const NAMES := ["Ясно", "Дождь", "Туман", "Гроза", "Ветер"]

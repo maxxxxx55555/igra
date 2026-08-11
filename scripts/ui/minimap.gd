@@ -1,4 +1,4 @@
-﻿extends Control
+extends Control
 const SIZE := Vector2(180, 180)
 const SCALE := 0.06
 const DISTRICT_OFFSETS: Dictionary = {

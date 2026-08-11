@@ -1,4 +1,4 @@
-﻿# AssetRegistry — опциональный подхват PNG-арта в стиле референса. БЕЗОПАСНО:
+# AssetRegistry — опциональный подхват PNG-арта в стиле референса. БЕЗОПАСНО:
 # если файла нет в assets/art/ — НЕ падает, отдаёт процедурный плейсхолдер.
 # Сохрани PNG (правый клик по картинке в чате) как: tile_floor.png, tile_wall.png,
 # player_top.png, coin_icon.png, menu_bg.png в THE_LAST_STREETLIGHT/assets/art/.

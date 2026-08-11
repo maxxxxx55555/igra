@@ -1,4 +1,4 @@
-﻿class_name FogSetup
+class_name FogSetup
 extends Node3D
 
 @onready var fog_volume: FogVolume = get_node_or_null("../FogVolume")

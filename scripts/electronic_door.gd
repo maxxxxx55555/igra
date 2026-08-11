@@ -1,4 +1,4 @@
-﻿class_name ElectronicDoor
+class_name ElectronicDoor
 extends Node3D
 
 @onready var door_mesh: Node3D = %DoorMesh

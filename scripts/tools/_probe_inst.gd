@@ -1,4 +1,4 @@
-﻿extends Node
+extends Node
 
 const SCENES: Array[String] = [
 	"res://scenes/player/player.tscn",

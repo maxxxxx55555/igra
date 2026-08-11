@@ -1,4 +1,4 @@
-﻿class_name WeightBar
+class_name WeightBar
 extends Control
 
 @onready var weight_fill: ColorRect = %WeightFill

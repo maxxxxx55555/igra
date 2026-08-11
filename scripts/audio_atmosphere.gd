@@ -1,4 +1,4 @@
-﻿extends Node
+extends Node
 
 const MIX: int = 22050
 

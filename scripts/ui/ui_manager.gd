@@ -1,4 +1,4 @@
-﻿extends Node
+extends Node
 const SCREENS: Dictionary = {
 	&"main_menu":       "res://scripts/ui/main_menu.gd",
 	&"pause":           "res://scripts/ui/pause_menu.gd",

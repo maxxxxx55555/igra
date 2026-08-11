@@ -1,4 +1,4 @@
-﻿extends Control
+extends Control
 @onready var coins_label: Label = $Panel/VBox/TopRow/CoinsLabel
 @onready var btn_plus: Button = $Panel/VBox/TopRow/BtnPlus
 @onready var sec_packs: HBoxContainer = $Panel/VBox/SecPacks/Row

@@ -1,4 +1,4 @@
-﻿extends Control
+extends Control
 const BASE_COLOR := Color("15181d")
 const BASE_RIM := Color("3a3f47")
 const KNOB_COLOR := Color("e8a13a")

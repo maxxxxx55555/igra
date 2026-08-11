@@ -1,4 +1,4 @@
-﻿extends SceneTree
+extends SceneTree
 
 func _init() -> void:
 	var f := FileAccess.open("res://scripts/tools/validate_list.txt", FileAccess.READ)

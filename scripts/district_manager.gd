@@ -1,4 +1,4 @@
-﻿extends Node
+extends Node
 
 const DISTRICTS: Array[String] = [
 	"suburbs", "residential", "park", "school", "hospital",

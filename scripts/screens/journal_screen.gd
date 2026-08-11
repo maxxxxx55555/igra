@@ -1,4 +1,4 @@
-﻿class_name JournalScreen
+class_name JournalScreen
 extends CanvasLayer
 
 @onready var document_list: ItemList = %DocumentList

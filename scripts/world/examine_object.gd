@@ -1,4 +1,4 @@
-﻿extends Area2D
+extends Area2D
 @export var text: String = "Следы катастрофы. Мир хранит ответы — нужно лишь смотреть внимательнее."
 func _ready() -> void:
     add_to_group("interactable")

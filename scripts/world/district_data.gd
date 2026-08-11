@@ -1,4 +1,4 @@
-﻿class_name DistrictData
+class_name DistrictData
 extends Resource
 enum Stage { DARK = 0, PARTIAL = 1, STREETS = 2, FULL = 3 }
 @export var id: StringName

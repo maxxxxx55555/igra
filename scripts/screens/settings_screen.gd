@@ -1,4 +1,4 @@
-﻿class_name SettingsScreen
+class_name SettingsScreen
 extends CanvasLayer
 
 @onready var master_slider: HSlider = %MasterSlider

@@ -1,4 +1,4 @@
-﻿extends Node
+extends Node
 
 var _env: Environment = null
 var _target_fog: Color = Color.BLACK

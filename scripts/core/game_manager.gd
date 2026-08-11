@@ -1,4 +1,4 @@
-﻿extends Node
+extends Node
 
 enum GameState { BOOT, MENU, PLAYING, PAUSED, DEAD, WIN }
 

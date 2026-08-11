@@ -1,4 +1,4 @@
-﻿extends CanvasLayer
+extends CanvasLayer
 const CFG_PATH := "user://onboarding.cfg"
 var _queue: Array[Dictionary] = []
 var _shown: Dictionary = {}

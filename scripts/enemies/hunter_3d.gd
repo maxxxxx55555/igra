@@ -1,4 +1,4 @@
-﻿class_name HunterMonster
+class_name HunterMonster
 extends "res://scripts/enemies/base_monster.gd"
 
 const CHARGE_SPEED: float = 8.0

@@ -1,4 +1,4 @@
-﻿class_name ItemData
+class_name ItemData
 extends Resource
 enum Rarity { COMMON, UNCOMMON, RARE }
 enum Effect { NONE, HEAL, RECHARGE }

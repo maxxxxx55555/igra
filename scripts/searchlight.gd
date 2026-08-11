@@ -1,4 +1,4 @@
-﻿class_name Searchlight
+class_name Searchlight
 extends Node3D
 
 @export var light_id: String = "search_001"

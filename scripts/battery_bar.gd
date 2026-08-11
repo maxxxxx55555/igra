@@ -1,4 +1,4 @@
-﻿class_name BatteryBar
+class_name BatteryBar
 extends Control
 
 @onready var battery_fill: ColorRect = %BatteryFill

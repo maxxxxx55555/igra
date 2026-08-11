@@ -1,4 +1,4 @@
-﻿extends Node3D
+extends Node3D
 class_name CityDecorator
 
 @export var district_id: StringName = &""

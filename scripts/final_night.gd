@@ -1,4 +1,4 @@
-﻿extends Node
+extends Node
 
 signal victory()
 var is_active: bool = false

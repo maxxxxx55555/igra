@@ -1,4 +1,4 @@
-﻿extends Area3D
+extends Area3D
 
 @export var inspect_text: String = ""
 @export var inspect_title: String = ""

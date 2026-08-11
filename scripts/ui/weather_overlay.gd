@@ -1,4 +1,4 @@
-﻿extends Control
+extends Control
 var _fog: float = 0.0
 var _rain: float = 0.0
 var _t: float = 0.0

@@ -1,4 +1,4 @@
-﻿class_name EmergencyLamp
+class_name EmergencyLamp
 extends Node3D
 
 @export var lamp_id: String = "lamp_001"

@@ -1,4 +1,4 @@
-﻿extends Node
+extends Node
 enum Ev { BLACKOUT, SURGE, DISTRESS, ACCIDENT }
 const EV_COUNT: int = 4
 const NAMES := {

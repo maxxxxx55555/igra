@@ -1,4 +1,4 @@
-﻿extends WorldEnvironment
+extends WorldEnvironment
 
 enum Weather { NIGHT, RAIN, FOG, STORM }
 

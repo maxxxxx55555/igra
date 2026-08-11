@@ -1,4 +1,4 @@
-﻿extends Node
+extends Node
 const _ITEMS: Array = [
     preload("res://data/items/battery.tres"),
     preload("res://data/items/medkit.tres"),

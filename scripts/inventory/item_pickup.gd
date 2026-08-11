@@ -1,4 +1,4 @@
-﻿extends Area2D
+extends Area2D
 @export var item_id: StringName
 @export var amount: int = 1
 func _ready() -> void:

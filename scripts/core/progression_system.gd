@@ -1,4 +1,4 @@
-﻿
+
 extends Node
 
 signal leveled_up(new_level: int)

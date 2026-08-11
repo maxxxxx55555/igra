@@ -1,4 +1,4 @@
-﻿extends RefCounted
+extends RefCounted
 
 enum ItemType { TOOL, CONSUMABLE, KEY, MATERIAL, DOCUMENT, WEAPON, EQUIPMENT, UPGRADE }
 enum Rarity { COMMON, UNCOMMON, RARE, EPIC, LEGENDARY }

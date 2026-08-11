@@ -1,4 +1,4 @@
-﻿extends CanvasLayer
+extends CanvasLayer
 signal panel_ready(name: String)
 const SCREEN_LIST: Array[String] = [
 	"MainMenu", "Loading", "Pause", "Settings", "Inventory",

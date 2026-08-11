@@ -1,4 +1,4 @@
-﻿extends Node
+extends Node
 @export var enable_proc_audio: bool = true
 func _ready() -> void:
 

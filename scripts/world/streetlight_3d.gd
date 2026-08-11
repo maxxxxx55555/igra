@@ -1,4 +1,4 @@
-﻿extends Node3D
+extends Node3D
 
 @export var district_id: StringName = &"test_zone"
 @export var force_on: bool = false
