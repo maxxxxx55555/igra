@@ -73,6 +73,14 @@ func _build_toast(text: String, color: Color, icon_text: String) -> void:
 	hbox.add_theme_constant_override("separation", 8)
 	panel.add_child(hbox)
 
+	# 3.14 Спека: timestamps уведомлений (HH:MM игрового времени).
+	var ts_label := Label.new()
+	ts_label.text = _toast_timestamp()
+	ts_label.add_theme_color_override("font_color", Color("8a7338"))
+	ts_label.add_theme_font_size_override("font_size", 12)
+	ts_label.custom_minimum_size = Vector2(46, 0)
+	hbox.add_child(ts_label)
+
 	var icon_label := Label.new()
 	icon_label.text = icon_text
 	icon_label.add_theme_color_override("font_color", color)
@@ -87,6 +95,12 @@ func _build_toast(text: String, color: Color, icon_text: String) -> void:
 
 	add_child(panel)
 	_fade_in(panel)
+
+## Возвращает "[HH:MM]" в реальном времени (игровое время — опционально
+## повесить на DayNight-сигнал позже, см. §V.4 в GDD).
+func _toast_timestamp() -> String:
+	var dt := Time.get_datetime_dict_from_system()
+	return "[%02d:%02d]" % [dt["hour"], dt["minute"]]
 
 func _fade_in(panel: Control) -> void:
 	panel.modulate.a = 0.0
