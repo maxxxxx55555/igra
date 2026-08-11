@@ -8,18 +8,18 @@ var current: int = Weather.CLEAR
 var _timer: float = 0.0
 @export var change_interval: float = 45.0
 func _ready() -> void:
-    process_mode = Node.PROCESS_MODE_ALWAYS
-    _timer = change_interval
-    _emit()
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	_timer = change_interval
+	_emit()
 func _process(delta: float) -> void:
-    _timer -= delta
-    if _timer <= 0.0:
-        _timer = change_interval
-        current = randi() % WEATHER_COUNT
-        _emit()
+	_timer -= delta
+	if _timer <= 0.0:
+		_timer = change_interval
+		current = randi() % WEATHER_COUNT
+		_emit()
 func _emit() -> void:
-    EventBus.weather_changed.emit(current, NAMES[current], FOG_STRENGTH[current], RAIN_STRENGTH[current])
+	EventBus.weather_changed.emit(current, NAMES[current], FOG_STRENGTH[current], RAIN_STRENGTH[current])
 func fog_strength() -> float:
-    return FOG_STRENGTH[current]
+	return FOG_STRENGTH[current]
 func rain_strength() -> float:
-    return RAIN_STRENGTH[current]
+	return RAIN_STRENGTH[current]

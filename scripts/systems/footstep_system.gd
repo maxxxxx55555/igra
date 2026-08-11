@@ -10,14 +10,14 @@ class_name FootstepSystem
 # scripts/tools/_gen_sfx.gd). Falls back to AudioManager._gen_step() if absent.
 
 const MATERIALS := {
-    "asphalt_dry": {"volume": -6.0, "pitch_range": [0.94, 1.06], "sample": "step_asphalt_dry"},
-    "asphalt_wet": {"volume": -8.0, "pitch_range": [0.92, 1.04], "sample": "step_asphalt_wet"},
-    "concrete":    {"volume": -4.0, "pitch_range": [0.96, 1.05], "sample": "step_concrete"},
-    "wood":        {"volume": -10.0, "pitch_range": [0.95, 1.08], "sample": "step_wood"},
-    "metal":       {"volume": -2.0, "pitch_range": [0.95, 1.07], "sample": "step_metal"},
-    "puddle":      {"volume": -12.0, "pitch_range": [0.90, 1.05], "sample": "step_puddle"},
-    "glass":       {"volume": -6.0, "pitch_range": [0.96, 1.09], "sample": "step_glass"},
-    "default":     {"volume": -8.0, "pitch_range": [0.94, 1.06], "sample": "step_concrete"},
+	"asphalt_dry": {"volume": -6.0, "pitch_range": [0.94, 1.06], "sample": "step_asphalt_dry"},
+	"asphalt_wet": {"volume": -8.0, "pitch_range": [0.92, 1.04], "sample": "step_asphalt_wet"},
+	"concrete":    {"volume": -4.0, "pitch_range": [0.96, 1.05], "sample": "step_concrete"},
+	"wood":        {"volume": -10.0, "pitch_range": [0.95, 1.08], "sample": "step_wood"},
+	"metal":       {"volume": -2.0, "pitch_range": [0.95, 1.07], "sample": "step_metal"},
+	"puddle":      {"volume": -12.0, "pitch_range": [0.90, 1.05], "sample": "step_puddle"},
+	"glass":       {"volume": -6.0, "pitch_range": [0.96, 1.09], "sample": "step_glass"},
+	"default":     {"volume": -8.0, "pitch_range": [0.94, 1.06], "sample": "step_concrete"},
 }
 
 const CLANK_VOLUME: float = 0.0
@@ -41,116 +41,116 @@ var _step_stream: AudioStream = null
 var _streams: Dictionary = {}
 
 func _ready() -> void:
-    _audio_player = AudioStreamPlayer3D.new()
-    _audio_player.name = "FootstepAudio"
-    _audio_player.max_distance = 20.0
-    add_child(_audio_player)
-    _step_stream = _resolve_step_stream()
-    _load_samples()
+	_audio_player = AudioStreamPlayer3D.new()
+	_audio_player.name = "FootstepAudio"
+	_audio_player.max_distance = 20.0
+	add_child(_audio_player)
+	_step_stream = _resolve_step_stream()
+	_load_samples()
 
 ## Per-surface WAVs cached once; missing files silently fall back to _step_stream.
 func _load_samples() -> void:
-    var names: Array = [CLANK_SAMPLE]
-    for key in MATERIALS:
-        names.append(String(MATERIALS[key]["sample"]))
-    for n in names:
-        var path: String = SFX_DIR + String(n) + ".wav"
-        if not _streams.has(n) and ResourceLoader.exists(path):
-            _streams[n] = load(path)
+	var names: Array = [CLANK_SAMPLE]
+	for key in MATERIALS:
+		names.append(String(MATERIALS[key]["sample"]))
+	for n in names:
+		var path: String = SFX_DIR + String(n) + ".wav"
+		if not _streams.has(n) and ResourceLoader.exists(path):
+			_streams[n] = load(path)
 
 func _sample(name: String) -> AudioStream:
-    return _streams.get(name, _step_stream)
+	return _streams.get(name, _step_stream)
 
 func _resolve_step_stream() -> AudioStream:
-    var am := get_node_or_null("/root/AudioManager")
-    if am and am.has_method("_gen_step"):
-        var generated: AudioStream = am._gen_step()
-        if generated:
-            return generated
-    if ResourceLoader.exists("res://assets/audio/sfx/sfx_step.wav"):
-        return load("res://assets/audio/sfx/sfx_step.wav")
-    return null
+	var am := get_node_or_null("/root/AudioManager")
+	if am and am.has_method("_gen_step"):
+		var generated: AudioStream = am._gen_step()
+		if generated:
+			return generated
+	if ResourceLoader.exists("res://assets/audio/sfx/sfx_step.wav"):
+		return load("res://assets/audio/sfx/sfx_step.wav")
+	return null
 
 func set_player(player: Node3D) -> void:
-    _player = player
-    if _player == null:
-        return
-    _raycast = _player.get_node_or_null("FootstepRaycast")
-    if _raycast == null:
-        _raycast = RayCast3D.new()
-        _raycast.name = "FootstepRaycast"
-        _raycast.target_position = Vector3(0, -1.5, 0)
-        _raycast.collision_mask = 1
-        _raycast.enabled = true
-        _player.add_child(_raycast)
+	_player = player
+	if _player == null:
+		return
+	_raycast = _player.get_node_or_null("FootstepRaycast")
+	if _raycast == null:
+		_raycast = RayCast3D.new()
+		_raycast.name = "FootstepRaycast"
+		_raycast.target_position = Vector3(0, -1.5, 0)
+		_raycast.collision_mask = 1
+		_raycast.enabled = true
+		_player.add_child(_raycast)
 
 func play_step(state: int, _speed: float, weight_kg: float) -> void:
-    if _player == null or _raycast == null or _step_stream == null:
-        return
-    # Crouch and idle produce no audible step (S2.2)
-    if state == STATE_CROUCH or state == STATE_IDLE:
-        return
+	if _player == null or _raycast == null or _step_stream == null:
+		return
+	# Crouch and idle produce no audible step (S2.2)
+	if state == STATE_CROUCH or state == STATE_IDLE:
+		return
 
-    _raycast.force_raycast_update()
-    var surface := _detect_material()
-    _step_counter += 1
+	_raycast.force_raycast_update()
+	var surface := _detect_material()
+	_step_counter += 1
 
-    if weight_kg > WEIGHT_CLANK_THRESHOLD and _step_counter % 4 == 0:
-        _play(_sample(CLANK_SAMPLE), CLANK_VOLUME, CLANK_PITCH_RANGE)
-        return
+	if weight_kg > WEIGHT_CLANK_THRESHOLD and _step_counter % 4 == 0:
+		_play(_sample(CLANK_SAMPLE), CLANK_VOLUME, CLANK_PITCH_RANGE)
+		return
 
-    var mat: Dictionary = MATERIALS.get(surface, MATERIALS["default"])
-    var speed_mult := 1.0
-    match state:
-        STATE_RUN: speed_mult = 1.5
-        STATE_WALK: speed_mult = 1.0
-        STATE_STEALTH: speed_mult = 0.3
-        _: speed_mult = 1.0
-    _play(_sample(String(mat["sample"])), float(mat["volume"]) + linear_to_db(speed_mult), mat["pitch_range"])
+	var mat: Dictionary = MATERIALS.get(surface, MATERIALS["default"])
+	var speed_mult := 1.0
+	match state:
+		STATE_RUN: speed_mult = 1.5
+		STATE_WALK: speed_mult = 1.0
+		STATE_STEALTH: speed_mult = 0.3
+		_: speed_mult = 1.0
+	_play(_sample(String(mat["sample"])), float(mat["volume"]) + linear_to_db(speed_mult), mat["pitch_range"])
 
 func _play(stream: AudioStream, volume_db: float, pitch_range: Array) -> void:
-    if stream == null:
-        return
-    _audio_player.stream = stream
-    _audio_player.volume_db = volume_db
-    _audio_player.pitch_scale = randf_range(float(pitch_range[0]), float(pitch_range[1]))
-    _audio_player.global_position = _player.global_position
-    _audio_player.play()
+	if stream == null:
+		return
+	_audio_player.stream = stream
+	_audio_player.volume_db = volume_db
+	_audio_player.pitch_scale = randf_range(float(pitch_range[0]), float(pitch_range[1]))
+	_audio_player.global_position = _player.global_position
+	_audio_player.play()
 
 func _detect_material() -> String:
-    if not _raycast.is_colliding():
-        return "default"
-    var collider := _raycast.get_collider()
-    if collider == null:
-        return "default"
-    var tagged = collider.get("surface_material")
-    if tagged != null and String(tagged) != "":
-        return String(tagged)
-    var n: String = String(collider.name).to_lower()
-    if "asphalt" in n or "road" in n or "street" in n:
-        return "asphalt_dry"
-    if "puddle" in n or "water" in n:
-        return "puddle"
-    if "concrete" in n or "floor" in n or "sidewalk" in n:
-        return "concrete"
-    if "wood" in n or "plank" in n:
-        return "wood"
-    if "metal" in n or "steel" in n or "grate" in n:
-        return "metal"
-    if "glass" in n:
-        return "glass"
-    return "default"
+	if not _raycast.is_colliding():
+		return "default"
+	var collider := _raycast.get_collider()
+	if collider == null:
+		return "default"
+	var tagged = collider.get("surface_material")
+	if tagged != null and String(tagged) != "":
+		return String(tagged)
+	var n: String = String(collider.name).to_lower()
+	if "asphalt" in n or "road" in n or "street" in n:
+		return "asphalt_dry"
+	if "puddle" in n or "water" in n:
+		return "puddle"
+	if "concrete" in n or "floor" in n or "sidewalk" in n:
+		return "concrete"
+	if "wood" in n or "plank" in n:
+		return "wood"
+	if "metal" in n or "steel" in n or "grate" in n:
+		return "metal"
+	if "glass" in n:
+		return "glass"
+	return "default"
 
 func register_surface(node: Node3D, material: String) -> void:
-    node.set("surface_material", material)
+	node.set("surface_material", material)
 
 func demo() -> void:
-    # Self-check: surface mapping and crouch silence must hold.
-    assert(MATERIALS.has("default"))
-    for key in ["asphalt_dry", "puddle", "metal", "glass"]:
-        assert(MATERIALS.has(key), "missing surface: %s" % key)
-        var r: Array = MATERIALS[key]["pitch_range"]
-        assert(float(r[0]) <= float(r[1]), "bad pitch range: %s" % key)
-        assert(String(MATERIALS[key]["sample"]) != "", "missing sample: %s" % key)
-    assert(STATE_CROUCH == 4 and STATE_STEALTH == 3, "state constants must mirror player enum")
-    print("[footstep] demo OK samples=", _streams.size())
+	# Self-check: surface mapping and crouch silence must hold.
+	assert(MATERIALS.has("default"))
+	for key in ["asphalt_dry", "puddle", "metal", "glass"]:
+		assert(MATERIALS.has(key), "missing surface: %s" % key)
+		var r: Array = MATERIALS[key]["pitch_range"]
+		assert(float(r[0]) <= float(r[1]), "bad pitch range: %s" % key)
+		assert(String(MATERIALS[key]["sample"]) != "", "missing sample: %s" % key)
+	assert(STATE_CROUCH == 4 and STATE_STEALTH == 3, "state constants must mirror player enum")
+	print("[footstep] demo OK samples=", _streams.size())

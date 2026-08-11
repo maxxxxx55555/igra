@@ -6,53 +6,53 @@ var _filter_index: int = 0
 var _filters: Array = ["none", "noir", "sepia", "cold", "warm", "vhs"]
 
 func _input(event: InputEvent) -> void:
-    if event.is_action_pressed("photo_mode"):
-        _toggle()
+	if event.is_action_pressed("photo_mode"):
+		_toggle()
 
 func _toggle() -> void:
-    _active = !_active
-    if _active:
-        Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-        _apply_filter()
-    else:
-        Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-        _remove_filter()
+	_active = !_active
+	if _active:
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		_apply_filter()
+	else:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		_remove_filter()
 
 func toggle() -> void:
-    _toggle()
+	_toggle()
 
 func _apply_filter() -> void:
-    var cam = get_viewport().get_camera_3d()
-    if not cam:
-        return
-    var env = cam.get_world_3d().environment if cam.get_world_3d() else null
-    if not env:
-        return
-    match _filters[_filter_index]:
-        "noir":
-            env.adjustment_saturation = 0.0
-            env.adjustment_contrast = 1.5
-        "sepia":
-            env.adjustment_saturation = 0.3
-        "cold":
-            env.fog_light_color = Color(0.1, 0.15, 0.3)
-        "warm":
-            env.fog_light_color = Color(0.3, 0.2, 0.1)
-        "vhs":
-            env.glow_intensity = 1.5
+	var cam = get_viewport().get_camera_3d()
+	if not cam:
+		return
+	var env = cam.get_world_3d().environment if cam.get_world_3d() else null
+	if not env:
+		return
+	match _filters[_filter_index]:
+		"noir":
+			env.adjustment_saturation = 0.0
+			env.adjustment_contrast = 1.5
+		"sepia":
+			env.adjustment_saturation = 0.3
+		"cold":
+			env.fog_light_color = Color(0.1, 0.15, 0.3)
+		"warm":
+			env.fog_light_color = Color(0.3, 0.2, 0.1)
+		"vhs":
+			env.glow_intensity = 1.5
 
 func _remove_filter() -> void:
-    pass
+	pass
 
 func cycle_filter() -> void:
-    _filter_index = (_filter_index + 1) % _filters.size()
-    _apply_filter()
+	_filter_index = (_filter_index + 1) % _filters.size()
+	_apply_filter()
 
 func take_photo() -> void:
-    var img = get_viewport().get_texture().get_image()
-    var path = "user://screenshots/photo_%d.png" % Time.get_unix_time_from_system()
-    DirAccess.make_dir_recursive_absolute("user://screenshots")
-    img.save_png(path)
-    print("[photo] saved: ", path)
-    if AchievementManager:
-        AchievementManager.unlock("photographer")
+	var img = get_viewport().get_texture().get_image()
+	var path = "user://screenshots/photo_%d.png" % Time.get_unix_time_from_system()
+	DirAccess.make_dir_recursive_absolute("user://screenshots")
+	img.save_png(path)
+	print("[photo] saved: ", path)
+	if AchievementManager:
+		AchievementManager.unlock("photographer")

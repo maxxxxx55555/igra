@@ -11,4 +11,4 @@ enum Kind { COIN_PACK, UPGRADE, SKIN, BUNDLE }
 @export var coins_granted: int = 0
 @export var bundle_contents: Array[StringName] = []
 func final_price_coins() -> int:
-    return int(round(price_coins * (1.0 - discount_percent / 100.0)))
+	return int(round(price_coins * (1.0 - discount_percent / 100.0)))

@@ -67,6 +67,7 @@ signal crosshair_state_changed(state: StringName)  # default | enemy | disabled
 signal monster_spotted(monster_id: StringName)
 signal noise_emitted(position: Vector3, intensity: float)
 signal player_battery_changed(level: float)
+signal player_damage_direction(amount: float, src_pos: Vector3)  # 3.15 — индикатор откуда удар
 signal player_damaged(amount: float)
 signal player_detected
 signal player_health_changed(health: float)
