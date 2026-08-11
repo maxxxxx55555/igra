@@ -1,5 +1,30 @@
 # Progress
 
+## 2026-08-10 — ФАЗА 2 / M1 срез 4-5 (post-fix): noise/vis бары + inventory backend
+
+### Срез 4 — Noise + Visibility бары (commit `7aaa404`)
+- Сцена `scenes/ui/hud_3d.tscn`: добавлены `NoiseLabel/NoiseT/NoiseF` + `VisibilityLabel/VisibilityT/VisibilityF` под HP/Stam/Bat, канон-цвета.
+- `scripts/ui/hud_3d.gd`: `_poll_noise_visibility()` через Timer 0.1s, fill offset_right = 88 + clamp × 222 px, цвета по трём порогам (звук: stamina→brass→ember; vis: hidden→dim→lit).
+- YAGNI: отдельных сигналов не добавлял — poll дешевле.
+
+### Срез 5 — Inventory backend (commit `d5dad79`)
+- `item_data.gd`: `EquipSlot { NONE..BACKPACK }`, `Rarity`-extended с `EPIC` (канон GDD §V.5 9.13).
+- `inventory_manager.gd`: equipment: `Dictionary[slot, null|{item_id,count}]`; `equip_item/unequip_item/get_equipped`; сериализация; RPC: `_request_equip,_unequip`; `sort_slots(mode)` — type/weight/rarity ( recent — офосил).
+- `loot_table.gd` — комментарий о legacy string-rarity (backward compat).
+
+### Known gaps (не делал в этой сессии)
+- Equipment-UI (§9.5: окно slotов + drag-and-drop в weapon) — UI shape, требует обновления сцены inventory_panel + drop-target logic.
+- Weapon comparsion (§9.9) — отдельный UI-screen (side-by-side).
+- Status icons на игроке (§3.12) — требуется `player.apply_status` (сейчас только на монстрах; руль группой Беhe Base).
+- Групповое AI (§7.12) — отдельная сессия; noise/vis бары дадут диагностику перед BehaviorTree расширением.
+
+### Gates after срезов
+- compile, signal, i18n — 0
+- asset — 4 (Android warnings, не runtime)
+- headless editor — 0 ERROR.
+
+---
+
 ## 2026-08-10 — ФАЗА 2 / M1: HUD-модули (срезы 1, 2, 3)
 
 ### Срез 1 — Crosshair color change (commit `b8d977c`)
