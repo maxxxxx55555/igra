@@ -1,5 +1,31 @@
 # Progress
 
+## 2026-08-10 — ФАЗА 0 (Ф0): foundation cleanup
+
+### Что сделано (commit `ec85ba5`)
+- **project.godot**: удалена повреждённая строка 11 (`"ï»¿config_version"=5` — BOM-хвост).
+- **BOM-strip**: 136 .gd файлов в `scripts/` очищены от UTF-8 BOM (гейт AGENTS.md «UTF-8 without BOM»).
+- **Дубли сцен**: удалены `scenes/ui/{settings_menu,settings_screen,credits_screen,difficulty_screen,Victory,GameOver}.tscn`. Бэкапы в `.backup/phase0/`.
+- **`scripts/theme_setup.gd`**: полная переделка под листы UI/UX-спеки — токены канона (bg-deep/panel/panel-edge/brass/ember/steel/bone/stamina), Bebas Neue (headers) + Roboto Condensed (body), chamfer-углы, приоритет к `assets/ui/theme_tls.tres`.
+- **`assets/shaders/post_process.gdshader`**: multiply-vignette → channel-replace-`#0c1016` (bg-deep) + film grain (8–12% opacity, TIME-animated). Был bloom/damage_flash — оставлены.
+
+### Что НЕ удалось как планировалось (YAGNI-correction)
+- Шейдеры изначально планировались как `shaders/grain.gdshader` + `shaders/vignette.gdshader`. Удалены как дубли — уже есть `assets/shaders/post_process.gdshader` с той же ролью. Обновлён он, новые не созданы.
+
+### Gates после Ф0
+- compile_gate_scene: COMPILE_GATE bad=0
+- signal_arity_check_scene: [sig] DONE fails=0
+- i18n_check_scene: [i18n] fails=0
+- asset_check_scene: DONE fails=4 (Android warnings, не runtime)
+- headless editor: 0 ERROR
+
+### Следующий шаг (Фаза 2 / M1)
+- HUD: прицел меняет цвет по врагу, индикатор направления урона, бары шума/заметности, timestamps, иконки состояний (см. GDD §V.1, §V.4).
+- Инвентарь: слоты экипировки (голова/тело/ноги/кобура/рюкзак), редкость предметов, сортировка, сравнение оружия (см. GDD §V.5).
+- BehaviorTree: групповая тактика (фланги + крик-оповещение) (см. GDD §V.3 7.12).
+
+---
+
 ## 2026-08-10 — ФАЗА 1: Канон-саммит (5 листов UI/UX-спеки впитаны в GDD)
 
 ### Контекст
