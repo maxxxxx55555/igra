@@ -168,6 +168,63 @@ offset_left = 224.0
 offset_top = 0.0
 offset_right = 260.0
 offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "100"
+horizontal_alignment = 0
+mouse_filter = 2
+
+# 3.10/3.11 Спека: бары уровня заметности и шума.
+[node name="NoiseLabel" type="Label" parent="TopLeft"]
+offset_left = 0.0
+offset_top = 64.0
+offset_right = 180.0
+offset_bottom = 80.0
+text = "ШУМ"
+mouse_filter = 2
+
+[node name="NoiseT" type="ColorRect" parent="TopLeft"]
+offset_left = 88.0
+offset_top = 66.0
+offset_right = 310.0
+offset_bottom = 78.0
+color = Color(0.165, 0.200, 0.251, 1.0)
+mouse_filter = 2
+
+[node name="NoiseF" type="ColorRect" parent="TopLeft"]
+offset_left = 88.0
+offset_top = 66.0
+offset_right = 88.0
+offset_bottom = 78.0
+color = Color(0.373, 0.541, 0.306, 1.0)
+mouse_filter = 2
+
+[node name="VisibilityLabel" type="Label" parent="TopLeft"]
+offset_left = 0.0
+offset_top = 84.0
+offset_right = 180.0
+offset_bottom = 100.0
+text = "ЗАМЕТ."
+mouse_filter = 2
+
+[node name="VisibilityT" type="ColorRect" parent="TopLeft"]
+offset_left = 88.0
+offset_top = 86.0
+offset_right = 310.0
+offset_bottom = 98.0
+color = Color(0.165, 0.200, 0.251, 1.0)
+mouse_filter = 2
+
+[node name="VisibilityF" type="ColorRect" parent="TopLeft"]
+offset_left = 88.0
+offset_top = 86.0
+offset_right = 88.0
+offset_bottom = 98.0
+color = Color(0.541, 0.451, 0.220, 1.0)
+mouse_filter = 2
+
+[node name="AmmoCounter" type="Control" parent="."]
+offset_bottom = 16.0
 mouse_filter = 2
 theme_type_variation = &"StatNumber"
 text = "100"

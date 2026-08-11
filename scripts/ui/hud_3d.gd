@@ -75,10 +75,19 @@ func _ready() -> void:
 	enemy_hp_bar.visible = false
 	prompt.visible = false
 	_setup_weight_bar()
+	_setup_nv_poll()
 	$BtnPause.pressed.connect(_on_pause)
 	_add_map_button()
 	EventBus.game_state_changed.connect(_on_game_state)
 	_on_game_state(int(GameManager.current_state))
+
+func _setup_nv_poll() -> void:
+	var nv_poll := Timer.new()
+	nv_poll.name = "NVPollTimer"
+	nv_poll.wait_time = 0.1
+	nv_poll.autostart = true
+	nv_poll.timeout.connect(_poll_noise_visibility)
+	add_child(nv_poll)
 
 func _setup_weight_bar() -> void:
 	var w := $WeightBar
@@ -95,6 +104,49 @@ func _setup_weight_bar() -> void:
 	poll.autostart = true
 	poll.timeout.connect(_poll_weight)
 	add_child(poll)
+
+## Бары шум/заметность (спека 3.10/3.11). Заполняются по игроку.
+@onready var noise_fill: ColorRect = $TopLeft/NoiseF
+@onready var noise_caption: Label = $TopLeft/NoiseLabel
+@onready var vis_fill: ColorRect = $TopLeft/VisibilityF
+@onready var vis_caption: Label = $TopLeft/VisibilityLabel
+
+const _BAR_L: float = 88.0
+const _BAR_W: float = 222.0  # 88 -> 310 px
+
+func _poll_noise_visibility() -> void:
+	var player := get_tree().get_first_node_in_group("player")
+	if player == null:
+		if noise_fill: noise_fill.visible = false
+		if vis_fill: vis_fill.visible = false
+		return
+	var noise: float = 0.0
+	if player.has_method("get_noise_level"):
+		noise = float(player.get_noise_level())
+	elif "noise_level" in player:
+		noise = float(player.noise_level)
+	noise = clampf(noise, 0.0, 1.0)
+	var vis: float = 1.0
+	if "visibility" in player:
+		vis = float(player.visibility)
+	vis = clampf(vis, 0.0, 1.0)
+	if noise_fill:
+		noise_fill.offset_right = _BAR_L + noise * _BAR_W
+		noise_fill.color = _pick_noise_color(noise)
+	if vis_fill:
+		vis_fill.offset_right = _BAR_L + vis * _BAR_W
+		vis_fill.color = _pick_vis_color(vis)
+
+func _pick_noise_color(v: float) -> Color:
+	if v < 0.34: return Color(0.373, 0.541, 0.306)  # stamina
+	elif v < 0.67: return Color(0.788, 0.635, 0.290)  # brass
+	else: return Color(0.706, 0.271, 0.184)  # ember
+
+func _pick_vis_color(v: float) -> Color:
+	# Видимость «наоборот» от шума: тихий+тёмный = зелёный.
+	if v < 0.15: return Color(0.373, 0.541, 0.306)
+	elif v < 0.5: return Color(0.788, 0.635, 0.290)
+	else: return Color(0.706, 0.271, 0.184)
 
 ## 3.6 Спека: прицел меняет цвет по наведению на врага
 ## YAGNI: не делаем RayCast-tick, а слушаем EventBus.
