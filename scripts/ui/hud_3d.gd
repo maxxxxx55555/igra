@@ -59,6 +59,8 @@ func _ready() -> void:
 	_apply_text_outlines()
 	EventBus.player_health_changed.connect(_on_hp)
 	EventBus.player_health_changed.connect(_on_damage_vignette)
+	if EventBus.has_signal(&"crosshair_state_changed"):
+		EventBus.crosshair_state_changed.connect(_on_crosshair_state)
 	EventBus.player_stamina_changed.connect(_on_stam)
 	EventBus.player_battery_changed.connect(_on_bat)
 	EventBus.ammo_changed.connect(_on_ammo_changed)
@@ -93,6 +95,28 @@ func _setup_weight_bar() -> void:
 	poll.autostart = true
 	poll.timeout.connect(_poll_weight)
 	add_child(poll)
+
+## 3.6 Спека: прицел меняет цвет по наведению на врага
+## YAGNI: не делаем RayCast-tick, а слушаем EventBus.
+@onready var _crosshair: ColorRect = $Crosshair
+
+const _CROSSHAIR_NAMES: Dictionary = {
+	"default": Color(0.541, 0.451, 0.220, 0.85),   # brass-dim
+	"enemy":  Color(0.706, 0.271, 0.184, 0.95),     # ember
+	"disabled": Color(0.165, 0.200, 0.251, 0.6),    # panel-edge (недоступно/прицел-вне-врага)
+}
+
+func _update_crosshair(state: StringName) -> void:
+	if _crosshair == null:
+		return
+	if _CROSSHAIR_NAMES.has(state):
+		_crosshair.color = _CROSSHAIR_NAMES[state]
+
+## Triggered по сигналу EventBus.player_aim_at / crosshair_state_changed.
+## Caller: игрок или система взаимодействия.
+func _on_crosshair_state(state: StringName) -> void:
+	_update_crosshair(state)
+
 
 func _poll_weight() -> void:
 	var w := $WeightBar

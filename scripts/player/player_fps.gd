@@ -145,11 +145,32 @@ func _physics_process(delta: float) -> void:
 	else:
 		_bob_time = 0.0
 		camera.position.y = move_toward(camera.position.y, _camera_base_y, delta * 4.0)
+	_UpdateCrosshairAim()
 	move_and_slide()
 	if Input.is_action_just_pressed("interact") and interact_ray.is_colliding():
 		var collider: Object = interact_ray.get_collider()
 		if collider != null and collider.has_method("interact"):
 			collider.call("interact", self)
+
+## 3.6 Спека: прицел меняет цвет по наведению на врага.
+## emits crosshair_state_changed (&"default" / &"enemy" / &"disabled").
+func _UpdateCrosshairAim() -> void:
+	if interact_ray == null:
+		EventBus.crosshair_state_changed.emit(&"disabled")
+		return
+	if not interact_ray.is_colliding():
+		EventBus.crosshair_state_changed.emit(&"default")
+		return
+	var collider := interact_ray.get_collider()
+	if collider == null:
+		EventBus.crosshair_state_changed.emit(&"disabled")
+		return
+	if collider.is_in_group("monster") or collider.is_in_group("enemy"):
+		EventBus.crosshair_state_changed.emit(&"enemy")
+	elif collider.has_method("interact"):
+		EventBus.crosshair_state_changed.emit(&"default")
+	else:
+		EventBus.crosshair_state_changed.emit(&"disabled")
 
 func _on_step() -> void:
 	if _footstep_dust:

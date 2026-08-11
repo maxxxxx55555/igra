@@ -63,6 +63,7 @@ signal item_consumed(item_id: String)
 signal level_completed(level_id: String)
 signal light_disrupted
 signal light_level_changed(level: float)
+signal crosshair_state_changed(state: StringName)  # default | enemy | disabled
 signal monster_spotted(monster_id: StringName)
 signal noise_emitted(position: Vector3, intensity: float)
 signal player_battery_changed(level: float)
