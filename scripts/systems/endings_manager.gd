@@ -4,32 +4,15 @@ signal ending_reached(ending_id: StringName)
 
 enum Ending { LIGHT, HOPE, SURVIVOR, DARK, TRUTH }
 
+## Тексты концовок были захардкожены по-русски прямо в словаре: на любом
+## из 13 языков игрок видел русский. Здесь лежат ключи, а строки берутся
+## из локализации в get_ending_data().
 const ENDING_DATA: Dictionary = {
-	"light": {
-		"title": "Свет",
-		"description": "Все 11 районов восстановлены. Все документы собраны. Реактор запущен, город озаряется. По радио доносится: «Спасибо».",
-		"color": Color(1.0, 0.85, 0.4)
-	},
-	"hope": {
-		"title": "Надежда",
-		"description": "Все районы восстановлены, но правда не раскрыта. Титры на фоне рассвета над городом.",
-		"color": Color(0.6, 0.8, 1.0)
-	},
-	"survivor": {
-		"title": "Выживший",
-		"description": "Только электростанция восстановлена. Остальной город погружен во тьму. Игрок уходит в неизвестность.",
-		"color": Color(0.8, 0.6, 0.6)
-	},
-	"dark": {
-		"title": "Тьма",
-		"description": "Игрок погиб или не восстановил сеть. Город погружается в вечную тьму. Игрок становится одним из монстров.",
-		"color": Color(0.2, 0.1, 0.2)
-	},
-	"truth": {
-		"title": "Истина",
-		"description": "Все документы + аудио-логи + фото + бункер в районе 11. Катастрофа была преднамеренной.",
-		"color": Color(1.0, 0.5, 0.2)
-	}
+	"light":    {"title": "ENDING_LIGHT_TITLE",    "desc": "ENDING_LIGHT_DESC",    "color": Color(1.0, 0.85, 0.4)},
+	"hope":     {"title": "ENDING_HOPE_TITLE",     "desc": "ENDING_HOPE_DESC",     "color": Color(0.6, 0.8, 1.0)},
+	"survivor": {"title": "ENDING_SURVIVOR_TITLE", "desc": "ENDING_SURVIVOR_DESC", "color": Color(0.8, 0.6, 0.6)},
+	"dark":     {"title": "ENDING_DARK_TITLE",     "desc": "ENDING_DARK_DESC",     "color": Color(0.2, 0.1, 0.2)},
+	"truth":    {"title": "ENDING_TRUTH_TITLE",    "desc": "ENDING_TRUTH_DESC",    "color": Color(1.0, 0.5, 0.2)},
 }
 
 var _achieved_ending: StringName = ""
@@ -91,12 +74,26 @@ func _determine_ending(full: int, total: int, all_docs: bool, bunker: bool, all_
 func get_ending() -> StringName:
 	return _achieved_ending
 
+## Возвращает уже переведённые title/description — вызывающему коду
+## (экран победы, экран концовок) не нужно знать про ключи.
 func get_ending_data(ending_id: StringName = "") -> Dictionary:
 	var id: StringName = ending_id if ending_id else _achieved_ending
-	return ENDING_DATA.get(String(id), {})
+	return _localized(ENDING_DATA.get(String(id), {}))
 
 func get_all_endings() -> Dictionary:
-	return ENDING_DATA.duplicate()
+	var out: Dictionary = {}
+	for id in ENDING_DATA:
+		out[id] = _localized(ENDING_DATA[id])
+	return out
+
+func _localized(entry: Dictionary) -> Dictionary:
+	if entry.is_empty():
+		return {}
+	return {
+		"title": LocalizationManager.t(String(entry.get("title", ""))),
+		"description": LocalizationManager.t(String(entry.get("desc", ""))),
+		"color": entry.get("color", Color.WHITE),
+	}
 
 func force_ending(ending_id: StringName) -> void:
 	_achieved_ending = ending_id

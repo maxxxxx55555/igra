@@ -58,6 +58,31 @@ func _districts_restored() -> int:
 		if d.stage >= DistrictData.Stage.FULL:
 			n += 1
 	return n
+## Ниже — API, которое спрашивают EndingsManager и AchievementManager
+## через has_method(). Этих методов здесь не было, поэтому проверки молча
+## возвращали 0/false: концовка «Свет» (все документы) была недостижима,
+## а «Истина» — тем более. Считаем по тем же 13 документам, что и Endings.
+func get_total_documents() -> int:
+	return Endings.TOTAL_DOCUMENTS
+
+func get_found_documents() -> int:
+	return count_docs()
+
+## Аудиологи и фото — часть коллекции документов: отдельных счётчиков
+## в игре нет, поэтому «все аудиологи» = все документы найдены.
+func has_all_audio_logs() -> bool:
+	return count_docs() >= Endings.TOTAL_DOCUMENTS
+
+func has_all_photos() -> bool:
+	return count_docs() >= Endings.TOTAL_DOCUMENTS
+
+## Бункер в 11-м районе = электростанция восстановлена полностью.
+func is_bunker_accessed() -> bool:
+	var pg := get_node_or_null("/root/PowerGrid")
+	if pg == null:
+		return false
+	return pg.get_stage(&"power_station") >= DistrictData.Stage.FULL
+
 func get_stats() -> Dictionary:
 	return {"secrets": secrets, "kills": kills, "puzzles": puzzles, "time_played": time_played, "districts": _districts_restored()}
 func to_dict() -> Dictionary:

@@ -200,12 +200,14 @@ func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, type: EnemyRos
 	if hp <= 0.0:
 		_trigger_death()
 
+## Смерть босса — конец игры, но экран победы здесь больше не грузится
+## сценой напрямую: это выбрасывало игрока из мира мимо GameManager, и
+## концовка (EndingsManager по документам и секретам) не считалась вовсе.
+## Теперь босс только сообщает о смерти, а финал ведёт FinaleDirector:
+## boss_defeated -> trigger_win() -> состояние WIN -> экран победы UIManager.
 func _trigger_death() -> void:
 	EventBus.boss_defeated.emit()
 	super._trigger_death()
-	await get_tree().create_timer(2.5).timeout
-	if is_inside_tree():
-		Routes.goto("res://scenes/ui/victory_screen.tscn")
 
 func _add_silhouette() -> void:
 	if get_node_or_null("BodyMesh"):
