@@ -35,6 +35,9 @@ var current_lang: String = "ru"
 
 var _strings: Dictionary = {}
 
+## Английский словарь как запасной: держим загруженным всегда.
+var _fallback: Dictionary = {}
+
 var _last_trans: Translation = null
 
 func _ready() -> void:
@@ -91,6 +94,8 @@ func _detect_system_lang() -> String:
 	return "en"
 
 func _load_language(lang: String) -> void:
+	if _fallback.is_empty():
+		_fallback = _read_json(LANG_DIR + "en.json")
 	var path = LANG_DIR + lang + ".json"
 	if not ResourceLoader.exists(path):
 		path = LANG_DIR + "en.json"
@@ -106,6 +111,16 @@ func _load_language(lang: String) -> void:
 	_save_pref(lang)
 	language_changed.emit(lang)
 
+func _read_json(path: String) -> Dictionary:
+	if not FileAccess.file_exists(path):
+		return {}
+	var f := FileAccess.open(path, FileAccess.READ)
+	if f == null:
+		return {}
+	var parsed = JSON.parse_string(f.get_as_text())
+	f.close()
+	return parsed if parsed is Dictionary else {}
+
 func _sync_translation_server(lang: String) -> void:
 	if _last_trans != null:
 		TranslationServer.remove_translation(_last_trans)
@@ -120,8 +135,24 @@ func set_language(lang: String) -> void:
 	if lang in SUPPORTED:
 		_load_language(lang)
 
+## Перевод ключа. Порядок: текущий язык -> английский -> сам ключ.
+## Раньше отсутствующий ключ показывался игроку как сырой "HUD_BATTERY";
+## теперь непереведённая строка хотя бы читается по-английски.
 func t(key: String) -> String:
-	return _strings.get(key, key)
+	if _strings.has(key):
+		return str(_strings[key])
+	if _fallback.has(key):
+		return str(_fallback[key])
+	return key
+
+## Перевод с подстановкой: tf("PICKED_UP", ["батарея", 2]) -> "Подобрано: батарея x2".
+func tf(key: String, args: Array) -> String:
+	var s := t(key)
+	return s % args if args.size() > 0 else s
+
+## Есть ли ключ хоть в одном словаре (для отладочных проверок).
+func has_key(key: String) -> bool:
+	return _strings.has(key) or _fallback.has(key)
 
 func cycle_language() -> void:
 	var idx = SUPPORTED.find(current_lang)

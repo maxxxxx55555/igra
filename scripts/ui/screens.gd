@@ -108,7 +108,7 @@ func _build_screen(name: String) -> void:
 	var exempt_close := ["MainMenu", "Loading", "Death", "Victory", "Saves", "ControlsTouch", "Weather", "StoryScene", "FinalNight"]
 	var close_btn: Button = null
 	if not name in exempt_close:
-		close_btn = _make_btn("ЗАКРЫТЬ", Vector2(card_w / 2.0 - 80, card_h - 46), Vector2(160, 36))
+		close_btn = _make_btn(LocalizationManager.t("SCR_ZAKRYT"), Vector2(card_w / 2.0 - 80, card_h - 46), Vector2(160, 36))
 		close_btn.pressed.connect(_on_close)
 		card.add_child(close_btn)
 	_screen_data[name] = {
@@ -357,27 +357,27 @@ func build_MainMenu(card: ColorRect, cw: float, ch: float, d: Dictionary) -> voi
 	version.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	card.add_child(version)
 	var btn_data := [
-		["ИГРАТЬ", 170, _on_start],
-		["ПРОДОЛЖИТЬ", 226, _on_resume],
-		["НАСТРОЙКИ", 282, _on_settings],
-		["МАГАЗИН", 338, _on_shop],
-		["МУЛЬТИПЛЕЕР", 394, _on_multiplayer],
-		["ВЫХОД", 450, _on_quit],
+		[LocalizationManager.t("SCR_IGRAT"), 170, _on_start],
+		[LocalizationManager.t("SCR_PRODOLZHIT"), 226, _on_resume],
+		[LocalizationManager.t("SCR_NASTROYKI"), 282, _on_settings],
+		[LocalizationManager.t("SCR_MAGAZIN"), 338, _on_shop],
+		[LocalizationManager.t("SCR_MULTIPLEER"), 394, _on_multiplayer],
+		[LocalizationManager.t("SCR_VYHOD"), 450, _on_quit],
 	]
 	var btns_arr := []
 	var stagger_tween := create_tween()
 	for i in btn_data.size():
 		var b: Array = btn_data[i]
 		match b[0]:
-			"ИГРАТЬ": b[0] = tr("new_game").to_upper()
-			"ПРОДОЛЖИТЬ": b[0] = tr("continue").to_upper()
-			"НАСТРОЙКИ": b[0] = tr("settings").to_upper()
-			"МАГАЗИН": b[0] = tr("shop").to_upper()
-			"МУЛЬТИПЛЕЕР": b[0] = tr("multiplayer").to_upper()
-			"ВЫХОД": b[0] = tr("quit").to_upper()
-		var btn_w := 260 if b[0] == "ИГРАТЬ" else 220
+			LocalizationManager.t("SCR_IGRAT"): b[0] = tr("new_game").to_upper()
+			LocalizationManager.t("SCR_PRODOLZHIT"): b[0] = tr("continue").to_upper()
+			LocalizationManager.t("SCR_NASTROYKI"): b[0] = tr("settings").to_upper()
+			LocalizationManager.t("SCR_MAGAZIN"): b[0] = tr("shop").to_upper()
+			LocalizationManager.t("SCR_MULTIPLEER"): b[0] = tr("multiplayer").to_upper()
+			LocalizationManager.t("SCR_VYHOD"): b[0] = tr("quit").to_upper()
+		var btn_w := 260 if b[0] == LocalizationManager.t("SCR_IGRAT") else 220
 		var btn := _make_btn(b[0], Vector2(cw / 2.0 - btn_w / 2.0, b[1]), Vector2(btn_w, 44))
-		if b[0] == "ИГРАТЬ":
+		if b[0] == LocalizationManager.t("SCR_IGRAT"):
 			btn.add_theme_font_size_override("font_size", 15)
 		btn.pressed.connect(b[2])
 		btn.modulate = Color(1, 1, 1, 0)
@@ -429,7 +429,7 @@ func build_MainMenu(card: ColorRect, cw: float, ch: float, d: Dictionary) -> voi
 		btn_conn += b.get_signal_connection_list("pressed").size()
 	var has_close := false
 	for c in card.get_children():
-		if c is Button and c.text.find("ЗАКРЫТЬ") >= 0:
+		if c is Button and c.text.find(LocalizationManager.t("SCR_ZAKRYT")) >= 0:
 			has_close = true
 			break
 	var layer_bg := find_child("MenuBG", true, false) as ColorRect
@@ -444,7 +444,7 @@ func build_MainMenu(card: ColorRect, cw: float, ch: float, d: Dictionary) -> voi
 
 func build_Loading(content: ColorRect, card: ColorRect, cw: float, ch: float, d: Dictionary) -> void:
 	var load_title := Label.new()
-	load_title.text = "ЗАГРУЗКА.. 0%"
+	load_title.text = LocalizationManager.t("SCR_ZAGRUZKA_0")
 	load_title.size = Vector2(content.size.x, 24)
 	load_title.position = Vector2(0, 10)
 	load_title.add_theme_color_override("font_color", BONE_TEXT)
@@ -463,9 +463,9 @@ func build_Loading(content: ColorRect, card: ColorRect, cw: float, ch: float, d:
 	bar_fill.position = Vector2(content.size.x / 2.0 - 100, 44)
 	content.add_child(bar_fill)
 	var tip_data := [
-		"Свет не только защищает вас от монстров, но и открывает новые пути.",
-		"Чем больше света, тем меньше монстров.",
-		"Тишина — твой союзник в темноте.",
+		LocalizationManager.t("SCR_SVET_NE_TOLKO_ZASCHISCHAET_VAS_OT_MONSTROV_N"),
+		LocalizationManager.t("SCR_CHEM_BOLSHE_SVETA_TEM_MENSHE_MONSTROV"),
+		LocalizationManager.t("SCR_TISHINA_TVOY_SOYUZNIK_V_TEMNOTE"),
 	]
 	var tip_lbl := Label.new()
 	tip_lbl.text = tip_data[0]
@@ -480,7 +480,7 @@ func build_Loading(content: ColorRect, card: ColorRect, cw: float, ch: float, d:
 	var loading_tween := create_tween()
 	loading_tween.tween_method(func(v):
 		bar_fill.size.x = v * 200
-		load_title.text = "ЗАГРУЗКА.. " + str(int(v * 100)) + "%"
+		load_title.text = LocalizationManager.t("SCR_ZAGRUZKA") + str(int(v * 100)) + "%"
 	, 0.0, 1.0, 1.4)
 	loading_tween.tween_callback(_on_loading_done)
 	var tip_idx := 0
@@ -503,10 +503,10 @@ func build_Pause(card: ColorRect, cw: float, ch: float) -> void:
 	overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	card.add_child(overlay)
 	var btn_data := [
-		["ПРОДОЛЖИТЬ", _on_resume],
-		["ЖУРНАЛ ЗАДАНИЙ", _on_quest_journal],
-		["НАСТРОЙКИ", _on_settings],
-		["ГЛАВНОЕ МЕНЮ", _on_mainmenu],
+		[LocalizationManager.t("SCR_PRODOLZHIT"), _on_resume],
+		[LocalizationManager.t("SCR_ZHURNAL_ZADANIY"), _on_quest_journal],
+		[LocalizationManager.t("SCR_NASTROYKI"), _on_settings],
+		[LocalizationManager.t("SCR_GLAVNOE_MENYU"), _on_mainmenu],
 	]
 	for i in btn_data.size():
 		_add_btn(card, btn_data[i][0], Vector2(cw / 2.0 - 110, 80 + i * 55), Vector2(220, 42), btn_data[i][1])
@@ -533,42 +533,42 @@ func _lang_code(label: String) -> String:
 func build_Settings(content: ColorRect, card: ColorRect, cw: float, ch: float) -> void:
 	var tabs_data := [
 		{
-			"name": "ИГРА",
+			"name": LocalizationManager.t("SCR_IGRA"),
 			"entries": [
-				{"label": "Язык", "type": "dropdown", "value": _lang_label(), "options": _lang_options()},
-				{"label": "Сложность", "type": "dropdown", "value": "Нормально", "options": ["Легко", "Нормально", "Сложно"]},
-				{"label": "Автосохранение", "type": "toggle", "value": true},
-				{"label": "Подсказки", "type": "toggle", "value": true},
+				{"label": LocalizationManager.t("SCR_YAZYK"), "type": "dropdown", "value": _lang_label(), "options": _lang_options()},
+				{"label": LocalizationManager.t("SCR_SLOZHNOST"), "type": "dropdown", "value": LocalizationManager.t("SCR_NORMALNO"), "options": [LocalizationManager.t("SCR_LEGKO"), LocalizationManager.t("SCR_NORMALNO"), LocalizationManager.t("SCR_SLOZHNO")]},
+				{"label": LocalizationManager.t("SCR_AVTOSOHRANENIE"), "type": "toggle", "value": true},
+				{"label": LocalizationManager.t("SCR_PODSKAZKI"), "type": "toggle", "value": true},
 			]
 		},
 		{
-			"name": "УПРАВЛЕНИЕ",
+			"name": LocalizationManager.t("SCR_UPRAVLENIE"),
 			"entries": [
-				{"label": "Чувствительность", "type": "slider", "value": 4.5, "min": 0.0, "max": 100.0, "step": 5.0, "suffix": "%"},
-				{"label": "Инверсия Y", "type": "toggle", "value": false},
-				{"label": "Угол камеры", "type": "dropdown", "value": "45°", "options": ["35°", "45°", "55°"]},
+				{"label": LocalizationManager.t("SCR_CHUVSTVITELNOST"), "type": "slider", "value": 4.5, "min": 0.0, "max": 100.0, "step": 5.0, "suffix": "%"},
+				{"label": LocalizationManager.t("SCR_INVERSIYA_Y"), "type": "toggle", "value": false},
+				{"label": LocalizationManager.t("SCR_UGOL_KAMERY"), "type": "dropdown", "value": "45°", "options": ["35°", "45°", "55°"]},
 			]
 		},
 		{
-			"name": "ГРАФИКА",
+			"name": LocalizationManager.t("SCR_GRAFIKA"),
 			"entries": [
-				{"label": "Качество", "type": "dropdown", "value": "Высокое", "options": ["Низкое", "Среднее", "Высокое"]},
-				{"label": "Разрешение", "type": "dropdown", "value": "100%", "options": ["75%", "100%", "150%"]},
-				{"label": "Тени", "type": "dropdown", "value": "Высокие", "options": ["Низкие", "Средние", "Высокие"]},
-				{"label": "Текстуры", "type": "dropdown", "value": "Высокие", "options": ["Низкие", "Средние", "Высокие"]},
-				{"label": "Эффекты", "type": "dropdown", "value": "Высокие", "options": ["Низкие", "Средние", "Высокие"]},
-				{"label": "Дальность прорисовки", "type": "slider", "value": 70.0, "min": 0.0, "max": 100.0, "step": 5.0, "suffix": "%"},
+				{"label": LocalizationManager.t("SCR_KACHESTVO"), "type": "dropdown", "value": LocalizationManager.t("SCR_VYSOKOE"), "options": [LocalizationManager.t("SCR_NIZKOE"), LocalizationManager.t("SCR_SREDNEE"), LocalizationManager.t("SCR_VYSOKOE")]},
+				{"label": LocalizationManager.t("SCR_RAZRESHENIE"), "type": "dropdown", "value": "100%", "options": ["75%", "100%", "150%"]},
+				{"label": LocalizationManager.t("SCR_TENI"), "type": "dropdown", "value": LocalizationManager.t("SCR_VYSOKIE"), "options": [LocalizationManager.t("SCR_NIZKIE"), LocalizationManager.t("SCR_SREDNIE"), LocalizationManager.t("SCR_VYSOKIE")]},
+				{"label": LocalizationManager.t("SCR_TEKSTURY"), "type": "dropdown", "value": LocalizationManager.t("SCR_VYSOKIE"), "options": [LocalizationManager.t("SCR_NIZKIE"), LocalizationManager.t("SCR_SREDNIE"), LocalizationManager.t("SCR_VYSOKIE")]},
+				{"label": LocalizationManager.t("SCR_EFFEKTY"), "type": "dropdown", "value": LocalizationManager.t("SCR_VYSOKIE"), "options": [LocalizationManager.t("SCR_NIZKIE"), LocalizationManager.t("SCR_SREDNIE"), LocalizationManager.t("SCR_VYSOKIE")]},
+				{"label": LocalizationManager.t("SCR_DALNOST_PRORISOVKI"), "type": "slider", "value": 70.0, "min": 0.0, "max": 100.0, "step": 5.0, "suffix": "%"},
 				{"label": "VSync", "type": "toggle", "value": true},
 				{"label": "FPS", "type": "dropdown", "value": "60", "options": ["30", "60", "120"]},
 			]
 		},
 		{
-			"name": "ЗВУК",
+			"name": LocalizationManager.t("SCR_ZVUK"),
 			"entries": [
-				{"label": "Мастер", "type": "slider", "value": 80.0, "min": 0.0, "max": 100.0, "step": 1.0, "suffix": "%"},
-				{"label": "Музыка", "type": "slider", "value": 70.0, "min": 0.0, "max": 100.0, "step": 1.0, "suffix": "%"},
+				{"label": LocalizationManager.t("SCR_MASTER"), "type": "slider", "value": 80.0, "min": 0.0, "max": 100.0, "step": 1.0, "suffix": "%"},
+				{"label": LocalizationManager.t("SCR_MUZYKA"), "type": "slider", "value": 70.0, "min": 0.0, "max": 100.0, "step": 1.0, "suffix": "%"},
 				{"label": "SFX", "type": "slider", "value": 85.0, "min": 0.0, "max": 100.0, "step": 1.0, "suffix": "%"},
-				{"label": "Голоса", "type": "slider", "value": 70.0, "min": 0.0, "max": 100.0, "step": 1.0, "suffix": "%"},
+				{"label": LocalizationManager.t("SCR_GOLOSA"), "type": "slider", "value": 70.0, "min": 0.0, "max": 100.0, "step": 1.0, "suffix": "%"},
 			]
 		},
 	]
@@ -613,7 +613,7 @@ func build_Settings(content: ColorRect, card: ColorRect, cw: float, ch: float) -
 					ob.select(idx)
 					row.add_child(ob)
 					controls[entry.label] = {"type": "dropdown", "node": ob}
-					if entry.label == "Язык":
+					if entry.label == LocalizationManager.t("SCR_YAZYK"):
 						ob.item_selected.connect(func(_idx: int):
 							var code := _lang_code(ob.get_item_text(_idx))
 							# Через LocalizationManager, а не голым set_locale():
@@ -640,7 +640,7 @@ func build_Settings(content: ColorRect, card: ColorRect, cw: float, ch: float) -
 					controls[entry.label] = {"type": "slider", "node": hs, "label": val_lbl}
 					hs.value_changed.connect(func(v):
 						val_lbl.text = str(v) + sfx
-						if tab.name == "ЗВУК":
+						if tab.name == LocalizationManager.t("SCR_ZVUK"):
 							SettingsManager.set_volume(entry.label, v / 100.0)
 					)
 
@@ -656,35 +656,35 @@ func build_Settings(content: ColorRect, card: ColorRect, cw: float, ch: float) -
 			Engine.max_fps = int(ob.get_item_text(idx))
 		)
 
-	if controls.has("Тени"):
-		var ob: OptionButton = controls["Тени"].node
+	if controls.has(LocalizationManager.t("SCR_TENI")):
+		var ob: OptionButton = controls[LocalizationManager.t("SCR_TENI")].node
 		ob.item_selected.connect(func(idx):
 			var val := ob.get_item_text(idx)
 			var moon := get_tree().root.find_child("Moon", true, false) as DirectionalLight3D
 			if moon:
-				moon.shadow_enabled = val in ["Средние", "Высокие"]
+				moon.shadow_enabled = val in [LocalizationManager.t("SCR_SREDNIE"), LocalizationManager.t("SCR_VYSOKIE")]
 		)
 
-	if controls.has("Качество"):
-		var ob: OptionButton = controls["Качество"].node
+	if controls.has(LocalizationManager.t("SCR_KACHESTVO")):
+		var ob: OptionButton = controls[LocalizationManager.t("SCR_KACHESTVO")].node
 		ob.item_selected.connect(func(idx):
 			var val := ob.get_item_text(idx)
 			var env := get_tree().root.get_node_or_null("WorldEnvironment")
 			if env and env.environment:
-				env.environment.glow_enabled = val in ["Среднее", "Высокое"]
-				env.environment.ssao_enabled = val == "Высокое"
+				env.environment.glow_enabled = val in [LocalizationManager.t("SCR_SREDNEE"), LocalizationManager.t("SCR_VYSOKOE")]
+				env.environment.ssao_enabled = val == LocalizationManager.t("SCR_VYSOKOE")
 		)
 
 	var btn_y := content.size.y - 44
-	_add_btn(content, "ПРИМЕНИТЬ", Vector2(10, btn_y), Vector2(120, 34), func():
+	_add_btn(content, LocalizationManager.t("SCR_PRIMENIT"), Vector2(10, btn_y), Vector2(120, 34), func():
 		# controls[] ключуется подписями ползунков, а не именами шин: раньше
 		# список ["Master","Music","SFX","Голоса"] совпадал только с двумя из
 		# четырёх, и громкость применялась частично.
-		for bus_label in ["Мастер", "Музыка", "SFX", "Голоса"]:
+		for bus_label in [LocalizationManager.t("SCR_MASTER"), LocalizationManager.t("SCR_MUZYKA"), "SFX", LocalizationManager.t("SCR_GOLOSA")]:
 			if controls.has(bus_label):
 				SettingsManager.set_volume(bus_label, controls[bus_label].node.value / 100.0)
-		var quality_val: String = controls["Качество"].node.get_item_text(controls["Качество"].node.selected)
-		var shadows_val: String = controls["Тени"].node.get_item_text(controls["Тени"].node.selected)
+		var quality_val: String = controls[LocalizationManager.t("SCR_KACHESTVO")].node.get_item_text(controls[LocalizationManager.t("SCR_KACHESTVO")].node.selected)
+		var shadows_val: String = controls[LocalizationManager.t("SCR_TENI")].node.get_item_text(controls[LocalizationManager.t("SCR_TENI")].node.selected)
 		SettingsManager.apply_graphics({
 			"quality": quality_val,
 			"shadows": shadows_val,
@@ -692,28 +692,28 @@ func build_Settings(content: ColorRect, card: ColorRect, cw: float, ch: float) -
 			"fps": int(controls["FPS"].node.get_item_text(controls["FPS"].node.selected)),
 		})
 		SettingsManager.apply_controls({
-			"sensitivity": controls["Чувствительность"].node.value,
-			"invert_y": controls["Инверсия Y"].node.button_pressed,
-			"camera_angle": controls["Угол камеры"].node.get_item_text(controls["Угол камеры"].node.selected),
+			"sensitivity": controls[LocalizationManager.t("SCR_CHUVSTVITELNOST")].node.value,
+			"invert_y": controls[LocalizationManager.t("SCR_INVERSIYA_Y")].node.button_pressed,
+			"camera_angle": controls[LocalizationManager.t("SCR_UGOL_KAMERY")].node.get_item_text(controls[LocalizationManager.t("SCR_UGOL_KAMERY")].node.selected),
 		})
 		SettingsManager.apply_game({
-			"language": _lang_code(controls["Язык"].node.get_item_text(controls["Язык"].node.selected)),
-			"difficulty": controls["Сложность"].node.get_item_text(controls["Сложность"].node.selected),
-			"autosave": controls["Автосохранение"].node.button_pressed,
-			"hints": controls["Подсказки"].node.button_pressed,
+			"language": _lang_code(controls[LocalizationManager.t("SCR_YAZYK")].node.get_item_text(controls[LocalizationManager.t("SCR_YAZYK")].node.selected)),
+			"difficulty": controls[LocalizationManager.t("SCR_SLOZHNOST")].node.get_item_text(controls[LocalizationManager.t("SCR_SLOZHNOST")].node.selected),
+			"autosave": controls[LocalizationManager.t("SCR_AVTOSOHRANENIE")].node.button_pressed,
+			"hints": controls[LocalizationManager.t("SCR_PODSKAZKI")].node.button_pressed,
 		})
 		SettingsManager.save_to_cfg()
-		_show_toast("НАСТРОЙКИ ПРИМЕНЕНЫ")
+		_show_toast(LocalizationManager.t("SCR_NASTROYKI_PRIMENENY"))
 	)
 
-	_add_btn(content, "ПО УМОЛЧАНИЮ", Vector2(140, btn_y), Vector2(130, 34), func():
+	_add_btn(content, LocalizationManager.t("SCR_PO_UMOLCHANIYU"), Vector2(140, btn_y), Vector2(130, 34), func():
 		var defaults := {
-			"Язык": _lang_label(), "Сложность": "Нормально",
-			"Автосохранение": true, "Подсказки": true,
-			"Чувствительность": 4.5, "Инверсия Y": false, "Угол камеры": "45°",
-			"Качество": "Высокое", "Разрешение": "100%", "Тени": "Высокие", "Текстуры": "Высокие",
-			"Эффекты": "Высокие", "Дальность прорисовки": 70.0, "VSync": true, "FPS": "60",
-			"Мастер": 80.0, "Музыка": 70.0, "SFX": 85.0, "Голоса": 70.0,
+			LocalizationManager.t("SCR_YAZYK"): _lang_label(), LocalizationManager.t("SCR_SLOZHNOST"): LocalizationManager.t("SCR_NORMALNO"),
+			LocalizationManager.t("SCR_AVTOSOHRANENIE"): true, LocalizationManager.t("SCR_PODSKAZKI"): true,
+			LocalizationManager.t("SCR_CHUVSTVITELNOST"): 4.5, LocalizationManager.t("SCR_INVERSIYA_Y"): false, LocalizationManager.t("SCR_UGOL_KAMERY"): "45°",
+			LocalizationManager.t("SCR_KACHESTVO"): LocalizationManager.t("SCR_VYSOKOE"), LocalizationManager.t("SCR_RAZRESHENIE"): "100%", LocalizationManager.t("SCR_TENI"): LocalizationManager.t("SCR_VYSOKIE"), LocalizationManager.t("SCR_TEKSTURY"): LocalizationManager.t("SCR_VYSOKIE"),
+			LocalizationManager.t("SCR_EFFEKTY"): LocalizationManager.t("SCR_VYSOKIE"), LocalizationManager.t("SCR_DALNOST_PRORISOVKI"): 70.0, "VSync": true, "FPS": "60",
+			LocalizationManager.t("SCR_MASTER"): 80.0, LocalizationManager.t("SCR_MUZYKA"): 70.0, "SFX": 85.0, LocalizationManager.t("SCR_GOLOSA"): 70.0,
 		}
 		for label in defaults:
 			if not controls.has(label):
@@ -735,7 +735,7 @@ func build_Settings(content: ColorRect, card: ColorRect, cw: float, ch: float) -
 		SettingsManager.set_volume("Master", 0.8)
 		SettingsManager.set_volume("Music", 0.7)
 		SettingsManager.set_volume("SFX", 0.85)
-		SettingsManager.set_volume("Голоса", 0.7)
+		SettingsManager.set_volume(LocalizationManager.t("SCR_GOLOSA"), 0.7)
 		var env := get_tree().root.get_node_or_null("WorldEnvironment")
 		if env and env.environment:
 			env.environment.glow_enabled = true
@@ -746,10 +746,10 @@ func build_Settings(content: ColorRect, card: ColorRect, cw: float, ch: float) -
 		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED)
 		Engine.max_fps = 60
 		SettingsManager.save_to_cfg()
-		_show_toast("НАСТРОЙКИ СБРОШЕНЫ")
+		_show_toast(LocalizationManager.t("SCR_NASTROYKI_SBROSHENY"))
 	)
 
-	_add_btn(content, "НАЗАД", Vector2(content.size.x - 120, btn_y), Vector2(110, 34), func():
+	_add_btn(content, LocalizationManager.t("SCR_NAZAD"), Vector2(content.size.x - 120, btn_y), Vector2(110, 34), func():
 		show_screen("Pause")
 	)
 
@@ -758,7 +758,7 @@ func build_Inventory(content: ColorRect, card: ColorRect, cw: float, ch: float) 
 	var cur_w: float = inv2.current_weight if inv2 else 0.0
 	var cap_w: float = inv2.stats.capacity_kg if (inv2 and inv2.stats) else 40.0
 	var weight_header := Label.new()
-	weight_header.text = "Вес: " + str(cur_w) + " / " + str(cap_w) + " кг"
+	weight_header.text = LocalizationManager.t("SCR_VES") + str(cur_w) + " / " + str(cap_w) + LocalizationManager.t("SCR_KG")
 	weight_header.size = Vector2(content.size.x, 20)
 	weight_header.position = Vector2(0, 0)
 	weight_header.add_theme_color_override("font_color", BRASS)
@@ -777,7 +777,7 @@ func build_Inventory(content: ColorRect, card: ColorRect, cw: float, ch: float) 
 	content.add_child(weight_fill)
 	var inv_real := absf(cur_w - 0.0) < 0.01
 
-	var slot_ids := ["фонарик", "батарейки", "аптечка", "ключ", "кабель", "предохранитель", "инструмент", "документ"]
+	var slot_ids := [LocalizationManager.t("SCR_FONARIK_2"), LocalizationManager.t("SCR_BATAREYKI"), LocalizationManager.t("SCR_APTECHKA"), LocalizationManager.t("SCR_KLYUCH"), LocalizationManager.t("SCR_KABEL"), LocalizationManager.t("SCR_PREDOHRANITEL"), LocalizationManager.t("SCR_INSTRUMENT"), LocalizationManager.t("SCR_DOKUMENT")]
 	var cols := 4
 	var slot_size := 64
 	var gap := 8
@@ -806,7 +806,7 @@ func build_Inventory(content: ColorRect, card: ColorRect, cw: float, ch: float) 
 		slot.add_child(badge)
 	var qa_y := start_y + 2 * (slot_size + gap) + 10
 	var qa_label := Label.new()
-	qa_label.text = "БЫСТРЫЙ ДОСТУП"
+	qa_label.text = LocalizationManager.t("SCR_BYSTRYY_DOSTUP")
 	qa_label.size = Vector2(content.size.x, 18)
 	qa_label.position = Vector2(0, qa_y)
 	qa_label.add_theme_color_override("font_color", BONE_TEXT)
@@ -833,17 +833,17 @@ func _hex_points(cx: float, cy: float, s: float) -> PackedVector2Array:
 
 func build_CityMap(content: ColorRect, card: ColorRect, cw: float, ch: float, _data: Dictionary) -> void:
 	var districts := [
-		{"id": "suburb", "name": "Пригород", "percent": 72, "threat": "низкий", "connections": ["residential", "park"]},
-		{"id": "residential", "name": "Жилые кварталы", "percent": 48, "threat": "средний", "connections": ["suburb", "park", "school", "hospital"]},
-		{"id": "park", "name": "Парк", "percent": 35, "threat": "средний", "connections": ["suburb", "residential", "school"]},
-		{"id": "school", "name": "Школа", "percent": 15, "threat": "высокий", "connections": ["residential", "park", "hospital"]},
-		{"id": "hospital", "name": "Больница", "percent": 20, "threat": "высокий", "connections": ["residential", "school", "policestation"]},
-		{"id": "policestation", "name": "Полицейский участок", "percent": 60, "threat": "средний", "connections": ["hospital", "warehouse", "gasstation"]},
-		{"id": "gasstation", "name": "АЗС", "percent": 0, "threat": "критический", "connections": ["policestation", "warehouse"]},
-		{"id": "warehouse", "name": "Складской комплекс", "percent": 10, "threat": "высокий", "connections": ["policestation", "industrial", "gasstation"]},
-		{"id": "industrial", "name": "Промышленная зона", "percent": 5, "threat": "критический", "connections": ["warehouse", "substation", "powerplant"]},
-		{"id": "substation", "name": "Подстанция", "percent": 25, "threat": "высокий", "connections": ["industrial", "powerplant"]},
-		{"id": "powerplant", "name": "Электростанция", "percent": 0, "threat": "критический", "connections": ["industrial", "substation"]},
+		{"id": "suburb", "name": LocalizationManager.t("SCR_PRIGOROD"), "percent": 72, "threat": LocalizationManager.t("SCR_NIZKIY"), "connections": ["residential", "park"]},
+		{"id": "residential", "name": LocalizationManager.t("SCR_ZHILYE_KVARTALY"), "percent": 48, "threat": LocalizationManager.t("SCR_SREDNIY"), "connections": ["suburb", "park", "school", "hospital"]},
+		{"id": "park", "name": LocalizationManager.t("SCR_PARK"), "percent": 35, "threat": LocalizationManager.t("SCR_SREDNIY"), "connections": ["suburb", "residential", "school"]},
+		{"id": "school", "name": LocalizationManager.t("SCR_SHKOLA"), "percent": 15, "threat": LocalizationManager.t("SCR_VYSOKIY"), "connections": ["residential", "park", "hospital"]},
+		{"id": "hospital", "name": LocalizationManager.t("SCR_BOLNICA"), "percent": 20, "threat": LocalizationManager.t("SCR_VYSOKIY"), "connections": ["residential", "school", "policestation"]},
+		{"id": "policestation", "name": LocalizationManager.t("SCR_POLICEYSKIY_UCHASTOK"), "percent": 60, "threat": LocalizationManager.t("SCR_SREDNIY"), "connections": ["hospital", "warehouse", "gasstation"]},
+		{"id": "gasstation", "name": LocalizationManager.t("SCR_AZS"), "percent": 0, "threat": LocalizationManager.t("SCR_KRITICHESKIY"), "connections": ["policestation", "warehouse"]},
+		{"id": "warehouse", "name": LocalizationManager.t("SCR_SKLADSKOY_KOMPLEKS"), "percent": 10, "threat": LocalizationManager.t("SCR_VYSOKIY"), "connections": ["policestation", "industrial", "gasstation"]},
+		{"id": "industrial", "name": LocalizationManager.t("SCR_PROMYSHLENNAYA_ZONA"), "percent": 5, "threat": LocalizationManager.t("SCR_KRITICHESKIY"), "connections": ["warehouse", "substation", "powerplant"]},
+		{"id": "substation", "name": LocalizationManager.t("SCR_PODSTANCIYA"), "percent": 25, "threat": LocalizationManager.t("SCR_VYSOKIY"), "connections": ["industrial", "powerplant"]},
+		{"id": "powerplant", "name": LocalizationManager.t("SCR_ELEKTROSTANCIYA"), "percent": 0, "threat": LocalizationManager.t("SCR_KRITICHESKIY"), "connections": ["industrial", "substation"]},
 	]
 	var map_container := Control.new()
 	map_container.size = Vector2(content.size.x - 130, content.size.y)
@@ -932,12 +932,12 @@ func build_CityMap(content: ColorRect, card: ColorRect, cw: float, ch: float, _d
 	legend_container.position = Vector2(content.size.x - 125, 0)
 	content.add_child(legend_container)
 	var legend_items := [
-		["ВАШЕ ПОЛОЖЕНИЕ", Color(0.788, 0.635, 0.290)],
-		["АКТИВНОЕ ЗАДАНИЕ", Color(0.541, 0.451, 0.220)],
-		["ВОССТАНОВЛЕН", Color(0.373, 0.541, 0.306)],
-		["ЧАСТИЧНО", Color(0.788, 0.635, 0.290)],
-		["ТЁМНЫЙ", Color(0.706, 0.271, 0.184)],
-		["ЗАБЛОКИРОВАН", Color(0.165, 0.200, 0.251)],
+		[LocalizationManager.t("SCR_VASHE_POLOZHENIE"), Color(0.788, 0.635, 0.290)],
+		[LocalizationManager.t("SCR_AKTIVNOE_ZADANIE"), Color(0.541, 0.451, 0.220)],
+		[LocalizationManager.t("SCR_VOSSTANOVLEN"), Color(0.373, 0.541, 0.306)],
+		[LocalizationManager.t("SCR_CHASTICHNO"), Color(0.788, 0.635, 0.290)],
+		[LocalizationManager.t("SCR_TEMNYY"), Color(0.706, 0.271, 0.184)],
+		[LocalizationManager.t("SCR_ZABLOKIROVAN"), Color(0.165, 0.200, 0.251)],
 	]
 	var li_y := 10.0
 	for li in legend_items:
@@ -970,8 +970,8 @@ func build_CityMap(content: ColorRect, card: ColorRect, cw: float, ch: float, _d
 			overlap = true
 			break
 	var toggle_y := content.size.y - 28
-	_add_btn(content, "ПРОГРЕСС", Vector2(content.size.x / 2.0 - 100, toggle_y), Vector2(95, 24), func(): _show_toast("РЕЖИМ ПРОГРЕССА"))
-	_add_btn(content, "УГРОЗА", Vector2(content.size.x / 2.0 + 5, toggle_y), Vector2(95, 24), func(): _show_toast("РЕЖИМ УГРОЗЫ"))
+	_add_btn(content, LocalizationManager.t("SCR_PROGRESS"), Vector2(content.size.x / 2.0 - 100, toggle_y), Vector2(95, 24), func(): _show_toast(LocalizationManager.t("SCR_REZHIM_PROGRESSA")))
+	_add_btn(content, LocalizationManager.t("SCR_UGROZA"), Vector2(content.size.x / 2.0 + 5, toggle_y), Vector2(95, 24), func(): _show_toast(LocalizationManager.t("SCR_REZHIM_UGROZY")))
 
 func build_Journal(content: ColorRect, card: ColorRect, cw: float, ch: float) -> void:
 	var tab_data := [tr("JOURNAL_TAB_QUESTS"), tr("JOURNAL_TAB_DOCUMENTS"), tr("JOURNAL_TAB_NOTES")]
@@ -1115,7 +1115,7 @@ func build_Tutorial(content: ColorRect, card: ColorRect, cw: float, ch: float) -
 
 func build_Achievements(content: ColorRect, card: ColorRect, cw: float, ch: float) -> void:
 	var header := Label.new()
-	header.text = "ПРОГРЕСС ДОСТИЖЕНИЙ 28/56 (50%)"
+	header.text = LocalizationManager.t("SCR_PROGRESS_DOSTIZHENIY_28_56_50")
 	header.size = Vector2(content.size.x, 22)
 	header.position = Vector2(0, 0)
 	header.add_theme_color_override("font_color", BRASS)
@@ -1133,12 +1133,12 @@ func build_Achievements(content: ColorRect, card: ColorRect, cw: float, ch: floa
 	bar_fill.position = Vector2(0, 24)
 	content.add_child(bar_fill)
 	var achievements := [
-		{"title": "Первый свет", "desc": "Включите первый фонарь", "date": "21.05.2025", "unlocked": true},
-		{"title": "Исследователь", "desc": "Найдите 10 документов", "date": "18.05.2025", "unlocked": true},
-		{"title": "Электрик", "desc": "Запустите 3 генератора", "date": "17.05.2025", "unlocked": true},
-		{"title": "Невидимость", "desc": "Пройдите мимо монстра", "date": "15.05.2025", "unlocked": true},
-		{"title": "Выживший", "desc": "Переживите первую ночь", "date": "14.05.2025", "unlocked": true},
-		{"title": "Мастер света", "desc": "Восстановите 100 фонарей", "date": "", "unlocked": false},
+		{"title": LocalizationManager.t("SCR_PERVYY_SVET"), "desc": LocalizationManager.t("SCR_VKLYUCHITE_PERVYY_FONAR"), "date": "21.05.2025", "unlocked": true},
+		{"title": LocalizationManager.t("SCR_ISSLEDOVATEL"), "desc": LocalizationManager.t("SCR_NAYDITE_10_DOKUMENTOV"), "date": "18.05.2025", "unlocked": true},
+		{"title": LocalizationManager.t("SCR_ELEKTRIK"), "desc": LocalizationManager.t("SCR_ZAPUSTITE_3_GENERATORA"), "date": "17.05.2025", "unlocked": true},
+		{"title": LocalizationManager.t("SCR_NEVIDIMOST"), "desc": LocalizationManager.t("SCR_PROYDITE_MIMO_MONSTRA"), "date": "15.05.2025", "unlocked": true},
+		{"title": LocalizationManager.t("SCR_VYZHIVSHIY"), "desc": LocalizationManager.t("SCR_PEREZHIVITE_PERVUYU_NOCH"), "date": "14.05.2025", "unlocked": true},
+		{"title": LocalizationManager.t("SCR_MASTER_SVETA"), "desc": LocalizationManager.t("SCR_VOSSTANOVITE_100_FONAREY"), "date": "", "unlocked": false},
 	]
 	var scroll := ScrollContainer.new()
 	scroll.size = Vector2(content.size.x, content.size.y - 70)
@@ -1181,15 +1181,15 @@ func build_Achievements(content: ColorRect, card: ColorRect, cw: float, ch: floa
 			date_lbl.add_theme_font_size_override("font_size", 9)
 			row.add_child(date_lbl)
 	var show_hidden_y := content.size.y - 28
-	_add_btn(content, "ПОКАЗАТЬ СКРЫТЫЕ", Vector2(content.size.x / 2.0 - 80, show_hidden_y), Vector2(160, 24), func(): _show_toast("СКРЫТЫХ ДОСТИЖЕНИЙ НЕТ"))
+	_add_btn(content, LocalizationManager.t("SCR_POKAZAT_SKRYTYE"), Vector2(content.size.x / 2.0 - 80, show_hidden_y), Vector2(160, 24), func(): _show_toast(LocalizationManager.t("SCR_SKRYTYH_DOSTIZHENIY_NET")))
 
 func build_Stats(content: ColorRect, card: ColorRect, cw: float, ch: float) -> void:
 	var metrics := [
-		{"value": "12ч47м", "label": "ВРЕМЯ В ИГРЕ"},
-		{"value": "4/11", "label": "РАЙОНОВ"},
-		{"value": "18/42", "label": "ДОКУМЕНТОВ"},
-		{"value": "12/36", "label": "СЕКРЕТОВ"},
-		{"value": "3/8", "label": "ПОДСТАНЦИЙ"},
+		{"value": LocalizationManager.t("SCR_12CH47M"), "label": LocalizationManager.t("SCR_VREMYA_V_IGRE")},
+		{"value": "4/11", "label": LocalizationManager.t("SCR_RAYONOV")},
+		{"value": "18/42", "label": LocalizationManager.t("SCR_DOKUMENTOV")},
+		{"value": "12/36", "label": LocalizationManager.t("SCR_SEKRETOV")},
+		{"value": "3/8", "label": LocalizationManager.t("SCR_PODSTANCIY")},
 	]
 	var cards_per_row := 3
 	var card_w := (content.size.x - 30) / cards_per_row
@@ -1231,22 +1231,22 @@ func build_Death(card: ColorRect, cw: float, ch: float, d: Dictionary) -> void:
 		d.content = null
 	d.title_lbl.add_theme_color_override("font_color", EMPER)
 	d.title_lbl.add_theme_font_size_override("font_size", 28)
-	d.title_lbl.text = "ВЫ ПОГИБЛИ"
+	d.title_lbl.text = LocalizationManager.t("SCR_VY_POGIBLI")
 	var death_info := Label.new()
 	var tracker := get_tree().root.get_node_or_null("ProgressTracker")
 	var play_sec: int = int(GameManager.play_time) if GameManager else 0
 	var time_str := "%02d:%02d:%02d" % [play_sec / 3600, (play_sec / 60) % 60, play_sec % 60]
 	var docs_found: int = tracker.count_docs() if tracker else 0
 	var dist_restored: int = tracker.get_stats().get("districts", 0) if tracker else 0
-	death_info.text = "Продержались %s / Документов найдено %d / Восстановлено районов %d/11" % [time_str, docs_found, dist_restored]
+	death_info.text = LocalizationManager.t("SCR_PRODERZHALIS_S_DOKUMENTOV_NAYDENO_D_VOSSTANO") % [time_str, docs_found, dist_restored]
 	death_info.size = Vector2(cw - 40, 30)
 	death_info.position = Vector2(20, 80)
 	death_info.add_theme_color_override("font_color", STEEL_TEXT)
 	death_info.add_theme_font_size_override("font_size", 11)
 	_apply_outline(death_info)
 	card.add_child(death_info)
-	_add_btn(card, "ЗАГРУЗИТЬ СОХРАНЕНИЕ", Vector2(cw / 2.0 - 140, 140), Vector2(280, 42), _on_load)
-	_add_btn(card, "ГЛАВНОЕ МЕНЮ", Vector2(cw / 2.0 - 110, 200), Vector2(220, 42), _on_mainmenu)
+	_add_btn(card, LocalizationManager.t("SCR_ZAGRUZIT_SOHRANENIE"), Vector2(cw / 2.0 - 140, 140), Vector2(280, 42), _on_load)
+	_add_btn(card, LocalizationManager.t("SCR_GLAVNOE_MENYU"), Vector2(cw / 2.0 - 110, 200), Vector2(220, 42), _on_mainmenu)
 
 func build_Victory(content: ColorRect, card: ColorRect, cw: float, ch: float) -> void:
 	var title := Label.new()
@@ -1317,7 +1317,7 @@ func build_Saves(content: ColorRect, card: ColorRect, cw: float, ch: float) -> v
 		slot_border.position = Vector2(-1, -1)
 		slot_card.add_child(slot_border)
 		var slot_title := Label.new()
-		slot_title.text = "СЛОТ " + str(slot)
+		slot_title.text = LocalizationManager.t("SCR_SLOT") + str(slot)
 		slot_title.size = Vector2(200, 20)
 		slot_title.position = Vector2(10, 8)
 		slot_title.add_theme_color_override("font_color", BONE_TEXT)
@@ -1326,25 +1326,25 @@ func build_Saves(content: ColorRect, card: ColorRect, cw: float, ch: float) -> v
 		if si.exists:
 			var time_str := Time.get_datetime_string_from_unix_time(si.modified, false) if si.modified > 0 else ""
 			var exists_lbl := Label.new()
-			exists_lbl.text = "Есть сохранение | " + time_str
+			exists_lbl.text = LocalizationManager.t("SCR_EST_SOHRANENIE") + time_str
 			exists_lbl.size = Vector2(300, 18)
 			exists_lbl.position = Vector2(10, 32)
 			exists_lbl.add_theme_color_override("font_color", STEEL_TEXT)
 			exists_lbl.add_theme_font_size_override("font_size", 10)
 			slot_card.add_child(exists_lbl)
-			_add_btn(slot_card, "ЗАГРУЗИТЬ", Vector2(content.size.x - 290, 40), Vector2(80, 22), func(s = slot):
+			_add_btn(slot_card, LocalizationManager.t("SCR_ZAGRUZIT"), Vector2(content.size.x - 290, 40), Vector2(80, 22), func(s = slot):
 				sm.load_slot(s)
-				_show_toast("Загружено")
+				_show_toast(LocalizationManager.t("SCR_ZAGRUZHENO"))
 			)
 
-			_add_btn(slot_card, "ПЕРЕЗАПИСАТЬ", Vector2(content.size.x - 200, 40), Vector2(90, 22), func(s = slot):
+			_add_btn(slot_card, LocalizationManager.t("SCR_PEREZAPISAT"), Vector2(content.size.x - 200, 40), Vector2(90, 22), func(s = slot):
 				sm.save_slot(s)
-				_show_toast("Сохранено")
+				_show_toast(LocalizationManager.t("SCR_SOHRANENO"))
 			)
 
-			_add_btn(slot_card, "УДАЛИТЬ", Vector2(content.size.x - 100, 40), Vector2(70, 22), func(s = slot):
+			_add_btn(slot_card, LocalizationManager.t("SCR_UDALIT"), Vector2(content.size.x - 100, 40), Vector2(70, 22), func(s = slot):
 				sm.delete_slot(s)
-				_show_toast("Удалено")
+				_show_toast(LocalizationManager.t("SCR_UDALENO"))
 				for c in content.get_children():
 					c.queue_free()
 				build_Saves(content, card, cw, ch)
@@ -1352,27 +1352,27 @@ func build_Saves(content: ColorRect, card: ColorRect, cw: float, ch: float) -> v
 
 		else:
 			var empty_lbl := Label.new()
-			empty_lbl.text = "ПУСТОЙ СЛОТ"
+			empty_lbl.text = LocalizationManager.t("SCR_PUSTOY_SLOT")
 			empty_lbl.size = Vector2(200, 18)
 			empty_lbl.position = Vector2(10, 32)
 			empty_lbl.add_theme_color_override("font_color", BRASS_DIM)
 			empty_lbl.add_theme_font_size_override("font_size", 10)
 			slot_card.add_child(empty_lbl)
-			_add_btn(slot_card, "СОХРАНИТЬ", Vector2(content.size.x - 100, 40), Vector2(80, 22), func(s = slot):
+			_add_btn(slot_card, LocalizationManager.t("SCR_SOHRANIT"), Vector2(content.size.x - 100, 40), Vector2(80, 22), func(s = slot):
 				sm.save_slot(s)
-				_show_toast("Сохранено")
+				_show_toast(LocalizationManager.t("SCR_SOHRANENO"))
 			)
 
 		slot_y += 90
 
 func build_Bestiary(content: ColorRect, card: ColorRect, cw: float, ch: float) -> void:
 	var creatures := [
-		{"id": "Shadow", "desc": "Быстрый и скрытный. Активно реагирует на свет и шум. Избегает открытых пространств.", "health": 60, "speed": 90, "weakness": "Свет", "met": 7, "total": 15},
-		{"id": "Crawler", "desc": "Передвигается на четырёх конечностях. Появляется из темноты, атакует внезапно.", "health": 40, "speed": 70, "weakness": "Свет", "met": 5, "total": 12},
-		{"id": "Watcher", "desc": "Высокий, худой. Наблюдает издалека, атакует при приближении к свету. Боится яркого света.", "health": 80, "speed": 50, "weakness": "Свет", "met": 4, "total": 10},
-		{"id": "Hunter", "desc": "Целенаправленно преследует жертву. Реагирует на шум на большом расстоянии.", "health": 100, "speed": 75, "weakness": "Свет", "met": 3, "total": 8},
-		{"id": "Destroyer", "desc": "Массивная неуязвимая машина разрушения. Появляется при критической угрозе.", "health": 200, "speed": 30, "weakness": "Свет", "met": 1, "total": 3},
-		{"id": "Boss", "desc": "Финальный противник. Встречается в центре электростанции в финальную ночь.", "health": 500, "speed": 60, "weakness": "Свет", "met": 0, "total": 1},
+		{"id": "Shadow", "desc": LocalizationManager.t("SCR_BYSTRYY_I_SKRYTNYY_AKTIVNO_REAGIRUET_NA_SVET"), "health": 60, "speed": 90, "weakness": LocalizationManager.t("SCR_SVET"), "met": 7, "total": 15},
+		{"id": "Crawler", "desc": LocalizationManager.t("SCR_PEREDVIGAETSYA_NA_CHETYREH_KONECHNOSTYAH_POY"), "health": 40, "speed": 70, "weakness": LocalizationManager.t("SCR_SVET"), "met": 5, "total": 12},
+		{"id": "Watcher", "desc": LocalizationManager.t("SCR_VYSOKIY_HUDOY_NABLYUDAET_IZDALEKA_ATAKUET_PR"), "health": 80, "speed": 50, "weakness": LocalizationManager.t("SCR_SVET"), "met": 4, "total": 10},
+		{"id": "Hunter", "desc": LocalizationManager.t("SCR_CELENAPRAVLENNO_PRESLEDUET_ZHERTVU_REAGIRUET"), "health": 100, "speed": 75, "weakness": LocalizationManager.t("SCR_SVET"), "met": 3, "total": 8},
+		{"id": "Destroyer", "desc": LocalizationManager.t("SCR_MASSIVNAYA_NEUYAZVIMAYA_MASHINA_RAZRUSHENIYA"), "health": 200, "speed": 30, "weakness": LocalizationManager.t("SCR_SVET"), "met": 1, "total": 3},
+		{"id": "Boss", "desc": LocalizationManager.t("SCR_FINALNYY_PROTIVNIK_VSTRECHAETSYA_V_CENTRE_EL"), "health": 500, "speed": 60, "weakness": LocalizationManager.t("SCR_SVET"), "met": 0, "total": 1},
 	]
 	var scroll := ScrollContainer.new()
 	scroll.size = Vector2(content.size.x, content.size.y)
@@ -1413,7 +1413,7 @@ func build_Bestiary(content: ColorRect, card: ColorRect, cw: float, ch: float) -
 		desc_lbl.add_theme_font_size_override("font_size", 9)
 		frame.add_child(desc_lbl)
 		var stats_lbl := Label.new()
-		stats_lbl.text = "Здоровье: %d  Скорость: %d  Слабые стороны: %s  |  Встречено %d/%d" % [c.health, c.speed, c.weakness, c.met, c.total]
+		stats_lbl.text = LocalizationManager.t("SCR_ZDOROVE_D_SKOROST_D_SLABYE_STORONY_S_VSTRECH") % [c.health, c.speed, c.weakness, c.met, c.total]
 		stats_lbl.size = Vector2(vbox.size.x - 100, 18)
 		stats_lbl.position = Vector2(82, 72)
 		stats_lbl.add_theme_color_override("font_color", BRASS_DIM)
@@ -1432,12 +1432,12 @@ func build_Character(content: ColorRect, card: ColorRect, cw: float, ch: float) 
 
 func build_FlashlightUpgrade(content: ColorRect, card: ColorRect, cw: float, ch: float) -> void:
 	var params := [
-		{"name": "Яркость", "level": 3, "max": 5},
-		{"name": "Дальность", "level": 2, "max": 5},
-		{"name": "Угол света", "level": 4, "max": 5},
-		{"name": "Расход батареи", "level": 2, "max": 5},
-		{"name": "Стабильность", "level": 3, "max": 5},
-		{"name": "Ёмкость", "level": 2, "max": 5},
+		{"name": LocalizationManager.t("SCR_YARKOST"), "level": 3, "max": 5},
+		{"name": LocalizationManager.t("SCR_DALNOST"), "level": 2, "max": 5},
+		{"name": LocalizationManager.t("SCR_UGOL_SVETA"), "level": 4, "max": 5},
+		{"name": LocalizationManager.t("SCR_RASHOD_BATAREI"), "level": 2, "max": 5},
+		{"name": LocalizationManager.t("SCR_STABILNOST"), "level": 3, "max": 5},
+		{"name": LocalizationManager.t("SCR_EMKOST"), "level": 2, "max": 5},
 	]
 	for i in params.size():
 		var py := 5 + i * 30
@@ -1474,7 +1474,7 @@ func build_FlashlightUpgrade(content: ColorRect, card: ColorRect, cw: float, ch:
 	preview_frame.position = Vector2(preview_x, preview_y)
 	content.add_child(preview_frame)
 	var preview_lbl := Label.new()
-	preview_lbl.text = "ФОНАРЬ"
+	preview_lbl.text = LocalizationManager.t("SCR_FONAR")
 	preview_lbl.size = Vector2(100, 20)
 	preview_lbl.position = Vector2(0, 30)
 	preview_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -1482,7 +1482,7 @@ func build_FlashlightUpgrade(content: ColorRect, card: ColorRect, cw: float, ch:
 	preview_lbl.add_theme_font_size_override("font_size", 10)
 	preview_frame.add_child(preview_lbl)
 	var level_info := Label.new()
-	level_info.text = "ТЕКУЩИЙ УРОВЕНЬ 3"
+	level_info.text = LocalizationManager.t("SCR_TEKUSCHIY_UROVEN_3")
 	level_info.size = Vector2(160, 20)
 	level_info.position = Vector2(5, 190)
 	level_info.add_theme_color_override("font_color", BONE_TEXT)
@@ -1490,14 +1490,14 @@ func build_FlashlightUpgrade(content: ColorRect, card: ColorRect, cw: float, ch:
 	_apply_outline(level_info)
 	content.add_child(level_info)
 	var cost_info := Label.new()
-	cost_info.text = "СТОИМОСТЬ 2500"
+	cost_info.text = LocalizationManager.t("SCR_STOIMOST_2500")
 	cost_info.size = Vector2(160, 20)
 	cost_info.position = Vector2(5, 212)
 	cost_info.add_theme_color_override("font_color", BRASS)
 	cost_info.add_theme_font_size_override("font_size", 12)
 	_apply_outline(cost_info)
 	content.add_child(cost_info)
-	_add_btn(content, "УЛУЧШИТЬ", Vector2(content.size.x / 2.0 - 60, content.size.y - 36), Vector2(120, 30), func(): _show_toast("УЛУЧШЕНИЕ ПРИМЕНЕНО"))
+	_add_btn(content, LocalizationManager.t("SCR_ULUCHSHIT"), Vector2(content.size.x / 2.0 - 60, content.size.y - 36), Vector2(120, 30), func(): _show_toast(LocalizationManager.t("SCR_ULUCHSHENIE_PRIMENENO")))
 
 func build_PhotoMode(content: ColorRect, card: ColorRect, cw: float, ch: float, d: Dictionary) -> void:
 	var photo := get_node_or_null("PhotoModeOverlay")
@@ -1526,7 +1526,7 @@ func build_ControlsTouch(content: ColorRect, card: ColorRect, cw: float, ch: flo
 	screen.position = Vector2(6, 6)
 	phone_frame.add_child(screen)
 	var screen_lbl := Label.new()
-	screen_lbl.text = "ТЕЛЕФОН"
+	screen_lbl.text = LocalizationManager.t("SCR_TELEFON")
 	screen_lbl.size = Vector2(108, 20)
 	screen_lbl.position = Vector2(0, 84)
 	screen_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -1534,11 +1534,11 @@ func build_ControlsTouch(content: ColorRect, card: ColorRect, cw: float, ch: flo
 	screen_lbl.add_theme_font_size_override("font_size", 10)
 	screen.add_child(screen_lbl)
 	var controls := [
-		{"label": "Фонарик", "value": "Действие"},
-		{"label": "Действие", "value": "Стойка"},
-		{"label": "Погода", "value": "День"},
-		{"label": "Угол камеры", "value": "45°"},
-		{"label": "Фильтр", "value": "Авто"},
+		{"label": LocalizationManager.t("SCR_FONARIK"), "value": LocalizationManager.t("SCR_DEYSTVIE")},
+		{"label": LocalizationManager.t("SCR_DEYSTVIE"), "value": LocalizationManager.t("SCR_STOYKA")},
+		{"label": LocalizationManager.t("SCR_POGODA"), "value": LocalizationManager.t("SCR_DEN")},
+		{"label": LocalizationManager.t("SCR_UGOL_KAMERY"), "value": "45°"},
+		{"label": LocalizationManager.t("SCR_FILTR"), "value": LocalizationManager.t("SCR_AVTO")},
 	]
 	var cx := 145.0
 	var cy := 10.0
@@ -1558,7 +1558,7 @@ func build_ControlsTouch(content: ColorRect, card: ColorRect, cw: float, ch: flo
 		val.add_theme_font_size_override("font_size", 10)
 		content.add_child(val)
 	var tip := Label.new()
-	tip.text = "Совет: настройте расположение кнопок"
+	tip.text = LocalizationManager.t("SCR_SOVET_NASTROYTE_RASPOLOZHENIE_KNOPOK")
 	tip.size = Vector2(content.size.x - 10, 18)
 	tip.position = Vector2(5, content.size.y - 24)
 	tip.add_theme_color_override("font_color", STEEL_TEXT)
@@ -1567,10 +1567,10 @@ func build_ControlsTouch(content: ColorRect, card: ColorRect, cw: float, ch: flo
 
 func build_Weather(content: ColorRect, card: ColorRect, cw: float, ch: float) -> void:
 	var weathers := [
-		{"name": "Дождь", "effect": "Уменьшает видимость, увеличивает шум"},
-		{"name": "Туман", "effect": "Сильно снижает видимость"},
-		{"name": "Гроза", "effect": "Молнии привлекают монстров"},
-		{"name": "Ветер", "effect": "Увеличивает уровень шума"},
+		{"name": LocalizationManager.t("SCR_DOZHD"), "effect": LocalizationManager.t("SCR_UMENSHAET_VIDIMOST_UVELICHIVAET_SHUM")},
+		{"name": LocalizationManager.t("SCR_TUMAN"), "effect": LocalizationManager.t("SCR_SILNO_SNIZHAET_VIDIMOST")},
+		{"name": LocalizationManager.t("SCR_GROZA"), "effect": LocalizationManager.t("SCR_MOLNII_PRIVLEKAYUT_MONSTROV")},
+		{"name": LocalizationManager.t("SCR_VETER"), "effect": LocalizationManager.t("SCR_UVELICHIVAET_UROVEN_SHUMA")},
 	]
 	var card_w := (content.size.x - 20) / 2.0
 	var card_h := (content.size.y - 10) / 2.0
@@ -1673,7 +1673,7 @@ func build_StoryScene(card: ColorRect, cw: float, ch: float, d: Dictionary) -> v
 	preview.position = Vector2(20, 56)
 	card.add_child(preview)
 	var preview_lbl := Label.new()
-	preview_lbl.text = "СЦЕНА"
+	preview_lbl.text = LocalizationManager.t("SCR_SCENA")
 	preview_lbl.size = Vector2(preview.size.x, 24)
 	preview_lbl.position = Vector2(0, preview.size.y / 2.0 - 12)
 	preview_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -1686,7 +1686,7 @@ func build_StoryScene(card: ColorRect, cw: float, ch: float, d: Dictionary) -> v
 	dialog_bar.position = Vector2(20, preview.size.y + preview.position.y + 4)
 	card.add_child(dialog_bar)
 	var dialog_lbl := Label.new()
-	dialog_lbl.text = "Неизвестный: Они говорили, что это временно... что система выдержит. Но система не выдержала нас."
+	dialog_lbl.text = LocalizationManager.t("SCR_NEIZVESTNYY_ONI_GOVORILI_CHTO_ETO_VREMENNO_C")
 	dialog_lbl.size = Vector2(dialog_bar.size.x - 20, 44)
 	dialog_lbl.position = Vector2(10, 6)
 	dialog_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -1694,7 +1694,7 @@ func build_StoryScene(card: ColorRect, cw: float, ch: float, d: Dictionary) -> v
 	dialog_lbl.add_theme_font_size_override("font_size", 11)
 	dialog_bar.add_child(dialog_lbl)
 	var skip_lbl := Label.new()
-	skip_lbl.text = "ПРОПУСТИТЬ [SPACE]"
+	skip_lbl.text = LocalizationManager.t("SCR_PROPUSTIT_SPACE")
 	skip_lbl.size = Vector2(180, 20)
 	skip_lbl.position = Vector2(cw / 2.0 - 90, ch - 24)
 	skip_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -1749,14 +1749,14 @@ func build_FinalNight(content: ColorRect, card: ColorRect, cw: float, ch: float,
 
 func build_PowerGrid(content: ColorRect, card: ColorRect, cw: float, ch: float) -> void:
 	var substations := [
-		{"name": "ПС-1", "pos": Vector2(60, 120), "status": "green"},
-		{"name": "ПС-2", "pos": Vector2(180, 60), "status": "amber"},
-		{"name": "ПС-3", "pos": Vector2(180, 180), "status": "red"},
-		{"name": "ПС-4", "pos": Vector2(300, 100), "status": "amber"},
-		{"name": "ПС-5", "pos": Vector2(300, 200), "status": "green"},
-		{"name": "ПС-6", "pos": Vector2(400, 140), "status": "red"},
-		{"name": "ПС-7", "pos": Vector2(420, 50), "status": "green"},
-		{"name": "ПС-8", "pos": Vector2(460, 200), "status": "red"},
+		{"name": LocalizationManager.t("SCR_PS_1"), "pos": Vector2(60, 120), "status": "green"},
+		{"name": LocalizationManager.t("SCR_PS_2"), "pos": Vector2(180, 60), "status": "amber"},
+		{"name": LocalizationManager.t("SCR_PS_3"), "pos": Vector2(180, 180), "status": "red"},
+		{"name": LocalizationManager.t("SCR_PS_4"), "pos": Vector2(300, 100), "status": "amber"},
+		{"name": LocalizationManager.t("SCR_PS_5"), "pos": Vector2(300, 200), "status": "green"},
+		{"name": LocalizationManager.t("SCR_PS_6"), "pos": Vector2(400, 140), "status": "red"},
+		{"name": LocalizationManager.t("SCR_PS_7"), "pos": Vector2(420, 50), "status": "green"},
+		{"name": LocalizationManager.t("SCR_PS_8"), "pos": Vector2(460, 200), "status": "red"},
 	]
 	var lines := [[0,1],[0,2],[1,3],[2,3],[2,4],[3,5],[4,5],[1,6],[3,6],[5,7],[6,7]]
 	for l in lines:
@@ -1782,7 +1782,7 @@ func build_PowerGrid(content: ColorRect, card: ColorRect, cw: float, ch: float) 
 		lbl.add_theme_font_size_override("font_size", 8)
 		content.add_child(lbl)
 	var voltage := Label.new()
-	voltage.text = "Напряжение в сети: 42%"
+	voltage.text = LocalizationManager.t("SCR_NAPRYAZHENIE_V_SETI_42")
 	voltage.size = Vector2(content.size.x, 20)
 	voltage.position = Vector2(10, 10)
 	voltage.add_theme_color_override("font_color", BRASS)
@@ -1790,14 +1790,14 @@ func build_PowerGrid(content: ColorRect, card: ColorRect, cw: float, ch: float) 
 	_apply_outline(voltage)
 	content.add_child(voltage)
 	var active := Label.new()
-	active.text = "Активные подстанции: 3/8"
+	active.text = LocalizationManager.t("SCR_AKTIVNYE_PODSTANCII_3_8")
 	active.size = Vector2(content.size.x, 18)
 	active.position = Vector2(10, 34)
 	active.add_theme_color_override("font_color", STEEL_TEXT)
 	active.add_theme_font_size_override("font_size", 11)
 	content.add_child(active)
 	var legend_y := content.size.y - 60
-	var legend_items := [["Активна", STAMINA_GREEN], ["Частично", BRASS], ["Отключена", EMPER]]
+	var legend_items := [[LocalizationManager.t("SCR_AKTIVNA"), STAMINA_GREEN], [LocalizationManager.t("SCR_CHASTICHNO_2"), BRASS], [LocalizationManager.t("SCR_OTKLYUCHENA"), EMPER]]
 	for i in legend_items.size():
 		var dot := ColorRect.new()
 		dot.color = legend_items[i][1]
@@ -1814,7 +1814,7 @@ func build_PowerGrid(content: ColorRect, card: ColorRect, cw: float, ch: float) 
 
 func build_Events(content: ColorRect, card: ColorRect, cw: float, ch: float) -> void:
 	var weather_info := Label.new()
-	weather_info.text = "Ночь | Дождь | Туман"
+	weather_info.text = LocalizationManager.t("SCR_NOCH_DOZHD_TUMAN")
 	weather_info.size = Vector2(content.size.x, 22)
 	weather_info.position = Vector2(0, 5)
 	weather_info.add_theme_color_override("font_color", BONE_TEXT)
@@ -1822,9 +1822,9 @@ func build_Events(content: ColorRect, card: ColorRect, cw: float, ch: float) -> 
 	_apply_outline(weather_info)
 	content.add_child(weather_info)
 	var events := [
-		{"name": "Сигнал бедствия с крыши", "time": "00:12:34"},
-		{"name": "Авария на подстанции", "time": "01:45:10"},
-		{"name": "Внезапное отключение света в парке", "time": "02:20:05"},
+		{"name": LocalizationManager.t("SCR_SIGNAL_BEDSTVIYA_S_KRYSHI"), "time": "00:12:34"},
+		{"name": LocalizationManager.t("SCR_AVARIYA_NA_PODSTANCII"), "time": "01:45:10"},
+		{"name": LocalizationManager.t("SCR_VNEZAPNOE_OTKLYUCHENIE_SVETA_V_PARKE"), "time": "02:20:05"},
 	]
 	var list_y := 36.0
 	for e in events:
@@ -1852,7 +1852,7 @@ func build_Events(content: ColorRect, card: ColorRect, cw: float, ch: float) -> 
 
 func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 	var header := Label.new()
-	header.text = "МОНЕТЫ: 0"
+	header.text = LocalizationManager.t("SCR_MONETY_0")
 	header.name = "ShopCoinHeader"
 	header.size = Vector2(content.size.x, 30)
 	header.position = Vector2(0, 0)
@@ -1860,14 +1860,14 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 	header.add_theme_font_size_override("font_size", 18)
 	header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	content.add_child(header)
-	header.text = "МОНЕТЫ: " + str(CoinWallet.get_coins())
-	EventBus.coins_changed.connect(func(v: int): header.text = "МОНЕТЫ: " + str(v), CONNECT_ONE_SHOT)
+	header.text = LocalizationManager.t("SCR_MONETY_2") + str(CoinWallet.get_coins())
+	EventBus.coins_changed.connect(func(v: int): header.text = LocalizationManager.t("SCR_MONETY_2") + str(v), CONNECT_ONE_SHOT)
 	var tab_h := HBoxContainer.new()
 	tab_h.size = Vector2(content.size.x, 28)
 	tab_h.position = Vector2(0, 34)
 	tab_h.alignment = BoxContainer.ALIGNMENT_CENTER
 	content.add_child(tab_h)
-	var tabs := ["УЛУЧШЕНИЯ", "ПРЕДМЕТЫ", "МОНЕТЫ"]
+	var tabs := [LocalizationManager.t("SCR_ULUCHSHENIYA"), LocalizationManager.t("SCR_PREDMETY"), LocalizationManager.t("SCR_MONETY")]
 	var current_tab := 0
 	var tab_btns := []
 	for t in tabs:
@@ -1920,14 +1920,14 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 		var price: float = it.get("price_coins", 0)
 		# IAP-путь удалён — только монеты.
 		var pl := Label.new()
-		pl.text = str(price) + " монет"
+		pl.text = str(price) + LocalizationManager.t("SCR_MONET")
 		pl.size = Vector2(card_item.size.x - 10, 16)
 		pl.position = Vector2(5, 60)
 		pl.add_theme_color_override("font_color", Color(0.788, 0.635, 0.290))
 		pl.add_theme_font_size_override("font_size", 11)
 		pl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		card_item.add_child(pl)
-		var btn := _make_btn("КУПИТЬ", Vector2(card_item.size.x / 2.0 - 45, 76), Vector2(90, 22))
+		var btn := _make_btn(LocalizationManager.t("SCR_KUPIT"), Vector2(card_item.size.x / 2.0 - 45, 76), Vector2(90, 22))
 		btn.pressed.connect(_on_buy.bind(it.id, int(price)))
 		card_item.add_child(btn)
 	# Реклама отключена (кнопка удалена)
@@ -1942,9 +1942,9 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 func _on_buy(item_id: String, price: int) -> void:
 	if CoinWallet.try_spend(price):
 		EventBus.purchase_done.emit(item_id, true)
-		_show_toast("КУПЛЕНО!")
+		_show_toast(LocalizationManager.t("SCR_KUPLENO"))
 	else:
-		_show_toast("НЕ ХВАТАЕТ МОНЕТ")
+		_show_toast(LocalizationManager.t("SCR_NE_HVATAET_MONET"))
 
 func _show_toast(msg: String) -> void:
 	var existing := get_node_or_null("Toast")
