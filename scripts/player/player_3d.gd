@@ -59,6 +59,8 @@ var _crouch_timer: float = 0.0
 var _hiding_spot: Node3D = null
 var _in_hiding: bool = false
 var _footstep_system: Node = null
+const INTERACTOR_SCRIPT: Script = preload("res://scripts/player/interactor.gd")
+var _interactor: Node = null
 
 const COMBO_DATA: Array = [
 	{ "windup": 0.25, "active": 0.15, "recovery": 0.15, "dmg": 8, "stam": 5, "knockback": 0.0 },
@@ -245,6 +247,12 @@ func _ready() -> void:
 		isv.jump_requested.connect(_buffer_jump)
 		isv.flashlight_requested.connect(toggle_flashlight)
 		isv.dodge_requested.connect(_handle_dodge)
+	# Взаимодействие с миром. До этого клавиша interact умела только осмотр
+	# и вход в укрытие: рубильники районов, генераторы и двери, у которых
+	# есть interact(), не вызывались ниоткуда — район нельзя было запитать.
+	_interactor = INTERACTOR_SCRIPT.new()
+	_interactor.setup(self, flashlight_pivot)
+	add_child(_interactor)
 	var gm := get_node_or_null("/root/GameManager")
 	call_deferred("_resolve_camera")
 	if gm and gm.has_method("is_playing") and gm.is_playing():
@@ -484,7 +492,6 @@ func _physics_process(delta: float) -> void:
 
 	_update_stamina(delta)
 	_update_battery(delta)
-	_update_hiding(delta)
 	_battery_log_timer += delta
 	if DEBUG_FLASHLIGHT and _battery_log_timer >= 1.0:
 		_battery_log_timer = 0.0
@@ -857,32 +864,37 @@ func _emit_footstep(weight_ratio: float) -> void:
 		cap = float(im.stats.get("capacity_kg"))
 	_footstep_system.play_step(current_state, _speed_for(current_state), weight_ratio * cap)
 
-func _update_hiding(delta: float) -> void:
+## Укрытие переключает Interactor через hiding_spot.interact(). Раньше клавишу
+## опрашивали здесь напрямую, из-за чего один и тот же нажатый interact мог
+## одновременно и спрятать игрока, и сработать по другому объекту.
+func toggle_hiding(spot: Node3D) -> void:
 	if not gameplay_active:
 		return
-	if InputService.is_interact_just_pressed():
-		if _in_hiding:
-			_exit_hiding()
-		else:
-			_try_enter_hiding()
+	if _in_hiding:
+		_exit_hiding()
+	else:
+		_enter_hiding(spot)
 
-func _try_enter_hiding() -> void:
-	var spots := get_tree().get_nodes_in_group("hiding_spot")
-	for spot in spots:
-		if spot.global_position.distance_to(global_position) < 2.0:
-			_hiding_spot = spot as Node3D
-			_in_hiding = true
-			can_move = false
-			velocity = Vector3.ZERO
-			global_position = _hiding_spot.global_position
-			visibility = 0.0
-			EventBus.player_hiding_changed.emit(true)
-			return
+func _enter_hiding(spot: Node3D) -> void:
+	if spot == null or not is_instance_valid(spot):
+		return
+	if spot.has_method("enter") and not spot.call("enter", self):
+		return
+	_hiding_spot = spot
+	_in_hiding = true
+	can_move = false
+	velocity = Vector3.ZERO
+	global_position = spot.global_position
+	visibility = 0.0
+	EventBus.player_hiding_changed.emit(true)
 
 func _exit_hiding() -> void:
 	if _hiding_spot:
+		if is_instance_valid(_hiding_spot) and _hiding_spot.has_method("exit"):
+			_hiding_spot.call("exit")
 		_in_hiding = false
 		can_move = true
+		visibility = 1.0
 		EventBus.player_hiding_changed.emit(false)
 		_hiding_spot = null
 

@@ -17,6 +17,17 @@ const DOC_SCENE: PackedScene = preload("res://scenes/pickups/document_pickup.tsc
 ## Базовый набор: встречается почти везде, поддерживает фонарь и здоровье.
 const COMMON: Array[StringName] = [&"battery", &"battery", &"scrap", &"medkit"]
 
+## Три детали, за которые щит района поднимает стадию (см. power_switch.gd:
+## кабель -> PARTIAL, предохранитель -> STREETS, транзистор -> FULL).
+## Лежат в каждом районе, и это обязательное условие проходимости: район
+## открывается только после того, как предыдущий доведён до FULL, поэтому
+## недостающую деталь физически неоткуда принести — игрок запирался бы
+## в пригороде навсегда. Здесь их по две штуки: запас на случай, если
+## игрок потратит деталь на соседний район.
+const REPAIR_PARTS: Array[StringName] = [
+	&"cable", &"cable", &"fuse", &"fuse", &"transistor", &"transistor",
+]
+
 ## Тематический набор района — то, ради чего в него имеет смысл заходить.
 const BY_DISTRICT: Dictionary = {
 	&"suburbs":       [&"battery", &"scrap", &"cable"],
@@ -72,6 +83,7 @@ static func populate(district_root: Node3D, district_id: StringName) -> int:
 
 	var items: Array[StringName] = []
 	items.append_array(COMMON)
+	items.append_array(REPAIR_PARTS)
 	var themed: Array = BY_DISTRICT.get(district_id, [])
 	for it in themed:
 		items.append(StringName(it))

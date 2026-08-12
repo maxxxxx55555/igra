@@ -72,8 +72,18 @@ func all_restored() -> bool:
 		if d.stage < DistrictData.Stage.FULL:
 			return false
 	return true
+## Раньше здесь немедленно объявлялась победа, как только последний район
+## доходил до FULL: игра заканчивалась экраном победы, минуя финальную ночь
+## и босса — при том, что Архитектор написан целиком. Теперь восстановление
+## сети только запускает финал, а побеждает игрок, победив босса
+## (см. scripts/world/finale_director.gd).
 func _check_victory() -> void:
-	if all_restored():
+	if not all_restored():
+		return
+	var fd := get_node_or_null("/root/FinaleDirector")
+	if fd == null:
+		# Подстраховка: если финального режиссёра нет в дереве, город
+		# восстановлен — этого достаточно для победы, зависать нельзя.
 		GameManager.trigger_win()
 
 ## Бинарный взгляд на стадию: район «под напряжением», если улицы горят.

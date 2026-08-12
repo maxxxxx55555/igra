@@ -108,6 +108,7 @@ scripts/player/death_sequence.gd
 scripts/player/flashlight.gd
 scripts/player/flashlight_stats.gd
 scripts/player/interact_zone.gd
+scripts/player/interactor.gd
 scripts/player/player.gd
 scripts/player/player_3d.gd
 scripts/player/player_stats.gd
@@ -257,6 +258,7 @@ scripts/world/district_themes.gd
 scripts/world/district_trigger.gd
 scripts/world/emissive_windows.gd
 scripts/world/examine_object.gd
+scripts/world/finale_director.gd
 scripts/world/ftue_generator.gd
 scripts/world/ftue_generator_3d.gd
 scripts/world/interior_zone.gd

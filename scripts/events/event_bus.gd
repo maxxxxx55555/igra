@@ -37,6 +37,7 @@ signal player_died
 
 signal achievement_unlocked(achievement_id: String)
 signal boss_defeated()
+signal boss_spawned()
 signal coins_changed(amount: int)
 signal district_blackout(district_id: StringName)
 signal district_restored(district_id: StringName, stage: int)
@@ -54,6 +55,9 @@ signal game_started
 signal game_state_changed(state: int)
 signal game_won
 signal hud_visibility_changed(visible: bool)
+## Текст подсказки под прицелом («Включить рубильник», «Спрятаться»).
+## Отдельно от player_interact_available: тот только показывает/прячет.
+signal interact_prompt_changed(text: String)
 signal interaction_done(object_id: String)
 signal inventory_changed
 signal inventory_notice(message: String)

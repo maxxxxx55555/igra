@@ -74,6 +74,8 @@ func _ready() -> void:
 	EventBus.player_battery_changed.connect(_on_bat)
 	EventBus.ammo_changed.connect(_on_ammo_changed)
 	EventBus.player_interact_available.connect(func(avail: bool): prompt.visible = avail)
+	# Подсказка была вечно пустой строкой: текст в неё никто не писал.
+	EventBus.interact_prompt_changed.connect(func(text: String) -> void: prompt.text = text)
 	EventBus.inventory_weight_changed.connect(_on_weight_changed)
 	EventBus.inventory_notice.connect(func(msg: String): _show_notice(msg))
 	EventBus.monster_spotted.connect(_on_monster_spotted)

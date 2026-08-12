@@ -1,40 +1,168 @@
 extends Control
+## Карта города: прогресс энергосети и переход между районами.
+##
+## Прежняя версия была заглушкой: восемь кружков через _draw(), английские
+## подписи мимо локализации, кнопка «Close (K)» и никакой возможности
+## куда-либо пойти. Между тем перемещаться по городу больше нечем — в
+## районах нет порталов, а WorldRuntime умеет строить любой район по
+## сигналу district_entered. Пока карта молчала, игрок навсегда оставался
+## в пригороде, то есть 10 из 11 районов были недостижимы.
+##
+## Теперь это рабочий экран: видно стадию каждого района, что его открывает
+## и куда можно отправиться.
 
-const CANON := ["suburbs","residential","park","school","hospital","gas_station","police","warehouses","industrial","substation","power_station"]
+const CANON: Array[StringName] = [
+	&"suburbs", &"residential", &"park", &"school", &"hospital", &"gas_station",
+	&"police", &"warehouses", &"industrial", &"substation", &"power_station",
+]
+
+## Цвет кружка по стадии восстановления.
+const STAGE_COLORS: Array[Color] = [
+	Color(0.30, 0.31, 0.35),  # DARK
+	Color(0.55, 0.42, 0.20),  # PARTIAL
+	Color(0.79, 0.64, 0.29),  # STREETS
+	Color(0.37, 0.54, 0.31),  # FULL
+]
+
+## Ключи перечислены явно, а не собираются как "MAP_STAGE_%d": проверка
+## локализации ищет ключи по коду и на склеенных именах ничего не находит.
+const STAGE_KEYS: Array[String] = [
+	"MAP_STAGE_0", "MAP_STAGE_1", "MAP_STAGE_2", "MAP_STAGE_3",
+]
+
+var _list: VBoxContainer = null
+var _title: Label = null
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	set_anchors_preset(Control.PRESET_FULL_RECT)
+	theme = ThemeProvider.build_theme()
+	_build()
+	EventBus.district_stage_changed.connect(func(_a: StringName, _b: int) -> void: _refresh())
+	EventBus.district_entered.connect(func(_a: StringName) -> void: _refresh())
+	visibility_changed.connect(func() -> void:
+		if visible:
+			_refresh())
+
+func _build() -> void:
 	var bg := ColorRect.new()
-	bg.color = Color(0.04, 0.05, 0.07, 0.94)
+	bg.color = Color(0.047, 0.063, 0.086, 0.94)
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
-	var t := Label.new()
-	t.text = "CITY POWER MAP"
-	t.position = Vector2(20, 10)
-	t.add_theme_font_size_override("font_size", 22)
-	t.add_theme_color_override("font_color", Color(1.0, 0.75, 0.3))
-	add_child(t)
-	var b := Button.new()
-	b.text = "Close (K)"
-	b.position = Vector2(20, 520)
-	b.pressed.connect(_close)
-	add_child(b)
+
+	var panel := PanelContainer.new()
+	panel.set_anchors_preset(Control.PRESET_CENTER)
+	panel.custom_minimum_size = Vector2(720, 560)
+	add_child(panel)
+
+	var root := VBoxContainer.new()
+	root.add_theme_constant_override("separation", 10)
+	panel.add_child(root)
+
+	_title = Label.new()
+	_title.add_theme_font_size_override("font_size", ThemeProvider.FONT_SIZE_TITLE)
+	_title.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
+	root.add_child(_title)
+
+	var scroll := ScrollContainer.new()
+	scroll.custom_minimum_size = Vector2(680, 440)
+	root.add_child(scroll)
+
+	_list = VBoxContainer.new()
+	_list.add_theme_constant_override("separation", 6)
+	_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.add_child(_list)
+
+	var close := Button.new()
+	close.text = LocalizationManager.t("BTN_CLOSE")
+	close.custom_minimum_size = Vector2(160, 40)
+	close.pressed.connect(_close)
+	root.add_child(close)
+
+func _refresh() -> void:
+	if _list == null:
+		return
+	for c in _list.get_children():
+		c.queue_free()
+	var pg := get_node_or_null("/root/PowerGrid")
+	var dm := get_node_or_null("/root/DistrictManager")
+	var current: StringName = StringName(dm.current_district) if dm != null else &""
+	var restored := 0
+	for id in CANON:
+		if pg != null and pg.get_stage(id) >= DistrictData.Stage.FULL:
+			restored += 1
+	if _title != null:
+		_title.text = LocalizationManager.tf("MAP_PROGRESS", [restored, CANON.size()])
+
+	for id in CANON:
+		_list.add_child(_make_row(id, pg, current))
+
+func _make_row(id: StringName, pg: Node, current: StringName) -> Control:
+	var stage: int = pg.get_stage(id) if pg != null else 0
+	var unlocked: bool = pg.is_unlocked(id) if pg != null else false
+	var is_here: bool = id == current
+
+	var row := PanelContainer.new()
+	var hb := HBoxContainer.new()
+	hb.add_theme_constant_override("separation", 12)
+	row.add_child(hb)
+
+	# Индикатор стадии.
+	var dot := ColorRect.new()
+	dot.color = STAGE_COLORS[clampi(stage, 0, 3)]
+	dot.custom_minimum_size = Vector2(14, 14)
+	dot.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	hb.add_child(dot)
+
+	var name_lbl := Label.new()
+	name_lbl.text = _display_name(id, pg)
+	name_lbl.custom_minimum_size = Vector2(200, 34)
+	name_lbl.add_theme_color_override("font_color",
+		ThemeProvider.COLOR_TEXT if unlocked else ThemeProvider.COLOR_TEXT_DIM)
+	hb.add_child(name_lbl)
+
+	var stage_lbl := Label.new()
+	stage_lbl.text = LocalizationManager.t(STAGE_KEYS[clampi(stage, 0, 3)])
+	stage_lbl.custom_minimum_size = Vector2(190, 34)
+	stage_lbl.add_theme_color_override("font_color", STAGE_COLORS[clampi(stage, 0, 3)])
+	hb.add_child(stage_lbl)
+
+	var action := Button.new()
+	action.custom_minimum_size = Vector2(190, 34)
+	if is_here:
+		action.text = LocalizationManager.t("MAP_YOU_ARE_HERE")
+		action.disabled = true
+	elif not unlocked:
+		var need: String = pg.missing_prerequisite_name(id) if pg != null else ""
+		action.text = LocalizationManager.tf("MAP_LOCKED_BY", [need])
+		action.disabled = true
+	else:
+		action.text = LocalizationManager.t("MAP_TRAVEL")
+		action.pressed.connect(_travel.bind(id))
+	hb.add_child(action)
+	return row
+
+func _display_name(id: StringName, pg: Node) -> String:
+	if pg != null:
+		var d = pg.get_district(id)
+		if d != null and not String(d.display_name).is_empty():
+			return String(d.display_name)
+	return String(id)
+
+## Переход строит WorldRuntime: он слушает district_entered и пересобирает
+## район вместе с врагами и лутом.
+func _travel(id: StringName) -> void:
+	var dm := get_node_or_null("/root/DistrictManager")
+	if dm != null and dm.has_method("transition_to"):
+		dm.transition_to(String(id))
+	else:
+		EventBus.district_entered.emit(id)
+	_close()
 
 func _close() -> void:
-	visible = false
-
-func _draw() -> void:
-	var pg := get_node_or_null("/root/PowerGrid")
-	var i := 0
-	for id in CANON:
-		var col := i % 4
-		var row := i / 4
-		var pos := Vector2(140.0 + float(col) * 180.0, 120.0 + float(row) * 130.0)
-		var on := false
-		if pg != null and pg.has_method("is_powered"):
-			on = pg.is_powered(StringName(id))
-		var c := Color(0.3, 1.0, 0.5) if on else Color(0.35, 0.35, 0.4)
-		draw_circle(pos, 14.0, c)
-		draw_string(ThemeDB.fallback_font, pos + Vector2(-50, 32), id, HORIZONTAL_ALIGNMENT_LEFT, 140, 12, Color.WHITE)
-		i += 1
+	var ui := get_node_or_null("/root/UIManager")
+	if ui != null and ui.has_method("close"):
+		ui.close(&"city_map")
+	else:
+		visible = false

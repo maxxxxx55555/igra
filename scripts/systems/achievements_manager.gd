@@ -290,18 +290,15 @@ func _check_unlock(achievement_id: StringName, condition: Variant) -> void:
 		# Simplified check
 		pass
 
+## Раньше стадии спрашивались по выдуманным id вида "district_0".. "district_10",
+## которых нет ни в PowerGrid, ни в DistrictManager: get_stage() всегда
+## возвращал 0, и достижение «весь город» не открывалось никогда.
+## Источник правды один — PowerGrid.
 func _all_districts_full() -> bool:
-	var dm = get_node_or_null("/root/DistrictManager")
-	if not dm:
+	var pg = get_node_or_null("/root/PowerGrid")
+	if not pg:
 		return false
-	var count = 0
-	var total = 0
-	for i in range(11):
-		var did = StringName("district_" + str(i))
-		if dm.get_stage(did) >= 3:
-			count += 1
-		total += 1
-	return count >= total
+	return pg.all_restored()
 
 func _all_docs_collected() -> bool:
 	var pt = get_node_or_null("/root/ProgressTracker")
