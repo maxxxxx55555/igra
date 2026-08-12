@@ -7,6 +7,7 @@ const DISTRICTS: Array[StringName] = [
 	&"substation", &"power_station",
 ]
 const ENEMY_POOL_SCRIPT: Script = preload("res://scripts/enemies/enemy_pool.gd")
+const LOOT_SCRIPT: Script = preload("res://scripts/world/district_loot.gd")
 
 static func build(parent: Node, district_id: StringName) -> Node3D:
 	var resolved_id: StringName = district_id if DISTRICTS.has(district_id) else &"suburbs"
@@ -18,6 +19,7 @@ static func build(parent: Node, district_id: StringName) -> Node3D:
 			if district_root != null:
 				parent.add_child(district_root)
 				_spawn_district_enemies(district_root)
+				LOOT_SCRIPT.populate(district_root, resolved_id)
 				EventBus.district_entered.emit(resolved_id)
 				return district_root
 	var root: Node3D = Node3D.new()
@@ -47,6 +49,7 @@ static func build(parent: Node, district_id: StringName) -> Node3D:
 		wx.set("weather_kind", String(theme.get("weather", "fog_light")))
 		root.add_child(wx)
 	_spawn_district_enemies(root)
+	LOOT_SCRIPT.populate(root, resolved_id)
 	EventBus.district_entered.emit(resolved_id)
 	return root
 

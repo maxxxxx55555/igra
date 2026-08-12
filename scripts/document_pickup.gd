@@ -5,6 +5,8 @@ extends Node3D
 @export var document_title: String = "Untitled"
 @export var document_content: String = ""
 
+const CATALOG_PATH: String = "res://data/documents/documents_catalog.json"
+
 ## Скрипт делят две разные сцены: в scenes/pickups меш зовётся MeshInstance3D
 ## и есть GlowOmniLight3D, а в scenes/gameplay меш зовётся PickupMesh и света
 ## нет. Жёсткий $-путь падал на одной из них, поэтому ищем оба имени.
@@ -23,6 +25,7 @@ func _ready() -> void:
 	if pickup_mesh == null:
 		pickup_mesh = get_node_or_null("MeshInstance3D") as MeshInstance3D
 	_ensure_glow()
+	_load_from_catalog()
 	if document_id != "":
 		# /root/JournalManager не существует; учёт документов ведёт ProgressTracker.
 		if ProgressTracker.is_doc_unlocked(document_id):
@@ -55,8 +58,31 @@ func _collect() -> void:
 		glow_light.visible = false
 	# У Area3D нет свойства disabled — отключается монитор столкновений.
 	collect_area.monitoring = false
+	# Раньше подбор только гасил модельку: документ не засчитывался в
+	# прогресс, не открывался в журнале и игрок не получал уведомления.
+	if document_id != "":
+		ProgressTracker.unlock_doc(document_id)
+	EventBus.inventory_notice.emit(
+		LocalizationManager.t("DOC_FOUND") + ": " + document_title)
 	document_collected.emit(document_title, document_id)
 	queue_free()
+
+## Заголовок и текст берём из data/documents/documents_catalog.json —
+## 33 готовых документа, которые до сих пор не читал никто.
+func _load_from_catalog() -> void:
+	if document_id == "" or document_content != "":
+		return
+	var f := FileAccess.open(CATALOG_PATH, FileAccess.READ)
+	if f == null:
+		return
+	var parsed: Variant = JSON.parse_string(f.get_as_text())
+	if not (parsed is Array):
+		return
+	for entry in (parsed as Array):
+		if entry is Dictionary and String(entry.get("doc_id", "")) == document_id:
+			document_title = String(entry.get("title", document_title))
+			document_content = String(entry.get("content", ""))
+			return
 
 func set_document(id: String, title: String, content: String) -> void:
 	document_id = id

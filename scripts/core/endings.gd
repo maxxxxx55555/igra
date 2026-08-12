@@ -4,7 +4,11 @@ class_name Endings
 
 const SPEEDRUN_SECONDS: float = 1800.0
 const TOTAL_DISTRICTS: int = 11
-const TOTAL_DOCUMENTS: int = 2  # doc_engineer_log + doc_family_letter
+## 11 документов реально лежат в мире (по одному на район, см.
+## DistrictLoot.DOCUMENTS) плюс 2 выдаются за события — прежнее значение 2
+## делало «все документы собраны» почти мгновенным и обесценивало лучшие
+## концовки.
+const TOTAL_DOCUMENTS: int = 13
 
 static var _ended: bool = false
 

@@ -42,6 +42,11 @@ func _unlock_doc(id: String) -> void:
 		return
 	_docs[id] = true
 	EventBus.document_unlocked.emit(StringName(id))
+## Публичная обёртка: документы поднимаются ещё и руками с земли,
+## а не только выдаются за события.
+func unlock_doc(id: String) -> void:
+	_unlock_doc(id)
+
 func is_doc_unlocked(id: String) -> bool:
 	return _docs.get(id, false)
 

@@ -251,6 +251,7 @@ scripts/world/district_atmosphere.gd
 scripts/world/district_data.gd
 scripts/world/district_grading.gd
 scripts/world/district_layouts.gd
+scripts/world/district_loot.gd
 scripts/world/district_scene_factory.gd
 scripts/world/district_themes.gd
 scripts/world/district_trigger.gd
