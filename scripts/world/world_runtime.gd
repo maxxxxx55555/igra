@@ -12,6 +12,10 @@ extends Node3D
 var _district_root: Node3D = null
 var _current_id: StringName = &""
 var _loading: bool = false
+## Точка появления по умолчанию — перекрёсток (-8, -8): сетка улиц идёт по
+## x/z = -24, -8, 8, 24, поэтому ровный ноль пришёлся бы на середину квартала.
+## Высота чуть выше дороги, чтобы игрок встал на неё, а не застрял в плитке.
+const PLAYER_SPAWN_POS: Vector3 = Vector3(-8.0, 1.2, -8.0)
 
 func _ready() -> void:
 	name = "WorldRuntime"
@@ -70,6 +74,11 @@ func _place_player(root: Node3D) -> void:
 	var spawn := root.get_node_or_null("PlayerSpawn")
 	if spawn is Node3D:
 		(player as Node3D).global_position = (spawn as Node3D).global_position
+		return
+	# Узла PlayerSpawn нет ни в одной из 11 сцен районов, поэтому при переходе
+	# игрок оставался на координатах прошлого района — мог оказаться в стене
+	# или за краем квартала. Ставим его на ближний к центру перекрёсток.
+	(player as Node3D).global_position = root.global_position + PLAYER_SPAWN_POS
 
 func current_district() -> StringName:
 	return _current_id
