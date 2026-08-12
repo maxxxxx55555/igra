@@ -269,6 +269,10 @@ toggle_map={
 ]
 }
 
+[gui]
+
+theme/custom="res://assets/ui/theme_tls.tres"
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"

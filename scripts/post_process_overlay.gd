@@ -50,7 +50,7 @@ func _process(delta: float) -> void:
 func _build_grain() -> void:
 	_grain = ColorRect.new()
 	_grain.name = "GrainOverlay"
-	_grain.color = Color(0.0, 0.0, 0.0, 0.0)
+	_grain.color = Color(1.0, 1.0, 1.0, 1.0)
 	_grain.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_grain.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(_grain)
@@ -58,15 +58,27 @@ func _build_grain() -> void:
 	mat.shader = _grain_shader()
 	_grain.material = mat
 
+## Плёночное зерно по GDD §11.4 (8–12% непрозрачности). Раньше здесь были
+## статичные строки развёртки (mod по Y) — это скан-лайны из CRT-эффекта,
+## а не зерно: картинка выглядела как старый телевизор и не шевелилась.
 func _grain_shader() -> Shader:
 	var s := Shader.new()
-	s.code = "shader_type canvas_item; uniform float intensity: hint_range(0,1) = 0.05; void fragment(){ float line = mod(floor(FRAGCOORD.y), 2.0); COLOR = vec4(0.0, 0.0, 0.0, line * intensity); }"
+	s.code = "shader_type canvas_item;\n" \
+		+ "uniform float intensity : hint_range(0.0, 0.2) = 0.10;\n" \
+		+ "uniform float speed : hint_range(0.0, 3.0) = 0.8;\n" \
+		+ "uniform float scale : hint_range(40.0, 200.0) = 110.0;\n" \
+		+ "float hash(vec2 p){ p = fract(p * vec2(234.34, 435.345)); p += dot(p, p + 34.23); return fract(p.x * p.y); }\n" \
+		+ "void fragment(){\n" \
+		+ "  vec2 off = vec2(TIME * speed * 0.3, TIME * speed * 0.17);\n" \
+		+ "  float g = hash((UV + off) * scale);\n" \
+		+ "  COLOR = vec4(vec3(g), (g - 0.5) * intensity + intensity * 0.5);\n" \
+		+ "}"
 	return s
 
 func _build_vignette() -> void:
 	_vignette = ColorRect.new()
 	_vignette.name = "VignetteOverlay"
-	_vignette.color = Color(0.0, 0.0, 0.0, 0.25)
+	_vignette.color = Color(0.047, 0.062, 0.086, 0.55)
 	_vignette.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_vignette.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(_vignette)
@@ -74,9 +86,16 @@ func _build_vignette() -> void:
 	mat.shader = _vignette_shader()
 	_vignette.material = mat
 
+## Виньетка уходит в #0c1016 (bg-deep), а не в чистый чёрный — канон GDD §11.2.
 func _vignette_shader() -> Shader:
 	var s := Shader.new()
-	s.code = "shader_type canvas_item; void fragment(){ vec2 d = abs(UV - 0.5); float v = smoothstep(0.2, 0.5, max(d.x, d.y)); COLOR.a *= v; }"
+	s.code = "shader_type canvas_item;\n" \
+		+ "const vec3 BG_DEEP = vec3(0.047, 0.062, 0.086);\n" \
+		+ "void fragment(){\n" \
+		+ "  vec2 d = (UV - 0.5) * vec2(1.7, 1.0);\n" \
+		+ "  float v = smoothstep(0.3, 1.0, length(d));\n" \
+		+ "  COLOR = vec4(BG_DEEP, COLOR.a * v);\n" \
+		+ "}"
 	return s
 
 func set_grain_intensity(v: float) -> void:

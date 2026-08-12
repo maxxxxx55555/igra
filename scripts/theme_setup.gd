@@ -15,11 +15,11 @@ var theme_res: Theme = null
 
 func _ready() -> void:
 	_build_theme()
-	get_tree().node_added.connect(_on_node)
-
-func _on_node(n: Node) -> void:
-	if theme_res != null and n is Control:
-		n.theme = theme_res
+	# Раньше тема присваивалась КАЖДОМУ Control через node_added: это затирало
+	# собственные темы сцен и стоило обхода дерева на каждый создаваемый узел.
+	# Правильное место одно — тема окна: она наследуется всем деревом Control.
+	if theme_res != null:
+		get_tree().root.theme = theme_res
 
 func _build_theme() -> void:
 	# 1) Попытаться загрузить существующую theme_tls.tres как базу.
@@ -106,7 +106,3 @@ func _build_theme() -> void:
 		t.set_stylebox("fill", "ProgressBar", pbf)
 
 	theme_res = t
-	if OS.has_feature("editor"):
-		DirAccess.make_dir_recursive_absolute("res://assets/theme")
-		ResourceSaver.save(t, "res://assets/theme/tls_theme.tres")
-	print("THEME ready")

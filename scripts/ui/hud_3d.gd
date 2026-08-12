@@ -356,21 +356,25 @@ func _on_enemy_hp_updated(_monster_id: StringName, ratio: float) -> void:
 	_enemy_hp_tween.tween_callback(func():
 		enemy_hp_bar.visible = false)
 
+## Вспышка виньетки при уроне. Возврат идёт к фактической базовой прозрачности,
+## а не к константе 0.4: иначе каждое попадание навсегда затемняло экран.
 func _on_damage_vignette(ratio: float) -> void:
-	if ratio < _hp and vignette:
+	var v := vignette
+	if ratio < _hp and v != null:
 		var tween := create_tween()
-		tween.tween_property(vignette, "color:a", 0.8, 0.15)
-		tween.tween_property(vignette, "color:a", 0.4, 0.15)
+		tween.tween_property(v, "color:a", 0.8, 0.15)
+		tween.tween_property(v, "color:a", _vignette_default_color.a, 0.25)
 
 func _on_hp(ratio: float) -> void:
 	_hp = ratio
 	_tween_fill(hp_fill, ratio)
 	hp_val.text = str(int(ratio * 100))
-	if ratio < 0.3 and vignette:
+	# На низком HP виньетка остаётся заметно плотнее базовой, но не «залипает».
+	var v := vignette
+	if ratio < 0.3 and v != null:
 		var tween := create_tween()
-		tween.tween_property(vignette, "color:a", 0.8, 0.15)
-		tween.tween_property(vignette, "color:a", 0.6, 0.15)
-		tween.play()
+		tween.tween_property(v, "color:a", 0.8, 0.15)
+		tween.tween_property(v, "color:a", maxf(_vignette_default_color.a, 0.6), 0.15)
 
 func _on_stam(ratio: float) -> void:
 	_stam = ratio
