@@ -53,8 +53,11 @@ func _setup_visuals() -> void:
 	_setup_eyes()
 
 func _setup_eyes() -> void:
-	var eye_left := $MeshInstance3D/EyeLeft
-	var eye_right := $MeshInstance3D/EyeRight
+	# Глаз в minion.tscn нет: прямой $-путь падал с "node not found".
+	var eye_left := get_node_or_null("MeshInstance3D/EyeLeft") as MeshInstance3D
+	var eye_right := get_node_or_null("MeshInstance3D/EyeRight") as MeshInstance3D
+	if eye_left == null or eye_right == null:
+		return
 	var eye_mat := StandardMaterial3D.new()
 	eye_mat.albedo_color = Color("ff3333")
 	eye_mat.emissive_enabled = true

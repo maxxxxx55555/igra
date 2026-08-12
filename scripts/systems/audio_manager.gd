@@ -52,7 +52,7 @@ func _ready() -> void:
 	# Озвучка игровых событий (раньше были немыми).
 	EventBus.item_picked_up.connect(func(_id: StringName) -> void: _one_shot(_gen_pickup(), -10.0))
 	EventBus.purchase_success.connect(func(_id: StringName) -> void: _one_shot(_gen_coin(), -8.0))
-	EventBus.purchase_failed.connect(func(_r: String) -> void: _one_shot(_gen_error(), -12.0))
+	EventBus.purchase_failed.connect(func(_id: String, _r: String) -> void: _one_shot(_gen_error(), -12.0))
 	EventBus.puzzle_solved.connect(func(_p: StringName, _d: StringName) -> void: _one_shot(_gen_success(), -6.0))
 	EventBus.district_restored.connect(func(_a: StringName, _b: int) -> void: _one_shot(_gen_powerup(), -4.0))
 	EventBus.achievement_unlocked.connect(func(_id: StringName) -> void: _one_shot(_gen_fanfare(), -6.0))

@@ -48,7 +48,8 @@ func mark_solved(id: String) -> void:
 	EventBus.puzzle_solved.emit(StringName(id), _district_of(id))
 	_grant_reward(id)
 	_check_all_solved()
-	ProgressTracker.increment_stat("puzzles_solved")
+	# ProgressTracker сам считает пазлы по сигналу puzzle_solved выше;
+	# здесь был вызов несуществующего increment_stat() — ошибка в рантайме.
 
 ## Идентификатор пазла = "<механизм>_<район>", поэтому район вытаскивается
 ## как остаток после первого подчёркивания (gas_station/power_station — с ним же).
