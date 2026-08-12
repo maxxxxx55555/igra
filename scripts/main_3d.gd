@@ -3,6 +3,7 @@ extends Node3D
 func _ready() -> void:
 
 	_setup_nav_region()
+	_setup_world_runtime()
 	_gp_proof()
 	_final_integration()
 	_auto_start_from_main()
@@ -44,6 +45,16 @@ func _auto_start_from_main() -> void:
 ## поверх первого — два кольца в одном углу.
 func _setup_joystick() -> void:
 	pass
+
+## Districts никогда не появлялись в игре: фабрика была, вызова не было.
+## WorldRuntime — единственная точка, которая строит и переключает районы.
+func _setup_world_runtime() -> void:
+	if get_node_or_null("WorldRuntime") != null:
+		return
+	var wr := Node3D.new()
+	wr.set_script(load("res://scripts/world/world_runtime.gd"))
+	wr.name = "WorldRuntime"
+	add_child(wr)
 
 func _setup_multiplayer() -> void:
 	var nm := get_node_or_null("/root/NetworkManager")

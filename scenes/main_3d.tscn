@@ -1,11 +1,10 @@
-[gd_scene load_steps=20 format=3]
+[gd_scene load_steps=19 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/environment/world_env.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud_3d.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/player/player_3d.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/ui/splash.tscn" id="5"]
 [ext_resource type="Script" path="res://scripts/core/camera_follow_3d.gd" id="6"]
-[ext_resource type="Script" path="res://scripts/world/street_builder.gd" id="7"]
 [ext_resource type="PackedScene" path="res://scenes/ui/screens.tscn" id="8"]
 [ext_resource type="Script" path="res://scripts/post_process_overlay.gd" id="9"]
 [ext_resource type="Script" path="res://scripts/world_env_setup.gd" id="10"]
@@ -64,9 +63,6 @@ height = 7.0
 distance = 5.0
 
 [node name="HUD" parent="." instance=ExtResource("2")]
-
-[node name="StreetBuilder" type="Node3D" parent="."]
-script = ExtResource("7")
 
 [node name="Ash" type="GPUParticles3D" parent="."]
 emitting = true
