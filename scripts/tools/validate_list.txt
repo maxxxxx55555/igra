@@ -24,7 +24,6 @@ scripts/core/camera_follow_3d.gd
 scripts/core/endings.gd
 scripts/core/game_manager.gd
 scripts/core/input_service.gd
-scripts/core/object_pool.gd
 scripts/core/progression_system.gd
 scripts/core/quest_manager.gd
 scripts/core/routes.gd
@@ -47,7 +46,6 @@ scripts/economy/shop_service.gd
 scripts/economy/upgrade_system.gd
 scripts/effects/ambient_particles.gd
 scripts/effects/damage_indicator.gd
-scripts/effects/fade_transition.gd
 scripts/effects/footstep_dust.gd
 scripts/effects/hit_spark.gd
 scripts/effects/muzzle_flash.gd
@@ -76,7 +74,6 @@ scripts/events/event_bus.gd
 scripts/final_night.gd
 scripts/fog_setup.gd
 scripts/fuse_box.gd
-scripts/game_manager.gd
 scripts/gameplay/ammo_pickup.gd
 scripts/gameplay/checkpoint.gd
 scripts/gameplay/craft_station.gd
@@ -98,7 +95,6 @@ scripts/inventory/inventory_stats.gd
 scripts/inventory/item_data.gd
 scripts/inventory/item_database.gd
 scripts/inventory/item_pickup.gd
-scripts/item_database.gd
 scripts/lighting/light_grid.gd
 scripts/main_3d.gd
 scripts/multiplayer/lan_discovery.gd
@@ -205,7 +201,6 @@ scripts/ui/panel_card.gd
 scripts/ui/pause_menu.gd
 scripts/ui/photo_album.gd
 scripts/ui/photo_mode.gd
-scripts/ui/post_process_manager.gd
 scripts/ui/pre_loading.gd
 scripts/ui/puzzle_cables.gd
 scripts/ui/quest_journal.gd
@@ -270,7 +265,6 @@ scripts/world/puzzle_3d.gd
 scripts/world/puzzle_base.gd
 scripts/world/puzzle_system.gd
 scripts/world/secret.gd
-scripts/world/shop.gd
 scripts/world/street_builder.gd
 scripts/world/street_props.gd
 scripts/world/streetlight.gd

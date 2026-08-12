@@ -657,14 +657,14 @@ post_process.
 > **Актуализировано канон-саммитом 2026-08-10.** См. **Приложение V** для
 > полного тегирования `[M0]`/`[M1]`/`[M2]`/`[M3]`/`[M4]`/`[вижн]`.
 
-- [ ] Адаптивная музыка: 5 слоёв crossfade (Ambient_Dark/Lit, Threat_Low/High, Action_Sting)
+- [x] Адаптивная музыка: 5 слоёв crossfade (Ambient_Dark/Lit, Threat_Low/High, Action_Sting)
 - [ ] Android APK: arm64, keystore, debug OFF, собрать и проверить на устройстве
 - [ ] Все 8 гейтов (16.4) зелёные; doctor.ps1 COMPILE OK (без скрытых parse-ошибок)
-- [ ] Полная локализация `screens.gd` (~1900 строк, хардкод RU) через `tr()`
-- [ ] **`[M0]`** Подключить существующий `assets/ui/theme_tls.tres` в `project.godot` (`[gui] theme/custom`)
-- [ ] **`[M0]`** `shaders/grain.gdshader` + `shaders/vignette.gdshader` на CanvasLayer
+- [x] Полная локализация `screens.gd` (~1900 строк, хардкод RU) через `tr()`
+- [x] **`[M0]`** Подключить существующий `assets/ui/theme_tls.tres` в `project.godot` (`[gui] theme/custom`)
+- [x] **`[M0]`** `shaders/grain.gdshader` + `shaders/vignette.gdshader` на CanvasLayer
 - [ ] **`[M0]`** Реальные SVG-иконки UI (ui_heart.svg и тд — файлы существуют или создать)
-- [ ] **`[M0]`** Чистка дублей сцен (settings ×3 → 1, credits/difficulty/victory/gameover ×2 → 1)
+- [x] **`[M0]`** Чистка дублей сцен (settings ×3 → 1, credits/difficulty/victory/gameover ×2 → 1)
 - [ ] **`[M0]`** Массовый strip BOM в `scripts/` (~140 файлов только в `scripts/`, не трогая legacy_quarantine)
 - [ ] **`[M0]`** Фикс `project.godot:11` повреждённой строки + `assets/ui/icon.png`
 - [ ] **`[M1]`** HUD-модули: прицел меняет цвет, индикатор направления урона, бары шума/заметности, timestamps в логе, иконки состояний (на базе существующего StatusEffects)
