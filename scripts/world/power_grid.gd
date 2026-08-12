@@ -60,7 +60,7 @@ func advance_district(id: StringName, new_stage: int) -> bool:
 	if new_stage >= DistrictData.Stage.STREETS:
 		EventBus.streetlight_activated.emit(id)
 	if new_stage >= DistrictData.Stage.FULL:
-		EventBus.district_restored.emit(id)
+		EventBus.district_restored.emit(id, new_stage)
 	EventBus.emit_district_powered(id)
 	power_changed.emit(id, new_stage > DistrictData.Stage.DARK)
 	_check_victory()

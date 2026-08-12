@@ -36,22 +36,22 @@ signal item_picked_up(item_id: StringName)
 signal player_died
 
 signal achievement_unlocked(achievement_id: String)
-signal boss_defeated(boss_id: String)
+signal boss_defeated()
 signal coins_changed(amount: int)
 signal district_blackout(district_id: StringName)
-signal district_restored(district_id: StringName)
+signal district_restored(district_id: StringName, stage: int)
 signal district_stage_changed(district_id: StringName, stage: int)
 signal document_unlocked(document_id: String)
 signal encyclopedia_unlocked(entry_id: String)
 signal enemy_hp_updated(monster_id: StringName, hp: float)
 signal examine_text(text: String)
 signal final_night_started
-signal flashlight_changed(state: bool)
+signal flashlight_changed()
 signal flashlight_depleted
 signal flashlight_state_changed(on: bool)
 signal game_over
 signal game_started
-signal game_state_changed(state: String)
+signal game_state_changed(state: int)
 signal game_won
 signal hud_visibility_changed(visible: bool)
 signal interaction_done(object_id: String)
@@ -59,31 +59,31 @@ signal inventory_changed
 signal inventory_notice(message: String)
 signal inventory_toggle_requested
 signal inventory_weight_changed(weight: float)
-signal item_consumed(item_id: String)
+signal item_consumed(item_id: StringName, effect: String, value: float)
 signal level_completed(level_id: String)
 signal light_disrupted
 signal light_level_changed(level: float)
 signal crosshair_state_changed(state: StringName)  # default | enemy | disabled
 signal monster_spotted(monster_id: StringName)
-signal noise_emitted(position: Vector3, intensity: float)
+signal noise_emitted(position: Vector2, radius: float)
 signal player_battery_changed(level: float)
 signal player_damage_direction(amount: float, src_pos: Vector3)  # 3.15 — индикатор откуда удар
 signal player_damaged(amount: float)
-signal player_detected
+signal player_detected(monster_id: StringName)
 signal player_health_changed(health: float)
 signal player_hiding_changed(hiding: bool)
 signal player_interact_available(available: bool)
 signal player_stamina_changed(stamina: float)
-signal player_state_changed(state: String)
+signal player_state_changed(state: int)
 signal player_stealth_changed(stealth: float)
 signal power_grid_updated
-signal purchase_done(item_id: String)
+signal purchase_done(item_id: String, ok: bool)
 signal purchase_failed(item_id: String, reason: String)
 signal purchase_success(item_id: String)
-signal puzzle_solved(puzzle_id: String)
+signal puzzle_solved(puzzle_id: StringName, district_id: StringName)
 signal puzzle_started(puzzle_id: String)
 signal quest_completed(quest_id: String)
-signal radar_marker_added(marker_id: String, position: Vector3)
+signal radar_marker_added(position: Vector2)
 signal secret_found(secret_id: String)
 signal settings_changed(key: String, value: Variant)
 signal shop_toggle_requested
@@ -92,7 +92,7 @@ signal streetlight_activated(streetlight_id: String)
 signal ui_screen_closed(screen_id: String)
 signal ui_screen_opened(screen_id: String)
 signal wave_completed(wave_number: int)
-signal weather_changed(weather_id: String)
+signal weather_changed(weather_id: int, weather_name: String, fog: float, rain: float)
 signal xp_gained(amount: int)
 signal zone_reached(zone_id: String)
 signal boss_phase_changed(phase: int)

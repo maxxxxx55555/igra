@@ -45,10 +45,16 @@ func is_solved(id: String) -> bool:
 func mark_solved(id: String) -> void:
 	_solved[id] = true
 	_active_puzzle = ""
-	EventBus.puzzle_solved.emit(StringName(id))
+	EventBus.puzzle_solved.emit(StringName(id), _district_of(id))
 	_grant_reward(id)
 	_check_all_solved()
 	ProgressTracker.increment_stat("puzzles_solved")
+
+## Идентификатор пазла = "<механизм>_<район>", поэтому район вытаскивается
+## как остаток после первого подчёркивания (gas_station/power_station — с ним же).
+func _district_of(id: String) -> StringName:
+	var parts := id.split("_", true, 1)
+	return StringName(parts[1]) if parts.size() > 1 else &""
 
 func _grant_reward(id: String) -> void:
 	if not _puzzle_data.has(id):
@@ -56,7 +62,7 @@ func _grant_reward(id: String) -> void:
 	var data: Dictionary = _puzzle_data[id]
 	match data["reward"]:
 		"coins":
-			CoinWallet.add_coins(data["amount"])
+			CoinWallet.add(int(data["amount"]))
 			EventBus.toast_requested.emit("+" + str(data["amount"]) + " coins", "finding")
 		"battery":
 			EventBus.item_picked_up.emit(&"battery")
@@ -87,7 +93,7 @@ func get_progress() -> float:
 		return 0.0
 	return float(_solved.size()) / float(_puzzle_data.size())
 
-func _on_district_restored(district_id: StringName) -> void:
+func _on_district_restored(_district_id: StringName, _stage: int) -> void:
 	EventBus.toast_requested.emit("District restored!", "achievement")
 
 func reset() -> void:

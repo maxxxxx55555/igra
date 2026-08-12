@@ -182,7 +182,7 @@ func _nearest_enemy_distance() -> float:
 			best = minf(best, (e as Node3D).global_position.distance_to(ppos))
 	return best
 
-func _on_boss_defeated(_boss_id: String) -> void:
+func _on_boss_defeated() -> void:
 	_boss_active = false
 	_combat_hold = 0.0
 #endregion

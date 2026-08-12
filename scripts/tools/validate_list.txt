@@ -18,7 +18,6 @@ scripts/core/achievement_manager.gd
 scripts/core/audio_system.gd
 scripts/core/camera_follow_3d.gd
 scripts/core/economy_manager.gd
-scripts/core/event_bus.gd
 scripts/core/game_manager.gd
 scripts/core/input_service.gd
 scripts/core/object_pool.gd
