@@ -117,13 +117,6 @@ scripts/player/player_3d.gd
 scripts/player/player_stats.gd
 scripts/player/player_visual.gd
 scripts/post_process_overlay.gd
-scripts/screens/controls_settings_screen.gd
-scripts/screens/death_screen.gd
-scripts/screens/journal_screen.gd
-scripts/screens/loading_screen.gd
-scripts/screens/pause_screen.gd
-scripts/screens/settings_screen.gd
-scripts/screens/story_scene.gd
 scripts/searchlight.gd
 scripts/settings_menu.gd
 scripts/splash.gd
@@ -149,7 +142,6 @@ scripts/systems/noise_propagation.gd
 scripts/systems/object_pool.gd
 scripts/systems/photo_mode.gd
 scripts/systems/progress_tracker.gd
-scripts/systems/quest_manager.gd
 scripts/systems/random_events.gd
 scripts/systems/save_slot_manager.gd
 scripts/systems/settings_manager.gd

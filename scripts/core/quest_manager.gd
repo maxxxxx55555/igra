@@ -50,6 +50,7 @@ func _init_quests() -> void:
 		["q_secrets_1", "Q_SECRETS_1_TITLE", "Q_SECRETS_1_DESC", "SECRET", "secret", 1, 30, []],
 		["q_secrets_2", "Q_SECRETS_2_TITLE", "Q_SECRETS_2_DESC", "SECRET", "secret", 2, 30, []],
 		["q_secrets_3", "Q_SECRETS_3_TITLE", "Q_SECRETS_3_DESC", "SECRET", "secret", 3, 40, [["blueprint_flashlight_brightness", 1]]],
+		["q_craft_items", "Q_CRAFT_ITEMS_TITLE", "Q_CRAFT_ITEMS_DESC", "CRAFT", "craft", 5, 65, [["scrap", 3]]],
 		["q_restore_district2", "Q_RESTORE_DISTRICT2_TITLE", "Q_RESTORE_DISTRICT2_DESC", "REPAIR", "district_2", 1, 150, [["blueprint_flashlight_battery", 1]]],
 	]
 	for qa in quest_data:
@@ -110,9 +111,10 @@ func _tick(q: Dictionary, n: int) -> void:
 func _complete(q: Dictionary) -> void:
 	q.done = true
 	_completed_count += 1
-	var coins := get_tree().root.get_node_or_null("/root/CoinManager")
-	if coins and coins.has_method("add_coins") and q.reward_coins > 0:
-		coins.add_coins(q.reward_coins)
+	# Раньше награда уходила в /root/CoinManager — такого автолоада нет,
+	# и монеты за квест молча не начислялись.
+	if int(q.reward_coins) > 0:
+		CoinWallet.add(int(q.reward_coins))
 	var inv := get_tree().root.get_node_or_null("/root/InventoryManager")
 	if inv and inv.has_method("try_add"):
 		for ri in q.reward_items:
@@ -145,6 +147,43 @@ func reset() -> void:
 		q.progress = 0
 		q.done = false
 	_completed_count = 0
+
+## Совместимость с внешними вызовами: NPC-выдача квестов и крафт обращались
+## к API прежнего (пустого) менеджера — get_quest_status/start_quest/
+## complete_objective. Раньше это молча ничего не делало.
+func get_quest_status(quest_id: StringName) -> int:
+	var q: Dictionary = quests.get(String(quest_id), {})
+	if q.is_empty():
+		return STATUS_NOT_STARTED
+	return get_status(q)
+
+func start_quest(quest_id: StringName) -> void:
+	var q: Dictionary = quests.get(String(quest_id), {})
+	if q.is_empty() or bool(q.get("done", false)):
+		return
+	quest_started.emit(String(quest_id))
+	quest_updated.emit()
+
+func complete_objective(quest_id: StringName, _objective_id: StringName, amount: int = 1) -> void:
+	var q: Dictionary = quests.get(String(quest_id), {})
+	if q.is_empty() or bool(q.get("done", false)):
+		return
+	_tick(q, amount)
+
+func is_completed(quest_id: StringName) -> bool:
+	var q: Dictionary = quests.get(String(quest_id), {})
+	return not q.is_empty() and bool(q.get("done", false))
+
+func all_completed() -> bool:
+	if quests.is_empty():
+		return false
+	for q in quests.values():
+		if not bool(q.get("done", false)):
+			return false
+	return true
+
+func can_progress() -> bool:
+	return true
 
 func get_active_count() -> int:
 	var n := 0

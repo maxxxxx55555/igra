@@ -24,8 +24,8 @@ func _ready() -> void:
 		pickup_mesh = get_node_or_null("MeshInstance3D") as MeshInstance3D
 	_ensure_glow()
 	if document_id != "":
-		var journal := get_tree().root.get_node_or_null("/root/JournalManager")
-		if journal and journal.has_method("is_collected") and journal.is_collected(document_id):
+		# /root/JournalManager не существует; учёт документов ведёт ProgressTracker.
+		if ProgressTracker.is_doc_unlocked(document_id):
 			queue_free()
 			return
 	collect_area.body_entered.connect(_on_body_entered)

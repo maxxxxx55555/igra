@@ -50,7 +50,7 @@ func _save() -> void:
 		"settings": SettingsManager.to_dict(),
 		"player_pos": _read_player_pos(),
 		"district": _current_district(),
-		"quests": _quest_data,
+		"quests": QuestManager.serialize(),
 		"xp": XpManager.save_data(),
 		"skill_tree": SkillTreeManager.save_data(),
 		"photos": _photos,
@@ -91,6 +91,9 @@ func load_all() -> bool:
 	var pp = data.get("player_pos", null)
 	_pending_player_pos = Vector3(pp[0], pp[1], pp[2]) if (pp is Array and pp.size() >= 3) else Vector3.INF
 	_quest_data = data.get("quests", {})
+	# Прогресс квестов раньше оседал в буфере _quest_data и никому не отдавался:
+	# после загрузки все 19 квестов снова были на нуле.
+	QuestManager.from_dict(_quest_data)
 	# Текущий район раньше хранил только SaveLoad; без него загрузка всегда
 	# возвращала игрока в стартовые пригороды.
 	var dm := get_node_or_null("/root/DistrictManager")
@@ -113,6 +116,7 @@ func reset_all() -> void:
 	Encyclopedia.from_dict({})
 	_pending_player_pos = Vector3.INF
 	_quest_data = {}
+	QuestManager.reset()
 	_photos = []
 	_daily_streak = 0
 	_last_daily_time = 0
@@ -206,7 +210,7 @@ func save_slot(slot: int) -> bool:
 		"progress": ProgressTracker.to_dict(),
 		"settings": SettingsManager.to_dict(),
 		"player_pos": _read_player_pos(),
-		"quests": _quest_data,
+		"quests": QuestManager.serialize(),
 		"xp": XpManager.save_data(),
 		"skill_tree": SkillTreeManager.save_data(),
 		"photos": _photos,
@@ -253,6 +257,7 @@ func load_slot(slot: int) -> bool:
 	var pp = data.get("player_pos", null)
 	_pending_player_pos = Vector3(pp[0], pp[1], pp[2]) if (pp is Array and pp.size() >= 3) else Vector3.INF
 	_quest_data = data.get("quests", {})
+	QuestManager.from_dict(_quest_data)
 	_photos = data.get("photos", [])
 	_daily_streak = int(data.get("daily_streak", 0))
 	_last_daily_time = int(data.get("last_daily_time", 0))
