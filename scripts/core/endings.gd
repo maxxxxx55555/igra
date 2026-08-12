@@ -33,27 +33,27 @@ static func evaluate() -> Array:
 
 	# Истина (секретная) — все документы + аудио-логи + фото + бункер
 	if pt and docs >= TOTAL_DOCUMENTS and all_districts and secrets >= 3:
-		out.append({"id": "truth", "title": "Истина", "desc": "Раскрывается: катастрофа была преднамеренной.", "tier": "secret"})
+		out.append({"id": "truth", "title": "END_TRUTH_TITLE", "desc": "END_TRUTH_DESC", "tier": "secret"})
 
 	# Свет (хорошая) — все 11 районов FULL + все документы
 	if all_districts and docs_pct >= 1.0:
-		out.append({"id": "light", "title": "Свет", "desc": "Реактор запущен, город восстановлен. Игрок слышит по радио: «Спасибо»", "tier": "good"})
+		out.append({"id": "light", "title": "END_LIGHT_TITLE", "desc": "END_LIGHT_DESC", "tier": "good"})
 
 	# Надежда (нейтральная) — все районы FULL, но < 50% документов
 	if all_districts and docs_pct < 0.5:
-		out.append({"id": "hope", "title": "Надежда", "desc": "Свет есть, но игрок не знает правду. Титры на фоне рассвета.", "tier": "neutral"})
+		out.append({"id": "hope", "title": "END_HOPE_TITLE", "desc": "END_HOPE_DESC", "tier": "neutral"})
 
 	# Выживший (средняя) — только District 11 (powerplant) восстановлен
 	if powerplant_full and not all_districts:
-		out.append({"id": "survivor", "title": "Выживший", "desc": "Игрок запускает станцию, но остальной город в тьме. Он уходит в неизвестность.", "tier": "medium"})
+		out.append({"id": "survivor", "title": "END_SURVIVOR_TITLE", "desc": "END_SURVIVOR_DESC", "tier": "medium"})
 
 	# Тьма (плохая) — сеть не починена (не достигнута или не восстановлена ЭС)
 	if pct < 1.0 and not powerplant_full:
-		out.append({"id": "darkness", "title": "Тьма", "desc": "Город погружается в вечную тьму. Игрок становится одним из монстров.", "tier": "bad"})
+		out.append({"id": "darkness", "title": "END_DARKNESS_TITLE", "desc": "END_DARKNESS_DESC", "tier": "bad"})
 
 	# Спринтер (достижение) — быстрая победа
 	if gm and gm.play_time > 0.0 and gm.play_time < SPEEDRUN_SECONDS:
-		out.append({"id": "sprinter", "title": "Спринтер", "desc": "Город спасён быстрее %d минут." % int(SPEEDRUN_SECONDS / 60.0), "tier": "achievement"})
+		out.append({"id": "sprinter", "title": "END_SPRINTER_TITLE", "desc": LocalizationManager.tf("END_SPRINTER_DESC", [int(SPEEDRUN_SECONDS / 60.0)]), "tier": "achievement"})
 
 	return out
 

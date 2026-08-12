@@ -10,9 +10,9 @@ const TILE_SIZE: int = 32
 const SLOT_W: int = 12
 const SLOT_H: int = 9
 const DISTRICT_LABELS: Dictionary = {
-	&"suburbs": "Пригород", &"residential": "Жилые", &"park": "Парк", &"school": "Школа",
-	&"hospital": "Больница", &"gas_station": "АЗС", &"police": "Полиция", &"warehouses": "Склады",
-	&"industrial": "Промзона", &"substation": "Подстанция", &"power_station": "Станция",
+	&"suburbs": "DIST_SUBURBS", &"residential": "DIST_RESIDENTIAL", &"park": "DIST_PARK", &"school": "DIST_SCHOOL",
+	&"hospital": "DIST_HOSPITAL", &"gas_station": "DIST_GAS", &"police": "DIST_POLICE", &"warehouses": "DIST_WAREHOUSES",
+	&"industrial": "DIST_INDUSTRIAL", &"substation": "DIST_SUBSTATION", &"power_station": "DIST_POWER",
 }
 var _tick: float = 0.0
 var _current_district: StringName = &""
@@ -50,7 +50,8 @@ func _draw() -> void:
 		var mix := c.lerp(theme_c, 0.45)
 		draw_circle(p, 6.5 if d.id == _current_district else 4.0, mix)
 		if d.id == _current_district: draw_arc(p, 8.0, 0.0, TAU, 24, ThemeProvider.COLOR_AMBER, 1.5, true)
-		var label: String = DISTRICT_LABELS.get(d.id, "")
+		var label_key: String = String(DISTRICT_LABELS.get(d.id, ""))
+		var label: String = LocalizationManager.t(label_key) if label_key != "" else ""
 		if label != "":
 			var font := ThemeDB.fallback_font
 			draw_string(font, p + Vector2(8, 4), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 9, ThemeProvider.COLOR_AMBER_DIM)
