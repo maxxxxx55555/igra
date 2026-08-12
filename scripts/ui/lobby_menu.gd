@@ -60,12 +60,12 @@ func _on_start_pressed() -> void:
 
 @rpc("call_local")
 func _start_game() -> void:
-	get_tree().change_scene_to_file("res://scenes/ui/pre_loading.tscn")
+	Routes.start_game()
 
 func _on_back_pressed() -> void:
 	LANDiscovery.stop()
 	NetworkManager.shutdown()
-	get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
+	Routes.to_menu()
 
 func _on_refresh_pressed() -> void:
 	host_list.clear()

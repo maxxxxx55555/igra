@@ -66,11 +66,13 @@ func continue_game() -> void:
 		return
 	_enter_play_and_reload()
 
+## Переводит автолоады в боевое состояние, но НЕ трогает дерево сцен.
+## Раньше здесь стоял reload_current_scene(): при старте из меню он
+## перезагружал само меню, а игровой мир так и не появлялся.
 func _enter_play_and_reload() -> void:
 	_change_state(GameState.PLAYING)
 	UIManager.close_all_blocking()
 	EventBus.game_started.emit()
-	get_tree().reload_current_scene()
 
 func pause_game() -> void:
 	if current_state == GameState.PLAYING:

@@ -42,12 +42,12 @@ func _show_endings() -> void:
 		stats_label.text += "\n• " + str(ends[i].get("title"))
 
 func _on_next() -> void:
-	get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
+	Routes.to_menu()
 
 func _on_ng() -> void:
 	NewGamePlus.activate_ng_plus()
-	get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
+	Routes.to_menu()
 
 func _on_menu() -> void:
 	get_tree().paused = false
-	get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
+	Routes.to_menu()

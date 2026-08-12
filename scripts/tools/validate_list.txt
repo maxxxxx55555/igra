@@ -118,7 +118,6 @@ scripts/player/flashlight_stats.gd
 scripts/player/interact_zone.gd
 scripts/player/player.gd
 scripts/player/player_3d.gd
-scripts/player/player_fps.gd
 scripts/player/player_stats.gd
 scripts/player/player_visual.gd
 scripts/post_process_overlay.gd
@@ -194,7 +193,6 @@ scripts/ui/inventory_system.gd
 scripts/ui/inventory_ui.gd
 scripts/ui/item_icons.gd
 scripts/ui/journal_ui.gd
-scripts/ui/level_select.gd
 scripts/ui/loading_screen.gd
 scripts/ui/lobby_menu.gd
 scripts/ui/main_menu.gd

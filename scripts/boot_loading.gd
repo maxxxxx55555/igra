@@ -13,6 +13,7 @@ const TIPS = [
 
 var progress: float = 0.0
 var target: float = 0.0
+var _left: bool = false
 
 func _ready() -> void:
 	add_to_group("ui_root")
@@ -23,5 +24,7 @@ func _process(delta: float) -> void:
 	target = min(target + delta * 30.0, 100.0)
 	progress = lerp(progress, target, delta * 2.0)
 	bar.value = progress
-	if progress > 99.0:
-		get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
+	# Без флага _left это срабатывало каждый кадр после 99% и спамило переходы.
+	if progress > 99.0 and not _left:
+		_left = true
+		Routes.to_menu()

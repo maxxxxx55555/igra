@@ -11,4 +11,4 @@ func _ready() -> void:
 	var tw = create_tween()
 	tw.tween_property(self, "modulate:a", 1.0, 1.0)
 	tw.tween_interval(2.0)
-	tw.tween_callback(func(): get_tree().change_scene_to_file("res://scenes/ui/boot_loading.tscn"))
+	tw.tween_callback(func(): Routes.goto(Routes.BOOT))

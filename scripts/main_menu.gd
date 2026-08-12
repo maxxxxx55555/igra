@@ -14,10 +14,10 @@ func _ready() -> void:
 	difficulty_btn.text = "СЛОЖНОСТЬ"
 	credits_btn.text = "ТИТРЫ"
 	quit_btn.text = "ВЫХОД"
-	play_btn.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/levels/level_01.tscn"))
-	settings_btn.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/ui/settings.tscn"))
-	difficulty_btn.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/ui/difficulty.tscn"))
-	credits_btn.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/ui/credits.tscn"))
+	play_btn.pressed.connect(func(): Routes.start_game())
+	settings_btn.pressed.connect(func(): Routes.goto(Routes.SETTINGS))
+	difficulty_btn.pressed.connect(func(): Routes.goto(Routes.DIFFICULTY))
+	credits_btn.pressed.connect(func(): Routes.goto(Routes.CREDITS))
 	quit_btn.pressed.connect(_on_quit)
 	_start_flicker()
 
@@ -29,4 +29,4 @@ func _start_flicker() -> void:
 	tw.tween_property(flicker, "modulate:a", 1.0, 0.5)
 
 func _on_quit() -> void:
-	get_tree().change_scene_to_file("res://scenes/ui/confirm_quit.tscn")
+	Routes.goto("res://scenes/ui/confirm_quit.tscn")

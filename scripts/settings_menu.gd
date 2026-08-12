@@ -41,7 +41,7 @@ func _ready() -> void:
 
 	# Back
 	var back := _make_button(vb, "НАЗАД")
-	back.pressed.connect(func() -> void: get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn"))
+	back.pressed.connect(func() -> void: Routes.to_menu())
 
 func _make_slider(parent: Node, label_text: String, cb: Callable) -> HSlider:
 	var row := HBoxContainer.new()

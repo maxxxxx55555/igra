@@ -30,14 +30,14 @@ func _pause_game() -> void:
 	is_paused = true
 	visible = true
 	Engine.time_scale = 0.0
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 
 func _resume_game() -> void:
 	is_paused = false
 	Engine.time_scale = 1.0
 	visible = false
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	InputService.refresh_mouse_mode()
 
 
 func _on_resume() -> void:
@@ -53,7 +53,7 @@ func _on_settings() -> void:
 func _on_save_quit() -> void:
 	_resume_game()
 	SaveSystem.save_all()
-	get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
+	Routes.to_menu()
 
 
 func _on_quit() -> void:

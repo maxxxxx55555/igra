@@ -1,7 +1,7 @@
 extends Node
 ## ObjectPool — универсальный пул объектов для врагов, пикапов, частиц.
 ## Использование:
-##   ObjectPool.register("enemy", preload("res://scenes/enemies/zombie.tscn"), 8)
+##   ObjectPool.register("enemy", preload("res://scenes/enemies/shadow_3d.tscn"), 8)
 ##   var inst = ObjectPool.get_instance("enemy")
 ##   ObjectPool.return_instance("enemy", inst)
 

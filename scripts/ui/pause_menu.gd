@@ -40,7 +40,7 @@ func _build() -> void:
 	vb.add_child(t)
 	_btn(vb, LocalizationManager.t("resume"),   func() -> void: UIManager.close(&"pause"); GameManager.resume_game())
 	_btn(vb, LocalizationManager.t("settings"), func() -> void: UIManager.open(&"settings"))
-	_btn(vb, LocalizationManager.t("restart"),  func() -> void: FadeTransition.fade_to(func() -> void: get_tree().reload_current_scene()))
+	_btn(vb, LocalizationManager.t("restart"),  func() -> void: FadeTransition.fade_to(func() -> void: Routes.restart_game()))
 	_btn(vb, LocalizationManager.t("back_menu"),func() -> void: FadeTransition.fade_to(func() -> void: GameManager.return_to_menu()))
 
 func _animate_in() -> void:

@@ -15,4 +15,4 @@ func _toggle_map() -> void:
 	if map_container:
 		map_container.visible = _is_open
 	get_tree().paused = _is_open
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if _is_open else Input.MOUSE_MODE_CAPTURED
+	InputService.refresh_mouse_mode()

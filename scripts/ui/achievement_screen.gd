@@ -4,7 +4,7 @@ extends CanvasLayer
 @onready var btn_back: Button = $Control/BtnBack
 
 func _ready() -> void:
-	btn_back.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn"))
+	btn_back.pressed.connect(func(): Routes.to_menu())
 	_populate()
 
 func _populate() -> void:

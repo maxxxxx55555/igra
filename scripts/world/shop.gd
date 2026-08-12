@@ -57,11 +57,7 @@ func _build_ui() -> void:
 
 		var name_l := Label.new()
 		name_l.custom_minimum_size = Vector2(220, 0)
-		var i18n := get_node_or_null("/root/I18n")
-		if i18n != null and i18n.has_method("t"):
-			name_l.text = i18n.t(StringName(it["key"]))
-		else:
-			name_l.text = it["id"]
+		name_l.text = LocalizationManager.t(String(it["key"]))
 		name_l.add_theme_font_size_override("font_size", 18)
 		name_l.add_theme_color_override("font_color", Color(0.95, 0.95, 0.95))
 		row.add_child(name_l)

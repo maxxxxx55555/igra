@@ -26,8 +26,8 @@ func show_game_over() -> void:
 
 func _on_restart() -> void:
 	get_tree().paused = false
-	get_tree().reload_current_scene()
+	Routes.restart_game()
 
 func _on_menu() -> void:
 	get_tree().paused = false
-	get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
+	Routes.to_menu()

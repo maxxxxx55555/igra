@@ -6,7 +6,7 @@ extends CanvasLayer
 
 var tips: Array = ["tip1", "tip2", "tip3", "tip4"]
 var _progress: float = 0.0
-var _target: String = "res://scenes/levels/level_01.tscn"
+var _target: String = "res://scenes/main_3d.tscn"
 
 func _ready() -> void:
 	status.text = LocalizationManager.t("loading")

@@ -20,7 +20,7 @@ func set_reason(reason: String) -> void:
 func show_death() -> void:
 	visible = true
 	Engine.time_scale = 0.0
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 func hide_death() -> void:
 	visible = false
@@ -28,7 +28,7 @@ func hide_death() -> void:
 
 func _on_continue() -> void:
 	hide_death()
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	InputService.refresh_mouse_mode()
 	var lm := get_tree().root.get_node_or_null("/root/LevelManager")
 	if lm and lm.has_method("respawn_or_reload"):
 		lm.respawn_or_reload()

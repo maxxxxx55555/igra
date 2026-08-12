@@ -56,5 +56,5 @@ func _end_cutscene() -> void:
 		_original_camera.current = true
 	_is_playing = false
 	get_tree().paused = false
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	InputService.refresh_mouse_mode()
 	cutscene_ended.emit()

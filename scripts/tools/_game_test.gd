@@ -11,7 +11,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	SaveSystem.reset_all()
 	GameManager._change_state(GameManager.GameState.PLAYING)
-	add_child(load("res://scenes/legacy_2d/main.tscn").instantiate())
+	add_child(load("res://scenes/main_3d.tscn").instantiate())
 	print("[gtest] main instantiated")
 
 func _process(delta: float) -> void:
@@ -158,7 +158,7 @@ func _test_meta() -> void:
 	NewGamePlus.reset_for_new_game()
 	print("[gtest] ng+ reset ok: ", NewGamePlus.get_current_ng_plus() == 0)
 	var cp_before: bool = SaveSystem.has_save()
-	SaveSystem.set_checkpoint("res://scenes/legacy_2d/main.tscn", Vector3(123, 0, 456))
+	SaveSystem.set_checkpoint("res://scenes/main_3d.tscn", Vector3(123, 0, 456))
 	print("[gtest] checkpoint autosave: ", SaveSystem.has_save())
 	if not cp_before:
 		DirAccess.remove_absolute("user://tls_savegame.save")

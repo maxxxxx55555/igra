@@ -69,17 +69,9 @@ func _apply_kind() -> void:
 		return
 	var key_title: StringName = &"msg_win" if kind == "win" else &"msg_lose"
 	var key_msg: StringName = &"msg_win" if kind == "win" else &"msg_lose"
-	if Engine.has_singleton("I18n") or get_tree().root.get_node_or_null("I18n") != null:
-		var i18n := get_tree().root.get_node_or_null("I18n")
-		if i18n != null and i18n.has_method("t"):
-			_title.text = i18n.t(key_title)
-			_sub.text = i18n.t(key_msg)
-		else:
-			_title.text = "ALL DISTRICTS POWERED!" if kind == "win" else "YOU FAILED..."
-			_sub.text = _title.text
-	else:
-		_title.text = "ALL DISTRICTS POWERED!" if kind == "win" else "YOU FAILED..."
-		_sub.text = _title.text
+	# Единый источник переводов — LocalizationManager (data/i18n/*.json).
+	_title.text = LocalizationManager.t(String(key_title))
+	_sub.text = LocalizationManager.t(String(key_msg))
 	if _bg != null:
 		_bg.color = COLOR_WIN_BG if kind == "win" else COLOR_LOSE_BG
 
@@ -90,4 +82,4 @@ func _unhandled_input(event: InputEvent) -> void:
 		var sl := get_tree().root.get_node_or_null("SaveLoad")
 		if sl != null and sl.has_method("mark_ending_shown"):
 			sl.mark_ending_shown()
-		get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+		Routes.to_menu()

@@ -7,9 +7,12 @@ var _timer: float = 0.0
 var _survive: float = 300.0
 
 func _ready() -> void:
-	var grid := get_node_or_null("/root/PowerGridManager")
-	if grid and grid.has_signal("all_restored"):
-		grid.all_restored.connect(start)
+	# PowerGridManager не существует (синглтон — PowerGrid), а сигнала
+	# all_restored у него нет: финальная ночь не запускалась никогда.
+	# Триггер — восстановление последнего района.
+	EventBus.district_restored.connect(func(_id: StringName, _stage: int) -> void:
+		if PowerGrid.all_restored():
+			start())
 
 
 func start() -> void:

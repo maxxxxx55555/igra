@@ -39,28 +39,11 @@ func _auto_start_from_main() -> void:
 	if GM and GM.has_method("_change_state"):
 		GM._change_state(GM.GameState.MENU)
 
+## Виртуальный джойстик живёт в hud_3d.tscn (BottomLeft/JoystickRing) и
+## включается там же по has_touch_ui(). Раньше здесь создавался второй,
+## поверх первого — два кольца в одном углу.
 func _setup_joystick() -> void:
-	# Виртуальный джойстик нужен только на тач-устройствах. На ПК он рисовался
-	# всегда и вдобавок дублировал JoystickRing из hud_3d.tscn — два кольца
-	# в одном углу.
-	if not (DisplayServer.is_touchscreen_available() or OS.has_feature("mobile")):
-		return
-	var cl := CanvasLayer.new()
-	cl.name = "TouchLayer"
-	add_child(cl)
-	var joy := Control.new()
-	joy.set_script(load("res://scripts/ui/virtual_joystick.gd"))
-	joy.name = "VirtualJoystick"
-	joy.size = Vector2(180, 180)
-	joy.anchor_left = 0.0
-	joy.anchor_top = 1.0
-	joy.anchor_right = 0.0
-	joy.anchor_bottom = 1.0
-	joy.offset_left = 24
-	joy.offset_top = -204
-	joy.offset_right = 204
-	joy.offset_bottom = -24
-	cl.add_child(joy)
+	pass
 
 func _setup_multiplayer() -> void:
 	var nm := get_node_or_null("/root/NetworkManager")

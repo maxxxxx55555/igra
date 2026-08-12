@@ -4,9 +4,9 @@ const SW: int = 12
 const SH: int = 9
 const LOOT_MAP: Dictionary = {"b": &"battery", "m": &"medkit", "k": &"key", "c": &"cable", "f": &"fuse", "s": &"scrap"}
 const ENEMY_MAP: Dictionary = {
-	"S": "res://scenes/enemies/shadow.tscn", "C": "res://scenes/enemies/crawler.tscn",
-	"W": "res://scenes/enemies/watcher.tscn", "H": "res://scenes/enemies/hunter.tscn",
-	"D": "res://scenes/enemies/destroyer.tscn", "B": "res://scenes/legacy_2d/boss.tscn",
+	"S": "res://scenes/enemies/shadow_3d.tscn", "C": "res://scenes/enemies/crawler_3d.tscn",
+	"W": "res://scenes/enemies/watcher_3d.tscn", "H": "res://scenes/enemies/hunter_3d.tscn",
+	"D": "res://scenes/enemies/destroyer_3d.tscn", "B": "res://scenes/enemies/boss_architect_3d.tscn",
 }
 const BLUEPRINT_SPAWNS: Array = [
 	{"district": &"residential", "cell": Vector2i(6,4), "item": &"blueprint_flashlight_brightness"},

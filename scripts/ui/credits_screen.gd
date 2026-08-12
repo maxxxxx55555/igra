@@ -5,4 +5,4 @@ func _ready() -> void:
 	$Panel/Back.text = LocalizationManager.t("back_menu")
 
 func _on_back() -> void:
-	get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
+	Routes.to_menu()

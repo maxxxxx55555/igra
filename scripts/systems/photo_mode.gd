@@ -12,10 +12,10 @@ func _input(event: InputEvent) -> void:
 func _toggle() -> void:
 	_active = !_active
 	if _active:
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		_apply_filter()
 	else:
-		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		InputService.refresh_mouse_mode()
 		_remove_filter()
 
 func toggle() -> void:

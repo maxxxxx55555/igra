@@ -19,7 +19,7 @@ func _pick(level: int = 0) -> void:
 	cfg.load("user://settings.cfg")
 	cfg.set_value("gameplay", "difficulty", level)
 	cfg.save("user://settings.cfg")
-	get_tree().change_scene_to_file("res://scenes/ui/loading_screen.tscn")
+	Routes.start_game()
 
 func _on_back() -> void:
-	get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
+	Routes.to_menu()

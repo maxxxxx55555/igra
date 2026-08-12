@@ -205,7 +205,7 @@ func _trigger_death() -> void:
 	super._trigger_death()
 	await get_tree().create_timer(2.5).timeout
 	if is_inside_tree():
-		get_tree().change_scene_to_file("res://scenes/ui/victory_screen.tscn")
+		Routes.goto("res://scenes/ui/victory_screen.tscn")
 
 func _add_silhouette() -> void:
 	if get_node_or_null("BodyMesh"):

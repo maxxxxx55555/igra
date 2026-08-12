@@ -49,7 +49,7 @@ func _toggle_inventory() -> void:
 	is_open = !is_open
 	inventory_panel.visible = is_open
 	get_tree().paused = is_open
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if is_open else Input.MOUSE_MODE_CAPTURED
+	InputService.refresh_mouse_mode()
 	inventory_toggled.emit(is_open)
 	_update_ui()
 

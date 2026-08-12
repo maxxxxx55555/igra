@@ -246,47 +246,61 @@ func _ready() -> void:
 		isv.flashlight_requested.connect(toggle_flashlight)
 		isv.dodge_requested.connect(_handle_dodge)
 	var gm := get_node_or_null("/root/GameManager")
+	call_deferred("_resolve_camera")
 	if gm and gm.has_method("is_playing") and gm.is_playing():
 		call_deferred("_on_game_started")
 
 func _buffer_jump() -> void:
 	_jump_buffer_timer = jump_buffer_time
 
+## Камера ищется отдельно от старта игры: направление движения считается от её
+## базиса, поэтому до первого game_started ссылка тоже обязана быть валидной.
+func _resolve_camera() -> void:
+	if is_instance_valid(_fps_cam):
+		return
+	var cam: Camera3D = get_viewport().get_camera_3d() if get_viewport() != null else null
+	if cam == null and get_tree() != null:
+		cam = get_tree().root.get_node_or_null("Main3D/Camera3D") as Camera3D
+	if cam == null and get_tree() != null and get_tree().current_scene != null:
+		cam = get_tree().current_scene.find_child("Camera3D", true, false) as Camera3D
+	_fps_cam = cam
+	if _fps_cam != null and _fps_cam.has_method("set_fps"):
+		_fps_cam.set_fps(true)
+
 func _on_game_started() -> void:
 	if _net_active and not is_multiplayer_authority():
 		return
 	gameplay_active = true
-	if _fps_cam == null:
-		var cam: Camera3D = get_viewport().get_camera_3d() if get_viewport() else null
-		if cam == null and get_tree():
-			cam = get_tree().root.get_node_or_null("Main3D/Camera3D") as Camera3D
-		_fps_cam = cam
-	if _fps_cam and _fps_cam.has_method("set_fps"):
-		_fps_cam.set_fps(true)
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	_resolve_camera()
+	# Режимом курсора владеет InputService (он же вернёт захват после паузы).
+	InputService.refresh_mouse_mode()
+
+func _is_touch_device() -> bool:
+	return InputService.is_touch_device()
+
+## Обзор. Мышь — на десктопе (при захваченном курсоре), палец — на Android.
+## Тач-зона обзора: правее JOY_ZONE_RATIO, чтобы не спорить с виртуальным
+## джойстиком слева. Раньше любой тап в этой зоне ещё и бил — из-за этого
+## поворот камеры сам себя превращал в атаку; удар теперь только по кнопке.
+const JOY_ZONE_RATIO: float = 0.35
+const TOUCH_LOOK_SENS: float = 0.004
 
 func _input(event: InputEvent) -> void:
 	if not gameplay_active:
 		return
 	if _net_active and not is_multiplayer_authority():
 		return
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		if Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
-			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
-		rotation.y -= event.relative.x * mouse_sens
-		_pitch -= event.relative.y * mouse_sens
-		_pitch = clampf(_pitch, -1.5, 1.5)
-	if event is InputEventScreenDrag:
+		_apply_look(-event.relative.x * mouse_sens, -event.relative.y * mouse_sens)
+	elif event is InputEventScreenDrag:
 		var vp_w: float = get_viewport().get_visible_rect().size.x if get_viewport() else 1000.0
-		if event.position.x < vp_w * 0.35:
+		if event.position.x < vp_w * JOY_ZONE_RATIO:
 			return
-		rotation.y -= event.relative.x * mouse_sens
-		_pitch = clampf(_pitch - event.relative.y * mouse_sens, -1.5, 1.5)
-	if event is InputEventScreenTouch and event.pressed:
-		var vp_w2: float = get_viewport().get_visible_rect().size.x if get_viewport() else 1000.0
-		if event.position.x >= vp_w2 * 0.35:
-			_handle_attack()
+		_apply_look(-event.relative.x * TOUCH_LOOK_SENS, -event.relative.y * TOUCH_LOOK_SENS)
+
+func _apply_look(yaw_delta: float, pitch_delta: float) -> void:
+	rotation.y += yaw_delta
+	_pitch = clampf(_pitch + pitch_delta, -1.5, 1.5)
 
 func _physics_process(delta: float) -> void:
 	if get_tree().paused:
@@ -325,6 +339,8 @@ func _physics_process(delta: float) -> void:
 		if _dodge_input_timer > 0.4:
 			_dodge_input_timer = 0.0
 	var dir: Vector3
+	if not is_instance_valid(_fps_cam):
+		_resolve_camera()
 	if _fps_cam and is_instance_valid(_fps_cam):
 		var fbasis := _fps_cam.global_transform.basis
 		var fwd := -fbasis.z
@@ -405,7 +421,7 @@ func _physics_process(delta: float) -> void:
 		_was_on_floor = true
 	else:
 		_coyote_timer -= delta
-	if Input.is_action_just_pressed("ui_accept"):
+	if Input.is_action_just_pressed("jump"):
 		_jump_buffer_timer = jump_buffer_time
 	else:
 		_jump_buffer_timer -= delta
@@ -417,7 +433,9 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 	if moving:
-		if Input.get_mouse_mode() != Input.MOUSE_MODE_CAPTURED:
+		# В FPS-виде поворотом владеет обзор (мышь/палец); доворачивать корпус к
+		# направлению движения нужно только в виде от третьего лица.
+		if not _is_fps_view():
 			var target_angle: float = atan2(dir.x, -dir.z)
 			rotation.y = lerp_angle(rotation.y, target_angle, 12.0 * delta)
 		pivot.rotation.y = 0.0
@@ -443,7 +461,7 @@ func _physics_process(delta: float) -> void:
 			_fps_cam.set_pitch(_pitch)
 	# Один пивот для света, конуса, пыли и «фонаря в руке» — иначе они смотрят врозь.
 	flashlight_pivot.global_rotation = Vector3(_pitch, global_rotation.y, 0.0)
-	human_body.visible = enable_human_body and Input.get_mouse_mode() != Input.MOUSE_MODE_CAPTURED
+	human_body.visible = enable_human_body and not _is_fps_view()
 
 	flashlight.visible = flashlight_enabled
 	# Конус — вид от третьего лица; из глаз он превращается в засвет во весь экран.
@@ -473,6 +491,8 @@ func _physics_process(delta: float) -> void:
 
 	if _dodge_cooldown > 0.0:
 		_dodge_cooldown -= delta
+	if _strobe_cooldown > 0.0:
+		_strobe_cooldown -= delta
 	if _iframes > 0.0:
 		_iframes -= delta
 	if _stun_timer > 0.0:
@@ -622,12 +642,63 @@ func add_battery(amount: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if _net_active and not is_multiplayer_authority():
 		return
-	if event.is_action_pressed("attack"):
+	if event.is_action_pressed("attack") or event.is_action_pressed("melee"):
 		_handle_attack()
-	if Input.is_action_just_pressed("flashlight_toggle"):
+	if event.is_action_pressed("flashlight_toggle"):
 		toggle_flashlight()
 	if event.is_action_pressed("interact"):
 		_try_inspect()
+	if event.is_action_pressed("strobe"):
+		trigger_strobe()
+
+## GDD §3.1 — стробоскоп: STUN всем врагам в конусе фонаря на 1.5 с, кд 10 с.
+## Требует включённого фонаря и заряда батареи.
+const STROBE_COOLDOWN: float = 10.0
+const STROBE_STUN: float = 1.5
+const STROBE_RANGE: float = 12.0
+const STROBE_HALF_ANGLE: float = 0.45  # ~26° от оси = конус 52°
+const STROBE_BATTERY_COST: float = 5.0
+
+var _strobe_cooldown: float = 0.0
+
+func get_strobe_cooldown_ratio() -> float:
+	return clampf(_strobe_cooldown / STROBE_COOLDOWN, 0.0, 1.0)
+
+func trigger_strobe() -> bool:
+	if _strobe_cooldown > 0.0 or not gameplay_active:
+		return false
+	if not flashlight_enabled or battery < STROBE_BATTERY_COST:
+		EventBus.inventory_notice.emit(LocalizationManager.t("STROBE_NO_POWER"))
+		return false
+	_strobe_cooldown = STROBE_COOLDOWN
+	consume_battery(STROBE_BATTERY_COST)
+	var origin: Vector3 = global_position + Vector3(0.0, 1.4, 0.0)
+	var forward: Vector3 = -flashlight_pivot.global_transform.basis.z
+	var hits: int = 0
+	for m in get_tree().get_nodes_in_group("monsters"):
+		if not (m is Node3D) or not is_instance_valid(m):
+			continue
+		var to_target: Vector3 = (m as Node3D).global_position - origin
+		if to_target.length() > STROBE_RANGE:
+			continue
+		if forward.normalized().dot(to_target.normalized()) < cos(STROBE_HALF_ANGLE * PI):
+			continue
+		if m.has_method("stun"):
+			m.call("stun", STROBE_STUN)
+			hits += 1
+	_strobe_flash()
+	EventBus.noise_emitted.emit(Vector2(global_position.x, global_position.z), 4.0)
+	if hits > 0:
+		EventBus.inventory_notice.emit(LocalizationManager.t("STROBE_HIT"))
+	return true
+
+func _strobe_flash() -> void:
+	var base_energy: float = flashlight.light_energy
+	var tw := create_tween()
+	for i in 3:
+		tw.tween_property(flashlight, "light_energy", base_energy * 3.0, 0.05)
+		tw.tween_property(flashlight, "light_energy", base_energy * 0.2, 0.05)
+	tw.tween_property(flashlight, "light_energy", base_energy, 0.1)
 
 func _try_inspect() -> void:
 	if not gameplay_active:
