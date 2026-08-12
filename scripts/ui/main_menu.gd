@@ -32,10 +32,13 @@ func _ready() -> void:
 	_connect(vb, "Quit", func() -> void: Routes.goto("res://scenes/ui/confirm_quit.tscn"))
 	_apply_localization()
 	LocalizationManager.language_changed.connect(_apply_localization)
-	# Игра переходит в состояние меню, иначе курсор остаётся захваченным
-	# после возврата из боя и по меню нечем кликать.
-	if GameManager.has_method("return_to_menu"):
+	# Возвращаем игру в состояние MENU (иначе после боя курсор остаётся
+	# захваченным и по меню нечем кликать), но только если это ещё не сделано:
+	# return_to_menu() дергает close_all_blocking() и шлёт game_state_changed.
+	if not GameManager.is_menu():
 		GameManager.return_to_menu()
+	else:
+		InputService.refresh_mouse_mode()
 
 ## «Продолжить» показываем только при наличии сохранения.
 func _ensure_continue(vb: VBoxContainer) -> void:

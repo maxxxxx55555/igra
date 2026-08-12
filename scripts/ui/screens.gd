@@ -1,13 +1,22 @@
 extends CanvasLayer
 signal panel_ready(name: String)
+## Экраны, которыми владеет UIManager (главное меню, пауза, настройки, смерть,
+## победа, карта, журналы, достижения, статистика, верстак, туториал). Раньше
+## Screens строил СВОИ копии всех этих экранов поверх экранов UIManager —
+## два одинаковых меню в одной сцене, оба перехватывали ввод.
+const OWNED_BY_UI_MANAGER: Array[String] = [
+	"MainMenu", "Pause", "Settings", "Death", "Victory",
+	"CityMap", "Journal", "QuestJournal", "Achievements", "Stats", "Workbench",
+	"Tutorial", "Inventory", "Character",
+]
+
+## За Screens остаётся то, чего в UIManager нет вовсе: головоломки, радио,
+## сюжетные сцены, финальная ночь, погода, щиток, события, магазин и т.п.
 const SCREEN_LIST: Array[String] = [
-	"MainMenu", "Loading", "Pause", "Settings", "Inventory",
-	"CityMap", "Journal", "QuestJournal", "Achievements", "Stats", "Shop",
-	"Death", "Victory", "Saves", "Bestiary", "Character",
+	"Loading", "Shop", "Saves", "Bestiary",
 	"FlashlightUpgrade", "PhotoMode", "ControlsTouch",
-	"Weather", "Workbench", "PuzzleCables", "Radio",
+	"Weather", "PuzzleCables", "Radio",
 	"StoryScene", "FinalNight", "PowerGrid", "Events",
-	"Tutorial",
 ]
 const BRASS: Color = Color(0.788, 0.635, 0.290)
 const BRASS_DIM: Color = Color(0.541, 0.451, 0.220)
@@ -144,7 +153,22 @@ func _setup_btn_hover(btn: Button) -> void:
 func _setup_btn_hover_connect(btn: Button) -> void:
 	_setup_btn_hover(btn)
 
+## Сопоставление старых имён Screens с идентификаторами UIManager.
+const UI_MANAGER_IDS: Dictionary = {
+	"MainMenu": &"main_menu", "Pause": &"pause", "Settings": &"settings",
+	"Death": &"death", "Victory": &"win", "CityMap": &"city_map",
+	"Journal": &"journal", "QuestJournal": &"quest_journal",
+	"Achievements": &"achievements", "Stats": &"stats",
+	"Workbench": &"workbench", "Tutorial": &"tutorial",
+}
+
 func show_screen(name: String) -> void:
+	# Экраны, отданные UIManager, открываем у него, а не строим второй раз.
+	if OWNED_BY_UI_MANAGER.has(name):
+		var id: StringName = UI_MANAGER_IDS.get(name, &"")
+		if id != &"" and UIManager != null:
+			UIManager.open(id)
+		return
 	hide_all()
 	_active_screen = name
 	if not _screen_data.has(name):

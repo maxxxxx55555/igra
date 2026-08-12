@@ -1,6 +1,9 @@
 extends Node
 const SCREENS: Dictionary = {
-	&"main_menu":       "res://scripts/ui/main_menu.gd",
+	# Именно сцена, а не скрипт: main_menu.gd работает с узлом VBox из
+	# main_menu.tscn. Инстанс «голого» скрипта давал пустой блокирующий
+	# оверлей, который прятал HUD и перехватывал ввод.
+	&"main_menu":       "res://scenes/ui/main_menu.tscn",
 	&"pause":           "res://scripts/ui/pause_menu.gd",
 	&"settings":        "res://scripts/ui/settings_screen.gd",
 	&"death":           "res://scripts/ui/death_screen.gd",
@@ -145,6 +148,11 @@ func _get_screen(id: StringName) -> Control:
 			node.set_anchors_and_offsets_preset(Control.PRESET_CENTER, Control.PRESET_MODE_KEEP_SIZE)
 	_cache[id] = node
 	return node
+## true, если текущая сцена — само главное меню.
+func _in_menu_scene() -> bool:
+	var cs := get_tree().current_scene
+	return cs != null and cs.scene_file_path == "res://scenes/ui/main_menu.tscn"
+
 func _set_hud(visible: bool) -> void:
 	EventBus.hud_visibility_changed.emit(visible)
 func _on_game_state(state: int) -> void:
@@ -156,7 +164,11 @@ func _on_game_state(state: int) -> void:
 			n.visible = in_game
 	match state:
 		GameManager.GameState.MENU:
-			open(&"main_menu")
+			# Если игрок уже НА сцене меню, второй экран поверх неё не нужен —
+			# иначе main_menu.gd -> return_to_menu() -> MENU -> open(main_menu)
+			# уходило в самоповтор и рисовало меню поверх меню.
+			if not _in_menu_scene():
+				open(&"main_menu")
 		GameManager.GameState.PLAYING:
 			# Меню закрывалось только по EventBus.game_started. Любой другой путь
 			# в PLAYING (загрузка, отладка, конец катсцены) оставлял главное меню
