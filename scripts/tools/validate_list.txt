@@ -179,7 +179,6 @@ scripts/ui/city_map.gd
 scripts/ui/coin_hud.gd
 scripts/ui/confirm_quit.gd
 scripts/ui/controls.gd
-scripts/ui/credits_screen.gd
 scripts/ui/death_screen.gd
 scripts/ui/dialog_system.gd
 scripts/ui/difficulty_screen.gd
