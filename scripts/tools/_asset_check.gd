@@ -11,7 +11,8 @@ func _ready() -> void:
 	_check_music()
 	_check_app_icon()
 	print("[asset-check] DONE fails=", _fails)
-	get_tree().quit()
+	# Гейт всегда выходил с кодом 0, поэтому в CI не мог ничего провалить.
+	get_tree().quit(0 if _fails == 0 else 1)
 
 ## S9.2/S9.3: per-surface footsteps + monster cues must exist and be non-empty.
 func _check_sfx_bank() -> void:
