@@ -1015,7 +1015,7 @@ func build_Journal(content: ColorRect, card: ColorRect, cw: float, ch: float) ->
 		for qid in quest_mgr.quests:
 			var q = quest_mgr.quests[qid]
 			var status := " [DONE]" if q.done else " [" + str(q.progress) + "/" + str(q.target_count) + "]"
-			quest_entries.append(q.title + status)
+			quest_entries.append(quest_mgr.get_title(q) + status)
 	doc_entries = ["doc_engineer_log", "doc_family_letter"]
 	note_entries = [tr("JOURNAL_TAB_NOTES")]
 	var all_lists := [quest_entries, doc_entries, note_entries]

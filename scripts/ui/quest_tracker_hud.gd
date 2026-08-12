@@ -45,7 +45,7 @@ func _build_ui() -> void:
 	
 	# Title
 	_title_lbl = Label.new()
-	_title_lbl.text = "OBJECTIVES"
+	_title_lbl.text = LocalizationManager.t("QUEST_OBJECTIVES")
 	_title_lbl.add_theme_font_size_override("font_size", 14)
 	_title_lbl.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
 	_title_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -91,49 +91,39 @@ func _refresh(_a: Variant = null, _b: Variant = null, _c: Variant = null) -> voi
 	
 	var show_markers = _settings and _settings.get_setting("objective_markers", true)
 	
-	var count = 0
-	for quest_id in active_quests:
+	_title_lbl.text = LocalizationManager.t("QUEST_OBJECTIVES")
+	_title_lbl.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
+
+	var count := 0
+	for quest in active_quests:
 		if count >= 3:
 			break
-		var quest = QuestManager._quests[quest_id]
-		if quest["status"] != QuestManager.STATUS_ACTIVE:
-			continue
-		
-		var data = quest["data"]
-		_title_lbl.text = data["title"]
-		_title_lbl.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
-		
-		for obj in data["objectives"]:
-			if count >= 3:
-				break
-			var current = quest["progress"].get(obj["id"], 0)
-			var target = obj["target"]
-			if current >= target:
-				continue
-			
-			var hb := HBoxContainer.new()
-			hb.add_theme_constant_override("separation", 6)
-			_objectives_vbox.add_child(hb)
-			
-			var checkbox := CheckBox.new()
-			checkbox.disabled = true
-			checkbox.button_pressed = current >= target
-			hb.add_child(checkbox)
-			
-			var obj_lbl := Label.new()
-			obj_lbl.text = "%s (%d/%d)" % [obj["description"], current, target]
-			obj_lbl.add_theme_font_size_override("font_size", 13)
-			obj_lbl.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT)
-			obj_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-			hb.add_child(obj_lbl)
-			
-			if show_markers and obj.get("marker_position"):
-				var arrow := TextureRect.new()
-				arrow.texture = _make_arrow_texture()
-				arrow.size = Vector2(16, 16)
-				hb.add_child(arrow)
-			
-			count += 1
+		var current := int(quest.get("progress", 0))
+		var target := int(quest.get("target_count", 1))
+
+		var hb := HBoxContainer.new()
+		hb.add_theme_constant_override("separation", 6)
+		_objectives_vbox.add_child(hb)
+
+		var checkbox := CheckBox.new()
+		checkbox.disabled = true
+		checkbox.button_pressed = current >= target
+		hb.add_child(checkbox)
+
+		var obj_lbl := Label.new()
+		obj_lbl.text = "%s (%d/%d)" % [QuestManager.get_title(quest), current, target]
+		obj_lbl.add_theme_font_size_override("font_size", 13)
+		obj_lbl.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT)
+		obj_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		hb.add_child(obj_lbl)
+
+		if show_markers:
+			var arrow := TextureRect.new()
+			arrow.texture = _make_arrow_texture()
+			arrow.size = Vector2(16, 16)
+			hb.add_child(arrow)
+
+		count += 1
 
 func _make_arrow_texture() -> Texture2D:
 	var img := Image.create(16, 16, false, Image.FORMAT_RGBA8)

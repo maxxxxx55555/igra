@@ -5,141 +5,141 @@ signal achievement_unlocked(achievement_id: StringName)
 const ACHIEVEMENTS: Dictionary = {
 	"ach_01": {
 		"id": &"ach_01",
-		"name": "Первый свет",
-		"description": "Активировать первый фонарь",
+		"name": "ACH_01_NAME",
+		"description": "ACH_01_DESC",
 		"secret": false,
 		"condition": "district_1_full"
 	},
 	"ach_02": {
 		"id": &"ach_02",
-		"name": "Электрик",
-		"description": "Восстановить 1 район до FULL",
+		"name": "ACH_02_NAME",
+		"description": "ACH_02_DESC",
 		"secret": false,
 		"condition": "any_district_full"
 	},
 	"ach_03": {
 		"id": &"ach_03",
-		"name": "Светоч",
-		"description": "Восстановить все районы до FULL",
+		"name": "ACH_03_NAME",
+		"description": "ACH_03_DESC",
 		"secret": false,
 		"condition": "all_districts_full"
 	},
 	"ach_04": {
 		"id": &"ach_04",
-		"name": "Библиотекарь",
-		"description": "Собрать все документы",
+		"name": "ACH_04_NAME",
+		"description": "ACH_04_DESC",
 		"secret": false,
 		"condition": "all_documents_collected"
 	},
 	"ach_05": {
 		"id": &"ach_05",
-		"name": "Охотник на тени",
-		"description": "Убить 50 Shadow",
+		"name": "ACH_05_NAME",
+		"description": "ACH_05_DESC",
 		"secret": false,
 		"condition": "kill_shadows_50"
 	},
 	"ach_06": {
 		"id": &"ach_06",
-		"name": "Тихий как мышь",
-		"description": "Пройти District 3 без обнаружения",
+		"name": "ACH_06_NAME",
+		"description": "ACH_06_DESC",
 		"secret": false,
 		"condition": "district3_stealth"
 	},
 	"ach_07": {
 		"id": &"ach_07",
-		"name": "Мастер комбо",
-		"description": "Выполнить 10 combo-3 подряд",
+		"name": "ACH_07_NAME",
+		"description": "ACH_07_DESC",
 		"secret": false,
 		"condition": "combo3_x10"
 	},
 	"ach_08": {
 		"id": &"ach_08",
-		"name": "Перегруз",
-		"description": "Носить > 39 кг 5 минут",
+		"name": "ACH_08_NAME",
+		"description": "ACH_08_DESC",
 		"secret": false,
 		"condition": "overload_5min"
 	},
 	"ach_09": {
 		"id": &"ach_09",
-		"name": "Фотограф",
-		"description": "Сделать 10 фото",
+		"name": "ACH_09_NAME",
+		"description": "ACH_09_DESC",
 		"secret": false,
 		"condition": "photos_10"
 	},
 	"ach_10": {
 		"id": &"ach_10",
-		"name": "Искатель",
-		"description": "Найти 10 секретов",
+		"name": "ACH_10_NAME",
+		"description": "ACH_10_DESC",
 		"secret": false,
 		"condition": "secrets_10"
 	},
 	"ach_11": {
 		"id": &"ach_11",
-		"name": "Эконом",
-		"description": "Накопить 5000 монет",
+		"name": "ACH_11_NAME",
+		"description": "ACH_11_DESC",
 		"secret": false,
 		"condition": "coins_5000"
 	},
 	"ach_12": {
 		"id": &"ach_12",
-		"name": "Без царапин",
-		"description": "Пройти District 4 без урона",
+		"name": "ACH_12_NAME",
+		"description": "ACH_12_DESC",
 		"secret": false,
 		"condition": "district4_no_damage"
 	},
 	"ach_13": {
 		"id": &"ach_13",
-		"name": "Архитектор",
-		"description": "Победить босса",
+		"name": "ACH_13_NAME",
+		"description": "ACH_13_DESC",
 		"secret": false,
 		"condition": "boss_defeated"
 	},
 	"ach_14": {
 		"id": &"ach_14",
-		"name": "Истина",
-		"description": "Получить секретную концовку",
+		"name": "ACH_14_NAME",
+		"description": "ACH_14_DESC",
 		"secret": true,
 		"condition": "ending_truth"
 	},
 	"ach_15": {
 		"id": &"ach_15",
-		"name": "Тьма",
-		"description": "Получить плохую концовку",
+		"name": "ACH_15_NAME",
+		"description": "ACH_15_DESC",
 		"secret": true,
 		"condition": "ending_dark"
 	},
 	"ach_16": {
 		"id": &"ach_16",
-		"name": "Спидраннер",
-		"description": "Пройти игру за < 4 часа",
+		"name": "ACH_16_NAME",
+		"description": "ACH_16_DESC",
 		"secret": true,
 		"condition": "speedrun_4h"
 	},
 	"ach_17": {
 		"id": &"ach_17",
-		"name": "Коллекционер",
-		"description": "Собрать все скины фонарика",
+		"name": "ACH_17_NAME",
+		"description": "ACH_17_DESC",
 		"secret": true,
 		"condition": "all_flashlight_skins"
 	},
 	"ach_18": {
 		"id": &"ach_18",
-		"name": "Железный человек",
-		"description": "Пройти игру в Hardcore-режиме",
+		"name": "ACH_18_NAME",
+		"description": "ACH_18_DESC",
 		"secret": true,
 		"condition": "hardcore_clear"
 	},
 	"ach_19": {
 		"id": &"ach_19",
-		"name": "Сон в летнюю ночь",
-		"description": "Поспать в кровати (District 1)",
+		"name": "ACH_19_NAME",
+		"description": "ACH_19_DESC",
 		"secret": true,
 		"condition": "sleep_in_bed"
 	},
 	"ach_20": {
 		"id": &"ach_20",
-		"name": "Кто там?",
-		"description": "Услышать галлюцинацию 5 раз",
+		"name": "ACH_20_NAME",
+		"description": "ACH_20_DESC",
 		"secret": true,
 		"condition": "hallucinations_5"
 	}
@@ -187,6 +187,8 @@ func get_all() -> Array:
 		var data = ACHIEVEMENTS[aid].duplicate()
 		data["unlocked"] = is_unlocked(aid)
 		data["progress"] = get_progress(aid)
+		data["name"] = LocalizationManager.t(String(data.get("name", aid)))
+		data["description"] = LocalizationManager.t(String(data.get("description", "")))
 		result.append(data)
 	return result
 
@@ -230,6 +232,8 @@ func get_achievements() -> Dictionary:
 	for aid in ACHIEVEMENTS:
 		var data = ACHIEVEMENTS[aid].duplicate()
 		data["unlocked"] = is_unlocked(aid)
+		data["name"] = LocalizationManager.t(String(data.get("name", aid)))
+		data["description"] = LocalizationManager.t(String(data.get("description", "")))
 		data["title"] = data["name"]
 		result[aid] = data
 	return result
