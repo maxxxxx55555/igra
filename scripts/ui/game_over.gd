@@ -22,7 +22,7 @@ func show_game_over() -> void:
 	
 	var time := int(GameManager.play_time)
 	var kills := GameManager.enemies_killed
-	lbl_stats.text = "Время: %ds | Убито: %d" % [time, kills]
+	lbl_stats.text = LocalizationManager.tf("GAME_OVER_STATS", [time, kills])
 
 func _on_restart() -> void:
 	get_tree().paused = false

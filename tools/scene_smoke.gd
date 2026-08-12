@@ -5,7 +5,6 @@ func _init():
     var paths = [
         "res://scenes/ui/main_menu.tscn",
         "res://scenes/ui/menu.tscn",
-        "res://scenes/ui/settings.tscn",
         "res://scenes/ui/settings_screen.tscn",
         "res://scenes/ui/difficulty_screen.tscn",
         "res://scenes/ui/pause_menu.tscn",

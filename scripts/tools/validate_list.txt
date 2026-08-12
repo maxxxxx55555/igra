@@ -34,7 +34,6 @@ scripts/crafting/crafting_manager.gd
 scripts/credits.gd
 scripts/cutscenes/cutscene_manager.gd
 scripts/death_screen.gd
-scripts/dialogue/dialogue_manager.gd
 scripts/district_manager.gd
 scripts/document_pickup.gd
 scripts/economy/coin_wallet.gd
@@ -98,7 +97,6 @@ scripts/multiplayer/multiplayer_manager.gd
 scripts/multiplayer/network_manager.gd
 scripts/net/lan_menu.gd
 scripts/net/lan_network.gd
-scripts/npc/npc_interactor.gd
 scripts/pickups/item_pickup_3d.gd
 scripts/player/death_sequence.gd
 scripts/player/flashlight.gd
@@ -111,7 +109,6 @@ scripts/player/player_stats.gd
 scripts/player/player_visual.gd
 scripts/post_process_overlay.gd
 scripts/searchlight.gd
-scripts/settings_menu.gd
 scripts/splash.gd
 scripts/stress_test.gd
 scripts/system/particle_manager.gd
@@ -170,7 +167,6 @@ scripts/ui/controls.gd
 scripts/ui/daily_events_ui.gd
 scripts/ui/damage_vignette.gd
 scripts/ui/death_screen.gd
-scripts/ui/dialog_system.gd
 scripts/ui/difficulty_screen.gd
 scripts/ui/district_banner.gd
 scripts/ui/encyclopedia_ui.gd
@@ -207,9 +203,7 @@ scripts/ui/save_slots_ui.gd
 scripts/ui/screen_flow_manager.gd
 scripts/ui/screens.gd
 scripts/ui/settings_full.gd
-scripts/ui/settings_menu.gd
 scripts/ui/settings_screen.gd
-scripts/ui/shop_ui.gd
 scripts/ui/skill_button.gd
 scripts/ui/skill_tree_tab.gd
 scripts/ui/skill_tree_ui.gd

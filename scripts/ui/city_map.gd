@@ -144,11 +144,14 @@ func _make_row(id: StringName, pg: Node, current: StringName) -> Control:
 	return row
 
 func _display_name(id: StringName, pg: Node) -> String:
+	# display_name в .tres записан по-русски; для остальных 12 языков имя
+	# берётся из словаря по ключу DISTRICT_NAME_<ID>.
+	var fallback: String = ""
 	if pg != null:
 		var d = pg.get_district(id)
-		if d != null and not String(d.display_name).is_empty():
-			return String(d.display_name)
-	return String(id)
+		if d != null:
+			fallback = String(d.display_name)
+	return LocalizationManager.name_for("DISTRICT_NAME_", id, fallback)
 
 ## Переход строит WorldRuntime: он слушает district_entered и пересобирает
 ## район вместе с врагами и лутом.

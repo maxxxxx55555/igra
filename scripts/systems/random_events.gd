@@ -2,10 +2,10 @@ extends Node
 enum Ev { BLACKOUT, SURGE, DISTRESS, ACCIDENT }
 const EV_COUNT: int = 4
 const NAMES := {
-	Ev.BLACKOUT: "В одном из районов погас свет!",
-	Ev.SURGE: "Скачок напряжения — фонарик мигнул!",
-	Ev.DISTRESS: "Сигнал бедствия где-то в городе…",
-	Ev.ACCIDENT: "Обвал привлёк внимание тварей!",
+	Ev.BLACKOUT: "EVENT_BLACKOUT",
+	Ev.SURGE: "EVENT_SURGE",
+	Ev.DISTRESS: "EVENT_DISTRESS",
+	Ev.ACCIDENT: "EVENT_ACCIDENT",
 }
 var _timer: float = 0.0
 @export var min_interval: float = 60.0
@@ -22,7 +22,7 @@ func _process(delta: float) -> void:
 		_fire()
 func _fire() -> void:
 	var ev: int = randi() % EV_COUNT
-	EventBus.inventory_notice.emit(NAMES[ev])
+	EventBus.inventory_notice.emit(LocalizationManager.t(NAMES[ev]))
 	match ev:
 		Ev.BLACKOUT:
 			var d := _random_non_full_district()

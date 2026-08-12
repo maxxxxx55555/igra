@@ -62,7 +62,7 @@ func start_new_game() -> void:
 
 func continue_game() -> void:
 	if not SaveSystem.load_all():
-		EventBus.inventory_notice.emit("Нет сохранения")
+		EventBus.inventory_notice.emit(LocalizationManager.t("NO_SAVE"))
 		return
 	_enter_play_and_reload()
 

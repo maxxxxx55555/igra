@@ -9,13 +9,13 @@ func toggle() -> void:
 	active = not active
 	visible = active
 	EventBus.hud_visibility_changed.emit(not active)
-	EventBus.inventory_notice.emit("Фоторежим: ВКЛ" if active else "Фоторежим: ВЫКЛ")
+	EventBus.inventory_notice.emit(LocalizationManager.t("PHOTO_MODE_ON" if active else "PHOTO_MODE_OFF"))
 	queue_redraw()
 func _unhandled_input(event: InputEvent) -> void:
 	if active and event is InputEventKey and event.pressed and not event.echo:
 		if event.is_action_pressed("photo_capture"):
 			_shots += 1
-			EventBus.inventory_notice.emit("Снимок сохранён (%d)" % _shots)
+			EventBus.inventory_notice.emit(LocalizationManager.tf("PHOTO_SAVED", [_shots]))
 func _draw() -> void:
 	if not active:
 		return

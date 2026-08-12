@@ -10,5 +10,5 @@ func _ready() -> void:
 func _on_body_entered(body: Node) -> void:
 	if body.is_in_group("player") and zone_id != "":
 		EventBus.zone_reached.emit(StringName(zone_id))
-		EventBus.inventory_notice.emit("ИССЛЕДОВАНО: " + zone_id)
+		EventBus.inventory_notice.emit(LocalizationManager.tf("ZONE_EXPLORED", [zone_id]))
 		queue_free()

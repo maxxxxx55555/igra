@@ -2,7 +2,7 @@ extends Node3D
 
 @export var district_id: StringName = &"test_zone"
 @export var result_stage: int = 1
-@export var action_name: String = "Запустить генератор"
+@export var action_name: String = ""  # пусто = ACTION_START_GENERATOR из локализации
 
 var _player_nearby: bool = false
 
@@ -25,6 +25,9 @@ func _on_interact() -> void:
 	if not _player_nearby:
 		return
 	PowerGrid.advance_district(district_id, result_stage)
-	EventBus.puzzle_solved.emit(StringName("%s_%s" % [district_id, action_name]), district_id)
-	EventBus.inventory_notice.emit(tr("ACTION_READY") % action_name)
+	# action_name пустой у большинства головоломок — подставляем локализованное
+	# название действия, иначе игрок видел бы "ГОТОВО: " без предмета.
+	var action: String = action_name if not action_name.is_empty() else LocalizationManager.t("ACTION_START_GENERATOR")
+	EventBus.puzzle_solved.emit(StringName("%s_%s" % [district_id, action]), district_id)
+	EventBus.inventory_notice.emit(LocalizationManager.tf("ACTION_READY", [action]))
 	queue_free()

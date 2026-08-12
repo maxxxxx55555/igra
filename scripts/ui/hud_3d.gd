@@ -264,9 +264,9 @@ func _remove_dup_leftbottom() -> void:
 
 func _add_captions() -> void:
 	var data := [
-		["HP", $TopLeft/HP],
-		["СТАМИНА", $TopLeft/Stam],
-		["БАТАРЕЯ", $TopLeft/Bat]
+		[LocalizationManager.t("HUD_HP"), $TopLeft/HP],
+		[LocalizationManager.t("HUD_STAMINA"), $TopLeft/Stam],
+		[LocalizationManager.t("HUD_BATTERY"), $TopLeft/Bat]
 	]
 	var outline_col := Color(0.047, 0.063, 0.086, 1.0)
 	var shadow_col := Color(0.0, 0.0, 0.0, 0.5)

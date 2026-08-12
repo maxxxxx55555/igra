@@ -134,10 +134,7 @@ func _test_screens() -> void:
 	print("[gtest] screens opened: ", UIManager.SCREENS.size())
 
 func _test_shop() -> void:
-	var before: int = CoinWallet.get_coins()
-	ShopService.buy(&"coin_pack_500")
-	var after: int = CoinWallet.get_coins()
-	print("[gtest] coins: ", before, " -> ", after)
+	# Паков монет за донат больше нет — проверяем только покупку за игровые монеты.
 	var up_before: int = CoinWallet.get_coins()
 	ShopService.buy(&"upgrade_flashlight_brightness")
 	print("[gtest] upgrade owned: ", ShopService.is_owned(&"upgrade_flashlight_brightness"), " coins ", up_before, " -> ", CoinWallet.get_coins())

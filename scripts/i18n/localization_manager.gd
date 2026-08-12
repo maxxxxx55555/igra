@@ -154,6 +154,16 @@ func tf(key: String, args: Array) -> String:
 func has_key(key: String) -> bool:
 	return _strings.has(key) or _fallback.has(key)
 
+## Имя игрового объекта по префиксу и id: name_for("ITEM_", &"battery", "Батарейка").
+## Ресурсы .tres хранят display_name по-русски, а языков в игре 13. Если ключ
+## ITEM_BATTERY есть в словаре — берём его, иначе возвращаем запасное значение
+## из ресурса, чтобы новый предмет без перевода не показывал голый id.
+func name_for(prefix: String, id: StringName, fallback_name: String = "") -> String:
+	var key: String = prefix + String(id).to_upper()
+	if has_key(key):
+		return t(key)
+	return fallback_name if not fallback_name.is_empty() else String(id)
+
 func cycle_language() -> void:
 	var idx = SUPPORTED.find(current_lang)
 	var next = SUPPORTED[(idx + 1) % SUPPORTED.size()]

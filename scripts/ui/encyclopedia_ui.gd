@@ -48,7 +48,7 @@ func _build() -> void:
 		prev.color = data.body_color if (unlocked and data) else ThemeProvider.COLOR_BG_DARK
 		cv.add_child(prev)
 		var nm := Label.new()
-		nm.text = data.display_name if unlocked else "???"
+		nm.text = LocalizationManager.name_for("MONSTER_", data.id, data.display_name) if unlocked else "???"
 		nm.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER if unlocked else ThemeProvider.COLOR_TEXT_DIM)
 		cv.add_child(nm)
 		var ds := Label.new()

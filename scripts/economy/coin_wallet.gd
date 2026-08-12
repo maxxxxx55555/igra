@@ -16,7 +16,7 @@ func try_spend(amount: int) -> bool:
 		return false
 	if coins < amount:
 		purchase_failed.emit("not_enough_coins")
-		EventBus.inventory_notice.emit("Недостаточно монет")
+		EventBus.inventory_notice.emit(LocalizationManager.t("NOT_ENOUGH_COINS"))
 		return false
 	coins -= amount
 	coins_changed.emit(coins)
