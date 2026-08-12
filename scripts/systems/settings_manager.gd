@@ -405,7 +405,8 @@ func _find_environment() -> Environment:
 		return cam.environment
 	return null
 
-func _ensure_bus(bus: String) -> void:    if AudioServer.get_bus_index(bus) < 0:
+func _ensure_bus(bus: String) -> void:
+	if AudioServer.get_bus_index(bus) < 0:
 		AudioServer.add_bus()
 		AudioServer.set_bus_name(AudioServer.bus_count - 1, bus)
 

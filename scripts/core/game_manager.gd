@@ -31,7 +31,9 @@ func is_win() -> bool: return current_state == GameState.WIN
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	AudioServer.set_bus_mute(0, true)
+	# Master-шина раньше глушилась здесь безусловно и нигде не размьючивалась —
+	# игра запускалась полностью беззвучной. Громкостью владеет SettingsManager.
+	AudioServer.set_bus_mute(0, false)
 	EventBus.enemy_killed.connect(func(_id: StringName) -> void: enemies_killed += 1)
 	_change_state(GameState.MENU)
 

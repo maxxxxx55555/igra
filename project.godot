@@ -70,7 +70,6 @@ EndingsManager="*res://scripts/systems/endings_manager.gd"
 TutorialSystem="*res://scripts/ui/tutorial_system.gd"
 RewardsManager="*res://scripts/economy/rewards_manager.gd"
 RandomEvents="*res://scripts/systems/random_events.gd"
-AdManager="*res://scripts/monetization/ad_manager.gd"
 #ScreenFlowManager="*res://scripts/ui/screen_flow_manager.gd"
 
 [debug]
