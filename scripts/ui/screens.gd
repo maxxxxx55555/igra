@@ -426,73 +426,84 @@ func build_Bestiary(content: ColorRect, card: ColorRect, cw: float, ch: float) -
 		frame.add_child(stats_lbl)
 
 func build_FlashlightUpgrade(content: ColorRect, card: ColorRect, cw: float, ch: float) -> void:
-	var params := [
-		{"name": LocalizationManager.t("SCR_YARKOST"), "level": 3, "max": 5},
-		{"name": LocalizationManager.t("SCR_DALNOST"), "level": 2, "max": 5},
-		{"name": LocalizationManager.t("SCR_UGOL_SVETA"), "level": 4, "max": 5},
-		{"name": LocalizationManager.t("SCR_RASHOD_BATAREI"), "level": 2, "max": 5},
-		{"name": LocalizationManager.t("SCR_STABILNOST"), "level": 3, "max": 5},
-		{"name": LocalizationManager.t("SCR_EMKOST"), "level": 2, "max": 5},
-	]
-	for i in params.size():
-		var py := 5 + i * 30
+	# Раньше здесь были шесть выдуманных строк с уровнями вида 3/5: экран
+	# не имел отношения к настоящим улучшениям и кнопка ничего не покупала.
+	# Теперь список строится из FlashlightUpgradeManager (5 веток), а кнопка
+	# рядом с веткой действительно тратит монеты и повышает уровень.
+	for c in content.get_children():
+		content.remove_child(c)
+		c.queue_free()
+	var branches: Array = FlashlightUpgradeManager.get_all_data()
+	var coins_lbl := Label.new()
+	coins_lbl.text = LocalizationManager.tf("COINS_AMOUNT", [CoinWallet.get_coins()])
+	coins_lbl.size = Vector2(160, 20)
+	coins_lbl.position = Vector2(content.size.x - 165, 4)
+	coins_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	coins_lbl.add_theme_color_override("font_color", BRASS)
+	coins_lbl.add_theme_font_size_override("font_size", 12)
+	_apply_outline(coins_lbl)
+	content.add_child(coins_lbl)
+	for i in branches.size():
+		var b: Dictionary = branches[i]
+		var py := 30 + i * 34
 		var lbl := Label.new()
-		lbl.text = params[i].name
-		lbl.size = Vector2(100, 22)
+		lbl.text = String(b["name"])
+		lbl.size = Vector2(110, 22)
 		lbl.position = Vector2(5, py)
 		lbl.add_theme_color_override("font_color", STEEL_TEXT)
 		lbl.add_theme_font_size_override("font_size", 12)
 		_apply_outline(lbl)
 		content.add_child(lbl)
+		var lvl: int = int(b["level"])
+		var mx: int = maxi(1, int(b["max"]))
 		var bar_bg := ColorRect.new()
 		bar_bg.color = PANEL_EDGE
-		bar_bg.size = Vector2(120, 10)
-		bar_bg.position = Vector2(110, py + 6)
+		bar_bg.size = Vector2(110, 10)
+		bar_bg.position = Vector2(120, py + 6)
 		content.add_child(bar_bg)
 		var bar_fill := ColorRect.new()
 		bar_fill.color = BRASS
-		bar_fill.size = Vector2(120 * params[i].level / params[i].max, 10)
-		bar_fill.position = Vector2(110, py + 6)
+		bar_fill.size = Vector2(110.0 * float(lvl) / float(mx), 10)
+		bar_fill.position = Vector2(120, py + 6)
 		content.add_child(bar_fill)
 		var level_lbl := Label.new()
-		level_lbl.text = "%d/%d" % [params[i].level, params[i].max]
-		level_lbl.size = Vector2(40, 22)
-		level_lbl.position = Vector2(240, py)
+		level_lbl.text = "%d/%d" % [lvl, mx]
+		level_lbl.size = Vector2(36, 22)
+		level_lbl.position = Vector2(236, py)
 		level_lbl.add_theme_color_override("font_color", BRASS_DIM)
 		level_lbl.add_theme_font_size_override("font_size", 10)
 		content.add_child(level_lbl)
-	var preview_x := content.size.x - 120.0
-	var preview_y := 10.0
-	var preview_frame := ColorRect.new()
-	preview_frame.color = PANEL_EDGE
-	preview_frame.size = Vector2(100, 80)
-	preview_frame.position = Vector2(preview_x, preview_y)
-	content.add_child(preview_frame)
-	var preview_lbl := Label.new()
-	preview_lbl.text = LocalizationManager.t("SCR_FONAR")
-	preview_lbl.size = Vector2(100, 20)
-	preview_lbl.position = Vector2(0, 30)
-	preview_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	preview_lbl.add_theme_color_override("font_color", BRASS_DIM)
-	preview_lbl.add_theme_font_size_override("font_size", 10)
-	preview_frame.add_child(preview_lbl)
-	var level_info := Label.new()
-	level_info.text = LocalizationManager.t("SCR_TEKUSCHIY_UROVEN_3")
-	level_info.size = Vector2(160, 20)
-	level_info.position = Vector2(5, 190)
-	level_info.add_theme_color_override("font_color", BONE_TEXT)
-	level_info.add_theme_font_size_override("font_size", 12)
-	_apply_outline(level_info)
-	content.add_child(level_info)
-	var cost_info := Label.new()
-	cost_info.text = LocalizationManager.t("SCR_STOIMOST_2500")
-	cost_info.size = Vector2(160, 20)
-	cost_info.position = Vector2(5, 212)
-	cost_info.add_theme_color_override("font_color", BRASS)
-	cost_info.add_theme_font_size_override("font_size", 12)
-	_apply_outline(cost_info)
-	content.add_child(cost_info)
-	_add_btn(content, LocalizationManager.t("SCR_ULUCHSHIT"), Vector2(content.size.x / 2.0 - 60, content.size.y - 36), Vector2(120, 30), func(): _show_toast(LocalizationManager.t("SCR_ULUCHSHENIE_PRIMENENO")))
+		var can_buy: bool = bool(b["can_buy"])
+		var cost: int = int(b["cost"])
+		var caption: String = ("%d" % cost) if can_buy else LocalizationManager.t("UPG_MAXED")
+		var branch_id: String = String(b["id"])
+		var btn_pos := Vector2(276, py)
+		if can_buy:
+			_add_btn(content, caption, btn_pos, Vector2(74, 24), func() -> void:
+				if FlashlightUpgradeManager.try_purchase(branch_id):
+					_show_toast(LocalizationManager.t("SCR_ULUCHSHENIE_PRIMENENO"))
+					# Перестраиваем после кадра: кнопка, из которой пришёл вызов,
+					# сама попадает под queue_free() при пересборке списка.
+					call_deferred("build_FlashlightUpgrade", content, card, cw, ch)
+				else:
+					_show_toast(LocalizationManager.t("NOT_ENOUGH_COINS"))
+			)
+		else:
+			var maxed := Label.new()
+			maxed.text = caption
+			maxed.size = Vector2(74, 24)
+			maxed.position = btn_pos
+			maxed.add_theme_color_override("font_color", BRASS_DIM)
+			maxed.add_theme_font_size_override("font_size", 10)
+			content.add_child(maxed)
+	var hint := Label.new()
+	hint.text = LocalizationManager.t("UPG_HINT")
+	hint.size = Vector2(content.size.x - 10, 20)
+	hint.position = Vector2(5, content.size.y - 26)
+	hint.add_theme_color_override("font_color", BONE_TEXT)
+	hint.add_theme_font_size_override("font_size", 10)
+	_apply_outline(hint)
+	content.add_child(hint)
 
 func build_PhotoMode(content: ColorRect, card: ColorRect, cw: float, ch: float, d: Dictionary) -> void:
 	var photo := get_node_or_null("PhotoModeOverlay")
