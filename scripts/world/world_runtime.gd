@@ -17,6 +17,11 @@ func _ready() -> void:
 	name = "WorldRuntime"
 	# Переход между районами инициирует DistrictTrigger/DistrictManager.
 	EventBus.district_entered.connect(_on_district_entered)
+	# Автосейв при входе в район раньше вёл SaveLoad — он удалён как второй
+	# конкурирующий формат, обязанность переехала на единственный SaveSystem.
+	EventBus.district_entered.connect(func(_id: StringName) -> void:
+		if GameManager.is_playing():
+			SaveSystem.save_all())
 	# Стартовый район поднимаем отложенно: игрок и HUD должны быть в дереве,
 	# иначе EnemyPool спавнит врагов вокруг ещё не существующей цели.
 	call_deferred("_load_initial")
@@ -51,10 +56,16 @@ func load_district(district_id: StringName) -> void:
 		dm.current_district = String(district_id)
 	_loading = false
 
-## Ставит игрока на точку старта района, если она размечена в сцене.
+## Ставит игрока на сохранённую позицию, иначе на точку старта района.
+## Восстановление позиции жило в world_map.gd, которого нет в игровой сцене,
+## поэтому загруженная координата никогда не применялась.
 func _place_player(root: Node3D) -> void:
 	var player := get_tree().get_first_node_in_group("player")
 	if player == null or not (player is Node3D):
+		return
+	var saved: Vector3 = SaveSystem.consume_pending_player_pos()
+	if saved != Vector3.INF:
+		(player as Node3D).global_position = saved
 		return
 	var spawn := root.get_node_or_null("PlayerSpawn")
 	if spawn is Node3D:

@@ -79,7 +79,5 @@ func _unhandled_input(event: InputEvent) -> void:
 	if _tween != null and _tween.is_running():
 		return
 	if event.is_action_pressed("ui_cancel") or (event is InputEventScreenTouch and event.pressed):
-		var sl := get_tree().root.get_node_or_null("SaveLoad")
-		if sl != null and sl.has_method("mark_ending_shown"):
-			sl.mark_ending_shown()
+		Endings.mark_ended()
 		Routes.to_menu()

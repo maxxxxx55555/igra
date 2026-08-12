@@ -9,11 +9,9 @@ const ITEMS := [
 
 var _ui: CanvasLayer
 var _bus: Node
-var _sl: Node
 
 func _ready() -> void:
 	_bus = get_node_or_null("/root/EventBus")
-	_sl = get_node_or_null("/root/SaveLoad")
 
 func interact(player: Node) -> void:
 	if _ui == null:
@@ -78,14 +76,14 @@ func _build_ui() -> void:
 	close_btn.pressed.connect(_on_close)
 	box.add_child(close_btn)
 
+## Кошелёк один — CoinWallet. Раньше магазин списывал монеты у SaveLoad,
+## который вёл ВТОРОЙ независимый счётчик: покупки не сходились с HUD.
 func _on_buy(item_id: String, cost: int) -> void:
-	if _sl == null or not _sl.has_method("get_coins"):
+	if not CoinWallet.try_spend(cost):
+		EventBus.purchase_failed.emit(item_id, "not_enough_coins")
 		return
-	if int(_sl.get_coins()) < cost:
-		return
-	_sl.add_coins(-cost)
-	if _bus != null:
-		_bus.shop_purchased.emit(StringName(item_id))
+	EventBus.shop_purchased.emit(StringName(item_id))
+	EventBus.purchase_done.emit(item_id, true)
 
 func _on_close() -> void:
 	close()
