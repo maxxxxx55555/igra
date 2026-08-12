@@ -48,6 +48,10 @@ var _fps_sum: float = 0.0
 var _fps_n: int = 0
 var _fps_done: bool = false
 var _attack_phase: String = "none" # "windup", "active", "recovery"
+## Номер удара текущего замаха (0..2). Раньше индекс COMBO_DATA вычислялся
+## в трёх местах по-разному, из-за чего восстановление бралось от следующего
+## удара, а урон — от предыдущего.
+var _attack_idx: int = 0
 var _attack_timer: float = 0.0
 var _hit_registered: bool = false
 var _stun_timer: float = 0.0
@@ -728,16 +732,19 @@ func set_battery_params(max_val: float) -> void:
 func _handle_attack() -> void:
 	if _stun_timer > 0.0 or not _can_attack or not gameplay_active:
 		return
-	if stamina < COMBO_DATA[mini(_combo_count, 2)]["stam"]:
+	var next_idx: int = 0 if (_combo_break or _combo_timer <= 0.0 or _combo_count >= COMBO_DATA.size()) else _combo_count
+	if stamina < COMBO_DATA[next_idx]["stam"]:
 		return
 	if _attack_phase != "none":
 		return
 	_hit_registered = false
-	var hit_idx: int = mini(_combo_count, 2)
-	if _combo_count > 0 and (_combo_break or _combo_timer <= 0.0):
+	if _combo_break or _combo_timer <= 0.0 or _combo_count >= COMBO_DATA.size():
+		# Сброс: серия прервана, окно истекло или связка из трёх ударов
+		# доиграна — следующий замах снова начинается с лёгкого удара.
 		_combo_count = 0
-		hit_idx = 0
-	var cd: Dictionary = COMBO_DATA[hit_idx]
+		_combo_break = false
+	_attack_idx = _combo_count
+	var cd: Dictionary = COMBO_DATA[_attack_idx]
 	stamina -= cd["stam"]
 	_attack_phase = "windup"
 	_attack_timer = cd["windup"]
@@ -751,8 +758,7 @@ func _tick_attack(delta: float) -> void:
 	if _attack_phase == "none":
 		return
 	_attack_timer -= delta
-	var hit_idx_2: int = mini(_combo_count, 2)
-	var cd2: Dictionary = COMBO_DATA[hit_idx_2]
+	var cd2: Dictionary = COMBO_DATA[_attack_idx]
 	match _attack_phase:
 		"windup":
 			if _attack_timer <= 0.0:
@@ -780,10 +786,7 @@ func _on_attack_hit(body: Node) -> void:
 	_hit_registered = true
 	if not body.has_method("take_damage"):
 		return
-	var hit_idx3: int = mini(_combo_count - 1, 2)
-	if hit_idx3 < 0:
-		return
-	var cd3: Dictionary = COMBO_DATA[hit_idx3]
+	var cd3: Dictionary = COMBO_DATA[_attack_idx]
 	var bonus: float = 0.0
 	if flashlight_enabled:
 		bonus = 0.25
