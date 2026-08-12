@@ -145,7 +145,6 @@ scripts/systems/vibration.gd
 scripts/systems/wave_manager.gd
 scripts/systems/weapon_mod_manager.gd
 scripts/systems/weather_system.gd
-scripts/systems/workbench_manager.gd
 scripts/systems/xp_manager.gd
 scripts/theme_setup.gd
 scripts/tools/_compile_all.gd

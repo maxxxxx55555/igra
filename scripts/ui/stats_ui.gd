@@ -17,18 +17,18 @@ func _build() -> void:
 	vb.add_theme_constant_override("separation", 10)
 	panel.add_child(vb)
 	var t := Label.new()
-	t.text = "СТАТИСТИКА"
+	t.text = LocalizationManager.t("STATS_TITLE")
 	t.add_theme_font_size_override("font_size", ThemeProvider.FONT_SIZE_TITLE)
 	t.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
 	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vb.add_child(t)
 	var s := ProgressTracker.get_stats()
-	_line(vb, "Восстановлено районов", "%d / %d" % [s["districts"], PowerGrid.all_districts().size()])
-	_line(vb, "Найдено секретов", "%d" % s["secrets"])
-	_line(vb, "Повержено существ", "%d" % s["kills"])
-	_line(vb, "Время в игре", "%d сек" % int(s["time_played"]))
+	_line(vb, LocalizationManager.t("STATS_DISTRICTS"), "%d / %d" % [s["districts"], PowerGrid.all_districts().size()])
+	_line(vb, LocalizationManager.t("STATS_SECRETS"), "%d" % s["secrets"])
+	_line(vb, LocalizationManager.t("STATS_KILLS"), "%d" % s["kills"])
+	_line(vb, LocalizationManager.t("STATS_TIME"), LocalizationManager.tf("STATS_SECONDS", [int(s["time_played"])]))
 	var b := Button.new()
-	b.text = "Закрыть"
+	b.text = LocalizationManager.t("ui_close")
 	b.focus_mode = Control.FOCUS_NONE
 	b.pressed.connect(func() -> void: UIManager.close(&"stats"))
 	vb.add_child(b)
