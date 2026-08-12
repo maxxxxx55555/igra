@@ -1,1 +1,0 @@
-extends "res://legacy_quarantine/enemies2d/enemy_base.gd"

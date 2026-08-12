@@ -5,6 +5,9 @@ signal attack_requested()
 signal jump_requested()
 signal flashlight_requested()
 signal dodge_requested(dir: Vector2)
+## Клавиши 1-6 были заведены в project.godot, но их никто не слушал:
+## быстрые слоты работали только мышью/тачем.
+signal quick_slot_requested(index: int)
 
 var _interact_pressed: bool = false
 var _interact_held: bool = false
@@ -94,6 +97,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	# Плюс фильтр «только InputEventKey» глушил геймпад.
 	if event.is_echo():
 		return
+	for i in range(1, 7):
+		if event.is_action_pressed("quick_slot_%d" % i):
+			quick_slot_requested.emit(i - 1)
+			return
 	if event.is_action_pressed("stealth"):
 		_joy_stealth_toggled = not _joy_stealth_toggled
 		_stealth_pressed = true

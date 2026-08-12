@@ -37,6 +37,7 @@ func _ready() -> void:
 	_remove_dup_leftbottom()
 	_apply_touch_visibility()
 	_fix_radar_anchor()
+	InputService.quick_slot_requested.connect(_on_quick_slot_key)
 	hp_fill.color = Color(0.706, 0.271, 0.184)
 	stam_fill.color = Color(0.373, 0.541, 0.306)
 	bat_fill.color = Color(0.788, 0.635, 0.290)
@@ -516,6 +517,9 @@ func _setup_slot_placeholders() -> void:
 		var border := slot0.get_node_or_null("Border")
 		if border:
 			border.color = Color(0.788, 0.635, 0.290)
+
+func _on_quick_slot_key(index: int) -> void:
+	_use_quick_slot(index)
 
 func _use_quick_slot(index: int) -> void:
 	var inv := get_tree().root.get_node_or_null("InventoryManager")
