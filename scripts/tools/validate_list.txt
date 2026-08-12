@@ -13,7 +13,6 @@ scripts/audio/proc_audio.gd
 scripts/audio_atmosphere.gd
 scripts/battery_bar.gd
 scripts/boot_loading.gd
-scripts/boss/boss_controller.gd
 scripts/components/attack_component.gd
 scripts/components/attack_component_3d.gd
 scripts/components/health_component.gd
@@ -36,7 +35,6 @@ scripts/credits.gd
 scripts/cutscenes/cutscene_manager.gd
 scripts/death_screen.gd
 scripts/dialogue/dialogue_manager.gd
-scripts/difficulty.gd
 scripts/district_manager.gd
 scripts/document_pickup.gd
 scripts/economy/coin_wallet.gd
@@ -55,7 +53,6 @@ scripts/effects/weather_vfx.gd
 scripts/electronic_door.gd
 scripts/emergency_lamp.gd
 scripts/enemies/base_monster.gd
-scripts/enemies/boss.gd
 scripts/enemies/boss_3d.gd
 scripts/enemies/crawler_3d.gd
 scripts/enemies/destroyer_3d.gd
@@ -71,7 +68,6 @@ scripts/enemies/status_effects.gd
 scripts/enemies/watcher_3d.gd
 scripts/environment/world_env.gd
 scripts/events/event_bus.gd
-scripts/final_night.gd
 scripts/fog_setup.gd
 scripts/fuse_box.gd
 scripts/gameplay/ammo_pickup.gd
@@ -189,7 +185,6 @@ scripts/ui/inventory_system.gd
 scripts/ui/inventory_ui.gd
 scripts/ui/item_icons.gd
 scripts/ui/journal_ui.gd
-scripts/ui/loading_screen.gd
 scripts/ui/lobby_menu.gd
 scripts/ui/main_menu.gd
 scripts/ui/map_controller.gd
@@ -237,7 +232,6 @@ scripts/ui/weather_overlay.gd
 scripts/ui/win_screen.gd
 scripts/ui/workbench.gd
 scripts/ui/world_map.gd
-scripts/victory.gd
 scripts/visual/emissive_windows.gd
 scripts/visual/moon_disc.gd
 scripts/visual/night_env.gd
@@ -274,6 +268,5 @@ scripts/world/streetlight.gd
 scripts/world/streetlight_3d.gd
 scripts/world/streetlight_spawner.gd
 scripts/world/world_bootstrap.gd
-scripts/world/world_map.gd
 scripts/world/world_runtime.gd
 scripts/world_env_setup.gd
