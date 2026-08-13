@@ -406,6 +406,11 @@ func _deal_damage() -> void:
 func _can_see_player() -> bool:
 	if not player_ref or not is_instance_valid(player_ref):
 		return false
+	# Укрытия были чисто декоративными: игрок прячется, player_3d выставляет
+	# visibility = 0.0, но зрение монстра это поле не читало и продолжало его
+	# видеть сквозь шкаф. Ключевая механика стелса — уважать заметность.
+	if "visibility" in player_ref and float(player_ref.visibility) <= 0.01:
+		return false
 	var dist := global_position.distance_to(player_ref.global_position)
 	if dist > vision_range:
 		# Check peripheral vision
