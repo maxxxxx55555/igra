@@ -13,5 +13,8 @@ var current = null
 
 func _ready() -> void:
 	if current == null:
-		current = preload("res://scripts/systems/quest_manager.gd").new()
+		# Путь вёл в res://scripts/systems/quest_manager.gd, которого нет:
+		# preload несуществующего файла — это ошибка парсинга, скрипт целиком
+		# не компилируется. Реальный менеджер квестов лежит в scripts/core.
+		current = preload("res://scripts/core/quest_manager.gd").new()
 		add_child(current)

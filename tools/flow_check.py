@@ -146,6 +146,79 @@ for path, text in ALL.items():
             missing_audio.append("%s -> %s" % (path, ref))
 check("все аудиофайлы из кода на диске", not missing_audio, "; ".join(missing_audio[:3]))
 
+# ── 9. preload/load: битый путь = ошибка парсинга всего скрипта ─────────────
+bad_preload: list[str] = []
+for base, _dirs, files in os.walk(ROOT):
+    if os.sep + ".git" in base:
+        continue
+    for f in files:
+        if not f.endswith(".gd"):
+            continue
+        p = os.path.join(base, f)
+        text = open(p, encoding="utf-8", errors="ignore").read()
+        for m in re.finditer(r'(?:preload|load)\(\s*"(res://[^"]+)"\s*\)', text):
+            if not os.path.exists(os.path.join(ROOT, m.group(1)[6:])):
+                line = text[: m.start()].count("\n") + 1
+                bad_preload.append("%s:%d %s" % (os.path.relpath(p, ROOT), line, m.group(1)))
+check("все preload/load ведут в существующие файлы", not bad_preload,
+      "; ".join(bad_preload[:3]))
+
+# ── 10. Арность подписок на сигналы автолоадов ──────────────────────────────
+# В Godot 4 обработчик обязан принимать не меньше аргументов, чем шлёт сигнал,
+# иначе КАЖДЫЙ emit — красная ошибка в консоли, а обработчик молчит.
+auto_pairs = re.findall(r'^(\w+)="\*?(res://[^"]+)"',
+                        cfg.split("[autoload]")[1].split("\n[")[0], re.M)
+sig_arity: dict[str, int] = {}
+for auto_name, auto_path in auto_pairs:
+    src = read(auto_path[6:])
+    for m in re.finditer(r"^signal\s+(\w+)\s*(?:\(([^)]*)\))?", src, re.M):
+        args = (m.group(2) or "").strip()
+        sig_arity["%s.%s" % (auto_name, m.group(1))] = (
+            0 if not args else len([a for a in args.split(",") if a.strip()]))
+
+
+def _params(sig: str) -> tuple[int, int] | None:
+    sig = sig.strip()
+    if not sig:
+        return (0, 0)
+    parts = [x for x in re.split(r",(?![^\[\]]*\])", sig) if x.strip()]
+    return (len([x for x in parts if "=" not in x]), len(parts))
+
+
+arity_bad: list[str] = []
+if sig_arity:
+    autos = "|".join(sorted({k.split(".")[0] for k in sig_arity}))
+    conn_re = re.compile(r"(?<![A-Za-z0-9_.])(%s)\.([A-Za-z_]\w*)\.connect\(\s*(.*)" % autos)
+    for path, text in ALL.items():
+        if "scripts/tools/" in path.replace(os.sep, "/"):
+            continue
+        for i, raw in enumerate(text.splitlines(), 1):
+            for m in conn_re.finditer(raw.split("#")[0]):
+                key = "%s.%s" % (m.group(1), m.group(2))
+                if key not in sig_arity:
+                    continue
+                rest = m.group(3).strip()
+                if ".unbind(" in rest:
+                    continue
+                got = None
+                lam = re.match(r"func\s*\(([^)]*)\)", rest)
+                if lam:
+                    got = _params(lam.group(1))
+                else:
+                    cm = re.match(r"(?:self\.)?([A-Za-z_]\w*)\s*[\),]", rest)
+                    if cm:
+                        fm = re.search(r"^func\s+%s\s*\(([^)]*)\)" % re.escape(cm.group(1)),
+                                       text, re.M)
+                        if fm:
+                            got = _params(fm.group(1))
+                            binds = len(re.findall(r"\.bind\(", rest))
+                            if got and binds:
+                                got = (max(0, got[0] - binds), got[1] - binds)
+                if got is not None and got[1] < sig_arity[key]:
+                    arity_bad.append("%s:%d %s шлёт %d, принимает %d"
+                                     % (path, i, key, sig_arity[key], got[1]))
+check("арность подписок на сигналы совпадает", not arity_bad, "; ".join(arity_bad[:3]))
+
 # ── вывод ───────────────────────────────────────────────────────────────────
 failed = [c for c in CHECKS if not c[1]]
 width = max(len(c[0]) for c in CHECKS)
