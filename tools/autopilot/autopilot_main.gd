@@ -62,6 +62,10 @@ func _run_all() -> void:
 	for entry in tests:
 		var test_name: String = entry["name"]
 		var fn: Callable = entry["fn"]
+		# Изоляция: упавший тест мог оставить дерево на паузе или замедленным.
+		# Следующий тест не должен расплачиваться за чужой мусор.
+		paused = false
+		Engine.time_scale = 1.0
 		_rt.begin(test_name)
 		var deadline := _elapsed() + TEST_BUDGET_SEC
 		# Вотчдог: тест сам обязан вернуть управление. Если он уходит в

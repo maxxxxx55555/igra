@@ -42,9 +42,15 @@ func collect() -> Array:
 
 # ── вспомогательное ────────────────────────────────────────────────────────
 
+## Прокручивает кадры, чтобы отработали _ready/_process.
+##
+## process_frame эмитится и во время паузы, поэтому ожидание кадров
+## безопасно даже внутри тестов паузы. Сброс состояния между тестами
+## делает autopilot_main.
 func _settle(tree: SceneTree, frames: int = SETTLE_FRAMES) -> void:
 	for i in frames:
 		await tree.process_frame
+
 
 func _autoload(tree: SceneTree, n: String) -> Node:
 	return tree.root.get_node_or_null("/root/" + n)
