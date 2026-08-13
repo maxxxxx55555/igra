@@ -141,6 +141,13 @@ func from_dict(d: Dictionary) -> void:
 			var q = quests[qid]
 			q.progress = int(d[qid].get("progress", 0))
 			q.done = bool(d[qid].get("done", false))
+	# Счётчик пересобираем из самих квестов: он инкрементируется только в
+	# момент выполнения, поэтому после загрузки сохранения оставался нулевым
+	# и get_completed_count() врал бы о прогрессе.
+	_completed_count = 0
+	for q in quests.values():
+		if q.done:
+			_completed_count += 1
 
 func reset() -> void:
 	for q in quests.values():
