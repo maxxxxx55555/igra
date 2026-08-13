@@ -305,8 +305,36 @@ func _add_captions() -> void:
 		bar.offset_top = float(row) * BAR_ROW_PITCH + BAR_ROW_TOP
 		bar.offset_bottom = bar.offset_top + BAR_H
 		row += 1
+	row = _layout_extra_rows(row)
 	var tl: Control = $TopLeft
-	tl.offset_bottom = tl.offset_top + BAR_ROW_TOP + float(data.size()) * BAR_ROW_PITCH
+	tl.offset_bottom = tl.offset_top + BAR_ROW_TOP + float(row) * BAR_ROW_PITCH
+
+## Бары шума и заметности лежат в сцене с фиксированными y (66 и 86), а ряды
+## HP/Stam/Bat выше раскладываются по BAR_ROW_PITCH и уезжают на 30/64/98.
+## В итоге «ШУМ» рисовался ровно поверх выносливости, а «ЗАМЕТ.» — поверх
+## батареи. Ставим их следующими рядами той же сетки.
+func _layout_extra_rows(start_row: int) -> int:
+	var rows := [
+		[noise_caption, noise_fill, get_node_or_null("TopLeft/NoiseT")],
+		[vis_caption, vis_fill, get_node_or_null("TopLeft/VisibilityT")],
+	]
+	var row := start_row
+	for r in rows:
+		var caption: Control = r[0]
+		if caption == null:
+			continue
+		var top := float(row) * BAR_ROW_PITCH + BAR_ROW_TOP
+		caption.offset_top = top
+		caption.offset_bottom = top + BAR_H
+		# Полоса и её подложка чуть тоньше подписи и выровнены по её центру.
+		for bar in [r[2], r[1]]:
+			var c: Control = bar
+			if c == null:
+				continue
+			c.offset_top = top + 2.0
+			c.offset_bottom = top + BAR_H - 2.0
+		row += 1
+	return row
 
 func _setup_number_fonts() -> void:
 	for lbl in [hp_val, stam_val, bat_val]:
