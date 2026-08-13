@@ -15,7 +15,7 @@ var _noise_timer: float = 0.0
 var _interact_target: Node = null
 func _ready() -> void:
 	if stats == null:
-		# push_error("Player: не назначен PlayerStats (data/balance/player_stats.tres)")
+		push_error("Player: не назначен PlayerStats (data/balance/player_stats.tres)")
 		return
 	stamina = stats.stamina_max
 	hp = stats.max_hp

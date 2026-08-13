@@ -59,7 +59,7 @@ func _save() -> void:
 	}
 	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	if file == null:
-		# push_error("SaveSystem: не удалось записать %s" % SAVE_PATH)
+		push_error("SaveSystem: не удалось записать %s" % SAVE_PATH)
 		return
 	file.store_string(JSON.stringify(payload))
 	file.close()
@@ -74,7 +74,7 @@ func load_all() -> bool:
 	file.close()
 	var json := JSON.new()
 	if json.parse(txt) != OK:
-		# push_error("SaveSystem: ошибка парсинга")
+		push_error("SaveSystem: ошибка парсинга")
 		return false
 	var d: Variant = json.data
 	if not (d is Dictionary):
@@ -221,7 +221,7 @@ func save_slot(slot: int) -> bool:
 	
 	var file = FileAccess.open(_get_slot_path(slot), FileAccess.WRITE)
 	if file == null:
-		# push_error("SaveSystem: не удалось записать слот %d" % slot)
+		push_error("SaveSystem: не удалось записать слот %d" % slot)
 		return false
 	
 	file.store_string(JSON.stringify(payload))
@@ -242,7 +242,7 @@ func load_slot(slot: int) -> bool:
 	
 	var json = JSON.new()
 	if json.parse(txt) != OK:
-		# push_error("SaveSystem: ошибка парсинга слота %d" % slot)
+		push_error("SaveSystem: ошибка парсинга слота %d" % slot)
 		return false
 	
 	var data = json.data as Dictionary

@@ -8,7 +8,7 @@ const CONE_TEX_SIZE: int = 256
 const CONE_COLOR := Color(1.0, 0.86, 0.55)
 func _ready() -> void:
 	if stats == null:
-		# push_error("Flashlight: не назначен FlashlightStats (data/balance/flashlight_stats.tres)")
+		push_error("Flashlight: не назначен FlashlightStats (data/balance/flashlight_stats.tres)")
 		return
 	add_to_group("flashlight")
 	shadow_enabled = true

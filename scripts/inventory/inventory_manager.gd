@@ -33,7 +33,7 @@ func _ready() -> void:
 		if loaded_stats != null:
 			stats = loaded_stats
 		else:
-			# push_warning("InventoryManager: falling back to a new InventoryStats instance")
+			push_warning("InventoryManager: falling back to a new InventoryStats instance")
 			stats = InventoryStats.new()
 	_init_empty_slots()
 func _init_empty_slots() -> void:

@@ -94,7 +94,7 @@ func _load_defaults() -> void:
 func set_volume(bus: String, v: float) -> void:
 	var b := _canon_bus(bus)
 	if not b in BUSES:
-		# push_warning("SettingsManager: unknown audio bus '%s'" % bus)
+		push_warning("SettingsManager: unknown audio bus '%s'" % bus)
 		return
 	_volumes[b] = clampf(v, 0.0, 1.0)
 	_settings[b] = _volumes[b]

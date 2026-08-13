@@ -27,7 +27,7 @@ var _pitch: float = 0.0
 func _ready() -> void:
 	_cam = _find_cam(self)
 	if _cam == null:
-		# push_warning("camera_follow_3d: Camera3D не найдена")
+		push_warning("camera_follow_3d: Camera3D не найдена")
 		return
 	_cam.projection = Camera3D.PROJECTION_PERSPECTIVE
 	# FOV, выставленный в сцене, важнее дефолта скрипта: раньше _ready()

@@ -14,7 +14,7 @@ func host(port: int = DEFAULT_PORT) -> int:
 	_peer = ENetMultiplayerPeer.new()
 	var err := _peer.create_server(port, MAX_CLIENTS)
 	if err != OK:
-		# push_warning("[LAN] host failed err=%d" % err)
+		push_warning("[LAN] host failed err=%d" % err)
 		return err
 	multiplayer.multiplayer_peer = _peer
 	role = Role.HOST
@@ -31,7 +31,7 @@ func join(host_ip: String, port: int = DEFAULT_PORT) -> int:
 	_peer = ENetMultiplayerPeer.new()
 	var err := _peer.create_client(host_ip, port)
 	if err != OK:
-		# push_warning("[LAN] join failed err=%d" % err)
+		push_warning("[LAN] join failed err=%d" % err)
 		return err
 	multiplayer.multiplayer_peer = _peer
 	role = Role.CLIENT
