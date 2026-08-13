@@ -54,6 +54,5 @@ func take_photo() -> void:
 	var path = "user://screenshots/photo_%d.png" % Time.get_unix_time_from_system()
 	DirAccess.make_dir_recursive_absolute("user://screenshots")
 	img.save_png(path)
-	print("[photo] saved: ", path)
 	if AchievementManager:
 		AchievementManager.unlock("photographer")

@@ -15,10 +15,11 @@ set -uo pipefail
 cd "$(dirname "$0")/.."
 
 # Файлы с многострочными лямбдами (корректный Godot 4, не по зубам gdtoolkit).
+# Единственный файл, который gdtoolkit 4.3.3 не разбирает: однострочная
+# лямбда с if внутри (character_screen.gd:205). Сам Godot такой код
+# принимает — это ограничение тулкита, а не ошибка в игре.
 ALLOWLIST=(
-	"scripts/systems/loot_drop.gd"
 	"scripts/ui/character_screen.gd"
-	"scripts/ui/screens.gd"
 )
 
 if ! command -v gdparse >/dev/null 2>&1; then
