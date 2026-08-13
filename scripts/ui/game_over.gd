@@ -11,6 +11,10 @@ var btn_restart: Button = $Control/VBoxContainer/BtnRestart
 var btn_menu: Button = $Control/VBoxContainer/BtnMenu
 
 func _ready() -> void:
+	# Экран сам ставит дерево на паузу, поэтому обязан работать во время неё:
+	# иначе его же кнопки «Заново» и «В меню» перестают нажиматься и выйти
+	# из паузы становится нечем.
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	btn_restart.pressed.connect(_on_restart)
 	btn_menu.pressed.connect(_on_menu)
 	EventBus.player_died.connect(show_game_over)

@@ -7,6 +7,13 @@ var _is_playing: bool = false
 var _camera: Camera3D
 var _original_camera: Camera3D
 
+## Катсцена ставит дерево на паузу, а потом ждёт свои твины и таймеры.
+## С режимом по умолчанию (PAUSABLE) они останавливаются вместе с деревом,
+## await не завершается никогда, и игра зависает намертво — снять паузу
+## некому, потому что снимает её как раз конец катсцены.
+func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+
 func play_cutscene(camera_path: NodePath, actions: Array[Dictionary]) -> void:
 	if _is_playing:
 		return

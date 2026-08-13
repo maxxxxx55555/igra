@@ -13,6 +13,7 @@ Godot в этом окружении недоступен, поэтому цик
 """
 from __future__ import annotations
 
+import glob
 import os
 import re
 import sys
@@ -422,6 +423,17 @@ check("финал перепроверяется после загрузки с�
 check("финал сбрасывается при новой игре",
       "func reset" in _finale and "fd.reset()" in _reset_body,
       "иначе второе прохождение идёт без босса")
+
+# ── 18. Кто ставит паузу — работает во время паузы ─────────────────────────
+# Узел с режимом PAUSABLE, который сам зовёт get_tree().paused = true,
+# замораживает собственные кнопки и await: снять паузу становится нечем.
+_pausers = []
+for _p in sorted(glob.glob("scripts/**/*.gd", recursive=True)):
+    _src = read(_p)
+    if "paused = true" in _src and "PROCESS_MODE_ALWAYS" not in _src:
+        _pausers.append(_p)
+check("экраны, ставящие паузу, продолжают работать во время неё",
+      not _pausers, "нет PROCESS_MODE_ALWAYS: " + ", ".join(_pausers))
 
 # ── вывод ───────────────────────────────────────────────────────────────────
 failed = [c for c in CHECKS if not c[1]]
