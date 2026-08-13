@@ -30,7 +30,10 @@ func _wire(d: Node) -> void:
 		props.name = "Props"
 		props.set("street_builder_path", sb.get_path())
 		d.add_child(props)
-	if _find(d, &"Windows") == null:
+	# Районные .tscn несут свои окна под именем EmissiveWindows. Искали только
+	# "Windows" — совпадений не было, и поверх авторских окон в каждом районе
+	# появлялся второй, лишний слой геометрии.
+	if _find(d, &"Windows") == null and _find(d, &"EmissiveWindows") == null:
 		var ws: Script = load("res://scripts/world/emissive_windows.gd")
 		var win: Node = ws.new()
 		win.name = "Windows"
