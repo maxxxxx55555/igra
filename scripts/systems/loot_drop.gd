@@ -19,6 +19,9 @@ func spawn_item(item_data: Dictionary) -> void:
 	sphere.radius = 0.4
 	shape.shape = sphere
 	pickup.add_child(shape)
+	# gdtoolkit (gdparse/gdlint) не умеет разбирать многострочные лямбды и
+	# ругается на строку ниже. Для Godot 4 это корректный синтаксис —
+	# ограничение инструмента, а не ошибка кода. Проверять файл нужно движком.
 	pickup.body_entered.connect(func(body: Node3D) -> void:
 		if body.is_in_group("player"):
 			var inv := get_tree().root.get_node_or_null("/root/InventoryManager")

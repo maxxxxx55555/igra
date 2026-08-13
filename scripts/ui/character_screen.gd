@@ -116,6 +116,9 @@ func _build_ui() -> void:
 		lbl.add_theme_font_size_override("font_size", 8)
 		slot.add_child(lbl)
 		var si := i
+		# gdtoolkit не поддерживает многострочные лямбды и помечает строку ниже
+		# как ошибку разбора. В Godot 4 синтаксис валиден — это ограничение
+		# инструмента; файл проверяется движком.
 		slot.gui_input.connect(func(event: InputEvent):
 			if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 				if InventoryManager and InventoryManager.has_method("use_item"):

@@ -155,6 +155,12 @@ if python3 tools/flow_check.py; then ok "flow_check"; else bad "flow_check"; fi
 head_ "Мёртвый код"
 if python3 tools/orphan_check.py; then ok "orphan_check"; else bad "orphan_check"; fi
 
+# Синтаксис GDScript (gdparse). Медленно (~90 с), поэтому только без --fast.
+if [[ "${1:-}" != "--fast" ]]; then
+  head_ "Синтаксис GDScript"
+  if ./tools/gdparse_check.sh; then ok "gdparse"; else bad "gdparse"; fi
+fi
+
 # ─────────────────────────── проверки в движке ───────────────────────────
 if [[ $STATIC_ONLY -eq 1 ]]; then
   echo; echo "${DIM}Проверки в движке пропущены (--static).${OFF}"
