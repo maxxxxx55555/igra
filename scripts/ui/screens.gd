@@ -1,4 +1,7 @@
 extends CanvasLayer
+
+const UI_MANAGER_IDS: Dictionary = {}
+
 signal panel_ready(name: String)
 ## Экраны, которыми владеет UIManager (главное меню, пауза, настройки, смерть,
 ## победа, карта, журналы, достижения, статистика, верстак, туториал). Раньше

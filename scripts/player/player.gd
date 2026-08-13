@@ -83,7 +83,7 @@ func _update_noise(delta: float, moving: bool) -> void:
 	_noise_timer += delta
 	if radius > 0.0 and _noise_timer >= stats.noise_emit_interval:
 		_noise_timer = 0.0
-		EventBus.noise_emitted.emit(Vector2(global_position.x, global_position.z), radius)
+		EventBus.noise_emitted.emit(global_position, radius)
 func _emit_state() -> void:
 	EventBus.player_state_changed.emit(int(current_state))
 	EventBus.player_stealth_changed.emit(current_state == State.STEALTH)
