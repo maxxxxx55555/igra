@@ -17,6 +17,10 @@ signal fuel_empty()
 
 
 func _ready() -> void:
+	# Своя зона близости у объекта есть, но Interactor обходит группу
+	# "interactable" — без неё подсказка в HUD не появлялась и клавиша
+	# взаимодействия объект не находила.
+	add_to_group("interactable")
 	interact_area.body_entered.connect(_on_body_entered)
 	interact_area.body_exited.connect(_on_body_exited)
 

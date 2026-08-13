@@ -250,6 +250,47 @@ CRITICAL_SIGNALS = [
 deaf = [s for s in CRITICAL_SIGNALS if not listeners(s)]
 check("у сигналов критического пути есть слушатели", not deaf, ", ".join(deaf))
 
+# ── 12. Автозагрузки ищут только в /root ────────────────────────────────────
+# Классика этого репозитория: player.get_node_or_null("InventoryManager").
+# Автолоад — ребёнок /root, а не игрока, поэтому поиск ВСЕГДА возвращает null,
+# и ветка с подбором ключа или открытием двери молча не выполняется.
+autoload_names = {n for n, _ in auto_pairs}
+wrong_lookup: list[str] = []
+for path, text in ALL.items():
+    for i, raw in enumerate(text.splitlines(), 1):
+        for m in re.finditer(r'(\w+)\.get_node(?:_or_null)?\(\s*"(\w+)"\s*\)',
+                             raw.split("#")[0]):
+            if m.group(2) in autoload_names and m.group(1) != "root":
+                wrong_lookup.append("%s:%d %s.get_node(\"%s\")"
+                                    % (path, i, m.group(1), m.group(2)))
+check("автозагрузки ищутся в /root, а не в чужом узле", not wrong_lookup,
+      "; ".join(wrong_lookup[:3]))
+
+# ── 13. Интерактивные объекты попадают в группу "interactable" ──────────────
+# Interactor обходит именно эту группу. Объект с interact(), который в неё не
+# встал, физически недостижим: подойти и нажать клавишу невозможно.
+not_grouped: list[str] = []
+for path, text in ALL.items():
+    if not re.search(r"^func interact\s*\(", text, re.M):
+        continue
+    if 'add_to_group("interactable")' in text:
+        continue
+    scene_has_group = any(
+        'groups=["interactable"' in s or '"interactable"' in s
+        for p2, s in ALL.items()
+        if p2.endswith(".tscn") and path.split("/")[-1] in s)
+    if not scene_has_group:
+        not_grouped.append(path)
+# Осиротевшие скрипты сюда не считаем: они и так вне игры.
+baseline_orphans: set[str] = set()
+_bp = os.path.join(ROOT, "tools", "orphan_baseline.txt")
+if os.path.exists(_bp):
+    baseline_orphans = {l.strip() for l in open(_bp, encoding="utf-8")
+                        if l.strip() and not l.startswith("#")}
+not_grouped = [p for p in not_grouped if p not in baseline_orphans]
+check("объекты с interact() состоят в группе interactable", not not_grouped,
+      ", ".join(not_grouped[:3]))
+
 # ── вывод ───────────────────────────────────────────────────────────────────
 failed = [c for c in CHECKS if not c[1]]
 width = max(len(c[0]) for c in CHECKS)
