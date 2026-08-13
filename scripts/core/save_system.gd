@@ -217,7 +217,10 @@ func get_slot_info(slot: int) -> Dictionary:
 		"exists": true,
 		"level": data.get("current_scene", "").get_file().get_basename().replace("level_", "").to_int() if data.get("current_scene", "") != "" else 1,
 		"playtime": progress.get("time_played", 0.0),
-		"modified": 0.0,
+		# Дата берётся с файла: в самом сейве её нет, а список слотов
+		# показывает её игроку. С захардкоженным нулём все слоты
+		# датировались 1970 годом.
+		"modified": float(FileAccess.get_modified_time(path)),
 		"scene": data.get("current_scene", "")
 	}
 
