@@ -30,11 +30,11 @@ func buy(id: StringName) -> void:
 	if item == null:
 		return
 	if item.kind != ShopItem.Kind.COIN_PACK and is_owned(id):
-		EventBus.inventory_notice.emit("Уже куплено")
+		EventBus.inventory_notice.emit(LocalizationManager.t("SHOP_ALREADY_OWNED"))
 		return
 	match item.kind:
 		ShopItem.Kind.COIN_PACK:
-			EventBus.inventory_notice.emit("ДОНАТ ОТКЛЮЧЁН — МОНЕТЫ ТОЛЬКО В ИГРЕ")
+			EventBus.inventory_notice.emit(LocalizationManager.t("SHOP_NO_IAP"))
 		_:
 			_spend_and_grant(item)
 func _spend_and_grant(item: ShopItem) -> void:
@@ -48,16 +48,16 @@ func _grant(item: ShopItem) -> void:
 	match item.kind:
 		ShopItem.Kind.UPGRADE:
 			UpgradeSystem.apply(item.id)
-			EventBus.inventory_notice.emit("Улучшение применено: %s" % item.display_name)
+			EventBus.inventory_notice.emit(LocalizationManager.tf("SHOP_UPGRADE_APPLIED", [item.display_name]))
 		ShopItem.Kind.SKIN:
 			EventBus.skin_unlocked.emit(item.id)
-			EventBus.inventory_notice.emit("Скин получен: %s" % item.display_name)
+			EventBus.inventory_notice.emit(LocalizationManager.tf("SHOP_SKIN_GRANTED", [item.display_name]))
 		ShopItem.Kind.BUNDLE:
 			for content_id in item.bundle_contents:
 				var c := get_item(content_id)
 				if c != null:
 					_grant(c)
-			EventBus.inventory_notice.emit("Набор получен: %s" % item.display_name)
+			EventBus.inventory_notice.emit(LocalizationManager.tf("SHOP_BUNDLE_GRANTED", [item.display_name]))
 func to_dict() -> Dictionary:
 	return {"owned": _owned.keys().map(func(k): return String(k))}
 func from_dict(d: Dictionary) -> void:

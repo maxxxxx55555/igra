@@ -7,7 +7,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	SaveSystem.reset_all()
 	GameManager._change_state(GameManager.GameState.PLAYING)
-	add_child(load("res://scenes/legacy_2d/main.tscn").instantiate())
+	add_child(load("res://scenes/main_3d.tscn").instantiate())
 	_ids = UIManager.SCREENS.keys()
 	await get_tree().create_timer(3.0).timeout
 	_next()

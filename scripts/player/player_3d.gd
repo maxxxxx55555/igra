@@ -48,6 +48,10 @@ var _fps_sum: float = 0.0
 var _fps_n: int = 0
 var _fps_done: bool = false
 var _attack_phase: String = "none" # "windup", "active", "recovery"
+## Номер удара текущего замаха (0..2). Раньше индекс COMBO_DATA вычислялся
+## в трёх местах по-разному, из-за чего восстановление бралось от следующего
+## удара, а урон — от предыдущего.
+var _attack_idx: int = 0
 var _attack_timer: float = 0.0
 var _hit_registered: bool = false
 var _stun_timer: float = 0.0
@@ -59,6 +63,8 @@ var _crouch_timer: float = 0.0
 var _hiding_spot: Node3D = null
 var _in_hiding: bool = false
 var _footstep_system: Node = null
+const INTERACTOR_SCRIPT: Script = preload("res://scripts/player/interactor.gd")
+var _interactor: Node = null
 
 const COMBO_DATA: Array = [
 	{ "windup": 0.25, "active": 0.15, "recovery": 0.15, "dmg": 8, "stam": 5, "knockback": 0.0 },
@@ -245,48 +251,68 @@ func _ready() -> void:
 		isv.jump_requested.connect(_buffer_jump)
 		isv.flashlight_requested.connect(toggle_flashlight)
 		isv.dodge_requested.connect(_handle_dodge)
+	# Взаимодействие с миром. До этого клавиша interact умела только осмотр
+	# и вход в укрытие: рубильники районов, генераторы и двери, у которых
+	# есть interact(), не вызывались ниоткуда — район нельзя было запитать.
+	_interactor = INTERACTOR_SCRIPT.new()
+	_interactor.setup(self, flashlight_pivot)
+	add_child(_interactor)
 	var gm := get_node_or_null("/root/GameManager")
+	call_deferred("_resolve_camera")
 	if gm and gm.has_method("is_playing") and gm.is_playing():
 		call_deferred("_on_game_started")
 
 func _buffer_jump() -> void:
 	_jump_buffer_timer = jump_buffer_time
 
+## Камера ищется отдельно от старта игры: направление движения считается от её
+## базиса, поэтому до первого game_started ссылка тоже обязана быть валидной.
+func _resolve_camera() -> void:
+	if is_instance_valid(_fps_cam):
+		return
+	var cam: Camera3D = get_viewport().get_camera_3d() if get_viewport() != null else null
+	if cam == null and get_tree() != null:
+		cam = get_tree().root.get_node_or_null("Main3D/Camera3D") as Camera3D
+	if cam == null and get_tree() != null and get_tree().current_scene != null:
+		cam = get_tree().current_scene.find_child("Camera3D", true, false) as Camera3D
+	_fps_cam = cam
+	if _fps_cam != null and _fps_cam.has_method("set_fps"):
+		_fps_cam.set_fps(true)
+
 func _on_game_started() -> void:
 	if _net_active and not is_multiplayer_authority():
 		return
 	gameplay_active = true
-	if _fps_cam == null:
-		var cam: Camera3D = get_viewport().get_camera_3d() if get_viewport() else null
-		if cam == null and get_tree():
-			cam = get_tree().root.get_node_or_null("Main3D/Camera3D") as Camera3D
-		_fps_cam = cam
-	if _fps_cam and _fps_cam.has_method("set_fps"):
-		_fps_cam.set_fps(true)
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	_resolve_camera()
+	# Режимом курсора владеет InputService (он же вернёт захват после паузы).
+	InputService.refresh_mouse_mode()
+
+func _is_touch_device() -> bool:
+	return InputService.is_touch_device()
+
+## Обзор. Мышь — на десктопе (при захваченном курсоре), палец — на Android.
+## Тач-зона обзора: правее JOY_ZONE_RATIO, чтобы не спорить с виртуальным
+## джойстиком слева. Раньше любой тап в этой зоне ещё и бил — из-за этого
+## поворот камеры сам себя превращал в атаку; удар теперь только по кнопке.
+const JOY_ZONE_RATIO: float = 0.35
+const TOUCH_LOOK_SENS: float = 0.004
 
 func _input(event: InputEvent) -> void:
 	if not gameplay_active:
 		return
 	if _net_active and not is_multiplayer_authority():
 		return
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		if Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
-			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
-		rotation.y -= event.relative.x * mouse_sens
-		_pitch -= event.relative.y * mouse_sens
-		_pitch = clampf(_pitch, -1.5, 1.5)
-	if event is InputEventScreenDrag:
+		_apply_look(-event.relative.x * mouse_sens, -event.relative.y * mouse_sens)
+	elif event is InputEventScreenDrag:
 		var vp_w: float = get_viewport().get_visible_rect().size.x if get_viewport() else 1000.0
-		if event.position.x < vp_w * 0.35:
+		if event.position.x < vp_w * JOY_ZONE_RATIO:
 			return
-		rotation.y -= event.relative.x * mouse_sens
-		_pitch = clampf(_pitch - event.relative.y * mouse_sens, -1.5, 1.5)
-	if event is InputEventScreenTouch and event.pressed:
-		var vp_w2: float = get_viewport().get_visible_rect().size.x if get_viewport() else 1000.0
-		if event.position.x >= vp_w2 * 0.35:
-			_handle_attack()
+		_apply_look(-event.relative.x * TOUCH_LOOK_SENS, -event.relative.y * TOUCH_LOOK_SENS)
+
+func _apply_look(yaw_delta: float, pitch_delta: float) -> void:
+	rotation.y += yaw_delta
+	_pitch = clampf(_pitch + pitch_delta, -1.5, 1.5)
 
 func _physics_process(delta: float) -> void:
 	if get_tree().paused:
@@ -325,6 +351,8 @@ func _physics_process(delta: float) -> void:
 		if _dodge_input_timer > 0.4:
 			_dodge_input_timer = 0.0
 	var dir: Vector3
+	if not is_instance_valid(_fps_cam):
+		_resolve_camera()
 	if _fps_cam and is_instance_valid(_fps_cam):
 		var fbasis := _fps_cam.global_transform.basis
 		var fwd := -fbasis.z
@@ -405,7 +433,7 @@ func _physics_process(delta: float) -> void:
 		_was_on_floor = true
 	else:
 		_coyote_timer -= delta
-	if Input.is_action_just_pressed("ui_accept"):
+	if Input.is_action_just_pressed("jump"):
 		_jump_buffer_timer = jump_buffer_time
 	else:
 		_jump_buffer_timer -= delta
@@ -417,7 +445,9 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 	if moving:
-		if Input.get_mouse_mode() != Input.MOUSE_MODE_CAPTURED:
+		# В FPS-виде поворотом владеет обзор (мышь/палец); доворачивать корпус к
+		# направлению движения нужно только в виде от третьего лица.
+		if not _is_fps_view():
 			var target_angle: float = atan2(dir.x, -dir.z)
 			rotation.y = lerp_angle(rotation.y, target_angle, 12.0 * delta)
 		pivot.rotation.y = 0.0
@@ -443,7 +473,7 @@ func _physics_process(delta: float) -> void:
 			_fps_cam.set_pitch(_pitch)
 	# Один пивот для света, конуса, пыли и «фонаря в руке» — иначе они смотрят врозь.
 	flashlight_pivot.global_rotation = Vector3(_pitch, global_rotation.y, 0.0)
-	human_body.visible = enable_human_body and Input.get_mouse_mode() != Input.MOUSE_MODE_CAPTURED
+	human_body.visible = enable_human_body and not _is_fps_view()
 
 	flashlight.visible = flashlight_enabled
 	# Конус — вид от третьего лица; из глаз он превращается в засвет во весь экран.
@@ -466,13 +496,14 @@ func _physics_process(delta: float) -> void:
 
 	_update_stamina(delta)
 	_update_battery(delta)
-	_update_hiding(delta)
 	_battery_log_timer += delta
 	if DEBUG_FLASHLIGHT and _battery_log_timer >= 1.0:
 		_battery_log_timer = 0.0
 
 	if _dodge_cooldown > 0.0:
 		_dodge_cooldown -= delta
+	if _strobe_cooldown > 0.0:
+		_strobe_cooldown -= delta
 	if _iframes > 0.0:
 		_iframes -= delta
 	if _stun_timer > 0.0:
@@ -622,12 +653,63 @@ func add_battery(amount: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if _net_active and not is_multiplayer_authority():
 		return
-	if event.is_action_pressed("attack"):
+	if event.is_action_pressed("attack") or event.is_action_pressed("melee"):
 		_handle_attack()
-	if Input.is_action_just_pressed("flashlight_toggle"):
+	if event.is_action_pressed("flashlight_toggle"):
 		toggle_flashlight()
 	if event.is_action_pressed("interact"):
 		_try_inspect()
+	if event.is_action_pressed("strobe"):
+		trigger_strobe()
+
+## GDD §3.1 — стробоскоп: STUN всем врагам в конусе фонаря на 1.5 с, кд 10 с.
+## Требует включённого фонаря и заряда батареи.
+const STROBE_COOLDOWN: float = 10.0
+const STROBE_STUN: float = 1.5
+const STROBE_RANGE: float = 12.0
+const STROBE_HALF_ANGLE: float = 0.45  # ~26° от оси = конус 52°
+const STROBE_BATTERY_COST: float = 5.0
+
+var _strobe_cooldown: float = 0.0
+
+func get_strobe_cooldown_ratio() -> float:
+	return clampf(_strobe_cooldown / STROBE_COOLDOWN, 0.0, 1.0)
+
+func trigger_strobe() -> bool:
+	if _strobe_cooldown > 0.0 or not gameplay_active:
+		return false
+	if not flashlight_enabled or battery < STROBE_BATTERY_COST:
+		EventBus.inventory_notice.emit(LocalizationManager.t("STROBE_NO_POWER"))
+		return false
+	_strobe_cooldown = STROBE_COOLDOWN
+	consume_battery(STROBE_BATTERY_COST)
+	var origin: Vector3 = global_position + Vector3(0.0, 1.4, 0.0)
+	var forward: Vector3 = -flashlight_pivot.global_transform.basis.z
+	var hits: int = 0
+	for m in get_tree().get_nodes_in_group("monsters"):
+		if not (m is Node3D) or not is_instance_valid(m):
+			continue
+		var to_target: Vector3 = (m as Node3D).global_position - origin
+		if to_target.length() > STROBE_RANGE:
+			continue
+		if forward.normalized().dot(to_target.normalized()) < cos(STROBE_HALF_ANGLE * PI):
+			continue
+		if m.has_method("stun"):
+			m.call("stun", STROBE_STUN)
+			hits += 1
+	_strobe_flash()
+	EventBus.noise_emitted.emit(Vector2(global_position.x, global_position.z), 4.0)
+	if hits > 0:
+		EventBus.inventory_notice.emit(LocalizationManager.t("STROBE_HIT"))
+	return true
+
+func _strobe_flash() -> void:
+	var base_energy: float = flashlight.light_energy
+	var tw := create_tween()
+	for i in 3:
+		tw.tween_property(flashlight, "light_energy", base_energy * 3.0, 0.05)
+		tw.tween_property(flashlight, "light_energy", base_energy * 0.2, 0.05)
+	tw.tween_property(flashlight, "light_energy", base_energy, 0.1)
 
 func _try_inspect() -> void:
 	if not gameplay_active:
@@ -650,16 +732,19 @@ func set_battery_params(max_val: float) -> void:
 func _handle_attack() -> void:
 	if _stun_timer > 0.0 or not _can_attack or not gameplay_active:
 		return
-	if stamina < COMBO_DATA[mini(_combo_count, 2)]["stam"]:
+	var next_idx: int = 0 if (_combo_break or _combo_timer <= 0.0 or _combo_count >= COMBO_DATA.size()) else _combo_count
+	if stamina < COMBO_DATA[next_idx]["stam"]:
 		return
 	if _attack_phase != "none":
 		return
 	_hit_registered = false
-	var hit_idx: int = mini(_combo_count, 2)
-	if _combo_count > 0 and (_combo_break or _combo_timer <= 0.0):
+	if _combo_break or _combo_timer <= 0.0 or _combo_count >= COMBO_DATA.size():
+		# Сброс: серия прервана, окно истекло или связка из трёх ударов
+		# доиграна — следующий замах снова начинается с лёгкого удара.
 		_combo_count = 0
-		hit_idx = 0
-	var cd: Dictionary = COMBO_DATA[hit_idx]
+		_combo_break = false
+	_attack_idx = _combo_count
+	var cd: Dictionary = COMBO_DATA[_attack_idx]
 	stamina -= cd["stam"]
 	_attack_phase = "windup"
 	_attack_timer = cd["windup"]
@@ -673,8 +758,7 @@ func _tick_attack(delta: float) -> void:
 	if _attack_phase == "none":
 		return
 	_attack_timer -= delta
-	var hit_idx_2: int = mini(_combo_count, 2)
-	var cd2: Dictionary = COMBO_DATA[hit_idx_2]
+	var cd2: Dictionary = COMBO_DATA[_attack_idx]
 	match _attack_phase:
 		"windup":
 			if _attack_timer <= 0.0:
@@ -702,10 +786,7 @@ func _on_attack_hit(body: Node) -> void:
 	_hit_registered = true
 	if not body.has_method("take_damage"):
 		return
-	var hit_idx3: int = mini(_combo_count - 1, 2)
-	if hit_idx3 < 0:
-		return
-	var cd3: Dictionary = COMBO_DATA[hit_idx3]
+	var cd3: Dictionary = COMBO_DATA[_attack_idx]
 	var bonus: float = 0.0
 	if flashlight_enabled:
 		bonus = 0.25
@@ -786,32 +867,37 @@ func _emit_footstep(weight_ratio: float) -> void:
 		cap = float(im.stats.get("capacity_kg"))
 	_footstep_system.play_step(current_state, _speed_for(current_state), weight_ratio * cap)
 
-func _update_hiding(delta: float) -> void:
+## Укрытие переключает Interactor через hiding_spot.interact(). Раньше клавишу
+## опрашивали здесь напрямую, из-за чего один и тот же нажатый interact мог
+## одновременно и спрятать игрока, и сработать по другому объекту.
+func toggle_hiding(spot: Node3D) -> void:
 	if not gameplay_active:
 		return
-	if InputService.is_interact_just_pressed():
-		if _in_hiding:
-			_exit_hiding()
-		else:
-			_try_enter_hiding()
+	if _in_hiding:
+		_exit_hiding()
+	else:
+		_enter_hiding(spot)
 
-func _try_enter_hiding() -> void:
-	var spots := get_tree().get_nodes_in_group("hiding_spot")
-	for spot in spots:
-		if spot.global_position.distance_to(global_position) < 2.0:
-			_hiding_spot = spot as Node3D
-			_in_hiding = true
-			can_move = false
-			velocity = Vector3.ZERO
-			global_position = _hiding_spot.global_position
-			visibility = 0.0
-			EventBus.player_hiding_changed.emit(true)
-			return
+func _enter_hiding(spot: Node3D) -> void:
+	if spot == null or not is_instance_valid(spot):
+		return
+	if spot.has_method("enter") and not spot.call("enter", self):
+		return
+	_hiding_spot = spot
+	_in_hiding = true
+	can_move = false
+	velocity = Vector3.ZERO
+	global_position = spot.global_position
+	visibility = 0.0
+	EventBus.player_hiding_changed.emit(true)
 
 func _exit_hiding() -> void:
 	if _hiding_spot:
+		if is_instance_valid(_hiding_spot) and _hiding_spot.has_method("exit"):
+			_hiding_spot.call("exit")
 		_in_hiding = false
 		can_move = true
+		visibility = 1.0
 		EventBus.player_hiding_changed.emit(false)
 		_hiding_spot = null
 

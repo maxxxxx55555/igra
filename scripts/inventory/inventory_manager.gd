@@ -43,7 +43,7 @@ func try_add(item_id: StringName, amount: int = 1) -> bool:
 	if data == null or amount <= 0:
 		return false
 	if current_weight + data.weight * amount > stats.capacity_kg + 0.0001:
-		EventBus.inventory_notice.emit("Рюкзак перегружен — нельзя поднять")
+		EventBus.inventory_notice.emit(LocalizationManager.t("INV_OVERWEIGHT"))
 		return false
 	var remaining := amount
 	if data.stackable:
@@ -58,7 +58,7 @@ func try_add(item_id: StringName, amount: int = 1) -> bool:
 	while remaining > 0:
 		var free_idx := _first_empty_slot()
 		if free_idx == -1:
-			EventBus.inventory_notice.emit("Нет свободных слотов")
+			EventBus.inventory_notice.emit(LocalizationManager.t("INV_NO_SLOTS"))
 			_recompute_weight()
 			EventBus.inventory_changed.emit()
 			return false
@@ -102,7 +102,7 @@ func use_item(slot_index: int) -> bool:
 		return false
 	var data := ItemDatabase.get_item(s["item_id"])
 	if data == null or not data.consumable:
-		EventBus.inventory_notice.emit("Этот предмет нельзя использовать")
+		EventBus.inventory_notice.emit(LocalizationManager.t("INV_NOT_USABLE"))
 		return false
 	EventBus.item_consumed.emit(s["item_id"], _effect_name(data.effect), data.effect_value)
 	s["count"] -= 1
@@ -219,7 +219,7 @@ func equip_item(slot_index: int) -> bool:
 		if cur_data != null:
 			var ok := try_add(cur_id, int(cur.get("count", 1)))
 			if not ok:
-				EventBus.inventory_notice.emit("Нет места в рюкзаке для снятого предмета")
+				EventBus.inventory_notice.emit(LocalizationManager.t("INV_NO_ROOM_UNEQUIP"))
 				return false
 	equipment[data.equip_slot] = {"item_id": s["item_id"], "count": s["count"]}
 	slots[slot_index] = null
@@ -238,7 +238,7 @@ func unequip_item(slot: ItemData.EquipSlot) -> bool:
 	var cur_id: StringName = cur.get("item_id", &"")
 	var ok := try_add(cur_id, int(cur.get("count", 1)))
 	if not ok:
-		EventBus.inventory_notice.emit("Нет места в рюкзаке")
+		EventBus.inventory_notice.emit(LocalizationManager.t("INV_NO_ROOM"))
 		return false
 	equipment[slot] = null
 	_recompute_weight()

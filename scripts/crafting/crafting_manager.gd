@@ -37,7 +37,7 @@ func craft(recipe_id: String) -> bool:
 	inventory[gives] = inventory.get(gives, 0) + 1
 	crafted.emit(gives)
 	if QuestManager:
-		QuestManager.complete_objective(&"side_10", &"craft_items", 1)
+		QuestManager.complete_objective(&"q_craft_items", &"craft", 1)
 	return true
 
 func get_recipe_count() -> int:

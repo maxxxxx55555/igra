@@ -66,7 +66,7 @@ func _on_pickup(item_id: StringName) -> void:
 	if s.begins_with(BLUEPRINT_PREFIX):
 		var up_id := StringName(s.substr(BLUEPRINT_PREFIX.length()))
 		if apply(up_id):
-			EventBus.inventory_notice.emit("Чертёж применён: улучшение получено!")
+			EventBus.inventory_notice.emit(LocalizationManager.t("BLUEPRINT_APPLIED"))
 func to_dict() -> Dictionary:
 	return {"applied": _applied.keys().map(func(k): return String(k))}
 func from_dict(d: Dictionary) -> void:

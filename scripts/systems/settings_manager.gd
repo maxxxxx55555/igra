@@ -16,12 +16,29 @@ const BUS_ALIASES := {
 }
 
 ## Подписи выпадающих списков → индекс уровня (0 низкий … 2 высокий).
+## Таблицы оставлены только для совместимости со старыми файлами настроек:
+## подписи в них русские и английские, а языков в игре 13 — на японском или
+## турецком совпадения не будет. Живой экран настроек (settings_screen.gd)
+## передаёт сюда индекс, поэтому _tier()/_difficulty_index() сначала
+## пробуют разобрать значение как число и только потом смотрят в таблицу.
 const TIER_LABELS := {
 	"Низкое": 0, "Среднее": 1, "Высокое": 2,
 	"Низкие": 0, "Средние": 1, "Высокие": 2,
 	"Low": 0, "Medium": 1, "High": 2,
 }
 const DIFFICULTY_LABELS := {"Легко": 0, "Нормально": 1, "Сложно": 2, "Easy": 0, "Normal": 1, "Hard": 2}
+
+## Значение из UI или из .cfg → индекс. Числа проходят как есть.
+static func _index_from(value: Variant, table: Dictionary, fallback: int) -> int:
+	if value is int or value is float:
+		return int(value)
+	var s: String = str(value)
+	if s.is_valid_int():
+		return s.to_int()
+	return int(table.get(s, fallback))
+
+static func _difficulty_index(value: Variant) -> int:
+	return clampi(_index_from(value, DIFFICULTY_LABELS, 1), 0, 2)
 
 var _volumes: Dictionary = {}
 var _language: String = "en"
@@ -135,7 +152,7 @@ func apply_game(d: Dictionary) -> void:
 	if d.has("language"):
 		set_language(String(d["language"]))
 	if d.has("difficulty"):
-		set_difficulty(int(DIFFICULTY_LABELS.get(str(d["difficulty"]), 1)))
+		set_difficulty(_difficulty_index(d["difficulty"]))
 	if d.has("autosave"):
 		_settings["autosave"] = bool(d["autosave"])
 	if d.has("hints"):
@@ -181,9 +198,7 @@ func apply_controls(d: Dictionary) -> void:
 	EventBus.settings_changed.emit("controls", d)
 
 func _tier(value: Variant) -> int:
-	if typeof(value) == TYPE_INT or typeof(value) == TYPE_FLOAT:
-		return clampi(int(value), 0, 2)
-	return int(TIER_LABELS.get(str(value), 2))
+	return clampi(_index_from(value, TIER_LABELS, 2), 0, 2)
 
 func save_to_cfg() -> void:
 	var cfg := ConfigFile.new()
@@ -405,7 +420,8 @@ func _find_environment() -> Environment:
 		return cam.environment
 	return null
 
-func _ensure_bus(bus: String) -> void:    if AudioServer.get_bus_index(bus) < 0:
+func _ensure_bus(bus: String) -> void:
+	if AudioServer.get_bus_index(bus) < 0:
 		AudioServer.add_bus()
 		AudioServer.set_bus_name(AudioServer.bus_count - 1, bus)
 

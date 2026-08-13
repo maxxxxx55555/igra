@@ -30,12 +30,15 @@ func _ready() -> void:
 		# push_warning("camera_follow_3d: Camera3D не найдена")
 		return
 	_cam.projection = Camera3D.PROJECTION_PERSPECTIVE
+	# FOV, выставленный в сцене, важнее дефолта скрипта: раньше _ready()
+	# затирал авторские 80° третьеличными 55° и вид становился «трубой».
+	if not is_equal_approx(_cam.fov, 75.0):
+		fov_deg = _cam.fov
 	_cam.fov = fov_deg
 	_current_height = height
 	_current_distance = distance
 	_current_fov = fov_deg
 	_target = _resolve_target()
-	var pitch = rad_to_deg(atan2(height - look_height_offset, distance))
 
 
 func set_pitch(v: float) -> void:

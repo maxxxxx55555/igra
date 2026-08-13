@@ -127,7 +127,7 @@ func _build_ui() -> void:
 	bg.add_child(lbl)
 	
 	var skip_btn := Button.new()
-	skip_btn.text = "Пропустить"
+	skip_btn.text = LocalizationManager.t("UI_SKIP")
 	skip_btn.size = Vector2(100, 30)
 	skip_btn.anchors_preset = Control.PRESET_BOTTOM_RIGHT
 	skip_btn.offset_bottom = -10

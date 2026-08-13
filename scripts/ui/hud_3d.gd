@@ -20,7 +20,15 @@ var _enemy_hp_tween: Tween
 @onready var ammo_val: Label = $AmmoCounter/AmmoVal
 @onready var prompt: Label = $PromptLabel
 @onready var notice: Label = $NoticeLabel
-@onready var vignette: ColorRect = get_tree().root.find_child("VignetteOverlay", true, false)
+## VignetteOverlay создаётся PostProcessOverlay уже после готовности HUD,
+## поэтому @onready ловил null и виньетка урона не работала — ищем лениво.
+var _vignette_cache: ColorRect = null
+var vignette: ColorRect:
+	get:
+		if is_instance_valid(_vignette_cache):
+			return _vignette_cache
+		_vignette_cache = get_tree().root.find_child("VignetteOverlay", true, false) as ColorRect
+		return _vignette_cache
 @onready var enemy_name_label: Label = $EnemyName
 @onready var enemy_hp_bar: ColorRect = $EnemyHPBar
 
@@ -29,6 +37,7 @@ func _ready() -> void:
 	_remove_dup_leftbottom()
 	_apply_touch_visibility()
 	_fix_radar_anchor()
+	InputService.quick_slot_requested.connect(_on_quick_slot_key)
 	hp_fill.color = Color(0.706, 0.271, 0.184)
 	stam_fill.color = Color(0.373, 0.541, 0.306)
 	bat_fill.color = Color(0.788, 0.635, 0.290)
@@ -49,8 +58,8 @@ func _ready() -> void:
 	hp_val.text = str(int(hp_ratio * 100))
 	stam_val.text = str(int(stam_ratio * 100))
 	bat_val.text = str(int(bat_ratio * 100))
-	if vignette:
-		_vignette_default_color = vignette.color
+	# Цвет по умолчанию читаем отложенно — оверлея ещё нет на этом кадре.
+	call_deferred("_cache_vignette_default")
 	_add_captions()
 	_setup_number_fonts()
 	_setup_slot_placeholders()
@@ -65,6 +74,8 @@ func _ready() -> void:
 	EventBus.player_battery_changed.connect(_on_bat)
 	EventBus.ammo_changed.connect(_on_ammo_changed)
 	EventBus.player_interact_available.connect(func(avail: bool): prompt.visible = avail)
+	# Подсказка была вечно пустой строкой: текст в неё никто не писал.
+	EventBus.interact_prompt_changed.connect(func(text: String) -> void: prompt.text = text)
 	EventBus.inventory_weight_changed.connect(_on_weight_changed)
 	EventBus.inventory_notice.connect(func(msg: String): _show_notice(msg))
 	EventBus.monster_spotted.connect(_on_monster_spotted)
@@ -80,6 +91,11 @@ func _ready() -> void:
 	_add_map_button()
 	EventBus.game_state_changed.connect(_on_game_state)
 	_on_game_state(int(GameManager.current_state))
+
+func _cache_vignette_default() -> void:
+	var v := vignette
+	if v != null:
+		_vignette_default_color = v.color
 
 func _setup_nv_poll() -> void:
 	var nv_poll := Timer.new()
@@ -206,12 +222,30 @@ func has_touch_ui() -> bool:
 	return DisplayServer.is_touchscreen_available() or OS.has_feature("mobile")
 
 func _apply_touch_visibility() -> void:
-	if has_touch_ui():
+	if not has_touch_ui():
+		for path in ["BottomLeft", "BottomRight"]:
+			var n := get_node_or_null(path) as CanvasItem
+			if n != null:
+				n.visible = false
 		return
-	for path in ["BottomLeft", "BottomRight"]:
-		var n := get_node_or_null(path) as CanvasItem
-		if n != null:
-			n.visible = false
+	_install_joystick()
+
+## JoystickRing в сцене был просто нарисованным кольцом — двигать им игрока было
+## нельзя. Вешаем на него virtual_joystick.gd, который пишет в InputService;
+## отдельный джойстик из main_3d.gd больше не создаётся (было два кольца).
+func _install_joystick() -> void:
+	var ring := get_node_or_null("BottomLeft/JoystickRing") as Control
+	if ring == null or ring.get_script() != null:
+		return
+	var js: Script = load("res://scripts/ui/virtual_joystick.gd")
+	if js == null:
+		return
+	var joy := Control.new()
+	joy.name = "JoystickInput"
+	joy.set_script(js)
+	joy.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	joy.mouse_filter = Control.MOUSE_FILTER_STOP
+	ring.add_child(joy)
 
 func _fix_radar_anchor() -> void:
 	var tr := get_node_or_null("TopRight") as Control
@@ -230,9 +264,9 @@ func _remove_dup_leftbottom() -> void:
 
 func _add_captions() -> void:
 	var data := [
-		["HP", $TopLeft/HP],
-		["СТАМИНА", $TopLeft/Stam],
-		["БАТАРЕЯ", $TopLeft/Bat]
+		[LocalizationManager.t("HUD_HP"), $TopLeft/HP],
+		[LocalizationManager.t("HUD_STAMINA"), $TopLeft/Stam],
+		[LocalizationManager.t("HUD_BATTERY"), $TopLeft/Bat]
 	]
 	var outline_col := Color(0.047, 0.063, 0.086, 1.0)
 	var shadow_col := Color(0.0, 0.0, 0.0, 0.5)
@@ -325,21 +359,25 @@ func _on_enemy_hp_updated(_monster_id: StringName, ratio: float) -> void:
 	_enemy_hp_tween.tween_callback(func():
 		enemy_hp_bar.visible = false)
 
+## Вспышка виньетки при уроне. Возврат идёт к фактической базовой прозрачности,
+## а не к константе 0.4: иначе каждое попадание навсегда затемняло экран.
 func _on_damage_vignette(ratio: float) -> void:
-	if ratio < _hp and vignette:
+	var v := vignette
+	if ratio < _hp and v != null:
 		var tween := create_tween()
-		tween.tween_property(vignette, "color:a", 0.8, 0.15)
-		tween.tween_property(vignette, "color:a", 0.4, 0.15)
+		tween.tween_property(v, "color:a", 0.8, 0.15)
+		tween.tween_property(v, "color:a", _vignette_default_color.a, 0.25)
 
 func _on_hp(ratio: float) -> void:
 	_hp = ratio
 	_tween_fill(hp_fill, ratio)
 	hp_val.text = str(int(ratio * 100))
-	if ratio < 0.3 and vignette:
+	# На низком HP виньетка остаётся заметно плотнее базовой, но не «залипает».
+	var v := vignette
+	if ratio < 0.3 and v != null:
 		var tween := create_tween()
-		tween.tween_property(vignette, "color:a", 0.8, 0.15)
-		tween.tween_property(vignette, "color:a", 0.6, 0.15)
-		tween.play()
+		tween.tween_property(v, "color:a", 0.8, 0.15)
+		tween.tween_property(v, "color:a", maxf(_vignette_default_color.a, 0.6), 0.15)
 
 func _on_stam(ratio: float) -> void:
 	_stam = ratio
@@ -398,28 +436,43 @@ func _on_btn_pressed(btn: Button) -> void:
 	tween.tween_property(btn, "scale", Vector2(0.92, 0.92), 0.04)
 	tween.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.04)
 
+## Кнопки-«спутники» правого кластера. Раньше они позиционировались абсолютными
+## пикселями от 1920x1080 и на телефоне уезжали за экран — теперь якорятся к
+## правому нижнему углу, а размер берётся из TOUCH_BTN (палец ~48-64 px).
+const TOUCH_BTN: Vector2 = Vector2(64, 64)
+
 func _add_side_buttons(isv: Node) -> void:
 	if not has_touch_ui():
 		return
-	var vp := get_viewport().get_visible_rect().size if get_viewport() else Vector2(1920, 1080)
-	var jump := Button.new()
-	jump.name = "BtnJump"
-	jump.text = "⬆"
-	jump.custom_minimum_size = Vector2(64, 64)
-	jump.size = Vector2(64, 64)
-	jump.position = Vector2(vp.x - 152, vp.y - 330)
-	jump.add_theme_font_size_override("font_size", 22)
-	jump.button_down.connect(func() -> void: isv.request_jump())
-	add_child(jump)
-	var flash := Button.new()
-	flash.name = "BtnFlash"
-	flash.text = "🔦"
-	flash.custom_minimum_size = Vector2(56, 56)
-	flash.size = Vector2(56, 56)
-	flash.position = Vector2(vp.x - 64, 12)
-	flash.add_theme_font_size_override("font_size", 20)
-	flash.button_down.connect(func() -> void: isv.request_flashlight())
-	add_child(flash)
+	var anchored := func(node: Control, from_right: float, from_bottom: float) -> void:
+		node.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+		node.offset_left = -from_right - node.custom_minimum_size.x
+		node.offset_right = -from_right
+		node.offset_top = -from_bottom - node.custom_minimum_size.y
+		node.offset_bottom = -from_bottom
+	var mk := func(nm: String, label: String, cb: Callable) -> Button:
+		var b := Button.new()
+		b.name = nm
+		b.text = label
+		b.custom_minimum_size = TOUCH_BTN
+		b.focus_mode = Control.FOCUS_NONE
+		b.add_theme_font_size_override("font_size", 22)
+		b.button_down.connect(cb)
+		add_child(b)
+		return b
+	var jump := mk.call("BtnJump", "↑", func() -> void: isv.request_jump()) as Button
+	anchored.call(jump, 20.0, 250.0)
+	var flash := mk.call("BtnFlash", "☀", func() -> void: isv.request_flashlight()) as Button
+	anchored.call(flash, 100.0, 250.0)
+	# Стробоскоп (GDD §3.1) — отдельная кнопка, на ПК это клавиша C.
+	# Приседание уже висит на BtnStealth в сцене — второй кнопки не нужно.
+	var strobe := mk.call("BtnStrobe", "⚡", func() -> void: _request_strobe()) as Button
+	anchored.call(strobe, 180.0, 250.0)
+
+func _request_strobe() -> void:
+	var p := get_tree().get_first_node_in_group("player")
+	if p != null and p.has_method("trigger_strobe"):
+		p.call("trigger_strobe")
 
 func _setup_slot_placeholders() -> void:
 	var item_icons := preload("res://scripts/ui/item_icons.gd")
@@ -466,6 +519,9 @@ func _setup_slot_placeholders() -> void:
 		var border := slot0.get_node_or_null("Border")
 		if border:
 			border.color = Color(0.788, 0.635, 0.290)
+
+func _on_quick_slot_key(index: int) -> void:
+	_use_quick_slot(index)
 
 func _use_quick_slot(index: int) -> void:
 	var inv := get_tree().root.get_node_or_null("InventoryManager")

@@ -3,6 +3,7 @@ extends Node3D
 func _ready() -> void:
 
 	_setup_nav_region()
+	_setup_world_runtime()
 	_gp_proof()
 	_final_integration()
 	_auto_start_from_main()
@@ -39,28 +40,21 @@ func _auto_start_from_main() -> void:
 	if GM and GM.has_method("_change_state"):
 		GM._change_state(GM.GameState.MENU)
 
+## Виртуальный джойстик живёт в hud_3d.tscn (BottomLeft/JoystickRing) и
+## включается там же по has_touch_ui(). Раньше здесь создавался второй,
+## поверх первого — два кольца в одном углу.
 func _setup_joystick() -> void:
-	# Виртуальный джойстик нужен только на тач-устройствах. На ПК он рисовался
-	# всегда и вдобавок дублировал JoystickRing из hud_3d.tscn — два кольца
-	# в одном углу.
-	if not (DisplayServer.is_touchscreen_available() or OS.has_feature("mobile")):
+	pass
+
+## Districts никогда не появлялись в игре: фабрика была, вызова не было.
+## WorldRuntime — единственная точка, которая строит и переключает районы.
+func _setup_world_runtime() -> void:
+	if get_node_or_null("WorldRuntime") != null:
 		return
-	var cl := CanvasLayer.new()
-	cl.name = "TouchLayer"
-	add_child(cl)
-	var joy := Control.new()
-	joy.set_script(load("res://scripts/ui/virtual_joystick.gd"))
-	joy.name = "VirtualJoystick"
-	joy.size = Vector2(180, 180)
-	joy.anchor_left = 0.0
-	joy.anchor_top = 1.0
-	joy.anchor_right = 0.0
-	joy.anchor_bottom = 1.0
-	joy.offset_left = 24
-	joy.offset_top = -204
-	joy.offset_right = 204
-	joy.offset_bottom = -24
-	cl.add_child(joy)
+	var wr := Node3D.new()
+	wr.set_script(load("res://scripts/world/world_runtime.gd"))
+	wr.name = "WorldRuntime"
+	add_child(wr)
 
 func _setup_multiplayer() -> void:
 	var nm := get_node_or_null("/root/NetworkManager")
@@ -116,7 +110,4 @@ func _final_integration() -> void:
 	for nm in checks:
 		if get_node_or_null(checks[nm]) != null:
 			ok += 1
-	var DB = load("res://scripts/item_database.gd")
-	if DB:
-		pass
 

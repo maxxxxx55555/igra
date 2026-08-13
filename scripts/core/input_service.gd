@@ -5,6 +5,9 @@ signal attack_requested()
 signal jump_requested()
 signal flashlight_requested()
 signal dodge_requested(dir: Vector2)
+## Клавиши 1-6 были заведены в project.godot, но их никто не слушал:
+## быстрые слоты работали только мышью/тачем.
+signal quick_slot_requested(index: int)
 
 var _interact_pressed: bool = false
 var _interact_held: bool = false
@@ -19,6 +22,11 @@ var _stealth_held: bool = false
 var _stealth_released: bool = false
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	# Курсор пересчитывается на смене состояния игры и открытии/закрытии экранов.
+	EventBus.game_state_changed.connect(func(_s: int) -> void: refresh_mouse_mode())
+	EventBus.ui_screen_opened.connect(func(_id: String) -> void: refresh_mouse_mode())
+	EventBus.ui_screen_closed.connect(func(_id: String) -> void: refresh_mouse_mode())
 	if not InputMap.has_action("attack"):
 		InputMap.add_action("attack")
 		var ev := InputEventMouseButton.new()
@@ -84,19 +92,52 @@ func is_interact_just_pressed() -> bool:
 	return p
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and not event.echo:
-		if event.is_action_pressed("stealth"):
-			_joy_stealth_toggled = not _joy_stealth_toggled
-			_stealth_pressed = true
-			_stealth_held = true
-		elif event.is_action_pressed("interact"):
-			interact_requested.emit()
-			_interact_pressed = true
-			_interact_held = true
-	if event is InputEventKey and not event.pressed and not event.echo:
-		if event.is_action_pressed("stealth"):
-			_stealth_held = false
-			_stealth_released = true
-		elif event.is_action_pressed("interact"):
-			_interact_held = false
-			_interact_released = true
+	# Раньше ветка отпускания вызывала is_action_pressed() на released-событии —
+	# оно всегда false, поэтому _stealth_held/_interact_held залипали навсегда.
+	# Плюс фильтр «только InputEventKey» глушил геймпад.
+	if event.is_echo():
+		return
+	for i in range(1, 7):
+		if event.is_action_pressed("quick_slot_%d" % i):
+			quick_slot_requested.emit(i - 1)
+			return
+	if event.is_action_pressed("stealth"):
+		_joy_stealth_toggled = not _joy_stealth_toggled
+		_stealth_pressed = true
+		_stealth_held = true
+	elif event.is_action_released("stealth"):
+		_stealth_held = false
+		_stealth_released = true
+	elif event.is_action_pressed("interact"):
+		interact_requested.emit()
+		_interact_pressed = true
+		_interact_held = true
+	elif event.is_action_released("interact"):
+		_interact_held = false
+		_interact_released = true
+
+## ── Владение режимом курсора ────────────────────────────────────────────────
+## Раньше mouse_mode дёргали 10 файлов вразнобой: пауза отпускала курсор, но
+## никто не возвращал захват — после первого Esc камера мышью не управлялась.
+## Теперь режим выводится из состояния игры в одном месте.
+
+func is_touch_device() -> bool:
+	return DisplayServer.is_touchscreen_available() or OS.has_feature("mobile")
+
+## true, если сейчас игрок должен смотреть камерой (игра идёт и оверлеев нет).
+func _should_capture() -> bool:
+	if is_touch_device():
+		return false
+	var gm := get_node_or_null("/root/GameManager")
+	if gm == null or not gm.has_method("is_playing") or not gm.is_playing():
+		return false
+	var ui := get_node_or_null("/root/UIManager")
+	if ui != null and ui.has_method("is_hud_blocked") and ui.is_hud_blocked():
+		return false
+	return true
+
+func refresh_mouse_mode() -> void:
+	var want := _should_capture()
+	var mode := Input.MOUSE_MODE_CAPTURED if want else Input.MOUSE_MODE_VISIBLE
+	if Input.get_mouse_mode() != mode:
+		Input.set_mouse_mode(mode)

@@ -60,9 +60,8 @@ ThemeSetup="*res://scripts/theme_setup.gd"
 MapController="*res://scripts/ui/map_controller.gd"
 LANNetwork="*res://scripts/net/lan_network.gd"
 PowerGrid="*res://scripts/world/power_grid.gd"
-SaveLoad="*res://scripts/save_load.gd"
 EventBus="*res://scripts/events/event_bus.gd"
-I18n="*res://scripts/i18n/i18n.gd"
+Routes="*res://scripts/core/routes.gd"
 Bootstrap="*res://scripts/_bootstrap.gd"
 ShotTool="*res://scripts/tools/shot_tool.gd"
 WorldBootstrap="*res://scripts/world/world_bootstrap.gd"
@@ -91,8 +90,9 @@ AudioManager="*res://scripts/systems/audio_manager.gd"
 AchievementManager="*res://scripts/systems/achievements_manager.gd"
 MusicManager="*res://scripts/systems/music_manager.gd"
 LocalizationManager="*res://scripts/i18n/localization_manager.gd"
-QuestManager="*res://scripts/systems/quest_manager.gd"
+QuestManager="*res://scripts/core/quest_manager.gd"
 DistrictManager="*res://scripts/district_manager.gd"
+FinaleDirector="*res://scripts/world/finale_director.gd"
 PuzzleSystem="*res://scripts/world/puzzle_system.gd"
 LANDiscovery="*res://scripts/multiplayer/lan_discovery.gd"
 NetworkManager="*res://scripts/multiplayer/network_manager.gd"
@@ -101,12 +101,10 @@ XpManager="*res://scripts/systems/xp_manager.gd"
 NewGamePlus="*res://scripts/systems/new_game_plus.gd"
 NoisePropagation="*res://scripts/systems/noise_propagation.gd"
 FlashlightUpgradeManager="*res://scripts/systems/flashlight_upgrade_manager.gd"
-WorkbenchManager="*res://scripts/systems/workbench_manager.gd"
 EndingsManager="*res://scripts/systems/endings_manager.gd"
 TutorialSystem="*res://scripts/ui/tutorial_system.gd"
 RewardsManager="*res://scripts/economy/rewards_manager.gd"
 RandomEvents="*res://scripts/systems/random_events.gd"
-AdManager="*res://scripts/monetization/ad_manager.gd"
 #ScreenFlowManager="*res://scripts/ui/screen_flow_manager.gd"
 
 [debug]
@@ -119,6 +117,10 @@ gdscript/warnings/unsafe_void_return=0
 gdscript/warnings/redundant_await=0
 gdscript/warnings/integer_division=0
 gdscript/warnings/narrow_conversion=0
+
+[audio]
+
+buses/default_bus_layout="res://default_bus_layout.tres"
 
 [display]
 
@@ -244,6 +246,51 @@ quick_slot_6={
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":54,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
 ]
 }
+melee={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":86,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+attack={
+"deadzone": 0.5,
+"events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":0,"position":Vector2(0, 0),"global_position":Vector2(0, 0),"factor":1.0,"button_index":1,"canceled":false,"pressed":false,"double_click":false,"script":null)
+]
+}
+strobe={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":67,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+
+close_screen={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194305,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+inventory={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194306,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+settings={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194332,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+skill_tree_toggle={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":84,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+toggle_map={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":75,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+
+[gui]
+
+theme/custom="res://assets/ui/theme_tls.tres"
 
 [rendering]
 

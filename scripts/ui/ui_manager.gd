@@ -1,11 +1,18 @@
 extends Node
 const SCREENS: Dictionary = {
-	&"main_menu":       "res://scripts/ui/main_menu.gd",
+	# Именно сцена, а не скрипт: main_menu.gd работает с узлом VBox из
+	# main_menu.tscn. Инстанс «голого» скрипта давал пустой блокирующий
+	# оверлей, который прятал HUD и перехватывал ввод.
+	&"main_menu":       "res://scenes/ui/main_menu.tscn",
 	&"pause":           "res://scripts/ui/pause_menu.gd",
 	&"settings":        "res://scripts/ui/settings_screen.gd",
 	&"death":           "res://scripts/ui/death_screen.gd",
 	&"win":             "res://scripts/ui/win_screen.gd",
 	&"city_map":        "res://scripts/ui/city_map.gd",
+	# Пять справочных разделов живут внутри одного экрана «Кодекс» с
+	# вкладками. Отдельные записи оставлены: старые вызовы open(&"journal")
+	# и т.п. перенаправляются в нужную вкладку через CODEX_TABS.
+	&"codex":           "res://scripts/ui/codex_ui.gd",
 	&"encyclopedia":    "res://scripts/ui/encyclopedia_ui.gd",
 	&"journal":         "res://scripts/ui/journal_ui.gd",
 	&"quest_journal":   "res://scripts/ui/quest_journal.gd",
@@ -17,7 +24,17 @@ const SCREENS: Dictionary = {
 	&"new_game_plus":   "res://scenes/ui/new_game_plus.tscn",
 }
 const BLOCKING: Array = [&"main_menu", &"pause", &"settings", &"death", &"win",
-	&"city_map", &"encyclopedia", &"journal", &"quest_journal", &"achievements", &"stats", &"workbench", &"photo", &"skill_tree", &"new_game_plus"]
+	&"city_map", &"codex", &"encyclopedia", &"journal", &"quest_journal", &"achievements", &"stats", &"workbench", &"photo", &"skill_tree", &"new_game_plus"]
+
+## Старый id раздела -> вкладка «Кодекса». Экраны перечислены и в SCREENS,
+## но открываются уже не поодиночке, а как вкладка общего экрана.
+const CODEX_TABS: Dictionary = {
+	&"journal": &"journal",
+	&"quest_journal": &"quests",
+	&"achievements": &"achievements",
+	&"stats": &"stats",
+	&"encyclopedia": &"bestiary",
+}
 var _layer: CanvasLayer
 var _cache: Dictionary = {}
 var _open_blocking: Array = []
@@ -85,6 +102,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif event.is_action_pressed("journal_toggle"):
 			toggle(&"journal")
 func open(id: StringName) -> void:
+	# Справочные разделы больше не открываются сами по себе — только как
+	# вкладка «Кодекса», иначе игрок получал бы окно без ряда вкладок.
+	if CODEX_TABS.has(id):
+		open_codex(CODEX_TABS[id])
+		return
 	var scr: Control = _get_screen(id)
 	if scr == null:
 		return
@@ -104,10 +126,34 @@ func close(id: StringName) -> void:
 			_set_hud(true)
 	EventBus.ui_screen_closed.emit(id)
 func toggle(id: StringName) -> void:
+	if CODEX_TABS.has(id):
+		# Повторное нажатие той же клавиши закрывает «Кодекс», а нажатие
+		# клавиши другого раздела переключает вкладку, не закрывая экран.
+		var want: StringName = CODEX_TABS[id]
+		var codex: Control = _cache.get(&"codex", null)
+		if codex != null and codex.visible and codex.has_method("current_tab"):
+			if StringName(codex.call("current_tab")) == want:
+				close(&"codex")
+				return
+		open_codex(want)
+		return
 	if _is_open(id):
 		close(id)
 	else:
 		open(id)
+
+## Открывает «Кодекс» на конкретной вкладке.
+func open_codex(tab: StringName) -> void:
+	var codex: Control = _get_screen(&"codex")
+	if codex == null:
+		return
+	codex.visible = true
+	if not _open_blocking.has(&"codex"):
+		_open_blocking.append(&"codex")
+	_set_hud(false)
+	if codex.has_method("open_tab"):
+		codex.call("open_tab", tab)
+	EventBus.ui_screen_opened.emit(&"codex")
 func close_all_blocking() -> void:
 	for id in _open_blocking.duplicate():
 		close(id)
@@ -145,6 +191,11 @@ func _get_screen(id: StringName) -> Control:
 			node.set_anchors_and_offsets_preset(Control.PRESET_CENTER, Control.PRESET_MODE_KEEP_SIZE)
 	_cache[id] = node
 	return node
+## true, если текущая сцена — само главное меню.
+func _in_menu_scene() -> bool:
+	var cs := get_tree().current_scene
+	return cs != null and cs.scene_file_path == "res://scenes/ui/main_menu.tscn"
+
 func _set_hud(visible: bool) -> void:
 	EventBus.hud_visibility_changed.emit(visible)
 func _on_game_state(state: int) -> void:
@@ -156,7 +207,11 @@ func _on_game_state(state: int) -> void:
 			n.visible = in_game
 	match state:
 		GameManager.GameState.MENU:
-			open(&"main_menu")
+			# Если игрок уже НА сцене меню, второй экран поверх неё не нужен —
+			# иначе main_menu.gd -> return_to_menu() -> MENU -> open(main_menu)
+			# уходило в самоповтор и рисовало меню поверх меню.
+			if not _in_menu_scene():
+				open(&"main_menu")
 		GameManager.GameState.PLAYING:
 			# Меню закрывалось только по EventBus.game_started. Любой другой путь
 			# в PLAYING (загрузка, отладка, конец катсцены) оставлял главное меню

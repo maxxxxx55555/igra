@@ -36,7 +36,6 @@ var _item_slots: Array[TextureButton] = []
 var _inv_btn: TextureButton
 
 # Top right buttons
-var _minimap_btn: TextureButton
 var _pause_btn: TextureButton
 
 # Flashlight button
@@ -154,25 +153,12 @@ func _build_ui() -> void:
 		_item_slots.append(slot)
 	_inv_btn = _item_slots[4]
 
-	# ===== TOP RIGHT - MINIMAP & PAUSE =====
+	# ===== TOP RIGHT - PAUSE =====
+	# Кнопки "MAP" здесь больше нет: она была 50x50 в правом верхнем углу,
+	# то есть лежала прямо поверх миникарты (180x180, тот же угол) и делала
+	# то же самое. Теперь карта открывается тапом по самой миникарте.
 	var top_right_x := vp_size.x - 70
 	var top_y := 20
-	
-	# Minimap toggle
-	_minimap_btn = TextureButton.new()
-	_minimap_btn.name = "MinimapBtn"
-	_minimap_btn.custom_minimum_size = Vector2(50, 50)
-	_minimap_btn.position = Vector2(top_right_x, top_y)
-	_minimap_btn.texture_normal = _make_circle_texture(Color(0.2, 0.3, 0.4, 0.8), 50)
-	_minimap_btn.texture_pressed = _make_circle_texture(Color(0.3, 0.5, 0.7, 0.9), 50)
-	_minimap_btn.text = "MAP"
-	_minimap_btn.add_theme_font_size_override("font_size", 9)
-	_minimap_btn.add_theme_color_override("font_color", Color(1, 1, 1, 1))
-	add_child(_minimap_btn)
-	_minimap_btn.pressed.connect(func() -> void: 
-		var ui = get_node_or_null("/root/UIManager")
-		if ui: ui.toggle(&"city_map")
-	)
 	
 	# Pause button (gear)
 	_pause_btn = TextureButton.new()

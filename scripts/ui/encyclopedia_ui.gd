@@ -1,5 +1,10 @@
 extends Control
 
+## Встроен во вкладку «Кодекса»: тогда экран не рисует свой затемняющий фон
+## и кнопку закрытия — их даёт общая рамка, — а панель растягивается на всю
+## вкладку вместо центрирования.
+var embedded: bool = false
+
 func _ready() -> void:
 	_build()
 	if not LocalizationManager.language_changed.is_connected(_on_lang_changed):
@@ -14,12 +19,16 @@ func _build() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = ThemeProvider.build_theme()
-	var bg := ColorRect.new()
-	bg.color = Color(0.04, 0.05, 0.07, 0.94)
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	add_child(bg)
+	if not embedded:
+		var bg := ColorRect.new()
+		bg.color = Color(0.04, 0.05, 0.07, 0.94)
+		bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+		add_child(bg)
 	var panel := PanelContainer.new()
-	panel.set_anchors_preset(Control.PRESET_CENTER)
+	if embedded:
+		panel.set_anchors_preset(Control.PRESET_FULL_RECT)
+	else:
+		panel.set_anchors_preset(Control.PRESET_CENTER)
 	panel.custom_minimum_size = Vector2(660, 480)
 	add_child(panel)
 	var vb := VBoxContainer.new()
@@ -48,7 +57,7 @@ func _build() -> void:
 		prev.color = data.body_color if (unlocked and data) else ThemeProvider.COLOR_BG_DARK
 		cv.add_child(prev)
 		var nm := Label.new()
-		nm.text = data.display_name if unlocked else "???"
+		nm.text = LocalizationManager.name_for("MONSTER_", data.id, data.display_name) if unlocked else "???"
 		nm.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER if unlocked else ThemeProvider.COLOR_TEXT_DIM)
 		cv.add_child(nm)
 		var ds := Label.new()
@@ -57,8 +66,9 @@ func _build() -> void:
 		ds.autowrap_mode = TextServer.AUTOWRAP_WORD
 		ds.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
 		cv.add_child(ds)
-	var b := Button.new()
-	b.text = LocalizationManager.t("ui_close")
-	b.focus_mode = Control.FOCUS_NONE
-	b.pressed.connect(func() -> void: UIManager.close(&"encyclopedia"))
-	vb.add_child(b)
+	if not embedded:
+		var b := Button.new()
+		b.text = LocalizationManager.t("ui_close")
+		b.focus_mode = Control.FOCUS_NONE
+		b.pressed.connect(func() -> void: UIManager.close(&"encyclopedia"))
+		vb.add_child(b)

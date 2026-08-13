@@ -25,14 +25,16 @@ func _show(id: String) -> void:
 		return
 	_shown[id] = true
 	_save_shown()
-	var texts := {
-		"wasd": "WASD / джойстик — движение",
-		"flashlight": "F — фонарик. Свет садит батарею, но отпугивает тени",
-		"shadow": "Тени боятся света. Держи луч на них — или прячься",
-		"interact": "E — взаимодействовать с объектами",
-		"inventory": "Tab — инвентарь. Следи за весом",
+	# Подсказки показываются игроку, поэтому берутся из локализации:
+	# захардкоженные строки оставались русскими на всех 13 языках.
+	var keys := {
+		"wasd": "tutorial_move",
+		"flashlight": "HINT_FLASHLIGHT",
+		"shadow": "TUT_LIGHT_SHIELD",
+		"interact": "tutorial_interact",
+		"inventory": "HINT_INVENTORY",
 	}
-	var msg: String = texts.get(id, "")
+	var msg: String = LocalizationManager.t(String(keys[id])) if keys.has(id) else ""
 	if msg.is_empty():
 		return
 	var toast := Label.new()

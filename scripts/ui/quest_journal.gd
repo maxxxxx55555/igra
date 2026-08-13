@@ -1,6 +1,11 @@
 extends Control
 class_name QuestJournal
 
+## Встроен во вкладку «Кодекса»: тогда экран не рисует свой затемняющий фон
+## и кнопку закрытия — их даёт общая рамка, — а панель растягивается на всю
+## вкладку вместо центрирования.
+var embedded: bool = false
+
 var _tab_bar: HBoxContainer
 var _quest_list: VBoxContainer
 var _detail_panel: VBoxContainer
@@ -19,13 +24,17 @@ func _build_ui() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = ThemeProvider.build_theme()
 
-	var bg := ColorRect.new()
-	bg.color = Color(0.04, 0.05, 0.07, 0.94)
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	add_child(bg)
+	if not embedded:
+		var bg := ColorRect.new()
+		bg.color = Color(0.04, 0.05, 0.07, 0.94)
+		bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+		add_child(bg)
 
 	var panel := PanelContainer.new()
-	panel.set_anchors_preset(Control.PRESET_CENTER)
+	if embedded:
+		panel.set_anchors_preset(Control.PRESET_FULL_RECT)
+	else:
+		panel.set_anchors_preset(Control.PRESET_CENTER)
 	panel.custom_minimum_size = Vector2(760, 520)
 	add_child(panel)
 
@@ -41,7 +50,7 @@ func _build_ui() -> void:
 	_tab_bar.add_theme_constant_override("separation", 4)
 	left_vb.add_child(_tab_bar)
 
-	var tabs := ["Active", "Completed", "All"]
+	var tabs := [LocalizationManager.t("QUEST_TAB_ACTIVE"), LocalizationManager.t("QUEST_TAB_DONE"), LocalizationManager.t("QUEST_TAB_ALL")]
 	for i in range(tabs.size()):
 		var btn := Button.new()
 		btn.text = tabs[i]
@@ -65,7 +74,7 @@ func _build_ui() -> void:
 	main_hb.add_child(right_vb)
 
 	var detail_title := Label.new()
-	detail_title.text = "QUEST DETAILS"
+	detail_title.text = LocalizationManager.t("QUEST_DETAILS")
 	detail_title.add_theme_font_size_override("font_size", 18)
 	detail_title.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
 	detail_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -78,11 +87,12 @@ func _build_ui() -> void:
 	detail_scroll.add_child(_detail_panel)
 	right_vb.add_child(detail_scroll)
 
-	var close_btn := Button.new()
-	close_btn.text = "Close"
-	close_btn.focus_mode = Control.FOCUS_NONE
-	close_btn.pressed.connect(func() -> void: UIManager.close(&"quest_journal"))
-	right_vb.add_child(close_btn)
+	if not embedded:
+		var close_btn := Button.new()
+		close_btn.text = LocalizationManager.t("SCR_ZAKRYT")
+		close_btn.focus_mode = Control.FOCUS_NONE
+		close_btn.pressed.connect(func() -> void: UIManager.close(&"quest_journal"))
+		right_vb.add_child(close_btn)
 
 	_refresh_list()
 
@@ -104,16 +114,16 @@ func _refresh_list() -> void:
 	var filter_active = _current_tab == 0
 	var filter_completed = _current_tab == 1
 
-	for quest_id in QuestManager._quests:
-		var quest = QuestManager._quests[quest_id]
-		var status = quest["status"]
-		if filter_active and status != QuestManager.STATUS_ACTIVE:
+	for quest_id in QuestManager.quests:
+		var quest: Dictionary = QuestManager.quests[quest_id]
+		var status := QuestManager.get_status(quest)
+		if filter_active and status == QuestManager.STATUS_COMPLETED:
 			continue
 		if filter_completed and status != QuestManager.STATUS_COMPLETED:
 			continue
 
 		var btn := Button.new()
-		btn.text = quest["data"]["title"]
+		btn.text = QuestManager.get_title(quest)
 		btn.focus_mode = Control.FOCUS_NONE
 		btn.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 		btn.custom_minimum_size = Vector2(0, 40)
@@ -129,30 +139,32 @@ func _show_quest_detail(quest_id: StringName) -> void:
 	for c in _detail_panel.get_children():
 		c.queue_free()
 
-	var quest = QuestManager._quests[quest_id]
-	var data = quest["data"]
+	var quest: Dictionary = QuestManager.quests.get(String(quest_id), {})
+	if quest.is_empty():
+		return
 
 	var title := Label.new()
-	title.text = data["title"]
+	title.text = QuestManager.get_title(quest)
 	title.add_theme_font_size_override("font_size", 20)
 	title.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
 	title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_detail_panel.add_child(title)
 
 	var desc := Label.new()
-	desc.text = data["description"]
+	desc.text = QuestManager.get_desc(quest)
 	desc.add_theme_font_size_override("font_size", 14)
 	desc.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT)
 	desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_detail_panel.add_child(desc)
 
 	var status_lbl := Label.new()
-	var status_text = "Not Started"
-	if quest["status"] == QuestManager.STATUS_ACTIVE:
-		status_text = "ACTIVE"
-	elif quest["status"] == QuestManager.STATUS_COMPLETED:
-		status_text = "COMPLETED"
-	status_lbl.text = "Status: " + status_text
+	var status_text := LocalizationManager.t("QUEST_STATUS_NEW")
+	match QuestManager.get_status(quest):
+		QuestManager.STATUS_ACTIVE:
+			status_text = LocalizationManager.t("QUEST_STATUS_ACTIVE")
+		QuestManager.STATUS_COMPLETED:
+			status_text = LocalizationManager.t("QUEST_STATUS_DONE")
+	status_lbl.text = LocalizationManager.t("QUEST_STATUS") + ": " + status_text
 	status_lbl.add_theme_font_size_override("font_size", 14)
 	status_lbl.add_theme_color_override("font_color", Color(0.8, 0.8, 0.4))
 	_detail_panel.add_child(status_lbl)
@@ -161,14 +173,14 @@ func _show_quest_detail(quest_id: StringName) -> void:
 	_detail_panel.add_child(sep)
 
 	var obj_title := Label.new()
-	obj_title.text = "OBJECTIVES"
+	obj_title.text = LocalizationManager.t("QUEST_OBJECTIVES")
 	obj_title.add_theme_font_size_override("font_size", 16)
 	obj_title.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
 	_detail_panel.add_child(obj_title)
 
-	for obj in data["objectives"]:
-		var current = quest["progress"].get(obj["id"], 0)
-		var target = obj["target"]
+	var current := int(quest.get("progress", 0))
+	var target := int(quest.get("target_count", 1))
+	for _i in 1:
 		var hb := HBoxContainer.new()
 		hb.add_theme_constant_override("separation", 8)
 
@@ -178,7 +190,7 @@ func _show_quest_detail(quest_id: StringName) -> void:
 		hb.add_child(checkbox)
 
 		var obj_lbl := Label.new()
-		obj_lbl.text = "%s (%d/%d)" % [obj["description"], current, target]
+		obj_lbl.text = "%s (%d/%d)" % [QuestManager.get_desc(quest), current, target]
 		obj_lbl.add_theme_font_size_override("font_size", 14)
 		obj_lbl.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT)
 		obj_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -186,13 +198,17 @@ func _show_quest_detail(quest_id: StringName) -> void:
 
 		_detail_panel.add_child(hb)
 
-	var rewards: Dictionary = data.get("rewards", {})
+	var rewards: Dictionary = {}
+	if int(quest.get("reward_coins", 0)) > 0:
+		rewards[LocalizationManager.t("SCR_MONETY")] = int(quest["reward_coins"])
+	for ri in quest.get("reward_items", []):
+		rewards[String(ri[0])] = int(ri[1])
 	if not rewards.is_empty():
 		var r_sep := HSeparator.new()
 		_detail_panel.add_child(r_sep)
 
 		var r_title := Label.new()
-		r_title.text = "REWARDS"
+		r_title.text = LocalizationManager.t("QUEST_REWARDS")
 		r_title.add_theme_font_size_override("font_size", 16)
 		r_title.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
 		_detail_panel.add_child(r_title)

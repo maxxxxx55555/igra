@@ -33,10 +33,6 @@ func try_inspect() -> bool:
 		return false
 	var text := inspect_text
 	if text.is_empty():
-		text = "Nothing of interest."
+		text = LocalizationManager.t("INSPECT_NOTHING")
 	EventBus.examine_text.emit(text)
-	var sm := get_tree().root.get_node_or_null("/root/StatsManager")
-	if sm and sm.has_method("add_inspect"):
-		sm.add_inspect()
-
 	return true

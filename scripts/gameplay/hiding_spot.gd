@@ -76,5 +76,18 @@ func exit() -> void:
 func is_occupied() -> bool:
 	return _occupied
 
+## Укрытие всегда принимает нажатие: занятое собой — чтобы выйти.
+## Без этого Interactor скрывал подсказку, как только игрок залезал внутрь,
+## и выбраться можно было только через старую ветку опроса клавиши.
+func can_interact() -> bool:
+	return not _occupied or _occupant != null
+
+func interact(player: Node) -> void:
+	if player == null or not player.has_method("toggle_hiding"):
+		return
+	player.call("toggle_hiding", self)
+
 func interact_prompt() -> String:
-	return "Hide" if can_enter() else "Occupied"
+	if _occupied:
+		return LocalizationManager.t("PROMPT_LEAVE_HIDE")
+	return LocalizationManager.t("PROMPT_HIDE")

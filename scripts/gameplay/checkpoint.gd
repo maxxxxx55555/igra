@@ -24,7 +24,5 @@ func _activate(player: Node3D) -> void:
 	if particles:
 		particles.modulate = Color(0.2, 1.0, 0.4)
 	SaveSystem.set_checkpoint(get_tree().current_scene.scene_file_path, player.global_position)
-	var lm := get_tree().root.get_node_or_null("/root/LevelManager")
-	if lm and lm.has_method("set_checkpoint"):
-		lm.set_checkpoint(player.global_position)
-	EventBus.inventory_notice.emit("ЧЕКПОИНТ АКТИВИРОВАН")
+	# Дубль в /root/LevelManager убран: чекпоинт уже сохранён строкой выше.
+	EventBus.inventory_notice.emit(LocalizationManager.t("CHECKPOINT_SET"))

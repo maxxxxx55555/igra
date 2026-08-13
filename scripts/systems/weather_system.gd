@@ -1,7 +1,9 @@
 extends Node
 enum Weather { CLEAR, RAIN, FOG, STORM, WIND }
 const WEATHER_COUNT: int = 5
-const NAMES := ["Ясно", "Дождь", "Туман", "Гроза", "Ветер"]
+## Названия погоды уходят в сигнал weather_changed и показываются игроку —
+## поэтому это ключи локализации, а не русские строки (языков в игре 13).
+const NAME_KEYS := ["WEATHER_CLEAR", "WEATHER_RAIN", "WEATHER_FOG", "WEATHER_STORM", "WEATHER_WIND"]
 const FOG_STRENGTH := { Weather.CLEAR: 0.0, Weather.RAIN: 0.25, Weather.FOG: 0.7, Weather.STORM: 0.55, Weather.WIND: 0.1 }
 const RAIN_STRENGTH := { Weather.CLEAR: 0.0, Weather.RAIN: 0.7, Weather.FOG: 0.0, Weather.STORM: 1.0, Weather.WIND: 0.2 }
 var current: int = Weather.CLEAR
@@ -18,7 +20,7 @@ func _process(delta: float) -> void:
 		current = randi() % WEATHER_COUNT
 		_emit()
 func _emit() -> void:
-	EventBus.weather_changed.emit(current, NAMES[current], FOG_STRENGTH[current], RAIN_STRENGTH[current])
+	EventBus.weather_changed.emit(current, LocalizationManager.t(NAME_KEYS[current]), FOG_STRENGTH[current], RAIN_STRENGTH[current])
 func fog_strength() -> float:
 	return FOG_STRENGTH[current]
 func rain_strength() -> float:

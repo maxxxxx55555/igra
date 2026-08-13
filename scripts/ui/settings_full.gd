@@ -32,7 +32,7 @@ func _toggle() -> void:
 	_is_open = !_is_open
 	visible = _is_open
 	get_tree().paused = _is_open
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if _is_open else Input.MOUSE_MODE_CAPTURED
+	InputService.refresh_mouse_mode()
 
 func _on_sfx_changed(value: float) -> void:
 	AudioServer.set_bus_volume_db(0, linear_to_db(value / 100.0))

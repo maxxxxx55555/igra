@@ -45,16 +45,24 @@ func _get_stats_data() -> Dictionary:
 	var data := {}
 	var stats: Dictionary = ProgressTracker.get_stats()
 	data["stats_time_played"] = _format_time(int(stats.get("time_played", 0)))
-	data["stats_coins"] = str(SaveLoad.coins)
+	data["stats_coins"] = str(CoinWallet.get_coins())
 	data["stats_districts"] = str(PowerGrid.powered_count()) + "/11"
-	data["hud_battery"] = str(int(SaveLoad.flashlight_battery * 100)) + "%"
+	# Заряд берём у живого игрока: SaveLoad хранил собственную копию, которая
+	# расходилась с фактическим battery игрока.
+	data["hud_battery"] = str(int(_battery_ratio() * 100)) + "%"
 	data["stats_level"] = str(XpManager.get_level())
 	data["stats_xp"] = str(XpManager.get_current_xp())
 	data["stats_enemies_killed"] = str(stats.get("kills", 0))
 	data["stats_puzzles"] = str(stats.get("puzzles", 0))
 	data["stats_secrets"] = str(stats.get("secrets", 0))
-	data["stats_lives"] = str(SaveLoad.lives)
+	data["stats_districts_restored"] = str(PowerGrid.powered_count())
 	return data
+
+func _battery_ratio() -> float:
+	var p := get_tree().get_first_node_in_group("player")
+	if p != null and "battery" in p and "battery_max" in p:
+		return clampf(float(p.battery) / maxf(0.001, float(p.battery_max)), 0.0, 1.0)
+	return 0.0
 
 func _get_persist(key: String, default_val: Variant) -> Variant:
 	return default_val

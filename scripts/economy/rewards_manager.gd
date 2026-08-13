@@ -8,10 +8,10 @@ func _ready() -> void:
 	EventBus.achievement_unlocked.connect(_on_achievement)
 func _on_secret(_secret_id: StringName) -> void:
 	CoinWallet.add(REWARD_SECRET)
-	EventBus.inventory_notice.emit("+%d монет за секрет" % REWARD_SECRET)
+	EventBus.inventory_notice.emit(LocalizationManager.tf("REWARD_SECRET", [REWARD_SECRET]))
 func _on_district(_district_id: StringName, _stage: int) -> void:
 	CoinWallet.add(REWARD_DISTRICT_RESTORED)
-	EventBus.inventory_notice.emit("+%d монет за район" % REWARD_DISTRICT_RESTORED)
+	EventBus.inventory_notice.emit(LocalizationManager.tf("REWARD_DISTRICT", [REWARD_DISTRICT_RESTORED]))
 func _on_achievement(_achievement_id: StringName) -> void:
 	CoinWallet.add(REWARD_ACHIEVEMENT)
-	EventBus.inventory_notice.emit("+%d монет за достижение" % REWARD_ACHIEVEMENT)
+	EventBus.inventory_notice.emit(LocalizationManager.tf("REWARD_ACHIEVEMENT", [REWARD_ACHIEVEMENT]))

@@ -2,9 +2,10 @@ extends Node3D
 ## S8 Craft Station: interact (inspectable) -> recipe list -> craft from inventory.
 
 const RECIPES: Dictionary = {
-	&"battery": {"result": &"battery", "amount": 1, "ingredients": {&"scrap": 2, &"cable": 1}, "name": "Батарея фонаря"},
-	&"medkit": {"result": &"medkit", "amount": 1, "ingredients": {&"scrap": 1, &"gear": 1}, "name": "Аптечка"},
-	&"fuse": {"result": &"fuse", "amount": 1, "ingredients": {&"scrap": 1, &"wiring": 1}, "name": "Предохранитель"},
+	# "name" — ключ локализации: названия рецептов видит игрок, а языков 13.
+	&"battery": {"result": &"battery", "amount": 1, "ingredients": {&"scrap": 2, &"cable": 1}, "name": "CRAFT_BATTERY"},
+	&"medkit": {"result": &"medkit", "amount": 1, "ingredients": {&"scrap": 1, &"gear": 1}, "name": "ITEM_MEDKIT"},
+	&"fuse": {"result": &"fuse", "amount": 1, "ingredients": {&"scrap": 1, &"wiring": 1}, "name": "ITEM_FUSE"},
 }
 
 var _ui: CanvasLayer = null
@@ -60,14 +61,14 @@ func _open_ui() -> void:
 	var box := VBoxContainer.new()
 	_panel.add_child(box)
 	var title := Label.new()
-	title.text = "ВЕРСТАК"
+	title.text = LocalizationManager.t("WORKBENCH_TITLE").to_upper()
 	title.add_theme_font_size_override("font_size", 28)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(title)
 	_list = VBoxContainer.new()
 	box.add_child(_list)
 	var close_btn := Button.new()
-	close_btn.text = "Закрыть (E)"
+	close_btn.text = LocalizationManager.t("WORKBENCH_CLOSE")
 	close_btn.pressed.connect(_close_ui)
 	box.add_child(close_btn)
 	get_tree().root.add_child(_ui)
@@ -91,7 +92,7 @@ func _refresh() -> void:
 		var r: Dictionary = RECIPES[id]
 		var can := _can_craft(r)
 		var btn := Button.new()
-		btn.text = "%s x%d — %s" % [str(r["name"]), r["amount"], _ingredients_text(r["ingredients"])]
+		btn.text = "%s x%d — %s" % [LocalizationManager.t(str(r["name"])), r["amount"], _ingredients_text(r["ingredients"])]
 		btn.disabled = not can
 		btn.pressed.connect(_on_craft.bind(id))
 		_list.add_child(btn)
@@ -99,7 +100,10 @@ func _refresh() -> void:
 func _ingredients_text(ingredients: Dictionary) -> String:
 	var parts: PackedStringArray = []
 	for item_id: StringName in ingredients:
-		parts.append("%s x%d" % [String(item_id), int(ingredients[item_id])])
+		# Имя ингредиента берём из ItemDatabase, а не из сырого id.
+		var item: ItemData = ItemDatabase.get_item(item_id)
+		var nm: String = LocalizationManager.name_for("ITEM_", item_id, item.display_name if item != null else "")
+		parts.append("%s x%d" % [nm, int(ingredients[item_id])])
 	return " + ".join(parts)
 
 func _can_craft(r: Dictionary) -> bool:
@@ -119,6 +123,6 @@ func _on_craft(recipe_id: StringName) -> void:
 	for item_id: StringName in r["ingredients"]:
 		_inv.remove(item_id, int(r["ingredients"][item_id]))
 	if _inv.try_add(r["result"], int(r["amount"])):
-		EventBus.inventory_notice.emit("Создано: %s" % str(r["name"]))
+		EventBus.inventory_notice.emit(LocalizationManager.tf("WORKBENCH_CRAFTED", [LocalizationManager.t(str(r["name"]))]))
 		print("[craft] done: ", recipe_id)
 	_refresh()

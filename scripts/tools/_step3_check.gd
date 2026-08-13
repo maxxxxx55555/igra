@@ -4,7 +4,7 @@ extends Node
 func _ready() -> void:
 	var bad: int = 0
 	for p in ["res://scenes/props/streetlight_3d.tscn", "res://scenes/player/player_3d.tscn",
-			"res://scenes/ui/hud_3d.tscn", "res://scenes/levels/level_01.tscn"]:
+			"res://scenes/ui/hud_3d.tscn", "res://scenes/main_3d.tscn"]:
 		var ps: PackedScene = load(p)
 		if ps == null:
 			printerr("LOAD FAIL ", p)

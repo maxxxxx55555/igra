@@ -6,19 +6,22 @@ signal stats_changed()
 enum Branch { BRIGHTNESS, RANGE, STABILITY, ANGLE, BATTERY }
 
 const BRANCH_NAMES: Array = ["brightness", "range", "stability", "angle", "battery"]
+## Названия и описания веток лежали здесь готовыми русскими строками, из-за
+## чего на остальных 12 языках экран улучшений был русским. Теперь — ключи,
+## а перевод берётся в get_branch_display()/get_branch_desc().
 const BRANCH_DISPLAY: Dictionary = {
-	"brightness": "Яркость",
-	"range": "Дальность",
-	"stability": "Стабильность",
-	"angle": "Угол",
-	"battery": "Батарея"
+	"brightness": "SCR_YARKOST",
+	"range": "SCR_DALNOST",
+	"stability": "SCR_STABILNOST",
+	"angle": "SCR_UGOL_SVETA",
+	"battery": "ITEM_BATTERY",
 }
 const BRANCH_DESC: Dictionary = {
-	"brightness": "Увеличивает яркость луча фонарика",
-	"range": "Увеличивает дальность свечения",
-	"stability": "Уменьшает мерцание при низком заряде",
-	"angle": "Расширяет угол конуса света",
-	"battery": "Увеличивает емкость батареи"
+	"brightness": "UPG_BRIGHTNESS_DESC",
+	"range": "UPG_RANGE_DESC",
+	"stability": "UPG_STABILITY_DESC",
+	"angle": "UPG_ANGLE_DESC",
+	"battery": "UPG_BATTERY_DESC",
 }
 
 const BASE_COSTS: Dictionary = {
@@ -92,10 +95,11 @@ func try_purchase(branch: String) -> bool:
 	return true
 
 func get_branch_display(branch: String) -> String:
-	return BRANCH_DISPLAY.get(branch, branch)
+	return LocalizationManager.t(String(BRANCH_DISPLAY.get(branch, branch)))
 
 func get_branch_desc(branch: String) -> String:
-	return BRANCH_DESC.get(branch, "")
+	var key: String = String(BRANCH_DESC.get(branch, ""))
+	return LocalizationManager.t(key) if not key.is_empty() else ""
 
 func get_all_data() -> Array:
 	var result: Array = []

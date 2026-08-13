@@ -31,7 +31,9 @@ func is_win() -> bool: return current_state == GameState.WIN
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	AudioServer.set_bus_mute(0, true)
+	# Master-шина раньше глушилась здесь безусловно и нигде не размьючивалась —
+	# игра запускалась полностью беззвучной. Громкостью владеет SettingsManager.
+	AudioServer.set_bus_mute(0, false)
 	EventBus.enemy_killed.connect(func(_id: StringName) -> void: enemies_killed += 1)
 	_change_state(GameState.MENU)
 
@@ -60,15 +62,17 @@ func start_new_game() -> void:
 
 func continue_game() -> void:
 	if not SaveSystem.load_all():
-		EventBus.inventory_notice.emit("Нет сохранения")
+		EventBus.inventory_notice.emit(LocalizationManager.t("NO_SAVE"))
 		return
 	_enter_play_and_reload()
 
+## Переводит автолоады в боевое состояние, но НЕ трогает дерево сцен.
+## Раньше здесь стоял reload_current_scene(): при старте из меню он
+## перезагружал само меню, а игровой мир так и не появлялся.
 func _enter_play_and_reload() -> void:
 	_change_state(GameState.PLAYING)
 	UIManager.close_all_blocking()
 	EventBus.game_started.emit()
-	get_tree().reload_current_scene()
 
 func pause_game() -> void:
 	if current_state == GameState.PLAYING:

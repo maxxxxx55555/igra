@@ -2,7 +2,7 @@ extends Node2D
 
 func _ready() -> void:
 	GameManager._change_state(GameManager.GameState.PLAYING)
-	var main: Node = load("res://scenes/legacy_2d/main.tscn").instantiate()
+	var main: Node = load("res://scenes/main_3d.tscn").instantiate()
 	add_child(main)
 	await get_tree().create_timer(2.5).timeout
 	_save_shot("res://assets/art/shot_game.png")

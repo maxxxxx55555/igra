@@ -51,8 +51,8 @@ func _refresh() -> void:
 			btn.text = "%s\nx%d" % [_short(data), s["count"]]
 			btn.modulate = RARITY_COLORS[r] if r < RARITY_COLORS.size() else Color.WHITE
 func _on_weight(_ratio: float) -> void:
-	weight_label.text = "Вес: %.1f / %.0f кг" % [InventoryManager.current_weight, InventoryManager.stats.capacity_kg]
+	weight_label.text = LocalizationManager.tf("INV_WEIGHT", [InventoryManager.current_weight, InventoryManager.stats.capacity_kg])
 func _short(data: ItemData) -> String:
 	if data == null:
 		return "?"
-	return data.display_name.substr(0, 6)
+	return LocalizationManager.name_for("ITEM_", data.id, data.display_name).substr(0, 6)

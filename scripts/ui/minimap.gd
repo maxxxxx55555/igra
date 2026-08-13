@@ -10,14 +10,18 @@ const TILE_SIZE: int = 32
 const SLOT_W: int = 12
 const SLOT_H: int = 9
 const DISTRICT_LABELS: Dictionary = {
-	&"suburbs": "Пригород", &"residential": "Жилые", &"park": "Парк", &"school": "Школа",
-	&"hospital": "Больница", &"gas_station": "АЗС", &"police": "Полиция", &"warehouses": "Склады",
-	&"industrial": "Промзона", &"substation": "Подстанция", &"power_station": "Станция",
+	&"suburbs": "DIST_SUBURBS", &"residential": "DIST_RESIDENTIAL", &"park": "DIST_PARK", &"school": "DIST_SCHOOL",
+	&"hospital": "DIST_HOSPITAL", &"gas_station": "DIST_GAS", &"police": "DIST_POLICE", &"warehouses": "DIST_WAREHOUSES",
+	&"industrial": "DIST_INDUSTRIAL", &"substation": "DIST_SUBSTATION", &"power_station": "DIST_POWER",
 }
 var _tick: float = 0.0
 var _current_district: StringName = &""
 func _ready() -> void:
-	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# Нажатие по миникарте открывает полную карту города — привычный жест
+	# из мобильных игр. Раньше стоял MOUSE_FILTER_IGNORE, и клик проваливался
+	# сквозь неё в игровой мир: игрок жал по карте, а персонаж стрелял.
+	mouse_filter = Control.MOUSE_FILTER_STOP
+	tooltip_text = LocalizationManager.t("MAP_OPEN_HINT")
 	custom_minimum_size = SIZE
 	size = SIZE
 	anchor_left = 1.0
@@ -31,6 +35,20 @@ func _ready() -> void:
 		EventBus.district_entered.connect(func(id: StringName) -> void:
 			_current_district = id
 			queue_redraw())
+## Открывает полноэкранную карту города по тапу/клику.
+func _gui_input(event: InputEvent) -> void:
+	if not GameManager.is_playing():
+		return
+	var tapped: bool = false
+	if event is InputEventMouseButton:
+		var mb := event as InputEventMouseButton
+		tapped = mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT
+	elif event is InputEventScreenTouch:
+		tapped = (event as InputEventScreenTouch).pressed
+	if tapped:
+		accept_event()
+		UIManager.open(&"city_map")
+
 func _process(delta: float) -> void:
 	_tick += delta
 	if _tick >= 0.1: _tick = 0.0; queue_redraw()
@@ -50,7 +68,8 @@ func _draw() -> void:
 		var mix := c.lerp(theme_c, 0.45)
 		draw_circle(p, 6.5 if d.id == _current_district else 4.0, mix)
 		if d.id == _current_district: draw_arc(p, 8.0, 0.0, TAU, 24, ThemeProvider.COLOR_AMBER, 1.5, true)
-		var label: String = DISTRICT_LABELS.get(d.id, "")
+		var label_key: String = String(DISTRICT_LABELS.get(d.id, ""))
+		var label: String = LocalizationManager.t(label_key) if label_key != "" else ""
 		if label != "":
 			var font := ThemeDB.fallback_font
 			draw_string(font, p + Vector2(8, 4), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 9, ThemeProvider.COLOR_AMBER_DIM)

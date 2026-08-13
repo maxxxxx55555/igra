@@ -8,9 +8,15 @@ signal streets_ready
 @export var road_width: float = 6.0
 @export var sidewalk_width: float = 1.5
 @export var lane_mark_spacing: float = 2.0
+## Шаг сетки кварталов в метрах. roads хранит перекрёстки в клетках (0..3),
+## и без умножения на этот шаг четыре параллельные улицы ложились на
+## z = 0,1,2,3 — то есть слипались в одну полосу шириной 3 метра вместо
+## квартальной сетки 48x48 м.
+@export var grid_spacing: float = 16.0
 @export var prop_seed: int = 0
 
 var roads: Array[Dictionary] = []
+var _center: Vector2 = Vector2.ZERO
 
 var _road_mm: MultiMeshInstance3D
 var _sidewalk_mm: MultiMeshInstance3D
@@ -76,26 +82,47 @@ func _layout() -> void:
 	roads.clear()
 	var cols := 3
 	var rows := 3
-	var spacing := 16.0
 	for r in range(rows + 1):
-		roads.append({"start": Vector2i(0, r), "end": Vector2i(cols, r), "dir": "h", "length": float(cols) * spacing})
+		roads.append({"start": Vector2i(0, r), "end": Vector2i(cols, r), "dir": "h", "length": float(cols) * grid_spacing})
 	for c in range(cols + 1):
-		roads.append({"start": Vector2i(c, 0), "end": Vector2i(c, rows), "dir": "v", "length": float(rows) * spacing})
+		roads.append({"start": Vector2i(c, 0), "end": Vector2i(c, rows), "dir": "v", "length": float(rows) * grid_spacing})
+	_update_center()
 
+## Точка на дороге по номеру плитки. Начало дороги переводится из клеток
+## сетки в метры (× grid_spacing), иначе улицы строятся вплотную друг к другу.
 func road_step_pos(road: Dictionary, step: int) -> Vector3:
+	return road_pos_at(road, float(step) * tile_size)
+
+## Точка на дороге по расстоянию от её начала в метрах.
+## Сетка центрируется на нуле: лут (радиус 6..22 м) и точки появления врагов
+## (±17 м) рассчитаны от начала координат района, а не от его угла.
+func road_pos_at(road: Dictionary, distance_m: float) -> Vector3:
 	var dir: Vector2 = (Vector2(road.end) - Vector2(road.start)).normalized()
-	var p: Vector2 = Vector2(road.start) + dir * float(step) * tile_size
+	var p: Vector2 = Vector2(road.start) * grid_spacing + dir * distance_m - _center
 	return Vector3(p.x, 0.01, p.y)
 
+## Половина габарита квартальной сетки — сдвиг, центрирующий район на нуле.
+## Считается один раз в _layout(): road_pos_at вызывается на каждую плитку.
+func _update_center() -> void:
+	var mx := 0.0
+	var mz := 0.0
+	for r in roads:
+		mx = maxf(mx, float(r.end.x) * grid_spacing)
+		mz = maxf(mz, float(r.end.y) * grid_spacing)
+	_center = Vector2(mx, mz) * 0.5
+
 func _fill_roads() -> void:
+	# round, а не int: при road_width 6 м и плитке 4 м усечение давало одну
+	# полосу вместо двух, и проезжая часть выходила уже тротуара.
+	var lanes: int = maxi(1, int(round(road_width / tile_size)))
 	var total := 0
 	for r in roads:
-		total += int(r.length / tile_size) * int(road_width / tile_size)
+		total += int(r.length / tile_size) * lanes
 	_road_mm.multimesh.instance_count = total
 	var idx := 0
 	for r in roads:
 		var steps := int(r.length / tile_size)
-		var w := int(road_width / tile_size)
+		var w := lanes
 		for s in range(steps):
 			var pos: Vector3 = road_step_pos(r, s)
 			for wi in range(w):
@@ -105,17 +132,21 @@ func _fill_roads() -> void:
 				if r.dir == "v":
 					t.basis = t.basis.rotated(Vector3.UP, PI * 0.5)
 				_road_mm.multimesh.set_instance_transform(idx, t)
+				_create_collision(t)
 				idx += 1
 
 func _fill_sidewalks() -> void:
+	# sidewalk_width (1.5 м) меньше плитки (4 м), поэтому int(1.5/4.0) давал 0
+	# и тротуары не строились ни разу. Полоса всегда хотя бы одна.
+	var lanes: int = maxi(1, int(round(sidewalk_width / tile_size)))
 	var total := 0
 	for r in roads:
-		total += 2 * int(r.length / tile_size) * int(sidewalk_width / tile_size)
+		total += 2 * int(r.length / tile_size) * lanes
 	_sidewalk_mm.multimesh.instance_count = total
 	var idx := 0
 	for r in roads:
 		var steps := int(r.length / tile_size)
-		var w := int(sidewalk_width / tile_size)
+		var w := lanes
 		for s in range(steps):
 			var pos: Vector3 = road_step_pos(r, s)
 			for side in [-1, 1]:
@@ -126,6 +157,7 @@ func _fill_sidewalks() -> void:
 					if r.dir == "v":
 						t.basis = t.basis.rotated(Vector3.UP, PI * 0.5)
 					_sidewalk_mm.multimesh.set_instance_transform(idx, t)
+					_create_collision(t)
 					idx += 1
 
 func _fill_markings() -> void:
@@ -137,7 +169,8 @@ func _fill_markings() -> void:
 	for r in roads:
 		var count := int(r.length / lane_mark_spacing)
 		for s in range(count):
-			var pos: Vector3 = road_step_pos(r, s)
+			# Разметка идёт со своим шагом, а не с шагом плитки дороги.
+			var pos: Vector3 = road_pos_at(r, float(s) * lane_mark_spacing)
 			var t := Transform3D()
 			t.origin = pos
 			if r.dir == "v":
@@ -158,3 +191,13 @@ func _ensure_mm() -> void:
 		_marking_mm = MultiMeshInstance3D.new()
 		_marking_mm.name = "MarkingMM"
 		add_child(_marking_mm)
+
+func _create_collision(t: Transform3D) -> void:
+	var body := StaticBody3D.new()
+	var shape := CollisionShape3D.new()
+	var box := BoxShape3D.new()
+	box.size = Vector3(tile_size, 0.1, tile_size)
+	shape.shape = box
+	body.add_child(shape)
+	body.transform = t
+	add_child(body)
