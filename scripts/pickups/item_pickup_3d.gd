@@ -26,6 +26,13 @@ func _ready() -> void:
 	monitorable = true
 	monitoring = true
 	_apply_tint()
+	# DistrictLoot сначала делает add_child() (тут срабатывает _ready), и только
+	# потом задаёт global_position. Высоту для покачивания поэтому фиксируем
+	# кадром позже, иначе _process утаскивал предмет к чужому _base_y = 0.
+	call_deferred("_capture_base_y")
+
+func _capture_base_y() -> void:
+	_base_y = global_position.y
 
 ## Цвет предмета подсказывает тип: батарея янтарная, аптечка красная,
 ## ключ стальной. Иначе всё выглядит одинаковыми ящиками.
