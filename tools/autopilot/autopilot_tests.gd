@@ -40,6 +40,7 @@ func collect() -> Array:
 		{"name": "подбор обновляет счётчик в HUD", "fn": _t_hud_badge},
 		{"name": "выход в меню работает из паузы", "fn": _t_quit_under_pause},
 		{"name": "смерть открывает экран смерти", "fn": _t_death_screen},
+		{"name": "переход в район автосохраняет новый район", "fn": _t_district_autosave},
 		{"name": "скриншоты экранов сохранены", "fn": _t_screenshots},
 	]
 
@@ -684,3 +685,43 @@ func _t_death_screen(tree: SceneTree, rt: RefCounted) -> void:
 		rt.fail("у UIManager нет _is_open()")
 	gm.return_to_menu()
 	await _settle(tree, 3)
+
+## Автосейв при переходе обязан записать НОВЫЙ район. Раньше он срабатывал
+## до того, как DistrictManager узнавал id, и в файл уходил предыдущий.
+func _t_district_autosave(tree: SceneTree, rt: RefCounted) -> void:
+	var gm := _autoload(tree, "GameManager")
+	var dm := _autoload(tree, "DistrictManager")
+	if gm == null or dm == null:
+		rt.unavailable("нет GameManager/DistrictManager")
+		return
+	var wr := Node3D.new()
+	wr.set_script(load("res://scripts/world/world_runtime.gd"))
+	wr.name = "WorldRuntime"
+	tree.root.add_child(wr)
+	# Автосейв пишется только в состоянии PLAYING.
+	gm.start_new_game()
+	await _settle(tree, 6)
+	if not wr.has_method("load_district"):
+		rt.fail("у WorldRuntime нет load_district()")
+		_despawn(wr)
+		return
+	wr.call("load_district", &"park")
+	await _settle(tree, 10)
+	rt.check(String(dm.current_district) == "park",
+		"DistrictManager остался на %s" % String(dm.current_district))
+	# Читаем сам файл: важно, что на диск попал именно новый район.
+	var f := FileAccess.open(SAVE_PATH, FileAccess.READ)
+	if f == null:
+		rt.fail("автосейв не создал файл сохранения")
+	else:
+		var raw := f.get_as_text()
+		f.close()
+		var parsed = JSON.parse_string(raw)
+		if parsed is Dictionary:
+			rt.check(String((parsed as Dictionary).get("district", "")) == "park",
+				"в сейве район %s, а не park" % String((parsed as Dictionary).get("district", "")))
+		else:
+			rt.fail("сейв не читается как JSON")
+	_despawn(wr)
+	gm.return_to_menu()
+	await _settle(tree, 4)
