@@ -22,4 +22,7 @@ func _on_body_entered(b: Node) -> void:
 	if _bus != null and _bus.has_method("emit_district_entered"):
 		_bus.emit_district_entered(district_id)
 	else:
-		print("[DistrictTrigger] entered: ", district_id)
+		# Без EventBus переход между районами не состоится вовсе, и печать в
+		# консоль этого не исправит — это отказ, а не отладочная заметка.
+		push_error("DistrictTrigger: нет EventBus, переход в '%s' не выполнен"
+			% district_id)
