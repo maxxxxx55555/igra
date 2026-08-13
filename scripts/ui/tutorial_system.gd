@@ -135,7 +135,17 @@ func _build_ui() -> void:
 	skip_btn.pressed.connect(_skip_tutorial)
 	bg.add_child(skip_btn)
 	
-	add_child(_hint_panel)
+	# TutorialSystem — автозагрузка (extends Node), а Control рисуется только
+	# внутри CanvasLayer или Viewport. Панель добавлялась прямо в автозагрузку
+	# и потому не отображалась вообще: подсказки обучения были невидимы.
+	var layer := CanvasLayer.new()
+	layer.name = "TutorialLayer"
+	layer.layer = 30
+	layer.process_mode = Node.PROCESS_MODE_ALWAYS
+	add_child(layer)
+	layer.add_child(_hint_panel)
+	_hint_panel.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_hint_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 func _make_stylebox() -> StyleBoxFlat:
 	var sb := StyleBoxFlat.new()
