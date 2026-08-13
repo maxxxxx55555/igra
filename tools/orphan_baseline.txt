@@ -2,6 +2,8 @@
 # Это задел под будущие фичи, а не мусор: систему пишут
 # раньше, чем к ней приделывают вызов. Гейт следит лишь
 # за тем, чтобы список НЕ РОС.
+components/attack_component.gd
+components/health_component.gd
 components/ragdoll_component.gd
 components/trap_component.gd
 scenes/enemies/enemy_model.tscn
@@ -35,7 +37,6 @@ scenes/ui/inventory_panel.tscn
 scenes/ui/lobby.tscn
 scenes/ui/photo_album.tscn
 scenes/ui/save_slots.tscn
-scenes/ui/stats_screen.tscn
 scenes/ui/transition_manager.tscn
 scenes/ui/tutorial.tscn
 scenes/vfx/vfx_blood.tscn
@@ -55,6 +56,7 @@ scripts/components/health_component.gd
 scripts/components/procedural_anim.gd
 scripts/core/audio_system.gd
 scripts/core/progression_system.gd
+scripts/core/save_data.gd
 scripts/core/theme_manager.gd
 scripts/crafting/crafting_manager.gd
 scripts/cutscenes/cutscene_manager.gd
@@ -67,6 +69,7 @@ scripts/emergency_lamp.gd
 scripts/enemies/minion.gd
 scripts/environment/world_env.gd
 scripts/fuse_box.gd
+scripts/generator.gd
 scripts/i18n/localized_button.gd
 scripts/i18n/localized_label.gd
 scripts/inspectable.gd
@@ -83,12 +86,14 @@ scripts/systems/save_slot_manager.gd
 scripts/systems/vibration.gd
 scripts/systems/wave_manager.gd
 scripts/systems/weapon_mod_manager.gd
+scripts/transformer.gd
 scripts/ui/character_screen.gd
 scripts/ui/controls.gd
 scripts/ui/hud_panel.gd
 scripts/ui/inventory_ui.gd
 scripts/ui/micro_interactions.gd
 scripts/ui/onboarding.gd
+scripts/ui/panel_card.gd
 scripts/ui/settings_full.gd
 scripts/ui/subtitle_manager.gd
 scripts/ui/toast_manager.gd
@@ -96,6 +101,7 @@ scripts/ui/ui_theme.gd
 scripts/ui/victory_screen.gd
 scripts/ui/world_map.gd
 scripts/visual/moon_disc.gd
+scripts/weapons/weapon_manager.gd
 scripts/world/city_decorator.gd
 scripts/world/district_layouts.gd
 scripts/world/ftue_generator.gd

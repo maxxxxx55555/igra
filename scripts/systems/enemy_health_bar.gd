@@ -16,7 +16,14 @@ func _ready() -> void:
 	if parent and parent.has_node("HealthComponent"):
 		var health = parent.get_node("HealthComponent")
 		max_health = health.max_health
-		current_health = health.current_health
+		# Компонентов здоровья в проекте два, и поле у них называется
+		# по-разному: current_health в components/health_component.gd и
+		# health в scripts/components/health_component.gd. Берём то, что
+		# реально есть, иначе полоска молча читает null.
+		if "current_health" in health:
+			current_health = health.current_health
+		elif "health" in health:
+			current_health = health.health
 		health.health_changed.connect(_on_health_changed)
 	_target = parent
 

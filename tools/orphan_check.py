@@ -37,6 +37,25 @@ TOOL_DIRS = ("scenes/tools/", "scripts/tools/", "tools/", "tests/")
 ENTRY_POINTS = ("scenes/ui/boot_loading.tscn",)
 
 
+def _used_outside_strings(pat: "re.Pattern[str]", text: str) -> bool:
+    """Считает совпадение только вне строкового литерала.
+
+    HealthComponent объявлен как class_name, но во всём проекте встречается
+    исключительно как имя узла в кавычках: get_node("HealthComponent").
+    Это обращение к узлу, а не использование типа, — иначе файл-сирота
+    выглядит подключённым и выпадает из проверки мёртвого кода.
+    """
+    for m in pat.finditer(text):
+        line_start = text.rfind("\n", 0, m.start()) + 1
+        prefix = text[line_start:m.start()]
+        if prefix.count('"') % 2 == 1:
+            continue  # внутри кавычек
+        if prefix.lstrip().startswith("#"):
+            continue  # в комментарии
+        return True
+    return False
+
+
 def collect() -> tuple[dict[str, set[str]], set[str], set[str]]:
     text: dict[str, str] = {}
     for base, dirs, files in os.walk(ROOT):
@@ -66,7 +85,9 @@ def collect() -> tuple[dict[str, set[str]], set[str], set[str]]:
     for cls, owner in declared.items():
         pat = re.compile(r"\b%s\b" % re.escape(cls))
         for p, t in text.items():
-            if p != owner and pat.search(t):
+            if p == owner:
+                continue
+            if _used_outside_strings(pat, t):
                 used_classes.add(cls)
                 break
 
