@@ -117,6 +117,15 @@ func reset_all() -> void:
 	_pending_player_pos = Vector3.INF
 	_quest_data = {}
 	QuestManager.reset()
+	# Эти три подсистемы load_all() восстанавливает, а сбросить забывали:
+	# новая игра начиналась с уровнем, опытом, деревом навыков и статистикой
+	# от прошлого забега. Пустой словарь возвращает их к значениям по
+	# умолчанию — тем же приёмом, что и кошелёк с магазином выше.
+	ProgressTracker.from_dict({})
+	XpManager.load_data({})
+	SkillTreeManager.load_data({})
+	# SettingsManager сознательно НЕ сбрасываем: громкость, язык и управление
+	# принадлежат игроку, а не забегу.
 	_photos = []
 	_daily_streak = 0
 	_last_daily_time = 0

@@ -369,6 +369,31 @@ if auto_sigs:
 check("число аргументов в вызовах автозагрузок верное", not call_bad,
       "; ".join(call_bad[:3]))
 
+# ── 15. save / load / reset должны знать об одних и тех же подсистемах ──────
+# Подсистема, которую сохраняют и загружают, но забыли сбросить, протекает
+# из прошлого забега в новую игру: уровень, опыт и дерево навыков так и
+# оставались от предыдущего прохождения.
+_save_src = read("scripts/core/save_system.gd")
+
+
+def _fn_body(name: str) -> str:
+    m = re.search(r"^func %s\([^)]*\)[^:]*:\n((?:(?:\t.*)?\n)*)" % re.escape(name),
+                  _save_src, re.M)
+    return m.group(1) if m else ""
+
+
+_save_body = _fn_body("_save")
+_load_body = _fn_body("load_all")
+_reset_body = _fn_body("reset_all")
+# SettingsManager: настройки принадлежат игроку, а не забегу.
+# SaveSystem: это он сам — имя попадает в тело собственных методов.
+_RESET_EXEMPT = {"SettingsManager", "SaveSystem"}
+persisted = {n for n, _ in auto_pairs
+             if n in _save_body and n in _load_body} - _RESET_EXEMPT
+never_reset = sorted(n for n in persisted if n not in _reset_body)
+check("новая игра сбрасывает весь сохраняемый прогресс", not never_reset,
+      ", ".join(never_reset))
+
 # ── вывод ───────────────────────────────────────────────────────────────────
 failed = [c for c in CHECKS if not c[1]]
 width = max(len(c[0]) for c in CHECKS)
