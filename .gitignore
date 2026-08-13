@@ -1,22 +1,23 @@
+# Godot
 .godot/
 bin/
 *.import
+*.uid
+
+# Tools / env
 *.pyc
 __pycache__/
 .aider*
 .env
 *.log
 verify_shot.png
-*.uid
-.godot/
 
+# Backups
 .backup/
 .freebuff/
 _BACKUPS/
+.tls_bak/
 builds/
-
-
-# мусор от поломанных фикс-скриптов
 *.bak
 
 # Build artifacts
@@ -31,16 +32,23 @@ docs/ANDROID_BUILD.md.bak
 p3_dump.txt
 finish_game.log
 findings.md.bak
-.tls_bak/
 en_keys.txt
 audio_refs*.txt
 missing_audio.txt
-
-The string is missing*
-void
 phase1_compile_gate.exitcode.txt
-
-# Headless Godot run dumps
 run_log.txt
-*.exitcode.txt
 run_log*.txt
+*.exitcode.txt
+
+# Agent dumps (чтобы не вернулись)
+full_log.txt
+import_log.txt
+smlog.txt
+stderr.txt
+stdout.txt
+vlog.txt
+all_en_keys.txt
+
+# OS
+Thumbs.db
+.DS_Store
