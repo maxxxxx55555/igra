@@ -125,6 +125,9 @@ check("расходники лечат и заряжают игрока",
 check("зрение монстра учитывает заметность игрока",
       '"visibility" in player_ref' in read("scripts/enemies/base_monster.gd"),
       "иначе укрытия декоративные — монстр видит сквозь шкаф")
+check("укрытия расставляются в районах",
+      "_spawn_hiding_spots" in read("scripts/world/district_scene_factory.gd"),
+      "класс HidingSpot есть, но прятаться негде")
 check("игрок шлёт изменение батареи", "player_battery_changed.emit" in player)
 
 # ── 5. Пауза ────────────────────────────────────────────────────────────────
