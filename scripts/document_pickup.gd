@@ -17,6 +17,11 @@ var glow_light: OmniLight3D = null
 var is_collected: bool = false
 var _bob_timer: float = 0.0
 var _rot_timer: float = 0.0
+## В scenes/pickups/document_pickup.tscn покачивание уже делает AnimationPlayer
+## (автоплей "BobAnim" по MeshInstance3D:position:y и rotation_degrees:y).
+## Если и _process писал те же свойства, две системы дрались за них каждый
+## кадр и предмет дёргался. Когда аниматор есть — код в анимацию не лезет.
+var _anim_driven: bool = false
 
 signal document_collected(title: String, doc_id: String)
 
@@ -24,6 +29,8 @@ func _ready() -> void:
 	pickup_mesh = (get_node_or_null("PickupMesh") as MeshInstance3D)
 	if pickup_mesh == null:
 		pickup_mesh = get_node_or_null("MeshInstance3D") as MeshInstance3D
+	var anim := get_node_or_null("AnimationPlayer") as AnimationPlayer
+	_anim_driven = anim != null and anim.autoplay != ""
 	_ensure_glow()
 	_load_from_catalog()
 	if document_id != "":
@@ -34,7 +41,7 @@ func _ready() -> void:
 	collect_area.body_entered.connect(_on_body_entered)
 
 func _process(delta: float) -> void:
-	if is_collected:
+	if is_collected or _anim_driven:
 		return
 	if pickup_mesh == null:
 		return
