@@ -20,12 +20,14 @@ const PLAYER_SPAWN_POS: Vector3 = Vector3(-8.0, 1.2, -8.0)
 func _ready() -> void:
 	name = "WorldRuntime"
 	# Переход между районами инициирует DistrictTrigger/DistrictManager.
+	#
+	# Автосейв при входе в район раньше висел здесь же, вторым обработчиком
+	# district_entered. Так делать нельзя: сигнал прилетает ИЗ СЕРЕДИНЫ
+	# DistrictSceneFactory.build() — до _place_player() и до обновления
+	# DistrictManager.current_district. В файл попадали позиция игрока и id
+	# района из ПРЕДЫДУЩЕГО района, и загрузка возвращала игрока назад.
+	# Теперь сохраняет сам load_district(), когда мир уже собран.
 	EventBus.district_entered.connect(_on_district_entered)
-	# Автосейв при входе в район раньше вёл SaveLoad — он удалён как второй
-	# конкурирующий формат, обязанность переехала на единственный SaveSystem.
-	EventBus.district_entered.connect(func(_id: StringName) -> void:
-		if GameManager.is_playing():
-			SaveSystem.save_all())
 	# Стартовый район поднимаем отложенно: игрок и HUD должны быть в дереве,
 	# иначе EnemyPool спавнит врагов вокруг ещё не существующей цели.
 	call_deferred("_load_initial")
@@ -59,6 +61,10 @@ func load_district(district_id: StringName) -> void:
 	if dm != null:
 		dm.current_district = String(district_id)
 	_loading = false
+	# Автосейв ровно здесь: район собран, игрок переставлен, DistrictManager
+	# знает новый id — в файл уйдёт согласованное состояние.
+	if GameManager.is_playing():
+		SaveSystem.save_all()
 
 ## Ставит игрока на сохранённую позицию, иначе на точку старта района.
 ## Восстановление позиции жило в world_map.gd, которого нет в игровой сцене,
