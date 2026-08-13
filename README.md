@@ -71,10 +71,11 @@ godot --headless --script res://scripts/tools/autoshot.gd
 
 ## Обязательные проверки перед коммитом
 
-### Статические (Godot не нужен, ~2 секунды)
+### Статические (Godot не нужен, ~1.5 минуты)
 
 ```bash
-./tools/check.sh --static
+./tools/check.sh --static          # весь набор, ~1.5 мин
+./tools/check.sh --static --fast   # без gdparse, ~2 секунды
 ```
 
 Одной командой прогоняет весь набор:
