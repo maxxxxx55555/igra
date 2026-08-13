@@ -151,6 +151,10 @@ if python3 tools/scene_node_check.py; then ok "scene_node_check"; else bad "scen
 head_ "Игровой цикл"
 if python3 tools/flow_check.py; then ok "flow_check"; else bad "flow_check"; fi
 
+# Файлы без ссылок: следим, чтобы список не рос.
+head_ "Мёртвый код"
+if python3 tools/orphan_check.py; then ok "orphan_check"; else bad "orphan_check"; fi
+
 # ─────────────────────────── проверки в движке ───────────────────────────
 if [[ $STATIC_ONLY -eq 1 ]]; then
   echo; echo "${DIM}Проверки в движке пропущены (--static).${OFF}"
