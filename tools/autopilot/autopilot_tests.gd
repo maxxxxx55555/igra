@@ -73,10 +73,16 @@ func _spawn(tree: SceneTree, path: String) -> Node:
 	tree.root.add_child(n)
 	return n
 
+## Убирает узел из дерева. Родителя проверяем: узел мог быть уже
+## освобождён вместе с родителем, и тогда get_parent() вернёт null —
+## обращение к нему уронило бы весь прогон на уборке, а не на проверке.
 func _despawn(n: Node) -> void:
-	if is_instance_valid(n):
-		n.get_parent().remove_child(n)
-		n.queue_free()
+	if not is_instance_valid(n):
+		return
+	var parent := n.get_parent()
+	if parent != null:
+		parent.remove_child(n)
+	n.queue_free()
 
 # ── тесты ──────────────────────────────────────────────────────────────────
 
@@ -522,12 +528,20 @@ func _t_hiding_placement(tree: SceneTree, rt: RefCounted) -> void:
 		_despawn(world)
 		return
 	await _settle(tree, 10)
+	# Физические тела попадают в пространство только после физического кадра:
+	# без этого ожидания intersect_shape вернёт пусто и тест «пройдёт» зря.
+	for i in 8:
+		await tree.physics_frame
 	var spots: Array = []
 	for n in root.get_children():
 		if String(n.name).begins_with("HidingSpot"):
 			spots.append(n)
 	rt.check(spots.size() > 0, "в районе не расставлено ни одного укрытия")
 	var space := root.get_world_3d().direct_space_state
+	if space == null:
+		rt.fail("нет доступа к физическому пространству")
+		_despawn(world)
+		return
 	for s in spots:
 		if not (s is Node3D):
 			continue
