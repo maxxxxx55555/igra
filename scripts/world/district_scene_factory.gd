@@ -19,6 +19,9 @@ const HIDING_SPOTS_PER_DISTRICT: int = 5
 const HIDING_RADIUS_MIN: float = 8.0
 const HIDING_RADIUS_MAX: float = 24.0
 
+## Та же точка, что у щитов в scenes/districts/*.tscn — рядом со спавном игрока.
+const POWER_SWITCH_POS: Vector3 = Vector3(8.0, 0.0, 8.0)
+
 static func build(parent: Node, district_id: StringName) -> Node3D:
 	var resolved_id: StringName = district_id if DISTRICTS.has(district_id) else &"suburbs"
 	var scene_path: String = "res://scenes/districts/%s.tscn" % String(resolved_id)
@@ -59,11 +62,29 @@ static func build(parent: Node, district_id: StringName) -> Node3D:
 		wx.name = "WeatherVFX"
 		wx.set("weather_kind", String(theme.get("weather", "fog_light")))
 		root.add_child(wx)
+	_spawn_power_switch(root, resolved_id)
 	_spawn_district_enemies(root)
 	LOOT_SCRIPT.populate(root, resolved_id)
 	_spawn_hiding_spots(root, resolved_id)
 	EventBus.district_entered.emit(resolved_id)
 	return root
+
+## Щит — единственный способ поднять стадию района, а значит и пройти игру.
+## В .tscn районов он стоит вручную; процедурная ветка его не ставила, поэтому
+## район, собранный запасным путём, невозможно было восстановить. Визуал щит
+## строит сам в _ready(), здесь нужен только узел с district_id.
+static func _spawn_power_switch(root: Node3D, district_id: StringName) -> void:
+	if root == null or root.get_node_or_null("PowerSwitch") != null:
+		return
+	var ps_script: Script = load("res://scripts/world/power_switch.gd") as Script
+	if ps_script == null:
+		return
+	var ps: Node3D = Node3D.new()
+	ps.set_script(ps_script)
+	ps.name = "PowerSwitch"
+	ps.set("district_id", district_id)
+	root.add_child(ps)
+	ps.position = POWER_SWITCH_POS
 
 ## Раскладывает укрытия по кругу вокруг центра района. Seed от имени района —
 ## значит, расположение стабильно между перезапусками и совпадает в сетевой игре.
