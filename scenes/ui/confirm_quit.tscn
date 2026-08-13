@@ -1,6 +1,22 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/confirm_quit.gd" id="1"]
+
+[sub_resource type="StyleBoxFlat" id="style_panel"]
+bg_color = Color(0.0784, 0.1059, 0.1412, 1)
+border_width_left = 1
+border_width_right = 1
+border_width_top = 1
+border_width_bottom = 1
+border_color = Color(0.1647, 0.2, 0.251, 1)
+corner_radius_top_left = 0
+corner_radius_top_right = 0
+corner_radius_bottom_left = 0
+corner_radius_bottom_right = 0
+content_margin_left = 16.0
+content_margin_top = 16.0
+content_margin_right = 16.0
+content_margin_bottom = 16.0
 
 [node name="ConfirmQuit" type="Control"]
 layout_mode = 3
@@ -27,14 +43,7 @@ offset_left = -180.0
 offset_top = -100.0
 offset_right = 180.0
 offset_bottom = 100.0
-
-[node name="Style" type="StyleBoxFlat" parent="Panel"]
-unique_name_in_owner = true
-bg_color = Color(0.0784, 0.1059, 0.1412, 1)
-border_color = Color(0.1647, 0.2, 0.251, 1)
-set_border_width_all = 1
-set_corner_radius_all = 0
-set_content_margin_all = 16
+theme_override_styles/panel = SubResource("style_panel")
 
 [node name="VBox" type="VBoxContainer" parent="Panel"]
 layout_mode = 2
