@@ -224,6 +224,24 @@ func _t_door(tree: SceneTree, rt: RefCounted) -> void:
 	rt.check(not ("has_item(" in src), "дверь зовёт несуществующий has_item()")
 	await _settle(tree, 2)
 
+## Путь настоящего сохранения игрока. Тест его перезаписывает, поэтому
+## содержимое сначала прячется, а в конце возвращается на место: прогон
+## автопилота не имеет права стереть чужой прогресс.
+const SAVE_PATH := "user://tls_savegame.save"
+const SAVE_BACKUP := "user://tls_savegame.autopilot_backup"
+
+func backup_save() -> void:
+	if FileAccess.file_exists(SAVE_PATH):
+		DirAccess.copy_absolute(SAVE_PATH, SAVE_BACKUP)
+
+func restore_save() -> void:
+	if FileAccess.file_exists(SAVE_BACKUP):
+		DirAccess.copy_absolute(SAVE_BACKUP, SAVE_PATH)
+		DirAccess.remove_absolute(SAVE_BACKUP)
+	elif FileAccess.file_exists(SAVE_PATH):
+		# Сохранения не было до прогона — не оставляем и после него.
+		DirAccess.remove_absolute(SAVE_PATH)
+
 func _t_save_roundtrip(tree: SceneTree, rt: RefCounted) -> void:
 	var save := _autoload(tree, "SaveSystem")
 	var dm := _autoload(tree, "DistrictManager")

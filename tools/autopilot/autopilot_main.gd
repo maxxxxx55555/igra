@@ -32,9 +32,19 @@ func _initialize() -> void:
 	# без живого главного цикла не отрисуется ни один скриншот.
 	_run_all()
 
+## Защита от повторного завершения: _finish() зовут и обычный конец прогона,
+## и аварийный лимит в _process. Без флага отчёт писался бы дважды, а quit()
+## вызывался поверх уже идущего выхода.
+var _finished: bool = false
+
 func _process(_delta: float) -> void:
+	if _finished:
+		return
 	if _elapsed() > TOTAL_BUDGET_SEC:
-		push_error("автопилот: превышен общий лимит времени")
+		# Сюда попадаем, только если тест навсегда завис на await: обычный
+		# путь до этого места не доходит. Отчёт всё равно будет записан.
+		_rt.fail("прогон прерван: превышен общий лимит %.0f с" % TOTAL_BUDGET_SEC)
+		_rt.end()
 		_finish()
 
 func _elapsed() -> float:
@@ -43,6 +53,9 @@ func _elapsed() -> float:
 func _run_all() -> void:
 	var suite := Suite.new()
 	var tests: Array = suite.collect()
+	# Тесты пишут в настоящий файл сохранения. Прячем прогресс владельца
+	# до прогона и возвращаем после — автопроверка не должна ничего стереть.
+	suite.backup_save()
 	for entry in tests:
 		var test_name: String = entry["name"]
 		var fn: Callable = entry["fn"]
@@ -55,6 +68,10 @@ func _run_all() -> void:
 			_rt.fail("тест не уложился в %.0f с — считаем зависанием" % TEST_BUDGET_SEC)
 		_rt.end()
 		print(("  FAIL " if _rt.last_test_failed() else "  ok   ") + test_name)
+		# Пишем отчёт после каждого теста. Если движок упадёт на следующем,
+		# у владельца всё равно останется файл с уже пройденной частью.
+		_rt.write_report(_elapsed())
+	suite.restore_save()
 	_finish()
 
 ## Запускает тест и следит, чтобы он не выбил бюджет. Callable может быть
@@ -64,6 +81,9 @@ func _guarded(fn: Callable, deadline: float) -> bool:
 	return _elapsed() <= deadline
 
 func _finish() -> void:
+	if _finished:
+		return
+	_finished = true
 	var text := _rt.write_report(_elapsed())
 	print(text)
 	var code := _rt.failed_count()
