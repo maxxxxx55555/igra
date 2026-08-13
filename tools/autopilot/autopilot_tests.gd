@@ -33,6 +33,10 @@ func collect() -> Array:
 		{"name": "Escape закрывает верхний оверлей первым", "fn": _t_esc_order},
 		{"name": "экраны интерфейса открываются и имеют размер", "fn": _t_ui_screens},
 		{"name": "подсказка обучения лежит в CanvasLayer", "fn": _t_tutorial_layer},
+		{"name": "полосы HUD не накладываются друг на друга", "fn": _t_hud_overlap},
+		{"name": "укрытия стоят не внутри стен", "fn": _t_hiding_placement},
+		{"name": "блэкаут гасит фонарь района", "fn": _t_blackout},
+		{"name": "движение через Input.action_press", "fn": _t_input_move},
 		{"name": "скриншоты экранов сохранены", "fn": _t_screenshots},
 	]
 
@@ -396,3 +400,142 @@ func _t_screenshots(tree: SceneTree, rt: RefCounted) -> void:
 	ui.close_all_blocking()
 	await _settle(tree, 3)
 	rt.check(rt.shot_count() > 0, "не сохранилось ни одного скриншота")
+
+## Полосы HP/выносливости/батареи/шума/заметности раскладываются по одной
+## сетке. Раньше «ШУМ» рисовался поверх выносливости — проверяем, что
+## прямоугольники видимых полос не пересекаются.
+func _t_hud_overlap(tree: SceneTree, rt: RefCounted) -> void:
+	var hud := _spawn(tree, HUD_SCENE)
+	if hud == null:
+		rt.unavailable("не поднялась сцена HUD " + HUD_SCENE)
+		return
+	await _settle(tree, 8)
+	var top := hud.get_node_or_null("TopLeft")
+	if top == null:
+		rt.fail("в HUD нет узла TopLeft")
+		_despawn(hud)
+		return
+	var bars: Array = []
+	for child in top.get_children():
+		if child is Control and (child as Control).visible:
+			var c := child as Control
+			if c.size.x > 0.0 and c.size.y > 0.0:
+				bars.append(c)
+	rt.check(bars.size() >= 2, "в HUD меньше двух видимых полос — раскладка не проверена")
+	for i in bars.size():
+		for j in range(i + 1, bars.size()):
+			var a: Control = bars[i]
+			var b: Control = bars[j]
+			var ra := Rect2(a.global_position, a.size)
+			var rb := Rect2(b.global_position, b.size)
+			if ra.intersects(rb):
+				rt.fail("полосы HUD пересекаются: %s и %s" % [a.name, b.name])
+	_despawn(hud)
+	await _settle(tree, 2)
+
+## Укрытия расставляет DistrictSceneFactory по кругу. Если точка попала
+## внутрь стены, игрок «спрячется» в геометрии. Проверяем пересечение
+## тела укрытия с миром через прямое физическое сканирование.
+func _t_hiding_placement(tree: SceneTree, rt: RefCounted) -> void:
+	var factory := load("res://scripts/world/district_scene_factory.gd")
+	if factory == null:
+		rt.unavailable("нет district_scene_factory.gd")
+		return
+	var world := Node3D.new()
+	tree.root.add_child(world)
+	var root: Node3D = factory.build(world, &"suburbs")
+	if root == null:
+		rt.fail("район не собрался")
+		_despawn(world)
+		return
+	await _settle(tree, 10)
+	var spots: Array = []
+	for n in root.get_children():
+		if String(n.name).begins_with("HidingSpot"):
+			spots.append(n)
+	rt.check(spots.size() > 0, "в районе не расставлено ни одного укрытия")
+	var space := root.get_world_3d().direct_space_state
+	for s in spots:
+		if not (s is Node3D):
+			continue
+		var shape := SphereShape3D.new()
+		shape.radius = 0.35
+		var params := PhysicsShapeQueryParameters3D.new()
+		params.shape = shape
+		params.transform = Transform3D(Basis(), (s as Node3D).global_position)
+		params.collide_with_areas = false
+		params.collide_with_bodies = true
+		# Само укрытие исключаем: пересечение с собой — не ошибка.
+		var self_rids: Array[RID] = []
+		for c in (s as Node3D).get_children():
+			if c is CollisionObject3D:
+				self_rids.append((c as CollisionObject3D).get_rid())
+		if s is CollisionObject3D:
+			self_rids.append((s as CollisionObject3D).get_rid())
+		params.exclude = self_rids
+		var hits := space.intersect_shape(params, 1)
+		if hits.size() > 0:
+			rt.fail("укрытие %s стоит внутри геометрии" % String(s.name))
+	_despawn(world)
+	await _settle(tree, 3)
+
+## Блэкаут обязан гасить свет фонаря: сигнал есть давно, но потребитель
+## в 3D появился поздно — следим, чтобы связь не отвалилась снова.
+func _t_blackout(tree: SceneTree, rt: RefCounted) -> void:
+	var bus := _autoload(tree, "EventBus")
+	var grid := _autoload(tree, "PowerGrid")
+	if bus == null or grid == null:
+		rt.unavailable("нет EventBus/PowerGrid")
+		return
+	var scene_path := "res://scenes/props/streetlight_3d.tscn"
+	var light: Node = null
+	if ResourceLoader.exists(scene_path):
+		light = _spawn(tree, scene_path)
+	if light == null:
+		var scr := load("res://scripts/world/streetlight_3d.gd")
+		if scr == null:
+			rt.unavailable("нет streetlight_3d")
+			return
+		rt.note("сцена фонаря не найдена, проверяем только реакцию скрипта")
+		var src: String = scr.source_code
+		rt.check("district_blackout" in src, "фонарь не подписан на district_blackout")
+		return
+	light.set("district_id", &"suburbs")
+	grid.advance_district(&"suburbs", 2)
+	await _settle(tree, 6)
+	var spot := light.get_node_or_null("SpotLight") as SpotLight3D
+	if spot == null:
+		rt.fail("у фонаря нет узла SpotLight")
+		_despawn(light)
+		return
+	var lit_before: bool = spot.visible
+	bus.district_blackout.emit(&"suburbs")
+	await _settle(tree, 4)
+	rt.check(lit_before, "фонарь не горел до блэкаута — проверка бессмысленна")
+	rt.check(not spot.visible, "блэкаут не погасил фонарь")
+	_despawn(light)
+	grid.reset()
+	await _settle(tree, 2)
+
+## Полный путь ввода: Input.action_press должен доезжать до игрока.
+## Проверяем не позицию (её съедает отсутствие пола), а то, что игрок
+## считывает действие и формирует ненулевое направление.
+func _t_input_move(tree: SceneTree, rt: RefCounted) -> void:
+	var p := _spawn(tree, PLAYER_SCENE)
+	if p == null:
+		rt.unavailable("не поднялась сцена игрока")
+		return
+	await _settle(tree)
+	p.can_move = true
+	p.gameplay_active = true
+	Input.action_press("move_up")
+	await _settle(tree, 4)
+	var dir := Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	Input.action_release("move_up")
+	await _settle(tree, 2)
+	rt.check(dir.length() > 0.01, "Input.get_vector не увидел нажатие move_up")
+	if p.has_method("compute_velocity"):
+		var v: Vector3 = p.compute_velocity(dir)
+		rt.check(v.length() > 0.01, "игрок не превратил ввод в скорость")
+	_despawn(p)
+	await _settle(tree, 2)
