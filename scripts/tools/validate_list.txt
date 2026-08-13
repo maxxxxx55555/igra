@@ -32,7 +32,6 @@ scripts/core/theme_manager.gd
 scripts/crafting/crafting_manager.gd
 scripts/credits.gd
 scripts/cutscenes/cutscene_manager.gd
-scripts/death_screen.gd
 scripts/district_manager.gd
 scripts/document_pickup.gd
 scripts/economy/coin_wallet.gd

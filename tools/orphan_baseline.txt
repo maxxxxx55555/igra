@@ -27,7 +27,6 @@ scenes/secrets/secret_room_12.tscn
 scenes/ui/achievement_screen.tscn
 scenes/ui/coin_hud.tscn
 scenes/ui/daily_events.tscn
-scenes/ui/death_screen.tscn
 scenes/ui/district_banner.tscn
 scenes/ui/epilogue.tscn
 scenes/ui/fade_transition.tscn
