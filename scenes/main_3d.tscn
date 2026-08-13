@@ -81,7 +81,9 @@ bus = &"Ambient"
 bus = &"SFX"
 
 [node name="Splash" parent="." instance=ExtResource("5")]
-show_splash = true
+visible = false
+show_splash = false
+next_scene = ""
 
 [node name="Screens" parent="." instance=ExtResource("8")]
 

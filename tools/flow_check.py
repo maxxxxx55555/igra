@@ -70,6 +70,18 @@ check("start_game ведёт в игровую сцену", "goto(LOADING if exi
 check("игровая сцена существует", os.path.exists(os.path.join(ROOT, "scenes/main_3d.tscn")))
 check("экран загрузки уходит в игру", "Routes.goto(Routes.GAME)" in read("scripts/ui/pre_loading.gd"))
 
+# ── 2b. Внутри игровой сцены ничто не уводит игрока обратно ─────────────────
+# Splash инстанцируется и как отдельная сцена, и как узел main_3d.tscn.
+# Если он безусловно вызывает Routes.goto(...), то уровень сам себя закрывает
+# через 3 секунды — игра становится непроходимой.
+main3d = read("scenes/main_3d.tscn")
+splash = read("scripts/splash.gd")
+check("заставка в игре выключена", "show_splash = false" in main3d,
+      "иначе логотип перекрывает уровень")
+check("заставка не уводит из игровой сцены",
+      "get_tree().current_scene == self" in splash,
+      "Routes.goto из узла main_3d выкидывал игрока на экран загрузки")
+
 # ── 3. Подбор предмета ──────────────────────────────────────────────────────
 def code_only(text: str) -> str:
     """Текст без комментариев — чтобы не ловить упоминания в пояснениях."""
