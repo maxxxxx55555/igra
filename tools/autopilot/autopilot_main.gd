@@ -37,15 +37,18 @@ func _initialize() -> void:
 ## вызывался поверх уже идущего выхода.
 var _finished: bool = false
 
-func _process(_delta: float) -> void:
+## MainLoop._process возвращает bool: true завершает главный цикл.
+## Поэтому здесь всегда false — выходом управляет только quit() в _finish().
+func _process(_delta: float) -> bool:
 	if _finished:
-		return
+		return false
 	if _elapsed() > TOTAL_BUDGET_SEC:
 		# Сюда попадаем, только если тест навсегда завис на await: обычный
 		# путь до этого места не доходит. Отчёт всё равно будет записан.
 		_rt.fail("прогон прерван: превышен общий лимит %.0f с" % TOTAL_BUDGET_SEC)
 		_rt.end()
 		_finish()
+	return false
 
 func _elapsed() -> float:
 	return float(Time.get_ticks_usec() - _started_usec) / 1_000_000.0

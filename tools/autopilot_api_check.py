@@ -122,7 +122,18 @@ def main() -> int:
         ok(False, f"тест {name} реализован, но не попал в collect() — не запустится")
     ok(len(listed) > 0, "в collect() нет ни одного теста")
 
-    # 5. Сигналы EventBus, на которые подписывается автопилот.
+    # 5. MainLoop._process возвращает bool: вернув true, он завершит цикл.
+    #    Объявление -> void молча ломает весь прогон, поэтому проверяем.
+    main_src = MAIN.read_text(encoding="utf-8")
+    if re.search(r"^extends\s+(SceneTree|MainLoop)", main_src, re.M):
+        m = re.search(r"^func\s+_process\s*\([^)]*\)\s*->\s*(\w+)", main_src, re.M)
+        ok(
+            m is not None and m.group(1) == "bool",
+            "autopilot_main._process должен возвращать bool "
+            f"(сейчас {m.group(1) if m else 'не объявлен'})",
+        )
+
+    # 6. Сигналы EventBus, на которые подписывается автопилот.
     bus = ROOT / "scripts/events/event_bus.gd"
     if bus.exists():
         bus_signals = set(re.findall(r"^signal\s+(\w+)", bus.read_text(encoding="utf-8"), re.M))
