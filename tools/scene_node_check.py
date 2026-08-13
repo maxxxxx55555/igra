@@ -115,7 +115,16 @@ def main() -> int:
         if spath.startswith("res://"):
             script_to_scene.setdefault(spath[6:], p)
 
-    dollar_re = re.compile(r'\$(?:"([^"]+)"|([A-Za-z_][\w/]*))')
+    # $Node, $"Node", а также get_node("Node") — последний тоже роняет сцену,
+    # если пути нет (get_node_or_null сознательно не проверяем: он для
+    # необязательных нод и возвращает null штатно).
+    # $Node, $"Node", а также get_node("Node") НА СЕБЕ — последний тоже роняет
+    # сцену, если пути нет. Вызовы вида other.get_node(...) пропускаем: там
+    # путь резолвится в чужом дереве (и обычно закрыт has_node).
+    # get_node_or_null сознательно не проверяем — он для необязательных нод.
+    dollar_re = re.compile(
+        r'\$(?:"([^"]+)"|([A-Za-z_][\w/]*))'
+        r'|(?<![\w.])get_node\(\s*"([^"/][^"]*)"\s*\)')
     bad_paths = []
     for script, scene in sorted(script_to_scene.items()):
         if not os.path.exists(script):
@@ -127,7 +136,7 @@ def main() -> int:
         for i, line in enumerate(open(script, encoding="utf-8", errors="ignore"), 1):
             code = line.split("#")[0]
             for m in dollar_re.finditer(code):
-                path = m.group(1) or m.group(2)
+                path = m.group(1) or m.group(2) or m.group(3)
                 if not path or path.startswith("/"):
                     continue
                 if path in nodes:
