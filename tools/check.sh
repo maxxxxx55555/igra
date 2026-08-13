@@ -143,6 +143,14 @@ PY
 RC=$?
 if [[ $RC -eq 0 ]]; then PASS=$((PASS+8)); else FAIL=$((FAIL+RC)); fi
 
+# Сцены: комментарии в .tscn, ресурсы в роли [node], битые $NodePath.
+head_ "Сцены и ссылки на ноды"
+if python3 tools/scene_node_check.py; then ok "scene_node_check"; else bad "scene_node_check"; fi
+
+# Ключевой игровой цикл: меню -> уровень -> подбор -> пауза -> меню.
+head_ "Игровой цикл"
+if python3 tools/flow_check.py; then ok "flow_check"; else bad "flow_check"; fi
+
 # ─────────────────────────── проверки в движке ───────────────────────────
 if [[ $STATIC_ONLY -eq 1 ]]; then
   echo; echo "${DIM}Проверки в движке пропущены (--static).${OFF}"
