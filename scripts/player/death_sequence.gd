@@ -10,6 +10,10 @@ var camera: Camera3D = player.get_node("Camera3D")
 var _is_dying: bool = false
 
 func _ready() -> void:
+	# Сцена смерти замедляет время и ждёт таймер. С режимом PAUSABLE таймер
+	# встал бы вместе с деревом, а Engine.time_scale остался бы 0.3 навсегда:
+	# игра выглядела бы «залипшей» даже после возврата в меню.
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	var health := player.get_node_or_null("HealthComponent")
 	if health:
 		health.died.connect(_on_died)
@@ -20,7 +24,9 @@ func _on_died() -> void:
 	_is_dying = true
 	Engine.time_scale = 0.3
 	_red_out()
-	await get_tree().create_timer(1.0).timeout
+	# Таймер игнорирует замедление времени: иначе 1 секунда превращается
+	# в 3.3 реальных, и экран смерти появляется с ощутимым зависанием.
+	await get_tree().create_timer(1.0, true, false, true).timeout
 	Engine.time_scale = 1.0
 	EventBus.player_died.emit()
 

@@ -161,6 +161,11 @@ if python3 tools/flow_check.py; then ok "flow_check"; else bad "flow_check"; fi
 head_ "Мёртвый код"
 if python3 tools/orphan_check.py; then ok "orphan_check"; else bad "orphan_check"; fi
 
+# Автопилот запускается на машине владельца, где отладить опечатку уже
+# нельзя, — поэтому его вызовы сверяем с реальными API заранее.
+head_ "Автопилот"
+if python3 tools/autopilot_api_check.py; then ok "autopilot_api"; else bad "autopilot_api"; fi
+
 # Синтаксис GDScript (gdparse). Медленно (~90 с), поэтому только без --fast.
 if [[ $SKIP_SLOW -eq 0 ]]; then
   head_ "Синтаксис GDScript"

@@ -435,6 +435,22 @@ for _p in sorted(glob.glob("scripts/**/*.gd", recursive=True)):
 check("экраны, ставящие паузу, продолжают работать во время неё",
       not _pausers, "нет PROCESS_MODE_ALWAYS: " + ", ".join(_pausers))
 
+# ── 19. Замедление времени всегда откатывается ─────────────────────────────
+# Engine.time_scale — глобальное состояние. Если узел замедлил время и ждёт
+# таймер, а таймер этого замедления не игнорирует (или узел встал на паузу),
+# время так и останется замедленным: игра выглядит зависшей.
+_slowers = []
+for _p in sorted(glob.glob("scripts/**/*.gd", recursive=True)):
+    _src = read(_p)
+    if not re.search(r"Engine\.time_scale\s*=\s*(?!1\.0)", _src):
+        continue
+    if "PROCESS_MODE_ALWAYS" not in _src:
+        _slowers.append(_p + " (нет PROCESS_MODE_ALWAYS)")
+    elif re.search(r"await .*create_timer\(\s*[^,)]+\s*\)", _src):
+        _slowers.append(_p + " (таймер не игнорирует time_scale)")
+check("замедление времени не может залипнуть навсегда",
+      not _slowers, "; ".join(_slowers))
+
 # ── вывод ───────────────────────────────────────────────────────────────────
 failed = [c for c in CHECKS if not c[1]]
 width = max(len(c[0]) for c in CHECKS)
