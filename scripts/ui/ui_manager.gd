@@ -55,6 +55,11 @@ func _ready() -> void:
 	_quest_hud = _mk_overlay("res://scripts/ui/quest_tracker_hud.gd", "QuestHUD")
 	_quest_hud.visible = false
 	EventBus.game_state_changed.connect(_on_game_state)
+	# toast_requested никто не слушал: всплывающие подсказки из daily_events_ui
+	# и finale_director уходили в пустоту. Показываем их тем же тостом, что и
+	# прямые вызовы show_notification().
+	EventBus.toast_requested.connect(func(text: String, _type: String) -> void:
+		show_notification(text))
 	EventBus.game_started.connect(func() -> void: close(&"main_menu"))
 	_on_game_state(GameManager.current_state)
 

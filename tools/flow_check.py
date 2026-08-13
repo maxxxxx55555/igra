@@ -135,6 +135,13 @@ check("смерть игрока кем-то обрабатывается", len(
 check("смерть переводит в состояние DEAD", "trigger_death()" in gm)
 check("экран смерти открывается по состоянию", 'open(&"death")' in uim)
 check("экран победы открывается по состоянию", 'open(&"win")' in uim)
+# Победа — такая же цепочка сигнал -> слушатель, как и смерть, и рвётся так же
+# незаметно: босс шлёт boss_defeated, а вызывает trigger_win() уже FinaleDirector.
+check("победа над боссом кем-то обрабатывается", len(listeners("boss_defeated")) > 0,
+      ", ".join(listeners("boss_defeated")))
+check("обработчик боссa зовёт trigger_win",
+      "trigger_win()" in read("scripts/world/finale_director.gd"))
+check("состояние WIN достижимо", "func trigger_win" in gm)
 check("с экрана смерти можно выйти в меню", "GameManager.return_to_menu()" in read("scripts/ui/death_screen.gd"))
 check("«Заново» перезагружает сцену", "Routes.restart_game()" in read("scripts/ui/death_screen.gd"))
 
@@ -230,6 +237,18 @@ if sig_arity:
                     arity_bad.append("%s:%d %s шлёт %d, принимает %d"
                                      % (path, i, key, sig_arity[key], got[1]))
 check("арность подписок на сигналы совпадает", not arity_bad, "; ".join(arity_bad[:3]))
+
+# ── 11. Сигналы критического пути обязаны иметь слушателя ───────────────────
+# Именно так ломались смерть игрока (game_over) и едва не сломалась победа:
+# сигнал шлётся, слушателя нет, и ничего не происходит — без единой ошибки.
+CRITICAL_SIGNALS = [
+    "game_over", "game_won", "boss_defeated", "game_started",
+    "game_state_changed", "item_picked_up", "inventory_changed",
+    "player_health_changed", "player_battery_changed", "toast_requested",
+    "hud_visibility_changed", "district_entered",
+]
+deaf = [s for s in CRITICAL_SIGNALS if not listeners(s)]
+check("у сигналов критического пути есть слушатели", not deaf, ", ".join(deaf))
 
 # ── вывод ───────────────────────────────────────────────────────────────────
 failed = [c for c in CHECKS if not c[1]]
