@@ -25,6 +25,13 @@ TESTS = ROOT / "tools/autopilot/autopilot_tests.gd"
 MAIN = ROOT / "tools/autopilot/autopilot_main.gd"
 RUNTIME = ROOT / "tools/autopilot/autopilot_runtime.gd"
 
+# Методы, встроенные в Object/Node: их не нужно искать в исходнике скрипта.
+OBJECT_BUILTINS = {
+    "has_method", "get_node_or_null", "get_node", "connect", "disconnect",
+    "emit", "call", "call_deferred", "get", "set", "has_signal", "is_class",
+    "add_child", "remove_child", "queue_free", "find_child",
+}
+
 fails: list[str] = []
 checks = 0
 
@@ -94,7 +101,9 @@ def main() -> int:
         if not available:
             continue
         for call in sorted(set(re.findall(rf"\b{var}\.(\w+)\s*\(", src))):
-            if call in ("has_method", "get_node_or_null", "connect", "disconnect", "emit"):
+            # Встроенные методы Object/Node есть у любого узла — их незачем
+            # искать в тексте скрипта автозагрузки.
+            if call in OBJECT_BUILTINS:
                 continue
             ok(
                 call in available,

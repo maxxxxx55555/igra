@@ -37,6 +37,9 @@ func collect() -> Array:
 		{"name": "укрытия стоят не внутри стен", "fn": _t_hiding_placement},
 		{"name": "блэкаут гасит фонарь района", "fn": _t_blackout},
 		{"name": "движение через Input.action_press", "fn": _t_input_move},
+		{"name": "подбор обновляет счётчик в HUD", "fn": _t_hud_badge},
+		{"name": "выход в меню работает из паузы", "fn": _t_quit_under_pause},
+		{"name": "смерть открывает экран смерти", "fn": _t_death_screen},
 		{"name": "скриншоты экранов сохранены", "fn": _t_screenshots},
 	]
 
@@ -607,3 +610,77 @@ func _t_input_move(tree: SceneTree, rt: RefCounted) -> void:
 		rt.check(v.length() > 0.01, "игрок не превратил ввод в скорость")
 	_despawn(p)
 	await _settle(tree, 2)
+
+## Счётчик в быстром слоте обязан меняться сразу после подбора: HUD
+## подписан на inventory_changed. Раньше бейджи оставались нулевыми,
+## пока игрок не откроет инвентарь.
+func _t_hud_badge(tree: SceneTree, rt: RefCounted) -> void:
+	var inv := _autoload(tree, "InventoryManager")
+	if inv == null:
+		rt.unavailable("нет InventoryManager")
+		return
+	var hud := _spawn(tree, HUD_SCENE)
+	if hud == null:
+		rt.unavailable("не поднялась сцена HUD")
+		return
+	await _settle(tree, 8)
+	# medkit стоит третьим в QUICK_SLOT_ITEMS, значит слот с индексом 2.
+	var slot := hud.get_node_or_null("BottomCenter/Slot2")
+	if slot == null:
+		rt.fail("в HUD нет узла BottomCenter/Slot2")
+		_despawn(hud)
+		return
+	var badge := slot.get_node_or_null("Badge") as Label
+	if badge == null:
+		rt.fail("в слоте нет узла Badge")
+		_despawn(hud)
+		return
+	inv.remove(&"medkit", 99)
+	await _settle(tree, 4)
+	rt.check(badge.text == "0", "счётчик не обнулился после очистки, показывает %s" % badge.text)
+	inv.try_add(&"medkit", 2)
+	await _settle(tree, 4)
+	rt.check(badge.text == "2", "после подбора счётчик показывает %s вместо 2" % badge.text)
+	inv.remove(&"medkit", 99)
+	_despawn(hud)
+	await _settle(tree, 2)
+
+## Выход в меню обязан срабатывать и когда игра стоит на паузе: иначе
+## из паузы невозможно выйти, и это выглядит как зависание.
+func _t_quit_under_pause(tree: SceneTree, rt: RefCounted) -> void:
+	var gm := _autoload(tree, "GameManager")
+	if gm == null:
+		rt.unavailable("нет GameManager")
+		return
+	gm.start_new_game()
+	await _settle(tree, 3)
+	gm.pause_game()
+	await _settle(tree, 2)
+	rt.check(tree.paused, "пауза не включилась — проверка бессмысленна")
+	gm.return_to_menu()
+	await _settle(tree, 4)
+	rt.check(not tree.paused, "выход в меню не снял паузу — игра осталась замороженной")
+	rt.check(gm.is_menu(), "состояние после выхода не MENU")
+
+## Смерть обязана поднимать экран смерти, а не просто менять состояние:
+## именно с него игрок жмёт «Заново» или «В меню».
+func _t_death_screen(tree: SceneTree, rt: RefCounted) -> void:
+	var gm := _autoload(tree, "GameManager")
+	var ui := _autoload(tree, "UIManager")
+	if gm == null or ui == null:
+		rt.unavailable("нет GameManager/UIManager")
+		return
+	gm.start_new_game()
+	await _settle(tree, 3)
+	gm.trigger_death()
+	await _settle(tree, 5)
+	rt.check(gm.is_dead(), "состояние не DEAD")
+	rt.check(not tree.paused, "экран смерти показан на паузе — кнопки не нажмутся")
+	# _is_open() — внутренний, но единственный точный ответ «экран виден».
+	if ui.has_method("_is_open"):
+		rt.check(bool(ui.call("_is_open", &"death")), "экран смерти не открыт")
+		await rt.screenshot(tree, "death")
+	else:
+		rt.fail("у UIManager нет _is_open()")
+	gm.return_to_menu()
+	await _settle(tree, 3)
