@@ -52,3 +52,4 @@ all_en_keys.txt
 # OS
 Thumbs.db
 .DS_Store
+*terminator*
