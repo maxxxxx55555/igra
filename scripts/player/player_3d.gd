@@ -245,6 +245,11 @@ func _ready() -> void:
 	EventBus.player_stamina_changed.emit(1.0)
 	EventBus.player_battery_changed.emit(1.0)
 	EventBus.game_started.connect(_on_game_started)
+	# Аптечки и батарейки не работали: item_consumed слушал только
+	# scripts/player/player.gd — контроллер из 2D-версии, которого в игровой
+	# сцене нет. Игрок тратил предмет, инвентарь его списывал, а здоровье и
+	# заряд не менялись.
+	EventBus.item_consumed.connect(_on_item_consumed)
 	var isv := get_node_or_null("/root/InputService")
 	if isv:
 		isv.attack_requested.connect(_handle_attack)
@@ -649,6 +654,15 @@ func consume_battery(amount: float) -> void:
 func add_battery(amount: float) -> void:
 	battery = clampf(battery + amount, 0.0, 100.0)
 	EventBus.player_battery_changed.emit(battery / 100.0)
+
+## Расход предмета из инвентаря. Имена эффектов задаёт
+## InventoryManager._effect_name() по ItemData.Effect: HEAL и RECHARGE.
+func _on_item_consumed(_id: StringName, effect: StringName, value: float) -> void:
+	match effect:
+		&"HEAL":
+			heal(value)
+		&"RECHARGE":
+			add_battery(value)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if _net_active and not is_multiplayer_authority():
