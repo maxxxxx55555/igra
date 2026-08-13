@@ -197,8 +197,20 @@ func _show_toast(msg: String) -> void:
 	_toast.add_theme_font_size_override("font_size", 14)
 	_toast.modulate = Color(1, 1, 1, 0)
 	add_child(_toast)
+	# Захватываем КОНКРЕТНУЮ метку, а не поле _toast: пока идёт анимация,
+	# следующий вызов _show_toast() уже перезапишет поле, и старый коллбэк
+	# удалил бы новую, только что показанную подсказку.
+	var label := _toast
 	var tw := create_tween()
-	tw.tween_property(_toast, "modulate:a", 1.0, 0.15)
+	tw.tween_property(label, "modulate:a", 1.0, 0.15)
 	tw.tween_interval(1.2)
-	tw.tween_property(_toast, "modulate:a", 0.0, 0.3)
-	tw.tween_callback(func(): if _toast: _toast.queue_free(); _toast = null)
+	tw.tween_property(label, "modulate:a", 0.0, 0.3)
+	tw.tween_callback(_drop_toast.bind(label))
+
+## Убирает конкретную подсказку и обнуляет поле, только если оно всё ещё
+## указывает на неё.
+func _drop_toast(label: Label) -> void:
+	if is_instance_valid(label):
+		label.queue_free()
+	if _toast == label:
+		_toast = null
