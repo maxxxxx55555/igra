@@ -1,33 +1,11 @@
 extends Node3D
 
 func _ready() -> void:
-
 	_setup_nav_region()
 	_setup_world_runtime()
-	_gp_proof()
-	_final_integration()
 	_auto_start_from_main()
-	_setup_joystick()
 	_setup_multiplayer()
-
-	var GM = get_node_or_null("/root/GameManager")
-	if GM:
-		var m = get_tree().get_first_node_in_group("monsters")
-		if m:
-			var nr = get_tree().get_first_node_in_group("nav_region")
-			var nav_ok = nr != null
-			var mesh_verts = 0
-			if nr:
-				var nm = nr.navigation_mesh
-				if nm:
-					mesh_verts = nm.get_vertices().size()
-			var agent_set = false
-			var na = m.find_child("NavigationAgent3D", true, false)
-			if na:
-				agent_set = na.target_position.distance_to(Vector3.ZERO) > 0.01
-
-
-
+	_setup_screen_shake()
 
 func _auto_start_from_main() -> void:
 	var GM = get_node_or_null("/root/GameManager")
@@ -39,12 +17,6 @@ func _auto_start_from_main() -> void:
 	# заодно она грозила вторым меню поверх первого.
 	if GM and GM.has_method("_change_state"):
 		GM._change_state(GM.GameState.MENU)
-
-## Виртуальный джойстик живёт в hud_3d.tscn (BottomLeft/JoystickRing) и
-## включается там же по has_touch_ui(). Раньше здесь создавался второй,
-## поверх первого — два кольца в одном углу.
-func _setup_joystick() -> void:
-	pass
 
 ## Districts никогда не появлялись в игре: фабрика была, вызова не было.
 ## WorldRuntime — единственная точка, которая строит и переключает районы.
@@ -66,10 +38,16 @@ func _setup_multiplayer() -> void:
 	mm.set("player_scene", preload("res://scenes/player/player_3d.tscn"))
 	add_child(mm)
 
-	var ss = get_node_or_null("ScreenShake")
-	var cam = get_node_or_null("Camera3D")
-	if ss and cam:
-		ss.setup(cam)
+## Тряска камеры. setup() вызывался внутри _setup_multiplayer() — уже ПОСЛЕ
+## раннего return для одиночной игры. То есть в обычной игре камера узлу не
+## передавалась, _camera оставался null, и тряска не работала вовсе.
+## Сам ScreenShake на урон и смерть врага подписан у себя в _ready().
+func _setup_screen_shake() -> void:
+	var shake := get_node_or_null("ScreenShake")
+	var cam := get_node_or_null("Camera3D") as Camera3D
+	if shake == null or cam == null:
+		return
+	shake.setup(cam)
 
 func _setup_nav_region() -> void:
 	var nreg := NavigationRegion3D.new()
@@ -80,34 +58,4 @@ func _setup_nav_region() -> void:
 	nreg.navigation_mesh = nm
 	nreg.add_to_group("nav_region")
 	add_child(nreg)
-
-
-func _gp_proof() -> void:
-	var p = get_tree().get_first_node_in_group("player")
-	var p_ok = p != null and p.is_inside_tree()
-	var c_ok = false
-	if p_ok:
-		var cone = p.get_node_or_null("ModelPivot/FlashlightPivot/Flashlight")
-		c_ok = cone != null and p.is_ancestor_of(cone)
-	var m = get_tree().get_first_node_in_group("monsters")
-	var m_ok = m != null and m.is_inside_tree()
-	var nav_ok = false
-	if m_ok:
-		nav_ok = m.find_child("NavigationAgent3D", true, false) != null
-	var nr = get_tree().get_first_node_in_group("nav_region")
-	var nav_region_ok = nr != null
-	if not nav_region_ok:
-		nav_region_ok = get_tree().get_nodes_in_group("navigation").size() > 0
-
-
-
-func _final_integration() -> void:
-	await get_tree().create_timer(4.0).timeout
-	var checks := {
-		"PuzzleSystem": "/root/PuzzleSystem",
-	}
-	var ok: int = 0
-	for nm in checks:
-		if get_node_or_null(checks[nm]) != null:
-			ok += 1
 
