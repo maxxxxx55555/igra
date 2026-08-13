@@ -48,6 +48,18 @@ var _vision_lost_timer: float = 0.0
 var _light_exposure_timer: float = 0.0
 var _is_in_flashlight: bool = false
 var _net_active: bool = false
+
+## Сеть активна только при реальном подключении к пиру.
+## Без этой проверки одиночная игра считает себя сетевой (OfflineMultiplayerPeer)
+## и шлёт RPC самой себе.
+func _is_networked() -> bool:
+	if multiplayer == null:
+		return false
+	var peer := multiplayer.multiplayer_peer
+	if peer == null or peer is OfflineMultiplayerPeer:
+		return false
+	return peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED
+
 var _remote_pos: Vector3 = Vector3.ZERO
 var _remote_rot: float = 0.0
 var _net_sync_timer: float = 0.0
@@ -109,7 +121,10 @@ func _ready() -> void:
 	_status_node = load("res://scripts/enemies/status_effects.gd").new()
 	_status_node.mob = self
 	add_child(_status_node)
-	_net_active = multiplayer != null and multiplayer.multiplayer_peer != null
+	# ВАЖНО: multiplayer_peer != null истинно и в одиночной игре — там висит
+	# OfflineMultiplayerPeer. С таким «активным» _net_active _sync_broadcast()
+	# слал .rpc() каждые 0.1 с на каждого монстра, то есть RPC самому себе.
+	_net_active = _is_networked()
 	if _net_active:
 		set_multiplayer_authority(1)
 	_telegraph = get_node_or_null("MonsterTelegraph")

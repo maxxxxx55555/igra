@@ -73,10 +73,14 @@ func _on_body_entered(body: Node) -> void:
 	_picked_up = true
 	set_deferred("monitoring", false)
 
-	if multiplayer.has_multiplayer_peer():
-		rpc_id(1, "_server_pickup", item_id, amount)
-	else:
-		EventBus.item_picked_up.emit(item_id)
+	# Сигнал item_picked_up уже отправлен внутри InventoryManager.try_add(),
+	# который сам же занимается и сетевой синхронизацией инвентаря.
+	# Раньше здесь было rpc_id(1, "_server_pickup", ...): по умолчанию
+	# multiplayer_peer — это OfflineMultiplayerPeer с id = 1, поэтому
+	# has_multiplayer_peer() истинно и в одиночной игре, а вызов уходил
+	# самому себе -> "RPC '_server_pickup' on yourself is not allowed".
+	# Ветка else дублировала сигнал, из-за чего звук подбора и счётчики
+	# квестов срабатывали дважды.
 
 	# Всплываем и гаснем: масштаб и свет вместо несуществующего modulate.
 	var tween := create_tween()
@@ -87,11 +91,6 @@ func _on_body_entered(body: Node) -> void:
 	if light != null:
 		tween.tween_property(light, "light_energy", 0.0, 0.28)
 	tween.chain().tween_callback(queue_free)
-
-@rpc("any_peer", "reliable")
-func _server_pickup(p_item_id: StringName, _p_amount: int) -> void:
-	if is_multiplayer_authority():
-		EventBus.item_picked_up.emit(p_item_id)
 
 func set_item(item: StringName, qty: int) -> void:
 	item_id = item

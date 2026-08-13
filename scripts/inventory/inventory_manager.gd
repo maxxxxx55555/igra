@@ -14,8 +14,20 @@ var equipment: Dictionary = {
 	ItemData.EquipSlot.BACKPACK: null,
 }
 
+## Сеть считается активной только при РЕАЛЬНОМ подключении.
+## multiplayer_peer != null истинно всегда: по умолчанию там висит
+## OfflineMultiplayerPeer, и в одиночной игре _sync_inventory.rpc() улетал
+## сам себе ("RPC on yourself is not allowed"). Проверяем настоящий пир.
+func _is_networked() -> bool:
+	if multiplayer == null:
+		return false
+	var peer := multiplayer.multiplayer_peer
+	if peer == null or peer is OfflineMultiplayerPeer:
+		return false
+	return peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED
+
 func _ready() -> void:
-	_net_active = multiplayer != null and multiplayer.multiplayer_peer != null
+	_net_active = _is_networked()
 	if stats == null:
 		var loaded_stats := load("res://data/balance/inventory_stats.tres") as InventoryStats
 		if loaded_stats != null:
@@ -68,9 +80,9 @@ func try_add(item_id: StringName, amount: int = 1) -> bool:
 	_recompute_weight()
 	EventBus.inventory_changed.emit()
 	EventBus.item_picked_up.emit(item_id)
-	if _net_active and is_multiplayer_authority():
+	if _is_networked() and is_multiplayer_authority():
 		_sync_inventory.rpc(to_dict())
-	elif _net_active:
+	elif _is_networked():
 		_request_add.rpc_id(1, item_id, amount)
 	return true
 func remove(item_id: StringName, amount: int = 1) -> bool:
@@ -89,9 +101,9 @@ func remove(item_id: StringName, amount: int = 1) -> bool:
 		return false
 	_recompute_weight()
 	EventBus.inventory_changed.emit()
-	if _net_active and is_multiplayer_authority():
+	if _is_networked() and is_multiplayer_authority():
 		_sync_inventory.rpc(to_dict())
-	elif _net_active:
+	elif _is_networked():
 		_request_remove.rpc_id(1, item_id, amount)
 	return true
 func use_item(slot_index: int) -> bool:
@@ -110,9 +122,9 @@ func use_item(slot_index: int) -> bool:
 		slots[slot_index] = null
 	_recompute_weight()
 	EventBus.inventory_changed.emit()
-	if _net_active and is_multiplayer_authority():
+	if _is_networked() and is_multiplayer_authority():
 		_sync_inventory.rpc(to_dict())
-	elif _net_active:
+	elif _is_networked():
 		_request_use.rpc_id(1, slot_index)
 	return true
 func has(item_id: StringName, amount: int = 1) -> bool:
@@ -225,9 +237,9 @@ func equip_item(slot_index: int) -> bool:
 	slots[slot_index] = null
 	_recompute_weight()
 	EventBus.inventory_changed.emit()
-	if _net_active and is_multiplayer_authority():
+	if _is_networked() and is_multiplayer_authority():
 		_sync_inventory.rpc(to_dict())
-	elif _net_active:
+	elif _is_networked():
 		_request_equip.rpc_id(1, slot_index)
 	return true
 
@@ -243,9 +255,9 @@ func unequip_item(slot: ItemData.EquipSlot) -> bool:
 	equipment[slot] = null
 	_recompute_weight()
 	EventBus.inventory_changed.emit()
-	if _net_active and is_multiplayer_authority():
+	if _is_networked() and is_multiplayer_authority():
 		_sync_inventory.rpc(to_dict())
-	elif _net_active:
+	elif _is_networked():
 		_request_unequip.rpc_id(1, int(slot))
 	return true
 
