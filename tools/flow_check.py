@@ -111,6 +111,9 @@ check("HUD показывает батарею", "player_battery_changed.connect
 check("HUD показывает шум", "_poll_noise_visibility" in hud and "get_noise_level" in hud)
 check("HUD прячется под блокирующими экранами", "hud_visibility_changed.connect" in hud,
       "HUD на слое 20, экраны UIManager на слое 10")
+check("HUD обновляет слоты после подбора",
+      "inventory_changed.connect" in hud,
+      "счётчики рисовались один раз в _ready() и навсегда оставались нулями")
 player = read("scripts/player/player_3d.gd")
 check("игрок отдаёт уровень шума", "func get_noise_level" in player)
 check("игрок шлёт изменение батареи", "player_battery_changed.emit" in player)

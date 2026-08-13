@@ -91,6 +91,9 @@ func _ready() -> void:
 	_add_map_button()
 	EventBus.game_state_changed.connect(_on_game_state)
 	EventBus.hud_visibility_changed.connect(_on_hud_visibility)
+	# Счётчики в слотах заполнялись один раз в _ready() и больше не менялись:
+	# игрок подбирал батарейку, а на панели по-прежнему висел ноль.
+	EventBus.inventory_changed.connect(_refresh_slot_badges)
 	_on_game_state(int(GameManager.current_state))
 
 func _cache_vignette_default() -> void:
@@ -561,6 +564,32 @@ func _setup_slot_placeholders() -> void:
 		var border := slot0.get_node_or_null("Border")
 		if border:
 			border.color = Color(0.788, 0.635, 0.290)
+	_refresh_slot_badges()
+
+## Порядок предметов в быстрых слотах. Один источник правды и для первичной
+## отрисовки, и для обновления счётчиков.
+const QUICK_SLOT_ITEMS: Array[StringName] = [
+	&"flashlight", &"battery", &"medkit", &"key", &"cable", &"fuse",
+]
+
+## Перерисовывает счётчики в шести быстрых слотах по текущему инвентарю.
+## Вызывается на EventBus.inventory_changed — то есть после каждого подбора,
+## расхода и выброса предмета.
+func _refresh_slot_badges() -> void:
+	var inv := get_tree().root.get_node_or_null("InventoryManager")
+	if inv == null or not inv.has_method("count_of"):
+		return
+	for i in QUICK_SLOT_ITEMS.size():
+		var slot := get_node_or_null("BottomCenter/Slot" + str(i))
+		if slot == null:
+			continue
+		var badge := slot.get_node_or_null("Badge") as Label
+		if badge == null:
+			continue
+		var cnt: int = inv.count_of(QUICK_SLOT_ITEMS[i])
+		badge.text = str(cnt)
+		# Пустой слот приглушаем, чтобы взгляд цеплялся за то, что есть.
+		badge.modulate.a = 1.0 if cnt > 0 else 0.35
 
 func _on_quick_slot_key(index: int) -> void:
 	_use_quick_slot(index)
