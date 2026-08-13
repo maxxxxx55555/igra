@@ -35,6 +35,7 @@ func collect() -> Array:
 		{"name": "подсказка обучения лежит в CanvasLayer", "fn": _t_tutorial_layer},
 		{"name": "полосы HUD не накладываются друг на друга", "fn": _t_hud_overlap},
 		{"name": "укрытия стоят не внутри стен", "fn": _t_hiding_placement},
+		{"name": "до укрытий есть путь по навигации", "fn": _t_hiding_reachable},
 		{"name": "блэкаут гасит фонарь района", "fn": _t_blackout},
 		{"name": "движение через Input.action_press", "fn": _t_input_move},
 		{"name": "подбор обновляет счётчик в HUD", "fn": _t_hud_badge},
@@ -725,3 +726,48 @@ func _t_district_autosave(tree: SceneTree, rt: RefCounted) -> void:
 	_despawn(wr)
 	gm.return_to_menu()
 	await _settle(tree, 4)
+
+## Укрытие, до которого нельзя дойти, бесполезно. Строим тот же навмеш,
+## что создаёт main_3d.gd, и просим карту проложить путь от точки спавна
+## игрока к каждому укрытию.
+func _t_hiding_reachable(tree: SceneTree, rt: RefCounted) -> void:
+	var factory := load("res://scripts/world/district_scene_factory.gd")
+	if factory == null:
+		rt.unavailable("нет district_scene_factory.gd")
+		return
+	var world := Node3D.new()
+	tree.root.add_child(world)
+	# Навигационная область строится так же, как в main_3d._setup_nav_region().
+	var nreg := NavigationRegion3D.new()
+	var nmesh := NavigationMesh.new()
+	var s := 40.0
+	nmesh.vertices = PackedVector3Array([
+		Vector3(-s, 0, -s), Vector3(s, 0, -s), Vector3(s, 0, s), Vector3(-s, 0, s),
+	])
+	nmesh.add_polygon(PackedInt32Array([0, 1, 2, 3]))
+	nreg.navigation_mesh = nmesh
+	world.add_child(nreg)
+	var root: Node3D = factory.build(world, &"suburbs")
+	if root == null:
+		rt.fail("район не собрался")
+		_despawn(world)
+		return
+	# Навигационной карте нужен кадр физики, чтобы принять регион.
+	for i in 12:
+		await tree.physics_frame
+	var map: RID = world.get_world_3d().navigation_map
+	var from := Vector3(-8.0, 0.0, -8.0)
+	var checked := 0
+	for n in root.get_children():
+		if not String(n.name).begins_with("HidingSpot") or not (n is Node3D):
+			continue
+		checked += 1
+		var to: Vector3 = (n as Node3D).global_position
+		var path := NavigationServer3D.map_get_path(map, from, Vector3(to.x, 0.0, to.z), true)
+		if path.size() < 2:
+			rt.fail("до укрытия %s нет пути по навигации" % String(n.name))
+		elif path[path.size() - 1].distance_to(Vector3(to.x, 0.0, to.z)) > 3.0:
+			rt.fail("путь до %s обрывается далеко от цели" % String(n.name))
+	rt.check(checked > 0, "не нашлось ни одного укрытия для проверки")
+	_despawn(world)
+	await _settle(tree, 3)
