@@ -394,6 +394,21 @@ never_reset = sorted(n for n in persisted if n not in _reset_body)
 check("новая игра сбрасывает весь сохраняемый прогресс", not never_reset,
       ", ".join(never_reset))
 
+# ── 16. Быстрое сохранение и слоты хранят одно и то же ──────────────────────
+# Это два независимых блока кода с одинаковым смыслом, и они расходятся:
+# в слот забыли положить район, и загрузка слота возвращала игрока в
+# стартовые пригороды.
+_slot_save = _fn_body("save_slot")
+_slot_load = _fn_body("load_slot")
+_quick_keys = set(re.findall(r'"(\w+)":', _save_body))
+_slot_keys = set(re.findall(r'"(\w+)":', _slot_save)) - {"timestamp"}
+_quick_read = set(re.findall(r'data\.get\("(\w+)"', _load_body))
+_slot_read = set(re.findall(r'data\.get\("(\w+)"', _slot_load))
+key_gap = sorted((_quick_keys - _slot_keys) | (_slot_keys - _quick_keys)
+                 | (_quick_read - _slot_read))
+check("быстрое сохранение и слоты хранят одинаковый набор данных",
+      not key_gap, "расходятся ключи: " + ", ".join(key_gap))
+
 # ── вывод ───────────────────────────────────────────────────────────────────
 failed = [c for c in CHECKS if not c[1]]
 width = max(len(c[0]) for c in CHECKS)
