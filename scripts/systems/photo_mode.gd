@@ -5,10 +5,11 @@ var _active: bool = false
 var _filter_index: int = 0
 var _filters: Array = ["none", "noir", "sepia", "cold", "warm", "vhs"]
 
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("photo_mode"):
-		_toggle()
-
+## Клавишу photo_mode обрабатывает UIManager для своего оверлея
+## (scripts/ui/photo_mode.gd). Этот режим — тот, что открывается из галереи
+## экранов, и раньше он ловил ту же клавишу сам: после одного захода в
+## галерею нажатие переключало сразу оба оверлея. Здесь переключение
+## только явное, через toggle().
 func _toggle() -> void:
 	_active = !_active
 	if _active:
