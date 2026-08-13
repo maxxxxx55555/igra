@@ -105,7 +105,16 @@ func load_all() -> bool:
 	_last_daily_time = int(data.get("last_daily_time", 0))
 	SkillTreeManager.load_data(data.get("skill_tree", {}))
 	XpManager.load_data(data.get("xp", {}))
+	_resume_finale()
 	return true
+
+## В сохранении все 11 районов могут быть уже FULL. district_restored при
+## загрузке не эмитится, поэтому FinaleDirector сам об этом не узнает —
+## город восстановлен, а босса нет и победить нельзя. Просим его перепроверить.
+func _resume_finale() -> void:
+	var fd := get_node_or_null("/root/FinaleDirector")
+	if fd != null and fd.has_method("_maybe_start_finale"):
+		fd.call_deferred("_maybe_start_finale")
 
 func reset_all() -> void:
 	PowerGrid.reset()
@@ -130,6 +139,11 @@ func reset_all() -> void:
 	_daily_streak = 0
 	_last_daily_time = 0
 	Endings.reset()
+	# Финальная ночь помнит, что уже запускалась: без сброса второе
+	# прохождение шло бы вообще без Архитектора.
+	var fd := get_node_or_null("/root/FinaleDirector")
+	if fd != null and fd.has_method("reset"):
+		fd.reset()
 
 func consume_pending_player_pos() -> Vector3:
 	var p := _pending_player_pos
@@ -282,6 +296,7 @@ func load_slot(slot: int) -> bool:
 	_last_daily_time = int(data.get("last_daily_time", 0))
 	SkillTreeManager.load_data(data.get("skill_tree", {}))
 	XpManager.load_data(data.get("xp", {}))
+	_resume_finale()
 	return true
 
 func delete_slot(slot: int) -> bool:

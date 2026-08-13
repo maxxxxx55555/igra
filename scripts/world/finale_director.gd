@@ -31,6 +31,14 @@ func _ready() -> void:
 	EventBus.boss_defeated.connect(_on_boss_defeated)
 
 func _on_district_restored(_id: StringName, _stage: int) -> void:
+	_maybe_start_finale()
+
+## Проверяет условие финала и, если оно выполнено, запускает финальную ночь.
+## Вызывается и при восстановлении района, и после загрузки сохранения:
+## в сейве все 11 районов уже могут быть FULL, а district_restored при
+## загрузке не эмитится — без этого игрок оставался с восстановленным
+## городом, но без босса и без возможности победить.
+func _maybe_start_finale() -> void:
 	if _triggered:
 		return
 	var pg := get_node_or_null("/root/PowerGrid")
@@ -44,6 +52,14 @@ func _on_district_restored(_id: StringName, _stage: int) -> void:
 	var dm := get_node_or_null("/root/DistrictManager")
 	if dm != null and String(dm.current_district) == "power_station":
 		call_deferred("_spawn_boss")
+
+## Сброс при новой игре. Без него второе прохождение считало финал уже
+## запущенным, и Архитектор больше никогда не появлялся.
+func reset() -> void:
+	_triggered = false
+	if is_instance_valid(_boss):
+		_boss.queue_free()
+	_boss = null
 
 ## Босс ждёт игрока на электростанции: приходить туда нужно самому.
 func _on_district_entered(district_id: StringName) -> void:

@@ -409,6 +409,20 @@ key_gap = sorted((_quick_keys - _slot_keys) | (_slot_keys - _quick_keys)
 check("быстрое сохранение и слоты хранят одинаковый набор данных",
       not key_gap, "расходятся ключи: " + ", ".join(key_gap))
 
+# ── 17. Финал доступен после загрузки и во втором прохождении ───────────────
+# district_restored при загрузке не эмитится, поэтому сейв с 11 районами на
+# стадии FULL оставлял игрока в восстановленном городе без босса. А флаг
+# _triggered без сброса лишал Архитектора и вторую игру подряд.
+_finale = read("scripts/world/finale_director.gd")
+_load_paths = [p for p in ("load_all", "load_slot")
+               if "_resume_finale()" not in _fn_body(p)]
+check("финал перепроверяется после загрузки сохранения",
+      "func _resume_finale" in _save_src and not _load_paths,
+      "нет вызова _resume_finale() в: " + ", ".join(_load_paths))
+check("финал сбрасывается при новой игре",
+      "func reset" in _finale and "fd.reset()" in _reset_body,
+      "иначе второе прохождение идёт без босса")
+
 # ── вывод ───────────────────────────────────────────────────────────────────
 failed = [c for c in CHECKS if not c[1]]
 width = max(len(c[0]) for c in CHECKS)
