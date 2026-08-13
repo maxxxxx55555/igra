@@ -90,6 +90,12 @@ func _unhandled_input(event: InputEvent) -> void:
 			if _is_open(&"pause"):
 				close(&"pause")
 				GameManager.resume_game()
+			elif _topmost_closable() != &"":
+				# Escape сначала закрывает открытый справочник/карту. Раньше он
+				# сразу открывал паузу поверх «Кодекса»: два блокирующих экрана
+				# накладывались, а после «Продолжить» кодекс оставался висеть и
+				# продолжал прятать HUD.
+				close(_topmost_closable())
 			elif GameManager.is_playing():
 				open(&"pause")
 				GameManager.pause_game()
@@ -101,6 +107,17 @@ func _unhandled_input(event: InputEvent) -> void:
 			toggle(&"encyclopedia")
 		elif event.is_action_pressed("journal_toggle"):
 			toggle(&"journal")
+## Последний открытый блокирующий экран, который Escape вправе закрыть.
+## Само меню и экраны смерти/победы не трогаем: из них выходят кнопками.
+const _ESC_KEEP: Array = [&"main_menu", &"death", &"win", &"pause"]
+
+func _topmost_closable() -> StringName:
+	for i in range(_open_blocking.size() - 1, -1, -1):
+		var id: StringName = _open_blocking[i]
+		if not _ESC_KEEP.has(id):
+			return id
+	return &""
+
 func open(id: StringName) -> void:
 	# Справочные разделы больше не открываются сами по себе — только как
 	# вкладка «Кодекса», иначе игрок получал бы окно без ряда вкладок.

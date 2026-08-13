@@ -90,6 +90,7 @@ func _ready() -> void:
 	$BtnPause.pressed.connect(_on_pause)
 	_add_map_button()
 	EventBus.game_state_changed.connect(_on_game_state)
+	EventBus.hud_visibility_changed.connect(_on_hud_visibility)
 	_on_game_state(int(GameManager.current_state))
 
 func _cache_vignette_default() -> void:
@@ -220,6 +221,16 @@ func _set_weight_color(w: Control, ratio: float) -> void:
 
 func _on_game_state(state: int) -> void:
 	visible = state == GameManager.GameState.PLAYING or state == GameManager.GameState.PAUSED
+	if visible:
+		# HUD лежит на layer 20, а все экраны UIManager — на layer 10, поэтому
+		# бары и кнопка паузы рисовались ПОВЕРХ меню паузы и «Кодекса».
+		# UIManager уже сообщает, когда открыт блокирующий экран, — слушаем его.
+		visible = not UIManager.is_hud_blocked()
+
+## UIManager шлёт это при открытии/закрытии любого блокирующего экрана
+## (пауза, кодекс, карта, настройки) и при входе/выходе из фоторежима.
+func _on_hud_visibility(v: bool) -> void:
+	visible = v and (GameManager.is_playing() or GameManager.is_paused())
 
 func has_touch_ui() -> bool:
 	return DisplayServer.is_touchscreen_available() or OS.has_feature("mobile")
