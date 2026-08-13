@@ -35,7 +35,19 @@ func _ready() -> void:
 	# игра запускалась полностью беззвучной. Громкостью владеет SettingsManager.
 	AudioServer.set_bus_mute(0, false)
 	EventBus.enemy_killed.connect(func(_id: StringName) -> void: enemies_killed += 1)
+	# Смерть игрока не была ни с чем связана: player_3d.take_damage() при hp <= 0
+	# шлёт EventBus.game_over, но подписчик на него был только в game_over.gd,
+	# который живёт в scenes/ui/game_over.tscn и в игру не инстанцируется.
+	# В итоге игрок умирал, а игра продолжалась как ни в чём не бывало.
+	# trigger_death() переводит состояние в DEAD, и UIManager открывает экран.
+	EventBus.game_over.connect(_on_player_game_over)
 	_change_state(GameState.MENU)
+
+## Защита от повторного входа: урон может прийти несколько раз за кадр.
+func _on_player_game_over() -> void:
+	if current_state == GameState.DEAD:
+		return
+	trigger_death()
 
 func _process(delta: float) -> void:
 	if is_playing():
@@ -85,10 +97,14 @@ func resume_game() -> void:
 		get_tree().paused = false
 
 func trigger_death() -> void:
+	if current_state == GameState.DEAD:
+		return
 	Endings.mark_ended()
 	_change_state(GameState.DEAD)
 	get_tree().paused = false
-	EventBus.game_over.emit()
+	# game_over здесь НЕ переизлучаем: этот сигнал шлёт сам игрок, когда у него
+	# кончилось здоровье, и именно он нас сюда и привёл. Повторный emit гонял бы
+	# сигнал по кругу через _on_player_game_over.
 
 func trigger_win() -> void:
 	Endings.mark_ended()
