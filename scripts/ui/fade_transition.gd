@@ -8,6 +8,11 @@ var _overlay: ColorRect
 var _busy: bool = false
 
 func _ready() -> void:
+	# КРИТИЧНО: fade_to() вызывается ИЗ МЕНЮ ПАУЗЫ, то есть при
+	# get_tree().paused == true. Без PROCESS_MODE_ALWAYS твины этого узла
+	# стоят вместе с деревом, callback никогда не выполняется, и кнопки
+	# «В меню» / «Заново» просто вешали игру на чёрном экране.
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	layer = 100
 	_overlay = ColorRect.new()
 	_overlay.color = Color(0, 0, 0, 0)
