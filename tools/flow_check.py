@@ -128,6 +128,7 @@ check("зрение монстра учитывает заметность иг�
 check("укрытия расставляются в районах",
       "_spawn_hiding_spots" in read("scripts/world/district_scene_factory.gd"),
       "класс HidingSpot есть, но прятаться негде")
+
 check("игрок шлёт изменение батареи", "player_battery_changed.emit" in player)
 
 # ── 5. Пауза ────────────────────────────────────────────────────────────────
@@ -305,6 +306,68 @@ if os.path.exists(_bp):
 not_grouped = [p for p in not_grouped if p not in baseline_orphans]
 check("объекты с interact() состоят в группе interactable", not not_grouped,
       ", ".join(not_grouped[:3]))
+
+# ── 14. Число аргументов в вызовах методов автолоадов ───────────────────────
+# Лишний или недостающий аргумент — ошибка времени выполнения, которую
+# компилятор пропускает при динамическом обращении.
+def _call_arity(text: str) -> int:
+    depth = 0
+    count = 0
+    current = ""
+    for ch in text:
+        if ch in "([{":
+            depth += 1
+        elif ch in ")]}":
+            if depth == 0:
+                break
+            depth -= 1
+        if ch == "," and depth == 0:
+            count += 1
+            current = ""
+            continue
+        current += ch
+    if current.strip() or count > 0:
+        count += 1
+    return count
+
+
+def _func_sigs(rel: str, seen: set[str] | None = None) -> dict[str, tuple[int, int]]:
+    if seen is None:
+        seen = set()
+    if rel in seen:
+        return {}
+    seen.add(rel)
+    src = read(rel)
+    out: dict[str, tuple[int, int]] = {}
+    for m in re.finditer(r"^(?:static\s+)?func\s+(\w+)\s*\(([^)]*)\)", src, re.M):
+        params = [p.strip() for p in re.split(r",(?![^\[\]]*\])", m.group(2)) if p.strip()]
+        out[m.group(1)] = (len([p for p in params if "=" not in p]), len(params))
+    ext = re.search(r'^extends\s+"res://([^"]+)"', src, re.M)
+    if ext:
+        for k, v in _func_sigs(ext.group(1), seen).items():
+            out.setdefault(k, v)
+    return out
+
+
+auto_sigs = {n: _func_sigs(p[6:]) for n, p in auto_pairs}
+call_bad: list[str] = []
+if auto_sigs:
+    call_re = re.compile(r'(?<![\w."\'])(%s)\.(\w+)\('
+                         % "|".join(sorted(auto_sigs, key=len, reverse=True)))
+    for path, text in ALL.items():
+        for i, raw in enumerate(text.splitlines(), 1):
+            code = raw.split("#")[0]
+            for m in call_re.finditer(code):
+                sig = auto_sigs.get(m.group(1), {}).get(m.group(2))
+                if sig is None:
+                    continue
+                got = _call_arity(code[m.end():])
+                if got < sig[0] or got > sig[1]:
+                    call_bad.append("%s:%d %s.%s ждёт %d..%d, передано %d"
+                                    % (path, i, m.group(1), m.group(2),
+                                       sig[0], sig[1], got))
+check("число аргументов в вызовах автозагрузок верное", not call_bad,
+      "; ".join(call_bad[:3]))
 
 # ── вывод ───────────────────────────────────────────────────────────────────
 failed = [c for c in CHECKS if not c[1]]
