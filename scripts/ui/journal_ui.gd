@@ -9,6 +9,11 @@ extends Control
 ## и показывает полный текст в отдельной панели, а не всплывающим уведомлением
 ## на пару секунд.
 
+## Встроен во вкладку «Кодекса»: тогда экран не рисует свой затемняющий фон
+## и кнопку закрытия — их даёт общая рамка, — а панель растягивается на всю
+## вкладку вместо центрирования.
+var embedded: bool = false
+
 const CATALOG_PATH: String = "res://data/documents/documents_catalog.json"
 
 var _list: VBoxContainer = null
@@ -45,13 +50,17 @@ func _build() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = ThemeProvider.build_theme()
-	var bg := ColorRect.new()
-	bg.color = Color(0.04, 0.05, 0.07, 0.94)
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	add_child(bg)
+	if not embedded:
+		var bg := ColorRect.new()
+		bg.color = Color(0.04, 0.05, 0.07, 0.94)
+		bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+		add_child(bg)
 
 	var panel := PanelContainer.new()
-	panel.set_anchors_preset(Control.PRESET_CENTER)
+	if embedded:
+		panel.set_anchors_preset(Control.PRESET_FULL_RECT)
+	else:
+		panel.set_anchors_preset(Control.PRESET_CENTER)
 	panel.custom_minimum_size = Vector2(860, 500)
 	add_child(panel)
 
@@ -96,12 +105,13 @@ func _build() -> void:
 	_reader_text.add_theme_color_override("default_color", ThemeProvider.COLOR_TEXT)
 	rv.add_child(_reader_text)
 
-	var back := Button.new()
-	back.text = LocalizationManager.t("ui_close")
-	back.focus_mode = Control.FOCUS_NONE
-	back.custom_minimum_size = Vector2(160, 38)
-	back.pressed.connect(func() -> void: UIManager.close(&"journal"))
-	vb.add_child(back)
+	if not embedded:
+		var back := Button.new()
+		back.text = LocalizationManager.t("ui_close")
+		back.focus_mode = Control.FOCUS_NONE
+		back.custom_minimum_size = Vector2(160, 38)
+		back.pressed.connect(func() -> void: UIManager.close(&"journal"))
+		vb.add_child(back)
 	_refresh()
 
 func _refresh() -> void:

@@ -161,6 +161,7 @@ scripts/ui/achievements_ui.gd
 scripts/ui/asset_registry.gd
 scripts/ui/character_screen.gd
 scripts/ui/city_map.gd
+scripts/ui/codex_ui.gd
 scripts/ui/coin_hud.gd
 scripts/ui/confirm_quit.gd
 scripts/ui/controls.gd

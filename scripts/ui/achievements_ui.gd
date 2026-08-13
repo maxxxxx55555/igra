@@ -7,6 +7,11 @@ extends Control
 ## и не знал об остальных шестнадцати. Теперь список берётся у менеджера
 ## через get_all() — он же отдаёт переведённые name/description.
 
+## Встроен во вкладку «Кодекса»: тогда экран не рисует свой затемняющий фон
+## и кнопку закрытия — их даёт общая рамка, — а панель растягивается на всю
+## вкладку вместо центрирования.
+var embedded: bool = false
+
 var _list: VBoxContainer
 var _counter: Label
 func _ready() -> void:
@@ -16,12 +21,16 @@ func _build() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = ThemeProvider.build_theme()
-	var bg := ColorRect.new()
-	bg.color = Color(0.04, 0.05, 0.07, 0.94)
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	add_child(bg)
+	if not embedded:
+		var bg := ColorRect.new()
+		bg.color = Color(0.04, 0.05, 0.07, 0.94)
+		bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+		add_child(bg)
 	var panel := PanelContainer.new()
-	panel.set_anchors_preset(Control.PRESET_CENTER)
+	if embedded:
+		panel.set_anchors_preset(Control.PRESET_FULL_RECT)
+	else:
+		panel.set_anchors_preset(Control.PRESET_CENTER)
 	panel.custom_minimum_size = Vector2(520, 460)
 	add_child(panel)
 	var vb := VBoxContainer.new()
@@ -44,11 +53,12 @@ func _build() -> void:
 	_list.add_theme_constant_override("separation", 8)
 	_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.add_child(_list)
-	var back := Button.new()
-	back.text = LocalizationManager.t("ui_close")
-	back.focus_mode = Control.FOCUS_NONE
-	back.pressed.connect(func() -> void: UIManager.close(&"achievements"))
-	vb.add_child(back)
+	if not embedded:
+		var back := Button.new()
+		back.text = LocalizationManager.t("ui_close")
+		back.focus_mode = Control.FOCUS_NONE
+		back.pressed.connect(func() -> void: UIManager.close(&"achievements"))
+		vb.add_child(back)
 	_refresh()
 func _refresh() -> void:
 	for c in _list.get_children():

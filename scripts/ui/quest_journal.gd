@@ -1,6 +1,11 @@
 extends Control
 class_name QuestJournal
 
+## Встроен во вкладку «Кодекса»: тогда экран не рисует свой затемняющий фон
+## и кнопку закрытия — их даёт общая рамка, — а панель растягивается на всю
+## вкладку вместо центрирования.
+var embedded: bool = false
+
 var _tab_bar: HBoxContainer
 var _quest_list: VBoxContainer
 var _detail_panel: VBoxContainer
@@ -19,13 +24,17 @@ func _build_ui() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = ThemeProvider.build_theme()
 
-	var bg := ColorRect.new()
-	bg.color = Color(0.04, 0.05, 0.07, 0.94)
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	add_child(bg)
+	if not embedded:
+		var bg := ColorRect.new()
+		bg.color = Color(0.04, 0.05, 0.07, 0.94)
+		bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+		add_child(bg)
 
 	var panel := PanelContainer.new()
-	panel.set_anchors_preset(Control.PRESET_CENTER)
+	if embedded:
+		panel.set_anchors_preset(Control.PRESET_FULL_RECT)
+	else:
+		panel.set_anchors_preset(Control.PRESET_CENTER)
 	panel.custom_minimum_size = Vector2(760, 520)
 	add_child(panel)
 
@@ -78,11 +87,12 @@ func _build_ui() -> void:
 	detail_scroll.add_child(_detail_panel)
 	right_vb.add_child(detail_scroll)
 
-	var close_btn := Button.new()
-	close_btn.text = LocalizationManager.t("SCR_ZAKRYT")
-	close_btn.focus_mode = Control.FOCUS_NONE
-	close_btn.pressed.connect(func() -> void: UIManager.close(&"quest_journal"))
-	right_vb.add_child(close_btn)
+	if not embedded:
+		var close_btn := Button.new()
+		close_btn.text = LocalizationManager.t("SCR_ZAKRYT")
+		close_btn.focus_mode = Control.FOCUS_NONE
+		close_btn.pressed.connect(func() -> void: UIManager.close(&"quest_journal"))
+		right_vb.add_child(close_btn)
 
 	_refresh_list()
 

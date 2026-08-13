@@ -39,6 +39,9 @@ func _build() -> void:
 	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vb.add_child(t)
 	_btn(vb, LocalizationManager.t("resume"),   func() -> void: UIManager.close(&"pause"); GameManager.resume_game())
+	# «Кодекс» (журнал, задания, достижения, характеристики, бестиарий) раньше
+	# открывался только с клавиатуры — на телефоне разделы были недоступны.
+	_btn(vb, LocalizationManager.t("CODEX_TITLE"), func() -> void: UIManager.open_codex(&"journal"))
 	_btn(vb, LocalizationManager.t("settings"), func() -> void: UIManager.open(&"settings"))
 	_btn(vb, LocalizationManager.t("restart"),  func() -> void: FadeTransition.fade_to(func() -> void: Routes.restart_game()))
 	_btn(vb, LocalizationManager.t("back_menu"),func() -> void: FadeTransition.fade_to(func() -> void: GameManager.return_to_menu()))
