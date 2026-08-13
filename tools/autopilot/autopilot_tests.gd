@@ -203,15 +203,36 @@ func _t_hiding(tree: SceneTree, rt: RefCounted) -> void:
 	await _settle(tree)
 	if not p.has_method("toggle_hiding"):
 		rt.fail("нет toggle_hiding()")
+		_despawn(spot)
+		_despawn(p)
+		return
+	# Настоящий монстр рядом с игроком: до укрытия он обязан его видеть,
+	# после — нет. Проверяем вызовом _can_see_player(), а не чтением кода.
+	var monster := _spawn(tree, "res://scenes/enemies/watcher_3d.tscn")
+	if monster != null:
+		await _settle(tree, 4)
+		(monster as Node3D).global_position = Vector3.ZERO
+		(p as Node3D).global_position = Vector3(0.0, 0.0, -2.0)
+		monster.set("player_ref", p)
+		await _settle(tree, 2)
+		var seen_before: bool = true
+		if monster.has_method("_can_see_player"):
+			seen_before = bool(monster.call("_can_see_player"))
+		p.toggle_hiding(spot)
+		await _settle(tree, 3)
+		rt.check(float(p.visibility) <= 0.01, "в укрытии видимость не обнулилась")
+		if monster.has_method("_can_see_player"):
+			rt.check(seen_before, "монстр не видел игрока даже до укрытия — проверка бессмысленна")
+			rt.check(not bool(monster.call("_can_see_player")),
+				"монстр продолжает видеть игрока внутри укрытия")
+		else:
+			rt.fail("у монстра нет _can_see_player()")
+		_despawn(monster)
 	else:
 		p.toggle_hiding(spot)
 		await _settle(tree, 2)
 		rt.check(float(p.visibility) <= 0.01, "в укрытии видимость не обнулилась")
-		# Ключевая связка: зрение монстра обязано читать visibility игрока.
-		var mon_script := load("res://scripts/enemies/base_monster.gd")
-		if mon_script != null:
-			var src: String = mon_script.source_code
-			rt.check("visibility" in src, "зрение монстра не смотрит на visibility игрока")
+		rt.fail("не поднялась сцена монстра — стелс проверен только наполовину")
 	_despawn(spot)
 	_despawn(p)
 	await _settle(tree, 2)
@@ -222,12 +243,35 @@ func _t_door(tree: SceneTree, rt: RefCounted) -> void:
 	if inv == null or door_script == null:
 		rt.unavailable("нет InventoryManager или скрипта двери")
 		return
-	# Дверь должна спрашивать ключ у автозагрузки, а не искать его в игроке.
-	var src: String = door_script.source_code
-	rt.check("InventoryManager" in src, "дверь не обращается к InventoryManager")
-	rt.check(not ("player.get_node_or_null(\"InventoryManager\")" in src),
-		"дверь ищет инвентарь внутри игрока — там его нет")
-	rt.check(not ("has_item(" in src), "дверь зовёт несуществующий has_item()")
+	# Дверь строим вручную: @onready ждёт MeshInstance3D и CollisionShape3D,
+	# отдельной сцены двери в проекте нет.
+	var door := StaticBody3D.new()
+	door.set_script(door_script)
+	var mi := MeshInstance3D.new()
+	mi.name = "MeshInstance3D"
+	mi.mesh = BoxMesh.new()
+	door.add_child(mi)
+	var cs := CollisionShape3D.new()
+	cs.name = "CollisionShape3D"
+	cs.shape = BoxShape3D.new()
+	door.add_child(cs)
+	tree.root.add_child(door)
+	await _settle(tree, 4)
+	door.set("required_key", "key")
+	inv.remove(&"key", 99)
+	await _settle(tree, 2)
+	# Без ключа дверь обязана остаться закрытой.
+	door.call("interact", null)
+	await _settle(tree, 3)
+	rt.check(not bool(door.get("is_open")), "дверь открылась без ключа")
+	# С ключом — открыться.
+	rt.check(inv.try_add(&"key", 1), "ключ не удалось положить в инвентарь")
+	await _settle(tree, 2)
+	door.call("interact", null)
+	await _settle(tree, 3)
+	rt.check(bool(door.get("is_open")), "дверь не открылась при наличии ключа")
+	inv.remove(&"key", 99)
+	_despawn(door)
 	await _settle(tree, 2)
 
 ## Путь настоящего сохранения игрока. Тест его перезаписывает, поэтому
