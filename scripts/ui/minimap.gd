@@ -17,7 +17,11 @@ const DISTRICT_LABELS: Dictionary = {
 var _tick: float = 0.0
 var _current_district: StringName = &""
 func _ready() -> void:
-	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# Нажатие по миникарте открывает полную карту города — привычный жест
+	# из мобильных игр. Раньше стоял MOUSE_FILTER_IGNORE, и клик проваливался
+	# сквозь неё в игровой мир: игрок жал по карте, а персонаж стрелял.
+	mouse_filter = Control.MOUSE_FILTER_STOP
+	tooltip_text = LocalizationManager.t("MAP_OPEN_HINT")
 	custom_minimum_size = SIZE
 	size = SIZE
 	anchor_left = 1.0
@@ -31,6 +35,20 @@ func _ready() -> void:
 		EventBus.district_entered.connect(func(id: StringName) -> void:
 			_current_district = id
 			queue_redraw())
+## Открывает полноэкранную карту города по тапу/клику.
+func _gui_input(event: InputEvent) -> void:
+	if not GameManager.is_playing():
+		return
+	var tapped: bool = false
+	if event is InputEventMouseButton:
+		var mb := event as InputEventMouseButton
+		tapped = mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT
+	elif event is InputEventScreenTouch:
+		tapped = (event as InputEventScreenTouch).pressed
+	if tapped:
+		accept_event()
+		UIManager.open(&"city_map")
+
 func _process(delta: float) -> void:
 	_tick += delta
 	if _tick >= 0.1: _tick = 0.0; queue_redraw()

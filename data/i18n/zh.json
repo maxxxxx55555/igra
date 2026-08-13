@@ -239,6 +239,7 @@
   "Locked": "已锁定",
   "MAIN_SETTINGS": "设置",
   "MAP_LOCKED_BY": "Locked by: %s",
+  "MAP_OPEN_HINT": "打开城市地图",
   "MAP_PROGRESS": "City power grid: %d of %d districts",
   "MAP_STAGE_0": "Dark",
   "MAP_STAGE_1": "Partial power",

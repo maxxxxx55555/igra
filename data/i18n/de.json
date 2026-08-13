@@ -239,6 +239,7 @@
   "Locked": "Gesperrt",
   "MAIN_SETTINGS": "Einstellungen",
   "MAP_LOCKED_BY": "Locked by: %s",
+  "MAP_OPEN_HINT": "Stadtkarte öffnen",
   "MAP_PROGRESS": "City power grid: %d of %d districts",
   "MAP_STAGE_0": "Dark",
   "MAP_STAGE_1": "Partial power",
