@@ -122,10 +122,13 @@ func _setup_weight_bar() -> void:
 	add_child(poll)
 
 ## Бары шум/заметность (спека 3.10/3.11). Заполняются по игроку.
-@onready var noise_fill: ColorRect = $TopLeft/NoiseF
-@onready var noise_caption: Label = $TopLeft/NoiseLabel
-@onready var vis_fill: ColorRect = $TopLeft/VisibilityF
-@onready var vis_caption: Label = $TopLeft/VisibilityLabel
+## get_node_or_null, а не $: при отсутствии ноды $ роняет весь _ready() HUD-а
+## ("Node not found: TopLeft/NoiseLabel"), и вместе с ним гаснут HP/батарея.
+## Ниже по коду все обращения и так закрыты проверками `if noise_fill:`.
+@onready var noise_fill: ColorRect = get_node_or_null("TopLeft/NoiseF") as ColorRect
+@onready var noise_caption: Label = get_node_or_null("TopLeft/NoiseLabel") as Label
+@onready var vis_fill: ColorRect = get_node_or_null("TopLeft/VisibilityF") as ColorRect
+@onready var vis_caption: Label = get_node_or_null("TopLeft/VisibilityLabel") as Label
 
 const _BAR_L: float = 88.0
 const _BAR_W: float = 222.0  # 88 -> 310 px
