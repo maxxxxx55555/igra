@@ -12,7 +12,13 @@ cd "$(dirname "$0")/.."
 
 GODOT="${GODOT:-godot}"
 STATIC_ONLY=0
-[[ "${1:-}" == "--static" ]] && STATIC_ONLY=1
+SKIP_SLOW=0
+for arg in "$@"; do
+	case "$arg" in
+		--static) STATIC_ONLY=1 ;;   # без гейтов, которым нужен Godot
+		--fast)   SKIP_SLOW=1 ;;     # без gdparse (~90 с на 285 файлах)
+	esac
+done
 
 PASS=0
 FAIL=0
@@ -156,7 +162,7 @@ head_ "Мёртвый код"
 if python3 tools/orphan_check.py; then ok "orphan_check"; else bad "orphan_check"; fi
 
 # Синтаксис GDScript (gdparse). Медленно (~90 с), поэтому только без --fast.
-if [[ "${1:-}" != "--fast" ]]; then
+if [[ $SKIP_SLOW -eq 0 ]]; then
   head_ "Синтаксис GDScript"
   if ./tools/gdparse_check.sh; then ok "gdparse"; else bad "gdparse"; fi
 fi

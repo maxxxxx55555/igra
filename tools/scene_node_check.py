@@ -81,6 +81,22 @@ def main() -> int:
     else:
         print(f"  OK   проверено {len(scenes) + len(resources)} файлов")
 
+    # ── 1b. UTF-8 BOM ───────────────────────────────────────────────────────
+    print("\n── BOM в начале файла")
+    boms = []
+    for p in scenes + resources + sorted(glob.glob("scripts/**/*.gd", recursive=True)):
+        if "/.git" in p:
+            continue
+        with open(p, "rb") as fh:
+            if fh.read(3) == b"\xef\xbb\xbf":
+                boms.append(p)
+    if boms:
+        problems += len(boms)
+        for p in boms:
+            print("  FAIL %s  — BOM стоит перед [gd_scene], парсер видит битый заголовок" % p)
+    else:
+        print("  OK   BOM не найден")
+
     # ── 2. Resource, объявленный как [node] ─────────────────────────────────
     print("\n── Ресурсы, ошибочно объявленные как [node]")
     bad_nodes = []
