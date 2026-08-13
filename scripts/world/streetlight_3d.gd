@@ -6,9 +6,16 @@ extends Node3D
 
 var _on: bool = false
 var _t: float = 0.0
+## Секунды до конца аварийного отключения. RandomEvents шлёт
+## district_blackout, но слушал его только 2D-фонарь из старой версии —
+## в 3D-мире событие ничего не гасило.
+var _blackout: float = 0.0
+
+const BLACKOUT_SECONDS: float = 15.0
 
 func _ready() -> void:
 	EventBus.district_stage_changed.connect(_on_stage_changed)
+	EventBus.district_blackout.connect(_on_blackout)
 	if force_on:
 		_on = true
 	var dm := get_node_or_null("/root/DistrictManager")
@@ -19,6 +26,11 @@ func _ready() -> void:
 	_update_light(st)
 
 func _process(delta: float) -> void:
+	if _blackout > 0.0:
+		_blackout -= delta
+		if _blackout <= 0.0:
+			_update_light()
+		return
 	if not _on or not lamp_flicker:
 		return
 	_t += delta
@@ -35,11 +47,26 @@ func _on_stage_changed(id: StringName, stage: int) -> void:
 		_on = stage >= 2
 		_update_light(stage)
 
+## Аварийное отключение района: гасим фонарь на BLACKOUT_SECONDS, после чего
+## _process сам вернёт свет через _update_light().
+func _on_blackout(id: StringName) -> void:
+	if id != district_id or not _on:
+		return
+	_blackout = BLACKOUT_SECONDS
+	var spot := get_node_or_null("SpotLight") as SpotLight3D
+	var glow := get_node_or_null("Glow") as OmniLight3D
+	if spot != null:
+		spot.visible = false
+	if glow != null:
+		glow.visible = false
+	_update_hum()
+
 func _update_light(stage: int = -1) -> void:
 	var spot: SpotLight3D = $SpotLight
 	var glow: OmniLight3D = $Glow
-	spot.visible = _on
-	glow.visible = _on
+	# Во время блэкаута свет остаётся выключенным, чем бы ни кончилась стадия.
+	spot.visible = _on and _blackout <= 0.0
+	glow.visible = _on and _blackout <= 0.0
 	_update_hum()
 	if _on and stage >= 3:
 		spot.light_energy = 3.5
@@ -57,7 +84,8 @@ func _update_hum() -> void:
 	var hum := get_node_or_null("Hum") as AudioStreamPlayer3D
 	if hum == null:
 		return
-	if _on and not hum.playing:
+	var should_hum: bool = _on and _blackout <= 0.0
+	if should_hum and not hum.playing:
 		hum.play()
-	elif not _on and hum.playing:
+	elif not should_hum and hum.playing:
 		hum.stop()
