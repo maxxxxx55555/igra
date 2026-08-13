@@ -29,7 +29,6 @@ scripts/core/routes.gd
 scripts/core/save_data.gd
 scripts/core/save_system.gd
 scripts/core/theme_manager.gd
-scripts/core/transition_manager.gd
 scripts/crafting/crafting_manager.gd
 scripts/credits.gd
 scripts/cutscenes/cutscene_manager.gd
@@ -75,12 +74,10 @@ scripts/gameplay/craft_station.gd
 scripts/gameplay/door.gd
 scripts/gameplay/exploding_barrel.gd
 scripts/gameplay/health_pickup.gd
-scripts/gameplay/hiding_spot.gd
 scripts/gameplay/key_item.gd
 scripts/gameplay/weapon_pickup.gd
 scripts/gameplay/zone_trigger.gd
 scripts/generator.gd
-scripts/hiding/hiding_spot.gd
 scripts/i18n/localization_manager.gd
 scripts/i18n/localized_button.gd
 scripts/i18n/localized_label.gd
@@ -111,7 +108,6 @@ scripts/post_process_overlay.gd
 scripts/searchlight.gd
 scripts/splash.gd
 scripts/stress_test.gd
-scripts/system/particle_manager.gd
 scripts/systems/achievements_manager.gd
 scripts/systems/audio_manager.gd
 scripts/systems/day_night.gd
@@ -208,13 +204,11 @@ scripts/ui/settings_screen.gd
 scripts/ui/skill_button.gd
 scripts/ui/skill_tree_tab.gd
 scripts/ui/skill_tree_ui.gd
-scripts/ui/splash.gd
 scripts/ui/stats_screen.gd
 scripts/ui/stats_ui.gd
 scripts/ui/subtitle_manager.gd
 scripts/ui/theme_provider.gd
 scripts/ui/toast_manager.gd
-scripts/ui/touch_controls.gd
 scripts/ui/transition_manager.gd
 scripts/ui/tutorial_system.gd
 scripts/ui/ui_manager.gd
