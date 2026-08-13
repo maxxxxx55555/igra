@@ -43,6 +43,7 @@ func _init_empty_slots() -> void:
 	_recompute_weight()
 ## Навык "inventory_space" расширяет сумку. Существующие слоты не трогаем —
 ## только дописываем пустые в конец, иначе содержимое сместится.
+## Расширяет рюкзак на amount ячеек (улучшение «вместимость»).
 func add_slots(amount: int) -> void:
 	if amount <= 0:
 		return
@@ -50,6 +51,9 @@ func add_slots(amount: int) -> void:
 		slots.append(null)
 	EventBus.inventory_changed.emit()
 
+## Кладёт предмет в рюкзак. Возвращает false и шлёт inventory_notice,
+## если не хватает веса или свободных ячеек — предмет тогда остаётся в мире.
+## При успехе шлёт inventory_changed и item_picked_up.
 func try_add(item_id: StringName, amount: int = 1) -> bool:
 	var data := ItemDatabase.get_item(item_id)
 	if data == null or amount <= 0:
@@ -85,6 +89,8 @@ func try_add(item_id: StringName, amount: int = 1) -> bool:
 	elif _is_networked():
 		_request_add.rpc_id(1, item_id, amount)
 	return true
+## Убирает amount штук предмета. false, если столько не нашлось;
+## в этом случае рюкзак остаётся нетронутым.
 func remove(item_id: StringName, amount: int = 1) -> bool:
 	var remaining := amount
 	for i in slots.size():
@@ -106,6 +112,8 @@ func remove(item_id: StringName, amount: int = 1) -> bool:
 	elif _is_networked():
 		_request_remove.rpc_id(1, item_id, amount)
 	return true
+## Расходует предмет из ячейки. Сам эффект не применяет — шлёт
+## item_consumed(effect, value), а лечит и заряжает уже игрок.
 func use_item(slot_index: int) -> bool:
 	if slot_index < 0 or slot_index >= slots.size():
 		return false
@@ -127,19 +135,23 @@ func use_item(slot_index: int) -> bool:
 	elif _is_networked():
 		_request_use.rpc_id(1, slot_index)
 	return true
+## Есть ли в рюкзаке хотя бы amount штук предмета.
 func has(item_id: StringName, amount: int = 1) -> bool:
 	return count_of(item_id) >= amount
+## Сколько всего таких предметов лежит во всех ячейках.
 func count_of(item_id: StringName) -> int:
 	var total := 0
 	for s in slots:
 		if s != null and s["item_id"] == item_id:
 			total += s["count"]
 	return total
+## Заполненность по весу от 0 до 1 — HUD красит по ней полосу нагрузки.
 func weight_ratio() -> float:
 	return clampf(current_weight / maxf(0.001, stats.capacity_kg), 0.0, 1.0)
 
 ## GDD §V.5 9.8 — сортировка предметов.
 ## mode: "type" | "weight" | "rarity" | "recent"
+## Сортирует ячейки: "type" (по типу), "name" или "weight".
 func sort_slots(mode: String = "type") -> void:
 	var keyed: Array = []
 	for i in slots.size():
@@ -181,6 +193,7 @@ func _type_priority(d: ItemData) -> int:
 		ItemData.EquipSlot.HOLSTER: return 13
 		ItemData.EquipSlot.BACKPACK: return 14
 	return 50
+## Слепок для сохранения и сетевой синхронизации.
 func to_dict() -> Dictionary:
 	var data: Array = []
 	for s in slots:
@@ -195,6 +208,7 @@ func to_dict() -> Dictionary:
 			equip_ids[str(int(slot))] = String(equipment[slot]["item_id"])
 	return {"slots": data, "equipment": equip_ids}
 
+## Восстанавливает рюкзак из слепка to_dict().
 func from_dict(d: Dictionary) -> void:
 	_init_empty_slots()
 	var saved: Array = d.get("slots", []) as Array
@@ -213,6 +227,7 @@ func from_dict(d: Dictionary) -> void:
 					equipment[slot] = {"item_id": item_id, "count": 1}
 	_recompute_weight()
 	EventBus.inventory_changed.emit()
+## Надевает предмет из ячейки в соответствующий слот экипировки.
 func equip_item(slot_index: int) -> bool:
 	if slot_index < 0 or slot_index >= slots.size():
 		return false
@@ -243,6 +258,7 @@ func equip_item(slot_index: int) -> bool:
 		_request_equip.rpc_id(1, slot_index)
 	return true
 
+## Снимает экипировку обратно в рюкзак. false, если места нет.
 func unequip_item(slot: ItemData.EquipSlot) -> bool:
 	var cur = equipment.get(slot)
 	if cur == null:
@@ -261,6 +277,7 @@ func unequip_item(slot: ItemData.EquipSlot) -> bool:
 		_request_unequip.rpc_id(1, int(slot))
 	return true
 
+## Что надето в слоте: {item_id, count} или пустой словарь.
 func get_equipped(slot: ItemData.EquipSlot) -> Dictionary:
 	var cur = equipment.get(slot)
 	return (cur as Dictionary) if cur is Dictionary else {}

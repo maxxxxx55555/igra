@@ -53,10 +53,13 @@ func _process(delta: float) -> void:
 	if is_playing():
 		play_time += delta
 
+## Отмечает уровень как пройденный. Понижать прогресс нельзя.
 func unlock_level(level: int) -> void:
 	if level > current_level:
 		current_level = level
 
+## Сбрасывает счётчики забега (уровень, время, убийства).
+## Сохранения не трогает — этим занимается SaveSystem.reset_all().
 func reset_run() -> void:
 	current_level = 1
 	play_time = 0.0
@@ -68,10 +71,14 @@ func _change_state(new_state: GameState) -> void:
 	current_state = new_state
 	EventBus.game_state_changed.emit(int(new_state))
 
+## Новая игра: стирает сохранение и переводит автолоады в бой.
+## Сцену НЕ меняет — за переход отвечает вызывающий (Routes.start_game()).
 func start_new_game() -> void:
 	SaveSystem.reset_all()
 	_enter_play_and_reload()
 
+## Продолжить с сохранения. Если файла нет — шлёт уведомление и
+## остаётся в текущем состоянии, состояние игры не меняется.
 func continue_game() -> void:
 	if not SaveSystem.load_all():
 		EventBus.inventory_notice.emit(LocalizationManager.t("NO_SAVE"))
@@ -86,16 +93,21 @@ func _enter_play_and_reload() -> void:
 	UIManager.close_all_blocking()
 	EventBus.game_started.emit()
 
+## Ставит игру на паузу. Действует только из состояния PLAYING,
+## поэтому повторный вызов из меню безопасен.
 func pause_game() -> void:
 	if current_state == GameState.PLAYING:
 		_change_state(GameState.PAUSED)
 		get_tree().paused = true
 
+## Снимает паузу. Действует только из состояния PAUSED.
 func resume_game() -> void:
 	if current_state == GameState.PAUSED:
 		_change_state(GameState.PLAYING)
 		get_tree().paused = false
 
+## Конец забега со смертью: состояние DEAD, экран смерти откроет UIManager.
+## Пауза снимается — иначе экран смерти замер бы вместе с деревом.
 func trigger_death() -> void:
 	if current_state == GameState.DEAD:
 		return
@@ -106,11 +118,15 @@ func trigger_death() -> void:
 	# кончилось здоровье, и именно он нас сюда и привёл. Повторный emit гонял бы
 	# сигнал по кругу через _on_player_game_over.
 
+## Победа: состояние WIN, экран победы откроет UIManager.
+## Зовётся из FinaleDirector после гибели босса.
 func trigger_win() -> void:
 	Endings.mark_ended()
 	_change_state(GameState.WIN)
 	EventBus.game_won.emit()
 
+## Возврат в главное меню из любого состояния: снимает паузу,
+## закрывает все блокирующие экраны и переводит состояние в MENU.
 func return_to_menu() -> void:
 	get_tree().paused = false
 	var was_menu := current_state == GameState.MENU
