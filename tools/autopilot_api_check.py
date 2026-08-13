@@ -113,7 +113,16 @@ def main() -> int:
         target = ROOT / path.replace("res://", "")
         ok(target.exists(), f"автопилот ссылается на несуществующий путь {path}")
 
-    # 4. Сигналы EventBus, на которые подписывается автопилот.
+    # 4. Каждый тест из collect() должен быть реализован, и наоборот.
+    listed = set(re.findall(r'"fn":\s*(_t_\w+)', src))
+    defined = set(re.findall(r"^func\s+(_t_\w+)", src, re.M))
+    for name in sorted(listed - defined):
+        ok(False, f"тест {name} заявлен в collect(), но не реализован")
+    for name in sorted(defined - listed):
+        ok(False, f"тест {name} реализован, но не попал в collect() — не запустится")
+    ok(len(listed) > 0, "в collect() нет ни одного теста")
+
+    # 5. Сигналы EventBus, на которые подписывается автопилот.
     bus = ROOT / "scripts/events/event_bus.gd"
     if bus.exists():
         bus_signals = set(re.findall(r"^signal\s+(\w+)", bus.read_text(encoding="utf-8"), re.M))

@@ -14,6 +14,17 @@
 > описано, как сгенерировать и закоммитить `.import`/`.uid`, и что проверить
 > глазами (раскладка HUD, свет, положение укрытий).
 
+## Проверить игру одной командой
+
+Полный автоматический прогон внутри настоящего Godot — без ручного
+тестирования. Команда и что прислать в ответ:
+[`docs/ONE_COMMAND_TEST.md`](docs/ONE_COMMAND_TEST.md).
+
+Отчёт появится в `tools/autopilot_report/report.txt`, скриншоты —
+в `tools/autopilot_report/shots/`. Подробности установки —
+[`docs/SETUP.md`](docs/SETUP.md), состояние проекта —
+[`docs/HANDOFF.md`](docs/HANDOFF.md).
+
 ## Сборка APK (Android)
 
 ### Требования
