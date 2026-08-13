@@ -2,7 +2,7 @@
 extends StaticBody3D
 
 @export 
-var required_key: String = "key_red"
+var required_key: String = "key"
 
 @export 
 var is_open: bool = false
@@ -13,15 +13,35 @@ var mesh: MeshInstance3D = $MeshInstance3D
 @onready 
 var collision: CollisionShape3D = $CollisionShape3D
 
-func interact(player: Node3D) -> void:
+func _ready() -> void:
+	# Без этой группы Interactor дверь не видел: он опрашивает
+	# get_tree().get_nodes_in_group("interactable"), а дверь туда не вставала —
+	# подойти и открыть её было невозможно.
+	add_to_group("interactable")
+
+func interact(_player: Node3D) -> void:
 	if is_open:
 		return
-	
-	var inv := player.get_node_or_null("InventoryManager")
-	if inv and inv.has_item(required_key):
+	# InventoryManager — автозагрузка, он лежит в /root, а не внутри игрока:
+	# player.get_node_or_null("InventoryManager") всегда возвращал null,
+	# поэтому дверь считалась запертой даже с нужным ключом в рюкзаке.
+	# Метода has_item() в инвентаре тоже нет — API называется has().
+	var inv := get_node_or_null("/root/InventoryManager")
+	if inv != null and inv.has_method("has") and inv.has(StringName(required_key)):
 		_open()
 	else:
 		_show_locked()
+
+## Подсказка в HUD. Ключи берём из существующего словаря (13 локалей),
+## новых не заводим.
+func interact_prompt() -> String:
+	if is_open:
+		return ""
+	return LocalizationManager.t("Locked")
+
+## Открытую дверь больше не предлагаем открыть повторно.
+func can_interact() -> bool:
+	return not is_open
 
 func _open() -> void:
 	is_open = true
