@@ -30,10 +30,24 @@ var _provider: Object = null
 var _last_shown_ms: int = -1
 var _in_flight: bool = false
 
+const CrazyGamesStub := preload("res://scripts/monetization/stub_crazy_games.gd")
+
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS  # ролик показывается и на паузе
-	_provider = StubAdProvider.new(self)
-	_provider.initialize()
+	set_provider(_default_provider())
+
+## В вебе настоящего SDK нет — ставим заглушку, которая честно говорит
+## «роликов нет» и не роняет сборку. Везде остальное — отладочная заглушка.
+func _default_provider() -> Object:
+	if OS.has_feature("web"):
+		return CrazyGamesStub.new(self)
+	return StubAdProvider.new(self)
+
+## Подмена поставщика: сюда придёт настоящий SDK, отсюда же его берут тесты.
+func set_provider(provider: Object) -> void:
+	_provider = provider
+	if _provider != null:
+		_provider.initialize()
 
 ## Готов ли ролик к показу прямо сейчас. Причина отказа не возвращается —
 ## вызывающему достаточно знать, показывать ли кнопку.
@@ -76,10 +90,10 @@ func _cooldown_left() -> float:
 	return maxf(0.0, COOLDOWN_SEC - passed)
 
 
-## Заглушка: ждёт 3 секунды и выдаёт награду. Ничего не грузит из сети,
+## Заглушка: показывает окно с отсчётом и кнопкой. Ничего не грузит из сети,
 ## поэтому годится и для автопилота, и для отладки в редакторе.
 class StubAdProvider:
-	const WATCH_SEC: float = 3.0
+	const POPUP := preload("res://scripts/monetization/ad_popup.gd")
 
 	var _service: Node
 
@@ -93,5 +107,10 @@ class StubAdProvider:
 		return true
 
 	func show(reward_id: StringName) -> void:
-		var t := _service.get_tree().create_timer(WATCH_SEC, true, false, true)
-		t.timeout.connect(func() -> void: _service._on_provider_reward(reward_id))
+		var popup := POPUP.new()
+		popup.name = "AdPopup"  # по этому имени окно находит автопилот
+		popup.claimed.connect(func() -> void: _service._on_provider_reward(reward_id))
+		popup.dismissed.connect(func() -> void: _service._on_provider_failed("игрок закрыл ролик"))
+		# Показ могут запросить из _ready другого узла, когда root ещё занят
+		# расстановкой детей — прямой add_child() там молча проваливается.
+		_service.get_tree().root.add_child.call_deferred(popup)

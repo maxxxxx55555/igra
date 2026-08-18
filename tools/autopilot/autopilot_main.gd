@@ -217,8 +217,23 @@ func _check_ad_flow() -> String:
 	ad.ad_failed.connect(func(reason): failed.append(reason))
 
 	ad.show_rewarded(&"bonus_coins")
-	# Заглушка ждёт 3 с игрового времени, даём запас.
+	await get_tree().process_frame  # окно добавляется отложенно
+	await get_tree().process_frame
+	var popup := get_tree().root.get_node_or_null("AdPopup")
+	if popup == null:
+		return "окно ролика не появилось"
+	var button := popup.find_child("ClaimButton", true, false) as Button
+	if button == null:
+		return "в окне нет кнопки ClaimButton"
+	if not button.disabled:
+		return "кнопку награды можно нажать до конца отсчёта"
+
+	# Отсчёт идёт 3 с игрового времени, даём запас.
 	await get_tree().create_timer(4.0, true, false, true).timeout
+	if button.disabled:
+		return "кнопка награды не разблокировалась за 4 с"
+	button.pressed.emit()  # то же, что нажатие игрока
+	await get_tree().process_frame
 
 	if not failed.is_empty():
 		return "осечка: " + String(failed[0])

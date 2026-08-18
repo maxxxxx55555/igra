@@ -58,6 +58,10 @@ func _ready() -> void:
 	# (иначе затрём выбор, который LocalizationManager определит сам).
 	if load_from_cfg():
 		call_deferred("_apply_locale", _language)
+	# _load_defaults() только кладёт fps_cap в словарь. Без этого вызова
+	# Engine.max_fps оставался нулём на свежей установке: кадры не ограничивались
+	# ничем, телефон грелся и жёг батарею на меню.
+	set_fps_cap(int(_settings.get("fps_cap", 1)))
 
 func _load_defaults() -> void:
 	_settings["difficulty"] = 1  # Normal
