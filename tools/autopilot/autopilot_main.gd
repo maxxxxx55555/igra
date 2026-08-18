@@ -25,8 +25,10 @@ func _ready() -> void:
 	_run("звуки монстров на диске", _check_sfx)
 	_run("локализация: 13 языков, паритет ключей", _check_i18n)
 	_run("тема и шрифты грузятся", _check_theme)
+	_run("у каждого предмета есть иконка", _check_item_icons)
 	_run("ключевые сцены инстанцируются", _check_scenes)
 	_run("сохранение переживает круг save->load", _check_save_roundtrip)
+	await _run_async("реклама за награду доходит до выдачи", _check_ad_flow)
 	_write()
 	get_tree().quit(1 if _fail > 0 else 0)
 
@@ -133,6 +135,23 @@ func _check_theme() -> String:
 			bad.append(f.get_file())
 	return "" if bad.is_empty() else "битые шрифты: " + ", ".join(bad)
 
+## ItemDatabase подхватывает иконку молча: нет файла — предмет останется без
+## картинки и в инвентаре будет пустая клетка. Здесь это становится видно.
+func _check_item_icons() -> String:
+	var db := get_node_or_null("/root/ItemDatabase")
+	if db == null:
+		return "ItemDatabase не поднялся"
+	var bad: Array[String] = []
+	var ids: Array = db.all_ids()
+	for id in ids:
+		var item = db.get_item(id)
+		if item == null:
+			bad.append(String(id) + ": нет в базе")
+		elif item.icon == null:
+			bad.append(String(id))
+	_note("предметов: %d" % ids.size())
+	return "" if bad.is_empty() else "без иконки: " + ", ".join(bad)
+
 func _check_scenes() -> String:
 	var bad: Array[String] = []
 	for path in [
@@ -183,10 +202,52 @@ func _check_save_roundtrip() -> String:
 		return "монеты не восстановились: ждали %d, получили %d" % [marker, after]
 	return ""
 
+## Полный круг: запросили ролик -> заглушка досмотрела -> награда пришла.
+## Заодно проверяем, что кулдаун закрывает повторный показ.
+func _check_ad_flow() -> String:
+	var ad := get_node_or_null("/root/AdService")
+	if ad == null:
+		return "AdService не поднялся"
+	if not ad.is_rewarded_ready():
+		return "заглушка сообщает, что ролик не готов"
+
+	var got: Array = []
+	var failed: Array = []
+	ad.reward_granted.connect(func(id, amount): got.append([id, amount]))
+	ad.ad_failed.connect(func(reason): failed.append(reason))
+
+	ad.show_rewarded(&"bonus_coins")
+	# Заглушка ждёт 3 с игрового времени, даём запас.
+	await get_tree().create_timer(4.0, true, false, true).timeout
+
+	if not failed.is_empty():
+		return "осечка: " + String(failed[0])
+	if got.is_empty():
+		return "награда не пришла за 4 с"
+	var id: StringName = got[0][0]
+	var amount: int = got[0][1]
+	if id != &"bonus_coins":
+		return "пришла чужая награда: " + String(id)
+	if amount != int(ad.REWARDS[&"bonus_coins"]):
+		return "сумма награды %d вместо %d" % [amount, int(ad.REWARDS[&"bonus_coins"])]
+	if ad.is_rewarded_ready():
+		return "кулдаун не закрыл повторный показ"
+	_note("награда: %s x%d, кулдаун %d с" % [id, amount, int(ad.cooldown_left())])
+	return ""
+
 ## ─────────────────────────── инфраструктура ───────────────────────────
 
 func _run(name: String, fn: Callable) -> void:
 	var err: String = fn.call()
+	if err == "":
+		_pass += 1
+		_lines.append("  PASS  " + name)
+	else:
+		_fail += 1
+		_lines.append("  FAIL  " + name + " — " + err)
+
+func _run_async(name: String, fn: Callable) -> void:
+	var err: String = await fn.call()
 	if err == "":
 		_pass += 1
 		_lines.append("  PASS  " + name)
