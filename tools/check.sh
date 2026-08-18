@@ -137,7 +137,7 @@ if broken: fails.append('critical-path')
 # 8. Ресурсы, на которые ссылается код: музыка и звуки монстров
 snd=[]
 mm=open('scripts/systems/music_manager.gd',encoding='utf-8').read()
-for m in re.findall(r'"res://([^"]+\.(?:wav|ogg))"',mm):
+for m in re.findall(r'"res://([^"]+\.(?:wav|ogg|mp3))"',mm):
     if not os.path.exists(m): snd.append(m)
 print(('  OK   ' if not snd else '  FAIL ')+f'музыкальные треки на диске ({len(snd)} нет)')
 if snd: fails.append('music')

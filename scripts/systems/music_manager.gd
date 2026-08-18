@@ -20,7 +20,7 @@ enum Mood { MENU, AMBIENT, TENSION, BATTLE, BOSS, VICTORY }
 
 #region Constants
 const TRACKS: Dictionary = {
-	Mood.MENU: "res://assets/audio/music/music_menu_dark.wav",
+	Mood.MENU: "res://assets/audio/music/abandoned_hallways.mp3",
 	Mood.AMBIENT: "res://assets/audio/music/music_ambient.wav",
 	Mood.TENSION: "res://assets/audio/music/music_tension.wav",
 	Mood.BATTLE: "res://assets/audio/music/music_battle.wav",
@@ -32,8 +32,8 @@ const AMBIENT_BY_DISTRICT: Dictionary = {
 	&"suburbs": "res://assets/audio/music/music_ambient.wav",
 	&"residential": "res://assets/audio/music/residential.wav",
 	&"park": "res://assets/audio/music/park.wav",
-	&"school": "res://assets/audio/music/music_ambient.wav",
-	&"hospital": "res://assets/audio/music/music_ambient_dark.wav",
+	&"school": "res://assets/audio/music/abandoned_hallways_alt.mp3",
+	&"hospital": "res://assets/audio/music/abandoned_hallways_alt.mp3",
 	&"gas_station": "res://assets/audio/music/downtown.wav",
 	&"police": "res://assets/audio/music/downtown.wav",
 	&"warehouses": "res://assets/audio/music/harbor.wav",
@@ -157,6 +157,14 @@ func _make_player(p_name: String) -> AudioStreamPlayer:
 	add_child(p)
 	return p
 
+## Зацикливание фоновой музыки. Настройки .import не в репозитории, поэтому
+## включаем цикл в коде — иначе на свежем клоне трек проиграет один раз и стихнет.
+static func _force_loop(s: AudioStream) -> void:
+	if s is AudioStreamWAV:
+		(s as AudioStreamWAV).loop_mode = AudioStreamWAV.LOOP_FORWARD
+	elif s is AudioStreamOggVorbis or s is AudioStreamMP3:
+		s.set("loop", true)
+
 func _load(m: Mood) -> AudioStream:
 	var path: String = _ambient_path if m == Mood.AMBIENT else TRACKS.get(m, "")
 	if path == "" or not ResourceLoader.exists(path):
@@ -164,8 +172,7 @@ func _load(m: Mood) -> AudioStream:
 	if _cache.has(path):
 		return _cache[path]
 	var s := load(path) as AudioStream
-	if s is AudioStreamWAV:
-		(s as AudioStreamWAV).loop_mode = AudioStreamWAV.LOOP_FORWARD
+	_force_loop(s)
 	_cache[path] = s
 	return s
 
@@ -228,8 +235,7 @@ func _build_layers() -> void:
 		pl.name = "Layer_" + String(key)
 		pl.bus = "Music" if AudioServer.get_bus_index("Music") >= 0 else "Master"
 		var s := load(path) as AudioStream
-		if s is AudioStreamOggVorbis:
-			(s as AudioStreamOggVorbis).loop = true
+		_force_loop(s)
 		pl.stream = s
 		pl.volume_db = MUTE_DB
 		add_child(pl)
