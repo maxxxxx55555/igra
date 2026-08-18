@@ -53,3 +53,6 @@ all_en_keys.txt
 Thumbs.db
 .DS_Store
 *terminator*
+
+# Local Claude settings
+.claude/settings.local.json
