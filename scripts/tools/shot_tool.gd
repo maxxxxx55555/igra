@@ -66,10 +66,15 @@ func _scenario() -> String:
 func _apply_scenario(name: String) -> void:
 	if name.is_empty():
 		return
-	var gm := get_node_or_null("/root/GameManager")
-	if gm and gm.has_method("start_new_game"):
-		gm.start_new_game()
-	await get_tree().create_timer(3.0).timeout
+	# Routes.start_game(), не GameManager.start_new_game() напрямую: последнее
+	# только переводит автолоады в PLAYING и не трогает дерево сцен — снимок
+	# уходил на 3с раньше, чем реально грузился res://scenes/main_3d.tscn,
+	# и попадал на состояние, которого игрок никогда не достигает (PLAYING
+	# поверх ещё живой сцены меню).
+	var routes := get_node_or_null("/root/Routes")
+	if routes and routes.has_method("start_game"):
+		routes.start_game()
+	await get_tree().create_timer(4.0).timeout
 	match name:
 		"lit":
 			var dm := get_node_or_null("/root/DistrictManager")

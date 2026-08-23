@@ -20,6 +20,7 @@ func _ready() -> void:
 	if vb == null:
 		return
 	_install_background()
+	_start_flicker()
 	_ensure_continue(vb as VBoxContainer)
 	_connect(vb, "Continue", func() -> void:
 		# continue_game() поднимает состояние автолоадов; сцену открываем сами.
@@ -52,6 +53,25 @@ func _install_background() -> void:
 	add_child(bg)
 	var bg_flat := get_node_or_null("BG")
 	move_child(bg, (bg_flat.get_index() + 1) if bg_flat else 0)
+
+## Flicker стоял в сцене с color.a = 0.15 и без единой строчки кода, которая
+## бы его двигала — ровный тёплый засвет поверх всего меню 24/7 вместо
+## задуманного мерцания лампы (см. комментарий T14 у _install_background).
+## Приглушаем базовую альфу и гоняем её неровными рывками, как дышащий
+## на ладан фонарь.
+func _start_flicker() -> void:
+	var f: ColorRect = get_node_or_null("Flicker")
+	if f == null:
+		return
+	f.color.a = 0.04
+	_flicker_step(f)
+
+func _flicker_step(f: ColorRect) -> void:
+	if not is_instance_valid(f):
+		return
+	var tw := create_tween()
+	tw.tween_property(f, "color:a", randf_range(0.02, 0.07), randf_range(0.15, 0.6))
+	tw.tween_callback(_flicker_step.bind(f))
 
 ## «Продолжить» показываем только при наличии сохранения.
 func _ensure_continue(vb: VBoxContainer) -> void:

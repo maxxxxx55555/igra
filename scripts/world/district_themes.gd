@@ -4,18 +4,25 @@ signal theme_changed(district_id: StringName)
 
 var current_id: StringName = &"suburbs"
 
+## sky/fog/ambient раньше были светлыми пастельными (sky ~#b0c8a0 — это же
+## светлое облачное НЕБО ДНЁМ), хотя в игре нет дня вообще (GDD §11.1,
+## permanent night) — статичное меню и вся 3D-графика вокруг были залиты
+## этими цветами через district_grading.gd. Затемнены до near-black,
+## оттенок сохранён по кластерам районов; fog приведён к канону #1a2133
+## (GDD §11.6: единый depth fog, не по-районно).
+const _FOG_CANON := Color("#1a2133")
 const THEMES := {
-	&"suburbs": {"primary": Color("#6a7a5a"), "accent": Color("#f4a35d"), "sky": Color("#b0c8a0"), "fog": Color("#c8d8c0"), "ambient": Color("#506048"), "music": "res://assets/audio/music/residential.wav", "weather": "clear", "display_name": "Пригород"},
-	&"residential": {"primary": Color("#6a7a5a"), "accent": Color("#f4a35d"), "sky": Color("#b0c8a0"), "fog": Color("#c8d8c0"), "ambient": Color("#506048"), "music": "res://assets/audio/music/residential.wav", "weather": "clear", "display_name": "Жилые"},
-	&"park": {"primary": Color("#3a6a4a"), "accent": Color("#f4e35d"), "sky": Color("#a0c8a0"), "fog": Color("#c0d8c0"), "ambient": Color("#305040"), "music": "res://assets/audio/music/park.wav", "weather": "clear", "display_name": "Парк"},
-	&"school": {"primary": Color("#5a5a6a"), "accent": Color("#f4c95d"), "sky": Color("#b0b0c0"), "fog": Color("#c8c8d8"), "ambient": Color("#484858"), "music": "res://assets/audio/music/residential.wav", "weather": "clear", "display_name": "Школа"},
-	&"hospital": {"primary": Color("#5a5a6a"), "accent": Color("#5dc8f4"), "sky": Color("#b0b0c0"), "fog": Color("#c8c8d8"), "ambient": Color("#484858"), "music": "res://assets/audio/music/residential.wav", "weather": "clear", "display_name": "Больница"},
-	&"gas_station": {"primary": Color("#5a4a3a"), "accent": Color("#e85d3a"), "sky": Color("#a09080"), "fog": Color("#c0b0a0"), "ambient": Color("#484038"), "music": "res://assets/audio/music/industrial.wav", "weather": "clear", "display_name": "АЗС"},
-	&"police": {"primary": Color("#4a4a6a"), "accent": Color("#5d5dc8"), "sky": Color("#a0a0c0"), "fog": Color("#c0c0d8"), "ambient": Color("#404058"), "music": "res://assets/audio/music/residential.wav", "weather": "clear", "display_name": "Полиция"},
-	&"warehouses": {"primary": Color("#5a4a3a"), "accent": Color("#e85d3a"), "sky": Color("#a09080"), "fog": Color("#c0b0a0"), "ambient": Color("#484038"), "music": "res://assets/audio/music/industrial.wav", "weather": "fog", "display_name": "Склады"},
-	&"industrial": {"primary": Color("#5a4a3a"), "accent": Color("#e85d3a"), "sky": Color("#a09080"), "fog": Color("#c0b0a0"), "ambient": Color("#484038"), "music": "res://assets/audio/music/industrial.wav", "weather": "fog", "display_name": "Промзона"},
-	&"substation": {"primary": Color("#5a5a5a"), "accent": Color("#f4f45d"), "sky": Color("#b0b0b0"), "fog": Color("#c8c8c8"), "ambient": Color("#484848"), "music": "res://assets/audio/music/industrial.wav", "weather": "fog", "display_name": "Подстанция"},
-	&"power_station": {"primary": Color("#5a5a5a"), "accent": Color("#f4f45d"), "sky": Color("#b0b0b0"), "fog": Color("#c8c8c8"), "ambient": Color("#484848"), "music": "res://assets/audio/music/industrial.wav", "weather": "fog", "display_name": "Станция"},
+	&"suburbs": {"primary": Color("#6a7a5a"), "accent": Color("#f4a35d"), "sky": Color("#0b0f0a"), "fog": _FOG_CANON, "ambient": Color("#141a12"), "music": "res://assets/audio/music/residential.wav", "weather": "clear", "display_name": "Пригород"},
+	&"residential": {"primary": Color("#6a7a5a"), "accent": Color("#f4a35d"), "sky": Color("#0b0f0a"), "fog": _FOG_CANON, "ambient": Color("#141a12"), "music": "res://assets/audio/music/residential.wav", "weather": "clear", "display_name": "Жилые"},
+	&"park": {"primary": Color("#3a6a4a"), "accent": Color("#f4e35d"), "sky": Color("#0a110a"), "fog": _FOG_CANON, "ambient": Color("#12180f"), "music": "res://assets/audio/music/park.wav", "weather": "clear", "display_name": "Парк"},
+	&"school": {"primary": Color("#5a5a6a"), "accent": Color("#f4c95d"), "sky": Color("#0b0c11"), "fog": _FOG_CANON, "ambient": Color("#14151c"), "music": "res://assets/audio/music/residential.wav", "weather": "clear", "display_name": "Школа"},
+	&"hospital": {"primary": Color("#5a5a6a"), "accent": Color("#5dc8f4"), "sky": Color("#0b0c11"), "fog": _FOG_CANON, "ambient": Color("#14151c"), "music": "res://assets/audio/music/residential.wav", "weather": "clear", "display_name": "Больница"},
+	&"gas_station": {"primary": Color("#5a4a3a"), "accent": Color("#e85d3a"), "sky": Color("#100d0a"), "fog": _FOG_CANON, "ambient": Color("#1a140f"), "music": "res://assets/audio/music/industrial.wav", "weather": "clear", "display_name": "АЗС"},
+	&"police": {"primary": Color("#4a4a6a"), "accent": Color("#5d5dc8"), "sky": Color("#0a0a11"), "fog": _FOG_CANON, "ambient": Color("#12121c"), "music": "res://assets/audio/music/residential.wav", "weather": "clear", "display_name": "Полиция"},
+	&"warehouses": {"primary": Color("#5a4a3a"), "accent": Color("#e85d3a"), "sky": Color("#100d0a"), "fog": _FOG_CANON, "ambient": Color("#1a140f"), "music": "res://assets/audio/music/industrial.wav", "weather": "fog", "display_name": "Склады"},
+	&"industrial": {"primary": Color("#5a4a3a"), "accent": Color("#e85d3a"), "sky": Color("#100d0a"), "fog": _FOG_CANON, "ambient": Color("#1a140f"), "music": "res://assets/audio/music/industrial.wav", "weather": "fog", "display_name": "Промзона"},
+	&"substation": {"primary": Color("#5a5a5a"), "accent": Color("#f4f45d"), "sky": Color("#0c0c0c"), "fog": _FOG_CANON, "ambient": Color("#161616"), "music": "res://assets/audio/music/industrial.wav", "weather": "fog", "display_name": "Подстанция"},
+	&"power_station": {"primary": Color("#5a5a5a"), "accent": Color("#f4f45d"), "sky": Color("#0c0c0c"), "fog": _FOG_CANON, "ambient": Color("#161616"), "music": "res://assets/audio/music/industrial.wav", "weather": "fog", "display_name": "Станция"},
 }
 
 func get_theme(district_id: StringName) -> Dictionary:
