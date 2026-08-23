@@ -89,6 +89,7 @@ func _ready() -> void:
 	_setup_nv_poll()
 	_setup_status_row()
 	_setup_weapon_compare()
+	_setup_quick_wheel()
 	$BtnPause.pressed.connect(_on_pause)
 	_add_map_button()
 	EventBus.game_state_changed.connect(_on_game_state)
@@ -215,6 +216,15 @@ func _setup_weapon_compare() -> void:
 	ui.set_script(ui_script)
 	add_child(ui)
 	wm.weapon_switched.connect(ui.on_weapon_switched)
+
+## T15: колесо быстрых слотов (удержание + аналоговый выбор из 6).
+var _quick_wheel: Control = null
+
+func _setup_quick_wheel() -> void:
+	var wheel_script := load("res://scripts/ui/quick_wheel_ui.gd")
+	_quick_wheel = Control.new()
+	_quick_wheel.set_script(wheel_script)
+	add_child(_quick_wheel)
 
 func _setup_weight_bar() -> void:
 	var w := $WeightBar
@@ -620,6 +630,10 @@ func _add_side_buttons(isv: Node) -> void:
 	# Приседание уже висит на BtnStealth в сцене — второй кнопки не нужно.
 	var strobe := mk.call("BtnStrobe", "⚡", func() -> void: _request_strobe()) as Button
 	anchored.call(strobe, 180.0, 250.0)
+	# T15: колесо быстрых слотов — держать, вести пальцем, отпустить.
+	var wheel := mk.call("BtnWheel", "◎", func() -> void: if _quick_wheel: _quick_wheel.open()) as Button
+	anchored.call(wheel, 260.0, 250.0)
+	wheel.button_up.connect(func() -> void: if _quick_wheel: _quick_wheel.close(true))
 
 func _request_strobe() -> void:
 	var p := get_tree().get_first_node_in_group("player")
