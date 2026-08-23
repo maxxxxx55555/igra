@@ -544,6 +544,20 @@ func _die() -> void:
 	EventBus.enemy_died.emit(global_position)
 	EventBus.coins_changed.emit(randi_range(5, 15))
 	_death_effect()
+	_maybe_drop_loot()
+
+## §6.2: "Loot: 30% шанс с трупа". Roster-flag loot_ammo включает патронный дроп
+## через существующую сцену подбора патронов — новый тип лута заводить не пришлось.
+const _AMMO_PICKUP := preload("res://scenes/pickups/ammo_pickup.tscn")
+
+func _maybe_drop_loot() -> void:
+	if not bool(roster_entry.get("loot_ammo", false)):
+		return
+	if randf() > 0.3:
+		return
+	var pickup := _AMMO_PICKUP.instantiate()
+	pickup.global_position = global_position + Vector3(0, 0.5, 0)
+	get_tree().current_scene.add_child(pickup)
 
 func _death_effect() -> void:
 	var p := GPUParticles3D.new()
