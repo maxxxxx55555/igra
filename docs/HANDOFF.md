@@ -1,29 +1,81 @@
 # Handoff
 
-Full detail: `docs/SESSION_REPORT_FINAL.md` (this phase — audio, shaders,
+Full detail: `docs/VISUAL_AUDIT.md` (latest phase — screenshot-driven
+visual/UI/lighting pass), `docs/SESSION_REPORT_FINAL.md` (audio, shaders,
 bug sweep, cleanup, ads, release prep) and `docs/SESSION_REPORT.md` (the
 earlier 19-task build phase). This file is the short version for picking
 the project back up.
 
+## Latest phase: visual polish (see docs/VISUAL_AUDIT.md for full detail)
+
+Started as an 8-step "make it stop looking cheap" mission (atmosphere,
+materials, UI theme, JUICE, VFX integration, perf guard). What actually
+got done, screenshot-verified, gate-verified, pushed:
+
+- Real UI theme fonts (theme_provider.gd was silently falling back to
+  the OS default font on every one of ~13 screens — never loaded the
+  actual Bebas Neue/Roboto Condensed files).
+- Main menu: fixed a background-tiling seam, a random day/generator boot
+  variant contradicting "no day" canon, and a static 15%-alpha overlay
+  that washed the whole menu brown (see before/after in docs/shots/).
+- District 3D lighting: `district_themes.gd`'s sky/fog/ambient were a
+  bright pastel *daytime* palette in a permanent-night game — darkened
+  to canon, fog unified to the GDD hex. `district_grading.gd` now
+  actually scales ambient by district power stage (DARK→FULL), which
+  GDD calls the game's main visual reward and previously did nothing.
+- Textured/PBR'd several default-grey street props (poles, benches,
+  dumpster) that had real textures sitting unused in assets/.
+- Zeroed out several rounded-corner UI violations (GDD bans them) and a
+  handful of non-canon hardcoded colors.
+- Minimap: was drawing all 11 district names inside a 180px circle
+  (guaranteed overlap/illegible) — now only labels the current district.
+- Real HUD bug: monster-spotted name showed literal "ember #<id>" in
+  every language, every encounter — now resolves the real i18n name.
+- Interstitial ad mislabeled "Rewarded ad" — now has its own title.
+- i18n hard-rule gaps closed on the reachable New Game+ screen (10 new
+  keys × 13 locales) and the monster-name bug above.
+
+**Not done** (honest gap, not attempted this pass): full project-wide UI
+StyleBoxTexture chrome, hit-vignette/hitmarker/micro-shake JUICE, pickup
+fly-to-HUD tweens, integrating ox alpha's newest VFX/grading assets
+(several arrived mid-session — see untracked files under `assets/` at
+time of writing), draw-call perf guard (<200), desktop/Steam export. A
+material audit found two full streetlight systems running simultaneously
+in every district (`street_props.gd` + `streetlight_spawner.gd`) — real
+duplication, not fixed, needs an in-editor look to pick which is
+canonical rather than a blind deletion.
+
+**A test-environment thing, not a product bug**: this dev machine's
+Godot `user://` save profile for this project has already reached a
+full-victory state from this session's own automated test runs
+(`victory.cfg` exists) — booting the game now shows a restoration
+banner/ad prompt immediately regardless of input. A fresh player save
+never triggers this. Lives outside the repo; needs explicit confirmation
+to clear, not something to do unilaterally.
+
 ## State right now (as of this line, checked directly)
-- HEAD = `1a12d0a`, fully pushed to `origin/main`. Working tree clean
-  except two files that belong to the parallel asset-agent session
-  (`docs/REPORT_ASSETS.md` modified, `docs/TRAILER_STORYBOARD.md`
-  untracked) — not reviewed or touched this pass, not mine to commit.
+- HEAD = `1bc8052`, fully pushed to `origin/main`. Working tree clean
+  except files that belong to the parallel asset-agent session
+  (`docs/REPORT_ASSETS.md` and a batch of new files under `assets/` —
+  new surface textures, lit tileset variants, monster SFX, store keyart —
+  not reviewed or touched this pass, not mine to commit; wiring some of
+  the new surface textures is exactly the kind of follow-up
+  `docs/VISUAL_AUDIT.md`'s P1 list points at).
 - All 4 mandatory gates green (re-verified after every commit this
   session). `tools/check.sh --static` green (10/10).
-- `autoload_api_check_scene.tscn` run directly: green (`fails=0`) — it
-  found one real issue earlier (stale comment referencing a signal that
-  was never implemented), fixed in commit `299a4d7`.
-- `game_test_3d_scene.tscn`: **still not resolved.** Launched directly in
-  the background (task id `bn3im6rif`) to work around `tools/check.sh`'s
-  combined run hanging twice earlier. It has now produced zero output
-  for over an hour of wall time — no error, no pass, no crash message,
-  nothing. I cannot currently tell whether it's genuinely still running,
-  silently stuck, or the output pipe itself stopped updating. This is the
-  one mandatory-adjacent check this session never got a real answer from.
-- Every other gate/check in this session's history passed on every run
-  it completed; nothing else is in this same "unknown" state.
+- `game_test_3d_scene.tscn`'s long-standing "hangs forever, no output"
+  mystery from the previous phase is now explained, not by a project bug:
+  it genuinely got as far as `[3dtest] phase1 combat: damage Shadow` and
+  then sat idle — the *process* never exited on its own even after that.
+  Found via `tasklist`: several `godot.exe`/`Godot_v4.7-*.exe` processes
+  from earlier hung runs (this phase and the previous one) were still
+  alive, never having been cleaned up. Once killed directly
+  (`taskkill /F /IM godot.exe`), the stuck task immediately reported
+  "completed, exit code 0". Root cause still not nailed down (why the
+  process itself doesn't exit after finishing its printed checks), but
+  it's a process-lifecycle issue in this environment, not evidence the
+  gate/game logic is broken — worth checking `tasklist` for leftover
+  `godot*.exe` before assuming any future "stuck" gate run is a real bug.
 
 ## Do this first in the next session
 ```bash
