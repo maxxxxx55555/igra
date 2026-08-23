@@ -21,8 +21,8 @@ func _ready() -> void:
 	add_to_group("crawlers")
 	# S9.3: scraping on asphalt, audible at 10 m.
 	_set_cues({
-		&"chase": {"file": "mon_crawler_scratch", "db": -8.0},
-		&"investigate": {"file": "mon_crawler_scratch", "db": -12.0},
+		&"chase": {"file": "monster_crawler_scrape", "db": -8.0},
+		&"investigate": {"file": "monster_crawler_scrape", "db": -12.0},
 	})
 
 func _tick_ai(delta: float) -> void:

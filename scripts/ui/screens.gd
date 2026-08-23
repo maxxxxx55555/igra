@@ -348,6 +348,7 @@ func build_Saves(content: ColorRect, card: ColorRect, cw: float, ch: float) -> v
 			_add_btn(slot_card, LocalizationManager.t("SCR_PEREZAPISAT"), Vector2(content.size.x - 200, 40), Vector2(90, 22), func(s = slot):
 				sm.save_slot(s)
 				_show_toast(LocalizationManager.t("SCR_SOHRANENO"))
+				EventBus.game_saved.emit()
 			)
 
 			_add_btn(slot_card, LocalizationManager.t("SCR_UDALIT"), Vector2(content.size.x - 100, 40), Vector2(70, 22), func(s = slot):
@@ -369,6 +370,7 @@ func build_Saves(content: ColorRect, card: ColorRect, cw: float, ch: float) -> v
 			_add_btn(slot_card, LocalizationManager.t("SCR_SOHRANIT"), Vector2(content.size.x - 100, 40), Vector2(80, 22), func(s = slot):
 				sm.save_slot(s)
 				_show_toast(LocalizationManager.t("SCR_SOHRANENO"))
+				EventBus.game_saved.emit()
 			)
 
 		slot_y += 90

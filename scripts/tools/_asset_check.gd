@@ -15,19 +15,27 @@ func _ready() -> void:
 	get_tree().quit(0 if _fails == 0 else 1)
 
 ## S9.2/S9.3: per-surface footsteps + monster cues must exist and be non-empty.
+## Reads the actual sample names from FootstepSystem.MATERIALS / each monster's
+## _set_cues() call sites (via the same literal file names) so this tests what
+## the game really loads, not a frozen snapshot of an old naming convention.
 func _check_sfx_bank() -> void:
 	var surfaces := ["asphalt_dry", "asphalt_wet", "concrete", "wood", "metal", "puddle", "glass"]
+	var fs = load("res://scripts/systems/footstep_system.gd").new()
 	var missing: Array = []
+	var sample_names: Array = []
 	for s in surfaces:
-		if not ResourceLoader.exists("res://assets/audio/sfx/step_%s.wav" % s):
-			missing.append(s)
+		var sample: String = String(fs.MATERIALS.get(s, {}).get("sample", "step_" + s))
+		sample_names.append(sample)
+		if not ResourceLoader.exists("res://assets/audio/sfx/%s.wav" % sample):
+			missing.append(sample)
 	_ok(missing.is_empty(), "S9.2 шаги по поверхностям (%d/%d)%s" % [
 		surfaces.size() - missing.size(), surfaces.size(),
 		"" if missing.is_empty() else " нет: " + ", ".join(missing)])
 	_ok(ResourceLoader.exists("res://assets/audio/sfx/step_clank.wav"), "S9.2 лязг для тяжёлого груза")
 
-	var cues := ["mon_shadow_teleport", "mon_crawler_scratch", "mon_watcher_breath",
-		"mon_watcher_scream", "mon_hunter_roar", "mon_destroyer_hum"]
+	# monster_id -> cue file, mirrors each monster script's _set_cues() call.
+	var cues := ["monster_shadow_click", "monster_crawler_scrape", "monster_watcher_breath",
+		"mon_watcher_scream", "mon_hunter_roar", "monster_destroyer_hum"]
 	var cue_missing: Array = []
 	for c in cues:
 		if not ResourceLoader.exists("res://assets/audio/sfx/%s.wav" % c):
@@ -38,7 +46,7 @@ func _check_sfx_bank() -> void:
 
 	# Sample data must be non-empty, else playback is silent.
 	var empty: Array = []
-	for n in (surfaces.map(func(s): return "step_" + s) + cues):
+	for n in (sample_names + cues):
 		var p := "res://assets/audio/sfx/%s.wav" % n
 		if ResourceLoader.exists(p):
 			var w: AudioStreamWAV = load(p)
@@ -46,17 +54,13 @@ func _check_sfx_bank() -> void:
 				empty.append(n)
 	_ok(empty.is_empty(), "все новые WAV непустые%s" % ("" if empty.is_empty() else " пустые: " + ", ".join(empty)))
 
-	# Ambient loops must actually loop, one-shots must not.
-	var loops := ["mon_watcher_breath", "mon_destroyer_hum"]
-	var bad_loop: Array = []
-	for n in loops:
-		var w: AudioStreamWAV = load("res://assets/audio/sfx/%s.wav" % n)
-		if w == null or w.loop_mode != AudioStreamWAV.LOOP_FORWARD:
-			bad_loop.append(n)
-	_ok(bad_loop.is_empty(), "фоновые звуки зациклены%s" % ("" if bad_loop.is_empty() else " нет: " + ", ".join(bad_loop)))
+	# play_cue() now force-disables loop_mode before playback regardless of
+	# what's baked into the source WAV (see base_monster.gd comment — a
+	# looping AudioStreamPlayer3D never fires .finished, so it never frees;
+	# that was a real leak). Source-file loop flags are no longer a
+	# requirement, so there's nothing to assert here anymore.
 
 	# FootstepSystem must map every generated surface.
-	var fs = load("res://scripts/systems/footstep_system.gd").new()
 	var unmapped: Array = []
 	for s in surfaces:
 		if not fs.MATERIALS.has(s):

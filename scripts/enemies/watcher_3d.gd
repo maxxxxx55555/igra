@@ -17,7 +17,7 @@ func _ready() -> void:
 	add_to_group("watchers")
 	# S9.3: heavy breathing at 5 m, scream is a global cue.
 	_set_cues({
-		&"chase": {"file": "mon_watcher_breath", "db": -10.0},
+		&"chase": {"file": "monster_watcher_breath", "db": -10.0},
 		&"scream": {"file": "mon_watcher_scream", "db": -2.0},
 	})
 

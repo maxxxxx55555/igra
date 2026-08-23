@@ -76,6 +76,7 @@ func _on_save() -> void:
 	SaveSystem.save_slot(_slot_index)
 	setup(_slot_index)  # Refresh
 	UIManager.show_notification(tr("Game saved to slot %d") % _slot_index)
+	EventBus.game_saved.emit()
 
 func _on_delete() -> void:
 	SaveSystem.delete_slot(_slot_index)

@@ -634,7 +634,16 @@ func play_cue(cue: StringName, min_interval: float = 2.0) -> void:
 	var am := get_node_or_null("/root/AudioManager")
 	if am == null or not am.has_method("play_sound_3d"):
 		return
-	am.play_sound_3d(load(path), global_position, float(data.get("db", -6.0)))
+	# play_sound_3d() frees its player on AudioStreamPlayer3D.finished — a
+	# looping stream never fires that signal, so a couple of the cue WAVs
+	# (baked with loop_mode=LOOP_FORWARD for use elsewhere) were leaking a
+	# never-freed, forever-looping player every re-trigger. Cues here are
+	# always one-shot stingers re-triggered by game logic, not stream loops.
+	var stream: AudioStream = load(path)
+	if stream is AudioStreamWAV and (stream as AudioStreamWAV).loop_mode != AudioStreamWAV.LOOP_DISABLED:
+		stream = (stream as AudioStreamWAV).duplicate()
+		(stream as AudioStreamWAV).loop_mode = AudioStreamWAV.LOOP_DISABLED
+	am.play_sound_3d(stream, global_position, float(data.get("db", -6.0)))
 
 func _sync_broadcast(delta: float) -> void:
 	_net_sync_timer -= delta

@@ -71,6 +71,10 @@ func _connect(vb: Node, node_name: String, cb: Callable) -> void:
 	b.focus_mode = Control.FOCUS_ALL
 	if not b.pressed.is_connected(cb):
 		b.pressed.connect(cb)
+	if not b.pressed.is_connected(UISFX.click):
+		b.pressed.connect(UISFX.click)
+	if not b.mouse_entered.is_connected(UISFX.hover):
+		b.mouse_entered.connect(UISFX.hover)
 
 func _apply_localization(_lang: Variant = null) -> void:
 	var vb: Node = get_node_or_null("VBox")

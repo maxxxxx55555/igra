@@ -26,7 +26,7 @@ func _ready() -> void:
 	flee_duration = 5.0
 	add_to_group("shadow")
 	# S9.3: Shadow has no footsteps; teleport is an electric snap.
-	_set_cues({&"teleport": {"file": "mon_shadow_teleport", "db": -4.0}})
+	_set_cues({&"teleport": {"file": "monster_shadow_click", "db": -4.0}})
 
 func _physics_process(delta: float) -> void:
 	super._physics_process(delta)

@@ -14,8 +14,8 @@ func _ready() -> void:
 	add_to_group("destroyers")
 	# S9.3: machinery hum, audible at 12 m.
 	_set_cues({
-		&"chase": {"file": "mon_destroyer_hum", "db": -6.0},
-		&"investigate": {"file": "mon_destroyer_hum", "db": -10.0},
+		&"chase": {"file": "monster_destroyer_hum", "db": -6.0},
+		&"investigate": {"file": "monster_destroyer_hum", "db": -10.0},
 	})
 
 func _handle_light_reaction(_delta: float) -> void:
