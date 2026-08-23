@@ -30,6 +30,60 @@ func _process(delta: float) -> void:
 func has_save() -> bool:
 	return FileAccess.file_exists(SAVE_PATH)
 
+## T16: сейв-целостность. Раньше JSON писался напрямую в целевой файл —
+## обрыв игры/питания посреди записи оставлял битый .save без возможности
+## восстановления. Теперь: temp+rename (атомарно), SHA-256 в конверте,
+## .bak — копия предыдущего валидного сейва на случай, если новый бит.
+
+func _write_atomic(path: String, payload: Dictionary) -> bool:
+	# checksum считаем от ТОЙ ЖЕ строки, что попадёт на диск как data_json —
+	# JSON.parse превращает int в float, так что пересчёт чек-суммы после
+	# парсинга payload заново в stringify() никогда бы не совпал с исходной.
+	var body := JSON.stringify(payload)
+	var envelope := {"checksum": body.sha256_text(), "data_json": body}
+	var tmp_path := path + ".tmp"
+	var f := FileAccess.open(tmp_path, FileAccess.WRITE)
+	if f == null:
+		return false
+	f.store_string(JSON.stringify(envelope))
+	f.close()
+	if FileAccess.file_exists(path):
+		DirAccess.copy_absolute(path, path + ".bak")
+	var err := DirAccess.rename_absolute(tmp_path, path)
+	return err == OK
+
+## Читает и проверяет конверт по указанному пути; {} если файла нет,
+## JSON битый, чек-сумма не сошлась или версия сейва новее движка.
+func _read_envelope(path: String) -> Dictionary:
+	if not FileAccess.file_exists(path):
+		return {}
+	var f := FileAccess.open(path, FileAccess.READ)
+	if f == null:
+		return {}
+	var txt := f.get_as_text()
+	f.close()
+	var outer := JSON.new()
+	if outer.parse(txt) != OK or not (outer.data is Dictionary):
+		return {}
+	var envelope: Dictionary = outer.data
+	var body: String = String(envelope.get("data_json", ""))
+	if body.is_empty() or body.sha256_text() != String(envelope.get("checksum", "")):
+		return {}
+	var inner := JSON.new()
+	if inner.parse(body) != OK or not (inner.data is Dictionary):
+		return {}
+	var data: Dictionary = inner.data
+	if int(data.get("version", 0)) > SAVE_VERSION:
+		return {}
+	return data
+
+## Основной файл -> .bak при провале основного (битый/пустой) -> {}.
+func _read_validated(path: String) -> Dictionary:
+	var data := _read_envelope(path)
+	if not data.is_empty():
+		return data
+	return _read_envelope(path + ".bak")
+
 func set_checkpoint(_scene_path: String, pos: Vector3) -> void:
 	_pending_player_pos = pos
 	_save()
@@ -57,29 +111,12 @@ func _save() -> void:
 		"daily_streak": _daily_streak,
 		"last_daily_time": _last_daily_time,
 	}
-	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
-	if file == null:
-		# push_error("SaveSystem: не удалось записать %s" % SAVE_PATH)
-		return
-	file.store_string(JSON.stringify(payload))
-	file.close()
+	_write_atomic(SAVE_PATH, payload)
 
 func load_all() -> bool:
-	if not has_save():
+	var data := _read_validated(SAVE_PATH)
+	if data.is_empty():
 		return false
-	var file := FileAccess.open(SAVE_PATH, FileAccess.READ)
-	if file == null:
-		return false
-	var txt: String = file.get_as_text()
-	file.close()
-	var json := JSON.new()
-	if json.parse(txt) != OK:
-		# push_error("SaveSystem: ошибка парсинга")
-		return false
-	var d: Variant = json.data
-	if not (d is Dictionary):
-		return false
-	var data: Dictionary = d as Dictionary
 	PowerGrid.from_dict(data.get("power", {}))
 	CoinWallet.from_dict(data.get("wallet", {}))
 	ShopService.from_dict(data.get("shop", {}))
@@ -172,22 +209,9 @@ func _get_slot_path(slot: int) -> String:
 	return "user://tls_savegame_slot%d.save" % slot
 
 func get_slot_info(slot: int) -> Dictionary:
-	var path = _get_slot_path(slot)
-	if not FileAccess.file_exists(path):
+	var data := _read_validated(_get_slot_path(slot))
+	if data.is_empty():
 		return {"exists": false}
-	
-	var file = FileAccess.open(path, FileAccess.READ)
-	if not file:
-		return {"exists": false}
-	
-	var txt = file.get_as_text()
-	file.close()
-	
-	var json = JSON.new()
-	if json.parse(txt) != OK:
-		return {"exists": false}
-	
-	var data = json.data as Dictionary
 	var progress = data.get("progress", {})
 	
 	return {
@@ -218,34 +242,12 @@ func save_slot(slot: int) -> bool:
 		"last_daily_time": _last_daily_time,
 		"timestamp": Time.get_unix_time_from_system()
 	}
-	
-	var file = FileAccess.open(_get_slot_path(slot), FileAccess.WRITE)
-	if file == null:
-		# push_error("SaveSystem: не удалось записать слот %d" % slot)
-		return false
-	
-	file.store_string(JSON.stringify(payload))
-	file.close()
-	return true
+	return _write_atomic(_get_slot_path(slot), payload)
 
 func load_slot(slot: int) -> bool:
-	var path = _get_slot_path(slot)
-	if not FileAccess.file_exists(path):
+	var data := _read_validated(_get_slot_path(slot))
+	if data.is_empty():
 		return false
-	
-	var file = FileAccess.open(path, FileAccess.READ)
-	if file == null:
-		return false
-	
-	var txt = file.get_as_text()
-	file.close()
-	
-	var json = JSON.new()
-	if json.parse(txt) != OK:
-		# push_error("SaveSystem: ошибка парсинга слота %d" % slot)
-		return false
-	
-	var data = json.data as Dictionary
 	PowerGrid.from_dict(data.get("power", {}))
 	CoinWallet.from_dict(data.get("wallet", {}))
 	ShopService.from_dict(data.get("shop", {}))
@@ -274,6 +276,8 @@ func load_slot(slot: int) -> bool:
 
 func delete_slot(slot: int) -> bool:
 	var path = _get_slot_path(slot)
+	if FileAccess.file_exists(path + ".bak"):
+		DirAccess.remove_absolute(path + ".bak")
 	if FileAccess.file_exists(path):
 		var err = DirAccess.remove_absolute(path)
 		return err == OK

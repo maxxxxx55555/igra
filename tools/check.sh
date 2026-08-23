@@ -181,6 +181,7 @@ else
     run_gate "локализация"               "res://scenes/tools/i18n_check_scene.tscn"
     run_gate "ассеты"                    "res://scenes/tools/asset_check_scene.tscn"
     run_gate "прогон 3D-сцены"           "res://scenes/tools/game_test_3d_scene.tscn"
+    run_gate "целостность сейва"         "res://scenes/tools/save_integrity_check_scene.tscn"
   fi
 fi
 
