@@ -5,13 +5,25 @@ bug sweep, cleanup, ads, release prep) and `docs/SESSION_REPORT.md` (the
 earlier 19-task build phase). This file is the short version for picking
 the project back up.
 
-## State right now
-- All 4 mandatory gates green, `tools/check.sh --static` green, plus
-  `autoload_api_check_scene.tscn` individually confirmed green (found and
-  fixed a real stale-comment failure — see SESSION_REPORT_FINAL.md).
-  `game_test_3d_scene.tscn` result: see the addendum at the bottom of
-  `SESSION_REPORT_FINAL.md`, added after this file was written.
-- All work pushed to `origin/main`, latest commit `299a4d7`.
+## State right now (as of this line, checked directly)
+- HEAD = `1a12d0a`, fully pushed to `origin/main`. Working tree clean
+  except two files that belong to the parallel asset-agent session
+  (`docs/REPORT_ASSETS.md` modified, `docs/TRAILER_STORYBOARD.md`
+  untracked) — not reviewed or touched this pass, not mine to commit.
+- All 4 mandatory gates green (re-verified after every commit this
+  session). `tools/check.sh --static` green (10/10).
+- `autoload_api_check_scene.tscn` run directly: green (`fails=0`) — it
+  found one real issue earlier (stale comment referencing a signal that
+  was never implemented), fixed in commit `299a4d7`.
+- `game_test_3d_scene.tscn`: **still not resolved.** Launched directly in
+  the background (task id `bn3im6rif`) to work around `tools/check.sh`'s
+  combined run hanging twice earlier. It has now produced zero output
+  for over an hour of wall time — no error, no pass, no crash message,
+  nothing. I cannot currently tell whether it's genuinely still running,
+  silently stuck, or the output pipe itself stopped updating. This is the
+  one mandatory-adjacent check this session never got a real answer from.
+- Every other gate/check in this session's history passed on every run
+  it completed; nothing else is in this same "unknown" state.
 
 ## Do this first in the next session
 ```bash
