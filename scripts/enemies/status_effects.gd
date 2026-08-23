@@ -15,8 +15,14 @@ var _immune: Dictionary = {}
 var _tick_timer: float = 0.0
 var mob: CharacterBody3D = null
 
+## Хост может быть монстром (BaseMonster, есть ai_state/stun()/_trigger_flee())
+## или игроком (CharacterBody3D без этих членов) — обращаемся к ним через
+## duck typing, чтобы один и тот же движок статусов работал на обоих.
+func _is_dead() -> bool:
+	return mob != null and "ai_state" in mob and mob.ai_state == BaseMonster.State.DEAD
+
 func apply(status: int, duration: float, dps: float = 0.0, power: float = 0.0) -> void:
-	if status in [Status.STUN, Status.FEAR] and mob and mob.ai_state == BaseMonster.State.DEAD:
+	if status in [Status.STUN, Status.FEAR] and _is_dead():
 		return
 	if _immune.get(status, 0.0) > 0.0:
 		return
@@ -25,8 +31,9 @@ func apply(status: int, duration: float, dps: float = 0.0, power: float = 0.0) -
 		e["t"] = maxf(float(e["t"]), duration)
 		e["dps"] = maxf(float(e["dps"]), dps)
 		e["power"] = maxf(float(e["power"]), power)
+		e["max"] = maxf(float(e.get("max", 0.0)), float(e["t"]))
 	else:
-		active[status] = {"t": duration, "dps": dps, "power": power}
+		active[status] = {"t": duration, "dps": dps, "power": power, "max": duration}
 	_apply_now(status)
 
 func is_active(status: int) -> bool:
@@ -38,7 +45,7 @@ func speed_multiplier() -> float:
 	return 1.0
 
 func _physics_process(delta: float) -> void:
-	if mob == null or mob.ai_state == BaseMonster.State.DEAD:
+	if mob == null or _is_dead():
 		return
 	if active.is_empty():
 		return
@@ -75,6 +82,8 @@ func _expire(s: int) -> void:
 	_immune[s] = IMMUNITY
 	if mob == null:
 		return
+	if not ("ai_state" in mob):
+		return
 	match s:
 		Status.STUN:
 			if mob.ai_state == BaseMonster.State.STUN:
@@ -84,10 +93,12 @@ func _expire(s: int) -> void:
 				mob._change_state(BaseMonster.State.PATROL)
 
 func _apply_now(s: int) -> void:
-	if mob == null or mob.ai_state == BaseMonster.State.DEAD:
+	if mob == null or _is_dead():
 		return
 	match s:
 		Status.STUN:
-			mob.stun(float(active[s]["t"]))
+			if mob.has_method("stun"):
+				mob.stun(float(active[s]["t"]))
 		Status.FEAR:
-			mob._trigger_flee()
+			if mob.has_method("_trigger_flee"):
+				mob._trigger_flee()

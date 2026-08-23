@@ -87,6 +87,7 @@ func _ready() -> void:
 	prompt.visible = false
 	_setup_weight_bar()
 	_setup_nv_poll()
+	_setup_status_row()
 	$BtnPause.pressed.connect(_on_pause)
 	_add_map_button()
 	EventBus.game_state_changed.connect(_on_game_state)
@@ -104,7 +105,99 @@ func _setup_nv_poll() -> void:
 	nv_poll.wait_time = 0.1
 	nv_poll.autostart = true
 	nv_poll.timeout.connect(_poll_noise_visibility)
+	nv_poll.timeout.connect(_poll_status_effects)
 	add_child(nv_poll)
+
+## 3.12/6.5: полоска статусов игрока (BLEED/BURN/POISON/SLOW/STUN) — иконка 32x32
+## с полоской длительности снизу, tween при появлении/исчезновении.
+const _STATUS_ICONS: Dictionary = {
+	EnemyRosterData.Status.BLEED: ["🩸", Color(0.706, 0.271, 0.184)],
+	EnemyRosterData.Status.BURN: ["🔥", Color(0.851, 0.408, 0.176)],
+	EnemyRosterData.Status.POISON: ["☠", Color(0.373, 0.541, 0.306)],
+	EnemyRosterData.Status.SLOW: ["🐌", Color(0.541, 0.451, 0.220)],
+	EnemyRosterData.Status.STUN: ["💫", Color(0.788, 0.635, 0.290)],
+}
+const _STATUS_ICON_SIZE: float = 32.0
+
+var _status_row: HBoxContainer = null
+var _status_icons: Dictionary = {}  # {int: Control}
+
+func _setup_status_row() -> void:
+	_status_row = HBoxContainer.new()
+	_status_row.name = "StatusRow"
+	_status_row.add_theme_constant_override("separation", 6)
+	_status_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var tl: Control = $TopLeft
+	_status_row.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	_status_row.position = Vector2(tl.offset_left, tl.offset_bottom + 8.0)
+	add_child(_status_row)
+
+func _poll_status_effects() -> void:
+	var player := get_tree().get_first_node_in_group("player")
+	var active: Dictionary = {}
+	if player and "status_fx" in player and player.status_fx:
+		active = player.status_fx.active
+	for status in _STATUS_ICONS:
+		var has: bool = active.has(status)
+		var icon: Control = _status_icons.get(status)
+		if has and icon == null:
+			_status_icons[status] = _spawn_status_icon(status)
+		elif not has and icon != null:
+			_despawn_status_icon(status, icon)
+		if has and _status_icons.has(status):
+			_update_status_icon(_status_icons[status], active[status])
+
+func _spawn_status_icon(status: int) -> Control:
+	var data: Array = _STATUS_ICONS[status]
+	var box := PanelContainer.new()
+	box.custom_minimum_size = Vector2(_STATUS_ICON_SIZE, _STATUS_ICON_SIZE)
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color(0.078, 0.098, 0.129, 0.85)
+	sb.border_color = data[1]
+	sb.set_border_width_all(2)
+	sb.set_corner_radius_all(4)
+	box.add_theme_stylebox_override("panel", sb)
+	var vb := VBoxContainer.new()
+	vb.alignment = BoxContainer.ALIGNMENT_CENTER
+	vb.add_theme_constant_override("separation", 2)
+	box.add_child(vb)
+	var lbl := Label.new()
+	lbl.text = data[0]
+	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl.add_theme_font_size_override("font_size", 16)
+	vb.add_child(lbl)
+	var bar_bg := ColorRect.new()
+	bar_bg.color = Color(0.047, 0.063, 0.086)
+	bar_bg.custom_minimum_size = Vector2(_STATUS_ICON_SIZE - 8.0, 3.0)
+	vb.add_child(bar_bg)
+	var bar_fill := ColorRect.new()
+	bar_fill.name = "Fill"
+	bar_fill.color = data[1]
+	bar_fill.size = Vector2(_STATUS_ICON_SIZE - 8.0, 3.0)
+	bar_bg.add_child(bar_fill)
+	box.modulate.a = 0.0
+	box.scale = Vector2(0.6, 0.6)
+	box.pivot_offset = box.custom_minimum_size * 0.5
+	_status_row.add_child(box)
+	var tw := create_tween()
+	tw.set_parallel(true)
+	tw.tween_property(box, "modulate:a", 1.0, 0.2)
+	tw.tween_property(box, "scale", Vector2.ONE, 0.2)
+	return box
+
+func _update_status_icon(icon: Control, state: Dictionary) -> void:
+	var fill := icon.find_child("Fill", true, false) as ColorRect
+	if fill == null:
+		return
+	var t: float = float(state.get("t", 0.0))
+	var mx: float = maxf(float(state.get("max", 1.0)), 0.001)
+	fill.size.x = (_STATUS_ICON_SIZE - 8.0) * clampf(t / mx, 0.0, 1.0)
+
+func _despawn_status_icon(status: int, icon: Control) -> void:
+	_status_icons.erase(status)
+	var tw := create_tween()
+	tw.tween_property(icon, "modulate:a", 0.0, 0.2)
+	tw.tween_callback(icon.queue_free)
 
 func _setup_weight_bar() -> void:
 	var w := $WeightBar

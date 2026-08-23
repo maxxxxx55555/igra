@@ -20,6 +20,9 @@ enum State { IDLE, WALK, RUN, STEALTH, CROUCH }
 
 var current_state: State = State.IDLE
 var hp: float = 100.0
+## 3.12/6.5: BLEED/BURN/POISON/SLOW/STUN на игроке — тот же движок, что и на монстрах
+## (см. base_monster.gd), _inflict_statuses() раньше был no-op без этого метода.
+var status_fx: Node = null
 var stamina: float = 100.0
 var battery: float = 100.0
 var look_dir: Vector3 = Vector3.FORWARD
@@ -173,6 +176,9 @@ func _ready() -> void:
 
 	gameplay_active = true
 	add_to_group("player")
+	status_fx = load("res://scripts/enemies/status_effects.gd").new()
+	status_fx.mob = self
+	add_child(status_fx)
 	_net_active = multiplayer != null and multiplayer.multiplayer_peer != null
 	var mh = stats.max_hp if (stats and stats.max_hp > 0) else 100.0
 	hp = float(mh)
@@ -539,12 +545,19 @@ func _notification(what: int) -> void:
 			_footstep_dust_node.queue_free()
 
 func _speed_for(state: State) -> float:
+	var base: float
 	match state:
-		State.RUN: return stats.run_speed
-		State.STEALTH: return stats.stealth_speed
-		State.WALK: return stats.walk_speed
-		State.CROUCH: return stats.walk_speed
-		_: return 0.0
+		State.RUN: base = stats.run_speed
+		State.STEALTH: base = stats.stealth_speed
+		State.WALK: base = stats.walk_speed
+		State.CROUCH: base = stats.walk_speed
+		_: base = 0.0
+	return base * (status_fx.speed_multiplier() if status_fx else 1.0)
+
+## Публичный вход для статусов НА игрока (укус, коготь, ожог) — см. base_monster.gd.
+func apply_status(status: int, duration: float, dps: float = 0.0, power: float = 0.0) -> void:
+	if status_fx:
+		status_fx.apply(status, duration, dps, power)
 
 func change_state(new_state: State) -> void:
 	if new_state == current_state:

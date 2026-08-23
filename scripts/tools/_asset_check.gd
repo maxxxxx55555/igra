@@ -150,21 +150,23 @@ func _check_music() -> void:
 			no_import.append(String(d).get_file())
 	_ok(no_import.is_empty(), "треки импортированы (попадут в APK)%s" % ("" if no_import.is_empty() else " нет: " + ", ".join(no_import)))
 
-	# MusicDirector зацикливает треки в рантайме через _force_loop() (см. её
-	# комментарий: .import-настройки не в репозитории), поэтому проверяем
-	# тем же путём, а не сырым флагом импорта, который для MP3 всегда false.
 	var not_looped: Array = []
 	for m in moods:
-		var res: AudioStream = load(moods[m]) as AudioStream
-		var empty: bool = res == null or (res.get("data") != null and (res.get("data") as PackedByteArray).size() == 0)
-		if empty:
-			not_looped.append(String(moods[m]).get_file() + "(пустой)")
-			continue
-		MusicDirector._force_loop(res)
-		var looped: bool = (res is AudioStreamWAV and res.loop_mode == AudioStreamWAV.LOOP_FORWARD) \
-			or (not res is AudioStreamWAV and bool(res.get("loop")))
-		if not looped:
-			not_looped.append(String(moods[m]).get_file() + "(без лупа)")
+		var res: Resource = load(moods[m])
+		if res is AudioStreamWAV:
+			var wav := res as AudioStreamWAV
+			if wav.data.size() == 0:
+				not_looped.append(String(moods[m]).get_file() + "(пустой)")
+			elif wav.loop_mode != AudioStreamWAV.LOOP_FORWARD:
+				not_looped.append(String(moods[m]).get_file() + "(без лупа)")
+		elif res is AudioStreamMP3:
+			var mp3 := res as AudioStreamMP3
+			if mp3.data.size() == 0:
+				not_looped.append(String(moods[m]).get_file() + "(пустой)")
+			elif not mp3.loop:
+				not_looped.append(String(moods[m]).get_file() + "(без лупа)")
+		else:
+			not_looped.append(String(moods[m]).get_file() + "(не загрузился)")
 	_ok(not_looped.is_empty(), "треки непустые и зациклены%s" % ("" if not_looped.is_empty() else ": " + ", ".join(not_looped)))
 
 	var districts: Dictionary = MusicDirector.AMBIENT_BY_DISTRICT
