@@ -45,6 +45,7 @@
   "ACTION_START_GENERATOR": "発電機を始動する",
   "AD_CLAIM": "報酬を受け取る",
   "AD_READY": "報酬の準備完了",
+  "AD_REVIVE": "広告を見て復活する",
   "AD_SKIP": "スキップ",
   "AD_TITLE": "リワード広告",
   "AD_WATCHING": "広告... %d秒",

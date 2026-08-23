@@ -45,6 +45,7 @@
   "ACTION_START_GENERATOR": "Arrancar el generador",
   "AD_CLAIM": "Reclamar recompensa",
   "AD_READY": "Recompensa lista",
+  "AD_REVIVE": "Ver anuncio para revivir",
   "AD_SKIP": "Omitir",
   "AD_TITLE": "Anuncio con recompensa",
   "AD_WATCHING": "Anuncio... %d s",

@@ -306,3 +306,11 @@ scaling_3d/scale=0.8
 environment/defaults/default_clear_color=Color(0.03, 0.03, 0.05, 1)
 scaling_3d/fsr_upscale=true
 mesh_lod/threshold_pixels=0.75
+
+[monetization]
+
+; AppLovin MAX — see docs/store/HUMAN_CHECKLIST.md. Empty = ad_service.gd
+; falls back to the debug stub; nothing here is required to run the game.
+applovin_sdk_key=""
+applovin_rewarded_unit_id=""
+applovin_interstitial_unit_id=""

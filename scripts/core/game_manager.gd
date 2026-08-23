@@ -41,7 +41,35 @@ func _ready() -> void:
 	# В итоге игрок умирал, а игра продолжалась как ни в чём не бывало.
 	# trigger_death() переводит состояние в DEAD, и UIManager открывает экран.
 	EventBus.game_over.connect(_on_player_game_over)
+	AdService.reward_granted.connect(_on_ad_reward)
 	_change_state(GameState.MENU)
+
+## Step 5: rewarded-ad payouts land here so every consumer (death screen's
+## revive button, a future HUD battery-boost button) shares one place that
+## actually applies the reward instead of each caller reimplementing it.
+func _on_ad_reward(reward_id: StringName, _amount: int) -> void:
+	var p := get_tree().get_first_node_in_group("player")
+	match reward_id:
+		&"revive":
+			revive_player()
+		&"extra_battery":
+			if p and p.has_method("add_battery"):
+				p.add_battery(50.0)
+
+## GDD §5.4's respawn HP ratio (50%), but in place rather than at a
+## checkpoint — this is the ad-revive path, not the standard death flow.
+func revive_player() -> void:
+	if current_state != GameState.DEAD:
+		return
+	var p := get_tree().get_first_node_in_group("player")
+	if p == null:
+		return
+	if p.has_method("heal"):
+		var max_hp: float = p.stats.max_hp if ("stats" in p and p.stats) else 100.0
+		p.heal(max_hp * 0.5)
+	_change_state(GameState.PLAYING)
+	get_tree().paused = false
+	UIManager.close_all_blocking()
 
 ## Защита от повторного входа: урон может прийти несколько раз за кадр.
 func _on_player_game_over() -> void:

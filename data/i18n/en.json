@@ -45,6 +45,7 @@
   "ACTION_START_GENERATOR": "Start the generator",
   "AD_CLAIM": "Claim reward",
   "AD_READY": "Reward ready",
+  "AD_REVIVE": "Watch ad to revive",
   "AD_SKIP": "Skip",
   "AD_TITLE": "Rewarded ad",
   "AD_WATCHING": "Advertisement... %ds",

@@ -98,6 +98,12 @@ func _ready() -> void:
 	EventBus.district_entered.connect(_on_district_entered)
 	set_mood(Mood.MENU, true)
 
+## AdService reads this to hold off interstitials mid-fight (spec: "never
+## during combat"). Reuses the same detection/decay MusicManager already
+## uses to hold combat music — no second combat tracker needed.
+func is_in_combat() -> bool:
+	return _combat_hold > 0.0
+
 func _process(delta: float) -> void:
 	_combat_hold = maxf(0.0, _combat_hold - delta)
 	_tick_layers(delta)
