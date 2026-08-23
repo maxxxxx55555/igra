@@ -45,12 +45,12 @@ const AMBIENT_BY_DISTRICT: Dictionary = {
 ## Слои GDD §25.2. Ambient_Dark/Lit ведутся стадией электросети,
 ## Threat_Low/High — близостью монстров, Action_Sting бьёт разово.
 const LAYERS: Dictionary = {
-	"ambient_dark": "res://assets/audio/music/Ambient_Dark.ogg",
-	"ambient_lit": "res://assets/audio/music/Ambient_Lit.ogg",
-	"threat_low": "res://assets/audio/music/Threat_Low.ogg",
-	"threat_high": "res://assets/audio/music/Threat_High.ogg",
+	"ambient_dark": "res://assets/audio/ambience/ambient_dark_loop.ogg",
+	"ambient_lit": "res://assets/audio/ambience/ambient_lit_loop.ogg",
+	"threat_low": "res://assets/audio/ambience/threat_low_loop.ogg",
+	"threat_high": "res://assets/audio/ambience/threat_high_loop.ogg",
 }
-const STING_PATH: String = "res://assets/audio/music/Action_Sting.ogg"
+const STING_PATH: String = "res://assets/audio/ambience/action_sting_loop.ogg"
 const LAYER_DB: float = -12.0
 const LAYER_LERP: float = 1.5
 const FADE_TIME: float = 2.2          ## Длительность кроссфейда, с
