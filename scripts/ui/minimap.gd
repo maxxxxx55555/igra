@@ -67,12 +67,16 @@ func _draw() -> void:
 		var theme_c := DistrictThemes.get_district_color(d.id)
 		var mix := c.lerp(theme_c, 0.45)
 		draw_circle(p, 6.5 if d.id == _current_district else 4.0, mix)
-		if d.id == _current_district: draw_arc(p, 8.0, 0.0, TAU, 24, ThemeProvider.COLOR_AMBER, 1.5, true)
-		var label_key: String = String(DISTRICT_LABELS.get(d.id, ""))
-		var label: String = LocalizationManager.t(label_key) if label_key != "" else ""
-		if label != "":
-			var font := ThemeDB.fallback_font
-			draw_string(font, p + Vector2(8, 4), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 9, ThemeProvider.COLOR_AMBER_DIM)
+		if d.id == _current_district:
+			draw_arc(p, 8.0, 0.0, TAU, 24, ThemeProvider.COLOR_AMBER, 1.5, true)
+			# Раньше подписывались все 11 районов сразу — на круге 180px это
+			# гарантированно накладывающийся, нечитаемый ком текста. Полные
+			# названия и так есть в city_map (открывается тапом); здесь
+			# подписываем только текущий район игрока.
+			var label_key: String = String(DISTRICT_LABELS.get(d.id, ""))
+			var label: String = LocalizationManager.t(label_key) if label_key != "" else ""
+			if label != "":
+				draw_string(ThemeDB.fallback_font, p + Vector2(10, 4), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 11, ThemeProvider.COLOR_AMBER)
 	draw_circle(center, 3.0, ThemeProvider.COLOR_AMBER)
 func _player_pos() -> Vector2:
 	var p := get_tree().get_first_node_in_group("player")

@@ -180,6 +180,7 @@ class StubAdProvider:
 	func show_interstitial() -> void:
 		var popup := POPUP.new()
 		popup.name = "AdPopupInterstitial"
+		popup.title_key = "AD_TITLE_INTERSTITIAL"
 		popup.claimed.connect(func() -> void: _service._on_provider_interstitial_shown())
 		popup.dismissed.connect(func() -> void: _service._on_provider_interstitial_shown())
 		_service.get_tree().root.add_child.call_deferred(popup)

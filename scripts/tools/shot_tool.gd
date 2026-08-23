@@ -66,15 +66,25 @@ func _scenario() -> String:
 func _apply_scenario(name: String) -> void:
 	if name.is_empty():
 		return
-	# Routes.start_game(), не GameManager.start_new_game() напрямую: последнее
-	# только переводит автолоады в PLAYING и не трогает дерево сцен — снимок
-	# уходил на 3с раньше, чем реально грузился res://scenes/main_3d.tscn,
-	# и попадал на состояние, которого игрок никогда не достигает (PLAYING
-	# поверх ещё живой сцены меню).
+	# ShotTool._ready() выполняется настолько рано (среди автозагрузок), что
+	# Bootstrap ещё не видит current_scene и уходит в scenes/ui/splash.tscn
+	# (fallback-ветка _bootstrap.gd) вместо прямого boot_loading — splash
+	# сам держит экран ~3с (fade 1с + пауза 2с, splash.gd), только потом
+	# идёт в BOOT, у которого свой ~3.3с отсчёт до меню. Итого «естественная»
+	# загрузка занимает ~6.5с, а не долю секунды — при более раннем вызове
+	# Routes.start_game() он гонится с ещё идущим переходом и получается
+	# каша из старого и нового экрана на одном кадре.
+	await get_tree().create_timer(8.0).timeout
+	# Вход в первый район корректно триггерит interstitial (ad_service.gd,
+	# district_entered) — это ожидаемое поведение, не баг, но для чистого
+	# скриншота сцены оно не нужно.
+	var ads := get_node_or_null("/root/AdService")
+	if ads:
+		ads.enabled = false
 	var routes := get_node_or_null("/root/Routes")
 	if routes and routes.has_method("start_game"):
 		routes.start_game()
-	await get_tree().create_timer(4.0).timeout
+	await get_tree().create_timer(6.0).timeout
 	match name:
 		"lit":
 			var dm := get_node_or_null("/root/DistrictManager")

@@ -13,6 +13,12 @@ signal dismissed
 const WATCH_SEC: float = 3.0
 const LAYER := 128  ## поверх HUD и меню
 
+## show_interstitial() переиспользует это же окно, но раньше показывал тот же
+## заголовок "AD_TITLE" ("Rewarded ad") даже для межстраничной рекламы, не
+## сулящей награды за просмотр — игрок видел неверный текст. Ставится до
+## add_child (см. ad_service.gd), поэтому доступен уже в _ready().
+var title_key: String = "AD_TITLE"
+
 var _title: Label
 var _status: Label
 var _claim: Button
@@ -41,7 +47,7 @@ func _ready() -> void:
 	panel.add_child(box)
 
 	_title = Label.new()
-	_title.text = LocalizationManager.t("AD_TITLE")
+	_title.text = LocalizationManager.t(title_key)
 	_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_title.theme_type_variation = &"header"
 	box.add_child(_title)
