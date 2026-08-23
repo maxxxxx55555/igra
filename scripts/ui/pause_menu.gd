@@ -29,6 +29,7 @@ func _build() -> void:
 	panel.modulate = Color(1, 1, 1, 0.0)  # начало tween
 	add_child(panel)
 	panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER, Control.PRESET_MODE_KEEP_SIZE)
+	_apply_panel_shader(panel)
 	var vb := VBoxContainer.new()
 	vb.add_theme_constant_override("separation", 12)
 	panel.add_child(vb)
@@ -55,6 +56,15 @@ func _animate_in() -> void:
 		tw.tween_property(bg, "color", Color(0.0, 0.0, 0.0, 0.55), 0.3).set_ease(Tween.EASE_OUT)
 	if panel:
 		tw.tween_property(panel, "modulate", Color(1, 1, 1, 1.0), 0.3).set_ease(Tween.EASE_OUT)
+
+## Art pass's chamfered-panel shader on the pause panel (one of the 2-3 key
+## panels this got wired to, per scope). rect_px must match actual pixel
+## size, so set it once the panel's fixed size is known.
+func _apply_panel_shader(panel: Control) -> void:
+	var mat := ShaderMaterial.new()
+	mat.shader = load("res://assets/shaders/ui_panel.gdshader")
+	mat.set_shader_parameter("rect_px", panel.custom_minimum_size)
+	panel.material = mat
 
 func _btn(p: Node, text: String, cb: Callable) -> void:
 	var b := Button.new()

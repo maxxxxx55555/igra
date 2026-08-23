@@ -126,12 +126,14 @@ func _setup_cone(force_off: bool) -> void:
 
 
 		return
-	var code := "shader_type spatial; render_mode blend_add, unshaded, cull_disabled, depth_draw_never, shadows_disabled; void fragment(){ float a = clamp(1.0 - UV.y, 0.0, 1.0) * 0.85; vec3 amber = vec3(1.0, 0.55, 0.18); vec3 c = amber * 1.5 * a; ALBEDO = c; ALPHA = 1.0; }"
+	# Was an inline hand-rolled shader string (axial fade only); the art pass's
+	# flashlight_cone.gdshader is the same technique with added rim falloff
+	# and flicker, so it replaces it here instead of living unused on disk.
+	var shader_res: Shader = load("res://assets/shaders/flashlight_cone.gdshader")
+	var code := shader_res.code
 	_cone_shader_code = code
-	var mat := Shader.new()
-	mat.code = code
 	var sm := ShaderMaterial.new()
-	sm.shader = mat
+	sm.shader = shader_res
 	cone.set_surface_override_material(0, sm)
 	cone_add_ok = true
 	cone_amber_ok = code.contains("blend_add") and code.contains("unshaded") and not ("vec3(1,1,1)" in code or "vec3(1.0, 1.0, 1.0)" in code or "vec3(0.8" in code)

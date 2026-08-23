@@ -13,8 +13,15 @@ const _POINTER_SIZE: float = 26.0
 
 var _pointer: TextureRect = null
 
+## Was a flat ColorRect.color:a tween; now driven by the art pass's
+## damage_vignette.gdshader (ember tint + 60bpm heartbeat pulse) via its
+## `strength` uniform instead — same trigger points, better visual.
+var _vignette_mat: ShaderMaterial
+
 func _ready() -> void:
-	vignette.color = Color(1, 0, 0, 0)
+	_vignette_mat = ShaderMaterial.new()
+	_vignette_mat.shader = load("res://assets/shaders/damage_vignette.gdshader")
+	vignette.material = _vignette_mat
 	EventBus.player_damaged.connect(_on_damaged)
 	if EventBus.has_signal(&"player_damage_direction"):
 		EventBus.player_damage_direction.connect(_on_damage_direction)
@@ -55,9 +62,9 @@ func _make_pointer_texture() -> ImageTexture:
 	return ImageTexture.create_from_image(img)
 
 func _on_damaged(_amount: int) -> void:
-	vignette.color = Color(1, 0, 0, 0.4)
+	_vignette_mat.set_shader_parameter("strength", 1.0)
 	var tween := create_tween()
-	tween.tween_property(vignette, "color:a", 0.0, _FADE_TIME)
+	tween.tween_method(func(v: float) -> void: _vignette_mat.set_shader_parameter("strength", v), 1.0, 0.0, _FADE_TIME)
 
 ## 3.15: при ударе — показываем по краю экрана, откуда пришёл урон.
 func _on_damage_direction(amount: float, src_pos: Vector3) -> void:

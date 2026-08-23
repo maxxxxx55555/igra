@@ -45,7 +45,9 @@ func _build_ui() -> void:
 	sb.content_margin_top = 6
 	sb.content_margin_bottom = 6
 	_panel.add_theme_stylebox_override("panel", sb)
+	_apply_panel_shader()
 	add_child(_panel)
+	_panel.resized.connect(_sync_panel_shader_size)
 	_rows_box = VBoxContainer.new()
 	_rows_box.add_theme_constant_override("separation", 3)
 	_panel.add_child(_rows_box)
@@ -54,6 +56,18 @@ func _build_ui() -> void:
 	_hide_timer.wait_time = VISIBLE_TIME
 	_hide_timer.timeout.connect(_hide)
 	add_child(_hide_timer)
+
+## One of the 2-3 key panels wired to the art pass's chamfered-panel shader
+## (per scope). Panel height grows with row count, so rect_px is resynced
+## on every resize rather than set once.
+func _apply_panel_shader() -> void:
+	var mat := ShaderMaterial.new()
+	mat.shader = load("res://assets/shaders/ui_panel.gdshader")
+	_panel.material = mat
+
+func _sync_panel_shader_size() -> void:
+	if _panel.material is ShaderMaterial:
+		(_panel.material as ShaderMaterial).set_shader_parameter("rect_px", _panel.size)
 
 ## Вызывается WeaponManager-ом при смене оружия — сравнивает с предыдущим.
 func on_weapon_switched(weapon: WeaponBase) -> void:

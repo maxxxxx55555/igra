@@ -90,6 +90,7 @@ func _ready() -> void:
 	_setup_status_row()
 	_setup_weapon_compare()
 	_setup_quick_wheel()
+	_setup_grain_overlay()
 	$BtnPause.pressed.connect(_on_pause)
 	_add_map_button()
 	EventBus.game_state_changed.connect(_on_game_state)
@@ -225,6 +226,29 @@ func _setup_weapon_compare() -> void:
 	ui.set_script(ui_script)
 	add_child(ui)
 	wm.weapon_switched.connect(ui.on_weapon_switched)
+
+## Permanent-night film grain, per art pass. Off on the LOW graphics tier
+## (cheap fragment shader but still a full-screen sampled pass — not worth
+## it once QualityManager has already dropped to LOW to protect FPS).
+var _grain_rect: ColorRect = null
+
+func _setup_grain_overlay() -> void:
+	_grain_rect = ColorRect.new()
+	_grain_rect.name = "GrainOverlay"
+	_grain_rect.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_grain_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var mat := ShaderMaterial.new()
+	mat.shader = load("res://assets/shaders/grain_overlay.gdshader")
+	_grain_rect.material = mat
+	add_child(_grain_rect)
+	_apply_grain_tier(int(SettingsManager.get_setting("graphics_tier", 2)))
+	EventBus.settings_changed.connect(func(key: String, value: Variant) -> void:
+		if key == "graphics_tier":
+			_apply_grain_tier(int(value)))
+
+func _apply_grain_tier(tier: int) -> void:
+	if _grain_rect:
+		_grain_rect.visible = tier > 0
 
 ## T15: колесо быстрых слотов (удержание + аналоговый выбор из 6).
 var _quick_wheel: Control = null
