@@ -228,7 +228,35 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		return
 	_tick_ai(delta)
+	_apply_knockback(delta)
 	move_and_slide()
+
+## GDD §5.1: Slam (3rd melee combo hit) carries 1.5m knockback, and a
+## backstab checks the target's facing — player_3d.gd's _on_attack_hit()
+## already computed both and called these via has_method(), but neither
+## existed anywhere, so knockback/backstab silently never fired.
+var _knockback_vel: Vector3 = Vector3.ZERO
+var _knockback_timer: float = 0.0
+const _KNOCKBACK_DECAY: float = 6.0
+
+func apply_knockback(impulse: Vector3) -> void:
+	if ai_state == State.DEAD:
+		return
+	_knockback_vel += impulse
+	_knockback_timer = 0.25
+
+func get_facing_dir() -> Vector3:
+	return -global_transform.basis.z
+
+## Adds decaying knockback on top of whatever the AI state set this frame
+## (_move_to() overwrites velocity.x/z directly, so this must run after
+## _tick_ai() and before move_and_slide(), not inside movement itself).
+func _apply_knockback(delta: float) -> void:
+	if _knockback_timer <= 0.0:
+		return
+	_knockback_timer -= delta
+	velocity += _knockback_vel
+	_knockback_vel = _knockback_vel.move_toward(Vector3.ZERO, _KNOCKBACK_DECAY * delta)
 
 func _tick_ai(delta: float) -> void:
 	match ai_state:
@@ -546,18 +574,25 @@ func _die() -> void:
 	_death_effect()
 	_maybe_drop_loot()
 
-## §6.2: "Loot: 30% шанс с трупа". Roster-flag loot_ammo включает патронный дроп
-## через существующую сцену подбора патронов — новый тип лута заводить не пришлось.
-const _AMMO_PICKUP := preload("res://scenes/pickups/ammo_pickup.tscn")
+## §6.2: "Loot: 30% шанс с трупа". Roster-flag loot_ammo — обозначает дроп
+## с "боеприпасников" (Sharpshooter). Изначально использовал
+## scenes/pickups/ammo_pickup.tscn -> player.add_ammo(), но add_ammo() нигде
+## не определён (WeaponManager/ammo-экономика — незадействованный
+## каркас, см. weapon_pickup.gd) — подбор молча ничего не делал. Даёт
+## реальный предмет через уже рабочую систему инвентаря вместо этого.
+const _ITEM_PICKUP := preload("res://scenes/pickups/item_pickup_3d.tscn")
+const _LOOT_ITEM: StringName = &"battery"
 
 func _maybe_drop_loot() -> void:
 	if not bool(roster_entry.get("loot_ammo", false)):
 		return
 	if randf() > 0.3:
 		return
-	var pickup := _AMMO_PICKUP.instantiate()
-	pickup.global_position = global_position + Vector3(0, 0.5, 0)
+	var pickup := _ITEM_PICKUP.instantiate()
 	get_tree().current_scene.add_child(pickup)
+	pickup.global_position = global_position + Vector3(0, 0.5, 0)
+	if pickup.has_method("set_item"):
+		pickup.set_item(_LOOT_ITEM, 1)
 
 func _death_effect() -> void:
 	var p := GPUParticles3D.new()
