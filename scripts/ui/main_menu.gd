@@ -19,6 +19,7 @@ func _ready() -> void:
 	var vb: Node = get_node_or_null("VBox")
 	if vb == null:
 		return
+	_install_background()
 	_ensure_continue(vb as VBoxContainer)
 	_connect(vb, "Continue", func() -> void:
 		# continue_game() поднимает состояние автолоадов; сцену открываем сами.
@@ -39,6 +40,18 @@ func _ready() -> void:
 		GameManager.return_to_menu()
 	else:
 		InputService.refresh_mouse_mode()
+
+## T14: живой параллакс-фон (NIGHT/DAY/GENERATOR) между BG и Flicker.
+func _install_background() -> void:
+	if get_node_or_null("MenuBackground") != null:
+		return
+	var bg_script := load("res://scripts/ui/menu_background.gd")
+	var bg := Control.new()
+	bg.name = "MenuBackground"
+	bg.set_script(bg_script)
+	add_child(bg)
+	var bg_flat := get_node_or_null("BG")
+	move_child(bg, (bg_flat.get_index() + 1) if bg_flat else 0)
 
 ## «Продолжить» показываем только при наличии сохранения.
 func _ensure_continue(vb: VBoxContainer) -> void:
