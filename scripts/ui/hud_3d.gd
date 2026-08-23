@@ -88,6 +88,7 @@ func _ready() -> void:
 	_setup_weight_bar()
 	_setup_nv_poll()
 	_setup_status_row()
+	_setup_weapon_compare()
 	$BtnPause.pressed.connect(_on_pause)
 	_add_map_button()
 	EventBus.game_state_changed.connect(_on_game_state)
@@ -198,6 +199,22 @@ func _despawn_status_icon(status: int, icon: Control) -> void:
 	var tw := create_tween()
 	tw.tween_property(icon, "modulate:a", 0.0, 0.2)
 	tw.tween_callback(icon.queue_free)
+
+## T13: сравнение оружия при переключении. WeaponManager сейчас не привязан
+## ни к одному игровому узлу (боевая система на мили) — ищем его мягко,
+## без него виджет просто не появляется.
+func _setup_weapon_compare() -> void:
+	var player := get_tree().get_first_node_in_group("player")
+	if player == null:
+		return
+	var wm := player.get_node_or_null("WeaponManager")
+	if wm == null or not wm.has_signal("weapon_switched"):
+		return
+	var ui_script := load("res://scripts/ui/weapon_compare_ui.gd")
+	var ui := CanvasLayer.new()
+	ui.set_script(ui_script)
+	add_child(ui)
+	wm.weapon_switched.connect(ui.on_weapon_switched)
 
 func _setup_weight_bar() -> void:
 	var w := $WeightBar
