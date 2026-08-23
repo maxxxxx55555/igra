@@ -1,6 +1,8 @@
 # ThemeProvider — ЕДИНЫЙ визуальный слой по арт-библии docs/ART_UI_STYLE.md:
-# латунь (brass) вместо янтаря, СРЕЗАННЫЕ углы (chamfer, радиус 0), шрифты Saira/Rajdhani/Share Tech Mono.
-# Все 14 экранов тянут build_theme() отсюда — это единственная точка истины для UI.
+# латунь (brass) вместо янтаря, СРЕЗАННЫЕ углы (chamfer, радиус 0), шрифты
+# Bebas Neue Bold / Roboto Condensed / Share Tech Mono (канон-саммит 2026-08-10,
+# GDD §11.3 — Saira/Rajdhani больше не подключаются к Theme).
+# Все экраны тянут build_theme() отсюда — это единственная точка истины для UI.
 class_name ThemeProvider
 extends RefCounted
 
@@ -21,20 +23,19 @@ const FONT_SIZE_BODY: int = 16
 const FONT_SIZE_TITLE: int = 22
 const FONT_SIZE_HUGE: int = 30
 
-static func _make_font(names: PackedStringArray, weight: int = 400) -> SystemFont:
-	var f := SystemFont.new()
-	f.font_names = names
-	f.font_weight = weight
-	return f
+## SystemFont спрашивает шрифт у ОС по имени — на машине/устройстве без
+## Rajdhani/Saira установленными это молча откатывалось на системный шрифт
+## (Inter/Roboto/Arial), запрещённый GDD §11.3. Грузим настоящие файлы из
+## assets/fonts/, как уже делает theme_setup.gd для темы окна.
+static func _load_font(path: String, fallback: Font) -> Font:
+	return load(path) if ResourceLoader.exists(path) else fallback
 
 static func build_theme() -> Theme:
 	var theme := Theme.new()
-	# Шрифты по арт-библии (запрещены Inter/Roboto/Arial и системные по умолчанию).
-	var font_body := _make_font(PackedStringArray(["Rajdhani-Regular", "Rajdhani"]))
-	var font_body_bold := _make_font(PackedStringArray(["Rajdhani-SemiBold", "Rajdhani"]), 600)
-	var font_heading := _make_font(PackedStringArray(["SairaCondensed-Bold", "Saira Condensed"]), 700)
-	var font_panel := _make_font(PackedStringArray(["SairaCondensed-Regular", "Saira Condensed"]))
-	var font_mono := _make_font(PackedStringArray(["ShareTechMono-Regular", "Share Tech Mono"]))
+	var font_body: Font = _load_font("res://assets/fonts/RobotoCondensed-Regular.ttf", ThemeDB.fallback_font)
+	var font_heading: Font = _load_font("res://assets/fonts/BebasNeue-Regular.ttf", font_body)
+	var font_panel := font_heading
+	var font_mono: Font = _load_font("res://assets/fonts/ShareTechMono-Regular.ttf", font_body)
 	theme.default_font = font_body
 	theme.set_font(&"font", &"Label", font_body)
 	theme.set_font(&"font", &"Button", font_panel)

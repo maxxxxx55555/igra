@@ -3,12 +3,17 @@ extends Node
 ##
 ##   godot --path . --shot                       # docs/MENU_SCREENSHOT.png через 10 с
 ##   godot --path . --shot=docs/foo.png --shot-delay=4
+##   godot --path . --shot=docs/foo.png --shot-scenario=combat
 ##
 ## Путь раньше был прибит к рабочему столу конкретной машины — теперь по
 ## умолчанию пишем в репозиторий, чтобы снимок попадал в отчёт.
 
 const DEFAULT_PATH := "res://docs/MENU_SCREENSHOT.png"
 const DEFAULT_DELAY := 10.0
+
+## Сценарии для визуального аудита: заставляют мир дойти до состояния,
+## которое иначе руками не собрать в headless-запуске.
+const SCENARIOS: PackedStringArray = ["street", "lit", "inventory", "combat"]
 
 func _ready() -> void:
 	for a in OS.get_cmdline_args():
@@ -49,11 +54,58 @@ func _run_series(base: String, marks: PackedFloat32Array) -> void:
 		print("SHOT_%s: %s t=%ds" % ["OK" if err == OK else "FAIL", p, int(marks[i])])
 	get_tree().quit(0)
 
+func _scenario() -> String:
+	for a in OS.get_cmdline_args():
+		if a.begins_with("--shot-scenario="):
+			var v := _arg_value(a, "")
+			return v if SCENARIOS.has(v) else ""
+	return ""
+
+## Ставит мир в состояние, которое иначе нельзя собрать без рук на клавиатуре:
+## реально стартует игру и (для combat/inventory/lit) донастраивает её.
+func _apply_scenario(name: String) -> void:
+	if name.is_empty():
+		return
+	var gm := get_node_or_null("/root/GameManager")
+	if gm and gm.has_method("start_new_game"):
+		gm.start_new_game()
+	await get_tree().create_timer(3.0).timeout
+	match name:
+		"lit":
+			var dm := get_node_or_null("/root/DistrictManager")
+			if dm and dm.has_method("set_stage"):
+				dm.set_stage(dm.current_district, 3)
+			await get_tree().create_timer(0.5).timeout
+		"inventory":
+			var inv := _find_by_script(get_tree().root, "inventory_ui.gd")
+			if inv and inv.has_method("toggle"):
+				inv.toggle()
+			await get_tree().create_timer(0.3).timeout
+		"combat":
+			var player := get_tree().get_first_node_in_group("player")
+			var monster := get_tree().get_first_node_in_group("monsters")
+			if player is Node3D and monster is Node3D:
+				(player as Node3D).global_position = (monster as Node3D).global_position + Vector3(0, 0, 2.5)
+			await get_tree().create_timer(1.0).timeout
+		_: # "street" — оставить как есть, только дождаться стрима мира.
+			pass
+
+static func _find_by_script(root: Node, file_name: String) -> Node:
+	var s: Script = root.get_script()
+	if s and String(s.resource_path).ends_with(file_name):
+		return root
+	for c in root.get_children():
+		var found := _find_by_script(c, file_name)
+		if found:
+			return found
+	return null
+
 func _run(path: String, delay: float) -> void:
 	var marks := _series()
 	if not marks.is_empty():
 		await _run_series(path, marks)
 		return
+	await _apply_scenario(_scenario())
 	await get_tree().create_timer(delay).timeout
 	var img := get_tree().root.get_texture().get_image()
 	var abs_path := path if path.begins_with("res://") or path.begins_with("user://") else ProjectSettings.globalize_path(path)

@@ -44,6 +44,12 @@ func _build_visual() -> void:
 	var mat := StandardMaterial3D.new()
 	mat.albedo_color = col
 	mat.roughness = 0.9
+	if spot_type == "dumpster":
+		var tex: Texture2D = load("res://assets/textures/surfaces/dumpster_metal_512.png")
+		if tex:
+			mat.albedo_texture = tex
+			mat.metallic = 0.5
+			mat.roughness = 0.55
 	box.material = mat
 	mi.mesh = box
 	mi.position = Vector3(0, size.y * 0.5, 0)

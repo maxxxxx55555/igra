@@ -39,7 +39,7 @@ func _build_ui() -> void:
 	sb.bg_color = Color(PANEL.r, PANEL.g, PANEL.b, 0.92)
 	sb.border_color = BRASS_DIM
 	sb.set_border_width_all(1)
-	sb.set_corner_radius_all(4)
+	sb.set_corner_radius_all(0)
 	sb.content_margin_left = 10
 	sb.content_margin_right = 10
 	sb.content_margin_top = 6

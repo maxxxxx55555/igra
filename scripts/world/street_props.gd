@@ -16,16 +16,26 @@ var _cone: CylinderMesh
 
 const _TEX_BRICK       := "res://assets/textures/environment/brick.png"
 const _TEX_RUSTY_METAL := "res://assets/textures/environment/rusty_metal.png"
+const _TEX_STREETLIGHT := "res://assets/textures/surfaces/streetlight_metal_512.png"
+const _TEX_BENCH       := "res://assets/textures/surfaces/bench_wood_512.png"
 
 ## Returns a StandardMaterial3D with albedo_texture loaded from path.
 ## Falls back to albedo_color if the texture file is missing.
 static func _wall_material(tex_path: String, fallback_color: Color) -> StandardMaterial3D:
+	return _prop_material(tex_path, fallback_color, 0.9, 0.0)
+
+## Same idea as _wall_material() but for props: optional texture, always a
+## deliberate roughness/metallic so nothing renders at the engine's flat-grey
+## default (roughness 1 / metallic 0 / albedo ~0.8,0.8,0.8).
+static func _prop_material(tex_path: String, fallback_color: Color, roughness: float, metallic: float) -> StandardMaterial3D:
 	var mat := StandardMaterial3D.new()
 	mat.albedo_color = fallback_color
-	var tex: Texture2D = load(tex_path)
-	if tex:
-		mat.albedo_texture = tex
-	mat.roughness = 0.9
+	if not tex_path.is_empty():
+		var tex: Texture2D = load(tex_path)
+		if tex:
+			mat.albedo_texture = tex
+	mat.roughness = roughness
+	mat.metallic = metallic
 	return mat
 
 func _ready() -> void:
@@ -82,9 +92,7 @@ func _spawn_pole_pair(center: Vector3, road: Dictionary) -> void:
 	for side in [-1, 1]:
 		var p := MeshInstance3D.new()
 		p.mesh = _pole
-		var pm := StandardMaterial3D.new()
-		pm.albedo_color = Color(0.15, 0.15, 0.18)
-		p.material_override = pm
+		p.material_override = _prop_material(_TEX_STREETLIGHT, Color(0.15, 0.15, 0.18), 0.55, 0.6)
 		p.position = center + perp * float(side)
 		add_child(p)
 		var l := MeshInstance3D.new()
@@ -101,9 +109,7 @@ func _spawn_pole_pair(center: Vector3, road: Dictionary) -> void:
 func _spawn_bench(center: Vector3, road: Dictionary) -> void:
 	var b := MeshInstance3D.new()
 	b.mesh = _bench
-	var m := StandardMaterial3D.new()
-	m.albedo_color = Color(0.35, 0.25, 0.15)
-	b.material_override = m
+	b.material_override = _prop_material(_TEX_BENCH, Color(0.35, 0.25, 0.15), 0.85, 0.0)
 	b.position = center + _side_offset(road, 2.8)
 	add_child(b)
 
@@ -111,24 +117,19 @@ func _spawn_tree(center: Vector3, road: Dictionary) -> void:
 	var off: Vector3 = _side_offset(road, 2.8)
 	var t := MeshInstance3D.new()
 	t.mesh = _trunk
-	var tm := StandardMaterial3D.new()
-	tm.albedo_color = Color(0.3, 0.18, 0.08)
-	t.material_override = tm
+	t.material_override = _prop_material("", Color(0.3, 0.18, 0.08), 0.95, 0.0)
 	t.position = center + off
 	add_child(t)
 	var l := MeshInstance3D.new()
 	l.mesh = _leaf
 	l.position = t.position + Vector3(0.0, 1.8, 0.0)
-	var lm := StandardMaterial3D.new()
-	lm.albedo_color = Color(0.15, 0.45, 0.18)
-	l.material_override = lm
+	l.material_override = _prop_material("", Color(0.15, 0.45, 0.18), 0.9, 0.0)
 	add_child(l)
 
 func _spawn_cone(center: Vector3, road: Dictionary) -> void:
 	var c := MeshInstance3D.new()
 	c.mesh = _cone
-	var m := StandardMaterial3D.new()
-	m.albedo_color = Color(1.0, 0.55, 0.1)
+	var m := _prop_material("", Color(1.0, 0.55, 0.1), 0.6, 0.0)
 	m.emission_enabled = true
 	m.emission = Color(1.0, 0.45, 0.05)
 	m.emission_energy_multiplier = 0.6

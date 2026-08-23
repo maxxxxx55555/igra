@@ -73,10 +73,10 @@ func _make_stylebox() -> StyleBoxFlat:
 	sb.border_width_right = 1
 	sb.border_width_top = 1
 	sb.border_width_bottom = 1
-	sb.corner_radius_top_left = 4
-	sb.corner_radius_top_right = 4
-	sb.corner_radius_bottom_left = 4
-	sb.corner_radius_bottom_right = 4
+	sb.corner_radius_top_left = 0
+	sb.corner_radius_top_right = 0
+	sb.corner_radius_bottom_left = 0
+	sb.corner_radius_bottom_right = 0
 	return sb
 
 func _on_settings_changed(key: String, value: Variant) -> void:

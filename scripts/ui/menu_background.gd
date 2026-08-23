@@ -44,7 +44,10 @@ func _ready() -> void:
 		add_child(c)
 		_containers.append(c)
 		_layers.append({"far": [], "near": []})
-	_theme = randi() % 3
+	# Всегда стартуем с NIGHT: у игры нет дня (GDD §11.1, «Дня нет»), а
+	# случайный выбор темы раньше на треть запусков встречал игрока в меню
+	# светлым DAY-фоном или тёплым GENERATOR прямо на первом экране.
+	_theme = BgTheme.NIGHT
 	_build_theme(0, _theme)
 	_containers[0].modulate.a = 1.0
 	_timer = CYCLE_TIME
@@ -56,9 +59,16 @@ func _build_theme(container_idx: int, theme: int) -> void:
 	_layers[container_idx]["far"] = _make_scroll_pair(c, far_tex, 0.45)
 	_layers[container_idx]["near"] = _make_scroll_pair(c, near_tex, 0.85)
 
+## Сколько копий 640px-тайла нужно, чтобы непрерывно закрыть весь экран
+## при скролле. Раньше их было ровно 2 (1280 px) — на экране 1920 px и шире
+## справа оставалась голая заливка фона без силуэта города.
+func _tile_count() -> int:
+	var vw := get_viewport().get_visible_rect().size.x
+	return maxi(2, ceili(vw / float(TEX_W)) + 1)
+
 func _make_scroll_pair(parent: Control, tex: ImageTexture, y_scale: float) -> Array:
 	var out: Array = []
-	for i in 2:
+	for i in _tile_count():
 		var t := TextureRect.new()
 		t.texture = tex
 		t.stretch_mode = TextureRect.STRETCH_KEEP

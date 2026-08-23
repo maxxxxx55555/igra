@@ -52,7 +52,7 @@ func _open_ui() -> void:
 	_panel = PanelContainer.new()
 	var st := StyleBoxFlat.new()
 	st.bg_color = Color(0.08, 0.08, 0.1, 0.96)
-	st.set_corner_radius_all(8)
+	st.set_corner_radius_all(0)
 	_panel.add_theme_stylebox_override("panel", st)
 	_panel.anchors_preset = Control.PRESET_CENTER
 	_panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER)

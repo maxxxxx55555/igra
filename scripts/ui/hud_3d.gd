@@ -159,7 +159,7 @@ func _spawn_status_icon(status: int) -> Control:
 	sb.bg_color = Color(0.078, 0.098, 0.129, 0.85)
 	sb.border_color = data[1]
 	sb.set_border_width_all(2)
-	sb.set_corner_radius_all(4)
+	sb.set_corner_radius_all(0)
 	box.add_theme_stylebox_override("panel", sb)
 	var vb := VBoxContainer.new()
 	vb.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -524,11 +524,13 @@ func _process(delta: float) -> void:
 	else:
 		bat_fill.color = Color(0.788, 0.635, 0.290)
 
-func _on_monster_spotted(monster_id) -> void:
-	if typeof(monster_id) == TYPE_INT:
-		enemy_name_label.text = "CRAWLER"
-	else:
-		enemy_name_label.text = "ember #" + str(monster_id)
+## monster_spotted всегда шлёт StringName (EventBus.gd) — ветка на TYPE_INT
+## никогда не выполнялась, а "ember #" + id было мусором, который игрок видел
+## на каждой встрече с монстром в любой локали. Имя берём из тех же i18n-
+## ключей, что уже наполнены для энциклопедии (MONSTER_SHADOW и т.д.).
+func _on_monster_spotted(monster_id: StringName) -> void:
+	var key := "MONSTER_" + String(monster_id).to_upper()
+	enemy_name_label.text = LocalizationManager.t(key)
 	enemy_name_label.visible = true
 	enemy_hp_bar.visible = true
 	if _enemy_hp_tween:

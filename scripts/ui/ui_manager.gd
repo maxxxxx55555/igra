@@ -72,7 +72,7 @@ func show_notification(msg: String) -> void:
 		_toast = Label.new()
 		_toast.name = "Toast"
 		_toast.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		_toast.add_theme_color_override("font_color", Color(1.0, 0.9, 0.6))
+		_toast.add_theme_color_override("font_color", Color("#d8d2c4"))  # bone-text
 		_toast.add_theme_font_size_override("font_size", 20)
 		_toast.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)
 		_toast.offset_bottom = -80

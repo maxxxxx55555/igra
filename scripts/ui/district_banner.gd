@@ -13,7 +13,7 @@ func _ready() -> void:
 	_label.position = Vector2(14, 10)
 	_label.size = Vector2(420, 36)
 	_label.add_theme_font_size_override("font_size", 22)
-	_label.add_theme_color_override("font_color", Color(1.0, 0.75, 0.3))
+	_label.add_theme_color_override("font_color", Color("#c9a24a"))  # brass
 	add_child(_label)
 	var bus := get_node_or_null("/root/EventBus")
 	if bus != null and bus.has_signal("district_entered"):

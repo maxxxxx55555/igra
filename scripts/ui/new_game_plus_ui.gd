@@ -15,24 +15,25 @@ func _ready() -> void:
 
 func _refresh() -> void:
 	var ng = NewGamePlus.get_current_ng_plus()
-	ng_label.text = "New Game+ Level: %d / %d" % [ng, NewGamePlus.get_max_ng_plus()]
-	current_level.text = "Current Run: " + ("NG+ %d" % ng if ng > 0 else "Base Game")
-	
+	ng_label.text = LocalizationManager.tf("NG_PLUS_LEVEL", [ng, NewGamePlus.get_max_ng_plus()])
+	var run_label := LocalizationManager.tf("NG_PLUS_LABEL", [ng]) if ng > 0 else LocalizationManager.t("NG_PLUS_BASE_GAME")
+	current_level.text = LocalizationManager.tf("NG_PLUS_CURRENT_RUN", [run_label])
+
 	var mult = NewGamePlus.get_difficulty_multiplier()
 	multiplier_label.text = (
-		"XP: x%.2f\n" % mult.xp_multiplier +
-		"Enemy HP: x%.2f\n" % mult.enemy_hp_multiplier +
-		"Enemy Damage: x%.2f\n" % mult.enemy_damage_multiplier +
-		"Player Damage: x%.2f\n" % mult.player_damage_multiplier +
-		"Loot Chance: x%.2f" % mult.loot_chance_multiplier
+		LocalizationManager.tf("NG_PLUS_STAT_XP", [mult.xp_multiplier]) + "\n" +
+		LocalizationManager.tf("NG_PLUS_STAT_ENEMY_HP", [mult.enemy_hp_multiplier]) + "\n" +
+		LocalizationManager.tf("NG_PLUS_STAT_ENEMY_DMG", [mult.enemy_damage_multiplier]) + "\n" +
+		LocalizationManager.tf("NG_PLUS_STAT_PLAYER_DMG", [mult.player_damage_multiplier]) + "\n" +
+		LocalizationManager.tf("NG_PLUS_STAT_LOOT", [mult.loot_chance_multiplier])
 	)
-	
+
 	activate_button.disabled = ng >= NewGamePlus.get_max_ng_plus()
 
 func _on_activate() -> void:
 	if NewGamePlus.activate_ng_plus():
 		_refresh()
-		UIManager.show_notification("New Game+ Activated! Difficulty increased.")
+		UIManager.show_notification(LocalizationManager.t("NG_PLUS_ACTIVATED"))
 
 func _close() -> void:
 	UIManager.close(&"new_game_plus")

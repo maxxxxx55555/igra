@@ -121,13 +121,13 @@ func _update_ui() -> void:
 				var label = Label.new()
 				label.text = str(slot.quantity)
 				label.position = Vector2(40, 40)
-				label.add_theme_color_override("font_color", Color.WHITE)
+				label.add_theme_color_override("font_color", Color("#d8d2c4"))  # bone-text
 				slot_btn.add_child(label)
 	weight_bar.value = (current_weight / MAX_WEIGHT) * 100.0
 	weight_label.text = str("%.1f" % current_weight) + " / " + str(MAX_WEIGHT) + " kg"
 	if current_weight > MAX_WEIGHT * 0.9:
-		weight_bar.modulate = Color(1, 0.2, 0.2)
+		weight_bar.modulate = Color("#b4452f")  # ember — danger
 	elif current_weight > MAX_WEIGHT * 0.7:
-		weight_bar.modulate = Color(1, 0.8, 0.2)
+		weight_bar.modulate = Color("#c9a24a")  # brass — warning
 	else:
 		weight_bar.modulate = Color.WHITE

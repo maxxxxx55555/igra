@@ -34,6 +34,11 @@ func _place_lamp(pos: Vector3, dir: String) -> void:
 	bm.size = Vector3(0.15, 3.5, 0.15)
 	var mat := StandardMaterial3D.new()
 	mat.albedo_color = Color("#1a1a1a")
+	mat.roughness = 0.55
+	mat.metallic = 0.6
+	var pole_tex: Texture2D = load("res://assets/textures/surfaces/streetlight_metal_512.png")
+	if pole_tex:
+		mat.albedo_texture = pole_tex
 	bm.material = mat
 	pole.mesh = bm
 	pole.position = base + Vector3(0, 1.75, 0)
