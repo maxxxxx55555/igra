@@ -150,12 +150,20 @@ func _check_music() -> void:
 			no_import.append(String(d).get_file())
 	_ok(no_import.is_empty(), "треки импортированы (попадут в APK)%s" % ("" if no_import.is_empty() else " нет: " + ", ".join(no_import)))
 
+	# MusicDirector зацикливает треки в рантайме через _force_loop() (см. её
+	# комментарий: .import-настройки не в репозитории), поэтому проверяем
+	# тем же путём, а не сырым флагом импорта, который для MP3 всегда false.
 	var not_looped: Array = []
 	for m in moods:
-		var st := load(moods[m]) as AudioStreamWAV
-		if st == null or st.data.size() == 0:
+		var res: AudioStream = load(moods[m]) as AudioStream
+		var empty: bool = res == null or (res.get("data") != null and (res.get("data") as PackedByteArray).size() == 0)
+		if empty:
 			not_looped.append(String(moods[m]).get_file() + "(пустой)")
-		elif st.loop_mode != AudioStreamWAV.LOOP_FORWARD:
+			continue
+		MusicDirector._force_loop(res)
+		var looped: bool = (res is AudioStreamWAV and res.loop_mode == AudioStreamWAV.LOOP_FORWARD) \
+			or (not res is AudioStreamWAV and bool(res.get("loop")))
+		if not looped:
 			not_looped.append(String(moods[m]).get_file() + "(без лупа)")
 	_ok(not_looped.is_empty(), "треки непустые и зациклены%s" % ("" if not_looped.is_empty() else ": " + ", ".join(not_looped)))
 
@@ -169,9 +177,9 @@ func _check_music() -> void:
 
 	# Реальная подмена трека при входе в район
 	var before: String = MusicManager._ambient_path
-	MusicManager._on_district_entered(&"old_town")
+	MusicManager._on_district_entered(&"substation")
 	var after: String = MusicManager._ambient_path
-	_ok(after != before and after.ends_with("music_ambient_dark.wav"), "old_town даёт свой эмбиент")
+	_ok(after != before and after.ends_with("music_ambient_dark.wav"), "substation даёт свой эмбиент")
 	MusicManager._on_district_entered(&"suburbs")
 	_ok(MusicManager._ambient_path == before, "возврат в suburbs возвращает трек")
 

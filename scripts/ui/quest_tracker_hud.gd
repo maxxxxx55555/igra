@@ -4,6 +4,11 @@ class_name QuestTrackerHUD
 # S5.3: HUD quest tracker - right top under minimap
 # Shows up to 3 active objectives with progress, optional direction arrow
 
+const PANEL_WIDTH := 300
+const PANEL_HEIGHT := 200
+const PANEL_MARGIN := 20
+const PANEL_TOP := 140  ## ниже миникарты
+
 var _settings: Node = null
 var _container: VBoxContainer
 var _title_lbl: Label
@@ -22,24 +27,26 @@ func _ready() -> void:
 	_refresh()
 
 func _build_ui() -> void:
-	# Main container - top right, under minimap area
+	# Панель справа сверху, под миникартой.
+	# size у заякоренного Control игнорируется, а из четырёх отступов задавались
+	# только два — панель схлопывалась в ~70 px, и текст переносился по одной
+	# букве в строку. Задаём пресет и все четыре отступа явно.
 	_container = VBoxContainer.new()
 	_container.name = "QuestHUDContainer"
-	_container.size = Vector2(300, 200)
-	_container.anchors_preset = Control.PRESET_TOP_RIGHT
-	_container.offset_top = 140  # Below minimap
-	_container.offset_right = -20
+	_container.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	_container.offset_left = -(PANEL_WIDTH + PANEL_MARGIN)
+	_container.offset_right = -PANEL_MARGIN
+	_container.offset_top = PANEL_TOP
+	_container.offset_bottom = PANEL_TOP + PANEL_HEIGHT
 	_container.add_theme_constant_override("separation", 8)
 	add_child(_container)
-	
+
 	# Background panel
 	var bg := PanelContainer.new()
-	bg.size = _container.size
 	bg.add_theme_stylebox_override("panel", _make_stylebox())
 	_container.add_child(bg)
-	
+
 	var inner_vb := VBoxContainer.new()
-	inner_vb.size = _container.size
 	inner_vb.add_theme_constant_override("separation", 6)
 	bg.add_child(inner_vb)
 	
@@ -115,12 +122,15 @@ func _refresh(_a: Variant = null, _b: Variant = null, _c: Variant = null) -> voi
 		obj_lbl.add_theme_font_size_override("font_size", 13)
 		obj_lbl.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT)
 		obj_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		# Без растяжения контейнер выдаёт метке минимальную ширину, и перенос
+		# по словам вырождается в перенос по буквам.
+		obj_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		hb.add_child(obj_lbl)
 
 		if show_markers:
 			var arrow := TextureRect.new()
 			arrow.texture = _make_arrow_texture()
-			arrow.size = Vector2(16, 16)
+			arrow.custom_minimum_size = Vector2(16, 16)  # size внутри контейнера игнорируется
 			hb.add_child(arrow)
 
 		count += 1
