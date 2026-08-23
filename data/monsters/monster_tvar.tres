@@ -1,7 +1,9 @@
-[gd_resource type="Resource" script_class="MonsterData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="MonsterData" load_steps=3 format=3]
 [ext_resource type="Script" path="res://scripts/enemies/monster_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/textures/enemies/tvar_512.png" id="2"]
 [resource]
 script = ExtResource("1")
+portrait = ExtResource("2")
 id = &"tvar"
 display_name = "Tvar"
 description = "A hulking mini-boss that slows under light and staggers only after a landed combo."

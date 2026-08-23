@@ -112,12 +112,13 @@ func _setup_nv_poll() -> void:
 
 ## 3.12/6.5: полоска статусов игрока (BLEED/BURN/POISON/SLOW/STUN) — иконка 32x32
 ## с полоской длительности снизу, tween при появлении/исчезновении.
+## glyph — запасной вариант, если PNG от арт-агента вдруг нет на диске.
 const _STATUS_ICONS: Dictionary = {
-	EnemyRosterData.Status.BLEED: ["🩸", Color(0.706, 0.271, 0.184)],
-	EnemyRosterData.Status.BURN: ["🔥", Color(0.851, 0.408, 0.176)],
-	EnemyRosterData.Status.POISON: ["☠", Color(0.373, 0.541, 0.306)],
-	EnemyRosterData.Status.SLOW: ["🐌", Color(0.541, 0.451, 0.220)],
-	EnemyRosterData.Status.STUN: ["💫", Color(0.788, 0.635, 0.290)],
+	EnemyRosterData.Status.BLEED: ["🩸", Color(0.706, 0.271, 0.184), "res://assets/textures/ui/status_bleed.png"],
+	EnemyRosterData.Status.BURN: ["🔥", Color(0.851, 0.408, 0.176), "res://assets/textures/ui/status_burn.png"],
+	EnemyRosterData.Status.POISON: ["☠", Color(0.373, 0.541, 0.306), "res://assets/textures/ui/status_poison.png"],
+	EnemyRosterData.Status.SLOW: ["🐌", Color(0.541, 0.451, 0.220), "res://assets/textures/ui/status_slow.png"],
+	EnemyRosterData.Status.STUN: ["💫", Color(0.788, 0.635, 0.290), "res://assets/textures/ui/status_stun.png"],
 }
 const _STATUS_ICON_SIZE: float = 32.0
 
@@ -163,11 +164,19 @@ func _spawn_status_icon(status: int) -> Control:
 	vb.alignment = BoxContainer.ALIGNMENT_CENTER
 	vb.add_theme_constant_override("separation", 2)
 	box.add_child(vb)
-	var lbl := Label.new()
-	lbl.text = data[0]
-	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	lbl.add_theme_font_size_override("font_size", 16)
-	vb.add_child(lbl)
+	var icon_path: String = data[2]
+	if ResourceLoader.exists(icon_path):
+		var tex_rect := TextureRect.new()
+		tex_rect.texture = load(icon_path)
+		tex_rect.custom_minimum_size = Vector2(22.0, 22.0)
+		tex_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		vb.add_child(tex_rect)
+	else:
+		var lbl := Label.new()
+		lbl.text = data[0]
+		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		lbl.add_theme_font_size_override("font_size", 16)
+		vb.add_child(lbl)
 	var bar_bg := ColorRect.new()
 	bar_bg.color = Color(0.047, 0.063, 0.086)
 	bar_bg.custom_minimum_size = Vector2(_STATUS_ICON_SIZE - 8.0, 3.0)

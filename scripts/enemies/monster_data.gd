@@ -19,3 +19,4 @@ extends Resource
 @export var melee_range: float = 26.0
 @export var can_break_lights: bool = false
 @export var body_color: Color = Color("5a2a2a")
+@export var portrait: Texture2D = null

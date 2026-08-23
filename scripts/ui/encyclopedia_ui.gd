@@ -52,10 +52,18 @@ func _build() -> void:
 		grid.add_child(card)
 		var cv := VBoxContainer.new()
 		card.add_child(cv)
-		var prev := ColorRect.new()
-		prev.custom_minimum_size = Vector2(190, 44)
-		prev.color = data.body_color if (unlocked and data) else ThemeProvider.COLOR_BG_DARK
-		cv.add_child(prev)
+		if unlocked and data and data.portrait != null:
+			var portrait := TextureRect.new()
+			portrait.custom_minimum_size = Vector2(190, 44)
+			portrait.texture = data.portrait
+			portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			cv.add_child(portrait)
+		else:
+			var prev := ColorRect.new()
+			prev.custom_minimum_size = Vector2(190, 44)
+			prev.color = data.body_color if (unlocked and data) else ThemeProvider.COLOR_BG_DARK
+			cv.add_child(prev)
 		var nm := Label.new()
 		nm.text = LocalizationManager.name_for("MONSTER_", data.id, data.display_name) if unlocked else "???"
 		nm.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER if unlocked else ThemeProvider.COLOR_TEXT_DIM)
