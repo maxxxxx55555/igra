@@ -15,6 +15,21 @@ var _player: Node = null
 var _inv: Node = null
 var _bar_fills: Array = []
 var _bar_values: Array = []
+## GDD §V.5 9.5 — реальные 5 слотов экипировки (ItemData.EquipSlot), не 4
+## декоративных бокса без логики, что было раньше.
+var _equip_slots: Array = []  # [{"box": Control, "icon": Control, "slot": EquipSlot}]
+var _quick_slots: Array = []  # [Control] — первые GRID_COUNT слотов инвентаря
+
+const _EQUIP_ORDER := [
+	ItemData.EquipSlot.HEAD, ItemData.EquipSlot.BODY, ItemData.EquipSlot.LEGS,
+	ItemData.EquipSlot.HOLSTER, ItemData.EquipSlot.BACKPACK,
+]
+const _EQUIP_KEYS := {
+	ItemData.EquipSlot.HEAD: "CHAR_HEAD", ItemData.EquipSlot.BODY: "CHAR_BODY",
+	ItemData.EquipSlot.LEGS: "CHAR_LEGS", ItemData.EquipSlot.HOLSTER: "CHAR_HOLSTER",
+	ItemData.EquipSlot.BACKPACK: "CHAR_BACKPACK",
+}
+const _GRID_COUNT := 8
 
 func _ready() -> void:
 	if not enable_character_screen: return
@@ -22,6 +37,9 @@ func _ready() -> void:
 	_inv = get_tree().root.get_node_or_null("InventoryManager")
 	_build_ui()
 	_update_stats()
+	_refresh_equipment()
+	if not EventBus.inventory_changed.is_connected(_refresh_equipment):
+		EventBus.inventory_changed.connect(_refresh_equipment)
 
 
 func _build_ui() -> void:
@@ -93,8 +111,8 @@ func _build_ui() -> void:
 
 	var slot_x := size.x - 105.0
 	var slot_y := 5.0
-	var slot_keys := ["CHAR_HEAD", "CHAR_BODY", "CHAR_BACKPACK", "CHAR_LAMP"]
-	for i in slot_keys.size():
+	for i in _EQUIP_ORDER.size():
+		var eq_slot: int = _EQUIP_ORDER[i]
 		var y := slot_y + i * 50
 		var slot := ColorRect.new()
 		slot.color = PANEL
@@ -107,23 +125,30 @@ func _build_ui() -> void:
 		border.position = Vector2(-1, -1)
 		border.mouse_filter = Control.MOUSE_FILTER_PASS
 		slot.add_child(border)
+		var icon_parent := Control.new()
+		icon_parent.name = "Icon"
+		icon_parent.size = Vector2(28, 28)
+		icon_parent.position = Vector2(4, 7)
+		icon_parent.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		slot.add_child(icon_parent)
 		var lbl := Label.new()
-		lbl.text = tr(slot_keys[i])
-		lbl.size = Vector2(90, 18)
-		lbl.position = Vector2(0, 12)
-		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		lbl.name = "Label"
+		lbl.text = tr(_EQUIP_KEYS[eq_slot])
+		lbl.size = Vector2(56, 32)
+		lbl.position = Vector2(34, 5)
+		lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		lbl.add_theme_color_override("font_color", BRASS_DIM)
 		lbl.add_theme_font_size_override("font_size", 8)
 		slot.add_child(lbl)
-		var si := i
 		slot.gui_input.connect(func(event: InputEvent):
 			if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-				if InventoryManager and InventoryManager.has_method("use_item"):
-					InventoryManager.use_item(si)
-					_show_toast("Item used")
-				)
+				if _inv and _inv.has_method("unequip_item") and _inv.get_equipped(eq_slot).size() > 0:
+					_inv.unequip_item(eq_slot)
+			)
+		_equip_slots.append({"box": slot, "icon": icon_parent, "label": lbl, "slot": eq_slot})
 
-	var grid_y := slot_y + slot_keys.size() * 50 + 10
+	var grid_y := slot_y + _EQUIP_ORDER.size() * 50 + 10
 	var grid_label := Label.new()
 	grid_label.text = tr("INV_QUICK_ACCESS")
 	grid_label.size = Vector2(size.x, 18)
@@ -150,6 +175,19 @@ func _build_ui() -> void:
 		border.size = Vector2(slot_sz + 2, slot_sz + 2)
 		border.position = Vector2(-1, -1)
 		slot.add_child(border)
+		var icon_parent := Control.new()
+		icon_parent.name = "Icon"
+		icon_parent.size = Vector2(slot_sz - 8, slot_sz - 8)
+		icon_parent.position = Vector2(4, 4)
+		icon_parent.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		slot.add_child(icon_parent)
+		var si := i
+		slot.mouse_filter = Control.MOUSE_FILTER_STOP
+		slot.gui_input.connect(func(event: InputEvent):
+			if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+				_on_quick_slot_clicked(si)
+			)
+		_quick_slots.append({"box": slot, "icon": icon_parent})
 
 func _process(delta: float) -> void:
 	if not enable_character_screen: return
@@ -180,6 +218,47 @@ func _update_stats() -> void:
 			_bar_fills[i].size.x = 100.0 * ratios[i]
 		if i < _bar_values.size():
 			_bar_values[i].text = vals[i]
+
+## Перерисовывает 5 слотов экипировки и превью первых _GRID_COUNT слотов
+## инвентаря — вызывается при открытии экрана и на inventory_changed.
+func _refresh_equipment() -> void:
+	if _inv == null:
+		return
+	var icons := preload("res://scripts/ui/item_icons.gd")
+	for e in _equip_slots:
+		var icon_parent: Control = e["icon"]
+		for c in icon_parent.get_children():
+			c.queue_free()
+		var eq: Dictionary = _inv.get_equipped(e["slot"])
+		if eq.size() > 0:
+			icons.draw_icon(icon_parent, eq.get("item_id", &""), 28.0)
+	for i in _quick_slots.size():
+		var q: Dictionary = _quick_slots[i]
+		var icon_parent: Control = q["icon"]
+		for c in icon_parent.get_children():
+			c.queue_free()
+		if i >= _inv.slots.size():
+			continue
+		var s = _inv.slots[i]
+		if s != null:
+			icons.draw_icon(icon_parent, s["item_id"], 36.0)
+
+## Клик по слоту быстрого доступа: экипируемые предметы — экипируем,
+## расходуемые — используем (сохраняет прежнее поведение use_item).
+func _on_quick_slot_clicked(slot_index: int) -> void:
+	if _inv == null or slot_index >= _inv.slots.size():
+		return
+	var s = _inv.slots[slot_index]
+	if s == null:
+		return
+	var data := ItemDatabase.get_item(s["item_id"])
+	if data == null:
+		return
+	if data.equip_slot != ItemData.EquipSlot.NONE:
+		_inv.equip_item(slot_index)
+	elif data.consumable:
+		_inv.use_item(slot_index)
+		_show_toast(tr("INV_ITEM_USED"))
 
 func _show_toast(msg: String) -> void:
 	var existing := get_node_or_null("Toast")
