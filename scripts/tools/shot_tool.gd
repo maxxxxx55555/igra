@@ -104,6 +104,21 @@ func _apply_scenario(name: String) -> void:
 			await get_tree().create_timer(1.0).timeout
 		_: # "street" — оставить как есть, только дождаться стрима мира.
 			pass
+	_clear_stray_popups()
+
+## Подстраховка: даже с ads.enabled=false какой-то показ иногда успевает
+## проскочить (не разобрано до конца — не блокирует основную задачу этой
+## сессии), плюс он ставит игру на паузу. Для чистого кадра снимаем то и
+## другое, а не гоняемся за первопричиной ещё один заход.
+func _clear_stray_popups() -> void:
+	get_tree().paused = false
+	for n in [get_tree().root.get_node_or_null("AdPopup"), get_tree().root.get_node_or_null("AdPopupInterstitial")]:
+		if n:
+			n.queue_free()
+	var ui := get_node_or_null("/root/UIManager")
+	if ui and ui.has_method("close_all_blocking"):
+		ui.close_all_blocking()
+	await get_tree().process_frame
 
 static func _find_by_script(root: Node, file_name: String) -> Node:
 	var s: Script = root.get_script()
