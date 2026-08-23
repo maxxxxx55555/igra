@@ -337,7 +337,7 @@ func _update_crosshair(state: StringName) -> void:
 	if _CROSSHAIR_NAMES.has(state):
 		_crosshair.color = _CROSSHAIR_NAMES[state]
 
-## Triggered по сигналу EventBus.player_aim_at / crosshair_state_changed.
+## Triggered по сигналу EventBus.crosshair_state_changed.
 ## Caller: игрок или система взаимодействия.
 func _on_crosshair_state(state: StringName) -> void:
 	_update_crosshair(state)
