@@ -6,6 +6,12 @@ const _DATA: Array = [
 	preload("res://data/monsters/monster_hunter.tres"),
 	preload("res://data/monsters/monster_destroyer.tres"),
 	preload("res://data/monsters/monster_boss.tres"),
+	preload("res://data/monsters/monster_sharpshooter.tres"),
+	preload("res://data/monsters/monster_brute.tres"),
+	preload("res://data/monsters/monster_burner.tres"),
+	preload("res://data/monsters/monster_rotter.tres"),
+	preload("res://data/monsters/monster_hound.tres"),
+	preload("res://data/monsters/monster_tvar.tres"),
 ]
 var _by_id: Dictionary = {}
 var _unlocked: Dictionary = {}

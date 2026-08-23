@@ -40,11 +40,11 @@ const AI_TO_ROSTER := {
 		"speed": 5.5, "attack_range": 1.4, "detect_range": 14.0,
 	},
 	&"rotter": {
-		"name": "ENEMY_ROTTER", "hp": 350, "damage": 15, "armor": 20,
-		"weak_spot": "legs", "behaviors": [Behavior.CHASE],
+		"name": "ENEMY_ROTTER", "hp": 140, "damage": 10, "armor": 15,
+		"weak_spot": "blunt", "behaviors": [Behavior.CHASE],
 		"inflicts": [Status.POISON],
-		"resistances": {DamageType.BULLET: 0.6, DamageType.SLASH: 0.8, DamageType.BLUNT: 0.7, DamageType.FIRE: 1.3, DamageType.ELECTRIC: 1.0, DamageType.POISON: 0.3},
-		"speed": 1.8, "attack_range": 1.8, "detect_range": 9.0,
+		"resistances": {DamageType.BULLET: 0.8, DamageType.SLASH: 0.8, DamageType.BLUNT: 1.5, DamageType.FIRE: 1.0, DamageType.ELECTRIC: 1.0, DamageType.POISON: 1.0},
+		"speed": 1.2, "attack_range": 1.8, "detect_range": 5.0,
 	},
 	&"spitter": {
 		"name": "ENEMY_SPITTER", "hp": 140, "damage": 10, "armor": 5,
@@ -94,6 +94,41 @@ const AI_TO_ROSTER := {
 		"inflicts": [Status.BLEED, Status.FEAR],
 		"resistances": {DamageType.BULLET: 1.0, DamageType.SLASH: 1.1, DamageType.BLUNT: 1.0, DamageType.FIRE: 1.0, DamageType.ELECTRIC: 1.0, DamageType.POISON: 1.0},
 		"speed": 6.0, "attack_range": 1.4, "detect_range": 16.0,
+	},
+	&"sharpshooter": {
+		"name": "ENEMY_SHARPSHOOTER", "hp": 60, "damage": 50, "armor": 10,
+		"weak_spot": "back", "behaviors": [Behavior.COVER],
+		"inflicts": [],
+		"resistances": {DamageType.BULLET: 1.0, DamageType.SLASH: 1.0, DamageType.BLUNT: 1.0, DamageType.FIRE: 1.0, DamageType.ELECTRIC: 1.0, DamageType.POISON: 1.0},
+		"speed": 1.8, "attack_range": 18.0, "detect_range": 6.0, "ranged": true, "loot_ammo": true,
+	},
+	&"brute": {
+		"name": "ENEMY_BRUTE", "hp": 350, "damage": 30, "armor": 15,
+		"weak_spot": "fire_electric", "behaviors": [Behavior.CHASE],
+		"inflicts": [],
+		"resistances": {DamageType.BULLET: 0.85, DamageType.SLASH: 1.0, DamageType.BLUNT: 0.85, DamageType.FIRE: 1.5, DamageType.ELECTRIC: 1.5, DamageType.POISON: 1.0},
+		"speed": 1.5, "attack_range": 2.2, "detect_range": 10.0,
+	},
+	&"burner": {
+		"name": "ENEMY_BURNER", "hp": 90, "damage": 15, "armor": 5,
+		"weak_spot": "fire_immune", "behaviors": [Behavior.COVER],
+		"inflicts": [Status.BURN],
+		"resistances": {DamageType.BULLET: 1.0, DamageType.SLASH: 1.0, DamageType.BLUNT: 1.0, DamageType.FIRE: 0.1, DamageType.ELECTRIC: 1.0, DamageType.POISON: 1.0},
+		"speed": 3.0, "attack_range": 8.0, "detect_range": 10.0, "ranged": true,
+	},
+	&"hound": {
+		"name": "ENEMY_HOUND_PACK", "hp": 40, "damage": 18, "armor": 0,
+		"weak_spot": "bullet", "behaviors": [Behavior.CHASE, Behavior.SWARM],
+		"inflicts": [],
+		"resistances": {DamageType.BULLET: 1.5, DamageType.SLASH: 1.0, DamageType.BLUNT: 1.0, DamageType.FIRE: 1.0, DamageType.ELECTRIC: 1.0, DamageType.POISON: 1.0},
+		"speed": 5.4, "attack_range": 1.4, "detect_range": 18.0,
+	},
+	&"tvar": {
+		"name": "ENEMY_TVAR", "hp": 1200, "damage": 40, "armor": 20,
+		"weak_spot": "strobe_combo", "behaviors": [Behavior.CHASE],
+		"inflicts": [],
+		"resistances": {DamageType.BULLET: 0.6, DamageType.SLASH: 0.7, DamageType.BLUNT: 0.8, DamageType.FIRE: 0.9, DamageType.ELECTRIC: 1.5, DamageType.POISON: 0.6},
+		"speed": 3.0, "attack_range": 3.0, "detect_range": 16.0, "mini_boss": true,
 	},
 }
 

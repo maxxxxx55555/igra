@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="MonsterData" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/enemies/monster_data.gd" id="1"]
+[resource]
+script = ExtResource("1")
+id = &"burner"
+display_name = "Burner"
+description = "Spits a burning payload from range and flees in panic when caught in the light."
+move_speed = 70.0
+chase_speed = 100.0
+collision_radius = 13.0
+detect_radius = 200.0
+vision_cone_deg = 90.0
+vision_range = 160.0
+noise_sensitivity = 1.0
+lose_time = 3.0
+light_vulnerable = false
+max_hp = 90.0
+melee_damage = 15.0
+melee_range = 160.0
+body_color = Color(0.55, 0.25, 0.05, 1)

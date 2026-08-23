@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="MonsterData" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/enemies/monster_data.gd" id="1"]
+[resource]
+script = ExtResource("1")
+id = &"hound"
+display_name = "Hound"
+description = "A fast pack hunter that howls for allies the instant it spots you."
+move_speed = 90.0
+chase_speed = 160.0
+collision_radius = 10.0
+detect_radius = 260.0
+vision_cone_deg = 120.0
+vision_range = 220.0
+noise_sensitivity = 1.2
+lose_time = 3.0
+max_hp = 40.0
+melee_damage = 18.0
+melee_range = 28.0
+body_color = Color(0.2, 0.18, 0.16, 1)

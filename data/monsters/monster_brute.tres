@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="MonsterData" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/enemies/monster_data.gd" id="1"]
+[resource]
+script = ExtResource("1")
+id = &"brute"
+display_name = "Brute"
+description = "A heavy charger that winds up a slam and follows through with a lunge, then needs to recover."
+move_speed = 30.0
+chase_speed = 45.0
+collision_radius = 17.0
+detect_radius = 220.0
+vision_cone_deg = 180.0
+vision_range = 120.0
+noise_sensitivity = 1.0
+lose_time = 3.0
+max_hp = 350.0
+melee_damage = 30.0
+melee_range = 44.0
+body_color = Color(0.35, 0.15, 0.1, 1)
