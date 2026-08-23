@@ -154,7 +154,6 @@ scripts/tools/_screen_test.gd
 scripts/tools/_shot.gd
 scripts/tools/_shot_3d.gd
 scripts/tools/validate_all.gd
-scripts/touch_controls.gd
 scripts/transformer.gd
 scripts/ui/achievement_screen.gd
 scripts/ui/achievements_ui.gd
@@ -214,7 +213,6 @@ scripts/ui/stats_ui.gd
 scripts/ui/subtitle_manager.gd
 scripts/ui/theme_provider.gd
 scripts/ui/toast_manager.gd
-scripts/ui/touch_controls.gd
 scripts/ui/transition_manager.gd
 scripts/ui/tutorial_system.gd
 scripts/ui/ui_manager.gd

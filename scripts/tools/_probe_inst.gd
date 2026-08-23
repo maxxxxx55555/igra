@@ -30,7 +30,6 @@ const SCENES: Array[String] = [
 	"res://scenes/ui/hud_3d.tscn",
 	"res://scenes/ui/skill_tree_ui.tscn",
 	"res://scenes/ui/quest_tracker_hud.tscn",
-	"res://scenes/ui/touch_controls.tscn",
 	"res://scenes/world/test_zone.tscn",
 ]
 

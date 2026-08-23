@@ -574,10 +574,18 @@ main_menu, settings, difficulty, pause_menu, save_slots, game_over, death_screen
 victory_screen, credits, epilogue, confirm_quit, loading_screen, pre_loading,
 boot_loading, splash, screens (агрегатор), hud_3d, hud_enhanced, coin_hud,
 district_banner, quest_tracker_hud, skill_tree_ui, skill_button, inventory_panel,
-level_select, lobby, new_game_plus, tutorial, touch_controls, transition_manager,
-post_process.
+level_select, lobby, new_game_plus, tutorial, transition_manager, post_process.
 
-*(итого ~30 UI-сцен — покрывают 25 экранов §12.2)*
+Мобильный ввод (тач-зоны, джойстик, кнопки) не отдельная сцена — раньше
+планировался как `touch_controls.tscn`, но эта заглушка так и не была
+доделана (пустая сцена без дочерних нод, скрипт падал бы на `%JoystickArea`
+при первом же `_ready()`) и никогда не инстанцировалась. Реальная
+реализация: `virtual_joystick.gd` (джойстик) + `hud_3d.gd`
+(`_install_joystick`/`_add_side_buttons`/`_wire_action_buttons`) —
+кнопки экшена/фонарика/стелса/спринта/прыжка/колеса и двойной тап на
+джойстике для рывка, всё внутри HUD-сцены, а не отдельным слоем.
+
+*(итого ~29 UI-сцен — покрывают 25 экранов §12.2)*
 
 ---
 
