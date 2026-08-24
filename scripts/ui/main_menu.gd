@@ -60,6 +60,23 @@ func _install_background() -> void:
 	add_child(bg)
 	var bg_flat := get_node_or_null("BG")
 	move_child(bg, (bg_flat.get_index() + 1) if bg_flat else 0)
+	_install_hero_bg_v2(bg)
+
+## V2 SKIN WIRING P4: real hero art (streetlight + silhouette) over the
+## procedural skyline above - inserted between them so both keep working,
+## just visually replaced (no code removed, matches "additive only").
+func _install_hero_bg_v2(after: Node) -> void:
+	var path := "res://assets/textures/screens_v2/menu_hero.png"
+	if get_node_or_null("MenuHeroV2") != null or not ResourceLoader.exists(path):
+		return
+	var hero := TextureRect.new()
+	hero.name = "MenuHeroV2"
+	hero.texture = load(path)
+	hero.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	hero.stretch_mode = TextureRect.STRETCH_SCALE
+	hero.set_anchors_preset(Control.PRESET_FULL_RECT)
+	add_child(hero)
+	move_child(hero, (after.get_index() + 1) if after else 0)
 
 ## Flicker стоял в сцене с color.a = 0.15 и без единой строчки кода, которая
 ## бы его двигала — ровный тёплый засвет поверх всего меню 24/7 вместо

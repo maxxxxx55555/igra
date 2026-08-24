@@ -55,6 +55,17 @@ func _build() -> void:
 	panel.set_anchors_preset(Control.PRESET_CENTER)
 	panel.custom_minimum_size = Vector2(720, 560)
 	add_child(panel)
+	# V2 SKIN WIRING P4: real isometric city backdrop under the district
+	# rows below (textless by design - rows/labels are the "engine overlay").
+	var map_bg_path := "res://assets/textures/maps_v2/city_iso_2048.png"
+	if ResourceLoader.exists(map_bg_path):
+		var map_bg := TextureRect.new()
+		map_bg.texture = load(map_bg_path)
+		map_bg.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		map_bg.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+		map_bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+		map_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		panel.add_child(map_bg)
 
 	var root := VBoxContainer.new()
 	root.add_theme_constant_override("separation", 10)

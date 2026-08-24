@@ -13,10 +13,24 @@ func _build() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = ThemeProvider.build_theme()
-	var bg := ColorRect.new()
-	bg.color = Color(0.09, 0.02, 0.02, 0.92)
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	add_child(bg)
+	# V2 SKIN WIRING P4: real background art over the old flat tint.
+	var bg_path := "res://assets/textures/screens_v2/death_loom.png"
+	if ResourceLoader.exists(bg_path):
+		var bg_tex := TextureRect.new()
+		bg_tex.texture = load(bg_path)
+		bg_tex.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		bg_tex.stretch_mode = TextureRect.STRETCH_SCALE
+		bg_tex.set_anchors_preset(Control.PRESET_FULL_RECT)
+		add_child(bg_tex)
+		var tint := ColorRect.new()
+		tint.color = Color(0.09, 0.02, 0.02, 0.45)
+		tint.set_anchors_preset(Control.PRESET_FULL_RECT)
+		add_child(tint)
+	else:
+		var bg := ColorRect.new()
+		bg.color = Color(0.09, 0.02, 0.02, 0.92)
+		bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+		add_child(bg)
 	var vb := VBoxContainer.new()
 	vb.set_anchors_preset(Control.PRESET_CENTER)
 	vb.add_theme_constant_override("separation", 16)

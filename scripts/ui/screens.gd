@@ -88,6 +88,7 @@ func _build_screen(name: String) -> void:
 	inner.position = Vector2(1, 1)
 	inner.mouse_filter = Control.MOUSE_FILTER_PASS
 	border.add_child(inner)
+	_apply_card_bg_v2(inner, name, card_w - 2, card_h - 2)
 	var header_line := ColorRect.new()
 	header_line.color = BRASS
 	header_line.size = Vector2(card_w - 4, 2)
@@ -118,6 +119,26 @@ func _build_screen(name: String) -> void:
 		"underlay": underlay, "card": card, "content": content,
 		"close_btn": close_btn if close_btn else Button.new(), "title_lbl": title_lbl,
 	}
+
+## V2 SKIN WIRING P4: card background art for the screens.gd-routed
+## screens that got one (visual only - inserted as `inner`'s first child
+## so it sits behind the existing header/title/content, same show/hide/
+## fade already driven by card.modulate - no new logic).
+const _CARD_BG_V2: Dictionary = {
+	"Loading": "res://assets/textures/screens_v2/loading_street.png",
+	"PowerGrid": "res://assets/textures/maps_v2/grid_panel_512.png",
+}
+
+func _apply_card_bg_v2(inner: ColorRect, name: String, w: float, h: float) -> void:
+	var path: String = _CARD_BG_V2.get(name, "")
+	if path == "" or not ResourceLoader.exists(path):
+		return
+	var bg := TextureRect.new()
+	bg.texture = load(path)
+	bg.size = Vector2(w, h)
+	bg.stretch_mode = TextureRect.STRETCH_SCALE
+	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	inner.add_child(bg)
 
 func _apply_outline(lbl: Label) -> void:
 	lbl.add_theme_color_override("font_outline_color", OUTLINE_COLOR)

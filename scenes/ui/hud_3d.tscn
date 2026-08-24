@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/hud_3d.gd" id="1"]
 [ext_resource type="Texture2D" path="res://assets/ui/ui_heart.svg" id="3_heart"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui_v2/bar_track_256x8.png" id="11_bartrack"]
 [ext_resource type="Texture2D" path="res://assets/textures/ui/crosshair_64.png" id="9_crosshair"]
 [ext_resource type="Texture2D" path="res://assets/textures/ui/hitmarker_64.png" id="10_hitmarker"]
 [ext_resource type="Texture2D" path="res://assets/ui/ui_interact.svg" id="4_interact"]
@@ -72,8 +73,10 @@ expand_mode = 1
 stretch_mode = 5
 mouse_filter = 2
 
-[node name="HPT" type="ColorRect" parent="TopLeft/HP"]
-color = Color(0.165, 0.200, 0.251, 1.0)
+[node name="HPT" type="TextureRect" parent="TopLeft/HP"]
+texture = ExtResource("11_bartrack")
+expand_mode = 1
+stretch_mode = 0
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -105,8 +108,10 @@ offset_right = 260.0
 offset_bottom = 64.0
 mouse_filter = 2
 
-[node name="StamT" type="ColorRect" parent="TopLeft/Stam"]
-color = Color(0.165, 0.200, 0.251, 1.0)
+[node name="StamT" type="TextureRect" parent="TopLeft/Stam"]
+texture = ExtResource("11_bartrack")
+expand_mode = 1
+stretch_mode = 0
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -148,8 +153,10 @@ expand_mode = 1
 stretch_mode = 5
 mouse_filter = 2
 
-[node name="BatT" type="ColorRect" parent="TopLeft/Bat"]
-color = Color(0.165, 0.200, 0.251, 1.0)
+[node name="BatT" type="TextureRect" parent="TopLeft/Bat"]
+texture = ExtResource("11_bartrack")
+expand_mode = 1
+stretch_mode = 0
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

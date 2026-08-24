@@ -72,8 +72,23 @@ func _refresh() -> void:
 		var unlocked: bool = bool(entry.get("unlocked", false))
 		if unlocked:
 			done += 1
+		var hrow := HBoxContainer.new()
+		hrow.add_theme_constant_override("separation", 8)
+		# V2 SKIN WIRING P4: real medal icon per achievement (id "ach_NN" ->
+		# ach_medal_v2_NN_96.png), dimmed while locked.
+		var medal_id: String = String(entry.get("id", "")).trim_prefix("ach_")
+		var medal_path := "res://assets/textures/icons_v2/ach_medal_v2_%s_96.png" % medal_id
+		if ResourceLoader.exists(medal_path):
+			var medal := TextureRect.new()
+			medal.texture = load(medal_path)
+			medal.custom_minimum_size = Vector2(28, 28)
+			medal.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			medal.modulate.a = 1.0 if unlocked else 0.35
+			hrow.add_child(medal)
 		var row := VBoxContainer.new()
 		row.add_theme_constant_override("separation", 0)
+		row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		hrow.add_child(row)
 		var l := Label.new()
 		var mark: String = "[+]" if unlocked else "[ ]"
 		# Секретные достижения не раскрываются до получения.
@@ -89,5 +104,5 @@ func _refresh() -> void:
 			d.add_theme_font_size_override("font_size", 12)
 			d.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
 			row.add_child(d)
-		_list.add_child(row)
+		_list.add_child(hrow)
 	_counter.text = LocalizationManager.tf("ACH_PROGRESS", [done, all.size()])

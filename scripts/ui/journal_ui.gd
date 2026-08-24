@@ -91,6 +91,16 @@ func _build() -> void:
 	_reader = PanelContainer.new()
 	_reader.custom_minimum_size = Vector2(490, 390)
 	cols.add_child(_reader)
+	# V2 SKIN WIRING P4: real paper texture behind the found-document text.
+	var paper_path := "res://assets/textures/screens_v2/journal_paper.png"
+	if ResourceLoader.exists(paper_path):
+		var paper_sb := StyleBoxTexture.new()
+		paper_sb.texture = load(paper_path)
+		paper_sb.content_margin_left = 14.0
+		paper_sb.content_margin_right = 14.0
+		paper_sb.content_margin_top = 12.0
+		paper_sb.content_margin_bottom = 12.0
+		_reader.add_theme_stylebox_override("panel", paper_sb)
 	var rv := VBoxContainer.new()
 	rv.add_theme_constant_override("separation", 8)
 	_reader.add_child(rv)
