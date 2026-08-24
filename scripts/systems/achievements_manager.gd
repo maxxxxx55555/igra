@@ -155,6 +155,7 @@ func _ready() -> void:
 	EventBus.enemy_killed.connect(_on_enemy_killed)
 	EventBus.secret_found.connect(_on_secret_found)
 	EventBus.district_restored.connect(_on_district_restored)
+	EventBus.streetlight_activated.connect(_on_streetlight_activated)
 	EventBus.document_unlocked.connect(_on_document_unlocked)
 	EventBus.quest_completed.connect(_on_quest_completed)
 	EventBus.game_won.connect(_on_game_won)
@@ -262,14 +263,18 @@ func _on_secret_found(secret_id: StringName) -> void:
 
 func _on_district_restored(district_id: StringName, stage: int) -> void:
 	if stage >= 3:
-		# ach_01 "first_light" was passed a StringName (&"district_1") that
-		# never matched either branch of _check_unlock - it could never
-		# unlock. Same trigger as ach_02 "electrician" (this handler only
-		# runs on stage>=3, i.e. a district reaching FULL) - "first light"
-		# fires on that same real event, not a separate condition to invent.
-		_check_unlock(&"ach_01", true)
 		_check_unlock(&"ach_02", true)
 		_check_unlock(&"ach_03", _all_districts_full())
+
+## WAVE 6 P5: ach_01 "first_light" gets its own real trigger - the FIRST
+## district reaching STREETS (streetlights on), not shared with ach_02
+## "electrician" (which fires on the LATER full-restoration event).
+## EventBus.streetlight_activated fires exactly once per district when
+## it crosses into Stage.STREETS (power_grid.gd's advance_district()) -
+## _unlock()'s own idempotency guard means only the genuine first
+## occurrence across any district actually unlocks anything.
+func _on_streetlight_activated(_district_id: String) -> void:
+	_check_unlock(&"ach_01", true)
 
 func _on_document_unlocked(doc_id: StringName) -> void:
 	_increment_progress(&"ach_04")

@@ -803,3 +803,25 @@ first.
   every prior session (buffered output, needs a kill to flush) -
   result pending, not force-killed this time (learned earlier this
   session that killing it mid-run corrupts the read, not the game).
+
+## WAVE 6 P5 — ach_01 "First Light" gets its own trigger
+- What: the earlier burst-wave fix made ach_01 share ach_02's trigger
+  (both fired on district reaching FULL) since ach_01's original code
+  passed a StringName that could never match either _check_unlock
+  branch. This wave asked for the more precise, GDD-correct fix: ach_01
+  should unlock on the FIRST STREETLIGHT restored (a district reaching
+  STREETS, the earlier/lighter milestone), not shared with ach_02
+  "electrician" (which correctly stays on the later FULL-restoration
+  event).
+- Files: achievements_manager.gd - removed ach_01 from _on_district_
+  restored's stage>=3(FULL) branch; added a new _on_streetlight_
+  activated(district_id) handler connected to EventBus.streetlight_
+  activated (fires exactly once per district crossing into
+  Stage.STREETS, per power_grid.gd's advance_district() - already a
+  real, live signal, just not listened to by achievements before).
+  _unlock()'s existing idempotency guard means only the genuine first
+  district-reaches-STREETS event across the whole playthrough actually
+  unlocks anything, later districts silently no-op - no new tracking
+  state needed.
+- Verification: compile bad=0, signal-arity fails=0 (handler param type
+  matches the signal's own String declaration).
