@@ -342,3 +342,54 @@ first.
   connection must be succeeding. Not fixing a bug that doesn't
   reproduce; noting as investigated-and-dismissed in the final report.
 - Verification: compile bad=0, signal-arity fails=0.
+
+## MAX-THROUGHPUT BURST — fix 3: achievement threshold bug + quest bugs + economy
+- What: A1 code-audit subagent found: (a) achievements_manager.gd's
+  _check_unlock() had a dead "Simplified check / pass" branch - any int
+  condition >=1 unlocked immediately, so "kill 50 shadows"/"10 photos"/
+  "10 secrets" all unlocked on the FIRST occurrence instead of at the
+  real threshold; ach_01 "first_light" was passed a StringName that
+  matched neither branch, so it could never unlock at all. (b) 4 of 5
+  KILL quests targeted flavor/roster names ("runner"/"tank"/"sniper"/
+  "squad") that don't exist as real monster_id substrings - permanently
+  stuck at 0/N. (c) Both district REPAIR quests fired on ANY district
+  reaching FULL (dead `or stage >= 2` bypass, plus fictional "district_1"/
+  "district_2" targets that never matched real ids either way) -
+  completed simultaneously on the first district restored. (d)
+  q_craft_items only advanced via crafting_manager.gd, which is never
+  autoloaded/instantiated - the live crafting path (workbench.gd) never
+  called QuestManager at all. (e) flashlight stability/battery upgrade
+  branches used a different cost table than GDD §3.3 documents (20650
+  total to max vs GDD's 19250, a 1400-coin/7% deviation).
+- Files: achievements_manager.gd (_check_unlock fixed to compare real
+  progress against threshold for int conditions; ach_01 -> true, same
+  trigger as ach_02 since both fire from the same stage>=3 handler with
+  nothing else differentiating them), quest_manager.gd (KILL targets
+  fixed via AI_TO_ROSTER's naming: runner->hunter, tank->destroyer
+  (no roster "tank" exists, "armored"/destroyer is the closest heavy
+  unit), sniper->sharpshooter (the real GDD "Sniper" character),
+  squad->hound (DEFAULT_CHOICE - swarm/pack flavor, no "squad" roster
+  entry exists); REPAIR targets suburbs/residential (real 1st/2nd
+  district ids per power_grid.gd's _DISTRICTS order); dropped the
+  `or stage >= 2` bypass), workbench.gd (_do_craft() now calls
+  QuestManager.complete_objective(&"q_craft_items", &"", _craft_qty)),
+  flashlight_upgrade_manager.gd (stability/battery cost tables matched
+  to the GDD-documented shared table).
+- DEFAULT_CHOICE (flagged for human review, these are content/design
+  judgment calls, not pure code fixes): the runner/tank/sniper/squad ->
+  hunter/destroyer/sharpshooter/hound mappings, and ach_01 unlocking on
+  the same trigger as ach_02. Reasonably grounded in the existing
+  AI_TO_ROSTER naming scheme, not arbitrary, but a human should sanity-
+  check quest flavor text still reads correctly against the enemy it
+  now actually targets.
+- NOT fixed (out of edits-only scope, noted for the report): q_find_
+  engineers/q_explore_school (EXPLORE zone_id triggers that don't exist
+  anywhere - would need new zone-detection code, a new system, not a
+  wire-up), q_connect_cables (same, INTERACT trigger doesn't exist),
+  workbench 7/8 recipes uncraftable (needs new item .tres resources -
+  content creation, not wiring), enemy stat AI_TO_ROSTER mismatches
+  (watcher/hunter/destroyer/crawler stats vs GDD - a real balance
+  change affecting core combat difficulty across the whole game,
+  deliberately deferred as too large/risky for this pass).
+- Verification: compile bad=0, --static 10/10 (flow_check 53/53,
+  includes the existing craft-flow self-check).

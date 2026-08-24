@@ -262,7 +262,12 @@ func _on_secret_found(secret_id: StringName) -> void:
 
 func _on_district_restored(district_id: StringName, stage: int) -> void:
 	if stage >= 3:
-		_check_unlock(&"ach_01", &"district_1")
+		# ach_01 "first_light" was passed a StringName (&"district_1") that
+		# never matched either branch of _check_unlock - it could never
+		# unlock. Same trigger as ach_02 "electrician" (this handler only
+		# runs on stage>=3, i.e. a district reaching FULL) - "first light"
+		# fires on that same real event, not a separate condition to invent.
+		_check_unlock(&"ach_01", true)
 		_check_unlock(&"ach_02", true)
 		_check_unlock(&"ach_03", _all_districts_full())
 
@@ -281,14 +286,20 @@ func _on_item_consumed(item_id: StringName, effect: StringName, value: float) ->
 		_increment_progress(&"ach_09")
 		_check_unlock(&"ach_09", 10)
 
+## condition is either a bool (milestone already met/not) or an int target
+## (compared against the running _progress counter _increment_progress()
+## keeps). Previously any int target >= 1 unlocked immediately on the
+## first call regardless of actual progress (e.g. "kill 50 shadows"
+## unlocked on the first kill) - the threshold branch below was dead
+## (`pass`).
 func _check_unlock(achievement_id: StringName, condition: Variant) -> void:
-	if condition == true or (condition is int and condition >= 1):
-		_unlock(achievement_id)
+	if condition is bool:
+		if condition:
+			_unlock(achievement_id)
 	elif condition is int:
-		# Check if progress meets threshold
-		var data = ACHIEVEMENTS.get(achievement_id, {})
-		# Simplified check
-		pass
+		var current: int = int(_progress.get(String(achievement_id), 0))
+		if current >= int(condition):
+			_unlock(achievement_id)
 
 ## Раньше стадии спрашивались по выдуманным id вида "district_0".. "district_10",
 ## которых нет ни в PowerGrid, ни в DistrictManager: get_stage() всегда

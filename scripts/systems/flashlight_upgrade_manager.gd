@@ -24,12 +24,16 @@ const BRANCH_DESC: Dictionary = {
 	"battery": "UPG_BATTERY_DESC",
 }
 
+## GDD §3.3: one shared cost column for all 5 branches (100/250/500/1000/
+## 2000, sum 3850 each -> 19250 to max everything). stability/battery had
+## their own higher table (sum 4550 each, 20650 total) - a 1400-coin/7%
+## deviation from the documented economy figure.
 const BASE_COSTS: Dictionary = {
 	"brightness": [100, 250, 500, 1000, 2000],
 	"range": [100, 250, 500, 1000, 2000],
-	"stability": [150, 300, 600, 1200, 2400],
+	"stability": [100, 250, 500, 1000, 2000],
 	"angle": [100, 250, 500, 1000, 2000],
-	"battery": [150, 300, 600, 1200, 2400]
+	"battery": [100, 250, 500, 1000, 2000]
 }
 
 const LEVEL_BONUSES: Dictionary = {

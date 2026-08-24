@@ -241,6 +241,12 @@ func _do_craft() -> void:
 	for comp in r["components"]:
 		InventoryManager.remove(comp[0], comp[1] * _craft_qty)
 	InventoryManager.try_add(r["result"], r["count"] * _craft_qty)
+	# q_craft_items only advanced via crafting_manager.gd, which is never
+	# autoloaded/instantiated anywhere - the real crafting path (here)
+	# never satisfied it, so the quest was permanently uncompletable.
+	var qm := get_node_or_null("/root/QuestManager")
+	if qm != null and qm.has_method("complete_objective"):
+		qm.complete_objective(&"q_craft_items", &"", _craft_qty)
 	if EventBus and EventBus.has_signal("inventory_notice"):
 		EventBus.inventory_notice.emit(tr("CRAFT_CREATED") + ": " + tr(r["name_key"]) + " x" + str(_craft_qty))
 	_update_detail()

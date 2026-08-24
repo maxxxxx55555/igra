@@ -29,16 +29,16 @@ func _ready() -> void:
 func _init_quests() -> void:
 	var quest_data := [
 		# --- Сюжет (5): ремонт энергосети города ---
-		["q_repair_district1", "Q_REPAIR_DISTRICT1_TITLE", "Q_REPAIR_DISTRICT1_DESC", "REPAIR", "district_1", 1, 100, []],
+		["q_repair_district1", "Q_REPAIR_DISTRICT1_TITLE", "Q_REPAIR_DISTRICT1_DESC", "REPAIR", "suburbs", 1, 100, []],
 		["q_find_fuses", "Q_FIND_FUSES_TITLE", "Q_FIND_FUSES_DESC", "COLLECT", "fuse", 3, 50, []],
 		["q_connect_cables", "Q_CONNECT_CABLES_TITLE", "Q_CONNECT_CABLES_DESC", "INTERACT", "cable_node", 1, 75, [["scrap", 4]]],
 		["q_find_engineers", "Q_FIND_ENGINEERS_TITLE", "Q_FIND_ENGINEERS_DESC", "EXPLORE", "engineer_camp", 1, 120, [["medkit", 1]]],
 		["q_explore_school", "Q_EXPLORE_SCHOOL_TITLE", "Q_EXPLORE_SCHOOL_DESC", "EXPLORE", "school_zone", 1, 150, [["gear", 2]]],
 		# --- Бой (5) ---
-		["q_kill_runner", "Q_KILL_RUNNER_TITLE", "Q_KILL_RUNNER_DESC", "KILL", "runner", 5, 60, []],
-		["q_kill_tank", "Q_KILL_TANK_TITLE", "Q_KILL_TANK_DESC", "KILL", "tank", 3, 90, [["battery", 1]]],
-		["q_kill_sniper", "Q_KILL_SNIPER_TITLE", "Q_KILL_SNIPER_DESC", "KILL", "sniper", 4, 80, []],
-		["q_kill_squad", "Q_KILL_SQUAD_TITLE", "Q_KILL_SQUAD_DESC", "KILL", "squad", 6, 100, [["transistor", 2]]],
+		["q_kill_runner", "Q_KILL_RUNNER_TITLE", "Q_KILL_RUNNER_DESC", "KILL", "hunter", 5, 60, []],
+		["q_kill_tank", "Q_KILL_TANK_TITLE", "Q_KILL_TANK_DESC", "KILL", "destroyer", 3, 90, [["battery", 1]]],
+		["q_kill_sniper", "Q_KILL_SNIPER_TITLE", "Q_KILL_SNIPER_DESC", "KILL", "sharpshooter", 4, 80, []],
+		["q_kill_squad", "Q_KILL_SQUAD_TITLE", "Q_KILL_SQUAD_DESC", "KILL", "hound", 6, 100, [["transistor", 2]]],
 		["q_kill_shadow", "Q_KILL_SHADOW_TITLE", "Q_KILL_SHADOW_DESC", "KILL", "shadow", 7, 70, []],
 		# --- Сбор (5) ---
 		["q_collect_scrap", "Q_COLLECT_SCRAP_TITLE", "Q_COLLECT_SCRAP_DESC", "COLLECT", "scrap", 10, 40, []],
@@ -51,7 +51,7 @@ func _init_quests() -> void:
 		["q_secrets_2", "Q_SECRETS_2_TITLE", "Q_SECRETS_2_DESC", "SECRET", "secret", 2, 30, []],
 		["q_secrets_3", "Q_SECRETS_3_TITLE", "Q_SECRETS_3_DESC", "SECRET", "secret", 3, 40, [["blueprint_flashlight_brightness", 1]]],
 		["q_craft_items", "Q_CRAFT_ITEMS_TITLE", "Q_CRAFT_ITEMS_DESC", "CRAFT", "craft", 5, 65, [["scrap", 3]]],
-		["q_restore_district2", "Q_RESTORE_DISTRICT2_TITLE", "Q_RESTORE_DISTRICT2_DESC", "REPAIR", "district_2", 1, 150, [["blueprint_flashlight_battery", 1]]],
+		["q_restore_district2", "Q_RESTORE_DISTRICT2_TITLE", "Q_RESTORE_DISTRICT2_DESC", "REPAIR", "residential", 1, 150, [["blueprint_flashlight_battery", 1]]],
 	]
 	for qa in quest_data:
 		var q := {
@@ -76,12 +76,18 @@ func _on_item_picked(item_id: StringName) -> void:
 			if sid == q.target or sid.begins_with(q.target):
 				_tick(q, 1)
 
-func _on_district_restored(district_id: StringName, stage: int) -> void:
+func _on_district_restored(district_id: StringName, _stage: int) -> void:
+	# Was "or stage >= 2", which fired for ANY district since this handler
+	# only ever runs on FULL restoration anyway (EventBus.district_restored
+	# is only emitted at Stage.FULL, see power_grid.gd) - both REPAIR quests
+	# completed simultaneously on the very first district, regardless of
+	# which one. Real district ids replaced the fictional "district_1"/
+	# "district_2" targets above (suburbs/residential = the actual 1st/2nd
+	# districts per power_grid.gd's _DISTRICTS order).
 	for qid in quests:
 		var q = quests[qid]
-		if q.type == "REPAIR" and not q.done:
-			if String(district_id) == q.target or stage >= 2:
-				_tick(q, 1)
+		if q.type == "REPAIR" and not q.done and String(district_id) == q.target:
+			_tick(q, 1)
 
 func _on_interaction_done(target_id: StringName) -> void:
 	for qid in quests:
