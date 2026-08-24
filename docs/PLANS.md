@@ -192,3 +192,23 @@ first.
   resolution. Result: `[footstep-check] DONE fails=0`, all 12
   surface/speed combos print OK.
 - Screenshot angles: none (audio-only, no visual surface).
+
+## RESCUE WAVE P0.5 — real gameplay screenshot tool
+- What: existing scripts/tools/shot_tool.gd's blind 8s-wait scenario
+  path raced the splash/boot bootstrap and produced menu screenshots
+  instead of gameplay (confirmed twice: docs/shots/rescue_street_verify{,2}.png).
+  Manual GUI-automation clicking (PostMessage/SendInput on the real
+  window) proved unreliable in this sandbox after the very first click
+  (see below) - not a reliable verification method here.
+- Files: new scripts/tools/_gameplay_shot.gd (bootstrap, mirrors
+  _boot_check.gd exactly) + scripts/tools/_gameplay_shot_runner.gd (the
+  real logic, spawned under get_tree().root so Routes.goto() scene
+  swaps don't free it mid-coroutine) + scenes/tools/gameplay_shot_scene.tscn.
+- Verification: `godot --path . --windowed res://scenes/tools/gameplay_shot_scene.tscn`
+  -> `SHOT_OK: .../docs/shots/gameplay_shot.png 1920x1055`. Screenshot
+  (saved as docs/shots/rescue_gameplay_after_p0_fix.png) shows real
+  gameplay - HUD (health/stamina/battery, ШУМ/ЗАМЕТ, radar, ammo), NO
+  win-overlay bug - proves the ending_screen.gd fix holds in a real
+  windowed run, not just the headless boot gate.
+- Side finding: the spawn view is almost entirely black/grain with no
+  visible environment - feeds directly into P2 (night sky, lighting).
