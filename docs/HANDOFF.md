@@ -3,14 +3,52 @@
 Read `docs/PRODUCTION_BIBLE.md` first — canon reference (pillars,
 visual/audio canon, budgets, checklist) for any new wave of work.
 
-Full detail: `docs/SESSION_REPORT_TRUTH.md` (latest phase — launch-
-readiness gate, real bug sweep, store copy), `docs/VISUAL_AUDIT.md`
-(screenshot-driven visual/UI/lighting pass), `docs/SESSION_REPORT_FINAL.md`
-(audio, shaders, bug sweep, cleanup, ads, release prep) and `docs/
+Full detail: `docs/SESSION_REPORT_RESCUE.md` (latest phase — real-window
+launch bug, night sky + district ambience wiring, boss stings, perf
+measurement), `docs/SESSION_REPORT_TRUTH.md` (launch-readiness gate,
+real bug sweep, store copy), `docs/VISUAL_AUDIT.md` (screenshot-driven
+visual/UI/lighting pass), `docs/SESSION_REPORT_FINAL.md` (audio,
+shaders, bug sweep, cleanup, ads, release prep) and `docs/
 SESSION_REPORT.md` (the earlier 19-task build phase). This file is the
 short version for picking the project back up.
 
-## Latest phase: TRUTH WAVE — launch-readiness (see docs/SESSION_REPORT_TRUTH.md)
+## Latest phase: RESCUE WAVE — real-window launch bug + visual pass (see docs/SESSION_REPORT_RESCUE.md)
+
+HEAD = `f368631`, fully pushed to `origin/main`. All mandatory gates +
+static + boot-flow + footstep gates green.
+
+The TRUTH WAVE pass verified launch only headlessly. This pass ran the
+game in a real `--windowed` process and found the actual player-facing
+blocker: `scenes/main_3d.tscn` embeds an `EndingScreen` node
+(`ending_screen.gd`) whose `_ready()` unconditionally built and faded in
+a full-screen "All districts powered!" win overlay on *every* load of
+the gameplay scene — nothing ever called its real trigger. A fresh New
+Game was instantly covered by a fake victory screen. Fixed (commit
+`d8637ab`); the real menu itself was always fine.
+
+Also this pass: wired the footstep surface×speed mapper for ox alpha's
+18 delivered files (walk/jog/sprint per surface — "jog" stays unused,
+no game state maps to it); wired the night-sky panorama into
+`WorldEnvironment` (it was being silently overridden every district
+entry by `district_grading.gd`, now only on LOW graphics tier as the
+intended perf fallback); wired the 11 district ambience beds into
+`MusicManager` (replacing a handful of generic tracks reused across
+districts) with live power-restoration reactivity; converted both
+boss-intro stings from WAV (over the 1MB budget) to OGG and wired them
+to the Architect/Tvar encounters; built a real draw-call perf-guard tool
+and measured **370 draw calls** (over the GDD's <200/<350 budgets) with
+the root cause identified (`streetlight_3d.tscn` has no MultiMesh
+batching) but not fixed — real regression risk to the streetlight-
+reactivity mechanic fixed last session if rushed.
+
+**Not attempted this pass**: status-FX HUD, hit/death VFX particles.
+**Blocked, not skipped**: UI chrome kit (waiting on OpenCode B's
+delivery), map/minimap district crests (no crest assets exist yet).
+Full self-audit, DEFAULT_CHOICE log, and a GUI-automation reliability
+note worth reading before trusting any future click-based verification
+in this sandbox: `docs/SESSION_REPORT_RESCUE.md`.
+
+## Previous phase: TRUTH WAVE — launch-readiness (see docs/SESSION_REPORT_TRUTH.md)
 
 HEAD = `7c8e475`, fully pushed to `origin/main`. All 4 mandatory gates +
 static + the new permanent `boot_check_scene.tscn` gate green.

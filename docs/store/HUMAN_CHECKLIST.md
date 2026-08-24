@@ -103,6 +103,21 @@ needs AppLovin's own data-collection disclosure added (ad ID, device
 info, etc. per their SDK) — this wasn't itemized before because ads were
 purely a debug stub at the time of the previous checklist pass.
 
+## RESCUE WAVE delta
+
+- P2.6 (UI chrome kit / StyleBoxTexture on main menu/pause/inventory)
+  needs OpenCode B's chrome-kit delivery before it can be integrated —
+  nothing to wire yet.
+- P2.7 (map/minimap district crest icons) needs the actual crest assets
+  — none exist in the repo (`assets/` has no file matching `*crest*`).
+- Draw-call budget: measured 370 in the spawn district vs the GDD's
+  <200 (D1) / <350 (D11) — needs a dedicated session for a MultiMesh
+  streetlight conversion (root cause + full context in `docs/
+  KNOWN_ISSUES.md`), not a quick fix.
+- Ponytail/CC0 asset-reference repo: still not found in `..\refs\` or
+  `.claude/skills/` (same result as the TRUTH WAVE pass) — paste the
+  exact URL if one should be added.
+
 ## Steam (optional/secondary platform, see `docs/store/steam.md`)
 
 - No desktop export preset exists yet in `export_presets.cfg` (only
