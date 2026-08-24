@@ -522,6 +522,7 @@ func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, type: EnemyRos
 	hp -= reduced
 	AudioManager.play_sound_3d(_HIT_SFX, global_position, -6.0)
 	_hit_flash()
+	_spawn_vfx(_VFX_HIT, global_position + Vector3(0, 1.0, 0))
 	# WAVE 6 P4: crosshair_state_changed was never emitted anywhere -
 	# the HUD crosshair never actually reacted to landing a hit.
 	EventBus.crosshair_state_changed.emit(&"hit")
@@ -585,6 +586,8 @@ func _die() -> void:
 ## реальный предмет через уже рабочую систему инвентаря вместо этого.
 const _ITEM_PICKUP := preload("res://scenes/pickups/item_pickup_3d.tscn")
 const _LOOT_ITEM: StringName = &"battery"
+const _VFX_HIT := preload("res://scenes/vfx/vfx_hit_spark.tscn")
+const _VFX_DEATH := preload("res://scenes/vfx/vfx_blood.tscn")
 
 func _maybe_drop_loot() -> void:
 	if not bool(roster_entry.get("loot_ammo", false)):
@@ -598,28 +601,12 @@ func _maybe_drop_loot() -> void:
 		pickup.set_item(_LOOT_ITEM, 1)
 
 func _death_effect() -> void:
-	var p := GPUParticles3D.new()
-	p.amount = 30
-	p.lifetime = 0.5
-	p.one_shot = true
-	p.explosiveness = 1.0
-	p.spread = 180
-	p.initial_velocity = 5.0
-	p.gravity = Vector3(0, -9.8, 0)
-	p.global_position = global_position + Vector3(0, 1.0, 0)
-	var pm := ParticleProcessMaterial.new()
-	pm.color = Color(0.8, 0.6, 0.3, 0.8)
-	pm.color_ramp = Gradient.new().set_color_ramp([
-		Color(1.0, 0.7, 0.3, 0.8),
-		Color(0.5, 0.3, 0.1, 0.0)
-	])
-	p.process_material = pm
-	var q := QuadMesh.new()
-	q.size = Vector2(0.2, 0.2)
-	p.draw_pass_1 = q
-	get_tree().root.add_child(p)
-	p.emitting = true
-	p.finished.connect(p.queue_free.bind())
+	_spawn_vfx(_VFX_DEATH, global_position + Vector3(0, 1.0, 0))
+
+func _spawn_vfx(scene: PackedScene, pos: Vector3) -> void:
+	var fx: Node3D = scene.instantiate()
+	get_tree().root.add_child(fx)
+	fx.global_position = pos
 
 func _trigger_death() -> void:
 	_die()

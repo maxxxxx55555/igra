@@ -1,11 +1,20 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
-[ext_resource type="Script" path="res://scripts/effects/ambient_particles.gd" id="1_script"]
+[ext_resource type="Script" path="res://scripts/effects/vfx_burst.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/textures/fx/blood_splatter.png" id="2_tex"]
 
 [node name="VFXBlood" type="GPUParticles3D"]
 script = ExtResource("1_script")
 emitting = false
-amount = 20
+amount = 28
 one_shot = true
-explosiveness = 0.8
-lifetime = 0.5
+explosiveness = 0.85
+lifetime = 0.6
+burst_color = Color(0.55, 0.06, 0.06, 0.9)
+burst_texture = ExtResource("2_tex")
+spread_deg = 100.0
+velocity_min = 1.0
+velocity_max = 3.5
+gravity = Vector3(0.0, -9.0, 0.0)
+particle_scale_min = 0.05
+particle_scale_max = 0.12

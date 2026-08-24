@@ -1,9 +1,11 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/weapons/weapon_rifle.gd" id="1_jjjj"]
+[ext_resource type="PackedScene" path="res://scenes/vfx/vfx_muzzle_flash.tscn" id="2_vfx"]
 
 [node name="WeaponRifle" type="Node3D"]
 script = ExtResource("1_jjjj")
+muzzle_flash_scene = ExtResource("2_vfx")
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
 target_position = Vector3(0, 0, -10)

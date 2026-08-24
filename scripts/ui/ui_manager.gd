@@ -82,6 +82,30 @@ func show_notification(msg: String) -> void:
 	var tw := create_tween()
 	tw.tween_interval(2.0)
 	tw.tween_callback(func() -> void: _toast.visible = false)
+## FINAL PERFECTION P2.2: pickup icon flies from its 3D world position to
+## the HUD's top-left stat panel, then fades - real visual confirmation an
+## item was gained, on top of (not instead of) the existing text toast.
+func fly_pickup_icon(world_pos: Vector3, texture: Texture2D) -> void:
+	if texture == null:
+		return
+	var cam := get_viewport().get_camera_3d()
+	if cam == null or not cam.is_position_in_frustum(world_pos):
+		return
+	var icon := TextureRect.new()
+	icon.texture = texture
+	icon.size = Vector2(32.0, 32.0)
+	icon.position = cam.unproject_position(world_pos) - Vector2(16.0, 16.0)
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.pivot_offset = Vector2(16.0, 16.0)
+	_layer.add_child(icon)
+	var target := Vector2(44.0, 54.0)
+	var tw := create_tween()
+	tw.set_parallel(true)
+	tw.tween_property(icon, "position", target, 0.45)\
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	tw.tween_property(icon, "scale", Vector2(0.25, 0.25), 0.45)
+	tw.chain().tween_callback(icon.queue_free)
+
 func is_hud_blocked() -> bool:
 	return (not _open_blocking.is_empty()) or (not GameManager.is_playing())
 func _unhandled_input(event: InputEvent) -> void:

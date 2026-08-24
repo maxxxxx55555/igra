@@ -20,6 +20,8 @@ var _base_y: float = 0.0
 var _time: float = 0.0
 var _picked_up: bool = false
 
+const _PICKUP_BLIP := preload("res://assets/audio/sfx/ui_hover.wav")
+
 func _ready() -> void:
 	# WAVE 6 P4: nothing ever added pickups to this group - radar.gd's
 	# minimap pickup blips (a live gameplay feature) and _game_test_3d.gd's
@@ -83,6 +85,10 @@ func _on_body_entered(body: Node) -> void:
 		return
 	_picked_up = true
 	set_deferred("monitoring", false)
+	var data := ItemDatabase.get_item(item_id)
+	if data != null:
+		UIManager.fly_pickup_icon(global_position, data.icon)
+	AudioManager.play_sfx(_PICKUP_BLIP, -8.0)
 
 	# Сигнал item_picked_up уже отправлен внутри InventoryManager.try_add(),
 	# который сам же занимается и сетевой синхронизацией инвентаря.
