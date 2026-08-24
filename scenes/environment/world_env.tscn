@@ -1,7 +1,16 @@
-﻿[gd_scene load_steps=1 format=3]
+﻿[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/sky/night_sky_panorama_2048x1024.png" id="1_pano"]
+
+[sub_resource type="PanoramaSkyMaterial" id="skymat_night"]
+panorama = ExtResource("1_pano")
+
+[sub_resource type="Sky" id="sky_night"]
+sky_material = SubResource("skymat_night")
 
 [sub_resource type="Environment" id="env_night"]
-background_mode = 1
+background_mode = 2
+sky = SubResource("sky_night")
 background_color = Color(0.02, 0.03, 0.06, 1)
 ambient_light_source = 2
 ambient_light_color = Color(0.08, 0.09, 0.14, 1)

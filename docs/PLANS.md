@@ -212,3 +212,31 @@ first.
   windowed run, not just the headless boot gate.
 - Side finding: the spawn view is almost entirely black/grain with no
   visible environment - feeds directly into P2 (night sky, lighting).
+
+## RESCUE WAVE P2.1 — night sky panorama -> WorldEnvironment
+- Files: scenes/environment/world_env.tscn (background_mode 1->2, add
+  PanoramaSkyMaterial+Sky using assets/textures/sky/night_sky_panorama_
+  2048x1024.png), scripts/world/district_grading.gd (was force-setting
+  background_mode=BG_COLOR every district entry/stage change, silently
+  overwriting the sky - now only does that on LOW graphics tier as a
+  perf fallback per Production Bible's checklist item; SKY mode
+  otherwise).
+- DEFAULT_CHOICE: moon_glow_256.png NOT wired as a permanent fixture.
+  docs/ASSET_HANDOFF.md's own delivery note says "design says no
+  permanent moon" - it's for a future moon EVENT, not default sky.
+  Wiring it always-on would invent a visual the design doc explicitly
+  says isn't canon.
+- Verification: compile+asset-check gates green. New scripts/tools/
+  _gameplay_shot.gd + _gameplay_shot_runner.gd (bootstrap-under-root
+  pattern, same as _boot_check.gd) drive real New Game headlessly and
+  capture the live viewport - avoids the GUI-automation unreliability
+  hit earlier this session (manual PostMessage/SendInput clicks on the
+  real window worked exactly once out of ~10 attempts, not reproducible
+  on demand - documented as a sandbox limitation, not a game bug).
+  docs/shots/rescue_p2_sky2.png: real street geometry now visible
+  (trees, streetlight pole, sidewalk - the pre-fix shot was flat black
+  with zero geometry visible). Sky region is a textured navy gradient,
+  not solid flat color, though individual stars read faint under fog +
+  DARK-stage tonemap - left as-is: GDD's pillar 1 wants DARK stage
+  near-pitch-black, so a barely-visible starfield there is closer to
+  canon than a bright one, not a bug to chase further.

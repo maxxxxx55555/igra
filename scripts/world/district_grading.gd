@@ -54,8 +54,16 @@ func _apply(district_id: StringName) -> void:
 	var theme: Dictionary = DistrictThemes.get_theme(district_id)
 	if _env != null and _env.environment != null:
 		var e: Environment = _env.environment
-		e.background_mode = Environment.BG_COLOR
-		e.background_color = Color(theme.get("sky", Color.BLACK))
+		# RESCUE WAVE P2: real starfield panorama now lives on the
+		# WorldEnvironment resource itself (scenes/environment/world_env.tscn).
+		# LOW tier falls back to a flat color (perf — panorama sky costs more
+		# to sample than a solid clear), everything else keeps the sky.
+		var tier: int = clampi(int(SettingsManager.get_setting("graphics_tier", 2)), 0, 2)
+		if tier == 0:
+			e.background_mode = Environment.BG_COLOR
+			e.background_color = Color(theme.get("sky", Color.BLACK))
+		else:
+			e.background_mode = Environment.BG_SKY
 		var fog: Color = Color(theme.get("fog", Color.GRAY))
 		e.fog_enabled = true
 		e.fog_color = fog

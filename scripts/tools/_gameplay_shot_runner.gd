@@ -4,9 +4,15 @@ extends Node
 
 const OUT_DEFAULT := "res://docs/shots/gameplay_shot.png"
 
+var _t0: int = 0
+
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	_t0 = Time.get_ticks_msec()
 	call_deferred("_run")
+
+func _log(msg: String) -> void:
+	print("[gshot] t=%.1fs %s" % [float(Time.get_ticks_msec() - _t0) / 1000.0, msg])
 
 func _out_path() -> String:
 	for a in OS.get_cmdline_user_args():
@@ -28,16 +34,20 @@ func _run() -> void:
 		printerr("SHOT_FAIL: menu never reachable")
 		get_tree().quit(1)
 		return
+	_log("menu reachable")
 	Routes.start_game()
 	if not await _wait_until(func() -> bool: return GameManager.is_playing(), 10.0):
 		printerr("SHOT_FAIL: never entered PLAYING")
 		get_tree().quit(1)
 		return
+	_log("playing")
 	if not await _wait_until(func() -> bool: return get_tree().get_first_node_in_group("player") != null, 10.0):
 		printerr("SHOT_FAIL: player never spawned")
 		get_tree().quit(1)
 		return
-	await get_tree().create_timer(1.5).timeout
+	_log("player spawned")
+	await get_tree().create_timer(0.3).timeout
+	_log("taking shot")
 	var img := get_tree().root.get_texture().get_image()
 	var path := _out_path()
 	var abs_path := ProjectSettings.globalize_path(path) if path.begins_with("res://") else path
