@@ -1,12 +1,48 @@
 # Handoff
 
-Full detail: `docs/VISUAL_AUDIT.md` (latest phase — screenshot-driven
-visual/UI/lighting pass), `docs/SESSION_REPORT_FINAL.md` (audio, shaders,
-bug sweep, cleanup, ads, release prep) and `docs/SESSION_REPORT.md` (the
-earlier 19-task build phase). This file is the short version for picking
-the project back up.
+Read `docs/PRODUCTION_BIBLE.md` first — canon reference (pillars,
+visual/audio canon, budgets, checklist) for any new wave of work.
 
-## Latest phase: visual polish (see docs/VISUAL_AUDIT.md for full detail)
+Full detail: `docs/SESSION_REPORT_TRUTH.md` (latest phase — launch-
+readiness gate, real bug sweep, store copy), `docs/VISUAL_AUDIT.md`
+(screenshot-driven visual/UI/lighting pass), `docs/SESSION_REPORT_FINAL.md`
+(audio, shaders, bug sweep, cleanup, ads, release prep) and `docs/
+SESSION_REPORT.md` (the earlier 19-task build phase). This file is the
+short version for picking the project back up.
+
+## Latest phase: TRUTH WAVE — launch-readiness (see docs/SESSION_REPORT_TRUTH.md)
+
+HEAD = `7c8e475`, fully pushed to `origin/main`. All 4 mandatory gates +
+static + the new permanent `boot_check_scene.tscn` gate green.
+
+Built a permanent boot-flow gate (`scenes/tools/boot_check_scene.tscn`,
+wired into `tools/check.sh`): real menu → New Game → 60s sustained
+gameplay → save → quit → load, all must not crash; also enforces "no ad
+before first player input" as a live regression check. Building it
+surfaced three real, previously-unknown bugs, all fixed: `SaveSystem
+.reset_all()` never actually reset XP/skill-tree state (New Game kept
+the last playthrough's level); `integrity_guard.gd`'s watchdog could
+force-quit to the main menu from a single-tick false positive; two new
+texture assets were wired into props but never had `.import` files
+generated, so they silently failed to load outside the editor. Also
+found and fixed: the game's namesake "darkness → restored power"
+streetlight mechanic didn't actually exist in gameplay (the live prop
+system built non-reactive flat decals; a complete, correct
+`streetlight_3d.tscn` implementation existed but was never
+instantiated anywhere — now wired in, old decals kept behind
+`legacy_streetlights=false`). Added a "Reset Progress" button to
+Settings. Rewrote both store listings and wrote `docs/PRODUCTION_BIBLE.md`.
+Full self-audit, DEFAULT_CHOICE log, and what-wasn't-attempted section:
+`docs/SESSION_REPORT_TRUTH.md`.
+
+**Not attempted this pass**: the P2 visual/design wave (night-sky
+panorama, district ambience-bed wiring, status-FX HUD, UI
+StyleBoxTexture chrome kit, minimap size bump, automated perf guard) —
+deliberate scope cut once P0 turned up real save-correctness bugs worth
+fixing properly. Pick this up next, starting from `docs/
+PRODUCTION_BIBLE.md`.
+
+## Previous phase: visual polish (see docs/VISUAL_AUDIT.md for full detail)
 
 Started as an 8-step "make it stop looking cheap" mission (atmosphere,
 materials, UI theme, JUICE, VFX integration, perf guard). What actually
