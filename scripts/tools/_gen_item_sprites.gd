@@ -57,6 +57,10 @@ func _targets() -> Array:
 		"bandage", "molotov", "lockpick", "taser", "repair_kit", "explosive",
 		# прочее
 		"flashlight", "coin",
+		# WAVE 6 P2: workbench.gd recipe materials/results that shipped
+		# with no icon at all (asset-check gate hard-fails on that).
+		"fabric", "alcohol", "gunpowder", "case", "metal", "paper",
+		"bottle", "noise_bomb", "firework", "makeshift_lamp",
 	]
 
 # ---------------- движок рисования ----------------
@@ -461,3 +465,78 @@ func _draw_coin() -> void:
 	_flat(64, 64, 10, 34, 4, 0, DARK, 0.45)
 	_flat(64, 64, 34, 10, 4, 0, DARK, 0.45)
 	_flat(50, 48, 16, 16, 8, 0, CREAM, 0.3)
+
+# ---------------- WAVE 6 P2: craft materials/results ----------------
+
+func _draw_fabric() -> void:
+	_rrect(56, 58, 68, 44, 4, -0.12, CREAM)
+	_rrect(72, 78, 68, 40, 4, 0.1, PAPER.darkened(0.08))
+	_flat(56, 58, 54, 3, 1, -0.12, STEEL_DK, 0.35)
+	_flat(56, 66, 54, 3, 1, -0.12, STEEL_DK, 0.35)
+	_flat(72, 86, 54, 3, 1, 0.1, STEEL_DK, 0.3)
+
+func _draw_alcohol() -> void:
+	_rrect(64, 34, 20, 16, 3, 0, STEEL)
+	_rrect(64, 78, 36, 70, 8, 0, GLASS)
+	_flat(64, 92, 30, 40, 6, 0, CREAM, 0.55)
+	_flat(64, 62, 30, 10, 2, 0, CREAM, 0.85)
+	_flat(56, 70, 5, 40, 2, 0, CREAM, 0.25)
+
+func _draw_gunpowder() -> void:
+	_rrect(64, 72, 56, 60, 16, 0, BROWN)
+	_caps(64, 42, 64, 30, 5, STEEL_DK)
+	_flat(64, 24, 20, 6, 2, 0, STEEL_DK, 0.8)
+	for i in 10:
+		var rx: float = 64.0 + cos(float(i) * 2.4) * randf_range(6.0, 20.0)
+		var ry: float = 78.0 + sin(float(i) * 3.1) * randf_range(6.0, 18.0)
+		_circ(rx, ry, 2.2, DARK, 0.0, 0.1, 0.15)
+
+func _draw_case() -> void:
+	_caps(64, 92, 64, 44, 13, COPPER)
+	_ring(64, 40, 13, 4, AMBER_HI, 1.0)
+	_flat(64, 92, 20, 6, 3, 0, DARK, 0.4)
+	_flat(56, 60, 5, 40, 2, 0, CREAM, 0.2)
+
+func _draw_metal() -> void:
+	_rrect(64, 64, 84, 60, 4, -0.08, STEEL)
+	_flat(64, 64, 70, 6, 2, -0.08, CREAM, 0.3)
+	_flat(64, 78, 70, 3, 1, -0.08, STEEL_DK, 0.4)
+	_circ(34, 42, 4, STEEL_DK, 1.0, 0.2, 0.0)
+	_circ(94, 86, 4, STEEL_DK, 1.0, 0.2, 0.0)
+
+func _draw_paper() -> void:
+	_rrect(58, 60, 58, 76, 3, -0.06, PAPER)
+	_rrect(70, 68, 58, 76, 3, 0.06, CREAM)
+	_flat(70, 46, 40, 3, 1, 0.06, STEEL_DK, 0.35)
+	_flat(70, 56, 40, 3, 1, 0.06, STEEL_DK, 0.35)
+	_flat(70, 66, 40, 3, 1, 0.06, STEEL_DK, 0.35)
+	_flat(70, 76, 26, 3, 1, 0.06, STEEL_DK, 0.3)
+
+func _draw_bottle() -> void:
+	_caps(64, 30, 64, 44, 7, GLASS)
+	_rrect(64, 84, 40, 72, 10, 0, GLASS)
+	_flat(64, 96, 34, 44, 8, 0, OLIVE, 0.75)
+	_flat(64, 60, 34, 10, 2, 0, CREAM, 0.7)
+	_flat(56, 68, 5, 44, 2, 0, CREAM, 0.25)
+
+func _draw_noise_bomb() -> void:
+	_circ(64, 72, 38, STEEL_DK)
+	_ring(64, 72, 24, 5, STEEL, 1.0)
+	_caps(64, 34, 64, 20, 4, BROWN)
+	_circ(64, 16, 6, RED_HI, 1.0, 0.3, 0.35)
+	_flat(50, 56, 14, 14, 6, 0, CREAM, 0.22)
+
+func _draw_firework() -> void:
+	_caps(64, 108, 64, 56, 6, BROWN)
+	_rrect(64, 46, 26, 32, 6, 0, RED)
+	_flat(64, 40, 20, 6, 2, 0, AMBER_HI, 0.8)
+	_circ(64, 20, 5, AMBER_HI, 0.0, 0.2, 0.4)
+	_circ(48, 30, 3, RED_HI, 0.0, 0.2, 0.4)
+	_circ(80, 30, 3, RED_HI, 0.0, 0.2, 0.4)
+
+func _draw_makeshift_lamp() -> void:
+	_rrect(64, 96, 28, 14, 4, 0, STEEL_DK)
+	_caps(64, 88, 64, 66, 4, STEEL)
+	_circ(64, 50, 26, AMBER_HI, 1.4, 0.25, 0.3)
+	_ring(64, 50, 30, 4, STEEL, 1.0)
+	_circ(64, 50, 14, CREAM, 0.0, 0.1, 0.5)

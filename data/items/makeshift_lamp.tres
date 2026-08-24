@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/inventory/item_data.gd" id="1"]
+[resource]
+script = ExtResource("1")
+id = &"makeshift_lamp"
+display_name = "Самодельная лампа"
+description = "Временный источник света. Не заменит фонарик."
+rarity = 1
+weight = 0.6
+stackable = true
+max_stack = 3
+consumable = true
+effect = 0
+effect_value = 0.0

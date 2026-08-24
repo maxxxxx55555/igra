@@ -28,6 +28,23 @@ const _ITEMS: Array = [
 	preload("res://data/items/document.tres"),
 	preload("res://data/items/audio_log.tres"),
 	preload("res://data/items/photo.tres"),
+	# WAVE 6 P2: workbench.gd's RECIPES needed these 13 - 7 raw materials
+	# for the 8 recipes, 6 craft results (medkit/battery already existed
+	# above). Icons unset (ASSET_PENDING) - item_database.gd's own
+	# fallback below already handles that for every other item too.
+	preload("res://data/items/fabric.tres"),
+	preload("res://data/items/alcohol.tres"),
+	preload("res://data/items/gunpowder.tres"),
+	preload("res://data/items/case.tres"),
+	preload("res://data/items/metal.tres"),
+	preload("res://data/items/paper.tres"),
+	preload("res://data/items/bottle.tres"),
+	preload("res://data/items/noise_bomb.tres"),
+	preload("res://data/items/lockpick.tres"),
+	preload("res://data/items/repair_kit.tres"),
+	preload("res://data/items/firework.tres"),
+	preload("res://data/items/molotov.tres"),
+	preload("res://data/items/makeshift_lamp.tres"),
 ]
 const ICON_DIR: String = "res://assets/textures/items/"
 var _by_id: Dictionary = {}

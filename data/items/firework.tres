@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/inventory/item_data.gd" id="1"]
+[resource]
+script = ExtResource("1")
+id = &"firework"
+display_name = "Фейерверк"
+description = "Яркая вспышка. Привлекает внимание — используйте с умом."
+rarity = 1
+weight = 0.3
+stackable = true
+max_stack = 5
+consumable = true
+effect = 0
+effect_value = 0.0

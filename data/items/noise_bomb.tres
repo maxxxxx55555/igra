@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/inventory/item_data.gd" id="1"]
+[resource]
+script = ExtResource("1")
+id = &"noise_bomb"
+display_name = "Шумовая бомба"
+description = "Взрывается громким звуком, отвлекает монстров."
+rarity = 1
+weight = 0.5
+stackable = true
+max_stack = 5
+consumable = true
+effect = 0
+effect_value = 0.0

@@ -659,3 +659,41 @@ first.
   screenshot/log tooling exists from prior sessions for this specific
   purpose) - numbers verified against GDD by direct value comparison,
   not by playtesting the actual feel.
+
+## WAVE 6 P2 — craft economy completion
+- What: 7 of 8 workbench.gd recipes were permanently uncraftable -
+  their required materials (fabric, alcohol, gunpowder, case, metal,
+  paper, bottle) didn't exist as items anywhere in the game; only
+  "battery" (cable+fuse) was craftable. cable/fuse/tool already
+  existed and needed no new item, just the 6 craft-result items
+  (noise_bomb/lockpick/repair_kit/firework/molotov/makeshift_lamp) plus
+  the 7 raw materials = 13 new data/items/*.tres, matching the existing
+  ItemData schema (id/display_name/description/rarity/weight/
+  stackable/max_stack/consumable/effect/effect_value). i18n name_key
+  strings (ITEM_NOISE_BOMB etc.) already existed in all 13 locales -
+  someone pre-registered the recipe display names ahead of the actual
+  items, confirmed via grep before assuming a new i18n task was needed.
+- Registered all 13 in item_database.gd's _ITEMS preload array.
+- Icons: item_database.gd already has a graceful fallback (looks for
+  assets/textures/items/<id>.png, procedural draw_icon() otherwise) -
+  but the project's OWN asset-check gate hard-fails when a real PNG is
+  missing (discovered via fails=2 after registering the items with no
+  icons - "ASSET_PENDING" alone wasn't going to pass the gate). Used
+  the project's existing procedural icon generator (scripts/tools/
+  _gen_item_sprites.gd + scenes/tools/gen_sprites_scene.tscn, the same
+  tool that made every other item's icon) - added 10 new _draw_<id>()
+  functions in the same analytical-SDF drawing style/palette as the
+  existing 28, ran the generator (38 total, all OK), regenerated
+  .import files. asset-check: fails=0.
+- Wired all 7 new raw materials into district_loot.gd's BY_DISTRICT
+  table (GDD gives no loot-table rules for these - thematic
+  DEFAULT_CHOICE placement, documented): fabric+alcohol -> hospital
+  (medical theme), gunpowder+case -> police (ammo/casings), metal ->
+  industrial, paper -> school (documents theme), bottle -> gas_station
+  (convenience-store theme). Added to existing district entries rather
+  than restructuring the loot table.
+- Verification (grep-proof, per P2's own stated alternative to a live
+  flow test): confirmed via direct file-existence checks that ALL 8
+  recipes' result item AND every one of their component materials now
+  resolve to a real data/items/*.tres - 0 missing. Gates: compile
+  bad=0, asset-check fails=0, --static 10/10.
