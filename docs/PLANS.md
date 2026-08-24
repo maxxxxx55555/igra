@@ -480,3 +480,16 @@ first.
   "ЗАМЕТ." abbreviation and visually clips against the notice-icon to
   its left at English locale - a layout/font-size tuning issue, not a
   functional bug. Flagged for a future visual pass.
+
+## MAX-THROUGHPUT BURST — fix 7: skill tree off-palette colors
+- What: A2 found skill_button.tscn's NameLabel/LevelLabel (saturated
+  gold 1,0.8,0.2), DescLabel (flat grey 0.8,0.8,0.8), CostLabel
+  (near-neon green 0.6,1,0.6 - banned high-saturation territory),
+  ReqLabel (saturated orange 1,0.5,0.3), and skill_tree_ui.tscn's
+  SkillPointsLabel (same gold) all use colors matching no canon token
+  - live in every skill card of the live skill tree screen.
+- Fix: mapped each to the semantically closest canon token: gold ->
+  brass (#c9a24a), grey -> steel-text (#aeb6bf), green cost -> stamina
+  (#5f8a4e, the canon "positive" token), orange requirement -> ember
+  (#b4452f, canon "danger/blocked" token).
+- Verification: compile bad=0.
