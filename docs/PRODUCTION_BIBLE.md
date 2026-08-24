@@ -134,8 +134,18 @@ thread).
 - [ ] Before/after screenshots for any visual change land in `docs/shots/`
 - [ ] `docs/VISUAL_AUDIT.md` / `docs/KNOWN_ISSUES.md` updated for any new
       finding, fixed or deliberately deferred
-- [ ] Perf: draw calls <200 printed/verified headless (not yet automated
-      as a gate — see backlog)
+- [ ] Perf: draw calls <200 printed/verified headless via
+      `scenes/tools/perf_check_scene.tscn` (RESCUE WAVE P3) — measured
+      370 draw calls in the suburbs spawn district, over both the D1
+      (<200) and D11 (<350) budgets. Root cause identified but not
+      fixed this session: `scenes/props/streetlight_3d.tscn` is 2
+      individual `MeshInstance3D` (Pole+Lamp) per pole, no MultiMesh
+      batching, and `street_props.gd` spawns a pole pair (4 mesh draws)
+      at regular street intervals. MultiMesh conversion is the likely
+      single biggest lever, but touches the per-instance district-power
+      reactivity fixed in the TRUTH WAVE pass — deferred as a real,
+      isolated task rather than rushed alongside everything else this
+      session (see docs/KNOWN_ISSUES.md).
 - [ ] i18n: every new user-facing string goes through
       `LocalizationManager.t()/tf()` (never Godot's native `tr()` on a
       raw sentence — that bug shipped in 5 files this session, see

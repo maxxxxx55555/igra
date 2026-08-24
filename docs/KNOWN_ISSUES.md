@@ -1,5 +1,23 @@
 # Known issues
 
+## Draw calls over budget: 370 measured vs GDD's <200 (D1) / <350 (D11)
+
+Measured via `scenes/tools/perf_check_scene.tscn` (RESCUE WAVE P3) in a
+real windowed run, suburbs spawn district: `draw_calls=370`. Root cause:
+`scenes/props/streetlight_3d.tscn` has 2 individual `MeshInstance3D`
+nodes (Pole, Lamp) and no MultiMesh batching; `street_props.gd` spawns a
+pole pair (4 mesh draws) at regular street intervals along every road
+segment, in every district. This is very likely the single largest
+contributor — worth confirming with a targeted before/after count before
+committing to a fix. Not fixed this session: batching would need to keep
+each pole's individual reactivity to `EventBus.district_stage_changed`
+(the mechanic fixed in the TRUTH WAVE pass, where the game's own
+streetlights previously didn't react to power at all) — MultiMesh only
+batches the mesh draw, so the light on/off state would need its own,
+carefully-tested per-instance-transform tracking. Real, isolated
+refactor task, not a small tweak — see `docs/PRODUCTION_BIBLE.md`'s
+checklist for the full note.
+
 ## boot_check_scene.tscn can see a spurious PLAYING -> MENU during its
 ## sustain phase — test-harness artifact, not a real-game bug (tolerated,
 ## logged as WARN, does not fail the gate)

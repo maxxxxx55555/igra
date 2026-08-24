@@ -256,3 +256,20 @@ first.
 - Verification: asset-check gate (which already had music-layer tests)
   green after updating the 2 stale assertions; compile gate green;
   --static suite 10/10, flow_check 53/53.
+
+## RESCUE WAVE P3 — perf guard (draw calls)
+- Files: new scripts/tools/_perf_check.gd + _perf_check_runner.gd (same
+  bootstrap-under-root pattern) + scenes/tools/perf_check_scene.tscn.
+  Prints draw_calls/primitives/objects_in_frame once real gameplay is
+  reached, does not hard-fail (no per-district budget wired to know
+  which of the GDD's two budgets applies at the spawn point) - matches
+  Production Bible's own "printed/verified, not yet an automated gate"
+  scoping. Not wired into tools/check.sh (would add ~15-20s per run for
+  a diagnostic-only check that always exits 0 - no real gate value).
+- Result: 370 draw calls in suburbs (spawn district), over both the D1
+  (<200) and D11 (<350) budgets. Root cause identified (streetlight_3d.
+  tscn has no MultiMesh batching, 2 MeshInstance3D per pole x pole pairs
+  at every street interval) but NOT fixed this session - would need to
+  preserve each pole's individual power-stage reactivity (fixed last
+  session, real regression risk if rushed). Documented in docs/
+  KNOWN_ISSUES.md and docs/PRODUCTION_BIBLE.md's checklist.
