@@ -8,6 +8,7 @@ const BAR_ROW_TOP: float = 30.0
 var _hp: float = 1.0
 var _stam: float = 1.0
 var _bat: float = 1.0
+var _battery_ad_button: Button = null
 var _vignette_default_color: Color
 var _enemy_hp_tween: Tween
 
@@ -73,6 +74,7 @@ func _ready() -> void:
 		EventBus.crosshair_state_changed.connect(_on_crosshair_state)
 	EventBus.player_stamina_changed.connect(_on_stam)
 	EventBus.player_battery_changed.connect(_on_bat)
+	_add_battery_ad_button()
 	EventBus.ammo_changed.connect(_on_ammo_changed)
 	EventBus.player_interact_available.connect(func(avail: bool): prompt.visible = avail)
 	# Подсказка была вечно пустой строкой: текст в неё никто не писал.
@@ -628,6 +630,31 @@ func _on_bat(ratio: float) -> void:
 	_bat = ratio
 	_tween_fill(bat_fill, ratio)
 	bat_val.text = str(int(ratio * 100))
+	if _battery_ad_button != null and is_instance_valid(_battery_ad_button) and not _battery_ad_button.disabled:
+		_battery_ad_button.visible = ratio < 0.3
+
+## FINAL PERFECTION P5: extra_battery reward was wired end-to-end in
+## GameManager._on_ad_reward() (adds 50 charge) but had no UI trigger -
+## AdService.show_rewarded(&"extra_battery") was never called from
+## anywhere. Same pattern as death_screen.gd's _add_revive_button().
+func _add_battery_ad_button() -> void:
+	if not AdService.can_show_reward(&"extra_battery"):
+		return
+	var bat_row: Control = get_node_or_null("TopLeft/Bat")
+	if bat_row == null:
+		return
+	var btn := Button.new()
+	btn.name = "BatteryAdButton"
+	btn.text = LocalizationManager.t("AD_EXTRA_BATTERY")
+	btn.visible = false
+	btn.custom_minimum_size = Vector2(150, 24)
+	btn.position = Vector2(0, 22)
+	btn.pressed.connect(func() -> void:
+		btn.disabled = true
+		btn.visible = false
+		AdService.show_rewarded(&"extra_battery"))
+	bat_row.add_child(btn)
+	_battery_ad_button = btn
 
 func _on_ammo_changed(current: int, max_ammo: int) -> void:
 	ammo_val.text = "%d / %d" % [current, max_ammo]

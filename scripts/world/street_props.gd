@@ -14,6 +14,13 @@ var _trunk: CylinderMesh
 var _leaf: SphereMesh
 var _cone: CylinderMesh
 
+## P3: local-space positions of every streetlight_3d.tscn instance spawned
+## this build() pass, so their static Pole/Lamp meshes can be batched into
+## two MultiMeshInstance3D draw calls afterwards instead of 2 draw calls
+## PER lamp (RESCUE WAVE measured 370 draw calls/scene; this was the
+## identified but previously-unfixed root cause).
+var _lamp_local_positions: Array[Vector3] = []
+
 const _TEX_BRICK       := "res://assets/textures/environment/brick.png"
 const _TEX_RUSTY_METAL := "res://assets/textures/environment/rusty_metal.png"
 const _TEX_STREETLIGHT := "res://assets/textures/surfaces/streetlight_metal_512.png"
@@ -83,6 +90,7 @@ func build() -> void:
 				_spawn_tree(pos, road)
 			if _rng.randf() < 0.15 * density:
 				_spawn_cone(pos, road)
+	_build_streetlight_multimesh()
 
 func _side_offset(road: Dictionary, dist: float) -> Vector3:
 	var dir: String = String(road.get("dir", "h"))
@@ -106,8 +114,51 @@ func _spawn_pole_pair(center: Vector3, road: Dictionary, district_id: StringName
 	for side in [-1, 1]:
 		var l: Node3D = _STREETLIGHT_3D.instantiate()
 		l.set("district_id", district_id)
+		l.set("mesh_visible", false)
 		l.position = center + perp * float(side)
 		add_child(l)
+		_lamp_local_positions.append(l.position)
+
+## P3: matches streetlight_3d.tscn's Pole/Lamp mesh+material exactly so the
+## batched version is visually identical to the per-instance one it replaces.
+const _POLE_MESH := preload("res://assets/mesh/mesh_streetlight_pole.res")
+const _LAMP_HEAD_OFFSET := Vector3(1.16, 4.2, 0.0)
+
+func _build_streetlight_multimesh() -> void:
+	if _lamp_local_positions.is_empty():
+		return
+	var pole_mat := StandardMaterial3D.new()
+	pole_mat.albedo_color = Color(0.165, 0.200, 0.251, 1.0)
+	var pole_mm := MultiMesh.new()
+	pole_mm.transform_format = MultiMesh.TRANSFORM_3D
+	pole_mm.mesh = _POLE_MESH
+	pole_mm.instance_count = _lamp_local_positions.size()
+	var lamp_mesh := SphereMesh.new()
+	lamp_mesh.radius = 0.08
+	lamp_mesh.height = 0.12
+	var lamp_mat := StandardMaterial3D.new()
+	lamp_mat.albedo_color = Color(0.788, 0.635, 0.290, 1.0)
+	lamp_mat.emission_enabled = true
+	lamp_mat.emission = Color(1.0, 0.82, 0.48, 1.0)
+	lamp_mat.emission_energy_multiplier = 1.6
+	var lamp_mm := MultiMesh.new()
+	lamp_mm.transform_format = MultiMesh.TRANSFORM_3D
+	lamp_mm.mesh = lamp_mesh
+	lamp_mm.instance_count = _lamp_local_positions.size()
+	for i in _lamp_local_positions.size():
+		var pos: Vector3 = _lamp_local_positions[i]
+		pole_mm.set_instance_transform(i, Transform3D(Basis(), pos))
+		lamp_mm.set_instance_transform(i, Transform3D(Basis(), pos + _LAMP_HEAD_OFFSET))
+	var pole_mmi := MultiMeshInstance3D.new()
+	pole_mmi.name = "StreetlightPolesBatched"
+	pole_mmi.multimesh = pole_mm
+	pole_mmi.material_override = pole_mat
+	add_child(pole_mmi)
+	var lamp_mmi := MultiMeshInstance3D.new()
+	lamp_mmi.name = "StreetlightLampsBatched"
+	lamp_mmi.multimesh = lamp_mm
+	lamp_mmi.material_override = lamp_mat
+	add_child(lamp_mmi)
 
 func _spawn_pole_pair_legacy(center: Vector3, road: Dictionary) -> void:
 	var perp: Vector3 = _side_offset(road, 3.5)

@@ -30,6 +30,25 @@ const FONT_SIZE_HUGE: int = 30
 static func _load_font(path: String, fallback: Font) -> Font:
 	return load(path) if ResourceLoader.exists(path) else fallback
 
+static func _load_tex(path: String) -> Texture2D:
+	return load(path) if ResourceLoader.exists(path) else null
+
+## Кнопочный chrome kit (256x64, chamfer уже вырезан в самой текстуре).
+## margin=16 — вне зоны 5-12px, где ERROR_LOG зафиксировал дрейф каёмки
+## на 9-slice срезе; 16 держит края чисто и оставляет плоский центр.
+static func _btn_stylebox(tex: Texture2D) -> StyleBoxTexture:
+	var sb := StyleBoxTexture.new()
+	sb.texture = tex
+	sb.texture_margin_left = 16.0
+	sb.texture_margin_right = 16.0
+	sb.texture_margin_top = 16.0
+	sb.texture_margin_bottom = 16.0
+	sb.content_margin_left = 14.0
+	sb.content_margin_right = 14.0
+	sb.content_margin_top = 8.0
+	sb.content_margin_bottom = 8.0
+	return sb
+
 static func build_theme() -> Theme:
 	var theme := Theme.new()
 	var font_body: Font = _load_font("res://assets/fonts/RobotoCondensed-Regular.ttf", ThemeDB.fallback_font)
@@ -77,6 +96,18 @@ static func build_theme() -> Theme:
 	theme.set_stylebox("hover", "Button", btn_h)
 	theme.set_stylebox("pressed", "Button", btn_p)
 	theme.set_stylebox("disabled", "Button", btn_n)
+	# P2.3: реальные текстуры поверх StyleBoxFlat выше, если ассеты на месте
+	# (остальной chrome kit — panel/tooltip/slot — оставлен на StyleBoxFlat,
+	# см. комментарий у _btn_stylebox()).
+	var btn_tex_n := _load_tex("res://assets/textures/ui/btn_tex_normal.png")
+	var btn_tex_h := _load_tex("res://assets/textures/ui/btn_tex_hover.png")
+	var btn_tex_p := _load_tex("res://assets/textures/ui/btn_tex_pressed.png")
+	var btn_tex_d := _load_tex("res://assets/textures/ui/btn_tex_disabled.png")
+	if btn_tex_n != null and btn_tex_h != null and btn_tex_p != null and btn_tex_d != null:
+		theme.set_stylebox("normal", "Button", _btn_stylebox(btn_tex_n))
+		theme.set_stylebox("hover", "Button", _btn_stylebox(btn_tex_h))
+		theme.set_stylebox("pressed", "Button", _btn_stylebox(btn_tex_p))
+		theme.set_stylebox("disabled", "Button", _btn_stylebox(btn_tex_d))
 	theme.set_color("font_color", "Button", COLOR_TEXT)
 	theme.set_color("font_hover_color", "Button", COLOR_AMBER_HI)
 	theme.set_color("font_disabled_color", "Button", COLOR_TEXT_DIM)

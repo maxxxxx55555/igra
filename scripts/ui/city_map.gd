@@ -108,6 +108,17 @@ func _make_row(id: StringName, pg: Node, current: StringName) -> Control:
 	hb.add_theme_constant_override("separation", 12)
 	row.add_child(hb)
 
+	# Герб района — какой это район; отдельно от кружка ниже (тот про стадию сети).
+	var crest_path := "res://assets/textures/crests/crest_%s_96.png" % String(id)
+	if ResourceLoader.exists(crest_path):
+		var crest := TextureRect.new()
+		crest.texture = load(crest_path)
+		crest.custom_minimum_size = Vector2(32, 32)
+		crest.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		crest.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		crest.modulate.a = 1.0 if unlocked else 0.4
+		hb.add_child(crest)
+
 	# Индикатор стадии.
 	var dot := ColorRect.new()
 	dot.color = STAGE_COLORS[clampi(stage, 0, 3)]

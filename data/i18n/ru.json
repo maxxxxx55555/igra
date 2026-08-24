@@ -794,5 +794,6 @@
   "SKILL_LOOT_LUCK_NAME": "Мародёр",
   "SKILL_LOOT_LUCK_DESC": "+20% к шансу редкого лута",
   "ACTION_STOP_GENERATOR": "Остановить генератор",
-  "GENERATOR_OUT_OF_FUEL": "В генераторе закончилось топливо"
+  "GENERATOR_OUT_OF_FUEL": "В генераторе закончилось топливо",
+  "AD_EXTRA_BATTERY": "Посмотреть рекламу за батарею"
 }

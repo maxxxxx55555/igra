@@ -1,6 +1,11 @@
 extends Control
-const SIZE := Vector2(180, 180)
+## P2.5: size bump 180->220 (was on the open backlog since VISUAL_AUDIT) +
+## real frame/player-arrow textures from the delivered minimap kit, layered
+## on top of the existing procedural draw (kept as the functional fallback).
+const SIZE := Vector2(220, 220)
 const SCALE := 0.06
+const _FRAME_TEX: Texture2D = preload("res://assets/textures/ui/minimap_frame_256.png")
+const _ARROW_TEX: Texture2D = preload("res://assets/textures/ui/minimap_player_arrow_32.png")
 const DISTRICT_OFFSETS: Dictionary = {
 	&"suburbs": Vector2i(0, 0), &"residential": Vector2i(1, 0), &"park": Vector2i(2, 0), &"school": Vector2i(3, 0),
 	&"hospital": Vector2i(0, 1), &"gas_station": Vector2i(1, 1), &"police": Vector2i(2, 1), &"warehouses": Vector2i(3, 1),
@@ -77,7 +82,8 @@ func _draw() -> void:
 			var label: String = LocalizationManager.t(label_key) if label_key != "" else ""
 			if label != "":
 				draw_string(ThemeDB.fallback_font, p + Vector2(10, 4), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 11, ThemeProvider.COLOR_AMBER)
-	draw_circle(center, 3.0, ThemeProvider.COLOR_AMBER)
+	draw_texture_rect(_ARROW_TEX, Rect2(center - Vector2(8, 8), Vector2(16, 16)), false)
+	draw_texture_rect(_FRAME_TEX, Rect2(Vector2.ZERO, r.size), false)
 func _player_pos() -> Vector2:
 	var p := get_tree().get_first_node_in_group("player")
 	var v3: Vector3 = p.global_position if is_instance_valid(p) else Vector3.ZERO
