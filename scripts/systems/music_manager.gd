@@ -70,13 +70,21 @@ const AMBIENCE_LIT_BY_DISTRICT: Dictionary = {
 }
 
 ## Слои GDD §25.2. Ambient_Dark/Lit ведутся стадией электросети,
-## Threat_Low/High — близостью монстров, Action_Sting бьёт разово.
+## Threat_Low/High/Action — близостью монстров и боевым состоянием.
+## THEME UNIFICATION P1: раньше указывали на generic-петли из
+## assets/audio/ambience/ (заглушки); реальные кинематографичные слои
+## лежат в assets/audio/music/layer_*.ogg (120s dark/lit, 60s threat,
+## 60.1s action, все на постоянном темпе под бесшовный кроссфейд —
+## см. docs/REPORT_ASSETS.md "T1 — Music layer loops").
 const LAYERS: Dictionary = {
-	"ambient_dark": "res://assets/audio/ambience/ambient_dark_loop.ogg",
-	"ambient_lit": "res://assets/audio/ambience/ambient_lit_loop.ogg",
-	"threat_low": "res://assets/audio/ambience/threat_low_loop.ogg",
-	"threat_high": "res://assets/audio/ambience/threat_high_loop.ogg",
+	"ambient_dark": "res://assets/audio/music/layer_dark.ogg",
+	"ambient_lit": "res://assets/audio/music/layer_lit.ogg",
+	"threat_low": "res://assets/audio/music/layer_threat_low.ogg",
+	"threat_high": "res://assets/audio/music/layer_threat_high.ogg",
+	"action": "res://assets/audio/music/layer_action.ogg",
 }
+## Разовый акцент при обнаружении (play_sting()) — отдельный ассет и
+## механика от постоянного слоя "action" выше, не путать.
 const STING_PATH: String = "res://assets/audio/ambience/action_sting_loop.ogg"
 const LAYER_DB: float = -12.0
 const LAYER_LERP: float = 1.5
@@ -375,3 +383,6 @@ func _update_layer_targets() -> void:
 	var d: float = _nearest_enemy_distance()
 	_layer_target["threat_high"] = 1.0 if (d <= BATTLE_RANGE or _combat_hold > 0.0) else 0.0
 	_layer_target["threat_low"] = 1.0 if (d <= TENSION_RANGE and d > BATTLE_RANGE) else 0.0
+	## P1: 5-й слой ("action") — тот же реальный бой, что двигает Mood.BATTLE,
+	## а не просто "враг рядом" (threat_high шире и включает удержание после боя).
+	_layer_target["action"] = 1.0 if mood == Mood.BATTLE else 0.0
