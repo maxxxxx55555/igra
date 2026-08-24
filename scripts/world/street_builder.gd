@@ -22,6 +22,11 @@ var _road_mm: MultiMeshInstance3D
 var _sidewalk_mm: MultiMeshInstance3D
 var _marking_mm: MultiMeshInstance3D
 
+## WAVE 6 P4: registers the item that fuels scripts/generator.gd
+## (gas_station.tscn's GasGenerator instance) - previously no constant
+## existed anywhere naming the real fuel item at all.
+const GENERATOR_FUEL: StringName = &"gas_canister"
+
 const _TEX_ASPHALT   := "res://assets/textures/environment/asphalt.png"
 const _TEX_CONCRETE  := "res://assets/textures/environment/concrete.png"
 

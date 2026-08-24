@@ -324,19 +324,39 @@ func _pick_vis_color(v: float) -> Color:
 
 ## 3.6 Спека: прицел меняет цвет по наведению на врага
 ## YAGNI: не делаем RayCast-tick, а слушаем EventBus.
-@onready var _crosshair: ColorRect = $Crosshair
+## WAVE 6 P4: crosshair_state_changed раньше не слал никто и никогда -
+## прицел был статичным ColorRect на одном and том же цвете всю игру.
+## Теперь настоящая TextureRect-иконка (crosshair_64.png), а "hit" —
+## не персистентное состояние, а отдельная вспышка hitmarker_64.png.
+@onready var _crosshair: TextureRect = $Crosshair
+@onready var _hit_marker: TextureRect = $HitMarker
+var _hit_tween: Tween
 
 const _CROSSHAIR_NAMES: Dictionary = {
-	"default": Color(0.541, 0.451, 0.220, 0.85),   # brass-dim
+	"default": Color(0.541, 0.451, 0.220, 0.85),   # brass-dim, hipfire
+	"aim": Color(0.788, 0.635, 0.290, 0.95),        # brass, aiming down sights
 	"enemy":  Color(0.706, 0.271, 0.184, 0.95),     # ember
 	"disabled": Color(0.165, 0.200, 0.251, 0.6),    # panel-edge (недоступно/прицел-вне-врага)
 }
 
 func _update_crosshair(state: StringName) -> void:
+	if state == &"hit":
+		_flash_hit_marker()
+		return
 	if _crosshair == null:
 		return
 	if _CROSSHAIR_NAMES.has(state):
-		_crosshair.color = _CROSSHAIR_NAMES[state]
+		_crosshair.modulate = _CROSSHAIR_NAMES[state]
+	_crosshair.scale = Vector2(0.7, 0.7) if state == &"aim" else Vector2.ONE
+
+func _flash_hit_marker() -> void:
+	if _hit_marker == null:
+		return
+	if _hit_tween != null and _hit_tween.is_valid():
+		_hit_tween.kill()
+	_hit_marker.modulate.a = 1.0
+	_hit_tween = create_tween()
+	_hit_tween.tween_property(_hit_marker, "modulate:a", 0.0, 0.25)
 
 ## Triggered по сигналу EventBus.crosshair_state_changed.
 ## Caller: игрок или система взаимодействия.

@@ -522,6 +522,9 @@ func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, type: EnemyRos
 	hp -= reduced
 	AudioManager.play_sound_3d(_HIT_SFX, global_position, -6.0)
 	_hit_flash()
+	# WAVE 6 P4: crosshair_state_changed was never emitted anywhere -
+	# the HUD crosshair never actually reacted to landing a hit.
+	EventBus.crosshair_state_changed.emit(&"hit")
 
 	if player_ref and is_instance_valid(player_ref):
 		if ai_state in [State.IDLE, State.PATROL, State.INVESTIGATE]:

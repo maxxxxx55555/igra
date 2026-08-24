@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://scripts/world/district_trigger.gd" id="3_dt"]
 [ext_resource type="Script" path="res://scripts/visual/emissive_windows.gd" id="4_ew"]
 [ext_resource type="Script" path="res://scripts/world/street_props.gd" id="5_cp"]
+[ext_resource type="Script" path="res://scripts/generator.gd" id="6_gen"]
 
 [sub_resource type="BoxShape3D" id="box_1"]
 size = Vector3(80, 20, 80)
@@ -34,3 +35,7 @@ seed_value = 8547
 [node name="Props" type="Node3D" parent="."]
 script = ExtResource("5_cp")
 street_builder_path = NodePath("../StreetBuilder")
+
+[node name="GasGenerator" type="Node3D" parent="."]
+script = ExtResource("6_gen")
+position = Vector3(-10, 0, -10)

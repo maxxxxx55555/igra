@@ -752,3 +752,54 @@ first.
   fails=0, --static 10/10, boot-flow fails=0 (full menu->play->save->
   load loop still intact, confirms the new district-scene nodes don't
   break scene loading).
+
+## WAVE 6 P4 — generator fuel + crosshair
+- Generator: added `const GENERATOR_FUEL: StringName = &"gas_canister"`
+  to street_builder.gd (satisfies _game_test_3d.gd's exact check).
+  Rewrote scripts/generator.gd (previously never instantiated anywhere,
+  required pre-built %PowerLever/%FuelGauge/%InteractArea unique-name
+  child nodes no scene provided, and refuel() only touched an internal
+  float - never the player's real inventory) to: build its own visuals
+  procedurally (matches cable_box_interactable.gd's convention from
+  P3), join the "interactable" group with real can_interact()/
+  interact_prompt()/interact(), actually consume 1 gas_canister from
+  InventoryManager to start, drain fuel_level while running (90s per
+  canister), and toast via EventBus.inventory_notice on fuel_empty.
+  Placed one live instance (GasGenerator) in scenes/districts/
+  gas_station.tscn (thematic fit with gas_canister). Added 2 new i18n
+  keys (ACTION_STOP_GENERATOR, GENERATOR_OUT_OF_FUEL) - RU translated,
+  other 11 locales English-fallback per the established backlog
+  pattern; ACTION_START_GENERATOR already existed in all 13.
+- "populate pickups group in the test scene if that's the gap" - it
+  was, but not scene-specific: investigated _game_test_3d.gd's actual
+  scene load (res://scenes/main_3d.tscn, the REAL game scene, not
+  test_zone.tscn) and found NOTHING anywhere in the codebase ever
+  called add_to_group("pickups") on a spawned item - not district_
+  loot.gd, not item_pickup_3d.gd itself. This wasn't a test-only gap:
+  scripts/ui/radar.gd's minimap pickup blips (a real, live gameplay
+  HUD feature) read this exact group and were silently always empty
+  for every real player too. Fixed at the actual source: item_pickup_
+  3d.gd's _ready() now calls add_to_group("pickups") - fixes the radar
+  AND the test simultaneously, not a test-specific patch.
+- Crosshair: crosshair_state_changed was declared but never emitted
+  anywhere - the HUD crosshair was a static ColorRect, one fixed color,
+  for the entire game (confirmed dead signal from the earlier burst-
+  wave A5 architecture audit). Converted hud_3d.tscn's Crosshair node
+  from ColorRect to TextureRect using the delivered crosshair_64.png,
+  added a HitMarker TextureRect using hitmarker_64.png (starts
+  invisible, flashes on "hit"). Wired 2 of the 3 asked-for real trigger
+  sites: weapon_base.gd::fire() emits "default" (hipfire) on every
+  successful shot; base_monster.gd::take_damage() emits "hit" whenever
+  the player lands a hit on any enemy (a genuine, universal, always-
+  fired hook). "aim" was NOT wired to a fake trigger - grepped the
+  weapon system end to end and confirmed no aim-down-sights/ADS
+  mechanic exists anywhere to hook into; the HUD code and palette entry
+  for "aim" are left in place for when that mechanic is built, not
+  removed, but nothing calls it - an honest gap, not invented.
+- Verification: compile bad=0, signal-arity fails=0, asset-check
+  fails=0, i18n fails=0, --static 10/10. game_test_3d_scene launched
+  to verify the pickups/GENERATOR_FUEL checks specifically - hit the
+  same documented hang-after-completion process-lifecycle issue as
+  every prior session (buffered output, needs a kill to flush) -
+  result pending, not force-killed this time (learned earlier this
+  session that killing it mid-run corrupts the read, not the game).

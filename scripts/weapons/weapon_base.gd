@@ -68,6 +68,14 @@ func fire(from_pos: Vector3, direction: Vector3) -> bool:
 		_owner.apply_recoil(recoil)
 	
 	fired.emit()
+	# WAVE 6 P4: crosshair_state_changed was never emitted anywhere - the
+	# HUD crosshair was a static, always-the-same-color ColorRect for the
+	# entire game. "aim" (ADS) has no real trigger site: no aim-down-
+	# sights mechanic exists anywhere in the weapon system to hook into,
+	# so it's left wired in the HUD but genuinely unused rather than
+	# faking a state change nothing in the game actually does.
+	if EventBus.has_signal(&"crosshair_state_changed"):
+		EventBus.crosshair_state_changed.emit(&"default")
 	return true
 
 func _muzzle_flash(pos: Vector3) -> void:

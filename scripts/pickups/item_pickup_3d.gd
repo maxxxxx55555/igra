@@ -21,6 +21,10 @@ var _time: float = 0.0
 var _picked_up: bool = false
 
 func _ready() -> void:
+	# WAVE 6 P4: nothing ever added pickups to this group - radar.gd's
+	# minimap pickup blips (a live gameplay feature) and _game_test_3d.gd's
+	# own check were both silently reading an always-empty group.
+	add_to_group("pickups")
 	_base_y = global_position.y
 	body_entered.connect(_on_body_entered)
 	monitorable = true
