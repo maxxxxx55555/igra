@@ -393,3 +393,33 @@ first.
   deliberately deferred as too large/risky for this pass).
 - Verification: compile bad=0, --static 10/10 (flow_check 53/53,
   includes the existing craft-flow self-check).
+
+## MAX-THROUGHPUT BURST — fix 4: off-canon backgrounds (menu/splash/boot/credits/settings/difficulty/pre_loading)
+- What: A2 UI-audit subagent found main_menu.tscn/credits.tscn/
+  splash.tscn/boot_loading.tscn/pre_loading.tscn/settings_screen.tscn/
+  difficulty_screen.tscn all use a warm brown-black or various
+  near-black backgrounds that don't match the canon bg-deep token
+  (#0c1016), plus main_menu.tscn's Flicker overlay and Title font +
+  splash.tscn's logo color use a stale, more-saturated pre-canon amber
+  instead of the brass token (#c9a24a) - live on literally every single
+  screen a player sees before/around gameplay, including the very first
+  frame of every boot.
+- Files: exact hex-token swaps only (Color(0.0706,0.0627,0.0471,*) ->
+  Color(0.0471,0.0627,0.0863,*) [bg-deep]; Color(0.8863,0.6392,0.2353,*)
+  -> Color(0.7882,0.6353,0.2902,*) [brass]) across main_menu.tscn,
+  credits.tscn, splash.tscn, boot_loading.tscn, pre_loading.tscn,
+  settings_screen.tscn, difficulty_screen.tscn, plus settings_screen.gd's
+  own procedural panel background (matched to the `panel` token #141b24
+  instead, since that one's a panel overlay not a screen backdrop).
+- NOT changed: win_screen.gd / death_screen.gd's amber/red-tinted
+  backgrounds - these read as an intentional mood tint (victory=warm,
+  death=danger-red) rather than a stale-color mistake, and forcing them
+  to flat bg-deep would remove meaningful differentiation for a
+  subjective gain. Left as a deferred item, not silently ignored.
+  scenes/ui/menu.tscn (visually identical off-canon bg) also left alone
+  - confirmed dead/orphaned, not reachable via Routes/UIManager (only
+  referenced by tools/scene_smoke.gd, a dev smoke-test enumerator).
+- Verification: compile bad=0. Real-window screenshot (docs/shots/
+  burst_menu_palette.png) confirms the fix visually - menu background is
+  now the correct cool blue-black, title/logo text is the correct less-
+  saturated gold, both matching PRODUCTION_BIBLE.md's palette table.
