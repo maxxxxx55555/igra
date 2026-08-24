@@ -305,3 +305,156 @@ current state first. From this phase: the audio/shader/tilesets wiring in
 Steps 1-2, and the AppLovin provider scaffolding in Step 5 — check
 `ad_service.gd`'s `_default_provider()` before assuming ads need
 wiring from scratch.
+
+---
+
+## CURRENT STATE SNAPSHOT — as of HEAD `14c9393` (THEME UNIFICATION + MUSIC + PERF + V2 SKIN wave)
+
+Written as a full-context appendix before a context compaction, so the
+next session can pick up cold. Supersedes stale items in the "Open
+threads" list above where they conflict — e.g. item #2 there
+(`extra_battery` has no UI trigger) is **fixed**, done in the FINAL
+PERFECTION wave's P5 (HUD button, see `scripts/ui/hud_3d.gd`
+`_add_battery_ad_button()`); left uncorrected above only because that
+list predates it and rewriting it wasn't in scope for this append.
+
+**HEAD = `14c9393`, fully pushed to `origin/main`.** All mandatory
+gates green: compile, signal-arity, autoload-api, i18n, asset-check,
+boot-flow, audio-hum, theme-unify-probe, footstep, save-integrity, and
+`tools/check.sh --static` (10/10). `game_test_3d_scene` still exhibits
+its long-standing, cross-session, pre-existing process-lifecycle hang
+after printing its checks (not caused by any work this session).
+
+A parallel asset-generation session has been running concurrently
+across the last several waves, actively writing to `assets/audio/`,
+`assets/textures/`, and dropping new `docs/REPORT_*.md`/
+`docs/ERROR_LOG*.md` files (most recently `REPORT_POLISH_V2.md` +
+`ERROR_LOG_POLISHV2.md`, `ERROR_LOG_UIV2.md`, `ERROR_LOG_ICONSV2.md` —
+none of these have been read or acted on yet). It also commits
+directly to `main` on its own (e.g. `c432a20`, "assets: endings
+warmth-order fix + wind_loop unblock"). None of its in-progress
+modified/deleted files under `assets/` have been staged or committed
+by this session — only exact, intentional filenames were ever `git
+add`ed. Check `git status` at the start of any new session before
+assuming the working tree is clean; the parallel session's uncommitted
+changes are expected to be there and are not this session's to touch.
+
+### Open items carried forward
+
+1. **`emissive_windows.gd` has never rendered a single window, in any
+   district, in any session.** Root-caused this wave: `populate()`
+   calls `_collect_walls(self, walls)`, searching the `EmissiveWindows`
+   node's own (always-empty) subtree. `world_bootstrap.gd` parents
+   `EmissiveWindows` as an empty sibling of `StreetBuilder`/`Props`,
+   never as their parent, so `walls` is always empty and `populate()`
+   always returns immediately. Confirmed by testing: converting it to
+   MultiMesh batching (this wave, `fce12ed`) measured **zero**
+   difference in draw calls, before or after.
+   **Not fixed** — the correct search scope (which meshes legitimately
+   count as "walls" vs benches/streetlight poles/road tiles, all of
+   which currently pass the `!= "Ground"` filter) needs a real look,
+   not a guess. Whoever picks this up next: start at
+   `scripts/world/emissive_windows.gd`'s `_collect_walls()` and
+   `scripts/world/world_bootstrap.gd`'s `_wire()`.
+2. **D1 draw-call budget (<200) still not met.** Progression this
+   engagement: 370 (RESCUE WAVE baseline) → 251 (streetlight
+   MultiMesh, FINAL PERFECTION wave) → 231 (bench/tree/cone MultiMesh,
+   this wave). 231 meets the D11 budget (<350) but not the stricter
+   D1 budget. Streetlights and benches/trees/cones are both now
+   batched — that avenue is exhausted. Remaining draw-call cost is
+   monster meshes (6, correctly individual/dynamic, not safe to batch)
+   and pickups (12, individual), neither reducible without a design
+   call, plus whatever HUD/2D overhead is baked into the same
+   `RENDER_TOTAL_DRAW_CALLS_IN_FRAME` metric. Measured via
+   `perf_check_scene.tscn` run `--windowed` (headless reports 0 for
+   this metric under Godot's dummy renderer — always use `--windowed`
+   to re-measure).
+3. **i18n backlog: 1,562 strings across 11 non-RU/non-EN locales
+   remain English-fallback** (exact figure, from
+   `docs/SESSION_REPORT_UNIFY.md`'s HUMAN_CHECKLIST — re-count from
+   the actual JSON files rather than trusting this prose if precision
+   matters, same way this wave and WAVE 6 both re-counted instead of
+   trusting the prior estimate). Composition: 116 remaining `SCR_*`
+   keys (mostly bestiary/lore prose — enemy descriptions, achievement
+   flavor text, quest hint sentences), plus WAVE 6's already-sized
+   carryover families (`ACH_*` 41, `Q_*`/`QUEST_*` 51,
+   `END_*`/`ENDING_*` 25, `ENEMY_*` 11, misc 38). RU and EN are both
+   already 100% real-language complete for every key that exists in
+   `en.json` (verified twice now, WAVE 6 and this wave — don't
+   re-assume RU is incomplete without checking first, that premise
+   has been wrong twice in a row).
+4. **V2 skin pass: what's wired vs not**, from `docs/REPORT_UI_V2.md` +
+   `docs/REPORT_ICONS_V2.md` (41 + 67 + 2 + 6 = ~137 delivered assets,
+   all now have real `.import` files after this wave's forced reimport
+   pass — see note below):
+
+   **Wired (this wave):**
+   - `screens_v2/loading_street.png` → `screens.gd`'s "Loading" card
+     (`_apply_card_bg_v2()`)
+   - `screens_v2/death_loom.png` → `death_screen.gd`
+   - `screens_v2/character_dim.png` → `stats_ui.gd` (non-embedded bg)
+   - `screens_v2/menu_hero.png` → `main_menu.gd`
+     (`_install_hero_bg_v2()`, layered over the still-running
+     procedural skyline)
+   - `screens_v2/journal_paper.png` → `journal_ui.gd`'s reader-pane
+     StyleBoxTexture
+   - `maps_v2/grid_panel_512.png` → `screens.gd`'s "PowerGrid" card
+     (same `_apply_card_bg_v2()`)
+   - `maps_v2/city_iso_2048.png` → `city_map.gd` panel backdrop
+   - `ui_v2/bar_track_256x8.png` → HUD HP/Stam/Bat track (`HPT`/
+     `StamT`/`BatT` in `scenes/ui/hud_3d.tscn`, converted
+     ColorRect→TextureRect); **fill (`HPF`/`StamF`/`BatF`) deliberately
+     left as ColorRect** — the v2 fill textures are flat colors that
+     already match the existing fill colors exactly, and converting
+     would touch the working offset-based ratio-clip logic for zero
+     visual gain
+   - `icons_v2/ach_medal_v2_{01..20}_96.png` → `achievements_ui.gd`,
+     all 20, dimmed to 35% alpha while locked
+
+   **Explicitly skipped, with reasons (not oversight):**
+   - `ui_v2/btn_primary_*` / `btn_secondary_*` — **rounded** corners,
+     violates the chamfer-canon rule (radius 0) enforced twice this
+     engagement already (rejected `theme_main.tres` for the same
+     defect this same wave). Last wave's `btn_tex_*` chrome (correctly
+     chamfered) is still the live button chrome — don't overwrite it
+     with these.
+   - `ui_v2/panel_olive_256.png` as the global Panel style — untested,
+     self-described-as-guessed olive-green palette shift across every
+     panel in the game. `ui_v2/panel_small_128.png` also unwired (no
+     distinct consumer identified without deeper changes).
+   - `ui_v2/coin_{500,1200,2500,6000}.png` — both named consumers are
+     dead: shop's `_populate_shop()` explicitly filters out
+     `ShopItem.Kind.COIN_PACK` (IAP disabled by design), and
+     `coin_hud.tscn` is never instantiated anywhere (grep-confirmed).
+   - `portraits_v2/*_full_512x768.png` (6 monster portraits) —
+     `encyclopedia_ui.gd`'s only portrait slot is a 190×44px compact
+     grid card; a 512×768 image doesn't fit that aspect ratio, and no
+     detail/expanded view exists to add one without new UI.
+   - **Never touched at all**: `ui_v2` hex status pips (5),
+     inventory/quickslot/equip-slot chrome (3), flashlight upgrade
+     render (1), weather forecast thumbnails (4), tabs (2), logo
+     grunge overlay (1); `icons_v2` monster line-art icons (6,
+     separate from the wired medals — bestiary/map threat blips),
+     item icons_v2 (10 — existing item-icon system already works,
+     swap risk not worth it), stat/ctrl/event icons (17), district
+     icons_v2 (11 — `city_map.gd` already has real crests from an
+     earlier wave, unclear this is a different intended slot vs a
+     duplicate).
+
+   **Import gotcha, worth remembering**: newly-delivered asset files
+   from the parallel session do NOT have `.import` sidecars until the
+   editor scans them — `ResourceLoader.exists()`/`load()` silently
+   fail on them until then, so wiring code can look correct and render
+   nothing. Fix: `godot --headless --editor --quit` (forces a full
+   project reimport). **Known side effect**: that exact command
+   re-serialized `default_bus_layout.tres` (the one hand-authored
+   `.tres` with a custom `uid://` the editor auto-touches) and
+   silently dropped `bus/0` (Master) plus mangled the uid string. Was
+   caught and restored by hand this wave (verified via `git diff` =
+   zero remaining delta) — if this file shows unexpected changes after
+   any future forced-reimport, check it against git history before
+   trusting it.
+
+5. Everything already open in `docs/store/HUMAN_CHECKLIST.md` (AppLovin
+   real-device testing chief among it), and the enemy-speed-baseline /
+   crosshair-ADS-design gaps from WAVE 6, are unchanged.
