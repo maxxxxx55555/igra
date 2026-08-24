@@ -40,6 +40,7 @@ var _salvage_btn: Button
 var _selected_salvage: int = -1
 
 func _ready() -> void:
+	theme = ThemeProvider.build_theme()
 	if not enable_workbench: return
 	_build_tabs()
 	_build_craft_panel()

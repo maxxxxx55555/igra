@@ -9,6 +9,7 @@ class_name NewGamePlusUI
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	theme = ThemeProvider.build_theme()
 	_refresh()
 	activate_button.pressed.connect(_on_activate)
 	back_button.pressed.connect(_close)

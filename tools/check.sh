@@ -190,6 +190,7 @@ else
     run_gate "boot-flow (меню/новая игра/сейв)" "res://scenes/tools/boot_check_scene.tscn"
     run_gate "footstep-маппер (surface x speed)" "res://scenes/tools/footstep_check_scene.tscn"
     run_gate "аудио: тишина до первого ввода" "res://scenes/tools/audio_hum_check_scene.tscn"
+    run_gate "единая тема: chrome виден на всех экранах" "res://scenes/tools/theme_unify_probe_scene.tscn"
   fi
 fi
 

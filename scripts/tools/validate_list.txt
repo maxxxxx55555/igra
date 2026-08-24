@@ -28,7 +28,6 @@ scripts/core/quest_manager.gd
 scripts/core/routes.gd
 scripts/core/save_data.gd
 scripts/core/save_system.gd
-scripts/core/theme_manager.gd
 scripts/core/transition_manager.gd
 scripts/crafting/crafting_manager.gd
 scripts/credits.gd

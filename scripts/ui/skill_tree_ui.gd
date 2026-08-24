@@ -7,6 +7,7 @@ class_name SkillTreeUI
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	theme = ThemeProvider.build_theme()
 	set_anchors_preset(Control.PRESET_CENTER)
 	custom_minimum_size = Vector2(600, 500)
 	

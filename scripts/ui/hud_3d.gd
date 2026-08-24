@@ -35,6 +35,7 @@ var vignette: ColorRect:
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	_apply_canonical_theme()
 	_remove_dup_leftbottom()
 	_apply_touch_visibility()
 	_fix_radar_anchor()
@@ -443,6 +444,21 @@ func _fix_radar_anchor() -> void:
 		return
 	tr.grow_vertical = Control.GROW_DIRECTION_END
 	tr.offset_bottom = tr.offset_top + tr.get_combined_minimum_size().y
+
+## THEME UNIFICATION P0: hud_3d.tscn's root is a CanvasLayer, not a
+## Control, so it has no .theme property of its own and can't inherit one
+## from an ancestor Window either (confirmed empirically: Window.theme
+## does not propagate to Controls added later in this engine build/
+## context, only Control-to-Control ancestry does). 19 individual leaf
+## nodes used to hardcode theme = data/ui/theme_main.tres directly (a
+## separate, rounded-corner, pre-chamfer-canon theme) - setting the real
+## theme once on each top-level Control child here reaches every one of
+## them via normal Control ancestry, same coverage as before.
+func _apply_canonical_theme() -> void:
+	var t := ThemeProvider.build_theme()
+	for child in get_children():
+		if child is Control:
+			(child as Control).theme = t
 
 func _remove_dup_leftbottom() -> void:
 	var vp := get_viewport().get_visible_rect().size
