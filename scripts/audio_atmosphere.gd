@@ -21,7 +21,7 @@ func _ready() -> void:
 		_monster_alert_players.append(p)
 	EventBus.district_entered.connect(_on_district_entered)
 	EventBus.enemy_attack.connect(_on_enemy_attack)
-	EventBus.monster_spotted.connect(_on_monster_spotted)
+	EventBus.player_detected.connect(_on_monster_spotted)
 
 
 func _make_player() -> AudioStreamPlayer:

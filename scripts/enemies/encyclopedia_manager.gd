@@ -19,7 +19,7 @@ func _ready() -> void:
 	for d in _DATA:
 		if d is MonsterData:
 			_by_id[(d as MonsterData).id] = d
-	EventBus.monster_spotted.connect(_on_spotted)
+	EventBus.player_detected.connect(_on_spotted)
 func _on_spotted(id: StringName) -> void:
 	unlock(id)
 func unlock(id: StringName) -> void:

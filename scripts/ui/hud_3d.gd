@@ -78,7 +78,7 @@ func _ready() -> void:
 	EventBus.interact_prompt_changed.connect(func(text: String) -> void: prompt.text = text)
 	EventBus.inventory_weight_changed.connect(_on_weight_changed)
 	EventBus.inventory_notice.connect(func(msg: String): _show_notice(msg))
-	EventBus.monster_spotted.connect(_on_monster_spotted)
+	EventBus.player_detected.connect(_on_monster_spotted)
 	EventBus.enemy_hp_updated.connect(_on_enemy_hp_updated)
 	enemy_name_label.add_theme_font_size_override("font_size", 18)
 	enemy_name_label.add_theme_color_override("font_color", Color(0.706, 0.271, 0.184))

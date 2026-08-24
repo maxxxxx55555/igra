@@ -319,3 +319,26 @@ first.
   session's edits-only scope — left as dict entries for forward
   compatibility, not claiming they're audible yet.
 - Verification: compile gate bad=0, asset-check fails=0.
+
+## MAX-THROUGHPUT BURST — fix 2: monster_spotted dead signal (5 subscribers)
+- What: arch-audit subagent found EventBus.monster_spotted (5 live
+  subscribers: audio_atmosphere.gd, encyclopedia_manager.gd,
+  audio_manager.gd, onboarding.gd, hud_3d.gd) is never emitted anywhere
+  - codebase migrated to EventBus.player_detected (same signature:
+  monster_id: StringName) but 5 subscriber files were never repointed.
+  Concrete effect: encyclopedia never auto-unlocks on sighting, HUD
+  spotted-indicator never fires, shadow tutorial hint never triggers,
+  spotted-growl SFX never plays.
+- Fix: repointed all 5 .connect() calls from monster_spotted to
+  player_detected (the live, actually-emitted signal with an identical
+  signature) - a rename-fix, not a new emit site.
+- Also investigated A5's [INIT_ORDER] claim (GameManager._ready()
+  connecting to AdService.reward_granted, AdService being autoload #52
+  vs GameManager #19) — did NOT reproduce: grepped every runtime log
+  captured this session (multiple full real-window boots) for
+  AdService/connect-on-null errors, zero hits; a fresh direct headless
+  boot also produced zero related errors. GDScript raises hard on
+  null.method() calls, so a silent no-op isn't possible here - the
+  connection must be succeeding. Not fixing a bug that doesn't
+  reproduce; noting as investigated-and-dismissed in the final report.
+- Verification: compile bad=0, signal-arity fails=0.

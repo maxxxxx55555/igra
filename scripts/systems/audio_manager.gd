@@ -47,7 +47,7 @@ func _ready() -> void:
 	EventBus.player_state_changed.connect(func(s: int) -> void: _last_state = s)
 	EventBus.flashlight_state_changed.connect(_on_flashlight_toggled)
 	EventBus.light_disrupted.connect(func() -> void: _one_shot(_gen_glitch(), -8.0))
-	EventBus.monster_spotted.connect(func(_id: StringName) -> void: _one_shot(_gen_growl(), -12.0))
+	EventBus.player_detected.connect(func(_id: StringName) -> void: _one_shot(_gen_growl(), -12.0))
 	EventBus.enemy_attack.connect(func(_dmg: int) -> void: _one_shot(_gen_growl(), -8.0))
 	# Озвучка игровых событий (раньше были немыми).
 	EventBus.item_picked_up.connect(func(_id: StringName) -> void: _one_shot(_gen_pickup(), -10.0))

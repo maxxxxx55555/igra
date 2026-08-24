@@ -14,7 +14,7 @@ func _ready() -> void:
 	_active = true
 	EventBus.player_state_changed.connect(func(_s: int): _show("wasd"))
 	EventBus.flashlight_state_changed.connect(func(_on: bool): _show("flashlight"))
-	EventBus.monster_spotted.connect(func(_id): _show("shadow"))
+	EventBus.player_detected.connect(func(_id): _show("shadow"))
 	EventBus.player_interact_available.connect(func(_a: bool): _show("interact"))
 	EventBus.inventory_toggle_requested.connect(func(): _show("inventory"))
 
