@@ -16,12 +16,10 @@ func setup(skill_id: StringName, skill_data: Dictionary) -> void:
 	_skill_id = skill_id
 	_skill_data = skill_data
 	
-	# skill_data.name/description — сырой английский текст в данных
-	# SKILL_TREES (skill_tree_manager.gd), не ключ локализации; полная
-	# локализация контента 18 скиллов — отдельная задача (см. отчёт),
-	# здесь фиксится только окружающий UI-текст.
-	name_label.text = skill_data.name
-	desc_label.text = skill_data.description
+	# WAVE 6 P0.2: skill_data.name/description now store i18n KEYS
+	# (SKILL_TREES in skill_tree_manager.gd), not raw English text.
+	name_label.text = LocalizationManager.t(skill_data.name)
+	desc_label.text = LocalizationManager.t(skill_data.description)
 	cost_label.text = LocalizationManager.tf("SKILL_COST_SP", [skill_data.cost])
 	level_label.text = ""
 	req_label.text = ""
@@ -48,7 +46,7 @@ func refresh() -> void:
 				for r in reqs:
 					var r_data = _get_skill_data(r)
 					if r_data:
-						req_names.append(r_data.name)
+						req_names.append(LocalizationManager.t(r_data.name))
 				req_label.text = LocalizationManager.tf("SKILL_REQUIRES", [", ".join(req_names)])
 			else:
 				req_label.text = LocalizationManager.t("SKILL_NOT_ENOUGH_POINTS")

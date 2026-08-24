@@ -540,3 +540,40 @@ first.
   toasts/death - all genuine natural Russian, saved to docs/
   ru_proof_dump.txt (this is PROOF the premise correction is right,
   not just an assertion).
+
+## WAVE 6 P0.2 — skill tree content i18n (RU)
+- CORRECTION: prompt said "18 x (name+description)" - the actual
+  skill_tree_manager.gd SKILL_TREES dict has 3 branches x 5 skills =
+  15 skills, not 18/20 (matches the already-known "3 branches, not
+  GDD's stated 4" gap documented in docs/KNOWN_ISSUES.md from a prior
+  session - deliberately NOT inventing a 4th branch to reach 18/20,
+  same reasoning as before).
+- Files: skill_tree_manager.gd's SKILL_TREES now stores i18n KEYS
+  (SKILL_<ID>_NAME/_DESC) instead of raw English text for all 15
+  skills' name+description; skill_button.gd (2 direct reads + 1
+  requirement-name read) and skill_tree_tab.gd (1 notification read)
+  updated to route through LocalizationManager.t(). Added 30 new keys
+  to en.json (English reference, unchanged text) and ru.json (real,
+  natural Russian) - and, required by the project's OWN i18n gate
+  (hard parity check across all 13 locales, discovered when it failed
+  fails=11 after adding EN+RU only), the same 30 keys with English
+  fallback values to the other 11 locales (matches the pre-existing
+  behavior for those locales - they showed English before too - but
+  now properly routed through the i18n system instead of hardcoded,
+  and accurately counted in the backlog: +30 keys to each of 11
+  locales, on top of the pre-existing 381/394/etc counts).
+- Side find + fix: adding these 3 specific RU descriptions
+  ("+15% к скорострельности" etc.) tripped tools/check.sh's own
+  placeholder-parity checker (ru/en %-placeholder count mismatch) -
+  investigated and found a real regex bug in the checker itself, not
+  in the translations: the regex allowed a bare space as a valid
+  printf flag character, so plain text like "+15% fire rate" /
+  "25% slower" spuriously counted as containing a %f/%s placeholder
+  (English matched, Russian correctly didn't, mismatch). Verified via
+  a scan of all of en.json that zero real placeholders in this project
+  use the space-flag printf form - safe to tighten the regex (removed
+  space from the allowed flag chars). Fixed at the source (the
+  checker), not by rewording the translations to dodge it.
+- Verification: compile bad=0, i18n fails=0, --static 10/10 (which now
+  includes the fixed placeholder-parity check, previously silently
+  never exercised by anything this specific before).

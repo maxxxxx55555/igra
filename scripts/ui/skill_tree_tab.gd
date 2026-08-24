@@ -36,4 +36,4 @@ func _on_unlock_requested(skill_id: StringName) -> void:
 		refresh()
 		# Show notification
 		var skill = _tree_data.skills[skill_id]
-		UIManager.show_notification(LocalizationManager.tf("Unlocked: %s", [skill.name]))
+		UIManager.show_notification(LocalizationManager.tf("Unlocked: %s", [LocalizationManager.t(skill.name)]))

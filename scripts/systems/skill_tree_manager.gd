@@ -8,40 +8,40 @@ const SKILL_TREES: Dictionary = {
 		"name": "Combat",
 		"skills": {
 			"damage_boost_1": {
-				"name": "Damage Boost I",
-				"description": "+10% weapon damage",
+				"name": "SKILL_DAMAGE_BOOST_1_NAME",
+				"description": "SKILL_DAMAGE_BOOST_1_DESC",
 				"cost": 1,
 				"requires": [],
 				"max_level": 3,
 				"effect_per_level": 0.1
 			},
 			"damage_boost_2": {
-				"name": "Damage Boost II",
-				"description": "+10% weapon damage",
+				"name": "SKILL_DAMAGE_BOOST_2_NAME",
+				"description": "SKILL_DAMAGE_BOOST_2_DESC",
 				"cost": 2,
 				"requires": ["damage_boost_1"],
 				"max_level": 3,
 				"effect_per_level": 0.1
 			},
 			"crit_chance": {
-				"name": "Critical Strike",
-				"description": "+5% critical hit chance",
+				"name": "SKILL_CRIT_CHANCE_NAME",
+				"description": "SKILL_CRIT_CHANCE_DESC",
 				"cost": 2,
 				"requires": ["damage_boost_1"],
 				"max_level": 3,
 				"effect_per_level": 0.05
 			},
 			"fire_rate": {
-				"name": "Rapid Fire",
-				"description": "+15% fire rate",
+				"name": "SKILL_FIRE_RATE_NAME",
+				"description": "SKILL_FIRE_RATE_DESC",
 				"cost": 2,
 				"requires": [],
 				"max_level": 2,
 				"effect_per_level": 0.15
 			},
 			"reload_speed": {
-				"name": "Quick Reload",
-				"description": "+25% reload speed",
+				"name": "SKILL_RELOAD_SPEED_NAME",
+				"description": "SKILL_RELOAD_SPEED_DESC",
 				"cost": 1,
 				"requires": ["fire_rate"],
 				"max_level": 2,
@@ -53,40 +53,40 @@ const SKILL_TREES: Dictionary = {
 		"name": "Survival",
 		"skills": {
 			"max_health": {
-				"name": "Vitality",
-				"description": "+20 max health",
+				"name": "SKILL_MAX_HEALTH_NAME",
+				"description": "SKILL_MAX_HEALTH_DESC",
 				"cost": 1,
 				"requires": [],
 				"max_level": 3,
 				"effect_per_level": 20
 			},
 			"health_regen": {
-				"name": "Regeneration",
-				"description": "+2 HP/sec regeneration",
+				"name": "SKILL_HEALTH_REGEN_NAME",
+				"description": "SKILL_HEALTH_REGEN_DESC",
 				"cost": 2,
 				"requires": ["max_health"],
 				"max_level": 2,
 				"effect_per_level": 2
 			},
 			"stamina_boost": {
-				"name": "Endurance",
-				"description": "+30 max stamina",
+				"name": "SKILL_STAMINA_BOOST_NAME",
+				"description": "SKILL_STAMINA_BOOST_DESC",
 				"cost": 1,
 				"requires": [],
 				"max_level": 2,
 				"effect_per_level": 30
 			},
 			"battery_capacity": {
-				"name": "Power Cells",
-				"description": "+25 max battery",
+				"name": "SKILL_BATTERY_CAPACITY_NAME",
+				"description": "SKILL_BATTERY_CAPACITY_DESC",
 				"cost": 1,
 				"requires": [],
 				"max_level": 2,
 				"effect_per_level": 25
 			},
 			"light_radius": {
-				"name": "Illumination",
-				"description": "+20% flashlight range",
+				"name": "SKILL_LIGHT_RADIUS_NAME",
+				"description": "SKILL_LIGHT_RADIUS_DESC",
 				"cost": 1,
 				"requires": ["battery_capacity"],
 				"max_level": 2,
@@ -98,40 +98,40 @@ const SKILL_TREES: Dictionary = {
 		"name": "Utility",
 		"skills": {
 			"inventory_space": {
-				"name": "Pack Rat",
-				"description": "+5 inventory slots",
+				"name": "SKILL_INVENTORY_SPACE_NAME",
+				"description": "SKILL_INVENTORY_SPACE_DESC",
 				"cost": 1,
 				"requires": [],
 				"max_level": 3,
 				"effect_per_level": 5
 			},
 			"move_speed": {
-				"name": "Lightfoot",
-				"description": "+10% movement speed",
+				"name": "SKILL_MOVE_SPEED_NAME",
+				"description": "SKILL_MOVE_SPEED_DESC",
 				"cost": 1,
 				"requires": [],
 				"max_level": 2,
 				"effect_per_level": 0.1
 			},
 			"stealth": {
-				"name": "Ghost",
-				"description": "Enemies detect you 25% slower",
+				"name": "SKILL_STEALTH_NAME",
+				"description": "SKILL_STEALTH_DESC",
 				"cost": 2,
 				"requires": ["move_speed"],
 				"max_level": 2,
 				"effect_per_level": 0.25
 			},
 			"xp_boost": {
-				"name": "Fast Learner",
-				"description": "+15% XP gain",
+				"name": "SKILL_XP_BOOST_NAME",
+				"description": "SKILL_XP_BOOST_DESC",
 				"cost": 2,
 				"requires": [],
 				"max_level": 2,
 				"effect_per_level": 0.15
 			},
 			"loot_luck": {
-				"name": "Scavenger",
-				"description": "+20% rare loot chance",
+				"name": "SKILL_LOOT_LUCK_NAME",
+				"description": "SKILL_LOOT_LUCK_DESC",
 				"cost": 2,
 				"requires": ["xp_boost"],
 				"max_level": 2,

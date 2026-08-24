@@ -103,8 +103,13 @@ if missing:
     for k in missing[:10]: print('         ',k)
 
 # 5. %-плейсхолдеры совпадают между ru и en
+# Без пробела во флагах: раньше "% " (пробел) засчитывался как валидный
+# printf-флаг, поэтому обычный текст вида "+15% fire rate"/"25% slower"
+# ложно считался форматной подстановкой (нашёлся при добавлении
+# SKILL_FIRE_RATE_DESC/SKILL_LIGHT_RADIUS_DESC/SKILL_STEALTH_DESC —
+# ни одна реальная подстановка в проекте пробел-флаг не использует).
 en=json.load(open('data/i18n/en.json',encoding='utf-8'))
-spec=re.compile(r'%[-+ #0]*[\d.]*[sdfx]')
+spec=re.compile(r'%[-+#0]*[\d.]*[sdfx]')
 mism=[k for k in ru if len(spec.findall(str(ru[k])))!=len(spec.findall(str(en.get(k,''))))]
 print(('  OK   ' if not mism else '  FAIL ')+f'плейсхолдеры ru/en ({len(mism)} расхождений)')
 if mism: fails.append('i18n-format')
