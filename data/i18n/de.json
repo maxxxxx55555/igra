@@ -756,5 +756,11 @@
   "SKILL_ALREADY_UNLOCKED": "Bereits freigeschaltet",
   "SKILL_LOCKED": "Gesperrt",
   "SKILL_REQUIRES": "Erfordert: %s",
-  "SKILL_NOT_ENOUGH_POINTS": "Nicht genug Fertigkeitspunkte"
+  "SKILL_NOT_ENOUGH_POINTS": "Nicht genug Fertigkeitspunkte",
+  "HUD_NOISE": "LÄRM",
+  "HUD_VISIBILITY": "SICHTBARKEIT",
+  "HUD_AMMO": "MUNITION",
+  "HUD_RADAR": "RADAR",
+  "HUD_SPRINT": "SPRINT",
+  "HUD_STEALTH": "TARNUNG"
 }

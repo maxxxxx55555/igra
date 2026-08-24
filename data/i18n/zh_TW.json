@@ -756,5 +756,11 @@
   "SKILL_ALREADY_UNLOCKED": "已解鎖",
   "SKILL_LOCKED": "已鎖定",
   "SKILL_REQUIRES": "需要：%s",
-  "SKILL_NOT_ENOUGH_POINTS": "技能點不足"
+  "SKILL_NOT_ENOUGH_POINTS": "技能點不足",
+  "HUD_NOISE": "噪音",
+  "HUD_VISIBILITY": "可見度",
+  "HUD_AMMO": "彈藥",
+  "HUD_RADAR": "雷達",
+  "HUD_SPRINT": "衝刺",
+  "HUD_STEALTH": "潛行"
 }

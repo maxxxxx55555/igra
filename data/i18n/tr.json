@@ -756,5 +756,11 @@
   "SKILL_ALREADY_UNLOCKED": "Zaten açıldı",
   "SKILL_LOCKED": "Kilitli",
   "SKILL_REQUIRES": "Gerekli: %s",
-  "SKILL_NOT_ENOUGH_POINTS": "Yeterli yetenek puanı yok"
+  "SKILL_NOT_ENOUGH_POINTS": "Yeterli yetenek puanı yok",
+  "HUD_NOISE": "GÜRÜLTÜ",
+  "HUD_VISIBILITY": "GÖRÜNÜRLÜK",
+  "HUD_AMMO": "CEPHANE",
+  "HUD_RADAR": "RADAR",
+  "HUD_SPRINT": "KOŞU",
+  "HUD_STEALTH": "GİZLİLİK"
 }

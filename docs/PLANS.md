@@ -458,3 +458,25 @@ first.
   this pass (out of scope for a quick sanity pass, needs its own
   dedicated review) - flagged in the final report.
 - Verification: compile bad=0, i18n gate fails=0.
+
+## MAX-THROUGHPUT BURST — fix 6: hardcoded HUD strings (live, every gameplay session)
+- What: A2 UI-audit subagent found NoiseLabel ("ШУМ"), VisibilityLabel
+  ("ЗАМЕТ."), AmmoCaption ("AMMO"), RadarLabel ("РАДАР") in the live
+  core gameplay HUD (hud_3d.tscn) are hardcoded raw strings (mixed
+  Russian/English) with NO code path ever overriding .text - stuck in
+  that exact mixed-language state in every locale, every single
+  gameplay session. Same for BtnSprint ("БЕГ")/BtnStealth ("СТЕЛС")
+  touch buttons.
+- Files: added 6 new keys (HUD_NOISE, HUD_VISIBILITY, HUD_AMMO,
+  HUD_RADAR, HUD_SPRINT, HUD_STEALTH) with real translations to all 13
+  locale JSONs; hud_3d.gd gets a new _localize_static_labels() (mirrors
+  the existing _add_captions() pattern for HP/Stamina/Battery), called
+  from _ready(), setting all 6 labels/buttons via LocalizationManager.t().
+- Verification: compile bad=0, i18n fails=0, signal-arity fails=0. Real
+  gameplay screenshot (docs/shots/burst_hud_i18n.png) confirms visually
+  - HUD now shows "NOISE"/"VISIBILITY"/"RADAR" in English locale instead
+  of the old mixed-language text.
+- Minor follow-up noted, not fixed: "VISIBILITY" is longer than the old
+  "ЗАМЕТ." abbreviation and visually clips against the notice-icon to
+  its left at English locale - a layout/font-size tuning issue, not a
+  functional bug. Flagged for a future visual pass.

@@ -756,5 +756,11 @@
   "SKILL_ALREADY_UNLOCKED": "Уже разблокировано",
   "SKILL_LOCKED": "Заблокировано",
   "SKILL_REQUIRES": "Требуется: %s",
-  "SKILL_NOT_ENOUGH_POINTS": "Недостаточно очков навыков"
+  "SKILL_NOT_ENOUGH_POINTS": "Недостаточно очков навыков",
+  "HUD_NOISE": "ШУМ",
+  "HUD_VISIBILITY": "ЗАМЕТ.",
+  "HUD_AMMO": "ПАТРОНЫ",
+  "HUD_RADAR": "РАДАР",
+  "HUD_SPRINT": "БЕГ",
+  "HUD_STEALTH": "СТЕЛС"
 }

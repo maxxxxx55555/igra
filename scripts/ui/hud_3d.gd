@@ -61,6 +61,7 @@ func _ready() -> void:
 	# Цвет по умолчанию читаем отложенно — оверлея ещё нет на этом кадре.
 	call_deferred("_cache_vignette_default")
 	_add_captions()
+	_localize_static_labels()
 	_setup_number_fonts()
 	_setup_slot_placeholders()
 	_setup_radar()
@@ -429,6 +430,28 @@ func _remove_dup_leftbottom() -> void:
 			if cr.position.x < vp.x * 0.25 and cr.position.y + cr.size.y > vp.y * 0.75:
 				c.queue_free()
 
+## Noise/visibility/ammo/radar captions and the sprint/stealth touch
+## buttons were hardcoded raw text (mixed Russian/English) in the .tscn
+## with no code path ever overriding .text - permanently stuck in that
+## exact mixed-language state in every locale.
+func _localize_static_labels() -> void:
+	if noise_caption != null:
+		noise_caption.text = LocalizationManager.t("HUD_NOISE")
+	if vis_caption != null:
+		vis_caption.text = LocalizationManager.t("HUD_VISIBILITY")
+	var ammo_caption := get_node_or_null("AmmoCounter/AmmoCaption") as Label
+	if ammo_caption != null:
+		ammo_caption.text = LocalizationManager.t("HUD_AMMO")
+	var radar_label := get_node_or_null("TopRight/RadarLabel") as Label
+	if radar_label != null:
+		radar_label.text = LocalizationManager.t("HUD_RADAR")
+	var btn_sprint := get_node_or_null("BottomRight/BtnSprint") as Button
+	if btn_sprint != null:
+		btn_sprint.text = LocalizationManager.t("HUD_SPRINT")
+	var btn_stealth := get_node_or_null("BottomRight/BtnStealth") as Button
+	if btn_stealth != null:
+		btn_stealth.text = LocalizationManager.t("HUD_STEALTH")
+
 func _add_captions() -> void:
 	var data := [
 		[LocalizationManager.t("HUD_HP"), $TopLeft/HP],
@@ -524,7 +547,7 @@ func _process(delta: float) -> void:
 	else:
 		bat_fill.color = Color(0.788, 0.635, 0.290)
 
-## monster_spotted всегда шлёт StringName (EventBus.gd) — ветка на TYPE_INT
+## player_detected всегда шлёт StringName (см. event_bus.gd) — ветка на TYPE_INT
 ## никогда не выполнялась, а "ember #" + id было мусором, который игрок видел
 ## на каждой встрече с монстром в любой локали. Имя берём из тех же i18n-
 ## ключей, что уже наполнены для энциклопедии (MONSTER_SHADOW и т.д.).

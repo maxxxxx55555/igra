@@ -756,5 +756,11 @@
   "SKILL_ALREADY_UNLOCKED": "Já desbloqueado",
   "SKILL_LOCKED": "Bloqueado",
   "SKILL_REQUIRES": "Requer: %s",
-  "SKILL_NOT_ENOUGH_POINTS": "Pontos de habilidade insuficientes"
+  "SKILL_NOT_ENOUGH_POINTS": "Pontos de habilidade insuficientes",
+  "HUD_NOISE": "RUIDO",
+  "HUD_VISIBILITY": "VISIBILIDADE",
+  "HUD_AMMO": "MUNICAO",
+  "HUD_RADAR": "RADAR",
+  "HUD_SPRINT": "CORRIDA",
+  "HUD_STEALTH": "FURTIVIDADE"
 }
