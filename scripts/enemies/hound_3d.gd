@@ -16,6 +16,12 @@ func _ready() -> void:
 	vision_range = 14.0
 	vision_angle = 120.0
 	add_to_group("hounds")
+	_set_cues({
+		&"attack": {"file": "mon_hound_attack", "db": -4.0},
+		&"hit": {"file": "mon_hound_hit", "db": -6.0},
+		&"death": {"file": "mon_hound_death", "db": -2.0},
+		&"step": {"file": "mon_hound_step", "db": -12.0},
+	})
 
 func _handle_light_reaction(_delta: float) -> void:
 	if not _is_in_flashlight:

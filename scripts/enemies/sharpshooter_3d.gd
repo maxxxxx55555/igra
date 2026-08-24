@@ -24,6 +24,15 @@ func _ready() -> void:
 	vision_range = 25.0
 	vision_angle = 30.0
 	add_to_group("sharpshooters")
+	# Delivered audio uses the GDD's "Sniper" name (mon_sniper_*), not the
+	# script's monster_id "sharpshooter" — wiring to the files that exist
+	# rather than renaming them.
+	_set_cues({
+		&"attack": {"file": "mon_sniper_attack", "db": -4.0},
+		&"hit": {"file": "mon_sniper_hit", "db": -6.0},
+		&"death": {"file": "mon_sniper_death", "db": -2.0},
+		&"step": {"file": "mon_sniper_step", "db": -12.0},
+	})
 
 ## §6.2: "STUN не работает" — Sniper is immune to the STUN status only.
 func apply_status(status: int, duration: float, dps: float = 0.0, power: float = 0.0) -> void:

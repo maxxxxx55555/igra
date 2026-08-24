@@ -294,3 +294,28 @@ first.
   10/10. Not screenshotted (audio-only); not manually heard this session
   (would need a live combat encounter, out of reach of the headless/
   scripted verification tools built this session).
+
+## MAX-THROUGHPUT BURST — fix 1: 6 silent enemy types (no combat audio)
+- What: asset-audit subagent found brute/burner/rotter/hound/tvar/
+  sharpshooter (all 6 new-roster enemies) never call _set_cues() at all
+  -> play_cue() no-ops on _cues.has(cue)==false for every cue including
+  "attack" -> these enemies were fully playable but 100% silent in
+  combat. 24 delivered mon_*.wav files (ASSET_HANDOFF.md T1) sat unused.
+- Files: brute_3d.gd, burner_3d.gd, rotter_3d.gd, hound_3d.gd, tvar_3d.gd,
+  sharpshooter_3d.gd — added _set_cues({attack/hit/death/step}) matching
+  ASSET_HANDOFF.md's own snippet and existing db suggestions.
+- DEFAULT_CHOICE: sharpshooter_3d.gd's monster_id is "sharpshooter" but
+  the delivered files are named mon_sniper_*.wav (GDD calls this enemy
+  "Sniper") — wired to the files that exist rather than renaming
+  anything (edits-only scope, no renames).
+- Note for the report, not a fix: grepped base_monster.gd — only
+  "attack"/"chase"/"investigate" cues are ever centrally triggered
+  (base_monster.gd:643-647); "hit"/"death"/"step" are never called for
+  ANY enemy, old or new roster alike. This isn't a regression I'm
+  introducing — it's the pre-existing behavior for every other enemy
+  type too (crawler/destroyer/hunter/shadow/watcher). Wiring real
+  hit/death/step trigger call sites site-wide would be a much larger
+  change than "wire the missing _set_cues() call" and is out of this
+  session's edits-only scope — left as dict entries for forward
+  compatibility, not claiming they're audible yet.
+- Verification: compile gate bad=0, asset-check fails=0.

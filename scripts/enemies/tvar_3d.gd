@@ -21,6 +21,12 @@ func _ready() -> void:
 	vision_angle = 360.0
 	add_to_group("tvars")
 	EventBus.player_detected.connect(_on_any_player_detected)
+	_set_cues({
+		&"attack": {"file": "mon_tvar_attack", "db": -4.0},
+		&"hit": {"file": "mon_tvar_hit", "db": -6.0},
+		&"death": {"file": "mon_tvar_death", "db": -2.0},
+		&"step": {"file": "mon_tvar_step", "db": -12.0},
+	})
 
 ## Mini-boss intro stinger, once per encounter (RESCUE WAVE P2.5). Guarded
 ## by monster_id since player_detected is a global broadcast from every

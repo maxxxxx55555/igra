@@ -24,6 +24,12 @@ func _ready() -> void:
 	vision_range = 6.0
 	vision_angle = 180.0
 	add_to_group("brutes")
+	_set_cues({
+		&"attack": {"file": "mon_brute_attack", "db": -4.0},
+		&"hit": {"file": "mon_brute_hit", "db": -6.0},
+		&"death": {"file": "mon_brute_death", "db": -2.0},
+		&"step": {"file": "mon_brute_step", "db": -12.0},
+	})
 
 func _handle_light_reaction(_delta: float) -> void:
 	pass
