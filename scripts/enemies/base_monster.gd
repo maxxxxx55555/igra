@@ -680,6 +680,18 @@ func play_cue(cue: StringName, min_interval: float = 2.0) -> void:
 		(stream as AudioStreamWAV).loop_mode = AudioStreamWAV.LOOP_DISABLED
 	am.play_sound_3d(stream, global_position, float(data.get("db", -6.0)))
 
+## RESCUE WAVE P2.5: boss/mini-boss encounter-start one-shot (architect/
+## tvar stings) — separate from play_cue() above since those are
+## repeatable attack/hit/death/step cues on a fixed .wav-path convention,
+## not a single intro stinger played once per encounter.
+func _play_intro_sting(path: String, db: float = -2.0) -> void:
+	if not ResourceLoader.exists(path):
+		return
+	var am := get_node_or_null("/root/AudioManager")
+	if am == null or not am.has_method("play_sound_3d"):
+		return
+	am.play_sound_3d(load(path), global_position, db)
+
 func _sync_broadcast(delta: float) -> void:
 	_net_sync_timer -= delta
 	if _net_sync_timer > 0.0:

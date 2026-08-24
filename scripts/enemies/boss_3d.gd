@@ -38,6 +38,7 @@ func _tick_ai(delta: float) -> void:
 		var md := get_node_or_null("/root/MusicManager")
 		if md != null and md.has_method("enter_boss"):
 			md.enter_boss()
+			_play_intro_sting("res://assets/audio/sfx/architect_sting.ogg")
 	var ratio: float = hp / max_hp
 	if ratio > 0.66:
 		phase = Phase.P1

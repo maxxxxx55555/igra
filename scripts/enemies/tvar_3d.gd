@@ -8,6 +8,7 @@ extends "res://scripts/enemies/base_monster.gd"
 
 var _combo_step: int = 0
 var _combo_timer: float = 0.0
+var _sting_played: bool = false
 
 func _init() -> void:
 	monster_id = &"tvar"
@@ -19,6 +20,15 @@ func _ready() -> void:
 	vision_range = 16.0
 	vision_angle = 360.0
 	add_to_group("tvars")
+	EventBus.player_detected.connect(_on_any_player_detected)
+
+## Mini-boss intro stinger, once per encounter (RESCUE WAVE P2.5). Guarded
+## by monster_id since player_detected is a global broadcast from every
+## monster's own detection, not just this one.
+func _on_any_player_detected(id: StringName) -> void:
+	if id == monster_id and not _sting_played:
+		_sting_played = true
+		_play_intro_sting("res://assets/audio/sfx/tvar_sting.ogg")
 
 func _handle_light_reaction(_delta: float) -> void:
 	if not _is_in_flashlight:

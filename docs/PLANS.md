@@ -273,3 +273,24 @@ first.
   preserve each pole's individual power-stage reactivity (fixed last
   session, real regression risk if rushed). Documented in docs/
   KNOWN_ISSUES.md and docs/PRODUCTION_BIBLE.md's checklist.
+
+## RESCUE WAVE P2.5 — boss stings, WAV>1MB -> OGG + wired to encounters
+- Files: converted assets/audio/sfx/{architect,tvar}_sting.wav (1.3MB/
+  1.0MB, over the 1MB budget per docs/PRODUCTION_BIBLE.md) to .ogg via
+  ffmpeg libvorbis q6 (78KB/69KB) - originals kept, not deleted (matches
+  the _pre_norm/ backup convention, avoids the "never delete" hard rule
+  on files that might still be a reference/planned asset). Generated
+  .import files (godot --headless --import).
+  Added base_monster.gd::_play_intro_sting() (positional one-shot via
+  AudioManager.play_sound_3d - separate from play_cue()'s repeatable
+  attack/hit/death/step convention, which hardcodes a .wav path and
+  isn't meant for a single per-encounter stinger).
+  boss_3d.gd (Architect, final boss): sting plays at the same "first
+  real player contact" moment that already triggers enter_boss() music.
+  tvar_3d.gd (mini-boss): new _sting_played guard + EventBus.player_
+  detected listener (id-checked against monster_id, since that signal
+  is a global per-monster broadcast), plays once on first detection.
+- Verification: compile/signal-arity/asset-check gates green, --static
+  10/10. Not screenshotted (audio-only); not manually heard this session
+  (would need a live combat encounter, out of reach of the headless/
+  scripted verification tools built this session).
