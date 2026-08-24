@@ -16,7 +16,10 @@ var _tween: Tween
 
 func _ready() -> void:
 	layer = 100
-	_build()
+	# RESCUE WAVE: nothing calls show_ending() (this node's only trigger) —
+	# building unconditionally here painted a full-screen "win" overlay
+	# over every single main_3d.tscn load, including a fresh New Game.
+	# show_ending() already builds lazily on first real call.
 
 func show_ending(k: String) -> void:
 	kind = k

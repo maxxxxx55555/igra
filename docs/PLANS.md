@@ -129,3 +129,47 @@ first.
   the menu to appear on its own. IntegrityGuard's debounce fix is kept
   regardless — a real, independently-worthwhile robustness improvement,
   just not the cause of this specific bug.
+
+## RESCUE WAVE P0 — real windowed launch, not headless
+- Files to touch: unknown yet — first reproduce with real `--windowed`
+  Godot process, capture stdout/stderr to docs/runtime_log.txt, read it.
+- Signals: none pre-known; whatever the parse/null/preload errors say.
+- Risks: window may not close itself in a non-interactive shell; may
+  need to force-kill the process after timeout and grep whatever got
+  flushed.
+- Verification: process exits (or is killed cleanly), log file is
+  non-empty, no leftover godot*.exe processes afterward (tasklist check,
+  per docs/HANDOFF.md's known process-lifecycle gotcha).
+- Screenshot angles: main menu (fresh boot), first ~10-20s of gameplay
+  after New Game, via shot_tool.gd flags if the window stays up long
+  enough, else via the OS-level screenshot mechanism.
+
+## RESCUE WAVE P0 — ROOT CAUSE FOUND: EndingScreen auto-fires
+- What: real windowed launch works fine (menu renders correctly,
+  screenshot proof). Clicking Play -> gameplay starts but is IMMEDIATELY
+  covered by a full-screen "All districts powered!" (msg_win) overlay
+  with [ESC]/[TAP] hint, fading in over 1.2s. This is the actual
+  "user can't get into the game" blocker.
+- Root cause: `scenes/main_3d.tscn` has a permanent `EndingScreen`
+  CanvasLayer child (`scripts/ui/ending_screen.gd`) whose `_ready()`
+  unconditionally calls `_build()`, and `kind` exports default to
+  `"win"`. Nothing anywhere calls `show_ending()` (grepped, zero call
+  sites) — it's dead API wired to a live, always-on node. So every
+  single load of the gameplay scene self-paints a fake win screen.
+  Confirmed NOT the canonical win screen: `GameManager.trigger_win()`
+  -> `EventBus.game_won` -> `UIManager` opens `&"win"` -> maps to
+  `scripts/ui/win_screen.gd` (uses EndingsManager's real 5-ending
+  system, GDD-correct). `ending_screen.gd` and a third orphaned
+  `scripts/ui/victory_screen.gd` are both unwired duplicates;
+  `ending_screen.gd` is uniquely harmful because it's physically
+  embedded in main_3d.tscn's node tree, not because anything triggers
+  it.
+- Files to touch: `scripts/ui/ending_screen.gd` only — stop `_ready()`
+  from calling `_build()`; `show_ending()` already lazily builds
+  (`if _bg == null: _build()`), so making it dormant by default costs
+  nothing and doesn't delete the file/feature per CLAUDE.md's hard
+  rule.
+- Risk: none identified — no other code references this node by path,
+  confirmed via grep.
+- Verification: relaunch real window, Play, confirm gameplay is visible
+  with no overlay; screenshot.
