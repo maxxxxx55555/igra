@@ -3,8 +3,10 @@
 Read `docs/PRODUCTION_BIBLE.md` first — canon reference (pillars,
 visual/audio canon, budgets, checklist) for any new wave of work.
 
-Full detail: `docs/SESSION_REPORT_FINAL_PERFECTION.md` (latest phase —
-boot audio hum, music bus effects, VFX wiring, UI chrome, streetlight
+Full detail: `docs/SESSION_REPORT_UNIFY.md` (latest phase — theme
+system unification, cinematic music layers, MultiMesh draw-call
+batching, V2 skin wiring), `docs/SESSION_REPORT_FINAL_PERFECTION.md`
+(boot audio hum, music bus effects, VFX wiring, UI chrome, streetlight
 MultiMesh batching, SCR_* i18n, extra_battery ad button),
 `docs/SESSION_REPORT_WAVE6.md` (L10N completion, enemy balance to GDD,
 craft economy, 3 dead quests, generator fuel, crosshair, ach_01),
@@ -18,7 +20,41 @@ shaders, bug sweep, cleanup, ads, release prep) and
 `docs/SESSION_REPORT.md` (the earlier 19-task build phase). This file
 is the short version for picking the project back up.
 
-## Latest phase: FINAL PERFECTION WAVE (see docs/SESSION_REPORT_FINAL_PERFECTION.md)
+## Latest phase: THEME UNIFICATION + MUSIC + PERF + V2 SKIN (see docs/SESSION_REPORT_UNIFY.md)
+
+HEAD = `31b3a8a`, fully pushed to `origin/main`. All mandatory gates +
+static + boot-flow + audio-hum + theme-unify green.
+
+Mapped and fixed a 4-way UI theme split: `ThemeProvider.build_theme()`
+is now the one real source everywhere (main_menu, hud_3d, workbench,
+skill_tree_ui, new_game_plus_ui all now opt in explicitly, matching
+the 12 screens that already did); `ThemeSetup` is a 2-line bootstrap;
+dead `ThemeManager` deleted; a 4th, previously-undocumented system
+(`hud_3d.tscn` hardcoding 19 nodes to a rounded-corner, pre-canon
+`theme_main.tres`) found and fixed. Discovered `Window.theme` doesn't
+reliably propagate to Controls added after boot in this engine
+context - worked around with proven local `theme =` assignment rather
+than trusting it. Rewired `MusicManager.LAYERS` to the real 5
+cinematic music layers (were pointed at placeholder loops); added a
+5th "action" combat layer. Batched benches/trees/cones into MultiMesh
+(251 -> 231 draw calls, still short of the D1<200 budget - see
+report). Fixed `asset_check`'s loop-metadata false-negative at its
+source instead of converting an asset. Wired a meaningful chunk of the
+newly-delivered V2 skin pass (6 screen backgrounds, HUD bar tracks,
+all 20 achievement medals, map backdrops) after finding and fixing a
+real blocker (137 new textures had zero `.import` files) and a real
+side effect of fixing it (the forced reimport pass silently dropped
+`default_bus_layout.tres`'s Master bus - caught and restored by hand).
+
+**Discovered, not fixed** (flagged in HUMAN_CHECKLIST): emissive
+windows have never rendered anything in any district, ever - root-
+caused to searching the wrong node subtree, needs a design call on
+what counts as a "wall" before fixing. ~65 of the ~137 delivered V2
+assets remain unwired (hex pips, slots, weather thumbs, most icon
+families) - sized in the report, not silently dropped. Full self-audit
+and DEFAULT_CHOICE log: `docs/SESSION_REPORT_UNIFY.md`.
+
+## Previous phase: FINAL PERFECTION WAVE (see docs/SESSION_REPORT_FINAL_PERFECTION.md)
 
 HEAD = `8344772`, fully pushed to `origin/main`. All mandatory gates +
 static + boot-flow + audio-hum green (asset_check_scene's one failure
