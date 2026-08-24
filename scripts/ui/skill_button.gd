@@ -22,7 +22,7 @@ func setup(skill_id: StringName, skill_data: Dictionary) -> void:
 	# здесь фиксится только окружающий UI-текст.
 	name_label.text = skill_data.name
 	desc_label.text = skill_data.description
-	cost_label.text = LocalizationManager.tf("Cost: %d SP", [skill_data.cost])
+	cost_label.text = LocalizationManager.tf("SKILL_COST_SP", [skill_data.cost])
 	level_label.text = ""
 	req_label.text = ""
 	
@@ -35,11 +35,11 @@ func refresh() -> void:
 	var can_unlock = SkillTreeManager.can_unlock(_skill_id)
 	
 	if level > 0:
-		level_label.text = LocalizationManager.tf("Level: %d/%d", [level, max_level])
+		level_label.text = LocalizationManager.tf("SKILL_LEVEL_FMT", [level, max_level])
 		self.disabled = level >= max_level
-		self.tooltip_text = LocalizationManager.t("Already unlocked")
+		self.tooltip_text = LocalizationManager.t("SKILL_ALREADY_UNLOCKED")
 	else:
-		level_label.text = LocalizationManager.t("Locked")
+		level_label.text = LocalizationManager.t("SKILL_LOCKED")
 		self.disabled = not can_unlock
 		if not can_unlock:
 			var reqs = _skill_data.requires
@@ -49,9 +49,9 @@ func refresh() -> void:
 					var r_data = _get_skill_data(r)
 					if r_data:
 						req_names.append(r_data.name)
-				req_label.text = LocalizationManager.tf("Requires: %s", [", ".join(req_names)])
+				req_label.text = LocalizationManager.tf("SKILL_REQUIRES", [", ".join(req_names)])
 			else:
-				req_label.text = LocalizationManager.t("Not enough skill points")
+				req_label.text = LocalizationManager.t("SKILL_NOT_ENOUGH_POINTS")
 
 func _on_pressed() -> void:
 	if not self.disabled:

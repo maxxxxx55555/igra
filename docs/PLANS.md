@@ -423,3 +423,38 @@ first.
   burst_menu_palette.png) confirms the fix visually - menu background is
   now the correct cool blue-black, title/logo text is the correct less-
   saturated gold, both matching PRODUCTION_BIBLE.md's palette table.
+
+## MAX-THROUGHPUT BURST — fix 5: skill_button.gd raw-sentence-as-key bug
+- What: A2 UI-audit subagent found skill_button.gd passes raw English
+  sentences ("Cost: %d SP", "Level: %d/%d", "Already unlocked", "Locked",
+  "Requires: %s", "Not enough skill points") directly as the LOOKUP KEY
+  to LocalizationManager.t()/tf(), and none of those exact sentences
+  exist as real keys in any locale JSON - t() falls back to returning
+  the key itself when not found, so every skill button's cost/level/
+  requirement text was permanently English in all 13 locales, in the
+  live skill tree screen. Distinct from the already-documented "18
+  skills' name/description content" gap in docs/KNOWN_ISSUES.md (that
+  one is skill_tree_manager.gd's data dict; this is skill_button.gd's
+  own surrounding chrome text).
+- Fix: added 6 new proper keys (SKILL_COST_SP, SKILL_LEVEL_FMT,
+  SKILL_ALREADY_UNLOCKED, SKILL_LOCKED, SKILL_REQUIRES,
+  SKILL_NOT_ENOUGH_POINTS) with real translations to all 13 locale
+  JSONs (en/ru/de/es/fr/it/ja/ko/pt_BR/tr/zh/zh_TW/ar), then repointed
+  skill_button.gd's 6 call sites to use them.
+- Verified (before assuming another instance of the same bug) that
+  skill_tree_tab.gd's near-identical-looking "Unlocked: %s" call is NOT
+  actually broken the same way: it's registered as a literal key
+  "Unlocked: %s" in every locale JSON with real per-locale translated
+  values (e.g. ru.json: "Открыто: %s") - stylistically inconsistent
+  with the UPPERCASE_SNAKE_CASE convention used elsewhere, but
+  functionally correct. Left alone - not a bug, don't fix what isn't
+  broken.
+- Side finding while touching the locale files: zh.json (Simplified
+  Chinese) has ~107 additional keys with romanized PINYIN placeholder
+  text (e.g. "yes":"Shi", "you_died":"NI SI LE") that are neither real
+  Chinese characters nor identical to English - a pattern the earlier
+  i18n-audit subagent's "byte-identical-to-English" check couldn't
+  catch, widening the known gap beyond A4's 196-key finding. Not fixed
+  this pass (out of scope for a quick sanity pass, needs its own
+  dedicated review) - flagged in the final report.
+- Verification: compile bad=0, i18n gate fails=0.

@@ -750,5 +750,11 @@
   "victory": "ステージクリア",
   "weight": "重量",
   "yes": "はい",
-  "you_died": "死亡"
+  "you_died": "死亡",
+  "SKILL_COST_SP": "コスト: %d SP",
+  "SKILL_LEVEL_FMT": "レベル: %d/%d",
+  "SKILL_ALREADY_UNLOCKED": "解除済み",
+  "SKILL_LOCKED": "ロック中",
+  "SKILL_REQUIRES": "必要: %s",
+  "SKILL_NOT_ENOUGH_POINTS": "スキルポイントが不足しています"
 }
