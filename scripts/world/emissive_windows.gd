@@ -26,14 +26,25 @@ func _ready() -> void:
 	_win_mat.emission_energy_multiplier = 1.6
 	call_deferred("populate")
 
+## P2 (THEME UNIFICATION wave): used to spawn one MeshInstance3D per window
+## (up to `window_count`, ~65% left .visible=true) as a child of its own
+## wall - a real per-district draw-call contributor (RESCUE WAVE's 370
+## draw calls -> 251 after streetlight batching -> 231 after bench/tree/
+## cone batching, still over the D1<200 budget). Windows never change
+## after spawn either, so only the actually-lit ones are collected and
+## batched into a single MultiMeshInstance3D - skips the invisible 35%
+## entirely instead of creating and then hiding them.
 func populate() -> void:
 	var walls: Array[MeshInstance3D] = []
 	_collect_walls(self, walls)
 	if walls.is_empty():
 		return
 	var n: int = mini(window_count, walls.size() * 6)
+	var lit_transforms: Array[Transform3D] = []
 	for i in range(n):
 		var w: MeshInstance3D = walls[_rng.randi_range(0, walls.size() - 1)]
+		if _rng.randf() >= lit_chance:
+			continue
 		var aabb: AABB = w.get_aabb()
 		if aabb.size.length() < 0.5:
 			continue
@@ -54,12 +65,25 @@ func populate() -> void:
 		else:
 			basis = Basis(Vector3.UP, PI * 0.5) * Basis(Vector3.RIGHT, PI * 0.5)
 			origin += Vector3(0.0, v * aabb.size.y, u * aabb.size.z)
-		var node := MeshInstance3D.new()
-		node.mesh = _win_mesh
-		node.material_override = _win_mat
-		node.transform = Transform3D(basis, origin)
-		w.add_child(node)
-		node.visible = _rng.randf() < lit_chance
+		# Batched instance is parented under `self`, but each window's
+		# transform was computed relative to its own wall - convert
+		# wall-local -> world -> self-local so every wall's windows land
+		# in the right place regardless of that wall's own transform.
+		var world_xform: Transform3D = w.global_transform * Transform3D(basis, origin)
+		lit_transforms.append(global_transform.affine_inverse() * world_xform)
+	if lit_transforms.is_empty():
+		return
+	var mm := MultiMesh.new()
+	mm.transform_format = MultiMesh.TRANSFORM_3D
+	mm.mesh = _win_mesh
+	mm.instance_count = lit_transforms.size()
+	for i in lit_transforms.size():
+		mm.set_instance_transform(i, lit_transforms[i])
+	var mmi := MultiMeshInstance3D.new()
+	mmi.name = "EmissiveWindowsBatched"
+	mmi.multimesh = mm
+	mmi.material_override = _win_mat
+	add_child(mmi)
 
 func _collect_walls(n: Node, out: Array[MeshInstance3D]) -> void:
 	if n is MeshInstance3D and String((n as MeshInstance3D).name) != "Ground":

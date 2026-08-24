@@ -14,6 +14,14 @@ var _trunk: CylinderMesh
 var _leaf: SphereMesh
 var _cone: CylinderMesh
 
+## P2 (THEME UNIFICATION wave): same batching for the other static,
+## never-reactive props street_props.gd spawns - benches/trees/cones never
+## change appearance after spawn (no signal hookups, no _process), so like
+## the streetlights they're pure MultiMesh candidates.
+var _bench_positions: Array[Vector3] = []
+var _tree_positions: Array[Vector3] = []
+var _cone_positions: Array[Vector3] = []
+
 ## P3: local-space positions of every streetlight_3d.tscn instance spawned
 ## this build() pass, so their static Pole/Lamp meshes can be batched into
 ## two MultiMeshInstance3D draw calls afterwards instead of 2 draw calls
@@ -91,6 +99,7 @@ func build() -> void:
 			if _rng.randf() < 0.15 * density:
 				_spawn_cone(pos, road)
 	_build_streetlight_multimesh()
+	_build_prop_multimesh()
 
 func _side_offset(road: Dictionary, dist: float) -> Vector3:
 	var dir: String = String(road.get("dir", "h"))
@@ -180,35 +189,46 @@ func _spawn_pole_pair_legacy(center: Vector3, road: Dictionary) -> void:
 		add_child(l)
 
 func _spawn_bench(center: Vector3, road: Dictionary) -> void:
-	var b := MeshInstance3D.new()
-	b.mesh = _bench
-	b.material_override = _prop_material(_TEX_BENCH, Color(0.35, 0.25, 0.15), 0.85, 0.0)
-	b.position = center + _side_offset(road, 2.8)
-	add_child(b)
+	_bench_positions.append(center + _side_offset(road, 2.8))
 
 func _spawn_tree(center: Vector3, road: Dictionary) -> void:
-	var off: Vector3 = _side_offset(road, 2.8)
-	var t := MeshInstance3D.new()
-	t.mesh = _trunk
-	t.material_override = _prop_material("", Color(0.3, 0.18, 0.08), 0.95, 0.0)
-	t.position = center + off
-	add_child(t)
-	var l := MeshInstance3D.new()
-	l.mesh = _leaf
-	l.position = t.position + Vector3(0.0, 1.8, 0.0)
-	l.material_override = _prop_material("", Color(0.15, 0.45, 0.18), 0.9, 0.0)
-	add_child(l)
+	_tree_positions.append(center + _side_offset(road, 2.8))
 
 func _spawn_cone(center: Vector3, road: Dictionary) -> void:
-	var c := MeshInstance3D.new()
-	c.mesh = _cone
-	var m := _prop_material("", Color(1.0, 0.55, 0.1), 0.6, 0.0)
-	m.emission_enabled = true
-	m.emission = Color(1.0, 0.45, 0.05)
-	m.emission_energy_multiplier = 0.6
-	c.material_override = m
-	c.position = center + _side_offset(road, 2.4)
-	add_child(c)
+	_cone_positions.append(center + _side_offset(road, 2.4))
+
+func _build_prop_multimesh() -> void:
+	_build_one_multimesh(_bench_positions, _bench,
+		_prop_material(_TEX_BENCH, Color(0.35, 0.25, 0.15), 0.85, 0.0), "BenchesBatched")
+	if not _tree_positions.is_empty():
+		_build_one_multimesh(_tree_positions, _trunk,
+			_prop_material("", Color(0.3, 0.18, 0.08), 0.95, 0.0), "TreeTrunksBatched")
+		var leaf_positions: Array[Vector3] = []
+		for p in _tree_positions:
+			leaf_positions.append(p + Vector3(0.0, 1.8, 0.0))
+		_build_one_multimesh(leaf_positions, _leaf,
+			_prop_material("", Color(0.15, 0.45, 0.18), 0.9, 0.0), "TreeLeavesBatched")
+	if not _cone_positions.is_empty():
+		var cone_mat := _prop_material("", Color(1.0, 0.55, 0.1), 0.6, 0.0)
+		cone_mat.emission_enabled = true
+		cone_mat.emission = Color(1.0, 0.45, 0.05)
+		cone_mat.emission_energy_multiplier = 0.6
+		_build_one_multimesh(_cone_positions, _cone, cone_mat, "ConesBatched")
+
+func _build_one_multimesh(positions: Array[Vector3], mesh: Mesh, material: Material, node_name: String) -> void:
+	if positions.is_empty():
+		return
+	var mm := MultiMesh.new()
+	mm.transform_format = MultiMesh.TRANSFORM_3D
+	mm.mesh = mesh
+	mm.instance_count = positions.size()
+	for i in positions.size():
+		mm.set_instance_transform(i, Transform3D(Basis(), positions[i]))
+	var mmi := MultiMeshInstance3D.new()
+	mmi.name = node_name
+	mmi.multimesh = mm
+	mmi.material_override = material
+	add_child(mmi)
 
 ## Convenience: build a wall MeshInstance3D with brick or rusty_metal texture.
 ## Call from a building-spawner script: CityStreetProps.make_wall_mesh(...)
