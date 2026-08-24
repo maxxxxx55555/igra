@@ -150,7 +150,10 @@ func _unlock_audio() -> void:
 	for key in _layers:
 		var pl: AudioStreamPlayer = _layers[key]
 		if not pl.playing:
-			pl.play()
+			# P1.3: разный сдвиг старта на каждый слой — иначе их точки
+			# зацикливания периодически совпадают (НОК длин петель) и
+			# дают механический ритмический стык.
+			pl.play(randf_range(0.0, 0.5))
 	var stream := _load(mood)
 	if stream == null:
 		return
@@ -190,7 +193,10 @@ func set_mood(new_mood: Mood, instant: bool = false, force: bool = false) -> voi
 	var next: AudioStreamPlayer = _b if _active == _a else _a
 	next.stream = stream
 	next.volume_db = MUTE_DB if not instant else FULL_DB
-	next.play()
+	# FINAL PERFECTION P1.3: старые Mood-треки не beat-matched друг к другу,
+	# так что кроссфейд на чужой downbeat звучит как ритмический стык —
+	# случайный сдвиг старта размывает совпадение.
+	next.play(randf_range(0.0, 0.5))
 	if _fade != null and _fade.is_valid():
 		_fade.kill()
 	if instant:
