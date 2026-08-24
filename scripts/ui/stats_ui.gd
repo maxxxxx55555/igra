@@ -46,19 +46,30 @@ func _build() -> void:
 	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vb.add_child(t)
 	var s := ProgressTracker.get_stats()
-	_line(vb, LocalizationManager.t("STATS_DISTRICTS"), "%d / %d" % [s["districts"], PowerGrid.all_districts().size()])
-	_line(vb, LocalizationManager.t("STATS_SECRETS"), "%d" % s["secrets"])
-	_line(vb, LocalizationManager.t("STATS_KILLS"), "%d" % s["kills"])
-	_line(vb, LocalizationManager.t("STATS_TIME"), LocalizationManager.tf("STATS_SECONDS", [int(s["time_played"])]))
+	_line(vb, LocalizationManager.t("STATS_DISTRICTS"), "%d / %d" % [s["districts"], PowerGrid.all_districts().size()], "district")
+	_line(vb, LocalizationManager.t("STATS_SECRETS"), "%d" % s["secrets"], "document")
+	_line(vb, LocalizationManager.t("STATS_KILLS"), "%d" % s["kills"], "skull")
+	_line(vb, LocalizationManager.t("STATS_TIME"), LocalizationManager.tf("STATS_SECONDS", [int(s["time_played"])]), "clock")
 	if not embedded:
 		var b := Button.new()
 		b.text = LocalizationManager.t("ui_close")
 		b.focus_mode = Control.FOCUS_NONE
 		b.pressed.connect(func() -> void: UIManager.close(&"stats"))
 		vb.add_child(b)
-func _line(p: Node, k: String, v: String) -> void:
+## icon_id: V2 SKIN WIRING P1: icons_v2/stat_[id]_64.png, drawn before the
+## label when present on disk.
+func _line(p: Node, k: String, v: String, icon_id: String = "") -> void:
 	var row := HBoxContainer.new()
 	p.add_child(row)
+	if icon_id != "":
+		var icon_path := "res://assets/textures/icons_v2/stat_%s_64.png" % icon_id
+		if ResourceLoader.exists(icon_path):
+			var icon := TextureRect.new()
+			icon.custom_minimum_size = Vector2(18, 18)
+			icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			icon.texture = load(icon_path)
+			icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			row.add_child(icon)
 	var lk := Label.new()
 	lk.text = k
 	lk.size_flags_horizontal = Control.SIZE_EXPAND_FILL

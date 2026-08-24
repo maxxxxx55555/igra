@@ -64,6 +64,18 @@ func _build() -> void:
 			prev.custom_minimum_size = Vector2(190, 44)
 			prev.color = data.body_color if (unlocked and data) else ThemeProvider.COLOR_BG_DARK
 			cv.add_child(prev)
+		# V2 SKIN WIRING P1: small line-art icon next to the portrait thumb,
+		# unlocked entries only - locked cards stay "???" with no id to key on.
+		if unlocked and data:
+			var icon_path := "res://assets/textures/icons_v2/monster_%s_64.png" % String(data.id)
+			if ResourceLoader.exists(icon_path):
+				var icon := TextureRect.new()
+				icon.custom_minimum_size = Vector2(20, 20)
+				icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+				icon.texture = load(icon_path)
+				icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+				icon.size_flags_horizontal = Control.SIZE_SHRINK_END
+				cv.add_child(icon)
 		var nm := Label.new()
 		nm.text = LocalizationManager.name_for("MONSTER_", data.id, data.display_name) if unlocked else "???"
 		nm.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER if unlocked else ThemeProvider.COLOR_TEXT_DIM)

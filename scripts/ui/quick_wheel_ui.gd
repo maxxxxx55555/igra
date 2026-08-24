@@ -13,6 +13,11 @@ const BRASS := Color("#c9a24a")
 const BRASS_DIM := Color("#3a3226")
 const BONE := Color("#d8d2c4")
 
+## V2 SKIN WIRING P1: same slot chrome as hud_3d.gd's quickslots, drawn under
+## each wedge's icon position. Loaded once; null (skipped) if missing on disk.
+const _CHROME_PATH := "res://assets/textures/ui_v2/quickslot_v2_72.png"
+var _chrome: Texture2D = load(_CHROME_PATH) if ResourceLoader.exists(_CHROME_PATH) else null
+
 var _open: bool = false
 var _drag: Vector2 = Vector2.ZERO
 var _highlight: int = -1
@@ -87,6 +92,9 @@ func _draw() -> void:
 		draw_line(_center, p1, col, 1.5)
 		draw_arc(_center, RADIUS, mid - slice * 0.5, mid + slice * 0.5, 12, col, 2.0)
 		var icon_pos: Vector2 = _center + Vector2(cos(mid), sin(mid)) * (RADIUS * 0.62)
+		if _chrome != null:
+			draw_texture_rect(_chrome, Rect2(icon_pos - Vector2(18, 18), Vector2(36, 36)), false,
+				Color(1, 1, 1, 1) if i == _highlight else Color(1, 1, 1, 0.6))
 		var s = inv.slots[i] if (inv and i < inv.slots.size()) else null
 		if s != null:
 			var item := ItemDatabase.get_item(s["item_id"])

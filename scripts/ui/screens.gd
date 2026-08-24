@@ -460,6 +460,17 @@ func build_FlashlightUpgrade(content: ColorRect, card: ColorRect, cw: float, ch:
 		content.remove_child(c)
 		c.queue_free()
 	var branches: Array = FlashlightUpgradeManager.get_all_data()
+	# V2 SKIN WIRING P1: item render, top-right corner, clear of the
+	# coins label and the branch rows below it.
+	var render_path := "res://assets/textures/ui_v2/flashlight_render_512.png"
+	if ResourceLoader.exists(render_path):
+		var render := TextureRect.new()
+		render.texture = load(render_path)
+		render.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		render.size = Vector2(72, 72)
+		render.position = Vector2(content.size.x - 78, 28)
+		render.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		content.add_child(render)
 	var coins_lbl := Label.new()
 	coins_lbl.text = LocalizationManager.tf("COINS_AMOUNT", [CoinWallet.get_coins()])
 	coins_lbl.size = Vector2(160, 20)
@@ -599,10 +610,10 @@ func build_ControlsTouch(content: ColorRect, card: ColorRect, cw: float, ch: flo
 
 func build_Weather(content: ColorRect, card: ColorRect, cw: float, ch: float) -> void:
 	var weathers := [
-		{"name": LocalizationManager.t("SCR_DOZHD"), "effect": LocalizationManager.t("SCR_UMENSHAET_VIDIMOST_UVELICHIVAET_SHUM")},
-		{"name": LocalizationManager.t("SCR_TUMAN"), "effect": LocalizationManager.t("SCR_SILNO_SNIZHAET_VIDIMOST")},
-		{"name": LocalizationManager.t("SCR_GROZA"), "effect": LocalizationManager.t("SCR_MOLNII_PRIVLEKAYUT_MONSTROV")},
-		{"name": LocalizationManager.t("SCR_VETER"), "effect": LocalizationManager.t("SCR_UVELICHIVAET_UROVEN_SHUMA")},
+		{"name": LocalizationManager.t("SCR_DOZHD"), "effect": LocalizationManager.t("SCR_UMENSHAET_VIDIMOST_UVELICHIVAET_SHUM"), "thumb": "rain"},
+		{"name": LocalizationManager.t("SCR_TUMAN"), "effect": LocalizationManager.t("SCR_SILNO_SNIZHAET_VIDIMOST"), "thumb": "fog"},
+		{"name": LocalizationManager.t("SCR_GROZA"), "effect": LocalizationManager.t("SCR_MOLNII_PRIVLEKAYUT_MONSTROV"), "thumb": "storm"},
+		{"name": LocalizationManager.t("SCR_VETER"), "effect": LocalizationManager.t("SCR_UVELICHIVAET_UROVEN_SHUMA"), "thumb": "wind"},
 	]
 	var card_w := (content.size.x - 20) / 2.0
 	var card_h := (content.size.y - 10) / 2.0
@@ -616,6 +627,18 @@ func build_Weather(content: ColorRect, card: ColorRect, cw: float, ch: float) ->
 		frame.size = Vector2(card_w, card_h)
 		frame.position = Vector2(cx, cy)
 		content.add_child(frame)
+		# V2 SKIN WIRING P1: real forecast thumbnail behind the name/effect
+		# labels, dimmed so the text stays readable over it.
+		var thumb_path := "res://assets/textures/ui_v2/weather_%s_256x144.png" % String(weathers[i]["thumb"])
+		if ResourceLoader.exists(thumb_path):
+			var thumb := TextureRect.new()
+			thumb.texture = load(thumb_path)
+			thumb.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			thumb.size = Vector2(card_w, card_h)
+			thumb.stretch_mode = TextureRect.STRETCH_SCALE
+			thumb.modulate = Color(1, 1, 1, 0.5)
+			thumb.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			frame.add_child(thumb)
 		var name_lbl := Label.new()
 		name_lbl.text = weathers[i].name
 		name_lbl.size = Vector2(card_w, 24)

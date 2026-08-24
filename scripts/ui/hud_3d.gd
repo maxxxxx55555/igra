@@ -771,9 +771,20 @@ func _setup_slot_placeholders() -> void:
 			continue
 		for child in slot.get_children():
 			child.queue_free()
-		var border := ColorRect.new()
+		# V2 SKIN WIRING P1: real slot chrome texture in place of the flat
+		# color swatch; falls back to the old ColorRect if missing on disk.
+		var chrome_path := "res://assets/textures/ui_v2/quickslot_v2_72.png"
+		var border: Control
+		if ResourceLoader.exists(chrome_path):
+			var tex_border := TextureRect.new()
+			tex_border.texture = load(chrome_path)
+			tex_border.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			tex_border.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			border = tex_border
+		else:
+			border = ColorRect.new()
+			(border as ColorRect).color = Color(0.165, 0.200, 0.251)
 		border.name = "Border"
-		border.color = Color(0.165, 0.200, 0.251)
 		border.size = Vector2(54, 54)
 		border.position = Vector2(-1, -1)
 		border.mouse_filter = Control.MOUSE_FILTER_PASS
@@ -804,8 +815,10 @@ func _setup_slot_placeholders() -> void:
 	var slot0 := get_node("BottomCenter/Slot0")
 	if slot0:
 		var border := slot0.get_node_or_null("Border")
-		if border:
-			border.color = Color(0.788, 0.635, 0.290)
+		if border is ColorRect:
+			(border as ColorRect).color = Color(0.788, 0.635, 0.290)
+		elif border is CanvasItem:
+			(border as CanvasItem).modulate = Color(0.788, 0.635, 0.290)
 
 func _on_quick_slot_key(index: int) -> void:
 	_use_quick_slot(index)

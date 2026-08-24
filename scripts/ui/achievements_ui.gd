@@ -82,6 +82,7 @@ func _refresh() -> void:
 			var medal := TextureRect.new()
 			medal.texture = load(medal_path)
 			medal.custom_minimum_size = Vector2(28, 28)
+			medal.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 			medal.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 			medal.modulate.a = 1.0 if unlocked else 0.35
 			hrow.add_child(medal)

@@ -24,6 +24,16 @@ const STAGE_COLORS: Array[Color] = [
 	Color(0.37, 0.54, 0.31),  # FULL
 ]
 
+## V2 SKIN WIRING P1: hex_[color]_128.png per DistrictData.Stage, plus a
+## separate "locked" hex for districts not yet unlocked at all.
+const _HEX_ICON: Array[String] = [
+	"res://assets/textures/ui_v2/hex_grey_128.png",   # DARK
+	"res://assets/textures/ui_v2/hex_amber_128.png",  # PARTIAL
+	"res://assets/textures/ui_v2/hex_amber_128.png",  # STREETS
+	"res://assets/textures/ui_v2/hex_green_128.png",  # FULL
+]
+const _HEX_LOCKED := "res://assets/textures/ui_v2/hex_locked_128.png"
+
 ## Ключи перечислены явно, а не собираются как "MAP_STAGE_%d": проверка
 ## локализации ищет ключи по коду и на склеенных именах ничего не находит.
 const STAGE_KEYS: Array[String] = [
@@ -125,17 +135,30 @@ func _make_row(id: StringName, pg: Node, current: StringName) -> Control:
 		var crest := TextureRect.new()
 		crest.texture = load(crest_path)
 		crest.custom_minimum_size = Vector2(32, 32)
+		crest.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		crest.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		crest.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		crest.modulate.a = 1.0 if unlocked else 0.4
 		hb.add_child(crest)
 
-	# Индикатор стадии.
-	var dot := ColorRect.new()
-	dot.color = STAGE_COLORS[clampi(stage, 0, 3)]
-	dot.custom_minimum_size = Vector2(14, 14)
-	dot.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	hb.add_child(dot)
+	# Индикатор стадии: hex-пип V2 (заблокирован -> серый замочный hex,
+	# иначе цвет по стадии сети). Цветной ColorRect ниже — запасной вариант,
+	# если файла нет на диске.
+	var hex_path := _HEX_LOCKED if not unlocked else _HEX_ICON[clampi(stage, 0, 3)]
+	if ResourceLoader.exists(hex_path):
+		var hex := TextureRect.new()
+		hex.texture = load(hex_path)
+		hex.custom_minimum_size = Vector2(16, 16)
+		hex.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		hex.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		hex.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		hb.add_child(hex)
+	else:
+		var dot := ColorRect.new()
+		dot.color = STAGE_COLORS[clampi(stage, 0, 3)]
+		dot.custom_minimum_size = Vector2(14, 14)
+		dot.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		hb.add_child(dot)
 
 	var name_lbl := Label.new()
 	name_lbl.text = _display_name(id, pg)

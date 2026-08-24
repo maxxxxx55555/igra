@@ -27,6 +27,7 @@ func _ready() -> void:
 	if vb == null:
 		return
 	_install_background()
+	_install_logo_grunge_v2(vb as VBoxContainer)
 	_start_flicker()
 	_ensure_continue(vb as VBoxContainer)
 	_connect(vb, "Continue", func() -> void:
@@ -77,6 +78,34 @@ func _install_hero_bg_v2(after: Node) -> void:
 	hero.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(hero)
 	move_child(hero, (after.get_index() + 1) if after else 0)
+
+## V2 SKIN WIRING P1: distress/stencil texture over the title text - additive
+## layer on top of the Label, doesn't touch the engine-rendered text itself.
+func _install_logo_grunge_v2(vb: VBoxContainer) -> void:
+	if vb == null:
+		return
+	var title := vb.get_node_or_null("Title") as Label
+	if title == null or title.get_node_or_null("LogoGrungeV2") != null:
+		return
+	var path := "res://assets/textures/ui_v2/logo_grunge_512.png"
+	if not ResourceLoader.exists(path):
+		return
+	# Parented under the Label (not the VBoxContainer) so it overlays the
+	# title in place instead of taking its own row in the vertical stack.
+	# The delivered PNG is an opaque brass fill with white scratch marks
+	# (a multiply/screen stencil, not a transparent decal) - additive blend
+	# at low alpha reads as light distress marks instead of a flat tan box.
+	var grunge := TextureRect.new()
+	grunge.name = "LogoGrungeV2"
+	grunge.texture = load(path)
+	grunge.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	grunge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	grunge.modulate.a = 0.18
+	var mat := CanvasItemMaterial.new()
+	mat.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+	grunge.material = mat
+	title.add_child(grunge)
+	grunge.set_anchors_preset(Control.PRESET_FULL_RECT)
 
 ## Flicker стоял в сцене с color.a = 0.15 и без единой строчки кода, которая
 ## бы его двигала — ровный тёплый засвет поверх всего меню 24/7 вместо
