@@ -11,6 +11,16 @@ const SAMPLE_KEYS: PackedStringArray = [
 	"BTN_CLOSE", "you_died",
 ]
 
+## FINAL PERFECTION P4.4: SCR_* proof sample - separate from SAMPLE_KEYS
+## above since P0's dump already proved the main i18n system works; this
+## one is specifically about the SCR_* family this wave translated.
+const SCR_SAMPLE_KEYS: PackedStringArray = [
+	"SCR_IGRAT", "SCR_NASTROYKI", "SCR_VYHOD", "SCR_PRODOLZHIT",
+	"SCR_GLAVNOE_MENYU", "SCR_GRAFIKA", "SCR_SLOZHNOST", "SCR_LEGKO",
+	"SCR_KACHESTVO", "SCR_SOHRANIT", "SCR_ZAGRUZIT", "SCR_ZAKRYT",
+	"SCR_VY_POGIBLI", "SCR_BOLNICA", "SCR_ELEKTROSTANCIYA",
+]
+
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	call_deferred("_run")
@@ -20,4 +30,6 @@ func _run() -> void:
 	print("[i18n-dump] lang=", LocalizationManager.current_lang)
 	for key in SAMPLE_KEYS:
 		print("[i18n-dump] ", key, " = ", LocalizationManager.t(key))
+	for key in SCR_SAMPLE_KEYS:
+		print("[i18n-dump-scr] ", key, " = ", LocalizationManager.t(key))
 	get_tree().quit(0)
