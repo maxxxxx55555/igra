@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://scripts/world/street_builder.gd" id="1_sb"]
 [ext_resource type="Script" path="res://scripts/world/power_switch.gd" id="2_ps"]
 [ext_resource type="Script" path="res://scripts/world/district_trigger.gd" id="3_dt"]
 [ext_resource type="Script" path="res://scripts/visual/emissive_windows.gd" id="4_ew"]
 [ext_resource type="Script" path="res://scripts/world/street_props.gd" id="5_cp"]
+[ext_resource type="Script" path="res://scripts/world/cable_box_interactable.gd" id="6_cb"]
 
 [sub_resource type="BoxShape3D" id="box_1"]
 size = Vector3(80, 20, 80)
@@ -34,3 +35,7 @@ seed_value = 7770
 [node name="Props" type="Node3D" parent="."]
 script = ExtResource("5_cp")
 street_builder_path = NodePath("../StreetBuilder")
+
+[node name="CableBox" type="Node3D" parent="."]
+script = ExtResource("6_cb")
+position = Vector3(-10, 0, -10)

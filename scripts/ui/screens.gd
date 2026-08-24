@@ -627,7 +627,19 @@ func build_PuzzleCables(content: ColorRect, card: ColorRect, cw: float, ch: floa
 		_show_toast(tr("CABLE_SUCCESS"))
 		var ps := get_tree().root.get_node_or_null("/root/PuzzleSystem")
 		if ps and ps.has_method("mark_solved"):
-			ps.mark_solved("cables_suburb")
+			# WAVE 6 P3: was hardcoded "cables_suburb" - every district's
+			# cable puzzle reported as suburb's regardless of which one
+			# was actually started.
+			var active_id: String = ps.get_active_puzzle() if ps.has_method("get_active_puzzle") else "cables_suburb"
+			ps.mark_solved(active_id if active_id != "" else "cables_suburb")
+			# WAVE 6 P3: q_connect_cables (INTERACT type, target "cable_node")
+			# was permanently uncompletable - nothing ever emitted that
+			# interaction. This is the actual solve event for the substation
+			# cable box (scripts/world/cable_box_interactable.gd).
+			if active_id == "fuse_substation":
+				var qm := get_tree().root.get_node_or_null("/root/QuestManager")
+				if qm and qm.has_method("complete_objective"):
+					qm.complete_objective(&"q_connect_cables", &"", 1)
 	)
 
 	puzzle.puzzle_failed.connect(func():

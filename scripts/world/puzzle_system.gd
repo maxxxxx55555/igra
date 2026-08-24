@@ -42,6 +42,12 @@ func start_puzzle(id: String) -> bool:
 func is_solved(id: String) -> bool:
 	return _solved.get(id, false)
 
+## WAVE 6 P3: screens.gd's PuzzleCables screen hardcoded "cables_suburb"
+## on solve regardless of which puzzle was actually started - every
+## district's cable puzzle silently reported as suburb's.
+func get_active_puzzle() -> String:
+	return _active_puzzle
+
 func mark_solved(id: String) -> void:
 	_solved[id] = true
 	_active_puzzle = ""

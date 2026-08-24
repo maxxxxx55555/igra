@@ -697,3 +697,58 @@ first.
   recipes' result item AND every one of their component materials now
   resolve to a real data/items/*.tres - 0 missing. Gates: compile
   bad=0, asset-check fails=0, --static 10/10.
+
+## WAVE 6 P3 — 3 dead quests, minimal EventBus-driven triggers
+- CORRECTIONS before executing:
+  (a) q_find_engineers is coded as type="EXPLORE" target="engineer_camp"
+      target_count=1 in quest_manager.gd - NOT an "INTERACT 2-3 notes"
+      quest as P3.2 described. Implemented what's actually coded (a
+      single zone trigger, reusing the same script as q_explore_school)
+      rather than changing the quest's fundamental type/count, which
+      would be a bigger, more invasive change for the same player-
+      facing beat ("find the engineer camp").
+  (b) q_connect_cables asked for a new "3x hold-2s" interaction
+      mechanic - but a complete, real cable-connection minigame
+      (scripts/ui/puzzle_cables.gd: grid-based wire-matching UI, 5
+      attempts, hint button, puzzle_solved/puzzle_failed signals) and
+      its full backing system (puzzle_system.gd: per-district puzzle
+      ids incl. "fuse_substation" with power_stage/reward data)
+      ALREADY EXIST - fully built, GDD-canonical, but PuzzleSystem.
+      start_puzzle() was, before this fix, only ever called from test
+      scripts, never from any real in-world interactable. Reused the
+      existing minigame instead of building a second, redundant
+      interaction paradigm from scratch (reuse-before-writing).
+- Files: new scripts/world/quest_zone_trigger.gd (generic "reach this
+  landmark" Area3D, mirrors district_trigger.gd's pattern, emits
+  EventBus.zone_reached) - placed in scenes/districts/school.tscn
+  (zone_id="school_zone") and scenes/districts/industrial.tscn
+  (zone_id="engineer_camp"). New scripts/world/cable_box_interactable.gd
+  (join the "interactable" group like power_switch.gd, calls
+  PuzzleSystem.start_puzzle("fuse_substation") on interact) - placed in
+  scenes/districts/substation.tscn.
+- Side bugs found+fixed while wiring: screens.gd's PuzzleCables screen
+  hardcoded "cables_suburb" on every solve, regardless of which
+  district's puzzle was actually started - every puzzle in the game
+  (not just my new one) would have silently mis-reported as suburb's.
+  Added PuzzleSystem.get_active_puzzle() getter, screens.gd now uses
+  the real active id. q_connect_cables (INTERACT type, target
+  "cable_node") is completed via QuestManager.complete_objective()
+  called from that same fixed solve-callback when the active puzzle is
+  "fuse_substation" (matches the existing p2 workbench.gd pattern for
+  wiring a non-standard completion path into the type-agnostic public
+  API, rather than fighting the type-specific _on_interaction_done
+  dispatcher for an event that isn't really a direct interaction).
+- P3.4 sanity-pass of the 4 remapped KILL-quest flavor texts (from the
+  earlier burst-wave session's runner->hunter/tank->destroyer/
+  sniper->sharpshooter/squad->hound remap) vs their new targets: all 4
+  already read correctly - "Cull the runners" fits Hunter's charge-
+  rush design, "Sniper hunter" matches GDD's OWN name for this exact
+  creature (GDD §6.2 literally calls sharpshooter's row "Sniper"),
+  "Wipe out the pack" matches Hound's real SWARM/pack-call behavior in
+  code, "Bring down the tanks"/"Armoured brutes" matches Destroyer's
+  actual high-armor slow-tank design. 0 i18n changes needed - this was
+  a genuine check, not a rubber stamp.
+- Verification: compile bad=0, signal-arity fails=0, asset-check
+  fails=0, --static 10/10, boot-flow fails=0 (full menu->play->save->
+  load loop still intact, confirms the new district-scene nodes don't
+  break scene loading).
