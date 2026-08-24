@@ -1,0 +1,16 @@
+[i18n-dump] lang=ru
+[i18n-dump] menu_title = ПОСЛЕДНИЙ ФОНАРЬ
+[i18n-dump] new_game = Новая игра
+[i18n-dump] continue = Продолжить
+[i18n-dump] quests = Задания
+[i18n-dump] difficulty = Сложность
+[i18n-dump] HUD_NOISE = ШУМ
+[i18n-dump] HUD_VISIBILITY = ЗАМЕТ.
+[i18n-dump] SKILL_LOCKED = Заблокировано
+[i18n-dump] ACH_01_NAME = Первый свет
+[i18n-dump] DIST_SUBURBS = Пригород
+[i18n-dump] DISTRICT_STAGE_2 = %s: улицы освещены
+[i18n-dump] CHECKPOINT_SET = ЧЕКПОИНТ АКТИВИРОВАН
+[i18n-dump] BOSS_APPEARS = АРХИТЕКТОР
+[i18n-dump] BTN_CLOSE = Закрыть
+[i18n-dump] you_died = ВЫ ПОГИБЛИ

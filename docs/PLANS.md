@@ -493,3 +493,50 @@ first.
   (#5f8a4e, the canon "positive" token), orange requirement -> ember
   (#b4452f, canon "danger/blocked" token).
 - Verification: compile bad=0.
+
+## WAVE 6 P0 — L10N completion
+- CORRECTION before executing: the prompt's P0.1 asked to "complete
+  ALL 196 missing keys for RU" - this premise is factually wrong.
+  docs/BURST_REPORT.md's own finding (re-verified fresh via
+  data/i18n/ru.json/en.json spot-checks) says RU is the ONE locale
+  that already has real, distinct, natural translations for the
+  196-key gap; the gap is in the OTHER 11 locales. Proceeding on the
+  correct premise rather than doing pointless/harmful rework
+  (overwriting already-good Russian text) or silently reinterpreting
+  without saying so.
+- Also corrected the gap's true SIZE: re-counted with a real JSON
+  parser (Node.js, available in this environment) instead of trusting
+  the prior session's estimate - the actual systemic gap is 381 keys
+  identical to EN across >=8 of 11 non-RU/non-EN locales (not 196).
+  Per-locale breakdown: ar/ja/ko/zh 381, de/fr 395, it 394, es/pt_BR
+  390, tr 386, zh_TW 401 (out of 764 total keys). Family breakdown:
+  SCR_* 183, ACH_* 41, Q_* 40, END_*/ENDING_* 25, DIST_*/DISTRICT_* 16,
+  ENEMY_*/QUEST_* 22, MAP_*/INV_*/PROMPT_*/SHOP_*/STATS_*/TIP_*/UPG_*
+  33, misc singles 21.
+- Scope decision (matches the prompt's own "main-flow only, backlog
+  the rest, do not half-translate" instruction for P0.3, applied
+  consistently): translated 32 high-visibility toast/label/district-
+  name keys (BOSS_APPEARS, CHECKPOINT_SET, DISTRICT_STAGE_1/2/3,
+  DIST_* x11 district names, WIN_SUMMARY, VICTORY_STATS, JOURNAL_*,
+  NEED_*, NEW_GAME_PLUS, etc.) into real, natural text across all 11
+  non-RU/non-EN locales (352 strings) via a Node.js-assisted batch
+  apply (generated translations myself, applied via targeted JSON
+  key-value replacement preserving all other content byte-for-byte).
+  ACH_* (41), Q_*/QUEST_* (51), SCR_* (183), END_*/ENDING_* (25),
+  ENEMY_* (11), and the smaller scattered families (33) are NOT
+  translated this pass - real, accurately-sized CONTENT_BACKLOG (349
+  keys x 11 locales remaining), not silently dropped.
+- zh.json pinyin placeholders: re-counted precisely (49 real
+  instances, not the ~107 estimate) via a pure-ASCII-value-but-
+  different-from-EN detector script - these are ALL main-flow
+  (menu_title, new_game/continue/quit, difficulty/graphics/sound/
+  language settings labels, inventory/shop/craft/quests, all 4
+  loading tips, all 6 tutorial hint lines, victory/you_died). Fixed
+  all 49 with real Simplified Chinese. Re-ran the detector after:
+  0 remaining.
+- Verification: i18n gate fails=0, compile bad=0. New scenes/tools/
+  i18n_dump_scene.tscn + scripts/tools/_i18n_dump.gd force lang=ru and
+  print 15 sample keys spanning menu/HUD/skills/achievements/districts/
+  toasts/death - all genuine natural Russian, saved to docs/
+  ru_proof_dump.txt (this is PROOF the premise correction is right,
+  not just an assertion).
