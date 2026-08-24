@@ -189,6 +189,7 @@ else
     run_gate "целостность сейва"         "res://scenes/tools/save_integrity_check_scene.tscn"
     run_gate "boot-flow (меню/новая игра/сейв)" "res://scenes/tools/boot_check_scene.tscn"
     run_gate "footstep-маппер (surface x speed)" "res://scenes/tools/footstep_check_scene.tscn"
+    run_gate "аудио: тишина до первого ввода" "res://scenes/tools/audio_hum_check_scene.tscn"
   fi
 fi
 

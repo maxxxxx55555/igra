@@ -107,6 +107,11 @@ var _current_district: StringName = &""
 var _layers: Dictionary = {}          ## имя слоя -> AudioStreamPlayer
 var _layer_target: Dictionary = {}    ## имя слоя -> целевая громкость 0..1
 var _sting: AudioStreamPlayer = null
+## FINAL PERFECTION P0: раньше _ready() автозагрузки включал музыку и все
+## 4 слоя сразу при старте процесса — до показа меню, до любого ввода
+## (слышимый "гул" на загрузке). Теперь ни один плеер не .play() до первого
+## реального ввода игрока; см. _input()/_unlock_audio().
+var _audio_unlocked: bool = false
 #endregion
 
 #region Virtual Methods
@@ -125,7 +130,34 @@ func _ready() -> void:
 	EventBus.enemy_attack.connect(func(_d: int) -> void: _combat_hold = CALM_DELAY)
 	EventBus.district_entered.connect(_on_district_entered)
 	EventBus.district_stage_changed.connect(_on_district_stage_changed)
-	set_mood(Mood.MENU, true)
+	mood = Mood.MENU
+
+## Ловит буквально первый ввод игрока (клавиша/клик/тач/геймпад) — а не
+## InputService.player_acted, который отслеживает только игровые unhandled-
+## события и не сработает на клик по кнопке меню (Control сам принимает
+## событие раньше _unhandled_input). Так меню получает музыку сразу по
+## первому клику, а не только после старта реального забега.
+func _input(event: InputEvent) -> void:
+	if _audio_unlocked or not event.is_pressed():
+		return
+	_unlock_audio()
+
+func _unlock_audio() -> void:
+	if _audio_unlocked:
+		return
+	_audio_unlocked = true
+	set_process_input(false)
+	for key in _layers:
+		var pl: AudioStreamPlayer = _layers[key]
+		if not pl.playing:
+			pl.play()
+	var stream := _load(mood)
+	if stream == null:
+		return
+	_active.stream = stream
+	_active.volume_db = MUTE_DB
+	_active.play()
+	create_tween().tween_property(_active, "volume_db", FULL_DB, FADE_TIME)
 
 ## AdService reads this to hold off interstitials mid-fight (spec: "never
 ## during combat"). Reuses the same detection/decay MusicManager already
@@ -150,6 +182,8 @@ func set_mood(new_mood: Mood, instant: bool = false, force: bool = false) -> voi
 	if new_mood == mood and _active.playing and not force:
 		return
 	mood = new_mood
+	if not _audio_unlocked:
+		return
 	var stream := _load(new_mood)
 	if stream == null:
 		return
@@ -293,7 +327,6 @@ func _build_layers() -> void:
 		pl.stream = s
 		pl.volume_db = MUTE_DB
 		add_child(pl)
-		pl.play()
 		_layers[key] = pl
 		_layer_target[key] = 0.0
 	if ResourceLoader.exists(STING_PATH):
