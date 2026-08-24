@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3]
+[gd_scene load_steps=18 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/environment/world_env.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud_3d.tscn" id="2"]
@@ -12,7 +12,6 @@
 [ext_resource type="Script" path="res://scripts/fog_setup.gd" id="14"]
 [ext_resource type="Script" path="res://scripts/effects/screen_shake.gd" id="15"]
 [ext_resource type="Script" path="res://scripts/world/streetlight_spawner.gd" id="16"]
-[ext_resource type="Script" path="res://scripts/visual/night_env.gd" id="17_NightE"]
 [ext_resource type="Script" path="res://scripts/ui/ending_screen.gd" id="19_Ending"]
 [ext_resource type="Script" path="res://scripts/net/lan_menu.gd" id="20_LANMen"]
 
@@ -99,9 +98,6 @@ script = ExtResource("15")
 
 [node name="StreetLightSpawner" type="Node3D" parent="."]
 script = ExtResource("16")
-
-[node name="NightEnv" type="Node3D" parent="."]
-script = ExtResource("17_NightE")
 
 [node name="EndingScreen" type="CanvasLayer" parent="."]
 script = ExtResource("19_Ending")
