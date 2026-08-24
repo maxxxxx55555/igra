@@ -69,13 +69,14 @@ func build() -> void:
 	var sb: Node = get_node_or_null(street_builder_path)
 	if sb == null:
 		return
+	var district_id: StringName = sb.get("district_id") if "district_id" in sb else &""
 	var step: int = 4
 	for road in sb.roads:
 		var length: float = float(road.get("length", 0.0))
 		var count: int = max(1, int(length / (float(step) * 4.0)))
 		for s in range(count):
 			var pos: Vector3 = sb.road_step_pos(road, s * step)
-			_spawn_pole_pair(pos, road)
+			_spawn_pole_pair(pos, road, district_id)
 			if _rng.randf() < 0.30 * density:
 				_spawn_bench(pos, road)
 			if _rng.randf() < 0.25 * density:
@@ -87,7 +88,28 @@ func _side_offset(road: Dictionary, dist: float) -> Vector3:
 	var dir: String = String(road.get("dir", "h"))
 	return Vector3(0.0, 0.0, dist) if dir == "h" else Vector3(dist, 0.0, 0.0)
 
-func _spawn_pole_pair(center: Vector3, road: Dictionary) -> void:
+## streetlight_3d.tscn (real pole mesh, SpotLight3D+OmniLight3D, hum audio,
+## visibility Area3D, and — the point of switching to it — a live
+## EventBus.district_stage_changed hookup) already existed unwired the
+## whole time; this file's own poles were flat emissive decals with no
+## actual Light3D and never reacted to district power stage at all, which
+## quietly broke the game's namesake "darkness -> restored power" beat.
+## See docs/KNOWN_ISSUES.md. legacy_streetlights=true restores the old
+## decals if the real prop ever needs to be bypassed again.
+const _STREETLIGHT_3D := preload("res://scenes/props/streetlight_3d.tscn")
+
+func _spawn_pole_pair(center: Vector3, road: Dictionary, district_id: StringName) -> void:
+	if ProjectSettings.get_setting("world/legacy_streetlights", false):
+		_spawn_pole_pair_legacy(center, road)
+		return
+	var perp: Vector3 = _side_offset(road, 3.5)
+	for side in [-1, 1]:
+		var l: Node3D = _STREETLIGHT_3D.instantiate()
+		l.set("district_id", district_id)
+		l.position = center + perp * float(side)
+		add_child(l)
+
+func _spawn_pole_pair_legacy(center: Vector3, road: Dictionary) -> void:
 	var perp: Vector3 = _side_offset(road, 3.5)
 	for side in [-1, 1]:
 		var p := MeshInstance3D.new()

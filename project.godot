@@ -314,3 +314,10 @@ mesh_lod/threshold_pixels=0.75
 applovin_sdk_key=""
 applovin_rewarded_unit_id=""
 applovin_interstitial_unit_id=""
+
+[world]
+
+; TRUTH WAVE P1: street_props.gd used to build flat emissive decals with
+; no real Light3D and no district-power reactivity. true restores that
+; old behavior; see docs/KNOWN_ISSUES.md.
+legacy_streetlights=false

@@ -11,6 +11,15 @@ var _last_position: Vector3 = Vector3.ZERO
 var _last_hp: float = 100.0
 var _last_battery: float = 100.0
 var _last_stamina: float = 100.0
+## TRUTH WAVE P1: один пропущенный тик ватчдога (1с) достаточно наивно
+## считался "игрок пропал навсегда" и бросал в меню — а игрок на деле мог
+## быть просто посреди обычной смерти/перехода (переродждение узла,
+## смена сцены), пока GameManager ещё не успел сам выставить DEAD. Гонка
+## воспроизводилась на boot_check_scene.tscn: watchdog форсил MENU раньше,
+## чем реальная логика смерти успевала отработать. Требуем несколько
+## подряд неудачных тиков, прежде чем считать это настоящей поломкой.
+const MISSING_PLAYER_GRACE_TICKS: int = 3
+var _missing_player_ticks: int = 0
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -54,13 +63,23 @@ func _watchdog() -> void:
 	if not is_instance_valid(GameManager):
 		return
 	if not GameManager.is_playing():
+		_missing_player_ticks = 0
 		return
 	var player := get_tree().get_first_node_in_group("player")
 	if not is_instance_valid(player):
+		_missing_player_ticks += 1
+		if _missing_player_ticks < MISSING_PLAYER_GRACE_TICKS:
+			return
+		# GameManager уже мог легитимно уйти из PLAYING (смерть/пауза/т.д.)
+		# в течение периода ожидания — тогда это не поломка, а обычный переход.
+		if not GameManager.is_playing():
+			_missing_player_ticks = 0
+			return
 		push_warning("IntegrityGuard: player missing")
 		if GameManager.has_method("_change_state"):
 			GameManager._change_state(GameManager.GameState.MENU)
 		return
+	_missing_player_ticks = 0
 	if not player.global_position.is_finite() or player.global_position.y <= -50.0:
 		player.global_position = _last_position
 		push_warning("IntegrityGuard: player position restored")

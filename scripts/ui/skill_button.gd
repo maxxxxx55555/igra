@@ -16,9 +16,13 @@ func setup(skill_id: StringName, skill_data: Dictionary) -> void:
 	_skill_id = skill_id
 	_skill_data = skill_data
 	
-	name_label.text = tr(skill_data.name)
-	desc_label.text = tr(skill_data.description)
-	cost_label.text = tr("Cost: %d SP") % skill_data.cost
+	# skill_data.name/description — сырой английский текст в данных
+	# SKILL_TREES (skill_tree_manager.gd), не ключ локализации; полная
+	# локализация контента 18 скиллов — отдельная задача (см. отчёт),
+	# здесь фиксится только окружающий UI-текст.
+	name_label.text = skill_data.name
+	desc_label.text = skill_data.description
+	cost_label.text = LocalizationManager.tf("Cost: %d SP", [skill_data.cost])
 	level_label.text = ""
 	req_label.text = ""
 	
@@ -31,11 +35,11 @@ func refresh() -> void:
 	var can_unlock = SkillTreeManager.can_unlock(_skill_id)
 	
 	if level > 0:
-		level_label.text = tr("Level: %d/%d") % [level, max_level]
+		level_label.text = LocalizationManager.tf("Level: %d/%d", [level, max_level])
 		self.disabled = level >= max_level
-		self.tooltip_text = tr("Already unlocked")
+		self.tooltip_text = LocalizationManager.t("Already unlocked")
 	else:
-		level_label.text = tr("Locked")
+		level_label.text = LocalizationManager.t("Locked")
 		self.disabled = not can_unlock
 		if not can_unlock:
 			var reqs = _skill_data.requires
@@ -44,10 +48,10 @@ func refresh() -> void:
 				for r in reqs:
 					var r_data = _get_skill_data(r)
 					if r_data:
-						req_names.append(tr(r_data.name))
-				req_label.text = tr("Requires: %s") % ", ".join(req_names)
+						req_names.append(r_data.name)
+				req_label.text = LocalizationManager.tf("Requires: %s", [", ".join(req_names)])
 			else:
-				req_label.text = tr("Not enough skill points")
+				req_label.text = LocalizationManager.t("Not enough skill points")
 
 func _on_pressed() -> void:
 	if not self.disabled:

@@ -36,3 +36,96 @@ first.
   on the gate's own corrupt-file test case).
 - Screenshot angles: settings Game tab (Reset Progress button + confirm
   dialog) — captured in P0.5's verification pass.
+
+## P0.4 — permanent boot_check_scene.tscn gate
+- Files to touch: `scripts/tools/_boot_check.gd` (new, tiny bootstrap),
+  `scripts/tools/_boot_check_runner.gd` (new, actual driver — has to live
+  under get_tree().root, not the swappable current_scene, same pattern as
+  `_smoke_fps_flow.gd`/`_smoke_fps_runner.gd`, or Routes.goto() frees it
+  mid-check), `scenes/tools/boot_check_scene.tscn` (new), `tools/check.sh`
+  (wire into the engine-gate section, after save-integrity).
+- Signals: none new; reads GameManager.is_playing(), watches for a live
+  "player" group node, checks for a stray AdPopupInterstitial node.
+- Risks: 60s real sustain makes this gate slow (~90s total) — acceptable,
+  it only runs in the non-`--static` path. Hard 150s timeout so a real
+  hang fails loudly instead of hanging the whole session (this project's
+  history has exactly that failure mode from unrelated causes).
+- Verification: compile_gate_scene (bad=0), then run the gate directly
+  and read its own exit code + phase log.
+- Screenshot angles: none (logic-only gate).
+- Result: found and fixed a real bug in the gate itself — `_boot_check.gd`
+  called `get_tree().root.add_child()` directly from `_ready()` instead
+  of deferring it, which fails outright ("Parent node is busy setting up
+  children") during the engine's own scene-setup window. Fixed to match
+  `_smoke_fps_flow.gd`'s `call_deferred("_start")` pattern. Second real
+  finding: the menu-reachable check used a single 0.5s wait instead of
+  polling — too short for a real scene swap in this environment, changed
+  to `_wait_until(..., 8.0)`. Verification in progress.
+
+## P1 — real bug sweep: dead-code audit for tr() misuse, streetlight duplication
+- Files to touch (i18n): `scripts/ui/skill_button.gd`,
+  `scripts/ui/skill_tree_tab.gd`, `scripts/ui/skill_tree_ui.gd` (Godot's
+  native tr() called on raw English sentences — no Translation entry
+  exists for a non-key string, so it always fell through to English
+  regardless of locale). `scripts/ui/lobby_menu.gd` and
+  `scripts/ui/save_slot_entry.gd` have the identical bug but are
+  confirmed unreachable (not in UIManager's screen dict, no call site
+  anywhere) — left unfixed per this project's established policy on
+  dead code, documented in docs/KNOWN_ISSUES.md instead.
+- Files to touch (streetlights): `scripts/world/street_props.gd`
+  (instantiate the real `streetlight_3d.tscn` instead of building flat
+  emissive decals), `project.godot` (`[world] legacy_streetlights=false`),
+  `docs/KNOWN_ISSUES.md` (new).
+- Signals: none new; consumes the existing `EventBus.district_stage_changed`
+  hookup already inside `streetlight_3d.gd` (previously unwired, not
+  because it was broken — nothing ever instantiated the scene).
+- Risks: `streetlight_spawner.gd`, initially flagged as "duplicate", is
+  actually dead code (only placed in `main_3d.tscn`'s root, whose
+  `street_builder_path` default never resolves there) — verified via
+  grep across all 11 district `.tscn` files before touching anything, so
+  no legacy-flag treatment was needed for it.
+- Verification: compile_gate_scene (bad=0); visual confirmation via
+  shot_tool scenario screenshot pending in P0.5's pass.
+- Screenshot angles: night-street district shot, ideally two districts at
+  different power stages to show the lit-vs-dark contrast now actually
+  working.
+
+## P1 (cont.) — real bug found via boot_check_scene.tscn itself
+- What: the new gate's sustain phase reproducibly caught GameManager
+  getting force-kicked from PLAYING to MENU ~10-20s into a fresh game,
+  every run. Traced to `scripts/systems/integrity_guard.gd`'s `_watchdog()`
+  (runs every 1s while playing): the instant `get_tree().get_first_node_in_group("player")`
+  returns null for even a single 1s tick, it force-calls
+  `GameManager._change_state(GameState.MENU)` directly — no grace period,
+  no check for whether the player is just mid-death/mid-transition. A
+  brief, single-tick gap (node being freed/reparented during a normal
+  death or scene-internal transition) reads identically to "player
+  crashed forever" and silently boots the session back to the main menu.
+  Not a hypothetical — reproduced on every boot_check run before the fix.
+- Fix: `scripts/systems/integrity_guard.gd` — require
+  `MISSING_PLAYER_GRACE_TICKS=3` consecutive missing-player ticks before
+  acting, and re-check `GameManager.is_playing()` at that point too (a
+  legitimate state change during the grace window, e.g. death, isn't a
+  watchdog failure).
+- Risk: raising the grace period means a genuinely-vanished player stays
+  undetected for up to ~3s longer — acceptable, this is a safety net for
+  a rare failure mode, not a per-frame check.
+- Verification: boot_check_scene.tscn re-run, watching whether the
+  spontaneous MENU-kick stops recurring.
+- Result: debounce alone did NOT fix it — added temporary stack-trace
+  instrumentation to `_change_state()` and `Routes.goto()` (removed after
+  diagnosis) and found the REAL cause: `_boot_check_runner.gd`'s own
+  first action was `Routes.goto(Routes.MENU)`, fired so early (mid
+  autoload init) that it raced `_bootstrap.gd`'s own current-scene check
+  — which independently redirected to `splash.tscn`. The resulting
+  orphaned splash instance's tween (fade 1s + hold 2s) wasn't freed
+  cleanly and fired its queued `Routes.goto(BOOT)` callback a SECOND
+  time much later, mid-gameplay, restarting boot_loading -> main_menu on
+  top of an active game — and main_menu.gd's own defensive
+  `if not GameManager.is_menu(): return_to_menu()` then forced the state
+  change my gate caught. Exact same bug class `shot_tool.gd` hit last
+  session (documented in `docs/VISUAL_AUDIT.md`) — same fix: don't call
+  `Routes.goto()` from a script that starts this early, just poll for
+  the menu to appear on its own. IntegrityGuard's debounce fix is kept
+  regardless — a real, independently-worthwhile robustness improvement,
+  just not the cause of this specific bug.

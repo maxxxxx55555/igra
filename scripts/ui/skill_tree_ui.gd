@@ -28,12 +28,12 @@ func _build_trees() -> void:
 		var tab = SkillTreeTabScene.instantiate()
 		tree_tabs.add_child(tab)
 		tab.setup(tree_id, tree_data)
-		tree_tabs.set_tab_title(tree_tabs.get_child_count() - 1, tr(tree_data.name))
+		tree_tabs.set_tab_title(tree_tabs.get_child_count() - 1, LocalizationManager.t(tree_data.name))
 
 ## skill_unlocked эмитит id навыка — без параметра дерево не перерисовывалось
 ## после покупки.
 func _refresh(_skill_id: Variant = null) -> void:
-	skill_points_label.text = tr("Skill Points: %d") % SkillTreeManager.get_skill_points()
+	skill_points_label.text = LocalizationManager.tf("Skill Points: %d", [SkillTreeManager.get_skill_points()])
 	
 	for tab in tree_tabs.get_children():
 		if tab is SkillTreeTab:
