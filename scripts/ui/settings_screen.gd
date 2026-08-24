@@ -96,7 +96,15 @@ func _build_game_tab(parent: VBoxContainer) -> void:
 	
 	# Objective markers on HUD
 	_toggle(parent, LocalizationManager.t("Objective Markers"), "objective_markers")
-	
+
+	# TRUTH WAVE P0.3: раньше единственный способ стереть прогресс —
+	# руками удалить файлы user:// на диске. Кнопка с подтверждением.
+	var reset_btn := Button.new()
+	reset_btn.text = LocalizationManager.t("Reset Progress")
+	reset_btn.add_theme_color_override("font_color", ThemeProvider.COLOR_DANGER)
+	reset_btn.pressed.connect(_confirm_reset_progress)
+	parent.add_child(reset_btn)
+
 	# Language. Список строится из LocalizationManager: раньше здесь было 8
 	# захардкоженных названий из 13 поддерживаемых, и порядок не совпадал с
 	# индексом, который читает _dropdown — выбор прыгал на чужой язык.
@@ -235,6 +243,54 @@ func _toggle(parent: Node, label: String, key: String) -> void:
 		SettingsManager.set_setting(key, pressed)
 	)
 	row.add_child(cb)
+
+## Процедурное окно подтверждения (как ad_popup.gd/confirm_quit.gd) —
+## отдельной .tscn под это заводить не стоит, этот экран целиком в коде.
+func _confirm_reset_progress() -> void:
+	var layer := CanvasLayer.new()
+	layer.layer = 130
+	add_child(layer)
+
+	var dim := ColorRect.new()
+	dim.color = Color(0, 0, 0, 0.72)
+	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	dim.mouse_filter = Control.MOUSE_FILTER_STOP
+	layer.add_child(dim)
+
+	var panel := PanelContainer.new()
+	panel.set_anchors_preset(Control.PRESET_CENTER)
+	panel.custom_minimum_size = Vector2(420, 0)
+	dim.add_child(panel)
+
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override("separation", 14)
+	panel.add_child(box)
+
+	var title := Label.new()
+	title.text = LocalizationManager.t("Reset Progress")
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_color_override("font_color", ThemeProvider.COLOR_DANGER)
+	box.add_child(title)
+
+	var body := Label.new()
+	body.text = LocalizationManager.t("Reset Progress Warning")
+	body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	body.autowrap_mode = TextServer.AUTOWRAP_WORD
+	box.add_child(body)
+
+	var yes := Button.new()
+	yes.text = LocalizationManager.t("yes")
+	yes.pressed.connect(func() -> void:
+		SaveSystem.wipe_all_saves()
+		layer.queue_free()
+		UIManager.close(&"settings")
+		Routes.to_menu())
+	box.add_child(yes)
+
+	var no := Button.new()
+	no.text = LocalizationManager.t("no")
+	no.pressed.connect(func() -> void: layer.queue_free())
+	box.add_child(no)
 
 func _dropdown(parent: Node, label: String, key: String, options: Array, callback) -> void:
 	var row := HBoxContainer.new()

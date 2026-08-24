@@ -54,35 +54,59 @@ func _write_atomic(path: String, payload: Dictionary) -> bool:
 
 ## Читает и проверяет конверт по указанному пути; {} если файла нет,
 ## JSON битый, чек-сумма не сошлась или версия сейва новее движка.
-func _read_envelope(path: String) -> Dictionary:
+## reason выводится через print() у вызывающей стороны — сама функция
+## только классифицирует, чтобы не дублировать текст на каждый return.
+func _read_envelope(path: String, out_reason: Array = []) -> Dictionary:
 	if not FileAccess.file_exists(path):
 		return {}
 	var f := FileAccess.open(path, FileAccess.READ)
 	if f == null:
+		if not out_reason.is_empty(): out_reason[0] = "не открылся"
 		return {}
 	var txt := f.get_as_text()
 	f.close()
 	var outer := JSON.new()
 	if outer.parse(txt) != OK or not (outer.data is Dictionary):
+		if not out_reason.is_empty(): out_reason[0] = "битый JSON"
 		return {}
 	var envelope: Dictionary = outer.data
 	var body: String = String(envelope.get("data_json", ""))
 	if body.is_empty() or body.sha256_text() != String(envelope.get("checksum", "")):
+		if not out_reason.is_empty(): out_reason[0] = "не совпала чек-сумма"
 		return {}
 	var inner := JSON.new()
 	if inner.parse(body) != OK or not (inner.data is Dictionary):
+		if not out_reason.is_empty(): out_reason[0] = "битый data_json"
 		return {}
 	var data: Dictionary = inner.data
 	if int(data.get("version", 0)) > SAVE_VERSION:
+		if not out_reason.is_empty(): out_reason[0] = "версия сейва новее билда"
 		return {}
 	return data
 
 ## Основной файл -> .bak при провале основного (битый/пустой) -> {}.
+## TRUTH WAVE P0.2: раньше провал был полностью тихим — залипший битый
+## файл никак не давал о себе знать в логах, и следующая загрузка снова
+## молча пыталась его прочитать. Теперь: лог о причине, а если и .bak не
+## читается — карантин (переименование в .corrupt-<unix>), чтобы файл не
+## путался под ногами при следующей попытке и чтобы это было видно на диске.
 func _read_validated(path: String) -> Dictionary:
-	var data := _read_envelope(path)
+	var main_reason := [""]
+	var data := _read_envelope(path, main_reason)
 	if not data.is_empty():
 		return data
-	return _read_envelope(path + ".bak")
+	if main_reason[0] != "":
+		print("[SaveSystem] основной сейв не читается (", main_reason[0], "): ", path, " — пробую .bak")
+	var bak_reason := [""]
+	data = _read_envelope(path + ".bak", bak_reason)
+	if not data.is_empty():
+		print("[SaveSystem] восстановлено из .bak: ", path)
+		return data
+	if main_reason[0] != "" and FileAccess.file_exists(path):
+		var quarantine := path + ".corrupt-" + str(Time.get_unix_time_from_system())
+		DirAccess.rename_absolute(path, quarantine)
+		print("[SaveSystem] сейв и .bak не читаются — карантин в ", quarantine, ", старт с чистого состояния")
+	return {}
 
 func set_checkpoint(_scene_path: String, pos: Vector3) -> void:
 	_pending_player_pos = pos
@@ -158,6 +182,11 @@ func reset_all() -> void:
 	_daily_streak = 0
 	_last_daily_time = 0
 	Endings.reset()
+	# TRUTH WAVE P0.2: эти двое сохранялись через SaveSystem (см. _save()/
+	# load_all()), но reset_all() их не трогал — "новая игра" стартовала
+	# с уровнем/скиллами от прошлого забега на этом сейв-профиле.
+	XpManager.reset()
+	SkillTreeManager.reset()
 
 func consume_pending_player_pos() -> Vector3:
 	var p := _pending_player_pos
@@ -291,3 +320,15 @@ func get_all_slots_info() -> Array:
 		info["is_autosave"] = (i == MAX_SLOTS)
 		result.append(info)
 	return result
+
+## TRUTH WAVE P0: "Reset progress" (settings_screen.gd) and boot-time
+## quarantine of an unreadable/mismatched save both need this — reset_all()
+## alone only clears autoload state in memory, it never touched the actual
+## save files, so a restart would resurrect the old progress via Continue.
+func wipe_all_saves() -> void:
+	for p in [SAVE_PATH, SAVE_PATH + ".bak"]:
+		if FileAccess.file_exists(p):
+			DirAccess.remove_absolute(p)
+	for i in range(1, MAX_SLOTS + 1):
+		delete_slot(i)
+	reset_all()

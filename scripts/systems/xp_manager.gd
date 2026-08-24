@@ -75,7 +75,10 @@ func _level_up() -> void:
 	level_up.emit(_level)
 	skill_point_earned.emit()
 	
-	UIManager.show_notification(tr("Level Up! Now level %d") % _level)
+	# tr() читает движковый .po/.csv перевод, которого в проекте нет — ключ
+	# всегда возвращался как есть, английским текстом, в любой локали.
+	# Проект локализует через LocalizationManager (data/i18n/*.json).
+	UIManager.show_notification(LocalizationManager.tf("LEVEL_UP_NOTICE", [_level]))
 
 func get_level() -> int:
 	return _level
@@ -91,6 +94,16 @@ func get_xp_progress() -> float:
 
 func get_total_skill_points() -> int:
 	return _total_skill_points
+
+## SaveSystem.reset_all() никогда не звал ни один XpManager-метод — "новая
+## игра" начиналась с уровнем и опытом от прошлого забега на этом же
+## сейв-профиле (заметно на district_restored: +100 XP сразу перетекало
+## в спонтанный "Level Up!" в первые секунды новой игры).
+func reset() -> void:
+	_level = 1
+	_current_xp = 0
+	_xp_to_next = base_xp_per_level
+	_total_skill_points = 0
 
 func save_data() -> Dictionary:
 	return {

@@ -117,11 +117,15 @@ func _cooldown_left() -> float:
 
 ## interstitial при смене района. "Никогда в бою" — читаем у MusicManager
 ## тот же _combat_hold, которым он уже держит боевую музыку, вместо
-## отдельного трекера боя.
+## отдельного трекера боя. TRUTH WAVE P0.2: "ads never before first
+## gameplay input" — вход в первый район сам по себе не в счёт, ждём
+## InputService.has_player_acted() (сбрасывается на новую игру).
 func is_interstitial_ready() -> bool:
 	if not (_provider != null and _provider.has_method("is_interstitial_ready")):
 		return false
-	return enabled and not _interstitial_in_flight and _interstitial_cooldown_left() <= 0.0 \
+	var input_ok: bool = not (InputService and InputService.has_method("has_player_acted")) \
+		or InputService.has_player_acted()
+	return enabled and input_ok and not _interstitial_in_flight and _interstitial_cooldown_left() <= 0.0 \
 		and not MusicManager.is_in_combat() and _provider.is_interstitial_ready()
 
 func interstitial_cooldown_left() -> float:

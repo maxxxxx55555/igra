@@ -8,6 +8,21 @@ signal dodge_requested(dir: Vector2)
 ## Клавиши 1-6 были заведены в project.godot, но их никто не слушал:
 ## быстрые слоты работали только мышью/тачем.
 signal quick_slot_requested(index: int)
+## Первое реальное действие игрока в текущем забеге — интерстишиалы не
+## должны появляться раньше этого (TRUTH WAVE P0.2: "ads never before
+## first gameplay input"). Сбрасывается на новую игру (см. game_started).
+signal player_acted()
+
+var _player_acted: bool = false
+
+func has_player_acted() -> bool:
+	return _player_acted
+
+func _mark_player_acted() -> void:
+	if _player_acted:
+		return
+	_player_acted = true
+	player_acted.emit()
 
 var _interact_pressed: bool = false
 var _interact_held: bool = false
@@ -27,6 +42,7 @@ func _ready() -> void:
 	EventBus.game_state_changed.connect(func(_s: int) -> void: refresh_mouse_mode())
 	EventBus.ui_screen_opened.connect(func(_id: String) -> void: refresh_mouse_mode())
 	EventBus.ui_screen_closed.connect(func(_id: String) -> void: refresh_mouse_mode())
+	EventBus.game_started.connect(func() -> void: _player_acted = false)
 	if not InputMap.has_action("attack"):
 		InputMap.add_action("attack")
 		var ev := InputEventMouseButton.new()
@@ -52,6 +68,8 @@ func request_dodge(dir: Vector2) -> void:
 
 func set_joy_move_dir(dir: Vector2) -> void:
 	_joy_dir = dir.limit_length(1.0)
+	if dir.length_squared() > 0.01:
+		_mark_player_acted()
 
 func set_joy_active(active: bool) -> void:
 	_joy_active = active
@@ -97,6 +115,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	# Плюс фильтр «только InputEventKey» глушил геймпад.
 	if event.is_echo():
 		return
+	if event.is_pressed():
+		_mark_player_acted()
 	for i in range(1, 7):
 		if event.is_action_pressed("quick_slot_%d" % i):
 			quick_slot_requested.emit(i - 1)

@@ -243,6 +243,12 @@ func get_all_trees() -> Dictionary:
 func get_unlocked_skills() -> Dictionary:
 	return _unlocked_skills.duplicate()
 
+## Тот же пробел, что и у XpManager: reset_all() никогда сюда не заглядывал —
+## очки/разблокированные скиллы переживали "новую игру".
+func reset() -> void:
+	_unlocked_skills = {}
+	_skill_points = 0
+
 func save_data() -> Dictionary:
 	return {
 		"unlocked_skills": _unlocked_skills,
