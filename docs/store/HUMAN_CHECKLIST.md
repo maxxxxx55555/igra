@@ -72,6 +72,37 @@ human for:
   — just needs to be published somewhere and linked.
 - Upload to an internal/closed testing track before production.
 
+## CC0 asset reference repo (TRUTH WAVE ask)
+
+Was asked to search `..\refs\` and `.claude/skills/` for a CC0 asset/
+pattern reference repo (examples given: something matching "ponytail",
+or Polyhaven/Kenney asset packs). Checked both — `..\refs\` only
+contains `AppLovin-MAX-Godot`, `escoria`, `godot-admob`,
+`godot-demo-projects`, `godot-docs`, `godot-open-rpg`, `ink`; `.claude/
+skills/` only has the `ponytail` family of *review/workflow* skills
+(over-engineering audits), not an asset pack. **No matching CC0 repo
+exists in this checkout.** If one should be added, please paste the
+exact URL (Polyhaven, Kenney, or otherwise) and it can be cloned into
+`..\refs\` per the existing convention.
+
+## Play Store rating change (PEGI 16, was PEGI 12)
+
+This pass's store-copy rewrite changed the expected rating from PEGI 12
+to **PEGI 16** per explicit instruction, citing the game's blood/bleed
+status effects and the disaster's deliberate-mass-casualty narrative
+thread. This is a judgment call on borderline content, not a GDD fact —
+worth a second look before actually submitting the IARC questionnaire;
+if the intent is PEGI 12, revert `docs/store/play_store.md`'s "Rating
+note" and the equivalent line in `docs/store/steam.md`.
+
+## AppLovin Data Safety disclosure (new since last checklist update)
+
+`docs/store/play_store.md`'s Data Safety section now flags that once a
+real AppLovin SDK key is in place, the Play Console Data Safety form
+needs AppLovin's own data-collection disclosure added (ad ID, device
+info, etc. per their SDK) — this wasn't itemized before because ads were
+purely a debug stub at the time of the previous checklist pass.
+
 ## Steam (optional/secondary platform, see `docs/store/steam.md`)
 
 - No desktop export preset exists yet in `export_presets.cfg` (only

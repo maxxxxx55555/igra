@@ -8,48 +8,54 @@ same build — no PC-exclusive content is planned.
 
 ### Short description (max 300 chars)
 ```
-A survival horror FPS set in a city stuck in endless night. Restore the
-power grid district by district with nothing but a flashlight and a
-fading battery — light is your resource, your weapon, and the only thing
-standing between you and what's out there.
+Restore the light. A stealth horror FPS where every streetlight is
+life — blackout city, and you're the grid engineer with one flashlight
+and a fading battery standing between you and what the dark hides.
 ```
 
 ### About this game (long description)
 ```
-THE LAST STREETLIGHT
+BLACKOUT CITY. YOU ARE THE GRID ENGINEER.
 
-The city fell into an endless night after the "Architect Project"
-disaster. You're a survivor with one flashlight and a battery that's
-never as full as you'd like. Restore the power grid district by
-district, and the streets you've lit stay lit behind you — safer, but
-never safe.
+The "Architect Project" disaster plunged the city into permanent night.
+You're a survivor with one flashlight, a fading battery, and a job no
+one else is left to do: get the power grid running again, district by
+district, street by street.
 
-Light is everything here:
-- A RESOURCE. Your flashlight runs on battery you manage and craft spares
-  for. Run it dry in the wrong place and you're navigating by sound alone.
-- A WEAPON. Some of what hunts you in the dark cannot survive being seen.
-- NAVIGATION. Lit streets are the path you've already made safe — the map
-  tells you exactly how far you've come.
-- A REWARD. Every district restored pushes the dark back for good.
+WHAT'S ACTUALLY IN THE BOX
+- 11 connected districts, one continuous city map — no procedural
+  filler, no level-select screen
+- 12 enemy types, including a mini-boss and a final boss, each with
+  distinct senses, weaknesses, and behavior
+- 5 different endings, decided by how much of the city — and how much
+  of the truth — you actually recover
+- 13 languages, fully localized
+- A 5-layer adaptive music system that shifts with the danger around
+  you — dark ambient, restored-district warmth, rising threat, and a
+  combat layer, crossfading as you go
+- Stealth built on noise and visibility, not a detection meter — stay
+  quiet, stay out of the light's reach, or don't
+- Equipment, crafting, and a workbench for upgrading your one real
+  tool: the flashlight
+- A save system with checksum-verified integrity and automatic backup
+  recovery — a corrupted save doesn't cost you the run
 
-FEATURES
-- One continuous city map across 11 districts. No procedural filler, no
-  loading screens between "levels" — it's one place, and you learn it.
-- Stealth-first design: manage noise and visibility, or fight when you
-  have no other choice.
-- An enemy roster with distinct AI behavior, elemental/status weaknesses,
-  and light reactions — some panic when you shine a light on them, some
-  are immune to it, one mini-boss slows down under it.
-- Crafting, upgrades, and a 5-slot equipment system.
-- Five different endings, determined by how much of the city — and how
-  much of the truth about the disaster — you actually uncover.
-- Fully offline single-player campaign. Optional local-network co-op.
-- 13 languages.
-- 8-12 hours for one ending; 15+ hours to find them all.
+LIGHT IS THE REWARD, NOT JUST THE TOOL
+Every district you restore stays lit. The contrast between the black
+streets you haven't reached yet and the ones you've already saved is
+the whole shape of the game. Stealth here isn't a mechanic bolted on
+top; the flashlight is simultaneously your only weapon against some of
+what hunts you, your only way to see, and the thing that gives you away
+every time you use it.
 
-Built in Godot 4, GL Compatibility renderer — this is primarily a mobile
-title (Android), and the desktop build shares the exact same content and
-save format.
+CONTROLS
+Mouse and keyboard: full support, WASD movement. This is primarily a
+mobile title (Android) built in Godot 4 with a GL Compatibility
+renderer; the desktop build shares the exact same content and save
+format.
+
+Free updates as the city gets built out further — no paywalled content
+split, no season pass.
 ```
 
 ## Tags (Steam tag list, order matters for discovery)
@@ -98,10 +104,13 @@ GodotSteam (or equivalent) plugin — **not integrated yet**; the in-game
 achievement screen works standalone regardless of Steam integration.
 
 ## Age rating
-Steam uses its own content survey (no IARC). Expect the same content notes
-as the Play Store listing (`docs/store/play_store.md` "Rating notes"):
-fantasy violence, horror/dark themes, no sexual content, no gambling, no
-in-game purchases at launch.
+Steam uses its own content survey (no IARC). Expected: **PEGI 16**
+equivalent — sustained horror tension, stylized violence against
+former-human enemies including visible blood/bleed status effects (GDD
+§6.5), and a narrative thread about a deliberately-caused mass-casualty
+disaster (Truth/Истина ending). No sexual content, no gambling, no
+in-game purchases at launch. See `docs/store/play_store.md` "Rating
+note" for the full citation.
 
 ## Privacy / data collection
 Same as Play Store: offline-first, no accounts, no analytics SDK in the
