@@ -154,9 +154,17 @@ func _check_music() -> void:
 			no_import.append(String(d).get_file())
 	_ok(no_import.is_empty(), "треки импортированы (попадут в APK)%s" % ("" if no_import.is_empty() else " нет: " + ", ".join(no_import)))
 
+	## .import не в репозитории (см. .gitignore) - на свежем клоне loop_mode/
+	## loop ВСЕГДА сбрасывается на дефолт при реимпорте, поэтому проект
+	## принципиально не полагается на запечённый флаг: MusicDirector.
+	## _force_loop() форсирует цикл в коде при каждой загрузке. Проверка
+	## должна отражать РЕАЛЬНОЕ поведение рантайма, а не сырой .import-дефолт -
+	## иначе она гарантированно красная на чистом клоне независимо от формата.
 	var not_looped: Array = []
 	for m in moods:
 		var res: Resource = load(moods[m])
+		if res is AudioStreamWAV or res is AudioStreamOggVorbis or res is AudioStreamMP3:
+			MusicDirector._force_loop(res)
 		if res is AudioStreamWAV:
 			var wav := res as AudioStreamWAV
 			if wav.data.size() == 0:
@@ -168,6 +176,12 @@ func _check_music() -> void:
 			if mp3.data.size() == 0:
 				not_looped.append(String(moods[m]).get_file() + "(пустой)")
 			elif not mp3.loop:
+				not_looped.append(String(moods[m]).get_file() + "(без лупа)")
+		elif res is AudioStreamOggVorbis:
+			var ogg := res as AudioStreamOggVorbis
+			if ogg.get_length() <= 0.0:
+				not_looped.append(String(moods[m]).get_file() + "(пустой)")
+			elif not ogg.loop:
 				not_looped.append(String(moods[m]).get_file() + "(без лупа)")
 		else:
 			not_looped.append(String(moods[m]).get_file() + "(не загрузился)")
