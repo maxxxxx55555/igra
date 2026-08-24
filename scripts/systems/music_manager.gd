@@ -27,7 +27,9 @@ const TRACKS: Dictionary = {
 	Mood.BOSS: "res://assets/audio/music/music_boss_dark.wav",
 	Mood.VICTORY: "res://assets/audio/music/music_victory.wav",
 }
-## Эмбиент по районам: у каждого своя атмосферная подложка.
+## Эмбиент по районам: у каждого своя атмосферная подложка. Запасной
+## вариант, если для района нет своей подложки ниже (не должно случаться —
+## AMBIENCE_DARK_BY_DISTRICT покрывает все 11).
 const AMBIENT_BY_DISTRICT: Dictionary = {
 	&"suburbs": "res://assets/audio/music/music_ambient.wav",
 	&"residential": "res://assets/audio/music/residential.wav",
@@ -40,6 +42,31 @@ const AMBIENT_BY_DISTRICT: Dictionary = {
 	&"industrial": "res://assets/audio/music/industrial.wav",
 	&"substation": "res://assets/audio/music/music_ambient_dark.wav",
 	&"power_station": "res://assets/audio/music/music_ambient_dark.wav",
+}
+
+## RESCUE WAVE P2.2: ox alpha's per-district ambience beds (docs/
+## PRODUCTION_BIBLE.md audio canon) — dedicated 36s loops per district,
+## replacing the generic tracks above as the Mood.AMBIENT track. Only 3
+## districts got a _lit variant (suburbs/hospital/power_station);
+## the rest fall back to their own _dark bed even once restored
+## (DEFAULT_CHOICE — no _lit file was delivered for them, not inventing one).
+const AMBIENCE_DARK_BY_DISTRICT: Dictionary = {
+	&"suburbs": "res://assets/audio/ambience/districts/suburbs_dark.ogg",
+	&"residential": "res://assets/audio/ambience/districts/residential_dark.ogg",
+	&"park": "res://assets/audio/ambience/districts/park_dark.ogg",
+	&"school": "res://assets/audio/ambience/districts/school_dark.ogg",
+	&"hospital": "res://assets/audio/ambience/districts/hospital_dark.ogg",
+	&"gas_station": "res://assets/audio/ambience/districts/gas_station_dark.ogg",
+	&"police": "res://assets/audio/ambience/districts/police_dark.ogg",
+	&"warehouses": "res://assets/audio/ambience/districts/warehouses_dark.ogg",
+	&"industrial": "res://assets/audio/ambience/districts/industrial_dark.ogg",
+	&"substation": "res://assets/audio/ambience/districts/substation_dark.ogg",
+	&"power_station": "res://assets/audio/ambience/districts/power_station_dark.ogg",
+}
+const AMBIENCE_LIT_BY_DISTRICT: Dictionary = {
+	&"suburbs": "res://assets/audio/ambience/districts/suburbs_lit.ogg",
+	&"hospital": "res://assets/audio/ambience/districts/hospital_lit.ogg",
+	&"power_station": "res://assets/audio/ambience/districts/power_station_lit.ogg",
 }
 
 ## Слои GDD §25.2. Ambient_Dark/Lit ведутся стадией электросети,
@@ -76,6 +103,7 @@ var _combat_hold: float = 0.0
 var _boss_active: bool = false
 var _cache: Dictionary = {}
 var _ambient_path: String = TRACKS[Mood.AMBIENT]
+var _current_district: StringName = &""
 var _layers: Dictionary = {}          ## имя слоя -> AudioStreamPlayer
 var _layer_target: Dictionary = {}    ## имя слоя -> целевая громкость 0..1
 var _sting: AudioStreamPlayer = null
@@ -96,6 +124,7 @@ func _ready() -> void:
 		play_sting())
 	EventBus.enemy_attack.connect(func(_d: int) -> void: _combat_hold = CALM_DELAY)
 	EventBus.district_entered.connect(_on_district_entered)
+	EventBus.district_stage_changed.connect(_on_district_stage_changed)
 	set_mood(Mood.MENU, true)
 
 ## AdService reads this to hold off interstitials mid-fight (spec: "never
@@ -184,7 +213,26 @@ func _load(m: Mood) -> AudioStream:
 
 ## Смена района: подменяем эмбиент-слой и перезапускаем, если он играет.
 func _on_district_entered(district_id: StringName) -> void:
-	var path: String = AMBIENT_BY_DISTRICT.get(district_id, "")
+	_current_district = district_id
+	_refresh_district_ambience()
+
+## Восстановление питания района, в котором сейчас находится игрок,
+## должно быть слышно, а не только видно (GDD §11.1 — свет и звук вместе).
+func _on_district_stage_changed(district_id: StringName, _stage: int) -> void:
+	if district_id == _current_district:
+		_refresh_district_ambience()
+
+func _ambience_path_for(district_id: StringName) -> String:
+	var lit: String = AMBIENCE_LIT_BY_DISTRICT.get(district_id, "")
+	if lit != "" and PowerGrid.get_stage(district_id) >= DistrictData.Stage.STREETS:
+		return lit
+	var dark: String = AMBIENCE_DARK_BY_DISTRICT.get(district_id, "")
+	if dark != "":
+		return dark
+	return AMBIENT_BY_DISTRICT.get(district_id, "")
+
+func _refresh_district_ambience() -> void:
+	var path: String = _ambience_path_for(_current_district)
 	if path == "" or path == _ambient_path:
 		return
 	_ambient_path = path

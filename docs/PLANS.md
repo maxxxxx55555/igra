@@ -240,3 +240,19 @@ first.
   DARK-stage tonemap - left as-is: GDD's pillar 1 wants DARK stage
   near-pitch-black, so a barely-visible starfield there is closer to
   canon than a bright one, not a bug to chase further.
+
+## RESCUE WAVE P2.2 — district ambience beds -> MusicManager
+- Files: scripts/systems/music_manager.gd (AMBIENCE_DARK_BY_DISTRICT +
+  AMBIENCE_LIT_BY_DISTRICT consts, _ambience_path_for()/_refresh_
+  district_ambience() replacing the old AMBIENT_BY_DISTRICT lookup in
+  _on_district_entered, new _on_district_stage_changed handler so power
+  restoration is audible immediately, not just on next district visit),
+  scripts/tools/_asset_check.gd (2 assertions hardcoded the old shared
+  generic filenames — updated to the new per-district bed names, same
+  intent).
+- DEFAULT_CHOICE: only suburbs/hospital/power_station got a _lit.ogg
+  from ox alpha; the other 8 districts keep playing their _dark bed even
+  once restored rather than inventing a _lit file that wasn't delivered.
+- Verification: asset-check gate (which already had music-layer tests)
+  green after updating the 2 stale assertions; compile gate green;
+  --static suite 10/10, flow_check 53/53.

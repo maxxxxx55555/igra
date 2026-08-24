@@ -181,13 +181,15 @@ func _check_music() -> void:
 	_ok(uniq.size() >= 2, "районы звучат по-разному (%d уникальных трека)" % uniq.size())
 	_ok(EventBus.district_entered.get_connections().size() > 0, "смена района переключает музыку")
 
-	# Реальная подмена трека при входе в район
-	var before: String = MusicManager._ambient_path
+	# Реальная подмена трека при входе в район (RESCUE WAVE P2.2: теперь
+	# районные ambience-подложки docs/PRODUCTION_BIBLE.md, не общие треки).
+	MusicManager._on_district_entered(&"suburbs")
+	var suburbs_path: String = MusicManager._ambient_path
 	MusicManager._on_district_entered(&"substation")
 	var after: String = MusicManager._ambient_path
-	_ok(after != before and after.ends_with("music_ambient_dark.wav"), "substation даёт свой эмбиент")
+	_ok(after != suburbs_path and after.ends_with("substation_dark.ogg"), "substation даёт свой эмбиент")
 	MusicManager._on_district_entered(&"suburbs")
-	_ok(MusicManager._ambient_path == before, "возврат в suburbs возвращает трек")
+	_ok(MusicManager._ambient_path == suburbs_path, "возврат в suburbs возвращает трек")
 
 ## Иконка приложения: основная + adaptive для Android, привязаны в конфигах.
 func _check_app_icon() -> void:
