@@ -241,7 +241,6 @@ scripts/world/district_loot.gd
 scripts/world/district_scene_factory.gd
 scripts/world/district_themes.gd
 scripts/world/district_trigger.gd
-scripts/world/emissive_windows.gd
 scripts/world/examine_object.gd
 scripts/world/finale_director.gd
 scripts/world/ftue_generator.gd

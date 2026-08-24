@@ -149,7 +149,7 @@ check("все аудиофайлы из кода на диске", not missing_a
 # ── 9. preload/load: битый путь = ошибка парсинга всего скрипта ─────────────
 bad_preload: list[str] = []
 for base, _dirs, files in os.walk(ROOT):
-    if os.sep + ".git" in base:
+    if os.sep + ".git" in base or os.sep + ".claude" + os.sep + "worktrees" in base:
         continue
     for f in files:
         if not f.endswith(".gd"):

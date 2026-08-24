@@ -1,5 +1,17 @@
 extends Node
 
+## P0 (EMISSIVE FIX wave): this used to also spawn a "Windows" node running
+## scripts/world/emissive_windows.gd, whose populate() searched its own
+## subtree for wall MeshInstance3D children to project window quads onto.
+## That subtree was always empty - not because of a wrong search path, but
+## because no script anywhere in the project spawns wall/building geometry
+## (CityStreetProps.make_wall_mesh() exists but is never called). The
+## dynamic node did nothing in every district, every session. Real window
+## lighting was already delivered a different way: each district .tscn
+## hand-wires its own MultiMeshInstance3D running scripts/visual/
+## emissive_windows.gd, which builds a self-contained lit/dark window grid
+## in _ready() with no dependency on wall geometry. Deleted the dead
+## duplicate instead of inventing wall-tagging for meshes that don't exist.
 func _ready() -> void:
 	call_deferred("_wire_all")
 
@@ -30,11 +42,6 @@ func _wire(d: Node) -> void:
 		props.name = "Props"
 		props.set("street_builder_path", sb.get_path())
 		d.add_child(props)
-	if _find(d, &"Windows") == null:
-		var ws: Script = load("res://scripts/world/emissive_windows.gd")
-		var win: Node = ws.new()
-		win.name = "Windows"
-		d.add_child(win)
 	if _find(d, &"Grading") == null:
 		var gs: Script = load("res://scripts/world/district_grading.gd")
 		var grading: Node = gs.new()
