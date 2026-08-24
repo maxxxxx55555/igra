@@ -3,16 +3,47 @@
 Read `docs/PRODUCTION_BIBLE.md` first — canon reference (pillars,
 visual/audio canon, budgets, checklist) for any new wave of work.
 
-Full detail: `docs/SESSION_REPORT_RESCUE.md` (latest phase — real-window
-launch bug, night sky + district ambience wiring, boss stings, perf
-measurement), `docs/SESSION_REPORT_TRUTH.md` (launch-readiness gate,
-real bug sweep, store copy), `docs/VISUAL_AUDIT.md` (screenshot-driven
-visual/UI/lighting pass), `docs/SESSION_REPORT_FINAL.md` (audio,
-shaders, bug sweep, cleanup, ads, release prep) and `docs/
-SESSION_REPORT.md` (the earlier 19-task build phase). This file is the
-short version for picking the project back up.
+Full detail: `docs/SESSION_REPORT_WAVE6.md` (latest phase — L10N
+completion, enemy balance to GDD, craft economy, 3 dead quests,
+generator fuel, crosshair, ach_01), `docs/BURST_REPORT.md` (parallel
+audit + fix wave: code/UI/assets/i18n/architecture findings),
+`docs/SESSION_REPORT_RESCUE.md` (real-window launch bug, night sky +
+district ambience wiring, boss stings, perf measurement),
+`docs/SESSION_REPORT_TRUTH.md` (launch-readiness gate, real bug sweep,
+store copy), `docs/VISUAL_AUDIT.md` (screenshot-driven visual/UI/
+lighting pass), `docs/SESSION_REPORT_FINAL.md` (audio, shaders, bug
+sweep, cleanup, ads, release prep) and `docs/SESSION_REPORT.md` (the
+earlier 19-task build phase). This file is the short version for
+picking the project back up.
 
-## Latest phase: RESCUE WAVE — real-window launch bug + visual pass (see docs/SESSION_REPORT_RESCUE.md)
+## Latest phase: WAVE 6 — balance + content + L10N completion (see docs/SESSION_REPORT_WAVE6.md)
+
+HEAD = `7cf3ed1`, fully pushed to `origin/main`. All mandatory gates +
+static + boot-flow green.
+
+Closed the BURST_REPORT "not fixed" list: L10N (RU was already
+complete, contrary to the wave's own premise — the real 381-key gap in
+the other 11 locales got a 32-key main-flow batch + zh's 49 pinyin
+placeholders fully fixed + skill tree content i18n'd for RU); enemy
+balance to GDD across all 12 types (found the bestiary `.tres` files
+are disconnected display-only data — fixed both that AND the real
+`enemy_roster_data.gd` stats); craft economy (13 new items, all 8
+workbench recipes now actually craftable, with generated icons); 3
+previously-dead quests wired via real triggers (one of them reusing a
+complete, GDD-canonical minigame that existed but was never reachable);
+a real fuel-consuming generator + a live crosshair (found and fixed
+along the way: the game's own minimap pickup blips were silently
+broken for every real player, not just a test); ach_01 given its own
+correct trigger.
+
+**Sized, not silently dropped, backlog**: i18n's remaining 349 keys ×
+11 locales (3,839 strings, `SCR_*` is the largest single bucket at
+183); enemy speed balance (GDD's "×" multiplier has no documented
+absolute baseline anywhere in the project); crosshair "aim" (no ADS
+mechanic exists to wire it to). Full self-audit and DEFAULT_CHOICE log:
+`docs/SESSION_REPORT_WAVE6.md`.
+
+## Previous phase: RESCUE WAVE — real-window launch bug + visual pass (see docs/SESSION_REPORT_RESCUE.md)
 
 HEAD = `f368631`, fully pushed to `origin/main`. All mandatory gates +
 static + boot-flow + footstep gates green.
