@@ -80,10 +80,19 @@ func _init_meshes() -> void:
 	_cone.bottom_radius = 0.35
 	_cone.height = 0.7
 
+## P2 (EMISSIVE FIX + PERF wave): D1 draw calls measured 234 with full
+## density on every tier - benches/trees/cones are the only remaining
+## lever (poles are the namesake prop, streetlights already batched).
+## LOW skips every other candidate slot (s % 2) rather than truncating
+## the finished array, so spacing along the street stays even instead
+## of leaving one dense half and one empty half. MED/HIGH/ULTRA unchanged.
+var _low_tier: bool = false
+
 func build() -> void:
 	var sb: Node = get_node_or_null(street_builder_path)
 	if sb == null:
 		return
+	_low_tier = int(SettingsManager.get_setting("graphics_tier", 2)) == 0
 	var district_id: StringName = sb.get("district_id") if "district_id" in sb else &""
 	var step: int = 4
 	for road in sb.roads:
@@ -92,11 +101,12 @@ func build() -> void:
 		for s in range(count):
 			var pos: Vector3 = sb.road_step_pos(road, s * step)
 			_spawn_pole_pair(pos, road, district_id)
-			if _rng.randf() < 0.30 * density:
+			var slot_ok: bool = not _low_tier or s % 2 == 0
+			if slot_ok and _rng.randf() < 0.30 * density:
 				_spawn_bench(pos, road)
-			if _rng.randf() < 0.25 * density:
+			if slot_ok and _rng.randf() < 0.25 * density:
 				_spawn_tree(pos, road)
-			if _rng.randf() < 0.15 * density:
+			if slot_ok and _rng.randf() < 0.15 * density:
 				_spawn_cone(pos, road)
 	_build_streetlight_multimesh()
 	_build_prop_multimesh()
