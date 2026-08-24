@@ -577,3 +577,85 @@ first.
 - Verification: compile bad=0, i18n fails=0, --static 10/10 (which now
   includes the fixed placeholder-parity check, previously silently
   never exercised by anything this specific before).
+
+## WAVE 6 P1 — enemy balance to GDD
+- CORRECTION before executing: "data/monsters/*.tres" is NOT the live
+  gameplay data source. Verified via grep: those 12 files are only
+  referenced by encyclopedia_manager.gd (bestiary/lore display text),
+  completely disconnected from base_monster.gd's actual combat stat
+  system, which reads HP/damage/hearing from enemy_roster_data.gd's
+  `roster` dict (via the AI_TO_ROSTER name-remapping A1's audit
+  originally flagged) and vision_range/vision_angle from each monster
+  script's own _ready() overrides. Confirmed by checking: the bestiary
+  .tres values (e.g. watcher vision_range=320.0) don't match EITHER
+  GDD OR the live roster dict's own numbers (watcher's real live
+  vision comes from watcher_3d.gd, unset, defaulting to
+  base_monster.gd's 10.0) - a third, fully independent, wrong number
+  set.
+- Given this, did BOTH: (1) the literal ask - fixed all 12 data/
+  monsters/*.tres files' max_hp/melee_damage/vision_range/
+  vision_cone_deg/detect_radius to GDD §6.2 exact values (real
+  bestiary-accuracy value for players reading in-game lore, zero
+  gameplay effect, zero code touched) via a Node.js regex-line-replace
+  script; (2) the substantive ask - fixed the ACTUAL gameplay-driving
+  numbers: enemy_roster_data.gd's roster dict entries for "runner"
+  (Hunter), "sniper" (Watcher), "armored" (Destroyer), "dog" (Crawler),
+  "beast" (Boss/Architect) - hp/damage/detect_range(hearing) to GDD
+  exact values - plus added missing vision_range/vision_angle overrides
+  in watcher_3d.gd/hunter_3d.gd/destroyer_3d.gd/crawler_3d.gd/
+  boss_3d.gd's _ready() (all 5 were either fully unset, using
+  base_monster.gd's generic default of 10m/90°, or partially set).
+  This is technically inside .gd files, but is exclusively numeric-
+  literal edits (no logic/behavior/architecture changes) - flagging
+  this explicitly since P1 said "NO code changes" assuming the .tres
+  files were live; doing ONLY the literal ask would have had zero
+  actual effect on the real, originally-flagged balance bug.
+- "Verify the other 8 rows match too" - they did NOT all match: 8 of
+  12 bestiary .tres rows needed vision/hearing corrections even though
+  6 of those 8 already had correct HP/damage (brute/burner/rotter/
+  hound/tvar/sharpshooter, the already-verified-correct [M2]/[M3]
+  roster). On the LIVE data side, brute/burner/rotter/hound/tvar/
+  sharpshooter's roster dict entries and vision_range overrides were
+  already independently confirmed correct in a prior session/audit -
+  not touched, no regression risk introduced there.
+- Speed intentionally NOT touched anywhere (bestiary or live roster):
+  GDD gives speed as a "x" multiplier with no documented absolute
+  baseline anywhere in the project (checked GDD.md, player_stats.tres -
+  player's walk_speed=170 is on a visibly different unit scale than the
+  roster dict's own speed values of 1.2-6.0, so it can't be used as the
+  multiplier's base without guessing). Left as a genuine spec gap
+  rather than inventing a conversion factor with real regression risk
+  (wrong speed could make an enemy uncontrollably fast or a pushover to
+  outrun).
+- DEFAULT_CHOICE: Architect (boss)'s vision cone left at 360°(omni) -
+  GDD's table gives no cone parenthetical for this row, same formatting
+  as Tvar/Rotter which both use 360° - matched that established
+  precedent rather than inventing a narrower cone.
+- Expected difficulty shift (one paragraph, as asked): Hunter becomes
+  meaningfully MORE dangerous (HP 45->120, damage 12->35 - was a
+  pushover, now hits like the "raша" GDD describes) while its
+  detection cone narrows (90 deg default -> 60 deg), so it's both
+  scarier up close and easier to avoid at range. Watcher becomes much
+  LESS punishing (HP 160->80, damage 25->12, hearing 25->8m) - it was
+  effectively sniping players from 18m with boss-tier stats; now a
+  real but softer threat, though its ranged attack_range itself
+  wasn't touched (out of the HP/damage/speed/vision/hearing scope) so
+  it still shoots from range, just for much less. Destroyer trades
+  tankiness for punch (HP 400->200, damage 20->25) and its vision
+  narrows sharply (10m default cone-90 -> 5m cone-180 - wide but very
+  short-range, matching its "lumbering tank" design), making it easier
+  to spot-and-avoid but more dangerous if it catches you. Crawler
+  becomes a glass cannon (HP 70->50, damage 9->20, more than doubled)
+  and its detection range shrinks (10m default -> 6m), rewarding
+  stealth around it much more than before. The Architect boss fight
+  gets shorter and harder-hitting (HP 1200->800, damage 30->40) - a
+  more intense, less attrition-based final encounter. Net effect
+  across all four: less "wrong enemy has boss stats" (Watcher/
+  Destroyer were previously over-tuned relative to their design)
+  and more real threat where GDD actually wants it (Hunter/Crawler
+  were previously undertuned).
+- Verification: compile bad=0, --static 10/10 (flow_check unaffected,
+  no logic changed). Not gameplay-tested live (no combat-encounter
+  screenshot/log tooling exists from prior sessions for this specific
+  purpose) - numbers verified against GDD by direct value comparison,
+  not by playtesting the actual feel.

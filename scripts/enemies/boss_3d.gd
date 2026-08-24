@@ -26,6 +26,10 @@ func _ready() -> void:
 	super._ready()
 	attack_cooldown = 2.0
 	light_flee = false
+	# WAVE 6 P1: GDD §6.2 Architect vision=20m, no cone given (same table
+	# formatting as Tvar/Rotter, which use 360 - same DEFAULT_CHOICE here).
+	vision_range = 20.0
+	vision_angle = 360.0
 	add_to_group("boss")
 	_add_silhouette()
 

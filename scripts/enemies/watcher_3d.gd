@@ -11,6 +11,7 @@ func _ready() -> void:
 	super._ready()
 	stun_duration = 2.0
 	flee_duration = 0.0
+	vision_range = 12.0  # WAVE 6 P1: GDD §6.2, was unset (base_monster.gd default 10.0)
 	vision_angle = 90.0
 	peripheral_range = 4.0
 	peripheral_angle = 45.0

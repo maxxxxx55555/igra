@@ -17,6 +17,8 @@ func _ready() -> void:
 	super._ready()
 	stun_duration = 0.0
 	flee_duration = 0.0
+	vision_range = 10.0  # WAVE 6 P1: GDD §6.2, was unset (base_monster.gd defaults)
+	vision_angle = 60.0
 	add_to_group("hunters")
 	# S9.3: roar before charge.
 	_set_cues({&"roar": {"file": "mon_hunter_roar", "db": -3.0}})

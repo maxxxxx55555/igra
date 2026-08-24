@@ -18,6 +18,7 @@ func _ready() -> void:
 	peripheral_angle = 60.0
 	chase_speed = LEAP_SPEED * 0.6
 	light_flee = false
+	vision_range = 6.0  # WAVE 6 P1: GDD §6.2, was unset (base_monster.gd default 10.0)
 	add_to_group("crawlers")
 	# S9.3: scraping on asphalt, audible at 10 m.
 	_set_cues({

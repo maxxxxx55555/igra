@@ -11,6 +11,8 @@ func _ready() -> void:
 	super._ready()
 	stun_duration = 2.0
 	flee_duration = 0.0
+	vision_range = 5.0  # WAVE 6 P1: GDD §6.2, was unset (base_monster.gd defaults)
+	vision_angle = 180.0
 	add_to_group("destroyers")
 	# S9.3: machinery hum, audible at 12 m.
 	_set_cues({
