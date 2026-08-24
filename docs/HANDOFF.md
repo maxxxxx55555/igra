@@ -3,20 +3,60 @@
 Read `docs/PRODUCTION_BIBLE.md` first — canon reference (pillars,
 visual/audio canon, budgets, checklist) for any new wave of work.
 
-Full detail: `docs/SESSION_REPORT_WAVE6.md` (latest phase — L10N
-completion, enemy balance to GDD, craft economy, 3 dead quests,
-generator fuel, crosshair, ach_01), `docs/BURST_REPORT.md` (parallel
-audit + fix wave: code/UI/assets/i18n/architecture findings),
-`docs/SESSION_REPORT_RESCUE.md` (real-window launch bug, night sky +
-district ambience wiring, boss stings, perf measurement),
-`docs/SESSION_REPORT_TRUTH.md` (launch-readiness gate, real bug sweep,
-store copy), `docs/VISUAL_AUDIT.md` (screenshot-driven visual/UI/
-lighting pass), `docs/SESSION_REPORT_FINAL.md` (audio, shaders, bug
-sweep, cleanup, ads, release prep) and `docs/SESSION_REPORT.md` (the
-earlier 19-task build phase). This file is the short version for
-picking the project back up.
+Full detail: `docs/SESSION_REPORT_FINAL_PERFECTION.md` (latest phase —
+boot audio hum, music bus effects, VFX wiring, UI chrome, streetlight
+MultiMesh batching, SCR_* i18n, extra_battery ad button),
+`docs/SESSION_REPORT_WAVE6.md` (L10N completion, enemy balance to GDD,
+craft economy, 3 dead quests, generator fuel, crosshair, ach_01),
+`docs/BURST_REPORT.md` (parallel audit + fix wave: code/UI/assets/i18n/
+architecture findings), `docs/SESSION_REPORT_RESCUE.md` (real-window
+launch bug, night sky + district ambience wiring, boss stings, perf
+measurement), `docs/SESSION_REPORT_TRUTH.md` (launch-readiness gate,
+real bug sweep, store copy), `docs/VISUAL_AUDIT.md` (screenshot-driven
+visual/UI/lighting pass), `docs/SESSION_REPORT_FINAL.md` (audio,
+shaders, bug sweep, cleanup, ads, release prep) and
+`docs/SESSION_REPORT.md` (the earlier 19-task build phase). This file
+is the short version for picking the project back up.
 
-## Latest phase: WAVE 6 — balance + content + L10N completion (see docs/SESSION_REPORT_WAVE6.md)
+## Latest phase: FINAL PERFECTION WAVE (see docs/SESSION_REPORT_FINAL_PERFECTION.md)
+
+HEAD = `8344772`, fully pushed to `origin/main`. All mandatory gates +
+static + boot-flow + audio-hum green (asset_check_scene's one failure
+is pre-existing/unrelated - see report).
+
+Fixed the real boot-audio-hum bug (MusicManager autoplaying the menu
+track + 4 ambience layers at process boot, before any input - gated
+behind a first-input latch, permanent regression gate added); added
+real reverb+compressor to the Music bus and de-clashed layer/mood
+crossfade phasing; wired the 3 dead vfx_*.tscn scenes (they shared a
+script that silently discarded each scene's own tuning) into hit/
+death/muzzle events plus a pickup fly-to-HUD icon tween; found and
+fixed a second always-on "MoonLight" duplicate that was undercutting
+the DARK-stage contrast; wired the button chrome kit into
+ThemeProvider (verified via headless probe, not screenshot - see
+report's self-audit) and bumped/re-skinned the minimap, added crests
+to the city map; batched streetlight Pole/Lamp meshes into
+MultiMeshInstance3D (370 -> 251 draw calls, meets D11 budget, not yet
+D1); translated the 67 highest-visibility SCR_* i18n keys into all 11
+non-RU/non-EN locales (718 strings); wired the previously-dead
+extra_battery ad-reward button into the HUD.
+
+**Corrected premises** (checked before acting, not assumed): P1's "5
+layer OGGs" aren't the ones MusicManager actually plays; P2.4's
+suspected culprit (district_grading.gd) was already dead code, the
+real bug was a different legacy script; P4's "translate SCR_* to
+Russian" - RU was already complete, same pattern as WAVE 6.
+
+**Discovered, not fixed** (flagged in HUMAN_CHECKLIST): three
+independent UI theme-registration systems exist simultaneously
+(ThemeProvider / ThemeSetup / a dead ThemeManager) - main_menu uses
+none of this wave's chrome work because it never opts into
+ThemeProvider at all. D1's draw-call budget (<200) still isn't met
+(251) - remaining cost is individually-meshed benches/trees/cones,
+outside this wave's "streetlights" scope. Full self-audit and
+DEFAULT_CHOICE log: `docs/SESSION_REPORT_FINAL_PERFECTION.md`.
+
+## Previous phase: WAVE 6 — balance + content + L10N completion (see docs/SESSION_REPORT_WAVE6.md)
 
 HEAD = `7cf3ed1`, fully pushed to `origin/main`. All mandatory gates +
 static + boot-flow green.
