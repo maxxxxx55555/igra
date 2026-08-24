@@ -19,7 +19,26 @@ const MATERIALS := {
 	"metal":       {"volume": -2.0, "pitch_range": [0.95, 1.07], "sample": "footstep_metal"},
 	"puddle":      {"volume": -12.0, "pitch_range": [0.90, 1.05], "sample": "step_puddle"},
 	"glass":       {"volume": -6.0, "pitch_range": [0.96, 1.09], "sample": "step_glass"},
+	"grass":       {"volume": -8.0, "pitch_range": [0.94, 1.06], "sample": "footstep_concrete"},
+	"gravel":      {"volume": -8.0, "pitch_range": [0.94, 1.06], "sample": "footstep_concrete"},
+	"tile":        {"volume": -8.0, "pitch_range": [0.94, 1.06], "sample": "footstep_concrete"},
 	"default":     {"volume": -8.0, "pitch_range": [0.94, 1.06], "sample": "footstep_concrete"},
+}
+
+## RESCUE WAVE P1: ox alpha delivered per-speed sets (assets/audio/sfx/
+## footsteps/<surface>_{walk,jog,sprint}.wav) for 6 surfaces. The player
+## only has 3 movement states that reach play_step (WALK, STEALTH, RUN —
+## CROUCH/IDLE are silent, see play_step()), so "jog" has no state to map
+## to and stays unused rather than inventing a jog mechanic that doesn't
+## exist (DEFAULT_CHOICE). WALK and STEALTH both use the "walk" sample;
+## RUN uses "sprint". Volume/pitch still come from MATERIALS above.
+const SPEED_SAMPLES := {
+	"concrete": {"walk": "footsteps/concrete_walk", "run": "footsteps/concrete_sprint"},
+	"metal":    {"walk": "footsteps/metal_walk",    "run": "footsteps/metal_sprint"},
+	"wood":     {"walk": "footsteps/wood_walk",     "run": "footsteps/wood_sprint"},
+	"grass":    {"walk": "footsteps/grass_walk",    "run": "footsteps/grass_sprint"},
+	"gravel":   {"walk": "footsteps/gravel_walk",   "run": "footsteps/gravel_sprint"},
+	"tile":     {"walk": "footsteps/tile_walk",     "run": "footsteps/tile_sprint"},
 }
 
 const CLANK_VOLUME: float = 0.0
@@ -55,6 +74,9 @@ func _load_samples() -> void:
 	var names: Array = [CLANK_SAMPLE]
 	for key in MATERIALS:
 		names.append(String(MATERIALS[key]["sample"]))
+	for surface in SPEED_SAMPLES:
+		for speed_key in SPEED_SAMPLES[surface]:
+			names.append(String(SPEED_SAMPLES[surface][speed_key]))
 	for n in names:
 		var path: String = SFX_DIR + String(n) + ".wav"
 		if not _streams.has(n) and ResourceLoader.exists(path):
@@ -102,13 +124,17 @@ func play_step(state: int, _speed: float, weight_kg: float) -> void:
 		return
 
 	var mat: Dictionary = MATERIALS.get(surface, MATERIALS["default"])
+	var sample_name: String = String(mat["sample"])
+	if SPEED_SAMPLES.has(surface):
+		var speed_key: String = "run" if state == STATE_RUN else "walk"
+		sample_name = String(SPEED_SAMPLES[surface][speed_key])
 	var speed_mult := 1.0
 	match state:
 		STATE_RUN: speed_mult = 1.5
 		STATE_WALK: speed_mult = 1.0
 		STATE_STEALTH: speed_mult = 0.3
 		_: speed_mult = 1.0
-	_play(_sample(String(mat["sample"])), float(mat["volume"]) + linear_to_db(speed_mult), mat["pitch_range"])
+	_play(_sample(sample_name), float(mat["volume"]) + linear_to_db(speed_mult), mat["pitch_range"])
 
 func _play(stream: AudioStream, volume_db: float, pitch_range: Array) -> void:
 	if stream == null:
@@ -141,6 +167,12 @@ func _detect_material() -> String:
 		return "metal"
 	if "glass" in n:
 		return "glass"
+	if "grass" in n or "lawn" in n:
+		return "grass"
+	if "gravel" in n:
+		return "gravel"
+	if "tile" in n:
+		return "tile"
 	return "default"
 
 func register_surface(node: Node3D, material: String) -> void:
@@ -155,4 +187,13 @@ func demo() -> void:
 		assert(float(r[0]) <= float(r[1]), "bad pitch range: %s" % key)
 		assert(String(MATERIALS[key]["sample"]) != "", "missing sample: %s" % key)
 	assert(STATE_CROUCH == 4 and STATE_STEALTH == 3, "state constants must mirror player enum")
+	# RESCUE WAVE P1: prove the walk/run -> per-speed-file mapping actually
+	# resolves to real loaded streams, not just that the dict entries exist.
+	for surface in SPEED_SAMPLES:
+		for speed_key in ["walk", "run"]:
+			var sample_name: String = String(SPEED_SAMPLES[surface][speed_key])
+			var stream := _sample(sample_name)
+			assert(stream != null and stream != _step_stream,
+				"footstep speed sample failed to load: %s (%s)" % [sample_name, speed_key])
+			print("[footstep] ", surface, "/", speed_key, " -> ", sample_name, ".wav OK")
 	print("[footstep] demo OK samples=", _streams.size())

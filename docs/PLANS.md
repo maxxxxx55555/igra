@@ -173,3 +173,22 @@ first.
   confirmed via grep.
 - Verification: relaunch real window, Play, confirm gameplay is visible
   with no overlay; screenshot.
+
+## RESCUE WAVE P1 — footstep mapper (surface x speed, ox alpha's 18 files)
+- Files: scripts/systems/footstep_system.gd (add SPEED_SAMPLES lookup +
+  grass/gravel/tile MATERIALS entries + detection keywords), new
+  scripts/tools/_footstep_check.gd + scenes/tools/footstep_check_scene.tscn
+  (permanent gate), tools/check.sh (wire it in).
+- Signals: none new.
+- Risk: only 3 player movement states reach play_step (WALK/STEALTH/RUN;
+  CROUCH/IDLE are silent) but delivered files have 3 speed tiers
+  (walk/jog/sprint) — no "jog" state exists. DEFAULT_CHOICE: WALK+STEALTH
+  both use "walk" tier, RUN uses "sprint" tier, "jog" files stay unused
+  rather than inventing a jog mechanic. Documented inline in code comment.
+- Verification: extended footstep_system.gd's existing demo() self-check
+  to assert every SPEED_SAMPLES entry actually resolves to a loaded,
+  non-null AudioStream (not just that the dict key exists); new gate
+  scene runs demo() headless and prints each surface/speed -> file
+  resolution. Result: `[footstep-check] DONE fails=0`, all 12
+  surface/speed combos print OK.
+- Screenshot angles: none (audio-only, no visual surface).
