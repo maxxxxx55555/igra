@@ -1,0 +1,8 @@
+alive
+unlocked
+ui added, children=1
+frame1 done, ui children=2
+detail opened, ui children=3
+timer done
+post_draw done
+saved png

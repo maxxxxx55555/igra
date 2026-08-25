@@ -75,7 +75,7 @@
   "Found server: %s": "Найден сервер: %s",
   "Game saved to slot %d": "Игра сохранена в слот %d",
   "INV_QUICK_ACCESS": "Быстрый доступ",
-  "INV_WEIGHT": "Вес",
+  "INV_WEIGHT": "Вес: %.1f / %.0f кг",
   "JOURNAL_TAB_DOCUMENTS": "Документы",
   "JOURNAL_TAB_NOTES": "Заметки",
   "JOURNAL_TAB_QUESTS": "Задания",

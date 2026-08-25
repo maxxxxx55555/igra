@@ -795,5 +795,18 @@
   "SKILL_LOOT_LUCK_DESC": "+20% rare loot chance",
   "ACTION_STOP_GENERATOR": "Stop generator",
   "GENERATOR_OUT_OF_FUEL": "Generator out of fuel",
-  "AD_EXTRA_BATTERY": "Watch ad for battery"
+  "AD_EXTRA_BATTERY": "Watch ad for battery",
+  "ENC_STAT_HP": "HP",
+  "ENC_STAT_SPEED": "Speed (move / chase)",
+  "ENC_STAT_WEAKNESS": "Weakness",
+  "ENC_STAT_STATUS": "Status",
+  "ENC_DISCOVERED": "Discovered",
+  "WEAKSPOT_HEAD": "Head",
+  "WEAKSPOT_BODY": "Body",
+  "WEAKSPOT_BACK": "Back",
+  "WEAKSPOT_BLUNT": "Blunt damage",
+  "WEAKSPOT_FIRE_ELECTRIC": "Fire / Electric",
+  "WEAKSPOT_FIRE_IMMUNE": "Immune to fire",
+  "WEAKSPOT_BULLET": "Bullets",
+  "WEAKSPOT_STROBE_COMBO": "Strobe + attack combo"
 }
