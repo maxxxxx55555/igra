@@ -6,13 +6,53 @@ ICONS_V2, MARKET_V2, POLISH_V2, STORE_V2, UI_V2), `docs/HANDOFF.md`,
 `docs/PRODUCTION_BIBLE.md`. `docs/BUGS_FOR_CLAUDE.md` does not exist —
 checked exhaustively, see P0 below.
 
+## Update — mid-session asset unblock
+
+Everything below through "Push" was written when P1 and half of P2 were
+genuinely blocked (checked at session start, both premises false at that
+point). `docs/REPORT_UNBLOCK_V2.md` then appeared on disk mid-session (the
+parallel asset-generation session delivering 38 files while this session
+was already working) — noticed via a routine `git status` sweep before the
+final commit, not assumed. Re-verified every file it claimed existed
+actually does, then went back and finished P1 and the rest of P2 for real
+rather than leaving the report saying "blocked" once that was no longer
+true. See commit `1ffd8b2` for the full detail; the status table and the
+sections below are updated to match. The original blocked-state writeup is
+left in place further down (unedited) as the honest record of what was
+true when it was written — this update section is additive, not a rewrite.
+
+**Now done, was blocked:**
+- P1 onboarding overlay — fully built (`scripts/ui/onboarding_overlay.gd`,
+  new `SaveSystem.onboard_done` flag, 4 panels, i18n ×13).
+- Player render → `stats_ui.gd` side panel.
+- Branch headers → `skill_tree_tab.gd`.
+- Weapon renders → switched to the newer, explicitly-tagged
+  `renders_v2/weapons/*_render_256.png` set.
+- Craft material icons → `workbench.gd` ingredient chips now cover 9/9
+  recipe component ids (was 2/9).
+- Ending full tracks → light/dark endings play the real 60s track now,
+  matching the brief's original literal ask (was: all 5 endings on
+  stings only, because no full track existed yet).
+
+Verified via a second headless checkpoint probe (`docs/p1_p2_unblock_probe.txt`):
+onboarding shows and completes correctly end-to-end (all 4 panels, marks
+`onboard_done`), player render panel builds without error, branch header
+found as a real child node, ending sting_player's stream confirmed as
+`AudioStreamOggVorbis` (the full track) and playing, workbench's
+`repair_kit` recipe now shows 4 nodes (2 icons + 2 labels) instead of 3.
+
+The same forced-reimport step (and the same `default_bus_layout.tres`
+side effect, caught and reverted the same way) was needed again for this
+batch — `assets/audio/ending_music/*.ogg` had no `.import` sidecars yet
+either.
+
 ## Status table
 
 | Task | Status | Artifacts |
 |---|---|---|
 | P0 fix BUGS_FOR_CLAUDE.md items | Blocked, not attempted | `docs/BUGS_FOR_CLAUDE.md` does not exist |
-| P1 onboarding overlay | Blocked, not attempted | `assets/textures/onboard_v2/` still does not exist |
-| P2 consistency wiring | Done | commit `ad39ca6`, `docs/p2_consistency_probe.txt` |
+| P1 onboarding overlay | **Done** (unblocked mid-session, see Update above) | commit `1ffd8b2`, `docs/p1_p2_unblock_probe.txt` |
+| P2 consistency wiring | Done, extended mid-session | commits `ad39ca6` + `1ffd8b2` |
 | P3 full regression | Done, zero regressions | commit `3d195b5` |
 | P4 release docs | Done | commit `436c655`, `docs/RELEASE_FINAL.md` |
 | This report | Done | this commit, pushed |
@@ -175,11 +215,10 @@ picking one.
 
 ## HUMAN_CHECKLIST delta
 
-No new manual actions from this session's own code. The two structural
-items worth a human's attention:
-- P1 (onboarding) and the player-render half of P2 are blocked purely on
-  missing art — nothing to build until `onboard_v2` and a player render
-  asset exist, or the tasks get dropped/rescoped.
+No new manual actions from this session's own code. P1 and the player-
+render half of P2, both originally listed here as blocked on missing art,
+are done as of the Update section above. Remaining item worth a human's
+attention:
 - `docs/RELEASE_FINAL.md` §"AppLovin MAX — approval email template" and
   the Web/Desktop export preset gaps it names are real prerequisites for
   Yandex Games and Steam/itch.io specifically, not optional polish.
@@ -190,13 +229,8 @@ items worth a human's attention:
   process was meant to generate it — "code-side list from bug-hunt" per
   the brief) before a P0-shaped task can do anything. Nothing to size
   until it exists.
-- **Onboarding overlay**: sized in the previous session's report already
-  (4 panels, SaveSystem flag, i18n captions ×13) — unchanged, still
-  blocked on `onboard_v2` art.
-- **Player render asset**: needs one delivered file
-  (`[something]_full_[dims].png` or similar) before `stats_ui`'s side
-  panel can show it — otherwise identical scope to the encyclopedia
-  detail view's portrait slot from two sessions ago.
+- ~~Onboarding overlay~~ — done, see Update section above.
+- ~~Player render asset~~ — done, see Update section above.
 - **Item icon resolver conflict**: still open from two sessions ago —
   icons_v2's fixed 10-item set doesn't cover the other 28+ item ids in
   the game; wiring only those 10 anywhere with full item coverage (not
@@ -221,4 +255,4 @@ items worth a human's attention:
 ## Push
 
 Commits this session: `ad39ca6` (P2), `3d195b5` (P3), `436c655` (P4),
-plus this report.
+`1ffd8b2` (P1 + P2 mid-session unblock), plus this report.
