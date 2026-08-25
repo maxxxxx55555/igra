@@ -15,7 +15,22 @@ var _skill_data: Dictionary
 func setup(skill_id: StringName, skill_data: Dictionary) -> void:
 	_skill_id = skill_id
 	_skill_data = skill_data
-	
+
+	# P2 (FINAL INTEGRATION wave): real skill icon, ids grep-locked against
+	# SKILL_TREES in skill_tree_manager.gd (icons/skills/<id>_96.png match
+	# the ids exactly per REPORT_CONTENT_WAVE.md's provenance note).
+	var icon_path := "res://assets/textures/icons/skills/%s_96.png" % String(skill_id)
+	if ResourceLoader.exists(icon_path):
+		var icon := TextureRect.new()
+		icon.name = "IconTex"
+		icon.custom_minimum_size = Vector2(32, 32)
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.texture = load(icon_path)
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		name_label.get_parent().add_child(icon)
+		name_label.get_parent().move_child(icon, 0)
+
 	# WAVE 6 P0.2: skill_data.name/description now store i18n KEYS
 	# (SKILL_TREES in skill_tree_manager.gd), not raw English text.
 	name_label.text = LocalizationManager.t(skill_data.name)

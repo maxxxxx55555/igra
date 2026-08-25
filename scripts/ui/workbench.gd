@@ -22,6 +22,19 @@ const RECIPES: Array[Dictionary] = [
 	{"id":"makeshift_lamp","name_key":"ITEM_MAKESHIFT_LAMP","result":"makeshift_lamp","count":1,"components":[["metal",2],["battery",1]]},
 ]
 
+## P2 (FINAL INTEGRATION wave): craft material icons -> ingredient chips
+## only, result icons stay V1 per the brief. icons_v2 filenames don't match
+## RECIPES' component ids 1:1 (delivered as a fixed 10-item generic set,
+## not full item coverage) - explicit map for the ids that DO have art;
+## every other component (fabric/alcohol/cable/fuse/gunpowder/case/metal/
+## paper/bottle - most of the actual recipe list) renders text-only, which
+## is the "consistent within chips" the brief asks for: a missing icon
+## reliably means no icon, not a wrong one.
+const _INGREDIENT_ICON: Dictionary = {
+	"tool": "res://assets/textures/icons_v2/tools_128.png",
+	"battery": "res://assets/textures/icons_v2/battery_pack_128.png",
+}
+
 var _active_tab: int = 0
 var _selected_recipe: int = -1
 var _craft_qty: int = 1
@@ -195,10 +208,22 @@ func _update_detail() -> void:
 		var needed = comp[1] * _craft_qty
 		var have := InventoryManager.count_of(item_id) if InventoryManager else 0
 		var key := "ITEM_" + item_id.to_upper()
+		var label_x := 10.0
+		var icon_path: String = _INGREDIENT_ICON.get(item_id, "")
+		if icon_path != "" and ResourceLoader.exists(icon_path):
+			var icon := TextureRect.new()
+			icon.position = Vector2(10, cy)
+			icon.size = Vector2(18, 18)
+			icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			icon.texture = load(icon_path)
+			_detail_frame.add_child(icon)
+			_comp_labels.append(icon)
+			label_x = 32.0
 		var clbl := Label.new()
 		clbl.text = tr(key) + ": " + str(needed) + " / " + str(have)
-		clbl.size = Vector2(_detail_frame.size.x - 20, 18)
-		clbl.position = Vector2(10, cy)
+		clbl.size = Vector2(_detail_frame.size.x - 10 - label_x, 18)
+		clbl.position = Vector2(label_x, cy)
 		clbl.add_theme_color_override("font_color", STAMINA if have >= needed else EMBER)
 		clbl.add_theme_font_size_override("font_size", 11)
 		_detail_frame.add_child(clbl)

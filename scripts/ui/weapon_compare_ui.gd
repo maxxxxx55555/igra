@@ -80,12 +80,20 @@ func on_weapon_switched(weapon: WeaponBase) -> void:
 func _show_compare(from_w: WeaponBase, to_w: WeaponBase) -> void:
 	for c in _rows_box.get_children():
 		c.queue_free()
+	# P2 (FINAL INTEGRATION wave): real weapon render icons either side of
+	# the arrow, keyed off weapon_name.to_lower() (matches the delivered
+	# icons/weapons/{pistol,rifle,shotgun}_128.png filenames exactly).
+	var title_row := HBoxContainer.new()
+	title_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	title_row.add_theme_constant_override("separation", 6)
+	_rows_box.add_child(title_row)
+	_add_weapon_icon(title_row, from_w)
 	var title := Label.new()
 	title.text = String(from_w.weapon_name) + "  →  " + String(to_w.weapon_name)
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_color_override("font_color", BONE_TEXT)
 	title.add_theme_font_size_override("font_size", 12)
-	_rows_box.add_child(title)
+	title_row.add_child(title)
+	_add_weapon_icon(title_row, to_w)
 	for row in _ROWS:
 		_rows_box.add_child(_make_row(row[0], float(from_w.get(row[1])), float(to_w.get(row[1])), row[2]))
 	_panel.visible = true
@@ -115,6 +123,20 @@ func _make_row(key: String, from_v: float, to_v: float, lower_is_better: bool) -
 		val.add_theme_color_override("font_color", BONE_TEXT)
 	hb.add_child(val)
 	return hb
+
+func _add_weapon_icon(parent: Node, weapon: WeaponBase) -> void:
+	var id := String(weapon.weapon_name).to_lower()
+	if id == "":
+		return
+	var path := "res://assets/textures/icons/weapons/%s_128.png" % id
+	if not ResourceLoader.exists(path):
+		return
+	var icon := TextureRect.new()
+	icon.custom_minimum_size = Vector2(20, 20)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.texture = load(path)
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	parent.add_child(icon)
 
 func _fmt(v: float) -> String:
 	return str(v) if v != roundf(v) else str(int(v))

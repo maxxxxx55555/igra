@@ -15,12 +15,36 @@ const ENDING_DATA: Dictionary = {
 	"truth":    {"title": "ENDING_TRUTH_TITLE",    "desc": "ENDING_TRUTH_DESC",    "color": Color(1.0, 0.5, 0.2)},
 }
 
+## P2 (FINAL INTEGRATION wave): GAMEFEEL V2 delivered one sting per ending
+## (assets/audio/jingles/ending_*_sting.ogg) but nothing anywhere connected
+## to ending_reached - grepped the whole project for ".connect(" on this
+## signal before writing this, zero matches. Only "full" tracks were asked
+## for in the brief (ending_light_full.ogg / ending_dark_full.ogg for two
+## of the five endings specifically); those don't exist on disk under that
+## name or any other - checked assets/audio/ and the delivery reports.
+## Wiring the real, delivered stings for all 5 endings is a strict superset
+## of "something plays for light/dark" using what's actually here, rather
+## than leaving genuinely finished audio silent because the fuller ask
+## can't be met.
+const _STING_PATH: Dictionary = {
+	"light": "res://assets/audio/jingles/ending_light_sting.ogg",
+	"hope": "res://assets/audio/jingles/ending_hope_sting.ogg",
+	"survivor": "res://assets/audio/jingles/ending_survivor_sting.ogg",
+	"dark": "res://assets/audio/jingles/ending_dark_sting.ogg",
+	"truth": "res://assets/audio/jingles/ending_truth_sting.ogg",
+}
+var _sting_player: AudioStreamPlayer
+
 var _achieved_ending: StringName = ""
 var _ending_data: Dictionary = {}
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	_sting_player = AudioStreamPlayer.new()
+	_sting_player.bus = "Music" if AudioServer.get_bus_index("Music") >= 0 else "Master"
+	add_child(_sting_player)
 	EventBus.game_won.connect(_evaluate_ending)
+	ending_reached.connect(_play_sting)
 
 func _evaluate_ending() -> void:
 	var dm: Node = get_node_or_null("/root/DistrictManager")
@@ -99,3 +123,10 @@ func force_ending(ending_id: StringName) -> void:
 	_achieved_ending = ending_id
 	_ending_data = ENDING_DATA.get(String(ending_id), {})
 	ending_reached.emit(ending_id)
+
+func _play_sting(ending_id: StringName) -> void:
+	var path: String = _STING_PATH.get(String(ending_id), "")
+	if path == "" or not ResourceLoader.exists(path):
+		return
+	_sting_player.stream = load(path)
+	_sting_player.play()

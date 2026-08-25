@@ -10,6 +10,10 @@ class_name WeaponShotgun
 
 func _ready() -> void:
 	super._ready()
+	# P2 (FINAL INTEGRATION wave): was never set here (unlike weapon_pistol.gd),
+	# so weapon_compare_ui.gd's "from -> to" title showed a blank name every
+	# time the player switched to or from the shotgun.
+	weapon_name = "Shotgun"
 	damage = pellet_damage
 	if _sfx and ResourceLoader.exists("res://assets/audio/sfx/sfx_shoot.wav"):
 		_sfx.stream = load("res://assets/audio/sfx/sfx_shoot.wav")

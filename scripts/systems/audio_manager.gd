@@ -1,5 +1,6 @@
-# AudioManager — autoload 18. ПРОЦЕДУРНЫЙ звук (дождь/гром/шаги/гул/щелчки/рык),
-# без внешних аудиофайлов. Громкость через бусы SFX/Master.
+# AudioManager — autoload 18. Смесь процедурного звука (шаги/гул/щелчки/рык/
+# события) и реальных сэмплов там, где они есть (ветер, дождь по металлу,
+# гром, фонарик, урон, низкое HP). Громкость через бусы SFX/Master.
 extends Node
 
 const MIX: int = 22050
@@ -10,11 +11,14 @@ var _wind: AudioStreamPlayer
 var _rain: AudioStreamPlayer
 var _threat: AudioStreamPlayer
 var _action: AudioStreamPlayer
+var _heartbeat: AudioStreamPlayer
+var _breath: AudioStreamPlayer
 var _pool: Array = []
 var _last_state: int = 0
 var _step_timer: float = 0.0
 var _thunder_timer: float = 0.0
 var _threat_timer: float = 0.0
+var _low_hp: bool = false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -35,7 +39,9 @@ func _ready() -> void:
 	_wind.stream = WIND_SFX
 	_wind.volume_db = -26.0
 	_wind.play()
-	_rain.stream = _gen_rain(2.0)
+	# CONTENT UX / FINAL INTEGRATION wave: real mastered rain over metal
+	# roofs/cars replaces the procedural white-noise placeholder.
+	_rain.stream = _force_loop(RAIN_SFX)
 	_rain.volume_db = -40.0
 	_rain.play()
 	# Слой threat: тихий пульсирующий гул, громкость ведёт близость монстров (_update_threat).
@@ -43,7 +49,19 @@ func _ready() -> void:
 	_threat.volume_db = -80.0
 	_threat.play()
 	_action.volume_db = -80.0
+	# Player-state loops (GDD low-HP tension cue): silent until HP<30%,
+	# started/stopped once on threshold cross in _on_player_health, not
+	# every frame - see _low_hp guard.
+	_heartbeat = _make_player()
+	_heartbeat.name = "HeartbeatLayer"
+	_heartbeat.stream = _force_loop(HEARTBEAT_SFX)
+	_heartbeat.volume_db = -6.0
+	_breath = _make_player()
+	_breath.name = "BreathLayer"
+	_breath.stream = _force_loop(BREATH_SFX)
+	_breath.volume_db = -6.0
 	EventBus.weather_changed.connect(_on_weather)
+	EventBus.player_health_changed.connect(_on_player_health)
 	EventBus.player_state_changed.connect(func(s: int) -> void: _last_state = s)
 	EventBus.flashlight_state_changed.connect(_on_flashlight_toggled)
 	EventBus.light_disrupted.connect(func() -> void: _one_shot(_gen_glitch(), -8.0))
@@ -67,6 +85,33 @@ const HURT_SFX := preload("res://assets/audio/sfx/sfx_hurt.wav")
 const WIND_SFX := preload("res://assets/audio/sfx/amb_wind.wav")
 const FLASHLIGHT_ON_SFX := preload("res://assets/audio/sfx/sfx_flashlight_on.wav")
 const FLASHLIGHT_OFF_SFX := preload("res://assets/audio/sfx/sfx_flashlight_off.wav")
+const RAIN_SFX := preload("res://assets/audio/one_shots/rain_on_metal_loop.ogg")
+const THUNDER_NEAR_SFX := preload("res://assets/audio/one_shots/thunder_near.wav")
+const THUNDER_FAR_SFX := preload("res://assets/audio/one_shots/thunder_far.wav")
+const HEARTBEAT_SFX := preload("res://assets/audio/one_shots/heartbeat_low_loop.ogg")
+const BREATH_SFX := preload("res://assets/audio/one_shots/breath_low_loop.ogg")
+const LOW_HP_THRESHOLD: float = 0.30
+
+## .import не в репозитории (см. .gitignore) - loop_mode/loop сбрасывается
+## на дефолт на свежем клоне, тот же паттерн, что MusicDirector._force_loop().
+static func _force_loop(s: AudioStream) -> AudioStream:
+	if s is AudioStreamWAV:
+		(s as AudioStreamWAV).loop_mode = AudioStreamWAV.LOOP_FORWARD
+	elif s is AudioStreamOggVorbis:
+		(s as AudioStreamOggVorbis).loop = true
+	return s
+
+func _on_player_health(ratio: float) -> void:
+	var low := ratio < LOW_HP_THRESHOLD
+	if low == _low_hp:
+		return
+	_low_hp = low
+	if low:
+		_heartbeat.play()
+		_breath.play()
+	else:
+		_heartbeat.stop()
+		_breath.stop()
 
 ## Щелчок фонаря: реальные сэмплы вместо процедурного клика.
 func _on_flashlight_toggled(enabled: bool) -> void:
@@ -137,7 +182,10 @@ func _process(delta: float) -> void:
 	if _thunder_timer > 0.0:
 		_thunder_timer -= delta
 		if _thunder_timer <= 0.0:
-			_one_shot(_gen_thunder(), -6.0)
+			# ~40% near / 60% far - a storm reads as mostly distant rolls
+			# with the occasional close crack, not every strike overhead.
+			var clap: AudioStream = THUNDER_NEAR_SFX if randf() < 0.4 else THUNDER_FAR_SFX
+			_one_shot(clap, -6.0)
 			_thunder_timer = randf_range(6.0, 14.0)
 	_threat_timer -= delta
 	if _threat_timer <= 0.0:
@@ -194,15 +242,6 @@ func _wrap_loop(b: PackedByteArray) -> AudioStreamWAV:
 	s.loop_end = b.size()
 	return s
 
-func _gen_rain(seconds: float) -> AudioStreamWAV:
-	var b := _buf(seconds)
-	var prev := 128
-	for i in b.size():
-		var n := randi() % 256
-		prev = (prev * 3 + n) / 4
-		b[i] = clampi(prev, 0, 255)
-	return _wrap_loop(b)
-
 func _gen_drone(seconds: float) -> AudioStreamWAV:
 	var b := _buf(seconds)
 	for i in b.size():
@@ -227,18 +266,6 @@ func _gen_click() -> AudioStreamWAV:
 		var env := 1.0 - float(i) / float(b.size())
 		var v := sin(t * 1800.0 * TAU) * env
 		b[i] = clampi(int(128.0 + v * 120.0), 0, 255)
-	return _wrap(b)
-
-func _gen_thunder() -> AudioStreamWAV:
-	var b := _buf(1.2)
-	var prev := 128
-	for i in b.size():
-		var env := exp(-float(i) / float(MIX) * 2.5)
-		var n := randi() % 256
-		prev = (prev * 2 + n) / 3
-		var v := (float(prev) / 255.0 - 0.5) * env
-		v += sin(float(i) / float(MIX) * 40.0 * TAU) * 0.3 * env
-		b[i] = clampi(int(128.0 + v * 150.0), 0, 255)
 	return _wrap(b)
 
 func _gen_growl() -> AudioStreamWAV:

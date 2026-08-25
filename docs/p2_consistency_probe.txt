@@ -1,0 +1,5 @@
+alive
+skill_tree: tabs=3 first_tab_buttons=5 icon_found=true
+workbench: comp_labels=3
+weapon_compare: from=Pistol to=Rifle rows=6 panel_visible=true
+ending sting playing=true stream=true
