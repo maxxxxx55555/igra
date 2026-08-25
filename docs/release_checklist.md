@@ -28,7 +28,11 @@ short top-level punch list; those cover the details.
 
 ## IARC Rating
 - [ ] Complete IARC rating questionnaire
-- [ ] Expected: 12+ (horror themes, mild violence)
+- [ ] Expected: **PEGI 16** (updated from 12+ — see `docs/store/play_store.md`
+      "Rating note" and `docs/store/HUMAN_CHECKLIST.md`: sustained horror
+      tension, visible blood/bleed status effects, deliberate-mass-casualty
+      narrative thread. This is a judgment call flagged for a second human
+      look before the actual IARC submission, not a settled fact.)
 - [ ] Submit via Google Play Console
 
 ## ASO (App Store Optimization)
