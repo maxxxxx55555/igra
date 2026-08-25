@@ -1,0 +1,3 @@
+alive
+hud added, children=20
+frame done
