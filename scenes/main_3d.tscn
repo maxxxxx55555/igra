@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3]
+[gd_scene load_steps=19 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/environment/world_env.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud_3d.tscn" id="2"]
@@ -14,6 +14,7 @@
 [ext_resource type="Script" path="res://scripts/world/streetlight_spawner.gd" id="16"]
 [ext_resource type="Script" path="res://scripts/ui/ending_screen.gd" id="19_Ending"]
 [ext_resource type="Script" path="res://scripts/net/lan_menu.gd" id="20_LANMen"]
+[ext_resource type="Script" path="res://scripts/ui/toast_manager.gd" id="21_Toast"]
 
 [sub_resource type="ParticleProcessMaterial" id="ash_mat"]
 emission_shape = 2
@@ -104,3 +105,6 @@ script = ExtResource("19_Ending")
 
 [node name="LANMenu" type="CanvasLayer" parent="."]
 script = ExtResource("20_LANMen")
+
+[node name="ToastManager" type="CanvasLayer" parent="."]
+script = ExtResource("21_Toast")

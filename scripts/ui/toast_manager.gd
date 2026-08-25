@@ -1,118 +1,102 @@
 extends CanvasLayer
+## P0 (CONTENT UX wave): EventBus.toast_requested is emitted from 10+ call
+## sites (puzzle_system.gd, power_switch.gd, finale_director.gd, ftue_*.gd,
+## daily_events_ui.gd) but had zero listeners anywhere in the project —
+## every "+5 coins", "District restored!", "Boss appears" notification was
+## silently dropped. Emitter call sites are unchanged; message text is
+## exactly what they already send.
+##
+## This file already existed (committed, unused - never instantiated
+## anywhere, never connected to the signal, own show_toast() API nobody
+## called) with a different design: top-right, one-at-a-time via a Timer
+## queue, text-glyph icons, and a type vocabulary (achievement/quest/
+## warning/finding) that doesn't match what's actually emitted (finding/
+## achievement/objective/danger - "warning"/"quest" never fire). This wave
+## asks for top-left, up to 3 simultaneous, real icons_v2 art - a different
+## shape, not a tweak - so replaced rather than patched. Prior version is
+## in git history (commit bddbded) if any of it is wanted later.
 
-## Toast notification system — всплывающие сообщения (достижения, квесты, находки).
+const MAX_VISIBLE: int = 3
+const FADE_IN: float = 0.2
+const HOLD: float = 3.5
+const FADE_OUT: float = 0.3
 
-signal toast_dismissed()
+## type -> icons_v2/event_*_48.png. Only "danger" and "objective" have a
+## real semantic match (siren = alarm, breaker = power event); "finding"
+## and "achievement" (the other two types actually emitted) render
+## text-only by design, not by a missing-file accident - ResourceLoader.
+## exists() is still checked so a renamed/missing file degrades the same way.
+const _TYPE_ICON: Dictionary = {
+	"danger": "res://assets/textures/icons_v2/event_siren_48.png",
+	"objective": "res://assets/textures/icons_v2/event_breaker_48.png",
+}
 
-@onready var _timer: Timer = Timer.new()
+var _stack: VBoxContainer
 var _queue: Array[Dictionary] = []
-var _active: bool = false
-
-const DURATION: float = 3.0
-const TOAST_HEIGHT: float = 60.0
+var _visible_count: int = 0
 
 func _ready() -> void:
-	layer = 100
-	_timer.wait_time = DURATION
-	_timer.one_shot = true
-	_timer.timeout.connect(_on_timeout)
-	add_child(_timer)
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	layer = 90
+	var root := Control.new()
+	root.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	root.position = Vector2(16, 16)
+	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(root)
+	_stack = VBoxContainer.new()
+	_stack.add_theme_constant_override("separation", 8)
+	_stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.add_child(_stack)
+	EventBus.toast_requested.connect(_on_toast_requested)
 
-## Показать toast: text (строка), type (achievement/finding/warning/quest)
-func show_toast(text: String, type: String = "finding") -> void:
+func _on_toast_requested(text: String, type: String) -> void:
 	_queue.append({"text": text, "type": type})
-	if not _active:
-		_display_next()
+	_pump()
 
-func _display_next() -> void:
-	if _queue.is_empty():
-		_active = false
-		return
-	_active = true
-	var data: Dictionary = _queue.pop_front()
-	var color: Color
-	var icon_text: String
-	match data["type"]:
-		"achievement":
-			color = Color("c9a24a")
-			icon_text = "*"
-		"quest":
-			color = Color("4a9ab5")
-			icon_text = "?"
-		"warning":
-			color = Color("b4452f")
-			icon_text = "!"
-		_:
-			color = Color("aeb6bf")
-			icon_text = "-"
-	_build_toast(data["text"], color, icon_text)
-	_timer.start()
+func _pump() -> void:
+	while _visible_count < MAX_VISIBLE and not _queue.is_empty():
+		_show(_queue.pop_front())
 
-func _build_toast(text: String, color: Color, icon_text: String) -> void:
-	for c in get_children():
-		if c is Control:
-			c.queue_free()
-	await get_tree().process_frame
+func _show(data: Dictionary) -> void:
+	_visible_count += 1
+	var row := PanelContainer.new()
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color(ThemeProvider.COLOR_BG_PANEL.r, ThemeProvider.COLOR_BG_PANEL.g,
+		ThemeProvider.COLOR_BG_PANEL.b, 0.92)
+	sb.border_color = ThemeProvider.COLOR_AMBER
+	sb.set_border_width_all(1)
+	sb.content_margin_left = 10
+	sb.content_margin_right = 10
+	sb.content_margin_top = 6
+	sb.content_margin_bottom = 6
+	row.add_theme_stylebox_override("panel", sb)
+	row.modulate.a = 0.0
+	_stack.add_child(row)
 
-	var panel := PanelContainer.new()
-	panel.anchors_preset = Control.PRESET_TOP_RIGHT
-	panel.anchor_left = 0.65
-	panel.anchor_right = 0.95
-	panel.anchor_top = 0.02
-	panel.anchor_bottom = 0.0
-	panel.offset_bottom = TOAST_HEIGHT
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color("141b24")
-	style.border_color = color
-	style.set_border_width_all(1)
-	style.set_corner_radius_all(0)
-	style.set_content_margin_all(10)
-	panel.add_theme_stylebox_override("panel", style)
+	var hb := HBoxContainer.new()
+	hb.add_theme_constant_override("separation", 8)
+	row.add_child(hb)
 
-	var hbox := HBoxContainer.new()
-	hbox.add_theme_constant_override("separation", 8)
-	panel.add_child(hbox)
+	var icon_path: String = _TYPE_ICON.get(String(data["type"]), "")
+	if icon_path != "" and ResourceLoader.exists(icon_path):
+		var icon := TextureRect.new()
+		icon.texture = load(icon_path)
+		icon.custom_minimum_size = Vector2(20, 20)
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		hb.add_child(icon)
 
-	# 3.14 Спека: timestamps уведомлений (HH:MM игрового времени).
-	var ts_label := Label.new()
-	ts_label.text = _toast_timestamp()
-	ts_label.add_theme_color_override("font_color", Color("8a7338"))
-	ts_label.add_theme_font_size_override("font_size", 12)
-	ts_label.custom_minimum_size = Vector2(46, 0)
-	hbox.add_child(ts_label)
+	var lbl := Label.new()
+	lbl.text = String(data["text"])
+	lbl.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT)
+	hb.add_child(lbl)
 
-	var icon_label := Label.new()
-	icon_label.text = icon_text
-	icon_label.add_theme_color_override("font_color", color)
-	icon_label.custom_minimum_size = Vector2(20, 0)
-	hbox.add_child(icon_label)
-
-	var msg_label := Label.new()
-	msg_label.text = text
-	msg_label.add_theme_color_override("font_color", Color("d8d2c4"))
-	msg_label.autowrap_mode = TextServer.AUTOWRAP_WORD
-	hbox.add_child(msg_label)
-
-	add_child(panel)
-	_fade_in(panel)
-
-## Возвращает "[HH:MM]" в реальном времени (игровое время — опционально
-## повесить на DayNight-сигнал позже, см. §V.4 в GDD).
-func _toast_timestamp() -> String:
-	var dt := Time.get_datetime_dict_from_system()
-	return "[%02d:%02d]" % [dt["hour"], dt["minute"]]
-
-func _fade_in(panel: Control) -> void:
-	panel.modulate.a = 0.0
 	var tw := create_tween()
-	tw.tween_property(panel, "modulate:a", 1.0, 0.2)
-
-func _on_timeout() -> void:
-	for c in get_children():
-		if c is Control:
-			var tw := create_tween()
-			tw.tween_property(c, "modulate:a", 0.0, 0.3)
-			tw.tween_callback(c.queue_free)
-	toast_dismissed.emit()
-	await get_tree().create_timer(0.4).timeout
-	_display_next()
+	tw.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tw.tween_property(row, "modulate:a", 1.0, FADE_IN)
+	tw.tween_interval(HOLD)
+	tw.tween_property(row, "modulate:a", 0.0, FADE_OUT)
+	tw.tween_callback(func() -> void:
+		row.queue_free()
+		_visible_count -= 1
+		_pump())
