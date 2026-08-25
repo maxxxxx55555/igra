@@ -12,7 +12,19 @@ const SkillButtonScene := preload("res://scenes/ui/skill_button.tscn")
 func setup(tree_id: StringName, tree_data: Dictionary) -> void:
 	_tree_id = tree_id
 	_tree_data = tree_data
-	
+
+	# P2 (FINAL INTEGRATION wave): real branch header banner above the
+	# skill grid, ids grep-locked against SKILL_TREES keys (combat/
+	# survival/utility) - delivered mid-session (REPORT_UNBLOCK_V2.md).
+	var header_path := "res://assets/textures/icons_v2/branches/%s_header_256x64.png" % String(tree_id)
+	if ResourceLoader.exists(header_path):
+		var header := TextureRect.new()
+		header.custom_minimum_size = Vector2(0, 48)
+		header.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		header.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		skill_grid.get_parent().add_child(header)
+		skill_grid.get_parent().move_child(header, 0)
+
 	var skills = tree_data.skills
 	skill_grid.columns = 4
 	

@@ -128,7 +128,10 @@ func _add_weapon_icon(parent: Node, weapon: WeaponBase) -> void:
 	var id := String(weapon.weapon_name).to_lower()
 	if id == "":
 		return
-	var path := "res://assets/textures/icons/weapons/%s_128.png" % id
+	# REPORT_UNBLOCK_V2 delivered a render specifically tagged for this
+	# screen (mid-session, after the icons/weapons/*_128 set already
+	# wired here) - switched to the one built for this exact consumer.
+	var path := "res://assets/textures/renders_v2/weapons/%s_render_256.png" % id
 	if not ResourceLoader.exists(path):
 		return
 	var icon := TextureRect.new()

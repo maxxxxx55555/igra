@@ -36,9 +36,23 @@ func _build() -> void:
 		panel.set_anchors_preset(Control.PRESET_CENTER)
 	panel.custom_minimum_size = Vector2(460, 360)
 	add_child(panel)
+	var hb := HBoxContainer.new()
+	hb.add_theme_constant_override("separation", 12)
+	panel.add_child(hb)
+	# P2 (FINAL INTEGRATION wave): real player render, side panel next to
+	# the stats column - delivered mid-session (REPORT_UNBLOCK_V2.md),
+	# this was logged as blocked/missing earlier in this same session.
+	var render_path := "res://assets/textures/renders_v2/player_512x768.png"
+	if ResourceLoader.exists(render_path):
+		var render := TextureRect.new()
+		render.custom_minimum_size = Vector2(128, 192)
+		render.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		render.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		hb.add_child(render)
 	var vb := VBoxContainer.new()
 	vb.add_theme_constant_override("separation", 10)
-	panel.add_child(vb)
+	vb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	hb.add_child(vb)
 	var t := Label.new()
 	t.text = LocalizationManager.t("STATS_TITLE")
 	t.add_theme_font_size_override("font_size", ThemeProvider.FONT_SIZE_TITLE)

@@ -23,16 +23,23 @@ const RECIPES: Array[Dictionary] = [
 ]
 
 ## P2 (FINAL INTEGRATION wave): craft material icons -> ingredient chips
-## only, result icons stay V1 per the brief. icons_v2 filenames don't match
-## RECIPES' component ids 1:1 (delivered as a fixed 10-item generic set,
-## not full item coverage) - explicit map for the ids that DO have art;
-## every other component (fabric/alcohol/cable/fuse/gunpowder/case/metal/
-## paper/bottle - most of the actual recipe list) renders text-only, which
-## is the "consistent within chips" the brief asks for: a missing icon
-## reliably means no icon, not a wrong one.
+## only, result icons stay V1 per the brief. icons_v2/craft/ (delivered
+## mid-session via REPORT_UNBLOCK_V2.md, grep-locked to the union of
+## RECIPES components + recipes.json "needs") covers every RECIPES
+## component id except "tool" - falls back to the older generic
+## icons_v2/tools_128.png for that one so coverage is still 9/9, not 8/9.
 const _INGREDIENT_ICON: Dictionary = {
 	"tool": "res://assets/textures/icons_v2/tools_128.png",
-	"battery": "res://assets/textures/icons_v2/battery_pack_128.png",
+	"battery": "res://assets/textures/icons_v2/craft/battery_64.png",
+	"fabric": "res://assets/textures/icons_v2/craft/fabric_64.png",
+	"alcohol": "res://assets/textures/icons_v2/craft/alcohol_64.png",
+	"cable": "res://assets/textures/icons_v2/craft/cable_64.png",
+	"fuse": "res://assets/textures/icons_v2/craft/fuse_64.png",
+	"gunpowder": "res://assets/textures/icons_v2/craft/gunpowder_64.png",
+	"case": "res://assets/textures/icons_v2/craft/case_64.png",
+	"metal": "res://assets/textures/icons_v2/craft/metal_64.png",
+	"paper": "res://assets/textures/icons_v2/craft/paper_64.png",
+	"bottle": "res://assets/textures/icons_v2/craft/bottle_64.png",
 }
 
 var _active_tab: int = 0

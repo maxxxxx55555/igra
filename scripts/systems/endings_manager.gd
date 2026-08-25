@@ -18,20 +18,25 @@ const ENDING_DATA: Dictionary = {
 ## P2 (FINAL INTEGRATION wave): GAMEFEEL V2 delivered one sting per ending
 ## (assets/audio/jingles/ending_*_sting.ogg) but nothing anywhere connected
 ## to ending_reached - grepped the whole project for ".connect(" on this
-## signal before writing this, zero matches. Only "full" tracks were asked
-## for in the brief (ending_light_full.ogg / ending_dark_full.ogg for two
-## of the five endings specifically); those don't exist on disk under that
-## name or any other - checked assets/audio/ and the delivery reports.
-## Wiring the real, delivered stings for all 5 endings is a strict superset
-## of "something plays for light/dark" using what's actually here, rather
-## than leaving genuinely finished audio silent because the fuller ask
-## can't be met.
+## signal before writing this, zero matches. "Full" tracks for light/dark
+## specifically (ending_light_full.ogg / ending_dark_full.ogg) didn't exist
+## anywhere when this wave started - checked assets/audio/ and every
+## delivery report - so all 5 endings were wired to their stings first, a
+## strict superset of "something plays for light/dark" using what existed
+## at the time. REPORT_UNBLOCK_V2.md then delivered exactly those 2 full
+## tracks mid-session (assets/audio/ending_music/), so light/dark now play
+## their real 60s loop-safe full track instead; hope/survivor/truth keep
+## their stings, per the brief's own "other endings keep stings."
 const _STING_PATH: Dictionary = {
 	"light": "res://assets/audio/jingles/ending_light_sting.ogg",
 	"hope": "res://assets/audio/jingles/ending_hope_sting.ogg",
 	"survivor": "res://assets/audio/jingles/ending_survivor_sting.ogg",
 	"dark": "res://assets/audio/jingles/ending_dark_sting.ogg",
 	"truth": "res://assets/audio/jingles/ending_truth_sting.ogg",
+}
+const _FULL_TRACK_PATH: Dictionary = {
+	"light": "res://assets/audio/ending_music/ending_light_full.ogg",
+	"dark": "res://assets/audio/ending_music/ending_dark_full.ogg",
 }
 var _sting_player: AudioStreamPlayer
 
@@ -125,6 +130,14 @@ func force_ending(ending_id: StringName) -> void:
 	ending_reached.emit(ending_id)
 
 func _play_sting(ending_id: StringName) -> void:
+	var full_path: String = _FULL_TRACK_PATH.get(String(ending_id), "")
+	if full_path != "" and ResourceLoader.exists(full_path):
+		var track: AudioStream = load(full_path)
+		if track is AudioStreamOggVorbis:
+			(track as AudioStreamOggVorbis).loop = true
+		_sting_player.stream = track
+		_sting_player.play()
+		return
 	var path: String = _STING_PATH.get(String(ending_id), "")
 	if path == "" or not ResourceLoader.exists(path):
 		return

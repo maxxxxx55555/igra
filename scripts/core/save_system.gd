@@ -11,6 +11,11 @@ var _quest_data: Dictionary = {}
 var _photos: Array = []
 var _daily_streak: int = 0
 var _last_daily_time: int = 0
+## P1 (FINAL INTEGRATION wave): "seen the onboarding overlay" - deliberately
+## NOT touched by reset_all() (a "New Game" reset re-runs progress/inventory/
+## quests, not "has this player ever seen the tutorial"), so it survives
+## across New Game resets on the same save slot and only ever shows once.
+var _onboard_done: bool = false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -134,6 +139,7 @@ func _save() -> void:
 		"photos": _photos,
 		"daily_streak": _daily_streak,
 		"last_daily_time": _last_daily_time,
+		"onboard_done": _onboard_done,
 	}
 	_write_atomic(SAVE_PATH, payload)
 
@@ -166,7 +172,17 @@ func load_all() -> bool:
 	_last_daily_time = int(data.get("last_daily_time", 0))
 	SkillTreeManager.load_data(data.get("skill_tree", {}))
 	XpManager.load_data(data.get("xp", {}))
+	_onboard_done = bool(data.get("onboard_done", false))
 	return true
+
+func is_onboard_done() -> bool:
+	return _onboard_done
+
+func mark_onboard_done() -> void:
+	if _onboard_done:
+		return
+	_onboard_done = true
+	_save()
 
 func reset_all() -> void:
 	PowerGrid.reset()

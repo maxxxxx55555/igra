@@ -1,0 +1,9 @@
+alive
+onboard showing=true root_children=2
+after 3 next, index=3 still_showing=true
+after 4th next (finish), showing=false onboard_done=true
+stats_ui children=3
+skill branch header found=true
+ending=light stream_class=AudioStreamOggVorbis playing=true
+workbench repair_kit comp_labels=4
+done

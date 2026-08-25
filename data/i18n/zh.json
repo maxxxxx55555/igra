@@ -808,5 +808,10 @@
   "WEAKSPOT_FIRE_ELECTRIC": "Fire / Electric",
   "WEAKSPOT_FIRE_IMMUNE": "Immune to fire",
   "WEAKSPOT_BULLET": "Bullets",
-  "WEAKSPOT_STROBE_COMBO": "Strobe + attack combo"
+  "WEAKSPOT_STROBE_COMBO": "Strobe + attack combo",
+  "ONBOARD_01_CAPTION": "Light is your only tool. Keep it close - it's dark here.",
+  "ONBOARD_02_CAPTION": "Turn on your flashlight to see - but the light gives you away too.",
+  "ONBOARD_03_CAPTION": "Reach a streetlight and power it on - that's how light returns to the city.",
+  "ONBOARD_04_CAPTION": "Every lit streetlight lights the street and pushes the danger back.",
+  "ONBOARD_NEXT": "Next"
 }
