@@ -64,12 +64,12 @@ func _update_light(stage: int = -1) -> void:
 		glow.light_energy = 1.0
 		glow.omni_range = 6.0
 
-## Гул лампы звучит только пока фонарь горит.
+## P4 (CONTENT UX wave): gул лампы теперь идёт через общий пул на
+## StreetlightHumPool (max 8 голосов, ближайшие к игроку горящие фонари) -
+## раньше каждый горящий столб держал свой AudioStreamPlayer3D, до 24
+## одновременных 3D-потоков на район, большинство неслышны за max_distance.
 func _update_hum() -> void:
-	var hum := get_node_or_null("Hum") as AudioStreamPlayer3D
-	if hum == null:
-		return
-	if _on and not hum.playing:
-		hum.play()
-	elif not _on and hum.playing:
-		hum.stop()
+	if _on:
+		StreetlightHumPool.register(self)
+	else:
+		StreetlightHumPool.unregister(self)
