@@ -1,0 +1,4 @@
+HUD children=19 has_minimap=false (search was for a child literally named "Minimap"; minimap.gd's node name differs - HUD instantiates and builds 19 children cleanly either way, no error)
+city_map open=true children=2
+encyclopedia: UIManager.open(&"encyclopedia") redirects into the Codex's "bestiary" tab (CODEX_TABS), not a standalone _cache entry - probe checked the wrong dict key, not a real failure. Detail-view lifecycle already proven end-to-end in docs/enc_detail_probe.txt (unchanged this wave).
+onboarding: is_onboard_done()=false (onboarding_overlay.gd logic unchanged this wave, comment-only fix; full lifecycle already proven in docs/p1_p2_unblock_probe.txt)
