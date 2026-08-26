@@ -1,0 +1,7 @@
+hospital detail playing=true stream=res://assets/audio/ambience/district_details/hospital_gurney_wheels.ogg
+substation detail playing=true stream=res://assets/audio/ambience/district_details/substation_transformer_buzz.ogg
+back to hospital stream=res://assets/audio/ambience/district_details/hospital_pa_mumble.ogg
+battle variant picks over 20 calls: { "res://assets/audio/music/music_battle.wav": 10, "res://assets/audio/music/music_combat.ogg": 10 }
+weather=WIND rain_target=0.0 wind_target=1.0
+weather=STORM rain_target=1.0 wind_target=0.0
+weather=CLEAR rain_target=0.0 wind_target=0.0

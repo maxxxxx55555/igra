@@ -3,8 +3,8 @@ extends CanvasLayer
 ## assets/textures/onboard_v2/ exists (delivered mid-session in
 ## REPORT_UNBLOCK_V2.md - was blocked/logged as missing in this same
 ## session's earlier P1 attempt). 4 panels shown once ever per save
-## profile (SaveSystem.onboard_done, unaffected by New Game resets - see
-## save_system.gd), NEXT/SKIP, never blocks gameplay after dismissal.
+## profile (SaveSystem is_onboard_done flag, unaffected by New Game resets -
+## see save_system.gd), NEXT/SKIP, never blocks gameplay after dismissal.
 
 const PANELS: Array[Dictionary] = [
 	{"img": "res://assets/textures/onboard_v2/onboard_01_spawn_256x144.png", "caption": "ONBOARD_01_CAPTION"},

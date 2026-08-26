@@ -27,6 +27,14 @@ const TRACKS: Dictionary = {
 	Mood.BOSS: "res://assets/audio/music/music_boss_dark.wav",
 	Mood.VICTORY: "res://assets/audio/music/music_victory.wav",
 }
+## BUGS_FOR_CLAUDE #3: music_combat.ogg had zero consumers. Rather than
+## delete a complete, normalized track (GDD gives no combat-layer canon
+## either way), wire it as a second BATTLE variant picked at random each
+## fresh transition into combat, so encounters don't always hear the same cue.
+const BATTLE_VARIANTS: Array[String] = [
+	"res://assets/audio/music/music_battle.wav",
+	"res://assets/audio/music/music_combat.ogg",
+]
 ## Эмбиент по районам: у каждого своя атмосферная подложка. Запасной
 ## вариант, если для района нет своей подложки ниже (не должно случаться —
 ## AMBIENCE_DARK_BY_DISTRICT покрывает все 11).
@@ -82,6 +90,8 @@ const LAYERS: Dictionary = {
 	"threat_low": "res://assets/audio/music/layer_threat_low.ogg",
 	"threat_high": "res://assets/audio/music/layer_threat_high.ogg",
 	"action": "res://assets/audio/music/layer_action.ogg",
+	"rain": "res://assets/audio/ambience/weather/rain_loop.ogg",
+	"wind": "res://assets/audio/ambience/weather/wind_loop.ogg",
 }
 ## Разовый акцент при обнаружении (play_sting()) — отдельный ассет и
 ## механика от постоянного слоя "action" выше, не путать.
@@ -115,6 +125,12 @@ var _current_district: StringName = &""
 var _layers: Dictionary = {}          ## имя слоя -> AudioStreamPlayer
 var _layer_target: Dictionary = {}    ## имя слоя -> целевая громкость 0..1
 var _sting: AudioStreamPlayer = null
+## BUGS_FOR_CLAUDE #5: the mastered weather beds under LAYERS["rain"/"wind"]
+## had no hook anywhere — audio_manager.gd's rain/wind players are a separate,
+## always-on procedural/one-shot layer, not these. Weather.RAIN/STORM raise
+## "rain", Weather.WIND raises "wind" (STORM implies heavy rain, not gusts,
+## per weather_system.gd's own RAIN_STRENGTH table).
+var _weather_id: int = 0
 ## FINAL PERFECTION P0: раньше _ready() автозагрузки включал музыку и все
 ## 4 слоя сразу при старте процесса — до показа меню, до любого ввода
 ## (слышимый "гул" на загрузке). Теперь ни один плеер не .play() до первого
@@ -138,6 +154,7 @@ func _ready() -> void:
 	EventBus.enemy_attack.connect(func(_d: int) -> void: _combat_hold = CALM_DELAY)
 	EventBus.district_entered.connect(_on_district_entered)
 	EventBus.district_stage_changed.connect(_on_district_stage_changed)
+	EventBus.weather_changed.connect(func(w: int, _n: String, _fog: float, _rain: float) -> void: _weather_id = w)
 	mood = Mood.MENU
 
 ## Ловит буквально первый ввод игрока (клавиша/клик/тач/геймпад) — а не
@@ -250,6 +267,8 @@ static func _force_loop(s: AudioStream) -> void:
 
 func _load(m: Mood) -> AudioStream:
 	var path: String = _ambient_path if m == Mood.AMBIENT else TRACKS.get(m, "")
+	if m == Mood.BATTLE:
+		path = BATTLE_VARIANTS[randi() % BATTLE_VARIANTS.size()]
 	if path == "" or not ResourceLoader.exists(path):
 		return null
 	if _cache.has(path):
@@ -386,3 +405,5 @@ func _update_layer_targets() -> void:
 	## P1: 5-й слой ("action") — тот же реальный бой, что двигает Mood.BATTLE,
 	## а не просто "враг рядом" (threat_high шире и включает удержание после боя).
 	_layer_target["action"] = 1.0 if mood == Mood.BATTLE else 0.0
+	_layer_target["rain"] = 1.0 if _weather_id in [WeatherSystem.Weather.RAIN, WeatherSystem.Weather.STORM] else 0.0
+	_layer_target["wind"] = 1.0 if _weather_id == WeatherSystem.Weather.WIND else 0.0
