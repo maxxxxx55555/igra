@@ -149,8 +149,16 @@ func apply_hit(target: Node, dmg: float) -> void:
 func _exclude_owner(ray: RayCast3D) -> void:
 	if _owner_excluded:
 		return
-	if _owner is CollisionObject3D:
-		ray.add_exception(_owner as CollisionObject3D)
+	var body := _owner as CollisionObject3D
+	if body == null:
+		# Страховка на случай, если владельца не передали: камера стоит внутри
+		# капсулы игрока, поэтому без исключения каждый выстрел попадал бы в себя.
+		var n := get_parent()
+		while n != null and body == null:
+			body = n as CollisionObject3D
+			n = n.get_parent()
+	if body != null:
+		ray.add_exception(body)
 		_owner_excluded = true
 
 ## Перезарядка по таймеру (GDD §18). `reserve` — сколько патронов реально

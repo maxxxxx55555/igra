@@ -13,9 +13,16 @@ var _unlocked: Array[int] = []
 
 func _ready() -> void:
 	_collect_children()
+	# _ready детей исполняется раньше _ready родителя, а в группу "player"
+	# игрок добавляет себя сам (player_3d.gd, add_to_group) — на этом кадре
+	# группы ещё нет, и поиск по группе вернул бы null. Владелец оружия — это
+	# наш родитель; группа остаётся запасным путём.
+	var shooter := get_parent() as Node3D
+	if shooter == null:
+		shooter = get_tree().get_first_node_in_group("player") as Node3D
 	for i in weapon_slots.size():
 		if weapon_slots[i]:
-			weapon_slots[i].set_shooter(get_tree().get_first_node_in_group("player"))
+			weapon_slots[i].set_shooter(shooter)
 			weapon_slots[i].ammo_changed.connect(_on_ammo_changed)
 	
 	_unlocked.clear()
