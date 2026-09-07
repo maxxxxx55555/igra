@@ -13,6 +13,21 @@ class_name DistrictLoot
 
 const PICKUP_SCENE: PackedScene = preload("res://scenes/pickups/item_pickup_3d.tscn")
 const DOC_SCENE: PackedScene = preload("res://scenes/pickups/document_pickup.tscn")
+const WEAPON_PICKUP_SCENE: PackedScene = preload("res://scenes/pickups/weapon_pickup.tscn")
+
+## Огнестрельный слой (GDD §18): патроны и стволы лежат там, где их логично
+## искать, — в полиции, на складах и в промзоне. Пистолет у игрока есть сразу,
+## автомат и дробовик находятся в мире (weapon_pickup -> unlock_weapon).
+const AMMO_ITEM: StringName = &"ammo"
+const AMMO_DROPS: Dictionary = {
+	&"police": 24,
+	&"warehouses": 18,
+	&"industrial": 12,
+}
+const WEAPON_DROPS: Dictionary = {
+	&"police": "rifle",
+	&"warehouses": "shotgun",
+}
 
 ## Базовый набор: встречается почти везде, поддерживает фонарь и здоровье.
 const COMMON: Array[StringName] = [&"battery", &"battery", &"scrap", &"medkit"]
@@ -96,6 +111,15 @@ static func populate(district_root: Node3D, district_id: StringName) -> int:
 		if _spawn_item(district_root, item_id, pos):
 			placed += 1
 
+	if AMMO_DROPS.has(district_id):
+		var apos := _scatter(district_root, rng)
+		if _spawn_item(district_root, AMMO_ITEM, apos, int(AMMO_DROPS[district_id])):
+			placed += 1
+	if WEAPON_DROPS.has(district_id):
+		var wpos := _scatter(district_root, rng)
+		if _spawn_weapon(district_root, String(WEAPON_DROPS[district_id]), wpos):
+			placed += 1
+
 	if DOCUMENTS.has(district_id):
 		var dpos := _scatter(district_root, rng)
 		if _spawn_document(district_root, String(DOCUMENTS[district_id]), dpos):
@@ -107,14 +131,23 @@ static func _scatter(root: Node3D, rng: RandomNumberGenerator) -> Vector3:
 	var rad := rng.randf_range(RADIUS_MIN, RADIUS_MAX)
 	return root.global_position + Vector3(cos(ang) * rad, DROP_Y, sin(ang) * rad)
 
-static func _spawn_item(root: Node3D, item_id: StringName, pos: Vector3) -> bool:
+static func _spawn_item(root: Node3D, item_id: StringName, pos: Vector3, amount: int = 1) -> bool:
 	var node := PICKUP_SCENE.instantiate() as Node3D
 	if node == null:
 		return false
 	root.add_child(node)
 	node.global_position = pos
 	if node.has_method("set_item"):
-		node.call("set_item", item_id, 1)
+		node.call("set_item", item_id, amount)
+	return true
+
+static func _spawn_weapon(root: Node3D, weapon_id: String, pos: Vector3) -> bool:
+	var node := WEAPON_PICKUP_SCENE.instantiate() as Node3D
+	if node == null:
+		return false
+	root.add_child(node)
+	node.global_position = pos
+	node.set("weapon_name", weapon_id)
 	return true
 
 static func _spawn_document(root: Node3D, doc_id: String, pos: Vector3) -> bool:

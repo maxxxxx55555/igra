@@ -23,15 +23,10 @@ func fire(from_pos: Vector3 = Vector3.ZERO, direction: Vector3 = Vector3.FORWARD
 	_fire_timer = fire_rate
 	current_ammo -= 1
 	ammo_changed.emit(current_ammo, max_ammo)
-	if _ray:
-		_ray.target_position = Vector3(randf() - 0.5, randf() - 0.5, -1) * hitscan_spread + Vector3(0, 0, -10)
-		_ray.force_raycast_update()
-		if _ray.is_colliding():
-			var target := _ray.get_collider()
-			if target and target.has_method("take_damage"):
-				target.take_damage(hitscan_damage, Vector3.ZERO, EnemyRosterData.DamageType.BULLET)
-			elif target and target.has_node("HealthComponent"):
-				target.get_node("HealthComponent").take_damage(hitscan_damage)
+	# Общий хитскан WeaponBase: тот же RayCast3D из сцены, но с исключением
+	# собственного тела игрока и с реальной точкой попадания в take_damage.
+	hitscan_ray(_ray, hitscan_spread, float(hitscan_damage))
+	_spawn_muzzle(from_pos)
 	if _sfx:
 		_sfx.pitch_scale = 1.2
 		_sfx.play()

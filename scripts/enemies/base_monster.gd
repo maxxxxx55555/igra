@@ -579,13 +579,13 @@ func _die() -> void:
 	_maybe_drop_loot()
 
 ## §6.2: "Loot: 30% шанс с трупа". Roster-flag loot_ammo — обозначает дроп
-## с "боеприпасников" (Sharpshooter). Изначально использовал
-## scenes/pickups/ammo_pickup.tscn -> player.add_ammo(), но add_ammo() нигде
-## не определён (WeaponManager/ammo-экономика — незадействованный
-## каркас, см. weapon_pickup.gd) — подбор молча ничего не делал. Даёт
-## реальный предмет через уже рабочую систему инвентаря вместо этого.
+## с "боеприпасников" (Sharpshooter). Раньше здесь лежала батарейка: метод
+## player.add_ammo() не существовал, и флаг loot_ammo не значил ничего.
+## Теперь огнестрельный слой живой, поэтому «боеприпасник» роняет патроны —
+## универсальный предмет ammo, из которого WeaponManager берёт перезарядку.
 const _ITEM_PICKUP := preload("res://scenes/pickups/item_pickup_3d.tscn")
-const _LOOT_ITEM: StringName = &"battery"
+const _LOOT_ITEM: StringName = &"ammo"
+const _LOOT_AMOUNT: int = 12
 const _VFX_HIT := preload("res://scenes/vfx/vfx_hit_spark.tscn")
 const _VFX_DEATH := preload("res://scenes/vfx/vfx_blood.tscn")
 
@@ -598,7 +598,7 @@ func _maybe_drop_loot() -> void:
 	get_tree().current_scene.add_child(pickup)
 	pickup.global_position = global_position + Vector3(0, 0.5, 0)
 	if pickup.has_method("set_item"):
-		pickup.set_item(_LOOT_ITEM, 1)
+		pickup.set_item(_LOOT_ITEM, _LOOT_AMOUNT)
 
 func _death_effect() -> void:
 	_spawn_vfx(_VFX_DEATH, global_position + Vector3(0, 1.0, 0))

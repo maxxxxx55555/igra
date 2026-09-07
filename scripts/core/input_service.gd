@@ -5,6 +5,10 @@ signal attack_requested()
 signal jump_requested()
 signal flashlight_requested()
 signal dodge_requested(dir: Vector2)
+## Огнестрельный слой: перезарядка и листание оружия идут сигналом, чтобы
+## клавиатура (R / колесо мыши) и тач-кнопки HUD шли одним путём.
+signal reload_requested()
+signal weapon_cycle_requested(dir: int)
 ## Клавиши 1-6 были заведены в project.godot, но их никто не слушал:
 ## быстрые слоты работали только мышью/тачем.
 signal quick_slot_requested(index: int)
@@ -66,6 +70,23 @@ func request_flashlight() -> void:
 func request_dodge(dir: Vector2) -> void:
 	dodge_requested.emit(dir)
 
+## Удержание огня: ПК — ПКМ, тач — BtnShoot (button_down/button_up).
+var _shoot_held: bool = false
+
+func is_shoot_held() -> bool:
+	return _shoot_held
+
+func set_shoot_held(held: bool) -> void:
+	if held:
+		_mark_player_acted()
+	_shoot_held = held
+
+func request_reload() -> void:
+	reload_requested.emit()
+
+func request_weapon_cycle(dir: int) -> void:
+	weapon_cycle_requested.emit(1 if dir >= 0 else -1)
+
 func set_joy_move_dir(dir: Vector2) -> void:
 	_joy_dir = dir.limit_length(1.0)
 	if dir.length_squared() > 0.01:
@@ -117,6 +138,21 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if event.is_pressed():
 		_mark_player_acted()
+	if event.is_action_pressed("shoot"):
+		set_shoot_held(true)
+		return
+	if event.is_action_released("shoot"):
+		set_shoot_held(false)
+		return
+	if event.is_action_pressed("reload"):
+		request_reload()
+		return
+	if event.is_action_pressed("weapon_next"):
+		request_weapon_cycle(1)
+		return
+	if event.is_action_pressed("weapon_prev"):
+		request_weapon_cycle(-1)
+		return
 	for i in range(1, 7):
 		if event.is_action_pressed("quick_slot_%d" % i):
 			quick_slot_requested.emit(i - 1)
@@ -157,6 +193,10 @@ func _should_capture() -> bool:
 	return true
 
 func refresh_mouse_mode() -> void:
+	# Пауза/экран/смена состояния игры: клавишу или тач-кнопку огня могли
+	# «отпустить» уже вне игры — иначе после возвращения ствол продолжил бы
+	# стрелять сам.
+	_shoot_held = false
 	var want := _should_capture()
 	var mode := Input.MOUSE_MODE_CAPTURED if want else Input.MOUSE_MODE_VISIBLE
 	if Input.get_mouse_mode() != mode:

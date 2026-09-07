@@ -2,6 +2,9 @@ extends Node
 const _ITEMS: Array = [
 	preload("res://data/items/battery.tres"),
 	preload("res://data/items/medkit.tres"),
+	# Огнестрельный слой (GDD §17/§18): патроны универсальные, расходуются
+	# перезарядкой из WeaponManager.
+	preload("res://data/items/ammo.tres"),
 	preload("res://data/items/key.tres"),
 	preload("res://data/items/scrap.tres"),
 	preload("res://data/items/cable.tres"),

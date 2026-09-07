@@ -1,9 +1,13 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scripts/player/player_3d.gd" id="1"]
 [ext_resource type="Resource" path="res://data/balance/player_stats.tres" id="2"]
 [ext_resource type="Resource" path="res://data/balance/flashlight_stats.tres" id="3"]
 [ext_resource type="AudioStream" path="res://assets/audio/sfx/step_concrete.wav" id="4_step"]
+[ext_resource type="Script" path="res://scripts/weapons/weapon_manager.gd" id="9_wm"]
+[ext_resource type="PackedScene" path="res://scenes/weapons/weapon_pistol.tscn" id="9_pistol"]
+[ext_resource type="PackedScene" path="res://scenes/weapons/weapon_rifle.tscn" id="9_rifle"]
+[ext_resource type="PackedScene" path="res://scenes/weapons/weapon_shotgun.tscn" id="9_shotgun"]
 
 [sub_resource type="CapsuleShape3D" id="capsule_shape"]
 radius = 0.3
@@ -229,3 +233,12 @@ stream = ExtResource("4_step")
 volume_db = -6.0
 max_distance = 20.0
 
+
+[node name="WeaponManager" type="Node" parent="."]
+script = ExtResource("9_wm")
+
+[node name="WeaponPistol" parent="WeaponManager" instance=ExtResource("9_pistol")]
+
+[node name="WeaponRifle" parent="WeaponManager" instance=ExtResource("9_rifle")]
+
+[node name="WeaponShotgun" parent="WeaponManager" instance=ExtResource("9_shotgun")]

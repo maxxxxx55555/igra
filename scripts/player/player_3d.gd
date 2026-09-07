@@ -69,6 +69,16 @@ var _footstep_system: Node = null
 const INTERACTOR_SCRIPT: Script = preload("res://scripts/player/interactor.gd")
 var _interactor: Node = null
 
+## ── Огнестрельный слой (IDEA.md: «hitscan shooting, reload system, ammo
+## inventory»; GDD §18) ──────────────────────────────────────────────────────
+## WeaponManager/WeaponBase лежали в проекте мёртвым каркасом: узел не висел
+## ни на игроке, ни в уровнях, action «reload» никто не слушал, а пикапы
+## патронов звали несуществующий add_ammo(). Теперь слой живой.
+const GUN_NOISE_RADIUS: float = 14.0
+const RECOIL_PITCH: float = 0.012
+
+@onready var weapons: WeaponManager = $WeaponManager
+
 const COMBO_DATA: Array = [
 	{ "windup": 0.25, "active": 0.15, "recovery": 0.15, "dmg": 8, "stam": 5, "knockback": 0.0 },
 	{ "windup": 0.30, "active": 0.15, "recovery": 0.15, "dmg": 12, "stam": 5, "knockback": 0.0 },
@@ -259,6 +269,8 @@ func _ready() -> void:
 		isv.jump_requested.connect(_buffer_jump)
 		isv.flashlight_requested.connect(toggle_flashlight)
 		isv.dodge_requested.connect(_handle_dodge)
+		isv.reload_requested.connect(_handle_reload)
+		isv.weapon_cycle_requested.connect(_cycle_weapon)
 	# Взаимодействие с миром. До этого клавиша interact умела только осмотр
 	# и вход в укрытие: рубильники районов, генераторы и двери, у которых
 	# есть interact(), не вызывались ниоткуда — район нельзя было запитать.
@@ -272,6 +284,90 @@ func _ready() -> void:
 
 func _buffer_jump() -> void:
 	_jump_buffer_timer = jump_buffer_time
+
+## ── Огнестрельный слой ─────────────────────────────────────────────────────
+func _handle_shoot() -> void:
+	if not gameplay_active or not GameManager.is_playing() or _stun_timer > 0.0:
+		return
+	if weapons == null:
+		return
+	if not is_instance_valid(_fps_cam):
+		_resolve_camera()
+	if _fps_cam == null:
+		return
+	var from: Vector3 = _fps_cam.global_position
+	var dir: Vector3 = -_fps_cam.global_transform.basis.z
+	if weapons.fire(from, dir):
+		_on_gun_fired()
+
+## GDD 3.6: прицел краснеет, когда на нём враг. Пункт числился «не
+## реализован»: crosshair_state_changed слали только weapon_base («default»)
+## и base_monster («hit» — вспышка хитмаркера), поэтому цвет не менялся
+## никогда. Состояние шлём только на смене, не каждый кадр.
+const AIM_RAY_LENGTH: float = 60.0
+var _aim_state: StringName = &"default"
+
+func _update_crosshair_state() -> void:
+	if not gameplay_active or not is_instance_valid(_fps_cam):
+		return
+	var ws := get_world_3d()
+	if ws == null:
+		return
+	var from: Vector3 = _fps_cam.global_position
+	var to: Vector3 = from + (-_fps_cam.global_transform.basis.z) * AIM_RAY_LENGTH
+	var query := PhysicsRayQueryParameters3D.create(from, to)
+	var exclude: Array[RID] = [get_rid()]
+	query.exclude = exclude
+	var hit: Dictionary = ws.direct_space_state.intersect_ray(query)
+	var state: StringName = &"default"
+	var collider: Object = hit.get("collider")
+	if collider is Node and (collider as Node).is_in_group("monsters"):
+		state = &"enemy"
+	if state != _aim_state:
+		_aim_state = state
+		EventBus.crosshair_state_changed.emit(state)
+
+## Выстрел слышно на весь квартал — шумовая система (GDD §3.10) по этому
+## событию поднимает монстров, поэтому стрелять «бесплатно» не выходит.
+func _on_gun_fired() -> void:
+	EventBus.noise_emitted.emit(Vector2(global_position.x, global_position.z), GUN_NOISE_RADIUS)
+	if OS.has_feature("mobile"):
+		Input.vibrate_handheld(15)
+
+func _handle_reload() -> void:
+	if weapons == null or not gameplay_active or not GameManager.is_playing():
+		return
+	if weapons.reload():
+		return
+	var w: WeaponBase = weapons.get_current_weapon()
+	if w != null and int(w.current_ammo) < int(w.max_ammo) and weapons.get_reserve() <= 0:
+		EventBus.inventory_notice.emit(LocalizationManager.t("RELOAD_NO_AMMO"))
+
+func _cycle_weapon(dir: int) -> void:
+	if weapons == null or not gameplay_active:
+		return
+	if dir >= 0:
+		weapons.next_weapon()
+	else:
+		weapons.previous_weapon()
+
+## Отдача: WeaponBase дёргает apply_recoil() у владельца оружия.
+func apply_recoil(amount: float) -> void:
+	_apply_look(0.0, clampf(amount, 0.0, 2.0) * RECOIL_PITCH)
+
+## Пикапы патронов (ammo_pickup.gd) и «боеприпасники» из roster-а зовут
+## именно этот метод — раньше его не существовало, и подбор был no-op.
+func add_ammo(_weapon_name: String, amount: int) -> void:
+	if weapons == null or amount <= 0:
+		return
+	weapons.add_reserve(amount)
+
+func unlock_weapon(id: String) -> bool:
+	if weapons == null or not weapons.unlock_weapon(id):
+		return false
+	var wname: String = LocalizationManager.name_for("WEAPON_", StringName(id), id.capitalize())
+	EventBus.inventory_notice.emit(LocalizationManager.tf("WEAPON_UNLOCKED", [wname]))
+	return true
 
 ## Камера ищется отдельно от старта игры: направление движения считается от её
 ## базиса, поэтому до первого game_started ссылка тоже обязана быть валидной.
@@ -341,6 +437,12 @@ func _physics_process(delta: float) -> void:
 	_movechk_timer += delta
 	if _movechk_timer >= 1.0:
 		_movechk_timer = 0.0
+
+	# Автоматический огонь: темп дозирует сам WeaponBase через fire_rate,
+	# поэтому достаточно удерживать кнопку (ПК — ПКМ, тач — BtnShoot).
+	if InputService.is_shoot_held():
+		_handle_shoot()
+	_update_crosshair_state()
 
 	if not can_move:
 		velocity = Vector3.ZERO

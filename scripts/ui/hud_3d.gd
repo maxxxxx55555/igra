@@ -77,6 +77,7 @@ func _ready() -> void:
 	EventBus.player_battery_changed.connect(_on_bat)
 	_add_battery_ad_button()
 	EventBus.ammo_changed.connect(_on_ammo_changed)
+	EventBus.inventory_changed.connect(_refresh_ammo)
 	EventBus.player_interact_available.connect(func(avail: bool): prompt.visible = avail)
 	# Подсказка была вечно пустой строкой: текст в неё никто не писал.
 	EventBus.interact_prompt_changed.connect(func(text: String) -> void: prompt.text = text)
@@ -672,8 +673,38 @@ func _add_battery_ad_button() -> void:
 	bat_row.add_child(btn)
 	_battery_ad_button = btn
 
-func _on_ammo_changed(current: int, max_ammo: int) -> void:
-	ammo_val.text = "%d / %d" % [current, max_ammo]
+## GDD 3.13: «12/36» — магазин и запас в рюкзаке. Раньше счётчик показывал
+## «магазин / вместимость магазина» и всю игру висел с нулями: EventBus
+## .ammo_changed не слал никто, потому что WeaponManager не был подключён
+## ни к игроку, ни к уровням.
+func _on_ammo_changed(current: int, _max_ammo: int) -> void:
+	var wm := _weapon_manager()
+	var counter := get_node_or_null("AmmoCounter") as Control
+	if wm == null or wm.get_current_weapon() == null:
+		if counter != null:
+			counter.visible = false
+		return
+	if counter != null:
+		counter.visible = true
+	ammo_val.text = "%d / %d" % [current, wm.get_reserve()]
+
+func _weapon_manager() -> WeaponManager:
+	var player := get_tree().get_first_node_in_group("player")
+	if player == null:
+		return null
+	return player.get_node_or_null("WeaponManager") as WeaponManager
+
+## Запас патронов живёт в инвентаре, поэтому счётчик обновляется и на
+## подборе/расходе патронов, а не только на выстреле.
+func _refresh_ammo() -> void:
+	var wm := _weapon_manager()
+	if wm == null:
+		return
+	var w: WeaponBase = wm.get_current_weapon()
+	if w == null:
+		_on_ammo_changed(0, 0)
+		return
+	_on_ammo_changed(int(w.current_ammo), int(w.max_ammo))
 
 func _tween_fill(cr: ColorRect, ratio: float) -> void:
 	var target: float = clampf(ratio, 0.0, 1.0) * BAR_W
@@ -751,6 +782,16 @@ func _add_side_buttons(isv: Node) -> void:
 	# Приседание уже висит на BtnStealth в сцене — второй кнопки не нужно.
 	var strobe := mk.call("BtnStrobe", "⚡", func() -> void: _request_strobe()) as Button
 	anchored.call(strobe, 180.0, 250.0)
+	# Огнестрельный слой на тач-устройствах: без этих кнопок перезарядка и
+	# смена оружия были физически недоступны — клавиш R и колеса мыши на
+	# телефоне нет, а action «reload» слушался только с клавиатуры.
+	var shoot := mk.call("BtnShoot", "✦", func() -> void: isv.set_shoot_held(true)) as Button
+	shoot.button_up.connect(func() -> void: isv.set_shoot_held(false))
+	anchored.call(shoot, 20.0, 170.0)
+	var reload := mk.call("BtnReload", "⟳", func() -> void: isv.request_reload()) as Button
+	anchored.call(reload, 100.0, 170.0)
+	var swap := mk.call("BtnSwapWeapon", "⇄", func() -> void: isv.request_weapon_cycle(1)) as Button
+	anchored.call(swap, 180.0, 170.0)
 	# T15: колесо быстрых слотов — держать, вести пальцем, отпустить.
 	var wheel := mk.call("BtnWheel", "◎", func() -> void: if _quick_wheel: _quick_wheel.open()) as Button
 	anchored.call(wheel, 260.0, 250.0)

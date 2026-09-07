@@ -47,7 +47,7 @@ func _apply_tint() -> void:
 	match item_id:
 		&"medkit", &"bandage", &"serum":
 			col = Color(0.706, 0.271, 0.184)
-		&"key", &"ancient_key", &"lockpick":
+		&"key", &"ancient_key", &"lockpick", &"ammo":
 			col = Color(0.682, 0.714, 0.749)
 		&"cable", &"wiring", &"transistor", &"circuit":
 			col = Color(0.373, 0.541, 0.306)

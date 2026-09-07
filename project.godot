@@ -295,6 +295,24 @@ quick_wheel={
 ]
 }
 
+; Огнестрельный слой (IDEA.md / GDD §18): огонь — ПКМ, листание оружия —
+; колесо мыши. LMB остаётся за ближним боем (GDD §5 — мили-ядро).
+shoot={
+"deadzone": 0.5,
+"events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":0,"position":Vector2(0, 0),"global_position":Vector2(0, 0),"factor":1.0,"button_index":2,"canceled":false,"pressed":false,"double_click":false,"script":null)
+]
+}
+weapon_next={
+"deadzone": 0.5,
+"events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":0,"position":Vector2(0, 0),"global_position":Vector2(0, 0),"factor":1.0,"button_index":4,"canceled":false,"pressed":false,"double_click":false,"script":null)
+]
+}
+weapon_prev={
+"deadzone": 0.5,
+"events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":0,"position":Vector2(0, 0),"global_position":Vector2(0, 0),"factor":1.0,"button_index":5,"canceled":false,"pressed":false,"double_click":false,"script":null)
+]
+}
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
@@ -303,7 +321,7 @@ lights_and_shadows/directional_shadow/size=1024
 lights_and_shadows/directional_shadow/soft_shadow_filter_quality=1
 textures/default_filters/anisotropic_filtering_level=1
 anti_aliasing/quality/msaa_3d=2
-scaling_3d/scale=0.8
+scaling_3d/scale=0.85
 environment/defaults/default_clear_color=Color(0.03, 0.03, 0.05, 1)
 scaling_3d/fsr_upscale=true
 mesh_lod/threshold_pixels=0.75

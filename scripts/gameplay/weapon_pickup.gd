@@ -27,14 +27,13 @@ func _on_body_entered(body: Node3D) -> void:
 	if not body.is_in_group("player"):
 		return
 
-	# GDD §5 (БОЕВАЯ СИСТЕМА) is melee-only canon — no ranged weapon appears
-	# anywhere in the combat design. WeaponManager/WeaponBase exist as
-	# scaffolding but this scene (and WeaponManager itself) are never
-	# instantiated in any live level, so `unlock_weapon()` — which
-	# WeaponManager never actually defined — was a no-op call to a method
-	# that doesn't exist, guarded by has_method() into silence. Removed
-	# rather than implemented: adding ranged combat would be a real design
-	# change beyond what GDD specifies, not a bug fix.
+	# GDD §18: «Пикапы: weapon_pickup.gd (unlock в WeaponManager)». Вызов
+	# unlock_weapon() долгое время был вырезан как no-op — WeaponManager не
+	# висел ни на игроке, ни в уровнях, и метода просто не существовало.
+	# Теперь огнестрельный слой живой (см. player_3d.gd, weapon_manager.gd),
+	# поэтому пикап снова открывает оружие и выдаёт патроны к нему.
+	if body.has_method("unlock_weapon"):
+		body.unlock_weapon(weapon_name)
 	if body.has_method("add_ammo"):
 		body.add_ammo(weapon_name, ammo_amount)
 	_play_pickup()

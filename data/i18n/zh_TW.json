@@ -813,5 +813,11 @@
   "ONBOARD_02_CAPTION": "Turn on your flashlight to see - but the light gives you away too.",
   "ONBOARD_03_CAPTION": "Reach a streetlight and power it on - that's how light returns to the city.",
   "ONBOARD_04_CAPTION": "Every lit streetlight lights the street and pushes the danger back.",
-  "ONBOARD_NEXT": "Next"
+  "ONBOARD_NEXT": "Next",
+  "ITEM_AMMO": "彈藥",
+  "WEAPON_PISTOL": "手槍",
+  "WEAPON_RIFLE": "步槍",
+  "WEAPON_SHOTGUN": "霰彈槍",
+  "WEAPON_UNLOCKED": "發現武器：%s",
+  "RELOAD_NO_AMMO": "沒有彈藥了"
 }

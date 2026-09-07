@@ -6,6 +6,10 @@ const AUTOSAVE_INTERVAL: float = 30.0
 const MAX_SLOTS: int = 4
 
 var _pending_player_pos: Vector3 = Vector3.INF
+## Огнестрельный слой (GDD §18): какое оружие найдено и что в руках. Ждёт
+## появления игрока так же, как _pending_player_pos: WeaponManager живёт на
+## игроке, а не среди автозагрузок.
+var _pending_weapons: Dictionary = {}
 var _autosave_timer: float = AUTOSAVE_INTERVAL
 var _quest_data: Dictionary = {}
 var _photos: Array = []
@@ -132,6 +136,7 @@ func _save() -> void:
 		"progress": ProgressTracker.to_dict(),
 		"settings": SettingsManager.to_dict(),
 		"player_pos": _read_player_pos(),
+		"weapons": _read_weapons(),
 		"district": _current_district(),
 		"quests": QuestManager.serialize(),
 		"xp": XpManager.save_data(),
@@ -157,6 +162,7 @@ func load_all() -> bool:
 	SettingsManager.from_dict(data.get("settings", {}))
 	var pp = data.get("player_pos", null)
 	_pending_player_pos = Vector3(pp[0], pp[1], pp[2]) if (pp is Array and pp.size() >= 3) else Vector3.INF
+	_pending_weapons = data.get("weapons", {}) if data.get("weapons", {}) is Dictionary else {}
 	_quest_data = data.get("quests", {})
 	# Прогресс квестов раньше оседал в буфере _quest_data и никому не отдавался:
 	# после загрузки все 19 квестов снова были на нуле.
@@ -192,6 +198,7 @@ func reset_all() -> void:
 	InventoryManager.from_dict({})
 	Encyclopedia.from_dict({})
 	_pending_player_pos = Vector3.INF
+	_pending_weapons = {}
 	_quest_data = {}
 	QuestManager.reset()
 	_photos = []
@@ -208,6 +215,21 @@ func consume_pending_player_pos() -> Vector3:
 	var p := _pending_player_pos
 	_pending_player_pos = Vector3.INF
 	return p
+
+func consume_pending_weapons() -> Dictionary:
+	var w := _pending_weapons
+	_pending_weapons = {}
+	return w
+
+## Ищем в сцене, как и позицию игрока: WeaponManager — узел на игроке.
+func _read_weapons() -> Dictionary:
+	var p := get_tree().get_first_node_in_group("player")
+	if not is_instance_valid(p):
+		return {}
+	var wm := p.get_node_or_null("WeaponManager")
+	if wm == null or not wm.has_method("to_dict"):
+		return {}
+	return wm.to_dict()
 
 func set_quest_data(data: Dictionary) -> void:
 	_quest_data = data
@@ -279,6 +301,7 @@ func save_slot(slot: int) -> bool:
 		"progress": ProgressTracker.to_dict(),
 		"settings": SettingsManager.to_dict(),
 		"player_pos": _read_player_pos(),
+		"weapons": _read_weapons(),
 		"quests": QuestManager.serialize(),
 		"xp": XpManager.save_data(),
 		"skill_tree": SkillTreeManager.save_data(),
@@ -303,6 +326,7 @@ func load_slot(slot: int) -> bool:
 	SettingsManager.from_dict(data.get("settings", {}))
 	var pp = data.get("player_pos", null)
 	_pending_player_pos = Vector3(pp[0], pp[1], pp[2]) if (pp is Array and pp.size() >= 3) else Vector3.INF
+	_pending_weapons = data.get("weapons", {}) if data.get("weapons", {}) is Dictionary else {}
 	_quest_data = data.get("quests", {})
 	QuestManager.from_dict(_quest_data)
 	_photos = data.get("photos", [])

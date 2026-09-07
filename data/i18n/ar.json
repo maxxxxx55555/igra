@@ -813,5 +813,11 @@
   "ONBOARD_02_CAPTION": "Turn on your flashlight to see - but the light gives you away too.",
   "ONBOARD_03_CAPTION": "Reach a streetlight and power it on - that's how light returns to the city.",
   "ONBOARD_04_CAPTION": "Every lit streetlight lights the street and pushes the danger back.",
-  "ONBOARD_NEXT": "Next"
+  "ONBOARD_NEXT": "Next",
+  "ITEM_AMMO": "ذخيرة",
+  "WEAPON_PISTOL": "مسدس",
+  "WEAPON_RIFLE": "بندقية",
+  "WEAPON_SHOTGUN": "بندقية خرطوش",
+  "WEAPON_UNLOCKED": "تم العثور على سلاح: %s",
+  "RELOAD_NO_AMMO": "لا توجد ذخيرة"
 }

@@ -124,6 +124,20 @@ func resume_game() -> void:
 		_change_state(GameState.PLAYING)
 		get_tree().paused = false
 
+## IDEA.md «Pause on minimize»: сворачивание приложения ставит игру на паузу
+## и сразу пишет автосейв — на Android процесс в фоне могут убить в любой
+## момент, а обычный автосейв SaveSystem тикает раз в 30 секунд.
+func _notification(what: int) -> void:
+	if what != NOTIFICATION_APPLICATION_FOCUS_OUT:
+		return
+	if not is_playing():
+		return
+	pause_game()
+	if UIManager != null and UIManager.has_method("open"):
+		UIManager.open(&"pause")
+	if SaveSystem != null and SaveSystem.has_method("save_slot"):
+		SaveSystem.save_slot(4)
+
 func trigger_death() -> void:
 	if current_state == GameState.DEAD:
 		return

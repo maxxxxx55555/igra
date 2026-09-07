@@ -25,15 +25,16 @@ func fire(from_pos: Vector3 = Vector3.ZERO, direction: Vector3 = Vector3.FORWARD
 	current_ammo -= 1
 	ammo_changed.emit(current_ammo, max_ammo)
 	if _rays:
-		var ray_list := _rays.get_children() as Array[RayCast3D]
-		for ray in ray_list:
-			ray.force_raycast_update()
-			if ray.is_colliding():
-				var target := ray.get_collider()
-				if target and target.has_method("take_damage"):
-					target.take_damage(pellet_damage, Vector3.ZERO, EnemyRosterData.DamageType.BULLET)
-				elif target and target.has_node("HealthComponent"):
-					target.get_node("HealthComponent").take_damage(pellet_damage)
+		var ray_list: Array = _rays.get_children()
+		# Раньше пучок стрелял по жёстко прописанным в сцене смещениям 0.05-0.1 м
+		# на 10 м (~0.5°) — «разброс дробовика» был уже, чем у автомата.
+		# Теперь конус считается из spread_degrees.
+		var spread_units: float = 2.0 * tan(deg_to_rad(spread_degrees) * 0.5)
+		var pellets: int = mini(pellet_count, ray_list.size())
+		for i in pellets:
+			var ray := ray_list[i] as RayCast3D
+			hitscan_ray(ray, spread_units, float(pellet_damage))
+	_spawn_muzzle(from_pos)
 	if _sfx:
 		_sfx.pitch_scale = 0.9
 		_sfx.play()
