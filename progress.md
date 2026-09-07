@@ -1,5 +1,69 @@
 # Progress
 
+## 2026-09-07 — FPS-СЛОЙ: оружие, перезарядка и патроны доведены до живого геймплея
+
+### Что было не так (по IDEA.md и GDD §18)
+`WeaponBase`/`WeaponManager`/три сцены стволов лежали в проекте мёртвым
+каркасом: менеджер не висел ни на игроке, ни в уровнях, action `reload`
+никто не слушал, `ammo_pickup.gd` и `weapon_pickup.gd` звали несуществующий
+`player.add_ammo()`, `unlock_weapon()` был вырезан как no-op, а счётчик
+патронов в HUD всю игру показывал `0 / 0` — `EventBus.ammo_changed` не слал
+никто. То есть второй пункт «Core mechanics» из описания игры не работал.
+
+### Что сделано
+- **`scenes/player/player_3d.tscn`**: узел `WeaponManager` + три ствола
+  (`WeaponPistol`/`WeaponRifle`/`WeaponShotgun`). `WeaponManager` сам
+  подбирает оружие из детей — экспорт массива ссылок в сцене не нужен.
+- **`weapon_base.gd`**: общий хитскан `hitscan_ray()` (RayCast3D из сцены,
+  без физических пуль), исключение собственного тела из луча, маска лучей = 3
+  (монстры сидят на `collision_layer = 2`, дефолтная маска 1 проходила сквозь
+  них), перезарядка из резерва (`try_reload(reserve)` + `_finish_reload`),
+  `_spawn_muzzle()`.
+- **`weapon_rifle.gd` / `weapon_shotgun.gd`**: урон через общий хитскан;
+  дробовик теперь разводит пучок по `spread_degrees` (в сцене были смещения
+  0.05-0.1 м на 10 м — уже автомата). `weapon_pistol.tscn` получил свой
+  `RayCast3D` (его не было, пистолет не наносил урона вовсе).
+- **`weapon_manager.gd`**: открытие стволов (`unlock_weapon`), листание
+  только найденного, разворот оружия вдоль взгляда камеры (иначе лучи летели
+  по -Z тела) + вьюмодель в кадре (`weapon_model.tscn`), резерв патронов =
+  предмет `ammo` в инвентаре, `to_dict`/`from_dict` для сейва.
+- **`player_3d.gd`**: огонь (удержание), перезарядка, смена ствола, отдача
+  `apply_recoil()`, `add_ammo()`, `unlock_weapon()`, шум выстрела 14 м,
+  прицел краснеет на враге (GDD 3.6 — пункт числился «не реализован»).
+- **`input_service.gd`**: `shoot`/`reload`/`weapon_next`/`weapon_prev` +
+  `is_shoot_held()`; сброс удержания на паузе/экране.
+- **`hud_3d.gd`**: тач-кнопки `BtnShoot`/`BtnReload`/`BtnSwapWeapon`
+  (без них на телефоне нельзя было ни перезарядиться, ни сменить ствол),
+  счётчик `магазин / запас` (GDD 3.13), скрытие счётчика без оружия.
+- **Экономика патронов**: новый предмет `data/items/ammo.tres` (0.05 кг,
+  стек 60) в `item_database.gd`; лут в полиции/складах/промзоне
+  (`district_loot.gd`), `weapon_pickup`-и с автоматом и дробовиком;
+  «боеприпасник» Sharpshooter роняет 12 патронов вместо батарейки.
+- **Сейв**: `weapons` в payload `SaveSystem` (+ `consume_pending_weapons`
+  по образцу `consume_pending_player_pos`), сброс в `reset_all()`.
+- **`game_manager.gd`**: пауза + автосейв на `NOTIFICATION_APPLICATION_FOCUS_OUT`
+  (IDEA.md «Pause on minimize»).
+- **`project.godot`**: actions `shoot` (ПКМ), `weapon_next`/`weapon_prev`
+  (колесо), `scaling_3d/scale` 0.8 -> 0.85 (IDEA.md «3D scaling 0.85»).
+- **i18n**: 6 новых ключей x 13 локалей (`ITEM_AMMO`, `WEAPON_PISTOL/RIFLE/
+  SHOTGUN`, `WEAPON_UNLOCKED`, `RELOAD_NO_AMMO`).
+
+### Проверено
+- `tools/check.sh --static` — 10/10 (включая scene_node_check: 90 пар
+  скрипт/сцена, flow_check: 53 проверки, арность подписок).
+- `tools/i18n_audit.py` — 294 ключа из кода, MISSING: 0.
+- `gdparse` (gdtoolkit 4.5) по всем изменённым .gd — чисто; единственная
+  ошибка парсера в `hud_3d.gd` — pre-existing лямбда-однострочник
+  `_quick_wheel.open())`, её же gdtoolkit не понимает и до правок.
+- Структура изменённых .tscn (id ext/sub-ресурсов, родители, файлы на диске)
+  проверена скриптом — 0 ошибок.
+
+### Не проверено (честно)
+Движковые гейты (`compile_gate`, `signal_arity`, `i18n_check`, `asset_check`,
+`boot_check`) в этой среде запустить нельзя: бинарь Godot 4.7 не скачивается
+(egress на release-assets.githubusercontent.com закрыт). Их нужно прогнать
+на машине с Godot перед коммитом в main.
+
 ## 2026-08-10 — ФАЗА 2 / M1 срез 4-5 (post-fix): noise/vis бары + inventory backend
 
 ### Срез 4 — Noise + Visibility бары (commit `7aaa404`)

@@ -20,7 +20,28 @@ shaders, bug sweep, cleanup, ads, release prep) and
 `docs/SESSION_REPORT.md` (the earlier 19-task build phase). This file
 is the short version for picking the project back up.
 
-## Latest phase: THEME UNIFICATION + MUSIC + PERF + V2 SKIN (see docs/SESSION_REPORT_UNIFY.md)
+## Latest phase: FPS WEAPON LAYER — оружие/перезарядка/патроны (see progress.md, 2026-09-07)
+
+Второй пункт «Core mechanics» из IDEA.md не работал: `WeaponManager` не висел
+ни на игроке, ни в уровнях, `reload` никто не слушал, пикапы патронов звали
+несуществующий `player.add_ammo()`, счётчик HUD показывал `0 / 0`. Слой
+подключён целиком: стволы на игроке, хитскан через `RayCast3D` (маска 3 —
+монстры на 2-м слое, дефолтная маска 1 проходила сквозь них), перезарядка из
+универсального предмета `ammo`, лут/пикапы в трёх районах, тач-кнопки,
+сейв найденных стволов, прицел краснеет на враге (GDD 3.6), счётчик
+`магазин / запас` (GDD 3.13). Заодно: пауза+автосейв при сворачивании
+(IDEA.md) и `scaling_3d/scale` 0.85.
+
+**Проверено только статически** (`tools/check.sh --static` 10/10,
+`tools/i18n_audit.py` MISSING: 0, `gdparse` по изменённым файлам): движок в
+этой среде недоступен, поэтому 4 обязательных гейта + `boot_check` нужно
+прогнать на машине с Godot 4.7 до merge. Список файлов — в progress.md.
+
+**Вопрос к хозяину:** IDEA.md требует Mobile-рендерер и запрещает
+Compatibility, а в проекте стоит `gl_compatibility` (нужен веб-экспорту и
+слабым Android). Не менял — см. docs/DECISIONS.md, 2026-09-07.
+
+## Previous phase: THEME UNIFICATION + MUSIC + PERF + V2 SKIN (see docs/SESSION_REPORT_UNIFY.md)
 
 HEAD = `31b3a8a`, fully pushed to `origin/main`. All mandatory gates +
 static + boot-flow + audio-hum + theme-unify green.
