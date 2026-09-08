@@ -1,6 +1,27 @@
 # Handoff
 
-## Latest phase: SHIP wave + Stage 1 decisions + autonomous i18n wave (2026-09-08)
+## Latest phase: RELEASE CANDIDATE pass (2026-09-08, autonomous, owner override)
+
+Read `PLAN.md`'s "Autonomous decisions log" first — full detail on every
+item below. Short version: merged Arena's suburbs-content PR (owner
+explicitly authorized direct merge, verified content-only scope first,
+0 conflicts), wired it into the existing document/lore pickup flow,
+fixed two live-language-switch i18n bugs (HUD captions, journal),
+added the missing Ambient-bus volume slider, found two OTHER stale
+`arena/*` branches with real but out-of-scope (code/weapons/tools, not
+content) work — flagged for owner review, not merged. Queued `residential`
+as the next Arena district in `ARENA_NEXT_PROMPT.md`.
+
+Not reached this pass, still open for the next wave: Phase 3's D1<200
+draw-call push, Phase 4 (GDD mechanic audit/simplification), Phase 5
+(onboarding/UX/crash-safety polish) from the RC-pass brief. Also found:
+`scenes/tools/game_test_3d_scene.tscn` gate stalls after "phase1 combat:
+damage Shadow" — confirmed pre-existing (reproduces on a clean stash
+before this pass's edits too), not investigated further; see
+`docs/KNOWN_ISSUES.md`. Run the other 11 gate scenes individually until
+that one's fixed — `tools/check.sh`'s full mode will hang on it.
+
+## Previous phase: SHIP wave + Stage 1 decisions + autonomous i18n wave (2026-09-08)
 
 Read `PLAN.md` first now — it is the live, actively-maintained tracking
 doc for this whole arc (status table, decisions log, i18n backlog
