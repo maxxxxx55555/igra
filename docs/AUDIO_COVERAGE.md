@@ -20,7 +20,7 @@ OGG q4 mono; beds = 36 s seamless loops (loop points 0.000–36.000, matched zer
 | school | abandoned_hallways_alt.mp3 ✔ | school_dark ✔ | **MISSING** | 4/4 ✔ |
 | hospital | abandoned_hallways_alt.mp3 ✔ | hospital_dark ✔ (1ch/44.1k/36.000 s) | hospital_lit ✔ (1ch/44.1k/36.000 s, header-verified 2026-09-08) | 4/4 ✔ (all 30.000 s) |
 | gas_station | downtown.wav ✔ | gas_station_dark ✔ (1ch/44.1k/36.000 s) | **MISSING** → spec G2e | 4/4 ✔ (all 30.000 s) |
-| police | downtown.wav ✔ | police_dark ✔ | **MISSING** | 3/3 ✔ |
+| police | downtown.wav ✔ | police_dark ✔ (1ch/44.1k/36.000 s, header-verified 2026-09-08) | **MISSING** → spec G2f | 3/3 ✔ (all 30.000 s) |
 | warehouses | harbor.wav ✔ | warehouses_dark ✔ | **MISSING** | 4/4 ✔ |
 | industrial | industrial.wav ✔ | industrial_dark ✔ | **MISSING** | 4/4 ✔ |
 | substation | music_ambient_dark.wav ✔ | substation_dark ✔ | **MISSING** | 3/3 ✔ |
