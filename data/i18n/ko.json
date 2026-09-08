@@ -819,5 +819,13 @@
   "WEAPON_RIFLE": "소총",
   "WEAPON_SHOTGUN": "산탄총",
   "WEAPON_UNLOCKED": "무기를 발견했습니다: %s",
-  "RELOAD_NO_AMMO": "탄약이 없습니다"
+  "RELOAD_NO_AMMO": "탄약이 없습니다",
+  "TUT_FLASHLIGHT": "F를 눌러 손전등을 켜세요. 빛은 배터리를 소모합니다.",
+  "TUT_MOVE": "WASD로 이동, Shift로 달리기. 모바일은 왼쪽 스틱.",
+  "TUT_PICKUP": "E로 아이템을 줍고 조사합니다.",
+  "TUT_CROUCH": "Ctrl로 웅크리기: 발소리가 작고 발견되기 어렵습니다.",
+  "TUT_DODGE": "방향을 두 번 눌러 회피하세요.",
+  "TUT_ATTACK": "마우스 왼쪽: 근접 공격. 연속 타격으로 콤보.",
+  "TUT_SHOOT": "마우스 오른쪽은 사격, R은 재장전. 총성은 멀리까지 들립니다.",
+  "TUT_INVENTORY": "Tab로 인벤토리를 엽니다."
 }

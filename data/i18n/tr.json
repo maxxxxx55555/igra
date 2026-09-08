@@ -819,5 +819,13 @@
   "WEAPON_RIFLE": "Tüfek",
   "WEAPON_SHOTGUN": "Av tüfeği",
   "WEAPON_UNLOCKED": "Silah bulundu: %s",
-  "RELOAD_NO_AMMO": "Mermi kalmadı"
+  "RELOAD_NO_AMMO": "Mermi kalmadı",
+  "TUT_FLASHLIGHT": "F el fenerini açar. Işın pil tüketir.",
+  "TUT_MOVE": "WASD ile hareket, Shift ile koşu. Telefonda: sol çubuk.",
+  "TUT_PICKUP": "E eşyaları alır ve nesneleri inceler.",
+  "TUT_CROUCH": "Ctrl ile çömel: daha sessiz, daha zor fark edilir.",
+  "TUT_DODGE": "Kaçmak için bir yöne iki kez dokun.",
+  "TUT_ATTACK": "Sol fare düğmesi: yakın dövüş. Vuruşları birleştirip kombo yap.",
+  "TUT_SHOOT": "Sağ fare düğmesi ateş eder, R şarjör değiştirir. Silah sesi uzaktan duyulur.",
+  "TUT_INVENTORY": "Tab envanteri açar."
 }

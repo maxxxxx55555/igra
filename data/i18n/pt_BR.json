@@ -819,5 +819,13 @@
   "WEAPON_RIFLE": "Fuzil",
   "WEAPON_SHOTGUN": "Escopeta",
   "WEAPON_UNLOCKED": "Arma encontrada: %s",
-  "RELOAD_NO_AMMO": "Sem munição"
+  "RELOAD_NO_AMMO": "Sem munição",
+  "TUT_FLASHLIGHT": "Pressione F para a lanterna. O feixe gasta bateria.",
+  "TUT_MOVE": "WASD para mover, Shift para correr. No celular: analógico esquerdo.",
+  "TUT_PICKUP": "E pega itens e examina objetos.",
+  "TUT_CROUCH": "Ctrl para agachar: passos mais silenciosos, mais difícil de ver.",
+  "TUT_DODGE": "Toque duas vezes numa direção para esquivar.",
+  "TUT_ATTACK": "Botão esquerdo: golpe corpo a corpo. Encadeie para um combo.",
+  "TUT_SHOOT": "Botão direito atira, R recarrega. Tiros são ouvidos de longe.",
+  "TUT_INVENTORY": "Tab abre o inventário."
 }

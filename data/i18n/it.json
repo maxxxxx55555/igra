@@ -819,5 +819,13 @@
   "WEAPON_RIFLE": "Fucile d’assalto",
   "WEAPON_SHOTGUN": "Fucile a pompa",
   "WEAPON_UNLOCKED": "Arma trovata: %s",
-  "RELOAD_NO_AMMO": "Munizioni esaurite"
+  "RELOAD_NO_AMMO": "Munizioni esaurite",
+  "TUT_FLASHLIGHT": "Premi F per la torcia. Il fascio consuma la batteria.",
+  "TUT_MOVE": "WASD per muoverti, Shift per correre. Su mobile: levetta sinistra.",
+  "TUT_PICKUP": "E raccoglie ed esamina gli oggetti.",
+  "TUT_CROUCH": "Ctrl per accovacciarti: più silenzioso, più difficile da individuare.",
+  "TUT_DODGE": "Tocca due volte una direzione per schivare.",
+  "TUT_ATTACK": "Tasto sinistro: colpo ravvicinato. Concatena i colpi per una combo.",
+  "TUT_SHOOT": "Tasto destro per sparare, R per ricaricare. Gli spari si sentono da lontano.",
+  "TUT_INVENTORY": "Tab apre l'inventario."
 }

@@ -819,5 +819,13 @@
   "WEAPON_RIFLE": "步枪",
   "WEAPON_SHOTGUN": "霰弹枪",
   "WEAPON_UNLOCKED": "发现武器：%s",
-  "RELOAD_NO_AMMO": "没有弹药了"
+  "RELOAD_NO_AMMO": "没有弹药了",
+  "TUT_FLASHLIGHT": "按 F 切换手电。光束会消耗电量。",
+  "TUT_MOVE": "WASD 移动，Shift 奔跑。手机上用左摇杆。",
+  "TUT_PICKUP": "E 拾取物品并查看。",
+  "TUT_CROUCH": "Ctrl 蹲下：脚步更轻，更难被发现。",
+  "TUT_DODGE": "连按两次方向即可闪避。",
+  "TUT_ATTACK": "鼠标左键：近战攻击。连续命中可连击。",
+  "TUT_SHOOT": "鼠标右键射击，R 装弹。枪声传得很远。",
+  "TUT_INVENTORY": "Tab 打开物品栏。"
 }

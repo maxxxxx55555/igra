@@ -819,5 +819,13 @@
   "WEAPON_RIFLE": "ライフル",
   "WEAPON_SHOTGUN": "ショットガン",
   "WEAPON_UNLOCKED": "武器を発見：%s",
-  "RELOAD_NO_AMMO": "弾薬がありません"
+  "RELOAD_NO_AMMO": "弾薬がありません",
+  "TUT_FLASHLIGHT": "Fで懐中電灯を切り替え。光はバッテリーを消費します。",
+  "TUT_MOVE": "WASDで移動、Shiftで走る。スマホは左スティック。",
+  "TUT_PICKUP": "Eでアイテムを拾い、調べる。",
+  "TUT_CROUCH": "Ctrlでしゃがむ：足音が静かで、見つかりにくい。",
+  "TUT_DODGE": "方向を2回タップで回避。",
+  "TUT_ATTACK": "左クリックで近接攻撃。連続ヒットでコンボ。",
+  "TUT_SHOOT": "右クリックで射撃、Rでリロード。銃声は遠くまで届く。",
+  "TUT_INVENTORY": "Tabでインベントリを開く。"
 }

@@ -819,5 +819,13 @@
   "WEAPON_RIFLE": "Fusil d’assaut",
   "WEAPON_SHOTGUN": "Fusil à pompe",
   "WEAPON_UNLOCKED": "Arme trouvée : %s",
-  "RELOAD_NO_AMMO": "Plus de munitions"
+  "RELOAD_NO_AMMO": "Plus de munitions",
+  "TUT_FLASHLIGHT": "Appuyez sur F pour la lampe. Le faisceau use la batterie.",
+  "TUT_MOVE": "WASD pour se déplacer, Shift pour courir. Sur mobile : stick gauche.",
+  "TUT_PICKUP": "E ramasse les objets et les examine.",
+  "TUT_CROUCH": "Ctrl pour s'accroupir : plus discret, plus difficile à repérer.",
+  "TUT_DODGE": "Tapez deux fois une direction pour esquiver.",
+  "TUT_ATTACK": "Clic gauche : coup au corps à corps. Enchaînez pour un combo.",
+  "TUT_SHOOT": "Clic droit pour tirer, R pour recharger. Les tirs s'entendent de loin.",
+  "TUT_INVENTORY": "Tab ouvre l'inventaire."
 }

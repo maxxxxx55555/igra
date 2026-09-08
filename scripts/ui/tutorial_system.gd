@@ -68,6 +68,14 @@ const STEPS: Array = [
 		"duration": 0.0
 	},
 	{
+		"id": "shoot",
+		"trigger": "action",
+		"action": "shoot",
+		"text_key": "TUT_SHOOT",
+		"position": Vector2(0, -200),
+		"duration": 0.0
+	},
+	{
 		"id": "inventory",
 		"trigger": "action",
 		"action": "inventory_toggle",
@@ -250,6 +258,27 @@ func _process(delta: float) -> void:
 		_step_timer -= delta
 		if _step_timer <= 0.0:
 			_complete_step()
+	elif step["trigger"] == "action":
+		_poll_action(String(step["action"]))
+
+## У шагов «move», «stealth», «inventory_toggle» и «shoot» нет своего сигнала в
+## InputService, поэтому они не завершались никогда: обучение зависало на них
+## до нажатия «Пропустить» (а подписи к тому же печатали голый ключ — половины
+## TUT_* не было в data/i18n). Проверяем реальный input.
+func _poll_action(action: String) -> void:
+	if not _waiting_for_action:
+		return
+	if action == "move":
+		if InputService.get_move_dir().length_squared() > 0.1:
+			_complete_step()
+		return
+	if action == "shoot":
+		# На тач-устройствах ПКМ нет, огонь идёт через BtnShoot -> set_shoot_held.
+		if InputService.is_shoot_held():
+			_complete_step()
+		return
+	if InputMap.has_action(action) and Input.is_action_just_pressed(action):
+		_complete_step()
 
 func _skip_tutorial() -> void:
 	_tutorial_active = false

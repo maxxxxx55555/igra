@@ -819,5 +819,13 @@
   "WEAPON_RIFLE": "Rifle",
   "WEAPON_SHOTGUN": "Escopeta",
   "WEAPON_UNLOCKED": "Arma encontrada: %s",
-  "RELOAD_NO_AMMO": "Sin munición"
+  "RELOAD_NO_AMMO": "Sin munición",
+  "TUT_FLASHLIGHT": "Pulsa F para la linterna. El haz gasta batería.",
+  "TUT_MOVE": "WASD para moverte, Shift para correr. En móvil: stick izquierdo.",
+  "TUT_PICKUP": "E recoge objetos e inspecciona.",
+  "TUT_CROUCH": "Ctrl para agacharte: más silencioso y difícil de ver.",
+  "TUT_DODGE": "Toca dos veces una dirección para esquivar.",
+  "TUT_ATTACK": "Botón izquierdo: golpe cuerpo a cuerpo. Encadena golpes para un combo.",
+  "TUT_SHOOT": "Botón derecho dispara, R recarga. Los disparos se oyen de lejos.",
+  "TUT_INVENTORY": "Tab abre el inventario."
 }

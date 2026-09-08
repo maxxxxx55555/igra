@@ -7,6 +7,12 @@ keys = set(json.load(io.open(EN, encoding='utf-8')).keys())
 
 PAT = re.compile(r'(?:\btr|LocalizationManager\.t|Localization\.t)\(\s*"((?:[^"\\\n]|\\.)*)"')
 
+# Ключи, которые не проходят через tr() литералом, а лежат в данных:
+# tutorial_system.gd STEPS["text_key"], workbench.gd RECIPES["name_key"].
+# Аудит их не видел, поэтому 7 из 10 подписей обучения отсутствовали в
+# data/i18n и панель подсказок печатала голый «TUT_MOVE».
+DATA_PAT = re.compile(r'"(?:text_key|name_key)"\s*:\s*"([A-Z][A-Z0-9_]*)"')
+
 ESCAPES = [('\\n', '\n'), ('\\t', '\t'), ('\\"', '"')]
 
 
@@ -30,6 +36,8 @@ def scan():
                 continue
             for m in PAT.finditer(s):
                 used[unescape(m.group(1))].append(p.replace(os.sep, '/'))
+            for m in DATA_PAT.finditer(s):
+                used[m.group(1)].append(p.replace(os.sep, '/'))
     return used
 
 

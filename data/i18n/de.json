@@ -819,5 +819,13 @@
   "WEAPON_RIFLE": "Gewehr",
   "WEAPON_SHOTGUN": "Schrotflinte",
   "WEAPON_UNLOCKED": "Waffe gefunden: %s",
-  "RELOAD_NO_AMMO": "Keine Munition übrig"
+  "RELOAD_NO_AMMO": "Keine Munition übrig",
+  "TUT_FLASHLIGHT": "Mit F schaltest du die Taschenlampe. Der Strahl kostet Akku.",
+  "TUT_MOVE": "WASD zum Bewegen, Shift zum Rennen. Am Handy: linker Stick.",
+  "TUT_PICKUP": "E hebt Gegenstände auf und untersucht Objekte.",
+  "TUT_CROUCH": "Ctrl zum Ducken: leiser, schwerer zu entdecken.",
+  "TUT_DODGE": "Richtung zweimal antippen für einen Ausweichsprung.",
+  "TUT_ATTACK": "Linke Maustaste: Nahkampfschlag. Serien ergeben eine Kombo.",
+  "TUT_SHOOT": "Rechte Maustaste schießt, R lädt nach. Schüsse hört man weit.",
+  "TUT_INVENTORY": "Tab öffnet das Inventar."
 }

@@ -819,5 +819,13 @@
   "WEAPON_RIFLE": "Rifle",
   "WEAPON_SHOTGUN": "Shotgun",
   "WEAPON_UNLOCKED": "Found weapon: %s",
-  "RELOAD_NO_AMMO": "No ammo left"
+  "RELOAD_NO_AMMO": "No ammo left",
+  "TUT_FLASHLIGHT": "Press F to toggle the flashlight. The beam eats battery.",
+  "TUT_MOVE": "WASD to move, Shift to run. On phone - the left stick.",
+  "TUT_PICKUP": "E picks up items and inspects objects.",
+  "TUT_CROUCH": "Ctrl to crouch: quieter steps, harder to spot.",
+  "TUT_DODGE": "Double-tap a direction to dodge.",
+  "TUT_ATTACK": "Left mouse button: melee strike. Chain hits for a combo.",
+  "TUT_SHOOT": "Right mouse button fires, R reloads. Gunfire is heard far away.",
+  "TUT_INVENTORY": "Tab opens the inventory."
 }
