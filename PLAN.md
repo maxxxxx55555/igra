@@ -11,6 +11,18 @@
 каждого пункта, коммит + пуш, отметить `[x]` в этом файле. Если пункт
 неоднозначен — остановиться и спросить, не выдумывать.
 
+**Ownership (autonomous mode, 2026-09-08):** `locales/**`, `data/i18n/**`
+and all i18n tooling (`tools/i18n_*.py`) are the local agent's from now
+on — the Qwen agent that previously worked this area is not running.
+ARENA (cloud agent, branch `arena/01a080ba-igra`) owns `levels/**`,
+`content/**`, `docs/**` except `docs/GDD.md`/`docs/PRODUCTION_BIBLE.md`
+(frozen) — never edit those paths, never touch its branch/PR.
+
+## Autonomous decisions log
+
+Format: what / why / alternatives considered. Appended to, never
+rewritten.
+
 ---
 
 ## А. Что уже работает (проверено, не предположение)
