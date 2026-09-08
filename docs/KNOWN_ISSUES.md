@@ -1,5 +1,35 @@
 # Known issues
 
+## District `powered_by` graph branches; GDD §4.1's chain text is narrative order, not a literal dependency spec
+
+`data/districts/*.tres` forms a branching, reconverging DAG (e.g.
+`industrial` requires BOTH `warehouses` AND `police` at FULL), not the
+single arrow-chain GDD §4.1 lists. `school` and `gas_station` are leaves
+of this graph — nothing lists them as anyone's prerequisite. Verified
+2026-09-08 (`docs/STATIC_AUDIT.md` #21): this predates any recent
+session's work, and victory still requires all 11 districts at FULL
+regardless of graph shape, so a leaf district isn't a completion bug,
+just one that gates nothing downstream. Do not "fix" `powered_by` to
+match a strict chain — the content team's `world_refs` reveal-gate
+closures (`docs/CONTENT_PIPELINE_AUDIT.md` §3.4) are computed against
+the real branching topology; forcing a linear chain would invalidate
+them.
+
+## `WorldBible.is_revealed()` doesn't distinguish "district exists" from "district visited"
+
+`scripts/world/world_bible.gd`'s `is_revealed(reveal)` checks
+`DistrictManager.get_stage(district) >= min_stage`. Every district
+defaults to stage `DARK` (0) whether or not the player has ever been
+there, so a `min_stage: 0` reveal is trivially "revealed" for an
+unvisited district — the check verifies stage progression, not
+visitation. Not a live bug today: content authoring discipline
+(`content/README.md`'s reachability rule, `docs/CONTENT_PIPELINE_AUDIT.md`
+§3.4) is what actually keeps `world_refs` from leaking early across all
+6 shipped district packs, not this primitive. Flagged so a future pack
+or UI feature doesn't lean on `is_revealed()` alone for "has the player
+been here" — it doesn't mean that. Found 2026-09-08 while reviewing
+Arena's own `park_note_05` fix (`docs/STATIC_AUDIT.md` #24).
+
 ## `scripts/world/puzzle_base.gd` — dead fossil, wrong node type for this 3D game
 
 Found in the 2026-09-08 static audit (`docs/STATIC_AUDIT.md` #16).

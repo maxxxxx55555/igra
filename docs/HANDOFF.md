@@ -27,6 +27,22 @@ PARTIAL stage isn't implemented in `streetlight_3d.gd`; the suburbs/
 residential/park `item_spawns.json` stage tables are unread (the older
 `REPAIR_PARTS` mechanism already covers solvability another way).
 
+**PR #3 merged (same day, "merge arena" command)**: `arena/01a08213-igra`
+— three districts at once (`school`/`hospital`/`gas_station`) plus
+`docs/CONTENT_PIPELINE_AUDIT.md` (Arena's own static audit of all 6
+packs shipped so far, which found and fixed a suburbs DARK-solvability
+gap and a park world_refs reveal-gate leak before this merge). Wired
+like the previous 3 districts, 48 keys × 13 locales translated
+(`i18n_audit.py`: 0 missing). Resolved both CODE-facing data facts
+Arena flagged: the school/gas_station "leaf" power topology is verified
+intentional (not a bug — GDD §4.1's chain text is narrative ordering,
+the real `.tres` graph already branches/reconverges); `district_themes.gd`'s
+dead per-district `"music"` field (disagreed with `music_manager.gd`,
+confirmed unread by anything) was deleted rather than "fixed" toward
+either side. Full reasoning: `PLAN.md` decisions log,
+`docs/STATIC_AUDIT.md` #21-#24. Next Arena district queued:
+`police` (`ARENA_NEXT_PROMPT.md`).
+
 ## Previous phase: RELEASE CANDIDATE pass (2026-09-08, autonomous, owner override)
 
 Read `PLAN.md`'s "Autonomous decisions log" first — full detail on every

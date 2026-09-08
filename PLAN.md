@@ -327,6 +327,63 @@ as mandatory, not optional, for the rest of this mode.
 
 ---
 
+**2026-09-08 ("merge arena" command, PR #3):** merged
+`arena/01a08213-igra` — three districts at once (`school`, `hospital`,
+`gas_station`) plus `docs/CONTENT_PIPELINE_AUDIT.md`, a static audit of
+all 6 packs shipped so far. Scope-checked (content/**, docs/**, assets/
+textures/** only, including two in-scope edits to already-merged
+`suburbs`/`park` content files — verified those didn't rename any note
+id my earlier wiring depends on), 8 JSON files validated, merged
+`--no-ff`, 0 conflicts, static gates green, branch deleted.
+
+Wired the same way as suburbs/residential/park: 24 new note ids added to
+`district_loot.gd`'s `LORE_DOCS`, matching catalog entries generated via
+a small one-off python script (not hand-typed — 24 entries with nested
+`world_refs` arrays is exactly the kind of transcription work a script
+should do). 48 keys × 13 locales translated directly, `i18n_audit.py`
+confirms 0 missing.
+
+Resolved both data facts Arena's own audit flagged as CODE's call
+(full reasoning + evidence: `docs/STATIC_AUDIT.md` #21-#22):
+- **school/gas_station power topology vs GDD §4.1**: verified NOT a bug.
+  `data/districts/*.tres` already forms a branching, reconverging DAG
+  (`industrial` needs BOTH `warehouses` AND `police`) that predates this
+  session entirely; GDD §4.1's single arrow-chain is a narrative/display
+  ordering, not a literal unlock-dependency spec. Left the `.tres` files
+  untouched — rewriting them to force a strict chain would invalidate
+  Arena's own already-shipped `world_refs` reveal-gate closures (computed
+  against the real branching topology in `CONTENT_PIPELINE_AUDIT.md`
+  §3.4), a much larger and riskier change than the "fix" would be worth.
+- **`district_themes.gd` vs `music_manager.gd` music-row disagreement**:
+  traced both to their actual call sites. `district_themes.gd`'s
+  per-district `"music"` key is read by nothing anywhere in the
+  codebase (confirmed dead — its own values were suspicious copy-paste,
+  5 districts sharing one file). `music_manager.gd`'s `AMBIENT_BY_
+  DISTRICT` is itself a documented-unreachable fallback, since
+  `AMBIENCE_DARK_BY_DISTRICT`/`AMBIENCE_LIT_BY_DISTRICT` already cover
+  all 11 districts and are what actually plays. Reconciled by deleting
+  the dead field rather than picking a "winning" value nothing would
+  ever read — the one true source of per-district audio stays the
+  `AMBIENCE_*_BY_DISTRICT` pair.
+
+Also surfaced (not fixed, logged as `STATIC_AUDIT.md` #24): Arena's own
+`park_note_05` fix exposed a real imprecision in `WorldBible.is_revealed()`
+— it checks `stage >= min_stage`, and every district defaults to `DARK`
+(0) whether visited or not, so a `min_stage: 0` reveal is trivially true
+for a district the player hasn't reached. Not a live bug today (content
+authoring discipline — §3.4's reachability rule — is the actual guardrail,
+and it's followed correctly in all 6 shipped packs), but a real gap in
+the primitive itself if a future pack or a UI feature ever trusts it
+without also checking district visitation. Deferred rather than risk an
+uncompiled change to a lookup two live features depend on.
+
+`ARENA_NEXT_PROMPT.md` updated to queue `police` (district 7, GDD §4.1),
+with its own reachability closure spelled out explicitly (`suburbs +
+park` only) so the next Arena pass doesn't have to rediscover the same
+rule the audit caught park breaking once already.
+
+---
+
 ## В. План работ по порядку
 
 ### Этап 1 — decisions needed (дизайнерские решения, не код)
