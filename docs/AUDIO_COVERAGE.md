@@ -18,7 +18,7 @@ OGG q4 mono; beds = 36 s seamless loops (loop points 0.000–36.000, matched zer
 | residential | residential.wav ✔ (major, 80 bpm, root 62, 14 bars ≈ 42 s) | residential_dark ✔ | **MISSING** | 3/3 ✔ |
 | park | park.wav ✔ | park_dark ✔ | **MISSING** | 4/4 ✔ |
 | school | abandoned_hallways_alt.mp3 ✔ | school_dark ✔ | **MISSING** | 4/4 ✔ |
-| hospital | abandoned_hallways_alt.mp3 ✔ | hospital_dark ✔ | hospital_lit ✔ | 4/4 ✔ |
+| hospital | abandoned_hallways_alt.mp3 ✔ | hospital_dark ✔ (1ch/44.1k/36.000 s) | hospital_lit ✔ (1ch/44.1k/36.000 s, header-verified 2026-09-08) | 4/4 ✔ (all 30.000 s) |
 | gas_station | downtown.wav ✔ | gas_station_dark ✔ | **MISSING** | 4/4 ✔ |
 | police | downtown.wav ✔ | police_dark ✔ | **MISSING** | 3/3 ✔ |
 | warehouses | harbor.wav ✔ | warehouses_dark ✔ | **MISSING** | 4/4 ✔ |
@@ -74,6 +74,29 @@ all present ✔. MusicManager falls back to the dark bed for districts without a
 - Reference pair for structure: `suburbs_dark.ogg` → `suburbs_lit.ogg`.
 - Wiring note: add `&"school"` row to `AMBIENCE_LIT_BY_DISTRICT` (CODE agent, after delivery).
 - Status: **spec only — binary not fabricated** (school asset pass delivered textures only).
+
+### G2d — hospital: **no lit-bed gap** (verified, district 5 pass)
+- `assets/audio/ambience/districts/hospital_lit.ogg` already ships. Statically verified by
+  parsing the Ogg/Vorbis identification header and the final page granule (no engine, no
+  ffprobe in this sandbox): **1 channel, 44,100 Hz, 36.000 s exactly, nominal 86 kbps,
+  279,412 B** — matches the house bed contract (36 s seamless loop, OGG q4 mono).
+  Its dark twin `hospital_dark.ogg` measures identically (1 ch, 44.1 kHz, 36.000 s).
+- `music_manager.gd` already maps `&"hospital"` in `AMBIENCE_LIT_BY_DISTRICT`; no wiring
+  action needed.
+- Detail one-shots verified present and all exactly 30.000 s / mono / 44.1 kHz:
+  `hospital_monitor_beep` (+4.6 dB offset), `hospital_pa_mumble` (+2.4),
+  `hospital_gurney_wheels` (0.0), `hospital_elevator_distant` (0.0).
+- **Not verifiable statically here:** integrated loudness (−18 LUFS) and true peak of the
+  shipped hospital beds — no ffmpeg/ffprobe in this sandbox. Flagged for whoever holds the
+  audio toolchain; docs/AUDIO_LOUDNESS.md remains the authority.
+- Optional (flavor, not canon-required) — `hospital_ward_curtain_drag.ogg`: 30 s loop,
+  OGG q4 mono, −18 LUFS, TP ≤ −1.5 dBFS. Rail-runner rattle plus fabric drag, sparse, one
+  event per 8–12 s; would join `DETAIL_BEDS["hospital"]` at −2.0 dB and play only in
+  `z_ward_b` (see `content/districts/hospital/prop_manifest.md`). Status: **spec only,
+  not fabricated.**
+- Content constraint for any future hospital audio: no PA words, no monitor rhythm in the
+  lit bed. The PA "almost-words" beat is scripted at STREETS (manifest stage table); the
+  Act II reveal must stay in documents, never in a loop.
 
 ### G3 — remaining lit beds (same template as G1/G2b/G2c, theme params from `gen_audio.py` DISTRICTS)
 - `school_lit.ogg` — **superseded by G2c above (full spec)**.
