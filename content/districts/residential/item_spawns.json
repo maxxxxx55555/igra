@@ -1,0 +1,96 @@
+{
+  "district": "residential",
+  "version": 1,
+  "_comment": "District 2 (GDD §4.1: suburbs -> residential). Threat tier 2 (shadow + crawler per scripts/enemies/enemy_pool.gd): teaches courtyard stealth and vertical reading (windows, stairwells) after the suburbs tutorial. Canon anchors: blueprint_flashlight_brightness is this district's blueprint (scripts/world/district_loot.gd BLUEPRINTS), doc_old_woman = house 24 (Babka Manya), grid-crew arc continues from suburbs_note_04/07. Repair-part guarantee mirrors district_loot.gd REPAIR_PARTS (2x cable/fuse/transistor physically present per district) so FULL is always reachable. All item ids verified against data/items/*.tres (41 ids, 2026-09).",
+  "tables": {
+    "DARK": [
+      { "item": "battery",  "weight": 20, "min": 1, "max": 1 },
+      { "item": "scrap",    "weight": 16, "min": 1, "max": 2 },
+      { "item": "medkit",   "weight": 12, "min": 1, "max": 1 },
+      { "item": "bottle",   "weight": 10, "min": 1, "max": 2 },
+      { "item": "paper",    "weight": 10, "min": 1, "max": 1 },
+      { "item": "fabric",   "weight": 10, "min": 1, "max": 1 },
+      { "item": "coin",     "weight": 8,  "min": 3, "max": 8 },
+      { "item": "alcohol",  "weight": 6,  "min": 1, "max": 1 },
+      { "item": "molotov",  "weight": 5,  "min": 1, "max": 1 },
+      { "item": "noise_bomb","weight": 4, "min": 1, "max": 1 },
+      { "item": "firework", "weight": 4,  "min": 1, "max": 1 }
+    ],
+    "PARTIAL": [
+      { "item": "battery",   "weight": 14, "min": 1, "max": 1 },
+      { "item": "cable",     "weight": 12, "min": 1, "max": 1 },
+      { "item": "fuse",      "weight": 12, "min": 1, "max": 1 },
+      { "item": "wiring",    "weight": 10, "min": 1, "max": 2 },
+      { "item": "scrap",     "weight": 10, "min": 1, "max": 2 },
+      { "item": "medkit",    "weight": 9,  "min": 1, "max": 1 },
+      { "item": "noise_bomb","weight": 8,  "min": 1, "max": 1 },
+      { "item": "coin",      "weight": 7,  "min": 5, "max": 12 },
+      { "item": "lockpick",  "weight": 6,  "min": 1, "max": 1 },
+      { "item": "repair_kit","weight": 6,  "min": 1, "max": 1 },
+      { "item": "circuit",   "weight": 4,  "min": 1, "max": 1 },
+      { "item": "transistor","weight": 4,  "min": 1, "max": 2 }
+    ],
+    "STREETS": [
+      { "item": "battery",    "weight": 10, "min": 1, "max": 1 },
+      { "item": "cable",      "weight": 10, "min": 1, "max": 2 },
+      { "item": "fuse",       "weight": 8,  "min": 1, "max": 2 },
+      { "item": "radio_part", "weight": 8,  "min": 1, "max": 1 },
+      { "item": "coin",       "weight": 8,  "min": 8, "max": 15 },
+      { "item": "medkit",     "weight": 7,  "min": 1, "max": 1 },
+      { "item": "repair_kit", "weight": 6,  "min": 1, "max": 1 },
+      { "item": "wiring",     "weight": 6,  "min": 1, "max": 2 },
+      { "item": "serum",      "weight": 5,  "min": 1, "max": 1 },
+      { "item": "gunpowder",  "weight": 4,  "min": 1, "max": 1 },
+      { "item": "circuit",    "weight": 4,  "min": 1, "max": 2 }
+    ],
+    "FULL": [
+      { "item": "coin",        "weight": 14, "min": 10, "max": 20 },
+      { "item": "medkit",      "weight": 10, "min": 1, "max": 1 },
+      { "item": "serum",       "weight": 8,  "min": 1, "max": 1 },
+      { "item": "repair_kit",  "weight": 8,  "min": 1, "max": 1 },
+      { "item": "battery",     "weight": 8,  "min": 1, "max": 2 },
+      { "item": "blueprint_flashlight_brightness", "weight": 5, "min": 1, "max": 1 },
+      { "item": "radio_part",  "weight": 5,  "min": 1, "max": 1 },
+      { "item": "transistor",  "weight": 4,  "min": 1, "max": 2 }
+    ]
+  },
+  "container_modifiers": {
+    "apartment_closet": 1.3,
+    "basement_shelf": 1.5,
+    "kitchen_drawer": 0.8,
+    "laundry_basket": 0.9,
+    "car_trunk": 1.2,
+    "trash_bin": 0.6,
+    "mail_box": 0.5
+  },
+  "fixed_spawns": [
+    { "id": "residential_fix_puzzle_01", "item": "cable",     "zone": "z_boiler_room",   "container": "basement_shelf",  "qty": 2, "min_stage": 0,
+      "reason": "Guarantee: cable for PARTIAL (cable -> PARTIAL per power_switch.gd); grid-crew cache from residential_note_07." },
+    { "id": "residential_fix_puzzle_02", "item": "fuse",      "zone": "z_block_west",    "container": "apartment_closet","qty": 2, "min_stage": 0,
+      "reason": "Guarantee: fuse for STREETS, spread into the west block so players learn stairwell stealth." },
+    { "id": "residential_fix_puzzle_03", "item": "transistor","zone": "z_boiler_room",   "container": "basement_shelf",  "qty": 2, "min_stage": 0,
+      "reason": "Guarantee: transistor for FULL behind the locked boiler-room door (key = residential_fix_key_01)." },
+    { "id": "residential_fix_key_01",    "item": "key",       "zone": "z_courtyard_play","container": "trash_bin",       "qty": 1, "min_stage": 0,
+      "reason": "Boiler-room key hidden in the sandbox; playground is the safest courtyard pocket." },
+    { "id": "residential_fix_blueprint_01","item": "blueprint_flashlight_brightness", "zone": "z_house24", "container": "kitchen_drawer", "qty": 1, "min_stage": 1,
+      "reason": "District blueprint (district_loot.gd BLUEPRINTS canon) with Babka Manya; gated behind first partial power." },
+    { "id": "residential_fix_med_01",    "item": "medkit",    "zone": "z_house24",       "container": "kitchen_drawer",  "qty": 2, "min_stage": 0,
+      "reason": "The old woman shares supplies; safe-ish heal cache after the crawler-heavy courtyards." },
+    { "id": "residential_fix_defense_01","item": "molotov",   "zone": "z_exit_east",     "container": "trash_bin",       "qty": 2, "min_stage": 2,
+      "reason": "Defense cache before the east exit to park; STREETS stage only." },
+    { "id": "residential_fix_exit_01",   "item": "battery",   "zone": "z_gate_south",    "container": "mail_box",        "qty": 3, "min_stage": 0,
+      "reason": "Battery cache at the district gate — top-up pushed forward from suburbs exit cache." }
+  ],
+  "zones": [
+    "z_gate_south", "z_block_west", "z_block_east", "z_courtyard_play",
+    "z_laundry_yard", "z_house24", "z_boiler_room", "z_exit_east"
+  ],
+  "rules": [
+    "R1: In DARK, fixed_spawns alone must cover the repair chain (>=2 cable, >=2 fuse, >=2 transistor reachable; transistor door key obtainable without lockpick).",
+    "R2: Rolled loot never includes stage-gated items early: table lookup uses the CURRENT DistrictData.Stage only.",
+    "R3: Fixed spawns are one-time per save; rolls are per-container with container_modifiers on qty.",
+    "R4: No firearms in residential (tier 2 stealth district; molotov/firework/noise_bomb remain the ceiling). Serum first appears in STREETS rolls.",
+    "R5: Courtyard containers (trash_bin, laundry_basket, mail_box) carry the rolled loot; apartment interiors carry the fixed story caches — stealth risk maps to reward.",
+    "R6: house 24 caches (blueprint, medkits) must not roll empty: Babka Manya's door is a scripted kindness, not RNG."
+  ]
+}
