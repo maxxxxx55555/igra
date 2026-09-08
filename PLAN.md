@@ -75,6 +75,60 @@ control. Added the slider (same pattern as its siblings). Left the `UI`
 bus without a slider — nothing in the project currently routes any sound
 to it, so a control for it would be speculative, not a fix.
 
+Follow-up (same day): fixed the same live-language-switch gap in
+`quest_journal.gd` (rebuild-on-language_changed, matching
+`settings_screen.gd`'s pattern) and `skill_tree_ui.gd`/`skill_button.gd`
+(tab titles + skill name/desc/cost retranslate via the existing
+`refresh()` chain). `docs/KNOWN_ISSUES.md`'s live-switch list is now
+fully closed.
+
+**2026-09-08 ("merge arena" command, PR #2):** owner sent the exact
+command to merge Arena's second PR (`arena/01a08149-igra`: residential +
+park district content, the world bible, lit-tile assets). Scope-checked
+first (own commits vs merge-base: `content/**`, `docs/**` except frozen,
+`assets/textures/**` only — in bounds), all 8 new JSON files
+syntax-validated, merged `--no-ff`, 0 conflicts, full 5-gate + windowed
+boot/perf suite green, branch deleted.
+
+Wired everything the same way suburbs was: `residential`/`park` note ids
+added to `district_loot.gd`'s `LORE_DOCS`, their catalog entries added to
+`documents_catalog.json` with `title_key`/`content_key`. Added a new
+`scripts/world/world_bible.gd` — minimal static id→dict lookups over
+`content/world/*.json`/`content/lore/*.json` (characters, factions,
+revealed radio transcripts), stage-gated through `DistrictManager`, no
+new systems (same style as `district_loot.gd`'s own static utility
+methods). Used it in two places: `journal_ui.gd` shows an already-
+revealed "Related: X, Y" line under a note's text when it carries
+`world_refs` (park notes only, so far); `radio.gd` appends revealed
+`content/world/radio_transcripts.json` broadcasts as extra channels next
+to its 5 fixed demo ones (same `tr()`-via-`TranslationServer` path the
+screen already used — `LocalizationManager` registers every JSON key
+with Godot's real `TranslationServer`, confirmed by reading
+`localization_manager.gd`, so this isn't the same class of bug as the
+raw-`tr()`-never-resolves issue from earlier waves).
+
+Deliberately NOT built: a UI to browse the whole world bible (characters/
+factions list, timeline) — the brief said "minimal APIs only, no new
+systems," and nothing in the merged content requires more than the two
+cross-link points above to be functional. `history.json` (`hist_*`)
+entries have no `i18n_keys` field by the world bible's own contract (not
+directly shown to the player) — not translated, correctly.
+
+85 new keys × 13 locales translated directly (not Qwen, not a
+placeholder pass): `LORE_RESIDENTIAL_*`(16), `LORE_PARK_*`(16),
+`WORLD_CHAR_*`(18), `WORLD_FACTION_*`(10), `WORLD_RADIO_*`(6),
+`WORLD_DIARY_*`(8), `WORLD_NEWS_*`(10), `JOURNAL_RELATED`(1).
+`content/world/history.json` intentionally excluded (see above).
+
+Caught and reverted before commit: registering `WorldBible`'s new
+`class_name` required one `godot --headless --editor --quit` run (a
+plain `--path . --quit` doesn't rebuild `global_script_class_cache.cfg`)
+— that editor pass silently corrupted `default_bus_layout.tres` on its
+own resave (dropped the whole Master bus block, dropped `room_size` from
+the reverb, mangled the resource `uid`). Caught by manually diffing the
+file before staging, reverted with `git checkout --`, documented in
+`docs/KNOWN_ISSUES.md` as a standing gotcha for next time.
+
 ---
 
 ## А. Что уже работает (проверено, не предположение)

@@ -12,6 +12,16 @@ added the missing Ambient-bus volume slider, found two OTHER stale
 content) work — flagged for owner review, not merged. Queued `residential`
 as the next Arena district in `ARENA_NEXT_PROMPT.md`.
 
+**PR #2 merged (same day, "merge arena" command)**: `arena/01a08149-igra`
+— residential + park district content, the world bible (characters/
+factions/radio/diary/news), lit-tile assets. Scope-checked, gates green,
+branch deleted. Wired like suburbs (`LORE_DOCS`, catalog entries) plus a
+new minimal `scripts/world/world_bible.gd` lookup used by `journal_ui.gd`
+(world_refs cross-links) and `radio.gd` (revealed broadcasts as extra
+channels). 85 new keys × 13 locales translated. Full detail: `PLAN.md`
+decisions log. Next Arena district queued in `ARENA_NEXT_PROMPT.md`:
+`school`.
+
 **Phase 4 update (same day, continued)**: play-probed the skill tree,
 quest journal and their live-language-switch behavior — found and fixed
 3 more stale-translation screens (skill tree tab titles + skill name/
