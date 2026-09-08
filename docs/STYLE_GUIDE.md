@@ -56,6 +56,23 @@ Stage ambient energy (canon, `district_grading.gd`): DARK 0.03 → PARTIAL 0.06 
 multiply luminance ≈ ×1.35–1.5 and blend 10–20% toward `#c9a24a`, keep the darkest texel
 above `#131a20`. Never repaint geometry; the pair must diff as light only.
 
+### 4.1 Numeric acceptance test for a `_lit` twin (added with the school pass)
+
+Measure before committing (Pillow + numpy, luminance = 0.2126R + 0.7152G + 0.0722B):
+
+| Metric | Target | Shipped reference values |
+|---|---|---|
+| Luminance lift `mean(lit)/mean(dark)` | 1.35–1.50 | school pair 1.42 |
+| Geometry correlation (Pearson on luminance, dark vs lit) | ≥ 0.85 | suburbs 0.999, park wall 0.930, school 0.943 / 0.895 |
+| Warmth `mean(R−B)` | positive, +15…+40 (dark twins are −10…−15) | park lit +23, school lit +24 / +32 |
+| Palette clamp | min texel ≥ 19, max ≤ 240 | school 19..239 |
+| Seam delta (mean abs diff of wrapping edge rows/cols) | within ±30% of the dark twin's | school 3.4 vs 3.8, 4.4 vs 3.1 |
+
+If an AI generation overshoots the lift (they usually do, ×2 or more), rescale the whole
+image so the mean luminance hits `mean(dark) × 1.42`, then wrap-blend an 8 px border to
+restore the seam, then clamp the palette — in that order. The same wrap-blend applies to new
+`surfaces/*_512.png` prop faces that need to tile.
+
 ## 5. Audio style (summary; canon in PRODUCTION_BIBLE §3, AUDIO_LOUDNESS.md)
 
 - Ambience beds: 36 s seamless loops, −18 LUFS, true peak ≤ −1.5 dBFS, OGG q4 mono;
