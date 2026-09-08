@@ -1,0 +1,94 @@
+{
+  "district": "park",
+  "version": 1,
+  "_comment": "District 3 (GDD §4.1; opens at suburbs FULL per district_park.tres powered_by). Threat tier 3 (crawler + hunter + shadow per scripts/enemies/enemy_pool.gd): teaches noise discipline — hunter hunts running sound (park_note_03). Canon anchors: blueprint_flashlight_battery is this district's blueprint (district_loot.gd BLUEPRINTS), doc_streetlight_manifesto = the Keeper's manifesto (documents_catalog), keeper's shed = grid-crew cache drop from park_note_03. Repair-part guarantee mirrors district_loot.gd REPAIR_PARTS (2x cable/fuse/transistor). All item ids verified against data/items/*.tres (41 ids, 2026-09).",
+  "tables": {
+    "DARK": [
+      { "item": "battery",  "weight": 20, "min": 1, "max": 1 },
+      { "item": "scrap",    "weight": 16, "min": 1, "max": 2 },
+      { "item": "cable",    "weight": 10, "min": 1, "max": 1 },
+      { "item": "bottle",   "weight": 10, "min": 1, "max": 2 },
+      { "item": "fabric",   "weight": 10, "min": 1, "max": 1 },
+      { "item": "medkit",   "weight": 9,  "min": 1, "max": 1 },
+      { "item": "coin",     "weight": 8,  "min": 3, "max": 8 },
+      { "item": "firework", "weight": 6,  "min": 1, "max": 1 },
+      { "item": "noise_bomb","weight": 5, "min": 1, "max": 1 },
+      { "item": "molotov",  "weight": 4,  "min": 1, "max": 1 }
+    ],
+    "PARTIAL": [
+      { "item": "battery",   "weight": 14, "min": 1, "max": 1 },
+      { "item": "cable",     "weight": 12, "min": 1, "max": 1 },
+      { "item": "fuse",      "weight": 12, "min": 1, "max": 1 },
+      { "item": "wiring",    "weight": 10, "min": 1, "max": 2 },
+      { "item": "scrap",     "weight": 10, "min": 1, "max": 2 },
+      { "item": "noise_bomb","weight": 9,  "min": 1, "max": 1 },
+      { "item": "medkit",    "weight": 8,  "min": 1, "max": 1 },
+      { "item": "coin",      "weight": 7,  "min": 5, "max": 12 },
+      { "item": "lockpick",  "weight": 6,  "min": 1, "max": 1 },
+      { "item": "repair_kit","weight": 6,  "min": 1, "max": 1 },
+      { "item": "circuit",   "weight": 4,  "min": 1, "max": 1 },
+      { "item": "transistor","weight": 4,  "min": 1, "max": 2 }
+    ],
+    "STREETS": [
+      { "item": "battery",    "weight": 10, "min": 1, "max": 1 },
+      { "item": "cable",      "weight": 10, "min": 1, "max": 2 },
+      { "item": "fuse",       "weight": 8,  "min": 1, "max": 2 },
+      { "item": "radio_part", "weight": 8,  "min": 1, "max": 1 },
+      { "item": "coin",       "weight": 8,  "min": 8, "max": 15 },
+      { "item": "medkit",     "weight": 7,  "min": 1, "max": 1 },
+      { "item": "serum",      "weight": 6,  "min": 1, "max": 1 },
+      { "item": "repair_kit", "weight": 6,  "min": 1, "max": 1 },
+      { "item": "wiring",     "weight": 6,  "min": 1, "max": 2 },
+      { "item": "gunpowder",  "weight": 4,  "min": 1, "max": 1 },
+      { "item": "circuit",    "weight": 4,  "min": 1, "max": 2 }
+    ],
+    "FULL": [
+      { "item": "coin",        "weight": 14, "min": 10, "max": 20 },
+      { "item": "medkit",      "weight": 10, "min": 1, "max": 1 },
+      { "item": "serum",       "weight": 8,  "min": 1, "max": 1 },
+      { "item": "repair_kit",  "weight": 8,  "min": 1, "max": 1 },
+      { "item": "battery",     "weight": 8,  "min": 1, "max": 2 },
+      { "item": "blueprint_flashlight_battery", "weight": 5, "min": 1, "max": 1 },
+      { "item": "radio_part",  "weight": 5,  "min": 1, "max": 1 },
+      { "item": "transistor",  "weight": 4,  "min": 1, "max": 2 }
+    ]
+  },
+  "container_modifiers": {
+    "tool_chest": 1.5,
+    "boat_bin": 0.9,
+    "cache_bench": 1.0,
+    "trash_bin": 0.6,
+    "mail_box": 0.5,
+    "kitchen_drawer": 0.8
+  },
+  "fixed_spawns": [
+    { "id": "park_fix_puzzle_01", "item": "cable",     "zone": "z_keeper_shed", "container": "tool_chest",  "qty": 2, "min_stage": 0,
+      "reason": "Guarantee: cable for PARTIAL; grid-crew cache drop promised in park_note_03." },
+    { "id": "park_fix_puzzle_02", "item": "fuse",      "zone": "z_chess_grove", "container": "cache_bench", "qty": 2, "min_stage": 0,
+      "reason": "Guarantee: fuse for STREETS, hidden under the chess pavilion boards." },
+    { "id": "park_fix_puzzle_03", "item": "transistor","zone": "z_keeper_shed", "container": "tool_chest",  "qty": 2, "min_stage": 0,
+      "reason": "Guarantee: transistor for FULL inside the locked keeper's shed (key = park_fix_key_01)." },
+    { "id": "park_fix_key_01",    "item": "key",       "zone": "z_pond",        "container": "boat_bin",    "qty": 1, "min_stage": 0,
+      "reason": "Shed key in the boat house bin, exactly where grid crew log 4 says." },
+    { "id": "park_fix_blueprint_01","item": "blueprint_flashlight_battery", "zone": "z_keeper_shed", "container": "tool_chest", "qty": 1, "min_stage": 1,
+      "reason": "District blueprint (district_loot.gd BLUEPRINTS canon); the Keeper's spare cell design." },
+    { "id": "park_fix_lure_01",   "item": "firework",  "zone": "z_alley_bare",  "container": "trash_bin",   "qty": 2, "min_stage": 0,
+      "reason": "Teaches noise-luring vs hunter (tier-3 stealth lesson); alley is the hunter lane." },
+    { "id": "park_fix_defense_01","item": "molotov",   "zone": "z_exit_east",   "container": "trash_bin",   "qty": 2, "min_stage": 2,
+      "reason": "Defense cache before the east exit to school; STREETS stage only." },
+    { "id": "park_fix_exit_01",   "item": "battery",   "zone": "z_gate_west",   "container": "mail_box",    "qty": 3, "min_stage": 0,
+      "reason": "Battery top-up at the west gate from residential." }
+  ],
+  "zones": [
+    "z_gate_west", "z_alley_bare", "z_grove_east", "z_keeper_shed", "z_bandstand",
+    "z_carousel", "z_chess_grove", "z_pond", "z_exit_east"
+  ],
+  "rules": [
+    "R1: In DARK, fixed_spawns alone must cover the repair chain (>=2 cable, >=2 fuse, >=2 transistor; shed key obtainable without lockpick).",
+    "R2: Rolled loot never includes stage-gated items early: table lookup uses the CURRENT DistrictData.Stage only.",
+    "R3: Fixed spawns are one-time per save; rolls are per-container with container_modifiers on qty.",
+    "R4: No firearms in park (tier 3 stealth district; molotov/firework/noise_bomb remain the ceiling). Serum first appears in STREETS rolls.",
+    "R5: Noise economy: alley/grove containers (trash_bin, boat_bin) sit in hunter lanes — reward maps to running-noise risk; open-lawn caches (cache_bench) are safer but poorer.",
+    "R6: Keeper's shed caches (blueprint, transistors) must not roll empty: the shed is a scripted cache drop, not RNG."
+  ]
+}

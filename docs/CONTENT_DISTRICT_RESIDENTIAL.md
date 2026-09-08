@@ -17,7 +17,8 @@ Scope respected: this pass touched **only `content/**` and `docs/**`**. No `*.gd
 ## Canon anchors used (verified in-repo)
 
 - Chain: `suburbs → residential`, `powered_by = [&"suburbs"]` (`data/districts/district_residential.tres`);
-  residential powers `park` and `school`.
+  residential powers `school` and `hospital`. (Park is powered directly by `suburbs` per
+  `district_park.tres` — corrected 2026-09 in the park pass.)
 - Enemies: `shadow`, `crawler` ×2 (`scripts/enemies/enemy_pool.gd`).
 - Blueprint: `blueprint_flashlight_brightness` (`scripts/world/district_loot.gd` BLUEPRINTS).
 - Story doc: `doc_old_woman` = house 24 / Babka Manya, «свет — не электричество»
