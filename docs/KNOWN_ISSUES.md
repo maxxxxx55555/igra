@@ -1,5 +1,21 @@
 # Known issues
 
+## `scripts/world/puzzle_base.gd` — dead fossil, wrong node type for this 3D game
+
+Found in the 2026-09-08 static audit (`docs/STATIC_AUDIT.md` #16).
+`extends Area2D`, calls `PowerGrid.toggle_district(district_id)` — the
+only other live call site of `toggle_district()`/`toggle()` besides
+`power_grid.gd` itself, and the mechanic GDD §4.3 still documents
+("Переключатели `PowerSwitch` и пазлы: `toggle_district` = STREETS ↔
+DARK"). Confirmed unreachable: `scenes/props/puzzle.tscn` (its only
+scene) is never instanced anywhere. Even revived it would need `Area3D`/
+`StaticBody3D` collision like `power_switch.gd`, not `Area2D`, to
+receive any interaction in this project's 3D interact system. Same
+treatment as the already-documented `streetlight.gd`/
+`streetlight_spawner.gd` fossils below: not deleted (CLAUDE.md: never
+delete a file unless proven dead *and* not a planned feature), flagged
+so nobody assumes it's live.
+
 ## `godot --headless --editor --quit` corrupts `default_bus_layout.tres` on resave — never commit after running it
 
 Needed once this pass to force a `global_script_class_cache.cfg` rebuild

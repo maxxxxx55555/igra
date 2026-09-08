@@ -1,6 +1,33 @@
 # Handoff
 
-## Latest phase: RELEASE CANDIDATE pass (2026-09-08, autonomous, owner override)
+## Latest phase: NO-GODOT static-audit pass (2026-09-08, full autonomy)
+
+Owner mandated a defect hunt verified entirely by code tracing — no
+Godot binary run at all. Full register: `docs/STATIC_AUDIT.md`. Player-
+facing summary + 5-minute manual check: `docs/PLAYER_VISIBLE_CHANGES.md`.
+
+**Headline**: 8 of 18 skill-tree skills across all 4 branches were
+purchasable but did nothing (weapons: damage/crit/fire-rate/reload;
+survival: health regen/light radius; utility: loot luck), 3 more called
+player methods that don't exist at all (max_health/stamina_boost/
+battery_capacity) — all wired now. Root cause behind "bought skills
+reset on Continue": `SkillTreeManager.load_data()` ran before the player
+node existed; moved the reapply into `player_3d.gd`'s own `_ready()`.
+Also fixed a severe one: a dead `ending_screen.gd` node was eating every
+Escape press during normal gameplay (force-quit to main menu, racing the
+real pause menu). Plus 9 more UI files fixed for live-language-switch
+retranslation (full sweep, not just previously-flagged ones), a global-
+lighting scope bug, a ghost-inventory-slot bug, a stale "collect all
+documents" threshold, and 2 confirmed-dead-code deletions.
+
+Documented-not-fixed (need a design call or a new system): only 3/5
+endings reachable (`survivor`/`dark` are dead branches); the live
+emissive-windows implementation never reacts to power stage; GDD's
+PARTIAL stage isn't implemented in `streetlight_3d.gd`; the suburbs/
+residential/park `item_spawns.json` stage tables are unread (the older
+`REPAIR_PARTS` mechanism already covers solvability another way).
+
+## Previous phase: RELEASE CANDIDATE pass (2026-09-08, autonomous, owner override)
 
 Read `PLAN.md`'s "Autonomous decisions log" first — full detail on every
 item below. Short version: merged Arena's suburbs-content PR (owner

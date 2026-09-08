@@ -252,6 +252,81 @@ file before staging, reverted with `git checkout --`, documented in
 
 ---
 
+**2026-09-08 (FULL AUTONOMY, NO-GODOT static-audit pass):** owner
+mandated a defect hunt verified entirely by code tracing — no Godot
+binary run at all this pass (a prior pass's `--editor --quit` had
+silently corrupted `default_bus_layout.tres`; this mode removes that
+risk class entirely). Used 3 parallel Explore subagents (power grid/
+emissive windows; save+load/endings; settings+i18n screen sweep) plus
+my own tracing (boot order, loot flow, skill tree all 4 branches,
+journal/world-bible, radio). Full register with file:line evidence:
+`docs/STATIC_AUDIT.md`. Player-facing summary + a 5-minute manual check
+list: `docs/PLAYER_VISIBLE_CHANGES.md`.
+
+Headline finding: **8 of 18 skill-tree skills across all 4 branches
+were purchasable (real skill-point cost) but did literally nothing** —
+`damage_boost_1/2`, `crit_chance`, `fire_rate`, `reload_speed` (combat),
+`health_regen`, `light_radius` (survival), `loot_luck` (utility). Three
+more (`max_health`, `stamina_boost`, `battery_capacity`) called player
+methods (`set_max_health` etc.) that don't exist anywhere in the
+codebase. And the root cause behind all "push once" skills losing their
+effect on every Continue: `SkillTreeManager.load_data()` runs during
+`SaveSystem`'s data-parse phase, before the player node exists, so its
+effect-replay loop always no-op'd. All wired/fixed this pass — see
+`STATIC_AUDIT.md` #2-#5 for the exact fix per skill.
+
+Also severe: `ending_screen.gd` was a completely dead, never-shown node
+whose `_unhandled_input` was nonetheless always live (its only guard
+depended on a `Tween` that's never created) — every Escape press during
+ordinary gameplay called `Endings.mark_ended()` and force-quit to the
+main menu, racing the real pause menu on the same keypress. Fixed with
+a one-line guard.
+
+Decisions on what NOT to fix (would need a design call or a new system,
+not a wire-up — documented in `STATIC_AUDIT.md`, not guessed at):
+- Only 3 of 5 GDD endings (`light`/`hope`/`truth`) are reachable;
+  `survivor`/`dark` are dead branches because `all_restored()` is
+  always true by the time the ending evaluator ever runs, and death
+  never triggers an evaluation at all. Needs a real design decision
+  (when should "Survivor" fire? should death show a real "Dark" ending
+  instead of the current static death screen?).
+- `scripts/visual/emissive_windows.gd` (the live implementation) never
+  reacts to district power stage at all — pure one-time randomness,
+  contradicting its own design brief. A real fix needs per-instance
+  MultiMesh color updates keyed by stage, not a one-line wire-up.
+- GDD's PARTIAL stage ("some streetlights lit") isn't implemented in
+  `streetlight_3d.gd` — PARTIAL looks identical to DARK. Same reasoning
+  as the windows above.
+- `content/districts/*/item_spawns.json`'s stage-gated tables/fixed-
+  spawns are never read by any script; `district_loot.gd`'s own
+  `REPAIR_PARTS` already guarantees the same solvability goal via an
+  older, simpler, already-working flat mechanism. Wiring the JSON would
+  mean building a new stage-aware spawn system to replace a working
+  one — out of scope for a defect-fix pass.
+
+Also fixed (major/minor, not skill-tree): a global lighting handler
+reacting to every district's stage change instead of just the player's
+current one; a renamed/removed inventory item id restoring as a
+permanent ghost slot; `TOTAL_DOCUMENTS` (endings threshold) was a
+hand-typed const that had already drifted stale after the suburbs/
+residential/park lore-note additions, made "collect all documents"
+trivial — now computed from the live spawn tables; save-slot UI always
+showed "Level: 1" and the 1970 epoch date; two confirmed 100%-dead-code
+no-ops deleted (a duplicate signal emit, an always-false sync
+condition); 9 more UI files (found via a full sweep, not just the ones
+flagged in earlier passes) fixed for live-language-switch retranslation
+— `docs/KNOWN_ISSUES.md`'s list should now be genuinely complete.
+
+Process note: caught and fixed one self-introduced bug this pass by
+re-reading every edited function before committing (a mid-file edit had
+left an orphaned tail — the flashlight battery-bonus code — sitting
+outside its function, referencing an undefined variable). With no
+compile gate available in no-Godot mode, this manual re-read step is
+now the only defense against exactly that class of mistake — treat it
+as mandatory, not optional, for the rest of this mode.
+
+---
+
 ## В. План работ по порядку
 
 ### Этап 1 — decisions needed (дизайнерские решения, не код)
