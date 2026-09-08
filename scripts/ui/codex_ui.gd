@@ -29,10 +29,21 @@ var _buttons: Array[Button] = []
 ## экрана заметно подтормаживало бы.
 var _pages: Dictionary = {}
 var _current: int = -1
+var _title_label: Label
+var _close_btn: Button
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_build()
+	# Static audit 2026-09-08: title/close/tab-label text was set once and
+	# never retranslated. Retranslate in place (not a full rebuild) so the
+	# lazily-created tab pages in _pages/_current aren't torn down - each
+	# hosted page (journal_ui.gd etc.) already retranslates itself.
+	LocalizationManager.language_changed.connect(func(_l: String) -> void:
+		_title_label.text = LocalizationManager.t("CODEX_TITLE")
+		_close_btn.text = LocalizationManager.t("ui_close")
+		for i in TABS.size():
+			_buttons[i].text = LocalizationManager.t(String(TABS[i]["label"])))
 
 func _build() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
@@ -56,18 +67,18 @@ func _build() -> void:
 	# Шапка: заголовок слева, крестик справа.
 	var header := HBoxContainer.new()
 	root.add_child(header)
-	var title := Label.new()
-	title.text = LocalizationManager.t("CODEX_TITLE")
-	title.add_theme_font_size_override("font_size", ThemeProvider.FONT_SIZE_TITLE)
-	title.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
-	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	header.add_child(title)
-	var close_btn := Button.new()
-	close_btn.text = LocalizationManager.t("ui_close")
-	close_btn.focus_mode = Control.FOCUS_NONE
-	close_btn.custom_minimum_size = Vector2(140, 40)
-	close_btn.pressed.connect(_close)
-	header.add_child(close_btn)
+	_title_label = Label.new()
+	_title_label.text = LocalizationManager.t("CODEX_TITLE")
+	_title_label.add_theme_font_size_override("font_size", ThemeProvider.FONT_SIZE_TITLE)
+	_title_label.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
+	_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_child(_title_label)
+	_close_btn = Button.new()
+	_close_btn.text = LocalizationManager.t("ui_close")
+	_close_btn.focus_mode = Control.FOCUS_NONE
+	_close_btn.custom_minimum_size = Vector2(140, 40)
+	_close_btn.pressed.connect(_close)
+	header.add_child(_close_btn)
 
 	# Содержимое активной вкладки.
 	_content = Control.new()

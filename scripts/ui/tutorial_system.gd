@@ -90,11 +90,16 @@ var _step_timer: float = 0.0
 var _completed_steps: Array = []
 var _tutorial_active: bool = false
 var _waiting_for_action: bool = false
+var _skip_btn: Button
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_build_ui()
 	_load_progress()
+	# Static audit 2026-09-08: "Skip" text on this permanent overlay was
+	# set once and never retranslated.
+	LocalizationManager.language_changed.connect(func(_l: String) -> void:
+		_skip_btn.text = LocalizationManager.t("UI_SKIP"))
 	
 	EventBus.game_started.connect(_on_game_started)
 	InputService.attack_requested.connect(_on_attack)
@@ -126,14 +131,14 @@ func _build_ui() -> void:
 	lbl.add_theme_font_size_override("font_size", 18)
 	bg.add_child(lbl)
 	
-	var skip_btn := Button.new()
-	skip_btn.text = LocalizationManager.t("UI_SKIP")
-	skip_btn.size = Vector2(100, 30)
-	skip_btn.anchors_preset = Control.PRESET_BOTTOM_RIGHT
-	skip_btn.offset_bottom = -10
-	skip_btn.offset_right = -10
-	skip_btn.pressed.connect(_skip_tutorial)
-	bg.add_child(skip_btn)
+	_skip_btn = Button.new()
+	_skip_btn.text = LocalizationManager.t("UI_SKIP")
+	_skip_btn.size = Vector2(100, 30)
+	_skip_btn.anchors_preset = Control.PRESET_BOTTOM_RIGHT
+	_skip_btn.offset_bottom = -10
+	_skip_btn.offset_right = -10
+	_skip_btn.pressed.connect(_skip_tutorial)
+	bg.add_child(_skip_btn)
 	
 	add_child(_hint_panel)
 

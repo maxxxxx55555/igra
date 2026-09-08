@@ -39,6 +39,17 @@ func _ready() -> void:
 	layer = 25
 	_build_menu_bg()
 	_build_all_screens()
+	# Static audit 2026-09-08: every screen's shared "Close" button was
+	# built once in _build_screen() and never retranslated (screens
+	# themselves are cached, never rebuilt, so a language change while a
+	# screen was closed left its close button stale next time it opened).
+	# Screens without a real close button got a placeholder Button.new()
+	# never added to the tree - harmless to retranslate too.
+	LocalizationManager.language_changed.connect(func(_l: String) -> void:
+		for d in _screen_data.values():
+			var btn: Button = d.get("close_btn")
+			if btn:
+				btn.text = LocalizationManager.t("SCR_ZAKRYT"))
 
 func _build_menu_bg() -> void:
 	var bg_full := ColorRect.new()

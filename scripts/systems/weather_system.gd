@@ -12,7 +12,12 @@ var _timer: float = 0.0
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_timer = change_interval
-	_emit()
+	# Static audit 2026-09-08: WeatherSystem is an earlier autoload than
+	# LocalizationManager (project.godot order), so this first _emit()
+	# used to run before any language was loaded - t() fell through to
+	# the raw key. Harmless today (no listener displays the name), but
+	# deferring costs nothing and removes the trap for future listeners.
+	call_deferred("_emit")
 func _process(delta: float) -> void:
 	_timer -= delta
 	if _timer <= 0.0:

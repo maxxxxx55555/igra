@@ -11,6 +11,7 @@ extends Control
 var _title: Label = null
 var _subtitle: Label = null
 var _stats: Label = null
+var _menu_btn: Button = null
 
 func _ready() -> void:
 	_build()
@@ -50,16 +51,19 @@ func _build() -> void:
 	_stats.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
 	vb.add_child(_stats)
 
-	var b := Button.new()
-	b.text = LocalizationManager.t("BTN_MAIN_MENU")
-	b.focus_mode = Control.FOCUS_NONE
-	b.custom_minimum_size = Vector2(220, 44)
-	b.pressed.connect(func() -> void: GameManager.return_to_menu())
-	vb.add_child(b)
+	_menu_btn = Button.new()
+	_menu_btn.focus_mode = Control.FOCUS_NONE
+	_menu_btn.custom_minimum_size = Vector2(220, 44)
+	_menu_btn.pressed.connect(func() -> void: GameManager.return_to_menu())
+	vb.add_child(_menu_btn)
 
 func _refresh() -> void:
 	if _title == null:
 		return
+	# Static audit 2026-09-08: button text was set once in _build() and
+	# never retranslated; _refresh() already reruns on every visibility_
+	# changed(visible), which is the natural retranslation point here.
+	_menu_btn.text = LocalizationManager.t("BTN_MAIN_MENU")
 	var em := get_node_or_null("/root/EndingsManager")
 	var data: Dictionary = {}
 	if em != null and em.has_method("get_ending_data"):

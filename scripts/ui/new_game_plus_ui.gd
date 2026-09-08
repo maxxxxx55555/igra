@@ -13,6 +13,10 @@ func _ready() -> void:
 	_refresh()
 	activate_button.pressed.connect(_on_activate)
 	back_button.pressed.connect(_close)
+	# Static audit 2026-09-08: this screen is cached by UIManager (never
+	# freed, just hidden) - a language change while it's closed left it
+	# stale next time it reopened, since nothing called _refresh() again.
+	LocalizationManager.language_changed.connect(func(_l: String) -> void: _refresh())
 
 func _refresh() -> void:
 	var ng = NewGamePlus.get_current_ng_plus()

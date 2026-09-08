@@ -27,6 +27,10 @@ func _ready() -> void:
 	# сквозь неё в игровой мир: игрок жал по карте, а персонаж стрелял.
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	tooltip_text = LocalizationManager.t("MAP_OPEN_HINT")
+	# Static audit 2026-09-08: tooltip was set once and never retranslated
+	# on this persistent always-on HUD element.
+	LocalizationManager.language_changed.connect(func(_l: String) -> void:
+		tooltip_text = LocalizationManager.t("MAP_OPEN_HINT"))
 	custom_minimum_size = SIZE
 	size = SIZE
 	anchor_left = 1.0

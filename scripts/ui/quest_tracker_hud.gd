@@ -24,6 +24,10 @@ func _ready() -> void:
 	QuestManager.quest_progress.connect(_refresh)
 	
 	EventBus.settings_changed.connect(_on_settings_changed)
+	# Static audit 2026-09-08: title on this always-on gameplay HUD was set
+	# once and never retranslated.
+	LocalizationManager.language_changed.connect(func(_l: String) -> void:
+		_title_lbl.text = LocalizationManager.t("QUEST_OBJECTIVES"))
 	_refresh()
 
 func _build_ui() -> void:

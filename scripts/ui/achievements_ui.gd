@@ -16,6 +16,13 @@ var _list: VBoxContainer
 var _counter: Label
 func _ready() -> void:
 	EventBus.achievement_unlocked.connect(func(_id: StringName) -> void: _refresh())
+	# Static audit 2026-09-08: title/close-button text was built once, never
+	# retranslated on a live language switch (the achievement rows
+	# themselves already refresh fine via _refresh()).
+	LocalizationManager.language_changed.connect(func(_l: String) -> void:
+		for c in get_children():
+			c.queue_free()
+		_build())
 	_build()
 func _build() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
