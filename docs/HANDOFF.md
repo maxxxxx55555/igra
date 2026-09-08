@@ -1,5 +1,60 @@
 # Handoff
 
+## Latest phase: SHIP wave + Stage 1 decisions + autonomous i18n wave (2026-09-08)
+
+Read `PLAN.md` first now — it is the live, actively-maintained tracking
+doc for this whole arc (status table, decisions log, i18n backlog
+table); this HANDOFF.md section is a summary pointer, not the source of
+truth going forward.
+
+Three sessions back to back, all gates green throughout, no force
+push, no history rewrite:
+
+1. **SHIP wave** (`docs/SESSION_REPORT_SHIP.md`): orphan-asset sweep
+   (285 quarantined files, 4 restored with real consumers, rest
+   confirmed dead), 5/8 `BUGS_FOR_CLAUDE.md` items fixed in code
+   (stale imports, `music_combat.ogg` wired as a battle variant,
+   district detail-bed audio, weather music layers), 548-file asset
+   consolidation commit, Web/Windows export preset skeletons added,
+   Android package id fixed pre-upload, `docs/PRIVACY_POLICY.md`
+   drafted.
+2. **Stage 1 decisions wave**: the three design questions PLAN.md had
+   flagged as blocking were answered and implemented — a 4th
+   "Stealth" skill branch (`silent_steps`/`cold_trail`, real effects
+   wired into `player_3d.gd`/`base_monster.gd`, not placeholders), the
+   dead lobby/save-slot screens formally archived (kept, not deleted,
+   per this project's own rule), `perf_check_scene.tscn` turned into a
+   real gate (hard-fails on D11<350; headless honestly SKIPs instead
+   of false-passing on the dummy renderer's draw_calls=0). Also
+   discovered mid-wave that the emissive-windows bug this doc's older
+   sections describe as unfixed had *already* been fixed in a prior
+   "FINAL PERFECTION P3" pass before this wave started — verified,
+   not re-done.
+3. **Autonomous i18n wave** (no human check-ins, per its own explicit
+   mandate): the full i18n backlog closed, 3424 → 165 English-fallback
+   strings (the 165 remaining are verified legitimate cognates/
+   loanwords, not gaps — see `PLAN.md` §Б.4 for the full breakdown and
+   commit list). Also corrected a stale `docs/KNOWN_ISSUES.md` entry
+   that still described the draw-call root cause as unfixed streetlight
+   mesh batching — that part turned out to already be fixed too; the
+   real remaining D1<200 gap is monster + pickup-item meshes, a
+   design/deeper-batching question, documented not guessed at further.
+
+State at the end of this arc: 8-gate static suite green, all engine
+gates green (compile/signal-arity/autoload-api/i18n/asset/save-
+integrity/footstep/audio-hum), `boot_check_scene.tscn` green
+(`--windowed`; `--headless` still hangs on the full boot flow, a
+long-known environment limitation, not a regression),
+`default_bus_layout.tres` unchanged throughout. Remaining work is
+Stage 4 in `PLAN.md` — human-only release steps (keystore, AppLovin
+key, Play Console, export templates) — tracked in `RELEASE_CHECKLIST.md`
+at the repo root.
+
+**ARENA** (cloud agent, branch `arena/01a080ba-igra`) is working in
+parallel on `levels/**`/`content/**`/most of `docs/**` — not touched by
+any of the above, per this project's ownership split.
+
+
 Read `docs/PRODUCTION_BIBLE.md` first — canon reference (pillars,
 visual/audio canon, budgets, checklist) for any new wave of work.
 
