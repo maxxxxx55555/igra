@@ -22,6 +22,7 @@ var current_ammo: int = 30
 var _fire_timer: float = 0.0
 var _reloading: bool = false
 var _reload_timer: float = 0.0
+var _reload_duration: float = 0.0
 var _owner: Node3D = null
 
 func _ready() -> void:
@@ -38,17 +39,17 @@ func fire(from_pos: Vector3, direction: Vector3) -> bool:
 	if not can_fire():
 		return false
 	
-	_fire_timer = fire_rate
+	_fire_timer = fire_rate * _fire_rate_multiplier()
 	current_ammo -= 1
 	ammo_changed.emit(current_ammo, max_ammo)
-	
+
 	# Spawn bullet
 	if bullet_scene:
 		var bullet = bullet_scene.instantiate()
 		bullet.global_position = from_pos
 		bullet.look_at(from_pos + direction)
 		if bullet.has_method("initialize"):
-			bullet.initialize(damage, range, _owner)
+			bullet.initialize(_effective_damage(), range, _owner)
 		get_tree().root.add_child(bullet)
 	
 	# Muzzle flash
@@ -96,7 +97,8 @@ func try_reload() -> bool:
 		return false
 	
 	_reloading = true
-	_reload_timer = reload_time
+	_reload_duration = reload_time * _reload_time_multiplier()
+	_reload_timer = _reload_duration
 	
 	if reload_sound:
 		AudioManager.play_sound_3d(reload_sound, global_position)
@@ -124,4 +126,33 @@ func is_reloading() -> bool:
 func get_reload_progress() -> float:
 	if not _reloading:
 		return 1.0
-	return 1.0 - (_reload_timer / reload_time)
+	return 1.0 - (_reload_timer / _reload_duration)
+
+## Static audit 2026-09-08: damage_boost_1/2, crit_chance, fire_rate and
+## reload_speed were purchasable (real skill-point cost, shown as unlocked
+## in the UI) but nothing in the game ever read them - buying them did
+## nothing. Wired at the point each stat is actually used; only applies to
+## the player's own weapon (an enemy could theoretically hold a WeaponBase
+## too, and skills are player-only).
+func _effective_damage() -> float:
+	if _owner == null or not _owner.is_in_group("player"):
+		return damage
+	var mult := 1.0
+	mult += 0.1 * SkillTreeManager.get_skill_level(&"damage_boost_1")
+	mult += 0.1 * SkillTreeManager.get_skill_level(&"damage_boost_2")
+	var dmg := damage * mult
+	# Design decision (not in GDD): crit multiplier x2, since SKILL_TREES
+	# only defines the per-level chance (5%/level, up to 15% at max).
+	if randf() < 0.05 * SkillTreeManager.get_skill_level(&"crit_chance"):
+		dmg *= 2.0
+	return dmg
+
+func _fire_rate_multiplier() -> float:
+	if _owner == null or not _owner.is_in_group("player"):
+		return 1.0
+	return 1.0 - 0.15 * SkillTreeManager.get_skill_level(&"fire_rate")
+
+func _reload_time_multiplier() -> float:
+	if _owner == null or not _owner.is_in_group("player"):
+		return 1.0
+	return 1.0 - 0.25 * SkillTreeManager.get_skill_level(&"reload_speed")

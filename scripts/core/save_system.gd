@@ -258,12 +258,19 @@ func get_slot_info(slot: int) -> Dictionary:
 	if data.is_empty():
 		return {"exists": false}
 	var progress = data.get("progress", {})
-	
+
+	# Static audit 2026-09-08: "level" always fell to its else-branch (1)
+	# because save_slot() never writes a "current_scene" key at all, and
+	# "modified" was hardcoded 0.0 instead of the "timestamp" field that IS
+	# saved. "district" is what's actually saved and closest to "level"
+	# for this project. Note: this slot API only feeds save_slots_ui.gd/
+	# save_slot_entry.gd, both archived/unreachable per KNOWN_ISSUES.md -
+	# fixed anyway since it's cheap, but not currently player-visible.
 	return {
 		"exists": true,
-		"level": data.get("current_scene", "").get_file().get_basename().replace("level_", "").to_int() if data.get("current_scene", "") != "" else 1,
+		"level": data.get("district", "") if data.get("district", "") != "" else 1,
 		"playtime": progress.get("time_played", 0.0),
-		"modified": 0.0,
+		"modified": data.get("timestamp", 0.0),
 		"scene": data.get("current_scene", "")
 	}
 

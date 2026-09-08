@@ -216,26 +216,25 @@ func _apply_skill_effect(skill_id: StringName, level: int) -> void:
 	var player = get_tree().get_first_node_in_group("player")
 	if not player:
 		return
-	
+
 	match skill_id:
 		"damage_boost_1", "damage_boost_2", "crit_chance", "fire_rate", "reload_speed":
-			# Handled by weapon system
+			# Read live by weapon_base.gd at the point each stat is used.
 			pass
 		"max_health":
-			if player.has_method("set_max_health"):
-				player.set_max_health(player.max_health + 20)
+			if player.stats:
+				player.stats.max_hp += 20
 		"health_regen":
-			# Add regen to player stats
+			# Read live each frame by player_3d.gd's _physics_process.
 			pass
 		"stamina_boost":
-			if player.has_method("set_max_stamina") and player.stats:
-				player.set_max_stamina(player.stats.stamina_max + 30)
+			if player.stats:
+				player.stats.stamina_max += 30
 		"battery_capacity":
-			if player.has_method("set_max_battery"):
-				player.set_max_battery(player.battery + 25)
+			player.battery_max += 25
 		"light_radius":
-			# Handled by flashlight
-			pass
+			if player.has_method("refresh_flashlight_range"):
+				player.refresh_flashlight_range()
 		"inventory_space":
 			InventoryManager.add_slots(5)
 		"move_speed":
@@ -246,7 +245,7 @@ func _apply_skill_effect(skill_id: StringName, level: int) -> void:
 			# Multiplier applied in XP gain
 			pass
 		"loot_luck":
-			# Handled by loot system
+			# Read live by district_loot.gd at roll time.
 			pass
 		"silent_steps":
 			# Read directly each frame by player_3d.gd's noise_radius calc
@@ -254,6 +253,20 @@ func _apply_skill_effect(skill_id: StringName, level: int) -> void:
 		"cold_trail":
 			# Read directly by base_monster.gd when setting _investigate_timer
 			pass
+
+## Static audit 2026-09-08: load_data() below used to call
+## _apply_skill_effect() itself, at a moment (SaveSystem's data-parse phase)
+## that runs BEFORE the player node exists - it silently no-op'd for every
+## "push once" skill above every single time a save was loaded, since
+## get_tree().get_first_node_in_group("player") was always empty. Split out
+## so player_3d.gd can call this once its own _ready() confirms the player
+## actually exists. Also fixes a second bug in the same loop: a stored
+## level N only replayed the per-level effect once instead of N times.
+func reapply_all_effects() -> void:
+	for skill_id in _unlocked_skills:
+		var level: int = int(_unlocked_skills[skill_id])
+		for lvl in range(1, level + 1):
+			_apply_skill_effect(skill_id, lvl)
 
 func get_tree_data(tree_id: StringName) -> Dictionary:
 	return SKILL_TREES.get(tree_id, {})
@@ -279,7 +292,6 @@ func save_data() -> Dictionary:
 func load_data(data: Dictionary) -> void:
 	_unlocked_skills = data.get("unlocked_skills", {})
 	_skill_points = data.get("skill_points", 0)
-	
-	# Re-apply all effects
-	for skill_id in _unlocked_skills:
-		_apply_skill_effect(skill_id, _unlocked_skills[skill_id])
+	# Effects are NOT reapplied here - this runs before the player node
+	# exists (see reapply_all_effects()'s comment). player_3d.gd calls
+	# reapply_all_effects() itself once it's ready.

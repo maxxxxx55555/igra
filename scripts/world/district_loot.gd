@@ -101,6 +101,13 @@ static func populate(district_root: Node3D, district_id: StringName) -> int:
 
 	var items: Array[StringName] = []
 	items.append_array(COMMON)
+	# Static audit 2026-09-08: "loot_luck" skill was purchasable but never
+	# read anywhere - buying it did nothing. Extra common-item rolls per
+	# level; still fully deterministic (same seeded rng as everything else
+	# in this function).
+	var luck_lvl := _skill_level(&"loot_luck")
+	for i in luck_lvl:
+		items.append(COMMON[rng.randi() % COMMON.size()])
 	items.append_array(REPAIR_PARTS)
 	var themed: Array = BY_DISTRICT.get(district_id, [])
 	for it in themed:
@@ -148,3 +155,9 @@ static func _spawn_document(root: Node3D, doc_id: String, pos: Vector3) -> bool:
 	node.global_position = pos
 	node.set("document_id", doc_id)
 	return true
+
+## static funcs have no self/get_node - same autoload-access pattern as
+## core/endings.gd's _root().
+static func _skill_level(skill_id: StringName) -> int:
+	var stm := Engine.get_main_loop().root.get_node_or_null("/root/SkillTreeManager")
+	return stm.get_skill_level(skill_id) if stm else 0

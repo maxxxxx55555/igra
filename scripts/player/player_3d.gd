@@ -182,6 +182,14 @@ func _ready() -> void:
 	status_fx.mob = self
 	add_child(status_fx)
 	_net_active = multiplayer != null and multiplayer.multiplayer_peer != null
+	# Static audit 2026-09-08: SkillTreeManager.load_data() (called during
+	# SaveSystem's data-parse phase, before this node exists) could never
+	# actually apply "push once" skill effects (max_health, stamina_boost,
+	# battery_capacity, move_speed, inventory_space, light_radius) - every
+	# Continue silently reset them to unboosted base. Reapply here, once,
+	# before stats/hp/stamina/battery below read their now-correct values.
+	if SkillTreeManager:
+		SkillTreeManager.reapply_all_effects()
 	var mh = stats.max_hp if (stats and stats.max_hp > 0) else 100.0
 	hp = float(mh)
 	stamina = stats.stamina_max
@@ -337,6 +345,12 @@ func _physics_process(delta: float) -> void:
 			_fps_sum += Engine.get_frames_per_second(); _fps_n += 1
 		elif _el >= 6000 and not _fps_done:
 			_fps_done = true
+		# Static audit 2026-09-08: "health_regen" skill was purchasable but
+		# nothing ever read it - buying it did nothing. Gated on is_playing()
+		# so it stops on death/menu like the FPS sampling above.
+		var regen_lvl: int = SkillTreeManager.get_skill_level(&"health_regen") if SkillTreeManager else 0
+		if regen_lvl > 0 and hp > 0.0:
+			heal(2.0 * regen_lvl * delta)
 	#DEBUG_MOVECHK
 	_movechk_timer += delta
 	if _movechk_timer >= 1.0:
@@ -919,6 +933,12 @@ func _exit_hiding() -> void:
 		EventBus.player_hiding_changed.emit(false)
 		_hiding_spot = null
 
+## Range comes from two independent sources (blueprint-bought flashlight
+## upgrades here, the skill-tree's "light_radius" skill) - _upgrade_range_bonus
+## caches the former so _refresh_flashlight_range() can recompute the sum
+## whenever either one changes, instead of one call overwriting the other.
+var _upgrade_range_bonus: float = 0.0
+
 func apply_flashlight_upgrades(levels: Dictionary) -> void:
 	if not levels:
 		return
@@ -926,12 +946,11 @@ func apply_flashlight_upgrades(levels: Dictionary) -> void:
 	if not fl_up:
 		return
 	var b_bonus: float = fl_up.get_bonus("brightness")
-	var r_bonus: float = fl_up.get_bonus("range")
 	var s_bonus: float = fl_up.get_bonus("stability")
 	var a_bonus: float = fl_up.get_bonus("angle")
 	var bat_bonus: float = fl_up.get_bonus("battery")
+	_upgrade_range_bonus = fl_up.get_bonus("range")
 	flashlight.light_energy = 1.0 * (1.0 + b_bonus)
-	flashlight.spot_range = 8.0 + r_bonus
 	flashlight.spot_angle = 45.0 + a_bonus
 	var sm := cone.material_override as ShaderMaterial
 	if sm:
@@ -939,5 +958,14 @@ func apply_flashlight_upgrades(levels: Dictionary) -> void:
 	battery_max = 100.0 * (1.0 + bat_bonus)
 	battery = minf(battery, battery_max)
 	EventBus.player_battery_changed.emit(battery / battery_max)
+	refresh_flashlight_range()
+
+## Static audit 2026-09-08: "light_radius" skill was purchasable but nothing
+## ever read it. Called from apply_flashlight_upgrades() above and from
+## SkillTreeManager when light_radius is unlocked, so whichever source
+## changes last still sees the other's contribution.
+func refresh_flashlight_range() -> void:
+	var skill_lvl: int = SkillTreeManager.get_skill_level(&"light_radius") if SkillTreeManager else 0
+	flashlight.spot_range = 8.0 * (1.0 + 0.2 * skill_lvl) + _upgrade_range_bonus
 
 

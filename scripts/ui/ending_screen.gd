@@ -79,6 +79,15 @@ func _apply_kind() -> void:
 		_bg.color = COLOR_WIN_BG if kind == "win" else COLOR_LOSE_BG
 
 func _unhandled_input(event: InputEvent) -> void:
+	# Static audit 2026-09-08: show_ending() is never called by anything,
+	# so _tween stayed null forever and this handler's only guard
+	# (`_tween != null and _tween.is_running()`) never returned early -
+	# every Escape press during ordinary gameplay called mark_ended() and
+	# force-quit to the main menu, on top of the real pause menu firing
+	# from the same keypress. Gate on _bg instead: this screen has nothing
+	# to dismiss (and no input to handle) until show_ending() has built it.
+	if _bg == null:
+		return
 	if _tween != null and _tween.is_running():
 		return
 	if event.is_action_pressed("ui_cancel") or (event is InputEventScreenTouch and event.pressed):

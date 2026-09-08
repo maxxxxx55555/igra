@@ -203,7 +203,12 @@ func from_dict(d: Dictionary) -> void:
 		if s == null:
 			slots[i] = null
 		elif s is Dictionary:
-			slots[i] = {"item_id": StringName(s.get("item_id", "")), "count": int(s.get("count", 0))}
+			# Static audit 2026-09-08: a renamed/removed item id used to
+			# restore as a permanent blank "ghost" slot (equipment slots
+			# below already guard the same way) - skip it instead.
+			var item_id := StringName(s.get("item_id", ""))
+			if ItemDatabase.get_item(item_id):
+				slots[i] = {"item_id": item_id, "count": int(s.get("count", 0))}
 	# Восстановление экипировки
 	for k in d.get("equipment", {}).keys():
 		for slot in equipment:

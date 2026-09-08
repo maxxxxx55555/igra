@@ -72,7 +72,7 @@ func _refresh() -> void:
 	var pt := get_node_or_null("/root/ProgressTracker")
 	var pg := get_node_or_null("/root/PowerGrid")
 	var docs: int = pt.count_docs() if pt != null else 0
-	var total_docs: int = Endings.TOTAL_DOCUMENTS
+	var total_docs: int = Endings.get_total_documents()
 	var districts: int = 0
 	if pg != null:
 		for d in pg.all_districts():

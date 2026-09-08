@@ -130,7 +130,15 @@ func apply_for_stage(stage: int) -> void:
 
 
 
+## Static audit 2026-09-08: this owns the ONE global WorldEnvironment/Moon/
+## PlayerGlow for the whole game, but reacted to every district's stage
+## change, not just wherever the player actually is - restoring a district
+## the player wasn't standing in overwrote the correct lighting underfoot.
+## Same guard district_grading.gd/music_manager.gd already use.
 func _on_district_stage_changed(_id: StringName, stage: int) -> void:
+	var dm := get_node_or_null("/root/DistrictManager")
+	if dm != null and _id != dm.current_district:
+		return
 	apply_for_stage(stage)
 
 func _on_weather_changed(_weather: int, _name: String, _fog: float, _rain: float) -> void:

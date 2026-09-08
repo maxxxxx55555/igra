@@ -4,11 +4,22 @@ class_name Endings
 
 const SPEEDRUN_SECONDS: float = 1800.0
 const TOTAL_DISTRICTS: int = 11
-## 11 документов реально лежат в мире (по одному на район, см.
-## DistrictLoot.DOCUMENTS) плюс 2 выдаются за события — прежнее значение 2
-## делало «все документы собраны» почти мгновенным и обесценивало лучшие
-## концовки.
-const TOTAL_DOCUMENTS: int = 13
+## Static audit 2026-09-08: this used to be a hand-typed const (13 = 11
+## DistrictLoot.DOCUMENTS + 2 event docs) that already drifted out of sync
+## once the suburbs/residential/park lore-note packs added 24 more document
+## ids via DistrictLoot.LORE_DOCS - "collect all documents" became
+## trivially satisfiable from the first two districts alone. Computed from
+## the live spawn tables instead, so it can't drift again.
+const EVENT_DOCUMENTS: int = 2  # doc_engineer_log, doc_family_letter (progress_tracker.gd)
+
+static func get_total_documents() -> int:
+	var ids := {}
+	for id in DistrictLoot.DOCUMENTS.values():
+		ids[String(id)] = true
+	for lore_list in DistrictLoot.LORE_DOCS.values():
+		for id in lore_list:
+			ids[String(id)] = true
+	return ids.size() + EVENT_DOCUMENTS
 
 static var _ended: bool = false
 
@@ -30,13 +41,13 @@ static func evaluate() -> Array:
 
 	var pct := _district_pct(dm)
 	var docs := _count_docs(pt)
-	var docs_pct := float(docs) / float(TOTAL_DOCUMENTS)
+	var docs_pct := float(docs) / float(get_total_documents())
 	var secrets: int = pt.secrets if pt else 0
 	var powerplant_full: bool = dm.get_stage("powerplant") >= 3
 	var all_districts: bool = dm.all_restored()
 
 	# Истина (секретная) — все документы + аудио-логи + фото + бункер
-	if pt and docs >= TOTAL_DOCUMENTS and all_districts and secrets >= 3:
+	if pt and docs >= get_total_documents() and all_districts and secrets >= 3:
 		out.append({"id": "truth", "title": "END_TRUTH_TITLE", "desc": "END_TRUTH_DESC", "tier": "secret"})
 
 	# Свет (хорошая) — все 11 районов FULL + все документы
