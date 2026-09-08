@@ -102,6 +102,21 @@ LORE_SCHOOL_07_TITLE  LORE_SCHOOL_07_TEXT
 LORE_SCHOOL_08_TITLE  LORE_SCHOOL_08_TEXT
 ```
 
+## Cross-check log (static, run 2026-09-08 at end of pass)
+
+| Check | Result |
+|---|---|
+| JSON validity (`content/**/*.json`, all packs) | pass |
+| Item / item_type ids ⊆ `data/items/*.tres` (25 used of 41) | pass |
+| `fixed_spawns.zone` ⊆ `zones[]`; note `location_hint` zones ⊆ `zones[]` | pass |
+| Every zone id, note id and fixed-spawn id also appears in `prop_manifest.md` | pass |
+| 16 `LORE_SCHOOL_*` keys listed in this handoff and matching `lore_notes.json` | pass |
+| R1 puzzle solvability in DARK from fixed spawns alone (cable 2 / fuse 2 / transistor 2 + key 1, no lockpick) | pass |
+| `world_refs` resolve in `content/world` + `content/lore` and are all gated at suburbs/residential (park-safe) | pass |
+| No Architect / Act II reveal anywhere in the pack | pass |
+| Every prop scene, texture and audio file referenced by manifest/handoff exists on disk (except the two deliberately spec-only audio files, `school_lit.ogg`, `school_pipe_whisper.ogg`) | pass |
+| Scope: changed paths ⊆ `content/**`, `assets/textures/**`, `docs/**`; no `*.gd`/`*.tscn`/`*.tres`/`tools/`/`locales/`/`data/`/root `.md`; frozen docs untouched | pass |
+
 ## Remaining districts
 
 `hospital → gas_station → police → warehouses → industrial → substation → power_station`.
