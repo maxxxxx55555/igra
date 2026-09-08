@@ -107,6 +107,8 @@ func _cache_vignette_default() -> void:
 	if v != null:
 		_vignette_default_color = v.color
 
+var _reload_bar: ColorRect = null
+
 func _setup_nv_poll() -> void:
 	var nv_poll := Timer.new()
 	nv_poll.name = "NVPollTimer"
@@ -114,6 +116,8 @@ func _setup_nv_poll() -> void:
 	nv_poll.autostart = true
 	nv_poll.timeout.connect(_poll_noise_visibility)
 	nv_poll.timeout.connect(_poll_status_effects)
+	# Прогресс перезарядки всё равно читается по кадрам — отдельный таймер не нужен.
+	nv_poll.timeout.connect(_poll_weapon_info)
 	add_child(nv_poll)
 
 ## 3.12/6.5: полоска статусов игрока (BLEED/BURN/POISON/SLOW/STUN) — иконка 32x32
@@ -673,20 +677,40 @@ func _add_battery_ad_button() -> void:
 	bat_row.add_child(btn)
 	_battery_ad_button = btn
 
-## GDD 3.13: «12/36» — магазин и запас в рюкзаке. Раньше счётчик показывал
-## «магазин / вместимость магазина» и всю игру висел с нулями: EventBus
-## .ammo_changed не слал никто, потому что WeaponManager не был подключён
-## ни к игроку, ни к уровням.
-func _on_ammo_changed(current: int, _max_ammo: int) -> void:
+## GDD 3.13: «Информация об оружии» — имя ствола, `магазин / запас` и прогресс
+## перезарядки. Раньше счётчик показывал «магазин / вместимость магазина» и всю
+## игру висел с нулями: EventBus.ammo_changed не слал никто, потому что
+## WeaponManager не был подключён ни к игроку, ни к уровням.
+func _poll_weapon_info() -> void:
 	var wm := _weapon_manager()
 	var counter := get_node_or_null("AmmoCounter") as Control
-	if wm == null or wm.get_current_weapon() == null:
-		if counter != null:
-			counter.visible = false
+	if wm == null or counter == null:
 		return
-	if counter != null:
-		counter.visible = true
-	ammo_val.text = "%d / %d" % [current, wm.get_reserve()]
+	var w: WeaponBase = wm.get_current_weapon()
+	if w == null:
+		counter.visible = false
+		return
+	counter.visible = true
+	var caption := get_node_or_null("AmmoCounter/AmmoCaption") as Label
+	if caption != null:
+		caption.text = LocalizationManager.name_for("WEAPON_", w.weapon_name, String(w.weapon_name))
+	ammo_val.text = "%d / %d" % [w.current_ammo, wm.get_reserve()]
+	_update_reload_bar(counter, w)
+
+func _update_reload_bar(parent: Control, w: WeaponBase) -> void:
+	if _reload_bar == null or not is_instance_valid(_reload_bar):
+		_reload_bar = ColorRect.new()
+		_reload_bar.name = "ReloadBar"
+		_reload_bar.color = Color(0.788, 0.635, 0.290)
+		_reload_bar.position = Vector2(0, 56)
+		_reload_bar.size = Vector2(0, 3)
+		_reload_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_reload_bar.visible = false
+		parent.add_child(_reload_bar)
+	var reloading: bool = w.is_reloading()
+	_reload_bar.visible = reloading
+	if reloading:
+		_reload_bar.size.x = 172.0 * w.get_reload_progress()
 
 func _weapon_manager() -> WeaponManager:
 	var player := get_tree().get_first_node_in_group("player")
@@ -694,17 +718,13 @@ func _weapon_manager() -> WeaponManager:
 		return null
 	return player.get_node_or_null("WeaponManager") as WeaponManager
 
-## Запас патронов живёт в инвентаре, поэтому счётчик обновляется и на
-## подборе/расходе патронов, а не только на выстреле.
+## Событийные пути (выстрел, подбор патронов) дёргают тот же опрос, чтобы
+## счётчик не ждал следующего тика таймера.
+func _on_ammo_changed(_current: int, _max_ammo: int) -> void:
+	_poll_weapon_info()
+
 func _refresh_ammo() -> void:
-	var wm := _weapon_manager()
-	if wm == null:
-		return
-	var w: WeaponBase = wm.get_current_weapon()
-	if w == null:
-		_on_ammo_changed(0, 0)
-		return
-	_on_ammo_changed(int(w.current_ammo), int(w.max_ammo))
+	_poll_weapon_info()
 
 func _tween_fill(cr: ColorRect, ratio: float) -> void:
 	var target: float = clampf(ratio, 0.0, 1.0) * BAR_W
