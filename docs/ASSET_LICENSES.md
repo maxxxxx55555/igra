@@ -27,6 +27,22 @@ currently loads `tiles/<district>_floor.png`; the `_lit` twins follow the conven
 | `assets/textures/tiles/park_wall_lit.png` | AI-generated in-session (Arena image generation), reference = in-house `tiles/park_wall.png` | Project-owned AI output; no third-party rights | none required | 256² RGB (downscaled 1024² LANCZOS), 104,064 B. Palette-clamped (6..249). Seam delta 32.6 ≈ shipped dark twin 27.7. |
 | `assets/textures/surfaces/pond_ice_512.png` | AI-generated in-session (Arena image generation), text-to-image, palette-locked prompt | Project-owned AI output; no third-party rights | none required | 512² RGB, 304,866 B (≤500 KB budget). Frozen pond for `z_pond` (park manifest gap #3). Dark steel-blue ice #131a20–#2a3340, pale cracks; min 9, max 127; seam 9.8. |
 
+## Added 2026-09-08 — hospital district asset pass
+
+Note: hospital already ships both lit tile twins (`tiles/hospital_floor_lit.png`,
+`tiles/hospital_wall_lit.png`) and both ambience beds, so this pass added **no** tiles and
+**no** audio — only the three prop surfaces the manifest zones needed.
+
+| Path | Origin | License | Attribution | Notes |
+|---|---|---|---|---|
+| `assets/textures/surfaces/hospital_curtain_512.png` | AI-generated in-session (Arena image generation), reference image = in-house `tiles/hospital_wall.png` (style/palette lock) | Project-owned AI output; no third-party rights | none required | 512² RGB, 184,453 B (≤500 KB). Privacy-curtain fabric for `z_ward_b` beds. Mirror-tiled horizontally → **seam_h 0.0** (vertical wrap intentionally not seamless: a curtain hangs, top mesh band ≠ bottom hem, seam_v 29.6 is by design). Mean luminance 100 (shipped `hospital_wall.png` 95, `hospital_tile_dirty_512.png` 121), palette clamped 19..146, warmth R−B −16 (cold, STYLE_GUIDE §1). |
+| `assets/textures/surfaces/morgue_drawers_512.png` | AI-generated in-session (Arena image generation), reference image = in-house `surfaces/school_lockers_512.png` (style lock) | Project-owned AI output; no third-party rights | none required | 512² RGB, 227,646 B. Drawer-bank wall for `z_morgue`. Mean luminance 100, palette 19..173, seam_h 4.3 / seam_v 9.1 (shipped `hospital_tile_dirty_512.png` 3.7), warmth R−B −15. Deliberately textless — no drawer numbers baked in. |
+| `assets/textures/surfaces/xray_lightbox_512.png` | AI-generated in-session (Arena image generation), text-to-image, palette-locked prompt | Project-owned AI output; no third-party rights | none required | 512² RGB, 248,426 B. X-ray light box for `z_operating` / `z_records` (the `hospital_note_07` examine anchor). Non-tiling framed panel — seam metric N/A by class (measured 8.6/13.3, unused). Mean luminance 62 (dim, unlit-by-default), diffuser glass held at district accent teal `#5dc8f4`/`#4a9ab5` low energy, palette clamped 19..166 so nothing blows out; blank film sheet, no image, no text. |
+
+Style compliance (STYLE_GUIDE §1–§3): all three read as unlit night props, matte, no pure
+`#000`/`#fff`, no neon, no baked text/numbers, ≤512² and well under the 500 KB prop budget.
+No lit-twin numeric test (§4.1) applies — no `_lit` variants were produced this pass.
+
 ## Added 2026-09-08 — school district asset pass
 
 | Path | Origin | License | Attribution | Notes |
