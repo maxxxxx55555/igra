@@ -55,7 +55,10 @@ and `lore_notes.json` (`location_hint`), so one wiring pass covers all three fil
 ### z_garage_row — puzzle-material anchor + grid crew story
 - Props: 3 open garages, 1 car on jacks, work bench, cable spools (environment prop).
 - Pickups: 2 `garage_shelf` + 1 `car_trunk` containers; fixed spawns
-  `suburbs_fix_puzzle_01` (2× fuse), `suburbs_fix_puzzle_02` (3× cable), `suburbs_fix_upgrade_01` (backpack_l1, PARTIAL+).
+  `suburbs_fix_puzzle_01` (2× fuse), `suburbs_fix_puzzle_02` (3× cable),
+  `suburbs_fix_puzzle_04` (2× transistor — added by the 2026-09-08 pipeline audit: district 1
+  cannot import a transistor, so FULL must be solvable from suburbs' own fixed spawns),
+  `suburbs_fix_upgrade_01` (backpack_l1, PARTIAL+).
 - Examine: `props/examine.tscn` → audio_log `suburbs_note_04` on the work bench.
 - Notes: this zone is the "why" of the district — the grid crew that proved one streetlight can burn.
 
