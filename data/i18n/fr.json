@@ -831,5 +831,6 @@
   "LORE_SUBURBS_07_TITLE": "Enregistreur : journal de l'équipe réseau, 2",
   "LORE_SUBURBS_07_TEXT": "« Dernière entrée, je crois. On a trouvé d'où vient la consommation et Marat ne veut pas le dire tout haut, alors je le fais : le transformateur est chaud. L'alimentation de la banlieue est coupée depuis deux semaines et le transformateur est CHAUD. On part à pied vers le poste. Si quelqu'un réécoute ça : la lumière peut revenir. On l'a prouvé sur le banc d'essai. Un seul lampadaire. Souvenez-vous-en. »",
   "LORE_SUBURBS_08_TITLE": "Liste de garde de la banlieue",
-  "LORE_SUBURBS_08_TEXT": "Une liste manuscrite : « Garde de rue — heures sombres. Ivanov 1er étage, Petro 2e, la vieille Anya à la fenêtre d'angle avec la lampe torche. » Trois noms sont barrés. À côté du dernier nom barré : « Il est parti chercher son chien. Le chien est revenu. Pas lui. »"
+  "LORE_SUBURBS_08_TEXT": "Une liste manuscrite : « Garde de rue — heures sombres. Ivanov 1er étage, Petro 2e, la vieille Anya à la fenêtre d'angle avec la lampe torche. » Trois noms sont barrés. À côté du dernier nom barré : « Il est parti chercher son chien. Le chien est revenu. Pas lui. »",
+  "Ambient Volume": "Volume ambiant"
 }

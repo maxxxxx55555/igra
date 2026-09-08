@@ -831,5 +831,6 @@
   "LORE_SUBURBS_07_TITLE": "Gravador: diário da equipe da rede, registro 2",
   "LORE_SUBURBS_07_TEXT": "\"Último registro, eu acho. Descobrimos de onde vem o consumo e Marat não quer dizer em voz alta, então eu digo: o transformador está quente. O alimentador suburbano está apagado há duas semanas e o transformador está QUENTE. Estamos indo a pé até a subestação. Se alguém ouvir isto: a luz pode voltar. Provamos isso na bancada. Um poste de luz. Lembrem-se disso.\"",
   "LORE_SUBURBS_08_TITLE": "Lista de vigilância do subúrbio",
-  "LORE_SUBURBS_08_TEXT": "Uma lista feita à mão: \"Vigia de rua — horas escuras. Ivanov 1º andar, Petro 2º, a velha Anya na janela da esquina com a lanterna.\" Três nomes estão riscados. Ao lado do último nome riscado: \"Ele foi procurar o cachorro dele. O cachorro voltou. Ele não.\""
+  "LORE_SUBURBS_08_TEXT": "Uma lista feita à mão: \"Vigia de rua — horas escuras. Ivanov 1º andar, Petro 2º, a velha Anya na janela da esquina com a lanterna.\" Três nomes estão riscados. Ao lado do último nome riscado: \"Ele foi procurar o cachorro dele. O cachorro voltou. Ele não.\"",
+  "Ambient Volume": "Volume ambiente"
 }

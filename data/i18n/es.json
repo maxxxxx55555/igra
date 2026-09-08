@@ -831,5 +831,6 @@
   "LORE_SUBURBS_07_TITLE": "Grabadora: registro de la cuadrilla eléctrica 2",
   "LORE_SUBURBS_07_TEXT": "«Última grabación, creo. Encontramos de dónde viene el consumo y Marat no quiere decirlo en voz alta, así que lo diré yo: el transformador está caliente. El alimentador suburbano lleva dos semanas apagado y el transformador está CALIENTE. Vamos a pie hacia la subestación. Si alguien escucha esto: la luz se puede recuperar. Lo demostramos en el banco de pruebas. Una farola. Recuérdenlo.»",
   "LORE_SUBURBS_08_TITLE": "Lista de vigilancia del suburbio",
-  "LORE_SUBURBS_08_TEXT": "Una lista escrita a mano: «Vigilancia callejera — horas oscuras. Ivanov, 1er piso; Petro, 2°; la vieja Anya en la ventana de la esquina con la linterna.» Tres nombres están tachados. Junto al último nombre tachado: «Fue a buscar a su perro. El perro volvió. Él no.»"
+  "LORE_SUBURBS_08_TEXT": "Una lista escrita a mano: «Vigilancia callejera — horas oscuras. Ivanov, 1er piso; Petro, 2°; la vieja Anya en la ventana de la esquina con la linterna.» Tres nombres están tachados. Junto al último nombre tachado: «Fue a buscar a su perro. El perro volvió. Él no.»",
+  "Ambient Volume": "Volumen ambiental"
 }

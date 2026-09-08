@@ -11,6 +11,12 @@ var _bat: float = 1.0
 var _battery_ad_button: Button = null
 var _vignette_default_color: Color
 var _enemy_hp_tween: Tween
+## PHASE 1 (languages = settings): HP/Stam/Bat captions are plain Labels
+## created once in _add_captions(); cached here so a live language switch
+## can re-text them without re-running that function's layout math.
+var _hp_caption: Label
+var _stam_caption: Label
+var _bat_caption: Label
 
 @onready var hp_fill: ColorRect = $TopLeft/HP/HPF
 @onready var hp_val: Label = $TopLeft/HP/HPVal
@@ -64,6 +70,11 @@ func _ready() -> void:
 	call_deferred("_cache_vignette_default")
 	_add_captions()
 	_localize_static_labels()
+	LocalizationManager.language_changed.connect(func(_l: String) -> void:
+		_localize_static_labels()
+		if _hp_caption: _hp_caption.text = LocalizationManager.t("HUD_HP")
+		if _stam_caption: _stam_caption.text = LocalizationManager.t("HUD_STAMINA")
+		if _bat_caption: _bat_caption.text = LocalizationManager.t("HUD_BATTERY"))
 	_setup_number_fonts()
 	_setup_slot_placeholders()
 	_setup_radar()
@@ -518,6 +529,10 @@ func _add_captions() -> void:
 		bar.position.y = float(row) * (BAR_ROW_PITCH)
 		bar.offset_top = float(row) * BAR_ROW_PITCH + BAR_ROW_TOP
 		bar.offset_bottom = bar.offset_top + BAR_H
+		match row:
+			0: _hp_caption = lbl
+			1: _stam_caption = lbl
+			2: _bat_caption = lbl
 		row += 1
 	row = _layout_extra_rows(row)
 	var tl: Control = $TopLeft

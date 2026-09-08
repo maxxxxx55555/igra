@@ -1,5 +1,5 @@
 extends Node
-const BUSES := ["Master", "SFX", "Music", "Voice"]
+const BUSES := ["Master", "SFX", "Music", "Voice", "Ambient"]
 ## Порядок обязан совпадать с LocalizationManager.SUPPORTED: экран настроек
 ## строит список по SUPPORTED, а индекс выбранного пункта хранит в
 ## _settings["language"], который здесь ищется через LANGUAGES.find(). При разном
@@ -13,6 +13,7 @@ const BUS_ALIASES := {
 	"Музыка": "Music", "Music Volume": "Music",
 	"Эффекты": "SFX", "SFX Volume": "SFX", "SFX": "SFX",
 	"Голоса": "Voice", "Voice Volume": "Voice", "Voice": "Voice",
+	"Окружение": "Ambient", "Ambient Volume": "Ambient", "Ambient": "Ambient",
 }
 
 ## Подписи выпадающих списков → индекс уровня (0 низкий … 2 высокий).

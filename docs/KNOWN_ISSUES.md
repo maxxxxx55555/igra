@@ -1,5 +1,38 @@
 # Known issues
 
+## `game_test_3d_scene.tscn` gate stalls silently after "phase1 combat: damage Shadow"
+
+Pre-existing, not a regression — reproduced identically on a clean stash
+of the working tree (before any 2026-09-08 RC-pass edits) and on `main`
+with those edits applied. `--headless` hangs until killed (`timeout`
+exit code 124); `--windowed` exits cleanly (code 0) but the test runner
+never prints its `DONE`/`fails=` line past that point — no script error
+in the log, just engine shutdown/leak noise. Combat/damage-on-Shadow is
+unrelated to any RC-pass change (i18n, HUD, settings, document catalog).
+Not investigated further this pass (would need `--verbose`/a debugger
+attached to see what phase1's coroutine is actually waiting on); `tools/
+check.sh`'s full (non `--static`) mode will hang here too — run the other
+11 gate scenes individually (5 headless: compile/signal-arity/autoload-
+api/i18n/asset; boot/perf need `--windowed`, same as the existing boot-
+flow note below) until this is fixed.
+
+## i18n: a few always-open-while-playing screens didn't retranslate on a live language switch
+
+Screens toggled via `UIManager` (`.visible = true/false`) stay instantiated
+for the whole session — they only rebuild their translated text if they
+explicitly listen for it. `journal_ui.gd` and `hud_3d.gd` (HP/Stamina/
+Battery/Noise/Visibility/Ammo/Radar/Sprint/Stealth captions) had no such
+hook and went stale after Settings → Language until the scene reloaded —
+fixed 2026-09-08 (both now reload their translated text on
+`LocalizationManager.language_changed`). `city_map.gd` was already correct
+(rebuilds on `visibility_changed`). `quest_journal.gd` and
+`skill_tree_ui.gd` still build their translated labels once in `_ready()`
+with no live-refresh hook — lower priority than the HUD since both are
+blocking screens normally closed before Settings is reachable (via pause),
+so the stale text only survives if the player reopens them later in the
+same session without a scene reload. Not fixed this pass; same shape of
+fix as `journal_ui.gd`/`hud_3d.gd` if picked up later.
+
 ## i18n: 165 strings are identical to English on purpose — do not "fix" them
 
 `tools/i18n_audit.py`'s `value == en[key]` check still flags ~165 strings

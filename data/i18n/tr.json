@@ -831,5 +831,6 @@
   "LORE_SUBURBS_07_TITLE": "Kayıt Cihazı: Şebeke Ekibi Günlüğü 2",
   "LORE_SUBURBS_07_TEXT": "\"Son kayıt sanırım. Çekişin nereden geldiğini bulduk ve Marat bunu yüksek sesle söylemek istemiyor, ben söyleyeyim: transformatör sıcak. Banliyö hattı iki haftadır karanlık ve transformatör SICAK. Trafo merkezine yürüyerek gidiyoruz. Bunu biri dinlerse: ışıklar geri getirilebilir. Bunu tezgahta kanıtladık. Tek bir sokak lambası. Bunu unutmayın.\"",
   "LORE_SUBURBS_08_TITLE": "Banliyö Nöbet Listesi",
-  "LORE_SUBURBS_08_TEXT": "Elle yazılmış bir liste: \"Sokak nöbeti — karanlık saatler. Ivanov 1. kat, Petro 2. kat, köşedeki pencerede el fenerli yaşlı Anya.\" Üç isim üzeri çizilmiş. Son çizilen ismin yanında: \"Köpeğini aramaya gitti. Köpek geri döndü. O dönmedi.\""
+  "LORE_SUBURBS_08_TEXT": "Elle yazılmış bir liste: \"Sokak nöbeti — karanlık saatler. Ivanov 1. kat, Petro 2. kat, köşedeki pencerede el fenerli yaşlı Anya.\" Üç isim üzeri çizilmiş. Son çizilen ismin yanında: \"Köpeğini aramaya gitti. Köpek geri döndü. O dönmedi.\"",
+  "Ambient Volume": "Ortam Sesi Düzeyi"
 }

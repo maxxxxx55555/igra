@@ -183,6 +183,11 @@ func _build_audio_tab(parent: VBoxContainer) -> void:
 		func(v: float) -> void: SettingsManager.set_volume("SFX", v))
 	_slider(parent, LocalizationManager.t("Voice Volume"), "voice", 0.0, 1.0, 0.05,
 		func(v: float) -> void: SettingsManager.set_volume("Voice", v))
+	# PHASE 2 (audio normal): district ambience plays on the "Ambient" bus
+	# (scripts/core/audio_system.gd, district_atmosphere.gd) but had no
+	# player-facing volume control at all - fixed.
+	_slider(parent, LocalizationManager.t("Ambient Volume"), "ambient", 0.0, 1.0, 0.05,
+		func(v: float) -> void: SettingsManager.set_volume("Ambient", v))
 
 func _build_accessibility_tab(parent: VBoxContainer) -> void:
 	parent.add_theme_constant_override("separation", 14)
