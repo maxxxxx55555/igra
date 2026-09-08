@@ -27,6 +27,18 @@ currently loads `tiles/<district>_floor.png`; the `_lit` twins follow the conven
 | `assets/textures/tiles/park_wall_lit.png` | AI-generated in-session (Arena image generation), reference = in-house `tiles/park_wall.png` | Project-owned AI output; no third-party rights | none required | 256² RGB (downscaled 1024² LANCZOS), 104,064 B. Palette-clamped (6..249). Seam delta 32.6 ≈ shipped dark twin 27.7. |
 | `assets/textures/surfaces/pond_ice_512.png` | AI-generated in-session (Arena image generation), text-to-image, palette-locked prompt | Project-owned AI output; no third-party rights | none required | 512² RGB, 304,866 B (≤500 KB budget). Frozen pond for `z_pond` (park manifest gap #3). Dark steel-blue ice #131a20–#2a3340, pale cracks; min 9, max 127; seam 9.8. |
 
+## Added 2026-09-08 — gas_station district asset pass
+
+| Path | Origin | License | Attribution | Notes |
+|---|---|---|---|---|
+| `assets/textures/tiles/gas_station_floor_lit.png` | AI-generated in-session (Arena image generation), reference image = in-house `tiles/gas_station_floor.png` | Project-owned AI output; no third-party rights | none required | 256² RGB (generated 1024², LANCZOS downscale), 107,047 B. Lit twin per STYLE_GUIDE §4/§4.1: same asphalt, same hazard-stripe band position, warm canopy lift only. Measured: lift ×1.42, geometry correlation 0.953, warmth R−B +30 (dark twin −0.6, target band +15…+40), palette 19..238, seam delta 5.3 vs dark 3.9. |
+| `assets/textures/tiles/gas_station_wall_lit.png` | AI-generated in-session (Arena image generation), reference image = in-house `tiles/gas_station_wall.png` | Project-owned AI output; no third-party rights | none required | 256² RGB (generated 1024², LANCZOS downscale), 100,617 B. Same corrugated ribs and rust streak positions. Measured: lift ×1.42, geometry correlation 0.855 (≥0.85 threshold), warmth R−B +28 (dark twin −16.9), palette 56..217, seam delta 3.0 vs dark 4.2. Warmth was chroma-corrected after generation (the raw output came back at R−B +70, outside the §4.1 band). |
+| `assets/textures/surfaces/fuel_pump_512.png` | AI-generated in-session (Arena image generation), reference image = in-house `surfaces/school_lockers_512.png` (style lock) | Project-owned AI output; no third-party rights | none required | 512² RGB, 267,351 B (≤500 KB). Petrol dispenser front for the six pumps in `z_pump_island`. Non-tiling panel class (seam metric N/A; measured 5.1). Mean luminance 72 — dead display, no lit digits, no brand text baked; single brass `#c9a24a` hose fitting as the only accent; palette clamped 19..200, warmth R−B −12 (cold body, warm fitting). |
+
+§4.1 numeric acceptance test applied to both lit twins (lift ratio, geometry correlation,
+warmth band, palette clamp, seam delta) — all within the thresholds recorded in
+docs/STYLE_GUIDE.md, with the wall pair's warmth corrected post-generation.
+
 ## Added 2026-09-08 — hospital district asset pass
 
 Note: hospital already ships both lit tile twins (`tiles/hospital_floor_lit.png`,
