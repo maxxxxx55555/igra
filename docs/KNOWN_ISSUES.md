@@ -1,22 +1,30 @@
 # Known issues
 
-## Draw calls over budget: 370 measured vs GDD's <200 (D1) / <350 (D11)
+## Draw calls: 234 measured vs GDD's <200 (D1) / <350 (D11) — D11 met, D1 not
 
-Measured via `scenes/tools/perf_check_scene.tscn` (RESCUE WAVE P3) in a
-real windowed run, suburbs spawn district: `draw_calls=370`. Root cause:
-`scenes/props/streetlight_3d.tscn` has 2 individual `MeshInstance3D`
-nodes (Pole, Lamp) and no MultiMesh batching; `street_props.gd` spawns a
-pole pair (4 mesh draws) at regular street intervals along every road
-segment, in every district. This is very likely the single largest
-contributor — worth confirming with a targeted before/after count before
-committing to a fix. Not fixed this session: batching would need to keep
-each pole's individual reactivity to `EventBus.district_stage_changed`
-(the mechanic fixed in the TRUTH WAVE pass, where the game's own
-streetlights previously didn't react to power at all) — MultiMesh only
-batches the mesh draw, so the light on/off state would need its own,
-carefully-tested per-instance-transform tracking. Real, isolated
-refactor task, not a small tweak — see `docs/PRODUCTION_BIBLE.md`'s
-checklist for the full note.
+**Update 2026-09-08 (autonomous wave)**: the root cause this entry used
+to describe (unbatched per-streetlight Pole/Lamp `MeshInstance3D`) was
+fixed in an intervening "FINAL PERFECTION P3" wave — `street_props.gd`
+now batches every district's Pole and Lamp meshes into two shared
+`MultiMeshInstance3D`, and each `streetlight_3d.tscn` instance sets
+`mesh_visible=false` on its own redundant copies (kept for the
+`Light3D`/`Hum`/`LightArea` nodes, which can't be MultiMesh'd and were
+confirmed NOT the draw-call problem — see
+`docs/SESSION_REPORT_FINAL_PERFECTION.md`). Re-measured via
+`scenes/tools/perf_check_scene.tscn` (now a real gate, see below):
+370 → **234** draw calls in the suburbs spawn district. `perf_check_scene`
+gates hard on D11<350 (met); D1<200 is flagged in its output but not
+hard-failed (see `scripts/tools/_perf_check_runner.gd`).
+
+The remaining 234→200 gap (per `PLAN.md`'s own prior analysis, still
+accurate): monster meshes (6, intentionally not MultiMesh-batched — they
+need independent skeletal animation/materials per instance) and
+pickupable items (12, individual — scattered per-instance, not currently
+pooled). Further reduction needs either a design call (fewer items/
+monsters live in the scene at once) or a deeper per-instance batching
+technique for animated/pickup meshes — neither is a small tweak.
+Documenting rather than guessing further, per this project's honesty
+rule; see `docs/PRODUCTION_BIBLE.md` §7 and `PLAN.md` item 1.
 
 ## boot_check_scene.tscn can see a spurious PLAYING -> MENU during its
 ## sustain phase — test-harness artifact, not a real-game bug (tolerated,
