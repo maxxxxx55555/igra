@@ -248,7 +248,10 @@
         "doc_id": "park_note_01",
         "title_key": "LORE_PARK_01_TITLE",
         "content_key": "LORE_PARK_01_TEXT",
-        "world_refs": ["char_keeper", "faction_keepers"]
+        "world_refs": [
+            "char_keeper",
+            "faction_keepers"
+        ]
     },
     {
         "doc_id": "park_note_02",
@@ -259,36 +262,263 @@
         "doc_id": "park_note_03",
         "title_key": "LORE_PARK_03_TITLE",
         "content_key": "LORE_PARK_03_TEXT",
-        "world_refs": ["char_marat", "char_grid_crew_recorder", "faction_grid_crew"]
+        "world_refs": [
+            "char_marat",
+            "char_grid_crew_recorder",
+            "faction_grid_crew"
+        ]
     },
     {
         "doc_id": "park_note_04",
         "title_key": "LORE_PARK_04_TITLE",
         "content_key": "LORE_PARK_04_TEXT",
-        "world_refs": ["faction_city_power"]
+        "world_refs": [
+            "faction_city_power"
+        ]
     },
     {
         "doc_id": "park_note_05",
         "title_key": "LORE_PARK_05_TITLE",
         "content_key": "LORE_PARK_05_TEXT",
-        "world_refs": ["char_babka_manya"]
+        "world_refs": [
+            "char_babka_manya"
+        ]
     },
     {
         "doc_id": "park_note_06",
         "title_key": "LORE_PARK_06_TITLE",
         "content_key": "LORE_PARK_06_TEXT",
-        "world_refs": ["char_keeper", "faction_keepers"]
+        "world_refs": [
+            "char_keeper",
+            "faction_keepers"
+        ]
     },
     {
         "doc_id": "park_note_07",
         "title_key": "LORE_PARK_07_TITLE",
         "content_key": "LORE_PARK_07_TEXT",
-        "world_refs": ["char_radio_voice"]
+        "world_refs": [
+            "char_radio_voice"
+        ]
     },
     {
         "doc_id": "park_note_08",
         "title_key": "LORE_PARK_08_TITLE",
         "content_key": "LORE_PARK_08_TEXT",
-        "world_refs": ["char_keeper"]
+        "world_refs": [
+            "char_keeper"
+        ]
+    },
+    {
+        "doc_id": "school_note_01",
+        "title_key": "LORE_SCHOOL_01_TITLE",
+        "content_key": "LORE_SCHOOL_01_TEXT",
+        "world_refs": [
+            "hist_blackout_night"
+        ]
+    },
+    {
+        "doc_id": "school_note_02",
+        "title_key": "LORE_SCHOOL_02_TITLE",
+        "content_key": "LORE_SCHOOL_02_TEXT",
+        "world_refs": [
+            "char_marat",
+            "faction_city_power"
+        ]
+    },
+    {
+        "doc_id": "school_note_03",
+        "title_key": "LORE_SCHOOL_03_TITLE",
+        "content_key": "LORE_SCHOOL_03_TEXT",
+        "world_refs": [
+            "char_marat",
+            "char_grid_crew_recorder",
+            "faction_grid_crew"
+        ]
+    },
+    {
+        "doc_id": "school_note_04",
+        "title_key": "LORE_SCHOOL_04_TITLE",
+        "content_key": "LORE_SCHOOL_04_TEXT",
+        "world_refs": [
+            "hist_evacuation_arena",
+            "news_arena_collection",
+            "faction_street_watch"
+        ]
+    },
+    {
+        "doc_id": "school_note_05",
+        "title_key": "LORE_SCHOOL_05_TITLE",
+        "content_key": "LORE_SCHOOL_05_TEXT",
+        "world_refs": [
+            "faction_street_watch"
+        ]
+    },
+    {
+        "doc_id": "school_note_06",
+        "title_key": "LORE_SCHOOL_06_TITLE",
+        "content_key": "LORE_SCHOOL_06_TEXT",
+        "world_refs": [
+            "hist_present_day"
+        ]
+    },
+    {
+        "doc_id": "school_note_07",
+        "title_key": "LORE_SCHOOL_07_TITLE",
+        "content_key": "LORE_SCHOOL_07_TEXT",
+        "world_refs": [
+            "hist_blackout_night"
+        ]
+    },
+    {
+        "doc_id": "school_note_08",
+        "title_key": "LORE_SCHOOL_08_TITLE",
+        "content_key": "LORE_SCHOOL_08_TEXT",
+        "world_refs": [
+            "faction_city_power"
+        ]
+    },
+    {
+        "doc_id": "hospital_note_01",
+        "title_key": "LORE_HOSPITAL_01_TITLE",
+        "content_key": "LORE_HOSPITAL_01_TEXT",
+        "world_refs": [
+            "hist_blackout_night"
+        ]
+    },
+    {
+        "doc_id": "hospital_note_02",
+        "title_key": "LORE_HOSPITAL_02_TITLE",
+        "content_key": "LORE_HOSPITAL_02_TEXT",
+        "world_refs": [
+            "hist_evacuation_arena",
+            "news_arena_collection"
+        ]
+    },
+    {
+        "doc_id": "hospital_note_03",
+        "title_key": "LORE_HOSPITAL_03_TITLE",
+        "content_key": "LORE_HOSPITAL_03_TEXT",
+        "world_refs": [
+            "faction_street_watch"
+        ]
+    },
+    {
+        "doc_id": "hospital_note_04",
+        "title_key": "LORE_HOSPITAL_04_TITLE",
+        "content_key": "LORE_HOSPITAL_04_TEXT",
+        "world_refs": [
+            "hist_blackout_night"
+        ]
+    },
+    {
+        "doc_id": "hospital_note_05",
+        "title_key": "LORE_HOSPITAL_05_TITLE",
+        "content_key": "LORE_HOSPITAL_05_TEXT",
+        "world_refs": [
+            "char_marat",
+            "char_grid_crew_recorder",
+            "faction_grid_crew"
+        ]
+    },
+    {
+        "doc_id": "hospital_note_06",
+        "title_key": "LORE_HOSPITAL_06_TITLE",
+        "content_key": "LORE_HOSPITAL_06_TEXT",
+        "world_refs": [
+            "hist_project_architect",
+            "faction_project_architect",
+            "news_architect_denied"
+        ]
+    },
+    {
+        "doc_id": "hospital_note_07",
+        "title_key": "LORE_HOSPITAL_07_TITLE",
+        "content_key": "LORE_HOSPITAL_07_TEXT",
+        "world_refs": [
+            "char_architect",
+            "faction_project_architect"
+        ]
+    },
+    {
+        "doc_id": "hospital_note_08",
+        "title_key": "LORE_HOSPITAL_08_TITLE",
+        "content_key": "LORE_HOSPITAL_08_TEXT",
+        "world_refs": [
+            "char_architect"
+        ]
+    },
+    {
+        "doc_id": "gas_station_note_01",
+        "title_key": "LORE_GAS_STATION_01_TITLE",
+        "content_key": "LORE_GAS_STATION_01_TEXT",
+        "world_refs": [
+            "hist_present_day"
+        ]
+    },
+    {
+        "doc_id": "gas_station_note_02",
+        "title_key": "LORE_GAS_STATION_02_TITLE",
+        "content_key": "LORE_GAS_STATION_02_TEXT",
+        "world_refs": [
+            "hist_evacuation_arena",
+            "news_arena_collection"
+        ]
+    },
+    {
+        "doc_id": "gas_station_note_03",
+        "title_key": "LORE_GAS_STATION_03_TITLE",
+        "content_key": "LORE_GAS_STATION_03_TEXT",
+        "world_refs": [
+            "char_marat",
+            "char_grid_crew_recorder",
+            "faction_grid_crew"
+        ]
+    },
+    {
+        "doc_id": "gas_station_note_04",
+        "title_key": "LORE_GAS_STATION_04_TITLE",
+        "content_key": "LORE_GAS_STATION_04_TEXT",
+        "world_refs": [
+            "hist_blackout_night",
+            "faction_city_power"
+        ]
+    },
+    {
+        "doc_id": "gas_station_note_05",
+        "title_key": "LORE_GAS_STATION_05_TITLE",
+        "content_key": "LORE_GAS_STATION_05_TEXT",
+        "world_refs": [
+            "faction_street_watch"
+        ]
+    },
+    {
+        "doc_id": "gas_station_note_06",
+        "title_key": "LORE_GAS_STATION_06_TITLE",
+        "content_key": "LORE_GAS_STATION_06_TEXT",
+        "world_refs": [
+            "char_keeper",
+            "faction_keepers",
+            "hist_keeper_reversal"
+        ]
+    },
+    {
+        "doc_id": "gas_station_note_07",
+        "title_key": "LORE_GAS_STATION_07_TITLE",
+        "content_key": "LORE_GAS_STATION_07_TEXT",
+        "world_refs": [
+            "char_radio_voice",
+            "radio_01_power_station",
+            "hist_radio_call"
+        ]
+    },
+    {
+        "doc_id": "gas_station_note_08",
+        "title_key": "LORE_GAS_STATION_08_TITLE",
+        "content_key": "LORE_GAS_STATION_08_TEXT",
+        "world_refs": [
+            "faction_street_watch",
+            "char_keeper"
+        ]
     }
 ]

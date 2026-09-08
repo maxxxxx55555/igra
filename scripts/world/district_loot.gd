@@ -86,6 +86,18 @@ const LORE_DOCS: Dictionary = {
 		"park_note_01", "park_note_02", "park_note_03", "park_note_04",
 		"park_note_05", "park_note_06", "park_note_07", "park_note_08",
 	],
+	&"school": [
+		"school_note_01", "school_note_02", "school_note_03", "school_note_04",
+		"school_note_05", "school_note_06", "school_note_07", "school_note_08",
+	],
+	&"hospital": [
+		"hospital_note_01", "hospital_note_02", "hospital_note_03", "hospital_note_04",
+		"hospital_note_05", "hospital_note_06", "hospital_note_07", "hospital_note_08",
+	],
+	&"gas_station": [
+		"gas_station_note_01", "gas_station_note_02", "gas_station_note_03", "gas_station_note_04",
+		"gas_station_note_05", "gas_station_note_06", "gas_station_note_07", "gas_station_note_08",
+	],
 }
 
 const RADIUS_MIN: float = 6.0

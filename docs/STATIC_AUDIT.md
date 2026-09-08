@@ -181,6 +181,69 @@ Status legend: OPEN / FIXED (commit hash) / DOCUMENTED (accepted, not fixed
 
 ---
 
+## From Arena's `docs/CONTENT_PIPELINE_AUDIT.md` (2026-09-08, PR #3)
+
+21. **`school`/`gas_station` are leaves of the `powered_by` graph, and
+    GDD §4.1's chain text doesn't literally match `data/districts/*.tres`
+    from `park` onward** — verified: GDD §4.1 lists a single arrow-chain
+    (`suburbs → residential → park → school → hospital → gas_station →
+    police → warehouses → industrial → substation → power_station`), but
+    the actual `.tres` topology already branches and reconverges before
+    this pass touched anything (`park`/`residential` both `powered_by =
+    [suburbs]`; `industrial powered_by = [warehouses, police]` — a
+    genuine two-parent convergence). This branching predates both Arena's
+    and this session's content work; nothing school/gas_station-specific
+    was newly introduced. Conclusion: the `.tres` graph is the intentional
+    design (a convergent DAG, not a strict chain), and GDD §4.1's prose is
+    a narrative/display ordering, not a literal unlock-dependency spec —
+    victory still requires all 11 at FULL regardless of graph shape, so a
+    leaf district isn't a "cannot complete" bug, just one that gates
+    nothing downstream. Status: **DOCUMENTED** (not a defect — verified
+    intentional; `.tres` files left untouched. Rewriting the graph to
+    match a strict chain would invalidate Arena's own already-audited
+    `world_refs` reveal-gate closures in `CONTENT_PIPELINE_AUDIT.md` §3.4,
+    which were computed against the real branching topology).
+22. **`district_themes.gd`'s per-district `"music"` field disagreed with
+    `music_manager.gd`'s `AMBIENT_BY_DISTRICT`** for `school`/`hospital`/
+    `gas_station` (e.g. `district_themes.gd` said `residential.wav` for
+    `school`; `music_manager.gd` said `abandoned_hallways_alt.mp3`).
+    Traced both: `district_themes.gd["music"]` is read NOWHERE
+    (`get_theme()`/`apply_to_environment()` only use `sky`/`ambient`/
+    `accent`) — confirmed dead, and its values were suspicious copy-paste
+    (5 unrelated districts all said `residential.wav`). `music_manager.gd`'s
+    `AMBIENT_BY_DISTRICT` is itself a documented fallback, unreachable in
+    practice since `AMBIENCE_DARK_BY_DISTRICT`/`AMBIENCE_LIT_BY_DISTRICT`
+    already cover all 11 districts. Neither disagreeing value was
+    actually live. Status: **FIXED** — deleted the dead `"music"` key
+    from every `THEMES` entry rather than pick a "winning" value for a
+    field nothing consumes; the real per-district audio source of truth
+    stays `AMBIENCE_DARK_BY_DISTRICT`/`AMBIENCE_LIT_BY_DISTRICT`.
+23. **`content/districts/suburbs/item_spawns.json` could not reach FULL
+    from its own guaranteed spawns** (no transistor in its DARK table,
+    only cable/fuse) — found and fixed by Arena's own audit before this
+    merge (added `suburbs_fix_puzzle_04`, 2× transistor). No CODE action
+    needed: `item_spawns.json` is still unread by any script (#20 above),
+    so this was a content-only fix to data nothing currently consumes;
+    logged here for completeness since it's Arena's own audit result.
+24. **`park_note_05` referenced a residential-gated character
+    (`char_babka_manya`) from a district reachable without residential**
+    — found and fixed by Arena's own audit (cleared `world_refs` to
+    `[]`) before this merge. Worth flagging a real gap this exposed in
+    `WorldBible.is_revealed()`: it checks `stage >= min_stage`, and every
+    district defaults to stage `DARK` (0) whether or not the player has
+    ever visited it — so a `min_stage: 0` reveal is trivially "revealed"
+    for a district the player hasn't reached, not just one they have.
+    Not a live bug today (Arena's content audit already avoids relying on
+    it, and the merged `school`/`hospital`/`gas_station` packs pass the
+    same closure check per their own audit §3.4/§4), but the primitive
+    itself doesn't enforce "has visited," only "stage progressed." Status:
+    **DOCUMENTED** — a real fix (checking district visitation, not just
+    stage) is a small addition but touches a shared lookup used by two
+    live features (journal Related-lines, radio unlocks); deferred rather
+    than risk it without being able to compile-check the change, per this
+    pass's no-Godot constraint. Content-side discipline (§3.4's rule) is
+    the actual guardrail in place today.
+
 ## CONFIRMED WORKING (traced this pass, no defect — do not re-audit)
 
 - `power_switch.gd::interact()`/stage-advance chain, `REPAIR_COST` vs
