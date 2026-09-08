@@ -1,0 +1,105 @@
+{
+  "district": "police",
+  "version": 1,
+  "_comment": "District 7 (GDD §4.1 chain order). Prereq verified in data/districts/district_police.tres: powered_by = [&\"park\"] (NOT gas_station, NOT the linear chain order). police is NOT a leaf — industrial.powered_by = [warehouses, police]. Threat roster (scripts/enemies/enemy_pool.gd): watcher, hunter, destroyer — destroyer LEADS the late-roster lesson: it does not react to light (GDD §6.2), so the school's flashlight-stun and the park's noise rule are not enough here. Themed loot canon (district_loot.gd BY_DISTRICT): key, medkit, tool, gunpowder, case. Blueprint CANON: BLUEPRINTS[police] = blueprint_backpack_capacity (the D7 backpack capacity schematic). Story doc canon: doc_evacuation_order (second list, 47 people, school yard 04:00). Puzzle canon: puzzle_system.gd transformer_police (reward 2 battery, power_stage 2). GDD §9 places the strobe workbench at D7 interrogation — there is no strobe blueprint id in data/items, so the room is flavour (police_note_08) not a new item. Repair-part guarantee mirrors district_loot.gd REPAIR_PARTS (2x cable/fuse/transistor). All item ids verified against data/items/*.tres (41 ids, 2026-09).",
+  "tables": {
+    "DARK": [
+      { "item": "key",        "weight": 16, "min": 1, "max": 1 },
+      { "item": "medkit",     "weight": 14, "min": 1, "max": 1 },
+      { "item": "tool",       "weight": 12, "min": 1, "max": 1 },
+      { "item": "case",       "weight": 12, "min": 1, "max": 3 },
+      { "item": "battery",    "weight": 12, "min": 1, "max": 1 },
+      { "item": "scrap",      "weight": 10, "min": 1, "max": 2 },
+      { "item": "cable",      "weight": 8,  "min": 1, "max": 1 },
+      { "item": "coin",       "weight": 7,  "min": 3, "max": 8 },
+      { "item": "paper",      "weight": 5,  "min": 1, "max": 2 },
+      { "item": "lockpick",   "weight": 4,  "min": 1, "max": 1 }
+    ],
+    "PARTIAL": [
+      { "item": "key",        "weight": 12, "min": 1, "max": 1 },
+      { "item": "medkit",     "weight": 12, "min": 1, "max": 1 },
+      { "item": "tool",       "weight": 10, "min": 1, "max": 1 },
+      { "item": "gunpowder",  "weight": 10, "min": 1, "max": 1 },
+      { "item": "case",       "weight": 10, "min": 1, "max": 3 },
+      { "item": "cable",      "weight": 9,  "min": 1, "max": 1 },
+      { "item": "fuse",       "weight": 9,  "min": 1, "max": 1 },
+      { "item": "battery",    "weight": 8,  "min": 1, "max": 1 },
+      { "item": "scrap",      "weight": 7,  "min": 1, "max": 2 },
+      { "item": "coin",       "weight": 6,  "min": 5, "max": 12 },
+      { "item": "molotov",    "weight": 4,  "min": 1, "max": 1 },
+      { "item": "transistor", "weight": 3,  "min": 1, "max": 2 }
+    ],
+    "STREETS": [
+      { "item": "medkit",     "weight": 12, "min": 1, "max": 1 },
+      { "item": "gunpowder",  "weight": 11, "min": 1, "max": 2 },
+      { "item": "case",       "weight": 10, "min": 2, "max": 4 },
+      { "item": "cable",      "weight": 8,  "min": 1, "max": 2 },
+      { "item": "fuse",       "weight": 8,  "min": 1, "max": 2 },
+      { "item": "coin",       "weight": 8,  "min": 8, "max": 15 },
+      { "item": "tool",       "weight": 7,  "min": 1, "max": 1 },
+      { "item": "repair_kit", "weight": 7,  "min": 1, "max": 1 },
+      { "item": "battery",    "weight": 6,  "min": 1, "max": 1 },
+      { "item": "molotov",    "weight": 6,  "min": 1, "max": 2 },
+      { "item": "noise_bomb", "weight": 5,  "min": 1, "max": 1 },
+      { "item": "transistor", "weight": 4,  "min": 1, "max": 2 }
+    ],
+    "FULL": [
+      { "item": "coin",       "weight": 14, "min": 10, "max": 20 },
+      { "item": "medkit",     "weight": 10, "min": 1, "max": 1 },
+      { "item": "repair_kit", "weight": 9,  "min": 1, "max": 1 },
+      { "item": "gunpowder",  "weight": 8,  "min": 1, "max": 2 },
+      { "item": "case",       "weight": 8,  "min": 2, "max": 4 },
+      { "item": "tool",       "weight": 7,  "min": 1, "max": 1 },
+      { "item": "gear",       "weight": 6,  "min": 1, "max": 2 },
+      { "item": "metal",      "weight": 6,  "min": 1, "max": 2 },
+      { "item": "serum",      "weight": 4,  "min": 1, "max": 1 },
+      { "item": "transistor", "weight": 4,  "min": 1, "max": 2 }
+    ]
+  },
+  "container_modifiers": {
+    "desk_drawer": 0.8,
+    "evidence_locker": 1.5,
+    "armory_cage": 1.4,
+    "cell_bunk": 0.9,
+    "radio_shelf": 1.0,
+    "filing_cabinet": 1.1,
+    "tool_cage": 1.3,
+    "trash_bin": 0.6
+  },
+  "fixed_spawns": [
+    { "id": "police_fix_puzzle_01", "item": "cable", "zone": "z_generator_room", "container": "tool_cage", "qty": 2, "min_stage": 0,
+      "reason": "Guarantee: cable for PARTIAL. Grid-crew leftovers at the transformer cage (police_note_03); unlocked." },
+    { "id": "police_fix_puzzle_02", "item": "fuse", "zone": "z_radio_room", "container": "radio_shelf", "qty": 2, "min_stage": 0,
+      "reason": "Guarantee: fuse for STREETS. Spare fuses in the dispatch rack by the handset — police_note_03 states it in-world. This district's puzzle is transformer_police, but power_switch still needs the fuse step." },
+    { "id": "police_fix_puzzle_03", "item": "transistor", "zone": "z_evidence_room", "container": "evidence_locker", "qty": 2, "min_stage": 0,
+      "reason": "Guarantee: transistor for FULL, in the locked evidence room; opened by police_fix_key_01 — no lockpick required (R1)." },
+    { "id": "police_fix_key_01", "item": "key", "zone": "z_front_desk", "container": "desk_drawer", "qty": 1, "min_stage": 0,
+      "reason": "Evidence-room key in the sergeant's unlocked blotter drawer. Reachable in DARK with zero tools." },
+    { "id": "police_fix_blueprint_01", "item": "blueprint_backpack_capacity", "zone": "z_interrogation", "container": "filing_cabinet", "qty": 1, "min_stage": 0,
+      "reason": "BLUEPRINTS canon: the D7 backpack-capacity schematic. Seized with a scavenger pack in interrogation 2; guaranteed, not rolled (R7)." },
+    { "id": "police_fix_armory_01", "item": "gunpowder", "zone": "z_armory", "container": "armory_cage", "qty": 2, "min_stage": 0,
+      "reason": "Themed guarantee (BY_DISTRICT): armory cage always pays out powder — ingredients, never a firearm (R4). Non-RNG by R6." },
+    { "id": "police_fix_armory_02", "item": "case", "zone": "z_armory", "container": "armory_cage", "qty": 3, "min_stage": 0,
+      "reason": "Themed guarantee (BY_DISTRICT): empty casings in the same cage. The armory must feel stripped, not stocked." },
+    { "id": "police_fix_med_01", "item": "medkit", "zone": "z_holding_cells", "container": "cell_bunk", "qty": 2, "min_stage": 0,
+      "reason": "Duty first-aid still in cell 1's bunk box; the cells are the destroyer's wing, so the heal sits where the lesson is." },
+    { "id": "police_fix_defense_01", "item": "molotov", "zone": "z_station_front", "container": "trash_bin", "qty": 2, "min_stage": 2,
+      "reason": "Ready-made defense cache in the front-lot bin; STREETS only (R2). Kept off the generator pad (R8)." },
+    { "id": "police_fix_exit_01", "item": "battery", "zone": "z_station_front", "container": "trash_bin", "qty": 3, "min_stage": 0,
+      "reason": "Battery top-up on arrival from the park road; the front lot is the safe pocket." }
+  ],
+  "zones": [
+    "z_station_front", "z_front_desk", "z_holding_cells", "z_evidence_room", "z_armory",
+    "z_interrogation", "z_generator_room", "z_radio_room", "z_courtyard"
+  ],
+  "rules": [
+    "R1: In DARK, fixed_spawns alone must cover the repair chain (>=2 cable, >=2 fuse, >=2 transistor); the evidence-room key (police_fix_key_01) sits in an unlocked desk drawer, so the transistors are reachable with zero lockpicks and zero rolled loot.",
+    "R2: Rolled loot never includes stage-gated items early: table lookup uses the CURRENT DistrictData.Stage only. Finished molotovs and noise_bombs enter rolls at PARTIAL/STREETS; in DARK the player gets materials (case, tool, gunpowder from the armory fixed spawn), never the weapon. gunpowder itself is a material and may appear in DARK only via the armory fixed spawn, not the DARK roll table.",
+    "R3: Fixed spawns are one-time per save; rolls are per-container with container_modifiers on qty.",
+    "R4: No firearms in police. There is no pistol/rifle/ammo id in data/items. gunpowder + case are crafting feedstock (empty casings, powder from old rounds). molotov/noise_bomb/firework remain the combat ceiling.",
+    "R5: Destroyer-led: the destroyer does not react to light (GDD §6.2). The rich containers (evidence_locker 1.5, armory_cage 1.4) sit in dead-end rooms with one door (evidence, armory, cells). The front lot and courtyard are open and poor. A player who never enters a dead-end still finishes the district via R1. Do not teach 'cone = weapon' here — police_note_02 and R5 are the same sentence.",
+    "R6: Armory and evidence caches must not roll empty — both are scripted caches, not RNG (mirrors park's keeper shed, school's shelter, hospital's pharmacy, gas_station's tanker).",
+    "R7: Blueprint guarantee: police_fix_blueprint_01 (blueprint_backpack_capacity) is the district's one schematic per district_loot.gd BLUEPRINTS. It is a fixed spawn, never a roll, reachable in DARK (interrogation 2 is unlocked). No other blueprint id may spawn here.",
+    "R8: Powder discipline: no fixed spawn places gunpowder inside z_generator_room or z_radio_room (transformer_police pad / live dispatch rack). Powder lives in the armory cage only."
+  ]
+}
