@@ -56,8 +56,27 @@ all present ✔. MusicManager falls back to the dark bed for districts without a
 - Wiring note: add `&"park"` row to `AMBIENCE_LIT_BY_DISTRICT` (CODE agent, after delivery).
 - Status: **spec only — binary not fabricated** (asset pass delivered tiles/pond ice only).
 
-### G3 — remaining lit beds (same template as G1/G2b, theme params from `gen_audio.py` DISTRICTS)
-- `school_lit.ogg` — major, 100 bpm; bell echoes softened to warm room tone.
+### G2c — `assets/audio/ambience/districts/school_lit.ogg` (school pass, full spec)
+- Type: 36 s seamless ambience loop, OGG q4 mono, 44.1 kHz; loop points 0.000–36.000,
+  matched zero-crossings; −18 LUFS integrated, true peak ≤ −1.5 dBFS.
+- Mood: "lit twin" of `school_dark.ogg` (STYLE_GUIDE §5): the corridor stops being a
+  cave and becomes a building that is merely empty. Cold room-tone drone −6 dB; add a warm
+  ballast hum for the restored ceiling bank (60 Hz + 120 Hz pair, −24 dBFS, gentle 0.2 Hz
+  amplitude wobble); the dark bed's distant-bell tail is kept but detuned down ~40 cents and
+  slowed so it reads as a relay, not a bell; locker-slam transients removed entirely (they
+  belong to `school_locker_slam.ogg`, which `district_atmosphere.gd` layers separately at
+  +2.7 dB); breath/pipe component low-passed at 800 Hz and dropped −8 dB.
+- Pulse alignment: 100 bpm bars (school theme canon: major, root MIDI 64, 14 bars ≈ 33.6 s
+  in `tools/gen_audio.py` DISTRICTS) → 36 s ≈ 60 bars of 0.6 s, so the 2 s MusicManager
+  crossfade lands on a downbeat at 0/6/12/18/24/30/36 s.
+- Never in the lit bed: children's voices, counting, whispering. The counting is a scripted
+  story beat (`school_note_07`), not ambience — putting it in a loop would make it wallpaper.
+- Reference pair for structure: `suburbs_dark.ogg` → `suburbs_lit.ogg`.
+- Wiring note: add `&"school"` row to `AMBIENCE_LIT_BY_DISTRICT` (CODE agent, after delivery).
+- Status: **spec only — binary not fabricated** (school asset pass delivered textures only).
+
+### G3 — remaining lit beds (same template as G1/G2b/G2c, theme params from `gen_audio.py` DISTRICTS)
+- `school_lit.ogg` — **superseded by G2c above (full spec)**.
 - `gas_station_lit.ogg` — blues, 110 bpm; sign buzz replaced by warm pump hum.
 - `police_lit.ogg` — minor, 120 bpm; radio static calmed, boots fade.
 - `warehouses_lit.ogg` — dorian, 75 bpm; metal creak slowed, forklift fades.
@@ -69,6 +88,14 @@ All: 36 s seamless, −18 LUFS, TP ≤ −1.5 dBFS, OGG q4 mono.
 - G4 — 4th residential detail bed `residential_courtyard_echo.ogg` (swing-chain creak /
   courtyard echo), 30 s loop, −18 LUFS; would join `DETAIL_BEDS["residential"]` with a
   +dB offset row in `district_atmosphere.gd` (currently 3 details, within the shipped 3–4 range).
+- G5 — 5th school detail one-shot `school_pipe_whisper.ogg` (school pass, optional):
+  6–9 s one-shot, OGG q4 mono, −18 LUFS, TP ≤ −1.5 dBFS. Heating-riser resonance with a
+  breath-like formant sweep just under the noise floor — *felt*, never intelligible: no
+  words, no numbers, no child's voice (the counting stays a scripted beat, see G2c). Would
+  join `DETAIL_BEDS["school"]` at −4.0 dB offset alongside `school_bell_echo` (1.8),
+  `school_locker_slam` (2.7), `school_chalk_scratch` (0.0), `school_desk_scrape` (0.0).
+  Restrict playback to `z_boiler_room` / `z_basement_shelter` (see
+  `content/districts/school/prop_manifest.md`). Status: **spec only, not fabricated.**
 
 ## Non-gaps (checked, fine)
 - All 40 detail one-shots referenced by `district_atmosphere.gd` exist on disk.
