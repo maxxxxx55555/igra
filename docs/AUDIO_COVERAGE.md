@@ -19,7 +19,7 @@ OGG q4 mono; beds = 36 s seamless loops (loop points 0.000–36.000, matched zer
 | park | park.wav ✔ | park_dark ✔ | **MISSING** | 4/4 ✔ |
 | school | abandoned_hallways_alt.mp3 ✔ | school_dark ✔ | **MISSING** | 4/4 ✔ |
 | hospital | abandoned_hallways_alt.mp3 ✔ | hospital_dark ✔ (1ch/44.1k/36.000 s) | hospital_lit ✔ (1ch/44.1k/36.000 s, header-verified 2026-09-08) | 4/4 ✔ (all 30.000 s) |
-| gas_station | downtown.wav ✔ | gas_station_dark ✔ | **MISSING** | 4/4 ✔ |
+| gas_station | downtown.wav ✔ | gas_station_dark ✔ (1ch/44.1k/36.000 s) | **MISSING** → spec G2e | 4/4 ✔ (all 30.000 s) |
 | police | downtown.wav ✔ | police_dark ✔ | **MISSING** | 3/3 ✔ |
 | warehouses | harbor.wav ✔ | warehouses_dark ✔ | **MISSING** | 4/4 ✔ |
 | industrial | industrial.wav ✔ | industrial_dark ✔ | **MISSING** | 4/4 ✔ |
@@ -98,9 +98,35 @@ all present ✔. MusicManager falls back to the dark bed for districts without a
   lit bed. The PA "almost-words" beat is scripted at STREETS (manifest stage table); the
   Act II reveal must stay in documents, never in a loop.
 
-### G3 — remaining lit beds (same template as G1/G2b/G2c, theme params from `gen_audio.py` DISTRICTS)
+### G2e — `assets/audio/ambience/districts/gas_station_lit.ogg` (gas_station pass, full spec)
+- Type: 36 s seamless ambience loop, OGG q4 mono, 44.1 kHz; loop points 0.000–36.000,
+  matched zero-crossings; −18 LUFS integrated, true peak ≤ −1.5 dBFS.
+- Verified on disk this pass (Ogg header + final granule): `gas_station_dark.ogg` is
+  1 ch / 44,100 Hz / **36.000 s** / 82,126 B, and all four detail one-shots
+  (`sign_buzz`, `pump_hum`, `gravel_crunch`, `car_pass`) are 1 ch / 44.1 kHz / 30.000 s.
+  Only the lit twin is missing — this is a **real gap**.
+- Mood: "lit twin" of `gas_station_dark.ogg` (STYLE_GUIDE §5). The forecourt stops being a
+  wind tunnel and becomes a working station with nobody in it: open-air wind bed −4 dB,
+  add a warm sodium ballast hum for the canopy pair (60/120 Hz, −24 dBFS, slow 0.15 Hz
+  wobble), add a low continuous pump-motor thrum at −26 dBFS (the district's cruel joke —
+  see `gas_station_note_04`), keep the distant road event but warm and slower.
+- **Remove in the lit twin:** the fault buzz. The dark bed's sign-buzz component is the
+  *fault*, not the sign (manifest stage table: "the buzz was the fault"); at STREETS+ the
+  sign runs clean, so the buzz motif drops out and `gas_station_sign_buzz.ogg` continues to
+  be layered separately by `district_atmosphere.gd` at 0.0 dB for one-shot flavour only.
+- Pulse alignment: 110 bpm bars (gas_station theme canon: blues, root MIDI 52, 16 bars ≈
+  34.9 s in `tools/gen_audio.py` DISTRICTS) → 36 s ≈ 66 bars of ~0.545 s; place the loop
+  seam on a bar line so the 2 s MusicManager crossfade lands clean.
+- Never in the loop: fire crackle. The scavenger drum fire is a positional prop sound
+  (`z_scavenger_camp`), not ambience — putting it in the bed would make the whole district
+  smell of smoke at every stage.
+- Reference pair for structure: `suburbs_dark.ogg` → `suburbs_lit.ogg`.
+- Wiring note: add `&"gas_station"` row to `AMBIENCE_LIT_BY_DISTRICT` (CODE, after delivery).
+- Status: **spec only — binary not fabricated** (asset pass delivered textures only).
+
+### G3 — remaining lit beds (same template as G1/G2b/G2c/G2e, theme params from `gen_audio.py` DISTRICTS)
 - `school_lit.ogg` — **superseded by G2c above (full spec)**.
-- `gas_station_lit.ogg` — blues, 110 bpm; sign buzz replaced by warm pump hum.
+- `gas_station_lit.ogg` — **superseded by G2e above (full spec)**.
 - `police_lit.ogg` — minor, 120 bpm; radio static calmed, boots fade.
 - `warehouses_lit.ogg` — dorian, 75 bpm; metal creak slowed, forklift fades.
 - `industrial_lit.ogg` — minor, 85 bpm; machinery drone −6 dB, steam vents gentler.
