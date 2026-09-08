@@ -1,5 +1,58 @@
 # Progress
 
+## 2026-09-07 (2) — UI-слой: обучение доходит до конца, HUD показывает оружие
+
+### Обучение (`scripts/ui/tutorial_system.gd`)
+Две поломки, из-за которых туториал был декорацией:
+- **7 из 10** ключей `TUT_*` из `STEPS` отсутствовали во всех 13 `data/i18n/*.json` —
+  панель печатала голые `TUT_MOVE`, `TUT_CROUCH`, `TUT_PICKUP`…
+- у шагов `move`/`stealth`/`inventory_toggle` **не было пути завершения**:
+  `_check_action()` вызывается только из 4 сигналов InputService
+  (attack/interact/flashlight/dodge), поэтому обучение висело на первом же шаге
+  до кнопки «Пропустить».
+
+Сделано: `_poll_action()` в `_process()` (move — по `InputService.get_move_dir()`,
+shoot — по `is_shoot_held()`, прочие — по `Input.is_action_just_pressed` с
+защитой `InputMap.has_action`), новый шаг `shoot` (ПКМ) перед шагом инвентаря,
+8 ключей во все 13 локалей → **829** ключей на локаль.
+`tools/i18n_audit.py` теперь ловит ключи из данных (`"text_key"`/`"name_key"`):
+**313** ключей вместо 294, `MISSING: 0`. Именно этот слепой обзор и пропустил
+семь подписей обучения.
+
+### HUD (`scripts/ui/hud_3d.gd`) — GDD §3.13
+`_refresh_ammo()`/`_on_ammo_changed()` сведены к `_poll_weapon_info()`:
+локализованное имя ствола (`LocalizationManager.name_for("WEAPON_", …)`),
+подпись «магазин / запас» и полоса перезарядки (`ColorRect`,
+`172 px * get_reload_progress()`). У `WeaponBase.get_reload_progress()` и
+`is_reloading()` наконец появился потребитель. Опрос — третий слот уже
+существующего `NVPollTimer` (100 мс), новых таймеров нет.
+
+### Запрет IDEA.md на физические пули
+Из `WeaponBase.fire()` удалена ветка спавна `bullet_scene` и сам экспорт: ни
+одна сцена оружия его не заполняла (grep по `scenes/`), а движок на каждый
+выстрел симулировал бы rigid body. Логика разворота ствола вынесена из
+`WeaponManager._aim()` в `WeaponBase.aim_at()` — она нужна и в `fire()`.
+
+### Мусор
+Удалён мёртвый дубль корневого каталога `components/` (4 файла: attack/health/
+ragdoll/trap — ноль ссылок в сценах и скриптах, `class_name` нигде не
+использован как тип) + записи из `scripts/tools/validate_list.txt`
+(258 записей, 0 отсутствующих).
+
+### Проверки
+`./tools/check.sh --static` — **10/10**; `tools/i18n_audit.py` — MISSING 0;
+`gdparse` по изменённым файлам — только известная ложная сработка в
+`hud_3d.gd:816` (однострочный `if` в лямбде, была до правок).
+Движковых гейтов (`compile_gate`, `signal_arity`, `i18n_check`, `boot_check`)
+здесь по-прежнему нет — бинарь Godot в песочнице не достать, их должен
+прогнать хозяин.
+
+Новый документ: `docs/IDEA_CONFORMANCE.md` — сверка IDEA.md с кодом пункт за
+пунктом, включая осознанные отклонения (рендерер, HealthComponent,
+TouchScreenButton, каталоги) и то, что осталось.
+
+---
+
 ## 2026-09-07 — FPS-СЛОЙ: оружие, перезарядка и патроны доведены до живого геймплея
 
 ### Что было не так (по IDEA.md и GDD §18)
