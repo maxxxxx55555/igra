@@ -1,0 +1,112 @@
+{
+  "district": "school",
+  "version": 1,
+  "_world_refs_contract": "Notes reference world-bible entries by id only (content/world/*, content/lore/*); no copied text. See docs/CONTENT_WORLD_BIBLE.md.",
+  "_reachability_rule": "school unlocks from residential FULL (data/districts/district_school.tres powered_by=[residential]); park may still be unvisited when the player arrives here. Therefore world_refs are restricted to ids whose reveal gate is suburbs/* or residential/* — no park-, hospital- or later-gated ids (CONTENT_WORLD_BIBLE rule 3). The Keeper appears in note 08 only as an unnamed 'old man from the lamp office' (flavour, no id, no journal unlock).",
+  "notes": [
+    {
+      "id": "school_note_01",
+      "item_type": "document",
+      "i18n_keys": { "title": "LORE_SCHOOL_01_TITLE", "text": "LORE_SCHOOL_01_TEXT" },
+      "en": {
+        "title": "Duty Teacher's Board, 15 March",
+        "text": "The page before the last one in the duty binder, still clipped to the board: \"11:40 — lessons cancelled, all classes to the basement shelter. Count your class twice at the door. We lost four minutes on the last drill and the inspector noticed.\" Under the signature, in pencil, in a child's round handwriting: \"we got counted three times. only two teachers counted.\""
+      },
+      "location_hint": "Duty desk board in the entrance lobby (z_lobby)",
+      "min_stage": 0,
+      "weight": 100,
+      "world_refs": ["hist_blackout_night"]
+    },
+    {
+      "id": "school_note_02",
+      "item_type": "photo",
+      "i18n_keys": { "title": "LORE_SCHOOL_02_TITLE", "text": "LORE_SCHOOL_02_TEXT" },
+      "en": {
+        "title": "Photo: Corridor Lamp Test",
+        "text": "A maintenance photograph taken for the annual inspection: the main corridor with every ceiling lamp burning, lockers in two clean rows, a man on a stepladder shielding his eyes. On the back, an inspector's stamp and a tired line of handwriting: \"Night draw four times the spec on this feeder. No fault found. Third building this month.\""
+      },
+      "location_hint": "Pinned inside the caretaker's notice frame, locker corridor (z_corridor_lockers)",
+      "min_stage": 0,
+      "weight": 90,
+      "world_refs": ["char_marat", "faction_city_power"]
+    },
+    {
+      "id": "school_note_03",
+      "item_type": "audio_log",
+      "i18n_keys": { "title": "LORE_SCHOOL_03_TITLE", "text": "LORE_SCHOOL_03_TEXT" },
+      "en": {
+        "title": "Recorder: Grid Crew Log 7",
+        "text": "\"Camped in the gym, two nights. We came for the boiler-room transformer and we'll leave it half done. There's one in the corridor that doesn't chase — it stands at the far end and looks at you. Marat put his light on it. Don't do that. It goes still for two seconds and then it is faster than you are. Walk past. Let it look. Shelter key is on the whistle lanyard in the equipment bin — we put it back where a teacher would keep it.\""
+      },
+      "location_hint": "Tape recorder on a folded cot, gymnasium (z_gym)",
+      "min_stage": 1,
+      "weight": 85,
+      "world_refs": ["char_marat", "char_grid_crew_recorder", "faction_grid_crew"]
+    },
+    {
+      "id": "school_note_04",
+      "item_type": "document",
+      "i18n_keys": { "title": "LORE_SCHOOL_04_TITLE", "text": "LORE_SCHOOL_04_TEXT" },
+      "en": {
+        "title": "Yard Collection Notice — Sheet Two",
+        "text": "A weather-swollen sheet still nailed to the gate board. \"COLLECTION POINT: SCHOOL YARD. Sheet two, forty-seven persons. Buses to the central arena. Bring documents and water. Bring no lamps, no batteries, no torches — the convoy travels dark.\" Along the bottom, ballpoint, pressed hard: \"Buses came at 04:00 for sheet one. Sheet two waited until sunrise. Nobody wrote sheet three.\""
+      },
+      "location_hint": "Gate notice board, school yard entrance (z_yard_gate)",
+      "min_stage": 0,
+      "weight": 95,
+      "world_refs": ["hist_evacuation_arena", "news_arena_collection", "faction_street_watch"]
+    },
+    {
+      "id": "school_note_05",
+      "item_type": "photo",
+      "i18n_keys": { "title": "LORE_SCHOOL_05_TITLE", "text": "LORE_SCHOOL_05_TEXT" },
+      "en": {
+        "title": "Photo: The Gym, Ninety Cots",
+        "text": "Rows of camp beds across the basketball lines, blankets folded to the same square, kerosene lanterns hung high on the wall bars — not one electric bulb burning, though the ceiling floods are right there. On the back: \"No electric light in the hall, by order of the shelter warden. The parents argued for an hour. The teachers won. Nobody argues about it now.\""
+      },
+      "location_hint": "Slid under the scoreboard glass, gymnasium (z_gym)",
+      "min_stage": 1,
+      "weight": 75,
+      "world_refs": ["faction_street_watch"]
+    },
+    {
+      "id": "school_note_06",
+      "item_type": "document",
+      "i18n_keys": { "title": "LORE_SCHOOL_06_TITLE", "text": "LORE_SCHOOL_06_TEXT" },
+      "en": {
+        "title": "Chalkboard, Copied Down",
+        "text": "A teacher's exercise book, one page filled with numbers copied from the classroom board morning after morning: 300. 300. 297. 297. 291. 291. 284. Under them, in the same careful hand: \"It writes the count at 03:40. It never counts itself. It is not wrong — I checked the register twice. If the number drops, do not go looking for the difference. The difference is looking for you.\""
+      },
+      "location_hint": "Open on the front desk, classroom wing (z_classroom_wing)",
+      "min_stage": 2,
+      "weight": 70,
+      "world_refs": ["hist_present_day"]
+    },
+    {
+      "id": "school_note_07",
+      "item_type": "audio_log",
+      "i18n_keys": { "title": "LORE_SCHOOL_07_TITLE", "text": "LORE_SCHOOL_07_TEXT" },
+      "en": {
+        "title": "Cassette: The Counting",
+        "text": "A child's toy recorder, the tape worn almost transparent. Forty seconds of breathing and pipe-hiss, then it comes through the heating riser: a whisper working down a class register, slow and patient, one name per breath. A girl whispers over it, very close to the microphone: \"It says my name wrong. It says it the way it heard it, not the way it is.\" Somebody shushes her. The counting reaches the end of the register and starts again from the top."
+      },
+      "location_hint": "Beside the heating riser in the basement shelter (z_basement_shelter)",
+      "min_stage": 2,
+      "weight": 80,
+      "world_refs": ["hist_blackout_night"]
+    },
+    {
+      "id": "school_note_08",
+      "item_type": "document",
+      "i18n_keys": { "title": "LORE_SCHOOL_08_TITLE", "text": "LORE_SCHOOL_08_TEXT" },
+      "en": {
+        "title": "Caretaker's Ledger, Last Page",
+        "text": "Forty-one lamps, listed by room, each with its own little service history — the caretaker ran this building like a grid of his own. The last page is after the blackout: \"Gave the gym floodlight transformer to the old man from the lamp office. He asked politely and he knew which breaker before I told him. Order of switching for whoever comes next: boiler feeder, corridor, gym, yard. And count the windows from the yard, never from the corridor. Corridors lie in this building.\""
+      },
+      "location_hint": "Ledger on the caretaker's bench, boiler room (z_boiler_room)",
+      "min_stage": 3,
+      "weight": 60,
+      "world_refs": ["faction_city_power"]
+    }
+  ]
+}

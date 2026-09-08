@@ -1,0 +1,112 @@
+{
+  "district": "gas_station",
+  "version": 1,
+  "_world_refs_contract": "Notes reference world-bible entries by id only (content/world/*, content/lore/*); no copied text. See docs/CONTENT_WORLD_BIBLE.md.",
+  "_reachability_rule": "gas_station unlocks from park FULL (district_gas_station.tres powered_by=[park]; GDD §4.3 requires every prereq at FULL), and park itself needs suburbs FULL. Guaranteed history at arrival: suburbs (all stages) + park (all stages) — so every suburbs- and park-gated world id is safe here regardless of its min_stage, and the Keeper/radio-voice material finally pays off. NOT guaranteed: residential and hospital (separate branch) — no residential- or hospital-gated ids are referenced, which also keeps the Act II Architect reveal (hospital STREETS, CONTENT_WORLD_BIBLE rule 3) untouched.",
+  "notes": [
+    {
+      "id": "gas_station_note_01",
+      "item_type": "document",
+      "i18n_keys": { "title": "LORE_GAS_STATION_01_TITLE", "text": "LORE_GAS_STATION_01_TEXT" },
+      "en": {
+        "title": "The Scavenger's List — Second Page",
+        "text": "The page after the famous one, same pencil, same block capitals. \"RULES FOR THIS STATION. Siphon from the underground tanks, never the cars — cars are somebody's plan. Roll the drums, don't drag them. If a pump reads a number, walk away from that pump. Sleep in the wash bay, it has one door and a drain. And if you find my first list, leave it, it is the only thing here anyone reads twice.\""
+      },
+      "location_hint": "Nailed to the cashier's kiosk post, forecourt (z_forecourt)",
+      "min_stage": 0,
+      "weight": 100,
+      "world_refs": ["hist_present_day"]
+    },
+    {
+      "id": "gas_station_note_02",
+      "item_type": "photo",
+      "i18n_keys": { "title": "LORE_GAS_STATION_02_TITLE", "text": "LORE_GAS_STATION_02_TEXT" },
+      "en": {
+        "title": "Photo: The Queue Out",
+        "text": "Shot from the canopy roof: cars nose to tail down the slip road and out of frame, every headlight off, sidelights only, a red chain of them going nowhere. On the back, a felt pen: \"Last station before the ring road. Fuel ran out at 03:00. The road was closed at 03:40. Half of them stayed in their cars until it got light, and it never really did.\""
+      },
+      "location_hint": "Wedged in the canopy sign frame above the slip road (z_road_queue)",
+      "min_stage": 0,
+      "weight": 95,
+      "world_refs": ["hist_evacuation_arena", "news_arena_collection"]
+    },
+    {
+      "id": "gas_station_note_03",
+      "item_type": "audio_log",
+      "i18n_keys": { "title": "LORE_GAS_STATION_03_TITLE", "text": "LORE_GAS_STATION_03_TEXT" },
+      "en": {
+        "title": "Recorder: Grid Crew Log 12",
+        "text": "\"Fuel run. Two hundred litres for the park generator and whatever we can carry after. Marat won't let us start the pump motor — he says an engine and a man running sound the same to the one that hunts out here, and the engine can't stop when it wants to. So we siphon by hand, all night, and we walk the drums out. Slowly. If you're replaying this and you're in a hurry: don't be. Hurry is the noise it likes.\""
+      },
+      "location_hint": "Recorder left on the shop counter by the till (z_shop)",
+      "min_stage": 1,
+      "weight": 85,
+      "world_refs": ["char_marat", "char_grid_crew_recorder", "faction_grid_crew"]
+    },
+    {
+      "id": "gas_station_note_04",
+      "item_type": "document",
+      "i18n_keys": { "title": "LORE_GAS_STATION_04_TITLE", "text": "LORE_GAS_STATION_04_TEXT" },
+      "en": {
+        "title": "Pump Log, Night Shift",
+        "text": "A ruled attendant's log: pump number, litres, time, initials. The last shift is neat until 02:00 and then it is not. \"Power out 22:14. Pumps dead, tills dead, canopy dead. 04:12 — pump 3 dispensed forty litres. Pump 3 has no power. There was nobody on the forecourt. I have written the number down because the number is real and I would like someone else to see it.\""
+      },
+      "location_hint": "Clipboard hanging inside the cashier's kiosk (z_pump_island)",
+      "min_stage": 0,
+      "weight": 90,
+      "world_refs": ["hist_blackout_night", "faction_city_power"]
+    },
+    {
+      "id": "gas_station_note_05",
+      "item_type": "photo",
+      "i18n_keys": { "title": "LORE_GAS_STATION_05_TITLE", "text": "LORE_GAS_STATION_05_TEXT" },
+      "en": {
+        "title": "Photo: The Last Delivery",
+        "text": "A tanker driver in front of his rig, cap pushed back, one hand on the fill hose like it is a dog he is proud of. Daylight — the photograph is from before. On the back, someone else's writing: \"He made the delivery on the second night with no lights on the road at all. Then he wouldn't leave the truck. Said an empty truck is a full one to somebody, and he'd rather be the somebody who guarded it.\""
+      },
+      "location_hint": "Taped to the tanker cab window, tanker apron (z_tanker)",
+      "min_stage": 1,
+      "weight": 75,
+      "world_refs": ["faction_street_watch"]
+    },
+    {
+      "id": "gas_station_note_06",
+      "item_type": "document",
+      "i18n_keys": { "title": "LORE_GAS_STATION_06_TITLE", "text": "LORE_GAS_STATION_06_TEXT" },
+      "en": {
+        "title": "Requisition, Countersigned",
+        "text": "A station requisition pad, one page filled in by a hand that does not belong to a petrol station. \"ITEM: canopy floodlight transformer, one. REASON: it will be needed at the centre. AUTHORISED BY: —\" and there the signature is just a small drawing of a streetlight inside a circle. Underneath, the manager's own biro: \"Old man came at dusk, took the transformer, left this. Knew which bolt to loosen first. Said the ones he takes down are the ones they cannot drink. I didn't argue. Nobody's buying petrol anyway.\""
+      },
+      "location_hint": "Requisition pad on the service-bay bench (z_service_bay)",
+      "min_stage": 2,
+      "weight": 70,
+      "world_refs": ["char_keeper", "faction_keepers", "hist_keeper_reversal"]
+    },
+    {
+      "id": "gas_station_note_07",
+      "item_type": "audio_log",
+      "i18n_keys": { "title": "LORE_GAS_STATION_07_TITLE", "text": "LORE_GAS_STATION_07_TEXT" },
+      "en": {
+        "title": "Car Radio: The Voice, Further Away",
+        "text": "Recorded off a car radio with the door open, battery nearly flat. The same loop the park shed carries, but thinner out here, breaking up between words: \"...district by district... lamp by lamp... go to the power station...\" then a wash of static, then the three soft clicks like a relay closing. Whoever taped it added their own voice at the end, very tired: \"It's been saying that for a month. Somebody should go.\""
+      },
+      "location_hint": "Cassette in the open driver's door of the third car in the queue (z_road_queue)",
+      "min_stage": 2,
+      "weight": 80,
+      "world_refs": ["char_radio_voice", "radio_01_power_station", "hist_radio_call"]
+    },
+    {
+      "id": "gas_station_note_08",
+      "item_type": "document",
+      "i18n_keys": { "title": "LORE_GAS_STATION_08_TITLE", "text": "LORE_GAS_STATION_08_TEXT" },
+      "en": {
+        "title": "Camp Rules, Nailed to the Post",
+        "text": "Board torn off a shelving unit, rules burnt into it with a soldering iron. \"1. Fire in the drum, never on the ground. 2. One lamp, hooded, and it goes out when the drum goes out. 3. Nobody runs in camp. 4. Nobody stands under a working streetlight, not even to argue about it. 5. If the old man comes to take a lamp down, help him and don't ask. 6. Whatever you hear at the pumps, it is a pump.\""
+      },
+      "location_hint": "Post at the centre of the scavenger camp (z_scavenger_camp)",
+      "min_stage": 3,
+      "weight": 60,
+      "world_refs": ["faction_street_watch", "char_keeper"]
+    }
+  ]
+}

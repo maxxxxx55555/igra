@@ -4,53 +4,258 @@
   "_comment": "Entry district. Design intent (GDD §3, §4.2): teach scavenge -> craft -> restore-light loop. Everything here is survivable with flashlight + basics; puzzle materials are GUARANTEED via fixed_spawns so the first transformer/streetlight puzzle is always solvable in DARK. No firearms, no heavy weapons — suburbs is the tutorial threat tier. All item ids verified against data/items/*.tres (38 ids, 2026-09).",
   "tables": {
     "DARK": [
-      { "item": "battery",  "weight": 20, "min": 1, "max": 1 },
-      { "item": "scrap",    "weight": 18, "min": 1, "max": 2 },
-      { "item": "bottle",   "weight": 12, "min": 1, "max": 2 },
-      { "item": "paper",    "weight": 10, "min": 1, "max": 1 },
-      { "item": "fabric",   "weight": 10, "min": 1, "max": 1 },
-      { "item": "medkit",   "weight": 8,  "min": 1, "max": 1 },
-      { "item": "coin",     "weight": 8,  "min": 3, "max": 8 },
-      { "item": "alcohol",  "weight": 6,  "min": 1, "max": 1 },
-      { "item": "molotov",  "weight": 4,  "min": 1, "max": 1 },
-      { "item": "firework", "weight": 4,  "min": 1, "max": 1 }
+      {
+        "item": "battery",
+        "weight": 20,
+        "min": 1,
+        "max": 1
+      },
+      {
+        "item": "scrap",
+        "weight": 18,
+        "min": 1,
+        "max": 2
+      },
+      {
+        "item": "bottle",
+        "weight": 12,
+        "min": 1,
+        "max": 2
+      },
+      {
+        "item": "paper",
+        "weight": 10,
+        "min": 1,
+        "max": 1
+      },
+      {
+        "item": "fabric",
+        "weight": 10,
+        "min": 1,
+        "max": 1
+      },
+      {
+        "item": "medkit",
+        "weight": 8,
+        "min": 1,
+        "max": 1
+      },
+      {
+        "item": "coin",
+        "weight": 8,
+        "min": 3,
+        "max": 8
+      },
+      {
+        "item": "alcohol",
+        "weight": 6,
+        "min": 1,
+        "max": 1
+      },
+      {
+        "item": "molotov",
+        "weight": 4,
+        "min": 1,
+        "max": 1
+      },
+      {
+        "item": "firework",
+        "weight": 4,
+        "min": 1,
+        "max": 1
+      }
     ],
     "PARTIAL": [
-      { "item": "battery",   "weight": 14, "min": 1, "max": 1 },
-      { "item": "cable",     "weight": 12, "min": 1, "max": 1 },
-      { "item": "fuse",      "weight": 12, "min": 1, "max": 1 },
-      { "item": "wiring",    "weight": 10, "min": 1, "max": 2 },
-      { "item": "scrap",     "weight": 10, "min": 1, "max": 2 },
-      { "item": "noise_bomb","weight": 8,  "min": 1, "max": 1 },
-      { "item": "medkit",    "weight": 7,  "min": 1, "max": 1 },
-      { "item": "coin",      "weight": 7,  "min": 5, "max": 12 },
-      { "item": "lockpick",  "weight": 6,  "min": 1, "max": 1 },
-      { "item": "repair_kit","weight": 6,  "min": 1, "max": 1 },
-      { "item": "circuit",   "weight": 4,  "min": 1, "max": 1 },
-      { "item": "transistor","weight": 4,  "min": 1, "max": 2 }
+      {
+        "item": "battery",
+        "weight": 14,
+        "min": 1,
+        "max": 1
+      },
+      {
+        "item": "cable",
+        "weight": 12,
+        "min": 1,
+        "max": 1
+      },
+      {
+        "item": "fuse",
+        "weight": 12,
+        "min": 1,
+        "max": 1
+      },
+      {
+        "item": "wiring",
+        "weight": 10,
+        "min": 1,
+        "max": 2
+      },
+      {
+        "item": "scrap",
+        "weight": 10,
+        "min": 1,
+        "max": 2
+      },
+      {
+        "item": "noise_bomb",
+        "weight": 8,
+        "min": 1,
+        "max": 1
+      },
+      {
+        "item": "medkit",
+        "weight": 7,
+        "min": 1,
+        "max": 1
+      },
+      {
+        "item": "coin",
+        "weight": 7,
+        "min": 5,
+        "max": 12
+      },
+      {
+        "item": "lockpick",
+        "weight": 6,
+        "min": 1,
+        "max": 1
+      },
+      {
+        "item": "repair_kit",
+        "weight": 6,
+        "min": 1,
+        "max": 1
+      },
+      {
+        "item": "circuit",
+        "weight": 4,
+        "min": 1,
+        "max": 1
+      },
+      {
+        "item": "transistor",
+        "weight": 4,
+        "min": 1,
+        "max": 2
+      }
     ],
     "STREETS": [
-      { "item": "battery",    "weight": 10, "min": 1, "max": 1 },
-      { "item": "cable",      "weight": 10, "min": 1, "max": 2 },
-      { "item": "gas_canister","weight": 8, "min": 1, "max": 1 },
-      { "item": "fuse",       "weight": 8,  "min": 1, "max": 2 },
-      { "item": "radio_part", "weight": 8,  "min": 1, "max": 1 },
-      { "item": "coin",       "weight": 8,  "min": 8, "max": 15 },
-      { "item": "repair_kit", "weight": 6,  "min": 1, "max": 1 },
-      { "item": "medkit",     "weight": 6,  "min": 1, "max": 1 },
-      { "item": "wiring",     "weight": 6,  "min": 1, "max": 2 },
-      { "item": "gunpowder",  "weight": 4,  "min": 1, "max": 1 },
-      { "item": "circuit",    "weight": 4,  "min": 1, "max": 2 }
+      {
+        "item": "battery",
+        "weight": 10,
+        "min": 1,
+        "max": 1
+      },
+      {
+        "item": "cable",
+        "weight": 10,
+        "min": 1,
+        "max": 2
+      },
+      {
+        "item": "gas_canister",
+        "weight": 8,
+        "min": 1,
+        "max": 1
+      },
+      {
+        "item": "fuse",
+        "weight": 8,
+        "min": 1,
+        "max": 2
+      },
+      {
+        "item": "radio_part",
+        "weight": 8,
+        "min": 1,
+        "max": 1
+      },
+      {
+        "item": "coin",
+        "weight": 8,
+        "min": 8,
+        "max": 15
+      },
+      {
+        "item": "repair_kit",
+        "weight": 6,
+        "min": 1,
+        "max": 1
+      },
+      {
+        "item": "medkit",
+        "weight": 6,
+        "min": 1,
+        "max": 1
+      },
+      {
+        "item": "wiring",
+        "weight": 6,
+        "min": 1,
+        "max": 2
+      },
+      {
+        "item": "gunpowder",
+        "weight": 4,
+        "min": 1,
+        "max": 1
+      },
+      {
+        "item": "circuit",
+        "weight": 4,
+        "min": 1,
+        "max": 2
+      }
     ],
     "FULL": [
-      { "item": "coin",        "weight": 14, "min": 10, "max": 20 },
-      { "item": "medkit",      "weight": 10, "min": 1, "max": 1 },
-      { "item": "serum",       "weight": 8,  "min": 1, "max": 1 },
-      { "item": "repair_kit",  "weight": 8,  "min": 1, "max": 1 },
-      { "item": "battery",     "weight": 8,  "min": 1, "max": 2 },
-      { "item": "blueprint_flashlight_battery", "weight": 5, "min": 1, "max": 1 },
-      { "item": "radio_part",  "weight": 5,  "min": 1, "max": 1 },
-      { "item": "transistor",  "weight": 4,  "min": 1, "max": 2 }
+      {
+        "item": "coin",
+        "weight": 14,
+        "min": 10,
+        "max": 20
+      },
+      {
+        "item": "medkit",
+        "weight": 10,
+        "min": 1,
+        "max": 1
+      },
+      {
+        "item": "serum",
+        "weight": 8,
+        "min": 1,
+        "max": 1
+      },
+      {
+        "item": "repair_kit",
+        "weight": 8,
+        "min": 1,
+        "max": 1
+      },
+      {
+        "item": "battery",
+        "weight": 8,
+        "min": 1,
+        "max": 2
+      },
+      {
+        "item": "blueprint_flashlight_battery",
+        "weight": 5,
+        "min": 1,
+        "max": 1
+      },
+      {
+        "item": "radio_part",
+        "weight": 5,
+        "min": 1,
+        "max": 1
+      },
+      {
+        "item": "transistor",
+        "weight": 4,
+        "min": 1,
+        "max": 2
+      }
     ]
   },
   "container_modifiers": {
@@ -62,29 +267,100 @@
     "mail_box": 0.5
   },
   "fixed_spawns": [
-    { "id": "suburbs_fix_puzzle_01", "item": "fuse",   "zone": "z_garage_row", "container": "garage_shelf", "qty": 2, "min_stage": 0,
-      "reason": "Guarantee: first transformer puzzle solvable in DARK (GDD §3 loop)." },
-    { "id": "suburbs_fix_puzzle_02", "item": "cable",  "zone": "z_garage_row", "container": "car_trunk",    "qty": 3, "min_stage": 0,
-      "reason": "Guarantee: cable for first streetlight reconnect." },
-    { "id": "suburbs_fix_puzzle_03", "item": "wiring", "zone": "z_maple_row",  "container": "kitchen_drawer", "qty": 2, "min_stage": 0,
-      "reason": "Guarantee: wiring spread outside garage so player explores houses." },
-    { "id": "suburbs_fix_teach_01",  "item": "makeshift_lamp", "zone": "z_corner_shop", "container": "shop_shelf", "qty": 1, "min_stage": 0,
-      "reason": "Teaches hands-free light (GDD §3 crafting); safe zone reward near spawn." },
-    { "id": "suburbs_fix_key_01",    "item": "key",    "zone": "z_cul_de_sac", "container": "kitchen_drawer", "qty": 1, "min_stage": 0,
-      "reason": "Opens corner shop back room (code agent wires the lock)." },
-    { "id": "suburbs_fix_upgrade_01","item": "backpack_l1", "zone": "z_garage_row", "container": "garage_shelf", "qty": 1, "min_stage": 1,
-      "reason": "One-time early capacity upgrade; gated behind first partial power." },
-    { "id": "suburbs_fix_defense_01","item": "molotov", "zone": "z_bus_stop",  "container": "trash_bin", "qty": 2, "min_stage": 2,
-      "reason": "Defense cache before north exit; STREETS stage only." },
-    { "id": "suburbs_fix_exit_01",   "item": "battery", "zone": "z_exit_north", "container": "mail_box", "qty": 3, "min_stage": 0,
-      "reason": "Battery cache at the exit to residential — encourages pushing forward." }
+    {
+      "id": "suburbs_fix_puzzle_01",
+      "item": "fuse",
+      "zone": "z_garage_row",
+      "container": "garage_shelf",
+      "qty": 2,
+      "min_stage": 0,
+      "reason": "Guarantee: first transformer puzzle solvable in DARK (GDD §3 loop)."
+    },
+    {
+      "id": "suburbs_fix_puzzle_02",
+      "item": "cable",
+      "zone": "z_garage_row",
+      "container": "car_trunk",
+      "qty": 3,
+      "min_stage": 0,
+      "reason": "Guarantee: cable for first streetlight reconnect."
+    },
+    {
+      "id": "suburbs_fix_puzzle_03",
+      "item": "wiring",
+      "zone": "z_maple_row",
+      "container": "kitchen_drawer",
+      "qty": 2,
+      "min_stage": 0,
+      "reason": "Guarantee: wiring spread outside garage so player explores houses."
+    },
+    {
+      "id": "suburbs_fix_puzzle_04",
+      "item": "transistor",
+      "zone": "z_garage_row",
+      "container": "garage_shelf",
+      "qty": 2,
+      "min_stage": 0,
+      "reason": "Guarantee: transistor for FULL. Suburbs is district 1 — no transistor can be carried in from anywhere else, so the FULL stage (and therefore residential/park unlocking) must be solvable from this district's own fixed spawns. Added by the 2026-09-08 pipeline audit."
+    },
+    {
+      "id": "suburbs_fix_teach_01",
+      "item": "makeshift_lamp",
+      "zone": "z_corner_shop",
+      "container": "shop_shelf",
+      "qty": 1,
+      "min_stage": 0,
+      "reason": "Teaches hands-free light (GDD §3 crafting); safe zone reward near spawn."
+    },
+    {
+      "id": "suburbs_fix_key_01",
+      "item": "key",
+      "zone": "z_cul_de_sac",
+      "container": "kitchen_drawer",
+      "qty": 1,
+      "min_stage": 0,
+      "reason": "Opens corner shop back room (code agent wires the lock)."
+    },
+    {
+      "id": "suburbs_fix_upgrade_01",
+      "item": "backpack_l1",
+      "zone": "z_garage_row",
+      "container": "garage_shelf",
+      "qty": 1,
+      "min_stage": 1,
+      "reason": "One-time early capacity upgrade; gated behind first partial power."
+    },
+    {
+      "id": "suburbs_fix_defense_01",
+      "item": "molotov",
+      "zone": "z_bus_stop",
+      "container": "trash_bin",
+      "qty": 2,
+      "min_stage": 2,
+      "reason": "Defense cache before north exit; STREETS stage only."
+    },
+    {
+      "id": "suburbs_fix_exit_01",
+      "item": "battery",
+      "zone": "z_exit_north",
+      "container": "mail_box",
+      "qty": 3,
+      "min_stage": 0,
+      "reason": "Battery cache at the exit to residential — encourages pushing forward."
+    }
   ],
   "zones": [
-    "z_spawn_edge", "z_maple_row", "z_bus_stop", "z_corner_shop",
-    "z_garage_row", "z_cul_de_sac", "z_backyards", "z_exit_north"
+    "z_spawn_edge",
+    "z_maple_row",
+    "z_bus_stop",
+    "z_corner_shop",
+    "z_garage_row",
+    "z_cul_de_sac",
+    "z_backyards",
+    "z_exit_north"
   ],
   "rules": [
-    "R1: In DARK, fixed_spawns alone must cover first puzzle costs (>=2 fuse, >=3 cable, >=2 wiring reachable without lockpick).",
+    "R1: In DARK, fixed_spawns alone must cover the whole repair chain without a lockpick (>=3 cable, >=2 fuse, >=2 transistor, >=2 wiring). Suburbs is district 1: nothing can be imported, so cable->PARTIAL, fuse->STREETS and transistor->FULL must all be findable here.",
     "R2: Rolled loot never includes stage-gated items early: table lookup uses the CURRENT DistrictData.Stage only.",
     "R3: Fixed spawns are one-time per save; rolls are per-container with container_modifiers on qty.",
     "R4: No firearms or weapon-tier items in suburbs (tutorial threat tier; molotov/firework/noise_bomb are the ceiling).",

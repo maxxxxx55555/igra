@@ -1,0 +1,112 @@
+{
+  "district": "hospital",
+  "version": 1,
+  "_world_refs_contract": "Notes reference world-bible entries by id only (content/world/*, content/lore/*); no copied text. See docs/CONTENT_WORLD_BIBLE.md.",
+  "_reveal_rule": "This is the Act II gate district (GDD §12.3; CONTENT_WORLD_BIBLE rule 3): char_architect / faction_project_architect / hist_project_architect / news_architect_denied all reveal at hospital min_stage 2 (STREETS). Every note carrying one of those ids therefore has min_stage >= 2 — notes 06, 07, 08. Notes 01-05 hint only ('the fourth feeder', 'the draw'), never naming the project. Hospital unlocks from residential FULL (district_hospital.tres), so park may be unvisited: all non-Architect world_refs stay suburbs/residential-gated (same park-safe rule as the school pack).",
+  "notes": [
+    {
+      "id": "hospital_note_01",
+      "item_type": "document",
+      "i18n_keys": { "title": "LORE_HOSPITAL_01_TITLE", "text": "LORE_HOSPITAL_01_TEXT" },
+      "en": {
+        "title": "Triage Board, Night Zero",
+        "text": "The wipe-clean board behind the reception desk, the last shift never erased. \"BEDS: 0. CORRIDOR: 41. GENERATOR: 6 HRS OF DIESEL. WARDS DARK AFTER 22:00 — DO NOT ARGUE WITH THE PATIENTS ABOUT THIS.\" Under the diesel line someone has added, in a different marker: \"Six hours came and went. Nobody asked for the light back.\""
+      },
+      "location_hint": "Reception desk board, main entrance (z_reception)",
+      "min_stage": 0,
+      "weight": 100,
+      "world_refs": ["hist_blackout_night"]
+    },
+    {
+      "id": "hospital_note_02",
+      "item_type": "photo",
+      "i18n_keys": { "title": "LORE_HOSPITAL_02_TITLE", "text": "LORE_HOSPITAL_02_TEXT" },
+      "en": {
+        "title": "Photo: Ambulance Bay, Night One",
+        "text": "A long exposure across the bay: six ambulances nose to tail, every headlight off, engines running — you can see the exhaust. The crews are loading by kerosene lamp, faces orange, hands blurred. On the back, in dispatcher's shorthand: \"Convoy to the arena, 02:40. Drive dark, unload dark. Anything with a bulb goes in the last van.\""
+      },
+      "location_hint": "Taped inside the dispatch window of the ambulance bay (z_ambulance_bay)",
+      "min_stage": 0,
+      "weight": 95,
+      "world_refs": ["hist_evacuation_arena", "news_arena_collection"]
+    },
+    {
+      "id": "hospital_note_03",
+      "item_type": "audio_log",
+      "i18n_keys": { "title": "LORE_HOSPITAL_03_TITLE", "text": "LORE_HOSPITAL_03_TEXT" },
+      "en": {
+        "title": "Dictaphone: Night Nurse, Round Three",
+        "text": "\"Round three. Corridor first, wards after — never the other way, I've stopped explaining why to the new ones. Keep the lamp low and keep it moving. A light that stands still is an invitation; a light that walks is just weather. Ward B is quiet. Ward B is not empty, it is quiet, there is a difference and I am too tired to write it in the log properly. Round four at four.\""
+      },
+      "location_hint": "Dictaphone on the nurses' station trolley, ward corridor (z_ward_corridor)",
+      "min_stage": 1,
+      "weight": 85,
+      "world_refs": ["faction_street_watch"]
+    },
+    {
+      "id": "hospital_note_04",
+      "item_type": "document",
+      "i18n_keys": { "title": "LORE_HOSPITAL_04_TITLE", "text": "LORE_HOSPITAL_04_TEXT" },
+      "en": {
+        "title": "Patient N — Continuation Sheet",
+        "text": "The continuation sheet clipped behind the first card. \"Day 4. Still refuses the window bed. Counts under his breath, always to the same number, always stops before he reaches it. Day 5. Asked the orderly whether the lamp in the corridor was one of ours or one of the old ones. Day 6. Bed empty at 03:40. Restraints intact, buckled. Corridor lamp was found switched on. Nobody switches that lamp on.\""
+      },
+      "location_hint": "Chart holder at the foot of the window bed, Ward B (z_ward_b)",
+      "min_stage": 0,
+      "weight": 90,
+      "world_refs": ["hist_blackout_night"]
+    },
+    {
+      "id": "hospital_note_05",
+      "item_type": "audio_log",
+      "i18n_keys": { "title": "LORE_HOSPITAL_05_TITLE", "text": "LORE_HOSPITAL_05_TEXT" },
+      "en": {
+        "title": "Recorder: Grid Crew Log 9",
+        "text": "\"Generator room, second night. We got the diesel plant turning and Marat went looking for why the building still draws with everything off. Three feeders on the plan. Four in the wall. The fourth is older cable, better cable, and it doesn't go to the wards — it runs out under the road toward the park line. Marat says don't cut it until we know who it feeds. I say we already know, we just don't have a name for it yet.\""
+      },
+      "location_hint": "Recorder on the diesel plant control desk (z_generator_room)",
+      "min_stage": 1,
+      "weight": 80,
+      "world_refs": ["char_marat", "char_grid_crew_recorder", "faction_grid_crew"]
+    },
+    {
+      "id": "hospital_note_06",
+      "item_type": "document",
+      "i18n_keys": { "title": "LORE_HOSPITAL_06_TITLE", "text": "LORE_HOSPITAL_06_TEXT" },
+      "en": {
+        "title": "Archive Box 14 — Sub-Feed Four",
+        "text": "A works requisition, nine years old, carbon copy, stamped twice. Sub-feed four: dedicated night circuit, hospital to park line, \"to be metered separately and not entered on the building plan\". Purpose field, typed: to store what the lamps have seen. Programme name, typed: PROJECT ARCHITECT. Authorising signature, hand-written, and beneath it a pencil note from whoever filed the box: \"Council says this program does not exist. Council also says do not shred this.\""
+      },
+      "location_hint": "Archive box on the floor of the records room (z_records)",
+      "min_stage": 2,
+      "weight": 75,
+      "world_refs": ["hist_project_architect", "faction_project_architect", "news_architect_denied"]
+    },
+    {
+      "id": "hospital_note_07",
+      "item_type": "photo",
+      "i18n_keys": { "title": "LORE_HOSPITAL_07_TITLE", "text": "LORE_HOSPITAL_07_TEXT" },
+      "en": {
+        "title": "Photo: Test Feeder Crew",
+        "text": "Nine engineers under a single test lamp on a gantry, arms folded, pleased with themselves. Eight are looking at the camera. The ninth, half a step back, is looking up at the lamp, and his face is the only one in focus. On the back, a caption in fountain pen with one name inked out so hard the paper split: \"Sub-feed four, first light. It held for nine hours and it remembered every one of them.\""
+      },
+      "location_hint": "Slipped inside the x-ray light box, records room (z_records)",
+      "min_stage": 2,
+      "weight": 70,
+      "world_refs": ["char_architect", "faction_project_architect"]
+    },
+    {
+      "id": "hospital_note_08",
+      "item_type": "document",
+      "i18n_keys": { "title": "LORE_HOSPITAL_08_TITLE", "text": "LORE_HOSPITAL_08_TEXT" },
+      "en": {
+        "title": "Morgue Ledger, Last Page",
+        "text": "Columns for name, ward, time, drawer. The last page keeps the names and abandons the rest. \"Night three: eleven admitted below, nine accounted for at dawn. Drawers were closed from the inside. I am not writing 'deceased' any more, I am writing 'left', and the difference is the whole of my report. Whoever reads this: they are not something that came instead of them. They are them. Turn your lamp off before you open the last row.\""
+      },
+      "location_hint": "Ledger on the attendant's desk, morgue (z_morgue)",
+      "min_stage": 3,
+      "weight": 60,
+      "world_refs": ["char_architect"]
+    }
+  ]
+}

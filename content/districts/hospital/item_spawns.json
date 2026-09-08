@@ -1,0 +1,105 @@
+{
+  "district": "hospital",
+  "version": 1,
+  "_comment": "District 5 (GDD §4.1 chain order), Act II gate district. Prereq verified in data/districts/district_hospital.tres: powered_by = [&\"residential\"]; hospital powers warehouses (district_warehouses.tres). Threat roster (scripts/enemies/enemy_pool.gd): watcher, shadow, crawler — watcher leads here, so the light-discipline lesson from school is assumed known and raised: this district's axis is supply, not stealth teaching. Themed loot canon (district_loot.gd BY_DISTRICT): medkit, medkit, serum, fabric, alcohol — hospital is the game's medicine bank. No blueprint (district_loot.gd BLUEPRINTS = residential/park/police/warehouses). Story doc canon: doc_hospital_note (patient N from substation Ж-3, 'the light is a door'). Puzzle canon: puzzle_system.gd generator_hospital (reward medkit, power_stage 2). Repair-part guarantee mirrors district_loot.gd REPAIR_PARTS (2x cable/fuse/transistor). All item ids verified against data/items/*.tres (41 ids, 2026-09).",
+  "tables": {
+    "DARK": [
+      { "item": "medkit",     "weight": 18, "min": 1, "max": 1 },
+      { "item": "battery",    "weight": 16, "min": 1, "max": 1 },
+      { "item": "fabric",     "weight": 14, "min": 1, "max": 2 },
+      { "item": "alcohol",    "weight": 12, "min": 1, "max": 1 },
+      { "item": "scrap",      "weight": 10, "min": 1, "max": 2 },
+      { "item": "cable",      "weight": 9,  "min": 1, "max": 1 },
+      { "item": "bottle",     "weight": 8,  "min": 1, "max": 2 },
+      { "item": "paper",      "weight": 6,  "min": 1, "max": 2 },
+      { "item": "coin",       "weight": 6,  "min": 3, "max": 8 },
+      { "item": "noise_bomb", "weight": 4,  "min": 1, "max": 1 }
+    ],
+    "PARTIAL": [
+      { "item": "medkit",     "weight": 16, "min": 1, "max": 2 },
+      { "item": "alcohol",    "weight": 12, "min": 1, "max": 2 },
+      { "item": "fabric",     "weight": 12, "min": 1, "max": 2 },
+      { "item": "cable",      "weight": 10, "min": 1, "max": 1 },
+      { "item": "fuse",       "weight": 10, "min": 1, "max": 1 },
+      { "item": "battery",    "weight": 10, "min": 1, "max": 1 },
+      { "item": "scrap",      "weight": 8,  "min": 1, "max": 2 },
+      { "item": "coin",       "weight": 7,  "min": 5, "max": 12 },
+      { "item": "lockpick",   "weight": 5,  "min": 1, "max": 1 },
+      { "item": "wiring",     "weight": 5,  "min": 1, "max": 2 },
+      { "item": "transistor", "weight": 4,  "min": 1, "max": 2 },
+      { "item": "serum",      "weight": 3,  "min": 1, "max": 1 }
+    ],
+    "STREETS": [
+      { "item": "medkit",     "weight": 14, "min": 1, "max": 2 },
+      { "item": "serum",      "weight": 10, "min": 1, "max": 1 },
+      { "item": "alcohol",    "weight": 9,  "min": 1, "max": 2 },
+      { "item": "cable",      "weight": 8,  "min": 1, "max": 2 },
+      { "item": "fuse",       "weight": 8,  "min": 1, "max": 2 },
+      { "item": "coin",       "weight": 8,  "min": 8, "max": 15 },
+      { "item": "battery",    "weight": 7,  "min": 1, "max": 1 },
+      { "item": "repair_kit", "weight": 6,  "min": 1, "max": 1 },
+      { "item": "fabric",     "weight": 6,  "min": 1, "max": 2 },
+      { "item": "circuit",    "weight": 5,  "min": 1, "max": 1 },
+      { "item": "transistor", "weight": 4,  "min": 1, "max": 2 },
+      { "item": "radio_part", "weight": 4,  "min": 1, "max": 1 }
+    ],
+    "FULL": [
+      { "item": "serum",      "weight": 14, "min": 1, "max": 2 },
+      { "item": "medkit",     "weight": 14, "min": 1, "max": 2 },
+      { "item": "coin",       "weight": 12, "min": 10, "max": 20 },
+      { "item": "repair_kit", "weight": 8,  "min": 1, "max": 1 },
+      { "item": "alcohol",    "weight": 7,  "min": 1, "max": 2 },
+      { "item": "battery",    "weight": 7,  "min": 1, "max": 2 },
+      { "item": "circuit",    "weight": 5,  "min": 1, "max": 2 },
+      { "item": "transistor", "weight": 4,  "min": 1, "max": 2 },
+      { "item": "radio_part", "weight": 4,  "min": 1, "max": 1 }
+    ]
+  },
+  "container_modifiers": {
+    "pharmacy_cabinet": 1.6,
+    "supply_trolley": 1.3,
+    "first_aid_cabinet": 1.2,
+    "archive_box": 1.0,
+    "gurney_tray": 0.9,
+    "linen_cart": 0.9,
+    "bedside_locker": 0.8,
+    "morgue_drawer": 0.8,
+    "trash_bin": 0.6
+  },
+  "fixed_spawns": [
+    { "id": "hospital_fix_puzzle_01", "item": "cable", "zone": "z_generator_room", "container": "supply_trolley", "qty": 2, "min_stage": 0,
+      "reason": "Guarantee: cable for PARTIAL. Grid-crew leftovers by the diesel plant desk (hospital_note_05); room is unlocked from the bay ramp." },
+    { "id": "hospital_fix_puzzle_02", "item": "fuse", "zone": "z_ward_corridor", "container": "first_aid_cabinet", "qty": 2, "min_stage": 0,
+      "reason": "Guarantee: fuse for STREETS. Corridor cabinet, no lock — the corridor is walkable in DARK per hospital_note_03's rule." },
+    { "id": "hospital_fix_puzzle_03", "item": "transistor", "zone": "z_pharmacy", "container": "pharmacy_cabinet", "qty": 2, "min_stage": 0,
+      "reason": "Guarantee: transistor for FULL. Pharmacy is locked; opened by hospital_fix_key_01 — no lockpick required (R1)." },
+    { "id": "hospital_fix_key_01", "item": "key", "zone": "z_reception", "container": "bedside_locker", "qty": 1, "min_stage": 0,
+      "reason": "Pharmacy key in the reception night-drawer, where the duty nurse would leave it. Reachable in DARK with zero tools." },
+    { "id": "hospital_fix_med_01", "item": "medkit", "zone": "z_ward_b", "container": "supply_trolley", "qty": 2, "min_stage": 0,
+      "reason": "Ward trolley left mid-round; the district's promise (medicine bank) must pay out even at DARK." },
+    { "id": "hospital_fix_med_02", "item": "serum", "zone": "z_pharmacy", "container": "pharmacy_cabinet", "qty": 1, "min_stage": 1,
+      "reason": "Single guaranteed serum behind the pharmacy lock from PARTIAL — the reward for solving the key chain." },
+    { "id": "hospital_fix_craft_01", "item": "alcohol", "zone": "z_operating", "container": "supply_trolley", "qty": 2, "min_stage": 0,
+      "reason": "Surgical spirit crate: themed material (BY_DISTRICT) and molotov feedstock without handing out molotovs." },
+    { "id": "hospital_fix_craft_02", "item": "fabric", "zone": "z_ward_b", "container": "linen_cart", "qty": 3, "min_stage": 0,
+      "reason": "Linen cart; pairs with hospital_fix_craft_01 for bandage/molotov crafting." },
+    { "id": "hospital_fix_defense_01", "item": "molotov", "zone": "z_exit_south", "container": "trash_bin", "qty": 2, "min_stage": 2,
+      "reason": "Defense cache at the south gate toward the warehouses road; STREETS stage only." },
+    { "id": "hospital_fix_exit_01", "item": "battery", "zone": "z_ambulance_bay", "container": "gurney_tray", "qty": 3, "min_stage": 0,
+      "reason": "Battery top-up on arrival from residential; the whole district is interior and flashlight-dependent." }
+  ],
+  "zones": [
+    "z_ambulance_bay", "z_reception", "z_ward_corridor", "z_ward_b", "z_operating",
+    "z_pharmacy", "z_records", "z_generator_room", "z_morgue", "z_exit_south"
+  ],
+  "rules": [
+    "R1: In DARK, fixed_spawns alone must cover the repair chain (>=2 cable, >=2 fuse, >=2 transistor); the pharmacy key (hospital_fix_key_01) sits in an unlocked reception drawer, so the transistors are reachable with zero lockpicks and zero rolled loot.",
+    "R2: Rolled loot never includes stage-gated items early: table lookup uses the CURRENT DistrictData.Stage only. Serum enters the rolls at PARTIAL (weight 3) and only becomes common at FULL — hospital is where the serum economy starts, it must not flood earlier districts' balance.",
+    "R3: Fixed spawns are one-time per save; rolls are per-container with container_modifiers on qty.",
+    "R4: No firearms in hospital (molotov/noise_bomb remain the ceiling). Alcohol + fabric are handed out as crafting feedstock instead of finished weapons.",
+    "R5: Supply economy, not stealth teaching: the rich containers (pharmacy_cabinet 1.6, supply_trolley 1.3) sit in the two rooms with a single entrance and no cover — pharmacy and operating theatre. Corridor and bay containers are poor but safe. A player who never enters a dead-end room still finishes the district via R1.",
+    "R6: Pharmacy and morgue caches must not roll empty — both are scripted caches, not RNG (mirrors park's keeper-shed and school's shelter rule).",
+    "R7: Act II gate: lore notes hospital_note_06/07/08 must not spawn before STREETS (min_stage 2) — they carry the Project Architect reveal (GDD §12.3, CONTENT_WORLD_BIBLE rule 3). The loot spawner must respect min_stage on notes, not only on items.",
+    "R8: No blueprint spawns in hospital (district_loot.gd BLUEPRINTS canon)."
+  ]
+}

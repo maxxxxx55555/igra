@@ -73,6 +73,22 @@ Human-readable placement plan per zone. Prop references point to existing scenes
 (`scenes/props/*.tscn`, `scenes/pickups/*.tscn`) and ambience to existing files under
 `assets/audio/ambience/`. Gaps are listed explicitly at the bottom (art/audio prompts).
 
+## Id scoping contract (added by the 2026-09-08 pipeline audit)
+
+- **Note ids are globally unique**: `<district>_note_NN`. Verified across all packs — no
+  collisions (`docs/CONTENT_PIPELINE_AUDIT.md`).
+- **Zone ids are district-scoped**, not global. `z_exit_east`, `z_exit_north` and
+  `z_boiler_room` legitimately appear in more than one district; they are only ever
+  meaningful as the pair `(district_id, zone_id)`. Code must key zone lookups by both —
+  never build a flat global zone table. Within one district, zone ids must be unique and
+  must appear identically in all three pack files.
+- **Fixed-spawn ids are globally unique**: `<district>_fix_<purpose>_NN`.
+- **world_refs reachability rule**: a district may only reference world-bible ids whose
+  `reveal.district` is that district itself (with `min_stage` respected) or a district on
+  its *guaranteed* prerequisite closure (`powered_by` transitively, all at FULL per GDD
+  §4.3). Example: `park` guarantees only `suburbs`; `gas_station` guarantees `park` +
+  `suburbs`; `school`/`hospital` guarantee `residential` + `suburbs`.
+
 ## Rules for content authors
 1. One district = deep pass first (template), then replicate.
 2. Every item id, prop scene, audio file referenced must already exist — content never blocks on art (YAGNI).
