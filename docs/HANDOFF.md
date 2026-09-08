@@ -12,9 +12,19 @@ added the missing Ambient-bus volume slider, found two OTHER stale
 content) work — flagged for owner review, not merged. Queued `residential`
 as the next Arena district in `ARENA_NEXT_PROMPT.md`.
 
+**Phase 4 update (same day, continued)**: play-probed the skill tree,
+quest journal and their live-language-switch behavior — found and fixed
+3 more stale-translation screens (skill tree tab titles + skill name/
+desc/cost, quest journal tabs/detail/close) using the same reuse-existing-
+refresh-chain pattern as the earlier HUD/journal fix. Save/load verified
+already locale-independent (saves store no translated text, everything
+resolves live by id) — no bug there. `docs/KNOWN_ISSUES.md`'s live-switch
+list is now fully closed. `arena/01a08149-igra` (PR #2) is accumulating
+on origin — do not touch until "merge arena".
+
 Not reached this pass, still open for the next wave: Phase 3's D1<200
-draw-call push, Phase 4 (GDD mechanic audit/simplification), Phase 5
-(onboarding/UX/crash-safety polish) from the RC-pass brief. Also found:
+draw-call push, the rest of Phase 4 (power grid/combat/craft simplification
+audit), Phase 5 (onboarding/UX polish) from the RC-pass brief. Also found:
 `scenes/tools/game_test_3d_scene.tscn` gate stalls after "phase1 combat:
 damage Shadow" — confirmed pre-existing (reproduces on a clean stash
 before this pass's edits too), not investigated further; see
