@@ -1,5 +1,22 @@
 # Known issues
 
+## `godot --headless --editor --quit` corrupts `default_bus_layout.tres` on resave — never commit after running it
+
+Needed once this pass to force a `global_script_class_cache.cfg` rebuild
+(a brand-new `class_name` isn't visible to other scripts/gates until the
+editor rescans the project — a plain `--headless --path . --quit` run
+does NOT trigger this, only `--editor` does). Side effect: the editor
+resaved `default_bus_layout.tres` on exit and silently corrupted it —
+dropped the entire Master bus block, dropped `room_size` from the reverb
+effect, and mangled the resource's own `uid` (`audiobuses00` →
+`udiobuses00`). Caught only by manually diffing the file before
+committing — no gate currently checks bus layout content, only that the
+5 expected buses exist by name. **Always run `git diff
+default_bus_layout.tres` (and ideally a full `git status`) after any
+`--editor` invocation, before staging anything.** `git checkout --
+default_bus_layout.tres` reverts it cleanly since flow_check's own bus
+gate doesn't need the class cache and passes either way.
+
 ## `game_test_3d_scene.tscn` gate stalls silently after "phase1 combat: damage Shadow"
 
 Pre-existing, not a regression — reproduced identically on a clean stash

@@ -54,7 +54,10 @@ func _load_catalog() -> void:
 				if entry.has("title_key") else String(entry.get("title", ""))
 			var text := LocalizationManager.t(String(entry["content_key"])) \
 				if entry.has("content_key") else String(entry.get("content", ""))
-			_catalog[String(entry["doc_id"])] = {"title": title, "text": text}
+			_catalog[String(entry["doc_id"])] = {
+				"title": title, "text": text,
+				"world_refs": entry.get("world_refs", []),
+			}
 
 func _build() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
@@ -161,4 +164,25 @@ func _refresh() -> void:
 func _open(doc_id: String) -> void:
 	var entry: Dictionary = _catalog.get(doc_id, {})
 	_reader_title.text = String(entry.get("title", ""))
-	_reader_text.text = String(entry.get("text", ""))
+	_reader_text.text = String(entry.get("text", "")) + _related_line(entry.get("world_refs", []))
+
+## World bible cross-links (park+ lore packs): show already-revealed
+## characters/factions a note points at, by their short i18n title.
+## Minimal lookup, no new UI - appended under the note text.
+func _related_line(world_refs: Array) -> String:
+	var names: Array = []
+	for ref_id in world_refs:
+		var id := String(ref_id)
+		var entry: Dictionary = {}
+		if id.begins_with("char_"):
+			entry = WorldBible.get_character(id)
+		elif id.begins_with("faction_"):
+			entry = WorldBible.get_faction(id)
+		if entry.is_empty() or not WorldBible.is_revealed(entry.get("reveal", {})):
+			continue
+		var keys: Dictionary = entry.get("i18n_keys", {})
+		if keys.has("title"):
+			names.append(LocalizationManager.t(String(keys["title"])))
+	if names.is_empty():
+		return ""
+	return "\n\n" + LocalizationManager.tf("JOURNAL_RELATED", [", ".join(names)])

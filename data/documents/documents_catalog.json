@@ -203,5 +203,92 @@
         "doc_id": "suburbs_note_08",
         "title_key": "LORE_SUBURBS_08_TITLE",
         "content_key": "LORE_SUBURBS_08_TEXT"
+    },
+    {
+        "doc_id": "residential_note_01",
+        "title_key": "LORE_RESIDENTIAL_01_TITLE",
+        "content_key": "LORE_RESIDENTIAL_01_TEXT"
+    },
+    {
+        "doc_id": "residential_note_02",
+        "title_key": "LORE_RESIDENTIAL_02_TITLE",
+        "content_key": "LORE_RESIDENTIAL_02_TEXT"
+    },
+    {
+        "doc_id": "residential_note_03",
+        "title_key": "LORE_RESIDENTIAL_03_TITLE",
+        "content_key": "LORE_RESIDENTIAL_03_TEXT"
+    },
+    {
+        "doc_id": "residential_note_04",
+        "title_key": "LORE_RESIDENTIAL_04_TITLE",
+        "content_key": "LORE_RESIDENTIAL_04_TEXT"
+    },
+    {
+        "doc_id": "residential_note_05",
+        "title_key": "LORE_RESIDENTIAL_05_TITLE",
+        "content_key": "LORE_RESIDENTIAL_05_TEXT"
+    },
+    {
+        "doc_id": "residential_note_06",
+        "title_key": "LORE_RESIDENTIAL_06_TITLE",
+        "content_key": "LORE_RESIDENTIAL_06_TEXT"
+    },
+    {
+        "doc_id": "residential_note_07",
+        "title_key": "LORE_RESIDENTIAL_07_TITLE",
+        "content_key": "LORE_RESIDENTIAL_07_TEXT"
+    },
+    {
+        "doc_id": "residential_note_08",
+        "title_key": "LORE_RESIDENTIAL_08_TITLE",
+        "content_key": "LORE_RESIDENTIAL_08_TEXT"
+    },
+    {
+        "doc_id": "park_note_01",
+        "title_key": "LORE_PARK_01_TITLE",
+        "content_key": "LORE_PARK_01_TEXT",
+        "world_refs": ["char_keeper", "faction_keepers"]
+    },
+    {
+        "doc_id": "park_note_02",
+        "title_key": "LORE_PARK_02_TITLE",
+        "content_key": "LORE_PARK_02_TEXT"
+    },
+    {
+        "doc_id": "park_note_03",
+        "title_key": "LORE_PARK_03_TITLE",
+        "content_key": "LORE_PARK_03_TEXT",
+        "world_refs": ["char_marat", "char_grid_crew_recorder", "faction_grid_crew"]
+    },
+    {
+        "doc_id": "park_note_04",
+        "title_key": "LORE_PARK_04_TITLE",
+        "content_key": "LORE_PARK_04_TEXT",
+        "world_refs": ["faction_city_power"]
+    },
+    {
+        "doc_id": "park_note_05",
+        "title_key": "LORE_PARK_05_TITLE",
+        "content_key": "LORE_PARK_05_TEXT",
+        "world_refs": ["char_babka_manya"]
+    },
+    {
+        "doc_id": "park_note_06",
+        "title_key": "LORE_PARK_06_TITLE",
+        "content_key": "LORE_PARK_06_TEXT",
+        "world_refs": ["char_keeper", "faction_keepers"]
+    },
+    {
+        "doc_id": "park_note_07",
+        "title_key": "LORE_PARK_07_TITLE",
+        "content_key": "LORE_PARK_07_TEXT",
+        "world_refs": ["char_radio_voice"]
+    },
+    {
+        "doc_id": "park_note_08",
+        "title_key": "LORE_PARK_08_TITLE",
+        "content_key": "LORE_PARK_08_TEXT",
+        "world_refs": ["char_keeper"]
     }
 ]

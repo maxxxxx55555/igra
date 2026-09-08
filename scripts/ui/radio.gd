@@ -19,6 +19,12 @@ const CHANNELS := [
 	{"key": "RADIO_DISTRESS", "name_tr": "RADIO_DISTRESS", "transcript_tr": "RADIO_TRANSCRIPT_SOS", "duration": 65.0, "coords": Vector2(203, 56)},
 ]
 
+## World-bible broadcasts (content/world/radio_transcripts.json), unlocked
+## by district/stage reveal - appended to the fixed demo channels above.
+## Same tr() convention as this screen already uses: LocalizationManager
+## registers every key with TranslationServer, so tr() resolves them too.
+var _channels: Array = []
+
 var _selected_idx: int = -1
 var _is_playing: bool = false
 var _play_time: float = 0.0
@@ -35,6 +41,16 @@ var _player_wave_bars: Array = []
 
 func _ready() -> void:
 	if not enable_radio: return
+	_channels = CHANNELS.duplicate()
+	for t in WorldBible.get_revealed_radio_transcripts():
+		var keys: Dictionary = t.get("i18n_keys", {})
+		_channels.append({
+			"key": String(t.get("id", "")),
+			"name_tr": String(keys.get("title", "")),
+			"transcript_tr": String(keys.get("text", "")),
+			"duration": 60.0,
+			"coords": null,
+		})
 	_build_ui()
 
 func _build_ui() -> void:
@@ -43,8 +59,8 @@ func _build_ui() -> void:
 	_channel_list.position = Vector2(0, 0)
 	add_child(_channel_list)
 
-	for i in CHANNELS.size():
-		var ch = CHANNELS[i]
+	for i in _channels.size():
+		var ch = _channels[i]
 		var row = ColorRect.new()
 		row.color = Color(0, 0, 0, 0)
 		row.size = Vector2(_channel_list.size.x, 36)
@@ -149,9 +165,9 @@ func _build_ui() -> void:
 	remove_btn.pressed.connect(_remove_channel)
 
 func _select_channel(idx: int) -> void:
-	if idx < 0 or idx >= CHANNELS.size(): return
+	if idx < 0 or idx >= _channels.size(): return
 	_selected_idx = idx
-	var ch = CHANNELS[idx]
+	var ch = _channels[idx]
 	_channel_name.text = tr(ch.name_tr)
 	_duration = ch.duration
 	_play_time = 0.0
@@ -170,7 +186,7 @@ func _stop_playback() -> void:
 	_time_label.text = "00:00 / " + _format_time(_duration)
 
 func _remove_channel() -> void:
-	if _selected_idx < 0 or _selected_idx >= CHANNELS.size(): return
+	if _selected_idx < 0 or _selected_idx >= _channels.size(): return
 	_is_playing = false
 	_play_time = 0.0
 	_selected_idx = -1
@@ -192,7 +208,7 @@ func _process(delta: float) -> void:
 
 	if _is_playing and _selected_idx >= 0:
 		_play_time += delta
-		var ch = CHANNELS[_selected_idx]
+		var ch = _channels[_selected_idx]
 		if _play_time >= ch.duration:
 			_play_time = ch.duration
 			_is_playing = false
