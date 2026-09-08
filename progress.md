@@ -182,3 +182,5 @@ SVG-иконки UI, вычистить дубли сцен, strip BOM в `scrip
   * take_damage overrides honour type в boss_3d/destroyer_3d/shadow_3d/hunter_3d
   * Карантин: legacy 2D enemies + levels + boss 2d → legacy_quarantine/{enemies2d,levels,scenes}; class_name снят, extends переписан на res://-path; gates green (compile/signal/i18n/asset)
   * known-bad: у игрока нет apply_status (weapon DoT на монстр есть, монстр→игрок — no-op), PowerGrid-как-ELECTRIC не наносит урон (это прогресс-система), падение урона нет (BLUNT-в-GDD — только 'padeniye pri HP=0'), lightщubl = FIRE (в балансе shadow рассасывается от света)
+
+- W1-assets: endings warmth-order fix per GDD 12.4 (light=WARMEST brass R-B +32.9, dark=COLDEST blackout lum 10.5, hope=partial warm + faint cold dawn; truth/survivor untouched canon) + wind_loop.ogg UNBLOCKED (attempt 5 stationary carrier: I=-18.19 TP=-10.55 seam=-1.08dB 380KB). Docs: REPORT_ASSETS W1 tables, ASSET_HANDOFF, ERROR_LOG rows, REPORT_CONTENT_WAVE stale BLOCK notes cleared. Backups in _BACKUPS/2026-08-24_*.

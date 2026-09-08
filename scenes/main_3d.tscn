@@ -75,11 +75,6 @@ process_material = SubResource("ash_mat")
 draw_pass_1 = SubResource("ash_mesh")
 position = Vector3(0, 5, 0)
 
-[node name="AudioAmbient" type="AudioStreamPlayer3D" parent="."]
-bus = &"Ambient"
-
-[node name="AudioSFX" type="AudioStreamPlayer3D" parent="."]
-bus = &"SFX"
 
 [node name="Splash" parent="." instance=ExtResource("5")]
 show_splash = true

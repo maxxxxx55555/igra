@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://scripts/document_pickup.gd" id="1_script"]
 
@@ -39,10 +39,6 @@ tracks/1/keys = {
 "values": [0.0, 360.0]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimLib_1"]
-_data = {
-"BobAnim": SubResource("Anim_bob")
-}
 
 [node name="DocumentPickup" type="Area3D" groups=["pickup", "document"]]
 script = ExtResource("1_script")
@@ -65,8 +61,3 @@ light_energy = 0.8
 omni_range = 2.0
 omni_attenuation = 1.5
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimLib_1")
-}
-autoplay = "BobAnim"

@@ -1,0 +1,31 @@
+key,ru,en
+ui_play,Играть,Play
+ui_settings,Настройки,Settings
+ui_exit,Выход,Exit
+hud_hp,HP,HP
+hud_ammo,Патроны,Ammo
+quest_collect,Собрать,Collect
+quest_kill,Убить,Kill
+quest_explore,Исследовать,Explore
+dialogue_hello,Привет,Hello
+ui_resume,Продолжить,Resume
+ui_save,Сохранить,Save
+ui_load,Загрузить,Load
+ui_back,Назад,Back
+ui_apply,Применить,Apply
+ui_reset,Сбросить,Reset
+ui_volume,Громкость,Volume
+ui_sensitivity,Чувствительность,Sensitivity
+ui_language,Язык,Language
+ui_vsync,V-Sync,V-Sync
+ui_show_fps,Показать FPS,Show FPS
+hud_weapon,Оружие,Weapon
+shop_title,Магазин,Shop
+shop_buy,Купить,Buy
+shop_remove_ads,Убрать рекламу,Remove Ads
+shop_coin_pack,1000 монет,1000 Coins
+shop_premium_skin,Премиум скин,Premium Skin
+tutorial_move,WASD — движение,WASD — move
+tutorial_shoot,ЛКМ — стрельба,LMB — shoot
+tutorial_flashlight,F — фонарик,F — flashlight
+tutorial_interact,E — подобрать,E — interact
