@@ -27,6 +27,22 @@ currently loads `tiles/<district>_floor.png`; the `_lit` twins follow the conven
 | `assets/textures/tiles/park_wall_lit.png` | AI-generated in-session (Arena image generation), reference = in-house `tiles/park_wall.png` | Project-owned AI output; no third-party rights | none required | 256² RGB (downscaled 1024² LANCZOS), 104,064 B. Palette-clamped (6..249). Seam delta 32.6 ≈ shipped dark twin 27.7. |
 | `assets/textures/surfaces/pond_ice_512.png` | AI-generated in-session (Arena image generation), text-to-image, palette-locked prompt | Project-owned AI output; no third-party rights | none required | 512² RGB, 304,866 B (≤500 KB budget). Frozen pond for `z_pond` (park manifest gap #3). Dark steel-blue ice #131a20–#2a3340, pale cracks; min 9, max 127; seam 9.8. |
 
+## Added 2026-09-08 — police district asset pass
+
+Dark tiles `tiles/police_floor.png` / `police_wall.png` already ship; this pass adds the
+missing `_lit` twins and one cell-bar prop face. No binary audio fabricated.
+
+| Path | Origin | License | Attribution | Notes |
+|---|---|---|---|---|
+| `assets/textures/tiles/police_floor_lit.png` | Derived in-session from in-house `tiles/police_floor.png` (luminance ×1.42 + brass warmth per STYLE_GUIDE §4/§4.1). An AI lit candidate was generated against the dark twin and discarded: geometry lock is the acceptance path. | Project-owned; no third-party rights | none required | 256² RGB, 80,067 B. Identical 4×4 tile grid. Measured: lift ×1.42 (target 1.35–1.50), geometry correlation 1.000, warmth R−B +25 (dark twin −19.5, target band +15…+40), palette 27..140, seam delta 5.1 vs dark 3.8 (ratio 1.34 — same class as school wall 4.4 vs 3.1). |
+| `assets/textures/tiles/police_wall_lit.png` | Derived in-session from in-house `tiles/police_wall.png` (same method as the floor twin). | Project-owned; no third-party rights | none required | 256² RGB, 73,599 B. Same running-bond brick / mortar. Measured: lift ×1.42, geometry correlation 1.000, warmth R−B +25 (dark twin −18.8), palette 21..201, seam delta 4.9 vs dark 3.6. |
+| `assets/textures/surfaces/cell_bars_512.png` | AI-generated in-session (Arena image generation), text-to-image, palette-locked prompt | Project-owned AI output; no third-party rights | none required | 512² RGB, 182,921 B (≤500 KB). Holding-cell bar face for `z_holding_cells`. Unlit night steel with brass `#c9a24a` bolt heads as the only accent; palette clamped 19..177 (no pure #000/#fff), warmth R−B −6 (cold body), mean luminance 41. Non-tiling panel class (seam metric N/A by class; measured 10.0). Deliberately textless — no cell numbers baked in. |
+
+§4.1 numeric acceptance test applied to both lit twins (lift ratio, geometry correlation,
+warmth band, palette clamp, seam delta) — lift/corr/warmth/palette inside the thresholds
+in docs/STYLE_GUIDE.md; seam scales with the uniform lift (same observation as the school
+wall pair).
+
 ## Added 2026-09-08 — gas_station district asset pass
 
 | Path | Origin | License | Attribution | Notes |
