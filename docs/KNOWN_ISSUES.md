@@ -26,12 +26,10 @@ hook and went stale after Settings → Language until the scene reloaded —
 fixed 2026-09-08 (both now reload their translated text on
 `LocalizationManager.language_changed`). `city_map.gd` was already correct
 (rebuilds on `visibility_changed`). `quest_journal.gd` and
-`skill_tree_ui.gd` still build their translated labels once in `_ready()`
-with no live-refresh hook — lower priority than the HUD since both are
-blocking screens normally closed before Settings is reachable (via pause),
-so the stale text only survives if the player reopens them later in the
-same session without a scene reload. Not fixed this pass; same shape of
-fix as `journal_ui.gd`/`hud_3d.gd` if picked up later.
+`skill_tree_ui.gd`/`skill_button.gd` had the same gap (tab titles, skill
+name/description/cost) — fixed 2026-09-08 Phase 4 pass, same shape of fix
+(quest_journal rebuilds like `settings_screen.gd`; skill tree reuses its
+existing `refresh()` chain). All screens now cover live language switch.
 
 ## i18n: 165 strings are identical to English on purpose — do not "fix" them
 

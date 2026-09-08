@@ -13,9 +13,21 @@ func _ready() -> void:
 	
 	SkillTreeManager.skill_unlocked.connect(_refresh)
 	EventBus.settings_changed.connect(_on_settings_changed)
-	
+	LocalizationManager.language_changed.connect(_on_language_changed)
+
 	close_button.pressed.connect(_close)
 	_build_trees()
+	_refresh()
+
+## PHASE 4 (live language switch): tab titles and skill_points_label are
+## plain LocalizationManager.t() calls made once in _build_trees()/_refresh()
+## - button name/desc/cost already retranslate via _refresh() -> tab.refresh()
+## -> btn.refresh(). Just needs re-running on a live switch, plus tab titles.
+func _on_language_changed(_lang: String) -> void:
+	for i in tree_tabs.get_child_count():
+		var tree_id: StringName = SkillTreeManager.get_all_trees().keys()[i]
+		var tree_data = SkillTreeManager.get_tree_data(tree_id)
+		tree_tabs.set_tab_title(i, LocalizationManager.t(tree_data.name))
 	_refresh()
 
 func _on_settings_changed(setting: String, value: Variant) -> void:

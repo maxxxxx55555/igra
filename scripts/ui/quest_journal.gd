@@ -18,6 +18,14 @@ func _ready() -> void:
 	QuestManager.quest_started.connect(_on_quest_changed)
 	QuestManager.quest_completed.connect(_on_quest_changed)
 	QuestManager.quest_progress.connect(_on_quest_progress)
+	# PHASE 4 (live language switch): tab labels/detail title/close button
+	# were only ever set in _build_ui() - same rebuild pattern as
+	# settings_screen.gd (free children, rebuild; _build_ui() already
+	# ends with _refresh_list()).
+	LocalizationManager.language_changed.connect(func(_l: String) -> void:
+		for c in get_children():
+			c.queue_free()
+		_build_ui())
 
 func _build_ui() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP

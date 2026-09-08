@@ -43,6 +43,13 @@ func setup(skill_id: StringName, skill_data: Dictionary) -> void:
 	refresh()
 
 func refresh() -> void:
+	# PHASE 4 (live language switch): name/desc/cost were only set once in
+	# setup() and never retranslated - stale after Settings -> Language
+	# while this tab stayed open. refresh() already runs on every
+	# unlock and on SkillTreeUI's language_changed hook, so redo them here.
+	name_label.text = LocalizationManager.t(_skill_data.name)
+	desc_label.text = LocalizationManager.t(_skill_data.description)
+	cost_label.text = LocalizationManager.tf("SKILL_COST_SP", [_skill_data.cost])
 	var level = SkillTreeManager.get_skill_level(_skill_id)
 	var max_level = _skill_data.max_level
 	var can_unlock = SkillTreeManager.can_unlock(_skill_id)
