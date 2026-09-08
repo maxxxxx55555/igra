@@ -13,7 +13,6 @@ signal ammo_changed(current: int, max: int)
 @export var reload_time: float = 2.0
 @export var spread: float = 0.02
 @export var recoil: float = 0.5
-@export var bullet_scene: PackedScene
 @export var muzzle_flash_scene: PackedScene
 @export var fire_sound: AudioStream
 @export var reload_sound: AudioStream
@@ -58,19 +57,12 @@ func fire(from_pos: Vector3, direction: Vector3) -> bool:
 	current_ammo -= 1
 	ammo_changed.emit(current_ammo, max_ammo)
 	
-	# Spawn bullet
-	if bullet_scene:
-		var bullet = bullet_scene.instantiate()
-		bullet.global_position = from_pos
-		bullet.look_at(from_pos + direction)
-		if bullet.has_method("initialize"):
-			bullet.initialize(damage, range, _owner)
-		get_tree().root.add_child(bullet)
-	else:
-		# IDEA.md: «hitscan shooting via RayCast3D», физических пуль нет.
-		# Без bullet_scene оружие обязано наносить урон лучом — раньше базовый
-		# fire() в этом случае просто тратил патрон в пустоту.
-		hitscan_ray(_main_ray(), spread, damage)
+	# IDEA.md прямо запрещает физические пули (rigid bodies): весь урон наносит
+	# хитскан-луч из сцены оружия. Ветка со спавном bullet_scene здесь была и
+	# требовала от движка симулировать тело на каждый выстрел — удалена вместе
+	# с экспортом, ни одна сцена оружия её не использовала.
+	aim_at(from_pos, direction)
+	hitscan_ray(_main_ray(), spread, damage)
 
 	_spawn_muzzle(from_pos)
 
@@ -112,6 +104,14 @@ func _spawn_muzzle(from_pos: Vector3) -> void:
 		flash.global_position = from_pos
 	else:
 		_muzzle_flash(from_pos)
+
+## Разворачивает оружие вдоль взгляда: лучи RayCast3D стреляют по локальному -Z,
+## а игрок смотрит камерой (у неё собственный питч). WeaponManager зовёт это
+## каждый кадр для текущего ствола, fire() — страховочно перед выстрелом.
+func aim_at(from_pos: Vector3, direction: Vector3) -> void:
+	if direction.length_squared() < 0.0001 or absf(direction.normalized().dot(Vector3.UP)) > 0.999:
+		return
+	global_transform = Transform3D(Basis.looking_at(direction.normalized(), Vector3.UP), from_pos)
 
 ## Луч оружия из сцены. У пистолета/автомата это `RayCast3D`, у дробовика —
 ## пучок в `Rays/`; подклассы берут свой узел сами и передают его в hitscan_ray().

@@ -66,13 +66,7 @@ func _process(_delta: float) -> void:
 		weapon.visible = false
 		return
 	weapon.visible = true
-	_aim(weapon, cam.global_position, -cam.global_transform.basis.z)
-
-func _aim(weapon: Node3D, from_pos: Vector3, direction: Vector3) -> void:
-	var dir := direction
-	if dir.length_squared() < 0.0001 or absf(dir.normalized().dot(Vector3.UP)) > 0.999:
-		return
-	weapon.global_transform = Transform3D(Basis.looking_at(dir.normalized(), Vector3.UP), from_pos)
+	weapon.aim_at(cam.global_position, -cam.global_transform.basis.z)
 
 func _apply_visibility() -> void:
 	for i in weapon_slots.size():
@@ -205,7 +199,7 @@ func _cycle(step: int) -> void:
 func fire(from_pos: Vector3, direction: Vector3) -> bool:
 	var weapon = get_current_weapon()
 	if weapon:
-		_aim(weapon, from_pos, direction)
+		weapon.aim_at(from_pos, direction)
 		return weapon.fire(from_pos, direction)
 	return false
 
