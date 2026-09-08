@@ -124,10 +124,39 @@ all present ✔. MusicManager falls back to the dark bed for districts without a
 - Wiring note: add `&"gas_station"` row to `AMBIENCE_LIT_BY_DISTRICT` (CODE, after delivery).
 - Status: **spec only — binary not fabricated** (asset pass delivered textures only).
 
-### G3 — remaining lit beds (same template as G1/G2b/G2c/G2e, theme params from `gen_audio.py` DISTRICTS)
+### G2f — `assets/audio/ambience/districts/police_lit.ogg` (police pass, full spec)
+- Type: 36 s seamless ambience loop, OGG q4 mono, 44.1 kHz; loop points 0.000–36.000,
+  matched zero-crossings; −18 LUFS integrated, true peak ≤ −1.5 dBFS.
+- Verified on disk this pass (Ogg/Vorbis identification header + final page granule; no
+  engine, no ffprobe): `police_dark.ogg` is **1 ch / 44,100 Hz / 36.000 s / nominal 86 kbps /
+  343,937 B**. Detail one-shots all 1 ch / 44.1 kHz / **30.000 s**:
+  `police_radio_static` (4.9 dB offset, 254,990 B), `police_siren_tail` (0.0, 238,645 B),
+  `police_boots_concrete` (2.4, 238,195 B). Only the lit twin is missing — this is a
+  **real gap**. Loudness (−18 LUFS / TP) of the shipped files is **not** verifiable here
+  (no ffmpeg); `docs/AUDIO_LOUDNESS.md` remains the authority.
+- Mood: "lit twin" of `police_dark.ogg` (STYLE_GUIDE §5). The station stops being a
+  cave of static and becomes a working precinct with nobody in it: cold room-tone drone
+  −6 dB; add a warm sodium ballast hum for the restored court flood (60/120 Hz, −24 dBFS,
+  slow 0.15 Hz wobble); keep a thin distant-city bed.
+- **Remove in the lit twin:** radio-static hiss and boot-fall transients. Both belong to
+  the detail one-shots (`police_radio_static` stays layered by `district_atmosphere.gd` at
+  +4.9 dB, `police_boots_concrete` at +2.4). The dark bed's static is the *fault*; at
+  STREETS+ the dispatch rack is merely empty, not broken.
+- Pulse alignment: 120 bpm bars (police theme canon: minor, root MIDI 53, 14 bars ≈ 28.0 s
+  in `tools/gen_audio.py` DISTRICTS) → 36 s = 72 bars of 0.5 s; place the loop seam on a
+  bar line so the 2 s MusicManager crossfade lands clean.
+- Never in the loop: voices on channel 3, a siren that starts, cell-door slams. Channel 3
+  is a scripted story beat (`police_note_07`); the siren tail is a positional one-shot on
+  the front lot (`z_station_front`); putting either in the bed would wallpaper the east
+  wing, which must stay quiet (cells unlit at every stage).
+- Reference pair for structure: `suburbs_dark.ogg` → `suburbs_lit.ogg`.
+- Wiring note: add `&"police"` row to `AMBIENCE_LIT_BY_DISTRICT` (CODE, after delivery).
+- Status: **spec only — binary not fabricated** (asset pass delivered textures only).
+
+### G3 — remaining lit beds (same template as G1/G2b/G2c/G2e/G2f, theme params from `gen_audio.py` DISTRICTS)
 - `school_lit.ogg` — **superseded by G2c above (full spec)**.
 - `gas_station_lit.ogg` — **superseded by G2e above (full spec)**.
-- `police_lit.ogg` — minor, 120 bpm; radio static calmed, boots fade.
+- `police_lit.ogg` — **superseded by G2f above (full spec)**.
 - `warehouses_lit.ogg` — dorian, 75 bpm; metal creak slowed, forklift fades.
 - `industrial_lit.ogg` — minor, 85 bpm; machinery drone −6 dB, steam vents gentler.
 - `substation_lit.ogg` — phrygian-dominant, 100 bpm; arc crackle removed, cable hum warms.
