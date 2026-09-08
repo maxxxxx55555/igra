@@ -5,6 +5,38 @@ in-game verification — a static-only pass can't play the game itself.
 
 ---
 
+## Batch 2 (2026-09-08) — school/hospital/gas_station content merged + wired
+
+- **3 new districts now have readable lore**: school (8 notes), hospital
+  (8 notes, including the Act II "Project Architect" reveal at STREETS),
+  gas_station (8 notes) — same document-pickup/journal flow as the
+  earlier districts, in all 13 languages.
+- **New lit tile art** for school and gas_station (floor/wall variants
+  that light up as those districts restore, matching hospital/residential/
+  park's existing look).
+- No gameplay-mechanic changes in this batch — content + a data
+  clarification (a dead, unused "music" field removed from
+  `district_themes.gd`, has zero effect on what actually plays).
+
+### HUMAN 5-MINUTE CHECK
+1. Reach the `school` district (residential → school per its
+   `powered_by`), pick up 2-3 document/photo/audio-log pickups, open the
+   Journal — confirm titles/text show in your current language, not
+   English fallback.
+2. Same for `hospital` — specifically check a note found at STREETS
+   stage or later mentions "Project Architect"; earlier hospital notes
+   should NOT mention it by name.
+3. Same for `gas_station` — one note (`Requisition, Countersigned`)
+   should show a "Related: The Keeper, ..." line under its text if you've
+   already been to `park`.
+4. Switch language mid-session (Settings → Language) while the Journal
+   is open on one of these new notes — text should retranslate instantly.
+5. Visually confirm school's and gas_station's lit-window/floor textures
+   actually change look between DARK and a later stage (compare a
+   screenshot at DARK vs after restoring to STREETS/FULL).
+
+---
+
 ## Batch 1 (2026-09-08) — severe/major static-audit fixes
 
 - **Escape no longer sometimes force-quits to the main menu.** A dead
