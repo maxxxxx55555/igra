@@ -815,5 +815,21 @@
   "SKILL_SILENT_STEPS_NAME": "Passos silenciosos",
   "SKILL_SILENT_STEPS_DESC": "-15% de raio de ruído",
   "SKILL_COLD_TRAIL_NAME": "Rastro frio",
-  "SKILL_COLD_TRAIL_DESC": "-20% no tempo de busca inimigo"
+  "SKILL_COLD_TRAIL_DESC": "-20% no tempo de busca inimigo",
+  "LORE_SUBURBS_01_TITLE": "Foto: Churrasco na Maple Row",
+  "LORE_SUBURBS_01_TEXT": "Uma foto desbotada. Seis vizinhos ao redor de uma churrasqueira, luzinhas penduradas acima, todos rindo. No verso, a caneta: \"A noite em que a luz ainda funcionava. Que ela volte.\"",
+  "LORE_SUBURBS_02_TITLE": "Aviso de manutenção programada",
+  "LORE_SUBURBS_02_TEXT": "COMPANHIA DE ENERGIA MUNICIPAL — ALIMENTADOR SUBURBANO 4. \"Corte programado em rodízio, terça-feira 22h00–23h00.\" O papel está pregado no batente da porta e empenado pela chuva. Alguém escreveu por cima em vermelho: \"Nunca mais voltou.\"",
+  "LORE_SUBURBS_03_TITLE": "Panfleto de evacuação",
+  "LORE_SUBURBS_03_TEXT": "\"MORADORES DO DISTRITO SUBURBANO: dirijam-se de forma ordeira ao ponto de encontro na arena central. Tragam documentos e uma bolsa por pessoa. Não permaneçam ao ar livre depois do anoitecer.\" A borda inferior está rasgada — faltam a data e o órgão emissor.",
+  "LORE_SUBURBS_04_TITLE": "Gravador: diário da equipe da rede, registro 1",
+  "LORE_SUBURBS_04_TEXT": "\"...terceiro turno, de novo o alimentador quatro. Os fusíveis estão bons do nosso lado, então é a subestação. Marat diz que o consumo não bate — algo está puxando da rede à noite, quarteirões inteiros. Falei pra ele: redes não bebem. Ele não riu.\"",
+  "LORE_SUBURBS_05_TITLE": "Bilhete embaixo de uma porta",
+  "LORE_SUBURBS_05_TEXT": "\"Se você está lendo isto, não bata. Não abrimos mais as portas depois do pôr do sol. Pegue as latas de comida na soleira, são suas. E se você chegar ao centro: o Guardião ainda mantém sua luz acesa. Vá até ele.\"",
+  "LORE_SUBURBS_06_TITLE": "Desenho de criança",
+  "LORE_SUBURBS_06_TEXT": "Um desenho a giz de cera no verso de uma conta: uma rua, um grande sol amarelo sobre um poste de luz, bonequinhos de palito de mãos dadas sob a luz. Tudo além da luz é um rabisco preto. Legenda em letras trêmulas: \"NOSSO POSTE DE LUZ E NÓS\".",
+  "LORE_SUBURBS_07_TITLE": "Gravador: diário da equipe da rede, registro 2",
+  "LORE_SUBURBS_07_TEXT": "\"Último registro, eu acho. Descobrimos de onde vem o consumo e Marat não quer dizer em voz alta, então eu digo: o transformador está quente. O alimentador suburbano está apagado há duas semanas e o transformador está QUENTE. Estamos indo a pé até a subestação. Se alguém ouvir isto: a luz pode voltar. Provamos isso na bancada. Um poste de luz. Lembrem-se disso.\"",
+  "LORE_SUBURBS_08_TITLE": "Lista de vigilância do subúrbio",
+  "LORE_SUBURBS_08_TEXT": "Uma lista feita à mão: \"Vigia de rua — horas escuras. Ivanov 1º andar, Petro 2º, a velha Anya na janela da esquina com a lanterna.\" Três nomes estão riscados. Ao lado do último nome riscado: \"Ele foi procurar o cachorro dele. O cachorro voltou. Ele não.\""
 }

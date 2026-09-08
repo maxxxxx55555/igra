@@ -163,5 +163,45 @@
         "doc_id": "doc_last_will",
         "title": "Предсмертная записка",
         "content": "«Тот, кто найдёт эту записку: не ищи моё тело. Я ушёл в подстанцию Ж-3 с фонарём в руках.»"
+    },
+    {
+        "doc_id": "suburbs_note_01",
+        "title_key": "LORE_SUBURBS_01_TITLE",
+        "content_key": "LORE_SUBURBS_01_TEXT"
+    },
+    {
+        "doc_id": "suburbs_note_02",
+        "title_key": "LORE_SUBURBS_02_TITLE",
+        "content_key": "LORE_SUBURBS_02_TEXT"
+    },
+    {
+        "doc_id": "suburbs_note_03",
+        "title_key": "LORE_SUBURBS_03_TITLE",
+        "content_key": "LORE_SUBURBS_03_TEXT"
+    },
+    {
+        "doc_id": "suburbs_note_04",
+        "title_key": "LORE_SUBURBS_04_TITLE",
+        "content_key": "LORE_SUBURBS_04_TEXT"
+    },
+    {
+        "doc_id": "suburbs_note_05",
+        "title_key": "LORE_SUBURBS_05_TITLE",
+        "content_key": "LORE_SUBURBS_05_TEXT"
+    },
+    {
+        "doc_id": "suburbs_note_06",
+        "title_key": "LORE_SUBURBS_06_TITLE",
+        "content_key": "LORE_SUBURBS_06_TEXT"
+    },
+    {
+        "doc_id": "suburbs_note_07",
+        "title_key": "LORE_SUBURBS_07_TITLE",
+        "content_key": "LORE_SUBURBS_07_TEXT"
+    },
+    {
+        "doc_id": "suburbs_note_08",
+        "title_key": "LORE_SUBURBS_08_TITLE",
+        "content_key": "LORE_SUBURBS_08_TEXT"
     }
 ]

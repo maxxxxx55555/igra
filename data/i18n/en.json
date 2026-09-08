@@ -815,5 +815,21 @@
   "SKILL_SILENT_STEPS_NAME": "Silent Steps",
   "SKILL_SILENT_STEPS_DESC": "-15% noise radius",
   "SKILL_COLD_TRAIL_NAME": "Cold Trail",
-  "SKILL_COLD_TRAIL_DESC": "-20% enemy search time"
+  "SKILL_COLD_TRAIL_DESC": "-20% enemy search time",
+  "LORE_SUBURBS_01_TITLE": "Photo: Barbecue on Maple Row",
+  "LORE_SUBURBS_01_TEXT": "A faded photo. Six neighbors around a grill, string lights overhead, all of them laughing. On the back, in pen: \"The night the lights still worked. May it come back.\"",
+  "LORE_SUBURBS_02_TITLE": "Scheduled Maintenance Notice",
+  "LORE_SUBURBS_02_TEXT": "CITY POWER COMPANY — SUBURBAN FEED 4. \"Planned rolling outage, Tuesday 22:00–23:00.\" The paper is nailed to the door frame and rain-warped. Someone wrote over it in red: \"It never came back ON.\"",
+  "LORE_SUBURBS_03_TITLE": "Evacuation Leaflet",
+  "LORE_SUBURBS_03_TEXT": "\"RESIDENTS OF THE SUBURBAN DISTRICT: proceed in an orderly fashion to the collection point at the central arena. Bring documents and one bag per person. Do not remain outdoors after dark.\" The bottom edge is torn off — the date and the issuing office are missing.",
+  "LORE_SUBURBS_04_TITLE": "Recorder: Grid Crew Log 1",
+  "LORE_SUBURBS_04_TEXT": "\"...third shift, feed four again. Fuses are fine on our end, so it's the substation. Marat says the draw doesn't add up — something is pulling from the grid at night, whole blocks' worth. I told him: grids don't drink. He didn't laugh.\"",
+  "LORE_SUBURBS_05_TITLE": "Note under a Door",
+  "LORE_SUBURBS_05_TEXT": "\"If you are reading this — do not knock. We don't open doors after sunset anymore. Take the canned food from the step, it is yours. And if you get to the center: the Keeper still keeps his light on. Go to him.\"",
+  "LORE_SUBURBS_06_TITLE": "Child's Drawing",
+  "LORE_SUBURBS_06_TEXT": "A crayon drawing on the back of a bill: a street, a big yellow sun above one lamppost, stick figures holding hands under its light. Everything beyond the light is black scribble. Caption in wobbly letters: \"OUR STREETLIGHT AND US.\"",
+  "LORE_SUBURBS_07_TITLE": "Recorder: Grid Crew Log 2",
+  "LORE_SUBURBS_07_TEXT": "\"Last entry, I think. We found where the draw comes from and Marat won't say it out loud, so I will: the transformer is warm. Suburb feed has been dark for two weeks and the transformer is WARM. We're walking out to the substation. If anyone replays this — the lights can be brought back. We proved it on the bench. One streetlight. Remember that.\"",
+  "LORE_SUBURBS_08_TITLE": "Suburbs Watch Roster",
+  "LORE_SUBURBS_08_TEXT": "A handwritten roster: \"Street watch — Dark hours. Ivanov 1st floor, Petro 2nd, old Anya at the corner window with the flashlight.\" Three names are crossed out. Next to the last crossed-out name: \"He went to look for his dog. The dog came back. He didn't.\""
 }

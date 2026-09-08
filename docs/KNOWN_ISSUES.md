@@ -1,5 +1,17 @@
 # Known issues
 
+## i18n: 165 strings are identical to English on purpose — do not "fix" them
+
+`tools/i18n_audit.py`'s `value == en[key]` check still flags ~165 strings
+across the 11 non-en/non-ru locales. Every one was manually verified during
+the 2026-09-08 autonomous i18n wave as a legitimate cognate/loanword (e.g.
+"Auto", "Park", "Normal", "AUDIO", "Journal", "Radio", the "SS-N" codes,
+" kg" as an SI unit) or a deliberate loanword choice ("Speedrunner",
+"Endurance" kept in de/fr/it/pt_BR) — not an overlooked gap. Full
+per-string breakdown and the commit list: `PLAN.md` §Б.4. Any *new* i18n
+key added after this point must be translated immediately, not added to
+this list.
+
 ## Draw calls: 234 measured vs GDD's <200 (D1) / <350 (D11) — D11 met, D1 not
 
 **Update 2026-09-08 (autonomous wave)**: the root cause this entry used

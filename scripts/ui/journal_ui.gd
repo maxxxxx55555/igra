@@ -25,6 +25,12 @@ var _catalog: Dictionary = {}
 func _ready() -> void:
 	_load_catalog()
 	EventBus.document_unlocked.connect(func(_id: StringName) -> void: _refresh())
+	# PHASE 1 (languages = settings): title_key/content_key entries resolve
+	# through LocalizationManager, so a live language switch must reload
+	# the catalog and rebuild the list, not just leave the cached strings.
+	LocalizationManager.language_changed.connect(func(_l: String) -> void:
+		_load_catalog()
+		_refresh())
 	_build()
 
 ## Каталог — список {doc_id,title,content}; переводим в словарь по id.
@@ -41,10 +47,14 @@ func _load_catalog() -> void:
 		return
 	for entry in parsed:
 		if entry is Dictionary and entry.has("doc_id"):
-			_catalog[String(entry["doc_id"])] = {
-				"title": String(entry.get("title", "")),
-				"text": String(entry.get("content", "")),
-			}
+			# Content-authored entries (e.g. suburbs lore) ship i18n keys
+			# instead of raw text so they translate; legacy entries keep
+			# raw text as-is.
+			var title := LocalizationManager.t(String(entry["title_key"])) \
+				if entry.has("title_key") else String(entry.get("title", ""))
+			var text := LocalizationManager.t(String(entry["content_key"])) \
+				if entry.has("content_key") else String(entry.get("content", ""))
+			_catalog[String(entry["doc_id"])] = {"title": title, "text": text}
 
 func _build() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP

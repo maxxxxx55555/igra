@@ -815,5 +815,21 @@
   "SKILL_SILENT_STEPS_NAME": "Leise Schritte",
   "SKILL_SILENT_STEPS_DESC": "-15% Geräuschradius",
   "SKILL_COLD_TRAIL_NAME": "Kalte Spur",
-  "SKILL_COLD_TRAIL_DESC": "-20% Suchzeit der Gegner"
+  "SKILL_COLD_TRAIL_DESC": "-20% Suchzeit der Gegner",
+  "LORE_SUBURBS_01_TITLE": "Foto: Grillfest in der Maple Row",
+  "LORE_SUBURBS_01_TEXT": "Ein verblasstes Foto. Sechs Nachbarn um einen Grill, Lichterketten darüber, alle lachen. Auf der Rückseite mit Kugelschreiber: „Die Nacht, in der das Licht noch funktionierte. Möge es zurückkehren.“",
+  "LORE_SUBURBS_02_TITLE": "Ankündigung geplanter Wartungsarbeiten",
+  "LORE_SUBURBS_02_TEXT": "STÄDTISCHES ENERGIEUNTERNEHMEN — VORSTADT-LEITUNG 4. „Geplante Rollierende Abschaltung, Dienstag 22:00–23:00 Uhr.“ Der Zettel ist an den Türrahmen genagelt und vom Regen gewellt. Jemand hat in Rot darübergeschrieben: „Es ging nie wieder AN.“",
+  "LORE_SUBURBS_03_TITLE": "Evakuierungsflugblatt",
+  "LORE_SUBURBS_03_TEXT": "„BEWOHNER DES VORSTADTBEZIRKS: Begeben Sie sich geordnet zum Sammelpunkt in der zentralen Arena. Bringen Sie Ausweispapiere und eine Tasche pro Person mit. Halten Sie sich nach Einbruch der Dunkelheit nicht im Freien auf.“ Der untere Rand ist abgerissen — Datum und ausstellende Stelle fehlen.",
+  "LORE_SUBURBS_04_TITLE": "Rekorder: Logbuch der Netz-Crew 1",
+  "LORE_SUBURBS_04_TEXT": "„...dritte Schicht, wieder Leitung vier. Bei uns sind die Sicherungen in Ordnung, also liegt's am Umspannwerk. Marat sagt, der Verbrauch stimmt nicht — nachts zieht etwas ganze Blöcke aus dem Netz. Ich hab ihm gesagt: Netze trinken nicht. Er hat nicht gelacht.“",
+  "LORE_SUBURBS_05_TITLE": "Zettel unter einer Tür",
+  "LORE_SUBURBS_05_TEXT": "„Wenn du das liest — klopfe nicht. Wir öffnen nach Sonnenuntergang keine Türen mehr. Nimm die Konserven von der Treppenstufe, sie gehören dir. Und wenn du zum Zentrum kommst: Der Wächter hält sein Licht noch am Brennen. Geh zu ihm.“",
+  "LORE_SUBURBS_06_TITLE": "Kinderzeichnung",
+  "LORE_SUBURBS_06_TEXT": "Eine Buntstiftzeichnung auf der Rückseite einer Rechnung: eine Straße, eine große gelbe Sonne über einer Laterne, Strichmännchen halten sich unter ihrem Licht an den Händen. Alles jenseits des Lichts ist schwarzes Gekritzel. Unterschrift in wackligen Buchstaben: „UNSERE LATERNE UND WIR.“",
+  "LORE_SUBURBS_07_TITLE": "Rekorder: Logbuch der Netz-Crew 2",
+  "LORE_SUBURBS_07_TEXT": "„Letzter Eintrag, glaube ich. Wir haben herausgefunden, woher der Verbrauch kommt, und Marat will es nicht laut sagen, also tue ich es: Der Transformator ist warm. Die Vorstadtleitung ist seit zwei Wochen dunkel, und der Transformator ist WARM. Wir gehen zu Fuß zum Umspannwerk. Falls das hier jemand abspielt: Das Licht kann zurückgebracht werden. Wir haben es auf der Werkbank bewiesen. Eine Laterne. Vergesst das nicht.“",
+  "LORE_SUBURBS_08_TITLE": "Wachliste der Vorstadt",
+  "LORE_SUBURBS_08_TEXT": "Eine handgeschriebene Liste: „Straßenwache — Dunkle Stunden. Iwanow 1. Stock, Petro 2., die alte Anja am Eckfenster mit der Taschenlampe.“ Drei Namen sind durchgestrichen. Neben dem letzten durchgestrichenen Namen: „Er ist seinen Hund suchen gegangen. Der Hund kam zurück. Er nicht.“"
 }

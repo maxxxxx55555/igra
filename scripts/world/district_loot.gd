@@ -70,6 +70,16 @@ const DOCUMENTS: Dictionary = {
 	&"power_station": "doc_core_station",
 }
 
+## Content-authored lore packs (content/districts/<id>/lore_notes.json),
+## one district at a time as ARENA's district passes land. Spawned the same
+## way as DOCUMENTS above, just several per district instead of one.
+const LORE_DOCS: Dictionary = {
+	&"suburbs": [
+		"suburbs_note_01", "suburbs_note_02", "suburbs_note_03", "suburbs_note_04",
+		"suburbs_note_05", "suburbs_note_06", "suburbs_note_07", "suburbs_note_08",
+	],
+}
+
 const RADIUS_MIN: float = 6.0
 const RADIUS_MAX: float = 22.0
 const DROP_Y: float = 0.6
@@ -100,6 +110,11 @@ static func populate(district_root: Node3D, district_id: StringName) -> int:
 		var dpos := _scatter(district_root, rng)
 		if _spawn_document(district_root, String(DOCUMENTS[district_id]), dpos):
 			placed += 1
+	if LORE_DOCS.has(district_id):
+		for doc_id in (LORE_DOCS[district_id] as Array):
+			var lpos := _scatter(district_root, rng)
+			if _spawn_document(district_root, String(doc_id), lpos):
+				placed += 1
 	return placed
 
 static func _scatter(root: Node3D, rng: RandomNumberGenerator) -> Vector3:

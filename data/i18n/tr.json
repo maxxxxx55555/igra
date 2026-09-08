@@ -815,5 +815,21 @@
   "SKILL_SILENT_STEPS_NAME": "Sessiz Adımlar",
   "SKILL_SILENT_STEPS_DESC": "-15% gürültü yarıçapı",
   "SKILL_COLD_TRAIL_NAME": "Soğuk İz",
-  "SKILL_COLD_TRAIL_DESC": "-20% düşman arama süresi"
+  "SKILL_COLD_TRAIL_DESC": "-20% düşman arama süresi",
+  "LORE_SUBURBS_01_TITLE": "Fotoğraf: Maple Row'da Mangal",
+  "LORE_SUBURBS_01_TEXT": "Solmuş bir fotoğraf. Bir mangalın etrafında altı komşu, üstlerinde ışık dizileri, hepsi gülüyor. Arkasında tükenmez kalemle: \"Işıkların hâlâ çalıştığı gece. Geri gelsin.\"",
+  "LORE_SUBURBS_02_TITLE": "Planlı Bakım Bildirimi",
+  "LORE_SUBURBS_02_TEXT": "ŞEHİR ELEKTRİK ŞİRKETİ — BANLİYÖ HATTI 4. \"Planlı dönüşümlü kesinti, Salı 22:00–23:00.\" Kağıt kapı çerçevesine çivilenmiş ve yağmurdan bükülmüş. Biri üzerine kırmızıyla yazmış: \"Bir daha hiç gelmedi.\"",
+  "LORE_SUBURBS_03_TITLE": "Tahliye El İlanı",
+  "LORE_SUBURBS_03_TEXT": "\"BANLİYÖ BÖLGESİ SAKİNLERİ: düzenli bir şekilde merkezi arenadaki toplanma noktasına gidiniz. Belgelerinizi ve kişi başı bir çanta getiriniz. Karanlık çöktükten sonra dışarıda kalmayınız.\" Alt kenarı yırtılmış — tarih ve yayınlayan makam eksik.",
+  "LORE_SUBURBS_04_TITLE": "Kayıt Cihazı: Şebeke Ekibi Günlüğü 1",
+  "LORE_SUBURBS_04_TEXT": "\"...üçüncü vardiya, yine dördüncü hat. Bizim taraftaki sigortalar sorunsuz, demek ki trafo merkezinde bir şey var. Marat çekilen gücün tutmadığını söylüyor — geceleri şebekeden bir şey çekiyor, koca mahalleler kadar. Ona dedim ki: şebekeler su içmez. Gülmedi.\"",
+  "LORE_SUBURBS_05_TITLE": "Kapı Altındaki Not",
+  "LORE_SUBURBS_05_TEXT": "\"Bunu okuyorsan kapıyı çalma. Gün battıktan sonra artık kapı açmıyoruz. Basamaktaki konserveleri al, senindir. Merkeze ulaşırsan: Bekçi hâlâ ışığını yakık tutuyor. Ona git.\"",
+  "LORE_SUBURBS_06_TITLE": "Çocuk Çizimi",
+  "LORE_SUBURBS_06_TEXT": "Bir faturanın arkasına yapılmış mum boya çizim: bir sokak, tek bir sokak lambasının üzerinde büyük sarı bir güneş, ışığın altında el ele tutuşan çöp adamlar. Işığın ötesindeki her şey siyah karalama. Titrek harflerle yazı: \"BİZİM SOKAK LAMBAMIZ VE BİZ.\"",
+  "LORE_SUBURBS_07_TITLE": "Kayıt Cihazı: Şebeke Ekibi Günlüğü 2",
+  "LORE_SUBURBS_07_TEXT": "\"Son kayıt sanırım. Çekişin nereden geldiğini bulduk ve Marat bunu yüksek sesle söylemek istemiyor, ben söyleyeyim: transformatör sıcak. Banliyö hattı iki haftadır karanlık ve transformatör SICAK. Trafo merkezine yürüyerek gidiyoruz. Bunu biri dinlerse: ışıklar geri getirilebilir. Bunu tezgahta kanıtladık. Tek bir sokak lambası. Bunu unutmayın.\"",
+  "LORE_SUBURBS_08_TITLE": "Banliyö Nöbet Listesi",
+  "LORE_SUBURBS_08_TEXT": "Elle yazılmış bir liste: \"Sokak nöbeti — karanlık saatler. Ivanov 1. kat, Petro 2. kat, köşedeki pencerede el fenerli yaşlı Anya.\" Üç isim üzeri çizilmiş. Son çizilen ismin yanında: \"Köpeğini aramaya gitti. Köpek geri döndü. O dönmedi.\""
 }

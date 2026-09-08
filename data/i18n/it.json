@@ -815,5 +815,21 @@
   "SKILL_SILENT_STEPS_NAME": "Passi silenziosi",
   "SKILL_SILENT_STEPS_DESC": "-15% raggio di rumore",
   "SKILL_COLD_TRAIL_NAME": "Pista fredda",
-  "SKILL_COLD_TRAIL_DESC": "-20% al tempo di ricerca nemico"
+  "SKILL_COLD_TRAIL_DESC": "-20% al tempo di ricerca nemico",
+  "LORE_SUBURBS_01_TITLE": "Foto: Barbecue in Maple Row",
+  "LORE_SUBURBS_01_TEXT": "Una foto sbiadita. Sei vicini attorno a una griglia, luci a festone sopra di loro, tutti che ridono. Sul retro, a penna: \"La notte in cui la luce funzionava ancora. Possa tornare.\"",
+  "LORE_SUBURBS_02_TITLE": "Avviso di manutenzione programmata",
+  "LORE_SUBURBS_02_TEXT": "AZIENDA ELETTRICA COMUNALE — LINEA SUBURBANA 4. \"Interruzione programmata a rotazione, martedì 22:00–23:00.\" Il foglio è inchiodato allo stipite della porta e deformato dalla pioggia. Qualcuno ci ha scritto sopra in rosso: \"Non è mai più tornata ACCESA.\"",
+  "LORE_SUBURBS_03_TITLE": "Volantino di evacuazione",
+  "LORE_SUBURBS_03_TEXT": "\"RESIDENTI DEL DISTRETTO SUBURBANO: recatevi in modo ordinato al punto di raccolta presso l'arena centrale. Portate i documenti e una borsa a persona. Non restate all'aperto dopo il tramonto.\" Il bordo inferiore è strappato: mancano la data e l'ufficio emittente.",
+  "LORE_SUBURBS_04_TITLE": "Registratore: diario della squadra rete, 1",
+  "LORE_SUBURBS_04_TEXT": "\"...terzo turno, di nuovo la linea quattro. I fusibili sono a posto dalla nostra parte, quindi è la cabina di trasformazione. Marat dice che i consumi non tornano — qualcosa attinge dalla rete di notte, interi isolati. Gli ho detto: le reti non bevono. Non ha riso.\"",
+  "LORE_SUBURBS_05_TITLE": "Biglietto sotto una porta",
+  "LORE_SUBURBS_05_TEXT": "\"Se stai leggendo questo, non bussare. Non apriamo più le porte dopo il tramonto. Prendi le conserve sul gradino, sono tue. E se arrivi al centro: il Custode tiene ancora accesa la sua luce. Va' da lui.\"",
+  "LORE_SUBURBS_06_TITLE": "Disegno di un bambino",
+  "LORE_SUBURBS_06_TEXT": "Un disegno a pastello sul retro di una bolletta: una strada, un grande sole giallo sopra un lampione, omini stilizzati che si tengono per mano sotto la sua luce. Tutto oltre la luce è uno scarabocchio nero. Didascalia in lettere tremolanti: \"IL NOSTRO LAMPIONE E NOI\".",
+  "LORE_SUBURBS_07_TITLE": "Registratore: diario della squadra rete, 2",
+  "LORE_SUBURBS_07_TEXT": "\"Ultima registrazione, credo. Abbiamo scoperto da dove viene il consumo e Marat non vuole dirlo ad alta voce, quindi lo dico io: il trasformatore è caldo. La linea suburbana è al buio da due settimane e il trasformatore è CALDO. Andiamo a piedi verso la cabina. Se qualcuno riascolta questo: la luce può tornare. L'abbiamo dimostrato sul banco. Un solo lampione. Ricordatelo.\"",
+  "LORE_SUBURBS_08_TITLE": "Elenco di guardia del sobborgo",
+  "LORE_SUBURBS_08_TEXT": "Un elenco scritto a mano: \"Guardia di strada — ore buie. Ivanov 1° piano, Petro 2°, la vecchia Anya alla finestra d'angolo con la torcia.\" Tre nomi sono cancellati. Accanto all'ultimo nome cancellato: \"È andato a cercare il suo cane. Il cane è tornato. Lui no.\""
 }

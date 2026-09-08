@@ -815,5 +815,21 @@
   "SKILL_SILENT_STEPS_NAME": "Pasos silenciosos",
   "SKILL_SILENT_STEPS_DESC": "-15% de radio de ruido",
   "SKILL_COLD_TRAIL_NAME": "Rastro frío",
-  "SKILL_COLD_TRAIL_DESC": "-20% al tiempo de búsqueda enemigo"
+  "SKILL_COLD_TRAIL_DESC": "-20% al tiempo de búsqueda enemigo",
+  "LORE_SUBURBS_01_TITLE": "Foto: Barbacoa en la calle Maple",
+  "LORE_SUBURBS_01_TEXT": "Una foto descolorida. Seis vecinos alrededor de una parrilla, luces de colores encima, todos riendo. Al dorso, con bolígrafo: «La noche en que la luz aún funcionaba. Ojalá vuelva».",
+  "LORE_SUBURBS_02_TITLE": "Aviso de mantenimiento programado",
+  "LORE_SUBURBS_02_TEXT": "COMPAÑÍA ELÉCTRICA MUNICIPAL — ALIMENTADOR SUBURBANO 4. «Corte programado por rotación, martes 22:00–23:00». El papel está clavado al marco de la puerta y deformado por la lluvia. Alguien escribió encima en rojo: «Nunca volvió a encenderse».",
+  "LORE_SUBURBS_03_TITLE": "Panfleto de evacuación",
+  "LORE_SUBURBS_03_TEXT": "«RESIDENTES DEL DISTRITO SUBURBANO: diríjanse de forma ordenada al punto de reunión en la arena central. Traigan documentos y una bolsa por persona. No permanezcan al aire libre después del anochecer.» El borde inferior está arrancado: faltan la fecha y la oficina emisora.",
+  "LORE_SUBURBS_04_TITLE": "Grabadora: registro de la cuadrilla eléctrica 1",
+  "LORE_SUBURBS_04_TEXT": "«...tercer turno, otra vez el alimentador cuatro. Los fusibles están bien de nuestro lado, así que es la subestación. Marat dice que el consumo no cuadra: algo está drenando la red por la noche, manzanas enteras. Le dije: las redes no beben. No se rio.»",
+  "LORE_SUBURBS_05_TITLE": "Nota bajo una puerta",
+  "LORE_SUBURBS_05_TEXT": "«Si estás leyendo esto, no llames. Ya no abrimos puertas después del atardecer. Toma la comida enlatada del escalón, es tuya. Y si llegas al centro: el Guardián todavía mantiene su luz encendida. Ve a él.»",
+  "LORE_SUBURBS_06_TITLE": "Dibujo de un niño",
+  "LORE_SUBURBS_06_TEXT": "Un dibujo con crayón en el dorso de una factura: una calle, un gran sol amarillo sobre una farola, muñecos de palitos tomados de la mano bajo su luz. Todo más allá de la luz es un garabato negro. Leyenda en letras torcidas: «NUESTRA FAROLA Y NOSOTROS».",
+  "LORE_SUBURBS_07_TITLE": "Grabadora: registro de la cuadrilla eléctrica 2",
+  "LORE_SUBURBS_07_TEXT": "«Última grabación, creo. Encontramos de dónde viene el consumo y Marat no quiere decirlo en voz alta, así que lo diré yo: el transformador está caliente. El alimentador suburbano lleva dos semanas apagado y el transformador está CALIENTE. Vamos a pie hacia la subestación. Si alguien escucha esto: la luz se puede recuperar. Lo demostramos en el banco de pruebas. Una farola. Recuérdenlo.»",
+  "LORE_SUBURBS_08_TITLE": "Lista de vigilancia del suburbio",
+  "LORE_SUBURBS_08_TEXT": "Una lista escrita a mano: «Vigilancia callejera — horas oscuras. Ivanov, 1er piso; Petro, 2°; la vieja Anya en la ventana de la esquina con la linterna.» Tres nombres están tachados. Junto al último nombre tachado: «Fue a buscar a su perro. El perro volvió. Él no.»"
 }

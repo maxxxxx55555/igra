@@ -80,8 +80,17 @@ func _load_from_catalog() -> void:
 		return
 	for entry in (parsed as Array):
 		if entry is Dictionary and String(entry.get("doc_id", "")) == document_id:
-			document_title = String(entry.get("title", document_title))
-			document_content = String(entry.get("content", ""))
+			# Content-authored entries (e.g. suburbs lore) ship i18n keys
+			# instead of raw text so they translate; legacy entries keep
+			# raw text as-is.
+			if entry.has("title_key"):
+				document_title = LocalizationManager.t(String(entry["title_key"]))
+			else:
+				document_title = String(entry.get("title", document_title))
+			if entry.has("content_key"):
+				document_content = LocalizationManager.t(String(entry["content_key"]))
+			else:
+				document_content = String(entry.get("content", ""))
 			return
 
 func set_document(id: String, title: String, content: String) -> void:

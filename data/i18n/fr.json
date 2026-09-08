@@ -815,5 +815,21 @@
   "SKILL_SILENT_STEPS_NAME": "Pas silencieux",
   "SKILL_SILENT_STEPS_DESC": "-15% de rayon de bruit",
   "SKILL_COLD_TRAIL_NAME": "Piste froide",
-  "SKILL_COLD_TRAIL_DESC": "-20% de temps de recherche ennemi"
+  "SKILL_COLD_TRAIL_DESC": "-20% de temps de recherche ennemi",
+  "LORE_SUBURBS_01_TITLE": "Photo : Barbecue sur Maple Row",
+  "LORE_SUBURBS_01_TEXT": "Une photo fanée. Six voisins autour d'un barbecue, des guirlandes lumineuses au-dessus, tous rient. Au dos, au stylo : « La nuit où la lumière fonctionnait encore. Puisse-t-elle revenir. »",
+  "LORE_SUBURBS_02_TITLE": "Avis de maintenance programmée",
+  "LORE_SUBURBS_02_TEXT": "COMPAGNIE D'ÉLECTRICITÉ MUNICIPALE — ALIMENTATION BANLIEUE 4. « Coupure tournante programmée, mardi 22h00–23h00. » Le papier est cloué au chambranle de la porte, gondolé par la pluie. Quelqu'un a écrit par-dessus en rouge : « Ça n'est jamais revenu. »",
+  "LORE_SUBURBS_03_TITLE": "Tract d'évacuation",
+  "LORE_SUBURBS_03_TEXT": "« HABITANTS DU DISTRICT DE BANLIEUE : rendez-vous en bon ordre au point de rassemblement de l'arène centrale. Munissez-vous de vos papiers et d'un sac par personne. Ne restez pas dehors après la tombée de la nuit. » Le bas est déchiré — la date et le service émetteur manquent.",
+  "LORE_SUBURBS_04_TITLE": "Enregistreur : journal de l'équipe réseau, 1",
+  "LORE_SUBURBS_04_TEXT": "« ...troisième équipe, encore l'alimentation quatre. Les fusibles sont bons de notre côté, donc c'est le poste de transformation. Marat dit que la consommation ne colle pas — quelque chose puise sur le réseau la nuit, des quartiers entiers. Je lui ai dit : les réseaux ne boivent pas. Il n'a pas ri. »",
+  "LORE_SUBURBS_05_TITLE": "Mot glissé sous une porte",
+  "LORE_SUBURBS_05_TEXT": "« Si tu lis ceci, ne frappe pas. On n'ouvre plus les portes après le coucher du soleil. Prends les conserves sur le seuil, elles sont à toi. Et si tu arrives au centre : le Gardien garde toujours sa lumière allumée. Va le voir. »",
+  "LORE_SUBURBS_06_TITLE": "Dessin d'enfant",
+  "LORE_SUBURBS_06_TEXT": "Un dessin au crayon de couleur au dos d'une facture : une rue, un grand soleil jaune au-dessus d'un lampadaire, des bonshommes-bâtons se tenant la main sous sa lumière. Tout au-delà de la lumière est un gribouillis noir. Légende en lettres tremblantes : « NOTRE LAMPADAIRE ET NOUS ».",
+  "LORE_SUBURBS_07_TITLE": "Enregistreur : journal de l'équipe réseau, 2",
+  "LORE_SUBURBS_07_TEXT": "« Dernière entrée, je crois. On a trouvé d'où vient la consommation et Marat ne veut pas le dire tout haut, alors je le fais : le transformateur est chaud. L'alimentation de la banlieue est coupée depuis deux semaines et le transformateur est CHAUD. On part à pied vers le poste. Si quelqu'un réécoute ça : la lumière peut revenir. On l'a prouvé sur le banc d'essai. Un seul lampadaire. Souvenez-vous-en. »",
+  "LORE_SUBURBS_08_TITLE": "Liste de garde de la banlieue",
+  "LORE_SUBURBS_08_TEXT": "Une liste manuscrite : « Garde de rue — heures sombres. Ivanov 1er étage, Petro 2e, la vieille Anya à la fenêtre d'angle avec la lampe torche. » Trois noms sont barrés. À côté du dernier nom barré : « Il est parti chercher son chien. Le chien est revenu. Pas lui. »"
 }
