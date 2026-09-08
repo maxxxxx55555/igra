@@ -84,12 +84,7 @@ func _ready() -> void:
 	EventBus.district_stage_changed.connect(_on_district_stage_changed)
 	EventBus.weather_changed.connect(_on_weather_changed)
 
-	# Автолоада PowerGridManager в проекте нет — синглтон зовётся PowerGrid,
-	# поэтому подписка молча не срабатывала и свет не менялся по стадиям.
-	PowerGrid.power_changed.connect(func(_id: StringName, _on: bool) -> void: _sync_stage_from_grid())
-
 	_player_glow = _find_player_glow()
-	_sync_stage_from_grid()
 
 func _process(delta: float) -> void:
 	if _override_frames > 0:
@@ -145,19 +140,6 @@ func _on_weather_changed(_weather: int, _name: String, _fog: float, _rain: float
 	var dm := get_node_or_null("/root/DistrictManager")
 	if dm:
 		apply_for_stage(dm.get_stage(dm.current_district))
-
-func _sync_stage_from_grid() -> void:
-	var dm := get_node_or_null("/root/DistrictManager")
-	if dm == null:
-		return
-	var did = dm.current_district
-	if did.is_empty():
-		return
-	# PowerGrid уже хранит стадию 0..3 (DARK/PARTIAL/STREETS/FULL) —
-	# пересчитывать её из процентов «восстановления» не нужно.
-	var new_stage: int = PowerGrid.get_stage(did)
-	if new_stage > dm.get_stage(did):
-		dm.set_stage(did, new_stage)
 
 ## Игрок ищется по группе: узел зовётся то "Player", то "PlayerFPS" в зависимости
 ## от того, как игрок попал в сцену, и поиск по имени молча возвращал null.

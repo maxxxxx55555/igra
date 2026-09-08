@@ -124,9 +124,8 @@ Status legend: OPEN / FIXED (commit hash) / DOCUMENTED (accepted, not fixed
 13. `scripts/world_env_setup.gd`'s `_sync_stage_from_grid()` — dead code,
     guard condition can never be true since `DistrictManager.get_stage()`
     now purely proxies `PowerGrid.get_stage()` (both sides of its `>`
-    comparison are always equal). Status: **DOCUMENTED** (harmless dead
-    code, deleting it is a style nit outside this pass's defect-fix
-    scope; noted for a future cleanup pass).
+    comparison are always equal). Status: **FIXED** (deleted the function
+    and both call sites — confirmed 100% no-op, safe to remove).
 14. `scripts/world/power_grid.gd`'s `reset()`/`from_dict()` mutate stage
     without emitting `district_stage_changed` (unlike `advance_district`/
     `_set_stage_direct`) — not reachable from real Continue/New-Game
@@ -137,7 +136,7 @@ Status legend: OPEN / FIXED (commit hash) / DOCUMENTED (accepted, not fixed
     `district_stage_changed` emission for the tutorial generator (the
     call it follows already emits it internally). Harmless (every
     listener is idempotent for a repeated identical value) but stale.
-    Status: **DOCUMENTED** (cosmetic, not touched this pass).
+    Status: **FIXED** (deleted, trivial/free).
 16. `scripts/world/puzzle_base.gd` — dead `Area2D` script (wrong node
     type for this 3D game besides being unreachable; `scenes/props/
     puzzle.tscn` is never instanced). Same "don't delete, might be

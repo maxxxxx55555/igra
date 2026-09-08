@@ -18,7 +18,10 @@ func interact(_player: Node) -> void:
 		return
 	completed = true
 	interaction_completed.emit()
-	EventBus.district_stage_changed.emit(&"suburbs", DistrictData.Stage.STREETS)
+	# Static audit 2026-09-08: advance_district() above already emits
+	# district_stage_changed internally - this was a stale duplicate emit
+	# predating that (harmless since every listener is idempotent for a
+	# repeated identical value, but wrong/confusing code).
 	EventBus.toast_requested.emit(tr("FTUE_STREET_LIT"), "objective")
 	EventBus.inventory_notice.emit(tr("FTUE_OBJECTIVE_UPDATED"))
 	var mesh := get_node_or_null("MeshInstance3D") as MeshInstance3D
