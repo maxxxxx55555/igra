@@ -1,3 +1,6 @@
+## ARCHIVED (PLAN.md Stage 1): multi-slot save picker row, not registered
+## in UIManager, no reachable entry point (real save/load is main_menu.gd's
+## single Continue button). Decision: keep as-is, do not wire or delete.
 extends PanelContainer
 class_name SaveSlotEntry
 

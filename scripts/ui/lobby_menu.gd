@@ -1,3 +1,7 @@
+## ARCHIVED (PLAN.md Stage 1): LAN lobby screen, not registered in
+## UIManager, no button opens it anywhere. Decision: keep as-is, do not
+## wire or delete. Kept per CLAUDE.md's "never delete unless proven dead
+## AND not planned" rule.
 extends Control
 
 @onready var host_button: Button = $VBoxContainer/HBoxContainer/HostButton

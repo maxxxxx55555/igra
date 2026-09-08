@@ -137,11 +137,13 @@ attempted here.
   lobby screen. Not registered in `UIManager`'s screen dict, no button
   anywhere opens it. Has the same raw-`tr()`-on-English-sentence bug as
   the skill tree did, left unfixed since nothing reaches this screen.
+  **ARCHIVED (PLAN.md Stage 1, decided): keep unwired, do not delete.**
 - `scripts/ui/save_slot_entry.gd` + `scripts/ui/save_slots_ui.gd` — a
   multi-slot save/load picker UI. Also not registered in `UIManager`, no
   reachable entry point (the real save/load path is `main_menu.gd`'s
   single "Continue" button -> `GameManager.continue_game()`, unrelated to
   this file). Same unfixed `tr()` bug for the same reason.
+  **ARCHIVED (PLAN.md Stage 1, decided): keep unwired, do not delete.**
 - Previously documented in `docs/VISUAL_AUDIT.md`: `city_decorator.gd`,
   `door.tscn`/`exploding_barrel.tscn`/old `pickups/*.tscn` (no material,
   never instantiated), `daily_events_ui.gd` (not in `UIManager`'s dict

@@ -1,3 +1,6 @@
+## ARCHIVED (PLAN.md Stage 1): multi-slot save picker screen, not
+## registered in UIManager, no reachable entry point. Decision: keep
+## as-is, do not wire or delete.
 extends Control
 class_name SaveSlotsUI
 
