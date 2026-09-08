@@ -44,8 +44,19 @@ all present ✔. MusicManager falls back to the dark bed for districts without a
 - 4–6 s, −14 LUFS; warm brass riser into a soft streetlight-ignition chime; played on
   `streetlight_activated` (carried over from suburbs manifest gap #4; reusable all districts).
 
-### G3 — remaining lit beds (same template as G1, theme params from `gen_audio.py` DISTRICTS)
-- `park_lit.ogg` — lydian, 75 bpm; birds-in-wind replaced by calm leaves + distant city hum.
+### G2b — `assets/audio/ambience/districts/park_lit.ogg` (park pass, full spec)
+- Type: 36 s seamless ambience loop, OGG q4 mono, 44.1 kHz; loop points 0.000–36.000,
+  matched zero-crossings; −18 LUFS integrated, true peak ≤ −1.5 dBFS.
+- Mood: "lit twin" of `park_dark.ogg` (STYLE_GUIDE §5): bare-trees wind softened to a calm
+  leaf bed, branch-snap motif removed, `park_distant_city_hum` component −6 dB, warm pad
+  raised; frozen-pond ice-crack transients kept but slowed and warmed.
+- Pulse alignment: 75 bpm bars (park theme canon: lydian, root MIDI 60, 14 bars ≈ 44.8 s in
+  `tools/gen_audio.py` DISTRICTS) so the 2 s MusicManager crossfade lands on the downbeat.
+- Reference pair for structure: `suburbs_dark.ogg` → `suburbs_lit.ogg`.
+- Wiring note: add `&"park"` row to `AMBIENCE_LIT_BY_DISTRICT` (CODE agent, after delivery).
+- Status: **spec only — binary not fabricated** (asset pass delivered tiles/pond ice only).
+
+### G3 — remaining lit beds (same template as G1/G2b, theme params from `gen_audio.py` DISTRICTS)
 - `school_lit.ogg` — major, 100 bpm; bell echoes softened to warm room tone.
 - `gas_station_lit.ogg` — blues, 110 bpm; sign buzz replaced by warm pump hum.
 - `police_lit.ogg` — minor, 120 bpm; radio static calmed, boots fade.
