@@ -1,7 +1,3 @@
-components/attack_component.gd
-components/health_component.gd
-components/ragdoll_component.gd
-components/trap_component.gd
 scripts/_bootstrap.gd
 scripts/ai/action_node.gd
 scripts/ai/behavior_node.gd
