@@ -410,7 +410,10 @@ func _detect_ambient() -> void:
 			noise_val = player_ref.get_noise_level()
 		if noise_val > noise_threshold and noise_val > 0.0:
 			_investigate_point = player_ref.global_position
-			_investigate_timer = 5.0
+			# PLAN.md Stage 3: Stealth skill "cold_trail" (0.2/level, max 2) -
+			# shortens how long enemies keep searching after losing the player.
+			var cold_trail_lvl: int = SkillTreeManager.get_skill_level(&"cold_trail") if SkillTreeManager else 0
+			_investigate_timer = 5.0 * (1.0 - 0.2 * cold_trail_lvl)
 			_change_state(State.INVESTIGATE)
 		if _can_see_player():
 			_change_state(State.CHASE)

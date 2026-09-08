@@ -113,14 +113,6 @@ const SKILL_TREES: Dictionary = {
 				"max_level": 2,
 				"effect_per_level": 0.1
 			},
-			"stealth": {
-				"name": "SKILL_STEALTH_NAME",
-				"description": "SKILL_STEALTH_DESC",
-				"cost": 2,
-				"requires": ["move_speed"],
-				"max_level": 2,
-				"effect_per_level": 0.25
-			},
 			"xp_boost": {
 				"name": "SKILL_XP_BOOST_NAME",
 				"description": "SKILL_XP_BOOST_DESC",
@@ -134,6 +126,32 @@ const SKILL_TREES: Dictionary = {
 				"description": "SKILL_LOOT_LUCK_DESC",
 				"cost": 2,
 				"requires": ["xp_boost"],
+				"max_level": 2,
+				"effect_per_level": 0.2
+			},
+		}
+	},
+	## PLAN.md Stage 3: 4th branch (GDD §8 wants 4, project had 3). Built on
+	## the two real, already-live stealth mechanics (player_3d.gd's noise
+	## emission, base_monster.gd's investigate-timer) rather than a new
+	## visibility-multiplier system that doesn't exist anywhere in the
+	## codebase yet - reuse before writing.
+	"stealth": {
+		"name": "Stealth",
+		"skills": {
+			"silent_steps": {
+				"name": "SKILL_SILENT_STEPS_NAME",
+				"description": "SKILL_SILENT_STEPS_DESC",
+				"cost": 1,
+				"requires": [],
+				"max_level": 3,
+				"effect_per_level": 0.15
+			},
+			"cold_trail": {
+				"name": "SKILL_COLD_TRAIL_NAME",
+				"description": "SKILL_COLD_TRAIL_DESC",
+				"cost": 2,
+				"requires": ["silent_steps"],
 				"max_level": 2,
 				"effect_per_level": 0.2
 			},
@@ -224,14 +242,17 @@ func _apply_skill_effect(skill_id: StringName, level: int) -> void:
 			if player.stats:
 				player.stats.walk_speed *= 1.1
 				player.stats.run_speed *= 1.1
-		"stealth":
-			# Handled by enemy AI detection
-			pass
 		"xp_boost":
 			# Multiplier applied in XP gain
 			pass
 		"loot_luck":
 			# Handled by loot system
+			pass
+		"silent_steps":
+			# Read directly each frame by player_3d.gd's noise_radius calc
+			pass
+		"cold_trail":
+			# Read directly by base_monster.gd when setting _investigate_timer
 			pass
 
 func get_tree_data(tree_id: StringName) -> Dictionary:

@@ -787,8 +787,6 @@
   "SKILL_INVENTORY_SPACE_DESC": "+5 inventory slots",
   "SKILL_MOVE_SPEED_NAME": "Lightfoot",
   "SKILL_MOVE_SPEED_DESC": "+10% movement speed",
-  "SKILL_STEALTH_NAME": "Ghost",
-  "SKILL_STEALTH_DESC": "Enemies detect you 25% slower",
   "SKILL_XP_BOOST_NAME": "Fast Learner",
   "SKILL_XP_BOOST_DESC": "+15% XP gain",
   "SKILL_LOOT_LUCK_NAME": "Scavenger",
@@ -813,5 +811,9 @@
   "ONBOARD_02_CAPTION": "Turn on your flashlight to see - but the light gives you away too.",
   "ONBOARD_03_CAPTION": "Reach a streetlight and power it on - that's how light returns to the city.",
   "ONBOARD_04_CAPTION": "Every lit streetlight lights the street and pushes the danger back.",
-  "ONBOARD_NEXT": "Next"
+  "ONBOARD_NEXT": "Next",
+  "SKILL_SILENT_STEPS_NAME": "靜步",
+  "SKILL_SILENT_STEPS_DESC": "噪音範圍-15%",
+  "SKILL_COLD_TRAIL_NAME": "冷線索",
+  "SKILL_COLD_TRAIL_DESC": "敵人搜索時間-20%"
 }

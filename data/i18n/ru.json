@@ -787,8 +787,6 @@
   "SKILL_INVENTORY_SPACE_DESC": "+5 ячеек инвентаря",
   "SKILL_MOVE_SPEED_NAME": "Лёгкая поступь",
   "SKILL_MOVE_SPEED_DESC": "+10% к скорости передвижения",
-  "SKILL_STEALTH_NAME": "Призрак",
-  "SKILL_STEALTH_DESC": "Враги замечают вас на 25% медленнее",
   "SKILL_XP_BOOST_NAME": "Быстрое обучение",
   "SKILL_XP_BOOST_DESC": "+15% к получаемому опыту",
   "SKILL_LOOT_LUCK_NAME": "Мародёр",
@@ -813,5 +811,9 @@
   "ONBOARD_02_CAPTION": "Включи фонарик, чтобы видеть, — но помни: свет заметен и монстрам.",
   "ONBOARD_03_CAPTION": "Подойди к фонарю и запусти его — так свет возвращается в город.",
   "ONBOARD_04_CAPTION": "Каждый включённый фонарь освещает улицу и отодвигает опасность.",
-  "ONBOARD_NEXT": "Далее"
+  "ONBOARD_NEXT": "Далее",
+  "SKILL_SILENT_STEPS_NAME": "Тихие шаги",
+  "SKILL_SILENT_STEPS_DESC": "-15% к радиусу шума",
+  "SKILL_COLD_TRAIL_NAME": "Холодный след",
+  "SKILL_COLD_TRAIL_DESC": "-20% к времени поиска врагов"
 }

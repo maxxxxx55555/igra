@@ -426,6 +426,9 @@ func _physics_process(delta: float) -> void:
 		State.RUN: noise_radius = 8.0
 		State.CROUCH: noise_radius = 0.5
 		_: noise_radius = 0.0
+	# PLAN.md Stage 3: Stealth skill branch, "silent_steps" (0.15/level, max 3).
+	var stealth_lvl: int = SkillTreeManager.get_skill_level(&"silent_steps") if SkillTreeManager else 0
+	noise_radius *= 1.0 - 0.15 * stealth_lvl
 	if moving and noise_radius > 0.0:
 		EventBus.noise_emitted.emit(Vector2(global_position.x, global_position.z), noise_radius)
 	var weight_speed_mult := 1.0 - weight_ratio * 0.5
