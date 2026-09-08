@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "_contract": "World-bible radio broadcasts (RADIO screen, GDD §12.2). Transcripts unlock by {district, min_stage}; en text is i18n source. speaker ids must exist in characters.json.",
+  "transcripts": [
+    {
+      "id": "radio_01_power_station",
+      "speaker": "char_radio_voice",
+      "title_en": "Broadcast 1 — The Call",
+      "i18n_keys": { "title": "WORLD_RADIO_01_TITLE", "text": "WORLD_RADIO_01_TEXT" },
+      "en": {
+        "title": "Broadcast 1 — The Call",
+        "text": "...if you can hear this, the grid can still be brought back. District by district, lamp by lamp. Do not go underground. Do not follow the arena signs. Go to the power station. The one who kept the light will meet you at the light. [three relay clicks]"
+      },
+      "reveal": { "district": "park", "min_stage": 0 },
+      "act": 1
+    },
+    {
+      "id": "radio_02_grid_crew_relay",
+      "speaker": "char_grid_crew_recorder",
+      "title_en": "Broadcast 2 — Crew Relay, Recovered",
+      "i18n_keys": { "title": "WORLD_RADIO_02_TITLE", "text": "WORLD_RADIO_02_TEXT" },
+      "en": {
+        "title": "Broadcast 2 — Crew Relay, Recovered",
+        "text": "Third shift to anyone: feeder four is not faulty, repeat, not faulty. The draw is deliberate. Marat traced it to a test tap that is not on any map. We are walking the line to the substation. If we do not call again — the bench proof stands. One streetlight. Remember that."
+      },
+      "reveal": { "district": "substation", "min_stage": 1 },
+      "act": 2
+    },
+    {
+      "id": "radio_03_keeper_reversal",
+      "speaker": "char_keeper",
+      "title_en": "Broadcast 3 — The Keeper Answers",
+      "i18n_keys": { "title": "WORLD_RADIO_03_TITLE", "text": "WORLD_RADIO_03_TEXT" },
+      "en": {
+        "title": "Broadcast 3 — The Keeper Answers",
+        "text": "You are restoring what I am taking apart, and we are both right. Every lamp you light feeds the city. Every lamp I carry out starves the thing in the center. Light the districts. I will meet you at the last one with everything I have kept. Forty years of light, engineer. Bring a strong back."
+      },
+      "reveal": { "district": "power_station", "min_stage": 1 },
+      "act": 3
+    }
+  ]
+}

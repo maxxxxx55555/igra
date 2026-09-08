@@ -17,7 +17,13 @@ content/
     lore_notes.json             <- readable world notes (document / photo / audio_log)
     item_spawns.json            <- loot tables per stage + fixed puzzle-critical spawns
     prop_manifest.md            <- prop / examine-spot / ambience placement plan
+  world/                        <- world bible (see docs/CONTENT_WORLD_BIBLE.md)
+    characters.json  factions.json  history.json  radio_transcripts.json
+  lore/                         <- world bible, found-text layer
+    diary_entries.json  news_clippings.json
 ```
+District packs reference `world/` and `lore/` **by id only** via `world_refs` arrays
+(no copied prose); contract and i18n inventory live in `docs/CONTENT_WORLD_BIBLE.md`.
 
 ## lore_notes.json schema
 ```jsonc

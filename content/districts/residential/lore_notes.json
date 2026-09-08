@@ -1,0 +1,102 @@
+{
+  "district": "residential",
+  "version": 1,
+  "notes": [
+    {
+      "id": "residential_note_01",
+      "item_type": "document",
+      "i18n_keys": { "title": "LORE_RESIDENTIAL_01_TITLE", "text": "LORE_RESIDENTIAL_01_TEXT" },
+      "en": {
+        "title": "Letter Under the Door of House 24",
+        "text": "\"Son, if you are reading this, you are alive, and that is the main thing. Babka Manya says: the light in this city is not electricity. The lamps remember who they were lit for. Walk kindly, and do not let your little lamp die between the buildings.\" The handwriting is careful, pre-war. The paper smells of valerian and kerosene."
+      },
+      "location_hint": "Doorstep of house 24, the only door with a fresh bell pull (z_house24)",
+      "min_stage": 0,
+      "weight": 100
+    },
+    {
+      "id": "residential_note_02",
+      "item_type": "photo",
+      "i18n_keys": { "title": "LORE_RESIDENTIAL_02_TITLE", "text": "LORE_RESIDENTIAL_02_TEXT" },
+      "en": {
+        "title": "Photo: Courtyard Wedding, 1987",
+        "text": "A glossy Soviet-era print. Long tables between the panel blocks, paper garlands strung from one balcony to the next, an old man slow-dancing with a bride. Every streetlight in the frame is burning. Someone has pressed a dried rowan berry into the corner of the print."
+      },
+      "location_hint": "Bench under the archway into the courtyard playground (z_courtyard_play)",
+      "min_stage": 0,
+      "weight": 90
+    },
+    {
+      "id": "residential_note_03",
+      "item_type": "audio_log",
+      "i18n_keys": { "title": "LORE_RESIDENTIAL_03_TITLE", "text": "LORE_RESIDENTIAL_03_TEXT" },
+      "en": {
+        "title": "Recorder: Intercom, House 12",
+        "text": "\"...the intercom has been dead for a month, but last night it clicked on by itself. A child's voice asked: 'Is the light on yet?' I said yes. I don't know why I said yes, ours is the only window that never had a lamp. The voice said: 'Then why is it dark in your stairwell?' Then static. I am not going down there again.\""
+      },
+      "location_hint": "Intercom box at the first entrance of the west block (z_block_west)",
+      "min_stage": 0,
+      "weight": 85
+    },
+    {
+      "id": "residential_note_04",
+      "item_type": "document",
+      "i18n_keys": { "title": "LORE_RESIDENTIAL_04_TITLE", "text": "LORE_RESIDENTIAL_04_TEXT" },
+      "en": {
+        "title": "Pipe Gallery Notice",
+        "text": "HOUSING OFFICE — NOTICE. \"Entry to the heating gallery between houses 18 and 20 is forbidden. The pipes knock even with the valves closed, this is normal thermal expansion and not a reason for panic.\" Below, in chalk, a different hand: \"The pipes are not knocking. They are counting.\""
+      },
+      "location_hint": "Rusted door of the boiler room / pipe gallery (z_boiler_room)",
+      "min_stage": 0,
+      "weight": 95
+    },
+    {
+      "id": "residential_note_05",
+      "item_type": "photo",
+      "i18n_keys": { "title": "LORE_RESIDENTIAL_05_TITLE", "text": "LORE_RESIDENTIAL_05_TEXT" },
+      "en": {
+        "title": "Photo: The Watching Window",
+        "text": "A night shot of the east block facade, grainy, taken from the courtyard. One window glows a dull amber on the seventh floor; every other pane is black. On the back, in pencil: \"Third night in a row. The grid has been dead for a month. Who is paying for that light?\""
+      },
+      "location_hint": "Drying-rack pole facing the east block (z_block_east)",
+      "min_stage": 1,
+      "weight": 75
+    },
+    {
+      "id": "residential_note_06",
+      "item_type": "document",
+      "i18n_keys": { "title": "LORE_RESIDENTIAL_06_TITLE", "text": "LORE_RESIDENTIAL_06_TEXT" },
+      "en": {
+        "title": "Chalk on the Playground",
+        "text": "Fresh chalk on the asphalt by the swing, in a child's careful capitals: \"THE TALL MAN STANDS WHERE THE LIGHT DOES NOT REACH. WE DREW A LAMP IN CHALK SO HE WOULD NOT SEE OUR SANDBOX.\" Below it, a chalk circle with rays, drawn surprisingly straight for a child."
+      },
+      "location_hint": "Asphalt at the yard swing, courtyard playground (z_courtyard_play)",
+      "min_stage": 1,
+      "weight": 70
+    },
+    {
+      "id": "residential_note_07",
+      "item_type": "audio_log",
+      "i18n_keys": { "title": "LORE_RESIDENTIAL_07_TITLE", "text": "LORE_RESIDENTIAL_07_TEXT" },
+      "en": {
+        "title": "Recorder: Grid Crew Log 3",
+        "text": "\"Crossed the residential blocks at night, hugging the walls like the old woman taught us. Marat counted: forty-one dark windows for every one that glows. Something is feeding those lit ones off our grid, and it lives closer to the center. We left a cache in the boiler room for whoever follows: transistors, and a warning. Do not look the Watcher in the lamps.\""
+      },
+      "location_hint": "Barricade at the east exit toward the park (z_exit_east)",
+      "min_stage": 2,
+      "weight": 80
+    },
+    {
+      "id": "residential_note_08",
+      "item_type": "document",
+      "i18n_keys": { "title": "LORE_RESIDENTIAL_08_TITLE", "text": "LORE_RESIDENTIAL_08_TEXT" },
+      "en": {
+        "title": "Superintendent's Ledger",
+        "text": "A ledger of apartment meters, last entry dated the night of the blackout: \"Meters 12, 24, 31 spin backwards at night. Current flows OUT of the apartments. Called the substation — they say we are drawing normal load. One of the two is lying, and the substation has never lied to me.\" The remaining pages are blank."
+      },
+      "location_hint": "Superintendent's closet, first floor of the west block (z_block_west)",
+      "min_stage": 1,
+      "weight": 65
+    }
+  ]
+}
