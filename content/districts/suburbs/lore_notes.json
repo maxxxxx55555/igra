@@ -1,0 +1,102 @@
+{
+  "district": "suburbs",
+  "version": 1,
+  "notes": [
+    {
+      "id": "suburbs_note_01",
+      "item_type": "photo",
+      "i18n_keys": { "title": "LORE_SUBURBS_01_TITLE", "text": "LORE_SUBURBS_01_TEXT" },
+      "en": {
+        "title": "Photo: Barbecue on Maple Row",
+        "text": "A faded photo. Six neighbors around a grill, string lights overhead, all of them laughing. On the back, in pen: \"The night the lights still worked. May it come back.\""
+      },
+      "location_hint": "Porch of the blue two-story house, Maple Row (z_maple_row)",
+      "min_stage": 0,
+      "weight": 100
+    },
+    {
+      "id": "suburbs_note_02",
+      "item_type": "document",
+      "i18n_keys": { "title": "LORE_SUBURBS_02_TITLE", "text": "LORE_SUBURBS_02_TEXT" },
+      "en": {
+        "title": "Scheduled Maintenance Notice",
+        "text": "CITY POWER COMPANY — SUBURBAN FEED 4. \"Planned rolling outage, Tuesday 22:00–23:00.\" The paper is nailed to the door frame and rain-warped. Someone wrote over it in red: \"It never came back ON.\""
+      },
+      "location_hint": "Community board at the bus stop (z_bus_stop)",
+      "min_stage": 0,
+      "weight": 90
+    },
+    {
+      "id": "suburbs_note_03",
+      "item_type": "document",
+      "i18n_keys": { "title": "LORE_SUBURBS_03_TITLE", "text": "LORE_SUBURBS_03_TEXT" },
+      "en": {
+        "title": "Evacuation Leaflet",
+        "text": "\"RESIDENTS OF THE SUBURBAN DISTRICT: proceed in an orderly fashion to the collection point at the central arena. Bring documents and one bag per person. Do not remain outdoors after dark.\" The bottom edge is torn off — the date and the issuing office are missing."
+      },
+      "location_hint": "Mail slot of the corner shop (z_corner_shop)",
+      "min_stage": 0,
+      "weight": 95
+    },
+    {
+      "id": "suburbs_note_04",
+      "item_type": "audio_log",
+      "i18n_keys": { "title": "LORE_SUBURBS_04_TITLE", "text": "LORE_SUBURBS_04_TEXT" },
+      "en": {
+        "title": "Recorder: Grid Crew Log 1",
+        "text": "\"...third shift, feed four again. Fuses are fine on our end, so it's the substation. Marat says the draw doesn't add up — something is pulling from the grid at night, whole blocks' worth. I told him: grids don't drink. He didn't laugh.\""
+      },
+      "location_hint": "Work bench, open garage (z_garage_row)",
+      "min_stage": 0,
+      "weight": 85
+    },
+    {
+      "id": "suburbs_note_05",
+      "item_type": "document",
+      "i18n_keys": { "title": "LORE_SUBURBS_05_TITLE", "text": "LORE_SUBURBS_05_TEXT" },
+      "en": {
+        "title": "Note under a Door",
+        "text": "\"If you are reading this — do not knock. We don't open doors after sunset anymore. Take the canned food from the step, it is yours. And if you get to the center: the Keeper still keeps his light on. Go to him.\""
+      },
+      "location_hint": "Doorstep of the house with boarded windows (z_cul_de_sac)",
+      "min_stage": 0,
+      "weight": 80
+    },
+    {
+      "id": "suburbs_note_06",
+      "item_type": "photo",
+      "i18n_keys": { "title": "LORE_SUBURBS_06_TITLE", "text": "LORE_SUBURBS_06_TEXT" },
+      "en": {
+        "title": "Child's Drawing",
+        "text": "A crayon drawing on the back of a bill: a street, a big yellow sun above one lamppost, stick figures holding hands under its light. Everything beyond the light is black scribble. Caption in wobbly letters: \"OUR STREETLIGHT AND US.\""
+      },
+      "location_hint": "Yard swing, overgrown garden (z_backyards)",
+      "min_stage": 1,
+      "weight": 70
+    },
+    {
+      "id": "suburbs_note_07",
+      "item_type": "audio_log",
+      "i18n_keys": { "title": "LORE_SUBURBS_07_TITLE", "text": "LORE_SUBURBS_07_TEXT" },
+      "en": {
+        "title": "Recorder: Grid Crew Log 2",
+        "text": "\"Last entry, I think. We found where the draw comes from and Marat won't say it out loud, so I will: the transformer is warm. Suburb feed has been dark for two weeks and the transformer is WARM. We're walking out to the substation. If anyone replays this — the lights can be brought back. We proved it on the bench. One streetlight. Remember that.\""
+      },
+      "location_hint": "Under the last lit streetlight before the exit to residential (z_exit_north)",
+      "min_stage": 2,
+      "weight": 75
+    },
+    {
+      "id": "suburbs_note_08",
+      "item_type": "document",
+      "i18n_keys": { "title": "LORE_SUBURBS_08_TITLE", "text": "LORE_SUBURBS_08_TEXT" },
+      "en": {
+        "title": "Suburbs Watch Roster",
+        "text": "A handwritten roster: \"Street watch — Dark hours. Ivanov 1st floor, Petro 2nd, old Anya at the corner window with the flashlight.\" Three names are crossed out. Next to the last crossed-out name: \"He went to look for his dog. The dog came back. He didn't.\""
+      },
+      "location_hint": "Kitchen table, house at the cul-de-sac (z_cul_de_sac)",
+      "min_stage": 1,
+      "weight": 65
+    }
+  ]
+}
