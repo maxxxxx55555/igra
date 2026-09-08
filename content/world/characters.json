@@ -1,0 +1,123 @@
+{
+  "version": 1,
+  "_contract": "World-bible characters. Districts reference these by id only (world_refs in content/districts/*/lore_notes.json); never copy text. Reveal gating is advisory for CODE: {district, min_stage} uses DistrictData.Stage (0..3). en text is source for i18n keys listed per entry.",
+  "characters": [
+    {
+      "id": "char_keeper",
+      "name": "The Keeper",
+      "epithet": "Watcher of the Lanterns",
+      "status": "alive, unmet until Act III",
+      "home_district": "power_station",
+      "first_mention": { "district": "suburbs", "note": "suburbs_note_05" },
+      "arc_acts": [1, 2, 3],
+      "reveal": { "district": "park", "min_stage": 0 },
+      "summary_en": "Kept the city's streetlights for forty years. After the blackout he 'keeps backwards': dismantling lamps so the thing draining the grid cannot drink them, and funneling parts to the center. Voice behind the radio call and the manifesto seal (identity confirmed only in the Truth ending).",
+      "i18n_keys": { "title": "WORLD_CHAR_KEEPER_TITLE", "text": "WORLD_CHAR_KEEPER_TEXT" },
+      "en": { "title": "The Keeper", "text": "Forty years of work orders, every lamp logged by hand. Now he keeps the light backwards, and the grid waits for him at the center." }
+    },
+    {
+      "id": "char_marat",
+      "name": "Marat",
+      "epithet": "grid crew engineer",
+      "status": "missing since the walk to the substation",
+      "home_district": "substation",
+      "first_mention": { "district": "suburbs", "note": "suburbs_note_04" },
+      "arc_acts": [1, 2],
+      "reveal": { "district": "suburbs", "min_stage": 0 },
+      "summary_en": "Night-shift engineer of the grid crew. First to measure the impossible draw ('grids don't drink'), first to say the transformer was warm. Walked to the substation in log 2; Petrov's loss in the park is the last confirmed trace of the crew.",
+      "i18n_keys": { "title": "WORLD_CHAR_MARAT_TITLE", "text": "WORLD_CHAR_MARAT_TEXT" },
+      "en": { "title": "Marat", "text": "The engineer who proved one streetlight can burn. The draw doesn't add up, he said. Something is pulling from the grid at night." }
+    },
+    {
+      "id": "char_grid_crew_recorder",
+      "name": "The Recorder",
+      "epithet": "grid crew, third shift",
+      "status": "missing",
+      "home_district": "substation",
+      "first_mention": { "district": "suburbs", "note": "suburbs_note_04" },
+      "arc_acts": [1, 2],
+      "reveal": { "district": "suburbs", "min_stage": 0 },
+      "summary_en": "Unnamed author of grid crew logs 1-4. Left the bench proof ('one streetlight'), the suburban cache, and the park cache at the keeper's shed. Their logs are the player's trail of breadcrumbs across the first three districts.",
+      "i18n_keys": { "title": "WORLD_CHAR_RECORDER_TITLE", "text": "WORLD_CHAR_RECORDER_TEXT" },
+      "en": { "title": "The Recorder", "text": "Third shift, feed four. If anyone replays this — the lights can be brought back. We proved it on the bench." }
+    },
+    {
+      "id": "char_petrov",
+      "name": "Petrov",
+      "epithet": "grid crew lineman",
+      "status": "taken at the pond edge (park)",
+      "home_district": "park",
+      "first_mention": { "district": "park", "note": "park_note_03" },
+      "arc_acts": [1],
+      "reveal": { "district": "park", "min_stage": 2 },
+      "summary_en": "Lineman taken by the hunter at the frozen pond 'without a sound, toward the water'. Foreshadows Act II: the monsters were people; the pond is where the park's changed still gather to be fed.",
+      "i18n_keys": { "title": "WORLD_CHAR_PETROV_TITLE", "text": "WORLD_CHAR_PETROV_TEXT" },
+      "en": { "title": "Petrov", "text": "The crew walked an hour in mud and it still found him at the pond edge. Took him toward the water without a sound." }
+    },
+    {
+      "id": "char_babka_manya",
+      "name": "Babka Manya",
+      "epithet": "the old woman of house 24",
+      "status": "alive, residential",
+      "home_district": "residential",
+      "first_mention": { "district": "residential", "note": "residential_note_01" },
+      "arc_acts": [1, 2],
+      "reveal": { "district": "residential", "min_stage": 0 },
+      "summary_en": "Keeps a lamp and a bowl of food for 'those who still remember their names'. Her line — 'the light in this city is not electricity' — is the thematic key to the Keeper and to the lamps-that-remember revealed in Act II.",
+      "i18n_keys": { "title": "WORLD_CHAR_MANYA_TITLE", "text": "WORLD_CHAR_MANYA_TEXT" },
+      "en": { "title": "Babka Manya", "text": "The light in this city is not electricity. The lamps remember who they were lit for." }
+    },
+    {
+      "id": "char_old_anya",
+      "name": "Old Anya",
+      "epithet": "corner window watch",
+      "status": "alive, suburbs",
+      "home_district": "suburbs",
+      "first_mention": { "district": "suburbs", "note": "suburbs_note_08" },
+      "arc_acts": [1],
+      "reveal": { "district": "suburbs", "min_stage": 1 },
+      "summary_en": "Suburbs watch roster member at the corner window with the flashlight. The street watch's last functioning sentinel; the roster's crossed names map the first disappearances.",
+      "i18n_keys": { "title": "WORLD_CHAR_ANYA_TITLE", "text": "WORLD_CHAR_ANYA_TEXT" },
+      "en": { "title": "Old Anya", "text": "At the corner window with the flashlight. The watch roster's last uncrossed name." }
+    },
+    {
+      "id": "char_superintendent",
+      "name": "The Superintendent",
+      "epithet": "residential blocks meter-keeper",
+      "status": "unknown",
+      "home_district": "residential",
+      "first_mention": { "district": "residential", "note": "residential_note_08" },
+      "arc_acts": [1, 2],
+      "reveal": { "district": "residential", "min_stage": 1 },
+      "summary_en": "Logged meters spinning backwards at night — current flowing OUT of apartments. His ledger is the residential-side measurement of the same draw Marat measured at the feeder: the grid is being drunk from both ends.",
+      "i18n_keys": { "title": "WORLD_CHAR_SUPERINTENDENT_TITLE", "text": "WORLD_CHAR_SUPERINTENDENT_TEXT" },
+      "en": { "title": "The Superintendent", "text": "Meters 12, 24, 31 spin backwards at night. One of the two is lying, and the substation has never lied to me." }
+    },
+    {
+      "id": "char_radio_voice",
+      "name": "The Radio Voice",
+      "epithet": "'Go to the power station'",
+      "status": "identity unresolved until endings",
+      "home_district": "park",
+      "first_mention": { "district": "park", "note": "park_note_07" },
+      "arc_acts": [1, 2, 3],
+      "reveal": { "district": "park", "min_stage": 0 },
+      "summary_en": "Calm voice looping the Act I call to the power station (GDD §12.3). The manifesto's wax seal and the radio's relay clicks suggest the Keeper — the Truth ending confirms; other endings leave it open by design.",
+      "i18n_keys": { "title": "WORLD_CHAR_RADIOVOICE_TITLE", "text": "WORLD_CHAR_RADIOVOICE_TEXT" },
+      "en": { "title": "The Radio Voice", "text": "Go to the power station. The one who kept the light will meet you at the light." }
+    },
+    {
+      "id": "char_architect",
+      "name": "The Architect",
+      "epithet": "author of Project Architect",
+      "status": "the boss, power_station",
+      "home_district": "power_station",
+      "first_mention": { "district": "school", "note": null },
+      "arc_acts": [2, 3],
+      "reveal": { "district": "hospital", "min_stage": 2 },
+      "summary_en": "Act II reveal: the grid experiment that taught the lamps to drink, and the people to become what hunts them. Boss of D11 (GDD §6.3). Content packs from school onward may reference char_architect; earlier districts only hint via 'the draw'.",
+      "i18n_keys": { "title": "WORLD_CHAR_ARCHITECT_TITLE", "text": "WORLD_CHAR_ARCHITECT_TEXT" },
+      "en": { "title": "The Architect", "text": "The project bears his name. The monsters were people; the grid was his instrument." }
+    }
+  ]
+}

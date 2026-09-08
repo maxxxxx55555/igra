@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "_contract": "World-bible diary fragments. author ids must exist in characters.json; reveal via {district, min_stage}; en text is i18n source.",
+  "entries": [
+    {
+      "id": "diary_keeper_01",
+      "author": "char_keeper",
+      "date_en": "forty years ago, spring",
+      "i18n_keys": { "title": "WORLD_DIARY_K1_TITLE", "text": "WORLD_DIARY_K1_TEXT" },
+      "en": {
+        "title": "Keeper's Diary — First Shift",
+        "text": "First shift today. Two hundred and nineteen lamps in the suburbs alone. The foreman says a lamp out is a street forgot. I intend to be remembered as the man who never let the street be forgot. Order 1 logged."
+      },
+      "reveal": { "district": "park", "min_stage": 1 }
+    },
+    {
+      "id": "diary_keeper_02",
+      "author": "char_keeper",
+      "date_en": "night zero",
+      "i18n_keys": { "title": "WORLD_DIARY_K2_TITLE", "text": "WORLD_DIARY_K2_TEXT" },
+      "en": {
+        "title": "Keeper's Diary — The Night It Went Out",
+        "text": "The outage was scheduled for one hour. At 23:00 the feeders held. At 23:40 they were drinking. I have kept lamps forty years; I know the sound a transformer makes when it is full, and the grid sounds full tonight, and every lamp in the city is dark. Something else is lit."
+      },
+      "reveal": { "district": "park", "min_stage": 2 }
+    },
+    {
+      "id": "diary_keeper_03",
+      "author": "char_keeper",
+      "date_en": "week 3",
+      "i18n_keys": { "title": "WORLD_DIARY_K3_TITLE", "text": "WORLD_DIARY_K3_TEXT" },
+      "en": {
+        "title": "Keeper's Diary — Backwards",
+        "text": "Decided. The drinker finds the grid through the lamps that can burn; a dismantled lamp is a door walled shut. Order 14,208: dismantle 219, suburbs, transformer to the center. I kept the light for forty years. Now I keep it backwards. Forgive me, streets."
+      },
+      "reveal": { "district": "park", "min_stage": 1 }
+    },
+    {
+      "id": "diary_manya_01",
+      "author": "char_babka_manya",
+      "date_en": "week 5",
+      "i18n_keys": { "title": "WORLD_DIARY_M1_TITLE", "text": "WORLD_DIARY_M1_TEXT" },
+      "en": {
+        "title": "Manya's Notebook — The Fed",
+        "text": "Three of them came to the pond again. The tall one that was the postman stands apart; he is ashamed. I put the bowl on the ice and I said their names out loud, all of them. They stood still when I said them. They remember. The light remembers too — that is why I keep my lamp."
+      },
+      "reveal": { "district": "residential", "min_stage": 2 }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "_contract": "World-bible factions. Referenced by id from district packs (world_refs) and from history/radio/diary/news entries. member ids must exist in content/world/characters.json.",
+  "factions": [
+    {
+      "id": "faction_city_power",
+      "name": "City Power Company",
+      "status": "dissolved at the blackout",
+      "alignment": "pre-war civic authority",
+      "members": ["char_marat", "char_grid_crew_recorder", "char_petrov"],
+      "districts": ["suburbs", "substation", "power_station"],
+      "reveal": { "district": "suburbs", "min_stage": 0 },
+      "summary_en": "The utility. Its maintenance notices, rolling-outage orders and feeder logs are the paper trail of Act I; its night shift became the grid crew when the official response collapsed.",
+      "i18n_keys": { "title": "WORLD_FACTION_CITYPOWER_TITLE", "text": "WORLD_FACTION_CITYPOWER_TEXT" },
+      "en": { "title": "City Power Company", "text": "Planned rolling outage, Tuesday 22:00-23:00. It never came back on." }
+    },
+    {
+      "id": "faction_grid_crew",
+      "name": "The Grid Crew",
+      "status": "missing (last trace: park pond)",
+      "alignment": "protagonist-adjacent",
+      "members": ["char_marat", "char_grid_crew_recorder", "char_petrov"],
+      "districts": ["suburbs", "residential", "park", "substation"],
+      "reveal": { "district": "suburbs", "min_stage": 0 },
+      "summary_en": "Third-shift crew that proved one streetlight can burn, mapped the impossible draw, and left the cache trail (suburbs bench, residential boiler room, park shed) the player follows. Their walk to the substation bridges Act I into Act II.",
+      "i18n_keys": { "title": "WORLD_FACTION_GRIDCREW_TITLE", "text": "WORLD_FACTION_GRIDCREW_TEXT" },
+      "en": { "title": "The Grid Crew", "text": "Grids don't drink, he said. The transformer was warm anyway." }
+    },
+    {
+      "id": "faction_street_watch",
+      "name": "Neighborhood Street Watch",
+      "status": "attrited, still keeping doors",
+      "alignment": "civilian survivors",
+      "members": ["char_old_anya", "char_superintendent", "char_babka_manya"],
+      "districts": ["suburbs", "residential"],
+      "reveal": { "district": "suburbs", "min_stage": 1 },
+      "summary_en": "Ad-hoc watch rosters, door notes, shared canned food. The human layer of the first two districts: people keeping small lights and smaller kindnesses alive against the dark.",
+      "i18n_keys": { "title": "WORLD_FACTION_WATCH_TITLE", "text": "WORLD_FACTION_WATCH_TEXT" },
+      "en": { "title": "Neighborhood Street Watch", "text": "Do not knock. We don't open doors after sunset anymore. Take the canned food from the step." }
+    },
+    {
+      "id": "faction_keepers",
+      "name": "The Keepers",
+      "status": "active, hidden",
+      "alignment": "the light side",
+      "members": ["char_keeper", "char_radio_voice"],
+      "districts": ["park", "power_station"],
+      "reveal": { "district": "park", "min_stage": 0 },
+      "summary_en": "The Keeper and whoever prints his manifestos. They keep lights backwards (dismantling) and forwards (the radio call to restore). The park is their forward post; the center their goal.",
+      "i18n_keys": { "title": "WORLD_FACTION_KEEPERS_TITLE", "text": "WORLD_FACTION_KEEPERS_TEXT" },
+      "en": { "title": "The Keepers", "text": "While one lantern burns, the city is alive." }
+    },
+    {
+      "id": "faction_project_architect",
+      "name": "Project Architect",
+      "status": "buried paperwork, living consequence",
+      "alignment": "the cause",
+      "members": ["char_architect"],
+      "districts": ["hospital", "industrial", "power_station"],
+      "reveal": { "district": "hospital", "min_stage": 2 },
+      "summary_en": "Act II reveal (GDD §12.3): the program that made the grid drink and turned people into the hunted. Denial memos surface in news clippings; the truth in hospital/industrial documents; its author waits at D11.",
+      "i18n_keys": { "title": "WORLD_FACTION_PROJECT_TITLE", "text": "WORLD_FACTION_PROJECT_TEXT" },
+      "en": { "title": "Project Architect", "text": "The lamps were never meant to remember. The project was never meant to drink." }
+    }
+  ]
+}

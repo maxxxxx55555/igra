@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "_contract": "World-bible timeline. Acts follow GDD §12.3 (I: D1-3, II: D4-8, III: D9-11). reveal = when the PLAYER learns it: {district, min_stage} via DistrictData.Stage; era = when it HAPPENED. refs point at character/faction/note ids only.",
+  "events": [
+    {
+      "id": "hist_grid_built",
+      "era": "40+ years pre-blackout",
+      "act": 0,
+      "title_en": "The Grid and the Keeper",
+      "text_en": "The city grid goes up district by district; one lamplighter signs on and stays forty years, logging every lamp by hand (14,207 orders before the blackout).",
+      "refs": ["char_keeper", "faction_keepers"],
+      "reveal": { "district": "park", "min_stage": 1 }
+    },
+    {
+      "id": "hist_project_architect",
+      "era": "12-3 years pre-blackout",
+      "act": 0,
+      "title_en": "Project Architect",
+      "text_en": "A research program taps the grid 'to store what the lamps have seen'. Officially denied, repeatedly. Its test feeders run at night; three apartment meters later spin backwards.",
+      "refs": ["faction_project_architect", "char_architect", "news_architect_denied", "news_meter_anomaly"],
+      "reveal": { "district": "hospital", "min_stage": 2 }
+    },
+    {
+      "id": "hist_trees_complaint",
+      "era": "3 weeks pre-blackout",
+      "act": 0,
+      "title_en": "The Park Complaints",
+      "text_en": "Residents report the park trees 'lean toward the lamps to listen'. The parks office closes the park and denies it. The closure notice is stamped weeks before the lights fail.",
+      "refs": ["faction_city_power", "news_trees_listen"],
+      "reveal": { "district": "park", "min_stage": 0 }
+    },
+    {
+      "id": "hist_blackout_night",
+      "era": "night zero",
+      "act": 1,
+      "title_en": "The Blackout",
+      "text_en": "Rolling outage scheduled 22:00-23:00 never ends. The feeder draw doesn't add up; the substation transformer is warm while dark. The city goes to silhouettes; the first watch rosters form.",
+      "refs": ["faction_city_power", "faction_street_watch", "char_marat", "news_rolling_outages"],
+      "reveal": { "district": "suburbs", "min_stage": 0 }
+    },
+    {
+      "id": "hist_evacuation_arena",
+      "era": "nights 1-3",
+      "act": 1,
+      "title_en": "The Arena Collection Point",
+      "text_en": "Leaflets order orderly evacuation to the central arena, one bag per person, no outdoors after dark. The issuing office and date are torn off every copy; nobody who went is mentioned again.",
+      "refs": ["news_arena_collection"],
+      "reveal": { "district": "suburbs", "min_stage": 0 }
+    },
+    {
+      "id": "hist_bench_proof",
+      "era": "week 1",
+      "act": 1,
+      "title_en": "One Streetlight on the Bench",
+      "text_en": "The grid crew proves a single streetlight can burn off scavenged parts. The proof becomes the game's loop and the crew's creed: darkness is reversible, district by district.",
+      "refs": ["faction_grid_crew", "char_grid_crew_recorder"],
+      "reveal": { "district": "suburbs", "min_stage": 2 }
+    },
+    {
+      "id": "hist_crew_walk_suburbs",
+      "era": "week 2",
+      "act": 1,
+      "title_en": "The Warm Transformer",
+      "text_en": "The crew finds the suburban draw's source: a transformer warm after two weeks dark. They log it, cache proof at the bench, and decide to walk to the substation.",
+      "refs": ["char_marat", "suburbs_note_07"],
+      "reveal": { "district": "suburbs", "min_stage": 2 }
+    },
+    {
+      "id": "hist_crew_walk_park",
+      "era": "week 2, same night",
+      "act": 1,
+      "title_en": "The Pond Edge",
+      "text_en": "Crossing the park, the crew loses Petrov to something that hunts running sound and carries him 'toward the water'. Survivors leave the cache at the keeper's shed and the warning: walk, always walk.",
+      "refs": ["char_petrov", "park_note_03", "faction_keepers"],
+      "reveal": { "district": "park", "min_stage": 2 }
+    },
+    {
+      "id": "hist_keeper_reversal",
+      "era": "weeks 2-4",
+      "act": 1,
+      "title_en": "Keeping Backwards",
+      "text_en": "The Keeper begins dismantling lit-capable lamps citywide ('every lamp I take apart is a lamp they cannot drink'), sending transformers toward the center. Work order 14,208 is the first; the manifesto follows.",
+      "refs": ["char_keeper", "faction_keepers", "park_note_06", "diary_keeper_03"],
+      "reveal": { "district": "park", "min_stage": 1 }
+    },
+    {
+      "id": "hist_radio_call",
+      "era": "week 4, looping",
+      "act": 1,
+      "title_en": "'Go to the Power Station'",
+      "text_en": "A calm voice begins looping on shortwave: restore the grid district by district, go to the power station, 'the one who kept the light will meet you at the light.' The player's Act I directive (GDD §12.3).",
+      "refs": ["char_radio_voice", "radio_01_power_station"],
+      "reveal": { "district": "park", "min_stage": 0 }
+    },
+    {
+      "id": "hist_present_day",
+      "era": "now",
+      "act": 1,
+      "title_en": "The Grid Engineer Walks",
+      "text_en": "A grid engineer with a flashlight enters the suburbs. Eleven districts dark, one bench-proven truth, and a city that remembers being lit. The player is the first person moving toward the center since the crew.",
+      "refs": ["faction_grid_crew", "faction_keepers"],
+      "reveal": { "district": "suburbs", "min_stage": 0 }
+    }
+  ]
+}
