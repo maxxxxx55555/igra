@@ -103,6 +103,21 @@ LORE_HOSPITAL_07_TITLE  LORE_HOSPITAL_07_TEXT
 LORE_HOSPITAL_08_TITLE  LORE_HOSPITAL_08_TEXT
 ```
 
+## Cross-check log (static, run 2026-09-08 at end of pass)
+
+| Check | Result |
+|---|---|
+| JSON validity (`content/**/*.json`, all packs) | pass |
+| Item / item_type ids ⊆ `data/items/*.tres` (23 used of 41) | pass |
+| `fixed_spawns.zone` ⊆ `zones[]`; note `location_hint` zones ⊆ `zones[]` | pass |
+| Every zone id, note id and fixed-spawn id also appears in `prop_manifest.md` | pass |
+| 16 `LORE_HOSPITAL_*` keys, convention + handoff parity | pass |
+| R1 puzzle solvability in DARK from fixed spawns alone (cable 2 / fuse 2 / transistor 2 + pharmacy key 1, no lockpick) | pass |
+| `world_refs` resolve; **Architect ids only in notes at `min_stage >= 2`** (their own hospital-STREETS gate); no later-act ids | pass |
+| Every prop scene, texture and audio file referenced by manifest/handoff exists on disk (the three new surfaces ship in this PR; only the optional `hospital_ward_curtain_drag.ogg` is spec-only) | pass |
+| Audio: `hospital_lit.ogg` + `hospital_dark.ogg` header-verified 1 ch / 44.1 kHz / 36.000 s; 4/4 detail beds 30.000 s | pass |
+| Scope: changed paths ⊆ `content/**`, `assets/textures/**`, `docs/**`; no `*.gd`/`*.tscn`/`*.tres`/`tools/`/`locales/`/`data/`/root `.md`; frozen docs untouched | pass |
+
 ## Remaining districts
 
 `gas_station → police → warehouses → industrial → substation → power_station`.
