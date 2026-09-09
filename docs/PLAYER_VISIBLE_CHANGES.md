@@ -5,6 +5,41 @@ in-game verification — a static-only pass can't play the game itself.
 
 ---
 
+## Batch 4 (2026-09-09) — warehouses district content merged + wired
+
+- **`warehouses` (district 8) now has readable lore**: 8 notes covering
+  a foreman's twenty-year logbook turning strange, a quarantined
+  solid-state cage nobody can explain, and the first documents to
+  reference the Act II "Project Architect" storyline directly — same
+  document-pickup/journal flow as every earlier district, in all 13
+  languages.
+- **New/fixed art**: lit floor/wall tile twins for the warehouse
+  interior, plus a small edge-seam fix on the existing dark floor tile
+  (a 3-pixel border that didn't tile cleanly — invisible in most
+  lighting, now corrected).
+- No gameplay-mechanic changes in this batch — content only.
+
+### HUMAN 5-MINUTE CHECK
+1. Reach the `warehouses` district (hospital → warehouses per its
+   `powered_by`), pick up 2-3 document/photo/audio-log pickups, open
+   the Journal — confirm titles/text show in your current language,
+   not English fallback.
+2. Read the note titled "Storage Request — No Letterhead" (found later
+   in the district) — it should reference the Project Architect
+   storyline by name, since you can only reach warehouses after
+   finishing hospital.
+3. Switch language mid-session (Settings → Language) while the Journal
+   is open on one of these new notes — text should retranslate
+   instantly.
+4. Visually confirm the warehouse's lit-window/floor textures actually
+   change look between DARK and a later stage (compare a screenshot at
+   DARK vs after restoring to STREETS/FULL); the floor should look
+   seamless when tiled, no visible border lines.
+5. Confirm "collect all documents" progress still counts correctly
+   after picking up a warehouses note (completionist total grew by 8).
+
+---
+
 ## Batch 3 (2026-09-09) — police district content merged + wired
 
 - **`police` (district 7) now has readable lore**: 8 notes covering the
