@@ -263,6 +263,34 @@ Status legend: OPEN / FIXED (commit hash) / DOCUMENTED (accepted, not fixed
     (0/16 leak to residential/hospital/school/gas_station), matching the
     pack's own closure claim exactly. Status: **VERIFIED, no fix needed.**
 
+## From Arena's `docs/CONTENT_PIPELINE_AUDIT.md` re-run (2026-09-09, PR #5)
+
+26. **`warehouses` (district 8) pack cross-checked against both open
+    data facts from #21/#22 — confirmed still resolved, nothing new.**
+    Arena's audit re-ran districts 1–8 (0 new defects, see its §1/§3.4)
+    after adding `warehouses`. Verified independently before wiring: (a)
+    topology — `district_warehouses.tres powered_by = [hospital]`, and
+    `warehouses` is *not* a leaf (`industrial.powered_by = [warehouses,
+    police]`, `data/districts/district_industrial.tres:8`), consistent
+    with #21's convergent-DAG conclusion; (b) music field —
+    `district_themes.gd`'s `warehouses` row (`district_themes.gd:35`) has
+    no `"music"` key (colour-only), so #22's fix already covers it.
+    `world_refs` reachability re-verified by hand against
+    `content/world/{history,factions,characters}.json` and
+    `content/lore/news_clippings.json`: all 12 distinct ids the pack
+    references resolve to a `reveal.district` of `suburbs`, `residential`
+    or `hospital` (0/12 leak to park/school/gas_station/police), matching
+    the pack's own closure claim exactly — including the three Act II
+    Project Architect ids (`char_architect`, `faction_project_architect`,
+    `hist_project_architect`, `news_architect_denied`), legitimately
+    guaranteed here for the first time since hospital is warehouses'
+    required prerequisite, used only at `min_stage >= 2` in the pack.
+    Also verified the Arena-side dark-floor edge-repair
+    (`tiles/warehouses_floor.png`, its own audit §3.5): the repaired dark
+    tile and both new lit twins load cleanly as valid PNGs, within the
+    ≤512²/~500KB prop-texture budget (`docs/PRODUCTION_BIBLE.md` §4).
+    Status: **VERIFIED, no fix needed.**
+
 - `power_switch.gd::interact()`/stage-advance chain, `REPAIR_COST` vs
   `district_loot.gd`'s `REPAIR_PARTS` stock — matches exactly.
 - `district_grading.gd`'s ambient-per-stage table vs GDD §4.2/§11.1.
