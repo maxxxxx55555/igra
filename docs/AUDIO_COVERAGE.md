@@ -10,7 +10,7 @@ be added to docs/ASSET_LICENSES.md and verified playable (ffprobe) before commit
 Global targets: ambience −18 LUFS integrated, true peak ≤ −1.5 dBFS; SFX/stings −14 LUFS;
 OGG q4 mono; beds = 36 s seamless loops (loop points 0.000–36.000, matched zero-crossings).
 
-## Coverage matrix (verified on disk 2026-09-08; warehouses row header-verified 2026-09-09)
+## Coverage matrix (verified on disk 2026-09-08; warehouses + industrial rows header-verified 2026-09-09)
 
 | District | Music theme (MusicManager) | Dark bed | Lit bed | Detail one-shots |
 |---|---|---|---|---|
@@ -22,7 +22,7 @@ OGG q4 mono; beds = 36 s seamless loops (loop points 0.000–36.000, matched zer
 | gas_station | downtown.wav ✔ | gas_station_dark ✔ (1ch/44.1k/36.000 s) | **MISSING** → spec G2e | 4/4 ✔ (all 30.000 s) |
 | police | downtown.wav ✔ | police_dark ✔ (1ch/44.1k/36.000 s, header-verified 2026-09-08) | **MISSING** → spec G2f | 3/3 ✔ (all 30.000 s) |
 | warehouses | harbor.wav ✔ | warehouses_dark ✔ (1ch/44.1k/36.000 s, header-verified 2026-09-09) | **MISSING** → spec G2g | 4/4 ✔ (all 30.000 s, header-verified 2026-09-09) |
-| industrial | industrial.wav ✔ | industrial_dark ✔ | **MISSING** | 4/4 ✔ |
+| industrial | industrial.wav ✔ (1ch/22.05 kHz/24.0 s — downtown/harbor legacy class) | industrial_dark ✔ **but 33.994 s, not the 36.000 s house contract** (1ch/44.1k/86 kbps/55,718 B, header-verified 2026-09-09 — see G2h) | **MISSING** → spec G2h | 4/4 ✔ (all 30.000 s, header-verified 2026-09-09) |
 | substation | music_ambient_dark.wav ✔ | substation_dark ✔ | **MISSING** | 3/3 ✔ |
 | power_station | music_ambient_dark.wav ✔ | power_station_dark ✔ | power_station_lit ✔ | 4/4 ✔ |
 
@@ -187,14 +187,58 @@ all present ✔. MusicManager falls back to the dark bed for districts without a
 - Status: **spec only — binary not fabricated** (asset pass delivered lit tiles + floor
   repair only).
 
+### G2h — `assets/audio/ambience/districts/industrial_lit.ogg` (industrial pass, full spec)
+- Type: seamless ambience loop, OGG q4 mono, 44.1 kHz; loop points 0.000–33.994,
+  matched zero-crossings; −18 LUFS integrated, true peak ≤ −1.5 dBFS. **Length = the
+  shipped dark bed, not the generic 36 s** — see the finding below.
+- Verified on disk this pass (Ogg/Vorbis identification header + final page granule; no
+  engine, no ffprobe): `industrial_dark.ogg` is **1 ch / 44,100 Hz / 33.994 s / nominal
+  86 kbps / 55,718 B**. Detail one-shots all 1 ch / 44.1 kHz / **30.000 s**:
+  `industrial_machinery_drone` (4.0 dB offset, 231,027 B), `industrial_pipe_hiss` (0.0,
+  299,508), `industrial_steam_vent` (0.0, 285,838), `industrial_vent_rattle` (4.5,
+  254,976). Only the lit twin is missing — this is a **real gap**. Loudness (−18 LUFS /
+  TP) is **not** verifiable here (no ffmpeg); `docs/AUDIO_LOUDNESS.md` remains the
+  authority.
+- **Finding (recorded, not fixed here — no binary audio is fabricated by this pipeline):**
+  `industrial_dark.ogg` is the **only** district bed off the 36.000 s house contract —
+  every other dark bed and all three shipped lit beds measure exactly 36.000 s (granule
+  1,587,600). Two readings, both recorded: (a) defect — a render off the house target;
+  (b) deliberate — the industrial theme canon in `tools/gen_audio.py` DISTRICTS is
+  minor / **85 bpm** / root MIDI 46 / **12 bars**, and 12 bars of 4 beats at 85 bpm =
+  33.88 s ≈ the shipped 33.994 s (36 s at 85 bpm is 12.75 bars — not a whole number, so
+  the generator may have followed the theme instead of the contract). Either way the
+  lit twin must match its dark bed for MusicManager's 2 s crossfade to land, so G2h
+  specs 33.994 s. If the audio toolchain holder prefers contract uniformity, re-render
+  the dark bed and the lit twin **together** at 36.000 s and update this spec + G3.
+- Mood: "lit twin" of `industrial_dark.ogg` (STYLE_GUIDE §5). The plant stops being a
+  dead cathedral of iron and becomes a lit factory with nobody in it: cold machinery
+  drone −6 dB; add a warm sodium ballast hum for the relit high-bays and yard floods
+  (60/120 Hz, −24 dBFS, slow 0.15 Hz wobble); steam vents gentler (−6 dB, low-passed
+  ~900 Hz); keep one distant press-clank per loop, slowed and warmed.
+- **Keep separate in the lit twin:** all four detail one-shots stay layered by
+  `district_atmosphere.gd` as today (`machinery_drone` +4.0, `vent_rattle` +4.5,
+  `pipe_hiss`/`steam_vent` 0.0) — the bed must not double them.
+- **Never in the loop:** the generator's 22:00 hum motif (that hum is the scripted
+  story beat of `doc_factory_log` / `industrial_note_01`), the sorting line starting or
+  counting (`industrial_note_03`/`_07` — the anomaly must not become wallpaper, same
+  rule as the warehouses sorter belt), voices, names, roll-call rhythm (`industrial_note_07`).
+- Pulse alignment: 85 bpm → bar = 2.8235 s; the 33.994 s loop = 12 bars + ~0.11 s tail;
+  place events on the 12 in-loop bar lines (0 … 31.06 s) and let the seam fall on the
+  sustained pad tail; MusicManager's 2 s crossfade ≈ 0.71 bars — cleanest across bar
+  boundaries.
+- Reference pair for structure: `suburbs_dark.ogg` → `suburbs_lit.ogg`.
+- Wiring note: add `&"industrial"` row to `AMBIENCE_LIT_BY_DISTRICT` (CODE, after delivery).
+- Status: **spec only — binary not fabricated** (asset pass delivered lit tiles only).
+
 ### G3 — remaining lit beds (same template as G1/G2b/G2c/G2e/G2f/G2g, theme params from `gen_audio.py` DISTRICTS)
 - `school_lit.ogg` — **superseded by G2c above (full spec)**.
 - `gas_station_lit.ogg` — **superseded by G2e above (full spec)**.
 - `police_lit.ogg` — **superseded by G2f above (full spec)**.
 - `warehouses_lit.ogg` — **superseded by G2g above (full spec)**.
-- `industrial_lit.ogg` — minor, 85 bpm; machinery drone −6 dB, steam vents gentler.
+- `industrial_lit.ogg` — **superseded by G2h above (full spec)**.
 - `substation_lit.ogg` — phrygian-dominant, 100 bpm; arc crackle removed, cable hum warms.
-All: 36 s seamless, −18 LUFS, TP ≤ −1.5 dBFS, OGG q4 mono.
+All: 36 s seamless, −18 LUFS, TP ≤ −1.5 dBFS, OGG q4 mono. (Exception: industrial per
+G2h — 33.994 s to match its shipped dark bed, or re-render the pair at 36 s.)
 
 ### Optional (flavor, not canon-required)
 - G4 — 4th residential detail bed `residential_courtyard_echo.ogg` (swing-chain creak /

@@ -197,5 +197,6 @@ breakage as gameplay, not a bug to guard against.
      rule as the warehouses sorter).
 3. Audio `districts/industrial_lit.ogg` — **real gap**, full spec in
    `docs/AUDIO_COVERAGE.md` G2h (not fabricated here). Dark bed and all 4 detail one-shots
-   exist and were header-verified this pass (bed 1 ch/44.1 kHz/36.000 s; one-shots
+   exist and were header-verified this pass (bed 1 ch/44.1 kHz/33.994 s — the only
+   district bed off the 36.000 s house contract, both readings recorded in G2h; one-shots
    1 ch/44.1 kHz/30.000 s).

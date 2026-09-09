@@ -94,9 +94,11 @@ convergence does not need them).
   → the pad in `z_generator_hall` (GG cell).
 - Ambience details exist, header-verified this pass: `industrial_machinery_drone` (4.0 dB),
   `industrial_pipe_hiss` (0.0), `industrial_steam_vent` (0.0), `industrial_vent_rattle`
-  (4.5) — all 1 ch/44.1 kHz/30.000 s; bed `industrial_dark.ogg` 1 ch/44.1 kHz/36.000 s /
-  55,718 B. Lit bed is a **real gap** — full spec in AUDIO_COVERAGE G2h (spec only, not
-  fabricated).
+  (4.5) — all 1 ch/44.1 kHz/30.000 s; bed `industrial_dark.ogg` 1 ch/44.1 kHz/**33.994 s**
+  (the only district bed off the 36.000 s house contract — real finding, recorded in
+  AUDIO_COVERAGE G2h with both readings; the 12-bar theme canon at 85 bpm = 33.88 s ≈
+  shipped length). Lit bed is a **real gap** — full spec in AUDIO_COVERAGE G2h (spec only,
+  not fabricated).
 - Music: `music_manager.gd` maps industrial → `industrial.wav` (exists). `district_themes.gd`
   industrial row is colour-only (no `"music"` key — same class as police/warehouses; no
   mismatch to flag). Theme accent `#e85d3a` is hotter than the ember token (STYLE_GUIDE §2);
