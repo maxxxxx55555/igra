@@ -176,6 +176,50 @@ for the district after that.
 
 ---
 
+**2026-09-09 (merge arena PR #5, autonomous, NO-GODOT static mode):**
+Merged `arena/01a0859c-igra` (warehouses district pack + Arena's
+`docs/CONTENT_PIPELINE_AUDIT.md` re-run across districts 1–8, 0 new
+defects; plus a surgical repair of a 3px edge-frame defect on the
+shipped dark `warehouses_floor.png`, re-deriving the lit twin from the
+repaired dark). Scope-checked, both JSON files valid, all 20 item ids
+and all 12 distinct `world_refs` ids cross-checked by hand against
+`data/items/*.tres` and `content/world/*`/`content/lore/*` before
+merging. `--no-ff`, 0 conflicts, pushed, branch deleted, static gates
+green.
+
+Wired identically to prior districts: `district_loot.gd`'s `LORE_DOCS`
+gained `warehouses` (its `BY_DISTRICT`/`BLUEPRINTS`/`DOCUMENTS` rows
+already existed in code ahead of content); 8 `documents_catalog.json`
+entries appended (97 total, 2 correctly carry no `world_refs` key since
+their source notes had an empty array); 16 `LORE_WAREHOUSES_*` keys
+translated ×13 locales (999 keys/locale, `i18n_audit.py`: `MISSING: 0`).
+
+Re-verified both open CODE-facing facts from PR #3/#4 (`STATIC_AUDIT.md`
+#21/#22) against the new pack: warehouses confirmed not a leaf
+(`industrial.powered_by = [warehouses, police]`), its `district_themes.gd`
+row has no `"music"` key — logged as `STATIC_AUDIT.md` #26, VERIFIED,
+no code change needed. Also load-tested the Arena-side texture repair
+(dark floor + both new lit twins) as valid PNGs within the prop-texture
+budget (`docs/PRODUCTION_BIBLE.md` §4) — clean.
+
+Notable first: warehouses' closure (hospital→residential→suburbs)
+legitimately unlocks the Act II Project Architect world-bible set for
+the first time (every district since hospital was on a branch that
+didn't require it); verified all three Architect ids plus the fourth
+(`char_architect`) are used at `min_stage >= 2` in the pack, matching
+their own `hospital/STREETS` reveal gate exactly — no premature-unlock
+leak of the kind #24 (park/`char_babka_manya`) originally found.
+
+`ARENA_NEXT_PROMPT.md` rewritten to queue district 9 (`industrial` per
+GDD §4.1) — the first **two-parent convergence**
+(`powered_by = [warehouses, police]`), so its guaranteed closure is
+the *union* of both branches (suburbs, residential, park, hospital,
+warehouses, police — six districts), not a single chain. Flagged this
+explicitly in the prompt since it's the first closure computation of
+this shape and the easiest one to get wrong.
+
+---
+
 ## А. Что уже работает (проверено, не предположение)
 
 Ядро игры полностью играбельно — подтверждено `boot_check_scene.tscn`

@@ -1,6 +1,39 @@
 # Handoff
 
-## Latest phase: PR #4 merged — police district (2026-09-09, "merge arena", NO-GODOT static mode)
+## Latest phase: PR #5 merged — warehouses district (2026-09-09, "merge arena", NO-GODOT static mode)
+
+`arena/01a0859c-igra` — `warehouses` district (D8) pack plus Arena's own
+re-run of `docs/CONTENT_PIPELINE_AUDIT.md` across all 8 shipped districts
+(0 new defects), plus a surgical 3px edge-frame repair on the shipped
+dark `warehouses_floor.png` (lit twin re-derived from the repaired
+dark). Scope-checked, both JSON files validated, all 20 item ids and
+all 12 distinct `world_refs` ids hand-verified before merging. `--no-ff`,
+0 conflicts, static gates green; both new/repaired textures load-tested
+as valid PNGs within the prop-texture budget.
+
+Wired like the previous 7 districts: `district_loot.gd`'s `LORE_DOCS`
+gained `warehouses` (its `BY_DISTRICT`/`BLUEPRINTS`/`DOCUMENTS` rows
+already existed in code ahead of content); 8 `documents_catalog.json`
+entries appended (97 total); 16 `LORE_WAREHOUSES_*` keys × 13 locales
+translated (`i18n_audit.py`: `MISSING: 0`, 999 keys/locale).
+
+Both CODE-facing data facts from PR #3/#4 (`STATIC_AUDIT.md` #21/#22)
+re-verified against the new pack: warehouses confirmed not a leaf
+(industrial still lists it as co-parent), its `district_themes.gd` row
+has no `"music"` key — logged as `STATIC_AUDIT.md` #26, VERIFIED, no
+code change needed. Notable first: warehouses' closure legitimately
+unlocks the Act II Project Architect set for the first time (every
+earlier district since hospital was on a branch that didn't require
+it) — verified all 4 Architect ids are paced at `min_stage >= 2`,
+matching their own reveal gate, no premature-unlock leak.
+
+Full reasoning: `PLAN.md` decisions log. Next Arena district queued:
+`industrial` (`ARENA_NEXT_PROMPT.md`) — the first **two-parent
+convergence** (`powered_by = [warehouses, police]`), closure = union of
+both branches (suburbs, residential, park, hospital, warehouses,
+police).
+
+## Previous phase: PR #4 merged — police district (2026-09-09, "merge arena", NO-GODOT static mode)
 
 `arena/01a08281-igra` — `police` district (D7) pack plus Arena's own
 re-run of `docs/CONTENT_PIPELINE_AUDIT.md` across all 7 shipped districts

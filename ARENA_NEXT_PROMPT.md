@@ -22,74 +22,75 @@ Never touch: `*.gd`, `*.tscn`, `*.tres`, `tools/`, `locales/`,
 (other than reading for reference/id validation), other `assets/**`
 subfolders.
 
-## Task: district `warehouses` (deep content pass, same template as the 7 done districts)
+## Task: district `industrial` (deep content pass, same template as the 8 done districts)
 
-Seven districts are done and merged (`suburbs`, `residential`, `park`,
-`school`, `hospital`, `gas_station`, `police`). Read
-`content/districts/police/` (most recent) and `content/README.md` for
-the exact schema — it includes the reachability rule and the
-zone-id-is-district-scoped contract. **Read `docs/CONTENT_PIPELINE_AUDIT.md`
-too** before starting — its re-run after each district (most recently
-1–7, 0 new defects) has repeatedly caught real mistakes early (a
-residential-gated `world_refs` leak in park, a missing transistor in
-suburbs' DARK spawn table); the same classes of mistake could repeat
-here if skipped.
+Eight districts are done and merged (`suburbs`, `residential`, `park`,
+`school`, `hospital`, `gas_station`, `police`, `warehouses`). Read
+`content/districts/warehouses/` (most recent) and `content/README.md`
+for the exact schema. **Read `docs/CONTENT_PIPELINE_AUDIT.md` too**
+before starting — its re-run after each district (most recently 1–8,
+0 new defects) has repeatedly caught real mistakes early; the same
+classes of mistake could repeat here if skipped.
 
-Deliverables (all under `content/districts/warehouses/`):
+**This district is different from every one so far: it is the first
+two-parent convergence.** `data/districts/district_industrial.tres`
+has `powered_by = [&"warehouses", &"police"]` — GDD §4.3 requires
+*both* prerequisites at FULL, not just one, so compute the closure as
+the union of both branches, not a single chain:
+- `warehouses` branch: `warehouses → hospital → residential → suburbs`
+- `police` branch: `police → park → suburbs`
+- **Union (guaranteed history at arrival): `suburbs`, `residential`,
+  `park`, `hospital`, `warehouses`, `police` — six districts, all
+  stages.** Every world id gated on any of those six is safe here
+  regardless of its own `min_stage`, including the Act II Project
+  Architect set (hospital-gated, already guaranteed via the warehouses
+  branch) and Keeper/radio-voice material (park-gated, guaranteed via
+  the police branch) — this is the first district where *both* of
+  those threads can be referenced together.
+- **NOT guaranteed:** `school`, `gas_station` — neither is an ancestor
+  of either branch. No ids gated on those two.
+
+Deliverables (all under `content/districts/industrial/`):
 1. `lore_notes.json` — 8 authored notes (mix of `document`/`photo`/
-   `audio_log`), stage-gated (`min_stage` 0-3), ids `warehouses_note_01`
-   through `_08`, i18n keys `LORE_WAREHOUSES_<NN>_TITLE`/`_TEXT`.
+   `audio_log`), stage-gated (`min_stage` 0-3), ids `industrial_note_01`
+   through `_08`, i18n keys `LORE_INDUSTRIAL_<NN>_TITLE`/`_TEXT`.
    `world_refs` (see `docs/CONTENT_WORLD_BIBLE.md`) MUST be restricted
-   to ids revealed by `warehouses`'s own transitive `powered_by`
-   closure — compute it yourself from `data/districts/district_warehouses.tres`
-   (`powered_by = [hospital]`; hospital's own `powered_by = [residential]`;
-   residential's own `powered_by = [suburbs]`), so the guaranteed
-   history at arrival is **hospital + residential + suburbs only** — no
-   park-, school-, gas_station-, or police-gated ids (those are
-   separate branches, not required for hospital to reach FULL). This
-   means the Act II "Project Architect" reveal (hospital STREETS,
-   gated on `hospital` itself, not on warehouses) IS legal here — the
-   player has necessarily seen hospital at FULL to arrive, so anything
-   gated at hospital/STREETS or earlier is guaranteed. Park/gas_station/
-   police material (Keeper, radio-voice, Channel 3) is NOT guaranteed
-   and must not be referenced.
+   to ids revealed by the six-district union above — double-check every
+   id against both branches before use, since this is the easiest
+   closure computation to get wrong so far (a single-parent mistake
+   here means checking the wrong branch, not just the wrong depth).
 2. `item_spawns.json` — 4 stage loot tables, fixed puzzle-critical
    spawns guaranteeing the DARK→FULL chain (cable→PARTIAL, fuse→STREETS,
    transistor→FULL per `power_switch.gd`) — verify your own pack passes
-   this, the way the audit's §3.1 fix did for suburbs. Container
-   modifiers, rules (prose). Check `district_loot.gd`'s `BY_DISTRICT`/
-   `BLUEPRINTS`/`STORY_DOC` dictionaries for warehouses' already-decided
-   themed loot/blueprint/story-doc canon (these are code-owned and
-   pre-exist your pass, same as they did for police) and build the pack
-   consistent with them — do not invent new item ids.
-3. `prop_manifest.md` — zone plan (warehouses = loading dock/storage
-   racks/office/loading yard per GDD canon), stage-state table, art/
-   audio gaps listed explicitly. Zone ids are district-scoped (reuse
-   across districts is fine and already happens elsewhere — see
-   `content/README.md`), but must stay unique within this pack.
+   this. Container modifiers, rules (prose). Check `district_loot.gd`'s
+   `BY_DISTRICT`/`BLUEPRINTS`/`STORY_DOC` dictionaries for industrial's
+   already-decided themed loot/blueprint/story-doc canon (code-owned,
+   pre-exist your pass) and build the pack consistent with them — do
+   not invent new item ids.
+3. `prop_manifest.md` — zone plan (industrial = factory floor/assembly
+   line/loading dock/foreman catwalk per GDD canon), stage-state table,
+   art/audio gaps listed explicitly. Zone ids are district-scoped (reuse
+   across districts is fine — see `content/README.md`), but must stay
+   unique within this pack.
 
 Canon to follow: GDD.md §4 (district chain), §12.3 (Act mapping —
-warehouses is D8, Act II territory; confirm against §12.3's Act
-boundaries before deciding what's legal to reference beyond the
-`powered_by` closure above). Every item id must already exist in
-`data/items/*.tres` — never invent new item ids. Every prop/audio
-reference must point at an asset that already exists — content never
-blocks on art (YAGNI).
+industrial is D9; confirm its Act boundary before deciding what's legal
+beyond the six-district closure above). Every item id must already
+exist in `data/items/*.tres` — never invent new item ids. Every prop/
+audio reference must point at an asset that already exists — content
+never blocks on art (YAGNI).
 
 ## Handoff doc
-Write `docs/CONTENT_DISTRICT_WAREHOUSES.md` (same shape as
-`docs/CONTENT_DISTRICT_POLICE.md`) — wiring checklist for the code
-agent, i18n key list (16 keys, `LORE_WAREHOUSES_<NN>_TITLE`/`_TEXT`) for
+Write `docs/CONTENT_DISTRICT_INDUSTRIAL.md` (same shape as
+`docs/CONTENT_DISTRICT_WAREHOUSES.md`) — wiring checklist for the code
+agent, i18n key list (16 keys, `LORE_INDUSTRIAL_<NN>_TITLE`/`_TEXT`) for
 the locale agent (currently the local/Claude session, not a separate
 Qwen agent — just list the keys, don't assume who translates them).
-State your computed `powered_by` closure explicitly in this doc, the
-way the police/gas_station/school handoffs did — it's what the code
-agent double-checks first.
+State your computed **two-branch union** closure explicitly in this
+doc — it's what the code agent double-checks first, and it's the part
+most likely to need a second look given the new convergence shape.
 
 ## After this district
 This file lives at the repo root, outside your ownership — don't edit
-it. The local/code agent updates it to the next district
-(`industrial` — note `industrial.powered_by = [warehouses, police]`,
-a two-parent convergence, so its guaranteed closure is the union of
-both branches' histories — then `substation → power_station`) once
-your PR is merged.
+it. The local/code agent updates it to the next district (`substation`,
+then `power_station` — the final district) once your PR is merged.
