@@ -1,6 +1,35 @@
 # Handoff
 
-## Latest phase: NO-GODOT static-audit pass (2026-09-08, full autonomy)
+## Latest phase: PR #4 merged — police district (2026-09-09, "merge arena", NO-GODOT static mode)
+
+`arena/01a08281-igra` — `police` district (D7) pack plus Arena's own
+re-run of `docs/CONTENT_PIPELINE_AUDIT.md` across all 7 shipped districts
+(0 new defects). Scope-checked, both JSON files validated, all 20 item
+ids and all 16 distinct `world_refs` ids hand-verified against
+`data/items/*.tres` / `content/world/*` before merging (not just trusted
+from the audit doc) — all clean. `--no-ff`, 0 conflicts, static gates
+green.
+
+Wired like the previous 6 districts: `district_loot.gd`'s `LORE_DOCS`
+gained `police` (its `BY_DISTRICT`/`BLUEPRINTS`/`STORY_DOC` rows already
+existed in code ahead of content); 8 `documents_catalog.json` entries
+appended (89 total); 16 `LORE_POLICE_*` keys × 13 locales translated
+(`i18n_audit.py`: `MISSING: 0`, 983 keys/locale).
+
+Both CODE-facing data facts from PR #3 (`STATIC_AUDIT.md` #21/#22)
+independently re-verified against the new pack rather than assumed:
+police is confirmed not a leaf of `powered_by` (industrial still lists
+it as co-parent), and its `district_themes.gd` row has no `"music"` key
+— logged as `STATIC_AUDIT.md` #25, VERIFIED, no code change needed.
+
+Caught mid-commit: `git add -A` would have swept an untracked
+`.claude/worktrees/` scaffolding directory into `main` — unstaged,
+`.gitignore`'d, re-committed clean. Full reasoning: `PLAN.md` decisions
+log. Next Arena district queued: `warehouses` (`ARENA_NEXT_PROMPT.md`),
+closure = hospital + residential + suburbs (Act II Architect material
+becomes legal for the first time there).
+
+## Previous phase: NO-GODOT static-audit pass (2026-09-08, full autonomy)
 
 Owner mandated a defect hunt verified entirely by code tracing — no
 Godot binary run at all. Full register: `docs/STATIC_AUDIT.md`. Player-

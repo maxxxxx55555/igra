@@ -131,6 +131,51 @@ file before staging, reverted with `git checkout --`, documented in
 
 ---
 
+**2026-09-09 (merge arena PR #4, autonomous, NO-GODOT static mode):**
+Merged `arena/01a08281-igra` (police district pack + Arena's
+`docs/CONTENT_PIPELINE_AUDIT.md` re-run across districts 1–7, 0 new
+defects) — scope-checked (content/districts/police, assets/textures,
+docs/** only, all within Arena's zones), both JSON files valid, all 20
+item ids and all 16 distinct `world_refs` ids cross-checked against
+`data/items/*.tres` and `content/world/*`/`content/lore/*` by hand
+before merging (not just trusted from the audit doc). `--no-ff`, 0
+conflicts, pushed, branch deleted, static gates green.
+
+Wired identically to prior districts: `district_loot.gd`'s `LORE_DOCS`
+gained the `police` entry (`BY_DISTRICT`/`BLUEPRINTS`/`STORY_DOC` already
+had `police` rows pre-existing in code, ahead of content — only the
+lore-note id list was new); 8 `documents_catalog.json` entries generated
+the same way as prior batches (89 entries total, 0 duplicates). 16
+`LORE_POLICE_*` keys translated ×13 locales (983 keys/locale,
+`i18n_audit.py` confirms `MISSING: 0`).
+
+Re-verified (not just trusted) both open CODE-facing facts from PR #3
+still hold for the new pack: police is not a leaf of `powered_by`
+(`industrial` still lists it as a co-parent — #21 stays correct as
+written), and `district_themes.gd`'s `police` row has no `"music"` key
+(colour-only, per the #22 fix already applied) — logged as
+`STATIC_AUDIT.md` #25, status VERIFIED, no code change needed either
+time.
+
+Caught and fixed before commit: `git add -A` swept in an untracked
+`.claude/worktrees/` directory (unrelated local worktree scaffolding,
+flagged at session start as `?? .claude/worktrees/` in git status, not
+authored by this session) that would otherwise have been committed to
+`main`. Unstaged, added `.claude/worktrees/` to `.gitignore`, re-staged
+only the intended files. Lesson: `git add -A` is unsafe when untracked
+non-project directories exist; prefer explicit paths after checking
+`git status` for surprises, especially right after a fresh session
+resume.
+
+`ARENA_NEXT_PROMPT.md` rewritten to queue district 8 (`warehouses` per
+GDD §4.1) with its computed `powered_by` closure spelled out
+(`hospital → residential → suburbs`, so Act II Architect material
+*is* legal there for the first time, unlike every district since
+hospital) and a heads-up about `industrial`'s two-parent convergence
+for the district after that.
+
+---
+
 ## А. Что уже работает (проверено, не предположение)
 
 Ядро игры полностью играбельно — подтверждено `boot_check_scene.tscn`
