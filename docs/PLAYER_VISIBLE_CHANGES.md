@@ -5,6 +5,41 @@ in-game verification — a static-only pass can't play the game itself.
 
 ---
 
+## Batch 6 (2026-09-09) — substation + power_station content merged + wired — ALL 11 DISTRICTS NOW HAVE LORE
+
+- **`substation` (district 10) and `power_station` (district 11, the
+  final district) now have readable lore**: 16 notes total covering the
+  grid crew's last radio calls, a memorandum in the Architect's own
+  handwriting, and the story's closing thread — the Keeper's answer to
+  the player — all reachable in your current language across all 13
+  supported languages.
+- **This completes the lore pass for the entire game.** Every one of
+  the 11 districts now has a full 8-note lore set (88 notes total),
+  fully translated, fully cross-referenced.
+- No gameplay-mechanic changes in this batch — content only.
+
+### HUMAN 5-MINUTE CHECK
+1. Reach `substation` (needs `industrial` at full restoration) and then
+   `power_station` (needs `substation` at full restoration) — pick up
+   2-3 notes in each, open the Journal, confirm titles/text show in
+   your current language, not English fallback.
+2. In `power_station`, find the note titled "Signal Loft — The Keeper
+   Answers" — this is the first time in the game the mysterious radio
+   voice actually responds instead of just repeating its loop.
+3. Switch language mid-session (Settings → Language) while the Journal
+   is open on one of these new notes — text should retranslate
+   instantly.
+4. Confirm "collect all documents" progress still counts correctly
+   after picking up notes in both districts (completionist total grew
+   by 16, to the game's final total).
+5. General playthrough sanity check: with all 11 districts now content-
+   complete, do a quick pass confirming district-to-district transitions
+   (park→gas_station→police→warehouses→industrial→substation→
+   power_station) still feel continuous — no missing prop zones or
+   obviously empty rooms in the newer districts.
+
+---
+
 ## Batch 5 (2026-09-09) — industrial district content merged + wired
 
 - **`industrial` (district 9) now has readable lore**: 8 notes covering
