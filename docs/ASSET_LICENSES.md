@@ -106,6 +106,35 @@ All pre-existing binaries (`tiles/residential_*.png`, `crests/crest_residential_
 were generated in-house by earlier sessions (procedural generators / `tools/gen_audio.py`);
 project-owned, no attribution required. No web-sourced assets are used in this district.
 
+## Added 2026-09-09 — warehouses district asset pass
+
+Dark tiles `tiles/warehouses_floor.png` / `warehouses_wall.png` already ship; this pass
+adds the missing `_lit` twins and repairs an edge-frame defect found on the dark floor.
+No binary audio fabricated.
+
+| Path | Origin | License | Attribution | Notes |
+|---|---|---|---|---|
+| `assets/textures/tiles/warehouses_floor.png` | Pre-existing in-house AI output (shipped dark tile); **edge-repaired in-session** | Project-owned; no third-party rights | none required | 256² RGB. Defect found by the §2 seam probe: an asymmetric 3 px dark frame on the top/left edges (mean Y 33 vs interior 45) gave a wrap seam of 18.8 — 4–5× the 3.8–4.4 house range (same probe on 7 shipped dark floors). Repair: the 3 frame rows/cols mirror-filled from interior rows/cols 5–3 across the boundary — 1,467 px of 65,536 (2.2%) changed, mean abs diff 0.32/255; wrap seam now **3.85** (in house range); palette unchanged 21..69; no other texel touched. |
+| `assets/textures/tiles/warehouses_floor_lit.png` | Derived in-session from the (repaired) in-house dark tile — luminance ×1.42 + brass `#c9a24a` blend per STYLE_GUIDE §4/§4.1; AI-lit candidates not needed (geometry lock is the acceptance path, cf. police pass) | Project-owned; no third-party rights | none required | 256² RGB, 69,324 B. Concrete slab of the west/east shed floors. Measured: lift ×1.406 (target 1.35–1.50), geometry correlation 0.982 (≥0.85), warmth R−B +21.5 (dark twin −3.9; band +15…+40), palette 30..84 (no pure #000/#fff), wrap-blend 8 px seam 2.5 vs dark 3.8 (ratio 0.66 — wrap crossfade improves the seam; no seam regression). |
+| `assets/textures/tiles/warehouses_wall_lit.png` | Derived in-session from in-house `tiles/warehouses_wall.png` (same method as the floor twin) | Project-owned; no third-party rights | none required | 256² RGB, 69,600 B. Corrugated steel wall, 32 px rib period preserved (measured horizontal period 32; ribs straight). Measured: lift ×1.417, geometry correlation 0.993, warmth R−B +21.3 (dark twin −15.9), palette 57..120, seam 2.6 vs dark 3.7 (ratio 0.70). |
+
+§4.1 numeric acceptance applied to both lit twins (lift, geometry correlation, warmth
+band, palette clamp, seam delta) — all inside the thresholds in docs/STYLE_GUIDE.md;
+seam ratios below 1.0 because the 8 px wrap blend lands the lit twins *better* than
+their dark sources (same observation class as the gas_station/police pairs, opposite
+sign). Dark-twin repair is ledgered above because the lit twin is derived from the
+repaired dark, keeping the pair geometry-locked (corr 0.982/0.993).
+
+## Pre-existing warehouses binaries (provenance summary, unchanged except floor repair above)
+
+All pre-existing binaries (`tiles/warehouses_floor.png`, `tiles/warehouses_wall.png`,
+`crests/crest_warehouses_96.png`, `loading/warehouses_loading.png`,
+`maps/warehouses_map_512.png`, `audio/ambience/districts/warehouses_dark.ogg`,
+`audio/ambience/district_details/warehouses_{cargo_impact,chain_rattle,forklift_distant,metal_creak}.ogg`,
+`audio/music/harbor.wav`) were produced in-house by earlier sessions (procedural
+generators / `tools/gen_audio.py`); project-owned, no attribution required.
+No web-sourced assets are used in this district.
+
 ## Audit checklist (run each asset pass)
 
 1. `git diff --stat` binaries vs. this ledger — every row present.
