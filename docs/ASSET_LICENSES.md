@@ -270,6 +270,20 @@ is recorded in `docs/AUDIO_COVERAGE.md` as a **finding, not a gap** — both fil
 toolchain holder's call, and a generic CC0 "generator hum" is not a substitute for the district
 detail. No binary audio has been fabricated at any point by this pipeline.
 
+## Added 2026-09-09 — Play Store kit art (Task 3, store/**)
+
+Store key art generated in-session (Arena image generation), text-to-image, palette-locked per
+docs/STYLE_GUIDE.md §2/§6. Post-processed deterministically (ImageMagick): pure-black/white
+clamped to `#0a0d12` / `#f0ead9`, exact store dimensions enforced, title composited in bone
+`#f2ecd9` + brass `#c9a24a` (DejaVu-Sans-Bold) over a dark gradient band — no baked-text glyph
+risk. Store art is a distinct class from in-game textures (asset_pipeline: "skip grain on store
+art"); no pure `#000`/`#fff` texels remain (verified 0).
+
+| Path | Origin | License | Attribution | Notes |
+|---|---|---|---|---|
+| `store/feature-graphic.png` | AI-generated in-session (Arena image generation), palette-locked | Project-owned AI output; no third-party rights | none required | 1024×500 sRGB. Permanent-night city, one brass streetlamp cone; title overlay. Palette-clamped, 684,630 B. |
+| `store/icon-512.png` | AI-generated in-session (Arena image generation), palette-locked | Project-owned AI output; no third-party rights | none required | 512×512 sRGB. Streetlamp-head crest emblem on night sky. Palette-clamped, 300,965 B. |
+
 ## Audit checklist (run each asset pass)
 
 1. `git diff --stat` binaries vs. this ledger — every row present.
