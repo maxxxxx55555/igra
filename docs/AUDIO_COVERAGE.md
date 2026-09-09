@@ -10,7 +10,7 @@ be added to docs/ASSET_LICENSES.md and verified playable (ffprobe) before commit
 Global targets: ambience −18 LUFS integrated, true peak ≤ −1.5 dBFS; SFX/stings −14 LUFS;
 OGG q4 mono; beds = 36 s seamless loops (loop points 0.000–36.000, matched zero-crossings).
 
-## Coverage matrix (verified on disk 2026-09-08)
+## Coverage matrix (verified on disk 2026-09-08; warehouses row header-verified 2026-09-09)
 
 | District | Music theme (MusicManager) | Dark bed | Lit bed | Detail one-shots |
 |---|---|---|---|---|
@@ -21,7 +21,7 @@ OGG q4 mono; beds = 36 s seamless loops (loop points 0.000–36.000, matched zer
 | hospital | abandoned_hallways_alt.mp3 ✔ | hospital_dark ✔ (1ch/44.1k/36.000 s) | hospital_lit ✔ (1ch/44.1k/36.000 s, header-verified 2026-09-08) | 4/4 ✔ (all 30.000 s) |
 | gas_station | downtown.wav ✔ | gas_station_dark ✔ (1ch/44.1k/36.000 s) | **MISSING** → spec G2e | 4/4 ✔ (all 30.000 s) |
 | police | downtown.wav ✔ | police_dark ✔ (1ch/44.1k/36.000 s, header-verified 2026-09-08) | **MISSING** → spec G2f | 3/3 ✔ (all 30.000 s) |
-| warehouses | harbor.wav ✔ | warehouses_dark ✔ | **MISSING** | 4/4 ✔ |
+| warehouses | harbor.wav ✔ | warehouses_dark ✔ (1ch/44.1k/36.000 s, header-verified 2026-09-09) | **MISSING** → spec G2g | 4/4 ✔ (all 30.000 s, header-verified 2026-09-09) |
 | industrial | industrial.wav ✔ | industrial_dark ✔ | **MISSING** | 4/4 ✔ |
 | substation | music_ambient_dark.wav ✔ | substation_dark ✔ | **MISSING** | 3/3 ✔ |
 | power_station | music_ambient_dark.wav ✔ | power_station_dark ✔ | power_station_lit ✔ | 4/4 ✔ |
@@ -153,11 +153,45 @@ all present ✔. MusicManager falls back to the dark bed for districts without a
 - Wiring note: add `&"police"` row to `AMBIENCE_LIT_BY_DISTRICT` (CODE, after delivery).
 - Status: **spec only — binary not fabricated** (asset pass delivered textures only).
 
-### G3 — remaining lit beds (same template as G1/G2b/G2c/G2e/G2f, theme params from `gen_audio.py` DISTRICTS)
+### G2g — `assets/audio/ambience/districts/warehouses_lit.ogg` (warehouses pass, full spec)
+- Type: 36 s seamless ambience loop, OGG q4 mono, 44.1 kHz; loop points 0.000–36.000,
+  matched zero-crossings; −18 LUFS integrated, true peak ≤ −1.5 dBFS.
+- Verified on disk this pass (Ogg/Vorbis identification header + final page granule; no
+  engine, no ffprobe): `warehouses_dark.ogg` is **1 ch / 44,100 Hz / 36.000 s / 197,976 B**.
+  Detail one-shots all 1 ch / 44.1 kHz / **30.000 s**: `warehouses_cargo_impact` (0.0 dB
+  offset, 235,569 B), `warehouses_chain_rattle` (2.1, 234,952 B),
+  `warehouses_forklift_distant` (0.0, 286,113 B), `warehouses_metal_creak` (0.0,
+  231,912 B). Only the lit twin is missing — this is a **real gap**. Loudness (−18 LUFS /
+  TP) of the shipped files is **not** verifiable here (no ffmpeg);
+  `docs/AUDIO_LOUDNESS.md` remains the authority.
+- Mood: "lit twin" of `warehouses_dark.ogg` (STYLE_GUIDE §5). The yard stops being a dead
+  depot in fog and becomes a working freight yard with nobody in it: cold fog-drone −6 dB;
+  add a warm sodium ballast hum for the yard flood pair (60/120 Hz, −24 dBFS, slow 0.15 Hz
+  wobble — the floods of `warehouses_note_02`); keep a thin open-air fog bed and one very
+  distant dock-chain clank per loop, slowed and warmed.
+- **Remove in the lit twin:** the forklift motif (fades — a running forklift would mean
+  people, and there are none) and the cold creak's edge (softened, kept as structure).
+  `warehouses_forklift_distant.ogg` stays layered by `district_atmosphere.gd` at 0.0 dB
+  for one-shot flavour only; `warehouses_metal_creak.ogg` (0.0) and
+  `warehouses_chain_rattle.ogg` (2.1) stay separate as before.
+- Pulse alignment: 75 bpm bars (warehouses theme canon: dorian in `tools/gen_audio.py`
+  DISTRICTS) → 36 s = 45 bars of 0.8 s; place the loop seam on a bar line so the 2 s
+  MusicManager crossfade lands clean.
+- Never in the loop: the sorter belt starting or counting, rhythmic chain counts, voices,
+  the quarantine-cage hum that means something is live. The belt is a scripted story beat
+  (`warehouses_note_03`/`_04`/`_08`) and the cage must stay silent at every stage — the
+  warehouses pack's own R-rule (prop_manifest R8: cold storage and cage never relight,
+  never speak). Putting either in the bed would wallpaper the anomaly.
+- Reference pair for structure: `suburbs_dark.ogg` → `suburbs_lit.ogg`.
+- Wiring note: add `&"warehouses"` row to `AMBIENCE_LIT_BY_DISTRICT` (CODE, after delivery).
+- Status: **spec only — binary not fabricated** (asset pass delivered lit tiles + floor
+  repair only).
+
+### G3 — remaining lit beds (same template as G1/G2b/G2c/G2e/G2f/G2g, theme params from `gen_audio.py` DISTRICTS)
 - `school_lit.ogg` — **superseded by G2c above (full spec)**.
 - `gas_station_lit.ogg` — **superseded by G2e above (full spec)**.
 - `police_lit.ogg` — **superseded by G2f above (full spec)**.
-- `warehouses_lit.ogg` — dorian, 75 bpm; metal creak slowed, forklift fades.
+- `warehouses_lit.ogg` — **superseded by G2g above (full spec)**.
 - `industrial_lit.ogg` — minor, 85 bpm; machinery drone −6 dB, steam vents gentler.
 - `substation_lit.ogg` — phrygian-dominant, 100 bpm; arc crackle removed, cable hum warms.
 All: 36 s seamless, −18 LUFS, TP ≤ −1.5 dBFS, OGG q4 mono.
