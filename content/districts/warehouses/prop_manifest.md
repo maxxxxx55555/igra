@@ -45,7 +45,7 @@ east shed — the district's one uncanny through-line (notes 04/06/07/08).
   barrier arm, road sign "Склады →" facing the hospital road, chain-link, one lamp on the
   booth, `cargo_crate` ×1, dock canopy edge.
 - Pickups: fixed `warehouses_fix_exit_01` (3× battery). No rolled loot (safe-start rule).
-- Stage behavior: DARK = booth lamp dead; PARTIAL+ booth lamp takes a low warm `#c9a24a`
+- Stage behavior: DARK = booth lamp dead; STREETS+ booth lamp takes a low warm `#c9a24a`
   energy; the barrier stays down until the district opens (trigger).
 - Ambience: `warehouses_chain_rattle.ogg` (2.1 dB) loudest here — chains the yard owns.
 
