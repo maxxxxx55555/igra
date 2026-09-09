@@ -5,6 +5,39 @@ in-game verification — a static-only pass can't play the game itself.
 
 ---
 
+## Batch 3 (2026-09-09) — police district content merged + wired
+
+- **`police` (district 7) now has readable lore**: 8 notes covering the
+  station's own evacuation records, a vanished night shift, and the
+  first sighting of "the Keeper's" streetlight-in-a-circle signature —
+  same document-pickup/journal flow as every earlier district, in all
+  13 languages.
+- **New art**: lit floor/wall tile twins for the station interior, plus
+  a cell-bars surface texture for the holding-cell wing.
+- No gameplay-mechanic changes in this batch — content only. (Two data
+  questions from the previous batch — district unlock order and a dead
+  music-data field — were re-checked against this district and confirmed
+  already resolved; nothing new to fix.)
+
+### HUMAN 5-MINUTE CHECK
+1. Reach the `police` district (park → police per its `powered_by`),
+   pick up 2-3 document/photo/audio-log pickups, open the Journal —
+   confirm titles/text show in your current language, not English
+   fallback.
+2. Read the note titled "Property Release, Countersigned" — its
+   "Related:" line should mention the Keeper if you've been to `park`
+   already (you have to have been, to reach police at all).
+3. Switch language mid-session (Settings → Language) while the Journal
+   is open on one of these new notes — text should retranslate
+   instantly.
+4. Visually confirm the station's lit-window/floor textures actually
+   change look between DARK and a later stage (compare a screenshot at
+   DARK vs after restoring to STREETS/FULL).
+5. Confirm "collect all documents" progress still counts correctly
+   after picking up a police note (completionist total grew by 8).
+
+---
+
 ## Batch 2 (2026-09-08) — school/hospital/gas_station content merged + wired
 
 - **3 new districts now have readable lore**: school (8 notes), hospital
