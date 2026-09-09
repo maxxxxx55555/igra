@@ -135,6 +135,36 @@ All pre-existing binaries (`tiles/warehouses_floor.png`, `tiles/warehouses_wall.
 generators / `tools/gen_audio.py`); project-owned, no attribution required.
 No web-sourced assets are used in this district.
 
+## Added 2026-09-09 — industrial district asset pass
+
+Dark tiles `tiles/industrial_floor.png` / `industrial_wall.png` already ship; this pass adds
+the missing `_lit` twins. No dark-twin repair needed: the §2 seam probe (run first, warehouses
+precedent) measured both dark twins clean — floor 3.81, wall 3.08, no edge-frame defect
+(edge means match interior). No binary audio fabricated.
+
+| Path | Origin | License | Attribution | Notes |
+|---|---|---|---|---|
+| `assets/textures/tiles/industrial_floor_lit.png` | Derived in-session from in-house `tiles/industrial_floor.png` (luminance ×1.42 + brass `#c9a24a` blend per STYLE_GUIDE §4/§4.1). Two AI lit candidates were generated against the dark twin first and **discarded** (floor candidate lift ×2.29, wall corr 0.59 — the overshoot §4.1 predicts); geometry lock is the acceptance path (police/warehouses precedent). | Project-owned; no third-party rights | none required | 256² RGB, 65,410 B. Concrete slab factory floor. Measured: lift ×1.420 (target 1.35–1.50), geometry correlation 0.999 (≥0.85), warmth R−B +21.5 (dark twin −7.2; band +15…+40), palette 21..68 (no pure #000/#fff), wrap seam 2.12 vs dark 3.81 (ratio 0.56 — improvement-side, same class as the shipped warehouses pair 0.66; the brass pull toward a constant inherently shrinks edge deltas on a dark tile). Diff is a smooth uniform lift (per-pixel |Δ| 12.0–24.7, row/col profile std ≤2.0) — light only, no geometry repaint. |
+| `assets/textures/tiles/industrial_wall_lit.png` | Derived in-session from in-house `tiles/industrial_wall.png` (same method as the floor twin). | Project-owned; no third-party rights | none required | 256² RGB, 71,254 B. Corrugated industrial siding. Measured: lift ×1.419, geometry correlation 0.998, warmth R−B +21.5 (dark twin −21.8), palette 68..163, wrap seam 2.62 vs dark 3.08 (**ratio 0.85 — inside the ±30% band**). Same smooth-lift profile (|Δ| 26.7–39.7, std ≤0.7). |
+
+§4.1 numeric acceptance applied to both lit twins (lift, geometry correlation, warmth band,
+palette clamp, seam delta) — lift/corr/warmth/palette all inside the thresholds in
+docs/STYLE_GUIDE.md; seams land at or below their dark twins' (0.85 wall — in band; 0.56
+floor — improvement-side deviation, documented above, no seam regression: both lit twins
+wrap **better** than their dark sources, same observation class as the warehouses pass).
+Both derive pointwise from the shipped dark tiles, so the pairs are geometry-locked by
+construction (corr 0.998/0.999).
+
+## Pre-existing industrial binaries (provenance summary, unchanged)
+
+All pre-existing binaries (`tiles/industrial_floor.png`, `tiles/industrial_wall.png`,
+`crests/crest_industrial_96.png`, `loading/industrial_loading.png`,
+`maps/industrial_map_512.png`, `audio/ambience/districts/industrial_dark.ogg`,
+`audio/ambience/district_details/industrial_{machinery_drone,pipe_hiss,steam_vent,vent_rattle}.ogg`,
+`audio/music/industrial.wav`) were produced in-house by earlier sessions (procedural
+generators / `tools/gen_audio.py`); project-owned, no attribution required. No web-sourced
+assets are used in this district.
+
 ## Audit checklist (run each asset pass)
 
 1. `git diff --stat` binaries vs. this ledger — every row present.
