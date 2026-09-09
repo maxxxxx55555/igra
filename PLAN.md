@@ -220,6 +220,80 @@ this shape and the easiest one to get wrong.
 
 ---
 
+**2026-09-09 (merge arena PR #6, autonomous, NO-GODOT static mode):**
+Merged `arena/01a085f3-igra` (industrial district pack, district 9, the
+chain's first two-parent convergence — `powered_by = [warehouses,
+police]` — plus Arena's `docs/CONTENT_PIPELINE_AUDIT.md` re-run across
+1–9, 0 new defects; its own audit traced and fixed 4 checker-tooling
+false positives, not pack issues). Scope-checked, both JSON files valid,
+all 19 item ids and all 22 distinct `world_refs` ids cross-checked by
+hand against the six-district union closure (suburbs, residential,
+park, hospital, warehouses, police) before merging — 0 leaks, including
+the first-ever simultaneous use of the Act II Architect set (via the
+warehouses branch) and the Keeper/radio set (via the police branch).
+`--no-ff`, 0 conflicts, pushed, branch deleted, static gates green.
+
+**Audio decision (merge directive step 2):** `industrial_dark.ogg`
+measures 33.994 s, the only district bed off the shipped 36.000 s house
+contract. Independently re-verified by parsing the Ogg container's own
+final-page granule directly (1,499,146 → 33.994 s exactly, no ffmpeg
+needed) rather than trusting Arena's header-verification claim blind.
+Computed the alternate theory precisely: 12 bars at the industrial
+theme's 85 bpm = 33.882 s, within 112 ms of the shipped length —
+consistent with normal encoder frame-padding, not a random mis-render
+(36 s at 85 bpm would be a non-whole 12.75 bars). Grepped
+`music_manager.gd` and `district_atmosphere.gd` for any hardcoded 36 s
+assumption — none exists; loop handling is duration-agnostic, driven by
+the actual resource. **Decision: accepted as canon, not a defect.**
+Chose not to re-render for two independent reasons, either alone
+sufficient: (a) the evidence favors "deliberate" over "render error",
+and (b) `assets/audio/**` is Arena's ownership zone, not code's — even
+if re-rendering were clearly correct, fabricating/replacing binary
+audio myself would cross the same ownership boundary the standing mode
+already establishes for `.gd`/`.tscn`/content files, and NO-GODOT
+static-only verification doesn't license generating new binary assets
+either. Documented in `docs/KNOWN_ISSUES.md`.
+
+**Content defect found and worked around, not hand-edited (ownership
+boundary respected):** `content/districts/industrial/lore_notes.json`'s
+`en.text` fields carry a literal double-escaped `\"` (backslash+quote)
+instead of a plain `"` in all 8 notes wherever they quote in-world
+dialogue — confirmed via `repr()` on the parsed Python string, confirmed
+absent from `warehouses`' equivalent file as a control. Since the raw
+JSON is Arena's reference/source material (`content/**`, not my zone)
+and the actual player-facing text lives in `data/i18n/*.json` under the
+keys I write, the fix was to write clean quotes into the 16
+`LORE_INDUSTRIAL_*` i18n keys directly rather than propagate the
+artifact — no player ever sees it, and the source file goes untouched.
+Registered `STATIC_AUDIT.md` #28, logged as an open question in
+`docs/HANDOFF.md` for Arena to clean up the source whenever `industrial`
+gets touched again.
+
+Also caught and fixed a self-inflicted bug from an earlier session
+turn: an edit in the previous ("warehouses") PR had accidentally
+dropped the `## CONFIRMED WORKING` section heading from
+`docs/STATIC_AUDIT.md` (its `old_string`/`new_string` pair omitted the
+heading line). Restored in this pass.
+
+Wired identically to prior districts: `district_loot.gd`'s `LORE_DOCS`
+gained `industrial` (its `BY_DISTRICT`/`DOCUMENTS` rows already existed
+in code; correctly has no `BLUEPRINTS` row, matching the pack's own "no
+schematic here" canon, R7); 8 `documents_catalog.json` entries appended
+(105 total); 16 `LORE_INDUSTRIAL_*` keys translated ×13 locales (1015
+keys/locale, `i18n_audit.py`: `MISSING: 0`).
+
+`ARENA_NEXT_PROMPT.md` rewritten to queue district 10 (`substation` per
+GDD §4.1) — a single direct parent (`industrial`) whose own closure is
+itself a union, so substation's guaranteed history is seven districts
+(suburbs, residential, park, hospital, warehouses, police, industrial).
+Flagged that `radio_02_grid_crew_relay` becomes legal to reference here
+for the first time (gated on `substation`/`min_stage 1` per
+`content/world/radio_transcripts.json`, verified directly), while
+`radio_03_keeper_reversal` stays out (gated on `power_station`, the
+final district).
+
+---
+
 ## А. Что уже работает (проверено, не предположение)
 
 Ядро игры полностью играбельно — подтверждено `boot_check_scene.tscn`
