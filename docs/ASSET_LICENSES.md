@@ -165,6 +165,41 @@ All pre-existing binaries (`tiles/industrial_floor.png`, `tiles/industrial_wall.
 generators / `tools/gen_audio.py`); project-owned, no attribution required. No web-sourced
 assets are used in this district.
 
+## Added 2026-09-09 — substation district asset pass
+
+Dark tiles `tiles/substation_floor.png` / `substation_wall.png` already ship; this pass adds
+the missing `_lit` twins. No dark-twin repair: the §2 seam probe (run first, warehouses
+precedent) found the floor clean (4.35, no edge frame — edges match interior) and the wall
+at 18.06 with NO frame defect either (top-3/left-3 rows match interior means) — the wall's
+seam is intrinsic to its high-contrast speckle pattern (bright dots to 122 cut at the wrap
+boundary), not a generation edge artifact, so the dark ships untouched (residential-floor
+precedent: recorded outlier, not repaired). No binary audio fabricated.
+
+| Path | Origin | License | Attribution | Notes |
+|---|---|---|---|---|
+| `assets/textures/tiles/substation_floor_lit.png` | Derived in-session from in-house `tiles/substation_floor.png` (luminance ×1.42 + brass `#c9a24a` blend per STYLE_GUIDE §4/§4.1; warmth blend solved per tile to R−B +22, gas_station-wall precedent; geometry lock is the acceptance path, police/warehouses/industrial precedent — no AI candidates needed) | Project-owned; no third-party rights | none required | 256² RGB, 78,931 B. Diamond-mesh yard concrete. Measured: lift ×1.420 (target 1.35–1.50), geometry correlation 0.995 (≥0.85), warmth R−B +22.0 (dark twin +3.1; band +15…+40), palette 28..85 (no pure #000/#fff), wrap seam 1.14 vs dark 4.35 (ratio 0.26 — improvement-side, same class as the shipped industrial floor 0.56). Diff is a smooth uniform lift (per-pixel mean |Δ| 15.1, row/col profile std ≤0.13) — light only; 8 px border shows no luminance frame (border vs interior +0.02). |
+| `assets/textures/tiles/substation_wall_lit.png` | Derived in-session from in-house `tiles/substation_wall.png` (same method as the floor twin) | Project-owned; no third-party rights | none required | 256² RGB, 86,755 B. Speckled concrete wall. Measured: lift ×1.420, geometry correlation 0.993, warmth R−B +22.0 (dark twin −6.6), palette 30..103, wrap seam 3.23 vs dark 18.06 (**ratio 0.18 — improvement-side; absolute 3.23 joins the 2.1–3.8 house range**). Same smooth-lift profile (mean |Δ| 17.4, std ≤0.59); no border frame (−0.01). |
+
+§4.1 numeric acceptance applied to both lit twins (lift, geometry correlation, warmth
+band, palette clamp, seam delta) — lift/corr/warmth/palette all inside the thresholds in
+docs/STYLE_GUIDE.md; seams land below their dark twins' (0.26 floor, 0.18 wall —
+improvement-side deviations, documented above, no seam regression: both lit twins wrap
+**better** than their dark sources, same observation class as the warehouses/industrial
+passes; the wall's larger ratio is an arithmetic consequence of its dark twin being a
+recorded 18.06 outlier, and its absolute 3.23 matches the shipped family). Both derive
+pointwise from the shipped dark tiles, so the pairs are geometry-locked by construction
+(corr 0.993/0.995).
+
+## Pre-existing substation binaries (provenance summary, unchanged)
+
+All pre-existing binaries (`tiles/substation_floor.png`, `tiles/substation_wall.png`,
+`crests/crest_substation_96.png`, `loading/substation_loading.png`,
+`maps/substation_map_512.png`, `audio/ambience/districts/substation_dark.ogg`,
+`audio/ambience/district_details/substation_{transformer_buzz,arc_crackle,cable_hum}.ogg`,
+`audio/music/music_ambient_dark.wav`) were produced in-house by earlier sessions
+(procedural generators / `tools/gen_audio.py`); project-owned, no attribution required.
+No web-sourced assets are used in this district.
+
 ## Audit checklist (run each asset pass)
 
 1. `git diff --stat` binaries vs. this ledger — every row present.
