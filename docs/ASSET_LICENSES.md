@@ -200,6 +200,43 @@ All pre-existing binaries (`tiles/substation_floor.png`, `tiles/substation_wall.
 (procedural generators / `tools/gen_audio.py`); project-owned, no attribution required.
 No web-sourced assets are used in this district.
 
+## Added 2026-09-09 — power_station district asset pass
+
+**No new binaries.** Both lit twins ship pre-existing (predating the §4.1 test, which was
+added with the school pass), and the crest / loading art / map all ship — "generate only
+missing pieces" yields an empty set (YAGNI). This pass re-measures the shipped pairs for
+the record instead of churning them (residential/hospital precedent: re-deriving a shipped
+pair is a texture pass on its own).
+
+Re-measured 2026-09-09 (Pillow + numpy, same §4.1 metrics):
+
+| Pair | Lift (1.35–1.50) | Corr (≥0.85) | Warmth (+15…+40) | Palette | Seam lit/dark |
+|---|---|---|---|---|---|
+| `power_station_floor` → `_lit` | **×1.561 (above band)** | 1.000 | **+4.7 (below band; dark −6.2)** | 32..233 | 18.42 / 15.88 (ratio 1.16, in band) |
+| `power_station_wall` → `_lit` | ×1.415 | 0.999 | **+12.1 (just below band; dark −8.2)** | 46..121 | 3.64 / 3.08 (ratio 1.18, in band) |
+
+Reading: the floor lit twin is brighter-but-not-warmer (lift overshoot, warmth undershoot
+— the exact AI-overshoot shape §4.1 predicts, shipped before the test existed); the wall
+twin meets every band except warmth, which it misses by 3 points. Both pairs are
+geometry-locked (corr ≥0.999) and both seams sit in-band. The floor dark's own 15.88 seam
+joins the recorded outlier class (residential floor 15.3, substation wall 18.06 —
+intrinsic pattern contrast, no frame defect, deliberately unrepaired). Council decision
+(skill `council`, logged): leave the shipped pair untouched — the game already renders it,
+no defect breaks loading, and §4.1 gates new twins, not shipped history.
+
+## Pre-existing power_station binaries (provenance summary, unchanged)
+
+All pre-existing binaries (`tiles/power_station_floor.png`,
+`tiles/power_station_floor_lit.png`, `tiles/power_station_wall.png`,
+`tiles/power_station_wall_lit.png`, `crests/crest_power_station_96.png`,
+`loading/power_station_loading.png`, `maps/power_station_map_512.png`,
+`audio/ambience/districts/power_station_dark.ogg`,
+`audio/ambience/districts/power_station_lit.ogg`,
+`audio/ambience/district_details/power_station_{generator_thrum,hv_whine,cooling_fan,breaker_clunk}.ogg`,
+`audio/music/music_ambient_dark.wav`) were produced in-house by earlier sessions
+(procedural generators / `tools/gen_audio.py`); project-owned, no attribution required.
+No web-sourced assets are used in this district.
+
 ## Audit checklist (run each asset pass)
 
 1. `git diff --stat` binaries vs. this ledger — every row present.
