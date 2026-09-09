@@ -24,11 +24,26 @@ OGG q4 mono; beds = 36 s seamless loops (loop points 0.000–36.000, matched zer
 | warehouses | harbor.wav ✔ | warehouses_dark ✔ (1ch/44.1k/36.000 s, header-verified 2026-09-09) | **MISSING** → spec G2g | 4/4 ✔ (all 30.000 s, header-verified 2026-09-09) |
 | industrial | industrial.wav ✔ (1ch/22.05 kHz/24.0 s — downtown/harbor legacy class) | industrial_dark ✔ **but 33.994 s, not the 36.000 s house contract** (1ch/44.1k/86 kbps/55,718 B, header-verified 2026-09-09 — see G2h) | **MISSING** → spec G2h | 4/4 ✔ (all 30.000 s, header-verified 2026-09-09) |
 | substation | music_ambient_dark.wav ✔ | substation_dark ✔ (1ch/44.1k/36.000 s, header-verified 2026-09-09) | **MISSING** → spec G2i | 3/3 ✔ (all 30.000 s, header-verified 2026-09-09) |
-| power_station | music_ambient_dark.wav ✔ | power_station_dark ✔ | power_station_lit ✔ | 4/4 ✔ |
+| power_station | music_ambient_dark.wav ✔ | power_station_dark ✔ (1ch/44.1k/36.000 s, header-verified 2026-09-09) | power_station_lit ✔ (1ch/44.1k/36.000 s, header-verified 2026-09-09 — sparse encode, 59,320 B) | 4/4 ✔ (**two off the 30 s class** — see F1) |
 
 Layers (dark/lit/threat_low/threat_high/action), weather (rain/wind) and action sting:
 all present ✔. MusicManager falls back to the dark bed for districts without a lit twin
 (documented DEFAULT_CHOICE in `music_manager.gd`).
+
+### F1 — power_station detail durations (finding, recorded 2026-09-09, not a gap)
+Header-verified this pass (Ogg/Vorbis identification header + final page granule; no
+engine, no ffprobe): `power_station_generator_thrum.ogg` is **28.749 s** (granule
+1,267,829, 220,543 B) and `power_station_cooling_fan.ogg` is **28.948 s** (granule
+1,276,622, 222,943 B) — both off the 30.000 s detail-bed class every other district's
+details hold exactly (`power_station_hv_whine` and `power_station_breaker_clunk` are
+30.000 s as expected; all four are 1 ch / 44.1 kHz). Same finding class as the
+industrial dark bed (G2h): `district_atmosphere.gd` loops whatever length ships
+(`AudioStreamOggVorbis.loop = true`, no duration read anywhere), so both files play
+correctly — the 30 s figure is a house norm ("30s seamless loops" in the script's own
+comment), not a code requirement. If the audio toolchain holder prefers class
+uniformity, re-render the two at 30.000 s; otherwise they stand as recorded. Not a gap
+(both files exist and wire), so no G-spec is appended. Loudness (−18 LUFS / TP) remains
+unverifiable in this sandbox (no ffmpeg) for all power_station files.
 
 ## Gaps (priority order)
 
