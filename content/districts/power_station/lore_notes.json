@@ -1,0 +1,112 @@
+{
+  "district": "power_station",
+  "version": 1,
+  "_world_refs_contract": "Notes reference world-bible entries by id only (content/world/*, content/lore/*); no copied text. See docs/CONTENT_WORLD_BIBLE.md.",
+  "_reachability_rule": "CHAIN TERMINAL. data/districts/district_power_station.tres powered_by = [&\"substation\"] — GDD §4.3 requires the prerequisite at FULL. Closure = substation's seven-district closure (suburbs, residential, park, hospital, warehouses, police, industrial — see the substation pack's _reachability_rule) PLUS substation itself = EIGHT districts, all stages: every packed district except the two leaves. Every world id gated on any of those eight is safe here regardless of its own min_stage. NOT guaranteed: school, gas_station (leaves — neither is an ancestor of anything) — no id is gated on them, and the pack never leans on their content. radio_03_keeper_reversal is gated on POWER_STATION ITSELF at min_stage 1 (content/world/radio_transcripts.json) — this is the first and only district where it is legal, and the note carrying it (power_station_note_03, min_stage 1) meets the gate exactly: the finale front-loads the Keeper's answer so notes 05-08 can close the threads it opens. LORE ONLY: this pack resolves people and paper (the Architect's memorandum, the Keeper's answer, the crew's last camp, the names) and never touches GDD §12.4 content or code mechanics — those are CODE's zone.",
+  "notes": [
+    {
+      "id": "power_station_note_01",
+      "item_type": "document",
+      "i18n_keys": { "title": "LORE_POWER_STATION_01_TITLE", "text": "LORE_POWER_STATION_01_TEXT" },
+      "en": {
+        "title": "Gate — The Hand Truck",
+        "text": "The crew's hand truck stands inside the station gate, unloaded and chalked. The drums are gone — carried in. The chalk on its bed is the recorder's hand, and it is a manifest, not a message: fuses, rack wire, the bench lamp from the suburbs wrapped in a curtain. Below the manifest, one line for whoever walks the line next: \"Marat counted the draw all the way here. It ends at this gate. Whatever the tap was feeding, it is fed from inside these walls now, and we are going in to meter it. The truck stays — the way back is downhill and we will not need it.\""
+      },
+      "location_hint": "Chalk manifest on the hand truck inside the gate (z_station_gate)",
+      "min_stage": 0,
+      "weight": 100,
+      "world_refs": ["char_marat", "char_grid_crew_recorder", "faction_grid_crew"]
+    },
+    {
+      "id": "power_station_note_02",
+      "item_type": "photo",
+      "i18n_keys": { "title": "LORE_POWER_STATION_02_TITLE", "text": "LORE_POWER_STATION_02_TEXT" },
+      "en": {
+        "title": "Photo: Hall 1, Dark",
+        "text": "A long-exposure photograph of the turbine hall, taken from the gallery on a night the station was fully dark. The three generators stand in a row like sleeping animals, and above them the dark is not empty — the exposure caught it moving, a slow churn in the black over the middle machine, the way heat moves over a road that is not hot. No flash was used. Nothing in the hall was lit. On the back, in a hand that does not appear anywhere else in the station: \"They are not running. Do not let them being still fool you.\""
+      },
+      "location_hint": "Wedged in the turbine-hall gallery rail (z_turbine_hall)",
+      "min_stage": 0,
+      "weight": 95,
+      "world_refs": []
+    },
+    {
+      "id": "power_station_note_03",
+      "item_type": "audio_log",
+      "i18n_keys": { "title": "LORE_POWER_STATION_03_TITLE", "text": "LORE_POWER_STATION_03_TEXT" },
+      "en": {
+        "title": "Signal Loft — The Keeper Answers",
+        "text": "A tape from the signal loft's big receiver, labelled in the night operator's hand: ANSWER — SAME VOICE, NEW WORDS. The calm voice that spent a year looping the call is looping it no longer. It answers: \"You are restoring what I am taking apart, and we are both right. Every lamp you light feeds the city. Every lamp I carry out starves the thing in the center. Light the districts. I will meet you at the last one with everything I have kept. Forty years of light, engineer. Bring a strong back.\" The operator's note under the tape: \"It knows the districts are lit. It is counting with us.\""
+      },
+      "location_hint": "Tape in the signal loft's big receiver (z_signal_loft)",
+      "min_stage": 1,
+      "weight": 90,
+      "world_refs": ["radio_03_keeper_reversal", "char_keeper", "hist_radio_call"]
+    },
+    {
+      "id": "power_station_note_04",
+      "item_type": "document",
+      "i18n_keys": { "title": "LORE_POWER_STATION_04_TITLE", "text": "LORE_POWER_STATION_04_TEXT" },
+      "en": {
+        "title": "Operations — The Pencil Line",
+        "text": "The operations duty file holds the station's own passport copy — 800 megawatts, three generators in reserve, and the standing order stamped by the regime department: DO NOT START AFTER 23:00, reason not stated, seal of EON. The pencil line in the margin is what the whole file is now about, and the duty roster finally names its author: the night engineer, last shift before the blackout, who wrote it and dated it and signed his name to it like a man filing a weather report: \"The generators no longer produce current. They produce voices.\" His supervisor's reply, same pencil, below: \"Noted. Keep the order. Start nothing after 23:00.\""
+      },
+      "location_hint": "Duty file on the operations desk (z_operations)",
+      "min_stage": 1,
+      "weight": 85,
+      "world_refs": ["faction_city_power", "hist_blackout_night"]
+    },
+    {
+      "id": "power_station_note_05",
+      "item_type": "document",
+      "i18n_keys": { "title": "LORE_POWER_STATION_05_TITLE", "text": "LORE_POWER_STATION_05_TEXT" },
+      "en": {
+        "title": "Memorandum — The Architect's Hand",
+        "text": "The last memorandum in the archive, handwritten where every earlier one was typed, and signed with the name the council denied in print. It is not addressed to anyone. \"The program was to store what the lamps have seen. I believed a city could be kept the way a ledger is kept — every street accounted for, nothing lost. The lamps learned to remember, and what they remembered first was the dark between lightings, and it taught them to drink. Every drum we wound is drinking somewhere tonight. I am not asking to be stopped. I am asking to be metered. I will be at the center, where the feeders meet, and I will answer for the current the way a meterman answers: to the unit.\""
+      },
+      "location_hint": "Last memorandum in the archive file (z_archive)",
+      "min_stage": 2,
+      "weight": 80,
+      "world_refs": ["char_architect", "faction_project_architect", "hist_project_architect"]
+    },
+    {
+      "id": "power_station_note_06",
+      "item_type": "photo",
+      "i18n_keys": { "title": "LORE_POWER_STATION_06_TITLE", "text": "LORE_POWER_STATION_06_TEXT" },
+      "en": {
+        "title": "Photo: The Bunker Racks",
+        "text": "A photograph taken by hand-lamp in the station bunker: floor-to-ceiling racks of streetlight housings, cleaned and tagged, brass shells racked apart from iron, every tag naming a street. The tally board at the rack's end is in a hand like a ruled line — the same hand that logged the grid's first order forty years ago, and the same hand that wrote the dismantling order weeks after the blackout. Two hundred and nineteen from the suburbs, and then the later rows, and then rows with no count yet. On the back: \"Forty years of light, racked and ready. He kept his half of the answer.\""
+      },
+      "location_hint": "Taped to the bunker rack end by the tally board (z_bunker)",
+      "min_stage": 2,
+      "weight": 75,
+      "world_refs": ["diary_keeper_01", "diary_keeper_03", "faction_keepers"]
+    },
+    {
+      "id": "power_station_note_07",
+      "item_type": "audio_log",
+      "i18n_keys": { "title": "LORE_POWER_STATION_07_TITLE", "text": "LORE_POWER_STATION_07_TEXT" },
+      "en": {
+        "title": "Cassette — Names, Said Out Loud",
+        "text": "A cassette in the crew camp's player, carried two districts east in the recorder's own pack. It is Manya's pond, weeks ago — ice, wind, and the old woman's voice saying names out loud into the dark, one by one, the way she says them for the fed: the postman, the twins, Katya's father. And then a crewman's voice, quieter, adding the one name that was never hers to say: \"Petrov.\" A long quiet. Then the recorder, barely audible: \"They stand still. She is right. They stand still. We are taking this east. If anything at the center still remembers being a man, it will stand still for its name.\""
+      },
+      "location_hint": "Cassette in the crew camp's player (z_crew_camp)",
+      "min_stage": 2,
+      "weight": 70,
+      "world_refs": ["diary_manya_01", "char_babka_manya", "char_petrov"]
+    },
+    {
+      "id": "power_station_note_08",
+      "item_type": "photo",
+      "i18n_keys": { "title": "LORE_POWER_STATION_08_TITLE", "text": "LORE_POWER_STATION_08_TEXT" },
+      "en": {
+        "title": "Photo: The Towers, First Light",
+        "text": "Shot from the cooling-tower gantry on the first night the station held: the towers lit from below, and at the gate below them the gate lamp burning — one streetlight, the crew's hand truck beside it, and a bowl of food set at its foot. The groundskeeper's note is pinned to the print: the station poplars have leaned toward the gate lamp all winter, the way the park trees leaned before the blackout. The watch roster is pinned under it, final line: the corner-window name, uncrossed — relieved, lamp kept. And the recorder's hand on the back, last: \"One streetlight. The bench proof stands at the center.\""
+      },
+      "location_hint": "Pinned to the cooling-tower gantry rail (z_cooling_towers)",
+      "min_stage": 3,
+      "weight": 60,
+      "world_refs": ["news_trees_listen", "char_old_anya", "hist_bench_proof"]
+    }
+  ]
+}

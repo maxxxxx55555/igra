@@ -1,0 +1,112 @@
+{
+  "district": "substation",
+  "version": 1,
+  "_world_refs_contract": "Notes reference world-bible entries by id only (content/world/*, content/lore/*); no copied text. See docs/CONTENT_WORLD_BIBLE.md.",
+  "_reachability_rule": "data/districts/district_substation.tres powered_by = [&\"industrial\"] — GDD §4.3 requires the prerequisite at FULL. Closure = industrial's own six-district union (suburbs, residential, park, hospital, warehouses, police — see the industrial pack's _reachability_rule) PLUS industrial itself = SEVEN districts, all stages. Every world id gated on any of those seven is safe here regardless of its own min_stage. NOT guaranteed: school, gas_station (leaves — neither is an ancestor of industrial) and power_station (a descendant: substation feeds IT, not the other way around) — so no id gated on those three may ever appear here; in particular radio_03_keeper_reversal (power_station-gated) stays out. radio_02_grid_crew_relay is gated on SUBSTATION ITSELF at min_stage 1 (content/world/radio_transcripts.json) — this is the first district where it is legal, and the note carrying it (substation_note_07, min_stage 2) respects substation's own stage progression. Pacing precedent kept: hospital-gated Architect ids sit at min_stage >= 2 matching their own STREETS gate (warehouses/industrial precedent), even though hospital is FULL at arrival.",
+  "notes": [
+    {
+      "id": "substation_note_01",
+      "item_type": "document",
+      "i18n_keys": { "title": "LORE_SUBSTATION_01_TITLE", "text": "LORE_SUBSTATION_01_TEXT" },
+      "en": {
+        "title": "Gatehouse — The Guard's Duplicate",
+        "text": "The gatehouse desk holds two logbooks, and only one of them was ever shown to anyone. The official one is the duty record the company filed: twelfth shift, door welded shut by the guard's own signed order, at 03:00 the door standing open by itself with nothing on the threshold, logged as a sensor trip because the pay mattered more than the truth. The duplicate, kept in the drawer under the weld receipt he paid for himself, says what he actually saw: \"The dark on the threshold had learned the shape of a doorway. It stood in it the way a man stands in it. I did not log a man, because there was no man, and I did not log the dark, because the form has no line for the dark. The weld held. The door opened anyway. Whatever came through it, it came through the weld, not the door.\""
+      },
+      "location_hint": "Duplicate logbook in the gatehouse desk drawer (z_gatehouse)",
+      "min_stage": 0,
+      "weight": 100,
+      "world_refs": ["hist_blackout_night", "faction_city_power"]
+    },
+    {
+      "id": "substation_note_02",
+      "item_type": "photo",
+      "i18n_keys": { "title": "LORE_SUBSTATION_02_TITLE", "text": "LORE_SUBSTATION_02_TEXT" },
+      "en": {
+        "title": "Photo: Yard C, 02:10",
+        "text": "A frost-survey photograph from the transformer yard, timestamped 02:10 on a night two weeks after the blackout. Every tank in Yard C stands white with frost except one — the middle tank of the east row, sweating dark, its frost melted in a clean ring on the gravel around its feet. A thermometer strip hangs in the frame beside it, placed there by whoever took the photograph, and the strip reads warm. On the back, in pencil, a single line that is not a measurement and was never filed: \"Two weeks dark. Still warm. I am not touching it again.\""
+      },
+      "location_hint": "Pinned inside the Yard C fence placard (z_transformer_yard)",
+      "min_stage": 0,
+      "weight": 95,
+      "world_refs": []
+    },
+    {
+      "id": "substation_note_03",
+      "item_type": "audio_log",
+      "i18n_keys": { "title": "LORE_SUBSTATION_03_TITLE", "text": "LORE_SUBSTATION_03_TEXT" },
+      "en": {
+        "title": "Recorder: Grid Crew Log 21 — The Fence",
+        "text": "\"Crew log twenty-one, and this is the fence we walked two districts to reach. Marat's trace ends here — feeder four's draw walks out of the park line, crosses the whole west grid, and goes into this yard through a breaker that is not on any map we were ever issued. The transformer is warm. Say it plain, Marat. [Marat, faint: grids don't drink.] Grids don't drink, and the transformer is warm anyway, and that is the whole of it. We cache what we carried at the bunk and we go in at first dark. If anyone replays this after us — we walked the line in, we will walk it out. The bench proof stands. One streetlight.\""
+      },
+      "location_hint": "Recorder left on the crew bunk footlocker (z_crew_bunk)",
+      "min_stage": 1,
+      "weight": 90,
+      "world_refs": ["char_marat", "char_grid_crew_recorder", "faction_grid_crew", "hist_crew_walk_suburbs"]
+    },
+    {
+      "id": "substation_note_04",
+      "item_type": "document",
+      "i18n_keys": { "title": "LORE_SUBSTATION_04_TITLE", "text": "LORE_SUBSTATION_04_TEXT" },
+      "en": {
+        "title": "Control Room — Night-Zero Printout",
+        "text": "The mimic-board event printout for the night the city went out, still in the control-room printer tray, torn off mid-page. 22:00 — the scheduled outage opens on the suburban feeders, exactly as the company announced it. 23:00 — the feeders do not come back. 23:40 — every needle on the board swings the wrong way at once, and the night operator's pencil in the margin, pressed hard enough to tear: \"The board is drawing its own route. It is walking the grid.\" Below it, in a different hand, older, the line someone copied here from a diary and never explained: \"The grid sounds full tonight, and every lamp in the city is dark. Something else is lit.\""
+      },
+      "location_hint": "Printer tray under the mimic board (z_control_room)",
+      "min_stage": 1,
+      "weight": 85,
+      "world_refs": ["diary_keeper_02", "news_rolling_outages"]
+    },
+    {
+      "id": "substation_note_05",
+      "item_type": "document",
+      "i18n_keys": { "title": "LORE_SUBSTATION_05_TITLE", "text": "LORE_SUBSTATION_05_TEXT" },
+      "en": {
+        "title": "Vault Order — Breaker 9, Unmapped",
+        "text": "Clipped to the vault breaker's own frame, where only the man with the key would ever read it: the wiring order that built what Marat traced. Twelve years before the blackout — breaker 9, wired off-plan, fed from the park line and the hospital sub-feed both, metering drums with the second coil wound to pay current back down the line. The day foreman's stamp across it: REFUSED. Below, the disposition that actually happened: \"Night shift takes it.\" Below that, the clipping someone pasted here years later, the council denying the program by name in print — the denial that names what it denies. And last, the night foreman's hand: \"It was never a fault. A fault does not need its own breaker.\""
+      },
+      "location_hint": "Clipped to the breaker 9 frame inside the vault (z_switchgear_vault)",
+      "min_stage": 2,
+      "weight": 80,
+      "world_refs": ["hist_project_architect", "faction_project_architect", "news_architect_denied"]
+    },
+    {
+      "id": "substation_note_06",
+      "item_type": "photo",
+      "i18n_keys": { "title": "LORE_SUBSTATION_06_TITLE", "text": "LORE_SUBSTATION_06_TEXT" },
+      "en": {
+        "title": "Photo: The Boneyard Count",
+        "text": "A photograph of the lamp boneyard behind the east fence, taken from the control-room window at dusk: rows of dismantled streetlight housings stacked like firewood, brass shells sorted from iron, every stack tagged with wire and a paper slip naming a suburbs street. In the foreground, the chalk tally board, and the tally is in a hand like a ruled line — the same hand that signed the grid's own orders forty years running. Two hundred and nineteen, and then more rows past the count, still being stacked. On the back: \"He does not hide them. He stages them. Whatever he is building at the center, it is built out of our own lamps.\""
+      },
+      "location_hint": "Taped to the control-room window frame (z_lamp_boneyard)",
+      "min_stage": 2,
+      "weight": 75,
+      "world_refs": ["char_keeper", "faction_keepers", "hist_keeper_reversal"]
+    },
+    {
+      "id": "substation_note_07",
+      "item_type": "audio_log",
+      "i18n_keys": { "title": "LORE_SUBSTATION_07_TITLE", "text": "LORE_SUBSTATION_07_TEXT" },
+      "en": {
+        "title": "Relay Rack — The Recovered Tape",
+        "text": "A tape found slotted in the relay rack, labelled in the recorder's hand: RELAY — SEND IF WE DON'T COME BACK. The crew's last call, played back off the rack's own speaker: \"Third shift to anyone: feeder four is not faulty, repeat, not faulty. The draw is deliberate. Marat traced it to a test tap that is not on any map. We are walking the line to the substation. If we do not call again — the bench proof stands. One streetlight. Remember that.\" They did not call again. The tape is the call. Whoever threads it into the rack's sender plays the crew's voice back onto the air they never came back to hear."
+      },
+      "location_hint": "Tape slotted in the relay rack sender (z_relay_room)",
+      "min_stage": 2,
+      "weight": 70,
+      "world_refs": ["radio_02_grid_crew_relay", "char_grid_crew_recorder", "hist_bench_proof"]
+    },
+    {
+      "id": "substation_note_08",
+      "item_type": "photo",
+      "i18n_keys": { "title": "LORE_SUBSTATION_08_TITLE", "text": "LORE_SUBSTATION_08_TEXT" },
+      "en": {
+        "title": "Photo: The East Gate, Sealed",
+        "text": "Taped to the sealed east gate, shot from the boneyard fence on the first night the yard floods held: the gate chained and padlocked from the inside, the road running east past the fence toward the power station stacks on the horizon — the last road in the city. In the frost at the fence corner, past the gate, a hand truck's wheel tracks and boot prints cut through the mesh from inside, heading east. The recorder's hand on the back: \"Marat says the tap is fed from the east. We rest one night and walk it. The radio voice keeps saying it and it has never once said why — go to the power station. We are going. If the gate is sealed when you read this, we sealed it behind us.\""
+      },
+      "location_hint": "Taped to the sealed east gate (z_east_gate)",
+      "min_stage": 3,
+      "weight": 60,
+      "world_refs": ["char_marat", "char_radio_voice", "radio_01_power_station"]
+    }
+  ]
+}
