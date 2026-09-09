@@ -23,7 +23,7 @@ OGG q4 mono; beds = 36 s seamless loops (loop points 0.000–36.000, matched zer
 | police | downtown.wav ✔ | police_dark ✔ (1ch/44.1k/36.000 s, header-verified 2026-09-08) | **MISSING** → spec G2f | 3/3 ✔ (all 30.000 s) |
 | warehouses | harbor.wav ✔ | warehouses_dark ✔ (1ch/44.1k/36.000 s, header-verified 2026-09-09) | **MISSING** → spec G2g | 4/4 ✔ (all 30.000 s, header-verified 2026-09-09) |
 | industrial | industrial.wav ✔ (1ch/22.05 kHz/24.0 s — downtown/harbor legacy class) | industrial_dark ✔ **but 33.994 s, not the 36.000 s house contract** (1ch/44.1k/86 kbps/55,718 B, header-verified 2026-09-09 — see G2h) | **MISSING** → spec G2h | 4/4 ✔ (all 30.000 s, header-verified 2026-09-09) |
-| substation | music_ambient_dark.wav ✔ | substation_dark ✔ | **MISSING** | 3/3 ✔ |
+| substation | music_ambient_dark.wav ✔ | substation_dark ✔ (1ch/44.1k/36.000 s, header-verified 2026-09-09) | **MISSING** → spec G2i | 3/3 ✔ (all 30.000 s, header-verified 2026-09-09) |
 | power_station | music_ambient_dark.wav ✔ | power_station_dark ✔ | power_station_lit ✔ | 4/4 ✔ |
 
 Layers (dark/lit/threat_low/threat_high/action), weather (rain/wind) and action sting:
@@ -230,13 +230,47 @@ all present ✔. MusicManager falls back to the dark bed for districts without a
 - Wiring note: add `&"industrial"` row to `AMBIENCE_LIT_BY_DISTRICT` (CODE, after delivery).
 - Status: **spec only — binary not fabricated** (asset pass delivered lit tiles only).
 
+### G2i — `assets/audio/ambience/districts/substation_lit.ogg` (substation pass, full spec)
+- Type: 36 s seamless ambience loop, OGG q4 mono, 44.1 kHz; loop points 0.000–36.000,
+  matched zero-crossings; −18 LUFS integrated, true peak ≤ −1.5 dBFS.
+- Verified on disk this pass (Ogg/Vorbis identification header + final page granule; no
+  engine, no ffprobe): `substation_dark.ogg` is **1 ch / 44,100 Hz / 36.000 s / nominal
+  86 kbps / 318,861 B** — on the house contract (unlike the industrial bed). Detail
+  one-shots all 1 ch / 44.1 kHz / **30.000 s**: `substation_transformer_buzz` (0.0 dB
+  offset, 226,836 B), `substation_arc_crackle` (5.8, nominal 110 kbps, 316,363 B),
+  `substation_cable_hum` (0.0, 237,816 B). Only the lit twin is missing — this is a
+  **real gap**. Loudness (−18 LUFS / TP) of the shipped files is **not** verifiable here
+  (no ffmpeg); `docs/AUDIO_LOUDNESS.md` remains the authority.
+- Mood: "lit twin" of `substation_dark.ogg` (STYLE_GUIDE §5). The yard stops being a dead
+  switchyard in fog and becomes a working substation with nobody in it: cold busbar drone
+  −6 dB; the transformer buzz warms (raise the 100/200 Hz pair, soften the 3 kHz edge);
+  add a warm sodium ballast hum for the relit yard floods (60/120 Hz, −24 dBFS, slow
+  0.15 Hz wobble); keep a thin open-air fog bed and one slow cable-hum swell per loop.
+- **Remove in the lit twin:** the arc-crackle motif. The dark bed's crackle is the
+  *fault* (the arc cage, `z_arc_cage` — manifest stage table: "the only thing burning in
+  D10 is the thing that is broken"); at FULL the fault is starved silent by the restored
+  grid, so the crackle drops out of the bed and `substation_arc_crackle.ogg` continues
+  to be layered separately by `district_atmosphere.gd` at +5.8 dB for one-shot flavour
+  only. The bed must also not double `substation_transformer_buzz` (0.0) or
+  `substation_cable_hum` (0.0).
+- Pulse alignment: 100 bpm bars (substation theme canon: phrygian-dominant, root MIDI 50,
+  14 bars in `tools/gen_audio.py` DISTRICTS) → 36 s = 15 bars of 2.4 s; place the loop
+  seam on a bar line so the 2 s MusicManager crossfade lands clean.
+- Never in the loop: voices in the wires, relay counts, the 03:00 door. The guard's door
+  is a scripted story beat (`substation_note_01`); the cage must fall silent at FULL
+  (the substation pack's own R-rule — prop_manifest R8: the cage never relights, never
+  speaks past the fault). Putting either in the bed would wallpaper the anomaly.
+- Reference pair for structure: `suburbs_dark.ogg` → `suburbs_lit.ogg`.
+- Wiring note: add `&"substation"` row to `AMBIENCE_LIT_BY_DISTRICT` (CODE, after delivery).
+- Status: **spec only — binary not fabricated** (asset pass delivered lit tiles only).
+
 ### G3 — remaining lit beds (same template as G1/G2b/G2c/G2e/G2f/G2g, theme params from `gen_audio.py` DISTRICTS)
 - `school_lit.ogg` — **superseded by G2c above (full spec)**.
 - `gas_station_lit.ogg` — **superseded by G2e above (full spec)**.
 - `police_lit.ogg` — **superseded by G2f above (full spec)**.
 - `warehouses_lit.ogg` — **superseded by G2g above (full spec)**.
 - `industrial_lit.ogg` — **superseded by G2h above (full spec)**.
-- `substation_lit.ogg` — phrygian-dominant, 100 bpm; arc crackle removed, cable hum warms.
+- `substation_lit.ogg` — **superseded by G2i above (full spec)**.
 All: 36 s seamless, −18 LUFS, TP ≤ −1.5 dBFS, OGG q4 mono. (Exception: industrial per
 G2h — 33.994 s to match its shipped dark bed, or re-render the pair at 36 s.)
 
