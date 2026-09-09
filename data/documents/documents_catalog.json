@@ -740,5 +740,153 @@
             "hist_radio_call",
             "char_grid_crew_recorder"
         ]
+    },
+    {
+        "doc_id": "substation_note_01",
+        "title_key": "LORE_SUBSTATION_01_TITLE",
+        "content_key": "LORE_SUBSTATION_01_TEXT",
+        "world_refs": [
+            "hist_blackout_night",
+            "faction_city_power"
+        ]
+    },
+    {
+        "doc_id": "substation_note_02",
+        "title_key": "LORE_SUBSTATION_02_TITLE",
+        "content_key": "LORE_SUBSTATION_02_TEXT"
+    },
+    {
+        "doc_id": "substation_note_03",
+        "title_key": "LORE_SUBSTATION_03_TITLE",
+        "content_key": "LORE_SUBSTATION_03_TEXT",
+        "world_refs": [
+            "char_marat",
+            "char_grid_crew_recorder",
+            "faction_grid_crew",
+            "hist_crew_walk_suburbs"
+        ]
+    },
+    {
+        "doc_id": "substation_note_04",
+        "title_key": "LORE_SUBSTATION_04_TITLE",
+        "content_key": "LORE_SUBSTATION_04_TEXT",
+        "world_refs": [
+            "diary_keeper_02",
+            "news_rolling_outages"
+        ]
+    },
+    {
+        "doc_id": "substation_note_05",
+        "title_key": "LORE_SUBSTATION_05_TITLE",
+        "content_key": "LORE_SUBSTATION_05_TEXT",
+        "world_refs": [
+            "hist_project_architect",
+            "faction_project_architect",
+            "news_architect_denied"
+        ]
+    },
+    {
+        "doc_id": "substation_note_06",
+        "title_key": "LORE_SUBSTATION_06_TITLE",
+        "content_key": "LORE_SUBSTATION_06_TEXT",
+        "world_refs": [
+            "char_keeper",
+            "faction_keepers",
+            "hist_keeper_reversal"
+        ]
+    },
+    {
+        "doc_id": "substation_note_07",
+        "title_key": "LORE_SUBSTATION_07_TITLE",
+        "content_key": "LORE_SUBSTATION_07_TEXT",
+        "world_refs": [
+            "radio_02_grid_crew_relay",
+            "char_grid_crew_recorder",
+            "hist_bench_proof"
+        ]
+    },
+    {
+        "doc_id": "substation_note_08",
+        "title_key": "LORE_SUBSTATION_08_TITLE",
+        "content_key": "LORE_SUBSTATION_08_TEXT",
+        "world_refs": [
+            "char_marat",
+            "char_radio_voice",
+            "radio_01_power_station"
+        ]
+    },
+    {
+        "doc_id": "power_station_note_01",
+        "title_key": "LORE_POWER_STATION_01_TITLE",
+        "content_key": "LORE_POWER_STATION_01_TEXT",
+        "world_refs": [
+            "char_marat",
+            "char_grid_crew_recorder",
+            "faction_grid_crew"
+        ]
+    },
+    {
+        "doc_id": "power_station_note_02",
+        "title_key": "LORE_POWER_STATION_02_TITLE",
+        "content_key": "LORE_POWER_STATION_02_TEXT"
+    },
+    {
+        "doc_id": "power_station_note_03",
+        "title_key": "LORE_POWER_STATION_03_TITLE",
+        "content_key": "LORE_POWER_STATION_03_TEXT",
+        "world_refs": [
+            "radio_03_keeper_reversal",
+            "char_keeper",
+            "hist_radio_call"
+        ]
+    },
+    {
+        "doc_id": "power_station_note_04",
+        "title_key": "LORE_POWER_STATION_04_TITLE",
+        "content_key": "LORE_POWER_STATION_04_TEXT",
+        "world_refs": [
+            "faction_city_power",
+            "hist_blackout_night"
+        ]
+    },
+    {
+        "doc_id": "power_station_note_05",
+        "title_key": "LORE_POWER_STATION_05_TITLE",
+        "content_key": "LORE_POWER_STATION_05_TEXT",
+        "world_refs": [
+            "char_architect",
+            "faction_project_architect",
+            "hist_project_architect"
+        ]
+    },
+    {
+        "doc_id": "power_station_note_06",
+        "title_key": "LORE_POWER_STATION_06_TITLE",
+        "content_key": "LORE_POWER_STATION_06_TEXT",
+        "world_refs": [
+            "diary_keeper_01",
+            "diary_keeper_03",
+            "faction_keepers"
+        ]
+    },
+    {
+        "doc_id": "power_station_note_07",
+        "title_key": "LORE_POWER_STATION_07_TITLE",
+        "content_key": "LORE_POWER_STATION_07_TEXT",
+        "world_refs": [
+            "diary_manya_01",
+            "char_babka_manya",
+            "char_petrov"
+        ]
+    },
+    {
+        "doc_id": "power_station_note_08",
+        "title_key": "LORE_POWER_STATION_08_TITLE",
+        "content_key": "LORE_POWER_STATION_08_TEXT",
+        "world_refs": [
+            "news_trees_listen",
+            "char_old_anya",
+            "hist_bench_proof"
+        ]
     }
 ]

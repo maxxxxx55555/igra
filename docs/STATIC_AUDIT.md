@@ -331,6 +331,91 @@ Status legend: OPEN / FIXED (commit hash) / DOCUMENTED (accepted, not fixed
     to clean up the source file's escaping in a future pass — cosmetic
     only, no further action needed from CODE.
 
+## From Arena's `docs/CONTENT_PIPELINE_AUDIT.md` final release certificate (2026-09-09, PR #7)
+
+29. **`substation` (D10) and `power_station` (D11, chain terminal) packs
+    verified against the full closure chain — the last two districts,
+    completing 11/11.** Arena's audit ran a final 1–11 re-run (0 defects
+    — 2 initial checker-tooling false positives found and fixed, not
+    pack issues) plus a 15-point CONTENT RELEASE CERTIFICATE. Verified
+    independently rather than trusted: (a) `district_substation.tres
+    powered_by = [industrial]`, closure = industrial's own six-district
+    union plus industrial itself (seven districts); (b)
+    `district_power_station.tres powered_by = [substation]`, closure =
+    substation's seven plus substation itself (eight districts) — every
+    packed district except the two confirmed-terminal leaves
+    (school/gas_station). Hand-checked all `world_refs` in both packs
+    (18 distinct substation ids, 20 distinct power_station ids): 0 leaks
+    outside each closure. `radio_02_grid_crew_relay` (gate:
+    substation/min_stage 1) used at `substation_note_07`/min_stage 2 —
+    respects the gate; `radio_03_keeper_reversal` (gate: power_station/
+    min_stage 1) used at `power_station_note_03`/min_stage 1 — meets the
+    gate exactly, the pack's intentional finale front-load. Independently
+    re-counted note/fixed-spawn ids across all 11 packs: 88 notes, 103
+    fixed spawns, both 100% unique (matches the certificate). Both new
+    item ids (`transformer`, used as an optional-salvage fixed spawn in
+    both packs) verified to exist in `data/items/*.tres`. Status:
+    **VERIFIED, no fix needed.**
+30. **Power_station's `reactor_power_station` puzzle citation
+    (`puzzle_system.gd:29`, `reward: "ending"`) traced read-only per the
+    merge directive's step 2 — confirmed the pack does not touch
+    endings logic, and confirmed no endings-logic change was made here
+    either.** `_grant_reward()`'s `"ending"` branch only emits a toast
+    ("Reactor online!"); no ending is triggered directly by
+    `puzzle_system.gd` — victory is `PowerGrid._check_victory()`
+    (all 11 districts FULL) → `GameManager.trigger_win()`, unrelated to
+    this dictionary. Status: **CONFIRMED READ-ONLY, no code change
+    needed** (satisfies the merge directive's explicit "no ending logic
+    changes" instruction).
+31. **`puzzle_system.gd`'s `_puzzle_data` reward economy (coins/battery/
+    medkit/ending, one entry per district, cited as canon by every
+    content pack's `item_spawns.json`) is reachable for only 1 of 11
+    districts.** Traced the full call graph: `PuzzleSystem.start_puzzle()`
+    (the only entry point that leads to `mark_solved()` → `_grant_reward()`)
+    has exactly one live, non-test caller in the entire codebase —
+    `cable_box_interactable.gd`, a single hardcoded instance
+    (`PUZZLE_ID = "fuse_substation"`) placed only in
+    `scenes/districts/substation.tscn` (added in an earlier "WAVE 6 P3"
+    pass to fix a previously-uncompletable quest objective). The other
+    10 `_puzzle_data` entries (`generator_suburbs`, `fuse_residential`,
+    `transformer_park`, `switch_school`, `generator_hospital`,
+    `fuse_gas_station`, `transformer_police`, `switch_warehouses`,
+    `generator_industrial`, `reactor_power_station`) have no interactable
+    node anywhere that calls `start_puzzle()` with their id — nothing
+    reaches them. This is **separate from and does not affect the core
+    district-restoration loop**, which is fully live for all 11
+    districts via `power_switch.gd` (item-cost repair, its own
+    independent `DISTRICT_RESTORED_TOAST`/`puzzle_solved` emission,
+    already `CONFIRMED WORKING` below) — a player restores every
+    district normally regardless of this finding. What's unreachable is
+    a separate bonus layer (extra coins/battery/medkit/a "Reactor
+    online!" flourish) that 10 content packs describe as their
+    district's "puzzle canon" believing it live. Status: **DOCUMENTED,
+    not fixed** — a real design decision, not a one-line bug: either (a)
+    build 9 more `cable_box_interactable`-style nodes + district scene
+    edits (real scene-editing work, higher risk without visual
+    verification, same class the suburbs wave already declined to
+    attempt blind), or (b) wire `power_switch.gd`'s own FULL-completion
+    path to additionally call `PuzzleSystem.mark_solved()` with each
+    district's canonical id (the minimal code-only fix candidate, but
+    changes what every player receives on every district completion —
+    a balance/design call, not mine to make unilaterally). Deferred
+    pending that decision; not blocking the IDEAL BAR since the core
+    loop is unaffected and this predates the current content pipeline
+    entirely.
+32. **Audio finding F1 (Arena's, independently re-verified): two
+    power_station detail one-shots are off the 30.000 s class every
+    other detail bed holds** — `power_station_generator_thrum.ogg`
+    (28.749 s) and `power_station_cooling_fan.ogg` (28.948 s), both
+    confirmed via direct Ogg-container final-page-granule parsing (same
+    method as the industrial_dark.ogg check, #22/KNOWN_ISSUES.md). Both
+    loop (`loop = true`) and no code reads or assumes a duration for
+    detail beds (`district_atmosphere.gd` grepped, confirmed). Same
+    reasoning as the industrial bed length: not my ownership zone
+    (`assets/audio/**`), no functional risk either way. Status:
+    **DOCUMENTED, not fixed** — re-render is the audio toolchain
+    holder's call, not blocking.
+
 ## CONFIRMED WORKING (traced this pass, no defect — do not re-audit)
 
 - `power_switch.gd::interact()`/stage-advance chain, `REPAIR_COST` vs
