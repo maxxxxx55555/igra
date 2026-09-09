@@ -1,17 +1,60 @@
 # Handoff
 
-## Open questions (for the next Arena content pass, not urgent)
+## Content pipeline: COMPLETE — 11/11 districts (2026-09-09)
 
-- **`content/districts/industrial/lore_notes.json`'s `en.text` fields
-  have a literal double-escaped `\"` instead of a plain `"` wherever a
-  note quotes in-world dialogue** (all 8 notes; `warehouses` and every
-  earlier pack use plain `"`). Cosmetic — worked around in the i18n
-  layer (`STATIC_AUDIT.md` #28), no player-facing effect, no urgency.
-  Please clean up the source file's escaping whenever `industrial` gets
-  touched again (e.g. a future prose pass), so future translators
-  copying straight from the JSON don't inherit the artifact.
+All 11 districts are packed, merged, wired, and translated:
+`suburbs → residential → park → school → hospital → gas_station →
+police → warehouses → industrial → substation → power_station`. See
+`docs/CONTENT_PIPELINE_AUDIT.md` §9 (CONTENT RELEASE CERTIFICATE) for
+the full 15-point verification, independently cross-checked (not just
+trusted) below. `ARENA_NEXT_PROMPT.md` now reads pipeline-complete —
+no next district queued, and GDD.md defines no epilogue-district scope
+beyond D11 (the "epilogue" scene in GDD §23 is an existing UI screen,
+unrelated to the district content pipeline).
 
-## Latest phase: PR #6 merged — industrial district (2026-09-09, "merge arena", NO-GODOT static mode)
+**Closed open question:** the industrial `lore_notes.json`
+double-escaping (previously logged here) was fixed by Arena in PR #7's
+own TASK 0 commit — verified byte-for-byte against the already-shipped
+i18n text (8/8 exact matches, zero player-visible change either way).
+No remaining open questions for Arena at this time.
+
+## Latest phase: PR #7 merged — substation + power_station, pipeline complete (2026-09-09, "merge arena", NO-GODOT static mode)
+
+`arena/01a0867f-igra` — the final two districts (`substation` D10,
+`power_station` D11, chain terminal), the industrial escaping fix, and
+the final 1–11 audit + release certificate. Scope-checked, all 5 JSON
+files valid, all item ids and all `world_refs` (18 distinct for
+substation, 20 for power_station) hand-verified against each closure —
+0 leaks. `--no-ff`, 0 conflicts, static gates green.
+
+Wired identically to all 9 prior districts: `district_loot.gd`'s
+`LORE_DOCS` gained both districts (their `BY_DISTRICT`/`DOCUMENTS` rows
+already existed in code; both correctly have no `BLUEPRINTS` row); 16
+`documents_catalog.json` entries appended (121 total); 32
+`LORE_SUBSTATION_*`/`LORE_POWER_STATION_*` keys ×13 locales translated
+(`i18n_audit.py`: `MISSING: 0`, 1047 keys/locale).
+
+Traced power_station's `reactor_power_station` puzzle citation
+(`reward: "ending"`) read-only per the merge directive — confirmed no
+endings-logic code touched, victory remains driven entirely by
+`PowerGrid._check_victory()`.
+
+**Substantial finding surfaced while tracing that puzzle citation, not
+introduced by this session:** `puzzle_system.gd`'s bonus reward economy
+(coins/battery/medkit/ending) is reachable for only 1 of 11 districts —
+the core district-restoration loop is unaffected (confirmed live via
+the separate `power_switch.gd` mechanism for all 11). Documented, not
+fixed — a real design decision between two remediation paths, not a
+one-line bug. Full reasoning: `docs/STATIC_AUDIT.md` #31,
+`docs/KNOWN_ISSUES.md`.
+
+Also independently re-verified Arena's new audio finding F1 (two
+power_station detail one-shots off the 30s class) — confirmed no code
+dependency, non-blocking (`STATIC_AUDIT.md` #32).
+
+Full reasoning for all of the above: `PLAN.md` decisions log.
+
+## Previous phase: PR #6 merged — industrial district (2026-09-09, "merge arena", NO-GODOT static mode)
 
 `arena/01a085f3-igra` — `industrial` district (D9), **the chain's first
 two-parent convergence** (`powered_by = [warehouses, police]`) and first

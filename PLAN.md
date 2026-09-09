@@ -294,6 +294,80 @@ final district).
 
 ---
 
+**2026-09-09 (merge arena PR #7, autonomous, NO-GODOT static mode) —
+CONTENT PIPELINE COMPLETE: 11/11 DISTRICTS:**
+Merged `arena/01a0867f-igra` — the final two districts (`substation`
+D10, `power_station` D11, chain terminal), plus Arena's own fix for the
+industrial `lore_notes.json` double-escaping (`STATIC_AUDIT.md` #28)
+and the final 1–11 re-run + 15-point CONTENT RELEASE CERTIFICATE in
+`docs/CONTENT_PIPELINE_AUDIT.md` §9. Scope-checked, all 5 JSON files
+valid, all item ids and all `world_refs` (18 distinct for substation,
+20 for power_station) hand-verified against each district's computed
+closure before merging — 0 leaks either way. `--no-ff`, 0 conflicts,
+pushed, branch deleted, static gates green.
+
+Verified the industrial escaping fix before trusting it: parsed
+Arena's fixed `lore_notes.json` and diffed all 8 texts byte-for-byte
+against the already-shipped `LORE_INDUSTRIAL_*` i18n values — 8/8
+exact matches, confirming zero player-visible change from either side
+of that fix (satisfied the merge directive's step 4 by direct
+comparison, not by assumption).
+
+Wired both districts identically to all 9 prior ones:
+`district_loot.gd`'s `LORE_DOCS` gained `substation` and
+`power_station` (their `BY_DISTRICT`/`DOCUMENTS` rows already existed
+in code; both correctly have no `BLUEPRINTS` row); 16
+`documents_catalog.json` entries appended (121 total, 0 duplicates); 32
+`LORE_SUBSTATION_*`/`LORE_POWER_STATION_*` keys translated ×13 locales
+(1047 keys/locale, `i18n_audit.py`: `MISSING: 0`).
+
+Traced `power_station`'s `reactor_power_station` puzzle citation
+(`reward: "ending"`) read-only per the merge directive's explicit
+step 2 instruction: confirmed `_grant_reward()`'s `"ending"` branch
+only emits a toast, and victory is driven entirely by
+`PowerGrid._check_victory()` (all 11 FULL) → `GameManager.trigger_win()`
+— unrelated to this dictionary. No endings-logic code touched.
+
+**Substantial finding this pass, not introduced by this session:**
+while tracing the "ending" reward, followed `PuzzleSystem.start_puzzle()`
+to its only live caller and discovered `puzzle_system.gd`'s entire
+reward dictionary (coins/battery/medkit/ending, one entry per district,
+cited as canon by all 11 content packs) is reachable for only 1 of 11
+districts — the other 10 have no interactable node wired to
+`start_puzzle()` at all. Traced carefully before concluding anything:
+confirmed the CORE district-restoration loop is unaffected (fully live
+via the separate, independent `power_switch.gd` mechanism for all 11
+districts, already `CONFIRMED WORKING` in a prior pass) — this is a
+missing SECONDARY bonus layer, not a broken core loop. Deliberately did
+NOT attempt a fix: building 9 more scene-level interactable nodes is
+real scene-editing work I can't visually verify in NO-GODOT mode (same
+class of risk the very first suburbs wave already declined for a
+similar reason), and the alternative — wiring `power_switch.gd` itself
+into `PuzzleSystem.mark_solved()` — would change what every player
+receives on every district completion, a balance/design call that
+isn't mine to make unilaterally without a decision from the owner.
+Registered as `STATIC_AUDIT.md` #31 and a `KNOWN_ISSUES.md` entry,
+DOCUMENTED not fixed, with both remediation paths spelled out for
+whoever makes that call.
+
+Also independently re-verified Arena's new audio finding F1
+(`power_station_generator_thrum.ogg`/`cooling_fan.ogg`, 28.7-28.9s vs
+the 30.000s detail-bed class) via the same direct Ogg-granule parsing
+method used for the industrial bed — confirmed no code dependency on
+detail-bed duration, documented as non-blocking (`STATIC_AUDIT.md` #32).
+
+**Content pipeline complete: 11/11 districts.** Independently
+re-verified Arena's release certificate rather than trusting it:
+recomputed note-id and fixed-spawn-id counts across all 11
+`content/districts/*/lore_notes.json` and `item_spawns.json` files by
+hand (88 notes, 103 fixed spawns, both confirmed 100% globally unique)
+— matches the certificate's own count exactly. `ARENA_NEXT_PROMPT.md`
+set to pipeline-complete (no next district queued); GDD.md has no
+epilogue-district scope beyond D11, so no further content wave is
+expected from Arena barring the owner requesting one.
+
+---
+
 ## А. Что уже работает (проверено, не предположение)
 
 Ядро игры полностью играбельно — подтверждено `boot_check_scene.tscn`

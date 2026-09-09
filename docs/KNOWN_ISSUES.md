@@ -43,6 +43,52 @@ mode's static-only verification is not a reason to fabricate binary
 audio myself. Decision recorded in `PLAN.md`'s decisions log
 (2026-09-09, PR #6).
 
+## Two power_station audio one-shots are off the 30.000 s detail-bed class — not blocking
+
+`power_station_generator_thrum.ogg` (28.749 s) and
+`power_station_cooling_fan.ogg` (28.948 s) are shorter than the
+30.000 s every other district's detail one-shots hold exactly —
+independently re-verified 2026-09-09 by the same direct Ogg-granule
+parsing used for the `industrial_dark.ogg` finding above. Both loop
+(`loop = true` in `district_atmosphere.gd`) and no code reads or
+assumes a detail-bed duration anywhere, so there is no functional
+risk. Same reasoning as the industrial bed: `assets/audio/**` is
+Arena's ownership zone, re-rendering (if wanted for consistency) is
+the audio toolchain holder's call, not code's. Full reasoning:
+`docs/STATIC_AUDIT.md` #32, Arena's `docs/CONTENT_PIPELINE_AUDIT.md`
+finding F1.
+
+## `PuzzleSystem`'s bonus reward economy (coins/battery/medkit/ending) is reachable for only 1 of 11 districts
+
+`scripts/world/puzzle_system.gd`'s `_puzzle_data` dictionary has one
+entry per district (e.g. `generator_suburbs`, `fuse_substation`,
+`reactor_power_station`) and every content pack's `item_spawns.json`
+cites its own entry as "puzzle canon". But the only path that reaches
+`mark_solved()` → `_grant_reward()` is `PuzzleSystem.start_puzzle()`,
+and the only live (non-test) caller of `start_puzzle()` anywhere in the
+codebase is `cable_box_interactable.gd` — a single hardcoded instance
+(`PUZZLE_ID = "fuse_substation"`) placed only in
+`scenes/districts/substation.tscn`. The other 10 districts have no
+interactable node that ever calls `start_puzzle()` with their id, so
+their coins/battery/medkit/"Reactor online!" bonus is currently dead
+content.
+
+**This does not affect the core game loop.** District restoration
+DARK→FULL is fully live and working for all 11 districts through the
+separate, independent `power_switch.gd` mechanism (item-cost repair:
+cable/fuse/transistor; its own `DISTRICT_RESTORED_TOAST`/`puzzle_solved`
+emission) — a player completes every district normally regardless of
+this gap. What's missing is a secondary bonus-reward layer.
+
+Not fixed — a real design decision, not a one-line bug: either build 9
+more `cable_box_interactable`-style scene nodes (real scene-editing
+work, high risk without visual verification), or have
+`power_switch.gd`'s FULL-completion path additionally call
+`PuzzleSystem.mark_solved()` with each district's canonical id (a
+code-only fix, but changes what every player receives on every
+district completion — a balance call, not code's to make
+unilaterally). Full reasoning: `docs/STATIC_AUDIT.md` #31.
+
 ## `WorldBible.is_revealed()` doesn't distinguish "district exists" from "district visited"
 
 `scripts/world/world_bible.gd`'s `is_revealed(reveal)` checks
