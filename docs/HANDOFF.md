@@ -1,6 +1,51 @@
 # Handoff
 
-## Latest phase: PR #5 merged — warehouses district (2026-09-09, "merge arena", NO-GODOT static mode)
+## Open questions (for the next Arena content pass, not urgent)
+
+- **`content/districts/industrial/lore_notes.json`'s `en.text` fields
+  have a literal double-escaped `\"` instead of a plain `"` wherever a
+  note quotes in-world dialogue** (all 8 notes; `warehouses` and every
+  earlier pack use plain `"`). Cosmetic — worked around in the i18n
+  layer (`STATIC_AUDIT.md` #28), no player-facing effect, no urgency.
+  Please clean up the source file's escaping whenever `industrial` gets
+  touched again (e.g. a future prose pass), so future translators
+  copying straight from the JSON don't inherit the artifact.
+
+## Latest phase: PR #6 merged — industrial district (2026-09-09, "merge arena", NO-GODOT static mode)
+
+`arena/01a085f3-igra` — `industrial` district (D9), **the chain's first
+two-parent convergence** (`powered_by = [warehouses, police]`) and first
+Act III district, plus Arena's own re-run of `docs/CONTENT_PIPELINE_AUDIT.md`
+across all 9 shipped districts (0 new defects; its own audit caught and
+fixed 4 checker-tooling false positives, not pack issues). Scope-checked,
+both JSON files validated, all 19 item ids and all 22 distinct `world_refs`
+ids hand-verified against the six-district union closure before merging.
+`--no-ff`, 0 conflicts, static gates green.
+
+**Audio finding resolved (step 2 of the merge directive):**
+`industrial_dark.ogg` measures 33.994 s, not the 36.000 s house contract
+every other district bed uses — independently re-verified by parsing the
+Ogg container's own final-page granule (1,499,146 → 33.994 s exactly, no
+ffmpeg needed). Decision: **accepted as canon**, not a defect — 12 bars
+at the industrial theme's 85 bpm = 33.882 s, within 112 ms of the shipped
+length (consistent with encoder padding, not a random mis-render); no
+code hardcodes the 36 s assumption anywhere. Full reasoning:
+`docs/KNOWN_ISSUES.md` and `PLAN.md`'s decisions log.
+
+Wired like the previous 8 districts: `district_loot.gd`'s `LORE_DOCS`
+gained `industrial` (its `BY_DISTRICT`/`DOCUMENTS` rows already existed
+in code; correctly has no `BLUEPRINTS` row, matching the pack's own "no
+schematic in this district" canon); 8 `documents_catalog.json` entries
+appended (105 total, written with clean quotes per the open question
+above); 16 `LORE_INDUSTRIAL_*` keys × 13 locales translated
+(`i18n_audit.py`: `MISSING: 0`).
+
+Both CODE-facing data facts from PR #3–#5 (`STATIC_AUDIT.md` #21/#22)
+re-verified against the new pack — logged as `STATIC_AUDIT.md` #27,
+VERIFIED, no code change needed. Full reasoning: `PLAN.md` decisions
+log. Next Arena district queued: `substation` (`ARENA_NEXT_PROMPT.md`).
+
+## Previous phase: PR #5 merged — warehouses district (2026-09-09, "merge arena", NO-GODOT static mode)
 
 `arena/01a0859c-igra` — `warehouses` district (D8) pack plus Arena's own
 re-run of `docs/CONTENT_PIPELINE_AUDIT.md` across all 8 shipped districts

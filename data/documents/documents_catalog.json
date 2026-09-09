@@ -663,5 +663,82 @@
             "char_grid_crew_recorder",
             "faction_grid_crew"
         ]
+    },
+    {
+        "doc_id": "industrial_note_01",
+        "title_key": "LORE_INDUSTRIAL_01_TITLE",
+        "content_key": "LORE_INDUSTRIAL_01_TEXT",
+        "world_refs": [
+            "hist_blackout_night",
+            "faction_city_power",
+            "news_rolling_outages"
+        ]
+    },
+    {
+        "doc_id": "industrial_note_02",
+        "title_key": "LORE_INDUSTRIAL_02_TITLE",
+        "content_key": "LORE_INDUSTRIAL_02_TEXT"
+    },
+    {
+        "doc_id": "industrial_note_03",
+        "title_key": "LORE_INDUSTRIAL_03_TITLE",
+        "content_key": "LORE_INDUSTRIAL_03_TEXT",
+        "world_refs": [
+            "char_marat",
+            "char_grid_crew_recorder",
+            "faction_grid_crew"
+        ]
+    },
+    {
+        "doc_id": "industrial_note_04",
+        "title_key": "LORE_INDUSTRIAL_04_TITLE",
+        "content_key": "LORE_INDUSTRIAL_04_TEXT",
+        "world_refs": [
+            "char_keeper",
+            "faction_keepers",
+            "hist_grid_built",
+            "hist_keeper_reversal"
+        ]
+    },
+    {
+        "doc_id": "industrial_note_05",
+        "title_key": "LORE_INDUSTRIAL_05_TITLE",
+        "content_key": "LORE_INDUSTRIAL_05_TEXT",
+        "world_refs": [
+            "hist_project_architect",
+            "news_meter_anomaly",
+            "char_superintendent"
+        ]
+    },
+    {
+        "doc_id": "industrial_note_06",
+        "title_key": "LORE_INDUSTRIAL_06_TITLE",
+        "content_key": "LORE_INDUSTRIAL_06_TEXT",
+        "world_refs": [
+            "char_architect",
+            "faction_project_architect",
+            "news_architect_denied"
+        ]
+    },
+    {
+        "doc_id": "industrial_note_07",
+        "title_key": "LORE_INDUSTRIAL_07_TITLE",
+        "content_key": "LORE_INDUSTRIAL_07_TEXT",
+        "world_refs": [
+            "char_babka_manya",
+            "char_petrov",
+            "hist_crew_walk_park"
+        ]
+    },
+    {
+        "doc_id": "industrial_note_08",
+        "title_key": "LORE_INDUSTRIAL_08_TITLE",
+        "content_key": "LORE_INDUSTRIAL_08_TEXT",
+        "world_refs": [
+            "char_radio_voice",
+            "radio_01_power_station",
+            "hist_radio_call",
+            "char_grid_crew_recorder"
+        ]
     }
 ]

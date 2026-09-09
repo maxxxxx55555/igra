@@ -291,6 +291,48 @@ Status legend: OPEN / FIXED (commit hash) / DOCUMENTED (accepted, not fixed
     ≤512²/~500KB prop-texture budget (`docs/PRODUCTION_BIBLE.md` §4).
     Status: **VERIFIED, no fix needed.**
 
+## From Arena's `docs/CONTENT_PIPELINE_AUDIT.md` re-run (2026-09-09, PR #6)
+
+27. **`industrial` (district 9, first two-parent convergence) pack
+    cross-checked against both open data facts from #21/#22 — confirmed
+    still resolved, nothing new.** Arena's audit re-ran districts 1–9
+    (0 new defects — its own §3.6 traced 4 initial audit-script false
+    positives to checker regex bugs, not pack content, and fixed them
+    tooling-side). Verified independently before wiring: (a) topology —
+    `district_industrial.tres powered_by = [warehouses, police]`, a
+    genuine two-parent convergence (both required at FULL per GDD §4.3,
+    not either), consistent with #21; (b) music field —
+    `district_themes.gd`'s `industrial` row has no `"music"` key
+    (colour-only). `world_refs` reachability re-verified by hand: all 22
+    distinct ids the pack references resolve to a `reveal.district` of
+    `suburbs`, `residential`, `park` or `hospital` (0/22 leak to
+    school/gas_station/substation/power_station) — exactly the
+    six-district union closure the pack claims (both parent branches
+    walked to their own root). The 4 Act II Architect ids and the 9
+    Keeper/radio ids are both legitimately used together for the first
+    time (this is the first district reachable via both branches at
+    once); Architect ids stay at `min_stage >= 2` matching their own
+    gate. Status: **VERIFIED, no fix needed.**
+28. **`content/districts/industrial/lore_notes.json`'s `en.text` fields
+    contain a literal double-escaped `\"` (backslash + quote) instead of
+    a plain `"` wherever a note quotes in-world dialogue** — confirmed
+    in all 8 notes (`industrial_note_01` through `_08`), absent from
+    every prior district's equivalent file (checked `warehouses` as a
+    control: uses plain `"` throughout). This is a content-source
+    authoring artifact, not a code bug — the raw JSON is Arena's
+    reference source for what to translate, not what ships to players;
+    the actual in-game text lives in `data/i18n/*.json` under the
+    `LORE_INDUSTRIAL_*` keys. Status: **WORKED AROUND** — wrote the
+    i18n key content with the stray backslashes stripped (clean quotes),
+    so no player ever sees the artifact; not hand-edited in
+    `content/districts/industrial/lore_notes.json` itself since that
+    file is outside this session's ownership zone (`content/**` is
+    Arena's). Logged as an open question in `docs/HANDOFF.md` for Arena
+    to clean up the source file's escaping in a future pass — cosmetic
+    only, no further action needed from CODE.
+
+## CONFIRMED WORKING (traced this pass, no defect — do not re-audit)
+
 - `power_switch.gd::interact()`/stage-advance chain, `REPAIR_COST` vs
   `district_loot.gd`'s `REPAIR_PARTS` stock — matches exactly.
 - `district_grading.gd`'s ambient-per-stage table vs GDD §4.2/§11.1.

@@ -15,6 +15,34 @@ closures (`docs/CONTENT_PIPELINE_AUDIT.md` §3.4) are computed against
 the real branching topology; forcing a linear chain would invalidate
 them.
 
+## `industrial_dark.ogg` is 33.994 s, not the shipped 36.000 s house contract — accepted as intentional
+
+Every other district's dark ambience bed (10 of 11) plus all 3 shipped
+lit beds (`suburbs`/`hospital`/`residential`) measure exactly 36.000 s
+(Ogg granule 1,587,600 @ 44.1 kHz) — independently re-verified
+2026-09-09 by parsing the Ogg container's final page granule directly
+(no ffmpeg needed): `industrial_dark.ogg`'s last granule is 1,499,146,
+giving 33.994 s exactly.
+
+Accepted as **deliberate, not a defect**: `tools/gen_audio.py`'s
+`DISTRICTS` canon sets industrial's theme to 85 bpm / 12 bars, and
+12 bars × 4 beats ÷ 85 bpm × 60 = 33.882 s — within 112 ms of the
+shipped 33.994 s (consistent with normal OGG frame-alignment padding
+at encode time, not a random mis-render; 36 s at 85 bpm would be a
+non-whole 12.75 bars, which the generator correctly declined to
+produce). No code hardcodes the 36 s assumption anywhere
+(`music_manager.gd`'s loop handling is duration-agnostic, driven by
+the actual resource), so there is no functional risk either way. The
+still-unfabricated `industrial_lit.ogg` (spec `docs/AUDIO_COVERAGE.md`
+G2h) must match this bed's real length (33.994 s), not the generic
+36 s, for `MusicManager`'s crossfade to land cleanly — already
+specified correctly. Re-rendering the dark bed for contract uniformity
+would be a valid alternative but is out of scope for this decision:
+`assets/audio/**` is Arena's ownership zone, not code's, and NO-GODOT
+mode's static-only verification is not a reason to fabricate binary
+audio myself. Decision recorded in `PLAN.md`'s decisions log
+(2026-09-09, PR #6).
+
 ## `WorldBible.is_revealed()` doesn't distinguish "district exists" from "district visited"
 
 `scripts/world/world_bible.gd`'s `is_revealed(reveal)` checks
