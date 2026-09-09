@@ -1,0 +1,112 @@
+{
+  "district": "warehouses",
+  "version": 1,
+  "_world_refs_contract": "Notes reference world-bible entries by id only (content/world/*, content/lore/*); no copied text. See docs/CONTENT_WORLD_BIBLE.md.",
+  "_reachability_rule": "warehouses unlocks from hospital FULL (district_warehouses.tres powered_by=[hospital]; GDD §4.3 requires every prereq at FULL), and hospital needs residential, which needs suburbs. Guaranteed history at arrival: suburbs (all stages) + residential (all stages) + hospital (all stages) — so every suburbs-, residential- and hospital-gated world id is safe here regardless of its own min_stage. The Act II Project Architect set (char_architect / faction_project_architect / hist_project_architect / news_architect_denied, all gated on hospital STREETS) is therefore legal — hospital must have reached FULL for warehouses to open — and is used only at min_stage >= 2 to keep the district's own pacing. NOT guaranteed: park, school, gas_station, police (separate branches / not on this path) — no Keeper / radio-voice / Channel-3 / evacuation-arena-*light* ids are referenced (news_arena_collection itself is suburbs-gated and safe, but is not used here). No Act III ids (radio_02_grid_crew_relay, radio_03_keeper_reversal).",
+  "notes": [
+    {
+      "id": "warehouses_note_01",
+      "item_type": "document",
+      "i18n_keys": { "title": "LORE_WAREHOUSES_01_TITLE", "text": "LORE_WAREHOUSES_01_TEXT" },
+      "en": {
+        "title": "Gate Log, Night Zero — Inbound",
+        "text": "The gatehouse clipboard, last page: the inbound sheet, stamped 21:40. Six crates from the hospital road, consignor box scratched out, stencilled CITY POWER — FEEDER HARDWARE — RETURN TO STORES, three of them already stamped QUARANTINE. The 22:00 shift clocked in under them and the log simply stops. In the margin, the night guard's hand, written hard enough to tear the paper: \"Trucks lined up south all the way to the hospital road. Drivers will not leave cargo after dark. They say the crates hum when the yard is quiet. They asked me which one of us it is.\""
+      },
+      "location_hint": "Clipboard on the dock-gate booth desk (z_dock_gate)",
+      "min_stage": 0,
+      "weight": 100,
+      "world_refs": ["hist_blackout_night", "news_rolling_outages"]
+    },
+    {
+      "id": "warehouses_note_02",
+      "item_type": "photo",
+      "i18n_keys": { "title": "LORE_WAREHOUSES_02_TITLE", "text": "LORE_WAREHOUSES_02_TEXT" },
+      "en": {
+        "title": "Photo: Yard Floods, 00:40",
+        "text": "Shot from the dock canopy through the fog: both yard floods burning, bay door four standing open, ramp down, and light spilling out of the trailer onto the wet concrete — light with no lamp in front of it, the way a flood throws when it is coming through a doorway. On the back, the guard's writing again: \"Breaker D was off. I checked it before I wrote that, and I checked it after. The trailer by door four is not on tonight's sheet. I am leaving the ramp down so whatever came out of it can go back in.\""
+      },
+      "location_hint": "Taped inside the dock canopy beside bay door four (z_loading_yard)",
+      "min_stage": 0,
+      "weight": 95,
+      "world_refs": []
+    },
+    {
+      "id": "warehouses_note_03",
+      "item_type": "audio_log",
+      "i18n_keys": { "title": "LORE_WAREHOUSES_03_TITLE", "text": "LORE_WAREHOUSES_03_TEXT" },
+      "en": {
+        "title": "Recorder: Grid Crew Log 17 — Stores Check",
+        "text": "\"Stores check, second night, and Marat's count holds: drums twelve through eighteen are feeder-grade, same lot the suburbs bench ran on. Fuses are racked by the yard flood box, tagged. Solid state is another story — nothing in the open stores; everything with a transistor in it is behind the quarantine mesh, and the cage key is not on the board. Recorder's note: we do not cut that lock. Whatever they quarantined in here, it was quarantined on purpose, and I would like the person who kept ordering it to explain the label first. Second thing: the sorter ran at two this morning. Nobody is on the sorter. Logging it and leaving.\""
+      },
+      "location_hint": "Recorder left on the feeder-room control desk (z_switch_room)",
+      "min_stage": 1,
+      "weight": 85,
+      "world_refs": ["char_marat", "char_grid_crew_recorder", "faction_grid_crew"]
+    },
+    {
+      "id": "warehouses_note_04",
+      "item_type": "document",
+      "i18n_keys": { "title": "LORE_WAREHOUSES_04_TITLE", "text": "LORE_WAREHOUSES_04_TEXT" },
+      "en": {
+        "title": "Foreman's Notebook — Final Pages",
+        "text": "A pocket book kept twenty years in the same patient hand. The last pages are not the same hand any more. \"Belt started itself at 02:00, sorting into quarantine. Nobody on the floor. Third night it sorted out of quarantine — I watched it stack a pallet it had no order for. I pulled the shed's mains and it was running again by first light. I have stopped writing 'loose wire'. It counts the crates, then it counts the lockers, and last night it counted the men. It does not need me to feed it any more. That is what it means to be replaced.\""
+      },
+      "location_hint": "Pocket book on the mezzanine office desk (z_foreman_office)",
+      "min_stage": 0,
+      "weight": 90,
+      "world_refs": []
+    },
+    {
+      "id": "warehouses_note_05",
+      "item_type": "document",
+      "i18n_keys": { "title": "LORE_WAREHOUSES_05_TITLE", "text": "LORE_WAREHOUSES_05_TEXT" },
+      "en": {
+        "title": "Quarantine Tag — Meters, Six Years Old",
+        "text": "A laminated tag wired to the cage mesh, dated the year three streets' meters ran backwards. \"REASON: negative draw at night. Drum tested twice — not faulty. Not a fault: a tap. Returns go to the cage, not to the grid.\" A supervisor's tick, nothing else. On the inside of the mesh, facing out, a pencil answer too small for the cage's owner to have read: \"These were not defective. Defective meters stop. These ran backwards on purpose, like something downstream was being fed. The cage is where you put things that feed. That is all the cage was ever for.\""
+      },
+      "location_hint": "Tag wired to the mesh of the quarantine cage (z_returns_cage)",
+      "min_stage": 1,
+      "weight": 80,
+      "world_refs": ["char_superintendent", "news_meter_anomaly"]
+    },
+    {
+      "id": "warehouses_note_06",
+      "item_type": "document",
+      "i18n_keys": { "title": "LORE_WAREHOUSES_06_TITLE", "text": "LORE_WAREHOUSES_06_TEXT" },
+      "en": {
+        "title": "Storage Request — No Letterhead",
+        "text": "A typed letter, no letterhead, found in the cold annex under a pallet of unopened quarantine crates. It asks the complex to store \"recording media and lamp fittings\" indefinitely, \"metered separately, not entered on the receiving plan\". One sentence is typed and then struck through, and the strike-through is not careful: \"we are storing what the lamps have seen.\" Beneath it, a different pen: \"We do not exist. Storage does not ask what it stores.\" On the back, the receiving stamp and the foreman's whole answer in one line: \"Received into quarantine. The belt decides where things that hear are kept, and I have stopped arguing with the belt.\""
+      },
+      "location_hint": "Under a quarantine pallet in the cold annex (z_cold_storage)",
+      "min_stage": 2,
+      "weight": 75,
+      "world_refs": ["faction_project_architect", "hist_project_architect", "news_architect_denied"]
+    },
+    {
+      "id": "warehouses_note_07",
+      "item_type": "audio_log",
+      "i18n_keys": { "title": "LORE_WAREHOUSES_07_TITLE", "text": "LORE_WAREHOUSES_07_TEXT" },
+      "en": {
+        "title": "Loader's Cassette — Names",
+        "text": "A cassette labelled \"G.\" in the break-room player. G. is practising names the way other men practise prayers — Roma, the twins from bay four, Katya's brother — the men whose lockers the belt counted. He keeps the list because the ones who collect know names, so a name is the only thing that still means something. Softer, then: \"They stood at the quarantine cage for an hour on the third night. Three of them, quiet, heads tilted like they were reading the tags. They knew my name before I said it. The belt knew it first, and a belt has no business knowing a name. Whatever is in that cage, it is not hardware. Hardware does not remember who loaded it — it was only ever on loan to us.\""
+      },
+      "location_hint": "Cassette in the break-room player (z_break_room)",
+      "min_stage": 2,
+      "weight": 70,
+      "world_refs": ["char_babka_manya", "char_architect"]
+    },
+    {
+      "id": "warehouses_note_08",
+      "item_type": "photo",
+      "i18n_keys": { "title": "LORE_WAREHOUSES_08_TITLE", "text": "LORE_WAREHOUSES_08_TEXT" },
+      "en": {
+        "title": "Photo: The East Gate, Loaded",
+        "text": "Taped inside the feeder-room door: the east gate at night, two figures with a hand truck, drums stacked, one figure turned back toward the camera — face lost in the fog, but the posture is a man counting a store he is leaving. On the back, the recorder's hand: \"Came back the third night. Took drums twelve through eighteen and every fuse on the tagged rack. Left the cage alone — the key never did turn up, and we are not the ones who cut locks. If you are reading this after the lights come on: the sorter ran the whole time we worked. Check the belt. It counts everything that leaves this yard now, and it counted us out.\""
+      },
+      "location_hint": "Taped inside the feeder-room door, beside the district feeder map (z_switch_room)",
+      "min_stage": 3,
+      "weight": 60,
+      "world_refs": ["char_marat", "char_grid_crew_recorder", "faction_grid_crew"]
+    }
+  ]
+}
