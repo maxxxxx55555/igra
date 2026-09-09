@@ -5,6 +5,40 @@ in-game verification — a static-only pass can't play the game itself.
 
 ---
 
+## Batch 5 (2026-09-09) — industrial district content merged + wired
+
+- **`industrial` (district 9) now has readable lore**: 8 notes covering
+  a factory floor frozen at the moment of the blackout, a sorting line
+  that keeps running with nobody on it, and the first documents to
+  bring together both major mystery threads (the Project Architect and
+  the Keeper) in one place — same document-pickup/journal flow as
+  every earlier district, in all 13 languages.
+- **New art**: lit floor/wall tile twins for the factory interior.
+- No gameplay-mechanic changes in this batch — content only.
+
+### HUMAN 5-MINUTE CHECK
+1. Reach the `industrial` district (needs BOTH `warehouses` and
+   `police` at full restoration — this is the first district with two
+   prerequisites), pick up 2-3 document/photo/audio-log pickups, open
+   the Journal — confirm titles/text show in your current language,
+   not English fallback.
+2. Read the note titled "Switchgear Room — The Winding Refusal" (found
+   later in the district) — it references the Project Architect
+   storyline. Read the note titled "Shipping Ledger" — it references
+   the Keeper. Both should be legible from this one district, which is
+   new (earlier districts could only guarantee one thread or the
+   other).
+3. Switch language mid-session (Settings → Language) while the Journal
+   is open on one of these new notes — text should retranslate
+   instantly.
+4. Visually confirm the factory's lit-window/floor textures actually
+   change look between DARK and a later stage (compare a screenshot at
+   DARK vs after restoring to STREETS/FULL).
+5. Confirm "collect all documents" progress still counts correctly
+   after picking up an industrial note (completionist total grew by 8).
+
+---
+
 ## Batch 4 (2026-09-09) — warehouses district content merged + wired
 
 - **`warehouses` (district 8) now has readable lore**: 8 notes covering
