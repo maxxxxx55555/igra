@@ -98,6 +98,10 @@ const LORE_DOCS: Dictionary = {
 		"gas_station_note_01", "gas_station_note_02", "gas_station_note_03", "gas_station_note_04",
 		"gas_station_note_05", "gas_station_note_06", "gas_station_note_07", "gas_station_note_08",
 	],
+	&"police": [
+		"police_note_01", "police_note_02", "police_note_03", "police_note_04",
+		"police_note_05", "police_note_06", "police_note_07", "police_note_08",
+	],
 }
 
 const RADIUS_MIN: float = 6.0

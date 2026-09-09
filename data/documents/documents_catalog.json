@@ -520,5 +520,81 @@
             "faction_street_watch",
             "char_keeper"
         ]
+    },
+    {
+        "doc_id": "police_note_01",
+        "title_key": "LORE_POLICE_01_TITLE",
+        "content_key": "LORE_POLICE_01_TEXT",
+        "world_refs": [
+            "hist_evacuation_arena",
+            "news_arena_collection",
+            "hist_present_day"
+        ]
+    },
+    {
+        "doc_id": "police_note_02",
+        "title_key": "LORE_POLICE_02_TITLE",
+        "content_key": "LORE_POLICE_02_TEXT",
+        "world_refs": [
+            "faction_street_watch"
+        ]
+    },
+    {
+        "doc_id": "police_note_03",
+        "title_key": "LORE_POLICE_03_TITLE",
+        "content_key": "LORE_POLICE_03_TEXT",
+        "world_refs": [
+            "char_marat",
+            "char_grid_crew_recorder",
+            "faction_grid_crew"
+        ]
+    },
+    {
+        "doc_id": "police_note_04",
+        "title_key": "LORE_POLICE_04_TITLE",
+        "content_key": "LORE_POLICE_04_TEXT",
+        "world_refs": [
+            "hist_blackout_night",
+            "faction_city_power"
+        ]
+    },
+    {
+        "doc_id": "police_note_05",
+        "title_key": "LORE_POLICE_05_TITLE",
+        "content_key": "LORE_POLICE_05_TEXT",
+        "world_refs": [
+            "char_keeper",
+            "faction_keepers",
+            "hist_trees_complaint"
+        ]
+    },
+    {
+        "doc_id": "police_note_06",
+        "title_key": "LORE_POLICE_06_TITLE",
+        "content_key": "LORE_POLICE_06_TEXT",
+        "world_refs": [
+            "char_keeper",
+            "faction_keepers",
+            "hist_keeper_reversal"
+        ]
+    },
+    {
+        "doc_id": "police_note_07",
+        "title_key": "LORE_POLICE_07_TITLE",
+        "content_key": "LORE_POLICE_07_TEXT",
+        "world_refs": [
+            "char_radio_voice",
+            "radio_01_power_station",
+            "hist_radio_call"
+        ]
+    },
+    {
+        "doc_id": "police_note_08",
+        "title_key": "LORE_POLICE_08_TITLE",
+        "content_key": "LORE_POLICE_08_TEXT",
+        "world_refs": [
+            "faction_street_watch",
+            "char_keeper"
+        ]
     }
 ]

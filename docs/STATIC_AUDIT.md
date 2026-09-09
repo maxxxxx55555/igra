@@ -244,7 +244,24 @@ Status legend: OPEN / FIXED (commit hash) / DOCUMENTED (accepted, not fixed
     pass's no-Godot constraint. Content-side discipline (§3.4's rule) is
     the actual guardrail in place today.
 
-## CONFIRMED WORKING (traced this pass, no defect — do not re-audit)
+## From Arena's `docs/CONTENT_PIPELINE_AUDIT.md` re-run (2026-09-09, PR #4)
+
+25. **`police` (district 7) pack cross-checked against both open data
+    facts from #21/#22 — confirmed still resolved, nothing new.** Arena's
+    audit re-ran districts 1–7 (0 new defects, see its §1/§3.3/§3.4) after
+    adding `police`. Verified independently before wiring: (a) topology —
+    `district_police.tres powered_by = [park]`, and `police` is *not* a
+    leaf (`industrial.powered_by = [warehouses, police]`), consistent with
+    #21's "convergent DAG, not a strict chain" conclusion, no `.tres`
+    changes needed; (b) music field — `district_themes.gd`'s `police` row
+    (`district_themes.gd:34`) has no `"music"` key at all (colour-only, as
+    the audit's §5.3 observation states), so the #22 fix already covers
+    it — nothing to delete. `world_refs` reachability re-verified by hand
+    against `content/world/{history,factions,characters,radio_transcripts}.json`
+    and `content/lore/news_clippings.json`: all 16 distinct ids the pack
+    references resolve to a `reveal.district` of `suburbs` or `park`
+    (0/16 leak to residential/hospital/school/gas_station), matching the
+    pack's own closure claim exactly. Status: **VERIFIED, no fix needed.**
 
 - `power_switch.gd::interact()`/stage-advance chain, `REPAIR_COST` vs
   `district_loot.gd`'s `REPAIR_PARTS` stock — matches exactly.
