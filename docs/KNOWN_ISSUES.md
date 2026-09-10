@@ -335,4 +335,32 @@ attempted here.
 - Previously documented in `docs/VISUAL_AUDIT.md`: `city_decorator.gd`,
   `door.tscn`/`exploding_barrel.tscn`/old `pickups/*.tscn` (no material,
   never instantiated), `daily_events_ui.gd` (not in `UIManager`'s dict
-  either).
+  either — its hardcoded strings were still localized in the RC final
+  pass so a future wiring doesn't reintroduce an i18n-rule violation).
+
+## Unmerged `arena/*` branches on origin — deliberately not merged (RC triage 2026-09-10)
+
+Three `arena/*` branches remain on origin after the RC final pass. Only
+one was merged; the other two are intentionally left alone.
+
+- **`arena/01a08729-igra` — MERGED** (RC final pass, Phase B). Store kit
+  (`store/**`), `docs/PROSE_CHANGES.md`, `docs/ASSET_LICENSES.md` +
+  `AUDIO_COVERAGE.md` + `CONTENT_PIPELINE_AUDIT.md` §10, and a 2-word
+  `centre→center` prose fix in `gas_station`/`police` `lore_notes.json`.
+  In MERGE POLICY scope; see `PLAN.md` 2026-09-10 decisions-log entry.
+- **`arena/019ffbd0-igra` — NOT merged.** 57 commits, merge-base ~60
+  commits behind `main`. Its payload (the autopilot in-engine test suite
+  plus a large stealth/doors/save/tutorial/finale fix batch) already
+  landed on `main` through earlier integration — `tools/autopilot/`,
+  `tools/flow_check.py`, `tools/orphan_check.py` are present and
+  CLAUDE.md's "Already done" list enumerates the fixes. Merging now would
+  replay stale history into conflicts for no gain. Kept on origin for
+  archival only; safe to delete once someone confirms nothing unique is
+  on it.
+- **`arena/01a07b1c-igra` — NOT merged.** 9 commits implementing an
+  FPS-weapons layer (`scripts/weapons/**`, `project.godot`, player/weapon
+  `.tscn`, `data/items/ammo.tres`, `docs/IDEA_CONFORMANCE.md`). Outside
+  the content/store/docs scope this project's self-merge protocol allows,
+  and a separate feature track (GDD §18) rather than RC finishing work.
+  Needs an explicit owner design decision before any of it goes near
+  `main` — do not self-merge.

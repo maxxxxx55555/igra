@@ -368,6 +368,62 @@ expected from Arena barring the owner requesting one.
 
 ---
 
+**2026-09-10 (RC FINAL PASS — arena triage + Phase A crunch, autonomous
+desktop, NO-GODOT static mode):**
+
+STEP 0 state sync: `git fetch` + `git pull --ff-only origin main` — `main`
+already at `db6367d`, the 12-commit RC crunch was NOT on `origin/main`, so
+Phase A (the STATIC_AUDIT close-out) executed in full — see the crunch
+commits and the STATIC_AUDIT.md status column.
+
+STEP 1 — three unmerged `arena/*` branches on origin, triaged before
+touching anything:
+
+- **`arena/01a08729-igra`** — 4 commits (`a2ed603`..`965d020`), branched
+  directly off the current `main` HEAD (`db6367d`). Scope: `store/**`
+  (listing EN+RU, changelog, feature-graphic.png, icon-512.png,
+  screenshots-plan, privacy-policy-template), `docs/{PROSE_CHANGES,
+  ASSET_LICENSES,AUDIO_COVERAGE,CONTENT_PIPELINE_AUDIT}.md`, and a 2-word
+  `centre→center` prose fix in `content/districts/{gas_station,police}/
+  lore_notes.json`. All inside the MERGE POLICY scope (store-kit +
+  PROSE_CHANGES + ASSET_LICENSES finishing work). All 5 JSON/`.md`
+  additions valid; the 2 lore edits are pure prose (no id renames — grep
+  cross-checked against `district_loot.gd`'s `LORE_DOCS`).
+  **Classification: fresh, in-scope Arena finishing work → the Phase B
+  merge target.** This is the "finishing session" branch the RC brief
+  refers to; being based on current HEAD it either *is* PR #8's branch or
+  supersedes it — same merge target either way.
+- **`arena/019ffbd0-igra`** — 57 commits, merge-base `f841ad6` (~60
+  commits behind `main`). Payload = the autopilot in-engine test suite +
+  a large gameplay-fix batch (stealth/doors/medkits/save-system/tutorial/
+  photo-mode/finale reachability). **Already on `main`** through earlier
+  integration: `tools/autopilot/`, `tools/flow_check.py`,
+  `tools/orphan_check.py` are all present on `main` and CLAUDE.md's
+  "Already done" list enumerates every one of these fixes.
+  **Classification: stale / superseded. NOT merged** — replaying 56 stale
+  commits would produce large conflicts for zero gain. `KNOWN_ISSUES.md`
+  note added; left on origin for archival only.
+- **`arena/01a07b1c-igra`** — 9 commits (Russian messages), an FPS-weapons
+  gameplay layer (`scripts/weapons/**`, `project.godot`, player/weapon
+  `.tscn`, `docs/IDEA_CONFORMANCE.md`, `data/items/ammo.tres`). Touches
+  code far outside the content/store/docs scope this project's self-merge
+  protocol permits, and is a separate feature initiative (GDD §18), not RC
+  finishing work. **Classification: stale, out-of-scope. NOT merged,
+  untouched** — needs an explicit owner decision. `KNOWN_ISSUES.md` note
+  added.
+
+Arena merge target chosen: **`arena/01a08729-igra`** (executed in Phase B).
+
+Phase sequencing: Phase A (STATIC_AUDIT crunch) run before Phase B (arena
+merge) — Phase A is the RC milestone (`RC FINAL PASS Phase A complete` is
+its own closing commit subject), it must land regardless of arena branch
+state, and Phase B carries a "static gates red → revert merge, STOP" clause
+that could otherwise abort the run before the crunch. `arena/01a08729-igra`
+is based on `db6367d` and merges cleanly on top of the Phase A commits
+(disjoint file sets — store/** + content prose vs. scripts/** + i18n).
+
+---
+
 ## А. Что уже работает (проверено, не предположение)
 
 Ядро игры полностью играбельно — подтверждено `boot_check_scene.tscn`
