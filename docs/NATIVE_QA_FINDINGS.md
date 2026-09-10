@@ -148,7 +148,7 @@ This pass reviews the **actual 11** non-EN/RU locales: `fr, de, es, it, pt_BR, t
 
 ## Italian (it)
 
-**Verdict:** the strongest literary prose of the Latin-script set (lore notes read natively written — « I corridoi mentono in questo edificio », « La differenza sta cercando vos » register work is excellent). Defects mirror the pipeline pattern: unaccented legacy keys, one CRITICAL malnutrition/false-friend ("sotto-alimentazione" for sub-feed), a codex name collision (Superintendent = « Il Custode del Palazzo » vs the Keeper = « Il Custode »), Title Case headlines, and one skill name from the wrong semantic field (« Accumulatore » = battery/accumulator for Pack Rat). Counts: **CRITICAL 1 (1 fixed)** · **HIGH 28 (28 fixed)** · MEDIUM 10 · LOW 7.
+**Verdict:** the strongest literary prose of the Latin-script set (lore notes read natively written — « I corridoi mentono in questo edificio », « La differenza sta cercando vos » register work is excellent). Defects mirror the pipeline pattern: unaccented legacy keys, one CRITICAL malnutrition/false-friend ("sotto-alimentazione" for sub-feed), a codex name collision (Superintendent = « Il Custode del Palazzo » vs the Keeper = « Il Custode »), Title Case headlines, and one skill name from the wrong semantic field (« Accumulatore » = battery/accumulator for Pack Rat). Counts: **CRITICAL 1 (1 fixed)** · **HIGH 27 (27 fixed)** · MEDIUM 10 · LOW 7. (28 HIGH were identified; hud_power «Energia» and MAP_STAGE_1 «Energia parziale» proved already correct — no-ops, no row emitted.)
 
 | key | current | issue | suggested_fix | priority |
 |---|---|---|---|---|
@@ -184,7 +184,7 @@ This pass reviews the **actual 11** non-EN/RU locales: `fr, de, es, it, pt_BR, t
 
 ## Portuguese, Brazil (pt_BR)
 
-**Verdict:** best overall consistency of the Latin set (uniform você, « Companhia de Energia Municipal » kept in EN-free form inside lore, « Catador »/« Gazuá » are genuinely native). Same pipeline defects elsewhere: accent loss in legacy keys, the « subalimentação » malnutrition false-friend (CRITICAL), « narrador » for the Recorder, Title Case headlines, and the game title itself disagreeing with in-game vocabulary (« O ULTIMO LAMPIAO » vs « poste de luz » everywhere else — a lampião is an oil lamp). Counts: **CRITICAL 1 (1 fixed)** · **HIGH 47 (47 fixed)** · MEDIUM 9 · LOW 7.
+**Verdict:** best overall consistency of the Latin set (uniform você, « Companhia de Energia Municipal » kept in EN-free form inside lore, « Catador »/« Gazuá » are genuinely native). Same pipeline defects elsewhere: accent loss in legacy keys, the « subalimentação » malnutrition false-friend (CRITICAL), « narrador » for the Recorder, Title Case headlines, and the game title itself disagreeing with in-game vocabulary (« O ULTIMO LAMPIAO » vs « poste de luz » everywhere else — a lampião is an oil lamp). Counts: **CRITICAL 1 (1 fixed)** · **HIGH 46 (46 fixed)** · MEDIUM 9 · LOW 7.
 
 | key | current | issue | suggested_fix | priority |
 |---|---|---|---|---|
@@ -460,3 +460,25 @@ This pass reviews the **actual 11** non-EN/RU locales: `fr, de, es, it, pt_BR, t
 | WORLD_DIARY_M1_TEXT | إنه خجل | إنه يشعر بالخجل | "He is shyness" — needs a proper predicate. |
 
 **MEDIUM (8, documented only):** ENEMY_ROTTER / MONSTER_ROTTER both المتعفن (inherited EN collision); hud_lives الأرواح ("souls" — acceptable AR gaming, المحاولات more standard); WORLD_NEWS_METERS_TEXT نقطة سحب ("draw point" — توصيل غير قانوني is the precise term for an illegal tap, but نقطة سحب is comprehensible); msg_win "جميع الأحياء" (أحياء = neighborhoods vs "the living" — context disambiguates); SBATTERY_CAPACITY_DESC / SMAX_HEALTH_DESC / SSTAMINA_BOOST_DESC "+25 البطارية القصوى" number-first pattern (RTL-rendering artifact, readable); WEAPON_STROBE_COMBO مزيج vs كومبو; GAME_OVER_STATS القتلى (casualty noun as kill counter — عددها clearer); VICTORY_STATS القتلى same. LOW (6): SCR_MONET leading double space; SCR_MONETY_2 / SCR_SLOT / SCR_VES trailing spaces; SCR_EST_SOHRANENIE trailing "\|"; SCR_ZAGRUZKA "جارٍ التحميل.. " missing third dot + trailing space.
+
+
+## Final tally (all 11 locales, pass complete)
+
+| Locale | CRITICAL found/fixed | HIGH found/fixed | MEDIUM | LOW | Fix rows in PROSE_CHANGES |
+|---|---|---|---|---|---|
+| fr | 4 / 4 | 49 / 49 | 11 | 7 | 53 |
+| de | 0 / 0 | 36 / 36 | 8 | 5 | 36 |
+| es | 0 / 0 | 48 / 48 | 10 | 7 | 48 |
+| it | 1 / 1 | 27 / 27 | 10 | 7 | 28 |
+| pt_BR | 1 / 1 | 46 / 46 | 9 | 7 | 47 |
+| tr | 2 / 2 | 54 / 54 | 9 | 7 | 56 |
+| ja | 0 / 0 | 28 / 28 | 8 | 7 | 28 |
+| ko | 1 / 1 | 29 / 29 | 7 | 6 | 30 |
+| zh | 0 / 0 | 41 / 41 | 6 | 6 | 41 |
+| zh_TW | 0 / 0 | 77 / 77 | 5 | 7 | 77 |
+| ar | 1 / 1 | 24 / 24 | 8 | 6 | 25 |
+| **Total** | **10 / 10** | **459 / 459** | **91** | **72** | **469** |
+
+**0 CRITICAL remaining after fixes.** All 469 rows are text-only replacements: no key/id/stage/gameplay changes, no deletions, placeholder parity verified per row (`%s`/`%d` counts preserved). Cross-cutting patterns fixed in every affected locale: the "sub-feed" malnutrition false friend, "City Power" left untranslated, "Bring a strong back" calque, verb-as-Holster-label, recorder/narrator word confusion, radio-voice person consistency, news-headline casing, district-name drift, coin/medkit/workbench terminology unification, enemy-name collisions (Arsonist/Burner), and locale-specific diacritic/punctuation regressions (tr stripped diacritics; ja/zh/zh_TW half-width punctuation; fr/es/it/pt accents).
+
+Cross-locale notes for the owner (documented, not fixed): ENEMY_ROTTER/MONSTER_ROTTER share the name "Rotter" in EN itself, so the collision in es/it/pt/tr/ko/zh/zh_TW/ar is source-inherited; ENEMY_ARSONIST vs MONSTER_BURNER collisions were fixed where they occurred (fr/es/it/pt documented as MEDIUM, tr/ko? n/a, zh/zh_TW fixed to 焚烧者/焚燒者; ar already distinct). SCR_MONETY_2 / SCR_SLOT / SCR_VES trailing spaces and SCR_ZAGRUZKA ".. " exist in most locales and mirror the RU source — a pipeline-level cleanup, not per-locale.
