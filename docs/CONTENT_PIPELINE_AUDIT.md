@@ -409,3 +409,116 @@ no `tools/`, `scenes/`, `scripts/`, `data/`, `locales/`/`localization/`, no root
 
 Finishing-pass re-run: **content 12/12 PASS, store kit 8/8 PASS, ownership clean, 0 defects.**
 The CONTENT RELEASE CERTIFICATE (§9) remains valid with no regression.
+
+## 11. Mega final pass re-run (2026-09-10) — certificate re-verified, 0 defects
+
+Fifth re-run of the full static audit, this time as the **mega final pass** (new session,
+RELEASE CANDIDATE v1). Scope per §9 certificate PLUS the store-kit checklist (§10.4,
+extended: trailer kit) PLUS the audio ladder re-run. Method identical to §6/§9 (pure static
+python over `content/**` + `data/**` + `assets/**` + `store/**`; no Godot/engine). Every §9
+certificate line re-verified; no regression introduced by this pass. Three initial flags
+(R7/R10/R11c) resolved as **checker bugs, not pack defects** (§3.6/§3.8 precedent): the
+re-run script first used wrong `data/districts/<d>.tres` filenames (real: `district_<d>.tres`
+with `&"..."` parents) and counted blueprint *districts* instead of blueprint *ids* — see
+§11.1 notes. Content packs themselves untouched except 3 prose strings (Task 3).
+
+### 11.1 Content certificate re-run (all 11 districts)
+
+| Check | Scope | Result |
+|---|---|---|
+| R1 | All content JSON parse (22 pack files + 4 world + 2 lore) | ✔ PASS (28/28, 0 failures) |
+| R2 | 88 lore-note ids, globally unique, exact `<district>_note_01..08` set | ✔ PASS (88/88, 0 dup) |
+| R3 | 103 fixed-spawn ids, globally unique, `<district>_fix_*` form | ✔ PASS (103/103) |
+| R4 | 176 `LORE_*` i18n keys unique; `01..08` × `TITLE/_TEXT` complete per district | ✔ PASS (176/176, no gaps) |
+| R5 | Every `item`/`item_type` value ⊆ `data/items/*.tres` ids | ✔ PASS (38 used ⊆ 42 data) |
+| R6 | Every `world_ref` (154) resolves to a world/lore bible id | ✔ PASS (154/154) |
+| R7 | Reveal-gate legality: each ref's `reveal.district` ∈ the district's `powered_by` closure ∪ self (min_stage respected; self-gated min_stage re-checked) | ✔ PASS (0 violations) |
+| R8 | All `location_hint` zones and all fixed-spawn zones are declared zones of that district (101 zones chain-wide) | ✔ PASS (0 undeclared) |
+| R9 | World-bible coverage: all 37 ids referenced ≥ once | ✔ PASS (37/37) |
+| R10 | District chain complete in `data/districts/*.tres` (11 files, `powered_by` matches GDD §4.1 incl. industrial ← warehouses+police; no cycles, all walks terminate at suburbs) | ✔ PASS (11/11) |
+| R11 | Zone/fixed-id contracts (containers declared, manifests reference all notes+fixes); spawned blueprint ids ⊆ the 4 `data/items` blueprint ids | ✔ PASS (unchanged) |
+| R12 | No audio/texture gap regressed (8 spec-only lit beds still absent = no fabrication; all 14 shipped beds present) | ✔ PASS (0 new gaps) |
+| R13 | Source escaping clean in all `content/**/*.json` (no `\\\"`) | ✔ PASS |
+| R14 | Power_station lore-only rule (no endings/boss-mechanic refs in D11 files) | ✔ PASS |
+| P1 | `docs/PROSE_CHANGES.md` handoff rows (5) byte-match JSON canon | ✔ PASS (5/5) |
+| DARK | Repair-chain proofs by qty: suburbs 3/2/2/1, warehouses 3/2/2/1, all others 2/2/2/1 + key | ✔ PASS (11/11, matches §1) |
+
+Content verdict: **0 defects.**
+
+### 11.2 Prose final polish (Task 3)
+
+Full editorial re-read of all 88 lore notes + world-bible prose (characters, factions,
+history, radio, diary, news). Typo scan (double spaces outside README alignment: none;
+common misspellings: none), title-length scan (none > 60 chars), orthography
+(`center` consistent; the one `centre` is a non-player-facing `location_hint`,
+out of handoff scope per §10.2). Three surgical upgrades, all verified as a 3-line
+diff after a formatting-churn fixup commit (the first attempt rewrote 2 files'
+indentation; restored to byte-identical formatting + 3 changed lines):
+
+| Changed i18n key | Field | Change |
+|---|---|---|
+| `LORE_PARK_02_TEXT` | en text | flat caption ending → quotable kicker `Nobody in the queue knew the order would never be given again.` |
+| `LORE_PARK_07_TEXT` | en text | `The voice is the same one as the manifesto's seal.` → `The voice belongs to whoever pressed the seal.` (voice/seal precision; the manifesto itself is canon per `LORE_PARK_01_TITLE`) |
+| `LORE_POLICE_05_TEXT` | en text | flat clerk-log ending → in-voice kicker `The property book has never cleared six items faster.` |
+
+Machine-readable handoff: `docs/PROSE_CHANGES.md` §"Changed rows (mega final pass)"
+(KEY\<TAB\>final en text, 3 rows, byte-verified vs canon in P1). Structural properties
+untouched (R2–R14 re-verified above).
+
+### 11.3 Audio ladder re-run (Task 1) — spec retained, no binary fabricated
+
+Skill discovery: `.opencode/skills/` (code/process/texture only), `docs/external_skills/`
+(behavior doc only), `docs/superpowers/specs/` (design doc only), sandbox toolset
+(spoken-word TTS — outputs voices every lit-bed spec forbids, cannot render seamless
+instrumental loops). **No audio-generation skill exists in this session** — step (a)
+impossible, recorded honestly. Step (b): CC0/CC-BY exact-match search re-run per gap
+class (signaturesounds CC0 pack, selektaudio CC0 drones, freesound IanStarGem industrial
+CC0 43.878 s stereo, PtrMan CC0 list, Envato/123RF non-qualifying Standard tracks) — no
+source adopted: none is a faithful re-voice of its in-repo dark bed at the exact loop
+length, and no `ffmpeg`/`ffprobe` exists in-sandbox to normalize/verify. Step (c): all
+gaps **remain spec-only**. Static re-verification: all 11 dark beds + 3 lit beds + 40
+details measure byte-identically to the 2026-09-09 record (36.000 s mono 44.1 kHz;
+industrial dark 33.994 s per G2h; F1 pair 28.749/28.948 s, finding not gap). Full record:
+`docs/ASSET_LICENSES.md` §"mega final pass: audio gap re-attempt (Task 1)",
+`docs/AUDIO_COVERAGE.md` §"Mega-final-pass note". **(Does not re-open §9 rows 8/12/13/15.)**
+
+### 11.4 Store-kit final + trailer kit (Tasks 2+4, `store/**`)
+
+| Check | Deliverable | Result |
+|---|---|---|
+| S1 | `store/listing.md` — EN + RU title + quotable tagline (`Restore the light. Every streetlight is life.` / `Верни свет. Каждый фонарь — жизнь.`) | ✔ PASS |
+| S2 | `store/listing.md` — short desc, full desc, punchy feature bullets, tags (EN + RU) | ✔ PASS |
+| S3 | `store/changelog.md` — v1.0, EN + RU | ✔ PASS |
+| S4 | `store/screenshots-plan.md` — 8 shots with scene/state/settings/language | ✔ PASS |
+| S5 | `store/privacy-policy-template.md` — plain template + RU, owner placeholders | ✔ PASS |
+| S6 | `store/feature-graphic.png` — 1024×500 | ✔ PASS |
+| S7 | `store/icon-512.png` — 512×512 | ✔ PASS |
+| S8 | Store art palette-clean (0 pure #000/#fff px) per STYLE_GUIDE §2 | ✔ PASS (0) |
+| S9 | Store art + text ledgered project-owned in `docs/ASSET_LICENSES.md` | ✔ PASS |
+| T1 | 3 wow-moment stills 1920×1080 (first restore, first ending, grid cascade), no HUD | ✔ PASS |
+| T2 | 1 vertical shorts shot 1080×1920 (silhouette vs lit skyline) | ✔ PASS |
+| T3 | 1 press-kit header 1600×900 (logo + tagline + 3 district thumbs) | ✔ PASS |
+| T4 | Trailer art palette-clean (0 pure #000/#fff px, verified per file) | ✔ PASS (0) |
+| T5 | `store/trailer/README.md` use-cases + `store/trailer.md` index + `store/press-kit.md` (review-copy instructions, contact template); all referenced art exists on disk | ✔ PASS |
+| T6 | Trailer art ledgered project-owned in `docs/ASSET_LICENSES.md` | ✔ PASS |
+
+Store verdict: **9/9 + trailer 6/6 PASS.** (Trailer art AI-generated in-session from
+palette-locked prompts, deterministic Pillow post-process → project-owned, no
+third-party rights; no CC0 needed.)
+
+### 11.5 Ownership / forbidden-path audit (session diff vs `72a7edf`)
+
+Changed files (15 incl. this section): `content/districts/{park,police}/lore_notes.json`,
+`docs/{CONTENT_PIPELINE_AUDIT,PROSE_CHANGES,ASSET_LICENSES,AUDIO_COVERAGE}.md`,
+`store/{listing,trailer,press-kit}.md`, `store/trailer/{README + 5 PNG masters}`. Scanned
+against CONTENT scope (`content/**`, `assets/textures|audio/**`, `store/**`, `docs/**`
+minus frozen GDD/PRODUCTION_BIBLE/HANDOFF): **0 forbidden-path writes** — no
+`*.gd`/`*.tscn`/`*.tres`, no `tools/`, `scenes/`, `scripts/`, `data/`,
+`locales/`/`localization/`, no root `.md`; frozen `docs/GDD.md`,
+`docs/PRODUCTION_BIBLE.md`, `docs/HANDOFF.md` untouched.
+
+### 11.6 Verdict
+
+Mega-final-pass re-run: **content 17/17 PASS, store kit 9/9 + trailer 6/6 PASS,
+ownership clean, 0 defects.** The CONTENT RELEASE CERTIFICATE (§9) remains valid with
+no regression. RELEASE CANDIDATE v1 content/store scope: **CERTIFIED.**
