@@ -21,6 +21,40 @@ in-scope-only PR per `ARENA_NEXT_PROMPT.md`'s protocol. `arena/01a080ba-
 igra` (suburbs district content, PR #1) was merged and deleted
 2026-09-08 — see decisions log below.
 
+## RELEASE CANDIDATE v2 — declared 2026-09-10 (MEGA FINAL POLISH)
+
+**`origin/main` is RELEASE CANDIDATE v2.** RC v1 (below) plus a deep
+static-only pass that closed every remaining WON'T-FIX:
+
+- **Endings** — all 5 GDD §12.4 endings now reachable (Dark/Survivor
+  wired to `trigger_death()`); `tools/qa_sim/endings_sim.py` proves it.
+- **PARTIAL power stage** — `streetlight_3d.gd` + `emissive_windows.gd`
+  now render PARTIAL distinctly from DARK; `tools/qa_sim/lighting_stage_sim.py`.
+- **Puzzle bonus economy (#31)** — trimmed to the one reachable row
+  (`tools/qa_sim/puzzle_economy_sim.py`); `power_grid` emit symmetry
+  (#14) fixed.
+- **i18n hardening** — a hardcoded Polish string, a "coming soon" tab, and
+  dev "ERROR:" toasts removed/localized; `tools/qa_sim/overflow_check.py`
+  → 0 fixed-width overflow sites (settings labels + battery-ad button
+  widened/wrapped).
+- **Accessibility** — 5 of 7 toggles were non-functional or crashed
+  (`tools/qa_sim/a11y_check.py`): Colorblind is now a real post shader,
+  Text Size rewired, High Contrast dispatched, Arachnophobia crash fixed;
+  Auto-aim + Dyslexia Font removed from the UI (no code path / no font
+  asset — owner follow-ups in `KNOWN_ISSUES.md`).
+- **Crash-safety deep dive** — 3 latent crash paths fixed (`screens.gd`
+  null-cast, `settings_manager.from_dict` language reset, `hud_3d`
+  after-free); STATIC_AUDIT #38–42.
+- **Viral hooks** — `WowDirector` autoload (shake + flash at first-light /
+  cascade / victory), opt-in **Trailer Mode** (HUD hide + slow-mo/FOV),
+  7 photo-mode colour filters with proper env snapshot/restore.
+
+Static gates green on every commit throughout. Sims live in
+`tools/qa_sim/` and are committed. Human playtest: `docs/HANDOFF.md`
+"HUMAN PLAYTEST SCRIPT v2" (14 lines).
+
+---
+
 ## RELEASE CANDIDATE — declared 2026-09-10
 
 **The build on `origin/main` is a RELEASE CANDIDATE.** Everything that

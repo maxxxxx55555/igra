@@ -1,5 +1,24 @@
 # Known issues
 
+## NO-GODOT verification substitutes (MEGA FINAL POLISH, 2026-09-10)
+
+This pass ran under an absolute no-engine constraint. The engine-launching
+gates were replaced with static equivalents, all committed under
+`tools/qa_sim/`:
+
+| Engine gate | Static substitute |
+|---|---|
+| `game_test_3d_scene` / compile smoke | `tools/check.sh --static` (10/10) + `flow_check.py` + `scene_node_check.py` + manual re-read of every edited function |
+| endings reachability (would need a playthrough) | `tools/qa_sim/endings_sim.py` — walks the reachable state space from the district DAG |
+| PARTIAL vs DARK visual diff | `tools/qa_sim/lighting_stage_sim.py` — tabulates the per-stage light/colour values |
+| puzzle-economy reachability | `tools/qa_sim/puzzle_economy_sim.py` — resolves every id against real `start_puzzle()` callers |
+| i18n text-overflow in-scene | `tools/qa_sim/overflow_check.py` — locale-length ratio × container width |
+| accessibility toggles apply | `tools/qa_sim/a11y_check.py` — traces each setting key to a real effect |
+| `perf_check_scene` draw calls | `tools/qa_sim/drawcall_estimate.py` — structural estimate + exact active-light before/after |
+
+`perf_check_scene.tscn --windowed` still needs one owner run for the real
+`RENDER_TOTAL_DRAW_CALLS_IN_FRAME` number (see the draw-calls entry).
+
 ## District `powered_by` graph branches; GDD §4.1's chain text is narrative order, not a literal dependency spec
 
 `data/districts/*.tres` forms a branching, reconverging DAG (e.g.

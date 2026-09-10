@@ -116,40 +116,61 @@ upload:
 
 ## 5. Google Play Console — first upload (primary platform)
 
-1. https://play.google.com/console → **Create app**.
-2. Fill the app details form (name, default language, app/game, free).
-3. **Data Safety** section — answer exactly (per this project's own
-   privacy audit, see `docs/RELEASE_FINAL.md` §8 for the reasoning):
-   - Does your app collect or share user data? **No**
-   - Is data encrypted in transit? **N/A** (nothing transmitted off-device
-     except explicit LAN co-op traffic to devices the player connects to
-     directly)
-   - Can users request data deletion? **N/A**
-   - Does your app have an ads SDK? **Yes** — AppLovin MAX. If you've
-     completed step 2 above and a real key is live, answer this
-     section per AppLovin's own disclosure (advertising ID, device
-     info) instead of "No ads SDK."
-   - Target audience: not designed for children; PEGI 16-equivalent
-     content.
-4. **App content** → **Privacy policy** → paste the URL from step 3.
-5. **Testing → Open testing → Create new release**:
-   - Upload the signed `.aab` from step 4.
-   - Write release notes.
-   - Add testers (an email list, or make it public) if the testing
-     track isn't already open.
-   - Review page → **Start rollout to Open testing**.
-6. Store listing (icon, screenshots, description) — the finished kit is
-   in `store/` (added in PR #8): `listing.md` (title / short / full
-   description, EN + RU), `changelog.md` (v1.0 release notes, EN + RU),
-   `feature-graphic.png` (1024×500, ready to upload), `icon-512.png`
-   (512×512), `screenshots-plan.md` (the 8 shots to capture, with the
-   in-game location for each — you still need to take them). Older copy
-   notes in `docs/store/play_store.md` are superseded by `store/` where
-   they differ.
+Do these in order. Play Console won't let you roll out until every
+**Dashboard → "Set up your app"** task has a green check.
+
+1. https://play.google.com/console → **Create app**. Name
+   `THE LAST STREETLIGHT`, default language **English (United States)**,
+   type **Game**, **Free**, accept the declarations.
+2. **App content** (left nav → Policy → App content). Complete each card:
+   a. **Privacy policy** → paste the URL from step 3.
+   b. **Ads** → **Yes, my app contains ads** (AppLovin MAX interstitial +
+      rewarded).
+   c. **App access** → **All functionality is available without special
+      access** (no login, no gated areas).
+   d. **Content ratings** → start the IARC questionnaire. Answers for this
+      game: category **Game**; **violence** — *cartoon/fantasy, non-
+      realistic, creatures not humans* → yes, mild; **fear/horror** — yes
+      (dark atmosphere, jump-scare-free stealth); **no** to sexual
+      content, gambling, drugs, profanity, user-to-user communication
+      (LAN co-op is direct-IP, not a social feature), controlled
+      substances. Submit → it returns PEGI 12 / ESRB Teen-ish. Save.
+   e. **Target audience and content** → age groups **13–15, 16–17, 18+**
+      (not designed for children); **no** to "appeals to children".
+   f. **News app** → No. **COVID-19 contact tracing** → No.
+      **Data safety** → fill per §8 of `docs/RELEASE_FINAL.md`:
+      collects/shares user data **No** (if the AppLovin key from step 2 is
+      live, switch to **Yes** and declare *Device or other IDs* +
+      *App activity*, "for advertising", not shared, per AppLovin's
+      published Data Safety guidance); encrypted in transit **N/A**;
+      deletion request **N/A**.
+   g. **Government apps** → No.
+3. **Store presence → Main store listing** — paste from `store/`:
+   - **App name** / **Short description** / **Full description** from
+     `store/listing.md` (EN now; add the RU localization under
+     *Store listing → Manage translations* using the RU block).
+   - **App icon** → `store/icon-512.png` (512×512 PNG, ≤1 MB).
+   - **Feature graphic** → `store/feature-graphic.png` (1024×500 PNG).
+   - **Phone screenshots** → at least 2, 16:9 or 9:16, each 1080–3840 px
+     on the long edge. Capture the 8 shots in `store/screenshots-plan.md`
+     (it names the exact district + camera + power stage for each). A
+     couple can come straight from **Trailer Mode** (Settings → Game →
+     Trailer Mode hides the HUD).
+   - **Tablet screenshots** — optional; reuse the phone set if short on
+     time.
+4. **Release → Testing → Open testing → Create new release**:
+   - **App bundles** → upload the signed `.aab` from step 4 (the export
+     step, above).
+   - **Release name** — e.g. `1.0 (1)`.
+   - **Release notes** → paste `store/changelog.md`'s v1.0 EN block
+     inside `<en-US>…</en-US>` (and RU inside `<ru-RU>…</ru-RU>`).
+   - **Countries / regions** → add all, or your target set.
+   - **Review release** → resolve any warnings → **Start rollout to
+     Open testing**.
 
 **Important**: the Android package name (`com.maxsimkasky.laststreetlight`)
-becomes permanent the moment you complete this step — Play Console does
-not allow changing it afterward for the same app listing.
+becomes permanent the moment the app is created — Play Console does not
+allow changing it afterward for the same listing.
 
 ## 6. Optional additional platforms
 

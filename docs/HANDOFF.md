@@ -1,29 +1,42 @@
 # Handoff
 
-## RELEASE CANDIDATE — 2026-09-10 (HEAD `4908125`)
+## RELEASE CANDIDATE v2 — 2026-09-10 (MEGA FINAL POLISH)
 
-`origin/main` is a RELEASE CANDIDATE. Phase A (STATIC_AUDIT close-out) +
-Phase B (arena PR #8 merge) + Phase C (docs) all done; static gates green
-on every commit. See `PLAN.md`'s "RELEASE CANDIDATE" block and
-`docs/STATIC_AUDIT.md`'s close-out table. Remaining work is the 7
-human-only steps in `RELEASE_CHECKLIST.md` plus the one playtest below.
+`origin/main` is RELEASE CANDIDATE v2. On top of RC v1 (STATIC_AUDIT
+close-out + arena PR #8): every remaining WON'T-FIX is now either fixed
+by static means with a `tools/qa_sim/` proof, or converted to an exact
+owner-verify step below. i18n + accessibility + crash-safety hardened;
+viral hooks added. Static gates green on every commit. See `PLAN.md`'s
+"RELEASE CANDIDATE" section and `docs/STATIC_AUDIT.md`'s close-out table.
+Remaining: the human-only steps in `RELEASE_CHECKLIST.md` + this playtest.
 
-### HUMAN PLAYTEST SCRIPT — the one Godot run (≈15 min)
+### HUMAN PLAYTEST SCRIPT v2 — the one Godot run (≈25–35 min)
 
 Run: `C:\Users\Maxsim\Desktop\TLS_Build\godot_extracted\Godot_v4.7-stable_win64_console.exe --path .`
+Each line = do this → expect this. Stop and note any line that fails.
 
-1. Main menu → **New Game**. Onboarding overlay shows once; NEXT through it. No ad, no fake victory screen.
-2. Play ~60 s: move, flashlight, one Shadow encounter. Camera shakes on the hit.
-3. **Settings → Accessibility → Reduce Screen Shake = ON.** Take another hit — no shake. Switch language, reopen — the row label is translated. Set back to your language, toggle shake OFF.
-4. Restore the starting district: repair its power switch (cable/fuse/transistor). Watch top-left — **exactly one** toast, naming the district, in your language (not two, not "District restored!" in English).
-5. Skill Tree: confirm **4 branches** (Combat / Survival / Utility / Stealth). Buy Max Health L1 — HUD max-HP jumps ~+20. Buy a Stealth skill.
-6. **Save** (pause → Save), **Continue** from menu. Skill Tree still shows the buys; max-HP still boosted (not reset).
-7. Press **Escape** ~10× while walking / opening menus — only ever the Pause menu, never bounced to main menu.
-8. Reach `substation` (needs `industrial` at FULL), solve the cable-box puzzle — reward toast ("+200 coins") is in your language.
-9. Journal → gas-station "Requisition, Countersigned" (English): middle line reads "…needed at the **center**…".
-10. Take 2 photos, cross one district border, play a few more minutes — no debug text in the console, no crashes, nothing behaves differently from before.
+1. **Boot / New Game.** Main menu (no day/generator variant, no auto-ad) → **New Game** → onboarding overlay shows once, NEXT through it → gameplay starts, no fake "All districts powered!" overlay.
+2. **First streetlight (wow #1).** In the start district repair the power switch to STREETS. Expect: streetlights snap on, a short warm screen-flash + a light camera shake, one localized "District saved: <name>" toast — and *only* that one (no English "District restored!").
+3. **PARTIAL stage.** Repair a *later* district one step (to PARTIAL, stage 1) and stand in it. Expect: ~40% of its streetlights lit and dim, fewer/dimmer building windows than a FULL district — visibly between DARK and STREETS, not identical to DARK.
+4. **Skill tree.** Open it → **4 branches** (Combat / Survival / Utility / Stealth). Buy Max Health L1 (HUD max-HP +~20) and one Stealth skill. Save (pause → Save) → Continue from menu → both still applied, HP still boosted.
+5. **Accessibility (Settings → Accessibility).** Reduce Screen Shake ON → take a hit, no shake. High Contrast ON → scene contrast/saturation jump. Colorblind Mode → Deuteranopia → a subtle full-screen tint shift; back to Off → clears. Text Size → Large → non-overridden UI text grows. Arachnophobia ON → no error, crawler enemies swap mesh. Switch language with the panel open → row labels retranslate.
+6. **13-locale spot check.** Settings → Language → cycle through **each** of the 13. For each: menu, HUD captions, and a Journal note render in that script with no raw KEYS and no clipped/overflowing buttons (ru/de/fr are the long ones — check the settings rows and the battery-ad button wrap).
+7. **Escape safety.** Press Escape ~10× while walking and opening/closing menus → only ever the Pause menu, never bounced to the main menu.
+8. **Photo mode.** Toggle photo mode → corner frame + HUD hidden. Press **Tab** to cycle the 7 filters (none/noir/faded/vivid/bright/moody/bloom) — the world grades live. Exit photo mode → grading returns exactly to normal (no leftover tint).
+9. **Trailer Mode.** Settings → Game → Trailer Mode ON → HUD hides. Trigger a wow moment (restore a district to FULL) → brief slow-mo + FOV punch + flash. Trailer Mode OFF → HUD returns.
+10. **Full run to victory.** Restore all 11 districts (`suburbs → residential → park → school → hospital → gas_station → police → warehouses → industrial → substation → power_station`). Confirm each is completable with found parts. At **cascade (wow #3)** — the last district hitting FULL — expect a bright flash + strong shake. Then final night → Architect at `power_station` → defeat → **Light** or **Truth** ending (per docs collected), with its music sting. This is **wow #2**.
+11. **Substation puzzle.** In `substation`, interact with the cable box → the cable minigame → solve → localized "+200 coins" toast. (The other 10 districts have no such puzzle by design — restoration is the power switch.)
+12. **Survivor / Dark endings.** New game: restore the spine to `power_station` FULL but skip `school` and `gas_station`, then die → **Survivor** ending. Separate run: die with the grid unrepaired → **Dark** ending. (These were unreachable before; `tools/qa_sim/endings_sim.py` proves all 5 now.)
+13. **Load edge case.** With language set to a non-English locale, load a save → language stays; no reset to English.
+14. **Soak.** Play ~10 min continuously across ≥3 district borders, take photos, take hits near a death/reload → no "previously freed instance" errors, no console debug spam, stable frame rate.
 
-If all 10 pass: RC confirmed playable — proceed to `RELEASE_CHECKLIST.md`.
+If 1–14 pass: RC v2 confirmed — proceed to `RELEASE_CHECKLIST.md`.
+
+### Owner-verify items (from STATIC_AUDIT ACCEPTs — quick checks, not blockers)
+
+- **#20** every district reaches FULL from its own found/guaranteed parts (covered by playtest line 10).
+- **#24** in the Journal, no note's "Related:" line names a character/faction/place from a district you have not yet reached.
+- **D1 draw calls** — run `scenes/tools/perf_check_scene.tscn --windowed`, read the number; distance-fade on the lights should have dropped it (was 234, target D11 < 350 already met, D1 < 200 aspirational).
 
 ## RC FINAL PASS — Phase A complete (2026-09-10, autonomous desktop, NO-GODOT static mode)
 
