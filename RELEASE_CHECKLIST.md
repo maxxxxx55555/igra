@@ -28,7 +28,7 @@ time (§7).
 
 | Area | State | Ref |
 |---|---|---|
-| Code / gameplay / autoloads | GOLD MASTER; headless suite green ×2 | `<gm-hash>`, `f3bd1e3` |
+| Code / gameplay / autoloads | GOLD MASTER; headless suite green ×2 | `7491c76`, `f3bd1e3` |
 | `tools/qa_sim/headless_suite` verification gate | new; 12 autoloads, 11 districts, 5 endings, save/load, combat | `f3bd1e3` |
 | i18n — 13 locales, every user-facing string | 1061 keys × 13, 0 MISSING at runtime | `a712dd1`, prior |
 | Content — 11/11 districts, 88 lore notes | packed, wired, translated | prior waves |

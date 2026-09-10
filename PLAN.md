@@ -23,7 +23,7 @@ igra` (suburbs district content, PR #1) was merged and deleted
 
 ## GOLD MASTER — declared 2026-09-10 (headless hardening pass)
 
-**`origin/main` is GOLD MASTER at `<gm-hash>`.** FINAL RC (below) plus a
+**`origin/main` is GOLD MASTER at `7491c76`.** FINAL RC (below) plus a
 headless verification pass after the owner lifted NO-GODOT to
 headless-only (`godot --headless` script/scene runs; still no
 `--windowed`/editor/visible window). New gate: `tools/qa_sim/headless_suite`.
