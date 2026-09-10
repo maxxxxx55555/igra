@@ -147,7 +147,24 @@ func get_setting(key: String, default: Variant = null) -> Variant:
 
 func set_setting(key: String, value: Variant) -> void:
 	_settings[key] = value
+	# The Settings screen's generic toggles/dropdowns route through here and
+	# never called the real appliers — so High Contrast / Arachnophobia /
+	# Colorblind / Text Size were stored but never took effect. Dispatch.
+	match key:
+		"high_contrast": _apply_high_contrast()
+		"arachnophobia": _apply_arachnophobia()
+		"dyslexia_font": _apply_dyslexia_font()
+		"colorblind": _apply_colorblind()
+		"text_size": _apply_text_size()
 	EventBus.settings_changed.emit(key, value)
+
+## Re-apply every accessibility effect from _settings — called after a config
+## load and once on boot (deferred so the scene tree / root theme exist).
+func apply_all_accessibility() -> void:
+	_apply_high_contrast()
+	_apply_arachnophobia()
+	_apply_colorblind()
+	_apply_text_size()
 
 ## Три apply_* + save_to_cfg вызываются из экрана настроек (scripts/ui/screens.gd),
 ## но в классе их не было — кнопка «ПРИМЕНИТЬ» падала с "Nonexistent function".
@@ -279,42 +296,89 @@ func set_colorblind_mode(idx: int) -> void:
 	_apply_colorblind()
 	EventBus.settings_changed.emit("colorblind", _settings["colorblind"])
 
+var _cb_layer: CanvasLayer = null
+var _cb_rect: ColorRect = null
+
+func _ensure_cb_overlay() -> void:
+	if is_instance_valid(_cb_rect):
+		return
+	_cb_layer = CanvasLayer.new()
+	_cb_layer.layer = 200
+	_cb_layer.process_mode = Node.PROCESS_MODE_ALWAYS
+	add_child(_cb_layer)
+	_cb_rect = ColorRect.new()
+	_cb_rect.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_cb_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var sh := Shader.new()
+	sh.code = "shader_type canvas_item;\n" \
+		+ "uniform int mode = 0;\n" \
+		+ "uniform sampler2D scr : hint_screen_texture, filter_linear;\n" \
+		+ "void fragment(){\n" \
+		+ " vec3 c = texture(scr, SCREEN_UV).rgb; vec3 o = c;\n" \
+		+ " if (mode == 1) { o.r = clamp(c.r*1.15 + c.g*0.10, 0.0, 1.0); o.b = clamp(c.b + (c.r - c.g)*0.20, 0.0, 1.0); }\n" \
+		+ " else if (mode == 2) { o.g = clamp(c.g*1.15 + c.r*0.10, 0.0, 1.0); o.b = clamp(c.b + (c.g - c.r)*0.20, 0.0, 1.0); }\n" \
+		+ " else if (mode == 3) { o.r = clamp(c.r + (c.b - c.g)*0.15, 0.0, 1.0); o.g = clamp(c.g + (c.b - c.r)*0.15, 0.0, 1.0); }\n" \
+		+ " COLOR = vec4(o, 1.0);\n}"
+	var mat := ShaderMaterial.new()
+	mat.shader = sh
+	_cb_rect.material = mat
+	_cb_layer.add_child(_cb_rect)
+
+## Colorblind assist: a full-screen post shader that lifts the confusable
+## channel and pushes its error into a distinguishable one, per type.
+## 0 off / 1 deuteranopia / 2 protanopia / 3 tritanopia. Constants are
+## conservative; tune in the shader if a colorblind playtester wants more.
 func _apply_colorblind() -> void:
-	var vp := get_viewport()
-	if vp == null:
-		return
-	var mode: int = _settings.get("colorblind", 0)
-	# ColorCorrection not available in Godot 4 - stub implementation
+	var mode: int = clampi(int(_settings.get("colorblind", 0)), 0, 3)
 	if mode == 0:
+		if is_instance_valid(_cb_rect):
+			_cb_rect.visible = false
 		return
-	# In Godot 4, colorblind correction would use a shader or ColorRect overlay
-	# For now, just emit the event
-	pass
+	_ensure_cb_overlay()
+	_cb_rect.visible = true
+	(_cb_rect.material as ShaderMaterial).set_shader_parameter("mode", mode)
 
 func set_text_size(idx: int) -> void:
 	_settings["text_size"] = clampi(idx, 0, 2)
 	_apply_text_size()
 	EventBus.settings_changed.emit("text_size", _settings["text_size"])
 
+var _base_font_size: int = 0
+
+## The old version looped an "ui_text" group that nothing is ever added to,
+## so it did nothing (and compounded if it had). Scale the root theme's
+## default font size from a captured base instead — affects every Control
+## that doesn't hard-override its own font size. Locale-agnostic.
 func _apply_text_size() -> void:
-	var mult: float = [0.8, 1.0, 1.3][_settings.get("text_size", 1)]
-	for lbl in get_tree().get_nodes_in_group("ui_text"):
-		if lbl is Label:
-			lbl.add_theme_font_size_override("font_size", int(lbl.get_theme_font_size("font_size") * mult))
+	var tree := get_tree()
+	if tree == null or tree.root == null or tree.root.theme == null:
+		return
+	var rt: Theme = tree.root.theme
+	if _base_font_size <= 0:
+		_base_font_size = rt.default_font_size if rt.default_font_size > 0 else 16
+	var mult: float = [0.85, 1.0, 1.2][clampi(int(_settings.get("text_size", 1)), 0, 2)]
+	rt.default_font_size = int(round(_base_font_size * mult))
 
 func set_dyslexia_font(enabled: bool) -> void:
 	_settings["dyslexia_font"] = enabled
 	_apply_dyslexia_font()
 	EventBus.settings_changed.emit("dyslexia_font", _settings["dyslexia_font"])
 
+## NOTE: the OpenDyslexic .ttf is not shipped in assets/fonts/ and the
+## "ui_text" group is never populated, so this has always been a no-op.
+## The toggle was removed from the Settings screen (2026-09-10 MEGA POLISH);
+## re-enable it once the font asset is added. Guarded here so a stale saved
+## config with dyslexia_font=true can't load a null resource.
 func _apply_dyslexia_font() -> void:
-	var font_name: String = "Rajdhani"
-	if _settings.get("dyslexia_font", false):
-		font_name = "OpenDyslexic"
-	var theme: Theme = ThemeProvider.build_theme()
+	if not _settings.get("dyslexia_font", false):
+		return
+	var path := "res://assets/fonts/OpenDyslexic-Regular.ttf"
+	if not ResourceLoader.exists(path):
+		return
+	var f: Font = load(path)
 	for ctrl in get_tree().get_nodes_in_group("ui_text"):
 		if ctrl is Control:
-			ctrl.add_theme_font_override("font", load("res://assets/fonts/" + font_name + "-Regular.ttf"))
+			(ctrl as Control).add_theme_font_override("font", f)
 
 func set_high_contrast(enabled: bool) -> void:
 	_settings["high_contrast"] = enabled
@@ -344,7 +408,9 @@ func set_arachnophobia(enabled: bool) -> void:
 func _apply_arachnophobia() -> void:
 	var enabled: bool = _settings.get("arachnophobia", false)
 	for enemy in get_tree().get_nodes_in_group("crawlers"):
-		if enemy.is_instance_valid():
+		# `enemy.is_instance_valid()` was a runtime error — Node has no such
+		# method; it's the global `is_instance_valid(obj)`.
+		if is_instance_valid(enemy):
 			var mesh := enemy.find_child("BodyMesh", true, false) as MeshInstance3D
 			if mesh:
 				mesh.visible = not enabled
@@ -448,3 +514,6 @@ func from_dict(d: Dictionary) -> void:
 	var s: Dictionary = d.get("settings", {}) as Dictionary
 	for key in s:
 		_settings[key] = s[key]
+	# Re-apply accessibility effects from the loaded config (deferred: the
+	# root theme / enemy nodes may not exist yet at load time).
+	call_deferred("apply_all_accessibility")

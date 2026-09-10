@@ -379,6 +379,43 @@ the 2026-09-10 RC pass; verified against the current code):
   buttons; only nit — it doesn't retranslate on a live language switch
   mid-overlay, negligible for a once-ever first-launch screen).
 
+## Accessibility toggles — 5 of 7 were non-functional; fixed 2026-09-10 (MEGA POLISH)
+
+The Settings → Accessibility tab shipped 7 toggles; a static trace
+(`tools/qa_sim/a11y_check.py`) found only High Contrast half-worked:
+
+- **Colorblind Mode** — `_apply_colorblind()` was an empty stub. Now a
+  real full-screen `canvas_item` post shader (deuteranopia / protanopia /
+  tritanopia channel-lift), mounted on a `CanvasLayer` from
+  `settings_manager.gd`. Conservative constants — a colorblind playtester
+  can tune the `*1.15 / 0.10 / 0.20` factors in the shader string.
+- **Text Size** — iterated an `"ui_text"` group that nothing ever joins
+  (and would have compounded). Now scales `get_tree().root.theme.default_font_size`
+  from a captured base. **Partial by design**: screens that hard-override
+  their own font size won't scale — full coverage needs each screen to
+  honor a text-scale, out of scope for RC.
+- **High Contrast** — `_apply_high_contrast()` worked, but the generic
+  `_toggle` in the Settings screen only called `set_setting()`, never
+  `set_high_contrast()`, so the checkbox did nothing. `set_setting()` now
+  dispatches to the real applier for every accessibility key.
+- **Arachnophobia Mode** — `enemy.is_instance_valid()` is a runtime error
+  (`Node` has no such method) → the toggle *crashed*. Fixed to the global
+  `is_instance_valid(enemy)`.
+- **Auto-aim Assist** — `auto_aim` is read by nothing anywhere in the
+  codebase. **Removed from the UI.** Re-add when an aim-assist code path
+  exists (`player_3d` targeting).
+- **Dyslexia Font** — loaded `res://assets/fonts/OpenDyslexic-Regular.ttf`,
+  which is **not shipped**, and (again) iterated the empty `"ui_text"`
+  group. **Removed from the UI**; `_apply_dyslexia_font()` guarded against
+  the null load. Re-add once the OpenDyslexic `.ttf` is added to
+  `assets/fonts/` — and gate it to Latin-script locales (it has no CJK /
+  Arabic glyphs).
+- **Reduce Screen Shake** — worked (added in the RC pass; read directly in
+  `screen_shake.gd`).
+
+Accessibility effects are now re-applied on config load
+(`from_dict → call_deferred("apply_all_accessibility")`).
+
 ## Unmerged `arena/*` branches on origin — deliberately not merged (RC triage 2026-09-10)
 
 Three `arena/*` branches remain on origin after the RC final pass. Only

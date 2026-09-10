@@ -202,15 +202,9 @@ func _build_accessibility_tab(parent: VBoxContainer) -> void:
 		[LocalizationManager.t("ts_small"), LocalizationManager.t("ts_medium"), LocalizationManager.t("ts_large")],
 		func(idx: int) -> void: SettingsManager.set_text_size(idx))
 	
-	# Dyslexia font
-	_toggle(parent, LocalizationManager.t("Dyslexia Font (OpenDyslexic)"), "dyslexia_font")
-	
 	# High contrast
 	_toggle(parent, LocalizationManager.t("High Contrast"), "high_contrast")
-	
-	# Auto-aim assist
-	_toggle(parent, LocalizationManager.t("Auto-aim Assist"), "auto_aim")
-	
+
 	# Arachnophobia mode
 	_toggle(parent, LocalizationManager.t("Arachnophobia Mode"), "arachnophobia")
 
