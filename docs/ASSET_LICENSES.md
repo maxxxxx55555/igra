@@ -339,6 +339,22 @@ distinct class from in-game textures (asset_pipeline: "skip grain on store art")
 | `store/trailer/shorts_silhouette_1080x1920.png` | AI-generated in-session, palette-locked | Project-owned AI output; no third-party rights | none required | 1080×1920 sRGB. Vertical silhouette vs lit skyline. |
 | `store/trailer/presskit_1600x900.png` | AI-generated bg + PIL-composited title/tagline + 3 shipped district loading thumbs (×2.2 legibility lift, press-kit only) | Project-owned AI output + in-house art; no third-party rights | none required | 1600×900 sRGB. Press-kit header. |
 
+## Added 2026-09-10 — GOLD MASTER v2: Android adaptive-icon layers (store/icon-adaptive/**)
+
+Derived deterministically from `store/icon-512.png` by
+`tools/gen_adaptive_icon.py` (re-run on any 512-master change). No new
+source art: the shipped crest resampled into the inner 66% safe zone,
+per-channel values clamped to `[16,216]` (~`#101418`..`#d8d2c4`), paired
+with a flat `#141b24` (STYLE_GUIDE "panel") opaque background. Verified:
+both 1080×1080; foreground RGBA transparent field, opaque region extrema
+in range, content inside the safe zone; background fully opaque, extrema
+in range; 0 pure `#000`/`#fff` texels (`gen_adaptive_icon.py --check`).
+
+| Path | Origin | License | Attribution | Notes |
+|---|---|---|---|---|
+| `store/icon-adaptive/foreground_1080x1080.png` | Derived from `store/icon-512.png` (in-house master), Pillow, deterministic | Project-owned; no third-party rights | none required | 1080×1080 RGBA. Adaptive-icon foreground, crest in 66% safe zone on transparent field, clamped palette. |
+| `store/icon-adaptive/background_1080x1080.png` | Generated flat colour, Pillow | Project-owned; no third-party rights | none required | 1080×1080 RGBA opaque. Adaptive-icon background, flat `#141b24`. |
+
 ## Audit checklist (run each asset pass)
 
 1. `git diff --stat` binaries vs. this ledger — every row present.

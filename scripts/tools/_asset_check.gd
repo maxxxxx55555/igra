@@ -207,20 +207,33 @@ func _check_music() -> void:
 
 ## Иконка приложения: основная + adaptive для Android, привязаны в конфигах.
 func _check_app_icon() -> void:
-	for p in ["res://assets/ui/icon.png", "res://assets/ui/icon_adaptive_fg.png", "res://assets/ui/icon_adaptive_bg.png"]:
-		var tex := load(p) as Texture2D
-		_ok(tex != null, "иконка есть: %s" % p.get_file())
-		if tex != null:
-			var need: int = 512 if p.ends_with("icon.png") else 432
-			_ok(tex.get_width() == need and tex.get_height() == need,
-				"%s размер %dx%d (нужно %d)" % [p.get_file(), tex.get_width(), tex.get_height(), need])
+	# Main square icon (512) + the GOLD MASTER v2 adaptive layers (1080,
+	# derived from store/icon-512.png by tools/gen_adaptive_icon.py).
+	var tex := load("res://assets/ui/icon.png") as Texture2D
+	_ok(tex != null, "иконка есть: icon.png")
+	if tex != null:
+		_ok(tex.get_width() == 512 and tex.get_height() == 512,
+			"icon.png размер %dx%d (нужно 512)" % [tex.get_width(), tex.get_height()])
+	# store/icon-adaptive/*.png are export-only assets Godot doesn't import,
+	# so load() would fail — read the PNG IHDR (bytes 16..24) directly.
+	for p in ["res://store/icon-adaptive/foreground_1080x1080.png",
+			"res://store/icon-adaptive/background_1080x1080.png"]:
+		var f := FileAccess.open(p, FileAccess.READ)
+		_ok(f != null, "иконка есть: %s" % p.get_file())
+		if f != null:
+			var hdr := f.get_buffer(24)
+			f.close()
+			var w: int = (hdr[16] << 24) | (hdr[17] << 16) | (hdr[18] << 8) | hdr[19]
+			var h: int = (hdr[20] << 24) | (hdr[21] << 16) | (hdr[22] << 8) | hdr[23]
+			_ok(w == 1080 and h == 1080, "%s размер %dx%d (нужно 1080)" % [p.get_file(), w, h])
 	_ok(ProjectSettings.get_setting("application/config/icon", "") == "res://assets/ui/icon.png",
 		"project.godot использует icon.png")
 	var cfg := FileAccess.open("res://export_presets.cfg", FileAccess.READ)
 	if cfg != null:
 		var txt := cfg.get_as_text()
 		cfg.close()
-		_ok(txt.contains("launcher_icons/adaptive_foreground_432x432=\"res://assets/ui/icon_adaptive_fg.png\""),
+		_ok(txt.contains("launcher_icons/adaptive_foreground_432x432=\"res://store/icon-adaptive/foreground_1080x1080.png\"")
+			and txt.contains("launcher_icons/adaptive_background_432x432=\"res://store/icon-adaptive/background_1080x1080.png\""),
 			"Android launcher icons привязаны")
 		_ok(txt.contains("permissions/internet=true"), "INTERNET разрешён (нужен для LAN-мультиплеера)")
 	else:
