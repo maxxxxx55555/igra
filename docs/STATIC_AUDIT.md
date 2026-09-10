@@ -21,7 +21,7 @@ disposition. Nothing is left "open".
 | # | Topic | RC disposition |
 |---|---|---|
 | 1–5 | skill-tree pay-for-nothing, ending_screen escape | FIXED (earlier) |
-| 6 | endings: 5 defined, 3 reachable | **WON'T-FIX (RC)** — survivor/dark need an owner design call (GDD §12.3/§12.4/§4.3 conflict); trace re-run and recorded |
+| 6 | endings: 5 defined, 3 reachable | **FIXED (MEGA POLISH)** — death now evaluates Dark/Survivor; `tools/qa_sim/endings_sim.py` proves all 5 reachable |
 | 7 | emissive windows not stage-reactive | **WON'T-FIX (RC)** — needs Godot visual verification; windows are set-dressing, not a GDD §11.1 reward channel |
 | 8 | PARTIAL stage looks like DARK | **WON'T-FIX (RC)** — per-lamp subset needs visual tuning; PARTIAL is transient, DARK/FULL distinct |
 | 9–13 | lighting scope, ghost slot, doc threshold, save-slot UI, dead sync | FIXED (earlier) |
@@ -133,6 +133,29 @@ disposition. Nothing is left "open".
    `ENDING_DATA` rows + their `ENDING_*`/`END_*` i18n keys are retained
    for that pass. Also logged: `KNOWN_ISSUES.md`, `PLAN.md` decisions
    log.
+
+   **Status update — FIXED (2026-09-10 MEGA POLISH), proven by
+   `tools/qa_sim/endings_sim.py`.** The design question dissolved on a
+   closer read of GDD §12.4 against the real DAG:
+   - **Dark** — `GameManager.trigger_death()` now calls
+     `EndingsManager.evaluate_death_ending()` (death never reached the
+     manager before). Death with the grid unrepaired → `dark`.
+   - **Survivor** ("только D11") — death with `power_station` at FULL but
+     `full < 11`. The sim parses `data/districts/*.tres`: `school` and
+     `gas_station` are leaves — nothing needs them — so the spine can be
+     driven to `power_station` FULL with `full == 9`. Die there →
+     `survivor`. Reachable with no new mechanic.
+   - `_determine_ending()` gained `is_death` + `power_station_full`
+     params; the win path (`is_death=false`, `full == 11`) is unchanged
+     — `light`/`hope`/`truth` byte-identical.
+   - `_on_state_changed()` stops the ending sting on revive back to
+     `PLAYING` (the Dark full track loops).
+   - Also fixed `scripts/core/endings.gd:46`: `get_stage("powerplant")`
+     → `"power_station"` (the 11th district's real id, GDD §4.1;
+     `"powerplant"` never existed, so `Endings.evaluate()`'s
+     Survivor/Dark checks were always false too).
+   Sim `PASS`: `light`/`hope`/`truth` (win path), `survivor`
+   (`death, full=9, station=UP`), `dark` (`death, full=0`).
 
 ## Major (wrong/missing designed behavior, not currency-for-nothing)
 

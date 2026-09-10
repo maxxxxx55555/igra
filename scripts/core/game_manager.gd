@@ -128,6 +128,9 @@ func trigger_death() -> void:
 	if current_state == GameState.DEAD:
 		return
 	Endings.mark_ended()
+	# GDD §12.4: death resolves the Dark / Survivor ending (was never
+	# evaluated on death before — only game_won reached EndingsManager).
+	EndingsManager.evaluate_death_ending()
 	_change_state(GameState.DEAD)
 	get_tree().paused = false
 	# game_over здесь НЕ переизлучаем: этот сигнал шлёт сам игрок, когда у него

@@ -43,7 +43,9 @@ static func evaluate() -> Array:
 	var docs := _count_docs(pt)
 	var docs_pct := float(docs) / float(get_total_documents())
 	var secrets: int = pt.secrets if pt else 0
-	var powerplant_full: bool = dm.get_stage("powerplant") >= 3
+	# The 11th district's canon id is "power_station" (GDD §4.1); "powerplant"
+	# never existed in data/districts/ so this check was always false.
+	var powerplant_full: bool = dm.get_stage("power_station") >= 3
 	var all_districts: bool = dm.all_restored()
 
 	# Истина (секретная) — все документы + аудио-логи + фото + бункер

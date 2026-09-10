@@ -48,14 +48,33 @@ func _ready() -> void:
 	_sting_player = AudioStreamPlayer.new()
 	_sting_player.bus = "Music" if AudioServer.get_bus_index("Music") >= 0 else "Master"
 	add_child(_sting_player)
-	EventBus.game_won.connect(_evaluate_ending)
+	EventBus.game_won.connect(_on_game_won)
+	EventBus.game_state_changed.connect(_on_state_changed)
 	ending_reached.connect(_play_sting)
 
-func _evaluate_ending() -> void:
+func _on_game_won() -> void:
+	_evaluate_ending(false)
+
+## GDD §12.4: a run that ends in death resolves to Dark ("сеть не починена")
+## or Survivor ("только D11" — the power station was lit but the grid was
+## left incomplete; reachable because school/gas_station are optional leaf
+## districts, so a power_station-FULL run can still have full < total).
+## Called from GameManager.trigger_death().
+func evaluate_death_ending() -> void:
+	_evaluate_ending(true)
+
+## Revive / retry / new game leaves the DEAD or WIN screen — kill any ending
+## sting (the Dark full track loops, so it must be stopped explicitly).
+func _on_state_changed(state: int) -> void:
+	if state == GameManager.GameState.PLAYING and _sting_player.playing:
+		_sting_player.stop()
+
+func _evaluate_ending(is_death: bool = false) -> void:
 	var dm: Node = get_node_or_null("/root/DistrictManager")
 	var pt: Node = get_node_or_null("/root/ProgressTracker")
 	var dm_districts: int = 0
 	var dm_full: int = 0
+	var power_station_full: bool = false
 	var docs_total: int = 0
 	var docs_found: int = 0
 	var has_bunker: bool = false
@@ -70,6 +89,7 @@ func _evaluate_ending() -> void:
 			var did = dm.get_district_id(i) if dm.has_method("get_district_id") else StringName("district_" + str(i))
 			if dm.get_stage(did) >= 3:
 				dm_full += 1
+		power_station_full = dm.get_stage(&"power_station") >= 3
 	
 	if pt:
 		docs_total = pt.get_total_documents() if pt.has_method("get_total_documents") else 0
@@ -79,12 +99,20 @@ func _evaluate_ending() -> void:
 		has_all_photos = pt.has_all_photos() if pt.has_method("has_all_photos") else false
 		has_bunker = pt.is_bunker_accessed() if pt.has_method("is_bunker_accessed") else false
 	
-	var ending: StringName = _determine_ending(dm_full, dm_districts, has_all_docs, has_bunker, has_all_audio, has_all_photos)
+	var ending: StringName = _determine_ending(dm_full, dm_districts, has_all_docs, has_bunker, has_all_audio, has_all_photos, is_death, power_station_full)
 	_achieved_ending = ending
 	_ending_data = ENDING_DATA.get(String(ending), {})
 	ending_reached.emit(ending)
 
-func _determine_ending(full: int, total: int, all_docs: bool, bunker: bool, all_audio: bool, all_photos: bool) -> StringName:
+func _determine_ending(full: int, total: int, all_docs: bool, bunker: bool, all_audio: bool, all_photos: bool, is_death: bool, power_station_full: bool) -> StringName:
+	# GDD §12.4 death outcomes — evaluated from GameManager.trigger_death().
+	if is_death:
+		# Survivor ("только D11"): the power station was restored but the grid
+		# was left incomplete (school/gas_station are optional leaves).
+		if power_station_full and full < total:
+			return &"survivor"
+		# Dark ("сеть не починена"): died before the grid was whole.
+		return &"dark"
 	# Truth: all docs + audio + photos + bunker
 	if all_docs and bunker and all_audio and all_photos:
 		return &"truth"
@@ -94,10 +122,11 @@ func _determine_ending(full: int, total: int, all_docs: bool, bunker: bool, all_
 	# Hope: all districts full but missing docs
 	if full >= total:
 		return &"hope"
-	# Survivor: only powerplant (district 11) full
-	if full == 1:
+	# Defensive (game_won only fires after all_restored(), so this is not
+	# expected on the live win path): a win with an incomplete grid maps to
+	# Survivor if the station is up, else Dark.
+	if power_station_full and full < total:
 		return &"survivor"
-	# Dark: died or no districts
 	return &"dark"
 
 func get_ending() -> StringName:
