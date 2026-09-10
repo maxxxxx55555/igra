@@ -21,6 +21,58 @@ in-scope-only PR per `ARENA_NEXT_PROMPT.md`'s protocol. `arena/01a080ba-
 igra` (suburbs district content, PR #1) was merged and deleted
 2026-09-08 — see decisions log below.
 
+## GOLD MASTER v3 — ABSOLUTE FINAL, declared 2026-09-10 (native-QA locale pass + final audio + shot plan)
+
+**`origin/main` is GOLD MASTER v3 at `<gm3-hash>`.** GOLD MASTER v2 (below)
+plus one Arena branch (`arena/01a08c02`, merged `--no-ff` `b4a04db`,
+deleted) carrying two validated payloads:
+
+**Native-QA locale pass** (`docs/NATIVE_QA_FINDINGS.md` +
+`docs/PROSE_CHANGES.md`): all **11 non-EN/RU shipped locales**
+(fr de es it pt_BR tr ja ko zh zh_TW ar) reviewed — 100 % scripted checks
+on 1061 keys × 11 (key + placeholder + typography + register parity),
+100 % native read of the 885 non-LORE keys, LORE titles + rotating deep
+sample + scripted scans. **10 CRITICAL + 458 HIGH** fixes, handed off as
+machine-readable rows and **applied to `data/i18n/*.json`** (`653d0a8`,
+`tools/apply_native_qa_locale_fixes.py`): fr 53 · tr 56 · zh_TW 77 ·
+es 48 · pt_BR 47 · zh 41 · de 36 · ko 30 · ja 28 · it 27 · ar 25 =
+**468 strings**, text-only (468 ins / 468 del, 0 key add/remove),
+per-row placeholder-parity checked, en/ru untouched. Cross-cutting fixes:
+the "sub-feed" malnutrition false friend, "City Power" left in English,
+"Bring a strong back" calque, verb-as-Holster-label,
+recorder/narrator confusion, radio-voice person consistency, news-headline
+casing, district-name drift, terminology unification, enemy-name
+collisions, and locale-specific diacritic/punctuation regressions.
+**0 CRITICAL requires a code fix** — the findings confirm the font
+already renders accents and RTL is already handled; MEDIUM/LOW documented
+only, not applied.
+
+**Final audio pass** (`docs/AUDIO_COVERAGE.md` + `docs/ASSET_LICENSES.md`):
+music-generation skills searched (none in repo or sandbox), per-gap
+Suno/Udio briefs deposited for the first toolchain-holding session, all
+**8 lit-bed gaps remain spec-only — no binary fabricated, no invented
+metadata**; 14 shipped beds statically re-verified unchanged. Ledger
+unchanged (0 binaries added). Accepted spec, already in `KNOWN_ISSUES.md`.
+No `assets/audio/**` change → nothing to wire.
+
+**Detailed screenshot plan** (`store/screenshot-plan-detailed.md`): the
+8 Play-Console shots (+2 RU) with exact per-shot position / facing /
+settings recipes, a <60-min capture clock, and a scripted-fallback
+matrix (`ShotTool` autoload). Statically verified against Gold Master v2.
+
+**Headless suite:** green twice consecutively on the v3 tip; P5 verifies
+**1061 en keys × 13 locales + 10 UI-surface keys, 0 MISSING at runtime**
+(the 13-locale cycle). Static gates green.
+
+**P2 / OWNER residue** (unchanged — see `GAP_TO_IDEAL.md` /
+`RELEASE_CHECKLIST.md`): keystore + signed AAB; Play Console upload +
+IARC + localized-listing paste; privacy-policy URL; real AppLovin key
+(optional); one `perf_check_scene.tscn --windowed` run; the 8-shot
+capture session per `store/screenshot-plan-detailed.md`; optional eyes-on
+playtest. Plus the two documented harness limits.
+
+---
+
 ## GOLD MASTER v2 — declared 2026-09-10 (store-release-pass recreate + gap-to-ideal)
 
 **`origin/main` is GOLD MASTER v2 at `e5d4f99`.** GOLD MASTER (below) plus

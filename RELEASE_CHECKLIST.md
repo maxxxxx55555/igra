@@ -2,7 +2,7 @@
 
 ## 0. TL;DR — the irreducible human minimum
 
-Everything code / content / store-side is **done by agents** (GOLD MASTER,
+Everything code / content / store-side is **done by agents** (GOLD MASTER v3,
 `origin/main`). What's left needs a GUI, an account, a signing key, or a
 build toolchain and cannot be done from an agent session:
 
@@ -15,12 +15,15 @@ build toolchain and cannot be done from an agent session:
    publish the text at any stable URL (§3).
 3. **Play Console.** Create the app, answer the IARC content-rating
    questionnaire (exact answers in §5.2d), paste the listing from
-   `store/listing.md` (13 locales — the 11 non-EN/RU ones are transcreated
-   from in-game strings; a native read before publish is recommended, not
-   required), the adaptive icon is in `store/icon-adaptive/`, art from
-   `store/`, screenshots per `store/screenshots-plan.md`; upload the
-   `.aab`, start rollout to Open Testing (§5). `store/review-responses.md`
-   has paste-ready replies for the first reviews.
+   `store/listing.md` (13 locales; the 11 non-EN/RU sections were
+   transcreated and then reviewed against a full native-speaker QA pass —
+   `docs/NATIVE_QA_FINDINGS.md`), the adaptive icon is in
+   `store/icon-adaptive/`, art from `store/`. Capture the 8 phone
+   screenshots (+2 RU) with **`store/screenshot-plan-detailed.md`** — it
+   has the exact per-shot position/facing/settings recipe and a <60-min
+   clock. Upload the `.aab`, start rollout to Open Testing (§5).
+   `store/review-responses.md` has paste-ready replies for the first
+   reviews.
 
 Optional / not blocking: real AppLovin SDK key (§2 — ships fine on the
 no-ad debug stub without it), extra platforms (§6), eyes-on playtest
@@ -32,14 +35,17 @@ draw-call number. Full gap list: `docs/GAP_TO_IDEAL.md`.
 
 | Area | State | Ref |
 |---|---|---|
-| Code / gameplay / autoloads | GOLD MASTER v2; headless suite green ×2 | `e5d4f99`, `2101311`, `f3bd1e3` |
+| Code / gameplay / autoloads | GOLD MASTER v3; headless suite green ×2 | `<gm3-hash>`, `2101311`, `f3bd1e3` |
 | `tools/qa_sim/headless_suite` verification gate | 12 autoloads · 11 districts + loot · 5 endings · save/load+lang · combat · 1061 keys ×13 at runtime · soak | `f3bd1e3` |
 | District-load / pickup engine errors | fixed — rebuild deferred out of the physics signal (0 "Function blocked" errors) | `2101311` |
 | i18n — 13 locales, every user-facing string | 1061 keys × 13, 0 MISSING at runtime | `a712dd1`, prior |
+| i18n — native-speaker QA on the 11 non-EN/RU locales | 10 CRITICAL + 458 HIGH fixes applied (468 strings); `docs/NATIVE_QA_FINDINGS.md` | `653d0a8` |
 | Content — 11/11 districts, 88 lore notes | packed, wired, translated | prior waves |
-| Store listing — **13 locales** | title/tagline from shipped i18n; short≤80/full/bullets/tags transcreated; EN+RU master untouched | `3babbff` |
+| Store listing — **13 locales** | title/tagline from shipped i18n; short≤80/full/bullets/tags transcreated then native-QA'd; EN+RU master untouched | `3babbff`, `653d0a8` |
 | Android adaptive icon | `store/icon-adaptive/` fg+bg 1080, safe-zone + extrema verified, wired in `export_presets.cfg` | `3babbff` |
 | Review-response playbook | `store/review-responses.md` — 5 classes × EN+RU | `3babbff` |
+| Screenshot capture plan | `store/screenshot-plan-detailed.md` — 8 shots + exact recipes + <60-min clock | `b4a04db` |
+| Audio lit-bed gaps | 8 remain spec-only; per-gap Suno/Udio briefs deposited; no binary faked | `b4a04db` |
 | Trailer / press kit — 5 key-art masters, edit plan, reviewer email | `store/trailer/`, `store/press-kit.md` | `6fea56e` |
 | Merged `arena/*` branches cleaned up | `01a08729`, `01a08b05` deleted; 2 held per owner | prior pass |
 

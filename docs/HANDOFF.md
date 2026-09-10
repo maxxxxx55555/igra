@@ -1,5 +1,39 @@
 # Handoff
 
+## GOLD MASTER v3 — ABSOLUTE FINAL, 2026-09-10 (native-QA locale pass + final audio + shot plan)
+
+`origin/main` is **GOLD MASTER v3** at `<gm3-hash>`. GOLD MASTER v2 (below)
+plus one Arena branch merged (`arena/01a08c02` → `b4a04db`, `--no-ff`,
+deleted) with two validated payloads:
+
+- **Native-speaker localization QA** (`docs/NATIVE_QA_FINDINGS.md`) — all
+  **11 non-EN/RU shipped locales** reviewed (fr de es it pt_BR tr ja ko zh
+  zh_TW ar): 100 % scripted parity checks on 1061 keys × 11, 100 % native
+  read of the 885 non-LORE keys, LORE titles + rotating deep sample.
+  **10 CRITICAL + 458 HIGH** fixes **applied to `data/i18n/*.json`**
+  (`653d0a8`, `tools/apply_native_qa_locale_fixes.py`, `--check` gate) —
+  **468 strings**, text-only (468 ins / 468 del, 0 key changes, per-row
+  placeholder parity, en/ru untouched). No code fix needed (font renders
+  accents, RTL already handled); MEDIUM/LOW documented only.
+- **Final audio pass** (`docs/AUDIO_COVERAGE.md`, `docs/ASSET_LICENSES.md`)
+  — the 8 lit-district ambience beds stay **spec-only, no binary
+  fabricated**; per-gap Suno/Udio briefs deposited for a toolchain-holding
+  session. Accepted spec (`KNOWN_ISSUES.md`). Nothing to wire.
+- **Detailed screenshot plan** (`store/screenshot-plan-detailed.md`) — 8
+  Play-Console shots (+2 RU), exact per-shot position/facing/settings
+  recipe, <60-min clock, `ShotTool` scripted fallback.
+
+Headless suite **green twice consecutively** on the v3 tip; P5 =
+1061 en keys × 13 locales + 10 UI-surface keys, **0 MISSING at runtime**.
+
+### OWNER TODO (unchanged — nothing new required)
+
+1. **Keystore + build:** `keytool -genkey -v -keystore release.keystore -alias tlsrelease -keyalg RSA -keysize 2048 -validity 10000`, fill `export_presets.cfg`, install `4.7-stable` templates + the Android build template in the editor, **Project → Export → Android** → signed `.aab`.
+2. **Privacy policy:** real support email into `store/privacy-policy-template.md`, publish its text at any stable URL.
+3. **Play Console:** create the app, answer IARC per `RELEASE_CHECKLIST.md` §5.2d, paste `store/listing.md` (13 locales, native-QA'd), adaptive icon from `store/icon-adaptive/`, capture the 8 screenshots with `store/screenshot-plan-detailed.md`; upload the `.aab`, roll out to Open Testing. `store/review-responses.md` covers the first reviews. Optional: one `perf_check_scene.tscn --windowed` run; eyes-on playtest; real AppLovin key.
+
+---
+
 ## GOLD MASTER v2 — 2026-09-10 (store-release-pass recreate + gap-to-ideal)
 
 `origin/main` is **GOLD MASTER v2** at `e5d4f99`. GOLD MASTER (below) plus:

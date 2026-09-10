@@ -5,6 +5,36 @@ in-game verification — a static-only pass can't play the game itself.
 
 ---
 
+## Batch 11 (2026-09-10) — GOLD MASTER v3: native-speaker localization pass
+
+- **468 localized strings fixed across 11 languages** (French, German,
+  Spanish, Italian, Portuguese-BR, Turkish, Japanese, Korean, Simplified
+  & Traditional Chinese, Arabic) after a full native-speaker review.
+  English and Russian were already the masters and are unchanged.
+- **10 outright mistranslations corrected**, e.g. the hospital's
+  electrical "sub-feed" had been rendered as the word for *malnutrition*
+  in French/Italian/Portuguese; the "City Power" utility was left in
+  English mid-sentence in several locales; a diary line about carrying
+  "a strong back" was a word-for-word calque.
+- **Systemic polish**: restored stripped accents (fr/es/it/pt) and
+  Turkish diacritics, converted half-width punctuation in Japanese and
+  Chinese prose, unified terminology (one word each for district / medkit
+  / workbench / substation per language), fixed newspaper-headline casing
+  and radio-voice grammar (singular vs plural "you").
+- No gameplay, keys, or text placeholders changed — text only.
+- **Not in-game:** a detailed 8-shot Play Store screenshot capture plan
+  (`store/screenshot-plan-detailed.md`) and the final audio-gap record
+  (the 8 unfilled lit-district ambience beds stay spec-only — no audio
+  was faked).
+
+### HUMAN CHECK (5 min)
+Set the language to French, then Turkish, then Japanese, then Arabic in
+turn. Walk the main menu → HUD → open the Journal and read a couple of
+notes → Settings → an ending screen. Expect natural, fully-accented text
+with no English words left in sentences and no `KEY_LIKE_THIS` leaks.
+
+---
+
 ## Batch 10 (2026-09-10) — GOLD MASTER v2: store pass + district-load fix
 
 - **Districts actually contain items now — and picking them up no longer
