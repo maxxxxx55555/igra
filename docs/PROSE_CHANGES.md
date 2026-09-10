@@ -122,3 +122,39 @@ relevant (typography/accents/terminology fix). Priority tags: [C]=CRITICAL, [H]=
 [C] LORE_HOSPITAL_07_TEXT | fr | Nine engineers under a single test lamp on a gantry, arms folded, pleased with themselves. Eight are looking at the camera. The ninth, half a step back, is looking up at the lamp, and his face is the only one in focus. On the back, a caption in fountain pen with one name inked out so hard the paper split: "Sub-feed four, first light. It held for nine hours and it remembered every one of them." | Neuf ingénieurs sous une seule lampe d'essai sur un portique, bras croisés, contents d'eux-mêmes. Huit regardent l'appareil photo. Le neuvième, un demi-pas en arrière, lève les yeux vers la lampe, et son visage est le seul net. Au dos, une légende au stylo plume avec un nom raturé si fort que le papier s'est déchiré : « Alimentation secondaire quatre, première lumière. Elle a tenu neuf heures et s'est souvenue de chacune d'elles. »
 [C] WORLD_NEWS_METERS_TEXT | fr | Apartment meters on three residential streets record negative draw at night. City Power blames 'faulty drums'. A retired meterman: a backwards meter is not a faulty drum, it is a tap. Something downstream is paying current into the wires, not taking it. | Les compteurs d'appartements dans trois rues résidentielles enregistrent une consommation négative la nuit. La compagnie invoque des « tambours défectueux ». Un releveur de compteurs à la retraite : un compteur qui tourne à l'envers n'est pas un tambour défectueux, c'est un branchement clandestin. Quelque chose en aval injecte du courant dans les fils, au lieu de le prélever.
 [H] WORLD_DIARY_K1_TEXT | fr | First shift today. Two hundred and nineteen lamps in the suburbs alone. The foreman says a lamp out is a street forgot. I intend to be remembered as the man who never let the street be forgot. Order 1 logged. | Première garde aujourd'hui. Deux cent dix-neuf lampadaires rien que dans la banlieue. Le contremaître dit qu'un lampadaire éteint est une rue oubliée. Je veux qu'on se souvienne de moi comme de l'homme qui n'a jamais laissé une rue sombrer dans l'oubli. Ordre 1 consigné.
+[H] back_menu | de | - | Hauptmenü
+[H] music_vol | de | - | Musik-Lautstärke
+[H] sfx_vol | de | - | Effekt-Lautstärke
+[H] next_level | de | - | Nächstes Level
+[H] select_slot | de | - | Slot wählen
+[H] tip1 | de | - | Lass die Taschenlampe an - Feinde fürchten Licht.
+[H] tip4 | de | - | Drücke M für die Karte.
+[H] tutorial_done | de | - | Tutorial beendet. Viel Glück!
+[H] tutorial_shoot | de | - | LINKSKLICK - schießen
+[H] AD_SKIP | de | - | Überspringen
+[H] AD_TITLE | de | - | Werbung für Belohnung
+[H] DEATH_TITLE | de | YOU DIED | DU BIST TOT
+[H] SCR_VY_POGIBLI | de | - | DU BIST TOT
+[H] quests | de | - | Quests
+[H] CODEX_TAB_QUESTS | de | - | Quests
+[H] JOURNAL_RELATED | de | Related: %s | Siehe auch: %s
+[H] CHAR_HOLSTER | de | Holster | Holster
+[H] ENEMY_ROTTER | de | Rotter | Verrotteter
+[H] PROMPT_REPAIR | de | Repair panel (needs: %s) | Verteilerkasten reparieren (benötigt: %s)
+[H] Q_FIND_FUSES_DESC | de | - | Durchsuche das Gebiet nach Sicherungen für den Verteilerkasten
+[H] Q_REPAIR_DISTRICT1_DESC | de | - | Finde den Verteilerkasten und versorge den Bezirk mit Strom
+[H] WORLD_NEWS_METERS_TEXT | de | - | Wohnungszähler in drei Wohnstraßen zeichnen nachts negativen Verbrauch auf. Die Stadtwerke geben 'defekten Trommeln' die Schuld. Ein pensionierter Zählerableser: Ein rückwärtslaufender Zähler ist keine defekte Trommel, es ist ein Abgriff. Etwas stromabwärts speist Strom in die Leitungen, statt ihn zu entnehmen.
+[H] WORLD_NEWS_ARCHITECT_TITLE | de | - | Rat bestreitet „Netzgedächtnis“-Programm
+[H] WORLD_NEWS_METERS_TITLE | de | - | Zähler laufen auf drei Straßen rückwärts
+[H] WORLD_NEWS_OUTAGES_TITLE | de | - | Rollierende Abschaltungen beginnen heute Nacht
+[H] WORLD_NEWS_TREES_TITLE | de | - | Park nach „Baum“-Beschwerden geschlossen
+[H] WORLD_NEWS_ARENA_TITLE | de | - | Sammelpunkt in der zentralen Arena
+[H] WORLD_DIARY_K2_TITLE | de | Keeper's Diary — The Night It Went Out | Tagebuch des Wächters — Die Nacht, in der das Licht erlosch
+[H] WORLD_CHAR_RADIOVOICE_TEXT | de | Go to the power station. The one who kept the light will meet you at the light. | Geht zum Kraftwerk. Wer das Licht gehütet hat, wird dir im Licht begegnen.
+[H] DIST_POLICE | de | - | Polizeiwache
+[H] SCR_POLICEYSKIY_UCHASTOK | de | - | Polizeiwache
+[H] DIST_SUBURBS | de | - | Vororte
+[H] SCR_PRIGOROD | de | - | Vororte
+[H] DIST_WAREHOUSES | de | - | Lagerkomplex
+[H] SCR_SKLADSKOY_KOMPLEKS | de | - | Lagerkomplex
+[H] LORE_INDUSTRIAL_05_TEXT | de | A machining order from the stores cage, twelve years before the blackout. Client line: blank. Quantity: four hundred metering drums, special wind. Special instruction, typed: WIND THE SECOND COIL TO PAY CURRENT BACK DOWN THE LINE. The day foreman's stamp across it: REFUSED — A METER MEASURES. Below, in a different ink, the disposition that actually happened: "Reassigned to night shift. The night shift does not read instructions." The shipping stubs stapled behind it name two destinations only — a line through the park, and the hospital sub-feed — and the retired meterman who came asking after his drums three years later was shown the door. His parting line is pencilled on the stub by whoever filed this: "He said, a backwards meter is not a fault, it is a tap, and the substation has never lied to him once." | Ein Bearbeitungsauftrag aus dem Lagerkäfig, zwölf Jahre vor dem Stromausfall. Kundenzeile: leer. Menge: vierhundert Zählertrommeln, Sonderwicklung. Sonderanweisung, getippt: DIE ZWEITE SPULE SO WICKELN, DASS STROM IN DIE LEITUNG ZURÜCKGESPEIST WIRD. Der Stempel des Tagvorarbeiters darüber: ABGELEHNT — EIN ZÄHLER MISST. Darunter, in anderer Tinte, die tatsächliche Verfügung: „An die Nachtschicht übertragen. Die Nachtschicht liest keine Anweisungen.“ Die dahinter gehefteten Versandbelege nennen nur zwei Ziele — eine Leitung durch den Park und die Krankenhaus-Unterspeisung — und der pensionierte Zählertechniker, der drei Jahre später nach seinen Trommeln fragen kam, wurde vor die Tür gesetzt. Sein Abschiedssatz ist mit Bleistift auf dem Beleg von wem auch immer dies abgelegt hat, notiert: „Er sagte, ein rückwärts laufender Zähler ist kein Fehler, es ist ein Abzweig, und das Umspannwerk hat ihn nicht ein einziges Mal belogen.“

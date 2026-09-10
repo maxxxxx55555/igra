@@ -66,3 +66,39 @@ This pass reviews the **actual 11** non-EN/RU locales: `fr, de, es, it, pt_BR, t
 | LGAS_STATION_04_TEXT | « …nette jusqu'à 2h00, puis plus. » | flat | « …puis plus rien de net. » | LOW |
 | LHOSPITAL_03_TEXT | « une lumière qui marche n'est que du temps qu'il fait » | clever but unidiomatic | « une lumière qui se déplace passe pour de la météo » | MEDIUM |
 | VICTORY_TITLE | « La ville brille » | loses "burns bright" | « La ville brille de mille feux » | LOW |
+
+---
+
+## German (de)
+
+**Verdict:** the best locale of the set — consistent du-register, idiomatic lore prose ("Etwas anderes brennt", "Die Dunkelheit hat dich geholt"), correct electrical vocabulary (Umspannwerk, Abgriff). Defects concentrate in the legacy lowercase keys (umlauts transliterated as ae/oe/ue while newer keys use real umlauts), English Title Case in world-news headlines, and several terminology splits. No CRITICAL meaning breaks found. Counts: **CRITICAL 0** · **HIGH 36 (36 fixed)** · MEDIUM 9 · LOW 7.
+
+| key | current | issue | suggested_fix | priority |
+|---|---|---|---|---|
+| ~11 keys: back_menu, music_vol, sfx_vol, next_level, select_slot, tip1, tip4, tutorial_done, tutorial_shoot, AD_SKIP, AD_TITLE | e.g. « Hauptmenue », « Naechstes Level », « Druecke M fuer die Karte », « Uberspringen », « Werbung fur Belohnung » | **Systemic umlaut transliteration** (ae/oe/ue + « fur ») in the legacy key set only; the rest of the file uses real umlauts (Straßenlaterne, Größe…) — reads as a bug to any German player | restore real umlauts (per-key rows in PROSE_CHANGES) | HIGH |
+| DEATH_TITLE, SCR_VY_POGIBLI | « DU BIST GESTORBEN » | grammatical but robotic game-over German; the sibling key `you_died` correctly says « DU BIST TOT » | « DU BIST TOT » | HIGH |
+| quests, CODEX_TAB_QUESTS | « Aufgaben », « Aufträge » | quest terminology split three ways (Aufgaben/Aufträge/Quests — « Keine aktiven Quests » already uses Quests) | unify on « Quests » | HIGH |
+| JOURNAL_RELATED | « Verwandt: %s » | **wrong meaning** — « verwandt » = related by family; journal cross-references need « Siehe auch » | « Siehe auch: %s » | HIGH |
+| CHAR_HOLSTER | « Wegstecken » | verb used as equipment-slot label | « Holster » | HIGH |
+| ENEMY_ROTTER | « Fäulnis » | abstract noun (decay) as a creature name; MONSTER_ROTTER is « Verrotteter » | « Verrotteter » | HIGH |
+| PROMPT_REPAIR, Q_FIND_FUSES_DESC, Q_REPAIR_DISTRICT1_DESC | « Tafel reparieren », « Verteilertafel » | « Tafel » = chalkboard; an electrical distribution board is a « Verteilerkasten » | unify to « Verteilerkasten » | HIGH |
+| WORLD_NEWS_METERS_TEXT | « City Power gibt 'defekten Trommeln' die Schuld » | faction name left in English; lore (LORE_INDUSTRIAL_01) calls it « Stadtwerke » | « Die Stadtwerke geben … » | HIGH |
+| WORLD_NEWS_ARCHITECT_TITLE, WORLD_NEWS_METERS_TITLE, WORLD_NEWS_OUTAGES_TITLE, WORLD_NEWS_TREES_TITLE, WORLD_NEWS_ARENA_TITLE | e.g. « Zähler Laufen auf Drei Straßen Rückwärts » | English Title Case in German newspaper headlines (+ straight quotes, + inconsistent « Zentralen »/« zentralen ») — looks machine-localized | German sentence case + „ “ quotes (per-key rows) | HIGH |
+| WORLD_DIARY_K2_TITLE | « Die Nacht, in der es Erlosch » | wrong mid-sentence capitalization; « es » has no referent | « Die Nacht, in der das Licht erlosch » | HIGH |
+| WORLD_CHAR_RADIOVOICE_TEXT | « …wird euch im Licht begegnen » | radio voice addresses the singular player as « euch »; WRADIO_01 correctly uses « dir » | « …wird dir im Licht begegnen » | HIGH |
+| DIST_POLICE, SCR_POLICEYSKIY_UCHASTOK | « Polizeirevier », « Polizeistation » | three names for the same district (Polizeiwache/Polizeirevier/Polizeistation) | unify on « Polizeiwache » | HIGH |
+| DIST_SUBURBS, SCR_PRIGOROD | « Vorort », « Vorstadt » | district-name drift vs DISTRICT_NAME_SUBURBS « Vororte » | « Vororte » | HIGH |
+| DIST_WAREHOUSES, SCR_SKLADSKOY_KOMPLEKS | « Lagerhäuser » | vs DISTRICT_NAME_WAREHOUSES « Lagerkomplex » | « Lagerkomplex » | HIGH |
+| LORE_INDUSTRIAL_05_TEXT | « DIE ZWEITE SPULE WICKELN, UM STROM DIE LEITUNG ZURÜCKZUZAHLEN. » | calque of "pay current back down the line"; « zurückzahlen » is a money verb — the technical term is einspeisen | « DIE ZWEITE SPULE SO WICKELN, DASS STROM IN DIE LEITUNG ZURÜCKGESPEIST WIRD. » | HIGH |
+| MONSTER_BRUTE | « Brutalo » | colloquial-jokey register clash in a horror bestiary | « Schläger » | MEDIUM |
+| Q_KILL_TANK_TITLE/_DESC | « Bring die Panzer zu Fall », « Gepanzerte Brutalos » | « Panzer » reads as the vehicle | « Schalte die Gepanzerten aus » | MEDIUM |
+| WEAKSPOT_STROBE_COMBO | « Blitzlicht + Angriffskombo » | strobe rendered « Blitzlicht » here but « Stroboskop » in STROBE_READY | « Stroboskop + Angriffskombo » | MEDIUM |
+| UPG_STABILITY_DESC | « bei niedrigem Akkustand » | flashlight runs on « Batterie » everywhere else | « Batteriestand » | MEDIUM |
+| SKILL_COST_SP | « Kosten: %d SP » | unexplained EN abbreviation; skill points are « Fertigkeitspunkte » | « Kosten: %d FP » | MEDIUM |
+| Level Up! Now level %d | « Level aufgestiegen! Jetzt Stufe %d. » | unidiomatic | « Level-Up! Jetzt Stufe %d. » | MEDIUM |
+| ITEM_AUDIO_LOG | « Audioprotokoll » | stiff compound | « Audioaufzeichnung » | MEDIUM |
+| Q_FIND_ENGINEERS_DESC | « Ingenieurscrew » | Denglish compound | « Ingenieursmannschaft » | LOW |
+| ENEMY_HOUND | « Hund » | plain vs MONSTER_HOUND « Hetzhund » | « Hetzhund » | LOW |
+| ACH_17_DESC, SHOP_SKIN_GRANTED | « Taschenlampen-Skins », « Skin freigeschaltet » | anglicism accepted in gamer DE | — | LOW |
+| SKILL_XP_BOOST_NAME | « Schnelllerner » | triple-L is correct but reads as a typo | — | LOW |
+| SCR keys PS_1–PS_8 | « UW-1 »… | fine (Umspannwerk prefix) — no action | — | LOW |
