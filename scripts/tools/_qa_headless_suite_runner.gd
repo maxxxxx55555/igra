@@ -154,16 +154,23 @@ func _p2b_combat() -> void:
 		return
 	var m: Node = monsters[0]
 	var hp0: float = float(m.get("hp")) if m.get("hp") != null else -1.0
-	if m.has_method("take_damage"):
-		m.take_damage(25.0)
+	if not m.has_method("take_damage"):
+		_fail("P2b monster has no take_damage()")
+		holder.queue_free()
+		return
+	m.take_damage(25.0)
 	await get_tree().process_frame
 	await get_tree().process_frame
-	var hp1: float = float(m.get("hp")) if is_instance_valid(m) and m.get("hp") != null else -999.0
-	if hp1 >= hp0:
-		_fail("P2b take_damage did not reduce hp: %s -> %s" % [hp0, hp1])
+	if not is_instance_valid(m):
+		_log("P2b combat: hp %.1f -> monster died (lethal damage) — OK" % hp0)
+	else:
+		var hp1: float = float(m.get("hp")) if m.get("hp") != null else hp0
+		if hp1 >= hp0:
+			_fail("P2b take_damage did not reduce hp: %.1f -> %.1f" % [hp0, hp1])
+		else:
+			_log("P2b combat: hp %.1f -> %.1f — OK" % [hp0, hp1])
 	holder.queue_free()
 	await get_tree().process_frame
-	_log("P2b combat: hp %s -> %s" % [hp0, hp1])
 
 # ── P3 ────────────────────────────────────────────────────────────────
 func _p3_save_load_lang() -> void:
