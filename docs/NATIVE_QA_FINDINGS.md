@@ -102,3 +102,44 @@ This pass reviews the **actual 11** non-EN/RU locales: `fr, de, es, it, pt_BR, t
 | ACH_17_DESC, SHOP_SKIN_GRANTED | « Taschenlampen-Skins », « Skin freigeschaltet » | anglicism accepted in gamer DE | — | LOW |
 | SKILL_XP_BOOST_NAME | « Schnelllerner » | triple-L is correct but reads as a typo | — | LOW |
 | SCR keys PS_1–PS_8 | « UW-1 »… | fine (Umspannwerk prefix) — no action | — | LOW |
+
+---
+
+## Spanish (es / es_ES)
+
+**Verdict:** confident, idiomatic transcreation overall (good register instincts, «toma/alimentador» electrical vocabulary, strong diary prose). Defects: missing accents + missing ¿¡ in the legacy key set, the recurring "recorder" character translated as «narrador» (narrator) in 7 lore notes, English Title Case in news headlines, and tú/ustedes flips inside the same note sets. Counts: **CRITICAL 0** · **HIGH 48 (48 fixed)** · MEDIUM 11 · LOW 8.
+
+| key | current | issue | suggested_fix | priority |
+|---|---|---|---|---|
+| ~19 keys: diff_easy, diff_hard, empty_slot, graphics, menu_title, music_vol, tip1, yes, HUD_AMMO, DISTRICT_ALREADY_FULL, DISTRICT_STAGE_1/2, DIST_POLICE, DIST_POWER, DIST_SUBSTATION, INSPECT_NOTHING, FINAL_NIGHT_GOTO_STATION, SCR accents, confirm_quit, tutorial_done | « Facil », « LA ULTIMA FAROLA », « Volumen musica », « MUNICION », « Salir seguro? », « Suerte! » | **systemic accent loss + missing ¿¡** in the legacy set (newer keys are fine) | restore á/é/í/ó/ú + «¿…?» pairs (per-key rows) | HIGH |
+| LORE_WAREHOUSES_08/INDUSTRIAL_08/SUBSTATION_07/SUBSTATION_08/POWER_STATION_01/07/08_TEXT | « la letra del narrador » ×7 | **wrong character word:** the crew's Recorder is « el Grabador » (WORLD_CHAR_RECORDER_TITLE); « narrador » = narrator — breaks codex cross-reference | « la letra del grabador » | HIGH |
+| WORLD_NEWS_METERS_TEXT | « City Power culpa a… », « Algo aguas abajo está inyectando corriente…, no tomándola. » | faction left in EN; « aguas abajo » word order breaks; « no tomándola » clipped | « La compañía culpa a… », « Algo, más abajo en la línea, está inyectando corriente en los cables en lugar de consumirla. » | HIGH |
+| WORLD_NEWS_ARCHITECT/ARENA/METERS/OUTAGES/TREES_TITLE | « El Consejo Niega el Programa 'Memoria de la Red' » | English Title Case + straight quotes in Spanish headlines | sentence case + « » (per-key rows) | HIGH |
+| WORLD_CHAR_RADIOVOICE_TEXT | « Vayan a la central eléctrica… los recibirá » | radio voice addresses plural « ustedes » here but « tú » in WORLD_RADIO_01 (same quote) | « Ve a la central eléctrica… te recibirá » | HIGH |
+| WORLD_RADIO_03_TEXT, LORE_POWER_STATION_03_TEXT | « Trae una espalda fuerte. » | calque of "Bring a strong back" | « Vas a necesitar una espalda fuerte. » | HIGH |
+| WORLD_DIARY_K3_TEXT | « desmontar la 219, suburbios » | reads as "dismantle the (single) 219" — it is all 219 suburb lamps | « desmontar las 219 » | HIGH |
+| Q_KILL_RUNNER_DESC | « Los corredores son lo más osado de esta noche. » | agreement error (singular neuter with plural subject) | « …los más atrevidos de esta noche. » | HIGH |
+| LORE_POLICE_01_TEXT | « El calco propio de la comisaría de la lista dos » | false friend: « calco » = calque/trace, not carbon copy | « La copia en papel carbón de la comisaría… » | HIGH |
+| LORE_POLICE_02_TEXT | « No pongan una lámpara… la luz solo les muestra » | ustedes flip mid-note-set (POLICE_03/08 use tú) | « No pongas… solo te muestra » | HIGH |
+| LORE_POWER_STATION_02_TEXT | « No dejen que su quietud los engañe » | same ustedes flip | « No dejes que su quietud te engañe » | HIGH |
+| LORE_POLICE_07_TEXT, LORE_GAS_STATION_07_TEXT | « …vayan a la central eléctrica… » | direct quotes of the radio loop must match WORLD_RADIO_01's « ve a la central eléctrica » | « …ve a la central… » | HIGH |
+| CHAR_HOLSTER | « Enfundar » | verb as slot label | « Funda » | HIGH |
+| enc_locked | « desbloquear la entrada » | encyclopedia entry, not entrance | « desbloquear su ficha » | HIGH |
+| DISTRICT_NAME_SUBURBS | « Afueras » | district name drift (DIST_SUBURBS/SCR_PRIGOROD/diaries all say « Suburbios ») | « Suburbios » | HIGH |
+| SKILL_COST_SP | « Costo: %d PH » | « Costo » (LatAm) vs « Coste » (es_ES) used elsewhere in the same file | « Coste: %d PH » | HIGH |
+| NG_PLUS_STAT_ENEMY_HP | « PV enemigos » | HP rendered PS (ENC_STAT_HP, skill regen) and PV here | « PS enemigos » | HIGH |
+| UPG_HINT | « Las monedas vienen de distritos, secretos y logros. » | clipped calque | « Las monedas se consiguen en los distritos, los secretos y los logros. » | HIGH |
+| ENEMY_ARSONIST / MONSTER_BURNER | both « Incendiario » | name collision across roster/bestiary | « Incendiario » / « Quemador » if shown together | MEDIUM |
+| ESLASHER | « Cortador » | weak creature name | « Acuchillador » | MEDIUM |
+| Q_KILL_TANK_TITLE | « Derriba a los tanques » | « tanques » = the vehicle | « Derriba a los acorazados » | MEDIUM |
+| TOAST_ITEM_FOUND | « ¡%s encontrado! » | gendered participle with dynamic %s | neutral « Objeto encontrado: %s » if code allows | MEDIUM |
+| ACH_17_DESC / SHOP_SKIN_GRANTED | « skins de linterna », « Skin desbloqueada » | platform term is « aspectos » | — | LOW |
+| select_slot | « Elige ranura » | missing article | « Elige una ranura » | LOW |
+| msg_caught | « ¡Te atraparon! » | impersonal; es_ES would prefer « ¡Te han pillado! » | — | LOW |
+| WORLD_FACTION_WATCH_TEXT | « No llamen… Tomen… » | ustedes in a neighbors' note reads LatAm for es_ES (vosotros expected) — diegetic, defensible | — | MEDIUM |
+| LORE_POLICE_03_TEXT | « Caza el vano de la puerta » | technical « vano » odd for a creature habit | « Caza el umbral » | MEDIUM |
+| LORE_POLICE_05_TEXT | « Dijo que no las robaron, las quitaron… » | active-voice ambiguity of EN passive ("were not stolen") | « Dijo que no eran un robo: las desmontaron… » | MEDIUM |
+| LORE_POWER_STATION_04_TEXT | « la copia del pasaporte propio de la central » | "passport" = equipment datasheet → « ficha técnica » | — | MEDIUM |
+| NEW_GAME_PLUS / NG keys | « Nueva Partida+ » | odd mid-word capital; es convention « Nueva partida+ » | — | LOW |
+| LORE_POWER_STATION_08_TEXT | « el nombre de la ventana esquinera » | clunky compound | « el nombre de la ventana de la esquina » | LOW |
+| Q_FIND_ENGINEERS_DESC | « el equipo de ingenieros » | fine (no action) | — | LOW |
