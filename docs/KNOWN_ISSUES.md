@@ -343,25 +343,22 @@ nodes do not affect the 3D rendering pipeline at all). Not deleted for
 the same reason; flagged here so nobody spends time trying to "fix" a
 2D light node in a 3D scene.
 
-## Skill tree: 3 branches exist, GDD says 4
+## Skill tree: 4th branch + skill-string localization — RESOLVED
 
-`docs/GDD.md` §8 lists "4 ветки" (4 branches) for the skill tree.
-`scripts/systems/skill_tree_manager.gd`'s `SKILL_TREES` const only
-defines 3: `combat`, `survival`, `utility`. Per the NO-OPINION protocol
-this was not "fixed" by inventing a 4th branch — flagging the gap instead
-so a real content decision can be made about what it should contain.
+Both of these were open earlier and are now closed (noticed stale during
+the 2026-09-10 RC pass; verified against the current code):
 
-## Skill tree content strings are not localized
-
-`skill_tree_manager.gd`'s `SKILL_TREES` dict stores skill `name`/
-`description` as raw English strings directly in code, not i18n keys —
-18 skills × 2 fields. The UI chrome around them (`skill_button.gd`,
-`skill_tree_tab.gd`, `skill_tree_ui.gd`) was fixed this pass (previously
-used Godot's native `tr()` on raw English sentences, which never
-resolves without an actual `.po`/`.csv` Translation entry — always fell
-through to English in every locale). Localizing the 18 skills' actual
-name/description content is a separate, larger content task, not
-attempted here.
+- **4th branch (GDD §8 wants 4, project had 3):** `skill_tree_manager.gd`'s
+  `SKILL_TREES` now defines **4** — `combat`, `survival`, `utility`,
+  `stealth` (the Stealth branch: `silent_steps`, `cold_trail`, real
+  effects wired into `player_3d.gd`/`base_monster.gd`). Added in PLAN.md
+  Stage 3, commit `b861b14`.
+- **Skill name/description localization:** every skill's `name`/
+  `description` in `SKILL_TREES` is now an `SKILL_*` i18n key
+  (`SKILL_DAMAGE_BOOST_1_NAME`, `SKILL_SILENT_STEPS_DESC`, …), resolved
+  through `LocalizationManager`, present in all 13 locales
+  (`i18n_audit.py`: `MISSING: 0`). The raw-English-in-code state this
+  entry used to describe is gone.
 
 ## Confirmed dead code, not touched (fixing it would have zero player-facing effect)
 

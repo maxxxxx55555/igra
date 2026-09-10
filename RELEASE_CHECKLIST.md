@@ -75,7 +75,10 @@ Contact: [your email]
 ## 3. Publish the privacy policy
 
 `docs/PRIVACY_POLICY.md` has the full drafted text, ready to publish —
-it just isn't hosted anywhere yet.
+it just isn't hosted anywhere yet. (`store/privacy-policy-template.md`,
+added with the store kit in PR #8, is a shorter fill-in-the-brackets
+version of the same policy — use whichever you prefer; the Data Safety
+answers in step 5 match both.)
 
 1. Fill in the `[your email/support address]` placeholder in that file
    with a real, monitored address.
@@ -135,9 +138,14 @@ upload:
    - Add testers (an email list, or make it public) if the testing
      track isn't already open.
    - Review page → **Start rollout to Open testing**.
-6. Store listing (icon, screenshots, description) — files already exist
-   and are wired; see `docs/store/play_store.md` for the exact copy to
-   paste in.
+6. Store listing (icon, screenshots, description) — the finished kit is
+   in `store/` (added in PR #8): `listing.md` (title / short / full
+   description, EN + RU), `changelog.md` (v1.0 release notes, EN + RU),
+   `feature-graphic.png` (1024×500, ready to upload), `icon-512.png`
+   (512×512), `screenshots-plan.md` (the 8 shots to capture, with the
+   in-game location for each — you still need to take them). Older copy
+   notes in `docs/store/play_store.md` are superseded by `store/` where
+   they differ.
 
 **Important**: the Android package name (`com.maxsimkasky.laststreetlight`)
 becomes permanent the moment you complete this step — Play Console does

@@ -21,6 +21,31 @@ in-scope-only PR per `ARENA_NEXT_PROMPT.md`'s protocol. `arena/01a080ba-
 igra` (suburbs district content, PR #1) was merged and deleted
 2026-09-08 — see decisions log below.
 
+## RELEASE CANDIDATE — declared 2026-09-10
+
+**The build on `origin/main` is a RELEASE CANDIDATE.** Everything that
+can be done without a Godot editor, a signing key, a store account, or a
+build toolchain is done:
+
+- Content pipeline complete — 11/11 districts packed, wired, translated
+  (88 lore notes ×13 locales, `i18n_audit.py` `MISSING: 0`).
+- `docs/STATIC_AUDIT.md` fully closed out — every entry FIXED or
+  WON'T-FIX (RC) with a reason + GDD ref (see its close-out table).
+- Arena finishing work merged (PR #8) — Play Store kit (`store/`),
+  finishing-pass prose, `ASSET_LICENSES`/`AUDIO_COVERAGE`/pipeline-audit
+  updates.
+- Static gate suite green on every commit: `tools/check.sh --static`
+  10/10, `flow_check.py` 53, `scene_node_check.py` clean, `i18n_audit.py`
+  `MISSING: 0`. `default_bus_layout.tres` untouched.
+- `docs/KNOWN_ISSUES.md` contains only deliberate accepts (each with the
+  reason it's accepted for RC).
+
+**Remaining work is human-only** — the 7 steps in `RELEASE_CHECKLIST.md`
+(keystore, AppLovin key, host privacy policy, install export templates,
+Play Console upload, optional platforms, version bump) plus one manual
+in-game playtest (10-line script in the RC final report / this session's
+chat output). Nothing on that list is a code or content task.
+
 ## Autonomous decisions log
 
 Format: what / why / alternatives considered. Appended to, never
@@ -465,7 +490,7 @@ dimensions.
 | Оружие: pistol/rifle/shotgun | `scripts/weapons/weapon_*.gd` | Работает, у каждого своё имя/звук/иконка |
 | Фонарик + дерево улучшений батареи/яркости/etc | `scripts/systems/flashlight_upgrade_manager.gd` | Работает, стоимость улучшений сверена с GDD §3.3 |
 | Крафт (верстак) | `scripts/ui/workbench.gd`, `data/items/*.tres` | Все 8/8 рецептов craftable (WAVE 6 P2) |
-| Скилл-дерево | `scripts/systems/skill_tree_manager.gd` | Работает, но **3 ветки вместо 4 из GDD §8** — см. раздел Б |
+| Скилл-дерево | `scripts/systems/skill_tree_manager.gd` | Работает, все 4 ветки GDD §8 (combat/survival/utility/stealth, `b861b14`), названия/описания через `SKILL_*` i18n-ключи ×13 |
 | Сохранения | `scripts/core/save_system.gd` | Работает; `reset_all()` реально сбрасывает XP/скиллы при New Game (это было сломано, исправлено — см. `CLAUDE.md` «TRUTH WAVE») |
 | 5 концовок | `scripts/systems/endings_manager.gd` | Работает: у каждой концовки своя музыка (стинг для 3, полный трек для 2) |
 | Достижения | `scripts/systems/achievements_manager.gd` | 20 достижений, реальные пороги (не «срабатывает на первом же событии», это было багом — исправлено) |
@@ -508,10 +533,12 @@ dimensions.
    потребовалось — задача снята с плана. Файлы: `scripts/world/emissive_windows.gd`,
    `scripts/world/world_bootstrap.gd`.
 
-3. **Скилл-дерево: 3 ветки вместо 4, заявленных в GDD §8.** Намеренно
-   не выдумана 4-я ветка вместо реального контента — нужно решение, что
-   в неё должно входить (это игровой дизайн, не код). Файл:
-   `scripts/systems/skill_tree_manager.gd`'s `SKILL_TREES`.
+3. ~~**Скилл-дерево: 3 ветки вместо 4.**~~ **ЗАКРЫТО** — 4-я ветка
+   (Stealth: `silent_steps`/`cold_trail`, реальные эффекты в
+   `player_3d.gd`/`base_monster.gd`) добавлена в Этапе 3, коммит
+   `b861b14`. Названия/описания всех навыков — `SKILL_*` i18n-ключи ×13
+   локалей (`i18n_audit.py`: `MISSING: 0`). Стейл-запись в
+   `docs/KNOWN_ISSUES.md` тоже поправлена (RC-проход 2026-09-10).
 
 4. **i18n-контент: ЗАВЕРШЕНО 2026-09-08 (автономная волна).** Было 3424
    строки-заглушки на английском (817 ключей × 11 языков) на начало

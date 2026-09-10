@@ -5,6 +5,51 @@ in-game verification — a static-only pass can't play the game itself.
 
 ---
 
+## Batch 7 (2026-09-10) — RC final pass (STATIC_AUDIT close-out + PR #8 merge)
+
+- **District-restore notification is no longer doubled.** Restoring a
+  district to FULL used to pop two overlapping toasts — a translated
+  "District saved: <name>" *and* an always-English "District restored!".
+  Now just the single translated one.
+- **Puzzle and daily-event notifications are translated now** (were
+  hardcoded English in every language): the substation cable-box puzzle
+  rewards ("+N coins", "Battery/Medkit found!", "Reactor online!") and
+  the daily-event start/end toasts.
+- **New accessibility option — Settings → Accessibility → "Reduce Screen
+  Shake".** When on, the camera stops shaking on hits and enemy deaths.
+  Off by default (no change unless you turn it on). Available in all 13
+  languages.
+- **Two lore notes read "center" instead of "centre"** (English text
+  only) — the gas-station "Requisition, Countersigned" and police
+  "Property Release, Countersigned" notes. Spelling consistency with the
+  other 24 in-world uses; no other locale affected (French keeps
+  "centre", which is correct French).
+- **No functional/gameplay change** otherwise. Debug text was removed
+  from the log output on district entry / photo capture / crafting —
+  invisible to players, listed for completeness.
+- **Store-submission kit** added under `store/` (listing EN+RU,
+  changelog, 1024×500 feature graphic, 512×512 icon, screenshots plan,
+  privacy-policy template) — repo assets for the human release steps,
+  nothing in-game.
+
+### HUMAN 5-MINUTE CHECK
+1. Restore any district to FULL (repair it with cable/fuse/transistor at
+   its power switch). Watch the toast area (top-left): you should see
+   **one** notification naming the district, in your current language —
+   not two, not an English "District restored!".
+2. Reach `substation`, find the cable-box puzzle, solve it. The reward
+   toast ("+200 coins") should be in your current language.
+3. Settings → Accessibility → toggle **Reduce Screen Shake** on. Take a
+   hit from an enemy — the camera should not shake. Toggle it off, take
+   another hit — the shake is back. Switch language with the panel open;
+   the row label retranslates.
+4. Open the Journal on the gas-station "Requisition, Countersigned" note
+   (English) — the middle line reads "…needed at the center…".
+5. Play for a few minutes across a district transition and a couple of
+   photos — nothing should look or behave differently from before.
+
+---
+
 ## Batch 6 (2026-09-09) — substation + power_station content merged + wired — ALL 11 DISTRICTS NOW HAVE LORE
 
 - **`substation` (district 10) and `power_station` (district 11, the
