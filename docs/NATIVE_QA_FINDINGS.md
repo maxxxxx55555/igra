@@ -389,3 +389,36 @@ This pass reviews the **actual 11** non-EN/RU locales: `fr, de, es, it, pt_BR, t
 | WORLD_CHAR_* (6), WORLD_FACTION_* (3), WORLD_RADIO_01/02/03 (3+title), WORLD_DIARY_* (4), WORLD_NEWS_* (4) | half-width , ; : between Chinese characters | ，；： | 22 keys total (incl. the three above): full-width punctuation is mandatory in zh prose; half-width commas between hanzi are the classic MT tell. Times (22:00) untouched. |
 
 **MEDIUM (6, documented only):** ENEMY_ROTTER / MONSTER_ROTTER both 腐烂者 (inherited: both are "Rotter" in EN too); WORKBENCH_CRAFTABLE 可 (terse; 可制作 clearer); diff_normal 普通 vs legacy SCR labels 正常; WORLD_NEWS_METERS_TEXT 分接头 (transformer tap — technically fine, 私接 clearer for lay readers); D2_TOAST "城市重新呼吸" (poetic, slightly stiff; 城市再次呼吸); ¢IGRAT 开始游戏 duplicates menu_play. LOW (6): SCR_MONETY_2 / SCR_SLOT / SCR_VES trailing spaces; SCR_EST_SOHRANENIE trailing "\|"; SCR_ZAGRUZKA "加载中.. " missing third dot + trailing space; tutorial keys "F - 手电筒" half-width hyphens (consistent within the set).
+
+## Chinese, Traditional (zh_TW)
+
+**Verdict:** A real adaptation, not a conversion: 存檔/儲存, 主選單, 連線, 滑鼠, 空白鍵, 電晶體, 電動機, 破關, 專案, 計畫 — all correct TW vocabulary where zh_CN used mainland terms. It inherits every zh defect (half-width punctuation across the 22-key WORLD codex block, 硬幣/金幣 split, ENEMY_ARSONIST/MONSTER_BURNER collision, 收槍 for Holster, "strong back" calque, 放倒屍體 logic slip), and adds its own terminology drift: 發電站 (16 keys, mainland-preferred) against the map label 發電廠; three spellings of "workbench" (工作檯/工作臺/工作台, 14 keys); 信號 vs the TW-standard 訊號; 祕密 vs 秘密. Counts: CRITICAL 0, HIGH 77, MEDIUM 5, LOW 7.
+
+**HIGH (77, fixed):**
+| Key | Was | Fix | Why |
+|---|---|---|---|
+| Q_KILL_TANK_DESC | 放倒三具屍體 | 留下三具屍體 | Corpses don't get knocked down; EN "Three bodies." = leave bodies behind. |
+| MONSTER_BURNER | 縱火者 | 焚燒者 | Collides with ENEMY_ARSONIST 縱火者. |
+| CHAR_HOLSTER | 收槍 | 槍套 | Verb as slot label; the weapon is a flashlight. |
+| DISTRICT_RESTORED_TOAST | 區域已拯救：%s | 區域已恢復：%s | 拯救 is for people; districts are restored. |
+| VICTORY_DISTRICTS | 恢復的地區 | 恢復的區域 | 地區 vs the game's own 區域. |
+| COINS_AMOUNT / ITEM_COIN / NOT_ENOUGH_COINS / REWARD_* (×3) / TOAST_COINS_GAINED / UPG_HINT | 金幣 | 硬幣 | Currency split (9 keys); HUD and quest toasts say 硬幣. |
+| BLUEPRINT_APPLIED | 已套用藍圖 | 已套用圖紙 | Items say 圖紙. |
+| SKILL_RELOAD_SPEED_DESC / _NAME | 裝填速度 / 快速裝填 | 換彈速度 / 快速換彈 | tip2 and weapon compare say 換彈. |
+| ACH_06_NAME | 靜如鼠 | 悄無聲息 | Not a Chinese idiom. |
+| RADIO_TRANSCRIPT_E1 | 如果聽到我們-請守護光明 | 如果你能聽到我們——請守護光明 | Dropped subject + stray hyphen. |
+| JOURNAL_RELATED | 相關:%s | 相關：%s | Half-width colon. |
+| confirm_quit / tutorial_done | 確定離開? / 祝你好運! | ？/！ | Half-width ? and ! in Chinese sentences. |
+| tip1 | 保持手電筒開啟 - 敵人畏懼光芒 | …——… | Half-width hyphen; zh prose elsewhere uses ——. |
+| menu_quit / SCR_VYHOD | 退出 | 離開 | TW usage (quit 離開 already); 退出 is mainland register. |
+| 發電站 → 發電廠 (16 keys) | 發電站 | 發電廠 | DISTRICT_NAME_POWER_STATION says 發電廠; 發電廠 is the standard TW term. Includes endings, FINAL_NIGHT_GOTO_STATION, radio voice, and 7 LORE keys. |
+| 工作檯 / 工作台 → 工作臺 (13 keys) | three spellings | 工作臺 | WORKBENCH_TITLE says 工作臺; unify quests + 11 LORE/codex keys. |
+| 信號 → 訊號 (3 keys) | 求救信號 | 求救訊號 | 訊號 is the TW standard (EVENT_DISTRESS/RADIO_DISTRESS already correct). |
+| 祕密 → 秘密 (2 keys) | 祕密 | 秘密 | Mixed with 秘密 everywhere else. |
+| WORLD_CHAR_ANYA_TEXT | 在轉角窗口 | 在轉角窗邊 | 窗口 in TW reads as "service counter", not a window. |
+| WORLD_* codex block (22 keys) | half-width , ; : | ，；： | Same MT-tell as zh; full-width punctuation in hanzi prose. Times untouched. |
+| WORLD_RADIO_03_TEXT | 帶上一副強壯的脊背來 | 帶副好身板來 | Literal "bring a strong back". |
+| WORLD_NEWS_METERS_TEXT | 城市電力公司 | 市電力公司 | Faction name unification. |
+| WORLD_NEWS_ARCHITECT_TEXT | 『建築師計畫』 | 「建築師計畫」 | 『』 is for nested quotes only. |
+
+**MEDIUM (5, documented only):** ENEMY_ROTTER / MONSTER_ROTTER both 腐爛者 (inherited EN collision); WORKBENCH_CRAFTABLE 可 (terse); IAUDIO_LOG 錄音日誌 (錄音檔 more natural for a tape item); diff_normal 普通 vs legacy SCR 正常; SCR keys trailing spaces (see LOW). LOW (7): SCR_MONET double leading space; SCR_MONETY_2 / SCR_SLOT / SCR_VES trailing spaces; SCR_EST_SOHRANENIE trailing "\|"; SCR_ZAGRUZKA "載入中.. " missing third dot + trailing space; tutorial keys "F - 手電筒" half-width hyphens (consistent within the set).
