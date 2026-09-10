@@ -422,3 +422,41 @@ This pass reviews the **actual 11** non-EN/RU locales: `fr, de, es, it, pt_BR, t
 | WORLD_NEWS_ARCHITECT_TEXT | 『建築師計畫』 | 「建築師計畫」 | 『』 is for nested quotes only. |
 
 **MEDIUM (5, documented only):** ENEMY_ROTTER / MONSTER_ROTTER both 腐爛者 (inherited EN collision); WORKBENCH_CRAFTABLE 可 (terse); IAUDIO_LOG 錄音日誌 (錄音檔 more natural for a tape item); diff_normal 普通 vs legacy SCR 正常; SCR keys trailing spaces (see LOW). LOW (7): SCR_MONET double leading space; SCR_MONETY_2 / SCR_SLOT / SCR_VES trailing spaces; SCR_EST_SOHRANENIE trailing "\|"; SCR_ZAGRUZKA "載入中.. " missing third dot + trailing space; tutorial keys "F - 手電筒" half-width hyphens (consistent within the set).
+
+## Arabic (ar)
+
+**Verdict:** Strong, fluent literary Arabic (يوميات الحارس — المناوبة الأولى, «الفجر» serum, سيد الضوء) with correct RTL-aware handling (RLM marks before +%d rewards). The problems are single-word misfires that a native hits immediately: "the drinker" rendered as الشارب — which first reads as "the mustache"; blunt damage rendered as "sharp damage" (ضرر حاد); the electrical fuse rendered as "molten" (منصهر) and elsewhere as "electrical valve" (صمام); the canned food "on the step" rendered as "from the grade" (من الدرجة); tip2's reloading rendered as "reconstruction"; and the radio voice slips into plural address in the codex while speaking singular on the radio. Counts: CRITICAL 1, HIGH 24, MEDIUM 8, LOW 6.
+
+**CRITICAL (1, fixed):**
+| Key | Was | Fix | Why |
+|---|---|---|---|
+| WORLD_DIARY_K3_TEXT | الشارب يجد الشبكة عبر المصابيح القادرة على الاحتراق | الذي يشرب يجد الشبكة عبر المصابيح القادرة على الاحتراق | الشارب = "the mustache" on first read; EN "The drinker" is the Keeper's name for the thing in the center — canon term garbled in the key diary. |
+
+**HIGH (24, fixed):**
+| Key | Was | Fix | Why |
+|---|---|---|---|
+| enc_locked | قابل المخلوق لفتح الإدخال. | قابل المخلوق لفتح بطاقته. | الإدخال = data input; a codex entry is بطاقة. |
+| tip2 | إعادة التعمير تستغرق 1.5 ثانية. | إعادة التلقيم تستغرق 1.5 ثانية. | التعمير = construction/rebuilding; reloading = إعادة التلقيم (matches weapon compare + skill). |
+| confirm_quit | الخروج بالتأكيد؟ | هل تريد الخروج؟ | "Exiting with certainty?" — not a question a native speaker asks. |
+| ACH_07_NAME | سيد التتابع | سيد الكومبو | "Master of sequence/relay" for Combo Master; كومبو is the universal gaming loanword. |
+| ENEMY_SLASHER | السلاخ | الممزّق | السلاخ = slaughterer/flayer (abattoir register); a claw monster shreds — الممزّق. |
+| ENEMY_SPITTER | البصّاق | الباصق | بصّاق = saliva (noun); the creature is the doer — الباصق. |
+| ITEM_FUSE | منصهر | فيوز | منصهر = molten; an electrical fuse is فيوز. |
+| SCR_PREDOHRANITEL | صمام كهربائي | فيوز | صمام = valve; unify with ITEM_FUSE. |
+| DISTRICT_RESTORED_TOAST | تم إنقاذ المنطقة: %s | تمت استعادة المنطقة: %s | إنقاذ = rescue (people); district restore = استعادة (as DSTAGE_*/DALREADY_FULL say). |
+| VICTORY_DISTRICTS | المناطق المرممة | المناطق المستعادة | مرممة = patched-up buildings; unify with WIN_SUMMARY/STATS (مستعادة). |
+| ENDING_LIGHT_DESC / END_LIGHT_DESC | تقول الراديو: "شكرًا لك" | يقول الراديو… | الراديو is masculine — gender agreement (2 keys). |
+| Hardcore Mode | الوضع الصعب | وضع Hardcore | ACH_18_DESC says وضع Hardcore; settings must match (Latin "Hardcore" is normal in AR gaming). |
+| craft | صناعة | صنع | Craft menu label vs WORKBENCH_CRAFT صنع and CRAFT_CREATED تم الصنع — صناعة also means "industry". |
+| WORKBENCH_CREATE_BTN | إنشاء | صنع | Third verb for the same action (صناعة/صنع/إنشاء) — unify. |
+| WEAKSPOT_BLUNT | ضرر حاد | ضرر الصدم | حاد = sharp — the exact opposite of blunt; impact damage = ضرر الصدم. |
+| Q_FIND_ENGINEERS_DESC | القطاع السكني | الحي السكني | District = حي everywhere else (Q_REPAIR_DISTRICT1_TITLE: الحي السكني); قطاع is the outlier. |
+| WORLD_FACTION_WATCH_TEXT | خذوا الطعام المعلّب من الدرجة | …من على العتبة | الدرجة = grade/rank; "the food on the step [of the door]" = العتبة. |
+| WORLD_CHAR_RADIOVOICE_TEXT | اذهبوا… سيقابلكم… | اذهب… سيقابلك… | The radio voice addresses the player singular in WORLD_RADIO_01; plural here breaks the speaker's identity. |
+| WORLD_RADIO_03_TEXT | أحضر ظهرًا قويًا. | ستحتاج ظهرًا قويًا. | Literal "bring a strong back"; "you'll need a strong back" is the natural phrasing. |
+| WORLD_NEWS_ARCHITECT_TEXT | '…' quotes; التغذية الفرعية للمستشفى | «…» quotes; خط التغذية الفرعي للمستشفى | WNEWS_OUTAGES uses «» — unify quote style; "hospital sub-feed" needs خط (line) to read electrically. |
+| WORLD_NEWS_ARCHITECT_TITLE | 'ذاكرة الشبكة' | «ذاكرة الشبكة» | Quote style. |
+| WORLD_NEWS_TREES_TEXT | 'تميل نحو المصابيح لتستمع' / 'الأشجار' | «…» ×2 | Quote style unification. |
+| WORLD_DIARY_M1_TEXT | إنه خجل | إنه يشعر بالخجل | "He is shyness" — needs a proper predicate. |
+
+**MEDIUM (8, documented only):** ENEMY_ROTTER / MONSTER_ROTTER both المتعفن (inherited EN collision); hud_lives الأرواح ("souls" — acceptable AR gaming, المحاولات more standard); WORLD_NEWS_METERS_TEXT نقطة سحب ("draw point" — توصيل غير قانوني is the precise term for an illegal tap, but نقطة سحب is comprehensible); msg_win "جميع الأحياء" (أحياء = neighborhoods vs "the living" — context disambiguates); SBATTERY_CAPACITY_DESC / SMAX_HEALTH_DESC / SSTAMINA_BOOST_DESC "+25 البطارية القصوى" number-first pattern (RTL-rendering artifact, readable); WEAPON_STROBE_COMBO مزيج vs كومبو; GAME_OVER_STATS القتلى (casualty noun as kill counter — عددها clearer); VICTORY_STATS القتلى same. LOW (6): SCR_MONET leading double space; SCR_MONETY_2 / SCR_SLOT / SCR_VES trailing spaces; SCR_EST_SOHRANENIE trailing "\|"; SCR_ZAGRUZKA "جارٍ التحميل.. " missing third dot + trailing space.
