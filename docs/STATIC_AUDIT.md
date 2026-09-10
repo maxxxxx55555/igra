@@ -22,8 +22,8 @@ disposition. Nothing is left "open".
 |---|---|---|
 | 1–5 | skill-tree pay-for-nothing, ending_screen escape | FIXED (earlier) |
 | 6 | endings: 5 defined, 3 reachable | **FIXED (MEGA POLISH)** — death now evaluates Dark/Survivor; `tools/qa_sim/endings_sim.py` proves all 5 reachable |
-| 7 | emissive windows not stage-reactive | **WON'T-FIX (RC)** — needs Godot visual verification; windows are set-dressing, not a GDD §11.1 reward channel |
-| 8 | PARTIAL stage looks like DARK | **WON'T-FIX (RC)** — per-lamp subset needs visual tuning; PARTIAL is transient, DARK/FULL distinct |
+| 7 | emissive windows not stage-reactive | **FIXED (MEGA POLISH)** — reads district id from `../StreetBuilder`, rebuilds colours per stage; FULL == pre-fix. `lighting_stage_sim.py` |
+| 8 | PARTIAL stage looks like DARK | **FIXED (MEGA POLISH)** — `_apply_stage()` lights a deterministic ~40% subset dimly at PARTIAL; 4 stages proven distinct by `lighting_stage_sim.py` |
 | 9–13 | lighting scope, ghost slot, doc threshold, save-slot UI, dead sync | FIXED (earlier) |
 | 14 | `power_grid.reset()/from_dict()` don't emit `district_stage_changed` | **WON'T-FIX (RC)** — unreachable in Continue/New-Game (scene rebuild re-reads stage); emitting mid-load would risk spurious listener side-effects during teardown |
 | 15, 17 | redundant emit, orphan `.uid` | FIXED (earlier) |
@@ -177,6 +177,19 @@ disposition. Nothing is left "open".
    WORKING); emissive windows are ambient set-dressing, not a named
    reward. Deferred to a Godot-enabled polish pass;
    `emissive_windows.gd`'s `_ready()` is the one wire-up point.
+
+   **Status update — FIXED (2026-09-10 MEGA POLISH).** `emissive_windows.gd`
+   now reads its district id from the sibling `../StreetBuilder` (a
+   `street_builder_path` export, default set — that node with a real
+   `district_id` exists in all 11 `scenes/districts/*.tscn`, grep-verified),
+   connects `EventBus.district_stage_changed`, and rebuilds per-instance
+   colours per stage: lit fraction = `density * [0.10, 0.45, 0.85, 1.0]`
+   and brightness = `[0.35, 0.60, 0.85, 1.0]` for DARK/PARTIAL/STREETS/
+   FULL. **FULL (`gate = density*1.0`, `bright = 1.0`) is byte-identical
+   to the pre-fix behaviour** — only DARK/PARTIAL/STREETS change. No
+   district context (procedural fallback) → treated as FULL, i.e. the old
+   behaviour. Proven distinct + no-FULL-regression by
+   `tools/qa_sim/lighting_stage_sim.py`.
 8. **`docs/GDD.md` PARTIAL stage vs `streetlight_3d.gd`** — GDD and
    `power_switch.gd`'s own comment both describe PARTIAL as "some
    streetlights lit," but `streetlight_3d.gd` only distinguishes
@@ -193,6 +206,17 @@ disposition. Nothing is left "open".
    working. Deferred to a Godot-enabled pass; the stage check in
    `streetlight_3d.gd` is the single edit point if a designer wants
    PARTIAL made visible.
+
+   **Status update — FIXED (2026-09-10 MEGA POLISH).**
+   `streetlight_3d.gd` gained an `_apply_stage()` that lights a
+   deterministic ~40% subset of lamps at PARTIAL (`_in_partial_set()` —
+   `hash(round(global_position.xz)) % 5 < 2`), dimmer and with a tighter
+   pool than STREETS: `spot_energy 1.4 / atten 2.0 / glow 0.5 / range 4.0`
+   vs STREETS `2.5 / 1.5 / 1.0 / 6.0`, and `_energy_scale = 0.55` feeds
+   the flicker in `_process()`. DARK (stage 0 → `_on = false`) and
+   STREETS/FULL branches are unchanged. `tools/qa_sim/lighting_stage_sim.py`
+   tabulates all 4 stages and confirms they are mutually distinct
+   post-fix (and shows the pre-fix PARTIAL==DARK collapse).
 9. **`scripts/world_env_setup.gd:133-134`** — the single global
    `WorldEnvironment`/`Moon`/`PlayerGlow` handler reacts to
    `district_stage_changed` from *any* district, not just the one the

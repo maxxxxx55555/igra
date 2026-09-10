@@ -13,6 +13,10 @@ extends Node3D
 
 var _on: bool = false
 var _t: float = 0.0
+## PARTIAL (stage 1) lamps run weaker; _process multiplies this into the
+## flicker so a stage-1 lamp reads dimmer than a STREETS lamp, not just
+## on/off. 1.0 at STREETS/FULL.
+var _energy_scale: float = 1.0
 
 func _ready() -> void:
 	if not mesh_visible:
@@ -21,14 +25,9 @@ func _ready() -> void:
 		if pole: pole.visible = false
 		if lamp: lamp.visible = false
 	EventBus.district_stage_changed.connect(_on_stage_changed)
-	if force_on:
-		_on = true
 	var dm := get_node_or_null("/root/DistrictManager")
-	var st := -1
-	if dm:
-		st = dm.get_stage(district_id)
-		_on = st >= 2 or force_on
-	_update_light(st)
+	var st := dm.get_stage(district_id) if dm else -1
+	_apply_stage(st)
 
 func _process(delta: float) -> void:
 	if not _on or not lamp_flicker:
@@ -36,16 +35,29 @@ func _process(delta: float) -> void:
 	_t += delta
 	var spot: SpotLight3D = $SpotLight
 	var glow: OmniLight3D = $Glow
-	var base: float = 0.85 + sin(_t * 12.0) * 0.15
+	var base: float = (0.85 + sin(_t * 12.0) * 0.15) * _energy_scale
 	if sin(_t * 37.0) > 0.95:
-		base = 0.2
+		base = 0.2 * _energy_scale
 	spot.light_energy = base * 2.0
 	glow.light_energy = base * 1.0
 
 func _on_stage_changed(id: StringName, stage: int) -> void:
 	if id == district_id:
-		_on = stage >= 2
-		_update_light(stage)
+		_apply_stage(stage)
+
+## GDD §4.2: PARTIAL = "часть фонарей" — a deterministic ~40% subset of a
+## district's lamps lights at stage 1, dimmer and with a tighter pool than
+## STREETS, so PARTIAL is visually distinct from both DARK (all off) and
+## STREETS (all on).
+func _apply_stage(stage: int) -> void:
+	var partial_lit: bool = stage == 1 and _in_partial_set()
+	_on = stage >= 2 or partial_lit or force_on
+	_energy_scale = 0.55 if (partial_lit and stage < 2 and not force_on) else 1.0
+	_update_light(stage)
+
+func _in_partial_set() -> bool:
+	var cell := Vector2i(int(round(global_position.x)), int(round(global_position.z)))
+	return abs(hash(cell)) % 5 < 2
 
 func _update_light(stage: int = -1) -> void:
 	var spot: SpotLight3D = $SpotLight
@@ -58,11 +70,17 @@ func _update_light(stage: int = -1) -> void:
 		spot.spot_attenuation = 1.0
 		glow.light_energy = 1.5
 		glow.omni_range = 8.0
-	elif _on:
+	elif _on and stage >= 2:
 		spot.light_energy = 2.5
 		spot.spot_attenuation = 1.5
 		glow.light_energy = 1.0
 		glow.omni_range = 6.0
+	elif _on:
+		# PARTIAL — tighter, weaker pool
+		spot.light_energy = 1.4
+		spot.spot_attenuation = 2.0
+		glow.light_energy = 0.5
+		glow.omni_range = 4.0
 
 ## P4 (CONTENT UX wave): gул лампы теперь идёт через общий пул на
 ## StreetlightHumPool (max 8 голосов, ближайшие к игроку горящие фонари) -
