@@ -1,5 +1,30 @@
 # Handoff
 
+## RELEASE CANDIDATE — 2026-09-10 (HEAD `4908125`)
+
+`origin/main` is a RELEASE CANDIDATE. Phase A (STATIC_AUDIT close-out) +
+Phase B (arena PR #8 merge) + Phase C (docs) all done; static gates green
+on every commit. See `PLAN.md`'s "RELEASE CANDIDATE" block and
+`docs/STATIC_AUDIT.md`'s close-out table. Remaining work is the 7
+human-only steps in `RELEASE_CHECKLIST.md` plus the one playtest below.
+
+### HUMAN PLAYTEST SCRIPT — the one Godot run (≈15 min)
+
+Run: `C:\Users\Maxsim\Desktop\TLS_Build\godot_extracted\Godot_v4.7-stable_win64_console.exe --path .`
+
+1. Main menu → **New Game**. Onboarding overlay shows once; NEXT through it. No ad, no fake victory screen.
+2. Play ~60 s: move, flashlight, one Shadow encounter. Camera shakes on the hit.
+3. **Settings → Accessibility → Reduce Screen Shake = ON.** Take another hit — no shake. Switch language, reopen — the row label is translated. Set back to your language, toggle shake OFF.
+4. Restore the starting district: repair its power switch (cable/fuse/transistor). Watch top-left — **exactly one** toast, naming the district, in your language (not two, not "District restored!" in English).
+5. Skill Tree: confirm **4 branches** (Combat / Survival / Utility / Stealth). Buy Max Health L1 — HUD max-HP jumps ~+20. Buy a Stealth skill.
+6. **Save** (pause → Save), **Continue** from menu. Skill Tree still shows the buys; max-HP still boosted (not reset).
+7. Press **Escape** ~10× while walking / opening menus — only ever the Pause menu, never bounced to main menu.
+8. Reach `substation` (needs `industrial` at FULL), solve the cable-box puzzle — reward toast ("+200 coins") is in your language.
+9. Journal → gas-station "Requisition, Countersigned" (English): middle line reads "…needed at the **center**…".
+10. Take 2 photos, cross one district border, play a few more minutes — no debug text in the console, no crashes, nothing behaves differently from before.
+
+If all 10 pass: RC confirmed playable — proceed to `RELEASE_CHECKLIST.md`.
+
 ## RC FINAL PASS — Phase A complete (2026-09-10, autonomous desktop, NO-GODOT static mode)
 
 **STEP 0:** `git pull --ff-only` — `main` at `db6367d`, the RC crunch was
