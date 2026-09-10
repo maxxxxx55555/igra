@@ -75,7 +75,7 @@
       "i18n_keys": { "title": "LORE_GAS_STATION_06_TITLE", "text": "LORE_GAS_STATION_06_TEXT" },
       "en": {
         "title": "Requisition, Countersigned",
-        "text": "A station requisition pad, one page filled in by a hand that does not belong to a petrol station. \"ITEM: canopy floodlight transformer, one. REASON: it will be needed at the centre. AUTHORISED BY: —\" and there the signature is just a small drawing of a streetlight inside a circle. Underneath, the manager's own biro: \"Old man came at dusk, took the transformer, left this. Knew which bolt to loosen first. Said the ones he takes down are the ones they cannot drink. I didn't argue. Nobody's buying petrol anyway.\""
+        "text": "A station requisition pad, one page filled in by a hand that does not belong to a petrol station. \"ITEM: canopy floodlight transformer, one. REASON: it will be needed at the center. AUTHORISED BY: —\" and there the signature is just a small drawing of a streetlight inside a circle. Underneath, the manager's own biro: \"Old man came at dusk, took the transformer, left this. Knew which bolt to loosen first. Said the ones he takes down are the ones they cannot drink. I didn't argue. Nobody's buying petrol anyway.\""
       },
       "location_hint": "Requisition pad on the service-bay bench (z_service_bay)",
       "min_stage": 2,

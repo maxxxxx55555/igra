@@ -47,6 +47,17 @@ unverifiable in this sandbox (no ffmpeg) for all power_station files.
 
 ## Gaps (priority order)
 
+### Finishing-pass note (2026-09-09, Task 2 — CC0 sourcing attempted, spec retained)
+
+Every gap below (lit beds G1, G2b/c/e/f/g/h/i; the F1 detail class; optional G2/G4/G5 and
+`hospital_ward_curtain_drag.ogg`) was re-opened for real CC0/CC-BY sourcing this pass. Genuine
+web searches were run per gap class; no CC0/CC-BY track satisfies the lit-twin contract
+(faithful re-voice of the district's own dark bed, exact loop length, district-true material,
+no voices/people, −18 LUFS) and no binary could be delivered/verified in this sandbox (no
+`ffmpeg`/`ffprobe`). All gaps below therefore **remain spec-only — no binary fabricated**. Full
+search record and reasoning: `docs/ASSET_LICENSES.md` §"finishing pass: CC0 audio sourcing
+attempts".
+
 ### G1 — `assets/audio/ambience/districts/residential_lit.ogg` (this district)
 - Type: 36 s seamless ambience loop, OGG q4 mono, −18 LUFS, TP ≤ −1.5 dBFS.
 - Mood: "lit twin" of `residential_dark.ogg` (STYLE_GUIDE §5): same material re-voiced

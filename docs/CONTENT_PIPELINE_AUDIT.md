@@ -328,3 +328,84 @@ other owners: industrial dark-bed length (G2h), power_station detail lengths (F1
 seam/§4.1 outliers on pre-existing art (residential floor, substation wall,
 power_station pair — §5 item 5), unverifiable-in-sandbox loudness (all beds). None of them
 blocks content wiring.
+
+## 10. Finishing pass re-run (2026-09-09) — certificate re-verified, 0 defects
+
+Fourth re-run of the full static audit, this time as the **finishing pass** (new session). Scope
+per §9 certificate PLUS the store-kit checklist (§10.4). Method identical to §6/§9 (pure static
+python over `content/**` + `data/**` + `assets/**` + `store/**`; no Godot/engine). Every §9
+certificate line re-verified and unchanged against the 1–11 re-run; no regression introduced by
+this pass.
+
+### 10.1 Content certificate re-run (all 11 districts)
+
+| Check | Scope | Result |
+|---|---|---|
+| R1 | All content JSON parse (lore_notes, item_spawns, world, lore, districts.json) | ✔ PASS (0 failures) |
+| R2 | 88 lore-note ids, globally unique; ids byte-unchanged vs `db6367d` | ✔ PASS (88/88, 0 dup, 0 renamed) |
+| R3 | 103 fixed-spawn ids, globally unique | ✔ PASS (103/103) |
+| R4 | 176 `LORE_*` i18n keys unique; ranges `01..08` × `TITLE/_TEXT` complete per district | ✔ PASS (176/176, no gaps) |
+| R5 | Every `item`/`item_type` value ⊆ the 41 `data/items/*.tres` ids | ✔ PASS (41/41) |
+| R6 | Every `world_ref` (154) resolves to a world/lore bible id | ✔ PASS (154/154) |
+| R7 | Reveal-gate legality: each ref's `reveal.district` ∈ the district's `powered_by` closure ∪ self (min_stage respected) | ✔ PASS (0 violations) |
+| R8 | All `location_hint` zones and all fixed-spawn zones are declared zones of that district | ✔ PASS (0 undeclared) |
+| R9 | World-bible coverage: all 37 ids (char 9, faction 5, hist 11, radio 3, diary 4, news 5) referenced ≥ once | ✔ PASS (37/37) |
+| R10 | District chain complete in `data/districts/*.tres` (11 districts, `powered_by` matches GDD §4.1) | ✔ PASS (11/11) |
+| R11 | Zone-id/note-id/fixed-id contracts per content/README | ✔ PASS (unchanged) |
+| R12 | No content audio/texture gap regressed this pass (this pass added no district binaries) | ✔ PASS (0 new gaps) |
+
+Content verdict: **0 defects.**
+
+### 10.2 Prose finishing pass (Task 1)
+
+Full editorial re-read of all 88 lore notes + world-bible prose. Conclusion: prose was already
+Play-Store grade (short, atmospheric, canon-consistent, zero filler). One real orthographic
+inconsistency fixed: the canonical "the center" spelled `centre` in two in-world requisition
+forms written by the Keeper (gas_station_note_06, police_note_06); all 24 other in-world uses
+are `center`. Structural properties untouched (R2–R12). Machine-readable change record for the
+locale handoff: `docs/PROSE_CHANGES.md` (KEY\<TAB\>final en text).
+
+| Changed i18n key | Field | Change |
+|---|---|---|
+| `LORE_GAS_STATION_06_TEXT` | en text | `...needed at the centre.` → `...needed at the center.` |
+| `LORE_POLICE_06_TEXT` | en text | `...needed at the centre.` → `...needed at the center.` |
+
+### 10.3 Audio CC0 sourcing attempt (Task 2) — spec retained, no binary fabricated
+
+Web searches run per gap class (lit beds G1, G2b/c/e/f/g/h/i; F1; optional). No CC0/CC-BY track
+satisfies the lit-twin contract (faithful re-voice of the district's own dark bed, exact loop
+length, district-true material, no voices/people, −18 LUFS) and no audio encoder/loudness tool
+exists in this sandbox to deliver any binary to contract. Full search record + reasoning:
+`docs/ASSET_LICENSES.md` §"finishing pass: CC0 audio sourcing attempts". All audio gaps remain
+spec-only. No fabricated audio. **(This does not re-open §9 rows 8/12/13/15.)**
+
+### 10.4 Store-kit checklist (Task 3, `store/**`)
+
+| Check | Deliverable | Result |
+|---|---|---|
+| S1 | `store/listing.md` — EN + RU title | ✔ PASS |
+| S2 | `store/listing.md` — short desc, full desc, feature bullets, tags (EN + RU) | ✔ PASS |
+| S3 | `store/changelog.md` — v1.0, EN + RU | ✔ PASS |
+| S4 | `store/screenshots-plan.md` — 8 shots with scene/state/settings/language | ✔ PASS |
+| S5 | `store/privacy-policy-template.md` — plain template + RU, owner placeholders | ✔ PASS |
+| S6 | `store/feature-graphic.png` — 1024×500 | ✔ PASS |
+| S7 | `store/icon-512.png` — 512×512 | ✔ PASS |
+| S8 | Store art palette-clean (0 pure #000/#fff px) per STYLE_GUIDE §2 | ✔ PASS (0) |
+| S9 | Store art + text ledgered project-owned in `docs/ASSET_LICENSES.md` | ✔ PASS |
+
+Store verdict: **8/8 checks PASS.** (Store art is AI-generated in-session from in-house-style,
+palette-locked prompts → project-owned, no third-party rights; no CC0 needed.)
+
+### 10.5 Ownership / forbidden-path audit (session diff vs `db6367d`)
+
+Changed files: `content/districts/{gas_station,police}/lore_notes.json`,
+`docs/{PROSE_CHANGES,ASSET_LICENSES,AUDIO_COVERAGE}.md`, `store/**` (6 files). Scanned against
+CONTENT scope (`content/**`, `assets/textures|audio/**`, `store/**`, `docs/**` minus frozen
+GDD/PRODUCTION_BIBLE/HANDOFF): **0 forbidden-path writes** — no `*.gd`/`*.tscn`/`*.tres`,
+no `tools/`, `scenes/`, `scripts/`, `data/`, `locales/`/`localization/`, no root `.md`; frozen
+`docs/GDD.md`, `docs/PRODUCTION_BIBLE.md`, `docs/HANDOFF.md` untouched.
+
+### 10.6 Verdict
+
+Finishing-pass re-run: **content 12/12 PASS, store kit 8/8 PASS, ownership clean, 0 defects.**
+The CONTENT RELEASE CERTIFICATE (§9) remains valid with no regression.

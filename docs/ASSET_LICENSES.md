@@ -237,6 +237,53 @@ All pre-existing binaries (`tiles/power_station_floor.png`,
 (procedural generators / `tools/gen_audio.py`); project-owned, no attribution required.
 No web-sourced assets are used in this district.
 
+## Added 2026-09-09 — finishing pass: CC0 audio sourcing attempts (Task 2)
+
+**No binaries added.** Task 2 asked to close the `docs/AUDIO_COVERAGE.md` audio gaps (lit beds
+G1, G2b/c/e/f/g/h/i; F1 detail class; optional flavor items) with real CC0/CC-BY tracks, and,
+where none is suitable, to keep the spec and record the search attempt honestly. Web searches
+were run for every gap class on 2026-09-09 (queries targeted CC0/CC-BY ambience, room tone,
+industrial/generator hum, hospital ward, school corridor, gas-station/streetlight-night
+ambience, seamless loop). Outcome for **all** gaps: **spec retained, no source adopted.** Reasons
+recorded honestly:
+
+1. **Contract mismatch (decisive).** Every lit bed is defined in `docs/AUDIO_COVERAGE.md` as a
+   *faithful "lit twin" re-voice of that district's own synthesized dark bed* (STYLE_GUIDE §5) —
+   exact 36.000 s seamless loop (33.994 s for industrial to match its shipped dark), −18 LUFS,
+   district-true material, plus per-bed "never wallpaper the anomaly / never include voices"
+   rules. No CC0/CC-BY source is a re-voice of an in-repo synthesized file; none matches the
+   exact loop lengths, and many candidates (ZapSplat hospital/school ambience) contain exactly
+   the voices/people those specs forbid.
+2. **License (secondary).** The richest ambience/room-tone candidates (ZapSplat, several
+   hospitals/school/industrial hums) are **Standard License, not CC0/CC-BY** — outside the repo's
+   only-permitted origins. Genuine CC0 libraries (freesound CC0 sets, e.g. `PtrMan`'s public CC0
+   list, `signaturesounds.org` CC0 ambience packs) contain generic drones/room tones only, none
+   district-true.
+3. **Delivery toolchain absent in sandbox.** No `ffmpeg`/`ffprobe` (verified), so no candidate
+   could be re-normalized to −18 LUFS / TP ≤ −1.5 dBFS, re-encoded to OGG q4 mono, or verified —
+   per pipeline rule every delivered binary must be header- and loudness-verified before commit.
+   A downloaded binary delivered un-verified would violate `docs/AUDIO_LOUDNESS.md`.
+
+F1 (power_station `generator_thrum` 28.749 s, `cooling_fan` 28.948 s vs the 30 s detail class)
+is recorded in `docs/AUDIO_COVERAGE.md` as a **finding, not a gap** — both files exist, loop via
+`AudioStreamOggVorbis.loop=true`, and play correctly; re-render at 30.000 s is the audio
+toolchain holder's call, and a generic CC0 "generator hum" is not a substitute for the district
+detail. No binary audio has been fabricated at any point by this pipeline.
+
+## Added 2026-09-09 — Play Store kit art (Task 3, store/**)
+
+Store key art generated in-session (Arena image generation), text-to-image, palette-locked per
+docs/STYLE_GUIDE.md §2/§6. Post-processed deterministically (ImageMagick): pure-black/white
+clamped to `#0a0d12` / `#f0ead9`, exact store dimensions enforced, title composited in bone
+`#f2ecd9` + brass `#c9a24a` (DejaVu-Sans-Bold) over a dark gradient band — no baked-text glyph
+risk. Store art is a distinct class from in-game textures (asset_pipeline: "skip grain on store
+art"); no pure `#000`/`#fff` texels remain (verified 0).
+
+| Path | Origin | License | Attribution | Notes |
+|---|---|---|---|---|
+| `store/feature-graphic.png` | AI-generated in-session (Arena image generation), palette-locked | Project-owned AI output; no third-party rights | none required | 1024×500 sRGB. Permanent-night city, one brass streetlamp cone; title overlay. Palette-clamped, 684,630 B. |
+| `store/icon-512.png` | AI-generated in-session (Arena image generation), palette-locked | Project-owned AI output; no third-party rights | none required | 512×512 sRGB. Streetlamp-head crest emblem on night sky. Palette-clamped, 300,965 B. |
+
 ## Audit checklist (run each asset pass)
 
 1. `git diff --stat` binaries vs. this ledger — every row present.

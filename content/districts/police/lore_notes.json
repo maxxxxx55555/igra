@@ -75,7 +75,7 @@
       "i18n_keys": { "title": "LORE_POLICE_06_TITLE", "text": "LORE_POLICE_06_TEXT" },
       "en": {
         "title": "Property Release, Countersigned",
-        "text": "A release form that is not in the station's typeface. \"ITEM: yard flood transformer, one. REASON: it will be needed at the centre. AUTHORISED BY: —\" and there the signature is the small streetlight-in-a-circle again. Underneath, the duty sergeant's own biro: \"He knew which cage. He knew which bolt. He said the ones he takes down are the ones they cannot drink. I signed because the floods had already come on once with the switch off, and I would rather they were gone.\""
+        "text": "A release form that is not in the station's typeface. \"ITEM: yard flood transformer, one. REASON: it will be needed at the center. AUTHORISED BY: —\" and there the signature is the small streetlight-in-a-circle again. Underneath, the duty sergeant's own biro: \"He knew which cage. He knew which bolt. He said the ones he takes down are the ones they cannot drink. I signed because the floods had already come on once with the switch off, and I would rather they were gone.\""
       },
       "location_hint": "Clipped to the generator-pad cage (z_generator_room)",
       "min_stage": 2,
