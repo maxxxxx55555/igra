@@ -322,6 +322,23 @@ all 3 shipped lit beds measure exactly as recorded (36.000 s mono 44.1 kHz; indu
 dark 33.994 s per G2h; F1 pair still 28.749/28.948 s, finding not gap); all other 38
 detail beds exactly 30.000 s. Zero drift since 2026-09-09.
 
+## Added 2026-09-10 — mega final pass: trailer graphics (Task 2, store/trailer/**)
+
+Trailer/viral-shorts art generated in-session (Arena image generation), text-to-image,
+palette-locked per docs/STYLE_GUIDE.md §2/§6. Post-processed deterministically (Pillow):
+center-crop to exact size, pure-black/white clamped to `#0a0d12` / `#f0ead9` (verified 0
+pure texels in all 5 files), press-kit title/tagline composited in bone `#f2ecd9` + brass
+`#c9a24a` (DejaVu-Sans-Bold) — no baked-AI-text glyph risk. Store/trailer art is a
+distinct class from in-game textures (asset_pipeline: "skip grain on store art").
+
+| Path | Origin | License | Attribution | Notes |
+|---|---|---|---|---|
+| `store/trailer/still_first_light_1920x1080.png` | AI-generated in-session, palette-locked | Project-owned AI output; no third-party rights | none required | 1920×1080 sRGB. First streetlight restore wow-moment; no HUD. |
+| `store/trailer/still_first_ending_1920x1080.png` | AI-generated in-session, palette-locked | Project-owned AI output; no third-party rights | none required | 1920×1080 sRGB. Half-lit city ending tease; spoiler-safe. |
+| `store/trailer/still_grid_cascade_1920x1080.png` | AI-generated in-session, palette-locked | Project-owned AI output; no third-party rights | none required | 1920×1080 sRGB. Grid-cascade wave; Shorts cover frame. |
+| `store/trailer/shorts_silhouette_1080x1920.png` | AI-generated in-session, palette-locked | Project-owned AI output; no third-party rights | none required | 1080×1920 sRGB. Vertical silhouette vs lit skyline. |
+| `store/trailer/presskit_1600x900.png` | AI-generated bg + PIL-composited title/tagline + 3 shipped district loading thumbs (×2.2 legibility lift, press-kit only) | Project-owned AI output + in-house art; no third-party rights | none required | 1600×900 sRGB. Press-kit header. |
+
 ## Audit checklist (run each asset pass)
 
 1. `git diff --stat` binaries vs. this ledger — every row present.
