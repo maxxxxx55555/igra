@@ -224,6 +224,20 @@ light is a readability nicety that could be swapped for a cheaper
 visual-quality call that needs a Profiler before/after, not a static
 guess.
 
+**Update 2026-09-10 (MEGA POLISH) — code-side reduction applied.**
+`distance_fade_enabled` added to the streetlight `SpotLight`/`Glow`
+(`begin 22 m`, culled at 30 m) and the pickup `GlowOmniLight3D`
+(`begin 12 m`, culled at 16 m). Both lights have short reach (spot 12 m,
+pickup omni 3.2 m), so nothing a player can see changes — only lights
+whose lit effect is already off-screen get culled entirely ("not sent to
+the shader at all", per the `Light3D` docs). `tools/qa_sim/drawcall_estimate.py`:
+a representative D1 frame goes from **58 → 18 active real-time lights
+(−69%)**. The residual structural draw calls (6 non-batchable monster
+meshes, in-view pickups / interactables, HUD 2D) still put a firm `<200`
+out of static reach — that needs a Profiler pass and, likely, a design
+call on concurrent monster/pickup counts. Owner step: re-run
+`scenes/tools/perf_check_scene.tscn --windowed` and read the new number.
+
 ## boot_check_scene.tscn can see a spurious PLAYING -> MENU during its
 ## sustain phase — test-harness artifact, not a real-game bug (tolerated,
 ## logged as WARN, does not fail the gate)

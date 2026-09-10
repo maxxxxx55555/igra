@@ -34,6 +34,9 @@ spot_angle = 45.0
 spot_attenuation = 0.8
 spot_range = 12.0
 shadow_enabled = false
+distance_fade_enabled = true
+distance_fade_begin = 22.0
+distance_fade_length = 8.0
 position = Vector3(1.16, 4.2, 0)
 rotation = Vector3(-1.5708, 0, 0)
 
@@ -42,6 +45,9 @@ light_color = Color(0.788, 0.635, 0.290, 1.0)
 light_energy = 1.0
 light_indirect_energy = 0.0
 shadow_enabled = false
+distance_fade_enabled = true
+distance_fade_begin = 22.0
+distance_fade_length = 8.0
 position = Vector3(1.16, 4.24, 0)
 
 [node name="Lamp" type="MeshInstance3D" parent="."]

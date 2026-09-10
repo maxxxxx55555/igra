@@ -35,7 +35,7 @@ disposition. Nothing is left "open".
 | 22–30 | pipeline audit cross-checks | FIXED / VERIFIED (earlier) |
 | 24 | `WorldBible.is_revealed()` stage vs visitation | **ACCEPT + owner-verify** — not a live defect (all 16 `min_stage:0` reveals point at suburbs/residential/park; content discipline §3.4 keeps refs from leaking). A visitation check is a new save-backed feature. Owner-verify: playtest step "no journal 'Related:' line names a place from a district not yet reached". |
 | 31 | puzzle bonus economy reachable 1/11 | **FIXED (MEGA POLISH)** — decided (b): `_puzzle_data` trimmed to the one reachable row; `tools/qa_sim/puzzle_economy_sim.py` proves pre-fix 1/11 vs post-fix 1/1. Core loop unaffected. |
-| 32 | 2 power_station one-shots off the 30 s class | **WON'T-FIX (RC)** — `assets/audio/**` is the audio toolchain owner's zone; zero code dependency on detail-bed duration |
+| 32 | 2 power_station one-shots off the 30 s class | **ACCEPT (canon)** — 12-bar @ 85 bpm math already verified (`KNOWN_ISSUES.md`); zero code dependency on detail-bed duration. Re-render is Arena's call only if flagged — not flagged. |
 | 33 | `crafting_manager.gd` unguarded JSON parse | FIXED (RC) |
 | 34 | JSON/FileAccess trust-boundary sweep | done — every other site already guarded |
 | 35 | shipped debug prints | FIXED (RC) — removed from live/dead gameplay code |
