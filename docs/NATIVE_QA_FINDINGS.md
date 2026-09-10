@@ -217,3 +217,70 @@ This pass reviews the **actual 11** non-EN/RU locales: `fr, de, es, it, pt_BR, t
 | SCR_PEREDVIGAETSYA… | « Move-se de quatro. » | clipped | « Move-se sobre quatro patas. » | LOW |
 | LORE_SUBSTATION_02_TEXT | « sua geada derretida num anel limpo » | possessive participle construction | « com a geada derretida num anel limpo » | LOW |
 | LORE_SUBSTATION_06_TEXT | « Ele as expõe. » | "He stages them" — « dispõe » is closer | — | LOW |
+
+## Turkish (tr)
+
+**Verdict:** Readable, surprisingly strong lore prose (LWAREHOUSES_04 "Yerinin alınması budur", LGAS_STATION_02 "hiç gerçekten ağarmadı" are genuinely good), but the legacy UI keys (~26) shipped with stripped Turkish diacritics — a longstanding tell of Russian-made games in Turkey and instantly visible on the very first screen. Beyond that: a 3-way coin-terminology split (jeton / para / madeni para), two enemy-name collisions, "City Power" left untranslated, water-tap false friend "musluk" for an electrical tap, and "Bring a strong back" calqued literally. Counts: CRITICAL 2, HIGH 54, MEDIUM 9, LOW 7.
+
+**CRITICAL (2, fixed):**
+| Key | Was | Fix | Why |
+|---|---|---|---|
+| LORE_WAREHOUSES_05_TEXT | Arıza değil: bir musluk. | Arıza değil: kaçak bir bağlantı. | "Musluk" = water faucet; EN "not a fault: a tap" means an illegal electrical tap — "kaçak bağlantı" is the standard TR term. Meaning break in a canon document. |
+| WORLD_DIARY_K3_TEXT | 219'u sök, banliyö, trafo merkeze. | 219'u sök, banliyö, transformatörü merkeze götür. | "trafo merkeze" misparses as "to the trafo merkezi" (= the substation, the game's own term); EN means "transformer → the center" (the Architect's lair). Canon destination flipped. |
+
+**HIGH (54, fixed):**
+| Key | Was | Fix | Why |
+|---|---|---|---|
+| achievements | Basarımlar | Başarımlar | Diacritic loss (ş) — first screen. |
+| back_menu | Ana Menu | Ana Menü | Diacritic loss (ü). |
+| confirm_quit | Cikmak istedigine emin misin? | Çıkmak istediğine emin misin? | Diacritics (Ç, ğ). |
+| empty_slot | Bos | Boş | Diacritic (ş). |
+| loading | Yukleniyor... | Yükleniyor... | Diacritic (ü). |
+| multiplayer | Coklu Oyuncu | Çoklu Oyuncu | Diacritic (Ç). |
+| music_vol | Muzik Sesi | Müzik Sesi | Diacritic (ü). |
+| next_level | Sonraki Bolum | Sonraki Bölüm | Diacritic (ü). |
+| paused | Duraklatildi | Duraklatıldı | Diacritic (ı). |
+| quests | Gorevler | Görevler | Diacritic (ö). |
+| quit | Cikis | Çıkış | Diacritics (Ç, ı). |
+| select_slot | Yuva Sec | Yuva Seç | Diacritic (ç). |
+| shop | Magaza | Mağaza | Diacritic (ğ). |
+| tip1 | Feneri acik tut - dusmanlar isiktan korkar. | Feneri açık tut - düşmanlar ışıktan korkar. | Diacritics ×5. |
+| tip2 | Sarj etmek 1,5 saniye surer. | Şarj etmek 1,5 saniye sürer. | Diacritics. |
+| tip3 | Canin azken siginak kullan. | Canın azken sığınak kullan. | Diacritics. |
+| tip4 | Harita icin M'ye bas. | Harita için M'ye bas. | Diacritics (i→için). |
+| tutorial_done | Egitim tamamlandi. İyi sanslar! | Eğitim tamamlandı. İyi şanslar! | Diacritics. |
+| tutorial_interact | E - etkilesim | E - etkileşim | Diacritic (ş). |
+| tutorial_jump | BOSLUK - zipla | BOŞLUK - zıpla | Diacritics; all-caps of "boşluk" is BOŞLUK. |
+| tutorial_shoot | SOL TIK - ates | SOL TIK - ateş | Diacritic (ş). |
+| victory | BOLUM TAMAMLANDI | BÖLÜM TAMAMLANDI | All-caps needs Ö (TR İ/ı rule respected elsewhere; this key missed). |
+| weight | Agirlik | Ağırlık | Diacritics. |
+| AD_CLAIM | Odulu al | Ödülü al | Diacritics. |
+| AD_READY | Odul hazir | Ödül hazır | Diacritics. |
+| AD_REVIVE | Yeniden dirilmek icin reklam izle | Yeniden dirilmek için reklam izle | "icin"→"için". |
+| AD_TITLE | Odullu reklam | Ödüllü reklam | Diacritics. |
+| COINS_AMOUNT | Para: %d | Jeton: %d | Coin-term unification on "jeton" (hud_coins, quest toasts already use it). |
+| NOT_ENOUGH_COINS | Yeterli para yok | Yeterli jeton yok | Same unification. |
+| UPG_HINT | Paralar bölgelerden… | Jetonlar bölgelerden… | Same unification. |
+| REWARD_ACHIEVEMENT / _DISTRICT / _SECRET | +%d madeni para | +%d jeton | Same unification (3 keys). |
+| TOAST_COINS_GAINED | +%s madeni para | +%s jeton | Same unification. |
+| ENEMY_ROTTER | Çürük | Çürümüş | "Çürük" also means "bruise"; MONSTER_ROTTER is "Çürümüş" — unify. |
+| MONSTER_BRUTE | Canavar | Zorba | Collided with ENEMY_BEAST "Canavar"; "Zorba" (bullying brute) separates them. |
+| CHAR_HOLSTER | Kılıfa Koy | Kılıf | Verb as equipment-slot label. |
+| PHOTO_MODE | Foto modu | Fotoğraf modu | PHOTO_MODE_ON/OFF say "Fotoğraf modu" — unify. |
+| DIST_RESIDENTIAL + SCR_ZHILYE_KVARTALY | Yerleşim Bölgesi | Konut Bölgesi | DNAME_RESIDENTIAL says "Konut bölgesi" — 2 keys unified (counts as 2 rows). |
+| WORLD_NEWS_METERS_TEXT | City Power 'arızalı tamburları' suçluyor… bir bağlantıdır. Aşağı akışta… | Şirket 'arızalı tamburları' suçluyor… bir kaçak bağlantıdır. Hattın aşağısında bir şey akımı kablolara veriyor, çekmiyor. | Untranslated entity ("City Power" → the faction is "Şehir Elektrik Şirketi"); "bağlantı" alone = any connection, tap needs "kaçak"; "aşağı akış" is a water metaphor, "hattın aşağısı" is the grid term. |
+| WORLD_NEWS_ARCHITECT_TEXT | hastane alt beslemesi | hastanenin ikincil besleme hattı | "alt besleme" reads as "under-feeding" (sub-feed malnutrition trap); "ikincil besleme hattı" = secondary feeder line. |
+| WORLD_NEWS_ARCHITECT_TITLE | Konsey 'Şebeke Belleği' Programını Yalanlıyor | Konsey «Şebeke Belleği» programını yalanlıyor | TR newspaper headlines are sentence case (not Title Case); «» quote marks for tabloid register. |
+| WORLD_NEWS_ARENA_TITLE | Merkezi Arenada Toplanma Noktası | Merkezi arenada toplanma noktası | Headline sentence case. |
+| WORLD_NEWS_METERS_TITLE | Üç Sokakta Sayaçlar Geriye Dönüyor | Üç sokakta sayaçlar geriye dönüyor | Headline sentence case. |
+| WORLD_NEWS_OUTAGES_TITLE | Dönüşümlü Kesintiler Bu Gece Başlıyor | Dönüşümlü kesintiler bu gece başlıyor | Headline sentence case. |
+| WORLD_NEWS_TREES_TITLE | 'Ağaç' Şikayetleri Sonrası Park Kapatıldı | «Ağaç» şikayetleri sonrası park kapatıldı | Headline sentence case + «». |
+| WORLD_CHAR_RADIOVOICE_TEXT | Elektrik santraline gidin… sizinle ışıkta buluşacak. | Elektrik santraline git… seninle ışıkta buluşacak. | Radio voice uses "sen" in WORLD_RADIO_01 ("seninle"); plural "siz" here breaks the speaker's identity. |
+| WORLD_RADIO_03_TEXT | Güçlü bir sırt getir. | Sırtın sağlam olsun. | Literal calque of "Bring a strong back"; "Sırtın sağlam olsun" is the exact TR idiom said before heavy work. |
+| WORLD_DIARY_M1_TEXT | lambamı yakık tutuyorum | lambamı yanık tutuyorum | "yakık" is a common misspelling; the adjective is "yanık" ("keep my lamp burning"). |
+| WORLD_CHAR_RECORDER_TITLE | Kayıt Yapan | Kayıtçı | "The one who records" as a codex name reads like a description; "Kayıtçı" is a real noun. |
+| LORE_WAREHOUSES_08_TEXT | anlatıcının eliyle | kaydedenin eliyle | "Anlatıcı" = narrator; EN "the recorder's hand" — wrong character word (same trap as ES narrador / PT narrador). |
+| LORE_GAS_STATION_06_TEXT | Söktüklerinin, onların içemeyeceği olanlar olduğunu söyledi. | Söktüklerinin, onların içemeyecekleri olduğunu söyledi. | Broken syntax: "the ones that are the ones they cannot drink" — double relative tangle. |
+| LORE_GAS_STATION_03_TEXT | bir motorla koşan bir adamın … aynı ses olduğunu söylüyor | bir motor ile koşan bir adamın sesinin … aynı geldiğini söylüyor | Misparse risk: "bir motorla koşan bir adam" = "a man running with an engine"; EN is "an engine and a man running sound the same". |
+
+**MEDIUM (9, documented only):** A16_NAME "Hız Koşucusu" (calque; TR gamers say "Speedrunner"); QKILL_TANK_TITLE "Tankları indir" + QKILL_TANK_DESC (vehicles vs armored monsters — "Zırhlıları indir" clearer); A07_DESC "kombo-3 zinciri" (calque "combo-3"; "3'lü kombo" natural); SKILL_RELOAD_SPEED_NAME "Hızlı Şarjör" ("fast magazine"; should be "Hızlı Doldurma"); WEAPON_COMPARE_RELOAD "Şarjör değişimi" (magazine swap; reload = "yeniden doldurma"); QSECRETS_1/2/3_TITLE "No.1" without space (TR: "No. 1" or "1."); ENEMY_ARSONIST "Kundakçı" / MONSTER_BURNER "Yakıcı" — near-collision but distinguishable, acceptable; WORLD_NEWS_METERS_TEXT "Emekli bir sayaç okuyucusu:" colon usage slightly telegraphic. LOW (7): DGAS title-case vs DNAME lowercase; DNAME_POLICE "Karakol" vs DPOLICE "Polis Karakolu" uneven; "Boss'u yen" anglicism (fine in TR gaming); ¢MONETY_2 "JETON: " trailing space; ¢EST_SOHRANENIE trailing "\|"; ¢ZAGRUZKA "YÜKLENİYOR.. " missing third dot + trailing space; ¢SLOT trailing space.
