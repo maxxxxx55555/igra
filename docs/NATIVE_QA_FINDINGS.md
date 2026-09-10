@@ -143,3 +143,39 @@ This pass reviews the **actual 11** non-EN/RU locales: `fr, de, es, it, pt_BR, t
 | NEW_GAME_PLUS / NG keys | « Nueva Partida+ » | odd mid-word capital; es convention « Nueva partida+ » | — | LOW |
 | LORE_POWER_STATION_08_TEXT | « el nombre de la ventana esquinera » | clunky compound | « el nombre de la ventana de la esquina » | LOW |
 | Q_FIND_ENGINEERS_DESC | « el equipo de ingenieros » | fine (no action) | — | LOW |
+
+---
+
+## Italian (it)
+
+**Verdict:** the strongest literary prose of the Latin-script set (lore notes read natively written — « I corridoi mentono in questo edificio », « La differenza sta cercando vos » register work is excellent). Defects mirror the pipeline pattern: unaccented legacy keys, one CRITICAL malnutrition/false-friend ("sotto-alimentazione" for sub-feed), a codex name collision (Superintendent = « Il Custode del Palazzo » vs the Keeper = « Il Custode »), Title Case headlines, and one skill name from the wrong semantic field (« Accumulatore » = battery/accumulator for Pack Rat). Counts: **CRITICAL 1 (1 fixed)** · **HIGH 28 (28 fixed)** · MEDIUM 10 · LOW 7.
+
+| key | current | issue | suggested_fix | priority |
+|---|---|---|---|---|
+| WORLD_NEWS_ARCHITECT_TEXT | « …collegate tramite la sotto-alimentazione dell'ospedale… » | **meaning break:** « sotto-alimentazione » = malnutrition; "sub-feed" is an electrical feeder | « …tramite l'alimentazione secondaria dell'ospedale… » | CRITICAL |
+| ACHIEVEMENTS_TITLE | « Trofei » | achievements split between « Trofei » (here) and « Obiettivi » (legacy key, REWARD_ACHIEVEMENT, UPG_HINT, SCR labels); Google Play it uses « Obiettivi » | « Obiettivi » | HIGH |
+| ~10 keys: difficulty, sens, AD_WATCHING, DISTRICT_ALREADY_FULL, FINAL_NIGHT_BEGINS, HUD_STEALTH, HUD_VISIBILITY, yes, (see rows) | « Difficolta », « FURTIVITA », « e gia », « citta e », « Si » | systemic accent loss in the legacy set | restore à/è/é/ì (per-key rows) | HIGH |
+| msg_caught | « Sei stato catturato! » | gendered (assumes male player) | « Ti hanno preso! » | HIGH |
+| ENEMY_ROTTER | « Marcio » | vs MONSTER_ROTTER « Putrefatto » — same creature two names | « Putrefatto » | HIGH |
+| CHAR_HOLSTER | « Ripone » | verb as equipment-slot label | « Fondina » | HIGH |
+| SKILL_INVENTORY_SPACE_NAME | « Accumulatore » | wrong semantic field — accumulator = battery in an electrical game | « Accaparratore » | HIGH |
+| WORLD_CHAR_SUPERINTENDENT_TITLE | « Il Custode del Palazzo » | **name collision** with the Keeper (« Il Custode ») in the codex | « L'Amministratore » | HIGH |
+| WORLD_CHAR_RADIOVOICE_TEXT | « Andate alla centrale… vi incontrerà » | radio voice uses voi here, tu in WORLD_RADIO_01 (same canon quote) | « Va' alla centrale… ti incontrerà » | HIGH |
+| WORLD_DIARY_K3_TEXT | « smontare il 219, sobborgo » | "the 219" (single) vs all 219 lamps | « smontare i 219 » | HIGH |
+| WORLD_DIARY_K1_TEXT | « l'uomo che non ha mai lasciato dimenticare una strada » | calque ("let forget") | « …che non ha mai permesso che una strada fosse dimenticata » | HIGH |
+| WORLD_DIARY_K2_TITLE | « La Notte in cui si è Spento » | wrong mid-title capital + missing subject | « La notte in cui la luce si è spente » | HIGH |
+| WORLD_NEWS_METERS_TEXT | « City Power incolpa » | faction left in EN (faction = « Azienda Elettrica Comunale ») | « L'azienda incolpa » | HIGH |
+| WORLD_NEWS_ARCHITECT/ARENA/METERS/OUTAGES/TREES_TITLE | « Il Consiglio Nega il Programma 'Memoria della Rete' » | English Title Case + straight quotes in it headlines | sentence case + « » (per-key rows) | HIGH |
+| WORLD_RADIO_03_TEXT | « Porta una schiena forte. » | calque of "Bring a strong back" | « Ti servirà una schiena forte. » | HIGH |
+| UPG_HINT | « Le monete arrivano da distretti, segreti e obiettivi. » | clipped calque | « Le monete si ottengono nei distretti, dai segreti e dagli obiettivi. » | HIGH |
+| CODEX_TITLE | « Codice » | reads as "code"; games keep « Codex » | « Codex » | MEDIUM |
+| DIST_GAS vs DISTRICT_NAME_GAS_STATION | « Stazione di servizio » vs « Distributore » | two names for one district | « Distributore » | MEDIUM |
+| ENEMY_HOUND vs MONSTER_HOUND | « Segugio » vs « Molosso » | creature-name drift | « Segugio » | MEDIUM |
+| Q_KILL_TANK_TITLE | « Abbatti i tank » | anglicism | « Abbatti i corazzati » | MEDIUM |
+| TOAST_ITEM_FOUND | « %s trovato! » | gendered participle with dynamic %s | « Oggetto trovato: %s » if code allows | MEDIUM |
+| ACH_17_DESC / SHOP_SKIN_GRANTED | « skin della torcia » | platform term « aspetti » | — | LOW |
+| QCOLLECT_SCRAP_DESC | « utili per il crafting » | anglicism accepted in gamer it | — | LOW |
+| ACH_15_DESC | « finale negativo » | it gaming says « finale cattivo » | — | LOW |
+| RADIO_TRANSCRIPT_E1/E2, WORLD_RADIO_02 | « Se ci sentite », « State attenti », « Ricordatelo » | radio voi vs WRADIO_01 tu — defensible (broadcast to all listeners) | — | MEDIUM |
+| LSCHOOL_03 vs LSCHOOL_06/08 | « Cammina oltre » vs « Contate… andate » | tu/voi flip between lore notes addressed to the same "whoever follows" | — | MEDIUM |
+| WORLD_NEWS_OUTAGES_TEXT | « "Una formalità di manutenzione" » | straight quotes vs « » elsewhere | — | LOW |
