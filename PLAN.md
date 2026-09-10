@@ -23,7 +23,7 @@ igra` (suburbs district content, PR #1) was merged and deleted
 
 ## GOLD MASTER v2 — declared 2026-09-10 (store-release-pass recreate + gap-to-ideal)
 
-**`origin/main` is GOLD MASTER v2 at `<gm2-hash>`.** GOLD MASTER (below) plus
+**`origin/main` is GOLD MASTER v2 at `e5d4f99`.** GOLD MASTER (below) plus
 the Arena store-release-pass rescued-or-recreated (Path B: the tarball was
 absent and its sha256 manifest malformed) and every remaining
 CLAUDE-owned P0/P1 closed. Arena sessions closed by the owner;

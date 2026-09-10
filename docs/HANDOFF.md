@@ -2,7 +2,7 @@
 
 ## GOLD MASTER v2 — 2026-09-10 (store-release-pass recreate + gap-to-ideal)
 
-`origin/main` is **GOLD MASTER v2** at `<gm2-hash>`. GOLD MASTER (below) plus:
+`origin/main` is **GOLD MASTER v2** at `e5d4f99`. GOLD MASTER (below) plus:
 
 - **Arena store-release-pass recreated (Path B).** `store-release-pass.tar.gz`
   was not in Downloads/Desktop and its sha256 manifest was malformed, so
