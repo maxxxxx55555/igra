@@ -8,7 +8,39 @@ confirm in-game (also collected in the HUMAN 5-MINUTE CHECK at the bottom of
 each PLAYER_VISIBLE_CHANGES.md batch).
 
 Status legend: OPEN / FIXED (commit hash) / DOCUMENTED (accepted, not fixed
-— reason given).
+— reason given) / WON'T-FIX (RC) (final RC-pass disposition — reason + GDD
+ref in the entry).
+
+---
+
+## RC FINAL PASS — full close-out (2026-09-10)
+
+Every previously-DEFERRED / DOCUMENTED / OPEN entry now has a final
+disposition. Nothing is left "open".
+
+| # | Topic | RC disposition |
+|---|---|---|
+| 1–5 | skill-tree pay-for-nothing, ending_screen escape | FIXED (earlier) |
+| 6 | endings: 5 defined, 3 reachable | **WON'T-FIX (RC)** — survivor/dark need an owner design call (GDD §12.3/§12.4/§4.3 conflict); trace re-run and recorded |
+| 7 | emissive windows not stage-reactive | **WON'T-FIX (RC)** — needs Godot visual verification; windows are set-dressing, not a GDD §11.1 reward channel |
+| 8 | PARTIAL stage looks like DARK | **WON'T-FIX (RC)** — per-lamp subset needs visual tuning; PARTIAL is transient, DARK/FULL distinct |
+| 9–13 | lighting scope, ghost slot, doc threshold, save-slot UI, dead sync | FIXED (earlier) |
+| 14 | `power_grid.reset()/from_dict()` don't emit `district_stage_changed` | **WON'T-FIX (RC)** — unreachable in Continue/New-Game (scene rebuild re-reads stage); emitting mid-load would risk spurious listener side-effects during teardown |
+| 15, 17 | redundant emit, orphan `.uid` | FIXED (earlier) |
+| 16 | `puzzle_base.gd` dead `Area2D` fossil | **WON'T-FIX (RC)** — the `toggle_district` mechanic it implements is real (GDD §4.3) but `power_switch.gd` is the live impl; kept per no-delete rule, flagged |
+| 18 | `weather_system.gd` calls `LocalizationManager.t()` pre-`_ready()` | **WON'T-FIX (RC)** — `t()` has a crash-safe key fallback and the string is displayed by nothing; reordering autoloads is disproportionate risk for a latent no-op |
+| 19 | 12 UI files no live-language retranslation | FIXED (9 live files); root-level `scripts/death_screen.gd` = **WON'T-FIX (RC)**, dead code (live `scripts/ui/death_screen.gd` already fixed) |
+| 20 | `item_spawns.json` stage tables unread | **WON'T-FIX (RC)** — wiring them is a new stage-aware spawn system, not a fix; `district_loot.gd`'s `REPAIR_PARTS` already guarantees GDD §4.3 solvability |
+| 21 | school/gas_station `powered_by` leaves | DOCUMENTED — verified intentional (convergent DAG), not a defect |
+| 22–30 | pipeline audit cross-checks | FIXED / VERIFIED (earlier) |
+| 24 | `WorldBible.is_revealed()` stage vs visitation | **WON'T-FIX (RC)** — a visitation check would *hide* currently-shown refs (not behavior-preserving); content discipline (§3.4) is the working guardrail; touches 2 live features, no compile-check in NO-GODOT |
+| 31 | puzzle bonus economy reachable 1/11 | **WON'T-FIX (RC)** — core loop + victory unaffected; full wiring is a GDD §3.3/§8 balance call; the 4 live toasts were localized + a duplicate toast removed |
+| 32 | 2 power_station one-shots off the 30 s class | **WON'T-FIX (RC)** — `assets/audio/**` is the audio toolchain owner's zone; zero code dependency on detail-bed duration |
+| 33 | `crafting_manager.gd` unguarded JSON parse | FIXED (RC) |
+| 34 | JSON/FileAccess trust-boundary sweep | done — every other site already guarded |
+| 35 | shipped debug prints | FIXED (RC) — removed from live/dead gameplay code |
+| 36 | accessibility: no motion option | FIXED (RC) — "Reduce Screen Shake" toggle added |
+| 37 | UX/onboarding | REVIEWED — `onboarding_overlay.gd` clean; `onboarding.gd` unwired/superseded, deferred |
 
 ---
 
