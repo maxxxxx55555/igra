@@ -34,3 +34,28 @@ string keeps `centre`; hints are not player-facing prose and are outside this ha
 LORE_GAS_STATION_06_TEXT	A station requisition pad, one page filled in by a hand that does not belong to a petrol station. "ITEM: canopy floodlight transformer, one. REASON: it will be needed at the center. AUTHORISED BY: —" and there the signature is just a small drawing of a streetlight inside a circle. Underneath, the manager's own biro: "Old man came at dusk, took the transformer, left this. Knew which bolt to loosen first. Said the ones he takes down are the ones they cannot drink. I didn't argue. Nobody's buying petrol anyway."
 
 LORE_POLICE_06_TEXT	A release form that is not in the station's typeface. "ITEM: yard flood transformer, one. REASON: it will be needed at the center. AUTHORISED BY: —" and there the signature is the small streetlight-in-a-circle again. Underneath, the duty sergeant's own biro: "He knew which cage. He knew which bolt. He said the ones he takes down are the ones they cannot drink. I signed because the floods had already come on once with the switch off, and I would rather they were gone."
+
+## Mega final pass (2026-09-10)
+
+Full re-read of all 88 district notes + world bible (characters, factions, history,
+radio, diary, news). No typos (scanned), no canon contradictions, no tone drift beyond
+the three surgical lines below. Structural properties untouched (ids, i18n keys,
+`min_stage`, stages, world-refs) — re-verified in the §11 mega-final re-run
+(`docs/CONTENT_PIPELINE_AUDIT.md`).
+
+- `LORE_PARK_02_TEXT`: flat photo-caption ending → quotable kicker ("Nobody in the
+  queue knew the order would never be given again.").
+- `LORE_PARK_07_TEXT`: canon/tone fix — "The voice is the same one as the manifesto's
+  seal" mixed voice with seal and invoked a "manifesto" no note names; now "The voice
+  belongs to whoever pressed the seal." (Keeper's streetlight-in-circle seal).
+- `LORE_POLICE_05_TEXT`: flat clerk-log ending → in-voice quotable kicker ("The
+  property book has never cleared six items faster.").
+
+## Changed rows (mega final pass)
+
+LORE_PARK_02_TEXT	The same carousel that rots at the north lawn, but painted and spinning, horses mid-gallop, a queue of children two rows deep. Every lamp post around it is lit for the evening ride. On the back: "Last summer. The lights stayed on till midnight by order of the park office." Nobody in the queue knew the order would never be given again.
+
+LORE_PARK_07_TEXT	A captured broadcast, looped on the shed's shortwave: a calm voice under static, neither young nor old: "...the grid can still be brought back. District by district, lamp by lamp. Go to the power station. The one who kept the light will meet you at the light." The loop ends with three soft clicks, like a streetlight relay. The voice belongs to whoever pressed the seal.
+
+LORE_POLICE_05_TEXT	Evidence flash on a steel locker: six streetlight heads tagged and stacked, glass intact, brass rings still warm-looking in the photograph. Daylight — this is from before. On the back, a property clerk's hand: "Seized from the park road. Owner would not give a name. Said they were not stolen, they were taken down so they could not be drunk. Released to the same old man two nights later. He signed with a streetlight in a circle. The property book has never cleared six items faster."
+

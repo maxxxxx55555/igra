@@ -1,112 +1,164 @@
 {
-  "district": "police",
-  "version": 1,
-  "_world_refs_contract": "Notes reference world-bible entries by id only (content/world/*, content/lore/*); no copied text. See docs/CONTENT_WORLD_BIBLE.md.",
-  "_reachability_rule": "police unlocks from park FULL (district_police.tres powered_by=[park]; GDD §4.3 requires every prereq at FULL), and park itself needs suburbs FULL. Guaranteed history at arrival: suburbs (all stages) + park (all stages) — so every suburbs- and park-gated world id is safe here regardless of its min_stage. Keeper/radio-voice material is legal (park is guaranteed). NOT guaranteed: residential, school, hospital, gas_station (separate branches / leaves) — no residential- or hospital-gated ids are referenced, which also keeps the Act II Architect reveal (hospital STREETS, CONTENT_WORLD_BIBLE rule 3) untouched. Police is D7 / Act II territory by chain order (GDD §12.3 D4–8) but the Architect ids stay gated on the hospital branch.",
-  "notes": [
-    {
-      "id": "police_note_01",
-      "item_type": "document",
-      "i18n_keys": { "title": "LORE_POLICE_01_TITLE", "text": "LORE_POLICE_01_TEXT" },
-      "en": {
-        "title": "Evacuation Order — Desk Copy",
-        "text": "The station's own carbon of list two, stamped RECEIVED 03:12. Same forty-seven names as the school-yard sheet, plus a duty sergeant's addendum in the margin: \"Assembly at 04:00. Doors of this building stay locked after they leave. Anyone still in the cells at 04:10 is not on the list and is not our problem.\" The last line is in a different pen: \"We processed the list. We did not walk anyone to the yard. That was the point of a list.\""
-      },
-      "location_hint": "Pinned under the blotter on the front desk (z_front_desk)",
-      "min_stage": 0,
-      "weight": 100,
-      "world_refs": ["hist_evacuation_arena", "news_arena_collection", "hist_present_day"]
-    },
-    {
-      "id": "police_note_02",
-      "item_type": "photo",
-      "i18n_keys": { "title": "LORE_POLICE_02_TITLE", "text": "LORE_POLICE_02_TEXT" },
-      "en": {
-        "title": "Photo: Cell 4, After",
-        "text": "Shot through the observation slit: four bunk frames, one blanket on the floor, the bench rail gouged in parallel lines that do not match a tool. No people. On the back, a felt pen: \"Cell 4 held three overnight. Morning count was zero. The lock was still locked from our side. Do not put a lamp in the corridor — it doesn't care about lamps, and the light just shows you the empty bunk.\""
-      },
-      "location_hint": "Taped inside the observation slit of cell 4 (z_holding_cells)",
-      "min_stage": 0,
-      "weight": 95,
-      "world_refs": ["faction_street_watch"]
-    },
-    {
-      "id": "police_note_03",
-      "item_type": "audio_log",
-      "i18n_keys": { "title": "LORE_POLICE_03_TITLE", "text": "LORE_POLICE_03_TEXT" },
-      "en": {
-        "title": "Recorder: Grid Crew Log 14",
-        "text": "\"Station transformer. Marat wants the feeder tagged before anyone throws a switch — he still says the draw doesn't add up, and a police pad is the last place he wants to prove it. We are not starting the siren. We are not testing the floods. If you're replaying this in the radio room: the spare fuses are in the rack by the handset, and the thing in the cell wing does not hunt noise. It hunts the doorway. Leave the door shut.\""
-      },
-      "location_hint": "Recorder left on the dispatch shelf (z_radio_room)",
-      "min_stage": 1,
-      "weight": 85,
-      "world_refs": ["char_marat", "char_grid_crew_recorder", "faction_grid_crew"]
-    },
-    {
-      "id": "police_note_04",
-      "item_type": "document",
-      "i18n_keys": { "title": "LORE_POLICE_04_TITLE", "text": "LORE_POLICE_04_TEXT" },
-      "en": {
-        "title": "Duty Log, Night Zero",
-        "text": "A ruled shift book, neat until 22:14. \"Power out citywide. Radio died with it. 22:31 — backup diesel coughed once and stopped. 23:05 — someone on channel 3, not a callsign we have. 00:40 — the yard floods came on with no switch thrown. I went out to kill them and the switch was already off. I have written that down because I would like it to have been a mistake.\""
-      },
-      "location_hint": "Open on the sergeant's side of the front desk (z_front_desk)",
-      "min_stage": 0,
-      "weight": 90,
-      "world_refs": ["hist_blackout_night", "faction_city_power"]
-    },
-    {
-      "id": "police_note_05",
-      "item_type": "photo",
-      "i18n_keys": { "title": "LORE_POLICE_05_TITLE", "text": "LORE_POLICE_05_TEXT" },
-      "en": {
-        "title": "Photo: Locker 12, Seized Lamps",
-        "text": "Evidence flash on a steel locker: six streetlight heads tagged and stacked, glass intact, brass rings still warm-looking in the photograph. Daylight — this is from before. On the back, a property clerk's hand: \"Seized from the park road. Owner would not give a name. Said they were not stolen, they were taken down so they could not be drunk. Released to the same old man two nights later. He signed with a streetlight in a circle.\""
-      },
-      "location_hint": "Rubber-banded to the latch of evidence locker 12 (z_evidence_room)",
-      "min_stage": 1,
-      "weight": 75,
-      "world_refs": ["char_keeper", "faction_keepers", "hist_trees_complaint"]
-    },
-    {
-      "id": "police_note_06",
-      "item_type": "document",
-      "i18n_keys": { "title": "LORE_POLICE_06_TITLE", "text": "LORE_POLICE_06_TEXT" },
-      "en": {
-        "title": "Property Release, Countersigned",
-        "text": "A release form that is not in the station's typeface. \"ITEM: yard flood transformer, one. REASON: it will be needed at the center. AUTHORISED BY: —\" and there the signature is the small streetlight-in-a-circle again. Underneath, the duty sergeant's own biro: \"He knew which cage. He knew which bolt. He said the ones he takes down are the ones they cannot drink. I signed because the floods had already come on once with the switch off, and I would rather they were gone.\""
-      },
-      "location_hint": "Clipped to the generator-pad cage (z_generator_room)",
-      "min_stage": 2,
-      "weight": 70,
-      "world_refs": ["char_keeper", "faction_keepers", "hist_keeper_reversal"]
-    },
-    {
-      "id": "police_note_07",
-      "item_type": "audio_log",
-      "i18n_keys": { "title": "LORE_POLICE_07_TITLE", "text": "LORE_POLICE_07_TEXT" },
-      "en": {
-        "title": "Channel 3: The Voice, On Our Handset",
-        "text": "Recorded off the dispatch set with the squelch rolled all the way open. Same loop the park shed carries, but it comes in on the station's own channel now, between bursts of the dead siren tail: \"...district by district... lamp by lamp... go to the power station...\" then three soft clicks like a relay, then a sergeant, very tired: \"It's been on our frequency since the diesel died. We stopped answering. It does not need us to answer.\""
-      },
-      "location_hint": "Cassette still in the dispatch deck (z_radio_room)",
-      "min_stage": 2,
-      "weight": 80,
-      "world_refs": ["char_radio_voice", "radio_01_power_station", "hist_radio_call"]
-    },
-    {
-      "id": "police_note_08",
-      "item_type": "document",
-      "i18n_keys": { "title": "LORE_POLICE_08_TITLE", "text": "LORE_POLICE_08_TEXT" },
-      "en": {
-        "title": "Night Watch Rules, Interrogation 2",
-        "text": "Board screwed to the wall of the second interrogation room, rules burnt in with a soldering iron. \"1. No lamps in the cell wing. It does not care, and you will. 2. The desk lamp in this room is the only one that pulses — leave it, it is the one thing that still slows them. 3. Nobody runs in the corridor. 4. If the old man comes for a flood, help him and don't log it twice. 5. Channel 3 is not a person. 6. If a cell counts empty and the lock is still locked, it is empty.\""
-      },
-      "location_hint": "Screwed to the wall of interrogation 2 (z_interrogation)",
-      "min_stage": 3,
-      "weight": 60,
-      "world_refs": ["faction_street_watch", "char_keeper"]
-    }
-  ]
+ "district": "police",
+ "version": 1,
+ "_world_refs_contract": "Notes reference world-bible entries by id only (content/world/*, content/lore/*); no copied text. See docs/CONTENT_WORLD_BIBLE.md.",
+ "_reachability_rule": "police unlocks from park FULL (district_police.tres powered_by=[park]; GDD §4.3 requires every prereq at FULL), and park itself needs suburbs FULL. Guaranteed history at arrival: suburbs (all stages) + park (all stages) — so every suburbs- and park-gated world id is safe here regardless of its min_stage. Keeper/radio-voice material is legal (park is guaranteed). NOT guaranteed: residential, school, hospital, gas_station (separate branches / leaves) — no residential- or hospital-gated ids are referenced, which also keeps the Act II Architect reveal (hospital STREETS, CONTENT_WORLD_BIBLE rule 3) untouched. Police is D7 / Act II territory by chain order (GDD §12.3 D4–8) but the Architect ids stay gated on the hospital branch.",
+ "notes": [
+  {
+   "id": "police_note_01",
+   "item_type": "document",
+   "i18n_keys": {
+    "title": "LORE_POLICE_01_TITLE",
+    "text": "LORE_POLICE_01_TEXT"
+   },
+   "en": {
+    "title": "Evacuation Order — Desk Copy",
+    "text": "The station's own carbon of list two, stamped RECEIVED 03:12. Same forty-seven names as the school-yard sheet, plus a duty sergeant's addendum in the margin: \"Assembly at 04:00. Doors of this building stay locked after they leave. Anyone still in the cells at 04:10 is not on the list and is not our problem.\" The last line is in a different pen: \"We processed the list. We did not walk anyone to the yard. That was the point of a list.\""
+   },
+   "location_hint": "Pinned under the blotter on the front desk (z_front_desk)",
+   "min_stage": 0,
+   "weight": 100,
+   "world_refs": [
+    "hist_evacuation_arena",
+    "news_arena_collection",
+    "hist_present_day"
+   ]
+  },
+  {
+   "id": "police_note_02",
+   "item_type": "photo",
+   "i18n_keys": {
+    "title": "LORE_POLICE_02_TITLE",
+    "text": "LORE_POLICE_02_TEXT"
+   },
+   "en": {
+    "title": "Photo: Cell 4, After",
+    "text": "Shot through the observation slit: four bunk frames, one blanket on the floor, the bench rail gouged in parallel lines that do not match a tool. No people. On the back, a felt pen: \"Cell 4 held three overnight. Morning count was zero. The lock was still locked from our side. Do not put a lamp in the corridor — it doesn't care about lamps, and the light just shows you the empty bunk.\""
+   },
+   "location_hint": "Taped inside the observation slit of cell 4 (z_holding_cells)",
+   "min_stage": 0,
+   "weight": 95,
+   "world_refs": [
+    "faction_street_watch"
+   ]
+  },
+  {
+   "id": "police_note_03",
+   "item_type": "audio_log",
+   "i18n_keys": {
+    "title": "LORE_POLICE_03_TITLE",
+    "text": "LORE_POLICE_03_TEXT"
+   },
+   "en": {
+    "title": "Recorder: Grid Crew Log 14",
+    "text": "\"Station transformer. Marat wants the feeder tagged before anyone throws a switch — he still says the draw doesn't add up, and a police pad is the last place he wants to prove it. We are not starting the siren. We are not testing the floods. If you're replaying this in the radio room: the spare fuses are in the rack by the handset, and the thing in the cell wing does not hunt noise. It hunts the doorway. Leave the door shut.\""
+   },
+   "location_hint": "Recorder left on the dispatch shelf (z_radio_room)",
+   "min_stage": 1,
+   "weight": 85,
+   "world_refs": [
+    "char_marat",
+    "char_grid_crew_recorder",
+    "faction_grid_crew"
+   ]
+  },
+  {
+   "id": "police_note_04",
+   "item_type": "document",
+   "i18n_keys": {
+    "title": "LORE_POLICE_04_TITLE",
+    "text": "LORE_POLICE_04_TEXT"
+   },
+   "en": {
+    "title": "Duty Log, Night Zero",
+    "text": "A ruled shift book, neat until 22:14. \"Power out citywide. Radio died with it. 22:31 — backup diesel coughed once and stopped. 23:05 — someone on channel 3, not a callsign we have. 00:40 — the yard floods came on with no switch thrown. I went out to kill them and the switch was already off. I have written that down because I would like it to have been a mistake.\""
+   },
+   "location_hint": "Open on the sergeant's side of the front desk (z_front_desk)",
+   "min_stage": 0,
+   "weight": 90,
+   "world_refs": [
+    "hist_blackout_night",
+    "faction_city_power"
+   ]
+  },
+  {
+   "id": "police_note_05",
+   "item_type": "photo",
+   "i18n_keys": {
+    "title": "LORE_POLICE_05_TITLE",
+    "text": "LORE_POLICE_05_TEXT"
+   },
+   "en": {
+    "title": "Photo: Locker 12, Seized Lamps",
+    "text": "Evidence flash on a steel locker: six streetlight heads tagged and stacked, glass intact, brass rings still warm-looking in the photograph. Daylight — this is from before. On the back, a property clerk's hand: \"Seized from the park road. Owner would not give a name. Said they were not stolen, they were taken down so they could not be drunk. Released to the same old man two nights later. He signed with a streetlight in a circle. The property book has never cleared six items faster.\""
+   },
+   "location_hint": "Rubber-banded to the latch of evidence locker 12 (z_evidence_room)",
+   "min_stage": 1,
+   "weight": 75,
+   "world_refs": [
+    "char_keeper",
+    "faction_keepers",
+    "hist_trees_complaint"
+   ]
+  },
+  {
+   "id": "police_note_06",
+   "item_type": "document",
+   "i18n_keys": {
+    "title": "LORE_POLICE_06_TITLE",
+    "text": "LORE_POLICE_06_TEXT"
+   },
+   "en": {
+    "title": "Property Release, Countersigned",
+    "text": "A release form that is not in the station's typeface. \"ITEM: yard flood transformer, one. REASON: it will be needed at the center. AUTHORISED BY: —\" and there the signature is the small streetlight-in-a-circle again. Underneath, the duty sergeant's own biro: \"He knew which cage. He knew which bolt. He said the ones he takes down are the ones they cannot drink. I signed because the floods had already come on once with the switch off, and I would rather they were gone.\""
+   },
+   "location_hint": "Clipped to the generator-pad cage (z_generator_room)",
+   "min_stage": 2,
+   "weight": 70,
+   "world_refs": [
+    "char_keeper",
+    "faction_keepers",
+    "hist_keeper_reversal"
+   ]
+  },
+  {
+   "id": "police_note_07",
+   "item_type": "audio_log",
+   "i18n_keys": {
+    "title": "LORE_POLICE_07_TITLE",
+    "text": "LORE_POLICE_07_TEXT"
+   },
+   "en": {
+    "title": "Channel 3: The Voice, On Our Handset",
+    "text": "Recorded off the dispatch set with the squelch rolled all the way open. Same loop the park shed carries, but it comes in on the station's own channel now, between bursts of the dead siren tail: \"...district by district... lamp by lamp... go to the power station...\" then three soft clicks like a relay, then a sergeant, very tired: \"It's been on our frequency since the diesel died. We stopped answering. It does not need us to answer.\""
+   },
+   "location_hint": "Cassette still in the dispatch deck (z_radio_room)",
+   "min_stage": 2,
+   "weight": 80,
+   "world_refs": [
+    "char_radio_voice",
+    "radio_01_power_station",
+    "hist_radio_call"
+   ]
+  },
+  {
+   "id": "police_note_08",
+   "item_type": "document",
+   "i18n_keys": {
+    "title": "LORE_POLICE_08_TITLE",
+    "text": "LORE_POLICE_08_TEXT"
+   },
+   "en": {
+    "title": "Night Watch Rules, Interrogation 2",
+    "text": "Board screwed to the wall of the second interrogation room, rules burnt in with a soldering iron. \"1. No lamps in the cell wing. It does not care, and you will. 2. The desk lamp in this room is the only one that pulses — leave it, it is the one thing that still slows them. 3. Nobody runs in the corridor. 4. If the old man comes for a flood, help him and don't log it twice. 5. Channel 3 is not a person. 6. If a cell counts empty and the lock is still locked, it is empty.\""
+   },
+   "location_hint": "Screwed to the wall of interrogation 2 (z_interrogation)",
+   "min_stage": 3,
+   "weight": 60,
+   "world_refs": [
+    "faction_street_watch",
+    "char_keeper"
+   ]
+  }
+ ]
 }
