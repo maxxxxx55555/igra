@@ -361,3 +361,40 @@ in range; 0 pure `#000`/`#fff` texels (`gen_adaptive_icon.py --check`).
 2. Web-sourced rows: license text archived in `docs/reference/` + credit line present.
 3. Sizes within budget (PRODUCTION_BIBLE §4): tiles ≤256² / ~500 KB.
 4. No pure #000/#fff texels in UI-visible art (STYLE_GUIDE §2).
+
+## Added 2026-09-10 — final audio pass: lit-bed generation attempt (Task 1)
+
+**No binaries added; ledger unchanged.** Task 1 of the final audio pass asked to close the
+eight remaining lit-bed gaps in `docs/AUDIO_COVERAGE.md` (G1 `residential_lit`; G2b
+`park_lit`; G2c `school_lit`; G2e `gas_station_lit`; G2f `police_lit`; G2g `warehouses_lit`;
+G2h `industrial_lit`; G2i `substation_lit`; F1 class re-checked) via music-generation skills
+(Suno/Udio-class, exact house contract), and — where generation is unavailable or fails the
+contract — to keep the spec and record the attempt honestly.
+
+(a) **No music-generation capability exists in this session.** Skill discovery at pass start:
+`.claude/skills/` (ponytail×6 — coding discipline), `.opencode/skills/` (`art-pipeline`,
+`council`, `godot-gates`, `self-commit`, `surgical-edit`, `yagni`), `.pi/skills/`
+(`gdd-canon`, `godot-gates`, `self-commit`, `surgical-edit`), `docs/external_skills/`
+(`karpathy-behavior.md`) — none synthesizes audio. Repo-wide search for Suno/Udio/MusicGen
+yields prose mentions only; no tool binding or credentials. The sandbox's sole audio tool is
+spoken-word TTS, which cannot render melodic/seamless instrumental loops and would output
+voices every lit-bed spec forbids. **Contract-true generation was attempted to the limit of
+discovery and is impossible here — recorded, not skipped.**
+
+(b) **Briefs deposited for the toolchain holder.** Per-gap music-generation prompts (dark-bed
+mood/tempo/instrumentation + district-true brighter/warmer modifier + exact contract) are now
+recorded in `docs/AUDIO_COVERAGE.md` §"Final-audio-pass note" step (b), ready to paste into
+Suno/Udio by the first session/owner holding such a tool. On receipt: Ogg/WAV header-verify +
+`ffmpeg loudnorm` to −18 LUFS / TP ≤ −1.5 dBFS (docs/AUDIO_LOUDNESS.md), house naming
+(`<district>_lit.ogg`), and a ledger row here with full origin/license/attribution. The CC0/
+CC-BY sourcing alternative remains exhausted per the 2026-09-09 finishing pass and the
+2026-09-10 mega final pass records above (not re-run a third time).
+
+(c) **Honest spec retention delivered.** No audio was fabricated and no metadata invented:
+the sandbox has no Vorbis encoder and no `ffmpeg`/`ffprobe` (verified absent this session),
+so no deliverable could meet the pipeline's verify-before-commit rule. Static re-verification
+this pass (stdlib Ogg/Vorbis header + final-page granule parse; no engine): all 14 shipped
+beds read 1 ch / 44,100 Hz / 36.000 s (`industrial_dark` 33.994 s per G2h) — byte-identical
+durations and sizes to the 2026-09-09/10 records; all 8 lit files confirmed absent; F1 pair
+(28.749/28.948 s) unchanged, finding not gap. Lit beds delivered: **3/11 shipped** (suburbs,
+hospital, power_station) + **0/8 new** this pass.
