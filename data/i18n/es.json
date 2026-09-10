@@ -1053,5 +1053,6 @@
   "DAILY_EVENT_BONUS": "Bonificación: x%.1f",
   "TOAST_COINS_GAINED": "+%s monedas",
   "TOAST_ITEM_FOUND": "¡%s encontrado!",
-  "TOAST_REACTOR_ONLINE": "¡Reactor en línea!"
+  "TOAST_REACTOR_ONLINE": "¡Reactor en línea!",
+  "Reduce Screen Shake": "Reducir sacudida de pantalla"
 }

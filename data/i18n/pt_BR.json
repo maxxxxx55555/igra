@@ -1053,5 +1053,6 @@
   "DAILY_EVENT_BONUS": "Bônus: x%.1f",
   "TOAST_COINS_GAINED": "+%s moedas",
   "TOAST_ITEM_FOUND": "%s encontrado!",
-  "TOAST_REACTOR_ONLINE": "Reator online!"
+  "TOAST_REACTOR_ONLINE": "Reator online!",
+  "Reduce Screen Shake": "Reduzir tremor de tela"
 }

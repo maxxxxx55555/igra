@@ -214,6 +214,9 @@ func _build_accessibility_tab(parent: VBoxContainer) -> void:
 	# Arachnophobia mode
 	_toggle(parent, LocalizationManager.t("Arachnophobia Mode"), "arachnophobia")
 
+	# Reduce screen shake (vestibular) — consumed in screen_shake.gd::add_trauma
+	_toggle(parent, LocalizationManager.t("Reduce Screen Shake"), "reduce_screen_shake")
+
 # Helper functions
 func _slider(parent: Node, label: String, key: String, min_v: float, max_v: float, step: float, callback) -> void:
 	var row := HBoxContainer.new()

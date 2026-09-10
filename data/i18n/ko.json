@@ -1053,5 +1053,6 @@
   "DAILY_EVENT_BONUS": "보너스: x%.1f",
   "TOAST_COINS_GAINED": "+%s 코인",
   "TOAST_ITEM_FOUND": "%s 발견!",
-  "TOAST_REACTOR_ONLINE": "원자로 가동!"
+  "TOAST_REACTOR_ONLINE": "원자로 가동!",
+  "Reduce Screen Shake": "화면 흔들림 감소"
 }

@@ -521,6 +521,29 @@ Status legend: OPEN / FIXED (commit hash) / DOCUMENTED (accepted, not fixed
     `stub_crazy_games.gd`'s "SDK not connected" notice (a stub's
     intended message).
 
+## RC final pass — accessibility + UX/onboarding (2026-09-10)
+
+36. **Accessibility: added a "Reduce Screen Shake" toggle.** The
+    settings screen already carries a code-built Accessibility tab
+    (colorblind, text size, dyslexia font, high contrast, auto-aim,
+    arachnophobia) but no vestibular / motion option, despite camera
+    trauma on every hit and enemy death. Added `_toggle(... "Reduce
+    Screen Shake", "reduce_screen_shake")` (same helper the tab's other
+    toggles use — persisted via `SettingsManager.set_setting`), and one
+    guard at the single choke point `screen_shake.gd::add_trauma()`
+    (`if SettingsManager.get_setting("reduce_screen_shake", false):
+    return`). Default off ⇒ behavior unchanged for existing players; one
+    guard covers every trauma source (`player_damaged`, `enemy_died`,
+    and any external `add_trauma()` caller). Status: **FIXED / added.**
+37. **UX/onboarding: reviewed, no blind change.** `onboarding_overlay.gd`
+    (live, `main_3d.tscn`) is clean — 4 panels once per save profile,
+    non-blocking, i18n throughout. `onboarding.gd` (a separate authored
+    contextual-hint system) is unwired and superseded by
+    `tutorial_system.gd` + `onboarding_overlay.gd`; wiring it in NO-GODOT
+    mode would be a feature-integration risk, not RC polish. Logged in
+    `KNOWN_ISSUES.md`, deferred to a Godot-enabled pass / owner archive
+    decision. Status: **REVIEWED, no code change.**
+
 ## CONFIRMED WORKING (traced this pass, no defect — do not re-audit)
 
 - `power_switch.gd::interact()`/stage-advance chain, `REPAIR_COST` vs

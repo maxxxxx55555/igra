@@ -18,6 +18,8 @@ func setup(camera: Camera3D) -> void:
 	_base_position = camera.position
 
 func add_trauma(amount: float) -> void:
+	if SettingsManager.get_setting("reduce_screen_shake", false):
+		return
 	_trauma = minf(1.0, _trauma + amount)
 
 func _process(delta: float) -> void:

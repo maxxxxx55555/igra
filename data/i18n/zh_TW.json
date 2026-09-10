@@ -1053,5 +1053,6 @@
   "DAILY_EVENT_BONUS": "加成：x%.1f",
   "TOAST_COINS_GAINED": "+%s 金幣",
   "TOAST_ITEM_FOUND": "找到%s！",
-  "TOAST_REACTOR_ONLINE": "反應爐已上線！"
+  "TOAST_REACTOR_ONLINE": "反應爐已上線！",
+  "Reduce Screen Shake": "減少畫面震動"
 }

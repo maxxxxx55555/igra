@@ -1053,5 +1053,6 @@
   "DAILY_EVENT_BONUS": "Бонус: x%.1f",
   "TOAST_COINS_GAINED": "+%s монет",
   "TOAST_ITEM_FOUND": "Найдено: %s!",
-  "TOAST_REACTOR_ONLINE": "Реактор запущен!"
+  "TOAST_REACTOR_ONLINE": "Реактор запущен!",
+  "Reduce Screen Shake": "Уменьшить тряску экрана"
 }

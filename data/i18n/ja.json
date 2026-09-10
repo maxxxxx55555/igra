@@ -1053,5 +1053,6 @@
   "DAILY_EVENT_BONUS": "ボーナス: x%.1f",
   "TOAST_COINS_GAINED": "+%s コイン",
   "TOAST_ITEM_FOUND": "%s を発見！",
-  "TOAST_REACTOR_ONLINE": "原子炉オンライン！"
+  "TOAST_REACTOR_ONLINE": "原子炉オンライン！",
+  "Reduce Screen Shake": "画面の揺れを軽減"
 }

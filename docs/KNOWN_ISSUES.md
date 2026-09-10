@@ -381,6 +381,18 @@ attempted here.
   never instantiated), `daily_events_ui.gd` (not in `UIManager`'s dict
   either — its hardcoded strings were still localized in the RC final
   pass so a future wiring doesn't reintroduce an i18n-rule violation).
+- `scripts/ui/onboarding.gd` — a contextual first-time-hint system
+  (WASD / flashlight / shadow / interact / inventory prompts on gameplay
+  events), fully authored and i18n'd, but **not instanced anywhere** and
+  not an autoload. Superseded by the two live systems: `tutorial_system.gd`
+  (the FTUE) and `onboarding_overlay.gd` (the 4-panel first-launch
+  overlay, wired in `main_3d.tscn`). Reviewed in the RC final pass —
+  wiring a hint system in blind (NO-GODOT) is a feature-integration risk,
+  not an RC polish; left for a Godot-enabled pass or an owner decision to
+  archive it. `onboarding_overlay.gd` itself was reviewed clean (shows
+  once per save profile, never blocks gameplay, i18n on all captions/
+  buttons; only nit — it doesn't retranslate on a live language switch
+  mid-overlay, negligible for a once-ever first-launch screen).
 
 ## Unmerged `arena/*` branches on origin — deliberately not merged (RC triage 2026-09-10)
 

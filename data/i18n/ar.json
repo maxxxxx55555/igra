@@ -1053,5 +1053,6 @@
   "DAILY_EVENT_BONUS": "مكافأة: x%.1f",
   "TOAST_COINS_GAINED": "+%s عملة",
   "TOAST_ITEM_FOUND": "تم العثور على %s!",
-  "TOAST_REACTOR_ONLINE": "المفاعل يعمل!"
+  "TOAST_REACTOR_ONLINE": "المفاعل يعمل!",
+  "Reduce Screen Shake": "تقليل اهتزاز الشاشة"
 }
