@@ -179,3 +179,41 @@ This pass reviews the **actual 11** non-EN/RU locales: `fr, de, es, it, pt_BR, t
 | RADIO_TRANSCRIPT_E1/E2, WORLD_RADIO_02 | « Se ci sentite », « State attenti », « Ricordatelo » | radio voi vs WRADIO_01 tu — defensible (broadcast to all listeners) | — | MEDIUM |
 | LSCHOOL_03 vs LSCHOOL_06/08 | « Cammina oltre » vs « Contate… andate » | tu/voi flip between lore notes addressed to the same "whoever follows" | — | MEDIUM |
 | WORLD_NEWS_OUTAGES_TEXT | « "Una formalità di manutenzione" » | straight quotes vs « » elsewhere | — | LOW |
+
+---
+
+## Portuguese, Brazil (pt_BR)
+
+**Verdict:** best overall consistency of the Latin set (uniform você, « Companhia de Energia Municipal » kept in EN-free form inside lore, « Catador »/« Gazuá » are genuinely native). Same pipeline defects elsewhere: accent loss in legacy keys, the « subalimentação » malnutrition false-friend (CRITICAL), « narrador » for the Recorder, Title Case headlines, and the game title itself disagreeing with in-game vocabulary (« O ULTIMO LAMPIAO » vs « poste de luz » everywhere else — a lampião is an oil lamp). Counts: **CRITICAL 1 (1 fixed)** · **HIGH 47 (47 fixed)** · MEDIUM 9 · LOW 7.
+
+| key | current | issue | suggested_fix | priority |
+|---|---|---|---|---|
+| WORLD_NEWS_ARCHITECT_TEXT | « …pela subalimentação do hospital… » | **meaning break:** « subalimentação » = malnutrition; electrical sub-feed | « …pela alimentação secundária do hospital… » | CRITICAL |
+| ~27 keys: diff_easy, diff_hard, graphics, inventory, music_vol, next_level, quests, tutorial_done, tutorial_jump, victory, you_died, AD_REVIVE, AD_TITLE, AD_WATCHING, DISTRICT_ALREADY_FULL, DISTRICT_STAGE_2, DIST_SUBSTATION, DIST_SUBURBS, DIST_WAREHOUSES, HUD_AMMO, HUD_NOISE, FINAL_NIGHT_BEGINS, NEED_DISTRICT_FIRST, NEED_ITEM, menu_title… | « Facil », « Graficos », « Missoes », « VOCE MORREU », « MUNICAO », « RUIDO », « ja esta », « estao » | **systemic accent loss** in the legacy set (newer keys accented correctly) | restore ç/á/é/í/ó/ú (per-key rows) | HIGH |
+| menu_title | « O ULTIMO LAMPIAO » | title word disagrees with the entire game: a « lampião » is an oil lamp; all gameplay text says « poste de luz » (A01_DESC, FINAL_NIGHT, lore) | « O ÚLTIMO POSTE DE LUZ » | HIGH |
+| CHAR_HOLSTER | « Guardar » | verb as equipment-slot label | « Coldre » | HIGH |
+| enc_locked | « desbloquear a entrada » | encyclopedia entry | « desbloquear o verbete » | HIGH |
+| NG_PLUS_STAT_ENEMY_HP | « HP dos inimigos » | HP rendered « PV » in bestiary/skills, « HP » here | « PV dos inimigos » | HIGH |
+| Q_KILL_SNIPER_DESC / _TITLE | « Snipers dominam os telhados », « Caçador de snipers » | anglicism vs ENEMY_SNIPER « Franco-atirador » | « Franco-atiradores… », « Caçador de franco-atiradores » | HIGH |
+| LORE_SUBSTATION_07/08_TEXT | « a letra do narrador » ×2 | wrong character word: the Recorder is « O Gravador » | « a letra do gravador » | HIGH |
+| LORE_SUBSTATION_08_TEXT | « — vão para a usina. » | quote of the radio loop must match WORLD_RADIO_01's « Vá até a usina » | « — vá para a usina. » | HIGH |
+| LORE_SUBSTATION_01_TEXT | « às 03h00 a porta ficando aberta sozinha sem nada na soleira » | broken gerund construction in the official log | « às 03h00 a porta aberta sozinha, sem nada na soleira » | HIGH |
+| LORE_SUBSTATION_03_TEXT | « essa é a cerca até onde caminhamos dois distritos para chegar » | tangled calque of "the fence we walked two districts to reach" | « essa é a cerca pela qual caminhamos dois distritos até chegar » | HIGH |
+| LORE_SUBSTATION_05_TEXT | « pelo subalimentador do hospital » | invented term; align with the CRITICAL sub-feed fix | « pelo alimentador secundário do hospital » | HIGH |
+| WORLD_NEWS_METERS_TEXT | « A City Power culpa » | faction left in EN | « A companhia culpa » | HIGH |
+| WORLD_NEWS_ARCHITECT/ARENA/METERS/OUTAGES/TREES_TITLE | « Medidores Giram para Trás em Três Ruas » | English Title Case + straight quotes in pt headlines | sentence case + « » (per-key rows) | HIGH |
+| WORLD_CHAR_RADIOVOICE_TEXT | « Vão até a usina… vai encontrá-los » | radio voice plural here vs « você » in WORLD_RADIO_01 | « Vá até a usina… vai encontrar você » | HIGH |
+| WORLD_RADIO_03_TEXT | « esfaima a coisa no centro », « Traga as costas fortes. » | rare verb « esfaimar » + calque of "Bring a strong back" | « mata de fome a coisa no centro », « Você vai precisar de costas fortes. » | HIGH |
+| WORLD_DIARY_K3_TEXT | « desmontar o 219, subúrbio » | "the 219" (single) vs all 219 lamps | « desmontar os 219 » | HIGH |
+| WORLD_DIARY_K2_TITLE | « A Noite em que Apagou » | missing subject + odd capitalization | « A noite em que a luz se apagou » | HIGH |
+| UPG_HINT | « As moedas vêm de distritos, segredos e conquistas. » | missing articles (clipped) | « As moedas vêm dos distritos, dos segredos e das conquistas. » | HIGH |
+| ENEMY_ARSONIST / MONSTER_BURNER | both « Incendiário » | name collision across roster/bestiary | « Incendiário » / « Queimador » if shown together | MEDIUM |
+| Q_KILL_TANK_TITLE | « Derrube os tanques » | « tanques » = vehicles | « Derrube os blindados » | MEDIUM |
+| DISTRICT_NAME_SUBURBS | « Subúrbios » | pt_BR « subúrbio » = working-class outskirts (cultural shift vs EN leafy suburbs) — acceptable, worth an eye | — | MEDIUM |
+| ACH_06_NAME | « Quieto como um Rato » | calque of "Quiet as a mouse"; pt idiom prefers « Silencioso como um rato » | — | MEDIUM |
+| WEAKSPOT_STROBE_COMBO | « Combo de flash + ataque » | « flash » vs « Estroboscópio » elsewhere | « Combo de estroboscópio + ataque » | MEDIUM |
+| TOAST_ITEM_FOUND | « %s encontrado! » | gendered participle with dynamic %s | « Item encontrado: %s » if code allows | MEDIUM |
+| ACH_17_DESC / SHOP_SKIN_GRANTED | « skins de lanterna » | pt platform term « visuais » | — | LOW |
+| SCR_PEREDVIGAETSYA… | « Move-se de quatro. » | clipped | « Move-se sobre quatro patas. » | LOW |
+| LORE_SUBSTATION_02_TEXT | « sua geada derretida num anel limpo » | possessive participle construction | « com a geada derretida num anel limpo » | LOW |
+| LORE_SUBSTATION_06_TEXT | « Ele as expõe. » | "He stages them" — « dispõe » is closer | — | LOW |
