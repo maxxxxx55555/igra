@@ -71,12 +71,36 @@ Status legend: OPEN / FIXED (commit hash) / DOCUMENTED (accepted, not fixed
    gated on it), so `full >= total` is always true by construction,
    making the `full == 1` (`survivor`) and fallback (`dark`) branches
    unreachable; `trigger_death()` never emits `game_won` at all, so death
-   never reaches `EndingsManager`. Status: **DOCUMENTED** — real fix
-   requires a design decision (when exactly is "Survivor" supposed to
-   trigage, and should death show a real "Dark" ending screen instead of
-   the current static death screen) that this pass isn't authorized to
-   invent; logged in KNOWN_ISSUES.md and PLAN.md decisions log instead of
-   guessed at.
+   never reaches `EndingsManager`. Status: **WON'T-FIX (RC)** — closed
+   2026-09-10 RC final pass, full reachability trace re-run and confirmed:
+
+   Every live `trigger_win()` path requires all 11 districts FULL —
+   `power_grid.gd::_check_victory()` (`if not all_restored(): return`
+   before the call) and `finale_director.gd::_on_boss_defeated()` (the
+   director only arms, and the boss only spawns, once
+   `pg.all_restored()` is true, `finale_director.gd:37`). The other two
+   `trigger_win()` references are a comment (`boss_3d.gd:212`) and a
+   test (`_game_test.gd:59`). So `EndingsManager._determine_ending()`
+   always runs with `full == total == 11` ⇒ `truth` / `light` / `hope`
+   are the only reachable results; `survivor` (`full == 1`) and `dark`
+   (fallthrough) are dead by construction. `trigger_death()` marks
+   `Endings._ended` but emits no `game_won`, so `EndingsManager` never
+   evaluates on death.
+
+   The 3 reachable endings match GDD §12.4's 3 *completion* outcomes and
+   are correctly ordered (`truth` tested first, cannot be masked — see
+   CONFIRMED WORKING). Making `survivor`/`dark` reachable is a design
+   decision, not a behavior-preserving fix: `survivor` ("только D11",
+   GDD §12.4) needs a finale path that fires with a partial grid, which
+   contradicts GDD §4.3 ("Все 11 районов FULL → trigger_win()") and
+   GDD §12.3 ("точка невозврата: вход в D10") — is the boss even
+   reachable without the full grid? not answerable statically. `dark`
+   ("смерть/не починена сеть") has no trigger because the game respawns
+   (no terminal-death event) and the finale is unreachable without a
+   repaired grid. Both need an owner design call; `survivor`/`dark`
+   `ENDING_DATA` rows + their `ENDING_*`/`END_*` i18n keys are retained
+   for that pass. Also logged: `KNOWN_ISSUES.md`, `PLAN.md` decisions
+   log.
 
 ## Major (wrong/missing designed behavior, not currency-for-nothing)
 

@@ -87,7 +87,32 @@ work, high risk without visual verification), or have
 `PuzzleSystem.mark_solved()` with each district's canonical id (a
 code-only fix, but changes what every player receives on every
 district completion — a balance call, not code's to make
-unilaterally). Full reasoning: `docs/STATIC_AUDIT.md` #31.
+unilaterally). Full reasoning: `docs/STATIC_AUDIT.md` #31. **RC final
+pass (2026-09-10): WON'T-FIX for RC** — the core restoration loop and
+victory are unaffected; the 4 `_grant_reward()` toasts that *are* live
+(the one wired puzzle) were localized, and a redundant second
+"District restored!" toast was removed. See `STATIC_AUDIT.md` #31.
+
+## Endings: GDD §12.4 lists 5, only 3 (Light / Hope / Truth) are reachable
+
+`scripts/systems/endings_manager.gd::_determine_ending()` is the live
+evaluator (via `EventBus.game_won` ← `GameManager.trigger_win()`). Every
+`trigger_win()` path is gated on all 11 districts FULL —
+`power_grid.gd::_check_victory()` returns early unless `all_restored()`,
+and `finale_director.gd` only arms the boss once the grid is complete —
+so `_determine_ending()` always sees `full == total == 11`. Its
+`survivor` branch (`full == 1`) and `dark` branch (fallthrough) can
+never be reached; `trigger_death()` emits no `game_won`, so there is no
+"Dark on death" either.
+
+Not a defect fix — a design decision. GDD §12.4 defines Survivor as
+"только D11" (a finale outcome with a *partial* grid, which contradicts
+GDD §4.3's "все 11 районов FULL → trigger_win()") and Dark as
+"смерть/не починена сеть" (but the game respawns — no terminal-death
+event — and the finale is unreachable without a repaired grid). Both
+need an owner call on *when* they should fire. The `survivor`/`dark`
+`ENDING_DATA` rows and their i18n keys are kept for that pass. Full
+trace: `docs/STATIC_AUDIT.md` #6.
 
 ## `WorldBible.is_revealed()` doesn't distinguish "district exists" from "district visited"
 
