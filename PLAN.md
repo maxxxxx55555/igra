@@ -474,6 +474,60 @@ dimensions.
 
 ---
 
+**2026-09-10 (MEGA FINAL POLISH — deep-static WON'T-FIX close-out, autonomous
+desktop, NO-GODOT absolute):** every remaining WON'T-FIX either fixed by
+static means (with a `tools/qa_sim/` simulation as evidence) or converted to
+a precise owner-verify step.
+
+- **#6 endings** → FIXED. `GameManager.trigger_death()` now calls
+  `EndingsManager.evaluate_death_ending()`; `_determine_ending()` gained
+  `is_death` + `power_station_full`. Dark = death, grid unrepaired.
+  Survivor = death with `power_station` FULL but `full < 11` — reachable
+  because `school`/`gas_station` are optional leaf districts (the sim
+  parses `data/districts/*.tres` to prove it). Win path unchanged.
+  `tools/qa_sim/endings_sim.py` walks the reachable state space →
+  all 5 endings reachable, `PASS`. Also fixed `core/endings.gd`'s stale
+  `"powerplant"` → `"power_station"` id.
+- **#7/#8 emissive-windows / PARTIAL** → FIXED. `streetlight_3d.gd` lights
+  a deterministic ~40% lamp subset (hash of world position) dimly at
+  PARTIAL; `emissive_windows.gd` reads its district id from
+  `../StreetBuilder` and scales lit-fraction + brightness per stage
+  (FULL byte-identical to the old fixed behaviour — no regression for
+  already-restored districts). `tools/qa_sim/lighting_stage_sim.py`
+  tabulates all 4 stages and confirms them mutually distinct post-fix.
+- **#14 power_grid** → FIXED. `reset()`/`from_dict()` now emit
+  `district_stage_changed` per district (symmetry with
+  `_set_stage_direct`); persistent autoload listeners stay in sync on
+  load/New-Game. `finale_director` listens to `district_restored`
+  (FULL-only) so no spurious finale.
+- **#18 weather_system** → already FIXED in an earlier pass
+  (`call_deferred("_emit")`); doc entry lagged the code.
+- **#16 / #19** → ACCEPT: `puzzle_base.gd` and root-level
+  `death_screen.tscn`/`.gd` re-confirmed not instanced; kept per the
+  no-delete rule.
+- **#20 / #24** → ACCEPT + owner-verify steps in the playtest script
+  (every district completable; no journal "Related:" line names a place
+  from a district not yet reached). Neither is a live defect.
+- **#31 puzzle bonus economy** → decided (b) **delete the dead path**.
+  `tools/qa_sim/puzzle_economy_sim.py` resolves every `_puzzle_data` id
+  against the ids a real interactable can pass to `start_puzzle()`:
+  pre-fix **1 of 11** rows reachable (only `fuse_substation`, via
+  `cable_box_interactable.gd` in `substation.tscn`). Wiring the other 9
+  into `power_switch.gd` would double-count `puzzle_solved` for
+  `progress_tracker`/`xp_manager` and change the reward economy on every
+  district completion (a GDD §3.3/§8 balance call, not code's). Trimmed
+  `_puzzle_data` to the one reachable row; `_grant_reward()` kept general
+  so a future real per-district puzzle interactable can re-add its row.
+  Core restoration DARK→FULL for all 11 districts is unaffected (separate
+  `power_switch.gd` loop).
+- **#32 audio length** → ACCEPT as canon (12-bar @ 85 bpm math already
+  verified, `KNOWN_ISSUES.md`); re-render is Arena's call if ever wanted.
+- **D1 draw calls** → static per-district estimate from the scene graphs
+  + code-side reductions, see its own commit and
+  `tools/qa_sim/drawcall_estimate.py`.
+
+---
+
 ## А. Что уже работает (проверено, не предположение)
 
 Ядро игры полностью играбельно — подтверждено `boot_check_scene.tscn`

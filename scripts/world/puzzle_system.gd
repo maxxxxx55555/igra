@@ -13,19 +13,21 @@ var _puzzle_data: Dictionary = {}
 func _ready() -> void:
 	_load_puzzle_data()
 
+## STATIC_AUDIT #31: this table used to carry one entry per district and
+## every content pack's item_spawns.json cited its row as "puzzle canon" —
+## but the only interactable that ever calls start_puzzle() is
+## cable_box_interactable.gd (PUZZLE_ID = "fuse_substation", placed only in
+## substation.tscn), so the other 10 rows were unreachable dead data.
+## District restoration DARK->FULL is fully live for all 11 districts via
+## power_switch.gd's own independent item-cost repair loop, unaffected by
+## this table. Trimmed to the one reachable puzzle rather than wiring 9
+## more (would double-count puzzle_solved for progress/XP and change the
+## reward economy — a GDD §3.3/§8 balance call, see PLAN.md 2026-09-10) or
+## keeping data that lies about being canon. _grant_reward() stays general
+## so a future real per-district puzzle interactable can add its row back.
 func _load_puzzle_data() -> void:
 	_puzzle_data = {
-		"generator_suburbs": {"reward": "coins", "amount": 50, "power_stage": 2},
-		"fuse_residential": {"reward": "coins", "amount": 75, "power_stage": 2},
-		"transformer_park": {"reward": "battery", "amount": 1, "power_stage": 2},
-		"switch_school": {"reward": "coins", "amount": 100, "power_stage": 2},
-		"generator_hospital": {"reward": "medkit", "amount": 1, "power_stage": 2},
-		"fuse_gas_station": {"reward": "coins", "amount": 125, "power_stage": 2},
-		"transformer_police": {"reward": "battery", "amount": 2, "power_stage": 2},
-		"switch_warehouses": {"reward": "coins", "amount": 150, "power_stage": 2},
-		"generator_industrial": {"reward": "medkit", "amount": 2, "power_stage": 2},
 		"fuse_substation": {"reward": "coins", "amount": 200, "power_stage": 2},
-		"reactor_power_station": {"reward": "ending", "amount": 1, "power_stage": 3}
 	}
 
 func start_puzzle(id: String) -> bool:

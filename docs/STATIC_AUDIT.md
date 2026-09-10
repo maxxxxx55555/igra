@@ -34,7 +34,7 @@ disposition. Nothing is left "open".
 | 21 | school/gas_station `powered_by` leaves | DOCUMENTED — verified intentional (convergent DAG), not a defect |
 | 22–30 | pipeline audit cross-checks | FIXED / VERIFIED (earlier) |
 | 24 | `WorldBible.is_revealed()` stage vs visitation | **ACCEPT + owner-verify** — not a live defect (all 16 `min_stage:0` reveals point at suburbs/residential/park; content discipline §3.4 keeps refs from leaking). A visitation check is a new save-backed feature. Owner-verify: playtest step "no journal 'Related:' line names a place from a district not yet reached". |
-| 31 | puzzle bonus economy reachable 1/11 | **WON'T-FIX (RC)** — core loop + victory unaffected; full wiring is a GDD §3.3/§8 balance call; the 4 live toasts were localized + a duplicate toast removed |
+| 31 | puzzle bonus economy reachable 1/11 | **FIXED (MEGA POLISH)** — decided (b): `_puzzle_data` trimmed to the one reachable row; `tools/qa_sim/puzzle_economy_sim.py` proves pre-fix 1/11 vs post-fix 1/1. Core loop unaffected. |
 | 32 | 2 power_station one-shots off the 30 s class | **WON'T-FIX (RC)** — `assets/audio/**` is the audio toolchain owner's zone; zero code dependency on detail-bed duration |
 | 33 | `crafting_manager.gd` unguarded JSON parse | FIXED (RC) |
 | 34 | JSON/FileAccess trust-boundary sweep | done — every other site already guarded |
@@ -552,6 +552,20 @@ disposition. Nothing is left "open".
     `power_switch.gd`'s already-localized `DISTRICT_RESTORED_TOAST` on
     every FULL restore, was deleted — one localized toast per restore
     now, not two.
+    **Status update — FIXED (2026-09-10 MEGA POLISH), decided (b) via
+    `tools/qa_sim/puzzle_economy_sim.py`.** The sim resolves every
+    `_puzzle_data` id against the ids a real (non-test) interactable can
+    pass to `start_puzzle()` — only `fuse_substation` (via
+    `cable_box_interactable.gd`'s `PUZZLE_ID`, placed in
+    `substation.tscn`). Pre-fix **1/11**. `_puzzle_data` is now trimmed
+    to that one row, so the table no longer claims 10 rows of "canon"
+    that nothing can reach; `_grant_reward()` is left general so a future
+    real per-district puzzle interactable adds its row back. Option (a) —
+    wiring the 9 into `power_switch.gd` — was rejected: it double-counts
+    `puzzle_solved` for `progress_tracker`/`xp_manager` (which already
+    tick ~3×/district from `power_switch`) and shifts the reward economy,
+    a GDD §3.3/§8 balance call. Core DARK→FULL restoration for all 11
+    districts is on the independent `power_switch.gd` loop, untouched.
 32. **Audio finding F1 (Arena's, independently re-verified): two
     power_station detail one-shots are off the 30.000 s class every
     other detail bed holds** — `power_station_generator_thrum.ogg`

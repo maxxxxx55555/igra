@@ -58,61 +58,35 @@ the audio toolchain holder's call, not code's. Full reasoning:
 `docs/STATIC_AUDIT.md` #32, Arena's `docs/CONTENT_PIPELINE_AUDIT.md`
 finding F1.
 
-## `PuzzleSystem`'s bonus reward economy (coins/battery/medkit/ending) is reachable for only 1 of 11 districts
+## `PuzzleSystem` bonus reward economy — RESOLVED (2026-09-10 MEGA POLISH)
 
-`scripts/world/puzzle_system.gd`'s `_puzzle_data` dictionary has one
-entry per district (e.g. `generator_suburbs`, `fuse_substation`,
-`reactor_power_station`) and every content pack's `item_spawns.json`
-cites its own entry as "puzzle canon". But the only path that reaches
-`mark_solved()` → `_grant_reward()` is `PuzzleSystem.start_puzzle()`,
-and the only live (non-test) caller of `start_puzzle()` anywhere in the
-codebase is `cable_box_interactable.gd` — a single hardcoded instance
-(`PUZZLE_ID = "fuse_substation"`) placed only in
-`scenes/districts/substation.tscn`. The other 10 districts have no
-interactable node that ever calls `start_puzzle()` with their id, so
-their coins/battery/medkit/"Reactor online!" bonus is currently dead
-content.
+Was: `puzzle_system.gd`'s `_puzzle_data` had one row per district, all
+cited as "puzzle canon" by the content packs, but only `fuse_substation`
+(via `cable_box_interactable.gd` in `substation.tscn`) is reachable —
+`tools/qa_sim/puzzle_economy_sim.py` proves 1/11. Decided (b): trimmed
+`_puzzle_data` to the one reachable row so the table stops claiming
+canon it can't deliver. Option (a) — wiring the other 9 into
+`power_switch.gd` — was rejected because it double-counts `puzzle_solved`
+for `progress_tracker`/`xp_manager` and shifts the reward economy (a
+GDD §3.3/§8 balance call). Core DARK→FULL restoration for all 11
+districts runs on the independent `power_switch.gd` loop and is
+unaffected. `_grant_reward()` kept general for a future real per-district
+puzzle interactable. Full reasoning: `docs/STATIC_AUDIT.md` #31,
+`PLAN.md` 2026-09-10 MEGA POLISH entry.
 
-**This does not affect the core game loop.** District restoration
-DARK→FULL is fully live and working for all 11 districts through the
-separate, independent `power_switch.gd` mechanism (item-cost repair:
-cable/fuse/transistor; its own `DISTRICT_RESTORED_TOAST`/`puzzle_solved`
-emission) — a player completes every district normally regardless of
-this gap. What's missing is a secondary bonus-reward layer.
+## Endings: all 5 GDD §12.4 endings reachable — RESOLVED (2026-09-10 MEGA POLISH)
 
-Not fixed — a real design decision, not a one-line bug: either build 9
-more `cable_box_interactable`-style scene nodes (real scene-editing
-work, high risk without visual verification), or have
-`power_switch.gd`'s FULL-completion path additionally call
-`PuzzleSystem.mark_solved()` with each district's canonical id (a
-code-only fix, but changes what every player receives on every
-district completion — a balance call, not code's to make
-unilaterally). Full reasoning: `docs/STATIC_AUDIT.md` #31. **RC final
-pass (2026-09-10): WON'T-FIX for RC** — the core restoration loop and
-victory are unaffected; the 4 `_grant_reward()` toasts that *are* live
-(the one wired puzzle) were localized, and a redundant second
-"District restored!" toast was removed. See `STATIC_AUDIT.md` #31.
-
-## Endings: GDD §12.4 lists 5, only 3 (Light / Hope / Truth) are reachable
-
-`scripts/systems/endings_manager.gd::_determine_ending()` is the live
-evaluator (via `EventBus.game_won` ← `GameManager.trigger_win()`). Every
-`trigger_win()` path is gated on all 11 districts FULL —
-`power_grid.gd::_check_victory()` returns early unless `all_restored()`,
-and `finale_director.gd` only arms the boss once the grid is complete —
-so `_determine_ending()` always sees `full == total == 11`. Its
-`survivor` branch (`full == 1`) and `dark` branch (fallthrough) can
-never be reached; `trigger_death()` emits no `game_won`, so there is no
-"Dark on death" either.
-
-Not a defect fix — a design decision. GDD §12.4 defines Survivor as
-"только D11" (a finale outcome with a *partial* grid, which contradicts
-GDD §4.3's "все 11 районов FULL → trigger_win()") and Dark as
-"смерть/не починена сеть" (but the game respawns — no terminal-death
-event — and the finale is unreachable without a repaired grid). Both
-need an owner call on *when* they should fire. The `survivor`/`dark`
-`ENDING_DATA` rows and their i18n keys are kept for that pass. Full
-trace: `docs/STATIC_AUDIT.md` #6.
+Was: only Light/Hope/Truth reachable — `_determine_ending()` only ran on
+`game_won` (always `full == 11`), so `survivor`/`dark` were dead. Now
+`GameManager.trigger_death()` calls `EndingsManager.evaluate_death_ending()`:
+death with the grid unrepaired → **Dark**; death with `power_station` at
+FULL but `full < 11` → **Survivor** (reachable because `school` and
+`gas_station` are optional leaf districts — the spine can reach
+`power_station` FULL at `full == 9`). Win path unchanged.
+`tools/qa_sim/endings_sim.py` walks the reachable state space and
+confirms all 5 (`PASS`). Also fixed `core/endings.gd`'s stale
+`"powerplant"` id → `"power_station"`. Full trace: `docs/STATIC_AUDIT.md`
+#6.
 
 ## `WorldBible.is_revealed()` doesn't distinguish "district exists" from "district visited"
 
