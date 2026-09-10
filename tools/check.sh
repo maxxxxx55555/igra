@@ -131,7 +131,7 @@ chain=[
  ('main_3d создаёт мир', has('scripts/main_3d.gd','WorldRuntime') or has('scripts/main_3d.gd','_setup_world_runtime')),
  ('мир строит районы', has('scripts/world/world_runtime.gd','DistrictSceneFactory.build')),
  ('районы спавнят врагов', has('scripts/world/district_scene_factory.gd','_spawn_district_enemies')),
- ('районы раскладывают лут', has('scripts/world/district_scene_factory.gd','LOOT_SCRIPT.populate')),
+ ('районы раскладывают лут', has('scripts/world/district_scene_factory.gd','DistrictLoot.populate')),
 ]
 broken=[n for n,c in chain if not c]
 print(('  OK   ' if not broken else '  FAIL ')+f'критический путь игры ({len(chain)-len(broken)}/{len(chain)})')

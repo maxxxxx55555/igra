@@ -26,7 +26,7 @@ func _ready() -> void:
 		if lamp: lamp.visible = false
 	EventBus.district_stage_changed.connect(_on_stage_changed)
 	var dm := get_node_or_null("/root/DistrictManager")
-	var st := dm.get_stage(district_id) if dm else -1
+	var st: int = dm.get_stage(district_id) if dm else -1
 	_apply_stage(st)
 
 func _process(delta: float) -> void:

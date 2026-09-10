@@ -15,11 +15,27 @@ var _boss_step: int = 0
 var _dmg_done: bool = false
 var _death_done: bool = false
 
+## Overall ceiling: a phase that stalls (seen intermittently in the phase1
+## combat step under --headless — monster AI physics timing) must not hang
+## CI forever. Same safety net as _boot_check_runner.gd. The reliable
+## coverage now lives in tools/qa_sim/headless_suite (P2 districts+loot,
+## P6 soak) + tools/flow_check.py; this scene stays as the fuller manual
+## smoke. See docs/KNOWN_ISSUES.md.
+const HARD_TIMEOUT_SEC: float = 150.0
+
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	GameManager._change_state(GameManager.GameState.PLAYING)
 	var main: Node = load("res://scenes/main_3d.tscn").instantiate()
 	add_child(main)
+	get_tree().create_timer(HARD_TIMEOUT_SEC).timeout.connect(_on_hard_timeout)
 	_log("phase0 scene loaded, waiting for world")
+
+func _on_hard_timeout() -> void:
+	if _phase >= 9:
+		return
+	_check(false, "hard timeout at phase %d — stalled, not completed" % _phase)
+	_finish()
 
 func _process(delta: float) -> void:
 	_t += delta
@@ -174,9 +190,14 @@ func _check(cond: bool, label: String) -> void:
 func _log(msg: String) -> void:
 	print("[3dtest] ", msg)
 
+var _finished: bool = false
+
 func _finish() -> void:
+	if _finished:
+		return
+	_finished = true
 	if _fails.is_empty():
 		print("[3dtest] ALL PASSED")
 	else:
 		print("[3dtest] FAILED: ", str(_fails))
-	get_tree().quit()
+	get_tree().quit(mini(_fails.size(), 250))

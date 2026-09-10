@@ -87,7 +87,7 @@ check("инвентарь шлёт item_picked_up", "EventBus.item_picked_up.emi
 check("инвентарь не шлёт RPC вне сети", "_is_networked()" in inv)
 check("сигнал подбора кто-то слушает", len(listeners("item_picked_up")) > 0,
       ", ".join(listeners("item_picked_up")))
-check("лут раскладывается по районам", "LOOT_SCRIPT.populate" in read("scripts/world/district_scene_factory.gd"))
+check("лут раскладывается по районам", "DistrictLoot.populate" in read("scripts/world/district_scene_factory.gd"))
 
 # ── 4. HUD ──────────────────────────────────────────────────────────────────
 hud = read("scripts/ui/hud_3d.gd")

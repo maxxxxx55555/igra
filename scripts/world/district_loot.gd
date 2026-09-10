@@ -191,5 +191,5 @@ static func _spawn_document(root: Node3D, doc_id: String, pos: Vector3) -> bool:
 ## static funcs have no self/get_node - same autoload-access pattern as
 ## core/endings.gd's _root().
 static func _skill_level(skill_id: StringName) -> int:
-	var stm := Engine.get_main_loop().root.get_node_or_null("/root/SkillTreeManager")
+	var stm := (Engine.get_main_loop() as SceneTree).root.get_node_or_null("/root/SkillTreeManager")
 	return stm.get_skill_level(skill_id) if stm else 0

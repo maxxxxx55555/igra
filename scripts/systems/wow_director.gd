@@ -46,7 +46,7 @@ func _wow(kind: String) -> void:
 	var ss := _screen_shake()
 	if ss != null and ss.has_method("add_trauma"):
 		ss.add_trauma(float(p["trauma"]))
-	_flash(p["flash"], float(p["flash_a"]), float(p["flash_t"]))
+	_flash_screen(p["flash"], float(p["flash_a"]), float(p["flash_t"]))
 	if _trailer_on():
 		EventBus.hud_visibility_changed.emit(false)
 		_cinematic(p)
@@ -69,7 +69,7 @@ func _cinematic(p: Dictionary) -> void:
 		await get_tree().create_timer(0.9 * slow).timeout
 		Engine.time_scale = 1.0
 
-func _flash(col: Color, alpha: float, dur: float) -> void:
+func _flash_screen(col: Color, alpha: float, dur: float) -> void:
 	if not is_instance_valid(_flash):
 		_flash_layer = CanvasLayer.new()
 		_flash_layer.layer = 190

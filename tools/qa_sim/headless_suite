@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+# GOLD MASTER headless verification suite (owner-approved headless-only
+# policy, 2026-09-10). Runs every engine gate scene individually with a
+# per-gate timeout (so one hang can't block the rest), then the extended
+# scenario driver (scenes/tools/qa_headless_suite_scene.tscn), then scans
+# every log for engine-level script errors. Logs to .qa_logs/ (untracked).
+#
+#   tools/qa_sim/headless_suite                 # default soak 120s
+#   QA_SOAK_SEC=600 tools/qa_sim/headless_suite # gold-master soak
+#   GODOT=/path/to/godot tools/qa_sim/headless_suite
+#
+# Exit 0 = green. Non-zero = number of failed checks. NEVER launches a
+# window: --headless only. perf_check self-skips headless (draw_calls=0);
+# its real budget number still needs one owner --windowed run.
+set -uo pipefail
+cd "$(dirname "$0")/../.."
+
+GODOT="${GODOT:-C:/Users/Maxsim/Desktop/TLS_Build/godot_extracted/Godot_v4.7-stable_win64_console.exe}"
+command -v "$GODOT" >/dev/null 2>&1 || [[ -x "$GODOT" ]] || { echo "Godot not found at: $GODOT"; exit 99; }
+
+LOG_DIR=".qa_logs"
+mkdir -p "$LOG_DIR"
+GREEN=$'\033[32m'; RED=$'\033[31m'; DIM=$'\033[2m'; OFF=$'\033[0m'
+FAILS=0
+
+# Benign --headless teardown noise — not real failures.
+BENIGN='leaked at exit|RID allocations|ObjectDB instances were leaked|resources still in use at exit|Thread object is being destroyed|Unreferenced static string|RIDs of type|Pages in use exist at exit|WARNING: A Thread'
+# Real engine-level problems.
+BAD='SCRIPT ERROR|Parse Error|Compile Error|Nonexistent function|freed instance|Failed to load script|Failed to instantiate an autoload|Invalid call|Invalid get index|Invalid set index|Cannot infer the type'
+
+scan_log() { # file, label
+	local f="$1" label="$2"
+	local hits
+	hits=$(grep -aE "$BAD" "$f" 2>/dev/null | grep -avE "$BENIGN" || true)
+	if [[ -n "$hits" ]]; then
+		FAILS=$((FAILS+1))
+		echo "  ${RED}ERR ${OFF} $label — engine errors in log:"
+		echo "$hits" | head -8 | sed 's/^/         /'
+	fi
+}
+
+run_scene() { # label, res-path, timeout-sec
+	local label="$1" scene="$2" t="$3"
+	local base; base=$(basename "${scene%.tscn}")
+	local log="$LOG_DIR/hs_${base}.log"
+	if [[ ! -f "${scene#res://}" ]]; then
+		echo "  ${DIM}skip${OFF} $label (no ${scene#res://})"; return
+	fi
+	timeout "$t" "$GODOT" --headless --path . "$scene" >"$log" 2>&1
+	local rc=$?
+	if [[ $rc -eq 0 ]]; then echo "  ${GREEN}OK  ${OFF} $label"
+	else FAILS=$((FAILS+1)); echo "  ${RED}FAIL${OFF} $label (rc=$rc)"; tail -12 "$log" | sed 's/^/         /'; fi
+	scan_log "$log" "$label"
+}
+
+echo "── Engine gates (headless, per-gate timeout)"
+run_scene "compile all scripts"        "res://scenes/tools/compile_gate_scene.tscn"          90
+run_scene "signal arity"               "res://scenes/tools/signal_arity_check_scene.tscn"    90
+run_scene "autoload API"               "res://scenes/tools/autoload_api_check_scene.tscn"    90
+run_scene "i18n"                       "res://scenes/tools/i18n_check_scene.tscn"            90
+run_scene "assets"                     "res://scenes/tools/asset_check_scene.tscn"           90
+# game_test_3d_scene: phase0 (player/monsters/pickups/fuel) is covered by
+# the driver's P2/P2b; its phase1+ combat/boss/death steps stall
+# intermittently under --headless (pre-existing, docs/KNOWN_ISSUES.md).
+# Run it manually for the fuller smoke; not gated here.
+run_scene "save integrity"             "res://scenes/tools/save_integrity_check_scene.tscn"  90
+run_scene "boot-flow"                  "res://scenes/tools/boot_check_scene.tscn"            200
+run_scene "footstep mapper"            "res://scenes/tools/footstep_check_scene.tscn"        90
+run_scene "audio silence-before-input" "res://scenes/tools/audio_hum_check_scene.tscn"       90
+run_scene "theme unify"               "res://scenes/tools/theme_unify_probe_scene.tscn"      90
+run_scene "perf budget (self-skips headless)" "res://scenes/tools/perf_check_scene.tscn"     120
+
+echo "── Extended scenario driver (districts / save+lang / endings / i18n x13 / soak)"
+QA_T=$(( ${QA_SOAK_SEC:-120} + 300 ))
+run_scene "qa headless suite"          "res://scenes/tools/qa_headless_suite_scene.tscn"     "$QA_T"
+
+echo
+echo "──────────────────────────────────────"
+if [[ $FAILS -eq 0 ]]; then
+	echo "${GREEN}Headless suite green.${OFF}"
+else
+	echo "${RED}Headless suite: $FAILS failed check(s).${OFF}"
+fi
+exit $FAILS

@@ -62,3 +62,4 @@ tools/autopilot_report/
 
 # Local git worktrees (not part of history)
 .claude/worktrees/
+.qa_logs/
