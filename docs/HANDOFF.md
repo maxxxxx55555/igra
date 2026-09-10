@@ -1,5 +1,39 @@
 # Handoff
 
+## GOLD MASTER v2 — 2026-09-10 (store-release-pass recreate + gap-to-ideal)
+
+`origin/main` is **GOLD MASTER v2** at `<gm2-hash>`. GOLD MASTER (below) plus:
+
+- **Arena store-release-pass recreated (Path B).** `store-release-pass.tar.gz`
+  was not in Downloads/Desktop and its sha256 manifest was malformed, so
+  the work was rebuilt (`3babbff`): `store/listing.md` extended to **13
+  locale sections** (title + tagline verbatim from the shipped in-game
+  translations; short ≤80 / full / 8 bullets / ASO tags for the 11
+  non-master locales transcreated from vetted in-game vocabulary — EN + RU
+  master byte-untouched); `store/icon-adaptive/` foreground + background
+  1080 layers derived from `store/icon-512.png` (66 % safe zone, extrema
+  clamped, wired into `export_presets.cfg`); `store/review-responses.md`
+  (5 classes × EN + RU). Ledgered in `docs/ASSET_LICENSES.md`; certified
+  in `docs/CONTENT_PIPELINE_AUDIT.md` §12 (0 defects). Owner instruction:
+  Arena sessions closed, `store/**` + those two docs reassigned to CLAUDE.
+- **Gap-to-ideal — every CLAUDE-owned P0/P1 closed** (`2101311`): the
+  district rebuild was running synchronously inside
+  `DistrictTrigger.body_entered`, so each spawned pickup's `_ready()`
+  threw "Function blocked during in/out signal" (~140 per district load)
+  and the scene tree was being rebuilt mid-physics-signal. Deferred it
+  (`world_runtime._on_district_entered` → `call_deferred`); same deferred
+  fix in `document_pickup._collect()`. Headless suite: **0** such errors.
+  Full P0/P1/P2 inventory: `docs/GAP_TO_IDEAL.md`.
+- Headless suite **green twice consecutively** on the v2 tip.
+
+### OWNER TODO (unchanged from GOLD MASTER — nothing new is required)
+
+1. **Keystore + build:** `keytool -genkey -v -keystore release.keystore -alias tlsrelease -keyalg RSA -keysize 2048 -validity 10000`, fill `export_presets.cfg`, install `4.7-stable` templates + the Android build template in the editor, **Project → Export → Android** → signed `.aab`.
+2. **Privacy policy:** real support email into `store/privacy-policy-template.md`, publish its text at any stable URL.
+3. **Play Console:** create the app, answer IARC per `RELEASE_CHECKLIST.md` §5.2d, paste `store/listing.md` (13 locales; a native read of the 11 transcreated ones is recommended pre-publish), adaptive icon from `store/icon-adaptive/`, art from `store/`, screenshots per `store/screenshots-plan.md`; upload the `.aab`, roll out to Open Testing. `store/review-responses.md` covers the first reviews. Optional: one `perf_check_scene.tscn --windowed` run for the real draw-call number; eyes-on playtest; real AppLovin key.
+
+---
+
 ## GOLD MASTER — 2026-09-10 (headless hardening pass)
 
 `origin/main` is **GOLD MASTER** at `f263f9f`. FINAL RC (below) plus a

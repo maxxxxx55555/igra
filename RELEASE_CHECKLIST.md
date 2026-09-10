@@ -15,26 +15,33 @@ build toolchain and cannot be done from an agent session:
    publish the text at any stable URL (§3).
 3. **Play Console.** Create the app, answer the IARC content-rating
    questionnaire (exact answers in §5.2d), paste the listing from
-   `store/listing.md` + art from `store/` + screenshots per
-   `store/screenshots-plan.md`, upload the `.aab`, start rollout to Open
-   Testing (§5).
+   `store/listing.md` (13 locales — the 11 non-EN/RU ones are transcreated
+   from in-game strings; a native read before publish is recommended, not
+   required), the adaptive icon is in `store/icon-adaptive/`, art from
+   `store/`, screenshots per `store/screenshots-plan.md`; upload the
+   `.aab`, start rollout to Open Testing (§5). `store/review-responses.md`
+   has paste-ready replies for the first reviews.
 
 Optional / not blocking: real AppLovin SDK key (§2 — ships fine on the
 no-ad debug stub without it), extra platforms (§6), eyes-on playtest
 (`docs/HANDOFF.md` "HUMAN PLAYTEST SCRIPT v2"), version bump at upload
-time (§7).
+time (§7), one `perf_check_scene.tscn --windowed` run for the real
+draw-call number. Full gap list: `docs/GAP_TO_IDEAL.md`.
 
 ### Already done by agents (do NOT redo)
 
 | Area | State | Ref |
 |---|---|---|
-| Code / gameplay / autoloads | GOLD MASTER; headless suite green ×2 | `f263f9f`, `f3bd1e3` |
-| `tools/qa_sim/headless_suite` verification gate | new; 12 autoloads, 11 districts, 5 endings, save/load, combat | `f3bd1e3` |
+| Code / gameplay / autoloads | GOLD MASTER v2; headless suite green ×2 | `<gm2-hash>`, `2101311`, `f3bd1e3` |
+| `tools/qa_sim/headless_suite` verification gate | 12 autoloads · 11 districts + loot · 5 endings · save/load+lang · combat · 1061 keys ×13 at runtime · soak | `f3bd1e3` |
+| District-load / pickup engine errors | fixed — rebuild deferred out of the physics signal (0 "Function blocked" errors) | `2101311` |
 | i18n — 13 locales, every user-facing string | 1061 keys × 13, 0 MISSING at runtime | `a712dd1`, prior |
 | Content — 11/11 districts, 88 lore notes | packed, wired, translated | prior waves |
-| Store kit — listing, changelog, screenshots plan, privacy template | present in `store/` | PR #8 |
-| Trailer / press kit — 5 key-art masters, edit plan, reviewer email | present in `store/trailer/`, `store/press-kit.md` | `6fea56e` |
-| Merged `arena/*` branches cleaned up | `01a08729`, `01a08b05` deleted; 2 held per owner | this pass |
+| Store listing — **13 locales** | title/tagline from shipped i18n; short≤80/full/bullets/tags transcreated; EN+RU master untouched | `3babbff` |
+| Android adaptive icon | `store/icon-adaptive/` fg+bg 1080, safe-zone + extrema verified, wired in `export_presets.cfg` | `3babbff` |
+| Review-response playbook | `store/review-responses.md` — 5 classes × EN+RU | `3babbff` |
+| Trailer / press kit — 5 key-art masters, edit plan, reviewer email | `store/trailer/`, `store/press-kit.md` | `6fea56e` |
+| Merged `arena/*` branches cleaned up | `01a08729`, `01a08b05` deleted; 2 held per owner | prior pass |
 
 `docs/RELEASE_FINAL.md` still has platform-specific detail (Yandex Games,
 itch.io, Steam) not repeated here.

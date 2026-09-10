@@ -21,6 +21,59 @@ in-scope-only PR per `ARENA_NEXT_PROMPT.md`'s protocol. `arena/01a080ba-
 igra` (suburbs district content, PR #1) was merged and deleted
 2026-09-08 — see decisions log below.
 
+## GOLD MASTER v2 — declared 2026-09-10 (store-release-pass recreate + gap-to-ideal)
+
+**`origin/main` is GOLD MASTER v2 at `<gm2-hash>`.** GOLD MASTER (below) plus
+the Arena store-release-pass rescued-or-recreated (Path B: the tarball was
+absent and its sha256 manifest malformed) and every remaining
+CLAUDE-owned P0/P1 closed. Arena sessions closed by the owner;
+`store/**` + `docs/{ASSET_LICENSES,CONTENT_PIPELINE_AUDIT}.md` reassigned
+to CLAUDE for this pass (no parallel session → no zone-conflict risk).
+
+**Store-release-pass recreate (`3babbff`):**
+- `store/listing.md` — **13 locale sections**. Title + tagline are the
+  shipped in-game `menu_title` / `menu_subtitle` verbatim (13 locales,
+  `i18n_audit.py` MISSING: 0); short (≤80, script-verified, max 73 EN) /
+  full / 8 bullets / ASO tags for the 11 non-master locales transcreated
+  from vetted in-game vocabulary. EN + RU master block byte-untouched.
+  Generator + `--check` gate: `tools/gen_store_listing_locales.py`.
+- `store/icon-adaptive/` — `foreground_1080x1080.png` +
+  `background_1080x1080.png` + README, derived deterministically from
+  `store/icon-512.png` by `tools/gen_adaptive_icon.py`. Crest in the
+  inner 66 % safe zone on a transparent field; flat `#141b24` opaque
+  background; per-channel extrema clamped to `[16,216]` → 0 pure
+  `#000`/`#fff`. `export_presets.cfg` Android `launcher_icons/adaptive_*`
+  repointed here; `_asset_check.gd` gate updated to match.
+- `store/review-responses.md` — 5 review classes × EN + RU templates,
+  each with an owner escalation line wired to a `KNOWN_ISSUES.md` entry.
+- `docs/ASSET_LICENSES.md` +2 binaries; `docs/CONTENT_PIPELINE_AUDIT.md`
+  §12 re-audit — listing 13/13, icon 2/2, review ops 5/5, **0 defects**.
+
+**Gap-to-ideal execution — CLAUDE-owned P0/P1, all closed:**
+- **G5 (`2101311`)** — the district rebuild ran synchronously *inside*
+  `DistrictTrigger.body_entered`, so every spawned pickup's `_ready()`
+  hit "Function blocked during in/out signal" (~140 per district load)
+  and tree surgery happened mid-physics-signal. `world_runtime
+  ._on_district_entered` now `call_deferred("load_district", …)`.
+  Headless suite: **0** such errors (was ~140/load).
+- **G6 (`2101311`)** — `document_pickup._collect()` set
+  `collect_area.monitoring` directly from `body_entered`; now
+  `set_deferred(...)`, matching `item_pickup_3d.gd`.
+- Full inventory + the P2/OWNER residue: **`docs/GAP_TO_IDEAL.md`**.
+
+**Headless suite:** green twice consecutively on the v2 tip
+(`tools/qa_sim/headless_suite`). Static gates green.
+
+**P2 / OWNER residue** (unchanged, see `GAP_TO_IDEAL.md` / `RELEASE_CHECKLIST.md`):
+one `perf_check_scene.tscn --windowed` run for the real draw-call number;
+release keystore + signed AAB; Play Console upload + IARC + localized
+listing paste; privacy-policy URL; real AppLovin key (optional — ships on
+the debug stub); native QA pass on the 11 transcreated locales; optional
+eyes-on playtest. Plus two documented, real-player-unaffected harness
+limits (`game_test_3d` phase-1 stall; P6 soak ~10 s).
+
+---
+
 ## GOLD MASTER — declared 2026-09-10 (headless hardening pass)
 
 **`origin/main` is GOLD MASTER at `f263f9f`.** FINAL RC (below) plus a

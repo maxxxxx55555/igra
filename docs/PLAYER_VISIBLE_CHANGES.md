@@ -5,6 +5,53 @@ in-game verification — a static-only pass can't play the game itself.
 
 ---
 
+## Batch 10 (2026-09-10) — GOLD MASTER v2: store pass + district-load fix
+
+- **Districts actually contain items now — and picking them up no longer
+  spams errors.** Batch 9 fixed loot spawning at all; this batch fixes
+  the follow-on: the game was rebuilding a whole district *from inside*
+  the "you entered a new district" trigger, which made every freshly
+  spawned battery / medkit / part throw an engine error and could leave
+  the new area in a fragile state. The rebuild now happens one frame
+  later, cleanly. You should see zero error spam crossing district
+  borders, and pickups/documents behave normally right after a border.
+- **Document pickups tidied up the same way** (collision turn-off is now
+  deferred).
+- **Store side (not in-game):** the Play Store listing now has all 13
+  languages (title + tagline pulled from the game's own translations),
+  an Android adaptive launcher icon derived from the 512 master, and a
+  review-response playbook. Nothing here ships in the APK.
+
+### HUMAN CHECK (2 min)
+Start a run, restore the first district, then walk across a couple of
+district borders while picking up items and documents. Expect: no error
+toasts, no console spam, items and journal notes work immediately on the
+far side of each border.
+
+---
+
+## Batch 9 (2026-09-10) — GOLD MASTER: headless hardening (loot + viral hooks)
+
+- **Every district was empty — that's fixed.** Loot, repair parts
+  (cable/fuse/transistor), documents and lore notes weren't spawning at
+  all in the built game (a static-call bug that only a real engine run
+  surfaces). The grid was literally uncompletable and the flashlight
+  couldn't be refuelled. Now each district spawns its full set again
+  (~12 pickups + its documents + 8 lore notes).
+- **The screen-shake + light-flash at the big moments is back.** The
+  system that fires juice at the first streetlight, the grid cascade and
+  the victory ending had failed to load since it shipped (a name
+  collision). It loads now, so those three beats punch again.
+
+### HUMAN CHECK
+New game → restore the first district: expect a warm flash + a short
+shake when the streetlights snap on. Pick up a battery and a document in
+that district. Restore everything → the final cascade should flash + shake
+hard. If districts feel empty or the wow-moments are silent, something
+regressed.
+
+---
+
 ## Batch 8 (2026-09-10) — FINAL RC: Arena mega final pass (PR #9)
 
 - **Three lore notes now end on a quotable line** (in every one of the
