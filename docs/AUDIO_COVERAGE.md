@@ -72,6 +72,72 @@ re-verification this pass: all shipped beds/details measure identically to the 2
 record (see `docs/ASSET_LICENSES.md` §"mega final pass: audio gap re-attempt"). This note
 does not re-open any §9/§10 audit row.
 
+### Final-audio-pass note (2026-09-10, Task 1 — music-generation skills attempted, spec retained)
+
+Step (a) — skill and tool discovery (full inventory this session): `.claude/skills/` =
+`ponytail`, `ponytail-audit`, `ponytail-debt`, `ponytail-gain`, `ponytail-help`,
+`ponytail-review` (coding-discipline skills); `.opencode/skills/` = `art-pipeline`,
+`asset_pipeline.md`, `council`, `godot-gates`, `self-commit`, `surgical-edit`, `yagni`
+(code/process/texture skills); `.pi/skills/` = `gdd-canon`, `godot-gates`, `self-commit`,
+`surgical-edit`; `docs/external_skills/` = `karpathy-behavior.md` (LLM-behavior doc only).
+Repository-wide search for music-generation (Suno/Udio/MusicGen/lit-bed generators) matches
+only prose mentions in docs and plans — **no music-generation skill, tool binding, or API
+access exists in this repo or sandbox**. The sandbox's only audio tool is spoken-word TTS
+(`add_voice`/`generate_speech`), whose own contract is spoken word only (it cannot render
+melodic/musical output or seamless instrumental loops) — and every lit-bed spec below forbids
+voices, so it fails the G1/G2* contract by design. Recorded honestly, not attempted into a
+fake delivery.
+
+Step (b) — generation briefs designed this pass for the first session that does hold a
+music-generation skill (Suno/Udio-class). Contract for every brief: instrumental
+"brighter/warmer lit variant" re-voice of THAT district's own dark bed mood, seamless loop,
+36.000 s ±0.1 (G2h: 33.994 s to match its shipped dark twin), target −18 LUFS (metadata
+intention; normalize on receipt per `docs/AUDIO_LOUDNESS.md`), OGG q4 mono house encode, no
+voices/people, plus that bed's own never-rules in the specs below. Prompts reference the dark
+bed's mood/tempo/instrumentation (theme canon per `tools/gen_audio.py` DISTRICTS):
+
+- **G1 `residential_lit.ogg`** — "Warm lit-variant bed of a cold residential-night drone:
+  slow 80 bpm pulse, warm analog pad raised over a quiet empty street, slowed wooden
+  pipe-creak motif, safe and homely; major tonality; no voices; seamless 36-second loop."
+- **G2b `park_lit.ogg`** — "Calm lit-variant park-night ambience: wind softened to a calm
+  leaf bed, distant city hum tucked low, frozen-pond ice-crack transients slowed and warmed;
+  lydian tonality, 75 bpm; no branch snaps, no voices; seamless 36-second loop."
+- **G2c `school_lit.ogg`** — "Empty lit school corridor at night: soft room-tone with a warm
+  60/120 Hz ballast hum for the restored ceiling bank, a faint detuned-and-slowed distant
+  bell tail reading as a relay; major tonality, 100 bpm; no locker slams, no children's
+  sounds, no voices; seamless 36-second loop."
+- **G2e `gas_station_lit.ogg`** — "Lit empty gas-station forecourt at night: soft open-air
+  wind, warm sodium canopy ballast hum (60/120 Hz), a low continuous pump-motor thrum, one
+  warm and slow distant road pass; blues tonality, 110 bpm; no fault buzz, no fire crackle,
+  no voices; seamless 36-second loop."
+- **G2f `police_lit.ogg`** — "Lit empty police precinct at night: cold room-tone lowered,
+  warm sodium flood hum for the court, a thin distant-city bed; minor tonality, 120 bpm; no
+  radio static, no boot steps, no sirens, no voices; seamless 36-second loop."
+- **G2g `warehouses_lit.ogg`** — "Lit empty freight yard in fog: cold fog drone lowered,
+  warm sodium flood hum over the yard, one distant slowed dock-chain clank; dorian tonality,
+  75 bpm; no forklift, no machinery start, no voices; seamless 36-second loop."
+- **G2h `industrial_lit.ogg`** — "Lit empty factory: cold machinery drone lowered, steam
+  vents gentler and low-passed, warm sodium high-bay hum, one distant slowed press-clank;
+  minor tonality, 85 bpm; no roll-call rhythm, no voices; seamless 33.994-second loop
+  (must match its shipped dark twin exactly)."
+- **G2i `substation_lit.ogg`** — "Lit working substation yard: cold busbar drone lowered,
+  transformer hum warmed (100/200 Hz pair raised, 3 kHz edge softened), warm sodium yard
+  flood hum, one slow cable-hum swell; phrygian-dominant tonality, 100 bpm; no arc crackle,
+  no voices; seamless 36-second loop."
+
+Step (c) — why no deterministic-fallback delivery either: `tools/gen_audio.py` (the pipeline's
+deterministic renderer) synthesizes only district MUSIC THEMES (22.05 kHz WAV); it has no
+ambience/lit-bed generator. The sandbox has no OGG/Vorbis encoder, no `ffmpeg`/`ffprobe`
+(verified absent this session), so no −18 LUFS normalization or verification is possible, and
+the shipped dark beds cannot even be decoded here (no Vorbis decoder) to check that a re-voice
+is faithful. Emitting unverifiable WAVs renamed to `.ogg` would violate both the pipeline rule
+(every delivered binary must be header- AND loudness-verified before commit) and the standing
+"no fabricated audio / no fake metadata" rule. **All gaps remain spec-only — no binary
+fabricated.** F1 unchanged (finding, not a gap). Static re-verification this pass (stdlib
+Ogg/Vorbis identification-header + final-page-granule parse; no engine, no ffprobe): all 14
+shipped beds measure exactly as recorded — 1 ch / 44,100 Hz / 36.000 s (`industrial_dark`
+33.994 s per G2h); the 8 lit files above confirmed absent on disk. Zero drift.
+
 ### G1 — `assets/audio/ambience/districts/residential_lit.ogg` (this district)
 - Type: 36 s seamless ambience loop, OGG q4 mono, −18 LUFS, TP ≤ −1.5 dBFS.
 - Mood: "lit twin" of `residential_dark.ogg` (STYLE_GUIDE §5): same material re-voiced
