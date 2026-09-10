@@ -1,5 +1,43 @@
 # Known issues
 
+## Autoplay bot (PLAYABLE IDEAL pass) — mechanics engine proven, full headless win blocked by a boot-path lifecycle issue
+
+`tools/qa_sim/autoplay_bot` + `scenes/tools/qa_autoplay_scene.tscn` drive
+the game with **simulated inputs only** (joystick move via
+`InputService.set_joy_move_dir`, `request_interact`, `request_attack`,
+`request_dodge`, City-Map Travel button, Save/Continue) while reading
+real state.
+
+**What it proved:** the winnability *mechanics engine* works end to end.
+In an early run the bot walked the player to a `cable` pickup, collected
+it by collision, walked to the suburbs `PowerSwitch`, pressed interact,
+and the district advanced **DARK → PARTIAL for real** — no state
+injection. It also surfaced and got fixed a real defect:
+`power_switch.gd` connected the 0-arg `_refresh_visual` to the 1-arg
+`EventBus.district_powered` signal without `unbind(1)`, logging
+"Method expected 0 argument(s), but called with 1" on *every* power-up
+(fixed this pass; connected once in `_ready`, not re-connected on every
+refresh).
+
+**What blocks a full 3/3 headless win right now:** when the bot boots
+through a gate scene (bypassing `boot_loading.tscn`) and then presses New
+Game, the game world is torn down / snapped back to MENU ~8 s after the
+run starts, and `DistrictLoot.populate()` does not run on that
+`start_game() -> pre_loading -> main_3d` path (a direct `main_3d.tscn`
+instantiate — `game_test_3d_scene` — still spawns all 12 pickups, so this
+is **not** an in-game winnability bug). `_boot_check_runner.gd` tolerates
+the same one-shot MENU yank by breaking early; the autoplay bot needs the
+world to *persist*, and Continue does not rebuild it. Real players boot
+through `boot_loading.tscn` and are unaffected.
+
+**Substitute coverage:** the static balance/solvability sim
+(`tools/qa_sim/` balance pass) proves DARK/PARTIAL solvability and no
+resource dead-ends across the spine; `headless_suite` P2 proves every
+district scene instantiates with its full loot set. Finishing the
+headless autoplay win needs one focused pass on the gate-scene→world
+bring-up (or running the bot as a temporary autoload against the real
+boot chain).
+
 ## Verification policy: headless-only Godot ALLOWED since 2026-09-10 (GOLD MASTER)
 
 The owner lifted the absolute NO-GODOT constraint to **headless-only**:

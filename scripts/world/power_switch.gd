@@ -47,6 +47,12 @@ func _ready() -> void:
 		_bus.district_stage_changed.connect(func(id: StringName, _s: int) -> void:
 			if id == district_id:
 				_refresh_visual())
+		# district_powered carries the district id; _refresh_visual takes
+		# none — unbind it. Connected once here, not re-connected on every
+		# refresh (the old in-_refresh_visual connect both leaked and, with
+		# no unbind, logged "expected 0 argument(s), but called with 1" on
+		# every power-up — surfaced by the autoplay bot).
+		_bus.district_powered.connect(_refresh_visual.unbind(1))
 
 func _build_visual() -> void:
 	_panel = MeshInstance3D.new()
@@ -125,8 +131,6 @@ func _refresh_visual() -> void:
 		mat.emission_energy_multiplier = maxf(0.2, energy)
 	if _stage_label != null:
 		_stage_label.text = "%d/3" % stage
-	if _bus != null and not _bus.district_powered.is_connected(_refresh_visual):
-		_bus.district_powered.connect(_refresh_visual)
 
 ## Interactor скрывает подсказку у полностью восстановленного щита.
 func can_interact() -> bool:

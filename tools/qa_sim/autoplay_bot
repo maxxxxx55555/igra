@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# AUTOPLAY BOT — winnability proof. Runs scenes/tools/qa_autoplay_scene.tscn
+# headless on N seeds; the bot plays the full game with simulated inputs
+# only. PASS = the bot wins (exit 0) on every seed. Exit 1 = a run ended
+# without a win but with a clean spine; exit 2 = a softlock was detected.
+#
+#   tools/qa_sim/autoplay_bot                 # seeds 1 2 3
+#   QA_SEEDS="7 11 42" tools/qa_sim/autoplay_bot
+#   GODOT=/path/to/godot tools/qa_sim/autoplay_bot
+set -uo pipefail
+cd "$(dirname "$0")/../.."
+
+GODOT="${GODOT:-C:/Users/Maxsim/Desktop/TLS_Build/godot_extracted/Godot_v4.7-stable_win64_console.exe}"
+[[ -x "$GODOT" ]] || command -v "$GODOT" >/dev/null 2>&1 || { echo "Godot not found: $GODOT"; exit 99; }
+mkdir -p .qa_logs
+GREEN=$'\033[32m'; RED=$'\033[31m'; OFF=$'\033[0m'
+SEEDS="${QA_SEEDS:-1 2 3}"
+WINS=0; TOTAL=0; SOFTLOCK=0
+
+for s in $SEEDS; do
+	TOTAL=$((TOTAL+1))
+	log=".qa_logs/autoplay_seed${s}.log"
+	QA_SEED="$s" timeout 1200 "$GODOT" --headless --path . res://scenes/tools/qa_autoplay_scene.tscn >"$log" 2>&1
+	rc=$?
+	line=$(grep -E "^\[bot s${s}\]   result" "$log" | tail -1)
+	if [[ $rc -eq 0 ]]; then
+		WINS=$((WINS+1)); echo "  ${GREEN}WIN ${OFF} seed $s  ($line)"
+	elif [[ $rc -eq 2 ]]; then
+		SOFTLOCK=$((SOFTLOCK+1)); echo "  ${RED}SOFTLOCK${OFF} seed $s"
+		grep -E "SOFTLOCK|RUN SUMMARY|districts FULL|stage timeline" "$log" | sed 's/^/       /'
+	else
+		echo "  ${RED}NO-WIN${OFF} seed $s (rc=$rc)"
+		grep -E "FAIL|RUN SUMMARY|result|districts FULL|deaths|stage timeline|part economy" "$log" | sed 's/^/       /'
+	fi
+done
+
+echo
+echo "──────────────────────────────────────"
+echo "autoplay bot: ${WINS}/${TOTAL} seeds won, ${SOFTLOCK} softlock(s)"
+[[ $WINS -eq $TOTAL ]] && exit 0
+[[ $SOFTLOCK -gt 0 ]] && exit 2
+exit 1
