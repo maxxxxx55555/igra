@@ -62,7 +62,7 @@
       "i18n_keys": { "title": "LORE_POLICE_05_TITLE", "text": "LORE_POLICE_05_TEXT" },
       "en": {
         "title": "Photo: Locker 12, Seized Lamps",
-        "text": "Evidence flash on a steel locker: six streetlight heads tagged and stacked, glass intact, brass rings still warm-looking in the photograph. Daylight — this is from before. On the back, a property clerk's hand: \"Seized from the park road. Owner would not give a name. Said they were not stolen, they were taken down so they could not be drunk. Released to the same old man two nights later. He signed with a streetlight in a circle.\""
+        "text": "Evidence flash on a steel locker: six streetlight heads tagged and stacked, glass intact, brass rings still warm-looking in the photograph. Daylight — this is from before. On the back, a property clerk's hand: \"Seized from the park road. Owner would not give a name. Said they were not stolen, they were taken down so they could not be drunk. Released to the same old man two nights later. He signed with a streetlight in a circle. The property book has never cleared six items faster.\""
       },
       "location_hint": "Rubber-banded to the latch of evidence locker 12 (z_evidence_room)",
       "min_stage": 1,

@@ -12,6 +12,11 @@ for the section-by-section GDD trace. Copy is short and atmospheric, zero filler
 - **EN:** The Last Streetlight
 - **RU:** Последний фонарь
 
+## Tagline (quotable — trailers, Shorts, press-kit, socials)
+
+- **EN:** `Restore the light. Every streetlight is life.`
+- **RU:** `Верни свет. Каждый фонарь — жизнь.`
+
 ## Short description
 
 - **EN (71/80 chars):** `Restore the light. Stealth horror FPS where every streetlight is life.`
@@ -100,24 +105,24 @@ no season pass.
 ## Feature bullets
 
 ### EN
-- One continuous blackout city — 11 connected districts, no loading screen between them.
-- Light is the reward: every district you restore stays lit, and the map fills in street by street.
-- Stealth on noise and visibility — the flashlight is your weapon, your sight, and your giveaway.
-- 12 enemies, each with distinct senses and weaknesses; a mini-boss and a final boss.
-- 5 endings shaped by how much of the city — and of the truth — you recover.
-- Craft, scavenge, and upgrade your flashlight at the workbench.
-- 5-layer adaptive music and full atmosphere that shift with danger.
-- 13 fully localized languages.
+- One continuous blackout city — 11 districts, zero loading screens. If you can see it, you can walk to it.
+- Light is the reward: every street you save stays lit. Your map is your trophy.
+- Your flashlight is your gun, your eyes, and your death sentence — every beam gives you away.
+- 12 hunters, each with its own senses and weaknesses. Learn them or feed them.
+- 5 endings. How much of the city — and how much of the truth — will you bring back?
+- Scavenge, craft, upgrade: one workbench, one flashlight, endless night.
+- Music that hears danger before you do — 5 adaptive layers that shift with the hunt.
+- 13 languages. One eternal night.
 
 ### RU
-- Единый город во тьме — 11 соединённых районов без экранов загрузки между ними.
-- Свет — награда: каждый спасённый район остаётся освещённым, и карта загорается улица за улицей.
-- Стелс на шуме и видимости: фонарь — твоё оружие, твой взгляд и твоя выдача.
-- 12 врагов с разными чувствами и слабостями; мини-босс и финальный босс.
-- 5 концовок, зависящих от того, сколько города и правды ты вернёшь.
-- Крафт и прокачка фонаря на верстаке.
-- 5-слойная адаптивная музыка, звучащая в тон опасности.
-- 13 полностью локализованных языков.
+- Единый город во тьме — 11 районов, ноль загрузочных экранов. Видишь — дойдёшь.
+- Свет — награда: каждая спасённая улица остаётся освещённой. Твоя карта — твой трофей.
+- Твой фонарь — оружие, глаза и смертный приговор: каждый луч тебя выдаёт.
+- 12 охотников, у каждого свои чувства и слабости. Изучи их — или стань добычей.
+- 5 концовок. Сколько города — и сколько правды — ты вернёшь?
+- Собирай, крафти, прокачивай: один верстак, один фонарь, бесконечная ночь.
+- Музыка, которая слышит опасность раньше тебя: 5 адаптивных слоёв в тон охоте.
+- 13 языков. Одна вечная ночь.
 
 ---
 

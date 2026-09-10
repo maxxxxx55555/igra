@@ -31,7 +31,7 @@
       },
       "en": {
         "title": "Photo: The Carousel in Summer",
-        "text": "The same carousel that rots at the north lawn, but painted and spinning, horses mid-gallop, a queue of children two rows deep. Every lamp post around it is lit for the evening ride. On the back: \"Last summer. The lights stayed on till midnight by order of the park office.\""
+        "text": "The same carousel that rots at the north lawn, but painted and spinning, horses mid-gallop, a queue of children two rows deep. Every lamp post around it is lit for the evening ride. On the back: \"Last summer. The lights stayed on till midnight by order of the park office.\" Nobody in the queue knew the order would never be given again."
       },
       "location_hint": "Ticket booth window of the dead carousel (z_carousel)",
       "min_stage": 0,
@@ -122,7 +122,7 @@
       },
       "en": {
         "title": "Radio: 'Go to the Power Station'",
-        "text": "A captured broadcast, looped on the shed's shortwave: a calm voice under static, neither young nor old: \"...the grid can still be brought back. District by district, lamp by lamp. Go to the power station. The one who kept the light will meet you at the light.\" The loop ends with three soft clicks, like a streetlight relay. The voice is the same one as the manifesto's seal."
+        "text": "A captured broadcast, looped on the shed's shortwave: a calm voice under static, neither young nor old: \"...the grid can still be brought back. District by district, lamp by lamp. Go to the power station. The one who kept the light will meet you at the light.\" The loop ends with three soft clicks, like a streetlight relay. The voice belongs to whoever pressed the seal."
       },
       "location_hint": "Shortwave radio on the keeper's work bench (z_keeper_shed)",
       "min_stage": 0,

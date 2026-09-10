@@ -58,6 +58,20 @@ no voices/people, −18 LUFS) and no binary could be delivered/verified in this 
 search record and reasoning: `docs/ASSET_LICENSES.md` §"finishing pass: CC0 audio sourcing
 attempts".
 
+### Mega-final-pass note (2026-09-10, Task 1 — ladder re-run, spec retained)
+
+Step (a): no audio-generation skill exists in this session (`.opencode/skills/` =
+code/process/texture skills only; `docs/external_skills/` = behavior doc only; sandbox
+offers spoken-word TTS, which outputs voices every lit-bed spec forbids and cannot render
+seamless instrumental loops — recorded honestly, not skipped). Step (b): CC0/CC-BY
+exact-match search re-run for every gap class; nearest hits are generic CC0 loops at wrong
+lengths / not re-voices of the in-repo dark beds, or Standard-licensed (non-qualifying)
+tracks — no source adopted; no `ffmpeg`/`ffprobe` in sandbox to normalize/verify any
+candidate. Step (c): all gaps **remain spec-only — no binary fabricated**. Static
+re-verification this pass: all shipped beds/details measure identically to the 2026-09-09
+record (see `docs/ASSET_LICENSES.md` §"mega final pass: audio gap re-attempt"). This note
+does not re-open any §9/§10 audit row.
+
 ### G1 — `assets/audio/ambience/districts/residential_lit.ogg` (this district)
 - Type: 36 s seamless ambience loop, OGG q4 mono, −18 LUFS, TP ≤ −1.5 dBFS.
 - Mood: "lit twin" of `residential_dark.ogg` (STYLE_GUIDE §5): same material re-voiced

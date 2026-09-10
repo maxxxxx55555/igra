@@ -284,6 +284,61 @@ art"); no pure `#000`/`#fff` texels remain (verified 0).
 | `store/feature-graphic.png` | AI-generated in-session (Arena image generation), palette-locked | Project-owned AI output; no third-party rights | none required | 1024×500 sRGB. Permanent-night city, one brass streetlamp cone; title overlay. Palette-clamped, 684,630 B. |
 | `store/icon-512.png` | AI-generated in-session (Arena image generation), palette-locked | Project-owned AI output; no third-party rights | none required | 512×512 sRGB. Streetlamp-head crest emblem on night sky. Palette-clamped, 300,965 B. |
 
+## Added 2026-09-10 — mega final pass: audio gap re-attempt (Task 1)
+
+**No binaries added.** The mega final pass re-opened every `docs/AUDIO_COVERAGE.md` gap
+(lit beds G1, G2b/c/e/f/g/h/i; F1 detail class; optionals G2/G4/G5 and
+`hospital_ward_curtain_drag.ogg`) under the Task 1 ladder: (a) audio-generation skill →
+(b) CC0/CC-BY exact-match → (c) spec-only with an honest record.
+
+(a) **No audio-generation skill exists in this session.** Skill discovery at pass start:
+`.opencode/skills/` holds `yagni, self-commit, godot-gates, surgical-edit, council,
+art-pipeline` (all code/process/texture skills — none synthesizes audio);
+`docs/external_skills/` holds only `karpathy-behavior.md` (LLM behavior, no tools);
+`docs/superpowers/specs/` holds a release-defect design doc (no tools). The sandbox
+toolset offers spoken-word TTS only, which by definition outputs *voices* (every lit-bed
+spec forbids voices/people) and cannot render a 36.000 s seamless instrumental loop to a
+−18 LUFS / TP ≤ −1.5 dBFS contract. Step (a) is therefore impossible here, not skipped.
+
+(b) **CC0/CC-BY exact-match search re-run 2026-09-10 — no source adopted.** Queries:
+CC0 seamless ambient loops; CC-BY school-corridor night ambience; freesound CC0
+industrial night hum; CC0 warm pad/drone loop beds. Genuine CC0 material exists but none
+is an exact match: `signaturesounds.org` CC0 ambient-loops pack (90 generic
+loops/textures, none district-true, none a re-voice of an in-repo dark bed);
+`selektaudio.com` CC0 drones (`ambience04` 40.5 s, `eerie:despair` 2:44 — wrong lengths,
+generic material); freesound `IanStarGem` Industrial/Factory Fans CC0 (**43.878 s stereo**,
+6.7 s loop variant — wrong length, stereo not mono, not a re-voice of
+`industrial_dark.ogg`); PtrMan CC0 list (generic pads/drones/room tones only);
+Envato/123RF school-corridor hits (royalty-free/Standard, **not** CC0/CC-BY).
+Decisive blockers, same as the 2026-09-09 pass: every lit bed is defined as a faithful
+re-voice of its district's own synthesized dark bed at an exact loop length with
+per-bed never-rules — no third-party file can satisfy that; and no `ffmpeg`/`ffprobe`/
+encoder exists in this sandbox (verified absent), so no candidate could be
+re-normalized to −18 LUFS, re-encoded OGG q4 mono, or loudness-verified before commit.
+
+(c) **All gaps remain spec-only — no binary fabricated.** Static re-verification this
+pass (Ogg/Vorbis header + final-page granule parse, no engine): all 11 dark beds and
+all 3 shipped lit beds measure exactly as recorded (36.000 s mono 44.1 kHz; industrial
+dark 33.994 s per G2h; F1 pair still 28.749/28.948 s, finding not gap); all other 38
+detail beds exactly 30.000 s. Zero drift since 2026-09-09.
+
+## Added 2026-09-10 — mega final pass: trailer graphics (Task 2, store/trailer/**)
+
+Trailer/viral-shorts art generated in-session (Arena image generation), text-to-image,
+palette-locked per docs/STYLE_GUIDE.md §2/§6. Post-processed deterministically (Pillow):
+center-crop to exact size, pure-black/white clamped to `#0a0d12` / `#f0ead9` (verified 0
+pure texels in all 5 files), press-kit title/tagline composited in bone `#f2ecd9` + brass
+`#c9a24a` (DejaVu-Sans-Bold) — no baked-AI-text glyph risk. Store/trailer art is a
+distinct class from in-game textures (asset_pipeline: "skip grain on store art").
+
+| Path | Origin | License | Attribution | Notes |
+|---|---|---|---|---|
+| `store/trailer/still_first_light_1920x1080.png` | AI-generated in-session, palette-locked | Project-owned AI output; no third-party rights | none required | 1920×1080 sRGB. First streetlight restore wow-moment; no HUD. |
+| `store/trailer/still_first_ending_1920x1080.png` | AI-generated in-session, palette-locked | Project-owned AI output; no third-party rights | none required | 1920×1080 sRGB. Half-lit city ending tease; spoiler-safe. |
+| `store/trailer/still_grid_cascade_1920x1080.png` | AI-generated in-session, palette-locked | Project-owned AI output; no third-party rights | none required | 1920×1080 sRGB. Grid-cascade wave; Shorts cover frame. |
+| `store/trailer/shorts_silhouette_1080x1920.png` | AI-generated in-session, palette-locked | Project-owned AI output; no third-party rights | none required | 1080×1920 sRGB. Vertical silhouette vs lit skyline. |
+| `store/trailer/presskit_1600x900.png` | AI-generated bg + PIL-composited title/tagline + 3 shipped district loading thumbs (×2.2 legibility lift, press-kit only) | Project-owned AI output + in-house art; no third-party rights | none required | 1600×900 sRGB. Press-kit header. |
+
 ## Audit checklist (run each asset pass)
 
 1. `git diff --stat` binaries vs. this ledger — every row present.
