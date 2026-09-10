@@ -1054,5 +1054,8 @@
   "TOAST_COINS_GAINED": "+%s Münzen",
   "TOAST_ITEM_FOUND": "%s gefunden!",
   "TOAST_REACTOR_ONLINE": "Reaktor online!",
-  "Reduce Screen Shake": "Bildschirmwackeln reduzieren"
+  "Reduce Screen Shake": "Bildschirmwackeln reduzieren",
+  "WORKBENCH_CRAFTABLE": "OK",
+  "ITEM_NOT_EQUIPPABLE": "Dieser Gegenstand kann nicht ausgerüstet werden",
+  "LOAD_FAILED": "Laden fehlgeschlagen"
 }

@@ -226,7 +226,7 @@ func equip_item(slot_index: int) -> bool:
 		return false
 	var data := ItemDatabase.get_item(s["item_id"])
 	if data == null or data.equip_slot == ItemData.EquipSlot.NONE:
-		EventBus.inventory_notice.emit("Przedmet nie może być ekwipowany")
+		EventBus.inventory_notice.emit(LocalizationManager.t("ITEM_NOT_EQUIPPABLE"))
 		return false
 	# Если в слоте что-то есть — убрать в инвентарь.
 	var cur = equipment.get(data.equip_slot)

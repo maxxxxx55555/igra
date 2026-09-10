@@ -1054,5 +1054,8 @@
   "TOAST_COINS_GAINED": "+%s 金币",
   "TOAST_ITEM_FOUND": "找到%s！",
   "TOAST_REACTOR_ONLINE": "反应堆已上线！",
-  "Reduce Screen Shake": "减少屏幕震动"
+  "Reduce Screen Shake": "减少屏幕震动",
+  "WORKBENCH_CRAFTABLE": "可",
+  "ITEM_NOT_EQUIPPABLE": "该物品无法装备",
+  "LOAD_FAILED": "加载失败"
 }

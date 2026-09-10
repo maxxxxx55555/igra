@@ -1054,5 +1054,8 @@
   "TOAST_COINS_GAINED": "+%s monedas",
   "TOAST_ITEM_FOUND": "¡%s encontrado!",
   "TOAST_REACTOR_ONLINE": "¡Reactor en línea!",
-  "Reduce Screen Shake": "Reducir sacudida de pantalla"
+  "Reduce Screen Shake": "Reducir sacudida de pantalla",
+  "WORKBENCH_CRAFTABLE": "OK",
+  "ITEM_NOT_EQUIPPABLE": "Este objeto no se puede equipar",
+  "LOAD_FAILED": "Error al cargar"
 }

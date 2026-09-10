@@ -1054,5 +1054,8 @@
   "TOAST_COINS_GAINED": "+%s コイン",
   "TOAST_ITEM_FOUND": "%s を発見！",
   "TOAST_REACTOR_ONLINE": "原子炉オンライン！",
-  "Reduce Screen Shake": "画面の揺れを軽減"
+  "Reduce Screen Shake": "画面の揺れを軽減",
+  "WORKBENCH_CRAFTABLE": "可",
+  "ITEM_NOT_EQUIPPABLE": "このアイテムは装備できません",
+  "LOAD_FAILED": "読み込みに失敗しました"
 }

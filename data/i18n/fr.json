@@ -1054,5 +1054,8 @@
   "TOAST_COINS_GAINED": "+%s pièces",
   "TOAST_ITEM_FOUND": "%s trouvé !",
   "TOAST_REACTOR_ONLINE": "Réacteur en ligne !",
-  "Reduce Screen Shake": "Réduire les secousses d'écran"
+  "Reduce Screen Shake": "Réduire les secousses d'écran",
+  "WORKBENCH_CRAFTABLE": "OK",
+  "ITEM_NOT_EQUIPPABLE": "Cet objet ne peut pas être équipé",
+  "LOAD_FAILED": "Échec du chargement"
 }

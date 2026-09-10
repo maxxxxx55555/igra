@@ -678,7 +678,10 @@ func _add_battery_ad_button() -> void:
 	btn.name = "BatteryAdButton"
 	btn.text = LocalizationManager.t("AD_EXTRA_BATTERY")
 	btn.visible = false
-	btn.custom_minimum_size = Vector2(150, 24)
+	# Long locales (ru/fr ~2x the EN length) overflow a fixed 150px button —
+	# wrap to a second line instead of spilling past the edge.
+	btn.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	btn.custom_minimum_size = Vector2(150, 40)
 	btn.position = Vector2(0, 22)
 	btn.pressed.connect(func() -> void:
 		btn.disabled = true

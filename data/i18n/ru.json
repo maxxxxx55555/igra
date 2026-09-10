@@ -1054,5 +1054,8 @@
   "TOAST_COINS_GAINED": "+%s монет",
   "TOAST_ITEM_FOUND": "Найдено: %s!",
   "TOAST_REACTOR_ONLINE": "Реактор запущен!",
-  "Reduce Screen Shake": "Уменьшить тряску экрана"
+  "Reduce Screen Shake": "Уменьшить тряску экрана",
+  "WORKBENCH_CRAFTABLE": "OK",
+  "ITEM_NOT_EQUIPPABLE": "Этот предмет нельзя экипировать",
+  "LOAD_FAILED": "Не удалось загрузить"
 }

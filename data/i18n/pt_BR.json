@@ -1054,5 +1054,8 @@
   "TOAST_COINS_GAINED": "+%s moedas",
   "TOAST_ITEM_FOUND": "%s encontrado!",
   "TOAST_REACTOR_ONLINE": "Reator online!",
-  "Reduce Screen Shake": "Reduzir tremor de tela"
+  "Reduce Screen Shake": "Reduzir tremor de tela",
+  "WORKBENCH_CRAFTABLE": "OK",
+  "ITEM_NOT_EQUIPPABLE": "Este item não pode ser equipado",
+  "LOAD_FAILED": "Falha ao carregar"
 }

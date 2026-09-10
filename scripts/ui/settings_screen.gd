@@ -223,7 +223,8 @@ func _slider(parent: Node, label: String, key: String, min_v: float, max_v: floa
 	parent.add_child(row)
 	var l := Label.new()
 	l.text = label
-	l.custom_minimum_size.x = 180
+	l.custom_minimum_size.x = 200
+	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	row.add_child(l)
 	var s := HSlider.new()
 	s.min_value = min_v
@@ -242,7 +243,8 @@ func _toggle(parent: Node, label: String, key: String) -> void:
 	parent.add_child(row)
 	var l := Label.new()
 	l.text = label
-	l.custom_minimum_size.x = 180
+	l.custom_minimum_size.x = 200
+	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	row.add_child(l)
 	var cb := CheckBox.new()
 	cb.button_pressed = SettingsManager.get_setting(key, false)
@@ -305,7 +307,8 @@ func _dropdown(parent: Node, label: String, key: String, options: Array, callbac
 	parent.add_child(row)
 	var l := Label.new()
 	l.text = label
-	l.custom_minimum_size.x = 180
+	l.custom_minimum_size.x = 200
+	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	row.add_child(l)
 	var ob := OptionButton.new()
 	ob.size_flags_horizontal = Control.SIZE_EXPAND_FILL

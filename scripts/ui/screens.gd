@@ -558,7 +558,7 @@ func build_PhotoMode(content: ColorRect, card: ColorRect, cw: float, ch: float, 
 	if not photo:
 		var photo_script := load("res://scripts/systems/photo_mode.gd")
 		if not photo_script:
-			_show_toast("ERROR: photo_mode script not found")
+			_show_toast(LocalizationManager.t("LOAD_FAILED"))
 			return
 		photo = Control.new()
 		photo.name = "PhotoModeOverlay"
@@ -672,7 +672,7 @@ func build_Weather(content: ColorRect, card: ColorRect, cw: float, ch: float) ->
 func build_PuzzleCables(content: ColorRect, card: ColorRect, cw: float, ch: float) -> void:
 	var puzzle_script := load("res://scripts/ui/puzzle_cables.gd")
 	if not puzzle_script:
-		_show_toast("ERROR: puzzle script not found")
+		_show_toast(LocalizationManager.t("LOAD_FAILED"))
 		return
 	var puzzle := Control.new()
 	puzzle.set_script(puzzle_script)
@@ -723,7 +723,7 @@ func build_PuzzleCables(content: ColorRect, card: ColorRect, cw: float, ch: floa
 func build_Radio(content: ColorRect, card: ColorRect, cw: float, ch: float) -> void:
 	var radio_script := load("res://scripts/ui/radio.gd")
 	if not radio_script:
-		_show_toast("ERROR: radio script not found")
+		_show_toast(LocalizationManager.t("LOAD_FAILED"))
 		return
 	var radio := Control.new()
 	radio.set_script(radio_script)

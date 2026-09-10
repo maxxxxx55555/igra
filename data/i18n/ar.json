@@ -1054,5 +1054,8 @@
   "TOAST_COINS_GAINED": "+%s عملة",
   "TOAST_ITEM_FOUND": "تم العثور على %s!",
   "TOAST_REACTOR_ONLINE": "المفاعل يعمل!",
-  "Reduce Screen Shake": "تقليل اهتزاز الشاشة"
+  "Reduce Screen Shake": "تقليل اهتزاز الشاشة",
+  "WORKBENCH_CRAFTABLE": "متاح",
+  "ITEM_NOT_EQUIPPABLE": "لا يمكن تجهيز هذا العنصر",
+  "LOAD_FAILED": "فشل التحميل"
 }

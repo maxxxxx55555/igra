@@ -52,7 +52,6 @@ var _detail_title: Label
 var _qty_label: Label
 var _create_btn: Button
 var _craft_panel: Control
-var _upgrade_panel: Control
 var _salvage_panel: Control
 var _salvage_vbox: VBoxContainer
 var _salvage_info: Label
@@ -64,14 +63,16 @@ func _ready() -> void:
 	if not enable_workbench: return
 	_build_tabs()
 	_build_craft_panel()
-	_build_upgrade_panel()
 	_build_salvage_panel()
 	_switch_tab(0)
 
 func _build_tabs() -> void:
-	var tw := size.x / 3.0
-	var names := [tr("WORKBENCH_CRAFT"), tr("WORKBENCH_UPGRADE"), tr("WORKBENCH_SALVAGE")]
-	for i in 3:
+	# The old "Upgrade" tab only ever showed a "coming soon" placeholder —
+	# flashlight upgrades have a real screen (screens.gd's 5-branch
+	# FlashlightUpgradeManager UI), so this tab was misleading. Removed.
+	var tw := size.x / 2.0
+	var names := [tr("WORKBENCH_CRAFT"), tr("WORKBENCH_SALVAGE")]
+	for i in 2:
 		var btn := Button.new()
 		btn.text = names[i]
 		btn.size = Vector2(tw - 4, 26)
@@ -88,9 +89,8 @@ func _on_tab_pressed(idx: int) -> void:
 
 func _switch_tab(idx: int) -> void:
 	if _craft_panel: _craft_panel.visible = idx == 0
-	if _upgrade_panel: _upgrade_panel.visible = idx == 1
-	if _salvage_panel: _salvage_panel.visible = idx == 2
-	if idx == 2: _refresh_salvage()
+	if _salvage_panel: _salvage_panel.visible = idx == 1
+	if idx == 1: _refresh_salvage()
 
 func _build_craft_panel() -> void:
 	_craft_panel = Control.new()
@@ -123,7 +123,7 @@ func _build_craft_panel() -> void:
 		row.add_child(lbl)
 		var stlbl := Label.new()
 		stlbl.name = "Status"
-		stlbl.text = "OK" if _can_craft_recipe(i) else "--"
+		stlbl.text = tr("WORKBENCH_CRAFTABLE") if _can_craft_recipe(i) else "--"
 		stlbl.size = Vector2(24, 20)
 		stlbl.position = Vector2(row.size.x - 28, 7)
 		stlbl.add_theme_color_override("font_color", STAMINA if _can_craft_recipe(i) else EMBER)
@@ -292,31 +292,8 @@ func _refresh_list() -> void:
 		var stlbl := row.get_node_or_null("Status") as Label
 		if stlbl:
 			var can := _can_craft_recipe(i)
-			stlbl.text = "OK" if can else "--"
+			stlbl.text = tr("WORKBENCH_CRAFTABLE") if can else "--"
 			stlbl.add_theme_color_override("font_color", STAMINA if can else EMBER)
-
-func _build_upgrade_panel() -> void:
-	_upgrade_panel = Control.new()
-	_upgrade_panel.size = Vector2(size.x, size.y - 32)
-	_upgrade_panel.position = Vector2(0, 32)
-	_upgrade_panel.visible = false
-	add_child(_upgrade_panel)
-	var title := Label.new()
-	title.text = tr("WORKBENCH_UPGRADE")
-	title.size = Vector2(size.x - 20, 24)
-	title.position = Vector2(10, 10)
-	title.add_theme_color_override("font_color", BONE_TEXT)
-	title.add_theme_font_size_override("font_size", 14)
-	_upgrade_panel.add_child(title)
-	title.add_theme_color_override("font_outline_color", Color(0.047, 0.063, 0.086, 1.0))
-	title.add_theme_constant_override("outline_size", 2)
-	var info := Label.new()
-	info.text = "Upgrade system \u2014 coming soon"
-	info.size = Vector2(size.x - 20, 100)
-	info.position = Vector2(10, 40)
-	info.add_theme_color_override("font_color", STEEL_TEXT)
-	info.add_theme_font_size_override("font_size", 11)
-	_upgrade_panel.add_child(info)
 
 func _build_salvage_panel() -> void:
 	_salvage_panel = Control.new()

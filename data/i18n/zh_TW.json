@@ -1054,5 +1054,8 @@
   "TOAST_COINS_GAINED": "+%s 金幣",
   "TOAST_ITEM_FOUND": "找到%s！",
   "TOAST_REACTOR_ONLINE": "反應爐已上線！",
-  "Reduce Screen Shake": "減少畫面震動"
+  "Reduce Screen Shake": "減少畫面震動",
+  "WORKBENCH_CRAFTABLE": "可",
+  "ITEM_NOT_EQUIPPABLE": "該物品無法裝備",
+  "LOAD_FAILED": "載入失敗"
 }
