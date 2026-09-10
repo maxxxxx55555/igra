@@ -127,6 +127,10 @@ func total_count() -> int:
 func reset() -> void:
 	for d in _by_id.values():
 		d.stage = DistrictData.Stage.DARK
+		# Symmetry with advance_district/_set_stage_direct: listeners that
+		# persist across a New Game (autoloads: music/env/grading) must be
+		# told each district went back to DARK, not just "something changed".
+		EventBus.district_stage_changed.emit(d.id, DistrictData.Stage.DARK)
 	EventBus.power_grid_updated.emit()
 func to_dict() -> Dictionary:
 	var stages: Dictionary = {}
@@ -136,5 +140,9 @@ func to_dict() -> Dictionary:
 func from_dict(d: Dictionary) -> void:
 	var stages: Dictionary = d.get("stages", {}) as Dictionary
 	for d2 in _by_id.values():
-		d2.stage = int(stages.get(String(d2.id), DistrictData.Stage.DARK))
+		var st := int(stages.get(String(d2.id), DistrictData.Stage.DARK))
+		d2.stage = st
+		# Same reason as reset(): sync persistent listeners to the loaded
+		# stage instead of relying on a later per-district signal.
+		EventBus.district_stage_changed.emit(d2.id, st)
 	EventBus.power_grid_updated.emit()

@@ -25,15 +25,15 @@ disposition. Nothing is left "open".
 | 7 | emissive windows not stage-reactive | **FIXED (MEGA POLISH)** — reads district id from `../StreetBuilder`, rebuilds colours per stage; FULL == pre-fix. `lighting_stage_sim.py` |
 | 8 | PARTIAL stage looks like DARK | **FIXED (MEGA POLISH)** — `_apply_stage()` lights a deterministic ~40% subset dimly at PARTIAL; 4 stages proven distinct by `lighting_stage_sim.py` |
 | 9–13 | lighting scope, ghost slot, doc threshold, save-slot UI, dead sync | FIXED (earlier) |
-| 14 | `power_grid.reset()/from_dict()` don't emit `district_stage_changed` | **WON'T-FIX (RC)** — unreachable in Continue/New-Game (scene rebuild re-reads stage); emitting mid-load would risk spurious listener side-effects during teardown |
+| 14 | `power_grid.reset()/from_dict()` don't emit `district_stage_changed` | **FIXED (MEGA POLISH)** — both now emit it per district; scene nodes still re-read on `_ready()`, `finale_director` unaffected (listens to `district_restored`) |
 | 15, 17 | redundant emit, orphan `.uid` | FIXED (earlier) |
-| 16 | `puzzle_base.gd` dead `Area2D` fossil | **WON'T-FIX (RC)** — the `toggle_district` mechanic it implements is real (GDD §4.3) but `power_switch.gd` is the live impl; kept per no-delete rule, flagged |
-| 18 | `weather_system.gd` calls `LocalizationManager.t()` pre-`_ready()` | **WON'T-FIX (RC)** — `t()` has a crash-safe key fallback and the string is displayed by nothing; reordering autoloads is disproportionate risk for a latent no-op |
-| 19 | 12 UI files no live-language retranslation | FIXED (9 live files); root-level `scripts/death_screen.gd` = **WON'T-FIX (RC)**, dead code (live `scripts/ui/death_screen.gd` already fixed) |
-| 20 | `item_spawns.json` stage tables unread | **WON'T-FIX (RC)** — wiring them is a new stage-aware spawn system, not a fix; `district_loot.gd`'s `REPAIR_PARTS` already guarantees GDD §4.3 solvability |
+| 16 | `puzzle_base.gd` dead `Area2D` fossil | **ACCEPT** — confirmed not instanced (`scenes/props/puzzle.tscn` unloaded; only a test names the file). GDD §4.3 mechanic real → kept per no-delete rule. No owner action. |
+| 18 | `weather_system.gd` calls `LocalizationManager.t()` pre-`_ready()` | **FIXED (already)** — `weather_system.gd:20` is `call_deferred("_emit")`; the doc entry lagged the code |
+| 19 | 12 UI files no live-language retranslation | FIXED (9 live files); root-level `scripts/death_screen.gd` + `scenes/ui/death_screen.tscn` = **ACCEPT**, confirmed dead (nothing instances the `.tscn`; `UIManager` uses `scripts/ui/death_screen.gd`), kept per no-delete rule |
+| 20 | `item_spawns.json` stage tables unread | **ACCEPT + owner-verify** — not a defect (`REPAIR_PARTS` guarantees GDD §4.3 solvability); wiring the JSON tables is a new system. Owner-verify: playtest step "every district completable". |
 | 21 | school/gas_station `powered_by` leaves | DOCUMENTED — verified intentional (convergent DAG), not a defect |
 | 22–30 | pipeline audit cross-checks | FIXED / VERIFIED (earlier) |
-| 24 | `WorldBible.is_revealed()` stage vs visitation | **WON'T-FIX (RC)** — a visitation check would *hide* currently-shown refs (not behavior-preserving); content discipline (§3.4) is the working guardrail; touches 2 live features, no compile-check in NO-GODOT |
+| 24 | `WorldBible.is_revealed()` stage vs visitation | **ACCEPT + owner-verify** — not a live defect (all 16 `min_stage:0` reveals point at suburbs/residential/park; content discipline §3.4 keeps refs from leaking). A visitation check is a new save-backed feature. Owner-verify: playtest step "no journal 'Related:' line names a place from a district not yet reached". |
 | 31 | puzzle bonus economy reachable 1/11 | **WON'T-FIX (RC)** — core loop + victory unaffected; full wiring is a GDD §3.3/§8 balance call; the 4 live toasts were localized + a duplicate toast removed |
 | 32 | 2 power_station one-shots off the 30 s class | **WON'T-FIX (RC)** — `assets/audio/**` is the audio toolchain owner's zone; zero code dependency on detail-bed duration |
 | 33 | `crafting_manager.gd` unguarded JSON parse | FIXED (RC) |
@@ -254,7 +254,15 @@ disposition. Nothing is left "open".
     `_set_stage_direct`) — not reachable from real Continue/New-Game
     (those always rebuild the scene tree via `Routes.goto()`, so `_ready()`
     re-reads the correct stage anyway) but a real API asymmetry. Status:
-    **DOCUMENTED** (latent, unreachable in current player-facing flows).
+    **FIXED (2026-09-10 MEGA POLISH)** — both now emit
+    `district_stage_changed(id, stage)` per district before the single
+    `power_grid_updated`, matching `_set_stage_direct`'s contract.
+    Behaviour-preserving: scene-node listeners don't exist yet during
+    `load_all()` (they re-read stage in their own `_ready()`); the added
+    emit only keeps persistent autoload listeners (music / env / grading,
+    each `district_id == current`-guarded) in sync. `finale_director`
+    listens to `district_restored` (FULL-only, unaffected), so no
+    spurious finale trigger on load.
 15. `scripts/world/ftue_generator_3d.gd:21` — redundant duplicate
     `district_stage_changed` emission for the tutorial generator (the
     call it follows already emits it internally). Harmless (every
@@ -274,9 +282,11 @@ disposition. Nothing is left "open".
     `LocalizationManager.t()` from its own `_ready()`, which runs before
     `LocalizationManager`'s `_ready()` since it's declared earlier in
     `project.godot`'s autoload list; currently harmless (no listener
-    displays the returned name string). Status: **DOCUMENTED** (harmless
-    today, flagged so nobody assumes the string is safe to start showing
-    without also deferring this call).
+    displays the returned name string). Status: **FIXED (already)** —
+    verified 2026-09-10: `weather_system.gd:20` reads
+    `call_deferred("_emit")` (with a comment citing this same audit), so
+    the first `weather_changed` emit now runs after every autoload's
+    `_ready()`. The doc entry was just never updated. No further action.
 19. 12 UI files build translated text once with no live-language-switch
     retranslation hook (found via a systematic grep sweep of all of
     `scripts/ui/`, cross-checked against the already-fixed set from
