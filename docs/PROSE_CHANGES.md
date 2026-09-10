@@ -398,3 +398,45 @@ relevant (typography/accents/terminology fix). Priority tags: [C]=CRITICAL, [H]=
 [H] SCR_ZHILYE_KVARTALY | ko | Residential | 주택가
 [H] DIST_WAREHOUSES | ko | Warehouses | 창고 단지
 [H] LORE_SUBURBS_03_TEXT | ko | "RESIDENTS OF THE SUBURBAN DISTRICT: proceed in an orderly fashion to the collection point at the central arena. Bring documents and one bag per person. Do not remain outdoors after dark." The bottom edge is torn off — the date and the issuing office are missing. | "교외 주민 여러분: 중앙 아레나의 집결지로 질서 있게 이동하십시오. 서류와 1인당 가방 하나를 지참하십시오. 어두워진 뒤에는 실외에 머물지 마십시오." 하단이 찢겨 나가 날짜와 발행 기관이 없다.
+
+[H] Q_KILL_TANK_DESC | zh | Armoured brutes block the way downtown. Three carcasses. | 装甲怪物挡住了通往市中心的路，留下三具尸体。
+[H] MONSTER_BURNER | zh | Burner | 焚烧者
+[H] CHAR_HOLSTER | zh | Holster | 枪套
+[H] DISTRICT_RESTORED_TOAST | zh | District saved: %s | 区域已恢复：%s
+[H] VICTORY_DISTRICTS | zh | Districts restored | 恢复的区域
+[H] COINS_AMOUNT | zh | Coins: %d | 硬币：%d
+[H] ITEM_COIN | zh | Coin | 硬币
+[H] NOT_ENOUGH_COINS | zh | Not enough coins | 硬币不足
+[H] REWARD_ACHIEVEMENT | zh | +%d coins for an achievement | 达成成就 +%d 硬币
+[H] REWARD_DISTRICT | zh | +%d coins for a district | 恢复区域 +%d 硬币
+[H] REWARD_SECRET | zh | +%d coins for a secret | 发现秘密 +%d 硬币
+[H] TOAST_COINS_GAINED | zh | +%s coins | +%s 硬币
+[H] UPG_HINT | zh | Coins come from districts, secrets and achievements. | 硬币来自区域、秘密与成就。
+[H] BLUEPRINT_APPLIED | zh | Blueprint applied: upgrade unlocked | 已应用图纸：升级已解锁
+[H] SKILL_RELOAD_SPEED_DESC | zh | +25% reload speed | 换弹速度+25%
+[H] SKILL_RELOAD_SPEED_NAME | zh | Quick Reload | 快速换弹
+[H] ACH_06_NAME | zh | Quiet as a Mouse | 悄无声息
+[H] RADIO_TRANSCRIPT_E1 | zh | ...this is the last broadcast of the city. The lamps are going out one by one. If you hear us - guard the light. | ...这是这座城市最后的广播。路灯一盏盏熄灭。如果你能听到我们——请守护光明。
+[H] JOURNAL_RELATED | zh | Related: %s | 相关：%s
+[H] WORLD_RADIO_03_TEXT | zh | You are restoring what I am taking apart, and we are both right. Every lamp you light feeds the city. Every lamp I carry out starves the thing in the center. Light the districts. I will meet you at the last one with everything I have kept. Forty years of light, engineer. Bring a strong back. | 你在恢复我拆毁的东西，我们两个都没有错。你点亮的每一盏灯都在滋养这座城市。我搬走的每一盏灯都在饿死中心那个东西。照亮各个区吧。我会在最后一个区带着我所守护的一切与你相见。四十年的光明，工程师。带副好身板来。
+[H] WORLD_NEWS_METERS_TEXT | zh | Apartment meters on three residential streets record negative draw at night. City Power blames 'faulty drums'. A retired meterman: a backwards meter is not a faulty drum, it is a tap. Something downstream is paying current into the wires, not taking it. | 三条住宅街道的公寓电表在夜间记录到负的用电量。市电力公司将其归咎于「有故障的鼓轮」。一位退休的抄表员说：倒转的电表不是鼓轮故障，那是一个分接头。下游有什么东西正在把电流注入电线，而不是从中取用。
+[H] WORLD_NEWS_ARCHITECT_TEXT | zh | The council denies funding any 'Project Architect' to 'store what the lamps have seen'. The denial names the project by title, which no reporter had used. The program's test feeders, records show, were wired through the hospital sub-feed and the park line. | 议会否认为任何「储存路灯所见之物」的「建筑师计划」提供过资金。这份否认声明却用了一个从没有任何记者使用过的名称来指称该项目。据记录显示，该项目的测试馈线是通过医院的分支馈线和公园线路接入的。
+[H] WORLD_CHAR_KEEPER_TEXT | zh | Forty years of work orders, every lamp logged by hand. Now he keeps the light backwards, and the grid waits for him at the center. | 四十年的工作单，每一盏灯都手写记录。现在他反过来守护光明，电网在中心等着他。
+[H] WORLD_CHAR_MARAT_TEXT | zh | The engineer who proved one streetlight can burn. The draw doesn't add up, he said. Something is pulling from the grid at night. | 证明了一盏路灯能够持续燃烧的工程师。用电量对不上，他说。夜里有什么东西在从电网里抽取。
+[H] WORLD_CHAR_RECORDER_TEXT | zh | Third shift, feed four. If anyone replays this — the lights can be brought back. We proved it on the bench. | 第三班，4号馈线。如果有人听到这段录音——灯光是可以恢复的。我们在工作台上证明过了。
+[H] WORLD_CHAR_PETROV_TEXT | zh | The crew walked an hour in mud and it still found him at the pond edge. Took him toward the water without a sound. | 小队在泥地里走了一个小时，它还是在池塘边找到了他。悄无声息地把他拖向水边。
+[H] WORLD_CHAR_SUPERINTENDENT_TEXT | zh | Meters 12, 24, 31 spin backwards at night. One of the two is lying, and the substation has never lied to me. | 12号、24号、31号电表夜里倒转。这两者之中有一个在撒谎，而变电站从没对我撒过谎。
+[H] WORLD_CHAR_ARCHITECT_TEXT | zh | The project bears his name. The monsters were people; the grid was his instrument. | 这个项目以他的名字命名。那些怪物曾是人类；电网是他的工具。
+[H] WORLD_FACTION_CITYPOWER_TEXT | zh | Planned rolling outage, Tuesday 22:00-23:00. It never came back on. | 计划轮流停电，周二22:00-23:00。再也没有恢复过。
+[H] WORLD_FACTION_GRIDCREW_TEXT | zh | Grids don't drink, he said. The transformer was warm anyway. | 电网又不会喝水，他说。可变压器还是热的。
+[H] WORLD_FACTION_KEEPERS_TEXT | zh | While one lantern burns, the city is alive. | 只要还有一盏灯笼燃烧，这座城市就还活着。
+[H] WORLD_RADIO_01_TEXT | zh | ...if you can hear this, the grid can still be brought back. District by district, lamp by lamp. Do not go underground. Do not follow the arena signs. Go to the power station. The one who kept the light will meet you at the light. [three relay clicks] | ……如果你能听到这段广播，电网仍然可以恢复。一个区一个区地，一盏灯一盏灯地。不要去地下。不要跟着竞技场的路标走。去发电站。守护灯光的那个人会在灯光中与你相见。〔三声继电器咔哒声〕
+[H] WORLD_RADIO_02_TITLE | zh | Broadcast 2 — Crew Relay, Recovered | 广播2 — 班组中继，已找回
+[H] WORLD_RADIO_02_TEXT | zh | Third shift to anyone: feeder four is not faulty, repeat, not faulty. The draw is deliberate. Marat traced it to a test tap that is not on any map. We are walking the line to the substation. If we do not call again — the bench proof stands. One streetlight. Remember that. | 第三班向所有人通报：4号馈线没有故障，重复，没有故障。这是蓄意的抽取。马拉特把它追踪到一个不在任何地图上的测试分接头。我们正沿着线路走向变电站。如果我们不再联络——工作台上的证明依然成立。一盏路灯。记住这一点。
+[H] WORLD_DIARY_K1_TEXT | zh | First shift today. Two hundred and nineteen lamps in the suburbs alone. The foreman says a lamp out is a street forgot. I intend to be remembered as the man who never let the street be forgot. Order 1 logged. | 今天是第一班。仅郊区就有两百一十九盏灯。工头说，熄灭的灯就是被遗忘的街道。我打算被人们记住，记住我是那个从不让街道被遗忘的人。第1号指令已记录。
+[H] WORLD_DIARY_K2_TEXT | zh | The outage was scheduled for one hour. At 23:00 the feeders held. At 23:40 they were drinking. I have kept lamps forty years; I know the sound a transformer makes when it is full, and the grid sounds full tonight, and every lamp in the city is dark. Something else is lit. | 停电原定持续一小时。23:00时馈线还撑得住。23:40时它们就在被吸取了。我守护路灯四十年了；我知道变压器满载时发出的声音，而今晚电网听起来是满载的，可城里的每一盏灯都是黑的。有别的东西亮着。
+[H] WORLD_DIARY_K3_TEXT | zh | Decided. The drinker finds the grid through the lamps that can burn; a dismantled lamp is a door walled shut. Order 14,208: dismantle 219, suburbs, transformer to the center. I kept the light for forty years. Now I keep it backwards. Forgive me, streets. | 决定了。那饮取者透过还能燃烧的灯找到电网；拆掉的灯就是一扇被砌死的门。第14208号指令：拆除219号，郊区，变压器送往中心。我守护这灯光四十年了。现在我反过来守护它。原谅我吧，街道们。
+[H] WORLD_DIARY_M1_TEXT | zh | Three of them came to the pond again. The tall one that was the postman stands apart; he is ashamed. I put the bowl on the ice and I said their names out loud, all of them. They stood still when I said them. They remember. The light remembers too — that is why I keep my lamp. | 他们当中的三个又来到了池塘边。那个曾是邮差的高个子站得远远的；他感到羞愧。我把碗放在冰面上，大声念出他们所有人的名字。我念出名字时，他们都静止不动。他们记得。灯光也记得——这就是我一直点着灯的原因。
+[H] WORLD_NEWS_OUTAGES_TEXT | zh | CITY POWER COMPANY announces planned rolling outages, Tuesday 22:00-23:00, suburban feeders first. 'A maintenance formality,' says the director. Asked about the night-shift request for feeder four, the director ended the call. | 市电力公司宣布计划轮流停电，周二22:00-23:00，先从郊区馈线开始。「只是例行维护，」局长说。当被问及夜班关于4号馈线的申请时，局长挂断了电话。
+[H] WORLD_NEWS_ARENA_TEXT | zh | Residents are to proceed orderly to the central arena. Documents and one bag per person. Do not remain outdoors after dark. The Herald notes the order carries no signature and no office, and that the arena's own lights were seen off at press time. | 居民应有序前往中央竞技场。每人携带证件和一个包。天黑后不要停留在户外。《先驱报》指出该命令既无签名也无发布机构，而且截稿时竞技场自身的灯光也已熄灭。
+[H] WORLD_NEWS_TREES_TEXT | zh | The central park closes until further notice following repeated complaints that the trees 'lean toward the lamps to listen'. The parks office: trees do not listen. Night gardeners, unnamed, add that the leaning started the week the new feeder hummed. | 由于反复收到关于树木「向路灯倾斜以聆听」的投诉，中央公园将暂时关闭，恕不另行通知。公园管理处表示：树木不会聆听。几位未透露姓名的夜间园丁补充说，这种倾斜是从新馈线开始嗡嗡作响的那一周开始的。

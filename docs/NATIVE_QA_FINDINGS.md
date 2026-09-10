@@ -364,3 +364,28 @@ This pass reviews the **actual 11** non-EN/RU locales: `fr, de, es, it, pt_BR, t
 | LORE_SUBURBS_03_TEXT | 교외 지구 주민 여러분 | 교외 주민 여러분 | Same 지구 trap; the district is just 교외. |
 
 **MEDIUM (7, documented only):** ENEMY_SPITTER 침 뱉는 자 (wordy; 스피터 would match the katakana monster list); PROMPT_HIDE 숨기 (reads as "conceal object"; 숨어들기/은신 clearer); STROBE_READY 스트로브 vs WSTROBE_COMBO 점멸광 (two words for strobe); Q_KILL_TANK_TITLE 탱크 (vehicle vs 장갑 괴물 in its own description); WORKBENCH_CRAFTABLE 가능 (terse); ONBOARD captions (해라체) vs TUT_* (합니다체) register mix on adjacent screens; msg_caught "발각되었다!" / msg_lose "실패했다…" plain vs formal toasts (read as deliberate arcade flavor — acceptable). LOW (6): SCR_MONETY_2 / SCR_SLOT / SCR_VES trailing spaces; SCR_ZAGRUZKA "로딩 중.. " missing third dot + trailing space; SCR_EST_SOHRANENIE trailing "\|"; RADIO_EMERGENCY2 "비상 2" bare numeral.
+
+## Chinese, Simplified (zh)
+
+**Verdict:** Genuinely good localization with confident transcreation (守灯人 for the Keeper, 被喂食者 for the Fed, 「黎明」血清 for Dawn serum, 暗影无处可逃 for "no escape for the shadows"). Two systematic defects: (1) the entire WORLD_* codex block shipped with half-width , ; : punctuation between Chinese characters — a classic machine-translation tell, 22 keys; (2) the currency is called both 硬币 and 金币 across different screens. Add the ENEMY_ARSONIST/MONSTER_BURNER name collision (both 纵火者), a verb where a slot label belongs (收枪 for Holster — and there is no gun in this game), and "Bring a strong back" translated literally. Counts: CRITICAL 0, HIGH 41, MEDIUM 6, LOW 6.
+
+**HIGH (41, fixed):**
+| Key | Was | Fix | Why |
+|---|---|---|---|
+| Q_KILL_TANK_DESC | 装甲怪物挡住了通往市中心的路，放倒三具尸体。 | …留下三具尸体。 | "放倒尸体" = knock down corpses (corpses don't stand); EN "Three bodies." means leave three bodies behind. |
+| MONSTER_BURNER | 纵火者 | 焚烧者 | Collides with ENEMY_ARSONIST 纵火者 — two different creatures, one name. |
+| CHAR_HOLSTER | 收枪 | 枪套 | Verb "holster the gun" as an equipment-slot label; the weapon is a flashlight. |
+| DISTRICT_RESTORED_TOAST | 区域已拯救：%s | 区域已恢复：%s | 拯救 = rescue (a person); a district is restored (恢复), as every other key says. |
+| VICTORY_DISTRICTS | 恢复的地区 | 恢复的区域 | 地区 vs the game's own 区域 (hud_district, MAP_PROGRESS). |
+| COINS_AMOUNT / ITEM_COIN / NOT_ENOUGH_COINS / REWARD_* (×3) / TOAST_COINS_GAINED / UPG_HINT | 金币 | 硬币 | Currency split 金币/硬币 across screens; HUD, shop and achievements say 硬币 (8 keys). |
+| BLUEPRINT_APPLIED | 已应用蓝图 | 已应用图纸 | Item names all say 图纸 (×4) — unify. |
+| SKILL_RELOAD_SPEED_DESC / _NAME | 装填速度 / 快速装填 | 换弹速度 / 快速换弹 | tip2 and weapon compare say 换弹 — unify the gameplay term. |
+| ACH_06_NAME | 静如鼠 | 悄无声息 | "静如鼠" is not a Chinese idiom; "quiet as a mouse" → 悄无声息. |
+| RADIO_TRANSCRIPT_E1 | 如果听到我们-请守护光明。 | 如果你能听到我们——请守护光明。 | Dropped subject + stray half-width hyphen; zh dash is ——. |
+| JOURNAL_RELATED | 相关:%s | 相关：%s | Half-width colon; rest of the file uses ：. |
+| WORLD_RADIO_03_TEXT | 带上一副强壮的脊背来。 | 带副好身板来。 | Literal "bring a strong back"; 带副好身板来 is the natural thing to say before heavy work. |
+| WORLD_NEWS_METERS_TEXT | 城市电力公司 | 市电力公司 | Faction name elsewhere is 市电力公司 (WORLD_FACTION_CITYPOWER_TITLE). |
+| WORLD_NEWS_ARCHITECT_TEXT | 『建筑师计划』 | 「建筑师计划」 | Project names elsewhere use 「」; 『』 is for quotes nested inside 「」. |
+| WORLD_CHAR_* (6), WORLD_FACTION_* (3), WORLD_RADIO_01/02/03 (3+title), WORLD_DIARY_* (4), WORLD_NEWS_* (4) | half-width , ; : between Chinese characters | ，；： | 22 keys total (incl. the three above): full-width punctuation is mandatory in zh prose; half-width commas between hanzi are the classic MT tell. Times (22:00) untouched. |
+
+**MEDIUM (6, documented only):** ENEMY_ROTTER / MONSTER_ROTTER both 腐烂者 (inherited: both are "Rotter" in EN too); WORKBENCH_CRAFTABLE 可 (terse; 可制作 clearer); diff_normal 普通 vs legacy SCR labels 正常; WORLD_NEWS_METERS_TEXT 分接头 (transformer tap — technically fine, 私接 clearer for lay readers); D2_TOAST "城市重新呼吸" (poetic, slightly stiff; 城市再次呼吸); ¢IGRAT 开始游戏 duplicates menu_play. LOW (6): SCR_MONETY_2 / SCR_SLOT / SCR_VES trailing spaces; SCR_EST_SOHRANENIE trailing "\|"; SCR_ZAGRUZKA "加载中.. " missing third dot + trailing space; tutorial keys "F - 手电筒" half-width hyphens (consistent within the set).
