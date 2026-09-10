@@ -647,6 +647,39 @@ disposition. Nothing is left "open".
     `KNOWN_ISSUES.md`, deferred to a Godot-enabled pass / owner archive
     decision. Status: **REVIEWED, no code change.**
 
+## MEGA POLISH — crash-safety deep dive #2 (2026-09-10)
+
+38. **`scripts/ui/screens.gd::_populate_screen()`** — `_screen_data.get(name)
+    as Dictionary` (no default): `.get()` returns `null` for an absent key,
+    and `null as Dictionary` → a typed-assign error. Not reachable today
+    (`_populate_screen` only runs after `show_screen`'s
+    `_screen_data.has(name)` gate), latent. **FIXED** — `.get(name, {})` +
+    `if d.is_empty()`.
+39. **`scripts/systems/settings_manager.gd::from_dict()`** — `_language =
+    d.get("language", "en"); _apply_locale(_language)` unconditionally.
+    An old save (or any game save missing the `settings.language` field)
+    would **silently reset the player's chosen language to English on
+    load**. **FIXED** — only override + `_apply_locale` when the payload
+    actually carries a non-empty `language`.
+40. **`scripts/ui/hud_3d.gd::_show_notice()`** — `await
+    create_timer(3.0).timeout` then `notice.text` with no validity check.
+    The HUD can be torn down (death → scene reload) during the 3 s wait →
+    "previously freed instance". **FIXED** — `if not
+    is_instance_valid(notice): return` after the await.
+41. **`scripts/systems/settings_manager.gd::_apply_arachnophobia()`** —
+    `enemy.is_instance_valid()` is a call to a non-existent method on
+    `Node`; toggling Arachnophobia Mode **errored at runtime**. **FIXED**
+    → global `is_instance_valid(enemy)` (see PHASE B.3).
+42. **Sweep result.** Re-audited every bare `get_node("...")` (9 sites) —
+    all guarded by `has_node`/`has_method`/`is_in_group`/null-check or
+    target a structural scene invariant. All 11 `JSON.parse_string`
+    sites null- and type-check (verified #33/#34 + re-verified). `await
+    create_timer().timeout` coroutines: the rest touch nothing after the
+    await, or use safe idioms (`signal.connect(node.queue_free)`,
+    child `Timer` nodes, `is_instance_valid` guards). `.get(k, default)
+    as Dictionary/Array` casts all carry a default (`{}`/`[]`), so no
+    null-cast. No further crash paths found.
+
 ## CONFIRMED WORKING (traced this pass, no defect — do not re-audit)
 
 - `power_switch.gd::interact()`/stage-advance chain, `REPAIR_COST` vs

@@ -509,8 +509,12 @@ func from_dict(d: Dictionary) -> void:
 	for b in BUSES:
 		_volumes[b] = clampf(float(v.get(b, 1.0)), 0.0, 1.0)
 		_apply(b)
-	_language = d.get("language", "en")
-	_apply_locale(_language)
+	# Only override the live language if the payload actually carries one —
+	# an older save (or a game save missing the field) must not silently
+	# reset a player's chosen language to English.
+	if d.has("language") and String(d["language"]) != "":
+		_language = String(d["language"])
+		_apply_locale(_language)
 	var s: Dictionary = d.get("settings", {}) as Dictionary
 	for key in s:
 		_settings[key] = s[key]

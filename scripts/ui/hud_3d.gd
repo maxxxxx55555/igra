@@ -880,5 +880,9 @@ func _setup_radar() -> void:
 func _show_notice(msg: String) -> void:
 	notice.text = msg
 	await get_tree().create_timer(3.0).timeout
+	# The HUD can be torn down (death -> scene reload) during the 3s wait —
+	# don't touch `notice` on a freed instance.
+	if not is_instance_valid(notice):
+		return
 	if notice.text == msg:
 		notice.text = ""

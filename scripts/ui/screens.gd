@@ -228,8 +228,10 @@ func hide_all() -> void:
 	EventBus.ui_screen_closed.emit("all")
 
 func _populate_screen(name: String) -> void:
-	var d: Dictionary = _screen_data.get(name) as Dictionary
-	if not d: return
+	# .get(name) with no default returns null -> `null as Dictionary` -> a
+	# typed-assign error. Default to {} and test emptiness instead.
+	var d: Dictionary = _screen_data.get(name, {})
+	if d.is_empty(): return
 	var content: ColorRect = d.content
 	var card: ColorRect = d.card
 	var cw := card.size.x
