@@ -19,10 +19,13 @@ const DISTRICTS: Array[StringName] = [
 	&"substation", &"power_station",
 ]
 const ENDINGS: Array[StringName] = [&"light", &"hope", &"survivor", &"dark", &"truth"]
-## Keys confirmed present in en.json, one per user-facing surface class.
+## One real key per user-facing surface (menu / HUD / journal / settings /
+## endings / toast) — must resolve to a non-empty, non-key string in every
+## locale. The bulk check below is full key-parity against en.
 const I18N_SAMPLE: Array[String] = [
-	"HUD_BATTERY", "HUD_NOISE", "JOURNAL_TITLE", "PHOTO_MODE_ON",
-	"DISTRICT_RESTORED_TOAST", "ENDING_LIGHT_TITLE", "ENDING_TRUTH_DESC",
+	"menu_play", "HUD_HP", "HUD_NOISE", "JOURNAL_TITLE", "JOURNAL_RELATED",
+	"SETTINGS_ACCESSIBILITY", "PHOTO_MODE_ON", "DISTRICT_RESTORED_TOAST",
+	"ENDING_LIGHT_TITLE", "ENDING_TRUTH_DESC",
 ]
 const AUTOLOADS: Array[String] = [
 	"Routes", "GameManager", "SaveSystem", "EventBus", "InputService",
@@ -199,14 +202,28 @@ func _p4_endings() -> void:
 # ── P5 ────────────────────────────────────────────────────────────────
 func _p5_i18n_locales() -> void:
 	var missing := 0
+	# Baseline: every key en actually ships.
+	LocalizationManager.set_language("en")
+	var en_keys: Array = LocalizationManager._strings.keys()
 	for loc in LocalizationManager.SUPPORTED:
 		LocalizationManager.set_language(loc)
+		# 5a: full key parity against en — no locale file may be short.
+		var loc_strings: Dictionary = LocalizationManager._strings
+		var gaps := 0
+		for k in en_keys:
+			if not loc_strings.has(k) or String(loc_strings[k]) == "":
+				gaps += 1
+		if gaps > 0:
+			_fail("P5 %s: %d/%d keys MISSING or empty vs en" % [loc, gaps, en_keys.size()])
+			missing += gaps
+		# 5b: the curated per-surface sample must resolve to real text.
 		for k in I18N_SAMPLE:
-			if not LocalizationManager.has_key(k) or LocalizationManager.t(k) == k:
-				_fail("P5 %s: key '%s' MISSING at runtime" % [loc, k])
+			if LocalizationManager.t(k) in ["", k]:
+				_fail("P5 %s: surface key '%s' unresolved at runtime" % [loc, k])
 				missing += 1
 	LocalizationManager.set_language("en")
-	_log("P5 i18n: %d locales x %d keys, %d MISSING" % [LocalizationManager.SUPPORTED.size(), I18N_SAMPLE.size(), missing])
+	_log("P5 i18n: %d locales x (%d en keys + %d surface keys), %d MISSING" % [
+		LocalizationManager.SUPPORTED.size(), en_keys.size(), I18N_SAMPLE.size(), missing])
 
 # ── P6 ────────────────────────────────────────────────────────────────
 func _p6_soak() -> void:

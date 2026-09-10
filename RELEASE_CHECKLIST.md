@@ -1,19 +1,49 @@
 # RELEASE_CHECKLIST.md — human-only steps to ship
 
-Everything code/content-side that could be automated is done (see
-`PLAN.md` for the full status table and `docs/HANDOFF.md` for the
-narrative summary). Every item below needs a GUI, an account, a signing
-key, or a build toolchain — none of it can be done from this session.
-This file supersedes older overlapping docs on a few points that changed
-since they were written (noted inline); `docs/RELEASE_FINAL.md` still has
-useful platform-specific detail (Yandex Games, itch.io, Steam) not
-repeated here.
+## 0. TL;DR — the irreducible human minimum
+
+Everything code / content / store-side is **done by agents** (GOLD MASTER,
+`origin/main`). What's left needs a GUI, an account, a signing key, or a
+build toolchain and cannot be done from an agent session:
+
+1. **Keystore + build.** `keytool -genkey … -alias tlsrelease` (§1), put
+   the path/passwords in `export_presets.cfg`, install `4.7-stable`
+   export templates + the Android build template in the Godot editor
+   (§4), then **Project → Export → Android** → signed `.aab`.
+2. **Privacy policy URL.** Put a real support email in
+   `store/privacy-policy-template.md` (or `docs/PRIVACY_POLICY.md`),
+   publish the text at any stable URL (§3).
+3. **Play Console.** Create the app, answer the IARC content-rating
+   questionnaire (exact answers in §5.2d), paste the listing from
+   `store/listing.md` + art from `store/` + screenshots per
+   `store/screenshots-plan.md`, upload the `.aab`, start rollout to Open
+   Testing (§5).
+
+Optional / not blocking: real AppLovin SDK key (§2 — ships fine on the
+no-ad debug stub without it), extra platforms (§6), eyes-on playtest
+(`docs/HANDOFF.md` "HUMAN PLAYTEST SCRIPT v2"), version bump at upload
+time (§7).
+
+### Already done by agents (do NOT redo)
+
+| Area | State | Ref |
+|---|---|---|
+| Code / gameplay / autoloads | GOLD MASTER; headless suite green ×2 | `<gm-hash>`, `f3bd1e3` |
+| `tools/qa_sim/headless_suite` verification gate | new; 12 autoloads, 11 districts, 5 endings, save/load, combat | `f3bd1e3` |
+| i18n — 13 locales, every user-facing string | 1061 keys × 13, 0 MISSING at runtime | `a712dd1`, prior |
+| Content — 11/11 districts, 88 lore notes | packed, wired, translated | prior waves |
+| Store kit — listing, changelog, screenshots plan, privacy template | present in `store/` | PR #8 |
+| Trailer / press kit — 5 key-art masters, edit plan, reviewer email | present in `store/trailer/`, `store/press-kit.md` | `6fea56e` |
+| Merged `arena/*` branches cleaned up | `01a08729`, `01a08b05` deleted; 2 held per owner | this pass |
+
+`docs/RELEASE_FINAL.md` still has platform-specific detail (Yandex Games,
+itch.io, Steam) not repeated here.
 
 Run this before anything else, every time:
 ```bash
-bash tools/check.sh
+bash tools/check.sh --static && GODOT=/path/to/godot tools/qa_sim/headless_suite
 ```
-Must be fully green. If it isn't, stop and fix that first — don't sign or
+Both must be green. If not, stop and fix that first — don't sign or
 upload a build off a red gate.
 
 ---

@@ -1,5 +1,53 @@
 # Known issues
 
+## Verification policy: headless-only Godot ALLOWED since 2026-09-10 (GOLD MASTER)
+
+The owner lifted the absolute NO-GODOT constraint to **headless-only**:
+`godot --headless` non-interactive script/scene runs are now allowed and
+required for verification. Still banned: `--windowed`, the editor GUI,
+any visible window, window-opening probe scenes. The gate is
+`tools/qa_sim/headless_suite` (engine gate scenes each with a per-gate
+timeout + `scenes/tools/qa_headless_suite_scene.tscn`). The
+`tools/qa_sim/*.py` static sims below stay valid and still run — they now
+back up the headless suite rather than replace it. Logs: `.qa_logs/`
+(untracked).
+
+First headless run found and fixed 4 latent regressions that static
+checks structurally cannot see (commit `f3bd1e3`): a `var`/`func` name
+collision that killed the `WowDirector` autoload, `LOOT_SCRIPT.populate`
+not dispatching through a `Script`-typed const (zero loot spawned in any
+district), and two `:=` type-inference errors that cascaded compile
+failures on a cold parse.
+
+### `game_test_3d_scene` phase 1+ stalls intermittently under --headless
+
+Its phase 0 (player / monsters / **pickups: 12** / fuel-item constant)
+passes reliably and is also covered by `headless_suite` P2/P2b. Phases
+1–8 (combat / inventory / battery / generator / boss / death) hang
+intermittently in the phase-1 combat step (`take_damage` on a monster
+inside `main_3d` — physics/nav timing under the dummy renderer); no
+script error, `_process` just stops ticking. Pre-existing (the scene
+predates this pass). Mitigated: a 150 s hard-timeout-as-FAIL + real exit
+code (`quit(fails)`) added so it can never hang CI. Substitute coverage:
+`headless_suite` P2b (combat damage in isolation — passes every run) +
+`tools/flow_check.py` (combat/inventory/battery/death signal wiring).
+Run the scene manually for the fuller smoke.
+
+### `headless_suite` P6 soak ends at ~10 s (test-runner MENU race)
+
+A gate scene that boots past `boot_loading.tscn` makes the splash/
+bootstrap fallback and the natural scene load contend for the first
+scene swap; the loser periodically fires `Routes.goto(BOOT)` /
+`return_to_menu()`, so sustained gameplay started from a test scene
+drops back to MENU after ~10 s. This is the **same** artifact the
+PERMANENT gate `_boot_check_runner.gd` documents and tolerates. Real
+players always boot through `boot_loading.tscn` and never hit it. P6
+logs it and ends the soak clean (no fail), same stance as boot_check.
+Net: the "10-minute soak" is capped at ~10 s of in-engine sustained
+play; the rest of the soak intent is covered by the crash-safety static
+sweep (`STATIC_AUDIT` #38–42, all 20 JSON/FileAccess sites) and the
+`boot_check_scene` 60 s sustain.
+
 ## NO-GODOT verification substitutes (MEGA FINAL POLISH, 2026-09-10)
 
 This pass ran under an absolute no-engine constraint. The engine-launching

@@ -21,6 +21,61 @@ in-scope-only PR per `ARENA_NEXT_PROMPT.md`'s protocol. `arena/01a080ba-
 igra` (suburbs district content, PR #1) was merged and deleted
 2026-09-08 — see decisions log below.
 
+## GOLD MASTER — declared 2026-09-10 (headless hardening pass)
+
+**`origin/main` is GOLD MASTER at `<gm-hash>`.** FINAL RC (below) plus a
+headless verification pass after the owner lifted NO-GODOT to
+headless-only (`godot --headless` script/scene runs; still no
+`--windowed`/editor/visible window). New gate: `tools/qa_sim/headless_suite`.
+
+**Fixed (4 latent regressions only a real engine run could surface,
+`f3bd1e3`):**
+- `wow_director.gd` — `var _flash` / `func _flash()` name collision →
+  parse error → the `WowDirector` autoload never loaded → PHASE-D viral
+  hooks (shake/flash at first-light/cascade/victory) were dead. Renamed
+  the func.
+- `district_scene_factory.gd` — `LOOT_SCRIPT.populate()` through a
+  `Script`-typed const does not dispatch to the static func in 4.7 →
+  **zero loot / repair-parts / documents spawned in any district** (grid
+  unwinnable, flashlight un-refuelable). Now calls via `class_name
+  DistrictLoot`. `game_test_3d` reports `pickups spawned: 12` (was 0).
+- `district_loot.gd`, `streetlight_3d.gd` — `:=` on an untyped expression
+  → "Cannot infer the type" SCRIPT ERROR, cascading compile failures on a
+  cold parse. Both vars given explicit types.
+- `_game_test_3d.gd` — never propagated failures (`quit()` == 0) and could
+  hang forever; added a 150 s hard-timeout-as-FAIL and `quit(fails)`.
+
+**Housekeeping:** merged remote branches `arena/01a08729-igra` and
+`arena/01a08b05-igra` deleted; `arena/019ffbd0-igra` and
+`arena/01a07b1c-igra` held (owner decision, `KNOWN_ISSUES.md`).
+
+**Headless suite result (green twice consecutively):**
+`headless_suite` = 11 engine gate scenes (per-gate timeout) + the
+scenario driver: P0 all 12 autoloads load · P1 New Game → player · P2 all
+11 district scenes instantiate + `DistrictLoot.populate()` > 0 · P2b
+combat damage · P3 save/load round-trip with mid-load language switch ·
+P4 all 5 endings fire + resolve to localized strings · P5 **1061 en keys
+× 13 locales + 10 surface keys, 0 MISSING at runtime** · P6 soak (clean;
+ends ~10 s on the pre-existing test-runner MENU race — `KNOWN_ISSUES.md`).
+
+**Perf (Task 4) — headless renderer reports `draw_calls=0` (dummy), so
+the static estimate stands; owner still needs one `perf_check_scene.tscn
+--windowed` run for the real number):**
+
+| D1 (suburbs) metric | before this pass | after this pass | note |
+|---|---|---|---|
+| loot pickups actually spawned | **0** (populate() broke) | **12** | `game_test_3d` headless |
+| structural mesh/2D draw calls (est.) | ~38 | ~38 | unchanged — loot was already in the estimate |
+| real-time lights sent to shader (est.) | ~16 (no pickup lights existed) | **18** (2 pickup lights in fade range) | `drawcall_estimate.py`; distance-fade caps lamp+pickup lights |
+| measured baseline (last `--windowed`) | 234 | pending owner run | D11 < 350 target already met at 234 |
+
+The loot fix *adds* 2 pickup lights/frame vs the broken state but lands
+exactly on the `drawcall_estimate.py` model's "AFTER 18" figure — the
+distance-fade guard (`streetlight_3d.gd`, pickup lights) still holds it
+69 % below the naive 58.
+
+---
+
 ## RELEASE CANDIDATE v3 — FINAL RC, declared 2026-09-10 (ARENA MEGA FINAL PASS merged)
 
 **`origin/main` is FINAL RC (`a712dd1`).** RC v2 code polish (`e65e1e4`)

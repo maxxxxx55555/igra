@@ -1,5 +1,61 @@
 # Handoff
 
+## GOLD MASTER — 2026-09-10 (headless hardening pass)
+
+`origin/main` is **GOLD MASTER** at `<gm-hash>`. FINAL RC (below) plus a
+real-engine verification pass: the owner lifted NO-GODOT to
+**headless-only** (`godot --headless` script/scene runs; still no
+`--windowed`, editor, or visible window). New gate:
+`tools/qa_sim/headless_suite` — ran **green twice consecutively**.
+
+**The first headless run paid for itself immediately — 4 latent
+regressions that static analysis structurally cannot catch (`f3bd1e3`):**
+1. `wow_director.gd` `var _flash`/`func _flash()` name collision → the
+   `WowDirector` autoload never loaded → the PHASE-D "viral hooks"
+   (screen shake + flash at first-light / grid-cascade / victory) were
+   **completely dead since they shipped**. Renamed the function.
+2. `district_scene_factory.gd` called `LOOT_SCRIPT.populate()` through a
+   `Script`-typed const, which does not dispatch to the static function
+   in Godot 4.7 → **no loot, no repair parts, no documents spawned in any
+   district** — the grid was literally unwinnable and the flashlight
+   un-refuelable in the built game. Now calls via `class_name
+   DistrictLoot`; `game_test_3d` reports `pickups spawned: 12` (was `0`).
+3. Two `:=` type-inference errors (`district_loot.gd`, `streetlight_3d.gd`)
+   that cascaded compile failures through
+   endings/progress/save/game_manager/power_grid on a cold parse.
+4. `_game_test_3d.gd` never surfaced failures (`quit()` == 0) and could
+   hang forever — added a hard-timeout-as-FAIL and a real exit code.
+
+**Housekeeping:** merged remote branches `arena/01a08729-igra` and
+`arena/01a08b05-igra` deleted. `arena/019ffbd0-igra` and
+`arena/01a07b1c-igra` **held** (owner decision — `KNOWN_ISSUES.md`).
+
+**Headless suite (`tools/qa_sim/headless_suite`, logs `.qa_logs/`):**
+11 engine gate scenes each with a per-gate timeout + a scenario driver —
+P0 12 autoloads load · P1 New Game → player spawns · P2 all 11 district
+scenes instantiate + `DistrictLoot.populate()` > 0 · P2b combat damage ·
+P3 save/load round-trip with a mid-load language switch · P4 all 5
+endings fire and resolve to localized strings · P5 **1061 en keys × 13
+locales + 10 UI-surface keys, 0 MISSING at runtime** · P6 soak (clean).
+Two known, documented, real-player-unaffected test-harness limits remain
+(`game_test_3d` phase-1 combat stall; P6 soak ends ~10 s on the
+boot-race) — both covered by substitutes, see `KNOWN_ISSUES.md`.
+
+**Perf:** headless renderer = dummy = `draw_calls=0`; the
+`drawcall_estimate.py` static model stands (~38 mesh/2D draw calls,
+~18 active lights/frame D1 after distance-fade). The real
+`RENDER_TOTAL_DRAW_CALLS_IN_FRAME` still needs one owner
+`perf_check_scene.tscn --windowed` run. Before/after table: `PLAN.md`
+GOLD MASTER section.
+
+### OWNER TODO (everything else is done — GOLD MASTER on `origin/main`)
+
+1. **Keystore + build:** `keytool -genkey -v -keystore release.keystore -alias tlsrelease -keyalg RSA -keysize 2048 -validity 10000`, put path + passwords in `export_presets.cfg`, install `4.7-stable` export templates + Android build template in the Godot editor, then **Project → Export → Android** → signed `.aab` (`RELEASE_CHECKLIST.md` §1, §4).
+2. **Privacy policy:** put a real support email in `store/privacy-policy-template.md`, publish its text at any stable URL (§3).
+3. **Play Console:** create the app, answer the IARC questionnaire (exact answers in `RELEASE_CHECKLIST.md` §5.2d), paste `store/listing.md` + art from `store/` + screenshots per `store/screenshots-plan.md`, upload the `.aab`, start rollout to Open Testing (§5). Optional: eyes-on run of "HUMAN PLAYTEST SCRIPT v2" below; real AppLovin SDK key (§2 — ships fine without it).
+
+---
+
 ## RELEASE CANDIDATE v3 — FINAL RC, 2026-09-10 (ARENA MEGA FINAL PASS merged)
 
 `origin/main` is **FINAL RC** at `a712dd1`. This is RC v2 (`e65e1e4`,
