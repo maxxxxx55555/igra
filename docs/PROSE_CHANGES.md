@@ -367,3 +367,34 @@ relevant (typography/accents/terminology fix). Priority tags: [C]=CRITICAL, [H]=
 [H] JOURNAL_RELATED | ja | Related: %s | 関連：%s
 [H] confirm_quit | ja | Quit for sure? | 終了しますか？
 [H] tutorial_done | ja | Tutorial complete. Good luck! | チュートリアル完了。頑張れ！
+
+[C] DISTRICT_2_TOAST | ko | District 2 restored! The city breathes again. | 2구역 복구! 도시가 다시 숨쉽니다.
+[H] WORLD_NEWS_METERS_TEXT | ko | Apartment meters on three residential streets record negative draw at night. City Power blames 'faulty drums'. A retired meterman: a backwards meter is not a faulty drum, it is a tap. Something downstream is paying current into the wires, not taking it. | 세 개의 주거 거리에 있는 아파트 계량기들이 밤마다 음의 소비량을 기록한다. 시 전력공사는 '고장 난 드럼' 탓이라고 한다. 은퇴한 계량기 검침원은 말한다: 거꾸로 도는 계량기는 고장 난 드럼이 아니라 무단 탭이다. 하류의 무언가가 전류를 전선에 공급하고 있는 것이지, 가져가는 것이 아니다.
+[H] WORLD_NEWS_ARCHITECT_TEXT | ko | The council denies funding any 'Project Architect' to 'store what the lamps have seen'. The denial names the project by title, which no reporter had used. The program's test feeders, records show, were wired through the hospital sub-feed and the park line. | 의회는 '가로등이 본 것을 저장'하기 위한 어떤 '프로젝트 아키텍트'에도 자금을 지원한 적이 없다고 부인한다. 이 부인 성명은 어떤 기자도 사용한 적 없는 명칭으로 프로젝트를 언급하고 있다. 기록에 따르면 프로그램의 시험 배전선은 병원 보조 배전선과 공원 선로를 통해 배선되어 있었다.
+[H] WORLD_RADIO_03_TEXT | ko | You are restoring what I am taking apart, and we are both right. Every lamp you light feeds the city. Every lamp I carry out starves the thing in the center. Light the districts. I will meet you at the last one with everything I have kept. Forty years of light, engineer. Bring a strong back. | 너는 내가 해체하는 것을 복구하고 있고, 우리 둘 다 옳다. 네가 켜는 모든 등불이 도시를 먹여 살린다. 내가 가지고 나가는 모든 등불은 중심부에 있는 그것을 굶주리게 한다. 구역들을 밝혀라. 내가 지켜온 모든 것을 가지고 마지막 구역에서 너를 만나겠다. 사십 년의 빛이다, 기술자여. 허리 튼튼히 하고 와라.
+[H] WORLD_CHAR_SUPERINTENDENT_TITLE | ko | The Superintendent | 관리소장
+[H] WORLD_FACTION_GRIDCREW_TITLE | ko | The Grid Crew | 전력망 작업조
+[H] WORLD_CHAR_MARAT_TEXT | ko | The engineer who proved one streetlight can burn. The draw doesn't add up, he said. Something is pulling from the grid at night. | 가로등 하나가 계속 탈 수 있음을 증명한 기술자. 소비량이 안 맞는다고 그는 말했다. 밤마다 뭔가가 전력망에서 전기를 끌어내고 있다.
+[H] VICTORY_DISTRICTS | ko | Districts restored | 복구된 구역
+[H] msg_win | ko | All districts powered! | 모든 구역에 전력이 공급되었습니다!
+[H] cb_deut | ko | Deuteranopia | 녹색맹
+[H] cb_prot | ko | Protanopia | 적색맹
+[H] cb_trit | ko | Tritanopia | 청색맹
+[H] enc_title | ko | Creature Encyclopedia | 몬스터 도감
+[H] CHAR_HOLSTER | ko | Holster | 홀스터
+[H] ACH_03_NAME | ko | Beacon | 봉화
+[H] SKILL_INVENTORY_SPACE_NAME | ko | Pack Rat | 수집꾼
+[H] ITEM_SERUM | ko | Dawn serum | 혈청「새벽」
+[H] ITEM_LOCKPICK | ko | Lockpick | 자물쇠 따개
+[H] ITEM_MEDKIT | ko | Medkit | 구급상자
+[H] RADIO_TRANSCRIPT_SOS | ko | ...SOS... we are trapped in the metro. They don't like light. Send batteries and medkits. SOS... | ...SOS... 우리는 지하철에 갇혔습니다. 그들은 빛을 싫어합니다. 배터리와 구급상자를 보내주세요. SOS...
+[H] RADIO_TRANSCRIPT_E1 | ko | ...this is the last broadcast of the city. The lamps are going out one by one. If you hear us - guard the light. | ...이것은 도시의 마지막 방송입니다. 가로등이 하나씩 꺼지고 있습니다. 들리신다면 — 빛을 지켜주세요.
+[H] DIST_INDUSTRIAL | ko | Industrial | 공업 지대
+[H] Q_RESTORE_DISTRICT2_DESC | ko | Bring light back to the industrial district - there is no way downtown without it | 공업 지대에 빛을 되찾아라. 빛 없이는 시내로 갈 수 없다.
+[H] SCR_PROMYSHLENNAYA_ZONA | ko | Industrial Zone | 공업 지대
+[H] DIST_RESIDENTIAL | ko | Residential | 주택가
+[H] Q_REPAIR_DISTRICT1_TITLE | ko | Restart the residential substation | 주택가 변전소를 재가동하라
+[H] Q_FIND_ENGINEERS_DESC | ko | Track the engineering crew through the residential sector | 주택가를 지나는 기술진을 추적하라
+[H] SCR_ZHILYE_KVARTALY | ko | Residential | 주택가
+[H] DIST_WAREHOUSES | ko | Warehouses | 창고 단지
+[H] LORE_SUBURBS_03_TEXT | ko | "RESIDENTS OF THE SUBURBAN DISTRICT: proceed in an orderly fashion to the collection point at the central arena. Bring documents and one bag per person. Do not remain outdoors after dark." The bottom edge is torn off — the date and the issuing office are missing. | "교외 주민 여러분: 중앙 아레나의 집결지로 질서 있게 이동하십시오. 서류와 1인당 가방 하나를 지참하십시오. 어두워진 뒤에는 실외에 머물지 마십시오." 하단이 찢겨 나가 날짜와 발행 기관이 없다.
