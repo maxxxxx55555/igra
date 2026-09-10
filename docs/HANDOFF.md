@@ -2,7 +2,7 @@
 
 ## GOLD MASTER v3 — ABSOLUTE FINAL, 2026-09-10 (native-QA locale pass + final audio + shot plan)
 
-`origin/main` is **GOLD MASTER v3** at `<gm3-hash>`. GOLD MASTER v2 (below)
+`origin/main` is **GOLD MASTER v3** at `ec68d42`. GOLD MASTER v2 (below)
 plus one Arena branch merged (`arena/01a08c02` → `b4a04db`, `--no-ff`,
 deleted) with two validated payloads:
 

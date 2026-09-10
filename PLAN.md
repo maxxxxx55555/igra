@@ -23,7 +23,7 @@ igra` (suburbs district content, PR #1) was merged and deleted
 
 ## GOLD MASTER v3 — ABSOLUTE FINAL, declared 2026-09-10 (native-QA locale pass + final audio + shot plan)
 
-**`origin/main` is GOLD MASTER v3 at `<gm3-hash>`.** GOLD MASTER v2 (below)
+**`origin/main` is GOLD MASTER v3 at `ec68d42`.** GOLD MASTER v2 (below)
 plus one Arena branch (`arena/01a08c02`, merged `--no-ff` `b4a04db`,
 deleted) carrying two validated payloads:
 

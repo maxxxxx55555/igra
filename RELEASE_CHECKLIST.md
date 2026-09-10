@@ -35,7 +35,7 @@ draw-call number. Full gap list: `docs/GAP_TO_IDEAL.md`.
 
 | Area | State | Ref |
 |---|---|---|
-| Code / gameplay / autoloads | GOLD MASTER v3; headless suite green ×2 | `<gm3-hash>`, `2101311`, `f3bd1e3` |
+| Code / gameplay / autoloads | GOLD MASTER v3; headless suite green ×2 | `ec68d42`, `2101311`, `f3bd1e3` |
 | `tools/qa_sim/headless_suite` verification gate | 12 autoloads · 11 districts + loot · 5 endings · save/load+lang · combat · 1061 keys ×13 at runtime · soak | `f3bd1e3` |
 | District-load / pickup engine errors | fixed — rebuild deferred out of the physics signal (0 "Function blocked" errors) | `2101311` |
 | i18n — 13 locales, every user-facing string | 1061 keys × 13, 0 MISSING at runtime | `a712dd1`, prior |
