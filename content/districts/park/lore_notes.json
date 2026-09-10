@@ -1,155 +1,155 @@
 {
- "district": "park",
- "version": 1,
- "_world_refs_contract": "Notes reference world-bible entries by id only (content/world/*); no copied text. See docs/CONTENT_WORLD_BIBLE.md.",
- "notes": [
-  {
-   "id": "park_note_01",
-   "item_type": "document",
-   "i18n_keys": {
-    "title": "LORE_PARK_01_TITLE",
-    "text": "LORE_PARK_01_TEXT"
-   },
-   "en": {
-    "title": "The Keeper's Manifesto, Posted Copy",
-    "text": "A broadsheet nailed to the bandstand rail, printed from a hand stencil: \"WHILE ONE LANTERN BURNS, THE CITY IS ALIVE. I KEPT THEM FOR FORTY YEARS. NOW I KEEP THEM BACKWARDS.\" Below, a wax seal of a streetlight in a circle. The nails are new. Someone still prints these."
-   },
-   "location_hint": "Bandstand rail, center-east lawn (z_bandstand)",
-   "min_stage": 0,
-   "weight": 100,
-   "world_refs": [
-    "char_keeper",
-    "faction_keepers"
-   ]
-  },
-  {
-   "id": "park_note_02",
-   "item_type": "photo",
-   "i18n_keys": {
-    "title": "LORE_PARK_02_TITLE",
-    "text": "LORE_PARK_02_TEXT"
-   },
-   "en": {
-    "title": "Photo: The Carousel in Summer",
-    "text": "The same carousel that rots at the north lawn, but painted and spinning, horses mid-gallop, a queue of children two rows deep. Every lamp post around it is lit for the evening ride. On the back: \"Last summer. The lights stayed on till midnight by order of the park office.\" Nobody in the queue knew the order would never be given again."
-   },
-   "location_hint": "Ticket booth window of the dead carousel (z_carousel)",
-   "min_stage": 0,
-   "weight": 90,
-   "world_refs": []
-  },
-  {
-   "id": "park_note_03",
-   "item_type": "audio_log",
-   "i18n_keys": {
-    "title": "LORE_PARK_03_TITLE",
-    "text": "LORE_PARK_03_TEXT"
-   },
-   "en": {
-    "title": "Recorder: Grid Crew Log 4",
-    "text": "\"We cut through the park and the trees went quiet. Marat said don't run, it hunts by the sound of running. We walked an hour in mud and it still found Petrov at the pond edge. Took him toward the water without a sound. We left the cache at the keeper's shed like the old man's notes said. If you're replaying this: the shed key is in the boat house bin. And walk. Always walk.\""
-   },
-   "location_hint": "Hollow stump on the west alley (z_alley_bare)",
-   "min_stage": 2,
-   "weight": 80,
-   "world_refs": [
-    "char_marat",
-    "char_grid_crew_recorder",
-    "faction_grid_crew"
-   ]
-  },
-  {
-   "id": "park_note_04",
-   "item_type": "document",
-   "i18n_keys": {
-    "title": "LORE_PARK_04_TITLE",
-    "text": "LORE_PARK_04_TEXT"
-   },
-   "en": {
-    "title": "Park Closure Notice",
-    "text": "CITY PARKS OFFICE. \"The central park is closed to visitors until further notice following the repeated complaints about the trees. The trees do not 'lean toward the lamps to listen'. Trees do not listen. Please stop feeding them.\" The stamp is from three weeks before the blackout."
-   },
-   "location_hint": "West gate fence, entry arch (z_gate_west)",
-   "min_stage": 0,
-   "weight": 95,
-   "world_refs": [
-    "faction_city_power"
-   ]
-  },
-  {
-   "id": "park_note_05",
-   "item_type": "photo",
-   "i18n_keys": {
-    "title": "LORE_PARK_05_TITLE",
-    "text": "LORE_PARK_05_TEXT"
-   },
-   "en": {
-    "title": "Photo: The Feeder",
-    "text": "A long-exposure night shot, blurred: a stooped figure at the pond edge, a bowl of food on the ice, and three pale shapes keeping distance just outside the flashlight's ring. On the back, in the same careful hand as house 24: \"They still come when I call. They remember their names. They just can't say them.\""
-   },
-   "location_hint": "Boat house door frame at the pond (z_pond)",
-   "min_stage": 1,
-   "weight": 75,
-   "world_refs": [],
-   "_audit_note": "world_refs cleared by the 2026-09-08 pipeline audit: char_babka_manya reveals at residential DARK, but park unlocks from suburbs only, so a player can read this note without residential ever being visited. The prose keeps the house-24 hint; the journal unlock does not fire early."
-  },
-  {
-   "id": "park_note_06",
-   "item_type": "document",
-   "i18n_keys": {
-    "title": "LORE_PARK_06_TITLE",
-    "text": "LORE_PARK_06_TEXT"
-   },
-   "en": {
-    "title": "The Keeper's Work Orders",
-    "text": "A bundle of work orders, forty years of them, rubber-banded: every streetlight in the city, logged by hand. The last page is dated after the blackout: \"Order 14,208. Dismantle lamp 219, suburbs. Its transformer goes to the center. I kept the light for forty years. Now I keep it backwards — every lamp I take apart is a lamp they cannot drink. Finish the grid without me.\""
-   },
-   "location_hint": "Work bench inside the keeper's shed (z_keeper_shed)",
-   "min_stage": 1,
-   "weight": 85,
-   "world_refs": [
-    "char_keeper",
-    "faction_keepers",
-    "hist_keeper_reversal"
-   ]
-  },
-  {
-   "id": "park_note_07",
-   "item_type": "audio_log",
-   "i18n_keys": {
-    "title": "LORE_PARK_07_TITLE",
-    "text": "LORE_PARK_07_TEXT"
-   },
-   "en": {
-    "title": "Radio: 'Go to the Power Station'",
-    "text": "A captured broadcast, looped on the shed's shortwave: a calm voice under static, neither young nor old: \"...the grid can still be brought back. District by district, lamp by lamp. Go to the power station. The one who kept the light will meet you at the light.\" The loop ends with three soft clicks, like a streetlight relay. The voice belongs to whoever pressed the seal."
-   },
-   "location_hint": "Shortwave radio on the keeper's work bench (z_keeper_shed)",
-   "min_stage": 0,
-   "weight": 90,
-   "world_refs": [
-    "char_radio_voice",
-    "radio_01_power_station"
-   ]
-  },
-  {
-   "id": "park_note_08",
-   "item_type": "document",
-   "i18n_keys": {
-    "title": "LORE_PARK_08_TITLE",
-    "text": "LORE_PARK_08_TEXT"
-   },
-   "en": {
-    "title": "Note at the Chess Tables",
-    "text": "A folded paper under a mid-game chess board, white to move: \"He told us the lamps remember us. That every light he ever kept keeps a little of whoever stood under it. I believed him when the lights were on. I believe him more now, in the dark. I'm leaving before they go out completely. Take the white pieces. I won't be back.\""
-   },
-   "location_hint": "Chess pavilion tables, south lawn (z_chess_grove)",
-   "min_stage": 1,
-   "weight": 65,
-   "world_refs": [
-    "char_keeper"
-   ]
-  }
- ],
- "_audit_2026_09_08": "park_note_05 world_refs cleared (residential-gated id in a district that does not guarantee residential). See docs/CONTENT_PIPELINE_AUDIT.md."
+  "district": "park",
+  "version": 1,
+  "_world_refs_contract": "Notes reference world-bible entries by id only (content/world/*); no copied text. See docs/CONTENT_WORLD_BIBLE.md.",
+  "notes": [
+    {
+      "id": "park_note_01",
+      "item_type": "document",
+      "i18n_keys": {
+        "title": "LORE_PARK_01_TITLE",
+        "text": "LORE_PARK_01_TEXT"
+      },
+      "en": {
+        "title": "The Keeper's Manifesto, Posted Copy",
+        "text": "A broadsheet nailed to the bandstand rail, printed from a hand stencil: \"WHILE ONE LANTERN BURNS, THE CITY IS ALIVE. I KEPT THEM FOR FORTY YEARS. NOW I KEEP THEM BACKWARDS.\" Below, a wax seal of a streetlight in a circle. The nails are new. Someone still prints these."
+      },
+      "location_hint": "Bandstand rail, center-east lawn (z_bandstand)",
+      "min_stage": 0,
+      "weight": 100,
+      "world_refs": [
+        "char_keeper",
+        "faction_keepers"
+      ]
+    },
+    {
+      "id": "park_note_02",
+      "item_type": "photo",
+      "i18n_keys": {
+        "title": "LORE_PARK_02_TITLE",
+        "text": "LORE_PARK_02_TEXT"
+      },
+      "en": {
+        "title": "Photo: The Carousel in Summer",
+        "text": "The same carousel that rots at the north lawn, but painted and spinning, horses mid-gallop, a queue of children two rows deep. Every lamp post around it is lit for the evening ride. On the back: \"Last summer. The lights stayed on till midnight by order of the park office.\" Nobody in the queue knew the order would never be given again."
+      },
+      "location_hint": "Ticket booth window of the dead carousel (z_carousel)",
+      "min_stage": 0,
+      "weight": 90,
+      "world_refs": []
+    },
+    {
+      "id": "park_note_03",
+      "item_type": "audio_log",
+      "i18n_keys": {
+        "title": "LORE_PARK_03_TITLE",
+        "text": "LORE_PARK_03_TEXT"
+      },
+      "en": {
+        "title": "Recorder: Grid Crew Log 4",
+        "text": "\"We cut through the park and the trees went quiet. Marat said don't run, it hunts by the sound of running. We walked an hour in mud and it still found Petrov at the pond edge. Took him toward the water without a sound. We left the cache at the keeper's shed like the old man's notes said. If you're replaying this: the shed key is in the boat house bin. And walk. Always walk.\""
+      },
+      "location_hint": "Hollow stump on the west alley (z_alley_bare)",
+      "min_stage": 2,
+      "weight": 80,
+      "world_refs": [
+        "char_marat",
+        "char_grid_crew_recorder",
+        "faction_grid_crew"
+      ]
+    },
+    {
+      "id": "park_note_04",
+      "item_type": "document",
+      "i18n_keys": {
+        "title": "LORE_PARK_04_TITLE",
+        "text": "LORE_PARK_04_TEXT"
+      },
+      "en": {
+        "title": "Park Closure Notice",
+        "text": "CITY PARKS OFFICE. \"The central park is closed to visitors until further notice following the repeated complaints about the trees. The trees do not 'lean toward the lamps to listen'. Trees do not listen. Please stop feeding them.\" The stamp is from three weeks before the blackout."
+      },
+      "location_hint": "West gate fence, entry arch (z_gate_west)",
+      "min_stage": 0,
+      "weight": 95,
+      "world_refs": [
+        "faction_city_power"
+      ]
+    },
+    {
+      "id": "park_note_05",
+      "item_type": "photo",
+      "i18n_keys": {
+        "title": "LORE_PARK_05_TITLE",
+        "text": "LORE_PARK_05_TEXT"
+      },
+      "en": {
+        "title": "Photo: The Feeder",
+        "text": "A long-exposure night shot, blurred: a stooped figure at the pond edge, a bowl of food on the ice, and three pale shapes keeping distance just outside the flashlight's ring. On the back, in the same careful hand as house 24: \"They still come when I call. They remember their names. They just can't say them.\""
+      },
+      "location_hint": "Boat house door frame at the pond (z_pond)",
+      "min_stage": 1,
+      "weight": 75,
+      "world_refs": [],
+      "_audit_note": "world_refs cleared by the 2026-09-08 pipeline audit: char_babka_manya reveals at residential DARK, but park unlocks from suburbs only, so a player can read this note without residential ever being visited. The prose keeps the house-24 hint; the journal unlock does not fire early."
+    },
+    {
+      "id": "park_note_06",
+      "item_type": "document",
+      "i18n_keys": {
+        "title": "LORE_PARK_06_TITLE",
+        "text": "LORE_PARK_06_TEXT"
+      },
+      "en": {
+        "title": "The Keeper's Work Orders",
+        "text": "A bundle of work orders, forty years of them, rubber-banded: every streetlight in the city, logged by hand. The last page is dated after the blackout: \"Order 14,208. Dismantle lamp 219, suburbs. Its transformer goes to the center. I kept the light for forty years. Now I keep it backwards — every lamp I take apart is a lamp they cannot drink. Finish the grid without me.\""
+      },
+      "location_hint": "Work bench inside the keeper's shed (z_keeper_shed)",
+      "min_stage": 1,
+      "weight": 85,
+      "world_refs": [
+        "char_keeper",
+        "faction_keepers",
+        "hist_keeper_reversal"
+      ]
+    },
+    {
+      "id": "park_note_07",
+      "item_type": "audio_log",
+      "i18n_keys": {
+        "title": "LORE_PARK_07_TITLE",
+        "text": "LORE_PARK_07_TEXT"
+      },
+      "en": {
+        "title": "Radio: 'Go to the Power Station'",
+        "text": "A captured broadcast, looped on the shed's shortwave: a calm voice under static, neither young nor old: \"...the grid can still be brought back. District by district, lamp by lamp. Go to the power station. The one who kept the light will meet you at the light.\" The loop ends with three soft clicks, like a streetlight relay. The voice belongs to whoever pressed the seal."
+      },
+      "location_hint": "Shortwave radio on the keeper's work bench (z_keeper_shed)",
+      "min_stage": 0,
+      "weight": 90,
+      "world_refs": [
+        "char_radio_voice",
+        "radio_01_power_station"
+      ]
+    },
+    {
+      "id": "park_note_08",
+      "item_type": "document",
+      "i18n_keys": {
+        "title": "LORE_PARK_08_TITLE",
+        "text": "LORE_PARK_08_TEXT"
+      },
+      "en": {
+        "title": "Note at the Chess Tables",
+        "text": "A folded paper under a mid-game chess board, white to move: \"He told us the lamps remember us. That every light he ever kept keeps a little of whoever stood under it. I believed him when the lights were on. I believe him more now, in the dark. I'm leaving before they go out completely. Take the white pieces. I won't be back.\""
+      },
+      "location_hint": "Chess pavilion tables, south lawn (z_chess_grove)",
+      "min_stage": 1,
+      "weight": 65,
+      "world_refs": [
+        "char_keeper"
+      ]
+    }
+  ],
+  "_audit_2026_09_08": "park_note_05 world_refs cleared (residential-gated id in a district that does not guarantee residential). See docs/CONTENT_PIPELINE_AUDIT.md."
 }

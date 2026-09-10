@@ -45,9 +45,10 @@ the three surgical lines below. Structural properties untouched (ids, i18n keys,
 
 - `LORE_PARK_02_TEXT`: flat photo-caption ending → quotable kicker ("Nobody in the
   queue knew the order would never be given again.").
-- `LORE_PARK_07_TEXT`: canon/tone fix — "The voice is the same one as the manifesto's
-  seal" mixed voice with seal and invoked a "manifesto" no note names; now "The voice
-  belongs to whoever pressed the seal." (Keeper's streetlight-in-circle seal).
+- `LORE_PARK_07_TEXT`: tone fix — "The voice is the same one as the manifesto's
+  seal" equated a voice with a wax seal; now "The voice belongs to whoever pressed
+  the seal." (Keeper's streetlight-in-circle seal, cf. `LORE_PARK_01_TITLE`
+  "The Keeper's Manifesto, Posted Copy" — the manifesto reference itself was canon).
 - `LORE_POLICE_05_TEXT`: flat clerk-log ending → in-voice quotable kicker ("The
   property book has never cleared six items faster.").
 
