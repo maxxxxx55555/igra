@@ -231,6 +231,25 @@ technique for animated/pickup meshes — neither is a small tweak.
 Documenting rather than guessing further, per this project's honesty
 rule; see `docs/PRODUCTION_BIBLE.md` §7 and `PLAN.md` item 1.
 
+**RC final pass (2026-09-10) — WON'T-FIX for RC ("D1 perf, code-side
+only").** No draw-call reduction here is simultaneously code-only,
+behavior-preserving, *and* verifiable without a Godot Visual Profiler
+run (headless reports `draw_calls=0`). The shippable budget — D11 < 350,
+the busiest district — is met (234) and hard-gated by
+`perf_check_scene.tscn`. Candidates and why each is deferred, not done
+blind: (a) MultiMesh-batching the 12 pickup / 6 monster meshes breaks
+per-instance bob/rotate animation and individual removal — the same
+regression class that broke streetlight reactivity when rushed once
+already; (b) distance-culling far pickups changes visible behavior
+(pop-in); (c) the single most promising code-side lever for a
+Godot-enabled pass: **each `scenes/pickups/item_pickup_3d.tscn` carries
+its own `OmniLight3D` glow** (12 live dynamic omni lights in D1) — the
+box mesh is already self-lit via an emissive material, so the cast-glow
+light is a readability nicety that could be swapped for a cheaper
+`VisibleOnScreenNotifier3D`-gated shared light or dropped, but that is a
+visual-quality call that needs a Profiler before/after, not a static
+guess.
+
 ## boot_check_scene.tscn can see a spurious PLAYING -> MENU during its
 ## sustain phase — test-harness artifact, not a real-game bug (tolerated,
 ## logged as WARN, does not fail the gate)
