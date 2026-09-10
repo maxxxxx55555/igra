@@ -5,6 +5,34 @@ in-game verification — a static-only pass can't play the game itself.
 
 ---
 
+## Batch 8 (2026-09-10) — FINAL RC: Arena mega final pass (PR #9)
+
+- **Three lore notes now end on a quotable line** (in every one of the
+  13 languages, not just English):
+  - *"Photo: The Carousel in Summer"* (Park) — adds: "Nobody in the
+    queue knew the order would never be given again."
+  - *"Radio: 'Go to the Power Station'"* (Park) — last line changed from
+    "The voice is the same one as the manifesto's seal" to "The voice
+    belongs to whoever pressed the seal." (fixes a mixed metaphor;
+    points at the Keeper's seal, which is already canon).
+  - *"Photo: Locker 12, Seized Lamps"* (Police) — adds: "The property
+    book has never cleared six items faster."
+- **No gameplay, stats, ids or save format changed** — text only.
+- **Store / marketing kit finished (not in-game):** `store/trailer/` now
+  holds 5 ship-ready key-art masters (3 wow-moment stills, 1 vertical
+  Shorts frame, 1 press-kit header), plus `store/trailer.md` (trailer
+  edit plan), `store/press-kit.md` (fact sheet + reviewer email), and
+  `store/listing.md` polish. Nothing here ships in the APK; it's for the
+  Play Store listing, the trailer editor, and press outreach.
+
+### HUMAN CHECK (1 min, optional)
+Open the Journal in-game, set the language to a few different locales,
+and read those three notes (Park carousel photo, Park radio, Police
+locker photo). Each should end on the new closing sentence, in-language,
+with no clipped text.
+
+---
+
 ## Batch 7 (2026-09-10) — RC final pass (STATIC_AUDIT close-out + PR #8 merge)
 
 - **District-restore notification is no longer doubled.** Restoring a

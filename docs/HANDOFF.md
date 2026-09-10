@@ -1,5 +1,60 @@
 # Handoff
 
+## RELEASE CANDIDATE v3 — FINAL RC, 2026-09-10 (ARENA MEGA FINAL PASS merged)
+
+`origin/main` is **FINAL RC** at `a712dd1`. This is RC v2 (`e65e1e4`,
+code polish — section below) plus Arena's last content/store pass merged
+and its prose re-synced into i18n. Nothing code-side is left that can be
+done without the Godot editor, a signing key, a store account, or a
+build toolchain.
+
+**What landed since RC v2:**
+- **Merged Arena PR #9** (`6fea56e`, `--no-ff`). Scope-checked to Arena
+  zones only — `content/**`, `store/**`, and four Arena-owned docs
+  (`ASSET_LICENSES`, `AUDIO_COVERAGE`, `CONTENT_PIPELINE_AUDIT`,
+  `PROSE_CHANGES`). No code/tool/scene/data/locale/frozen-doc change.
+- **`store/trailer/` kit** — 5 palette-locked key-art masters
+  (`still_first_light`/`still_first_ending`/`still_grid_cascade`
+  1920×1080, `shorts_silhouette` 1080×1920, `presskit` 1600×900),
+  dimensions + non-pure-black/white verified statically (IHDR read +
+  per-channel extrema clamped to `(10,240)`). `store/trailer.md`,
+  `store/press-kit.md`, `store/trailer/README.md`, `store/listing.md`
+  polish. Every binary has an `ASSET_LICENSES.md` entry.
+- **3 lore-note prose kickers** (`LORE_PARK_02_TEXT`, `LORE_PARK_07_TEXT`,
+  `LORE_POLICE_05_TEXT`) per `docs/PROSE_CHANGES.md` "Changed rows (mega
+  final pass)". ids / keys / `min_stage` / stages untouched.
+- **i18n re-sync** (`a712dd1`, code's zone) — those 3 keys updated in all
+  13 `data/i18n/*.json`: en to the authoritative rows, the added/changed
+  sentence translated in-language for the other 12. Placeholder parity
+  held; `i18n_audit.py` `MISSING: 0`.
+- **Audio** — ladder re-run, all lit-bed gaps kept spec-only, no binary
+  fabricated (`AUDIO_COVERAGE.md`).
+- **Content certificate** — `CONTENT_PIPELINE_AUDIT.md` §11: 11/11
+  districts, store kit, ownership — 0 defects.
+
+**Static gates, green after both the merge and the i18n commit** (no
+Godot binary run — NO-GODOT static mode):
+`bash tools/check.sh --static` 10/10 · `python tools/flow_check.py` 53 ·
+`python tools/scene_node_check.py` clean · `python tools/i18n_audit.py`
+`MISSING: 0` · all 6 `tools/qa_sim/*.py` PASS.
+
+**Arena branch** `origin/arena/01a08b05-igra` is merged; deleting it
+needs push rights to Arena's namespace this session doesn't have — safe
+for the owner to delete on GitHub.
+
+### Owner next steps (in order)
+1. `git pull --ff-only` on `main` (expect tip `a712dd1`).
+2. Run **HUMAN PLAYTEST SCRIPT v2** below — the single Godot run
+   (≈25–35 min), boot → all 11 districts → all 5 endings → soak. The
+   3 prose kickers surface at playtest line 6 (13-locale Journal check).
+3. Work **`RELEASE_CHECKLIST.md`** top to bottom: release keystore →
+   AppLovin SDK key → publish privacy policy → install export templates
+   → Play Console first upload (store copy from `store/listing.md`,
+   art from `store/`, screenshots per `store/screenshots-plan.md`,
+   trailer per `store/trailer.md` + `store/trailer/`) → version bump.
+
+---
+
 ## RELEASE CANDIDATE v2 — 2026-09-10 (MEGA FINAL POLISH)
 
 `origin/main` is RELEASE CANDIDATE v2. On top of RC v1 (STATIC_AUDIT

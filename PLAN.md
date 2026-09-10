@@ -21,6 +21,38 @@ in-scope-only PR per `ARENA_NEXT_PROMPT.md`'s protocol. `arena/01a080ba-
 igra` (suburbs district content, PR #1) was merged and deleted
 2026-09-08 — see decisions log below.
 
+## RELEASE CANDIDATE v3 — FINAL RC, declared 2026-09-10 (ARENA MEGA FINAL PASS merged)
+
+**`origin/main` is FINAL RC (`a712dd1`).** RC v2 code polish (`e65e1e4`)
+plus Arena's mega final content/store/trailer pass merged clean:
+
+- **Arena PR #9 merged** (`6fea56e`, `git merge --no-ff arena/01a08b05`)
+  — scope-checked to Arena zones only (`content/**`, `store/**`,
+  `docs/{ASSET_LICENSES,AUDIO_COVERAGE,CONTENT_PIPELINE_AUDIT,PROSE_CHANGES}.md`);
+  zero code/tool/scene/data/locale/frozen-doc edits from Arena.
+- **Trailer + press kit** — `store/trailer/` 5 palette-locked masters
+  (3×1920×1080, 1×1080×1920, 1×1600×900; 0 pure `#000`/`#fff` texels,
+  verified via IHDR + per-channel extrema `(10,240)`), `store/trailer.md`
+  index, `store/press-kit.md`, `store/trailer/README.md` use-cases,
+  `store/listing.md` polish. Every binary has an `ASSET_LICENSES.md` entry.
+- **Prose polish** — 3 surgical lore kickers (`LORE_PARK_02_TEXT`,
+  `LORE_PARK_07_TEXT`, `LORE_POLICE_05_TEXT`) per `docs/PROSE_CHANGES.md`
+  "Changed rows (mega final pass)"; ids/keys/stages unchanged.
+- **i18n re-sync** (`a712dd1`, code's zone) — those 3 keys synced across
+  all 13 locales (en → authoritative rows, new sentence translated
+  in-language); placeholder parity held; `i18n_audit.py` `MISSING: 0`.
+- **Audio** — ladder re-run, all lit-bed gaps honestly retained as
+  spec-only, **no binary fabricated** (`AUDIO_COVERAGE.md`).
+- **Content certificate** — `CONTENT_PIPELINE_AUDIT.md` §11 mega-final
+  re-run: 11/11 districts, store kit, ownership all **0 defects**.
+
+Static gates green post-merge and post-i18n: `check.sh --static` 10/10,
+`flow_check.py` 53, `scene_node_check.py` clean, `i18n_audit.py`
+`MISSING: 0`, all 6 `tools/qa_sim/` sims PASS. No Godot binary run.
+Human playtest: `docs/HANDOFF.md` "HUMAN PLAYTEST SCRIPT".
+
+---
+
 ## RELEASE CANDIDATE v2 — declared 2026-09-10 (MEGA FINAL POLISH)
 
 **`origin/main` is RELEASE CANDIDATE v2.** RC v1 (below) plus a deep

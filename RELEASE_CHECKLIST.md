@@ -158,6 +158,12 @@ Do these in order. Play Console won't let you roll out until every
      Trailer Mode hides the HUD).
    - **Tablet screenshots** — optional; reuse the phone set if short on
      time.
+   - **Promo / key art** (not required by Play, used everywhere else) →
+     `store/trailer/` has 5 ship-ready masters (3 wow-moment stills
+     1920×1080, 1 vertical Shorts frame 1080×1920, 1 press-kit header
+     1600×900). `store/trailer.md` is the trailer edit plan (60–90 s cut
+     + 0:30 vertical), `store/trailer/README.md` is per-file use-cases,
+     `store/press-kit.md` is the reviewer fact sheet + outreach email.
 4. **Release → Testing → Open testing → Create new release**:
    - **App bundles** → upload the signed `.aab` from step 4 (the export
      step, above).
