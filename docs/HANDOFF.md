@@ -1,5 +1,54 @@
 # Handoff
 
+## RC FINAL PASS — Phase A complete (2026-09-10, autonomous desktop, NO-GODOT static mode)
+
+**STEP 0:** `git pull --ff-only` — `main` at `db6367d`, the RC crunch was
+not yet on origin, so Phase A ran in full.
+
+**STEP 1 — arena branch triage** (full reasoning: `PLAN.md` 2026-09-10
+decisions-log entry, `KNOWN_ISSUES.md`): three unmerged `arena/*` branches.
+`arena/01a08729-igra` (store kit + `PROSE_CHANGES.md` + `ASSET_LICENSES`,
+based on current HEAD) = the Phase B merge target. `arena/019ffbd0-igra`
+(57 commits, autopilot suite) = superseded, its payload already on `main`
+— hold. `arena/01a07b1c-igra` (9 commits, FPS-weapons layer) =
+out-of-scope, owner decision only — hold.
+
+**Phase A — STATIC_AUDIT close-out.** Every previously DEFERRED/DOCUMENTED/
+OPEN entry now has a final disposition (`docs/STATIC_AUDIT.md` close-out
+table). Real fixes made:
+
+- **i18n toasts** (`b98bc25`..`ea6d935`): `puzzle_system.gd`'s 4
+  `_grant_reward()` toasts and `daily_events_ui.gd`'s title/button/2
+  toasts were hardcoded English — now localized, +9 i18n keys ×13
+  locales, placeholder parity verified. Removed a redundant
+  `_on_district_restored` handler that double-toasted every FULL restore
+  alongside `power_switch.gd`'s already-localized `DISTRICT_RESTORED_TOAST`.
+- **crash-safety** (`43aa164`): guarded `crafting_manager.gd`'s unchecked
+  `JSON.parse_string` → typed-Dictionary assignment (latent null-deref;
+  dead code today). Swept all 20 JSON/`FileAccess` sites — every other
+  one already null- and type-checks.
+- **shipped debug prints** removed from live/dead gameplay code
+  (`district_trigger.gd` per district entry, `photo_mode.gd`,
+  `craft_station.gd`, dead `victory_screen.gd`); deliberate diagnostics
+  (`save_system.gd` recovery logs, `footstep_system.gd` `demo()`) kept.
+- **accessibility** (`43136a1`): added a "Reduce Screen Shake" toggle
+  (vestibular) — one guard at `screen_shake.gd::add_trauma()`, the single
+  trauma choke point; default off, +1 i18n key ×13.
+
+WON'T-FIX (RC), each with reason + GDD ref in `STATIC_AUDIT.md`: #6
+endings (survivor/dark need an owner design call), #7/#8 emissive-windows
+/ PARTIAL (need Godot visual verification), #14/#16/#18/#19/#20/#24
+(unreachable / not behavior-preserving / ownership-zone / needs
+compile-check), #31 puzzle bonus economy (GDD balance call), #32 audio
+one-shot lengths (audio toolchain owner's zone), D1 draw-call gap
+(no code-only + behavior-preserving + statically-verifiable cut exists;
+D11<350 shippable budget met at 234 and gated).
+
+All static gates green after every commit (`tools/check.sh --static`
+10/10, `flow_check.py` 53, `scene_node_check.py` clean, `i18n_audit.py`
+MISSING: 0). `default_bus_layout.tres` untouched. **Next: Phase B** —
+merge `arena/01a08729-igra`, then Phase C (RC declaration).
+
 ## Content pipeline: COMPLETE — 11/11 districts (2026-09-09)
 
 All 11 districts are packed, merged, wired, and translated:
