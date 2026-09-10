@@ -1045,5 +1045,13 @@
   "LORE_POWER_STATION_07_TITLE": "Fita cassete — nomes, ditos em voz alta",
   "LORE_POWER_STATION_07_TEXT": "Uma fita cassete no toca-fitas do acampamento da equipe, carregada dois distritos a leste na própria mochila do narrador. É o lago de Manya, semanas atrás — gelo, vento, e a voz da velha dizendo nomes em voz alta na escuridão, um por um, do jeito que ela os diz pelos alimentados: o carteiro, os gêmeos, o pai de Katya. E então a voz de um membro da equipe, mais baixa, adicionando o único nome que nunca foi dela para dizer: \"Petrov.\" Um longo silêncio. Depois o narrador, mal audível: \"Eles ficam parados. Ela está certa. Eles ficam parados. Estamos levando isso para leste. Se algo no centro ainda se lembra de ter sido um homem, ficará parado ao ouvir seu nome.\"",
   "LORE_POWER_STATION_08_TITLE": "Foto: as torres, primeira luz",
-  "LORE_POWER_STATION_08_TEXT": "Tirada da passarela da torre de resfriamento na primeira noite em que a usina se sustentou: as torres iluminadas por baixo, e no portão abaixo delas a luminária do portão acesa — um poste, o carrinho de mão da equipe ao lado, e uma tigela de comida posta a seus pés. A nota do zelador está presa à impressão: os choupos da usina se inclinaram para a luminária do portão o inverno todo, do jeito que as árvores do parque se inclinavam antes do apagão. A escala de vigília está presa embaixo, última linha: o nome da janela de canto, não riscado — dispensado, luminária mantida. E a letra do narrador no verso, por último: \"Um poste. A prova do banco permanece no centro.\""
+  "LORE_POWER_STATION_08_TEXT": "Tirada da passarela da torre de resfriamento na primeira noite em que a usina se sustentou: as torres iluminadas por baixo, e no portão abaixo delas a luminária do portão acesa — um poste, o carrinho de mão da equipe ao lado, e uma tigela de comida posta a seus pés. A nota do zelador está presa à impressão: os choupos da usina se inclinaram para a luminária do portão o inverno todo, do jeito que as árvores do parque se inclinavam antes do apagão. A escala de vigília está presa embaixo, última linha: o nome da janela de canto, não riscado — dispensado, luminária mantida. E a letra do narrador no verso, por último: \"Um poste. A prova do banco permanece no centro.\"",
+  "DAILY_EVENT_TITLE": "Evento diário",
+  "DAILY_EVENT_START": "Iniciar",
+  "DAILY_EVENT_STARTED": "Evento diário iniciado!",
+  "DAILY_EVENT_ENDED": "Evento diário encerrado!",
+  "DAILY_EVENT_BONUS": "Bônus: x%.1f",
+  "TOAST_COINS_GAINED": "+%s moedas",
+  "TOAST_ITEM_FOUND": "%s encontrado!",
+  "TOAST_REACTOR_ONLINE": "Reator online!"
 }

@@ -18,9 +18,9 @@ func _ready() -> void:
 	LocalizationManager.language_changed.connect(_apply_localization)
 
 func _apply_localization(_lang: Variant = null) -> void:
-	_title.text = "DAILY EVENT"
+	_title.text = LocalizationManager.t("DAILY_EVENT_TITLE")
 	_close_btn.text = LocalizationManager.t("ui_close")
-	_start_btn.text = "START"
+	_start_btn.text = LocalizationManager.t("DAILY_EVENT_START")
 
 func _process(delta: float) -> void:
 	if _event_active:
@@ -39,7 +39,7 @@ func _update_display() -> void:
 	else:
 		_timer_label.text = "00:00"
 		_start_btn.visible = true
-	_bonus_label.text = "BONUS: x%.1f" % _get_bonus()
+	_bonus_label.text = LocalizationManager.tf("DAILY_EVENT_BONUS", [_get_bonus()])
 
 func _get_bonus() -> float:
 	if not SaveSystem:
@@ -51,10 +51,10 @@ func _on_start() -> void:
 	_event_active = true
 	_time_remaining = 3600.0
 	SaveSystem.increment_daily_streak()
-	EventBus.toast_requested.emit("Daily Event started!", "achievement")
+	EventBus.toast_requested.emit(LocalizationManager.t("DAILY_EVENT_STARTED"), "achievement")
 
 func _on_event_end() -> void:
-	EventBus.toast_requested.emit("Daily Event ended!", "achievement")
+	EventBus.toast_requested.emit(LocalizationManager.t("DAILY_EVENT_ENDED"), "achievement")
 
 func _on_close() -> void:
 	queue_free()

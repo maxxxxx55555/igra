@@ -1045,5 +1045,13 @@
   "LORE_POWER_STATION_07_TITLE": "Cassette — Names, Said Out Loud",
   "LORE_POWER_STATION_07_TEXT": "A cassette in the crew camp's player, carried two districts east in the recorder's own pack. It is Manya's pond, weeks ago — ice, wind, and the old woman's voice saying names out loud into the dark, one by one, the way she says them for the fed: the postman, the twins, Katya's father. And then a crewman's voice, quieter, adding the one name that was never hers to say: \"Petrov.\" A long quiet. Then the recorder, barely audible: \"They stand still. She is right. They stand still. We are taking this east. If anything at the center still remembers being a man, it will stand still for its name.\"",
   "LORE_POWER_STATION_08_TITLE": "Photo: The Towers, First Light",
-  "LORE_POWER_STATION_08_TEXT": "Shot from the cooling-tower gantry on the first night the station held: the towers lit from below, and at the gate below them the gate lamp burning — one streetlight, the crew's hand truck beside it, and a bowl of food set at its foot. The groundskeeper's note is pinned to the print: the station poplars have leaned toward the gate lamp all winter, the way the park trees leaned before the blackout. The watch roster is pinned under it, final line: the corner-window name, uncrossed — relieved, lamp kept. And the recorder's hand on the back, last: \"One streetlight. The bench proof stands at the center.\""
+  "LORE_POWER_STATION_08_TEXT": "Shot from the cooling-tower gantry on the first night the station held: the towers lit from below, and at the gate below them the gate lamp burning — one streetlight, the crew's hand truck beside it, and a bowl of food set at its foot. The groundskeeper's note is pinned to the print: the station poplars have leaned toward the gate lamp all winter, the way the park trees leaned before the blackout. The watch roster is pinned under it, final line: the corner-window name, uncrossed — relieved, lamp kept. And the recorder's hand on the back, last: \"One streetlight. The bench proof stands at the center.\"",
+  "DAILY_EVENT_TITLE": "Daily Event",
+  "DAILY_EVENT_START": "Start",
+  "DAILY_EVENT_STARTED": "Daily Event started!",
+  "DAILY_EVENT_ENDED": "Daily Event ended!",
+  "DAILY_EVENT_BONUS": "Bonus: x%.1f",
+  "TOAST_COINS_GAINED": "+%s coins",
+  "TOAST_ITEM_FOUND": "%s found!",
+  "TOAST_REACTOR_ONLINE": "Reactor online!"
 }

@@ -1045,5 +1045,13 @@
   "LORE_POWER_STATION_07_TITLE": "Kaset — İsimler, Yüksek Sesle Söylenen",
   "LORE_POWER_STATION_07_TEXT": "Ekip kampının çalarında bir kaset, anlatıcının kendi çantasında iki semt doğuya taşınmış. Bu Manya'nın göleti, haftalar önce — buz, rüzgar, ve yaşlı kadının karanlığa isimleri yüksek sesle söyleyen sesi, birer birer, beslenenler için söylediği şekilde: postacı, ikizler, Katya'nın babası. Ve sonra bir ekip üyesinin sesi, daha yumuşak, hiç onun söylemesi gerekmeyen o tek ismi ekliyor: \"Petrov.\" Uzun bir sessizlik. Sonra anlatıcı, zar zor duyulur: \"Kımıldamadan duruyorlar. Haklı. Kımıldamadan duruyorlar. Bunu doğuya götürüyoruz. Merkezde bir adam olduğunu hâlâ hatırlayan bir şey varsa, kendi ismi için kımıldamadan duracaktır.\"",
   "LORE_POWER_STATION_08_TITLE": "Fotoğraf: Kuleler, İlk Işık",
-  "LORE_POWER_STATION_08_TEXT": "İstasyonun dayandığı ilk gece soğutma kulesi iskelesinden çekilmiş: kuleler altından aydınlatılmış, ve altlarındaki kapıda kapı lambası yanıyor — bir sokak lambası, yanında ekibin el arabası, ve ayağının dibine konmuş bir kase yemek. Bekçinin notu baskıya iğnelenmiş: istasyon kavakları tüm kış boyunca kapı lambasına doğru eğilmiş, kesintiden önce park ağaçlarının eğildiği gibi. Nöbet listesi altına iğnelenmiş, son satır: köşe penceresinin adı, çizilmemiş — nöbeti devredildi, lamba korundu. Ve arkasındaki anlatıcının eli, en son: \"Bir sokak lambası. Tezgah kanıtı merkezde geçerli.\""
+  "LORE_POWER_STATION_08_TEXT": "İstasyonun dayandığı ilk gece soğutma kulesi iskelesinden çekilmiş: kuleler altından aydınlatılmış, ve altlarındaki kapıda kapı lambası yanıyor — bir sokak lambası, yanında ekibin el arabası, ve ayağının dibine konmuş bir kase yemek. Bekçinin notu baskıya iğnelenmiş: istasyon kavakları tüm kış boyunca kapı lambasına doğru eğilmiş, kesintiden önce park ağaçlarının eğildiği gibi. Nöbet listesi altına iğnelenmiş, son satır: köşe penceresinin adı, çizilmemiş — nöbeti devredildi, lamba korundu. Ve arkasındaki anlatıcının eli, en son: \"Bir sokak lambası. Tezgah kanıtı merkezde geçerli.\"",
+  "DAILY_EVENT_TITLE": "Günlük Etkinlik",
+  "DAILY_EVENT_START": "Başlat",
+  "DAILY_EVENT_STARTED": "Günlük etkinlik başladı!",
+  "DAILY_EVENT_ENDED": "Günlük etkinlik sona erdi!",
+  "DAILY_EVENT_BONUS": "Bonus: x%.1f",
+  "TOAST_COINS_GAINED": "+%s madeni para",
+  "TOAST_ITEM_FOUND": "%s bulundu!",
+  "TOAST_REACTOR_ONLINE": "Reaktör çevrimiçi!"
 }

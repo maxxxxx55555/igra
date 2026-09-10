@@ -1045,5 +1045,13 @@
   "LORE_POWER_STATION_07_TITLE": "Casete — nombres, dichos en voz alta",
   "LORE_POWER_STATION_07_TEXT": "Un casete en el reproductor del campamento de la cuadrilla, llevado dos distritos al este en la propia mochila del narrador. Es el estanque de Manya, semanas atrás — hielo, viento, y la voz de la anciana diciendo nombres en voz alta hacia la oscuridad, uno por uno, como los dice para los alimentados: el cartero, los gemelos, el padre de Katya. Y luego la voz de un miembro de la cuadrilla, más suave, añadiendo el único nombre que nunca fue suyo decir: «Petrov». Un largo silencio. Luego el narrador, apenas audible: «Se quedan quietos. Tiene razón. Se quedan quietos. Nos llevamos esto al este. Si algo en el centro todavía recuerda haber sido un hombre, se quedará quieto por su nombre».",
   "LORE_POWER_STATION_08_TITLE": "Foto: las torres, primera luz",
-  "LORE_POWER_STATION_08_TEXT": "Tomada desde la pasarela de la torre de refrigeración la primera noche en que la central aguantó: las torres iluminadas desde abajo, y en la puerta debajo de ellas la lámpara de la puerta ardiendo — una farola, la carretilla de la cuadrilla junto a ella, y un cuenco de comida puesto a su pie. La nota del guardabosques está sujeta a la copia: los álamos de la central se han inclinado hacia la lámpara de la puerta todo el invierno, como se inclinaban los árboles del parque antes del apagón. La lista de guardia está sujeta debajo, última línea: el nombre de la ventana esquinera, no tachado — relevado, lámpara mantenida. Y la letra del narrador al reverso, por último: «Una farola. La prueba del banco se mantiene en el centro»."
+  "LORE_POWER_STATION_08_TEXT": "Tomada desde la pasarela de la torre de refrigeración la primera noche en que la central aguantó: las torres iluminadas desde abajo, y en la puerta debajo de ellas la lámpara de la puerta ardiendo — una farola, la carretilla de la cuadrilla junto a ella, y un cuenco de comida puesto a su pie. La nota del guardabosques está sujeta a la copia: los álamos de la central se han inclinado hacia la lámpara de la puerta todo el invierno, como se inclinaban los árboles del parque antes del apagón. La lista de guardia está sujeta debajo, última línea: el nombre de la ventana esquinera, no tachado — relevado, lámpara mantenida. Y la letra del narrador al reverso, por último: «Una farola. La prueba del banco se mantiene en el centro».",
+  "DAILY_EVENT_TITLE": "Evento diario",
+  "DAILY_EVENT_START": "Iniciar",
+  "DAILY_EVENT_STARTED": "¡Evento diario iniciado!",
+  "DAILY_EVENT_ENDED": "¡Evento diario finalizado!",
+  "DAILY_EVENT_BONUS": "Bonificación: x%.1f",
+  "TOAST_COINS_GAINED": "+%s monedas",
+  "TOAST_ITEM_FOUND": "¡%s encontrado!",
+  "TOAST_REACTOR_ONLINE": "¡Reactor en línea!"
 }

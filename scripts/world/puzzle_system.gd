@@ -12,7 +12,6 @@ var _puzzle_data: Dictionary = {}
 
 func _ready() -> void:
 	_load_puzzle_data()
-	EventBus.district_restored.connect(_on_district_restored)
 
 func _load_puzzle_data() -> void:
 	_puzzle_data = {
@@ -70,15 +69,18 @@ func _grant_reward(id: String) -> void:
 	match data["reward"]:
 		"coins":
 			CoinWallet.add(int(data["amount"]))
-			EventBus.toast_requested.emit("+" + str(data["amount"]) + " coins", "finding")
+			EventBus.toast_requested.emit(
+				LocalizationManager.tf("TOAST_COINS_GAINED", [data["amount"]]), "finding")
 		"battery":
 			EventBus.item_picked_up.emit(&"battery")
-			EventBus.toast_requested.emit("Battery found!", "finding")
+			EventBus.toast_requested.emit(
+				LocalizationManager.tf("TOAST_ITEM_FOUND", [LocalizationManager.t("ITEM_BATTERY")]), "finding")
 		"medkit":
 			EventBus.item_picked_up.emit(&"medkit")
-			EventBus.toast_requested.emit("Medkit found!", "finding")
+			EventBus.toast_requested.emit(
+				LocalizationManager.tf("TOAST_ITEM_FOUND", [LocalizationManager.t("ITEM_MEDKIT")]), "finding")
 		"ending":
-			EventBus.toast_requested.emit("Reactor online!", "achievement")
+			EventBus.toast_requested.emit(LocalizationManager.t("TOAST_REACTOR_ONLINE"), "achievement")
 
 func _check_all_solved() -> void:
 	var all_done := true
@@ -99,9 +101,6 @@ func get_progress() -> float:
 	if _puzzle_data.is_empty():
 		return 0.0
 	return float(_solved.size()) / float(_puzzle_data.size())
-
-func _on_district_restored(_district_id: StringName, _stage: int) -> void:
-	EventBus.toast_requested.emit("District restored!", "achievement")
 
 func reset() -> void:
 	_solved.clear()

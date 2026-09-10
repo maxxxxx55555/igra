@@ -84,16 +84,36 @@ Status legend: OPEN / FIXED (commit hash) / DOCUMENTED (accepted, not fixed
    implementation is pure one-time randomness in `_ready()`; it never
    reads `PowerGrid`/`district_stage_changed` at all, contradicting its
    own design brief (`docs/CONTENT_DISTRICT_RESIDENTIAL.md`'s "map the
-   7th-floor watching window to PARTIAL-on"). Status: **DOCUMENTED** —
-   see reasoning below (this entry's fix would need per-instance
-   MultiMesh color updates keyed by stage, a real feature, not a
-   one-line wire-up; flagged rather than rushed).
+   7th-floor watching window to PARTIAL-on"). Status: **WON'T-FIX (RC)**
+   — closed 2026-09-10 RC final pass. The *rendering* path is already
+   solved (`scripts/visual/emissive_windows.gd`'s `MultiMeshInstance3D`
+   draws real windows in all 11 `scenes/districts/*.tscn` — see
+   `PLAN.md` §Б.2). What remains is making lit windows *react* to power
+   stage, which needs per-instance MultiMesh colour updates keyed by
+   `district_stage_changed` and visual tuning that NO-GODOT static mode
+   cannot verify (a wrong guess ships visibly broken windows). GDD §11.1
+   names streetlights + ambient grading + moon as the "darkness →
+   restored power" reward channels — all three are live and working
+   (`KNOWN_ISSUES.md` streetlights entry, `STATIC_AUDIT.md` CONFIRMED
+   WORKING); emissive windows are ambient set-dressing, not a named
+   reward. Deferred to a Godot-enabled polish pass;
+   `emissive_windows.gd`'s `_ready()` is the one wire-up point.
 8. **`docs/GDD.md` PARTIAL stage vs `streetlight_3d.gd`** — GDD and
    `power_switch.gd`'s own comment both describe PARTIAL as "some
    streetlights lit," but `streetlight_3d.gd` only distinguishes
    `stage >= 2`; PARTIAL (stage 1) looks identical to DARK for every
-   streetlight in every district. Status: **DOCUMENTED** (same reasoning
-   as #7 — a real per-lamp partial-lighting feature, not a wire-up).
+   streetlight in every district. Status: **WON'T-FIX (RC)** — closed
+   2026-09-10 RC final pass. GDD §4.2 defines PARTIAL as "часть фонарей"
+   (some lamps); a per-lamp lit subset is a lighting feature needing
+   visual tuning (which lamps, how many, does it read as intentional)
+   that NO-GODOT mode cannot verify. PARTIAL is also transient — a
+   player's single `power_switch.gd` repair interaction advances
+   DARK → STREETS → FULL (`STAGE_MSG_KEYS`), so the game rarely sits at
+   stage 1. DARK and FULL — the stages GDD §4.2 ties ambient/moon values
+   to and the ones a player actually dwells in — are fully distinct and
+   working. Deferred to a Godot-enabled pass; the stage check in
+   `streetlight_3d.gd` is the single edit point if a designer wants
+   PARTIAL made visible.
 9. **`scripts/world_env_setup.gd:133-134`** — the single global
    `WorldEnvironment`/`Moon`/`PlayerGlow` handler reacts to
    `district_stage_changed` from *any* district, not just the one the
@@ -403,6 +423,22 @@ Status legend: OPEN / FIXED (commit hash) / DOCUMENTED (accepted, not fixed
     pending that decision; not blocking the IDEAL BAR since the core
     loop is unaffected and this predates the current content pipeline
     entirely.
+    **Status update — WON'T-FIX (RC), closed 2026-09-10 RC final pass.**
+    Neither path (a)/(b) is "simplest behavior-preserving": (a) can't be
+    visually verified in NO-GODOT mode; (b) changes the reward economy
+    for every player on every completion, which GDD §3.3/§8 balance owns.
+    Core restoration (GDD §4.2/§4.3, live `power_switch.gd`) and victory
+    (GDD §12.4, all 11 FULL) are unaffected. The 10 unreachable
+    `_puzzle_data` rows stay as forward-looking design data (content
+    packs cite them). **What the RC pass fixed in `puzzle_system.gd`:**
+    the four `_grant_reward()` toasts — live today for the one wired
+    puzzle (`fuse_substation`) — were hardcoded English, now localized
+    (`TOAST_COINS_GAINED`/`TOAST_ITEM_FOUND`/`TOAST_REACTOR_ONLINE`, ×13
+    locales); and the redundant `_on_district_restored` handler, which
+    fired a second untranslated "District restored!" toast alongside
+    `power_switch.gd`'s already-localized `DISTRICT_RESTORED_TOAST` on
+    every FULL restore, was deleted — one localized toast per restore
+    now, not two.
 32. **Audio finding F1 (Arena's, independently re-verified): two
     power_station detail one-shots are off the 30.000 s class every
     other detail bed holds** — `power_station_generator_thrum.ogg`

@@ -1045,5 +1045,13 @@
   "LORE_POWER_STATION_07_TITLE": "Cassette — noms, dits à voix haute",
   "LORE_POWER_STATION_07_TEXT": "Une cassette dans le lecteur du camp de l'équipe, transportée sur deux quartiers vers l'est dans le propre sac du narrateur. C'est l'étang de Manya, il y a des semaines — glace, vent, et la voix de la vieille femme disant des noms à voix haute dans l'obscurité, un par un, de la façon dont elle les dit pour ceux qu'elle nourrit : le facteur, les jumeaux, le père de Katya. Et puis la voix d'un membre de l'équipe, plus douce, ajoutant le seul nom qui n'était jamais le sien à dire : « Petrov. » Un long silence. Puis le narrateur, à peine audible : « Ils restent immobiles. Elle a raison. Ils restent immobiles. On emmène ça à l'est. Si quelque chose au centre se souvient encore d'avoir été un homme, il restera immobile pour son nom. »",
   "LORE_POWER_STATION_08_TITLE": "Photo : les tours, première lumière",
-  "LORE_POWER_STATION_08_TEXT": "Prise depuis la passerelle de la tour de refroidissement la première nuit où la centrale a tenu : les tours éclairées par le bas, et au portail en dessous la lampe du portail brûlant — un lampadaire, le diable de l'équipe à côté, et un bol de nourriture posé à son pied. La note du gardien est épinglée au tirage : les peupliers de la centrale se sont penchés vers la lampe du portail tout l'hiver, comme les arbres du parc se penchaient avant la panne. Le tableau de garde est épinglé dessous, dernière ligne : le nom de la fenêtre d'angle, non barré — relevé, lampe conservée. Et l'écriture du narrateur au dos, en dernier : « Un lampadaire. La preuve du banc tient au centre. »"
+  "LORE_POWER_STATION_08_TEXT": "Prise depuis la passerelle de la tour de refroidissement la première nuit où la centrale a tenu : les tours éclairées par le bas, et au portail en dessous la lampe du portail brûlant — un lampadaire, le diable de l'équipe à côté, et un bol de nourriture posé à son pied. La note du gardien est épinglée au tirage : les peupliers de la centrale se sont penchés vers la lampe du portail tout l'hiver, comme les arbres du parc se penchaient avant la panne. Le tableau de garde est épinglé dessous, dernière ligne : le nom de la fenêtre d'angle, non barré — relevé, lampe conservée. Et l'écriture du narrateur au dos, en dernier : « Un lampadaire. La preuve du banc tient au centre. »",
+  "DAILY_EVENT_TITLE": "Événement quotidien",
+  "DAILY_EVENT_START": "Démarrer",
+  "DAILY_EVENT_STARTED": "Événement quotidien lancé !",
+  "DAILY_EVENT_ENDED": "Événement quotidien terminé !",
+  "DAILY_EVENT_BONUS": "Bonus : x%.1f",
+  "TOAST_COINS_GAINED": "+%s pièces",
+  "TOAST_ITEM_FOUND": "%s trouvé !",
+  "TOAST_REACTOR_ONLINE": "Réacteur en ligne !"
 }

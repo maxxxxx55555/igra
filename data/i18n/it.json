@@ -1045,5 +1045,13 @@
   "LORE_POWER_STATION_07_TITLE": "Cassetta — nomi, detti ad alta voce",
   "LORE_POWER_STATION_07_TEXT": "Una cassetta nel lettore del campo della squadra, portata due distretti a est nello zaino stesso del narratore. È lo stagno di Manya, settimane fa — ghiaccio, vento, e la voce della vecchia che dice nomi ad alta voce nel buio, uno per uno, nel modo in cui li dice per i nutriti: il postino, i gemelli, il padre di Katya. E poi la voce di un membro della squadra, più piano, che aggiunge l'unico nome che non era mai stato suo da dire: \"Petrov.\" Un lungo silenzio. Poi il narratore, appena udibile: \"Restano fermi. Ha ragione. Restano fermi. Lo stiamo portando a est. Se qualcosa al centro ricorda ancora di essere stato un uomo, resterà fermo per il suo nome.\"",
   "LORE_POWER_STATION_08_TITLE": "Foto: le torri, prima luce",
-  "LORE_POWER_STATION_08_TEXT": "Scattata dalla passerella della torre di raffreddamento la prima notte in cui la centrale ha tenuto: le torri illuminate dal basso, e al cancello sotto di esse la lampada del cancello accesa — un lampione, il carrello a mano della squadra accanto, e una ciotola di cibo posta ai suoi piedi. La nota del custode è appuntata alla stampa: i pioppi della centrale si sono piegati verso la lampada del cancello per tutto l'inverno, come gli alberi del parco si piegavano prima del blackout. Il turno di guardia è appuntato sotto, ultima riga: il nome della finestra d'angolo, non barrato — sollevato dal turno, lampada mantenuta. E la mano del narratore sul retro, per ultimo: \"Un lampione. La prova del banco regge al centro.\""
+  "LORE_POWER_STATION_08_TEXT": "Scattata dalla passerella della torre di raffreddamento la prima notte in cui la centrale ha tenuto: le torri illuminate dal basso, e al cancello sotto di esse la lampada del cancello accesa — un lampione, il carrello a mano della squadra accanto, e una ciotola di cibo posta ai suoi piedi. La nota del custode è appuntata alla stampa: i pioppi della centrale si sono piegati verso la lampada del cancello per tutto l'inverno, come gli alberi del parco si piegavano prima del blackout. Il turno di guardia è appuntato sotto, ultima riga: il nome della finestra d'angolo, non barrato — sollevato dal turno, lampada mantenuta. E la mano del narratore sul retro, per ultimo: \"Un lampione. La prova del banco regge al centro.\"",
+  "DAILY_EVENT_TITLE": "Evento giornaliero",
+  "DAILY_EVENT_START": "Avvia",
+  "DAILY_EVENT_STARTED": "Evento giornaliero avviato!",
+  "DAILY_EVENT_ENDED": "Evento giornaliero terminato!",
+  "DAILY_EVENT_BONUS": "Bonus: x%.1f",
+  "TOAST_COINS_GAINED": "+%s monete",
+  "TOAST_ITEM_FOUND": "%s trovato!",
+  "TOAST_REACTOR_ONLINE": "Reattore online!"
 }

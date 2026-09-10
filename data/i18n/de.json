@@ -1045,5 +1045,13 @@
   "LORE_POWER_STATION_07_TITLE": "Kassette — Namen, laut ausgesprochen",
   "LORE_POWER_STATION_07_TEXT": "Eine Kassette im Player des Crew-Lagers, zwei Bezirke ostwärts im eigenen Rucksack des Aufnehmenden getragen. Es ist Manjas Teich, vor Wochen — Eis, Wind, und die Stimme der alten Frau, die Namen laut in die Dunkelheit spricht, einen nach dem anderen, so wie sie sie für die Gefütterten spricht: der Postbote, die Zwillinge, Katjas Vater. Und dann die Stimme eines Crewmitglieds, leiser, die den einen Namen hinzufügt, den auszusprechen nie ihre war: „Petrow.“ Eine lange Stille. Dann der Aufnehmende, kaum hörbar: „Sie halten still. Sie hat recht. Sie halten still. Wir bringen das nach Osten. Wenn irgendetwas im Zentrum sich noch daran erinnert, ein Mensch gewesen zu sein, wird es bei seinem Namen still halten.“",
   "LORE_POWER_STATION_08_TITLE": "Foto: Die Türme, erstes Licht",
-  "LORE_POWER_STATION_08_TEXT": "Aufgenommen vom Kühlturmgerüst in der ersten Nacht, in der die Station hielt: die Türme von unten beleuchtet, und am Tor darunter die brennende Torlampe — eine Straßenlaterne, der Sackkarren der Crew daneben, und eine Schale Essen an ihrem Fuß aufgestellt. Die Notiz des Platzwarts ist an den Abzug geheftet: die Pappeln der Station haben sich den ganzen Winter zur Torlampe geneigt, so wie sich die Parkbäume vor dem Stromausfall neigten. Der Wachplan ist darunter geheftet, letzte Zeile: der Name am Eckfenster, nicht durchgestrichen — abgelöst, Lampe erhalten. Und die Handschrift des Aufnehmenden auf der Rückseite, zuletzt: „Eine Straßenlaterne. Der Bankbeweis steht im Zentrum.“"
+  "LORE_POWER_STATION_08_TEXT": "Aufgenommen vom Kühlturmgerüst in der ersten Nacht, in der die Station hielt: die Türme von unten beleuchtet, und am Tor darunter die brennende Torlampe — eine Straßenlaterne, der Sackkarren der Crew daneben, und eine Schale Essen an ihrem Fuß aufgestellt. Die Notiz des Platzwarts ist an den Abzug geheftet: die Pappeln der Station haben sich den ganzen Winter zur Torlampe geneigt, so wie sich die Parkbäume vor dem Stromausfall neigten. Der Wachplan ist darunter geheftet, letzte Zeile: der Name am Eckfenster, nicht durchgestrichen — abgelöst, Lampe erhalten. Und die Handschrift des Aufnehmenden auf der Rückseite, zuletzt: „Eine Straßenlaterne. Der Bankbeweis steht im Zentrum.“",
+  "DAILY_EVENT_TITLE": "Tägliches Ereignis",
+  "DAILY_EVENT_START": "Starten",
+  "DAILY_EVENT_STARTED": "Tägliches Ereignis gestartet!",
+  "DAILY_EVENT_ENDED": "Tägliches Ereignis beendet!",
+  "DAILY_EVENT_BONUS": "Bonus: x%.1f",
+  "TOAST_COINS_GAINED": "+%s Münzen",
+  "TOAST_ITEM_FOUND": "%s gefunden!",
+  "TOAST_REACTOR_ONLINE": "Reaktor online!"
 }
