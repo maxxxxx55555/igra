@@ -284,3 +284,41 @@ This pass reviews the **actual 11** non-EN/RU locales: `fr, de, es, it, pt_BR, t
 | LORE_GAS_STATION_03_TEXT | bir motorla koşan bir adamın … aynı ses olduğunu söylüyor | bir motor ile koşan bir adamın sesinin … aynı geldiğini söylüyor | Misparse risk: "bir motorla koşan bir adam" = "a man running with an engine"; EN is "an engine and a man running sound the same". |
 
 **MEDIUM (9, documented only):** A16_NAME "Hız Koşucusu" (calque; TR gamers say "Speedrunner"); QKILL_TANK_TITLE "Tankları indir" + QKILL_TANK_DESC (vehicles vs armored monsters — "Zırhlıları indir" clearer); A07_DESC "kombo-3 zinciri" (calque "combo-3"; "3'lü kombo" natural); SKILL_RELOAD_SPEED_NAME "Hızlı Şarjör" ("fast magazine"; should be "Hızlı Doldurma"); WEAPON_COMPARE_RELOAD "Şarjör değişimi" (magazine swap; reload = "yeniden doldurma"); QSECRETS_1/2/3_TITLE "No.1" without space (TR: "No. 1" or "1."); ENEMY_ARSONIST "Kundakçı" / MONSTER_BURNER "Yakıcı" — near-collision but distinguishable, acceptable; WORLD_NEWS_METERS_TEXT "Emekli bir sayaç okuyucusu:" colon usage slightly telegraphic. LOW (7): DGAS title-case vs DNAME lowercase; DNAME_POLICE "Karakol" vs DPOLICE "Polis Karakolu" uneven; "Boss'u yen" anglicism (fine in TR gaming); ¢MONETY_2 "JETON: " trailing space; ¢EST_SOHRANENIE trailing "\|"; ¢ZAGRUZKA "YÜKLENİYOR.. " missing third dot + trailing space; ¢SLOT trailing space.
+
+## Japanese (ja)
+
+**Verdict:** The strongest CJK locale so far — natural idiom choices everywhere (残機 for lives, 真夏の夜の夢 for "A Midsummer Night's Dream", ネズミのように静かに for "quiet as a mouse", well-formed headline style 「議会、「送電網の記憶」計画を否定」). Weaknesses cluster in terminology drift (狙撃兵/狙撃手, 工業地区/工業地帯, 救急箱/救急キット, two 管理人 characters, skill 収集家 colliding with achievement 収集家), the "City Power" entity left in katakana シティ・パワー in one news item while everything else says 市電力公社, half-width punctuation in Japanese prose (!?: and a lone "-"), and two translation slips ("Bring a strong back" rendered literally as 頑丈な背中を持ってこい, and "if you hear us" flipped to 私たちが聞こえるなら). No meaning-breaking errors. Counts: CRITICAL 0, HIGH 28, MEDIUM 8, LOW 7.
+
+**HIGH (28, fixed):**
+| Key | Was | Fix | Why |
+|---|---|---|---|
+| WORLD_NEWS_METERS_TEXT | シティ・パワーは「故障したドラム」のせい… タップだ。…電流を電線に払い込んでいる…取っているのではない | 市電力公社は「故障したドラム」のせい… 盗電だ。…電流を電線に流し込んでいる…吸い取っているのではない | Entity left as katakana "City Power" (faction is 市電力公社 everywhere else); "tap" = illegal electrical tap → 盗電 (electricity theft), the precise JA term; 払い込む is for paying money, current is 流し込む/吸い取る; half-width ":" → full-width. |
+| WORLD_NEWS_ARCHITECT_TEXT | 病院の副系統 | 病院の二次フィーダー | "Hospital sub-feed" — 副系統 is not an electrical term; WDIARY_K2 already uses フィーダー for feeder. |
+| WORLD_RADIO_03_TEXT | 頑丈な背中を持ってこい | 万全の体で来い | Literal calque of "Bring a strong back"; 万全の体で来い ("come in full readiness") is the natural equivalent. |
+| WORLD_CHAR_RADIOVOICE_TEXT | 光を守ってきた者が、光の中で会うだろう | …光の中でお前と会うだろう | Missing indirect object — as written, "will meet in the light" (with whom?); WRADIO_01 gets it right (お前を迎える). |
+| WORLD_CHAR_SUPERINTENDENT_TITLE | 管理人（住宅） | 大家 | Collides with Keeper = 管理人 (diaries are 管理人の日記); a housing-block superintendent obsessed with apartment meters is exactly a 大家. |
+| WORLD_DIARY_K3_TEXT | 命令14,208番:219番を撤去せよ | 命令14,208番：219番を撤去せよ | Half-width colon in JA prose. |
+| WORLD_RADIO_02_TEXT | 三交代目から全員へ:四系統は… | 三交代目から全員へ：四系統は… | Half-width colon. |
+| RADIO_TRANSCRIPT_E1 | 私たちが聞こえるなら-光を守って。 | これが聞こえているなら――光を守って。 | "If you hear us" flipped to "if we can hear"; lone half-width hyphen → JA dash ――. |
+| DISTRICT_RESTORED_TOAST | 地区を救済：%s | 地区を復旧：%s | 救済 = relief/alms; restoring a district is 復旧 (used everywhere else). |
+| CHAR_HOLSTER | 収納 | ホルスター | "Storage" for the holster slot; ホルスター is the standard loanword. |
+| ACH_03_NAME | 標 | 希望の灯 | Lone kanji "signpost" for "Beacon"; unreadable as an achievement title. |
+| ACH_11_NAME | 経済家 | エコノミスト | 経済家 is not a real Japanese word. |
+| SKILL_INVENTORY_SPACE_NAME | 収集家 | ため込み屋 | EN "Pack Rat"; 収集家 collides with ACH_17_NAME "Collector" (収集家). |
+| ITEM_SERUM | 血清「ドーン」 | 「夜明け」の血清 | ドーン reads as "Done"/"boom"; the name is Dawn → 夜明け. |
+| SKILL_LOOT_LUCK_NAME | 漁り屋 | スカベンジャー | 漁り屋 misreads as "fisherman" (漁); EN "Scavenger". |
+| Q_KILL_SNIPER_DESC | 狙撃兵が屋上を占拠… | 狙撃手が屋上を占拠… | ENEMY_SNIPER is 狙撃手 — unify the enemy's name. |
+| Q_KILL_SNIPER_TITLE | 狙撃兵ハンター | 狙撃手ハンター | Same unification. |
+| DIST_INDUSTRIAL | 工業地区 | 工業地帯 | DNAME_INDUSTRIAL is 工業地帯 — map vs quest drift. |
+| Q_RESTORE_DISTRICT2_DESC | 工業地区に光を取り戻せ | 工業地帯に光を取り戻せ | Same unification. |
+| Q_REPAIR_DISTRICT1_DESC | 分電盤を見つけ | 配電盤を見つけ | 分電盤 = household breaker panel; PROMPT_REPAIR already says 配電盤. |
+| shop_medkit | 救急箱 | 救急キット | ITEM_MEDKIT is 救急キット — unify item name. |
+| Q_COLLECT_MEDKIT_DESC | 救急箱を3個集めろ | 救急キットを3個集めろ | Same unification. |
+| Q_COLLECT_MEDKIT_TITLE | 救急箱 | 救急キット | Same unification. |
+| SCR_APTECHKA | 救急箱 | 救急キット | Same unification. |
+| WEAKSPOT_FIRE_IMMUNE | 火に免疫 | 炎耐性 | 免疫 is medical; enemy stat panels say 耐性. |
+| JOURNAL_RELATED | 関連:%s | 関連：%s | Half-width colon; rest of the file uses ：. |
+| confirm_quit | 終了しますか? | 終了しますか？ | Half-width "?" in JA sentence. |
+| tutorial_done | チュートリアル完了。頑張れ! | …頑張れ！ | Half-width "!". |
+
+**MEDIUM (8, documented only):** PROMPT_INTERACT 操作 vs tutorial_interact 調べる (mixed interact verbs); MAP_LOCKED_BY ロック要因 (要因 = contributing factor; ロック原因 cleaner); SHOP_SKIN_GRANTED スキン解除 vs Unlocked: %s 解放 (both words used for "unlock"); Q_FIND_ENGINEERS_TITLE 技術者 vs DESC 技術班; ACH_12_NAME 傷一つなく (adverbial fragment as title; 傷ひとつ負わず reads better); WEAPON_COMPARE_MAG 弾倉 (military register; マガジン is the game norm); WORKBENCH_CRAFTABLE 可 (terse; 作成可 clearer). LOW (7): SCR_MONETY_2 trailing space after コイン：; SCR_SLOT, SCR_VES trailing spaces; SCR_EST_SOHRANENIE trailing "\|"; SCR_ZAGRUZKA "ロード中.. " missing third dot + trailing space; LEVEL_UP_NOTICE mixes half-width space after ！; RADIO_EMERGENCY2 "緊急2" bare numeral.
