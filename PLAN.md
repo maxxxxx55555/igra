@@ -422,6 +422,31 @@ that could otherwise abort the run before the crunch. `arena/01a08729-igra`
 is based on `db6367d` and merges cleanly on top of the Phase A commits
 (disjoint file sets — store/** + content prose vs. scripts/** + i18n).
 
+**Phase B executed — `Merge PR #8` (`--no-ff`, 0 conflicts, static gates
+green).** Brought `store/**` (6 files), `docs/PROSE_CHANGES.md`,
+`docs/ASSET_LICENSES.md` + `AUDIO_COVERAGE.md` +
+`CONTENT_PIPELINE_AUDIT.md` §10, and the `centre→center` fix in
+`gas_station`/`police` `lore_notes.json`. All within the MERGE POLICY
+scope / Arena's ownership zones.
+
+i18n re-sync per `PROSE_CHANGES.md`: the 2 changed rows
+(`LORE_GAS_STATION_06_TEXT`, `LORE_POLICE_06_TEXT`) are a British→American
+spelling normalization of one word ("centre"→"center") in the recurring
+Keeper's requisition forms. `data/i18n/en.json` updated byte-for-byte
+from the merged content JSON (verified equal). The other 12 locales need
+no byte change: `fr` legitimately keeps "centre" (correct French), and
+`ru/de/es/it/pt_BR/ja/ko/zh/zh_TW/ar` already render the concept in-
+language (центр / Zentrum / 中心 / …) with no English loanword to fix.
+Key parity confirmed across all 13 (`i18n_audit.py`: `MISSING: 0`,
+placeholder parity N/A — no `%` specifiers in these keys).
+
+Store-kit checklist verified: `store/listing.md` (Title / Short / Full,
+EN+RU), `store/changelog.md` (v1.0 EN+RU), `store/feature-graphic.png`
+(1024×500, exact Play spec), `store/icon-512.png` (512×512),
+`store/screenshots-plan.md` (8-shot plan), `store/privacy-policy-
+template.md` (full template) — all present, well-formed, correct PNG
+dimensions.
+
 ---
 
 ## А. Что уже работает (проверено, не предположение)
