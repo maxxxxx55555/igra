@@ -57,7 +57,10 @@ func _collect() -> void:
 	if glow_light != null:
 		glow_light.visible = false
 	# У Area3D нет свойства disabled — отключается монитор столкновений.
-	collect_area.monitoring = false
+	# _collect() бежит из _on_body_entered (сигнал физики), где прямое
+	# присваивание monitoring блокируется движком ("Function blocked
+	# during in/out signal") — тот же set_deferred, что в item_pickup_3d.gd.
+	collect_area.set_deferred("monitoring", false)
 	# Раньше подбор только гасил модельку: документ не засчитывался в
 	# прогресс, не открывался в журнале и игрок не получал уведомления.
 	if document_id != "":

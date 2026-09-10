@@ -40,7 +40,14 @@ func _load_initial() -> void:
 func _on_district_entered(district_id: StringName) -> void:
 	if district_id == _current_id:
 		return
-	load_district(district_id)
+	# district_entered arrives from DistrictTrigger's body_entered — a
+	# physics in/out signal. Building the new district synchronously here
+	# runs every spawned pickup's _ready() inside that callback, where
+	# Area3D.set_monitorable/monitoring is blocked by the engine
+	# ("Function blocked during in/out signal"). Defer the rebuild to the
+	# next idle frame; the _loading / _current_id guards already make
+	# load_district re-entrant-safe.
+	call_deferred("load_district", district_id)
 
 ## Выгружает прошлый район и строит новый. Идемпотентна и защищена от
 ## повторного входа: DistrictTrigger умеет стрелять несколько раз за кадр.
