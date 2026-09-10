@@ -2,7 +2,7 @@
 
 ## GOLD MASTER — 2026-09-10 (headless hardening pass)
 
-`origin/main` is **GOLD MASTER** at `7491c76`. FINAL RC (below) plus a
+`origin/main` is **GOLD MASTER** at `f263f9f`. FINAL RC (below) plus a
 real-engine verification pass: the owner lifted NO-GODOT to
 **headless-only** (`godot --headless` script/scene runs; still no
 `--windowed`, editor, or visible window). New gate:
