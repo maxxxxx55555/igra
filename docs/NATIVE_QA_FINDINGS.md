@@ -322,3 +322,45 @@ This pass reviews the **actual 11** non-EN/RU locales: `fr, de, es, it, pt_BR, t
 | tutorial_done | チュートリアル完了。頑張れ! | …頑張れ！ | Half-width "!". |
 
 **MEDIUM (8, documented only):** PROMPT_INTERACT 操作 vs tutorial_interact 調べる (mixed interact verbs); MAP_LOCKED_BY ロック要因 (要因 = contributing factor; ロック原因 cleaner); SHOP_SKIN_GRANTED スキン解除 vs Unlocked: %s 解放 (both words used for "unlock"); Q_FIND_ENGINEERS_TITLE 技術者 vs DESC 技術班; ACH_12_NAME 傷一つなく (adverbial fragment as title; 傷ひとつ負わず reads better); WEAPON_COMPARE_MAG 弾倉 (military register; マガジン is the game norm); WORKBENCH_CRAFTABLE 可 (terse; 作成可 clearer). LOW (7): SCR_MONETY_2 trailing space after コイン：; SCR_SLOT, SCR_VES trailing spaces; SCR_EST_SOHRANENIE trailing "\|"; SCR_ZAGRUZKA "ロード中.. " missing third dot + trailing space; LEVEL_UP_NOTICE mixes half-width space after ！; RADIO_EMERGENCY2 "緊急2" bare numeral.
+
+## Korean (ko)
+
+**Verdict:** Solid, game-native register (해라체 for quest objectives, 합니다체 for UI, punchy toast style), with a couple of genuine howlers: DISTRICT_2_TOAST says "지구 2" — "Earth 2 restored" instead of "district 2" — and the color-blindness settings read as "green medicine / red medicine / blue medicine" (녹색약/적색약/청색약) instead of color-vision deficiency (녹색맹 etc.). "City Power" is left as 시티 파워 in one news item (faction is 시 전력공사), district names drift across three variants (공업 지대/지구/구역, 주택가/주거 지역/주택 구역), "Bring a strong back" is translated literally (튼튼한 등을 가져와라), and the Grid Crew faction is named after a switchboard (배전반 작업조). Counts: CRITICAL 1, HIGH 29, MEDIUM 7, LOW 6.
+
+**CRITICAL (1, fixed):**
+| Key | Was | Fix | Why |
+|---|---|---|---|
+| DISTRICT_2_TOAST | 지구 2 복구! 도시가 다시 숨쉰다. | 2구역 복구! 도시가 다시 숨쉽니다. | "지구 2" reads "Earth 2" — the game's own word for district is 구역; toast register aligned with the rest of the toast family. |
+
+**HIGH (29, fixed):**
+| Key | Was | Fix | Why |
+|---|---|---|---|
+| WORLD_NEWS_METERS_TEXT | 시티 파워는 '고장 난 드럼' 탓이라고 한다… 드럼이 아니라 탭이다 | 시 전력공사는… 드럼이 아니라 무단 탭이다 | Untranslated entity; bare "탭" is the UI word for "tab" — an illegal electrical tap is 무단 탭. |
+| WORLD_NEWS_ARCHITECT_TEXT | 병원 부속 배전선 | 병원 보조 배전선 | "Sub-feed": 부속 (accessory) → 보조 (secondary/auxiliary), the standard KO electrical term. |
+| WORLD_RADIO_03_TEXT | 튼튼한 등을 가져와라 | 허리 튼튼히 하고 와라 | Literal "bring a sturdy back"; the natural equivalent said before heavy work. |
+| WORLD_CHAR_SUPERINTENDENT_TITLE | 관리인 (주택) | 관리소장 | Collides with Keeper = 관리인 (diaries: 관리인의 일기); housing-office superintendent = 관리소장. |
+| WORLD_FACTION_GRIDCREW_TITLE | 배전반 작업조 | 전력망 작업조 | 배전반 = switchboard panel; "The Grid Crew" works the grid → 전력망 작업조. |
+| WORLD_CHAR_MARAT_TEXT | 뭔가가 전력망에서 끌어당기고 있다 | 뭔가가 전력망에서 전기를 끌어내고 있다 | 끌어당기다 = pull toward oneself physically; drawing power = 끌어내다. |
+| VICTORY_DISTRICTS | 복구된 지구 | 복구된 구역 | 지구 (Earth/precinct) vs the game's 구역. |
+| msg_win | 모든 구역에 전력이 공급되었다! | …공급되었습니다! | Toast family is 합니다체 (저장되었습니다, 복구되었습니다) — this one plain past. |
+| cb_prot / cb_deut / cb_trit | 적색약 / 녹색약 / 청색약 | 적색맹 / 녹색맹 / 청색맹 | "-색약" parses as "…-colored medicine"; color-vision deficiency is 색맹 (3 keys). |
+| enc_title | 괴물 백과사전 | 몬스터 도감 | Bestiary is 도감 (BESTIARY·t already says 몬스터 도감); "encyclopedia" is a book, not a UI. |
+| CHAR_HOLSTER | 수납 | 홀스터 | "Storage" for the holster slot. |
+| ACH_03_NAME | 등대 | 봉화 | "Beacon" → 등대 is a sea lighthouse; for the city relit, 봉화 (signal fire). |
+| SKILL_INVENTORY_SPACE_NAME | 수집가 | 수집꾼 | EN "Pack Rat"; collides with ACH_17_NAME 수집가 (Collector). |
+| ITEM_SERUM | 혈청 「새벽」 | 혈청「새벽」 | Korean typography: no space before 「. (Note: "새벽" for Dawn is exactly right.) |
+| ITEM_LOCKPICK | 따기 도구 | 자물쇠 따개 | "따기 도구" is vague (따다 has many senses); lockpick = 자물쇠 따개. |
+| ITEM_MEDKIT | 구급 키트 | 구급상자 | Rest of the game says 구급상자 — unify item name. |
+| RADIO_TRANSCRIPT_SOS | 배터리와 구급 키트를 | 배터리와 구급상자를 | Same unification. |
+| RADIO_TRANSCRIPT_E1 | 들리신다면-빛을 지켜주세요 | 들리신다면 — 빛을 지켜주세요 | Stray half-width hyphen inside a sentence. |
+| DIST_INDUSTRIAL | 공업 지구 | 공업 지대 | DNAME says 공업 지대 — map/quest drift. |
+| Q_RESTORE_DISTRICT2_DESC | 공업 구역에 빛을 | 공업 지대에 빛을 | Third variant in the same quest's own title (공업 지대에 전력을) — unify. |
+| SCR_PROMYSHLENNAYA_ZONA | 공업 지역 | 공업 지대 | Same unification (legacy label). |
+| DIST_RESIDENTIAL | 주거 지역 | 주택가 | DNAME says 주택가. |
+| Q_REPAIR_DISTRICT1_TITLE | 주택 구역 변전소 | 주택가 변전소 | Same unification. |
+| Q_FIND_ENGINEERS_DESC | 주택 구역을 통과하는 | 주택가를 지나는 | Same unification. |
+| SCR_ZHILYE_KVARTALY | 주거 지역 | 주택가 | Same unification. |
+| DIST_WAREHOUSES | 창고 지역 | 창고 단지 | DNAME says 창고 단지. |
+| LORE_SUBURBS_03_TEXT | 교외 지구 주민 여러분 | 교외 주민 여러분 | Same 지구 trap; the district is just 교외. |
+
+**MEDIUM (7, documented only):** ENEMY_SPITTER 침 뱉는 자 (wordy; 스피터 would match the katakana monster list); PROMPT_HIDE 숨기 (reads as "conceal object"; 숨어들기/은신 clearer); STROBE_READY 스트로브 vs WSTROBE_COMBO 점멸광 (two words for strobe); Q_KILL_TANK_TITLE 탱크 (vehicle vs 장갑 괴물 in its own description); WORKBENCH_CRAFTABLE 가능 (terse); ONBOARD captions (해라체) vs TUT_* (합니다체) register mix on adjacent screens; msg_caught "발각되었다!" / msg_lose "실패했다…" plain vs formal toasts (read as deliberate arcade flavor — acceptable). LOW (6): SCR_MONETY_2 / SCR_SLOT / SCR_VES trailing spaces; SCR_ZAGRUZKA "로딩 중.. " missing third dot + trailing space; SCR_EST_SOHRANENIE trailing "\|"; RADIO_EMERGENCY2 "비상 2" bare numeral.
