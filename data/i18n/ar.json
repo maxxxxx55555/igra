@@ -1057,5 +1057,7 @@
   "Reduce Screen Shake": "تقليل اهتزاز الشاشة",
   "WORKBENCH_CRAFTABLE": "متاح",
   "ITEM_NOT_EQUIPPABLE": "لا يمكن تجهيز هذا العنصر",
-  "LOAD_FAILED": "فشل التحميل"
+  "LOAD_FAILED": "فشل التحميل",
+  "Trailer Mode": "وضع المقطع الدعائي",
+  "PHOTO_FILTER": "مرشح: %s"
 }

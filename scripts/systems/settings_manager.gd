@@ -156,6 +156,7 @@ func set_setting(key: String, value: Variant) -> void:
 		"dyslexia_font": _apply_dyslexia_font()
 		"colorblind": _apply_colorblind()
 		"text_size": _apply_text_size()
+		"trailer_mode": EventBus.hud_visibility_changed.emit(not bool(value))
 	EventBus.settings_changed.emit(key, value)
 
 ## Re-apply every accessibility effect from _settings — called after a config

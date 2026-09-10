@@ -1057,5 +1057,7 @@
   "Reduce Screen Shake": "Reduce Screen Shake",
   "WORKBENCH_CRAFTABLE": "OK",
   "ITEM_NOT_EQUIPPABLE": "This item can't be equipped",
-  "LOAD_FAILED": "Failed to load"
+  "LOAD_FAILED": "Failed to load",
+  "Trailer Mode": "Trailer Mode",
+  "PHOTO_FILTER": "Filter: %s"
 }

@@ -1057,5 +1057,7 @@
   "Reduce Screen Shake": "减少屏幕震动",
   "WORKBENCH_CRAFTABLE": "可",
   "ITEM_NOT_EQUIPPABLE": "该物品无法装备",
-  "LOAD_FAILED": "加载失败"
+  "LOAD_FAILED": "加载失败",
+  "Trailer Mode": "预告片模式",
+  "PHOTO_FILTER": "滤镜：%s"
 }

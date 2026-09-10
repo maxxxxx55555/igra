@@ -1057,5 +1057,7 @@
   "Reduce Screen Shake": "Ekran sarsıntısını azalt",
   "WORKBENCH_CRAFTABLE": "OK",
   "ITEM_NOT_EQUIPPABLE": "Bu eşya kuşanılamaz",
-  "LOAD_FAILED": "Yükleme başarısız"
+  "LOAD_FAILED": "Yükleme başarısız",
+  "Trailer Mode": "Fragman Modu",
+  "PHOTO_FILTER": "Filtre: %s"
 }

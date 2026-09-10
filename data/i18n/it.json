@@ -1057,5 +1057,7 @@
   "Reduce Screen Shake": "Riduci tremolio schermo",
   "WORKBENCH_CRAFTABLE": "OK",
   "ITEM_NOT_EQUIPPABLE": "Questo oggetto non può essere equipaggiato",
-  "LOAD_FAILED": "Caricamento non riuscito"
+  "LOAD_FAILED": "Caricamento non riuscito",
+  "Trailer Mode": "Modalità trailer",
+  "PHOTO_FILTER": "Filtro: %s"
 }

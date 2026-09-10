@@ -1057,5 +1057,7 @@
   "Reduce Screen Shake": "화면 흔들림 감소",
   "WORKBENCH_CRAFTABLE": "가능",
   "ITEM_NOT_EQUIPPABLE": "이 아이템은 장착할 수 없습니다",
-  "LOAD_FAILED": "불러오기 실패"
+  "LOAD_FAILED": "불러오기 실패",
+  "Trailer Mode": "트레일러 모드",
+  "PHOTO_FILTER": "필터: %s"
 }

@@ -1057,5 +1057,7 @@
   "Reduce Screen Shake": "Réduire les secousses d'écran",
   "WORKBENCH_CRAFTABLE": "OK",
   "ITEM_NOT_EQUIPPABLE": "Cet objet ne peut pas être équipé",
-  "LOAD_FAILED": "Échec du chargement"
+  "LOAD_FAILED": "Échec du chargement",
+  "Trailer Mode": "Mode bande-annonce",
+  "PHOTO_FILTER": "Filtre : %s"
 }

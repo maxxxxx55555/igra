@@ -1057,5 +1057,7 @@
   "Reduce Screen Shake": "Reduzir tremor de tela",
   "WORKBENCH_CRAFTABLE": "OK",
   "ITEM_NOT_EQUIPPABLE": "Este item não pode ser equipado",
-  "LOAD_FAILED": "Falha ao carregar"
+  "LOAD_FAILED": "Falha ao carregar",
+  "Trailer Mode": "Modo trailer",
+  "PHOTO_FILTER": "Filtro: %s"
 }

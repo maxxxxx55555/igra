@@ -1057,5 +1057,7 @@
   "Reduce Screen Shake": "Bildschirmwackeln reduzieren",
   "WORKBENCH_CRAFTABLE": "OK",
   "ITEM_NOT_EQUIPPABLE": "Dieser Gegenstand kann nicht ausgerüstet werden",
-  "LOAD_FAILED": "Laden fehlgeschlagen"
+  "LOAD_FAILED": "Laden fehlgeschlagen",
+  "Trailer Mode": "Trailer-Modus",
+  "PHOTO_FILTER": "Filter: %s"
 }

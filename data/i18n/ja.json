@@ -1057,5 +1057,7 @@
   "Reduce Screen Shake": "画面の揺れを軽減",
   "WORKBENCH_CRAFTABLE": "可",
   "ITEM_NOT_EQUIPPABLE": "このアイテムは装備できません",
-  "LOAD_FAILED": "読み込みに失敗しました"
+  "LOAD_FAILED": "読み込みに失敗しました",
+  "Trailer Mode": "トレーラーモード",
+  "PHOTO_FILTER": "フィルター: %s"
 }

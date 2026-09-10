@@ -1057,5 +1057,7 @@
   "Reduce Screen Shake": "Reducir sacudida de pantalla",
   "WORKBENCH_CRAFTABLE": "OK",
   "ITEM_NOT_EQUIPPABLE": "Este objeto no se puede equipar",
-  "LOAD_FAILED": "Error al cargar"
+  "LOAD_FAILED": "Error al cargar",
+  "Trailer Mode": "Modo tráiler",
+  "PHOTO_FILTER": "Filtro: %s"
 }

@@ -1057,5 +1057,7 @@
   "Reduce Screen Shake": "Уменьшить тряску экрана",
   "WORKBENCH_CRAFTABLE": "OK",
   "ITEM_NOT_EQUIPPABLE": "Этот предмет нельзя экипировать",
-  "LOAD_FAILED": "Не удалось загрузить"
+  "LOAD_FAILED": "Не удалось загрузить",
+  "Trailer Mode": "Режим трейлера",
+  "PHOTO_FILTER": "Фильтр: %s"
 }

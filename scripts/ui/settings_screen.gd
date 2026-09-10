@@ -97,6 +97,10 @@ func _build_game_tab(parent: VBoxContainer) -> void:
 	# Objective markers on HUD
 	_toggle(parent, LocalizationManager.t("Objective Markers"), "objective_markers")
 
+	# Trailer Mode — hides the HUD and adds a slow-mo/FOV beat at the game's
+	# three "wow" moments (for recording shorts). Opt-in, off by default.
+	_toggle(parent, LocalizationManager.t("Trailer Mode"), "trailer_mode")
+
 	# TRUTH WAVE P0.3: раньше единственный способ стереть прогресс —
 	# руками удалить файлы user:// на диске. Кнопка с подтверждением.
 	var reset_btn := Button.new()
