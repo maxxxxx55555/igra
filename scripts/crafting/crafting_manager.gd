@@ -9,8 +9,11 @@ var inventory: Dictionary = {}
 
 func _ready() -> void:
 	var f = FileAccess.open("res://data/recipes/recipes.json", FileAccess.READ)
-	if f:
-		recipes = JSON.parse_string(f.get_as_text())
+	if f == null:
+		return
+	var parsed: Variant = JSON.parse_string(f.get_as_text())
+	if parsed is Dictionary:
+		recipes = parsed
 
 func add_material(item_id: String, amount: int = 1) -> void:
 	inventory[item_id] = inventory.get(item_id, 0) + amount

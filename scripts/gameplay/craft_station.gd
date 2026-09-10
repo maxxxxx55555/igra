@@ -124,5 +124,4 @@ func _on_craft(recipe_id: StringName) -> void:
 		_inv.remove(item_id, int(r["ingredients"][item_id]))
 	if _inv.try_add(r["result"], int(r["amount"])):
 		EventBus.inventory_notice.emit(LocalizationManager.tf("WORKBENCH_CRAFTED", [LocalizationManager.t(str(r["name"]))]))
-		print("[craft] done: ", recipe_id)
 	_refresh()

@@ -476,6 +476,51 @@ Status legend: OPEN / FIXED (commit hash) / DOCUMENTED (accepted, not fixed
     **DOCUMENTED, not fixed** — re-render is the audio toolchain
     holder's call, not blocking.
 
+## RC final pass — crash-safety sweep + shipped-print cleanup (2026-09-10)
+
+33. **`scripts/crafting/crafting_manager.gd::_ready()`** — assigned the
+    raw result of `JSON.parse_string()` straight into `var recipes:
+    Dictionary`. A malformed or non-object `recipes.json` makes
+    `parse_string` return `null` (or an Array), and every later
+    `recipes.has(...)` / `recipes[id].needs` would then null-deref.
+    `crafting_manager.gd` is currently **dead** (not an autoload, not
+    referenced anywhere — superseded by `craft_station.gd` +
+    `data/items/*.tres`), so this is latent, not a live crash. Status:
+    **FIXED** — one guard at the parse boundary (`if parsed is
+    Dictionary: recipes = parsed`), `recipes` can no longer become
+    `null`. File kept (not deleted — crafting is a shipped feature, this
+    is a superseded implementation someone could revive).
+34. **Sweep result — every other JSON/`FileAccess` trust boundary is
+    already guarded.** Checked all 20 parse/read sites:
+    `save_system.gd` (double `JSON.new()` with `.get_error()` checks +
+    `.bak`/quarantine recovery), `localization_manager.gd`,
+    `world_bible.gd` (`file_exists` + `f == null` + `parsed is
+    Dictionary and parsed.get(key) is Array`), `document_pickup.gd` /
+    `journal_ui.gd` (`f == null` + `parsed is Array` + `entry is
+    Dictionary` + `.get(k, default)`), `achievements_manager.gd`,
+    `flashlight_upgrade_manager.gd`, `new_game_plus.gd`,
+    `save_slot_manager.gd`, `tutorial_system.gd`, `difficulty_manager.gd`,
+    `leaderboard.gd` — all null-check the handle and type-check the
+    parse before use. Bare `get_node()` (non-`_or_null`) calls all
+    target autoloads (`/root/GameManager` etc.) or entity-local nodes
+    (`HealthComponent`, `Camera3D`) that are structural invariants
+    exercised by the autopilot suite. No further fix needed.
+35. **Shipped debug prints removed from live/dead gameplay code**
+    (CLAUDE.md: "Zero shipped: … debug prints"): `district_trigger.gd`
+    (`"[DistrictTrigger] entered"` — fired on every district entry, in
+    all 11 district scenes; the `else` branch it lived in was a dead
+    fallback for an `EventBus` method that always exists),
+    `photo_mode.gd` (`"[photo] saved"` — every photo),
+    `craft_station.gd` (`"[craft] done"` — every craft),
+    `victory_screen.gd` (`"[ENDINGS] …"` ×2 — dead screen, not in
+    `UIManager`). **Kept deliberately:** `save_system.gd`'s
+    save-corruption recovery `print()`s (operator feedback on a
+    data-loss path — silent recovery would be worse),
+    `footstep_system.gd`'s `demo()` self-check output,
+    `lan_network.gd`'s connection diagnostics (dead lobby code),
+    `stub_crazy_games.gd`'s "SDK not connected" notice (a stub's
+    intended message).
+
 ## CONFIRMED WORKING (traced this pass, no defect — do not re-audit)
 
 - `power_switch.gd::interact()`/stage-advance chain, `REPAIR_COST` vs

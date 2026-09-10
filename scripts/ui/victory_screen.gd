@@ -28,9 +28,6 @@ func _apply_loc(_lang: Variant = null) -> void:
 
 func _show_endings() -> void:
 	var ends: Array = Endings.evaluate()
-	print("[ENDINGS] achieved: ", ends.size())
-	for e in ends:
-		print("[ENDINGS] - ", e.get("id"), ": ", e.get("title"), " (", e.get("tier"), ")")
 	if ends.is_empty():
 		title.text += "\n" + LocalizationManager.t("END_NONE")
 		stats_label.text += "\n" + LocalizationManager.t("END_NONE_HINT")

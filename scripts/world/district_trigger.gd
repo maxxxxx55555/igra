@@ -21,5 +21,3 @@ func _on_body_entered(b: Node) -> void:
 	_fired = true
 	if _bus != null and _bus.has_method("emit_district_entered"):
 		_bus.emit_district_entered(district_id)
-	else:
-		print("[DistrictTrigger] entered: ", district_id)
