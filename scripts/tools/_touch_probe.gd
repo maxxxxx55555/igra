@@ -22,8 +22,27 @@ func _run() -> void:
 	_probe_joystick()
 	_probe_buttons()
 	_probe_help_screen()
+	_probe_leaderboard()
 	print("[touch-probe] DONE fails=", _fails.size())
 	get_tree().quit(mini(_fails.size(), 250))
+
+## GOLD MASTER v5 hooks pass: a recorded run shows up in the leaderboard
+## and Stats builds cleanly with an entry present.
+func _probe_leaderboard() -> void:
+	LocalLeaderboard.record_run(754.0, 12, 11, "light")
+	var top := LocalLeaderboard.get_top_runs(5)
+	_ok(top.size() > 0 and float(top[0]["time"]) <= 754.0, "record_run() -> get_top_runs() round-trips")
+	var stats_scr: Script = load("res://scripts/ui/stats_ui.gd")
+	var stats := Control.new()
+	stats.set_script(stats_scr)
+	get_tree().root.add_child(stats)
+	var lb_row: Label = null
+	for n in stats.find_children("*", "Label", true, false):
+		if (n as Label).text == LocalizationManager.t("LEADERBOARD_TITLE"):
+			lb_row = n
+			break
+	_ok(lb_row != null, "Stats screen shows the leaderboard section once a run exists")
+	stats.queue_free()
 
 ## GOLD MASTER v4 STEP 2: the new Help/Codex tab actually builds and
 ## shows controls + glossary content, keyboard+touch, no script errors.

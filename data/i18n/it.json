@@ -1078,5 +1078,6 @@
   "TOUCH_PAUSE_BTN": "Pulsante pausa",
   "Render Scale": "Scala di rendering",
   "BTN_ONE_MORE_RUN": "Un'altra partita",
-  "COLLECTION_TITLE": "Collezione"
+  "COLLECTION_TITLE": "Collezione",
+  "LEADERBOARD_TITLE": "Migliori partite"
 }

@@ -71,6 +71,23 @@ func _build() -> void:
 	_line(vb, LocalizationManager.t("STATS_SECRETS"), "%d" % s["secrets"], "document")
 	_line(vb, LocalizationManager.t("STATS_KILLS"), "%d" % s["kills"], "skull")
 	_line(vb, LocalizationManager.t("STATS_TIME"), LocalizationManager.tf("STATS_SECONDS", [int(s["time_played"])]), "clock")
+
+	# GOLD MASTER v5 hooks pass: local leaderboard — top runs by fastest
+	# win, independent of SaveSystem's save/reset cycle (a New Game must
+	# not erase past records).
+	if LocalLeaderboard != null and LocalLeaderboard.has_runs():
+		var lb_title := Label.new()
+		lb_title.text = LocalizationManager.t("LEADERBOARD_TITLE")
+		lb_title.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
+		vb.add_child(lb_title)
+		var i := 1
+		for run in LocalLeaderboard.get_top_runs(5):
+			var mins := int(run["time"]) / 60
+			var secs := int(run["time"]) % 60
+			_line(vb, "#%d" % i, "%02d:%02d — %d districts, %d kills" %
+				[mins, secs, run["districts"], run["kills"]], "")
+			i += 1
+
 	if not embedded:
 		var b := Button.new()
 		b.text = LocalizationManager.t("ui_close")

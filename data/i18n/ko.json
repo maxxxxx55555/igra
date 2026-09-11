@@ -1078,5 +1078,6 @@
   "TOUCH_PAUSE_BTN": "일시정지 버튼",
   "Render Scale": "렌더 스케일",
   "BTN_ONE_MORE_RUN": "한 번 더",
-  "COLLECTION_TITLE": "컬렉션"
+  "COLLECTION_TITLE": "컬렉션",
+  "LEADERBOARD_TITLE": "베스트 런"
 }
