@@ -1059,5 +1059,11 @@
   "ITEM_NOT_EQUIPPABLE": "Cet objet ne peut pas être équipé",
   "LOAD_FAILED": "Échec du chargement",
   "Trailer Mode": "Mode bande-annonce",
-  "PHOTO_FILTER": "Filtre : %s"
+  "PHOTO_FILTER": "Filtre : %s",
+  "Touch Sensitivity": "Sensibilité tactile",
+  "Haptic Feedback": "Vibration",
+  "Invert Look": "Inverser la vue",
+  "ONBOARD_05_CAPTION": "Les piles gardent la lampe torche allumée — trouve-les avant de te retrouver dans le noir.",
+  "ONBOARD_06_CAPTION": "Certains panneaux ont besoin de plus que du courant — relie les câbles pour les débloquer.",
+  "ONBOARD_07_CAPTION": "Accroupis-toi pour te déplacer sans bruit et rester hors du champ de vision d'un chasseur."
 }

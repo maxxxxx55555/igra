@@ -398,3 +398,28 @@ beds read 1 ch / 44,100 Hz / 36.000 s (`industrial_dark` 33.994 s per G2h) — b
 durations and sizes to the 2026-09-09/10 records; all 8 lit files confirmed absent; F1 pair
 (28.749/28.948 s) unchanged, finding not gap. Lit beds delivered: **3/11 shipped** (suburbs,
 hospital, power_station) + **0/8 new** this pass.
+
+## Added 2026-09-11 — GOLD MASTER v4: mobile-art pass (touch HUD + onboarding, Path B recreate)
+
+`arena/01a08c53-igra` existed but carried **zero new commits** (tip = `540c57a`, already an
+ancestor of `main` — no payload landed), so this pass was recreated deterministically:
+`tools/gen_mobile_art_pass.py` (`--check` gate), Pillow only, no randomness, STYLE_GUIDE §2
+palette. Touch glyphs: RGB clamped `[12,216]` wherever alpha > 0, alpha capped at 226 (stay
+semi-transparent over the world), 0 pure `#000`/`#fff`, all ≤30 KB (largest is 2.0 KB).
+Onboard stills: same "flat silhouettes on bg-deep, one warm light source max" class as the
+shipped `onboard_01..04` (STYLE_GUIDE "Loading art" row), RGB clamped `[12,216]`.
+
+| Path | Origin | License | Attribution | Notes |
+|---|---|---|---|---|
+| `assets/textures/touch/touch_joy_base_256.png` | Generated (Pillow, deterministic) | Project-owned; no third-party rights | none required | 256×256 RGBA. Virtual-joystick ring, semi-transparent. |
+| `assets/textures/touch/touch_joy_knob_256.png` | Generated (Pillow, deterministic) | Project-owned; no third-party rights | none required | 256×256 RGBA. Virtual-joystick knob. |
+| `assets/textures/touch/touch_interact_128.png` | Generated (Pillow, deterministic) | Project-owned; no third-party rights | none required | 128×128 RGBA. Lantern-in-hand interact glyph (available skin; current `BtnInteract` keeps its shipped SVG icon — see `docs/ASSET_HANDOFF.md`). |
+| `assets/textures/touch/touch_pause_128.png` | Generated (Pillow, deterministic) | Project-owned; no third-party rights | none required | 128×128 RGBA. Pause glyph (available skin). |
+| `assets/textures/touch/touch_back_128.png` | Generated (Pillow, deterministic) | Project-owned; no third-party rights | none required | 128×128 RGBA. Back-chevron glyph — wired into the new Help/Codex screen. |
+| `assets/textures/touch/help_controls_96.png` | Generated (Pillow, deterministic) | Project-owned; no third-party rights | none required | 96×96 RGBA. D-pad glyph, Help/Codex controls section. |
+| `assets/textures/touch/help_battery_96.png` | Generated (Pillow, deterministic) | Project-owned; no third-party rights | none required | 96×96 RGBA. Battery glyph, Help/Codex. |
+| `assets/textures/touch/help_puzzle_96.png` | Generated (Pillow, deterministic) | Project-owned; no third-party rights | none required | 96×96 RGBA. Plug/socket glyph, Help/Codex. |
+| `assets/textures/touch/help_stealth_96.png` | Generated (Pillow, deterministic) | Project-owned; no third-party rights | none required | 96×96 RGBA. Crossed-eye glyph, Help/Codex. |
+| `assets/textures/onboard_v2/onboard_05_light_cone_1024x576.png` | Generated (Pillow, deterministic) | Project-owned; no third-party rights | none required | 1024×576 RGB. Flashlight+battery onboarding beat. |
+| `assets/textures/onboard_v2/onboard_06_cable_box_1024x576.png` | Generated (Pillow, deterministic) | Project-owned; no third-party rights | none required | 1024×576 RGB. Cable-puzzle onboarding beat. |
+| `assets/textures/onboard_v2/onboard_07_crouch_hunter_1024x576.png` | Generated (Pillow, deterministic) | Project-owned; no third-party rights | none required | 1024×576 RGB. Stealth (crouch vs. hunter cone) onboarding beat. |

@@ -11,6 +11,13 @@ const PANELS: Array[Dictionary] = [
 	{"img": "res://assets/textures/onboard_v2/onboard_02_light_256x144.png", "caption": "ONBOARD_02_CAPTION"},
 	{"img": "res://assets/textures/onboard_v2/onboard_03_streetlight_256x144.png", "caption": "ONBOARD_03_CAPTION"},
 	{"img": "res://assets/textures/onboard_v2/onboard_04_district_256x144.png", "caption": "ONBOARD_04_CAPTION"},
+	# GOLD MASTER v4 mobile-art pass: 3 more beats (flashlight/battery,
+	# the substation cable puzzle, crouch-vs-hunter stealth) — same
+	# TextureRect (STRETCH_KEEP_ASPECT_CENTERED already handles the
+	# higher 1024x576 source resolution).
+	{"img": "res://assets/textures/onboard_v2/onboard_05_light_cone_1024x576.png", "caption": "ONBOARD_05_CAPTION"},
+	{"img": "res://assets/textures/onboard_v2/onboard_06_cable_box_1024x576.png", "caption": "ONBOARD_06_CAPTION"},
+	{"img": "res://assets/textures/onboard_v2/onboard_07_crouch_hunter_1024x576.png", "caption": "ONBOARD_07_CAPTION"},
 ]
 const AUTO_HIDE_DISTRICT: StringName = &"suburbs"
 const AUTO_HIDE_STAGE: int = 2  ## DistrictData.Stage.STREETS

@@ -144,6 +144,14 @@ func _build_controls_tab(parent: VBoxContainer) -> void:
 	_slider(parent, LocalizationManager.t("Button Size"), "button_size", 0.8, 1.5, 0.05,
 		func(v: float) -> void: SettingsManager.set_button_size(v))
 
+	# GOLD MASTER v4 mobile-art pass: touch/look controls.
+	_slider(parent, LocalizationManager.t("Touch Sensitivity"), "touch_sensitivity", 0.5, 2.0, 0.05,
+		func(v: float) -> void: SettingsManager.set_touch_sensitivity(v))
+
+	_toggle(parent, LocalizationManager.t("Haptic Feedback"), "haptics")
+
+	_toggle(parent, LocalizationManager.t("Invert Look"), "invert_look")
+
 func _build_graphics_tab(parent: VBoxContainer) -> void:
 	parent.add_theme_constant_override("separation", 14)
 	

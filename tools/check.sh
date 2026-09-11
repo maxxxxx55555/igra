@@ -196,6 +196,7 @@ else
     # проверка бюджета D11<350 требует --windowed:
     #   godot --windowed --path . scenes/tools/perf_check_scene.tscn
     run_gate "перф-бюджет (draw calls, только --windowed)" "res://scenes/tools/perf_check_scene.tscn"
+    run_gate "тач-инпут (joystick/deadzone/HUD-кнопки)" "res://scenes/tools/touch_probe_scene.tscn"
   fi
 fi
 

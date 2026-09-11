@@ -269,3 +269,52 @@ generic street/combat/inventory frames at spawn; it cannot stage non-current dis
 walk to zone anchors. Example: `godot --path . --shot=shot01_lit.png --shot-scenario=lit
 --shot-delay=20`. Treat its output as **backup** for shot 1 only; shots 2–8 require the live
 session above. (No Godot was run to produce this plan — all facts static.)
+
+## 7. PHONE — touch-HUD recipes (GOLD MASTER v4 mobile-art pass)
+
+Three shots that put the **real touch HUD on screen** (the EN/RU set in §1-3 deliberately
+hides it via Trailer Mode — these are the counter-set that proves the game is playable by
+thumb, for the store's phone-specific gallery slot). Same district-stage prerequisites as
+§1-3; capture on an actual touchscreen device or the editor's mobile remote-debug view (not
+possible headless — this plan is static-verified, capture itself is OWNER work like the rest
+of this file).
+
+**Shared rules for all three:**
+- **Trailer Mode OFF** (the opposite of §1-3 — the touch HUD must be visible: joystick,
+  BottomRight action cluster, HP/stamina/battery bars).
+- **Aspect:** most phones are taller than 16:9 (e.g. 20:9). **Pad, never crop**, to the
+  1920×1080 canvas Play expects: center the live 20:9 capture and letterbox the remainder in
+  `#0c1016` (STYLE_GUIDE bg-deep) — never stretch, never crop content off the sides.
+  Recompress at 24-bit PNG or JPEG, ≤ 8 MB, same as §4's checklist.
+- **Language:** EN (RU optional companion, same pattern as shot08).
+
+### P1 — first-light, touch HUD visible
+
+- **Setup:** identical trigger moment to shot 1 (§3 "Shot 1 — the hook"): stand at the
+  suburbs power switch 1.0-1.5 s after it flips to STREETS, Trailer Mode **OFF** this time.
+- **Frame:** streetlights igniting behind the player, joystick (`BottomLeft`) and the
+  BottomRight action cluster (attack/sprint/stealth/interact) both fully visible and legible.
+- **File:** `shot_p1_touch_first_light_1920x1080_en.png`.
+
+### P2 — crouch, stealth read
+
+- **Setup:** any district with a visible hunter at mid-range, player crouched (stealth
+  toggled via `BtnStealth` or the Crouch Input binding) in cover/shadow.
+- **Frame:** crouched player silhouette low in frame, hunter visible but not adjacent (reads
+  as "avoiding," not "caught"); touch HUD visible, `HUD_STEALTH` label legible.
+- **File:** `shot_p2_touch_crouch_1920x1080_en.png`.
+
+### P3 — one-tap fix (interact glyph read)
+
+- **Setup:** player standing at a power switch or cable-box puzzle, **not yet interacted**,
+  `BtnInteract` glowing (the new interact-availability pulse, `hud_3d.gd
+  _pulse_interact_button`) — captured mid-pulse (brass tint, not white).
+- **Frame:** the interactable object + the pulsing `BtnInteract` both in frame — sells "one
+  tap fixes this" at a glance.
+- **File:** `shot_p3_touch_interact_1920x1080_en.png`.
+
+### QA (same as §4, plus)
+
+- Touch HUD elements (joystick ring/knob, BottomRight cluster) fully inside the letterboxed
+  frame, not clipped by the pad.
+- Letterbox bars are flat `#0c1016`, no gradient/vignette bleeding into them.

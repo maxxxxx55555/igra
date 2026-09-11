@@ -1059,5 +1059,11 @@
   "ITEM_NOT_EQUIPPABLE": "Este objeto no se puede equipar",
   "LOAD_FAILED": "Error al cargar",
   "Trailer Mode": "Modo tráiler",
-  "PHOTO_FILTER": "Filtro: %s"
+  "PHOTO_FILTER": "Filtro: %s",
+  "Touch Sensitivity": "Sensibilidad táctil",
+  "Haptic Feedback": "Vibración",
+  "Invert Look": "Invertir la vista",
+  "ONBOARD_05_CAPTION": "Las pilas mantienen la linterna encendida — encuéntralas antes de quedarte a oscuras.",
+  "ONBOARD_06_CAPTION": "Algunos paneles necesitan más que energía — conecta los cables para desbloquearlos.",
+  "ONBOARD_07_CAPTION": "Agáchate para moverte en silencio y quedar fuera del campo de visión de un cazador."
 }

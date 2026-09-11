@@ -1059,5 +1059,11 @@
   "ITEM_NOT_EQUIPPABLE": "该物品无法装备",
   "LOAD_FAILED": "加载失败",
   "Trailer Mode": "预告片模式",
-  "PHOTO_FILTER": "滤镜：%s"
+  "PHOTO_FILTER": "滤镜：%s",
+  "Touch Sensitivity": "触控灵敏度",
+  "Haptic Feedback": "震动反馈",
+  "Invert Look": "反转视角",
+  "ONBOARD_05_CAPTION": "电池能让手电筒持续发光——趁还没陷入黑暗时找到它们。",
+  "ONBOARD_06_CAPTION": "有些配电盘光靠电力还不够——接好电缆才能解锁。",
+  "ONBOARD_07_CAPTION": "蹲下可以安静移动，避开猎手的视线范围。"
 }

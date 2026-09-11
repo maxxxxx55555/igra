@@ -324,10 +324,15 @@ func _input(event: InputEvent) -> void:
 		var vp_w: float = get_viewport().get_visible_rect().size.x if get_viewport() else 1000.0
 		if event.position.x < vp_w * JOY_ZONE_RATIO:
 			return
-		_apply_look(-event.relative.x * TOUCH_LOOK_SENS, -event.relative.y * TOUCH_LOOK_SENS)
+		var touch_mult: float = SettingsManager.get_touch_sensitivity() if SettingsManager != null else 1.0
+		_apply_look(-event.relative.x * TOUCH_LOOK_SENS * touch_mult, -event.relative.y * TOUCH_LOOK_SENS * touch_mult)
 
+## GOLD MASTER v4: Invert Look flips only the vertical (pitch) axis — the
+## conventional meaning of "invert look", not left/right.
 func _apply_look(yaw_delta: float, pitch_delta: float) -> void:
 	rotation.y += yaw_delta
+	if SettingsManager != null and SettingsManager.is_look_inverted():
+		pitch_delta = -pitch_delta
 	_pitch = clampf(_pitch + pitch_delta, -1.5, 1.5)
 
 func _physics_process(delta: float) -> void:

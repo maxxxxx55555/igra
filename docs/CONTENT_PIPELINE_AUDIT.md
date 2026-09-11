@@ -582,3 +582,62 @@ owner instruction (Arena closed, no conflict risk). `tools/` +
 Store-release-pass recreate: **listing 13/13, adaptive icon 2/2 + README,
 review ops 5/5 classes, ledger + audit complete — 0 defects.** The
 CONTENT RELEASE CERTIFICATE (§9) remains valid, no regression.
+
+## 13. Mobile-art-pass recreate re-audit (2026-09-11, GOLD MASTER v4) — 0 defects
+
+`arena/01a08c53-igra` was present on origin but its tip (`540c57a`) was already an ancestor
+of `main` — **zero new commits, no payload**. Path B (recreate) taken per the brief.
+
+### 13.1 Touch-HUD glyphs (`assets/textures/touch/**`, 9 files)
+
+Generated deterministically by `tools/gen_mobile_art_pass.py` (committed, `--check` gate).
+Verified: `touch_joy_base/knob_256` exactly 256×256; `touch_interact/pause/back_128` exactly
+128×128; `help_controls/battery/puzzle/stealth_96` exactly 96×96; every file ≤30 KB (largest
+2.0 KB); alpha ≤226 everywhere; 0 pure `#000`/`#fff` (RGB clamped to `[12,216]` wherever
+alpha > 0). GREEN.
+
+### 13.2 Onboarding stills (`assets/textures/onboard_v2/onboard_{05,06,07}_*_1024x576.png`)
+
+Same generator. Verified: exactly 1024×576; RGB clamped `[12,216]`; same "flat silhouettes on
+bg-deep, one warm light source max" composition class as the shipped `onboard_01..04`
+(STYLE_GUIDE "Loading art" row). Wired into `scripts/ui/onboarding_overlay.gd` as panels 5-7
+(`ONBOARD_05/06/07_CAPTION`, 13 locales, `i18n_audit.py` MISSING: 0). GREEN.
+
+### 13.3 Touch-input AAA polish
+
+`scripts/ui/virtual_joystick.gd`: real dead-zone (reads the existing `deadzone` Settings
+value, default 0.15, design range 0.15-0.25), exponential response curve (`RESPONSE_CURVE`
+1.6, precise near-center / full-speed at the rim), `touch_sensitivity` Settings multiplier,
+haptic tick on touch-down (`Input.vibrate_handheld`, gated by the new Haptic Feedback
+setting), knob visual press-scale, and the two new textures replacing the hand-drawn
+placeholder circle. `scripts/player/player_3d.gd`: Invert Look setting (pitch axis only,
+the conventional meaning) applied to both mouse-look and touch drag-look; Touch Sensitivity
+also scales touch drag-look. New Settings rows: Touch Sensitivity (0.5x-2.0x), Haptic
+Feedback (toggle), Invert Look (toggle) — Controls tab, 13 locales.
+
+Verified by a new headless gate, `scenes/tools/touch_probe_scene.tscn`
+(`scripts/tools/_touch_probe.gd`), wired into `tools/check.sh` and
+`tools/qa_sim/headless_suite`: injects real `InputEventScreenTouch`/`InputEventScreenDrag`
+into the live `virtual_joystick.gd` control and asserts `InputService` state changes
+correctly (dead-zone suppresses a sub-threshold drag, a full-rim drag reaches max speed,
+release zeroes it, the Settings dead-zone value is actually read); injects synthetic
+`button_down` on the real `hud_3d.tscn`'s `BtnInteract`/`BtnAttack` and asserts
+`InputService.interact_requested`/`attack_requested` fire. 9/9 checks GREEN.
+
+### 13.4 Ownership / forbidden-path audit
+
+Changed: `assets/textures/touch/**`, `assets/textures/onboard_v2/onboard_0{5,6,7}*`,
+`tools/gen_mobile_art_pass.py`, `scripts/ui/{virtual_joystick,onboarding_overlay,hud_3d,
+settings_screen}.gd`, `scripts/player/player_3d.gd`, `scripts/systems/settings_manager.gd`,
+`scripts/tools/_touch_probe.gd`, `scenes/tools/touch_probe_scene.tscn`, `tools/check.sh`,
+`tools/qa_sim/headless_suite`, `data/i18n/*.json` (+6 keys ×13), `docs/{ASSET_LICENSES,
+CONTENT_PIPELINE_AUDIT,ASSET_HANDOFF}.md`, `store/screenshot-plan-detailed.md`. All within
+CLAUDE's standing zone (`*.gd`, `tools/`, `scenes/`, `data/`) plus `assets/textures/**` and
+the reassigned `store/**` + asset docs (owner instruction: Arena's mobile-art pass carried no
+payload, recreate it locally). Frozen `docs/GDD.md`, `docs/PRODUCTION_BIBLE.md`,
+`docs/HANDOFF.md` untouched.
+
+### 13.5 Verdict
+
+Mobile-art-pass recreate: **touch glyphs 9/9, onboarding stills 3/3, touch-input probe 9/9,
+ledger + audit complete — 0 defects.**

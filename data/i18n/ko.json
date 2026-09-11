@@ -1059,5 +1059,11 @@
   "ITEM_NOT_EQUIPPABLE": "이 아이템은 장착할 수 없습니다",
   "LOAD_FAILED": "불러오기 실패",
   "Trailer Mode": "트레일러 모드",
-  "PHOTO_FILTER": "필터: %s"
+  "PHOTO_FILTER": "필터: %s",
+  "Touch Sensitivity": "터치 감도",
+  "Haptic Feedback": "진동",
+  "Invert Look": "시점 반전",
+  "ONBOARD_05_CAPTION": "배터리가 손전등을 계속 밝혀줍니다 — 어둠 속에 남겨지기 전에 찾으세요.",
+  "ONBOARD_06_CAPTION": "전력만으로는 부족한 배전반도 있습니다 — 케이블을 맞춰 잠금을 해제하세요.",
+  "ONBOARD_07_CAPTION": "웅크리면 조용히 움직이고 사냥꾼의 시야 밖에 머물 수 있습니다."
 }

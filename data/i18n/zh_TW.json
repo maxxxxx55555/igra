@@ -1059,5 +1059,11 @@
   "ITEM_NOT_EQUIPPABLE": "該物品無法裝備",
   "LOAD_FAILED": "載入失敗",
   "Trailer Mode": "預告片模式",
-  "PHOTO_FILTER": "濾鏡：%s"
+  "PHOTO_FILTER": "濾鏡：%s",
+  "Touch Sensitivity": "觸控靈敏度",
+  "Haptic Feedback": "觸覺回饋",
+  "Invert Look": "反轉視角",
+  "ONBOARD_05_CAPTION": "電池能讓手電筒持續發光——趁還沒陷入黑暗時找到它們。",
+  "ONBOARD_06_CAPTION": "有些配電盤光靠電力還不夠——接好電纜才能解鎖。",
+  "ONBOARD_07_CAPTION": "蹲下可以安靜移動，避開獵人的視線範圍。"
 }

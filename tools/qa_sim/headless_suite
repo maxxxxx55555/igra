@@ -69,6 +69,7 @@ run_scene "footstep mapper"            "res://scenes/tools/footstep_check_scene.
 run_scene "audio silence-before-input" "res://scenes/tools/audio_hum_check_scene.tscn"       90
 run_scene "theme unify"               "res://scenes/tools/theme_unify_probe_scene.tscn"      90
 run_scene "perf budget (self-skips headless)" "res://scenes/tools/perf_check_scene.tscn"     120
+run_scene "touch input probe"          "res://scenes/tools/touch_probe_scene.tscn"           90
 
 echo "── Extended scenario driver (districts / save+lang / endings / i18n x13 / soak)"
 QA_T=$(( ${QA_SOAK_SEC:-120} + 300 ))

@@ -1059,5 +1059,11 @@
   "ITEM_NOT_EQUIPPABLE": "This item can't be equipped",
   "LOAD_FAILED": "Failed to load",
   "Trailer Mode": "Trailer Mode",
-  "PHOTO_FILTER": "Filter: %s"
+  "PHOTO_FILTER": "Filter: %s",
+  "Touch Sensitivity": "Touch Sensitivity",
+  "Haptic Feedback": "Haptic Feedback",
+  "Invert Look": "Invert Look",
+  "ONBOARD_05_CAPTION": "Batteries keep the flashlight burning - find them before you're left in the dark.",
+  "ONBOARD_06_CAPTION": "Some panels need more than power - match the cables to unlock them.",
+  "ONBOARD_07_CAPTION": "Crouch to move quietly and stay out of a hunter's line of sight."
 }

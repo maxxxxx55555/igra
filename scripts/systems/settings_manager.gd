@@ -95,6 +95,9 @@ func _load_defaults() -> void:
 	_settings["auto_aim"] = false
 	_settings["arachnophobia"] = false
 	_settings["objective_markers"] = true
+	_settings["touch_sensitivity"] = 1.0
+	_settings["haptics"] = true
+	_settings["invert_look"] = false
 
 func set_volume(bus: String, v: float) -> void:
 	var b := _canon_bus(bus)
@@ -482,6 +485,21 @@ func set_draw_distance(v: float) -> void:
 	if cam != null:
 		cam.far = maxf(_settings["draw_distance"], cam.near + 1.0)
 	EventBus.settings_changed.emit("draw_distance", _settings["draw_distance"])
+
+## GOLD MASTER v4 mobile-art pass: touch-HUD controls (virtual_joystick.gd
+## reads touch_sensitivity/haptics live; player_3d.gd reads invert_look).
+func set_touch_sensitivity(v: float) -> void:
+	_settings["touch_sensitivity"] = clampf(v, 0.5, 2.0)
+	EventBus.settings_changed.emit("touch_sensitivity", _settings["touch_sensitivity"])
+
+func get_touch_sensitivity() -> float:
+	return float(_settings.get("touch_sensitivity", 1.0))
+
+func haptics_enabled() -> bool:
+	return bool(_settings.get("haptics", true))
+
+func is_look_inverted() -> bool:
+	return bool(_settings.get("invert_look", false))
 
 func _find_environment() -> Environment:
 	var we := get_tree().root.find_child("WorldEnvironment", true, false) as WorldEnvironment

@@ -1059,5 +1059,11 @@
   "ITEM_NOT_EQUIPPABLE": "このアイテムは装備できません",
   "LOAD_FAILED": "読み込みに失敗しました",
   "Trailer Mode": "トレーラーモード",
-  "PHOTO_FILTER": "フィルター: %s"
+  "PHOTO_FILTER": "フィルター: %s",
+  "Touch Sensitivity": "タッチ感度",
+  "Haptic Feedback": "バイブレーション",
+  "Invert Look": "視点反転",
+  "ONBOARD_05_CAPTION": "電池が懐中電灯を灯し続ける――暗闇に取り残される前に見つけろ。",
+  "ONBOARD_06_CAPTION": "電力だけでは開かない配電盤もある――ケーブルを合わせて解除しろ。",
+  "ONBOARD_07_CAPTION": "しゃがめば静かに動け、狩人の視界の外にいられる。"
 }

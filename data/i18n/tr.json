@@ -1059,5 +1059,11 @@
   "ITEM_NOT_EQUIPPABLE": "Bu eşya kuşanılamaz",
   "LOAD_FAILED": "Yükleme başarısız",
   "Trailer Mode": "Fragman Modu",
-  "PHOTO_FILTER": "Filtre: %s"
+  "PHOTO_FILTER": "Filtre: %s",
+  "Touch Sensitivity": "Dokunma Hassasiyeti",
+  "Haptic Feedback": "Titreşim",
+  "Invert Look": "Görünümü Ters Çevir",
+  "ONBOARD_05_CAPTION": "Piller el fenerini yanık tutar — karanlıkta kalmadan önce onları bul.",
+  "ONBOARD_06_CAPTION": "Bazı panolar güçten fazlasını ister — açmak için kabloları eşleştir.",
+  "ONBOARD_07_CAPTION": "Sessizce hareket etmek ve bir avcının görüş alanının dışında kalmak için eğil."
 }

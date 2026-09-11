@@ -89,6 +89,7 @@ func _ready() -> void:
 	_add_battery_ad_button()
 	EventBus.ammo_changed.connect(_on_ammo_changed)
 	EventBus.player_interact_available.connect(func(avail: bool): prompt.visible = avail)
+	EventBus.player_interact_available.connect(_pulse_interact_button)
 	# Подсказка была вечно пустой строкой: текст в неё никто не писал.
 	EventBus.interact_prompt_changed.connect(func(text: String) -> void: prompt.text = text)
 	EventBus.inventory_weight_changed.connect(_on_weight_changed)
@@ -736,6 +737,24 @@ func _on_btn_pressed(btn: Button) -> void:
 	var tween := create_tween()
 	tween.tween_property(btn, "scale", Vector2(0.92, 0.92), 0.04)
 	tween.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.04)
+	if OS.has_feature("mobile") and SettingsManager != null and SettingsManager.haptics_enabled():
+		Input.vibrate_handheld(15)
+
+## GOLD MASTER v4: BtnInteract gets a slow brass pulse while something is
+## in reach — the touch-only equivalent of the PC prompt label appearing.
+var _interact_pulse: Tween = null
+func _pulse_interact_button(on: bool) -> void:
+	var btn := get_node_or_null("BottomRight/BtnInteract") as Button
+	if btn == null:
+		return
+	if _interact_pulse != null and _interact_pulse.is_valid():
+		_interact_pulse.kill()
+	if not on:
+		btn.modulate = Color.WHITE
+		return
+	_interact_pulse = create_tween().set_loops()
+	_interact_pulse.tween_property(btn, "modulate", Color(1.3, 1.15, 0.8), 0.5)
+	_interact_pulse.tween_property(btn, "modulate", Color.WHITE, 0.5)
 
 ## Кнопки-«спутники» правого кластера. Раньше они позиционировались абсолютными
 ## пикселями от 1920x1080 и на телефоне уезжали за экран — теперь якорятся к

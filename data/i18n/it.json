@@ -1059,5 +1059,11 @@
   "ITEM_NOT_EQUIPPABLE": "Questo oggetto non può essere equipaggiato",
   "LOAD_FAILED": "Caricamento non riuscito",
   "Trailer Mode": "Modalità trailer",
-  "PHOTO_FILTER": "Filtro: %s"
+  "PHOTO_FILTER": "Filtro: %s",
+  "Touch Sensitivity": "Sensibilità tattile",
+  "Haptic Feedback": "Vibrazione",
+  "Invert Look": "Inverti la visuale",
+  "ONBOARD_05_CAPTION": "Le batterie tengono accesa la torcia — trovale prima di restare al buio.",
+  "ONBOARD_06_CAPTION": "Alcuni pannelli richiedono più della corrente — collega i cavi per sbloccarli.",
+  "ONBOARD_07_CAPTION": "Accovacciati per muoverti in silenzio e restare fuori dal campo visivo di un cacciatore."
 }
