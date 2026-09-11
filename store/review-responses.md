@@ -15,31 +15,30 @@ House rules:
 
 ---
 
-## Class 1 — Crash / won't launch / lost save
+## Class 1 — Crash / won't launch
 
 **EN**
 ```
 Thanks for flagging this, and sorry it hit you. This isn't the intended
 behaviour. Could you tell us your device model and Android/iOS version,
 and what you were doing right before it happened (booting, saving,
-changing districts)? Saves are checksum-verified with an automatic
-backup, so a lost slot can often be recovered — email <support@…> with
-that info and we'll walk you through it.
+changing districts)? If it happens every time at the same step, say
+which step — that alone usually pins the cause. Email <support@…> with
+that info and we'll take it from there.
 ```
 **RU**
 ```
 Спасибо, что сообщили, — так быть не должно. Напишите, пожалуйста,
 модель устройства и версию Android/iOS и что происходило прямо перед
-сбоем (запуск, сохранение, переход между районами). Сохранения
-проверяются контрольной суммой и имеют резервную копию, поэтому
-потерянный слот часто удаётся восстановить — напишите на <support@…>,
-и мы поможем.
+сбоем (запуск, сохранение, переход между районами). Если повторяется
+каждый раз на одном и том же шаге — укажите на каком, этого часто
+достаточно, чтобы найти причину. Напишите на <support@…>, разберёмся.
 ```
-**Escalation (owner):** reproduce on a matching device; check the save
-envelope path in `scripts/core/save_system.gd` (`_read_envelope` /
-`_read_validated`) and the boot flow (`boot_check_scene.tscn`). Not a
-known open issue — `KNOWN_ISSUES.md` records the save round-trip and
-boot-flow as passing gates. If it reproduces, it's a new P0.
+**Escalation (owner):** reproduce on a matching device; check the boot
+flow (`boot_check_scene.tscn`) first, then the subsystem named by the
+player's last step. Not a known open issue — `KNOWN_ISSUES.md` records
+the boot-flow gate and the save/load round-trip as passing. If it
+reproduces, it's a new P0. (Lost-save reports route to Class 6.)
 
 ## Class 2 — Performance: lag, stutter, battery drain, heat
 
@@ -59,14 +58,20 @@ helps or not — device details make it much easier to chase.
 динамический свет, и этот экран разменивает его на плавность. Напишите,
 помогло или нет, — детали устройства сильно ускорят разбор.
 ```
-**Escalation (owner):** `KNOWN_ISSUES.md` "Draw calls: 234 measured vs
-GDD's <200 (D1) / <350 (D11)" — D11 target is met, D1 is not, and the
-distance-fade guard on streetlight + pickup lights already caps active
-lights (~18/frame D1 per `tools/qa_sim/drawcall_estimate.py`). Still
-pending: one owner `perf_check_scene.tscn --windowed` run for the real
+**Escalation (owner):** wired to the ACCEPTED state in `KNOWN_ISSUES.md`
+"Draw calls: 234 measured vs GDD's <200 (D1) / <350 (D11) — D11 met,
+D1 not": the shippable D11 budget (<350) is met at 234 and hard-gated
+by `perf_check_scene.tscn`; the D1<200 gap is WON'T-FIX for RC
+(accepted — no code-only, behavior-preserving, statically verifiable
+reduction remains), and the MEGA POLISH distance-fade cull already cut
+active real-time lights 58 → 18 (−69%, `tools/qa_sim/
+drawcall_estimate.py`). Honest ceiling to keep in mind when replying:
+residual cost is 6 non-batchable monster meshes + in-view pickups +
+HUD, which a Profiler pass and possibly a concurrent monster/pickup
+budget would be needed to move. Still pending: one owner
+`perf_check_scene.tscn --windowed` run for the real
 `RENDER_TOTAL_DRAW_CALLS_IN_FRAME` on the reported device tier. If a
-low-end tier is consistently bad, that's a P1 (concurrent
-monster/pickup budget or a material merge).
+low-end tier is consistently bad, that's a P1.
 
 ## Class 3 — Stuck / can't progress / too hard / "I'm lost"
 
@@ -143,14 +148,58 @@ a small project a lot.
 `docs/GAP_TO_IDEAL.md` (P1/P2 as appropriate). No action needed on the
 review itself beyond the reply.
 
+## Class 6 — Save lost / corrupted save
+
+**EN**
+```
+We're sorry — losing progress hurts and we take it seriously. Every
+save is written with a checksum, and the game keeps a backup copy of
+the previous valid save, so there is a real chance your progress can
+be restored. Please email <support@…> with your device model, Android
+version and roughly when it happened (after a crash? after clearing
+app data? after switching districts?) — we'll walk you through
+checking the backup on your device. One honest caveat: if both the
+save and its backup fail their integrity check, the game quarantines
+the damaged files and starts a fresh slot — in that case we can't
+promise a recovery, but we do want the report, because it means
+something real went wrong.
+```
+**RU**
+```
+Сочувствуем — терять прогресс обидно, и мы относимся к этому
+серьёзно. Каждое сохранение пишется с контрольной суммой, а игра
+хранит резервную копию предыдущего валидного сейва, поэтому шанс
+вернуть прогресс реальный. Напишите на <support@…> модель устройства,
+версию Android и примерно когда это случилось (после вылета? после
+очистки данных приложения? после перехода между районами?) — поможем
+проверить резервную копию на устройстве. Честная оговорка: если и
+сейв, и резервная копия не проходят проверку целостности, игра
+изолирует повреждённые файлы и начинает новый слот — в этом случае
+восстановление обещать нельзя, но сам репорт нам нужен: значит,
+что-то действительно пошло не так.
+```
+**Escalation (owner):** wired to the save path in
+`scripts/core/save_system.gd`: every write is a SHA-256 envelope
+(`_save_envelope`), `_read_validated` falls back main → `.bak` →
+quarantine + clean start, and the quarantined envelope is kept on
+disk (recovery sometimes possible by inspecting the quarantine file).
+`KNOWN_ISSUES.md` records the save/load round-trip and the boot-flow
+gate as PASSING, and there is **no known open save-loss defect** — so
+treat any credible report as a potential new P0: reproduce on a
+matching device, pull the slot + `.bak` + quarantine files, and if a
+loss path reproduces, open the KNOWN_ISSUES entry in the same commit
+as the fix. Never tell a player their progress "will" be restored —
+only that the backup exists and we'll check it.
+
 ---
 
 ## Quick router
 
 | Review says… | Class | Owner tag |
 |---|---|---|
-| "crashes", "black screen", "lost my save", "won't open" | 1 | `crash` — new P0 until reproduced |
-| "lag", "stutter", "hot", "drains battery", "fps" | 2 | `perf` — `KNOWN_ISSUES` draw-calls entry |
+| "crashes", "black screen", "won't open" | 1 | `crash` — new P0 until reproduced |
+| "lag", "stutter", "hot", "drains battery", "fps" | 2 | `perf` — `KNOWN_ISSUES` draw-calls entry (accepted state) |
 | "stuck", "can't finish", "no parts", "too hard", "lost" | 3 | `progression` — verify `DistrictLoot.populate()` |
 | "too many ads", "pay to win", "cash grab" | 4 | `ads` — `AdService` timing, usually a misunderstanding |
 | 4–5★ + "please add…" | 5 | `request` — log in `GAP_TO_IDEAL.md` |
+| "lost my save", "progress gone", "save corrupted/deleted" | 6 | `saveloss` — no known open defect; credible repro = new P0 |
