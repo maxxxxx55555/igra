@@ -21,6 +21,75 @@ in-scope-only PR per `ARENA_NEXT_PROMPT.md`'s protocol. `arena/01a080ba-
 igra` (suburbs district content, PR #1) was merged and deleted
 2026-09-08 — see decisions log below.
 
+## GOLD MASTER v5 — "HOOKS & SIMPLIFIED", declared 2026-09-11
+
+**`origin/main` is GOLD MASTER v5 at `<gm5-hash>`.** GOLD MASTER v3 (below) plus
+two sessions of work that were never given their own PLAN.md milestone at
+the time (commit messages called them "mobile-art pass" / v4 scope and
+"hooks pass" / v5 scope — declared together here since v4 was never
+formally written up):
+
+**Mobile-art + touch AAA polish** (v4 scope): `arena/01a08c53-igra`
+carried no payload (tip already an ancestor of `main`), so the mobile
+art pass was recreated deterministically (`tools/gen_mobile_art_pass.py`
+— 9 touch glyphs + 3 onboard stills, STYLE_GUIDE palette, `--check`
+gate). `virtual_joystick.gd` gained a real dead-zone, an exponential
+response curve, a Settings-driven sensitivity multiplier, haptics, and
+knob press-scale; 3 new Settings rows (Touch Sensitivity, Haptic
+Feedback, Invert Look) plus a mobile-relevant Render Scale
+(`Viewport.scaling_3d_scale`, distinct from the pre-existing
+PC-oriented window-size "Resolution"). New Help/Codex tab: live
+keyboard keybinds (read from `InputMap`, never drifts) + a touch
+reference column + a mechanics glossary reusing existing hint strings.
+New headless gate `touch_probe_scene.tscn` injects real touch/drag
+events and HUD button presses. Balance sim
+(`tools/qa_sim/balance_sim.py`, source-driven, no duplicated magic
+numbers): DARK solvable at +100% repair-part margin, 0 resource
+dead-ends, hunter pressure 6→3 across stages, time-to-win 4.9h (DARK
+typical) within the 3-6h target. `docs/HONEST_ASSESSMENT.md` (candid
+5.5/10 pre-launch read — no session has ever played this game, and says
+so) and `docs/VISUAL_AUDIO_SPEC.md` (per-district LUT moods, wow-moment
+cue specs, the 8 remaining audio-gap contract, screenshot composition
+rules) written for Arena. `docs/KNOWN_ISSUES.md`: 1230 textures still
+Lossless (not VRAM-compressed) flagged P1/OWNER — needs a windowed
+visual banding check this policy can't do.
+
+**Hooks pass** (v5 scope, no server required): One More Run (NG+ prompt
+on the win screen), Collection Album (district-accent cards + progress
+bars over existing document-unlock data), a local leaderboard in Stats
+(top-10 fastest wins, survives New Game resets), 30 daily-challenge
+templates across 5 EventBus-signal-driven types with 7/30/100-day streak
+rewards (`data/daily_challenges.json` + `DailyChallengeManager`, a
+main-menu card), 11 new per-district achievements (31 total — short of
+the "50+" ask; see the final report's honest accounting, the remaining
+~19 would each need a genuine new trigger, not filler), and a clipboard
+Share button (`DisplayServer.clipboard_set` — honest scope, not a native
+Android intent this session can't add or verify).
+
+**Simplification audit** (STEP 5): checked pathfinding, physics
+interaction, dynamic lighting and AI against the brief's four requested
+rewrites — none of the four over-engineered patterns are actually
+present (`NavigationAgent3D` is already Godot's own stdlib pathfinder;
+raycasts are already targeted, not a framework; `LightLimiter` is a
+51-line distance-budget cull already; the 8-state AI FSM's extra states
+encode real stealth-genre behavior a 3-state collapse would remove).
+**0 files rewritten, by design** — see `docs/SIMPLIFICATION_AUDIT.md`
+for the full per-category evidence. Flags `scripts/ui/screens.gd`
+(1059 lines) as a real future candidate, not attempted blind.
+
+**Verification:** static gates green, `headless_suite` green ×2
+consecutive, all `tools/qa_sim/*.py` PASS, `touch_probe_scene.tscn`
+23/23 (including a 200-event fuzz pass + 30-value Settings fuzz pass,
+deterministic seed). Save-corruption coverage: `save_integrity_check_scene`
+(already in the suite) corrupts the main save and both main+`.bak`,
+asserts `.bak` recovery and graceful rejection — green throughout.
+`tools/qa_sim/autoplay_bot`: still blocked by the pre-existing
+gate-scene boot-lifecycle issue documented in `docs/KNOWN_ISSUES.md`
+(unrelated to this pass's work; not re-attempted here) — 0/1 seeds won,
+honestly reported, not swept under the rug.
+
+---
+
 ## GOLD MASTER v3 — ABSOLUTE FINAL, declared 2026-09-10 (native-QA locale pass + final audio + shot plan)
 
 **`origin/main` is GOLD MASTER v3 at `ec68d42`.** GOLD MASTER v2 (below)

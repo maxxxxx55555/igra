@@ -2,9 +2,10 @@
 
 ## 0. TL;DR — the irreducible human minimum
 
-Everything code / content / store-side is **done by agents** (GOLD MASTER v3,
-`origin/main`). What's left needs a GUI, an account, a signing key, or a
-build toolchain and cannot be done from an agent session:
+Everything code / content / store-side is **done by agents** (GOLD MASTER v5
+"HOOKS & SIMPLIFIED", `origin/main`). What's left needs a GUI, an account, a
+signing key, a build toolchain, or a human playing the game — and cannot be
+done from an agent session:
 
 1. **Keystore + build.** `keytool -genkey … -alias tlsrelease` (§1), put
    the path/passwords in `export_presets.cfg`, install `4.7-stable`
@@ -26,16 +27,36 @@ build toolchain and cannot be done from an agent session:
    reviews.
 
 Optional / not blocking: real AppLovin SDK key (§2 — ships fine on the
-no-ad debug stub without it), extra platforms (§6), eyes-on playtest
-(`docs/HANDOFF.md` "HUMAN PLAYTEST SCRIPT v2"), version bump at upload
+no-ad debug stub without it), extra platforms (§6), version bump at upload
 time (§7), one `perf_check_scene.tscn --windowed` run for the real
-draw-call number. Full gap list: `docs/GAP_TO_IDEAL.md`.
+draw-call number, migrating 1230 textures to VRAM-compressed (`docs/
+KNOWN_ISSUES.md` "Mobile texture compression"). Full gap list:
+`docs/GAP_TO_IDEAL.md`.
+
+**Not actually optional, despite the label above:** the **eyes-on
+playtest** (`docs/HANDOFF.md` "HUMAN PLAYTEST SCRIPT v2") is the single
+highest-leverage remaining action, full stop. `docs/HONEST_ASSESSMENT.md`
+says this plainly: every visual/feel claim in this repo — banding,
+touch-target overlap, whether the joystick actually feels good, the
+final boss's real difficulty on a first attempt — is inferred from code,
+never observed, because NO-GODOT policy means no agent session has ever
+seen this game run. One real playthrough on the actual target device,
+before wider release, will surface more than any further static/headless
+pass could.
 
 ### Already done by agents (do NOT redo)
 
 | Area | State | Ref |
 |---|---|---|
-| Code / gameplay / autoloads | GOLD MASTER v3; headless suite green ×2 | `ec68d42`, `2101311`, `f3bd1e3` |
+| Code / gameplay / autoloads | GOLD MASTER v5 "HOOKS & SIMPLIFIED"; headless suite green ×2 | `<gm5-hash>`, `ec68d42`, `f3bd1e3` |
+| Touch AAA polish | dead-zone, response curve, sensitivity, haptics, Help screen (keyboard+touch+glossary) | `62e8bdd`, `bfbe3d5` |
+| Mobile-art pass (Arena recreate) | 9 touch glyphs + 3 onboard stills, `--check` gate | `62e8bdd` |
+| Balance sim | DARK +100% repair-part margin, 0 dead-ends, 4 skill branches, 4.9h time-to-win (DARK) | `59d09b3` |
+| `docs/HONEST_ASSESSMENT.md` | candid pre-launch read, 5.5/10, cites the eyes-on-playtest gap explicitly | `ff35718` |
+| `docs/VISUAL_AUDIO_SPEC.md` | LUT moods, wow-cue specs, 8 audio-gap contract, screenshot rules — for Arena | `be00cb9` |
+| Hooks — daily challenges, Collection Album, leaderboard, One More Run, 31 achievements, Share | no server required, all data-driven, 13 locales | `6100436`..`7e8c67b` |
+| `docs/SIMPLIFICATION_AUDIT.md` | 4 requested rewrites checked, 0 attempted — already-idiomatic code, evidence per category | `ddd0830` |
+| Touch/fuzz headless gate | `touch_probe_scene.tscn`, 23/23 incl. a 200-event fuzz pass | `3522d89` |
 | `tools/qa_sim/headless_suite` verification gate | 12 autoloads · 11 districts + loot · 5 endings · save/load+lang · combat · 1061 keys ×13 at runtime · soak | `f3bd1e3` |
 | District-load / pickup engine errors | fixed — rebuild deferred out of the physics signal (0 "Function blocked" errors) | `2101311` |
 | i18n — 13 locales, every user-facing string | 1061 keys × 13, 0 MISSING at runtime | `a712dd1`, prior |

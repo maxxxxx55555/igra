@@ -5,6 +5,68 @@ in-game verification — a static-only pass can't play the game itself.
 
 ---
 
+## Batch 13 (2026-09-11) — GOLD MASTER v5: daily challenges, collection album, leaderboard, achievements, share
+
+- **A reason to open the game tomorrow.** The main menu now shows
+  today's challenge (e.g. "Kill 10 enemies" or "Fully restore 2
+  districts") with your progress and your daily streak. 30 different
+  challenges rotate through the year; everyone worldwide gets the same
+  one on the same day. Finishing one pays coins; hitting a 7/30/100-day
+  streak pays a bigger bonus on top.
+- **Collection Album** — new tab in the Codex (press your journal/codex
+  key) showing all 11 districts as cards, each with a progress bar for
+  how many of that district's documents and lore notes you've found.
+- **Best Runs** in the Stats screen — your 5 fastest wins, with district
+  count and kills, kept even after you start a New Game.
+- **31 achievements now** (was 20) — one for fully restoring each of the
+  11 districts, on top of the existing set.
+- **"One More Run"** button on the ending screen, next to Main Menu —
+  jumps straight to the New Game+ screen instead of making you find it
+  through the menus.
+- **Share button** on the ending screen — copies a short summary of your
+  run (ending + districts restored) to your clipboard so you can paste
+  it anywhere. Off switch: Settings → Game → "Share Progress".
+
+### HUMAN CHECK (3 min)
+Open the main menu — a daily challenge card should show under Continue.
+Play until you finish it (or fake a fast one: kill enough things /
+restore a district) — coins should increase and the streak should tick
+up. Open the Codex → Collection tab — 11 cards, each with a plausible
+progress bar. Win or lose a run — the ending screen should show One More
+Run and Share buttons.
+
+---
+
+## Batch 12 (2026-09-11) — GOLD MASTER v4 (mobile art + touch): joystick feel, Help screen, 7 onboarding beats
+
+- **The virtual joystick actually feels like one now** — a real
+  dead-zone (a light touch near center does nothing, same as any modern
+  controller), a response curve (fine control near center, full speed at
+  the rim), and the knob visibly grows a little while held. New art for
+  the joystick base/knob and a handful of touch icons.
+- **New Settings rows (Controls tab):** Touch Sensitivity, Haptic
+  Feedback (a short vibration on touch-down and button presses, can be
+  turned off), Invert Look. **New Settings row (Graphics tab):** Render
+  Scale — the real mobile performance knob (distinct from the older
+  "Resolution" option, which only does anything in a windowed PC build).
+- **New Help screen** — in the Codex, a Controls section (your actual
+  keyboard bindings, plus what does the same thing on touch) and a short
+  mechanics glossary (flashlight, battery, the cable puzzle, stealth,
+  districts).
+- **3 new onboarding panels** (now 7 total) covering batteries, the
+  cable puzzle, and crouching to avoid a hunter's sightline.
+- Nothing about core gameplay changed — no numbers were tuned, no
+  district content changed.
+
+### HUMAN CHECK (2 min)
+On a touch device (or the editor's touch emulation): hold the joystick
+near its center — the player should barely move; push to the rim — full
+speed. Open Settings → Controls, confirm the 3 new rows exist and the
+sliders/toggles respond. Open the Codex → Help tab — controls list and
+glossary should read correctly in at least 2 different languages.
+
+---
+
 ## Batch 11 (2026-09-10) — GOLD MASTER v3: native-speaker localization pass
 
 - **468 localized strings fixed across 11 languages** (French, German,

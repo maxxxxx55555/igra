@@ -1,5 +1,44 @@
 # Handoff
 
+## GOLD MASTER v5 "HOOKS & SIMPLIFIED" — 2026-09-11
+
+`origin/main` is **GOLD MASTER v5** at `<gm5-hash>`. GOLD MASTER v3 (below)
+plus two passes that were never given their own PLAN.md milestone at the
+time (see `PLAN.md`'s own GOLD MASTER v5 section for the full breakdown):
+a mobile-art + touch-AAA-polish pass (Arena's mobile art branch carried
+no payload, recreated deterministically; real dead-zone/curve/haptics on
+the virtual joystick; a new Help/Codex screen; a source-driven balance
+sim; `docs/HONEST_ASSESSMENT.md` and `docs/VISUAL_AUDIO_SPEC.md`), and a
+hooks pass (daily challenges, Collection Album, local leaderboard, One
+More Run, 11 new per-district achievements, clipboard Share — no server
+required) plus a simplification audit that found nothing to safely
+rewrite (`docs/SIMPLIFICATION_AUDIT.md`).
+
+**Read this first:** `docs/HONEST_ASSESSMENT.md`. The short version — the
+code, content, and verification discipline in this repo are unusually
+deep for the team size, but **no session has ever played this game**.
+Every claim about feel, banding, touch-target overlap, or the boss
+fight's real difficulty is inferred from code, not observed. That gap
+doesn't close with more static/headless work; it closes with a human
+playing it once on the device it will actually ship on.
+
+### OWNER TODO (in order)
+
+1. **Play it once.** `docs/HANDOFF.md`'s own "HUMAN PLAYTEST SCRIPT v2"
+   below, or just play naturally — the single highest-leverage action
+   left, above any further code work (see `docs/HONEST_ASSESSMENT.md`).
+2. **Keystore + build → Play Console upload.** `RELEASE_CHECKLIST.md` §0
+   has the full ordered list (keystore, AppLovin key optional, privacy
+   policy URL, export templates, IARC answers, the 13-locale listing
+   paste). `store/screenshot-plan-detailed.md` has exact capture recipes
+   including 3 new touch-HUD shots (§7).
+3. **Optional, not blocking:** migrate `assets/textures/**` to
+   VRAM-compressed (`docs/KNOWN_ISSUES.md` — 1230 files still Lossless,
+   needs a windowed visual banding check); a real AppLovin key; extra
+   platforms (`RELEASE_CHECKLIST.md` §6).
+
+---
+
 ## GOLD MASTER v3 — ABSOLUTE FINAL, 2026-09-10 (native-QA locale pass + final audio + shot plan)
 
 `origin/main` is **GOLD MASTER v3** at `ec68d42`. GOLD MASTER v2 (below)
