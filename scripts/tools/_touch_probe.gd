@@ -25,6 +25,7 @@ func _run() -> void:
 	_probe_leaderboard()
 	_probe_daily_challenge()
 	_probe_achievements_and_share()
+	_fuzz_touch_and_settings()
 	print("[touch-probe] DONE fails=", _fails.size())
 	get_tree().quit(mini(_fails.size(), 250))
 
@@ -230,3 +231,54 @@ func _probe_achievements_and_share() -> void:
 	_ok(text.length() > 10 and text.contains("%") == false,
 		"Share text is built and fully substituted (%d chars, no leftover %%d/%%s)" % text.length())
 	win.queue_free()
+
+## GOLD MASTER v5 STEP 7 (final regression): a bounded fuzz pass — random
+## touch sequences (out-of-range positions, mismatched touch indices,
+## drag-without-a-prior-down, rapid down/up spam) and random Settings
+## values, on the real live controls. Pass criterion is structural: the
+## whole scene must reach here and DONE without the engine ever printing
+## a SCRIPT ERROR (checked by the caller shell script against this run's
+## log, same convention as every other gate) and without get_move_dir()
+## ever returning a non-finite vector.
+func _fuzz_touch_and_settings() -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 20260911  # deterministic — a failure must reproduce
+	var js_script: Script = load("res://scripts/ui/virtual_joystick.gd")
+	var js := Control.new()
+	js.set_script(js_script)
+	js.size = Vector2(160, 160)
+	add_child(js)
+
+	var bad_vectors := 0
+	for i in 200:
+		var idx := rng.randi_range(-1, 3)  # includes out-of-range indices
+		var pos := Vector2(rng.randf_range(-500, 700), rng.randf_range(-500, 700))
+		if rng.randi_range(0, 1) == 0:
+			var t := InputEventScreenTouch.new()
+			t.index = idx
+			t.pressed = rng.randi_range(0, 1) == 1
+			t.position = pos
+			js.call("_gui_input", t)
+		else:
+			var d := InputEventScreenDrag.new()
+			d.index = idx
+			d.position = pos
+			d.relative = Vector2(rng.randf_range(-200, 200), rng.randf_range(-200, 200))
+			js.call("_gui_input", d)
+		var mv: Vector2 = InputService.get_move_dir()
+		if not (is_finite(mv.x) and is_finite(mv.y)):
+			bad_vectors += 1
+	InputService.set_joy_active(false)
+	InputService.set_joy_move_dir(Vector2.ZERO)
+	js.queue_free()
+	_ok(bad_vectors == 0, "200 fuzzed touch events, 0 non-finite move vectors")
+
+	for i in 30:
+		SettingsManager.set_touch_sensitivity(rng.randf_range(-5.0, 5.0))
+		SettingsManager.set_render_scale(rng.randf_range(-2.0, 3.0))
+		SettingsManager.set_setting("deadzone", rng.randf_range(-2.0, 2.0))
+	_ok(SettingsManager.get_touch_sensitivity() >= 0.5 and SettingsManager.get_touch_sensitivity() <= 2.0,
+		"touch_sensitivity stays clamped under fuzzed input")
+	SettingsManager.set_setting("deadzone", 0.15)
+	SettingsManager.set_touch_sensitivity(1.0)
+	SettingsManager.set_render_scale(1.0)
