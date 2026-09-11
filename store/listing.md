@@ -161,7 +161,7 @@ flashlight horror, stealth FPS, atmospheric horror, restoring the light.
 
 ## 13-locale listing sections
 
-Title + tagline are the shipped in-game `menu_title` / `menu_subtitle` (professionally translated, 13 locales, `i18n_audit.py` MISSING: 0). Short/full/bullets/tags for the 11 non-master locales are transcreated from the same vetted in-game vocabulary — recommend one native pass before submission, but every claim is GDD-true and the wording reuses shipped strings. EN + RU keep the master text in the block above.
+Title + tagline are the shipped in-game `menu_title` / `menu_subtitle`, byte-identical to `data/i18n/<loc>.json` (professionally translated, 13 locales, `i18n_audit.py` MISSING: 0). Short/full/bullets/tags for the 11 non-master locales are transcreated from the same vetted in-game vocabulary — every claim is GDD-true and the wording reuses shipped strings; a native spot-check before submission is still welcome. The 8 bullets per locale are benefit-led (player outcome first, spec second) as of the 2026-09-11 console-ready polish. EN + RU keep the master text in the block above, byte-untouched.
 
 ### en — English
 
@@ -183,7 +183,7 @@ Title + tagline are the shipped in-game `menu_title` / `menu_subtitle` (professi
 
 ### es — Español
 
-- **Title:** LA ULTIMA FAROLA
+- **Title:** LA ÚLTIMA FAROLA
 - **Tagline:** Un superviviente en la noche eterna. Devuelve la luz a la ciudad.
 - **Short (73/80):** Devuelve la luz. Terror sigiloso en primera persona: cada farola es vida.
 - **Full description:**
@@ -209,14 +209,14 @@ Tu linterna es a la vez tu única arma contra parte de lo que te caza, tu única
 Táctil: joystick virtual y botones, esquiva con doble toque. PC: WASD y ratón, la misma partida. Actualizaciones gratuitas. Sin contenido de pago.
 ```
 - **Feature bullets:**
-  - Una sola ciudad a oscuras: 11 distritos, cero pantallas de carga. Si lo ves, puedes llegar.
+  - Camina hasta cualquier calle que veas: una sola ciudad a oscuras, 11 distritos, cero pantallas de carga.
   - La luz es la recompensa: cada calle que salvas se queda encendida. Tu mapa es tu trofeo.
   - Tu linterna es tu arma, tus ojos y tu sentencia: cada haz te delata.
-  - 12 cazadores, cada uno con sus sentidos y debilidades. Apréndelos o serás su presa.
-  - 5 finales. ¿Cuánta ciudad — y cuánta verdad — vas a devolver?
+  - Sobrevive a 12 cazadores aprendiendo sus sentidos y debilidades — cada uno caza a su manera.
+  - Elige cuánto recuperas: 5 finales según cuánta ciudad — y cuánta verdad — devuelvas.
   - Recoge, fabrica, mejora: un banco de trabajo, una linterna, noche sin fin.
   - Música que oye el peligro antes que tú: 5 capas adaptativas al ritmo de la caza.
-  - 13 idiomas. Una noche eterna.
+  - Juega en tu idioma: 13 lenguas bajo una misma noche eterna.
 - **ASO tags:** Survival horror, FPS, Atmosférico, Sigilo, Oscuro, Un jugador, Sin conexión, Fabricación, Narrativo, Indie
 
 ### de — Deutsch
@@ -247,20 +247,20 @@ Deine Taschenlampe ist zugleich deine einzige Waffe gegen einen Teil dessen, was
 Touch: virtueller Joystick und Aktionstasten, Ausweichen per Doppeltipp. PC: WASD und Maus, dasselbe Spiel. Kostenlose Updates. Keine kostenpflichtigen Inhalte.
 ```
 - **Feature bullets:**
-  - Eine einzige Stadt im Blackout: 11 Bezirke, null Ladebildschirme. Was du siehst, erreichst du.
-  - Licht ist die Belohnung: jede gerettete Straße bleibt erleuchtet. Deine Karte ist dein Trophäe.
+  - Geh jede Straße, die du siehst: eine einzige Stadt im Blackout, 11 Bezirke, null Ladebildschirme.
+  - Licht ist die Belohnung: jede gerettete Straße bleibt erleuchtet. Deine Karte ist deine Trophäe.
   - Deine Taschenlampe ist Waffe, Augen und Todesurteil: jeder Strahl verrät dich.
-  - 12 Jäger, jeder mit eigenen Sinnen und Schwächen. Lerne sie oder füttere sie.
-  - 5 Enden. Wie viel Stadt — und wie viel Wahrheit — bringst du zurück?
+  - Überlebe 12 Jäger, indem du ihre Sinne und Schwächen lernst — jeder jagt anders.
+  - Entscheide, was du zurückbringst: 5 Enden, je nachdem wie viel Stadt — und Wahrheit — du holst.
   - Sammeln, herstellen, verbessern: eine Werkbank, eine Taschenlampe, endlose Nacht.
   - Musik, die Gefahr vor dir hört: 5 adaptive Schichten im Takt der Jagd.
-  - 13 Sprachen. Eine ewige Nacht.
+  - Spiel in deiner Sprache: 13 Sprachen, eine ewige Nacht.
 - **ASO tags:** Survival-Horror, Ego-Shooter, Atmosphärisch, Schleichen, Dunkel, Einzelspieler, Offline, Handwerk, Story, Indie
 
 ### fr — Français
 
 - **Title:** LE DERNIER REVERBERE
-- **Tagline:** Un survivant dans une nuit éternelle. Rends sa lumière à la ville.
+- **Tagline:** Un survivant dans une nuit éternelle. Rendez sa lumière à la ville.
 - **Short (71/80):** Rends la lumière. FPS d'horreur furtif : chaque lampadaire est une vie.
 - **Full description:**
 
@@ -285,14 +285,14 @@ Ta lampe torche est à la fois ta seule arme contre une partie de ce qui te traq
 Tactile : joystick virtuel et boutons, esquive en double-tap. PC : WASD et souris, la même partie. Mises à jour gratuites. Aucun contenu payant.
 ```
 - **Feature bullets:**
-  - Une seule ville dans le noir : 11 districts, zéro écran de chargement. Si tu le vois, tu y vas.
+  - Marche jusqu'à toute rue que tu vois : une seule ville dans le noir, 11 districts, zéro écran de chargement.
   - La lumière est la récompense : chaque rue sauvée reste allumée. Ta carte est ton trophée.
   - Ta lampe torche est ton arme, tes yeux et ta condamnation : chaque faisceau te trahit.
-  - 12 chasseurs, chacun avec ses sens et ses faiblesses. Apprends-les ou nourris-les.
-  - 5 fins. Quelle part de ville — et de vérité — vas-tu ramener ?
+  - Survis à 12 chasseurs en apprenant leurs sens et leurs faiblesses — chacun traque à sa façon.
+  - Choisis ce que tu ramènes : 5 fins selon la part de ville — et de vérité — que tu récupères.
   - Fouille, fabrique, améliore : un établi, une lampe torche, une nuit sans fin.
   - Une musique qui entend le danger avant toi : 5 couches adaptatives au rythme de la traque.
-  - 13 langues. Une nuit éternelle.
+  - Joue dans ta langue : 13 langues, une nuit éternelle.
 - **ASO tags:** Survival horror, FPS, Atmosphérique, Infiltration, Sombre, Solo, Hors ligne, Artisanat, Narratif, Indé
 
 ### it — Italiano
@@ -323,19 +323,19 @@ La tua torcia è insieme la tua unica arma contro parte di ciò che ti dà la ca
 Touch: joystick virtuale e pulsanti, schivata con doppio tocco. PC: WASD e mouse, la stessa partita. Aggiornamenti gratuiti. Nessun contenuto a pagamento.
 ```
 - **Feature bullets:**
-  - Un'unica città al buio: 11 distretti, zero schermate di caricamento. Se lo vedi, ci arrivi.
+  - Arriva a piedi ovunque tu riesca a vedere: un'unica città al buio, 11 distretti, zero schermate di caricamento.
   - La luce è la ricompensa: ogni strada salvata resta accesa. La tua mappa è il tuo trofeo.
   - La tua torcia è arma, occhi e condanna: ogni fascio ti tradisce.
-  - 12 cacciatori, ognuno con sensi e debolezze propri. Imparali o diventa la loro preda.
-  - 5 finali. Quanta città — e quanta verità — riporterai?
+  - Sopravvivi a 12 cacciatori imparandone sensi e debolezze — ognuno caccia a modo suo.
+  - Scegli quanto riportare: 5 finali in base a quanta città — e quanta verità — recuperi.
   - Raccogli, crea, potenzia: un banco da lavoro, una torcia, notte senza fine.
   - Musica che sente il pericolo prima di te: 5 livelli adattivi al ritmo della caccia.
-  - 13 lingue. Una notte eterna.
+  - Gioca nella tua lingua: 13 lingue, una notte eterna.
 - **ASO tags:** Survival horror, FPS, Atmosferico, Furtività, Oscuro, Giocatore singolo, Offline, Crafting, Narrativo, Indie
 
 ### pt_BR — Português (BR)
 
-- **Title:** O ULTIMO LAMPIAO
+- **Title:** O ÚLTIMO POSTE DE LUZ
 - **Tagline:** Um sobrevivente numa noite eterna. Traga a luz de volta à cidade.
 - **Short (63/80):** Traga a luz de volta. FPS de terror furtivo: cada poste é vida.
 - **Full description:**
@@ -361,14 +361,14 @@ Sua lanterna é ao mesmo tempo sua única arma contra parte do que te caça, seu
 Toque: joystick virtual e botões, esquiva com toque duplo. PC: WASD e mouse, o mesmo jogo. Atualizações gratuitas. Sem conteúdo pago.
 ```
 - **Feature bullets:**
-  - Uma única cidade no apagão: 11 distritos, zero telas de carregamento. Se você vê, você chega.
+  - Vá a pé até onde a vista alcança: uma única cidade no apagão, 11 distritos, zero telas de carregamento.
   - A luz é a recompensa: cada rua salva continua acesa. Seu mapa é seu troféu.
   - Sua lanterna é sua arma, seus olhos e sua sentença: cada facho te denuncia.
-  - 12 caçadores, cada um com sentidos e fraquezas próprios. Aprenda-os ou vire presa.
-  - 5 finais. Quanto da cidade — e quanto da verdade — você vai trazer de volta?
+  - Sobreviva a 12 caçadores aprendendo seus sentidos e fraquezas — cada um caça de um jeito.
+  - Escolha o que trazer de volta: 5 finais conforme quanto da cidade — e da verdade — você recupera.
   - Vasculhe, fabrique, melhore: uma bancada, uma lanterna, noite sem fim.
   - Música que ouve o perigo antes de você: 5 camadas adaptativas no ritmo da caçada.
-  - 13 idiomas. Uma noite eterna.
+  - Jogue no seu idioma: 13 idiomas, uma noite eterna.
 - **ASO tags:** Survival horror, FPS, Atmosférico, Furtividade, Sombrio, Um jogador, Offline, Criação, Narrativo, Indie
 
 ### tr — Türkçe
@@ -399,14 +399,14 @@ El fenerin aynı anda seni avlayanların bir kısmına karşı tek silahın, gö
 Dokunmatik: sanal çubuk ve düğmeler, çift dokunuşla yan geçiş. PC: WASD ve fare, aynı oyun. Ücretsiz güncellemeler. Ücretli içerik yok.
 ```
 - **Feature bullets:**
-  - Karanlıkta tek bir şehir: 11 bölge, sıfır yükleme ekranı. Görüyorsan, yürüyebilirsin.
+  - Gördüğün her sokağa yürüyerek ulaş: karanlıkta tek bir şehir, 11 bölge, sıfır yükleme ekranı.
   - Ödül ışıktır: kurtardığın her sokak yanık kalır. Haritan senin kupandır.
   - El fenerin silahın, gözlerin ve idam fermanın: her huzme seni ele verir.
-  - 12 avcı, her biri kendi duyuları ve zayıflıklarıyla. Öğren ya da yem ol.
-  - 5 son. Şehrin — ve gerçeğin — ne kadarını geri getireceksin?
+  - 12 avcıyı duyularını ve zayıflıklarını öğrenerek atlat — her biri başka türlü avlanır.
+  - Getireceklerine kendin karar ver: 5 son, şehrin — ve gerçeğin — ne kadarını kurtardığına göre.
   - Topla, üret, geliştir: bir tezgâh, bir el feneri, bitmeyen gece.
   - Tehlikeyi senden önce duyan müzik: avın ritmine göre 5 uyarlanır katman.
-  - 13 dil. Sonsuz bir gece.
+  - Kendi dilinde oyna: 13 dil, tek bir sonsuz gece.
 - **ASO tags:** Hayatta kalma korkusu, FPS, Atmosferik, Gizlilik, Karanlık, Tek oyunculu, Çevrimdışı, Üretim, Hikâye, Bağımsız
 
 ### ja — 日本語
@@ -437,14 +437,14 @@ Dokunmatik: sanal çubuk ve düğmeler, çift dokunuşla yan geçiş. PC: WASD v
 タッチ：仮想スティックとアクションボタン、ダブルタップで回避。PC：WASDとマウス、同じセーブデータ。無料アップデート。有料コンテンツなし。
 ```
 - **Feature bullets:**
-  - 闇に沈んだひとつながりの街――11地区、ロード画面ゼロ。見えれば、そこへ歩いて行ける。
+  - 見えた場所へ、歩いて行ける。闇に沈んだひとつながりの街、11地区、ロード画面ゼロ。
   - 光こそ報酬。救った通りは点いたまま。あなたの地図がそのままトロフィーだ。
   - 懐中電灯は武器であり、目であり、死刑宣告――光を放つたびに居場所がばれる。
-  - 12体の狩人、それぞれ固有の感覚と弱点。学ぶか、餌になるか。
-  - 5つのエンディング。街を――そして真実を――どれだけ持ち帰る？
+  - 12体の狩人を、感覚と弱点を学んで出し抜け。それぞれ固有の狩り方を持つ。
+  - 街を――そして真実を――どれだけ持ち帰るかで、5つのエンディングが変わる。
   - 拾い、作り、強化する。作業台ひとつ、懐中電灯ひとつ、終わらない夜。
   - 危険をあなたより先に聴く音楽――狩りに合わせて動く5層のアダプティブ。
-  - 13言語。ひとつの永遠の夜。
+  - 13言語で遊べる。ひとつの永遠の夜を、あなたの言葉で。
 - **ASO tags:** サバイバルホラー, FPS, 雰囲気, ステルス, ダーク, シングルプレイ, オフライン, クラフト, ストーリー重視, インディー
 
 ### ko — 한국어
@@ -475,14 +475,14 @@ Dokunmatik: sanal çubuk ve düğmeler, çift dokunuşla yan geçiş. PC: WASD v
 터치: 가상 스틱과 액션 버튼, 더블 탭 회피. PC: WASD와 마우스, 같은 세이브. 무료 업데이트. 유료 콘텐츠 없음.
 ```
 - **Feature bullets:**
-  - 어둠에 잠긴 하나의 도시 — 11개 구역, 로딩 화면 제로. 보이면, 걸어갈 수 있다.
+  - 보이는 곳이라면 걸어갈 수 있다. 어둠에 잠긴 하나의 도시, 11개 구역, 로딩 화면 제로.
   - 빛이 곧 보상. 구한 거리는 계속 켜져 있다. 당신의 지도가 곧 트로피다.
   - 손전등은 무기이자 눈이자 사형선고 — 빛줄기마다 위치가 드러난다.
-  - 12종의 사냥꾼, 저마다 고유한 감각과 약점. 익히거나, 먹잇감이 되거나.
-  - 5가지 엔딩. 도시를 — 그리고 진실을 — 얼마나 되찾을 것인가?
+  - 12종의 사냥꾼을 감각과 약점을 익혀 따돌려라. 저마다 사냥법이 다르다.
+  - 도시를 — 그리고 진실을 — 얼마나 되찾느냐에 따라 5가지 엔딩이 갈린다.
   - 줍고, 만들고, 강화한다: 작업대 하나, 손전등 하나, 끝없는 밤.
   - 위험을 당신보다 먼저 듣는 음악 — 사냥에 맞춰 움직이는 5계층 적응형.
-  - 13개 언어. 하나의 영원한 밤.
+  - 13개 언어로 플레이. 하나의 영원한 밤을 당신의 언어로.
 - **ASO tags:** 생존 공포, FPS, 분위기, 잠입, 다크, 싱글플레이어, 오프라인, 제작, 스토리, 인디
 
 ### zh — 简体中文
@@ -513,14 +513,14 @@ Dokunmatik: sanal çubuk ve düğmeler, çift dokunuşla yan geçiş. PC: WASD v
 触屏：虚拟摇杆与操作按钮，双击闪避。PC：WASD 与鼠标，同一份存档。免费更新。无付费内容。
 ```
 - **Feature bullets:**
-  - 一座黑暗中的连续城市——11 个区域，零加载画面。看得见，就走得到。
+  - 看得见，就走得到。一座黑暗中的连续城市，11 个区域，零加载画面。
   - 光就是奖励：每条被拯救的街道都一直亮着。你的地图就是你的奖杯。
   - 手电筒是你的武器、你的眼睛，也是你的死刑判决：每一道光束都会暴露你。
-  - 12 个猎手，各有各的感官与弱点。要么学会它们，要么成为猎物。
-  - 5 种结局。你要带回多少城市——又带回多少真相？
+  - 摸清 12 个猎手的感官与弱点再活下来——它们各有各的猎法。
+  - 带回多少城市——又带回多少真相，决定你的 5 种结局。
   - 搜刮、制作、强化：一张工作台，一支手电筒，无尽长夜。
   - 比你更早听见危险的音乐——随猎杀节奏变化的 5 层自适应。
-  - 13 种语言。一场永恒黑夜。
+  - 13 种语言可玩。用你的语言，走进同一场永恒黑夜。
 - **ASO tags:** 生存恐怖, 第一人称射击, 氛围, 潜行, 黑暗, 单人, 离线, 制作, 剧情丰富, 独立游戏
 
 ### zh_TW — 繁體中文
@@ -551,14 +551,14 @@ Dokunmatik: sanal çubuk ve düğmeler, çift dokunuşla yan geçiş. PC: WASD v
 觸控：虛擬搖桿與操作按鈕，雙擊閃避。PC：WASD 與滑鼠，同一份存檔。免費更新。無付費內容。
 ```
 - **Feature bullets:**
-  - 一座黑暗中的連續城市——11 個區域，零載入畫面。看得見，就走得到。
+  - 看得見，就走得到。一座黑暗中的連續城市，11 個區域，零載入畫面。
   - 光就是獎勵：每條被拯救的街道都一直亮著。你的地圖就是你的獎盃。
   - 手電筒是你的武器、你的眼睛，也是你的死刑判決：每一道光束都會暴露你。
-  - 12 個獵手，各有各的感官與弱點。要麼學會它們，要麼成為獵物。
-  - 5 種結局。你要帶回多少城市——又帶回多少真相？
+  - 摸清 12 個獵手的感官與弱點再活下來——牠們各有各的獵法。
+  - 帶回多少城市——又帶回多少真相，決定你的 5 種結局。
   - 搜刮、製作、強化：一張工作臺，一支手電筒，無盡長夜。
   - 比你更早聽見危險的音樂——隨獵殺節奏變化的 5 層自適應。
-  - 13 種語言。一場永恆黑夜。
+  - 13 種語言可玩。用你的語言，走進同一場永恆黑夜。
 - **ASO tags:** 生存恐怖, 第一人稱射擊, 氛圍, 潛行, 黑暗, 單人, 離線, 製作, 劇情豐富, 獨立遊戲
 
 ### ar — العربية
@@ -589,14 +589,14 @@ Dokunmatik: sanal çubuk ve düğmeler, çift dokunuşla yan geçiş. PC: WASD v
 باللمس: عصا افتراضية وأزرار، ومراوغة بنقرة مزدوجة. الحاسب: WASD والفأرة، الحفظة نفسها. تحديثات مجانية. بلا محتوى مدفوع.
 ```
 - **Feature bullets:**
-  - مدينة واحدة متصلة في الظلام — 11 حيًّا، صفر شاشات تحميل. ما تراه، تبلغه سيرًا.
+  - ما تراه، تبلغه سيرًا: مدينة واحدة متصلة في الظلام، 11 حيًّا، صفر شاشات تحميل.
   - النور هو المكافأة: كل شارع تنقذه يبقى مضاءً. خريطتك هي جائزتك.
   - مصباحك سلاحك وعيناك وحكم إعدامك: كل شعاع يكشفك.
-  - 12 صيّادًا، لكلٍّ حواسه ونقاط ضعفه. تعلَّمها أو كن طعمًا لها.
-  - 5 نهايات. كم من المدينة — وكم من الحقيقة — ستعيد؟
+  - تعلَّم حواس الصيّادين الاثني عشر ونقاط ضعفهم لتنجو — كلٌّ يصطاد على طريقته.
+  - قرّر كم ستعيد معك: 5 نهايات تبعًا لمقدار ما تستعيده من المدينة ومن الحقيقة.
   - انبش واصنع وطوّر: طاولة عمل واحدة، مصباح واحد، ليل بلا نهاية.
   - موسيقى تسمع الخطر قبلك: 5 طبقات تكيّفية على إيقاع المطاردة.
-  - 13 لغة. ليل أبدي واحد.
+  - العب بلغتك: 13 لغة تحت ليلٍ أبدي واحد.
 - **ASO tags:** رعب البقاء, تصويب أول, أجواء, تخفٍّ, ظلام, لاعب واحد, دون اتصال, تصنيع, قصة غنية, مستقل
 
 <!-- END GENERATED 13-LOCALE BLOCK -->
