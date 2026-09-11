@@ -10,25 +10,25 @@ be added to docs/ASSET_LICENSES.md and verified playable (ffprobe) before commit
 Global targets: ambience −18 LUFS integrated, true peak ≤ −1.5 dBFS; SFX/stings −14 LUFS;
 OGG q4 mono; beds = 36 s seamless loops (loop points 0.000–36.000, matched zero-crossings).
 
-## Coverage matrix (verified on disk 2026-09-08; warehouses + industrial rows header-verified 2026-09-09)
+## Coverage matrix (verified on disk 2026-09-08; warehouses + industrial rows header-verified 2026-09-09; lit beds completed + header/loudness-verified 2026-09-11)
 
 | District | Music theme (MusicManager) | Dark bed | Lit bed | Detail one-shots |
 |---|---|---|---|---|
 | suburbs | music_ambient.wav ✔ | suburbs_dark ✔ | suburbs_lit ✔ | 3/3 ✔ |
-| residential | residential.wav ✔ (major, 80 bpm, root 62, 14 bars ≈ 42 s) | residential_dark ✔ | **MISSING** | 3/3 ✔ |
-| park | park.wav ✔ | park_dark ✔ | **MISSING** | 4/4 ✔ |
-| school | abandoned_hallways_alt.mp3 ✔ | school_dark ✔ | **MISSING** | 4/4 ✔ |
+| residential | residential.wav ✔ (major, 80 bpm, root 62, 14 bars ≈ 42 s) | residential_dark ✔ | residential_lit ✔ (1ch/44.1k/36.000 s, −18 LUFS, delivered 2026-09-11) | 3/3 ✔ |
+| park | park.wav ✔ | park_dark ✔ | park_lit ✔ (1ch/44.1k/36.000 s, −18 LUFS, delivered 2026-09-11) | 4/4 ✔ |
+| school | abandoned_hallways_alt.mp3 ✔ | school_dark ✔ | school_lit ✔ (1ch/44.1k/36.000 s, −18 LUFS, delivered 2026-09-11) | 4/4 ✔ |
 | hospital | abandoned_hallways_alt.mp3 ✔ | hospital_dark ✔ (1ch/44.1k/36.000 s) | hospital_lit ✔ (1ch/44.1k/36.000 s, header-verified 2026-09-08) | 4/4 ✔ (all 30.000 s) |
-| gas_station | downtown.wav ✔ | gas_station_dark ✔ (1ch/44.1k/36.000 s) | **MISSING** → spec G2e | 4/4 ✔ (all 30.000 s) |
-| police | downtown.wav ✔ | police_dark ✔ (1ch/44.1k/36.000 s, header-verified 2026-09-08) | **MISSING** → spec G2f | 3/3 ✔ (all 30.000 s) |
-| warehouses | harbor.wav ✔ | warehouses_dark ✔ (1ch/44.1k/36.000 s, header-verified 2026-09-09) | **MISSING** → spec G2g | 4/4 ✔ (all 30.000 s, header-verified 2026-09-09) |
-| industrial | industrial.wav ✔ (1ch/22.05 kHz/24.0 s — downtown/harbor legacy class) | industrial_dark ✔ **but 33.994 s, not the 36.000 s house contract** (1ch/44.1k/86 kbps/55,718 B, header-verified 2026-09-09 — see G2h) | **MISSING** → spec G2h | 4/4 ✔ (all 30.000 s, header-verified 2026-09-09) |
-| substation | music_ambient_dark.wav ✔ | substation_dark ✔ (1ch/44.1k/36.000 s, header-verified 2026-09-09) | **MISSING** → spec G2i | 3/3 ✔ (all 30.000 s, header-verified 2026-09-09) |
+| gas_station | downtown.wav ✔ | gas_station_dark ✔ (1ch/44.1k/36.000 s) | gas_station_lit ✔ (1ch/44.1k/36.000 s, −18 LUFS, delivered 2026-09-11) | 4/4 ✔ (all 30.000 s) |
+| police | downtown.wav ✔ | police_dark ✔ (1ch/44.1k/36.000 s, header-verified 2026-09-08) | police_lit ✔ (1ch/44.1k/36.000 s, −18 LUFS, delivered 2026-09-11) | 3/3 ✔ (all 30.000 s) |
+| warehouses | harbor.wav ✔ | warehouses_dark ✔ (1ch/44.1k/36.000 s, header-verified 2026-09-09) | warehouses_lit ✔ (1ch/44.1k/36.000 s, −18 LUFS, delivered 2026-09-11) | 4/4 ✔ (all 30.000 s, header-verified 2026-09-09) |
+| industrial | industrial.wav ✔ (1ch/22.05 kHz/24.0 s — downtown/harbor legacy class) | industrial_dark ✔ **but 33.994 s, not the 36.000 s house contract** (1ch/44.1k/86 kbps/55,718 B, header-verified 2026-09-09 — see G2h) | industrial_lit ✔ (1ch/44.1k/33.994 s twin-exact, −18 LUFS, delivered 2026-09-11) | 4/4 ✔ (all 30.000 s, header-verified 2026-09-09) |
+| substation | music_ambient_dark.wav ✔ | substation_dark ✔ (1ch/44.1k/36.000 s, header-verified 2026-09-09) | substation_lit ✔ (1ch/44.1k/36.000 s, −18 LUFS, delivered 2026-09-11) | 3/3 ✔ (all 30.000 s, header-verified 2026-09-09) |
 | power_station | music_ambient_dark.wav ✔ | power_station_dark ✔ (1ch/44.1k/36.000 s, header-verified 2026-09-09) | power_station_lit ✔ (1ch/44.1k/36.000 s, header-verified 2026-09-09 — sparse encode, 59,320 B) | 4/4 ✔ (**two off the 30 s class** — see F1) |
 
 Layers (dark/lit/threat_low/threat_high/action), weather (rain/wind) and action sting:
 all present ✔. MusicManager falls back to the dark bed for districts without a lit twin
-(documented DEFAULT_CHOICE in `music_manager.gd`).
+(documented DEFAULT_CHOICE in `music_manager.gd`). 2026-09-11: all 11 lit twins now ship (cert `docs/CERT_AUDIO.md`); the fallback stays as safety until CODE wires the 8 new `AMBIENCE_LIT_BY_DISTRICT` rows.
 
 ### F1 — power_station detail durations (finding, recorded 2026-09-09, not a gap)
 Header-verified this pass (Ogg/Vorbis identification header + final page granule; no
@@ -138,6 +138,22 @@ Ogg/Vorbis identification-header + final-page-granule parse; no engine, no ffpro
 shipped beds measure exactly as recorded — 1 ch / 44,100 Hz / 36.000 s (`industrial_dark`
 33.994 s per G2h); the 8 lit files above confirmed absent on disk. Zero drift.
 
+### Audio-delivery note (2026-09-11 — gaps closed: beds 8/8 + cues 3/3)
+
+Ladder re-run honestly: (a) no music-gen skill exists (same inventory as
+2026-09-10 — coding/process/texture skills + behavior doc only; TTS rejected,
+voices forbidden); (b) 3 genuine CC0/CC-BY searches, nearest hits rejected
+(wrong lengths/licenses, nothing can re-voice our own dark beds) — recorded in
+`docs/LEDGER_AUDIO.md` L2; (c) delivery via the repo-canonical deterministic
+pipeline (`asset_pipeline.md`): pip-installed numpy 2.4.6 + static ffmpeg 7.0.2
+(libvorbis + loudnorm verified) rendered 44.1 k mono masters from fixed seeds,
+dual-pass loudnorm I=−18/TP=−1.8/LRA=11, OGG q4. All 8 lit beds + 3 wow cues
+(60/90/120 s, arcs verified on decode) header- and loudness-verified
+post-encode (|I+18| ≤ 0.25, TP ≤ −2.01, granules exact, seams ≤ −41 dB).
+Renderer committed: `assets/audio/_build/gen_audio_pass.py`. F1 retained as
+recorded (finding, not a gap — re-verified 28.749/28.948 s). Wiring remains
+CODE-owned (routing: `assets/audio/README.md`). Verdicts: `docs/CERT_AUDIO.md`.
+
 ### G1 — `assets/audio/ambience/districts/residential_lit.ogg` (this district)
 - Type: 36 s seamless ambience loop, OGG q4 mono, −18 LUFS, TP ≤ −1.5 dBFS.
 - Mood: "lit twin" of `residential_dark.ogg` (STYLE_GUIDE §5): same material re-voiced
@@ -145,6 +161,7 @@ shipped beds measure exactly as recorded — 1 ch / 44,100 Hz / 36.000 s (`indus
   any) aligned to 80 bpm bars (residential theme canon) for clean 2 s crossfades.
 - Reference pair for structure: `suburbs_dark.ogg` → `suburbs_lit.ogg`.
 - Wiring note: add row to `AMBIENCE_LIT_BY_DISTRICT` (CODE agent, after delivery).
+- Delivery (2026-09-11): ships — 1ch/44.1k/36.000 s, I −18.15, TP −4.89. Cert `docs/CERT_AUDIO.md` §1/§4.
 
 ### G2 — Global relight riser `assets/audio/sfx/power_returns_riser.wav` (one-shot)
 - 4–6 s, −14 LUFS; warm brass riser into a soft streetlight-ignition chime; played on
@@ -161,6 +178,7 @@ shipped beds measure exactly as recorded — 1 ch / 44,100 Hz / 36.000 s (`indus
 - Reference pair for structure: `suburbs_dark.ogg` → `suburbs_lit.ogg`.
 - Wiring note: add `&"park"` row to `AMBIENCE_LIT_BY_DISTRICT` (CODE agent, after delivery).
 - Status: **spec only — binary not fabricated** (asset pass delivered tiles/pond ice only).
+- Delivery (2026-09-11): `park_lit.ogg` ships — 1ch/44.1k/36.000 s, I −18.20, TP −4.23. Cert `docs/CERT_AUDIO.md` §1/§4.
 
 ### G2c — `assets/audio/ambience/districts/school_lit.ogg` (school pass, full spec)
 - Type: 36 s seamless ambience loop, OGG q4 mono, 44.1 kHz; loop points 0.000–36.000,
@@ -180,6 +198,7 @@ shipped beds measure exactly as recorded — 1 ch / 44,100 Hz / 36.000 s (`indus
 - Reference pair for structure: `suburbs_dark.ogg` → `suburbs_lit.ogg`.
 - Wiring note: add `&"school"` row to `AMBIENCE_LIT_BY_DISTRICT` (CODE agent, after delivery).
 - Status: **spec only — binary not fabricated** (school asset pass delivered textures only).
+- Delivery (2026-09-11): `school_lit.ogg` ships — 1ch/44.1k/36.000 s, I −18.14, TP −3.95. Cert `docs/CERT_AUDIO.md` §1/§4.
 
 ### G2d — hospital: **no lit-bed gap** (verified, district 5 pass)
 - `assets/audio/ambience/districts/hospital_lit.ogg` already ships. Statically verified by
@@ -229,6 +248,7 @@ shipped beds measure exactly as recorded — 1 ch / 44,100 Hz / 36.000 s (`indus
 - Reference pair for structure: `suburbs_dark.ogg` → `suburbs_lit.ogg`.
 - Wiring note: add `&"gas_station"` row to `AMBIENCE_LIT_BY_DISTRICT` (CODE, after delivery).
 - Status: **spec only — binary not fabricated** (asset pass delivered textures only).
+- Delivery (2026-09-11): `gas_station_lit.ogg` ships — 1ch/44.1k/36.000 s, I −18.18, TP −3.52. Cert `docs/CERT_AUDIO.md` §1/§4.
 
 ### G2f — `assets/audio/ambience/districts/police_lit.ogg` (police pass, full spec)
 - Type: 36 s seamless ambience loop, OGG q4 mono, 44.1 kHz; loop points 0.000–36.000,
@@ -258,6 +278,7 @@ shipped beds measure exactly as recorded — 1 ch / 44,100 Hz / 36.000 s (`indus
 - Reference pair for structure: `suburbs_dark.ogg` → `suburbs_lit.ogg`.
 - Wiring note: add `&"police"` row to `AMBIENCE_LIT_BY_DISTRICT` (CODE, after delivery).
 - Status: **spec only — binary not fabricated** (asset pass delivered textures only).
+- Delivery (2026-09-11): `police_lit.ogg` ships — 1ch/44.1k/36.000 s, I −18.14, TP −4.04. Cert `docs/CERT_AUDIO.md` §1/§4.
 
 ### G2g — `assets/audio/ambience/districts/warehouses_lit.ogg` (warehouses pass, full spec)
 - Type: 36 s seamless ambience loop, OGG q4 mono, 44.1 kHz; loop points 0.000–36.000,
@@ -292,6 +313,7 @@ shipped beds measure exactly as recorded — 1 ch / 44,100 Hz / 36.000 s (`indus
 - Wiring note: add `&"warehouses"` row to `AMBIENCE_LIT_BY_DISTRICT` (CODE, after delivery).
 - Status: **spec only — binary not fabricated** (asset pass delivered lit tiles + floor
   repair only).
+- Delivery (2026-09-11): `warehouses_lit.ogg` ships — 1ch/44.1k/36.000 s, I −18.13, TP −2.74. Cert `docs/CERT_AUDIO.md` §1/§4.
 
 ### G2h — `assets/audio/ambience/districts/industrial_lit.ogg` (industrial pass, full spec)
 - Type: seamless ambience loop, OGG q4 mono, 44.1 kHz; loop points 0.000–33.994,
@@ -335,6 +357,7 @@ shipped beds measure exactly as recorded — 1 ch / 44,100 Hz / 36.000 s (`indus
 - Reference pair for structure: `suburbs_dark.ogg` → `suburbs_lit.ogg`.
 - Wiring note: add `&"industrial"` row to `AMBIENCE_LIT_BY_DISTRICT` (CODE, after delivery).
 - Status: **spec only — binary not fabricated** (asset pass delivered lit tiles only).
+- Delivery (2026-09-11): `industrial_lit.ogg` ships — 1,499,146 smp/33.994 s twin-exact, I −18.11, TP −3.35. Cert `docs/CERT_AUDIO.md` §1/§4.
 
 ### G2i — `assets/audio/ambience/districts/substation_lit.ogg` (substation pass, full spec)
 - Type: 36 s seamless ambience loop, OGG q4 mono, 44.1 kHz; loop points 0.000–36.000,
@@ -369,6 +392,7 @@ shipped beds measure exactly as recorded — 1 ch / 44,100 Hz / 36.000 s (`indus
 - Reference pair for structure: `suburbs_dark.ogg` → `suburbs_lit.ogg`.
 - Wiring note: add `&"substation"` row to `AMBIENCE_LIT_BY_DISTRICT` (CODE, after delivery).
 - Status: **spec only — binary not fabricated** (asset pass delivered lit tiles only).
+- Delivery (2026-09-11): `substation_lit.ogg` ships — 1ch/44.1k/36.000 s, I −18.08, TP −4.26. Cert `docs/CERT_AUDIO.md` §1/§4.
 
 ### G3 — remaining lit beds (same template as G1/G2b/G2c/G2e/G2f/G2g, theme params from `gen_audio.py` DISTRICTS)
 - `school_lit.ogg` — **superseded by G2c above (full spec)**.
