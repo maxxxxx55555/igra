@@ -1087,5 +1087,10 @@
   "DAILY_PLAY_MINUTES": "Juega %d minutos",
   "DAILY_CHALLENGE_TITLE": "Desafío diario",
   "DAILY_STREAK_LABEL": "Racha: %d días",
-  "DAILY_COMPLETED_LABEL": "¡Completado!"
+  "DAILY_COMPLETED_LABEL": "¡Completado!",
+  "ACH_DISTRICT_FULL_DESC": "Restaura este distrito por completo.",
+  "BTN_SHARE": "Compartir",
+  "SHARE_TEXT": "LA ULTIMA FAROLA — final «%s», %d/%d distritos restaurados. Devuelve la luz. Cada farola es vida.",
+  "SHARE_COPIED": "¡Copiado al portapapeles!",
+  "Share Progress": "Compartir progreso"
 }

@@ -1087,5 +1087,10 @@
   "DAILY_PLAY_MINUTES": "%d分間プレイする",
   "DAILY_CHALLENGE_TITLE": "デイリーチャレンジ",
   "DAILY_STREAK_LABEL": "連続記録：%d日",
-  "DAILY_COMPLETED_LABEL": "達成！"
+  "DAILY_COMPLETED_LABEL": "達成！",
+  "ACH_DISTRICT_FULL_DESC": "この地区を完全に復旧させる。",
+  "BTN_SHARE": "共有",
+  "SHARE_TEXT": "最後の街灯 ――「%s」エンディング、%d/%d地区復旧。光を取り戻せ。街灯ひとつが命。",
+  "SHARE_COPIED": "クリップボードにコピーしました！",
+  "Share Progress": "進捗を共有"
 }

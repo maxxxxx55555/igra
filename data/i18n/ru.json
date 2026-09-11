@@ -1087,5 +1087,10 @@
   "DAILY_PLAY_MINUTES": "Играй %d минут",
   "DAILY_CHALLENGE_TITLE": "Ежедневное задание",
   "DAILY_STREAK_LABEL": "Серия: %d дней",
-  "DAILY_COMPLETED_LABEL": "Выполнено!"
+  "DAILY_COMPLETED_LABEL": "Выполнено!",
+  "ACH_DISTRICT_FULL_DESC": "Полностью восстанови этот район.",
+  "BTN_SHARE": "Поделиться",
+  "SHARE_TEXT": "ПОСЛЕДНИЙ ФОНАРЬ — концовка «%s», восстановлено районов: %d/%d. Верни свет. Каждый фонарь — жизнь.",
+  "SHARE_COPIED": "Скопировано в буфер обмена!",
+  "Share Progress": "Делиться прогрессом"
 }

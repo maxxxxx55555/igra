@@ -13,6 +13,7 @@ var _subtitle: Label = null
 var _stats: Label = null
 var _menu_btn: Button = null
 var _more_btn: Button = null
+var _share_btn: Button = null
 
 func _ready() -> void:
 	_build()
@@ -62,6 +63,18 @@ func _build() -> void:
 	_more_btn.pressed.connect(func() -> void: UIManager.open(&"new_game_plus"))
 	vb.add_child(_more_btn)
 
+	# GOLD MASTER v5 hooks pass: copies a shareable run summary to the
+	# clipboard (DisplayServer.clipboard_set) — works on every platform
+	# Godot ships to, including Android, without a native share-sheet
+	# plugin this session has no way to verify on a real device. Player
+	# pastes it wherever they like. Honest scope: not an Android
+	# Intent.ACTION_SEND (that needs a small plugin — see GAP_TO_IDEAL.md).
+	_share_btn = Button.new()
+	_share_btn.focus_mode = Control.FOCUS_NONE
+	_share_btn.custom_minimum_size = Vector2(220, 44)
+	_share_btn.pressed.connect(_on_share_pressed)
+	vb.add_child(_share_btn)
+
 	_menu_btn = Button.new()
 	_menu_btn.focus_mode = Control.FOCUS_NONE
 	_menu_btn.custom_minimum_size = Vector2(220, 44)
@@ -76,6 +89,8 @@ func _refresh() -> void:
 	# changed(visible), which is the natural retranslation point here.
 	_menu_btn.text = LocalizationManager.t("BTN_MAIN_MENU")
 	_more_btn.text = LocalizationManager.t("BTN_ONE_MORE_RUN")
+	_share_btn.text = LocalizationManager.t("BTN_SHARE")
+	_share_btn.visible = SettingsManager == null or SettingsManager.get_setting("share_enabled", true)
 	var em := get_node_or_null("/root/EndingsManager")
 	var data: Dictionary = {}
 	if em != null and em.has_method("get_ending_data"):
@@ -96,3 +111,23 @@ func _refresh() -> void:
 				districts += 1
 	_stats.text = LocalizationManager.tf("WIN_SUMMARY",
 		[districts, Endings.TOTAL_DISTRICTS, docs, total_docs])
+
+## Split from _on_share_pressed() so a headless probe can assert on the
+## built text directly — DisplayServer.clipboard_set/get is a real OS
+## clipboard call that the --headless display driver does not back, so
+## round-tripping through it is not something this session can verify.
+func _build_share_text() -> String:
+	var em := get_node_or_null("/root/EndingsManager")
+	var ending_title: String = String(em.get_ending_data().get("title", "")) if em != null else ""
+	var pg := get_node_or_null("/root/PowerGrid")
+	var districts := 0
+	if pg != null:
+		for d in pg.all_districts():
+			if d.stage >= DistrictData.Stage.FULL:
+				districts += 1
+	var total: int = Endings.TOTAL_DISTRICTS
+	return LocalizationManager.tf("SHARE_TEXT", [ending_title, districts, total])
+
+func _on_share_pressed() -> void:
+	DisplayServer.clipboard_set(_build_share_text())
+	EventBus.inventory_notice.emit(LocalizationManager.t("SHARE_COPIED"))

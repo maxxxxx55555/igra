@@ -1087,5 +1087,10 @@
   "DAILY_PLAY_MINUTES": "%d분 동안 플레이",
   "DAILY_CHALLENGE_TITLE": "일일 도전 과제",
   "DAILY_STREAK_LABEL": "연속 기록: %d일",
-  "DAILY_COMPLETED_LABEL": "완료!"
+  "DAILY_COMPLETED_LABEL": "완료!",
+  "ACH_DISTRICT_FULL_DESC": "이 구역을 완전히 복구하세요.",
+  "BTN_SHARE": "공유",
+  "SHARE_TEXT": "마지막 가로등 — '%s' 엔딩, %d/%d개 구역 복구. 빛을 되돌리세요. 가로등 하나가 생명입니다.",
+  "SHARE_COPIED": "클립보드에 복사되었습니다!",
+  "Share Progress": "진행 상황 공유"
 }

@@ -1087,5 +1087,10 @@
   "DAILY_PLAY_MINUTES": "Spiele %d Minuten",
   "DAILY_CHALLENGE_TITLE": "Tägliche Herausforderung",
   "DAILY_STREAK_LABEL": "Serie: %d Tage",
-  "DAILY_COMPLETED_LABEL": "Erledigt!"
+  "DAILY_COMPLETED_LABEL": "Erledigt!",
+  "ACH_DISTRICT_FULL_DESC": "Stelle diesen Bezirk vollständig wieder her.",
+  "BTN_SHARE": "Teilen",
+  "SHARE_TEXT": "DIE LETZTE LATERNE — Ende „%s“, %d/%d Bezirke wiederhergestellt. Bring das Licht zurück. Jede Laterne ist Leben.",
+  "SHARE_COPIED": "In die Zwischenablage kopiert!",
+  "Share Progress": "Fortschritt teilen"
 }

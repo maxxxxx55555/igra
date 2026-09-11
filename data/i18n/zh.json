@@ -1087,5 +1087,10 @@
   "DAILY_PLAY_MINUTES": "游玩%d分钟",
   "DAILY_CHALLENGE_TITLE": "每日挑战",
   "DAILY_STREAK_LABEL": "连续天数：%d天",
-  "DAILY_COMPLETED_LABEL": "已完成！"
+  "DAILY_COMPLETED_LABEL": "已完成！",
+  "ACH_DISTRICT_FULL_DESC": "完全修复这个区域。",
+  "BTN_SHARE": "分享",
+  "SHARE_TEXT": "最后一盏街灯 ——「%s」结局，已修复%d/%d个区域。让城市重获光明。每盏街灯都是生命。",
+  "SHARE_COPIED": "已复制到剪贴板！",
+  "Share Progress": "分享进度"
 }

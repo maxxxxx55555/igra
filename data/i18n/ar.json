@@ -1087,5 +1087,10 @@
   "DAILY_PLAY_MINUTES": "العب لمدة %d دقائق",
   "DAILY_CHALLENGE_TITLE": "التحدي اليومي",
   "DAILY_STREAK_LABEL": "التتابع: %d أيام",
-  "DAILY_COMPLETED_LABEL": "تم الإنجاز!"
+  "DAILY_COMPLETED_LABEL": "تم الإنجاز!",
+  "ACH_DISTRICT_FULL_DESC": "استعد هذا الحي بالكامل.",
+  "BTN_SHARE": "مشاركة",
+  "SHARE_TEXT": "آخر مصباح شارع — نهاية «%s»، تم استعادة %d/%d أحياء. أعد النور. كل مصباح شارع حياة.",
+  "SHARE_COPIED": "تم النسخ إلى الحافظة!",
+  "Share Progress": "مشاركة التقدم"
 }

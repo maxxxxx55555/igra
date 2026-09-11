@@ -1087,5 +1087,10 @@
   "DAILY_PLAY_MINUTES": "Jogue por %d minutos",
   "DAILY_CHALLENGE_TITLE": "Desafio diário",
   "DAILY_STREAK_LABEL": "Sequência: %d dias",
-  "DAILY_COMPLETED_LABEL": "Concluído!"
+  "DAILY_COMPLETED_LABEL": "Concluído!",
+  "ACH_DISTRICT_FULL_DESC": "Restaure este distrito completamente.",
+  "BTN_SHARE": "Compartilhar",
+  "SHARE_TEXT": "O ULTIMO LAMPIAO — final \"%s\", %d/%d distritos restaurados. Traga a luz de volta. Cada poste é vida.",
+  "SHARE_COPIED": "Copiado para a área de transferência!",
+  "Share Progress": "Compartilhar progresso"
 }

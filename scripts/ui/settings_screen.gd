@@ -101,6 +101,11 @@ func _build_game_tab(parent: VBoxContainer) -> void:
 	# three "wow" moments (for recording shorts). Opt-in, off by default.
 	_toggle(parent, LocalizationManager.t("Trailer Mode"), "trailer_mode")
 
+	# GOLD MASTER v5 hooks pass: Share button on the win screen copies a
+	# run summary to the clipboard (DisplayServer.clipboard_set) - works
+	# on every platform Godot ships to. On, by default.
+	_toggle(parent, LocalizationManager.t("Share Progress"), "share_enabled")
+
 	# TRUTH WAVE P0.3: раньше единственный способ стереть прогресс —
 	# руками удалить файлы user:// на диске. Кнопка с подтверждением.
 	var reset_btn := Button.new()

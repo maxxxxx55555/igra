@@ -1087,5 +1087,10 @@
   "DAILY_PLAY_MINUTES": "%d dakika oyna",
   "DAILY_CHALLENGE_TITLE": "Günlük Görev",
   "DAILY_STREAK_LABEL": "Seri: %d gün",
-  "DAILY_COMPLETED_LABEL": "Tamamlandı!"
+  "DAILY_COMPLETED_LABEL": "Tamamlandı!",
+  "ACH_DISTRICT_FULL_DESC": "Bu bölgeyi tamamen onar.",
+  "BTN_SHARE": "Paylaş",
+  "SHARE_TEXT": "SON SOKAK LAMBASI — \"%s\" sonu, %d/%d bölge onarıldı. Işığı geri getir. Her sokak lambası bir hayattır.",
+  "SHARE_COPIED": "Panoya kopyalandı!",
+  "Share Progress": "İlerlemeyi Paylaş"
 }

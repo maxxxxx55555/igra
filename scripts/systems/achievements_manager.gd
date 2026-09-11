@@ -142,7 +142,24 @@ const ACHIEVEMENTS: Dictionary = {
 		"description": "ACH_20_DESC",
 		"secret": true,
 		"condition": "hallucinations_5"
-	}
+	},
+	# GOLD MASTER v5 hooks pass: one achievement per district — name
+	# reuses the district's own already-13-locale-translated
+	# DISTRICT_NAME_<ID> key verbatim (it already reads naturally as an
+	# achievement title, e.g. "Suburbs"); one shared description key
+	# avoids 11 near-duplicate translated sentences with per-language
+	# grammatical-agreement risk. Trigger: _on_district_restored() above.
+	"ach_district_suburbs": {"id": &"ach_district_suburbs", "name": "DISTRICT_NAME_SUBURBS", "description": "ACH_DISTRICT_FULL_DESC", "secret": false, "condition": "district_suburbs_full"},
+	"ach_district_residential": {"id": &"ach_district_residential", "name": "DISTRICT_NAME_RESIDENTIAL", "description": "ACH_DISTRICT_FULL_DESC", "secret": false, "condition": "district_residential_full"},
+	"ach_district_park": {"id": &"ach_district_park", "name": "DISTRICT_NAME_PARK", "description": "ACH_DISTRICT_FULL_DESC", "secret": false, "condition": "district_park_full"},
+	"ach_district_school": {"id": &"ach_district_school", "name": "DISTRICT_NAME_SCHOOL", "description": "ACH_DISTRICT_FULL_DESC", "secret": false, "condition": "district_school_full"},
+	"ach_district_hospital": {"id": &"ach_district_hospital", "name": "DISTRICT_NAME_HOSPITAL", "description": "ACH_DISTRICT_FULL_DESC", "secret": false, "condition": "district_hospital_full"},
+	"ach_district_gas_station": {"id": &"ach_district_gas_station", "name": "DISTRICT_NAME_GAS_STATION", "description": "ACH_DISTRICT_FULL_DESC", "secret": false, "condition": "district_gas_station_full"},
+	"ach_district_police": {"id": &"ach_district_police", "name": "DISTRICT_NAME_POLICE", "description": "ACH_DISTRICT_FULL_DESC", "secret": false, "condition": "district_police_full"},
+	"ach_district_warehouses": {"id": &"ach_district_warehouses", "name": "DISTRICT_NAME_WAREHOUSES", "description": "ACH_DISTRICT_FULL_DESC", "secret": false, "condition": "district_warehouses_full"},
+	"ach_district_industrial": {"id": &"ach_district_industrial", "name": "DISTRICT_NAME_INDUSTRIAL", "description": "ACH_DISTRICT_FULL_DESC", "secret": false, "condition": "district_industrial_full"},
+	"ach_district_substation": {"id": &"ach_district_substation", "name": "DISTRICT_NAME_SUBSTATION", "description": "ACH_DISTRICT_FULL_DESC", "secret": false, "condition": "district_substation_full"},
+	"ach_district_power_station": {"id": &"ach_district_power_station", "name": "DISTRICT_NAME_POWER_STATION", "description": "ACH_DISTRICT_FULL_DESC", "secret": false, "condition": "district_power_station_full"},
 }
 
 var _unlocked: Dictionary = {}
@@ -265,6 +282,10 @@ func _on_district_restored(district_id: StringName, stage: int) -> void:
 	if stage >= 3:
 		_check_unlock(&"ach_02", true)
 		_check_unlock(&"ach_03", _all_districts_full())
+		# GOLD MASTER v5 hooks pass: one achievement per district, generic
+		# id/trigger (no per-district special-casing needed) — 11 new
+		# achievements from a single line.
+		_check_unlock(StringName("ach_district_" + String(district_id)), true)
 
 ## WAVE 6 P5: ach_01 "first_light" gets its own real trigger - the FIRST
 ## district reaching STREETS (streetlights on), not shared with ach_02

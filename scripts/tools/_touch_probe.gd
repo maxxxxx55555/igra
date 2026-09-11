@@ -24,6 +24,7 @@ func _run() -> void:
 	_probe_help_screen()
 	_probe_leaderboard()
 	_probe_daily_challenge()
+	_probe_achievements_and_share()
 	print("[touch-probe] DONE fails=", _fails.size())
 	get_tree().quit(mini(_fails.size(), 250))
 
@@ -202,3 +203,30 @@ func _probe_buttons() -> void:
 		_ok(box2[0], "BtnAttack.button_down -> InputService.attack_requested")
 
 	hud.queue_free()
+
+## GOLD MASTER v5 hooks pass: the 11 per-district achievements (one
+## generic trigger, no per-district special-casing) + the clipboard
+## Share flow on the win screen.
+func _probe_achievements_and_share() -> void:
+	_ok(AchievementManager.ACHIEVEMENTS.size() >= 31,
+		"achievement roster >= 31 (20 original + 11 per-district) — found %d" % AchievementManager.ACHIEVEMENTS.size())
+	# user://achievements.cfg persists across separate headless-suite gate
+	# invocations (and across this dev machine's own repeated manual runs)
+	# on the same calendar day, so this may already be unlocked — assert
+	# the post-condition, not a fresh-unlock delta (same reasoning as the
+	# daily-challenge persistence handling above).
+	EventBus.district_restored.emit(&"suburbs", 3)
+	_ok(AchievementManager.is_unlocked(&"ach_district_suburbs"),
+		"district_restored(suburbs, FULL) unlocks/keeps ach_district_suburbs unlocked")
+
+	var win_scr: Script = load("res://scripts/ui/win_screen.gd")
+	var win := Control.new()
+	win.set_script(win_scr)
+	get_tree().root.add_child(win)
+	# _build_share_text() is the testable half; DisplayServer.clipboard_set
+	# is a real OS call the --headless driver doesn't back (see the
+	# function's own comment) — not something this session can verify.
+	var text: String = win.call("_build_share_text")
+	_ok(text.length() > 10 and text.contains("%") == false,
+		"Share text is built and fully substituted (%d chars, no leftover %%d/%%s)" % text.length())
+	win.queue_free()

@@ -1087,5 +1087,10 @@
   "DAILY_PLAY_MINUTES": "Gioca per %d minuti",
   "DAILY_CHALLENGE_TITLE": "Sfida giornaliera",
   "DAILY_STREAK_LABEL": "Serie: %d giorni",
-  "DAILY_COMPLETED_LABEL": "Completato!"
+  "DAILY_COMPLETED_LABEL": "Completato!",
+  "ACH_DISTRICT_FULL_DESC": "Ripristina completamente questo distretto.",
+  "BTN_SHARE": "Condividi",
+  "SHARE_TEXT": "L'ULTIMO LAMPIONE — finale «%s», %d/%d distretti ripristinati. Riporta la luce. Ogni lampione è vita.",
+  "SHARE_COPIED": "Copiato negli appunti!",
+  "Share Progress": "Condividi i progressi"
 }

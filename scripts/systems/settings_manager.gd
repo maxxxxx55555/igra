@@ -99,6 +99,7 @@ func _load_defaults() -> void:
 	_settings["haptics"] = true
 	_settings["invert_look"] = false
 	_settings["render_scale"] = 1.0
+	_settings["share_enabled"] = true
 
 func set_volume(bus: String, v: float) -> void:
 	var b := _canon_bus(bus)
