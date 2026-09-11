@@ -1076,5 +1076,7 @@
   "TOUCH_MAP_BTN": "Karten-Taste",
   "TOUCH_MENU_BTN": "Menü-Taste",
   "TOUCH_PAUSE_BTN": "Pause-Taste",
-  "Render Scale": "Render-Skalierung"
+  "Render Scale": "Render-Skalierung",
+  "BTN_ONE_MORE_RUN": "Noch ein Durchlauf",
+  "COLLECTION_TITLE": "Sammlung"
 }

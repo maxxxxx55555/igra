@@ -1076,5 +1076,7 @@
   "TOUCH_MAP_BTN": "زر الخريطة",
   "TOUCH_MENU_BTN": "زر القائمة",
   "TOUCH_PAUSE_BTN": "زر الإيقاف المؤقت",
-  "Render Scale": "مقياس العرض"
+  "Render Scale": "مقياس العرض",
+  "BTN_ONE_MORE_RUN": "جولة أخرى",
+  "COLLECTION_TITLE": "المجموعة"
 }

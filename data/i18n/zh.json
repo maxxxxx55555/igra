@@ -1076,5 +1076,7 @@
   "TOUCH_MAP_BTN": "地图按钮",
   "TOUCH_MENU_BTN": "菜单按钮",
   "TOUCH_PAUSE_BTN": "暂停按钮",
-  "Render Scale": "渲染缩放"
+  "Render Scale": "渲染缩放",
+  "BTN_ONE_MORE_RUN": "再来一局",
+  "COLLECTION_TITLE": "收藏"
 }

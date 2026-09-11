@@ -21,6 +21,9 @@ const TABS: Array[Dictionary] = [
 	{"id": &"bestiary", "label": "enc_title", "script": "res://scripts/ui/encyclopedia_ui.gd"},
 	# GOLD MASTER v4 mobile-art pass: controls (keyboard+touch) + glossary.
 	{"id": &"help", "label": "Help", "script": "res://scripts/ui/help_ui.gd"},
+	# GOLD MASTER v5 hooks pass: collectible-album read of the same
+	# document-unlock data journal_ui.gd lists as text.
+	{"id": &"collection", "label": "COLLECTION_TITLE", "script": "res://scripts/ui/collection_ui.gd"},
 ]
 
 var _content: Control = null

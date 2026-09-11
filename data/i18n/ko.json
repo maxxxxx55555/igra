@@ -1076,5 +1076,7 @@
   "TOUCH_MAP_BTN": "지도 버튼",
   "TOUCH_MENU_BTN": "메뉴 버튼",
   "TOUCH_PAUSE_BTN": "일시정지 버튼",
-  "Render Scale": "렌더 스케일"
+  "Render Scale": "렌더 스케일",
+  "BTN_ONE_MORE_RUN": "한 번 더",
+  "COLLECTION_TITLE": "컬렉션"
 }

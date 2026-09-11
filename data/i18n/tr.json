@@ -1076,5 +1076,7 @@
   "TOUCH_MAP_BTN": "Harita düğmesi",
   "TOUCH_MENU_BTN": "Menü düğmesi",
   "TOUCH_PAUSE_BTN": "Duraklat düğmesi",
-  "Render Scale": "Render Ölçeği"
+  "Render Scale": "Render Ölçeği",
+  "BTN_ONE_MORE_RUN": "Bir Tur Daha",
+  "COLLECTION_TITLE": "Koleksiyon"
 }

@@ -1076,5 +1076,7 @@
   "TOUCH_MAP_BTN": "マップボタン",
   "TOUCH_MENU_BTN": "メニューボタン",
   "TOUCH_PAUSE_BTN": "ポーズボタン",
-  "Render Scale": "レンダースケール"
+  "Render Scale": "レンダースケール",
+  "BTN_ONE_MORE_RUN": "もう一周",
+  "COLLECTION_TITLE": "コレクション"
 }

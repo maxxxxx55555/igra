@@ -12,6 +12,7 @@ var _title: Label = null
 var _subtitle: Label = null
 var _stats: Label = null
 var _menu_btn: Button = null
+var _more_btn: Button = null
 
 func _ready() -> void:
 	_build()
@@ -51,6 +52,16 @@ func _build() -> void:
 	_stats.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
 	vb.add_child(_stats)
 
+	# GOLD MASTER v5 hooks pass: "One More Run" — the ending is the exact
+	# moment a player is most likely to want another go. Opens the existing
+	# NG+ confirm screen (multipliers shown there) rather than jumping
+	# straight into a harder run unannounced.
+	_more_btn = Button.new()
+	_more_btn.focus_mode = Control.FOCUS_NONE
+	_more_btn.custom_minimum_size = Vector2(220, 44)
+	_more_btn.pressed.connect(func() -> void: UIManager.open(&"new_game_plus"))
+	vb.add_child(_more_btn)
+
 	_menu_btn = Button.new()
 	_menu_btn.focus_mode = Control.FOCUS_NONE
 	_menu_btn.custom_minimum_size = Vector2(220, 44)
@@ -64,6 +75,7 @@ func _refresh() -> void:
 	# never retranslated; _refresh() already reruns on every visibility_
 	# changed(visible), which is the natural retranslation point here.
 	_menu_btn.text = LocalizationManager.t("BTN_MAIN_MENU")
+	_more_btn.text = LocalizationManager.t("BTN_ONE_MORE_RUN")
 	var em := get_node_or_null("/root/EndingsManager")
 	var data: Dictionary = {}
 	if em != null and em.has_method("get_ending_data"):

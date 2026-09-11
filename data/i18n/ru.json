@@ -1076,5 +1076,7 @@
   "TOUCH_MAP_BTN": "Кнопка карты",
   "TOUCH_MENU_BTN": "Кнопка меню",
   "TOUCH_PAUSE_BTN": "Кнопка паузы",
-  "Render Scale": "Масштаб рендера"
+  "Render Scale": "Масштаб рендера",
+  "BTN_ONE_MORE_RUN": "Ещё один забег",
+  "COLLECTION_TITLE": "Коллекция"
 }

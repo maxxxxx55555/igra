@@ -25,9 +25,11 @@ const SCREENS: Dictionary = {
 	# GOLD MASTER v4 mobile-art pass: controls (keyboard+touch) + mechanics
 	# glossary, also embeds as a Codex tab — see CODEX_TABS below.
 	&"help":            "res://scripts/ui/help_ui.gd",
+	# GOLD MASTER v5 hooks pass: collectible-album read of document unlocks.
+	&"collection":      "res://scripts/ui/collection_ui.gd",
 }
 const BLOCKING: Array = [&"main_menu", &"pause", &"settings", &"death", &"win",
-	&"city_map", &"codex", &"encyclopedia", &"journal", &"quest_journal", &"achievements", &"stats", &"workbench", &"photo", &"skill_tree", &"new_game_plus", &"help"]
+	&"city_map", &"codex", &"encyclopedia", &"journal", &"quest_journal", &"achievements", &"stats", &"workbench", &"photo", &"skill_tree", &"new_game_plus", &"help", &"collection"]
 
 ## Старый id раздела -> вкладка «Кодекса». Экраны перечислены и в SCREENS,
 ## но открываются уже не поодиночке, а как вкладка общего экрана.
@@ -38,6 +40,7 @@ const CODEX_TABS: Dictionary = {
 	&"stats": &"stats",
 	&"encyclopedia": &"bestiary",
 	&"help": &"help",
+	&"collection": &"collection",
 }
 var _layer: CanvasLayer
 var _cache: Dictionary = {}

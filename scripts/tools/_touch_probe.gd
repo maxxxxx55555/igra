@@ -40,6 +40,22 @@ func _probe_help_screen() -> void:
 			help_page = n
 			break
 	_ok(help_page != null and help_page.visible, "Help page instantiated and visible")
+
+	codex.call("open_tab", &"collection")
+	_ok(codex.call("current_tab") == &"collection", "Codex.open_tab(&collection) switches to the Collection tab")
+	var coll_page: Control = null
+	for n in codex.find_children("*", "Control", true, false):
+		if n.get_script() != null and String(n.get_script().resource_path).ends_with("collection_ui.gd"):
+			coll_page = n
+			break
+	_ok(coll_page != null and coll_page.visible, "Collection page instantiated and visible")
+	var cards := 0
+	if coll_page != null:
+		var grid := coll_page.find_children("*", "GridContainer", true, false)
+		if not grid.is_empty():
+			cards = (grid[0] as GridContainer).get_child_count()
+	_ok(cards == DistrictSceneFactory.district_count(), "Collection shows one card per district (%d)" % cards)
+
 	codex.queue_free()
 
 func _probe_joystick() -> void:

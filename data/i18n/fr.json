@@ -1076,5 +1076,7 @@
   "TOUCH_MAP_BTN": "Bouton carte",
   "TOUCH_MENU_BTN": "Bouton menu",
   "TOUCH_PAUSE_BTN": "Bouton pause",
-  "Render Scale": "Échelle de rendu"
+  "Render Scale": "Échelle de rendu",
+  "BTN_ONE_MORE_RUN": "Encore une partie",
+  "COLLECTION_TITLE": "Collection"
 }
