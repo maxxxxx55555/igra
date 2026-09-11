@@ -1075,5 +1075,6 @@
   "TOUCH_SPRINT_BTN": "Koşu düğmesi",
   "TOUCH_MAP_BTN": "Harita düğmesi",
   "TOUCH_MENU_BTN": "Menü düğmesi",
-  "TOUCH_PAUSE_BTN": "Duraklat düğmesi"
+  "TOUCH_PAUSE_BTN": "Duraklat düğmesi",
+  "Render Scale": "Render Ölçeği"
 }

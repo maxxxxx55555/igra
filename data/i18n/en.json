@@ -1075,5 +1075,6 @@
   "TOUCH_SPRINT_BTN": "Sprint button",
   "TOUCH_MAP_BTN": "Map button",
   "TOUCH_MENU_BTN": "Menu button",
-  "TOUCH_PAUSE_BTN": "Pause button"
+  "TOUCH_PAUSE_BTN": "Pause button",
+  "Render Scale": "Render Scale"
 }

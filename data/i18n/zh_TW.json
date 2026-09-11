@@ -1075,5 +1075,6 @@
   "TOUCH_SPRINT_BTN": "衝刺按鈕",
   "TOUCH_MAP_BTN": "地圖按鈕",
   "TOUCH_MENU_BTN": "選單按鈕",
-  "TOUCH_PAUSE_BTN": "暫停按鈕"
+  "TOUCH_PAUSE_BTN": "暫停按鈕",
+  "Render Scale": "渲染縮放"
 }

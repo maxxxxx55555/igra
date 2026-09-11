@@ -1075,5 +1075,6 @@
   "TOUCH_SPRINT_BTN": "Botão de corrida",
   "TOUCH_MAP_BTN": "Botão do mapa",
   "TOUCH_MENU_BTN": "Botão do menu",
-  "TOUCH_PAUSE_BTN": "Botão de pausa"
+  "TOUCH_PAUSE_BTN": "Botão de pausa",
+  "Render Scale": "Escala de renderização"
 }

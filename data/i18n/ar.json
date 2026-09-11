@@ -1075,5 +1075,6 @@
   "TOUCH_SPRINT_BTN": "زر الاندفاع",
   "TOUCH_MAP_BTN": "زر الخريطة",
   "TOUCH_MENU_BTN": "زر القائمة",
-  "TOUCH_PAUSE_BTN": "زر الإيقاف المؤقت"
+  "TOUCH_PAUSE_BTN": "زر الإيقاف المؤقت",
+  "Render Scale": "مقياس العرض"
 }

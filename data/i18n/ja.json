@@ -1075,5 +1075,6 @@
   "TOUCH_SPRINT_BTN": "ダッシュボタン",
   "TOUCH_MAP_BTN": "マップボタン",
   "TOUCH_MENU_BTN": "メニューボタン",
-  "TOUCH_PAUSE_BTN": "ポーズボタン"
+  "TOUCH_PAUSE_BTN": "ポーズボタン",
+  "Render Scale": "レンダースケール"
 }

@@ -164,7 +164,13 @@ func _build_graphics_tab(parent: VBoxContainer) -> void:
 	_dropdown(parent, LocalizationManager.t("Resolution"), "resolution",
 		["720p", "1080p", "1440p"],
 		func(idx: int) -> void: SettingsManager.set_resolution(idx))
-	
+
+	# GOLD MASTER v4 mobile-art pass: the mobile-relevant scale knob —
+	# "Resolution" above changes the OS window, a no-op fullscreen on
+	# Android; this renders at a fraction of the viewport and upscales.
+	_slider(parent, LocalizationManager.t("Render Scale"), "render_scale", 0.5, 1.0, 0.05,
+		func(v: float) -> void: SettingsManager.set_render_scale(v))
+
 	_toggle(parent, LocalizationManager.t("VSync"), "vsync")
 	_dropdown(parent, LocalizationManager.t("FPS Cap"), "fps_cap", ["30", "60", "120"],
 		func(idx: int) -> void: SettingsManager.set_fps_cap(idx))

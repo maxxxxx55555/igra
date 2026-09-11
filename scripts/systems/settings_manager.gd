@@ -98,6 +98,7 @@ func _load_defaults() -> void:
 	_settings["touch_sensitivity"] = 1.0
 	_settings["haptics"] = true
 	_settings["invert_look"] = false
+	_settings["render_scale"] = 1.0
 
 func set_volume(bus: String, v: float) -> void:
 	var b := _canon_bus(bus)
@@ -447,6 +448,18 @@ func set_fps_cap(idx: int) -> void:
 	_settings["fps_cap"] = idx
 	Engine.max_fps = FPS_STEPS[idx]
 	EventBus.settings_changed.emit("fps_cap", idx)
+
+## GOLD MASTER v4 mobile-art pass: dynamic 3D render scale
+## (Viewport.scaling_3d_scale) — the actual mobile-relevant "resolution
+## scale" lever. `resolution` above changes the OS window size, a no-op on
+## a fullscreen Android device; this renders at a fraction of the real
+## viewport and upscales, the standard mobile perf knob.
+func set_render_scale(v: float) -> void:
+	_settings["render_scale"] = clampf(v, 0.5, 1.0)
+	var vp := get_viewport()
+	if vp != null:
+		vp.scaling_3d_scale = _settings["render_scale"]
+	EventBus.settings_changed.emit("render_scale", _settings["render_scale"])
 
 func set_shadow_quality(idx: int) -> void:
 	idx = clampi(idx, 0, 2)

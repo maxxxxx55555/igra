@@ -547,3 +547,26 @@ one was merged; the other two are intentionally left alone.
   and a separate feature track (GDD §18) rather than RC finishing work.
   Needs an explicit owner design decision before any of it goes near
   `main` — do not self-merge.
+
+## Mobile texture compression — every texture ships Lossless (mode=0), not VRAM Compressed (P1/OWNER)
+
+Checked this pass (PLAYABLE IDEAL, STEP 5 mobile perf): all 1230 `assets/**/*.import` files
+sampled use `compress/mode=0` (Lossless) — none are VRAM Compressed. On Android this means
+larger APK size and full RGBA8 GPU memory per texture instead of ETC2/ASTC block compression
+(typically 4-6x less VRAM). `export_presets.cfg`'s Android preset now has
+`texture_format/etc2_astc=true` (added this pass — inert today since nothing is VRAM-compressed
+yet, but correct and ready for the migration below).
+
+**Why not fixed here:** re-importing ~1230 textures to VRAM Compressed is a bulk `.import`
+edit outside a headless session's safe reach for two reasons: (1) `assets/textures/**` is
+Arena's/OpenCode's ownership zone, not reassigned for a project-wide pipeline change (only
+this pass's 12 new mobile-art files were reassigned); (2) VRAM block compression can introduce
+visible banding on this game's palette-locked, deliberately-flat-gradient art (STYLE_GUIDE
+explicitly bans banding) — verifying that needs a windowed visual diff, which NO-GODOT
+headless-only policy forbids.
+
+**Owner remediation:** in the Godot editor, select `assets/textures/**` (environment/prop
+surfaces are the highest-value targets — UI glyphs and the STYLE_GUIDE-locked flat art may be
+better left Lossless for crispness) → Import dock → Compress Mode → **VRAM Compressed** →
+Reimport, then a visual spot-check for banding on a few district loading screens before
+shipping. `texture_format/etc2_astc=true` is already set for when this lands.

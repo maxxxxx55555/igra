@@ -1075,5 +1075,6 @@
   "TOUCH_SPRINT_BTN": "Bouton sprint",
   "TOUCH_MAP_BTN": "Bouton carte",
   "TOUCH_MENU_BTN": "Bouton menu",
-  "TOUCH_PAUSE_BTN": "Bouton pause"
+  "TOUCH_PAUSE_BTN": "Bouton pause",
+  "Render Scale": "Échelle de rendu"
 }

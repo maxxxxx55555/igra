@@ -1075,5 +1075,6 @@
   "TOUCH_SPRINT_BTN": "Кнопка бега",
   "TOUCH_MAP_BTN": "Кнопка карты",
   "TOUCH_MENU_BTN": "Кнопка меню",
-  "TOUCH_PAUSE_BTN": "Кнопка паузы"
+  "TOUCH_PAUSE_BTN": "Кнопка паузы",
+  "Render Scale": "Масштаб рендера"
 }

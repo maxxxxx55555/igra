@@ -1075,5 +1075,6 @@
   "TOUCH_SPRINT_BTN": "Sprint-Taste",
   "TOUCH_MAP_BTN": "Karten-Taste",
   "TOUCH_MENU_BTN": "Menü-Taste",
-  "TOUCH_PAUSE_BTN": "Pause-Taste"
+  "TOUCH_PAUSE_BTN": "Pause-Taste",
+  "Render Scale": "Render-Skalierung"
 }

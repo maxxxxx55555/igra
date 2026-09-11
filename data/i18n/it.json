@@ -1075,5 +1075,6 @@
   "TOUCH_SPRINT_BTN": "Pulsante scatto",
   "TOUCH_MAP_BTN": "Pulsante mappa",
   "TOUCH_MENU_BTN": "Pulsante menu",
-  "TOUCH_PAUSE_BTN": "Pulsante pausa"
+  "TOUCH_PAUSE_BTN": "Pulsante pausa",
+  "Render Scale": "Scala di rendering"
 }
