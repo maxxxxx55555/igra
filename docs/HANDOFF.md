@@ -2,7 +2,7 @@
 
 ## GOLD MASTER v5 "HOOKS & SIMPLIFIED" — 2026-09-11
 
-`origin/main` is **GOLD MASTER v5** at `<gm5-hash>`. GOLD MASTER v3 (below)
+`origin/main` is **GOLD MASTER v5** at `54f1b31`. GOLD MASTER v3 (below)
 plus two passes that were never given their own PLAN.md milestone at the
 time (see `PLAN.md`'s own GOLD MASTER v5 section for the full breakdown):
 a mobile-art + touch-AAA-polish pass (Arena's mobile art branch carried

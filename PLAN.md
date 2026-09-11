@@ -23,7 +23,7 @@ igra` (suburbs district content, PR #1) was merged and deleted
 
 ## GOLD MASTER v5 — "HOOKS & SIMPLIFIED", declared 2026-09-11
 
-**`origin/main` is GOLD MASTER v5 at `<gm5-hash>`.** GOLD MASTER v3 (below) plus
+**`origin/main` is GOLD MASTER v5 at `54f1b31`.** GOLD MASTER v3 (below) plus
 two sessions of work that were never given their own PLAN.md milestone at
 the time (commit messages called them "mobile-art pass" / v4 scope and
 "hooks pass" / v5 scope — declared together here since v4 was never

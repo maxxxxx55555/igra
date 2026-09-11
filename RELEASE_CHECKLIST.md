@@ -48,7 +48,7 @@ pass could.
 
 | Area | State | Ref |
 |---|---|---|
-| Code / gameplay / autoloads | GOLD MASTER v5 "HOOKS & SIMPLIFIED"; headless suite green ×2 | `<gm5-hash>`, `ec68d42`, `f3bd1e3` |
+| Code / gameplay / autoloads | GOLD MASTER v5 "HOOKS & SIMPLIFIED"; headless suite green ×2 | `54f1b31`, `ec68d42`, `f3bd1e3` |
 | Touch AAA polish | dead-zone, response curve, sensitivity, haptics, Help screen (keyboard+touch+glossary) | `62e8bdd`, `bfbe3d5` |
 | Mobile-art pass (Arena recreate) | 9 touch glyphs + 3 onboard stills, `--check` gate | `62e8bdd` |
 | Balance sim | DARK +100% repair-part margin, 0 dead-ends, 4 skill branches, 4.9h time-to-win (DARK) | `59d09b3` |
