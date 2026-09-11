@@ -1079,5 +1079,13 @@
   "Render Scale": "Échelle de rendu",
   "BTN_ONE_MORE_RUN": "Encore une partie",
   "COLLECTION_TITLE": "Collection",
-  "LEADERBOARD_TITLE": "Meilleures parties"
+  "LEADERBOARD_TITLE": "Meilleures parties",
+  "DAILY_KILL_ENEMIES": "Élimine %d ennemis",
+  "DAILY_FIND_SECRETS": "Trouve %d documents",
+  "DAILY_LIGHT_STREETS": "Éclaire les rues de %d districts",
+  "DAILY_RESTORE_DISTRICTS": "Restaure entièrement %d districts",
+  "DAILY_PLAY_MINUTES": "Joue pendant %d minutes",
+  "DAILY_CHALLENGE_TITLE": "Défi quotidien",
+  "DAILY_STREAK_LABEL": "Série : %d jours",
+  "DAILY_COMPLETED_LABEL": "Terminé !"
 }

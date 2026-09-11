@@ -30,6 +30,7 @@ func _ready() -> void:
 	_install_logo_grunge_v2(vb as VBoxContainer)
 	_start_flicker()
 	_ensure_continue(vb as VBoxContainer)
+	_install_daily_card(vb as VBoxContainer)
 	_connect(vb, "Continue", func() -> void:
 		# continue_game() поднимает состояние автолоадов; сцену открываем сами.
 		GameManager.continue_game()
@@ -136,6 +137,58 @@ func _ensure_continue(vb: VBoxContainer) -> void:
 	b.name = "Continue"
 	vb.add_child(b)
 	vb.move_child(b, 1)
+
+## GOLD MASTER v5 hooks pass: today's daily challenge + streak, a small
+## card near the top of the menu — the return-tomorrow hook.
+const _DAILY_TEXT_KEYS: Dictionary = {
+	"kill_enemies": "DAILY_KILL_ENEMIES", "find_secrets": "DAILY_FIND_SECRETS",
+	"light_streets": "DAILY_LIGHT_STREETS", "restore_districts": "DAILY_RESTORE_DISTRICTS",
+	"play_minutes": "DAILY_PLAY_MINUTES",
+}
+func _install_daily_card(vb: VBoxContainer) -> void:
+	if vb.get_node_or_null("DailyCard") == null:
+		var card := VBoxContainer.new()
+		card.name = "DailyCard"
+		card.add_theme_constant_override("separation", 2)
+		vb.add_child(card)
+		vb.move_child(card, 1)
+		var title := Label.new()
+		title.name = "Title"
+		title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		title.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
+		card.add_child(title)
+		var body := Label.new()
+		body.name = "Body"
+		body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		body.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
+		card.add_child(body)
+		var streak := Label.new()
+		streak.name = "Streak"
+		streak.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		streak.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
+		card.add_child(streak)
+	_refresh_daily_card(vb)
+
+func _refresh_daily_card(vb: VBoxContainer) -> void:
+	var card := vb.get_node_or_null("DailyCard")
+	if card == null or DailyChallengeManager == null:
+		return
+	var t: Dictionary = DailyChallengeManager.get_today()
+	if t.is_empty():
+		card.visible = false
+		return
+	card.visible = true
+	var text_key: String = _DAILY_TEXT_KEYS.get(String(t.get("type", "")), "")
+	(card.get_node("Title") as Label).text = LocalizationManager.t("DAILY_CHALLENGE_TITLE")
+	var target := int(t.get("target", 0))
+	var desc := LocalizationManager.tf(text_key, [target]) if text_key != "" else ""
+	var progress := DailyChallengeManager.get_progress()
+	var done := DailyChallengeManager.is_completed_today()
+	(card.get_node("Body") as Label).text = "%s  (%d/%d)%s" % [
+		desc, mini(progress, target), target,
+		("  " + LocalizationManager.t("DAILY_COMPLETED_LABEL")) if done else ""]
+	var streak: int = SaveSystem.get_daily_streak() if SaveSystem != null else 0
+	(card.get_node("Streak") as Label).text = LocalizationManager.tf("DAILY_STREAK_LABEL", [streak])
 
 func _connect(vb: Node, node_name: String, cb: Callable) -> void:
 	var b := vb.get_node_or_null(node_name) as Button

@@ -1079,5 +1079,13 @@
   "Render Scale": "Render Scale",
   "BTN_ONE_MORE_RUN": "One More Run",
   "COLLECTION_TITLE": "Collection",
-  "LEADERBOARD_TITLE": "Best Runs"
+  "LEADERBOARD_TITLE": "Best Runs",
+  "DAILY_KILL_ENEMIES": "Kill %d enemies",
+  "DAILY_FIND_SECRETS": "Find %d documents",
+  "DAILY_LIGHT_STREETS": "Light up %d districts' streets",
+  "DAILY_RESTORE_DISTRICTS": "Fully restore %d districts",
+  "DAILY_PLAY_MINUTES": "Play for %d minutes",
+  "DAILY_CHALLENGE_TITLE": "Daily Challenge",
+  "DAILY_STREAK_LABEL": "Streak: %d days",
+  "DAILY_COMPLETED_LABEL": "Completed!"
 }

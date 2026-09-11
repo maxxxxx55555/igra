@@ -1079,5 +1079,13 @@
   "Render Scale": "렌더 스케일",
   "BTN_ONE_MORE_RUN": "한 번 더",
   "COLLECTION_TITLE": "컬렉션",
-  "LEADERBOARD_TITLE": "베스트 런"
+  "LEADERBOARD_TITLE": "베스트 런",
+  "DAILY_KILL_ENEMIES": "적 %d마리 처치",
+  "DAILY_FIND_SECRETS": "문서 %d개 찾기",
+  "DAILY_LIGHT_STREETS": "%d개 구역의 거리 밝히기",
+  "DAILY_RESTORE_DISTRICTS": "%d개 구역 완전 복구",
+  "DAILY_PLAY_MINUTES": "%d분 동안 플레이",
+  "DAILY_CHALLENGE_TITLE": "일일 도전 과제",
+  "DAILY_STREAK_LABEL": "연속 기록: %d일",
+  "DAILY_COMPLETED_LABEL": "완료!"
 }

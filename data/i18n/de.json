@@ -1079,5 +1079,13 @@
   "Render Scale": "Render-Skalierung",
   "BTN_ONE_MORE_RUN": "Noch ein Durchlauf",
   "COLLECTION_TITLE": "Sammlung",
-  "LEADERBOARD_TITLE": "Beste Läufe"
+  "LEADERBOARD_TITLE": "Beste Läufe",
+  "DAILY_KILL_ENEMIES": "Töte %d Feinde",
+  "DAILY_FIND_SECRETS": "Finde %d Dokumente",
+  "DAILY_LIGHT_STREETS": "Erleuchte die Straßen in %d Bezirken",
+  "DAILY_RESTORE_DISTRICTS": "Stelle %d Bezirke vollständig wieder her",
+  "DAILY_PLAY_MINUTES": "Spiele %d Minuten",
+  "DAILY_CHALLENGE_TITLE": "Tägliche Herausforderung",
+  "DAILY_STREAK_LABEL": "Serie: %d Tage",
+  "DAILY_COMPLETED_LABEL": "Erledigt!"
 }

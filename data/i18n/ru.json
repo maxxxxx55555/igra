@@ -1079,5 +1079,13 @@
   "Render Scale": "Масштаб рендера",
   "BTN_ONE_MORE_RUN": "Ещё один забег",
   "COLLECTION_TITLE": "Коллекция",
-  "LEADERBOARD_TITLE": "Лучшие забеги"
+  "LEADERBOARD_TITLE": "Лучшие забеги",
+  "DAILY_KILL_ENEMIES": "Убей %d врагов",
+  "DAILY_FIND_SECRETS": "Найди %d документов",
+  "DAILY_LIGHT_STREETS": "Зажги улицы в %d районах",
+  "DAILY_RESTORE_DISTRICTS": "Полностью восстанови %d районов",
+  "DAILY_PLAY_MINUTES": "Играй %d минут",
+  "DAILY_CHALLENGE_TITLE": "Ежедневное задание",
+  "DAILY_STREAK_LABEL": "Серия: %d дней",
+  "DAILY_COMPLETED_LABEL": "Выполнено!"
 }

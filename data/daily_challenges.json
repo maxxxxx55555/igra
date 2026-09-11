@@ -1,0 +1,39 @@
+{
+  "templates": [
+    {"id": "kill_03", "type": "kill_enemies", "target": 3, "reward": 30},
+    {"id": "kill_05", "type": "kill_enemies", "target": 5, "reward": 50},
+    {"id": "kill_08", "type": "kill_enemies", "target": 8, "reward": 80},
+    {"id": "kill_10", "type": "kill_enemies", "target": 10, "reward": 100},
+    {"id": "kill_15", "type": "kill_enemies", "target": 15, "reward": 150},
+    {"id": "kill_20", "type": "kill_enemies", "target": 20, "reward": 200},
+    {"id": "secret_02", "type": "find_secrets", "target": 2, "reward": 30},
+    {"id": "secret_03", "type": "find_secrets", "target": 3, "reward": 45},
+    {"id": "secret_05", "type": "find_secrets", "target": 5, "reward": 75},
+    {"id": "secret_08", "type": "find_secrets", "target": 8, "reward": 120},
+    {"id": "secret_12", "type": "find_secrets", "target": 12, "reward": 180},
+    {"id": "secret_16", "type": "find_secrets", "target": 16, "reward": 240},
+    {"id": "streets_01", "type": "light_streets", "target": 1, "reward": 40},
+    {"id": "streets_02", "type": "light_streets", "target": 2, "reward": 80},
+    {"id": "streets_03", "type": "light_streets", "target": 3, "reward": 120},
+    {"id": "streets_04", "type": "light_streets", "target": 4, "reward": 160},
+    {"id": "streets_06", "type": "light_streets", "target": 6, "reward": 240},
+    {"id": "streets_08", "type": "light_streets", "target": 8, "reward": 320},
+    {"id": "restore_01", "type": "restore_districts", "target": 1, "reward": 60},
+    {"id": "restore_02", "type": "restore_districts", "target": 2, "reward": 120},
+    {"id": "restore_03", "type": "restore_districts", "target": 3, "reward": 180},
+    {"id": "restore_04", "type": "restore_districts", "target": 4, "reward": 240},
+    {"id": "restore_05", "type": "restore_districts", "target": 5, "reward": 300},
+    {"id": "restore_06", "type": "restore_districts", "target": 6, "reward": 360},
+    {"id": "play_03", "type": "play_minutes", "target": 3, "reward": 20},
+    {"id": "play_05", "type": "play_minutes", "target": 5, "reward": 35},
+    {"id": "play_08", "type": "play_minutes", "target": 8, "reward": 55},
+    {"id": "play_12", "type": "play_minutes", "target": 12, "reward": 80},
+    {"id": "play_15", "type": "play_minutes", "target": 15, "reward": 100},
+    {"id": "play_20", "type": "play_minutes", "target": 20, "reward": 130}
+  ],
+  "streak_rewards": [
+    {"days": 7, "reward": 150},
+    {"days": 30, "reward": 750},
+    {"days": 100, "reward": 3000}
+  ]
+}

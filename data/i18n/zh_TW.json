@@ -1079,5 +1079,13 @@
   "Render Scale": "渲染縮放",
   "BTN_ONE_MORE_RUN": "再玩一輪",
   "COLLECTION_TITLE": "收藏",
-  "LEADERBOARD_TITLE": "最佳紀錄"
+  "LEADERBOARD_TITLE": "最佳紀錄",
+  "DAILY_KILL_ENEMIES": "擊殺%d個敵人",
+  "DAILY_FIND_SECRETS": "找到%d份文件",
+  "DAILY_LIGHT_STREETS": "點亮%d個區域的街道",
+  "DAILY_RESTORE_DISTRICTS": "完全修復%d個區域",
+  "DAILY_PLAY_MINUTES": "遊玩%d分鐘",
+  "DAILY_CHALLENGE_TITLE": "每日挑戰",
+  "DAILY_STREAK_LABEL": "連續天數：%d天",
+  "DAILY_COMPLETED_LABEL": "已完成！"
 }

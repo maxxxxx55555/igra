@@ -1079,5 +1079,13 @@
   "Render Scale": "Render Ölçeği",
   "BTN_ONE_MORE_RUN": "Bir Tur Daha",
   "COLLECTION_TITLE": "Koleksiyon",
-  "LEADERBOARD_TITLE": "En İyi Koşular"
+  "LEADERBOARD_TITLE": "En İyi Koşular",
+  "DAILY_KILL_ENEMIES": "%d düşman öldür",
+  "DAILY_FIND_SECRETS": "%d belge bul",
+  "DAILY_LIGHT_STREETS": "%d bölgenin sokaklarını aydınlat",
+  "DAILY_RESTORE_DISTRICTS": "%d bölgeyi tamamen onar",
+  "DAILY_PLAY_MINUTES": "%d dakika oyna",
+  "DAILY_CHALLENGE_TITLE": "Günlük Görev",
+  "DAILY_STREAK_LABEL": "Seri: %d gün",
+  "DAILY_COMPLETED_LABEL": "Tamamlandı!"
 }

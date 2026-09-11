@@ -1079,5 +1079,13 @@
   "Render Scale": "مقياس العرض",
   "BTN_ONE_MORE_RUN": "جولة أخرى",
   "COLLECTION_TITLE": "المجموعة",
-  "LEADERBOARD_TITLE": "أفضل الجولات"
+  "LEADERBOARD_TITLE": "أفضل الجولات",
+  "DAILY_KILL_ENEMIES": "اقتل %d أعداء",
+  "DAILY_FIND_SECRETS": "اعثر على %d وثائق",
+  "DAILY_LIGHT_STREETS": "أضئ شوارع %d أحياء",
+  "DAILY_RESTORE_DISTRICTS": "استعد %d أحياء بالكامل",
+  "DAILY_PLAY_MINUTES": "العب لمدة %d دقائق",
+  "DAILY_CHALLENGE_TITLE": "التحدي اليومي",
+  "DAILY_STREAK_LABEL": "التتابع: %d أيام",
+  "DAILY_COMPLETED_LABEL": "تم الإنجاز!"
 }

@@ -1079,5 +1079,13 @@
   "Render Scale": "レンダースケール",
   "BTN_ONE_MORE_RUN": "もう一周",
   "COLLECTION_TITLE": "コレクション",
-  "LEADERBOARD_TITLE": "ベストラン"
+  "LEADERBOARD_TITLE": "ベストラン",
+  "DAILY_KILL_ENEMIES": "敵を%d体倒す",
+  "DAILY_FIND_SECRETS": "書類を%d個見つける",
+  "DAILY_LIGHT_STREETS": "%d地区の街灯を灯す",
+  "DAILY_RESTORE_DISTRICTS": "%d地区を完全に復旧する",
+  "DAILY_PLAY_MINUTES": "%d分間プレイする",
+  "DAILY_CHALLENGE_TITLE": "デイリーチャレンジ",
+  "DAILY_STREAK_LABEL": "連続記録：%d日",
+  "DAILY_COMPLETED_LABEL": "達成！"
 }
