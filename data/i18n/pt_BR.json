@@ -1065,5 +1065,15 @@
   "Invert Look": "Inverter visão",
   "ONBOARD_05_CAPTION": "As pilhas mantêm a lanterna acesa — encontre-as antes de ficar no escuro.",
   "ONBOARD_06_CAPTION": "Alguns painéis precisam de mais que energia — conecte os cabos para desbloqueá-los.",
-  "ONBOARD_07_CAPTION": "Agache-se para se mover em silêncio e ficar fora do campo de visão de um caçador."
+  "ONBOARD_07_CAPTION": "Agache-se para se mover em silêncio e ficar fora do campo de visão de um caçador.",
+  "Help": "Ajuda",
+  "Cable Puzzle": "Quebra-cabeça de cabos",
+  "TOUCH_JOYSTICK": "Joystick esquerdo",
+  "TOUCH_FLASH_BTN": "Botão da lanterna",
+  "TOUCH_INTERACT_BTN": "Botão brilhante ao alcance",
+  "TOUCH_STEALTH_BTN": "Botão de furtividade",
+  "TOUCH_SPRINT_BTN": "Botão de corrida",
+  "TOUCH_MAP_BTN": "Botão do mapa",
+  "TOUCH_MENU_BTN": "Botão do menu",
+  "TOUCH_PAUSE_BTN": "Botão de pausa"
 }

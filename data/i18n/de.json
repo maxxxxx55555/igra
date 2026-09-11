@@ -1065,5 +1065,15 @@
   "Invert Look": "Blick invertieren",
   "ONBOARD_05_CAPTION": "Batterien halten die Taschenlampe am Leuchten — finde sie, bevor du im Dunkeln stehst.",
   "ONBOARD_06_CAPTION": "Manche Tafeln brauchen mehr als Strom — verbinde die Kabel, um sie freizuschalten.",
-  "ONBOARD_07_CAPTION": "Ducke dich, um leise zu bleiben und dem Sichtfeld eines Jägers zu entgehen."
+  "ONBOARD_07_CAPTION": "Ducke dich, um leise zu bleiben und dem Sichtfeld eines Jägers zu entgehen.",
+  "Help": "Hilfe",
+  "Cable Puzzle": "Kabel-Rätsel",
+  "TOUCH_JOYSTICK": "Linker Joystick",
+  "TOUCH_FLASH_BTN": "Taschenlampen-Taste",
+  "TOUCH_INTERACT_BTN": "Leuchtende Taste in Reichweite",
+  "TOUCH_STEALTH_BTN": "Tarnungs-Taste",
+  "TOUCH_SPRINT_BTN": "Sprint-Taste",
+  "TOUCH_MAP_BTN": "Karten-Taste",
+  "TOUCH_MENU_BTN": "Menü-Taste",
+  "TOUCH_PAUSE_BTN": "Pause-Taste"
 }

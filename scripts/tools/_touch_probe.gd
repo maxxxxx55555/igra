@@ -21,8 +21,26 @@ func _ready() -> void:
 func _run() -> void:
 	_probe_joystick()
 	_probe_buttons()
+	_probe_help_screen()
 	print("[touch-probe] DONE fails=", _fails.size())
 	get_tree().quit(mini(_fails.size(), 250))
+
+## GOLD MASTER v4 STEP 2: the new Help/Codex tab actually builds and
+## shows controls + glossary content, keyboard+touch, no script errors.
+func _probe_help_screen() -> void:
+	var scr: Script = load("res://scripts/ui/codex_ui.gd")
+	var codex := Control.new()
+	codex.set_script(scr)
+	get_tree().root.add_child(codex)
+	codex.call("open_tab", &"help")
+	_ok(codex.call("current_tab") == &"help", "Codex.open_tab(&help) switches to the Help tab")
+	var help_page: Control = null
+	for n in codex.find_children("*", "Control", true, false):
+		if n.get_script() != null and String(n.get_script().resource_path).ends_with("help_ui.gd"):
+			help_page = n
+			break
+	_ok(help_page != null and help_page.visible, "Help page instantiated and visible")
+	codex.queue_free()
 
 func _probe_joystick() -> void:
 	var js_script: Script = load("res://scripts/ui/virtual_joystick.gd")

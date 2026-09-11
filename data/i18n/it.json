@@ -1065,5 +1065,15 @@
   "Invert Look": "Inverti la visuale",
   "ONBOARD_05_CAPTION": "Le batterie tengono accesa la torcia — trovale prima di restare al buio.",
   "ONBOARD_06_CAPTION": "Alcuni pannelli richiedono più della corrente — collega i cavi per sbloccarli.",
-  "ONBOARD_07_CAPTION": "Accovacciati per muoverti in silenzio e restare fuori dal campo visivo di un cacciatore."
+  "ONBOARD_07_CAPTION": "Accovacciati per muoverti in silenzio e restare fuori dal campo visivo di un cacciatore.",
+  "Help": "Aiuto",
+  "Cable Puzzle": "Puzzle dei cavi",
+  "TOUCH_JOYSTICK": "Joystick sinistro",
+  "TOUCH_FLASH_BTN": "Pulsante torcia",
+  "TOUCH_INTERACT_BTN": "Pulsante luminoso a portata",
+  "TOUCH_STEALTH_BTN": "Pulsante furtività",
+  "TOUCH_SPRINT_BTN": "Pulsante scatto",
+  "TOUCH_MAP_BTN": "Pulsante mappa",
+  "TOUCH_MENU_BTN": "Pulsante menu",
+  "TOUCH_PAUSE_BTN": "Pulsante pausa"
 }

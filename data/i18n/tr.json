@@ -1065,5 +1065,15 @@
   "Invert Look": "Görünümü Ters Çevir",
   "ONBOARD_05_CAPTION": "Piller el fenerini yanık tutar — karanlıkta kalmadan önce onları bul.",
   "ONBOARD_06_CAPTION": "Bazı panolar güçten fazlasını ister — açmak için kabloları eşleştir.",
-  "ONBOARD_07_CAPTION": "Sessizce hareket etmek ve bir avcının görüş alanının dışında kalmak için eğil."
+  "ONBOARD_07_CAPTION": "Sessizce hareket etmek ve bir avcının görüş alanının dışında kalmak için eğil.",
+  "Help": "Yardım",
+  "Cable Puzzle": "Kablo Bulmacası",
+  "TOUCH_JOYSTICK": "Sol joystick",
+  "TOUCH_FLASH_BTN": "Fener düğmesi",
+  "TOUCH_INTERACT_BTN": "Menzildeyken parlayan düğme",
+  "TOUCH_STEALTH_BTN": "Gizlilik düğmesi",
+  "TOUCH_SPRINT_BTN": "Koşu düğmesi",
+  "TOUCH_MAP_BTN": "Harita düğmesi",
+  "TOUCH_MENU_BTN": "Menü düğmesi",
+  "TOUCH_PAUSE_BTN": "Duraklat düğmesi"
 }

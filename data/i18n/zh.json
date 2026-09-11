@@ -1065,5 +1065,15 @@
   "Invert Look": "反转视角",
   "ONBOARD_05_CAPTION": "电池能让手电筒持续发光——趁还没陷入黑暗时找到它们。",
   "ONBOARD_06_CAPTION": "有些配电盘光靠电力还不够——接好电缆才能解锁。",
-  "ONBOARD_07_CAPTION": "蹲下可以安静移动，避开猎手的视线范围。"
+  "ONBOARD_07_CAPTION": "蹲下可以安静移动，避开猎手的视线范围。",
+  "Help": "帮助",
+  "Cable Puzzle": "电缆谜题",
+  "TOUCH_JOYSTICK": "左侧摇杆",
+  "TOUCH_FLASH_BTN": "手电筒按钮",
+  "TOUCH_INTERACT_BTN": "靠近时发光的按钮",
+  "TOUCH_STEALTH_BTN": "潜行按钮",
+  "TOUCH_SPRINT_BTN": "冲刺按钮",
+  "TOUCH_MAP_BTN": "地图按钮",
+  "TOUCH_MENU_BTN": "菜单按钮",
+  "TOUCH_PAUSE_BTN": "暂停按钮"
 }

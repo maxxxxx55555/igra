@@ -1065,5 +1065,15 @@
   "Invert Look": "反轉視角",
   "ONBOARD_05_CAPTION": "電池能讓手電筒持續發光——趁還沒陷入黑暗時找到它們。",
   "ONBOARD_06_CAPTION": "有些配電盤光靠電力還不夠——接好電纜才能解鎖。",
-  "ONBOARD_07_CAPTION": "蹲下可以安靜移動，避開獵人的視線範圍。"
+  "ONBOARD_07_CAPTION": "蹲下可以安靜移動，避開獵人的視線範圍。",
+  "Help": "說明",
+  "Cable Puzzle": "電纜謎題",
+  "TOUCH_JOYSTICK": "左側搖桿",
+  "TOUCH_FLASH_BTN": "手電筒按鈕",
+  "TOUCH_INTERACT_BTN": "靠近時發光的按鈕",
+  "TOUCH_STEALTH_BTN": "潛行按鈕",
+  "TOUCH_SPRINT_BTN": "衝刺按鈕",
+  "TOUCH_MAP_BTN": "地圖按鈕",
+  "TOUCH_MENU_BTN": "選單按鈕",
+  "TOUCH_PAUSE_BTN": "暫停按鈕"
 }

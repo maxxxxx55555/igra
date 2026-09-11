@@ -1065,5 +1065,15 @@
   "Invert Look": "Invert Look",
   "ONBOARD_05_CAPTION": "Batteries keep the flashlight burning - find them before you're left in the dark.",
   "ONBOARD_06_CAPTION": "Some panels need more than power - match the cables to unlock them.",
-  "ONBOARD_07_CAPTION": "Crouch to move quietly and stay out of a hunter's line of sight."
+  "ONBOARD_07_CAPTION": "Crouch to move quietly and stay out of a hunter's line of sight.",
+  "Help": "Help",
+  "Cable Puzzle": "Cable Puzzle",
+  "TOUCH_JOYSTICK": "Left thumb-stick",
+  "TOUCH_FLASH_BTN": "Flashlight button",
+  "TOUCH_INTERACT_BTN": "Glowing button when in reach",
+  "TOUCH_STEALTH_BTN": "Stealth button",
+  "TOUCH_SPRINT_BTN": "Sprint button",
+  "TOUCH_MAP_BTN": "Map button",
+  "TOUCH_MENU_BTN": "Menu button",
+  "TOUCH_PAUSE_BTN": "Pause button"
 }

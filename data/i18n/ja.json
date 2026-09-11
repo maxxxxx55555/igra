@@ -1065,5 +1065,15 @@
   "Invert Look": "視点反転",
   "ONBOARD_05_CAPTION": "電池が懐中電灯を灯し続ける――暗闇に取り残される前に見つけろ。",
   "ONBOARD_06_CAPTION": "電力だけでは開かない配電盤もある――ケーブルを合わせて解除しろ。",
-  "ONBOARD_07_CAPTION": "しゃがめば静かに動け、狩人の視界の外にいられる。"
+  "ONBOARD_07_CAPTION": "しゃがめば静かに動け、狩人の視界の外にいられる。",
+  "Help": "ヘルプ",
+  "Cable Puzzle": "ケーブルパズル",
+  "TOUCH_JOYSTICK": "左スティック",
+  "TOUCH_FLASH_BTN": "懐中電灯ボタン",
+  "TOUCH_INTERACT_BTN": "近くにいると光るボタン",
+  "TOUCH_STEALTH_BTN": "ステルスボタン",
+  "TOUCH_SPRINT_BTN": "ダッシュボタン",
+  "TOUCH_MAP_BTN": "マップボタン",
+  "TOUCH_MENU_BTN": "メニューボタン",
+  "TOUCH_PAUSE_BTN": "ポーズボタン"
 }
