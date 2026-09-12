@@ -86,6 +86,34 @@ F-A2 verdicts rest on exact header/granule/size identity with the certified
 2026-09-11 encode; loudness facts are inherited from `docs/CERT_AUDIO.md`
 §1–§3, not re-claimed as fresh measurements.
 
+## F-V1 — cinematic post-fx presets (TASK 2 — DELIVERED 11/11)
+
+`assets/textures/postfx/presets.json` (v1) + `assets/textures/postfx/README.md`
+(NEW dir). Data-only JSON table district→{bloom,vignette,chroma,grain};
+conservative values grounded in `docs/VISUAL_AUDIO_SPEC.md` §1 moods and the
+shipped LUTs: bloom 0.12–0.35 (fog districts highest, hospital lowest —
+warm-absent stays cold), vignette 0.45–0.60 in `#0c1016` (GDD §11.2 canon
+color for all 11 — per-district vignette colors cut per `yagni`, the LUT
+already owns per-district color), chroma 0.5–1.0 px @1080p, grain 0.08–0.12
+(GDD §11.4 band). Twins stay twins (residential=suburbs,
+industrial=warehouses, power_station=substation).
+
+CODE mapping verified read-only against shipped consumers (not edited):
+bloom → `Environment.glow_*` on `env_night` (no glow keys today — additive);
+vignette/grain → `PostProcessOverlay.set_vignette_strength` (clamp 0–0.7) /
+`set_grain_intensity` (clamp 0–0.15) — every preset inside both clamps;
+chroma → NEW uniform, no shipped consumer (marked as such in README);
+suggested switch point `district_grading.gd` `_apply()` + stack order in README.
+
+Verification (numpy/PIL sim over palette-locked `still_first_light`, base
+18..239): FULL-strength stack (0.35/0.60/1.0px/0.12) with the EXACT shipped
+shader math (add-only grain veil, shipped vignette formula) grades to
+14..236, **0 pure-white / 0 pure-black / 0 >250 texels**, contrast 98.6%
+retained — readable, nothing blown. (A first stress sim with symmetric grain
+and 2.2× bloom gain showed 18 white/88k black texels — disclosed here as a
+sim artifact, not shipped behavior; faithful-math rerun is the verdict
+basis.) Full numbers: `docs/CERT_FINALE.md` §2.
+
 ## F-A4 — audio files touched (owned paths only)
 
 - `docs/AUDIO_COVERAGE.md` (surgical: finale-pass note appended — matrix

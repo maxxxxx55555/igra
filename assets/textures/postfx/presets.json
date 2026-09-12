@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "generated": "2026-09-12",
+  "owner": "CONTENT+ASSETS agent (data only — wiring is CODE-owned)",
+  "convention": "Conservative filmic values: subtle, never distracting. Ranges: bloom.bloom 0-1 (Godot glow_bloom), vignette.strength 0-0.7 (PostProcessOverlay alpha clamp), chroma.amount_px_1080p (edge pixels at 1080p, scales linearly with height), grain.intensity 0.08-0.12 (GDD 11.4 film-grain band). Vignette color is #0c1016 for every district per GDD 11.2 canon (vignette goes to bg-deep, never pure black) — see README.",
+  "districts": {
+    "suburbs": {
+      "bloom": {"enabled": true, "bloom": 0.25, "intensity": 0.6, "strength": 1.0, "hdr_threshold": 1.0},
+      "vignette": {"strength": 0.5, "color": "#0c1016"},
+      "chroma": {"amount_px_1080p": 0.75},
+      "grain": {"intensity": 0.1}
+    },
+    "residential": {
+      "bloom": {"enabled": true, "bloom": 0.25, "intensity": 0.6, "strength": 1.0, "hdr_threshold": 1.0},
+      "vignette": {"strength": 0.5, "color": "#0c1016"},
+      "chroma": {"amount_px_1080p": 0.75},
+      "grain": {"intensity": 0.1}
+    },
+    "park": {
+      "bloom": {"enabled": true, "bloom": 0.2, "intensity": 0.6, "strength": 1.0, "hdr_threshold": 1.0},
+      "vignette": {"strength": 0.45, "color": "#0c1016"},
+      "chroma": {"amount_px_1080p": 0.5},
+      "grain": {"intensity": 0.09}
+    },
+    "school": {
+      "bloom": {"enabled": true, "bloom": 0.15, "intensity": 0.6, "strength": 1.0, "hdr_threshold": 1.0},
+      "vignette": {"strength": 0.55, "color": "#0c1016"},
+      "chroma": {"amount_px_1080p": 0.5},
+      "grain": {"intensity": 0.1}
+    },
+    "hospital": {
+      "bloom": {"enabled": true, "bloom": 0.12, "intensity": 0.6, "strength": 1.0, "hdr_threshold": 1.0},
+      "vignette": {"strength": 0.55, "color": "#0c1016"},
+      "chroma": {"amount_px_1080p": 0.5},
+      "grain": {"intensity": 0.09}
+    },
+    "gas_station": {
+      "bloom": {"enabled": true, "bloom": 0.3, "intensity": 0.6, "strength": 1.0, "hdr_threshold": 1.0},
+      "vignette": {"strength": 0.5, "color": "#0c1016"},
+      "chroma": {"amount_px_1080p": 1.0},
+      "grain": {"intensity": 0.1}
+    },
+    "police": {
+      "bloom": {"enabled": true, "bloom": 0.15, "intensity": 0.6, "strength": 1.0, "hdr_threshold": 1.0},
+      "vignette": {"strength": 0.6, "color": "#0c1016"},
+      "chroma": {"amount_px_1080p": 0.5},
+      "grain": {"intensity": 0.11}
+    },
+    "warehouses": {
+      "bloom": {"enabled": true, "bloom": 0.35, "intensity": 0.6, "strength": 1.0, "hdr_threshold": 1.0},
+      "vignette": {"strength": 0.5, "color": "#0c1016"},
+      "chroma": {"amount_px_1080p": 1.0},
+      "grain": {"intensity": 0.12}
+    },
+    "industrial": {
+      "bloom": {"enabled": true, "bloom": 0.35, "intensity": 0.6, "strength": 1.0, "hdr_threshold": 1.0},
+      "vignette": {"strength": 0.5, "color": "#0c1016"},
+      "chroma": {"amount_px_1080p": 1.0},
+      "grain": {"intensity": 0.12}
+    },
+    "substation": {
+      "bloom": {"enabled": true, "bloom": 0.3, "intensity": 0.6, "strength": 1.0, "hdr_threshold": 1.0},
+      "vignette": {"strength": 0.55, "color": "#0c1016"},
+      "chroma": {"amount_px_1080p": 0.75},
+      "grain": {"intensity": 0.12}
+    },
+    "power_station": {
+      "bloom": {"enabled": true, "bloom": 0.3, "intensity": 0.6, "strength": 1.0, "hdr_threshold": 1.0},
+      "vignette": {"strength": 0.55, "color": "#0c1016"},
+      "chroma": {"amount_px_1080p": 0.75},
+      "grain": {"intensity": 0.12}
+    }
+  }
+}
