@@ -570,3 +570,22 @@ surfaces are the highest-value targets — UI glyphs and the STYLE_GUIDE-locked 
 better left Lossless for crispness) → Import dock → Compress Mode → **VRAM Compressed** →
 Reimport, then a visual spot-check for banding on a few district loading screens before
 shipping. `texture_format/etc2_astc=true` is already set for when this lands.
+
+## GDD achievement count is stale — code ships 31, GDD/store copy says 20
+
+Found 2026-09-12 (RELEASE CONVERGENCE, arena store-pass cert). `docs/GDD.md` §21 and its
+supplement §S17 list exactly `ach_01`–`ach_20` (20 achievements), and `store/listing.md`
+correctly ships "20" per the repo's GDD-wins-on-conflict rule. But
+`scripts/systems/achievements_manager.gd` has shipped **31** since the GOLD MASTER v5 hooks
+pass (2026-09-11) added 11 per-district achievements (`ach_district_<id>`) that were never
+back-ported into the GDD. The GDD is the stale side, not the store copy.
+
+**Why not fixed here:** updating GDD §21 to list 11 new achievement entries (name/description/
+trigger per district) is a content-canon write, not a bugfix, and risks scope creep into a
+docs-consolidation pass. Deferred to a dedicated content pass.
+
+**Remediation:** add the 11 `ach_district_<id>` entries to GDD §21/§S17 (name = the existing
+`DISTRICT_NAME_<ID>` i18n key, description = the shared `ACH_DISTRICT_FULL_DESC` key already
+in code), then re-run `tools/gen_store_listing_locales.py` with the polished bullets ported in
+first (`docs/CERT_STORE.md` §8.2 warns regenerating without doing so reverts the 2026-09-11
+benefit-led polish) so store copy can honestly say 31.

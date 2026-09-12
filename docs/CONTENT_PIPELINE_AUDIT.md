@@ -641,3 +641,55 @@ payload, recreate it locally). Frozen `docs/GDD.md`, `docs/PRODUCTION_BIBLE.md`,
 
 Mobile-art-pass recreate: **touch glyphs 9/9, onboarding stills 3/3, touch-input probe 9/9,
 ledger + audit complete — 0 defects.**
+
+## 14. Visual asset pass (2026-09-12) — LUTs, screenshots, trailer re-grade
+
+Delivered `arena/01a0902d-igra`, merged `1382035`. Full certificate: `docs/CERT_VISUAL.md`
+(kept, indexed in `docs/RELEASE_ARTIFACTS.md`). Static-only verification (PNG decode + numpy
+pixel math; NO-GODOT standing — no render QA).
+
+- **11/11 LUTs** (`assets/textures/luts/lut_<district>.png`, 256×16): 0 pure black/white,
+  min≥16 max≤240, 0 row-monotonicity defects. Twin districts byte-identical (suburbs≡
+  residential, warehouses≡industrial, substation≡power_station).
+- **8/8 Play-Store screenshots** (1920×1080, ≤8MB, mean saturation ≤40; 3 touch-HUD shots
+  pixel-exact letterboxed `#0c1016`).
+- **4/4 trailer stills re-graded** in place (luma-mix 0.55, re-clamped [10,240]); presskit
+  composite deliberately left ungraded (3-district composite, a single LUT would mis-grade it).
+- Defects: **0**. Human eyeball composition check remains owner QA per
+  `store/screenshot-plan-detailed.md` §4 — tracked in `RELEASE_CHECKLIST.md`.
+
+## 15. Audio asset pass (2026-09-12) — 8 lit beds + 3 wow cues
+
+Delivered `arena/01a0902d-igra`, merged `1382035`. Full certificate: `docs/CERT_AUDIO.md`.
+Verification: Ogg header/granule parse (stdlib) + `ffmpeg loudnorm` measure-mode decode (no
+engine).
+
+- **8/8 lit ambience beds** (G1, G2b/c/e/f/g/h/i): exact length match to their dark twins
+  (36.000s, G2h 33.994s), -18 LUFS ±0.25, TP ≤ -2.01 dBFS, seams ≤ -41dB (masked under bed
+  RMS), 0 voices, 0 clipping, pure synthesis (auditable in committed `gen_audio_pass.py`).
+- **3/3 wow cues** (`cue_first_light` 60s, `cue_grid_cascade` 90s, `cue_victory` 120s):
+  arc-verified by 8th-window RMS decode — swell/climax/resolve land where the spec puts them.
+- F1 (`power_station_generator_thrum`/`_cooling_fan`) re-verified unchanged — retained finding,
+  not a gap (rationale: `docs/LEDGER_AUDIO.md` L4).
+- Defects: **0**. Wiring into `music_manager`/district themes is CODE-owned — see §3 of the
+  2026-09-12 RELEASE CONVERGENCE pass for wiring status.
+
+## 16. Store asset pass (2026-09-12) — 13-locale listing polish, press-kit, privacy policy
+
+Delivered `arena/01a09030-igra`, merged `dcf075e`. Full certificate: `docs/CERT_STORE.md`.
+Verification: `tools/gen_store_listing_locales.py --check` + independent parse + sha256 prefix
+diff.
+
+- **13/13 locales** console-paste-ready: char limits hold (title≤30, short≤80), byte-identical
+  to shipped `data/i18n/<loc>.json` `menu_title`/`menu_subtitle` (3 stale parity defects found
+  + fixed this pass: es/fr/pt_BR), 8 benefit-led bullets each, 0 placeholder leaks in
+  paste-ready fields.
+- EN/RU masters byte-untouched (sha256 prefix match, before/after identical).
+- **Recorded discrepancy, not fixed here:** store copy ships "20 achievements" per GDD
+  §21/§S17 (repo's GDD-wins-on-conflict rule); shipped code (`achievements_manager.gd`)
+  actually has **31** since the hooks pass added 11 per-district achievements that were never
+  added to the GDD. The GDD is stale, not the store copy — tracked in `docs/KNOWN_ISSUES.md`.
+  A future content pass should update GDD §21 to list all 31, then regenerate store copy.
+- Review-response honesty confirmed: perf/save-loss reply classes cite real recorded state
+  (`docs/KNOWN_ISSUES.md`), no dates or guarantees promised.
+- Defects: **0** open (4 fixed this pass — see `docs/CERT_STORE.md` §9).

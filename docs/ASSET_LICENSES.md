@@ -423,3 +423,29 @@ shipped `onboard_01..04` (STYLE_GUIDE "Loading art" row), RGB clamped `[12,216]`
 | `assets/textures/onboard_v2/onboard_05_light_cone_1024x576.png` | Generated (Pillow, deterministic) | Project-owned; no third-party rights | none required | 1024×576 RGB. Flashlight+battery onboarding beat. |
 | `assets/textures/onboard_v2/onboard_06_cable_box_1024x576.png` | Generated (Pillow, deterministic) | Project-owned; no third-party rights | none required | 1024×576 RGB. Cable-puzzle onboarding beat. |
 | `assets/textures/onboard_v2/onboard_07_crouch_hunter_1024x576.png` | Generated (Pillow, deterministic) | Project-owned; no third-party rights | none required | 1024×576 RGB. Stealth (crouch vs. hunter cone) onboarding beat. |
+
+## Added 2026-09-12 — VISUAL asset pass (11 LUTs, 8 screenshots, 4 trailer re-grades)
+
+Delivered via `arena/01a0902d-igra`, merged `1382035`. Full pipeline/verification narrative
+consolidated from `docs/LEDGER_VISUAL.md` (kept on disk, indexed in `docs/RELEASE_ARTIFACTS.md`).
+Every item is deterministic numpy/PIL transform output or Arena AI image generation composited
+with repo-owned art — project-owned, no third-party rights.
+
+| Path | Origin | License | Attribution | Notes |
+|---|---|---|---|---|
+| `assets/textures/luts/lut_<district>.png` (11 files) | Generated (numpy/PIL, deterministic) | Project-owned; no third-party rights | none required | 256×16 Godot `Environment.color_correction` LUTs, per-district tint sourced from `district_themes.gd` THEMES. 0 row-monotonicity defects; twin districts byte-identical. |
+| `store/screenshots/shot{01,02,05,07,08}_*_1920x1080_en.png` (5 files) | Arena AI image gen (env frames) + programmatic post (LUT luma-mix 0.6, bloom, vignette) | Project-owned AI output; no third-party rights | none required | Palette-clamped [16,240], mean saturation ≤40. Shot 8 is a programmatic composite of the repo's own city-overview map + district crests, no AI text. |
+| `store/screenshots/shot_p{1,2,3}_touch_*_1920x1080_en.png` (3 files) | Composite of repo touch-HUD sprites + programmatic HP/stamina/battery bars | Project-owned; no third-party rights | none required | 20:9 content centered + letterboxed in 1920×1080, flat `#0c1016` bars (pixel-exact). |
+| `store/trailer/still_first_light/_first_ending/_grid_cascade/shorts_silhouette` (4 files, re-graded in place) | Existing Arena AI stills, re-graded | Project-owned; no third-party rights | none required | Per-district LUT luma-mix (0.55), re-clamped [10,240]. Originals recoverable from git history. `presskit_1600x900.png` deliberately left ungraded (3-district composite). |
+
+## Added 2026-09-12 — AUDIO asset pass (8 lit ambience beds + 3 wow cues)
+
+Delivered via `arena/01a0902d-igra`, merged `1382035`. Full pipeline/verification narrative
+consolidated from `docs/LEDGER_AUDIO.md`. Pure synthesis (numpy) + `ffmpeg loudnorm`/encode —
+zero third-party samples, zero voices (auditable in the committed generator script).
+
+| Path | Origin | License | Attribution | Notes |
+|---|---|---|---|---|
+| `assets/audio/ambience/districts/{gas_station,industrial,park,police,residential,school,substation,warehouses}_lit.ogg` (8 files) | Generated (numpy synth + `ffmpeg loudnorm`, deterministic, seeds 1101-1108) | Project-owned; no third-party rights | none required | Fills gaps G1, G2b/c/e/f/g/h/i in `docs/AUDIO_COVERAGE.md`. 36.000s exact (G2h twin 33.994s), -18 LUFS, OGG q4 mono 44.1k. |
+| `assets/audio/music/cue_{first_light,grid_cascade,victory}.ogg` (3 files) | Generated (numpy synth + `ffmpeg loudnorm`, seeds 1201-1203) | Project-owned; no third-party rights | none required | Wow-moment one-shot cues, 60/90/120s, arc-verified by 8th-window RMS decode. |
+| `assets/audio/_build/gen_audio_pass.py` | Repo-owned tool | Project-owned | none required | Deterministic renderer for the two rows above; import-excluded via `.gdignore`. |
