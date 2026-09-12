@@ -2,7 +2,7 @@
 
 ## RELEASE CANDIDATE FINAL v2 — 2026-09-13
 
-`origin/main` is **RELEASE CANDIDATE FINAL v2** at `<rcf2-hash>`. On top
+`origin/main` is **RELEASE CANDIDATE FINAL v2** at `b100750`. On top
 of v1 (below): a FINAL HARDENING PASS closed the 3 named technical
 blockers this project had left. Most notably — **a real, severe bug was
 found and fixed**: `scenes/main_3d.tscn`'s embedded splash screen
