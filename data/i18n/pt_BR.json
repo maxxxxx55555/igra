@@ -1092,5 +1092,11 @@
   "BTN_SHARE": "Compartilhar",
   "SHARE_TEXT": "O ULTIMO LAMPIAO — final \"%s\", %d/%d distritos restaurados. Traga a luz de volta. Cada poste é vida.",
   "SHARE_COPIED": "Copiado para a área de transferência!",
-  "Share Progress": "Compartilhar progresso"
+  "Share Progress": "Compartilhar progresso",
+  "Export Save": "Exportar save",
+  "Import Save": "Importar save",
+  "SAVE_EXPORTED": "Save exportado para Downloads",
+  "SAVE_EXPORT_FAILED": "Ainda não há save para exportar",
+  "SAVE_IMPORTED": "Save importado — reinicie para continuar",
+  "SAVE_IMPORT_FAILED": "Nenhum save válido encontrado em Downloads"
 }

@@ -1092,5 +1092,11 @@
   "BTN_SHARE": "Paylaş",
   "SHARE_TEXT": "SON SOKAK LAMBASI — \"%s\" sonu, %d/%d bölge onarıldı. Işığı geri getir. Her sokak lambası bir hayattır.",
   "SHARE_COPIED": "Panoya kopyalandı!",
-  "Share Progress": "İlerlemeyi Paylaş"
+  "Share Progress": "İlerlemeyi Paylaş",
+  "Export Save": "Kaydı Dışa Aktar",
+  "Import Save": "Kaydı İçe Aktar",
+  "SAVE_EXPORTED": "Kayıt İndirilenler'e aktarıldı",
+  "SAVE_EXPORT_FAILED": "Dışa aktarılacak kayıt yok",
+  "SAVE_IMPORTED": "Kayıt içe aktarıldı — devam etmek için yeniden başlatın",
+  "SAVE_IMPORT_FAILED": "İndirilenler'de geçerli bir kayıt bulunamadı"
 }

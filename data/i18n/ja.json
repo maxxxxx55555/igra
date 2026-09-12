@@ -1092,5 +1092,11 @@
   "BTN_SHARE": "共有",
   "SHARE_TEXT": "最後の街灯 ――「%s」エンディング、%d/%d地区復旧。光を取り戻せ。街灯ひとつが命。",
   "SHARE_COPIED": "クリップボードにコピーしました！",
-  "Share Progress": "進捗を共有"
+  "Share Progress": "進捗を共有",
+  "Export Save": "セーブをエクスポート",
+  "Import Save": "セーブをインポート",
+  "SAVE_EXPORTED": "セーブをダウンロードフォルダに書き出しました",
+  "SAVE_EXPORT_FAILED": "エクスポートするセーブがありません",
+  "SAVE_IMPORTED": "セーブを読み込みました。再起動すると続きから遊べます",
+  "SAVE_IMPORT_FAILED": "ダウンロードフォルダに有効なセーブが見つかりません"
 }

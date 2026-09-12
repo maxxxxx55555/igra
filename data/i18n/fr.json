@@ -1092,5 +1092,11 @@
   "BTN_SHARE": "Partager",
   "SHARE_TEXT": "LE DERNIER REVERBERE — fin « %s », %d/%d districts restaurés. Rends la lumière. Chaque lampadaire est une vie.",
   "SHARE_COPIED": "Copié dans le presse-papiers !",
-  "Share Progress": "Partager la progression"
+  "Share Progress": "Partager la progression",
+  "Export Save": "Exporter la sauvegarde",
+  "Import Save": "Importer la sauvegarde",
+  "SAVE_EXPORTED": "Sauvegarde exportée vers Téléchargements",
+  "SAVE_EXPORT_FAILED": "Aucune sauvegarde à exporter",
+  "SAVE_IMPORTED": "Sauvegarde importée — redémarrez pour continuer",
+  "SAVE_IMPORT_FAILED": "Aucune sauvegarde valide trouvée dans Téléchargements"
 }

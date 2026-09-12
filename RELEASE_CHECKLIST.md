@@ -66,9 +66,10 @@ pass could.
 | Android adaptive icon | `store/icon-adaptive/` fg+bg 1080, safe-zone + extrema verified, wired in `export_presets.cfg` | `3babbff` |
 | Review-response playbook | `store/review-responses.md` — 5 classes × EN+RU | `3babbff` |
 | Screenshot capture plan | `store/screenshot-plan-detailed.md` — 8 shots + exact recipes + <60-min clock | `b4a04db` |
-| Audio lit-bed gaps | 8 remain spec-only; per-gap Suno/Udio briefs deposited; no binary faked | `b4a04db` |
+| Audio lit-bed gaps | **RESOLVED 2026-09-12** — all 8 delivered (arena audio pass, synthesis + `ffmpeg loudnorm`), wired into `music_manager.gd` `AMBIENCE_LIT_BY_DISTRICT` | `9885fb1` |
 | Trailer / press kit — 5 key-art masters, edit plan, reviewer email | `store/trailer/`, `store/press-kit.md` | `6fea56e` |
 | Merged `arena/*` branches cleaned up | `01a08729`, `01a08b05` deleted; 2 held per owner | prior pass |
+| RELEASE CONVERGENCE pass — merged Arena visual+audio+store, 11 LUTs wired live, HMAC save signing, 50-mutant corruption fuzzer, save export/import, check.sh timeout hardening | see `docs/RELEASE_ARTIFACTS.md` for the full index | `dcf075e`..(this pass's tip) |
 
 `docs/RELEASE_FINAL.md` still has platform-specific detail (Yandex Games,
 itch.io, Steam) not repeated here.
@@ -256,3 +257,20 @@ the export/upload steps in those sections once step 4 above is done.
 `version/name="1.0"`. Bump both per whatever versioning scheme you want
 to use, at the time of your actual first upload — not before, so the
 version number reflects when it was really shipped.
+
+## 8. Player save transfer ("lost phone") — already live, no owner action
+
+Settings → Game tab has **Export Save** / **Import Save**. Export copies the
+live save to the device's own Downloads folder as `tls_save_export.json`;
+a player moves that one file to a new device however they normally move
+files (their own file manager, a cloud-drive app, a cable, email to
+themselves) and presses Import there. No native Android share-sheet
+integration — that needs a plugin this project doesn't have (same honest
+scope as the Share Progress button, `scripts/ui/win_screen.gd`); this is a
+real file in a real, player-visible folder instead. Signed with the same
+HMAC the autosave uses (`scripts/core/save_system.gd`), so a garbage file
+placed at that name is refused rather than imported; the current save is
+always backed up to `.bak` before an import overwrites it, so an accidental
+import is recoverable the same way a corrupt autosave already is. Nothing
+for you to configure — mention it in the store listing's FAQ/description
+only if you want players to know it exists ahead of time.

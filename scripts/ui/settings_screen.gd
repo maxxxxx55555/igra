@@ -106,6 +106,26 @@ func _build_game_tab(parent: VBoxContainer) -> void:
 	# on every platform Godot ships to. On, by default.
 	_toggle(parent, LocalizationManager.t("Share Progress"), "share_enabled")
 
+	# RELEASE CONVERGENCE STEP 6: anti "lost phone" - copies the live save
+	# to/from the OS's own Downloads folder (no share-sheet plugin in this
+	# project, see save_system.gd). Import has no confirm dialog like
+	# Reset Progress below: it always backs up the current save to .bak
+	# first, so an accidental import is recoverable the same way a
+	# corrupt autosave already is (see save_system.gd, _save_integrity_check.gd).
+	var export_btn := Button.new()
+	export_btn.text = LocalizationManager.t("Export Save")
+	export_btn.pressed.connect(func() -> void:
+		var key := "SAVE_EXPORTED" if SaveSystem.export_save_to_file() else "SAVE_EXPORT_FAILED"
+		EventBus.inventory_notice.emit(LocalizationManager.t(key)))
+	parent.add_child(export_btn)
+
+	var import_btn := Button.new()
+	import_btn.text = LocalizationManager.t("Import Save")
+	import_btn.pressed.connect(func() -> void:
+		var key := "SAVE_IMPORTED" if SaveSystem.import_save_from_file() else "SAVE_IMPORT_FAILED"
+		EventBus.inventory_notice.emit(LocalizationManager.t(key)))
+	parent.add_child(import_btn)
+
 	# TRUTH WAVE P0.3: раньше единственный способ стереть прогресс —
 	# руками удалить файлы user:// на диске. Кнопка с подтверждением.
 	var reset_btn := Button.new()

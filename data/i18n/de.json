@@ -1092,5 +1092,11 @@
   "BTN_SHARE": "Teilen",
   "SHARE_TEXT": "DIE LETZTE LATERNE — Ende „%s“, %d/%d Bezirke wiederhergestellt. Bring das Licht zurück. Jede Laterne ist Leben.",
   "SHARE_COPIED": "In die Zwischenablage kopiert!",
-  "Share Progress": "Fortschritt teilen"
+  "Share Progress": "Fortschritt teilen",
+  "Export Save": "Speicherstand exportieren",
+  "Import Save": "Speicherstand importieren",
+  "SAVE_EXPORTED": "Speicherstand nach Downloads exportiert",
+  "SAVE_EXPORT_FAILED": "Noch kein Speicherstand zum Exportieren",
+  "SAVE_IMPORTED": "Speicherstand importiert — neu starten zum Fortsetzen",
+  "SAVE_IMPORT_FAILED": "Kein gültiger Speicherstand in Downloads gefunden"
 }

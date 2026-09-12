@@ -23,6 +23,44 @@ const _HMAC_KEY: String = "TLS-savegame-v1-4f1c9e6b2a8d5f03"
 static func _sign(body: String) -> String:
 	return Crypto.new().hmac_digest(HashingContext.HASH_SHA256, _HMAC_KEY.to_utf8_buffer(), body.to_utf8_buffer()).hex_encode()
 
+## RELEASE CONVERGENCE STEP 6 (anti "lost phone"): the live save is the one
+## Continue reads (SAVE_PATH, via has_save()/load_all()) - the 4-slot API
+## below already carries a static-audit note that its own UI is archived/
+## unreachable, so export/import targets SAVE_PATH only, not the slots.
+## No native Android share-sheet plugin exists in this project (same
+## honest scope as win_screen.gd's clipboard Share) - this writes a real
+## file to the OS's own Downloads folder, which the player moves to a new
+## device however they like (their file manager, a cloud-drive app, a
+## cable), then Import reads it back from that same folder. Documented
+## owner-facing flow: RELEASE_CHECKLIST.md.
+const EXPORT_FILENAME: String = "tls_save_export.json"
+
+## src_path/dest_path/filename default to the real save + real export name;
+## _save_integrity_check.gd's fuzz-style gate overrides them to a scratch
+## file instead, the same reason its other checks use _SLOT=97 instead of a
+## real slot - this must never be able to touch a developer's actual save.
+func _export_path(filename: String = EXPORT_FILENAME) -> String:
+	return OS.get_system_dir(OS.SYSTEM_DIR_DOWNLOADS).path_join(filename)
+
+func export_save_to_file(src_path: String = SAVE_PATH, filename: String = EXPORT_FILENAME) -> bool:
+	if not FileAccess.file_exists(src_path):
+		return false
+	var err := DirAccess.copy_absolute(src_path, _export_path(filename))
+	return err == OK
+
+## Validates the exported file is a genuine, signature-passing save
+## envelope before touching anything - a garbage/foreign file in Downloads
+## named the same never reaches dest_path. Backs up the current save to
+## .bak first (the same convention _write_atomic() already uses), so an
+## accidental import is recoverable the same way a corrupt autosave is.
+func import_save_from_file(dest_path: String = SAVE_PATH, filename: String = EXPORT_FILENAME) -> bool:
+	var path := _export_path(filename)
+	if not FileAccess.file_exists(path) or _read_envelope(path).is_empty():
+		return false
+	if FileAccess.file_exists(dest_path):
+		DirAccess.copy_absolute(dest_path, dest_path + ".bak")
+	return DirAccess.copy_absolute(path, dest_path) == OK
+
 var _pending_player_pos: Vector3 = Vector3.INF
 var _autosave_timer: float = AUTOSAVE_INTERVAL
 var _quest_data: Dictionary = {}

@@ -1092,5 +1092,11 @@
   "BTN_SHARE": "Compartir",
   "SHARE_TEXT": "LA ULTIMA FAROLA — final «%s», %d/%d distritos restaurados. Devuelve la luz. Cada farola es vida.",
   "SHARE_COPIED": "¡Copiado al portapapeles!",
-  "Share Progress": "Compartir progreso"
+  "Share Progress": "Compartir progreso",
+  "Export Save": "Exportar partida",
+  "Import Save": "Importar partida",
+  "SAVE_EXPORTED": "Partida exportada a Descargas",
+  "SAVE_EXPORT_FAILED": "Aún no hay partida para exportar",
+  "SAVE_IMPORTED": "Partida importada: reinicia para continuar",
+  "SAVE_IMPORT_FAILED": "No se encontró una partida válida en Descargas"
 }

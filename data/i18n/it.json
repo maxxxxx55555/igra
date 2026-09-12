@@ -1092,5 +1092,11 @@
   "BTN_SHARE": "Condividi",
   "SHARE_TEXT": "L'ULTIMO LAMPIONE — finale «%s», %d/%d distretti ripristinati. Riporta la luce. Ogni lampione è vita.",
   "SHARE_COPIED": "Copiato negli appunti!",
-  "Share Progress": "Condividi i progressi"
+  "Share Progress": "Condividi i progressi",
+  "Export Save": "Esporta salvataggio",
+  "Import Save": "Importa salvataggio",
+  "SAVE_EXPORTED": "Salvataggio esportato in Download",
+  "SAVE_EXPORT_FAILED": "Nessun salvataggio da esportare",
+  "SAVE_IMPORTED": "Salvataggio importato — riavvia per continuare",
+  "SAVE_IMPORT_FAILED": "Nessun salvataggio valido trovato in Download"
 }

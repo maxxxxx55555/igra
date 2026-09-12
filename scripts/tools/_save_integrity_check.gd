@@ -12,6 +12,7 @@ func _ready() -> void:
 	_check_bak_recovery()
 	_check_corrupt_rejected()
 	_check_fuzz_50_mutants()
+	_check_export_import()
 	_cleanup()
 	print("[save-integrity] DONE fails=", _fails)
 	get_tree().quit(0 if _fails == 0 else 1)
@@ -121,6 +122,49 @@ func _check_fuzz_50_mutants() -> void:
 	_ok(true, "fuzz: 50/50 mutants processed without crashing the process")
 	if FileAccess.file_exists(_path() + ".bak"):
 		DirAccess.remove_absolute(_path() + ".bak")
+
+## RELEASE CONVERGENCE STEP 6 (anti "lost phone"): a fully scratch path on
+## both ends (a fake "save" file that isn't SAVE_PATH, a fake export
+## filename that isn't EXPORT_FILENAME) - never touches a real save or a
+## real Downloads file, same reason as _SLOT=97 above.
+const _SCRATCH_SAVE: String = "user://tls_savegame_TESTONLY.save"
+const _SCRATCH_EXPORT: String = "tls_save_export_TESTONLY.json"
+
+func _check_export_import() -> void:
+	if FileAccess.file_exists(_SCRATCH_SAVE):
+		DirAccess.remove_absolute(_SCRATCH_SAVE)
+	_ok(not SaveSystem.export_save_to_file(_SCRATCH_SAVE, _SCRATCH_EXPORT),
+		"экспорт отказывает, если сейва ещё нет")
+
+	# A real signed save (built via the normal slot machinery, then copied
+	# to the scratch path) must round-trip through export -> import cleanly.
+	CoinWallet.from_dict({})
+	CoinWallet.add(333)
+	SaveSystem.save_slot(_SLOT)
+	DirAccess.copy_absolute(_path(), _SCRATCH_SAVE)
+	_ok(SaveSystem.export_save_to_file(_SCRATCH_SAVE, _SCRATCH_EXPORT), "экспорт пишет файл в Downloads")
+
+	CoinWallet.from_dict({})
+	CoinWallet.add(999)
+	SaveSystem.save_slot(_SLOT)
+	DirAccess.copy_absolute(_path(), _SCRATCH_SAVE)  # scratch now holds 999, export still holds 333
+	_ok(SaveSystem.import_save_from_file(_SCRATCH_SAVE, _SCRATCH_EXPORT), "импорт читает файл из Downloads")
+	DirAccess.copy_absolute(_SCRATCH_SAVE, _path())
+	CoinWallet.from_dict({})
+	SaveSystem.load_slot(_SLOT)
+	_ok(CoinWallet.get_coins() == 333, "импорт вернул исходные (333) данные, не последние (999) — было %d" % CoinWallet.get_coins())
+
+	# Garbage placed at the export filename must be refused, not imported.
+	var dl_path: String = OS.get_system_dir(OS.SYSTEM_DIR_DOWNLOADS).path_join(_SCRATCH_EXPORT)
+	var gf := FileAccess.open(dl_path, FileAccess.WRITE)
+	gf.store_string("не json{{{")
+	gf.close()
+	_ok(not SaveSystem.import_save_from_file(_SCRATCH_SAVE, _SCRATCH_EXPORT), "импорт отказывает на битом файле экспорта")
+
+	for p: String in [_SCRATCH_SAVE, _SCRATCH_SAVE + ".bak", dl_path]:
+		if FileAccess.file_exists(p):
+			DirAccess.remove_absolute(p)
+	CoinWallet.from_dict({})
 
 func _cleanup() -> void:
 	for suffix: String in ["", ".bak", ".tmp"]:

@@ -1092,5 +1092,11 @@
   "BTN_SHARE": "Share",
   "SHARE_TEXT": "THE LAST STREETLIGHT — %s ending, %d/%d districts restored. Restore the light. Every streetlight is life.",
   "SHARE_COPIED": "Copied to clipboard!",
-  "Share Progress": "Share Progress"
+  "Share Progress": "Share Progress",
+  "Export Save": "Export Save",
+  "Import Save": "Import Save",
+  "SAVE_EXPORTED": "Save exported to Downloads",
+  "SAVE_EXPORT_FAILED": "No save to export yet",
+  "SAVE_IMPORTED": "Save imported — restart to continue",
+  "SAVE_IMPORT_FAILED": "No valid save found in Downloads"
 }

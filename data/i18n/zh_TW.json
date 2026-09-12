@@ -1092,5 +1092,11 @@
   "BTN_SHARE": "分享",
   "SHARE_TEXT": "最後一盞街燈 ——「%s」結局，已修復%d/%d個區域。讓城市重獲光明。每盞街燈都是生命。",
   "SHARE_COPIED": "已複製到剪貼簿！",
-  "Share Progress": "分享進度"
+  "Share Progress": "分享進度",
+  "Export Save": "匯出存檔",
+  "Import Save": "匯入存檔",
+  "SAVE_EXPORTED": "存檔已匯出到下載資料夾",
+  "SAVE_EXPORT_FAILED": "還沒有可匯出的存檔",
+  "SAVE_IMPORTED": "存檔已匯入——重新啟動後繼續遊戲",
+  "SAVE_IMPORT_FAILED": "下載資料夾中找不到有效存檔"
 }

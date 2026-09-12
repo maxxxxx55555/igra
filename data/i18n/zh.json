@@ -1092,5 +1092,11 @@
   "BTN_SHARE": "分享",
   "SHARE_TEXT": "最后一盏街灯 ——「%s」结局，已修复%d/%d个区域。让城市重获光明。每盏街灯都是生命。",
   "SHARE_COPIED": "已复制到剪贴板！",
-  "Share Progress": "分享进度"
+  "Share Progress": "分享进度",
+  "Export Save": "导出存档",
+  "Import Save": "导入存档",
+  "SAVE_EXPORTED": "存档已导出到下载文件夹",
+  "SAVE_EXPORT_FAILED": "还没有可导出的存档",
+  "SAVE_IMPORTED": "存档已导入——重启后继续游戏",
+  "SAVE_IMPORT_FAILED": "下载文件夹中未找到有效存档"
 }
