@@ -26,13 +26,13 @@ claim always stays in the artifact itself — this file only points at it. Start
 | Autoplay bot | `tools/qa_sim/autoplay_bot` | winnability evidence — see `docs/KNOWN_ISSUES.md` "Autoplay bot" section for current score |
 | Balance sim | `tools/qa_sim/balance_sim.py` | economy/time-to-win modeling, DARK/PARTIAL margins |
 
-## docs/artifacts/ (this pass's new reports)
+## docs/artifacts/ (this pass's new reports — all delivered)
 
 | Artifact | Path | Proves |
 |---|---|---|
-| Final gate report | `docs/artifacts/final_gate_report.md` | consolidated green/red state of every gate at RC tag time |
-| Security / anti-tamper report | `docs/artifacts/security_report.md` | save HMAC signing, corrupt-recovery behavior, dev-tool exclusion, zero debug prints |
-| APK size report | `docs/artifacts/apk_size_report.md` | **done** — 738 texture files, 41.2 MiB, 100% Lossless measured; scoped pilot + honest APK-vs-VRAM impact estimate; not applied (needs a windowed banding check, see report §4) |
+| Final gate report | `docs/artifacts/final_gate_report.md` | 22/23 engine gates green (1 pre-existing documented stall), headless_suite ×3, 7/7 qa_sim, i18n MISSING:0 |
+| Security / anti-tamper report | `docs/artifacts/security_report.md` | HMAC-SHA256 save signing, 50-mutant corruption fuzz (0 crashes), stat clamps, dev-tool export exclusion, 0 shipped debug prints found |
+| APK size report | `docs/artifacts/apk_size_report.md` | 738 texture files, 41.2 MiB, 100% Lossless measured; scoped pilot + honest APK-vs-VRAM impact estimate; not applied (needs a windowed banding check, report §4) |
 | Owner-only items | `docs/artifacts/known_owner_only_items.md` | exhaustive list of what only the owner can finish, and why |
 
 ## Canon docs this pass touches (not new artifacts, but the record of truth)

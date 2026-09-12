@@ -5,6 +5,37 @@ in-game verification — a static-only pass can't play the game itself.
 
 ---
 
+## Batch 14 (2026-09-12) — RELEASE CANDIDATE FINAL: mood grading, full ambient audio, save transfer
+
+- **Every district now has its own color mood**, not just a shared night
+  palette — hospital reads clinically cold, gas_station leans warm/ember,
+  substation and power_station go near-desaturated, and so on. This was
+  built and delivered earlier but never actually connected to the
+  in-game camera; it's live now.
+- **Full ambient soundscape** — all 11 districts now have their own
+  "restored" ambience track (was 3 of 11: suburbs, hospital,
+  power_station); the other 8 used to fall back to the darker/tenser
+  track even after you'd relit them.
+- **Three new music moments** — a swell when you light the first
+  streetlight, a rising cue when the whole grid comes back on, and a
+  bittersweet resolve on the ending screen.
+- **Export Save / Import Save** — new buttons in Settings → Game. Export
+  copies your save to your device's Downloads folder; move that one file
+  to a new phone (however you'd normally move a file) and press Import
+  there to pick up where you left off — no account, no server.
+- Two new Play Store screenshots' worth of touch-HUD art and a store
+  listing refresh from a separate content team's pass, folded in.
+
+### HUMAN CHECK (5 min)
+Walk into 2-3 different districts (try one you haven't restored yet
+alongside a lit one) — the overall color tone should visibly shift
+between them, not look identical. Restore a district you haven't lit
+before and listen for its ambient track changing on power-up. Settings →
+Game → Export Save, then check your phone's/PC's Downloads folder for
+`tls_save_export.json`.
+
+---
+
 ## Batch 13 (2026-09-11) — GOLD MASTER v5: daily challenges, collection album, leaderboard, achievements, share
 
 - **A reason to open the game tomorrow.** The main menu now shows

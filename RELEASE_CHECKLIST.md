@@ -2,10 +2,12 @@
 
 ## 0. TL;DR — the irreducible human minimum
 
-Everything code / content / store-side is **done by agents** (GOLD MASTER v5
-"HOOKS & SIMPLIFIED", `origin/main`). What's left needs a GUI, an account, a
-signing key, a build toolchain, or a human playing the game — and cannot be
-done from an agent session:
+Everything code / content / store-side is **done by agents** (RELEASE
+CANDIDATE FINAL, `origin/main` — see `docs/RELEASE_ARTIFACTS.md` for the full
+index and `docs/artifacts/known_owner_only_items.md` for exactly this list
+with reasoning). What's left needs a GUI, an account, a signing key, a build
+toolchain, or a human playing the game — and cannot be done from an agent
+session:
 
 1. **Keystore + build.** `keytool -genkey … -alias tlsrelease` (§1), put
    the path/passwords in `export_presets.cfg`, install `4.7-stable`
@@ -29,9 +31,10 @@ done from an agent session:
 Optional / not blocking: real AppLovin SDK key (§2 — ships fine on the
 no-ad debug stub without it), extra platforms (§6), version bump at upload
 time (§7), one `perf_check_scene.tscn --windowed` run for the real
-draw-call number, migrating 1230 textures to VRAM-compressed (`docs/
-KNOWN_ISSUES.md` "Mobile texture compression"). Full gap list:
-`docs/GAP_TO_IDEAL.md`.
+draw-call number, the texture-compression pilot in `docs/artifacts/
+apk_size_report.md` (738 files, 41.2 MiB, measured 2026-09-12; scoped
+`tiles`+`surfaces` pilot ready, needs a windowed banding check). Full gap
+list: `docs/GAP_TO_IDEAL.md`.
 
 **Not actually optional, despite the label above:** the **eyes-on
 playtest** (`docs/HANDOFF.md` "HUMAN PLAYTEST SCRIPT v2") is the single

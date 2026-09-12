@@ -21,6 +21,52 @@ in-scope-only PR per `ARENA_NEXT_PROMPT.md`'s protocol. `arena/01a080ba-
 igra` (suburbs district content, PR #1) was merged and deleted
 2026-09-08 — see decisions log below.
 
+## RELEASE CANDIDATE FINAL — declared 2026-09-12, tip `<rcf-hash>`
+
+RELEASE CONVERGENCE PASS on top of GOLD MASTER v5 (below): merged all
+three pending Arena passes (visual, audio, store), wired their content
+live, closed the biggest technical gaps STEP 4's honest assessment named,
+and produced a full artifact set. See `docs/RELEASE_ARTIFACTS.md` for the
+index and `docs/artifacts/final_gate_report.md` for the gate-by-gate
+proof. Summary:
+
+- **Merged 3 Arena branches** (`1382035` visual+audio, `dcf075e` store) —
+  scope-checked clean (docs/store/textures/audio only), 0 reverts needed.
+  Consolidated their ledgers/certs into `docs/ASSET_LICENSES.md` +
+  `docs/CONTENT_PIPELINE_AUDIT.md` §14-16, indexed in
+  `docs/RELEASE_ARTIFACTS.md` (`25adacd`).
+- **Wired live**: 11 per-district color-correction LUTs into the real
+  WorldEnvironment (`world_env_setup.gd`, not the dead
+  `district_grading.gd` branch this pass found and documented), 8 new
+  lit ambience beds (all 11 districts now have a `_lit` variant, was
+  3/11), 3 wow-moment cues on the same signals WowDirector's visual
+  presets already use (`9885fb1`).
+- **Anti-bug**: bound every `check.sh` engine gate with a timeout — the
+  documented `game_test_3d_scene.tscn` stall could hang the owner's one
+  command forever before this (`4e36523`); found and fixed a real,
+  intermittent tree-detach race in the headless_suite language-switch
+  scenario (`649874d`). Autoplay-bot softlock reconfirmed unchanged,
+  deferred to owner playtest (`bb1ddca`).
+- **Anti-tamper**: HMAC-SHA256 save signing (was plain SHA-256, no key),
+  backward-compatible with existing saves; numeric stat clamps; a
+  50-mutant save-corruption fuzzer (0 crashes); dev-tool/probe-scene
+  export exclusion; audited for debug prints (0 genuine violations
+  found) (`f75d3fd`, `4b2625a`, this pass's export_presets.cfg edit).
+- **Anti "lost phone"**: `SaveSystem.export_save_to_file()`/
+  `import_save_from_file()`, Settings → Game tab, 6 new i18n keys × 13
+  locales (`2057b3e`).
+- **APK size**: measured 738 texture files / 41.2 MiB / 100% Lossless,
+  honest APK-vs-VRAM impact estimate, scoped pilot — not applied (needs
+  a windowed banding check, owner-only) (`2662bfd`).
+- **Full artifact set**: `docs/artifacts/{final_gate_report,
+  security_report,apk_size_report,known_owner_only_items}.md`, all
+  indexed in `docs/RELEASE_ARTIFACTS.md`.
+
+Owner-only items are now down to exactly the irreducible set: keystore +
+signed AAB, Play Console/IARC/upload, privacy policy URL, one real
+playtest/windowed check, and an optional real AppLovin key — full list
+in `docs/artifacts/known_owner_only_items.md`.
+
 ## GOLD MASTER v5 — "HOOKS & SIMPLIFIED", declared 2026-09-11
 
 **`origin/main` is GOLD MASTER v5 at `54f1b31`.** GOLD MASTER v3 (below) plus

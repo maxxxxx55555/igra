@@ -1,5 +1,41 @@
 # Handoff
 
+## RELEASE CANDIDATE FINAL — 2026-09-12
+
+`origin/main` is **RELEASE CANDIDATE FINAL** at `<rcf-hash>`. GOLD MASTER
+v5 (below) plus a full RELEASE CONVERGENCE pass: merged all three pending
+Arena branches (visual, audio, store — no reverts needed, all scope-clean),
+wired their content live (11 per-district LUTs, all 11 districts' ambient
+audio, 3 wow-moment cues), closed real gaps (`check.sh`'s unbounded hang
+risk, an intermittent tree-detach crash, HMAC save signing, a 50-mutant
+corruption fuzzer, save export/import for device transfers), and measured
+(not guessed) the texture-compression opportunity. Full detail:
+`PLAN.md`'s own RELEASE CANDIDATE FINAL section; full artifact index:
+`docs/RELEASE_ARTIFACTS.md`; gate-by-gate proof:
+`docs/artifacts/final_gate_report.md`.
+
+**Read this first, still:** `docs/HONEST_ASSESSMENT.md`. Nothing this
+pass changes the headline finding — **no session has ever played this
+game.** Everything closable without eyes on a running build has now been
+closed (see `docs/artifacts/known_owner_only_items.md` for the exact,
+now-short list of what's left and why each item structurally needs a
+human).
+
+### OWNER TODO (in order)
+
+1. **Play it once.** Still the single highest-leverage action, unchanged
+   from GOLD MASTER v5's own TODO below — see `docs/HONEST_ASSESSMENT.md`
+   and the "HUMAN PLAYTEST SCRIPT v2" further down this file.
+2. **Keystore + build → Play Console upload.** `RELEASE_CHECKLIST.md` §0
+   has the full ordered list; §8 (new) documents the save export/import
+   feature, which needs no owner setup.
+3. **Optional, not blocking:** the texture-compression pilot in
+   `docs/artifacts/apk_size_report.md` §5 (scoped to `tiles`+`surfaces`,
+   the safest 65% of the texture budget, with exact editor steps); a real
+   AppLovin key; extra platforms (`RELEASE_CHECKLIST.md` §6).
+
+---
+
 ## GOLD MASTER v5 "HOOKS & SIMPLIFIED" — 2026-09-11
 
 `origin/main` is **GOLD MASTER v5** at `54f1b31`. GOLD MASTER v3 (below)
