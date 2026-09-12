@@ -1,5 +1,43 @@
 # Known issues
 
+## district_grading.gd's Environment branch is dead code (found 2026-09-12, wiring LUTs)
+
+While wiring the 2026-09-12 arena visual pass's 11 per-district color-correction LUTs into
+`WorldEnvironment`, found that `scripts/world/district_grading.gd` (the script the LUT
+README and `docs/VISUAL_AUDIO_SPEC.md` both name as the intended wiring point) never
+actually runs its Environment-mutation branch (fog/sky/ambient/tonemap — `_apply()`'s
+`if _env != null and _env.environment != null:` block). Its only instantiator,
+`scripts/world/world_bootstrap.gd` `_wire()`, dynamically creates the `Grading` child node
+per district but only sets `district_root_path`, never the `@export var
+world_environment_path` the script needs to find its WorldEnvironment — so `_env` is always
+`null` and the whole branch (per-district fog color, sky background, ambient tint,
+FILMIC tonemap) has been a silent no-op since it was written. The only visible effect that
+ever shipped from `district_grading.gd` is its separate `_apply_ground()` floor-tint call
+(guarded by `_root`, not `_env` — that one does run).
+
+**Why not fixed by wiring the missing NodePath:** a second, genuinely live system already
+owns the same WorldEnvironment resource — `scripts/world_env_setup.gd` (attached to the
+main scene root) sets ambient/fog/tonemap once in `_ready()` and re-drives
+`ambient_light_color`/`ambient_light_energy`/moon/player-glow per **stage** (DARK/LIT/FULL)
+on every `district_stage_changed`, using one fixed palette for the whole game, not a
+per-district hue. Simply pointing `district_grading.gd` at the real WorldEnvironment would
+make two systems fight over `ambient_light_color`/`fog_color`/`tonemap_mode` on every stage
+change — a worse, flickering bug. Whether districts should carry their own fog/sky hue (not
+just LUT grading + floor tint, which do work today) is a design call, not a wiring bug fix,
+so it's left alone here.
+
+**What was actually wired instead:** the 11 LUTs go into `world_env_setup.gd` — the real
+live WorldEnvironment owner — as `Environment.adjustment_color_correction`, keyed by
+`EventBus.district_entered` (`_apply_lut()`, filename = `lut_<district_id>.png`, no table
+needed). This is genuinely live and does not conflict with the stage-based ambient system
+(different Environment properties).
+
+**If someone wants full per-district fog/sky/ambient later:** decide whether that should
+override or blend with `world_env_setup.gd`'s stage palette, then either delete
+`district_grading.gd`'s dead branch or wire `world_environment_path` to the real node and
+make the two systems cooperate (e.g. `district_grading.gd` sets fog/sky/tonemap only,
+`world_env_setup.gd` keeps owning ambient/moon/glow).
+
 ## Autoplay bot (PLAYABLE IDEAL pass) — mechanics engine proven, full headless win blocked by a boot-path lifecycle issue
 
 `tools/qa_sim/autoplay_bot` + `scenes/tools/qa_autoplay_scene.tscn` drive
@@ -240,6 +278,16 @@ default_bus_layout.tres` (and ideally a full `git status`) after any
 `--editor` invocation, before staging anything.** `git checkout --
 default_bus_layout.tres` reverts it cleanly since flow_check's own bus
 gate doesn't need the class cache and passes either way.
+
+**2026-09-12 addendum:** confirmed `--import` triggers the identical
+corruption, not just `--editor` — ran `godot --headless --path . --import
+--quit` to materialize `.import` files for the arena visual/audio pass's
+new assets (LUTs, screenshots, ogg beds), and got the exact same
+Master-block/`room_size`/uid damage on `default_bus_layout.tres`. So the
+rule is: **any** headless invocation that does a project-wide reimport or
+class-cache rebuild (`--import`, `--editor`) is suspect, not just
+`--editor` specifically. Reverted with the same `git checkout --` before
+committing.
 
 ## `game_test_3d_scene.tscn` gate stalls silently after "phase1 combat: damage Shadow"
 

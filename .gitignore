@@ -3,6 +3,7 @@
 bin/
 *.import
 *.uid
+*.translation
 
 # Tools / env
 *.pyc

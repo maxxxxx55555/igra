@@ -83,8 +83,12 @@ func _ready() -> void:
 
 	EventBus.district_stage_changed.connect(_on_district_stage_changed)
 	EventBus.weather_changed.connect(_on_weather_changed)
+	EventBus.district_entered.connect(_apply_lut)
 
 	_player_glow = _find_player_glow()
+	var dm := get_node_or_null("/root/DistrictManager")
+	if dm != null:
+		_apply_lut(dm.current_district)
 
 func _process(delta: float) -> void:
 	if _override_frames > 0:
@@ -148,6 +152,26 @@ func _find_player_glow() -> OmniLight3D:
 	if player == null:
 		return null
 	return player.find_child("PlayerGlow", true, false) as OmniLight3D
+
+## 2026-09-12 audio/visual pass: per-district color-correction LUT
+## (assets/textures/luts/README.md). This is the ONE live WorldEnvironment
+## (see class comment above) — district_grading.gd also grades per-district
+## fog/sky/ambient, but its `world_environment_path` export is never set by
+## its only instantiator (world_bootstrap.gd's dynamic "Grading" node), so
+## that whole branch is dead code today; not touched here (see
+## docs/KNOWN_ISSUES.md "district_grading.gd Environment branch is dead").
+## Filename convention IS the district->LUT mapping, no table needed.
+## Missing file (a district with no LUT yet) leaves grading off — safe
+## identity fallback, never an error.
+func _apply_lut(district_id: StringName) -> void:
+	if _env == null:
+		return
+	var lut_path := "res://assets/textures/luts/lut_%s.png" % String(district_id)
+	if ResourceLoader.exists(lut_path):
+		_env.adjustment_enabled = true
+		_env.adjustment_color_correction = load(lut_path)
+	else:
+		_env.adjustment_enabled = false
 
 func _find_we(n: Node) -> WorldEnvironment:
 	if n == null: return null

@@ -52,12 +52,12 @@ const AMBIENT_BY_DISTRICT: Dictionary = {
 	&"power_station": "res://assets/audio/music/music_ambient_dark.wav",
 }
 
-## RESCUE WAVE P2.2: ox alpha's per-district ambience beds (docs/
-## PRODUCTION_BIBLE.md audio canon) — dedicated 36s loops per district,
-## replacing the generic tracks above as the Mood.AMBIENT track. Only 3
-## districts got a _lit variant (suburbs/hospital/power_station);
-## the rest fall back to their own _dark bed even once restored
-## (DEFAULT_CHOICE — no _lit file was delivered for them, not inventing one).
+## RESCUE WAVE P2.2 + 2026-09-12 audio pass: ox alpha's + arena's per-
+## district ambience beds (docs/PRODUCTION_BIBLE.md audio canon) —
+## dedicated 36s loops per district, replacing the generic tracks above
+## as the Mood.AMBIENT track. All 11 districts now have a _lit variant
+## (suburbs/hospital/power_station shipped earlier; the remaining 8
+## delivered in the 2026-09-12 arena audio pass, docs/CERT_AUDIO.md).
 const AMBIENCE_DARK_BY_DISTRICT: Dictionary = {
 	&"suburbs": "res://assets/audio/ambience/districts/suburbs_dark.ogg",
 	&"residential": "res://assets/audio/ambience/districts/residential_dark.ogg",
@@ -73,7 +73,15 @@ const AMBIENCE_DARK_BY_DISTRICT: Dictionary = {
 }
 const AMBIENCE_LIT_BY_DISTRICT: Dictionary = {
 	&"suburbs": "res://assets/audio/ambience/districts/suburbs_lit.ogg",
+	&"residential": "res://assets/audio/ambience/districts/residential_lit.ogg",
+	&"park": "res://assets/audio/ambience/districts/park_lit.ogg",
+	&"school": "res://assets/audio/ambience/districts/school_lit.ogg",
 	&"hospital": "res://assets/audio/ambience/districts/hospital_lit.ogg",
+	&"gas_station": "res://assets/audio/ambience/districts/gas_station_lit.ogg",
+	&"police": "res://assets/audio/ambience/districts/police_lit.ogg",
+	&"warehouses": "res://assets/audio/ambience/districts/warehouses_lit.ogg",
+	&"industrial": "res://assets/audio/ambience/districts/industrial_lit.ogg",
+	&"substation": "res://assets/audio/ambience/districts/substation_lit.ogg",
 	&"power_station": "res://assets/audio/ambience/districts/power_station_lit.ogg",
 }
 
@@ -96,6 +104,15 @@ const LAYERS: Dictionary = {
 ## Разовый акцент при обнаружении (play_sting()) — отдельный ассет и
 ## механика от постоянного слоя "action" выше, не путать.
 const STING_PATH: String = "res://assets/audio/ambience/action_sting_loop.ogg"
+## 2026-09-12 audio pass: one-shot wow-moment cues (docs/CERT_AUDIO.md §2),
+## same 3 moments WowDirector's _PRESETS punches the camera/flash for —
+## first streetlight, full-grid cascade, victory ending. Reused signals,
+## no new trigger plumbing.
+const WOW_CUE_BY_KIND: Dictionary = {
+	"first_light": "res://assets/audio/music/cue_first_light.ogg",
+	"cascade": "res://assets/audio/music/cue_grid_cascade.ogg",
+	"ending": "res://assets/audio/music/cue_victory.ogg",
+}
 const LAYER_DB: float = -12.0
 const LAYER_LERP: float = 1.5
 const FADE_TIME: float = 2.2          ## Длительность кроссфейда, с
@@ -125,6 +142,8 @@ var _current_district: StringName = &""
 var _layers: Dictionary = {}          ## имя слоя -> AudioStreamPlayer
 var _layer_target: Dictionary = {}    ## имя слоя -> целевая громкость 0..1
 var _sting: AudioStreamPlayer = null
+var _wow_cue: AudioStreamPlayer = null
+var _first_light_cue_done: bool = false
 ## BUGS_FOR_CLAUDE #5: the mastered weather beds under LAYERS["rain"/"wind"]
 ## had no hook anywhere — audio_manager.gd's rain/wind players are a separate,
 ## always-on procedural/one-shot layer, not these. Weather.RAIN/STORM raise
@@ -155,6 +174,10 @@ func _ready() -> void:
 	EventBus.district_entered.connect(_on_district_entered)
 	EventBus.district_stage_changed.connect(_on_district_stage_changed)
 	EventBus.weather_changed.connect(func(w: int, _n: String, _fog: float, _rain: float) -> void: _weather_id = w)
+	EventBus.streetlight_activated.connect(func(_id: String) -> void: _play_wow_cue_first_light())
+	EventBus.district_restored.connect(_on_district_restored_wow)
+	EventBus.game_won.connect(func() -> void: _play_wow_cue("ending"))
+	EventBus.game_started.connect(func() -> void: _first_light_cue_done = false)
 	mood = Mood.MENU
 
 ## Ловит буквально первый ввод игрока (клавиша/клик/тач/геймпад) — а не
@@ -369,11 +392,36 @@ func _build_layers() -> void:
 		_sting.stream = load(STING_PATH) as AudioStream
 		_sting.volume_db = LAYER_DB
 		add_child(_sting)
+	_wow_cue = AudioStreamPlayer.new()
+	_wow_cue.name = "WowCue"
+	_wow_cue.bus = "Music" if AudioServer.get_bus_index("Music") >= 0 else "Master"
+	_wow_cue.volume_db = FULL_DB
+	add_child(_wow_cue)
 
 ## Разовый акцент при обнаружении игрока.
 func play_sting() -> void:
 	if _sting != null and not _sting.playing:
 		_sting.play()
+
+## Первая включённая лампа за забег — не путать с district_restored (тот же
+## сигнал зажигает WowDirector's "first_light" визуальный пресет).
+func _play_wow_cue_first_light() -> void:
+	if _first_light_cue_done:
+		return
+	_first_light_cue_done = true
+	_play_wow_cue("first_light")
+
+func _on_district_restored_wow(_district_id: StringName, _stage: int) -> void:
+	var pg := get_node_or_null("/root/PowerGrid")
+	if pg != null and pg.has_method("all_restored") and pg.all_restored():
+		_play_wow_cue("cascade")
+
+func _play_wow_cue(kind: String) -> void:
+	var path: String = WOW_CUE_BY_KIND.get(kind, "")
+	if path == "" or _wow_cue == null or not ResourceLoader.exists(path):
+		return
+	_wow_cue.stream = load(path) as AudioStream
+	_wow_cue.play()
 
 func _tick_layers(delta: float) -> void:
 	if _layers.is_empty():
