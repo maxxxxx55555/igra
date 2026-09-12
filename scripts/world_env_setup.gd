@@ -134,13 +134,24 @@ func apply_for_stage(stage: int) -> void:
 ## change, not just wherever the player actually is - restoring a district
 ## the player wasn't standing in overwrote the correct lighting underfoot.
 ## Same guard district_grading.gd/music_manager.gd already use.
+## RELEASE CONVERGENCE STEP 4: a headless_suite language-switch scenario
+## (mid scene-reload) intermittently fired district_stage_changed while
+## this node was detached from the active tree - an absolute-path
+## get_node_or_null("/root/...") requires being inside the active tree
+## and threw instead of just returning null. Guard the same way
+## hud_3d.gd's _on_weight_changed now does: no-op when not attached,
+## nothing meaningful to update on a detached node anyway.
 func _on_district_stage_changed(_id: StringName, stage: int) -> void:
+	if not is_inside_tree():
+		return
 	var dm := get_node_or_null("/root/DistrictManager")
 	if dm != null and _id != dm.current_district:
 		return
 	apply_for_stage(stage)
 
 func _on_weather_changed(_weather: int, _name: String, _fog: float, _rain: float) -> void:
+	if not is_inside_tree():
+		return
 	var dm := get_node_or_null("/root/DistrictManager")
 	if dm:
 		apply_for_stage(dm.get_stage(dm.current_district))

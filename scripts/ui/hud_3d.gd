@@ -389,7 +389,15 @@ func _poll_weight() -> void:
 		w.value = ratio * 100.0
 		_set_weight_color(w, ratio)
 
+## RELEASE CONVERGENCE STEP 4: a headless_suite language-switch scenario
+## (mid scene-reload) intermittently fired this while the HUD was detached
+## from the tree - get_tree() returning null then crashed on .root. Same
+## root cause as world_env_setup.gd's _on_district_stage_changed guard
+## below; the fix is the same shape: no-op when not attached, there is
+## nothing meaningful to update on a detached node anyway.
 func _on_weight_changed(weight: float) -> void:
+	if not is_inside_tree():
+		return
 	var w := $WeightBar
 	if not w:
 		return
