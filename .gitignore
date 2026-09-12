@@ -5,6 +5,21 @@ bin/
 *.uid
 *.translation
 
+# EXCEPTION (BLOCKER 2, 2026-09-12): these .import files carry non-default
+# compress/mode=2 (VRAM Compressed) + compress/high_quality=true settings,
+# individually PSNR-verified >=40dB against their Lossless originals
+# (docs/artifacts/texture_compression_audit.md has the full per-file
+# numbers). .import is normally never committed in this project (a fresh
+# `--import` regenerates it with engine defaults) - committing exactly
+# these means the compression choice survives a clean checkout instead of
+# silently reverting to Lossless the next time anyone reimports. Nothing
+# else under assets/textures/ is exempted.
+!assets/textures/tiles/*.import
+!assets/textures/surfaces/*.import
+!assets/textures/environment/asphalt.png.import
+!assets/textures/environment/brick.png.import
+!assets/textures/environment/concrete.png.import
+
 # Tools / env
 *.pyc
 __pycache__/

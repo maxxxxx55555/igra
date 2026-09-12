@@ -653,6 +653,27 @@ and an honest APK-size-vs-VRAM-memory impact estimate in
 not fixed this pass either, for the same reason (needs a windowed banding
 check this session structurally cannot run).
 
+**2026-09-12 EXECUTED (FINAL HARDENING PASS, BLOCKER 2):** the pilot
+above was actually run and PSNR-verified — 74 files (`tiles`, `surfaces`,
+3 of 4 `environment`) converted to `compress/mode=2` +
+`compress/high_quality=true`, every one individually confirmed ≥40dB
+against its Lossless original (45.64-52.37 dB actual range;
+`high_quality=true` was required — default quality failed the bar
+entirely at 34-37 dB). `enemies` textures failed even at high quality
+(28-36 dB) and stayed Lossless. Full method, per-file numbers, and
+category-by-category reasoning: `docs/artifacts/
+texture_compression_audit.md`. Committed via a scoped `.gitignore`
+exception for exactly these 74 `.import` files (normally never
+committed in this project) so the setting survives a clean checkout.
+**Real measured result, not an estimate:** on-disk size for these 74
+files went **up** 8.99→9.69 MiB (this game's flat art already compresses
+well under Lossless PNG) while VRAM/runtime footprint went **down**
+38.75→9.69 MiB, a real ~4x reduction — confirming the VRAM-memory case
+was always the substantial one, not APK download size. The windowed
+banding check remains the one owner-only step before this specific
+change should be trusted in production
+(`docs/artifacts/known_owner_only_items.md`).
+
 **Why not fixed here:** re-importing ~1230 textures to VRAM Compressed is a bulk `.import`
 edit outside a headless session's safe reach for two reasons: (1) `assets/textures/**` is
 Arena's/OpenCode's ownership zone, not reassigned for a project-wide pipeline change (only
