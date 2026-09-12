@@ -76,6 +76,26 @@ headless autoplay win needs one focused pass on the gate-scene→world
 bring-up (or running the bot as a temporary autoload against the real
 boot chain).
 
+**Reconfirmed 2026-09-12 (RELEASE CONVERGENCE, STEP 4):** re-ran
+`QA_SEEDS="1" tools/qa_sim/autoplay_bot` after this pass's LUT/audio
+wiring, check.sh timeout fix, and HMAC/anti-tamper changes, to make sure
+none of that regressed or accidentally fixed it. Identical symptom,
+same district, same phase: `SOFTLOCK: no progress for 45s —
+phase=spine district=suburbs spine_i=0 have_target=true pos=? score=0`,
+0/11 districts FULL. `pos=?` in that line (the bot's own position readout
+failing) is consistent with the documented root cause — if the world gets
+torn down/re-created under the bot mid-run, its cached player-node
+reference goes stale, so it would report "no progress" and a dead
+position query forever even if the underlying issue were something other
+than literal player-position stagnation. Not pursued further this pass:
+this exact bug has already had multiple dedicated fix attempts across
+prior sessions (Continue-instead-of-New-Game, routing through
+`Routes.goto(Routes.BOOT)`) without a full spine win, and the mechanics
+engine + per-district loot spawning are independently proven by other
+gates (see above). Owner real-device/editor playtest remains the
+authoritative winnability check — tracked in `RELEASE_CHECKLIST.md`, not
+re-attempted here without new information.
+
 ## Verification policy: headless-only Godot ALLOWED since 2026-09-10 (GOLD MASTER)
 
 The owner lifted the absolute NO-GODOT constraint to **headless-only**:
