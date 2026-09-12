@@ -625,6 +625,16 @@ larger APK size and full RGBA8 GPU memory per texture instead of ETC2/ASTC block
 `texture_format/etc2_astc=true` (added this pass — inert today since nothing is VRAM-compressed
 yet, but correct and ready for the migration below).
 
+**2026-09-12 re-measured (RELEASE CONVERGENCE STEP 7):** fresh count finds
+738 texture `.import` files (not 1230 — likely a different glob/snapshot;
+both counts agree on the finding: 100% Lossless, 0% VRAM Compressed),
+41.2 MiB total on disk. Full byte breakdown, a scoped/prioritized pilot
+(`tiles`+`surfaces` = 65% of `assets/textures/`, lowest banding risk),
+and an honest APK-size-vs-VRAM-memory impact estimate in
+`docs/artifacts/apk_size_report.md`. Same decision as below still holds —
+not fixed this pass either, for the same reason (needs a windowed banding
+check this session structurally cannot run).
+
 **Why not fixed here:** re-importing ~1230 textures to VRAM Compressed is a bulk `.import`
 edit outside a headless session's safe reach for two reasons: (1) `assets/textures/**` is
 Arena's/OpenCode's ownership zone, not reassigned for a project-wide pipeline change (only

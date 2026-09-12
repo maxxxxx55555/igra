@@ -32,7 +32,7 @@ claim always stays in the artifact itself — this file only points at it. Start
 |---|---|---|
 | Final gate report | `docs/artifacts/final_gate_report.md` | consolidated green/red state of every gate at RC tag time |
 | Security / anti-tamper report | `docs/artifacts/security_report.md` | save HMAC signing, corrupt-recovery behavior, dev-tool exclusion, zero debug prints |
-| APK size report | `docs/artifacts/apk_size_report.md` | texture compression before/after estimate |
+| APK size report | `docs/artifacts/apk_size_report.md` | **done** — 738 texture files, 41.2 MiB, 100% Lossless measured; scoped pilot + honest APK-vs-VRAM impact estimate; not applied (needs a windowed banding check, see report §4) |
 | Owner-only items | `docs/artifacts/known_owner_only_items.md` | exhaustive list of what only the owner can finish, and why |
 
 ## Canon docs this pass touches (not new artifacts, but the record of truth)
