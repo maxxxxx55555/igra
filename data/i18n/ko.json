@@ -1098,5 +1098,15 @@
   "SAVE_EXPORTED": "저장 파일을 다운로드 폴더로 내보냈습니다",
   "SAVE_EXPORT_FAILED": "내보낼 저장 파일이 없습니다",
   "SAVE_IMPORTED": "저장 파일을 가져왔습니다. 계속하려면 재시작하세요",
-  "SAVE_IMPORT_FAILED": "다운로드 폴더에서 유효한 저장 파일을 찾을 수 없습니다"
+  "SAVE_IMPORT_FAILED": "다운로드 폴더에서 유효한 저장 파일을 찾을 수 없습니다",
+  "Touch Tuning": "터치 조정",
+  "tt_comfort": "편안함",
+  "tt_default": "기본값",
+  "tt_responsive": "민감함",
+  "TOUCH_CAL_TITLE": "조작감을 익혀보세요",
+  "TOUCH_CAL_STEP_DRAG": "조이스틱을 드래그해서 이동하세요.",
+  "TOUCH_CAL_STEP_INTERACT": "이번엔 상호작용을 눌러보세요.",
+  "TOUCH_CAL_STEP_HAPTIC": "방금 진동 느꼈나요? 그게 햅틱 피드백이에요 — 계속하려면 탭하세요.",
+  "TOUCH_CAL_BTN_INTERACT": "상호작용",
+  "TOUCH_CAL_BTN_CONTINUE": "계속하기"
 }

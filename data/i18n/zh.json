@@ -1098,5 +1098,15 @@
   "SAVE_EXPORTED": "存档已导出到下载文件夹",
   "SAVE_EXPORT_FAILED": "还没有可导出的存档",
   "SAVE_IMPORTED": "存档已导入——重启后继续游戏",
-  "SAVE_IMPORT_FAILED": "下载文件夹中未找到有效存档"
+  "SAVE_IMPORT_FAILED": "下载文件夹中未找到有效存档",
+  "Touch Tuning": "触控调节",
+  "tt_comfort": "舒适",
+  "tt_default": "默认",
+  "tt_responsive": "灵敏",
+  "TOUCH_CAL_TITLE": "熟悉操作方式",
+  "TOUCH_CAL_STEP_DRAG": "拖动摇杆即可移动。",
+  "TOUCH_CAL_STEP_INTERACT": "现在点击互动。",
+  "TOUCH_CAL_STEP_HAPTIC": "感觉到震动了吗?这就是触觉反馈——点击继续。",
+  "TOUCH_CAL_BTN_INTERACT": "互动",
+  "TOUCH_CAL_BTN_CONTINUE": "继续"
 }

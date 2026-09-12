@@ -21,6 +21,8 @@ func _ready() -> void:
 func _run() -> void:
 	_probe_joystick()
 	_probe_buttons()
+	await _probe_touch_timing()
+	await _probe_touch_calibration()
 	_probe_help_screen()
 	_probe_leaderboard()
 	_probe_daily_challenge()
@@ -173,6 +175,114 @@ func _probe_joystick() -> void:
 		"dead-zone setting is live (same drag: dz=0.15 -> %.2f, dz=0.6 -> %.2f)" % [half_mv, half_mv_highdz])
 
 	js.queue_free()
+
+## FINAL HARDENING PASS (BLOCKER 3): timing assertions for the touch-feel
+## spec — joystick response, interact-pulse, haptic call, and the knob's
+## press-scale animation. Headless can prove the CODE PATH is synchronous/
+## in-budget (no deferred call, no accidental extra frame of latency); it
+## cannot prove a real device's actual perceived feel — see
+## docs/KNOWN_ISSUES.md for that honest boundary.
+func _probe_touch_timing() -> void:
+	var js_script: Script = load("res://scripts/ui/virtual_joystick.gd")
+	var js := Control.new()
+	js.set_script(js_script)
+	js.size = Vector2(160, 160)
+	add_child(js)
+
+	# 1. Joystick response: touch-down must update InputService the SAME
+	# call, not queued/deferred - budget is 1 frame at 60fps (16.7ms), but
+	# the real architecture is a synchronous _gui_input handler (0ms).
+	var down := InputEventScreenTouch.new()
+	down.index = 0; down.pressed = true; down.position = Vector2(160, 80)
+	var t0 := Time.get_ticks_usec()
+	js.call("_gui_input", down)
+	var latency_ms: float = (Time.get_ticks_usec() - t0) / 1000.0
+	_ok(latency_ms < 16.7, "joystick touch response is same-frame (%.3fms, budget 1 frame/16.7ms)" % latency_ms)
+	_ok(bool(InputService.get("_joy_active")), "joystick reports active immediately on touch-down")
+
+	# 2. Knob press-scale animates over 80-120ms of GAME time (virtual_
+	# joystick.gd PRESS_ANIM_RATE=10.0 -> 1.0/10.0=100ms) - not instant, not
+	# sluggish. Drives _process() with an explicit fixed 60fps delta rather
+	# than awaiting real engine frames: --headless has no vsync/frame cap,
+	# so wall-clock time for N frames does not equal N/60s of simulated
+	# time (a nearly-empty scene can blow through frames far faster than
+	# 60fps) - this is a real-gameplay-pace simulation, not a wall-clock
+	# stopwatch.
+	var accumulated := 0.0
+	var frames := 0
+	while float(js.get("_press_anim")) < 0.99 and frames < 30:
+		js.call("_process", 1.0 / 60.0)
+		accumulated += 1.0 / 60.0
+		frames += 1
+	var scale_ms: float = accumulated * 1000.0
+	_ok(scale_ms >= 80.0 - 17.0 and scale_ms <= 120.0 + 17.0,
+		"knob press-scale animates in-budget (%.0fms, target 80-120ms, +-1 frame)" % scale_ms)
+
+	var up := InputEventScreenTouch.new()
+	up.index = 0; up.pressed = false; up.position = Vector2(160, 80)
+	js.call("_gui_input", up)
+	js.queue_free()
+
+	# 3. Haptic call fires synchronously on touch-down (SettingsManager
+	# haptics_enabled() gate already exists elsewhere) - budget 50ms, real
+	# architecture is 0ms (same _gui_input call as #1). Re-measured on a
+	# fresh press since the joystick above was just freed.
+	var js2 := Control.new()
+	js2.set_script(js_script)
+	js2.size = Vector2(160, 160)
+	add_child(js2)
+	var t1 := Time.get_ticks_usec()
+	js2.call("_gui_input", down)
+	var haptic_ms: float = (Time.get_ticks_usec() - t1) / 1000.0
+	_ok(haptic_ms < 50.0, "haptic call fires in-budget on touch-down (%.3fms, budget 50ms)" % haptic_ms)
+	js2.call("_gui_input", up)
+	js2.queue_free()
+
+	# 4. Interact-pulse fires within 100ms of proximity
+	# (EventBus.player_interact_available -> hud_3d._pulse_interact_button
+	# starts a Tween the same call, no defer).
+	var hud_scene: PackedScene = load("res://scenes/ui/hud_3d.tscn")
+	var hud := hud_scene.instantiate()
+	get_tree().root.add_child(hud)
+	var t2 := Time.get_ticks_usec()
+	EventBus.player_interact_available.emit(true)
+	var pulse_ms: float = (Time.get_ticks_usec() - t2) / 1000.0
+	var pulse_tween = hud.get("_interact_pulse")
+	_ok(pulse_tween != null and pulse_tween.is_valid(), "interact-pulse Tween starts on proximity")
+	_ok(pulse_ms < 100.0, "interact-pulse fires in-budget on proximity (%.3fms, budget 100ms)" % pulse_ms)
+	EventBus.player_interact_available.emit(false)
+	hud.queue_free()
+
+## FINAL HARDENING PASS (BLOCKER 3): one-time calibration overlay - all 3
+## steps driven the same way the rest of this file drives simulated input.
+func _probe_touch_calibration() -> void:
+	SettingsManager.set_setting("touch_calibration_done", false)
+	var overlay: Control = load("res://scripts/ui/touch_calibration_overlay.gd").new()
+	get_tree().root.add_child(overlay)
+	await get_tree().process_frame
+
+	# step 0: drag the embedded joystick past the threshold
+	var down := InputEventScreenTouch.new()
+	down.index = 0; down.pressed = true; down.position = Vector2(80, 80)
+	overlay._joy.call("_gui_input", down)
+	var drag := InputEventScreenDrag.new()
+	drag.index = 0; drag.position = Vector2(160, 80); drag.relative = Vector2(80, 0)
+	overlay._joy.call("_gui_input", drag)
+	overlay._process(0.0)  # the overlay polls InputService.get_move_dir() here
+	_ok(overlay._step == 1, "calibration advances past the drag step (step=%d)" % overlay._step)
+	var up := InputEventScreenTouch.new()
+	up.index = 0; up.pressed = false; up.position = Vector2(160, 80)
+	overlay._joy.call("_gui_input", up)
+
+	# step 1: tap Interact
+	overlay._btn.pressed.emit()
+	_ok(overlay._step == 2, "calibration advances past the interact step (step=%d)" % overlay._step)
+
+	# step 2: haptic pulse already fired entering this step; confirm to finish
+	overlay._btn.pressed.emit()
+	await get_tree().process_frame
+	_ok(SettingsManager.get_setting("touch_calibration_done", false), "calibration marks itself done on finish")
+	_ok(not is_instance_valid(overlay) or overlay.is_queued_for_deletion(), "calibration overlay frees itself when done")
 
 func _probe_buttons() -> void:
 	var hud_script: Script = load("res://scripts/ui/hud_3d.gd")

@@ -87,6 +87,7 @@ func _ready() -> void:
 	EventBus.player_stamina_changed.connect(_on_stam)
 	EventBus.player_battery_changed.connect(_on_bat)
 	_add_battery_ad_button()
+	_maybe_show_touch_calibration()
 	EventBus.ammo_changed.connect(_on_ammo_changed)
 	EventBus.player_interact_available.connect(func(avail: bool): prompt.visible = avail)
 	EventBus.player_interact_available.connect(_pulse_interact_button)
@@ -677,6 +678,17 @@ func _on_bat(ratio: float) -> void:
 ## GameManager._on_ad_reward() (adds 50 charge) but had no UI trigger -
 ## AdService.show_rewarded(&"extra_battery") was never called from
 ## anywhere. Same pattern as death_screen.gd's _add_revive_button().
+## FINAL HARDENING PASS (BLOCKER 3): one-time touch calibration on first
+## touch-device launch - drag the joystick, tap interact, feel the haptic
+## pulse. has_touch_ui() already gates every other touch-only setup here.
+func _maybe_show_touch_calibration() -> void:
+	if not has_touch_ui():
+		return
+	if SettingsManager.get_setting("touch_calibration_done", false):
+		return
+	var overlay: Control = load("res://scripts/ui/touch_calibration_overlay.gd").new()
+	get_tree().root.add_child(overlay)
+
 func _add_battery_ad_button() -> void:
 	if not AdService.can_show_reward(&"extra_battery"):
 		return

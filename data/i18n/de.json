@@ -1098,5 +1098,15 @@
   "SAVE_EXPORTED": "Speicherstand nach Downloads exportiert",
   "SAVE_EXPORT_FAILED": "Noch kein Speicherstand zum Exportieren",
   "SAVE_IMPORTED": "Speicherstand importiert — neu starten zum Fortsetzen",
-  "SAVE_IMPORT_FAILED": "Kein gültiger Speicherstand in Downloads gefunden"
+  "SAVE_IMPORT_FAILED": "Kein gültiger Speicherstand in Downloads gefunden",
+  "Touch Tuning": "Touch-Feinabstimmung",
+  "tt_comfort": "Komfort",
+  "tt_default": "Standard",
+  "tt_responsive": "Reaktionsschnell",
+  "TOUCH_CAL_TITLE": "Steuerung ausprobieren",
+  "TOUCH_CAL_STEP_DRAG": "Ziehe den Joystick, um dich zu bewegen.",
+  "TOUCH_CAL_STEP_INTERACT": "Jetzt auf Interagieren tippen.",
+  "TOUCH_CAL_STEP_HAPTIC": "Hast du das Vibrieren gespürt? Das ist dein haptisches Feedback — zum Fortfahren tippen.",
+  "TOUCH_CAL_BTN_INTERACT": "Interagieren",
+  "TOUCH_CAL_BTN_CONTINUE": "Weiter"
 }

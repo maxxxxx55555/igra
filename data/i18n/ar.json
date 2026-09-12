@@ -1098,5 +1098,15 @@
   "SAVE_EXPORTED": "تم تصدير الحفظ إلى مجلد التنزيلات",
   "SAVE_EXPORT_FAILED": "لا يوجد حفظ للتصدير بعد",
   "SAVE_IMPORTED": "تم استيراد الحفظ — أعد التشغيل للمتابعة",
-  "SAVE_IMPORT_FAILED": "لم يتم العثور على حفظ صالح في مجلد التنزيلات"
+  "SAVE_IMPORT_FAILED": "لم يتم العثور على حفظ صالح في مجلد التنزيلات",
+  "Touch Tuning": "ضبط اللمس",
+  "tt_comfort": "مريح",
+  "tt_default": "افتراضي",
+  "tt_responsive": "سريع الاستجابة",
+  "TOUCH_CAL_TITLE": "تعرّف على أزرار التحكم",
+  "TOUCH_CAL_STEP_DRAG": "اسحب عصا التحكم للتحرك.",
+  "TOUCH_CAL_STEP_INTERACT": "الآن اضغط على تفاعل.",
+  "TOUCH_CAL_STEP_HAPTIC": "هل شعرت بالاهتزاز؟ هذا هو الاستجابة اللمسية — اضغط للمتابعة.",
+  "TOUCH_CAL_BTN_INTERACT": "تفاعل",
+  "TOUCH_CAL_BTN_CONTINUE": "متابعة"
 }

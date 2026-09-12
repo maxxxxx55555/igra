@@ -1098,5 +1098,15 @@
   "SAVE_EXPORTED": "Partida exportada a Descargas",
   "SAVE_EXPORT_FAILED": "Aún no hay partida para exportar",
   "SAVE_IMPORTED": "Partida importada: reinicia para continuar",
-  "SAVE_IMPORT_FAILED": "No se encontró una partida válida en Descargas"
+  "SAVE_IMPORT_FAILED": "No se encontró una partida válida en Descargas",
+  "Touch Tuning": "Ajuste táctil",
+  "tt_comfort": "Comodidad",
+  "tt_default": "Predeterminado",
+  "tt_responsive": "Sensible",
+  "TOUCH_CAL_TITLE": "Familiarízate con los controles",
+  "TOUCH_CAL_STEP_DRAG": "Arrastra el joystick para moverte.",
+  "TOUCH_CAL_STEP_INTERACT": "Ahora toca Interactuar.",
+  "TOUCH_CAL_STEP_HAPTIC": "¿Notaste la vibración? Es la respuesta háptica — toca para continuar.",
+  "TOUCH_CAL_BTN_INTERACT": "Interactuar",
+  "TOUCH_CAL_BTN_CONTINUE": "Continuar"
 }

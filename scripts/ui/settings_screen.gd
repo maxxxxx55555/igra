@@ -169,6 +169,13 @@ func _build_controls_tab(parent: VBoxContainer) -> void:
 	_slider(parent, LocalizationManager.t("Button Size"), "button_size", 0.8, 1.5, 0.05,
 		func(v: float) -> void: SettingsManager.set_button_size(v))
 
+	# FINAL HARDENING PASS: one-tap preset over sensitivity+deadzone+haptics
+	# (SettingsManager.TOUCH_TUNING_PRESETS) - the sliders below still work
+	# individually afterward, this is a shortcut, not a lock.
+	_dropdown(parent, LocalizationManager.t("Touch Tuning"), "touch_tuning_preset",
+		[LocalizationManager.t("tt_comfort"), LocalizationManager.t("tt_default"), LocalizationManager.t("tt_responsive")],
+		func(idx: int) -> void: SettingsManager.set_touch_tuning_preset(idx))
+
 	# GOLD MASTER v4 mobile-art pass: touch/look controls.
 	_slider(parent, LocalizationManager.t("Touch Sensitivity"), "touch_sensitivity", 0.5, 2.0, 0.05,
 		func(v: float) -> void: SettingsManager.set_touch_sensitivity(v))

@@ -1098,5 +1098,15 @@
   "SAVE_EXPORTED": "Save exported to Downloads",
   "SAVE_EXPORT_FAILED": "No save to export yet",
   "SAVE_IMPORTED": "Save imported — restart to continue",
-  "SAVE_IMPORT_FAILED": "No valid save found in Downloads"
+  "SAVE_IMPORT_FAILED": "No valid save found in Downloads",
+  "Touch Tuning": "Touch Tuning",
+  "tt_comfort": "Comfort",
+  "tt_default": "Default",
+  "tt_responsive": "Responsive",
+  "TOUCH_CAL_TITLE": "Get a Feel for the Controls",
+  "TOUCH_CAL_STEP_DRAG": "Drag the joystick to move.",
+  "TOUCH_CAL_STEP_INTERACT": "Now tap Interact.",
+  "TOUCH_CAL_STEP_HAPTIC": "Feel that buzz? That's your haptic feedback — tap to continue.",
+  "TOUCH_CAL_BTN_INTERACT": "Interact",
+  "TOUCH_CAL_BTN_CONTINUE": "Continue"
 }

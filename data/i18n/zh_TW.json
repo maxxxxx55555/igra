@@ -1098,5 +1098,15 @@
   "SAVE_EXPORTED": "存檔已匯出到下載資料夾",
   "SAVE_EXPORT_FAILED": "還沒有可匯出的存檔",
   "SAVE_IMPORTED": "存檔已匯入——重新啟動後繼續遊戲",
-  "SAVE_IMPORT_FAILED": "下載資料夾中找不到有效存檔"
+  "SAVE_IMPORT_FAILED": "下載資料夾中找不到有效存檔",
+  "Touch Tuning": "觸控調節",
+  "tt_comfort": "舒適",
+  "tt_default": "預設",
+  "tt_responsive": "靈敏",
+  "TOUCH_CAL_TITLE": "熟悉操作方式",
+  "TOUCH_CAL_STEP_DRAG": "拖動搖桿即可移動。",
+  "TOUCH_CAL_STEP_INTERACT": "現在點擊互動。",
+  "TOUCH_CAL_STEP_HAPTIC": "感覺到震動了嗎?這就是觸覺回饋——點擊繼續。",
+  "TOUCH_CAL_BTN_INTERACT": "互動",
+  "TOUCH_CAL_BTN_CONTINUE": "繼續"
 }

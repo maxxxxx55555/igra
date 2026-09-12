@@ -706,3 +706,43 @@ docs-consolidation pass. Deferred to a dedicated content pass.
 in code), then re-run `tools/gen_store_listing_locales.py` with the polished bullets ported in
 first (`docs/CERT_STORE.md` §8.2 warns regenerating without doing so reverts the 2026-09-11
 benefit-led polish) so store copy can honestly say 31.
+
+## Touch feel (BLOCKER 3, FINAL HARDENING PASS) — code-level timing proven headlessly; real-device feel is not, and cannot be
+
+`touch_probe_scene.tscn` now asserts concrete timing budgets, not just
+that a signal fires eventually: joystick touch-down updates
+`InputService` the same call (measured, not assumed — CPU time between
+the injected event and the state change, comfortably under one frame at
+60fps); the knob's press-scale animates over 80-120ms of *simulated game
+time* (driven by an explicit fixed 60fps delta rather than real engine
+frames — `--headless` has no vsync/frame cap, so wall-clock time for N
+frames does not equal N/60s of game time on a nearly-empty test scene,
+which is what the first version of this test got wrong before it was
+fixed to drive `_process()` directly); the haptic call and the
+interact-button proximity pulse both fire the same call as their
+triggering signal.
+
+**What this proves:** the code paths that are SUPPOSED to feel responsive
+have no accidental extra latency, no deferred call, no wrong animation
+rate baked in — `virtual_joystick.gd`'s press-scale rate was actually
+wrong before this pass (6.0/s → ~167ms, outside the 80-120ms spec; fixed
+to 10.0/s → ~100ms) and this is the test that caught it.
+
+**What this cannot prove, and no headless session ever will:** whether a
+real thumb on real glass, with real touch-sampling latency, a real
+haptic motor's actual felt intensity, and real screen-to-finger parallax,
+actually *feels* good. `Input.vibrate_handheld()`'s ms argument is a
+request to the OS; its physical strength/timing on any specific device is
+outside Godot's (or this session's) control entirely. This is the same
+category of gap `docs/HONEST_ASSESSMENT.md` already names as the
+project's headline risk — a real device playtest is the only way to close
+it, tracked in `RELEASE_CHECKLIST.md`.
+
+**Also new this pass:** a "Touch Tuning" preset (Comfort/Default/
+Responsive — Settings → Controls) is a one-tap shortcut over the
+sensitivity/deadzone/haptics sliders that already existed, not a new
+mechanic; and a one-time "Touch Calibration" overlay (drag, tap, feel the
+haptic) shown on a touch device's first HUD load
+(`scripts/ui/touch_calibration_overlay.gd`), gated the same way every
+other touch-only setup in `hud_3d.gd` already is
+(`has_touch_ui()` + a persisted `touch_calibration_done` flag).

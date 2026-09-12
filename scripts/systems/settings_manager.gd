@@ -96,6 +96,8 @@ func _load_defaults() -> void:
 	_settings["arachnophobia"] = false
 	_settings["objective_markers"] = true
 	_settings["touch_sensitivity"] = 1.0
+	_settings["touch_tuning_preset"] = 1  # Default
+	_settings["touch_calibration_done"] = false
 	_settings["haptics"] = true
 	_settings["invert_look"] = false
 	_settings["render_scale"] = 1.0
@@ -499,6 +501,28 @@ func set_draw_distance(v: float) -> void:
 	if cam != null:
 		cam.far = maxf(_settings["draw_distance"], cam.near + 1.0)
 	EventBus.settings_changed.emit("draw_distance", _settings["draw_distance"])
+
+## FINAL HARDENING PASS (BLOCKER 3): one-tap touch feel, data-driven -
+## each preset is just the 3 knobs already wired live (sensitivity,
+## deadzone, haptics), no new mechanic. "Comfort" trades speed for
+## forgiveness (wide dead-zone, no haptics); "Responsive" trades
+## forgiveness for speed (tight dead-zone, full sensitivity); "Default"
+## matches this game's existing shipped defaults exactly.
+const TOUCH_TUNING_PRESETS: Array[Dictionary] = [
+	{"name": "Comfort", "sensitivity": 0.7, "deadzone": 0.22, "haptics": false},
+	{"name": "Default", "sensitivity": 1.0, "deadzone": 0.15, "haptics": true},
+	{"name": "Responsive", "sensitivity": 1.4, "deadzone": 0.08, "haptics": true},
+]
+
+func set_touch_tuning_preset(idx: int) -> void:
+	idx = clampi(idx, 0, TOUCH_TUNING_PRESETS.size() - 1)
+	var p: Dictionary = TOUCH_TUNING_PRESETS[idx]
+	_settings["touch_tuning_preset"] = idx
+	set_touch_sensitivity(p["sensitivity"])
+	set_deadzone(p["deadzone"])
+	_settings["haptics"] = p["haptics"]
+	EventBus.settings_changed.emit("haptics", p["haptics"])
+	EventBus.settings_changed.emit("touch_tuning_preset", idx)
 
 ## GOLD MASTER v4 mobile-art pass: touch-HUD controls (virtual_joystick.gd
 ## reads touch_sensitivity/haptics live; player_3d.gd reads invert_look).

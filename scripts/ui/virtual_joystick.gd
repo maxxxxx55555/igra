@@ -33,10 +33,14 @@ func _ready() -> void:
 		_knob_tex = load(KNOB_TEX_PATH)
 	InputService.set_joy_active(false)
 	InputService.set_joy_move_dir(Vector2.ZERO)
+## FINAL HARDENING PASS: rate tuned so the press-scale reaches full over
+## ~100ms (1.0 / 10.0), the touch-feel spec's 80-120ms window - was 6.0
+## (~167ms, outside the window). Verified by touch_probe_scene.tscn.
+const PRESS_ANIM_RATE: float = 10.0
 func _process(delta: float) -> void:
 	var target: float = 1.0 if _touch_index != -1 else 0.0
 	if not is_equal_approx(_press_anim, target):
-		_press_anim = move_toward(_press_anim, target, delta * 6.0)
+		_press_anim = move_toward(_press_anim, target, delta * PRESS_ANIM_RATE)
 		queue_redraw()
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventScreenTouch:

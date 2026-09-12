@@ -1098,5 +1098,15 @@
   "SAVE_EXPORTED": "Kayıt İndirilenler'e aktarıldı",
   "SAVE_EXPORT_FAILED": "Dışa aktarılacak kayıt yok",
   "SAVE_IMPORTED": "Kayıt içe aktarıldı — devam etmek için yeniden başlatın",
-  "SAVE_IMPORT_FAILED": "İndirilenler'de geçerli bir kayıt bulunamadı"
+  "SAVE_IMPORT_FAILED": "İndirilenler'de geçerli bir kayıt bulunamadı",
+  "Touch Tuning": "Dokunma Ayarı",
+  "tt_comfort": "Konfor",
+  "tt_default": "Varsayılan",
+  "tt_responsive": "Duyarlı",
+  "TOUCH_CAL_TITLE": "Kontrolleri Hisset",
+  "TOUCH_CAL_STEP_DRAG": "Hareket etmek için joystick'i sürükleyin.",
+  "TOUCH_CAL_STEP_INTERACT": "Şimdi Etkileşim'e dokunun.",
+  "TOUCH_CAL_STEP_HAPTIC": "O titreşimi hissettin mi? Bu dokunsal geri bildirim — devam etmek için dokun.",
+  "TOUCH_CAL_BTN_INTERACT": "Etkileşim",
+  "TOUCH_CAL_BTN_CONTINUE": "Devam Et"
 }

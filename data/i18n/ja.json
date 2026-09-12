@@ -1098,5 +1098,15 @@
   "SAVE_EXPORTED": "セーブをダウンロードフォルダに書き出しました",
   "SAVE_EXPORT_FAILED": "エクスポートするセーブがありません",
   "SAVE_IMPORTED": "セーブを読み込みました。再起動すると続きから遊べます",
-  "SAVE_IMPORT_FAILED": "ダウンロードフォルダに有効なセーブが見つかりません"
+  "SAVE_IMPORT_FAILED": "ダウンロードフォルダに有効なセーブが見つかりません",
+  "Touch Tuning": "タッチ調整",
+  "tt_comfort": "快適",
+  "tt_default": "標準",
+  "tt_responsive": "俊敏",
+  "TOUCH_CAL_TITLE": "操作に慣れよう",
+  "TOUCH_CAL_STEP_DRAG": "スティックをドラッグして移動しよう。",
+  "TOUCH_CAL_STEP_INTERACT": "次にインタラクトをタップしよう。",
+  "TOUCH_CAL_STEP_HAPTIC": "今の振動を感じた?これがハプティックフィードバックだよ。タップして続けよう。",
+  "TOUCH_CAL_BTN_INTERACT": "インタラクト",
+  "TOUCH_CAL_BTN_CONTINUE": "続ける"
 }
