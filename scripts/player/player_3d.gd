@@ -89,6 +89,20 @@ var _battery_log_timer: float = 0.0
 var _coyote_timer: float = 0.0
 var _jump_buffer_timer: float = 0.0
 var _was_on_floor: bool = true
+## FINAL HARDENING PASS (2026-09-12): last position where is_on_floor()
+## was true. No recovery existed anywhere for a player who falls out of
+## the world (a procedural-geometry gap, a physics glitch) - found via
+## the autoplay bot genuinely falling through the school district's floor
+## and free-falling forever with no way back. Real players have the exact
+## same exposure; this was never a test-only gap.
+var _last_grounded_pos: Vector3 = Vector3.ZERO
+var _airborne_sec: float = 0.0
+## A real jump/fall off a ledge is well under this; only a hole with
+## nothing to land on keeps is_on_floor() false this long. Time-based
+## rather than an absolute Y threshold - it catches a hole at ANY depth
+## (a shallow dip is just as much a softlock as a deep pit) without
+## having to guess a "how deep is too deep" number per district.
+const MAX_AIRBORNE_SEC: float = 3.0
 var _pitch: float = 0.0
 var _fps_cam: Camera3D = null
 var _net_active: bool = false
@@ -178,6 +192,17 @@ func _ready() -> void:
 
 	gameplay_active = true
 	add_to_group("player")
+	# FINAL HARDENING PASS (2026-09-12): using a medkit/battery from any
+	# inventory UI (character_screen.gd, hud_3d.gd quickbar, inventory_ui.gd,
+	# quick_wheel_ui.gd) has always routed through InventoryManager.use_item()
+	# -> EventBus.item_consumed, but the only listener that applied the
+	# actual effect lived on scripts/player/player.gd - a legacy script
+	# never instanced by player_3d.tscn (the real 3D player). Consuming a
+	# medkit or battery removed it from inventory and did nothing else in
+	# the shipped game. Found while investigating why the autoplay bot's
+	# flashlight went dead mid-boss-fight despite carrying batteries.
+	if not EventBus.item_consumed.is_connected(_on_item_consumed):
+		EventBus.item_consumed.connect(_on_item_consumed)
 	status_fx = load("res://scripts/enemies/status_effects.gd").new()
 	status_fx.mob = self
 	add_child(status_fx)
@@ -280,6 +305,19 @@ func _ready() -> void:
 
 func _buffer_jump() -> void:
 	_jump_buffer_timer = jump_buffer_time
+
+## Teleports back to the last known grounded position if the player ends
+## up below the world (a hole in generated street geometry, a physics
+## fling) - no legitimate district floor sits anywhere near this deep.
+## Zero cost when nothing is wrong (one float compare per physics frame).
+func _check_fall_recovery() -> void:
+	if _airborne_sec < MAX_AIRBORNE_SEC:
+		return
+	if _last_grounded_pos == Vector3.ZERO:
+		return  # never grounded yet this run - nothing safe to return to
+	global_position = _last_grounded_pos
+	velocity = Vector3.ZERO
+	_airborne_sec = 0.0
 
 ## Камера ищется отдельно от старта игры: направление движения считается от её
 ## базиса, поэтому до первого game_started ссылка тоже обязана быть валидной.
@@ -461,8 +499,11 @@ func _physics_process(delta: float) -> void:
 	if is_on_floor():
 		_coyote_timer = coyote_time
 		_was_on_floor = true
+		_last_grounded_pos = global_position
+		_airborne_sec = 0.0
 	else:
 		_coyote_timer -= delta
+		_airborne_sec += delta
 	if Input.is_action_just_pressed("jump"):
 		_jump_buffer_timer = jump_buffer_time
 	else:
@@ -473,6 +514,7 @@ func _physics_process(delta: float) -> void:
 		_jump_buffer_timer = 0.0
 	velocity += get_gravity() * delta
 	move_and_slide()
+	_check_fall_recovery()
 
 	if moving:
 		# В FPS-виде поворотом владеет обзор (мышь/палец); доворачивать корпус к
@@ -686,6 +728,15 @@ func consume_battery(amount: float) -> void:
 func add_battery(amount: float) -> void:
 	battery = clampf(battery + amount, 0.0, 100.0)
 	EventBus.player_battery_changed.emit(battery / 100.0)
+
+## Ported from the dead scripts/player/player.gd - same match, same two
+## effects (ItemData.Effect only defines HEAL/RECHARGE today; anything
+## else already emits &"NONE" from inventory_manager.gd's _effect_name()
+## and is intentionally a no-op here, not a missing case).
+func _on_item_consumed(_id: StringName, effect: StringName, value: float) -> void:
+	match effect:
+		&"HEAL": heal(value)
+		&"RECHARGE": add_battery(value)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if _net_active and not is_multiplayer_authority():
