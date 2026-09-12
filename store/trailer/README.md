@@ -19,6 +19,18 @@ DejaVu-Sans-Bold bone `#f2ecd9` + brass `#c9a24a`).
 | `shorts_silhouette_1080x1920.png` | 1080×1920 | **Vertical shorts shot.** YouTube Shorts / TikTok / Reels cover + first frame; phone wallpaper freebie; Stories announcement card. |
 | `presskit_1600x900.png` | 1600×900 | **Press-kit header.** Review-copy email header; press-kit deck cover; itch.io / indieDB header; festival submission banner. Title + tagline + 3 shipped district thumbs (D1 suburbs, D5 hospital, D11 power_station). |
 
+## 2026-09-11 re-grade (visual pass)
+
+The four mood stills were re-graded with the per-district color-correction LUTs shipped in
+`assets/textures/luts/` (VISUAL_AUDIO_SPEC §1): `still_first_light` → `lut_suburbs`
+(first streetlight), `still_first_ending` → `lut_suburbs` (warm-dim ending), 
+`still_grid_cascade` → `lut_power_station` (finale neutral + pale gold), 
+`shorts_silhouette` → `lut_suburbs` (cold silhouette + amber). Applied as a luma-mix
+(strength 0.55): district tint in the shadows, warm practicals preserved, then re-clamped
+to [10,240] — every still remains palette-pure (0 pure `#000`/`#fff` texels, min ≥ 18,
+max ≤ 239). `presskit_1600x900.png` is a title+tagline composite over three per-district
+thumbs, not a single-mood still — left untouched rather than mis-graded by one LUT.
+
 ## Rules
 
 - Never recompress below q85 / never upscale — re-export from these masters.
