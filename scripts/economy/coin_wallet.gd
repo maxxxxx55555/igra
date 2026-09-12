@@ -25,6 +25,14 @@ func get_coins() -> int:
 	return coins
 func to_dict() -> Dictionary:
 	return {"coins": coins}
+## Anti-tamper sanity clamp (RELEASE CONVERGENCE, STEP 5): a hand-edited save
+## used to set `coins` to any int with no bound — not a security hole per se
+## (single-player, no leaderboard payout), but an easy path to display/economy
+## nonsense (negative balance, overflow-scale numbers). 999999 is well above
+## anything reachable by legitimate play (shop prices are 30-100), not a
+## design cap.
+const MAX_COINS: int = 999999
+
 func from_dict(d: Dictionary) -> void:
-	coins = int(d.get("coins", start_coins))
+	coins = clampi(int(d.get("coins", start_coins)), 0, MAX_COINS)
 	coins_changed.emit(coins)

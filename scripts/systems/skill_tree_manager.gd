@@ -289,9 +289,13 @@ func save_data() -> Dictionary:
 		"skill_points": _skill_points
 	}
 
+## Anti-tamper sanity clamp (RELEASE CONVERGENCE, STEP 5): type-check the
+## dictionary (a hand-edited save could put any JSON value there) and bound
+## skill_points — see xp_manager.gd's load_data() for the same rationale.
 func load_data(data: Dictionary) -> void:
-	_unlocked_skills = data.get("unlocked_skills", {})
-	_skill_points = data.get("skill_points", 0)
+	var unlocked: Variant = data.get("unlocked_skills", {})
+	_unlocked_skills = unlocked if unlocked is Dictionary else {}
+	_skill_points = clampi(int(data.get("skill_points", 0)), 0, 9999)
 	# Effects are NOT reapplied here - this runs before the player node
 	# exists (see reapply_all_effects()'s comment). player_3d.gd calls
 	# reapply_all_effects() itself once it's ready.

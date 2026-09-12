@@ -5,6 +5,24 @@ const SAVE_VERSION: int = 3
 const AUTOSAVE_INTERVAL: float = 30.0
 const MAX_SLOTS: int = 4
 
+## RELEASE CONVERGENCE STEP 5 (anti-tamper): the T16 "checksum" was a plain
+## SHA-256 of the body — proves *corruption* (bit rot, truncated write) but
+## not *authenticity*: anyone can hand-edit data_json and recompute a
+## matching sha256_text() with no secret needed. HMAC-SHA256 needs this key
+## to produce a valid signature, so a save-editor now has to find the key in
+## the binary first, not just re-hash. Honest scope, documented once here so
+## it isn't re-litigated per call site: this is a SPEED BUMP, not real
+## anti-cheat. The key ships inside the client for an offline single-player
+## game with no server to hold a real secret — anyone willing to decompile
+## the binary can still forge a signed save. Real server-side anti-cheat is
+## impossible without a backend this game doesn't have (see
+## docs/KNOWN_ISSUES.md). This still stops the common case (a text editor on
+## the JSON) which the old plain hash didn't.
+const _HMAC_KEY: String = "TLS-savegame-v1-4f1c9e6b2a8d5f03"
+
+static func _sign(body: String) -> String:
+	return Crypto.new().hmac_digest(HashingContext.HASH_SHA256, _HMAC_KEY.to_utf8_buffer(), body.to_utf8_buffer()).hex_encode()
+
 var _pending_player_pos: Vector3 = Vector3.INF
 var _autosave_timer: float = AUTOSAVE_INTERVAL
 var _quest_data: Dictionary = {}
@@ -45,7 +63,7 @@ func _write_atomic(path: String, payload: Dictionary) -> bool:
 	# JSON.parse превращает int в float, так что пересчёт чек-суммы после
 	# парсинга payload заново в stringify() никогда бы не совпал с исходной.
 	var body := JSON.stringify(payload)
-	var envelope := {"checksum": body.sha256_text(), "data_json": body}
+	var envelope := {"hmac": _sign(body), "data_json": body}
 	var tmp_path := path + ".tmp"
 	var f := FileAccess.open(tmp_path, FileAccess.WRITE)
 	if f == null:
@@ -76,7 +94,20 @@ func _read_envelope(path: String, out_reason: Array = []) -> Dictionary:
 		return {}
 	var envelope: Dictionary = outer.data
 	var body: String = String(envelope.get("data_json", ""))
-	if body.is_empty() or body.sha256_text() != String(envelope.get("checksum", "")):
+	if body.is_empty():
+		if not out_reason.is_empty(): out_reason[0] = "не совпала чек-сумма"
+		return {}
+	# Backward-compat: a save written before this pass carries "checksum"
+	# (plain sha256_text(), no key) instead of "hmac" — accept it once so
+	# existing players don't get quarantined on the very next patch; the
+	# next _write_atomic() (autosave/checkpoint) re-signs it with the real
+	# HMAC. New writes never produce "checksum" again.
+	var signed_ok: bool
+	if envelope.has("hmac"):
+		signed_ok = _sign(body) == String(envelope["hmac"])
+	else:
+		signed_ok = body.sha256_text() == String(envelope.get("checksum", ""))
+	if not signed_ok:
 		if not out_reason.is_empty(): out_reason[0] = "не совпала чек-сумма"
 		return {}
 	var inner := JSON.new()

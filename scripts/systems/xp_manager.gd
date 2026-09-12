@@ -113,8 +113,13 @@ func save_data() -> Dictionary:
 		"total_skill_points": _total_skill_points
 	}
 
+## Anti-tamper sanity clamp (RELEASE CONVERGENCE, STEP 5): a hand-edited save
+## used to load these ints straight through, no bound — negative XP/level
+## breaks UI math, an absurd value is a free win with none of the design's
+## own level-up pacing. Bounds are generous ceilings (nothing enforces a real
+## level cap elsewhere in the game), not a claimed design max.
 func load_data(data: Dictionary) -> void:
-	_level = data.get("level", 1)
-	_current_xp = data.get("current_xp", 0)
-	_xp_to_next = data.get("xp_to_next", base_xp_per_level)
-	_total_skill_points = data.get("total_skill_points", 0)
+	_level = clampi(int(data.get("level", 1)), 1, 9999)
+	_current_xp = clampi(int(data.get("current_xp", 0)), 0, 999999999)
+	_xp_to_next = clampi(int(data.get("xp_to_next", base_xp_per_level)), 1, 999999999)
+	_total_skill_points = clampi(int(data.get("total_skill_points", 0)), 0, 9999)
