@@ -21,7 +21,7 @@ in-scope-only PR per `ARENA_NEXT_PROMPT.md`'s protocol. `arena/01a080ba-
 igra` (suburbs district content, PR #1) was merged and deleted
 2026-09-08 — see decisions log below.
 
-## RELEASE CANDIDATE FINAL — declared 2026-09-12, tip `<rcf-hash>`
+## RELEASE CANDIDATE FINAL — declared 2026-09-12, tip `7e55558`
 
 RELEASE CONVERGENCE PASS on top of GOLD MASTER v5 (below): merged all
 three pending Arena passes (visual, audio, store), wired their content

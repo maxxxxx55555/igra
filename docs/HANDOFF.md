@@ -2,7 +2,7 @@
 
 ## RELEASE CANDIDATE FINAL — 2026-09-12
 
-`origin/main` is **RELEASE CANDIDATE FINAL** at `<rcf-hash>`. GOLD MASTER
+`origin/main` is **RELEASE CANDIDATE FINAL** at `7e55558`. GOLD MASTER
 v5 (below) plus a full RELEASE CONVERGENCE pass: merged all three pending
 Arena branches (visual, audio, store — no reverts needed, all scope-clean),
 wired their content live (11 per-district LUTs, all 11 districts' ambient
