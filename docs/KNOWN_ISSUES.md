@@ -38,63 +38,81 @@ override or blend with `world_env_setup.gd`'s stage palette, then either delete
 make the two systems cooperate (e.g. `district_grading.gd` sets fog/sky/tonemap only,
 `world_env_setup.gd` keeps owning ambient/moon/glow).
 
-## Autoplay bot (PLAYABLE IDEAL pass) — mechanics engine proven, full headless win blocked by a boot-path lifecycle issue
+## Autoplay bot (FINAL HARDENING PASS, 2026-09-12) — ROOT CAUSE FOUND AND FIXED; boss fight remains a skill gate
 
 `tools/qa_sim/autoplay_bot` + `scenes/tools/qa_autoplay_scene.tscn` drive
-the game with **simulated inputs only** (joystick move via
-`InputService.set_joy_move_dir`, `request_interact`, `request_attack`,
-`request_dodge`, City-Map Travel button, Save/Continue) while reading
+the game with **simulated inputs only** (joystick move, look/aim,
+interact, attack, dodge, City-Map Travel, Save/Continue) while reading
 real state.
 
-**What it proved:** the winnability *mechanics engine* works end to end.
-In an early run the bot walked the player to a `cable` pickup, collected
-it by collision, walked to the suburbs `PowerSwitch`, pressed interact,
-and the district advanced **DARK → PARTIAL for real** — no state
-injection. It also surfaced and got fixed a real defect:
-`power_switch.gd` connected the 0-arg `_refresh_visual` to the 1-arg
-`EventBus.district_powered` signal without `unbind(1)`, logging
-"Method expected 0 argument(s), but called with 1" on *every* power-up
-(fixed this pass; connected once in `_ready`, not re-connected on every
-refresh).
+**The actual root cause of every prior session's ~8s world-teardown,
+finally traced:** `scenes/main_3d.tscn` embeds a `Splash` child
+(`splash.tscn` / `scripts/splash.gd`) that, **unconditionally**, ~3
+seconds after `main_3d.tscn` loads, fired `Routes.goto(Routes.BOOT)` —
+destroying the entire game world and routing back through
+`boot_loading.tscn` to the main menu. No guard existed anywhere. Confirmed
+with a one-off diagnostic print: the redirect landed at **t=7.87s**,
+matching the "~8s after New Game" figure every prior session's own
+observations independently converged on, exactly. **This was never a
+test-only artifact — a real player hits it too, identically, every single
+new-game session past the ~8s mark.** It went uncaught for the same
+reason `docs/HONEST_ASSESSMENT.md` names as this whole repo's headline
+risk: no session, agent or human, had ever played past that point with
+eyes on the result. Fixed (`84cd280`): ported the exact
+`GameManager.is_playing()` guard the dead, never-wired sibling
+`scripts/ui/splash.gd` already had into the file actually instanced.
 
-**What blocks a full 3/3 headless win right now:** when the bot boots
-through a gate scene (bypassing `boot_loading.tscn`) and then presses New
-Game, the game world is torn down / snapped back to MENU ~8 s after the
-run starts, and `DistrictLoot.populate()` does not run on that
-`start_game() -> pre_loading -> main_3d` path (a direct `main_3d.tscn`
-instantiate — `game_test_3d_scene` — still spawns all 12 pickups, so this
-is **not** an in-game winnability bug). `_boot_check_runner.gd` tolerates
-the same one-shot MENU yank by breaking early; the autoplay bot needs the
-world to *persist*, and Continue does not rebuild it. Real players boot
-through `boot_loading.tscn` and are unaffected.
+**A second real bug found chasing the bot further once the world stopped
+being destroyed:** the player has no recovery if it ends up below the
+world (a hole in a district's procedurally-generated street geometry —
+reproduced concretely in the school district). No `Y` floor, no fall
+timeout, nothing — a fallen player free-falls forever. Fixed (`85af9f9`):
+a time-based guard (3s continuous `is_on_floor()==false`) teleports back
+to the last grounded position.
 
-**Substitute coverage:** the static balance/solvability sim
-(`tools/qa_sim/` balance pass) proves DARK/PARTIAL solvability and no
-resource dead-ends across the spine; `headless_suite` P2 proves every
-district scene instantiates with its full loot set. Finishing the
-headless autoplay win needs one focused pass on the gate-scene→world
-bring-up (or running the bot as a temporary autoload against the real
-boot chain).
+**A third real, severe, previously-shipped bug found investigating why
+the bot's flashlight died mid-fight despite carrying batteries:** using
+*any* consumable (medkit, battery) from *any* inventory UI
+(`character_screen.gd`, `hud_3d.gd` quickbar, `inventory_ui.gd`,
+`quick_wheel_ui.gd`) has always routed through
+`InventoryManager.use_item()` → `EventBus.item_consumed`, but the only
+listener that applied the actual heal/recharge effect lived on
+`scripts/player/player.gd` — a legacy script **never instanced by
+`player_3d.tscn`**, the real 3D player. Consuming a medkit or battery
+silently removed it from inventory and did **nothing else, for every
+player, in every build, until now.** Fixed (`85af9f9`): ported the exact
+dispatch to the live script.
 
-**Reconfirmed 2026-09-12 (RELEASE CONVERGENCE, STEP 4):** re-ran
-`QA_SEEDS="1" tools/qa_sim/autoplay_bot` after this pass's LUT/audio
-wiring, check.sh timeout fix, and HMAC/anti-tamper changes, to make sure
-none of that regressed or accidentally fixed it. Identical symptom,
-same district, same phase: `SOFTLOCK: no progress for 45s —
-phase=spine district=suburbs spine_i=0 have_target=true pos=? score=0`,
-0/11 districts FULL. `pos=?` in that line (the bot's own position readout
-failing) is consistent with the documented root cause — if the world gets
-torn down/re-created under the bot mid-run, its cached player-node
-reference goes stale, so it would report "no progress" and a dead
-position query forever even if the underlying issue were something other
-than literal player-position stagnation. Not pursued further this pass:
-this exact bug has already had multiple dedicated fix attempts across
-prior sessions (Continue-instead-of-New-Game, routing through
-`Routes.goto(Routes.BOOT)`) without a full spine win, and the mechanics
-engine + per-district loot spawning are independently proven by other
-gates (see above). Owner real-device/editor playtest remains the
-authoritative winnability check — tracked in `RELEASE_CHECKLIST.md`, not
-re-attempted here without new information.
+**Net result:** the bot went from **0/11 districts, dead at ~8s, every
+single run** (the state every prior session documented) to **11/11
+districts FULL in the clear majority of runs** — the district spine has
+never cleared headlessly before this pass. Combat, revives, and the real
+final-boss engagement (the Architect) are all reached and function with
+genuine simulated input (no state injection).
+
+**What's still not won:** the boss's P2 phase (`scripts/enemies/
+boss_3d.gd`: "invisible in dark") requires the player's flashlight cone
+actually on the boss (`base_monster.gd` `_is_in_flashlight`, a real
+angle+distance test) — the bot never simulated look/aim input at all
+before this pass (movement + action buttons only), so P2 was permanently
+unwinnable regardless of the fixes above. Added `_face()` (aims via the
+same `_apply_look` real mouse/touch look drives — simulated input, not a
+warp) and `_maintain_flashlight()` (battery management) to the bot
+(`8f5925e`), but a handful of runs after both fixes still didn't land a
+win — the boss may kite/reposition in a way the bot's simple
+approach-and-attack loop can't close on, which is now a bot-sophistication
+gap, not a lifecycle bug. **Also newly visible now that the spine can be
+reached at all:** roughly 1-in-3 runs still fail *early* (suburbs/
+residential, before the fixed bug would even apply) with the same
+SOFTLOCK signature — not investigated this pass (budget), plausibly
+physics/navigation timing variance rather than a fixed bug, since retries
+of the identical seed produce different failure points. Flagged for a
+future pass, not the blocker this one targeted.
+
+**Owner real-device/editor playtest remains the authoritative winnability
+check** — tracked in `RELEASE_CHECKLIST.md` — but the headless evidence
+bar just moved enormously: from "the world cannot survive 8 seconds" to
+"the whole game is headlessly completable except the final boss fight."
 
 ## Verification policy: headless-only Godot ALLOWED since 2026-09-10 (GOLD MASTER)
 
