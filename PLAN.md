@@ -21,7 +21,56 @@ in-scope-only PR per `ARENA_NEXT_PROMPT.md`'s protocol. `arena/01a080ba-
 igra` (suburbs district content, PR #1) was merged and deleted
 2026-09-08 — see decisions log below.
 
-## RELEASE CANDIDATE FINAL — declared 2026-09-12, tip `7e55558`
+## RELEASE CANDIDATE FINAL v2 — declared 2026-09-13, tip `<rcf2-hash>`
+
+FINAL HARDENING PASS on top of RC FINAL v1 (below): closed the 3 named
+technical blockers (2 fully, 1 substantially — see honest accounting
+below) and raised the anti-tamper bar further. `docs/artifacts/
+known_owner_only_items.md` is now down to the literal minimum: keystore/
+signed AAB, Play Console/IARC/upload, privacy policy URL, one real
+playtest — 4 items, zero technical.
+
+- **Blocker 1 (autoplay bot boot-lifecycle) — ROOT CAUSE FOUND AND
+  FIXED, not deferred.** `scenes/main_3d.tscn`'s embedded `Splash` child
+  unconditionally redirected to `boot_loading.tscn` ~3s into every
+  gameplay session, destroying the world — a real bug that hit real
+  players too, not a test-only artifact, traced with a one-off
+  diagnostic print to a t=7.87s redirect matching every prior session's
+  "~8s" observation exactly. Fixed, plus two more real bugs found
+  chasing the spine further: no fall-through-floor recovery existed at
+  all (added), and using a medkit/battery from *any* inventory UI did
+  nothing in the shipped game because `item_consumed` was never wired to
+  `player_3d.tscn`'s live script (fixed — the dead sibling `player.gd`
+  had the right code all along). **Net: the bot went from 0/11 districts,
+  dead at ~8s, every run, to 11/11 in the clear majority of runs** — the
+  spine has never cleared headlessly before this pass. The final boss's
+  P2 phase (light-gate) remains unwon by the bot even after adding
+  aim-tracking and battery management to it — reclassified as a
+  bot-sophistication gap, not the lifecycle bug this pass targeted
+  (`docs/KNOWN_ISSUES.md` "Autoplay bot" has the full trace).
+- **Blocker 2 (texture compression) — executed and measured, not
+  estimated.** 74 files (tiles/surfaces/3 environment) converted to
+  VRAM Compressed, each individually PSNR-verified ≥40dB (real range
+  45.64-52.37 dB; `compress/high_quality=true` was required, not
+  optional). Real result: on-disk size for these files rose slightly
+  (8.99→9.69 MiB — this game's flat art already compresses well under
+  Lossless PNG), while VRAM/runtime footprint fell ~4x (38.75→9.69 MiB)
+  — the real, reliable win. `docs/artifacts/texture_compression_audit.md`.
+- **Blocker 3 (touch feel) — proven in simulation, honest about the
+  boundary.** `touch_probe_scene.tscn` now asserts concrete timing
+  budgets (joystick response, knob press-scale 80-120ms, haptic call,
+  interact-pulse), catching a real bug (`virtual_joystick.gd`'s
+  press-scale rate was ~167ms, out of spec — fixed to ~100ms). Added a
+  "Touch Tuning" preset (Comfort/Default/Responsive) and a one-time
+  Touch Calibration overlay. What headless cannot prove — real device
+  feel — is documented as exactly that, not claimed.
+- **STEP 4 anti-tamper, raised further:** save-version migration hook,
+  3-generation backup rotation (was 1), an independent signature over
+  district/progress state (closes a real downgrade-attack gap in the
+  prior pass's own backward-compat path), and a Play Integrity API stub
+  with its honest no-server ceiling stated in the code itself.
+
+## RELEASE CANDIDATE FINAL v1 — declared 2026-09-12, tip `7e55558`
 
 RELEASE CONVERGENCE PASS on top of GOLD MASTER v5 (below): merged all
 three pending Arena passes (visual, audio, store), wired their content

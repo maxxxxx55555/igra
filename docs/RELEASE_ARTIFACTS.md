@@ -2,7 +2,16 @@
 
 One line per artifact: what it is, where it lives, what it proves. Source of truth for a
 claim always stays in the artifact itself — this file only points at it. Started
-2026-09-12 (RELEASE CONVERGENCE PASS).
+2026-09-12 (RELEASE CONVERGENCE PASS), updated 2026-09-13 (FINAL HARDENING PASS).
+
+## FINAL HARDENING PASS (2026-09-13) — 3 named blockers closed
+
+| Blocker | Result | Evidence |
+|---|---|---|
+| 1. Autoplay bot boot-lifecycle | **Root cause found and fixed** (not deferred) — `scenes/main_3d.tscn`'s Splash child unconditionally redirected to boot after ~3s, a real bug hitting real players; plus a fall-recovery gap and a dead item-effect listener, both fixed. 0/11→11/11 districts in the clear majority of runs. Boss P2 phase remains a bot-sophistication gap, not this blocker. | `docs/KNOWN_ISSUES.md` "Autoplay bot", commits `84cd280`/`85af9f9`/`8f5925e` |
+| 2. Texture compression | **Executed and measured** — 74 files VRAM-compressed, individually PSNR-verified ≥40dB; real ~4x VRAM reduction, small on-disk increase (honest, not the naive expectation) | `docs/artifacts/texture_compression_audit.md`, commit `a2c4074` |
+| 3. Touch feel | **Timing proven in simulation** — 4 new budget assertions, caught and fixed a real animation-rate bug; touch tuning presets + one-time calibration added; real-device feel honestly stays unprovable headlessly | `docs/KNOWN_ISSUES.md` "Touch feel", commit `a3e34b1` |
+| STEP 4 anti-tamper | Save versioning hook, 3-generation backup rotation, independent progress signature (closes a real downgrade gap), Play Integrity stub | `docs/artifacts/security_report.md` §7, commit `8d9140e` |
 
 ## Arena delivery ledgers + certificates (kept on disk, consolidated into canon docs)
 
@@ -22,8 +31,8 @@ claim always stays in the artifact itself — this file only points at it. Start
 | Flow check | `tools/flow_check.py` (53 checks) | full game-loop wiring intact |
 | i18n audit | `tools/i18n_audit.py` | `MISSING: 0` across 13 locales |
 | Headless suite | `tools/qa_sim/headless_suite` | scripted P0-P6 scenario + all `scenes/tools/*_scene.tscn` gates, run ×2 consecutive |
-| Touch probe | `scenes/tools/touch_probe_scene.tscn` / `scripts/tools/_touch_probe.gd` | 23/23 assertions incl. 200-event input fuzz + 30-value settings fuzz |
-| Autoplay bot | `tools/qa_sim/autoplay_bot` | winnability evidence — see `docs/KNOWN_ISSUES.md` "Autoplay bot" section for current score |
+| Touch probe | `scenes/tools/touch_probe_scene.tscn` / `scripts/tools/_touch_probe.gd` | all green incl. 200-event input fuzz, 30-value settings fuzz, timing budgets, and the touch-calibration overlay (2026-09-13) |
+| Autoplay bot | `tools/qa_sim/autoplay_bot` | **11/11 districts in the clear majority of runs** (was 0/11, every run — see `docs/KNOWN_ISSUES.md` "Autoplay bot" for the fix and the remaining boss-fight gap) |
 | Balance sim | `tools/qa_sim/balance_sim.py` | economy/time-to-win modeling, DARK/PARTIAL margins |
 
 ## docs/artifacts/ (this pass's new reports — all delivered)
@@ -32,8 +41,10 @@ claim always stays in the artifact itself — this file only points at it. Start
 |---|---|---|
 | Final gate report | `docs/artifacts/final_gate_report.md` | 22/23 engine gates green (1 pre-existing documented stall), headless_suite ×3, 7/7 qa_sim, i18n MISSING:0 |
 | Security / anti-tamper report | `docs/artifacts/security_report.md` | HMAC-SHA256 save signing, 50-mutant corruption fuzz (0 crashes), stat clamps, dev-tool export exclusion, 0 shipped debug prints found |
-| APK size report | `docs/artifacts/apk_size_report.md` | 738 texture files, 41.2 MiB, 100% Lossless measured; scoped pilot + honest APK-vs-VRAM impact estimate; not applied (needs a windowed banding check, report §4) |
-| Owner-only items | `docs/artifacts/known_owner_only_items.md` | exhaustive list of what only the owner can finish, and why |
+| APK size report | `docs/artifacts/apk_size_report.md` | updated 2026-09-13 with the real measured before/after (was an estimate) |
+| Texture compression audit | `docs/artifacts/texture_compression_audit.md` | full PSNR method + per-category results for the 74 compressed files (new 2026-09-13) |
+| Owner-only items | `docs/artifacts/known_owner_only_items.md` | exactly 4 items, zero technical, as of 2026-09-13 |
+| PSNR verification tool | `tools/texture_psnr_check.gd` | reusable headless PSNR checker — decodes a reimported texture, diffs against the original PNG pixel-for-pixel |
 
 ## Canon docs this pass touches (not new artifacts, but the record of truth)
 

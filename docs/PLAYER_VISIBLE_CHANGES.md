@@ -5,6 +5,36 @@ in-game verification — a static-only pass can't play the game itself.
 
 ---
 
+## Batch 15 (2026-09-13) — FINAL HARDENING: a real crash fixed, medkits/batteries actually work now, touch tuning
+
+- **A real bug fixed: the game used to send you back to the main menu
+  ~8 seconds into every single new game**, destroying your run. This
+  was never intentional and never actually shipped-and-noticed before —
+  it's fixed now. If you've bounced off this game early before, this is
+  why, and it should be gone.
+- **Medkits and batteries actually do something now.** They always
+  removed themselves from your inventory when used, but the healing/
+  recharge never applied — a real bug, now fixed.
+- **Fell through the floor?** If you ever end up below the world, you'll
+  be returned to solid ground automatically instead of falling forever.
+- **Touch Tuning** — new Settings → Controls preset: Comfort, Default, or
+  Responsive, a one-tap shortcut over the sensitivity/dead-zone/haptics
+  sliders.
+- **Touch Calibration** — first time you play on a touch device, a quick
+  one-time screen walks you through the joystick, the interact button,
+  and the haptic buzz.
+- Save export/import, save signing, and save-corruption recovery are all
+  measurably more robust (not directly visible, but your save is safer).
+
+### HUMAN CHECK (2 min)
+Start a new game and just... keep playing past 10 seconds. You should
+stay in the game world (this used to kick you to the main menu around
+then). Pick up a medkit or battery and use it — your HP/battery bar
+should actually move. If you're on a touch device, you should see the
+calibration screen once, the first time.
+
+---
+
 ## Batch 14 (2026-09-12) — RELEASE CANDIDATE FINAL: mood grading, full ambient audio, save transfer
 
 - **Every district now has its own color mood**, not just a shared night

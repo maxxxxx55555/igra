@@ -1,9 +1,12 @@
-# Known owner-only items (RELEASE CANDIDATE FINAL, 2026-09-12)
+# Known owner-only items (RELEASE CANDIDATE FINAL v2, 2026-09-13)
 
 Everything an agent session can do from this repo is done. What's left
 needs a GUI, an account, a signing key, a build toolchain, or a human
 looking at/playing the game — structurally outside what any headless
 session can perform. Full click-by-click steps: `RELEASE_CHECKLIST.md`.
+**Exactly 4 items, all owner-only, zero technical** (the FINAL HARDENING
+PASS closed the technical blockers this list carried before — see
+`PLAN.md`'s RC FINAL v2 section for what changed).
 
 ## 1. Android keystore + signed AAB (`RELEASE_CHECKLIST.md` §1, §4)
 
@@ -34,36 +37,44 @@ this repo — banding, touch-target overlap, whether the joystick actually
 feels good, the final boss's real difficulty on a first attempt — is
 inferred from code and static/headless gates, never observed, because
 NO-GODOT (headless-only) policy means no agent session has ever seen this
-game render. Concretely, this single playtest also resolves or informs:
+game render. What this single playtest now resolves, updated after the
+FINAL HARDENING PASS:
 
-- **Autoplay bot's unresolved softlock** (`docs/KNOWN_ISSUES.md`
-  "Autoplay bot"): the mechanics engine is proven end-to-end by other
-  means (district power-up via real collision+interact, per-district loot
-  spawning, balance sim), but a full scripted win was never achieved
-  headlessly. A human playing normally sidesteps the bot's own
-  boot-harness lifecycle bug entirely and is the authoritative
-  winnability check.
-- **Texture compression banding risk** (`docs/artifacts/
-  apk_size_report.md` §4): whether ETC2/ASTC VRAM compression introduces
-  visible banding on this game's flat-gradient, palette-locked art is a
-  "look at it" question with no headless substitute. A scoped pilot
-  (`tiles`+`surfaces`, 65% of the texture budget, lowest risk) is
-  specified and ready to try.
+- **Autoplay bot: the boot-lifecycle bug is fixed** (root cause found and
+  fixed, not just worked around — `docs/KNOWN_ISSUES.md` "Autoplay bot").
+  The district spine now clears headlessly (11/11) in the clear majority
+  of runs, a first for this project. What remains unwon is the final
+  boss's P2 phase specifically — the bot's simple approach-and-attack
+  loop can't out-position a boss that may kite, which is a question of
+  *bot* sophistication, not *game* winnability. A human playing normally
+  is unaffected by any of this and is still the authoritative check on
+  whether the boss fight itself is fun/fair/beatable.
+- **Texture compression banding**: 74 specific files (`tiles`, `surfaces`,
+  3 `environment`) were actually converted to VRAM Compressed and
+  individually PSNR-verified ≥40dB this pass (`docs/artifacts/
+  texture_compression_audit.md`) — PSNR is an objective proxy for pixel
+  difference, not a substitute for eyes on the actual render. Look at a
+  few district floors/walls (especially `tiles`) for banding before
+  trusting this specific change in production.
 - **Draw-call budget's real number** (`tools/qa_sim/
   perf_check_scene.tscn` self-skips under `--headless`, dummy renderer
   always reports 0 draw calls) — needs one `--windowed` run for a true
   D1/D11 measurement.
+- **Touch feel**: `touch_probe_scene.tscn` proves the joystick/haptic/
+  interact-pulse code paths have no accidental latency and hit their
+  timing budgets in simulation (`docs/KNOWN_ISSUES.md` "Touch feel") —
+  it cannot prove a real thumb on real glass feels good.
 
-## 5. Real AppLovin MAX SDK key — optional, monetization only
+---
 
-`AdService` is wired against the stub; ships fine with no ads if the
-owner doesn't want them. Getting a real key needs an AppLovin account
-(`RELEASE_CHECKLIST.md` §2) — not blocking a release.
+Optional, genuinely not blocking a release (not counted in the 4 above):
 
-## 6. Version bump at actual upload time (`RELEASE_CHECKLIST.md` §7)
-
-`export_presets.cfg` is still `version/code=1` / `version/name="1.0"` on
-purpose — bump it when the build is really about to ship, not before.
+- **Real AppLovin MAX SDK key** — `AdService` is wired against the stub;
+  ships fine with no ads if the owner doesn't want them
+  (`RELEASE_CHECKLIST.md` §2).
+- **Version bump at actual upload time** (`RELEASE_CHECKLIST.md` §7) —
+  `export_presets.cfg` is still `version/code=1` on purpose, bump it when
+  the build is really about to ship.
 
 ---
 

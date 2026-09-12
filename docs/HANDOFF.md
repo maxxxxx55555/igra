@@ -1,6 +1,31 @@
 # Handoff
 
-## RELEASE CANDIDATE FINAL — 2026-09-12
+## RELEASE CANDIDATE FINAL v2 — 2026-09-13
+
+`origin/main` is **RELEASE CANDIDATE FINAL v2** at `<rcf2-hash>`. On top
+of v1 (below): a FINAL HARDENING PASS closed the 3 named technical
+blockers this project had left. Most notably — **a real, severe bug was
+found and fixed**: `scenes/main_3d.tscn`'s embedded splash screen
+unconditionally sent every player back to the main menu ~8 seconds into
+a new game, destroying the run. This was never a test-only artifact; it
+hit real players identically. Also fixed: no recovery for falling
+through the world, and using a medkit/battery did nothing (a dead legacy
+script owned the only listener for it). 74 textures were actually
+VRAM-compressed and individually PSNR-verified (not estimated). Touch
+timing is now asserted with real budgets, catching a real animation-rate
+bug. Anti-tamper gained versioning, 3-generation backup rotation, an
+independent progress signature, and a Play Integrity stub. Full detail:
+`PLAN.md`'s RC FINAL v2 section; artifact index: `docs/
+RELEASE_ARTIFACTS.md`; gate proof: `docs/artifacts/final_gate_report.md`.
+
+**Owner-only items are now down to exactly 4, zero technical**:
+keystore/signed AAB, Play Console/IARC/upload, privacy policy URL, one
+real playtest. Full detail with reasoning: `docs/artifacts/
+known_owner_only_items.md`.
+
+---
+
+## RELEASE CANDIDATE FINAL v1 — 2026-09-12
 
 `origin/main` is **RELEASE CANDIDATE FINAL** at `7e55558`. GOLD MASTER
 v5 (below) plus a full RELEASE CONVERGENCE pass: merged all three pending
