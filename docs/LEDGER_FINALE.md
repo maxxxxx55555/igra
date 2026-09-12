@@ -114,6 +114,35 @@ and 2.2× bloom gain showed 18 white/88k black texels — disclosed here as a
 sim artifact, not shipped behavior; faithful-math rerun is the verdict
 basis.) Full numbers: `docs/CERT_FINALE.md` §2.
 
+## F-T1 — trailer hero shots (TASK 3 — DELIVERED 4/4)
+
+4 NEW masters in `store/trailer/` (Arena text-to-image, this session):
+`hero_first_restore_1920x1080.png` (1920×1080, 3607 KB, Shot A),
+`hero_grid_cascade_1920x1080.png` (1920×1080, 3995 KB, Shot B),
+`hero_reactor_room_1920x1080.png` (1920×1080, 3995 KB, Shot C),
+`hero_shorts_cut_1080x1920.png` (1080×1920, 3532 KB, vertical).
+Finish chain (numpy 2.4.6 + pillow 12.3.0, seeds 101–104): Lanczos to exact
+canvas → district LUT trilinear @0.55 (A/D `lut_suburbs`, B/C
+`lut_power_station`) → bloom 0.30 → vignette (shipped formula) 0.50/0.60/0.55
+→ radial chroma 0.75px → grain (shipped add-only math) 0.10/0.12 → clamp
+[10,240]. All 4: exact dims, 0 pure-white / 0 pure-black texels, min 10 max
+240, visually QA'd (no text/HUD/watermark, subjects in center band).
+Deliberate override of the `asset_pipeline` "skip grain on store art" rule:
+the brief demands filmic grain on these masters and they are marketing
+sources (re-exported on upload, never runtime textures) — the ~1 MB grain
+cost is disclosed, not hidden. Prompts + exact Godot stack values recorded in
+`store/trailer/README.md`; facts in `docs/CERT_FINALE.md` §3.
+
+## F-LIC — license rows DRAFTED for the docs owner (do not merge from here)
+
+This agent is forbidden from editing `docs/ASSET_LICENSES.md`. Draft rows for
+the docs owner to merge verbatim: (1) `assets/textures/postfx/presets.json` +
+`README.md` — project-authored preset data (this session), no third-party
+rights; (2) 4× `store/trailer/hero_*.png` — project-owned AI output (Arena
+image generation, this session; finished with project LUTs/shaders), no
+third-party rights, no attribution required. No audio binaries this pass
+(nothing new to license).
+
 ## F-A4 — audio files touched (owned paths only)
 
 - `docs/AUDIO_COVERAGE.md` (surgical: finale-pass note appended — matrix
