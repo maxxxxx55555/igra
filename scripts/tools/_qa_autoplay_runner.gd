@@ -155,6 +155,7 @@ func _process(delta: float) -> void:
 		_player = get_tree().get_first_node_in_group("player")
 
 	if _player_ok():
+		_maintain_flashlight()
 		match _phase:
 			"spine": _tick_spine(delta)
 			"boss": _tick_boss(delta)
@@ -243,7 +244,7 @@ func _tick_boss(delta: float) -> void:
 		return
 	var bp: Vector3 = (boss as Node3D).global_position
 	var d := _player.global_position.distance_to(bp)
-	# keep flashlight on (default true) — needed for the boss P2 light gate
+	_face(bp)  # P2's light-gate needs the flashlight cone actually on the boss, not just "on"
 	if _player.get("hp") != null and float(_player.get("hp")) < 30.0:
 		_use_item(&"medkit")
 	if d > 2.6:
@@ -276,6 +277,27 @@ func _dir_to(world_pos: Vector3) -> Vector2:
 	var fwd := -basis.z; fwd.y = 0.0; fwd = fwd.normalized()
 	var right := basis.x; right.y = 0.0; right = right.normalized()
 	return Vector2(wdir.dot(right), -wdir.dot(fwd)).limit_length(1.0)
+
+## FINAL HARDENING PASS: the boss's P2 phase is only vulnerable while lit
+## (base_monster.gd _is_in_flashlight: a real spot-cone/angle test against
+## the flashlight's actual facing, not just "flashlight enabled"). The bot
+## never simulated look/aim input at all (only movement + action buttons),
+## so the flashlight - mounted on the player's facing - pointed wherever
+## it last happened to, landing on the boss by chance in P1 and then
+## staying dark through all of P2. This calls the exact same rotation
+## entry point real mouse/touch look input drives (player_3d.gd
+## _apply_look) - simulated input, not a position/state warp, same class
+## of thing set_joy_move_dir already is for movement.
+func _face(target: Vector3) -> void:
+	if not _player.has_method("_apply_look"):
+		return
+	var to_target := target - _player.global_position
+	to_target.y = 0.0
+	if to_target.length() < 0.01:
+		return
+	var wanted_yaw := atan2(to_target.x, -to_target.z)
+	var yaw_delta := wrapf(wanted_yaw - _player.rotation.y, -PI, PI)
+	_player.call("_apply_look", yaw_delta, 0.0)
 
 func _move(dir: Vector2) -> void:
 	# nudge past an obstacle if we've been stuck
@@ -350,6 +372,17 @@ func _nearest_pickup(item_id: StringName) -> Node:
 		if d < best_d:
 			best_d = d; best = n
 	return best
+
+## FINAL HARDENING PASS: found via the boss fight — flashlight auto-disables
+## at battery<=0.0 (player_3d.gd), and the bot never once managed battery
+## in ~2.5 real minutes of continuous flashlight use. base_monster.gd's
+## light-gate (_is_in_flashlight) requires light_energy > 0.1, so a dead
+## flashlight makes the P2 phase permanently unwinnable regardless of aim.
+## Same _use_item() plumbing the medkit-at-low-hp check already uses.
+func _maintain_flashlight() -> void:
+	var b: Variant = _player.get("battery")
+	if b != null and float(b) < 20.0:
+		_use_item(&"battery")
 
 func _use_item(item_id: StringName) -> void:
 	var inv := get_node_or_null("/root/InventoryManager")
