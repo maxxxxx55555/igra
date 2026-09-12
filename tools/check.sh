@@ -169,15 +169,23 @@ else
     echo "  ${DIM}Godot не найден в PATH. Укажите путь: GODOT=/путь/к/godot ./tools/check.sh${OFF}"
     echo "  ${DIM}Скачать: https://godotengine.org/download${OFF}"
   else
-    run_gate() { # имя, сцена
-      local name="$1" scene="$2"
+    # RELEASE CONVERGENCE STEP 4: game_test_3d_scene.tscn's phase1+ combat
+    # step stalls intermittently under --headless (pre-existing,
+    # docs/KNOWN_ISSUES.md "game_test_3d_scene.tscn gate stalls silently") -
+    # this used to hang run_gate (and this whole script) forever with no
+    # timeout at all, the exact way tools/qa_sim/headless_suite's own
+    # run_scene already guards every gate. Same fix here: a per-gate
+    # timeout, default matches headless_suite's 90s.
+    run_gate() { # имя, сцена, [таймаут-с]
+      local name="$1" scene="$2" t="${3:-90}"
       if [[ ! -f "${scene#res://}" ]]; then
         echo "  ${DIM}пропуск${OFF} $name (нет $scene)"; return
       fi
       local out
-      out=$("$GODOT" --headless --path . "$scene" 2>&1)
+      out=$(timeout "$t" "$GODOT" --headless --path . "$scene" 2>&1)
       local rc=$?
       if [[ $rc -eq 0 ]]; then ok "$name"
+      elif [[ $rc -eq 124 ]]; then bad "$name (таймаут ${t}s)"; echo "$out" | tail -15 | sed 's/^/         /'
       else bad "$name (код $rc)"; echo "$out" | tail -15 | sed 's/^/         /'; fi
     }
     run_gate "компиляция всех скриптов" "res://scenes/tools/compile_gate_scene.tscn"
@@ -185,9 +193,9 @@ else
     run_gate "API автозагрузок"          "res://scenes/tools/autoload_api_check_scene.tscn"
     run_gate "локализация"               "res://scenes/tools/i18n_check_scene.tscn"
     run_gate "ассеты"                    "res://scenes/tools/asset_check_scene.tscn"
-    run_gate "прогон 3D-сцены"           "res://scenes/tools/game_test_3d_scene.tscn"
+    run_gate "прогон 3D-сцены"           "res://scenes/tools/game_test_3d_scene.tscn" 90
     run_gate "целостность сейва"         "res://scenes/tools/save_integrity_check_scene.tscn"
-    run_gate "boot-flow (меню/новая игра/сейв)" "res://scenes/tools/boot_check_scene.tscn"
+    run_gate "boot-flow (меню/новая игра/сейв)" "res://scenes/tools/boot_check_scene.tscn" 200
     run_gate "footstep-маппер (surface x speed)" "res://scenes/tools/footstep_check_scene.tscn"
     run_gate "аудио: тишина до первого ввода" "res://scenes/tools/audio_hum_check_scene.tscn"
     run_gate "единая тема: chrome виден на всех экранах" "res://scenes/tools/theme_unify_probe_scene.tscn"
@@ -195,7 +203,7 @@ else
     # гейт сам это обнаруживает и молча пропускает (SKIP, не OK/FAIL). Реальная
     # проверка бюджета D11<350 требует --windowed:
     #   godot --windowed --path . scenes/tools/perf_check_scene.tscn
-    run_gate "перф-бюджет (draw calls, только --windowed)" "res://scenes/tools/perf_check_scene.tscn"
+    run_gate "перф-бюджет (draw calls, только --windowed)" "res://scenes/tools/perf_check_scene.tscn" 120
     run_gate "тач-инпут (joystick/deadzone/HUD-кнопки)" "res://scenes/tools/touch_probe_scene.tscn"
   fi
 fi
