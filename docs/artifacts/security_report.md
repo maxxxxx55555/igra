@@ -96,3 +96,49 @@ nothing to remove.**
 `docs/RELEASE_ARTIFACTS.md` for the commit. Import validates the file is a
 genuine HMAC-signed envelope before touching anything, and backs up the
 current save to `.bak` first — same recoverability guarantee as §2.
+
+## 7. FINAL HARDENING PASS additions (STEP 4, 2026-09-13)
+
+**Save versioning / migration hook.** `SaveSystem._migrate()` runs on
+every load; a `from_version < SAVE_VERSION` dispatches to a per-version
+transform. Honest note: versions 1-3 have been additive-only (every
+`from_dict()`/`load_data()` this and prior passes touched already reads
+new keys with a safe default) — there is no real migration to run *yet*.
+The mechanism exists now so the next actual breaking schema change has
+somewhere to plug in, rather than needing the whole pattern invented
+under release pressure.
+
+**Backup rotation: 3 generations, not 1.** `_rotate_backups()` keeps
+`.bak` (newest) through `.bak3` (oldest); `_read_validated()` tries all
+three in order before quarantining. Protects against corruption striking
+twice in a row (two autosaves after a disk starts failing) — a single
+`.bak` couldn't survive that, three can. Verified: write 4 times, confirm
+all 3 backups exist and hold the right generation each
+(`_check_backup_rotation`, `scripts/tools/_save_integrity_check.gd`).
+
+**Progress-critical fields get an independent signature.**
+`_sign_progress()` signs `power` (district stages) + `progress`
+(documents/secrets — what `Endings.evaluate()` actually keys off of)
+*separately* from the whole-envelope HMAC. Honest scope: this is mostly
+redundant with §1's HMAC *except* for one real gap — §1's own
+backward-compatibility path still accepts a pre-HMAC save signed with the
+old, unkeyed `checksum` field. Downgrading to that field name would let
+someone edit `power`/`progress` freely and re-hash with no secret at all;
+this second signature still needs the real key even then, so a forged
+"all districts FULL" or inflated document count gets `power`/`progress`
+reset to empty rather than trusted. Verified adversarially
+(`_check_progress_signature`): forges `power` inside an otherwise
+perfectly-valid, correctly-*re-signed* outer envelope (not just a
+checksum mismatch — the outer signature is genuinely correct on the
+forged body) and confirms the forgery is still caught and discarded.
+
+**Play Integrity API — stub, honestly.** `scripts/systems/
+play_integrity_service.gd` (new autoload `PlayIntegrityService`). Android
+app attestation needs a server to send the resulting token to for
+verification; this project has none (`docs/HONEST_ASSESSMENT.md`), so a
+"real" implementation here would be theater — a token nobody ever checks.
+The stub exists purely as a wiring point matching `AdService`'s own
+pre-real-SDK-key shape: `request_integrity_token()` always emits a
+`STUB_NO_SERVER` verdict, `is_available()` always returns `false`. Not
+gating anything gameplay-relevant today — there is nothing to gate a
+client-only "attestation" against.

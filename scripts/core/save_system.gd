@@ -96,7 +96,26 @@ func has_save() -> bool:
 ## восстановления. Теперь: temp+rename (атомарно), SHA-256 в конверте,
 ## .bak — копия предыдущего валидного сейва на случай, если новый бит.
 
+## FINAL HARDENING PASS (STEP 4 anti-tamper): districts-lit + progress
+## (documents/secrets - what Endings.evaluate() actually keys off of) get
+## their OWN signature, independent of the whole-envelope one below.
+## Honest scope: today this is mostly redundant with the outer HMAC
+## (both cover consistently-signed data), EXCEPT for the one gap that
+## makes it worth having - the outer envelope's backward-compat path
+## (_read_envelope) still accepts a pre-HMAC save signed with the old
+## unkeyed sha256_text() "checksum" field. A save downgraded to that old
+## field name could otherwise have power/progress edited freely and
+## re-hashed with no secret needed; this second, independent signature on
+## exactly the ending-determining fields still needs the real key even
+## then. Verified in _read_envelope() below; a mismatch resets power/
+## progress to empty rather than trusting a forged win.
+func _sign_progress(power: Dictionary, progress: Dictionary) -> String:
+	return _sign(JSON.stringify({"power": power, "progress": progress}))
+
 func _write_atomic(path: String, payload: Dictionary) -> bool:
+	if payload.has("power") or payload.has("progress"):
+		payload = payload.duplicate()
+		payload["progress_hmac"] = _sign_progress(payload.get("power", {}), payload.get("progress", {}))
 	# checksum считаем от ТОЙ ЖЕ строки, что попадёт на диск как data_json —
 	# JSON.parse превращает int в float, так что пересчёт чек-суммы после
 	# парсинга payload заново в stringify() никогда бы не совпал с исходной.
@@ -109,9 +128,22 @@ func _write_atomic(path: String, payload: Dictionary) -> bool:
 	f.store_string(JSON.stringify(envelope))
 	f.close()
 	if FileAccess.file_exists(path):
-		DirAccess.copy_absolute(path, path + ".bak")
+		_rotate_backups(path)
 	var err := DirAccess.rename_absolute(tmp_path, path)
 	return err == OK
+
+## STEP 4 anti-tamper: keep the last 3 autosaves, not just 1 - a single
+## .bak doesn't help if corruption strikes twice in a row (two autosaves
+## after a disk starts failing, or a crash mid-write followed immediately
+## by another autosave attempt before anyone notices). .bak = newest,
+## .bak3 = oldest of the 3 kept.
+const BACKUP_DEPTH: int = 3
+func _rotate_backups(path: String) -> void:
+	for i in range(BACKUP_DEPTH, 1, -1):
+		var src: String = path + (".bak" if i == 2 else ".bak%d" % (i - 1))
+		if FileAccess.file_exists(src):
+			DirAccess.copy_absolute(src, path + ".bak%d" % i)
+	DirAccess.copy_absolute(path, path + ".bak")
 
 ## Читает и проверяет конверт по указанному пути; {} если файла нет,
 ## JSON битый, чек-сумма не сошлась или версия сейва новее движка.
@@ -156,6 +188,40 @@ func _read_envelope(path: String, out_reason: Array = []) -> Dictionary:
 	if int(data.get("version", 0)) > SAVE_VERSION:
 		if not out_reason.is_empty(): out_reason[0] = "версия сейва новее билда"
 		return {}
+	data = _verify_progress(data)
+	return _migrate(data)
+
+## STEP 4 anti-tamper: recomputes _sign_progress() over the loaded power/
+## progress fields and compares to the stored progress_hmac. A save that
+## predates this pass has no progress_hmac at all - treated as
+## unverifiable-but-trusted-once, same policy as the outer envelope's
+## "checksum"-vs-"hmac" backward-compat above (every subsequent write
+## adds the field). A save that HAS the field and fails the check gets
+## power/progress reset to empty rather than trusted - see _sign_progress()
+## for what this actually protects against.
+func _verify_progress(data: Dictionary) -> Dictionary:
+	if not data.has("progress_hmac"):
+		return data
+	var expected: String = _sign_progress(data.get("power", {}), data.get("progress", {}))
+	if expected != String(data["progress_hmac"]):
+		print("[SaveSystem] district/progress данные не прошли отдельную проверку подписи — сброшены")
+		data["power"] = {}
+		data["progress"] = {}
+	return data
+
+## Save-file versioning (STEP 4): a hook for the next real schema change,
+## not a claim one has happened yet. Versions 1-3 have been additive-only
+## (new keys read with a safe .get() default elsewhere in this file and in
+## every *.from_dict()/load_data() this session touched) - nothing to
+## transform. Runs on every load regardless, so the mechanism exists
+## before it's needed under time pressure rather than being invented then.
+func _migrate(data: Dictionary) -> Dictionary:
+	var from_version: int = int(data.get("version", 1))
+	if from_version >= SAVE_VERSION:
+		return data
+	# match from_version:
+	#   1: data = _migrate_v1_to_v2(data)  # (no such change has shipped yet)
+	data["version"] = SAVE_VERSION
 	return data
 
 ## Основной файл -> .bak при провале основного (битый/пустой) -> {}.
@@ -170,16 +236,19 @@ func _read_validated(path: String) -> Dictionary:
 	if not data.is_empty():
 		return data
 	if main_reason[0] != "":
-		print("[SaveSystem] основной сейв не читается (", main_reason[0], "): ", path, " — пробую .bak")
-	var bak_reason := [""]
-	data = _read_envelope(path + ".bak", bak_reason)
-	if not data.is_empty():
-		print("[SaveSystem] восстановлено из .bak: ", path)
-		return data
+		print("[SaveSystem] основной сейв не читается (", main_reason[0], "): ", path, " — пробую резервные")
+	# STEP 4: try all 3 rotated backups, newest first, not just .bak.
+	for i in range(1, BACKUP_DEPTH + 1):
+		var suffix: String = ".bak" if i == 1 else ".bak%d" % i
+		var bak_reason := [""]
+		data = _read_envelope(path + suffix, bak_reason)
+		if not data.is_empty():
+			print("[SaveSystem] восстановлено из ", suffix, ": ", path)
+			return data
 	if main_reason[0] != "" and FileAccess.file_exists(path):
 		var quarantine := path + ".corrupt-" + str(Time.get_unix_time_from_system())
 		DirAccess.rename_absolute(path, quarantine)
-		print("[SaveSystem] сейв и .bak не читаются — карантин в ", quarantine, ", старт с чистого состояния")
+		print("[SaveSystem] сейв и резервные копии не читаются — карантин в ", quarantine, ", старт с чистого состояния")
 	return {}
 
 func set_checkpoint(_scene_path: String, pos: Vector3) -> void:

@@ -11,6 +11,8 @@ func _ready() -> void:
 	_check_round_trip()
 	_check_bak_recovery()
 	_check_corrupt_rejected()
+	_check_backup_rotation()
+	_check_progress_signature()
 	_check_fuzz_50_mutants()
 	_check_export_import()
 	_cleanup()
@@ -57,14 +59,86 @@ func _check_bak_recovery() -> void:
 	_ok(CoinWallet.get_coins() == 111, ".bak содержит предыдущее валидное состояние (%d)" % CoinWallet.get_coins())
 
 func _check_corrupt_rejected() -> void:
-	# Основной и .bak оба битые — load_slot обязан вернуть false, а не мусор.
+	# Основной и все резервные копии битые — load_slot обязан вернуть false.
 	var f := FileAccess.open(_path(), FileAccess.WRITE)
 	f.store_string("{\"checksum\":\"deadbeef\",\"data_json\":\"{\\\"version\\\":1}\"}")
 	f.close()
-	if FileAccess.file_exists(_path() + ".bak"):
-		DirAccess.remove_absolute(_path() + ".bak")
+	_remove_all_backups()
 	var ok: bool = SaveSystem.load_slot(_SLOT)
 	_ok(not ok, "чек-сумма не сошлась -> load_slot отказывает, а не подставляет мусор")
+
+## STEP 4 anti-tamper: 3 rotated backups, not just 1 - write 4 times and
+## confirm the newest 3 all exist (and hold the expected values), oldest
+## rotated out.
+func _check_backup_rotation() -> void:
+	_remove_all_backups()
+	for coins in [10, 20, 30, 40]:
+		CoinWallet.from_dict({})
+		CoinWallet.add(coins)
+		SaveSystem.save_slot(_SLOT)
+	_ok(FileAccess.file_exists(_path() + ".bak") and FileAccess.file_exists(_path() + ".bak2")
+		and FileAccess.file_exists(_path() + ".bak3"), "3 резервные копии существуют после 4 записей")
+	CoinWallet.from_dict({})
+	SaveSystem.load_slot(_SLOT)
+	var main_coins: int = CoinWallet.get_coins()
+	# The newest bak holds the write immediately before the current main
+	# (30, since main=40) - restore it via the real recovery path (corrupt
+	# main, let load_slot fall back) rather than reading the file directly.
+	var f2 := FileAccess.open(_path(), FileAccess.WRITE)
+	f2.store_string("не json{{{")
+	f2.close()
+	CoinWallet.from_dict({})
+	SaveSystem.load_slot(_SLOT)
+	_ok(main_coins == 40 and CoinWallet.get_coins() == 30,
+		"ротация хранит 3 последних состояния по порядку (было %d, .bak дал %d)" % [main_coins, CoinWallet.get_coins()])
+	# Re-corrupt main + newest bak - load_slot must reach .bak2 (20).
+	var f3 := FileAccess.open(_path(), FileAccess.WRITE)
+	f3.store_string("не json{{{"); f3.close()
+	var f4 := FileAccess.open(_path() + ".bak", FileAccess.WRITE)
+	f4.store_string("не json{{{"); f4.close()
+	CoinWallet.from_dict({})
+	SaveSystem.load_slot(_SLOT)
+	_ok(CoinWallet.get_coins() == 20, ".bak2 достижим, когда основной и .bak оба биты (%d)" % CoinWallet.get_coins())
+	_remove_all_backups()
+
+func _remove_all_backups() -> void:
+	for suffix in [".bak", ".bak2", ".bak3"]:
+		if FileAccess.file_exists(_path() + suffix):
+			DirAccess.remove_absolute(_path() + suffix)
+
+## STEP 4 anti-tamper: forging a district-FULL/progress state independent
+## of the whole-envelope signature must not survive - see save_system.gd
+## _sign_progress()'s comment for exactly what this protects against.
+func _check_progress_signature() -> void:
+	CoinWallet.from_dict({})
+	PowerGrid.from_dict({})
+	SaveSystem.save_slot(_SLOT)
+	var f := FileAccess.open(_path(), FileAccess.READ)
+	var txt := f.get_as_text()
+	f.close()
+	var outer := JSON.new()
+	outer.parse(txt)
+	var envelope: Dictionary = outer.data
+	var inner := JSON.new()
+	inner.parse(String(envelope["data_json"]))
+	var data: Dictionary = inner.data
+	# Forge "all districts full" directly in the parsed body, bypassing the
+	# real PowerGrid entirely - exactly the attack _sign_progress() exists
+	# to catch, since data["progress_hmac"] here is still the ORIGINAL
+	# signature over the ORIGINAL (untampered) power/progress.
+	data["power"] = {"suburbs": {"stage": 3}}
+	var forged_body := JSON.stringify(data)
+	# Re-sign the OUTER envelope with the real key so this isn't just
+	# re-testing "checksum mismatch -> reject" - the point is the outer
+	# envelope can be perfectly valid and the forgery still gets caught.
+	var forged: Dictionary = {"hmac": SaveSystem.call("_sign", forged_body), "data_json": forged_body}
+	var wf := FileAccess.open(_path(), FileAccess.WRITE)
+	wf.store_string(JSON.stringify(forged))
+	wf.close()
+	SaveSystem.load_slot(_SLOT)
+	var restored: Dictionary = PowerGrid.to_dict()
+	_ok(restored.is_empty() or not restored.has("suburbs"),
+		"forged district-FULL state is rejected even with a valid outer envelope")
 
 ## RELEASE CONVERGENCE STEP 4: 50 mutants of a real signed save, each a
 ## different byte-level corruption/tamper of the same template. "Graceful"
@@ -78,8 +152,7 @@ func _check_fuzz_50_mutants() -> void:
 	CoinWallet.from_dict({})
 	CoinWallet.add(555)
 	SaveSystem.save_slot(_SLOT)
-	if FileAccess.file_exists(_path() + ".bak"):
-		DirAccess.remove_absolute(_path() + ".bak")  # isolate: no fallback crutch for this pass
+	_remove_all_backups()  # isolate: no fallback crutch for this pass
 	var f := FileAccess.open(_path(), FileAccess.READ)
 	var template: PackedByteArray = f.get_buffer(f.get_length())
 	f.close()
@@ -120,8 +193,7 @@ func _check_fuzz_50_mutants() -> void:
 	# any of the 50 mutants above would have killed the process mid-loop,
 	# never printing this or the final DONE line.
 	_ok(true, "fuzz: 50/50 mutants processed without crashing the process")
-	if FileAccess.file_exists(_path() + ".bak"):
-		DirAccess.remove_absolute(_path() + ".bak")
+	_remove_all_backups()
 
 ## RELEASE CONVERGENCE STEP 6 (anti "lost phone"): a fully scratch path on
 ## both ends (a fake "save" file that isn't SAVE_PATH, a fake export
@@ -167,7 +239,7 @@ func _check_export_import() -> void:
 	CoinWallet.from_dict({})
 
 func _cleanup() -> void:
-	for suffix: String in ["", ".bak", ".tmp"]:
+	for suffix: String in ["", ".bak", ".bak2", ".bak3", ".tmp"]:
 		var p: String = _path() + suffix
 		if FileAccess.file_exists(p):
 			DirAccess.remove_absolute(p)
