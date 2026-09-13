@@ -1,0 +1,5 @@
+== verify_listing.py ==
+locales with generated section: 13 / 13
+master fences found: 2
+note: short lines checked (generated block + master labels): 13
+RESULT: GREEN — 13/13 parity, limits, deleted-claims scan, keyword density all pass

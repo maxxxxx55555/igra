@@ -8,6 +8,46 @@ Play Console constraints used throughout: 16:9, **min 1080p** → capture **1920
 native; JPEG or 24-bit PNG, ≤ 8 MB each; keep key action in the central band (Play crops);
 no overlay text/arrows. Min 2 shots required, max 8 per type — we deliver exactly 8 EN (+2 RU).
 
+## 0.5 STATUS at FINAL STORE SYNC (2026-09-13, RC FINAL v2) — delivered vs still to capture
+
+Path existence below was re-checked on disk with `os.stat` (no engine run — the standing
+no-Godot policy of this plan). Every cited path exists at the stated pixel size.
+
+**Legend:** ✅ = file exists, upload-ready · 🎨 = a `store/trailer/` master may be used
+**directly** in the slot (AI key-art, palette-locked — usable as store *art*, never labelled
+as real gameplay footage) · ⛔ = only obtainable by in-game capture (recipes in §3).
+
+| Plan shot | Deliverable status | Exact file(s) on disk |
+|---|---|---|
+| 1 — hook, light vs dark | ✅ delivered | `store/screenshots/shot01_light_vs_dark_1920x1080_en.png` (1920×1080) |
+| 1 — art-direct alternative | 🎨 | `store/trailer/hero_first_restore_1920x1080.png`, `store/trailer/still_first_light_1920x1080.png` |
+| 2 — district boundary | ✅ delivered | `store/screenshots/shot02_district_boundary_1920x1080_en.png` |
+| 3 — stealth horror | ⛔ capture needed | target file `shot03_stealth_horror_1920x1080_en.png` (recipe §3 Shot 3; no trailer equivalent — the stills never show HUD/stealth read) |
+| 4 — keeper lore | ⛔ capture needed | target file `shot04_keeper_lore_1920x1080_en.png` (recipe §3 Shot 4; no trailer equivalent) |
+| 5 — restored forecourt | ✅ delivered | `store/screenshots/shot05_restored_forecourt_1920x1080_en.png` |
+| 6 — the mystery inside | ⛔ capture needed | target file `shot06_mystery_inside_1920x1080_en.png` (recipe §3 Shot 6; `store/trailer/hero_reactor_room_1920x1080.png` is the power_station reactor hall, NOT industrial — it may stand as separate "final act" art, but is not a substitute frame for this shot) |
+| 7 — the last streetlight | ✅ delivered | `store/screenshots/shot07_last_streetlight_1920x1080_en.png` |
+| 7 — art companions | 🎨 | `store/trailer/hero_grid_cascade_1920x1080.png` ("11 districts" bullet visual), `store/trailer/still_first_ending_1920x1080.png` ("5 endings" bullet visual) |
+| 8 — city map (EN) | ✅ delivered | `store/screenshots/shot08_city_map_1920x1080_en.png` |
+| 8 — city map (RU) | ⛔ capture needed | `shot08_city_map_1920x1080_ru.png` — §3 Shot 8 recipe, RU variant |
+| 1 — RU variant | ⛔ optional | `shot01_light_vs_dark_1920x1080_ru.png` |
+| P1 — touch first light | ✅ delivered | `store/screenshots/shot_p1_touch_first_light_1920x1080_en.png` |
+| P2 — touch crouch | ✅ delivered | `store/screenshots/shot_p2_touch_crouch_1920x1080_en.png` |
+| P3 — touch interact | ✅ delivered | `store/screenshots/shot_p3_touch_interact_1920x1080_en.png` |
+| Vertical shorts frame | 🎨 direct | `store/trailer/hero_shorts_cut_1080x1920.png`, `store/trailer/shorts_silhouette_1080x1920.png` (not gallery slots — Play gallery is 16:9; these are for YT/TikTok/Reels) |
+| Press-kit header | ✅ direct | `store/trailer/presskit_1600x900.png` (1600×900) |
+
+Honest-state notes (kept verbatim so the page never overstates): the P1–P3 touch-HUD files are
+**composited renders** built from the repo's real touch sprites and shipped HUD palette (see
+`store/screenshots/README.md`) — they are accurate to the shipped HUD layout but not raw device
+captures; a real-device screenshot remains the gold standard if the owner takes one. The 🎨
+trailer masters are AI-generated key art (license note: `docs/ASSET_LICENSES.md`, "mega final
+pass: trailer graphics") — fine for socials, store art slots and press decks; never caption
+them "gameplay footage".
+
+**Bottom line: the 8-slot EN phone gallery is already complete with on-disk files — day-1
+upload needs no new capture. Shots 3, 4, 6 and the RU variants are owner-side upgrades.**
+
 ## 0. Verified controls, systems, and honest limits
 
 **Boot chain:** `boot_loading.tscn` → main menu (≈3.3 s boot counter) → *Continue/New Game*
@@ -112,7 +152,7 @@ steps 0–36 only (~35 min, slack for retakes) and shot 2's file simply joins th
 Zone ids are real anchors from `content/districts/*/prop_manifest.md`. "Face" = point the
 camera; there are no camera presets (see §0).
 
-### Shot 1 — the hook: light vs. the dark ⭐ money shot
+### Shot 1 — the hook: light vs. the dark ⭐ money shot — ✅ DELIVERED (`store/screenshots/shot01_light_vs_dark_1920x1080_en.png`) · 🎨 art-direct alt `store/trailer/hero_first_restore_1920x1080.png`
 - **Scene to open:** main menu → Continue **SAVE-B** → loads `res://scenes/main_3d.tscn`,
   district **suburbs**.
 - **District + stage:** suburbs **FULL**.
@@ -131,7 +171,7 @@ camera; there are no camera presets (see §0).
   for the RU listing — same frame, Русский in Settings).
 - **File:** `shot01_light_vs_dark_1920x1080_en.png` (+ `_ru.png`).
 
-### Shot 2 — one city: a district boundary ⏳en-route (prep)
+### Shot 2 — one city: a district boundary ⏳en-route (prep) — ✅ DELIVERED (`store/screenshots/shot02_district_boundary_1920x1080_en.png`)
 - **Scene:** `res://scenes/main_3d.tscn`, district **residential**.
 - **District + stage:** residential **FULL**, park still **DARK** (natural mid-campaign
   state — capture it the minute residential's last switch flips).
@@ -146,7 +186,7 @@ camera; there are no camera presets (see §0).
   save — no player-facing down-stage exists; verified). Rebuild a mid-game save and capture
   en route, or substitute the nearest lit-streetlight edge frame with the same composition.
 
-### Shot 3 — stealth horror ⏳en-route (prep) / SAVE-A
+### Shot 3 — stealth horror ⏳en-route (prep) / SAVE-A — ⛔ CAPTURE NEEDED (no trailer equivalent)
 - **Scene:** `res://scenes/main_3d.tscn`, district **residential** — on SAVE-A walk north
   through suburbs' `z_exit_north`; en-route it is residential's state on first arrival.
 - **District + stage:** residential **DARK or PARTIAL**.
@@ -163,7 +203,7 @@ camera; there are no camera presets (see §0).
 - **Resolution/aspect:** 1920×1080. **Language:** EN.
 - **File:** `shot03_stealth_horror_1920x1080_en.png`.
 
-### Shot 4 — the voice / keeper lore ⏳en-route (prep)
+### Shot 4 — the voice / keeper lore ⏳en-route (prep) — ⛔ CAPTURE NEEDED (no trailer equivalent)
 - **Scene:** `res://scenes/main_3d.tscn`, district **park** (first arrival in the campaign).
 - **District + stage:** park **DARK** (any stage onward is acceptable; DARK reads best).
 - **Reach:** `z_keeper_shed` (Keeper's workshop, K cell). **Verified locked:** the door is
@@ -178,7 +218,7 @@ camera; there are no camera presets (see §0).
 - **Fallback:** the Keeper's context reads equally at the shed door with the lamp inside;
   never substitute another district.
 
-### Shot 5 — restored world, nobody home
+### Shot 5 — restored world, nobody home — ✅ DELIVERED (`store/screenshots/shot05_restored_forecourt_1920x1080_en.png`)
 - **Scene:** `res://scenes/main_3d.tscn`, district **gas_station** — from SAVE-B suburbs:
   **K** → *gas_station* row → **Travel** (unlocked on SAVE-B).
 - **District + stage:** gas_station **FULL**.
@@ -192,7 +232,7 @@ camera; there are no camera presets (see §0).
 - **Resolution/aspect:** 1920×1080. **Language:** EN.
 - **File:** `shot05_restored_forecourt_1920x1080_en.png`.
 
-### Shot 6 — the mystery inside ⏳en-route (prep)
+### Shot 6 — the mystery inside ⏳en-route (prep) — ⛔ CAPTURE NEEDED (`hero_reactor_room` is power_station, not a substitute)
 - **Scene:** `res://scenes/main_3d.tscn`, district **industrial** (first arrival in the
   campaign).
 - **District + stage:** industrial **DARK** (any stage onward acceptable).
@@ -207,7 +247,7 @@ camera; there are no camera presets (see §0).
   any unpowered district's single-overhead prop (keep "one warm lamp in a dark interior")
   and flag it at upload — do not fake the zone.
 
-### Shot 7 — the ending: the last streetlight ⭐ money shot
+### Shot 7 — the ending: the last streetlight ⭐ money shot — ✅ DELIVERED (`store/screenshots/shot07_last_streetlight_1920x1080_en.png`)
 - **Scene:** `res://scenes/main_3d.tscn`, district **power_station** — SAVE-B: **K** →
   *power_station* row → **Travel**.
 - **District + stage:** power_station **FULL** (final district).
@@ -223,7 +263,7 @@ camera; there are no camera presets (see §0).
 - **Resolution/aspect:** 1920×1080. **Language:** EN.
 - **File:** `shot07_last_streetlight_1920x1080_en.png`.
 
-### Shot 8 — scope & localization (city map)
+### Shot 8 — scope & localization (city map) — ✅ EN DELIVERED (`store/screenshots/shot08_city_map_1920x1080_en.png`) · ⛔ RU variant to capture
 - **Scene:** `res://scenes/main_3d.tscn` + **City Map overlay** (`scripts/ui/city_map.gd`,
   opened with **K**) — from SAVE-B, any safe spot.
 - **District + stage:** all 11 districts **FULL** reads strongest (all hexes green, every
@@ -253,7 +293,14 @@ camera; there are no camera presets (see §0).
 
 ## 5. Upload mapping
 
-- **EN phone set (16:9, 1080p):** shots 1–8 EN files, in order 1,2,3,4,5,6,7,8.
+- **EN phone set (16:9, 1080p) — day-1 upload, 8/8 slots already filled** (Play caps this gallery at 8):
+  in `store/screenshots/` → `shot01_light_vs_dark_1920x1080_en.png`,
+  `shot02_district_boundary_1920x1080_en.png`, `shot05_restored_forecourt_1920x1080_en.png`,
+  `shot07_last_streetlight_1920x1080_en.png`, `shot08_city_map_1920x1080_en.png`,
+  `shot_p1_touch_first_light_1920x1080_en.png`, `shot_p2_touch_crouch_1920x1080_en.png`,
+  `shot_p3_touch_interact_1920x1080_en.png` (order: 1, 2, 5, 7, 8, p1, p2, p3 — see
+  `store/screenshots/README.md`). Once shots 3/4/6 are captured later, prefer swapping in
+  real in-game frames over the weakest art slot — do not exceed 8, do not upscale.
 - **RU phone set:** `shot08_city_map_1920x1080_ru.png` + `shot01_light_vs_dark_1920x1080_ru.png`
   (if captured); other locales fall back to store listing translations (`store/listing.md`,
   `tools/gen_store_listing_locales.py`).
@@ -288,7 +335,7 @@ of this file).
   Recompress at 24-bit PNG or JPEG, ≤ 8 MB, same as §4's checklist.
 - **Language:** EN (RU optional companion, same pattern as shot08).
 
-### P1 — first-light, touch HUD visible
+### P1 — first-light, touch HUD visible — ✅ DELIVERED (`store/screenshots/shot_p1_touch_first_light_1920x1080_en.png`, composited-HUD render, see §0.5)
 
 - **Setup:** identical trigger moment to shot 1 (§3 "Shot 1 — the hook"): stand at the
   suburbs power switch 1.0-1.5 s after it flips to STREETS, Trailer Mode **OFF** this time.
@@ -296,7 +343,7 @@ of this file).
   BottomRight action cluster (attack/sprint/stealth/interact) both fully visible and legible.
 - **File:** `shot_p1_touch_first_light_1920x1080_en.png`.
 
-### P2 — crouch, stealth read
+### P2 — crouch, stealth read — ✅ DELIVERED (`store/screenshots/shot_p2_touch_crouch_1920x1080_en.png`, composited-HUD render)
 
 - **Setup:** any district with a visible hunter at mid-range, player crouched (stealth
   toggled via `BtnStealth` or the Crouch Input binding) in cover/shadow.
@@ -304,7 +351,7 @@ of this file).
   as "avoiding," not "caught"); touch HUD visible, `HUD_STEALTH` label legible.
 - **File:** `shot_p2_touch_crouch_1920x1080_en.png`.
 
-### P3 — one-tap fix (interact glyph read)
+### P3 — one-tap fix (interact glyph read) — ✅ DELIVERED (`store/screenshots/shot_p3_touch_interact_1920x1080_en.png`, composited-HUD render)
 
 - **Setup:** player standing at a power switch or cable-box puzzle, **not yet interacted**,
   `BtnInteract` glowing (the new interact-availability pulse, `hud_3d.gd
