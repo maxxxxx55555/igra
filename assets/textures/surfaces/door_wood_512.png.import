@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://5vucqqlwm0i"
-path.bptc="res://.godot/imported/door_wood_512.png-0652bec0c73f9914b3d6aca4cc9669c1.bptc.ctex"
+uid="uid://cd02b4c3ce9f"
+path.bptc="res://.godot/imported/door_wood_512.png-cd02b4c3ce9f83b84410da10e562c541.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/surfaces/door_wood_512.png"
-dest_files=["res://.godot/imported/door_wood_512.png-0652bec0c73f9914b3d6aca4cc9669c1.bptc.ctex"]
+dest_files=["res://.godot/imported/door_wood_512.png-cd02b4c3ce9f83b84410da10e562c541.bptc.ctex"]
 
 [params]
 
@@ -24,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

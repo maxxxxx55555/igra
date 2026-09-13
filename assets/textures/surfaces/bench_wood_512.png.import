@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d2gufx575dabm"
-path.bptc="res://.godot/imported/bench_wood_512.png-f6194a573ac30282ba4f46fac4236591.bptc.ctex"
+uid="uid://e0ae7334d1c8"
+path.bptc="res://.godot/imported/bench_wood_512.png-e0ae7334d1c8991d082a67bbcee799e2.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/surfaces/bench_wood_512.png"
-dest_files=["res://.godot/imported/bench_wood_512.png-f6194a573ac30282ba4f46fac4236591.bptc.ctex"]
+dest_files=["res://.godot/imported/bench_wood_512.png-e0ae7334d1c8991d082a67bbcee799e2.bptc.ctex"]
 
 [params]
 
@@ -24,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dynifak4kaw4m"
-path.bptc="res://.godot/imported/concrete_wall_512.png-356089b2b4aa5b0bcb8b6391280dbe1e.bptc.ctex"
+uid="uid://296e51022239"
+path.bptc="res://.godot/imported/concrete_wall_512.png-296e51022239cb57a7fcbf3c0a4911ab.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/surfaces/concrete_wall_512.png"
-dest_files=["res://.godot/imported/concrete_wall_512.png-356089b2b4aa5b0bcb8b6391280dbe1e.bptc.ctex"]
+dest_files=["res://.godot/imported/concrete_wall_512.png-296e51022239cb57a7fcbf3c0a4911ab.bptc.ctex"]
 
 [params]
 
@@ -24,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

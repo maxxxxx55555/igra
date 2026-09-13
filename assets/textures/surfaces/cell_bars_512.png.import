@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://t2flkwfdq656"
-path.bptc="res://.godot/imported/cell_bars_512.png-2057245b877af08dc3ed42b9d96b2f0f.bptc.ctex"
+uid="uid://02b1a91451d6"
+path.bptc="res://.godot/imported/cell_bars_512.png-02b1a91451d65009f89b6b01378b6724.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/surfaces/cell_bars_512.png"
-dest_files=["res://.godot/imported/cell_bars_512.png-2057245b877af08dc3ed42b9d96b2f0f.bptc.ctex"]
+dest_files=["res://.godot/imported/cell_bars_512.png-02b1a91451d65009f89b6b01378b6724.bptc.ctex"]
 
 [params]
 
@@ -24,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

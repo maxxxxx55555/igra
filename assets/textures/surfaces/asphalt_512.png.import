@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://biplwpv2o5fu0"
-path.bptc="res://.godot/imported/asphalt_512.png-b0d5be8201379144c5f579badfa92483.bptc.ctex"
+uid="uid://019570b7afe4"
+path.bptc="res://.godot/imported/asphalt_512.png-019570b7afe4b3a0c8ebd60fd48231b9.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/surfaces/asphalt_512.png"
-dest_files=["res://.godot/imported/asphalt_512.png-b0d5be8201379144c5f579badfa92483.bptc.ctex"]
+dest_files=["res://.godot/imported/asphalt_512.png-019570b7afe4b3a0c8ebd60fd48231b9.bptc.ctex"]
 
 [params]
 
@@ -24,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

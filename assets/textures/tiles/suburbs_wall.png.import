@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b17xuovxs3awi"
-path.bptc="res://.godot/imported/suburbs_wall.png-2b6ebb2b23422d4de58cbcf089cfcb8a.bptc.ctex"
+uid="uid://b5e156fd5e8b"
+path.bptc="res://.godot/imported/suburbs_wall.png-b5e156fd5e8be54f4723f7e450a30e7c.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/tiles/suburbs_wall.png"
-dest_files=["res://.godot/imported/suburbs_wall.png-2b6ebb2b23422d4de58cbcf089cfcb8a.bptc.ctex"]
+dest_files=["res://.godot/imported/suburbs_wall.png-b5e156fd5e8be54f4723f7e450a30e7c.bptc.ctex"]
 
 [params]
 
@@ -24,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

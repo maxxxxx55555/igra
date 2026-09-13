@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://djcimra3jeka6"
-path.bptc="res://.godot/imported/industrial_floor.png-81827196d450c4d4dd9c55d5df53e045.bptc.ctex"
+uid="uid://76e7a6ac7f8b"
+path.bptc="res://.godot/imported/industrial_floor.png-76e7a6ac7f8b39da41de0e698f418451.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/tiles/industrial_floor.png"
-dest_files=["res://.godot/imported/industrial_floor.png-81827196d450c4d4dd9c55d5df53e045.bptc.ctex"]
+dest_files=["res://.godot/imported/industrial_floor.png-76e7a6ac7f8b39da41de0e698f418451.bptc.ctex"]
 
 [params]
 
@@ -24,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

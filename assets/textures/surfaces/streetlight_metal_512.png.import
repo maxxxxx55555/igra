@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dsdfxx15mpysg"
-path.bptc="res://.godot/imported/streetlight_metal_512.png-67e2659aee5e79a140c832e505b17b77.bptc.ctex"
+uid="uid://65fe60533f18"
+path.bptc="res://.godot/imported/streetlight_metal_512.png-65fe60533f18a83ec6a8a0db4a61a251.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/surfaces/streetlight_metal_512.png"
-dest_files=["res://.godot/imported/streetlight_metal_512.png-67e2659aee5e79a140c832e505b17b77.bptc.ctex"]
+dest_files=["res://.godot/imported/streetlight_metal_512.png-65fe60533f18a83ec6a8a0db4a61a251.bptc.ctex"]
 
 [params]
 
@@ -24,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

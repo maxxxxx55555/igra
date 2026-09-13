@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://db65uuosu6l80"
-path.bptc="res://.godot/imported/substation_wall_lit.png-b858b5bfef2f9000a6659a95cdbbc377.bptc.ctex"
+uid="uid://62949e69c80b"
+path.bptc="res://.godot/imported/substation_wall_lit.png-62949e69c80b545371317f2b24bdefb6.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/tiles/substation_wall_lit.png"
-dest_files=["res://.godot/imported/substation_wall_lit.png-b858b5bfef2f9000a6659a95cdbbc377.bptc.ctex"]
+dest_files=["res://.godot/imported/substation_wall_lit.png-62949e69c80b545371317f2b24bdefb6.bptc.ctex"]
 
 [params]
 
@@ -24,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

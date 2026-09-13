@@ -164,8 +164,8 @@ func _ready() -> void:
 	_b = _make_player("MusicB")
 	_active = _a
 	_build_layers()
-	EventBus.game_started.connect(func() -> void: set_mood(Mood.AMBIENT))
-	EventBus.game_won.connect(func() -> void: set_mood(Mood.VICTORY))
+	EventBus.game_started.connect(_on_game_started)
+	EventBus.game_won.connect(_on_game_won)
 	EventBus.boss_defeated.connect(_on_boss_defeated)
 	EventBus.player_detected.connect(func(_id: StringName) -> void:
 		_combat_hold = CALM_DELAY
@@ -176,8 +176,6 @@ func _ready() -> void:
 	EventBus.weather_changed.connect(func(w: int, _n: String, _fog: float, _rain: float) -> void: _weather_id = w)
 	EventBus.streetlight_activated.connect(func(_id: String) -> void: _play_wow_cue_first_light())
 	EventBus.district_restored.connect(_on_district_restored_wow)
-	EventBus.game_won.connect(func() -> void: _play_wow_cue("ending"))
-	EventBus.game_started.connect(func() -> void: _first_light_cue_done = false)
 	mood = Mood.MENU
 
 ## Ловит буквально первый ввод игрока (клавиша/клик/тач/геймпад) — а не
@@ -213,6 +211,14 @@ func _unlock_audio() -> void:
 ## AdService reads this to hold off interstitials mid-fight (spec: "never
 ## during combat"). Reuses the same detection/decay MusicManager already
 ## uses to hold combat music — no second combat tracker needed.
+func _on_game_started() -> void:
+	set_mood(Mood.AMBIENT)
+	_first_light_cue_done = false
+
+func _on_game_won() -> void:
+	set_mood(Mood.VICTORY)
+	_play_wow_cue("ending")
+
 func is_in_combat() -> bool:
 	return _combat_hold > 0.0
 

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b252po6heqd8l"
-path.bptc="res://.godot/imported/warehouses_wall.png-e1c8d3dfdc4eada513c11ce39060a126.bptc.ctex"
+uid="uid://e1b3ef4cb7f6"
+path.bptc="res://.godot/imported/warehouses_wall.png-e1b3ef4cb7f6f11db2cf08db64d5c383.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/tiles/warehouses_wall.png"
-dest_files=["res://.godot/imported/warehouses_wall.png-e1c8d3dfdc4eada513c11ce39060a126.bptc.ctex"]
+dest_files=["res://.godot/imported/warehouses_wall.png-e1b3ef4cb7f6f11db2cf08db64d5c383.bptc.ctex"]
 
 [params]
 
@@ -24,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
