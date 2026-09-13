@@ -1,0 +1,204 @@
+{
+  "version": 1,
+  "_contract": "Moment + gallery captions in Keeper-log voice. Pure data: CODE triggers moments via the listed signals/conditions and shows gallery text under existing title keys (DISTRICT_NAME_<ID> for districts; en text is self-titled for specials). en strings are i18n source; CONTENT never edits locales.",
+  "moments": [
+    {
+      "id": "moment_first_light",
+      "ref": {"kind": "achievement", "id": "first_light", "code_id": "ach_01"},
+      "trigger": "AchievementManager unlock ach_01 (condition district_1_full)",
+      "i18n_key": "CAPTION_MOMENT_FIRST_LIGHT",
+      "en": {"text": "Night 1. One lamp. Mine. The street remembered what morning was."}
+    },
+    {
+      "id": "moment_photographer",
+      "ref": {"kind": "achievement", "id": "photographer", "code_id": "ach_09"},
+      "trigger": "AchievementManager unlock ach_09 (condition photos_10)",
+      "i18n_key": "CAPTION_MOMENT_PHOTOGRAPHER",
+      "en": {"text": "Night 40. Ten frames kept. If the grid forgets us, the film won't."}
+    },
+    {
+      "id": "moment_overload",
+      "ref": {"kind": "achievement", "id": "overload", "code_id": "ach_08"},
+      "trigger": "AchievementManager unlock ach_08 (condition overload_5min)",
+      "i18n_key": "CAPTION_MOMENT_OVERLOAD",
+      "en": {"text": "Night 63. Pack's too heavy; back's too old. Still carried it home."}
+    },
+    {
+      "id": "moment_ending_light",
+      "ref": {"kind": "ending", "id": "light", "code_id": "light"},
+      "trigger": "EndingsManager.ending_reached(light)",
+      "i18n_key": "CAPTION_MOMENT_ENDING_LIGHT",
+      "en": {"text": "Last night. The grid held. Forty years of work orders — paid in full."}
+    },
+    {
+      "id": "moment_ending_darkness",
+      "ref": {"kind": "ending", "id": "darkness", "code_id": "dark"},
+      "trigger": "EndingsManager.ending_reached(dark) — content id 'darkness' maps to CODE ending id 'dark' (ACH_15 Darkness)",
+      "i18n_key": "CAPTION_MOMENT_ENDING_DARKNESS",
+      "en": {"text": "Last night. I blew the lamps out myself. Forgive me. It was the only way to starve it."}
+    },
+    {
+      "id": "moment_ng_plus",
+      "ref": {"kind": "system", "id": "ng_plus_activated", "code_id": "ng_plus_activated"},
+      "trigger": "NewGamePlus.ng_plus_activated(level)",
+      "i18n_key": "CAPTION_MOMENT_NG_PLUS",
+      "en": {"text": "Night 1, again. The city reset; I didn't. The log continues. It always continues."}
+    },
+    {
+      "id": "moment_doc_streetlight_manifesto",
+      "ref": {"kind": "lore_note", "id": "doc_streetlight_manifesto", "code_id": "doc_streetlight_manifesto"},
+      "trigger": "EventBus.document_unlocked(doc_streetlight_manifesto)",
+      "i18n_key": "CAPTION_MOMENT_DOC_MANIFESTO",
+      "en": {"text": "Found my own manifesto by the last lamp. Younger handwriting. Same promise."}
+    },
+    {
+      "id": "moment_doc_final_light",
+      "ref": {"kind": "lore_note", "id": "doc_final_light", "code_id": "doc_final_light"},
+      "trigger": "EventBus.document_unlocked(doc_final_light)",
+      "i18n_key": "CAPTION_MOMENT_DOC_FINAL_LIGHT",
+      "en": {"text": "\"While one lamp burns, the city lives.\" I wrote that. I still believe it."}
+    },
+    {
+      "id": "moment_doc_protocol_dawn",
+      "ref": {"kind": "lore_note", "id": "doc_protocol_dawn", "code_id": "doc_protocol_dawn"},
+      "trigger": "EventBus.document_unlocked(doc_protocol_dawn)",
+      "i18n_key": "CAPTION_MOMENT_DOC_PROTOCOL_DAWN",
+      "en": {"text": "EON's Protocol Dawn: lock the grid, save the staff. They locked it. Nobody saved anybody."}
+    },
+    {
+      "id": "moment_doc_blackout_news",
+      "ref": {"kind": "lore_note", "id": "doc_blackout_news", "code_id": "doc_blackout_news"},
+      "trigger": "EventBus.document_unlocked(doc_blackout_news)",
+      "i18n_key": "CAPTION_MOMENT_DOC_BLACKOUT_NEWS",
+      "en": {"text": "The last paper says one day. It has been years. Somebody tore the date out — hope or mercy."}
+    },
+    {
+      "id": "moment_doc_first_death",
+      "ref": {"kind": "lore_note", "id": "doc_first_death", "code_id": "doc_first_death"},
+      "trigger": "EventBus.document_unlocked(doc_first_death)",
+      "i18n_key": "CAPTION_MOMENT_DOC_FIRST_DEATH",
+      "en": {"text": "A dead man's note: \"Light is the only prayer.\" He was right. He is still right."}
+    },
+    {
+      "id": "moment_doc_voice_in_wires",
+      "ref": {"kind": "lore_note", "id": "doc_voice_in_wires", "code_id": "doc_voice_in_wires"},
+      "trigger": "EventBus.document_unlocked(doc_voice_in_wires)",
+      "i18n_key": "CAPTION_MOMENT_DOC_VOICE_IN_WIRES",
+      "en": {"text": "Something talks on the wires at night. I log the words. I do not answer."}
+    }
+  ],
+  "gallery": [
+    {
+      "id": "gallery_suburbs",
+      "ref": {"kind": "district", "id": "suburbs"},
+      "title_key": "DISTRICT_NAME_SUBURBS",
+      "i18n_key": "CAPTION_GALLERY_SUBURBS",
+      "en": {"text": "Where the lights went out first, and where they'll come back first."}
+    },
+    {
+      "id": "gallery_residential",
+      "ref": {"kind": "district", "id": "residential"},
+      "title_key": "DISTRICT_NAME_RESIDENTIAL",
+      "i18n_key": "CAPTION_GALLERY_RESIDENTIAL",
+      "en": {"text": "A thousand windows. I count the lit ones every night. The count grows."}
+    },
+    {
+      "id": "gallery_park",
+      "ref": {"kind": "district", "id": "park"},
+      "title_key": "DISTRICT_NAME_PARK",
+      "i18n_key": "CAPTION_GALLERY_PARK",
+      "en": {"text": "The lamps here drink the fog. Pretty. Hungry. Both."}
+    },
+    {
+      "id": "gallery_school",
+      "ref": {"kind": "district", "id": "school"},
+      "title_key": "DISTRICT_NAME_SCHOOL",
+      "i18n_key": "CAPTION_GALLERY_SCHOOL",
+      "en": {"text": "Somebody chalked a sun on the blackboard. It outlasted the grid."}
+    },
+    {
+      "id": "gallery_hospital",
+      "ref": {"kind": "district", "id": "hospital"},
+      "title_key": "DISTRICT_NAME_HOSPITAL",
+      "i18n_key": "CAPTION_GALLERY_HOSPITAL",
+      "en": {"text": "The generators held longest here. So did the nurses."}
+    },
+    {
+      "id": "gallery_gas_station",
+      "ref": {"kind": "district", "id": "gas_station"},
+      "title_key": "DISTRICT_NAME_GAS_STATION",
+      "i18n_key": "CAPTION_GALLERY_GAS_STATION",
+      "en": {"text": "Fuel, fumes, and one fluorescent that refuses to die."}
+    },
+    {
+      "id": "gallery_police",
+      "ref": {"kind": "district", "id": "police"},
+      "title_key": "DISTRICT_NAME_POLICE",
+      "i18n_key": "CAPTION_GALLERY_POLICE",
+      "en": {"text": "The holding cells are empty. The radio isn't. Don't ask."}
+    },
+    {
+      "id": "gallery_warehouses",
+      "ref": {"kind": "district", "id": "warehouses"},
+      "title_key": "DISTRICT_NAME_WAREHOUSES",
+      "i18n_key": "CAPTION_GALLERY_WAREHOUSES",
+      "en": {"text": "Crates of lamps nobody installed. I installed them. You're welcome."}
+    },
+    {
+      "id": "gallery_industrial",
+      "ref": {"kind": "district", "id": "industrial"},
+      "title_key": "DISTRICT_NAME_INDUSTRIAL",
+      "i18n_key": "CAPTION_GALLERY_INDUSTRIAL",
+      "en": {"text": "The presses stopped mid-stroke. The dark likes the echo in here."}
+    },
+    {
+      "id": "gallery_substation",
+      "ref": {"kind": "district", "id": "substation"},
+      "title_key": "DISTRICT_NAME_SUBSTATION",
+      "i18n_key": "CAPTION_GALLERY_SUBSTATION",
+      "en": {"text": "Marat walked in here and never walked out. Mind the hum."}
+    },
+    {
+      "id": "gallery_power_station",
+      "ref": {"kind": "district", "id": "power_station"},
+      "title_key": "DISTRICT_NAME_POWER_STATION",
+      "i18n_key": "CAPTION_GALLERY_POWER_STATION",
+      "en": {"text": "The center. My forty years end here — one way or another."}
+    },
+    {
+      "id": "gallery_night_zero",
+      "ref": {"kind": "special", "id": "night_zero"},
+      "title_key": null,
+      "i18n_key": "CAPTION_GALLERY_NIGHT_ZERO",
+      "en": {"text": "Night Zero. 03:14. The city exhaled, and the dark inhaled."}
+    },
+    {
+      "id": "gallery_the_keeper",
+      "ref": {"kind": "special", "id": "the_keeper"},
+      "title_key": "WORLD_CHAR_KEEPER_TITLE",
+      "i18n_key": "CAPTION_GALLERY_THE_KEEPER",
+      "en": {"text": "Forty years of work orders. This face kept every lamp logged by hand."}
+    },
+    {
+      "id": "gallery_the_architect",
+      "ref": {"kind": "special", "id": "the_architect"},
+      "title_key": "WORLD_CHAR_ARCHITECT_TITLE",
+      "i18n_key": "CAPTION_GALLERY_THE_ARCHITECT",
+      "en": {"text": "It built its nest in the dead grid. Tonight we evict it."}
+    },
+    {
+      "id": "gallery_babka_lamp",
+      "ref": {"kind": "special", "id": "babka_lamp"},
+      "title_key": "WORLD_CHAR_MANYA_TITLE",
+      "i18n_key": "CAPTION_GALLERY_BABKA_LAMP",
+      "en": {"text": "Babka Manya's lamp. \"The light in this city is not electricity.\""}
+    },
+    {
+      "id": "gallery_last_streetlight",
+      "ref": {"kind": "special", "id": "last_streetlight"},
+      "title_key": null,
+      "i18n_key": "CAPTION_GALLERY_LAST_STREETLIGHT",
+      "en": {"text": "The last streetlight. While it burns, the city lives."}
+    }
+  ]
+}

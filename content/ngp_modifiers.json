@@ -1,0 +1,83 @@
+{
+  "version": 1,
+  "_contract": "Pure-data NG+ modifiers. CODE reads effects only; multipliers are floats, toggles are bools. Same-knob stacking multiplies. Gated to NG+ level >= 1 (see scripts/systems/new_game_plus.gd, MAX_NG_PLUS=3). en strings are i18n source; CONTENT never edits locales.",
+  "gates": "NG+≥1",
+  "stacking": {
+    "same_knob": "multiply",
+    "exclusive": "symmetric exclusive_with lists; CODE must refuse co-selection"
+  },
+  "modifiers": [
+    {
+      "id": "long_night",
+      "gate": "NG+≥1",
+      "exclusive_with": ["blackout_plus"],
+      "effects": {
+        "multipliers": {"battery": 0.80},
+        "toggles": {}
+      },
+      "notes": "CODE: battery multiplies usable battery capacity/drain budget (0.80 = 20% less light per cell).",
+      "i18n_keys": {"name": "NGP_LONG_NIGHT_NAME", "desc": "NGP_LONG_NIGHT_DESC"},
+      "en": {"name": "Long Night", "desc": "Battery yields 20% less light. The dark is patient; your cells are not."}
+    },
+    {
+      "id": "whisper",
+      "gate": "NG+≥1",
+      "exclusive_with": ["sprint"],
+      "effects": {
+        "multipliers": {"hunter_hearing": 0.70, "loot": 0.90},
+        "toggles": {}
+      },
+      "notes": "CODE: hunter_hearing scales Hunter detection radius/gain; loot scales roll quantity chance.",
+      "i18n_keys": {"name": "NGP_WHISPER_NAME", "desc": "NGP_WHISPER_DESC"},
+      "en": {"name": "Whisper", "desc": "Hunters hear 30% less, but loot yields 10% less. Tread soft, carry little."}
+    },
+    {
+      "id": "blackout_plus",
+      "gate": "NG+≥1",
+      "exclusive_with": ["long_night"],
+      "effects": {
+        "multipliers": {"extra_dark_districts": 1.0},
+        "toggles": {}
+      },
+      "notes": "CODE: extra_dark_districts is an ADDITIVE count carried as float (int(value) districts start DARK), not a multiplier. Exclusive with long_night: double-darkness stacking is unfair.",
+      "i18n_keys": {"name": "NGP_BLACKOUT_PLUS_NAME", "desc": "NGP_BLACKOUT_PLUS_DESC"},
+      "en": {"name": "Blackout+", "desc": "One extra district starts DARK. No head start, no mercy."}
+    },
+    {
+      "id": "keepers_pact",
+      "gate": "NG+≥1",
+      "exclusive_with": [],
+      "effects": {
+        "multipliers": {"lore": 2.0},
+        "toggles": {"hints": false}
+      },
+      "notes": "CODE: hints=false disables hint prompts; lore scales lore-insight/XP-from-documents gains.",
+      "i18n_keys": {"name": "NGP_KEEPERS_PACT_NAME", "desc": "NGP_KEEPERS_PACT_DESC"},
+      "en": {"name": "Keeper's Pact", "desc": "No hints. Lore insight doubled. He never explained either."}
+    },
+    {
+      "id": "sprint",
+      "gate": "NG+≥1",
+      "exclusive_with": ["whisper"],
+      "effects": {
+        "multipliers": {"cycle": 0.85, "rewards": 1.5},
+        "toggles": {"time_pressure": true}
+      },
+      "notes": "CODE: cycle scales night-cycle length; rewards scales coin/XP payouts; time_pressure enables the countdown HUD already used by timed events. Exclusive with whisper: stealth and sprint are opposite playstyles.",
+      "i18n_keys": {"name": "NGP_SPRINT_NAME", "desc": "NGP_SPRINT_DESC"},
+      "en": {"name": "Sprint", "desc": "Night cycle 15% shorter, rewards +50%. Run the light home."}
+    },
+    {
+      "id": "ghost",
+      "gate": "NG+≥1",
+      "exclusive_with": [],
+      "effects": {
+        "multipliers": {},
+        "toggles": {"crawlers_ignore": true, "achievements": false}
+      },
+      "notes": "CODE: crawlers_ignore skips Crawler aggro; achievements=false blocks AchievementManager.unlock (still logged, never granted).",
+      "i18n_keys": {"name": "NGP_GHOST_NAME", "desc": "NGP_GHOST_DESC"},
+      "en": {"name": "Ghost", "desc": "Crawlers ignore you. Achievements disabled. Unseen, unrecorded."}
+    }
+  ]
+}
