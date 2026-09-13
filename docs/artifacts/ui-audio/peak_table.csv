@@ -1,0 +1,8 @@
+file,cue,duration_s,channels,samplerate,codec,granule,size_bytes,peak_dBFS,rms_dBFS
+ui_menu_click.ogg,menu_click (soft mechanical),0.103,1,44100,vorbis,4544,4769,-6.13,-28.21
+ui_achievement_sting.ogg,achievement_sting (warm 2-note),0.911,1,44100,vorbis,40184,7814,-11.23,-22.44
+ui_secret_discovery_sting.ogg,secret_discovery_sting (mysterious chime),0.393,1,44100,vorbis,17332,5579,-11.19,-24.71
+ui_daily_complete_sting.ogg,daily_complete_sting (short uplift),0.637,1,44100,vorbis,28092,6528,-11.08,-24.10
+ui_streak_milestone_sting.ogg,streak_milestone_sting (subdued triumphant),0.584,1,44100,vorbis,25746,6399,-11.07,-23.55
+ui_boss_sting.ogg,boss_sting (low brass hit),0.481,1,44100,vorbis,21216,5862,-11.17,-24.19
+ui_ending_sting.ogg,ending_sting (resolved warm chord),0.571,1,44100,vorbis,25186,6244,-11.09,-23.17
