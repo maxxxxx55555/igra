@@ -4,6 +4,34 @@ One line per artifact: what it is, where it lives, what it proves. Source of tru
 claim always stays in the artifact itself — this file only points at it. Started
 2026-09-12 (RELEASE CONVERGENCE PASS), updated 2026-09-13 through FINAL CONSOLIDATION.
 
+## MEGA FINAL PASS (2026-09-13) — 3 of 4 branches merged, secrets made reachable, 6 review agents
+
+The pass that took secrets from "exists in content, unreachable in the build" to findable,
+wired the retention content, and put both content validators into the standing gate.
+
+| Artifact | Where | What it proves |
+|---|---|---|
+| Audio mix report | `docs/artifacts/audio-mix/audio_mix_report.md` | ffmpeg-measured bus tree + LUFS/RMS/peak per file; 7 findings, 3 fixed, 3 logged as deliberate non-goals, 1 pass |
+| Retention & fun review | `docs/artifacts/retention-fun/retention_fun_review.md` | return-loop score 5/10 with reasons; proof that only 1 of 26 secrets was reachable at game start; top-3 friction, all fixed |
+| Content-depth validator | `docs/artifacts/content-depth/audit_content_depth.py` | 26 secrets + world canon; now gate-enforced, 0 ERROR |
+| Retention validator | `docs/artifacts/retention/validate_retention.py` | 60 dailies / 6 NG+ modifiers / 28 captions; 270 checks ALL PASS; now gate-enforced |
+| Known issues | `docs/KNOWN_ISSUES.md` | the four gaps this pass leaves open, each with reproducible evidence |
+| Player-visible Batch 18 | `docs/PLAYER_VISIBLE_CHANGES.md` | what the owner should verify by hand, headed by the secrets fix |
+
+**Branch decisions.** Merged: `arena/01a09a11-igra` (content-depth, `bcd2bc9`),
+`arena/01a09a0b-igra` (ui-audio, `8c334ef`), `arena/01a09a4a-igra` (retention, `e75204d`).
+**Rejected: `arena/card-unique-rescue`** — it certifies a 22/22 district-card scene match
+while its own blob hashes are byte-identical to main. Zero card art changed, and it would
+have replaced the real 1024×1536 contact sheet with a single 512×512 card. Full evidence in
+`KNOWN_ISSUES.md`; the underlying 4-of-22 duplicate-photo defect remains open.
+
+**Verification.** 6 agents run this pass: 4 pre-merge scope-checks (1 caught the fabricated
+card cert), plus audio-mix, retention-fun, edge-case and visual-consistency reviews. Their
+findings were fixed or documented, never dismissed — including one regression the reviews
+caught in my own work (guarding `audio_manager`'s procedural click silenced screen
+navigation outright) and one latent autoload-order crash (UISFX at autoload 68 referencing
+EndingsManager at 107).
+
 ## FINAL CONSOLIDATION (2026-09-13) — arena/store-sync + arena/art-final merged, badges/cards wired, owner packet
 
 Merged 2 of the 4 branches the task named (`arena/content-depth`, `arena/ui-audio` were
