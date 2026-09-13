@@ -746,3 +746,30 @@ haptic) shown on a touch device's first HUD load
 (`scripts/ui/touch_calibration_overlay.gd`), gated the same way every
 other touch-only setup in `hud_3d.gd` already is
 (`has_touch_ui()` + a persisted `touch_calibration_done` flag).
+
+## District collection cards: 4 of 22 share a base photo, don't depict their own district (2026-09-13, art-final merge)
+
+`arena/art-final`'s new `assets/textures/cards/card_<district>_512.png` art
+(wired live this pass into `scripts/ui/collection_ui.gd`) is genuinely
+new, correctly dimensioned (512×512, PSNR/purity clean per
+`docs/CERT_ARTFINAL.md`), and each file is a distinct PNG (different
+SHA-256) — but `docs/LEDGER_ARTFINAL.md` line 90 documents, by design,
+that 4 source photos are shared across all 11 districts: `hero_grid_
+cascade` for power_station/substation, `hero_first_restore` for suburbs/
+residential/park, `hero_reactor_room` for industrial/warehouses, and
+`still_first_light` for **everything else** — school, hospital,
+gas_station, and police all key off the same streetlight photo,
+differentiated only by per-district color grading (same "twins stay
+twins" precedent already accepted for the LUTs), not by depicting the
+district. This means `docs/CERT_ARTFINAL.md`'s own per-card "Mood"
+column ("gas station pumps wet concrete ember glow", "school corridor
+chalk dust flickering", "police desk badge radio blue cold", "hospital
+hallway cold teal gurney") describes a scene that isn't actually in the
+image for those 4 districts — a real content-accuracy gap in the
+delivered art, found by an S-assets verification subagent during the
+FINAL CONSOLIDATION merge, not a wiring bug and not something code can
+fix. Not blocking (the card still renders, still shows *a* moody night
+scene, and the district name/accent-color/progress-bar below it are
+correct) — flagged here for whoever holds the art pipeline next: 4 of
+22 cards would benefit from a bespoke re-render matching their own
+scene description.

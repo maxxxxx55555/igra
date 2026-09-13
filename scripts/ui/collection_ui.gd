@@ -80,9 +80,10 @@ func _build() -> void:
 func _district_card(district_id: StringName, found: int, total: int) -> Control:
 	var theme_data: Dictionary = DistrictThemes.THEMES.get(district_id, {})
 	var accent: Color = theme_data.get("accent", ThemeProvider.COLOR_AMBER)
+	var lit: bool = PowerGrid.get_stage(district_id) >= DistrictData.Stage.STREETS
 
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(230, 84)
+	panel.custom_minimum_size = Vector2(230, 168)
 	var sb := StyleBoxFlat.new()
 	sb.bg_color = Color(accent.r, accent.g, accent.b, 0.10)
 	sb.border_color = accent
@@ -94,6 +95,16 @@ func _district_card(district_id: StringName, found: int, total: int) -> Control:
 	var vb := VBoxContainer.new()
 	vb.add_theme_constant_override("separation", 6)
 	panel.add_child(vb)
+
+	var art_path := "res://assets/textures/cards/card_%s%s_512.png" % [String(district_id), "" if lit else "_locked"]
+	if ResourceLoader.exists(art_path):
+		var art := TextureRect.new()
+		art.texture = load(art_path)
+		art.custom_minimum_size = Vector2(0, 84)
+		art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+		art.clip_contents = true
+		vb.add_child(art)
 
 	var name_lbl := Label.new()
 	name_lbl.text = LocalizationManager.name_for("DISTRICT_NAME_", district_id, String(district_id))
