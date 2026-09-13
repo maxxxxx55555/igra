@@ -1,0 +1,86 @@
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_gas_station_01 :: SECRET_GAS_STATION_01_TITLE authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_gas_station_01 :: SECRET_GAS_STATION_01_TEXT authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_gas_station_02 :: SECRET_GAS_STATION_02_TITLE authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_gas_station_02 :: SECRET_GAS_STATION_02_TEXT authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_hospital_01 :: SECRET_HOSPITAL_01_TITLE authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_hospital_01 :: SECRET_HOSPITAL_01_TEXT authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_hospital_02 :: SECRET_HOSPITAL_02_TITLE authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_hospital_02 :: SECRET_HOSPITAL_02_TEXT authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_hospital_03 :: SECRET_HOSPITAL_03_TITLE authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_hospital_03 :: SECRET_HOSPITAL_03_TEXT authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_industrial_01 :: SECRET_INDUSTRIAL_01_TITLE authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_industrial_01 :: SECRET_INDUSTRIAL_01_TEXT authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_industrial_02 :: SECRET_INDUSTRIAL_02_TITLE authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_industrial_02 :: SECRET_INDUSTRIAL_02_TEXT authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_industrial_03 :: SECRET_INDUSTRIAL_03_TITLE authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_industrial_03 :: SECRET_INDUSTRIAL_03_TEXT authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_park_01 :: SECRET_PARK_01_TITLE authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_park_01 :: SECRET_PARK_01_TEXT authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_park_02 :: SECRET_PARK_02_TITLE authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_park_02 :: SECRET_PARK_02_TEXT authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_park_03 :: SECRET_PARK_03_TITLE authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_park_03 :: SECRET_PARK_03_TEXT authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_police_01 :: SECRET_POLICE_01_TITLE authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_police_01 :: SECRET_POLICE_01_TEXT authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_police_02 :: SECRET_POLICE_02_TITLE authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_police_02 :: SECRET_POLICE_02_TEXT authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_power_station_01 :: SECRET_POWER_STATION_01_TITLE authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_power_station_01 :: SECRET_POWER_STATION_01_TEXT authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_power_station_02 :: SECRET_POWER_STATION_02_TITLE authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_power_station_02 :: SECRET_POWER_STATION_02_TEXT authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_power_station_03 :: SECRET_POWER_STATION_03_TITLE authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_power_station_03 :: SECRET_POWER_STATION_03_TEXT authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_residential_01 :: SECRET_RESIDENTIAL_01_TITLE authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_residential_01 :: SECRET_RESIDENTIAL_01_TEXT authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_residential_02 :: SECRET_RESIDENTIAL_02_TITLE authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_residential_02 :: SECRET_RESIDENTIAL_02_TEXT authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_school_01 :: SECRET_SCHOOL_01_TITLE authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_school_01 :: SECRET_SCHOOL_01_TEXT authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_school_02 :: SECRET_SCHOOL_02_TITLE authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_school_02 :: SECRET_SCHOOL_02_TEXT authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_substation_01 :: SECRET_SUBSTATION_01_TITLE authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_substation_01 :: SECRET_SUBSTATION_01_TEXT authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_substation_02 :: SECRET_SUBSTATION_02_TITLE authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_substation_02 :: SECRET_SUBSTATION_02_TEXT authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_suburbs_01 :: SECRET_SUBURBS_01_TITLE authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_suburbs_01 :: SECRET_SUBURBS_01_TEXT authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_suburbs_02 :: SECRET_SUBURBS_02_TITLE authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_suburbs_02 :: SECRET_SUBURBS_02_TEXT authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_warehouses_01 :: SECRET_WAREHOUSES_01_TITLE authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_warehouses_01 :: SECRET_WAREHOUSES_01_TEXT authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_warehouses_02 :: SECRET_WAREHOUSES_02_TITLE authored, awaiting LOCALE handoff to the 13 locales
+WARN  I18N_KEY_PENDING           content/secrets.json#secret_warehouses_02 :: SECRET_WAREHOUSES_02_TEXT authored, awaiting LOCALE handoff to the 13 locales
+WARN  SECRET_ROOM_STUB           scenes/secrets/ :: 12/12 secret_room_*.tscn contain no secret.gd/secret_id (unwired stubs)
+INFO  COUNT                      content/districts/gas_station/item_spawns.json :: fixed_spawns = 9, zones = 9
+INFO  COUNT                      content/districts/gas_station/lore_notes.json :: notes = 8
+INFO  COUNT                      content/districts/hospital/item_spawns.json :: fixed_spawns = 10, zones = 10
+INFO  COUNT                      content/districts/hospital/lore_notes.json :: notes = 8
+INFO  COUNT                      content/districts/industrial/item_spawns.json :: fixed_spawns = 10, zones = 10
+INFO  COUNT                      content/districts/industrial/lore_notes.json :: notes = 8
+INFO  COUNT                      content/districts/park/item_spawns.json :: fixed_spawns = 8, zones = 9
+INFO  COUNT                      content/districts/park/lore_notes.json :: notes = 8
+INFO  COUNT                      content/districts/police/item_spawns.json :: fixed_spawns = 10, zones = 9
+INFO  COUNT                      content/districts/police/lore_notes.json :: notes = 8
+INFO  COUNT                      content/districts/power_station/item_spawns.json :: fixed_spawns = 10, zones = 10
+INFO  COUNT                      content/districts/power_station/lore_notes.json :: notes = 8
+INFO  COUNT                      content/districts/residential/item_spawns.json :: fixed_spawns = 8, zones = 8
+INFO  COUNT                      content/districts/residential/lore_notes.json :: notes = 8
+INFO  COUNT                      content/districts/school/item_spawns.json :: fixed_spawns = 9, zones = 9
+INFO  COUNT                      content/districts/school/lore_notes.json :: notes = 8
+INFO  COUNT                      content/districts/substation/item_spawns.json :: fixed_spawns = 10, zones = 10
+INFO  COUNT                      content/districts/substation/lore_notes.json :: notes = 8
+INFO  COUNT                      content/districts/suburbs/item_spawns.json :: fixed_spawns = 9, zones = 8
+INFO  COUNT                      content/districts/suburbs/lore_notes.json :: notes = 8
+INFO  COUNT                      content/districts/warehouses/item_spawns.json :: fixed_spawns = 10, zones = 9
+INFO  COUNT                      content/districts/warehouses/lore_notes.json :: notes = 8
+INFO  COUNT                      content/lore/diary_entries.json :: entries = 4
+INFO  COUNT                      content/lore/news_clippings.json :: clippings = 5
+INFO  COUNT                      content/secrets.json :: secrets = 26
+INFO  COUNT                      content/world/characters.json :: characters = 9
+INFO  COUNT                      content/world/factions.json :: factions = 5
+INFO  COUNT                      content/world/history.json :: events = 11
+INFO  COUNT                      content/world/radio_transcripts.json :: transcripts = 3
+INFO  I18N_ONLY_COUNT            data/i18n/en.json :: 17 keys hold prose backed by neither content/** nor any script/scene
+INFO  PVC_OK                     docs/PLAYER_VISIBLE_CHANGES.md :: claim '8 lore notes' matches all 11 packs
+
+== 0 ERROR, 53 WARN, 31 INFO ==
