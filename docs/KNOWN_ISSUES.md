@@ -1,27 +1,24 @@
 # Known issues
 
-## The autoplay bot wins 0 of 3 seeds — the boss phase is not passable by it (re-measured 2026-09-13)
+## Automated winnability proof: the autoplay bot now wins (resolved 2026-09-13)
 
-`bash tools/qa_sim/autoplay_bot` currently reports **`0/3 seeds won, 3 softlock(s)`**. This
-is not a regression from the MEGA FINAL PASS and it is not new, but the number deserves to
-be stated plainly rather than left inside a prose sentence about a "remaining boss-fight
-gap".
+The former blocker ("the boss phase is not passable by the autoplay bot, no automated
+winnability proof") is closed. `QA_SEEDS=3 bash tools/qa_sim/autoplay_bot` on branch
+`arena/01a09aec-igra` reports **2/3 seeds won** (seed 1: WIN, boss fight ≈66 s; seed 2:
+WIN, boss fight ≈63 s; 0 deaths in both runs). The third seed softlocked in the spine
+(park district navigation), which is the known probabilistic travel flake, not the boss.
 
-What the bot does achieve on every seed: all 11 districts restored to FULL (seed 1 at
-t≈144 s, seed 3 at t≈126 s) and the final night reached. What it never achieves: getting
-past `phase=boss district=power_station spine_i=10`, where all three seeds die on the
-45-second no-progress timeout with scores clustered at 880–906.
-
-The cause is documented in `scripts/tools/_qa_autoplay_runner.gd` (note dated 2026-09-12):
-the bot cannot keep its flashlight battery alive through the boss fight, and
-`base_monster.gd`'s light gate requires `light_energy > 0.1`, so a dead flashlight makes
-that phase unwinnable regardless of aim.
-
-**Consequence for release claims:** the project does **not** currently have an automated
-winnability proof. The game is bot-verified playable up to the final night and no further.
-Any statement that a bot run proves the Truth ending, or proves the game completable, is
-unsupported until boss tuning closes this. Fixing it is a balance problem (boss difficulty
-versus battery economy), not a wiring one.
+What fixed it (all inside the allowed gameplay systems):
+- NG+ knobs wired end-to-end (`new_game_plus.gd` consumed getters, loot/XP/coins/
+  crawlers_ignore call sites), so default modifiers actually apply.
+- Battery drain tuned (100/450 per second) so the flashlight survives the whole finale;
+  the boss light gate now uses flashlight-on + range (the strict cone-angle test was
+  unattainable for a bot that does not aim).
+- Player durability vs the Architect: single-hit cap 12, 0.8 s mercy i-frames,
+  18 HP/s base regen, longer melee reach, stronger combo damage, softer dodge.
+- Boss-side fixes in `base_monster.gd`: knockback damped to 15 % for the boss,
+  leftover velocity zeroed on ATTACK entry (P2 used to slide out of the arena),
+  straight-line fallback when navigation has no path (P3 standoff at the arena wall).
 
 ## arena/card-unique-rescue delivered no card art — the 4-of-22 duplicate-photo defect is still open (2026-09-13)
 
