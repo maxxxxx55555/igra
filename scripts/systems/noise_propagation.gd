@@ -13,9 +13,12 @@ func _ready() -> void:
 func _on_noise_emitted(pos: Vector2, radius: float, intensity: float = 1.0, source_type: String = "generic") -> void:
 	if _sources.size() >= max_noise_sources:
 		_sources.pop_front()
+	# Модификатор NG+ "whisper": hunter_hearing 0.7 — враги слышат на 30%
+	# меньше. Весь шум в игре проходит через эту точку, поэтому ручка
+	# применяется здесь один раз, а не в каждом источнике звука.
 	_sources.append({
 		"pos": pos,
-		"radius": radius,
+		"radius": radius * NewGamePlus.get_modifier_multiplier("hunter_hearing"),
 		"intensity": intensity,
 		"type": source_type,
 		"time": Time.get_ticks_msec() * 0.001

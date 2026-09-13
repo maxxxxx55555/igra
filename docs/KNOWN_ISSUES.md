@@ -1,5 +1,77 @@
 # Known issues
 
+## arena/card-unique-rescue delivered no card art — the 4-of-22 duplicate-photo defect is still open (2026-09-13)
+
+The branch `arena/card-unique-rescue` (tip `b1d7830`) was commissioned to fix the known
+defect where 4 of the 22 district collection cards share a base photo and do not depict
+their own district. It was **rejected, not merged**, because it does not contain the fix it
+certifies. Evidence, all reproducible:
+
+- `git ls-tree -r main -- assets/textures/cards/` and the same command against the branch
+  produce **byte-identical listings** — same 22 filenames, same 22 blob SHAs. Not one card
+  image was changed. `git diff --name-status` lists only 4 paths, none under
+  `assets/textures/cards/`.
+- The branch's `docs/CERT_ARTFINAL.md` claims four named cards were regenerated with
+  distinct scenes, claims the locked variants match spec, and asserts "Scene match: 22/22
+  (100%) — independent verify-agent read". The blob hashes disprove all of it.
+- It would also have been a **regression**: its `cards_contact_sheet.png` replaces the real
+  1024×1536 contact sheet (the only artifact that makes the defect visible) with a single
+  512×512 card image, and `cards_contact_sheet_48.png` is a lone 48×48 thumbnail rather
+  than a 48px legibility sheet.
+- `scripts/regen_cards.py` could not have produced the fix even if run: it reads
+  `card_<d>_512.png` and writes the same path applying only a blue-channel multiply and
+  `-auto-level` — a tint cannot change what a photograph depicts — and its locked path
+  colorizes 100% to flat `#0c1016`, which would yield a solid near-black rectangle. It also
+  hardcodes `cwd="/home/user/igra"`, so every subprocess call fails on this machine and the
+  script exits 0 having done nothing.
+
+**Status:** the original defect stands, unchanged. Fixing it needs genuinely new per-district
+card imagery, which is an art-sourcing task, not a code task. Do not re-merge this branch;
+do not relocate `regen_cards.py` into `tools/` — it is broken and unreferenced.
+
+## The 124 new content strings are key-complete in 13 locales but only authored in English (2026-09-13)
+
+The secrets/daily/NG+/caption content pass added 124 keys, and they are present in all 13
+locale files with exact parity (1234 keys each, `i18n_audit` MISSING: 0). In the 12
+non-English locales they currently hold the **English source text as a placeholder**. This
+is deliberate: a missing key breaks the screen that asks for it, whereas untranslated text
+merely reads as untranslated. But parity is not translation, and the audit gate cannot tell
+the difference — do not read "MISSING: 0" as "localized".
+
+Affected: 52 `SECRET_*` (literary lore prose, the largest chunk), 30 `DAILY_*_FLAVOR`,
+12 `NGP_*`, 28 `CAPTION_*`, 2 UI strings. Russian matters most here — the project is
+Russian-authored and ru is a first-class language, not a translation target.
+
+## Secret placement uses seeded scatter, not the authored zones (2026-09-13)
+
+`content/secrets.json` gives every secret a `zone` (`"z_maple_row"`) and a prose
+`location_hint` ("base of the third lamp pole, behind the trunk"). The 3D districts carry
+**no named zone markers** — `zone` exists only as authoring vocabulary shared with
+`content/districts/<id>/item_spawns.json`, and nothing in the scenes resolves those names to
+positions. So `DistrictLoot._spawn_secrets()` places each secret by the same deterministic
+seeded scatter used for all other loot, seeded per secret id so the spot is stable across
+runs and across players in LAN, at a wider radius than ordinary loot.
+
+Consequence: a secret is findable and stable, but it is not *where its text says it is*, so
+the location_hint prose currently describes fiction rather than geometry. Closing this needs
+named zone marker nodes in the district scenes that `_spawn_secrets` can look up by name.
+
+## Seven NG+ modifier knobs are stored but not consumed (2026-09-13)
+
+`content/ngp_modifiers.json` defines 11 effect knobs. Four are live: `loot` (folded into
+`NewGamePlus.get_loot_chance_multiplier()`), `battery` (divides flashlight drain in
+`player_3d.gd`), `achievements` (makes `AchievementManager.unlock()` a no-op for the
+`ghost` modifier), and the exclusivity/gating rules themselves. The other seven —
+`hunter_hearing`, `extra_dark_districts`, `lore`, `hints`, `cycle`, `rewards`,
+`time_pressure` — are parsed, persisted and readable through
+`NewGamePlus.get_modifier_multiplier()` / `get_modifier_toggle()`, but **nothing reads them
+yet**, because the systems they describe have no existing hook to fold them into and
+inventing those hooks was outside a wiring pass.
+
+So picking `whisper` today changes loot but not hunter hearing; picking `sprint` changes
+nothing yet. The modifier descriptions shown to the player therefore overstate their effect.
+Either wire the remaining knobs or trim the descriptions before these are advertised.
+
 ## district_grading.gd's Environment branch is dead code (found 2026-09-12, wiring LUTs)
 
 While wiring the 2026-09-12 arena visual pass's 11 per-district color-correction LUTs into
