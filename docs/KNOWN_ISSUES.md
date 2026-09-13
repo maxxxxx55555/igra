@@ -84,18 +84,17 @@ structure. So **all 22 card files represent 4 photographs for 11 districts**, an
 need genuinely new photography. Previous entries describing this as "4 of 22 share a base
 photo" understated it.
 
-## The 124 new content strings are key-complete in 13 locales but only authored in English (2026-09-13)
+## The 155 formerly-English content strings are now translated in all 12 non-English locales (2026-09-13)
 
-The secrets/daily/NG+/caption content pass added 124 keys, and they are present in all 13
-locale files with exact parity (1234 keys each, `i18n_audit` MISSING: 0). In the 12
-non-English locales they currently hold the **English source text as a placeholder**. This
-is deliberate: a missing key breaks the screen that asks for it, whereas untranslated text
-merely reads as untranslated. But parity is not translation, and the audit gate cannot tell
-the difference — do not read "MISSING: 0" as "localized".
-
-Affected: 52 `SECRET_*` (literary lore prose, the largest chunk), 30 `DAILY_*_FLAVOR`,
-12 `NGP_*`, 28 `CAPTION_*`, 2 UI strings. Russian matters most here — the project is
-Russian-authored and ru is a first-class language, not a translation target.
+The secrets/daily/NG+/caption content wave left 155 keys holding English
+placeholder text in ru, es, de, fr, it, pt_BR, tr, ja, ko, zh, zh_TW and ar
+(52 `SECRET_*`, 60 `DAILY_*_FLAVOR`, 28 `CAPTION_*`, 14 `NGP_*`, `TUT_JOURNAL`).
+They are now authored in every non-English locale in the established Keeper
+voice, reusing the glossary of the existing `secret_found_`/`district_`/
+`achievement_` strings. `NG_PLUS_LABEL` ("NG+ %d") deliberately stays identical
+everywhere — "NG+" is universal. Parity is unaffected (1265 keys × 13 locales,
+`i18n_audit` MISSING: 0), and the strings still identical to English are the
+intentional cognates listed further down plus `NG_PLUS_LABEL`.
 
 ## Secret placement uses seeded scatter, not the authored zones (2026-09-13)
 
