@@ -341,6 +341,14 @@ func reset_all() -> void:
 	# с уровнем/скиллами от прошлого забега на этом сейв-профиле.
 	XpManager.reset()
 	SkillTreeManager.reset()
+	# Тот же класс ошибки, что и TRUTH WAVE P0.2 выше, только про другие
+	# системы. ProgressTracker несёт счётчики секретов/убийств/пазлов и список
+	# уже найденных секретов, NewGamePlus — уровень NG+ и выбранные
+	# модификаторы. Без сброса «новая игра» стартовала бы со статистикой
+	# прошлого забега, а найденные секреты не появились бы заново вовсе
+	# (DistrictLoot теперь пропускает те, что помнит ProgressTracker).
+	ProgressTracker.from_dict({})
+	NewGamePlus.reset_for_new_game()
 
 func consume_pending_player_pos() -> Vector3:
 	var p := _pending_player_pos

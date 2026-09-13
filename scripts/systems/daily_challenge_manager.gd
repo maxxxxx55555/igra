@@ -45,7 +45,13 @@ func _ready() -> void:
 	_load_state()
 	_roll_for_today()
 	EventBus.enemy_killed.connect(func(_id): _tick("kill_enemies", 1))
+	# "find_secrets" считает и документы, и собственно секреты. Раньше секреты
+	# было физически не найти (secret.gd был 2D-нодой и не попадал в
+	# интерактивы), поэтому счёт шёл только по документам; теперь настоящая
+	# находка тоже обязана двигать ежедневку. Документы при этом остаются:
+	# их в игре около сотни против 26 секретов, а цели доходят до 24 в день.
 	EventBus.document_unlocked.connect(func(_id): _tick("find_secrets", 1))
+	EventBus.secret_found.connect(func(_id): _tick("find_secrets", 1))
 	EventBus.streetlight_activated.connect(func(_id): _tick("light_streets", 1))
 	EventBus.district_restored.connect(func(_id, _stage): _tick("restore_districts", 1))
 	EventBus.photo_captured.connect(func(_path): _tick("photo_subject", 1))

@@ -29,6 +29,25 @@ certifies. Evidence, all reproducible:
 card imagery, which is an art-sourcing task, not a code task. Do not re-merge this branch;
 do not relocate `regen_cards.py` into `tools/` — it is broken and unreferenced.
 
+**The defect is substantially worse than "4 of 22" as previously recorded.** A measured
+visual audit (average-hash Hamming distance plus mean-absolute-difference on 32×32
+greyscale, all 55 unlocked pairs) found the 11 unlocked district cards reduce to just
+**4 distinct base photographs**:
+
+| Cluster | Hamming | MAD |
+|---|---|---|
+| suburbs / residential / park | 0 | 1.06–2.93 |
+| school / hospital / gas_station / police | 0–1 | 2.1–6.2 |
+| warehouses / industrial | 0 | 1.07 |
+| substation / power_station | 0 | 1.06 |
+
+The nearest cross-cluster pair (hospital/industrial) jumps to Hamming 9 / MAD 16.1, so the
+four clusters are a real separation and not a threshold artifact. Locked variants are clean —
+each hashes against its own unlocked twin only, the difference being darkening rather than
+structure. So **all 22 card files represent 4 photographs for 11 districts**, and 7 districts
+need genuinely new photography. Previous entries describing this as "4 of 22 share a base
+photo" understated it.
+
 ## The 124 new content strings are key-complete in 13 locales but only authored in English (2026-09-13)
 
 The secrets/daily/NG+/caption content pass added 124 keys, and they are present in all 13

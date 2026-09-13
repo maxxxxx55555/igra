@@ -216,6 +216,12 @@ func _unlock(achievement_id: StringName) -> void:
 	_unlocked[String(achievement_id)] = true
 	_save()
 	achievement_unlocked.emit(achievement_id)
+	# Локального сигнала мало: на EventBus.achievement_unlocked висят звук
+	# достижения (UISFX), фанфара (AudioManager) и подписи Смотрителя
+	# (CaptionsManager), а сюда его никто не пробрасывал. Из 31 достижения
+	# только 4 приходили на шину — те, что выдаёт ProgressTracker сам.
+	# Остальные 27 открывались беззвучно и без подписи.
+	EventBus.achievement_unlocked.emit(achievement_id)
 
 # Public API for external callers
 func unlock(short_id: String) -> void:

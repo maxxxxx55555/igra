@@ -185,7 +185,16 @@ static func _spawn_secrets(root: Node3D, district_id: StringName) -> int:
 	_load_secrets()
 	var rows: Array = _secrets_by_district.get(String(district_id), [])
 	var placed := 0
+	var pt := (Engine.get_main_loop() as SceneTree).root.get_node_or_null("/root/ProgressTracker")
 	for row in rows:
+		# Район пересобирается заново при каждом входе (world_runtime
+		# выбрасывает старый корень и строит новый), поэтому уже взятый секрет
+		# иначе появлялся бы снова: награду можно было бы фармить бесконечно,
+		# а достижение «seeker» за 10 секретов закрывалось бы одним и тем же.
+		# Флаг _taken живёт на освобождённой ноде, так что помнить обязан
+		# ProgressTracker.
+		if pt != null and pt.is_secret_found(String(row.get("id", ""))):
+			continue
 		var node := SECRET_SCENE.instantiate() as Node3D
 		if node == null:
 			continue
