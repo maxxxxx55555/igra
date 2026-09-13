@@ -1232,5 +1232,6 @@
   "CAPTION_GALLERY_BABKA_LAMP": "Babka Manya's lamp. \"The light in this city is not electricity.\"",
   "CAPTION_GALLERY_LAST_STREETLIGHT": "The last streetlight. While it burns, the city lives.",
   "NGP_PICK_TITLE": "Modifiers chosen: %d / %d",
-  "NGP_ACTIVE_LABEL": "Active modifiers: %s"
+  "NGP_ACTIVE_LABEL": "Active modifiers: %s",
+  "TUT_JOURNAL": "Your journal tracks quests and the secrets you find. Open it any time."
 }

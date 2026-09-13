@@ -15,6 +15,22 @@ const _DIR: String = "res://assets/audio/sfx/"
 ## короткий стингер не ныряет под музыку и не тянет за собой хвост.
 const _UI_DIR: String = "res://assets/audio/ui/"
 
+## Стингеры лежат на диске тише музыкальной подложки, а не громче: RMS
+## стингеров -22..-25 dB против -14..-15 dB у бедов, то есть на слух они
+## тонули под музыкой при unity gain. Поднимаем на шине UI.
+##
+## Заявленную в CERT_UIAUDIO цель «на 6-10 dB выше RMS бедов» этим путём не
+## взять: для неё нужно +15 dB, а пики файлов лежат на -11 dBFS, так что
+## сумма ушла бы в клиппинг. Берём столько, сколько есть до 0 dBFS с запасом:
+## стингер выходит примерно вровень с бедом и слышен за счёт транзиента и
+## другого спектра. Честно выше бедов можно сделать только перемастерингом
+## исходников или дакингом музыки — см. docs/KNOWN_ISSUES.md.
+const _UI_GAIN_DB: Dictionary = {
+	# пик -6.1 dBFS — этому нужен меньший подъём, иначе клиппинг
+	"menu_click": 4.0,
+}
+const _UI_GAIN_DEFAULT_DB: float = 9.0
+
 func _ready() -> void:
 	EventBus.achievement_unlocked.connect(func(_id: String) -> void: achievement())
 	EventBus.inventory_notice.connect(func(_msg: String) -> void: error())
@@ -25,9 +41,29 @@ func _ready() -> void:
 	EventBus.level_completed.connect(func(_id: String) -> void: play_ui("daily_complete_sting"))
 	EventBus.boss_spawned.connect(func() -> void: play_ui("boss_sting"))
 	EventBus.boss_defeated.connect(func() -> void: play_ui("boss_sting"))
-	EventBus.game_won.connect(func() -> void: play_ui("ending_sting"))
-	DailyChallengeManager.completed.connect(func(_reward: int) -> void: play_ui("daily_complete_sting"))
-	DailyChallengeManager.streak_milestone.connect(func(_days: int) -> void: play_ui("streak_milestone_sting"))
+	# Раньше на ui_screen_opened звучал процедурный клик из audio_manager.
+	# Его глушит guard "_has_ui_sting", поэтому настоящий клик надо повесить
+	# сюда — иначе переходы между экранами стали бы беззвучными.
+	EventBus.ui_screen_opened.connect(func(_id: String) -> void: play_ui("menu_click"))
+	call_deferred("_wire_late_autoloads")
+
+## UISFX объявлен в project.godot раньше (строка 68), чем EndingsManager (107)
+## и DailyChallengeManager (109): на момент нашего _ready() этих синглтонов
+## в дереве ещё нет, и прямое обращение дало бы Nil. Поэтому подписки на них
+## откладываются на кадр, когда автолоады уже подняты.
+func _wire_late_autoloads() -> void:
+	var endings := get_node_or_null("/root/EndingsManager")
+	if endings != null:
+		# Не на game_won: там MusicDirector уже запускает music_victory и
+		# cue_victory разом, и стингер под ними не слышно вовсе.
+		# ending_reached приходит и на концовках после смерти
+		# (dark/survivor), где музыки победы нет и стингер — единственная
+		# звуковая точка.
+		endings.ending_reached.connect(func(_id: StringName) -> void: play_ui("ending_sting"))
+	var daily := get_node_or_null("/root/DailyChallengeManager")
+	if daily != null:
+		daily.completed.connect(func(_reward: int) -> void: play_ui("daily_complete_sting"))
+		daily.streak_milestone.connect(func(_days: int) -> void: play_ui("streak_milestone_sting"))
 
 ## Одиночный проигрыш стингера на шине UI. Имя — без префикса "ui_" и без
 ## расширения: play_ui("boss_sting") -> res://assets/audio/ui/ui_boss_sting.ogg
@@ -37,6 +73,7 @@ func play_ui(sound: String) -> void:
 		return
 	var p := AudioStreamPlayer.new()
 	p.bus = &"UI"
+	p.volume_db = float(_UI_GAIN_DB.get(sound, _UI_GAIN_DEFAULT_DB))
 	p.stream = load(path)
 	add_child(p)
 	p.play()
