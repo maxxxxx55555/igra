@@ -460,8 +460,108 @@ def main():
                         A.err("FIRST_MENTION_DISTRICT", w,
                               "note '%s' lives in %s, first_mention says %s" % (fm["note"], owner, fm["district"]))
 
+    # -- secrets registry (content/secrets.json) -----------------------------
+    used_keys_from_secrets = set()
+    pending_locale_keys = []   # (key, en_source, secret_id) awaiting LOCALE handoff
+    SECRET_THREADS = None
+    spath = os.path.join(ROOT, "content", "secrets.json")
+    if os.path.exists(spath):
+        r = rel(spath)
+        sd = load(spath)
+        SECRET_THREADS = set((sd.get("_threads") or {}).keys())
+        secs = sd.get("secrets", [])
+        A.info("COUNT", r, "secrets = %d" % len(secs))
+        if not (24 <= len(secs) <= 30):
+            A.err("SECRETS_COUNT", r, "task requires 24-30 canon secrets, file has %d" % len(secs))
+        sec_ids = set()
+        for s in secs:
+            sid = s.get("id", "<no id>")
+            where = "%s#%s" % (r, sid)
+            if sid in sec_ids:
+                A.err("DUP_ID", where, "duplicate secret id")
+            sec_ids.add(sid)
+            if sid in world_ids or sid in all_note_ids:
+                A.err("DUP_ID", where, "collides with a world-bible or note id")
+            dist = s.get("district")
+            if dist not in CHAIN:
+                A.err("UNKNOWN_DISTRICT", where, "district %r not in GDD 4.1 chain" % dist)
+                continue
+            if not re.fullmatch(r"secret_%s_\d\d" % re.escape(dist), sid):
+                A.err("SECRET_ID_FORMAT", where, "violates contract 'secret_<district>_NN'")
+            # act derived from district
+            want_act = act_of_district(dist)
+            if s.get("act") != want_act:
+                A.err("ACT_GATE_MISMATCH", where,
+                      "act=%r but district %s is Act %d (GDD 12.3); act is derived" % (s.get("act"), dist, want_act))
+            ms = s.get("min_stage")
+            if not isinstance(ms, int) or not (0 <= ms <= 3):
+                A.err("BAD_MIN_STAGE", where, "min_stage %r not an int 0..3" % (ms,))
+            # zone must exist in that district's item_spawns zones
+            zones = set(spawns[dist][1].get("zones", []) or []) if dist in spawns else set()
+            z = s.get("zone")
+            if not z:
+                A.err("MISSING_ZONE", where, "no zone")
+            elif zones and z not in zones:
+                A.err("DEAD_ZONE_REF", where, "zone '%s' absent from %s item_spawns zones" % (z, dist))
+            # reward
+            rw = s.get("reward") or {}
+            if rw.get("item") not in items:
+                A.err("DEAD_ITEM_ID", where, "reward.item '%s' has no data/items/*.tres" % rw.get("item"))
+            if not isinstance(rw.get("amount"), int) or rw.get("amount", 0) < 1:
+                A.err("BAD_REWARD_QTY", where, "reward.amount %r not an int >= 1" % rw.get("amount"))
+            # thread
+            if SECRET_THREADS and s.get("thread") not in SECRET_THREADS:
+                A.err("UNKNOWN_THREAD", where, "thread %r not declared in _threads" % s.get("thread"))
+            # world_refs reachability
+            allowed = guaranteed_closure(dist) | {dist}
+            for ref in s.get("world_refs", []) or []:
+                if ref not in world_ids:
+                    A.err("DEAD_WORLD_REF", where, "'%s' resolves to nothing" % ref)
+                    continue
+                reveal = world_ids[ref][1]
+                if reveal and reveal.get("district") not in allowed:
+                    A.err("REF_UNREACHABLE", where,
+                          "'%s' reveals at %s but %s only guarantees {%s}"
+                          % (ref, reveal.get("district"), dist,
+                             ", ".join(sorted(allowed - {dist})) or "nothing"))
+            # i18n
+            i18n = s.get("i18n_keys", {})
+            for slot in ("title", "text"):
+                k = i18n.get(slot)
+                if not k:
+                    A.err("MISSING_I18N_KEY", where, "no i18n_keys.%s" % slot)
+                    continue
+                m = re.fullmatch(r"SECRET_%s_(\d\d)_%s" % (dist.upper(), slot.upper()), k)
+                if not m:
+                    A.err("I18N_KEY_FORMAT", where, "'%s' violates SECRET_<DISTRICT>_<NN>_%s" % (k, slot.upper()))
+                elif not sid.endswith("_" + m.group(1)):
+                    A.err("I18N_KEY_INDEX", where, "key index %s does not match id %s" % (m.group(1), sid))
+                if k not in en:
+                    # Repo contract (content/README.md): CONTENT authors the `en`
+                    # source; the LOCALE agent adds the keys to all 13 locales.
+                    # A key authored in this pass and not yet handed off is
+                    # PENDING, not a content defect. Pre-existing content (above)
+                    # keeps the hard error.
+                    pending_locale_keys.append((k, (s.get("en") or {}).get(slot), sid))
+                    A.warn("I18N_KEY_PENDING", where,
+                           "%s authored, awaiting LOCALE handoff to the 13 locales" % k)
+                else:
+                    src = (s.get("en") or {}).get(slot)
+                    if src is None:
+                        A.err("NO_EN_SOURCE", where, "key %s but no en.%s source" % (k, slot))
+                    elif en[k] != src:
+                        A.err("I18N_CANON_SLIP", where, "en.json %s differs from content en.%s" % (k, slot))
+            used_keys_from_secrets.add(i18n.get("title"))
+            used_keys_from_secrets.add(i18n.get("text"))
+            # location_hint zone mentions
+            for z2 in re.findall(r"\((z_[a-z0-9_]+)\)", s.get("location_hint", "") or ""):
+                if zones and z2 not in zones:
+                    A.err("DEAD_ZONE_HINT", where, "hint names %s, absent from %s zones" % (z2, dist))
+    else:
+        A.err("MISSING_FILE", "content/secrets.json", "secrets registry absent (TASK 2 deliverable)")
+
     # -- E. orphan i18n keys -------------------------------------------------
-    used = set()
+    used = set(used_keys_from_secrets)
     for r, key in WORLD_KEYMAP.items():
         if r in world:
             for e in world[r][1].get(key, []):
@@ -472,9 +572,75 @@ def main():
     for k in sorted(en):
         if (k.startswith("LORE_") or k.startswith("WORLD_")) and k not in used:
             A.warn("ORPHAN_I18N_KEY", "data/i18n/en.json", "'%s' has no backing content entry" % k)
+    pending_key_names = {k for k, _v, _s in pending_locale_keys}
     for k in sorted(used):
-        if k and k not in en:
+        if k and k not in en and k not in pending_key_names:
             A.err("I18N_KEY_ABSENT", "en.json", "content key '%s' missing from en.json" % k)
+
+    # -- TASK 3: texts living ONLY in i18n ----------------------------------
+    # A key is "i18n-only" when its text exists in data/i18n/*.json but is backed
+    # by no content/** entry AND referenced by no script/scene. Those are prose
+    # whose sole source of truth is a locale file, which breaks the repo rule that
+    # content/** is the source of truth. Locales are NOT touched; the table goes
+    # in the certificate for CODE to adopt.
+    code_blob = []
+    for base in ("scripts", "scenes", "components"):
+        for dirpath, _dirs, files in os.walk(os.path.join(ROOT, base)):
+            for fn in files:
+                if fn.endswith((".gd", ".tscn", ".tres")):
+                    try:
+                        code_blob.append(open(os.path.join(dirpath, fn), encoding="utf-8").read())
+                    except (OSError, UnicodeDecodeError):
+                        pass
+    code_blob = "\n".join(code_blob)
+    i18n_only = []
+    for k, v in en.items():
+        if k in used:
+            continue
+        if k in code_blob:
+            continue
+        if not isinstance(v, str) or len(v.strip()) < 24:
+            continue
+        i18n_only.append((k, v))
+    i18n_only.sort()
+    A.info("I18N_ONLY_COUNT", "data/i18n/en.json",
+           "%d keys hold prose backed by neither content/** nor any script/scene" % len(i18n_only))
+
+    # -- artifacts: handoff tables ------------------------------------------
+    adir = os.path.join(ROOT, "docs", "artifacts", "content-depth")
+    os.makedirs(adir, exist_ok=True)
+
+    if pending_locale_keys:
+        with open(os.path.join(adir, "pending_locale_handoff.md"), "w", encoding="utf-8") as f:
+            f.write("# Pending LOCALE handoff — content/secrets.json\n\n")
+            f.write("Authored by CONTENT (this pass). `en` below is the source string;\n")
+            f.write("the LOCALE agent adds these keys to all 13 locales. CONTENT never\n")
+            f.write("edits `data/i18n/`. Source of truth: `content/secrets.json`.\n\n")
+            f.write("| key | source (`en`) | secret id |\n|---|---|---|\n")
+            for k, v, sid in sorted(pending_locale_keys):
+                f.write("| `%s` | %s | `%s` |\n" % (k, json.dumps(v, ensure_ascii=False), sid))
+            f.write("\nTotal: %d keys (%d secrets x 2).\n" % (len(pending_locale_keys), len(pending_locale_keys) // 2))
+
+    with open(os.path.join(adir, "i18n_only_texts.md"), "w", encoding="utf-8") as f:
+        f.write("# TASK 3 — texts living ONLY in i18n (CODE-sync table)\n\n")
+        f.write("Keys whose prose exists in `data/i18n/*.json` but is backed by no\n")
+        f.write("`content/**` entry and referenced by no script/scene. For these the\n")
+        f.write("locale file is the only source of truth, which inverts the repo rule\n")
+        f.write("that `content/**` is the source of truth for authored content.\n")
+        f.write("**Locales were not touched.** Proposed `en` = current value verbatim;\n")
+        f.write("CODE decides whether to adopt each into a content file or wire it.\n\n")
+        def md_cell(s):
+            """Escape a string for a markdown table cell (keys can hold \n and |)."""
+            return (str(s).replace("\\", "\\\\").replace("|", "\\|")
+                    .replace("\n", "\\n").replace("\r", "\\r").replace("\t", "\\t"))
+
+        f.write("| key | proposed `en` |\n|---|---|\n")
+        for k, v in i18n_only:
+            f.write("| `%s` | %s |\n" % (md_cell(k), md_cell(v)))
+        f.write("\nTotal: %d keys.\n" % len(i18n_only))
+        f.write("\nVerified: none of these keys appears in any `.gd`, `.tscn` or\n")
+        f.write("`.tres` under `scripts/`, `scenes/` or `components/`, and none is\n")
+        f.write("backed by a `content/**` entry. They are dead or unadopted strings.\n")
 
     # -- F. PVC lore-note count claim ---------------------------------------
     pvc = os.path.join(ROOT, "docs", "PLAYER_VISIBLE_CHANGES.md")
