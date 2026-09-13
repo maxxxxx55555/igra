@@ -154,6 +154,24 @@ Renderer committed: `assets/audio/_build/gen_audio_pass.py`. F1 retained as
 recorded (finding, not a gap — re-verified 28.749/28.948 s). Wiring remains
 CODE-owned (routing: `assets/audio/README.md`). Verdicts: `docs/CERT_AUDIO.md`.
 
+### Finale-pass note (2026-09-12, Task 1 — brief premise stale, all gaps verified closed)
+
+Music-gen skill inventory re-run this session (`.opencode`/`.claude`/`.pi`
+skills, `docs/external_skills/`, `docs/superpowers/`, repo-wide
+suno/udio/musicgen grep): still no music-generation skill, tool binding, or
+API access anywhere — refined-prompt generation could not be executed, and
+was not faked. It also was not needed: stdlib Ogg header + granule probe of
+all 8 "remaining" lit beds (G1, G2b/c/e/f/g/h/i) shows every file present
+with granule/size byte-identical to the certified 2026-09-11 record (7×
+1,587,600 = 36.000 s, G2h 1,499,146 = 33.994 s twin-exact; all 1ch/44.1k/q4)
+— zero drift, zero missing. F1 re-verified identical (28.749/28.948 s,
+retained as recorded). CC0/CC-BY re-search correctly skipped per `yagni` +
+convergence rule (no open gaps to search for; history stands in
+`docs/LEDGER_AUDIO.md` L2). No new binaries, no rewrites. Full attempt log:
+`docs/LEDGER_FINALE.md` §F-A1…F-A4; finale certificate: `docs/CERT_FINALE.md`.
+Loudness facts inherited from `docs/CERT_AUDIO.md` (not re-measurable without
+a decoder in this sandbox — stated, not hidden).
+
 ### G1 — `assets/audio/ambience/districts/residential_lit.ogg` (this district)
 - Type: 36 s seamless ambience loop, OGG q4 mono, −18 LUFS, TP ≤ −1.5 dBFS.
 - Mood: "lit twin" of `residential_dark.ogg` (STYLE_GUIDE §5): same material re-voiced
