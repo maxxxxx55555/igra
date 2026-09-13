@@ -205,7 +205,7 @@ static func _spawn_secrets(root: Node3D, district_id: StringName) -> int:
 		root.add_child(node)
 		node.global_position = root.global_position + Vector3(cos(ang) * rad, DROP_Y, sin(ang) * rad)
 		node.set("secret_id", StringName(String(row.get("id", ""))))
-		node.set("district_id", district_id)
+		node.set("home_district", district_id)
 		node.set("min_stage", int(row.get("min_stage", 0)))
 		var reward: Dictionary = row.get("reward", {})
 		node.set("item_id", StringName(String(reward.get("item", "battery"))))

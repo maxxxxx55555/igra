@@ -16,7 +16,13 @@ extends Node3D
 @export var secret_id: StringName = &""
 @export var item_id: StringName = &"battery"
 @export var amount: int = 1
-@export var district_id: StringName = &""
+## НЕ называть это district_id. Щит района экспортирует ровно такое имя, и всё,
+## что ищет щит по группе "interactable", опознаёт его утиной типизацией
+## «есть district_id и есть interact()» — например
+## _qa_autoplay_runner._switch_node(). Секрет подходил под тот же шаблон и
+## возвращался вместо щита: бот шёл к секрету, брал его, район не двигался,
+## прогон вставал в софтлок на 45 секунд.
+@export var home_district: StringName = &""
 ## Стадия района, ниже которой секрет ещё не найти (content: min_stage 0..3).
 @export var min_stage: int = 0
 @export var title_key: String = ""
@@ -27,7 +33,7 @@ func _ready() -> void:
 	add_to_group("interactable")
 	_refresh_gate()
 	EventBus.district_stage_changed.connect(func(id: StringName, _stage: int) -> void:
-		if id == district_id:
+		if id == home_district:
 			_refresh_gate())
 
 ## Секрет со стадией выше текущей не виден и не берётся: район сначала надо
@@ -39,9 +45,9 @@ func _refresh_gate() -> void:
 func can_interact() -> bool:
 	if _taken:
 		return false
-	if district_id == &"":
+	if home_district == &"":
 		return true
-	return PowerGrid.get_stage(district_id) >= min_stage
+	return PowerGrid.get_stage(home_district) >= min_stage
 
 func interact_prompt() -> String:
 	return LocalizationManager.t("PROMPT_INTERACT")
