@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 # GOLD MASTER headless verification suite (owner-approved headless-only
 # policy, 2026-09-10). Runs every engine gate scene individually with a
-# per-gate timeout (so one hang can't block the rest), then the extended
-# scenario driver (scenes/tools/qa_headless_suite_scene.tscn), then scans
+# per-gate timeout (so one hang can't block the rest), then scans
 # every log for engine-level script errors. Logs to .qa_logs/ (untracked).
 #
 #   tools/qa_sim/headless_suite                 # default soak 120s
@@ -15,8 +14,12 @@
 set -uo pipefail
 cd "$(dirname "$0")/../.."
 
-GODOT="${GODOT:-C:/Users/Maxsim/Desktop/TLS_Build/godot_extracted/Godot_v4.7-stable_win64_console.exe}"
-command -v "$GODOT" >/dev/null 2>&1 || [[ -x "$GODOT" ]] || { echo "Godot not found at: $GODOT"; exit 99; }
+GODOT="$(bash tools/qa_sim/_resolve_godot.sh 2>/dev/null)"
+if [[ -z "$GODOT" ]] || [[ ! -x "$GODOT" ]]; then
+  bash tools/qa_sim/_resolve_godot.sh >&2
+  exit 99
+fi
+echo "# Godot binary: $GODOT"
 
 LOG_DIR=".qa_logs"
 mkdir -p "$LOG_DIR"
