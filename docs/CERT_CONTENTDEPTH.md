@@ -244,11 +244,35 @@ content/world/radio_transcripts.json |   5 +-
   `docs/artifacts/content-depth/pending_locale_handoff.md`.
 - **1 × `SECRET_ROOM_STUB`** — the 12 empty `secret_room_*.tscn`. CODE zone; see §7.
 
-### 6.2 Reproduce
+### 6.2 Reproduce / what was actually run
 
 ```
 python3 docs/artifacts/content-depth/audit_content_depth.py   # exit 0 = 0 defects
+bash tools/check.sh --static                                  # project gate, exit 0
 ```
+
+`audit_content_depth.py` is the only check in this repo that reads `content/**` — the
+project's own gates do not parse the content JSON, so the content assertions above rest on
+it and on the diffs quoted in §6.
+
+The project's own static gate suite was run and is **all green, exit 0** (10 checks), the
+parts that matter here being:
+
+- `локализация: 13 языков × 1110 ключей, паритет=True` — locale parity intact across all 13
+  locales; this pass touched none of them.
+- `ключи из кода найдены в словаре (0 потеряно)` — every key referenced by code resolves;
+  the 52 `SECRET_*` keys are referenced by no code yet, so they cannot break this gate
+  (which is exactly why they are PENDING rather than defective).
+- `ссылки на ресурсы (0 битых)`, `автозагрузки (0 битых)`, `validate_list (262 записей, 0
+  отсутствуют)`, `все preload/load ведут в существующие файлы`, `арность подписок на
+  сигналы совпадает` — no reference or signal damage.
+
+**Not run, and why:** the engine half of `tools/check.sh` and the `godot-gates` skill need a
+Godot 4 binary; none is installed in this sandbox (the skill's configured path is a Windows
+path). This pass changed **no** `.gd`, `.tscn` or `.tres` file — verified, the 8 changed
+files are 3 content JSON, 1 certificate and 4 artifacts — so no engine code path was
+altered and the engine gates have nothing new to exercise. Wiring the secrets (§7.1) *will*
+need them, and belongs to CODE.
 
 ---
 
