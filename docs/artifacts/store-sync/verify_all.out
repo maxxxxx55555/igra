@@ -1,0 +1,12 @@
+# run 2026-09-13 UTC @ repo tip 225431f — after all sync edits
+== verify_listing.py ==
+locales with generated section: 13 / 13
+master fences found: 2
+note: short lines checked (generated block + master labels): 13
+RESULT: GREEN — 13/13 parity, limits, deleted-claims scan, keyword density all pass
+
+== verify_paths_and_numbers.py ==
+cited-path checks: 67 exact + 6 globs, all backtick paths in: store/listing.md, store/press-kit.md, store/changelog.md, store/privacy-policy-template.md, store/screenshot-plan-detailed.md
+PNG sizes verified via IHDR: 27
+numbers recomputed: {'11 connected districts': 11, '88 lore notes': 88, '13 locales': 13, '31 achievements': 31, '30 daily challenges': 30, '12 enemy scripts': 12, '5 endings': 5}
+RESULT: GREEN — every cited path exists at claimed size; all press-kit numbers reproduce from source
