@@ -21,7 +21,7 @@ in-scope-only PR per `ARENA_NEXT_PROMPT.md`'s protocol. `arena/01a080ba-
 igra` (suburbs district content, PR #1) was merged and deleted
 2026-09-08 — see decisions log below.
 
-## SHIP STATE: RELEASE CANDIDATE FINAL v4 — declared 2026-09-13, tip TBD (FINAL CONSOLIDATION)
+## SHIP STATE: RELEASE CANDIDATE FINAL v4 — declared 2026-09-13, tip `0148790` (FINAL CONSOLIDATION)
 
 FINAL CONSOLIDATION on top of v3: merged 2 of the 4 named branches
 (`arena/store-sync`, `arena/art-final`) after an independent subagent
