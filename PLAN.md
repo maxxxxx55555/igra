@@ -21,6 +21,42 @@ in-scope-only PR per `ARENA_NEXT_PROMPT.md`'s protocol. `arena/01a080ba-
 igra` (suburbs district content, PR #1) was merged and deleted
 2026-09-08 — see decisions log below.
 
+## RELEASE CANDIDATE FINAL v3 — declared 2026-09-13, tip TBD (merge `36c3673`)
+
+Merged Arena's AUDIO/VISUAL FINALE branch (`arena/01a09712-igra`) on top of RC FINAL v2:
+scope-check passed clean (10 files, all additions, all in her `assets/textures/`,
+`docs/*.md`, `store/` zones — no conflicts, `--no-ff` merge). Wired the two CODE-owned
+pieces her README asked for:
+
+- **Post-fx presets** (`assets/textures/postfx/presets.json`, 11/11 districts:
+  bloom/vignette/chroma/grain): bloom wired into `scripts/world_env_setup.gd`'s new
+  `_apply_postfx()`, keyed on `EventBus.district_entered` next to the existing `_apply_lut()`
+  (the live WorldEnvironment — her README's suggested hook, `district_grading.gd`, is dead
+  code per `docs/KNOWN_ISSUES.md`, so the wiring targets the real owner instead). Vignette
+  and grain call the existing `set_vignette_strength()`/`set_grain_intensity()` on
+  `scripts/post_process_overlay.gd`; chroma is a new `set_chroma_amount()` + a radial
+  RGB-split canvas shader (no shipped consumer existed before this pass). Missing preset or
+  file leaves every value at its already-shipped default — safe identity fallback, same
+  policy as `_apply_lut()`.
+- **Audio beds**: no wiring needed — all 11 `AMBIENCE_LIT_BY_DISTRICT` rows were already
+  filled (2026-09-12 RELEASE CONVERGENCE pass); this merge's audio contribution was a
+  coverage-doc note only (`docs/AUDIO_COVERAGE.md`), confirmed by re-reading
+  `scripts/systems/music_manager.gd` before touching anything.
+
+Consolidation: license rows for the 2 new postfx files + 4 trailer heroes merged into
+`docs/ASSET_LICENSES.md` (drafted by Arena in `docs/LEDGER_FINALE.md` §F-LIC, since she
+doesn't own that file); a §17 verdict summary added to `docs/CONTENT_PIPELINE_AUDIT.md`.
+Kept `docs/LEDGER_FINALE.md`/`docs/CERT_FINALE.md` on disk as the source-of-truth evidence
+— same precedent as the visual/audio/store passes' ledgers/certs (`docs/RELEASE_ARTIFACTS.md`
+table), not deleted.
+
+Full regression after the merge + wiring: static 10/10, all 22/23 engine gates (same 1
+pre-existing documented stall, unchanged), `headless_suite` green ×2 consecutive, 7/7
+`qa_sim` Python sims, i18n `MISSING: 0`. No owner-only item changed — still the same 4
+(`docs/artifacts/known_owner_only_items.md`).
+
+---
+
 ## RELEASE CANDIDATE FINAL v2 — declared 2026-09-13, tip `b100750`
 
 FINAL HARDENING PASS on top of RC FINAL v1 (below): closed the 3 named

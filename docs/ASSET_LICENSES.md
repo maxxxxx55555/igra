@@ -449,3 +449,13 @@ zero third-party samples, zero voices (auditable in the committed generator scri
 | `assets/audio/ambience/districts/{gas_station,industrial,park,police,residential,school,substation,warehouses}_lit.ogg` (8 files) | Generated (numpy synth + `ffmpeg loudnorm`, deterministic, seeds 1101-1108) | Project-owned; no third-party rights | none required | Fills gaps G1, G2b/c/e/f/g/h/i in `docs/AUDIO_COVERAGE.md`. 36.000s exact (G2h twin 33.994s), -18 LUFS, OGG q4 mono 44.1k. |
 | `assets/audio/music/cue_{first_light,grid_cascade,victory}.ogg` (3 files) | Generated (numpy synth + `ffmpeg loudnorm`, seeds 1201-1203) | Project-owned; no third-party rights | none required | Wow-moment one-shot cues, 60/90/120s, arc-verified by 8th-window RMS decode. |
 | `assets/audio/_build/gen_audio_pass.py` | Repo-owned tool | Project-owned | none required | Deterministic renderer for the two rows above; import-excluded via `.gdignore`. |
+
+## Added 2026-09-13 — AUDIO/VISUAL FINALE pass (postfx presets + trailer heroes)
+
+Delivered via `arena/01a09712-igra`, merged `36c3673`. Full attempt log consolidated from
+`docs/LEDGER_FINALE.md` §F-LIC (drafted there since that pass is not this file's owner).
+
+| Path | Origin | License | Attribution | Notes |
+|---|---|---|---|---|
+| `assets/textures/postfx/presets.json`, `assets/textures/postfx/README.md` | Project-authored preset data | Project-owned; no third-party rights | none required | 11-district bloom/vignette/chroma/grain data; wired live in `scripts/world_env_setup.gd` (bloom) and `scripts/post_process_overlay.gd` (vignette/chroma/grain). |
+| `store/trailer/hero_{first_restore,grid_cascade,reactor_room}_1920x1080.png`, `hero_shorts_cut_1080x1920.png` (4 files) | AI-generated (in-session image generation, finished with project LUTs/shaders per `store/trailer/README.md`) | Project-owned; no third-party rights | none required | Marketing masters only, never runtime textures (3.5-4.0 MB each, full postfx stack baked in). |

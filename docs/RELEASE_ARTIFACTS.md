@@ -2,7 +2,18 @@
 
 One line per artifact: what it is, where it lives, what it proves. Source of truth for a
 claim always stays in the artifact itself — this file only points at it. Started
-2026-09-12 (RELEASE CONVERGENCE PASS), updated 2026-09-13 (FINAL HARDENING PASS).
+2026-09-12 (RELEASE CONVERGENCE PASS), updated 2026-09-13 (FINAL HARDENING PASS, then the
+AUDIO/VISUAL FINALE merge).
+
+## AUDIO/VISUAL FINALE merge (2026-09-13) — postfx presets wired live
+
+Merged `arena/01a09712-igra` (`36c3673`) on top of RC FINAL v2: 11-district cinematic
+post-fx presets (bloom/vignette/chroma/grain), 4 trailer hero stills, finale ledger +
+certificate. Wired this pass: bloom into `world_env_setup.gd`'s `_apply_postfx()` (the live
+WorldEnvironment), vignette/grain into `post_process_overlay.gd`'s existing setters, and a
+new `set_chroma_amount()` (no shipped consumer before this merge). Audio side needed no new
+wiring — all 11 `AMBIENCE_LIT_BY_DISTRICT` rows were already filled. See
+`docs/CONTENT_PIPELINE_AUDIT.md` §17, `docs/ASSET_LICENSES.md` "Added 2026-09-13".
 
 ## FINAL HARDENING PASS (2026-09-13) — 3 named blockers closed
 
@@ -22,6 +33,8 @@ claim always stays in the artifact itself — this file only points at it. Start
 | Visual certificate | `docs/CERT_VISUAL.md` | 0 defects — dims/purity/palette/LUT-monotonicity/letterbox, all measured | `docs/CONTENT_PIPELINE_AUDIT.md` §14 |
 | Audio certificate | `docs/CERT_AUDIO.md` | 0 defects — header/granule/loudness/contract-pass, all measured | `docs/CONTENT_PIPELINE_AUDIT.md` §15 |
 | Store certificate | `docs/CERT_STORE.md` | 0 open defects — 13/13 locale parity, char limits, master-hash unchanged | `docs/CONTENT_PIPELINE_AUDIT.md` §16 |
+| Finale ledger | `docs/LEDGER_FINALE.md` | postfx presets + trailer heroes, full attempt log incl. license rows for the docs owner | `docs/ASSET_LICENSES.md` (2026-09-13 section) |
+| Finale certificate | `docs/CERT_FINALE.md` | 0 defects — presets schema/clamps, full-strength sim, trailer dims/purity, scope hygiene | `docs/CONTENT_PIPELINE_AUDIT.md` §17 |
 
 ## QA / gate reports
 

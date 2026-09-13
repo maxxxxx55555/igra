@@ -693,3 +693,25 @@ diff.
 - Review-response honesty confirmed: perf/save-loss reply classes cite real recorded state
   (`docs/KNOWN_ISSUES.md`), no dates or guarantees promised.
 - Defects: **0** open (4 fixed this pass — see `docs/CERT_STORE.md` §9).
+
+## 17. Audio/visual FINALE pass (2026-09-12) — postfx presets + trailer heroes
+
+Delivered `arena/01a09712-igra`, merged `36c3673`. Full certificate: `docs/CERT_FINALE.md`.
+Verification: JSON schema assert + numpy/PIL pixel checks + Ogg header/granule re-verify of
+the 8 lit beds already shipped (no new audio binaries this pass — see `docs/AUDIO_COVERAGE.md`).
+
+- **Post-fx presets** (`assets/textures/postfx/presets.json`, 11/11 districts): schema PASS,
+  every value inside its shipped clamp (bloom 0.12-0.35, vignette 0.45-0.60 in `#0c1016`,
+  chroma 0.5-1.0px, grain 0.08-0.12 per GDD §11.4). Full-strength simulation over a
+  palette-locked still: 0 pure-white/black texels, 98.6% contrast retained. Wired live this
+  pass: bloom → `world_env_setup.gd`'s `_apply_postfx()` (the one live WorldEnvironment, same
+  owner as the per-district LUTs); vignette/grain → `post_process_overlay.gd`'s existing
+  setters; chroma → new `set_chroma_amount()` on the same overlay (no shipped consumer before
+  this pass, per her README's "NEW" flag).
+- **4/4 trailer hero stills** (1920×1080 / 1080×1920 exact, 10..240 range, 0 pure W/B,
+  3.5-4.0 MB marketing masters, full postfx stack baked in, never runtime textures).
+- **8/8 lit beds re-verified unchanged** (byte-identical granule/size to the 2026-09-11
+  `CERT_AUDIO.md` record) — the brief's "gaps remain" premise was stale; already wired into
+  `AMBIENCE_LIT_BY_DISTRICT` (all 11 rows) since the 2026-09-12 RELEASE CONVERGENCE pass.
+- Defects: **0**. Scope hygiene self-checked by the delivering session (10 files, all
+  additions, all in-zone) and independently re-verified at merge time.

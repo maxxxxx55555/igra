@@ -32,6 +32,8 @@ var _env: Environment = null
 var _moon: DirectionalLight3D = null
 var _player_glow: OmniLight3D = null
 var _override_frames: int = 5
+var _postfx: Dictionary = {}
+var _postfx_overlay: Node = null
 
 func _ready() -> void:
 	var root = get_tree().current_scene
@@ -84,11 +86,14 @@ func _ready() -> void:
 	EventBus.district_stage_changed.connect(_on_district_stage_changed)
 	EventBus.weather_changed.connect(_on_weather_changed)
 	EventBus.district_entered.connect(_apply_lut)
+	EventBus.district_entered.connect(_apply_postfx)
+	_postfx = _load_postfx_presets()
 
 	_player_glow = _find_player_glow()
 	var dm := get_node_or_null("/root/DistrictManager")
 	if dm != null:
 		_apply_lut(dm.current_district)
+		_apply_postfx(dm.current_district)
 
 func _process(delta: float) -> void:
 	if _override_frames > 0:
@@ -183,6 +188,52 @@ func _apply_lut(district_id: StringName) -> void:
 		_env.adjustment_color_correction = load(lut_path)
 	else:
 		_env.adjustment_enabled = false
+
+## 2026-09-13 FINALE merge: cinematic post-fx presets per district
+## (assets/textures/postfx/README.md). Bloom lands on this WorldEnvironment
+## (already the one live Environment — see _apply_lut's comment above);
+## vignette/chroma/grain land on the PostProcessOverlay CanvasLayer, found
+## lazily the same way hud_3d.gd finds its VignetteOverlay child. A missing
+## file or a district with no preset row leaves everything at its already-
+## shipped default — safe identity fallback, same policy as _apply_lut.
+func _load_postfx_presets() -> Dictionary:
+	var path := "res://assets/textures/postfx/presets.json"
+	if not FileAccess.file_exists(path):
+		return {}
+	var parsed = JSON.parse_string(FileAccess.get_file_as_string(path))
+	if parsed is Dictionary and parsed.get("districts") is Dictionary:
+		return parsed["districts"]
+	return {}
+
+func _apply_postfx(district_id: StringName) -> void:
+	if _env == null:
+		return
+	var preset: Dictionary = _postfx.get(String(district_id), {})
+	var bloom: Dictionary = preset.get("bloom", {})
+	_env.glow_enabled = bool(bloom.get("enabled", true))
+	_env.glow_bloom = float(bloom.get("bloom", 0.1))
+	_env.glow_intensity = float(bloom.get("intensity", glow_intensity))
+	_env.glow_strength = float(bloom.get("strength", 1.0))
+	_env.glow_hdr_threshold = float(bloom.get("hdr_threshold", 1.0))
+
+	var overlay := _find_postfx_overlay()
+	if overlay == null:
+		return
+	var vignette: Dictionary = preset.get("vignette", {})
+	if overlay.has_method("set_vignette_strength"):
+		overlay.set_vignette_strength(float(vignette.get("strength", 0.55)))
+	var chroma: Dictionary = preset.get("chroma", {})
+	if overlay.has_method("set_chroma_amount"):
+		overlay.set_chroma_amount(float(chroma.get("amount_px_1080p", 0.0)))
+	var grain: Dictionary = preset.get("grain", {})
+	if overlay.has_method("set_grain_intensity"):
+		overlay.set_grain_intensity(float(grain.get("intensity", 0.1)))
+
+func _find_postfx_overlay() -> Node:
+	if is_instance_valid(_postfx_overlay):
+		return _postfx_overlay
+	_postfx_overlay = get_tree().root.find_child("PostProcessOverlay", true, false)
+	return _postfx_overlay
 
 func _find_we(n: Node) -> WorldEnvironment:
 	if n == null: return null

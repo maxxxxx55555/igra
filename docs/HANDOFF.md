@@ -1,5 +1,28 @@
 # Handoff
 
+## RELEASE CANDIDATE FINAL v3 — 2026-09-13
+
+`origin/main` is **RELEASE CANDIDATE FINAL v3**. Merged Arena's AUDIO/VISUAL FINALE branch
+(`arena/01a09712-igra`, `--no-ff` merge `36c3673`) on top of v2: 11-district cinematic
+post-fx presets (bloom/vignette/chroma/grain), 4 trailer hero stills, a finale ledger and
+certificate. Scope-checked clean (10 files, all additions, all in Arena's own zones) before
+merging.
+
+Wired live: bloom into `scripts/world_env_setup.gd` (the one live WorldEnvironment, same
+place the per-district LUTs already hook in), vignette/grain into
+`scripts/post_process_overlay.gd`'s existing setters, and a brand-new chroma layer (radial
+RGB-split canvas shader) since no consumer existed for it before. Audio needed zero new
+wiring — the lit-bed dictionary was already complete. Full detail: `PLAN.md`'s RC FINAL v3
+section; verdicts: `docs/CONTENT_PIPELINE_AUDIT.md` §17; licenses:
+`docs/ASSET_LICENSES.md` "Added 2026-09-13".
+
+Full regression re-run after the merge: static 10/10, engine gates 22/23 (same one
+pre-existing documented stall), `headless_suite` green ×2 consecutive, 7/7 `qa_sim`, i18n
+`MISSING: 0`. **Owner-only items are unchanged at exactly 4, zero technical** — this merge
+was pure content + wiring, it didn't touch anything on that list.
+
+---
+
 ## RELEASE CANDIDATE FINAL v2 — 2026-09-13
 
 `origin/main` is **RELEASE CANDIDATE FINAL v2** at `b100750`. On top

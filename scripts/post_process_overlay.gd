@@ -2,12 +2,17 @@ extends CanvasLayer
 
 var _grain: ColorRect = null
 var _vignette: ColorRect = null
+var _chroma: ColorRect = null
 var _visibility_overlay: ColorRect = null
 var _visibility_detected: bool = false
 var _visibility_timer: float = 0.0
 
 func _ready() -> void:
 	layer = 100
+	# Chroma samples SCREEN_TEXTURE, so it must draw before the grain/vignette
+	# overlays (plain color layers, no screen sampling) or it would pick up
+	# their tint on its R/B offset taps.
+	_build_chroma()
 	_build_grain()
 	_build_vignette()
 	_build_visibility_overlay()
@@ -46,6 +51,45 @@ func _process(delta: float) -> void:
 	var mat := _visibility_overlay.material as ShaderMaterial
 	if mat != null:
 		mat.set_shader_parameter("pulse", new_pulse)
+
+## Радиальная хроматическая аберрация (assets/textures/postfx/README.md
+## "Chroma" layer). amount_px_1080p=0 -> identity (R=G=B, no sampling
+## offset), so districts with no preset entry render unchanged.
+func _build_chroma() -> void:
+	_chroma = ColorRect.new()
+	_chroma.name = "ChromaOverlay"
+	_chroma.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_chroma.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(_chroma)
+	var mat := ShaderMaterial.new()
+	mat.shader = _chroma_shader()
+	mat.set_shader_parameter("amount_px_1080p", 0.0)
+	mat.set_shader_parameter("viewport_height", 1080.0)
+	_chroma.material = mat
+
+func _chroma_shader() -> Shader:
+	var s := Shader.new()
+	s.code = "shader_type canvas_item;\n" \
+		+ "uniform sampler2D screen_texture : hint_screen_texture, filter_linear;\n" \
+		+ "uniform float amount_px_1080p : hint_range(0.0, 3.0) = 0.0;\n" \
+		+ "uniform float viewport_height : hint_range(1.0, 8192.0) = 1080.0;\n" \
+		+ "void fragment(){\n" \
+		+ "  vec2 centered = UV - 0.5;\n" \
+		+ "  float px = amount_px_1080p * (viewport_height / 1080.0);\n" \
+		+ "  vec2 offset = centered * (px / max(viewport_height, 1.0));\n" \
+		+ "  float r = textureLod(screen_texture, SCREEN_UV + offset, 0.0).r;\n" \
+		+ "  float g = textureLod(screen_texture, SCREEN_UV, 0.0).g;\n" \
+		+ "  float b = textureLod(screen_texture, SCREEN_UV - offset, 0.0).b;\n" \
+		+ "  COLOR = vec4(r, g, b, 1.0);\n" \
+		+ "}"
+	return s
+
+func set_chroma_amount(px_1080p: float) -> void:
+	if _chroma and _chroma.material is ShaderMaterial:
+		var vp := get_viewport()
+		var h: float = float(vp.get_visible_rect().size.y) if vp else 1080.0
+		_chroma.material.set_shader_parameter("amount_px_1080p", clampf(px_1080p, 0.0, 3.0))
+		_chroma.material.set_shader_parameter("viewport_height", h)
 
 func _build_grain() -> void:
 	_grain = ColorRect.new()

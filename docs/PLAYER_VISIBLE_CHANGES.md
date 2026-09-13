@@ -5,6 +5,19 @@ in-game verification — a static-only pass can't play the game itself.
 
 ---
 
+## Batch 16 (2026-09-13) — cinematic look pass: bloom, vignette, chroma, film grain per district
+
+- **Every district now has its own subtle cinematic grading** on top of the
+  existing color LUTs: a touch of glow around bright lights, a soft vignette
+  at the screen edges, gentle film grain, and (new) a barely-visible color
+  fringe on hard highlights. Fog districts (warehouses, industrial) glow and
+  grain a little more; clinical districts (hospital, police, school) stay
+  colder and glow less. None of it should be *noticed* on its own — only
+  felt as the game looking a bit more like a finished film.
+- No gameplay change, no new settings — this is purely a look pass.
+
+---
+
 ## Batch 15 (2026-09-13) — FINAL HARDENING: a real crash fixed, medkits/batteries actually work now, touch tuning
 
 - **A real bug fixed: the game used to send you back to the main menu
