@@ -21,7 +21,7 @@ in-scope-only PR per `ARENA_NEXT_PROMPT.md`'s protocol. `arena/01a080ba-
 igra` (suburbs district content, PR #1) was merged and deleted
 2026-09-08 — see decisions log below.
 
-## RELEASE CANDIDATE FINAL v3 — declared 2026-09-13, tip TBD (merge `36c3673`)
+## RELEASE CANDIDATE FINAL v3 — declared 2026-09-13, tip `44142de` (merge `36c3673`)
 
 Merged Arena's AUDIO/VISUAL FINALE branch (`arena/01a09712-igra`) on top of RC FINAL v2:
 scope-check passed clean (10 files, all additions, all in her `assets/textures/`,
