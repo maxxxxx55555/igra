@@ -54,6 +54,32 @@ in the same day's work, and all of them were fixed or explicitly recorded.
 | Content pipeline audit | `docs/CONTENT_PIPELINE_AUDIT.md` | per-pass content verdicts §1–§19 |
 | Asset licences | `docs/ASSET_LICENSES.md` | provenance for every shipped asset |
 
+## Autoplay bot — the regression no static gate could see
+
+`bash tools/qa_sim/autoplay_bot` plays the game headless with simulated input only. It
+caught a defect that passed static 12/12, engine 24/25 *and* the whole headless suite:
+
+`scripts/tools/_qa_autoplay_runner.gd::_switch_node()` locates a district's power switch by
+duck-typing over the `interactable` group — the first node carrying a `district_id` and an
+`interact()` method. The newly-wired `secret.gd` had both. The bot therefore walked to a
+secret instead of the switch, collected it, the district never advanced, and the run died on
+the 45-second no-progress timeout.
+
+| Run | Districts restored | Outcome |
+|---|---|---|
+| With the collision | 5 / 11 | softlock at `gas_station` stage 2 |
+| After renaming the field to `home_district` | **11 / 11** | reaches the final night, then stalls in the boss phase |
+
+The remaining boss-phase stall is the **pre-existing, already-recorded gap**, not new: the
+prior `RELEASE_ARTIFACTS` row states "11/11 districts in the clear majority of runs … and
+the remaining boss-fight gap", and `_qa_autoplay_runner.gd` carries a note dated 2026-09-12
+explaining that the bot cannot keep its flashlight battery alive through the boss fight.
+None of this pass's changes touch boss combat or battery drain at default modifier values.
+
+The lesson worth keeping: a feature can be wired correctly, pass every gate, and still break
+the game through a name collision with an existing convention. The bot is the only thing
+that found it.
+
 ## Standing gates
 
 `bash tools/check.sh` — 12 static gates (now including both content validators) plus 13
