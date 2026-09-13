@@ -1,5 +1,28 @@
 # Known issues
 
+## The autoplay bot wins 0 of 3 seeds — the boss phase is not passable by it (re-measured 2026-09-13)
+
+`bash tools/qa_sim/autoplay_bot` currently reports **`0/3 seeds won, 3 softlock(s)`**. This
+is not a regression from the MEGA FINAL PASS and it is not new, but the number deserves to
+be stated plainly rather than left inside a prose sentence about a "remaining boss-fight
+gap".
+
+What the bot does achieve on every seed: all 11 districts restored to FULL (seed 1 at
+t≈144 s, seed 3 at t≈126 s) and the final night reached. What it never achieves: getting
+past `phase=boss district=power_station spine_i=10`, where all three seeds die on the
+45-second no-progress timeout with scores clustered at 880–906.
+
+The cause is documented in `scripts/tools/_qa_autoplay_runner.gd` (note dated 2026-09-12):
+the bot cannot keep its flashlight battery alive through the boss fight, and
+`base_monster.gd`'s light gate requires `light_energy > 0.1`, so a dead flashlight makes
+that phase unwinnable regardless of aim.
+
+**Consequence for release claims:** the project does **not** currently have an automated
+winnability proof. The game is bot-verified playable up to the final night and no further.
+Any statement that a bot run proves the Truth ending, or proves the game completable, is
+unsupported until boss tuning closes this. Fixing it is a balance problem (boss difficulty
+versus battery economy), not a wiring one.
+
 ## arena/card-unique-rescue delivered no card art — the 4-of-22 duplicate-photo defect is still open (2026-09-13)
 
 The branch `arena/card-unique-rescue` (tip `b1d7830`) was commissioned to fix the known

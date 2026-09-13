@@ -67,14 +67,27 @@ the 45-second no-progress timeout.
 
 | Run | Districts restored | Outcome |
 |---|---|---|
-| With the collision | 5 / 11 | softlock at `gas_station` stage 2 |
-| After renaming the field to `home_district` | **11 / 11** | reaches the final night, then stalls in the boss phase |
+| With the collision (seed 1) | 5 / 11 | softlock at `gas_station` stage 2 |
+| After renaming the field to `home_district` | **11 / 11 on all 3 seeds** | all 3 reach the final night, all 3 stall in the boss phase |
 
-The remaining boss-phase stall is the **pre-existing, already-recorded gap**, not new: the
-prior `RELEASE_ARTIFACTS` row states "11/11 districts in the clear majority of runs … and
-the remaining boss-fight gap", and `_qa_autoplay_runner.gd` carries a note dated 2026-09-12
+Full result of the post-fix run, stated as the bot itself reports it:
+**`autoplay bot: 0/3 seeds won, 3 softlock(s)`.** Every seed restores all 11 districts
+(seed 1 at t=144 s, seed 2, seed 3 at t=126 s) and every seed then dies on the 45-second
+no-progress timeout at `phase=boss district=power_station spine_i=10`, with scores clustered
+at 880–906. The district-restoration spine is healthy and consistent; the boss phase is not
+passable by the bot on any seed.
+
+The boss-phase stall is the **pre-existing, already-recorded gap**, not new: the prior
+`RELEASE_ARTIFACTS` row states "11/11 districts in the clear majority of runs … and the
+remaining boss-fight gap", and `_qa_autoplay_runner.gd` carries a note dated 2026-09-12
 explaining that the bot cannot keep its flashlight battery alive through the boss fight.
 None of this pass's changes touch boss combat or battery drain at default modifier values.
+
+**What this does and does not prove.** It proves the game is playable end-to-end up to the
+final night, and that the secrets collision no longer blocks the spine. It does **not**
+prove the game is winnable: no seed has produced a win, so the "bot proves ≥3 secrets plus
+the Truth ending in one playthrough" deliverable is **unmet**. Boss tuning is the open item
+standing between the bot and a winnability proof.
 
 The lesson worth keeping: a feature can be wired correctly, pass every gate, and still break
 the game through a name collision with an existing convention. The bot is the only thing
