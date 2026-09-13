@@ -10,6 +10,14 @@
 set -uo pipefail
 cd "$(dirname "$0")/../.."
 
+# Путь к Godot: переменная окружения > тулчейн в песочнице > `godot` в PATH
+# > дефолтный локальный путь владельца (Windows).
+GODOT="${GODOT:-}"
+if [[ -z "$GODOT" ]]; then
+	for cand in "$HOME/godot/godot-toolchain/Godot_v4.7-stable_linux.x86_64" "$(command -v godot || true)"; do
+		if [[ -n "$cand" && ( -x "$cand" ) ]]; then GODOT="$cand"; break; fi
+	done
+fi
 GODOT="${GODOT:-C:/Users/Maxsim/Desktop/TLS_Build/godot_extracted/Godot_v4.7-stable_win64_console.exe}"
 [[ -x "$GODOT" ]] || command -v "$GODOT" >/dev/null 2>&1 || { echo "Godot not found: $GODOT"; exit 99; }
 mkdir -p .qa_logs
