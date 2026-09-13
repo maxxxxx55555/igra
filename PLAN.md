@@ -21,6 +21,42 @@ in-scope-only PR per `ARENA_NEXT_PROMPT.md`'s protocol. `arena/01a080ba-
 igra` (suburbs district content, PR #1) was merged and deleted
 2026-09-08 — see decisions log below.
 
+## SHIP STATE: RELEASE CANDIDATE FINAL v5 — declared 2026-09-13 (MEGA FINAL PASS)
+
+Gates at declaration, two consecutive full runs on the final code, identical both times:
+**static 12/12, engine 24/25, headless suite green, i18n MISSING 0 at 1265 keys across 13
+locales, retention validator 270 checks ALL PASS, content-depth 0 ERROR.** The single engine
+failure is the pre-existing 3D-scene 90s stall, unchanged from the baseline that predates
+this pass. `default_bus_layout.tres` clean — no `--import` was run.
+
+**Merged:** `arena/01a09a11-igra` content-depth, `arena/01a09a0b-igra` ui-audio,
+`arena/01a09a4a-igra` retention — each after an independent pre-merge scope-check.
+**Rejected:** `arena/card-unique-rescue`, which certified a 22/22 district-card scene match
+while its own blob hashes are byte-identical to `main`. No card art changed. See
+`docs/KNOWN_ISSUES.md`.
+
+**The result that matters most:** secrets were unreachable in the built game. `secret.gd`
+extended `Area2D`, and `interactor.gd` skips any candidate that is not a `Node3D`, so
+`EventBus.secret_found` had never fired once — and with it the secrets quest, the
+`secret_hunter` and `seeker` achievements, the XP and coin rewards, and the stats counter
+were all dead. All 26 secrets now spawn through the existing `DistrictLoot` placement path.
+
+**Six review agents** ran this pass and found nine defects; every one was fixed or recorded.
+Two were P0s in this same day's work — collected secrets respawning on district re-entry,
+and New Game failing to reset `ProgressTracker`/`NewGamePlus` (the identical bug class to
+the TRUTH WAVE P0.2 already recorded in `CLAUDE.md`). A third found that 27 of 31
+achievements were unlocking silently because `AchievementManager` was never bridged to
+`EventBus`. Full evidence: `docs/artifacts/GAME_QUALITY_DOSSIER.md`.
+
+**Not done, and not claimed as done** — the honest list lives at the end of the dossier:
+7 districts still share another district's card photograph (measured: 11 districts, 4
+photographs); the 154 new content strings are English in all 12 non-English locales, so
+`MISSING: 0` is parity and not translation; 7 of 11 NG+ modifier knobs are stored but not
+consumed, so some modifier descriptions overstate their effect; secrets are placed by seeded
+scatter rather than their authored zones; there is no music ducking and the Ambient bus does
+not carry the district beds; and there is no out-of-app notification, which is the largest
+remaining lever on the return loop.
+
 ## SHIP STATE: RELEASE CANDIDATE FINAL v4 — declared 2026-09-13, tip `0148790` (FINAL CONSOLIDATION)
 
 FINAL CONSOLIDATION on top of v3: merged 2 of the 4 named branches

@@ -1,5 +1,45 @@
 # Handoff
 
+## SHIP STATE: RELEASE CANDIDATE FINAL v5 — 2026-09-13 (MEGA FINAL PASS)
+
+`origin/main` is **RELEASE CANDIDATE FINAL v5**. Two consecutive full regressions on the
+final code gave identical results: static 12/12, engine 24/25, headless suite green, i18n
+MISSING 0 at 1265 keys × 13 locales, retention validator 270 checks ALL PASS, content-depth
+0 ERROR. The one engine failure is the pre-existing 3D-scene 90s stall.
+
+**If you read one thing:** secrets did not work. `scripts/world/secret.gd` extended `Area2D`
+— a leftover from the 2D build — and `scripts/player/interactor.gd` filters targets with
+`not (node is Node3D): continue`. So no secret was ever an interaction candidate,
+`EventBus.secret_found` had never fired in the shipped game, and everything hanging off it
+(the secrets quest, `secret_hunter`, `seeker`, XP, coin rewards, the stats counter) was dead
+with it. This is the class of thing that passes every static gate and still means a feature
+does not exist. All 26 secrets now spawn via `DistrictLoot._spawn_secrets()`.
+
+**Branches.** Merged content-depth, ui-audio and retention after independent per-branch
+scope-checks. **Rejected `arena/card-unique-rescue`**: its certificate claims four district
+cards were regenerated with distinct scenes and asserts "Scene match: 22/22", while
+`git ls-tree` shows its 22 card blobs are byte-identical to `main`. Do not re-merge it, and
+do not rescue `scripts/regen_cards.py` from it — that script hardcodes `/home/user/igra`,
+only applies a colour tint, and its locked-variant path colorizes 100% to flat `#0c1016`.
+
+**What the six review agents caught.** Nine defects, all fixed or recorded. Two P0s were in
+the same day's work: collected secrets respawned on every district re-entry (the district
+root is rebuilt on entry and `_taken` died with the freed node — `ProgressTracker` now
+remembers), and New Game did not reset `ProgressTracker`/`NewGamePlus`. That second one is
+the *same bug class* as the TRUTH WAVE P0.2 already recorded in `CLAUDE.md` — worth noting
+that it recurred, because it will recur again whenever a new persistent system is added and
+`SaveSystem.reset_all()` is not updated alongside it. A third found 27 of 31 achievements
+unlocking silently because `AchievementManager._unlock()` only emitted its own local signal
+and was never bridged to `EventBus`.
+
+**Open gaps, stated plainly** (full list at the end of `docs/artifacts/GAME_QUALITY_DOSSIER.md`):
+7 districts share another district's card photograph — measured as 11 districts drawn from
+4 photographs, worse than the "4 of 22" previously recorded; the 154 new content strings are
+English placeholders in all 12 non-English locales, so `MISSING: 0` means parity, not
+translation; 7 of 11 NG+ modifier knobs are parsed and persisted but unconsumed, so some
+modifier descriptions currently overstate what they do; secrets sit at seeded-scatter
+positions rather than their authored zones, because the 3D districts have no zone markers.
+
 ## SHIP STATE: RELEASE CANDIDATE FINAL v4 — 2026-09-13
 
 `origin/main` is **RELEASE CANDIDATE FINAL v4**, a FINAL CONSOLIDATION pass on top of v3.
