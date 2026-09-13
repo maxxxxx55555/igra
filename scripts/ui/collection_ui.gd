@@ -129,4 +129,16 @@ func _district_card(district_id: StringName, found: int, total: int) -> Control:
 	count_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	vb.add_child(count_lbl)
 
+	# Подпись Смотрителя к району (content/captions.json, gallery). Появляется
+	# только когда район уже освещён: до этого карточка — «замок», и подпись
+	# рассказала бы про район раньше, чем игрок его увидел.
+	if lit:
+		var caption := CaptionsManager.gallery_caption_for("district", String(district_id))
+		if caption != "":
+			var cap_lbl := Label.new()
+			cap_lbl.text = caption
+			cap_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			cap_lbl.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
+			vb.add_child(cap_lbl)
+
 	return panel

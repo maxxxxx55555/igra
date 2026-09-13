@@ -73,13 +73,24 @@ func _ready() -> void:
 	EventBus.purchase_failed.connect(func(_id: String, _r: String) -> void: _one_shot(_gen_error(), -12.0))
 	EventBus.puzzle_solved.connect(func(_p: StringName, _d: StringName) -> void: _one_shot(_gen_success(), -6.0))
 	EventBus.district_restored.connect(func(_a: StringName, _b: int) -> void: _one_shot(_gen_powerup(), -4.0))
-	EventBus.achievement_unlocked.connect(func(_id: StringName) -> void: _one_shot(_gen_fanfare(), -6.0))
-	EventBus.quest_completed.connect(func(_id: StringName) -> void: _one_shot(_gen_fanfare(), -8.0))
-	EventBus.secret_found.connect(func(_id: StringName) -> void: _one_shot(_gen_chime(), -8.0))
+	# Пять событий теперь озвучивает UISFX настоящими стингерами на шине UI
+	# (docs/CERT_UIAUDIO.md §4). Процедурный вариант остаётся запасным и молчит,
+	# пока файл стингера на месте, иначе на событие звучали бы оба сразу.
+	EventBus.achievement_unlocked.connect(func(_id: StringName) -> void:
+		if not _has_ui_sting("achievement_sting"): _one_shot(_gen_fanfare(), -6.0))
+	EventBus.quest_completed.connect(func(_id: StringName) -> void:
+		if not _has_ui_sting("daily_complete_sting"): _one_shot(_gen_fanfare(), -8.0))
+	EventBus.secret_found.connect(func(_id: StringName) -> void:
+		if not _has_ui_sting("secret_discovery_sting"): _one_shot(_gen_chime(), -8.0))
 	EventBus.enemy_killed.connect(func(_id: StringName) -> void: _one_shot(_gen_thud(), -10.0))
-	EventBus.boss_defeated.connect(func() -> void: _one_shot(_gen_boom(), -3.0))
+	EventBus.boss_defeated.connect(func() -> void:
+		if not _has_ui_sting("boss_sting"): _one_shot(_gen_boom(), -3.0))
 	EventBus.player_damaged.connect(_on_player_damaged)
-	EventBus.ui_screen_opened.connect(func(_id: StringName) -> void: _one_shot(_gen_click(), -16.0))
+	EventBus.ui_screen_opened.connect(func(_id: StringName) -> void:
+		if not _has_ui_sting("menu_click"): _one_shot(_gen_click(), -16.0))
+
+static func _has_ui_sting(name: String) -> bool:
+	return ResourceLoader.exists("res://assets/audio/ui/ui_" + name + ".ogg")
 
 const HURT_SFX := preload("res://assets/audio/sfx/sfx_hurt.wav")
 const WIND_SFX := preload("res://assets/audio/sfx/amb_wind.wav")

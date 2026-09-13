@@ -664,7 +664,11 @@ func _update_battery(delta: float) -> void:
 	if not flashlight_enabled or not gameplay_active or get_tree().paused or menu_is_open:
 		return
 	var prev := battery
-	battery = clampf(battery - BATTERY_DRAIN_PER_SEC * delta, 0.0, 100.0)
+	# Модификатор NG+ "long_night": battery 0.8 = на 20% меньше света с
+	# элемента, то есть ручка делит запас, а значит умножает расход.
+	var batt_mult: float = NewGamePlus.get_modifier_multiplier("battery")
+	var drain: float = BATTERY_DRAIN_PER_SEC / batt_mult if batt_mult > 0.0 else BATTERY_DRAIN_PER_SEC
+	battery = clampf(battery - drain * delta, 0.0, 100.0)
 	if absf(battery - prev) > 0.01:
 		EventBus.player_battery_changed.emit(battery / 100.0)
 	if battery <= 0.0 and flashlight_enabled:

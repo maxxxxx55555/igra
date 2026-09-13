@@ -219,6 +219,11 @@ func _unlock(achievement_id: StringName) -> void:
 
 # Public API for external callers
 func unlock(short_id: String) -> void:
+	# Модификатор NG+ "ghost" отключает достижения целиком: он даёт крупное
+	# послабление (ползуны игнорируют игрока), и цена за него — прогон,
+	# который не засчитывается в трофеи.
+	if not NewGamePlus.get_modifier_toggle("achievements", true):
+		return
 	var map: Dictionary = {
 		"architect": &"ach_13",
 		"first_light": &"ach_01",

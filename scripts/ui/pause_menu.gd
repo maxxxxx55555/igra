@@ -39,6 +39,19 @@ func _build() -> void:
 	t.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
 	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vb.add_child(t)
+	# Активные модификаторы NG+ должны быть видны, не держаться в голове:
+	# они меняют расход батареи, слух охотников и выдачу достижений.
+	var active: Array = NewGamePlus.get_active_modifiers()
+	if not active.is_empty():
+		var names: Array = []
+		for id in active:
+			var keys: Dictionary = NewGamePlus.get_modifier(String(id)).get("i18n_keys", {})
+			names.append(LocalizationManager.t(String(keys.get("name", id))))
+		var ml := Label.new()
+		ml.text = LocalizationManager.tf("NGP_ACTIVE_LABEL", [", ".join(names)])
+		ml.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		ml.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		vb.add_child(ml)
 	_btn(vb, LocalizationManager.t("resume"),   func() -> void: UIManager.close(&"pause"); GameManager.resume_game())
 	# «Кодекс» (журнал, задания, достижения, характеристики, бестиарий) раньше
 	# открывался только с клавиатуры — на телефоне разделы были недоступны.

@@ -2,6 +2,15 @@ extends Node
 
 signal ng_plus_activated(new_level: int)
 signal difficulty_scaled(multiplier: float)
+## Выбран модификатор NG+ (content/ngp_modifiers.json).
+signal modifier_selected(modifier_id: String)
+
+## Модификаторы NG+: чистые данные, код читает только effects.
+## Один выбор на каждый уровень NG+, поэтому активных может быть до
+## MAX_NG_PLUS штук — из-за этого stacking.same_knob = "multiply" в контракте
+## вообще имеет смысл, и из-за этого же exclusive_with надо проверять против
+## уже выбранных, а не против пустоты.
+const MODIFIERS_PATH: String = "res://content/ngp_modifiers.json"
 
 const MAX_NG_PLUS = 3
 const XP_MULTIPLIER_PER_NG = 0.25
@@ -12,10 +21,81 @@ const LOOT_CHANCE_MULTIPLIER_PER_NG = 0.1
 
 var _current_ng_plus: int = 0
 var _is_ng_plus_active: bool = false
+var _modifiers: Array = []
+var _active_modifiers: Array = []
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	_load_modifiers()
 	_load_save()
+
+func _load_modifiers() -> void:
+	if not ResourceLoader.exists(MODIFIERS_PATH):
+		return
+	var f := FileAccess.open(MODIFIERS_PATH, FileAccess.READ)
+	if f == null:
+		return
+	var parsed = JSON.parse_string(f.get_as_text())
+	if parsed is Dictionary:
+		_modifiers = parsed.get("modifiers", [])
+
+func get_modifiers() -> Array:
+	return _modifiers
+
+func get_active_modifiers() -> Array:
+	return _active_modifiers.duplicate()
+
+func get_modifier(id: String) -> Dictionary:
+	for m in _modifiers:
+		if String(m.get("id", "")) == id:
+			return m
+	return {}
+
+## Взять можно, пока выборов меньше, чем уровней NG+, и пока модификатор не
+## конфликтует с уже взятым. Списки exclusive_with симметричны, но проверяем
+## обе стороны — данные правит контент, симметрию лучше не считать данностью.
+func can_select(id: String) -> bool:
+	if _current_ng_plus < 1:
+		return false
+	if id in _active_modifiers:
+		return false
+	if _active_modifiers.size() >= _current_ng_plus:
+		return false
+	var m := get_modifier(id)
+	if m.is_empty():
+		return false
+	for other in _active_modifiers:
+		if other in m.get("exclusive_with", []):
+			return false
+		if id in get_modifier(other).get("exclusive_with", []):
+			return false
+	return true
+
+func select_modifier(id: String) -> bool:
+	if not can_select(id):
+		return false
+	_active_modifiers.append(id)
+	modifier_selected.emit(id)
+	_save_save()
+	return true
+
+## Числовые ручки перемножаются между активными модификаторами (контракт
+## stacking.same_knob = "multiply"); отсутствующая ручка не трогает значение.
+func get_modifier_multiplier(knob: String) -> float:
+	var v := 1.0
+	for id in _active_modifiers:
+		var mult: Dictionary = get_modifier(id).get("effects", {}).get("multipliers", {})
+		if mult.has(knob):
+			v *= float(mult[knob])
+	return v
+
+## Переключатели: любой активный модификатор, задающий ручку, выигрывает.
+func get_modifier_toggle(knob: String, default_value: bool = false) -> bool:
+	for id in _active_modifiers:
+		var tog: Dictionary = get_modifier(id).get("effects", {}).get("toggles", {})
+		if tog.has(knob):
+			return bool(tog[knob])
+	return default_value
 
 func get_current_ng_plus() -> int:
 	return _current_ng_plus
@@ -58,12 +138,15 @@ func get_enemy_hp_multiplier() -> float:
 func get_player_damage_multiplier() -> float:
 	return 1.0 + _current_ng_plus * PLAYER_DAMAGE_MULTIPLIER_PER_NG
 
+## Ручка "loot" из модификаторов складывается прямо сюда, чтобы все уже
+## существующие вызовы получили эффект без правок на местах.
 func get_loot_chance_multiplier() -> float:
-	return 1.0 + _current_ng_plus * LOOT_CHANCE_MULTIPLIER_PER_NG
+	return (1.0 + _current_ng_plus * LOOT_CHANCE_MULTIPLIER_PER_NG) * get_modifier_multiplier("loot")
 
 func reset_for_new_game() -> void:
 	_current_ng_plus = 0
 	_is_ng_plus_active = false
+	_active_modifiers.clear()
 	_save_save()
 
 func _load_save() -> void:
@@ -81,12 +164,16 @@ func _load_save() -> void:
 	var data = json.data as Dictionary
 	_current_ng_plus = data.get("ng_plus", 0)
 	_is_ng_plus_active = data.get("active", false)
+	_active_modifiers.clear()
+	for id in data.get("modifiers", []):
+		_active_modifiers.append(String(id))
 
 func _save_save() -> void:
 	var path = "user://ng_plus_data.json"
 	var data = {
 		"ng_plus": _current_ng_plus,
-		"active": _is_ng_plus_active
+		"active": _is_ng_plus_active,
+		"modifiers": _active_modifiers,
 	}
 	var file = FileAccess.open(path, FileAccess.WRITE)
 	if file:
