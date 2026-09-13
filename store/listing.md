@@ -5,6 +5,14 @@ in-game RU title is **ПОСЛЕДНИЙ ФОНАРЬ** per `data/i18n/ru.json` 
 for every claim: `docs/GDD.md` (citations inline where useful) — see `docs/store/play_store.md`
 for the section-by-section GDD trace. Copy is short and atmospheric, zero filler.
 
+**FINAL STORE SYNC (2026-09-13, game at RELEASE CANDIDATE FINAL v2):** every claim below was
+re-verified line-by-line against `docs/PLAYER_VISIBLE_CHANGES.md`, `PLAN.md` and
+`docs/artifacts/final_gate_report.md`; the per-claim cross-table lives in
+`docs/CERT_STORESYNC.md`. Unbacked forward promises were deleted (day-one-complete replaced
+them), and the LAN-multiplayer/ad lines in Data-safety were rewritten to match the shipped
+build exactly. EN/RU in-game masters (`data/i18n/en.json`, `ru.json`) untouched; master *store
+copy* changed only where the claim audit required it.
+
 ---
 
 ## Title
@@ -19,8 +27,8 @@ for the section-by-section GDD trace. Copy is short and atmospheric, zero filler
 
 ## Short description
 
-- **EN (71/80 chars):** `Restore the light. Stealth horror FPS where every streetlight is life.`
-- **RU (~64/80):** `Верни свет. Стелс-хоррор-шутер, где каждый уличный фонарь — жизнь.`
+- **EN (70/80 chars):** `Restore the light. Stealth horror FPS where every streetlight is life.`
+- **RU (66/80):** `Верни свет. Стелс-хоррор-шутер, где каждый уличный фонарь — жизнь.`
 
 ---
 
@@ -51,6 +59,7 @@ WHAT'S INSIDE
 - Stealth built on noise and visibility, not a detection meter
 - Crafting and a workbench for upgrading your one real tool: the flashlight
 - Checksum-verified saves with automatic backup recovery
+- 30 daily challenges, 31 achievements, and a New Game+ after the credits
 
 The flashlight is simultaneously your only weapon against some of what
 hunts you, your only way to see, and the thing that gives you away every
@@ -58,10 +67,13 @@ time you switch it on.
 
 CONTROLS
 Touch: virtual joystick plus action buttons, with a double-tap dodge.
-PC: WASD and mouse — same game, same save file.
+PC: WASD and mouse — same game, same save file; export or import it
+between devices, no account, no server.
 
-Free updates as the city gets built out further. No paywalled content,
-no season pass.
+THE WHOLE CITY ON DAY ONE
+All 11 districts ship complete — story, puzzles, lore and endings
+included. No paywalled content, no season pass. Fully offline: this
+blackout is a survival puzzle box, and the story is yours to drive.
 ```
 
 ### RU
@@ -87,6 +99,7 @@ no season pass.
 - Стелс на шуме и видимости, а не на индикаторе обнаружения
 - Крафт и верстак для прокачки твоего единственного настоящего оружия — фонаря
 - Сохранения с проверкой целостности и автовосстановлением
+- 30 ежедневных испытаний, 31 достижение и New Game+ после финала
 
 Фонарь одновременно — твоё единственное оружие против тех, кто охотится
 во тьме, твой единственный способ видеть и то, что выдаёт тебя каждый
@@ -94,10 +107,14 @@ no season pass.
 
 УПРАВЛЕНИЕ
 Сенсорное: виртуальный джойстик и кнопки действий, уклонение двойным
-касанием. ПК: WASD и мышь — та же игра, тот же файл сохранения.
+касанием. ПК: WASD и мышь — та же игра, тот же файл сохранения;
+экспортируй и импортируй его между устройствами — без аккаунта и
+сервера.
 
-Бесплатные обновления по мере расширения города. Никакого платного
-контента и сезонных пропусков.
+ВЕСЬ ГОРОД В ДЕНЬ ЗАПУСКА
+Все 11 районов готовы целиком — сюжет, головоломки, архивы и концовки.
+Никакого платного контента и сезонных пропусков. Полностью офлайн:
+этот блэкаут — survival-пазл, где историю ведёшь ты.
 ```
 
 ---
@@ -132,13 +149,15 @@ no season pass.
 `Survival Horror`, `FPS`, `Atmospheric`, `Stealth`, `Dark`, `Single-player`,
 `Offline`, `Crafting`, `Exploration`, `Story Rich`, `Indie`
 Keywords: blackout, survival horror, stealth, power grid, night city,
-flashlight horror, stealth FPS, atmospheric horror, restoring the light.
+flashlight horror, stealth FPS, atmospheric horror, restoring the light,
+story-driven, survival puzzle, offline horror game, flashlight game.
 
 ### RU
 `Выживание`, `Хоррор`, `Шутер от первого лица`, `Атмосферный`, `Стелс`,
 `Одиночная игра`, `Офлайн`, `Крафт`, `Исследование`, `Сюжетный`, `Инди`
 Ключевые слова: блэкаут, хоррор выживания, стелс, электросеть, ночной
-город, хоррор с фонарём, атмосферный хоррор, вернуть свет.
+город, хоррор с фонарём, атмосферный хоррор, вернуть свет, сюжетная
+игра, survival-пазл, офлайн-хоррор.
 
 ---
 
@@ -147,12 +166,22 @@ flashlight horror, stealth FPS, atmospheric horror, restoring the light.
 - Expected age rating: **PEGI 16** (horror tension, stylized violence, a
   narrative about a deliberately caused disaster) — see `docs/store/play_store.md`.
 
-## Data-safety notes (confirm with the owner before submitting)
+## Data-safety notes (confirmed against the shipped RC FINAL v2 build, 2026-09-13)
 - Offline-first, no account system, no analytics SDK in the current build.
 - No personal data collected or shared by the game.
-- LAN multiplayer connects only to devices the player explicitly joins.
-- Ad SDK (AppLovin MAX) is integrated behind a key — not shipping until a real
-  key is set; if enabled, the policy must add the SDK disclosure before submission.
+- No multiplayer ships in the launch build: the LAN prototype
+  (`scripts/multiplayer/`, archived per `docs/A10_multiplayer_decision.md`)
+  is unreachable from any UI, and the game itself opens no network
+  connections. (Play Console Data-Safety answers must say "no data
+  collected, no users" — an earlier draft line about LAN multiplayer was
+  removed here as unbacked.)
+- Ads: the optional AppLovin MAX plugin ships with **no SDK key configured**,
+  so no real ad ever loads and nothing is collected; until a key is set the
+  ad slots show an offline debug placeholder popup only. If a real key is
+  enabled before submission, the Data-Safety form and privacy policy §5 must
+  be updated first — see `docs/store/HUMAN_CHECKLIST.md`.
+- The Android build declares `INTERNET` (reserved for the optional ad plugin)
+  and `VIBRATE` (touch haptics) only — see `export_presets.cfg`.
 - Privacy-policy URL placeholder — see `store/privacy-policy-template.md`.
 
 ---
@@ -161,7 +190,7 @@ flashlight horror, stealth FPS, atmospheric horror, restoring the light.
 
 ## 13-locale listing sections
 
-Title + tagline are the shipped in-game `menu_title` / `menu_subtitle`, byte-identical to `data/i18n/<loc>.json` (professionally translated, 13 locales, `i18n_audit.py` MISSING: 0). Short/full/bullets/tags for the 11 non-master locales are transcreated from the same vetted in-game vocabulary — every claim is GDD-true and the wording reuses shipped strings; a native spot-check before submission is still welcome. The 8 bullets per locale are benefit-led (player outcome first, spec second) as of the 2026-09-11 console-ready polish. EN + RU keep the master text in the block above, byte-untouched.
+Title + tagline are the shipped in-game `menu_title` / `menu_subtitle`, byte-identical to `data/i18n/<loc>.json` (professionally translated, 13 locales, `i18n_audit.py` MISSING: 0). Short/full/bullets/tags for the 11 non-master locales are transcreated from the same vetted in-game vocabulary — every claim is GDD-true and the wording reuses shipped strings; a native spot-check before submission is still welcome. The 8 bullets per locale are benefit-led (player outcome first, spec second) as of the 2026-09-11 console-ready polish. FINAL SYNC 2026-09-13: every locale's full description now mirrors the RC FINAL v2 master exactly — the "free updates" forward-promise was deleted and replaced with the shipped day-one-complete/offline closer, and a "30 daily challenges, 31 achievements, New Game+" line was added; the per-claim cross-table is in `docs/CERT_STORESYNC.md`. EN + RU keep the master text in the block above (surgically edited only where the claim audit required it — see `docs/CERT_STORESYNC.md` §3).
 
 ### en — English
 
@@ -205,8 +234,9 @@ Tu linterna es a la vez tu única arma contra parte de lo que te caza, tu única
 - Sigilo basado en ruido y visibilidad, no en un medidor
 - Fabricación y banco de trabajo para mejorar tu linterna
 - Guardado con verificación de integridad y copia de seguridad
+- 30 desafíos diarios, 31 logros y New Game+ tras los créditos
 
-Táctil: joystick virtual y botones, esquiva con doble toque. PC: WASD y ratón, la misma partida. Actualizaciones gratuitas. Sin contenido de pago.
+Táctil: joystick virtual y botones, esquiva con doble toque. PC: WASD y ratón, la misma partida. El juego llega completo el día uno —historia, puzles y finales incluidos— y se juega sin conexión: un survival-puzzle narrativo. Sin contenido de pago ni pase de temporada.
 ```
 - **Feature bullets:**
   - Camina hasta cualquier calle que veas: una sola ciudad a oscuras, 11 distritos, cero pantallas de carga.
@@ -243,8 +273,9 @@ Deine Taschenlampe ist zugleich deine einzige Waffe gegen einen Teil dessen, was
 - Schleichen über Geräusch und Sichtbarkeit, nicht über eine Anzeige
 - Herstellung und Werkbank zum Verbessern deiner Taschenlampe
 - Speicherstände mit Integritätsprüfung und Backup
+- 30 tägliche Herausforderungen, 31 Erfolge und New Game+ nach den Credits
 
-Touch: virtueller Joystick und Aktionstasten, Ausweichen per Doppeltipp. PC: WASD und Maus, dasselbe Spiel. Kostenlose Updates. Keine kostenpflichtigen Inhalte.
+Touch: virtueller Joystick und Aktionstasten, Ausweichen per Doppeltipp. PC: WASD und Maus, dasselbe Spiel. Die ganze Stadt ist ab Tag eins fertig — Geschichte, Rätsel und Enden inklusive. Komplett offline: ein story-getriebenes Survival-Puzzle. Keine kostenpflichtigen Inhalte, kein Season Pass.
 ```
 - **Feature bullets:**
   - Geh jede Straße, die du siehst: eine einzige Stadt im Blackout, 11 Bezirke, null Ladebildschirme.
@@ -281,8 +312,9 @@ Ta lampe torche est à la fois ta seule arme contre une partie de ce qui te traq
 - Infiltration basée sur le bruit et la visibilité, pas sur une jauge
 - Fabrication et établi pour améliorer ta lampe torche
 - Sauvegardes vérifiées avec récupération de secours
+- 30 défis quotidiens, 31 succès et New Game+ après le générique
 
-Tactile : joystick virtuel et boutons, esquive en double-tap. PC : WASD et souris, la même partie. Mises à jour gratuites. Aucun contenu payant.
+Tactile : joystick virtuel et boutons, esquive en double-tap. PC : WASD et souris, la même partie. La ville entière dès le jour un — intrigue, énigmes et fins incluses. Entièrement hors ligne : un survival-puzzle narratif. Aucun contenu payant, aucun pass saisonnier.
 ```
 - **Feature bullets:**
   - Marche jusqu'à toute rue que tu vois : une seule ville dans le noir, 11 districts, zéro écran de chargement.
@@ -319,8 +351,9 @@ La tua torcia è insieme la tua unica arma contro parte di ciò che ti dà la ca
 - Furtività basata su rumore e visibilità, non su un indicatore
 - Crafting e banco da lavoro per migliorare la torcia
 - Salvataggi verificati con recupero di backup
+- 30 sfide giornaliere, 31 achievement e New Game+ dopo i titoli di coda
 
-Touch: joystick virtuale e pulsanti, schivata con doppio tocco. PC: WASD e mouse, la stessa partita. Aggiornamenti gratuiti. Nessun contenuto a pagamento.
+Touch: joystick virtuale e pulsanti, schivata con doppio tocco. PC: WASD e mouse, la stessa partita. La città intera dal giorno uno — storia, enigmi e finali inclusi. Completamente offline: un survival-puzzle narrativo. Nessun contenuto a pagamento, nessun season pass.
 ```
 - **Feature bullets:**
   - Arriva a piedi ovunque tu riesca a vedere: un'unica città al buio, 11 distretti, zero schermate di caricamento.
@@ -357,8 +390,9 @@ Sua lanterna é ao mesmo tempo sua única arma contra parte do que te caça, seu
 - Furtividade baseada em ruído e visibilidade, não num medidor
 - Criação e bancada para melhorar sua lanterna
 - Saves verificados com recuperação de backup
+- 30 desafios diários, 31 conquistas e New Game+ após os créditos
 
-Toque: joystick virtual e botões, esquiva com toque duplo. PC: WASD e mouse, o mesmo jogo. Atualizações gratuitas. Sem conteúdo pago.
+Toque: joystick virtual e botões, esquiva com toque duplo. PC: WASD e mouse, o mesmo jogo. A cidade inteira desde o primeiro dia — história, quebra-cabeças e finais inclusos. Totalmente offline: um survival-puzzle narrativo. Sem conteúdo pago, sem passe de temporada.
 ```
 - **Feature bullets:**
   - Vá a pé até onde a vista alcança: uma única cidade no apagão, 11 distritos, zero telas de carregamento.
@@ -395,8 +429,9 @@ El fenerin aynı anda seni avlayanların bir kısmına karşı tek silahın, gö
 - Bir göstergeye değil, sese ve görünürlüğe dayalı gizlilik
 - El fenerini geliştirmek için üretim ve tezgâh
 - Bütünlük doğrulamalı, yedekten kurtarmalı kayıtlar
+- Krediler sonrası 30 günlük görev, 31 başarı ve New Game+
 
-Dokunmatik: sanal çubuk ve düğmeler, çift dokunuşla yan geçiş. PC: WASD ve fare, aynı oyun. Ücretsiz güncellemeler. Ücretli içerik yok.
+Dokunmatik: sanal çubuk ve düğmeler, çift dokunuşla yan geçiş. PC: WASD ve fare, aynı oyun. Şehrin tamamı ilk günden hazır — hikâye, bulmacalar ve sonlar dâhil. Baştan sona çevrimdışı: hikâye odaklı bir hayatta kalma bulmacası. Ücretli içerik yok, sezon pası yok.
 ```
 - **Feature bullets:**
   - Gördüğün her sokağa yürüyerek ulaş: karanlıkta tek bir şehir, 11 bölge, sıfır yükleme ekranı.
@@ -433,8 +468,9 @@ Dokunmatik: sanal çubuk ve düğmeler, çift dokunuşla yan geçiş. PC: WASD v
 - ゲージではなく、音と視認性で成立するステルス
 - 唯一の道具、懐中電灯を強化するクラフトと作業台
 - 整合性チェックとバックアップ復旧付きのセーブ
+- デイリーチャレンジ30種、実績31個、クリア後にはNew Game+
 
-タッチ：仮想スティックとアクションボタン、ダブルタップで回避。PC：WASDとマウス、同じセーブデータ。無料アップデート。有料コンテンツなし。
+タッチ：仮想スティックとアクションボタン、ダブルタップで回避。PC：WASDとマウス、同じセーブデータ。街はローンチ時点で完全体——物語も謎解きも全エンディングも収録。オフラインで遊ぶ、ストーリー主導のサバイバルパズル。有料コンテンツもシーズンパスもありません。
 ```
 - **Feature bullets:**
   - 見えた場所へ、歩いて行ける。闇に沈んだひとつながりの街、11地区、ロード画面ゼロ。
@@ -471,8 +507,9 @@ Dokunmatik: sanal çubuk ve düğmeler, çift dokunuşla yan geçiş. PC: WASD v
 - 게이지가 아닌 소음과 시야로 이루어지는 잠입
 - 유일한 도구인 손전등을 강화하는 제작과 작업대
 - 무결성 검증과 백업 복구가 있는 세이브
+- 데일리 챌린지 30종, 업적 31개, 그리고 크레딧 이후의 뉴 게임+
 
-터치: 가상 스틱과 액션 버튼, 더블 탭 회피. PC: WASD와 마우스, 같은 세이브. 무료 업데이트. 유료 콘텐츠 없음.
+터치: 가상 스틱과 액션 버튼, 더블 탭 회피. PC: WASD와 마우스, 같은 세이브. 출시 당일 도시 전체가 완성본입니다 — 이야기, 퍼즐, 모든 엔딩 포함. 완전 오프라인, 스토리 중심의 생존 퍼즐. 유료 콘텐츠도 시즌 패도 없습니다.
 ```
 - **Feature bullets:**
   - 보이는 곳이라면 걸어갈 수 있다. 어둠에 잠긴 하나의 도시, 11개 구역, 로딩 화면 제로.
@@ -509,8 +546,9 @@ Dokunmatik: sanal çubuk ve düğmeler, çift dokunuşla yan geçiş. PC: WASD v
 - 基于噪音与可见度、而非探测条的潜行
 - 用于强化手电筒的制作与工作台
 - 带完整性校验与备份恢复的存档
+- 30 项每日挑战、31 个成就，通关后还有 New Game+
 
-触屏：虚拟摇杆与操作按钮，双击闪避。PC：WASD 与鼠标，同一份存档。免费更新。无付费内容。
+触屏：虚拟摇杆与操作按钮，双击闪避。PC：WASD 与鼠标，同一份存档。整座城市在首日即为完全体——剧情、谜题与全部结局都已收录。完全离线、剧情驱动的生存解谜。无付费内容，无赛季通行证。
 ```
 - **Feature bullets:**
   - 看得见，就走得到。一座黑暗中的连续城市，11 个区域，零加载画面。
@@ -547,8 +585,9 @@ Dokunmatik: sanal çubuk ve düğmeler, çift dokunuşla yan geçiş. PC: WASD v
 - 基於噪音與可見度、而非偵測條的潛行
 - 用於強化手電筒的製作與工作臺
 - 帶完整性校驗與備份還原的存檔
+- 30 項每日挑戰、31 個成就，破關後還有 New Game+
 
-觸控：虛擬搖桿與操作按鈕，雙擊閃避。PC：WASD 與滑鼠，同一份存檔。免費更新。無付費內容。
+觸控：虛擬搖桿與操作按鈕，雙擊閃避。PC：WASD 與滑鼠，同一份存檔。整座城市在首日起即為完全體——劇情、謎題與全部結局都已收錄。完全離線、劇情驅動的生存解謎。無付費內容，無賽季通行證。
 ```
 - **Feature bullets:**
   - 看得見，就走得到。一座黑暗中的連續城市，11 個區域，零載入畫面。
@@ -585,8 +624,9 @@ Dokunmatik: sanal çubuk ve düğmeler, çift dokunuşla yan geçiş. PC: WASD v
 - تخفٍّ قائم على الصوت والرؤية، لا على مؤشر
 - تصنيع وطاولة عمل لتطوير مصباحك
 - حفظ بتحقق من السلامة واستعادة احتياطية
+- 30 تحديًا يوميًا و31 إنجازًا وNew Game+ بعد النهاية
 
-باللمس: عصا افتراضية وأزرار، ومراوغة بنقرة مزدوجة. الحاسب: WASD والفأرة، الحفظة نفسها. تحديثات مجانية. بلا محتوى مدفوع.
+باللمس: عصا افتراضية وأزرار، ومراوغة بنقرة مزدوجة. الحاسب: WASD والفأرة، الحفظة نفسها. المدينة كاملة من اليوم الأول — القصة والألغاز وكل النهايات مشمولة. لعبة نجاة وألغاز سردية تعمل دون اتصال بالكامل. بلا محتوى مدفوع وبلا جواز موسم.
 ```
 - **Feature bullets:**
   - ما تراه، تبلغه سيرًا: مدينة واحدة متصلة في الظلام، 11 حيًّا، صفر شاشات تحميل.
