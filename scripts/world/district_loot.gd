@@ -13,6 +13,13 @@ class_name DistrictLoot
 
 const PICKUP_SCENE: PackedScene = preload("res://scenes/pickups/item_pickup_3d.tscn")
 const DOC_SCENE: PackedScene = preload("res://scenes/pickups/document_pickup.tscn")
+const SECRET_SCENE: PackedScene = preload("res://scenes/props/secret.tscn")
+
+## content/secrets.json — 26 секретов, авторский контент. Читается один раз
+## на запуск: populate() статический и вызывается по разу на район.
+const SECRETS_PATH: String = "res://content/secrets.json"
+static var _secrets_by_district: Dictionary = {}
+static var _secrets_loaded: bool = false
 
 ## Базовый набор: встречается почти везде, поддерживает фонарь и здоровье.
 const COMMON: Array[StringName] = [&"battery", &"battery", &"scrap", &"medkit"]
@@ -162,7 +169,60 @@ static func populate(district_root: Node3D, district_id: StringName) -> int:
 			var lpos := _scatter(district_root, rng)
 			if _spawn_document(district_root, String(doc_id), lpos):
 				placed += 1
+	placed += _spawn_secrets(district_root, district_id)
 	return placed
+
+## Секреты района из content/secrets.json.
+##
+## Контент задаёт zone ("z_maple_row") и location_hint словами, но в 3D-районах
+## нет именованных маркеров зон — zone существует только как словарь авторов
+## в content/districts/<id>/item_spawns.json. Поэтому позиция берётся тем же
+## детерминированным разбросом, что и весь остальной лут, но seed считается от
+## id самого секрета: место у каждого секрета своё и одинаковое между
+## запусками и у всех игроков в сети. Радиус больше обычного — секрет должен
+## лежать в стороне от маршрута, а не под ногами.
+static func _spawn_secrets(root: Node3D, district_id: StringName) -> int:
+	_load_secrets()
+	var rows: Array = _secrets_by_district.get(String(district_id), [])
+	var placed := 0
+	for row in rows:
+		var node := SECRET_SCENE.instantiate() as Node3D
+		if node == null:
+			continue
+		var srng := RandomNumberGenerator.new()
+		srng.seed = hash(String(row.get("id", "")))
+		var ang := srng.randf_range(0.0, TAU)
+		var rad := srng.randf_range(RADIUS_MAX * 0.6, RADIUS_MAX)
+		root.add_child(node)
+		node.global_position = root.global_position + Vector3(cos(ang) * rad, DROP_Y, sin(ang) * rad)
+		node.set("secret_id", StringName(String(row.get("id", ""))))
+		node.set("district_id", district_id)
+		node.set("min_stage", int(row.get("min_stage", 0)))
+		var reward: Dictionary = row.get("reward", {})
+		node.set("item_id", StringName(String(reward.get("item", "battery"))))
+		node.set("amount", int(reward.get("amount", 1)))
+		var keys: Dictionary = row.get("i18n_keys", {})
+		node.set("title_key", String(keys.get("title", "")))
+		placed += 1
+	return placed
+
+static func _load_secrets() -> void:
+	if _secrets_loaded:
+		return
+	_secrets_loaded = true
+	if not ResourceLoader.exists(SECRETS_PATH):
+		return
+	var f := FileAccess.open(SECRETS_PATH, FileAccess.READ)
+	if f == null:
+		return
+	var parsed = JSON.parse_string(f.get_as_text())
+	if not (parsed is Dictionary):
+		return
+	for row in parsed.get("secrets", []):
+		var d := String(row.get("district", ""))
+		if not _secrets_by_district.has(d):
+			_secrets_by_district[d] = []
+		_secrets_by_district[d].append(row)
 
 static func _scatter(root: Node3D, rng: RandomNumberGenerator) -> Vector3:
 	var ang := rng.randf_range(0.0, TAU)

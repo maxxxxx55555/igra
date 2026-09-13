@@ -6,17 +6,38 @@ var puzzles: int = 0
 var time_played: float = 0.0
 var _ach_done: Dictionary = {}
 var _docs: Dictionary = {}
+## Какие именно секреты найдены. Счётчика `secrets` хватало достижениям, но
+## не экрану коллекции: чтобы показать найденный секрет текстом, нужен id.
+var _secrets_found: Dictionary = {}
 const DOC_ON_DISTRICT := "doc_engineer_log"
 const DOC_ON_SECRET := "doc_family_letter"
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	EventBus.secret_found.connect(func(_id): secrets += 1; _unlock_doc(DOC_ON_SECRET); _post())
+	EventBus.secret_found.connect(_on_secret_found)
 	EventBus.enemy_killed.connect(_on_kill)
 	EventBus.puzzle_solved.connect(func(_a, _b): puzzles += 1; _post())
 	EventBus.district_restored.connect(func(_a, _b): _unlock_doc(DOC_ON_DISTRICT); _post())
 func _process(delta: float) -> void:
 	if GameManager.is_playing():
 		time_played += delta
+## Один и тот же секрет не должен считаться дважды: он queue_free()-ится
+## при взятии, но сохранение/загрузка в том же сеансе могла бы повторить id.
+func _on_secret_found(id: StringName) -> void:
+	var key := String(id)
+	if key != "" and _secrets_found.has(key):
+		return
+	if key != "":
+		_secrets_found[key] = true
+	secrets += 1
+	_unlock_doc(DOC_ON_SECRET)
+	_post()
+
+func is_secret_found(id: String) -> bool:
+	return _secrets_found.get(id, false)
+
+func found_secret_ids() -> Array:
+	return _secrets_found.keys()
+
 func _on_kill(id: StringName) -> void:
 	kills += 1
 	if id == &"shadow":
@@ -88,7 +109,8 @@ func get_stats() -> Dictionary:
 func to_dict() -> Dictionary:
 	return {"secrets": secrets, "kills": kills, "shadow_kills": shadow_kills, "puzzles": puzzles, "time_played": time_played,
 		"ach": _ach_done.keys().map(func(k): return String(k)),
-		"docs": _docs.keys().filter(func(k): return _docs[k]).map(func(k): return String(k))}
+		"docs": _docs.keys().filter(func(k): return _docs[k]).map(func(k): return String(k)),
+		"secret_ids": _secrets_found.keys().map(func(k): return String(k))}
 func from_dict(d: Dictionary) -> void:
 	secrets = int(d.get("secrets", 0))
 	kills = int(d.get("kills", 0))
@@ -101,3 +123,6 @@ func from_dict(d: Dictionary) -> void:
 	_docs.clear()
 	for k in d.get("docs", []):
 		_docs[String(k)] = true
+	_secrets_found.clear()
+	for k in d.get("secret_ids", []):
+		_secrets_found[String(k)] = true

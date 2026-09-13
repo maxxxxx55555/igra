@@ -12,8 +12,14 @@ extends Node
 
 signal progress_changed(current: int, target: int)
 signal completed(reward: int)
+## Серия пройденных дней перевалила за веху из streak_rewards.
+signal streak_milestone(days: int)
 
-const DATA_PATH: String = "res://data/daily_challenges.json"
+## Контент-пасс retention принёс 60 шаблонов в content/daily_challenges.json
+## (было 30 в data/). Читаем контентный файл, если он есть, и откатываемся на
+## старый — на случай частичного чекаута без content/.
+const DATA_PATH: String = "res://content/daily_challenges.json"
+const DATA_PATH_LEGACY: String = "res://data/daily_challenges.json"
 const SAVE_PATH: String = "user://tls_daily.json"
 const SECONDS_PER_DAY: int = 86400
 
@@ -25,6 +31,13 @@ var _progress: int = 0
 var _completed_today: bool = false
 var _last_completed_day: int = -1
 var _play_seconds: float = 0.0
+## no_flashlight_segment: отрезок — SEGMENT_SECONDS подряд с выключенным
+## фонарём. Любое включение обнуляет накопленное, иначе «отрезок» набирался бы
+## мерцанием. Стадия района не проверяется намеренно: пройти тёмный район без
+## фонаря — как раз то, что ежедневка просит.
+const SEGMENT_SECONDS: float = 30.0
+var _flashlight_on: bool = false
+var _dark_seconds: float = 0.0
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -35,19 +48,31 @@ func _ready() -> void:
 	EventBus.document_unlocked.connect(func(_id): _tick("find_secrets", 1))
 	EventBus.streetlight_activated.connect(func(_id): _tick("light_streets", 1))
 	EventBus.district_restored.connect(func(_id, _stage): _tick("restore_districts", 1))
+	EventBus.photo_captured.connect(func(_path): _tick("photo_subject", 1))
+	EventBus.flashlight_state_changed.connect(func(on: bool) -> void:
+		_flashlight_on = on
+		_dark_seconds = 0.0)
 
 func _process(delta: float) -> void:
 	if _completed_today or _today.is_empty():
 		return
-	if String(_today.get("type", "")) == "play_minutes" and GameManager.is_playing():
+	if not GameManager.is_playing():
+		return
+	if String(_today.get("type", "")) == "play_minutes":
 		_play_seconds += delta
 		if int(_play_seconds / 60.0) > _progress:
 			_tick("play_minutes", 1)
+	elif String(_today.get("type", "")) == "no_flashlight_segment" and not _flashlight_on:
+		_dark_seconds += delta
+		if _dark_seconds >= SEGMENT_SECONDS:
+			_dark_seconds = 0.0
+			_tick("no_flashlight_segment", 1)
 
 func _load_templates() -> void:
-	if not ResourceLoader.exists(DATA_PATH):
+	var path := DATA_PATH if ResourceLoader.exists(DATA_PATH) else DATA_PATH_LEGACY
+	if not ResourceLoader.exists(path):
 		return
-	var f := FileAccess.open(DATA_PATH, FileAccess.READ)
+	var f := FileAccess.open(path, FileAccess.READ)
 	if f == null:
 		return
 	var parsed = JSON.parse_string(f.get_as_text())
@@ -108,6 +133,7 @@ func _streak_bonus(streak: int) -> int:
 			var wallet := get_node_or_null("/root/CoinWallet")
 			if wallet != null and wallet.has_method("add"):
 				wallet.add(int(row.get("reward", 0)))
+			streak_milestone.emit(streak)
 	return bonus
 
 ## Public read for the main-menu card and any future UI.

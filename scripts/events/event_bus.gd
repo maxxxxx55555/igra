@@ -89,6 +89,8 @@ signal puzzle_started(puzzle_id: String)
 signal quest_completed(quest_id: String)
 signal radar_marker_added(position: Vector2)
 signal secret_found(secret_id: String)
+## Снимок в фоторежиме сохранён. Нужен ежедневкам типа photo_subject.
+signal photo_captured(path: String)
 signal settings_changed(key: String, value: Variant)
 signal shop_toggle_requested
 signal skin_unlocked(skin_id: String)

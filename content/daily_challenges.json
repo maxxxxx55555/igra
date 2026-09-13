@@ -55,11 +55,11 @@
     {"id": "play_60", "type": "play_minutes", "target": 60, "reward": 390, "i18n_key": "DAILY_PLAY_60_FLAVOR", "en": {"flavor": "Sixty minutes. A full hour. The Keeper nods."}},
     {"id": "play_90", "type": "play_minutes", "target": 90, "reward": 585, "i18n_key": "DAILY_PLAY_90_FLAVOR", "en": {"flavor": "Ninety minutes. Overtime in the light brigade."}},
     {"id": "play_120", "type": "play_minutes", "target": 120, "reward": 780, "i18n_key": "DAILY_PLAY_120_FLAVOR", "en": {"flavor": "Two hours. A full watch. Log it with pride."}},
-    {"id": "photo_01", "type": "photo_subject", "target": 1, "reward": 25, "wired": false, "requires_signal": "EventBus.photo_captured", "i18n_key": "DAILY_PHOTO_01_FLAVOR", "en": {"flavor": "One subject. Frame something worth remembering."}},
-    {"id": "photo_03", "type": "photo_subject", "target": 3, "reward": 75, "wired": false, "requires_signal": "EventBus.photo_captured", "i18n_key": "DAILY_PHOTO_03_FLAVOR", "en": {"flavor": "Three subjects. The city's portrait, one frame at a time."}},
-    {"id": "photo_05", "type": "photo_subject", "target": 5, "reward": 125, "wired": false, "requires_signal": "EventBus.photo_captured", "i18n_key": "DAILY_PHOTO_05_FLAVOR", "en": {"flavor": "Five subjects. A gallery of the almost-lost."}},
-    {"id": "dark_05", "type": "no_flashlight_segment", "target": 5, "reward": 150, "wired": false, "i18n_key": "DAILY_DARK_05_FLAVOR", "en": {"flavor": "Five segments, flashlight OFF. Trust the lamps."}},
-    {"id": "dark_10", "type": "no_flashlight_segment", "target": 10, "reward": 300, "wired": false, "i18n_key": "DAILY_DARK_10_FLAVOR", "en": {"flavor": "Ten segments in lamp-light only. Walk like the Keeper."}}
+    {"id": "photo_01", "type": "photo_subject", "target": 1, "reward": 25, "wired": true, "requires_signal": "EventBus.photo_captured", "i18n_key": "DAILY_PHOTO_01_FLAVOR", "en": {"flavor": "One subject. Frame something worth remembering."}},
+    {"id": "photo_03", "type": "photo_subject", "target": 3, "reward": 75, "wired": true, "requires_signal": "EventBus.photo_captured", "i18n_key": "DAILY_PHOTO_03_FLAVOR", "en": {"flavor": "Three subjects. The city's portrait, one frame at a time."}},
+    {"id": "photo_05", "type": "photo_subject", "target": 5, "reward": 125, "wired": true, "requires_signal": "EventBus.photo_captured", "i18n_key": "DAILY_PHOTO_05_FLAVOR", "en": {"flavor": "Five subjects. A gallery of the almost-lost."}},
+    {"id": "dark_05", "type": "no_flashlight_segment", "target": 5, "reward": 150, "wired": true, "i18n_key": "DAILY_DARK_05_FLAVOR", "en": {"flavor": "Five segments, flashlight OFF. Trust the lamps."}},
+    {"id": "dark_10", "type": "no_flashlight_segment", "target": 10, "reward": 300, "wired": true, "i18n_key": "DAILY_DARK_10_FLAVOR", "en": {"flavor": "Ten segments in lamp-light only. Walk like the Keeper."}}
   ],
   "streak_rewards": [
     {"days": 7, "reward": 150},

@@ -10,13 +10,42 @@ extends Node
 
 const _DIR: String = "res://assets/audio/sfx/"
 
+## Семь CC0-стингеров из пасса ui-audio. Все идут на шину UI одним выстрелом
+## (docs/CERT_UIAUDIO.md §4): шина сухая, без компрессора и реверба, поэтому
+## короткий стингер не ныряет под музыку и не тянет за собой хвост.
+const _UI_DIR: String = "res://assets/audio/ui/"
+
 func _ready() -> void:
 	EventBus.achievement_unlocked.connect(func(_id: String) -> void: achievement())
 	EventBus.inventory_notice.connect(func(_msg: String) -> void: error())
 	EventBus.purchase_failed.connect(func(_item_id: String, _reason: String) -> void: error())
 	EventBus.game_saved.connect(func() -> void: save())
+	EventBus.secret_found.connect(func(_id: String) -> void: play_ui("secret_discovery_sting"))
+	EventBus.quest_completed.connect(func(_id: String) -> void: play_ui("daily_complete_sting"))
+	EventBus.level_completed.connect(func(_id: String) -> void: play_ui("daily_complete_sting"))
+	EventBus.boss_spawned.connect(func() -> void: play_ui("boss_sting"))
+	EventBus.boss_defeated.connect(func() -> void: play_ui("boss_sting"))
+	EventBus.game_won.connect(func() -> void: play_ui("ending_sting"))
+	DailyChallengeManager.completed.connect(func(_reward: int) -> void: play_ui("daily_complete_sting"))
+	DailyChallengeManager.streak_milestone.connect(func(_days: int) -> void: play_ui("streak_milestone_sting"))
+
+## Одиночный проигрыш стингера на шине UI. Имя — без префикса "ui_" и без
+## расширения: play_ui("boss_sting") -> res://assets/audio/ui/ui_boss_sting.ogg
+func play_ui(sound: String) -> void:
+	var path := _UI_DIR + "ui_" + sound + ".ogg"
+	if not ResourceLoader.exists(path):
+		return
+	var p := AudioStreamPlayer.new()
+	p.bus = &"UI"
+	p.stream = load(path)
+	add_child(p)
+	p.play()
+	p.finished.connect(p.queue_free)
 
 func click() -> void:
+	if ResourceLoader.exists(_UI_DIR + "ui_menu_click.ogg"):
+		play_ui("menu_click")
+		return
 	_play("ui_click", 800.0, 0.05)
 
 func hover() -> void:
@@ -29,6 +58,9 @@ func save() -> void:
 	_play("ui_save", 950.0, 0.08)
 
 func achievement() -> void:
+	if ResourceLoader.exists(_UI_DIR + "ui_achievement_sting.ogg"):
+		play_ui("achievement_sting")
+		return
 	_play("ui_achievement", 1400.0, 0.15)
 
 func pickup() -> void:
