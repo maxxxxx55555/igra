@@ -160,6 +160,23 @@ if "$PY" tools/scene_node_check.py; then ok "scene_node_check"; else bad "scene_
 head_ "Игровой цикл"
 if "$PY" tools/flow_check.py; then ok "flow_check"; else bad "flow_check"; fi
 
+# Контентные валидаторы из пассов content-depth и retention. Оба приехали
+# вместе с контентом и до этого висели отдельными скриптами: секреты, канон
+# мира, 60 ежедневок, 6 модификаторов NG+ и 28 подписей больше не проверялись
+# ничем после мержа. Держим их в общем прогоне, чтобы правка JSON ломала гейт,
+# а не игру.
+head_ "Контент: глубина и удержание"
+if "$PY" docs/artifacts/content-depth/audit_content_depth.py >/dev/null 2>&1; then
+  ok "audit_content_depth"
+else
+  bad "audit_content_depth"
+fi
+if "$PY" docs/artifacts/retention/validate_retention.py >/dev/null 2>&1; then
+  ok "validate_retention"
+else
+  bad "validate_retention"
+fi
+
 # ─────────────────────────── проверки в движке ───────────────────────────
 if [[ $STATIC_ONLY -eq 1 ]]; then
   echo; echo "${DIM}Проверки в движке пропущены (--static).${OFF}"

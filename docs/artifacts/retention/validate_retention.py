@@ -25,7 +25,9 @@ Stdlib only. Exit 0 = ALL PASS. Run from repo root:
 import json
 import sys
 
-ROOT = __file__.split("docs/artifacts/retention")[0] or "."
+# __file__ comes back with backslashes on Windows, so splitting on a
+# forward-slash path never matched and ROOT stayed the script's own path.
+ROOT = __file__.replace("\\", "/").split("docs/artifacts/retention")[0] or "."
 FAILURES: list[str] = []
 PASSES: list[str] = []
 
@@ -90,13 +92,20 @@ def main() -> int:
     check("streak-preserved", daily["streak_rewards"] == orig["streak_rewards"] == [
         {"days": 7, "reward": 150}, {"days": 30, "reward": 750}, {"days": 100, "reward": 3000}],
         str(daily["streak_rewards"]))
-    orig_entry_lines = raw_lines_with("data/daily_challenges.json", '"id":')
-    got_entry_lines = raw_lines_with("content/daily_challenges.json", '"id":')[:30]
-    check("byteeq-line-count", len(orig_entry_lines) == 30 and len(got_entry_lines) == 30,
-          f"{len(orig_entry_lines)}/{len(got_entry_lines)}")
-    mism = [i for i, (a, b) in enumerate(zip(orig_entry_lines, got_entry_lines))
-            if a.strip().rstrip(",") != b.strip().rstrip(",")]
-    check("byteeq-orig-30", not mism, f"lines differ at idx {mism}")
+    # Was a raw-line comparison of the first 30 entries against the legacy
+    # data/ file. The invariant it protects is that the content pass did not
+    # re-balance the original 30 — but CODE has since added an i18n_key and
+    # an en.flavor to each of them (the legacy 30 predate the flavor field,
+    # and without it half the calendar would show a blank daily card). So
+    # compare the balance-bearing fields instead of the bytes: ids, types,
+    # targets and rewards must still match exactly.
+    BALANCE = ("id", "type", "target", "reward")
+    orig_balance = [{k: t[k] for k in BALANCE} for t in orig["templates"]]
+    got_balance = [{k: t[k] for k in BALANCE} for t in daily["templates"][:30]]
+    check("balance-line-count", len(orig_balance) == 30 and len(got_balance) == 30,
+          f"{len(orig_balance)}/{len(got_balance)}")
+    mism = [i for i, (a, b) in enumerate(zip(orig_balance, got_balance)) if a != b]
+    check("balance-orig-30", not mism, f"original 30 re-balanced at idx {mism}")
     for i, t in enumerate(daily["templates"][:30]):
         o = orig["templates"][i]
         check(f"byteeq-field-{o['id']}",
@@ -116,7 +125,11 @@ def main() -> int:
           str(sorted(t["id"] for t in daily["templates"][30:])))
     for t in daily["templates"]:
         if t["type"] in NEW_TYPES:
-            check(f"gate-{t['id']}-wired-false", t.get("wired") is False, str(t))
+            # Was `is False` — it asserted the pre-wiring handoff state. The
+            # photo_subject / no_flashlight_segment types are wired now
+            # (EventBus.photo_captured; 30s continuous flashlight-off), so
+            # the standing invariant is the opposite: they must stay wired.
+            check(f"gate-{t['id']}-wired-live", t.get("wired") is True, str(t))
         else:
             check(f"gate-{t['id']}-wired-live",
                   t["type"] in WIRED_TYPES and t.get("wired", True) is not False, str(t))
@@ -188,8 +201,11 @@ def main() -> int:
     # Brief says "110" but itemizes 60+12+28=100; assert the itemized sum.
     check("i18n-total-100", len(all_keys) == 100 and len(set(all_keys)) == 100,
           f"got {len(all_keys)}/{len(set(all_keys))}")
-    leaked = [k for k in all_keys if k in en]
-    check("i18n-not-in-locales", not leaked, f"already in en.json: {leaked}")
+    # Was "not-in-locales": it asserted the keys had NOT yet been synced,
+    # which was true only during the handoff. They are synced now, so the
+    # standing invariant is that every one of them is present.
+    absent = [k for k in all_keys if k not in en]
+    check("i18n-all-in-locales", not absent, f"missing from en.json: {absent}")
 
     print(f"PASS {len(PASSES)} checks")
     for f in FAILURES:

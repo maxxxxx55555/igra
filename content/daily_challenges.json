@@ -1,69 +1,626 @@
 {
   "templates": [
-    {"id": "kill_03", "type": "kill_enemies", "target": 3, "reward": 30},
-    {"id": "kill_05", "type": "kill_enemies", "target": 5, "reward": 50},
-    {"id": "kill_08", "type": "kill_enemies", "target": 8, "reward": 80},
-    {"id": "kill_10", "type": "kill_enemies", "target": 10, "reward": 100},
-    {"id": "kill_15", "type": "kill_enemies", "target": 15, "reward": 150},
-    {"id": "kill_20", "type": "kill_enemies", "target": 20, "reward": 200},
-    {"id": "secret_02", "type": "find_secrets", "target": 2, "reward": 30},
-    {"id": "secret_03", "type": "find_secrets", "target": 3, "reward": 45},
-    {"id": "secret_05", "type": "find_secrets", "target": 5, "reward": 75},
-    {"id": "secret_08", "type": "find_secrets", "target": 8, "reward": 120},
-    {"id": "secret_12", "type": "find_secrets", "target": 12, "reward": 180},
-    {"id": "secret_16", "type": "find_secrets", "target": 16, "reward": 240},
-    {"id": "streets_01", "type": "light_streets", "target": 1, "reward": 40},
-    {"id": "streets_02", "type": "light_streets", "target": 2, "reward": 80},
-    {"id": "streets_03", "type": "light_streets", "target": 3, "reward": 120},
-    {"id": "streets_04", "type": "light_streets", "target": 4, "reward": 160},
-    {"id": "streets_06", "type": "light_streets", "target": 6, "reward": 240},
-    {"id": "streets_08", "type": "light_streets", "target": 8, "reward": 320},
-    {"id": "restore_01", "type": "restore_districts", "target": 1, "reward": 60},
-    {"id": "restore_02", "type": "restore_districts", "target": 2, "reward": 120},
-    {"id": "restore_03", "type": "restore_districts", "target": 3, "reward": 180},
-    {"id": "restore_04", "type": "restore_districts", "target": 4, "reward": 240},
-    {"id": "restore_05", "type": "restore_districts", "target": 5, "reward": 300},
-    {"id": "restore_06", "type": "restore_districts", "target": 6, "reward": 360},
-    {"id": "play_03", "type": "play_minutes", "target": 3, "reward": 20},
-    {"id": "play_05", "type": "play_minutes", "target": 5, "reward": 35},
-    {"id": "play_08", "type": "play_minutes", "target": 8, "reward": 55},
-    {"id": "play_12", "type": "play_minutes", "target": 12, "reward": 80},
-    {"id": "play_15", "type": "play_minutes", "target": 15, "reward": 100},
-    {"id": "play_20", "type": "play_minutes", "target": 20, "reward": 130},
-    {"id": "kill_01", "type": "kill_enemies", "target": 1, "reward": 10, "i18n_key": "DAILY_KILL_01_FLAVOR", "en": {"flavor": "One shadow. Every long night starts with one."}},
-    {"id": "kill_02", "type": "kill_enemies", "target": 2, "reward": 20, "i18n_key": "DAILY_KILL_02_FLAVOR", "en": {"flavor": "Two shadows. Warm up the flashlight."}},
-    {"id": "kill_12", "type": "kill_enemies", "target": 12, "reward": 120, "i18n_key": "DAILY_KILL_12_FLAVOR", "en": {"flavor": "Twelve. A dozen reasons the lamps stay lit."}},
-    {"id": "kill_25", "type": "kill_enemies", "target": 25, "reward": 250, "i18n_key": "DAILY_KILL_25_FLAVOR", "en": {"flavor": "Twenty-five. Marat's whole shift quota in one night."}},
-    {"id": "kill_40", "type": "kill_enemies", "target": 40, "reward": 400, "i18n_key": "DAILY_KILL_40_FLAVOR", "en": {"flavor": "Forty. One for every year the Keeper kept the lamps."}},
-    {"id": "secret_01", "type": "find_secrets", "target": 1, "reward": 15, "i18n_key": "DAILY_SECRET_01_FLAVOR", "en": {"flavor": "One secret. Start where the wiring hums."}},
-    {"id": "secret_04", "type": "find_secrets", "target": 4, "reward": 60, "i18n_key": "DAILY_SECRET_04_FLAVOR", "en": {"flavor": "Four secrets. Check behind the fuse boxes."}},
-    {"id": "secret_06", "type": "find_secrets", "target": 6, "reward": 90, "i18n_key": "DAILY_SECRET_06_FLAVOR", "en": {"flavor": "Six secrets. The quiet corners pay out."}},
-    {"id": "secret_10", "type": "find_secrets", "target": 10, "reward": 150, "i18n_key": "DAILY_SECRET_10_FLAVOR", "en": {"flavor": "Ten secrets. A full page in the Keeper's log."}},
-    {"id": "secret_24", "type": "find_secrets", "target": 24, "reward": 360, "i18n_key": "DAILY_SECRET_24_FLAVOR", "en": {"flavor": "Twenty-four. Every hidden thing in one night. Legend work."}},
-    {"id": "streets_05", "type": "light_streets", "target": 5, "reward": 200, "i18n_key": "DAILY_STREETS_05_FLAVOR", "en": {"flavor": "Five streets. A fistful of dawn."}},
-    {"id": "streets_07", "type": "light_streets", "target": 7, "reward": 280, "i18n_key": "DAILY_STREETS_07_FLAVOR", "en": {"flavor": "Seven streets. Lucky current."}},
-    {"id": "streets_09", "type": "light_streets", "target": 9, "reward": 360, "i18n_key": "DAILY_STREETS_09_FLAVOR", "en": {"flavor": "Nine streets. The grid hums your name."}},
-    {"id": "streets_12", "type": "light_streets", "target": 12, "reward": 480, "i18n_key": "DAILY_STREETS_12_FLAVOR", "en": {"flavor": "Twelve streets. A whole district's worth of dawn."}},
-    {"id": "streets_16", "type": "light_streets", "target": 16, "reward": 640, "i18n_key": "DAILY_STREETS_16_FLAVOR", "en": {"flavor": "Sixteen streets. Light the city like it's Night Zero in reverse."}},
-    {"id": "restore_07", "type": "restore_districts", "target": 7, "reward": 420, "i18n_key": "DAILY_RESTORE_07_FLAVOR", "en": {"flavor": "Seven districts. The blackout is losing."}},
-    {"id": "restore_08", "type": "restore_districts", "target": 8, "reward": 480, "i18n_key": "DAILY_RESTORE_08_FLAVOR", "en": {"flavor": "Eight districts. Hold the line, lamp by lamp."}},
-    {"id": "restore_09", "type": "restore_districts", "target": 9, "reward": 540, "i18n_key": "DAILY_RESTORE_09_FLAVOR", "en": {"flavor": "Nine districts. Almost the whole grid humming."}},
-    {"id": "restore_10", "type": "restore_districts", "target": 10, "reward": 600, "i18n_key": "DAILY_RESTORE_10_FLAVOR", "en": {"flavor": "Ten districts. One short of a miracle."}},
-    {"id": "restore_11", "type": "restore_districts", "target": 11, "reward": 660, "i18n_key": "DAILY_RESTORE_11_FLAVOR", "en": {"flavor": "Eleven districts. The whole city. All of it. FULL."}},
-    {"id": "play_30", "type": "play_minutes", "target": 30, "reward": 195, "i18n_key": "DAILY_PLAY_30_FLAVOR", "en": {"flavor": "Thirty minutes. Half an hour against the dark."}},
-    {"id": "play_45", "type": "play_minutes", "target": 45, "reward": 290, "i18n_key": "DAILY_PLAY_45_FLAVOR", "en": {"flavor": "Forty-five. The lamps know your footsteps by now."}},
-    {"id": "play_60", "type": "play_minutes", "target": 60, "reward": 390, "i18n_key": "DAILY_PLAY_60_FLAVOR", "en": {"flavor": "Sixty minutes. A full hour. The Keeper nods."}},
-    {"id": "play_90", "type": "play_minutes", "target": 90, "reward": 585, "i18n_key": "DAILY_PLAY_90_FLAVOR", "en": {"flavor": "Ninety minutes. Overtime in the light brigade."}},
-    {"id": "play_120", "type": "play_minutes", "target": 120, "reward": 780, "i18n_key": "DAILY_PLAY_120_FLAVOR", "en": {"flavor": "Two hours. A full watch. Log it with pride."}},
-    {"id": "photo_01", "type": "photo_subject", "target": 1, "reward": 25, "wired": true, "requires_signal": "EventBus.photo_captured", "i18n_key": "DAILY_PHOTO_01_FLAVOR", "en": {"flavor": "One subject. Frame something worth remembering."}},
-    {"id": "photo_03", "type": "photo_subject", "target": 3, "reward": 75, "wired": true, "requires_signal": "EventBus.photo_captured", "i18n_key": "DAILY_PHOTO_03_FLAVOR", "en": {"flavor": "Three subjects. The city's portrait, one frame at a time."}},
-    {"id": "photo_05", "type": "photo_subject", "target": 5, "reward": 125, "wired": true, "requires_signal": "EventBus.photo_captured", "i18n_key": "DAILY_PHOTO_05_FLAVOR", "en": {"flavor": "Five subjects. A gallery of the almost-lost."}},
-    {"id": "dark_05", "type": "no_flashlight_segment", "target": 5, "reward": 150, "wired": true, "i18n_key": "DAILY_DARK_05_FLAVOR", "en": {"flavor": "Five segments, flashlight OFF. Trust the lamps."}},
-    {"id": "dark_10", "type": "no_flashlight_segment", "target": 10, "reward": 300, "wired": true, "i18n_key": "DAILY_DARK_10_FLAVOR", "en": {"flavor": "Ten segments in lamp-light only. Walk like the Keeper."}}
+    {
+      "id": "kill_03",
+      "type": "kill_enemies",
+      "target": 3,
+      "reward": 30,
+      "i18n_key": "DAILY_KILL_03_FLAVOR",
+      "en": {
+        "flavor": "Three of them. Enough to remind the street who walks it."
+      }
+    },
+    {
+      "id": "kill_05",
+      "type": "kill_enemies",
+      "target": 5,
+      "reward": 50,
+      "i18n_key": "DAILY_KILL_05_FLAVOR",
+      "en": {
+        "flavor": "Five. They come for the light; meet them before it."
+      }
+    },
+    {
+      "id": "kill_08",
+      "type": "kill_enemies",
+      "target": 8,
+      "reward": 80,
+      "i18n_key": "DAILY_KILL_08_FLAVOR",
+      "en": {
+        "flavor": "Eight. Count them the way you count fuses — carefully."
+      }
+    },
+    {
+      "id": "kill_10",
+      "type": "kill_enemies",
+      "target": 10,
+      "reward": 100,
+      "i18n_key": "DAILY_KILL_10_FLAVOR",
+      "en": {
+        "flavor": "Ten tonight. The dark can spare them."
+      }
+    },
+    {
+      "id": "kill_15",
+      "type": "kill_enemies",
+      "target": 15,
+      "reward": 150,
+      "i18n_key": "DAILY_KILL_15_FLAVOR",
+      "en": {
+        "flavor": "Fifteen. Long night. Keep the lamp behind you."
+      }
+    },
+    {
+      "id": "kill_20",
+      "type": "kill_enemies",
+      "target": 20,
+      "reward": 200,
+      "i18n_key": "DAILY_KILL_20_FLAVOR",
+      "en": {
+        "flavor": "Twenty. Whatever is out there is running out of sons."
+      }
+    },
+    {
+      "id": "secret_02",
+      "type": "find_secrets",
+      "target": 2,
+      "reward": 30,
+      "i18n_key": "DAILY_SECRET_02_FLAVOR",
+      "en": {
+        "flavor": "Two things the city hid. It hides badly."
+      }
+    },
+    {
+      "id": "secret_03",
+      "type": "find_secrets",
+      "target": 3,
+      "reward": 45,
+      "i18n_key": "DAILY_SECRET_03_FLAVOR",
+      "en": {
+        "flavor": "Three. Look where nobody bothered to look twice."
+      }
+    },
+    {
+      "id": "secret_05",
+      "type": "find_secrets",
+      "target": 5,
+      "reward": 75,
+      "i18n_key": "DAILY_SECRET_05_FLAVOR",
+      "en": {
+        "flavor": "Five. Every street keeps something in its pockets."
+      }
+    },
+    {
+      "id": "secret_08",
+      "type": "find_secrets",
+      "target": 8,
+      "reward": 120,
+      "i18n_key": "DAILY_SECRET_08_FLAVOR",
+      "en": {
+        "flavor": "Eight. The Keeper wrote things down. Find them."
+      }
+    },
+    {
+      "id": "secret_12",
+      "type": "find_secrets",
+      "target": 12,
+      "reward": 180,
+      "i18n_key": "DAILY_SECRET_12_FLAVOR",
+      "en": {
+        "flavor": "Twelve. You are reading someone else's life now."
+      }
+    },
+    {
+      "id": "secret_16",
+      "type": "find_secrets",
+      "target": 16,
+      "reward": 240,
+      "i18n_key": "DAILY_SECRET_16_FLAVOR",
+      "en": {
+        "flavor": "Sixteen. By now the city is telling you the truth."
+      }
+    },
+    {
+      "id": "streets_01",
+      "type": "light_streets",
+      "target": 1,
+      "reward": 40,
+      "i18n_key": "DAILY_STREETS_01_FLAVOR",
+      "en": {
+        "flavor": "One lamp. It is how every night starts."
+      }
+    },
+    {
+      "id": "streets_02",
+      "type": "light_streets",
+      "target": 2,
+      "reward": 80,
+      "i18n_key": "DAILY_STREETS_02_FLAVOR",
+      "en": {
+        "flavor": "Two lamps. A direction, not yet a road."
+      }
+    },
+    {
+      "id": "streets_03",
+      "type": "light_streets",
+      "target": 3,
+      "reward": 120,
+      "i18n_key": "DAILY_STREETS_03_FLAVOR",
+      "en": {
+        "flavor": "Three lamps. Someone could find their way home."
+      }
+    },
+    {
+      "id": "streets_04",
+      "type": "light_streets",
+      "target": 4,
+      "reward": 160,
+      "i18n_key": "DAILY_STREETS_04_FLAVOR",
+      "en": {
+        "flavor": "Four. The dark has to step back to make room."
+      }
+    },
+    {
+      "id": "streets_06",
+      "type": "light_streets",
+      "target": 6,
+      "reward": 240,
+      "i18n_key": "DAILY_STREETS_06_FLAVOR",
+      "en": {
+        "flavor": "Six lamps lit. The street begins to look like a street."
+      }
+    },
+    {
+      "id": "streets_08",
+      "type": "light_streets",
+      "target": 8,
+      "reward": 320,
+      "i18n_key": "DAILY_STREETS_08_FLAVOR",
+      "en": {
+        "flavor": "Eight. Stand at one end and you can see the other."
+      }
+    },
+    {
+      "id": "restore_01",
+      "type": "restore_districts",
+      "target": 1,
+      "reward": 60,
+      "i18n_key": "DAILY_RESTORE_01_FLAVOR",
+      "en": {
+        "flavor": "One district back on the grid. Start somewhere."
+      }
+    },
+    {
+      "id": "restore_02",
+      "type": "restore_districts",
+      "target": 2,
+      "reward": 120,
+      "i18n_key": "DAILY_RESTORE_02_FLAVOR",
+      "en": {
+        "flavor": "Two. The map stops being a list of losses."
+      }
+    },
+    {
+      "id": "restore_03",
+      "type": "restore_districts",
+      "target": 3,
+      "reward": 180,
+      "i18n_key": "DAILY_RESTORE_03_FLAVOR",
+      "en": {
+        "flavor": "Three districts. The wire remembers the shape of the city."
+      }
+    },
+    {
+      "id": "restore_04",
+      "type": "restore_districts",
+      "target": 4,
+      "reward": 240,
+      "i18n_key": "DAILY_RESTORE_04_FLAVOR",
+      "en": {
+        "flavor": "Four. Power flows the way water used to."
+      }
+    },
+    {
+      "id": "restore_05",
+      "type": "restore_districts",
+      "target": 5,
+      "reward": 300,
+      "i18n_key": "DAILY_RESTORE_05_FLAVOR",
+      "en": {
+        "flavor": "Five. Half the city can see its own hands."
+      }
+    },
+    {
+      "id": "restore_06",
+      "type": "restore_districts",
+      "target": 6,
+      "reward": 360,
+      "i18n_key": "DAILY_RESTORE_06_FLAVOR",
+      "en": {
+        "flavor": "Six districts lit. Keep going; the rest are waiting."
+      }
+    },
+    {
+      "id": "play_03",
+      "type": "play_minutes",
+      "target": 3,
+      "reward": 20,
+      "i18n_key": "DAILY_PLAY_03_FLAVOR",
+      "en": {
+        "flavor": "Three minutes. Long enough to check the fuses."
+      }
+    },
+    {
+      "id": "play_05",
+      "type": "play_minutes",
+      "target": 5,
+      "reward": 35,
+      "i18n_key": "DAILY_PLAY_05_FLAVOR",
+      "en": {
+        "flavor": "Five minutes out there. The lamps notice."
+      }
+    },
+    {
+      "id": "play_08",
+      "type": "play_minutes",
+      "target": 8,
+      "reward": 55,
+      "i18n_key": "DAILY_PLAY_08_FLAVOR",
+      "en": {
+        "flavor": "Eight minutes. Walk the line, listen to the hum."
+      }
+    },
+    {
+      "id": "play_12",
+      "type": "play_minutes",
+      "target": 12,
+      "reward": 80,
+      "i18n_key": "DAILY_PLAY_12_FLAVOR",
+      "en": {
+        "flavor": "Twelve minutes. The city is quieter when you are in it."
+      }
+    },
+    {
+      "id": "play_15",
+      "type": "play_minutes",
+      "target": 15,
+      "reward": 100,
+      "i18n_key": "DAILY_PLAY_15_FLAVOR",
+      "en": {
+        "flavor": "Fifteen minutes on the wire. Steady work."
+      }
+    },
+    {
+      "id": "play_20",
+      "type": "play_minutes",
+      "target": 20,
+      "reward": 130,
+      "i18n_key": "DAILY_PLAY_20_FLAVOR",
+      "en": {
+        "flavor": "Twenty minutes. That is a shift, Keeper."
+      }
+    },
+    {
+      "id": "kill_01",
+      "type": "kill_enemies",
+      "target": 1,
+      "reward": 10,
+      "i18n_key": "DAILY_KILL_01_FLAVOR",
+      "en": {
+        "flavor": "One shadow. Every long night starts with one."
+      }
+    },
+    {
+      "id": "kill_02",
+      "type": "kill_enemies",
+      "target": 2,
+      "reward": 20,
+      "i18n_key": "DAILY_KILL_02_FLAVOR",
+      "en": {
+        "flavor": "Two shadows. Warm up the flashlight."
+      }
+    },
+    {
+      "id": "kill_12",
+      "type": "kill_enemies",
+      "target": 12,
+      "reward": 120,
+      "i18n_key": "DAILY_KILL_12_FLAVOR",
+      "en": {
+        "flavor": "Twelve. A dozen reasons the lamps stay lit."
+      }
+    },
+    {
+      "id": "kill_25",
+      "type": "kill_enemies",
+      "target": 25,
+      "reward": 250,
+      "i18n_key": "DAILY_KILL_25_FLAVOR",
+      "en": {
+        "flavor": "Twenty-five. Marat's whole shift quota in one night."
+      }
+    },
+    {
+      "id": "kill_40",
+      "type": "kill_enemies",
+      "target": 40,
+      "reward": 400,
+      "i18n_key": "DAILY_KILL_40_FLAVOR",
+      "en": {
+        "flavor": "Forty. One for every year the Keeper kept the lamps."
+      }
+    },
+    {
+      "id": "secret_01",
+      "type": "find_secrets",
+      "target": 1,
+      "reward": 15,
+      "i18n_key": "DAILY_SECRET_01_FLAVOR",
+      "en": {
+        "flavor": "One secret. Start where the wiring hums."
+      }
+    },
+    {
+      "id": "secret_04",
+      "type": "find_secrets",
+      "target": 4,
+      "reward": 60,
+      "i18n_key": "DAILY_SECRET_04_FLAVOR",
+      "en": {
+        "flavor": "Four secrets. Check behind the fuse boxes."
+      }
+    },
+    {
+      "id": "secret_06",
+      "type": "find_secrets",
+      "target": 6,
+      "reward": 90,
+      "i18n_key": "DAILY_SECRET_06_FLAVOR",
+      "en": {
+        "flavor": "Six secrets. The quiet corners pay out."
+      }
+    },
+    {
+      "id": "secret_10",
+      "type": "find_secrets",
+      "target": 10,
+      "reward": 150,
+      "i18n_key": "DAILY_SECRET_10_FLAVOR",
+      "en": {
+        "flavor": "Ten secrets. A full page in the Keeper's log."
+      }
+    },
+    {
+      "id": "secret_24",
+      "type": "find_secrets",
+      "target": 24,
+      "reward": 360,
+      "i18n_key": "DAILY_SECRET_24_FLAVOR",
+      "en": {
+        "flavor": "Twenty-four. Every hidden thing in one night. Legend work."
+      }
+    },
+    {
+      "id": "streets_05",
+      "type": "light_streets",
+      "target": 5,
+      "reward": 200,
+      "i18n_key": "DAILY_STREETS_05_FLAVOR",
+      "en": {
+        "flavor": "Five streets. A fistful of dawn."
+      }
+    },
+    {
+      "id": "streets_07",
+      "type": "light_streets",
+      "target": 7,
+      "reward": 280,
+      "i18n_key": "DAILY_STREETS_07_FLAVOR",
+      "en": {
+        "flavor": "Seven streets. Lucky current."
+      }
+    },
+    {
+      "id": "streets_09",
+      "type": "light_streets",
+      "target": 9,
+      "reward": 360,
+      "i18n_key": "DAILY_STREETS_09_FLAVOR",
+      "en": {
+        "flavor": "Nine streets. The grid hums your name."
+      }
+    },
+    {
+      "id": "streets_12",
+      "type": "light_streets",
+      "target": 12,
+      "reward": 480,
+      "i18n_key": "DAILY_STREETS_12_FLAVOR",
+      "en": {
+        "flavor": "Twelve streets. A whole district's worth of dawn."
+      }
+    },
+    {
+      "id": "streets_16",
+      "type": "light_streets",
+      "target": 16,
+      "reward": 640,
+      "i18n_key": "DAILY_STREETS_16_FLAVOR",
+      "en": {
+        "flavor": "Sixteen streets. Light the city like it's Night Zero in reverse."
+      }
+    },
+    {
+      "id": "restore_07",
+      "type": "restore_districts",
+      "target": 7,
+      "reward": 420,
+      "i18n_key": "DAILY_RESTORE_07_FLAVOR",
+      "en": {
+        "flavor": "Seven districts. The blackout is losing."
+      }
+    },
+    {
+      "id": "restore_08",
+      "type": "restore_districts",
+      "target": 8,
+      "reward": 480,
+      "i18n_key": "DAILY_RESTORE_08_FLAVOR",
+      "en": {
+        "flavor": "Eight districts. Hold the line, lamp by lamp."
+      }
+    },
+    {
+      "id": "restore_09",
+      "type": "restore_districts",
+      "target": 9,
+      "reward": 540,
+      "i18n_key": "DAILY_RESTORE_09_FLAVOR",
+      "en": {
+        "flavor": "Nine districts. Almost the whole grid humming."
+      }
+    },
+    {
+      "id": "restore_10",
+      "type": "restore_districts",
+      "target": 10,
+      "reward": 600,
+      "i18n_key": "DAILY_RESTORE_10_FLAVOR",
+      "en": {
+        "flavor": "Ten districts. One short of a miracle."
+      }
+    },
+    {
+      "id": "restore_11",
+      "type": "restore_districts",
+      "target": 11,
+      "reward": 660,
+      "i18n_key": "DAILY_RESTORE_11_FLAVOR",
+      "en": {
+        "flavor": "Eleven districts. The whole city. All of it. FULL."
+      }
+    },
+    {
+      "id": "play_30",
+      "type": "play_minutes",
+      "target": 30,
+      "reward": 195,
+      "i18n_key": "DAILY_PLAY_30_FLAVOR",
+      "en": {
+        "flavor": "Thirty minutes. Half an hour against the dark."
+      }
+    },
+    {
+      "id": "play_45",
+      "type": "play_minutes",
+      "target": 45,
+      "reward": 290,
+      "i18n_key": "DAILY_PLAY_45_FLAVOR",
+      "en": {
+        "flavor": "Forty-five. The lamps know your footsteps by now."
+      }
+    },
+    {
+      "id": "play_60",
+      "type": "play_minutes",
+      "target": 60,
+      "reward": 390,
+      "i18n_key": "DAILY_PLAY_60_FLAVOR",
+      "en": {
+        "flavor": "Sixty minutes. A full hour. The Keeper nods."
+      }
+    },
+    {
+      "id": "play_90",
+      "type": "play_minutes",
+      "target": 90,
+      "reward": 585,
+      "i18n_key": "DAILY_PLAY_90_FLAVOR",
+      "en": {
+        "flavor": "Ninety minutes. Overtime in the light brigade."
+      }
+    },
+    {
+      "id": "play_120",
+      "type": "play_minutes",
+      "target": 120,
+      "reward": 780,
+      "i18n_key": "DAILY_PLAY_120_FLAVOR",
+      "en": {
+        "flavor": "Two hours. A full watch. Log it with pride."
+      }
+    },
+    {
+      "id": "photo_01",
+      "type": "photo_subject",
+      "target": 1,
+      "reward": 25,
+      "wired": true,
+      "requires_signal": "EventBus.photo_captured",
+      "i18n_key": "DAILY_PHOTO_01_FLAVOR",
+      "en": {
+        "flavor": "One subject. Frame something worth remembering."
+      }
+    },
+    {
+      "id": "photo_03",
+      "type": "photo_subject",
+      "target": 3,
+      "reward": 75,
+      "wired": true,
+      "requires_signal": "EventBus.photo_captured",
+      "i18n_key": "DAILY_PHOTO_03_FLAVOR",
+      "en": {
+        "flavor": "Three subjects. The city's portrait, one frame at a time."
+      }
+    },
+    {
+      "id": "photo_05",
+      "type": "photo_subject",
+      "target": 5,
+      "reward": 125,
+      "wired": true,
+      "requires_signal": "EventBus.photo_captured",
+      "i18n_key": "DAILY_PHOTO_05_FLAVOR",
+      "en": {
+        "flavor": "Five subjects. A gallery of the almost-lost."
+      }
+    },
+    {
+      "id": "dark_05",
+      "type": "no_flashlight_segment",
+      "target": 5,
+      "reward": 150,
+      "wired": true,
+      "i18n_key": "DAILY_DARK_05_FLAVOR",
+      "en": {
+        "flavor": "Five segments, flashlight OFF. Trust the lamps."
+      }
+    },
+    {
+      "id": "dark_10",
+      "type": "no_flashlight_segment",
+      "target": 10,
+      "reward": 300,
+      "wired": true,
+      "i18n_key": "DAILY_DARK_10_FLAVOR",
+      "en": {
+        "flavor": "Ten segments in lamp-light only. Walk like the Keeper."
+      }
+    }
   ],
   "streak_rewards": [
-    {"days": 7, "reward": 150},
-    {"days": 30, "reward": 750},
-    {"days": 100, "reward": 3000}
+    {
+      "days": 7,
+      "reward": 150
+    },
+    {
+      "days": 30,
+      "reward": 750
+    },
+    {
+      "days": 100,
+      "reward": 3000
+    }
   ]
 }
