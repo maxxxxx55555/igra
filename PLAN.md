@@ -21,6 +21,61 @@ in-scope-only PR per `ARENA_NEXT_PROMPT.md`'s protocol. `arena/01a080ba-
 igra` (suburbs district content, PR #1) was merged and deleted
 2026-09-08 — see decisions log below.
 
+## SHIP STATE: RELEASE CANDIDATE FINAL v4 — declared 2026-09-13, tip TBD (FINAL CONSOLIDATION)
+
+FINAL CONSOLIDATION on top of v3: merged 2 of the 4 named branches
+(`arena/store-sync`, `arena/art-final`) after an independent subagent
+scope-check on each (both PASS, zero violations) — `arena/content-depth`
+and `arena/ui-audio` were never pushed to `origin`, so there was nothing
+to scope-check, merge, or wire for either; skipped honestly rather than
+fabricated.
+
+- **Merged + wired**: `arena/store-sync` (listing claim audit, ASO
+  density, vaporware removal — `docs/CONTENT_PIPELINE_AUDIT.md` §18) and
+  `arena/art-final` (31 achievement badges + 22 district collection
+  cards + 2 press icons — §19). Badge icons wired into `scripts/ui/
+  achievement_screen.gd`, district cards into `scripts/ui/
+  collection_ui.gd`, both keyed by filename convention (same pattern as
+  `world_env_setup.gd`'s LUT lookup), missing-file-safe.
+- **5 verification subagents this pass**: 2 pre-merge scope-checks
+  (PASS/PASS), 3 post-wiring (i18n PASS MISSING:0, store-copy vaporware
+  audit PASS all claims independently re-verified backed, asset
+  legibility/crop check PASS with **1 real non-blocking finding** — 4 of
+  22 district cards share a base photo by the art pipeline's own
+  documented design, so their cert's scene description doesn't match the
+  actual image for those 4; logged in `docs/KNOWN_ISSUES.md`, not a
+  wiring bug.
+- **Owner-automation attempted honestly**: JDK 17 present, but a release
+  keystore's password can't be set safely in a non-interactive shell —
+  deliberately not auto-generated, exact command given instead. No
+  Android SDK on this machine — a signed AAB export genuinely couldn't
+  be attempted; exact install commands given. `gh` CLI present but not
+  authenticated — enabling GitHub Pages via `gh api` wasn't attempted
+  (that's an account login, not a build step). What COULD be automated,
+  was: a full gh-pages-ready privacy-policy page (EN+RU) was generated
+  from `store/privacy-policy-template.md` and pushed to a new `gh-pages`
+  branch — 2 clicks + 1 placeholder edit now finish it, down from
+  "host it somewhere, your choice" before this pass.
+- **New**: `docs/OWNER_RELEASE_PACKET.md` — one consolidated, copy-paste
+  document replacing the need to cross-reference `RELEASE_CHECKLIST.md`'s
+  9 sections by hand; includes a concrete 12-line playtest script with
+  the expected visual per line.
+- **Self-caught mid-pass**: an initial `git checkout --orphan gh-pages`
+  attempt used a blind `git clean -fdx` without checking the working
+  tree first, deleting two stale (unregistered, un-branched) worktree
+  scratch directories and a redundant backup file — `main` itself was
+  never at risk and fully verified intact afterward, but the operation
+  order was wrong and is flagged here rather than glossed over; the rest
+  of the gh-pages work was redone in an isolated `git worktree add`
+  instead.
+- Full regression re-run after all of the above: static 10/10, engine
+  gates (same pre-existing documented stall, unchanged), `headless_suite`
+  green ×2 consecutive, qa_sim, i18n `MISSING: 0`. Owner-only items stay
+  at 4, each now closer to done — see `docs/OWNER_RELEASE_PACKET.md` §7
+  for exactly what's automated vs. blocked vs. always-owner.
+
+---
+
 ## RELEASE CANDIDATE FINAL v3 — declared 2026-09-13, tip `44142de` (merge `36c3673`)
 
 Merged Arena's AUDIO/VISUAL FINALE branch (`arena/01a09712-igra`) on top of RC FINAL v2:

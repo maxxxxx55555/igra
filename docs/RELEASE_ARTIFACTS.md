@@ -2,8 +2,22 @@
 
 One line per artifact: what it is, where it lives, what it proves. Source of truth for a
 claim always stays in the artifact itself — this file only points at it. Started
-2026-09-12 (RELEASE CONVERGENCE PASS), updated 2026-09-13 (FINAL HARDENING PASS, then the
-AUDIO/VISUAL FINALE merge).
+2026-09-12 (RELEASE CONVERGENCE PASS), updated 2026-09-13 through FINAL CONSOLIDATION.
+
+## FINAL CONSOLIDATION (2026-09-13) — arena/store-sync + arena/art-final merged, badges/cards wired, owner packet
+
+Merged 2 of the 4 branches the task named (`arena/content-depth`, `arena/ui-audio` were
+never pushed to origin — skipped, not fabricated). Both merged branches passed an
+independent subagent scope-check first (2 subagents, both PASS, no violations). Wired this
+pass: achievement badge icons (`scripts/ui/achievement_screen.gd`) and district collection
+cards (`scripts/ui/collection_ui.gd`) from `arena/art-final`'s new texture set. 3 more
+verification subagents ran post-wiring: i18n (PASS, MISSING:0), store-copy vaporware audit
+(PASS, all claims backed incl. the corrected 31-achievement count), asset legibility/crop
+check (found one real, non-blocking gap — 4 of 22 district cards share a base photo,
+`docs/KNOWN_ISSUES.md`). New `docs/OWNER_RELEASE_PACKET.md`: one consolidated, copy-paste
+document for every remaining owner step, including a gh-pages-ready privacy-policy page
+already built and pushed to a new `gh-pages` branch this pass. See
+`docs/CONTENT_PIPELINE_AUDIT.md` §18 (store-sync) and §19 (art-final scope note).
 
 ## AUDIO/VISUAL FINALE merge (2026-09-13) — postfx presets wired live
 

@@ -715,3 +715,51 @@ the 8 lit beds already shipped (no new audio binaries this pass — see `docs/AU
   `AMBIENCE_LIT_BY_DISTRICT` (all 11 rows) since the 2026-09-12 RELEASE CONVERGENCE pass.
 - Defects: **0**. Scope hygiene self-checked by the delivering session (10 files, all
   additions, all in-zone) and independently re-verified at merge time.
+
+## 18. Store-sync pass (2026-09-13) — listing claim audit, ASO, vaporware removal
+
+Delivered `arena/01a0999f-igra`, merged `2396888`. Full certificate: `docs/CERT_STORESYNC.md`.
+Verification: independent subagent scope-check (10 changed files, all in `store/**` +
+`docs/CERT_STORESYNC.md`/`docs/artifacts/store-sync/**` + a pure-append note in `progress.md`
+— no violations) plus a second, independent subagent that re-ran the claim audit from scratch
+against the actual code/data rather than trusting the cert.
+
+- **25/25 store claims independently re-verified BACKED** against real code/data: 11
+  districts, 12 enemy types, 5 endings, **31 achievements** (confirms the corrected
+  post-GDD number, not the stale "20" from §16), 30 daily challenges, 88 lore notes, 13
+  languages, save export/import, 4 skill branches, touch double-tap dodge, New Game+,
+  crafting, HMAC saves, 3-6h time-to-win, gate numbers. Zero overstated or unverifiable
+  claims found.
+- **Vaporware removed**: a stale "free updates" promise and a false LAN-multiplayer
+  data-safety claim (the LAN prototype is archived, unreachable from any UI — `docs/
+  A10_multiplayer_decision.md`) were cut from `store/listing.md` and `store/
+  privacy-policy-template.md`.
+- Both delivered Python verify scripts (`docs/artifacts/store-sync/verify_listing.py`,
+  `verify_paths_and_numbers.py`) independently confirmed to compile and their recorded
+  `.out` runs independently confirmed genuine (not fabricated output).
+- Defects: **0**.
+
+## 19. Art-final pass (2026-09-13) — badge/card/press icon redo, wired live
+
+Delivered `arena/01a099a0-igra` (also pushed as `arena/art-final`, identical commit), merged
+`7c1c579`. Full certificate: `docs/CERT_ARTFINAL.md`. Verification: independent subagent
+scope-check (61 files, all under `assets/textures/{badges,cards}/`, `store/press/`, her own
+docs — no violations) plus a second subagent doing independent PIL-based dimension/purity
+re-measurement and a 48px-badge-legibility + card-crop simulation (the actual on-screen
+display sizes, not the 128px/512px source sizes).
+
+- **31/31 badges + 22/22 cards + 2/2 press icons**: independently re-measured dimensions
+  (128×128 / 512×512 exactly) and pixel-range extrema match `CERT_ARTFINAL.md`'s claims
+  file-for-file on every sample checked, no discrepancy.
+- **48px legibility (badges display at 48×48 in `achievement_screen.gd`)**: sampled 9 badges
+  across all 4 rarity tiers, resized 128→48px, measured contrast/edge-detail survival — all
+  well clear of a legibility floor, no badge collapses to a flat blob at display size.
+- **Card letterbox crop (cards display as a 230×84 strip in `collection_ui.gd`)**: the
+  `STRETCH_KEEP_ASPECT_COVERED` crop keeps a real, non-blank vertical band for every sampled
+  card — geometrically fine.
+- **One real, non-blocking finding**: 4 of 22 district cards (school/hospital/gas_station/
+  police) share one of 4 base source photos by design (`docs/LEDGER_ARTFINAL.md` line 90),
+  so their `CERT_ARTFINAL.md` "Mood" text describes a scene that isn't actually depicted in
+  the image for those 4. Logged in `docs/KNOWN_ISSUES.md`; not a wiring bug, needs a future
+  bespoke re-render.
+- Defects: **0 dimension/purity defects; 1 content-fidelity gap** (see above).

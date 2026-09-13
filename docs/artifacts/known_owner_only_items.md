@@ -1,36 +1,54 @@
-# Known owner-only items (RELEASE CANDIDATE FINAL v2, 2026-09-13)
+# Known owner-only items (FINAL CONSOLIDATION pass, 2026-09-13)
 
 Everything an agent session can do from this repo is done. What's left
 needs a GUI, an account, a signing key, a build toolchain, or a human
 looking at/playing the game — structurally outside what any headless
-session can perform. Full click-by-click steps: `RELEASE_CHECKLIST.md`.
-**Exactly 4 items, all owner-only, zero technical** (the FINAL HARDENING
-PASS closed the technical blockers this list carried before — see
-`PLAN.md`'s RC FINAL v2 section for what changed).
+session can perform. One copy-paste-ready document with everything below:
+`docs/OWNER_RELEASE_PACKET.md` (full click-by-click detail still in
+`RELEASE_CHECKLIST.md`). **Still 4 items, all owner-only, zero technical**
+— this pass automated as much of each as honestly could be, see the
+"attempted this pass" note on each.
 
-## 1. Android keystore + signed AAB (`RELEASE_CHECKLIST.md` §1, §4)
+## 1. Android keystore + signed AAB (`docs/OWNER_RELEASE_PACKET.md` §a)
 
-`keytool -genkey` for a release keystore, install `4.7-stable` export
-templates in the Godot editor, **Project → Export → Android** → signed
-`.aab`. Cannot be done headlessly — needs the editor GUI and a real
-signing identity only the owner should hold.
+**Attempted this pass**: JDK 17 is present (`keytool` works), but a
+release keystore is a permanent secret with no non-interactive-safe way
+to set its password — deliberately not auto-generated (see the packet's
+§a reasoning). The Android SDK isn't installed on this machine at all
+(`ANDROID_HOME` unset, no `sdkmanager`/`adb`), so a headless AAB export
+was not possible either — exact install commands for both pieces are in
+the packet, including the one-line headless export command to run once
+they're both in place. Needs the owner to hold a signing identity only
+they should hold.
 
-## 2. Play Console — app creation, IARC, upload (`RELEASE_CHECKLIST.md` §5)
+## 2. Play Console — app creation, IARC, upload (`docs/OWNER_RELEASE_PACKET.md` §b)
 
 Create the app, answer the IARC content-rating questionnaire (exact
-answers already drafted in §5.2d), paste the 13-locale listing from
-`store/listing.md`, upload screenshots per
-`store/screenshot-plan-detailed.md`, upload the signed `.aab`, start
-Open Testing rollout. Needs a live Google account and their console UI.
+answers already drafted), paste the 13-locale listing from
+`store/listing.md` (13/13 parity certified, `docs/CERT_STORESYNC.md`),
+upload screenshots per the packet's §e (8 gallery + 3 touch, 5 of 8
+gallery shots still need in-game capture), upload the signed `.aab`,
+start Open Testing rollout. Needs a live Google account and their
+console UI — not attempted.
 
-## 3. Privacy policy URL + support contact (`RELEASE_CHECKLIST.md` §3)
+## 3. Privacy policy URL + support contact (`docs/OWNER_RELEASE_PACKET.md` §c)
 
-`store/privacy-policy-template.md` has `[contact email / support URL]`
-placeholders (EN+RU) by design — filling in a real, monitored contact and
-publishing the text at a stable HTTPS URL is an owner identity decision,
-not something a session can invent on their behalf.
+**Attempted this pass**: generated a gh-pages-ready page (EN+RU, language
+toggle) from `store/privacy-policy-template.md` and pushed it to a new
+`gh-pages` branch on `origin`. What's left is 2 clicks (repo Settings →
+Pages → enable) + replacing the contact-email placeholder with a real
+one — an owner identity decision the page itself flags in-place, not
+something a session can invent. `gh` CLI is installed but not
+authenticated, so enabling Pages via `gh api` wasn't attempted (logging
+in as the owner is an account action).
 
 ## 4. One real device playtest / windowed visual check — the highest-leverage item
+
+A concrete 12-line script with the expected visual per line is now written out in
+`docs/OWNER_RELEASE_PACKET.md` §g — covering every item below plus this pass's new
+per-district post-fx look, the new achievement badges (legibility at their small display
+size), and the new district collection cards (including the known 4-of-22 shared-photo gap,
+`docs/KNOWN_ISSUES.md`).
 
 `docs/HONEST_ASSESSMENT.md` names this plainly: every visual/feel claim in
 this repo — banding, touch-target overlap, whether the joystick actually

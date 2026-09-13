@@ -1,5 +1,37 @@
 # Handoff
 
+## SHIP STATE: RELEASE CANDIDATE FINAL v4 — 2026-09-13
+
+`origin/main` is **RELEASE CANDIDATE FINAL v4**, a FINAL CONSOLIDATION pass on top of v3.
+Merged 2 of the 4 named branches (`arena/store-sync`, `arena/art-final` — `arena/
+content-depth`/`arena/ui-audio` were never pushed, skipped honestly), each independently
+scope-checked by a subagent first (both PASS). Wired the new art live: 31 achievement badges
+into `scripts/ui/achievement_screen.gd`, 22 district collection cards into `scripts/ui/
+collection_ui.gd`. 3 more verification subagents ran post-wiring (i18n, store-copy vaporware
+audit, asset legibility/crop) — all PASS except one real, non-blocking finding (4 of 22 cards
+share a base photo by the art pipeline's own design; `docs/KNOWN_ISSUES.md`).
+
+Attempted the owner-only automation honestly rather than performatively: a release keystore
+wasn't auto-generated (no safe non-interactive way to set its password — a permanent secret
+should be typed by the owner, not invented for them); a signed AAB export wasn't possible at
+all (no Android SDK on this machine) — both have exact commands now in the new
+**`docs/OWNER_RELEASE_PACKET.md`**, a single consolidated copy-paste document (12-line
+playtest script included). What COULD be automated was: a gh-pages-ready privacy-policy page
+was built and pushed to a new `gh-pages` branch — 2 clicks + 1 placeholder edit finish it.
+
+**Self-flagged, not hidden**: mid-pass, an orphan-branch checkout was followed by a blind
+`git clean -fdx` without checking the working tree first — it deleted two stale, unregistered
+worktree scratch directories and a backup file. `main` was verified fully intact afterward
+(zero diff from the committed tree); the actual gh-pages work was redone safely in an
+isolated `git worktree add`. Recorded here and in `PLAN.md`'s v4 section rather than omitted.
+
+Full regression re-run: static 10/10, engine gates unchanged, `headless_suite` green ×2,
+i18n `MISSING: 0`. **Owner-only items are still 4** (keystore/AAB, Play Console, privacy
+policy, one playtest) but each is now more concretely closed than before — see
+`docs/OWNER_RELEASE_PACKET.md` §7 for the automated/blocked/always-owner breakdown.
+
+---
+
 ## RELEASE CANDIDATE FINAL v3 — 2026-09-13
 
 `origin/main` is **RELEASE CANDIDATE FINAL v3**. Merged Arena's AUDIO/VISUAL FINALE branch

@@ -5,6 +5,18 @@ in-game verification — a static-only pass can't play the game itself.
 
 ---
 
+## Batch 17 (2026-09-13) — achievement badges and district collection cards now have real art
+
+- **The Achievements screen** shows a small icon per achievement now, instead of a blank box.
+- **The Collection/Codex screen** shows a moody night photo behind each district's name and
+  progress bar. Heads up: 4 districts (school, hospital, gas station, police) currently share
+  one photo between them, differently colored — not unique art yet, tracked as a known gap.
+- No new mechanic, no settings change — pure look pass, same as Batch 16.
+- Also updated: store listing/press-kit/changelog copy synced to the shipped 31-achievement
+  count and current feature set (no player-facing change, store-page-only).
+
+---
+
 ## Batch 16 (2026-09-13) — cinematic look pass: bloom, vignette, chroma, film grain per district
 
 - **Every district now has its own subtle cinematic grading** on top of the
