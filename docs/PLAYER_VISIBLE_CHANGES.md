@@ -5,6 +5,46 @@ in-game verification — a static-only pass can't play the game itself.
 
 ---
 
+## Batch 18 (2026-09-13) — secrets are findable at last, plus dailies, NG+ modifiers and UI sound
+
+This is the biggest gameplay batch in a while: one of these items was a feature that
+existed on paper but could not be reached in the built game at all.
+
+- **26 hidden secrets now exist in the world and can actually be found.** This is the
+  headline fix. The secret object was written for the old 2D build, and the 3D
+  interaction code skips anything that isn't a 3D node — so no secret was reachable
+  anywhere, ever, and the `secret_found` event never fired once. Everything hanging off
+  that event was therefore dead too: the "find a secret" quest, the secret-hunter
+  achievement, the XP and coin rewards, and the secrets counter on the stats screen.
+  **Worth verifying by hand:** start a new game, walk the starting district, and confirm
+  you can find and pick up a secret, that a toast appears, and that the stats screen
+  counter goes up.
+- **Secrets appear as the district gets repaired.** Each secret has a stage requirement,
+  so some are only visible after you fix the district further. Two of them sit in the
+  starting district: one from the very beginning, one after your first repair.
+- **The daily challenge has 60 variations instead of 30**, and every day now carries a
+  short line of flavour text. Two new kinds of daily exist: photograph N subjects, and
+  spend N stretches of 30 seconds with your flashlight off.
+- **New Game+ now offers modifiers.** From NG+1 you pick one per NG+ level on the NG+
+  screen — for example "Long Night" (batteries give 20% less light) or "Ghost" (crawlers
+  ignore you, but the run earns no achievements). Conflicting pairs refuse to be picked
+  together. Active picks are listed on the pause menu.
+  **Caveat worth knowing before you test:** only four of the modifier effects are actually
+  live right now (loot, battery, hunter hearing, achievements-off). The rest are shown and
+  described but do not change the game yet — see `docs/KNOWN_ISSUES.md`.
+- **Seven new interface sounds**: menu clicks, achievement, secret discovery, daily
+  complete, streak milestone, boss, and ending. They were measured against the music and
+  turned up, because at their original level they sat underneath the soundtrack and could
+  not be heard.
+- **The Keeper now comments on big moments** — 12 one-time lines that fire on things like
+  your first lit district, an ending, or starting NG+. District cards in the Collection
+  screen gained a line of description once that district is lit.
+- **The tutorial now mentions the journal**, so new players learn that quests and secrets
+  exist instead of having to stumble on the screen.
+- All of the above is translated in the sense that no screen will show a missing-text
+  error in any of the 13 languages — but the 154 new lines are currently English in the
+  12 non-English languages. Russian included. That is a known gap, not an oversight.
+
 ## Batch 17 (2026-09-13) — achievement badges and district collection cards now have real art
 
 - **The Achievements screen** shows a small icon per achievement now, instead of a blank box.
