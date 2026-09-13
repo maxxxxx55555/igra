@@ -1,6 +1,7 @@
 {
   "version": 1,
-  "_contract": "World-bible radio broadcasts (RADIO screen, GDD §12.2). Transcripts unlock by {district, min_stage}; en text is i18n source. speaker ids must exist in characters.json.",
+  "_contract": "World-bible radio broadcasts (RADIO screen, GDD §12.2). Transcripts unlock by {district, min_stage}; en text is i18n source. speaker ids must exist in characters.json. `act` tracks the act of the REVEAL district (GDD §12.3: I=D1-3, II=D4-8, III=D9-11) — it is derived from `reveal.district`, never assigned independently.",
+  "_audit_2026_09_13": "radio_02_grid_crew_relay act 2 -> 3. The `act` field disagreed with its own reveal gate: substation is D10, i.e. Act III. Three packs already documented this id as Act III (industrial `_reachability_rule`: 'the Act III broadcasts radio_02/radio_03'; warehouses `_reachability_rule`: 'No Act III ids (radio_02_grid_crew_relay, ...)'; substation `_reachability_rule`: 'the first district where radio_02_grid_crew_relay ... is legal'). Metadata corrected to match the reveal, which is authoritative because CODE unlocks RADIO entries by `reveal` (docs/CONTENT_WORLD_BIBLE.md rule 2). Broadcast pacing is unchanged: 1 is Act I, 2 and 3 are Act III, matching the bible's own summary 'Act I call -> Act III keeper answer'.",
   "transcripts": [
     {
       "id": "radio_01_power_station",
@@ -24,7 +25,7 @@
         "text": "Third shift to anyone: feeder four is not faulty, repeat, not faulty. The draw is deliberate. Marat traced it to a test tap that is not on any map. We are walking the line to the substation. If we do not call again — the bench proof stands. One streetlight. Remember that."
       },
       "reveal": { "district": "substation", "min_stage": 1 },
-      "act": 2
+      "act": 3
     },
     {
       "id": "radio_03_keeper_reversal",

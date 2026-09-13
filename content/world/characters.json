@@ -112,10 +112,11 @@
       "epithet": "author of Project Architect",
       "status": "the boss, power_station",
       "home_district": "power_station",
-      "first_mention": { "district": "school", "note": null },
+      "first_mention": { "district": "hospital", "note": "hospital_note_07" },
       "arc_acts": [2, 3],
       "reveal": { "district": "hospital", "min_stage": 2 },
-      "summary_en": "Act II reveal: the grid experiment that taught the lamps to drink, and the people to become what hunts them. Boss of D11 (GDD §6.3). Content packs from school onward may reference char_architect; earlier districts only hint via 'the draw'.",
+      "summary_en": "Act II reveal: the grid experiment that taught the lamps to drink, and the people to become what hunts them. Boss of D11 (GDD §6.3). Content packs may reference char_architect only from hospital onward (its reveal district): hospital itself, plus any district whose guaranteed prerequisite closure contains hospital — warehouses, industrial, substation, power_station. school and gas_station may NOT, being leaves off that branch; earlier districts only hint via 'the draw'.",
+      "_audit_2026_09_13": "first_mention was {district: school, note: null} — a dead ref and a reachability violation at once. school's guaranteed closure is {residential, suburbs} (district_school.tres powered_by=[residential]), so no school note may legally carry a hospital-gated id; school's own prop_manifest says so ('Architect reveal gates at hospital STREETS — nothing here may pre-empt it'). First note that actually carries char_architect is hospital_note_07 (min_stage 2, matching this reveal exactly); hospital_note_06 introduces PROJECT ARCHITECT the programme (hist_/faction_/news_ ids) but not the man. summary_en's 'from school onward' corrected to 'from hospital onward' for the same reason. summary_en is internal prose, not an i18n source (no key maps to it), so no locale sync is needed.",
       "i18n_keys": { "title": "WORLD_CHAR_ARCHITECT_TITLE", "text": "WORLD_CHAR_ARCHITECT_TEXT" },
       "en": { "title": "The Architect", "text": "The project bears his name. The monsters were people; the grid was his instrument." }
     }
