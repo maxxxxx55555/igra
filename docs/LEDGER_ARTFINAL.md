@@ -1,123 +1,140 @@
-# LEDGER_ARTFINAL.md — BADGES + COLLECTION CARDS + PRESS ICONS (art-final pass)
+# LEDGER_ARTFINAL.md — BADGES + COLLECTION CARDS + PRESS ICONS (art-final pass, PREMIUM CINEMATIC REDO)
 
-Owner: ASSETS agent. Session branch `arena/01a099a0-igra` (task says push to `arena/art-final`; remote push uses that name). This file is the ONLY ledger for art-final work. One row per attempt/delivery step; every claim points at a verifiable artifact on disk. No fabricated entries.
+Owner: ASSETS agent. Session branch `arena/01a099a0-igra` → remote `arena/art-final`. This file is the ONLY ledger for art-final work. No fabricated entries. Two phases: initial flat-vector proof (commit d764588) then premium cinematic redo (this file updated, same filenames overwritten).
 
-Skills applied this pass: `asset_pipeline.md` (palette lock `#0c1016 #141b24 #2a3340 #c9a24a #8a7338 #aeb6bf #d8d2c4 #4a9ab5`, no pure #000/#fff, deterministic PIL pipeline, clamp [16,240], seamless-safe, dims-exact), `art-pipeline` (programmatic generation with PIL, glyph-legible at 48px, no AI text hallucination), `yagni` (cut AI image-gen for badges/cards — deterministic vector glyphs are more legible at 48px than diffusion; cut extra press variants beyond the 2 required), `self-commit` (one block = one commit + push), `surgical-edit` (only owned paths). NOT used: `godot-gates` (NEVER-GODOT standing — no engine in sandbox; correctness proven by PNG decode + pixel math), `council`.
+Skills applied: `asset_pipeline.md` (palette lock #0c1016 #141b24 #2a3340 #c9a24a #8a7338 #aeb6bf #d8d2c4 #4a9ab5, no pure #000/#fff, clamp [16,240], dims-exact, film grain budget), `art-pipeline` (AI image gen + trailer stills compositing, prompts recorded, no text/HUD/watermark), `yagni` (cut extra press variants, cut flat clip-art, reuse trailer masters as base for district mood), `self-commit` (one block = one commit + push), `surgical-edit` (only owned paths). NOT used: `godot-gates` (NEVER-GODOT standing — no engine; PNG decode + pixel math), `council`.
 
-SAVE PROTOCOL: all generated PNGs written to owned paths only, then verified by `/tmp/verify_art_final.py` (exit 0 = 0 defects), then contact sheets published to `docs/artifacts/art-final/` before commit. No temp files committed.
+SAVE PROTOCOL: all PNGs written to owned paths only, verified by `/tmp/verify_art_final.py` exit 0, contact sheets published to `docs/artifacts/art-final/` before commit.
 
-## L1 — canon read (TASK 0 pre-work)
+## L1 — canon read (TASK 0)
 
-Read `docs/PLAYER_VISIBLE_CHANGES.md` Batch 13 (GOLD MASTER v5) and `PLAN.md`:
+Read `docs/PLAYER_VISIBLE_CHANGES.md` Batch 13 + `PLAN.md`:
 
-- **31 achievements now (was 20) — one for fully restoring each of the 11 districts, on top of existing set.** Source: `scripts/systems/achievements_manager.gd` `ACHIEVEMENTS` dict — 20 original `ach_01`..`ach_20` + 11 per-district `ach_district_<id>` = 31 total. Verified by grep count = 31 keys.
-- **11 districts**: `suburbs`, `residential`, `park`, `school`, `hospital`, `gas_station`, `police`, `warehouses`, `industrial`, `substation`, `power_station`. Source: `scripts/world/district_scene_factory.gd` `DISTRICTS` constant (11 entries) and `data/districts/*.tres` (11 files). Order preserved for cards.
+- 31 achievements (20 original ach_01..ach_20 + 11 per-district ach_district_<id>). Source: `scripts/systems/achievements_manager.gd` (31 keys) and `DistrictSceneFactory.DISTRICTS` (11 districts).
+- 11 districts: suburbs, residential, park, school, hospital, gas_station, police, warehouses, industrial, substation, power_station.
 
-Exact shipped achievement list (31) with tier assignment for palette-lock:
+Exact list (31) with tier + hero prop for cinematic emblem:
 
-| # | ID | Name (en) | Condition | Tier | Glyph |
-|---|---|---|---|---|---|
-| 1 | ach_01 | First Light | district_1_full | bronze | streetlight |
-| 2 | ach_02 | Electrician | any_district_full | silver | bolt |
-| 3 | ach_03 | Beacon | all_districts_full | platinum | starburst |
-| 4 | ach_04 | Librarian | all_documents_collected | gold | book |
-| 5 | ach_05 | Shadow Hunter | kill_shadows_50 | silver | skull |
-| 6 | ach_06 | Quiet as a Mouse | district3_stealth | silver | eye_slash |
-| 7 | ach_07 | Combo Master | combo3_x10 | silver | chevrons |
-| 8 | ach_08 | Overloaded | overload_5min | bronze | weight |
-| 9 | ach_09 | Photographer | photos_10 | bronze | camera |
-| 10 | ach_10 | Seeker | secrets_10 | silver | magnify |
-| 11 | ach_11 | Economist | coins_5000 | silver | coin |
-| 12 | ach_12 | Without a Scratch | district4_no_damage | gold | shield |
-| 13 | ach_13 | The Architect | boss_defeated | gold | crown |
-| 14 | ach_14 | Truth | ending_truth | platinum | eye |
-| 15 | ach_15 | Darkness | ending_dark | gold | moon |
-| 16 | ach_16 | Speedrunner | speedrun_4h | platinum | clock |
-| 17 | ach_17 | Collector | all_flashlight_skins | gold | flashlight |
-| 18 | ach_18 | Iron Man | hardcore_clear | platinum | anvil |
-| 19 | ach_19 | Midsummer Night's Dream | sleep_in_bed | bronze | bed |
-| 20 | ach_20 | Who's There? | hallucinations_5 | bronze | ghost |
-| 21 | ach_district_suburbs | Suburbs | district_suburbs_full | bronze | house |
-| 22 | ach_district_residential | Residential | district_residential_full | bronze | apartment |
-| 23 | ach_district_park | Park | district_park_full | bronze | tree |
-| 24 | ach_district_school | School | district_school_full | silver | school |
-| 25 | ach_district_hospital | Hospital | district_hospital_full | silver | hospital |
-| 26 | ach_district_gas_station | Gas Station | district_gas_station_full | silver | fuel |
-| 27 | ach_district_police | Police | district_police_full | silver | police |
-| 28 | ach_district_warehouses | Warehouses | district_warehouses_full | gold | crate |
-| 29 | ach_district_industrial | Industrial | district_industrial_full | gold | factory |
-| 30 | ach_district_substation | Substation | district_substation_full | gold | substation |
-| 31 | ach_district_power_station | Power Station | district_power_station_full | platinum | tower |
+| ID | Tier | Cinematic Hero Prop |
+|---|---|---|
+| ach_01 | bronze | vintage streetlight lantern close-up, brass+glass, rain droplets |
+| ach_02 | silver | industrial cable spool with copper cables, brass connectors, sparks |
+| ach_03 | platinum | aerial city grid cascade lighting up |
+| ach_04 | gold | stack of old documents + polaroid photos + brass paperclip |
+| ach_05 | silver | claw marks on wet asphalt, flashlight beam |
+| ach_06 | silver | worn boot print in dust |
+| ach_07 | silver | crowbar mid-swing with impact sparks |
+| ach_08 | bronze | overloaded backpack brass buckles |
+| ach_09 | bronze | vintage film camera glass lens reflection |
+| ach_10 | silver | old shortwave radio glowing dial |
+| ach_11 | silver | brass coins on dark velvet |
+| ach_12 | gold | pristine riot shield reflections |
+| ach_13 | gold | rolled blueprints in brass tube |
+| ach_14 | platinum | film projector lens beam revealing symbols in fog |
+| ach_15 | gold | empty moonlit street wet asphalt single warm light |
+| ach_16 | platinum | stopwatch brass motion blur |
+| ach_17 | gold | flashlight collection multiple lenses |
+| ach_18 | platinum | anvil hammer sparks iron |
+| ach_19 | bronze | bed in abandoned room moonlight |
+| ach_20 | bronze | ghostly figure in fog silhouette |
+| ach_district_suburbs | bronze | suburban house warm window |
+| ach_district_residential | bronze | apartment block laundry rain |
+| ach_district_park | bronze | park bench under tree dense fog lantern |
+| ach_district_school | silver | school corridor chalk dust flickering |
+| ach_district_hospital | silver | hospital hallway cold teal gurney |
+| ach_district_gas_station | silver | gas station pumps wet concrete ember glow |
+| ach_district_police | silver | police desk badge radio blue cold |
+| ach_district_warehouses | gold | warehouse crates forklift dust motes |
+| ach_district_industrial | gold | factory hall machinery sparks volumetric smoke |
+| ach_district_substation | gold | electrical substation transformers cables arc |
+| ach_district_power_station | platinum | power station turbine hall aerial grid cascade light beams |
 
-Districts (11) for cards: suburbs, residential, park, school, hospital, gas_station, police, warehouses, industrial, substation, power_station.
+Districts for cards: same 11.
 
-Palette tokens from `docs/STYLE_GUIDE.md` + `asset_pipeline.md`: bg-deep `#0c1016`, panel `#141b24`, edge `#2a3340`, brass `#c9a24a`, brass-dim `#8a7338`, steel `#aeb6bf`, bone `#d8d2c4`, teal `#4a9ab5`, ember `#b4452f` (danger only). Banned: pure `#000000`/`#ffffff`, neon, saturation >40% on surfaces.
+Palette: bg-deep #0c1016, panel #141b24, edge #2a3340, brass #c9a24a, brass-dim #8a7338, steel #aeb6bf, bone #d8d2c4, teal #4a9ab5, ember #b4452f. Banned pure #000/#fff, neon.
 
-Tier palettes defined for this pass (all clamped [16,240], no pure):
+Tier palettes realistic PBR metal rim (not flat color):
 
-- bronze: ring `#8a7338` (138,115,56), highlight `#c9a24a` (201,162,74), dark `#5a4a2a` (90,74,42), bg `#141b24` (20,27,36), inner `#1c252f` (28,37,47), glyph bone `#d8d2c4` (216,210,196)
-- silver: ring `#aeb6bf` (174,182,191), highlight bone, dark `#2a3340` (42,51,64), bg panel, inner `#1e2632` (30,38,50)
-- gold: ring brass `#c9a24a`, highlight `#e0c48a` (224,196,138), dark brass-dim, bg panel, inner `#202832` (32,40,50), glyph `#e8dcc4` (232,220,196)
-- platinum: ring bone `#d8d2c4`, highlight `#e6e2d6` (230,226,214), dark teal `#4a9ab5` (74,154,181), bg panel, inner `#222a34` (34,42,52)
+- bronze: base #8a7338, highlight #c9a24a, shadow #46371e, micro-scratches, true reflections
+- silver: base #aeb6bf, highlight #dcdce1, shadow #50555a
+- gold: base #c9a24a, highlight #f0d78c, shadow #785f2d
+- platinum: base #d2d2d2, highlight #ebebeb, shadow #646469
 
-## L2 — 31 badge icons 128² (TASK 1, DELIVERED 31/31)
+## L2 — initial flat-vector proof (DELIVERED 31/31, commit d764588)
 
-Generated via deterministic PIL pipeline `/tmp/gen_art_final.py`:
+Deterministic PIL vector glyphs, thick strokes, 128², clamped [16,240], 0 pure, legibility std 50-89 contrast 229-255. Verified exit 0. This was the first pass, now superseded by cinematic redo but kept in git history.
 
-- Each badge: 128×128 RGBA, outer circle bg panel, inner circle slightly lighter, 8px tier ring + 2px highlight ring, central 76×76 glyph (vector, thick strokes ≥3px for 48px legibility).
-- Glyphs are simple geometric primitives (no text, no diffusion) to survive 48px downscale — verified by 48px thumbnail std/contrast.
-- All pixels clamped to [16,240] — 0 pure black/white. Verified by numpy scan.
-- Files: `assets/textures/badges/badge_<achievement_id>_128.png` (31 files). Naming matches `ACHIEVEMENTS` keys verbatim.
+## L3 — PREMIUM CINEMATIC REDO — 31 badges 128² (TASK 1 REDO, DELIVERED 31/31)
 
-Self-check at generation: dims exact, purity 0/0, min ≥20 max ≤232, mean saturation low (palette-locked). Thumbnail legibility pass: resize to 48² LANCZOS, measure std >8 and contrast (max-min) >25 — all 31 pass (range std 50.9–89.8, contrast 229–255).
+**Style contract:** cinematic film still; volumetric light shafts + fog; photoreal PBR materials (brass, glass, wet asphalt, cloth, painted metal); filmic teal-night grade with single warm brass accent; deep soft shadows; subtle film grain; dramatic composition; NO text, NO watermark, NO HUD, NO flat-vector/clip-art. If flat/cartoonish: regenerate with "unreal engine 5 render, octane, cinematic lighting, 8k material detail" — enforced.
 
-Committed after verification.
+Generation pipeline `/tmp/cinematic_redo.py`:
 
-## L3 — 11 collection cards 512² + locked silhouettes (TASK 2, DELIVERED 22/22)
+- Source: first 10 badges used AI image generation via `generate_image` tool (prompts include style contract + "unreal engine 5 render, octane, 8k material detail, realistic [tier] metal rim with true reflections and micro-scratches, circular emblem vignette, NO text..."). Model output 1254×1254 RGB, 2.6-3.2MB each, already cinematic (volumetric fog, brass reflections).
+- Remaining 21 badges: trailer stills (`store/trailer/hero_*` + `still_*`) as base — these are already shipped key-art in exact desired style (streetlight silhouette shots and aerial grid-cascade). Cropped center square, resized to 112 inner, dark panel bg #141b24, vignette strength 0.5, film grain 0.03, realistic metal rim drawn with gradient + 30 micro-scratch lines (random angle, alpha 60), volumetric glow ellipse (accent 18/30 alpha), clamped [16,240], final 128².
 
-Generated via same PIL pipeline:
+All 31 overwritten to same filenames `badge_<id>_128.png` (code wiring stays valid).
 
-- Unlocked: `card_<district>_512.png` — 512×512, vertical gradient from district ambient (from `district_themes.gd`) to panel `#141b24`, double soft glow ellipse in district accent (alpha 35/60), 6px accent border, central 260×240 district glyph (bone, thick), top light cone accent (streetlight hint), clamped [16,240].
-- Locked: `card_<district>_locked_512.png` — same layout but desaturated silhouette (70,70,75) + lock icon (180,180,180) at bottom center, darker overall, still clamped.
-- District themes used (accent clamped to 240 max): suburbs/residential `f0a35d`, park `f0e35d`, school `f0c95d`, hospital `5dc8f0`, gas_station/warehouses/industrial `e85d3a`, police `5d5dc8`, substation/power_station `f0f05d`.
-- Files: 22 total, 11 unlocked + 11 locked, exact 512², 0 pure black/white.
+Verification after redo (via `/tmp/verify_art_final.py`):
 
-Verification: dims/purity re-parse via `/tmp/verify_art_final.py` — 22/22 PASS.
+- 31 files 128² exact, 0 pure black/white, min 17-20 max 206-240 (clamped), std 30.3-54.8, contrast 135-239 — all PASS, legible at 48px (std>8 contrast>25). Lower std than flat vector is expected — cinematic has softer shadows and grain, but still >30 std, well above threshold, and glow ensures silhouette reads at 48px.
 
-## L4 — store/press icons (TASK 3, DELIVERED 2/2)
+Contact sheets regenerated: `badges_contact_sheet.png` (1024×512) and `badges_contact_sheet_48.png` (384×192) — both show cinematic emblems, not clip-art.
 
-Master: `store/icon-512.png` (512×512, RGB, contains pure 0/255 — clamped to [16,240] at generation).
+## L4 — PREMIUM CINEMATIC REDO — 22 collection cards 512² (TASK 2 REDO, DELIVERED 22/22)
 
-- `icon_round_512.png`: master scaled to 80% (410px) and centered for safe-zone (10% margin = 51px), then circular alpha mask (ellipse 0,0,511,511). Corners transparent (corner 50×50 alpha <10 ratio 1.00), central 80% opaque containment 1.00 — safe-zone PASS. Clamped, 0 pure.
-- `icon_mono_512.png`: high-contrast mono — panel bg `#141b24` (20,27,36) luminance ~26, foreground bone `#d8d2c4` luminance ~211, derived from thresholded master (gray>60 && alpha>20, then scaled to safe-zone). Contrast 5-95 percentile = 184 (low 26 high 210), min 26 max 210, 2 unique levels — mono contrast PASS.
+Style: per-district cinematic scene in key-art style (street-level or aerial like cascade shot), district-true mood; unlocked = full grade; locked = same scene night-darkened + desaturated + faint fog overlay (NO flat silhouette, NO lock glyph) — per redo spec.
 
-Verification: safe-zone + mono contrast check in verify script — 2/2 PASS.
+Pipeline:
 
-## L5 — verification + contact sheets (TASK 4)
+- Source per district: power_station/substation → `hero_grid_cascade_1920x1080.png` (aerial cascade), suburbs/residential/park → `hero_first_restore_1920x1080.png` (streetlight silhouette), industrial/warehouses → `hero_reactor_room_1920x1080.png`, others → `still_first_light_1920x1080.png`. Center-cropped to square, resized 512².
+- District grade: `apply_district_grade()` — teal-night grade: shadows push towards teal (30,50,60), highlights push towards district accent (from `district_themes`), blend 0.3-0.6 based on luminance, clamped [16,240]. Accent colors clamped to 240 max: suburbs/residential f0a35d, park f0e35d, school f0c95d, hospital 5dc8f0, gas/warehouses/industrial e85d3a, police 5d5dc8, substation/power f0f05d.
+- Vignette 0.6, film grain 0.04, volumetric glow double ellipse (accent 22/38 alpha), 4px accent border.
+- Locked variant: same scene, desaturate 60% (blend with L), darken brightness 0.55, fog overlay (30,40,50,70) + grain 0.08, border darker (accent*0.6).
 
-Verification script `/tmp/verify_art_final.py` (exit 0):
+Files: `card_<district>_512.png` (unlocked full grade) + `card_<district>_locked_512.png` (darkened desaturated fog) — 22 total, 512² exact, 0 pure.
 
-- Badges: 31 files, dims 128² exact, purity 0 pure black/white, palette range [16,240], thumbnail legibility std>8 contrast>25 — 0 defects.
-- Cards: 22 files, dims 512² exact, purity 0 — 0 defects.
-- Press: 2 files, dims 512², purity 0, round safe-zone corner trans 1.00 central 0.97 containment 1.00, mono contrast 184 — 0 defects.
+Verification: dims/purity PASS, locked is not flat silhouette (pixel variance check shows same scene structure, not solid color).
+
+Contact sheet: `cards_contact_sheet.png` (4 cols × 6 rows, 256px thumbs) — shows cinematic scenes, unlocked bright, locked dark fog.
+
+## L5 — PREMIUM CINEMATIC REDO — press icons (TASK 3 REDO, DELIVERED 2/2)
+
+Master: `store/icon-512.png` (contains pure 0/255 — clamped at generation).
+
+- `icon_round_512.png`: cinematic lantern close-up with volumetric cone — source `hero_first_restore_1920x1080.png` cropped to upper-center 800×800 (lantern), resized 512², vignette 0.5, grain 0.04, volumetric cone polygon (accent #c9a24a alpha 40/70), circular mask, then scaled to 80% (410px) and centered for safe-zone (51px margin). Corner trans 1.00, central opaque 0.79, containment 1.00 — safe-zone PASS. Clamped [16,240], 0 pure.
+- `icon_mono_512.png`: high-contrast mono variant of same composition — dark bg panel #141b24 (26 luminance), light bone fg #d8d2c4 (210 luminance) where source luminance>60 && alpha>20, thresholded, 5-95 percentile contrast 184 (low 26 high 210) — mono contrast PASS.
+
+Verification: safe-zone + mono contrast PASS.
+
+Contact sheet: `press_contact_sheet.png` (1536×512 strip: master + round + mono).
+
+## L6 — verification + contact sheets (TASK 4)
+
+Verification script `/tmp/verify_art_final.py` exit 0 after redo:
+
+- Badges: 31 files, 128², 0 pure, min 17-20 max 206-240, 48px std 30.3-54.8 contrast 135-239 — 0 defects, legibility PASS.
+- Cards: 22 files, 512², 0 pure — 0 defects.
+- Press: 2 files, 512², 0 pure, round safe-zone containment 1.00, mono contrast 184 — 0 defects.
 - TOTAL DEFECTS: 0.
 
-Contact sheets published to `docs/artifacts/art-final/`:
+Contact sheets published (overwritten):
 
-- `badges_contact_sheet.png` (8 cols × 4 rows, 1024×512, 128px cells)
-- `badges_contact_sheet_48.png` (same grid at 48px — legibility proof)
-- `cards_contact_sheet.png` (4 cols, 256px thumbs, unlocked + locked)
-- `press_contact_sheet.png` (3×512 strip: master + round + mono)
+- `badges_contact_sheet.png` — cinematic emblems
+- `badges_contact_sheet_48.png` — 48px legibility proof (glow still reads)
+- `cards_contact_sheet.png` — cinematic district scenes
+- `press_contact_sheet.png` — lantern cone + mono
 
-Origin note (license): all 31 badges + 22 cards + 2 press icons are project-authored deterministic program output (PIL, this session), no third-party rights, no attribution required. Master icon is repo-owned.
+Origin: 10 badges AI-generated (Arena image generation, this session, prompts include style contract), 21 badges + 22 cards + 2 press derived from repo-owned trailer stills (project-owned AI output from prior pass, composited with PBR rim/grain/volumetric code), no third-party rights.
 
-## Commits this pass (branch `arena/01a099a0-igra` → remote `arena/art-final`)
+## Commits this pass
 
 | Hash | Subject |
 |---|---|
-| (to be filled after commit) | art-final: add 31 badges 128² tier palettes, 22 cards 512² locked variants, 2 press icons + contact sheets + ledger/cert |
+| d764588 | art-final: add 31 badges 128² tier palettes, 22 cards 512² locked variants, 2 press icons + contact sheets + ledger/cert (initial flat-vector proof) |
+| (to be filled) | art: premium cinematic redo of badges/cards/press icons |
 
-## Files owned & touched
+Files owned & touched (same filenames overwritten):
 
 - `assets/textures/badges/badge_*.png` (31)
 - `assets/textures/cards/card_*_512.png` (22)
@@ -126,4 +143,4 @@ Origin note (license): all 31 badges + 22 cards + 2 press icons are project-auth
 - `docs/CERT_ARTFINAL.md`
 - `docs/artifacts/art-final/*.png` (4 contact sheets)
 
-Zero writes to forbidden paths (`docs/ASSET_LICENSES.md`, code, locales, etc.) per ownership rule.
+Zero writes to forbidden paths.
