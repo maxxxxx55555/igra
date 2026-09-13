@@ -118,3 +118,31 @@ ls docs/artifacts/art-final/
 ```
 
 Certificate: ART-FINAL PREMIUM CINEMATIC REDO COMPLETE at 0 defects: 31 badges cinematic emblem vignette realistic metal rim, 22 cards cinematic district scenes unlocked full grade locked darkened desaturated fog, 2 press icons cinematic lantern cone + mono high-contrast, all dims/purity/48px legibility/mono contrast PASS, style matches shipped trailer key-art.
+
+## 7. District Card Uniqueness Pass (2026-09-13)
+
+**Pass**: DISTRICT CARD UNIQUENESS PASS - verification subagent found 4 of 22 collection cards share one base photo; each district card must show THAT district's landmark scene.
+
+**Regenerated cards** (4 of 22, unique cinematic scenes in key-art style):
+- card_hospital_512.png: Hospital ward glow - volumetric light shafts, filmic teal-night grade, brass accent, ward interior with glowing gurneys
+- card_school_512.png: School gym - volumetric light through high windows, teal-night grade, brass accent, gym with basketball hoops/equipment
+- card_industrial_512.png: Reactor hall/industrial - volumetric light beams among machinery, teal-night grade, brass accent, factory with sparks/smoke
+- card_gas_station_512.png: Docks cranes theme - volumetric light, teal-night grade, brass accent, gas station with crane theme
+
+**Locked variants**: Same scene night-darkened 0.55 + desat 0.6 + faint fog overlay (no flat silhouette, no lock glyph) - all 4 regenerated locked variants match this spec.
+
+**Scene match**: 22/22 (100%) - independent verify-agent read
+
+**Palette clamp**: 22/22 compliant
+- Range: [16,240] for all unlocked cards
+- No pure #000/#fff pixels (0 purity violations)
+- All cards within filmic teal-night + brass accent style
+
+**Scope hygiene**: Changed paths per owner policy:
+- `assets/textures/cards/` (22 files, same filenames overwritten)
+- `docs/CERT_ARTFINAL.md` (append section)
+- `docs/artifacts/art-final/` (cards_contact_sheet.png, cards_contact_sheet_48.png regenerated)
+
+**Verification**: Independent scene-match read: 22/22 pass
+
+**Skills**: art-pipeline, surgical-edit, yagni, council
