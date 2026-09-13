@@ -1,0 +1,18 @@
+assets/audio/ui/ui_menu_click.ogg: codec=vorbis ch=1 rate=44100 granule=4544 len=0.103s pages=3
+assets/audio/ui/ui_achievement_sting.ogg: codec=vorbis ch=1 rate=44100 granule=40184 len=0.911s pages=3
+assets/audio/ui/ui_secret_discovery_sting.ogg: codec=vorbis ch=1 rate=44100 granule=17332 len=0.393s pages=3
+assets/audio/ui/ui_daily_complete_sting.ogg: codec=vorbis ch=1 rate=44100 granule=28092 len=0.637s pages=3
+assets/audio/ui/ui_streak_milestone_sting.ogg: codec=vorbis ch=1 rate=44100 granule=25746 len=0.584s pages=3
+assets/audio/ui/ui_boss_sting.ogg: codec=vorbis ch=1 rate=44100 granule=21216 len=0.481s pages=3
+assets/audio/ui/ui_ending_sting.ogg: codec=vorbis ch=1 rate=44100 granule=25186 len=0.571s pages=3
+
+License URL re-check: https://creativecommons.org/publicdomain/zero/1.0/ — fetch_page verified CC0 deed (You can copy, modify, distribute... without asking permission)
+Local LICENSE-AUDIO checks:
+  /tmp/uisfx/LICENSE-AUDIO: exists=True
+    -> UI SFX audio assets are dedicated to the public domain under the Creative Commons CC0 1.0 Universal Public Domain Dedication.  To the extent possible under law, Yuki Capital has waived all copyright a...
+  /tmp/kenney_ui/addons/kenney_ui_audio/LICENSE.txt: exists=True
+    -> 	  	UI SFX Set  	by  Kenney Vleugels (Kenney.nl)  			------------------------------  	License (Creative Commons Zero, CC0) 	http://creativecommons.org/publicdomain/zero/1.0/  	You may use these assets...
+  /tmp/uisfx/packages/uisfx/LICENSE-AUDIO: exists=True
+    -> The audio files under `sounds/` are dedicated to the public domain under the Creative Commons CC0 1.0 Universal Public Domain Dedication.  You may copy, modify, distribute, and use these files, includ...
+
+VERIFY PASS: all 7 headers + licenses OK
