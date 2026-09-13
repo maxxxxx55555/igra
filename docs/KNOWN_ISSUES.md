@@ -25,6 +25,19 @@ versus battery economy), not a wiring one.
 
 ## arena/card-unique-rescue delivered no card art — the 4-of-22 duplicate-photo defect is still open (2026-09-13)
 
+**Status update (2026-09-13): 7 districts specced, awaiting art.**
+The full fix pipeline now exists: `docs/CARD_ART_BRIEF.md` specs all 7
+districts (park, school, hospital, gas_station, police, warehouses,
+substation) with measured palettes (hex), compositions, moods and
+deterministic Midjourney v7 / Flux.1-dev prompts; `scripts/regen_cards_v2.py`
+grades raw 1024×1536 photographs into `content/cards/` via a
+histogram-matching color-grade LUT with built-in validation; and a pre-commit
+hook (`.pre-commit-config.yaml` → `scripts/check_card_art_changes.py`) now
+rejects card-art commits/PRs whose `git diff --stat content/cards/` shows zero
+changes — exactly the failure mode of this branch. What remains: the seven
+photographs themselves (an art task, not a code task), then a separate
+code-touching PR to wire the 512² twins into `assets/textures/cards/`.
+
 The branch `arena/card-unique-rescue` (tip `b1d7830`) was commissioned to fix the known
 defect where 4 of the 22 district collection cards share a base photo and do not depict
 their own district. It was **rejected, not merged**, because it does not contain the fix it
