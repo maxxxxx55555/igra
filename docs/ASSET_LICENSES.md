@@ -459,3 +459,28 @@ Delivered via `arena/01a09712-igra`, merged `36c3673`. Full attempt log consolid
 |---|---|---|---|---|
 | `assets/textures/postfx/presets.json`, `assets/textures/postfx/README.md` | Project-authored preset data | Project-owned; no third-party rights | none required | 11-district bloom/vignette/chroma/grain data; wired live in `scripts/world_env_setup.gd` (bloom) and `scripts/post_process_overlay.gd` (vignette/chroma/grain). |
 | `store/trailer/hero_{first_restore,grid_cascade,reactor_room}_1920x1080.png`, `hero_shorts_cut_1080x1920.png` (4 files) | AI-generated (in-session image generation, finished with project LUTs/shaders per `store/trailer/README.md`) | Project-owned; no third-party rights | none required | Marketing masters only, never runtime textures (3.5-4.0 MB each, full postfx stack baked in). |
+
+## Added 2026-09-14 — 7 unique district card art pass (generated, graded, shipped)
+
+Closes the shared-photo defect (`docs/KNOWN_ISSUES.md`): park, school,
+hospital, gas_station, police, warehouses and substation were generated
+in-session from text prompts (`docs/CARD_ART_BRIEF.md` §4, best candidate
+per district), 2:3 center-cropped → 1024×1536, and graded by
+`scripts/regen_cards_v2.py` (histogram-match to the district keeper +
+saturation rolloff + palette lock + clamp [16,240] + seeded grain) with
+all 8 validation checks PASS per district. The 512² twins are
+byte-identical to the shipped unlocked textures. Locked variants are
+derived from the twins by `scripts/make_locked_cards.py` (deterministic
+per-pixel RGB affine OLS-fit on the 4 keeper pairs + flat accent×0.6
+border + seeded grain 0.01; two full runs byte-identical). The 1024×1536
+masters exceed the 500 KB texture budget by design: they are content
+masters in `content/cards/`, not engine textures, and must stay the
+canonical lossless pipeline output (byte-reproducible determinism).
+
+| Path | Origin | License | Attribution | Notes |
+|---|---|---|---|---|
+| `content/cards/district_<d>.png` (7 files: gas_station 3,407,561 B; hospital 3,421,078; park 3,439,636; police 3,470,566; school 3,394,371; substation 3,454,858; warehouses 3,469,336) | AI-generated in-session (Arena image generation), text-to-image from `docs/CARD_ART_BRIEF.md` §4 prompts, no reference photo; graded deterministically by `scripts/regen_cards_v2.py` | Project-owned AI output; no third-party rights | none required | 1024×1536 masters, 8/8 checks PASS per district (per-image report in the `feat(art): generate + grade 7 unique district cards` commit). |
+| `content/cards/twins/card_<d>_512.png` (7 files, 468,981–515,651 B) | Derived in-session from the masters above (`scripts/regen_cards_v2.py --emit-512`: 512² + 4px accent border) | Project-owned AI output; no third-party rights | none required | Byte-identical to the shipped unlocked textures below. |
+| `assets/textures/cards/card_<d>_512.png` (7 files, same sizes as the twins) | Byte-copies of `content/cards/twins/card_<d>_512.png` | Project-owned AI output; no third-party rights | none required | Replace the seven shared-photo textures. Loaded by name from `scripts/ui/collection_ui.gd` (no code change). Palette 16–240, no pure #000/#fff. |
+| `assets/textures/cards/card_<d>_locked_512.png` (7 files: gas_station 355,039 B; hospital 361,029; park 363,892; police 381,213; school 351,235; substation 372,909; warehouses 373,858) | Derived in-session from the in-house unlocked twins (`scripts/make_locked_cards.py`; "darkened desaturated fog" per `docs/LEDGER_ARTFINAL.md` L93) | Project-owned; no third-party rights | none required | 512², palette 16–146 (no pure #000/#fff), flat accent×0.6 border (keeper locked borders measured flat, std 0.0). Scene structure preserved (per-channel interior std 9–17 ≈ keeper locked 10–15). |
+| `docs/artifacts/art-final/cards_contact_sheet.png` (2,193,453 B) | Derived in-session (`scripts/make_card_contact_sheet.py`: 4×6 grid of 256² LANCZOS thumbnails of the 22 shipped cards, order recovered by cell-matching the pre-replacement sheet) | Project-owned; no third-party rights | none required | 1024×1536. |

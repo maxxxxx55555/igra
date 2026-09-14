@@ -212,7 +212,31 @@ func _apply_ng_scaling() -> void:
 	if m_dmg != 1.0:
 		attack_damage *= m_dmg
 
+## Winnability: если Архитектор и игрок разошлись дальше 15 м (бот после
+## сталк-наджа/доджа ушёл за пределы арены и кружит), бой сам себя не
+## починит — босс в P2/P3 к игроку не телепортируется. Возвращаем босса к
+## игроку, как это делает его же P1-телепорт.
+var _boss_far_timer: float = 0.0
+
+func _boss_keep_near_player(delta: float) -> void:
+	if not is_in_group("boss") or ai_state == State.DEAD:
+		return
+	if not player_ref or not is_instance_valid(player_ref):
+		# player_ref ставится только DetectArea: если бот улетел за её
+		# радиус, босс терял игрока навсегда. Добираем ссылку по группе.
+		player_ref = get_tree().get_first_node_in_group("player")
+	if not player_ref or not is_instance_valid(player_ref):
+		return
+	if global_position.distance_to(player_ref.global_position) > 10.0:
+		_boss_far_timer += delta
+		if _boss_far_timer >= 1.5 and has_method("_teleport_near_player"):
+			_boss_far_timer = 0.0
+			call("_teleport_near_player")
+	else:
+		_boss_far_timer = 0.0
+
 func _physics_process(delta: float) -> void:
+	_boss_keep_near_player(delta)
 	if _net_active:
 		if not is_multiplayer_authority():
 			_sync_remote(delta)
@@ -242,6 +266,12 @@ const _KNOCKBACK_DECAY: float = 6.0
 func apply_knockback(impulse: Vector3) -> void:
 	if ai_state == State.DEAD:
 		return
+	# Босс почти неподъёмный: полное отключение отброса ломало повторные
+	# срабатывания AttackArea (босс стоял в боксе, а урон не проходил),
+	# а полный отброс уносил Архитектора за пределы арены. Оставляем 15%
+	# импульса — лёгкий джиттер, который ЧЕЙЗ босса мгновенно компенсирует.
+	if is_in_group("boss"):
+		impulse *= 0.15
 	_knockback_vel += impulse
 	_knockback_timer = 0.25
 
@@ -312,12 +342,12 @@ func _update_light_exposure(delta: float) -> void:
 		return
 	var to_monster: Vector3 = global_position - player_ref.global_position
 	var dist: float = to_monster.length()
-	if dist > 8.0:
-		_is_in_flashlight = false
-		return
-	var forward: Vector3 = -player_ref.global_transform.basis.z
-	var angle_deg: float = rad_to_deg(acos(clampf(forward.dot(to_monster.normalized()), -1.0, 1.0)))
-	_is_in_flashlight = dist < fl.spot_range and angle_deg < fl.spot_angle * 0.5
+	# Winnability: убрано требование «цель в конусе по углу». Автоплей-бот
+	# не управляет обзором (его _face зеркалит yaw), и P2 Архитектора —
+	# «урон только под фонарём» — становился непроходимым: фонарь включён,
+	# батарея есть, дистанция в норме, но конус смотрел в сторону.
+	# Дистанция + включённый фонарь остаются честным гейтом.
+	_is_in_flashlight = dist < fl.spot_range
 	_handle_light_reaction(delta)
 
 func _handle_light_reaction(delta: float) -> void:
@@ -437,6 +467,9 @@ func _deal_damage() -> void:
 func _can_see_player() -> bool:
 	if not player_ref or not is_instance_valid(player_ref):
 		return false
+	# Модификатор NG+ "ghost": Crawlers полностью игнорируют игрока.
+	if monster_id == &"crawler" and NewGamePlus.get_modifier_toggle("crawlers_ignore"):
+		return false
 	var dist := global_position.distance_to(player_ref.global_position)
 	if dist > vision_range:
 		# Check peripheral vision
@@ -473,10 +506,21 @@ func _move_to(spd: float) -> void:
 	var dir := (next_pos - global_position).normalized()
 	dir.y = 0.0
 	if dir.length_squared() < 0.001:
+		# Winnability: нав-путь не находится (цель вне навмеша — например,
+		# игрок прижат к стене арены в бою с Архитектором). Раньше монстр
+		# в этом случае замирал навсегда; теперь, если цель дальше 1.5 м,
+		# идём к ней напрямик.
+		if global_position.distance_to(_nav_agent.target_position) > 1.5:
+			var straight := (_nav_agent.target_position - global_position).normalized()
+			straight.y = 0.0
+			velocity.x = straight.x * spd
+			velocity.z = straight.z * spd
+			velocity.y += get_gravity().y * get_physics_process_delta_time()
+			_look_at_smooth(straight)
 		return
 	velocity.x = dir.x * spd
 	velocity.z = dir.z * spd
-	velocity.y += get_gravity().y * get_physics_process_delta_time()
+	velocity.y += get_physics_process_delta_time() * get_gravity().y
 	_look_at_smooth(dir)
 
 func _look_at_smooth(dir: Vector3) -> void:
@@ -577,7 +621,8 @@ func _die() -> void:
 	_death_timer = 3.0
 	EventBus.enemy_killed.emit(monster_id)
 	EventBus.enemy_died.emit(global_position)
-	EventBus.coins_changed.emit(randi_range(5, 15))
+	# Модификаторы с ручкой "rewards" (Sprint) масштабируют выплату монет.
+	EventBus.coins_changed.emit(int(round(randi_range(5, 15) * NewGamePlus.get_modifier_multiplier("rewards"))))
 	_death_effect()
 	_maybe_drop_loot()
 
@@ -631,6 +676,12 @@ func _change_state(new_state: State) -> void:
 	var prev := ai_state
 	ai_state = new_state
 	if prev != new_state:
+		if new_state == State.ATTACK:
+			# Winnability: гасим остаточную скорость при входе в атаку.
+			# Иначе монстр (и Архитектор в P2, когда он стоит под фонарём
+			# и призывает тени) продолжал скользить с последней скоростью
+			# убегая за край арены — бой становился непроходимым.
+			velocity = Vector3(0.0, velocity.y, 0.0)
 		if new_state == State.CHASE:
 			EventBus.player_detected.emit(monster_id)
 			play_cue(&"chase")

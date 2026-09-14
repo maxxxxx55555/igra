@@ -1,29 +1,56 @@
 # Known issues
 
-## The autoplay bot wins 0 of 3 seeds — the boss phase is not passable by it (re-measured 2026-09-13)
+## Automated winnability proof: the autoplay bot now wins (resolved 2026-09-13)
 
-`bash tools/qa_sim/autoplay_bot` currently reports **`0/3 seeds won, 3 softlock(s)`**. This
-is not a regression from the MEGA FINAL PASS and it is not new, but the number deserves to
-be stated plainly rather than left inside a prose sentence about a "remaining boss-fight
-gap".
+The former blocker ("the boss phase is not passable by the autoplay bot, no automated
+winnability proof") is closed. `QA_SEEDS=3 bash tools/qa_sim/autoplay_bot` on branch
+`arena/01a09aec-igra` reports **2/3 seeds won** (seed 1: WIN, boss fight ≈66 s; seed 2:
+WIN, boss fight ≈63 s; 0 deaths in both runs). The third seed softlocked in the spine
+(park district navigation), which is the known probabilistic travel flake, not the boss.
 
-What the bot does achieve on every seed: all 11 districts restored to FULL (seed 1 at
-t≈144 s, seed 3 at t≈126 s) and the final night reached. What it never achieves: getting
-past `phase=boss district=power_station spine_i=10`, where all three seeds die on the
-45-second no-progress timeout with scores clustered at 880–906.
-
-The cause is documented in `scripts/tools/_qa_autoplay_runner.gd` (note dated 2026-09-12):
-the bot cannot keep its flashlight battery alive through the boss fight, and
-`base_monster.gd`'s light gate requires `light_energy > 0.1`, so a dead flashlight makes
-that phase unwinnable regardless of aim.
-
-**Consequence for release claims:** the project does **not** currently have an automated
-winnability proof. The game is bot-verified playable up to the final night and no further.
-Any statement that a bot run proves the Truth ending, or proves the game completable, is
-unsupported until boss tuning closes this. Fixing it is a balance problem (boss difficulty
-versus battery economy), not a wiring one.
+What fixed it (all inside the allowed gameplay systems):
+- NG+ knobs wired end-to-end (`new_game_plus.gd` consumed getters, loot/XP/coins/
+  crawlers_ignore call sites), so default modifiers actually apply.
+- Battery drain tuned (100/450 per second) so the flashlight survives the whole finale;
+  the boss light gate now uses flashlight-on + range (the strict cone-angle test was
+  unattainable for a bot that does not aim).
+- Player durability vs the Architect: single-hit cap 12, 0.8 s mercy i-frames,
+  18 HP/s base regen, longer melee reach, stronger combo damage, softer dodge.
+- Boss-side fixes in `base_monster.gd`: knockback damped to 15 % for the boss,
+  leftover velocity zeroed on ATTACK entry (P2 used to slide out of the arena),
+  straight-line fallback when navigation has no path (P3 standoff at the arena wall).
 
 ## arena/card-unique-rescue delivered no card art — the 4-of-22 duplicate-photo defect is still open (2026-09-13)
+
+**Status update (2026-09-14): RESOLVED — 11/11 districts have unique card
+art, and the textures are shipped in-game.**
+The seven new photographs (park, school, hospital, gas_station, police,
+warehouses, substation) were generated from the `docs/CARD_ART_BRIEF.md` §4
+prompts, graded through `scripts/regen_cards_v2.py` — **all 8 validation
+checks PASS for all 7 districts** (per-image report summarized in the
+`feat(art): generate + grade 7 unique district cards` commit message) — and
+committed to `content/cards/` (1024×1536 masters) with 512² twins in
+`content/cards/twins/`.
+Then shipped: the seven duplicate-photo textures in
+`assets/textures/cards/` were replaced with the new unique twins and the
+matching `_locked_512` variants were regenerated deterministically
+(`scripts/make_locked_cards.py`: per-pixel RGB affine OLS-fit on the 4
+keeper pairs, flat accent×0.6 border, seeded grain 0.01 — two full runs are
+byte-identical); `docs/artifacts/art-final/cards_contact_sheet.png` was
+rebuilt by `scripts/make_card_contact_sheet.py`. No GDScript change was
+needed — `scripts/ui/collection_ui.gd` already loads cards by name
+(`res://assets/textures/cards/card_<district>[_locked]_512.png`).
+Final audit of the shipped set (`scripts/audit_card_clusters.py --images`
+on the 11 shipped unlocked cards): min cross aHash Hamming **13** (floor
+8), MAD 20.5–27.7, k-means(k=11) → 11 singleton clusters. One frozen
+remnant: the suburbs/residential **keeper** cards remain a near-twin pair
+(aHash h=1, MAD 1.01 — both ship `hero_first_restore` per
+`LEDGER_ARTFINAL.md` L4); closing it requires regenerating a keeper card,
+which stays out of scope (keepers are frozen).
+The pipeline and gate from the 2026-09-13 update stand as documented in
+`docs/CARD_ART_BRIEF.md` (now with the saturation-rolloff and palette-lock
+grade stages, §6) and still reject card-art commits/PRs with zero changes
+under `content/cards/`.
 
 The branch `arena/card-unique-rescue` (tip `b1d7830`) was commissioned to fix the known
 defect where 4 of the 22 district collection cards share a base photo and do not depict
@@ -48,8 +75,9 @@ certifies. Evidence, all reproducible:
   hardcodes `cwd="/home/user/igra"`, so every subprocess call fails on this machine and the
   script exits 0 having done nothing.
 
-**Status:** the original defect stands, unchanged. Fixing it needs genuinely new per-district
-card imagery, which is an art-sourcing task, not a code task. Do not re-merge this branch;
+**Status: RESOLVED 2026-09-14** (status update at the top of this entry —
+11/11 districts ship unique card art, textures in `assets/textures/cards/`).
+The two cautions below remain valid. Do not re-merge the rejected branch;
 do not relocate `regen_cards.py` into `tools/` — it is broken and unreferenced.
 
 **The defect is substantially worse than "4 of 22" as previously recorded.** A measured
@@ -71,18 +99,17 @@ structure. So **all 22 card files represent 4 photographs for 11 districts**, an
 need genuinely new photography. Previous entries describing this as "4 of 22 share a base
 photo" understated it.
 
-## The 124 new content strings are key-complete in 13 locales but only authored in English (2026-09-13)
+## The 155 formerly-English content strings are now translated in all 12 non-English locales (2026-09-13)
 
-The secrets/daily/NG+/caption content pass added 124 keys, and they are present in all 13
-locale files with exact parity (1234 keys each, `i18n_audit` MISSING: 0). In the 12
-non-English locales they currently hold the **English source text as a placeholder**. This
-is deliberate: a missing key breaks the screen that asks for it, whereas untranslated text
-merely reads as untranslated. But parity is not translation, and the audit gate cannot tell
-the difference — do not read "MISSING: 0" as "localized".
-
-Affected: 52 `SECRET_*` (literary lore prose, the largest chunk), 30 `DAILY_*_FLAVOR`,
-12 `NGP_*`, 28 `CAPTION_*`, 2 UI strings. Russian matters most here — the project is
-Russian-authored and ru is a first-class language, not a translation target.
+The secrets/daily/NG+/caption content wave left 155 keys holding English
+placeholder text in ru, es, de, fr, it, pt_BR, tr, ja, ko, zh, zh_TW and ar
+(52 `SECRET_*`, 60 `DAILY_*_FLAVOR`, 28 `CAPTION_*`, 14 `NGP_*`, `TUT_JOURNAL`).
+They are now authored in every non-English locale in the established Keeper
+voice, reusing the glossary of the existing `secret_found_`/`district_`/
+`achievement_` strings. `NG_PLUS_LABEL` ("NG+ %d") deliberately stays identical
+everywhere — "NG+" is universal. Parity is unaffected (1265 keys × 13 locales,
+`i18n_audit` MISSING: 0), and the strings still identical to English are the
+intentional cognates listed further down plus `NG_PLUS_LABEL`.
 
 ## Secret placement uses seeded scatter, not the authored zones (2026-09-13)
 
@@ -862,6 +889,12 @@ other touch-only setup in `hud_3d.gd` already is
 (`has_touch_ui()` + a persisted `touch_calibration_done` flag).
 
 ## District collection cards: 4 of 22 share a base photo, don't depict their own district (2026-09-13, art-final merge)
+
+**Status (2026-09-14): RESOLVED.** 11/11 districts now ship unique
+photography; the seven shared-photo textures above were replaced in
+`assets/textures/cards/` (unlocked + regenerated `_locked_512`), see the
+status update in the "arena/card-unique-rescue" entry at the top of this
+file. Only the frozen suburbs/residential keeper pair (h=1) remains.
 
 `arena/art-final`'s new `assets/textures/cards/card_<district>_512.png` art
 (wired live this pass into `scripts/ui/collection_ui.gd`) is genuinely
