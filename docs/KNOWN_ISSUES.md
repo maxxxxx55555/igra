@@ -22,22 +22,31 @@ What fixed it (all inside the allowed gameplay systems):
 
 ## arena/card-unique-rescue delivered no card art — the 4-of-22 duplicate-photo defect is still open (2026-09-13)
 
-**Status update (2026-09-14): 11/11 districts have unique card art.**
+**Status update (2026-09-14): RESOLVED — 11/11 districts have unique card
+art, and the textures are shipped in-game.**
 The seven new photographs (park, school, hospital, gas_station, police,
 warehouses, substation) were generated from the `docs/CARD_ART_BRIEF.md` §4
 prompts, graded through `scripts/regen_cards_v2.py` — **all 8 validation
 checks PASS for all 7 districts** (per-image report summarized in the
 `feat(art): generate + grade 7 unique district cards` commit message) — and
 committed to `content/cards/` (1024×1536 masters) with 512² twins in
-`content/cards/twins/`. Cluster re-audit (`scripts/audit_card_clusters.py`,
-reproducible version of the report §4 method): all 7 new cards are distinct
-from each other and from all 4 keepers — min cross aHash Hamming **13**
-(floor 8), MAD 20.5–28, k-means(k=11) → 11 singleton clusters. One frozen
-remnant: the suburbs/residential **keeper** cards are a near-twin pair
+`content/cards/twins/`.
+Then shipped: the seven duplicate-photo textures in
+`assets/textures/cards/` were replaced with the new unique twins and the
+matching `_locked_512` variants were regenerated deterministically
+(`scripts/make_locked_cards.py`: per-pixel RGB affine OLS-fit on the 4
+keeper pairs, flat accent×0.6 border, seeded grain 0.01 — two full runs are
+byte-identical); `docs/artifacts/art-final/cards_contact_sheet.png` was
+rebuilt by `scripts/make_card_contact_sheet.py`. No GDScript change was
+needed — `scripts/ui/collection_ui.gd` already loads cards by name
+(`res://assets/textures/cards/card_<district>[_locked]_512.png`).
+Final audit of the shipped set (`scripts/audit_card_clusters.py --images`
+on the 11 shipped unlocked cards): min cross aHash Hamming **13** (floor
+8), MAD 20.5–27.7, k-means(k=11) → 11 singleton clusters. One frozen
+remnant: the suburbs/residential **keeper** cards remain a near-twin pair
 (aHash h=1, MAD 1.01 — both ship `hero_first_restore` per
 `LEDGER_ARTFINAL.md` L4); closing it requires regenerating a keeper card,
-out of scope here. What remains: a separate code-touching PR to wire the
-512² twins into `assets/textures/cards/` + `scripts/ui/collection_ui.gd`.
+which stays out of scope (keepers are frozen).
 The pipeline and gate from the 2026-09-13 update stand as documented in
 `docs/CARD_ART_BRIEF.md` (now with the saturation-rolloff and palette-lock
 grade stages, §6) and still reject card-art commits/PRs with zero changes
@@ -66,8 +75,9 @@ certifies. Evidence, all reproducible:
   hardcodes `cwd="/home/user/igra"`, so every subprocess call fails on this machine and the
   script exits 0 having done nothing.
 
-**Status:** the original defect stands, unchanged. Fixing it needs genuinely new per-district
-card imagery, which is an art-sourcing task, not a code task. Do not re-merge this branch;
+**Status: RESOLVED 2026-09-14** (status update at the top of this entry —
+11/11 districts ship unique card art, textures in `assets/textures/cards/`).
+The two cautions below remain valid. Do not re-merge the rejected branch;
 do not relocate `regen_cards.py` into `tools/` — it is broken and unreferenced.
 
 **The defect is substantially worse than "4 of 22" as previously recorded.** A measured
@@ -879,6 +889,12 @@ other touch-only setup in `hud_3d.gd` already is
 (`has_touch_ui()` + a persisted `touch_calibration_done` flag).
 
 ## District collection cards: 4 of 22 share a base photo, don't depict their own district (2026-09-13, art-final merge)
+
+**Status (2026-09-14): RESOLVED.** 11/11 districts now ship unique
+photography; the seven shared-photo textures above were replaced in
+`assets/textures/cards/` (unlocked + regenerated `_locked_512`), see the
+status update in the "arena/card-unique-rescue" entry at the top of this
+file. Only the frozen suburbs/residential keeper pair (h=1) remains.
 
 `arena/art-final`'s new `assets/textures/cards/card_<district>_512.png` art
 (wired live this pass into `scripts/ui/collection_ui.gd`) is genuinely

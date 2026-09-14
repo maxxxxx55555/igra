@@ -96,8 +96,15 @@ def main() -> int:
     # Pre-existing keeper twin: the shipped suburbs and residential cards are
     # both graded hero_first_restore (LEDGER_ARTFINAL L4) — a known defect
     # frozen in place because the keeper cards may not be modified. Reported,
-    # excluded from the distinctness gate.
-    PREEXISTING = frozenset({"keeper_suburbs", "keeper_residential"})
+    # excluded from the distinctness gate. Recognized in both naming
+    # conventions: keeper_* (content/cards baseline) and card_*_512 (shipped
+    # assets).
+    PREEXISTING_PAIRS = (
+        frozenset({"keeper_suburbs", "keeper_residential"}),
+        frozenset({"card_suburbs_512", "card_residential_512"}),
+    )
+    def is_preexisting(a: str, b: str) -> bool:
+        return frozenset((a, b)) in PREEXISTING_PAIRS
 
     worst_h, worst_m, worst_pair = 99, 999.0, None
     rows = []
@@ -108,7 +115,7 @@ def main() -> int:
             h = hamming(F[a]["hash"], F[b]["hash"])
             m = float(np.mean(np.abs(F[a]["grey32"] - F[b]["grey32"])))
             rows.append((h, m, a, b))
-            if frozenset((a, b)) == PREEXISTING:
+            if is_preexisting(a, b):
                 preexisting.append((h, m, a, b))
                 continue
             if h < worst_h or (h == worst_h and m < worst_m):
@@ -116,7 +123,7 @@ def main() -> int:
     rows.sort()
     print("12 closest pairs (hamming, mad32):")
     for h, m, a, b in rows[:12]:
-        flag = "PRE " if frozenset((a, b)) == PREEXISTING else ("OK " if h >= 8 else "FAIL")
+        flag = "PRE " if is_preexisting(a, b) else ("OK " if h >= 8 else "FAIL")
         print(f"  {flag} h={h:2d} mad={m:5.2f}  {a} / {b}")
     print(f"\nworst pair (excluding pre-existing twin): "
           f"h={worst_h} mad={worst_m:.2f} ({worst_pair[0]} / {worst_pair[1]})")
