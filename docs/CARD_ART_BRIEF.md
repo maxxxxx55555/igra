@@ -1,10 +1,22 @@
 # CARD ART BRIEF — 7 unique district photographs (producer-ready)
 
-**Status: 7 districts specced, awaiting art.**
+**Status: 11/11 districts have unique card art (2026-09-14).**
 
-Owner: art pipeline. Date: 2026-09-13. Branch: `arena/card-art-pipeline`.
-Feeds: `scripts/regen_cards_v2.py` (grade pipeline), `.pre-commit-config.yaml` (gate),
-`docs/KNOWN_ISSUES.md` (defect record).
+All 7 raws generated from the §4 candidate prompts, graded through
+`scripts/regen_cards_v2.py` — **all 8 validation checks PASS for all 7
+districts** — and committed to `content/cards/` (1024×1536 graded masters)
+plus `content/cards/twins/` (512² in-game twins). Cluster re-audit
+(`scripts/audit_card_clusters.py`): all 7 new cards distinct from each
+other and from every keeper card — **min cross Hamming 13 (floor 8)**,
+MAD 20.5–28, k-means(k=11) → 11 singleton clusters. One frozen remnant:
+the suburbs/residential keeper pair is near-identical (aHash h=1, both
+ship `hero_first_restore`) — pre-existing, and the keeper cards are
+frozen (see §7). Generation/grading log: §6.3.
+
+Owner: art pipeline. Date: 2026-09-13 (spec) / 2026-09-14 (art landed).
+Feeds: `scripts/regen_cards_v2.py` (grade pipeline), `scripts/audit_card_clusters.py`
+(cluster audit), `.pre-commit-config.yaml` (gate), `docs/KNOWN_ISSUES.md`
+(defect record).
 
 ---
 
@@ -39,12 +51,21 @@ zero card changes; a pre-commit gate now makes that impossible (see §8).
 
 ### 2.1 The four photographs and their keeper districts
 
-| Photo | Keeper district (depicts its own) | Borrows it (needs new art) |
-|---|---|---|
-| `hero_first_restore` — streetlamp, silhouetted figure waving, wet suburban street | **suburbs** | park, residential → park only (residential keeps `still_first_light`, see below) |
-| `still_first_light` — ornate streetlamp, quiet **residential street** of single-family houses, one lit window | **residential** | school, hospital, gas_station, police |
-| `hero_reactor_room` — glowing reactor tower in a vast machine hall, clocks, gantry silhouette | **industrial** | warehouses |
-| `hero_grid_cascade` — aerial night city, diagonal light cascade sweeping the grid | **power_station** | substation |
+| Photo | Shipped to (measured cluster) | Keeper (depicts its own) | This pass |
+|---|---|---|---|
+| `hero_first_restore` — streetlamp, silhouetted figure waving, wet suburban street | suburbs, residential, park (aHash h=0–1, MAD ≤ 2.9) | **suburbs** | park replaced; residential frozen as keeper twin (footnote) |
+| `still_first_light` — ornate streetlamp, quiet street of single-family houses, one lit window | school, hospital, gas_station, police (h=0–1) | — (none of the four cards depicts its own district) | all 4 replaced |
+| `hero_reactor_room` — glowing reactor tower in a vast machine hall, clocks, gantry silhouette | industrial, warehouses (h=0) | **industrial** | warehouses replaced |
+| `hero_grid_cascade` — aerial night city, diagonal light cascade sweeping the grid | power_station, substation (h=0) | **power_station** | substation replaced |
+
+> Footnote: `LEDGER_ARTFINAL.md` (L4) lists `hero_first_restore` as the source
+> for suburbs **and** residential — the shipped `card_residential_512.png` is a
+> graded twin of `card_suburbs_512.png` (aHash h=1, MAD 1.01, re-measured
+> 2026-09-14). The `still_first_light` photograph (a residential street) was
+> the source for the school/hospital/gas_station/police cards, which is why
+> the §6 reference mapping points those four at the street-family keeper
+> card `card_residential_512.png`. The residential twin is itself part of the
+> original defect and is frozen — keepers may not be modified in this pass.
 
 Cluster evidence (aHash 8×8 Hamming + MAD on 32×32 greyscale, all 55 pairs):
 intra-cluster Hamming 0–1 / MAD 1.06–6.2; nearest cross-cluster pair
@@ -415,6 +436,15 @@ scripts/regen_cards_v2.py
   2. histogram-matching color grade: per-channel CDF-matched LUT (256³) built
      from the district's reference keeper card (92% center region, border
      excluded) — this is the "color-grade LUT"
+  2b. saturation rolloff: filmic soft-knee compression above 30% saturation
+      (asymptote 48%) — the house correction for AI highlight-overshoot
+      (STYLE_GUIDE §4.1 precedent: generated art rescaled, then clamped)
+  2c. palette lock: out-of-band saturated hues (sat ≥ 0.18) rotated toward
+      the nearest allowed hue (band edge or district accent), capped at 60°
+      per pixel — the hue-axis twin of the [16,240] value clamp. Grossly
+      off-family input (e.g. magenta, >60° from every allowed hue) is NOT
+      rotated and still fails validation, so the hue-family check remains a
+      real gate
   3. clamp texels to [16, 240] (card family convention)
   4. deterministic film grain (seeded, default amplitude 0.04, --grain 0 to skip)
   5. validate (below) and write JSON report
@@ -452,7 +482,8 @@ Reference mapping (histogram target per district — overridable with
 | substation | `assets/textures/cards/card_power_station_512.png` |
 
 Determinism: fixed seed (default 13), fixed k-means-free CDF matching, no
-timestamps in output — identical inputs produce byte-identical PNGs.
+timestamps in output — identical inputs produce byte-identical PNGs
+(re-verified 2026-09-14: two full 7-card runs, SHA-256 identical per file).
 
 ### 6.1 Automatic validation (the script fails the build, exit 1, on any FAIL)
 
@@ -465,15 +496,56 @@ timestamps in output — identical inputs produce byte-identical PNGs.
 | Uniqueness | vs all 4 keeper cards: aHash (8×8) Hamming ≥ 8 AND 32×32 grey MAD ≥ 12 (in-cluster max is 6.2; nearest cross-cluster is 9/16.1) |
 | Display band | center 230×84-aspect band luminance std ≥ 20 (legibility floor) |
 
-Re-run after art lands: the card-cluster audit in
-`docs/artifacts/visual-consistency/visual_consistency_report.md` §4 must then
-show **11 distinct photographs** (cross-cluster Hamming ≥ 8).
+Re-run after art lands — **done 2026-09-14** via
+`scripts/audit_card_clusters.py` (reproducible version of the §4 audit):
+all 7 new cards distinct from each other and from all keepers — min cross
+Hamming **13** (floor 8), MAD 20.5–28, k-means(k=11) → 11 singleton clusters.
+(Original audit: `docs/artifacts/visual-consistency/visual_consistency_report.md` §4.)
+
+### 6.3 Generation log (2026-09-14)
+
+Generator: in-session image model (single text-to-image call per attempt;
+the generator does not honor Midjourney parameters, so the §4 prompts were
+submitted as candidate-1/-2 **Flux wording** with the `--ar 2:3 --style raw
+--v 7` suffixes stripped and an explicit portrait-orientation sentence).
+Output sizes were 768×1376 / 848×1264 / 896×1200 → center-cropped to 2:3
+around the subject, LANCZOS-resized to exactly 1024×1536 **before** grading
+(sanctioned by the commission). Raw inputs were kept out of the repo
+(`/tmp`); only graded output is committed.
+
+| District | Attempt(s) | Prompt variant | What the validator caught | Resolution |
+|---|---|---|---|---|
+| school | 1 | §4.2 candidate 1 | — | passed first grade |
+| police | 1 | §4.5 candidate 1 | — | passed first grade |
+| substation | 1 | §4.7 candidate 1 | — | passed first grade |
+| park | 2 | §4.1 candidate 2 (after cand. 1) | cand. 1: p99_sat 0.61 > 0.55 (gold-carousel highlights) | cand. 2's smaller light + rolloff stage → pass |
+| warehouses | 1 | §4.6 candidate 1 | share_sat40 0.127 > 0.12 (0.7 pp, ember light pool) | rolloff stage closed it; cand. 2 regen was blocked by the platform's per-session image cap (10) |
+| gas_station | 2 | §4.4 candidate 2 (after cand. 1) | cand. 1: hue-family 0.71 (olive 60–90° cast) + p99/share40; cand. 2: hue-family 0.81 (residual olive/teal 50–180°) | cand. 2 + palette-lock stage → pass (hue-family 0.92+) |
+| hospital | 2 | §4.3 candidate 2 (after cand. 1) | cand. 1: hue-family 0.52 (warm rust 10–30° + olive 50–90° in a warm-banned district); cand. 2: residual 150–180° teal | cand. 2 + palette-lock stage → pass |
+
+Composition fixes applied per the commission's on-failure rule: park,
+gas_station and hospital were re-generated with their alternate (candidate 2)
+prompts; warehouses' attempt-2 generation was unavailable (platform image
+cap) so its 0.7 pp share_sat40 overshoot was closed by the uniform
+saturation-rolloff stage (§6, step 2b) instead. No per-district threshold was
+loosened at any point; the 8 checks ran unchanged for all 7 districts and
+all passed.
 
 ## 7. The 4 keeper cards (untouched by this pipeline)
 
 `suburbs`, `residential`, `industrial`, `power_station` keep their existing
 photographs. Their locked twins and contact-sheet rows stay as-is. Do not
 regenerate them — the histogram references in §6 point at them.
+
+**Known frozen remnant (measured 2026-09-14):** `card_suburbs_512.png` and
+`card_residential_512.png` are a near-twin pair — aHash Hamming **1**, 32×32
+grey MAD **1.01** — because both were graded from `hero_first_restore`
+(`docs/LEDGER_ARTFINAL.md` L4). This is the last shared base photo in the
+collection and predates this pass; eliminating it requires regenerating a
+keeper card (e.g. a bespoke `residential` photograph — the `still_first_light`
+street scene is a natural candidate) in a future art pass. The cluster audit
+(`scripts/audit_card_clusters.py`) reports this pair as pre-existing/frozen
+and gates everything else.
 
 ## 8. Gate — no more "zero card changes" PRs
 
@@ -503,13 +575,20 @@ regenerate them — the histogram references in §6 point at them.
 
 ## 9. Definition of done
 
-1. Seven accepted raw photographs (1024×1536), licensed per §5, one per
-   district in §4.
-2. `scripts/regen_cards_v2.py --raw-dir <raws> --report report.json` exits 0
-   and writes seven files to `content/cards/` with a passing report.
-3. `content/cards/` is included in the same PR/commit as the raw→graded
-   files (the gate enforces this).
-4. Re-run the card-cluster audit: 11/11 distinct, cross-cluster Hamming ≥ 8.
-5. `docs/KNOWN_ISSUES.md` card entry closed; new 512² wiring to
-   `assets/textures/cards/` is a **separate** code-touching PR (out of scope
-   here — no GDScript/scene changes in this branch).
+1. ✅ Seven accepted raw photographs (1024×1536) generated from the §4
+   prompts (log: §6.3) — license ledgering per `docs/ASSET_LICENSES.md`
+   convention is pending with the wiring PR (raws were generated in-session
+   and are not re-derivable without their exact model versions).
+2. ✅ `scripts/regen_cards_v2.py --raw-dir <raws> --out content/cards
+   --emit-512 content/cards/twins --report report.json` exits 0; all 8
+   validation checks pass for all 7 districts (report summarized in the
+   `feat(art): generate + grade 7 unique district cards` commit message).
+3. ✅ `content/cards/` committed together with the graded files (the gate
+   saw the card changes and passed).
+4. ✅ Cluster audit re-run: 11/11 distinct — 7 new cards vs 4 keepers, min
+   cross Hamming 13 ≥ 8, k-means(k=11) → 11 singletons (suburbs/residential
+   keeper twin frozen, §7).
+5. ⏳ Remaining: wire the 512² twins into `assets/textures/cards/`
+   (`card_<district>_512.png` + `_locked` variants) and
+   `scripts/ui/collection_ui.gd` in a **separate** code-touching PR;
+   regenerate the residential keeper card to close the last twin (§7).

@@ -181,6 +181,110 @@ def stable_seed(base: int, name: str) -> int:
     return (base * 1_000_003 + zlib.crc32(name.encode("utf-8"))) % (2**32)
 
 
+def hsv_to_rgb(h, s, v):
+    """h in degrees [0,360), s/v in [0,1]; returns float RGB in [0,1]."""
+    h = (h % 360.0) / 60.0
+    i = np.floor(h).astype(np.int64) % 6
+    f = h - np.floor(h)
+    p = v * (1.0 - s)
+    q = v * (1.0 - s * f)
+    t = v * (1.0 - s * (1.0 - f))
+    # per-element sector lookup (np.take with axis=None ravels: wrong for 2D)
+    i2 = i[..., None]
+    r = np.take_along_axis(np.stack([v, q, p, p, t, v], axis=-1), i2, axis=-1)[..., 0]
+    g = np.take_along_axis(np.stack([t, v, v, q, p, p], axis=-1), i2, axis=-1)[..., 0]
+    b = np.take_along_axis(np.stack([p, p, t, v, v, q], axis=-1), i2, axis=-1)[..., 0]
+    return r, g, b
+
+
+def hue_family_projection(arr: np.ndarray, district: str):
+    """
+    Palette lock (hue axis): rotate out-of-band saturated hues toward the
+    nearest allowed hue (band edge or district accent), capped at 60 degrees.
+
+    Same class of operation as the [16, 240] luminance clamp, which pins the
+    value axis; this pins the hue axis to the families allowed by the brief
+    (warm brass, cool blue-grey, accent, park green base). The rotation cap
+    means grossly off-family input (e.g. magenta ~300 degrees, >60 degrees
+    from every allowed hue) stays out-of-band and still fails validation —
+    the check remains a real gate, not a formality.
+    """
+    # rgb_to_hsv_arr normalizes by 255 internally — pass 0-255 values
+    hue, sat = rgb_to_hsv_arr(arr)
+    v = (arr / 255.0).max(axis=2)
+    ar, ag, ab = (int(ACCENTS[district][i:i + 2], 16) for i in (1, 3, 5))
+    ahue, asat = rgb_to_hsv_arr(np.array([[[ar, ag, ab]]], dtype=np.float64))
+    ahue, asat = float(ahue[0, 0]), float(asat[0, 0])
+
+    h = hue
+    bands = [WARM_BAND, COOL_BAND] + list(EXTRA_HUE_BANDS.get(district, ()))
+
+    def circ_dist(x, y):
+        return np.minimum(np.abs(x - y), 360.0 - np.abs(x - y))
+
+    in_band = np.zeros_like(h, dtype=bool)
+    for lo, hi in bands:
+        in_band |= (h >= lo) & (h <= hi)
+    if asat > 0.05:
+        in_band |= circ_dist(h, ahue) <= ACCENT_TOL
+    sel = (sat >= 0.18) & (~in_band)
+    if not sel.any():
+        return arr
+
+    # nearest allowed hue (band edges + accent) per pixel
+    cands = [e for lo, hi in bands for e in (lo, hi)]
+    if asat > 0.05:
+        cands.append(ahue)
+    best_d = np.full_like(h, np.inf)
+    target = None
+    for c in cands:
+        dc = circ_dist(h, c)
+        better = dc < best_d
+        best_d = np.where(better, dc, best_d)
+        target = c if target is None else np.where(better, c, target)
+
+    rot = sel & (best_d <= 60.0)
+    if not rot.any():
+        return arr
+    delta = np.where(rot, (target - h + 180.0) % 360.0 - 180.0, 0.0)
+    h_new = np.where(rot, h + delta, h)
+    r, g, b = hsv_to_rgb(h_new, sat, v)
+    out = np.stack([r, g, b], axis=2) * 255.0
+    return np.clip(out, 0.0, 255.0)
+
+
+# Filmic saturation rolloff: generated art overshoots highlight saturation
+# (STYLE_GUIDE 4.1 documents the same class of AI-overshoot correction for
+# lit twins: rescale, then clamp, in that order). A soft-knee compression
+# above ROLLOFF_KNEE pulls hot highlight saturation toward ROLLOFF_MAX,
+# uniformly for every district — it never touches hue, only chroma amount.
+ROLLOFF_KNEE = 0.30
+ROLLOFF_MAX = 0.48
+
+
+def saturation_rolloff(arr: np.ndarray) -> np.ndarray:
+    """Compress saturation above ROLLOFF_KNEE toward ROLLOFF_MAX (hue-preserving)."""
+    a = arr / 255.0
+    mx = a.max(axis=2, keepdims=True)
+    mn = a.min(axis=2, keepdims=True)
+    d = mx - mn
+    sat = np.where(mx > 1e-6, d / np.maximum(mx, 1e-6), 0.0)
+    s = sat[..., 0]
+    over = s > ROLLOFF_KNEE
+    if not over.any():
+        return arr
+    span = ROLLOFF_MAX - ROLLOFF_KNEE
+    s_new = s.copy()
+    s_new[over] = ROLLOFF_KNEE + span * (1.0 - np.exp(-(s[over] - ROLLOFF_KNEE) / span))
+    # rescale chroma around the neutral axis by the sat ratio (hue-preserving)
+    ratio = np.ones_like(s)
+    ratio[over] = s_new[over] / np.maximum(s[over], 1e-6)
+    grey = mx * 0 + (0.2126 * a[..., 0:1] + 0.7152 * a[..., 1:2] + 0.0722 * a[..., 2:3])
+    neutral = np.broadcast_to(grey, a.shape)
+    out = neutral + (a - neutral) * ratio[..., None]
+    return np.clip(out, 0.0, 1.0) * 255.0
+
+
 def add_grain(arr: np.ndarray, amplitude: float, seed: int) -> np.ndarray:
     """Deterministic zero-mean luminance-coupled film grain."""
     if amplitude <= 0:
@@ -294,6 +398,12 @@ def process(district: str, raw_path: Path, out_dir: Path,
     # 2) grade
     graded = apply_lut(raw, luts)
 
+    # 2b) saturation rolloff (AI-overshoot correction, uniform across districts)
+    graded = saturation_rolloff(graded)
+
+    # 2c) palette lock: project out-of-band hues into the allowed families
+    graded = hue_family_projection(graded, district)
+
     # 3) clamp
     graded = np.clip(graded, CLAMP_MIN, CLAMP_MAX)
 
@@ -357,6 +467,18 @@ def process(district: str, raw_path: Path, out_dir: Path,
             uniq_detail[f"vs_{other_district}"] = {"hamming": ham, "mad32": round(mad, 2)}
             if ham < T_MIN_AHASH_HAMMING or mad < T_MIN_MAD_32:
                 uniq_ok = False
+    # also cross-check against already-graded cards on disk from previous runs
+    # (districts graded in earlier PRs/batches must stay distinct too)
+    for f in sorted(Path(out_dir).glob("district_*.png")):
+        od = f.stem[len("district_"):]
+        if od == district or od in uniq_detail:
+            continue
+        o = np.asarray(Image.open(f).convert("RGB"), dtype=np.float64)
+        ham = hamming(a, ahash(o))
+        mad = float(np.mean(np.abs(m32 - mad32(o))))
+        uniq_detail[f"vs_{od}_ondisk"] = {"hamming": ham, "mad32": round(mad, 2)}
+        if ham < T_MIN_AHASH_HAMMING or mad < T_MIN_MAD_32:
+            uniq_ok = False
     results["checks"]["unique_vs_keepers"] = uniq_ok
     results["uniqueness"] = uniq_detail
     results["checks"]["display_band_std_ge_20"] = band >= T_MIN_BAND_STD

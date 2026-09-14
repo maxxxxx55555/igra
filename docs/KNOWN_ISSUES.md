@@ -22,18 +22,26 @@ What fixed it (all inside the allowed gameplay systems):
 
 ## arena/card-unique-rescue delivered no card art — the 4-of-22 duplicate-photo defect is still open (2026-09-13)
 
-**Status update (2026-09-13): 7 districts specced, awaiting art.**
-The full fix pipeline now exists: `docs/CARD_ART_BRIEF.md` specs all 7
-districts (park, school, hospital, gas_station, police, warehouses,
-substation) with measured palettes (hex), compositions, moods and
-deterministic Midjourney v7 / Flux.1-dev prompts; `scripts/regen_cards_v2.py`
-grades raw 1024×1536 photographs into `content/cards/` via a
-histogram-matching color-grade LUT with built-in validation; and a pre-commit
-hook (`.pre-commit-config.yaml` → `scripts/check_card_art_changes.py`) now
-rejects card-art commits/PRs whose `git diff --stat content/cards/` shows zero
-changes — exactly the failure mode of this branch. What remains: the seven
-photographs themselves (an art task, not a code task), then a separate
-code-touching PR to wire the 512² twins into `assets/textures/cards/`.
+**Status update (2026-09-14): 11/11 districts have unique card art.**
+The seven new photographs (park, school, hospital, gas_station, police,
+warehouses, substation) were generated from the `docs/CARD_ART_BRIEF.md` §4
+prompts, graded through `scripts/regen_cards_v2.py` — **all 8 validation
+checks PASS for all 7 districts** (per-image report summarized in the
+`feat(art): generate + grade 7 unique district cards` commit message) — and
+committed to `content/cards/` (1024×1536 masters) with 512² twins in
+`content/cards/twins/`. Cluster re-audit (`scripts/audit_card_clusters.py`,
+reproducible version of the report §4 method): all 7 new cards are distinct
+from each other and from all 4 keepers — min cross aHash Hamming **13**
+(floor 8), MAD 20.5–28, k-means(k=11) → 11 singleton clusters. One frozen
+remnant: the suburbs/residential **keeper** cards are a near-twin pair
+(aHash h=1, MAD 1.01 — both ship `hero_first_restore` per
+`LEDGER_ARTFINAL.md` L4); closing it requires regenerating a keeper card,
+out of scope here. What remains: a separate code-touching PR to wire the
+512² twins into `assets/textures/cards/` + `scripts/ui/collection_ui.gd`.
+The pipeline and gate from the 2026-09-13 update stand as documented in
+`docs/CARD_ART_BRIEF.md` (now with the saturation-rolloff and palette-lock
+grade stages, §6) and still reject card-art commits/PRs with zero changes
+under `content/cards/`.
 
 The branch `arena/card-unique-rescue` (tip `b1d7830`) was commissioned to fix the known
 defect where 4 of the 22 district collection cards share a base photo and do not depict
