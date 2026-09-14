@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cs3hwydvujyh6"
-path.bptc="res://.godot/imported/xray_lightbox_512.png-96d719a859766d461e5bf6dace889703.bptc.ctex"
+uid="uid://4078ce8636f7"
+path.bptc="res://.godot/imported/xray_lightbox_512.png-4078ce8636f7efa91b66d8903d60f35b.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/surfaces/xray_lightbox_512.png"
-dest_files=["res://.godot/imported/xray_lightbox_512.png-96d719a859766d461e5bf6dace889703.bptc.ctex"]
+dest_files=["res://.godot/imported/xray_lightbox_512.png-4078ce8636f7efa91b66d8903d60f35b.bptc.ctex"]
 
 [params]
 
@@ -24,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

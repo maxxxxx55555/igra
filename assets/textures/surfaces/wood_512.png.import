@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c4mmnlmk2jbng"
-path.bptc="res://.godot/imported/wood_512.png-c2b2a042f73d8b6853f06f5c172ff405.bptc.ctex"
+uid="uid://ba4abe116cca"
+path.bptc="res://.godot/imported/wood_512.png-ba4abe116ccad4672f5dc26f79349a48.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/surfaces/wood_512.png"
-dest_files=["res://.godot/imported/wood_512.png-c2b2a042f73d8b6853f06f5c172ff405.bptc.ctex"]
+dest_files=["res://.godot/imported/wood_512.png-ba4abe116ccad4672f5dc26f79349a48.bptc.ctex"]
 
 [params]
 
@@ -24,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

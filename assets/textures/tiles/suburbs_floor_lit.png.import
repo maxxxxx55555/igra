@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d33vbhhvir0ln"
-path.bptc="res://.godot/imported/suburbs_floor_lit.png-c6b88128a2256d394f8aceb47064e50a.bptc.ctex"
+uid="uid://93e7d3095958"
+path.bptc="res://.godot/imported/suburbs_floor_lit.png-93e7d3095958036920faa1a6b14cc19c.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/tiles/suburbs_floor_lit.png"
-dest_files=["res://.godot/imported/suburbs_floor_lit.png-c6b88128a2256d394f8aceb47064e50a.bptc.ctex"]
+dest_files=["res://.godot/imported/suburbs_floor_lit.png-93e7d3095958036920faa1a6b14cc19c.bptc.ctex"]
 
 [params]
 
@@ -24,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

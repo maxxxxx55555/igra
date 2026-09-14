@@ -920,3 +920,99 @@ scene, and the district name/accent-color/progress-bar below it are
 correct) — flagged here for whoever holds the art pipeline next: 4 of
 22 cards would benefit from a bespoke re-render matching their own
 scene description.
+
+## arena/texture-optimization edge-case defects (2026-09-13)
+
+Hunted across the five mandated focus areas (save/load across district
+transitions, NG+ restart, locale switch mid-run, audio bus reconnection,
+concurrent signal emissions). Five new defects found; three fixed in
+this branch (✅), two left as KNOWN_ISSUES (⚠️) because they need an
+owner-level decision or art/content change, not a code patch.
+
+### ✅ Defect 1 (FIXED): `audio_atmosphere.gd` district pitch table used wrong ids
+**Area:** audio + district transitions
+**Repro:** Start a run, walk into any district (hospital/police/gas_station/
+warehouses/substation/power_station). The procedural ambient drone in
+`audio_atmosphere.gd` is supposed to shift per district (+/-25 Hz) but
+the `_district_pitch_offset()` match table used legacy names
+(`"suburb"`, `"policestation"`, `"gasstation"`, `"warehouse"`,
+`"powerplant"`) that never match the canonical district ids
+(`suburbs/police/gas_station/warehouses/power_station`). Every district
+fell through to the `return 0.0` default so the same 55 Hz drone played
+everywhere.
+**Fix:** Renamed the table's keys to the real StringNames used
+everywhere else in the project. Verified against DistrictManager.DISTRICTS.
+
+### ✅ Defect 2 (FIXED): Slot saves didn't persist current district / onboarding / daily streak
+**Area:** save/load across district transitions
+**Repro:** Walk into hospital, open the (archived) save-slots UI, save to
+slot 1, return to menu, load slot 1. `save_slot()` wrote `wallet`,
+`power`, `player_pos`, etc. but omitted `district`, `onboard_done`,
+`daily_streak`, `last_daily_time` — the exact same class of bug that
+TRUTH WAVE P0.2 fixed on the main save. Loading the slot always returned
+the player to `suburbs` regardless of where they saved, reset the daily
+streak, and could re-show the onboarding overlay that should only appear
+once.
+**Fix:** `save_slot()` now writes `district`, `onboard_done`,
+`daily_streak`, `last_daily_time` (matching `_save()`); `load_slot()`
+restores `DistrictManager.current_district` and `_onboard_done` the same
+way `load_all()` does.
+
+### ✅ Defect 3 (FIXED): Weather name doesn't refresh on mid-run locale switch
+**Area:** locale switch mid-run
+**Repro:** Start a run during a non-CLEAR weather (wait ~45 s for RAIN/
+FOG/STORM/WIND), open Settings → Language, pick a different language,
+close settings. The `weather_changed` signal carries a localized
+`weather_name` string; until the next random weather tick (up to 45 s
+later) any UI showing the current weather name kept the previous
+language. Latent today (no listener reads the name in the current HUD)
+but a real trap for future consumers and a violation of the "all
+dynamic strings refresh on language_changed" invariant every other
+system holds.
+**Fix:** `weather_system.gd` connects to
+`LocalizationManager.language_changed` (deferred, to handle autoload
+order) and re-emits the current weather with the freshly translated
+name.
+
+### ✅ Defect 4 (FIXED): `streetlight_hum_pool` never set an audio bus, never looped the hum, never reconnected to SFX
+**Area:** audio bus reconnection
+**Repro:** Boot a fresh profile, walk to a lit street (post-restore
+suburbs). The 8-slot `AudioStreamPlayer3D` pool in
+`streetlight_hum_pool.gd` routed to the default `"Master"` bus (bypassing
+SFX volume sliders) because `p.bus` was never set. More importantly, the
+hum stream's `.import` loop flag is not committed to git (same pattern
+called out in `audio_manager._force_loop()` / `music_manager._force_loop()`),
+so on a fresh checkout the WAV imported with `loop_mode=DISABLED` and
+each pool slot fell silent after ~0.6 s once the one-shot WAV ended,
+producing a continuous pop/churn on the REASSIGN_INTERVAL cadence. Also,
+if SettingsManager created the `SFX` bus deferred after our `_ready()`
+ran, we never migrated slots off Master.
+**Fix:** Pool slots now set `bus = "SFX"` (with Master fallback),
+`_force_loop()` the hum stream at startup, and `_reassign()` lazily
+reconnects every slot to SFX the moment the bus appears.
+
+### ⚠️ Defect 5 (known, not fixed): `DistrictTrigger.one_shot` can prevent district_entered from (re)firing on respawn after death
+**Area:** save/load + concurrent signals
+**Repro:** Die and revive inside a district trigger Zone (rare: trigger
+Zones are the invisible boxes at district borders, but a death while
+backpedalling across a border can leave the player's body inside the
+neighboring trigger). Revive keeps the same district scene loaded;
+`_fired = true` from the original entry stays `true` because
+`district_trigger.gd` only resets it on `_ready` (new scene instantiation),
+not on revive. Walking back across the trigger and re-entering the same
+neighbor district would not emit `district_entered` again. Low hit-rate
+in practice (deaths inside border triggers are uncommon) and fixing it
+correctly needs a design call on whether revive should re-fire
+`district_entered` at all (would restart the save-on-entry autosave,
+refresh ambience twice, etc.) — flagging here rather than making a
+call that could re-introduce the double-transition crashes `world_
+runtime.gd`'s `_loading` guard exists to prevent.
+
+### ✅ Drive-by fix caught during the hunt: `music_manager.gd` double-subscribed to game_won / game_started
+`_ready()` connected `EventBus.game_won` twice (once for `set_mood(VICTORY)`,
+once for `_play_wow_cue("ending")`) and `game_started` twice (once for
+`set_mood(AMBIENT)`, once to reset `_first_light_cue_done`). Godot still
+invokes each callback, so both effects did happen, but the double
+subscription was a latent concurrent-signal footgun (a future listener
+added to one of those lambdas would fire twice per event). Consolidated
+into two `_on_game_started` / `_on_game_won` methods that do both.

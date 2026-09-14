@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dfu7uwqjs6sbi"
-path.bptc="res://.godot/imported/park_wall.png-35dd0c7ce1594c2f96f09ca2560608f4.bptc.ctex"
+uid="uid://f36d5a431b23"
+path.bptc="res://.godot/imported/park_wall.png-f36d5a431b2357299473286e61ccaebe.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/tiles/park_wall.png"
-dest_files=["res://.godot/imported/park_wall.png-35dd0c7ce1594c2f96f09ca2560608f4.bptc.ctex"]
+dest_files=["res://.godot/imported/park_wall.png-f36d5a431b2357299473286e61ccaebe.bptc.ctex"]
 
 [params]
 
@@ -24,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

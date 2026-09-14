@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bs6sporkf8cu6"
-path.bptc="res://.godot/imported/school_wall.png-d69b30839a9c928f37068a50e50d8ffd.bptc.ctex"
+uid="uid://5c4f865f26c3"
+path.bptc="res://.godot/imported/school_wall.png-5c4f865f26c36574845644da1e497a8e.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/tiles/school_wall.png"
-dest_files=["res://.godot/imported/school_wall.png-d69b30839a9c928f37068a50e50d8ffd.bptc.ctex"]
+dest_files=["res://.godot/imported/school_wall.png-5c4f865f26c36574845644da1e497a8e.bptc.ctex"]
 
 [params]
 
@@ -24,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

@@ -23,18 +23,38 @@ const HUM_STREAM: AudioStream = preload("res://assets/audio/sfx/amb_lamp_hum.wav
 var _players: Array[AudioStreamPlayer3D] = []
 var _registered: Array[Node3D] = []
 var _timer: float = 0.0
+var _hum_bus: String = "Master"
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	# Pick the right bus once at boot (defensive: SFX bus may not exist yet
+	# during very early autoload order — SettingsManager._ensure_bus creates
+	# it later; re-resolve lazily on first _reassign if still Master).
+	_hum_bus = _resolve_bus()
+	# Force-loop the hum stream the same way audio_manager.gd and
+	# music_manager.gd do — .import loop settings aren't committed so on a
+	# fresh checkout the imported stream defaults to one-shot and each pool
+	# slot would fall silent 0.6s into district entry.
+	_force_loop(HUM_STREAM)
 	for i in MAX_POOL:
 		var p := AudioStreamPlayer3D.new()
 		p.name = "HumSlot%d" % i
 		p.stream = HUM_STREAM
+		p.bus = _hum_bus
 		p.volume_db = -22.0
 		p.unit_size = 4.0
 		p.max_distance = 14.0
 		add_child(p)
 		_players.append(p)
+
+static func _resolve_bus() -> String:
+	return "SFX" if AudioServer.get_bus_index("SFX") >= 0 else "Master"
+
+static func _force_loop(s: AudioStream) -> void:
+	if s is AudioStreamWAV:
+		(s as AudioStreamWAV).loop_mode = AudioStreamWAV.LOOP_FORWARD
+	elif s is AudioStreamOggVorbis:
+		(s as AudioStreamOggVorbis).loop = true
 
 func register(streetlight: Node3D) -> void:
 	if not _registered.has(streetlight):
@@ -56,6 +76,13 @@ func _process(delta: float) -> void:
 	_reassign()
 
 func _reassign() -> void:
+	# Late bus reconnect: SettingsManager._ensure_bus("SFX") runs deferred
+	# after settings load; if we booted before that existed and fell back
+	# to Master, migrate every slot to SFX the moment it appears.
+	if _hum_bus == "Master" and AudioServer.get_bus_index("SFX") >= 0:
+		_hum_bus = "SFX"
+		for p in _players:
+			p.bus = _hum_bus
 	var player := get_tree().get_first_node_in_group("player")
 	if player == null or not (player is Node3D):
 		for p in _players:

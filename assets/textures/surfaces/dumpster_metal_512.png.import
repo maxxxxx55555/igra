@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://tuvp176igwxl"
-path.bptc="res://.godot/imported/dumpster_metal_512.png-29f4dcd25b5ac91c937c5dfb8d24831b.bptc.ctex"
+uid="uid://7c31787a3509"
+path.bptc="res://.godot/imported/dumpster_metal_512.png-7c31787a35098757d3a14890f50b3683.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/surfaces/dumpster_metal_512.png"
-dest_files=["res://.godot/imported/dumpster_metal_512.png-29f4dcd25b5ac91c937c5dfb8d24831b.bptc.ctex"]
+dest_files=["res://.godot/imported/dumpster_metal_512.png-7c31787a35098757d3a14890f50b3683.bptc.ctex"]
 
 [params]
 
@@ -24,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

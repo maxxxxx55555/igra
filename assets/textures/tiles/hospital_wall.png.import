@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://da4sqlaqb5wd6"
-path.bptc="res://.godot/imported/hospital_wall.png-85c2f084ec53e9ac5349550c38a64bf7.bptc.ctex"
+uid="uid://500e921b026b"
+path.bptc="res://.godot/imported/hospital_wall.png-500e921b026b697f5dac6c7c299d3d02.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/tiles/hospital_wall.png"
-dest_files=["res://.godot/imported/hospital_wall.png-85c2f084ec53e9ac5349550c38a64bf7.bptc.ctex"]
+dest_files=["res://.godot/imported/hospital_wall.png-500e921b026b697f5dac6c7c299d3d02.bptc.ctex"]
 
 [params]
 
@@ -24,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

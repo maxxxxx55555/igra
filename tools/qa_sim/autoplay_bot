@@ -10,16 +10,15 @@
 set -uo pipefail
 cd "$(dirname "$0")/../.."
 
-# Путь к Godot: переменная окружения > тулчейн в песочнице > `godot` в PATH
-# > дефолтный локальный путь владельца (Windows).
-GODOT="${GODOT:-}"
-if [[ -z "$GODOT" ]]; then
-	for cand in "$HOME/godot/godot-toolchain/Godot_v4.7-stable_linux.x86_64" "$(command -v godot || true)"; do
-		if [[ -n "$cand" && ( -x "$cand" ) ]]; then GODOT="$cand"; break; fi
-	done
+# Путь к Godot разрешает общий хелпер _resolve_godot.sh (он же используется
+# в headless_suite): $GODOT > PATH > тулчейн в песочнице > tools/.bin >
+# системные пути > путь владельца (Windows) > авто-загрузка.
+GODOT="$(bash tools/qa_sim/_resolve_godot.sh 2>/dev/null)"
+if [[ -z "$GODOT" ]] || [[ ! -x "$GODOT" ]]; then
+  bash tools/qa_sim/_resolve_godot.sh >&2  # print diagnostic
+  exit 99
 fi
-GODOT="${GODOT:-C:/Users/Maxsim/Desktop/TLS_Build/godot_extracted/Godot_v4.7-stable_win64_console.exe}"
-[[ -x "$GODOT" ]] || command -v "$GODOT" >/dev/null 2>&1 || { echo "Godot not found: $GODOT"; exit 99; }
+echo "# Godot binary: $GODOT"
 mkdir -p .qa_logs
 GREEN=$'\033[32m'; RED=$'\033[31m'; OFF=$'\033[0m'
 SEEDS="${QA_SEEDS:-1 2 3}"
@@ -31,14 +30,15 @@ for s in $SEEDS; do
 	QA_SEED="$s" timeout 1200 "$GODOT" --headless --path . res://scenes/tools/qa_autoplay_scene.tscn >"$log" 2>&1
 	rc=$?
 	line=$(grep -E "^\[bot s${s}\]   result" "$log" | tail -1)
+	districts=$(grep -E "districts FULL|restored=11|restored_full" "$log" | tail -3)
 	if [[ $rc -eq 0 ]]; then
 		WINS=$((WINS+1)); echo "  ${GREEN}WIN ${OFF} seed $s  ($line)"
 	elif [[ $rc -eq 2 ]]; then
 		SOFTLOCK=$((SOFTLOCK+1)); echo "  ${RED}SOFTLOCK${OFF} seed $s"
-		grep -E "SOFTLOCK|RUN SUMMARY|districts FULL|stage timeline" "$log" | sed 's/^/       /'
+		grep -E "SOFTLOCK|RUN SUMMARY|districts FULL|restored_full|stage timeline|phase=" "$log" | sed 's/^/       /'
 	else
 		echo "  ${RED}NO-WIN${OFF} seed $s (rc=$rc)"
-		grep -E "FAIL|RUN SUMMARY|result|districts FULL|deaths|stage timeline|part economy" "$log" | sed 's/^/       /'
+		grep -E "FAIL|RUN SUMMARY|result|districts FULL|restored_full|deaths|stage timeline|part economy|phase=|ERROR|SCRIPT ERROR" "$log" | sed 's/^/       /'
 	fi
 done
 

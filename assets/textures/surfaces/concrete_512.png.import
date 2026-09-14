@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c0xpug6tf24wc"
-path.bptc="res://.godot/imported/concrete_512.png-211ccf4fb5180941a9396d88bd041a1e.bptc.ctex"
+uid="uid://cc29a7d6e0c2"
+path.bptc="res://.godot/imported/concrete_512.png-cc29a7d6e0c2de824cd8fe3dacbeea66.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/surfaces/concrete_512.png"
-dest_files=["res://.godot/imported/concrete_512.png-211ccf4fb5180941a9396d88bd041a1e.bptc.ctex"]
+dest_files=["res://.godot/imported/concrete_512.png-cc29a7d6e0c2de824cd8fe3dacbeea66.bptc.ctex"]
 
 [params]
 
@@ -24,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
