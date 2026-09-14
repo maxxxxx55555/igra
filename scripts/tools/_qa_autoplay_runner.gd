@@ -53,10 +53,23 @@ var _deaths := 0
 var _timeline: Array = []          # [ "district:stage@t" ]
 var _part_log: Array = []          # [ "picked cable @suburbs t=.." ]
 var _act_cd := 0.0
+var _strobe_cd := 0.0
 var _boss_deadline := 0.0
 var _win_seen := false
 var _hb := 0.0
 var _menu_recoveries := 0
+
+## Onboarding timing telemetry (PLAYABLE IDEAL P3): first-run pacing to the
+## content that's supposed to hook a new player. -1.0 = never happened this
+## run. The bot doesn't go out of its way to find a secret (it only ever
+## walks the required district-switch/part route), so first_secret_found
+## stays -1.0 on a normal run — that absence is itself the honest finding:
+## onboarding pacing for secrets can't be measured without also teaching
+## the bot to seek them, which this pass didn't do.
+var _t_first_interact := -1.0
+var _t_first_secret_hint := -1.0
+var _t_first_secret_found := -1.0
+var _t_first_district_full := -1.0
 var _iact_pending := {"want": &"", "before": -1, "at": 0.0}
 
 func _ready() -> void:
@@ -67,6 +80,9 @@ func _ready() -> void:
 	get_tree().create_timer(HARD_TIMEOUT_SEC).timeout.connect(_on_hard_timeout)
 	EventBus.game_won.connect(func() -> void: _win_seen = true)
 	EventBus.player_died.connect(func() -> void: _deaths += 1)
+	EventBus.secret_found.connect(func(_id: String) -> void:
+		if _t_first_secret_found < 0.0:
+			_t_first_secret_found = _now())
 	call_deferred("_start")
 
 func _now() -> float:
@@ -112,6 +128,7 @@ func _process(delta: float) -> void:
 	if _done or _phase == "boot":
 		return  # _start() owns bring-up
 	_act_cd = maxf(0.0, _act_cd - delta)
+	_strobe_cd = maxf(0.0, _strobe_cd - delta)
 	if _win_seen or GameManager.is_win():
 		_log("WIN ending fired")
 		_phase = "won"
@@ -123,10 +140,24 @@ func _process(delta: float) -> void:
 		var ppos := _player.global_position if _player_ok() else Vector3.INF
 		var tdist := ppos.distance_to(_target_pos) if (_have_target and _player_ok()) else -1.0
 		var ncable := get_tree().get_nodes_in_group("pickups").size()
-		_log("hb ph=%s st=%d want=%s cur=%s si=%d sc=%.0f mr=%d ppos=%s tgt=%s tdist=%.1f npu=%d" % [
+		if _t_first_secret_hint < 0.0:
+			for n in get_tree().get_nodes_in_group("interactable"):
+				if n.get("secret_id") != null and n is Node3D and (n as Node3D).visible:
+					_t_first_secret_hint = _now()
+					break
+		var boss_info := ""
+		if _phase == "boss":
+			var boss := get_tree().get_first_node_in_group("boss")
+			if boss != null and is_instance_valid(boss):
+				var bd := ppos.distance_to((boss as Node3D).global_position)
+				boss_info = " boss_pos=%s boss_dist=%.1f boss_hp=%s/%s" % [
+					str((boss as Node3D).global_position.round()), bd, str(boss.get("hp")), str(boss.get("max_hp"))]
+			else:
+				boss_info = " boss=NULL"
+		_log("hb ph=%s st=%d want=%s cur=%s si=%d sc=%.0f mr=%d ppos=%s tgt=%s tdist=%.1f npu=%d%s" % [
 			_phase, GameManager.current_state, SPINE[mini(_spine_i, SPINE.size() - 1)],
 			_current_district(), _spine_i, _compute_score(), _menu_recoveries,
-			str(ppos.round()), str(_target_pos.round()), tdist, ncable])
+			str(ppos.round()), str(_target_pos.round()), tdist, ncable, boss_info])
 
 	if not GameManager.is_playing():
 		if GameManager.is_dead():
@@ -227,6 +258,8 @@ func _tick_spine(_delta: float) -> void:
 	_move(_dir_to(_target_pos))
 	if _player.global_position.distance_to(_target_pos) <= REACH and _act_cd <= 0.0:
 		InputService.request_interact()
+		if _t_first_interact < 0.0:
+			_t_first_interact = _now()
 		_act_cd = 1.0
 		_iact_pending = {"want": want, "before": stage, "at": _now()}
 
@@ -247,6 +280,15 @@ func _tick_boss(delta: float) -> void:
 	_face(bp)  # P2's light-gate needs the flashlight cone actually on the boss, not just "on"
 	if _player.get("hp") != null and float(_player.get("hp")) < 30.0:
 		_use_item(&"medkit")
+	## The GDD (§6.2) lists the Architect's weakness as "стробоскоп" — the
+	## strobe. Measured: without it the bot's melee-only loop cleared under
+	## 1% of the boss's HP in a 45s no-progress window before SOFTLOCK fired
+	## (docs/artifacts/ ... boss chase logs, 2026-09-14). trigger_strobe()
+	## stuns everything in a 12m cone on a real 10s/5-battery cooldown, so
+	## spamming the request here is harmless — it silently no-ops off cooldown.
+	if d <= 10.0 and _strobe_cd <= 0.0:
+		InputService.request_strobe()
+		_strobe_cd = 1.0
 	if d > 2.6:
 		_move(_dir_to(bp))
 	else:
@@ -459,6 +501,8 @@ func _record_stage(id: StringName, stage: int) -> void:
 	if _timeline.is_empty() or _timeline[-1].begins_with("%s:" % id) == false or not _timeline[-1].begins_with(key):
 		if _timeline.is_empty() or not _timeline[-1].begins_with(key):
 			_timeline.append("%s@%.1f" % [key, _now()])
+			if stage >= 3 and _t_first_district_full < 0.0:
+				_t_first_district_full = _now()
 
 func _on_hard_timeout() -> void:
 	if _done:
@@ -494,6 +538,8 @@ func _finish() -> void:
 	print("[bot s%d]   wall time    : %.1fs" % [_seed, _now()])
 	print("[bot s%d]   districts FULL: %d/11" % [_seed, full])
 	print("[bot s%d]   deaths       : %d" % [_seed, _deaths])
+	print("[bot s%d]   onboarding   : first_interactable=%.1f first_secret_hint=%.1f first_secret_found=%.1f first_district_full=%.1f" % [
+		_seed, _t_first_interact, _t_first_secret_hint, _t_first_secret_found, _t_first_district_full])
 	print("[bot s%d]   stage timeline: %s" % [_seed, ", ".join(_timeline)])
 	print("[bot s%d]   part economy : %s" % [_seed, " | ".join(_part_log)])
 	for f in _fails:

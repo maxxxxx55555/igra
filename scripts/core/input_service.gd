@@ -5,6 +5,12 @@ signal attack_requested()
 signal jump_requested()
 signal flashlight_requested()
 signal dodge_requested(dir: Vector2)
+## The strobe was only ever reachable through the raw "strobe" input action
+## (player_3d.gd _unhandled_input) — nothing driving through InputService,
+## the bot included, could trigger it. It's the Architect's documented
+## weakness (GDD §6.2: "стробоскоп"); without it the boss fight has no
+## opening the bot's plain melee/dodge loop can exploit.
+signal strobe_requested()
 ## Клавиши 1-6 были заведены в project.godot, но их никто не слушал:
 ## быстрые слоты работали только мышью/тачем.
 signal quick_slot_requested(index: int)
@@ -65,6 +71,9 @@ func request_flashlight() -> void:
 
 func request_dodge(dir: Vector2) -> void:
 	dodge_requested.emit(dir)
+
+func request_strobe() -> void:
+	strobe_requested.emit()
 
 func set_joy_move_dir(dir: Vector2) -> void:
 	_joy_dir = dir.limit_length(1.0)

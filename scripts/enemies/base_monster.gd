@@ -476,7 +476,16 @@ func _move_to(spd: float) -> void:
 		return
 	velocity.x = dir.x * spd
 	velocity.z = dir.z * spd
-	velocity.y += get_gravity().y * get_physics_process_delta_time()
+	## move_and_slide() doesn't zero velocity.y on landing by itself (the
+	## standard CharacterBody3D gotcha) — this kept adding gravity every
+	## call with nothing ever resetting it. Harmless for a short chase, but
+	## the boss's P2 phase can chase invisibly for a long stretch: measured,
+	## velocity.y grew enough over ~30s to tunnel through the floor and free
+	## -fall forever (2026-09-14 boss chase logs, Y went 1 -> -166 in 25s).
+	if is_on_floor():
+		velocity.y = 0.0
+	else:
+		velocity.y += get_gravity().y * get_physics_process_delta_time()
 	_look_at_smooth(dir)
 
 func _look_at_smooth(dir: Vector3) -> void:

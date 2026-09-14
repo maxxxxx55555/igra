@@ -63,6 +63,20 @@ func _tick_ai(delta: float) -> void:
 			_tick_p3(delta)
 
 func _tick_p1(delta: float) -> void:
+	## P1 only ever relocates via _teleport_near_player() (a position warp,
+	## not velocity) — it never calls _move_to() like P2/P3 do. But a landed
+	## combo-3 hit's apply_knockback() still sets `velocity` on this
+	## CharacterBody3D, and nothing in P1 ever zeroes it back out after the
+	## knockback timer expires. move_and_slide() then keeps reapplying that
+	## last residual velocity every frame forever — measured: the boss (and
+	## the player chasing it) drifted 200+ units across the map over a
+	## single fight once hits started landing (2026-09-14 boss chase logs).
+	velocity.x = 0.0
+	velocity.z = 0.0
+	if ai_state == State.STUN:
+		return  # P2/P3 already stop here; P1 didn't, so the GDD's own
+		# documented weakness (§6.2 "стробоскоп") never punished P1 at all —
+		# the strobe stunned the model but the ranged spam kept firing anyway.
 	if ai_state == State.ATTACK and attack_timer > 0.0:
 		return
 	_teleport_timer -= delta

@@ -67,6 +67,8 @@ func revive_player() -> void:
 	if p.has_method("heal"):
 		var max_hp: float = p.stats.max_hp if ("stats" in p and p.stats) else 100.0
 		p.heal(max_hp * 0.5)
+	if p.has_method("grant_iframes"):
+		p.grant_iframes(2.0)  # a breath before the fight can kill them again
 	_change_state(GameState.PLAYING)
 	get_tree().paused = false
 	UIManager.close_all_blocking()

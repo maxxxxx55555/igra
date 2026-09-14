@@ -277,6 +277,13 @@ func _ready() -> void:
 	attack_box.size = Vector3(0.6, 0.4, 1.2)
 	attack_shape.shape = attack_box
 	_attack_area.add_child(attack_shape)
+	## Never offset from the player's own origin (radius 0.3), so the box
+	## only ever reached 0.3m past the player's own body — nowhere near a
+	## target the player is actually standing in front of (measured against
+	## the boss's 0.6m capsule at normal melee range: real landed DPS came
+	## in at roughly a tenth of the combo's theoretical max). -Z is forward
+	## for this rig (same convention as _dir_to()/get_facing_dir()).
+	_attack_area.position = Vector3(0.0, 0.9, -0.9)
 	add_child(_attack_area)
 	_attack_area.monitoring = false
 	_attack_area.body_entered.connect(_on_attack_hit)
@@ -292,6 +299,7 @@ func _ready() -> void:
 		isv.jump_requested.connect(_buffer_jump)
 		isv.flashlight_requested.connect(toggle_flashlight)
 		isv.dodge_requested.connect(_handle_dodge)
+		isv.strobe_requested.connect(func() -> void: trigger_strobe())
 	# Взаимодействие с миром. До этого клавиша interact умела только осмотр
 	# и вход в укрытие: рубильники районов, генераторы и двери, у которых
 	# есть interact(), не вызывались ниоткуда — район нельзя было запитать.
@@ -696,6 +704,14 @@ func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, _type: EnemyRo
 		# (иначе HP затрётся синком, а HUD/game_over сработают на чужой машине).
 		_request_player_damage.rpc_id(get_multiplayer_authority(), clampf(amount, 0.0, 200.0))
 		return
+	## _iframes counted down since dodge granted it but nothing ever read it
+	## back — dodging through an attack never actually avoided the hit.
+	## Found chasing the boss fight: revive_player() dropped the player back
+	## in front of the Architect at half HP with no grace window, so the
+	## very next energy ball (every ~2-3s) killed them again — a loop that
+	## ate the whole 240s deadline. grant_iframes() below feeds both cases.
+	if _iframes > 0.0:
+		return
 	hp = clampf(hp - amount, 0.0, stats.max_hp)
 	AudioManager.play_sound_3d(preload("res://assets/audio/sfx/sfx_hurt.wav"), global_position, -4.0)
 	EventBus.player_health_changed.emit(hp / stats.max_hp)
@@ -896,6 +912,9 @@ func _on_attack_hit(body: Node) -> void:
 		if body.has_method("apply_knockback"):
 			body.apply_knockback(kb_dir * cd3["knockback"])
 
+
+func grant_iframes(duration: float) -> void:
+	_iframes = maxf(_iframes, duration)
 
 func apply_stun(duration: float = 0.3) -> void:
 	if _attack_phase == "windup":
