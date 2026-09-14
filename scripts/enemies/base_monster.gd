@@ -604,7 +604,7 @@ const _VFX_DEATH := preload("res://scenes/vfx/vfx_blood.tscn")
 func _maybe_drop_loot() -> void:
 	if not bool(roster_entry.get("loot_ammo", false)):
 		return
-	if randf() > 0.3:
+	if randf() > 0.3 * NewGamePlus.get_loot_chance_multiplier():
 		return
 	var pickup := _ITEM_PICKUP.instantiate()
 	get_tree().current_scene.add_child(pickup)

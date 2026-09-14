@@ -11,6 +11,9 @@ func _ready() -> void:
 	if sm and sm.to_dict().get("hints", true) == false:
 		_active = false
 		return
+	if not NewGamePlus.get_modifier_toggle("hints", true):
+		_active = false
+		return
 	_active = true
 	EventBus.player_state_changed.connect(func(_s: int): _show("wasd"))
 	EventBus.flashlight_state_changed.connect(func(_on: bool): _show("flashlight"))

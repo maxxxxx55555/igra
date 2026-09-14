@@ -41,7 +41,7 @@ func _on_district_restored(district_id: StringName, stage: int) -> void:
 	_add_xp(100)
 
 func _on_secret_found(secret_id: StringName) -> void:
-	_add_xp(75)
+	_add_xp(int(75 * NewGamePlus.get_modifier_multiplier("lore")))
 
 ## Публичная точка входа: секретные комнаты и квесты начисляют опыт напрямую.
 func add_xp(amount: int) -> void:
