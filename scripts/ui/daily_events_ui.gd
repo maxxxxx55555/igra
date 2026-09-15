@@ -32,9 +32,15 @@ func _process(delta: float) -> void:
 
 func _update_display() -> void:
 	if _event_active:
-		var mins := int(_time_remaining) / 60
-		var secs := int(_time_remaining) % 60
-		_timer_label.text = "%02d:%02d" % [mins, secs]
+		# Ручка NG+ "time_pressure" (Sprint): включает обратный отсчёт для
+		# таймеров таймд-эвентов; по умолчанию (без модификатора) таймер
+		# продолжает идти, просто не показывает тикающие часы.
+		if NewGamePlus.get_modifier_toggle("time_pressure", false):
+			var mins := int(_time_remaining) / 60
+			var secs := int(_time_remaining) % 60
+			_timer_label.text = "%02d:%02d" % [mins, secs]
+		else:
+			_timer_label.text = ""
 		_start_btn.visible = false
 	else:
 		_timer_label.text = "00:00"

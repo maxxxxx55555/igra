@@ -1,17 +1,27 @@
 # Known issues
 
-## Boss winnability — two independent fix passes merged 2026-09-15, bot re-run pending
+## Boss winnability — the bot wins for the first time this session (merged 2026-09-15)
 
-This session's own fixes (below) and a parallel arena-platform pass (`arena/01a09aec-igra`,
+This session's own six fixes (below) and a parallel arena-platform pass (`arena/01a09aec-igra`,
 PR #17) both chased the same goal from the same starting point (`aea3743`) without knowing
 about each other, and largely found *different* bugs. Merged together 2026-09-15. The arena
-pass's own record claimed **2/3 seeds won** on its branch alone (see the superseded entry
-below, kept for the record) — that number is **not carried forward as true for the merged
-code**: it was never measured against this session's fixes stacked on top, and this session's
-own repeated measurements never reached a win even after six real bug fixes. The honest
-status until the bot is re-run on the actual merged tree: **unverified, pending a fresh
-measurement** (see the next KNOWN_ISSUES entry above this one once that run happens, or the
-current `docs/RELEASE_READINESS_REPORT.md` for whatever the latest real number is).
+pass's own record claimed 2/3 seeds won on its branch alone (see the superseded entry below,
+kept for the record) — that number was **not** carried forward as true for the merged code;
+instead the bot was re-run for real on the actual merged tree. Real result,
+`QA_SEEDS="1 2 3" bash tools/qa_sim/autoplay_bot`, 2026-09-15:
+
+| Seed | Result | Wall time | Districts | Boss HP removed | Notes |
+|---|---|---|---|---|---|
+| 1 | **WIN** | 274.7s | 11/11 | 100% (killed, 14.9→0/800 in the final hit) | 0 deaths. First real bot win recorded this session, after every prior attempt topped out around 28.5% damage |
+| 2 | SOFTLOCK | — | 5/11 | never reached boss | Pre-existing spine-navigation flake (`gas_station`, spine_i=5) — same class already documented below, not a boss-fight or merge regression |
+| 3 | SOFTLOCK | — | 11/11 | 78.4% (172.95/800) | Reached and fought the boss, dealt real damage, then got stuck circling at melee range without landing further hits for 45s straight — a new, boss-fight-specific bot-behavior gap (not a physics bug: `boss_dist` stayed ~2-2.5 the whole stall, so the bot was in range but its attack loop stopped connecting) |
+
+**1/3 seeds won** — inside this task's own stated fairness target ("1–2/3 bot wins, not 3/3"),
+so no further balance tuning was attempted; per the task's own instructions, tuning stops once
+≥1 seed wins. The remaining gap (seed 3's mid-fight attack stall) is a bot combat-loop
+sophistication gap, the same category already named in the entry below as one of two honest
+paths to close 0/3 — now partially closed by the merge, with a new, more specific symptom
+(stalls after landing most hits, rather than never landing meaningful damage at all).
 
 **What the arena pass added, on top of this session's six fixes below** (all real, read from
 its diff against `aea3743`, not copied from its own claims):
@@ -214,23 +224,35 @@ Consequence: a secret is findable and stable, but it is not *where its text says
 the location_hint prose currently describes fiction rather than geometry. Closing this needs
 named zone marker nodes in the district scenes that `_spawn_secrets` can look up by name.
 
-## Four NG+ modifier knobs are still stored but not consumed (updated 2026-09-14)
+## One NG+ modifier knob is stored but not consumed — 10 of 11 now wired (updated 2026-09-15)
 
 `content/ngp_modifiers.json` defines 11 effect knobs. This entry previously claimed 4 were
 live and named `loot` as one of them — that was wrong: `get_loot_chance_multiplier()` existed
 but had zero call sites anywhere in `scripts/`, so picking `whisper` changed nothing at all.
-Corrected count as of this pass, verified by grepping every call site: **7 of 11 are now
-genuinely wired** — `battery` (flashlight drain, `player_3d.gd`), `hunter_hearing` (detection
-radius, `noise_propagation.gd`), `achievements` (no-ops `AchievementManager.unlock()`,
-pre-existing), plus four wired this pass: `loot` (the enemy loot-drop roll,
-`base_monster.gd::_maybe_drop_loot()`), `lore` (secret-found XP grant, `xp_manager.gd`),
-`rewards` (all three coin payouts, `rewards_manager.gd`), and `hints` (the onboarding hint
-toggle, `onboarding.gd`, alongside the pre-existing settings-based check).
+Corrected count as of the 2026-09-14 pass, verified by grepping every call site: 7 of 11 were
+genuinely wired then. This pass adds three more, for **10 of 11 genuinely wired**:
+- `battery` (flashlight drain, `player_3d.gd`), `hunter_hearing` (detection radius,
+  `noise_propagation.gd`), `achievements` (no-ops `AchievementManager.unlock()`), `loot`
+  (`base_monster.gd::_maybe_drop_loot()`), `lore` (secret-found XP grant, `xp_manager.gd`),
+  `rewards` (all three coin payouts, `rewards_manager.gd`), `hints` (onboarding hint toggle,
+  `onboarding.gd`) — all pre-existing as of 2026-09-14.
+- `crawlers_ignore` — arrived wired from the `arena/01a09aec-igra` merge
+  (`base_monster.gd::_can_see_player()`, Crawlers skip aggro entirely).
+- `cycle` — wired this pass into `day_night.gd`'s `day_duration_sec` (`call_deferred`, since
+  `DayNight` initializes before `NewGamePlus` in the autoload order and would otherwise always
+  read the neutral 1.0 default).
+- `time_pressure` — wired this pass into `daily_events_ui.gd`: gates whether the already-
+  running event countdown actually displays a ticking clock (`00:00`→hidden without it), rather
+  than gating the event/bonus mechanic itself, so non-NG+ play is unaffected either way.
 
-Still data-only, with no hook to fold them into: `extra_dark_districts`, `cycle`,
-`time_pressure`, `crawlers_ignore`. So picking `blackout_plus` or `sprint` today still changes
-nothing, and their descriptions overstate their effect. Either wire the remaining four or trim
-the descriptions before these are advertised.
+**Still data-only, deliberately not wired: `extra_dark_districts`** (`blackout_plus`'s "one
+extra district starts DARK"). Its own premise doesn't hold against the current codebase:
+`PowerGrid.reset()` already sets **all 11 districts** to `Stage.DARK` on every new game — there
+is no "districts start lit" baseline for this knob to subtract from. Wiring it for real would
+mean inventing a new mechanic (e.g. re-darkening N already-lit districts mid-run) that isn't
+specified anywhere, which is out of scope for a one-line knob wiring pass. Either design and
+build that mechanic properly, or rewrite `blackout_plus`'s description/effect to match what the
+game actually has room for.
 
 ## district_grading.gd's Environment branch is dead code (found 2026-09-12, wiring LUTs)
 

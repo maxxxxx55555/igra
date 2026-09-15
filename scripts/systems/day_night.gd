@@ -12,7 +12,15 @@ func _ready() -> void:
 	if _env == null:
 		_env = get_tree().root.get_node_or_null("Main/WorldEnvironment") as WorldEnvironment
 	set_process(true)
+	# Ручка NG+ "cycle" (Sprint): множитель длины цикла, напр. 0.85 = короче.
+	# call_deferred: автозагрузка DayNight идёт в project.godot раньше
+	# NewGamePlus, и на её _ready() модификаторы ещё не загружены
+	# (_load_save() выполнится позже) — прямой вызов тут всегда читал бы 1.0.
+	call_deferred(&"_apply_cycle_multiplier")
 	_apply(get_hour())
+
+func _apply_cycle_multiplier() -> void:
+	day_duration_sec *= NewGamePlus.get_night_cycle_multiplier()
 
 func _process(delta: float) -> void:
 	_t += delta
