@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c66v66u0sw3o7"
-path.bptc="res://.godot/imported/police_floor_lit.png-3ff0339bcce50d0d181182d2e3a41d73.bptc.ctex"
+uid="uid://db05c7e96189"
+path.bptc="res://.godot/imported/police_floor_lit.png-db05c7e96189ab7e2e7c633c4509909b.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/tiles/police_floor_lit.png"
-dest_files=["res://.godot/imported/police_floor_lit.png-3ff0339bcce50d0d181182d2e3a41d73.bptc.ctex"]
+dest_files=["res://.godot/imported/police_floor_lit.png-db05c7e96189ab7e2e7c633c4509909b.bptc.ctex"]
 
 [params]
 
@@ -24,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

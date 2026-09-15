@@ -5,20 +5,21 @@ bin/
 *.uid
 *.translation
 
-# EXCEPTION (BLOCKER 2, 2026-09-12): these .import files carry non-default
-# compress/mode=2 (VRAM Compressed) + compress/high_quality=true settings,
-# individually PSNR-verified >=40dB against their Lossless originals
-# (docs/artifacts/texture_compression_audit.md has the full per-file
-# numbers). .import is normally never committed in this project (a fresh
-# `--import` regenerates it with engine defaults) - committing exactly
-# these means the compression choice survives a clean checkout instead of
-# silently reverting to Lossless the next time anyone reimports. Nothing
-# else under assets/textures/ is exempted.
-!assets/textures/tiles/*.import
-!assets/textures/surfaces/*.import
-!assets/textures/environment/asphalt.png.import
-!assets/textures/environment/brick.png.import
-!assets/textures/environment/concrete.png.import
+# EXCEPTION (perf(textures) 2026-09-13): committed .import files carry
+# non-default compress/mode=2 (VRAM Compressed = ASTC 6x6 on Android /
+# ETC2 on GL) + compress/high_quality=true. PSNR-verified >=38dB against
+# Lossless originals (docs/TEXTURE_COMPRESSION_REPORT.md). .import is
+# normally gitignored (a fresh `--import` regenerates it with engine
+# defaults = Lossless); committing them means ASTC survives a clean
+# checkout instead of silently reverting. Excludes cards (content ban),
+# store/ and docs/ marketing screenshots (non-shipping), and _orphaned.
+# Recursive globs (**) cover subdirectories like icons/skills/, icons_v2/craft/,
+# renders_v2/weapons/ etc.
+!assets/art/*.import
+!assets/grading/*.import
+!assets/photos/*.import
+!assets/textures/**/*.import
+assets/textures/cards/*.import
 
 # Tools / env
 *.pyc

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bwia2h7g1kq1s"
-path.bptc="res://.godot/imported/school_floor_lit.png-e50b6fb1d59dfab190e840ff96630287.bptc.ctex"
+uid="uid://126ba0e7f2f0"
+path.bptc="res://.godot/imported/school_floor_lit.png-126ba0e7f2f042cbd12b082cb4115d47.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/tiles/school_floor_lit.png"
-dest_files=["res://.godot/imported/school_floor_lit.png-e50b6fb1d59dfab190e840ff96630287.bptc.ctex"]
+dest_files=["res://.godot/imported/school_floor_lit.png-126ba0e7f2f042cbd12b082cb4115d47.bptc.ctex"]
 
 [params]
 
@@ -24,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

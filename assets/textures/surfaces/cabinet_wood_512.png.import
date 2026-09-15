@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b2ljtwiya46ji"
-path.bptc="res://.godot/imported/cabinet_wood_512.png-32871e38693b68f03fc525a8770303dc.bptc.ctex"
+uid="uid://9301caec45ce"
+path.bptc="res://.godot/imported/cabinet_wood_512.png-9301caec45ce724c1e74729f39cc429e.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/surfaces/cabinet_wood_512.png"
-dest_files=["res://.godot/imported/cabinet_wood_512.png-32871e38693b68f03fc525a8770303dc.bptc.ctex"]
+dest_files=["res://.godot/imported/cabinet_wood_512.png-9301caec45ce724c1e74729f39cc429e.bptc.ctex"]
 
 [params]
 
@@ -24,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

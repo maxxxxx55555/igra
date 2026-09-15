@@ -432,12 +432,14 @@ func save_slot(slot: int) -> bool:
 		"progress": ProgressTracker.to_dict(),
 		"settings": SettingsManager.to_dict(),
 		"player_pos": _read_player_pos(),
+		"district": _current_district(),
 		"quests": QuestManager.serialize(),
 		"xp": XpManager.save_data(),
 		"skill_tree": SkillTreeManager.save_data(),
 		"photos": _photos,
 		"daily_streak": _daily_streak,
 		"last_daily_time": _last_daily_time,
+		"onboard_done": _onboard_done,
 		"timestamp": Time.get_unix_time_from_system()
 	}
 	return _write_atomic(_get_slot_path(slot), payload)
@@ -458,18 +460,26 @@ func load_slot(slot: int) -> bool:
 	_pending_player_pos = Vector3(pp[0], pp[1], pp[2]) if (pp is Array and pp.size() >= 3) else Vector3.INF
 	_quest_data = data.get("quests", {})
 	QuestManager.from_dict(_quest_data)
+	# Mirror load_all(): restore current district so a slot load returns
+	# the player to the district they saved in (previously hardcoded
+	# suburbs the same way the main save was before TRUTH WAVE P0.2).
+	var dm := get_node_or_null("/root/DistrictManager")
+	var did: String = String(data.get("district", ""))
+	if dm != null and not did.is_empty():
+		dm.current_district = did
 	_photos = data.get("photos", [])
 	_daily_streak = int(data.get("daily_streak", 0))
 	_last_daily_time = int(data.get("last_daily_time", 0))
-	
+	_onboard_done = bool(data.get("onboard_done", false))
+
 	# Load skill tree
 	if SkillTreeManager:
 		SkillTreeManager.load_data(data.get("skill_tree", {}))
-	
+
 	# Load XP
 	if XpManager:
 		XpManager.load_data(data.get("xp", {}))
-	
+
 	return true
 
 func delete_slot(slot: int) -> bool:

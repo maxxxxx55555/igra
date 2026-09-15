@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://f6bmbnu1o8lq"
-path.bptc="res://.godot/imported/fuel_pump_512.png-cab692b88c113d6a0e151d2050e6e2ca.bptc.ctex"
+uid="uid://d4685a7becd0"
+path.bptc="res://.godot/imported/fuel_pump_512.png-d4685a7becd032dbaf349efcaa2d13cb.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/surfaces/fuel_pump_512.png"
-dest_files=["res://.godot/imported/fuel_pump_512.png-cab692b88c113d6a0e151d2050e6e2ca.bptc.ctex"]
+dest_files=["res://.godot/imported/fuel_pump_512.png-d4685a7becd032dbaf349efcaa2d13cb.bptc.ctex"]
 
 [params]
 
@@ -24,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

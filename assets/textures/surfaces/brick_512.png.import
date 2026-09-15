@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ca723f3aak66p"
-path.bptc="res://.godot/imported/brick_512.png-21f26b5f1d848e983e40ad2985cb6bf2.bptc.ctex"
+uid="uid://6738f80d576e"
+path.bptc="res://.godot/imported/brick_512.png-6738f80d576e080a497a70cd214e37c5.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/surfaces/brick_512.png"
-dest_files=["res://.godot/imported/brick_512.png-21f26b5f1d848e983e40ad2985cb6bf2.bptc.ctex"]
+dest_files=["res://.godot/imported/brick_512.png-6738f80d576e080a497a70cd214e37c5.bptc.ctex"]
 
 [params]
 
@@ -24,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

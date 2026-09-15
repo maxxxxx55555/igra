@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b5y1wt3c3oww8"
-path.bptc="res://.godot/imported/residential_floor.png-6b3061850e8990a81f08ebe305b89c37.bptc.ctex"
+uid="uid://873f26bf6cd8"
+path.bptc="res://.godot/imported/residential_floor.png-873f26bf6cd8850c8433c57229d7d65d.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/tiles/residential_floor.png"
-dest_files=["res://.godot/imported/residential_floor.png-6b3061850e8990a81f08ebe305b89c37.bptc.ctex"]
+dest_files=["res://.godot/imported/residential_floor.png-873f26bf6cd8850c8433c57229d7d65d.bptc.ctex"]
 
 [params]
 
@@ -24,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

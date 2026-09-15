@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://djhn1aq1pvx8l"
-path.bptc="res://.godot/imported/police_wall_lit.png-931d03b4fe5bf326a9efaf8d881eb367.bptc.ctex"
+uid="uid://338ac66f15d1"
+path.bptc="res://.godot/imported/police_wall_lit.png-338ac66f15d1e8c380bfb3f96da57b2c.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/tiles/police_wall_lit.png"
-dest_files=["res://.godot/imported/police_wall_lit.png-931d03b4fe5bf326a9efaf8d881eb367.bptc.ctex"]
+dest_files=["res://.godot/imported/police_wall_lit.png-338ac66f15d1e8c380bfb3f96da57b2c.bptc.ctex"]
 
 [params]
 
@@ -24,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

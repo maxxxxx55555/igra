@@ -38,18 +38,24 @@ func _on_district_entered(district_id: StringName) -> void:
 
 
 func _district_pitch_offset(district: String) -> float:
+	## Per-district drone pitch (Hz offset from 55Hz base). IDs must match
+	## the canonical district_id StringNames used everywhere else in the
+	## project (suburbs/residential/.../power_station) — the previous table
+	## used legacy names ("suburb", "policestation", "powerplant" etc.) so
+	## every district fell through to the 0.0 default and the pitch never
+	## actually changed between districts (same 55Hz drone everywhere).
 	match district:
-		"suburb": return 0.0
-		"residential": return 8.0
-		"park": return -5.0
-		"school": return 12.0
-		"hospital": return -8.0
-		"policestation": return 15.0
-		"gasstation": return 20.0
-		"warehouse": return -12.0
-		"industrial": return 10.0
-		"substation": return 18.0
-		"powerplant": return 25.0
+		"suburbs":       return 0.0
+		"residential":   return 8.0
+		"park":          return -5.0
+		"school":        return 12.0
+		"hospital":      return -8.0
+		"police":        return 15.0
+		"gas_station":   return 20.0
+		"warehouses":    return -12.0
+		"industrial":    return 10.0
+		"substation":    return 18.0
+		"power_station": return 25.0
 	return 0.0
 
 func _on_enemy_attack(_damage: int) -> void:

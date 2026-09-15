@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b2hira05aeoxj"
-path.bptc="res://.godot/imported/power_station_floor_lit.png-68961eb613c6087403279ff9a0b30153.bptc.ctex"
+uid="uid://bdde88a07253"
+path.bptc="res://.godot/imported/power_station_floor_lit.png-bdde88a07253011644ce63ae7ba816aa.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/tiles/power_station_floor_lit.png"
-dest_files=["res://.godot/imported/power_station_floor_lit.png-68961eb613c6087403279ff9a0b30153.bptc.ctex"]
+dest_files=["res://.godot/imported/power_station_floor_lit.png-bdde88a07253011644ce63ae7ba816aa.bptc.ctex"]
 
 [params]
 
@@ -24,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

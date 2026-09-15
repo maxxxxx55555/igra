@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://044qq5ulm77o"
-path.bptc="res://.godot/imported/gas_station_floor.png-37fe6372e958c6026513f3e1d7a7e71f.bptc.ctex"
+uid="uid://ef86cfe41b51"
+path.bptc="res://.godot/imported/gas_station_floor.png-ef86cfe41b5184d3899303ae5292c9e1.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/tiles/gas_station_floor.png"
-dest_files=["res://.godot/imported/gas_station_floor.png-37fe6372e958c6026513f3e1d7a7e71f.bptc.ctex"]
+dest_files=["res://.godot/imported/gas_station_floor.png-ef86cfe41b5184d3899303ae5292c9e1.bptc.ctex"]
 
 [params]
 
@@ -24,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
