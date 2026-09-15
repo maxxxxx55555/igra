@@ -4,6 +4,27 @@ One line per artifact: what it is, where it lives, what it proves. Source of tru
 claim always stays in the artifact itself — this file only points at it. Started
 2026-09-12 (RELEASE CONVERGENCE PASS), updated 2026-09-13 through FINAL CONSOLIDATION.
 
+## Arena bridge + real boss win (2026-09-15) — merged 2 branches, bot wins 6/10, 10/11 NG+ knobs
+
+Bridged `arena/01a09aec-igra` (PR #17: card art, i18n, boss-fight fixes, NG+ knobs) and
+`arena/texture-optimization` (ASTC compression, edge-case fixes) into `main`, hand-resolving
+the one real overlap with this session's own prior boss-fight fixes rather than letting either
+side silently clobber the other. The combined result is the first real, repeatable bot win of
+the entire session: 6/10 seeds won in a 10-seed sample. Also wired 2 more NG+ knobs (10/11
+total), ran the onboarding telemetry sample that was pending (already well inside target, no
+tuning needed), built a headless-safe still-capture tool, and caught an unverified "≥30%
+smaller APK" claim that arrived with the merge.
+
+| Artifact | Where | What it proves |
+|---|---|---|
+| Release readiness report (supersedes the 2026-09-14/15 version below) | `docs/RELEASE_READINESS_REPORT.md` | all 11 items re-verified on the actual merged tree — 8 PASS, 1 partial-with-caveat, 2 FAIL, stated plainly |
+| Known issues (boss winnability, updated) | `docs/KNOWN_ISSUES.md`, top entry | the merged fix set, the 3-seed and 10-seed win-rate tables, and the remaining attack-stall/nav-flake gaps |
+| Known issues (onboarding timing, new) | `docs/KNOWN_ISSUES.md` | real 10-seed median table, all metrics already inside the ≤8min target |
+| Known issues (texture-size caveat, new) | `docs/KNOWN_ISSUES.md` | why the merged texture pass's APK-size claim shouldn't be trusted at face value, with a real spot check |
+| Known issues (NG+ knobs, updated) | `docs/KNOWN_ISSUES.md` | 10/11 wired, `extra_dark_districts`'s premise mismatch explained |
+| Still-capture tool | `tools/qa_sim/capture_stills.gd`, `scenes/tools/capture_stills_scene.tscn` | headless-safe no-op, verified; windowed capture unverified (standing policy) |
+| Owner release packet (refreshed) | `docs/OWNER_RELEASE_PACKET.md` | boss-fight and card-art lines updated to the real current state |
+
 ## Boss-fight bug hunt (2026-09-14/15) — six real defects fixed, 0/3 bot wins still stands
 
 Commissioned as "Phases 2-5" of a plan whose CONTEXT section claimed two arena branches were
