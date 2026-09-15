@@ -1,27 +1,63 @@
 # Known issues
 
-## The autoplay bot wins 0 of 3 seeds — the boss phase is not passable by it (re-measured 2026-09-13)
+## The autoplay bot still wins 0 of 3 seeds — but six real boss-fight bugs behind that number got fixed (2026-09-14)
 
-`bash tools/qa_sim/autoplay_bot` currently reports **`0/3 seeds won, 3 softlock(s)`**. This
-is not a regression from the MEGA FINAL PASS and it is not new, but the number deserves to
-be stated plainly rather than left inside a prose sentence about a "remaining boss-fight
-gap".
+`bash tools/qa_sim/autoplay_bot` still reports **`0/3 seeds won`**. Do not read that as "no
+progress" — the fight underneath that number went from an instant, unwinnable spiral to a
+stable, safe fight that deals real damage. Chasing the bot's winnability found and fixed six
+genuine defects, none of them balance numbers:
 
-What the bot does achieve on every seed: all 11 districts restored to FULL (seed 1 at
-t≈144 s, seed 3 at t≈126 s) and the final night reached. What it never achieves: getting
-past `phase=boss district=power_station spine_i=10`, where all three seeds die on the
-45-second no-progress timeout with scores clustered at 880–906.
+1. **`revive_player()` had no grace window.** It dropped the player back at half HP standing
+   next to the boss; the next ranged hit (every 2-3s) killed them again, in a loop that
+   consumed the entire 240s fight without landing a single melee swing.
+2. **Dodge invulnerability was completely broken.** `_iframes` counted down but `take_damage()`
+   never checked it — dodging through an attack never actually avoided the hit, for any enemy,
+   not just the boss. One guard (`player_3d.gd`) fixes both this and #1: `revive_player()` now
+   calls the same `grant_iframes()` for a 2s grace period.
+3. **The boss's documented weakness was unreachable by the only automated player.** GDD §6.2
+   lists "стробоскоп" (the strobe) as the Architect's weakness, but strobe only ever fired from
+   a raw `"strobe"` input action — nothing driving through `InputService` (the bot's only
+   interface) could trigger it. Added `InputService.request_strobe()` alongside the existing
+   `request_attack`/`request_dodge`/etc.
+4. **P1 was immune to the stun the strobe applies.** P2 and P3 both check
+   `ai_state == State.STUN` and pause; P1 never did, so a landed strobe froze the model in
+   place while its ranged attacks kept firing on schedule anyway.
+5. **A long P2 chase could send the boss falling through the floor, forever.** `_move_to()`
+   added gravity to `velocity.y` every call and never reset it on landing — the standard
+   `CharacterBody3D` gotcha. Harmless for a short chase, but P2's invisible pursuit can run
+   long enough for it to accumulate past what floor collision arrests in one step. Measured:
+   the boss's Y went from 1 to -166 over 25 seconds and never came back.
+6. **The melee attack hitbox was never offset from the player's own origin**, so it only ever
+   reached about 0.3m past the player's own body — short of a boss standing at the ~1.8m the
+   combat AI naturally holds. Measured landed DPS was roughly a tenth of the combo system's
+   theoretical output before this was fixed.
 
-The cause is documented in `scripts/tools/_qa_autoplay_runner.gd` (note dated 2026-09-12):
-the bot cannot keep its flashlight battery alive through the boss fight, and
-`base_monster.gd`'s light gate requires `light_energy > 0.1`, so a dead flashlight makes
-that phase unwinnable regardless of aim.
+**What the fight looks like now:** stable position (no more drift or floor-fall), zero
+deaths across every post-fix run, and real sustained damage — up to **28.5% of the boss's
+800 HP dealt within the 240s window** in the best observed run. Still short of a kill, and
+still not a win. Two more runs never even reached the boss phase, softlocking earlier in the
+spine (`suburbs` at spine_i=0 in one run, `gas_station` at spine_i=5 in another) — this is
+pre-existing bot-navigation flakiness, not a boss-fight regression: the bot's movement is a
+naive direct-vector-to-target with no real pathfinding, and it has intermittently stalled in
+different districts across many runs this session regardless of which code was under test.
+
+**What would close the remaining gap:** the ceiling now is raw damage throughput, not
+survival — the bot never dies anymore, it just runs out of clock. Two honest options, neither
+attempted this pass: (a) teach the bot a better combat loop (sustained combo uptime, using the
+strobe-stun window specifically to land free hits, maybe throwing a FIRE-type item the boss
+resists far less than the BLUNT its combo deals), or (b) a real difficulty pass on the boss's
+`armor`/`resistances` (`scripts/enemies/enemy_roster_data.gd` `&"beast"` entry — these are
+implementation details, not specified by the GDD's own stat table, so they're a legitimate
+tuning target). Don't just inflate combo damage numbers to force a bot win without a human
+confirming the fight still feels fair — see item below on why a human playtest still matters
+here.
 
 **Consequence for release claims:** the project does **not** currently have an automated
-winnability proof. The game is bot-verified playable up to the final night and no further.
-Any statement that a bot run proves the Truth ending, or proves the game completable, is
-unsupported until boss tuning closes this. Fixing it is a balance problem (boss difficulty
-versus battery economy), not a wiring one.
+winnability proof. The game is bot-verified playable, safely, up to and through a real boss
+engagement, and no further. Any statement that a bot run proves the Truth ending, or proves
+the game completable, remains unsupported. What changed today is that the remaining gap is
+now demonstrably about combat throughput, not about the bot instantly breaking on contact
+with the boss.
 
 ## arena/card-unique-rescue delivered no card art — the 4-of-22 duplicate-photo defect is still open (2026-09-13)
 
@@ -98,21 +134,23 @@ Consequence: a secret is findable and stable, but it is not *where its text says
 the location_hint prose currently describes fiction rather than geometry. Closing this needs
 named zone marker nodes in the district scenes that `_spawn_secrets` can look up by name.
 
-## Seven NG+ modifier knobs are stored but not consumed (2026-09-13)
+## Four NG+ modifier knobs are still stored but not consumed (updated 2026-09-14)
 
-`content/ngp_modifiers.json` defines 11 effect knobs. Four are live: `loot` (folded into
-`NewGamePlus.get_loot_chance_multiplier()`), `battery` (divides flashlight drain in
-`player_3d.gd`), `achievements` (makes `AchievementManager.unlock()` a no-op for the
-`ghost` modifier), and the exclusivity/gating rules themselves. The other seven —
-`hunter_hearing`, `extra_dark_districts`, `lore`, `hints`, `cycle`, `rewards`,
-`time_pressure` — are parsed, persisted and readable through
-`NewGamePlus.get_modifier_multiplier()` / `get_modifier_toggle()`, but **nothing reads them
-yet**, because the systems they describe have no existing hook to fold them into and
-inventing those hooks was outside a wiring pass.
+`content/ngp_modifiers.json` defines 11 effect knobs. This entry previously claimed 4 were
+live and named `loot` as one of them — that was wrong: `get_loot_chance_multiplier()` existed
+but had zero call sites anywhere in `scripts/`, so picking `whisper` changed nothing at all.
+Corrected count as of this pass, verified by grepping every call site: **7 of 11 are now
+genuinely wired** — `battery` (flashlight drain, `player_3d.gd`), `hunter_hearing` (detection
+radius, `noise_propagation.gd`), `achievements` (no-ops `AchievementManager.unlock()`,
+pre-existing), plus four wired this pass: `loot` (the enemy loot-drop roll,
+`base_monster.gd::_maybe_drop_loot()`), `lore` (secret-found XP grant, `xp_manager.gd`),
+`rewards` (all three coin payouts, `rewards_manager.gd`), and `hints` (the onboarding hint
+toggle, `onboarding.gd`, alongside the pre-existing settings-based check).
 
-So picking `whisper` today changes loot but not hunter hearing; picking `sprint` changes
-nothing yet. The modifier descriptions shown to the player therefore overstate their effect.
-Either wire the remaining knobs or trim the descriptions before these are advertised.
+Still data-only, with no hook to fold them into: `extra_dark_districts`, `cycle`,
+`time_pressure`, `crawlers_ignore`. So picking `blackout_plus` or `sprint` today still changes
+nothing, and their descriptions overstate their effect. Either wire the remaining four or trim
+the descriptions before these are advertised.
 
 ## district_grading.gd's Environment branch is dead code (found 2026-09-12, wiring LUTs)
 
