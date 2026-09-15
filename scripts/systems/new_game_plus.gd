@@ -126,8 +126,11 @@ func get_difficulty_multiplier() -> Dictionary:
 		"loot_chance_multiplier": 1.0 + ng * LOOT_CHANCE_MULTIPLIER_PER_NG,
 	}
 
+## Ручка "lore" (Keeper's Pact) складывается прямо сюда: инсайт/XP с
+## документов идёт через XpManager, поэтому все существующие вызовы
+## получают эффект без правок на местах (тот же приём, что для "loot").
 func get_xp_multiplier() -> float:
-	return 1.0 + _current_ng_plus * XP_MULTIPLIER_PER_NG
+	return (1.0 + _current_ng_plus * XP_MULTIPLIER_PER_NG) * get_modifier_multiplier("lore")
 
 func get_enemy_damage_multiplier() -> float:
 	return 1.0 + _current_ng_plus * ENEMY_DAMAGE_MULTIPLIER_PER_NG
@@ -142,6 +145,37 @@ func get_player_damage_multiplier() -> float:
 ## существующие вызовы получили эффект без правок на местах.
 func get_loot_chance_multiplier() -> float:
 	return (1.0 + _current_ng_plus * LOOT_CHANCE_MULTIPLIER_PER_NG) * get_modifier_multiplier("loot")
+
+## Ручка "hints" (Keeper's Pact): false гасит подсказки. Читающие системы
+## берут значение отсюда, а не из эффектов модификатора напрямую.
+func are_hints_enabled() -> bool:
+	return get_modifier_toggle("hints", true)
+
+## Ручка "cycle" (Sprint): множитель длины ночного цикла (0.85 = короче).
+func get_night_cycle_multiplier() -> float:
+	return get_modifier_multiplier("cycle")
+
+## Ручка "time_pressure" (Sprint): включает обратный отсчёт для временных
+## событий.
+func is_time_pressure_enabled() -> bool:
+	return get_modifier_toggle("time_pressure", false)
+
+## Третий режим чтения эффектов рядом с множителями и переключателями:
+## по контракту контента некоторые ручки — additive-счётчики в форме числа
+## (например, "extra_dark_districts"), их значения суммируются, а не
+## перемножаются.
+func get_modifier_additive(knob: String) -> int:
+	var n := 0
+	for id in _active_modifiers:
+		var mult: Dictionary = get_modifier(id).get("effects", {}).get("multipliers", {})
+		if mult.has(knob):
+			n += int(float(mult[knob]))
+	return n
+
+## Ручка "extra_dark_districts" (Blackout+): сколько дополнительных районов
+## стартуют в DARK.
+func get_extra_dark_districts() -> int:
+	return get_modifier_additive("extra_dark_districts")
 
 func reset_for_new_game() -> void:
 	_current_ng_plus = 0

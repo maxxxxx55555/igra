@@ -1,0 +1,28 @@
+# Pre-commit hooks — card-art pipeline (docs/CARD_ART_BRIEF.md section 8).
+#
+# Install once in a clone:
+#   python3 -m venv .venv && .venv/bin/pip install pre-commit
+#   .venv/bin/pre-commit install
+#
+# The `card-art-changes` hook REJECTS card-art commits that stage zero files
+# under content/cards/ (the failure mode of the rejected
+# arena/card-unique-rescue branch: certified art that did not exist).
+# It triggers when the branch name contains "card" (e.g.
+# arena/card-art-pipeline), when CARD_ART_FORCE=1 is set, or when the staged
+# changes already touch content/cards/ (trivially passing). Commits on all
+# other branches are unaffected.
+#
+# PR-level enforcement (exact "git diff --stat content/cards/" semantics):
+# run in CI — python3 scripts/check_card_art_changes.py --ci-base origin/<base>
+# Stdlib only; no hook dependencies to install for the script itself.
+
+repos:
+  - repo: local
+    hooks:
+      - id: card-art-changes
+        name: "card-art: card-branch commits must change content/cards/"
+        entry: python3 scripts/check_card_art_changes.py
+        language: system
+        pass_filenames: false
+        always_run: true
+        verbose: true

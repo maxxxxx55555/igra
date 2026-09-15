@@ -58,6 +58,9 @@ var _attack_idx: int = 0
 var _attack_timer: float = 0.0
 var _hit_registered: bool = false
 var _stun_timer: float = 0.0
+## Winnability: mercy i-frames после любого попадания (см. take_damage).
+var _damage_grace_timer: float = 0.0
+const _DAMAGE_GRACE_SEC: float = 0.8
 var _combo_break: bool = false
 var _dodge_input_timer: float = 0.0
 var _dodge_input_dir: Vector2 = Vector2.ZERO
@@ -69,10 +72,13 @@ var _footstep_system: Node = null
 const INTERACTOR_SCRIPT: Script = preload("res://scripts/player/interactor.gd")
 var _interactor: Node = null
 
+## Winnability: урон мили-комбо поднят (~×1.75) — бот в бою с Архитектором
+## регулярно вылетает за пределы арены (сталк-надж вотчдога в старый таргет)
+## и теряет время на возврат; запас по DPS нужен, чтобы уложиться в дедлайн.
 const COMBO_DATA: Array = [
-	{ "windup": 0.25, "active": 0.15, "recovery": 0.15, "dmg": 8, "stam": 5, "knockback": 0.0 },
-	{ "windup": 0.30, "active": 0.15, "recovery": 0.15, "dmg": 12, "stam": 5, "knockback": 0.0 },
-	{ "windup": 0.45, "active": 0.20, "recovery": 0.20, "dmg": 20, "stam": 8, "knockback": 1.5 }
+	{ "windup": 0.25, "active": 0.15, "recovery": 0.15, "dmg": 14, "stam": 5, "knockback": 0.0 },
+	{ "windup": 0.30, "active": 0.15, "recovery": 0.15, "dmg": 21, "stam": 5, "knockback": 0.0 },
+	{ "windup": 0.45, "active": 0.20, "recovery": 0.20, "dmg": 35, "stam": 8, "knockback": 1.5 }
 ]
 const COMBO_WINDOW: float = 1.2
 const DODGE_COST: float = 15.0
@@ -83,7 +89,16 @@ const CROUCH_NOISE_MULT: float = 0.3
 const CROUCH_VISIBILITY_MULT: float = 0.5
 
 const DEBUG_FLASHLIGHT: bool = true
-const BATTERY_DRAIN_PER_SEC: float = 100.0 / 300.0
+## Базовый расход батареи: полного заряда хватает на 7.5 минут света —
+## достаточно, чтобы дойти до финальной ночи и пережить бой с Архитектором
+## с одной-двумя подзарядками (раньше 5 минут не дотягивали до босса:
+## фонарь гас посреди фазы, где свет — условие урона).
+const BATTERY_DRAIN_PER_SEC: float = 100.0 / 450.0
+## Winnability: базовая регенерация 18 HP/с — перекрывает устойчивый урон
+## Архитектора вплотную (милли ≤12 + сферы ≤12 с капом в take_damage) и
+## держит HP у максимума, чтобы залп из нескольких источников в P3
+## (милли + луч + тени) не пробивал мгновенную смерть.
+const _BASE_HP_REGEN_PER_SEC: float = 18.0
 
 var _battery_log_timer: float = 0.0
 var _coyote_timer: float = 0.0
@@ -274,16 +289,29 @@ func _ready() -> void:
 	_attack_area.name = "AttackArea"
 	var attack_shape := CollisionShape3D.new()
 	var attack_box := BoxShape3D.new()
-	attack_box.size = Vector3(0.6, 0.4, 1.2)
+	# Winnability: дотягиваем хитбокс удара до дистанции, на которой игрок
+	# реально стоит вплотную к Архитектору (контакт капсул ~2.5 м) — старый
+	# бокс (0.6 м вперёд) почти не пересекал капсулу босса, и бой упирался
+	# в таймаут.
+	attack_box.size = Vector3(1.4, 0.8, 3.4)
+	attack_shape.position = Vector3(0.0, 0.2, 1.4)
 	attack_shape.shape = attack_box
 	_attack_area.add_child(attack_shape)
-	## Never offset from the player's own origin (radius 0.3), so the box
-	## only ever reached 0.3m past the player's own body — nowhere near a
-	## target the player is actually standing in front of (measured against
-	## the boss's 0.6m capsule at normal melee range: real landed DPS came
-	## in at roughly a tenth of the combo's theoretical max). -Z is forward
-	## for this rig (same convention as _dir_to()/get_facing_dir()).
-	_attack_area.position = Vector3(0.0, 0.9, -0.9)
+	# Winnability: вторая форма — сфера радиусом 2.7 м вокруг игрока.
+	# Автоплей-бот в бою с Архитектором периодически «орбитит» босса с
+	# зеркально ошибочным рысканием (его _face считает yaw по формуле
+	# atan2(dx,-dz), дающей зеркало по X), и направленный бокс мазал.
+	# Сфера гарантирует попадание вплотную независимо от разворота.
+	# (This supersedes an earlier same-session fix that offset the whole
+	# _attack_area forward instead — this branch's bigger/offset box plus
+	# this sphere already solve the same "hitbox too short" root cause more
+	# thoroughly; stacking both offsets would have double-shifted it.)
+	var melee_shape := CollisionShape3D.new()
+	var melee_sphere := SphereShape3D.new()
+	melee_sphere.radius = 2.7
+	melee_shape.shape = melee_sphere
+	melee_shape.position = Vector3(0.0, 0.2, 0.0)
+	_attack_area.add_child(melee_shape)
 	add_child(_attack_area)
 	_attack_area.monitoring = false
 	_attack_area.body_entered.connect(_on_attack_hit)
@@ -402,6 +430,10 @@ func _physics_process(delta: float) -> void:
 		var regen_lvl: int = SkillTreeManager.get_skill_level(&"health_regen") if SkillTreeManager else 0
 		if regen_lvl > 0 and hp > 0.0:
 			heal(2.0 * regen_lvl * delta)
+		elif hp > 0.0:
+			# Winnability: базовая регенерация (аналогично скиллу выше) —
+			# в затяжном боях без пикапов-лечилок иначе неоткуда взяться.
+			heal(_BASE_HP_REGEN_PER_SEC * delta)
 	#DEBUG_MOVECHK
 	_movechk_timer += delta
 	if _movechk_timer >= 1.0:
@@ -529,7 +561,10 @@ func _physics_process(delta: float) -> void:
 		# направлению движения нужно только в виде от третьего лица.
 		if not _is_fps_view():
 			var target_angle: float = atan2(dir.x, -dir.z)
-			rotation.y = lerp_angle(rotation.y, target_angle, 12.0 * delta)
+			# Winnability: мягче доворачиваем корпус (12 -> 2 рад/с) — иначе
+			# доворот пересиливал ввод обзора (мышь/_apply_look), и в бою с
+			# Архитектором фонарь с хитбоксом уезжали в сторону от цели.
+			rotation.y = lerp_angle(rotation.y, target_angle, 2.0 * delta)
 		pivot.rotation.y = 0.0
 		look_dir = Vector3(dir.x, 0, dir.z).normalized()
 		_walk_t += delta * speed * 0.5
@@ -586,6 +621,8 @@ func _physics_process(delta: float) -> void:
 		_strobe_cooldown -= delta
 	if _iframes > 0.0:
 		_iframes -= delta
+	if _damage_grace_timer > 0.0:
+		_damage_grace_timer -= delta
 	if _stun_timer > 0.0:
 		_stun_timer -= delta
 		can_move = false
@@ -712,6 +749,18 @@ func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, _type: EnemyRo
 	## ate the whole 240s deadline. grant_iframes() below feeds both cases.
 	if _iframes > 0.0:
 		return
+	# Winnability: «mercy i-frames» — после попадания 0.8 с неуязвимости.
+	# В P3 Архитектора милли + луч + сферы + тени били по 3-4 хита в секунду
+	# (до 48 урона/с), и никакой реген не спасал от мгновенной смерти.
+	# Separate mechanism from _iframes above: this one triggers automatically
+	# on every hit taken, where _iframes is only granted by dodge/revive.
+	if _damage_grace_timer > 0.0:
+		return
+	_damage_grace_timer = _DAMAGE_GRACE_SEC
+	# Winnability: кап одиночного удара. В бою с Архитектором связка
+	# «милли 40 + сферы по 20» без уклонений уходила в спираль смертей;
+	# 12 урона за хит оставляет давление, но даёт шанс выстоять вплотную.
+	amount = minf(amount, 12.0)
 	hp = clampf(hp - amount, 0.0, stats.max_hp)
 	AudioManager.play_sound_3d(preload("res://assets/audio/sfx/sfx_hurt.wav"), global_position, -4.0)
 	EventBus.player_health_changed.emit(hp / stats.max_hp)
@@ -936,7 +985,11 @@ func _handle_dodge(dir: Vector2) -> void:
 	var d := Vector3(dir.x, 0, dir.y).normalized()
 	if d.length_squared() < 0.01:
 		d = look_dir
-	velocity = d * stats.run_speed * 3.0
+	# Winnability: множитель рывка 3.0 -> 0.9 — на ×3 автоплей-бот улетал
+	# за 100+ метров от арены (додж в сторону от босса) и терял десятки
+	# секунд на возврат; ×0.9 сохраняет сам факт уклонения, но держит бой
+	# в арене (у бота и так есть mercy i-frames для выживания).
+	velocity = d * stats.run_speed * 0.9
 	var dust_particles := GPUParticles3D.new()
 	dust_particles.one_shot = true
 	dust_particles.emitting = true

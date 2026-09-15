@@ -54,6 +54,18 @@ func _refresh_modifiers() -> void:
 	var title := Label.new()
 	title.text = LocalizationManager.tf("NGP_PICK_TITLE", [active.size(), NewGamePlus.get_current_ng_plus()])
 	_mod_box.add_child(title)
+	# Сводка по «не-множительным» ручкам модификаторов: значения идут через
+	# потреблённые геттеры NewGamePlus (hints/cycle/time_pressure/
+	# extra_dark_districts), а не читаются из эффектов напрямую.
+	var knobs := Label.new()
+	knobs.text = "hints:%s · cycle:x%.2f · pressure:%s · dark+:%d" % [
+		"on" if NewGamePlus.are_hints_enabled() else "off",
+		NewGamePlus.get_night_cycle_multiplier(),
+		"on" if NewGamePlus.is_time_pressure_enabled() else "off",
+		NewGamePlus.get_extra_dark_districts(),
+	]
+	knobs.modulate.a = 0.7
+	_mod_box.add_child(knobs)
 	for m in mods:
 		var id := String(m.get("id", ""))
 		var keys: Dictionary = m.get("i18n_keys", {})
