@@ -80,6 +80,32 @@ its diff against `aea3743`, not copied from its own claims):
   sphere shape alongside the resized box, superseding this session's own smaller forward-
   offset fix for the same "hitbox too short" root cause.
 
+## The merged texture-compression pass's "≥30% smaller APK" claim is unverified, and a spot check doesn't support it (2026-09-15)
+
+`docs/TEXTURE_COMPRESSION_REPORT.md` (from `arena/texture-optimization`, merged this pass)
+extends the real, measured 74-file pilot (`docs/artifacts/texture_compression_audit.md`) to
+~465 more files, but its own text says every PSNR value past the original pilot is
+**"est." (projected, not measured)**, and its "Overall APK build-size reduction of ≥30%" is
+explicitly labeled **"Estimated"** — the report says outright its sandbox had no Godot binary
+to measure with. That estimate should not be trusted at face value: the original pilot's own
+*real* measurement found the opposite of the naive expectation for this project's flat,
+palette-locked art — on-disk size **increased** slightly (8.99→9.69 MiB) even though VRAM
+dropped ~4x, because fixed-rate block compression doesn't beat PNG's deflate on simple,
+flat-color source images.
+
+A quick real spot check this pass (`.godot/imported/*.ctex` size vs source PNG, several
+categories) is consistent with that same pattern, more severely: `ui_v2` +1976%, `icons_v2`
++839%, `items` +357%, `tiles`+`surfaces` combined +43.7% (vs. the original pilot's own +7.8%
+for the same two categories — the discrepancy itself suggests this spot-check method doesn't
+cleanly reproduce the pilot's more careful measurement, most likely because the dev-time
+`.ctex` cache carries Godot resource-wrapper overhead a real exported `.pck`/APK may not).
+`badges` was the one category that came out smaller (-40%). **Net: the real evidence is mixed
+and mostly points away from "≥30% smaller," not toward it** — the true number needs an actual
+APK export + diff (blocked on the Android SDK this machine doesn't have,
+`docs/OWNER_RELEASE_PACKET.md` §a) before anyone should rely on it. The VRAM-reduction case
+(the pilot's *real* win, and the actual motivation — protecting low-end Android devices from
+texture-memory pressure) is unaffected by any of this.
+
 ## Onboarding timing: already well inside the ≤8min target, no trigger tuning needed (2026-09-15)
 
 Telemetry (`first_interactable_seen`, `first_secret_hinted`, `first_secret_found`,

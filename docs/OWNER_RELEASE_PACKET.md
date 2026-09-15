@@ -182,22 +182,24 @@ possible, not just a desktop window.
    pass's new art, `assets/textures/badges/`) — confirm they're legible at their small
    display size, not a blurry smear.
 10. **Open the Collection/Codex screen.** *Expect:* each district card shows a moody night
-    photo behind its name/progress bar (this pass's new art,
-    `assets/textures/cards/`) — note: `docs/KNOWN_ISSUES.md` already flags that 4 of 22
-    cards (school/hospital/gas_station/police) share a base photo and won't visually match
-    their own district; this is a known, non-blocking art gap, not a bug to report twice.
+    photo behind its name/progress bar, and all 11 districts now have their own distinct
+    photo — the previously-known "4 cards share a base photo" gap was fixed and shipped
+    (`docs/KNOWN_ISSUES.md`, RESOLVED 2026-09-14); this line is now just a "does it look
+    right" check, not a known-gap callout.
 11. **Reach the final boss and fight normally.** *Expect:* this is the single most important
-    line. A 2026-09-14 pass found and fixed six real bugs in this fight (a revive death-spiral,
-    broken dodge invulnerability, an unreachable weakness ability, the boss's first phase being
-    immune to stun, a chase that could send the boss falling through the floor forever, and a
-    melee attack hitbox that was too short to reach a target at normal range — full list in
-    `docs/KNOWN_ISSUES.md`, top entry). The bot no longer dies or breaks in this fight and deals
-    real damage, but still hasn't landed a win inside its 240-second budget — it's dealt up to
-    28.5% of the boss's HP in the best run. **A human needs to confirm the fight is actually
-    winnable and feels fair**, not just non-broken; the bot's number may still understate a
-    real player's better tactics (dodging projectiles, using the strobe deliberately) or may
-    reveal the boss genuinely needs a difficulty pass. Either way, this is the one line in this
-    checklist most likely to surface a real problem.
+    line. Two independent bug-fixing passes (2026-09-14 and 2026-09-15, full list in
+    `docs/KNOWN_ISSUES.md`'s top entry) fixed real bugs in this fight — revive death-spirals,
+    broken dodge invulnerability, an unreachable weakness ability, stun immunity, floor
+    fall-through, a too-short melee hitbox, the boss losing the player entirely, knockback
+    flinging it out of the arena, and more. The bot now **wins this fight for real**: a 10-seed
+    sample won 6/10, with the remaining losses split between a mid-fight attack-stall (the bot
+    occasionally stops landing hits after dealing most of a kill's worth of damage) and
+    pre-existing navigation flakiness earlier in the run, unrelated to the boss. **A human still
+    needs to play this fight** — the bot's numbers say it's winnable, not that it feels fair;
+    real tactics (dodging projectiles, using the strobe deliberately) may make it easier or
+    reveal a difficulty pass is still wanted. This is still the one line in this checklist most
+    likely to surface a real problem, just a different kind now — "does it feel good," not
+    "does it work."
 12. **Save, fully close the app, relaunch, load.** *Expect:* you resume exactly where you
     left off, correct district/power-stage/inventory.
 
