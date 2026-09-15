@@ -7,21 +7,53 @@ PR #17) both chased the same goal from the same starting point (`aea3743`) witho
 about each other, and largely found *different* bugs. Merged together 2026-09-15. The arena
 pass's own record claimed 2/3 seeds won on its branch alone (see the superseded entry below,
 kept for the record) — that number was **not** carried forward as true for the merged code;
-instead the bot was re-run for real on the actual merged tree. Real result,
-`QA_SEEDS="1 2 3" bash tools/qa_sim/autoplay_bot`, 2026-09-15:
+instead the bot was re-run for real on the actual merged tree, twice: a first 3-seed check
+right after merging, then a full 10-seed sample for the onboarding-timing pass below (which
+needed a bigger sample anyway). The two runs used the **same seeds with different outcomes**
+(seed 2 softlocked in the first run, won in the second; seed 3 softlocked in the first run,
+won in the second) — the bot is driven by real-time physics/input timing, not a pure seeded
+RNG, so re-running the same seed is not perfectly reproducible. Treat both runs as independent
+samples of the same underlying win rate, not as two measurements of one true per-seed result.
+
+**10-seed sample** (the primary evidence — larger and run right after the 3-seed check, same
+merged code, no balance changes in between), `QA_SEEDS="1 2 3 4 5 6 7 8 9 10" bash
+tools/qa_sim/autoplay_bot`, 2026-09-15:
+
+| Seed | Result | Notes |
+|---|---|---|
+| 1, 2, 3, 5, 6, 7 | **WIN** (6/10) | |
+| 4 | SOFTLOCK | Reached boss (11/11 districts), same mid-fight attack-stall pattern as below |
+| 8 | SOFTLOCK | Spine nav flake, `residential` spine_i=1, only 1/11 districts — an early, severe case |
+| 9 | SOFTLOCK | Spine nav flake, `school` spine_i=3, 3/11 districts |
+| 10 | SOFTLOCK | Spine nav flake, `industrial` spine_i=8, 8/11 districts |
+
+**6/10 seeds won.** The earlier 3-seed check (below) independently produced 1/3 — both are
+consistent with a real, non-trivial win rate now existing where there was none all session
+until this merge, comfortably past the "≥1 of 3" bar and inside the task's own stated fairness
+band ("1–2/3 bot wins" scaled to a 3-seed batch; a 10-seed batch naturally shows more
+variance). No balance tuning was attempted beyond what arrived in the merge itself — per the
+task's own instructions, tuning stops once seeds are winning, and re-tuning to chase a
+specific ratio across differently-sized samples would just be curve-fitting noise.
+
+**First 3-seed check** (immediately after merging, before the 10-seed sample above),
+`QA_SEEDS="1 2 3" bash tools/qa_sim/autoplay_bot`:
 
 | Seed | Result | Wall time | Districts | Boss HP removed | Notes |
 |---|---|---|---|---|---|
 | 1 | **WIN** | 274.7s | 11/11 | 100% (killed, 14.9→0/800 in the final hit) | 0 deaths. First real bot win recorded this session, after every prior attempt topped out around 28.5% damage |
-| 2 | SOFTLOCK | — | 5/11 | never reached boss | Pre-existing spine-navigation flake (`gas_station`, spine_i=5) — same class already documented below, not a boss-fight or merge regression |
-| 3 | SOFTLOCK | — | 11/11 | 78.4% (172.95/800) | Reached and fought the boss, dealt real damage, then got stuck circling at melee range without landing further hits for 45s straight — a new, boss-fight-specific bot-behavior gap (not a physics bug: `boss_dist` stayed ~2-2.5 the whole stall, so the bot was in range but its attack loop stopped connecting) |
+| 2 | SOFTLOCK | — | 5/11 | never reached boss | Pre-existing spine-navigation flake (`gas_station`, spine_i=5) |
+| 3 | SOFTLOCK | — | 11/11 | 78.4% (172.95/800) | Reached and fought the boss, dealt real damage, then got stuck circling at melee range without landing further hits for 45s straight |
 
-**1/3 seeds won** — inside this task's own stated fairness target ("1–2/3 bot wins, not 3/3"),
-so no further balance tuning was attempted; per the task's own instructions, tuning stops once
-≥1 seed wins. The remaining gap (seed 3's mid-fight attack stall) is a bot combat-loop
-sophistication gap, the same category already named in the entry below as one of two honest
-paths to close 0/3 — now partially closed by the merge, with a new, more specific symptom
-(stalls after landing most hits, rather than never landing meaningful damage at all).
+**The remaining boss-phase gap** (seed 3 above, seed 4 in the 10-seed sample): a new,
+boss-fight-specific bot-behavior symptom, not a physics bug — `boss_dist` stayed ~2-2.5 the
+whole stall in both cases, so the bot was in range but its attack loop stopped connecting.
+This is the same category already named below as one of two honest paths to close 0/3 (a
+smarter bot combat loop), now partially closed by the merge — the bot no longer fails to
+damage the boss at all, it occasionally stalls only after landing most of a kill's worth of
+hits. **The remaining spine-navigation softlocks** (2 of 4 in the 3-seed check's own class,
+3 of 4 in the 10-seed sample) are the same pre-existing, already-documented bot-navigation
+flakiness — unrelated to this pass's changes, and in the 10-seed sample responsible for most
+of the non-wins, not the boss fight itself.
 
 **What the arena pass added, on top of this session's six fixes below** (all real, read from
 its diff against `aea3743`, not copied from its own claims):
@@ -47,6 +79,27 @@ its diff against `aea3743`, not copied from its own claims):
   revive `_iframes`), and battery drain retuned. Melee hitbox gained a second, generous 2.7m
   sphere shape alongside the resized box, superseding this session's own smaller forward-
   offset fix for the same "hitbox too short" root cause.
+
+## Onboarding timing: already well inside the ≤8min target, no trigger tuning needed (2026-09-15)
+
+Telemetry (`first_interactable_seen`, `first_secret_hinted`, `first_secret_found`,
+`first_district_cleared`) was already wired into `scripts/tools/_qa_autoplay_runner.gd` from an
+earlier pass; this pass ran the real 10-seed sample it was waiting on
+(`QA_SEEDS="1 2 3 4 5 6 7 8 9 10" bash tools/qa_sim/autoplay_bot`, same run used for the
+winnability table above):
+
+| Metric | Median | Notes |
+|---|---|---|
+| First interactable seen | 5.1s | |
+| First secret hinted | 9.95s | The game's own trigger — this is the metric "tune existing triggers" would actually move, and it's already ~48x under the 480s (8min) target |
+| First secret found | 113.6s (**among the 5/10 seeds that found one at all**) | 5 of 10 seeds never found a secret in-run: `-1.0`. Not a trigger-timing problem — the bot doesn't seek secrets, it only stumbles onto one opportunistically while pathing to its real objective (an already-documented bot-behavior gap, see the winnability entry above and "Autoplay bot" below). Even the found-cases' median is 4x under target |
+| First district cleared | 17.45s | |
+
+**No trigger tuning was attempted** — every measured median is already far inside the ≤8min
+target, so there was nothing to tune. The only honest gap is `first_secret_found`'s 50% miss
+rate, and that's a bot-capability gap (it would need the bot taught to seek secrets, which is
+out of scope for "tune existing triggers, no new popups"), not evidence the game's own hint
+timing is slow.
 
 ## The autoplay bot still wins 0 of 3 seeds — but six real boss-fight bugs behind that number got fixed (2026-09-14)
 
