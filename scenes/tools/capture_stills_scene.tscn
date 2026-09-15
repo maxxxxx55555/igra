@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/tools/_capture_stills_bootstrap.gd" id="1_c"]
+
+[node name="CaptureStills" type="Node"]
+script = ExtResource("1_c")
