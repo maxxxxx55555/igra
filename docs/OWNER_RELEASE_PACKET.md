@@ -187,10 +187,17 @@ possible, not just a desktop window.
     cards (school/hospital/gas_station/police) share a base photo and won't visually match
     their own district; this is a known, non-blocking art gap, not a bug to report twice.
 11. **Reach the final boss and fight normally.** *Expect:* this is the single most important
-    line — the autoplay bot clears all 11 districts but has never won the boss's second phase
-    even after this session added aim-tracking/battery-management to it
-    (`docs/KNOWN_ISSUES.md` "Autoplay bot"). A human needs to confirm the fight is actually
-    fair/beatable/fun; the bot's failure may say nothing about a real player's experience.
+    line. A 2026-09-14 pass found and fixed six real bugs in this fight (a revive death-spiral,
+    broken dodge invulnerability, an unreachable weakness ability, the boss's first phase being
+    immune to stun, a chase that could send the boss falling through the floor forever, and a
+    melee attack hitbox that was too short to reach a target at normal range — full list in
+    `docs/KNOWN_ISSUES.md`, top entry). The bot no longer dies or breaks in this fight and deals
+    real damage, but still hasn't landed a win inside its 240-second budget — it's dealt up to
+    28.5% of the boss's HP in the best run. **A human needs to confirm the fight is actually
+    winnable and feels fair**, not just non-broken; the bot's number may still understate a
+    real player's better tactics (dodging projectiles, using the strobe deliberately) or may
+    reveal the boss genuinely needs a difficulty pass. Either way, this is the one line in this
+    checklist most likely to surface a real problem.
 12. **Save, fully close the app, relaunch, load.** *Expect:* you resume exactly where you
     left off, correct district/power-stage/inventory.
 
