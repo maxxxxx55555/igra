@@ -1,0 +1,38 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/fx/dust.png" id="1_tex"]
+
+[sub_resource type="ParticleProcessMaterial" id="rain_mat"]
+emission_shape = 3
+emission_box_extents = Vector3(18, 1, 18)
+direction = Vector3(0.05, -1, 0)
+spread = 3.0
+initial_velocity_min = 16.0
+initial_velocity_max = 22.0
+gravity = Vector3(0, -6, 0)
+scale_min = 0.7
+scale_max = 1.1
+color = Color(0.55, 0.62, 0.72, 0.35)
+
+[sub_resource type="StandardMaterial3D" id="rain_mesh_mat"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 1, 1, 1)
+albedo_texture = ExtResource("1_tex")
+billboard_mode = 2
+
+[sub_resource type="QuadMesh" id="rain_mesh"]
+material = SubResource("rain_mesh_mat")
+size = Vector2(0.035, 0.55)
+
+[node name="VFXRain" type="GPUParticles3D"]
+emitting = false
+amount = 300
+lifetime = 0.8
+preprocess = 0.8
+lifetime_randomness = 0.3
+local_coords = false
+process_material = SubResource("rain_mat")
+draw_pass_1 = SubResource("rain_mesh")
+visibility_aabb = AABB(-20, -16, -20, 40, 32, 40)

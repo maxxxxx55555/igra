@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/effects/vfx_burst.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/textures/fx/strobe_flash_128.png" id="2_tex"]
+
+[node name="VFXStrobe" type="GPUParticles3D"]
+script = ExtResource("1_script")
+emitting = false
+amount = 24
+one_shot = true
+explosiveness = 0.9
+lifetime = 0.25
+burst_color = Color(1.0, 0.95, 0.85, 1.0)
+burst_texture = ExtResource("2_tex")
+spread_deg = 180.0
+velocity_min = 0.5
+velocity_max = 1.5
+gravity = Vector3(0, 0, 0)
+particle_scale_min = 0.2
+particle_scale_max = 0.5
+emit_direction = Vector3(0, 1, 0)
