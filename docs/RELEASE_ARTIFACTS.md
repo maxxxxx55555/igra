@@ -4,6 +4,25 @@ One line per artifact: what it is, where it lives, what it proves. Source of tru
 claim always stays in the artifact itself — this file only points at it. Started
 2026-09-12 (RELEASE CONVERGENCE PASS), updated 2026-09-13 through FINAL CONSOLIDATION.
 
+## Boss-fight bug hunt (2026-09-14/15) — six real defects fixed, 0/3 bot wins still stands
+
+Commissioned as "Phases 2-5" of a plan whose CONTEXT section claimed two arena branches were
+already merged delivering boss winnability and texture optimization. Checked first: neither
+branch exists, on `main` or the remote — the premise was false, so this was a first real
+attempt, not a re-verification. Chasing autoplay-bot winnability found six genuine bugs (a
+revive death-spiral, broken dodge invulnerability, an unreachable boss weakness, a
+stun-immune boss phase, a floor-fall-through chase bug, and a too-short melee hitbox) — none
+of them balance numbers. The fight went from instantly breaking to stable with real sustained
+damage (up to 28.5% of the boss's HP in the 240s window), but has not yet produced a
+bot-verified win.
+
+| Artifact | Where | What it proves |
+|---|---|---|
+| Release readiness report | `docs/RELEASE_READINESS_REPORT.md` | all 11 brief checklist items, each with real evidence — 5 PASS, 1 PARTIAL, 1 reframed-but-real, 4 FAIL/unattempted, stated plainly |
+| Known issues (boss-fight entry) | `docs/KNOWN_ISSUES.md`, top entry | the six bugs found and fixed, the honest remaining gap, and what would close it |
+| Known issues (NG+ knobs entry) | `docs/KNOWN_ISSUES.md` | corrected count: 7 of 11 knobs now genuinely wired (grep-verified), 4 still data-only |
+| Owner release packet | `docs/OWNER_RELEASE_PACKET.md` | item 11 (the boss-fight playtest line) updated to the real current state |
+
 ## MEGA FINAL PASS (2026-09-13) — 3 of 4 branches merged, secrets made reachable, 6 review agents
 
 The pass that took secrets from "exists in content, unreachable in the build" to findable,
