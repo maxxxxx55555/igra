@@ -1,5 +1,20 @@
 # Known issues
 
+## Tried and reverted: routing the bot's spine navigation through a NavigationAgent3D (2026-09-16)
+
+The persistent spine-phase softlocks (see the 10-seed table below) come from the bot's
+straight-line-to-target movement having no real obstacle routing, only a sideways "nudge" when
+fully stopped. Tried the obvious real fix: give the bot its own `NavigationAgent3D` (same
+navmesh `base_monster.gd`'s enemies already path through) and route pickup/switch approach
+through `get_next_path_position()` instead of a raw direct vector. **Made it worse, not
+better**: re-testing the exact seeds that previously softlocked, seed 8 now failed *earlier*
+(spine_i=0 in suburbs, 0/11 districts, vs. spine_i=1/1 district before). Reverted immediately
+rather than ship a regression — root cause not diagnosed (candidates: the agent recomputing a
+path every tick off a constantly-refreshed `target_position` rather than a stable one, or a
+map-sync timing issue from parenting the agent to the moving player node right before reading
+its path the same frame). Whoever tries this again should reproduce the regression on seed 8
+first (`QA_SEEDS=8 bash tools/qa_sim/autoplay_bot`) before trusting any fix.
+
 ## Boss winnability — the bot wins for the first time this session (merged 2026-09-15)
 
 This session's own six fixes (below) and a parallel arena-platform pass (`arena/01a09aec-igra`,
