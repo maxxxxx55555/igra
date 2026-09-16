@@ -7,13 +7,14 @@ straight-line-to-target movement having no real obstacle routing, only a sideway
 fully stopped. Tried the obvious real fix: give the bot its own `NavigationAgent3D` (same
 navmesh `base_monster.gd`'s enemies already path through) and route pickup/switch approach
 through `get_next_path_position()` instead of a raw direct vector. **Made it worse, not
-better**: re-testing the exact seeds that previously softlocked, seed 8 now failed *earlier*
-(spine_i=0 in suburbs, 0/11 districts, vs. spine_i=1/1 district before). Reverted immediately
-rather than ship a regression — root cause not diagnosed (candidates: the agent recomputing a
-path every tick off a constantly-refreshed `target_position` rather than a stable one, or a
-map-sync timing issue from parenting the agent to the moving player node right before reading
-its path the same frame). Whoever tries this again should reproduce the regression on seed 8
-first (`QA_SEEDS=8 bash tools/qa_sim/autoplay_bot`) before trusting any fix.
+better, on all three seeds re-tested** (8, 9, 10 — the ones that softlocked in the 10-seed
+sample below): all three now failed at 0/11 or 1/11 districts (vs. 1/11, 3/11, 8/11 before) —
+`0/3 seeds won, 3 softlock(s)`, every one earlier than its pre-fix failure point. Reverted
+immediately rather than ship a regression — root cause not diagnosed (candidates: the agent
+recomputing a path every tick off a constantly-refreshed `target_position` rather than a
+stable one, or a map-sync timing issue from parenting the agent to the moving player node
+right before reading its path the same frame). Whoever tries this again should reproduce the
+regression first (`QA_SEEDS="8 9 10" bash tools/qa_sim/autoplay_bot`) before trusting any fix.
 
 ## Boss winnability — the bot wins for the first time this session (merged 2026-09-15)
 

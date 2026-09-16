@@ -18,19 +18,20 @@ unread from either branch's own claims about itself.
 | 2 | Engine gates | **24/25 PASS** | `bash tools/check.sh` (full) → "Провалено: 1, пройдено: 24"; the one failure is the same pre-existing `прогон 3D-сцены (таймаут 90s)` stall, unchanged by this pass |
 | 3 | Headless suite | **GREEN** | `bash tools/qa_sim/headless_suite` → all 12 engine gates + the extended scenario driver, all `OK`, exit 0 |
 | 4 | Autoplay bot wins ≥1/3 at default NG+ | **PASS — 6/10** (also checked 1/3 in a separate 3-seed run) | See "Boss winnability" below. First real bot win of this entire session, after every prior attempt topped out around 28.5% boss HP damage |
-| 5 | Autoplay bot restores 11/11 across all seeds | **Still FAIL, inconsistent** | 7 of the 10 seeds reached 11/11; the other 3 softlocked mid-spine on pre-existing bot-navigation flakiness before ever reaching the boss — same known issue, unrelated to this pass |
+| 5 | Autoplay bot restores 11/11 across all seeds | **Still FAIL, inconsistent** | 7 of the 10 seeds reached 11/11; the other 3 softlocked mid-spine on pre-existing bot-navigation flakiness before ever reaching the boss. Tried a real fix this pass (routing the bot through a `NavigationAgent3D` instead of straight-line movement) — it made the worst-affected seed fail *earlier*, so it was reverted; see `docs/KNOWN_ISSUES.md` for what was tried and why it didn't land. Same known issue, unrelated to the boss fight itself |
 | 6 | i18n: 0 English strings in non-English locales | **PASS** (was FAIL — 124 known) | The gap this report's earlier version flagged is closed by the merge's own i18n commit. Re-verified independently, not just trusted: diffed every one of 1265 keys, en.json vs each of the 12 non-English locales — **zero** keys are byte-identical with alphabetic content in ja/zh/ar/ko/zh_TW; the Latin-alphabet locales (de/fr/es/it/pt_BR/tr) show 10-35 identical keys each, individually spot-checked and all are legitimate shared words/loanwords (`Filter`, `Radio`, `Status`, `Park`, format strings like `%d`/`%s`), not leftover English prose |
-| 7 | NG+ knobs: all 7 wired | **10 of 11 wired** (was 7 of 11) | Grep-verified call sites, 3 more wired since the last version of this report: `crawlers_ignore` arrived pre-wired from the merge; `cycle` and `time_pressure` wired this pass (`day_night.gd`, `daily_events_ui.gd`). Only `extra_dark_districts` stays data-only — its own premise doesn't hold against the current codebase (`PowerGrid.reset()` already puts all 11 districts in DARK on new game, so there's no "starts lit" baseline for "one extra starts dark" to subtract from); wiring it for real means inventing a new mechanic, out of scope here — see `docs/KNOWN_ISSUES.md` |
+| 7 | NG+ knobs: all 7 wired | **11 of 11 wired** (was 7 of 11) | Grep-verified call sites, 4 more wired since the last version of this report: `crawlers_ignore` arrived pre-wired from the merge; `cycle` and `time_pressure` wired into `day_night.gd`/`daily_events_ui.gd`; `extra_dark_districts` wired last — its literal "starts DARK" premise doesn't hold (`PowerGrid.reset()` already darkens all 11 districts on new game), so it was wired into the mechanic the modifier is actually named after instead: the existing random blackout event (`random_events.gd`) now hits `1 + extra_dark_districts` districts instead of always 1 |
 | 8 | Onboarding: median time-to-first-secret ≤8min, 10-seed table | **PASS** (was NOT ATTEMPTED) | Real 10-seed sample, telemetry that was already wired: median first-interactable 5.1s, median first-secret-**hinted** 9.95s (≈48x under the 480s target — this is the metric "tune existing triggers" would actually move), median first-district-full 17.45s. First-secret-**found** only happened in 5 of 10 seeds (the bot doesn't seek secrets, only stumbles on them) — among those, median 113.6s, still comfortably under target. No trigger tuning was needed or attempted; every measured number already clears the bar |
 | 9 | Textures: ≥30% size reduction | **Still PARTIAL, now with an added caveat** | The original 74-file pilot's real, measured result stands: VRAM **-75%** (38.75→9.69 MiB), on-disk **+0.70 MiB** for that batch. The merge added a 465-file extension (`arena/texture-optimization`) claiming "≥30% smaller APK" — but that branch's own report labels the number **"Estimated,"** not measured (no Godot binary in its sandbox). A real spot check this pass of actual compiled sizes found mixed, mostly-negative signal (`ui_v2` +1976%, `items` +357%, `badges` -40%) — see `docs/KNOWN_ISSUES.md` for the full breakdown and the caveat that even this spot-check likely doesn't match true APK-packaged size. The real number needs an actual Android export, blocked on the SDK this machine doesn't have |
 | 10 | Edge cases: ≥3 defects fixed | **PASS — 6 this session + 5 more from the merged arena pass, 11 total** | This session: revive death-spiral, broken dodge invulnerability, unreachable boss weakness, P1 stun-immunity, floor fall-through, too-short melee hitbox. Merged in: boss losing the player at range with no reposition, knockback flinging the boss out of the arena, residual velocity on generic ATTACK-state entry, monsters freezing when off the nav mesh, an unsatisfiable-by-any-non-aiming-agent flashlight cone-angle gate. Full detail and commit references: `docs/KNOWN_ISSUES.md`, top entries |
 | 11 | Release packet: owner-executable | **DONE**, refreshed this pass | `docs/OWNER_RELEASE_PACKET.md`, 220 lines (~4 pages); item 11 (boss playtest) rewritten for the real 6/10 win rate, item 10 (Collection screen) corrected — it referenced an already-resolved card-art gap as if still open |
 
-**8 of 11 pass outright, 1 is partial-with-honest-caveats, 2 still fail** (districts-on-every-seed,
-and the texture APK-size axis specifically) — stated plainly, not rounded up. Compared to this
-report's same-day earlier version: items 4, 6, 7, 8 moved from FAIL/unattempted to PASS; item 9
-kept its PARTIAL status but gained a real caveat against an unverified claim that arrived with
-the merge; item 10 grew from 6 to 11 real fixes.
+**9 of 11 pass outright, 1 is partial-with-honest-caveats, 1 still fails** (districts-on-every-
+seed — a real fix was attempted and reverted after it regressed the problem, see below) —
+stated plainly, not rounded up. Compared to this report's same-day earlier version: items 4, 6,
+7, 8 moved from FAIL/unattempted to PASS (item 7 reaching a clean 11/11); item 9 kept its
+PARTIAL status but gained a real caveat against an unverified claim that arrived with the
+merge; item 10 grew from 6 to 11 real fixes.
 
 ## Boss winnability — what actually happened
 
@@ -71,8 +72,8 @@ seeds are winning.
   merged" premise — Phase 0 discovery (GitHub API, no `gh auth login`) found them as plain
   branches on `origin`, not a separate fork; merged both with `--no-ff`, hand-resolving the one
   real conflict area.
-- **NG+ knobs**: wired 2 more (`cycle`, `time_pressure`) on top of the 1 (`crawlers_ignore`)
-  that arrived pre-wired from the merge, reaching 10 of 11.
+- **NG+ knobs**: wired 3 more (`cycle`, `time_pressure`, `extra_dark_districts`) on top of the 1
+  (`crawlers_ignore`) that arrived pre-wired from the merge, reaching a clean 11 of 11.
 - **Onboarding telemetry**: sampled for real (10 seeds) instead of leaving it as "wired but
   never run" — target already met, no code changes needed.
 - **Still-capture tool**: `tools/qa_sim/capture_stills.gd` + `scenes/tools/capture_stills_scene.tscn`,
@@ -81,6 +82,9 @@ seeds are winning.
   re-implementing movement/combat logic.
 - **Caught and flagged** an unverified size claim that arrived with the merge rather than
   repeating it as fact.
+- **Attempted and reverted** a real navmesh-based fix for the bot's spine-navigation softlocks
+  — it made the failures worse across all 3 re-tested seeds, so it was pulled before it could
+  ship as a regression. See `docs/KNOWN_ISSUES.md` for what was tried.
 
 ## Standing gates
 
