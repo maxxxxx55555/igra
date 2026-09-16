@@ -25,9 +25,17 @@ func _fire() -> void:
 	EventBus.inventory_notice.emit(LocalizationManager.t(NAMES[ev]))
 	match ev:
 		Ev.BLACKOUT:
-			var d := _random_non_full_district()
-			if d != &"":
-				EventBus.district_blackout.emit(d)
+			# Ручка NG+ "extra_dark_districts" (Blackout+): districts already
+			# all start DARK on a new game (PowerGrid.reset()), so "one extra
+			# starts dark" has nothing to subtract from at game start — but
+			# this is the actual blackout mechanic the modifier is named
+			# after, so the knob widens its blast radius instead: 1 district
+			# normally, 1 + extra_dark_districts under Blackout+.
+			var hits: int = 1 + NewGamePlus.get_extra_dark_districts()
+			for i in hits:
+				var d := _random_non_full_district()
+				if d != &"":
+					EventBus.district_blackout.emit(d)
 		Ev.SURGE:
 			EventBus.light_disrupted.emit()
 		Ev.DISTRESS:

@@ -303,13 +303,13 @@ Consequence: a secret is findable and stable, but it is not *where its text says
 the location_hint prose currently describes fiction rather than geometry. Closing this needs
 named zone marker nodes in the district scenes that `_spawn_secrets` can look up by name.
 
-## One NG+ modifier knob is stored but not consumed — 10 of 11 now wired (updated 2026-09-15)
+## All 11 NG+ modifier knobs now wired (updated 2026-09-16)
 
 `content/ngp_modifiers.json` defines 11 effect knobs. This entry previously claimed 4 were
 live and named `loot` as one of them — that was wrong: `get_loot_chance_multiplier()` existed
 but had zero call sites anywhere in `scripts/`, so picking `whisper` changed nothing at all.
-Corrected count as of the 2026-09-14 pass, verified by grepping every call site: 7 of 11 were
-genuinely wired then. This pass adds three more, for **10 of 11 genuinely wired**:
+Corrected count as of the 2026-09-14 pass: 7 of 11. The 2026-09-15 pass added three more
+(10 of 11). This pass closes the last one:
 - `battery` (flashlight drain, `player_3d.gd`), `hunter_hearing` (detection radius,
   `noise_propagation.gd`), `achievements` (no-ops `AchievementManager.unlock()`), `loot`
   (`base_monster.gd::_maybe_drop_loot()`), `lore` (secret-found XP grant, `xp_manager.gd`),
@@ -317,21 +317,23 @@ genuinely wired then. This pass adds three more, for **10 of 11 genuinely wired*
   `onboarding.gd`) — all pre-existing as of 2026-09-14.
 - `crawlers_ignore` — arrived wired from the `arena/01a09aec-igra` merge
   (`base_monster.gd::_can_see_player()`, Crawlers skip aggro entirely).
-- `cycle` — wired this pass into `day_night.gd`'s `day_duration_sec` (`call_deferred`, since
+- `cycle` — wired 2026-09-15 into `day_night.gd`'s `day_duration_sec` (`call_deferred`, since
   `DayNight` initializes before `NewGamePlus` in the autoload order and would otherwise always
   read the neutral 1.0 default).
-- `time_pressure` — wired this pass into `daily_events_ui.gd`: gates whether the already-
+- `time_pressure` — wired 2026-09-15 into `daily_events_ui.gd`: gates whether the already-
   running event countdown actually displays a ticking clock (`00:00`→hidden without it), rather
   than gating the event/bonus mechanic itself, so non-NG+ play is unaffected either way.
-
-**Still data-only, deliberately not wired: `extra_dark_districts`** (`blackout_plus`'s "one
-extra district starts DARK"). Its own premise doesn't hold against the current codebase:
-`PowerGrid.reset()` already sets **all 11 districts** to `Stage.DARK` on every new game — there
-is no "districts start lit" baseline for this knob to subtract from. Wiring it for real would
-mean inventing a new mechanic (e.g. re-darkening N already-lit districts mid-run) that isn't
-specified anywhere, which is out of scope for a one-line knob wiring pass. Either design and
-build that mechanic properly, or rewrite `blackout_plus`'s description/effect to match what the
-game actually has room for.
+- `extra_dark_districts` — wired this pass, but not where the modifier's own text implies.
+  Its literal premise ("one extra district starts DARK") doesn't hold against the codebase:
+  `PowerGrid.reset()` already sets **all 11 districts** to `Stage.DARK` on every new game, so
+  there's no "starts lit" baseline to subtract from — inventing one would mean building a new
+  mechanic nobody asked for. But the modifier is literally *named* "Blackout+", and the game
+  already has a real blackout mechanic: `scripts/systems/random_events.gd` periodically fires
+  one of four random events, one of which (`Ev.BLACKOUT`) darkens a random non-FULL district
+  for 15s (`EventBus.district_blackout`, consumed by `streetlight.gd`'s city-map icon). Wired
+  the knob into that instead: a blackout event now hits `1 + extra_dark_districts` districts
+  instead of always exactly 1 — the real mechanic the modifier's name and "no mercy" framing
+  actually point at, reusing existing infrastructure rather than adding new gameplay.
 
 ## district_grading.gd's Environment branch is dead code (found 2026-09-12, wiring LUTs)
 
