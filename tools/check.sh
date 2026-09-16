@@ -216,6 +216,7 @@ else
     run_gate "footstep-маппер (surface x speed)" "res://scenes/tools/footstep_check_scene.tscn"
     run_gate "аудио: тишина до первого ввода" "res://scenes/tools/audio_hum_check_scene.tscn"
     run_gate "единая тема: chrome виден на всех экранах" "res://scenes/tools/theme_unify_probe_scene.tscn"
+    run_gate "настройки: тир графики и accessibility переживают рестарт" "res://scenes/tools/settings_persist_probe_scene.tscn"
     # Draw-call budget: --headless всегда даёт draw_calls=0 (dummy renderer) -
     # гейт сам это обнаруживает и молча пропускает (SKIP, не OK/FAIL). Реальная
     # проверка бюджета D11<350 требует --windowed:

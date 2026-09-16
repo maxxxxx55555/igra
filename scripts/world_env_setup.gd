@@ -50,7 +50,6 @@ func _ready() -> void:
 		we.environment = Environment.new()
 	_env = we.environment
 
-	_env.tonemap_mode = Environment.TONE_MAPPER_AGX
 	_env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	_env.ambient_light_color = AMBIENT_COLOR_DARK
 	_env.ambient_light_energy = ambient_energy_default
@@ -83,6 +82,8 @@ func _ready() -> void:
 	# Flashlight defaults (set on player scene)
 	# - spot_range = 8.0, spot_angle = 45, light_energy = 1.0, color = #c9a24a
 
+	_apply_graphics_tier(int(SettingsManager.get_setting("graphics_tier", 2)))
+	EventBus.settings_changed.connect(_on_settings_changed)
 	EventBus.district_stage_changed.connect(_on_district_stage_changed)
 	EventBus.weather_changed.connect(_on_weather_changed)
 	EventBus.district_entered.connect(_apply_lut)
@@ -153,6 +154,43 @@ func _on_district_stage_changed(_id: StringName, stage: int) -> void:
 	if dm != null and _id != dm.current_district:
 		return
 	apply_for_stage(stage)
+
+## VISUAL_PASS W1: graphics_tier (SettingsManager, 0..3) selects a preset
+## dict from visual_quality.tres (tier 3/Ultra reuses "high", per its own
+## metadata/graphics_tier_map which only defines low/medium/high). Runs
+## before the district stage/LUT/postfx application below, which refine
+## rather than replace this base — matches the wiring spec's stated order.
+func _apply_graphics_tier(tier: int) -> void:
+	if _env == null:
+		return
+	var vq := load("res://assets/config/visual_quality.tres")
+	if vq == null:
+		return
+	var names := ["low", "medium", "high", "high"]
+	var name: String = names[clampi(tier, 0, names.size() - 1)]
+	var p: Dictionary = vq.get_meta(name, {})
+	if p.is_empty():
+		return
+	_env.tonemap_mode = int(p.get("tonemap_mode", Environment.TONE_MAPPER_ACES))
+	_env.tonemap_exposure = float(p.get("tonemap_exposure", 1.0))
+	_env.glow_enabled = bool(p.get("glow_enabled", true))
+	_env.glow_bloom = float(p.get("glow_bloom", _env.glow_bloom))
+	_env.glow_intensity = float(p.get("glow_intensity", _env.glow_intensity))
+	_env.glow_strength = float(p.get("glow_strength", _env.glow_strength))
+	_env.glow_hdr_threshold = float(p.get("glow_hdr_threshold", _env.glow_hdr_threshold))
+	_env.fog_density = float(p.get("fog_density", _env.fog_density))
+	_env.fog_sky_affect = float(p.get("fog_sky_affect", _env.fog_sky_affect))
+	_env.ssao_enabled = bool(p.get("ssao_enabled", false))
+	_env.ssil_enabled = bool(p.get("ssil_enabled", false))
+	_env.volumetric_fog_enabled = bool(p.get("volumetric_fog_enabled", false))
+	_env.adjustment_enabled = true
+	_env.adjustment_contrast = float(p.get("contrast", 1.0))
+	_env.adjustment_saturation = float(p.get("saturation", 1.0))
+
+func _on_settings_changed(key: String, value: Variant) -> void:
+	if key != "graphics_tier":
+		return
+	_apply_graphics_tier(int(value))
 
 func _on_weather_changed(_weather: int, _name: String, _fog: float, _rain: float) -> void:
 	if not is_inside_tree():
