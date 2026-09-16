@@ -12,6 +12,14 @@ func _ready() -> void:
 func _run() -> void:
 	var bad: int = 0
 
+	# Mutates real user://settings.cfg (SettingsManager is the live autoload,
+	# not a sandboxed copy) - capture whatever was actually saved so a
+	# developer running this gate locally gets their own settings back, not
+	# hardcoded defaults.
+	var orig_tier: int = int(SettingsManager.get_setting("graphics_tier", 2))
+	var orig_hc: bool = bool(SettingsManager.get_setting("high_contrast", false))
+	var orig_ts: int = int(SettingsManager.get_setting("text_size", 1))
+
 	# --- Item 12: graphics preset switch actually applies ---
 	var root: Node3D = Node3D.new()
 	get_tree().root.add_child(root)
@@ -55,8 +63,11 @@ func _run() -> void:
 	if not persist_ok:
 		bad += 1
 	reloaded.queue_free()
-	SettingsManager.set_high_contrast(false)
-	SettingsManager.set_text_size(1)
+
+	# Restore whatever was actually on disk before this probe ran.
+	SettingsManager.set_graphics_tier(orig_tier)
+	SettingsManager.set_high_contrast(orig_hc)
+	SettingsManager.set_text_size(orig_ts)
 	SettingsManager.save_to_cfg()
 
 	print("[settings-persist] DONE bad=", bad)

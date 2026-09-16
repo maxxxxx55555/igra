@@ -4,6 +4,21 @@ One line per artifact: what it is, where it lives, what it proves. Source of tru
 claim always stays in the artifact itself — this file only points at it. Started
 2026-09-12 (RELEASE CONVERGENCE PASS), updated 2026-09-13 through FINAL CONSOLIDATION.
 
+## Visual pass bridge + graphics-tier seam (2026-09-16) — 1 of 3 named lanes real, seam wired, 26th gate added
+
+A follow-up task named three branches to bridge; verified against `origin` first rather than
+trusted — only one (`arena/01a0a4c3-igra`, visual pass) actually exists. Merged it for real
+after a dry-run proved it clean, then wired the one real gap its own doc named (Settings
+graphics-tier dropdown never reached the live Environment) and added a headless regression gate
+proving two Phase-3 checklist items for real instead of leaving them unverified.
+
+| Artifact | Where | What it proves |
+|---|---|---|
+| Merge commit | `1de306d` | the real visual-pass lane, clean 3-way merge, ancestor-proven, static-gate green |
+| Graphics-tier seam | `scripts/world_env_setup.gd`, commit `77d11ac` | Settings tier dropdown now actually changes the live WorldEnvironment (tonemap/glow/fog/SSAO), not just a stored int |
+| Settings-persistence gate (new, #26 in `tools/check.sh`) | `scripts/tools/_settings_persist_probe.gd`, `scenes/tools/settings_persist_probe_scene.tscn` | real headless evidence for two checklist items: tier switch reaches the Environment (glow 0.40→0.55, SSAO false→true), and an accessibility setting survives save→reload |
+| Known issues (updated) | `docs/KNOWN_ISSUES.md`, top entry | which of the 3 named lanes is real, what was and wasn't wired, and the still-blocked stills gap |
+
 ## Arena bridge + real boss win (2026-09-15) — merged 2 branches, bot wins 6/10, 10/11 NG+ knobs
 
 Bridged `arena/01a09aec-igra` (PR #17: card art, i18n, boss-fight fixes, NG+ knobs) and

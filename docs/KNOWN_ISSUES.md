@@ -1,5 +1,50 @@
 # Known issues
 
+## Visual pass merged, graphics-tier seam wired; two named "lanes" from this task's own brief don't exist (2026-09-16)
+
+A follow-up task named three branch "lanes" to bridge by commit-subject prefix: `feat(visual):`,
+`feat(qa): cert ledger`, `feat(accessibility):`. Checked for real against every ref on `origin`
+(fetched fresh first) rather than trusted: only **one** exists —
+`arena/01a0a4c3-igra`, `9c2263f feat(visual): AAA environment/material/UI pass with mobile
+profiles`. No branch anywhere on `origin`, merged or not, has a `feat(qa): cert ledger` or
+`feat(accessibility):` commit. Whoever gets a task referencing those two again: they are not on
+this repo's remote as of this entry; don't spend time hunting for a fork that was never checked
+either (this repo has no forks — `origin` is the only remote).
+
+The one real lane was verified before merging, not just merged on the branch's own say-so: a
+dry-run 3-way merge on a scratch branch first (a raw `git diff main..tip` looked alarming —
+666 files, 29K deletions — because it diffs two divergent tips directly, not what a real merge
+produces; the actual merge base was 21 commits back and the real merge was clean, 21 files,
++970/-14, zero conflicts, every file from this session's own prior work still present
+afterward). Merged for real, static-gate verified, pushed (`1de306d`).
+
+Its own `docs/VISUAL_PASS.md` (added by the merge) named one real gap: the Settings screen's
+"Graphics Tier" dropdown already called `SettingsManager.set_graphics_tier()`, but nothing
+downstream ever read `assets/config/visual_quality.tres`'s low/medium/high preset — the
+dropdown changed shadow/texture/fps/resolution tiers but never touched the environment
+(tonemap/glow/fog/SSAO). Wired that one seam in `world_env_setup.gd` (`77d11ac`): applies the
+preset on boot and live on `EventBus.settings_changed`, in the doc's own stated order (preset
+first, per-district LUT/postfx refine after, unchanged). Scoped to just this seam — the doc's
+full W1-W10 spec (materials, particles, per-district light multipliers, UI transitions,
+ThemeProvider parity) is real future work, most of it needing on-device visual verification this
+session structurally cannot do (headless-only policy) and several of its own values are
+explicitly flagged "blind-tuned, VERIFY ON DEVICE" by the branch that wrote them — not something
+to wire blind in bulk without a way to see the result. A known pre-existing gap this pass did
+*not* fix (flagged by the doc's own author, not new): `district_scene_factory` builds a second,
+separate `WorldEnvironment` for procedural districts, so this seam's tier-apply may not reach
+that one in every gameplay scene — needs unifying onto one `WorldEnvironment`, out of scope here.
+
+Added a real headless-safe regression gate for two of this task's checklist items rather than
+declaring them blocked: `settings_persist_probe_scene.tscn` proves (a) the tier switch reaches
+the live `Environment` (glow_intensity 0.40→0.55, SSAO false→true measured across Low→High) and
+(b) an accessibility setting (`high_contrast`, `text_size`) survives a real
+`save_to_cfg()` → fresh `SettingsManager` → `load_from_cfg()` round trip — the same path a real
+app restart uses, no window needed since both are pure state reads. Now gate #26 in
+`tools/check.sh`, passing. **Still genuinely blocked**: 8 canonical screenshots in
+`docs/stills/` — `tools/qa_sim/capture_stills.gd` exists and its headless no-op path is
+verified, but actually producing PNGs needs a windowed run, which the standing headless-only
+policy doesn't allow this session to do. `docs/stills/` has 0 files; not fabricated as done.
+
 ## Tried and reverted twice: routing the bot's spine navigation through a NavigationAgent3D (2026-09-16)
 
 The persistent spine-phase softlocks (see the 10-seed table below) come from the bot's

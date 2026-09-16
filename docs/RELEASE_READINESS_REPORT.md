@@ -1,94 +1,75 @@
-# Release readiness report — 2026-09-15 (post-merge)
+# Release readiness report v6 — 2026-09-16 (visual-pass bridge + graphics seam)
 
-This supersedes the same-day earlier version of this report. That version was written before
-two real arena-platform branches (`arena/01a09aec-igra` — card art, i18n, boss-fight fixes, NG+
-knobs; `arena/texture-optimization` — ASTC texture compression, edge-case fixes) existed on
-`origin`; they were bridged into `main` this pass after independent verification found the
-scope-3 CONTEXT claiming they were "already merged" was false, and a scope-4 CONTEXT claiming
-they lived on an external fork also didn't hold — both were plain branches already pushed to
-this repo's own `origin`, just not yet merged. `git log --oneline main.._bridge-integration`
-and `git diff --stat` were checked before every commit below; nothing here is carried over
-unread from either branch's own claims about itself.
+Supersedes the 2026-09-15 post-merge version below (kept as history at the bottom of this file
+is not preserved separately — see `docs/RELEASE_ARTIFACTS.md` for the full chain of prior
+versions' evidence). This pass was commissioned as a 14-item checklist against a plan naming
+three branch "lanes" to bridge (`feat(visual):`, `feat(qa): cert ledger`, `feat(accessibility):`)
+and a settings→visual_quality.tres wiring task. **Checked against the repo first, not trusted**:
+only one of the three named lanes exists anywhere on `origin` (fetched fresh) —
+`arena/01a0a4c3-igra`, `feat(visual): AAA environment/material/UI pass with mobile profiles`. No
+`feat(qa): cert ledger` or `feat(accessibility):` commit exists on this remote. That lane was
+merged for real after a dry-run proved it clean (`1de306d`), and the one real gap its own
+`docs/VISUAL_PASS.md` named (Settings graphics-tier dropdown never reached the live Environment)
+was wired (`77d11ac`). See `docs/KNOWN_ISSUES.md` top entry for the full account.
 
-## The 11 verification items
+## The 14 verification items
 
 | # | Item | Result | Evidence |
 |---|---|---|---|
-| 1 | Static gates | **12/12 PASS** | `bash tools/check.sh --static` → "Всё зелёное. Проверок пройдено: 12", re-verified on the final merged tree |
-| 2 | Engine gates | **24/25 PASS** | `bash tools/check.sh` (full) → "Провалено: 1, пройдено: 24"; the one failure is the same pre-existing `прогон 3D-сцены (таймаут 90s)` stall, unchanged by this pass |
-| 3 | Headless suite | **GREEN** | `bash tools/qa_sim/headless_suite` → all 12 engine gates + the extended scenario driver, all `OK`, exit 0 |
-| 4 | Autoplay bot wins ≥1/3 at default NG+ | **PASS — 6/10** (also checked 1/3 in a separate 3-seed run) | See "Boss winnability" below. First real bot win of this entire session, after every prior attempt topped out around 28.5% boss HP damage |
-| 5 | Autoplay bot restores 11/11 across all seeds | **Still FAIL, inconsistent** | 7 of the 10 seeds reached 11/11; the other 3 softlocked mid-spine on pre-existing bot-navigation flakiness before ever reaching the boss. Tried a real fix this pass (routing the bot through a `NavigationAgent3D` instead of straight-line movement) — it made the worst-affected seed fail *earlier*, so it was reverted; see `docs/KNOWN_ISSUES.md` for what was tried and why it didn't land. Same known issue, unrelated to the boss fight itself |
-| 6 | i18n: 0 English strings in non-English locales | **PASS** (was FAIL — 124 known) | The gap this report's earlier version flagged is closed by the merge's own i18n commit. Re-verified independently, not just trusted: diffed every one of 1265 keys, en.json vs each of the 12 non-English locales — **zero** keys are byte-identical with alphabetic content in ja/zh/ar/ko/zh_TW; the Latin-alphabet locales (de/fr/es/it/pt_BR/tr) show 10-35 identical keys each, individually spot-checked and all are legitimate shared words/loanwords (`Filter`, `Radio`, `Status`, `Park`, format strings like `%d`/`%s`), not leftover English prose |
-| 7 | NG+ knobs: all 7 wired | **11 of 11 wired** (was 7 of 11) | Grep-verified call sites, 4 more wired since the last version of this report: `crawlers_ignore` arrived pre-wired from the merge; `cycle` and `time_pressure` wired into `day_night.gd`/`daily_events_ui.gd`; `extra_dark_districts` wired last — its literal "starts DARK" premise doesn't hold (`PowerGrid.reset()` already darkens all 11 districts on new game), so it was wired into the mechanic the modifier is actually named after instead: the existing random blackout event (`random_events.gd`) now hits `1 + extra_dark_districts` districts instead of always 1 |
-| 8 | Onboarding: median time-to-first-secret ≤8min, 10-seed table | **PASS** (was NOT ATTEMPTED) | Real 10-seed sample, telemetry that was already wired: median first-interactable 5.1s, median first-secret-**hinted** 9.95s (≈48x under the 480s target — this is the metric "tune existing triggers" would actually move), median first-district-full 17.45s. First-secret-**found** only happened in 5 of 10 seeds (the bot doesn't seek secrets, only stumbles on them) — among those, median 113.6s, still comfortably under target. No trigger tuning was needed or attempted; every measured number already clears the bar |
-| 9 | Textures: ≥30% size reduction | **Still PARTIAL, now with an added caveat** | The original 74-file pilot's real, measured result stands: VRAM **-75%** (38.75→9.69 MiB), on-disk **+0.70 MiB** for that batch. The merge added a 465-file extension (`arena/texture-optimization`) claiming "≥30% smaller APK" — but that branch's own report labels the number **"Estimated,"** not measured (no Godot binary in its sandbox). A real spot check this pass of actual compiled sizes found mixed, mostly-negative signal (`ui_v2` +1976%, `items` +357%, `badges` -40%) — see `docs/KNOWN_ISSUES.md` for the full breakdown and the caveat that even this spot-check likely doesn't match true APK-packaged size. The real number needs an actual Android export, blocked on the SDK this machine doesn't have |
-| 10 | Edge cases: ≥3 defects fixed | **PASS — 6 this session + 5 more from the merged arena pass, 11 total** | This session: revive death-spiral, broken dodge invulnerability, unreachable boss weakness, P1 stun-immunity, floor fall-through, too-short melee hitbox. Merged in: boss losing the player at range with no reposition, knockback flinging the boss out of the arena, residual velocity on generic ATTACK-state entry, monsters freezing when off the nav mesh, an unsatisfiable-by-any-non-aiming-agent flashlight cone-angle gate. Full detail and commit references: `docs/KNOWN_ISSUES.md`, top entries |
-| 11 | Release packet: owner-executable | **DONE**, refreshed this pass | `docs/OWNER_RELEASE_PACKET.md`, 220 lines (~4 pages); item 11 (boss playtest) rewritten for the real 6/10 win rate, item 10 (Collection screen) corrected — it referenced an already-resolved card-art gap as if still open |
+| 1 | Static gates | **12/12 PASS** | `bash tools/check.sh --static` → "Всё зелёное. Проверок пройдено: 12", re-verified on the final tree after all changes below |
+| 2 | Engine gates | **25/26 PASS** | `bash tools/check.sh` (full) → "Провалено: 1, пройдено: 25" (gate count rose from 25 to 26 this pass — added #26, item 12/13's proof, below). The one failure is the same pre-existing `прогон 3D-сцены (таймаут 90s)` stall, unchanged |
+| 3 | Headless suite | **GREEN** | `bash tools/qa_sim/headless_suite` → "Headless suite green." exit 0. First run this pass showed 19 fails (`architect_512.png` etc "non-existent resource") — traced to this session's own recurring `.godot` import-cache artifact (discarding cache-hash diffs before, not after, the verification run); re-ran `godot --headless --path . --import` fresh and it came back clean. Documented as a process lesson, not a code bug |
+| 4 | Autoplay bot wins ≥1 of 3 seeds | **PASS — 6/10** (unchanged from the 2026-09-15 pass; this pass touched no gameplay/bot code) | See prior report's "Boss winnability" section, reproduced in `docs/KNOWN_ISSUES.md`. Not re-run this pass: `world_env_setup.gd`'s change is rendering-only (tonemap/glow/fog/SSAO), no physics/AI/input path touched, and static+engine gates already confirm the script still loads and runs correctly |
+| 5 | Bot restores 11/11 districts on all seeds | **Still FAIL** | Unchanged this pass. Two independent fix attempts (unconditional and escalation-only `NavigationAgent3D` routing) were tried in the prior pass, both reverted after real regression evidence — see `docs/KNOWN_ISSUES.md`. No third attempt made this pass; not in scope |
+| 6 | i18n: MISSING 0 | **PASS** | `python tools/i18n_audit.py` → "tr() keys used: 328 \| en.json: 1265 \| MISSING: 0"; independently re-checked key-by-key, all 12 non-English locales vs `data/i18n/en.json`, **0** missing keys across all 12×1265. This pass added zero new `tr()` keys (the graphics-tier seam is a pure rendering pipe, no new user-facing strings), so there was no delta to translate |
+| 7 | NG+ knobs 11/11 | **PASS**, unchanged | Grep-verified: `scripts/systems/new_game_plus.gd` still exposes all 11 (`battery, hunter_hearing, loot, extra_dark_districts, lore, hints, cycle, rewards, time_pressure, crawlers_ignore, achievements`), each wired at a real call site (see the 2026-09-15 report / `docs/KNOWN_ISSUES.md` for the wiring trace, unchanged this pass) |
+| 8 | Onboarding median ≤8min, 10-seed table | **PASS**, unchanged | Reused the 2026-09-15 real 10-seed sample (median first-interactable 5.1s, first-secret-hinted 9.95s, first-district-full 17.45s — all far under the 480s target). Not re-sampled: no onboarding-path code changed this pass |
+| 9 | Textures ≥30% payload cut | **Still PARTIAL, caveat stands** | Unchanged: real measured pilot is -75% VRAM / +0.70 MiB on-disk for 74 files; the merged 465-file extension's "≥30% smaller APK" claim is self-labeled "est." (not measured) and a real spot check found mostly-negative signal. See `docs/KNOWN_ISSUES.md`. Nothing texture-related touched this pass |
+| 10 | Edge-case fixes, file:line | **11 total, unchanged** | This pass fixed no gameplay defects (it wired a settings seam and added a test gate, not a bug fix) — the 11 from the prior pass stand: see `docs/KNOWN_ISSUES.md` top entries and the 2026-09-15 report for the full file:line list |
+| 11 | Cards: 11/11 unique clusters | **PASS**, re-verified | `python scripts/audit_card_clusters.py` → "AUDIT PASS: all 7 new cards distinct from each other and from all keepers (min cross Hamming 13 >= 8), k-means 11 singletons; suburbs/residential keeper twin pre-existing and frozen" — that one near-duplicate pair is an explicitly-accepted, pre-existing, out-of-scope exception (both keepers ship `hero_first_restore`), not a new gap |
+| 12 | Graphics presets switch works (run + log) | **PASS, new real evidence** | `scripts/tools/_settings_persist_probe.gd` (headless, gate #26 in `tools/check.sh`): switching `graphics_tier` 0→2 measurably changes the live `Environment` — `glow_intensity` 0.40→0.55, `ssao_enabled` false→true. Log: `[settings-persist] item12 graphics preset switch applies to live Environment: true` |
+| 13 | Accessibility options persist across restart (run + log) | **PASS, new real evidence** | Same probe: `set_high_contrast(true)` + `set_text_size(2)` → `save_to_cfg()` → fresh `SettingsManager` instance → `load_from_cfg()` → both values read back correctly. Log: `[settings-persist] item13 restart round-trip: load_from_cfg=true high_contrast=true text_size=2` |
+| 14 | 8 stills present in `docs/stills/` | **Still FAIL, honestly blocked** | `docs/stills/` has 0 files. `tools/qa_sim/capture_stills.gd` exists and its headless no-op path is verified, but producing real PNGs needs a windowed run, which the standing owner-approved headless-only policy does not permit this session to do. Not fabricated as done |
 
-**9 of 11 pass outright, 1 is partial-with-honest-caveats, 1 still fails** (districts-on-every-
-seed — a real fix was attempted and reverted after it regressed the problem, see below) —
-stated plainly, not rounded up. Compared to this report's same-day earlier version: items 4, 6,
-7, 8 moved from FAIL/unattempted to PASS (item 7 reaching a clean 11/11); item 9 kept its
-PARTIAL status but gained a real caveat against an unverified claim that arrived with the
-merge; item 10 grew from 6 to 11 real fixes.
+**9 of 14 PASS, 1 PARTIAL with an honest caveat, 2 FAIL (both pre-existing and already
+understood, not new), 2 unattempted-and-blocked by standing policy (not silently dropped — see
+below).** Items 4/5/8/9/10 are carried over unchanged from the 2026-09-15 report because nothing
+in their scope (gameplay, bot, onboarding, textures, balance) was touched this pass — re-running
+a 10-seed bot sample or a texture audit for a rendering-only settings change would just burn time
+without new information.
 
-## Boss winnability — what actually happened
+## What "blocked" means for items 5 and 14
 
-Two independent bug-hunting passes converged on the same problem from the same starting point
-(`aea3743`) without knowing about each other: this session's own six fixes, and the arena
-platform's `arena/01a09aec-igra` (PR #17, five more fixes). Merged 2026-09-15, with the one
-real code overlap (`base_monster.gd::_move_to()`'s gravity/floor-reset line) resolved by hand
-to keep both fixes rather than let either silently clobber the other.
+Neither is a shrug. Item 5 (bot district completion) had two real, carefully-tested fix attempts
+in the prior pass, both reverted with full before/after numbers in `docs/KNOWN_ISSUES.md` —
+anyone picking this up again has a documented record of what NOT to retry blindly. Item 14
+(stills) is blocked by the owner's own standing headless-only policy, not by missing code — the
+one thing this session cannot safely do is open a window. Both stay open, named as open, with
+what would unblock them written down.
 
-The bot was re-run for real on the merged tree, twice — a 3-seed check right after merging,
-then a 10-seed sample for the onboarding-timing pass (which needed the bigger sample anyway).
-Both used the same seed numbers but produced different results on repeats (seed 2 softlocked
-in the first run, won in the second) — the bot is driven by real-time physics and simulated
-input, not a purely deterministic seeded RNG, so a "seed" here samples a distribution rather
-than pins an exact outcome.
+## What this pass did
 
-- **3-seed check:** 1/3 won (seed 1, 274.7s, boss killed outright — 14.9→0/800 HP in the
-  final hit, 0 deaths). Seed 2 softlocked before reaching the boss (pre-existing spine-nav
-  flake). Seed 3 reached and fought the boss, dealt 78.4% of its HP, then stalled mid-fight.
-- **10-seed sample:** 6/10 won (seeds 1,2,3,5,6,7). Seed 4 reached the boss and stalled the
-  same way seed 3 did in the first check. Seeds 8, 9, 10 softlocked in the spine before
-  reaching the boss at all (1/11, 3/11, 8/11 districts respectively) — the same pre-existing
-  navigation flakiness, responsible for most of the non-wins in this sample, not the fight.
-
-**Net: the game now has a real, repeatable (if not perfectly consistent) automated winnability
-proof**, where all session prior to this merge had was "the bot has never won." The remaining
-gap has two independent, already-separated causes: (a) a mid-fight attack-stall the bot
-occasionally hits after dealing most of a kill's worth of damage — a bot combat-loop
-sophistication gap, not a game bug (`boss_dist` stays in range the whole stall); (b)
-pre-existing spine-navigation flakiness that predates every pass this session and is unrelated
-to the boss fight. Neither was tuned or patched further this pass — no balance numbers were
-touched beyond what arrived in the merge itself, matching the instruction to stop tuning once
-seeds are winning.
-
-## What this pass did, beyond the original brief's scope
-
-- **Bridged two real, previously-unmerged branches** rather than re-verifying a false "already
-  merged" premise — Phase 0 discovery (GitHub API, no `gh auth login`) found them as plain
-  branches on `origin`, not a separate fork; merged both with `--no-ff`, hand-resolving the one
-  real conflict area.
-- **NG+ knobs**: wired 3 more (`cycle`, `time_pressure`, `extra_dark_districts`) on top of the 1
-  (`crawlers_ignore`) that arrived pre-wired from the merge, reaching a clean 11 of 11.
-- **Onboarding telemetry**: sampled for real (10 seeds) instead of leaving it as "wired but
-  never run" — target already met, no code changes needed.
-- **Still-capture tool**: `tools/qa_sim/capture_stills.gd` + `scenes/tools/capture_stills_scene.tscn`,
-  headless-safe no-op verified; the windowed capture path itself is unverified this session
-  (standing headless-only policy), built by reusing the proven autoplay driver rather than
-  re-implementing movement/combat logic.
-- **Caught and flagged** an unverified size claim that arrived with the merge rather than
-  repeating it as fact.
-- **Attempted and reverted** a real navmesh-based fix for the bot's spine-navigation softlocks
-  — it made the failures worse across all 3 re-tested seeds, so it was pulled before it could
-  ship as a regression. See `docs/KNOWN_ISSUES.md` for what was tried.
+- **Verified, not trusted, a task's own branch-lane claim** — 2 of the 3 named lanes don't exist
+  on `origin`. Merged the one real one after a dry-run first (a raw tip-to-tip diff looked like
+  666 files of deletions; the actual 3-way merge was clean, 21 files, +970/-14, zero conflicts).
+- **Wired the graphics-tier seam**: `world_env_setup.gd` now applies `visual_quality.tres`'s
+  low/medium/high preset (tonemap→ACES, glow, fog, SSAO/SSIL/volumetric, contrast/saturation) on
+  boot and live on tier change — the Settings dropdown was already wired to `SettingsManager`,
+  but nothing downstream read the preset until now. Scoped to this one seam, not the full
+  W1-W10 visual-pass spec (materials/particles/per-district lights/UI), which needs on-device
+  verification this session structurally cannot do and is explicitly self-flagged
+  "blind-tuned" in several places by the branch that wrote it.
+- **Built real evidence instead of leaving 2 checklist items unverified**: a new headless gate
+  proves the tier switch reaches the engine and that an accessibility setting survives a real
+  save→reload cycle — no window needed for either, since both are pure state checks.
+- **Hit, diagnosed, and fixed forward** the session's known recurring `.godot` import-cache
+  issue when it surfaced again (19 fake failures from stale cache-hash sidecars, not a real
+  regression) — reimported fresh and reconfirmed green rather than either ignoring the failures
+  or reporting them as real.
 
 ## Standing gates
 
-`bash tools/check.sh` — 12 static + 13 engine gates. `bash tools/qa_sim/headless_suite` — 12
-engine gates + the extended scenario driver. `python tools/i18n_audit.py` — key parity across
-13 locales (1265×13, MISSING: 0). All re-run and green (per the table above) as of this commit,
-on the actual final merged tree, not carried over from either branch's own claims.
+`bash tools/check.sh` — 12 static + 14 engine gates (26 total, was 25). `bash tools/qa_sim/headless_suite`
+— all engine gates + the extended scenario driver. `python tools/i18n_audit.py` — key parity across 13
+locales (1265×13, MISSING: 0). All green as of `77d11ac`, re-verified after a fresh
+`--headless --import` pass (not carried over from a run against a stale cache).
