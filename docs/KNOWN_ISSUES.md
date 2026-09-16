@@ -1,20 +1,36 @@
 # Known issues
 
-## Tried and reverted: routing the bot's spine navigation through a NavigationAgent3D (2026-09-16)
+## Tried and reverted twice: routing the bot's spine navigation through a NavigationAgent3D (2026-09-16)
 
 The persistent spine-phase softlocks (see the 10-seed table below) come from the bot's
 straight-line-to-target movement having no real obstacle routing, only a sideways "nudge" when
-fully stopped. Tried the obvious real fix: give the bot its own `NavigationAgent3D` (same
-navmesh `base_monster.gd`'s enemies already path through) and route pickup/switch approach
-through `get_next_path_position()` instead of a raw direct vector. **Made it worse, not
+fully stopped. Two separate attempts at a real fix, both reverted:
+
+**Attempt 1 — unconditional routing.** Give the bot its own `NavigationAgent3D` (same navmesh
+`base_monster.gd`'s enemies already path through) and route pickup/switch approach through
+`get_next_path_position()` instead of a raw direct vector, for every tick. **Made it worse, not
 better, on all three seeds re-tested** (8, 9, 10 — the ones that softlocked in the 10-seed
 sample below): all three now failed at 0/11 or 1/11 districts (vs. 1/11, 3/11, 8/11 before) —
-`0/3 seeds won, 3 softlock(s)`, every one earlier than its pre-fix failure point. Reverted
-immediately rather than ship a regression — root cause not diagnosed (candidates: the agent
-recomputing a path every tick off a constantly-refreshed `target_position` rather than a
-stable one, or a map-sync timing issue from parenting the agent to the moving player node
-right before reading its path the same frame). Whoever tries this again should reproduce the
-regression first (`QA_SEEDS="8 9 10" bash tools/qa_sim/autoplay_bot`) before trusting any fix.
+`0/3 seeds won, 3 softlock(s)`, every one earlier than its pre-fix failure point.
+
+**Attempt 2 — escalation-only routing.** Suspecting attempt 1's problem was querying an async
+`NavigationServer` path the same frame it was requested, tried a narrower version: only switch
+to nav-agent routing after the bot's existing stuck/nudge cycle had already failed 3 times in a
+row (several real seconds of settle time first), leaving normal movement untouched otherwise.
+**This genuinely fixed what it targeted** — re-tested on seeds 8/9/10: all three now reached
+11/11 districts (up from 1/11, 3/11, 8/11), one of them (seed 9) an outright win, with the
+other two's only remaining failure moved to the already-known boss-phase attack-stall, not
+navigation at all. But re-testing seeds 1-7 to check for side effects on previously-reliable
+seeds **found a real regression there instead**: seed 1 (which had won every single time it
+was run this session) softlocked in the spine for the first time, seed 3 (also always a win)
+softlocked too, and seed 4 got worse (used to reach 11/11 and only stall in the boss fight, now
+stalled at 1/11 in the spine). Net effect across the full 1-10 range: negative, not positive —
+reverted.
+
+Root cause not diagnosed for either attempt. Whoever tries this again should retest the full
+seed 1-10 range (not just the seeds that were already failing) before trusting any fix — this
+mechanism has now twice looked like an improvement on a narrow slice and turned out to be a net
+regression on the fuller picture.
 
 ## Boss winnability — the bot wins for the first time this session (merged 2026-09-15)
 
