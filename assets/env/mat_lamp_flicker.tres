@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://assets/shaders/streetlight_flicker.gdshader" id="1_shader"]
+
+[resource]
+shader = ExtResource("1_shader")
+shader_parameter/lit = 1.0
+shader_parameter/hum_level = 1.0
+shader_parameter/energy_mult = 1.6
