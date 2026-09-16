@@ -5,6 +5,9 @@ Godot 4 stealth-narrative game. You are the sole dev; owner only pulls, runs one
 ## Default mode: ponytail
 Apply `.claude/skills/ponytail` to every change. Shortest working diff, reuse before writing, delete over add, no unrequested abstractions. Never lazy about: understanding the flow first, validation at trust boundaries, i18n, one runnable check per non-trivial change.
 
+## Spec-kit
+Installed (`.specify/`, `.claude/skills/speckit-*`) — owner asked to always use it. For any new feature-sized wave of work, run `/speckit-specify` → `/speckit-plan` → `/speckit-tasks` → `/speckit-implement` instead of freeform planning. Small fixes/bug chases don't need the full flow.
+
 ## Read first, every wave
 `docs/PRODUCTION_BIBLE.md` — pillars, visual/audio canon, asset budgets, gameplay-canon pointers, store positioning, launch checklist. Read it before starting any new wave of work; it exists so canon doesn't have to be re-derived from screenshots or memory each time.
 
