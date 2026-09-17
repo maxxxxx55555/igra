@@ -1,5 +1,51 @@
 # Known issues
 
+## Owner-only cleanup: `assets/_orphaned/` and `assets/audio/_pre_norm/` physical deletion (2026-09-17)
+
+Both are already excluded from the shipped `.pck` via `export_presets.cfg` exclude_filter
+(`11cbb4e`, 27.7% real measured cut — see `docs/SIZE_BUDGET.md`). Physical deletion from the repo
+is a separate, smaller win (frees repo/checkout disk space, not build size) and is blocked in
+automated sessions: the local tool-permission classifier refuses `git rm -r` as irreversible
+destruction even though both are git-tracked and fully revertible. Owner-run, when convenient:
+
+```
+git rm -r assets/_orphaned assets/audio/_pre_norm
+```
+
+`assets/_orphaned/` was independently verified dead twice (a prior session's own orphan-scan,
+documented in this file's own history/`docs/ERROR_LOG_FINAL.md`; re-confirmed this session via
+the same 17-directory dynamic-loader narrowing in `docs/SIZE_BUDGET.md`). `assets/audio/_pre_norm/`
+is documented "do NOT import" archive material in `docs/ASSET_HANDOFF.md`/`docs/REPORT_ASSETS.md`.
+Also newly spotted this session, not yet investigated: a `res://_QUARANTINE/` directory exists
+(seen in `compile_gate_scene.tscn`'s gate output, scenes under `_QUARANTINE/scenes/effects/`) —
+another asset-quarantine location the size-budget pass didn't cover; worth folding into the next
+size pass.
+
+## Audio bitrate (E7 of `docs/SIZE_BUDGET.md`) — investigated, not executed, on purpose (2026-09-17)
+
+`assets/audio/{music,sfx,ambience,ui}` is not raw in the shipped build: every `.wav`'s own
+`.import` file already sets `compress/mode=2` (Vorbis, applied at Godot's import step) —
+`downtown.wav` measured 1.06MB source → 214KB imported. Re-encoding an already-lossy-compressed
+stream with an external tool (ffmpeg) risks a second, audible generation of quality loss for a
+gain that isn't confirmed to exist, since Godot 4.7's WAV importer doesn't appear to expose a
+separate kbps/quality field in its `.import` params (only the `compress/mode` enum was found).
+Skipped deliberately rather than guessed at. If this is worth revisiting: first confirm whether
+`compress/mode`'s "Quality" setting has a tunable bitrate anywhere in Godot 4.7's import dock (not
+found in the `.import` file's own param list), before touching any source audio.
+
+## Stills / store screenshots — owner-run, not automatable in this environment (2026-09-17)
+
+`tools/qa_sim/capture_stills.gd`'s own header already documents why:
+`DisplayServer.get_name() == "headless"` → no compositor → no-op by design, confirmed unchanged
+this session. The tool itself works; it just needs a real window. Owner-run command:
+
+```
+"C:\Users\Maxsim\Desktop\TLS_Build\godot_extracted\Godot_v4.7-stable_win64_console.exe" --path . --windowed res://scenes/tools/capture_stills_scene.tscn
+```
+
+Outputs 8 canonical shots to `docs/stills/`. The 8-shot STORE_KIT list in `docs/STORE_KIT.md` and
+the before/after GAMEFEEL_SPEC stills both depend on this same owner-run windowed step.
+
 ## Visual pass merged, graphics-tier seam wired; two named "lanes" from this task's own brief don't exist (2026-09-16)
 
 A follow-up task named three branch "lanes" to bridge by commit-subject prefix: `feat(visual):`,
@@ -651,36 +697,6 @@ the audio toolchain holder's call, not code's. Full reasoning:
 `docs/STATIC_AUDIT.md` #32, Arena's `docs/CONTENT_PIPELINE_AUDIT.md`
 finding F1.
 
-## `PuzzleSystem` bonus reward economy — RESOLVED (2026-09-10 MEGA POLISH)
-
-Was: `puzzle_system.gd`'s `_puzzle_data` had one row per district, all
-cited as "puzzle canon" by the content packs, but only `fuse_substation`
-(via `cable_box_interactable.gd` in `substation.tscn`) is reachable —
-`tools/qa_sim/puzzle_economy_sim.py` proves 1/11. Decided (b): trimmed
-`_puzzle_data` to the one reachable row so the table stops claiming
-canon it can't deliver. Option (a) — wiring the other 9 into
-`power_switch.gd` — was rejected because it double-counts `puzzle_solved`
-for `progress_tracker`/`xp_manager` and shifts the reward economy (a
-GDD §3.3/§8 balance call). Core DARK→FULL restoration for all 11
-districts runs on the independent `power_switch.gd` loop and is
-unaffected. `_grant_reward()` kept general for a future real per-district
-puzzle interactable. Full reasoning: `docs/STATIC_AUDIT.md` #31,
-`PLAN.md` 2026-09-10 MEGA POLISH entry.
-
-## Endings: all 5 GDD §12.4 endings reachable — RESOLVED (2026-09-10 MEGA POLISH)
-
-Was: only Light/Hope/Truth reachable — `_determine_ending()` only ran on
-`game_won` (always `full == 11`), so `survivor`/`dark` were dead. Now
-`GameManager.trigger_death()` calls `EndingsManager.evaluate_death_ending()`:
-death with the grid unrepaired → **Dark**; death with `power_station` at
-FULL but `full < 11` → **Survivor** (reachable because `school` and
-`gas_station` are optional leaf districts — the spine can reach
-`power_station` FULL at `full == 9`). Win path unchanged.
-`tools/qa_sim/endings_sim.py` walks the reachable state space and
-confirms all 5 (`PASS`). Also fixed `core/endings.gd`'s stale
-`"powerplant"` id → `"power_station"`. Full trace: `docs/STATIC_AUDIT.md`
-#6.
-
 ## `WorldBible.is_revealed()` doesn't distinguish "district exists" from "district visited"
 
 `scripts/world/world_bible.gd`'s `is_revealed(reveal)` checks
@@ -933,23 +949,6 @@ fossil from an earlier prototype phase — inert in this 3D game (Light2D
 nodes do not affect the 3D rendering pipeline at all). Not deleted for
 the same reason; flagged here so nobody spends time trying to "fix" a
 2D light node in a 3D scene.
-
-## Skill tree: 4th branch + skill-string localization — RESOLVED
-
-Both of these were open earlier and are now closed (noticed stale during
-the 2026-09-10 RC pass; verified against the current code):
-
-- **4th branch (GDD §8 wants 4, project had 3):** `skill_tree_manager.gd`'s
-  `SKILL_TREES` now defines **4** — `combat`, `survival`, `utility`,
-  `stealth` (the Stealth branch: `silent_steps`, `cold_trail`, real
-  effects wired into `player_3d.gd`/`base_monster.gd`). Added in PLAN.md
-  Stage 3, commit `b861b14`.
-- **Skill name/description localization:** every skill's `name`/
-  `description` in `SKILL_TREES` is now an `SKILL_*` i18n key
-  (`SKILL_DAMAGE_BOOST_1_NAME`, `SKILL_SILENT_STEPS_DESC`, …), resolved
-  through `LocalizationManager`, present in all 13 locales
-  (`i18n_audit.py`: `MISSING: 0`). The raw-English-in-code state this
-  entry used to describe is gone.
 
 ## Confirmed dead code, not touched (fixing it would have zero player-facing effect)
 
