@@ -1,5 +1,28 @@
 # Known issues
 
+## W2-W10 visual pass — deliberately not attempted this session (2026-09-17)
+
+`docs/VISUAL_PASS.md` §8 has a fully-specified wiring plan (W1-W11) for the merged visual-pass
+branch's delivered materials/shaders (`camera_attributes_night.tres`, `mat_lamp_flicker.tres`,
+`mat_wet_asphalt.tres`, `contact_shadow.gdshader`, `vfx_rain.tscn`, etc.) — verified this session
+that only **W1** (graphics-tier preset) is actually wired; W2-W10 are real files sitting unused,
+confirmed via `grep -rln "<filename>"` finding zero consumers for each.
+
+Not implemented, on purpose: two real blockers surfaced while investigating just W5 (wet ground).
+First, the "live" ground-material code path is genuinely ambiguous — `district_grading.gd` looks
+like the place to wire it (has a `_apply_ground` function, per-district floor texture logic) but
+its own file comment says it's dead code today (`world_environment_path`/`district_root_path`
+exports never set by its instantiator); the actual live ground rendering appears to be scene-file
+authored, not script-driven, meaning a real fix needs opening and editing up to 11 district
+`.tscn` files, not one script. Second — and the bigger reason — this session has no way to
+visually verify a shader/material change (headless-only, confirmed in the STORE_KIT/stills entry
+below), and `docs/SIZE_BUDGET.md`'s E2-E4 correction (same session) just proved this repo has
+real, non-obvious traps around "is this actually wired or just delivered" that are easy to get
+wrong confidently. Wiring 9 waves of 3D rendering/shader code blind, with no render to check
+against, risked shipping something subtly broken with no way to catch it — worse than leaving it
+honestly open. `docs/VISUAL_PASS.md` §8 already has the exact per-wave instructions; this is real,
+scoped, dev-remaining work for a session (or a human) that can actually see the game render.
+
 ## Owner-only cleanup: `assets/_orphaned/` and `assets/audio/_pre_norm/` physical deletion (2026-09-17)
 
 Both are already excluded from the shipped `.pck` via `export_presets.cfg` exclude_filter
