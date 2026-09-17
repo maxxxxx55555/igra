@@ -17,8 +17,19 @@
 ## New blocker this turn
 `git rm -r assets/_orphaned/` was refused by the same local tool-permission classifier ("Irreversible Local Destruction") even though the folder is git-tracked and fully revertible. This blocks **any** file deletion in this session, not just this one — same will apply to P3's E5 and any future delete. Substituted export-filter exclusion where possible (done above); physical deletion needs the owner to run it directly, or grant a Bash permission rule for `git rm`.
 
+## E7 (audio re-encode) — investigated, not executed
+`assets/audio/{music,sfx,ambience,ui}` (96MB source, 140 .wav + 103 .ogg) is NOT raw in the
+shipped build — checked `downtown.wav`'s own `.import` file: `compress/mode=2` (Vorbis, already
+applied at Godot's import step). Source 1.06MB -> imported `.sample` 214KB, already ~20%. The
+27.7% .pck cut already measured reflects this real compressed size, not the 96MB source figure.
+E7's "music <=96kbps / sfx <=64kbps" ask is a further bitrate-tightening on an already-compressed
+format, not a raw-WAV-to-OGG conversion — needs checking whether Godot 4.7's WAV importer exposes
+a quality/kbps knob (not visible in the `.import` params seen so far, only mode=2 with no bitrate
+field) before touching anything. Not done this turn — a wrong move here is lossy and hard to spot
+without listening to each file, so it gets its own careful pass rather than a rushed one.
+
 ## Next phase
-P3 remainder — audio re-encode (E7), then P4/P5 code (juice + accessibility toggles; stills stay owner-run per the codebase's own documented headless-capture limitation, see below)
+P4 code (juice + accessibility toggles per GAMEFEEL_SPEC.md — the only P4/P5 work not blocked; stills capture stays owner-run per the STEP 1 finding above)
 
 ## STEP 1 finding
 `scripts/tools/viewport_capture.gd` was NOT built. `tools/qa_sim/capture_stills.gd` (already exists, wired to `scenes/tools/capture_stills_scene.tscn`) already tried headless capture and documented why it can't work: `DisplayServer.get_name() == "headless"` → no compositor → no-op by design. Building a new headless capture script would just rediscover the same failure. Stills/store-screenshot capture stays a windowed, owner-run step using the existing tool.
