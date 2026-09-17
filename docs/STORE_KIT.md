@@ -12,18 +12,34 @@ screenshot list.
 ## Locale coverage — EN + 12
 
 Matches `SettingsManager.LANGUAGES` (the 13 locales the game itself ships in — store listing
-languages should track playable languages, not diverge from them):
+languages should track playable languages, not diverge from them). Two tiers, not conflated:
 
-| Locale | Store listing status |
+- **Full long-form listing** (description, bullets, keywords — `docs/store/play_store.md` shape):
+  EN only, done. Translating the full listing into 12 more locales is real professional
+  translation work this doc doesn't fabricate — machine-drafted-then-native-checked, tracked as
+  dev-remaining.
+- **Short description** (≤80 chars, the line shown in search results before a user opens the
+  listing page): all 13 done below — small enough to translate carefully at this pass without
+  guessing at nuance a longer passage would risk.
+
+| Locale | Short description (≤80 chars) |
 |---|---|
-| en | done — `docs/store/play_store.md` / `steam.md` |
-| ru | done — game's primary dev language; store copy not yet translated (dev-remaining) |
-| es, de, fr, it, pt_BR, tr, ja, ko, zh, zh_TW, ar | not started (dev-remaining) |
+| en | Restore the light. Stealth horror FPS where every streetlight is life. |
+| ru | Верни свет. Стелс-хоррор от первого лица, где каждый фонарь — жизнь. |
+| es | Restaura la luz. Terror sigiloso en primera persona donde cada farola es vida. |
+| de | Bring das Licht zurück. Stealth-Horror, in dem jede Laterne Leben bedeutet. |
+| fr | Rallume la lumière. Horreur furtive où chaque réverbère est une vie. |
+| it | Riaccendi la luce. Horror stealth dove ogni lampione è vita. |
+| pt_BR | Restaure a luz. Terror furtivo onde cada poste é vida. |
+| tr | Işığı geri getir. Her sokak lambası bir can taşıyan gizlilik korkusu. |
+| ja | 灯りを取り戻せ。一つ一つの街灯が命になるステルスホラー。 |
+| ko | 빛을 되찾아라. 모든 가로등이 생명인 스텔스 호러. |
+| zh | 重燃光明。每一盏路灯都是生命的潜行恐怖游戏。 |
+| zh_TW | 重燃光明。每一盞路燈都是生命的潛行恐怖遊戲。 |
+| ar | أعد النور. رعب تسللي حيث كل عمود إنارة هو حياة. |
 
-Translating the other 11 into store-listing copy is real translation work, not something to
-fabricate here — each needs either a professional pass or, at minimum, a machine-translation draft
-a native speaker checks before submission. Out of scope for this doc-only phase; tracked as
-dev-remaining in the P6 readiness report.
+Full long-form listing translation for es/de/fr/it/pt_BR/tr/ja/ko/zh/zh_TW/ar (11 locales) remains
+dev-remaining — this pass deliberately didn't rush a full-page translation at low review depth.
 
 ## Privacy policy skeleton
 
