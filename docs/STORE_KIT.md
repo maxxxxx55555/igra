@@ -1,0 +1,80 @@
+# Store kit
+
+## Listing copy — reuse, don't duplicate
+
+English listing copy already exists and is GDD-sourced:
+[docs/store/play_store.md](docs/store/play_store.md) (Google Play) and
+[docs/store/steam.md](docs/store/steam.md) (Steam). Hook line (from
+`docs/PRODUCTION_BIBLE.md` §6): *"Blackout city. You are the grid engineer."* This file does not
+re-write that copy — it adds what's missing: locale coverage, a privacy skeleton, and the
+screenshot list.
+
+## Locale coverage — EN + 12
+
+Matches `SettingsManager.LANGUAGES` (the 13 locales the game itself ships in — store listing
+languages should track playable languages, not diverge from them):
+
+| Locale | Store listing status |
+|---|---|
+| en | done — `docs/store/play_store.md` / `steam.md` |
+| ru | done — game's primary dev language; store copy not yet translated (dev-remaining) |
+| es, de, fr, it, pt_BR, tr, ja, ko, zh, zh_TW, ar | not started (dev-remaining) |
+
+Translating the other 11 into store-listing copy is real translation work, not something to
+fabricate here — each needs either a professional pass or, at minimum, a machine-translation draft
+a native speaker checks before submission. Out of scope for this doc-only phase; tracked as
+dev-remaining in the P6 readiness report.
+
+## Privacy policy skeleton
+
+No `docs/store/PRIVACY.md` or published policy page exists yet — `play_store.md`'s own Data Safety
+section already flags this as a submission blocker ("Privacy policy URL: TODO — publish a policy
+page"). Skeleton, grounded in the game's actual data footprint (verified this session — no
+analytics SDK, no account system found in `scripts/`):
+
+```
+# Privacy Policy — THE LAST STREETLIGHT
+
+Effective date: <fill in at publish>
+
+This game does not collect, store, or transmit personal data to us or any third party in its
+current build.
+
+- Save data stays on your device (local file, never uploaded).
+- Local-network co-op only connects to devices on the same LAN you explicitly join — no data
+  leaves your network.
+- [IF AppLovin MAX ad SDK key is live at ship time: this build shows ads via AppLovin MAX, which
+  may collect an advertising identifier and usage data per their own policy — link AppLovin's
+  privacy policy here and disclose this in the Play Data Safety section too.]
+- Contact: <owner email/support address>
+```
+
+This is a skeleton, not a filed policy — the owner fills in the effective date, contact, and the
+AppLovin bracket (delete it if shipping without ads; keep and link if the real SDK key is in by
+launch — see `docs/store/HUMAN_CHECKLIST.md`).
+
+## 8-shot screenshot list
+
+Grounded in the actual pillars (`docs/PRODUCTION_BIBLE.md` §1: light-vs-dark, noise/visibility
+stealth, power-restoration-as-reward) and the real district roster (11 districts, verified in
+`scripts/world/district_layouts.gd`: suburbs, residential, park, school, industrial, substation,
+power_station, + 4 more):
+
+1. **Dark district, pre-restoration** — cold ambient, no streetlights, player's flashlight cone as
+   the only warm light source (pillar 1, primary hook image).
+2. **Same district, post-restoration** — streetlights lit, warm ambient shift (the "reward" beat,
+   pillar 3) — pairs with #1 as a before/after.
+3. **Stealth moment** — player in a flashlight cone's edge, an enemy mid-patrol, noise-radius
+   readable from the HUD (pillar 2 — sells "simulation, not a meter").
+4. **Substation/industrial district** — mechanical/electrical visual variety, distinct from the
+   suburban shots.
+5. **City map / district-power overview screen** (`city_map.gd`'s hex district-stage art) — shows
+   scope (multiple districts, progress state) in one UI shot.
+6. **Combat/encounter beat** — one of the 7 monster types, framed to read as tense not gory (PEGI
+   16 per `docs/PRODUCTION_BIBLE.md` §6 — avoid a shot that reads as the rating's ceiling).
+7. **A puzzle/interior/quest beat** — school or park district interior, shows non-combat variety.
+8. **HUD/inventory or photo-mode shot** — sells the systems (health/stamina/battery bars, inventory,
+   or the existing photo-mode feature from `docs/PRODUCTION_BIBLE.md`'s "already done" list).
+
+Capture mechanics (windowed, owner-approved per this run's constraints) are P5's job, not this
+doc's — this is the shot list P5 executes against.
