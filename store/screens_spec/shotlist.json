@@ -1,0 +1,181 @@
+{
+  "version": 1,
+  "_contract": "Store-gallery shot list with captions in the Keeper's voice (terse, second person, archaic lean, ellipses, no exclamation marks). caption/alt are EN source strings: localize them, never rewrite this file for a locale - a localized media caption travels with its own-language capture pass (see the ru entries in variants). Captions are store/press text only and are NEVER burned into the PNG (Play applies its own overlay) - see store/screenshot-plan-detailed.md section 3. artifact paths are the delivered frames; status mirrors that plan's status table (section 0.5). id is the join key to the plan: never renumber.",
+  "canvas": {
+    "gallery": "1920x1080",
+    "phone": "1920x1080 (1920x864 content + 108 px letterbox, per section 7)"
+  },
+  "budgets": {
+    "caption_chars": 120,
+    "alt_chars": 200
+  },
+  "play_console_upload_order": [
+    "shot01_light_vs_dark",
+    "shot02_district_boundary",
+    "shot05_restored_forecourt",
+    "shot07_last_streetlight",
+    "shot08_city_map",
+    "shot_p1_touch_first_light",
+    "shot_p2_touch_crouch",
+    "shot_p3_touch_interact"
+  ],
+  "shots": [
+    {
+      "id": "shot01_light_vs_dark",
+      "plan": "section 3 Shot 1 (money shot)",
+      "title": "The hook - light vs. the dark",
+      "pillar": "light-vs-dark",
+      "district": "suburbs",
+      "zone": "z_maple_row",
+      "artifact": "store/screenshots/shot01_light_vs_dark_1920x1080_en.png",
+      "status": "delivered",
+      "caption": "One lamp against the whole night... and the street remembers morning.",
+      "alt": "Warm streetlight pools recede down Maple Row toward the camera; past the north exit the road is black.",
+      "variants": [
+        {
+          "locale": "ru",
+          "artifact": "store/screenshots/shot01_light_vs_dark_1920x1080_ru.png",
+          "status": "optional_capture",
+          "caption": "Один фонарь против всей ночи... и улица вспоминает утро."
+        }
+      ]
+    },
+    {
+      "id": "shot02_district_boundary",
+      "plan": "section 3 Shot 2",
+      "title": "One city - a district boundary",
+      "pillar": "light-vs-dark",
+      "district": "residential",
+      "zone": "z_exit_east",
+      "artifact": "store/screenshots/shot02_district_boundary_1920x1080_en.png",
+      "status": "delivered",
+      "caption": "You saved this block. Ahead, the dark keeps its own counsel...",
+      "alt": "Standing at the residential barricade facing the park: lit residential block behind, black trees and pond ahead, one brass lamp at the edge.",
+      "variants": []
+    },
+    {
+      "id": "shot03_stealth_horror",
+      "plan": "section 3 Shot 3",
+      "title": "Stealth horror",
+      "pillar": "noise-visibility-stealth",
+      "district": "residential",
+      "zone": "z_courtyard_play",
+      "artifact": "store/screenshots/shot03_stealth_horror_1920x1080_en.png",
+      "status": "capture_needed",
+      "caption": "The light shows you the way... and shows you to it.",
+      "alt": "Player crouched at the edge of a flashlight pool on the playground chalk-lamp; a tall shadow waits just outside the light.",
+      "variants": []
+    },
+    {
+      "id": "shot04_keeper_lore",
+      "plan": "section 3 Shot 4",
+      "title": "The voice - keeper lore",
+      "pillar": "power-restoration-as-reward",
+      "district": "park",
+      "zone": "z_keeper_shed",
+      "artifact": "store/screenshots/shot04_keeper_lore_1920x1080_en.png",
+      "status": "capture_needed",
+      "caption": "A voice on the shortwave... someone still keeps the night honest.",
+      "alt": "Close on the keeper's shed bench: one brass work lamp, a shortwave radio, scattered papers.",
+      "variants": []
+    },
+    {
+      "id": "shot05_restored_forecourt",
+      "plan": "section 3 Shot 5",
+      "title": "Restored world, nobody home",
+      "pillar": "power-restoration-as-reward",
+      "district": "gas_station",
+      "zone": "z_pump_island",
+      "artifact": "store/screenshots/shot05_restored_forecourt_1920x1080_en.png",
+      "status": "delivered",
+      "caption": "The pumps are dead. The canopy burns... and nobody comes to pay.",
+      "alt": "Empty wet forecourt under the canopy's sodium light; pump displays dark, the queue road black beyond.",
+      "variants": []
+    },
+    {
+      "id": "shot06_mystery_inside",
+      "plan": "section 3 Shot 6",
+      "title": "The mystery inside",
+      "pillar": "power-restoration-as-reward",
+      "district": "industrial",
+      "zone": "z_workshop_b",
+      "artifact": "store/screenshots/shot06_mystery_inside_1920x1080_en.png",
+      "status": "capture_needed",
+      "caption": "The bench is warm. Whoever worked here... did not come back.",
+      "alt": "One warm lamp burning over an empty work bench in the dark industrial plant, no operator.",
+      "variants": []
+    },
+    {
+      "id": "shot07_last_streetlight",
+      "plan": "section 3 Shot 7 (money shot)",
+      "title": "The ending - the last streetlight",
+      "pillar": "power-restoration-as-reward",
+      "district": "power_station",
+      "zone": "z_cooling_towers / z_station_gate",
+      "artifact": "store/screenshots/shot07_last_streetlight_1920x1080_en.png",
+      "status": "delivered",
+      "caption": "The gate lamp burns... and the city answers, one street at a time.",
+      "alt": "Wide view from the cooling-tower gantry: towers lit from below, the station gate lamp glowing at the foot.",
+      "variants": []
+    },
+    {
+      "id": "shot08_city_map",
+      "plan": "section 3 Shot 8",
+      "title": "Scope and localization - the city map",
+      "pillar": "scope",
+      "district": "all",
+      "zone": "city map overlay",
+      "artifact": "store/screenshots/shot08_city_map_1920x1080_en.png",
+      "status": "delivered",
+      "caption": "Eleven rings. Count them... count what you gave back.",
+      "alt": "The in-game city map: the chain of 11 districts, most rings lit, one still dark.",
+      "variants": [
+        {
+          "locale": "ru",
+          "artifact": "store/screenshots/shot08_city_map_1920x1080_ru.png",
+          "status": "capture_needed",
+          "caption": "Одиннадцать колец. Сосчитай их... и сосчитай, что ты вернул."
+        }
+      ]
+    },
+    {
+      "id": "shot_p1_touch_first_light",
+      "plan": "section 7 P1",
+      "title": "Phone - first light, touch HUD",
+      "pillar": "touch-controls",
+      "district": "suburbs",
+      "zone": "first light",
+      "artifact": "store/screenshots/shot_p1_touch_first_light_1920x1080_en.png",
+      "status": "delivered",
+      "caption": "First light. Yours to carry now...",
+      "alt": "Phone touch HUD over the suburbs at first light: virtual joystick, action buttons, health, stamina and battery bars.",
+      "variants": []
+    },
+    {
+      "id": "shot_p2_touch_crouch",
+      "plan": "section 7 P2",
+      "title": "Phone - crouch, stealth read",
+      "pillar": "noise-visibility-stealth",
+      "district": "residential",
+      "zone": "z_courtyard_play",
+      "artifact": "store/screenshots/shot_p2_touch_crouch_1920x1080_en.png",
+      "status": "delivered",
+      "caption": "Crouch low. Let the dark forget your name...",
+      "alt": "Crouched player in a residential courtyard with the stealth read visible on the touch HUD.",
+      "variants": []
+    },
+    {
+      "id": "shot_p3_touch_interact",
+      "plan": "section 7 P3",
+      "title": "Phone - one-tap fix, interact glyph",
+      "pillar": "touch-controls",
+      "district": "residential",
+      "zone": "power switch",
+      "artifact": "store/screenshots/shot_p3_touch_interact_1920x1080_en.png",
+      "status": "delivered",
+      "caption": "One switch... and the street owes you a light.",
+      "alt": "Player at a residential power switch with the interact glyph pulsing on the touch HUD.",
+      "variants": []
+    }
+  ]
+}
