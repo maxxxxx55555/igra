@@ -4,6 +4,25 @@ One line per artifact: what it is, where it lives, what it proves. Source of tru
 claim always stays in the artifact itself — this file only points at it. Started
 2026-09-12 (RELEASE CONVERGENCE PASS), updated 2026-09-13 through FINAL CONSOLIDATION.
 
+## v7 closure pass (2026-09-17) — 4 of 5 DEV-REMAINING items closed, one self-caught correction
+
+Closed v7's DEV-REMAINING list: fixed the `flow_check.py` tool bug, got a definitive (not
+"appears to be") answer on audio bitrate, added all 13 locales' short store descriptions, and
+deliberately did NOT force through the full W2-W10 visual pass blind. The size-budget narrowing
+(item 2) is the notable one: a first attempt over-excluded 6 real, documented, planned-but-unwired
+asset directories on zero-code-reference evidence alone — caught by cross-checking delivery docs
+instead of trusting the grep, reverted in the same pass, and reported honestly rather than left as
+a wrong 36.6%/27.7% number.
+
+| Artifact | Where | What it proves |
+|---|---|---|
+| `flow_check.py` fix | `tools/flow_check.py`, commit `822642f` | Master-bus check no longer fails on a valid bus layout; static gates 12/12 |
+| Size narrowing + correction | `export_presets.cfg`, `docs/SIZE_BUDGET.md`, commits `f29bbfc` then `3eab8e3` | real, corrected 23.5% total payload cut (215,512,000 bytes); the wrong-then-fixed methodology is documented, not hidden |
+| Audio bitrate — definitive | `docs/KNOWN_ISSUES.md`, commit `ce8f7b6` | checked Godot's own `ResourceImporterWAV` reference doc; no safe control exists, no files touched |
+| W2-W10 not attempted | `docs/KNOWN_ISSUES.md`, commit `3980737` | honest reasoning: only W1 wired, live/dead ground-material ambiguity found, no visual verification capability |
+| 13-locale short descriptions | `docs/STORE_KIT.md`, commit `2ce2be6` | all 13 locales, char-count verified ≤80 |
+| Readiness v7.1 | `docs/RELEASE_READINESS_REPORT.md` | weighted 67% (up from 62%), every row cited to a real commit or run |
+
 ## Premium release pack + juice accessibility gating (2026-09-17) — v7 readiness, 27.7% payload cut, real not fabricated
 
 Commissioned as a 6-phase autonomous premium-release push assuming no prior arena-session work

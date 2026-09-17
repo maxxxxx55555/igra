@@ -1,3 +1,69 @@
+# Release readiness report v7.1 — 2026-09-17 (closure pass: 5 DEV-REMAINING items from v7)
+
+Supersedes v7 below (kept as history; v7.0.0-rc1 stays tagged on origin as released, per explicit
+instruction — this isn't a rewrite of what shipped, it's the next real pass). Closed 4 of v7's 5
+DEV-REMAINING items for real; the 5th (full W2-W10 visual pass) was investigated and deliberately
+not attempted — see below, not silently dropped.
+
+**Correction to v7's own reported number**: v7 said the payload cut was 27.7%. That figure already
+baked in a mistake from the prior P3 session (`assets/store/v2`/`assets/store/endings` excluded as
+"dead marketing" when they're real planned content for platform store listings and the ending
+screens). This pass's own first attempt at narrowing the size budget further made the *same class*
+of mistake on a larger scale — 6 directories worth of real, documented, planned-but-unwired
+content (menu-parallax art, touch-gesture pictograms, the map-screen UI, etc.) excluded on
+zero-code-reference evidence alone, without cross-checking the delivery docs that would have
+caught it. Caught and reverted within the same pass rather than left standing — full trace in
+`docs/SIZE_BUDGET.md`'s "E2-E4 executed... then corrected" section. **Real total cut: 23.5%**
+(215,512,000 bytes, down from an original 281,710,668), not 27.7% and not the 36.6% this pass
+briefly claimed in between.
+
+## v7's 5 DEV-REMAINING items — closure status
+
+| # | Item | Result |
+|---|---|---|
+| 1 | `flow_check.py` Master-bus check fix | **Done**, `822642f` — real tool bug (checked for a string Godot's own bus-layout format never writes for the implicit index-0 bus), not a game bug. Static gates now 12/12 |
+| 2 | SIZE_BUDGET E2-E4 narrowing | **Done, with a self-caught correction** — see above. Real cut 23.5%, `3eab8e3` |
+| 3 | Audio bitrate investigation | **Done, definitive** — `ce8f7b6`, checked `../refs/godot-docs`'s authoritative `ResourceImporterWAV` reference: no bitrate/quality control exists in Godot 4.7's WAV importer at all (3-value enum only). No files re-encoded |
+| 4 | Full W2-W10 visual pass | **Not attempted, on purpose** — `3980737`. Verified only W1 is wired; W2-W10's materials/shaders exist unused. Not wired because (a) the live ground-material code path is genuinely ambiguous (looks scene-file-based, not script-based, needing up to 11 `.tscn` edits to verify), and (b) this session cannot visually verify a shader/material change, and item 2's own correction just proved this repo has real, easy-to-miss wired-vs-delivered traps. Full wiring spec already exists in `docs/VISUAL_PASS.md` §8 for whoever can see the render |
+| 5 | Store listing 12 locales | **Partial, real** — `2ce2be6`. All 13 locales now have a translated, char-verified (≤80) short description. Full long-form listing (description/bullets/keywords) stays untranslated for 11 locales — deliberately not rushed at low review depth |
+
+## Verification (real runs, this pass)
+
+| Item | Result | Evidence |
+|---|---|---|
+| Static gates | **12/12 PASS** | `bash tools/check.sh --static` → "Всё зелёное. Проверок пройдено: 12" |
+| Engine gates (full) | **25/26 PASS** | `bash tools/check.sh` → "Провалено: 1, пройдено: 25". The 1 fail is `прогон 3D-сцены (таймаут 90s)` — the same long-documented pre-existing stall, unchanged. `flow_check` no longer among the failures |
+| Compile gate | **bad=0** | `compile_gate_scene.tscn`, re-run after every export-filter change this pass |
+| Save signing + tamper probe | **fails=0** | `save_integrity_check_scene.tscn`, re-verified in the full run above |
+| Payload cut | **23.5% real, measured, corrected** | see above and `docs/SIZE_BUDGET.md` |
+| Stills / store shots | **0 — still owner-run** | unchanged from v7, `docs/KNOWN_ISSUES.md` has the exact command |
+
+## Weighted readiness: **67%** (up from v7's 62%)
+
+| Category | Weight | Score | Change from v7 | Why |
+|---|---|---|---|---|
+| Engineering gates | 30 | 96% | +4 | 25/26, real fix landed (flow_check), only the pre-existing stall remains |
+| Security | 10 | 100% | — | unchanged |
+| Size/perf | 15 | 60% | +5 | real 23.5% cut with a corrected, trustworthy methodology (worth more than a higher but wrong number); E5 physical delete and `surfaces/`/`ui/` narrowing still open |
+| Visual/juice | 10 | 35% | — | unchanged — W2-W10 investigated, not wired, for good reason (see item 4 above) |
+| Content/i18n | 10 | 100% | — | unchanged |
+| Store/marketing | 10 | 45% | +15 | all 13 locales now have a real short description; full listing still EN-only |
+| Owner-only steps | 15 | 0% | — | structurally unchanged, not a code gap |
+
+`30×0.96 + 10×1.00 + 15×0.60 + 10×0.35 + 10×1.00 + 10×0.45 + 15×0.00 = 66.8` → **67%**
+
+## Gaps (updated)
+
+OWNER-ONLY list is unchanged from v7 (see below, carried forward) — nothing in this pass reduced
+it, since none of the 5 items were account/GUI/signing-key/eyes-on-render work.
+
+DEV-REMAINING, updated: SIZE_BUDGET E5 (physical deletion, still tool-permission-blocked) +
+`surfaces/`/`ui/` per-file narrowing; full W2-W10 visual pass (needs a session/human that can see
+the render); store listing translation to 11 locales (short descriptions done, long-form not);
+`res://_QUARANTINE/` directory still not folded into the size pass.
+
+---
+
 # Release readiness report v7 — 2026-09-17 (premium spec pack, security reuse, size cut, juice+accessibility)
 
 Supersedes v6 below (kept as history; see `docs/RELEASE_ARTIFACTS.md` for the full evidence

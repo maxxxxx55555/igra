@@ -1,23 +1,14 @@
-# Run state — premium release push
+# Run state — premium release push (closure run)
 
-## Phases done
-- P1 `6d356f6`: 5 premium docs, grounded in real repo state (not invented).
-- P2 (no new commit): save signing + tamper probe already existed and is gated — reused, re-verified `fails=0`.
-- P3 `11cbb4e`: export-filter exclusion of `_pre_norm`/`_orphaned`/marketing dirs, **27.7% real measured `.pck` cut**. Audio bitrate (E7) investigated, skipped on purpose (already Vorbis-compressed at import; see `docs/KNOWN_ISSUES.md`).
-- P4 `f372a5c`: 3 new accessibility toggles (reduce_flash/reduce_time_fx/reduce_ui_motion), all 13 locales; juice wired at real shared call sites (wow_director hit-stop/explosion, toast pop, button press-pulse), all gated. Gates green (static 12/12, compile bad=0, save-integrity 0).
-- P5: skipped by design — stills/store shots need a real window (`tools/qa_sim/capture_stills.gd`'s own no-op proves headless can't); no image tool available for key art. Both recorded owner-only.
-- KNOWN_ISSUES trim `f83e783`: removed 3 explicitly-RESOLVED entries (mechanical, not a full re-audit); added this session's real residuals.
+## Closure items done
+- ITEM 1 `822642f`: flow_check.py Master-bus check fixed (tool bug, not game bug). Static now 12/12.
+- ITEM 2 `f29bbfc` then corrected `3eab8e3`: E2-E4 size narrowing over-excluded 6 real planned-feature directories on zero-reference evidence alone (menu-parallax art, touch-gesture pictograms, map-screen UI, ending-screen art, platform store assets). Caught by cross-checking delivery docs, reverted same session. Real total cut: **23.5%** (215,512,000 bytes, down from 281,710,668), not the 36.6%/27.7% earlier claimed.
+- ITEM 3 `ce8f7b6`: audio bitrate — definitive answer via `../refs/godot-docs`: no safe kbps control exists in Godot 4.7's WAV importer (3-value enum only: PCM/ADPCM/QOA). No files changed.
+- ITEM 4: deliberately not attempted — `f83e783`-era finding (W1 only wired) plus a genuine live/dead code-path ambiguity in ground-material wiring, no visual verification capability. Recorded in `docs/KNOWN_ISSUES.md` (`3980737`).
+- ITEM 5 `2ce2be6`: 13-locale short descriptions (<=80 chars) done; full long-form listing stays dev-remaining for 11 locales.
 
-## Durable blocker (any future session)
-`git rm`/file deletion is refused by the local tool-permission classifier as irreversible, even when git-tracked and revertible. Deletions must be owner-run or need a granted Bash permission rule. Export-filter exclusion is the working substitute where it applies.
+## Correction discipline this run
+This session found and fixed a real methodology flaw in its own prior-turn work (E2-E4's first pass) rather than let the wrong number stand. Lesson for any future size-budget work in this repo: zero code references does not mean dead — cross-check `docs/REPORT_*.md`/`docs/*_SPEC.md` for "planned"/"unwired"/"delivered ahead of code" language before excluding or deleting anything.
 
-## P6 sign-off
-Real gate re-verification found P4's own commit message overclaimed "static 12/12" — true,
-reproducible number is **11/12** (`flow_check`'s Master-bus sub-check fails on any valid Godot
-bus layout, pre-existing bug, zero diff on the file this session — see v7 report for the full
-trace). Corrected in `docs/RELEASE_READINESS_REPORT.md` v7 rather than left uncorrected. Full
-engine run: 24/26 (same flow_check fail + the known 3D-scene 90s stall). v7 weighted readiness:
-**62%**. Tagged `v7.0.0-rc1`.
-
-## Done
-All 6 phases addressed (P2/P5 by informed reuse/skip, not attempted-and-failed). Nothing left to resume unless the owner wants SIZE_BUDGET E2-E4, audio bitrate, or the full W2-W10 visual pass picked up next (see v7 report's DEV-REMAINING table).
+## Next
+P6.1 sign-off — v7.1 report with corrected numbers, tag v7.1.0-rc2 (v7.0.0-rc1 stays as-is).
