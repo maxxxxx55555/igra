@@ -105,7 +105,60 @@ bus, so this check fails on any valid bus layout — confirmed via `git diff` sh
 that file across this session. Not fixed here, out of scope for a size-budget pass; flagged for
 whoever owns gate maintenance).
 
-**Not done this session** (real, not deleted-and-hidden): E7 audio re-encode (music/SFX bitrate
-pass) and the physical deletion of `assets/_orphaned/` once the owner clears the tool-permission
-block. The 720-candidate narrowed list beyond the 3 directories above still needs E3-E4's
-per-file spot-checking before any further export exclusion or deletion.
+## E2-E4 executed — per-candidate dynamic-loader narrowing (follow-up session)
+
+Of the 720 candidates surviving E1's 17-directory cut, 504 were already handled (the 3 directories
+above). The remaining 216 were checked directory-by-directory against every dynamic-loader call
+site found via `grep -rln "<dirname>"` then narrowed to the exact `assets/<path>` prefix each
+call site actually builds, same method as E1:
+
+**Confirmed dead, excluded** (directory-level, zero references anywhere, no dynamic construction
+found): `textures/items_legacy/` (26), `textures/picto_v2/` (13), `textures/docs_v2/` (6),
+`textures/stages_v2/` (4), `textures/overlays_v2/` (4), `textures/maps/` (12 — `maps_v2/` is the
+live directory `city_map.gd` actually uses), `textures/loading/` (11 — confirms the P1 spot-check
+finding: `screens.gd:139` uses one static `screens_v2/loading_street.png` for every loading
+screen), `audio/ambience/wav_src/` (5 — explicitly documented in `docs/AUDIO_CONVERT.md`/
+`docs/MISSING_IMPORTS.md`/`docs/REPORT_ASSETS.md` as archived WAV masters, "never import",
+same category as `_pre_norm`).
+
+**Confirmed dead, excluded** (file-level, directory has other live files so directory-level
+exclusion would have broken them): `textures/icons/*.png` root (12 achievement icons — superseded
+by `icons_v2/ach_medal_v2_*`, `icons/skills/` subfolder untouched, still dynamic-live) +
+`textures/icons/weapons/*` (9 — superseded by `icons_v2` weapon renders); `textures/fx/` 14 of its
+19 files (the other 5 — `blood_splatter.png`, `dust.png`, `muzzle_flash.png`, `spark_alt_64.png`,
+`strobe_flash_128.png` — are real `ext_resource` targets in `scenes/vfx/*.tscn`, confirmed live,
+left alone); `textures/renders_v2/` 5 of its files (`backpack_256.png`, `battery_pack_256.png`,
+`bundle_survivor_256.png`, `medkit_256.png`, `tools_256.png` — `player_512x768.png` in the same
+directory is a real static reference in `stats_ui.gd:52`, confirmed live, left alone).
+
+**Found, NOT excluded — a real planned-feature catch**: `audio/ambience/{ambient_dark_loop,
+ambient_lit_loop,threat_high_loop,threat_low_loop}.ogg` (4 files) have zero current code
+references, but `docs/REPORT_ASSETS.md:20` explicitly documents them as prepared assets whose
+game-code wiring was a deliberate, still-open decision ("whether new OGGs replace `Ambient_*.ogg`
+layers is a code-wiring decision outside assets ownership"), and `docs/TRAILER_STORYBOARD.md`/
+`store/trailer.md` already plan to use them. This is exactly the `hiding_spot.gd`-class mistake
+`CLAUDE.md` warns about — zero references does not mean dead when a real doc calls it a planned
+feature. Left alone, not excluded, not deleted.
+
+**Not reached this pass** (mixed live+dead directories, per-file work not completed — still real
+candidates, just not verified yet): `textures/surfaces/` (24, directory is live via
+`hiding_spot.gd`/`street_props.gd`/`streetlight_spawner.gd`), `textures/ui/` (36, almost certainly
+mixed given its generic role). `assets/store/*.png` top-level (14 loose marketing images) and
+`assets/art/*`/`assets/grading/night_grade.png` (6 loose single files) also untouched — small
+enough to be low-value versus the risk of a rushed per-file call.
+
+**Measured**, before/after this pass (Desktop preset, `godot --export-pack`, both runs same
+session, only `export_presets.cfg` changed):
+
+| | bytes | MB |
+|---|---|---|
+| After E1 (prior session) | 203,681,544 | 194.3 |
+| After E2-E4 | 178,551,292 | 170.3 |
+| **This pass's cut** | 25,130,252 | 24.0 |
+| **Total cut from original baseline** | 103,159,376 | 98.4 — **36.6%** |
+
+Gates re-checked after the change: static 12/12, `compile_gate_scene.tscn` bad=0.
+
+**Not done this session**: E7 audio re-encode (see `docs/KNOWN_ISSUES.md`), the physical deletion
+of `assets/_orphaned/`/`assets/audio/_pre_norm/` (owner-only, same tool-permission block), and the
+`surfaces/`/`ui/` per-file narrowing named above.
