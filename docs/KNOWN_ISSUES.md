@@ -21,17 +21,24 @@ Also newly spotted this session, not yet investigated: a `res://_QUARANTINE/` di
 another asset-quarantine location the size-budget pass didn't cover; worth folding into the next
 size pass.
 
-## Audio bitrate (E7 of `docs/SIZE_BUDGET.md`) — investigated, not executed, on purpose (2026-09-17)
+## Audio bitrate (E7 of `docs/SIZE_BUDGET.md`) — investigated, definitively no safe control exists (2026-09-17, confirmed in follow-up)
 
 `assets/audio/{music,sfx,ambience,ui}` is not raw in the shipped build: every `.wav`'s own
-`.import` file already sets `compress/mode=2` (Vorbis, applied at Godot's import step) —
-`downtown.wav` measured 1.06MB source → 214KB imported. Re-encoding an already-lossy-compressed
-stream with an external tool (ffmpeg) risks a second, audible generation of quality loss for a
-gain that isn't confirmed to exist, since Godot 4.7's WAV importer doesn't appear to expose a
-separate kbps/quality field in its `.import` params (only the `compress/mode` enum was found).
-Skipped deliberately rather than guessed at. If this is worth revisiting: first confirm whether
-`compress/mode`'s "Quality" setting has a tunable bitrate anywhere in Godot 4.7's import dock (not
-found in the `.import` file's own param list), before touching any source audio.
+`.import` file already sets `compress/mode=2` — **correction to this entry's first version**:
+that's **Quite OK Audio (QOA)**, not Vorbis (Godot 4.7's WAV importer offers exactly 3
+`compress/mode` values: `0` PCM, `1` IMA ADPCM, `2` QOA — verified against
+`../refs/godot-docs/classes/class_resourceimporterwav.rst`, the authoritative property reference).
+`downtown.wav` measured 1.06MB source → 214KB imported at this setting.
+
+**Definitive answer**: `ResourceImporterWAV`'s full property list is `compress/mode`,
+`edit/{loop_begin,loop_end,loop_mode,normalize,trim}`, `force/{8_bit,max_rate,max_rate_hz,mono}`
+— confirmed exhaustive from the reference doc. There is no bitrate/quality float anywhere in it.
+QOA (the current setting) has no tunable rate; the only way to get a real Vorbis-with-bitrate-cap
+is external re-encoding to `.ogg` with a tool like ffmpeg and updating every `.wav` reference to
+`.ogg` in code — a second lossy generation on top of QOA, changes tracked source files, and
+touches every `load("...wav")` call site. Not attempted: the ask (E7, "music ≤96kbps / sfx
+≤64kbps Vorbis") doesn't map onto what this importer can actually do, and forcing it through
+external re-encoding is a meaningfully different, riskier task than the one line item implied.
 
 ## Stills / store screenshots — owner-run, not automatable in this environment (2026-09-17)
 
