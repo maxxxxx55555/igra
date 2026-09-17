@@ -136,7 +136,14 @@ for action in ("ui_pause", "city_map_toggle", "journal_toggle", "encyclopedia_to
 
 # ── 8. Звук ─────────────────────────────────────────────────────────────────
 buses = read("default_bus_layout.tres")
-for bus in ("Master", "Music", "SFX", "Ambient", "UI"):
+# Bus 0 is always Master in Godot's own format - it's implicit and never
+# written as `bus/0/name = &"Master"` unless something explicitly renamed
+# it away from the default. Checking for the literal string (like every
+# other bus below) fails on every valid AudioBusLayout resource - this
+# isn't a missing bus, it's the check expecting a line Godot never writes.
+check("аудио-шина Master существует",
+      'name = &"Master"' in buses or not re.search(r"bus/0/name\s*=", buses))
+for bus in ("Music", "SFX", "Ambient", "UI"):
     check("аудио-шина %s существует" % bus, 'name = &"%s"' % bus in buses)
 check("Master не заглушен на старте", "set_bus_mute(0, false)" in gm)
 missing_audio: list[str] = []
