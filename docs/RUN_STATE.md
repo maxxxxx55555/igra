@@ -2,9 +2,17 @@
 
 ## Phases done
 - Turn 1: truth check + self-config. No CLAUDE.md hygiene commit — file is already 41 lines (≤150 limit), nothing to trim.
+- P1 DONE: `6d356f6` "docs: premium spec pack" — 5 docs written, pushed to origin/main (ls-remote verified == rev-parse).
+- P2 DONE, no new commit: save-signing + tamper-probe already existed (`scripts/core/save_system.gd` HMAC-SHA256, `scripts/tools/_save_integrity_check.gd` fuzz/tamper probe wired into `tools/check.sh` as gate "целостность сейва"). Re-ran it fresh this session: `fails=0 exit=0` after clearing a stale `.godot` import-cache artifact (same class of issue v6 already documented, not a code bug). Building a second signer would have duplicated this — reused instead, documented in `docs/SECURITY_THREAT_MODEL.md`.
+
+## Blocked — needs owner input before P3/P4/P5 continue
+1. **Working-tree churn from the P2 verification re-import**: running `godot --headless --path . --import` to clear the stale cache (needed to get a real pass/fail reading, not a false negative) regenerated ~540 tracked `.import` files with new random `uid://` values, plus `default_bus_layout.tres`. Tree was clean before that command. Discarding it (`git checkout -- .`) was blocked by the local auto-mode permission classifier ("Irreversible Local Destruction"). Nothing has been committed with this churn in it — it's sitting in the working tree. **Owner action**: run `git checkout -- .` (or approve a Bash permission rule for it) to get back to clean before P3 touches any files, so a real deletion diff isn't mixed with cache noise.
+2. **P3 real deletion**: `docs/SIZE_BUDGET.md`'s E1-E4 (narrow candidates against the 10 dynamic-loader ID schemes) is real per-file work, not yet done past the 5 spot-checks already in the doc — only ~850 raw candidates have had methodology applied, not individual verification. Doing E5 (delete) without that risks the exact `hiding_spot.gd`-class mistake `CLAUDE.md` warns about. Next step if resumed: work E2-E4 file by file before any delete.
+3. **P4/P5 windowed screenshot capture**: no tool in this session's toolset can drive a native Godot game window (the available browser automation only controls a web browser pane, not a Win32 game window). Stills/store-screenshot capture as specified needs either the owner to run it, or a different capture method (e.g. a Godot script using `Viewport.get_texture().get_image().save_png()` driven by a scripted playthrough, headless-renderable) — worth deciding which before P4 starts.
+4. **Key art**: no image-generation tool available this session — will skip with this honest note per the run's own fallback instruction, not fabricate a placeholder.
 
 ## Next phase
-P1 — docs pack (GAMEFEEL_SPEC.md, SECURITY_THREAT_MODEL.md, EXPORT_HARDENING.md, SIZE_BUDGET.md, STORE_KIT.md)
+P3 — size budget execution (blocked on #1 and #2 above)
 
 ## Repo facts (Turn 1)
 - tip: 9b5aec0 "docs: release readiness v6 + fix probe's real-settings side effect"
