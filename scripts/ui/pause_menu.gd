@@ -85,5 +85,6 @@ func _btn(p: Node, text: String, cb: Callable) -> void:
 	b.focus_mode = Control.FOCUS_NONE
 	b.pressed.connect(cb)
 	b.pressed.connect(UISFX.click)
+	b.pressed.connect(UISFX.press_pulse.bind(b))
 	b.mouse_entered.connect(UISFX.hover)
 	p.add_child(b)

@@ -199,6 +199,8 @@ func _connect(vb: Node, node_name: String, cb: Callable) -> void:
 		b.pressed.connect(cb)
 	if not b.pressed.is_connected(UISFX.click):
 		b.pressed.connect(UISFX.click)
+	if not b.pressed.is_connected(UISFX.press_pulse):
+		b.pressed.connect(UISFX.press_pulse.bind(b))
 	if not b.mouse_entered.is_connected(UISFX.hover):
 		b.mouse_entered.connect(UISFX.hover)
 

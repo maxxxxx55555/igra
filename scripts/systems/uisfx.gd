@@ -88,6 +88,20 @@ func click() -> void:
 func hover() -> void:
 	_play("ui_hover", 1000.0, 0.03)
 
+## docs/GAMEFEEL_SPEC.md UI press micro-scale. Opt-in per control (call
+## alongside click()) rather than a scene-tree-wide button retrofit — this
+## pass wires the one real click() call site, not every Button in the UI.
+func press_pulse(control: Control) -> void:
+	if not is_instance_valid(control):
+		return
+	var sm := get_node_or_null("/root/SettingsManager")
+	if sm != null and sm.has_method("get_setting") and bool(sm.get_setting("reduce_ui_motion", false)):
+		return
+	control.pivot_offset = control.size / 2.0
+	control.scale = Vector2(0.92, 0.92)
+	var tw := create_tween()
+	tw.tween_property(control, "scale", Vector2.ONE, 0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
 func error() -> void:
 	_play("ui_error", 260.0, 0.12)
 

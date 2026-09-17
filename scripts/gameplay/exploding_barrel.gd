@@ -43,6 +43,7 @@ func _explode() -> void:
 	# VFX
 	if explosion_particles:
 		explosion_particles.emitting = true
+	WowDirector.wow("explosion")
 	if explosion_light:
 		explosion_light.visible = true
 		

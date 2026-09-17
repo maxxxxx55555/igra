@@ -581,6 +581,8 @@ func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, type: EnemyRos
 	hp -= reduced
 	AudioManager.play_sound_3d(_HIT_SFX, global_position, -6.0)
 	_hit_flash()
+	if is_in_group("boss"):
+		WowDirector.hit_stop()
 	_spawn_vfx(_VFX_HIT, global_position + Vector3(0, 1.0, 0))
 	# WAVE 6 P4: crosshair_state_changed was never emitted anywhere -
 	# the HUD crosshair never actually reacted to landing a hit.

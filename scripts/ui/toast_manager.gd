@@ -91,6 +91,16 @@ func _show(data: Dictionary) -> void:
 	lbl.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT)
 	hb.add_child(lbl)
 
+	# docs/GAMEFEEL_SPEC.md: scale-pop stands in for a particle burst on
+	# finding/achievement/daily-quest toasts — same trigger points, no new
+	# GPUParticles scene needed. Gated: a repeated pop-in is exactly the
+	# kind of motion Reduce UI Motion exists to turn off. Deferred one frame
+	# so row.size reflects the icon+label layout, not zero.
+	var sm := get_node_or_null("/root/SettingsManager")
+	var reduce_motion: bool = sm != null and sm.has_method("get_setting") and bool(sm.get_setting("reduce_ui_motion", false))
+	if not reduce_motion:
+		call_deferred("_pop_in", row)
+
 	var tw := create_tween()
 	tw.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	tw.tween_property(row, "modulate:a", 1.0, FADE_IN)
@@ -100,3 +110,12 @@ func _show(data: Dictionary) -> void:
 		row.queue_free()
 		_visible_count -= 1
 		_pump())
+
+func _pop_in(row: Control) -> void:
+	if not is_instance_valid(row):
+		return
+	row.pivot_offset = row.size / 2.0
+	row.scale = Vector2(0.85, 0.85)
+	var pop := create_tween()
+	pop.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	pop.tween_property(row, "scale", Vector2.ONE, FADE_IN).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)

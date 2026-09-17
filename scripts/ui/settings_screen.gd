@@ -261,6 +261,12 @@ func _build_accessibility_tab(parent: VBoxContainer) -> void:
 	# Reduce screen shake (vestibular) — consumed in screen_shake.gd::add_trauma
 	_toggle(parent, LocalizationManager.t("Reduce Screen Shake"), "reduce_screen_shake")
 
+	# docs/GAMEFEEL_SPEC.md accessibility toggles — consumed in wow_director.gd
+	# (flash/hit-stop) and toast_manager.gd/ui_button micro-motion.
+	_toggle(parent, LocalizationManager.t("Reduce Flash"), "reduce_flash")
+	_toggle(parent, LocalizationManager.t("Reduce Time Effects"), "reduce_time_fx")
+	_toggle(parent, LocalizationManager.t("Reduce UI Motion"), "reduce_ui_motion")
+
 # Helper functions
 func _slider(parent: Node, label: String, key: String, min_v: float, max_v: float, step: float, callback) -> void:
 	var row := HBoxContainer.new()

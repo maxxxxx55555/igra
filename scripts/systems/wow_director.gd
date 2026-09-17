@@ -15,45 +15,65 @@ const _PRESETS: Dictionary = {
 	"first_light": {"trauma": 0.30, "flash": Color(1.00, 0.82, 0.45), "flash_a": 0.20, "flash_t": 0.5, "slowmo": 1.0, "fov": 0.0},
 	"cascade":     {"trauma": 0.55, "flash": Color(1.00, 0.95, 0.80), "flash_a": 0.28, "flash_t": 0.8, "slowmo": 0.5, "fov": 4.0},
 	"ending":      {"trauma": 0.45, "flash": Color(0.92, 0.62, 0.32), "flash_a": 0.26, "flash_t": 1.0, "slowmo": 0.4, "fov": 3.0},
+	# docs/GAMEFEEL_SPEC.md — explosions: shake only, no flash/slowmo.
+	"explosion":   {"trauma": 0.35, "flash": Color.WHITE, "flash_a": 0.0, "flash_t": 0.1, "slowmo": 1.0, "fov": 0.0},
 }
 
 var _first_light_done: bool = false
 var _flash_layer: CanvasLayer = null
 var _flash: ColorRect = null
+var _hitstop_active: bool = false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	EventBus.streetlight_activated.connect(_on_streetlight)
 	EventBus.district_restored.connect(_on_district_restored)
-	EventBus.game_won.connect(func() -> void: _wow("ending"))
+	EventBus.game_won.connect(func() -> void: wow("ending"))
 	EventBus.game_started.connect(func() -> void: _first_light_done = false)
 
 func _on_streetlight(_id: Variant) -> void:
 	if _first_light_done:
 		return
 	_first_light_done = true
-	_wow("first_light")
+	wow("first_light")
 
 func _on_district_restored(_id: Variant, _stage: Variant) -> void:
 	var pg := get_node_or_null("/root/PowerGrid")
 	if pg != null and pg.has_method("all_restored") and pg.all_restored():
-		_wow("cascade")
+		wow("cascade")
 
-func _wow(kind: String) -> void:
+func wow(kind: String) -> void:
 	var p: Dictionary = _PRESETS.get(kind, {})
 	if p.is_empty():
 		return
 	var ss := _screen_shake()
 	if ss != null and ss.has_method("add_trauma"):
 		ss.add_trauma(float(p["trauma"]))
-	_flash_screen(p["flash"], float(p["flash_a"]), float(p["flash_t"]))
+	if float(p["flash_a"]) > 0.0 and not _setting("reduce_flash", false):
+		_flash_screen(p["flash"], float(p["flash_a"]), float(p["flash_t"]))
 	if _trailer_on():
 		EventBus.hud_visibility_changed.emit(false)
 		_cinematic(p)
 
 func _trailer_on() -> bool:
+	return _setting("trailer_mode", false)
+
+func _setting(key: String, default: bool) -> bool:
 	var sm := get_node_or_null("/root/SettingsManager")
-	return sm != null and sm.has_method("get_setting") and bool(sm.get_setting("trailer_mode", false))
+	return bool(sm.get_setting(key, default)) if sm != null and sm.has_method("get_setting") else default
+
+## docs/GAMEFEEL_SPEC.md hit-stop: brief real-time Engine.time_scale dip,
+## capped at 80ms wall-clock (ignore_time_scale timer) so it can't be
+## stretched by its own dip. Guarded against re-entry — two boss hits in
+## the same beat must not stack multiplicatively (GAMEFEEL_SPEC's own rule).
+func hit_stop(ms: float = 80.0, scale: float = 0.25) -> void:
+	if _hitstop_active or _setting("reduce_time_fx", false):
+		return
+	_hitstop_active = true
+	Engine.time_scale = scale
+	await get_tree().create_timer(minf(ms, 80.0) / 1000.0, true, false, true).timeout
+	Engine.time_scale = 1.0
+	_hitstop_active = false
 
 func _cinematic(p: Dictionary) -> void:
 	var slow: float = float(p.get("slowmo", 1.0))
@@ -64,7 +84,7 @@ func _cinematic(p: Dictionary) -> void:
 		var tw := create_tween()
 		tw.tween_property(cam, "fov", base - fov_add, 0.25)
 		tw.tween_property(cam, "fov", base, 0.9)
-	if slow < 1.0:
+	if slow < 1.0 and not _setting("reduce_time_fx", false):
 		Engine.time_scale = slow
 		await get_tree().create_timer(0.9 * slow).timeout
 		Engine.time_scale = 1.0
