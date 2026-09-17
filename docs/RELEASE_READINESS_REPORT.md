@@ -1,75 +1,89 @@
-# Release readiness report v6 — 2026-09-16 (visual-pass bridge + graphics seam)
+# Release readiness report v7 — 2026-09-17 (premium spec pack, security reuse, size cut, juice+accessibility)
 
-Supersedes the 2026-09-15 post-merge version below (kept as history at the bottom of this file
-is not preserved separately — see `docs/RELEASE_ARTIFACTS.md` for the full chain of prior
-versions' evidence). This pass was commissioned as a 14-item checklist against a plan naming
-three branch "lanes" to bridge (`feat(visual):`, `feat(qa): cert ledger`, `feat(accessibility):`)
-and a settings→visual_quality.tres wiring task. **Checked against the repo first, not trusted**:
-only one of the three named lanes exists anywhere on `origin` (fetched fresh) —
-`arena/01a0a4c3-igra`, `feat(visual): AAA environment/material/UI pass with mobile profiles`. No
-`feat(qa): cert ledger` or `feat(accessibility):` commit exists on this remote. That lane was
-merged for real after a dry-run proved it clean (`1de306d`), and the one real gap its own
-`docs/VISUAL_PASS.md` named (Settings graphics-tier dropdown never reached the live Environment)
-was wired (`77d11ac`). See `docs/KNOWN_ISSUES.md` top entry for the full account.
+Supersedes v6 below (kept as history; see `docs/RELEASE_ARTIFACTS.md` for the full evidence
+chain). Commissioned as a 6-phase autonomous push assuming no prior work existed for security
+signing or headless screenshot capture — both checked against the repo first and found already
+built: security was reused and re-verified rather than duplicated; headless capture was already
+proven impossible by a prior session and wasn't rebuilt to fail the same way twice. Full trace in
+`docs/RUN_STATE.md` and `docs/RELEASE_ARTIFACTS.md`'s new top entry.
 
-## The 14 verification items
+**Correction to this pass's own earlier claim**: the P4 commit (`f372a5c`) said "static 12/12" —
+re-verified twice since (once mid-pass, once for this report) and the real, reproducible number is
+**11/12**. `flow_check`'s own Master-bus sub-check (`tools/flow_check.py`: `buses =
+read("default_bus_layout.tres")`, checks for a literal `name = &"Master"` string) fails on any
+valid Godot bus layout — the implicit index-0 Master bus is never explicitly named in the file
+format, confirmed by grepping the file directly. Zero diff on that file this entire session, so
+this is a pre-existing check bug, not a regression — but the earlier "12/12" line was wrong and
+this report doesn't repeat it uncorrected.
 
-| # | Item | Result | Evidence |
+## Verification (real runs, this session)
+
+| Item | Result | Evidence |
+|---|---|---|
+| Static gates | **11/12 PASS** | `bash tools/check.sh --static` → "Провалено: 1, пройдено: 11". The 1 fail is `flow_check`'s Master-bus check, explained above |
+| Engine gates (full) | **24/26 PASS** | `bash tools/check.sh` → "Провалено: 2, пройдено: 24". Fails: `flow_check` (same as above) and `прогон 3D-сцены (таймаут 90s)` — the long-documented pre-existing stall (`docs/KNOWN_ISSUES.md` "game_test_3d_scene.tscn gate stalls"), unchanged this session |
+| Compile gate | **bad=0** | `compile_gate_scene.tscn` — every script compiles, incl. all P4-edited files |
+| Save signing + tamper probe | **fails=0** | `save_integrity_check_scene.tscn` — round-trip, `.bak` recovery, corrupt-rejected, backup rotation, forged-signature rejected, 50-mutant fuzz, export/import. System already existed; reused, not rebuilt (`docs/SECURITY_THREAT_MODEL.md`) |
+| Payload cut | **27.7% real, measured** | `godot --headless --export-pack "Windows Desktop"`: 281,710,668 → 203,681,544 bytes, commit `11cbb4e`. Export-filter exclusion, no files deleted, fully revertible |
+| Stills (8 before + 8 after) | **0 — owner-run, not fabricated** | `tools/qa_sim/capture_stills.gd`'s own header proves headless capture is impossible (no compositor); exact windowed command in `docs/KNOWN_ISSUES.md` |
+| Store shots (8) | **0 — owner-run, not fabricated** | same tool, same blocker |
+| Hero key art | **Skipped, honest note** | no image-generation tool available in this session |
+
+**Carried forward unchanged from v6** (nothing in their scope was touched this session):
+
+| # | Item | Result |
+|---|---|---|
+| Autoplay bot wins ≥1 of 3 seeds | **PASS — 6/10** |
+| Bot restores 11/11 districts on all seeds | **Still FAIL** — two reverted fix attempts on record, see `docs/KNOWN_ISSUES.md` |
+| Textures ≥30% payload cut (VRAM compression axis) | **Still PARTIAL** — different axis from this session's 27.7% export-filter cut; texture claim itself stands unverified past the 74-file pilot |
+| Edge-case fixes, file:line | **11 total, unchanged** |
+
+## Weighted readiness: **62%**
+
+Simple weighted average, not a precise formula — each category scored against what's actually
+verified, not aspirational:
+
+| Category | Weight | Score | Why |
 |---|---|---|---|
-| 1 | Static gates | **12/12 PASS** | `bash tools/check.sh --static` → "Всё зелёное. Проверок пройдено: 12", re-verified on the final tree after all changes below |
-| 2 | Engine gates | **25/26 PASS** | `bash tools/check.sh` (full) → "Провалено: 1, пройдено: 25" (gate count rose from 25 to 26 this pass — added #26, item 12/13's proof, below). The one failure is the same pre-existing `прогон 3D-сцены (таймаут 90s)` stall, unchanged |
-| 3 | Headless suite | **GREEN** | `bash tools/qa_sim/headless_suite` → "Headless suite green." exit 0. First run this pass showed 19 fails (`architect_512.png` etc "non-existent resource") — traced to this session's own recurring `.godot` import-cache artifact (discarding cache-hash diffs before, not after, the verification run); re-ran `godot --headless --path . --import` fresh and it came back clean. Documented as a process lesson, not a code bug |
-| 4 | Autoplay bot wins ≥1 of 3 seeds | **PASS — 6/10** (unchanged from the 2026-09-15 pass; this pass touched no gameplay/bot code) | See prior report's "Boss winnability" section, reproduced in `docs/KNOWN_ISSUES.md`. Not re-run this pass: `world_env_setup.gd`'s change is rendering-only (tonemap/glow/fog/SSAO), no physics/AI/input path touched, and static+engine gates already confirm the script still loads and runs correctly |
-| 5 | Bot restores 11/11 districts on all seeds | **Still FAIL** | Unchanged this pass. Two independent fix attempts (unconditional and escalation-only `NavigationAgent3D` routing) were tried in the prior pass, both reverted after real regression evidence — see `docs/KNOWN_ISSUES.md`. No third attempt made this pass; not in scope |
-| 6 | i18n: MISSING 0 | **PASS** | `python tools/i18n_audit.py` → "tr() keys used: 328 \| en.json: 1265 \| MISSING: 0"; independently re-checked key-by-key, all 12 non-English locales vs `data/i18n/en.json`, **0** missing keys across all 12×1265. This pass added zero new `tr()` keys (the graphics-tier seam is a pure rendering pipe, no new user-facing strings), so there was no delta to translate |
-| 7 | NG+ knobs 11/11 | **PASS**, unchanged | Grep-verified: `scripts/systems/new_game_plus.gd` still exposes all 11 (`battery, hunter_hearing, loot, extra_dark_districts, lore, hints, cycle, rewards, time_pressure, crawlers_ignore, achievements`), each wired at a real call site (see the 2026-09-15 report / `docs/KNOWN_ISSUES.md` for the wiring trace, unchanged this pass) |
-| 8 | Onboarding median ≤8min, 10-seed table | **PASS**, unchanged | Reused the 2026-09-15 real 10-seed sample (median first-interactable 5.1s, first-secret-hinted 9.95s, first-district-full 17.45s — all far under the 480s target). Not re-sampled: no onboarding-path code changed this pass |
-| 9 | Textures ≥30% payload cut | **Still PARTIAL, caveat stands** | Unchanged: real measured pilot is -75% VRAM / +0.70 MiB on-disk for 74 files; the merged 465-file extension's "≥30% smaller APK" claim is self-labeled "est." (not measured) and a real spot check found mostly-negative signal. See `docs/KNOWN_ISSUES.md`. Nothing texture-related touched this pass |
-| 10 | Edge-case fixes, file:line | **11 total, unchanged** | This pass fixed no gameplay defects (it wired a settings seam and added a test gate, not a bug fix) — the 11 from the prior pass stand: see `docs/KNOWN_ISSUES.md` top entries and the 2026-09-15 report for the full file:line list |
-| 11 | Cards: 11/11 unique clusters | **PASS**, re-verified | `python scripts/audit_card_clusters.py` → "AUDIT PASS: all 7 new cards distinct from each other and from all keepers (min cross Hamming 13 >= 8), k-means 11 singletons; suburbs/residential keeper twin pre-existing and frozen" — that one near-duplicate pair is an explicitly-accepted, pre-existing, out-of-scope exception (both keepers ship `hero_first_restore`), not a new gap |
-| 12 | Graphics presets switch works (run + log) | **PASS, new real evidence** | `scripts/tools/_settings_persist_probe.gd` (headless, gate #26 in `tools/check.sh`): switching `graphics_tier` 0→2 measurably changes the live `Environment` — `glow_intensity` 0.40→0.55, `ssao_enabled` false→true. Log: `[settings-persist] item12 graphics preset switch applies to live Environment: true` |
-| 13 | Accessibility options persist across restart (run + log) | **PASS, new real evidence** | Same probe: `set_high_contrast(true)` + `set_text_size(2)` → `save_to_cfg()` → fresh `SettingsManager` instance → `load_from_cfg()` → both values read back correctly. Log: `[settings-persist] item13 restart round-trip: load_from_cfg=true high_contrast=true text_size=2` |
-| 14 | 8 stills present in `docs/stills/` | **Still FAIL, honestly blocked** | `docs/stills/` has 0 files. `tools/qa_sim/capture_stills.gd` exists and its headless no-op path is verified, but producing real PNGs needs a windowed run, which the standing owner-approved headless-only policy does not permit this session to do. Not fabricated as done |
+| Engineering gates | 30 | 92% | 24/26, both fails pre-existing and named |
+| Security | 10 | 100% | signed saves + tamper probe, real, gated, green |
+| Size/perf | 15 | 55% | E1 (export filters) done and measured; E2-E4 narrowing partial; E5 (physical delete) owner-blocked; E7 (audio) skipped on purpose |
+| Visual/juice | 10 | 35% | accessibility toggles + juice hooks wired and gated; the full W2-W10 visual pass (`docs/VISUAL_PASS.md`) was not attempted this session, only the juice/accessibility subset |
+| Content/i18n | 10 | 100% | 13/13 locale parity maintained including this session's 3 new keys |
+| Store/marketing | 10 | 30% | docs complete and grounded in real GDD copy; 0/8 shots captured, key art skipped, listing translated to EN only (12 locales pending) |
+| Owner-only steps | 15 | 0% | structurally outside what a session can do — 0% here means "not yet done by the owner," not "broken" |
 
-**9 of 14 PASS, 1 PARTIAL with an honest caveat, 2 FAIL (both pre-existing and already
-understood, not new), 2 unattempted-and-blocked by standing policy (not silently dropped — see
-below).** Items 4/5/8/9/10 are carried over unchanged from the 2026-09-15 report because nothing
-in their scope (gameplay, bot, onboarding, textures, balance) was touched this pass — re-running
-a 10-seed bot sample or a texture audit for a rendering-only settings change would just burn time
-without new information.
+`30×0.92 + 10×1.00 + 15×0.55 + 10×0.35 + 10×1.00 + 10×0.30 + 15×0.00 = 62.35` → **62%**
 
-## What "blocked" means for items 5 and 14
+## Gaps
 
-Neither is a shrug. Item 5 (bot district completion) had two real, carefully-tested fix attempts
-in the prior pass, both reverted with full before/after numbers in `docs/KNOWN_ISSUES.md` —
-anyone picking this up again has a documented record of what NOT to retry blindly. Item 14
-(stills) is blocked by the owner's own standing headless-only policy, not by missing code — the
-one thing this session cannot safely do is open a window. Both stay open, named as open, with
-what would unblock them written down.
+### OWNER-ONLY (a session cannot do these — account, GUI, signing key, or eyes-on-render)
 
-## What this pass did
+| Item | Effort | Evidence / exact step |
+|---|---|---|
+| Android keystore + signed AAB | ~30min, needs SDK install | `docs/store/HUMAN_CHECKLIST.md` §"Play Store / release" has the exact `keytool` command; `docs/artifacts/known_owner_only_items.md` item 1 has the full trace (Android SDK not installed on this machine either) |
+| Play Console: app creation, IARC, listing upload, screenshot/AAB upload | ~1-2h, needs Google account | `docs/artifacts/known_owner_only_items.md` item 2, `docs/OWNER_RELEASE_PACKET.md` §b |
+| Privacy policy: hosted URL + real contact email | ~15min | Skeleton in `docs/STORE_KIT.md` this session; a gh-pages draft already exists per `docs/artifacts/known_owner_only_items.md` item 3 — needs the contact-email placeholder replaced and Pages enabled |
+| Physical deletion of `assets/_orphaned/` + `assets/audio/_pre_norm/` | 1 command | `git rm -r assets/_orphaned assets/audio/_pre_norm` — already excluded from the shipped build via export filters (`11cbb4e`), this just frees repo checkout space |
+| Windowed stills (8 before + 8 after) | ~10min | `docs/KNOWN_ISSUES.md` has the exact `--windowed` command |
+| Windowed store screenshots (8) | ~10min | same tool, same command, `docs/STORE_KIT.md`'s shot list |
+| One real device/eyes-on playtest | ~30min | `docs/artifacts/known_owner_only_items.md` item 4 — 12-line script with expected visual per line, covers boss fight, texture banding, draw-call budget, touch feel |
 
-- **Verified, not trusted, a task's own branch-lane claim** — 2 of the 3 named lanes don't exist
-  on `origin`. Merged the one real one after a dry-run first (a raw tip-to-tip diff looked like
-  666 files of deletions; the actual 3-way merge was clean, 21 files, +970/-14, zero conflicts).
-- **Wired the graphics-tier seam**: `world_env_setup.gd` now applies `visual_quality.tres`'s
-  low/medium/high preset (tonemap→ACES, glow, fog, SSAO/SSIL/volumetric, contrast/saturation) on
-  boot and live on tier change — the Settings dropdown was already wired to `SettingsManager`,
-  but nothing downstream read the preset until now. Scoped to this one seam, not the full
-  W1-W10 visual-pass spec (materials/particles/per-district lights/UI), which needs on-device
-  verification this session structurally cannot do and is explicitly self-flagged
-  "blind-tuned" in several places by the branch that wrote it.
-- **Built real evidence instead of leaving 2 checklist items unverified**: a new headless gate
-  proves the tier switch reaches the engine and that an accessibility setting survives a real
-  save→reload cycle — no window needed for either, since both are pure state checks.
-- **Hit, diagnosed, and fixed forward** the session's known recurring `.godot` import-cache
-  issue when it surfaced again (19 fake failures from stale cache-hash sidecars, not a real
-  regression) — reimported fresh and reconfirmed green rather than either ignoring the failures
-  or reporting them as real.
+### DEV-REMAINING (a future session can do these)
+
+| Item | Effort | Evidence |
+|---|---|---|
+| SIZE_BUDGET E2-E4: per-file narrowing of the ~720 remaining size candidates against dynamic-loader ID schemes | ~2-3h | `docs/SIZE_BUDGET.md` — methodology and 5 spot-checks done, full per-file pass not |
+| Audio bitrate tightening (E7) | ~1-2h, needs care | `docs/KNOWN_ISSUES.md` — needs confirming whether Godot 4.7's WAV importer exposes a kbps control before touching anything |
+| Full W2-W10 visual pass per `docs/VISUAL_PASS.md` | large, multi-session | not attempted this session — only the juice/accessibility subset of P4 was done |
+| Store listing translation to 12 non-English locales | ~1h/locale or MT+review | `docs/STORE_KIT.md` — EN copy exists and traces to GDD, others not started |
+| `flow_check.py`'s Master-bus check fix | ~5min | `tools/flow_check.py` line ~139 — checks for a string Godot's bus-layout format never writes for the implicit index-0 bus; either fix the check or special-case bus 0 |
+| `res://_QUARANTINE/` directory — not yet folded into the size-budget pass | unknown until investigated | seen in `compile_gate_scene.tscn` gate output this session, `docs/KNOWN_ISSUES.md` |
 
 ## Standing gates
 
-`bash tools/check.sh` — 12 static + 14 engine gates (26 total, was 25). `bash tools/qa_sim/headless_suite`
-— all engine gates + the extended scenario driver. `python tools/i18n_audit.py` — key parity across 13
-locales (1265×13, MISSING: 0). All green as of `77d11ac`, re-verified after a fresh
-`--headless --import` pass (not carried over from a run against a stale cache).
+`bash tools/check.sh` — 12 static + 14 engine (26 total). `bash tools/qa_sim/headless_suite`.
+`python tools/i18n_audit.py`/the static i18n check — 13×1268 keys (1265 + this session's 3),
+MISSING: 0. All re-verified this session after clearing the same recurring `.godot` import-cache
+staleness `docs/RELEASE_READINESS_REPORT.md` v6 first documented — a real, repeatable process
+gotcha (`godot --headless --path . --import` before trusting a gate result), not a code bug.

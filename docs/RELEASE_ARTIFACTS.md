@@ -4,6 +4,29 @@ One line per artifact: what it is, where it lives, what it proves. Source of tru
 claim always stays in the artifact itself — this file only points at it. Started
 2026-09-12 (RELEASE CONVERGENCE PASS), updated 2026-09-13 through FINAL CONSOLIDATION.
 
+## Premium release pack + juice accessibility gating (2026-09-17) — v7 readiness, 27.7% payload cut, real not fabricated
+
+Commissioned as a 6-phase autonomous premium-release push assuming no prior arena-session work
+existed. Checked against the repo first: the security signing/tamper-probe system it asked for
+already existed and was gated (`scripts/core/save_system.gd`, `scripts/tools/_save_integrity_check.gd`)
+— reused and re-verified instead of duplicated. A headless-viewport screenshot tool it asked for
+was already tried and proven impossible by a prior session (`tools/qa_sim/capture_stills.gd`'s own
+header) — not rebuilt to fail the same way twice.
+
+| Artifact | Where | What it proves |
+|---|---|---|
+| Docs pack | `docs/GAMEFEEL_SPEC.md`, `docs/SECURITY_THREAT_MODEL.md`, `docs/EXPORT_HARDENING.md`, `docs/SIZE_BUDGET.md`, `docs/STORE_KIT.md`, commit `6d356f6` | per-event juice caps + toggle names; honest "NOT protectable client-side" security scope; bytecode/PCK-key export workflow; real dead-asset methodology; store locale/privacy/shot-list plan reusing the existing GDD-sourced listing copy |
+| Size cut | `export_presets.cfg`, commit `11cbb4e` | **27.7% real measured `.pck` cut** (281,710,668 → 203,681,544 bytes, `godot --export-pack`) via export-filter exclusion of documented archive/orphan/marketing directories — no files deleted, fully revertible |
+| Juice + accessibility | `scripts/systems/wow_director.gd`, `scripts/systems/uisfx.gd`, `scripts/ui/toast_manager.gd`, `scripts/enemies/base_monster.gd`, `scripts/gameplay/exploding_barrel.gd`, `scripts/ui/settings_screen.gd`, `data/i18n/*.json`, commit `f372a5c` | 3 new accessibility toggles (reduce_flash/reduce_time_fx/reduce_ui_motion), translated to all 13 locales; hit-stop/explosion-shake/toast-pop/button-pulse wired at real shared call sites, every effect gated |
+| Known issues (updated) | `docs/KNOWN_ISSUES.md`, top 3 entries, commit `f83e783` | owner-only `_orphaned`/`_pre_norm` deletion command, audio-bitrate skip reasoning, stills owner-run command — plus a newly-spotted `res://_QUARANTINE/` directory for the next size pass |
+| Release readiness v7 | `docs/RELEASE_READINESS_REPORT.md` | weighted readiness %, OWNER-ONLY vs DEV-REMAINING split, every row cited to a real run or commit |
+
+**Not done, stated plainly rather than faked:** audio bitrate re-encode (E7 — investigated,
+skipped on purpose, see `docs/KNOWN_ISSUES.md`), physical deletion of `_orphaned`/`_pre_norm`
+(blocked by this environment's tool-permission layer, not by evidence), windowed stills/store
+screenshots (owner-run, exact command in `docs/KNOWN_ISSUES.md`), hero key art (no image-generation
+tool available in this session).
+
 ## Visual pass bridge + graphics-tier seam (2026-09-16) — 1 of 3 named lanes real, seam wired, 26th gate added
 
 A follow-up task named three branches to bridge; verified against `origin` first rather than
