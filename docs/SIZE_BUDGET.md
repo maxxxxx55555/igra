@@ -105,60 +105,82 @@ bus, so this check fails on any valid bus layout — confirmed via `git diff` sh
 that file across this session. Not fixed here, out of scope for a size-budget pass; flagged for
 whoever owns gate maintenance).
 
-## E2-E4 executed — per-candidate dynamic-loader narrowing (follow-up session)
+## E2-E4 executed — per-candidate dynamic-loader narrowing, then corrected (follow-up session)
 
 Of the 720 candidates surviving E1's 17-directory cut, 504 were already handled (the 3 directories
 above). The remaining 216 were checked directory-by-directory against every dynamic-loader call
-site found via `grep -rln "<dirname>"` then narrowed to the exact `assets/<path>` prefix each
-call site actually builds, same method as E1:
+site found via `grep -rln "<dirname>"`, same method as E1. **A first pass over-excluded several
+directories — zero code references isn't the same as dead when the content is a planned feature
+delivered ahead of its code wiring, which this repo does repeatedly.** Caught and reverted within
+the same session, documented honestly below rather than left standing.
 
-**Confirmed dead, excluded** (directory-level, zero references anywhere, no dynamic construction
-found): `textures/items_legacy/` (26), `textures/picto_v2/` (13), `textures/docs_v2/` (6),
-`textures/stages_v2/` (4), `textures/overlays_v2/` (4), `textures/maps/` (12 — `maps_v2/` is the
-live directory `city_map.gd` actually uses), `textures/loading/` (11 — confirms the P1 spot-check
-finding: `screens.gd:139` uses one static `screens_v2/loading_street.png` for every loading
-screen), `audio/ambience/wav_src/` (5 — explicitly documented in `docs/AUDIO_CONVERT.md`/
-`docs/MISSING_IMPORTS.md`/`docs/REPORT_ASSETS.md` as archived WAV masters, "never import",
-same category as `_pre_norm`).
+**Confirmed dead, excluded** (real "ARCHIVED"/"superseded" documentation, not just an absence of
+references): `textures/items_legacy/` (26 — `docs/REPORT_ASSETS.md`: "intentional... kept as
+backups", live replacements in `textures/items/`), `audio/ambience/wav_src/` (5 — `docs/
+AUDIO_CONVERT.md`/`docs/MISSING_IMPORTS.md`: "ARCHIVED", "never import", live `.ogg` replacements
+exist), `textures/icons/*.png` root (12 achievement icons — `docs/REPORT_BUG_HUNT.md`: "legacy...
+superseded unwired", replacement `icons_v2/ach_medal_v2_*` confirmed live), `textures/icons/
+weapons/*` (9 — `weapon_compare_ui.gd`'s own comment confirms it switched from this exact path to
+`renders_v2/weapons/*_render_256.png` mid-session).
 
-**Confirmed dead, excluded** (file-level, directory has other live files so directory-level
-exclusion would have broken them): `textures/icons/*.png` root (12 achievement icons — superseded
-by `icons_v2/ach_medal_v2_*`, `icons/skills/` subfolder untouched, still dynamic-live) +
-`textures/icons/weapons/*` (9 — superseded by `icons_v2` weapon renders); `textures/fx/` 14 of its
-19 files (the other 5 — `blood_splatter.png`, `dust.png`, `muzzle_flash.png`, `spark_alt_64.png`,
-`strobe_flash_128.png` — are real `ext_resource` targets in `scenes/vfx/*.tscn`, confirmed live,
-left alone); `textures/renders_v2/` 5 of its files (`backpack_256.png`, `battery_pack_256.png`,
-`bundle_survivor_256.png`, `medkit_256.png`, `tools_256.png` — `player_512x768.png` in the same
-directory is a real static reference in `stats_ui.gd:52`, confirmed live, left alone).
+**Reverted after over-excluding — real planned-feature content, not dead** (caught by
+cross-checking delivery/report docs instead of trusting a zero-reference grep alone):
+- `textures/loading/` (11) — `docs/VISUAL_PASS.md` §6 W8 names this exact path as the source art
+  for a planned menu-parallax layer not yet built.
+- `textures/{picto_v2,docs_v2,stages_v2,overlays_v2}/` (13+6+4+4=27) — `docs/REPORT_GAMEFEEL_V2.md`
+  / `docs/REPORT_POLISH_V2.md` document these as delivered art for planned touch-gesture
+  pictograms, a restoration-stage strip, document-page variants, and weather overlays — none
+  coded yet, all real.
+- `textures/maps/` (12) — `docs/REPORT_CONTENT_WAVE.md` states outright: "map screen / city map
+  UI (**unwired; procedural today**)" — explicitly a planned replacement for the current
+  procedural map, not dead art.
+- `textures/fx/` (the 14 non-ext_resource files) and `textures/renders_v2/` (the 5 non-`player_
+  512x768` files) — no explicit "planned" doc found for these specific files, but given three
+  other categories in the same batch turned out to be planned-not-dead, and no "ARCHIVED"/
+  "superseded" language exists for them either, left un-excluded on the same reasoning rather than
+  risk a fourth mistake.
+- `assets/store/v2/` (62, from the **prior** P3 session) and `assets/store/endings/` (5, same) —
+  `docs/BUGS_FOR_CLAUDE.md` lists `store/v2` needing an import pass (planned platform store
+  assets: App Store, itch.io, Yandex, etc.), and `docs/REPORT_CONTENT_WAVE.md`/`docs/
+  ASSET_HANDOFF.md` both describe `store/endings/*` as intended for `EndingScreen`/`win_screen`
+  (canon warmth-gradient art with real QA history) even though nothing in `endings_manager.gd`/
+  `win_screen.gd` currently loads them — a wiring gap, not proof of deadness. Both reverted.
 
-**Found, NOT excluded — a real planned-feature catch**: `audio/ambience/{ambient_dark_loop,
-ambient_lit_loop,threat_high_loop,threat_low_loop}.ogg` (4 files) have zero current code
-references, but `docs/REPORT_ASSETS.md:20` explicitly documents them as prepared assets whose
-game-code wiring was a deliberate, still-open decision ("whether new OGGs replace `Ambient_*.ogg`
-layers is a code-wiring decision outside assets ownership"), and `docs/TRAILER_STORYBOARD.md`/
-`store/trailer.md` already plan to use them. This is exactly the `hiding_spot.gd`-class mistake
-`CLAUDE.md` warns about — zero references does not mean dead when a real doc calls it a planned
-feature. Left alone, not excluded, not deleted.
+**Still excluded from the prior P3 session, re-checked and confirmed safe this pass**: `_pre_norm`,
+`_orphaned`, `store/storyboard` (pre-production trailer planning art, never a shippable asset by
+definition), `store/play_final` (`docs/SESSION_REPORT_SHIP.md`: zero script/scene references, no
+"planned" language found), `store/press` (`docs/ASSET_HANDOFF.md`: explicit "Marketing only; do
+not import into game scenes").
 
-**Not reached this pass** (mixed live+dead directories, per-file work not completed — still real
-candidates, just not verified yet): `textures/surfaces/` (24, directory is live via
-`hiding_spot.gd`/`street_props.gd`/`streetlight_spawner.gd`), `textures/ui/` (36, almost certainly
-mixed given its generic role). `assets/store/*.png` top-level (14 loose marketing images) and
-`assets/art/*`/`assets/grading/night_grade.png` (6 loose single files) also untouched — small
-enough to be low-value versus the risk of a rushed per-file call.
+**Found, correctly NOT excluded (kept from the first pass)**: `audio/ambience/{ambient_dark_loop,
+ambient_lit_loop,threat_high_loop,threat_low_loop}.ogg` (4 files) — `docs/REPORT_ASSETS.md:20`
+documents their game-code wiring as a deliberate open decision; `docs/TRAILER_STORYBOARD.md`/
+`store/trailer.md` already plan to use them.
 
-**Measured**, before/after this pass (Desktop preset, `godot --export-pack`, both runs same
-session, only `export_presets.cfg` changed):
+**Not reached this pass**: `textures/surfaces/` (24, live directory, needs per-file work),
+`textures/ui/` (36, likely mixed). Given the over-exclusion this pass already produced and
+corrected, these are deliberately left for a pass with more time for the cross-check this section
+now shows is necessary, not rushed through.
+
+**Measured** (Desktop preset, `godot --export-pack`, same session, only `export_presets.cfg`
+changed each time):
 
 | | bytes | MB |
 |---|---|---|
-| After E1 (prior session) | 203,681,544 | 194.3 |
-| After E2-E4 | 178,551,292 | 170.3 |
-| **This pass's cut** | 25,130,252 | 24.0 |
-| **Total cut from original baseline** | 103,159,376 | 98.4 — **36.6%** |
+| Original baseline (before any size work) | 281,710,668 | 268.6 |
+| After E1 (prior session, `11cbb4e`) | 203,681,544 | 194.3 |
+| After E2-E4 first pass (over-excluded) | 178,551,292 | 170.3 |
+| **After E2-E4 corrected** | 215,512,000 | 205.5 |
+| **Real total cut from original baseline** | 66,198,668 | 63.1 — **23.5%** |
 
-Gates re-checked after the change: static 12/12, `compile_gate_scene.tscn` bad=0.
+**This is lower than the 27.7% `docs/RELEASE_READINESS_REPORT.md` v7 reported**, because that
+figure was measured against the P3 baseline which had already over-excluded `store/v2` and
+`store/endings` — both reverted here as real planned content, not dead. v7.0.0-rc1 stays tagged as
+released (per instruction, not moved or deleted); this is the corrected number going forward, and
+v7.1 states it plainly rather than repeat the old one.
 
-**Not done this session**: E7 audio re-encode (see `docs/KNOWN_ISSUES.md`), the physical deletion
-of `assets/_orphaned/`/`assets/audio/_pre_norm/` (owner-only, same tool-permission block), and the
-`surfaces/`/`ui/` per-file narrowing named above.
+Gates re-checked after the correction: static 12/12, `compile_gate_scene.tscn` bad=0.
+
+**Not done this session**: E7 audio re-encode (see `docs/KNOWN_ISSUES.md` — definitively no safe
+control exists), the physical deletion of `assets/_orphaned/`/`assets/audio/_pre_norm/`
+(owner-only, tool-permission block), and the `surfaces/`/`ui/` per-file narrowing named above.
