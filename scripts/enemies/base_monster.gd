@@ -40,6 +40,7 @@ var _stun_timer: float = 0.0
 var _flee_timer: float = 0.0
 var _investigate_timer: float = 0.0
 var _investigate_point: Vector3 = Vector3.ZERO
+var _player_hiding: bool = false
 var _death_timer: float = 0.0
 var _rage_active: bool = false
 var _rage_timer: float = 0.0
@@ -116,6 +117,12 @@ func _ready() -> void:
 		add_child(_detect_area)
 	_detect_area.body_entered.connect(_on_detect_body_entered)
 	_detect_area.body_exited.connect(_on_detect_body_exited)
+	# GAME_AUDIT P1: hiding_spot.gd blocks the initial spotting raycast, but
+	# nothing told an already-CHASE/ATTACK monster the player went hidden -
+	# it kept pathing to and hitting the exact hiding position. Real LOS
+	# would be the correct model; this is the reuse-before-write version of
+	# "the monster loses the player" using the signal that already exists.
+	EventBus.player_hiding_changed.connect(_on_player_hiding_changed)
 	add_to_group("enemies")
 	add_to_group("monsters")
 	_status_node = load("res://scripts/enemies/status_effects.gd").new()
@@ -390,6 +397,9 @@ func _state_chase(delta: float) -> void:
 	if not player_ref or not is_instance_valid(player_ref):
 		_change_state(State.PATROL)
 		return
+	if _player_hiding:
+		_enter_investigate_at(player_ref.global_position)
+		return
 	_set_nav_target(player_ref.global_position)
 	var dist := global_position.distance_to(player_ref.global_position)
 	if dist <= attack_range and attack_timer <= 0.0:
@@ -439,14 +449,22 @@ func _detect_ambient() -> void:
 		if player_ref.has_method("get_noise_level"):
 			noise_val = player_ref.get_noise_level()
 		if noise_val > noise_threshold and noise_val > 0.0:
-			_investigate_point = player_ref.global_position
-			# PLAN.md Stage 3: Stealth skill "cold_trail" (0.2/level, max 2) -
-			# shortens how long enemies keep searching after losing the player.
-			var cold_trail_lvl: int = SkillTreeManager.get_skill_level(&"cold_trail") if SkillTreeManager else 0
-			_investigate_timer = 5.0 * (1.0 - 0.2 * cold_trail_lvl)
-			_change_state(State.INVESTIGATE)
+			_enter_investigate_at(player_ref.global_position)
 		if _can_see_player():
 			_change_state(State.CHASE)
+
+## Shared by "heard a noise" (_detect_ambient) and "lost the hidden player"
+## (_state_chase): go search the last known point instead of tracking blind.
+func _enter_investigate_at(pos: Vector3) -> void:
+	_investigate_point = pos
+	# PLAN.md Stage 3: Stealth skill "cold_trail" (0.2/level, max 2) -
+	# shortens how long enemies keep searching after losing the player.
+	var cold_trail_lvl: int = SkillTreeManager.get_skill_level(&"cold_trail") if SkillTreeManager else 0
+	_investigate_timer = 5.0 * (1.0 - 0.2 * cold_trail_lvl)
+	_change_state(State.INVESTIGATE)
+
+func _on_player_hiding_changed(hiding: bool) -> void:
+	_player_hiding = hiding
 
 func _perform_attack() -> void:
 	if not player_ref or not is_instance_valid(player_ref) or not player_ref.has_method("take_damage"):
@@ -457,6 +475,8 @@ func _perform_attack() -> void:
 		_deal_damage()
 
 func _deal_damage() -> void:
+	if _player_hiding:
+		return
 	if player_ref and is_instance_valid(player_ref) and player_ref.has_method("take_damage"):
 		if global_position.distance_to(player_ref.global_position) <= attack_range + 0.5:
 			player_ref.take_damage(attack_damage)
