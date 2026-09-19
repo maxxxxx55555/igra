@@ -1,4 +1,42 @@
-# Run state — orchestrator pass (2026-09-19)
+# Run state — orchestrator pass (2026-09-20)
+
+## This session (2026-09-20): full-game audit + gameplay fixes
+- Phase 0: `gh auth status` not logged in (device-flow login needs a human at
+  github.com, can't complete headlessly) — skipped per "never block on gh". Push path
+  proven directly via git instead: `git ls-remote origin refs/heads/main` ==
+  `git rev-parse main` after every push below, all matched.
+- Phase 1: `docs/GAME_AUDIT.md` — full score table, 9 P1 fixes shipped, 6 findings
+  documented but not fixed (zone boundary / needs playtest / needs design call), 5
+  design improvements with acceptance criteria. Read it for detail; commits:
+  `f1002d3` `7ec2e3a` `f7832c1` `ee273ee` `6bf1deb` `cab439b` `ac847af` `4c0be57`.
+- **Gate baseline changed since the last orchestrator pass — verified, not a
+  regression.** Full `bash tools/check.sh` (non-static) now shows 20/26, not the
+  previously-recorded 25/26. The 6 failures are compile-gate, asset-check, 3D-scene
+  (the already-documented pre-existing stall), save-integrity, boot-flow, and
+  theme-unify. Root-caused all 6 before touching anything:
+  - compile-gate / asset-check / theme-unify all fail on the *same* pre-existing
+    cause — stale/missing `.godot/imported/*.ctex` cache for several PNGs
+    (`city_iso_2048.png`, `btn_tex_disabled.png`, `quickslot_v2_72.png`, and 41/41
+    item icons in asset-check) in this headless environment. Confirmed present
+    *before* any Phase 2 edit (same error in a standalone `scene_smoke.gd` run at
+    the very start of this session).
+  - save-integrity / boot-flow: confirmed via `git stash` A/B test — both fail
+    identically (byte-identical error messages) against pristine pre-session code.
+    save-integrity fails *worse* on pristine (13 fails incl. basic save/load
+    round-trip) — a `user://` filesystem behavior issue in this sandbox, not
+    anything in `save_system.gd`.
+  - Static gate (12/12), `scene_node_check.py` (clean), and
+    `tools/qa_sim/balance_sim.py` (PASS) all stayed green throughout.
+  - Not fixed this session: none of these 6 are in scope for a gameplay-fix pass
+    (they're headless-environment/import-cache issues, not code bugs) — flagging
+    here so the next session doesn't re-litigate the stash A/B test.
+- Phase 3 (integrator): **not run.** Neither trigger condition met — no literal
+  "MERGE NOW" from the owner this session, and `docs/RUN_STATE_OC.md`/
+  `docs/RUN_STATE_CL.md` still don't exist (OpenCode/Cline haven't started).
+  Unchanged from the stance below.
+
+---
+
 
 ## Done, pushed
 - `86228c6` Phase 0: CLAUDE.md economy rules block; no `.mcp.json` in repo (nothing to disable at
