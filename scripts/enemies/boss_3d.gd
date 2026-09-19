@@ -84,7 +84,13 @@ func _tick_p1(delta: float) -> void:
 		_teleport_timer = TELEPORT_INTERVAL
 		_teleport_near_player()
 	if player_ref and is_instance_valid(player_ref):
-		_throw_energy_ball()
+		# GAME_AUDIT P1: fired instantly with zero visual/audio cue, often on
+		# the same tick as a teleport-in - reuse the same MonsterTelegraph
+		# warn() every other attack in the base class already goes through.
+		if _telegraph:
+			_telegraph.warn(_throw_energy_ball)
+		else:
+			_throw_energy_ball()
 		var cd: float = attack_cooldown
 		if _is_in_light():
 			cd *= 1.5
