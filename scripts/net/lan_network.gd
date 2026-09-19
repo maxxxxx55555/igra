@@ -56,19 +56,19 @@ func is_client() -> bool: return role == Role.CLIENT
 func is_online() -> bool: return connected
 
 func _on_peer_connected(id: int) -> void:
-	print("[LAN] peer connected ", id)
+	push_warning("[LAN] peer connected ", id)
 func _on_peer_disconnected(id: int) -> void:
-	print("[LAN] peer disconnected ", id)
+	push_warning("[LAN] peer disconnected ", id)
 func _on_connected_to_server() -> void:
-	print("[LAN] connected to server")
+	push_warning("[LAN] connected to server")
 	var bus := get_node_or_null("/root/EventBus")
 	if bus != null:
 		bus.lan_joined.emit(multiplayer.get_unique_id())
 func _on_connection_failed() -> void:
-	print("[LAN] connection failed")
+	push_warning("[LAN] connection failed")
 	leave()
 func _on_server_disconnected() -> void:
-	print("[LAN] server disconnected")
+	push_warning("[LAN] server disconnected")
 	leave()
 
 @rpc("any_peer", "call_local", "unreliable")

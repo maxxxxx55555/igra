@@ -34,7 +34,7 @@ func start_client() -> void:
 	_is_host = false
 	_udp = PacketPeerUDP.new()
 	if _udp.bind(DISCOVERY_PORT) != OK:
-		# push_warning("LANDiscovery: port %d busy, scan disabled" % DISCOVERY_PORT)
+		push_warning("LANDiscovery: port %d busy, scan disabled" % DISCOVERY_PORT)
 		_udp = null
 		return
 	set_process(true)

@@ -17,7 +17,7 @@ func _init(service: Node) -> void:
 	_service = service
 
 func initialize() -> void:
-	print(LOG_PREFIX, ": SDK не подключён, реклама отключена, игра продолжает работать")
+	push_warning(LOG_PREFIX, ": SDK не подключён, реклама отключена, игра продолжает работать")
 	_logged = true
 
 ## Роликов нет. Игра обязана продолжать работать, поэтому это не ошибка,
