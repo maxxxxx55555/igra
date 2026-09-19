@@ -1,14 +1,41 @@
-# Run state — premium release push (closure run)
+# Run state — orchestrator pass (2026-09-19)
 
-## Closure items done
-- ITEM 1 `822642f`: flow_check.py Master-bus check fixed (tool bug, not game bug). Static now 12/12.
-- ITEM 2 `f29bbfc` then corrected `3eab8e3`: E2-E4 size narrowing over-excluded 6 real planned-feature directories on zero-reference evidence alone (menu-parallax art, touch-gesture pictograms, map-screen UI, ending-screen art, platform store assets). Caught by cross-checking delivery docs, reverted same session. Real total cut: **23.5%** (215,512,000 bytes, down from 281,710,668), not the 36.6%/27.7% earlier claimed.
-- ITEM 3 `ce8f7b6`: audio bitrate — definitive answer via `../refs/godot-docs`: no safe kbps control exists in Godot 4.7's WAV importer (3-value enum only: PCM/ADPCM/QOA). No files changed.
-- ITEM 4: deliberately not attempted — `f83e783`-era finding (W1 only wired) plus a genuine live/dead code-path ambiguity in ground-material wiring, no visual verification capability. Recorded in `docs/KNOWN_ISSUES.md` (`3980737`).
-- ITEM 5 `2ce2be6`: 13-locale short descriptions (<=80 chars) done; full long-form listing stays dev-remaining for 11 locales.
+## Done, pushed
+- `86228c6` Phase 0: CLAUDE.md economy rules block; no `.mcp.json` in repo (nothing to disable at
+  repo scope); `rtk` not installed, not verified, skipped.
+- `ff863c3` Phase 1: merged `arena/01a0b08a-igra` (verified real, clean, conflict-free before
+  merging — not trusted from the task description). Gates re-verified after a clean `--import`:
+  static 12/12, full 25/26 (only the pre-existing 3D-scene stall). 4 OTHER unmerged `arena/*`
+  branches checked and deliberately NOT merged — see below, not silently dropped.
+- `8704231` Phase 2: `AGENTS.md` (OpenCode zone), `.clinerules/zone.md` (Cline zone),
+  `docs/AGENT_ZONES.md` (manifest). Local branches `oc/visual-w10`/`cl/a11y-i18n` created from
+  current main, not pushed (both empty so far).
+- `bf0f7c9` Phase 3: `docs/TOOLING_DECISIONS.md` — nothing installed (see file for why).
 
-## Correction discipline this run
-This session found and fixed a real methodology flaw in its own prior-turn work (E2-E4's first pass) rather than let the wrong number stand. Lesson for any future size-budget work in this repo: zero code references does not mean dead — cross-check `docs/REPORT_*.md`/`docs/*_SPEC.md` for "planned"/"unwired"/"delivered ahead of code" language before excluding or deleting anything.
+## Arena branches NOT merged — real evidence, not a guess
+- `arena/019ffbd0-igra` (77 files, 2953+/1052- vs main, 110 conflict-marker lines in a merge-tree
+  dry run) — deep early-history divergence (commits go back to hiding-spot/save-system fixes
+  already shipped on main under different hashes). Real conflict, needs human resolution.
+- `arena/01a07b1c-igra` (45 files, 1197+/216-, 71 conflict-marker lines) — FPS weapon-layer
+  changes that likely conflict with the live weapon code on main.
+- `arena/01a09af1-igra` (552 files, 20244+/343-, 6 conflict-marker lines) — its own history is
+  just merges of two ALREADY-merged branches, yet diverges massively from current main. Almost
+  certainly stale/abandoned, not safe to merge blind.
+- `arena/01a0ab24-igra` (3 files, 517+, **direct semantic conflict**) — a more detailed,
+  conflicting `docs/GAMEFEEL_SPEC.md`/new `docs/QA_MATRIX.md`/`docs/BALANCE_MATRIX.md` vs the
+  version already wired into shipped code this session (`f372a5c`). Flagged in both zone
+  contracts for whoever picks up visual/a11y work next.
+- `arena/card-unique-rescue` — already explicitly rejected in this repo's own history
+  (`docs/RELEASE_ARTIFACTS.md`: fabricated 22/22 cert, byte-identical blobs to main). Not
+  re-attempted.
 
-## Next
-P6.1 sign-off — v7.1 report with corrected numbers, tag v7.1.0-rc2 (v7.0.0-rc1 stays as-is).
+## Integrator stance
+No dev work on `main` right now. Waiting on either owner command "MERGE NOW" or both
+`docs/RUN_STATE_OC.md`/`docs/RUN_STATE_CL.md` showing done+pushed (neither exists yet — no
+OpenCode/Cline session has started work).
+
+## Owner actions
+1. `/model opusplan` (Phase 0 ask).
+2. Open OpenCode Desktop on this repo, checkout `oc/visual-w10` — it auto-reads `AGENTS.md`.
+3. Open Cline Desktop on this repo, checkout `cl/a11y-i18n` — it auto-reads `.clinerules/zone.md`.
+4. When both are done: say "MERGE NOW" (or just wait — this tool checks both RUN_STATE files).
