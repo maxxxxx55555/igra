@@ -4,6 +4,7 @@ const BAR_W: float = 220.0
 const BAR_H: float = 16.0
 const BAR_ROW_PITCH: float = 34.0
 const BAR_ROW_TOP: float = 30.0
+const _SLOT_ITEMS: Array = [&"flashlight", &"battery", &"medkit", &"key", &"cable", &"fuse"]
 
 var _hp: float = 1.0
 var _stam: float = 1.0
@@ -94,6 +95,10 @@ func _ready() -> void:
 	# Подсказка была вечно пустой строкой: текст в неё никто не писал.
 	EventBus.interact_prompt_changed.connect(func(text: String) -> void: prompt.text = text)
 	EventBus.inventory_weight_changed.connect(_on_weight_changed)
+	# Badge counts froze at their _ready()-time snapshot: nothing refreshed
+	# them on pickup/use/craft even though inventory_changed fires for all
+	# three (inventory_manager.gd).
+	EventBus.inventory_changed.connect(_refresh_slot_badges)
 	EventBus.inventory_notice.connect(func(msg: String): _show_notice(msg))
 	EventBus.player_detected.connect(_on_monster_spotted)
 	EventBus.enemy_hp_updated.connect(_on_enemy_hp_updated)
@@ -820,7 +825,7 @@ func _request_strobe() -> void:
 
 func _setup_slot_placeholders() -> void:
 	var item_icons := preload("res://scripts/ui/item_icons.gd")
-	var order := [&"flashlight", &"battery", &"medkit", &"key", &"cable", &"fuse"]
+	var order := _SLOT_ITEMS
 	var inv := get_tree().root.get_node_or_null("InventoryManager")
 	for i in 6:
 		var slot := get_node("BottomCenter/Slot" + str(i))
@@ -885,6 +890,18 @@ func _use_quick_slot(index: int) -> void:
 	if not inv or not inv.has_method("use_item"):
 		return
 	inv.use_item(index)
+
+func _refresh_slot_badges() -> void:
+	var inv := get_tree().root.get_node_or_null("InventoryManager")
+	if not inv:
+		return
+	for i in _SLOT_ITEMS.size():
+		var slot := get_node_or_null("BottomCenter/Slot" + str(i))
+		var badge: Label = slot.get_node_or_null("Badge") if slot else null
+		if not badge:
+			continue
+		var item_id: StringName = _SLOT_ITEMS[i]
+		badge.text = str(inv.count_of(item_id)) if item_id != &"" else "0"
 
 func _add_map_button() -> void:
 	var btn := Button.new()
