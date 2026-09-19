@@ -204,7 +204,7 @@ func _verify_progress(data: Dictionary) -> Dictionary:
 		return data
 	var expected: String = _sign_progress(data.get("power", {}), data.get("progress", {}))
 	if expected != String(data["progress_hmac"]):
-		print("[SaveSystem] district/progress данные не прошли отдельную проверку подписи — сброшены")
+		push_warning("[SaveSystem] district/progress данные не прошли отдельную проверку подписи — сброшены")
 		data["power"] = {}
 		data["progress"] = {}
 	return data
@@ -236,19 +236,19 @@ func _read_validated(path: String) -> Dictionary:
 	if not data.is_empty():
 		return data
 	if main_reason[0] != "":
-		print("[SaveSystem] основной сейв не читается (", main_reason[0], "): ", path, " — пробую резервные")
+		push_warning("[SaveSystem] основной сейв не читается (", main_reason[0], "): ", path, " — пробую резервные")
 	# STEP 4: try all 3 rotated backups, newest first, not just .bak.
 	for i in range(1, BACKUP_DEPTH + 1):
 		var suffix: String = ".bak" if i == 1 else ".bak%d" % i
 		var bak_reason := [""]
 		data = _read_envelope(path + suffix, bak_reason)
 		if not data.is_empty():
-			print("[SaveSystem] восстановлено из ", suffix, ": ", path)
+			push_warning("[SaveSystem] восстановлено из ", suffix, ": ", path)
 			return data
 	if main_reason[0] != "" and FileAccess.file_exists(path):
 		var quarantine := path + ".corrupt-" + str(Time.get_unix_time_from_system())
 		DirAccess.rename_absolute(path, quarantine)
-		print("[SaveSystem] сейв и резервные копии не читаются — карантин в ", quarantine, ", старт с чистого состояния")
+		push_warning("[SaveSystem] сейв и резервные копии не читаются — карантин в ", quarantine, ", старт с чистого состояния")
 	return {}
 
 func set_checkpoint(_scene_path: String, pos: Vector3) -> void:
@@ -341,14 +341,29 @@ func reset_all() -> void:
 	# с уровнем/скиллами от прошлого забега на этом сейв-профиле.
 	XpManager.reset()
 	SkillTreeManager.reset()
-	# Тот же класс ошибки, что и TRUTH WAVE P0.2 выше, только про другие
-	# системы. ProgressTracker несёт счётчики секретов/убийств/пазлов и список
-	# уже найденных секретов, NewGamePlus — уровень NG+ и выбранные
-	# модификаторы. Без сброса «новая игра» стартовала бы со статистикой
-	# прошлого забега, а найденные секреты не появились бы заново вовсе
-	# (DistrictLoot теперь пропускает те, что помнит ProgressTracker).
+	# Тот же класс ошибки, что и TRUTH WAVE P0.2 выше, только про другую
+	# систему. ProgressTracker несёт счётчики секретов/убийств/пазлов и список
+	# уже найденных секретов. Без сброса «новая игра» стартовала бы со
+	# статистикой прошлого забега, а найденные секреты не появились бы
+	# заново вовсе (DistrictLoot теперь пропускает те, что помнит
+	# ProgressTracker).
 	ProgressTracker.from_dict({})
-	NewGamePlus.reset_for_new_game()
+	# GAME_AUDIT P1: same reset gap as XP/skills above, for the district
+	# pointer - load_all() sets dm.current_district from the save (line
+	# ~304-307), but reset_all() never set it back to the start district, so
+	# "New Game" pressed mid-run (death screen, or Play after a save exists)
+	# left the player's district pointer stale at wherever they died/quit.
+	var dm := get_node_or_null("/root/DistrictManager")
+	if dm != null:
+		dm.current_district = "suburbs"
+	# GAME_AUDIT P1: NewGamePlus.reset_for_new_game() deliberately NOT called
+	# here, unlike the systems above. victory_screen.gd's NG+ button calls
+	# NewGamePlus.activate_ng_plus() then routes straight to the main menu;
+	# the only way to actually START that harder run is the menu's "Play"
+	# button, which is start_new_game() -> reset_all(). Wiping NG+ here made
+	# NG+ unreachable in practice - activating it and starting the run
+	# immediately reset it to 0. A genuinely fresh save (NG+ level already 0)
+	# is unaffected either way.
 
 func consume_pending_player_pos() -> Vector3:
 	var p := _pending_player_pos
