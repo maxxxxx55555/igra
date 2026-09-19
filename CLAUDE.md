@@ -37,5 +37,19 @@ Launch, RPC-on-self, StyleBoxFlat scenes, NoiseLabel tscn, FadeTransition pause 
 ## Corrected this session (TRUTH WAVE) — was claimed done, actually wasn't
 `reset_all()`/"XP reset" was listed as done but `SaveSystem.reset_all()` never actually called `XpManager.reset()` or `SkillTreeManager.reset()` — a fresh New Game kept the previous playthrough's level/XP/skill points on the same save profile. Fixed; see `docs/KNOWN_ISSUES.md` and `docs/PLANS.md` for the full trace. Lesson: an "already done" claim here should point at a real test/gate, not just a past commit message.
 
+## Economy rules (context budget)
+Targeted `rg`/`sed -n` reads, never a whole-file cat over ~300 lines. Never re-read a file already
+held this turn. Command output: redirect + `grep`/`tail` to ≤30-40 relevant lines, never paste a
+full log. One-line phase reports on multi-step work (`PHASE N DONE: <hash> <gate-summary>`). Reuse
+an earlier gate result only when the diff provably cannot affect it (state the reason in one
+clause). `rtk` is not installed on this machine (checked 2026-09-19, `command not found`) — no
+verified official package to install under that name without ambiguity, so this repo runs without
+it; if it's ever added, prefix verbose commands with it instead of the above.
+
+## Multi-agent zones (if wired)
+When `docs/AGENT_ZONES.md` exists, each listed agent owns exactly the files/dirs in its zone
+table — a zone violation (editing outside it) means stop and report, not push through. See that
+file for the live agent/branch/zone list.
+
 ## Not built yet
 `docs/PRODUCTION_BIBLE.md`'s perf-guard checklist item (draw-call count as an automated gate, not just a manual check) is not built. Everything else previously listed here (`tools/autopilot/`, `docs/HANDOFF.md`, `docs/KNOWN_ISSUES.md`) now exists — check current state before assuming something doesn't exist rather than trusting this list.
