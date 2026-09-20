@@ -665,11 +665,21 @@ func _speed_for(state: State) -> float:
 	var base: float
 	match state:
 		State.RUN: base = stats.run_speed
-		State.STEALTH: base = stats.stealth_speed
+		State.STEALTH:
+			base = stats.stealth_speed
+			# docs/DESIGN_AUDIT_ARENA.md P2 quiet_pace: +10%/level, STEALTH only,
+			# applied once before status/weight modifiers below.
+			var quiet_lvl: int = SkillTreeManager.get_skill_level(&"quiet_pace") if SkillTreeManager else 0
+			base *= 1.0 + 0.10 * quiet_lvl
 		State.WALK: base = stats.walk_speed
 		State.CROUCH: base = stats.walk_speed
 		_: base = 0.0
 	return base * (status_fx.speed_multiplier() if status_fx else 1.0)
+
+## docs/DESIGN_AUDIT_ARENA.md P2 low_profile: base_monster.gd reads this to
+## gate the sight-range reduction (sneaking + flashlight off only).
+func is_sneaking() -> bool:
+	return current_state == State.STEALTH or current_state == State.CROUCH
 
 ## Публичный вход для статусов НА игрока (укус, коготь, ожог) — см. base_monster.gd.
 func apply_status(status: int, duration: float, dps: float = 0.0, power: float = 0.0) -> void:

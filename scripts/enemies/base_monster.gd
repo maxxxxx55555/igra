@@ -506,10 +506,22 @@ func _can_see_player() -> bool:
 	# Модификатор NG+ "ghost": Crawlers полностью игнорируют игрока.
 	if monster_id == &"crawler" and NewGamePlus.get_modifier_toggle("crawlers_ignore"):
 		return false
+	var vrange := vision_range
+	var prange := peripheral_range
+	# docs/DESIGN_AUDIT_ARENA.md P2 low_profile: -10%/level to both sight
+	# ranges, avoidance only. Acquire-states only (not an active CHASE),
+	# player must be sneaking with the flashlight off, boss excluded.
+	if not is_in_group("boss") and ai_state in [State.IDLE, State.PATROL, State.INVESTIGATE] \
+			and player_ref.has_method("is_sneaking") and player_ref.is_sneaking() \
+			and player_ref.get("flashlight_enabled") == false:
+		var lp_lvl: int = SkillTreeManager.get_skill_level(&"low_profile") if SkillTreeManager else 0
+		var mult := 1.0 - 0.10 * lp_lvl
+		vrange *= mult
+		prange *= mult
 	var dist := global_position.distance_to(player_ref.global_position)
-	if dist > vision_range:
+	if dist > vrange:
 		# Check peripheral vision
-		if peripheral_range > 0.0 and dist <= peripheral_range:
+		if prange > 0.0 and dist <= prange:
 			var dir_to := (player_ref.global_position - global_position).normalized()
 			var forward := -global_transform.basis.z.normalized()
 			var angle := acos(clampf(dir_to.dot(forward), -1.0, 1.0))
@@ -521,7 +533,7 @@ func _can_see_player() -> bool:
 	var angle := acos(clampf(dir_to.dot(forward), -1.0, 1.0))
 	if angle > deg_to_rad(vision_angle * 0.5):
 		# Check peripheral vision
-		if peripheral_range > 0.0 and dist <= peripheral_range and angle <= deg_to_rad(peripheral_angle * 0.5):
+		if prange > 0.0 and dist <= prange and angle <= deg_to_rad(peripheral_angle * 0.5):
 			return _check_line_of_sight()
 		return false
 	return _check_line_of_sight()

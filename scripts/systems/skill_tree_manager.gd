@@ -155,6 +155,24 @@ const SKILL_TREES: Dictionary = {
 				"max_level": 2,
 				"effect_per_level": 0.2
 			},
+			## docs/DESIGN_AUDIT_ARENA.md P2: avoidance-only choices, not combat
+			## replacements. requires silent_steps (unlocked, not maxed).
+			"low_profile": {
+				"name": "SKILL_LOW_PROFILE_NAME",
+				"description": "SKILL_LOW_PROFILE_DESC",
+				"cost": 2,
+				"requires": ["silent_steps"],
+				"max_level": 2,
+				"effect_per_level": 0.10
+			},
+			"quiet_pace": {
+				"name": "SKILL_QUIET_PACE_NAME",
+				"description": "SKILL_QUIET_PACE_DESC",
+				"cost": 1,
+				"requires": ["silent_steps"],
+				"max_level": 2,
+				"effect_per_level": 0.10
+			},
 		}
 	}
 }
@@ -255,6 +273,12 @@ func _apply_skill_effect(skill_id: StringName, level: int) -> void:
 			pass
 		"cold_trail":
 			# Read directly by base_monster.gd when setting _investigate_timer
+			pass
+		"low_profile":
+			# Read directly by base_monster.gd._can_see_player() at acquire time
+			pass
+		"quiet_pace":
+			# Read directly by player_3d.gd._speed_for(State.STEALTH)
 			pass
 
 ## Static audit 2026-09-08: load_data() below used to call
