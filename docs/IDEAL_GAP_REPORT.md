@@ -1,77 +1,118 @@
-# Ideal gap report — 2026-09-20 (RC finish pass)
+# Ideal gap report — 2026-09-21 (v7.3, real-engine pass)
 
-What "ideal" (9-10/10, ship-ready) looks like for each system, scored against what's
-actually verified in this checkout right now — not aspirational. Every score cites the
-evidence it's based on. `docs/GAME_AUDIT.md` has the original full-system audit from
-earlier the same day; this report is the state *after* that audit's fixes, this session's
-own regression-catch-and-revert, and the arena design audit's proposals.
+Updates v7.2's report (2026-09-20, below) after a pass with something no prior session had:
+a real Godot 4.7 binary on this machine, not a headless-only sandbox. That changed two
+things — real `autoplay_bot` runs against real gameplay, and TOP-10 #4 (the "re-verify gate
+failures on a real machine" item) actually got done, which flipped several "environmental,
+unconfirmed" gate failures into "confirmed environmental, now fixed" or "confirmed real."
+
+## What changed this pass
+
+- **Boss-phase softlock (was TOP-10 #2) — CLOSED**, `acddc80`. Root cause confirmed with
+  real telemetry (not simulated): the Architect's P2/P3 chase periodically sinks below the
+  arena floor (measured Y −1 → −33 across ~90s in one real run), and the existing rescue
+  teleport only checked full 3D distance with a 1.5s grace period, so a vertically-fallen
+  boss read as "close" and the rescue never fired fast enough. Fixed by checking vertical
+  separation independently, no grace period. **3-seed bot: 2/3 wins, boss fight reached and
+  resolved both times** (up from a 1/3 pre-fix baseline on the same revision, where the other
+  2 seeds hit this exact signature). One unrelated new finding surfaced by this same bot run:
+  seed2 hit a spine-phase softlock in `residential` (not boss-related) — logged below as a
+  new open item, not silently dropped.
+- **Arena P2 stealth skills (was TOP-10 #3) — CLOSED**, `c2dbeb4`. `low_profile` and
+  `quiet_pace` added per `docs/DESIGN_AUDIT_ARENA.md`, localized to all 13 locales,
+  rank-0-safe by construction (bot baseline unaffected).
+- **Shop.gd dead code (was TOP-10 #5) — CLOSED via deletion**, `aa6548b`. Traced the live
+  "Shop" UI screen and confirmed it's fully wired to `ShopService`/`CoinWallet` — a separate,
+  working system. `shop.gd`'s battery/stamina/medkit catalog was never connected to it or
+  anything else and predates it; deleted, not a planned feature. **The underlying economy
+  gap this item was about (1,300-coin repeat-profile shortfall) is NOT closed by this** —
+  deletion removes dead code, it doesn't add income. Still open, see Economy row below.
+- **`_QUARANTINE` fold-in (was TOP-10 #9) — CLOSED**, `d704461`. Export-filter exclusion
+  (not physical deletion, per this repo's hard rule) across all 3 presets. Measured via a
+  real `--export-pack` run: 213,686,040 → 213,110,424 bytes (−0.27%, real number not an
+  estimate).
+- **Audio mix-audit auto-fixes — CLOSED (the auto-fixable subset)**, `39b2254`. VICTORY mood
+  exempted from force-loop (was replaying a 14.5s figure forever under the win screen's 120s
+  arc); 8 confirmed-0-consumer duplicate/orphan audio files deleted. Loudness normalization,
+  new track generation, and the MENU track swap still need audio generation + ears — itemized
+  in `docs/MUSIC_RECIPE.md` (new this pass) and `docs/AUDIO_MIX_AUDIT.md`.
+- **Visual pass (TOP-10 #1) — barely moved, on purpose.** Only W10's streetlight
+  per-district `energy_mult` wiring landed (`e865149`) — pure numeric, no shader/material,
+  no rendering judgment needed. Everything else in W2-W10 has its asset already authored
+  (shaders/materials/vfx scenes/env presets all exist on disk, confirmed) but genuinely needs
+  a rendered frame to judge quality, which this pass deliberately didn't attempt blind, even
+  though this sandbox can technically render now — see `docs/VISUAL_REMAINING.md` (new this
+  pass) for the itemized remainder, including one real doc/code conflict found (District-
+  Themes' proposed ambient constants don't match `world_env_setup.gd`'s actual live values).
+- **TOP-10 #4 (real-machine gate re-verify) — DONE, and the diagnosis changed.** v7.2's
+  report said all 6 sandbox gate failures were "environmental," proven via git-stash A/B
+  testing but never actually fixed (no real machine to fix them on). This pass had a real
+  machine: ran `godot --headless --path . --import` (the exact fix `docs/RELEASE_READINESS_REPORT.md`
+  v6 already documented but no session since had hardware to apply), and 5 of the 6
+  failures (compile-gate, asset-check, boot-flow, theme-unify, save-integrity) went
+  **green**. Final tally: **26/27 engine+static gates**, up from v7.2's 21/27 — the only
+  remaining fail is the 3D-scene 90s-timeout stall, the same one named as pre-existing in
+  v7, v7.1 and v7.2. See `docs/RELEASE_READINESS_REPORT.md` v7.3 for the full breakdown.
 
 ## Per-category score
 
 | Category | Score | Evidence |
 |---|---|---|
-| Core game loop | 7/10 | `game_manager.gd` state machine solid, no changes needed this pass (`docs/GAME_AUDIT.md` finding #1) |
-| Save / NG+ | 8/10 | NG+ reachable end-to-end (last session), district pointer resets, battery/skill composition now order-independent (this pass, `24ceb68`), NG+ menu clarity shipped (`4e7560e`) |
-| Districts | 7/10 | stable, unchanged this pass |
-| Economy | 6/10 | `balance_sim.py` now reports the coin ledger honestly (`8f48faf`) instead of silently passing; real gap remains: `scripts/systems/shop.gd` (the "Shop" autoload) is dead code, zero callers - repeat-profile players have no verified in-run way to close the ~1,300-coin gap to 2 catalog items (see TOP-10 #6) |
-| Stealth / AI | 7/10 | `silent_steps` now actually reaches the noise value monsters check, investigate-timer arrival bug fixed (`2a88503`); hidden-player damage guard already fixed prior session |
-| Boss fight | 6/10 | P1 warning now visible (`24ceb68`); a boss-phase softlock is real but intermittent and its root cause is unconfirmed (battery/light-gate hypothesis tested and disproven this pass, see TOP-10 #2) |
-| Balance data | 8/10 | player-speed regression caught and reverted (`d6c86cc`), battery capacity ceiling now honored everywhere (`24ceb68`) |
-| i18n | 8/10 | `lan_menu.gd` fully localized, 19 new NG+/LAN keys across all 13 locales, parity + key-usage gates green (`4e7560e`); P2's two proposed new stealth skills have no keys yet (never implemented, see TOP-10 #3) |
-| Accessibility | 7/10 | a probe now exists and proves all 3 toggles gate their real juice sites AND survive save->reload (`c889b41`) - previously unverified entirely |
-| Audio | 7/10 | procedural layer now explicitly pauses with gameplay, guarded against two real mid-pause races (`f9bbfd7`) |
-| Visual / UI polish | 4/10 | only W1 (graphics presets) and now W9 (focus/disabled theme states, `2d5e702`) of `docs/VISUAL_PASS.md`'s W1-W10 are wired; W2-W8, W10 are real delivered shaders/materials sitting unused (see TOP-10 #1) |
-| Zero-shipped-debris | 9/10 | 13 BOM files + 7 debug-print/commented-code issues fixed prior session |
-| Release/QA process | 7/10 | IRON RULE established this pass (no balance commit without a recorded bot run); 6 gate failures in this sandbox all root-caused as pre-existing/environmental via git-stash A/B testing, not code regressions - still need a real-machine reverification (see TOP-10 #4) |
+| Core game loop | 7/10 | unchanged this pass |
+| Save / NG+ | 8/10 | unchanged this pass |
+| Districts | 7/10 | unchanged, but see new open item: seed2's spine-phase softlock in `residential` (below) |
+| Economy | 6/10 | `shop.gd` dead code resolved (hygiene win), but the real gap — repeat-profile players ~1,300 coins short of 2 catalog items with 0 repeatable income — is unchanged; deleting dead code doesn't fund anything |
+| Stealth / AI | 8/10 | P2 skills (`low_profile`/`quiet_pace`) landed this pass, `c2dbeb4`; P1's prior fixes still hold (unchanged) |
+| Boss fight | 8/10 | root cause found and fixed with real telemetry this pass, `acddc80`; 2/3 bot wins with the boss resolved both times, up from 1/3 |
+| Balance data | 8/10 | unchanged this pass; `balance_sim.py` PASS, stealth branch now 4 skills/13 SP (was 2/7), matching the design audit's arithmetic exactly |
+| i18n | 8/10 | 2 new keys (`SKILL_LOW_PROFILE_*`/`SKILL_QUIET_PACE_*`) × 13 locales this pass, parity green, `MISSING: 0` |
+| Accessibility | 7/10 | unchanged this pass |
+| Audio | 7.5/10 | mix-audit auto-fixes landed (`39b2254`); loudness/new-track work still needs generation + ears, recipe now exists (`docs/MUSIC_RECIPE.md`) |
+| Visual / UI polish | 4/10 | one more W-item wired (streetlight `energy_mult`) out of the ~10 remaining; still the lowest-scoring category, unchanged in substance — see `docs/VISUAL_REMAINING.md` |
+| Zero-shipped-debris | 9/10 | unchanged |
+| Release/QA process | 9/10 | real engine-gate re-verification actually happened this pass: 26/27 on real hardware (up from 21/27), only the long-documented 3D-scene stall remains; IRON RULE maintained (boss fix has a recorded 3-seed run in its commit) |
 
-## TOP-10 gap-to-ideal items
+## New open item found this pass
 
-Ordered by impact/effort, not by category.
+- **Spine-phase softlock, `residential` district.** Found by this pass's own post-fix
+  verification bot run (seed2): `SOFTLOCK: no progress for 45s — phase=spine
+  district=residential spine_i=1`, at `.qa_logs/autoplay_seed2.log` (this run's artifacts).
+  Not the boss-phase bug (different phase, different district, unrelated cause) — genuinely
+  new, not previously documented in `docs/KNOWN_ISSUES.md`. **DEV, unscoped** — this pass's
+  time went to the boss-phase fix (explicitly prioritized) and didn't leave room to
+  diagnose a second softlock; needs its own root-cause pass the same way the boss one got.
 
-1. **Full W2-W10 visual pass wiring** (`docs/VISUAL_PASS.md` §8 has the exact per-wave
-   spec). **DEV, large (multi-session), needs eyes-on-render** — this sandbox is
-   headless-only; every prior session that touched this correctly declined to wire 9
-   waves of shader/material code blind. Highest visual-quality impact in this list by far.
-2. **Boss-phase softlock root cause** — confirmed real and intermittent (this pass's own
-   diagnostic: 1 clean win, 2 prior softlocks, all in the boss phase after full district
-   completion), battery/light-gating hypothesis disproven with real telemetry, remaining
-   hypothesis (occasional navigation Y-dip below floor) unconfirmed. **DEV, medium** — the
-   new `battery=`/`fl_on=` heartbeat fields (`scripts/tools/_qa_autoplay_runner.gd`) are
-   already in place; needs a few more `autoplay_bot` runs that happen to reproduce it.
-3. **Arena design audit P2** (two new stealth skills, `low_profile`/`quiet_pace`) — fully
-   specified with exact values and localization copy in `docs/DESIGN_AUDIT_ARENA.md`, never
-   implemented (P3's UI/copy rework shipped this pass, P2's skill additions did not).
-   **DEV, medium** — skill_tree_manager.gd + base_monster.gd/player_3d.gd consumer wiring,
-   plus 2 new keys x 13 locales.
-4. **Re-verify the 6 gate failures on the owner's real machine.** All 6 (compile-gate,
-   asset-check, 3D-scene, save-integrity, boot-flow, theme-unify) were root-caused this
-   session as sandbox-specific (missing `.godot/imported/` cache for several textures, a
-   `user://` filesystem quirk, the long-documented 3D-scene stall) via a `git stash` A/B
-   test against pristine code - not regressions from any commit. **OWNER, ~10 min**: run
-   `bash tools/check.sh` (non-static) on a real dev machine and confirm the count differs
-   from this sandbox's 21/27.
-5. **Shop.gd**: either delete the dead "Shop" autoload (`scripts/systems/shop.gd`, zero
-   callers, confirmed this pass) or actually wire it to close the economy's real
-   repeat-profile funding gap. **DEV, small-medium** — a real design call, not a bug fix;
-   currently `ShopService` (the live, wired system) is unaffected either way.
-6. **Store listing full long-form translation** to 11 non-English locales (short
-   descriptions done, per v7.1). **DEV or owner-reviewable, ~1h/locale or MT+review.**
-7. **Windowed stills + store screenshots** (8 before/after, 8 store shots) — headless
-   capture proven impossible by a prior session; exact command in this file's history.
-   **OWNER-ONLY, ~10 min.**
-8. **Android keystore + signed AAB, Play Console setup** (app creation, IARC, listing
-   upload). **OWNER-ONLY, ~1-2h, needs a Google account + local Android SDK.**
-9. **`res://_QUARANTINE/` directory** — spotted in gate output, never folded into the
-   size-budget pass. **DEV, small** — same methodology as `docs/QUARANTINE_AUDIT.md`
-   already used for `_orphaned`/`_pre_norm`.
-10. **`gh auth login`** — device-flow login needs a human at github.com; this session
-    never blocks on it (push path proven directly via git) but PR/CI-based workflows stay
-    unavailable until it's done. **OWNER-ONLY, ~2 min.**
+## TOP-10 gap-to-ideal items (re-ordered; closed items removed)
+
+1. **Full W2-W10 visual pass wiring.** Still **DEV, large (multi-session), needs eyes-on-render**
+   — unchanged in substance from v7.2, see `docs/VISUAL_REMAINING.md` for the current itemized
+   list (assets all exist, wiring + quality judgment is the gap) plus one real doc/code
+   conflict this pass found and flagged rather than guessed at.
+2. **New spine-phase softlock in `residential`.** **DEV, unscoped** — see above. Same class
+   of bug as the boss-phase one (a bot-detected softlock with real telemetry available in
+   `.qa_logs/`), needs the same diagnostic treatment.
+3. **Economy: repeat-profile coin shortfall.** **DEV or design call, medium** — `shop.gd`'s
+   removal closed the dead-code question but not the underlying gap
+   (`docs/DESIGN_AUDIT_ARENA.md` P6 has the full ledger: 1,300-coin gap, 0 repeatable-grind
+   income by design). Needs an actual design decision (new faucet, reduced prices, or accept
+   the gap as intentional friction), not a code fix.
+4. **Store listing full long-form translation** to 11 non-English locales. Unchanged from
+   v7.2. **DEV or owner-reviewable, ~1h/locale or MT+review.**
+5. **Music generation** — `docs/MUSIC_RECIPE.md` (new this pass) has all 19 Suno prompts
+   ready to paste, ordered, with target files and post-production steps. **OWNER, ~2-4h**
+   (generation + trim/loudnorm/export per track — the prompts are ready, the audio isn't).
+6. **Windowed stills + store screenshots** (8 before/after, 8 store shots). Unchanged.
+   **OWNER-ONLY, ~10 min** — this pass confirmed the sandbox now has a real Godot binary,
+   but headless capture is still architecturally impossible (no compositor); the windowed
+   command is unchanged from prior sessions' notes.
+7. **Android keystore + signed AAB, Play Console setup.** Unchanged. **OWNER-ONLY, ~1-2h.**
+8. **`gh auth login`.** Unchanged, still not done (`gh auth status` checked this pass — not
+   logged in). **OWNER-ONLY, ~2 min.**
 
 ## Shortest path to 9/10 overall
 
-The single highest-leverage item is #1 (visual pass) — it's the only category below 6/10
-(Visual/UI at 4/10) and has zero dependency on the others. Everything else on this list is
-independently completable in any order. #2 (boss softlock) is the second priority: it's
-the one correctness question with a nonzero chance of blocking a real playthrough, and the
-diagnostic infrastructure to close it out is already in place.
+Same as v7.2: the visual pass (#1) is still the highest-leverage single item and the only
+category below 6/10. The new spine-phase softlock (#2) is now the second priority — it's a
+correctness bug with a nonzero chance of blocking a real playthrough, exactly like the boss
+one was, and this pass already proved the diagnostic method (real bot run + heartbeat
+telemetry + targeted fix) works.

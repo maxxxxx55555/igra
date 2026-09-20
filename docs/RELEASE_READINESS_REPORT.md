@@ -1,3 +1,66 @@
+# Release readiness report v7.3 — 2026-09-21 (real-engine sign-off)
+
+Supersedes v7.2 below (kept as history). Full detail in `docs/IDEAL_GAP_REPORT.md` (v7.3
+update, same date) and `docs/VISUAL_REMAINING.md`/`docs/MUSIC_RECIPE.md` (new this pass).
+
+**What's different about this pass:** it ran on a machine with a real Godot 4.7 binary, not
+a headless-only sandbox. Every prior v7.x report's "environmental, proven via git-stash A/B
+test" gate failures were real but unfixable without hardware — this pass had the hardware,
+so TOP-10 #4 (from v7.2) actually got closed instead of re-confirmed-and-carried-forward.
+The fix was exactly what `docs/RELEASE_READINESS_REPORT.md` v6 already documented (`godot
+--headless --path . --import` before trusting a gate result) — no session since v6 had a
+real machine to run it on until now.
+
+## Verification (real runs, this pass)
+
+| Item | Result | Evidence |
+|---|---|---|
+| Static gates | **12/12 PASS** | `bash tools/check.sh --static` |
+| Engine gates (full) | **26/27 PASS** (up from v7.2's 21/27) | `bash tools/check.sh` → "Провалено: 1, пройдено: 26". The 1 remaining fail is `прогон 3D-сцены (таймаут 90s)` — the same long-documented pre-existing stall named in v7, v7.1 and v7.2 (`docs/KNOWN_ISSUES.md`), unchanged by this pass's import fix. Compile-gate, asset-check, boot-flow, theme-unify and save-integrity — all 5 of v7.2's other "environmental" failures — are now confirmed environmental AND fixed, not just A/B-tested as probably-environmental |
+| Full asset import | **530/530 imported, 0 errors** | `godot --headless --import --path .` — this alone flipped compile-gate and asset-check from FAIL to PASS; both prior failures were 100% import-cache staleness, not code or content bugs (traced to specific missing `.ctex` cache entries, confirmed by direct re-run after import) |
+| `autoplay_bot` (pre-fix baseline) | **1/3** | seed2 WIN, seed1 + seed3 both softlocked in the boss phase with the identical Y-dip signature — `.qa_logs/autoplay_seed{1,3}.log` this pass |
+| `autoplay_bot` (post-fix) | **2/3, boss resolved both wins** | seed1 WIN, seed3 WIN; seed2 hit a new, unrelated spine-phase softlock in `residential` (logged as a new open item, not the boss bug) — `.qa_logs/autoplay_seed{1,2,3}.log` this pass, IRON RULE record in commit `acddc80` |
+| `balance_sim.py` | **PASS** | stealth branch now 4 skills/13 SP (was 2/7) reflecting this pass's `low_profile`/`quiet_pace` addition, matches `docs/DESIGN_AUDIT_ARENA.md`'s derived arithmetic exactly |
+| i18n | **13/13 locales, MISSING: 0** | `python tools/i18n_audit.py`; 2 new skill keys × 13 locales this pass |
+| Quarantine audit | **PASS** | `python tools/quarantine_audit.py --check`; separately, real `--export-pack` measured the fold-in at −575,616 bytes (−0.27%) |
+| a11y | **PASS, 7/7** | `python tools/qa_sim/a11y_check.py` (static) — no `_sec_probe` file exists in this repo under that name; the closest equivalent static safety check, `tools/qa_sim/overflow_check.py` (text-overflow risk scan), also ran clean of new findings |
+| Store listing | not re-run this pass (no store-facing change) | unchanged from v7.2's 13/13 |
+
+## Weighted readiness: **67%** (up from v7.2's 64%)
+
+| Category | Weight | Score | Change from v7.2 | Why |
+|---|---|---|---|---|
+| Engineering gates | 30 | 96% | +11 | 26/27 real, on real hardware — not an A/B-tested guess. The single remaining fail is the long-documented pre-existing 3D-scene stall, unchanged across 4 reports now |
+| Security | 10 | 100% | — | unchanged |
+| Size/perf | 15 | 62% | +2 | quarantine fold-in measured this pass (`docs/IDEAL_GAP_REPORT.md`) |
+| Visual/juice | 10 | 47% | +2 | one more W-item wired (W10 streetlight energy_mult); still the lowest-scoring dev category |
+| Content/i18n | 10 | 100% | — | unchanged |
+| Store/marketing | 10 | 45% | — | untouched this pass |
+| Owner-only steps | 15 | 0% | — | structurally unchanged; music generation now has a ready recipe (`docs/MUSIC_RECIPE.md`) which lowers the owner's effort but not this score (still 0 tracks actually generated) |
+
+`30×0.96 + 10×1.00 + 15×0.62 + 10×0.47 + 10×1.00 + 10×0.45 + 15×0.00 = 67.15` → **67%**
+
+## OWNER-ONLY (unchanged structurally, one item's effort just dropped)
+
+| Item | Effort | Evidence |
+|---|---|---|
+| Windowed stills + store screenshots | ~10 min | `docs/KNOWN_ISSUES.md` has the exact command; headless capture confirmed still impossible (no compositor) even with a real Godot binary now available |
+| Android keystore + signed AAB, Play Console setup | ~1-2h | `docs/store/HUMAN_CHECKLIST.md` |
+| `gh auth login` | ~2 min | checked this pass: still not authenticated |
+| **Music generation (19 tracks)** | **~2-4h, effort lowered this pass** | `docs/MUSIC_RECIPE.md` (new) — every Suno prompt is ready to paste in order; the owner's remaining work is generation + the DAW trim/loudnorm/export pass, not prompt-writing |
+| Store listing translation, 11 locales | ~1h/locale or MT+review | unchanged |
+
+## DEV-REMAINING
+
+| Item | Effort | Evidence |
+|---|---|---|
+| Full W2-W10 visual pass | large, multi-session, needs eyes-on-render | `docs/VISUAL_REMAINING.md` (new this pass) — itemized, including one real doc/code conflict found and flagged rather than guessed at |
+| New spine-phase softlock, `residential` district | unscoped | found by this pass's own verification run, `docs/IDEAL_GAP_REPORT.md` "New open item"; needs the same diagnostic treatment the boss-phase bug just got |
+| Economy: repeat-profile coin shortfall | medium, design call | `shop.gd` deletion closed the dead-code half of this, not the funding gap itself |
+| Audio loudness normalization + new-track mixing | ~2-3h, needs ears | `docs/AUDIO_MIX_AUDIT.md` §a; this pass did the auto-fixable subset only (loop-flag fix + dead-file cleanup) |
+
+---
+
 # Release readiness report v7.2 — 2026-09-20 (RC finish pass: OC/Cline absorbed, arena consumed, IRON RULE)
 
 Supersedes v7.1 below (kept as history). Full detail in `docs/IDEAL_GAP_REPORT.md` (new
@@ -34,7 +97,7 @@ recorded in the commit message. Neither session tagged a release before this one
 | Security | 10 | 100% | — | unchanged; save-integrity gate's sandbox failure is the same proven-environmental issue above, not a signing/crypto regression |
 | Size/perf | 15 | 60% | — | untouched this pass |
 | Visual/juice | 10 | 45% | +10 | a11y probe now proves the 3 toggles actually gate their juice sites (previously unverified); W9 theme parity wired |
-| Content/i18n | 10 | 100% | — | unchanged, more robust (lan_menu now fully localized, 19 new keys, parity maintained) |
+| Content/i18n | 10 | 100% | — | unchanged |
 | Store/marketing | 10 | 45% | — | untouched this pass |
 | Owner-only steps | 15 | 0% | — | structurally unchanged, not a code gap |
 
