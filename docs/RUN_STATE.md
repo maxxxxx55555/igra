@@ -3,7 +3,9 @@
 ## Session 3 (2026-09-20, later): balance consumption from arena design audit
 Consumed `docs/DESIGN_AUDIT_ARENA.md` from `arena/01a0bdfa-igra` (`docs(design):`
 commit `0a15e5e`, 8 proposals P1-P8; a later `docs(qa):` commit `a365088` on the same
-branch extends `docs/QA_MATRIX.md` + adds `docs/RELEASE_CHECKLIST.md`, docs-only).
+branch extends `docs/QA_MATRIX.md` + adds an owner checklist, docs-only; renamed to
+`docs/RC_OWNER_CHECKLIST.md` on merge — collided case-insensitively with the pre-existing
+`docs/release_checklist.md` on this Windows checkout otherwise, see RELEASE_ARTIFACTS.md).
 
 **Critical regression found and fixed first** (`d6c86cc`): the PRIOR session's own
 "player speed fix" (`data/balance/player_stats.tres` 170/300/90 → 1.7/3.0/0.9) was

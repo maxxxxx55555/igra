@@ -1,5 +1,32 @@
 # Known issues
 
+## Boss-phase softlock is real but nondeterministic — battery/light-gate hypothesis disproven (2026-09-20)
+
+RC finish pass observed the autoplay bot softlock in the boss phase (power_station,
+`phase=boss`) twice independently, always AFTER restoring all 11/11 districts (spine
+navigation and the P5 battery-capacity fix both proven fine both times — full district
+timelines, no resource starvation). Formed a hypothesis: the boss's P2 phase requires the
+flashlight to be lit on it to take damage (`boss_3d.gd`'s `_is_in_light()` gate); if the bot's
+battery ran out with no items left to refill, the boss would go permanently invulnerable and
+neither side could progress, matching the observed symptom (`boss_hp` frozen, `boss_dist`
+stuck near attack range for 40+ seconds before the 45s no-progress SOFTLOCK fired).
+
+**Disproven by a targeted diagnostic run**: added `battery=`/`fl_on=` to the bot's boss-phase
+heartbeat log (`scripts/tools/_qa_autoplay_runner.gd`) and re-ran. `fl_on=true` for the entire
+fight, `battery` never dropped below ~20 (the bot's own `_maintain_flashlight()` refill logic
+kept it topped up), and `boss_hp` dropped steadily throughout — the run **won cleanly** in
+303s. Also noted: `boss_pos.y` occasionally goes negative (e.g. `-31.0`, `-28.0`, `-17.0`)
+mid-fight before recovering — a navigation/physics dip below the floor plane that usually
+self-corrects but, in the two observed failures, may not have. This is the likely real
+mechanism, not battery/light-gating, but is **unconfirmed** — would need a run that
+softlocks WITH the new telemetry to nail down (neither of the two prior softlocks had it).
+Matches this doc's own much older "boss stall" entries below (2026-09-14/15/16) — a
+long-running, real, intermittent issue, not a regression from anything landed today.
+
+**Not a regression**: this session's own bot-win evidence across today's runs: 1/3 (P5
+verification), 1/1 (this diagnostic) — consistent with historical ~50-60% win rates recorded
+elsewhere in this file, not a new failure mode.
+
 ## W2-W10 visual pass — deliberately not attempted this session (2026-09-17)
 
 `docs/VISUAL_PASS.md` §8 has a fully-specified wiring plan (W1-W11) for the merged visual-pass

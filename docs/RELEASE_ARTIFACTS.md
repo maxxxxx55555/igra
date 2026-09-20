@@ -4,6 +4,31 @@ One line per artifact: what it is, where it lives, what it proves. Source of tru
 claim always stays in the artifact itself — this file only points at it. Started
 2026-09-12 (RELEASE CONVERGENCE PASS), updated 2026-09-13 through FINAL CONSOLIDATION.
 
+## RC finish pass v7.2 (2026-09-20) — OC/Cline lanes absorbed, arena design+QA consumed, IRON RULE established
+
+Two sessions same day. First caught and reverted a real regression shipped the session
+before (player speed "fix" that softlocked the bot 0/3 — see `docs/GAME_AUDIT.md`'s
+CORRECTION and `docs/RUN_STATE.md`). Second consumed the arena design audit's 8 proposals
+(P1, P4, P5, P6, P7, P8 applied; P2/P3 partially - NG+ UI+copy done, new stealth skills
+deferred to the locale owner's own judgment) and one arena QA doc merge, absorbed the never-
+started OpenCode/Cline lanes into the integrator zone, added an accessibility probe gate, and
+established the IRON RULE: no balance/number commit without a 3-seed `autoplay_bot` run
+recorded in the commit message.
+
+| Artifact | Where | What it proves |
+|---|---|---|
+| Speed-regression revert | `data/balance/player_stats.tres`, `docs/GAME_AUDIT.md`, commit `d6c86cc` | reverted 1.7/3.0/0.9 back to 170/300/90; bot 0/3 -> 3/3 confirmed before/after |
+| Zone rebaseline | `docs/AGENT_ZONES.md`, commit `ddbfaab` | oc/visual-w10 and cl/a11y-i18n verified at their exact branch-creation commit (zero work), marked INACTIVE, scope absorbed |
+| P4 audio pause | `scripts/audio/proc_audio.gd`, commit `f9bbfd7` | explicit PROCESS_MODE_PAUSABLE + guards at the two mid-flight pause races; not a balance change |
+| P5 battery + P8 telegraph | `scripts/player/player_3d.gd`, `scripts/systems/skill_tree_manager.gd`, `scripts/enemies/monster_telegraph.gd`, `tools/qa_sim/balance_sim.py`, commit `24ceb68` | battery_max composition bug + 4 hardcoded clamps fixed; boss P1 warning was invisible (dead mesh lookup + invalid 2D property on a 3D mesh), fixed; bot 1/3 win recorded in commit |
+| P2/P3 NG+ clarity + lan_menu i18n | `scripts/ui/{main_menu,new_game_plus_ui,win_screen}.gd`, `scripts/net/lan_menu.gd`, `data/i18n/*.json` (19 new keys x 13 locales), commit `4e7560e` | Play button now shows NG+ level + confirms before reset; lan_menu fully localized; i18n parity + key-usage gates green |
+| P3 a11y probe | `scripts/tools/_a11y_probe.gd`, `scenes/tools/a11y_probe_scene.tscn`, commit `c889b41` | proves reduce_flash/reduce_time_fx/reduce_ui_motion actually gate their juice sites + survive save->reload; wired into `tools/check.sh` |
+| P4 visual W9 | `scripts/ui/theme_provider.gd`, commit `2d5e702` | focus ring + distinct disabled state, VISUAL_PASS.md's one safely-verifiable item this pass (no windowed render capability in this environment) |
+| Ideal-gap: achievement toggle | `scripts/systems/achievements_manager.gd`, commit `e0458af` | Ghost NG+ modifier's achievement-disable now actually covers all 31 achievements, not 4 |
+| Boss-softlock diagnosis | `scripts/tools/_qa_autoplay_runner.gd`, `docs/KNOWN_ISSUES.md`, commit `e0458af` | battery/light-gate hypothesis tested and disproven via real telemetry; likely cause (occasional navigation Y-dip) documented, unconfirmed |
+| Arena docs merge | `docs/DESIGN_AUDIT_ARENA.md`, `docs/QA_MATRIX.md`, commit `1d3de3c`; renamed `docs/RC_OWNER_CHECKLIST.md`, commit follows | --no-ff merge of `arena/01a0bdfa-igra`, zero code conflicts. Its `docs/RELEASE_CHECKLIST.md` collided case-insensitively with the pre-existing `docs/release_checklist.md` on this Windows checkout (same physical file, two git index entries) - restored the original lowercase file's content and renamed the merged-in one to `docs/RC_OWNER_CHECKLIST.md` so both survive as distinct documents. Caught before any further commit built on the corrupted state. |
+| Sign-off | `docs/IDEAL_GAP_REPORT.md`, `docs/RELEASE_READINESS_REPORT.md` v7.2 | this pass's own scoring + top-10 gap-to-ideal list |
+
 ## v7 closure pass (2026-09-17) — 4 of 5 DEV-REMAINING items closed, one self-caught correction
 
 Closed v7's DEV-REMAINING list: fixed the `flow_check.py` tool bug, got a definitive (not
