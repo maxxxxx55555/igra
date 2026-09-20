@@ -234,6 +234,17 @@ func _boss_keep_near_player(delta: float) -> void:
 		player_ref = get_tree().get_first_node_in_group("player")
 	if not player_ref or not is_instance_valid(player_ref):
 		return
+	# Boss-phase softlock (IDEAL_GAP_REPORT #2): measured via 2026-09-20
+	# autoplay logs — P2/P3 chase pathing occasionally dips the boss below
+	# the arena floor (Y -1 -> -33 over ~90s in one real run), and 3D
+	# distance alone missed it: a fallen boss can still read as "close"
+	# while actually unhittable, so the 10m/1.5s far-timer never fired.
+	# Vertical separation is never legitimate gameplay, so it's corrected
+	# immediately instead of waiting on the horizontal-wander grace period.
+	if absf(global_position.y - player_ref.global_position.y) > 3.0 and has_method("_teleport_near_player"):
+		_boss_far_timer = 0.0
+		call("_teleport_near_player")
+		return
 	if global_position.distance_to(player_ref.global_position) > 10.0:
 		_boss_far_timer += delta
 		if _boss_far_timer >= 1.5 and has_method("_teleport_near_player"):
