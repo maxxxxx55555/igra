@@ -1,5 +1,58 @@
 # Run state — orchestrator pass (2026-09-20)
 
+## Session 3 (2026-09-20, later): balance consumption from arena design audit
+Consumed `docs/DESIGN_AUDIT_ARENA.md` from `arena/01a0bdfa-igra` (`docs(design):`
+commit `0a15e5e`, 8 proposals P1-P8; a later `docs(qa):` commit `a365088` on the same
+branch extends `docs/QA_MATRIX.md` + adds `docs/RELEASE_CHECKLIST.md`, docs-only).
+
+**Critical regression found and fixed first** (`d6c86cc`): the PRIOR session's own
+"player speed fix" (`data/balance/player_stats.tres` 170/300/90 → 1.7/3.0/0.9) was
+wrong. It was based on comparing the player's raw speed number to monster speed
+numbers and assuming proximity was correct, never checked against actual behavior.
+`tools/qa_sim/autoplay_bot` proved it: with the "fixed" values, 0/3 seeds won, all
+stuck within meters of spawn within 45s (district distances need the original
+traversal speed). Reverted to 170/300/90; bot confirmed 3/3 wins. Corrected
+`docs/GAME_AUDIT.md` in place (finding #2 + score rows) rather than deleting the
+record of the mistake. **Lesson for next session: never ship a numeric balance
+change without an `autoplay_bot` run first** — this one sat unverified in `main`
+for an entire session before this pass caught it.
+
+Applied from the arena audit (zone: balance/data files, gameplay scripts):
+- P6 (coin-economy reporting) + P7 (duration-target scoping to DARK) — `8f48faf`,
+  docs/simulator-reporting only, zero runtime delta, no bot test needed (verified the
+  new `[7]` balance_sim.py section reproduces the audit's derived numbers exactly).
+- P1 (repair the stealth skill investment) — `2a88503`: `silent_steps` was reducing
+  a noise-radius signal with zero listeners instead of the noise scalar monsters
+  actually read; `_state_investigate()` re-armed its own search timer to 5.0 every
+  tick on arrival, so search never expired. Both fixed. Bot: 1/3 win, 2 softlocks —
+  both after restoring 2-4/11 districts in nav-heavy districts (park/hospital)
+  unrelated to noise/investigate logic, matching this repo's own documented
+  historical baseline (`docs/KNOWN_ISSUES.md`: "6/10 wins... spine-navigation
+  failures"). Meets the audit's own stated target (>=1 win, 1-2/3 expected, not 3/3).
+
+**Not applied — out of zone:** P2 (new `low_profile`/`quiet_pace` skills) and P3
+(NG+ menu-copy rework) both require new keys across all 13 `data/i18n/*.json` locale
+files, which is `cl/a11y-i18n`'s zone per `docs/AGENT_ZONES.md`, not mine. Their
+non-localization pieces (skill effect wiring, routing logic) are ready to implement
+once locale keys exist — see `docs/DESIGN_AUDIT_ARENA.md` P2/P3 for the exact
+proposed strings and target files.
+
+**Not applied — deferred, not evidence-rejected:** P4 (pause `proc_audio.gd` with
+gameplay), P5 (make purchased battery capacity real instead of clamped to 100), P8
+(fix `MonsterTelegraph`'s mesh-lookup timing so the boss P1 warning is actually
+visible). All three passed a read-through and looked implementable, but after the
+speed-revert finding above this session deliberately stopped adding balance/gameplay
+changes rather than rushing three more without individually-verified bot runs. Each
+still has full file/line detail and acceptance criteria in the arena doc.
+
+## Phase M (merge check): WAITING
+Lane readiness: arena design branch — ready (`arena/01a0bdfa-igra`, consumed above).
+Arena QA branch (`docs(qa):`) — ready (`a365088`, docs-only, same branch).
+`docs/RUN_STATE_OC.md` (OpenCode) — **missing**. `docs/RUN_STATE_CL.md` (Cline) —
+**missing**. Not all lanes ready; per protocol, stopping here rather than merging or
+polling. No merge, no tag, no `RELEASE_READINESS_REPORT.md` v7.2 this session — those
+are gated on OC+CL finishing or an owner "MERGE NOW", neither of which happened.
+
 ## This session (2026-09-20): full-game audit + gameplay fixes
 - Phase 0: `gh auth status` not logged in (device-flow login needs a human at
   github.com, can't complete headlessly) — skipped per "never block on gh". Push path
