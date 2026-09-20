@@ -5,6 +5,18 @@ full headless engine battery, and fixed the fixable P1s in the same session (pon
 shortest diff, reuse before writing). Every finding below cites `file:line` or a run
 output; anything without hard evidence is marked HYPOTHESIS.
 
+> **CORRECTION (2026-09-20, same day, later session):** Finding #2 below ("player was
+> up to 15x faster than the fastest monster") was WRONG and has been reverted. It was
+> based on a static-analysis assumption never checked against actual behavior. The
+> `autoplay_bot` QA tool proved it: with the "fixed" values (1.7/3.0/0.9 m/s) the bot
+> softlocked 0/3 seeds, stuck within a few meters of spawn, every time — the district
+> layout genuinely needs the original traversal speed. With the original values
+> (170/300/90) restored, the same bot cleared 5 districts in under 90 seconds. See the
+> correction entry in `docs/RUN_STATE.md` for the full trace. Lesson: a code-level root
+> cause (no separate scale factor between player and monster velocity) does not by
+> itself prove which side of the comparison is "wrong" — verify against the actual
+> world scale (here, inter-district distances), not just internal numeric consistency.
+
 ## Score table
 
 | System | Score /10 | Status |
@@ -15,9 +27,9 @@ output; anything without hard evidence is marked HYPOTHESIS.
 | Economy | 5 → 6 | **fixed** (stale comment); sim coverage gap open |
 | Monster AI / stealth detection | 5 → 7 | **fixed** (hidden player could still be tracked/hit) |
 | Boss fight | 6 → 7 | **fixed** (P1 ranged attack had zero telegraph) |
-| Player controller | 6 → 8 | **fixed** (speed data bug, see Balance) |
+| Player controller | 6 | as-is (speed "fix" below was reverted, see CORRECTION) |
 | Input service | 8 | as-is, no action needed |
-| Balance data | 3 → 7 | **fixed** (player 15x faster than fastest monster) |
+| Balance data | 3 | as-is (player speed "fix" reverted, see CORRECTION) |
 | i18n | 7 | one gap open, **Cline zone** — not touched |
 | Audio | 6 | debug prints fixed; one behavioral HYPOTHESIS left open |
 | UI/HUD | 4 → 7 | **fixed** (quickslot badges never refreshed) |
@@ -32,14 +44,18 @@ output; anything without hard evidence is marked HYPOTHESIS.
    (`save_system.gd:351`, now removed) and wiped the level the player just set.
    Fix: `reset_all()` no longer touches NG+ state — a genuinely fresh save (level
    already 0) is unaffected either way. `scripts/core/save_system.gd`.
-2. **Player was up to 15x faster than the fastest monster** —
-   `data/balance/player_stats.tres` had `walk_speed=170.0, run_speed=300.0,
-   stealth_speed=90.0`, used directly as `CharacterBody3D.velocity` magnitude in m/s
-   (`player_3d.gd:538,656-666`, no scale factor anywhere). Monster speeds
-   (`enemy_roster_data.gd`) range 1.2-6.0 m/s. Read as leftover 2D pixel-speed
-   constants never converted for the 3D port. Fixed by dividing by 100 (preserves the
-   original walk:run:stealth ratio, lands in human walking/jogging/sneaking range:
-   1.7 / 3.0 / 0.9 m/s), consistent with the tuned monster roster.
+2. ~~**Player was up to 15x faster than the fastest monster**~~ — **RETRACTED, see
+   CORRECTION at the top of this file.** `data/balance/player_stats.tres` had
+   `walk_speed=170.0, run_speed=300.0, stealth_speed=90.0`, used directly as
+   `CharacterBody3D.velocity` magnitude (`player_3d.gd:538,656-666`, no scale factor
+   anywhere) vs. monster speeds (`enemy_roster_data.gd`) of 1.2-6.0. The code-level
+   observation was correct; the conclusion that this was a bug was not. Divided the
+   player values by 100 last session (1.7/3.0/0.9) without checking behavior first —
+   `autoplay_bot` proved that change softlocks the game 0/3 seeds at spawn. Reverted
+   to the original 170/300/90 this session; `autoplay_bot` cleared 5 districts in
+   under 90s with the revert. The apparent scale mismatch against monster speeds is
+   real but unexplained — worth a design look, not a unilateral numeric "fix" again
+   without bot verification first.
 3. **A hidden player could still be tracked and hit** — `hiding_spot.gd`'s physical
    occlusion blocks the *first* spotting raycast, but once a monster is in CHASE/ATTACK
    it never re-checked hiding: `_state_chase` (`base_monster.gd:389-405`, pre-fix)
