@@ -134,6 +134,33 @@ def time_to_win(style_minutes):
         MIN_MENU_TRAVEL_OVERHEAD_PER_DISTRICT * len(SPINE)
 
 
+# ── coin economy (source of truth: rewards_manager.gd, achievements_manager.gd,
+#    content/secrets.json, data/shop/*.tres) ─────────────────────────────
+# arena design audit P6 (2026-09-20, docs/DESIGN_AUDIT_ARENA.md): only wallet-
+# crediting events count as income — repeatable "kill coins" are HUD-only
+# (no CoinWallet.add caller), so they are NOT counted here on purpose.
+def coin_economy():
+    rw = read("scripts/economy/rewards_manager.gd")
+    reward = lambda name: int(re.search(rf"REWARD_{name}:\s*int\s*=\s*(\d+)", rw).group(1))
+    secret_reward = reward("SECRET")
+    district_reward = reward("DISTRICT_RESTORED")
+    achievement_reward = reward("ACHIEVEMENT")
+    n_secrets = len(re.findall(r'"id"\s*:', read("content/secrets.json")))
+    n_achievements = len(re.findall(r'"id"\s*:', read("scripts/systems/achievements_manager.gd")))
+    prices = []
+    for f in sorted((ROOT / "data/shop").glob("*.tres")):
+        m = re.search(r"price_coins\s*=\s*(\d+)", f.read_text(encoding="utf-8"))
+        if m:
+            prices.append(int(m.group(1)))
+    prices.sort()
+    return {
+        "secret_reward": secret_reward, "district_reward": district_reward,
+        "achievement_reward": achievement_reward, "n_secrets": n_secrets,
+        "n_districts": len(SPINE), "n_achievements": n_achievements,
+        "cheapest_two": prices[:2],
+    }
+
+
 def main():
     fails = []
     print("═" * 70)
@@ -247,6 +274,27 @@ def main():
               f"pacing). Not treated as a hard fail: DARK — the style the game's tension design targets — "
               f"lands cleanly in range, and this estimate has no ground-truth playtest to calibrate against.")
 
+    # 7. coin economy — reporting only (arena design audit P6): no runtime
+    #    delta, just makes the reachable-income vs. catalog-price gap visible
+    #    instead of assuming kill-income or secret-discovery fund progress.
+    ce = coin_economy()
+    print("\n[7] Coin economy (reachable wallet income vs. catalog prices, no runtime change)")
+    fresh_no_secrets = ce["n_districts"] * ce["district_reward"]
+    all_secrets = ce["n_secrets"] * ce["secret_reward"]
+    all_achievements = ce["n_achievements"] * ce["achievement_reward"]
+    cheapest_two_cost = sum(ce["cheapest_two"])
+    print(f"    districts x reward: {ce['n_districts']} x {ce['district_reward']} = {fresh_no_secrets}")
+    print(f"    all secrets x reward: {ce['n_secrets']} x {ce['secret_reward']} = {all_secrets}")
+    print(f"    all achievements x reward: {ce['n_achievements']} x {ce['achievement_reward']} = {all_achievements} (profile-persistent, not per-run)")
+    print(f"    cheapest 2 catalog items: {ce['cheapest_two']} = {cheapest_two_cost}")
+    print(f"    -> repeat profile, no secrets ({fresh_no_secrets}) vs cheapest 2 items ({cheapest_two_cost}): "
+          f"{'covers it' if fresh_no_secrets >= cheapest_two_cost else f'gap of {cheapest_two_cost - fresh_no_secrets}'}")
+    print(f"    -> fresh profile, all secrets + all districts ({fresh_no_secrets + all_secrets}) vs cheapest 2 items: "
+          f"{'covers it' if fresh_no_secrets + all_secrets >= cheapest_two_cost else 'gap remains'}")
+    # Not a fails.append(): this is the audit's requested visibility, not a
+    # new bot-win gate — repeatable-grind income and secret discovery stay
+    # optional, per P6's acceptance criteria.
+
     print("\n" + "═" * 70)
     if fails:
         print(f"BALANCE SIM: {len(fails)} FAIL(S)")
@@ -254,7 +302,8 @@ def main():
             print("  -", f)
         return 1
     print("BALANCE SIM: PASS — DARK solvable with >=20% margin in every district, "
-          "no resource dead-ends, 4 skill branches, time-to-win within 3-6h.")
+          "no resource dead-ends, 4 skill branches, DARK time-to-win within 3-6h "
+          "(PARTIAL is a longer optional style, see NOTE above).")
     return 0
 
 

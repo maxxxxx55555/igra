@@ -117,6 +117,13 @@ pointer, not a duplicate (numbers drift; one source of truth):
 - Save format/cadence: GDD §10
 - Endings (5): GDD §12.4
 
+**Playthrough duration target:** 3-6 hours for a first DARK-oriented
+playthrough. `tools/qa_sim/balance_sim.py`'s model currently estimates
+4.905h for DARK and 6.885h for thorough PARTIAL play (arena design audit,
+2026-09-20, `docs/DESIGN_AUDIT_ARENA.md` P7). PARTIAL is a longer,
+optional exploration style, not a violation of the target — neither
+estimate is a measured completion time or a per-session requirement.
+
 ## 6. Store positioning
 
 Hook: *"Blackout city. You are the grid engineer."* Full copy in
