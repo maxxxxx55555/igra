@@ -303,7 +303,11 @@ func _load(m: Mood) -> AudioStream:
 	if _cache.has(path):
 		return _cache[path]
 	var s := load(path) as AudioStream
-	_force_loop(s)
+	# AUDIO_MIX_AUDIT.md b: music_victory.wav is a 14.5s figure, not a bed -
+	# _force_loop looped it forever under the 120s win-screen arc. Every
+	# other Mood is a genuine bed/ambient track meant to loop; VICTORY isn't.
+	if m != Mood.VICTORY:
+		_force_loop(s)
 	_cache[path] = s
 	return s
 
