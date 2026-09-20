@@ -223,18 +223,20 @@ def main():
     print(f"    -> DARK-style need (duty cycle {FLASHLIGHT_DUTY_CYCLE_DARK:.0%} of "
           f"{MIN_PER_DISTRICT_DARK:.0f} min clear): {dark_need_min:.1f} min — "
           f"{'OK' if budget_min >= dark_need_min else 'FAIL'}")
+    # arena design audit P5: scripts/systems/shop.gd (the "Shop" autoload) is
+    # dead code - grep finds zero callers of Shop.buy()/Shop.add_coins()
+    # anywhere else in scripts/. The real, wired purchase path is ShopService
+    # (scripts/economy/shop_service.gd). A shortfall here has no verified
+    # battery-purchase path to fall back on; report it honestly instead of
+    # crediting an unreferenced autoload.
     print(f"    -> PARTIAL-style need (duty cycle {FLASHLIGHT_DUTY_CYCLE_PARTIAL:.0%} of "
           f"{MIN_PER_DISTRICT_PARTIAL:.0f} min clear): {partial_need_min:.1f} min — "
-          f"{'shortfall covered by shop (battery 50 coins, max 3/visit — data/economy checked below)' if budget_min < partial_need_min else 'OK'}")
+          f"{'OK' if budget_min >= partial_need_min else 'SHORTFALL, no verified purchase path (see note)'}")
     if budget_min < dark_need_min:
-        fails.append(f"battery budget ({budget_min:.1f} min) undercuts DARK-style flashlight need ({dark_need_min:.1f} min) even counting the shop supplement")
+        fails.append(f"battery budget ({budget_min:.1f} min) undercuts DARK-style flashlight need ({dark_need_min:.1f} min)")
     elif budget_min < partial_need_min:
-        shop = read("scripts/systems/shop.gd")
-        has_shop_battery = bool(re.search(r'"battery":\s*\{"price"', shop))
-        print(f"    -> shop sells batteries: {has_shop_battery} (guaranteed-loot-only budget is a conservative "
-              f"lower bound, not the real ceiling — coins come from districts/secrets/achievements per UPG_HINT)")
-        if not has_shop_battery:
-            fails.append(f"battery budget ({budget_min:.1f} min) undercuts PARTIAL-style need ({partial_need_min:.1f} min) and no shop supplement exists")
+        fails.append(f"battery budget ({budget_min:.1f} min) undercuts PARTIAL-style need ({partial_need_min:.1f} min) — "
+                      f"guaranteed loot only; scripts/systems/shop.gd's battery item is dead code (no caller), not a real supplement")
 
     # 5. skill branches
     branches = skill_branches()

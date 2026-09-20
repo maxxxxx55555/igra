@@ -231,7 +231,10 @@ func _apply_skill_effect(skill_id: StringName, level: int) -> void:
 			if player.stats:
 				player.stats.stamina_max += 30
 		"battery_capacity":
-			player.battery_max += 25
+			if player.has_method("refresh_battery_max"):
+				player.refresh_battery_max()
+			else:
+				player.battery_max += 25
 		"light_radius":
 			if player.has_method("refresh_flashlight_range"):
 				player.refresh_flashlight_range()

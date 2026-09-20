@@ -719,9 +719,9 @@ func _update_battery(delta: float) -> void:
 	# элемента, то есть ручка делит запас, а значит умножает расход.
 	var batt_mult: float = NewGamePlus.get_modifier_multiplier("battery")
 	var drain: float = BATTERY_DRAIN_PER_SEC / batt_mult if batt_mult > 0.0 else BATTERY_DRAIN_PER_SEC
-	battery = clampf(battery - drain * delta, 0.0, 100.0)
+	battery = clampf(battery - drain * delta, 0.0, battery_max)
 	if absf(battery - prev) > 0.01:
-		EventBus.player_battery_changed.emit(battery / 100.0)
+		EventBus.player_battery_changed.emit(battery / battery_max)
 	if battery <= 0.0 and flashlight_enabled:
 		flashlight_enabled = false
 		EventBus.flashlight_state_changed.emit(false)
@@ -797,12 +797,12 @@ func get_battery() -> float:
 	return battery
 
 func consume_battery(amount: float) -> void:
-	battery = clampf(battery - amount, 0.0, 100.0)
-	EventBus.player_battery_changed.emit(battery / 100.0)
+	battery = clampf(battery - amount, 0.0, battery_max)
+	EventBus.player_battery_changed.emit(battery / battery_max)
 
 func add_battery(amount: float) -> void:
-	battery = clampf(battery + amount, 0.0, 100.0)
-	EventBus.player_battery_changed.emit(battery / 100.0)
+	battery = clampf(battery + amount, 0.0, battery_max)
+	EventBus.player_battery_changed.emit(battery / battery_max)
 
 ## Ported from the dead scripts/player/player.gd - same match, same two
 ## effects (ItemData.Effect only defines HEAL/RECHARGE today; anything
@@ -1093,10 +1093,22 @@ func apply_flashlight_upgrades(levels: Dictionary) -> void:
 	var sm := cone.material_override as ShaderMaterial
 	if sm:
 		sm.set_shader_parameter("softness", 0.3 * (1.0 - s_bonus))
-	battery_max = 100.0 * (1.0 + bat_bonus)
+	_flashlight_battery_bonus = bat_bonus
+	refresh_battery_max()
+	refresh_flashlight_range()
+
+## GAME_AUDIT/arena design audit P5: battery_max used to be set incrementally
+## from two places (this upgrade bonus here, "+= 25" per skill rank in
+## skill_tree_manager.gd) - whichever wrote last silently discarded the
+## other's contribution. Recomputed from scratch from both live sources
+## every time either changes, so order no longer matters.
+var _flashlight_battery_bonus: float = 0.0
+
+func refresh_battery_max() -> void:
+	var skill_lvl: int = SkillTreeManager.get_skill_level(&"battery_capacity") if SkillTreeManager else 0
+	battery_max = 100.0 * (1.0 + _flashlight_battery_bonus) + 25.0 * skill_lvl
 	battery = minf(battery, battery_max)
 	EventBus.player_battery_changed.emit(battery / battery_max)
-	refresh_flashlight_range()
 
 ## Static audit 2026-09-08: "light_radius" skill was purchasable but nothing
 ## ever read it. Called from apply_flashlight_upgrades() above and from
