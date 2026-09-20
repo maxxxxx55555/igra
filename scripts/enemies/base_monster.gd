@@ -388,8 +388,13 @@ func _state_patrol(delta: float) -> void:
 
 func _state_investigate(delta: float) -> void:
 	_set_nav_target(_investigate_point)
-	if _nav_agent and _nav_agent.is_navigation_finished():
-		_investigate_timer = 5.0
+	# GAME_AUDIT/arena design audit P1: this used to re-arm the timer to a
+	# flat 5.0 every tick once arrived (nav finished), which permanently
+	# beat _update_timers()'s decrement - the monster reached the last-known
+	# point and then searched forever, never falling back to PATROL. Arrival
+	# now just means "stand here and keep watching/listening"
+	# (_detect_ambient() below still runs) while the rank-scaled timer set by
+	# _enter_investigate_at()/other entry points counts down normally.
 	_move_to(_base_speed * 0.6)
 	_detect_ambient()
 

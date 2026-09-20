@@ -515,6 +515,14 @@ func _physics_process(delta: float) -> void:
 		State.RUN: speed_noise = 0.8
 		State.CROUCH: speed_noise = 0.15
 		_: speed_noise = 0.0
+	# PLAN.md Stage 3 / GAME_AUDIT/arena design audit P1: silent_steps only
+	# ever discounted noise_radius below, which feeds EventBus.noise_emitted
+	# - a signal with zero listeners repo-wide. The value monsters actually
+	# read is noise_level (base_monster.gd get_noise_level()), which never
+	# got the skill's reduction. Apply it here instead, to speed_noise only
+	# (an overloaded backpack still jingles regardless of footwork).
+	var stealth_lvl: int = SkillTreeManager.get_skill_level(&"silent_steps") if SkillTreeManager else 0
+	speed_noise *= 1.0 - 0.15 * stealth_lvl
 	noise_level = speed_noise + overload_noise_penalty
 	var noise_radius: float = 0.0
 	match current_state:
@@ -523,8 +531,6 @@ func _physics_process(delta: float) -> void:
 		State.RUN: noise_radius = 8.0
 		State.CROUCH: noise_radius = 0.5
 		_: noise_radius = 0.0
-	# PLAN.md Stage 3: Stealth skill branch, "silent_steps" (0.15/level, max 3).
-	var stealth_lvl: int = SkillTreeManager.get_skill_level(&"silent_steps") if SkillTreeManager else 0
 	noise_radius *= 1.0 - 0.15 * stealth_lvl
 	if moving and noise_radius > 0.0:
 		EventBus.noise_emitted.emit(Vector2(global_position.x, global_position.z), noise_radius)
