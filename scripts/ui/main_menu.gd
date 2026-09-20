@@ -36,7 +36,7 @@ func _ready() -> void:
 		GameManager.continue_game()
 		if GameManager.is_playing():
 			Routes.goto(Routes.GAME))
-	_connect(vb, "Play", func() -> void: Routes.start_game())
+	_connect(vb, "Play", _on_play_pressed)
 	_connect(vb, "Settings", func() -> void: Routes.goto(Routes.SETTINGS))
 	_connect(vb, "Difficulty", func() -> void: Routes.goto(Routes.DIFFICULTY))
 	_connect(vb, "Credits", func() -> void: Routes.goto(Routes.CREDITS))
@@ -204,6 +204,26 @@ func _connect(vb: Node, node_name: String, cb: Callable) -> void:
 	if not b.mouse_entered.is_connected(UISFX.hover):
 		b.mouse_entered.connect(UISFX.hover)
 
+## arena design audit P3: "Play" reset run progress with zero warning, and
+## with no indication a just-activated NG+ level was about to start. Confirm
+## before the irreversible reset (only when there's a save to lose); the NG+
+## suffix on the button itself is handled in _apply_localization() below.
+func _on_play_pressed() -> void:
+	if not SaveSystem.has_save():
+		Routes.start_game()
+		return
+	var ng := NewGamePlus.get_current_ng_plus()
+	var dlg := ConfirmationDialog.new()
+	dlg.dialog_text = LocalizationManager.tf("NGP_NEW_GAME_CONFIRM_BODY", [ng]) if ng > 0 \
+		else LocalizationManager.t("NGP_NEW_GAME_CONFIRM_BODY_BASE")
+	dlg.get_ok_button().text = LocalizationManager.t("NGP_NEW_GAME_CONFIRM_START")
+	dlg.get_cancel_button().text = LocalizationManager.t("NGP_NEW_GAME_CONFIRM_KEEP")
+	dlg.confirmed.connect(Routes.start_game)
+	dlg.confirmed.connect(dlg.queue_free)
+	dlg.canceled.connect(dlg.queue_free)
+	add_child(dlg)
+	dlg.popup_centered()
+
 func _apply_localization(_lang: Variant = null) -> void:
 	var vb: Node = get_node_or_null("VBox")
 	if vb == null:
@@ -212,6 +232,35 @@ func _apply_localization(_lang: Variant = null) -> void:
 		var b := vb.get_node_or_null(String(node_name)) as Button
 		if b != null:
 			b.text = LocalizationManager.t(String(LABELS[node_name]))
+	_apply_ngp_status(vb)
+
+## arena design audit P3: neither button told the player NG+ was active or
+## which one actually starts a run - "Continue" resumes the exact save,
+## "Play" is the only path to a fresh NG+ run (and now confirms before it
+## resets progress, see _on_play_pressed()).
+func _apply_ngp_status(vb: Node) -> void:
+	var play_btn := vb.get_node_or_null("Play") as Button
+	var continue_btn := vb.get_node_or_null("Continue") as Button
+	var ng := NewGamePlus.get_current_ng_plus() if NewGamePlus else 0
+	if play_btn != null:
+		play_btn.text = LocalizationManager.tf("NGP_NEW_GAME_ACTION", [ng]) if ng > 0 \
+			else LocalizationManager.t(String(LABELS["Play"]))
+	if continue_btn != null and ng > 0:
+		continue_btn.text = LocalizationManager.t("NGP_CONTINUE_SAVED")
+	var status := get_node_or_null("NGPStatus") as Label
+	if ng > 0:
+		if status == null:
+			status = Label.new()
+			status.name = "NGPStatus"
+			status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			status.custom_minimum_size = Vector2(280, 0)
+			status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			status.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
+			vb.add_child(status)
+			vb.move_child(status, 0)
+		status.text = LocalizationManager.tf("NGP_MENU_STATUS", [ng])
+	elif status != null:
+		status.queue_free()
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):

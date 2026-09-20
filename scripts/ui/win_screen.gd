@@ -88,7 +88,9 @@ func _refresh() -> void:
 	# never retranslated; _refresh() already reruns on every visibility_
 	# changed(visible), which is the natural retranslation point here.
 	_menu_btn.text = LocalizationManager.t("BTN_MAIN_MENU")
-	_more_btn.text = LocalizationManager.t("BTN_ONE_MORE_RUN")
+	# arena design audit P3: "One More Run" implied pressing it started a
+	# harder run immediately; it only opens the NG+ setup screen.
+	_more_btn.text = LocalizationManager.t("NGP_SETUP_ACTION")
 	_share_btn.text = LocalizationManager.t("BTN_SHARE")
 	_share_btn.visible = SettingsManager == null or SettingsManager.get_setting("share_enabled", true)
 	var em := get_node_or_null("/root/EndingsManager")

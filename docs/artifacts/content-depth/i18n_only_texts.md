@@ -106,6 +106,7 @@ CODE decides whether to adopt each into a content file or wire it.
 | `NGP_LONG_NIGHT_DESC` | Battery yields 20% less light. The dark is patient; your cells are not. |
 | `NGP_SPRINT_DESC` | Night cycle 15% shorter, rewards +50%. Run the light home. |
 | `NGP_WHISPER_DESC` | Hunters hear 30% less, but loot yields 10% less. Tread soft, carry little. |
+| `NG_PLUS_ACTIVATED` | New Game+ activated! Difficulty increased. |
 | `SCR_PRODERZHALIS_S_DOKUMENTOV_NAYDENO_D_VOSSTANO` | Survived %s / Documents found %d / Districts restored %d/11 |
 | `SCR_PROGRESS_DOSTIZHENIY_28_56_50` | ACHIEVEMENT PROGRESS 28/56 (50%) |
 | `SCR_VKLYUCHITE_PERVYY_FONAR` | Switch on the first streetlight |
@@ -121,7 +122,7 @@ CODE decides whether to adopt each into a content file or wire it.
 | `tip3` | Use cover when HP is low. |
 | `tutorial_done` | Tutorial complete. Good luck! |
 
-Total: 111 keys.
+Total: 112 keys.
 
 Verified: none of these keys appears in any `.gd`, `.tscn` or
 `.tres` under `scripts/`, `scenes/` or `components/`, and none is

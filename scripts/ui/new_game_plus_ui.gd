@@ -8,13 +8,20 @@ class_name NewGamePlusUI
 @onready var back_button: Button = $MarginContainer/VBoxContainer/BackButton
 
 var _mod_box: VBoxContainer = null
+var _help_label: Label = null
+## arena design audit P3: cleared on every screen open (_ready()/whenever
+## UIManager shows this cached screen again), not persisted - tracks only
+## "did the player activate NG+ during THIS visit" so Back can offer
+## "continue to main menu" instead of silently just closing the overlay.
+var _activated_this_visit: bool = false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	theme = ThemeProvider.build_theme()
+	_activated_this_visit = false
 	_refresh()
 	activate_button.pressed.connect(_on_activate)
-	back_button.pressed.connect(_close)
+	back_button.pressed.connect(_on_back)
 	# Static audit 2026-09-08: this screen is cached by UIManager (never
 	# freed, just hidden) - a language change while it's closed left it
 	# stale next time it reopened, since nothing called _refresh() again.
@@ -22,7 +29,8 @@ func _ready() -> void:
 
 func _refresh() -> void:
 	var ng = NewGamePlus.get_current_ng_plus()
-	ng_label.text = LocalizationManager.tf("NG_PLUS_LEVEL", [ng, NewGamePlus.get_max_ng_plus()])
+	var max_ng = NewGamePlus.get_max_ng_plus()
+	ng_label.text = LocalizationManager.tf("NG_PLUS_LEVEL", [ng, max_ng])
 	var run_label := LocalizationManager.tf("NG_PLUS_LABEL", [ng]) if ng > 0 else LocalizationManager.t("NG_PLUS_BASE_GAME")
 	current_level.text = LocalizationManager.tf("NG_PLUS_CURRENT_RUN", [run_label])
 
@@ -35,7 +43,20 @@ func _refresh() -> void:
 		LocalizationManager.tf("NG_PLUS_STAT_LOOT", [mult.loot_chance_multiplier])
 	)
 
-	activate_button.disabled = ng >= NewGamePlus.get_max_ng_plus()
+	var at_cap := ng >= max_ng
+	activate_button.disabled = at_cap
+	activate_button.text = LocalizationManager.t("NGP_AT_LIMIT") if at_cap \
+		else LocalizationManager.tf("NGP_ACTIVATE_ACTION", [ng + 1])
+	back_button.text = LocalizationManager.t("NGP_BACK_CONTINUE") if _activated_this_visit \
+		else LocalizationManager.t("NGP_BACK_RETURN")
+	if _help_label == null:
+		_help_label = Label.new()
+		_help_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_help_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		_help_label.modulate.a = 0.75
+		ng_label.get_parent().add_child(_help_label)
+		ng_label.get_parent().move_child(_help_label, ng_label.get_index() + 1)
+	_help_label.text = LocalizationManager.t("NGP_ACTIVATE_HELP")
 	_refresh_modifiers()
 
 ## Один выбор модификатора на каждый уровень NG+. Список строится кодом, а не
@@ -89,8 +110,16 @@ func _refresh_modifiers() -> void:
 
 func _on_activate() -> void:
 	if NewGamePlus.activate_ng_plus():
+		_activated_this_visit = true
 		_refresh()
-		UIManager.show_notification(LocalizationManager.t("NG_PLUS_ACTIVATED"))
+		UIManager.show_notification(LocalizationManager.tf("NGP_ACTIVATE_FEEDBACK", [NewGamePlus.get_current_ng_plus()]))
 
-func _close() -> void:
+## arena design audit P3: before activation this just closes the overlay
+## (back to the ending/wherever it was opened from); after an activation
+## this visit, it routes to the main menu instead - the only place "Play"
+## (the actual NG+ run start) lives - via the same close-blocking-screens
+## path GameManager.return_to_menu() already uses.
+func _on_back() -> void:
 	UIManager.close(&"new_game_plus")
+	if _activated_this_visit:
+		GameManager.return_to_menu()
