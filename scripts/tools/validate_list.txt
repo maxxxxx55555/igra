@@ -134,7 +134,6 @@ scripts/systems/progress_tracker.gd
 scripts/systems/random_events.gd
 scripts/systems/save_slot_manager.gd
 scripts/systems/settings_manager.gd
-scripts/systems/shop.gd
 scripts/systems/skill_tree_manager.gd
 scripts/systems/uisfx.gd
 scripts/systems/vibration.gd
