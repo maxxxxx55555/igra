@@ -92,10 +92,26 @@ static func build_theme() -> Theme:
 	var btn_p := btn_n.duplicate() as StyleBoxFlat
 	btn_p.bg_color = COLOR_BG_PANEL
 	btn_p.border_color = COLOR_AMBER
+	# VISUAL_PASS.md W9/U2/U3: no focus indicator existed anywhere (keyboard/
+	# controller nav had nothing to show which control has focus), and the
+	# StyleBoxFlat disabled fallback was byte-identical to normal (no
+	# affordance without the texture chrome kit). Distinct dimmed fill +
+	# lower-contrast border + a 2px brass focus ring.
+	var btn_focus := btn_n.duplicate() as StyleBoxFlat
+	btn_focus.border_color = COLOR_AMBER
+	btn_focus.set_border_width_all(2)
+	var btn_d := StyleBoxFlat.new()
+	btn_d.bg_color = COLOR_BG_DARK.lerp(COLOR_BG_PANEL, 0.35)
+	btn_d.border_color = COLOR_BORDER
+	btn_d.set_border_width_all(1)
+	btn_d.set_corner_radius_all(0)
+	btn_d.set_content_margin_all(10)
 	theme.set_stylebox("normal", "Button", btn_n)
 	theme.set_stylebox("hover", "Button", btn_h)
 	theme.set_stylebox("pressed", "Button", btn_p)
-	theme.set_stylebox("disabled", "Button", btn_n)
+	theme.set_stylebox("focus", "Button", btn_focus)
+	theme.set_stylebox("disabled", "Button", btn_d)
+	theme.set_stylebox("focus", "LineEdit", btn_focus)
 	# P2.3: реальные текстуры поверх StyleBoxFlat выше, если ассеты на месте
 	# (остальной chrome kit — panel/tooltip/slot — оставлен на StyleBoxFlat,
 	# см. комментарий у _btn_stylebox()).
