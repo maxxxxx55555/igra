@@ -150,8 +150,9 @@ func _process(delta: float) -> void:
 			var boss := get_tree().get_first_node_in_group("boss")
 			if boss != null and is_instance_valid(boss):
 				var bd := ppos.distance_to((boss as Node3D).global_position)
-				boss_info = " boss_pos=%s boss_dist=%.1f boss_hp=%s/%s" % [
-					str((boss as Node3D).global_position.round()), bd, str(boss.get("hp")), str(boss.get("max_hp"))]
+				boss_info = " boss_pos=%s boss_dist=%.1f boss_hp=%s/%s battery=%s fl_on=%s" % [
+					str((boss as Node3D).global_position.round()), bd, str(boss.get("hp")), str(boss.get("max_hp")),
+					str(_player.get("battery")), str(_player.get("flashlight_enabled"))]
 			else:
 				boss_info = " boss=NULL"
 		_log("hb ph=%s st=%d want=%s cur=%s si=%d sc=%.0f mr=%d ppos=%s tgt=%s tdist=%.1f npu=%d%s" % [

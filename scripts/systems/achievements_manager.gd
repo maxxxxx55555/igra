@@ -211,6 +211,14 @@ func get_all() -> Array:
 	return result
 
 func _unlock(achievement_id: StringName) -> void:
+	# GAME_AUDIT/arena design audit P6: the Ghost NG+ modifier's "no
+	# achievements" cost only worked for the handful of callers routed
+	# through the public unlock() wrapper below - _check_unlock() (27 of the
+	# 31 achievements: district clears, documents, secrets, the finale...)
+	# called _unlock() directly and skipped the check entirely. Moved here,
+	# the one place both paths converge, so it actually covers all of them.
+	if not NewGamePlus.get_modifier_toggle("achievements", true):
+		return
 	if _unlocked.get(String(achievement_id), false):
 		return
 	_unlocked[String(achievement_id)] = true
@@ -227,9 +235,8 @@ func _unlock(achievement_id: StringName) -> void:
 func unlock(short_id: String) -> void:
 	# Модификатор NG+ "ghost" отключает достижения целиком: он даёт крупное
 	# послабление (ползуны игнорируют игрока), и цена за него — прогон,
-	# который не засчитывается в трофеи.
-	if not NewGamePlus.get_modifier_toggle("achievements", true):
-		return
+	# который не засчитывается в трофеи. Gate lives in _unlock() now (below),
+	# shared with _check_unlock()'s internal callers.
 	var map: Dictionary = {
 		"architect": &"ach_13",
 		"first_light": &"ach_01",
