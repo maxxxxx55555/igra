@@ -23,6 +23,12 @@ var _player_was_moving: bool = false
 var _flashlight_on: bool = true
 
 func _ready() -> void:
+	# arena design audit P4: explicit, not inherited-by-default - this whole
+	# procedural layer (ambient hum, moans, footsteps, flashlight click)
+	# follows gameplay pause, unlike the sibling systems (audio_manager.gd,
+	# music_manager.gd, streetlight_hum_pool.gd) that stay PROCESS_MODE_ALWAYS
+	# on purpose. Deliberate per-source decision, not a global silence policy.
+	process_mode = Node.PROCESS_MODE_PAUSABLE
 	if not enable_proc_audio:
 		return
 	_ambient_current_volume = ambient_volume
@@ -62,14 +68,21 @@ func _ready() -> void:
 
 
 func _on_flashlight_toggled(enabled: bool) -> void:
+	# Signal delivery isn't gated by process_mode, so this can still fire
+	# while paused - cache the state, skip the tween and the click sound.
 	_flashlight_on = enabled
 	var target_vol := ambient_quiet_volume if enabled else ambient_volume
+	if get_tree().paused:
+		_ambient_current_volume = target_vol
+		return
 	var tween := create_tween()
 	tween.tween_method(func(v: float): _ambient_current_volume = v, _ambient_current_volume, target_vol, 0.5)
 	if enabled:
 		_play_flashlight_click()
 
 func _play_flashlight_click() -> void:
+	if get_tree().paused:
+		return
 	var gen := AudioStreamGenerator.new()
 	gen.mix_rate = 24000
 	gen.buffer_length = 0.1
@@ -82,6 +95,11 @@ func _play_flashlight_click() -> void:
 	add_child(player)
 	player.play()
 	await get_tree().process_frame
+	# A pause can land mid-await; discard rather than queue a stale click
+	# for resume.
+	if get_tree().paused:
+		player.queue_free()
+		return
 	var playback := player.get_stream_playback()
 	if playback:
 		var frame_count := 600
@@ -99,6 +117,8 @@ func _on_player_state_changed(state: int) -> void:
 	pass
 
 func _play_footstep() -> void:
+	if get_tree().paused:
+		return
 	var gen := AudioStreamGenerator.new()
 	gen.mix_rate = 12000
 	gen.buffer_length = 0.1
@@ -111,6 +131,9 @@ func _play_footstep() -> void:
 	add_child(player)
 	player.play()
 	await get_tree().process_frame
+	if get_tree().paused:
+		player.queue_free()
+		return
 	var playback := player.get_stream_playback()
 	if playback:
 		var frame_count := 300
@@ -127,7 +150,7 @@ func _play_footstep() -> void:
 	player.queue_free()
 
 func _play_moan() -> void:
-	if not _gen_ok:
+	if not _gen_ok or get_tree().paused:
 		return
 	var gen := AudioStreamGenerator.new()
 	gen.mix_rate = 12000
@@ -142,6 +165,9 @@ func _play_moan() -> void:
 	add_child(player)
 	player.play()
 	await get_tree().process_frame
+	if get_tree().paused:
+		player.queue_free()
+		return
 	var playback := player.get_stream_playback()
 	var dur := randf_range(0.8, 2.0)
 	if playback:
