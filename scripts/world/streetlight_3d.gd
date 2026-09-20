@@ -17,6 +17,10 @@ var _t: float = 0.0
 ## flicker so a stage-1 lamp reads dimmer than a STREETS lamp, not just
 ## on/off. 1.0 at STREETS/FULL.
 var _energy_scale: float = 1.0
+## VISUAL_PASS.md W10/§3: per-district light punch (fog districts read
+## brighter through the murk, hospital/police stay dim per canon). 1.0 if
+## the district has no entry or the config resource is missing.
+var _light_energy_mult: float = 1.0
 
 func _ready() -> void:
 	if not mesh_visible:
@@ -24,6 +28,11 @@ func _ready() -> void:
 		var lamp := get_node_or_null("Lamp")
 		if pole: pole.visible = false
 		if lamp: lamp.visible = false
+	if ResourceLoader.exists("res://assets/config/visual_quality.tres"):
+		var vq := load("res://assets/config/visual_quality.tres")
+		var district_lights: Dictionary = vq.get_meta("district_lights", {}) if vq else {}
+		var entry: Dictionary = district_lights.get(String(district_id), {})
+		_light_energy_mult = float(entry.get("energy_mult", 1.0))
 	EventBus.district_stage_changed.connect(_on_stage_changed)
 	var dm := get_node_or_null("/root/DistrictManager")
 	var st: int = dm.get_stage(district_id) if dm else -1
@@ -38,8 +47,8 @@ func _process(delta: float) -> void:
 	var base: float = (0.85 + sin(_t * 12.0) * 0.15) * _energy_scale
 	if sin(_t * 37.0) > 0.95:
 		base = 0.2 * _energy_scale
-	spot.light_energy = base * 2.0
-	glow.light_energy = base * 1.0
+	spot.light_energy = base * 2.0 * _light_energy_mult
+	glow.light_energy = base * 1.0 * _light_energy_mult
 
 func _on_stage_changed(id: StringName, stage: int) -> void:
 	if id == district_id:
@@ -66,20 +75,20 @@ func _update_light(stage: int = -1) -> void:
 	glow.visible = _on
 	_update_hum()
 	if _on and stage >= 3:
-		spot.light_energy = 3.5
+		spot.light_energy = 3.5 * _light_energy_mult
 		spot.spot_attenuation = 1.0
-		glow.light_energy = 1.5
+		glow.light_energy = 1.5 * _light_energy_mult
 		glow.omni_range = 8.0
 	elif _on and stage >= 2:
-		spot.light_energy = 2.5
+		spot.light_energy = 2.5 * _light_energy_mult
 		spot.spot_attenuation = 1.5
-		glow.light_energy = 1.0
+		glow.light_energy = 1.0 * _light_energy_mult
 		glow.omni_range = 6.0
 	elif _on:
 		# PARTIAL — tighter, weaker pool
-		spot.light_energy = 1.4
+		spot.light_energy = 1.4 * _light_energy_mult
 		spot.spot_attenuation = 2.0
-		glow.light_energy = 0.5
+		glow.light_energy = 0.5 * _light_energy_mult
 		glow.omni_range = 4.0
 
 ## P4 (CONTENT UX wave): gул лампы теперь идёт через общий пул на
