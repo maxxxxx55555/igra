@@ -30,6 +30,18 @@ const SOFTLOCK_SEC := 45.0
 const HARD_TIMEOUT_SEC := 900.0
 const BOSS_FIGHT_SEC := 240.0
 const STUCK_NUDGE_SEC := 2.0
+## player_3d.gd:544 normalizes the move direction before applying speed
+## (`dir.normalized() * final_speed`) — a shorter joystick vector moves the
+## player exactly as fast as a full one, so the only lever that bounds nudge
+## displacement is TIME. At walk_speed (170, data/balance/player_stats.tres),
+## the old 1.2s window could move the player up to 204m — confirmed by a real
+## softlock log (docs/KNOWN_ISSUES.md) showing a 150-250m position jump right
+## before a permanent stall. 0.25s bounds the worst case to ~43m, comfortably
+## inside a district's ~40m nav-mesh half-size even from a max-radius (22m,
+## district_loot.gd RADIUS_MAX) starting scatter point, while still covering
+## far more distance than the sub-meter local obstacles a "sidestep" needs to
+## clear.
+const NUDGE_SEC := 0.25
 
 var _seed: int = 1
 var _rng := RandomNumberGenerator.new()
@@ -492,7 +504,7 @@ func _watchdog(delta: float) -> void:
 				var base := _dir_to(_target_pos)
 				var perp := Vector2(-base.y, base.x) * (1.0 if _rng.randf() < 0.5 else -1.0)
 				_nudge_dir = (perp + base * 0.3).limit_length(1.0)
-				_nudge_until = _now() + 1.2
+				_nudge_until = _now() + NUDGE_SEC
 				_stuck_sec = 0.0
 		else:
 			_stuck_sec = 0.0
