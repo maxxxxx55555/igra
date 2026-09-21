@@ -1,3 +1,73 @@
+# Ideal gap report — 2026-09-21 (v7.3.1, backlog audit + softlock re-investigation)
+
+Updates v7.3 below (same date, kept as history). No TOP-10 item **closed** this pass — this
+pass's work was audit/investigation/analysis depth, not new fixes, and is reported honestly
+as such rather than padded.
+
+## What changed this pass (v7.3.1)
+
+- **Arena merge backlog (Phase M0) — re-audited, still 0 mergeable.** All 5 still-unmerged
+  `origin/arena/*` refs re-checked against current `main` (2 commits past the v7.3 tag):
+  `019ffbd0-igra` and `01a07b1c-igra` both still produce real 3-way conflicts under `git
+  merge-tree --write-tree` (confirmed with the modern conflict-listing form of the command,
+  not just a diff-stat guess); `01a09af1-igra` conflicts even on `tools/qa_sim/autoplay_bot`
+  itself and remains the same stale 552-file mega-merge v7.2's integrator pass first flagged;
+  `01a0ab24-igra`'s docs (`GAMEFEEL_SPEC.md`/`QA_MATRIX.md`) are confirmed superseded — main's
+  `QA_MATRIX.md` is a strictly newer, extended version (40+30 cases vs. the branch's original
+  16); `card-unique-rescue` stays rejected per its already-documented fabricated-cert finding,
+  not re-opened. Full per-ref evidence in `docs/RUN_STATE.md`. `origin/gh-pages` is not an
+  arena ref (privacy-policy deploy target) and was excluded, not silently skipped.
+- **Residential spine-softlock (TOP-10 #2, was) — one more hypothesis ruled out, one more
+  rejected, still open.** The "locked boiler room blocks the pickup" theory (item_spawns.json
+  places the district's first-needed `cable` in the same `zone` as the key-gated
+  `transistor`) was investigated and disproven before any code was touched:
+  `district_loot.gd` confirms 3D districts have no real zone markers at all — `zone` is
+  authoring metadata only, every fixed-spawn lands via the same seeded scatter, no door/lock
+  code exists anywhere. Separately, gave the bot's movement a `NavigationAgent3D` (mirroring
+  `base_monster.gd`, since the bot previously steered in a straight line with only a 2s stuck-
+  nudge for obstacles) and verified with a real 3-seed run: **0/3, worse than the 2/3
+  baseline**, with a new softlock in `suburbs` (previously always-solid) alongside
+  `park`/`hospital`. Reverted per the IRON RULE, documented in `docs/KNOWN_ISSUES.md`. The
+  softlock's real mechanism is still unknown; next session needs finer-grained telemetry
+  inside the 45s stall window, not a third guess.
+- **Economy gap (TOP-10 #3) — 3 funding-path options written up, no decision made.**
+  `docs/ECONOMY_OPTIONS.md` (new): wire the existing (currently cosmetic) kill-coin number
+  into `CoinWallet`, cut the two target catalog prices, or add a bounded quest/puzzle faucet —
+  each scored on code impact / player risk / effort / reversibility, all marked
+  NEEDS-OWNER-DECISION per this phase's analysis-only scope. Also corrects the standing "0
+  repeatable income" framing: daily challenges already pay real wallet coins (avg 216.5,
+  calendar-gated), which the single-playthrough bot trace correctly never sees but a real
+  returning player already has.
+- **Verification battery re-run**, reusing results only where nothing that could affect them
+  changed (stated per-row below, per this repo's own economy-of-context rule): static 12/12
+  (re-run), i18n 13/13 MISSING:0 (re-run), quarantine audit PASS (re-run), `balance_sim.py`
+  PASS (re-run, independently reproduces the same 1,300-coin gap `ECONOMY_OPTIONS.md` cites).
+  Engine gates (26/27) and the boss-resolved 2/3 `autoplay_bot` baseline were **not** re-run —
+  reused from the v7.3 tag commit, since this pass's only gameplay-code edit (the
+  `NavigationAgent3D` bot experiment) was fully reverted via `git checkout --`, never
+  committed, leaving zero net code delta since that measurement.
+
+## TOP-10, restated (genuinely open only — v7.3's numbering carried forward where unchanged)
+
+1. **Full W2-W10 visual pass wiring.** Unchanged from v7.3 — **DEV, large, needs eyes-on-render**.
+2. **Spine-phase softlock in `residential`.** Unchanged from v7.3, deeper investigation this
+   pass (2 hypotheses now rejected with evidence, 1 lead ruled out before coding) — **DEV,
+   unscoped, more telemetry needed before a third attempt**.
+3. **Economy: repeat-profile coin shortfall.** Unchanged from v7.3, now has 3 scored options
+   ready to pick from (`docs/ECONOMY_OPTIONS.md`) — **DEV or design call, medium; awaiting an
+   owner decision on which option (or "accept the gap"), not blocked on more analysis**.
+4. **Music generation.** Unchanged — **OWNER, ~2-4h**, prompts ready in `docs/MUSIC_RECIPE.md`.
+5. **Windowed stills + store screenshots.** Unchanged — **OWNER-ONLY, ~10 min**.
+6. **Android keystore + signed AAB, Play Console setup.** Unchanged — **OWNER-ONLY, ~1-2h**.
+7. **`gh auth login`.** Unchanged, still not done — **OWNER-ONLY, ~2 min**.
+
+(The arena merge backlog was never one of v7.3's numbered TOP-10 items — it's tracked
+separately in `docs/RUN_STATE.md`, re-confirmed this pass as still 0 mergeable. Not listed as
+a numbered gap here because there's nothing actionable left in those 5 refs without new
+human-authored conflict resolution, which isn't a gap this repo's own automation can close.)
+
+---
+
 # Ideal gap report — 2026-09-21 (v7.3, real-engine pass)
 
 Updates v7.2's report (2026-09-20, below) after a pass with something no prior session had:

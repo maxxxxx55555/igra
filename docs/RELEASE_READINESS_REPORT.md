@@ -1,3 +1,57 @@
+# Release readiness report v7.3.1 — 2026-09-21 (arena backlog audit + softlock re-investigation)
+
+Supersedes v7.3 below (kept as history, same date). **No score movement this pass** — every
+weighted category below is unchanged from v7.3, honestly, because this pass's work (Phase M0
+arena-backlog re-audit, a second softlock hypothesis tried and rejected, an economy
+funding-path options doc) closed zero DEV-REMAINING items. Recording that plainly rather than
+inventing a bump: process/analysis depth isn't the same as a shipped fix, and this report's
+weighting doesn't have a category for "audited harder."
+
+## Verification (this pass — reused where explicitly justified, re-run otherwise)
+
+| Item | Result | Evidence |
+|---|---|---|
+| Static gates | **12/12 PASS** | `bash tools/check.sh --static`, re-run this pass |
+| i18n | **13/13 locales, MISSING: 0** | `python tools/i18n_audit.py`, re-run — no new strings this pass, confirms no regression |
+| Quarantine audit | **PASS** | `python tools/quarantine_audit.py --check`, re-run |
+| `balance_sim.py` | **PASS** | re-run; independently reproduces the same 1,300-coin repeat-profile gap `docs/ECONOMY_OPTIONS.md` cites |
+| Engine gates (full) | **26/27, reused from the v7.3 tag** | not re-run: this pass's only gameplay-code edit (a `NavigationAgent3D` experiment in the QA bot) was fully reverted (`git checkout --`, never committed) — zero net code delta since the v7.3 measurement, so the result provably still holds |
+| `autoplay_bot`, boss-resolved | **2/3, reused from `acddc80`** | same reasoning as above — no gameplay code changed since that commit |
+| Arena merge backlog | **0/5 mergeable, re-confirmed with `git merge-tree --write-tree`** | `docs/RUN_STATE.md` has the per-ref conflict evidence; not a rubber-stamp of the 2026-09-20 finding, independently re-derived |
+
+## Weighted readiness: **69%** (unchanged from v7.3 — see note above)
+
+| Category | Weight | Score | Change from v7.3 | Why |
+|---|---|---|---|---|
+| Engineering gates | 30 | 96% | — | reused, justified above |
+| Security | 10 | 100% | — | unchanged |
+| Size/perf | 15 | 62% | — | unchanged |
+| Visual/juice | 10 | 47% | — | unchanged, still the lowest dev-scored category |
+| Content/i18n | 10 | 100% | — | unchanged |
+| Store/marketing | 10 | 65% | — | unchanged |
+| Owner-only steps | 15 | 0% | — | unchanged |
+
+`30×0.96 + 10×1.00 + 15×0.62 + 10×0.47 + 10×1.00 + 10×0.65 + 15×0.00 = 69.15` → **69%**
+
+This report has no weighted slot for "economy" or "process/QA depth" — the coin-shortfall gap
+and the arena-backlog audit both live in `docs/IDEAL_GAP_REPORT.md`'s separate per-category
+scoring, unaffected here on purpose (same rubric v7.3 used).
+
+## OWNER-ONLY — unchanged from v7.3
+
+See v7.3's table below; nothing about owner-side effort changed this pass.
+
+## DEV-REMAINING — unchanged from v7.3, deeper evidence on two of four
+
+| Item | Effort | Change this pass |
+|---|---|---|
+| Full W2-W10 visual pass | large, multi-session | none |
+| Spine-phase softlock, `residential` | unscoped | 2 hypotheses now rejected (was 1), 1 lead ruled out before coding — `docs/KNOWN_ISSUES.md` |
+| Economy: repeat-profile coin shortfall | medium, design call | 3 scored options now exist — `docs/ECONOMY_OPTIONS.md` — still awaiting an owner pick |
+| Audio loudness normalization + new-track mixing | ~2-3h, needs ears | none |
+
+---
+
 # Release readiness report v7.3 — 2026-09-21 (real-engine sign-off)
 
 Supersedes v7.2 below (kept as history). Full detail in `docs/IDEAL_GAP_REPORT.md` (v7.3
