@@ -20,27 +20,23 @@ intended change + the command to verify it on a real machine.
   just wires the existing constant into the existing per-stage light code.
   No shader, no material, no new asset.
 
-## Found, deliberately NOT touched — doc/code conflict
+## RESOLVED this pass — W10 ambient "conflict" was never live at runtime
 
-- **W10 (DistrictThemes ambient/fog "canon" fix).** VISUAL_PASS.md's wiring
-  spec says change `district_themes.gd`'s `apply_to_environment()` ambient
-  `0.5 → stage canon (0.03/0.06/0.11/0.16)` and fog `0.005 → 0.013`. But the
-  actual live, stage-aware ambient system is `scripts/world_env_setup.gd`'s
-  `apply_for_stage()`, whose real canon constants are `AMBIENT_DARK=0.12`,
-  `AMBIENT_LIT=0.20`, `AMBIENT_FULL=0.30` (3 stage buckets, not 4) — a
-  different number scale than the doc's `0.03/0.06/0.11/0.16`. Two
-  independent ambient-setting code paths exist
-  (`district_themes.apply_to_environment` and `world_env_setup.apply_for_stage`)
-  and it's not established from static reading alone which one wins at
-  runtime, or whether `district_themes.gd`'s hardcoded `0.5`/`0.005` is even
-  live (could be dead-overwritten immediately after by `world_env_setup.gd`,
-  matching the doc's own W1 note that `world_env_setup.gd` "overrides
-  `world_env.tscn` at runtime"). Guessing a value here risks silently
-  regressing the correct number. **Owner/dev-with-render-session step:**
-  trace call order between `district_themes.apply_to_environment` and
-  `world_env_setup.apply_for_stage` on a district transition (add a temporary
-  print, or breakpoint, on each), confirm which value survives, then either
-  delete the dead write or reconcile the two canon tables.
+Traced the call graph statically rather than rendering to find out (no ambiguity to
+resolve on-device once the reachability question is answered): `DistrictThemes.apply_to_environment()`
+has exactly one call site, `district_scene_factory.gd:32`, inside the `else` branch of
+`DistrictSceneFactory.build()` — the fallback path that only runs when
+`ResourceLoader.exists(scene_path)` is false for a district's `.tscn` file. Confirmed
+all 11 entries in `DistrictSceneFactory.DISTRICTS` have a real file in
+`scenes/districts/*.tscn` (`ls` count: 11/11). That fallback branch is therefore
+unreachable for every real district in the shipped game — `district_themes.gd`'s
+hardcoded `0.5`/`0.005` ambient/fog values never execute during actual play.
+`world_env_setup.gd`'s `apply_for_stage()` (called from 3 real, live sites) is the
+sole ambient system that matters. **VISUAL_PASS.md's proposed constant change to
+`district_themes.gd` would have had zero observable effect** — tuning numbers in dead
+code. Not applying it; nothing to verify on a render since nothing about this specific
+item can appear in one. `world_env_setup.gd`'s existing `AMBIENT_DARK=0.12`/
+`AMBIENT_LIT=0.20`/`AMBIENT_FULL=0.30` stand as the real, single source of truth.
 
 ## Owner-run, needs rendering/listening to judge (not attempted)
 

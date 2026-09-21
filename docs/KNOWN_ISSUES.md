@@ -1,5 +1,70 @@
 # Known issues
 
+## CRITICAL, NEW, NOT FIXED (2026-09-21): 3D world renders as severe magenta/pink corruption in windowed mode
+
+First time this project has ever had a real windowed Godot binary + the ability to actually
+look at a captured frame (P0/P4 of a v7.5 pass) — and the very first real 3D gameplay
+screenshots taken (`res://scenes/tools/capture_stills_scene.tscn`, real playthrough via the
+autoplay bot, not a synthetic probe) show the entire 3D world rendering as severe magenta/pink
+visual noise: jagged horizontal scanline-like streaks across the ground plane, hundreds of
+scattered magenta/purple particle-like dots, and at least one object rendering as concentric
+magenta/purple rings. The HUD (health/stamina/battery bars, radar, all text) renders perfectly
+clean and readable on top of it — this is a 3D-world-rendering-only problem, not a whole-engine
+or UI-layer problem. GPU: `ATI Technologies Inc. — AMD Radeon(TM) Graphics` (integrated),
+renderer: `gl_compatibility` (`project.godot:304`, used for both desktop and mobile presets).
+
+**Ruled out already**: not an import-cache issue (ran a full `--headless --import` immediately
+before capturing, zero texture-load errors in the capture log); not shader compile failures
+(grepped the full log for `shader`/`compil`/`unsupported`/`fallback`, zero hits); not
+SSR/SSIL/SSAO/volumetric fog (all four are Forward+/Mobile-only features not supported by
+`gl_compatibility` — disabled all four in a scratch edit of
+`assets/env/night_environment_desktop.tres` and re-captured; corruption was **unchanged**,
+edit reverted, never committed).
+
+**Not established, genuinely unknown**: whether this is the game actually rendering wrong on
+this hardware/driver/renderer combination (which would mean real players on similar low-end/
+integrated GPUs — exactly the target Android min-spec per `docs/RELEASE_CHECKLIST.md` — could
+see the same thing), or an artifact specific to the `get_tree().root.get_texture().get_image()`
+viewport-readback capture method used by `capture_stills.gd` (a driver-level framebuffer-readback
+bug is a known class of issue on some integrated-GPU OpenGL drivers, and would explain corrupted
+*captures* while the actually-displayed frame is fine). No way to tell which from inside this
+session — nobody watched the live window while this ran, only the saved PNGs.
+
+**Evidence**: `docs/stills/03_district_suburbs.png` and `04_district_residential.png` from this
+pass's capture runs (not committed to git — multi-MB PNGs, not this repo's convention for
+`KNOWN_ISSUES.md` evidence — left on disk locally, `docs/stills/` is untracked-but-not-gitignored
+so `git status` will show them until cleaned up or committed).
+
+**Next session must do, before anything else visual**: have a human actually look at the live
+game window (not a captured PNG) during a `--windowed` run on this same machine, to settle
+capture-artifact vs. real-rendering-bug. This blocks P4's full W2-W10 material-assignment work
+and P7's store screenshots for this pass — assigning new materials or capturing store shots on
+top of an unconfirmed-cause rendering corruption risks wasted or actively misleading work.
+
+## NEW, NOT FIXED (2026-09-21): City Map "Travel" to `park` produced `player.global_position = (inf, inf, inf)`, new softlock
+
+Found in the same windowed capture run as the magenta-corruption finding above (real autoplay
+bot driving real gameplay, not a synthetic probe) — **not the already-fixed residential
+nudge-duration softlock** (different district, different mechanism, and the fix for that one is
+verified 3/3 clean in 3 separate headless re-runs this same pass, so this is not a regression of
+it). Sequence from the log: bot reaches `suburbs` FULL at t=13.9s, travels to `residential` via
+the City Map's Travel button (`city_map.gd:_travel` → `DistrictManager.transition_to`), reaches
+`residential` FULL at t=30.4s, travels to `park` the same way at t=31.5s — and from t=36.5s
+onward every heartbeat shows `ppos=(inf, inf, inf)` until the 45s no-progress watchdog fires:
+`SOFTLOCK: no progress for 45s — phase=spine district=park spine_i=2`.
+
+**Not root-caused this pass** — time went to the (more severe-looking) rendering finding above.
+Candidate starting points for whoever picks this up: `world_runtime.gd:_place_player()`'s
+`SaveSystem.consume_pending_player_pos()` sentinel path (`Vector3.INF` is the real "no saved
+position" sentinel value already used by design — worth checking whether `park.tscn` has a
+`PlayerSpawn` node at all, and whether some other code path can end up *setting* the pending-pos
+field to a bad value rather than just consuming the sentinel), and whether this is
+windowed-mode-specific (3 separate all-headless 3-seed bot re-runs this same pass, on the exact
+current codebase, produced zero occurrences of this — this is the first time `park` has been
+reached via a **windowed** run with a live camera/viewport, and `_qa_autoplay_runner.gd`'s own
+`_dir_to()` depends on `get_viewport().get_camera_3d()`). Two real leads, neither confirmed —
+recorded here rather than guessed at.
+
 ## RESOLVED (2026-09-21, later): spine-phase softlock — root cause was nudge duration, not touch distance or speed
 
 The two entries below (both 2026-09-21) each ruled out one wrong hypothesis without finding

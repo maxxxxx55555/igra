@@ -64,12 +64,17 @@ func _run() -> void:
 	EventBus.boss_spawned.connect(_on_boss_spawned)
 	EventBus.game_won.connect(_on_game_won)
 
-	Routes.start_game()
-	if not await _wait_until(func() -> bool: return GameManager.is_playing(), 10.0):
-		_log("FAIL: never entered PLAYING")
-		get_tree().quit(1)
-		return
-	_log("playing — spawning the autoplay driver to reach districts/boss/win")
+	# BUG FOUND LIVE (2026-09-21, P4 visual pass): this used to call
+	# Routes.start_game() + wait for PLAYING itself, THEN spawn
+	# _qa_autoplay_runner.gd on top - but the runner's own _start() ALSO
+	# navigates to MainMenu and calls Routes.start_game(), since it's
+	# designed to be spawned fresh from boot, not mid-game. Redundantly
+	# calling both caused the runner's _start() to bounce back toward a
+	# menu that was no longer where the game actually was, then fail its
+	# own "menu not reached in 14s" check. We're still at MainMenu here
+	# (shots 01/02 only opened Settings, never started a game) - just
+	# spawn the runner and let its own _start() do the whole boot.
+	_log("still at menu — spawning the autoplay driver to boot + reach districts/boss/win")
 	var runner := Node.new()
 	runner.name = "StillsAutoplayDriver"
 	runner.set_script(load("res://scripts/tools/_qa_autoplay_runner.gd"))
