@@ -1,5 +1,43 @@
 # Run state — orchestrator pass (2026-09-20)
 
+## Session 7 continued: R2 truth-gate hardening (visual+audio DONE, verified; play in progress)
+
+Per `docs/REDTEAM_CHALLENGE.md`'s TG-SEE/TG-HEAR/TG-PLAY specs (arena, read this pass):
+
+- **TG-SEE (visual_truth_gate.py): DONE.** Magenta ratio now measured on the WORLD band only
+  (excludes HUD top strip and quickbar bottom strip), threshold tightened 1.0%→0.5%; added a
+  colored-noise-outlier detector (catches corruption that isn't hue-pure magenta); added
+  `REBACK_UNVERIFIED` printed on every verdict (honest: this is an in-engine texture readback,
+  not an OS-level screenshot — see G0's finding that OS-level capture is unavailable in this
+  session). Tried the arena's third proposed check (clear-color-flood, >2% of world band near
+  the project's clear color ⇒ "world didn't draw") as blocking, and **found it produces false
+  failures**: all 3 already-verified-clean R0 evidence frames scored 88-90% flood because they're
+  DARK-stage night captures (legitimately mostly near-black), not FULL-stage as the arena's own
+  caveat requires. Demoted to reported-only, not blocking — shipping it as blocking would fail
+  every correct dark-district screenshot this project has. Re-verified against all 6 committed
+  evidence frames (3 corrupted, 3 clean) post-hardening: correctly separates them, clean frames
+  now read 0.04-0.06% (well under 0.5%) instead of the old whole-frame 0.09-0.12%.
+- **TG-HEAR (audio_truth_gate.gd): DONE, verified real.** Added a true-peak ceiling
+  (-1.5dBFS, `docs/STYLE_GUIDE.md`'s own audio budget) checked on Master/Music/SFX/Ambient —
+  catches clipping, not just "is something happening". Tightened the Music silence threshold
+  -60dB→-45dB per the arena spec. Added injected `move_up` input after the audio-unlock press so
+  footstep SFX gets a real chance to fire (best-effort, not blocking — spawn/collision are outside
+  this probe's control), reported not blocking for SFX/Ambient's lower bound. Re-run result:
+  Master -12.9dB, Music -18.3dB, SFX -16.1dB (the injected movement genuinely triggered a
+  footstep — real signal, not silence), Ambient -32.1dB, all under the clipping ceiling, Music
+  well above the silence floor. **PASS, for real reasons.**
+- **TG-PLAY (`_qa_autoplay_runner.gd`): code written, compiles clean
+  (`compile_gate_scene.tscn` bad=0), one-seed sanity run in progress.** Added an `is_finite`
+  position invariant check at the TOP of `_watchdog()` (before the score/stuck logic that would
+  itself misbehave on inf/NaN) — fires `INVARIANT_FAIL pos` immediately instead of waiting out
+  the 45s `SOFTLOCK_SEC` timeout, directly targeting the exact park-travel bug the arena's own
+  PASS-while-broken scenario names (3 separate all-headless bot re-runs won clean on a build
+  where a windowed run hit `(inf,inf,inf)` via City Map Travel). Added a `_nudge_count` counter,
+  printed in the run summary — a "clean" win with many nudges is a navigation defect wearing a
+  pass, per the arena's own framing. **Not yet done**: entrypoint-coverage tracking (arena item
+  2, counting `DistrictManager.transition_to` call sites exercised per run) — bigger lift,
+  deferred, noted honestly rather than silently dropped.
+
 ## Session 7 (2026-09-22, studio-lead pass): R1 tested and closed (not reopened), arena docs found
 
 **R1 (the new directive's "prior render fix is VOID" claim): tested directly, refuted.** The
