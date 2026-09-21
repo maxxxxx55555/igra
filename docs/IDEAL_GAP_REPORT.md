@@ -1,3 +1,65 @@
+# Ideal gap report — 2026-09-21 (v7.3.2, softlock CLOSED + audio loudness + arena debug audit merged)
+
+Updates v7.3.1 below (same date, kept as history). Unlike v7.3.1 (audit-only, nothing closed),
+this pass closed two real items.
+
+## What changed this pass (v7.3.2)
+
+- **Residential spine-softlock (TOP-10 #2, was) — CLOSED**, `b7213ac`. A fresh arena branch
+  (`arena/01a0c324-igra`, merged `68d6ce4`) carried `docs/SPINE_SOFTLOCK_AUDIT.md` with a
+  ranked candidate list. Its #1 candidate (C1, high-speed tunneling at 170 m/s) was checked
+  against real telemetry (temporary diagnostic prints, reverted after, never shipped) and
+  **rejected**: player velocity was 0.0 while stuck, not 170 — no tunneling. The audit's #2
+  candidate (C4, the stuck-nudge launching the player out of bounds) was confirmed, but its
+  proposed fix was wrong for this codebase: `player_3d.gd:544` normalizes movement direction
+  before applying speed, so shrinking the nudge vector's length (the audit's suggestion)
+  cannot change velocity. The real lever was nudge **duration** (1.2s at full speed = up to
+  204m, matching the previously-logged 150-250m position jumps) — cut to 0.25s. **3-seed bot:
+  3/3 WINS, zero FAIL/SOFTLOCK lines in any log** (up from the 2/3 boss-fix baseline — a net
+  improvement, not just a recovery). QA-bot-only change, no gameplay/balance file touched.
+  Full trace in `docs/KNOWN_ISSUES.md`.
+- **Audio loudness (part of the standing DEV-REMAINING item) — the shipped-track half CLOSED**,
+  `86ef452`. Measured all 21 music/ambient tracks against the house law (-18 LUFS, TP<=-1.5
+  dBFS) with `ffmpeg loudnorm`. Found and fixed: `abandoned_hallways.mp3` (MENU theme, was
+  -15.13 LUFS / **+0.10 dBTP — actually clipping**) and `abandoned_hallways_alt.mp3`
+  (school/hospital theme, -14.44/**+0.04 dBTP, also clipping**), plus `layer_lit.ogg` (-14.07,
+  4 LU hotter than its `layer_dark.ogg` crossfade sibling). All three now measure -18.0 to
+  -17.9 LUFS with safe true peak. `music_combat.ogg`'s -21.93 spread was left alone — already
+  documented in `docs/MUSIC_RECIPE.md` as a deliberate variant pool, not a defect. Remaining
+  audio work (new-track generation + mixing those once they exist) is 100% owner-blocked now,
+  not a dev task — folded into the music item in `docs/OWNER_HANDOFF.md` rather than staying a
+  separate DEV-REMAINING line.
+- **Arena backlog — 1 more ref landed**, `68d6ce4`: `arena/01a0c324-igra`
+  (`docs/SPINE_SOFTLOCK_AUDIT.md`, docs-only, clean merge, directly enabled the softlock fix
+  above). The other 5 refs from v7.3.1's audit are unchanged (still 0 mergeable, not
+  re-checked this pass — nothing new landed on any of them).
+- **`docs/OWNER_HANDOFF.md` (new)** consolidates all owner-blocked work into one document:
+  19 music prompts inline (was previously only in `docs/MUSIC_RECIPE.md`), the exact windowed
+  screenshot command, release-ops steps (and flags a real keystore-command inconsistency
+  between `docs/RELEASE_CHECKLIST.md` and `docs/store/HUMAN_CHECKLIST.md` rather than silently
+  picking one), and the 3 economy options as neutral decision cards. Also corrects a stale
+  gap-report line: "8 before/after, 8 store shots" conflated two different deliverables — the
+  5 `assets/store/screenshot_0X.png` files are already shipped (confirmed on disk), only
+  `docs/stills/`'s 8 shots (0 files) are genuinely owner-blocked.
+
+## TOP-10, restated (genuinely open only)
+
+1. **Full W2-W10 visual pass wiring.** Unchanged — **DEV, large, needs eyes-on-render**.
+2. **Economy: repeat-profile coin shortfall.** Unchanged, 3 scored options ready
+   (`docs/ECONOMY_OPTIONS.md`, decision card in `docs/OWNER_HANDOFF.md`) — **DEV or design
+   call, medium; awaiting an owner decision, not blocked on more analysis**.
+3. **Music generation.** Unchanged — **OWNER, ~2-4h**, all 19 prompts now also inline in
+   `docs/OWNER_HANDOFF.md`.
+4. **Windowed stills** (`docs/stills/`, 8 shots — NOT the store listing screenshots, which are
+   already shipped). **OWNER-ONLY, ~2 min**, exact command in `docs/OWNER_HANDOFF.md`.
+5. **Android keystore + signed AAB, Play Console setup.** Unchanged — **OWNER-ONLY, ~1-2h**.
+6. **`gh auth login`.** Unchanged, still not done — **OWNER-ONLY, ~2 min**.
+
+(Residential softlock and the shipped-track audio-loudness half are both closed as of this
+pass — removed from the list rather than carried forward stale.)
+
+---
+
 # Ideal gap report — 2026-09-21 (v7.3.1, backlog audit + softlock re-investigation)
 
 Updates v7.3 below (same date, kept as history). No TOP-10 item **closed** this pass — this

@@ -1,3 +1,63 @@
+# Release readiness report v7.3.2 — 2026-09-21 (softlock CLOSED + audio loudness + arena debug merge)
+
+Supersedes v7.3.1 below (kept as history, same date). Unlike v7.3.1, this pass closed real
+DEV-REMAINING work — two items move, honestly scored.
+
+## Verification (this pass)
+
+| Item | Result | Evidence |
+|---|---|---|
+| Static gates | **12/12 PASS** | `bash tools/check.sh --static`, re-run |
+| i18n | **13/13 locales, MISSING: 0** | re-run, no new strings this pass |
+| Store listing | **13/13 GREEN** | re-run |
+| Quarantine audit | **PASS** | re-run |
+| `balance_sim.py` | **PASS** | re-run |
+| `autoplay_bot` | **3/3 WINS, zero FAIL/SOFTLOCK lines** | fresh run verifying the nudge-duration fix (`b7213ac`) — up from the 2/3 boss-fix baseline, a real improvement, not a reused number |
+| Engine gates (full) | **26/27, reused from the v7.3 tag** | not re-run: this pass's only code changes were to `scripts/tools/_qa_autoplay_runner.gd` (QA-only tool, exercised live and error-free across 6 real bot runs this pass) and a temporary diagnostic in `item_pickup_3d.gd` that was fully reverted before commit — no shipped scene/resource/gameplay-script change the 26/27 suite would see differently |
+| Arena merge | **1 ref merged** (`arena/01a0c324-igra`, docs-only, `68d6ce4`) | directly enabled the softlock fix; the other 5 refs are unchanged from v7.3.1's audit |
+
+## Weighted readiness: **70%** (up from v7.3.1's 69%)
+
+| Category | Weight | Score | Change | Why |
+|---|---|---|---|---|
+| Engineering gates | 30 | 98% | +2 | the 26/27 static/engine count is unchanged, but this pass adds a genuinely stronger correctness signal: the autoplay bot went from a 2/3 baseline with a known, real softlock to 3/3 with zero failures anywhere, on a QA-tool fix verified the same way the boss-phase fix was |
+| Security | 10 | 100% | — | unchanged |
+| Size/perf | 15 | 62% | — | unchanged |
+| Visual/juice | 10 | 47% | — | unchanged |
+| Content/i18n | 10 | 100% | — | unchanged |
+| Store/marketing | 10 | 65% | — | unchanged |
+| Owner-only steps | 15 | 0% | — | unchanged — structurally still 0 until the owner actually does one of the steps; `docs/OWNER_HANDOFF.md` (new) lowers the *effort* to act, not this score |
+
+`30×0.98 + 10×1.00 + 15×0.62 + 10×0.47 + 10×1.00 + 10×0.65 + 15×0.00 = 69.9` → **70%**
+
+This report's categories still have no slot for "audio quality" (same structural gap as
+"economy" in v7.3.1) — the loudness fix is real and is reflected in `docs/IDEAL_GAP_REPORT.md`
+instead, which has an Audio category; not force-fit into a score bucket here that doesn't
+semantically cover it.
+
+## OWNER-ONLY — see `docs/OWNER_HANDOFF.md` (new, single consolidated document)
+
+| Item | Effort | Change this pass |
+|---|---|---|
+| Music generation (19 tracks) | ~2-4h | prompts now also inline in the handoff doc, not just `docs/MUSIC_RECIPE.md` |
+| Windowed stills (`docs/stills/`, 8 shots) | ~2 min | **corrected**: the 5 `assets/store/screenshot_0X.png` files are already shipped (confirmed on disk this pass) — only this 8-shot before/after set is actually blocked, not "8 store shots" as prior reports implied |
+| Android keystore + signed AAB, Play Console | ~1-2h | flagged a real inconsistency between two existing docs' keystore commands (different filename/alias each) — owner must pick one, not run both |
+| `gh auth login` | ~2 min | unchanged, still not done |
+
+## DEV-REMAINING — down to 2 items (was 4 in v7.3.1)
+
+| Item | Effort | Change this pass |
+|---|---|---|
+| Full W2-W10 visual pass | large, multi-session | none |
+| Economy: repeat-profile coin shortfall | medium, design call | unchanged, decision card now in `docs/OWNER_HANDOFF.md` too |
+
+**Closed this pass**: residential spine-softlock (was unscoped DEV, now fixed and verified
+3/3) and the shipped-track half of audio loudness normalization (was "~2-3h, needs ears" —
+the ears-needing part turns out to have been measurable with `ffmpeg loudnorm`, done; what's
+left is 100% new-track generation, which is owner work, not dev work).
+
+---
+
 # Release readiness report v7.3.1 — 2026-09-21 (arena backlog audit + softlock re-investigation)
 
 Supersedes v7.3 below (kept as history, same date). **No score movement this pass** — every
