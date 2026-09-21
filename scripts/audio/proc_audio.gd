@@ -21,6 +21,15 @@ var _footstep_timer: float = 0.0
 var _footstep_interval: float = 0.0
 var _player_was_moving: bool = false
 var _flashlight_on: bool = true
+## P5 (audio depth): district-flavored hum + threat-reactive density, within
+## the existing procedural generator - no new assets, same buses. Frequency
+## offset is a small deterministic spread per district (same hash-seeding
+## idiom district_loot.gd already uses for its own per-district scatter), so
+## each district's hum reads as subtly its own character rather than one
+## identical tone everywhere. Re-read on every district_entered, not just
+## _ready(), since one instance persists across district rebuilds.
+var _district_hum_offset: float = 0.0
+var _threat_level: float = 0.0
 
 func _ready() -> void:
 	# arena design audit P4: explicit, not inherited-by-default - this whole
@@ -65,6 +74,17 @@ func _ready() -> void:
 	_no_missing = no_missing
 	EventBus.flashlight_state_changed.connect(_on_flashlight_toggled)
 	EventBus.player_state_changed.connect(_on_player_state_changed)
+	EventBus.district_entered.connect(_on_district_entered)
+	_on_district_entered(&"")
+
+func _on_district_entered(_district_id: StringName) -> void:
+	var dm := get_node_or_null("/root/DistrictManager")
+	var id: String = String(dm.current_district) if dm != null else ""
+	# Same seeding idiom as district_loot.gd's _scatter rng - deterministic
+	# per district, not random per visit. Small spread (+-4Hz on a 65Hz base)
+	# so districts stay in the same family, just not identical.
+	var h := hash(id)
+	_district_hum_offset = float(h % 800) / 100.0 - 4.0
 
 
 func _on_flashlight_toggled(enabled: bool) -> void:
@@ -184,10 +204,45 @@ func _play_moan() -> void:
 	await get_tree().create_timer(dur + 0.1).timeout
 	player.queue_free()
 
+## P5: cheap, throttled (not every frame) proximity check - any monster in
+## CHASE/ATTACK within 20m counts as "threat", not just nearest/boss. Reuses
+## the "monsters" group every enemy script already joins (base_monster.gd),
+## no new signal plumbing.
+const _THREAT_CHECK_SEC := 0.5
+const _THREAT_RADIUS := 20.0
+var _threat_check_timer: float = 0.0
+
+func _update_threat_level() -> void:
+	var player := get_tree().get_first_node_in_group("player")
+	if player == null or not (player is Node3D):
+		_threat_level = 0.0
+		return
+	var ppos: Vector3 = (player as Node3D).global_position
+	var level := 0.0
+	for m in get_tree().get_nodes_in_group("monsters"):
+		if not (m is Node3D) or not is_instance_valid(m):
+			continue
+		var ai_state = m.get("ai_state")
+		if ai_state == null:
+			continue
+		# State.CHASE=3, State.ATTACK=4 (base_monster.gd's enum) - read by
+		# value, not by name, since GDScript enums aren't importable by ref
+		# across an autoload boundary without a class_name dependency.
+		if int(ai_state) != 3 and int(ai_state) != 4:
+			continue
+		if ppos.distance_to((m as Node3D).global_position) <= _THREAT_RADIUS:
+			level = 1.0
+			break
+	_threat_level = level
+
 func _process(delta: float) -> void:
 	if not enable_proc_audio:
 		return
 	_time += delta
+	_threat_check_timer += delta
+	if _threat_check_timer >= _THREAT_CHECK_SEC:
+		_threat_check_timer = 0.0
+		_update_threat_level()
 	if _gen_ok and _ambient_player and _ambient_player.get_stream_playback():
 		var playback = _ambient_player.get_stream_playback()
 		if playback:
@@ -195,17 +250,21 @@ func _process(delta: float) -> void:
 			if frames > 0:
 				var buf := PackedVector2Array()
 				buf.resize(frames)
+				var freq := ambient_hum_freq + _district_hum_offset + _threat_level * 6.0
+				var vol_mult := 1.0 + _threat_level * 0.35
 				for i in frames:
 					var t := _time + float(i) / 24000.0
-					var hum := sin(t * ambient_hum_freq * TAU) * _ambient_current_volume * 0.5
-					var mod_slow := sin(t * 0.3) * 0.5 + 0.5
+					var hum := sin(t * freq * TAU) * _ambient_current_volume * 0.5 * vol_mult
+					var mod_slow := sin(t * (0.3 + _threat_level * 0.5)) * 0.5 + 0.5
 					var v := hum * (0.6 + mod_slow * 0.4)
 					buf[i] = Vector2(v, v)
 				playback.push_buffer(buf)
 	_moan_timer += delta
 	if _moan_timer >= _moan_cooldown:
 		_moan_timer = 0.0
-		_moan_cooldown = randf_range(moan_interval_min, moan_interval_max)
+		# Threat-reactive density: moans stack up to ~2x more often mid-chase
+		# instead of the flat interval used at rest.
+		_moan_cooldown = randf_range(moan_interval_min, moan_interval_max) * (1.0 - _threat_level * 0.5)
 		_play_moan()
 	var player := get_tree().get_first_node_in_group("player")
 	if player and player.has_method("is_moving"):
