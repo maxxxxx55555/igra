@@ -1,5 +1,44 @@
 # Run state — orchestrator pass (2026-09-20)
 
+## Session 4 (2026-09-21, v7.3.1 pass): Phase M0 arena backlog re-audit
+
+Re-checked all 5 still-unmerged `origin/arena/*` refs from the 2026-09-20 "Arena branches
+NOT merged" table below, plus `origin/gh-pages` (not an arena ref — GitHub Pages privacy-
+policy deploy target, `fb2ca98`, unrelated to game code, out of scope). `git branch -r
+--no-merged main` shows the same 5 arena refs as before; nothing new landed since. Docs(audio)/
+docs(debug)/docs(ideal) branches the directive expected to check for **do not exist on
+origin** (`git log --all --grep` for those subjects: zero hits) — Phase W and Phase A both
+fall to their no-branch-found path below.
+
+| ref | action | proof |
+|---|---|---|
+| `arena/019ffbd0-igra` | skip — real conflict | `git merge-tree --write-tree main origin/arena/019ffbd0-igra` shows 3-way conflicts starting at `.gitignore`/`README.md`, real divergence not a trivial rename; matches 2026-09-20's own finding (110 conflict lines then, still conflicting now) |
+| `arena/01a07b1c-igra` | skip — real conflict | same command conflicts on `data/i18n/*.json` (all 13 locale files) and the weapon-system scripts; main already has a live `scripts/weapons/` system this branch's `WeaponBase` rework overlaps, unverifiable without a full regression pass this session doesn't have room for |
+| `arena/01a09af1-igra` | skip — stale + conflicting | conflicts even on `tools/qa_sim/autoplay_bot` itself; 552-file diff with multiple merge bases (two already-merged branches merged into each other) — confirmed stale per 2026-09-20's own note, not re-litigated further |
+| `arena/01a0ab24-igra` | skip — superseded | docs-only (`GAMEFEEL_SPEC.md`/`QA_MATRIX.md`/`BALANCE_MATRIX.md`), but `diff main:docs/QA_MATRIX.md` vs the branch's version shows main's is a strictly newer, extended version (40 base + 30 RC-extension cases, dated 2026-09-20, vs the branch's original 2026-09-16 base) — already transplanted and evolved past, nothing left to take |
+| `arena/card-unique-rescue` | skip — rejected, not re-checked | per directive's own instruction: "REJECTED for fabricated cert — never merge, extract nothing"; not re-opened |
+
+0 merged, 0 cherry-picked, 5 skipped (all with real evidence, not guesses). No commit needed
+beyond this doc entry — nothing changed on disk. `chore(merge): arena backlog 0 refs (all 5
+re-verified skip)` covers this table.
+
+## Session 4, Phase W: residential spine-softlock — still open, two hypotheses down
+
+No `docs(debug):`-subject branch exists on origin (checked above) — took the no-branch path:
+fresh analysis avoiding the already-rejected `PICKUP_TOUCH` hypothesis, tried ONE alternative
+(`NavigationAgent3D`-based bot pathing instead of straight-line `_dir_to()`, mirroring
+`base_monster.gd`), verified with a real 3-seed run: **0/3, softlocks in `park`/`hospital`/
+`suburbs`** (the last one new — `suburbs` had never failed before) — worse than baseline.
+Reverted, never committed. Full writeup with both rejected hypotheses (the earlier
+`PICKUP_TOUCH` one and this one) plus one ruled-out lead (the "locked boiler room" zone
+metadata, which turned out to have zero code enforcement — `district_loot.gd` places all
+fixed-spawns by seeded scatter, no real doors/zones exist in 3D) is in
+`docs/KNOWN_ISSUES.md`. **More data needed, not guessing further this pass**: the residential
+softlock's real mechanism is still unconfirmed. A next session should add position-level
+telemetry INSIDE the 45s stall window (the current 5s heartbeat cadence is too coarse to see
+what the bot is actually colliding with) before trying a third fix.
+
+
 ## Session 3 (2026-09-20, later): balance consumption from arena design audit
 Consumed `docs/DESIGN_AUDIT_ARENA.md` from `arena/01a0bdfa-igra` (`docs(design):`
 commit `0a15e5e`, 8 proposals P1-P8; a later `docs(qa):` commit `a365088` on the same

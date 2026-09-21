@@ -41,6 +41,37 @@ long way at the game's canonical, bot-verified-correct high speed, 170-300 "m/s"
 wasn't confirmed either). Left open, not silently dropped. `.qa_logs/autoplay_seed2.log`
 from the 2026-09-21 pass has the original trace, if still present when picked up next.
 
+**Lead investigated and RULED OUT (not a hypothesis tried, a theory disproven before touching
+code)**: `content/districts/residential/item_spawns.json`'s `residential_fix_puzzle_01` places
+the district's first-needed `cable` in `zone: "z_boiler_room"`, the same zone as the
+key-gated `transistor` ("behind the locked boiler-room door (key = residential_fix_key_01)"
+per that file's own comment) — a plausible "bot walks toward a pickup that's behind a closed
+door it can't open" explanation. Checked before attempting any fix:
+`scripts/world/district_loot.gd`'s own comment (`_spawn_secrets`, ~line 177) says plainly
+that 3D districts have **no named zone markers at all** — `zone` is authoring-only metadata
+in the JSON, every fixed-spawn item (including the "locked" ones) is placed by the same
+seeded random scatter as everything else, with zero physical door/lock gating anywhere in
+`scripts/` (grepped for `z_boiler_room` / `locked_zones` / `zone_locked` / `key_gated`, zero
+hits outside content JSON, and `residential.tscn` has no "door" node at all). The locked
+boiler room is pure narrative flavor text with no code behind it — ruled out, not the cause.
+
+**Second hypothesis tried and REJECTED (2026-09-21, later)**: the bot's `_dir_to()` steers in
+a straight line at the target regardless of walls (`scripts/tools/_qa_autoplay_runner.gd`),
+unlike monsters, which route via `NavigationAgent3D` (`base_monster.gd._move_to`) — plausible
+that residential's denser courtyard/stairwell geometry defeats the 2s stuck-nudge fallback
+where open districts don't. Added a `NavigationAgent3D` child to the bot's player node,
+mirroring `base_monster.gd`'s exact idiom (including its off-navmesh straight-line fallback),
+and routed `_dir_to()` through it. Full 3-seed verification: **0/3 wins — softlocks in
+`park` (spine_i=2), `hospital` (spine_i=4), AND `suburbs` (spine_i=0, the tutorial district,
+which had never failed before)** — worse than the 2/3 baseline and a regression into a
+district that used to be solid. Reverted immediately (`git checkout --`, never committed).
+Whatever navmesh-vs-pickup-position mismatch might explain this (items are placed by a
+seeded scatter with no navmesh awareness per the ruled-out lead above — plausible some land
+in spots the navmesh reaches only via a clamped nearest-point that isn't actually adjacent to
+the real pickup) is not confirmed. **Do not retry this exact fix (bot-side NavigationAgent3D)
+without new evidence.** Two hypotheses down; the residential softlock's actual mechanism is
+still unknown. Left open.
+
 ## Boss-phase softlock is real but nondeterministic — battery/light-gate hypothesis disproven (2026-09-20)
 
 RC finish pass observed the autoplay bot softlock in the boss phase (power_station,
