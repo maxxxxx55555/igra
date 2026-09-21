@@ -23,6 +23,12 @@ func _ready() -> void:
 		print("[stills] headless — no display to capture from, no-op")
 		get_tree().quit(0)
 		return
+	# R0 rendering-corruption diagnostic (2026-09-21): log the real adapter
+	# and active method/driver on every windowed run so a magenta-corruption
+	# report always carries what hardware/backend produced it.
+	print("[stills] adapter=%s vendor=%s method=%s driver=%s" % [
+		RenderingServer.get_video_adapter_name(), RenderingServer.get_video_adapter_vendor(),
+		RenderingServer.get_current_rendering_method(), RenderingServer.get_current_rendering_driver_name()])
 	call_deferred("_run")
 
 func _log(msg: String) -> void:
