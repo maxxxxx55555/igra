@@ -1,5 +1,21 @@
 # Run state — orchestrator pass (2026-09-20)
 
+## Session 6 (2026-09-21/22, v8.0 order-pass): P1 function matrix — DONE
+
+`docs/FUNCTION_MATRIX.md`: 110 rows (89-row spine generated straight from `project.godot`'s
+`[autoload]`/`[input]` sections via `tools/qa_sim/gen_function_matrix.py` — cross-count proof
+in the doc's own methodology section — plus 21 hand-curated extra rows covering every category
+the directive names: save/NG+/achievement/security/economy/stealth/boss/district/audio/i18n).
+11 WORKS (everything R0/G1/P0 already verified this pass), 4 BUG (the `settings_full.gd`
+dead-code find + the 3 standing bugs, all carried over honestly, none newly claimed fixed), 4
+CANNOT-TEST-HEADLESS, 1 BY-DESIGN-LIMIT, 1 PARTIAL (i18n), 89 UNTESTED — that UNTESTED count is
+P2's actual to-do list, not a hidden claim of brokenness.
+
+**Next**: P2, sweep the 89 UNTESTED spine rows (autoloads/input actions) toward WORKS/BUG/
+CANNOT-TEST-HEADLESS/BY-DESIGN-LIMIT, prioritizing rows reachable from the same G1 GUI-ENGINE
+harness (in-run pause/inventory/map/flashlight/interact, still not built — see G1's own
+residual note above) before reaching for headless scripted probes for the rest.
+
 ## Session 6 (2026-09-21/22, v8.0 order-pass): P0 truth gates — DONE
 
 **P0: all three truth gates built, wired into `tools/check.sh` as blocking, and verified real**
