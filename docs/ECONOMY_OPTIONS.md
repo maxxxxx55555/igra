@@ -1,5 +1,25 @@
 # Economy funding-path options — repeat-profile coin shortfall
 
+## DECIDED (2026-09-21): Option B, price cut — owner-delegated
+
+Owner explicitly delegated this decision this pass, with criteria in priority order:
+**reversibility first, player-experience safety second, revenue third**. Applied in that
+order: **B wins clearly on the first criterion alone** — a single-field `.tres` edit with no
+save-data implications (prices aren't stored per-save) beats A's design-audit-flagged grind
+risk (needs a cap to even be safe, and a cap needs new persistent state, less trivially
+reversible) and C's one-way-door property (players who complete a quest and bank the coins
+can't have that undone by reverting the quest). B is equally safe on the second criterion
+(zero risk of turning the stealth pillar into a combat-optional grind, unlike A). Revenue
+doesn't discriminate between the three — this is an in-game currency with no real-money
+purchase path in this codebase, not a live monetization lever.
+
+**Implemented**: `data/shop/upgrade_flashlight_brightness.tres` 1500→**1200**,
+`data/shop/upgrade_backpack_slots.tres` 2000→**1000**. New total 2200, exactly matching the
+repeat-profile ceiling (`tools/qa_sim/balance_sim.py`'s own dynamic economy section confirms:
+"repeat profile, no secrets (2200) vs cheapest 2 items (2200): covers it" — was 3500 before).
+Not below the ceiling on purpose — a same-run purchase should still feel like a real spend of
+everything earned, not leave slack.
+
 Analysis only, per `docs/DESIGN_AUDIT_ARENA.md` P6's ledger (still the source of truth for the
 numbers below — not re-derived, just cited): a repeat-profile player with no secrets banks
 **2,200** coins (11 districts × 200, `scripts/economy/rewards_manager.gd`), against **3,500**

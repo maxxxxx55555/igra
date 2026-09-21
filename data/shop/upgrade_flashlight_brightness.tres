@@ -6,4 +6,4 @@ id = &"upgrade_flashlight_brightness"
 kind = 1
 display_name = "Яркость фонаря +1"
 description = "Усиливает луч. Достижимо и чертежом в мире."
-price_coins = 1500
+price_coins = 1200

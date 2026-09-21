@@ -6,4 +6,4 @@ id = &"upgrade_backpack_slots"
 kind = 1
 display_name = "Рюкзак +4 слота"
 description = "Больше ячеек. Достижимо и чертежом в мире."
-price_coins = 2000
+price_coins = 1000

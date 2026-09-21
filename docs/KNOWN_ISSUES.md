@@ -65,7 +65,25 @@ reached via a **windowed** run with a live camera/viewport, and `_qa_autoplay_ru
 `_dir_to()` depends on `get_viewport().get_camera_3d()`). Two real leads, neither confirmed —
 recorded here rather than guessed at.
 
-## RESOLVED (2026-09-21, later): spine-phase softlock — root cause was nudge duration, not touch distance or speed
+## CORRECTION (2026-09-21, even later): the entry below is NOT fully resolved — much rarer, reproduced once more
+
+Downgrading the "RESOLVED" claim below before it goes stale: while verifying an unrelated
+change (P6, `data/shop/*.tres` price data, zero code path to movement/pickup logic) with a
+fresh 3-seed run, seed3 hit **the exact same signature again** — `SOFTLOCK: no progress for
+45s — phase=spine district=residential spine_i=1`, `tdist` oscillating at 1.4-1.5 for the full
+stall window, same as originally documented. 2/3 seeds still won cleanly (meets the IRON
+RULE's own ≥1-win bar for the price change, which is unrelated and not being reverted over
+this), but this proves the nudge-duration fix (`b7213ac`, below) **reduced** the failure rate,
+it did not **eliminate** the underlying mechanism: shortening the nudge window makes the
+"lucky recovery" case much more likely (was demonstrated working, in-log, for the original
+fix's own verification run) but a sufficiently unlucky RNG draw can still fail to land the
+player inside the true 1.0m contact radius within 45s. Real state: **much rarer, not gone**.
+Don't re-claim "RESOLVED" without a much larger sample (10+ seeds) showing zero recurrences,
+and don't re-try the two already-rejected hypotheses (PICKUP_TOUCH tightening, bot-side
+NavigationAgent3D) if picking this back up — both are still bad ideas, this new data doesn't
+change that.
+
+## PARTIALLY RESOLVED (2026-09-21, later): spine-phase softlock — root cause was nudge duration, not touch distance or speed (see correction above — reduced, not eliminated)
 
 The two entries below (both 2026-09-21) each ruled out one wrong hypothesis without finding
 the real cause. A third pass got there: `arena/01a0c324-igra`'s `docs/SPINE_SOFTLOCK_AUDIT.md`

@@ -46,23 +46,42 @@ MENU slot in `scripts/systems/music_manager.gd`'s `TRACKS` dict; once #3/#4 land
 map. Don't delete the files outright — `docs/MUSIC_RECIPE.md` notes they may still be reused
 as a school/hospital ambience *source class* per `docs/MUSIC_SPEC.md` §a.
 
-## 2. Screenshots
+## 2. Screenshots — BLOCKED on something more serious than "needs a windowed run" now
 
 **Correction to earlier gap reports first**: `docs/IDEAL_GAP_REPORT.md`'s standing "8 before/
-after, 8 store shots" line conflates two different, separately-tracked deliverables — checked
-both on disk this pass:
+after, 8 store shots" line conflates two different, separately-tracked deliverables:
 - `assets/store/screenshot_01.png` … `_05.png` (5 files) — **already done and shipped**,
   wired into `export_presets.cfg`, confirmed present on disk. Nothing to do here.
-- `docs/stills/` (8 canonical before/after shots, feeds `docs/STORE_KIT.md` and the
-  GAMEFEEL_SPEC before/after pair) — **genuinely empty, 0 files**, and genuinely owner-only:
-  headless Godot has no compositor, so this needs a real windowed run.
+- `docs/stills/` (8 canonical shots, feeds `docs/STORE_KIT.md` and the GAMEFEEL_SPEC
+  before/after pair) — this pass fixed a real bug in the capture tool itself (it was
+  redundantly re-booting the game mid-capture and failing every time before reaching any
+  district) and got it producing real shots for the first time. **But the very first real
+  gameplay screenshots this project has ever had show the 3D world rendering as severe
+  magenta/pink visual corruption** — see `docs/KNOWN_ISSUES.md`'s "CRITICAL, NEW, NOT FIXED"
+  entry for the full writeup. Ruled out: import-cache staleness, shader compile errors,
+  SSR/SSIL/SSAO/volumetric fog (disabled all four, corruption unchanged). **Genuinely unknown
+  whether this is the game actually rendering broken on this integrated-AMD-GPU/
+  `gl_compatibility` combination** (which would matter for real low-end Android hardware,
+  the actual ship target) **or a viewport-readback artifact specific to how the capture tool
+  grabs a frame** (`get_tree().root.get_texture().get_image()`) — nobody has watched the live
+  window during a run, only the saved PNGs.
 
-Run this once, on this machine, with the window visible:
+**Before running the command below for real screenshots, first just watch the window** (don't
+close it, don't rely on the saved files) during one run:
 ```bash
 "C:\Users\Maxsim\Desktop\TLS_Build\godot_extracted\Godot_v4.7-stable_win64_console.exe" --path . --windowed res://scenes/tools/capture_stills_scene.tscn
 ```
-Outputs the 8 shots to `docs/stills/`. ~2 minutes, no further input needed once the window
-opens (the scene automates the capture sequence itself).
+If the live game looks fine and only the *saved files* are corrupted, it's a capture-side bug
+(next step: try a different screenshot method, e.g. an OS-level capture instead of the
+in-engine viewport grab). If the live game itself looks corrupted, it's a real rendering bug
+that needs fixing before ANY of the visual-pass or store-screenshot work in this repo can
+proceed meaningfully — don't spend time on `docs/VISUAL_REMAINING.md`'s W3-W5 material
+assignments on top of an unconfirmed-cause broken renderer.
+
+**Also found in the same run, unrelated to the above, not yet fixed**: a new softlock — City
+Map "Travel" to `park` left the player's position at `(inf, inf, inf)`. Full details and
+candidate leads in `docs/KNOWN_ISSUES.md`. Not the same bug as the already-fixed residential
+one (verified separately, still clean).
 
 ## 3. Release ops (Android / Play Store)
 
