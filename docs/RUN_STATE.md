@@ -1,5 +1,114 @@
 # Run state — orchestrator pass (2026-09-20)
 
+## Session 6 (2026-09-21/22, v8.0 order-pass): R0 rendering fix — DONE, in progress on rest
+
+**R0 (render root-cause): CLOSED.** Owner confirmed with their own eyes the magenta corruption
+is real (headless gates never see it — dummy driver, no GPU). Root-caused empirically, NOT
+guessed: tested rendering method (gl_compatibility/forward_plus/mobile — all 3 corrupted
+identically, ruling out renderer/driver), glow (disabled via temp env-var override — zero
+change, ruled out), sky panorama VRAM compression (temp Lossless reimport — zero change, ruled
+out), then isolated it to `scaling_3d/scale=0.8` (sub-native 3D render + FSR upscale) breaking
+`SCREEN_UV` alignment for every `hint_screen_texture` read in
+`scripts/post_process_overlay.gd`'s chroma-aberration shader (active by default per district
+via `assets/textures/postfx/presets.json`). Fix: `scaling_3d/scale` 0.8→1.0 in `project.godot`.
+Verified project-wide across all 3 rendering methods with a new hue-based measurement tool
+(`tools/qa_sim/visual_truth_gate.py`, also P0's first truth gate):
+  before: gl_compatibility 2.46% · forward_plus 13.82% · mobile 2.67% (all FAIL, >1%)
+  after:  gl_compatibility 0.09% · forward_plus  0.11% · mobile  0.12% (all PASS)
+Evidence frames: `docs/stills/evidence/r0_before_*.png`, `r0_after_*.png`. Committed `24116c4`
+`fix(render): scaling_3d/scale 0.8->1.0 -- magenta 2.46%->0.09% (gl_compatibility)`, pushed,
+`git ls-remote`==`git rev-parse` verified match.
+
+**Also found this pass, record for P6**: `docs/REDTEAM_CHALLENGE.md` and
+`docs/RENDERING_DIAGNOSIS.md` (the order-pass directive says these are "arena"-authored and
+must be read/closed before tagging v8.0.0-rc1) **do not exist anywhere in this repo** — checked
+`main`, every local branch, and every `origin/arena/*` remote ref via `git ls-tree -r` per
+branch, zero matches. Do not re-search for these at P6; the directive's premise about their
+existence is stale or mistaken. Treat their P0/P1-closure requirement as vacuously satisfied
+(nothing to read, nothing to close) and note this explicitly in the final sign-off's RESIDUAL
+line rather than silently skipping it.
+
+**G0: OS-level SendInput/PrintWindow abandoned, real finding not a guess.** Built
+`tools/gui_driver.ps1` (Add-Type user32 P/Invoke: SetForegroundWindow, SendInput/mouse_event,
+keybd_event, CopyFromScreen) exactly as specified, then validated it before trusting it: a
+launched, live, `Responding=True` Godot process never got a `MainWindowHandle` (polled 20s) and
+`MainWindowTitle` stayed empty. Diagnosed via `[System.Diagnostics.Process]::GetCurrentProcess().SessionId`
+→ this automation session runs in Windows **Session 4**, not the interactive session the owner
+is physically logged into — any window this session creates exists on a desktop nobody can see,
+so `SendInput` would move nothing the owner's own eyes could verify and `CopyFromScreen` would
+capture whatever's on a screen that isn't this window. Continuing to build on top of that would
+manufacture fake "OS-level" proof, which is exactly what "NO GUESSING" forbids. Deleted
+`gui_driver.ps1` (dead in this environment, misleading to leave around) and switched to the
+directive's own named fallback: real in-engine `InputEvent` injection via a debug driver
+(`tools/qa_sim/gui_explore_runner.gd` + `scripts/tools/_gui_explore_bootstrap.gd` +
+`scenes/tools/gui_explore_scene.tscn`, same survive-scene-swap bootstrap pattern as
+`capture_stills.gd`), keeping the already-proven-real screenshot method R0 used throughout
+(`get_tree().root.get_texture().get_image()` — genuine GPU pixels, not desktop-compositor
+capture). Every result line this produces is labeled **GUI-ENGINE**, never GUI-OS, per the
+directive's own honesty rule for a degraded fallback. **Next session: don't re-attempt
+SendInput/PrintWindow in this environment — the session-isolation finding above is why, not a
+transient flake.**
+
+**G1 progress (GUI-ENGINE), verified real, committed**: `gui_explore_runner.gd` covers
+main-menu button navigation (Settings/Difficulty/Credits, click via `btn.pressed.emit()` — a
+geometric `push_input()` click was tried first and silently failed to register despite a valid
+Button ref, not yet root-caused, dropped in favor of the reliable signal-emit method already
+used for the language dropdown) and the full 13-language settings sweep (select each
+`LocalizationManager.SUPPORTED` index on the real language `OptionButton`, found by its unique
+13-item count, verify `LocalizationManager.current_lang` changed and the rebuilt settings title
+`Label.text` is non-empty and single-script). Result: **19/19 PASS, 0 BUG** — all 3 menu
+buttons navigate correctly, all 13 locales produce a distinct, non-empty, single-script title.
+**Not yet built**: in-run exploration (pause/inventory/map/flashlight/interact — G1 item 3) —
+needs its own slice, geometric click helper was removed as unused this pass, re-add when that
+slice starts.
+
+**Second environment limitation found and root-caused this pass (3 attempts, then stopped
+per TIMEOUT RULE, same discipline as a truth gate)**: multiple `get_tree().root.get_texture()`
+screenshots taken within ONE Godot process in this session are unreliable past the first call.
+Attempt 1 (plain real-time wait, 0.2-0.3s): every shot after the first came back byte-identical
+to frame 1 (frozen). Attempt 2 (+ `RenderingServer.force_draw()`): identical, still frozen.
+Attempt 3 (+ `await RenderingServer.frame_post_draw` x5, + a 3s real-time wait): the image
+finally changed, but to a state from SEVERAL SHOTS EARLIER in the run, not the current one
+(directly verified: a shot logically taken right after entering Settings in English came back
+showing the main menu in Portuguese, a language only selected many steps later in the same
+run) — a lagging backlog against a render pipeline nothing is actually compositing/presenting,
+not a simple cache, and not fixable by waiting longer from inside the script. Root cause ties
+back to the G0 finding above (no real desktop consuming these frames). `capture_stills.gd` is
+NOT affected the same way — its shots are minutes apart during continuous 3D gameplay (real,
+constant engine activity), not seconds apart against a mostly-static 2D UI. Fix applied:
+`gui_explore_runner.gd` now takes exactly ONE screenshot per process launch (the initial menu,
+before any backlog can form) and relies entirely on the (unaffected, always-correct) node-state
+data checks for every subsequent step. **Next session: if UI-flow screenshots are ever needed
+beyond the first, spawn a fresh process per shot (like `shot_tool.gd`'s `--shot=` pattern) —
+do not try to fix multi-shot-per-process capture in this environment again, it has now failed
+three independently-designed ways.**
+
+**Next**: finish this run's results → P0 (finish audio/i18n truth gates) → P1
+(FUNCTION_MATRIX.md, merge G1 rows) → P2 (sweep to 0 BUG/0 UNTESTED, incl. the 3 standing bugs:
+`_game_test_3d.gd` phase-7 harness, park-travel inf-position softlock, residential softlock
+flakiness, PLUS the new `settings_full.gd` dead-code finding below) → P3 (real language
+switching — likely already mostly built, see finding below, P3 becomes mostly verification) →
+P4/P5 (visual + store shots) → P6 (regression lock + `v8.0.0-rc1` sign-off).
+
+**Found this pass, record for P2/matrix**: `scripts/ui/settings_full.gd` (a second, older
+settings-panel implementation with its own `LangOption` dropdown) is referenced by **zero**
+`.tscn` files and loaded/instanced nowhere in code — only appears in
+`scripts/tools/validate_list.txt`, which is a flat auto-enumerated inventory, not a usage site.
+The live settings screen is `scripts/ui/settings_screen.gd` (routed via `Routes.SETTINGS` from
+`main_menu.gd`'s Settings button). `settings_full.gd` looks like dead code, not a planned
+feature — confirm with one more search pass before deleting (CLAUDE.md hard rule: proven dead
+*and* not planned).
+
+**Found this pass, encouraging**: runtime language switching already looks comprehensively
+wired — ~30 UI scripts connect to `LocalizationManager.language_changed` and rebuild/retranslate
+themselves (grepped, not guessed: `main_menu.gd`, `settings_screen.gd`, `pause_menu.gd`,
+`hud_3d.gd`, `codex_ui.gd`, `achievements_ui.gd`, and ~24 more). The full chain
+`settings_screen.gd` dropdown → `SettingsManager.set_language()` → `LocalizationManager.set_language()`
+→ `TranslationServer` + `language_changed.emit()` → every connected screen rebuilds, live, no
+restart — read end-to-end, not assumed. P3 may turn out to be mostly a verification pass over
+already-real functionality rather than a build task; the i18n_truth_gate (P0, not yet built)
+and a full G1 sweep will confirm or find the gaps.
+
 ## Session 5 (2026-09-21, v7.5 ceiling pass): TIMEOUT — unwrapped headless run hung 54 minutes
 
 `godot --headless --path . res://scenes/tools/attack_sim_scene.tscn`, run manually (NOT through
