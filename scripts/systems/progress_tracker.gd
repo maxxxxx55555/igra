@@ -9,6 +9,12 @@ var _docs: Dictionary = {}
 ## Какие именно секреты найдены. Счётчика `secrets` хватало достижениям, но
 ## не экрану коллекции: чтобы показать найденный секрет текстом, нужен id.
 var _secrets_found: Dictionary = {}
+## QA_SWARM_FINDINGS.md P1 (cheater): district_loot.gd's populate() had no
+## gate at all, unlike secrets below - leaving and re-entering a district
+## (which rebuilds the scene, world_runtime.gd) restocked every common item
+## and repair part for free, indefinitely. One flag per district, same
+## idempotent-dict shape as _secrets_found.
+var _districts_looted: Dictionary = {}
 const DOC_ON_DISTRICT := "doc_engineer_log"
 const DOC_ON_SECRET := "doc_family_letter"
 func _ready() -> void:
@@ -34,6 +40,12 @@ func _on_secret_found(id: StringName) -> void:
 
 func is_secret_found(id: String) -> bool:
 	return _secrets_found.get(id, false)
+
+func is_district_looted(id: String) -> bool:
+	return _districts_looted.get(id, false)
+
+func mark_district_looted(id: String) -> void:
+	_districts_looted[id] = true
 
 func found_secret_ids() -> Array:
 	return _secrets_found.keys()
@@ -110,7 +122,8 @@ func to_dict() -> Dictionary:
 	return {"secrets": secrets, "kills": kills, "shadow_kills": shadow_kills, "puzzles": puzzles, "time_played": time_played,
 		"ach": _ach_done.keys().map(func(k): return String(k)),
 		"docs": _docs.keys().filter(func(k): return _docs[k]).map(func(k): return String(k)),
-		"secret_ids": _secrets_found.keys().map(func(k): return String(k))}
+		"secret_ids": _secrets_found.keys().map(func(k): return String(k)),
+		"looted_districts": _districts_looted.keys().map(func(k): return String(k))}
 func from_dict(d: Dictionary) -> void:
 	secrets = int(d.get("secrets", 0))
 	kills = int(d.get("kills", 0))
@@ -126,3 +139,6 @@ func from_dict(d: Dictionary) -> void:
 	_secrets_found.clear()
 	for k in d.get("secret_ids", []):
 		_secrets_found[String(k)] = true
+	_districts_looted.clear()
+	for k in d.get("looted_districts", []):
+		_districts_looted[String(k)] = true

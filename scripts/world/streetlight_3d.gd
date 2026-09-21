@@ -21,8 +21,15 @@ var _energy_scale: float = 1.0
 ## brighter through the murk, hospital/police stay dim per canon). 1.0 if
 ## the district has no entry or the config resource is missing.
 var _light_energy_mult: float = 1.0
+## QA_SWARM_FINDINGS.md P1 (accessibility): every lit lamp in every district
+## dipped into a sharp ~6Hz flicker with no accessibility gate at all - only
+## a per-instance scene export existed, nothing player-facing. Cached once
+## like _light_energy_mult above (district scenes rebuild on re-entry per
+## world_runtime.gd, so toggling the setting takes effect next visit).
+var _reduce_flash: bool = false
 
 func _ready() -> void:
+	_reduce_flash = SettingsManager != null and bool(SettingsManager.get_setting("reduce_flash", false))
 	if not mesh_visible:
 		var pole := get_node_or_null("Pole")
 		var lamp := get_node_or_null("Lamp")
@@ -45,7 +52,7 @@ func _process(delta: float) -> void:
 	var spot: SpotLight3D = $SpotLight
 	var glow: OmniLight3D = $Glow
 	var base: float = (0.85 + sin(_t * 12.0) * 0.15) * _energy_scale
-	if sin(_t * 37.0) > 0.95:
+	if not _reduce_flash and sin(_t * 37.0) > 0.95:
 		base = 0.2 * _energy_scale
 	spot.light_energy = base * 2.0 * _light_energy_mult
 	glow.light_energy = base * 1.0 * _light_energy_mult

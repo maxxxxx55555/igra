@@ -876,9 +876,18 @@ func trigger_strobe() -> bool:
 		EventBus.inventory_notice.emit(LocalizationManager.t("STROBE_HIT"))
 	return true
 
+## QA_SWARM_FINDINGS.md P0 (accessibility): this used to rapid-cycle light_energy
+## 3x at ~10Hz with no accessibility gate at all - wow_director.gd's one-shot
+## story flash already respects reduce_flash, this player-triggerable ability
+## didn't. The stun itself (trigger_strobe, above) is unaffected - only the
+## visual flicker is reduced to a single gentle pulse.
 func _strobe_flash() -> void:
 	var base_energy: float = flashlight.light_energy
 	var tw := create_tween()
+	if SettingsManager != null and bool(SettingsManager.get_setting("reduce_flash", false)):
+		tw.tween_property(flashlight, "light_energy", base_energy * 1.6, 0.12)
+		tw.tween_property(flashlight, "light_energy", base_energy, 0.2)
+		return
 	for i in 3:
 		tw.tween_property(flashlight, "light_energy", base_energy * 3.0, 0.05)
 		tw.tween_property(flashlight, "light_energy", base_energy * 0.2, 0.05)

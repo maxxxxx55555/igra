@@ -155,10 +155,20 @@ static func populate(district_root: Node3D, district_id: StringName) -> int:
 		items.append(StringName(BLUEPRINTS[district_id]))
 
 	var placed := 0
-	for item_id in items:
-		var pos := _scatter(district_root, rng)
-		if _spawn_item(district_root, item_id, pos):
-			placed += 1
+	## QA_SWARM_FINDINGS.md P1 (cheater): the item loop below used to run
+	## unconditionally on every populate() call - leaving and re-entering a
+	## district (world_runtime.gd rebuilds the scene each visit) restocked
+	## every common item AND repair part for free, indefinitely. Secrets
+	## already had this gate (_spawn_secrets below); items didn't.
+	var pt := (Engine.get_main_loop() as SceneTree).root.get_node_or_null("/root/ProgressTracker")
+	var already_looted: bool = pt != null and pt.is_district_looted(String(district_id))
+	if not already_looted:
+		for item_id in items:
+			var pos := _scatter(district_root, rng)
+			if _spawn_item(district_root, item_id, pos):
+				placed += 1
+		if pt != null:
+			pt.mark_district_looted(String(district_id))
 
 	if DOCUMENTS.has(district_id):
 		var dpos := _scatter(district_root, rng)
