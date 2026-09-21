@@ -1,5 +1,35 @@
 # Known issues
 
+## RESOLVED (2026-09-21, later): spine-phase softlock — root cause was nudge duration, not touch distance or speed
+
+The two entries below (both 2026-09-21) each ruled out one wrong hypothesis without finding
+the real cause. A third pass got there: `arena/01a0c324-igra`'s `docs/SPINE_SOFTLOCK_AUDIT.md`
+proposed C1 (high-speed tunneling, 170 m/s skipping the pickup's Area3D) as the top candidate.
+Checked against real telemetry before touching any code — temporary diagnostic prints in
+`_qa_autoplay_runner.gd` and `item_pickup_3d.gd` (reverted after, never shipped) showed
+**player velocity was 0.0** while stuck at the 1.27-1.32m touch threshold, dozens of
+consecutive frames: no tunneling, the bot was simply idle, waiting for a collision that
+needed it to be within the true 1.0m contact radius (0.7 pickup + 0.3 player), not the 1.4m
+it stops at. C1 rejected on direct evidence.
+
+What the same log then showed working: a stuck-nudge event fired, launched the player at
+~117 m/s, and this time landed it at 0.31m (inside true contact) — the pickup registered.
+So the nudge mechanism itself was fine at recovering *locally*; the actual bug was in its
+blast radius. `player_3d.gd:544` normalizes the movement direction before applying speed
+(`dir.normalized() * final_speed`) — the audit's proposed fix (shrink the nudge vector's
+*length* to slow it down) would have done nothing, since magnitude never affected velocity
+in this codebase. The only real lever was **time**: the nudge ran at full walk-speed for a
+fixed 1.2s, which is exactly what produced the previously-logged 150-250m jumps that could
+land the player outside the district's ~40m nav-mesh half-size entirely. Cut to 0.25s
+(`b7213ac`) — bounds worst-case displacement to ~43m even from a max-radius (22m) scatter
+start, while still covering far more distance than the sub-meter local obstacles a sidestep
+actually needs to clear. 3-seed bot: **3/3 WINS, zero FAIL/SOFTLOCK lines in any log** — up
+from the 2/3 boss-fix baseline, a net improvement, not just a recovery. QA-bot-only change,
+no gameplay/balance file touched. See `docs/SPINE_SOFTLOCK_AUDIT.md` for the full candidate
+ranking and `docs/IDEAL_GAP_REPORT.md` v7.3.2 for the writeup. Keeping both entries below for
+the diagnostic trail — each correctly ruled out what it tested, even though neither found the
+real cause on its own.
+
 ## RESOLVED (2026-09-21): boss-phase softlock — root cause was the Y-dip, not battery/light
 
 The entry below (2026-09-20) correctly identified the Y-dip as the likely mechanism but
