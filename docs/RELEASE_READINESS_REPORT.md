@@ -24,9 +24,9 @@ real machine to run it on until now.
 | i18n | **13/13 locales, MISSING: 0** | `python tools/i18n_audit.py`; 2 new skill keys × 13 locales this pass |
 | Quarantine audit | **PASS** | `python tools/quarantine_audit.py --check`; separately, real `--export-pack` measured the fold-in at −575,616 bytes (−0.27%) |
 | a11y | **PASS, 7/7** | `python tools/qa_sim/a11y_check.py` (static) — no `_sec_probe` file exists in this repo under that name; the closest equivalent static safety check, `tools/qa_sim/overflow_check.py` (text-overflow risk scan), also ran clean of new findings |
-| Store listing | not re-run this pass (no store-facing change) | unchanged from v7.2's 13/13 |
+| Store listing | **CORRECTION: already 13/13 complete, not an open item** | `python tools/gen_store_listing_locales.py --check` → GREEN this pass. `store/listing.md` was read directly and confirmed to contain genuine, complete, non-placeholder title/tagline/short+full description/8 bullets/ASO tags for all 13 locales (landed `82a7e87`, 2026-09-10-13, "FINAL SYNC" note in the file itself). v7, v7.1, v7.2 and this report's own first draft all carried forward "translation to 11 locales" as a DEV-REMAINING/OWNER-ONLY gap without re-checking — even though v7.2's own Verification table already said "13/13 GREEN" a section above its stale gap list. Corrected here rather than repeated a 4th time; see the Store/marketing score and OWNER-ONLY table below |
 
-## Weighted readiness: **67%** (up from v7.2's 64%)
+## Weighted readiness: **69%** (up from v7.2's 64%; 2 points of this pass's gain is the store-listing correction, not new work)
 
 | Category | Weight | Score | Change from v7.2 | Why |
 |---|---|---|---|---|
@@ -35,10 +35,10 @@ real machine to run it on until now.
 | Size/perf | 15 | 62% | +2 | quarantine fold-in measured this pass (`docs/IDEAL_GAP_REPORT.md`) |
 | Visual/juice | 10 | 47% | +2 | one more W-item wired (W10 streetlight energy_mult); still the lowest-scoring dev category |
 | Content/i18n | 10 | 100% | — | unchanged |
-| Store/marketing | 10 | 45% | — | untouched this pass |
+| Store/marketing | 10 | 65% | +20 | listing text (title/tagline/short+full description/bullets/tags, 13/13 locales) was already complete and is now correctly counted — see the correction above. Remaining gap is purely visual: 0/8 screenshots, key art, both owner-only (headless capture still impossible) |
 | Owner-only steps | 15 | 0% | — | structurally unchanged; music generation now has a ready recipe (`docs/MUSIC_RECIPE.md`) which lowers the owner's effort but not this score (still 0 tracks actually generated) |
 
-`30×0.96 + 10×1.00 + 15×0.62 + 10×0.47 + 10×1.00 + 10×0.45 + 15×0.00 = 67.15` → **67%**
+`30×0.96 + 10×1.00 + 15×0.62 + 10×0.47 + 10×1.00 + 10×0.65 + 15×0.00 = 69.15` → **69%**
 
 ## OWNER-ONLY (unchanged structurally, one item's effort just dropped)
 
@@ -48,7 +48,6 @@ real machine to run it on until now.
 | Android keystore + signed AAB, Play Console setup | ~1-2h | `docs/store/HUMAN_CHECKLIST.md` |
 | `gh auth login` | ~2 min | checked this pass: still not authenticated |
 | **Music generation (19 tracks)** | **~2-4h, effort lowered this pass** | `docs/MUSIC_RECIPE.md` (new) — every Suno prompt is ready to paste in order; the owner's remaining work is generation + the DAW trim/loudnorm/export pass, not prompt-writing |
-| Store listing translation, 11 locales | ~1h/locale or MT+review | unchanged |
 
 ## DEV-REMAINING
 

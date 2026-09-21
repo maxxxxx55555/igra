@@ -96,8 +96,14 @@ unconfirmed" gate failures into "confirmed environmental, now fixed" or "confirm
    (`docs/DESIGN_AUDIT_ARENA.md` P6 has the full ledger: 1,300-coin gap, 0 repeatable-grind
    income by design). Needs an actual design decision (new faucet, reduced prices, or accept
    the gap as intentional friction), not a code fix.
-4. **Store listing full long-form translation** to 11 non-English locales. Unchanged from
-   v7.2. **DEV or owner-reviewable, ~1h/locale or MT+review.**
+4. ~~Store listing full long-form translation to 11 non-English locales~~ — **REMOVED,
+   was already done.** Checked this pass: `python tools/gen_store_listing_locales.py --check`
+   → GREEN, and `store/listing.md` genuinely contains complete, non-placeholder title/
+   tagline/short+full description/8 bullets/ASO tags for all 13 locales, landed `82a7e87`
+   (2026-09-10-13). This item was wrongly carried forward as open across v7, v7.1, v7.2, and
+   this report's own first draft — v7.2's Verification table even said "13/13 GREEN" a
+   section above its own gap list, and nobody (including this pass, initially) cross-checked
+   the two. Corrected in `docs/RELEASE_READINESS_REPORT.md` v7.3 rather than repeated again.
 5. **Music generation** — `docs/MUSIC_RECIPE.md` (new this pass) has all 19 Suno prompts
    ready to paste, ordered, with target files and post-production steps. **OWNER, ~2-4h**
    (generation + trim/loudnorm/export per track — the prompts are ready, the audio isn't).
