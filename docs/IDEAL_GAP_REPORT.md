@@ -1,3 +1,48 @@
+# Ideal gap report — 2026-09-21 (v7.5, security hardening + 2 critical NEW findings)
+
+Updates v7.3.2 below (same date, kept as history). Full verification and category detail in
+`docs/RELEASE_READINESS_REPORT.md` v7.5 — not duplicated here.
+
+## TOP items, restated (genuinely open only)
+
+1. **Two critical NEW findings block further visual/store work** — magenta 3D-rendering
+   corruption (cause unconfirmed: real bug vs. capture artifact) and a new `park`-travel
+   inf-position softlock. **OWNER, urgent**: watch the live window during one windowed run to
+   settle the rendering question — everything else visual/store-related waits on this.
+2. **Full W2-W10 visual pass wiring.** Unchanged in substance, now also blocked on #1 above —
+   **DEV, large, needs eyes-on-render** (and a confirmed-working renderer first).
+3. **Residential softlock: much rarer, not eliminated.** Corrected from v7.3.2's overclaimed
+   "RESOLVED" after reproducing it once more verifying an unrelated change. **DEV, needs a
+   10+-seed sample to properly re-baseline the current failure rate**, not a re-guess at a fix.
+4. **`_game_test_3d.gd` phase-7 boss-test harness bug.** The gate's own shell timeout was
+   shorter than its internal watchdog (fixed, `tools/check.sh`), revealing the gate's real
+   failure point for the first time: its synthetic boss-spawn setup for phase 7 specifically.
+   **DEV, small-medium** — not real-gameplay-affecting (the real bot fights the boss fine).
+5. **Music generation.** Unchanged — **OWNER, ~2-4h**.
+6. **Android keystore + signed AAB, Play Console setup.** Unchanged — **OWNER-ONLY, ~1-2h**.
+7. **`gh auth login`.** Unchanged — **OWNER-ONLY, ~2 min**.
+
+## Closed this pass
+
+- **Security**: 2 real holes closed (`achievements.cfg` forgery, NG+ level forgery), a
+  permanent 14-case adversarial gate added (`scripts/security/attack_sim.gd`), bytecode-only
+  export enabled on all 3 presets.
+- **QA swarm bugs**: district loot re-farm exploit, 2 accessibility flash gaps (player strobe,
+  streetlight flicker), 1 RU translation error.
+- **Audio depth**: `proc_audio.gd` district-flavored hum + threat-reactive density.
+- **Economy**: owner-delegated decision made and implemented (Option B, price cut) — this item
+  is now genuinely closed, not just analyzed.
+- **Tooling**: `capture_stills.gd`'s redundant-boot bug (blocked every windowed capture until
+  fixed this pass), the 3D-scene gate's timeout-shorter-than-its-own-watchdog bug.
+
+## Score
+
+Per-category scoring lives in `docs/RELEASE_READINESS_REPORT.md` v7.5's weighted table
+(unchanged at 70% — a deliberate non-move pending the rendering-corruption question, explained
+there in full rather than repeated here).
+
+---
+
 # Ideal gap report — 2026-09-21 (v7.3.2, softlock CLOSED + audio loudness + arena debug audit merged)
 
 Updates v7.3.1 below (same date, kept as history). Unlike v7.3.1 (audit-only, nothing closed),

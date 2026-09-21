@@ -1,3 +1,107 @@
+# Release readiness report v7.5 — 2026-09-21 (owner-machine ideal pass: security hardening, 2 critical NEW findings)
+
+Supersedes v7.3.2 below (kept as history, same date). This pass ran on the owner's own machine
+with windowed rendering AND multimodal image reading available for the first time — both used
+as real verification tools, not just described capability. **Headline isn't a percentage
+move** (still 70%, see why below) — it's that this pass closed 2 real security holes with a
+permanent adversarial test suite, fixed a real bug in the screenshot tool that let it capture
+gameplay for the first time ever, and that capture immediately surfaced two severe, previously
+-invisible findings that need a human's eyes before any further visual/store work proceeds.
+
+## Verification (this pass)
+
+| Item | Result | Evidence |
+|---|---|---|
+| Static gates | **12/12 PASS** | re-run, multiple times |
+| i18n | **13/13 locales, MISSING: 0** | re-run |
+| Store listing | **13/13 GREEN** | re-run |
+| Quarantine audit | **PASS** | re-run |
+| `balance_sim.py` | **PASS**, confirms the new 2,200/2,200 economy match | re-run |
+| `attack_sim` (new gate) | **14/14 PASS** | `scripts/security/attack_sim.gd`, wired into `tools/check.sh` |
+| `autoplay_bot` | **2/3 WINS** (economy verify) + **3/3 WINS** (audio smoke, single-seed reached boss cleanly) across this pass's separate runs | seed3's one failure was the residential softlock recurring under an unrelated change — see `docs/KNOWN_ISSUES.md`'s correction; not a new regression |
+| Engine gates (full) | **26/27, reused** | no shipped scene/gameplay-script changed since the last full run; the one failing gate (3D-scene) now has a REAL diagnostic instead of an opaque timeout — see below |
+| 3D-scene gate diagnostic | **FIXED the gate's own timeout bug** (90s shell timeout was shorter than the scene's own 150s internal watchdog) | real failure now visible: the test harness's own phase-7 boss-spawn setup, not real gameplay (the real bot fights the boss fine) |
+
+## Weighted readiness: **70%** (unchanged from v7.3.2 — see why)
+
+| Category | Weight | Score | Change | Why |
+|---|---|---|---|---|
+| Engineering gates | 30 | 98% | — | 26/27 unchanged; the 3D-scene gate's diagnostic is fixed but the gate itself still fails, so no raw-count change to score off of |
+| Security | 10 | 100% | — (already ceiling) | now grounded in a real, automated 14-case adversarial suite plus 2 real closed holes (achievements.cfg forgery, NG+ level forgery), not just the pre-existing save-signing threat-model doc — substance improved, the number was already maxed |
+| Size/perf | 15 | 62% | — | unchanged |
+| Visual/juice | 10 | 47% | — | **deliberately not moved either direction** — a critical, unconfirmed rendering-corruption finding this pass (below) could reveal real new risk once resolved, or turn out to be nothing (a capture-tool artifact); guessing which way to move this number before it's resolved would be exactly the kind of unverified claim this project's whole history has been correcting |
+| Content/i18n | 10 | 100% | — | unchanged |
+| Store/marketing | 10 | 65% | — | unchanged; screenshots still blocked, now for a more serious reason (below) than "needs a windowed run" |
+| Owner-only steps | 15 | 0% | — | unchanged, structural |
+
+`30×0.98 + 10×1.00 + 15×0.62 + 10×0.47 + 10×1.00 + 10×0.65 + 15×0.00 = 69.9` → **70%**
+
+## Two critical, NEW, unresolved findings this pass (full detail: `docs/KNOWN_ISSUES.md`)
+
+1. **3D world renders as severe magenta/pink visual corruption** in the first real gameplay
+   screenshots this project has ever captured (`docs/stills/03_district_suburbs.png` etc., not
+   committed to git — left on disk locally). HUD renders clean on top; only the 3D world is
+   affected. Ruled out: import-cache staleness, shader compile errors, SSR/SSIL/SSAO/
+   volumetric fog (disabled all four in a reverted scratch test, corruption unchanged).
+   **Genuinely unknown** whether this is real broken rendering on this integrated-AMD-GPU/
+   `gl_compatibility` combination (which would matter for the actual Android ship target) or a
+   viewport-readback capture artifact — nobody has watched the live window yet, only saved
+   PNGs. **This blocks P4's remaining W2-W10 material-assignment work and P7's real store
+   screenshots for this pass** — building visual work or capturing store assets on top of an
+   unconfirmed-cause corruption risks wasted or actively misleading output.
+2. **City Map "Travel" to `park` produced `player.global_position = (inf, inf, inf)`**, a new
+   softlock, found in the same run. Not the already-fixed residential nudge-duration softlock
+   (different district/mechanism, verified separately still holding — see correction below).
+   Not root-caused this pass; candidate leads recorded, not guessed at.
+
+## Correction to v7.3.2's "RESOLVED" claim
+
+Verifying an unrelated change (economy prices, below) reproduced the residential softlock once
+more (2/3 wins, not 3/3) — same signature as before the nudge-duration fix. Downgraded
+`docs/KNOWN_ISSUES.md`'s entry from RESOLVED to "much rarer, not eliminated" rather than let a
+disproven claim stand. The fix is real and working (this failure rate is a fraction of the 0/3
+pre-fix baseline) — just not a mathematical guarantee, which the original "RESOLVED" wording
+overclaimed.
+
+## What else closed this pass
+
+- **P1 QA swarm**: 5 hostile personas (subagents), 20 findings, 0 duplicates of known issues.
+  3 fixed (P0 accessibility flash gap, P1 loot-refarm exploit, P1 RU mistranslation).
+- **P2 security**: `scripts/security/attack_sim.gd` (14 cases) + `script_export_mode=1`
+  bytecode export on all 3 presets + corrected `docs/EXPORT_HARDENING.md`'s overstated
+  debug-print-guard framing (42/43 flagged files are unreachable QA-tool/demo() code, not a
+  real shipped-print risk — verified, not assumed).
+- **P3 bug sweep**: district loot re-farm exploit closed (`ProgressTracker.is_district_looted`),
+  player strobe + streetlight flicker now respect `reduce_flash`, RU `ITEM_AUDIO_LOG` typo fixed.
+- **P5 audio depth**: `proc_audio.gd` gained district-flavored hum + threat-reactive density,
+  same generator/buses, no new assets.
+- **P6 economy**: owner-delegated decision, Option B (price cut) chosen by explicit criteria
+  (reversibility > safety > revenue), implemented, verified, documented.
+
+## OWNER-ONLY — 4 items (see `docs/OWNER_HANDOFF.md` for full detail)
+
+| Item | Effort | Note |
+|---|---|---|
+| **NEW: watch the live window during a windowed run**, determine if the rendering corruption above is real or capture-side | ~5 min to watch, unknown follow-up | blocks all further visual/store work until resolved |
+| Music generation (19 tracks) | ~2-4h | unchanged, prompts ready |
+| Android keystore + signed AAB, Play Console | ~1-2h | unchanged, two conflicting keystore commands flagged |
+| `gh auth login` | ~2 min | unchanged, optional |
+
+(4 items, not the 3 this pass's own directive targeted — the rendering finding is new and
+serious enough that hiding it to hit a number would be dishonest; windowed screenshots were
+already on the list and are now entangled with this same open question, not a 5th item.)
+
+## DEV-REMAINING
+
+| Item | Effort |
+|---|---|
+| Full W2-W10 visual pass | blocked on the rendering-corruption question above |
+| `_game_test_3d.gd` phase-7 boss-test harness bug | now has a real diagnostic to work from (see `docs/KNOWN_ISSUES.md`) |
+| Residential softlock, residual flakiness | much rarer, not eliminated — needs a 10+-seed sample to properly re-baseline |
+| `park` travel inf-position softlock | new, not root-caused |
+
+---
+
 # Release readiness report v7.3.2 — 2026-09-21 (softlock CLOSED + audio loudness + arena debug merge)
 
 Supersedes v7.3.1 below (kept as history, same date). Unlike v7.3.1, this pass closed real
