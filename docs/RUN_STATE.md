@@ -1,5 +1,25 @@
 # Run state — orchestrator pass (2026-09-20)
 
+## Session 5 (2026-09-21, v7.5 ceiling pass): TIMEOUT — unwrapped headless run hung 54 minutes
+
+`godot --headless --path . res://scenes/tools/attack_sim_scene.tscn`, run manually (NOT through
+`tools/check.sh`'s `run_gate`, which already wraps every gate in `timeout "$t"` — that safety net
+was just bypassed by running the scene directly). Process sat alive for 54 min printing a stream
+of `.godot/imported/*.ctex` load failures from `MapController` (an autoload, so it boots on
+EVERY scene regardless of which one is passed on the command line) → `city_map.gd` → texture
+loads, never once reaching `attack_sim.gd`'s own `_ready()` (confirmed: zero `[attack-sim]` lines
+in the log). Root cause: the `.godot/imported/` cache was stale again — a `git checkout -- '*.import'`
+earlier in this same session (meant only to discard harmless churn per the standing lesson) also
+reverted the *fix* from an earlier `--import` pass in this session, undoing it. Killed both PIDs
+by hand (`Stop-Process -Force`) after confirming via `Get-Date` the run was genuinely stuck, not
+slow. **New standing rule**: never revert `.import` files mid-session without re-running
+`--import` again immediately after — the two are a matched pair, not independent cleanup steps.
+**Also new standing rule**: every manual (outside `run_gate`) Godot invocation this session
+forward gets an explicit `timeout Ns` prefix — `run_gate` was already safe, the manual verification
+command wasn't. Added a 45s in-scene watchdog to `attack_sim.gd` itself as defense-in-depth for
+any future stall inside the gate's own checks (not this boot-time one, which happens before
+`_ready()` runs at all and no in-scene code can catch).
+
 ## Session 4 (2026-09-21, v7.3.1 pass): Phase M0 arena backlog re-audit
 
 Re-checked all 5 still-unmerged `origin/arena/*` refs from the 2026-09-20 "Arena branches

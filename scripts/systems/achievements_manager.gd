@@ -178,20 +178,43 @@ func _ready() -> void:
 	EventBus.game_won.connect(_on_game_won)
 	EventBus.item_consumed.connect(_on_item_consumed)
 
+## QA_SWARM_FINDINGS.md P2 (cheater): this file used to be plain JSON, unlike
+## save_system.gd's HMAC-signed envelope - hand-editing "unlocked": true was
+## a one-line achievement forge. Reuses SaveSystem's existing static _sign()
+## (same key, same algorithm) instead of standing up a second signing
+## mechanism. A forged/edited signed body fails to verify and loads empty,
+## same "reject, don't substitute garbage" shape as the main save - but an
+## existing player's pre-existing PLAIN (unsigned) file must still load once
+## and get migrated forward, exactly like save_system.gd's own _migrate()
+## does for legacy saves, or this would silently wipe real trophies instead
+## of just closing the hole going forward.
 func _load() -> void:
 	if not FileAccess.file_exists(_pref_path):
 		return
 	var f = FileAccess.open(_pref_path, FileAccess.READ)
-	if f:
-		var data = JSON.parse_string(f.get_as_text())
+	if f == null:
+		return
+	var envelope = JSON.parse_string(f.get_as_text())
+	if envelope is Dictionary and envelope.has("hmac") and envelope.has("data_json"):
+		if String(envelope["hmac"]) != String(SaveSystem.call("_sign", envelope["data_json"])):
+			return
+		var data = JSON.parse_string(String(envelope["data_json"]))
 		if data is Dictionary:
 			_unlocked = data.get("unlocked", {})
 			_progress = data.get("progress", {})
+		return
+	# Legacy plain-JSON file (pre-signing) - trust it once, same compat
+	# stance as save_system.gd's _migrate(), then re-save signed below.
+	if envelope is Dictionary:
+		_unlocked = envelope.get("unlocked", {})
+		_progress = envelope.get("progress", {})
+		_save()
 
 func _save() -> void:
 	var f = FileAccess.open(_pref_path, FileAccess.WRITE)
 	if f:
-		f.store_string(JSON.stringify({"unlocked": _unlocked, "progress": _progress}))
+		var body: String = JSON.stringify({"unlocked": _unlocked, "progress": _progress})
+		f.store_string(JSON.stringify({"hmac": SaveSystem.call("_sign", body), "data_json": body}))
 
 func is_unlocked(achievement_id: StringName) -> bool:
 	return _unlocked.get(String(achievement_id), false)

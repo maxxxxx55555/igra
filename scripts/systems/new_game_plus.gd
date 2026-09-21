@@ -196,7 +196,11 @@ func _load_save() -> void:
 	if json.parse(txt) != OK:
 		return
 	var data = json.data as Dictionary
-	_current_ng_plus = data.get("ng_plus", 0)
+	# QA_SWARM_FINDINGS.md P2 (cheater): a hand-edited/forged ng_plus_data.json
+	# with an absurd level had nothing clamping it back down - every
+	# get_*_multiplier() below scales off this value, so an unclamped level
+	# well past MAX_NG_PLUS turns into runaway enemy HP/damage scaling.
+	_current_ng_plus = clampi(int(data.get("ng_plus", 0)), 0, MAX_NG_PLUS)
 	_is_ng_plus_active = data.get("active", false)
 	_active_modifiers.clear()
 	for id in data.get("modifiers", []):
