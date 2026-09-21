@@ -1,6 +1,54 @@
 # Run state — orchestrator pass (2026-09-20)
 
-## Session 6 (2026-09-21/22, v8.0 order-pass): R0 rendering fix — DONE, in progress on rest
+## Session 6 (2026-09-21/22, v8.0 order-pass): P0 truth gates — DONE
+
+**P0: all three truth gates built, wired into `tools/check.sh` as blocking, and verified real**
+(not just "runs without crashing" — each one caught and helped fix a real issue this pass):
+
+- `tools/qa_sim/visual_truth_gate.py` — hue-based magenta%/black%/HUD-presence check on windowed
+  PNGs. Wired as a static check against the committed R0 evidence frames
+  (`docs/stills/evidence/r0_after_*.png`) as a permanent regression lock — PASS now, will FAIL
+  if the R0 fix ever regresses. No live Godot needed (reads committed files).
+- `tools/qa_sim/audio_truth_gate.gd` (+ `_audio_truth_bootstrap.gd`,
+  `audio_truth_gate_scene.tscn`) — RUNTIME proof the Music bus isn't silent (peak dB via
+  `AudioServer.get_bus_peak_volume_left/right_db`), which `flow_check.py`'s static bus-layout
+  parsing can never catch (a bus can exist by name and still never receive audio). Self-skips
+  under `--headless` (no real audio device) exactly like `perf_check_scene.tscn` self-skips on
+  draw calls — wired into `check.sh`'s engine-checks section, real check needs `--windowed`.
+  **First real run correctly FAILED** (peak stuck at -80dB/silence) — root-caused by reading
+  `music_manager.gd`, not guessed: every music/ambient layer is deliberately held muted until
+  the player's first real input (`_unlock_audio()`, gated on `_input()`'s `event.is_pressed()`
+  — this project's own documented "no boot-hum" measure, already gated separately by
+  `audio_hum_check_scene.tscn`). The probe never sent any input, so it never unlocked. Fixed by
+  injecting one synthetic `InputEventKey` via `Input.parse_input_event()` after boot, matching
+  what a real player's first click does for free. Re-run: **PASS, peak=-11.9dB**.
+  (Along the way, also caught and fixed a *self-inflicted* bug: R0's temporary Lossless
+  reimport test on the sky panorama texture had been reverted via `git checkout` on the
+  `.import` file without re-running `--import` afterward — exactly the standing lesson already
+  written above in Session 5's entry, which I didn't follow the first time. Left a stale/broken
+  `.godot/imported/*.ctex` reference that made `world_env.tscn` fail to parse. Fixed with one
+  `--import` pass; re-affirming the lesson: reverting an `.import` file and reimporting are a
+  matched pair, never do one without the other.)
+- `tools/qa_sim/i18n_truth_gate.py` — static, per-key check across all 13 `data/i18n/*.json`
+  against `en.json`: missing keys, mixed-script (CJK+Cyrillic+Arabic combined in one string;
+  Latin is exempt, this project's own convention keeps some tokens untranslated on purpose),
+  and length ratio >1.6x (only for base strings ≥12 chars — the first real run flagged ~100
+  strings per locale that were all short single words like "Save"→"Sauvegarder", a completely
+  normal, correct translation expansion, not a bug; hand-verified before adding the floor
+  rather than shipping a gate that cries wolf on fine translations). Wired as a blocking static
+  check. **Current real result: 4/12 PASS** (ja/ko/zh/zh_TW clean; ru/es/de/fr/it/pt_BR/tr/ar
+  each still show a handful of length-ratio flags, e.g. `AD_REVIVE`, `Crouch Input`). Zero
+  missing keys, zero mixed-script anywhere — matches the `gui_explore_runner.gd` G1 finding of
+  solid i18n plumbing. **Honest residual for P3**: the remaining overflow flags are a STATIC
+  PROXY (raw character count), not a confirmed visual bug — several of the flagged rows already
+  render inside `autowrap_mode = TextServer.AUTOWRAP_WORD_SMART` labels with generous width
+  (`settings_screen.gd`'s `_slider`/`_toggle`/`_dropdown` rows), which would swallow the extra
+  length with zero visible overflow. P3 needs to check each flagged string against its ACTUAL
+  UI container (fixed-width button vs. autowrap label) before treating it as a real bug to fix,
+  not just satisfy the raw ratio.
+
+Static gate baseline with all three wired in: **13 static checks, 1 failing** (i18n_truth_gate,
+honestly, per the residual above — not fudged to pass).
 
 **R0 (render root-cause): CLOSED.** Owner confirmed with their own eyes the magenta corruption
 is real (headless gates never see it — dummy driver, no GPU). Root-caused empirically, NOT

@@ -177,6 +177,26 @@ else
   bad "validate_retention"
 fi
 
+# Order-pass v8 P0 truth gates: visual/audio are real-rendering findings a
+# regex/text check can never see (R0: magenta corruption was invisible to
+# every check above, only a real windowed GPU frame showed it). visual_truth_gate
+# runs against the committed R0 evidence frames as a permanent regression lock
+# (docs/RUN_STATE.md has the before/after numbers); it needs no live Godot,
+# just the PNGs already in the repo. audio needs a real audio device, so it
+# lives in the engine-checks section below instead (self-skips headless, same
+# pattern as perf_check_scene.tscn's draw-call gate).
+head_ "Truth gates: visual/i18n (данные уже в репозитории)"
+if "$PY" tools/qa_sim/visual_truth_gate.py docs/stills/evidence/r0_after_*.png >/dev/null 2>&1; then
+  ok "visual_truth_gate (R0 regression lock)"
+else
+  bad "visual_truth_gate (R0 regression lock)"
+fi
+if "$PY" tools/qa_sim/i18n_truth_gate.py >/dev/null 2>&1; then
+  ok "i18n_truth_gate"
+else
+  bad "i18n_truth_gate (см. 'python tools/qa_sim/i18n_truth_gate.py' - overflow это статическая эвристика по длине строки, не подтверждённый визуально баг, см. docs/RUN_STATE.md)"
+fi
+
 # ─────────────────────────── проверки в движке ───────────────────────────
 if [[ $STATIC_ONLY -eq 1 ]]; then
   echo; echo "${DIM}Проверки в движке пропущены (--static).${OFF}"
@@ -229,6 +249,12 @@ else
     # проверка бюджета D11<350 требует --windowed:
     #   godot --windowed --path . scenes/tools/perf_check_scene.tscn
     run_gate "перф-бюджет (draw calls, только --windowed)" "res://scenes/tools/perf_check_scene.tscn" 120
+    # Order-pass v8 P0: то же ограничение, что у перф-бюджета выше -
+    # --headless не даёт реального аудио-устройства, гейт сам это видит
+    # (DisplayServer.get_name()=="headless") и молча пропускает. Реальная
+    # проверка ("Music bus реально не в тишине") требует --windowed:
+    #   godot --windowed --path . scenes/tools/audio_truth_gate_scene.tscn
+    run_gate "аудио: Music bus не в тишине (только --windowed)" "res://scenes/tools/audio_truth_gate_scene.tscn" 60
     run_gate "тач-инпут (joystick/deadzone/HUD-кнопки)" "res://scenes/tools/touch_probe_scene.tscn"
   fi
 fi
