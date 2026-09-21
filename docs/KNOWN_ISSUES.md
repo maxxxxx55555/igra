@@ -1,5 +1,46 @@
 # Known issues
 
+## RESOLVED (2026-09-21): boss-phase softlock — root cause was the Y-dip, not battery/light
+
+The entry below (2026-09-20) correctly identified the Y-dip as the likely mechanism but
+couldn't confirm it — no softlock had happened WITH the new telemetry yet. This pass got
+that run: `boss_pos.y` sank from ~1 to −33 over ~90s during a real softlock (seed3,
+`.qa_logs/autoplay_seed3.log` from a 2026-09-21 session), while the existing "keep near
+player" rescue teleport (`base_monster.gd._boss_keep_near_player`) only checked full 3D
+distance with a 1.5s grace period — a boss that had fallen 30+ units down still read as
+"close" in 3D distance, so the rescue never fired in time. Fixed by checking vertical
+separation independently, no grace period (`acddc80`). 3-seed bot: 2/3 wins with the boss
+resolved both times (was 1/3 pre-fix). See `docs/IDEAL_GAP_REPORT.md` v7.3 for the full
+writeup. Keeping the original entry below for the diagnostic trail, not deleting it.
+
+## New (2026-09-21): spine-phase softlock, residential — investigated, root cause NOT found, one hypothesis tried and rejected
+
+A 2026-09-21 verification run (seed2) softlocked in the SPINE phase (not boss) at
+`residential`, `spine_i=1`: `SOFTLOCK: no progress for 45s — phase=spine
+district=residential spine_i=1`. Heartbeats show the bot oscillating at distance 1.4-1.5
+from a `cable` pickup target for ~30s (never closing the gap), then the player's position
+jumps ~150-250 units between two consecutive 5s heartbeats before the softlock fires with a
+stale target.
+
+**Hypothesis tried and REJECTED**: the bot's `PICKUP_TOUCH` constant (1.4,
+`scripts/tools/_qa_autoplay_runner.gd`) is larger than the pickup's actual Area3D contact
+radius (pickup Area3D radius 0.7 + player capsule radius 0.3 = 1.0m true overlap distance),
+so the bot could plausibly stop at 1.4m — just outside real contact — and oscillate
+indefinitely. Tightened `PICKUP_TOUCH` to 0.8 (below the 1.0m true radius) and re-ran the
+full 3-seed verification: **result was 0/3 wins, with softlocks in three DIFFERENT
+districts (gas_station, suburbs, school) — worse than the 2/3 baseline, not better.**
+Reverted immediately (never committed). Whatever the touch-distance math predicts in
+isolation, in practice a tighter `PICKUP_TOUCH` makes the bot's approach/pathing behavior
+meaningfully worse across many districts, not just better at residential — the real
+mechanism is not simply "the stop distance is too far from the collision radius." Do not
+re-try this exact fix without new evidence (e.g., telemetry showing what specifically
+blocks the approach at residential specifically, since the position jump afterward still
+needs its own explanation — plausibly just the stuck-nudge fallback moving the character a
+long way at the game's canonical, bot-verified-correct high speed, 170-300 "m/s" per
+`data/balance/player_stats.tres`, once nudging engages for multiple 1.2s cycles — but this
+wasn't confirmed either). Left open, not silently dropped. `.qa_logs/autoplay_seed2.log`
+from the 2026-09-21 pass has the original trace, if still present when picked up next.
+
 ## Boss-phase softlock is real but nondeterministic — battery/light-gate hypothesis disproven (2026-09-20)
 
 RC finish pass observed the autoplay bot softlock in the boss phase (power_station,
