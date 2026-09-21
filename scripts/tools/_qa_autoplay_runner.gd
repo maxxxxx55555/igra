@@ -58,6 +58,8 @@ var _nudge_dir := Vector2.ZERO
 var _nudge_until := 0.0
 var _last_pos := Vector3.ZERO
 var _stuck_sec := 0.0
+var _nudge_count := 0  # R2 hardening (docs/REDTEAM_CHALLENGE.md TG-PLAY): a "clean" win bought
+## by many nudges is a navigation defect wearing a pass, not a real pass.
 
 var _score := -1.0
 var _score_t := 0.0
@@ -478,6 +480,20 @@ func _compute_score() -> float:
 	return s
 
 func _watchdog(delta: float) -> void:
+	# R2 hardening (docs/REDTEAM_CHALLENGE.md TG-PLAY, arena finding): 3
+	# separate headless bot re-runs won clean on the exact build where a
+	# WINDOWED run reached park via the City Map Travel button and produced
+	# player.global_position=(inf,inf,inf) until the 45s SOFTLOCK watchdog
+	# finally called it - a real player-observable softlock sat behind a
+	# green gate for 45s of wasted wall time per occurrence, every run.
+	# Checking the invariant BEFORE the score/stuck logic below (which all
+	# read global_position and would themselves misbehave on inf/NaN) turns
+	# that into an immediate, precise failure instead of a slow, vague one.
+	if _player_ok() and not _player.global_position.is_finite():
+		_fail("INVARIANT_FAIL pos — global_position=%s phase=%s district=%s" % [
+			str(_player.global_position), _phase, _current_district()])
+		return _finish()
+
 	# finale: once all 11 are FULL, move to the boss phase
 	var pg := get_node_or_null("/root/PowerGrid")
 	if _phase == "spine" and pg != null and pg.all_restored():
@@ -506,6 +522,7 @@ func _watchdog(delta: float) -> void:
 				_nudge_dir = (perp + base * 0.3).limit_length(1.0)
 				_nudge_until = _now() + NUDGE_SEC
 				_stuck_sec = 0.0
+				_nudge_count += 1
 		else:
 			_stuck_sec = 0.0
 
@@ -551,6 +568,7 @@ func _finish() -> void:
 	print("[bot s%d]   wall time    : %.1fs" % [_seed, _now()])
 	print("[bot s%d]   districts FULL: %d/11" % [_seed, full])
 	print("[bot s%d]   deaths       : %d" % [_seed, _deaths])
+	print("[bot s%d]   nudges       : %d (>1 means the win leaned on nudge rescues, not clean nav — docs/REDTEAM_CHALLENGE.md TG-PLAY)" % [_seed, _nudge_count])
 	print("[bot s%d]   onboarding   : first_interactable=%.1f first_secret_hint=%.1f first_secret_found=%.1f first_district_full=%.1f" % [
 		_seed, _t_first_interact, _t_first_secret_hint, _t_first_secret_found, _t_first_district_full])
 	print("[bot s%d]   stage timeline: %s" % [_seed, ", ".join(_timeline)])

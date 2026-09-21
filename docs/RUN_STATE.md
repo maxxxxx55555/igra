@@ -26,8 +26,15 @@ Per `docs/REDTEAM_CHALLENGE.md`'s TG-SEE/TG-HEAR/TG-PLAY specs (arena, read this
   Master -12.9dB, Music -18.3dB, SFX -16.1dB (the injected movement genuinely triggered a
   footstep — real signal, not silence), Ambient -32.1dB, all under the clipping ceiling, Music
   well above the silence floor. **PASS, for real reasons.**
-- **TG-PLAY (`_qa_autoplay_runner.gd`): code written, compiles clean
-  (`compile_gate_scene.tscn` bad=0), one-seed sanity run in progress.** Added an `is_finite`
+- **TG-PLAY (`_qa_autoplay_runner.gd`): DONE, verified real — and it immediately paid for
+  itself.** One-seed sanity run (seed 1, headless, 900s budget): WIN, 0 deaths, 11/11 districts
+  FULL, 253.8s, **no false positive from the new invariant check**. The new nudge counter
+  reported **16 nudges in this "clean" win** — far over the arena's own "≤1 nudge/seed to call a
+  win genuinely clean" bar. This is new, real information: every prior 3-seed bot claim on this
+  project reported WIN/deaths/timeline but never nudge count, so a win this nudge-heavy would
+  have been reported identically to a truly clean one. Not fixing the underlying navigation
+  fragility this pass (that's a P2/balance-adjacent investigation, not a truth-gate change) — but
+  it is now visible, which it wasn't before. Added an `is_finite`
   position invariant check at the TOP of `_watchdog()` (before the score/stuck logic that would
   itself misbehave on inf/NaN) — fires `INVARIANT_FAIL pos` immediately instead of waiting out
   the 45s `SOFTLOCK_SEC` timeout, directly targeting the exact park-travel bug the arena's own
