@@ -1,5 +1,75 @@
 # Run state — orchestrator pass (2026-09-20)
 
+## Session 7 (2026-09-22, studio-lead pass): R1 tested and closed (not reopened), arena docs found
+
+**R1 (the new directive's "prior render fix is VOID" claim): tested directly, refuted.** The
+studio-lead directive claimed the live path (`world_env_setup.gd:182-184` +
+`settings_manager.gd:494-495`, SSAO/SSIL/SSR/volumetric fog all `true` at the default "High"
+tier under `gl_compatibility`) was the real magenta cause, and that R0's `scaling_3d` fix from
+the prior session was unrelated/void. Verified both halves before acting: (1) confirmed the live
+path claim is accurate (`visual_quality.tres` `metadata/high` does set all four to `true`,
+`settings_manager.gd:494-495` does set SSAO/SSR at effects≥2/default); (2) ran the actual
+decisive test anyway — reverted to the ORIGINAL corrupted `scaling_3d/scale=0.8`, forced all
+four effects OFF via a temp env-var gate in `world_env_setup.gd`, captured a windowed
+`forward_plus` frame (the one method where these effects genuinely run, unlike gl_compatibility
+which silently no-ops SSIL/volumetric fog per its own engine warnings). **Result: magenta 4.64%,
+visually obvious corruption, effects being off changed nothing.** Frame:
+`docs/stills/r1_scale08_fx_off_fplus.png`. This conclusively rules out the four effects and
+reconfirms R0's fix (`scaling_3d/scale` 0.8→1.0, already committed `24116c4`) is the real and
+sufficient root cause — both test changes reverted, `project.godot`/`world_env_setup.gd` back to
+their committed state, nothing new committed for this test itself.
+
+Cross-checked against `docs/RENDERING_DIAGNOSIS.md` (arena, found and read this pass — see
+below): that document's own ranked "candidate fixes" list puts screen-space effects as candidate
+#1 and texture compression as #2, with the framebuffer/scaling chain (what R0 actually fixed) as
+#3 — and explicitly says "stop when the stills go clean and record which number fixed it." My
+R0 work (last session) already eliminated #2 (Lossless sky texture, no change) before finding #3
+worked; this session's test now also eliminates #1. All three lines of evidence — arena's static
+analysis, last session's empirical A/B, and this session's decisive re-test — converge on the
+same answer. No correction to `docs/CORRECTION_LOG.md` is needed: nothing I claimed was wrong,
+it is now independently confirmed twice over.
+
+**Arena docs: found on two NEW remote branches that appeared mid-session** (`git fetch` after
+the studio-lead directive named them; they did not exist at any earlier point this session, when
+an exhaustive search across `main` + every local branch + all `origin/arena/*` refs at that time
+found nothing — that search was correct for what existed then).
+
+- `origin/arena/01a0c589-igra`: `docs/RENDERING_DIAGNOSIS.md`, `docs/REDTEAM_CHALLENGE.md`,
+  `docs/I18N_DEFECTS.md` — all read in full this pass.
+- `origin/arena/01a0c619-igra`: `docs/SECURITY_PATCH_SPEC.md` — read in full this pass (779
+  lines, 8 P1/P2 findings on unsigned NG+/flashlight/daily/leaderboard files, a dormant
+  IntegrityGuard autoload, cross-slot save swap, PCK/keystore hygiene; exact patch contracts
+  given for each, C-01 through C-08).
+- **`BREAK_REPORT`, `SLOP_REPORT`, `TZ_COMPLIANCE_AUDIT` genuinely do not exist on ANY remote
+  head** (checked all 18 `arena/*` branches after the fetch). Per owner instruction: wrote
+  `docs/INTERIM_BREAK.md`, `docs/INTERIM_SLOP.md`, `docs/INTERIM_TZ_COMPLIANCE.md` as honestly-
+  labeled lead-dev self-audits, each explicitly marked "superseded when the real arena branch
+  lands" — not faked arena authorship, not skipped.
+
+**REDTEAM_CHALLENGE.md key findings for later phases (R3/P2):**
+- CHALLENGE-01 = my own already-known standing bug (`_game_test_3d.gd` phase-7 harness, null
+  boss `get()` errors) — confirms the 90s→170s timeout bump was opacity, not a fix. No new info,
+  same bug, same open status.
+- CHALLENGE-02 = residential softlock, but with a NEW concrete hypothesis I didn't have before:
+  bot stop distance 1.4-1.5m vs 1.0m true contact radius. Worth testing in R3/P2 before more
+  10-seed re-baselines burn time on the vague version of this bug.
+- CHALLENGE-03 = re-confirms `settings_full.gd` dead-code suspicion (matches my own P1 finding
+  independently) and explicitly asks for a second method (call-graph, not just grep) before
+  deletion — not yet done.
+- MISSED-00 (no FUNCTION_MATRIX.md existed) is now stale — I built one last session (`fe52499`).
+  MISSED-01..05 (LocalLeaderboard, quick_wheel, StreetlightHumPool, RandomEvents,
+  PlayIntegrityService) all already exist as UNTESTED rows in my matrix — no new rows needed,
+  they need testing (P2), not discovery.
+- Hardened truth-gate specs (TG-SEE/TG-HEAR/TG-PLAY) are detailed and actionable — next up, R2.
+
+**I18N_DEFECTS.md**: documents a 159-value-edit i18n quality pass (`fix(i18n): native-quality
+pass`) committed on the SAME arena branch as RENDERING_DIAGNOSIS — but that commit is on
+`arena/01a0c589-igra`, NOT on `main`. My P0 `i18n_truth_gate.py` result (4/12 locales pass,
+overflow flags on the rest) was measured against `main`'s CURRENT (pre-arena-fix) locale files.
+This arena commit may already fix some of my flagged overflow rows — needs reconciling before
+I18N-FINAL, by diffing `main`'s `data/i18n/*.json` against that branch's version, not by
+re-doing the same 159-edit pass blind.
+
 ## Session 6 (2026-09-21/22, v8.0 order-pass): P1 function matrix — DONE
 
 `docs/FUNCTION_MATRIX.md`: 110 rows (89-row spine generated straight from `project.godot`'s
