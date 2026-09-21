@@ -1,5 +1,30 @@
 # Known issues
 
+## DIAGNOSED (2026-09-21, P8): the "прогон 3D-сцены" gate's real failure point, captured for the first time
+
+Named as a pre-existing stall across v7 through v7.3.2's reports, always as an opaque 90s
+timeout with no diagnostic — because `tools/check.sh`'s own shell-level `run_gate` timeout
+(90s) was **shorter** than the test scene's own internal `HARD_TIMEOUT_SEC` (150s,
+`scripts/tools/_game_test_3d.gd:24`), so the shell always killed the process before the
+scene's own graceful-timeout handler (which reports exactly which phase it's stuck on) ever
+got to run. Bumped the gate's shell timeout to 170s (`tools/check.sh`) and ran it directly —
+the scene's own diagnostic fired clean: **`[FAIL] hard timeout at phase 7 — stalled, not
+completed`**, with `boss spawned` / `boss energy ball spawned: 0` / `boss minion cap 3: 14 ->
+4` all failing first, plus `SCRIPT ERROR: Cannot call method 'get' on a null value.` at
+`_game_test_3d.gd:138/142/160/162`. This is `_game_test_3d.gd`'s own **synthetic phase-7 boss
+test harness** never getting a boss reference to test against — not the real game: the real
+`autoplay_bot`, on this same current codebase, reaches and fights the boss fine (2/3 real wins
+this pass alone, boss HP tracked dropping normally in the logs). The gap is in the test
+scene's own boss-spawn setup for that one phase, not shipped gameplay.
+
+**Not fixed this pass** — this was the sanctioned "timeout-tune, attempt once" per this pass's
+own directive; actually fixing `_game_test_3d.gd`'s phase-7 boss setup is a second, separate
+task (read how phases 1-6 set up their test subjects vs. phase 7, find why the boss reference
+is null there specifically) that a future session should pick up now that the real failure
+point is finally visible instead of a bare timeout. The `tools/check.sh` timeout bump (90s ->
+170s) is a real, permanent fix in itself — every future run of this gate gets an actual
+diagnostic instead of an opaque kill, regardless of whether phase 7 itself ever gets fixed.
+
 ## CRITICAL, NEW, NOT FIXED (2026-09-21): 3D world renders as severe magenta/pink corruption in windowed mode
 
 First time this project has ever had a real windowed Godot binary + the ability to actually

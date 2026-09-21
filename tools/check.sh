@@ -210,7 +210,12 @@ else
     run_gate "API автозагрузок"          "res://scenes/tools/autoload_api_check_scene.tscn"
     run_gate "локализация"               "res://scenes/tools/i18n_check_scene.tscn"
     run_gate "ассеты"                    "res://scenes/tools/asset_check_scene.tscn"
-    run_gate "прогон 3D-сцены"           "res://scenes/tools/game_test_3d_scene.tscn" 90
+    # P8 (2026-09-21): the scene's OWN HARD_TIMEOUT_SEC (_game_test_3d.gd) is
+    # 150s, longer than this gate's old 90s shell timeout - meaning the shell
+    # always killed the process before the scene's own graceful timeout
+    # handler (which reports the exact stalled phase) ever got to run.
+    # Bumped past 150s so the real diagnostic can fire, if it's still stuck.
+    run_gate "прогон 3D-сцены"           "res://scenes/tools/game_test_3d_scene.tscn" 170
     run_gate "целостность сейва"         "res://scenes/tools/save_integrity_check_scene.tscn"
     run_gate "adversarial: achievement/NG+/economy/district-id forgery" "res://scenes/tools/attack_sim_scene.tscn"
     run_gate "boot-flow (меню/новая игра/сейв)" "res://scenes/tools/boot_check_scene.tscn" 200
