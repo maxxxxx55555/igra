@@ -213,6 +213,23 @@ if "$PY" tools/qa_sim/balance_sim.py >/dev/null 2>&1; then
 else
   bad "balance_sim"
 fi
+if "$PY" tools/qa_sim/lighting_stage_sim.py >/dev/null 2>&1; then
+  ok "lighting_stage_sim (DARK/PARTIAL/STREETS/FULL pairwise-distinct)"
+else
+  bad "lighting_stage_sim"
+fi
+if "$PY" tools/qa_sim/a11y_check.py >/dev/null 2>&1; then
+  ok "a11y_check (every a11y toggle traces UI -> real effect)"
+else
+  bad "a11y_check"
+fi
+# overflow_check.py is a reporting tool (unconditional exit 0, no pass/fail
+# assertion) - deliberately not wired as a gate here, see docs/RUN_STATE.md.
+if "$PY" tools/qa_sim/drawcall_estimate.py >/dev/null 2>&1; then
+  ok "drawcall_estimate (structural draw-call/light estimate, D1)"
+else
+  bad "drawcall_estimate"
+fi
 
 # ─────────────────────────── проверки в движке ───────────────────────────
 if [[ $STATIC_ONLY -eq 1 ]]; then

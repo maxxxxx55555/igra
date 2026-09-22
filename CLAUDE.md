@@ -52,4 +52,4 @@ table — a zone violation (editing outside it) means stop and report, not push 
 file for the live agent/branch/zone list.
 
 ## Not built yet
-`docs/PRODUCTION_BIBLE.md`'s perf-guard checklist item (draw-call count as an automated gate, not just a manual check) is not built. Everything else previously listed here (`tools/autopilot/`, `docs/HANDOFF.md`, `docs/KNOWN_ISSUES.md`) now exists — check current state before assuming something doesn't exist rather than trusting this list.
+Nothing currently known — the last item here (perf-guard draw-call gate) was found more built than claimed (2026-09-22 P2 matrix sweep): `tools/qa_sim/drawcall_estimate.py` gives a real, assertion-backed structural estimate and is now wired into `tools/check.sh --static`; a live windowed gate (`scenes/tools/perf_check_scene.tscn`) already existed too. Neither has re-measured the true <200 GDD draw-call target against a real GPU recently — that still needs a `--windowed` run, not a new tool. Check current state before assuming something doesn't exist rather than trusting this list.

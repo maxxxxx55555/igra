@@ -163,7 +163,38 @@ Static suite now 16/17 (same pre-existing i18n heuristic fail).
 New totals after five batches: 112 rows, WORKS 55, BUG 5, CANNOT-TEST-HEADLESS 2, UNTESTED 45
 (down from 89 at P2's start).
 
-**Next**: continue P2 sweep on the remaining 45 UNTESTED AL/X rows (achievements, skill tree,
+**Sixth batch, same pass — 4 more built-but-unwired Python tools, including one that corrects a
+stale `CLAUDE.md` claim:** `lighting_stage_sim.py`, `a11y_check.py`, `overflow_check.py`,
+`drawcall_estimate.py`.
+- `lighting_stage_sim.py`: DARK/PARTIAL/STREETS/FULL are pairwise-distinct by source-level
+  computation for both `streetlight_3d.gd` and `emissive_windows.gd`. Reinforces X15. Wired.
+- `a11y_check.py`: traces 5 more accessibility settings (colorblind, text_size, high_contrast,
+  arachnophobia, reduce_screen_shake) from UI to a real, locale-independent effect. Combined with
+  existing evidence (language dropdown, graphics-tier persistence, `a11y_probe_scene.tscn`'s
+  juice-gating), upgraded X07 (settings tabs) from UNTESTED to **WORKS**. Wired.
+- `overflow_check.py`: NOT wired — read its source first: `main()` unconditionally `return 0`,
+  no actual pass/fail assertion, so wiring it as a gate would always show green regardless of
+  findings (gate theater). Its actual finding is valuable though: traced every one of
+  `i18n_truth_gate.py`'s 49 flagged overflow keys to its real UI usage site and found 0 land in a
+  fixed-width control — all are autowrap-safe. Noted on X18 as promising but explicitly NOT
+  treated as resolving the still-failing blocking gate; that reconciliation belongs to
+  I18N-FINAL, not this note.
+- `drawcall_estimate.py`: **this is the exact item `CLAUDE.md`'s "Not built yet" section named**
+  (perf-guard draw-call automated gate). It already existed, already had real assertions (lamp/
+  pickup distance-fade enabled, active-light count reduced), just was never wired anywhere. Wired
+  into `check.sh`. A live windowed gate (`perf_check_scene.tscn`) already existed too, self-skips
+  headless. Neither has re-measured the true <200 GDD target against a real GPU recently — noted
+  honestly rather than claimed closed. Corrected `CLAUDE.md`'s stale note in the same commit
+  (project's own convention: "check current state... rather than trusting this list"). Added new
+  row X24.
+
+Static suite now 19/20 (same pre-existing i18n heuristic fail). `scene_node_check.py`/
+`flow_check.py` both clean.
+
+New totals after six batches: 113 rows (added X23, X24), WORKS 57, BUG 5, CANNOT-TEST-HEADLESS 2,
+UNTESTED 44 (down from 89 at P2's start).
+
+**Next**: continue P2 sweep on the remaining 44 UNTESTED AL/X rows (achievements, skill tree,
 quest manager, NG+, weather, NoisePropagation, stealth/boss live-window items, etc.) using the
 same reuse-before-build discipline — check `scripts/tools/_*.gd`/`scenes/tools/*.tscn` for an
 existing probe before writing a new one.
