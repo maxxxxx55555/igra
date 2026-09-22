@@ -45,8 +45,8 @@ by memory, so completeness can be proven instead of assumed.
 | AL15 | DayNight (autoload) | `scripts/systems/day_night.gd` | UNTESTED | UNTESTED |
 | AL16 | DistrictThemes (autoload) | `scripts/world/district_themes.gd` | UNTESTED | UNTESTED |
 | AL17 | DistrictAtmosphere (autoload) | `scripts/world/district_atmosphere.gd` | UNTESTED | UNTESTED |
-| AL18 | GameManager (autoload) | `scripts/core/game_manager.gd` | UNTESTED | UNTESTED |
-| AL19 | SaveSystem (autoload) | `scripts/core/save_system.gd` | static read this pass | CANNOT-TEST-HEADLESS — save/load round-trip previously verified per CLAUDE.md's "already done" list, not re-run this pass |
+| AL18 | GameManager (autoload) | `scripts/core/game_manager.gd` | GOLD MASTER P1/P1b/P6 (`qa_headless_suite_scene.tscn`) | **WORKS** — MENU->PLAYING transition, PLAYING<->PAUSED via `ui_pause`, DEAD reachable (P4/P6), 15s sustained PLAYING, all headless |
+| AL19 | SaveSystem (autoload) | `scripts/core/save_system.gd` | GOLD MASTER P3 (`qa_headless_suite_scene.tscn`) | **WORKS** — real `save_all()`/`load_all()` round trip with a language switch mid-load, headless, 0 fails. Upgrades the prior CANNOT-TEST-HEADLESS call (a stale environment-limitation note, not a wrong claim — the suite existed but wasn't wired into any gate until this pass) |
 | AL20 | InputService (autoload) | `scripts/core/input_service.gd` | UNTESTED | UNTESTED |
 | AL21 | ItemDatabase (autoload) | `scripts/inventory/item_database.gd` | UNTESTED | UNTESTED |
 | AL22 | InventoryManager (autoload) | `scripts/inventory/inventory_manager.gd` | UNTESTED | UNTESTED |
@@ -76,7 +76,7 @@ by memory, so completeness can be proven instead of assumed.
 | AL46 | NewGamePlus (autoload) | `scripts/systems/new_game_plus.gd` | UNTESTED | UNTESTED |
 | AL47 | NoisePropagation (autoload) | `scripts/systems/noise_propagation.gd` | UNTESTED | UNTESTED |
 | AL48 | FlashlightUpgradeManager (autoload) | `scripts/systems/flashlight_upgrade_manager.gd` | UNTESTED | UNTESTED |
-| AL49 | EndingsManager (autoload) | `scripts/systems/endings_manager.gd` | UNTESTED | UNTESTED |
+| AL49 | EndingsManager (autoload) | `scripts/systems/endings_manager.gd` | GOLD MASTER P4 (`qa_headless_suite_scene.tscn`) | **WORKS** — all 5 endings (light/hope/survivor/dark/truth) fire `ending_reached` and resolve to non-empty, non-key localized title+description |
 | AL50 | LocalLeaderboard (autoload) | `scripts/systems/local_leaderboard.gd` | UNTESTED | UNTESTED |
 | AL51 | DailyChallengeManager (autoload) | `scripts/systems/daily_challenge_manager.gd` | UNTESTED | UNTESTED |
 | AL52 | CaptionsManager (autoload) | `scripts/systems/captions_manager.gd` | UNTESTED | UNTESTED |
@@ -85,38 +85,38 @@ by memory, so completeness can be proven instead of assumed.
 | AL55 | RandomEvents (autoload) | `scripts/systems/random_events.gd` | UNTESTED | UNTESTED |
 | AL56 | AdService (autoload) | `scripts/monetization/ad_service.gd` | static read + disabled during probes | BY-DESIGN-LIMIT — real SDK key still needed, `docs/store/HUMAN_CHECKLIST.md` |
 | AL57 | PlayIntegrityService (autoload) | `scripts/systems/play_integrity_service.gd` | UNTESTED | UNTESTED |
-| IN58 | input action `move_left` | `project.godot [input]` | UNTESTED | UNTESTED |
-| IN59 | input action `move_right` | `project.godot [input]` | UNTESTED | UNTESTED |
-| IN60 | input action `move_up` | `project.godot [input]` | UNTESTED | UNTESTED |
-| IN61 | input action `move_down` | `project.godot [input]` | UNTESTED | UNTESTED |
-| IN62 | input action `run` | `project.godot [input]` | UNTESTED | UNTESTED |
-| IN63 | input action `stealth` | `project.godot [input]` | UNTESTED | UNTESTED |
-| IN64 | input action `interact` | `project.godot [input]` | UNTESTED | UNTESTED |
-| IN65 | input action `flashlight_toggle` | `project.godot [input]` | UNTESTED | UNTESTED |
-| IN66 | input action `inventory_toggle` | `project.godot [input]` | UNTESTED | UNTESTED |
-| IN67 | input action `shop_toggle` | `project.godot [input]` | UNTESTED | UNTESTED |
-| IN68 | input action `ui_pause` | `project.godot [input]` | UNTESTED | UNTESTED |
-| IN69 | input action `photo_mode` | `project.godot [input]` | UNTESTED | UNTESTED |
-| IN70 | input action `photo_capture` | `project.godot [input]` | UNTESTED | UNTESTED |
-| IN71 | input action `city_map_toggle` | `project.godot [input]` | UNTESTED | UNTESTED |
-| IN72 | input action `encyclopedia_toggle` | `project.godot [input]` | UNTESTED | UNTESTED |
-| IN73 | input action `journal_toggle` | `project.godot [input]` | UNTESTED | UNTESTED |
-| IN74 | input action `jump` | `project.godot [input]` | UNTESTED | UNTESTED |
-| IN75 | input action `quick_slot_1` | `project.godot [input]` | UNTESTED | UNTESTED |
-| IN76 | input action `quick_slot_2` | `project.godot [input]` | UNTESTED | UNTESTED |
-| IN77 | input action `quick_slot_3` | `project.godot [input]` | UNTESTED | UNTESTED |
-| IN78 | input action `quick_slot_4` | `project.godot [input]` | UNTESTED | UNTESTED |
-| IN79 | input action `quick_slot_5` | `project.godot [input]` | UNTESTED | UNTESTED |
-| IN80 | input action `quick_slot_6` | `project.godot [input]` | UNTESTED | UNTESTED |
-| IN81 | input action `melee` | `project.godot [input]` | UNTESTED | UNTESTED |
-| IN82 | input action `attack` | `project.godot [input]` | UNTESTED | UNTESTED |
-| IN83 | input action `strobe` | `project.godot [input]` | UNTESTED | UNTESTED |
-| IN84 | input action `close_screen` | `project.godot [input]` | UNTESTED | UNTESTED |
-| IN85 | input action `inventory` | `project.godot [input]` | UNTESTED | UNTESTED |
-| IN86 | input action `settings` | `project.godot [input]` | UNTESTED | UNTESTED |
-| IN87 | input action `skill_tree_toggle` | `project.godot [input]` | UNTESTED | UNTESTED |
-| IN88 | input action `toggle_map` | `project.godot [input]` | UNTESTED | UNTESTED |
-| IN89 | input action `quick_wheel` | `project.godot [input]` | UNTESTED | UNTESTED |
+| IN58 | input action `move_left` | `project.godot [input]` | GOLD MASTER P1b (`_qa_headless_suite_runner.gd`) | **WORKS** — real `InputEventAction` dispatch via `parse_input_event`, no crash, player stayed valid/PLAYING |
+| IN59 | input action `move_right` | `project.godot [input]` | GOLD MASTER P1b | **WORKS** — see IN58 |
+| IN60 | input action `move_up` | `project.godot [input]` | GOLD MASTER P1b | **WORKS** — see IN58 |
+| IN61 | input action `move_down` | `project.godot [input]` | GOLD MASTER P1b | **WORKS** — see IN58 |
+| IN62 | input action `run` | `project.godot [input]` | GOLD MASTER P1b | **WORKS** — see IN58 |
+| IN63 | input action `stealth` | `project.godot [input]` | GOLD MASTER P1b | **WORKS** — event-driven path in `input_service.gd:_unhandled_input`, confirmed reachable via real dispatch |
+| IN64 | input action `interact` | `project.godot [input]` | GOLD MASTER P1b | **WORKS** — same event-driven path as IN63 |
+| IN65 | input action `flashlight_toggle` | `project.godot [input]` | GOLD MASTER P1b | **WORKS** — see IN58 |
+| IN66 | input action `inventory_toggle` | `project.godot [input]` | GOLD MASTER P1b (open+close pair) | **WORKS** — returns to PLAYING after open/close, player stays valid |
+| IN67 | input action `shop_toggle` | `project.godot [input]` | GOLD MASTER P1b (dispatched, no crash) + full-repo grep | **BUG (dead mapping)** — bound to `M` in `project.godot`, but no script calls `is_action*("shop_toggle")` or emits `EventBus.shop_toggle_requested` from it; the shop only opens via `controls.gd`'s button click. Not a crash risk. Not auto-fixed: wiring it means inventing what it should do (owner decision, out of scope per directive) — recorded as QUESTION in `docs/RUN_STATE.md` |
+| IN68 | input action `ui_pause` | `project.godot [input]` | GOLD MASTER P1b (open+close pair) | **WORKS** — pauses to `GameManager.PAUSED` and back to `PLAYING` cleanly |
+| IN69 | input action `photo_mode` | `project.godot [input]` | GOLD MASTER P1b (on/capture/off triple) | **WORKS** |
+| IN70 | input action `photo_capture` | `project.godot [input]` | GOLD MASTER P1b | **WORKS** — see IN69 |
+| IN71 | input action `city_map_toggle` | `project.godot [input]` | GOLD MASTER P1b (open+close pair) | **WORKS** |
+| IN72 | input action `encyclopedia_toggle` | `project.godot [input]` | GOLD MASTER P1b (open+close pair) | **WORKS** |
+| IN73 | input action `journal_toggle` | `project.godot [input]` | GOLD MASTER P1b (open+close pair) | **WORKS** |
+| IN74 | input action `jump` | `project.godot [input]` | GOLD MASTER P1b | **WORKS** — see IN58 |
+| IN75 | input action `quick_slot_1` | `project.godot [input]` | GOLD MASTER P1b, `InputService.quick_slot_requested(0)` signal asserted | **WORKS** — real event dispatch confirmed via signal, not just no-crash |
+| IN76 | input action `quick_slot_2` | `project.godot [input]` | GOLD MASTER P1b, signal asserted | **WORKS** — see IN75 |
+| IN77 | input action `quick_slot_3` | `project.godot [input]` | GOLD MASTER P1b, signal asserted | **WORKS** — see IN75 |
+| IN78 | input action `quick_slot_4` | `project.godot [input]` | GOLD MASTER P1b, signal asserted | **WORKS** — see IN75 |
+| IN79 | input action `quick_slot_5` | `project.godot [input]` | GOLD MASTER P1b, signal asserted | **WORKS** — see IN75 |
+| IN80 | input action `quick_slot_6` | `project.godot [input]` | GOLD MASTER P1b, signal asserted | **WORKS** — see IN75 |
+| IN81 | input action `melee` | `project.godot [input]` | GOLD MASTER P1b | **WORKS** — see IN58 |
+| IN82 | input action `attack` | `project.godot [input]` | GOLD MASTER P1b | **WORKS** — see IN58 |
+| IN83 | input action `strobe` | `project.godot [input]` | GOLD MASTER P1b | **WORKS** — dispatches `InputService.strobe_requested`, no crash (only reachable this way per `input_service.gd`'s own comment — boss weakness, see X10) |
+| IN84 | input action `close_screen` | `project.godot [input]` | GOLD MASTER P1b (dispatched, no crash) + full-repo grep + keycode diff | **BUG (dead mapping, likely superseded)** — bound to physical Escape, but `ui_pause` is ALSO bound to Escape and IS the real consumer; `close_screen` itself has zero script consumers. Reads as a leftover from before pause/close were consolidated — SLOP-CLEAN candidate (safe removal), not a player-facing break since Escape works via `ui_pause` |
+| IN85 | input action `inventory` | `project.godot [input]` | GOLD MASTER P1b (open+close pair) | **WORKS** — duplicate Tab binding with `inventory_toggle` (both open the same screen), functional either way |
+| IN86 | input action `settings` | `project.godot [input]` | GOLD MASTER P1b (dispatched, no crash) + full-repo grep | **BUG (dead mapping)** — bound to `F1`, no script consumes it; settings screen is menu-only (X07). Not auto-fixed for the same reason as IN67 — recorded as QUESTION in `docs/RUN_STATE.md` |
+| IN87 | input action `skill_tree_toggle` | `project.godot [input]` | GOLD MASTER P1b (open+close pair) | **WORKS** |
+| IN88 | input action `toggle_map` | `project.godot [input]` | GOLD MASTER P1b (open+close pair) | **WORKS** |
+| IN89 | input action `quick_wheel` | `project.godot [input]` | GOLD MASTER P1b | **WORKS** — arena MISSED-04, confirmed wired in `quick_wheel_ui.gd`, press+release is its correct hold-to-open usage |
 
 ## Extra rows: UI screens, non-autoload systems, standing bugs
 
@@ -149,7 +149,13 @@ by memory, so completeness can be proven instead of assumed.
 
 - Spine: 89 (57 autoloads + 32 input actions)
 - Extra: 21
-- **Grand total: 111 rows** (added X22 this pass). WORKS: 11 · FIXED: 2 (X08 CHALLENGE-03, X19 CHALLENGE-01) · BUG: 2 (park — open standing; X22 — open, new) · PARTIALLY FIXED: 1 (X21 residential, R3 CHALLENGE-02) · CANNOT-TEST-HEADLESS: 4 · BY-DESIGN-LIMIT: 1 · PARTIAL (i18n): 1 · UNTESTED: 89
+- **Grand total: 111 rows.** WORKS: 43 (+32 this P2 pass: all 32 input actions via the newly-wired
+  GOLD MASTER P1b entrypoint-coverage phase, plus AL18 GameManager/AL19 SaveSystem/AL49
+  EndingsManager via P1/P3/P4/P6) · FIXED: 2 (X08 CHALLENGE-03, X19 CHALLENGE-01) · BUG: 5 (park —
+  open standing; X22 — open, new; IN67/IN84/IN86 — dead input mappings, new this pass, see rows for
+  detail) · PARTIALLY FIXED: 1 (X21 residential, R3 CHALLENGE-02) · CANNOT-TEST-HEADLESS: 3 (AL19
+  moved to WORKS) · BY-DESIGN-LIMIT: 1 · PARTIAL (i18n): 1 · UNTESTED: 55
 
-This is P1's inventory, not P2's sweep — the 89 UNTESTED rows are the explicit to-do list for
-the next phase, not a claim that they're broken.
+P2 sweep in progress: this pass closed all 32 IN rows plus 3 AL rows via the GOLD MASTER headless
+suite (`scenes/tools/qa_headless_suite_scene.tscn`, now wired into `tools/check.sh`). 55 AL/X rows
+remain UNTESTED — continuing the sweep next.

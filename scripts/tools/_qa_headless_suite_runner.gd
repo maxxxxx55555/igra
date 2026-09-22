@@ -4,6 +4,8 @@ extends Node
 ## Routes scene swaps it triggers. Phases:
 ##   P0  every autoload the game needs is actually loaded
 ##   P1  menu -> New Game -> player spawns
+##   P1b every input action in project.godot exercised at least once
+##       (order-pass R2 PLAY truth-gate spec: entrypoint coverage)
 ##   P2  all 11 district scenes instantiate AND DistrictLoot.populate()
 ##       returns >0 (the LOOT_SCRIPT.populate regression guard)
 ##   P3  save/load round-trip with a language switch in the middle
@@ -32,6 +34,25 @@ const AUTOLOADS: Array[String] = [
 	"AdService", "WowDirector", "EndingsManager", "DistrictManager",
 	"LocalizationManager", "ProgressTracker", "SkillTreeManager",
 ]
+## Toggle-type screens/modes: pressed twice (open, close) so the pair leaves
+## GameManager back in PLAYING regardless of what opening them does.
+const TOGGLE_ACTIONS: Array[String] = [
+	"inventory_toggle", "inventory", "ui_pause", "city_map_toggle",
+	"encyclopedia_toggle", "journal_toggle", "skill_tree_toggle", "toggle_map",
+]
+## Momentary/one-shot actions: a single press+release is the real usage.
+const MOMENTARY_ACTIONS: Array[String] = [
+	"move_left", "move_right", "move_up", "move_down", "run", "stealth",
+	"interact", "flashlight_toggle", "jump", "quick_slot_1", "quick_slot_2",
+	"quick_slot_3", "quick_slot_4", "quick_slot_5", "quick_slot_6", "melee",
+	"attack", "strobe", "quick_wheel",
+]
+## Confirmed via full-repo grep (no is_action_pressed/is_action_released/
+## is_action() call anywhere in scripts/): defined in project.godot's
+## [input] map but not consumed by any script. Not a crash risk, just dead
+## config — pressed anyway (harmless no-op) so coverage is still literal,
+## but logged separately so the matrix doesn't claim WORKS for them.
+const DEAD_ACTIONS: Array[String] = ["shop_toggle", "close_screen", "settings"]
 
 var _fails: PackedStringArray = []
 var _t0: int = 0
@@ -68,6 +89,7 @@ func _wait_until(pred: Callable, timeout_sec: float) -> bool:
 func _run() -> void:
 	await _p0_autoloads()
 	await _p1_new_game()
+	await _p1b_input_coverage()
 	await _p2_districts()
 	await _p2b_combat()
 	await _p3_save_load_lang()
@@ -106,6 +128,77 @@ func _p1_new_game() -> void:
 		_fail("P1 player did not spawn in 10s")
 		return
 	_log("P1 New Game OK, player spawned")
+
+# ── P1b ───────────────────────────────────────────────────────────────
+## Input.action_press()/action_release() only update polling state (Input.
+## is_action_pressed) — they do NOT reach _input/_unhandled_input (Godot's
+## own documented behavior). InputService.gd's stealth/interact/quick_slot
+## handling is event-driven (_unhandled_input), so a real InputEventAction
+## via parse_input_event is required to actually exercise those paths;
+## action_press() would silently no-op them while still "passing" a
+## no-crash check. Caught via the quick_slot_requested signal assertion.
+func _synth_tap(action: String) -> void:
+	var down := InputEventAction.new()
+	down.action = action
+	down.pressed = true
+	Input.parse_input_event(down)
+	await get_tree().process_frame
+	var up := InputEventAction.new()
+	up.action = action
+	up.pressed = false
+	Input.parse_input_event(up)
+	await get_tree().process_frame
+
+func _p1b_input_coverage() -> void:
+	if not GameManager.is_playing():
+		_fail("P1b started outside PLAYING (state=%d)" % GameManager.current_state)
+		return
+	var qs_seen: Dictionary = {}
+	var qs_conn := func(i: int) -> void: qs_seen[i] = true
+	InputService.quick_slot_requested.connect(qs_conn)
+	var checked := 0
+	for a in MOMENTARY_ACTIONS + DEAD_ACTIONS:
+		if not InputMap.has_action(a):
+			_fail("P1b action '%s' missing from InputMap" % a)
+			continue
+		await _synth_tap(a)
+		checked += 1
+		if not GameManager.is_playing():
+			_fail("P1b action '%s' left PLAYING (state=%d)" % [a, GameManager.current_state])
+			InputService.quick_slot_requested.disconnect(qs_conn)
+			return
+		if not is_instance_valid(get_tree().get_first_node_in_group("player")):
+			_fail("P1b action '%s' invalidated the player" % a)
+			InputService.quick_slot_requested.disconnect(qs_conn)
+			return
+	InputService.quick_slot_requested.disconnect(qs_conn)
+	for i in range(6):
+		if not qs_seen.get(i, false):
+			_fail("P1b quick_slot_%d did not emit quick_slot_requested(%d)" % [i + 1, i])
+	# Toggle actions: open (press+release), close (press+release again).
+	for a in TOGGLE_ACTIONS:
+		if not InputMap.has_action(a):
+			_fail("P1b action '%s' missing from InputMap" % a)
+			continue
+		await _synth_tap(a)
+		await _synth_tap(a)
+		checked += 1
+		if not GameManager.is_playing():
+			_fail("P1b toggle '%s' did not return to PLAYING after open+close (state=%d)" % [a, GameManager.current_state])
+			return
+		if not is_instance_valid(get_tree().get_first_node_in_group("player")):
+			_fail("P1b toggle '%s' invalidated the player" % a)
+			return
+	# photo_mode/photo_capture: on, capture, off — same open/close discipline.
+	for a in ["photo_mode", "photo_capture", "photo_mode"]:
+		await _synth_tap(a)
+	checked += 2
+	if not GameManager.is_playing():
+		_fail("P1b photo_mode/photo_capture pair did not return to PLAYING (state=%d)" % GameManager.current_state)
+		return
+	_log("P1b input coverage: %d/%d actions exercised, 0 crash, %d dead (no consumer): %s" % [
+		checked, MOMENTARY_ACTIONS.size() + DEAD_ACTIONS.size() + TOGGLE_ACTIONS.size() + 2,
+		DEAD_ACTIONS.size(), ", ".join(DEAD_ACTIONS)])
 
 # ── P2 ────────────────────────────────────────────────────────────────
 func _p2_districts() -> void:

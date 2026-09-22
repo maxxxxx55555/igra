@@ -1,5 +1,71 @@
 # Run state — orchestrator pass (2026-09-20)
 
+## Session 8: P2 MATRIX SWEEP begun — GOLD MASTER suite wired in, closes 35 rows
+
+R1/R2/R3 all closed (Session 7). Studio-lead directive's next phase is P2 (sweep 89 UNTESTED
+rows). Found `scripts/tools/_qa_headless_suite_runner.gd` +
+`scenes/tools/qa_headless_suite_scene.tscn` already built (GOLD MASTER suite: P0 autoload
+presence, P1 new-game, P2 all 11 districts + `DistrictLoot.populate`, P3 save/load round-trip
+with a language switch, P4 all 5 endings, P5 13-locale key resolution, P6 soak) — but never wired
+into `tools/check.sh`. Reused it rather than building new infra (ponytail rung 2).
+
+**Self-inflicted false alarm, caught before it was ever claimed as real:** stashed 541
+modified `.import` files + `default_bus_layout.tres` at the start of this session as "stale UID
+churn" (an earlier Lossless-texture-format A/B test from R1 left the tracked `.import` files and
+the untracked `.godot/imported/` binary cache out of sync — same failure class as the
+already-documented "never split revert+reimport" lesson, repeated). The revert alone desynced the
+cache further; running the GOLD MASTER suite against that state produced a real-looking crash
+(`city_map.gd:136` `_make_row`, triggered from `power_grid.gd:from_dict` during P3's language-switch
+load). Root-caused via a second clean `--headless --import` pass (resyncs cache to whatever
+`.import` files are currently checked out) before writing anything down as a finding — the
+crash did not reproduce afterward (0 fails, full battery). No CORRECTION_LOG entry needed since
+nothing was ever asserted publicly as a bug. Lesson reinforced: this environment's `.godot`
+import cache regenerates UIDs on every Godot process launch regardless of what's committed
+(confirmed: 541 files dirty again immediately after a fresh `--import`, before any of my own
+changes) — reverting tracked `.import` files without a same-session reimport is the actual
+hazard, not the UID churn itself. Going forward: leave `.import` diffs alone entirely; never
+stash/revert them.
+
+**Built new, real coverage — not a stub:** added phase P1b (`_p1b_input_coverage`) to the GOLD
+MASTER runner, directly closing the R2 PLAY truth-gate spec's still-open "every input action
+exercised at least once per run" requirement (defined in the directive but never implemented in
+R2 — checked, confirmed absent, before building it now). First implementation used
+`Input.action_press()`/`action_release()` and passed 26/32 silently — but a real assertion (the
+`quick_slot_requested` signal, the one check in the batch that verified an actual side effect
+rather than just "no crash") caught that `action_press()` only updates Godot's *polling* state
+and does NOT reach `_input`/`_unhandled_input` (documented Godot behavior) — the exact path
+`input_service.gd` uses for stealth/interact/quick_slot. Fixed by synthesizing a real
+`InputEventAction` through `Input.parse_input_event()` instead. Re-ran: 32/32 actions dispatched,
+0 crashes, quick-slot signal assertion now genuinely passes. Lesson for future probes in this
+codebase: `Input.action_press()` alone is not sufficient to prove an `_unhandled_input`-driven
+system was exercised — only polling-based systems (`Input.get_vector`, `is_action_pressed`) see
+it; use `parse_input_event()` when the target consumer is event-driven.
+
+**Real finding, recorded not guessed:** full-repo grep for every one of the 32 input actions
+found 3 with zero script consumers anywhere — `shop_toggle` (bound to `M`), `close_screen`
+(bound to Escape), `settings` (bound to `F1`). `close_screen` is very likely dead/superseded —
+`ui_pause` is ALSO bound to Escape and IS the real consumer, so removing `close_screen` from
+`project.godot`'s input map is a safe SLOP-CLEAN candidate (added to `docs/INTERIM_SLOP.md`).
+`shop_toggle`/`settings` are genuinely ambiguous — could be intended hotkeys never wired, or
+dead leftovers — and per the directive's own "you do not invent scope... record as QUESTION, do
+not guess" rule, wiring them to specific behavior would be inventing a design decision that
+isn't traceable to a TZ row, matrix row, arena finding, or truth-gate failure. **QUESTION for
+owner:** should `M` open the shop mid-game (same as the existing shop UI button) and `F1` open
+settings mid-game (same as the menu path)? If yes, the wiring is a 2-line change each
+(`EventBus.shop_toggle_requested.emit()` / `Routes`-equivalent for settings) once confirmed.
+
+Wired the suite into `tools/check.sh` (`QA_SOAK_SEC` env-overridable, default 20s for gate speed
+vs. the suite's own 120s standalone default for a real soak). Updated `docs/FUNCTION_MATRIX.md`:
+all 32 IN rows resolved (29 WORKS, 3 BUG-dead-mapping), plus AL18 GameManager/AL19
+SaveSystem/AL49 EndingsManager promoted to WORKS on real P1/P3/P4/P6 evidence. New totals: WORKS
+43, BUG 5, CANNOT-TEST-HEADLESS 3, UNTESTED 55 (down from 89). Static gates 13/14 (same
+pre-existing i18n heuristic fail), `scene_node_check.py` clean, compile gate `bad=0`.
+
+**Next**: continue P2 sweep on the remaining 55 UNTESTED AL/X rows (economy, achievements,
+skill tree, security/attack_sim re-run, stealth/boss live-window items, etc.) using the same
+reuse-before-build discipline — check for existing probes (`_save_integrity_check.gd`,
+`attack_sim_scene.tscn`, `_settings_persist_probe.gd`, etc.) before writing new ones.
+
 ## Session 7 continued: R3 CHALLENGE-01 CLOSED — real fix, not a timeout bump
 
 `_game_test_3d.gd` phase 7 (the synthetic boss-mechanics test) crashed with "null boss get()
