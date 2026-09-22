@@ -128,7 +128,19 @@ AL07 PowerGrid, AL21 ItemDatabase, AL22 InventoryManager, and new row X23 as WOR
 New totals after all three batches: 112 rows (added X23), WORKS 50, BUG 5, CANNOT-TEST-HEADLESS
 2, UNTESTED 50 (down from 89 at P2's start).
 
-**Next**: continue P2 sweep on the remaining 50 UNTESTED AL/X rows (achievements, skill tree,
+**Fourth batch, same pass — economy via `game_test_3d_scene.tscn` phase6:** already wired into
+`check.sh`, never cross-referenced. Re-ran standalone to confirm no regression from the
+`power_grid.gd` fix (unrelated system, confirmed clean — the only FAIL was the already-known,
+already-documented X22 death-screen finding from R3 CHALLENGE-01, not a new issue). Phase6 itself
+(coins/shop) printed zero FAILs: `CoinWallet.add()`/`.coins` verified across an add-then-spend
+sequence, `ShopService.get_item()`/`.buy()` resolves a real catalog entry and deducts the exact
+price (2500), `UpgradeSystem.is_applied()` confirms the purchased upgrade actually took effect.
+Credited AL24/AL25/AL26/X14 as WORKS.
+
+New totals after four batches: 112 rows, WORKS 54, BUG 5, CANNOT-TEST-HEADLESS 2, UNTESTED 46
+(down from 89 at P2's start).
+
+**Next**: continue P2 sweep on the remaining 46 UNTESTED AL/X rows (achievements, skill tree,
 quest manager, NG+, weather, NoisePropagation, stealth/boss live-window items, etc.) using the
 same reuse-before-build discipline — check `scripts/tools/_*.gd`/`scenes/tools/*.tscn` for an
 existing probe before writing a new one.

@@ -51,9 +51,9 @@ by memory, so completeness can be proven instead of assumed.
 | AL21 | ItemDatabase (autoload) | `scripts/inventory/item_database.gd` | `craft_check_scene.tscn` (re-run standalone this pass) | **WORKS** — every recipe material (scrap/cable/gear/wiring) resolves and is obtainable through `InventoryManager.try_add` |
 | AL22 | InventoryManager (autoload) | `scripts/inventory/inventory_manager.gd` | `craft_check_scene.tscn` (re-run standalone this pass) | **WORKS** — `try_add`/`count_of` round-trip verified across a real craft flow (battery: scrap2+cable1 -> craft -> materials spent, item gained; medkit gating correctly blocks without `gear`, then succeeds once added) |
 | AL23 | Encyclopedia (autoload) | `scripts/enemies/encyclopedia_manager.gd` | UNTESTED | UNTESTED |
-| AL24 | CoinWallet (autoload) | `scripts/economy/coin_wallet.gd` | UNTESTED | UNTESTED |
-| AL25 | ShopService (autoload) | `scripts/economy/shop_service.gd` | UNTESTED | UNTESTED |
-| AL26 | UpgradeSystem (autoload) | `scripts/economy/upgrade_system.gd` | UNTESTED | UNTESTED |
+| AL24 | CoinWallet (autoload) | `scripts/economy/coin_wallet.gd` | `game_test_3d_scene.tscn` phase6 (already wired in `check.sh`, re-run standalone this pass) | **WORKS** — `add()`/`coins` verified across a real add-then-spend sequence |
+| AL25 | ShopService (autoload) | `scripts/economy/shop_service.gd` | `game_test_3d_scene.tscn` phase6 | **WORKS** — `get_item()` resolves a real catalog entry, `buy()` deducts the correct price (2500) from the wallet |
+| AL26 | UpgradeSystem (autoload) | `scripts/economy/upgrade_system.gd` | `game_test_3d_scene.tscn` phase6 | **WORKS** — `is_applied()` confirms a purchased upgrade (`upgrade_flashlight_battery`) actually took effect, not just that the coins moved |
 | AL27 | UIManager (autoload) | `scripts/ui/ui_manager.gd` | UNTESTED | UNTESTED |
 | AL28 | WeatherSystem (autoload) | `scripts/systems/weather_system.gd` | UNTESTED | UNTESTED |
 | AL29 | SettingsManager (autoload) | `scripts/systems/settings_manager.gd` | GUI-ENGINE + windowed audio probe + `settings_persist_probe_scene.tscn` (re-run standalone this pass) | **WORKS** — language + volume routing confirmed end-to-end; `set_graphics_tier`/`set_effects_quality` apply live to the running `Environment` (Low->High tier switch measured: glow 0.40->0.55, ssao false->true); `high_contrast`/`text_size` survive a save->restart round trip |
@@ -135,7 +135,7 @@ by memory, so completeness can be proven instead of assumed.
 | X11 | achievements: unlock conditions | `scripts/systems/achievements_manager.gd` | UNTESTED | UNTESTED |
 | X12 | NG+ carryover (skill points / XP reset on new run) | `scripts/systems/new_game_plus.gd`, `scripts/core/save_system.gd` | fixed and documented in a prior session (TRUTH WAVE) | WORKS — see `CLAUDE.md`'s "Corrected this session" note; not re-verified this pass |
 | X13 | security: adversarial save/achievement/economy/district-id forgery | `scripts/security/attack_sim.gd` | `attack_sim_scene.tscn`, run standalone this pass | **WORKS** — 0 fails: forged-HMAC achievements rejected, legacy unsigned achievements trusted-once-then-resigned (not wiped), forged NG+=99 clamped to 3, absurd/negative/non-numeric coins all clamp safely, 4 malicious `district_id` payloads (path traversal, `res://` escape, script injection, empty) don't crash the scene factory, cross-save-slot swap loads cleanly with no corruption |
-| X14 | economy: coin wallet / shop purchases / upgrades | `scripts/economy/*` | UNTESTED this pass | UNTESTED |
+| X14 | economy: coin wallet / shop purchases / upgrades | `scripts/economy/*` | `game_test_3d_scene.tscn` phase6, re-run standalone this pass | **WORKS** — full buy flow verified: wallet credited, catalog item resolved, purchase deducts the exact price, upgrade actually applies (see AL24/AL25/AL26) |
 | X15 | district stage progression (DARK->LIT->FULL) | `scripts/district_manager.gd`, `scripts/world_env_setup.gd` | windowed observation during R0/P0 captures | WORKS — visually confirmed across multiple R0 evidence frames (different stages, different lighting) |
 | X16 | audio: Music bus real playback | `scripts/systems/music_manager.gd` | windowed probe (`audio_truth_gate.gd`) | **WORKS** — see AL34 |
 | X17 | audio: silence before first input (no boot hum) | `scripts/systems/music_manager.gd` (`_unlock_audio`) | `tools/check.sh`'s `audio_hum_check_scene.tscn` gate | WORKS — pre-existing gate, and directly observed this pass while root-causing X16's first FAIL |
@@ -150,18 +150,21 @@ by memory, so completeness can be proven instead of assumed.
 
 - Spine: 89 (57 autoloads + 32 input actions)
 - Extra: 22 (added X23 this pass)
-- **Grand total: 112 rows.** WORKS: 50 (+39 this P2 pass: all 32 input actions via the newly-wired
+- **Grand total: 112 rows.** WORKS: 54 (+43 this P2 pass: all 32 input actions via the newly-wired
   GOLD MASTER P1b entrypoint-coverage phase; AL18 GameManager/AL19 SaveSystem/AL49 EndingsManager
   via P1/P3/P4/P6; X13 security/attack_sim, AL04 ThemeSetup, AL37 WowDirector via already-wired
   `check.sh` gates that were never cross-referenced to a matrix row before this pass; AL07
   PowerGrid/AL21 ItemDatabase/AL22 InventoryManager/X23 win-path Endings via `craft_check_scene.
-  tscn`, another unwired-but-built probe, which also surfaced and fixed a real bug — see AL07)
-  · FIXED: 2 (X08 CHALLENGE-03, X19 CHALLENGE-01) · BUG: 5 (park — open standing; X22 — open,
-  new; IN67/IN84/IN86 — dead input mappings, new this pass) · PARTIALLY FIXED: 1 (X21 residential,
-  R3 CHALLENGE-02) · CANNOT-TEST-HEADLESS: 2 (X13 moved to WORKS) · BY-DESIGN-LIMIT: 1 · PARTIAL
-  (i18n): 1 · UNTESTED: 50
+  tscn`, another unwired-but-built probe, which also surfaced and fixed a real bug — see AL07;
+  AL24 CoinWallet/AL25 ShopService/AL26 UpgradeSystem/X14 economy via `game_test_3d_scene.tscn`
+  phase6, already wired but never cross-referenced) · FIXED: 2 (X08 CHALLENGE-03, X19
+  CHALLENGE-01) · BUG: 5 (park — open standing; X22 — open, new; IN67/IN84/IN86 — dead input
+  mappings, new this pass) · PARTIALLY FIXED: 1 (X21 residential, R3 CHALLENGE-02) ·
+  CANNOT-TEST-HEADLESS: 2 (X13 moved to WORKS) · BY-DESIGN-LIMIT: 1 · PARTIAL (i18n): 1 ·
+  UNTESTED: 46
 
-P2 sweep in progress: this pass closed all 32 IN rows plus 10 AL/X rows (1 brand new — X23) — 3
+P2 sweep in progress: this pass closed all 32 IN rows plus 14 AL/X rows (1 brand new — X23) — 3
 via the GOLD MASTER suite's own new P1b work, 3 by cross-referencing already-wired-but-unmapped
-`check.sh` gates, 4 via a third unwired probe (`craft_check_scene.tscn`) that also surfaced a
-real, fixed bug. 50 AL/X rows remain UNTESTED — continuing the sweep next.
+`check.sh` gates, 4 via `craft_check_scene.tscn` (also surfaced a real, fixed bug), 4 via
+`game_test_3d_scene.tscn` phase6 (also already wired, never cross-referenced). 46 AL/X rows
+remain UNTESTED — continuing the sweep next.
