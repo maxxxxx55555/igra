@@ -88,18 +88,26 @@ func _process(delta: float) -> void:
 			_sub += delta
 			if not _puzzle_done:
 				_puzzle_done = true
-				if not InventoryManager.has(&"gas_canister", 1):
-					InventoryManager.try_add(&"gas_canister", 1)
-				var ps := get_tree().root.get_node_or_null("PuzzleSystem")
-				_check(ps != null, "PuzzleSystem autoload exists")
-				if ps:
-					var started: bool = ps.start_puzzle("cables_suburb")
-					_check(started, "puzzle start")
-					ps.mark_solved("cables_suburb")
-					_check(ps.is_solved("cables_suburb"), "puzzle solved")
+				# CHALLENGE-01 root cause (docs/REDTEAM_CHALLENGE.md): this phase
+				# used to solve puzzle_system.gd's "cables_suburb" entry, but that
+				# entry was trimmed from _puzzle_data as unreachable dead data
+				# (see puzzle_system.gd's own STATIC_AUDIT #31 comment) - district
+				# stage progression is live exclusively through power_switch.gd's
+				# item-cost repair loop now. start_puzzle()/mark_solved() on a
+				# stale ID still returned true (the dict just records an ID with
+				# no reward wiring), so this test kept "passing" step 4 while
+				# silently never advancing the district PowerGrid was tracking -
+				# and phase7's boss (gated on district progress) then never
+				# spawned, which is what actually surfaced as "null boss" crashes
+				# at every later boss_step. Exercise the real mechanism instead.
+				InventoryManager.try_add(&"cable", 1)
+				var sw: Node = get_tree().root.find_child("PowerSwitch", true, false)
+				_check(sw != null, "PowerSwitch exists")
+				if sw and sw.has_method("interact"):
+					sw.interact(_player)
 			elif _sub > 1.0:
 				var stage: int = PowerGrid.get_stage(&"suburbs")
-				_check(stage == 3, "district stage after puzzle: %d" % stage)
+				_check(stage == DistrictData.Stage.PARTIAL, "district stage after repair: %d" % stage)
 				_phase = 5; _sub = 0.0; _log("phase5 save/load")
 		5:
 			var ok: bool = SaveSystem.save_slot(3)
@@ -124,6 +132,33 @@ func _process(delta: float) -> void:
 		7:
 			_boss_step += 1
 			var boss: Node = get_tree().get_first_node_in_group("boss")
+			# CHALLENGE-01 root cause, part 2 (docs/REDTEAM_CHALLENGE.md): the
+			# real boss only spawns via finale_director.gd once ALL 11
+			# districts reach FULL and the player enters power_station - this
+			# isolated phase-test was never going to satisfy that through a
+			# few synthetic item/puzzle calls (phase 4's stale puzzle wiring
+			# only ever made it LOOK reachable by "passing" without actually
+			# advancing anything, per the phase4 fix above). This scene tests
+			# the boss's OWN mechanics in isolation (damage/phase/summon/
+			# energy-ball), same as phases 1-6 test their systems directly
+			# rather than replaying the whole campaign - so spawn it directly,
+			# the same way finale_director.gd's own _spawn_boss() does.
+			if boss == null and _boss_step == 1:
+				var boss_scene: PackedScene = load("res://scenes/enemies/boss_architect_3d.tscn")
+				var spawned: Node3D = boss_scene.instantiate() as Node3D
+				get_tree().current_scene.add_child(spawned)
+				spawned.global_position = _player.global_position + _player.global_transform.basis * Vector3(0, 0, -6.0)
+				boss = spawned
+			# Defensive guard (the concrete crash docs/REDTEAM_CHALLENGE.md
+			# flagged, "null boss get() errors"): steps 20/40/60/80 all call
+			# boss.get(...)/boss.take_damage(...) unconditionally. If the
+			# boss were ever freed mid-fight (e.g. a future change makes the
+			# synthetic damage above lethal), this turned into a hard crash
+			# instead of a normal _check() failure - fail once, cleanly, and
+			# stop the phase instead of throwing.
+			if boss == null and _boss_step > 1:
+				_check(false, "boss missing at step %d (freed mid-test?)" % _boss_step)
+				return _finish()
 			match _boss_step:
 				1:
 					_check(boss != null, "boss spawned")
@@ -132,11 +167,26 @@ func _process(delta: float) -> void:
 						var conns: Array = area.body_entered.get_connections() if area else []
 						_check(conns.size() > 0, "boss DetectArea connected: %d" % conns.size())
 						_player.hp = 9999.0
-						boss.take_damage(300.0)
+						# CHALLENGE-01, part 3: the raw amount passed to take_damage()
+						# is NOT what lands on hp - boss_3d.gd's own take_damage()
+						# applies armor (25% per enemy_roster_data.gd &"beast") AND a
+						# BULLET resistance of 0.5 (same table), for a combined 0.375
+						# effective multiplier. This step's original 300 only ever
+						# removed 112.5 real hp (800->687.5, 85.9%) - nowhere near
+						# enough for step 40 below to ever see the P1->P2 threshold
+						# (66%) cross, which is exactly the second failure this
+						# uncovered once the crash above stopped masking it. 600 raw
+						# (=225 real, 800->575, 71.9%) keeps this step's own "still
+						# P1" intent intact while leaving room for step 20's dose to
+						# cross the line.
+						boss.take_damage(600.0)
 						_check(boss.hp < 800.0, "boss P1 damage: hp=%s" % str(boss.hp))
 				20:
 					_check(int(boss.get("phase")) == 0, "boss phase P1 at >66%%: %s" % str(boss.get("phase")))
-					boss.take_damage(50.0)
+					# 200 raw (=75 real) brings cumulative real damage to 300/800
+					# (62.5% remaining) - inside the P2 band (33-66%) for step 40's
+					# check below. See step 1's comment for the armor+resistance math.
+					boss.take_damage(200.0)
 					boss.player_ref = _player
 				40:
 					_check(int(boss.get("phase")) == 1, "boss phase P2 at <66%%: %s" % str(boss.get("phase")))
@@ -165,18 +215,53 @@ func _process(delta: float) -> void:
 					boss.hp = 800.0
 					boss.set("_is_in_flashlight", false)
 					boss.player_ref = null
-					_player.hp = 100.0
+					# CHALLENGE-01, part 4: same class of bug as the boss damage
+					# calibration above, found the same way (by finally reaching
+					# this phase instead of crashing before it). player_3d.gd's
+					# take_damage() hard-caps every hit at 12.0 (a boss-fight
+					# winnability mechanic, its own comment: "no dodge -> death
+					# spiral") and gates repeats behind a grace timer - so the
+					# single take_damage(9999.0) call below only ever removed 12
+					# real hp, never enough to kill a 100-hp player. Start just
+					# under the cap so the one real (uncapped-relevant) hit lands
+					# exactly on the actual clampf(hp-amount,0,max) path real
+					# combat uses, not a bypass.
+					_player.hp = 10.0
 					_phase = 8; _sub = 0.0; _log("phase8 death screen")
 		8:
 			_sub += delta
 			if not _death_done and _player:
 				_death_done = true
 				if _player.has_method("take_damage"):
+					# CHALLENGE-01, part 5: even with hp set just under the 12.0
+					# cap, the boss fight above can leave _damage_grace_timer
+					# (0.8s post-hit invincibility, player_3d.gd:773-775) still
+					# counting down from an autonomous boss/minion hit landed
+					# during phase 7's real-time simulation - which silently
+					# no-ops this call entirely (line 773: "if
+					# _damage_grace_timer > 0.0: return", before hp is ever
+					# touched). Clear both grace mechanisms right before the
+					# kill blow so this phase tests death-screen wiring, not
+					# whether a stray boss attack happened to land recently.
+					_player.set("_damage_grace_timer", 0.0)
+					_player.set("_iframes", 0.0)
 					_player.take_damage(9999.0)
 			elif _sub > 1.0:
 				var screens: Node = get_tree().root.find_child("Screens", true, false)
 				var death_open: bool = screens and screens.get("_active_screen") == "Death"
-				_check(death_open, "death screen opened: %s" % str(screens.get("_active_screen") if screens else "no screens"))
+				# NEW FINDING (separate from CHALLENGE-01's phase-7 target, which
+				# is fully fixed above): confirmed via a diagnostic print (since
+				# removed) that hp reaches exactly 0.0 and GameManager.current_state
+				# correctly becomes DEAD(4) - the game-state machine and
+				# _on_game_state_changed's DEAD mapping both work. _active_screen
+				# stays empty anyway, meaning screen_flow_manager.gd's cached
+				# _screens reference or its state sync doesn't come up correctly
+				# when boot is bypassed (this scene skips splash/menu straight to
+				# main_3d.tscn, same shortcut every phase here relies on). Recorded
+				# as its own open item rather than chased further under
+				# CHALLENGE-01's name - see docs/FUNCTION_MATRIX.md / KNOWN_ISSUES.md.
+				_check(death_open, "death screen opened: %s (state=%s)" % [
+					str(screens.get("_active_screen") if screens else "no screens"), str(GameManager.current_state)])
 				_finish()
 		9:
 			_finish()

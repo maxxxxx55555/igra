@@ -25,6 +25,18 @@ point is finally visible instead of a bare timeout. The `tools/check.sh` timeout
 170s) is a real, permanent fix in itself — every future run of this gate gets an actual
 diagnostic instead of an opaque kill, regardless of whether phase 7 itself ever gets fixed.
 
+**CLOSED (2026-09-22, R3 CHALLENGE-01)**: the follow-up task above is done. Root cause was
+never "the boss reference is null" in isolation — it was 3 layers deep: phase 4's puzzle-solve
+call targeted a puzzle ID already trimmed from `puzzle_system.gd`'s data as dead data, so it
+never advanced district stage, so the boss's real spawn gate (11 districts FULL) never fired;
+the test also never spawned the boss itself, having always relied on that gate; and once spawned,
+the synthetic damage amounts didn't account for the boss's real 25% armor + 50% bullet
+resistance, so the P1->P2 phase transition never crossed threshold either. All 3 fixed in
+`scripts/tools/_game_test_3d.gd`; phase 7 now passes all 9 of its own checks, zero crashes,
+verified across multiple consecutive runs. Full trace in `docs/RUN_STATE.md`. New, separate
+finding surfaced by this fix (phase 8's death screen doesn't display when boot is bypassed) is
+tracked as `docs/FUNCTION_MATRIX.md` X22, not part of this closure.
+
 ## CRITICAL, NEW, NOT FIXED (2026-09-21): 3D world renders as severe magenta/pink corruption in windowed mode
 
 First time this project has ever had a real windowed Godot binary + the ability to actually

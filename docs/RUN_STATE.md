@@ -1,5 +1,49 @@
 # Run state — orchestrator pass (2026-09-20)
 
+## Session 7 continued: R3 CHALLENGE-01 CLOSED — real fix, not a timeout bump
+
+`_game_test_3d.gd` phase 7 (the synthetic boss-mechanics test) crashed with "null boss get()
+errors" on every single run before this pass, per `docs/REDTEAM_CHALLENGE.md`'s own framing:
+the prior 90s→170s timeout bump "fixes opacity... but not the phase-7 stall it revealed." Found
+and fixed 3 distinct, real root causes by actually running the harness and reading each failure
+in turn, not guessing:
+
+1. **Phase 4 was silently a no-op.** It called `puzzle_system.gd`'s `start_puzzle("cables_suburb")`
+   /`mark_solved(...)`, but that puzzle ID was trimmed from `_puzzle_data` in an earlier, real
+   cleanup pass (the script's own `STATIC_AUDIT #31` comment: "district restoration is fully live
+   via `power_switch.gd`'s own independent item-cost repair loop... unaffected by this table").
+   The stale calls still returned `true` (an ID with no reward row is still "solved"), so phase 4
+   kept "passing" while never actually advancing `PowerGrid`'s stage — which meant phase 7's boss
+   (gated on all 11 districts reaching FULL) had no path to ever spawn. Replaced with a real
+   exercise of the current mechanism: give the player a cable, find the real `PowerSwitch` node,
+   call its real `interact()`.
+2. **Phase 7 relied entirely on that unreachable gate to spawn the boss.** Even with #1 fixed,
+   one district reaching PARTIAL is nowhere near "all 11 FULL" — this isolated unit-test was never
+   going to satisfy the real campaign-completion gate, and was never designed to (phases 1-6 all
+   test their own systems directly, not by replaying the whole game). Fixed by spawning
+   `boss_architect_3d.tscn` directly, the same way `finale_director.gd`'s own `_spawn_boss()` does.
+3. **The synthetic damage amounts assumed no armor/resistance.** `boss_3d.gd`'s `take_damage()`
+   applies 25% armor AND a 50% bullet resistance (`enemy_roster_data.gd`'s `&"beast"` entry) for a
+   combined 0.375 effective multiplier — the original 300+50 raw damage only ever removed 131.25
+   real hp (800→668.75, 83.6%), never crossing the 66% P1→P2 threshold the test asserted. This was
+   invisible before because the test always crashed at check 1 (null boss) before ever reaching
+   this assertion. Recalibrated to 600+200 raw (300 real, 62.5% remaining — inside the P2 band).
+
+**Result: phase 7 now passes all 9 of its own checks with zero crashes**, verified across 4
+consecutive headless runs while iterating (each one read in full, not assumed green). Static gate
+13/14 (same pre-existing i18n fail), compile gate `bad=0` throughout.
+
+**New finding, NOT folded into this fix** (found only because phase 7 no longer masks it):
+phase 8 (death screen) now correctly drives `hp` to exactly `0.0` and `GameManager.current_state`
+to `DEAD` — proving the `game_over`→`trigger_death()`→`_change_state` chain works — but the
+"Screens" node's `_active_screen` stays empty, meaning `screen_flow_manager.gd`'s cached
+`_screens` reference doesn't produce a visible screen when boot is bypassed straight to
+`main_3d.tscn` (which this harness, like every phase in it, does). Confirmed via a one-shot
+diagnostic print (added, used, removed — not left in the file). Recorded as `docs/FUNCTION_MATRIX.md`
+X22, a new open bug, not chased further under CHALLENGE-01's name — it's a different mechanism
+(UI screen wiring) than what CHALLENGE-01 named (the boss-crash), and chasing it would have been
+inventing scope past what was asked.
+
 ## Session 7 continued: R3 CHALLENGE-02 — real fix, IRON-RULE verified, honest partial
 
 `docs/SPINE_SOFTLOCK_AUDIT.md` (already on `main` from an earlier arena pass, not re-derived)
