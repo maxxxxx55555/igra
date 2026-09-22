@@ -140,7 +140,30 @@ Credited AL24/AL25/AL26/X14 as WORKS.
 New totals after four batches: 112 rows, WORKS 54, BUG 5, CANNOT-TEST-HEADLESS 2, UNTESTED 46
 (down from 89 at P2's start).
 
-**Next**: continue P2 sweep on the remaining 46 UNTESTED AL/X rows (achievements, skill tree,
+**Fifth batch, same pass — 3 more built-but-unwired tools, this time static Python sims (no
+engine needed):** `puzzle_economy_sim.py` (STATIC_AUDIT #31), `endings_sim.py` (STATIC_AUDIT #6),
+`balance_sim.py` (PLAYABLE IDEAL TASK 3) all existed, all correct, none wired into `check.sh`.
+Wired all three into the static section. Results:
+- `puzzle_economy_sim.py`: confirms only 1/11 of `PuzzleSystem`'s original `_puzzle_data` rows
+  (`fuse_substation`) is reachable from any real interactable — credited AL41 **WORKS (narrow)**,
+  not a full pass, since 10/11 of the original table is dead (already trimmed in a prior
+  session).
+- `endings_sim.py`: independently re-derives the exact same district `powered_by` DAG my
+  `craft_check` fix used this pass (external confirmation that fix's reasoning was right) and
+  proves all 5 GDD endings are reachable from at least one real state. Reinforces AL49.
+- `balance_sim.py`: DARK-style solvable with >=20% loot margin in every district, no resource
+  dead-ends, 4 skill branches costed out, DARK time-to-win lands in the 3-6h target (PARTIAL runs
+  ~6.9h, flagged as a soft finding not a hard fail — no ground-truth playtest to calibrate
+  against). Coin economy: repeat-profile income covers the cheapest 2 catalog items. Not
+  credited to a specific matrix row (design-balance validation, not autoload-functional
+  evidence) — kept as supporting evidence for the later TZ phase's balance-related rows.
+
+Static suite now 16/17 (same pre-existing i18n heuristic fail).
+
+New totals after five batches: 112 rows, WORKS 55, BUG 5, CANNOT-TEST-HEADLESS 2, UNTESTED 45
+(down from 89 at P2's start).
+
+**Next**: continue P2 sweep on the remaining 45 UNTESTED AL/X rows (achievements, skill tree,
 quest manager, NG+, weather, NoisePropagation, stealth/boss live-window items, etc.) using the
 same reuse-before-build discipline — check `scripts/tools/_*.gd`/`scenes/tools/*.tscn` for an
 existing probe before writing a new one.

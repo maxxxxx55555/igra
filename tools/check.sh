@@ -196,6 +196,23 @@ if "$PY" tools/qa_sim/i18n_truth_gate.py >/dev/null 2>&1; then
 else
   bad "i18n_truth_gate (см. 'python tools/qa_sim/i18n_truth_gate.py' - overflow это статическая эвристика по длине строки, не подтверждённый визуально баг, см. docs/RUN_STATE.md)"
 fi
+# Static, source-driven sims (STATIC_AUDIT #6/#31, PLAYABLE IDEAL TASK 3) —
+# built, correct, but never wired into any gate until this P2 pass.
+if "$PY" tools/qa_sim/puzzle_economy_sim.py >/dev/null 2>&1; then
+  ok "puzzle_economy_sim (STATIC_AUDIT #31 reachability)"
+else
+  bad "puzzle_economy_sim"
+fi
+if "$PY" tools/qa_sim/endings_sim.py >/dev/null 2>&1; then
+  ok "endings_sim (all 5 GDD endings reachable)"
+else
+  bad "endings_sim"
+fi
+if "$PY" tools/qa_sim/balance_sim.py >/dev/null 2>&1; then
+  ok "balance_sim (economy/battery/skill-branch/time-to-win)"
+else
+  bad "balance_sim"
+fi
 
 # ─────────────────────────── проверки в движке ───────────────────────────
 if [[ $STATIC_ONLY -eq 1 ]]; then

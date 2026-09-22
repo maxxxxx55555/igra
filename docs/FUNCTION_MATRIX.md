@@ -68,7 +68,7 @@ by memory, so completeness can be proven instead of assumed.
 | AL38 | QuestManager (autoload) | `scripts/core/quest_manager.gd` | UNTESTED | UNTESTED |
 | AL39 | DistrictManager (autoload) | `scripts/district_manager.gd` | UNTESTED | UNTESTED |
 | AL40 | FinaleDirector (autoload) | `scripts/world/finale_director.gd` | UNTESTED | UNTESTED |
-| AL41 | PuzzleSystem (autoload) | `scripts/world/puzzle_system.gd` | UNTESTED | UNTESTED |
+| AL41 | PuzzleSystem (autoload) | `scripts/world/puzzle_system.gd` | `puzzle_economy_sim.py` (static, source-driven; built for STATIC_AUDIT #31, never wired into any gate before this pass) | **WORKS (narrow)** — only 1 of its original 11 `_puzzle_data` rows (`fuse_substation`) is reachable from any real interactable; the other 10 are confirmed-dead entries already trimmed in a prior session per the script's own audit comment. The live 1/1 row is provably reachable, not just present |
 | AL42 | LANDiscovery (autoload) | `scripts/multiplayer/lan_discovery.gd` | UNTESTED | UNTESTED |
 | AL43 | NetworkManager (autoload) | `scripts/multiplayer/network_manager.gd` | UNTESTED | UNTESTED |
 | AL44 | SkillTreeManager (autoload) | `scripts/systems/skill_tree_manager.gd` | UNTESTED | UNTESTED |
@@ -76,7 +76,7 @@ by memory, so completeness can be proven instead of assumed.
 | AL46 | NewGamePlus (autoload) | `scripts/systems/new_game_plus.gd` | UNTESTED | UNTESTED |
 | AL47 | NoisePropagation (autoload) | `scripts/systems/noise_propagation.gd` | UNTESTED | UNTESTED |
 | AL48 | FlashlightUpgradeManager (autoload) | `scripts/systems/flashlight_upgrade_manager.gd` | UNTESTED | UNTESTED |
-| AL49 | EndingsManager (autoload) | `scripts/systems/endings_manager.gd` | GOLD MASTER P4 (`qa_headless_suite_scene.tscn`) | **WORKS** — all 5 endings (light/hope/survivor/dark/truth) fire `ending_reached` and resolve to non-empty, non-key localized title+description |
+| AL49 | EndingsManager (autoload) | `scripts/systems/endings_manager.gd` | GOLD MASTER P4 (`qa_headless_suite_scene.tscn`) + `endings_sim.py` (static, mirrors `_determine_ending()` exactly, never wired before this pass) | **WORKS** — dynamic: all 5 endings fire `ending_reached` and resolve to non-empty, non-key localized title+description. Static: independently re-derives the same district `powered_by` DAG my `craft_check` fix used (confirms that fix's dependency-chain reasoning was correct) and proves all 5 endings are reachable from at least one real state, not just internally consistent |
 | AL50 | LocalLeaderboard (autoload) | `scripts/systems/local_leaderboard.gd` | UNTESTED | UNTESTED |
 | AL51 | DailyChallengeManager (autoload) | `scripts/systems/daily_challenge_manager.gd` | UNTESTED | UNTESTED |
 | AL52 | CaptionsManager (autoload) | `scripts/systems/captions_manager.gd` | UNTESTED | UNTESTED |
@@ -150,21 +150,23 @@ by memory, so completeness can be proven instead of assumed.
 
 - Spine: 89 (57 autoloads + 32 input actions)
 - Extra: 22 (added X23 this pass)
-- **Grand total: 112 rows.** WORKS: 54 (+43 this P2 pass: all 32 input actions via the newly-wired
+- **Grand total: 112 rows.** WORKS: 55 (+44 this P2 pass: all 32 input actions via the newly-wired
   GOLD MASTER P1b entrypoint-coverage phase; AL18 GameManager/AL19 SaveSystem/AL49 EndingsManager
   via P1/P3/P4/P6; X13 security/attack_sim, AL04 ThemeSetup, AL37 WowDirector via already-wired
   `check.sh` gates that were never cross-referenced to a matrix row before this pass; AL07
   PowerGrid/AL21 ItemDatabase/AL22 InventoryManager/X23 win-path Endings via `craft_check_scene.
   tscn`, another unwired-but-built probe, which also surfaced and fixed a real bug — see AL07;
   AL24 CoinWallet/AL25 ShopService/AL26 UpgradeSystem/X14 economy via `game_test_3d_scene.tscn`
-  phase6, already wired but never cross-referenced) · FIXED: 2 (X08 CHALLENGE-03, X19
+  phase6, already wired but never cross-referenced; AL41 PuzzleSystem via `puzzle_economy_sim.py`,
+  another built-but-unwired static sim, now wired) · FIXED: 2 (X08 CHALLENGE-03, X19
   CHALLENGE-01) · BUG: 5 (park — open standing; X22 — open, new; IN67/IN84/IN86 — dead input
   mappings, new this pass) · PARTIALLY FIXED: 1 (X21 residential, R3 CHALLENGE-02) ·
   CANNOT-TEST-HEADLESS: 2 (X13 moved to WORKS) · BY-DESIGN-LIMIT: 1 · PARTIAL (i18n): 1 ·
-  UNTESTED: 46
+  UNTESTED: 45
 
-P2 sweep in progress: this pass closed all 32 IN rows plus 14 AL/X rows (1 brand new — X23) — 3
+P2 sweep in progress: this pass closed all 32 IN rows plus 15 AL/X rows (1 brand new — X23) — 3
 via the GOLD MASTER suite's own new P1b work, 3 by cross-referencing already-wired-but-unmapped
 `check.sh` gates, 4 via `craft_check_scene.tscn` (also surfaced a real, fixed bug), 4 via
-`game_test_3d_scene.tscn` phase6 (also already wired, never cross-referenced). 46 AL/X rows
+`game_test_3d_scene.tscn` phase6, 1 via a static Python sim (`puzzle_economy_sim.py`) plus two
+more (`endings_sim.py`, `balance_sim.py`) now wired as reinforcing/balance evidence. 45 AL/X rows
 remain UNTESTED — continuing the sweep next.
