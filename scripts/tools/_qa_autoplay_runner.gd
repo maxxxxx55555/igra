@@ -259,7 +259,7 @@ func _tick_spine(_delta: float) -> void:
 		_target_pos = (p as Node3D).global_position
 		_have_target = true
 		if _player.global_position.distance_to(_target_pos) > PICKUP_TOUCH:
-			_move(_dir_to(_target_pos))
+			_move(_approach_dir(_target_pos))
 		else:
 			_move(Vector2.ZERO)  # collision picks it up
 		return
@@ -334,6 +334,28 @@ func _dir_to(world_pos: Vector3) -> Vector2:
 	var fwd := -basis.z; fwd.y = 0.0; fwd = fwd.normalized()
 	var right := basis.x; right.y = 0.0; right = right.normalized()
 	return Vector2(wdir.dot(right), -wdir.dot(fwd)).limit_length(1.0)
+
+## R3 CHALLENGE-02 (docs/REDTEAM_CHALLENGE.md, root-caused in detail in
+## docs/SPINE_SOFTLOCK_AUDIT.md C1, ranked strongest of 5 candidates): at
+## walk_speed=170 (verified correct, do not touch — RUN_STATE.md Session 3),
+## 60Hz physics moves the bot 2.83m/frame. A pickup's true contact radius is
+## ~1.0m (0.7 pickup sphere + 0.3 player capsule), so approaching at full
+## speed can jump from >1.4 (PICKUP_TOUCH) to <0.8 PAST the target in a
+## single frame without ever overlapping the Area3D long enough for
+## body_entered to fire — the bot then "stops" at a distance it never
+## actually touched, oscillates, and eventually nudges itself out of the
+## nav mesh. This is Option B from the audit's own ranked fix list: slow
+## the APPROACH near the target instead of the REJECTED option (tightening
+## PICKUP_TOUCH, already tried, made 0/3 wins worse — see KNOWN_ISSUES.md).
+const APPROACH_SLOWDOWN_RADIUS := 5.0
+const APPROACH_MIN_SCALE := 0.15  ## never fully stop outside PICKUP_TOUCH — plenty slow to not overshoot
+func _approach_dir(target: Vector3) -> Vector2:
+	var dir := _dir_to(target)
+	var dist := _player.global_position.distance_to(target)
+	if dist < APPROACH_SLOWDOWN_RADIUS:
+		var scale := clampf(dist / APPROACH_SLOWDOWN_RADIUS, APPROACH_MIN_SCALE, 1.0)
+		dir *= scale
+	return dir
 
 ## FINAL HARDENING PASS: the boss's P2 phase is only vulnerable while lit
 ## (base_monster.gd _is_in_flashlight: a real spot-cone/angle test against

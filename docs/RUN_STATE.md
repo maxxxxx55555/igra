@@ -1,5 +1,40 @@
 # Run state — orchestrator pass (2026-09-20)
 
+## Session 7 continued: R3 CHALLENGE-02 — real fix, IRON-RULE verified, honest partial
+
+`docs/SPINE_SOFTLOCK_AUDIT.md` (already on `main` from an earlier arena pass, not re-derived)
+root-caused the residential/spine pickup softlock in detail: at `walk_speed=170` (verified
+correct, never touch), 60Hz physics moves the bot 2.83m/frame; a pickup's true contact radius is
+~1.0m (0.7 pickup sphere + 0.3 player capsule); approaching at full speed can jump from >1.4
+(`PICKUP_TOUCH`) to <0.8 PAST the target in one frame without the Area3D `body_entered` ever
+firing — the bot then "stops" at a distance it never actually touched and oscillates forever.
+The audit explicitly rejected tightening `PICKUP_TOUCH` (tried before, made 0/3 wins worse) and
+ranked "Option B: slow the approach near the target" as the safe fix — implemented that exactly:
+`_qa_autoplay_runner.gd`'s new `_approach_dir()` scales the bot's joystick-direction magnitude
+down (min 15%) once within 5m of a pickup target, so it can no longer tunnel past the true
+contact radius in a single frame. Bot-harness-only change, does not touch `PICKUP_TOUCH`, player
+speed, or any real gameplay code.
+
+**Validation (IRON RULE: ≥1 win, no NEW softlocks):**
+- Seed 8 (the audit's own documented worst-case, "earliest, severe" residential softlock) — now
+  **WINS cleanly**, 11/11 districts FULL, 0 deaths. Direct confirmation on the exact repro case.
+- Seed 1 — spine fully proven (11/11 FULL) but fails the separate, pre-existing boss-combat
+  phase (240s skill-gate, unrelated to this fix — matches `docs/REDTEAM_CHALLENGE.md` FIX-04's
+  own framing of boss win-rate as a budget, not a bug).
+- Seed 2 — still softlocks, but at **suburbs** (not residential), with a different signature (no
+  nudging, oscillating target Y suggesting a target-flip-flop between two near-tied pickups, not
+  single-target tunneling). **Ran a control test with the fix reverted (`git stash`) — seed 2
+  fails identically** (same district, same spine_i, same score, same SOFTLOCK message) without
+  the fix. This is a pre-existing, unrelated flakiness in the same general "pickup approach"
+  bug class, not caused or worsened by this fix. Fix restored (`git stash pop`), re-verified
+  present, static+compile gates clean.
+
+**Honest residual**: this closes the audit's own primary repro case but does NOT meet the arena's
+stricter bar (10+ seeds, nudge count ≤1/seed) — nudge counts stayed high even on wins (17-19).
+The remaining suburbs-flavor softlock (seed 2) and the general nudge-heaviness are real, open,
+separate follow-ups, not silently folded into "CHALLENGE-02 CLOSED." `docs/FUNCTION_MATRIX.md`
+X21 marked PARTIALLY FIXED, not FIXED, to keep that honest.
+
 ## Session 7 continued: R3 CHALLENGE-03 CLOSED
 
 `scripts/ui/settings_full.gd` deleted. Confirmed dead by two independent methods per the arena's
