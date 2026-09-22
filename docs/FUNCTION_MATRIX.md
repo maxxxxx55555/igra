@@ -129,7 +129,7 @@ by memory, so completeness can be proven instead of assumed.
 | X05 | main menu: Quit -> confirm dialog | `scripts/ui/main_menu.gd` (`confirm_quit.tscn`) | UNTESTED | UNTESTED |
 | X06 | settings: 13-language runtime switch | `scripts/ui/settings_screen.gd` | GUI-ENGINE (`gui_explore_runner.gd`) | **WORKS** — see P0 i18n finding for the residual overflow flags |
 | X07 | settings: graphics/audio/accessibility tabs (sliders, dropdowns, toggles) | `scripts/ui/settings_screen.gd` | UNTESTED (13-language sweep only exercised the language dropdown) | UNTESTED |
-| X08 | settings_full.gd — second, unused settings panel | `scripts/ui/settings_full.gd` | static grep: zero `.tscn` references, zero `load()`/instance sites | **BUG (dead code)** — looks orphaned, not confirmed a planned feature yet; see `docs/RUN_STATE.md` |
+| X08 | settings_full.gd — second, unused settings panel | ~~`scripts/ui/settings_full.gd`~~ (deleted) | 2 independent methods: zero `.tscn`/`load()` references (any file type, not just `.tscn`), and no `class_name` (only reachable by path) + its own `@onready $Panel/VBox/...` node paths matched no committed scene | **FIXED (R3 CHALLENGE-03)** — confirmed dead, not planned (no mention in any doc), deleted; `validate_list.txt` updated to match |
 | X09 | stealth: monster vision vs. player visibility/noise | `scripts/enemies/base_monster.gd` (+ `scripts/player/*`) | UNTESTED this pass | CANNOT-TEST-HEADLESS (needs live windowed play) — previously verified per CLAUDE.md "already done" list |
 | X10 | boss encounter (`boss_3d.gd`) | `scripts/enemies/boss_3d.gd` | UNTESTED this pass | UNTESTED |
 | X11 | achievements: unlock conditions | `scripts/systems/achievements_manager.gd` | UNTESTED | UNTESTED |
@@ -148,7 +148,7 @@ by memory, so completeness can be proven instead of assumed.
 
 - Spine: 89 (57 autoloads + 32 input actions)
 - Extra: 21
-- **Grand total: 110 rows.** WORKS: 11 · BUG: 4 (1 dead-code find + 3 standing) · CANNOT-TEST-HEADLESS: 4 · BY-DESIGN-LIMIT: 1 · PARTIAL: 1 · UNTESTED: 89
+- **Grand total: 110 rows.** WORKS: 11 · FIXED: 1 (X08, R3 CHALLENGE-03) · BUG: 3 (standing: harness/park/residential) · CANNOT-TEST-HEADLESS: 4 · BY-DESIGN-LIMIT: 1 · PARTIAL: 1 · UNTESTED: 89
 
 This is P1's inventory, not P2's sweep — the 89 UNTESTED rows are the explicit to-do list for
 the next phase, not a claim that they're broken.

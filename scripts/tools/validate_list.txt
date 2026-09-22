@@ -200,7 +200,6 @@ scripts/ui/save_slot_entry.gd
 scripts/ui/save_slots_ui.gd
 scripts/ui/screen_flow_manager.gd
 scripts/ui/screens.gd
-scripts/ui/settings_full.gd
 scripts/ui/settings_screen.gd
 scripts/ui/skill_button.gd
 scripts/ui/skill_tree_tab.gd

@@ -1,5 +1,19 @@
 # Run state — orchestrator pass (2026-09-20)
 
+## Session 7 continued: R3 CHALLENGE-03 CLOSED
+
+`scripts/ui/settings_full.gd` deleted. Confirmed dead by two independent methods per the arena's
+own request (not just repeating the P1 grep): (1) a full-repository text search for
+"settings_full" across every file type, not just `.tscn`/`.gd` — zero hits outside this
+session's own docs and the flat `validate_list.txt` inventory; (2) structural analysis — the
+file has no `class_name` (so path-based `load()`/`.tscn` reference is the ONLY possible way
+anything could use it, which method 1 already ruled out) and its own `@onready` node paths
+(`$Panel/VBox/SFXSlider` etc.) match no committed scene, meaning it would error immediately if
+ever instantiated standalone — further evidence it never shipped attached to anything. No doc
+anywhere mentions a planned second settings panel. `validate_list.txt` updated to drop the now-
+missing path (would otherwise fail `tools/check.sh`'s own resource-existence check). Static
+gate 13/14 (same 1 pre-existing i18n fail), compile gate `bad=0`.
+
 ## Session 7 continued: R2 truth-gate hardening (visual+audio DONE, verified; play in progress)
 
 Per `docs/REDTEAM_CHALLENGE.md`'s TG-SEE/TG-HEAR/TG-PLAY specs (arena, read this pass):
