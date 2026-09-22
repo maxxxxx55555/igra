@@ -76,8 +76,8 @@ func _install_hero_bg_v2(after: Node) -> void:
 	hero.texture = load(path)
 	hero.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	hero.stretch_mode = TextureRect.STRETCH_SCALE
-	hero.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(hero)
+	hero.set_anchors_preset(Control.PRESET_FULL_RECT)
 	move_child(hero, (after.get_index() + 1) if after else 0)
 
 ## V2 SKIN WIRING P1: distress/stencil texture over the title text - additive

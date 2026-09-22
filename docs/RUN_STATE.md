@@ -194,7 +194,54 @@ Static suite now 19/20 (same pre-existing i18n heuristic fail). `scene_node_chec
 New totals after six batches: 113 rows (added X23, X24), WORKS 57, BUG 5, CANNOT-TEST-HEADLESS 2,
 UNTESTED 44 (down from 89 at P2's start).
 
-**Next**: continue P2 sweep on the remaining 44 UNTESTED AL/X rows (achievements, skill tree,
+**Seventh batch, same pass — `ui_layout_check_scene.tscn`, the biggest single investigation this
+pass, real bugs found and the check itself repaired:** built, never wired; first run reported 226
+fails. Rather than accept or discard that number, ran it down layer by layer:
+1. `SCRIPT ERROR: Nonexistent function 'add_theme_class_override' in base 'Button'` —
+   `quest_journal.gd:70` called a method that doesn't exist in Godot 4. The real API, already
+   used correctly elsewhere in this codebase (`ad_popup.gd:52`), is the `theme_type_variation`
+   property. Fixed.
+2. Behind that, `SCRIPT ERROR: Invalid assignment... 'horizontal_alignment'... base 'Button'` —
+   same file, line 136: `horizontal_alignment` is a Label-family property; `Button` uses
+   `alignment` (confirmed via a working example already in `journal_ui.gd:156`). Fixed.
+3. Behind THAT, `Cannot infer the type of "at_cap" variable...` in `new_game_plus_ui.gd:46` —
+   this exact message had appeared in every compile-gate run all session and was assumed harmless
+   noise (compile_gate's own `bad=0` tolerates it). It is NOT harmless: `UIManager._get_screen()`
+   loads screens via runtime `load()`, and a parse error there makes `load()` return null and log
+   "Failed to load script... Parse error" — a real load failure this specific calling context hits
+   even though static compilation elsewhere shrugs it off. Root cause: `var ng = ...`/`var max_ng
+   = ...` are untyped, so `var at_cap := ng >= max_ng` can't infer a type from Variant operands.
+   Fixed with an explicit `var at_cap: bool = ...` instead of chasing the untyped source vars
+   (smaller diff, doesn't touch call sites elsewhere).
+4. With all three crashes gone, one real finding remained: `&"tutorial": "res://scripts/ui/
+   tutorial_system.gd"` in `UIManager.SCREENS` always returns null — `tutorial_system.gd extends
+   Node`, not `Control`, so `_get_screen()`'s `scr.new() as Control` cast always fails. Confirmed
+   via full-repo grep: zero callers anywhere ever open `&"tutorial"` through UIManager. The real
+   tutorial hints already work via their own direct CanvasLayer (`CLAUDE.md`'s "already done"
+   list). Removed the dead `SCREENS` entry — the only reference to it in the entire codebase.
+5. With 0 crashes and 0 dead-screen fails, 225 "fails" remained — all real code being flagged by
+   an overly literal check. Two false-positive classes, both root-caused in the check itself
+   rather than worked around per-screen: (a) the check recursively walked `ScrollContainer`
+   descendants and flagged any content taller than the viewport, even though that's the entire
+   point of a scroll container (confirmed `achievements_ui.gd` DOES wrap its list correctly —
+   the flag was purely the check's own blind spot); (b) 2 remaining fails were
+   `menu_background.gd`'s parallax skyline tiles, deliberately tiled with the last copy staged
+   off-screen for seamless scrolling (the code's own comments document this exactly). Fixed the
+   check to skip `ScrollContainer` descendants and `MOUSE_FILTER_IGNORE` decorative elements
+   (this codebase's own established convention for "not interactive," already used by
+   `main_menu.gd`'s grunge overlay) — an off-screen interactive control is always worth flagging,
+   an off-screen decorative one, by design, often isn't.
+6. Along the way, also reordered `main_menu.gd`'s hero background `set_anchors_preset()` to after
+   `add_child()` (this check's own header comment names that exact ordering trap) — didn't turn
+   out to be the cause of the 2 remaining fails, but is correct practice regardless and left in.
+
+Final state: 0 fails, real. Wired into `check.sh`. Credited AL27 UIManager as WORKS with the full
+story documented on its row (not just the number).
+
+New totals after seven batches: 113 rows, WORKS 58, BUG 5, CANNOT-TEST-HEADLESS 2, UNTESTED 43
+(down from 89 at P2's start).
+
+**Next**: continue P2 sweep on the remaining 43 UNTESTED AL/X rows (achievements, skill tree,
 quest manager, NG+, weather, NoisePropagation, stealth/boss live-window items, etc.) using the
 same reuse-before-build discipline — check `scripts/tools/_*.gd`/`scenes/tools/*.tscn` for an
 existing probe before writing a new one.

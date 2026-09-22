@@ -67,7 +67,7 @@ func _build_ui() -> void:
 		btn.pressed.connect(_on_tab_pressed.bind(i))
 		_tab_bar.add_child(btn)
 		if i == 0:
-			btn.add_theme_class_override("TabSelected", "Button")
+			btn.theme_type_variation = &"TabSelected"
 
 	_quest_list = VBoxContainer.new()
 	_quest_list.add_theme_constant_override("separation", 6)
@@ -133,7 +133,7 @@ func _refresh_list() -> void:
 		var btn := Button.new()
 		btn.text = QuestManager.get_title(quest)
 		btn.focus_mode = Control.FOCUS_NONE
-		btn.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		btn.custom_minimum_size = Vector2(0, 40)
 		if status == QuestManager.STATUS_ACTIVE:
 			btn.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)

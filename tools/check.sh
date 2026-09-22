@@ -279,6 +279,7 @@ else
     run_gate "единая тема: chrome виден на всех экранах" "res://scenes/tools/theme_unify_probe_scene.tscn"
     run_gate "настройки: тир графики и accessibility переживают рестарт" "res://scenes/tools/settings_persist_probe_scene.tscn"
     run_gate "accessibility: reduce_flash/time_fx/ui_motion гейтят juice-сайты" "res://scenes/tools/a11y_probe_scene.tscn"
+    run_gate "вёрстка: все экраны UIManager в кадре" "res://scenes/tools/ui_layout_check_scene.tscn"
     # GOLD MASTER suite (P0 autoloads, P1 new-game, P1b every input action
     # exercised, P2 districts+loot, P3 save/load+lang, P4 endings, P5 i18n,
     # P6 soak). Built 2026-09 but never wired in until now (P2 matrix-sweep

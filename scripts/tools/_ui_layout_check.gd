@@ -49,9 +49,21 @@ func _check_screen(id: StringName, view: Vector2) -> void:
 
 ## Видимый элемент с реальным размером обязан пересекаться с кадром хотя бы
 ## наполовину: панель, уехавшая за край, для игрока просто не существует.
-func _check_children(id: StringName, node: Node, view: Vector2) -> void:
+## Внутри ScrollContainer это неверно по определению — его контент специально
+## больше видимой области и клипуется/скроллится, а не «уехал за край». Без
+## этого исключения любой длинный список (кодекс, ачивки, журнал) даёт сотни
+## ложных срабатываний на собственном скроллящемся содержимом.
+func _check_children(id: StringName, node: Node, view: Vector2, in_scroll: bool = false) -> void:
 	for c in node.get_children():
-		if c is Control and c.visible:
+		# MOUSE_FILTER_IGNORE is this codebase's own established convention
+		# for purely decorative, non-interactive overlays (see grunge in
+		# main_menu.gd) - menu_background.gd's parallax skyline tiles use it
+		# too, deliberately staged partly/fully off-screen so a scroll
+		# animation can bring them into view with no visible seam. An
+		# off-screen INTERACTIVE control is always worth flagging (the
+		# player can't click it); an off-screen decorative one, by design,
+		# often isn't.
+		if c is Control and c.visible and not in_scroll and c.mouse_filter != Control.MOUSE_FILTER_IGNORE:
 			var cr: Rect2 = (c as Control).get_global_rect()
 			if cr.size.x > 1.0 and cr.size.y > 1.0:
 				var screen := Rect2(Vector2.ZERO, view)
@@ -62,7 +74,7 @@ func _check_children(id: StringName, node: Node, view: Vector2) -> void:
 						% [id, c.name, int(cr.position.x), int(cr.position.y),
 							int(cr.size.x), int(cr.size.y)])
 		if c is Control:
-			_check_children(id, c, view)
+			_check_children(id, c, view, in_scroll or c is ScrollContainer)
 
 func _fail(msg: String) -> void:
 	_fails += 1

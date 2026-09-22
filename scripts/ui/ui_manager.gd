@@ -19,7 +19,6 @@ const SCREENS: Dictionary = {
 	&"achievements":    "res://scripts/ui/achievements_ui.gd",
 	&"stats":           "res://scripts/ui/stats_ui.gd",
 	&"workbench":       "res://scripts/ui/workbench.gd",
-	&"tutorial":        "res://scripts/ui/tutorial_system.gd",
 	&"skill_tree":      "res://scenes/ui/skill_tree_ui.tscn",
 	&"new_game_plus":   "res://scenes/ui/new_game_plus.tscn",
 	# GOLD MASTER v4 mobile-art pass: controls (keyboard+touch) + mechanics

@@ -54,7 +54,7 @@ by memory, so completeness can be proven instead of assumed.
 | AL24 | CoinWallet (autoload) | `scripts/economy/coin_wallet.gd` | `game_test_3d_scene.tscn` phase6 (already wired in `check.sh`, re-run standalone this pass) | **WORKS** — `add()`/`coins` verified across a real add-then-spend sequence |
 | AL25 | ShopService (autoload) | `scripts/economy/shop_service.gd` | `game_test_3d_scene.tscn` phase6 | **WORKS** — `get_item()` resolves a real catalog entry, `buy()` deducts the correct price (2500) from the wallet |
 | AL26 | UpgradeSystem (autoload) | `scripts/economy/upgrade_system.gd` | `game_test_3d_scene.tscn` phase6 | **WORKS** — `is_applied()` confirms a purchased upgrade (`upgrade_flashlight_battery`) actually took effect, not just that the coins moved |
-| AL27 | UIManager (autoload) | `scripts/ui/ui_manager.gd` | UNTESTED | UNTESTED |
+| AL27 | UIManager (autoload) | `scripts/ui/ui_manager.gd` | `ui_layout_check_scene.tscn` (built, never wired before this pass; also repaired — see below) | **WORKS** — all 17 real `SCREENS` entries instantiate and pass full-frame/child-in-bounds layout checks, 0 fails. Found and fixed 4 real bugs surfaced along the way: (1) `quest_journal.gd` called the nonexistent `Button.add_theme_class_override()` — real API is `theme_type_variation`; (2) same file set `Button.horizontal_alignment` (a Label-family property that doesn't exist on Button) instead of `Button.alignment`; (3) `new_game_plus_ui.gd`'s `var at_cap := ng >= max_ng` couldn't be type-inferred (untyped operands) — this was the "at_cap" parse warning seen (and wrongly assumed harmless) all session, actually causing a real load failure via `load()`; (4) `&"tutorial"` was registered in `SCREENS` pointing at the `TutorialSystem` autoload's own script (`extends Node`, not `Control`) — always returned null, zero real callers anywhere, removed as dead config (the real tutorial hints run via their own CanvasLayer, per `CLAUDE.md`'s "already done" list). Also root-cause-fixed the check itself: it originally reported 226 fails, ~225 of which were false positives from not accounting for `ScrollContainer` clipping (legitimately long lists) or `MOUSE_FILTER_IGNORE` decorative/parallax elements (`menu_background.gd`'s scrolling skyline tiles, intentionally staged off-screen) |
 | AL28 | WeatherSystem (autoload) | `scripts/systems/weather_system.gd` | UNTESTED | UNTESTED |
 | AL29 | SettingsManager (autoload) | `scripts/systems/settings_manager.gd` | GUI-ENGINE + windowed audio probe + `settings_persist_probe_scene.tscn` (re-run standalone this pass) | **WORKS** — language + volume routing confirmed end-to-end; `set_graphics_tier`/`set_effects_quality` apply live to the running `Environment` (Low->High tier switch measured: glow 0.40->0.55, ssao false->true); `high_contrast`/`text_size` survive a save->restart round trip |
 | AL30 | QualityManager (autoload) | `scripts/systems/quality_manager.gd` | UNTESTED | UNTESTED |
@@ -151,7 +151,7 @@ by memory, so completeness can be proven instead of assumed.
 
 - Spine: 89 (57 autoloads + 32 input actions)
 - Extra: 24 (added X23, X24 this pass)
-- **Grand total: 113 rows.** WORKS: 57 (+46 this P2 pass: all 32 input actions via the
+- **Grand total: 113 rows.** WORKS: 58 (+47 this P2 pass: all 32 input actions via the
   newly-wired GOLD MASTER P1b entrypoint-coverage phase; AL18 GameManager/AL19 SaveSystem/AL49
   EndingsManager via P1/P3/P4/P6; X13 security/attack_sim, AL04 ThemeSetup, AL37 WowDirector via
   already-wired `check.sh` gates that were never cross-referenced to a matrix row before this
@@ -160,15 +160,17 @@ by memory, so completeness can be proven instead of assumed.
   real bug — see AL07; AL24 CoinWallet/AL25 ShopService/AL26 UpgradeSystem/X14 economy via
   `game_test_3d_scene.tscn` phase6; AL41 PuzzleSystem via `puzzle_economy_sim.py`; X07 settings
   tabs and X24 (new) perf-guard draw-call/light budget via `a11y_check.py`/`drawcall_estimate.py`
-  — CLAUDE.md's "Not built yet" perf-guard note was stale, corrected in the same commit) ·
-  FIXED: 2 (X08 CHALLENGE-03, X19 CHALLENGE-01) · BUG: 5 (park — open standing; X22 — open, new;
-  IN67/IN84/IN86 — dead input mappings, new this pass) · PARTIALLY FIXED: 1 (X21 residential, R3
-  CHALLENGE-02) · CANNOT-TEST-HEADLESS: 2 (X13 moved to WORKS) · BY-DESIGN-LIMIT: 1 · PARTIAL
-  (i18n): 1 · UNTESTED: 44
+  — CLAUDE.md's "Not built yet" perf-guard note was stale, corrected in the same commit; AL27
+  UIManager via `ui_layout_check_scene.tscn` — built, never wired, found and fixed 4 real bugs
+  plus root-caused ~225 false positives in the check itself, see AL27) · FIXED: 2 (X08
+  CHALLENGE-03, X19 CHALLENGE-01) · BUG: 5 (park — open standing; X22 — open, new; IN67/IN84/IN86
+  — dead input mappings, new this pass) · PARTIALLY FIXED: 1 (X21 residential, R3 CHALLENGE-02) ·
+  CANNOT-TEST-HEADLESS: 2 (X13 moved to WORKS) · BY-DESIGN-LIMIT: 1 · PARTIAL (i18n): 1 ·
+  UNTESTED: 43
 
-P2 sweep in progress: this pass closed all 32 IN rows plus 17 AL/X rows (2 brand new — X23, X24)
+P2 sweep in progress: this pass closed all 32 IN rows plus 18 AL/X rows (2 brand new — X23, X24)
 — 3 via the GOLD MASTER suite's own new P1b work, 3 by cross-referencing already-wired-but-unmapped
 `check.sh` gates, 4 via `craft_check_scene.tscn` (also surfaced a real, fixed bug), 4 via
-`game_test_3d_scene.tscn` phase6, 1 via `puzzle_economy_sim.py`, 2 more via
-`lighting_stage_sim.py`/`a11y_check.py`/`drawcall_estimate.py` (all newly wired). 44 AL/X rows
-remain UNTESTED — continuing the sweep next.
+`game_test_3d_scene.tscn` phase6, 1 via `puzzle_economy_sim.py`, 3 via lighting/a11y/drawcall
+static sims, 1 via `ui_layout_check_scene.tscn` (also surfaced and fixed 4 real bugs). 43 AL/X
+rows remain UNTESTED — continuing the sweep next.

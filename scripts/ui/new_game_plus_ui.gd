@@ -43,7 +43,7 @@ func _refresh() -> void:
 		LocalizationManager.tf("NG_PLUS_STAT_LOOT", [mult.loot_chance_multiplier])
 	)
 
-	var at_cap := ng >= max_ng
+	var at_cap: bool = ng >= max_ng
 	activate_button.disabled = at_cap
 	activate_button.text = LocalizationManager.t("NGP_AT_LIMIT") if at_cap \
 		else LocalizationManager.tf("NGP_ACTIVATE_ACTION", [ng + 1])
