@@ -61,10 +61,35 @@ SaveSystem/AL49 EndingsManager promoted to WORKS on real P1/P3/P4/P6 evidence. N
 43, BUG 5, CANNOT-TEST-HEADLESS 3, UNTESTED 55 (down from 89). Static gates 13/14 (same
 pre-existing i18n heuristic fail), `scene_node_check.py` clean, compile gate `bad=0`.
 
-**Next**: continue P2 sweep on the remaining 55 UNTESTED AL/X rows (economy, achievements,
-skill tree, security/attack_sim re-run, stealth/boss live-window items, etc.) using the same
-reuse-before-build discipline — check for existing probes (`_save_integrity_check.gd`,
-`attack_sim_scene.tscn`, `_settings_persist_probe.gd`, etc.) before writing new ones.
+**Second batch, same pass — free wins from gates already wired into `check.sh` but never
+cross-referenced to a matrix row:** ran `attack_sim_scene.tscn`, `theme_unify_probe_scene.tscn`,
+`settings_persist_probe_scene.tscn`, `a11y_probe_scene.tscn` standalone and read their real
+output (not just exit code) before crediting anything:
+- `attack_sim_scene.tscn` → **X13 WORKS**: 0 fails against forged-HMAC achievements, NG+=99
+  clamp, coin over/under/non-numeric clamp, 4 malicious `district_id` payloads (path traversal /
+  `res://` escape / script injection / empty), cross-save-slot-swap corruption check.
+- `theme_unify_probe_scene.tscn` → **AL04 ThemeSetup WORKS**: main_menu Play + hud_3d BtnPause
+  both resolve the same shared `StyleBoxTexture`.
+- `settings_persist_probe_scene.tscn` → **AL29 SettingsManager reinforced**: graphics tier
+  switch applies live to the running `Environment` (measured glow/ssao delta), accessibility
+  settings survive a restart round trip.
+- `a11y_probe_scene.tscn` → **AL37 WowDirector WORKS**: flash correctly gated by `reduce_flash`,
+  survives save->reload.
+- `footstep_check_scene.tscn` also passed (12/12 surface×speed->sound mappings) but doesn't map
+  cleanly to any existing matrix row — real coverage, not credited to avoid a forced/dishonest
+  row match. `AL30 QualityManager` was checked for dead-code risk (zero external callers, like
+  the earlier X08 finding) but read in full: it's a legitimate self-driven autoload (FPS-based
+  auto-tier via its own `_process` + `EventBus.settings_changed`, no external caller needed by
+  design) — NOT dead, left UNTESTED (would need a sustained frame-rate-throttle harness to verify
+  functionally, not attempted this pass).
+
+New totals after both batches: WORKS 46, BUG 5, CANNOT-TEST-HEADLESS 2, UNTESTED 53 (down from
+89 at P2's start).
+
+**Next**: continue P2 sweep on the remaining 53 UNTESTED AL/X rows (economy, achievements, skill
+tree, quest manager, NG+, stealth/boss live-window items, etc.) using the same
+reuse-before-build discipline — check `scripts/tools/_*.gd`/`scenes/tools/*.tscn` for an existing
+probe before writing a new one.
 
 ## Session 7 continued: R3 CHALLENGE-01 CLOSED — real fix, not a timeout bump
 

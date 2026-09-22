@@ -31,7 +31,7 @@ by memory, so completeness can be proven instead of assumed.
 | AL01 | FadeTransition (autoload) | `scripts/ui/fade_transition.gd` | UNTESTED | UNTESTED |
 | AL02 | ObjectPool (autoload) | `scripts/systems/object_pool.gd` | UNTESTED | UNTESTED |
 | AL03 | LightLimiter (autoload) | `scripts/systems/light_limiter.gd` | UNTESTED | UNTESTED |
-| AL04 | ThemeSetup (autoload) | `scripts/theme_setup.gd` | UNTESTED | UNTESTED |
+| AL04 | ThemeSetup (autoload) | `scripts/theme_setup.gd` | `theme_unify_probe_scene.tscn` (already wired in `check.sh`, re-run standalone this pass) | **WORKS** — main_menu Play button and hud_3d BtnPause both resolve to the same shared `StyleBoxTexture` (`btn_tex_normal.png`), confirming the unified theme actually reaches both screens |
 | AL05 | MapController (autoload) | `scripts/ui/map_controller.gd` | UNTESTED | UNTESTED |
 | AL06 | LANNetwork (autoload) | `scripts/net/lan_network.gd` | UNTESTED | UNTESTED |
 | AL07 | PowerGrid (autoload) | `scripts/world/power_grid.gd` | UNTESTED | UNTESTED |
@@ -56,7 +56,7 @@ by memory, so completeness can be proven instead of assumed.
 | AL26 | UpgradeSystem (autoload) | `scripts/economy/upgrade_system.gd` | UNTESTED | UNTESTED |
 | AL27 | UIManager (autoload) | `scripts/ui/ui_manager.gd` | UNTESTED | UNTESTED |
 | AL28 | WeatherSystem (autoload) | `scripts/systems/weather_system.gd` | UNTESTED | UNTESTED |
-| AL29 | SettingsManager (autoload) | `scripts/systems/settings_manager.gd` | GUI-ENGINE + windowed audio probe | **WORKS** — language + volume routing both confirmed end-to-end this pass |
+| AL29 | SettingsManager (autoload) | `scripts/systems/settings_manager.gd` | GUI-ENGINE + windowed audio probe + `settings_persist_probe_scene.tscn` (re-run standalone this pass) | **WORKS** — language + volume routing confirmed end-to-end; `set_graphics_tier`/`set_effects_quality` apply live to the running `Environment` (Low->High tier switch measured: glow 0.40->0.55, ssao false->true); `high_contrast`/`text_size` survive a save->restart round trip |
 | AL30 | QualityManager (autoload) | `scripts/systems/quality_manager.gd` | UNTESTED | UNTESTED |
 | AL31 | ProgressTracker (autoload) | `scripts/systems/progress_tracker.gd` | UNTESTED | UNTESTED |
 | AL32 | AudioManager (autoload) | `scripts/systems/audio_manager.gd` | windowed probe (Music bus only) | CANNOT-TEST-HEADLESS — SFX/Ambient bus playback not yet probed, only Music |
@@ -64,7 +64,7 @@ by memory, so completeness can be proven instead of assumed.
 | AL34 | MusicManager (autoload) | `scripts/systems/music_manager.gd` | windowed probe (`audio_truth_gate.gd`) | **WORKS** — Music bus peak=-11.9dB confirmed, real playback |
 | AL35 | StreetlightHumPool (autoload) | `scripts/systems/streetlight_hum_pool.gd` | UNTESTED | UNTESTED |
 | AL36 | LocalizationManager (autoload) | `scripts/i18n/localization_manager.gd` | GUI-ENGINE (`gui_explore_runner.gd`) | **WORKS** — 13/13 languages verified live, non-empty + single-script |
-| AL37 | WowDirector (autoload) | `scripts/systems/wow_director.gd` | UNTESTED | UNTESTED |
+| AL37 | WowDirector (autoload) | `scripts/systems/wow_director.gd` | `a11y_probe_scene.tscn` (already wired in `check.sh`, re-run standalone this pass) | **WORKS** — flash effect correctly fires when `reduce_flash=false` and is correctly suppressed when `reduce_flash=true`; setting survives a save->reload round trip |
 | AL38 | QuestManager (autoload) | `scripts/core/quest_manager.gd` | UNTESTED | UNTESTED |
 | AL39 | DistrictManager (autoload) | `scripts/district_manager.gd` | UNTESTED | UNTESTED |
 | AL40 | FinaleDirector (autoload) | `scripts/world/finale_director.gd` | UNTESTED | UNTESTED |
@@ -134,7 +134,7 @@ by memory, so completeness can be proven instead of assumed.
 | X10 | boss encounter (`boss_3d.gd`) | `scripts/enemies/boss_3d.gd` | UNTESTED this pass | UNTESTED |
 | X11 | achievements: unlock conditions | `scripts/systems/achievements_manager.gd` | UNTESTED | UNTESTED |
 | X12 | NG+ carryover (skill points / XP reset on new run) | `scripts/systems/new_game_plus.gd`, `scripts/core/save_system.gd` | fixed and documented in a prior session (TRUTH WAVE) | WORKS — see `CLAUDE.md`'s "Corrected this session" note; not re-verified this pass |
-| X13 | security: adversarial save/achievement/economy/district-id forgery | `scripts/systems/play_integrity_service.gd` | `tools/check.sh`'s `attack_sim_scene.tscn` gate (headless) | CANNOT-TEST-HEADLESS this pass — gate exists and is wired, not re-run standalone this session |
+| X13 | security: adversarial save/achievement/economy/district-id forgery | `scripts/security/attack_sim.gd` | `attack_sim_scene.tscn`, run standalone this pass | **WORKS** — 0 fails: forged-HMAC achievements rejected, legacy unsigned achievements trusted-once-then-resigned (not wiped), forged NG+=99 clamped to 3, absurd/negative/non-numeric coins all clamp safely, 4 malicious `district_id` payloads (path traversal, `res://` escape, script injection, empty) don't crash the scene factory, cross-save-slot swap loads cleanly with no corruption |
 | X14 | economy: coin wallet / shop purchases / upgrades | `scripts/economy/*` | UNTESTED this pass | UNTESTED |
 | X15 | district stage progression (DARK->LIT->FULL) | `scripts/district_manager.gd`, `scripts/world_env_setup.gd` | windowed observation during R0/P0 captures | WORKS — visually confirmed across multiple R0 evidence frames (different stages, different lighting) |
 | X16 | audio: Music bus real playback | `scripts/systems/music_manager.gd` | windowed probe (`audio_truth_gate.gd`) | **WORKS** — see AL34 |
@@ -149,13 +149,15 @@ by memory, so completeness can be proven instead of assumed.
 
 - Spine: 89 (57 autoloads + 32 input actions)
 - Extra: 21
-- **Grand total: 111 rows.** WORKS: 43 (+32 this P2 pass: all 32 input actions via the newly-wired
-  GOLD MASTER P1b entrypoint-coverage phase, plus AL18 GameManager/AL19 SaveSystem/AL49
-  EndingsManager via P1/P3/P4/P6) · FIXED: 2 (X08 CHALLENGE-03, X19 CHALLENGE-01) · BUG: 5 (park —
-  open standing; X22 — open, new; IN67/IN84/IN86 — dead input mappings, new this pass, see rows for
-  detail) · PARTIALLY FIXED: 1 (X21 residential, R3 CHALLENGE-02) · CANNOT-TEST-HEADLESS: 3 (AL19
-  moved to WORKS) · BY-DESIGN-LIMIT: 1 · PARTIAL (i18n): 1 · UNTESTED: 55
+- **Grand total: 111 rows.** WORKS: 46 (+35 this P2 pass: all 32 input actions via the newly-wired
+  GOLD MASTER P1b entrypoint-coverage phase; AL18 GameManager/AL19 SaveSystem/AL49 EndingsManager
+  via P1/P3/P4/P6; X13 security/attack_sim, AL04 ThemeSetup, AL37 WowDirector via already-wired
+  `check.sh` gates that were never cross-referenced to a matrix row before this pass) · FIXED: 2
+  (X08 CHALLENGE-03, X19 CHALLENGE-01) · BUG: 5 (park — open standing; X22 — open, new;
+  IN67/IN84/IN86 — dead input mappings, new this pass) · PARTIALLY FIXED: 1 (X21 residential, R3
+  CHALLENGE-02) · CANNOT-TEST-HEADLESS: 2 (X13 moved to WORKS) · BY-DESIGN-LIMIT: 1 · PARTIAL
+  (i18n): 1 · UNTESTED: 53
 
-P2 sweep in progress: this pass closed all 32 IN rows plus 3 AL rows via the GOLD MASTER headless
-suite (`scenes/tools/qa_headless_suite_scene.tscn`, now wired into `tools/check.sh`). 55 AL/X rows
-remain UNTESTED — continuing the sweep next.
+P2 sweep in progress: this pass closed all 32 IN rows plus 6 AL/X rows — 3 via the GOLD MASTER
+suite's own new work, 3 more by cross-referencing gates that were already wired into `check.sh`
+but never mapped to a matrix row. 53 AL/X rows remain UNTESTED — continuing the sweep next.
