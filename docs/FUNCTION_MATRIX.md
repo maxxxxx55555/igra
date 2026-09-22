@@ -34,7 +34,7 @@ by memory, so completeness can be proven instead of assumed.
 | AL04 | ThemeSetup (autoload) | `scripts/theme_setup.gd` | `theme_unify_probe_scene.tscn` (already wired in `check.sh`, re-run standalone this pass) | **WORKS** — main_menu Play button and hud_3d BtnPause both resolve to the same shared `StyleBoxTexture` (`btn_tex_normal.png`), confirming the unified theme actually reaches both screens |
 | AL05 | MapController (autoload) | `scripts/ui/map_controller.gd` | UNTESTED | UNTESTED |
 | AL06 | LANNetwork (autoload) | `scripts/net/lan_network.gd` | UNTESTED | UNTESTED |
-| AL07 | PowerGrid (autoload) | `scripts/world/power_grid.gd` | UNTESTED | UNTESTED |
+| AL07 | PowerGrid (autoload) | `scripts/world/power_grid.gd` | `craft_check_scene.tscn` (re-run standalone this pass, bug found+fixed) | **WORKS** — `advance_district`/`get_district`/`is_unlocked` exercised through the real 11-district dependency graph. Found and fixed a real bug in the process: the locked-district notice at line 53 used the wrong i18n key (`tr("FIRST_RESTORE")`, a plain string with no `%s`) instead of `NEED_DISTRICT_FIRST` (the key `power_switch.gd:161` already uses correctly for this exact situation) — threw a GDScript string-formatting error on every call. Currently unreachable through the real interact() flow (`power_switch.gd` gates `is_unlocked()` before ever calling this), but reachable by any direct caller (this QA tool included) — fixed to match the established convention |
 | AL08 | EventBus (autoload) | `scripts/events/event_bus.gd` | UNTESTED | UNTESTED |
 | AL09 | Routes (autoload) | `scripts/core/routes.gd` | GUI-ENGINE (`gui_explore_runner.gd`) | **WORKS** — MENU/SETTINGS/DIFFICULTY/CREDITS navigation verified |
 | AL10 | Bootstrap (autoload) | `scripts/_bootstrap.gd` | UNTESTED | UNTESTED |
@@ -47,9 +47,9 @@ by memory, so completeness can be proven instead of assumed.
 | AL17 | DistrictAtmosphere (autoload) | `scripts/world/district_atmosphere.gd` | UNTESTED | UNTESTED |
 | AL18 | GameManager (autoload) | `scripts/core/game_manager.gd` | GOLD MASTER P1/P1b/P6 (`qa_headless_suite_scene.tscn`) | **WORKS** — MENU->PLAYING transition, PLAYING<->PAUSED via `ui_pause`, DEAD reachable (P4/P6), 15s sustained PLAYING, all headless |
 | AL19 | SaveSystem (autoload) | `scripts/core/save_system.gd` | GOLD MASTER P3 (`qa_headless_suite_scene.tscn`) | **WORKS** — real `save_all()`/`load_all()` round trip with a language switch mid-load, headless, 0 fails. Upgrades the prior CANNOT-TEST-HEADLESS call (a stale environment-limitation note, not a wrong claim — the suite existed but wasn't wired into any gate until this pass) |
-| AL20 | InputService (autoload) | `scripts/core/input_service.gd` | UNTESTED | UNTESTED |
-| AL21 | ItemDatabase (autoload) | `scripts/inventory/item_database.gd` | UNTESTED | UNTESTED |
-| AL22 | InventoryManager (autoload) | `scripts/inventory/inventory_manager.gd` | UNTESTED | UNTESTED |
+| AL20 | InputService (autoload) | `scripts/core/input_service.gd` | GOLD MASTER P1b (real `InputEventAction` dispatch) | **WORKS** — `_unhandled_input`'s event-driven paths (stealth toggle, interact, quick_slot 1-6) verified via the `quick_slot_requested` signal actually firing with the right index, not just no-crash |
+| AL21 | ItemDatabase (autoload) | `scripts/inventory/item_database.gd` | `craft_check_scene.tscn` (re-run standalone this pass) | **WORKS** — every recipe material (scrap/cable/gear/wiring) resolves and is obtainable through `InventoryManager.try_add` |
+| AL22 | InventoryManager (autoload) | `scripts/inventory/inventory_manager.gd` | `craft_check_scene.tscn` (re-run standalone this pass) | **WORKS** — `try_add`/`count_of` round-trip verified across a real craft flow (battery: scrap2+cable1 -> craft -> materials spent, item gained; medkit gating correctly blocks without `gear`, then succeeds once added) |
 | AL23 | Encyclopedia (autoload) | `scripts/enemies/encyclopedia_manager.gd` | UNTESTED | UNTESTED |
 | AL24 | CoinWallet (autoload) | `scripts/economy/coin_wallet.gd` | UNTESTED | UNTESTED |
 | AL25 | ShopService (autoload) | `scripts/economy/shop_service.gd` | UNTESTED | UNTESTED |
@@ -143,21 +143,25 @@ by memory, so completeness can be proven instead of assumed.
 | X19 | STANDING BUG: `_game_test_3d.gd` phase-7 harness stall | `scripts/tools/_game_test_3d.gd` | `scenes/tools/game_test_3d_scene.tscn`, headless | **FIXED (R3 CHALLENGE-01)** — 3 real, distinct root causes found and fixed, not a timeout bump: (1) phase 4 was "solving" a puzzle ID trimmed from `puzzle_system.gd`'s data table as dead data, so it never actually advanced district stage, so the boss's real spawn gate (all 11 districts FULL) never fired — replaced with a direct exercise of the current `power_switch.gd` repair mechanism; (2) the test never spawned the boss itself, relying entirely on that unreachable gate — now spawns `boss_architect_3d.tscn` directly, the same way `finale_director.gd`'s own `_spawn_boss()` does, to test the boss's mechanics in isolation like every other phase tests its own system; (3) the synthetic damage amounts assumed no armor/resistance, so the P1→P2 phase transition never crossed its threshold — recalibrated against the boss's real 0.375 effective damage multiplier (25% armor × 50% bullet resistance, `enemy_roster_data.gd`'s `&"beast"` entry). Phase 7 now passes all 9 of its own checks with zero crashes (was: crash at check 1 of 9, every run). New finding recorded separately, not folded into this fix: phase 8 (death screen) now correctly reaches `hp=0`/`GameManager.current_state=DEAD` but `screen_flow_manager.gd`'s `_screens` reference doesn't produce a visible screen when boot is bypassed straight to `main_3d.tscn` — see `docs/KNOWN_ISSUES.md` |
 | X20 | STANDING BUG: park-travel inf-position softlock | (park district, bot-discovered) | `tools/qa_sim/autoplay_bot` | **BUG (open, detection improved)** — root cause of WHY position goes non-finite still unconfirmed; a prior session's one alternative fix attempt (NavigationAgent3D bot pathing) made results WORSE (0/3, new softlocks) and was reverted (`docs/RUN_STATE.md` Session 4). R2's `is_finite` invariant check (TG-PLAY hardening) now catches this in <1s instead of the old 45s SOFTLOCK wait, but does not fix the underlying cause |
 | X21 | STANDING BUG: residential softlock residual flakiness | `scripts/tools/_qa_autoplay_runner.gd` `_approach_dir()` | `tools/qa_sim/autoplay_bot`, 3 seeds this pass, needs a 10+-seed re-baseline for the arena's own bar | **PARTIALLY FIXED (R3 CHALLENGE-02)** — root-caused via `docs/SPINE_SOFTLOCK_AUDIT.md`'s own C1 (high-speed tunneling past a pickup's ~1.0m true collision radius past the bot's 1.4 touch threshold), fixed via that audit's Option B (scale approach speed down near the target, NOT the rejected PICKUP_TOUCH-tightening option). Seed 8 — the audit's own documented worst-case — now WINS cleanly (was the primary softlock repro). Seed 2 still softlocks, but a control run proved that failure pre-exists the fix (identical signature with the fix reverted) — a related but distinct flakiness in the same "pickup approach" class, not caused or worsened by this fix. Honest residual: not closed to the arena's 10-seed/≤1-nudge bar; nudge counts (17-19/seed) remain high even on wins |
+| X23 | NEW ROW: win-path ending determination (`Endings` class — distinct from `EndingsManager` AL49, which handles the death-path only) | `scripts/core/endings.gd` | `craft_check_scene.tscn` (re-run + repaired standalone this pass) | **WORKS** — `evaluate()`'s district%/docs%/power-station-only branching (survivor/hope/light) verified against the real 11-district dependency graph and the real `DistrictLoot` document set, not a stub. Found via investigating why this probe used a `district_id` ("powerplant") that doesn't exist in `data/districts/` — turned out `scripts/core/endings.gd` line 46-48's own comment already documents that exact historical bug as fixed in the real code; only this QA script still had the stale id, now fixed too (see AL07) |
 | X22 | NEW FINDING: death screen doesn't display when boot flow is bypassed | `scripts/ui/screen_flow_manager.gd` (`_screens`) | discovered via `_game_test_3d.gd` phase 8, once phase 7's fix let the test reach it | **BUG (open, new)** — confirmed via a diagnostic print (removed after use): the player reaches `hp=0.0` and `GameManager.current_state` correctly becomes `DEAD`, proving `EventBus.game_over` -> `trigger_death()` -> `_change_state` all fire correctly; `screen_flow_manager.gd`'s `_on_game_state_changed` maps DEAD and calls `_enter_state`->`_show_death()`, but the "Screens" node's `_active_screen` stays empty. Not yet isolated further: either `screen_flow_manager.gd`'s cached `_screens` reference is stale/null when boot is bypassed straight to `main_3d.tscn` (as every phase in this harness does), or it's a different "Screens" instance than the one the test finds via `get_tree().root.find_child`. Needs a session with room to add a proper diagnostic rather than the print-and-remove used to confirm the state-machine half works |
 
 ## Totals
 
 - Spine: 89 (57 autoloads + 32 input actions)
-- Extra: 21
-- **Grand total: 111 rows.** WORKS: 46 (+35 this P2 pass: all 32 input actions via the newly-wired
+- Extra: 22 (added X23 this pass)
+- **Grand total: 112 rows.** WORKS: 50 (+39 this P2 pass: all 32 input actions via the newly-wired
   GOLD MASTER P1b entrypoint-coverage phase; AL18 GameManager/AL19 SaveSystem/AL49 EndingsManager
   via P1/P3/P4/P6; X13 security/attack_sim, AL04 ThemeSetup, AL37 WowDirector via already-wired
-  `check.sh` gates that were never cross-referenced to a matrix row before this pass) · FIXED: 2
-  (X08 CHALLENGE-03, X19 CHALLENGE-01) · BUG: 5 (park — open standing; X22 — open, new;
-  IN67/IN84/IN86 — dead input mappings, new this pass) · PARTIALLY FIXED: 1 (X21 residential, R3
-  CHALLENGE-02) · CANNOT-TEST-HEADLESS: 2 (X13 moved to WORKS) · BY-DESIGN-LIMIT: 1 · PARTIAL
-  (i18n): 1 · UNTESTED: 53
+  `check.sh` gates that were never cross-referenced to a matrix row before this pass; AL07
+  PowerGrid/AL21 ItemDatabase/AL22 InventoryManager/X23 win-path Endings via `craft_check_scene.
+  tscn`, another unwired-but-built probe, which also surfaced and fixed a real bug — see AL07)
+  · FIXED: 2 (X08 CHALLENGE-03, X19 CHALLENGE-01) · BUG: 5 (park — open standing; X22 — open,
+  new; IN67/IN84/IN86 — dead input mappings, new this pass) · PARTIALLY FIXED: 1 (X21 residential,
+  R3 CHALLENGE-02) · CANNOT-TEST-HEADLESS: 2 (X13 moved to WORKS) · BY-DESIGN-LIMIT: 1 · PARTIAL
+  (i18n): 1 · UNTESTED: 50
 
-P2 sweep in progress: this pass closed all 32 IN rows plus 6 AL/X rows — 3 via the GOLD MASTER
-suite's own new work, 3 more by cross-referencing gates that were already wired into `check.sh`
-but never mapped to a matrix row. 53 AL/X rows remain UNTESTED — continuing the sweep next.
+P2 sweep in progress: this pass closed all 32 IN rows plus 10 AL/X rows (1 brand new — X23) — 3
+via the GOLD MASTER suite's own new P1b work, 3 by cross-referencing already-wired-but-unmapped
+`check.sh` gates, 4 via a third unwired probe (`craft_check_scene.tscn`) that also surfaced a
+real, fixed bug. 50 AL/X rows remain UNTESTED — continuing the sweep next.

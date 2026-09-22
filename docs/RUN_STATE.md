@@ -86,10 +86,52 @@ output (not just exit code) before crediting anything:
 New totals after both batches: WORKS 46, BUG 5, CANNOT-TEST-HEADLESS 2, UNTESTED 53 (down from
 89 at P2's start).
 
-**Next**: continue P2 sweep on the remaining 53 UNTESTED AL/X rows (economy, achievements, skill
-tree, quest manager, NG+, stealth/boss live-window items, etc.) using the same
-reuse-before-build discipline — check `scripts/tools/_*.gd`/`scenes/tools/*.tscn` for an existing
-probe before writing a new one.
+**Third batch, same pass — a real bug found and fixed, not just credited:** found
+`scripts/tools/_craft_check.gd` (craft flow + endings), also built but never wired into
+`check.sh`. First run: 11/15 checks OK (crafting itself: recipes, material spend, item gain all
+correct) but 2 GDScript runtime errors and 3 ending-check fails. Root-caused both, not just the
+symptom:
+1. **Real bug in shipped code**: `scripts/world/power_grid.gd:53` (`advance_district`'s
+   locked-district branch) called `tr("FIRST_RESTORE") % missing_prerequisite_name(id)`.
+   `FIRST_RESTORE`'s en.json text is `"First district restored!"` — no `%s` placeholder at all —
+   so the `%` operator throws "String formatting error: not all arguments converted" every time
+   this branch runs. The correct key was one line away in the same json:
+   `NEED_DISTRICT_FIRST: "You must restore this district first: %s"`, already used correctly for
+   this exact scenario by `power_switch.gd:161` via `LocalizationManager.tf(...)`. Fixed to match
+   that convention. Currently unreachable through real play (`power_switch.gd` gates
+   `is_unlocked()` before ever calling `advance_district`), so no IRON RULE bot re-validation
+   needed (no play-reachable behavior changed) — but reachable by any other direct caller
+   (this QA tool proved it), so worth shipping the fix regardless.
+2. **Stale test data, same class of bug as CHALLENGE-01's phase-4 finding**: the probe used
+   pre-rename district ids (`"powerplant"`, `"suburb"`, `"policestation"`, `"warehouse"`,
+   `"gasstation"`) that silently no-op against `PowerGrid` (unknown id -> `get_district()` ->
+   null), so the ending checks were never really exercising anything. Fixed to the real ids
+   (`district_manager.gd`'s own `DISTRICTS` list). Also rewrote the "survivor" sub-case: the old
+   assumption ("only power_station restored") was structurally impossible — `power_station`'s own
+   `powered_by` chain requires nearly the whole city FULL first — so the real setup is the full
+   chain minus the two GDD-documented optional leaves (school, gas_station). And the "light
+   ending with all docs" sub-case only ever unlocked 2 of the many documents
+   `Endings.get_total_documents()` actually counts (every `DistrictLoot.DOCUMENTS`/`LORE_DOCS`
+   id) — fixed to unlock the same set the counter itself sums.
+3. **Along the way, resolved a naming scare**: `_craft_check.gd` calls `Endings.evaluate()`
+   (`class_name Endings`, `scripts/core/endings.gd`) — NOT the `EndingsManager` autoload (AL49)
+   already credited WORKS this pass. Confirmed these are two real, complementary, both-live
+   systems (not a duplicate/dead-code pair like the earlier X08 settings_full.gd finding):
+   `EndingsManager` handles the death-triggered outcomes (`game_manager.gd` calls
+   `evaluate_death_ending()` on death), `Endings` handles the win-triggered outcomes
+   (`win_screen.gd`/`victory_screen.gd`/`ending_screen.gd` all call it directly). Added as new
+   row X23 since it's a real, previously-uninventoried system now backed by real evidence.
+
+All 15 craft_check assertions pass after both fixes (`0 fails`). Wired into `check.sh`. Credited
+AL07 PowerGrid, AL21 ItemDatabase, AL22 InventoryManager, and new row X23 as WORKS.
+
+New totals after all three batches: 112 rows (added X23), WORKS 50, BUG 5, CANNOT-TEST-HEADLESS
+2, UNTESTED 50 (down from 89 at P2's start).
+
+**Next**: continue P2 sweep on the remaining 50 UNTESTED AL/X rows (achievements, skill tree,
+quest manager, NG+, weather, NoisePropagation, stealth/boss live-window items, etc.) using the
+same reuse-before-build discipline — check `scripts/tools/_*.gd`/`scenes/tools/*.tscn` for an
+existing probe before writing a new one.
 
 ## Session 7 continued: R3 CHALLENGE-01 CLOSED — real fix, not a timeout bump
 

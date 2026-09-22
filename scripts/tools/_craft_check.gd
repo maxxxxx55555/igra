@@ -35,28 +35,60 @@ func _run() -> void:
 	ends = Endings.evaluate()
 	var dm = get_tree().root.get_node_or_null("/root/DistrictManager")
 	if dm:
-		dm.set_stage("powerplant", 3)
+		# District ids match district_manager.gd's own DISTRICTS list; the
+		# pre-rename ids this test used to have ("powerplant", "suburb",
+		# "policestation", "warehouse", "gasstation") silently no-op'd
+		# against PowerGrid (unknown id -> get_district() returns null),
+		# so the ending checks below never actually advanced a real
+		# district and always failed regardless of ending logic. Also,
+		# power_station itself requires the whole chain FULL first
+		# (powered_by: substation<-industrial<-warehouses+police<-...) —
+		# "only power_station" was never reachable; endings_manager.gd's
+		# actual survivor rule is `power_station_full and full < total`,
+		# i.e. the station up while ANY district (not necessarily all) is
+		# short — satisfied here by the two GDD-documented optional leaves
+		# (school, gas_station) staying unrestored.
+		dm.set_stage("suburbs", 3)
+		dm.set_stage("park", 3)
+		dm.set_stage("residential", 3)
+		dm.set_stage("police", 3)
+		dm.set_stage("hospital", 3)
+		dm.set_stage("warehouses", 3)
+		dm.set_stage("industrial", 3)
+		dm.set_stage("substation", 3)
+		dm.set_stage("power_station", 3)
 		ends = Endings.evaluate()
-		checks.append(["survivor ending (only powerplant)", ends.any(func(e): return e.get("id") == "survivor")])
-		dm.set_stage("powerplant", 3)
-		dm.set_stage("suburb", 3)
+		checks.append(["survivor ending (station up, school+gas_station left)", ends.any(func(e): return e.get("id") == "survivor")])
+		dm.set_stage("suburbs", 3)
 		dm.set_stage("residential", 3)
 		dm.set_stage("park", 3)
 		dm.set_stage("school", 3)
 		dm.set_stage("hospital", 3)
-		dm.set_stage("policestation", 3)
-		dm.set_stage("warehouse", 3)
-		dm.set_stage("gasstation", 3)
+		dm.set_stage("police", 3)
+		dm.set_stage("warehouses", 3)
+		dm.set_stage("gas_station", 3)
 		dm.set_stage("industrial", 3)
 		dm.set_stage("substation", 3)
 		ends = Endings.evaluate()
 		checks.append(["light ending (all + no docs)", ends.any(func(e): return e.get("id") == "hope")])
 		var pt = get_tree().root.get_node_or_null("/root/ProgressTracker")
 		if pt:
-			pt.is_doc_unlocked("doc_engineer_log")
-			pt.is_doc_unlocked("doc_family_letter")
-			pt._unlock_doc("doc_engineer_log")
-			pt._unlock_doc("doc_family_letter")
+			# Endings.get_total_documents() counts every DistrictLoot
+			# document/lore id + the 2 event docs (see scripts/core/
+			# endings.gd) — unlocking only the 2 event docs (as this
+			# test used to) could never reach docs_pct >= 1.0. Unlock
+			# the same set the counter itself sums, so this actually
+			# tests the "light" branch instead of always failing it.
+			var doc_ids: Dictionary = {}
+			for id in DistrictLoot.DOCUMENTS.values():
+				doc_ids[String(id)] = true
+			for lore_list in DistrictLoot.LORE_DOCS.values():
+				for id in lore_list:
+					doc_ids[String(id)] = true
+			doc_ids["doc_engineer_log"] = true
+			doc_ids["doc_family_letter"] = true
+			for id in doc_ids:
+				pt._unlock_doc(id)
 			ends = Endings.evaluate()
 			checks.append(["light ending with all docs", ends.any(func(e): return e.get("id") == "light")])
 	Endings.reset()

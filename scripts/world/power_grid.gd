@@ -50,7 +50,8 @@ func advance_district(id: StringName, new_stage: int) -> bool:
 	var d := get_district(id)
 	if d == null or not is_unlocked(id) or new_stage <= d.stage:
 		if d != null and not is_unlocked(id):
-			EventBus.inventory_notice.emit(tr("FIRST_RESTORE") % missing_prerequisite_name(id))
+			EventBus.inventory_notice.emit(
+				LocalizationManager.tf("NEED_DISTRICT_FIRST", [missing_prerequisite_name(id)]))
 		return false
 	d.stage = new_stage as DistrictData.Stage
 	EventBus.district_stage_changed.emit(id, new_stage)

@@ -237,6 +237,7 @@ else
     # Bumped past 150s so the real diagnostic can fire, if it's still stuck.
     run_gate "прогон 3D-сцены"           "res://scenes/tools/game_test_3d_scene.tscn" 170
     run_gate "целостность сейва"         "res://scenes/tools/save_integrity_check_scene.tscn"
+    run_gate "крафт-флоу + концовки"     "res://scenes/tools/craft_check_scene.tscn"
     run_gate "adversarial: achievement/NG+/economy/district-id forgery" "res://scenes/tools/attack_sim_scene.tscn"
     run_gate "boot-flow (меню/новая игра/сейв)" "res://scenes/tools/boot_check_scene.tscn" 200
     run_gate "footstep-маппер (surface x speed)" "res://scenes/tools/footstep_check_scene.tscn"
