@@ -151,7 +151,19 @@ func _process(delta: float) -> void:
 	_hb += delta
 	if _hb >= 5.0:
 		_hb = 0.0
-		var ppos := _player.global_position if _player_ok() else Vector3.INF
+		# BREAK_REPORT Q1: ppos=(inf,inf,inf) here used to be indistinguishable
+		# between "the player's actual transform is broken" and "_player_ok()
+		# was false" (freed instance, or just not in the tree at this exact
+		# tick - e.g. mid district-rebuild). Logging validity/tree-membership/
+		# finiteness separately turns that ambiguity into an answerable log:
+		# valid+in_tree+not-finite is a real NaN/INF transform bug (never seen
+		# yet); valid+in_tree+finite-but-deep-negative-Y is B15 (fell through
+		# a not-yet-built floor); invalid or not-in-tree is a "who freed/
+		# detached the player" bug, unrelated to position at all.
+		var p_valid := is_instance_valid(_player)
+		var p_in_tree := p_valid and (_player as Node).is_inside_tree()
+		var ppos := (_player as Node3D).global_position if p_in_tree else Vector3.INF
+		var p_finite := p_in_tree and is_finite(ppos.x) and is_finite(ppos.y) and is_finite(ppos.z)
 		var tdist := ppos.distance_to(_target_pos) if (_have_target and _player_ok()) else -1.0
 		var ncable := get_tree().get_nodes_in_group("pickups").size()
 		if _t_first_secret_hint < 0.0:
@@ -169,10 +181,10 @@ func _process(delta: float) -> void:
 					str(_player.get("battery")), str(_player.get("flashlight_enabled"))]
 			else:
 				boss_info = " boss=NULL"
-		_log("hb ph=%s st=%d want=%s cur=%s si=%d sc=%.0f mr=%d ppos=%s tgt=%s tdist=%.1f npu=%d%s" % [
+		_log("hb ph=%s st=%d want=%s cur=%s si=%d sc=%.0f mr=%d ppos=%s valid=%s in_tree=%s finite=%s tgt=%s tdist=%.1f npu=%d%s" % [
 			_phase, GameManager.current_state, SPINE[mini(_spine_i, SPINE.size() - 1)],
 			_current_district(), _spine_i, _compute_score(), _menu_recoveries,
-			str(ppos.round()), str(_target_pos.round()), tdist, ncable, boss_info])
+			str(ppos.round()), p_valid, p_in_tree, p_finite, str(_target_pos.round()), tdist, ncable, boss_info])
 
 	if not GameManager.is_playing():
 		if GameManager.is_dead():

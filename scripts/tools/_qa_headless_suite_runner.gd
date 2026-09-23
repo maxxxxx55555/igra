@@ -122,6 +122,7 @@ func _run() -> void:
 	await _p2k_streetlight_activated_fires_once()
 	await _p2l_import_save_survives_next_autosave()
 	await _p2m_autosave_writes_real_save()
+	await _p2n_q1_park_heartbeat_probe()
 	await _p6_soak()
 	_finish()
 
@@ -536,6 +537,51 @@ func _p2m_autosave_writes_real_save() -> void:
 		_fail("P2m periodic autosave tick did not write SAVE_PATH (mtime unchanged: %d)" % before)
 		return
 	_log("P2m periodic autosave writes the real save Continue reads - OK")
+
+## BREAK_REPORT Q1 probe: the autoplay bot's own heartbeat log used to
+## collapse "player node invalid/freed", "player not in tree yet" and "the
+## player's actual transform is broken" into one indistinguishable
+## ppos=(inf,inf,inf) fallback. This travels to park (matching the report's
+## own repro district) via the real DistrictManager.transition_to() and
+## checks is_instance_valid/is_inside_tree/is_finite immediately on the
+## first tick after the district id flips - the exact split the report
+## asked for, run through the reliable GOLD MASTER path instead of the
+## autoplay bot's spine AI (which can hit its own separate, already-known
+## residential softlock long before ever reaching park).
+func _p2n_q1_park_heartbeat_probe() -> void:
+	var player := get_tree().get_first_node_in_group("player")
+	var dm := get_node_or_null("/root/DistrictManager")
+	if player == null or dm == null:
+		_fail("P2n no player/DistrictManager to probe with")
+		return
+	# Report names "park" specifically as the repro district - go via
+	# suburbs first if already there, so this always actually crosses INTO
+	# park rather than toggling away from it.
+	if String(dm.current_district) == "park":
+		dm.transition_to("suburbs")
+		var away_frames := 0
+		while String(dm.current_district) != "suburbs" and away_frames < 120:
+			await get_tree().process_frame
+			away_frames += 1
+	var target: StringName = &"park"
+	dm.transition_to(String(target))
+	var frames_waited := 0
+	const MAX_FRAMES := 120
+	while String(dm.current_district) != String(target) and frames_waited < MAX_FRAMES:
+		await get_tree().process_frame
+		frames_waited += 1
+	var p_valid := is_instance_valid(player)
+	var p_in_tree := p_valid and player.is_inside_tree()
+	var pos: Vector3 = (player as Node3D).global_position if p_in_tree else Vector3.INF
+	var p_finite := p_in_tree and is_finite(pos.x) and is_finite(pos.y) and is_finite(pos.z)
+	_log("P2n Q1 answer: after travel to '%s', first-tick player state: valid=%s in_tree=%s finite=%s pos=%s" % [target, p_valid, p_in_tree, p_finite, pos])
+	if not p_valid or not p_in_tree:
+		_fail("P2n Q1: player node invalid/detached right after travel to '%s' (valid=%s in_tree=%s) - this is 'who freed the player', not a transform bug" % [target, p_valid, p_in_tree])
+		return
+	if not p_finite:
+		_fail("P2n Q1: player transform is genuinely non-finite after travel to '%s': %s - a REAL NaN/INF bug, distinct from B15's floor race" % [target, pos])
+		return
+	_log("P2n Q1 answered: player is valid, in-tree and finite after travel to park - the report's ppos=(inf,inf,inf) heartbeat entries are the _player_ok()==false fallback sentinel, not evidence of a broken transform")
 
 # ── P3 ────────────────────────────────────────────────────────────────
 func _p3_save_load_lang() -> void:
