@@ -150,13 +150,29 @@ func get_progress() -> int:
 func is_completed_today() -> bool:
 	return _completed_today
 
+## BREAK_REPORT B6: this was plain JSON. Deleting the file reset
+## _last_completed_day to its default -1 (never assigned when the file is
+## missing), which reads as "not completed today" for any real calendar
+## day, letting the same day's challenge (and its coin payout, and streak
+## increments each still-same-day completion feeds) be claimed again by
+## deleting one file. Same fix as achievements_manager.gd already applies
+## to its own separate small file: sign with SaveSystem's existing
+## static _sign() (same key/algorithm, no second signing mechanism) rather
+## than merge into the main per-slot save - this state is deliberately
+## profile-independent (survives New Game, see this file's own header).
+## No legacy-plain-json trust-once compat: this system is recent enough
+## (GOLD MASTER v5) that there's no real installed base to protect, and a
+## missing/forged file just re-rolls today once, same low-cost failure
+## mode as a first launch - unlike the main save (B4), there's no case
+## here where rejecting outright is a real cost worth a compat exception.
 func _save_state() -> void:
 	var f := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	if f != null:
-		f.store_string(JSON.stringify({
+		var body: String = JSON.stringify({
 			"today_id": _today_id, "progress": _progress,
 			"last_completed_day": _last_completed_day,
-		}))
+		})
+		f.store_string(JSON.stringify({"hmac": SaveSystem.call("_sign", body), "data_json": body}))
 
 func _load_state() -> void:
 	if not FileAccess.file_exists(SAVE_PATH):
@@ -164,7 +180,12 @@ func _load_state() -> void:
 	var f := FileAccess.open(SAVE_PATH, FileAccess.READ)
 	if f == null:
 		return
-	var parsed = JSON.parse_string(f.get_as_text())
+	var envelope = JSON.parse_string(f.get_as_text())
+	if not (envelope is Dictionary) or not envelope.has("hmac") or not envelope.has("data_json"):
+		return
+	if String(envelope["hmac"]) != String(SaveSystem.call("_sign", envelope["data_json"])):
+		return
+	var parsed = JSON.parse_string(String(envelope["data_json"]))
 	if parsed is Dictionary:
 		_today_id = String(parsed.get("today_id", ""))
 		_progress = int(parsed.get("progress", 0))

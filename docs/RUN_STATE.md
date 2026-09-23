@@ -237,13 +237,47 @@ given time budget - lower rigor than the other two, noted honestly rather than g
 
 attack_sim + save-integrity + GOLD MASTER suite: 0 fails. Static gates unchanged (19/20).
 
-**Next**: the remaining BREAK_REPORT items in severity order (B6-B16, Q1), then SEC-CLOSE,
+**C1 BREAK-CLOSE, B6 (high — daily reward replayable by deleting one file):** report's claim
+confirmed: `tls_daily.json` was plain JSON; deleting it reset `_last_completed_day` to its
+unassigned default `-1`, which never equals a real day index, so "already completed today"
+silently became false again.
+
+Investigated what's actually closable before fixing anything, since this is a DELETION attack,
+not a forgery one - and no client-side signature can verify data that no longer exists. Applied
+the same HMAC-signing pattern `achievements_manager.gd` already uses for its own separate file
+(reuses `SaveSystem`'s existing static `_sign()`, no second signing mechanism), which closes the
+*adjacent* attack the report also implies (editing the file's content - e.g. backdating
+`last_completed_day` to trigger a streak bonus, or setting `progress` to an instant-complete
+value - without the real key). Full deletion itself stays exactly as replayable as before; no
+signature changes that, and said so plainly rather than claiming it fixed - same "inherent,
+not closable" framing `docs/SECURITY_PATCH_SPEC.md` uses for its own client-side-only findings.
+Deliberately did NOT move this state into the main per-slot save (which the report's own
+"stored with the signed save" phrasing suggested): this file's own header comment documents it
+staying separate specifically so daily-challenge progress survives New Game, the same reasoning
+already applied to achievements - moving it would silently regress that for a benefit (stopping
+deletion) that doesn't actually exist.
+
+Real methodological catch while building the regression test: my first version simulated the
+literal repro (delete the file, reload) and passed on BOTH old and new code - not because the fix
+worked, but because deletion is unfixable by design, so of course neither version could ever
+"win" that specific test. Rewrote it to test what's actually closable (content forgery with a
+wrong signature) and, separately, hand-verified the deletion-adjacent claim old code actually had
+a bug in: forging the plain, no-envelope shape old code expects (`{"today_id":...,
+"last_completed_day": 99999}`) got blindly trusted (confirmed via a throwaway scratch scene,
+deleted after use, not left in the tree) - old and new code expect different file *shapes*
+entirely once signing is added, so no single forged input can meaningfully A/B both; verified
+each version against its own real expected format instead.
+
+attack_sim + GOLD MASTER suite: 0 fails. Static gates unchanged (19/20).
+
+**Next**: the remaining BREAK_REPORT items in severity order (B7-B16, Q1), then SEC-CLOSE,
 SLOP-CLEAN, TZ-CLOSE, finish P2, I18N-FINAL, sign-off - per the studio-lead directive's own
 phase order. Every remaining report claim gets the same treatment: verify empirically before
 fixing, verify the fix with a real A/B control, correct the report's own claim (or an existing
-test's own hidden flaw, as B4 found) in the commit if testing disagrees with it. The bot
-win-rate finding from B3 needs its own dedicated investigation before C7 - not blocking B4+ in
-the meantime, since it's independent of them too.
+test's own hidden flaw, as B4/B6 found) in the commit if testing disagrees with it, and say so
+plainly when a claimed fix is actually an inherent limit (B6) rather than force a false "closed."
+The bot win-rate finding from B3 needs its own dedicated investigation before C7 - not blocking
+B4+ in the meantime, since it's independent of them too.
 
 ## Session 8: P2 MATRIX SWEEP begun — GOLD MASTER suite wired in, closes 35 rows
 

@@ -34,6 +34,7 @@ func _ready() -> void:
 	_check_ng_plus_level_clamped()
 	_check_ng_plus_modifiers_revalidated()
 	_check_reset_progress_clears_ng_plus()
+	_check_daily_challenge_forgery_rejected()
 	_check_coin_wallet_absurd_values()
 	_check_district_id_injection_defended()
 	_check_cross_save_swap_no_corruption()
@@ -98,6 +99,55 @@ func _check_achievements_legacy_migrates() -> void:
 	AchievementManager._unlocked.clear()
 	AchievementManager._progress.clear()
 	AchievementManager._save()
+
+# ── daily challenge: forged content must not be trusted ──────────────────
+## BREAK_REPORT B6: tls_daily.json was plain JSON - hand-editing
+## last_completed_day (to skip a day and re-trigger streak bonuses) or
+## progress (to instant-complete without earning it) was a one-line forge,
+## no signature to break. Now HMAC-signed like achievements.cfg: a body
+## edited without the real key fails to verify and loads as a fresh,
+## not-yet-completed day rather than trusting the forged content.
+## Honest limit, not claimed fixed: full file DELETION can't be defended
+## against by any client-side signature - there's no data left to verify.
+## Signing raises the cost (the flag isn't the only thing at risk if this
+## file is deliberately kept separate from the main save, though deletion
+## itself stays free either way) rather than closing deletion outright;
+## documented as an inherent residual, same class as SECURITY_PATCH_SPEC's
+## own client-side-unclosable findings, not swept in with what signing
+## actually does close (content forgery).
+func _check_daily_challenge_forgery_rejected() -> void:
+	var path := "user://tls_daily.json"
+	var had_file := FileAccess.file_exists(path)
+	var backup := ""
+	if had_file:
+		var bf := FileAccess.open(path, FileAccess.READ)
+		backup = bf.get_as_text()
+		bf.close()
+	var today: int = DailyChallengeManager.call("_today_index")
+	# Forge "completed yesterday" (so a streak-continuation check would
+	# treat today as the next consecutive day) under a wrong signature -
+	# simulates editing the real file without the key.
+	var forged_body := JSON.stringify({
+		"today_id": "forged", "progress": 999, "last_completed_day": today - 1,
+	})
+	var f := FileAccess.open(path, FileAccess.WRITE)
+	f.store_string(JSON.stringify({"hmac": "0000deadbeef0000", "data_json": forged_body}))
+	f.close()
+	# Reset to the class's own untouched defaults before loading, same
+	# "clear, then assert the forgery didn't apply" shape as the
+	# achievements check above.
+	DailyChallengeManager._last_completed_day = -1
+	DailyChallengeManager._progress = 0
+	DailyChallengeManager.call("_load_state")
+	_ok(DailyChallengeManager._last_completed_day == -1 and DailyChallengeManager._progress == 0,
+		"forged tls_daily.json (wrong hmac) is rejected, not trusted")
+	if had_file:
+		var wf := FileAccess.open(path, FileAccess.WRITE)
+		wf.store_string(backup)
+		wf.close()
+	elif FileAccess.file_exists(path):
+		DirAccess.remove_absolute(path)
+	DailyChallengeManager.call("_load_state")
 
 # ── NG+ level forgery ───────────────────────────────────────────────────
 func _check_ng_plus_level_clamped() -> void:
