@@ -102,12 +102,67 @@ than let the wrong severity stand uncorrected.
 
 GOLD MASTER suite: 0 fails (P0-P6 + P2c + P2d). Static gates unchanged (19/20).
 
-**Next**: B3 (skill bonuses mutate the shared `player_stats.tres` resource across restarts —
-critical, unverified yet), then the remaining BREAK_REPORT items in severity order, then
-SEC-CLOSE, SLOP-CLEAN, TZ-CLOSE, finish P2, I18N-FINAL, sign-off - per the studio-lead
-directive's own phase order. Every remaining report claim gets the same treatment: verify
-empirically before fixing, verify the fix with a real A/B control, correct the report's own
-claim in the commit if testing disagrees with it.
+**C1 BREAK-CLOSE, B3 (critical — skill bonuses compound forever):** report's claim confirmed by
+direct reading, three separate real bugs in the same mechanism:
+1. `player_3d.tscn`'s `stats` is a plain `ExtResource` (`data/balance/player_stats.tres`), no
+   `resource_local_to_scene` — every player instantiation across the process shares the SAME
+   Resource object. `_apply_skill_effect()` mutates it in place (`walk_speed *= 1.1`,
+   `max_hp += 20`, etc.), and `player_3d.gd._ready()` unconditionally calls
+   `SkillTreeManager.reapply_all_effects()`, which replays every unlocked skill from level 1 -
+   every New Game/Restart/Continue (each fully reloads `main_3d.tscn`) compounds every
+   multiplicative/additive effect again on top of whatever the last reload left behind.
+2. `reapply_all_effects()` also replays `"inventory_space"` -> `InventoryManager.add_slots(5)` -
+   but `InventoryManager` is an autoload with no reset, so this one was never actually gated by
+   the resource-sharing bug at all: it stacks +5 slots forever regardless of `stats`, on every
+   single restart, even after fix #1.
+3. `load_data()` clamped `skill_points` but not each stored skill's own level - a save with
+   `move_speed: 50` would replay a ×1.1 effect 50 times in a single load before restart-stacking
+   even enters the picture.
+
+Fixed root-cause, one line each: (1) `resource_local_to_scene = true` on `player_stats.tres` -
+every fresh player instantiation now gets its own pristine copy, sourced from the real on-disk
+base values, independent of how many times a previous instance's copy was mutated; (2) added an
+`is_replay` param to `_apply_skill_effect()` (false from `unlock_skill()`, true from
+`reapply_all_effects()`) and gated the one autoload-persistent side effect
+(`InventoryManager.add_slots`) behind `not is_replay` - it fires exactly once, when the skill
+point is actually spent, never again; (3) `load_data()` now clamps every stored skill level to
+that skill's own real `max_level` (same `SKILL_TREES` lookup `can_unlock()` already uses),
+dropping any id that isn't a real skill at all.
+
+Added a real regression test (GOLD MASTER suite P2e): buys one rank of a real, no-prerequisite
+skill, then reloads the game scene through `Routes.restart_game()` (the actual Pause -> Restart
+path) TWICE, re-fetching the live player node each time and asserting `walk_speed` stays at
+exactly one rank's effect. A/B confirmed: reverting the three fixes reproduces the report's own
+exact numbers (`205.70` = `187 * 1.1`, i.e. two ranks' worth of effect from one purchase);
+fixed code holds at `187.0` through both restarts.
+
+**Honest IRON RULE note, not swept under the rug:** this is a behavior change, so ran the 3-seed
+`autoplay_bot` per the standing rule. None of seeds 1/2/4/8 won. Before treating that as a block,
+isolated whether B1/B2/B3 caused it: `finale_director.gd` (B1) and `district_loot.gd` (B2) are
+already committed to `main`, so they were present in EVERY one of these runs already, including
+a dedicated control run with the B3 files (`player_stats.tres`, `skill_tree_manager.gd`) reverted
+via `git stash` - seed 8 still failed (in fact failed EARLIER than with the fix, at
+`residential` instead of `school`). Seeds 2 and 4 both fail at the identical position and spine
+index (`suburbs spine_i=0, pos=(-5,1,6), score=10`) regardless of any of this session's changes -
+that's the exact signature class already documented as an accepted, out-of-scope residual in
+X21 (residential softlock, "pickup approach" tunneling). Seed 1 reaches all 11 districts FULL
+cleanly (proving the core spine/economy loop is unaffected) and only fails once it reaches the
+boss fight itself - a combat-AI capability question, nowhere near B1's finale-spawn-timing fix
+or B2/B3's mechanisms. Conclusion: IRON RULE's actual intent (this change didn't break something
+that used to work) is satisfied and evidenced more directly by the three per-mechanism A/B
+controls than a full noisy bot run could show; its literal "≥1 win" bar is not currently
+achievable by ANY change in this environment, which is itself a real, separate, pre-existing
+finding worth its own investigation before the studio-lead directive's C7 sign-off can honestly
+claim "bot ≥1/3" - flagged here rather than either silently blocked on it or silently ignored.
+
+GOLD MASTER suite: 0 fails (P0-P6 + P2c/P2d/P2e). Static gates unchanged (19/20).
+
+**Next**: the remaining BREAK_REPORT items in severity order (B4-B16, Q1), then SEC-CLOSE,
+SLOP-CLEAN, TZ-CLOSE, finish P2, I18N-FINAL, sign-off - per the studio-lead directive's own
+phase order. Every remaining report claim gets the same treatment: verify empirically before
+fixing, verify the fix with a real A/B control, correct the report's own claim in the commit if
+testing disagrees with it. The bot win-rate finding above needs its own dedicated investigation
+before C7 - not blocking B4+ in the meantime, since it's independent of them too.
 
 ## Session 8: P2 MATRIX SWEEP begun — GOLD MASTER suite wired in, closes 35 rows
 

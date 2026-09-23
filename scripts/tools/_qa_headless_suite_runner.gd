@@ -19,6 +19,11 @@ extends Node
 ##       actually loads its title/content (was: "Untitled"/empty forever,
 ##       even though unlock_doc itself still fires correctly on collect -
 ##       confirmed by A/B testing both claims, not assumed from the report)
+##   P2e BREAK_REPORT B3 regression: buy one rank of move_speed, Restart
+##       twice via the real Routes.restart_game() - walk_speed must settle
+##       at exactly one rank's effect both times, not compound (was:
+##       170->187->205.7->226.4..., shared un-scened player_stats.tres
+##       resource replayed every unlocked skill from _ready() every restart)
 ##   P3  save/load round-trip with a language switch in the middle
 ##   P4  all 5 endings fire and resolve to localized (non-key) strings
 ##   P5  every one of the 13 locales resolves a curated key set at runtime
@@ -108,6 +113,7 @@ func _run() -> void:
 	await _p5_i18n_locales()
 	await _p2c_finale_boss_race()
 	await _p2d_document_id_race()
+	await _p2e_skill_stack_race()
 	await _p6_soak()
 	_finish()
 
@@ -427,6 +433,44 @@ func _p2d_document_id_race() -> void:
 		_fail("P2d count_docs() did not increment: %d -> %d" % [before, ProgressTracker.count_docs()])
 	holder.queue_free()
 	_log("P2d document id race: real _spawn_document -> _ready sees id -> collect unlocks it - OK")
+
+# ── P2e ───────────────────────────────────────────────────────────────
+## BREAK_REPORT B3 regression: real Restart, not a synthetic reset. Buys
+## one rank of a real, no-prerequisite, cost-1 skill and reloads the game
+## scene through Routes.restart_game() (the same path Pause -> Restart
+## uses) twice, checking the actual player node each time.
+func _p2e_skill_stack_race() -> void:
+	if not GameManager.is_playing():
+		_fail("P2e started outside PLAYING (state=%d)" % GameManager.current_state)
+		return
+	var player := get_tree().get_first_node_in_group("player")
+	if player == null or player.get("stats") == null:
+		_fail("P2e no player/stats to test against")
+		return
+	var base_speed: float = float(player.stats.walk_speed)
+	var expected: float = base_speed * 1.1
+	SkillTreeManager.add_skill_points(1)
+	if not SkillTreeManager.unlock_skill(&"move_speed"):
+		_fail("P2e unlock_skill(move_speed) failed (unexpected prereq/cost gate)")
+		return
+	var after_buy: float = float(player.stats.walk_speed)
+	if not is_equal_approx(after_buy, expected):
+		_fail("P2e after buying rank 1: walk_speed=%.2f, expected %.2f" % [after_buy, expected])
+		return
+	for restart_n in range(1, 3):
+		Routes.restart_game()
+		var back := await _wait_until(func() -> bool:
+			return GameManager.is_playing() and get_tree().get_first_node_in_group("player") != null, 10.0)
+		if not back:
+			_fail("P2e restart %d: game/player did not come back in 10s" % restart_n)
+			return
+		player = get_tree().get_first_node_in_group("player")
+		var speed: float = float(player.stats.walk_speed)
+		if not is_equal_approx(speed, expected):
+			_fail("P2e after restart %d: walk_speed=%.2f, expected %.2f (stacking if higher)" % [
+				restart_n, speed, expected])
+			return
+	_log("P2e skill stack race: one rank of move_speed survives 2 real restarts at %.1f, no compounding - OK" % expected)
 
 # ── P6 ────────────────────────────────────────────────────────────────
 func _p6_soak() -> void:

@@ -229,7 +229,17 @@ func unlock_skill(skill_id: StringName) -> bool:
 			return true
 	return false
 
-func _apply_skill_effect(skill_id: StringName, level: int) -> void:
+## BREAK_REPORT B3: is_replay distinguishes the two callers. unlock_skill()
+## (a player spending a real skill point) always passes false - the effect
+## needs to actually happen. reapply_all_effects() (every player _ready(),
+## i.e. every New Game/Restart/Continue) passes true, replaying every
+## unlocked skill from level 1 so effects that live on the player node or
+## its (now resource_local_to_scene) stats resource - which are genuinely
+## fresh each time - get restored. Effects that target persistent AUTOLOAD
+## state (InventoryManager.add_slots()) must NOT replay: that state was
+## already permanently applied the one time the skill was bought and never
+## resets on its own, so replaying it stacked +5 slots on every restart.
+func _apply_skill_effect(skill_id: StringName, level: int, is_replay: bool = false) -> void:
 	# Apply effects to player
 	var player = get_tree().get_first_node_in_group("player")
 	if not player:
@@ -257,7 +267,8 @@ func _apply_skill_effect(skill_id: StringName, level: int) -> void:
 			if player.has_method("refresh_flashlight_range"):
 				player.refresh_flashlight_range()
 		"inventory_space":
-			InventoryManager.add_slots(5)
+			if not is_replay:
+				InventoryManager.add_slots(5)
 		"move_speed":
 			if player.stats:
 				player.stats.walk_speed *= 1.1
@@ -293,7 +304,7 @@ func reapply_all_effects() -> void:
 	for skill_id in _unlocked_skills:
 		var level: int = int(_unlocked_skills[skill_id])
 		for lvl in range(1, level + 1):
-			_apply_skill_effect(skill_id, lvl)
+			_apply_skill_effect(skill_id, lvl, true)
 
 func get_tree_data(tree_id: StringName) -> Dictionary:
 	return SKILL_TREES.get(tree_id, {})
@@ -321,8 +332,27 @@ func save_data() -> Dictionary:
 ## skill_points — see xp_manager.gd's load_data() for the same rationale.
 func load_data(data: Dictionary) -> void:
 	var unlocked: Variant = data.get("unlocked_skills", {})
-	_unlocked_skills = unlocked if unlocked is Dictionary else {}
+	var raw: Dictionary = unlocked if unlocked is Dictionary else {}
+	# BREAK_REPORT B3: skill_points was clamped but a per-skill level wasn't -
+	# a forged/corrupted save with e.g. move_speed: 50 would replay a
+	# multiplicative effect 50 times on this one load (each restart used to
+	# compound it further too; that half is fixed by resource_local_to_scene
+	# on player_stats.tres + is_replay in _apply_skill_effect). Clamp each
+	# stored level to that skill's own real max_level, same lookup can_unlock
+	# already uses, and drop ids that aren't in SKILL_TREES at all.
+	_unlocked_skills = {}
+	for skill_id in raw:
+		var lvl: int = int(raw[skill_id]) if (raw[skill_id] is int or raw[skill_id] is float) else 0
+		var cap := _max_level_for(StringName(skill_id))
+		if cap > 0 and lvl > 0:
+			_unlocked_skills[skill_id] = clampi(lvl, 0, cap)
 	_skill_points = clampi(int(data.get("skill_points", 0)), 0, 9999)
 	# Effects are NOT reapplied here - this runs before the player node
 	# exists (see reapply_all_effects()'s comment). player_3d.gd calls
 	# reapply_all_effects() itself once it's ready.
+
+func _max_level_for(skill_id: StringName) -> int:
+	for tree in SKILL_TREES.values():
+		if tree.skills.has(skill_id):
+			return int(tree.skills[skill_id].max_level)
+	return 0
