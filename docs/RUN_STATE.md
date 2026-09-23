@@ -567,10 +567,48 @@ windowed run on a machine with a GPU, which this pass has not attempted yet. Sta
 `a0ec4ee`, pushed, push verified (one transient TLS blip on the verification fetch itself, resolved
 on retry - not a push failure).
 
-**Next**: B15 and B16 need a real windowed run (GPU-backed, not headless) to even attempt - this
-pass has not done that yet. If a windowed run isn't practical in this environment, they get
-recorded honestly as still-open NEEDS-RUNTIME-CONFIRM items rather than guessed shut. Then
-SEC-CLOSE,
+**C1 BREAK-CLOSE, B16 (offline player treats a default peer as a live network):** labeled
+`NEEDS-RUNTIME-CONFIRM` in the report, but turned out fully answerable headless - the report's own
+"watch the debugger" repro was just describing a manual way to check a pure code-logic question,
+not something that needs a GPU or real frame timing. Confirmed exactly as described:
+`player_3d.gd`'s `_net_active = multiplayer.multiplayer_peer != null` is true even in single-player,
+because Godot's default `OfflineMultiplayerPeer` is never actually null. `inventory_manager.gd` and
+`base_monster.gd` both already exclude it by name, each with its own comment explaining the same
+trap - `player_3d.gd` copied the naive check before those two were fixed.
+
+Traced the real runtime consequence rather than trusting the report's predicted error text
+verbatim: with `_net_active` wrongly true and `is_multiplayer_authority()` true (the normal case
+for a standalone/offline session), `_physics_process` called `_sync_broadcast()`'s
+`_sync_transform.rpc(...)` every physics frame - confirmed via a real headless run that this IS
+reachable (not merely theoretical), though it turned out to silently no-op rather than print the
+report's predicted "RPC on yourself" error in this Godot build/RPC-mode combination (`@rpc("any_peer",
+"unreliable")`). Movement itself wasn't broken for the authority case (falls through to normal
+movement code below, matching what every earlier bot run this session already showed working) -
+but a hypothetical NON-authority instance would have `_sync_remote()`'d toward a `_remote_pos` that
+never gets updated (starts at `ZERO`) and never moved locally at all, exactly as the report warned.
+
+Fix: match the pattern the other two systems already established -
+`peer != null and not peer is OfflineMultiplayerPeer` (`scripts/player/player_3d.gd`).
+
+Regression test (GOLD MASTER suite P2o): confirms the real player node in this headless
+single-player session has `multiplayer_peer is OfflineMultiplayerPeer` and asserts
+`_net_active == false`. A/B verified: fails on the reverted code, passes on the fix. Not a
+gameplay-behavior change for the path every prior test already exercised (authority movement is
+unchanged; this only removes a spurious per-frame RPC call), so no IRON RULE bot re-run needed.
+Static gates 19/20 (pre-existing `i18n_truth_gate` FAIL only), `flow_check.py` OK,
+`scene_node_check.py` OK. Committed `cb73c83`, pushed, push verified.
+
+**All of BREAK_REPORT.md is now closed except B15** (`NEEDS-RUNTIME-CONFIRM` - player teleported
+onto a district whose floor collision doesn't exist yet). Unlike B16 and Q1, B15 genuinely needs an
+actual windowed frame hitch between `add_child` and `street_builder.gd`'s deferred `build()` -
+headless timing was already shown (B10) to not match real frame pacing, so a headless test cannot
+manufacture the specific race this needs. This pass has not attempted a windowed run yet; that's
+the next real decision point, not something to fake past with a headless proxy.
+
+**Next**: attempt B15 with an actual windowed Godot run if practical in this environment
+(GPU-backed, hard-timeout-wrapped per the standing TIMEOUT RULE - a prior session already hit a
+54-minute hang on an unwrapped manual run). If not practical, record it honestly as still-open
+rather than guessed shut, and move on to SEC-CLOSE,
 SLOP-CLEAN, TZ-CLOSE, finish P2, I18N-FINAL, sign-off - per the studio-lead directive's own phase
 order. Every remaining report claim gets the same treatment: verify empirically before fixing,
 verify the fix with a real A/B control, correct the report's own claim (or an existing test's own
