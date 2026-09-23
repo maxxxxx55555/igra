@@ -221,7 +221,15 @@ func _ready() -> void:
 	status_fx = load("res://scripts/enemies/status_effects.gd").new()
 	status_fx.mob = self
 	add_child(status_fx)
-	_net_active = multiplayer != null and multiplayer.multiplayer_peer != null
+	# BREAK_REPORT B16: multiplayer_peer != null is true even offline - the
+	# default OfflineMultiplayerPeer sits there always. inventory_manager.gd
+	# and base_monster.gd already exclude it; this copied the check before
+	# they were fixed. Without this, single-player treated itself as
+	# networked: authority RPC'd _sync_broadcast every physics frame (RPC on
+	# yourself), non-authority lerped toward a never-updated ZERO and never
+	# moved locally at all.
+	var peer := multiplayer.multiplayer_peer if multiplayer != null else null
+	_net_active = peer != null and not peer is OfflineMultiplayerPeer
 	# Static audit 2026-09-08: SkillTreeManager.load_data() (called during
 	# SaveSystem's data-parse phase, before this node exists) could never
 	# actually apply "push once" skill effects (max_health, stamina_boost,

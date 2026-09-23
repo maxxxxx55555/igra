@@ -123,6 +123,7 @@ func _run() -> void:
 	await _p2l_import_save_survives_next_autosave()
 	await _p2m_autosave_writes_real_save()
 	await _p2n_q1_park_heartbeat_probe()
+	await _p2o_offline_player_not_net_active()
 	await _p6_soak()
 	_finish()
 
@@ -582,6 +583,29 @@ func _p2n_q1_park_heartbeat_probe() -> void:
 		_fail("P2n Q1: player transform is genuinely non-finite after travel to '%s': %s - a REAL NaN/INF bug, distinct from B15's floor race" % [target, pos])
 		return
 	_log("P2n Q1 answered: player is valid, in-tree and finite after travel to park - the report's ppos=(inf,inf,inf) heartbeat entries are the _player_ok()==false fallback sentinel, not evidence of a broken transform")
+
+## BREAK_REPORT B16 regression: player_3d.gd's _net_active used to be
+## `multiplayer.multiplayer_peer != null`, true even in single-player
+## because Godot's default OfflineMultiplayerPeer is never actually null -
+## inventory_manager.gd and base_monster.gd already exclude it
+## specifically, this copied the check before those were fixed. Confirms
+## the real player node in this single-player headless session doesn't
+## consider itself networked.
+func _p2o_offline_player_not_net_active() -> void:
+	var player := get_tree().get_first_node_in_group("player")
+	if player == null:
+		_fail("P2o no player to check")
+		return
+	if multiplayer.multiplayer_peer == null:
+		_fail("P2o test invalid: multiplayer_peer is actually null here, can't tell OfflineMultiplayerPeer exclusion apart from a plain null check")
+		return
+	if not (multiplayer.multiplayer_peer is OfflineMultiplayerPeer):
+		_fail("P2o test invalid: multiplayer_peer is not OfflineMultiplayerPeer in this headless session (got %s) - assumption behind this test doesn't hold" % multiplayer.multiplayer_peer.get_class())
+		return
+	if bool(player.get("_net_active")):
+		_fail("P2o single-player session with only the default OfflineMultiplayerPeer set _net_active=true - RPCs would fire on yourself every physics frame")
+		return
+	_log("P2o offline player correctly does not treat OfflineMultiplayerPeer as a live network - OK")
 
 # ── P3 ────────────────────────────────────────────────────────────────
 func _p3_save_load_lang() -> void:
