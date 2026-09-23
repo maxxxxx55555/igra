@@ -537,7 +537,40 @@ imported 2930; P2m: mtime unchanged), pass on the fix. Existing `save_integrity_
 Static gates 19/20 (pre-existing `i18n_truth_gate` FAIL only), `flow_check.py` OK,
 `scene_node_check.py` OK. Committed `a36ac8b`, pushed, push verified.
 
-**Next**: the remaining BREAK_REPORT items in severity order (B15, B16, Q1), then SEC-CLOSE,
+**C1 BREAK-CLOSE, Q1 (park heartbeat `ppos=(inf, inf, inf)` is not evidence the transform is
+INF):** this was a QUESTION, not a bug claim - answered rather than "fixed." Confirmed the report's
+own suspicion: `_qa_autoplay_runner.gd`'s heartbeat computed `ppos := _player.global_position if
+_player_ok() else Vector3.INF`, and `_player_ok()` is `is_instance_valid(_player) and
+is_inside_tree()`. So `(inf,inf,inf)` in that log was ALWAYS the `_player_ok()==false` fallback
+sentinel, collapsing three different real situations (freed player node, player simply not in the
+tree yet at this exact tick, or - never actually distinguished before - a genuinely broken NaN/INF
+transform) into one indistinguishable string.
+
+Fix (a real diagnostic improvement, not a guess): the heartbeat now logs `valid=`/`in_tree=`/
+`finite=` separately, so a future run can tell which of the three is actually happening.
+
+Answered empirically with a new GOLD MASTER suite probe (P2n): travels to park specifically (the
+report's own named repro district) via the real `DistrictManager.transition_to()`, and checks
+validity/tree-membership/finiteness on the very first tick the district id flips - same intent as
+the report's own suggested probe, just run through the suite's reliable transition path instead of
+waiting on the autoplay bot's spine AI (which hit its own separate, already-known residential
+softlock in a live attempt before ever reaching park - see the still-open item noted in Session 4).
+Result: player is valid, in-tree, and finite immediately after entering park headless
+(`pos=(-8, ~1, -8)`), never `(inf,inf,inf)` and never a deep-negative Y. This rules out a
+genuinely-broken transform and a freed/detached player node as explanations for the original
+ambiguous log line, in this environment. It does NOT clear B15 itself - the report frames B15 as
+needing an actual windowed frame hitch between `add_child` and `street_builder.gd`'s deferred
+`build()`, which headless timing (already shown in B10 to NOT match real frame pacing) can't
+reproduce. B15 and B16 both stay `NEEDS-RUNTIME-CONFIRM`, honestly still open - they need a real
+windowed run on a machine with a GPU, which this pass has not attempted yet. Static gates 19/20
+(pre-existing `i18n_truth_gate` FAIL only), `flow_check.py` OK, `scene_node_check.py` OK. Committed
+`a0ec4ee`, pushed, push verified (one transient TLS blip on the verification fetch itself, resolved
+on retry - not a push failure).
+
+**Next**: B15 and B16 need a real windowed run (GPU-backed, not headless) to even attempt - this
+pass has not done that yet. If a windowed run isn't practical in this environment, they get
+recorded honestly as still-open NEEDS-RUNTIME-CONFIRM items rather than guessed shut. Then
+SEC-CLOSE,
 SLOP-CLEAN, TZ-CLOSE, finish P2, I18N-FINAL, sign-off - per the studio-lead directive's own phase
 order. Every remaining report claim gets the same treatment: verify empirically before fixing,
 verify the fix with a real A/B control, correct the report's own claim (or an existing test's own
