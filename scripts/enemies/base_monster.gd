@@ -683,8 +683,13 @@ func _die() -> void:
 	_death_timer = 3.0
 	EventBus.enemy_killed.emit(monster_id)
 	EventBus.enemy_died.emit(global_position)
+	# BREAK_REPORT B8: this emitted EventBus's own (now-removed) coins_changed
+	# signal directly instead of calling CoinWallet.add() - the roll never reached the real wallet
+	# at all (shop/quests use CoinWallet, so kills paid nothing spendable),
+	# and the HUD (listening to this same wrong signal) displayed the raw
+	# per-kill roll as if it were the total balance.
 	# Модификаторы с ручкой "rewards" (Sprint) масштабируют выплату монет.
-	EventBus.coins_changed.emit(int(round(randi_range(5, 15) * NewGamePlus.get_modifier_multiplier("rewards"))))
+	CoinWallet.add(int(round(randi_range(5, 15) * NewGamePlus.get_modifier_multiplier("rewards"))))
 	_death_effect()
 	_maybe_drop_loot()
 

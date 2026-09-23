@@ -931,7 +931,10 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 	header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	content.add_child(header)
 	header.text = LocalizationManager.t("SCR_MONETY_2") + str(CoinWallet.get_coins())
-	EventBus.coins_changed.connect(func(v: int): header.text = LocalizationManager.t("SCR_MONETY_2") + str(v), CONNECT_ONE_SHOT)
+	# BREAK_REPORT B8: was EventBus's own (now-removed) coins_changed, which
+	# nothing but a kill roll ever emitted - a real shop purchase never
+	# refreshed this header.
+	CoinWallet.coins_changed.connect(func(v: int): header.text = LocalizationManager.t("SCR_MONETY_2") + str(v), CONNECT_ONE_SHOT)
 	var tab_h := HBoxContainer.new()
 	tab_h.size = Vector2(content.size.x, 28)
 	tab_h.position = Vector2(0, 34)

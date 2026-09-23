@@ -38,7 +38,6 @@ signal player_died
 signal achievement_unlocked(achievement_id: String)
 signal boss_defeated()
 signal boss_spawned()
-signal coins_changed(amount: int)
 signal district_blackout(district_id: StringName)
 signal district_restored(district_id: StringName, stage: int)
 signal district_stage_changed(district_id: StringName, stage: int)

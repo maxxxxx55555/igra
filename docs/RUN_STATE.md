@@ -372,8 +372,41 @@ assertions across both fail on the reverted code, pass on fixed.
 
 craft_check + attack_sim + GOLD MASTER suite: 0 fails. Static gates unchanged (19/20).
 
-**Next**: B8 (kills don't pay the wallet; coin HUD shows the kill roll as if it were the
-balance), then the remaining BREAK_REPORT items in severity order (B10-B16, Q1), then SEC-CLOSE,
+**C1 BREAK-CLOSE, B8 (high — kills don't pay the wallet, coin HUD shows the kill roll instead of
+the balance):** report's claim confirmed exactly. `base_monster.gd`'s `_die()` emitted `EventBus`'s
+own `coins_changed` signal directly with the kill-reward roll, instead of calling
+`CoinWallet.add()` - kills paid nothing spendable at all (shop/quests only ever check the real
+wallet). Worse than the report's own framing once traced further: `coin_hud.gd` and one shop
+header in `screens.gd` both listened ONLY to that same wrong signal, which NOTHING else in the
+whole codebase ever emitted - meaning the coin HUD never refreshed for any REAL coin change
+either (shop purchases, quest rewards, secret finds, achievement payouts all go through
+`CoinWallet.add()`, which fires `CoinWallet`'s own, different `coins_changed`). The only time
+either display ever updated after boot was a kill, showing the raw 5-15 roll as if it were the
+total balance - exactly the report's title, but for every coin source, not just kills.
+
+Fixed at the root for all three sites: `base_monster.gd` now calls `CoinWallet.add()`; both UI
+listeners now subscribe to `CoinWallet`'s real signal instead. Removed the now-fully-dead
+`EventBus.coins_changed` signal declaration (zero emitters, zero listeners left) rather than
+leave an unused, confusingly-similarly-named signal sitting next to the real one - a plausible
+reason this bug existed in the first place.
+
+Real methodological catch while wiring this up: my own explanatory comments (three new, one from
+much earlier this session) that named the old signal as `EventBus.coins_changed` in prose tripped
+`autoload_api_check_scene.tscn`'s existing gate - it scans raw file text for `Autoload.member`
+patterns and can't tell code from comments. Ran that gate standalone (not part of `--static`,
+only in the full engine battery I hadn't run end-to-end recently) and found 4 false-positive
+fails, 3 from this commit's own comments and one pre-existing since an earlier B1b comment this
+same session. Reworded all 4 to describe the old signal without the literal dotted form, rather
+than weaken the gate's own matching to accommodate prose.
+
+Added a real regression test (GOLD MASTER suite P2h): kills a real monster with lethal damage,
+asserts `CoinWallet.get_coins()` actually increases. A/B confirmed: fails on reverted code
+(`2720 -> 2720`), passes on fixed (`2720 -> 2728`).
+
+craft_check + attack_sim + signal-arity + autoload-api + GOLD MASTER suite: 0 fails. Static gates
+unchanged (19/20).
+
+**Next**: the remaining BREAK_REPORT items in severity order (B10-B16, Q1), then SEC-CLOSE,
 SLOP-CLEAN, TZ-CLOSE, finish P2, I18N-FINAL, sign-off - per the studio-lead directive's own phase
 order. Every remaining report claim gets the same treatment: verify empirically before fixing,
 verify the fix with a real A/B control, correct the report's own claim (or an existing test's own

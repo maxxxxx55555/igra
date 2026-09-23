@@ -116,6 +116,7 @@ func _run() -> void:
 	await _p2e_skill_stack_race()
 	await _p2f_secret_full_backpack()
 	await _p2g_quest_reward_full_backpack()
+	await _p2h_kill_pays_wallet()
 	await _p6_soak()
 	_finish()
 
@@ -153,7 +154,7 @@ func _p1_new_game() -> void:
 # ── P1b ───────────────────────────────────────────────────────────────
 ## Input.action_press()/action_release() only update polling state (Input.
 ## is_action_pressed) — they do NOT reach _input/_unhandled_input (Godot's
-## own documented behavior). InputService.gd's stealth/interact/quick_slot
+## own documented behavior). InputService's own stealth/interact/quick_slot
 ## handling is event-driven (_unhandled_input), so a real InputEventAction
 ## via parse_input_event is required to actually exercise those paths;
 ## action_press() would silently no-op them while still "passing" a
@@ -283,6 +284,35 @@ func _p2b_combat() -> void:
 			_fail("P2b take_damage did not reduce hp: %.1f -> %.1f" % [hp0, hp1])
 		else:
 			_log("P2b combat: hp %.1f -> %.1f — OK" % [hp0, hp1])
+	holder.queue_free()
+	await get_tree().process_frame
+
+## BREAK_REPORT B8 regression: a kill must pay the REAL wallet
+## (CoinWallet), not just fire a display-only signal nothing else reads.
+func _p2h_kill_pays_wallet() -> void:
+	var holder := Node3D.new()
+	holder.name = "QAKillHolder"
+	add_child(holder)
+	var inst := (load("res://scenes/districts/suburbs.tscn") as PackedScene).instantiate()
+	holder.add_child(inst)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var monsters := get_tree().get_nodes_in_group("monsters")
+	if monsters.is_empty():
+		_fail("P2h no monsters in group after building suburbs")
+		holder.queue_free()
+		return
+	var m: Node = monsters[0]
+	var before: int = CoinWallet.get_coins()
+	m.take_damage(99999.0)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	if is_instance_valid(m):
+		_fail("P2h monster survived 99999 damage - can't test the kill payout")
+	elif CoinWallet.get_coins() <= before:
+		_fail("P2h kill did not pay CoinWallet: %d -> %d" % [before, CoinWallet.get_coins()])
+	else:
+		_log("P2h kill pays wallet: %d -> %d - OK" % [before, CoinWallet.get_coins()])
 	holder.queue_free()
 	await get_tree().process_frame
 
