@@ -120,6 +120,8 @@ func _run() -> void:
 	await _p2i_district_save_position_race()
 	await _p2j_locked_district_travel_blocked()
 	await _p2k_streetlight_activated_fires_once()
+	await _p2l_import_save_survives_next_autosave()
+	await _p2m_autosave_writes_real_save()
 	await _p6_soak()
 	_finish()
 
@@ -457,6 +459,83 @@ func _p2k_streetlight_activated_fires_once() -> void:
 		_fail("P2k streetlight_activated fired %d times for one district's PARTIAL->STREETS->FULL repair (expected exactly 1, at the STREETS crossing)" % fire_count[0])
 		return
 	_log("P2k streetlight_activated fires exactly once per district - OK")
+
+## BREAK_REPORT B13a regression: import_save_from_file() used to only
+## overwrite the file on disk - the live session's in-memory state never
+## refreshed, so the very next event-driven _save() (district-enter,
+## secret, puzzle, purchase) immediately clobbered the import with the
+## stale pre-import state. Exports the current state, mutates the live
+## wallet, saves (simulating ongoing play with that mutation already on
+## disk), imports (should restore the pre-mutation state on disk AND live),
+## then replays the report's "Travel, or pick up a secret" step (another
+## real _save()) and checks the file still holds the pre-mutation balance.
+func _p2l_import_save_survives_next_autosave() -> void:
+	var wallet := get_node_or_null("/root/CoinWallet")
+	if wallet == null:
+		_fail("P2l CoinWallet autoload missing")
+		return
+	var original: int = wallet.get_coins()
+	# export_save_to_file() copies whatever is CURRENTLY on SAVE_PATH - an
+	# earlier phase's save may be stale relative to the live wallet right
+	# now, so force a fresh write first or the exported snapshot won't
+	# actually match `original`.
+	SaveSystem.save_all()
+	if not SaveSystem.export_save_to_file():
+		_fail("P2l export_save_to_file failed")
+		return
+	wallet.add(777)
+	SaveSystem.save_all()
+	if not SaveSystem.import_save_from_file():
+		_fail("P2l import_save_from_file failed")
+		wallet.from_dict({"coins": original})
+		SaveSystem.save_all()
+		return
+	SaveSystem.save_all()
+	var saved_coins := _p2l_read_saved_coins()
+	# Restore live state to what the (correct) import should leave it at,
+	# regardless of outcome, so later phases aren't affected by this test.
+	wallet.from_dict({"coins": original})
+	SaveSystem.save_all()
+	if saved_coins != original:
+		_fail("P2l import was clobbered by the next autosave: file has %d coins, expected the imported %d" % [saved_coins, original])
+		return
+	_log("P2l import survives the next event-driven autosave - OK")
+
+func _p2l_read_saved_coins() -> int:
+	var f := FileAccess.open(SaveSystem.SAVE_PATH, FileAccess.READ)
+	if f == null:
+		return -1
+	var outer := JSON.new()
+	if outer.parse(f.get_as_text()) != OK:
+		return -1
+	var inner := JSON.new()
+	if inner.parse(String((outer.data as Dictionary).get("data_json", ""))) != OK:
+		return -1
+	var wallet_dict: Dictionary = (inner.data as Dictionary).get("wallet", {})
+	return int(wallet_dict.get("coins", -1))
+
+## BREAK_REPORT B13b regression: the periodic autosave used to write
+## save_slot(4), a slot nothing reachable in the shipping game (the
+## multi-slot picker UI was archived) ever reads - Continue only reads
+## SAVE_PATH via load_all(). Forces one autosave tick and confirms
+## SAVE_PATH's own mtime actually advances (the fix routes the timer
+## through _save(), which writes SAVE_PATH; the bug wrote a different file
+## entirely and never touched this one).
+func _p2m_autosave_writes_real_save() -> void:
+	if not FileAccess.file_exists(SaveSystem.SAVE_PATH):
+		_fail("P2m no save file present to check")
+		return
+	var before := FileAccess.get_modified_time(SaveSystem.SAVE_PATH)
+	# Real filesystem mtimes are 1-second granularity on some platforms;
+	# without this the write can land in the same second and look like a
+	# no-op even when it genuinely wrote.
+	await get_tree().create_timer(1.1).timeout
+	SaveSystem._process(999.0)
+	var after := FileAccess.get_modified_time(SaveSystem.SAVE_PATH)
+	if after <= before:
+		_fail("P2m periodic autosave tick did not write SAVE_PATH (mtime unchanged: %d)" % before)
+		return
+	_log("P2m periodic autosave writes the real save Continue reads - OK")
 
 # ── P3 ────────────────────────────────────────────────────────────────
 func _p3_save_load_lang() -> void:

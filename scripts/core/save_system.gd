@@ -59,7 +59,15 @@ func import_save_from_file(dest_path: String = SAVE_PATH, filename: String = EXP
 		return false
 	if FileAccess.file_exists(dest_path):
 		DirAccess.copy_absolute(dest_path, dest_path + ".bak")
-	return DirAccess.copy_absolute(path, dest_path) == OK
+	if DirAccess.copy_absolute(path, dest_path) != OK:
+		return false
+	# BREAK_REPORT B13: this used to only overwrite the file on disk. The
+	# live session's in-memory state never changed, so the next
+	# district-enter/secret/puzzle/purchase autosave (_save(), below)
+	# immediately clobbered the import with the stale pre-import state.
+	if dest_path == SAVE_PATH:
+		load_all()
+	return true
 
 var _pending_player_pos: Vector3 = Vector3.INF
 var _autosave_timer: float = AUTOSAVE_INTERVAL
@@ -86,7 +94,13 @@ func _process(delta: float) -> void:
 	_autosave_timer -= delta
 	if _autosave_timer <= 0.0:
 		_autosave_timer = AUTOSAVE_INTERVAL
-		save_slot(4)  # autosave to slot 4
+		# BREAK_REPORT B13: this used to write save_slot(4), a slot Continue
+		# (load_all() / SAVE_PATH) never reads - the multi-slot picker UI
+		# that could load it was archived, so the timer protected nothing.
+		# A crash rolled back to the last event-driven _save() (travel,
+		# secret, puzzle, purchase), not to within 30 seconds. Writing the
+		# real save here is what "protects a crash" actually requires.
+		_save()
 
 func has_save() -> bool:
 	return FileAccess.file_exists(SAVE_PATH)
