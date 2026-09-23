@@ -117,6 +117,7 @@ func _run() -> void:
 	await _p2f_secret_full_backpack()
 	await _p2g_quest_reward_full_backpack()
 	await _p2h_kill_pays_wallet()
+	await _p2i_district_save_position_race()
 	await _p6_soak()
 	_finish()
 
@@ -315,6 +316,76 @@ func _p2h_kill_pays_wallet() -> void:
 		_log("P2h kill pays wallet: %d -> %d - OK" % [before, CoinWallet.get_coins()])
 	holder.queue_free()
 	await get_tree().process_frame
+
+## Reads player_pos out of the live save file (bypassing SaveSystem.load_all(),
+## which would mutate live autoload state other phases still need). Returns
+## Vector3.INF if the file/JSON/field isn't there.
+func _p2i_read_saved_player_pos() -> Vector3:
+	var f := FileAccess.open(SaveSystem.SAVE_PATH, FileAccess.READ)
+	if f == null:
+		return Vector3.INF
+	var outer := JSON.new()
+	if outer.parse(f.get_as_text()) != OK:
+		return Vector3.INF
+	var inner := JSON.new()
+	if inner.parse(String((outer.data as Dictionary).get("data_json", ""))) != OK:
+		return Vector3.INF
+	var saved_pos: Array = (inner.data as Dictionary).get("player_pos", [])
+	if saved_pos.size() < 3:
+		return Vector3.INF
+	return Vector3(saved_pos[0], saved_pos[1], saved_pos[2])
+
+## BREAK_REPORT B10 regression: the district-enter autosave used to be a
+## listener connected directly to EventBus.district_entered, the same signal
+## DistrictManager.transition_to() emits SYNCHRONOUSLY before it even
+## returns - so that listener wrote the PRE-teleport position to disk before
+## load_district() had a chance to run at all. A later, physics-driven
+## re-fire of the same signal (once the placed player overlaps the new
+## district's own trigger volume) then silently re-saves the correct
+## position within the same headless frame this test's earlier
+## frame-count/position-poll versions used, self-healing the bug before any
+## practical wait could observe it - so this checks the file the instant
+## transition_to() returns, with no await at all, which is also the
+## faithful repro of the report's own "quit right after crossing" scenario.
+func _p2i_district_save_position_race() -> void:
+	if not GameManager.is_playing():
+		_fail("P2i started outside PLAYING (state=%d)" % GameManager.current_state)
+		return
+	var player := get_tree().get_first_node_in_group("player")
+	var dm := get_node_or_null("/root/DistrictManager")
+	if player == null or dm == null:
+		_fail("P2i no player/DistrictManager to test against")
+		return
+	var target: StringName = &"park" if String(dm.current_district) != "park" else &"suburbs"
+	var marker := Vector3(500.0, 1.0, 500.0)
+	player.global_position = marker
+	dm.transition_to(String(target))
+	var immediate_saved := _p2i_read_saved_player_pos()
+	if immediate_saved != Vector3.INF and immediate_saved.distance_to(marker) < 1.0:
+		_fail("P2i district-enter autosave wrote the pre-teleport marker position %s to disk (stale save)" % immediate_saved)
+		return
+	# Let the transition fully settle, then also confirm the save eventually
+	# reflects where the player actually ended up.
+	var frames_waited := 0
+	const MAX_FRAMES := 120
+	while player.global_position.distance_to(marker) < 1.0 and frames_waited < MAX_FRAMES:
+		await get_tree().process_frame
+		frames_waited += 1
+	if player.global_position.distance_to(marker) < 1.0:
+		_fail("P2i player never actually moved off the test marker position within %d frames" % MAX_FRAMES)
+		return
+	if String(dm.current_district) != String(target):
+		_fail("P2i district did not reach '%s'" % target)
+		return
+	var final_pos: Vector3 = player.global_position
+	var saved := _p2i_read_saved_player_pos()
+	if saved == Vector3.INF:
+		_fail("P2i save file missing/invalid after a district-entered autosave")
+		return
+	if saved.distance_to(final_pos) > 1.0:
+		_fail("P2i saved position %s does not match actual post-transition position %s (stale save)" % [saved, final_pos])
+		return
+	_log("P2i district save position race: no stale marker write, saved position matches post-transition spawn - OK")
 
 # ── P3 ────────────────────────────────────────────────────────────────
 func _p3_save_load_lang() -> void:

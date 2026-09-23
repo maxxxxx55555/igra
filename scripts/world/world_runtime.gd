@@ -21,11 +21,6 @@ func _ready() -> void:
 	name = "WorldRuntime"
 	# Переход между районами инициирует DistrictTrigger/DistrictManager.
 	EventBus.district_entered.connect(_on_district_entered)
-	# Автосейв при входе в район раньше вёл SaveLoad — он удалён как второй
-	# конкурирующий формат, обязанность переехала на единственный SaveSystem.
-	EventBus.district_entered.connect(func(_id: StringName) -> void:
-		if GameManager.is_playing():
-			SaveSystem.save_all())
 	# Стартовый район поднимаем отложенно: игрок и HUD должны быть в дереве,
 	# иначе EnemyPool спавнит врагов вокруг ещё не существующей цели.
 	call_deferred("_load_initial")
@@ -66,6 +61,17 @@ func load_district(district_id: StringName) -> void:
 	if dm != null:
 		dm.current_district = String(district_id)
 	_loading = false
+	# BREAK_REPORT B10: the autosave used to be a separate listener on
+	# EventBus.district_entered - the same signal that ALSO (via
+	# _on_district_entered's own deferred call) triggers this whole
+	# rebuild. DistrictSceneFactory.build() re-emits district_entered
+	# synchronously from inside itself, so that listener always fired
+	# before _place_player() ran below it in this same function -
+	# save_all() captured the pre-teleport position every time, whichever
+	# of the two emits triggered it. Moved the save to here, after the
+	# district pointer and player position are both actually correct.
+	if GameManager.is_playing():
+		SaveSystem.save_all()
 
 ## Ставит игрока на сохранённую позицию, иначе на точку старта района.
 ## Восстановление позиции жило в world_map.gd, которого нет в игровой сцене,
