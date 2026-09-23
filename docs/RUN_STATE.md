@@ -454,7 +454,35 @@ documented `i18n_truth_gate` overflow-heuristic FAIL, unrelated), `flow_check.py
 `scene_node_check.py` OK, GOLD MASTER suite 0 fails (P2i included). Committed `cc1e0b3`, pushed,
 push verified (`git rev-parse main` == `git ls-remote origin main`).
 
-**Next**: the remaining BREAK_REPORT items in severity order (B11-B16, Q1), then SEC-CLOSE,
+**C1 BREAK-CLOSE, B11 (district locks enforced only by the map button):** report's claim
+confirmed. `DistrictManager.transition_to()` never checked `PowerGrid.is_unlocked()` - only
+`city_map.gd`'s Travel button did, via its `disabled` state. Any other direct caller of
+`transition_to()` (the QA autoplay bot's own fallback path, used when the map button can't be
+found for some reason) skipped the check entirely. Confirmed walking triggers were NOT a real
+second path, contrary to a first-glance worry: `DistrictTrigger` only exists inside districts
+`WorldRuntime` has already built, i.e. districts already entered - there's no trigger to walk into
+for a district that was never built because it's still locked.
+
+Fix: `transition_to()` now checks `PowerGrid.is_unlocked(district_id)` itself and returns early
+(no-op, same as a disabled button) if false (`scripts/district_manager.gd`).
+
+Regression test (GOLD MASTER suite P2j): runs after P2c has already advanced every district to
+FULL for its own boss-race test, so this test de-levels one district's real prerequisite back to
+DARK first, confirms `is_unlocked()` agrees, calls the real `transition_to()`, and checks
+`current_district` didn't move - then restores the prerequisite's stage so later phases aren't
+affected. A/B confirmed: fails on the unguarded code ("entered locked district 'school'"), passes
+on the fix.
+
+This is a real behavior change (travel can now be refused where it wasn't before), so ran the IRON
+RULE check: `QA_SEED=1` autoplay_bot still reaches all 11 districts FULL and WINS with the fix in
+place - no new softlock, and the district progression order the bot already follows never actually
+depended on skipping ahead of a lock. (Noted for later, not blocking: the bot's own longer/soak
+runs from earlier in this session showed an unrelated, pre-existing boss-phase softlock on some
+seeds - separate from this fix, already tracked as its own open item.) Static gates 19/20 (only
+the pre-existing `i18n_truth_gate` FAIL), `flow_check.py` OK, `scene_node_check.py` OK. Committed
+`d7a0692`, pushed, push verified.
+
+**Next**: the remaining BREAK_REPORT items in severity order (B12-B16, Q1), then SEC-CLOSE,
 SLOP-CLEAN, TZ-CLOSE, finish P2, I18N-FINAL, sign-off - per the studio-lead directive's own phase
 order. Every remaining report claim gets the same treatment: verify empirically before fixing,
 verify the fix with a real A/B control, correct the report's own claim (or an existing test's own
