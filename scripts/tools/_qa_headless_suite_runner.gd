@@ -118,6 +118,7 @@ func _run() -> void:
 	await _p2g_quest_reward_full_backpack()
 	await _p2h_kill_pays_wallet()
 	await _p2i_district_save_position_race()
+	await _p2j_locked_district_travel_blocked()
 	await _p6_soak()
 	_finish()
 
@@ -386,6 +387,39 @@ func _p2i_district_save_position_race() -> void:
 		_fail("P2i saved position %s does not match actual post-transition position %s (stale save)" % [saved, final_pos])
 		return
 	_log("P2i district save position race: no stale marker write, saved position matches post-transition spawn - OK")
+
+## BREAK_REPORT B11 regression: DistrictManager.transition_to() used to
+## enforce the district-lock rule nowhere - only the city map's Travel
+## button checked PowerGrid.is_unlocked() before calling transition_to(),
+## so any other caller (the QA bot's own fallback path, this test) could
+## walk straight into a district whose prerequisite district was never
+## repaired. De-levels a district's real prerequisite back to DARK
+## (runs after P2c has already advanced everything to FULL, so this is
+## the only way left to get a genuinely locked target), confirms
+## is_unlocked() agrees, then calls the real transition_to() and checks
+## current_district did not move.
+func _p2j_locked_district_travel_blocked() -> void:
+	var pg := get_node_or_null("/root/PowerGrid")
+	var dm := get_node_or_null("/root/DistrictManager")
+	if pg == null or dm == null:
+		_fail("P2j PowerGrid/DistrictManager autoload missing")
+		return
+	var target: StringName = &"school" if String(dm.current_district) != "school" else &"hospital"
+	var parent_id: StringName = pg.get_district(target).powered_by[0]
+	var parent_stage_before: int = pg.get_stage(parent_id)
+	pg.get_district(parent_id).stage = DistrictData.Stage.DARK
+	if pg.is_unlocked(target):
+		_fail("P2j test setup failed: '%s' still unlocked after de-leveling its prerequisite '%s'" % [target, parent_id])
+		pg.get_district(parent_id).stage = parent_stage_before as DistrictData.Stage
+		return
+	var before: String = String(dm.current_district)
+	dm.transition_to(String(target))
+	var after: String = String(dm.current_district)
+	pg.get_district(parent_id).stage = parent_stage_before as DistrictData.Stage
+	if after != before:
+		_fail("P2j transition_to() entered locked district '%s' (prerequisite '%s' was DARK)" % [target, parent_id])
+		return
+	_log("P2j locked district travel blocked: transition_to() correctly refused - OK")
 
 # ── P3 ────────────────────────────────────────────────────────────────
 func _p3_save_load_lang() -> void:

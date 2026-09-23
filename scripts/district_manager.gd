@@ -62,5 +62,8 @@ func transition_to(district_id: String) -> void:
 		return
 	if not DISTRICTS.has(district_id):
 		return
+	var pg := _grid()
+	if pg != null and not pg.is_unlocked(StringName(district_id)):
+		return
 	current_district = district_id
 	EventBus.district_entered.emit(StringName(district_id))
