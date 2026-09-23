@@ -80,18 +80,30 @@ func _place_player(root: Node3D) -> void:
 	var player := get_tree().get_first_node_in_group("player")
 	if player == null or not (player is Node3D):
 		return
+	var target: Vector3
 	var saved: Vector3 = SaveSystem.consume_pending_player_pos()
 	if saved != Vector3.INF:
-		(player as Node3D).global_position = saved
-		return
-	var spawn := root.get_node_or_null("PlayerSpawn")
-	if spawn is Node3D:
-		(player as Node3D).global_position = (spawn as Node3D).global_position
-		return
-	# Узла PlayerSpawn нет ни в одной из 11 сцен районов, поэтому при переходе
-	# игрок оставался на координатах прошлого района — мог оказаться в стене
-	# или за краем квартала. Ставим его на ближний к центру перекрёсток.
-	(player as Node3D).global_position = root.global_position + PLAYER_SPAWN_POS
+		target = saved
+	else:
+		var spawn := root.get_node_or_null("PlayerSpawn")
+		if spawn is Node3D:
+			target = (spawn as Node3D).global_position
+		else:
+			# Узла PlayerSpawn нет ни в одной из 11 сцен районов, поэтому при
+			# переходе игрок оставался на координатах прошлого района — мог
+			# оказаться в стене или за краем квартала. Ставим его на ближний
+			# к центру перекрёсток.
+			target = root.global_position + PLAYER_SPAWN_POS
+	(player as Node3D).global_position = target
+	# BREAK_REPORT B15: street_builder.gd's road collision is built via a
+	# deferred call, one frame after this. Fall recovery in player_3d.gd
+	# used to only arm once the player had actually STOOD on a floor -
+	# zero net for the frame(s) right after any teleport, including this
+	# one, if a hitch dropped the player through geometry that isn't
+	# solid yet. Arming it with the intended spawn point immediately
+	# closes that specific gap without needing to wait for a real floor.
+	if player.has_method("mark_spawn_as_grounded"):
+		player.mark_spawn_as_grounded(target)
 
 func current_district() -> StringName:
 	return _current_id

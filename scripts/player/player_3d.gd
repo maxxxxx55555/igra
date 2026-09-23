@@ -363,6 +363,17 @@ func _check_fall_recovery() -> void:
 	velocity = Vector3.ZERO
 	_airborne_sec = 0.0
 
+## BREAK_REPORT B15: WorldRuntime calls this right after placing the player
+## for a new district, marking that spawn as a safe fall-recovery target
+## immediately. Previously _last_grounded_pos only armed once is_on_floor()
+## had actually been true at least once this run, so a hitch between
+## add_child and street_builder.gd's deferred road-collision build had zero
+## safety net - exactly the frame(s) most exposed to falling through floor
+## that doesn't exist yet.
+func mark_spawn_as_grounded(pos: Vector3) -> void:
+	_last_grounded_pos = pos
+	_airborne_sec = 0.0
+
 ## Камера ищется отдельно от старта игры: направление движения считается от её
 ## базиса, поэтому до первого game_started ссылка тоже обязана быть валидной.
 func _resolve_camera() -> void:

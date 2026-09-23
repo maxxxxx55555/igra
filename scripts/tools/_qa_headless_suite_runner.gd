@@ -124,6 +124,7 @@ func _run() -> void:
 	await _p2m_autosave_writes_real_save()
 	await _p2n_q1_park_heartbeat_probe()
 	await _p2o_offline_player_not_net_active()
+	await _p2p_fall_recovery_armed_on_spawn()
 	await _p6_soak()
 	_finish()
 
@@ -606,6 +607,52 @@ func _p2o_offline_player_not_net_active() -> void:
 		_fail("P2o single-player session with only the default OfflineMultiplayerPeer set _net_active=true - RPCs would fire on yourself every physics frame")
 		return
 	_log("P2o offline player correctly does not treat OfflineMultiplayerPeer as a live network - OK")
+
+## BREAK_REPORT B15 regression: fall recovery in player_3d.gd used to only
+## arm _last_grounded_pos once is_on_floor() had actually been true at
+## least once this run - zero safety net for the very first frame(s) after
+## any teleport, including a district transition landing before
+## street_builder.gd's deferred road-collision build has run, if a hitch
+## dropped the player through the not-yet-solid floor. WorldRuntime now
+## calls player.mark_spawn_as_grounded() right after positioning the
+## player, arming the net with the intended spawn immediately.
+##
+## Two checks: (1) a direct unit check that mark_spawn_as_grounded()
+## actually sets state, isolated from real physics/transition timing;
+## (2) resets to the exact "never grounded" sentinel the bug depends on,
+## then confirms a real district transition arms it via the earliest
+## observable check (same technique as B10/P2i - no extra frames of
+## margin, since natural is_on_floor() grounding could otherwise mask the
+## same gap this exists to catch).
+func _p2p_fall_recovery_armed_on_spawn() -> void:
+	var player := get_tree().get_first_node_in_group("player")
+	var dm := get_node_or_null("/root/DistrictManager")
+	if player == null or dm == null:
+		_fail("P2p no player/DistrictManager to test against")
+		return
+	if not player.has_method("mark_spawn_as_grounded"):
+		_fail("P2p player_3d.gd has no mark_spawn_as_grounded() method")
+		return
+	# (1) direct unit check
+	player.set("_last_grounded_pos", Vector3.ZERO)
+	player.mark_spawn_as_grounded(Vector3(11.0, 22.0, 33.0))
+	if Vector3(player.get("_last_grounded_pos")) != Vector3(11.0, 22.0, 33.0):
+		_fail("P2p mark_spawn_as_grounded() did not set _last_grounded_pos")
+		return
+	# (2) real transition, earliest-frame check
+	player.set("_last_grounded_pos", Vector3.ZERO)
+	player.set("_airborne_sec", 0.0)
+	var target: StringName = &"park" if String(dm.current_district) != "park" else &"suburbs"
+	dm.transition_to(String(target))
+	var frames_waited := 0
+	const MAX_FRAMES := 120
+	while String(dm.current_district) != String(target) and frames_waited < MAX_FRAMES:
+		await get_tree().process_frame
+		frames_waited += 1
+	if Vector3(player.get("_last_grounded_pos")) == Vector3.ZERO:
+		_fail("P2p _last_grounded_pos still ZERO immediately after a district transition - the spawn had no fall-recovery net armed")
+		return
+	_log("P2p fall recovery armed on spawn (mark_spawn_as_grounded wired into WorldRuntime._place_player) - OK")
 
 # ── P3 ────────────────────────────────────────────────────────────────
 func _p3_save_load_lang() -> void:
