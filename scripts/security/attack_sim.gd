@@ -35,6 +35,7 @@ func _ready() -> void:
 	_check_ng_plus_modifiers_revalidated()
 	_check_reset_progress_clears_ng_plus()
 	_check_daily_challenge_forgery_rejected()
+	_check_progress_tracker_grant_unlocks_real_achievement()
 	_check_coin_wallet_absurd_values()
 	_check_district_id_injection_defended()
 	_check_cross_save_swap_no_corruption()
@@ -148,6 +149,41 @@ func _check_daily_challenge_forgery_rejected() -> void:
 	elif FileAccess.file_exists(path):
 		DirAccess.remove_absolute(path)
 	DailyChallengeManager.call("_load_state")
+
+# ── ProgressTracker short-id grants must go through the real API ─────────
+## BREAK_REPORT B7: ProgressTracker._grant() used to emit
+## EventBus.achievement_unlocked directly with short ids ("first_light"),
+## bypassing AchievementManager.unlock() entirely - the real ach_01 row
+## never actually unlocked (missing from the trophy list forever), while
+## rewards_manager.gd's blanket "any emit pays REWARD_ACHIEVEMENT" handler
+## paid coins anyway since it doesn't check which id fired. Drives the
+## real signal (EventBus.puzzle_solved) rather than calling _grant()
+## directly, so this proves the whole chain, not just the one function.
+func _check_progress_tracker_grant_unlocks_real_achievement() -> void:
+	# Full isolation, not just "first_light": _check_achievements() also
+	# grants district_one/shadow_slayer/secret_hunter from whatever state
+	# PowerGrid/kills/secrets happen to be in - a boot default (or an
+	# earlier check) can leave one of those already satisfied, which paid
+	# out a second, real 100 coins and made this look like a double-pay
+	# bug in the fix being tested here, when it was really test isolation.
+	PowerGrid.reset()
+	ProgressTracker.puzzles = 0
+	ProgressTracker.shadow_kills = 0
+	ProgressTracker.secrets = 0
+	ProgressTracker._ach_done.clear()
+	AchievementManager._unlocked.erase("ach_01")
+	CoinWallet.from_dict({})
+	var before: int = CoinWallet.get_coins()
+	var expected_reward: int = int(RewardsManager.REWARD_ACHIEVEMENT * NewGamePlus.get_modifier_multiplier("rewards"))
+	EventBus.puzzle_solved.emit(&"fuse_substation", &"substation")
+	_ok(AchievementManager.is_unlocked(&"ach_01"),
+		"ProgressTracker's first_light grant actually unlocks the real ach_01 row")
+	_ok(CoinWallet.get_coins() == before + expected_reward,
+		"achievement reward pays exactly once (%d), not double (got %d -> %d)" % [
+			expected_reward, before, CoinWallet.get_coins()])
+	AchievementManager._unlocked.erase("ach_01")
+	AchievementManager._save()
+	CoinWallet.from_dict({})
 
 # ── NG+ level forgery ───────────────────────────────────────────────────
 func _check_ng_plus_level_clamped() -> void:

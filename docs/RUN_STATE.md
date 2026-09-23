@@ -270,14 +270,76 @@ each version against its own real expected format instead.
 
 attack_sim + GOLD MASTER suite: 0 fails. Static gates unchanged (19/20).
 
-**Next**: the remaining BREAK_REPORT items in severity order (B7-B16, Q1), then SEC-CLOSE,
+**C1 BREAK-CLOSE, B7 (high — legacy achievements.cfg trust + bad coin payouts), plus a MAJOR
+unplanned discovery along the way:**
+
+The report's B7 has two halves. Left the first (legacy unsigned `achievements.cfg` trusted once)
+alone deliberately: `docs/SECURITY_PATCH_SPEC.md` P-02 explicitly frames this as a UX judgment
+call ("achievements are device-level history and should survive Reset Progress... rejecting old
+files may be a UX decision"), not a clear bug, and the studio-lead directive's own C1(d) named
+NG+/daily/achievements for *adding* signing (already present here) and named the MAIN save
+specifically for outright rejection (B4) - it did not say the same for achievements. Not
+guessing past an explicit, deliberate design tradeoff already on record.
+
+Fixed the second, clear half: `ProgressTracker._grant()` emitted `EventBus.achievement_unlocked`
+directly with short ids ("first_light") instead of calling the real `AchievementManager.unlock()`
+API every other caller (`photo_mode.gd`, `victory_screen.gd`) already uses for the exact same
+short-id -> `ach_*` mapping. Consequence: the real `ach_01` row never actually unlocked or
+persisted (permanently missing from the trophy list), while `rewards_manager.gd`'s blanket
+"any `achievement_unlocked` emit pays 100 coins" handler paid out anyway, since it never checks
+which id fired. Fixed by routing `_grant()` through `AchievementManager.unlock(id)` - the achievement
+now genuinely unlocks, through the one real, already-established path.
+
+**Building the regression test surfaced something much bigger than B7 itself.** First version
+of the test (drive a real `puzzle_solved` emit, assert exactly one 100-coin payout) failed with
+a payout of 200, not 100 - even after full state isolation (`PowerGrid.reset()`, clearing every
+`_ach_done`/`_unlocked` flag `_check_achievements()` could react to). Traced it with the same
+`print_stack()`-and-connection-dump discipline as B1's race condition, not guesswork:
+`EventBus.achievement_unlocked.get_connections()` showed `rewards_manager.gd`'s `_on_achievement`
+connected TWICE. `project.godot`'s `[autoload]` section had two dead lines - `#RewardsManager=...`
+and `#RandomEvents=...` - left over from someone trying to "disable" an autoload by prefixing its
+name with `#`. Godot's `[autoload]` parser does not treat that as a comment: it creates a real,
+active second instance literally named `#RewardsManager` under `/root`, running its own `_ready()`
+and connecting its own listeners alongside the correctly-named real one. Confirmed directly
+(`get_tree().root.get_children()` showed both `/root/#RewardsManager` and `/root/RewardsManager`
+present and live).
+
+**Actual impact: every coin reward in the entire game - achievements, secrets, district
+restoration - has been paid out DOUBLE**, for as long as both lines coexisted; `RandomEvents` had
+the identical duplicate-instance bug, running two independent random-interval timers rather than
+one, so blackout/surge/distress/accident events have been firing roughly twice as often as
+designed (each instance separately timed and separately rolling which event fires - not "the same
+event twice," two concurrent event streams). A third dead line, `#ScreenFlowManager=...`, has no
+live un-prefixed counterpart anywhere in the file, so it's a true no-op today (Godot still creates
+an oddly-named node for it, but nothing addresses that literal autoload name) - left it alone
+rather than touch something outside what's actually broken.
+
+Fixed by deleting both dead lines outright (`RewardsManager`/`RandomEvents` already have their
+real, correctly-named entries elsewhere in the same section). A/B confirmed in isolation from the
+`_grant()` fix: reverting only `project.godot` reproduces the exact 200-coin double-pay again;
+restoring it alone (with the `_grant()` fix still in place) brings it back to exactly 100.
+
+This is an economy-wide balance change (halving effective coin income from every one of these
+three sources back to its intended rate) far bigger in scope than B7 named, but it's a pure
+correctness fix - removing an accidental double-instantiation nobody designed - not a new balance
+decision, so it doesn't need a design judgment call the way B4/B6 did. Per IRON RULE it should
+still get 3-seed bot validation; the bot currently doesn't complete a full win in this
+environment regardless of any change in this session (see the B3 entry's dedicated finding), so
+that specific bar isn't achievable right now for this fix either, same honest gap - not
+suppressed here a second time.
+
+attack_sim + save-integrity + GOLD MASTER suite: 0 fails. Static gates unchanged (19/20).
+
+**Next**: the remaining BREAK_REPORT items in severity order (B8-B16, Q1), then SEC-CLOSE,
 SLOP-CLEAN, TZ-CLOSE, finish P2, I18N-FINAL, sign-off - per the studio-lead directive's own
 phase order. Every remaining report claim gets the same treatment: verify empirically before
 fixing, verify the fix with a real A/B control, correct the report's own claim (or an existing
 test's own hidden flaw, as B4/B6 found) in the commit if testing disagrees with it, and say so
-plainly when a claimed fix is actually an inherent limit (B6) rather than force a false "closed."
-The bot win-rate finding from B3 needs its own dedicated investigation before C7 - not blocking
-B4+ in the meantime, since it's independent of them too.
+plainly when a claimed fix is actually an inherent limit (B6) or a deliberate non-fix (B7's
+legacy-trust half) rather than force a false "closed." The bot win-rate finding from B3 needs its
+own dedicated investigation before C7 - not blocking B4+ in the meantime, since it's independent
+of them too. Also worth a quick separate look later: whether any OTHER `#`-prefixed autoload line
+besides the three found here has a live duplicate elsewhere in `project.godot`.
 
 ## Session 8: P2 MATRIX SWEEP begun — GOLD MASTER suite wired in, closes 35 rows
 

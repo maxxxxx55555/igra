@@ -67,9 +67,21 @@ func _check_achievements() -> void:
 		_grant("shadow_slayer")
 	if not _ach_done.get("secret_hunter", false) and secrets >= 3:
 		_grant("secret_hunter")
+## BREAK_REPORT B7: this used to emit EventBus.achievement_unlocked directly
+## with these short ids ("first_light" etc.), bypassing AchievementManager
+## entirely - the real ach_* row (ach_01 for "first_light") never actually
+## unlocked or persisted (missing from the trophy list forever), while
+## rewards_manager.gd's blanket "any achievement_unlocked emit pays
+## REWARD_ACHIEVEMENT coins" handler paid out anyway, since it doesn't
+## check which id fired. Other callers (photo_mode.gd, victory_screen.gd)
+## already go through the real API for the exact same short-id ->
+## ach_* mapping (achievements_manager.gd's own unlock()); this one just
+## never had been wired the same way. _ach_done stays as this class's own
+## "don't re-check the condition every frame" latch, separate from
+## AchievementManager's real _unlocked state.
 func _grant(id: String) -> void:
 	_ach_done[id] = true
-	EventBus.achievement_unlocked.emit(StringName(id))
+	AchievementManager.unlock(id)
 func _unlock_doc(id: String) -> void:
 	if _docs.get(id, false):
 		return
