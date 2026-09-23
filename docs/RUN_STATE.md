@@ -157,12 +157,53 @@ claim "bot ≥1/3" - flagged here rather than either silently blocked on it or s
 
 GOLD MASTER suite: 0 fails (P0-P6 + P2c/P2d/P2e). Static gates unchanged (19/20).
 
-**Next**: the remaining BREAK_REPORT items in severity order (B4-B16, Q1), then SEC-CLOSE,
+**C1 BREAK-CLOSE, B4 (high — checksum-only/no-progress_hmac saves trusted):** report's claim
+confirmed by direct reading, also directly named by the studio-lead directive's own C1(d)
+("REJECT checksum-only (no progress_hmac) saves on load"). Cross-checked against
+`docs/SECURITY_PATCH_SPEC.md` P-01 first since it covers the identical mechanism in more depth -
+the spec itself frames this as a genuine POLICY choice, not a pure bug ("Riskiest assumption:
+existing legacy players are more important than refusing an unauthenticated authority file"),
+and says a kept compat path "must not be called closed." The directive resolves that choice
+explicitly (reject), so implemented reject per the directive - documented as a deliberate policy
+change, not a free fix: this does orphan any genuinely legitimate save written before HMAC
+signing existed.
+
+Two real bypasses in the same class, both were "just omit the field":
+1. Outer envelope: no `hmac` fell back to trusting a plain, unkeyed `sha256_text()` "checksum" -
+   anyone can compute a correct sha256 of their own forged body, no secret needed.
+2. Inner `_verify_progress`: no `progress_hmac` at all skipped the check entirely, trusting
+   forged `power`/`progress` unverified (different from a MISMATCHED `progress_hmac`, which was
+   already correctly caught - only the missing case was the bug).
+
+Fixed both: missing/wrong `hmac` now rejects the whole envelope (`{}`, same as an existing wrong-
+checksum rejection); missing `progress_hmac` is now treated the same as a failed one (power/
+progress wiped). Verified the write path (`_save()`) always emits both fields already, so normal
+gameplay saves are unaffected - only saves missing either field are newly rejected.
+
+Extended the existing `_save_integrity_check.gd` probe (2 new cases) rather than the GOLD MASTER
+suite - this is squarely save-integrity's own home. Real methodological catch along the way,
+twice: (a) my first version of the legacy-checksum test didn't clear `.bak`/`.bak2`/`.bak3` first,
+so `_read_validated`'s backup fallback silently loaded a legitimate prior backup and the test
+passed for the wrong reason - fixed by adding the same `_remove_all_backups()` call
+`_check_corrupt_rejected` already uses; (b) both my new test AND the EXISTING, previously-trusted
+`_check_progress_signature()` check forge `power` in the wrong shape (`{"suburbs": {"stage": 3}}`)
+- `PowerGrid.to_dict()`'s real format is `{"stages": {district_id: int}}`, and `from_dict()`
+silently ignores anything not under `"stages"`, so the forged payload never reached PowerGrid at
+all regardless of whether the signature check worked. Fixed the shape in both tests (not just
+mine) and their assertions. A/B confirmed with the corrected shape against a reverted
+`save_system.gd`: the existing mismatched-`progress_hmac` case still correctly fails to reject
+even on old code (that mechanism was never broken - only the two missing-field paths were), and
+both new missing-field cases now correctly fail without the fix and pass with it.
+
+GOLD MASTER suite + save-integrity gate: 0 fails. Static gates unchanged (19/20).
+
+**Next**: the remaining BREAK_REPORT items in severity order (B5-B16, Q1), then SEC-CLOSE,
 SLOP-CLEAN, TZ-CLOSE, finish P2, I18N-FINAL, sign-off - per the studio-lead directive's own
 phase order. Every remaining report claim gets the same treatment: verify empirically before
-fixing, verify the fix with a real A/B control, correct the report's own claim in the commit if
-testing disagrees with it. The bot win-rate finding above needs its own dedicated investigation
-before C7 - not blocking B4+ in the meantime, since it's independent of them too.
+fixing, verify the fix with a real A/B control, correct the report's own claim (or an existing
+test's own hidden flaw, as B4 found) in the commit if testing disagrees with it. The bot
+win-rate finding from B3 needs its own dedicated investigation before C7 - not blocking B4+ in
+the meantime, since it's independent of them too.
 
 ## Session 8: P2 MATRIX SWEEP begun — GOLD MASTER suite wired in, closes 35 rows
 

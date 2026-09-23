@@ -13,6 +13,8 @@ func _ready() -> void:
 	_check_corrupt_rejected()
 	_check_backup_rotation()
 	_check_progress_signature()
+	_check_legacy_checksum_rejected()
+	_check_missing_progress_hmac_rejected()
 	_check_fuzz_50_mutants()
 	_check_export_import()
 	_cleanup()
@@ -126,7 +128,13 @@ func _check_progress_signature() -> void:
 	# real PowerGrid entirely - exactly the attack _sign_progress() exists
 	# to catch, since data["progress_hmac"] here is still the ORIGINAL
 	# signature over the ORIGINAL (untampered) power/progress.
-	data["power"] = {"suburbs": {"stage": 3}}
+	# Shape must match PowerGrid.to_dict()'s real output ({"stages": {id:
+	# int}}) - BREAK_REPORT B4 verification found this used to be the
+	# wrong flat shape ({"suburbs": {"stage": 3}}), which from_dict()'s own
+	# `d.get("stages", {})` silently ignores entirely: the forgery never
+	# reached PowerGrid regardless of whether the signature check worked,
+	# so this assertion passed for the wrong reason on both sides of B4.
+	data["power"] = {"stages": {"suburbs": 3}}
 	var forged_body := JSON.stringify(data)
 	# Re-sign the OUTER envelope with the real key so this isn't just
 	# re-testing "checksum mismatch -> reject" - the point is the outer
@@ -136,9 +144,69 @@ func _check_progress_signature() -> void:
 	wf.store_string(JSON.stringify(forged))
 	wf.close()
 	SaveSystem.load_slot(_SLOT)
-	var restored: Dictionary = PowerGrid.to_dict()
-	_ok(restored.is_empty() or not restored.has("suburbs"),
+	var restored: Dictionary = (PowerGrid.to_dict().get("stages", {}) as Dictionary)
+	_ok(int(restored.get("suburbs", 0)) != 3,
 		"forged district-FULL state is rejected even with a valid outer envelope")
+
+## BREAK_REPORT B4 / SECURITY_PATCH_SPEC P-01: a plain "checksum" (unkeyed
+## sha256_text(), no secret) used to be trusted once when "hmac" was absent -
+## anyone can compute a correct sha256 of their own forged body, no key
+## needed. Confirms the CORRECT checksum for a forged body is still rejected
+## now (this used to be the exact bypass; wrong-checksum rejection is
+## already covered by _check_corrupt_rejected above, a different case).
+func _check_legacy_checksum_rejected() -> void:
+	CoinWallet.from_dict({})
+	CoinWallet.add(50)
+	SaveSystem.save_slot(_SLOT)
+	var f := FileAccess.open(_path(), FileAccess.READ)
+	var txt := f.get_as_text()
+	f.close()
+	var outer := JSON.new()
+	outer.parse(txt)
+	var body: String = String((outer.data as Dictionary)["data_json"])
+	# A real forger's move: drop "hmac", compute the correct plain checksum
+	# of a body they edited freely (here just reusing the real body is
+	# enough to prove the point - even a byte-perfect legitimate body with
+	# no hmac must now be refused). Clear backups first (same reason
+	# _check_corrupt_rejected does) - _read_validated falls back to a real
+	# signed .bak otherwise, which would pass for the wrong reason.
+	_remove_all_backups()
+	var legacy: Dictionary = {"checksum": body.sha256_text(), "data_json": body}
+	var wf := FileAccess.open(_path(), FileAccess.WRITE)
+	wf.store_string(JSON.stringify(legacy))
+	wf.close()
+	var ok: bool = SaveSystem.load_slot(_SLOT)
+	_ok(not ok, "legacy checksum-only envelope (correct checksum, no hmac) is rejected, not trusted-once")
+	_remove_all_backups()
+
+## BREAK_REPORT B4: a save missing "progress_hmac" entirely used to skip
+## the district/progress signature check altogether (trusted unverified) -
+## the same "just omit the field" bypass as the legacy checksum above, one
+## layer in. Now treated the same as a failed check: wiped, not trusted.
+func _check_missing_progress_hmac_rejected() -> void:
+	CoinWallet.from_dict({})
+	PowerGrid.from_dict({})
+	SaveSystem.save_slot(_SLOT)
+	var f := FileAccess.open(_path(), FileAccess.READ)
+	var txt := f.get_as_text()
+	f.close()
+	var outer := JSON.new()
+	outer.parse(txt)
+	var envelope: Dictionary = outer.data
+	var inner := JSON.new()
+	inner.parse(String(envelope["data_json"]))
+	var data: Dictionary = inner.data
+	data["power"] = {"stages": {"suburbs": 3}}
+	data.erase("progress_hmac")
+	var forged_body := JSON.stringify(data)
+	var forged: Dictionary = {"hmac": SaveSystem.call("_sign", forged_body), "data_json": forged_body}
+	var wf := FileAccess.open(_path(), FileAccess.WRITE)
+	wf.store_string(JSON.stringify(forged))
+	wf.close()
+	SaveSystem.load_slot(_SLOT)
+	var restored: Dictionary = (PowerGrid.to_dict().get("stages", {}) as Dictionary)
+	_ok(int(restored.get("suburbs", 0)) != 3,
+		"missing progress_hmac is treated as failed, not skipped (valid outer envelope, no progress_hmac at all)")
 
 ## RELEASE CONVERGENCE STEP 4: 50 mutants of a real signed save, each a
 ## different byte-level corruption/tamper of the same template. "Graceful"

@@ -167,17 +167,16 @@ func _read_envelope(path: String, out_reason: Array = []) -> Dictionary:
 	if body.is_empty():
 		if not out_reason.is_empty(): out_reason[0] = "не совпала чек-сумма"
 		return {}
-	# Backward-compat: a save written before this pass carries "checksum"
-	# (plain sha256_text(), no key) instead of "hmac" — accept it once so
-	# existing players don't get quarantined on the very next patch; the
-	# next _write_atomic() (autosave/checkpoint) re-signs it with the real
-	# HMAC. New writes never produce "checksum" again.
-	var signed_ok: bool
-	if envelope.has("hmac"):
-		signed_ok = _sign(body) == String(envelope["hmac"])
-	else:
-		signed_ok = body.sha256_text() == String(envelope.get("checksum", ""))
-	if not signed_ok:
+	# BREAK_REPORT B4 / SECURITY_PATCH_SPEC P-01: the old "checksum" (plain
+	# sha256_text(), no key) compat path let anyone forge a save by setting
+	# checksum to their own edited body's hash - no secret required at all.
+	# There is no cryptographic way to tell an authentic pre-patch legacy
+	# file from a forged one, so per the studio-lead directive this is now
+	# a real rejection, not a one-time trust: a save without a real "hmac"
+	# never loads. This does orphan any genuinely legitimate save written
+	# before HMAC signing existed - a real cost, not a free fix (see
+	# docs/SECURITY_PATCH_SPEC.md P-01's own "riskiest assumption").
+	if not envelope.has("hmac") or _sign(body) != String(envelope["hmac"]):
 		if not out_reason.is_empty(): out_reason[0] = "не совпала чек-сумма"
 		return {}
 	var inner := JSON.new()
@@ -192,18 +191,15 @@ func _read_envelope(path: String, out_reason: Array = []) -> Dictionary:
 	return _migrate(data)
 
 ## STEP 4 anti-tamper: recomputes _sign_progress() over the loaded power/
-## progress fields and compares to the stored progress_hmac. A save that
-## predates this pass has no progress_hmac at all - treated as
-## unverifiable-but-trusted-once, same policy as the outer envelope's
-## "checksum"-vs-"hmac" backward-compat above (every subsequent write
-## adds the field). A save that HAS the field and fails the check gets
-## power/progress reset to empty rather than trusted - see _sign_progress()
-## for what this actually protects against.
+## progress fields and compares to the stored progress_hmac.
+## BREAK_REPORT B4: a save with no progress_hmac at all used to skip this
+## check entirely and trust power/progress unverified - the exact same
+## "just omit the field" bypass as the outer envelope's legacy checksum
+## (P-01). Missing the field is now treated the same as failing the check:
+## power/progress get reset to empty rather than trusted either way.
 func _verify_progress(data: Dictionary) -> Dictionary:
-	if not data.has("progress_hmac"):
-		return data
 	var expected: String = _sign_progress(data.get("power", {}), data.get("progress", {}))
-	if expected != String(data["progress_hmac"]):
+	if not data.has("progress_hmac") or expected != String(data["progress_hmac"]):
 		push_warning("[SaveSystem] district/progress данные не прошли отдельную проверку подписи — сброшены")
 		data["power"] = {}
 		data["progress"] = {}
