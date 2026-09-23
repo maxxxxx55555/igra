@@ -522,3 +522,14 @@ func wipe_all_saves() -> void:
 	for i in range(1, MAX_SLOTS + 1):
 		delete_slot(i)
 	reset_all()
+	# BREAK_REPORT B5: NewGamePlus owns its own save file entirely outside
+	# SaveSystem's scope (unlike reset_all() above, which deliberately does
+	# NOT touch it - see that function's own comment, activate-then-Play is
+	# the real flow). "Reset Progress" is different: the player asked for
+	# an actually fresh start, and an earned NG+ level surviving that isn't
+	# the same "activate then Play" case reset_all() protects.
+	if NewGamePlus:
+		NewGamePlus.reset_for_new_game()
+	var ngp_path := "user://ng_plus_data.json"
+	if FileAccess.file_exists(ngp_path):
+		DirAccess.remove_absolute(ngp_path)

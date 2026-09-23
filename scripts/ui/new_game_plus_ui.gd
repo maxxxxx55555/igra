@@ -43,7 +43,16 @@ func _refresh() -> void:
 		LocalizationManager.tf("NG_PLUS_STAT_LOOT", [mult.loot_chance_multiplier])
 	)
 
-	var at_cap: bool = ng >= max_ng
+	# BREAK_REPORT B5: nothing stopped pressing Activate repeatedly in one
+	# screen visit - the button stayed enabled until the real NG+ cap, so
+	# one win could bank all 3 levels without ever playing NG+1/NG+2. This
+	# screen only ever opens from a real win (win_screen.gd's "One More
+	# Run"), so one activation per visit is the actual cap; _activated_
+	# this_visit already exists to gate _on_back()'s routing, reused here.
+	# Reuses NGP_AT_LIMIT's copy for both cases (imprecise when ng < max_ng
+	# but "already activated this visit" - not worth a new 13-locale key
+	# for one word of accuracy on a disabled button).
+	var at_cap: bool = ng >= max_ng or _activated_this_visit
 	activate_button.disabled = at_cap
 	activate_button.text = LocalizationManager.t("NGP_AT_LIMIT") if at_cap \
 		else LocalizationManager.tf("NGP_ACTIVATE_ACTION", [ng + 1])

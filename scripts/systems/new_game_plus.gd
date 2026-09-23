@@ -202,9 +202,19 @@ func _load_save() -> void:
 	# well past MAX_NG_PLUS turns into runaway enemy HP/damage scaling.
 	_current_ng_plus = clampi(int(data.get("ng_plus", 0)), 0, MAX_NG_PLUS)
 	_is_ng_plus_active = data.get("active", false)
+	# BREAK_REPORT B5: a hand-edited modifiers array bypassed can_select()
+	# entirely - a forged file could list more modifiers than levels
+	# unlocked, or two mutually-exclusive ones together. Re-validate through
+	# the same gate a real pick uses, one at a time so each check sees only
+	# the ids already accepted (matches how select_modifier() builds the
+	# list normally - exclusivity/count checks are meaningless against an
+	# empty-then-growing list if seeded with the whole forged array at once).
+	var loaded: Array = data.get("modifiers", [])
 	_active_modifiers.clear()
-	for id in data.get("modifiers", []):
-		_active_modifiers.append(String(id))
+	for id in loaded:
+		var sid := String(id)
+		if can_select(sid):
+			_active_modifiers.append(sid)
 
 func _save_save() -> void:
 	var path = "user://ng_plus_data.json"

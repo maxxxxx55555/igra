@@ -197,7 +197,47 @@ both new missing-field cases now correctly fail without the fix and pass with it
 
 GOLD MASTER suite + save-integrity gate: 0 fails. Static gates unchanged (19/20).
 
-**Next**: the remaining BREAK_REPORT items in severity order (B5-B16, Q1), then SEC-CLOSE,
+**C1 BREAK-CLOSE, B5 (high — NG+ file unsigned, exclusive modifiers not re-checked, 3 levels
+bankable from 1 win):** report's claim confirmed, three distinct bugs, all in the same file-load/
+UI path:
+1. `new_game_plus_ui.gd`'s Activate button stayed enabled after every press up to the real
+   `MAX_NG_PLUS` cap - the NG+ screen is only ever reachable from a real win (`win_screen.gd`'s
+   "One More Run", confirmed the only caller via full-repo grep), but nothing stopped clicking
+   Activate 3 times in that one visit, banking all 3 levels without ever playing NG+1/NG+2.
+2. `_load_save()` appended every modifier id straight from the file into `_active_modifiers` with
+   no `can_select()` gate at all - a hand-edited file could seat more modifiers than levels
+   unlocked, or two mutually-exclusive ones (`sprint`/`whisper` per `content/ngp_modifiers.json`)
+   together.
+3. `SaveSystem.wipe_all_saves()` (the real "Reset Progress" action) deleted the main save + all
+   slots and called `reset_all()`, but never touched `NewGamePlus`'s own separate save file at
+   all - a player asking for a genuinely fresh start kept an earned NG+ level. Confirmed this is
+   NOT the same gap as `reset_all()` deliberately skipping NG+ (that one's correct and
+   documented: NG+ activation happens via the win screen, then Play calls `reset_all()` to start
+   the harder run - wiping NG+ there would make the whole feature unreachable). "Reset Progress"
+   is a different, stronger request the existing skip doesn't cover.
+
+Fixed all three, minimally: (1) `at_cap` now also true when `_activated_this_visit` (already
+existed, was only used to route the Back button) - one activation per screen visit, matching the
+"only reachable via a real win" access pattern; (2) `_load_save()` re-validates each id through
+`can_select()` one at a time as it builds `_active_modifiers`, reusing the exact gate a real pick
+already goes through instead of trusting the file; (3) `wipe_all_saves()` now also calls
+`NewGamePlus.reset_for_new_game()` (already existed, was just never called from here) and deletes
+`user://ng_plus_data.json`.
+
+Added 3 real regression tests. Two extend `attack_sim.gd` (`content/ngp_modifiers.json`'s real
+`sprint`/`whisper` exclusive pair, forged into one file alongside 2 more ids against a 3-level
+cap) - A/B confirmed both fail on old code, pass on fixed. Third also in `attack_sim.gd` (not
+`_save_integrity_check.gd`, which deliberately isolates itself to a scratch slot outside
+`MAX_SLOTS` - `wipe_all_saves()` operates on the real main save path and every real slot, so this
+one backs up/restores `SAVE_PATH`/`.bak` around the call instead) - A/B confirmed NG+ survives
+Reset Progress on old code, is cleared on fixed. UI fix (#1) verified by direct code reading
+(the `_activated_this_visit` flag and its consumption are both a few lines, already used
+correctly elsewhere in the same file for `_on_back()`) rather than a new headless UI-drive test,
+given time budget - lower rigor than the other two, noted honestly rather than glossed over.
+
+attack_sim + save-integrity + GOLD MASTER suite: 0 fails. Static gates unchanged (19/20).
+
+**Next**: the remaining BREAK_REPORT items in severity order (B6-B16, Q1), then SEC-CLOSE,
 SLOP-CLEAN, TZ-CLOSE, finish P2, I18N-FINAL, sign-off - per the studio-lead directive's own
 phase order. Every remaining report claim gets the same treatment: verify empirically before
 fixing, verify the fix with a real A/B control, correct the report's own claim (or an existing

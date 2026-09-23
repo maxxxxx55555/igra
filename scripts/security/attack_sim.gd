@@ -32,6 +32,8 @@ func _ready() -> void:
 	_check_achievements_forgery_rejected()
 	_check_achievements_legacy_migrates()
 	_check_ng_plus_level_clamped()
+	_check_ng_plus_modifiers_revalidated()
+	_check_reset_progress_clears_ng_plus()
 	_check_coin_wallet_absurd_values()
 	_check_district_id_injection_defended()
 	_check_cross_save_swap_no_corruption()
@@ -120,6 +122,40 @@ func _check_ng_plus_level_clamped() -> void:
 		DirAccess.remove_absolute(path)
 	NewGamePlus._load_save()
 
+## BREAK_REPORT B5: _load_save() used to append every id from the file
+## straight into _active_modifiers with no can_select() gate at all - a
+## forged file could list more modifiers than levels unlocked, or two
+## mutually-exclusive ones (sprint/whisper, content/ngp_modifiers.json)
+## together. Same backup/restore pattern as the level-clamp check above.
+func _check_ng_plus_modifiers_revalidated() -> void:
+	var path := "user://ng_plus_data.json"
+	var had_file := FileAccess.file_exists(path)
+	var backup := ""
+	if had_file:
+		var bf := FileAccess.open(path, FileAccess.READ)
+		backup = bf.get_as_text()
+		bf.close()
+	var f := FileAccess.open(path, FileAccess.WRITE)
+	f.store_string(JSON.stringify({
+		"ng_plus": 3, "active": true,
+		"modifiers": ["sprint", "whisper", "keepers_pact", "ghost"],
+	}))
+	f.close()
+	NewGamePlus._load_save()
+	var active: Array = NewGamePlus.get_active_modifiers()
+	_ok(not ("sprint" in active and "whisper" in active),
+		"forged file can't seat both exclusive modifiers (sprint+whisper) at once")
+	_ok(active.size() <= NewGamePlus.get_current_ng_plus(),
+		"forged file can't seat more modifiers (%d) than unlocked levels (%d)" % [
+			active.size(), NewGamePlus.get_current_ng_plus()])
+	if had_file:
+		var wf := FileAccess.open(path, FileAccess.WRITE)
+		wf.store_string(backup)
+		wf.close()
+	else:
+		DirAccess.remove_absolute(path)
+	NewGamePlus._load_save()
+
 # ── economy: absurd values can't desync CoinWallet ─────────────────────
 func _check_coin_wallet_absurd_values() -> void:
 	CoinWallet.from_dict({"coins": 999999999999})
@@ -162,6 +198,46 @@ func _check_cross_save_swap_no_corruption() -> void:
 			if FileAccess.file_exists(p):
 				DirAccess.remove_absolute(p)
 	CoinWallet.from_dict({})
+
+## BREAK_REPORT B5: wipe_all_saves() (the real "Reset Progress" action)
+## deleted the main save + all slots and called reset_all(), but never
+## touched NewGamePlus's own separate save file at all - an earned NG+
+## level survived a player asking for a genuinely fresh start. Backs up
+## and restores SAVE_PATH/.bak around the call since wipe_all_saves()
+## operates on the real main save path, not a scratch slot like every
+## other check in this file (MAX_SLOTS=4, so the 96/97 scratch slots
+## other checks use are outside its per-slot delete loop and unaffected).
+func _check_reset_progress_clears_ng_plus() -> void:
+	var main_path := "user://tls_savegame.save"
+	var backups: Dictionary = {}
+	for p in [main_path, main_path + ".bak"]:
+		if FileAccess.file_exists(p):
+			var bf := FileAccess.open(p, FileAccess.READ)
+			backups[p] = bf.get_as_text()
+			bf.close()
+	var ngp_path := "user://ng_plus_data.json"
+	var had_ngp := FileAccess.file_exists(ngp_path)
+	var ngp_backup := ""
+	if had_ngp:
+		var nf := FileAccess.open(ngp_path, FileAccess.READ)
+		ngp_backup = nf.get_as_text()
+		nf.close()
+	var f := FileAccess.open(ngp_path, FileAccess.WRITE)
+	f.store_string(JSON.stringify({"ng_plus": 2, "active": true, "modifiers": ["ghost"]}))
+	f.close()
+	NewGamePlus._load_save()
+	SaveSystem.wipe_all_saves()
+	_ok(NewGamePlus.get_current_ng_plus() == 0 and not FileAccess.file_exists(ngp_path),
+		"Reset Progress clears NewGamePlus's own save file, not just SaveSystem's")
+	for p in backups:
+		var wf := FileAccess.open(p, FileAccess.WRITE)
+		wf.store_string(backups[p])
+		wf.close()
+	if had_ngp:
+		var wf2 := FileAccess.open(ngp_path, FileAccess.WRITE)
+		wf2.store_string(ngp_backup)
+		wf2.close()
+	NewGamePlus._load_save()
 
 func _cleanup() -> void:
 	CoinWallet.from_dict({})
