@@ -8,6 +8,11 @@ extends Node
 ##       (order-pass R2 PLAY truth-gate spec: entrypoint coverage)
 ##   P2  all 11 district scenes instantiate AND DistrictLoot.populate()
 ##       returns >0 (the LOOT_SCRIPT.populate regression guard)
+##   P2c BREAK_REPORT B1 regression: all districts restored while the player
+##       is elsewhere, then Travel to power_station via the real
+##       DistrictManager.transition_to() the player uses - the boss must
+##       actually spawn and survive (was: spawned into the district about to
+##       be freed, then silently deleted, win never fires)
 ##   P3  save/load round-trip with a language switch in the middle
 ##   P4  all 5 endings fire and resolve to localized (non-key) strings
 ##   P5  every one of the 13 locales resolves a curated key set at runtime
@@ -95,6 +100,7 @@ func _run() -> void:
 	await _p3_save_load_lang()
 	await _p4_endings()
 	await _p5_i18n_locales()
+	await _p2c_finale_boss_race()
 	await _p6_soak()
 	_finish()
 
@@ -324,6 +330,50 @@ func _p5_i18n_locales() -> void:
 	LocalizationManager.set_language("en")
 	_log("P5 i18n: %d locales x (%d en keys + %d surface keys), %d MISSING" % [
 		LocalizationManager.SUPPORTED.size(), en_keys.size(), I18N_SAMPLE.size(), missing])
+
+# ── P2c ───────────────────────────────────────────────────────────────
+## BREAK_REPORT B1 regression. Order respects the real powered_by DAG
+## (data/districts/*.tres): suburbs has no prereq; residential/park need
+## suburbs; hospital/school need residential; police/gas_station need park;
+## warehouses needs hospital; industrial needs warehouses AND police;
+## substation needs industrial; power_station needs substation.
+const FULL_RESTORE_ORDER: Array[StringName] = [
+	&"suburbs", &"residential", &"park", &"hospital", &"school",
+	&"police", &"gas_station", &"warehouses", &"industrial",
+	&"substation", &"power_station",
+]
+func _p2c_finale_boss_race() -> void:
+	if not GameManager.is_playing():
+		_fail("P2c started outside PLAYING (state=%d)" % GameManager.current_state)
+		return
+	var pg := get_node_or_null("/root/PowerGrid")
+	var dm := get_node_or_null("/root/DistrictManager")
+	if pg == null or dm == null:
+		_fail("P2c PowerGrid/DistrictManager autoload missing")
+		return
+	if String(dm.current_district) == "power_station":
+		_fail("P2c player already in power_station - can't test the Travel race")
+		return
+	for id in FULL_RESTORE_ORDER:
+		pg.advance_district(id, 3)
+	if not pg.all_restored():
+		_fail("P2c all_restored() false after advancing every district to 3")
+		return
+	# The real Travel entry point (city_map.gd's button calls the same API).
+	dm.transition_to("power_station")
+	var boss_ok := await _wait_until(func() -> bool:
+		var b := get_tree().get_first_node_in_group("boss")
+		return b != null and is_instance_valid(b) and not b.is_queued_for_deletion(), 5.0)
+	if not boss_ok:
+		_fail("P2c boss did not spawn (or was freed) within 5s of Travel to power_station")
+		return
+	var boss := get_tree().get_first_node_in_group("boss")
+	var boss_parent := boss.get_parent()
+	if boss_parent == null or (boss_parent as Node).scene_file_path != "res://scenes/districts/power_station.tscn":
+		_fail("P2c boss parent is not the power_station district root (path=%s)" % (
+			String(boss_parent.scene_file_path) if boss_parent else "null"))
+		return
+	_log("P2c finale boss race: boss spawned and alive in power_station after Travel - OK")
 
 # ── P6 ────────────────────────────────────────────────────────────────
 func _p6_soak() -> void:

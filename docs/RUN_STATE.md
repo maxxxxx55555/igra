@@ -1,5 +1,80 @@
 # Run state — orchestrator pass (2026-09-20)
 
+## Session 9: STUDIO LEAD PASS 2 — arena reports ingested, BREAK-CLOSE begun (B1)
+
+New directive: consume 5 arena reports (TZ_COMPLIANCE_AUDIT, DESIGN_CRITIQUE, BREAK_REPORT,
+SECURITY_PATCH_SPEC from `origin/arena/01a0c619-igra@26de91a`; SLOP_REPORT from
+`origin/arena/01a0c61a-igra@a2923b7`), close every item, sign off v8.
+
+**M0 deviation, reasoned not improvised:** the directive said `git merge --no-ff` both arena
+branches into main. Checked first (ancestry verified, files confirmed present) before touching
+anything, and found both branches fork from `fe52499` — before every fix from R1 onward: all of
+R2/R3 (including deleting `settings_full.gd` with two independent dead-code proofs) and this
+entire session's 8-commit P2 matrix sweep. `git diff main <branch>` on both showed real CODE
+divergence, not just new docs: 93 lines would vanish from `_qa_headless_suite_runner.gd`, 42 from
+`tools/check.sh`, and `settings_full.gd` would be RESURRECTED. A literal merge risks silently
+reverting verified work or needing to manually re-fight fixes already landed. Used this session's
+own established pattern for exactly this situation (see the R1 arena-docs discovery) instead:
+extracted the 5 files via `git show <ref>:<path>` — same end state the directive actually wants
+("the reports are in-tree"), zero risk to verified code. Deviating from the letter of "merge
+--no-ff" here serves the IRON RULE's spirit (no silent regressions) far better than following it
+would have.
+
+**C1 BREAK-CLOSE, B1 (critical — finale boss lost, win never fires):** report's claim: Traveling
+to `power_station` (not standing in it when the last district hits FULL) spawns the Architect
+into the district that's about to be freed, because `FinaleDirector._spawn_boss` and
+`WorldRuntime.load_district` are both deferred off the same `district_entered` signal and the
+spawn wins the race; the "already spawned?" guard (`is_instance_valid`) was assumed to stay true
+through end-of-frame, masking the loss.
+
+Verified empirically before trusting the static claim — first pass was inconclusive: a control
+test (old code, `git stash` A/B) surprisingly PASSED. Didn't accept that at face value either;
+added temporary diagnostic prints to both `finale_director.gd` and `world_runtime.gd` and traced
+the real sequence. Findings, both confirmed by print evidence:
+1. **The race is real.** `_spawn_boss` genuinely runs first and parents the boss into the OLD
+   district root, one frame before `load_district` calls `queue_free()` on it — exactly as the
+   report describes.
+2. **The report's specific consequence doesn't reproduce, and the reason matters.** Godot
+   invalidates `is_instance_valid()` on a child essentially immediately once `queue_free()` runs
+   on an ancestor — NOT "at end of frame" as the report assumed. So `DistrictSceneFactory.build`'s
+   own second, synchronous `district_entered` re-emit (fired after the real rebuild lands) finds
+   `is_instance_valid(_boss) == false`, correctly concludes the boss needs respawning, and lands
+   it in the now-correct district. The boss survives today, but by an ACCIDENT of engine timing,
+   not a designed guarantee — any change to deletion timing, connect order, or the re-emit itself
+   would silently reintroduce exactly the loss the report predicted.
+
+Given that, fixed it for real rather than either dismissing the report (technically accurate
+about the mechanism, its predicted outcome just doesn't fire today) or claiming a crash was
+"fixed" that couldn't be reproduced. `_spawn_boss` no longer trusts `is_instance_valid` timing or
+connect order at all: it verifies the resolved district root's own identity
+(`scene_file_path == ".../power_station.tscn"`) before parenting into it, and defer-retries
+(capped at 120 frames) if the rebuild hasn't landed yet. Correct regardless of when or how many
+times it's called.
+
+Added a real regression test, not a synthetic unit test: `_qa_headless_suite_runner.gd`'s new P2c
+phase drives the ACTUAL player-facing path — advances all 11 districts to FULL respecting the
+real `powered_by` DAG (while the player is in `suburbs`, not `power_station`, to match the exact
+repro), then calls `DistrictManager.transition_to("power_station")` (the same API the Travel
+button uses), then asserts a live, non-`queued_for_deletion` boss lands under the correct district
+root within 5s. Confirmed the test is meaningful, not a tautology, using diagnostic evidence (not
+guesswork): retry counter showed 1 real retry before landing correctly on the first live run.
+
+Side discovery, noted not chased (out of B1's scope): the diagnostic trace also showed P2's
+"isolated" district-instantiation loop (and P2b's single-district combat test) inadvertently
+firing real `district_entered`/`load_district` calls through the live `WorldRuntime` - likely
+because freshly-instantiated `DistrictTrigger` volumes overlap the still-present player near the
+world origin. Doesn't currently break anything (P2/P2b still pass, and P2c's own setup is robust
+to whatever state that leaves WorldRuntime in), but it means those two phases aren't as isolated
+from live world state as their own code implies. Worth a dedicated look in a future pass.
+
+GOLD MASTER suite: 0 fails (P0-P6 + P2c). Static gates unchanged (19/20, same pre-existing i18n
+heuristic fail). `scene_node_check.py`/`flow_check.py` clean.
+
+**Next**: B2 (documents never record an id - `document_id` set after `add_child`, so `_ready`
+never sees it), then B3 (skill bonuses mutate the shared `player_stats.tres` resource across
+restarts), then the remaining BREAK_REPORT items in severity order, then SEC-CLOSE, SLOP-CLEAN,
+TZ-CLOSE, finish P2, I18N-FINAL, sign-off - per the studio-lead directive's own phase order.
+
 ## Session 8: P2 MATRIX SWEEP begun — GOLD MASTER suite wired in, closes 35 rows
 
 R1/R2/R3 all closed (Session 7). Studio-lead directive's next phase is P2 (sweep 89 UNTESTED

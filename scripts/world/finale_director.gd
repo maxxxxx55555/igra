@@ -22,6 +22,27 @@ const SPAWN_OFFSET: Vector3 = Vector3(0.0, 0.0, -14.0)
 
 var _boss: Node3D = null
 var _triggered: bool = false
+var _spawn_retries: int = 0
+## BREAK_REPORT B1: district_entered fires once from DistrictManager.transition_to
+## (before WorldRuntime's own deferred load_district swaps in the new district)
+## and again from DistrictSceneFactory.build, synchronously, after the new
+## district root is already parented. Both reach _on_district_entered.
+## Diagnostic-confirmed: FinaleDirector (autoload) connects before WorldRuntime
+## (scene node), so its deferred _spawn_boss is queued and runs first, landing
+## the boss in the OLD district root a frame before it's queue_free()'d. The
+## report predicted this permanently loses the boss (assuming is_instance_valid
+## stays true through end-of-frame after queue_free); confirmed instead that
+## Godot invalidates it immediately once queue_free() runs on the ancestor, so
+## the second (post-rebuild) emit's "already spawned?" check sees false and
+## retries into the now-correct district. That's an accident of engine timing,
+## not a designed guarantee - anything that changes the order or timing of
+## either deferred call would silently reintroduce the loss. Removed the
+## dependence on it entirely: _spawn_boss now verifies the resolved root's own
+## identity (scene_file_path) before parenting into it, regardless of when or
+## how many times it's called. Capped so a genuinely broken transition can't
+## retry forever.
+const MAX_SPAWN_RETRIES: int = 120
+const POWER_STATION_SCENE_PATH: String = "res://scenes/districts/power_station.tscn"
 
 func _ready() -> void:
 	name = "FinaleDirector"
@@ -54,11 +75,19 @@ func _on_district_entered(district_id: StringName) -> void:
 	call_deferred("_spawn_boss")
 
 func _spawn_boss() -> void:
-	if is_instance_valid(_boss):
+	if is_instance_valid(_boss) and not _boss.is_queued_for_deletion():
 		return
 	var parent: Node = _district_root()
-	if parent == null:
+	if parent == null or (parent as Node).scene_file_path != POWER_STATION_SCENE_PATH:
+		# The rebuild that swaps in the power_station scene hasn't finished
+		# yet - wait one more idle frame instead of spawning into whatever
+		# district is still WorldRuntime's last child (the one about to be
+		# freed).
+		_spawn_retries += 1
+		if _spawn_retries <= MAX_SPAWN_RETRIES:
+			call_deferred("_spawn_boss")
 		return
+	_spawn_retries = 0
 	var boss := BOSS_SCENE.instantiate() as Node3D
 	if boss == null:
 		return
