@@ -406,13 +406,61 @@ asserts `CoinWallet.get_coins()` actually increases. A/B confirmed: fails on rev
 craft_check + attack_sim + signal-arity + autoload-api + GOLD MASTER suite: 0 fails. Static gates
 unchanged (19/20).
 
-**Next**: the remaining BREAK_REPORT items in severity order (B10-B16, Q1), then SEC-CLOSE,
+**C1 BREAK-CLOSE, B10 (district-enter autosave runs before the player is moved):** report's claim
+confirmed. `world_runtime.gd`'s `_ready()` connected a second, separate listener straight to
+`EventBus.district_entered` that called `SaveSystem.save_all()` unconditionally; the SAME signal
+also (via `_on_district_entered`'s deferred call) triggers the whole district rebuild, and
+`DistrictSceneFactory.build()` re-emits `district_entered` again, synchronously, from inside
+itself. That listener has no ordering relationship to `_place_player()`, so it could - and did -
+write the pre-teleport position to disk before the player had actually been moved into the new
+district.
+
+Fix: deleted the separate listener entirely; the save now happens at the tail of
+`load_district()`, after `_place_player()` and the `DistrictManager.current_district` update, so
+by the time it runs both are already correct (`scripts/world/world_runtime.gd`).
+
+This one cost far more time than it should have because the FIRST two regression-test attempts
+both passed on the unmodified (buggy) code, which should be impossible - a false-negative test is
+worse than no test, so it wasn't shippable. Traced why with two rounds of `Time.get_ticks_msec()`
+diagnostics added to both the test and the buggy listener, then removed once understood (never
+landed in a commit):
+1. **A 5-second `_wait_until` poll, then a 4-fixed-frame wait, then a "poll every frame until
+   `dm.current_district == target`" wait - all three passed on broken code.** The reason isn't
+   that headless frame pacing is slow (it is - consecutive `process_frame` boundaries land 80–500ms
+   apart in this environment, confirmed by timestamp, not the ~16.67ms of real 60fps - but that
+   turned out to be a red herring for this specific bug, not the cause).
+2. **The real reason: `DistrictManager.transition_to()` sets `current_district` and emits
+   `district_entered` SYNCHRONOUSLY, before it even returns to the caller** (`district_manager.gd`
+   line 65-66, pre-existing, not part of this bug). The buggy listener is connected directly to
+   that signal, so it fires - and writes the stale, pre-teleport position to disk - inside
+   `transition_to()`'s own call, before any `await` in the test has a chance to run at all. Any
+   frame-based or position-based wait executes strictly AFTER that stale write, by which point a
+   later, physics-driven re-fire of the same signal (once the now-correctly-placed player overlaps
+   the new district's own trigger volume) has usually already silently re-saved the correct
+   position too - self-healing the very symptom the test exists to catch, regardless of how tight
+   the wait is.
+3. **Fix for the test, not just the code:** stopped trying to catch the bug in a timing window at
+   all. The regression test now calls `dm.transition_to()` and reads the save file IMMEDIATELY
+   after, with zero `await`s, asserting the file does NOT contain the pre-teleport marker
+   position - which is also a more faithful repro of the report's own "quit right after crossing"
+   scenario than any wait-then-check approach could be. A second, later check (after the
+   transition settles) still confirms the save eventually matches the real final position, as a
+   secondary correctness check.
+
+A/B confirmed properly this time: reverted listener -> immediate check fails ("wrote the
+pre-teleport marker position (500, 1, 500) to disk"); fix restored -> passes cleanly. Added as
+GOLD MASTER suite phase P2i. Full battery re-run clean: static gates 19/20 (only the pre-existing,
+documented `i18n_truth_gate` overflow-heuristic FAIL, unrelated), `flow_check.py` OK,
+`scene_node_check.py` OK, GOLD MASTER suite 0 fails (P2i included). Committed `cc1e0b3`, pushed,
+push verified (`git rev-parse main` == `git ls-remote origin main`).
+
+**Next**: the remaining BREAK_REPORT items in severity order (B11-B16, Q1), then SEC-CLOSE,
 SLOP-CLEAN, TZ-CLOSE, finish P2, I18N-FINAL, sign-off - per the studio-lead directive's own phase
 order. Every remaining report claim gets the same treatment: verify empirically before fixing,
 verify the fix with a real A/B control, correct the report's own claim (or an existing test's own
-hidden flaw, as B4/B6 found) in the commit if testing disagrees with it, and say so plainly when
-a claimed fix is actually an inherent limit (B6) or a deliberate non-fix (B7's legacy-trust half)
-rather than force a false "closed." The bot win-rate finding from B3 needs its own dedicated
+hidden flaw, as B4/B6/B10 found) in the commit if testing disagrees with it, and say so plainly
+when a claimed fix is actually an inherent limit (B6) or a deliberate non-fix (B7's legacy-trust
+half) rather than force a false "closed." The bot win-rate finding from B3 needs its own dedicated
 investigation before C7 - not blocking B4+ in the meantime, since it's independent of them too.
 Also worth a quick separate look later: whether any OTHER `#`-prefixed autoload line besides the
 three found in B7 has a live duplicate elsewhere in `project.godot`.
