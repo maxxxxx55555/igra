@@ -507,7 +507,37 @@ Not a balance/progression change (no new player-facing gate, just de-duplicating
 IRON RULE bot re-run needed for this one. Static gates 19/20 (pre-existing `i18n_truth_gate` FAIL
 only), `flow_check.py` OK, `scene_node_check.py` OK. Committed `c814621`, pushed, push verified.
 
-**Next**: the remaining BREAK_REPORT items in severity order (B13-B16, Q1), then SEC-CLOSE,
+**C1 BREAK-CLOSE, B13 (Import does not load; the 30s autosave is not what Continue reads):**
+report's claim confirmed - two separate bugs behind one report entry.
+
+1. `import_save_from_file()` copied the imported file onto `SAVE_PATH` but never refreshed the
+   live session's in-memory autoload state. The next event-driven `_save()` (district-enter,
+   secret, puzzle, purchase - `_ready()`'s own four listeners) wrote the STALE pre-import state
+   right back over the file, silently undoing the import a few seconds after the "Save Imported"
+   notice. Fix: call `load_all()` after a successful copy, but only when `dest_path == SAVE_PATH`
+   (the only real caller, `settings_screen.gd`, never passes another path).
+2. The periodic 30s autosave called `save_slot(4)`, a slot nothing in the shipping game ever
+   reads - `Continue` only calls `load_all()` against `SAVE_PATH`, and the multi-slot picker UI
+   that could load slot 4 was archived in an earlier session (noted at the time in `save_system.gd`
+   itself). The timer's own comment claimed crash protection it didn't provide: a real crash rolled
+   back to the last EVENT save, not to within 30 seconds. Fix: route the timer through `_save()`
+   instead, so it actually writes `SAVE_PATH`.
+
+Regression tests (GOLD MASTER suite P2l/P2m): P2l replays the report's exact repro end to end
+(mutate the live wallet, save, import, save again) and reads the resulting file directly, checking
+it holds the imported value rather than the clobbering mutation - caught its own first-draft bug
+before the A/B even ran: it exported without first calling `save_all()`, so the exported snapshot
+captured a STALE on-disk balance left over from an earlier phase, not the live `original` value it
+meant to protect; fixed by saving immediately before exporting. P2m forces one autosave tick via a
+direct `SaveSystem._process(999.0)` call and confirms `SAVE_PATH`'s own mtime actually advances
+(with a 1.1s real-time wait first, since mtime resolution can be 1-second-granular). Both A/B
+confirmed: fail cleanly on the reverted code (P2l: file held the clobbering 3707 instead of the
+imported 2930; P2m: mtime unchanged), pass on the fix. Existing `save_integrity_check_scene` gate
+(24 checks, including its own pre-existing import round-trip check) still green - no regression.
+Static gates 19/20 (pre-existing `i18n_truth_gate` FAIL only), `flow_check.py` OK,
+`scene_node_check.py` OK. Committed `a36ac8b`, pushed, push verified.
+
+**Next**: the remaining BREAK_REPORT items in severity order (B15, B16, Q1), then SEC-CLOSE,
 SLOP-CLEAN, TZ-CLOSE, finish P2, I18N-FINAL, sign-off - per the studio-lead directive's own phase
 order. Every remaining report claim gets the same treatment: verify empirically before fixing,
 verify the fix with a real A/B control, correct the report's own claim (or an existing test's own
