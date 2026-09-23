@@ -70,10 +70,44 @@ from live world state as their own code implies. Worth a dedicated look in a fut
 GOLD MASTER suite: 0 fails (P0-P6 + P2c). Static gates unchanged (19/20, same pre-existing i18n
 heuristic fail). `scene_node_check.py`/`flow_check.py` clean.
 
-**Next**: B2 (documents never record an id - `document_id` set after `add_child`, so `_ready`
-never sees it), then B3 (skill bonuses mutate the shared `player_stats.tres` resource across
-restarts), then the remaining BREAK_REPORT items in severity order, then SEC-CLOSE, SLOP-CLEAN,
-TZ-CLOSE, finish P2, I18N-FINAL, sign-off - per the studio-lead directive's own phase order.
+**C1 BREAK-CLOSE, B2 (critical, per the report — endings unreachable):** report's claim:
+`_spawn_document` sets `document_id` after `add_child` (which already ran `_ready()`), so
+`_load_from_catalog()` and the "already unlocked" check both see `""`, `unlock_doc` never fires
+on collect, and Light/Truth (which need the full document catalog) become permanently
+unreachable from world pickups.
+
+Fixed the confirmed part, then verified the report's own severity claim empirically rather than
+trusting it — same A/B discipline as B1. Added a regression test that spawns a document the real
+way (`DistrictLoot._spawn_document`, not `ProgressTracker.unlock_doc` directly, which the
+existing `craft_check` probe already bypasses), checks what `_ready()` actually saw, then
+triggers a real `_collect()`. First version of the test checked `is_doc_unlocked`/`count_docs`
+after collect — passed on BOTH old and fixed code, which didn't match the report's claim. Root
+cause: `node.set("document_id", doc_id)` still runs (just one line later, after `add_child`), so
+by the time a real `_collect()` call happens, `document_id` is already correct — `unlock_doc`
+fires fine regardless of ordering. The report's stronger claim (documents can never be unlocked,
+endings unreachable) does not hold up under test.
+
+What IS real, confirmed by the same A/B test after refining it to check the actual
+discriminating signal: `_load_from_catalog()` only ever runs once, from `_ready()`, and bails
+immediately if `document_id` was still `""` at that exact moment — no later fix to the property
+re-triggers it. With the id set after `add_child` (old code), every collected document shows
+`document_title="Untitled"` and `document_content=""` forever, even though it correctly unlocks
+and counts. Control test: old code FAILS the refined check (`title='Untitled' content=''`),
+fixed code passes. Fixed by moving `node.set("document_id", doc_id)` before `root.add_child(node)`
+— the minimal one-line reorder, no other logic touched.
+
+Real, player-visible bug (every world document reads blank in the toast/journal) — just a
+narrower one than reported. Documented both the fix and the correction in the same commit rather
+than let the wrong severity stand uncorrected.
+
+GOLD MASTER suite: 0 fails (P0-P6 + P2c + P2d). Static gates unchanged (19/20).
+
+**Next**: B3 (skill bonuses mutate the shared `player_stats.tres` resource across restarts —
+critical, unverified yet), then the remaining BREAK_REPORT items in severity order, then
+SEC-CLOSE, SLOP-CLEAN, TZ-CLOSE, finish P2, I18N-FINAL, sign-off - per the studio-lead
+directive's own phase order. Every remaining report claim gets the same treatment: verify
+empirically before fixing, verify the fix with a real A/B control, correct the report's own
+claim in the commit if testing disagrees with it.
 
 ## Session 8: P2 MATRIX SWEEP begun — GOLD MASTER suite wired in, closes 35 rows
 

@@ -262,9 +262,16 @@ static func _spawn_document(root: Node3D, doc_id: String, pos: Vector3) -> bool:
 	var node := DOC_SCENE.instantiate() as Node3D
 	if node == null:
 		return false
+	# BREAK_REPORT B2: add_child() runs _ready() immediately (root is already
+	# in the tree) - document_id must be set before that, not after, or
+	# _ready()'s _load_from_catalog() bails on the still-empty id and never
+	# runs again (title/content stay "Untitled"/"" forever, even though the
+	# id property itself gets corrected a line later - collecting it still
+	# calls unlock_doc with the right id, but the toast/journal show a blank
+	# document with no name).
+	node.set("document_id", doc_id)
 	root.add_child(node)
 	node.global_position = pos
-	node.set("document_id", doc_id)
 	return true
 
 ## static funcs have no self/get_node - same autoload-access pattern as

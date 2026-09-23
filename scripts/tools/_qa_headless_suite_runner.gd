@@ -13,6 +13,12 @@ extends Node
 ##       DistrictManager.transition_to() the player uses - the boss must
 ##       actually spawn and survive (was: spawned into the district about to
 ##       be freed, then silently deleted, win never fires)
+##   P2d BREAK_REPORT B2 regression: a document pickup spawned the real way
+##       (DistrictLoot._spawn_document) must have its id set before add_child
+##       so _load_from_catalog() (which only ever runs once, from _ready())
+##       actually loads its title/content (was: "Untitled"/empty forever,
+##       even though unlock_doc itself still fires correctly on collect -
+##       confirmed by A/B testing both claims, not assumed from the report)
 ##   P3  save/load round-trip with a language switch in the middle
 ##   P4  all 5 endings fire and resolve to localized (non-key) strings
 ##   P5  every one of the 13 locales resolves a curated key set at runtime
@@ -101,6 +107,7 @@ func _run() -> void:
 	await _p4_endings()
 	await _p5_i18n_locales()
 	await _p2c_finale_boss_race()
+	await _p2d_document_id_race()
 	await _p6_soak()
 	_finish()
 
@@ -374,6 +381,52 @@ func _p2c_finale_boss_race() -> void:
 			String(boss_parent.scene_file_path) if boss_parent else "null"))
 		return
 	_log("P2c finale boss race: boss spawned and alive in power_station after Travel - OK")
+
+# ── P2d ───────────────────────────────────────────────────────────────
+## BREAK_REPORT B2 regression: spawn a document the real way (the static
+## helper the district-populate flow actually calls, not ProgressTracker
+## directly) and confirm the id survived _ready() and a real collect.
+func _p2d_document_id_race() -> void:
+	var holder := Node3D.new()
+	holder.name = "QADocHolder"
+	add_child(holder)
+	const DOC_ID := "doc_blackout_news"
+	if ProgressTracker.is_doc_unlocked(DOC_ID):
+		_log("P2d skipped: '%s' already unlocked from an earlier phase" % DOC_ID)
+		holder.queue_free()
+		return
+	var before := ProgressTracker.count_docs()
+	var ok: bool = DistrictLoot._spawn_document(holder, DOC_ID, Vector3.ZERO)
+	if not ok:
+		_fail("P2d _spawn_document returned false")
+		holder.queue_free()
+		return
+	await get_tree().process_frame
+	var pickup := holder.get_child(0) if holder.get_child_count() > 0 else null
+	if pickup == null or not is_instance_valid(pickup):
+		_fail("P2d document pickup node missing after spawn")
+		holder.queue_free()
+		return
+	# The property itself is correct regardless of ordering (set() always
+	# updates it) - what actually distinguishes "ready saw it in time" is
+	# _load_from_catalog(), which only ever runs once, from _ready(), and
+	# bails immediately if document_id was still "" at that moment. If it
+	# bailed, title/content stay at their empty defaults forever - no later
+	# fix to the id property re-triggers it.
+	var got_title: String = String(pickup.get("document_title"))
+	var got_content: String = String(pickup.get("document_content"))
+	if got_title == "Untitled" or got_content == "":
+		_fail("P2d _ready() missed the id: title='%s' content='%s' (catalog never loaded)" % [got_title, got_content])
+		holder.queue_free()
+		return
+	pickup.call("_collect")
+	await get_tree().process_frame
+	if not ProgressTracker.is_doc_unlocked(DOC_ID):
+		_fail("P2d collecting the pickup did not unlock_doc('%s')" % DOC_ID)
+	if ProgressTracker.count_docs() != before + 1:
+		_fail("P2d count_docs() did not increment: %d -> %d" % [before, ProgressTracker.count_docs()])
+	holder.queue_free()
+	_log("P2d document id race: real _spawn_document -> _ready sees id -> collect unlocks it - OK")
 
 # ── P6 ────────────────────────────────────────────────────────────────
 func _p6_soak() -> void:
