@@ -50,12 +50,59 @@ func add_slots(amount: int) -> void:
 		slots.append(null)
 	EventBus.inventory_changed.emit()
 
+## BREAK_REPORT B9: used to fill existing partial stacks first, THEN check
+## for a free slot for whatever didn't fit - failing at that point still
+## left the partial-stack portion committed and returned false. Callers
+## that don't special-case a partial success (secret.gd's interact() just
+## checked the bool) had no way to know part of the amount actually
+## landed; a caller that DOES respect the false and lets the player retry
+## would then re-request the FULL original amount, double-counting the
+## part that already landed. Now a dry run first: compute real capacity
+## (existing partial stacks + empty slots) before touching any state, so
+## a failure is always all-or-nothing.
+func _slot_capacity_for(item_id: StringName, data) -> int:
+	var capacity := 0
+	if data.stackable:
+		for s in slots:
+			if s != null and s["item_id"] == item_id and s["count"] < data.max_stack:
+				capacity += data.max_stack - s["count"]
+	var per_free_slot: int = data.max_stack if data.stackable else 1
+	for s in slots:
+		if s == null:
+			capacity += per_free_slot
+	return capacity
+
+## Dry-run check for callers (quest rewards, secrets) that need to know
+## BEFORE committing anything else (marking a quest done, paying coins,
+## consuming a world object) whether the grant would actually succeed -
+## see try_add()'s own comment for why a post-hoc bool wasn't enough.
+func can_add(item_id: StringName, amount: int = 1) -> bool:
+	var data := ItemDatabase.get_item(item_id)
+	if data == null or amount <= 0:
+		return false
+	if current_weight + data.weight * amount > stats.capacity_kg + 0.0001:
+		return false
+	return _slot_capacity_for(item_id, data) >= amount
+
+## BREAK_REPORT B9: used to fill existing partial stacks first, THEN check
+## for a free slot for whatever didn't fit - failing at that point still
+## left the partial-stack portion committed and returned false. Callers
+## that don't special-case a partial success (secret.gd's interact() just
+## checked the bool) had no way to know part of the amount actually
+## landed; a caller that DOES respect the false and lets the player retry
+## would then re-request the FULL original amount, double-counting the
+## part that already landed. Now a dry run first: compute real capacity
+## (existing partial stacks + empty slots) before touching any state, so
+## a failure is always all-or-nothing.
 func try_add(item_id: StringName, amount: int = 1) -> bool:
 	var data := ItemDatabase.get_item(item_id)
 	if data == null or amount <= 0:
 		return false
 	if current_weight + data.weight * amount > stats.capacity_kg + 0.0001:
 		EventBus.inventory_notice.emit(LocalizationManager.t("INV_OVERWEIGHT"))
+		return false
+	if _slot_capacity_for(item_id, data) < amount:
+		EventBus.inventory_notice.emit(LocalizationManager.t("INV_NO_SLOTS"))
 		return false
 	var remaining := amount
 	if data.stackable:
@@ -64,16 +111,11 @@ func try_add(item_id: StringName, amount: int = 1) -> bool:
 				break
 			var s = slots[i]
 			if s != null and s["item_id"] == item_id and s["count"] < data.max_stack:
-				var can_add := mini(data.max_stack - s["count"], remaining)
-				s["count"] += can_add
-				remaining -= can_add
+				var fill := mini(data.max_stack - s["count"], remaining)
+				s["count"] += fill
+				remaining -= fill
 	while remaining > 0:
 		var free_idx := _first_empty_slot()
-		if free_idx == -1:
-			EventBus.inventory_notice.emit(LocalizationManager.t("INV_NO_SLOTS"))
-			_recompute_weight()
-			EventBus.inventory_changed.emit()
-			return false
 		var put := mini(remaining, data.max_stack if data.stackable else 1)
 		slots[free_idx] = {"item_id": item_id, "count": put}
 		remaining -= put

@@ -330,16 +330,59 @@ suppressed here a second time.
 
 attack_sim + save-integrity + GOLD MASTER suite: 0 fails. Static gates unchanged (19/20).
 
-**Next**: the remaining BREAK_REPORT items in severity order (B8-B16, Q1), then SEC-CLOSE,
-SLOP-CLEAN, TZ-CLOSE, finish P2, I18N-FINAL, sign-off - per the studio-lead directive's own
-phase order. Every remaining report claim gets the same treatment: verify empirically before
-fixing, verify the fix with a real A/B control, correct the report's own claim (or an existing
-test's own hidden flaw, as B4/B6 found) in the commit if testing disagrees with it, and say so
-plainly when a claimed fix is actually an inherent limit (B6) or a deliberate non-fix (B7's
-legacy-trust half) rather than force a false "closed." The bot win-rate finding from B3 needs its
-own dedicated investigation before C7 - not blocking B4+ in the meantime, since it's independent
-of them too. Also worth a quick separate look later: whether any OTHER `#`-prefixed autoload line
-besides the three found here has a live duplicate elsewhere in `project.godot`.
+**C1 BREAK-CLOSE, B9 + B14 together (high + medium — "found-state committed before the grant
+succeeds"):** took these two out of strict severity order deliberately - B9 (secrets) and B14
+(quest item rewards) are the exact same root-cause bug in two different callers of
+`InventoryManager.try_add()`, and B9's fix directly changes the API contract B14 depends on, so
+fixing them in the same pass (and same commit) avoids re-deriving the same analysis twice. B8 is
+still open, next.
+
+`secret.gd`'s `interact()` set `_taken=true`, emitted `secret_found` (which `ProgressTracker`
+records permanently), and `queue_free()`'d the node - all BEFORE checking `try_add()`'s return
+value. A full backpack still permanently lost the secret. `quest_manager.gd`'s `_complete()` had
+the identical shape: `q.done = true` set, coins paid, before checking whether the item reward
+would even fit.
+
+Root cause underneath both: `try_add()` itself wasn't atomic. It filled existing partial stacks
+FIRST, then checked for a free slot for whatever didn't fit - a failure at that point still left
+the partial-stack portion committed. A caller that (unlike the two above) DID respect the
+returned `false` and let the player retry would then re-request the full original amount,
+double-counting whatever had already landed. Fixed at the root, once, for every caller: `try_add`
+now does a dry-run capacity check (existing partial-stack room + empty-slot room) before touching
+any state, so a failure is always all-or-nothing. Added a public `can_add()` dry-run wrapper
+around the same capacity check, for callers (like quest completion) that need to know success
+BEFORE committing other state.
+
+Fixed `secret.gd` to check `try_add()`'s result before committing anything - a failed grab now
+leaves the secret exactly as it was. Fixed `quest_manager.gd`'s `_complete()` to pre-flight every
+`reward_item` with `can_add()` before marking `done`/paying coins - a quest whose reward can't fit
+now stays open (and tells the player why) instead of completing short.
+
+Found and fixed a small adjacent bug while in `district_loot.gd`'s secret-spawn code for B9: the
+same add_child-before-set ordering bug class as B2 (documents) - `home_district`/`min_stage` were
+set AFTER `add_child()`, so `_ready()`'s initial visibility check always saw "no district gate"
+and showed secrets before their district reached `min_stage`. Confirmed this was cosmetic only
+(`interact()` re-checks fresh with the by-then-correct values, so it was never actually
+collectible early) - fixed the ordering anyway since it was one line, in the exact function
+already being touched.
+
+Added 2 real regression tests to the GOLD MASTER suite (P2f secret, P2g quest), both driving the
+real scene/completion code, not synthetic unit calls in isolation from it. A/B confirmed: all 5
+assertions across both fail on the reverted code, pass on fixed.
+
+craft_check + attack_sim + GOLD MASTER suite: 0 fails. Static gates unchanged (19/20).
+
+**Next**: B8 (kills don't pay the wallet; coin HUD shows the kill roll as if it were the
+balance), then the remaining BREAK_REPORT items in severity order (B10-B16, Q1), then SEC-CLOSE,
+SLOP-CLEAN, TZ-CLOSE, finish P2, I18N-FINAL, sign-off - per the studio-lead directive's own phase
+order. Every remaining report claim gets the same treatment: verify empirically before fixing,
+verify the fix with a real A/B control, correct the report's own claim (or an existing test's own
+hidden flaw, as B4/B6 found) in the commit if testing disagrees with it, and say so plainly when
+a claimed fix is actually an inherent limit (B6) or a deliberate non-fix (B7's legacy-trust half)
+rather than force a false "closed." The bot win-rate finding from B3 needs its own dedicated
+investigation before C7 - not blocking B4+ in the meantime, since it's independent of them too.
+Also worth a quick separate look later: whether any OTHER `#`-prefixed autoload line besides the
+three found in B7 has a live duplicate elsewhere in `project.godot`.
 
 ## Session 8: P2 MATRIX SWEEP begun — GOLD MASTER suite wired in, closes 35 rows
 

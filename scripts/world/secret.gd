@@ -55,8 +55,16 @@ func interact_prompt() -> String:
 func interact(_player: Node = null) -> void:
 	if _taken or not can_interact():
 		return
+	# BREAK_REPORT B9: _taken/secret_found/queue_free() used to fire
+	# regardless of whether the item actually fit - a full backpack still
+	# permanently consumed the secret (ProgressTracker records the id,
+	# DistrictLoot skips it on future visits) with nothing to show for it.
+	# try_add() is now atomic (all-or-nothing, see inventory_manager.gd),
+	# so a false here means genuinely nothing landed - leave the secret in
+	# the world exactly as it was and let the player come back with room.
+	if not InventoryManager.try_add(item_id, amount):
+		return
 	_taken = true
-	InventoryManager.try_add(item_id, amount)
 	EventBus.secret_found.emit(String(secret_id))
 	var title: String = LocalizationManager.t(title_key) if title_key != "" else ""
 	var notice: String = LocalizationManager.t("SECRET_FOUND")

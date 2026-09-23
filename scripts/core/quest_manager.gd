@@ -114,14 +114,26 @@ func _tick(q: Dictionary, n: int) -> void:
 	if q.progress >= q.target_count:
 		_complete(q)
 
+## BREAK_REPORT B14: q.done was set (and coins/completion events fired)
+## before checking whether the item rewards would even fit - try_add()'s
+## bool was ignored entirely. A full backpack quietly lost the item reward
+## forever, with the quest marked done as if it had paid out completely.
+## Pre-flight every reward item with the new can_add() dry run (same
+## atomicity fix as B9) before touching any state; if any won't fit, leave
+## the quest open and tell the player why, instead of completing it short.
 func _complete(q: Dictionary) -> void:
+	var inv := get_tree().root.get_node_or_null("/root/InventoryManager")
+	if inv and inv.has_method("can_add"):
+		for ri in q.reward_items:
+			if not inv.can_add(StringName(ri[0]), int(ri[1])):
+				EventBus.inventory_notice.emit(LocalizationManager.t("INV_NO_SLOTS"))
+				return
 	q.done = true
 	_completed_count += 1
 	# Раньше награда уходила в /root/CoinManager — такого автолоада нет,
 	# и монеты за квест молча не начислялись.
 	if int(q.reward_coins) > 0:
 		CoinWallet.add(int(q.reward_coins))
-	var inv := get_tree().root.get_node_or_null("/root/InventoryManager")
 	if inv and inv.has_method("try_add"):
 		for ri in q.reward_items:
 			inv.try_add(StringName(ri[0]), int(ri[1]))

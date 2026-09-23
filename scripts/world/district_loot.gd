@@ -212,8 +212,14 @@ static func _spawn_secrets(root: Node3D, district_id: StringName) -> int:
 		srng.seed = hash(String(row.get("id", "")))
 		var ang := srng.randf_range(0.0, TAU)
 		var rad := srng.randf_range(RADIUS_MAX * 0.6, RADIUS_MAX)
-		root.add_child(node)
-		node.global_position = root.global_position + Vector3(cos(ang) * rad, DROP_Y, sin(ang) * rad)
+		# Same ordering bug class as BREAK_REPORT B2 (documents): add_child()
+		# runs _ready() immediately, and _ready()'s own _refresh_gate() reads
+		# home_district/min_stage to decide initial visibility - set after
+		# add_child, it always saw "" (no gate) and showed the secret before
+		# its district reached min_stage. interact() re-checks fresh at
+		# interaction time, so this was cosmetic (visible-but-rejected), not
+		# a real skip - still real enough to fix while touching this exact
+		# spawn order for B9's fix in secret.gd below.
 		node.set("secret_id", StringName(String(row.get("id", ""))))
 		node.set("home_district", district_id)
 		node.set("min_stage", int(row.get("min_stage", 0)))
@@ -222,6 +228,8 @@ static func _spawn_secrets(root: Node3D, district_id: StringName) -> int:
 		node.set("amount", int(reward.get("amount", 1)))
 		var keys: Dictionary = row.get("i18n_keys", {})
 		node.set("title_key", String(keys.get("title", "")))
+		root.add_child(node)
+		node.global_position = root.global_position + Vector3(cos(ang) * rad, DROP_Y, sin(ang) * rad)
 		placed += 1
 	return placed
 

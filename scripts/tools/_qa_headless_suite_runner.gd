@@ -114,6 +114,8 @@ func _run() -> void:
 	await _p2c_finale_boss_race()
 	await _p2d_document_id_race()
 	await _p2e_skill_stack_race()
+	await _p2f_secret_full_backpack()
+	await _p2g_quest_reward_full_backpack()
 	await _p6_soak()
 	_finish()
 
@@ -471,6 +473,80 @@ func _p2e_skill_stack_race() -> void:
 				restart_n, speed, expected])
 			return
 	_log("P2e skill stack race: one rank of move_speed survives 2 real restarts at %.1f, no compounding - OK" % expected)
+
+## Fills every real inventory slot with a non-matching item so try_add()
+## has zero capacity for anything else, regardless of the tested item's
+## own stacking rules. Shared by P2f/P2g; restores empty slots after.
+func _fill_backpack_full() -> void:
+	for i in InventoryManager.slots.size():
+		InventoryManager.slots[i] = {"item_id": &"scrap", "count": 999}
+	InventoryManager.call("_recompute_weight")
+
+func _empty_backpack() -> void:
+	for i in InventoryManager.slots.size():
+		InventoryManager.slots[i] = null
+	InventoryManager.call("_recompute_weight")
+
+# ── P2f ───────────────────────────────────────────────────────────────
+## BREAK_REPORT B9 regression: a secret interacted with on a full backpack
+## must stay in the world, not be silently consumed. Instantiates the real
+## secret scene with properties set before add_child (also verifies the
+## district_loot.gd spawn-order fix alongside it, real reuse not a stub).
+func _p2f_secret_full_backpack() -> void:
+	if not GameManager.is_playing():
+		_fail("P2f started outside PLAYING (state=%d)" % GameManager.current_state)
+		return
+	_fill_backpack_full()
+	var holder := Node3D.new()
+	holder.name = "QASecretHolder"
+	add_child(holder)
+	var secret := (load("res://scenes/props/secret.tscn") as PackedScene).instantiate()
+	const TEST_ID := "qa_test_secret"
+	secret.set("secret_id", StringName(TEST_ID))
+	secret.set("item_id", &"battery")
+	secret.set("amount", 1)
+	secret.set("home_district", &"")
+	secret.set("min_stage", 0)
+	holder.add_child(secret)
+	secret.call("interact", null)
+	if not (is_instance_valid(secret) and not secret.get("_taken")):
+		_fail("P2f secret was consumed even though the backpack was full")
+	if ProgressTracker.is_secret_found(TEST_ID):
+		_fail("P2f ProgressTracker recorded a secret that couldn't be collected")
+	_empty_backpack()
+	if is_instance_valid(secret):
+		secret.queue_free()
+	holder.queue_free()
+	_log("P2f secret full-backpack: secret preserved, not recorded as found - OK")
+
+# ── P2g ───────────────────────────────────────────────────────────────
+## BREAK_REPORT B14 regression: a quest whose item reward can't fit must
+## stay open (done=false), not complete short with the item lost. Builds
+## a minimal synthetic quest dict matching what _complete() actually reads
+## (isolates the fixed logic from needing real quest content data).
+func _p2g_quest_reward_full_backpack() -> void:
+	if not GameManager.is_playing():
+		_fail("P2g started outside PLAYING (state=%d)" % GameManager.current_state)
+		return
+	_fill_backpack_full()
+	var before_coins: int = CoinWallet.get_coins()
+	var q: Dictionary = {
+		"id": "qa_test_quest", "done": false, "reward_coins": 50,
+		"reward_items": [["battery", 1]],
+	}
+	QuestManager.call("_complete", q)
+	if bool(q.get("done", false)):
+		_fail("P2g quest completed even though its item reward couldn't fit")
+	if CoinWallet.get_coins() != before_coins:
+		_fail("P2g coin reward was paid even though the quest didn't complete (%d -> %d)" % [
+			before_coins, CoinWallet.get_coins()])
+	_empty_backpack()
+	QuestManager.call("_complete", q)
+	if not (bool(q.get("done", false)) and CoinWallet.get_coins() == before_coins + 50):
+		_fail("P2g same quest failed to complete once there was room (done=%s coins=%d)" % [
+			q.get("done", false), CoinWallet.get_coins()])
+	CoinWallet.from_dict({"coins": before_coins})
+	_log("P2g quest reward full-backpack: stays open when full, completes once there's room - OK")
 
 # ── P6 ────────────────────────────────────────────────────────────────
 func _p6_soak() -> void:
