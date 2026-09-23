@@ -53,12 +53,16 @@ func advance_district(id: StringName, new_stage: int) -> bool:
 			EventBus.inventory_notice.emit(
 				LocalizationManager.tf("NEED_DISTRICT_FIRST", [missing_prerequisite_name(id)]))
 		return false
+	var old_stage := d.stage
 	d.stage = new_stage as DistrictData.Stage
 	EventBus.district_stage_changed.emit(id, new_stage)
 	EventBus.power_grid_updated.emit()
 	# Фонари на улицах загораются на стадии STREETS — этого события ждёт
-	# обучение, чтобы закрыть последнюю фазу.
-	if new_stage >= DistrictData.Stage.STREETS:
+	# обучение, чтобы закрыть последнюю фазу. Должно сработать ровно один
+	# раз за район, в момент пересечения STREETS - а не при каждом
+	# advance_district с new_stage >= STREETS (FULL тоже проходил этот
+	# порог и стрелял событие повторно).
+	if old_stage < DistrictData.Stage.STREETS and new_stage >= DistrictData.Stage.STREETS:
 		EventBus.streetlight_activated.emit(id)
 	if new_stage >= DistrictData.Stage.FULL:
 		EventBus.district_restored.emit(id, new_stage)

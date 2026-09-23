@@ -119,6 +119,7 @@ func _run() -> void:
 	await _p2h_kill_pays_wallet()
 	await _p2i_district_save_position_race()
 	await _p2j_locked_district_travel_blocked()
+	await _p2k_streetlight_activated_fires_once()
 	await _p6_soak()
 	_finish()
 
@@ -420,6 +421,42 @@ func _p2j_locked_district_travel_blocked() -> void:
 		_fail("P2j transition_to() entered locked district '%s' (prerequisite '%s' was DARK)" % [target, parent_id])
 		return
 	_log("P2j locked district travel blocked: transition_to() correctly refused - OK")
+
+## BREAK_REPORT B12 regression: PowerGrid.advance_district() used to fire
+## streetlight_activated whenever new_stage >= STREETS, not just when the
+## district actually CROSSED into STREETS - so repairing STREETS -> FULL
+## fired it a second time. AchievementManager's own unlock is idempotent so
+## it hid the bug there, but DailyChallengeManager's light_streets counter
+## just increments per event and double-counted. Runs after P2c/P2j have
+## already pushed every district to FULL, so this de-levels one district to
+## PARTIAL, replays the report's exact repro (advance to STREETS, then to
+## FULL) while counting real signal emissions, then restores the district's
+## stage.
+func _p2k_streetlight_activated_fires_once() -> void:
+	var pg := get_node_or_null("/root/PowerGrid")
+	if pg == null:
+		_fail("P2k PowerGrid autoload missing")
+		return
+	var target: StringName = &"school"
+	var d = pg.get_district(target)
+	if d == null:
+		_fail("P2k district '%s' not found" % target)
+		return
+	var stage_before: int = d.stage
+	d.stage = DistrictData.Stage.PARTIAL
+	# Boxed in an Array: GDScript lambdas capture plain locals by value, so a
+	# bare int would never see the mutation happen inside the closure.
+	var fire_count := [0]
+	var counter := func(_id) -> void: fire_count[0] += 1
+	EventBus.streetlight_activated.connect(counter)
+	pg.advance_district(target, DistrictData.Stage.STREETS)
+	pg.advance_district(target, DistrictData.Stage.FULL)
+	EventBus.streetlight_activated.disconnect(counter)
+	d.stage = stage_before as DistrictData.Stage
+	if fire_count[0] != 1:
+		_fail("P2k streetlight_activated fired %d times for one district's PARTIAL->STREETS->FULL repair (expected exactly 1, at the STREETS crossing)" % fire_count[0])
+		return
+	_log("P2k streetlight_activated fires exactly once per district - OK")
 
 # ── P3 ────────────────────────────────────────────────────────────────
 func _p3_save_load_lang() -> void:
