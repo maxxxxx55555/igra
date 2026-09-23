@@ -482,7 +482,32 @@ seeds - separate from this fix, already tracked as its own open item.) Static ga
 the pre-existing `i18n_truth_gate` FAIL), `flow_check.py` OK, `scene_node_check.py` OK. Committed
 `d7a0692`, pushed, push verified.
 
-**Next**: the remaining BREAK_REPORT items in severity order (B12-B16, Q1), then SEC-CLOSE,
+**C1 BREAK-CLOSE, B12 (`streetlight_activated` fires again at FULL, not just STREETS):** report's
+claim confirmed. `PowerGrid.advance_district()` fired the signal whenever `new_stage >= STREETS`,
+which stays true for the LATER STREETS -> FULL repair too - a second, spurious fire per district.
+`AchievementManager._on_streetlight_activated`'s own unlock call is idempotent, so it hid the bug
+there entirely; `DailyChallengeManager`'s `light_streets` counter has no such latch and just
+increments per event, so a `light_streets` daily challenge counted 2 per district instead of 1.
+
+Fix: capture the district's stage BEFORE mutating it, and only fire when the OLD stage was below
+STREETS and the new one is at or above it (`old_stage < STREETS and new_stage >= STREETS`) -
+fires exactly once at the real crossing regardless of whether a caller steps through STREETS or
+jumps straight PARTIAL -> FULL in one call (`scripts/world/power_grid.gd`).
+
+Regression test (GOLD MASTER suite P2k): de-levels a district to PARTIAL, connects a counter to
+the real `EventBus.streetlight_activated`, replays the report's own PARTIAL->STREETS->FULL repro
+via two real `advance_district()` calls, then restores the district's stage. Tripped over a real
+GDScript gotcha while writing it: a lambda closure captures a bare local by VALUE, so
+`fire_count += 1` inside the counter closure was silently mutating a copy, never the outer
+variable - the test read back 0 even while a DIAG print inside the closure proved it fired.
+Fixed by boxing the counter in a one-element Array (captured by reference) instead. A/B confirmed
+once that was fixed: fires 2x on the reverted code, 1x on the fix.
+
+Not a balance/progression change (no new player-facing gate, just de-duplicating an event), so no
+IRON RULE bot re-run needed for this one. Static gates 19/20 (pre-existing `i18n_truth_gate` FAIL
+only), `flow_check.py` OK, `scene_node_check.py` OK. Committed `c814621`, pushed, push verified.
+
+**Next**: the remaining BREAK_REPORT items in severity order (B13-B16, Q1), then SEC-CLOSE,
 SLOP-CLEAN, TZ-CLOSE, finish P2, I18N-FINAL, sign-off - per the studio-lead directive's own phase
 order. Every remaining report claim gets the same treatment: verify empirically before fixing,
 verify the fix with a real A/B control, correct the report's own claim (or an existing test's own
