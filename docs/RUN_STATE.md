@@ -605,10 +605,40 @@ headless timing was already shown (B10) to not match real frame pacing, so a hea
 manufacture the specific race this needs. This pass has not attempted a windowed run yet; that's
 the next real decision point, not something to fake past with a headless proxy.
 
-**Next**: attempt B15 with an actual windowed Godot run if practical in this environment
-(GPU-backed, hard-timeout-wrapped per the standing TIMEOUT RULE - a prior session already hit a
-54-minute hang on an unwrapped manual run). If not practical, record it honestly as still-open
-rather than guessed shut, and move on to SEC-CLOSE,
+**C1 BREAK-CLOSE, B15 (player teleported onto a district whose floor doesn't exist yet):**
+labeled `NEEDS-RUNTIME-CONFIRM` for a real windowed hitch, which this pass did not attempt (no
+confirmed practical windowed setup used this session; recorded honestly rather than faked with a
+headless proxy). But the report's own root-cause analysis names a SECOND, independently fixable
+gap that doesn't need the hitch to reproduce: `player_3d.gd`'s `_check_fall_recovery()` refused to
+act while `_last_grounded_pos` was still its `Vector3.ZERO` sentinel - true until `is_on_floor()`
+had confirmed true at least once this run - so the very first frame(s) after ANY teleport
+(including a normal district transition, not just a hitched one) had zero safety net, exactly
+during the window `street_builder.gd`'s deferred road-collision `build()` leaves open.
+
+Fixed that concrete half: `WorldRuntime._place_player()` now calls a new
+`player.mark_spawn_as_grounded(target)` right after positioning the player, arming the recovery
+net with the intended spawn point immediately instead of waiting for real physics contact.
+
+Regression test (GOLD MASTER suite P2p): a direct unit check that `mark_spawn_as_grounded()` sets
+state, isolated from real transition timing, plus an integration check that resets to the exact
+"never grounded" sentinel and confirms a real district transition arms it at the earliest
+observable frame (same B10-style earliest-check discipline, since natural `is_on_floor()`
+grounding could otherwise mask the same gap this exists to catch). A/B verified: fails on the
+reverted code (method doesn't exist), passes on the fix. Quick `autoplay_bot` sanity run (seed 1,
+90s) shows normal progression, no new errors - not a full IRON RULE win-proof, but enough to catch
+an obvious regression in code this close to core movement. Static gates 19/20 (pre-existing
+`i18n_truth_gate` FAIL only), `flow_check.py` OK, `scene_node_check.py` OK. Committed `8c99689`,
+pushed, push verified.
+
+**Honest status**: this closes the fixable, code-level half of B15 (the missing safety net) but
+does NOT claim the report's full end-to-end repro (an actual windowed frame hitch dropping the
+player through not-yet-built collision) has been reproduced or ruled out - that still needs a real
+windowed run this pass has not attempted. Recorded as such, not claimed "ALL GREEN."
+
+**docs/BREAK_REPORT.md is now fully closed: B1 through B16 and Q1, every item either fixed with a
+real A/B-verified regression test, or (B15) fixed at the root-cause level available without a
+windowed run, with the remaining gap stated honestly rather than papered over.** C1 BREAK-CLOSE is
+done. Next per the studio-lead directive's own phase order: C2 SEC-CLOSE (`docs/SECURITY_PATCH_SPEC.md`),
 SLOP-CLEAN, TZ-CLOSE, finish P2, I18N-FINAL, sign-off - per the studio-lead directive's own phase
 order. Every remaining report claim gets the same treatment: verify empirically before fixing,
 verify the fix with a real A/B control, correct the report's own claim (or an existing test's own
