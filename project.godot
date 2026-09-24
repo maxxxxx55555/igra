@@ -110,6 +110,7 @@ RewardsManager="*res://scripts/economy/rewards_manager.gd"
 RandomEvents="*res://scripts/systems/random_events.gd"
 AdService="*res://scripts/monetization/ad_service.gd"
 PlayIntegrityService="*res://scripts/systems/play_integrity_service.gd"
+IntegrityGuard="*res://scripts/systems/integrity_guard.gd"
 #ScreenFlowManager="*res://scripts/ui/screen_flow_manager.gd"
 
 [debug]

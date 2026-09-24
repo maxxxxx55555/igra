@@ -40,6 +40,7 @@ func _ready() -> void:
 	_check_progress_tracker_grant_unlocks_real_achievement()
 	_check_main_authority_schema()
 	_check_district_id_and_player_pos_validated()
+	_check_integrity_guard_wired()
 	_check_coin_wallet_absurd_values()
 	_check_district_id_injection_defended()
 	_check_cross_save_swap_rejected()
@@ -388,6 +389,26 @@ func _check_district_id_and_player_pos_validated() -> void:
 			if FileAccess.file_exists(p):
 				DirAccess.remove_absolute(p)
 	SaveSystem.load_all()
+
+## SECURITY_PATCH_SPEC R-01: integrity_guard.gd implemented a real runtime
+## watchdog (economy clamp, missing-player detection, fell-through-floor/
+## non-finite position restore, HP/battery/stamina range checks) but was
+## never in project.godot's [autoload] list - the threat model called it a
+## live watchdog when nothing was actually running it. Confirms it's now
+## registered AND its economy clamp fires live (bypassing CoinWallet's own
+## from_dict() clamp by writing the public var directly, so this actually
+## exercises IntegrityGuard's own check, not CoinWallet's).
+func _check_integrity_guard_wired() -> void:
+	var ig := get_node_or_null("/root/IntegrityGuard")
+	_ok(ig != null, "IntegrityGuard is registered as a live autoload (was dormant per R-01)")
+	if ig == null:
+		return
+	var before: int = CoinWallet.get_coins()
+	CoinWallet.coins = 99999999999
+	ig._check_economy()
+	_ok(CoinWallet.get_coins() <= ig.MAX_COINS,
+		"IntegrityGuard's live economy check clamps an absurd wallet value (got %d, cap %d)" % [CoinWallet.get_coins(), ig.MAX_COINS])
+	CoinWallet.coins = before
 
 # ── economy: absurd values can't desync CoinWallet ─────────────────────
 func _check_coin_wallet_absurd_values() -> void:
