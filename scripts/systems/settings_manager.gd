@@ -47,6 +47,7 @@ var _settings: Dictionary = {}
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	get_tree().node_added.connect(_on_node_added)
 	for b in BUSES:
 		_volumes[b] = 1.0
 		_ensure_bus(b)
@@ -259,18 +260,12 @@ const FPS_STEPS := [30, 60, 120]
 const RESOLUTIONS := [Vector2i(1280, 720), Vector2i(1920, 1080), Vector2i(2560, 1440)]
 const SHADOW_ATLAS := [1024, 2048, 4096]
 ## Пресеты качества: тени / текстуры / эффекты / потолок FPS / разрешение.
-## GDD.md:377 (C06): "fog, particles 50-150%" per tier. fog_mult scales the
-## live depth-fog density (base 0.012, world_env_setup.gd's own default).
-## particle_ratio is stored/emitted for a future per-emitter pass (needs a
-## "particles" group wired across ~11 scenes, out of scope for this row) -
-## not applied to any node yet; DEFERRED-STRUCTURAL, see TZ_DECISIONS.md.
 const GRAPHICS_TIERS := [
-	{"shadows": 0, "textures": 0, "effects": 0, "fps": 0, "resolution": 0, "fog_mult": 0.7, "particle_ratio": 0.5},
-	{"shadows": 1, "textures": 1, "effects": 1, "fps": 0, "resolution": 1, "fog_mult": 0.85, "particle_ratio": 0.75},
-	{"shadows": 2, "textures": 2, "effects": 2, "fps": 1, "resolution": 1, "fog_mult": 1.0, "particle_ratio": 1.0},
-	{"shadows": 2, "textures": 2, "effects": 2, "fps": 1, "resolution": 2, "fog_mult": 1.15, "particle_ratio": 1.5},
+	{"shadows": 0, "textures": 0, "effects": 0, "fps": 0, "resolution": 0},
+	{"shadows": 1, "textures": 1, "effects": 1, "fps": 0, "resolution": 1},
+	{"shadows": 2, "textures": 2, "effects": 2, "fps": 1, "resolution": 1},
+	{"shadows": 2, "textures": 2, "effects": 2, "fps": 1, "resolution": 2},
 ]
-const BASE_FOG_DENSITY: float = 0.012
 
 func set_difficulty(idx: int) -> void:
 	_settings["difficulty"] = clampi(idx, 0, 2)
@@ -432,6 +427,36 @@ func _apply_arachnophobia() -> void:
 				if alt:
 					alt.visible = enabled
 
+## GDD.md:377 (C06): particles 50-150% per graphics tier. The ratio lives
+## next to fog in visual_quality.tres (single source; world_env_setup.gd
+## applies the fog half). amount_ratio caps at 1.0 in Godot, so a >1 tier
+## scales `amount` from a remembered base instead.
+func _particle_ratio() -> float:
+	var vq := load("res://assets/config/visual_quality.tres")
+	var names := ["low", "medium", "high", "ultra"]
+	var tier: int = clampi(int(_settings.get("graphics_tier", 2)), 0, names.size() - 1)
+	var p: Dictionary = vq.get_meta(names[tier], {}) if vq else {}
+	return float(p.get("particle_ratio", 1.0))
+
+func _scale_emitter(n: Node, ratio: float) -> void:
+	var e := n as GPUParticles3D
+	if e == null:
+		return
+	if not e.has_meta("tier_base_amount"):
+		e.set_meta("tier_base_amount", e.amount)
+	var base: int = int(e.get_meta("tier_base_amount"))
+	e.amount = maxi(1, int(round(base * maxf(ratio, 1.0))))
+	e.amount_ratio = clampf(ratio, 0.0, 1.0)
+
+func _apply_particle_ratio() -> void:
+	var ratio := _particle_ratio()
+	for n in get_tree().root.find_children("*", "GPUParticles3D", true, false):
+		_scale_emitter(n, ratio)
+
+func _on_node_added(n: Node) -> void:
+	if n is GPUParticles3D:
+		_scale_emitter(n, _particle_ratio())
+
 func set_graphics_tier(idx: int) -> void:
 	idx = clampi(idx, 0, GRAPHICS_TIERS.size() - 1)
 	_settings["graphics_tier"] = idx
@@ -441,10 +466,7 @@ func set_graphics_tier(idx: int) -> void:
 	set_effects_quality(preset["effects"])
 	set_fps_cap(preset["fps"])
 	set_resolution(preset["resolution"])
-	_settings["particle_ratio"] = preset["particle_ratio"]
-	var env := _find_environment()
-	if env != null:
-		env.fog_density = BASE_FOG_DENSITY * float(preset["fog_mult"])
+	_apply_particle_ratio()
 	EventBus.settings_changed.emit("graphics_tier", idx)
 
 func set_resolution(idx: int) -> void:

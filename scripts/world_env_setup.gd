@@ -166,7 +166,7 @@ func _apply_graphics_tier(tier: int) -> void:
 	var vq := load("res://assets/config/visual_quality.tres")
 	if vq == null:
 		return
-	var names := ["low", "medium", "high", "high"]
+	var names := ["low", "medium", "high", "ultra"]  # C06: ultra is its own preset (fog 0.015, particles 150%)
 	var name: String = names[clampi(tier, 0, names.size() - 1)]
 	var p: Dictionary = vq.get_meta(name, {})
 	if p.is_empty():
