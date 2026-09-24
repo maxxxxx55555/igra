@@ -617,6 +617,7 @@ func _physics_process(delta: float) -> void:
 	human_body.visible = enable_human_body and not _is_fps_view()
 
 	flashlight.visible = flashlight_enabled
+	_update_low_battery_flicker()
 	# Конус — вид от третьего лица; из глаз он превращается в засвет во весь экран.
 	cone.visible = flashlight_enabled and cone_amber_ok and not _is_fps_view()
 	dust.emitting = flashlight_enabled
@@ -1116,6 +1117,22 @@ func _exit_hiding() -> void:
 ## whenever either one changes, instead of one call overwriting the other.
 var _upgrade_range_bonus: float = 0.0
 
+func _update_low_battery_flicker() -> void:
+	if flashlight_stats == null:
+		return
+	if _base_flashlight_energy < 0.0:
+		_base_flashlight_energy = flashlight.light_energy
+	var ratio_pct: float = battery / maxf(battery_max, 0.001) * 100.0
+	var flicker: bool = flashlight_enabled and ratio_pct < flashlight_stats.flicker_battery_threshold \
+		and _flashlight_stability_bonus < 1.0 \
+		and not bool(SettingsManager.get_setting("reduce_flash", false))
+	if flicker:
+		_flickering = true
+		flashlight.light_energy = _base_flashlight_energy * (1.0 + (randf() * 2.0 - 1.0) * flashlight_stats.flicker_intensity)
+	elif _flickering:
+		_flickering = false
+		flashlight.light_energy = _base_flashlight_energy
+
 func apply_flashlight_upgrades(levels: Dictionary) -> void:
 	if not levels:
 		return
@@ -1133,6 +1150,8 @@ func apply_flashlight_upgrades(levels: Dictionary) -> void:
 	if sm:
 		sm.set_shader_parameter("softness", 0.3 * (1.0 - s_bonus))
 	_flashlight_battery_bonus = bat_bonus
+	_flashlight_stability_bonus = s_bonus
+	_base_flashlight_energy = flashlight.light_energy
 	refresh_battery_max()
 	refresh_flashlight_range()
 
@@ -1142,6 +1161,11 @@ func apply_flashlight_upgrades(levels: Dictionary) -> void:
 ## other's contribution. Recomputed from scratch from both live sources
 ## every time either changes, so order no longer matters.
 var _flashlight_battery_bonus: float = 0.0
+## GDD.md:79 (G12b): flicker below the low-battery threshold, cleared by the
+## max-level Stability upgrade (bonus 1.0).
+var _flashlight_stability_bonus: float = 0.0
+var _base_flashlight_energy: float = -1.0
+var _flickering: bool = false
 const BATTERY_PER_SKILL_LVL: float = 25.0
 
 func refresh_battery_max() -> void:
