@@ -136,12 +136,24 @@ func to_dict() -> Dictionary:
 		"docs": _docs.keys().filter(func(k): return _docs[k]).map(func(k): return String(k)),
 		"secret_ids": _secrets_found.keys().map(func(k): return String(k)),
 		"looted_districts": _districts_looted.keys().map(func(k): return String(k))}
+## content/secrets.json ships exactly 26 secrets (district_loot.gd/secret.gd
+## both document this) - a real, fixed content total, unlike kills/puzzles
+## below which have no such fixed roster in this project (kills accumulate
+## indefinitely across a playthrough; inventing a puzzle total without a
+## documented source would risk a wrong cap breaking a legitimate save).
+const MAX_SECRETS: int = 26
+
 func from_dict(d: Dictionary) -> void:
-	secrets = int(d.get("secrets", 0))
-	kills = int(d.get("kills", 0))
-	shadow_kills = int(d.get("shadow_kills", 0))
-	puzzles = int(d.get("puzzles", 0))
-	time_played = float(d.get("time_played", 0.0))
+	# SECURITY_PATCH_SPEC P-07: every field here used to be trusted raw off
+	# a signed-but-hand-editable save. secrets has a real fixed total to
+	# clamp against; kills/puzzles don't (see MAX_SECRETS comment), but
+	# negative counters and a nonsensical shadow_kills > kills are always
+	# wrong regardless of any total, so those are still worth closing.
+	secrets = clampi(int(d.get("secrets", 0)), 0, MAX_SECRETS)
+	kills = maxi(0, int(d.get("kills", 0)))
+	shadow_kills = clampi(int(d.get("shadow_kills", 0)), 0, kills)
+	puzzles = maxi(0, int(d.get("puzzles", 0)))
+	time_played = maxf(0.0, float(d.get("time_played", 0.0)))
 	_ach_done.clear()
 	for k in d.get("ach", []):
 		_ach_done[String(k)] = true

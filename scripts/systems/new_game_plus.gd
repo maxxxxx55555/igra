@@ -192,10 +192,26 @@ func _load_save() -> void:
 		return
 	var txt = file.get_as_text()
 	file.close()
-	var json = JSON.new()
-	if json.parse(txt) != OK:
+	var outer := JSON.new()
+	if outer.parse(txt) != OK or not (outer.data is Dictionary):
 		return
-	var data = json.data as Dictionary
+	var envelope: Dictionary = outer.data
+	# SECURITY_PATCH_SPEC P-03: this file was entirely unsigned plain JSON -
+	# ng_plus/active/modifiers control real difficulty, rewards, battery and
+	# time-pressure scaling (get_*_multiplier() below), so a hand edit could
+	# set ng_plus=3 and active=true with zero real playthroughs. Same clean
+	# policy as daily_challenge_manager.gd's own B6 fix: reject outright, no
+	# legacy-plain-JSON trust-once compat (no real installed base to
+	# protect). Doesn't prove the level was legitimately earned - only that
+	# the file wasn't hand-edited after this game itself last wrote it.
+	if not envelope.has("hmac") or not envelope.has("data_json"):
+		return
+	if String(envelope["hmac"]) != String(SaveSystem.call("_sign", String(envelope["data_json"]))):
+		return
+	var inner := JSON.new()
+	if inner.parse(String(envelope["data_json"])) != OK or not (inner.data is Dictionary):
+		return
+	var data: Dictionary = inner.data
 	# QA_SWARM_FINDINGS.md P2 (cheater): a hand-edited/forged ng_plus_data.json
 	# with an absurd level had nothing clamping it back down - every
 	# get_*_multiplier() below scales off this value, so an unclamped level
@@ -223,7 +239,8 @@ func _save_save() -> void:
 		"active": _is_ng_plus_active,
 		"modifiers": _active_modifiers,
 	}
+	var body := JSON.stringify(data)
 	var file = FileAccess.open(path, FileAccess.WRITE)
 	if file:
-		file.store_string(JSON.stringify(data))
+		file.store_string(JSON.stringify({"hmac": SaveSystem.call("_sign", body), "data_json": body}))
 		file.close()

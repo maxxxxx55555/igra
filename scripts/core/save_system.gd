@@ -465,13 +465,22 @@ func save_slot(slot: int) -> bool:
 		"daily_streak": _daily_streak,
 		"last_daily_time": _last_daily_time,
 		"onboard_done": _onboard_done,
-		"timestamp": Time.get_unix_time_from_system()
+		"timestamp": Time.get_unix_time_from_system(),
+		"slot_id": slot,
 	}
 	return _write_atomic(_get_slot_path(slot), payload)
 
+## SECURITY_PATCH_SPEC P-06: every slot shares the same HMAC key with no
+## slot identity in the signed body, so a validly-signed save from slot B
+## copied over slot A's file loaded cleanly as if it were A's own data -
+## not corruption, but a silent profile-swap with no signal to the player.
+## slot_id is now part of the signed payload; a file whose slot_id doesn't
+## match the slot being loaded is rejected the same as a bad HMAC.
 func load_slot(slot: int) -> bool:
 	var data := _read_validated(_get_slot_path(slot))
 	if data.is_empty():
+		return false
+	if int(data.get("slot_id", -1)) != slot:
 		return false
 	PowerGrid.from_dict(data.get("power", {}))
 	CoinWallet.from_dict(data.get("wallet", {}))

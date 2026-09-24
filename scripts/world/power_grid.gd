@@ -145,7 +145,10 @@ func to_dict() -> Dictionary:
 func from_dict(d: Dictionary) -> void:
 	var stages: Dictionary = d.get("stages", {}) as Dictionary
 	for d2 in _by_id.values():
-		var st := int(stages.get(String(d2.id), DistrictData.Stage.DARK))
+		# SECURITY_PATCH_SPEC P-07: a signed-but-hand-edited save could set
+		# any integer stage (e.g. 99), skipping repair sequencing entirely
+		# and fabricating "all restored" for the finale/ending checks.
+		var st := clampi(int(stages.get(String(d2.id), DistrictData.Stage.DARK)), 0, DistrictData.Stage.FULL)
 		d2.stage = st
 		# Same reason as reset(): sync persistent listeners to the loaded
 		# stage instead of relying on a later per-district signal.

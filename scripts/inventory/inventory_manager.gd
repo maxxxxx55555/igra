@@ -249,8 +249,16 @@ func from_dict(d: Dictionary) -> void:
 			# restore as a permanent blank "ghost" slot (equipment slots
 			# below already guard the same way) - skip it instead.
 			var item_id := StringName(s.get("item_id", ""))
-			if ItemDatabase.get_item(item_id):
-				slots[i] = {"item_id": item_id, "count": int(s.get("count", 0))}
+			var item_data: ItemData = ItemDatabase.get_item(item_id)
+			if item_data:
+				# SECURITY_PATCH_SPEC P-07: count was trusted raw - a
+				# signed-but-hand-edited save could set an absurd count for
+				# a stackable item, or any nonzero count for a non-stackable
+				# one (max_stack=1 in that case still bounds it correctly).
+				var cap: int = item_data.max_stack if item_data.stackable else 1
+				var count := clampi(int(s.get("count", 0)), 0, cap)
+				if count > 0:
+					slots[i] = {"item_id": item_id, "count": count}
 	# Восстановление экипировки
 	for k in d.get("equipment", {}).keys():
 		for slot in equipment:

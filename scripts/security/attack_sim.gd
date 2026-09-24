@@ -33,12 +33,15 @@ func _ready() -> void:
 	_check_achievements_legacy_migrates()
 	_check_ng_plus_level_clamped()
 	_check_ng_plus_modifiers_revalidated()
+	_check_ng_plus_unsigned_file_rejected()
 	_check_reset_progress_clears_ng_plus()
+	_check_flashlight_upgrade_forgery_rejected()
 	_check_daily_challenge_forgery_rejected()
 	_check_progress_tracker_grant_unlocks_real_achievement()
+	_check_main_authority_schema()
 	_check_coin_wallet_absurd_values()
 	_check_district_id_injection_defended()
-	_check_cross_save_swap_no_corruption()
+	_check_cross_save_swap_rejected()
 	_cleanup()
 	_done = true
 	print("[attack-sim] DONE fails=", _fails)
@@ -186,6 +189,18 @@ func _check_progress_tracker_grant_unlocks_real_achievement() -> void:
 	CoinWallet.from_dict({})
 
 # ── NG+ level forgery ───────────────────────────────────────────────────
+## SECURITY_PATCH_SPEC P-03: ng_plus_data.json is now a signed envelope
+## (SaveSystem's own HMAC, matching daily_challenge_manager.gd's B6 fix) -
+## every test file below must be written through this so it survives the
+## envelope check and actually reaches the clamp/revalidation logic under
+## test, rather than being rejected outright before it does.
+func _write_ngp_test_file(data: Dictionary) -> void:
+	var path := "user://ng_plus_data.json"
+	var body := JSON.stringify(data)
+	var f := FileAccess.open(path, FileAccess.WRITE)
+	f.store_string(JSON.stringify({"hmac": SaveSystem.call("_sign", body), "data_json": body}))
+	f.close()
+
 func _check_ng_plus_level_clamped() -> void:
 	var path := "user://ng_plus_data.json"
 	var had_file := FileAccess.file_exists(path)
@@ -194,9 +209,7 @@ func _check_ng_plus_level_clamped() -> void:
 		var bf := FileAccess.open(path, FileAccess.READ)
 		backup = bf.get_as_text()
 		bf.close()
-	var f := FileAccess.open(path, FileAccess.WRITE)
-	f.store_string(JSON.stringify({"ng_plus": 99, "active": true, "modifiers": []}))
-	f.close()
+	_write_ngp_test_file({"ng_plus": 99, "active": true, "modifiers": []})
 	NewGamePlus._load_save()
 	_ok(NewGamePlus.get_current_ng_plus() <= NewGamePlus.get_max_ng_plus(),
 		"forged ng_plus=99 is clamped to MAX_NG_PLUS (%d), got %d" % [NewGamePlus.get_max_ng_plus(), NewGamePlus.get_current_ng_plus()])
@@ -221,12 +234,10 @@ func _check_ng_plus_modifiers_revalidated() -> void:
 		var bf := FileAccess.open(path, FileAccess.READ)
 		backup = bf.get_as_text()
 		bf.close()
-	var f := FileAccess.open(path, FileAccess.WRITE)
-	f.store_string(JSON.stringify({
+	_write_ngp_test_file({
 		"ng_plus": 3, "active": true,
 		"modifiers": ["sprint", "whisper", "keepers_pact", "ghost"],
-	}))
-	f.close()
+	})
 	NewGamePlus._load_save()
 	var active: Array = NewGamePlus.get_active_modifiers()
 	_ok(not ("sprint" in active and "whisper" in active),
@@ -241,6 +252,106 @@ func _check_ng_plus_modifiers_revalidated() -> void:
 	else:
 		DirAccess.remove_absolute(path)
 	NewGamePlus._load_save()
+
+## SECURITY_PATCH_SPEC P-03: ng_plus_data.json used to be plain, unsigned
+## JSON - active/modifiers/ng_plus control real difficulty, rewards,
+## battery and time-pressure scaling with no proof any of it was earned.
+## Writes a plain (unsigned) file with a maxed-out, fully-active state and
+## confirms _load_save() now leaves the CURRENT in-memory state alone
+## rather than adopting it.
+func _check_ng_plus_unsigned_file_rejected() -> void:
+	var path := "user://ng_plus_data.json"
+	var had_file := FileAccess.file_exists(path)
+	var backup := ""
+	if had_file:
+		var bf := FileAccess.open(path, FileAccess.READ)
+		backup = bf.get_as_text()
+		bf.close()
+	NewGamePlus.reset_for_new_game()  # known baseline: ng_plus=0, active=false
+	var f := FileAccess.open(path, FileAccess.WRITE)
+	f.store_string(JSON.stringify({"ng_plus": 3, "active": true, "modifiers": ["ghost"]}))
+	f.close()
+	NewGamePlus._load_save()
+	_ok(NewGamePlus.get_current_ng_plus() == 0 and not NewGamePlus.is_ng_plus_active(),
+		"unsigned ng_plus_data.json is rejected, not adopted (got ng_plus=%d active=%s)" % [
+			NewGamePlus.get_current_ng_plus(), NewGamePlus.is_ng_plus_active()])
+	if had_file:
+		var wf := FileAccess.open(path, FileAccess.WRITE)
+		wf.store_string(backup)
+		wf.close()
+	else:
+		DirAccess.remove_absolute(path)
+	NewGamePlus._load_save()
+
+## SECURITY_PATCH_SPEC P-04: flashlight_upgrades.cfg used to be plain,
+## unsigned, unclamped JSON directly granting real flashlight bonuses
+## (brightness/range/stability/angle/battery all change player_3d.gd's
+## light output) with no coins ever spent. Writes an unsigned file with
+## every branch at 999 and confirms it's rejected outright (levels stay
+## at whatever they were, never adopt the forged value).
+func _check_flashlight_upgrade_forgery_rejected() -> void:
+	var path := "user://flashlight_upgrades.cfg"
+	var had_file := FileAccess.file_exists(path)
+	var backup := ""
+	if had_file:
+		var bf := FileAccess.open(path, FileAccess.READ)
+		backup = bf.get_as_text()
+		bf.close()
+	var before := FlashlightUpgradeManager.get_level("brightness")
+	var f := FileAccess.open(path, FileAccess.WRITE)
+	f.store_string(JSON.stringify({"brightness": 999, "range": 999, "stability": 999, "angle": 999, "battery": 999}))
+	f.close()
+	FlashlightUpgradeManager._load()
+	_ok(FlashlightUpgradeManager.get_level("brightness") == before,
+		"unsigned flashlight_upgrades.cfg is rejected, not adopted (got %d, expected unchanged %d)" % [
+			FlashlightUpgradeManager.get_level("brightness"), before])
+	if had_file:
+		var wf := FileAccess.open(path, FileAccess.WRITE)
+		wf.store_string(backup)
+		wf.close()
+	else:
+		DirAccess.remove_absolute(path)
+	FlashlightUpgradeManager._load()
+
+## SECURITY_PATCH_SPEC P-07/C-04: signed authority bodies had no semantic
+## validation at all - "HMAC-valid" was being treated as "game-valid".
+## Covers the four loaders given schema fixes: PowerGrid (stage clamp),
+## InventoryManager (item allowlist + stack-size clamp, already partly
+## covered elsewhere), ProgressTracker (secrets/shadow_kills bounds), and
+## QuestManager (progress/done consistency).
+func _check_main_authority_schema() -> void:
+	# PowerGrid: absurd stage clamps to FULL, not left at the forged value.
+	PowerGrid.from_dict({"stages": {"suburbs": 99}})
+	_ok(PowerGrid.get_stage(&"suburbs") <= DistrictData.Stage.FULL,
+		"forged district stage 99 clamps to FULL, got %d" % PowerGrid.get_stage(&"suburbs"))
+	PowerGrid.reset()
+	# InventoryManager: absurd count on a real stackable item clamps to its
+	# own max_stack, not left at the forged value.
+	InventoryManager.from_dict({"slots": [{"item_id": "scrap", "count": 999999}]})
+	var scrap_count: int = 0
+	for s in InventoryManager.slots:
+		if s != null and String(s.get("item_id", "")) == "scrap":
+			scrap_count = int(s.get("count", 0))
+	var scrap_data: ItemData = ItemDatabase.get_item(&"scrap")
+	_ok(scrap_data != null and scrap_count <= scrap_data.max_stack,
+		"forged scrap count 999999 clamps to max_stack (%s), got %d" % [
+			scrap_data.max_stack if scrap_data else "?", scrap_count])
+	InventoryManager.from_dict({})
+	# ProgressTracker: secrets beyond the real 26-secret total clamps down;
+	# shadow_kills can never exceed kills.
+	ProgressTracker.from_dict({"secrets": 9999, "kills": 5, "shadow_kills": 9999})
+	_ok(ProgressTracker.secrets <= ProgressTracker.MAX_SECRETS,
+		"forged secrets 9999 clamps to the real total (%d), got %d" % [ProgressTracker.MAX_SECRETS, ProgressTracker.secrets])
+	_ok(ProgressTracker.shadow_kills <= ProgressTracker.kills,
+		"forged shadow_kills (9999) can't exceed kills (%d), got %d" % [ProgressTracker.kills, ProgressTracker.shadow_kills])
+	ProgressTracker.from_dict({})
+	# QuestManager: done=true with zero progress on a real quest is not
+	# accepted as a genuine completion.
+	QuestManager.from_dict({"q_connect_cables": {"progress": 0, "done": true}})
+	var forged_q: Dictionary = QuestManager.quests.get("q_connect_cables", {})
+	_ok(not bool(forged_q.get("done", false)),
+		"forged done=true with progress=0 is not accepted as a real completion")
+	QuestManager.reset()
 
 # ── economy: absurd values can't desync CoinWallet ─────────────────────
 func _check_coin_wallet_absurd_values() -> void:
@@ -264,8 +375,17 @@ func _check_district_id_injection_defended() -> void:
 			root.queue_free()
 	probe.queue_free()
 
-# ── cross-save swap: copying a foreign signed save over a slot ─────────
-func _check_cross_save_swap_no_corruption() -> void:
+## SECURITY_PATCH_SPEC P-06/C-02: slots used to share one HMAC key with no
+## slot identity in the signed body, so a validly-signed save copied from
+## slot B over slot A's file loaded cleanly AS slot A - a silent
+## profile-swap with no corruption signal at all. slot_id is now part of
+## the signed payload; load_slot() rejects a file whose slot_id doesn't
+## match. This intentionally changes the old test's own expectation
+## (renamed from _check_cross_save_swap_no_corruption): slot identity is
+## now a real boundary, not a documented "drag files to swap saves"
+## feature - there is no player-facing UI for that today (the slot picker
+## is archived per KNOWN_ISSUES.md), so nothing currently promises it.
+func _check_cross_save_swap_rejected() -> void:
 	var slot_a := _SLOT
 	var slot_b := _SLOT + 1
 	CoinWallet.from_dict({}); CoinWallet.add(111)
@@ -275,10 +395,11 @@ func _check_cross_save_swap_no_corruption() -> void:
 	var path_a := "user://tls_savegame_slot%d.save" % slot_a
 	var path_b := "user://tls_savegame_slot%d.save" % slot_b
 	DirAccess.copy_absolute(path_b, path_a)  # foreign (but validly signed) file dropped into slot A
-	CoinWallet.from_dict({})
+	CoinWallet.from_dict({}); CoinWallet.add(111)  # restore A's pre-load wallet state to check against
 	var loaded := SaveSystem.load_slot(slot_a)
-	_ok(loaded and CoinWallet.get_coins() == 222,
-		"a validly-signed save from another slot loads cleanly, no corruption (got %d)" % CoinWallet.get_coins())
+	_ok(not loaded and CoinWallet.get_coins() == 111,
+		"a validly-signed save from another slot is rejected by slot_id, not silently adopted as this slot (loaded=%s coins=%d)" % [loaded, CoinWallet.get_coins()])
+	_ok(SaveSystem.load_slot(slot_b), "slot B still loads fine under its own, correct slot_id")
 	for suffix in ["", ".bak", ".bak2", ".bak3"]:
 		for p in [path_a + suffix, path_b + suffix]:
 			if FileAccess.file_exists(p):
@@ -308,9 +429,7 @@ func _check_reset_progress_clears_ng_plus() -> void:
 		var nf := FileAccess.open(ngp_path, FileAccess.READ)
 		ngp_backup = nf.get_as_text()
 		nf.close()
-	var f := FileAccess.open(ngp_path, FileAccess.WRITE)
-	f.store_string(JSON.stringify({"ng_plus": 2, "active": true, "modifiers": ["ghost"]}))
-	f.close()
+	_write_ngp_test_file({"ng_plus": 2, "active": true, "modifiers": ["ghost"]})
 	NewGamePlus._load_save()
 	SaveSystem.wipe_all_saves()
 	_ok(NewGamePlus.get_current_ng_plus() == 0 and not FileAccess.file_exists(ngp_path),

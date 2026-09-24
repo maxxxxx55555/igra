@@ -157,8 +157,13 @@ func from_dict(d: Dictionary) -> void:
 	for qid in d:
 		if quests.has(qid):
 			var q = quests[qid]
-			q.progress = int(d[qid].get("progress", 0))
-			q.done = bool(d[qid].get("done", false))
+			# SECURITY_PATCH_SPEC P-07: progress/done were trusted raw off a
+			# signed-but-hand-editable save - progress could exceed the
+			# quest's own target, and done could be set true with zero
+			# progress, faking completion (and the coin/item reward it
+			# implies elsewhere) without ever doing the objective.
+			q.progress = clampi(int(d[qid].get("progress", 0)), 0, int(q.target_count))
+			q.done = bool(d[qid].get("done", false)) and q.progress >= q.target_count
 
 func reset() -> void:
 	for q in quests.values():
