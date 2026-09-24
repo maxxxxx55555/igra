@@ -158,8 +158,21 @@ func has_key(key: String) -> bool:
 ## Ресурсы .tres хранят display_name по-русски, а языков в игре 13. Если ключ
 ## ITEM_BATTERY есть в словаре — берём его, иначе возвращаем запасное значение
 ## из ресурса, чтобы новый предмет без перевода не показывал голый id.
+## GDD.md:379 (C04): arachnophobia mode renames Crawler to "blind dogs" -
+## settings_manager.gd's _apply_arachnophobia() already swaps the MESH
+## (BodyMesh/AltMesh on the "crawlers" group); this is the matching text
+## half, shared by the encyclopedia entry and the real-time "spotted" label
+## (hud_3d.gd) so a player who enabled the toggle never sees the word
+## "Crawler" in either place.
+func _display_monster_id(id: StringName) -> StringName:
+	if id == &"crawler":
+		var sm := get_node_or_null("/root/SettingsManager")
+		if sm != null and sm.has_method("get_setting") and bool(sm.get_setting("arachnophobia", false)):
+			return &"crawler_arachnophobia"
+	return id
+
 func name_for(prefix: String, id: StringName, fallback_name: String = "") -> String:
-	var key: String = prefix + String(id).to_upper()
+	var key: String = prefix + String(_display_monster_id(id)).to_upper()
 	if has_key(key):
 		return t(key)
 	return fallback_name if not fallback_name.is_empty() else String(id)

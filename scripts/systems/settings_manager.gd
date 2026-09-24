@@ -259,12 +259,18 @@ const FPS_STEPS := [30, 60, 120]
 const RESOLUTIONS := [Vector2i(1280, 720), Vector2i(1920, 1080), Vector2i(2560, 1440)]
 const SHADOW_ATLAS := [1024, 2048, 4096]
 ## Пресеты качества: тени / текстуры / эффекты / потолок FPS / разрешение.
+## GDD.md:377 (C06): "fog, particles 50-150%" per tier. fog_mult scales the
+## live depth-fog density (base 0.012, world_env_setup.gd's own default).
+## particle_ratio is stored/emitted for a future per-emitter pass (needs a
+## "particles" group wired across ~11 scenes, out of scope for this row) -
+## not applied to any node yet; DEFERRED-STRUCTURAL, see TZ_DECISIONS.md.
 const GRAPHICS_TIERS := [
-	{"shadows": 0, "textures": 0, "effects": 0, "fps": 0, "resolution": 0},
-	{"shadows": 1, "textures": 1, "effects": 1, "fps": 0, "resolution": 1},
-	{"shadows": 2, "textures": 2, "effects": 2, "fps": 1, "resolution": 1},
-	{"shadows": 2, "textures": 2, "effects": 2, "fps": 1, "resolution": 2},
+	{"shadows": 0, "textures": 0, "effects": 0, "fps": 0, "resolution": 0, "fog_mult": 0.7, "particle_ratio": 0.5},
+	{"shadows": 1, "textures": 1, "effects": 1, "fps": 0, "resolution": 1, "fog_mult": 0.85, "particle_ratio": 0.75},
+	{"shadows": 2, "textures": 2, "effects": 2, "fps": 1, "resolution": 1, "fog_mult": 1.0, "particle_ratio": 1.0},
+	{"shadows": 2, "textures": 2, "effects": 2, "fps": 1, "resolution": 2, "fog_mult": 1.15, "particle_ratio": 1.5},
 ]
+const BASE_FOG_DENSITY: float = 0.012
 
 func set_difficulty(idx: int) -> void:
 	_settings["difficulty"] = clampi(idx, 0, 2)
@@ -435,6 +441,10 @@ func set_graphics_tier(idx: int) -> void:
 	set_effects_quality(preset["effects"])
 	set_fps_cap(preset["fps"])
 	set_resolution(preset["resolution"])
+	_settings["particle_ratio"] = preset["particle_ratio"]
+	var env := _find_environment()
+	if env != null:
+		env.fog_density = BASE_FOG_DENSITY * float(preset["fog_mult"])
 	EventBus.settings_changed.emit("graphics_tier", idx)
 
 func set_resolution(idx: int) -> void:

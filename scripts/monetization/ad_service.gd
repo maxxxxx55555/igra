@@ -24,7 +24,7 @@ const REWARDS: Dictionary = {
 	&"hint_reveal": 1,
 }
 
-const COOLDOWN_SEC: float = 900.0  ## 15 минут между роликами
+const COOLDOWN_SEC: float = 3600.0  ## GDD.md:616 (E03/T02): 1 ролик в час
 ## interstitial на смене района: не чаще раза в 3 минуты, никогда в бою.
 const INTERSTITIAL_COOLDOWN_SEC: float = 180.0
 ## revive/extra_battery — по одному разу за сессию каждый (не общий лимит
@@ -99,6 +99,19 @@ func _on_provider_reward(reward_id: StringName) -> void:
 	if reward_id in SESSION_LIMITED:
 		_used_this_session[reward_id] = true
 	reward_granted.emit(reward_id, int(REWARDS.get(reward_id, 0)))
+
+## GDD.md:614-616 (§24.4): the "bonus_coins" offer's other choice - decline
+## the ad for a -100 coin penalty instead of +100 for watching. No modal UI
+## calls this yet (this whole reward path has no player-facing entry point
+## today, see TZ_DECISIONS.md) - the mechanism exists correctly for when one
+## is built. Shares the same hourly cooldown as watching: the offer itself
+## is what's rate-limited, not just the ad impression.
+func skip_bonus_coins() -> bool:
+	if not can_show_reward(&"bonus_coins"):
+		return false
+	_last_shown_ms = Time.get_ticks_msec()
+	CoinWallet.spend_clamped(int(REWARDS[&"bonus_coins"]))
+	return true
 
 ## Поставщик зовёт это при любой осечке. Кулдаун не трогаем: неудачный показ
 ## не должен запирать игрока на 15 минут.

@@ -21,6 +21,15 @@ func try_spend(amount: int) -> bool:
 	coins -= amount
 	coins_changed.emit(coins)
 	return true
+## GDD.md:614 (E03): the ad-skip penalty clamps at 0 rather than refusing
+## like try_spend() does - declining the ad offer must always go through,
+## never blocked by "not enough coins" the way a shop purchase is.
+func spend_clamped(amount: int) -> void:
+	if amount <= 0:
+		return
+	coins = maxi(0, coins - amount)
+	coins_changed.emit(coins)
+
 func get_coins() -> int:
 	return coins
 func to_dict() -> Dictionary:

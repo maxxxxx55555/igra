@@ -620,7 +620,9 @@ func _process(delta: float) -> void:
 ## на каждой встрече с монстром в любой локали. Имя берём из тех же i18n-
 ## ключей, что уже наполнены для энциклопедии (MONSTER_SHADOW и т.д.).
 func _on_monster_spotted(monster_id: StringName) -> void:
-	var key := "MONSTER_" + String(monster_id).to_upper()
+	# C04: routes through the same arachnophobia name-swap the encyclopedia
+	# uses, so the "spotted" label never shows "Crawler" with the toggle on.
+	var key := "MONSTER_" + String(LocalizationManager._display_monster_id(monster_id)).to_upper()
 	enemy_name_label.text = LocalizationManager.t(key)
 	enemy_name_label.visible = true
 	enemy_hp_bar.visible = true
