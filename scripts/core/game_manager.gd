@@ -102,6 +102,39 @@ func start_new_game() -> void:
 	SaveSystem.reset_all()
 	_enter_play_and_reload()
 
+## GDD.md:147 (G16): respawn at the district entry with 50% HP, battery NOT
+## restored. The death screen's Retry used to call start_new_game(), which
+## reset ALL progress on every death in normal mode (and made Hardcore's
+## save wipe meaningless). No save (Hardcore just wiped it, or none yet) ->
+## a genuinely new game, which is what Hardcore's one life means.
+const RESPAWN_HP_RATIO: float = 0.5
+var _respawn_battery: float = -1.0
+
+func respawn_after_death() -> void:
+	if not SaveSystem.has_save():
+		start_new_game()
+		return
+	var p := get_tree().get_first_node_in_group("player")
+	var bat: float = float(p.get("battery")) if p else -1.0
+	if not SaveSystem.load_all():
+		start_new_game()
+		return
+	# District entry, not wherever the last periodic autosave caught the
+	# player (usually mid-fight, next to whatever killed them).
+	SaveSystem.consume_pending_player_pos()
+	_respawn_battery = bat
+	_enter_play_and_reload()
+
+## Called by WorldRuntime right after it places the player in the district.
+func apply_pending_respawn(player: Node) -> void:
+	if _respawn_battery < 0.0 or player == null:
+		return
+	var max_hp: float = player.stats.max_hp if ("stats" in player and player.stats) else 100.0
+	player.set("hp", max_hp * RESPAWN_HP_RATIO)
+	player.set("battery", minf(_respawn_battery, float(player.get("battery_max"))))
+	EventBus.player_health_changed.emit(RESPAWN_HP_RATIO)
+	_respawn_battery = -1.0
+
 func continue_game() -> void:
 	if not SaveSystem.load_all():
 		EventBus.inventory_notice.emit(LocalizationManager.t("NO_SAVE"))

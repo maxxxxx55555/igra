@@ -46,11 +46,11 @@ func _build() -> void:
 	vb.add_child(_s)
 	_b = Button.new()
 	_b.focus_mode = Control.FOCUS_NONE
-	# start_new_game() сознательно НЕ трогает дерево сцен, поэтому одного его
-	# мало: состояние становилось PLAYING, но на экране оставался тот же
-	# мёртвый игрок с 0 HP. Перезагружаем игровую сцену, как делает меню.
+	# respawn_after_death() (G16) не трогает дерево сцен, поэтому одного его
+	# мало: без перезагрузки на экране оставался бы тот же мёртвый игрок с
+	# 0 HP. Перезагружаем игровую сцену, как делает меню.
 	_b.pressed.connect(func() -> void:
-		GameManager.start_new_game()
+		GameManager.respawn_after_death()
 		Routes.restart_game())
 	vb.add_child(_b)
 	_b2 = Button.new()

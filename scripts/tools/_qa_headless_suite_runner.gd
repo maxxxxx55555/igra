@@ -120,6 +120,7 @@ func _run() -> void:
 	await _p2o_offline_player_not_net_active()
 	await _p2p_fall_recovery_armed_on_spawn()
 	_p2q_autoload_behaviour()
+	await _p2r_respawn_keeps_progress()
 	await _p6_soak()
 	_finish()
 
@@ -633,18 +634,25 @@ func _p2p_fall_recovery_armed_on_spawn() -> void:
 	if Vector3(player.get("_last_grounded_pos")) != Vector3(11.0, 22.0, 33.0):
 		_fail("P2p mark_spawn_as_grounded() did not set _last_grounded_pos")
 		return
-	# (2) real transition, earliest-frame check
-	player.set("_last_grounded_pos", Vector3.ZERO)
+	# (2) real transition. Sentinel is a position no spawn can produce (ZERO
+	# collided with a legitimately saved pending pos once loads really
+	# restored data). WorldRuntime builds the district via call_deferred
+	# (deliberate: Area3D setup is blocked inside physics signals), so wait
+	# for that load - with the player's physics frozen, so natural
+	# is_on_floor() grounding cannot arm the net and mask the gap.
+	var sentinel := Vector3(-9999.0, -9999.0, -9999.0)
+	player.set("_last_grounded_pos", sentinel)
 	player.set("_airborne_sec", 0.0)
 	var target: StringName = &"park" if String(dm.current_district) != "park" else &"suburbs"
+	player.set_physics_process(false)
 	dm.transition_to(String(target))
 	var frames_waited := 0
-	const MAX_FRAMES := 120
-	while String(dm.current_district) != String(target) and frames_waited < MAX_FRAMES:
+	while Vector3(player.get("_last_grounded_pos")) == sentinel and frames_waited < 120:
 		await get_tree().process_frame
 		frames_waited += 1
-	if Vector3(player.get("_last_grounded_pos")) == Vector3.ZERO:
-		_fail("P2p _last_grounded_pos still ZERO immediately after a district transition - the spawn had no fall-recovery net armed")
+	player.set_physics_process(true)
+	if Vector3(player.get("_last_grounded_pos")) == sentinel:
+		_fail("P2p _last_grounded_pos still the sentinel after the district load (%d frames) - the spawn had no fall-recovery net armed" % frames_waited)
 		return
 	_log("P2p fall recovery armed on spawn (mark_spawn_as_grounded wired into WorldRuntime._place_player) - OK")
 
@@ -720,6 +728,57 @@ func _p2q_autoload_behaviour() -> void:
 	if AdService.COOLDOWN_SEC != 3600.0 or AdService.INTERSTITIAL_COOLDOWN_SEC != 3600.0:
 		_fail("P2q ad cooldowns differ from GDD.md:616 (1 ad per hour)")
 	_log("P2q autoload behavioural asserts run - OK")
+
+# ── P2r ───────────────────────────────────────────────────────────────
+## TZ G16 regression: the death screen's Retry used to call start_new_game()
+## and wipe all progress. Drives the exact button path (respawn_after_death +
+## Routes.restart_game) and asserts district/stage kept, HP 50%, battery not
+## refilled. Also the regression for the progress-signature bug it exposed
+## (disk_saved was -1: every load reset district power and ProgressTracker).
+func _p2r_respawn_keeps_progress() -> void:
+	var p := get_tree().get_first_node_in_group("player")
+	if p == null:
+		_fail("P2r no player")
+		return
+	var did := String(DistrictManager.current_district)
+	PowerGrid.advance_district(StringName(did), 2)
+	var stage_before: int = int(PowerGrid.get_stage(StringName(did)))
+	SaveSystem.save_all()
+	var disk: Dictionary = SaveSystem._read_validated(SaveSystem.SAVE_PATH)
+	var disk_saved: int = int(disk.get("power", {}).get("stages", {}).get(did, -1))
+	var bat_before: float = 37.0
+	p.set("battery", bat_before)
+	p.set("_damage_grace_timer", 0.0)
+	p.set("_iframes", 0.0)
+	p.set("hp", 1.0)  # single hits are capped at 12 (winnability)
+	p.take_damage(99999.0)
+	if not await _wait_until(func() -> bool: return GameManager.is_dead(), 5.0):
+		_fail("P2r player did not die")
+		return
+	GameManager.respawn_after_death()
+	Routes.restart_game()
+	var back := func() -> bool:
+		var q := get_tree().get_first_node_in_group("player")
+		return GameManager.is_playing() and q != null and q != p and is_instance_valid(q) and q.is_inside_tree()
+	if not await _wait_until(back, 15.0):
+		_fail("P2r never came back to PLAYING with a fresh player")
+		return
+	await get_tree().process_frame
+	var q := get_tree().get_first_node_in_group("player")
+	var max_hp: float = q.stats.max_hp
+	var stage_after: int = int(PowerGrid.get_stage(StringName(did)))
+	var hp: float = float(q.get("hp"))
+	var bat: float = float(q.get("battery"))
+	if disk_saved != stage_before:
+		_fail("P2r save did not keep the district stage (memory %d, on disk %d)" % [stage_before, disk_saved])
+	elif String(DistrictManager.current_district) != did or stage_after != stage_before:
+		_fail("P2r progress lost on respawn: %s stage %d -> %s stage %d" % [did, stage_before, DistrictManager.current_district, stage_after])
+	elif hp < max_hp * 0.5 or hp > max_hp * 0.6:  # a few frames of 18 HP/s regen
+		_fail("P2r respawn HP %s, expected 50%% of %s" % [hp, max_hp])
+	elif bat > bat_before + 0.001 or bat < bat_before - 1.0:  # drains a little, never refilled
+		_fail("P2r respawn battery %s, expected unchanged %s" % [bat, bat_before])
+	else:
+		_log("P2r respawn keeps district/stage, HP 50%, battery not refilled - OK")
 
 # ── P3 ────────────────────────────────────────────────────────────────
 func _p3_save_load_lang() -> void:
