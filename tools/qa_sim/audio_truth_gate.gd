@@ -28,7 +28,11 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	if DisplayServer.get_name() == "headless":
 		print("[audio-truth] SKIP DUMMY_AUDIO -- headless has no real audio device, would always read silence")
-		get_tree().quit(0)
+		# check.sh's run_gate() maps exit 3 to a printed SKIP, distinct from
+		# the exit-0 "ok" a real windowed pass reports - quit(0) here used to
+		# make check.sh print this gate green on every standard headless run
+		# while testing nothing at all (SLOP_REPORT item 2).
+		get_tree().quit(3)
 		return
 	call_deferred("_run")
 

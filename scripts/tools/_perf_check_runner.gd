@@ -50,7 +50,9 @@ func _run() -> void:
 	# for a known, tracked, unresolved gap.
 	if draw_calls == 0:
 		print("[perf] SKIP: draw_calls=0 means headless dummy renderer - re-run with --windowed to actually measure")
-		get_tree().quit(0)
+		# check.sh's run_gate() maps exit 3 to a printed SKIP, distinct from
+		# the exit-0 "ok" a real windowed pass reports (SLOP_REPORT item 2).
+		get_tree().quit(3)
 		return
 	var over_d11 := draw_calls >= BUDGET_D11
 	print("[perf] budget D1<%d D11<%d -> %s%s" % [BUDGET_D1, BUDGET_D11,

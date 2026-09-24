@@ -261,6 +261,7 @@ else
       out=$(timeout "$t" "$GODOT" --headless --path . "$scene" 2>&1)
       local rc=$?
       if [[ $rc -eq 0 ]]; then ok "$name"
+      elif [[ $rc -eq 3 ]]; then echo "  ${DIM}пропуск${OFF} $name (нужен --windowed, не OK/FAIL)"
       elif [[ $rc -eq 124 ]]; then bad "$name (таймаут ${t}s)"; echo "$out" | tail -15 | sed 's/^/         /'
       else bad "$name (код $rc)"; echo "$out" | tail -15 | sed 's/^/         /'; fi
     }
