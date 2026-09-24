@@ -42,7 +42,12 @@ import numpy as np
 from PIL import Image
 
 MAGENTA_FAIL_PCT = 0.5
-BLACK_FAIL_PCT = 85.0
+# SLOP_REPORT item (§2, under-tight): was 85.0, nearly vacuous - a half-black
+# corrupted frame would still pass. Real committed evidence frames
+# (docs/stills/evidence/r0_after_*.png) measure 7.6-9.8% black on confirmed-
+# clean captures; 40.0 keeps a 4-5x margin over that while actually catching
+# a frame gone substantially black.
+BLACK_FAIL_PCT = 40.0
 CLEAR_COLOR_FLOOD_PCT = 2.0
 HUE_LOW, HUE_HIGH = 260.0, 345.0  # degrees: purple through magenta to pink
 MIN_SAT, MIN_VAL = 0.25, 0.12     # ignore near-grey / near-black noise
