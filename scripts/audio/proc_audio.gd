@@ -77,9 +77,13 @@ func _ready() -> void:
 	EventBus.district_entered.connect(_on_district_entered)
 	_on_district_entered(&"")
 
-func _on_district_entered(_district_id: StringName) -> void:
-	var dm := get_node_or_null("/root/DistrictManager")
-	var id: String = String(dm.current_district) if dm != null else ""
+func _on_district_entered(district_id: StringName) -> void:
+	var id: String = String(district_id)
+	if id.is_empty():
+		# Only the _ready() seeding call (&"") needs this fallback - every
+		# real emitter of district_entered passes a real id.
+		var dm := get_node_or_null("/root/DistrictManager")
+		id = String(dm.current_district) if dm != null else ""
 	# Same seeding idiom as district_loot.gd's _scatter rng - deterministic
 	# per district, not random per visit. Small spread (+-4Hz on a 65Hz base)
 	# so districts stay in the same family, just not identical.

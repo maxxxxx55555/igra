@@ -550,7 +550,6 @@ func _physics_process(delta: float) -> void:
 		State.RUN: noise_radius = 8.0
 		State.CROUCH: noise_radius = 0.5
 		_: noise_radius = 0.0
-	noise_radius *= 1.0 - 0.15 * stealth_lvl
 	if moving and noise_radius > 0.0:
 		EventBus.noise_emitted.emit(Vector2(global_position.x, global_position.z), noise_radius)
 	var weight_speed_mult := 1.0 - weight_ratio * 0.5
@@ -1141,10 +1140,11 @@ func apply_flashlight_upgrades(levels: Dictionary) -> void:
 ## other's contribution. Recomputed from scratch from both live sources
 ## every time either changes, so order no longer matters.
 var _flashlight_battery_bonus: float = 0.0
+const BATTERY_PER_SKILL_LVL: float = 25.0
 
 func refresh_battery_max() -> void:
 	var skill_lvl: int = SkillTreeManager.get_skill_level(&"battery_capacity") if SkillTreeManager else 0
-	battery_max = 100.0 * (1.0 + _flashlight_battery_bonus) + 25.0 * skill_lvl
+	battery_max = 100.0 * (1.0 + _flashlight_battery_bonus) + BATTERY_PER_SKILL_LVL * skill_lvl
 	battery = minf(battery, battery_max)
 	EventBus.player_battery_changed.emit(battery / battery_max)
 

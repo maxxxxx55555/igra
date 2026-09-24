@@ -15,8 +15,9 @@ const DISTRICTS: Array[String] = [
 	"suburbs", "residential", "park", "school", "hospital",
 	"gas_station", "police", "warehouses", "industrial", "substation", "power_station"
 ]
+const START_DISTRICT: String = "suburbs"
 
-var current_district: String = "suburbs"
+var current_district: String = START_DISTRICT
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -54,7 +55,7 @@ func get_district_count() -> int:
 
 func get_district_id(index: int) -> StringName:
 	if index < 0 or index >= DISTRICTS.size():
-		return &"suburbs"
+		return StringName(START_DISTRICT)
 	return StringName(DISTRICTS[index])
 
 func transition_to(district_id: String) -> void:

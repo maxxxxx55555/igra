@@ -10,7 +10,7 @@ extends Node
 ## achievement-file forgery, NG+ level forgery, absurd economy values, and
 ## district-id injection into the scene loader.
 
-const _SLOT: int = 96  # a different scratch slot than _save_integrity_check.gd's 97
+const _SLOT: int = 95  # scratch pair 95/96 (the swap check below uses _SLOT+1=96 too), different from _save_integrity_check.gd's 97
 
 var _fails: int = 0
 var _done: bool = false

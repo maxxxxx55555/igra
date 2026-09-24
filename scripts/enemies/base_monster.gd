@@ -224,6 +224,10 @@ func _apply_ng_scaling() -> void:
 ## починит — босс в P2/P3 к игроку не телепортируется. Возвращаем босса к
 ## игроку, как это делает его же P1-телепорт.
 var _boss_far_timer: float = 0.0
+## Measured rescue threshold (see the comment on its use below): a real
+## chase-pathing dip ran Y -1 -> -33 over ~90s, so any vertical separation
+## this large is never legitimate gameplay.
+const _Y_DIP_TELEPORT: float = 3.0
 
 func _boss_keep_near_player(delta: float) -> void:
 	if not is_in_group("boss") or ai_state == State.DEAD:
@@ -241,7 +245,7 @@ func _boss_keep_near_player(delta: float) -> void:
 	# while actually unhittable, so the 10m/1.5s far-timer never fired.
 	# Vertical separation is never legitimate gameplay, so it's corrected
 	# immediately instead of waiting on the horizontal-wander grace period.
-	if absf(global_position.y - player_ref.global_position.y) > 3.0 and has_method("_teleport_near_player"):
+	if absf(global_position.y - player_ref.global_position.y) > _Y_DIP_TELEPORT and has_method("_teleport_near_player"):
 		_boss_far_timer = 0.0
 		call("_teleport_near_player")
 		return

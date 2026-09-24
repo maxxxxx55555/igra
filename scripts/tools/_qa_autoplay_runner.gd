@@ -36,11 +36,13 @@ const STUCK_NUDGE_SEC := 2.0
 ## displacement is TIME. At walk_speed (170, data/balance/player_stats.tres),
 ## the old 1.2s window could move the player up to 204m — confirmed by a real
 ## softlock log (docs/KNOWN_ISSUES.md) showing a 150-250m position jump right
-## before a permanent stall. 0.25s bounds the worst case to ~43m, comfortably
-## inside a district's ~40m nav-mesh half-size even from a max-radius (22m,
-## district_loot.gd RADIUS_MAX) starting scatter point, while still covering
-## far more distance than the sub-meter local obstacles a "sidestep" needs to
-## clear.
+## before a permanent stall. 0.25s cuts that worst case to ~43m - still enough
+## to carry a max-radius (22m, district_loot.gd RADIUS_MAX) starting scatter
+## point past a district's ~40m nav-mesh half-size in the worst case, so this
+## is a rate reduction, not a guarantee of staying in-bounds (see
+## docs/KNOWN_ISSUES.md's own correction on this exact fix). It covers far
+## more distance than the sub-meter local obstacles a "sidestep" needs to
+## clear, which is the case this actually needs to handle well.
 const NUDGE_SEC := 0.25
 
 var _seed: int = 1

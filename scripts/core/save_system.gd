@@ -369,7 +369,7 @@ func reset_all() -> void:
 	# left the player's district pointer stale at wherever they died/quit.
 	var dm := get_node_or_null("/root/DistrictManager")
 	if dm != null:
-		dm.current_district = "suburbs"
+		dm.current_district = dm.START_DISTRICT
 	# GAME_AUDIT P1: NewGamePlus.reset_for_new_game() deliberately NOT called
 	# here, unlike the systems above. victory_screen.gd's NG+ button calls
 	# NewGamePlus.activate_ng_plus() then routes straight to the main menu;

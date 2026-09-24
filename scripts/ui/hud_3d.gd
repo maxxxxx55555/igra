@@ -901,7 +901,7 @@ func _refresh_slot_badges() -> void:
 		if not badge:
 			continue
 		var item_id: StringName = _SLOT_ITEMS[i]
-		badge.text = str(inv.count_of(item_id)) if item_id != &"" else "0"
+		badge.text = str(inv.count_of(item_id))
 
 func _add_map_button() -> void:
 	var btn := Button.new()

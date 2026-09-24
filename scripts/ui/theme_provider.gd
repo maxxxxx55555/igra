@@ -100,12 +100,9 @@ static func build_theme() -> Theme:
 	var btn_focus := btn_n.duplicate() as StyleBoxFlat
 	btn_focus.border_color = COLOR_AMBER
 	btn_focus.set_border_width_all(2)
-	var btn_d := StyleBoxFlat.new()
+	var btn_d := btn_n.duplicate() as StyleBoxFlat
 	btn_d.bg_color = COLOR_BG_DARK.lerp(COLOR_BG_PANEL, 0.35)
 	btn_d.border_color = COLOR_BORDER
-	btn_d.set_border_width_all(1)
-	btn_d.set_corner_radius_all(0)
-	btn_d.set_content_margin_all(10)
 	theme.set_stylebox("normal", "Button", btn_n)
 	theme.set_stylebox("hover", "Button", btn_h)
 	theme.set_stylebox("pressed", "Button", btn_p)
