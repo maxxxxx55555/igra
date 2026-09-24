@@ -1,5 +1,44 @@
 # Run state — orchestrator pass (2026-09-20)
 
+## Session 10 (2026-09-24): C4 TZ-CLOSE started
+
+`docs/EXEC_PLAN.md` written (plan-only pass) covering C4-C9. `docs/DESIGN_DECISIONS.md` confirmed
+absent, so C4 uses GDD.md canon verbatim per the plan's DR-4. Baseline 3-seed bot run at `c73cf7c`
+before any C4 edit: 2/3 wins (seed 1, seed 3), 1 softlock — seed 2 stalls 45s into `suburbs`
+(`phase=spine district=suburbs spine_i=0`), distinct from the previously-documented boss-phase/
+park/residential softlocks. New finding, not yet root-caused; logged as the C4 IRON RULE baseline
+(`.qa_logs/baseline_run.log`) so "no new softlock" comparisons have real data instead of vibes.
+
+**PHASE C4a DONE: `fa5fee4`** A02 (music crossfade 2.0s), V02 (boss/explosion off pure magenta/
+white onto ember), V05 (moon shadow atlas 2048, mobile stays 1024), G02 (sprint headbob 0.1,
+gated by `reduce_ui_motion`), G03 (sprint FOV +5°). All DR-4, cosmetic-only, no bot run needed.
+compile gate clean, `attack_sim` DONE fails=0.
+
+**Environment finding, no code fix**: this sandbox's `.godot/imported/` cache had gone stale for
+several BPTC-compressed enemy portrait textures (`architect_512.png`, `sniper_512.png`,
+`brute_512.png`, `burner_512.png`, `rotter_512.png`, `hound_512.png`, `tvar_512.png`). A
+`--headless` reimport (tried first) does NOT regenerate BPTC — needs real GPU compression, which
+the dummy headless renderer can't do. This silently broke the `Encyclopedia` autoload's script
+compile (its top-level const array preloads the `.tres` monster resources that reference those
+textures), which cascaded into `SaveSystem.save_slot()` crashing on `Encyclopedia.to_dict()` on a
+Nil object — surfaced as an `attack_sim` FAIL ("slot B still loads fine") that had nothing to do
+with slot logic. Root-caused via a targeted debug print of all 8 autoloads `save_slot()` touches
+(one call, cheap) rather than guessing; confirmed by A/B (same FAIL on unmodified HEAD). Fixed
+with one **windowed** `godot --editor --quit --path .` pass (real GPU import); `attack_sim` and
+`compile_gate` both clean after. **Runbook note for future sessions**: if a gate fails with a Nil
+autoload or a "referenced non-existent resource" on an enemy/UI texture, don't assume a code
+regression — run a non-headless `--editor --quit` reimport first and re-test. This is the same
+class of issue `attack_sim.gd`'s own 2026-09-21 comment already documents for MapController boot
+hangs — a recurring hazard of this specific dev sandbox, not the shipped game.
+
+**Also found, not yet fixed**: `qa_headless_suite_scene.tscn`'s P2l/P2m/P3 phases are flaky
+independent of any code change — reproduced `fails=3` (P2l/P2m/P3) and `fails=0` inconsistently
+across repeated runs of the *identical* unmodified HEAD commit, all mtime/wall-clock-sensitive
+checks. Not a C4 regression (proven via repeated A/B on both edited and clean trees). Candidate
+for a C5 MATRIX finding: these three phases likely need a coarser timing tolerance or a retry,
+not a code fix to the save system itself.
+
+
 ## Session 9 continued: C3 SLOP-CLEAN — SLOP_REPORT.md items closed
 
 C2 SEC-CLOSE finished. Per the studio-lead directive's phase order, moved to C3: consume every
