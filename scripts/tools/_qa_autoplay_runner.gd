@@ -101,6 +101,8 @@ func _ready() -> void:
 			_t_first_secret_found = _now())
 	call_deferred("_start")
 
+var _forced_pause_done: bool = false
+
 func _now() -> float:
 	return float(Time.get_ticks_msec() - _t0) / 1000.0
 
@@ -188,9 +190,25 @@ func _process(delta: float) -> void:
 			_current_district(), _spine_i, _compute_score(), _menu_recoveries,
 			str(ppos.round()), p_valid, p_in_tree, p_finite, str(_target_pos.round()), tdist, ncable, boss_info])
 
+	# Test knob (tools-only): QA_FORCE_PAUSE_AT=<sec> reproduces the X20
+	# PAUSED state deterministically for the PAUSED-recovery A/B.
+	if not _forced_pause_done and OS.get_environment("QA_FORCE_PAUSE_AT") != "" and GameManager.is_playing() and _now() >= float(OS.get_environment("QA_FORCE_PAUSE_AT")):
+		_forced_pause_done = true
+		UIManager.open(&"pause")
+		GameManager.pause_game()
 	if not GameManager.is_playing():
 		if GameManager.is_dead():
 			_try_revive()
+		elif GameManager.current_state == GameManager.GameState.PAUSED and _act_cd <= 0.0:
+			# FUNCTION_MATRIX X20: PAUSED is only reachable via a real ui_pause
+			# (Escape) key event (UIManager), which a windowed unattended run can
+			# receive from the OS. The bot had no PAUSED branch, so it idled
+			# for the whole timeout with no SOFTLOCK line. Log it and resume.
+			_log("RECOVER: game PAUSED (player valid=%s) -> resume" % str(_player_ok()))
+			UIManager.close(&"pause")
+			GameManager.resume_game()
+			_act_cd = 2.5
+			_score_t = _now()
 		elif GameManager.current_state == GameManager.GameState.MENU and _act_cd <= 0.0:
 			# The gate-scene boot artifact: launched straight into a gate
 			# scene (bypassing boot_loading.tscn), a stale boot/menu flow

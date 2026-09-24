@@ -247,21 +247,13 @@ func _process(delta: float) -> void:
 					_player.set("_iframes", 0.0)
 					_player.take_damage(9999.0)
 			elif _sub > 1.0:
-				var screens: Node = get_tree().root.find_child("Screens", true, false)
-				var death_open: bool = screens and screens.get("_active_screen") == "Death"
-				# NEW FINDING (separate from CHALLENGE-01's phase-7 target, which
-				# is fully fixed above): confirmed via a diagnostic print (since
-				# removed) that hp reaches exactly 0.0 and GameManager.current_state
-				# correctly becomes DEAD(4) - the game-state machine and
-				# _on_game_state_changed's DEAD mapping both work. _active_screen
-				# stays empty anyway, meaning screen_flow_manager.gd's cached
-				# _screens reference or its state sync doesn't come up correctly
-				# when boot is bypassed (this scene skips splash/menu straight to
-				# main_3d.tscn, same shortcut every phase here relies on). Recorded
-				# as its own open item rather than chased further under
-				# CHALLENGE-01's name - see docs/FUNCTION_MATRIX.md / KNOWN_ISSUES.md.
-				_check(death_open, "death screen opened: %s (state=%s)" % [
-					str(screens.get("_active_screen") if screens else "no screens"), str(GameManager.current_state)])
+				# The live death screen is opened by UIManager (ui_manager.gd
+				# _on_game_state DEAD -> open(&"death")). This used to read the
+				# legacy "Screens"/ScreenFlowManager node, whose autoload is
+				# commented out in project.godot, so it could never be true
+				# (FUNCTION_MATRIX X22 root cause - not a game bug).
+				var death_open: bool = UIManager._is_open(&"death")
+				_check(death_open, "death screen opened via UIManager (state=%s)" % str(GameManager.current_state))
 				_finish()
 		9:
 			_finish()

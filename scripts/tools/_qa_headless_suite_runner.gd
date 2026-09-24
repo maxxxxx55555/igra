@@ -63,12 +63,6 @@ const MOMENTARY_ACTIONS: Array[String] = [
 	"quick_slot_3", "quick_slot_4", "quick_slot_5", "quick_slot_6", "melee",
 	"attack", "strobe", "quick_wheel",
 ]
-## Confirmed via full-repo grep (no is_action_pressed/is_action_released/
-## is_action() call anywhere in scripts/): defined in project.godot's
-## [input] map but not consumed by any script. Not a crash risk, just dead
-## config — pressed anyway (harmless no-op) so coverage is still literal,
-## but logged separately so the matrix doesn't claim WORKS for them.
-const DEAD_ACTIONS: Array[String] = ["shop_toggle", "close_screen", "settings"]
 
 var _fails: PackedStringArray = []
 var _t0: int = 0
@@ -125,6 +119,7 @@ func _run() -> void:
 	await _p2n_q1_park_heartbeat_probe()
 	await _p2o_offline_player_not_net_active()
 	await _p2p_fall_recovery_armed_on_spawn()
+	_p2q_autoload_behaviour()
 	await _p6_soak()
 	_finish()
 
@@ -187,7 +182,7 @@ func _p1b_input_coverage() -> void:
 	var qs_conn := func(i: int) -> void: qs_seen[i] = true
 	InputService.quick_slot_requested.connect(qs_conn)
 	var checked := 0
-	for a in MOMENTARY_ACTIONS + DEAD_ACTIONS:
+	for a in MOMENTARY_ACTIONS:
 		if not InputMap.has_action(a):
 			_fail("P1b action '%s' missing from InputMap" % a)
 			continue
@@ -226,9 +221,8 @@ func _p1b_input_coverage() -> void:
 	if not GameManager.is_playing():
 		_fail("P1b photo_mode/photo_capture pair did not return to PLAYING (state=%d)" % GameManager.current_state)
 		return
-	_log("P1b input coverage: %d/%d actions exercised, 0 crash, %d dead (no consumer): %s" % [
-		checked, MOMENTARY_ACTIONS.size() + DEAD_ACTIONS.size() + TOGGLE_ACTIONS.size() + 2,
-		DEAD_ACTIONS.size(), ", ".join(DEAD_ACTIONS)])
+	_log("P1b input coverage: %d/%d actions exercised, 0 crash" % [
+		checked, MOMENTARY_ACTIONS.size() + TOGGLE_ACTIONS.size() + 2])
 
 # ── P2 ────────────────────────────────────────────────────────────────
 func _p2_districts() -> void:
@@ -653,6 +647,77 @@ func _p2p_fall_recovery_armed_on_spawn() -> void:
 		_fail("P2p _last_grounded_pos still ZERO immediately after a district transition - the spawn had no fall-recovery net armed")
 		return
 	_log("P2p fall recovery armed on spawn (mark_spawn_as_grounded wired into WorldRuntime._place_player) - OK")
+
+# ── P2q ───────────────────────────────────────────────────────────────
+## FUNCTION_MATRIX C5: one real behavioural assertion per state-bearing
+## autoload that had none (pool lifecycle, serialisation round-trips,
+## API contract values). State touched here is snapshotted and restored.
+func _p2q_autoload_behaviour() -> void:
+	var ps := PackedScene.new()
+	ps.pack(Node3D.new())
+	ObjectPool.register(&"qa_pool", ps, 2)
+	var inst = ObjectPool.get_instance(&"qa_pool")
+	if inst == null or ObjectPool.active_count(&"qa_pool") != 1:
+		_fail("P2q ObjectPool.get_instance did not hand out exactly one active instance")
+	else:
+		ObjectPool.return_instance(&"qa_pool", inst)
+		if ObjectPool.active_count(&"qa_pool") != 0 or ObjectPool.free_count(&"qa_pool") < 1:
+			_fail("P2q ObjectPool.return_instance did not release the instance")
+	var enc_before: Dictionary = Encyclopedia.to_dict()
+	var ids: Array = Encyclopedia.all_ids()
+	if ids.is_empty():
+		_fail("P2q Encyclopedia.all_ids() is empty")
+	else:
+		Encyclopedia.unlock(ids[0])
+		if not Encyclopedia.is_unlocked(ids[0]):
+			_fail("P2q Encyclopedia.unlock() did not stick")
+		var snap: Dictionary = Encyclopedia.to_dict()
+		Encyclopedia.from_dict({})
+		Encyclopedia.from_dict(snap)
+		if Encyclopedia.to_dict() != snap:
+			_fail("P2q Encyclopedia to_dict/from_dict round-trip changed the data")
+	Encyclopedia.from_dict(enc_before)
+	var q_before: Dictionary = QuestManager.serialize()
+	QuestManager.from_dict(q_before)
+	if QuestManager.serialize() != q_before:
+		_fail("P2q QuestManager serialize/from_dict round-trip changed the data")
+	var sp: int = SkillTreeManager.get_skill_points()
+	SkillTreeManager.add_skill_points(1)
+	if SkillTreeManager.get_skill_points() != sp + 1:
+		_fail("P2q SkillTreeManager.add_skill_points(1) did not add exactly 1")
+	SkillTreeManager.add_skill_points(-1)
+	var xp_snap = XpManager.save_data()
+	XpManager.reset()
+	if XpManager.get_level() != 1:
+		_fail("P2q XpManager.reset() did not return to level 1")
+	XpManager.add_xp(1000000)
+	if XpManager.get_level() <= 1:
+		_fail("P2q XpManager.add_xp(1000000) did not level up")
+	XpManager.load_data(xp_snap)
+	if FlashlightUpgradeManager.get_max_level() != 5 or FlashlightUpgradeManager.get_cost("brightness", 1) != 100:
+		_fail("P2q FlashlightUpgradeManager max level / L1 cost differ from GDD.md:90-95 (5 / 100)")
+	if DistrictManager.get_district_count() != 11 or String(DistrictManager.get_district_id(0)) != "suburbs":
+		_fail("P2q DistrictManager district list is not the 11-district GDD order")
+	var prog_before: Dictionary = ProgressTracker.to_dict()
+	var docs_before: int = ProgressTracker.count_docs()
+	ProgressTracker.unlock_doc("qa_probe_doc")
+	if not ProgressTracker.is_doc_unlocked("qa_probe_doc") or ProgressTracker.count_docs() != docs_before + 1:
+		_fail("P2q ProgressTracker.unlock_doc did not register exactly one new doc")
+	ProgressTracker.from_dict(prog_before)
+	if AchievementManager.get_all().is_empty():
+		_fail("P2q AchievementManager.get_all() is empty")
+	if NewGamePlus.get_current_ng_plus() < 0 or NewGamePlus.get_modifiers().is_empty():
+		_fail("P2q NewGamePlus current level / modifier list invalid")
+	for w in [WeatherSystem.fog_strength(), WeatherSystem.rain_strength()]:
+		if float(w) < 0.0 or float(w) > 1.0:
+			_fail("P2q WeatherSystem strength outside 0..1")
+	if not (DailyChallengeManager.get_today() is Dictionary) or DailyChallengeManager.get_today().is_empty():
+		_fail("P2q DailyChallengeManager.get_today() is empty")
+	if PlayIntegrityService.is_available():
+		_fail("P2q PlayIntegrityService reports available under headless desktop")
+	if float(NoisePropagation.get_noise_at(Vector2(1e6, 1e6))) != 0.0:
+		_fail("P2q NoisePropagation.get_noise_at() far from every source is not 0")
+	_log("P2q autoload behavioural asserts run - OK")
 
 # ── P3 ────────────────────────────────────────────────────────────────
 func _p3_save_load_lang() -> void:
