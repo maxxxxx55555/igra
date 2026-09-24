@@ -176,10 +176,10 @@ position = Vector3(0.25, 1.45, 0)
 rotation = Vector3(-0.6, 0, 0)
 
 [node name="Flashlight" type="SpotLight3D" parent="ModelPivot/FlashlightPivot"]
-light_color = Color(1.0, 0.82, 0.48, 1.0)
+light_color = Color(0.788, 0.635, 0.29, 1.0)
 light_energy = 24.0
 light_indirect_energy = 0.5
-spot_angle = 35.0
+spot_angle = 45.0
 spot_attenuation = 1.0
 spot_range = 16.0
 shadow_enabled = false
