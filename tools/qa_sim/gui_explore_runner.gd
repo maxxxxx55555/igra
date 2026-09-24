@@ -104,18 +104,22 @@ func _find_first_label(root: Node) -> Label:
 			return r
 	return null
 
+## Mirrors i18n_truth_gate.py's SCRIPT_RANGES exactly: Latin is deliberately
+## NOT one of the tracked scripts there, since this project's own convention
+## keeps brand names/tech tokens in Latin on purpose even inside a
+## CJK/Cyrillic/Arabic locale string. Tracking Latin here (as this used to)
+## disagreed with the Python gate: a title mixing a Latin token with the
+## target script was BUG here and PASS there.
 func _has_mixed_script(s: String) -> bool:
-	var has_latin := false
 	var has_cjk := false
 	var has_cyrillic := false
 	var has_arabic := false
 	for i in s.length():
 		var c := s.unicode_at(i)
-		if (c >= 0x41 and c <= 0x7A): has_latin = true
-		elif c >= 0x4E00 and c <= 0x9FFF: has_cjk = true
+		if c >= 0x4E00 and c <= 0x9FFF: has_cjk = true
 		elif c >= 0x0400 and c <= 0x04FF: has_cyrillic = true
 		elif c >= 0x0600 and c <= 0x06FF: has_arabic = true
-	var scripts := int(has_latin) + int(has_cjk) + int(has_cyrillic) + int(has_arabic)
+	var scripts := int(has_cjk) + int(has_cyrillic) + int(has_arabic)
 	return scripts > 1
 
 func _run() -> void:
