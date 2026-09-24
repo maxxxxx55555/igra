@@ -1,5 +1,87 @@
 # Run state — orchestrator pass (2026-09-20)
 
+## Session 9 continued: C2 SEC-CLOSE — SECURITY_PATCH_SPEC.md findings closed
+
+C1 BREAK-CLOSE finished (all of B1-B16 + Q1). Per the studio-lead directive's own phase order,
+moved to C2: close every closable item in `docs/SECURITY_PATCH_SPEC.md` as real code + `attack_sim`
+cases, same A/B-verified-fix discipline as C1. Progress this pass, commit hashes in order:
+
+- **P-01 (main-save legacy checksum bypass) — already closed.** Confirmed, not re-touched: this
+  session's earlier break-B4 fix already made `_read_envelope()` reject any save without a real
+  `hmac` outright, closing exactly what the spec calls for.
+- **P-03 (`ng_plus_data.json` unsigned)** — was entirely plain JSON controlling real difficulty/
+  reward/battery/time-pressure scaling. Now a signed envelope, same reject-outright policy as
+  daily's own B6 fix (no legacy-plain-JSON compat - no real installed base to protect). `commit
+  9b7a46b`.
+- **P-04 (`flashlight_upgrades.cfg` unsigned)** — directly granted real flashlight bonuses with no
+  coins spent. Signed the same way, plus every branch clamped to `[0, MAX_LEVEL]`. `9b7a46b`.
+- **P-06 (slot HMAC not bound to slot)** — a validly-signed save from slot B silently loaded as
+  slot A. `slot_id` is now part of the signed payload; `load_slot()` rejects a mismatch.
+  `attack_sim.gd`'s `_check_cross_save_swap_no_corruption` renamed/inverted to
+  `_check_cross_save_swap_rejected` - deliberate policy choice: there's no player-facing slot UI
+  promising cross-slot import today (archived), so slot identity is now a real boundary, not a
+  documented feature. `9b7a46b`.
+- **P-07 (signed bodies had no semantic validation)** — `PowerGrid.from_dict` clamps stage to FULL;
+  `InventoryManager.from_dict` clamps count to each item's real `max_stack`; `ProgressTracker.from_dict`
+  clamps `secrets` to the real, documented 26-secret content total (`content/secrets.json`) and
+  `shadow_kills` to `kills` - deliberately did NOT invent `MAX_KILLS`/`MAX_PUZZLES` caps, since
+  neither has a fixed total anywhere in this project and guessing wrong risks breaking a legitimate
+  long/replayed save; `QuestManager.from_dict` clamps progress to `target_count` and forces
+  `done=false` if progress hasn't reached it. `9b7a46b`.
+- **P-02 (achievements legacy plain-JSON trust) — assessed, left as-is, documented why.** Traced
+  every consumer (`get_achievements()`, `get_all()`, `is_unlocked()`) and confirmed all of them
+  iterate the fixed `ACHIEVEMENTS` roster and look up by known id - a forged file's unknown ids are
+  genuinely inert dead weight, not exploitable, and achievements carry no coin/item reward
+  (`_unlock()` is display/sound/caption only). The legacy-trust-once policy itself was already a
+  deliberate, documented choice from earlier this session (achievements as device-level history
+  surviving Reset Progress, matching the spec's own stated "riskiest assumption"). Not re-litigated.
+- **D-04 (tracked debug keystore credentials)** — `export_presets.cfg` carried a debug keystore
+  path/user/password in plaintext, pointing at a file that isn't even present in this checkout
+  (gitignored) - leakage regardless. Blanked to match the already-empty release fields; Godot's own
+  default debug-keystore behavior kicks in with these empty, which is also more correct than the
+  previous dangling reference. `60a289b`.
+- **R-03 (saved district/position applied with no validation)** — `SaveSystem.load_all()`/
+  `load_slot()` wrote a save's `district` straight to `DistrictManager.current_district` with no
+  check against the real roster, and a `player_pos` that's valid finite JSON but overflows to
+  non-finite once narrowed into a real `Vector3` (e.g. `1e40`) was applied directly. Both now
+  validated (`DISTRICTS.has(did)`, a new `_parse_player_pos()` helper routing non-finite through
+  the existing `Vector3.INF` "no saved position" sentinel). `60a289b`.
+- **R-01 (documented runtime watchdog was dormant)** — `integrity_guard.gd` already implemented a
+  real watchdog (economy clamp, missing-player grace-tick detection, fell-through-floor/non-finite
+  position restore, HP/battery/stamina range checks) but was never in `project.godot`'s
+  `[autoload]` list. Added it. Deliberately did NOT add the spec's own speed/displacement watchdog
+  snippet (R-02's other half) in this pass - a correct teleport/scene-transition exemption is real
+  risk to get wrong (false-positive would punish normal district travel), and the existing script's
+  position check only guards non-finite/`y<=-50` (which normal travel never triggers), so wiring it
+  as-is was safe without that addition. Verified with the actual game running: `autoplay_bot`
+  `QA_SEED=2` won cleanly with zero `IntegrityGuard` interventions logged (IRON RULE satisfied for
+  this live-every-frame runtime change); `QA_SEED=1` hit the same pre-existing, independent
+  boss-phase softlock this session already tracks separately - confirmed identical symptom/phase,
+  not a new regression. `2278cf9`.
+
+Every fix above has a real `attack_sim.gd` regression case, A/B-verified against the reverted code
+(same discipline as C1). Full battery re-run clean after each commit: `attack_sim` 0 fails,
+`save_integrity_check_scene` 0 fails, GOLD MASTER suite 0 fails, static gates 19/20 (pre-existing
+`i18n_truth_gate` FAIL only), `flow_check.py` OK, `scene_node_check.py` OK.
+
+**Assessed and deliberately deferred, not guessed shut (still open):**
+- **R-02's speed/displacement half** — needs a correct teleport-exemption design; not attempted yet.
+- **R-05/C-06 (Routes.goto()/district-id strict allowlist)** — audited every real caller of
+  `Routes.goto()`: all of them pass either a named `Routes.XXX` constant or a hardcoded literal,
+  zero dynamic/caller-provided input reaches it today (matches the spec's own "riskiest assumption:
+  all future route callers remain internal and trusted"). A full enum/table refactor would defend
+  against a hypothetical FUTURE caller, not a live gap - deferred as low-value-now per ponytail,
+  not fixed.
+- **R-07 (LAN sender/payload validation), C-07, C-08 (export/release static gates), P-08 (local
+  leaderboard signing)** — not yet attempted this pass.
+- **D-01/D-02/D-03 (PCK tamper, extractable HMAC key, bytecode-only Web assets)** — the spec's own
+  section 5 explicitly frames these as inherent client-side limits, not patch items. Not touched;
+  will be reaffirmed rather than re-litigated when `docs/SECURITY_THREAT_MODEL.md` is updated.
+
+**Next**: R-07 LAN validation and C-08 release gates if time allows, then update
+`docs/SECURITY_THREAT_MODEL.md` to reflect everything closed above and re-affirm the inherent-limit
+items, then move to C3 SLOP-CLEAN per the directive's phase order.
+
 ## Session 9: STUDIO LEAD PASS 2 — arena reports ingested, BREAK-CLOSE begun (B1)
 
 New directive: consume 5 arena reports (TZ_COMPLIANCE_AUDIT, DESIGN_CRITIQUE, BREAK_REPORT,
