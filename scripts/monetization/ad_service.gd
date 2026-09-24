@@ -25,8 +25,10 @@ const REWARDS: Dictionary = {
 }
 
 const COOLDOWN_SEC: float = 3600.0  ## GDD.md:616 (E03/T02): 1 ролик в час
-## interstitial на смене района: не чаще раза в 3 минуты, никогда в бою.
-const INTERSTITIAL_COOLDOWN_SEC: float = 180.0
+## Interstitial on district change, never in combat. GDD.md:616 "1 реклама в час"
+## applies to every ad, not only rewarded ones -
+## the old 180 s let a district-hopping player see ~20 ads an hour.
+const INTERSTITIAL_COOLDOWN_SEC: float = 3600.0
 ## revive/extra_battery — по одному разу за сессию каждый (не общий лимит
 ## на оба), остальные награды подчиняются только 15-минутному кулдауну.
 const SESSION_LIMITED: Array[StringName] = [&"revive", &"extra_battery"]

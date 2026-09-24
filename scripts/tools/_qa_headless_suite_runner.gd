@@ -717,6 +717,8 @@ func _p2q_autoload_behaviour() -> void:
 		_fail("P2q PlayIntegrityService reports available under headless desktop")
 	if float(NoisePropagation.get_noise_at(Vector2(1e6, 1e6))) != 0.0:
 		_fail("P2q NoisePropagation.get_noise_at() far from every source is not 0")
+	if AdService.COOLDOWN_SEC != 3600.0 or AdService.INTERSTITIAL_COOLDOWN_SEC != 3600.0:
+		_fail("P2q ad cooldowns differ from GDD.md:616 (1 ad per hour)")
 	_log("P2q autoload behavioural asserts run - OK")
 
 # ── P3 ────────────────────────────────────────────────────────────────
