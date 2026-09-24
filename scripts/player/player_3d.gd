@@ -532,7 +532,7 @@ func _physics_process(delta: float) -> void:
 		State.STEALTH: speed_noise = 0.3
 		State.WALK: speed_noise = 0.4
 		State.RUN: speed_noise = 0.8
-		State.CROUCH: speed_noise = 0.15
+		State.CROUCH: speed_noise = 0.4 * CROUCH_NOISE_MULT  # GDD.md:69 (G07): walk noise x0.3
 		_: speed_noise = 0.0
 	# PLAN.md Stage 3 / GAME_AUDIT/arena design audit P1: silent_steps only
 	# ever discounted noise_radius below, which feeds EventBus.noise_emitted
