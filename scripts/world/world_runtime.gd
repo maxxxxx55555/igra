@@ -47,7 +47,9 @@ func _on_district_entered(district_id: StringName) -> void:
 ## Выгружает прошлый район и строит новый. Идемпотентна и защищена от
 ## повторного входа: DistrictTrigger умеет стрелять несколько раз за кадр.
 func load_district(district_id: StringName) -> void:
-	if _loading or district_id == _current_id:
+	# A deferred call can land after a scene swap (Routes.restart_game) took
+	# this WorldRuntime out of the tree but before it was freed.
+	if not is_inside_tree() or _loading or district_id == _current_id:
 		return
 	_loading = true
 	if is_instance_valid(_district_root):
@@ -104,6 +106,7 @@ func _place_player(root: Node3D) -> void:
 	# closes that specific gap without needing to wait for a real floor.
 	if player.has_method("mark_spawn_as_grounded"):
 		player.mark_spawn_as_grounded(target)
+	GameManager.apply_pending_respawn(player)
 
 func current_district() -> StringName:
 	return _current_id

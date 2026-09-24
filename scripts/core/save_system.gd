@@ -123,8 +123,14 @@ func has_save() -> bool:
 ## exactly the ending-determining fields still needs the real key even
 ## then. Verified in _read_envelope() below; a mismatch resets power/
 ## progress to empty rather than trusting a forged win.
+## Signs a JSON round-tripped copy so write and verify see the same text:
+## the writer holds ints (stage 2), the verifier holds what JSON.parse gives
+## back (2.0), and stringify(2) != stringify(2.0). Signing the raw dict made
+## every load fail this check and silently reset all district power and
+## ProgressTracker data (found by the G16 respawn regression, suite P2r).
 func _sign_progress(power: Dictionary, progress: Dictionary) -> String:
-	return _sign(JSON.stringify({"power": power, "progress": progress}))
+	var canon: Variant = JSON.parse_string(JSON.stringify({"power": power, "progress": progress}))
+	return _sign(JSON.stringify(canon))
 
 func _write_atomic(path: String, payload: Dictionary) -> bool:
 	if payload.has("power") or payload.has("progress"):
