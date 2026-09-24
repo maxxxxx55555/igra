@@ -191,6 +191,18 @@ if "$PY" tools/qa_sim/visual_truth_gate.py docs/stills/evidence/r0_after_*.png >
 else
   bad "visual_truth_gate (R0 regression lock)"
 fi
+# The PNG lock above only re-measures OLD committed frames. The real R0
+# cause (2026-09-25, windowed A/B): the 11 district LUTs were imported as
+# CompressedTexture2D, which Environment.adjustment_color_correction reads
+# as a 1D gradient - a 256x16 16-slice 3D LUT sampled that way turns the
+# world magenta with banding rings (world hue-magenta 13% -> 0.03%). Earlier
+# "clean" frames were clean only because the textures failed to load.
+# Pin: every LUT must stay a Texture3D import.
+if ! grep -L 'importer="3d_texture"' assets/textures/luts/lut_*.png.import | grep -q .; then
+  ok "R0 root cause pinned (11 district LUTs import as Texture3D)"
+else
+  bad "district LUT no longer a Texture3D import - world renders magenta (see RUN_STATE 2026-09-25)"
+fi
 if "$PY" tools/qa_sim/i18n_truth_gate.py >/dev/null 2>&1; then
   ok "i18n_truth_gate"
 else
@@ -265,6 +277,18 @@ else
       elif [[ $rc -eq 124 ]]; then bad "$name (таймаут ${t}s)"; echo "$out" | tail -15 | sed 's/^/         /'
       else bad "$name (код $rc)"; echo "$out" | tail -15 | sed 's/^/         /'; fi
     }
+    # ENV RULE (RUN_STATE 2026-09-24): a --headless run cannot regenerate
+    # BPTC-compressed textures, and a stale .godot/imported/ cache for the
+    # enemy portraits breaks the Encyclopedia autoload -> cascading bogus
+    # gate failures (save_slot Nil, "slot B" attack_sim FAIL). One windowed
+    # editor pass reimports with real GPU compression. NEVER `git checkout`
+    # the .import files afterwards: that re-points them at cache files that
+    # do not exist and silently unloads textures. Skip with
+    # TLS_SKIP_REIMPORT=1 (e.g. a display-less CI box with a warm cache).
+    if [[ "${TLS_SKIP_REIMPORT:-0}" != "1" ]]; then
+      if timeout 240 "$GODOT" --editor --quit --path . >/dev/null 2>&1; then ok "реимпорт ассетов (оконный, GPU-сжатие)"; else bad "реимпорт ассетов (оконный) не завершился"; fi
+      git checkout -- default_bus_layout.tres 2>/dev/null || true
+    fi
     run_gate "компиляция всех скриптов" "res://scenes/tools/compile_gate_scene.tscn"
     run_gate "арность сигналов"          "res://scenes/tools/signal_arity_check_scene.tscn"
     run_gate "API автозагрузок"          "res://scenes/tools/autoload_api_check_scene.tscn"
