@@ -78,9 +78,49 @@ Every fix above has a real `attack_sim.gd` regression case, A/B-verified against
   section 5 explicitly frames these as inherent client-side limits, not patch items. Not touched;
   will be reaffirmed rather than re-litigated when `docs/SECURITY_THREAT_MODEL.md` is updated.
 
-**Next**: R-07 LAN validation and C-08 release gates if time allows, then update
-`docs/SECURITY_THREAT_MODEL.md` to reflect everything closed above and re-affirm the inherent-limit
-items, then move to C3 SLOP-CLEAN per the directive's phase order.
+**R-07 (LAN sender/payload validation) — closed.** `rpc_player_state`/`rpc_power_changed` accepted
+any peer's claimed `peer_id`/position/district with zero checks. Now rejects a non-finite
+position/yaw, a district outside `DistrictManager.DISTRICTS`, and (for player state) a remote
+sender claiming a `peer_id` that isn't its own (`sender_id == 0`, the `call_local` host echo, is
+exempt - that's not impersonation). No consumer of either signal exists anywhere in the codebase
+(confirmed by grep) - closed as the boundary a future consumer would otherwise trust blindly, not
+because of a live exploit today. `attack_sim.gd`'s new `_check_lan_payload_validation` covers the
+payload half; the sender-binding half genuinely can't be exercised meaningfully by a single-process
+headless call (it always presents as `sender_id 0`, the exempted case) - stated honestly rather
+than claimed tested. A/B verified the covered half. `cef6ae6`.
+
+**C-08 (release/export static gate) — added.** New `tools/qa_sim/release_export_check.py`, wired
+into `tools/check.sh --static`: fails on a committed PCK `encryption_key=` or non-empty debug
+keystore credentials (regression guard for D-04); treats an unconfigured release keystore as an
+informational NOTE, not a failure, since this project hasn't cut a signed release build yet and
+hard-failing on that would misrepresent "not done" as "broken." Explicitly does NOT inspect an
+actual exported artifact (needs a real `--export-release` run this environment can't do) - stated
+in the script's own output. A/B verified by temporarily restoring the pre-D-04 debug credentials.
+Static gate now 20/21 (still only the pre-existing `i18n_truth_gate` FAIL). `a453425`.
+
+`docs/SECURITY_THREAT_MODEL.md` rewritten (`c7f7b1f`) to describe the actual current state instead
+of the pre-SEC-CLOSE one - extended signing across every sidecar file, slot binding, semantic
+validation, the watchdog actually being live, LAN validation - and to reaffirm (not re-litigate)
+that key extraction/memory editing/no-server-truth are still real, unchanged, inherent limits that
+now simply apply across a wider signed surface.
+
+**C2 SEC-CLOSE status: every item marked `Closable? Yes` in SECURITY_PATCH_SPEC.md that has a
+real, safe, well-scoped fix is now closed** (P-01/03/04/06/07, D-04, R-01/03/07, C-01 through C-05
+and C-08's patterns applied where they had a concrete target). **Deliberately still open, recorded
+honestly rather than guessed shut:**
+- **R-02's speed/displacement watchdog** - needs a correct teleport/scene-transition exemption;
+  real design risk to get wrong, not attempted.
+- **R-05/C-06 (`Routes.goto()` strict allowlist)** - assessed, not fixed: every real caller today
+  passes a named constant or hardcoded literal, zero dynamic input reaches it, so a full enum/table
+  refactor would defend a hypothetical future caller, not a live gap. Low-value-now per ponytail.
+- **P-08 (local leaderboard signing)** - the spec's own framing says this is UX history, not a
+  security boundary ("not a server hole"); not touched.
+- **D-01/D-02/D-03 (PCK tamper, extractable HMAC key, bytecode-only Web assets)** - the spec's own
+  section 5 frames these as inherent client-side limits, not patch items. Reaffirmed in the
+  threat-model rewrite, not re-litigated as if they were open findings.
+
+**Next**: per the studio-lead directive's own phase order, move to C3 SLOP-CLEAN
+(`docs/SLOP_REPORT.md`).
 
 ## Session 9: STUDIO LEAD PASS 2 — arena reports ingested, BREAK-CLOSE begun (B1)
 
