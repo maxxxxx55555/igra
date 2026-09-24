@@ -208,6 +208,11 @@ if "$PY" tools/qa_sim/i18n_truth_gate.py >/dev/null 2>&1; then
 else
   bad "i18n_truth_gate (см. 'python tools/qa_sim/i18n_truth_gate.py' - overflow это статическая эвристика по длине строки, не подтверждённый визуально баг, см. docs/RUN_STATE.md)"
 fi
+if "$PY" tools/qa_sim/hardcoded_text_gate.py >/dev/null 2>&1; then
+  ok "hardcoded_text_gate (no untranslated words assigned to .text)"
+else
+  bad "hardcoded_text_gate (см. 'python tools/qa_sim/hardcoded_text_gate.py')"
+fi
 # Static, source-driven sims (STATIC_AUDIT #6/#31, PLAYABLE IDEAL TASK 3) —
 # built, correct, but never wired into any gate until this P2 pass.
 if "$PY" tools/qa_sim/puzzle_economy_sim.py >/dev/null 2>&1; then

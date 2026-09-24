@@ -1289,5 +1289,7 @@
   "DAILY_PLAY_08_FLAVOR": "여덟 분. 선을 걷고, 웅웅거림에 귀를 기울여라.",
   "DAILY_PLAY_12_FLAVOR": "십이 분. 네가 있으면 도시가 더 조용하다.",
   "DAILY_PLAY_15_FLAVOR": "십오 분, 선 위에서. 꾸준한 작업.",
-  "DAILY_PLAY_20_FLAVOR": "이십 분. 그건 하나의 교대다, 관리인."
+  "DAILY_PLAY_20_FLAVOR": "이십 분. 그건 하나의 교대다, 관리인.",
+  "NGP_KNOBS_SUMMARY": "힌트: %s · 밤 주기: x%.2f · 시간 압박: %s · 추가 어둠: %d",
+  "opt_on": "켜짐"
 }

@@ -1289,5 +1289,7 @@
   "DAILY_PLAY_08_FLAVOR": "八分鐘。沿線走，聽著嗡鳴。",
   "DAILY_PLAY_12_FLAVOR": "十二分鐘。你在城裡，城市就更安靜。",
   "DAILY_PLAY_15_FLAVOR": "十五分鐘在線路上。平穩的活。",
-  "DAILY_PLAY_20_FLAVOR": "二十分鐘。這就算一個班了，守燈人。"
+  "DAILY_PLAY_20_FLAVOR": "二十分鐘。這就算一個班了，守燈人。",
+  "NGP_KNOBS_SUMMARY": "提示：%s · 夜晚週期：x%.2f · 時間壓力：%s · 額外黑暗：%d",
+  "opt_on": "開啟"
 }

@@ -859,7 +859,7 @@
   "LORE_PARK_02_TITLE": "Photo: The Carousel in Summer",
   "LORE_PARK_02_TEXT": "The same carousel that rots at the north lawn, but painted and spinning, horses mid-gallop, a queue of children two rows deep. Every lamp post around it is lit for the evening ride. On the back: \"Last summer. The lights stayed on till midnight by order of the park office.\" Nobody in the queue knew the order would never be given again.",
   "LORE_PARK_03_TITLE": "Recorder: Grid Crew Log 4",
-  "LORE_PARK_03_TEXT": "\"We cut through the park and the trees went quiet. Marat said don't run, it hunts by the sound of running. We walked an hour in mud and it still found Petrov at the pond edge. Took him toward the water without a sound. We left the cache at the keeper's shed like the old man's notes said. If you're replaying this: the shed key is in the boat house bin. And walk. Always walk.\"",
+  "LORE_PARK_03_TEXT": "\"We cut through the park and the trees went quiet. Marat said don't run, it hunts by the sound of running. We walked an hour in mud and it still found Petrov at the pond edge. Took him toward the water without a sound. We left the cache at the keeper's shed like the old man's notes said. If you're hearing this: the shed key is in the boat house bin. And walk. Always walk.\"",
   "LORE_PARK_04_TITLE": "Park Closure Notice",
   "LORE_PARK_04_TEXT": "CITY PARKS OFFICE. \"The central park is closed to visitors until further notice following the repeated complaints about the trees. The trees do not 'lean toward the lamps to listen'. Trees do not listen. Please stop feeding them.\" The stamp is from three weeks before the blackout.",
   "LORE_PARK_05_TITLE": "Photo: The Feeder",
@@ -1289,5 +1289,7 @@
   "DAILY_PLAY_08_FLAVOR": "Eight minutes. Walk the line, listen to the hum.",
   "DAILY_PLAY_12_FLAVOR": "Twelve minutes. The city is quieter when you are in it.",
   "DAILY_PLAY_15_FLAVOR": "Fifteen minutes on the wire. Steady work.",
-  "DAILY_PLAY_20_FLAVOR": "Twenty minutes. That is a shift, Keeper."
+  "DAILY_PLAY_20_FLAVOR": "Twenty minutes. That is a shift, Keeper.",
+  "NGP_KNOBS_SUMMARY": "Hints: %s · Night cycle: x%.2f · Time pressure: %s · Extra dark: %d",
+  "opt_on": "On"
 }

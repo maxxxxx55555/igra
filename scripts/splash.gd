@@ -27,7 +27,7 @@ func _ready() -> void:
 		return
 	add_to_group("ui_root")
 	logo.color = Color("#1D1812")
-	label.text = "THE LAST STREETLIGHT"
+	label.text = LocalizationManager.t("menu_title")
 	label.add_theme_color_override("font_color", Color("#E2A33C"))
 	var tw = create_tween()
 	tw.tween_property(self, "modulate:a", 1.0, 1.0)

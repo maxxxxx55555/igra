@@ -88,12 +88,14 @@ func _refresh_modifiers() -> void:
 	# потреблённые геттеры NewGamePlus (hints/cycle/time_pressure/
 	# extra_dark_districts), а не читаются из эффектов напрямую.
 	var knobs := Label.new()
-	knobs.text = "hints:%s · cycle:x%.2f · pressure:%s · dark+:%d" % [
-		"on" if NewGamePlus.are_hints_enabled() else "off",
+	var on := LocalizationManager.t("opt_on")
+	var off := LocalizationManager.t("opt_off")
+	knobs.text = LocalizationManager.tf("NGP_KNOBS_SUMMARY", [
+		on if NewGamePlus.are_hints_enabled() else off,
 		NewGamePlus.get_night_cycle_multiplier(),
-		"on" if NewGamePlus.is_time_pressure_enabled() else "off",
+		on if NewGamePlus.is_time_pressure_enabled() else off,
 		NewGamePlus.get_extra_dark_districts(),
-	]
+	])
 	knobs.modulate.a = 0.7
 	_mod_box.add_child(knobs)
 	for m in mods:
