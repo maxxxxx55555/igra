@@ -608,12 +608,44 @@ func _outline_recursive(node: Node, oc: Color, sc: Color) -> void:
 	for c in node.get_children():
 		_outline_recursive(c, oc, sc)
 
+## GDD.md:213 (S03): noise indicator is an ember-vignette pulse at the
+## screen edge, not a number. Reuses the same sin-pulse idiom the low-
+## battery fill above already does. Normalized against the loudest state
+## (RUN + full overload, ~10.4 noise_radius per player_3d.gd) so the pulse
+## reads as "how loud am I" rather than a raw, meaningless radius number.
+## Gated by reduce_flash (a11y_probe_scene already proves that toggle
+## suppresses juice like this).
+const _MAX_NOISE_FOR_VIGNETTE: float = 10.4
+var _noise_reduce_flash_cache: bool = false
+var _noise_reduce_flash_t: float = 0.0
+
 func _process(delta: float) -> void:
 	if _bat < 0.25:
 		var pulse: float = sin(Time.get_ticks_msec() * 0.0095) * 0.5 + 0.5
 		bat_fill.color = Color(0.788, 0.635, 0.290).lerp(Color(0.706, 0.271, 0.184), pulse)
 	else:
 		bat_fill.color = Color(0.788, 0.635, 0.290)
+	_process_noise_vignette(delta)
+
+func _process_noise_vignette(delta: float) -> void:
+	var v := vignette
+	if v == null:
+		return
+	_noise_reduce_flash_t += delta
+	if _noise_reduce_flash_t >= 1.0:
+		_noise_reduce_flash_t = 0.0
+		var sm := get_node_or_null("/root/SettingsManager")
+		_noise_reduce_flash_cache = sm != null and sm.has_method("get_setting") and bool(sm.get_setting("reduce_flash", false))
+	if _noise_reduce_flash_cache:
+		return
+	var player := get_tree().get_first_node_in_group("player")
+	if player == null or not player.has_method("get_noise_level"):
+		return
+	var noise_ratio: float = clampf(float(player.get_noise_level()) / _MAX_NOISE_FOR_VIGNETTE, 0.0, 1.0)
+	if noise_ratio <= 0.01:
+		return
+	var pulse: float = (sin(Time.get_ticks_msec() * 0.006) * 0.5 + 0.5) * noise_ratio
+	v.color = Color(0.706, 0.271, 0.184, maxf(_vignette_default_color.a, pulse * 0.5))
 
 ## player_detected всегда шлёт StringName (см. event_bus.gd) — ветка на TYPE_INT
 ## никогда не выполнялась, а "ember #" + id было мусором, который игрок видел

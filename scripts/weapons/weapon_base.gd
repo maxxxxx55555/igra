@@ -38,10 +38,11 @@ func can_fire() -> bool:
 func fire(from_pos: Vector3, direction: Vector3) -> bool:
 	if not can_fire():
 		return false
-	
+
 	_fire_timer = fire_rate * _fire_rate_multiplier()
 	current_ammo -= 1
 	ammo_changed.emit(current_ammo, max_ammo)
+	direction = _apply_auto_aim(from_pos, direction)
 
 	# Spawn bullet
 	if bullet_scene:
@@ -134,6 +135,35 @@ func get_reload_progress() -> float:
 ## nothing. Wired at the point each stat is actually used; only applies to
 ## the player's own weapon (an enemy could theoretically hold a WeaponBase
 ## too, and skills are player-only).
+## GDD.md:378 (C03): auto-aim accessibility toggle. Off by default (only
+## the player fires through this shared path - enemies don't use
+## WeaponBase). Biases toward the nearest living enemy within a narrow
+## cone rather than a hard snap, so it reads as assistance, not an aimbot.
+const _AUTO_AIM_CONE_DEG: float = 12.0
+func _apply_auto_aim(from_pos: Vector3, direction: Vector3) -> Vector3:
+	if _owner == null or not _owner.is_in_group("player"):
+		return direction
+	var sm := _owner.get_tree().root.get_node_or_null("/root/SettingsManager")
+	if sm == null or not sm.has_method("get_setting") or not bool(sm.get_setting("auto_aim", false)):
+		return direction
+	var best: Node3D = null
+	var best_dot: float = cos(deg_to_rad(_AUTO_AIM_CONE_DEG))
+	for e in _owner.get_tree().get_nodes_in_group("enemies"):
+		if not (e is Node3D) or not is_instance_valid(e):
+			continue
+		if "ai_state" in e and int(e.ai_state) == BaseMonster.State.DEAD:
+			continue
+		var to_e: Vector3 = ((e as Node3D).global_position - from_pos)
+		if to_e.length() > range or to_e.length() < 0.01:
+			continue
+		var dot := direction.normalized().dot(to_e.normalized())
+		if dot > best_dot:
+			best_dot = dot
+			best = e
+	if best == null:
+		return direction
+	return (best.global_position - from_pos).normalized()
+
 func _effective_damage() -> float:
 	if _owner == null or not _owner.is_in_group("player"):
 		return damage
