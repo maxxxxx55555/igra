@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ab31dd54216a"
-path.bptc="res://.godot/imported/crawler_full_512x768.png-ab31dd54216a8822d85c8c4d15ead3c1.bptc.ctex"
+uid="uid://b31dd54216a"
+path.bptc="res://.godot/imported/crawler_full_512x768.png-36c80753c1858a17c3c90726f025ebfb.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/portraits_v2/crawler_full_512x768.png"
-dest_files=["res://.godot/imported/crawler_full_512x768.png-ab31dd54216a8822d85c8c4d15ead3c1.bptc.ctex"]
+dest_files=["res://.godot/imported/crawler_full_512x768.png-36c80753c1858a17c3c90726f025ebfb.bptc.ctex"]
 
 [params]
 

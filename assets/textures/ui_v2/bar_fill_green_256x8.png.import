@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://05eaad4232b0"
-path.bptc="res://.godot/imported/bar_fill_green_256x8.png-05eaad4232b0c4305ab7ffafb6caae2f.bptc.ctex"
+path.bptc="res://.godot/imported/bar_fill_green_256x8.png-2427c4a181e107d646a22a10d841ca09.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/ui_v2/bar_fill_green_256x8.png"
-dest_files=["res://.godot/imported/bar_fill_green_256x8.png-05eaad4232b0c4305ab7ffafb6caae2f.bptc.ctex"]
+dest_files=["res://.godot/imported/bar_fill_green_256x8.png-2427c4a181e107d646a22a10d841ca09.bptc.ctex"]
 
 [params]
 

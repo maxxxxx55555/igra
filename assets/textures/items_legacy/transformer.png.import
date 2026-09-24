@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://00c168f94570"
-path.bptc="res://.godot/imported/transformer.png-00c168f94570243275e6b8b976ef377d.bptc.ctex"
+uid="uid://00c168ga4570"
+path.bptc="res://.godot/imported/transformer.png-49fa271e4a6b87a7f192806e8fa23984.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/items_legacy/transformer.png"
-dest_files=["res://.godot/imported/transformer.png-00c168f94570243275e6b8b976ef377d.bptc.ctex"]
+dest_files=["res://.godot/imported/transformer.png-49fa271e4a6b87a7f192806e8fa23984.bptc.ctex"]
 
 [params]
 

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://fb8d44928971"
-path.bptc="res://.godot/imported/case_64.png-fb8d44928971a77acf5601556d86d2d7.bptc.ctex"
+uid="uid://fb8d45a3aa71"
+path.bptc="res://.godot/imported/case_64.png-b3413bb89c9270e8746873037ab17fb8.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/icons_v2/craft/case_64.png"
-dest_files=["res://.godot/imported/case_64.png-fb8d44928971a77acf5601556d86d2d7.bptc.ctex"]
+dest_files=["res://.godot/imported/case_64.png-b3413bb89c9270e8746873037ab17fb8.bptc.ctex"]
 
 [params]
 

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d3ff61f299be"
-path.bptc="res://.godot/imported/poison_cloud_64.png-d3ff61f299be6bceb3ceca571838c0c4.bptc.ctex"
+uid="uid://d3ff61f3babe"
+path.bptc="res://.godot/imported/poison_cloud_64.png-b60666f9bb30529ed876253cc8802bbb.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/fx/poison_cloud_64.png"
-dest_files=["res://.godot/imported/poison_cloud_64.png-d3ff61f299be6bceb3ceca571838c0c4.bptc.ctex"]
+dest_files=["res://.godot/imported/poison_cloud_64.png-b60666f9bb30529ed876253cc8802bbb.bptc.ctex"]
 
 [params]
 

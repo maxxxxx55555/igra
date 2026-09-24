@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ab26940385a1"
-path.bptc="res://.godot/imported/hex_grey_128.png-ab26940385a1b13db1e0d6bf93c1c459.bptc.ctex"
+uid="uid://b27a40385a1"
+path.bptc="res://.godot/imported/hex_grey_128.png-c9e9966fb1f1e4b61dda6d12bbad37c0.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/ui_v2/hex_grey_128.png"
-dest_files=["res://.godot/imported/hex_grey_128.png-ab26940385a1b13db1e0d6bf93c1c459.bptc.ctex"]
+dest_files=["res://.godot/imported/hex_grey_128.png-c9e9966fb1f1e4b61dda6d12bbad37c0.bptc.ctex"]
 
 [params]
 

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://445895c1f5da"
-path.bptc="res://.godot/imported/bar_track_256x8.png-445895c1f5da4432ac681251ce0f21e2.bptc.ctex"
+uid="uid://446aa5c1f5da"
+path.bptc="res://.godot/imported/bar_track_256x8.png-1338f6217a769963a174cdde69b72bbc.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/ui_v2/bar_track_256x8.png"
-dest_files=["res://.godot/imported/bar_track_256x8.png-445895c1f5da4432ac681251ce0f21e2.bptc.ctex"]
+dest_files=["res://.godot/imported/bar_track_256x8.png-1338f6217a769963a174cdde69b72bbc.bptc.ctex"]
 
 [params]
 

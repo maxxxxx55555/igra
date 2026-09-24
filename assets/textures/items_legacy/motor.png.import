@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://352f0b9bf8bf"
-path.bptc="res://.godot/imported/motor.png-352f0b9bf8bf6fcc35d09d34a68ab033.bptc.ctex"
+uid="uid://352f0cabf8bf"
+path.bptc="res://.godot/imported/motor.png-bda6644581e9d2a68fc09368a7456551.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/items_legacy/motor.png"
-dest_files=["res://.godot/imported/motor.png-352f0b9bf8bf6fcc35d09d34a68ab033.bptc.ctex"]
+dest_files=["res://.godot/imported/motor.png-bda6644581e9d2a68fc09368a7456551.bptc.ctex"]
 
 [params]
 

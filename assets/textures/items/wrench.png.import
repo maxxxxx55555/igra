@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://23807a26eac8"
-path.bptc="res://.godot/imported/wrench.png-23807a26eac8d94fe0e96499bce5786d.bptc.ctex"
+path.bptc="res://.godot/imported/wrench.png-ca31e80432ca5b270f661dbe10e8e774.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/items/wrench.png"
-dest_files=["res://.godot/imported/wrench.png-23807a26eac8d94fe0e96499bce5786d.bptc.ctex"]
+dest_files=["res://.godot/imported/wrench.png-ca31e80432ca5b270f661dbe10e8e774.bptc.ctex"]
 
 [params]
 

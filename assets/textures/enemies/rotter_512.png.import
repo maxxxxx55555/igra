@@ -3,16 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://e8c705357760"
-path.bptc="res://.godot/imported/rotter_512.png-e8c705357760b307896e41f14ffc666c.bptc.ctex"
+path="res://.godot/imported/rotter_512.png-50a6f2c95217f46320e1866048350e48.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
 "vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/textures/enemies/rotter_512.png"
-dest_files=["res://.godot/imported/rotter_512.png-e8c705357760b307896e41f14ffc666c.bptc.ctex"]
+dest_files=["res://.godot/imported/rotter_512.png-50a6f2c95217f46320e1866048350e48.ctex"]
 
 [params]
 

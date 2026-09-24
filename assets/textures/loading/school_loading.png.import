@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://2f3ff47c1478"
-path.bptc="res://.godot/imported/school_loading.png-2f3ff47c1478eb53e3b75b6705bae842.bptc.ctex"
+path.bptc="res://.godot/imported/school_loading.png-ef504fbb7e34a4ef96fd1885704440bc.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/loading/school_loading.png"
-dest_files=["res://.godot/imported/school_loading.png-2f3ff47c1478eb53e3b75b6705bae842.bptc.ctex"]
+dest_files=["res://.godot/imported/school_loading.png-ef504fbb7e34a4ef96fd1885704440bc.bptc.ctex"]
 
 [params]
 

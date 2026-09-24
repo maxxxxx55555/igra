@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://0bf9b7d6a38a"
-path.bptc="res://.godot/imported/taser_arc_64.png-0bf9b7d6a38a4b4379e47e5dc9f75bac.bptc.ctex"
+uid="uid://0bgab7d6a38a"
+path.bptc="res://.godot/imported/taser_arc_64.png-6d2bb8c6f6590afa8286bfcbf08fd45b.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/fx/taser_arc_64.png"
-dest_files=["res://.godot/imported/taser_arc_64.png-0bf9b7d6a38a4b4379e47e5dc9f75bac.bptc.ctex"]
+dest_files=["res://.godot/imported/taser_arc_64.png-6d2bb8c6f6590afa8286bfcbf08fd45b.bptc.ctex"]
 
 [params]
 

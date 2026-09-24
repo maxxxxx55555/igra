@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://681e5915195a"
-path.bptc="res://.godot/imported/gas_station_map_512.png-681e5915195a743f5437ae6a34c36660.bptc.ctex"
+uid="uid://681e6a152a5a"
+path.bptc="res://.godot/imported/gas_station_map_512.png-018a44e35273fcea71fd311ed68fca94.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/maps/gas_station_map_512.png"
-dest_files=["res://.godot/imported/gas_station_map_512.png-681e5915195a743f5437ae6a34c36660.bptc.ctex"]
+dest_files=["res://.godot/imported/gas_station_map_512.png-018a44e35273fcea71fd311ed68fca94.bptc.ctex"]
 
 [params]
 

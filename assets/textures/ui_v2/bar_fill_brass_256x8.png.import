@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://457b78619704"
-path.bptc="res://.godot/imported/bar_fill_brass_256x8.png-457b78619704e08b6760cdaa823ab5eb.bptc.ctex"
+uid="uid://457b7862a704"
+path.bptc="res://.godot/imported/bar_fill_brass_256x8.png-d6fe726a4fb906a33a83cfaa0b403463.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/ui_v2/bar_fill_brass_256x8.png"
-dest_files=["res://.godot/imported/bar_fill_brass_256x8.png-457b78619704e08b6760cdaa823ab5eb.bptc.ctex"]
+dest_files=["res://.godot/imported/bar_fill_brass_256x8.png-d6fe726a4fb906a33a83cfaa0b403463.bptc.ctex"]
 
 [params]
 

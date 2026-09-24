@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://3ddaf1b39373"
-path.bptc="res://.godot/imported/survival_header_256x64.png-3ddaf1b39373ed18ef5182bc5bd34e2a.bptc.ctex"
+uid="uid://3ddaf1b4a373"
+path.bptc="res://.godot/imported/survival_header_256x64.png-4411ce8663f994fa87a96b477a5a1d4f.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/icons_v2/branches/survival_header_256x64.png"
-dest_files=["res://.godot/imported/survival_header_256x64.png-3ddaf1b39373ed18ef5182bc5bd34e2a.bptc.ctex"]
+dest_files=["res://.godot/imported/survival_header_256x64.png-4411ce8663f994fa87a96b477a5a1d4f.bptc.ctex"]
 
 [params]
 

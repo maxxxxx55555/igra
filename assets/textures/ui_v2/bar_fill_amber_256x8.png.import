@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://44bb0c239612"
-path.bptc="res://.godot/imported/bar_fill_amber_256x8.png-44bb0c2396123a5858e2f17b2f4e9993.bptc.ctex"
+uid="uid://44bb0c24a612"
+path.bptc="res://.godot/imported/bar_fill_amber_256x8.png-ac8d868f03413762c5a19b401cdd45fb.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/ui_v2/bar_fill_amber_256x8.png"
-dest_files=["res://.godot/imported/bar_fill_amber_256x8.png-44bb0c2396123a5858e2f17b2f4e9993.bptc.ctex"]
+dest_files=["res://.godot/imported/bar_fill_amber_256x8.png-ac8d868f03413762c5a19b401cdd45fb.bptc.ctex"]
 
 [params]
 

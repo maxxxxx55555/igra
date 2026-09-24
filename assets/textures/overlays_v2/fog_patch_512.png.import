@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://0ec04f6b0649"
-path.bptc="res://.godot/imported/fog_patch_512.png-0ec04f6b064933fc9170330b885ffe40.bptc.ctex"
+uid="uid://0ec04f6b065a"
+path.bptc="res://.godot/imported/fog_patch_512.png-00623840f637a61805fe39180521e2a8.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/overlays_v2/fog_patch_512.png"
-dest_files=["res://.godot/imported/fog_patch_512.png-0ec04f6b064933fc9170330b885ffe40.bptc.ctex"]
+dest_files=["res://.godot/imported/fog_patch_512.png-00623840f637a61805fe39180521e2a8.bptc.ctex"]
 
 [params]
 

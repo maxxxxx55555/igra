@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://347f0ee5b27d"
-path.bptc="res://.godot/imported/damage_boost_1_96.png-347f0ee5b27dcb453e790f37cc8ceab7.bptc.ctex"
+path.bptc="res://.godot/imported/damage_boost_1_96.png-fb6c1ef1b3228e84424ec06173e776cf.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/icons/skills/damage_boost_1_96.png"
-dest_files=["res://.godot/imported/damage_boost_1_96.png-347f0ee5b27dcb453e790f37cc8ceab7.bptc.ctex"]
+dest_files=["res://.godot/imported/damage_boost_1_96.png-fb6c1ef1b3228e84424ec06173e776cf.bptc.ctex"]
 
 [params]
 

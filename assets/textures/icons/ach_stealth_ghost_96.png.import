@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://6cbb292791b0"
-path.bptc="res://.godot/imported/ach_stealth_ghost_96.png-6cbb292791b08d8174c89b9d5f1bc0b4.bptc.ctex"
+uid="uid://6cbb3a28a1b0"
+path.bptc="res://.godot/imported/ach_stealth_ghost_96.png-09bfa345443910b151de5dbf2f70ebcd.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/icons/ach_stealth_ghost_96.png"
-dest_files=["res://.godot/imported/ach_stealth_ghost_96.png-6cbb292791b08d8174c89b9d5f1bc0b4.bptc.ctex"]
+dest_files=["res://.godot/imported/ach_stealth_ghost_96.png-09bfa345443910b151de5dbf2f70ebcd.bptc.ctex"]
 
 [params]
 

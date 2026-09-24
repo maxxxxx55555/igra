@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b2aba53a71b5"
-path.bptc="res://.godot/imported/progress_fill.png-b2aba53a71b5b8b7aaa6fbcdfc07f53d.bptc.ctex"
+path.bptc="res://.godot/imported/progress_fill.png-bcefd47bf8d627b5dd1897fe4497746c.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/ui/progress_fill.png"
-dest_files=["res://.godot/imported/progress_fill.png-b2aba53a71b5b8b7aaa6fbcdfc07f53d.bptc.ctex"]
+dest_files=["res://.godot/imported/progress_fill.png-bcefd47bf8d627b5dd1897fe4497746c.bptc.ctex"]
 
 [params]
 

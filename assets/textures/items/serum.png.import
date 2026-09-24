@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://648891bf5b5f"
-path.bptc="res://.godot/imported/serum.png-648891bf5b5f66649194754c88fd8645.bptc.ctex"
+uid="uid://65aaa1bf5b5f"
+path.bptc="res://.godot/imported/serum.png-95fd195d81cfac89b6f95c07fab57a62.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/items/serum.png"
-dest_files=["res://.godot/imported/serum.png-648891bf5b5f66649194754c88fd8645.bptc.ctex"]
+dest_files=["res://.godot/imported/serum.png-95fd195d81cfac89b6f95c07fab57a62.bptc.ctex"]
 
 [params]
 

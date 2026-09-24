@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://59998ba8f697"
-path.bptc="res://.godot/imported/menu_bg.png-59998ba8f697b4dd60bfe3db7760f922.bptc.ctex"
+uid="uid://6bba8ba8f7a7"
+path.bptc="res://.godot/imported/menu_bg.png-d293837817b78035fb838c286bd64075.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/art/menu_bg.png"
-dest_files=["res://.godot/imported/menu_bg.png-59998ba8f697b4dd60bfe3db7760f922.bptc.ctex"]
+dest_files=["res://.godot/imported/menu_bg.png-d293837817b78035fb838c286bd64075.bptc.ctex"]
 
 [params]
 

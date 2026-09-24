@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c877a7d218f0"
-path.bptc="res://.godot/imported/blueprint.png-c877a7d218f04f22f13aee2631af6a1c.bptc.ctex"
+path.bptc="res://.godot/imported/blueprint.png-739f93ba5f5cf1d90307bfcecb0c2a4a.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/items/blueprint.png"
-dest_files=["res://.godot/imported/blueprint.png-c877a7d218f04f22f13aee2631af6a1c.bptc.ctex"]
+dest_files=["res://.godot/imported/blueprint.png-739f93ba5f5cf1d90307bfcecb0c2a4a.bptc.ctex"]
 
 [params]
 

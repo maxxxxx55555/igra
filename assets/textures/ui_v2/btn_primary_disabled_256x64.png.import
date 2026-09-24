@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://f013349034fb"
-path.bptc="res://.godot/imported/btn_primary_disabled_256x64.png-f013349034fb27d40c9a6ce14047fa24.bptc.ctex"
+uid="uid://f01335a034fb"
+path.bptc="res://.godot/imported/btn_primary_disabled_256x64.png-43e10549624daeb32a1932580c08d67b.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/ui_v2/btn_primary_disabled_256x64.png"
-dest_files=["res://.godot/imported/btn_primary_disabled_256x64.png-f013349034fb27d40c9a6ce14047fa24.bptc.ctex"]
+dest_files=["res://.godot/imported/btn_primary_disabled_256x64.png-43e10549624daeb32a1932580c08d67b.bptc.ctex"]
 
 [params]
 

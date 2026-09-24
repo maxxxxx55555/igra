@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://5dad2f29f30e"
-path.bptc="res://.godot/imported/gunpowder_64.png-5dad2f29f30ebdcf673e8c90adbfa6a8.bptc.ctex"
+uid="uid://5dad2f3af30e"
+path.bptc="res://.godot/imported/gunpowder_64.png-ad8ba37666fadd0b19082dd9bdb1033e.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/icons_v2/craft/gunpowder_64.png"
-dest_files=["res://.godot/imported/gunpowder_64.png-5dad2f29f30ebdcf673e8c90adbfa6a8.bptc.ctex"]
+dest_files=["res://.godot/imported/gunpowder_64.png-ad8ba37666fadd0b19082dd9bdb1033e.bptc.ctex"]
 
 [params]
 

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://0c153d29c0c7"
-path.bptc="res://.godot/imported/warehouses_loading.png-0c153d29c0c732254e6a77e2f56aae9a.bptc.ctex"
+uid="uid://0c153d3ac0c7"
+path.bptc="res://.godot/imported/warehouses_loading.png-7b5a91a84f54fbfb87515b348bc09263.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/loading/warehouses_loading.png"
-dest_files=["res://.godot/imported/warehouses_loading.png-0c153d29c0c732254e6a77e2f56aae9a.bptc.ctex"]
+dest_files=["res://.godot/imported/warehouses_loading.png-7b5a91a84f54fbfb87515b348bc09263.bptc.ctex"]
 
 [params]
 

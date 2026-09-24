@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://f6f6988c43b3"
-path.bptc="res://.godot/imported/water.png-f6f6988c43b332a027511d705e81770c.bptc.ctex"
+uid="uid://f6f7a88c43b3"
+path.bptc="res://.godot/imported/water.png-b0a7dbc58e8546f4391dac1372ff9252.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/items_legacy/water.png"
-dest_files=["res://.godot/imported/water.png-f6f6988c43b332a027511d705e81770c.bptc.ctex"]
+dest_files=["res://.godot/imported/water.png-b0a7dbc58e8546f4391dac1372ff9252.bptc.ctex"]
 
 [params]
 

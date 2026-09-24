@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://1b973b0146db"
-path.bptc="res://.godot/imported/backpack.png-1b973b0146dbfca76915add56561dd22.bptc.ctex"
+uid="uid://1ca73b0146db"
+path.bptc="res://.godot/imported/backpack.png-31576670d60c647710c392eba16545ff.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/items/backpack.png"
-dest_files=["res://.godot/imported/backpack.png-1b973b0146dbfca76915add56561dd22.bptc.ctex"]
+dest_files=["res://.godot/imported/backpack.png-31576670d60c647710c392eba16545ff.bptc.ctex"]
 
 [params]
 

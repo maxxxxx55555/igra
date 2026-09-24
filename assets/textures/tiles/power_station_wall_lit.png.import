@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://45bfc3be5195"
-path.bptc="res://.godot/imported/power_station_wall_lit.png-45bfc3be519535fa8e8c8b120da55ec7.bptc.ctex"
+uid="uid://45bfc3be52a5"
+path.bptc="res://.godot/imported/power_station_wall_lit.png-eedaed5424473b83417f64ac71a4aa84.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/tiles/power_station_wall_lit.png"
-dest_files=["res://.godot/imported/power_station_wall_lit.png-45bfc3be519535fa8e8c8b120da55ec7.bptc.ctex"]
+dest_files=["res://.godot/imported/power_station_wall_lit.png-eedaed5424473b83417f64ac71a4aa84.bptc.ctex"]
 
 [params]
 

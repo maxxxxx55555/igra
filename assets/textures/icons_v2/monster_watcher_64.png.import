@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://0c43e4ecb331"
-path.bptc="res://.godot/imported/monster_watcher_64.png-0c43e4ecb3316b7ba8a5843e0b689874.bptc.ctex"
+path.bptc="res://.godot/imported/monster_watcher_64.png-7ee0d75698e0e8a6eaf325d9a239ec4b.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/icons_v2/monster_watcher_64.png"
-dest_files=["res://.godot/imported/monster_watcher_64.png-0c43e4ecb3316b7ba8a5843e0b689874.bptc.ctex"]
+dest_files=["res://.godot/imported/monster_watcher_64.png-7ee0d75698e0e8a6eaf325d9a239ec4b.bptc.ctex"]
 
 [params]
 

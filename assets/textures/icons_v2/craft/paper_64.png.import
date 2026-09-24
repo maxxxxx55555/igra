@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://42963e309af8"
-path.bptc="res://.godot/imported/paper_64.png-42963e309af83e21f840e73e285378a2.bptc.ctex"
+uid="uid://43a63e31aaf8"
+path.bptc="res://.godot/imported/paper_64.png-c2feac5a50fa814f9d0781cb4282f0d0.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/icons_v2/craft/paper_64.png"
-dest_files=["res://.godot/imported/paper_64.png-42963e309af83e21f840e73e285378a2.bptc.ctex"]
+dest_files=["res://.godot/imported/paper_64.png-c2feac5a50fa814f9d0781cb4282f0d0.bptc.ctex"]
 
 [params]
 

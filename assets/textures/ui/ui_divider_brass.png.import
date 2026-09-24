@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://f6b495155e2f"
-path.bptc="res://.godot/imported/ui_divider_brass.png-f6b495155e2fc855dc8915b6d29ac021.bptc.ctex"
+uid="uid://f6b5a5155e2f"
+path.bptc="res://.godot/imported/ui_divider_brass.png-f66be13bef92fbd8d0757cbd8341b4ad.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/ui/ui_divider_brass.png"
-dest_files=["res://.godot/imported/ui_divider_brass.png-f6b495155e2fc855dc8915b6d29ac021.bptc.ctex"]
+dest_files=["res://.godot/imported/ui_divider_brass.png-f66be13bef92fbd8d0757cbd8341b4ad.bptc.ctex"]
 
 [params]
 

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://a9fae78d900f"
-path.bptc="res://.godot/imported/health_regen_96.png-a9fae78d900f995e27a5948407296c1a.bptc.ctex"
+uid="uid://bafae78ea00f"
+path.bptc="res://.godot/imported/health_regen_96.png-db3db6f9a56da5edcd2945779ce7b652.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/icons/skills/health_regen_96.png"
-dest_files=["res://.godot/imported/health_regen_96.png-a9fae78d900f995e27a5948407296c1a.bptc.ctex"]
+dest_files=["res://.godot/imported/health_regen_96.png-db3db6f9a56da5edcd2945779ce7b652.bptc.ctex"]
 
 [params]
 

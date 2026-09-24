@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://df5ba40421b3"
-path.bptc="res://.godot/imported/pistol_holster_128.png-df5ba40421b3e4f231db9221bd930d1f.bptc.ctex"
+path.bptc="res://.godot/imported/pistol_holster_128.png-fb72b256ebd16dfd9fd0c856b0b4c63e.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/icons/weapons/pistol_holster_128.png"
-dest_files=["res://.godot/imported/pistol_holster_128.png-df5ba40421b3e4f231db9221bd930d1f.bptc.ctex"]
+dest_files=["res://.godot/imported/pistol_holster_128.png-fb72b256ebd16dfd9fd0c856b0b4c63e.bptc.ctex"]
 
 [params]
 

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://db05c7e96189"
-path.bptc="res://.godot/imported/police_floor_lit.png-db05c7e96189ab7e2e7c633c4509909b.bptc.ctex"
+uid="uid://db05c7fa62aa"
+path.bptc="res://.godot/imported/police_floor_lit.png-3ff0339bcce50d0d181182d2e3a41d73.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/tiles/police_floor_lit.png"
-dest_files=["res://.godot/imported/police_floor_lit.png-db05c7e96189ab7e2e7c633c4509909b.bptc.ctex"]
+dest_files=["res://.godot/imported/police_floor_lit.png-3ff0339bcce50d0d181182d2e3a41d73.bptc.ctex"]
 
 [params]
 

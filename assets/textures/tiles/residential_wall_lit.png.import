@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://f2557af6989e"
-path.bptc="res://.godot/imported/residential_wall_lit.png-f2557af6989e7116b050b2a12ce28373.bptc.ctex"
+uid="uid://f2557af7baae"
+path.bptc="res://.godot/imported/residential_wall_lit.png-8fe7095d0258b1d062957aecef7f9703.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/tiles/residential_wall_lit.png"
-dest_files=["res://.godot/imported/residential_wall_lit.png-f2557af6989e7116b050b2a12ce28373.bptc.ctex"]
+dest_files=["res://.godot/imported/residential_wall_lit.png-8fe7095d0258b1d062957aecef7f9703.bptc.ctex"]
 
 [params]
 

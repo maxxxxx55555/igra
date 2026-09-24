@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://2f0daa6b7e4a"
-path.bptc="res://.godot/imported/status_burn.png-2f0daa6b7e4adc875deb4d881066f2ca.bptc.ctex"
+path.bptc="res://.godot/imported/status_burn.png-6c7b9d5901c618f4b6c33440739dbe5d.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/ui/status_burn.png"
-dest_files=["res://.godot/imported/status_burn.png-2f0daa6b7e4adc875deb4d881066f2ca.bptc.ctex"]
+dest_files=["res://.godot/imported/status_burn.png-6c7b9d5901c618f4b6c33440739dbe5d.bptc.ctex"]
 
 [params]
 

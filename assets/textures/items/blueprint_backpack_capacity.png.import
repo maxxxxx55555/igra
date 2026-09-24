@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://189e52f69ce0"
-path.bptc="res://.godot/imported/blueprint_backpack_capacity.png-189e52f69ce0c679d9c5b8975e59c01b.bptc.ctex"
+uid="uid://2aae52f7ace0"
+path.bptc="res://.godot/imported/blueprint_backpack_capacity.png-049f968d36e957c08d98313445c05476.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/items/blueprint_backpack_capacity.png"
-dest_files=["res://.godot/imported/blueprint_backpack_capacity.png-189e52f69ce0c679d9c5b8975e59c01b.bptc.ctex"]
+dest_files=["res://.godot/imported/blueprint_backpack_capacity.png-049f968d36e957c08d98313445c05476.bptc.ctex"]
 
 [params]
 

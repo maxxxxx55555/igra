@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c47d8a63e885"
-path.bptc="res://.godot/imported/crest_power_station_96.png-c47d8a63e8854f0506188b9d1d77bf44.bptc.ctex"
+path.bptc="res://.godot/imported/crest_power_station_96.png-a0012bd912ea5ab4f11a58e64e7a61d9.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/crests/crest_power_station_96.png"
-dest_files=["res://.godot/imported/crest_power_station_96.png-c47d8a63e8854f0506188b9d1d77bf44.bptc.ctex"]
+dest_files=["res://.godot/imported/crest_power_station_96.png-a0012bd912ea5ab4f11a58e64e7a61d9.bptc.ctex"]
 
 [params]
 

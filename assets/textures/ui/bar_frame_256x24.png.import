@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://116bef376689"
-path.bptc="res://.godot/imported/bar_frame_256x24.png-116bef376689a26b278e944287a3a95b.bptc.ctex"
+uid="uid://116bef3767aa"
+path.bptc="res://.godot/imported/bar_frame_256x24.png-7a40efba992fe42d39c0457848b450b3.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/ui/bar_frame_256x24.png"
-dest_files=["res://.godot/imported/bar_frame_256x24.png-116bef376689a26b278e944287a3a95b.bptc.ctex"]
+dest_files=["res://.godot/imported/bar_frame_256x24.png-7a40efba992fe42d39c0457848b450b3.bptc.ctex"]
 
 [params]
 

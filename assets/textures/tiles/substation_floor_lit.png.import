@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://7fc70394d5c1"
-path.bptc="res://.godot/imported/substation_floor_lit.png-7fc70394d5c18d746613565dad907bad.bptc.ctex"
+uid="uid://7fc704a4d5c1"
+path.bptc="res://.godot/imported/substation_floor_lit.png-fb581fbc01a47c976dbc547d46b8f4dd.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/tiles/substation_floor_lit.png"
-dest_files=["res://.godot/imported/substation_floor_lit.png-7fc70394d5c18d746613565dad907bad.bptc.ctex"]
+dest_files=["res://.godot/imported/substation_floor_lit.png-fb581fbc01a47c976dbc547d46b8f4dd.bptc.ctex"]
 
 [params]
 

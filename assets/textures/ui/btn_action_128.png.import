@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cd66fa580db7"
-path.bptc="res://.godot/imported/btn_action_128.png-cd66fa580db7eeb78645b3816b1b2248.bptc.ctex"
+path.bptc="res://.godot/imported/btn_action_128.png-770efcef437307d41282d49c34c5ae77.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/ui/btn_action_128.png"
-dest_files=["res://.godot/imported/btn_action_128.png-cd66fa580db7eeb78645b3816b1b2248.bptc.ctex"]
+dest_files=["res://.godot/imported/btn_action_128.png-770efcef437307d41282d49c34c5ae77.bptc.ctex"]
 
 [params]
 

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://edd89771afd3"
-path.bptc="res://.godot/imported/btn_crouch_pressed_128.png-edd89771afd3c69903dd333eefbb856d.bptc.ctex"
+uid="uid://edeaa771afd3"
+path.bptc="res://.godot/imported/btn_crouch_pressed_128.png-d95c182b91136bb2cbe54f89d0f1c6e7.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/ui/btn_crouch_pressed_128.png"
-dest_files=["res://.godot/imported/btn_crouch_pressed_128.png-edd89771afd3c69903dd333eefbb856d.bptc.ctex"]
+dest_files=["res://.godot/imported/btn_crouch_pressed_128.png-d95c182b91136bb2cbe54f89d0f1c6e7.bptc.ctex"]
 
 [params]
 

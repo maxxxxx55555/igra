@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://019d0e082e2a"
-path.bptc="res://.godot/imported/character_dim.png-019d0e082e2ae58a414e07cc96f894d9.bptc.ctex"
+uid="uid://02ad0e082e2a"
+path.bptc="res://.godot/imported/character_dim.png-a50c1780c59c2ce7f7b6432fe3d3fcba.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/screens_v2/character_dim.png"
-dest_files=["res://.godot/imported/character_dim.png-019d0e082e2ae58a414e07cc96f894d9.bptc.ctex"]
+dest_files=["res://.godot/imported/character_dim.png-a50c1780c59c2ce7f7b6432fe3d3fcba.bptc.ctex"]
 
 [params]
 

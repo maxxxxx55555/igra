@@ -2,17 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://8192f0910357"
-path.bptc="res://.godot/imported/sniper_512.png-8192f0910357719118b137dc553d7fb1.bptc.ctex"
+uid="uid://82a2f1a10357"
+path="res://.godot/imported/sniper_512.png-cb15fb481df79faf0df3e81af10ffd3b.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
 "vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/textures/enemies/sniper_512.png"
-dest_files=["res://.godot/imported/sniper_512.png-8192f0910357719118b137dc553d7fb1.bptc.ctex"]
+dest_files=["res://.godot/imported/sniper_512.png-cb15fb481df79faf0df3e81af10ffd3b.ctex"]
 
 [params]
 

@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://fc7d3eb1dabd"
-path.bptc="res://.godot/imported/ach_speedrunner_96.png-fc7d3eb1dabdd6a6a8e5167dbd6e9f64.bptc.ctex"
+path.bptc="res://.godot/imported/ach_speedrunner_96.png-0e3ce9832aff3c10ce4cdfb569e5c080.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/icons/ach_speedrunner_96.png"
-dest_files=["res://.godot/imported/ach_speedrunner_96.png-fc7d3eb1dabdd6a6a8e5167dbd6e9f64.bptc.ctex"]
+dest_files=["res://.godot/imported/ach_speedrunner_96.png-0e3ce9832aff3c10ce4cdfb569e5c080.bptc.ctex"]
 
 [params]
 

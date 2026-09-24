@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bd68ebb7b36c"
-path.bptc="res://.godot/imported/alcohol_64.png-bd68ebb7b36c9d2407ffd065d01508f3.bptc.ctex"
+path.bptc="res://.godot/imported/alcohol_64.png-5534e2bf18b6afc06a9875d8cc4dac07.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/icons_v2/craft/alcohol_64.png"
-dest_files=["res://.godot/imported/alcohol_64.png-bd68ebb7b36c9d2407ffd065d01508f3.bptc.ctex"]
+dest_files=["res://.godot/imported/alcohol_64.png-5534e2bf18b6afc06a9875d8cc4dac07.bptc.ctex"]
 
 [params]
 

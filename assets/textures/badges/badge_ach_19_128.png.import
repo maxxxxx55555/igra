@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://27b7c8343df1"
-path.bptc="res://.godot/imported/badge_ach_19_128.png-27b7c8343df1f03070a0d68d79363403.bptc.ctex"
+path.bptc="res://.godot/imported/badge_ach_19_128.png-34d0fca730e77da8c14fbc02cb6cb206.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/badges/badge_ach_19_128.png"
-dest_files=["res://.godot/imported/badge_ach_19_128.png-27b7c8343df1f03070a0d68d79363403.bptc.ctex"]
+dest_files=["res://.godot/imported/badge_ach_19_128.png-34d0fca730e77da8c14fbc02cb6cb206.bptc.ctex"]
 
 [params]
 

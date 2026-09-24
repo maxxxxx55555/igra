@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cb15bd777f7e"
-path.bptc="res://.godot/imported/power_station_map_512.png-cb15bd777f7edff00631dd4e12496afd.bptc.ctex"
+path.bptc="res://.godot/imported/power_station_map_512.png-1206214d6a831477ef9201f78c2e5e7e.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/maps/power_station_map_512.png"
-dest_files=["res://.godot/imported/power_station_map_512.png-cb15bd777f7edff00631dd4e12496afd.bptc.ctex"]
+dest_files=["res://.godot/imported/power_station_map_512.png-1206214d6a831477ef9201f78c2e5e7e.bptc.ctex"]
 
 [params]
 

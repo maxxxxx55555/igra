@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://25c5a94c064d"
-path.bptc="res://.godot/imported/old_park.png-25c5a94c064da39a26b6e4f197f7a150.bptc.ctex"
+uid="uid://25c5ba4c064d"
+path.bptc="res://.godot/imported/old_park.png-08401c62e8e941ec4341bfd93389d188.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/photos/old_park.png"
-dest_files=["res://.godot/imported/old_park.png-25c5a94c064da39a26b6e4f197f7a150.bptc.ctex"]
+dest_files=["res://.godot/imported/old_park.png-08401c62e8e941ec4341bfd93389d188.bptc.ctex"]
 
 [params]
 

@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://e44be8a15087"
-path.bptc="res://.godot/imported/grid_panel_512.png-e44be8a15087d1e74f99bb8ea8c0c4e7.bptc.ctex"
+path.bptc="res://.godot/imported/grid_panel_512.png-4175d700e2ec37a01c3ef562c2790f0e.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/maps_v2/grid_panel_512.png"
-dest_files=["res://.godot/imported/grid_panel_512.png-e44be8a15087d1e74f99bb8ea8c0c4e7.bptc.ctex"]
+dest_files=["res://.godot/imported/grid_panel_512.png-4175d700e2ec37a01c3ef562c2790f0e.bptc.ctex"]
 
 [params]
 

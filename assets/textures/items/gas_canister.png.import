@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://22c86f3515f1"
-path.bptc="res://.godot/imported/gas_canister.png-22c86f3515f176e1f8725f6eb8e2a2c6.bptc.ctex"
+path.bptc="res://.godot/imported/gas_canister.png-faac859ceaa0e628b144737bde53e8d8.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/items/gas_canister.png"
-dest_files=["res://.godot/imported/gas_canister.png-22c86f3515f176e1f8725f6eb8e2a2c6.bptc.ctex"]
+dest_files=["res://.godot/imported/gas_canister.png-faac859ceaa0e628b144737bde53e8d8.bptc.ctex"]
 
 [params]
 

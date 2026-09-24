@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://6b569b83fb9b"
-path.bptc="res://.godot/imported/repair_kit.png-6b569b83fb9bf47c5b00cf45494a2ccf.bptc.ctex"
+uid="uid://6b57ab83fcab"
+path.bptc="res://.godot/imported/repair_kit.png-f99bf577608b22c16ec6ebf4b9da2e6a.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/items/repair_kit.png"
-dest_files=["res://.godot/imported/repair_kit.png-6b569b83fb9bf47c5b00cf45494a2ccf.bptc.ctex"]
+dest_files=["res://.godot/imported/repair_kit.png-f99bf577608b22c16ec6ebf4b9da2e6a.bptc.ctex"]
 
 [params]
 

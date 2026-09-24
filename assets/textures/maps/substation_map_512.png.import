@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://40005d569b5e"
-path.bptc="res://.godot/imported/substation_map_512.png-40005d569b5e087eeb56dec0b1ad807c.bptc.ctex"
+uid="uid://40005d57ab5e"
+path.bptc="res://.godot/imported/substation_map_512.png-d2afe1a02619592f57f346e8e4e84b98.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/maps/substation_map_512.png"
-dest_files=["res://.godot/imported/substation_map_512.png-40005d569b5e087eeb56dec0b1ad807c.bptc.ctex"]
+dest_files=["res://.godot/imported/substation_map_512.png-d2afe1a02619592f57f346e8e4e84b98.bptc.ctex"]
 
 [params]
 

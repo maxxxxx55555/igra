@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://858aacbeb967"
-path.bptc="res://.godot/imported/hospital_loading.png-858aacbeb967b05c91534cb8ee66b999.bptc.ctex"
+uid="uid://858aacbeca67"
+path.bptc="res://.godot/imported/hospital_loading.png-64b70c93955d5b5a1c11b7ef7e8a524e.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/loading/hospital_loading.png"
-dest_files=["res://.godot/imported/hospital_loading.png-858aacbeb967b05c91534cb8ee66b999.bptc.ctex"]
+dest_files=["res://.godot/imported/hospital_loading.png-64b70c93955d5b5a1c11b7ef7e8a524e.bptc.ctex"]
 
 [params]
 

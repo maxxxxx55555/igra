@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://5842c14ce8fe"
-path.bptc="res://.godot/imported/touch_joy_knob_256.png-5842c14ce8fe0a4fc783bd27a074ab34.bptc.ctex"
+path.bptc="res://.godot/imported/touch_joy_knob_256.png-3adda98a049e83eadc70a873cc4daa75.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/touch/touch_joy_knob_256.png"
-dest_files=["res://.godot/imported/touch_joy_knob_256.png-5842c14ce8fe0a4fc783bd27a074ab34.bptc.ctex"]
+dest_files=["res://.godot/imported/touch_joy_knob_256.png-3adda98a049e83eadc70a873cc4daa75.bptc.ctex"]
 
 [params]
 

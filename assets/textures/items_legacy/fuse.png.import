@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://6713f9fa3c12"
-path.bptc="res://.godot/imported/fuse.png-6713f9fa3c120d2bdce73a46f1d0dce2.bptc.ctex"
+uid="uid://6713gafa3c12"
+path.bptc="res://.godot/imported/fuse.png-cb8409121ae10e7a2bfe74acd40dba4b.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/items_legacy/fuse.png"
-dest_files=["res://.godot/imported/fuse.png-6713f9fa3c120d2bdce73a46f1d0dce2.bptc.ctex"]
+dest_files=["res://.godot/imported/fuse.png-cb8409121ae10e7a2bfe74acd40dba4b.bptc.ctex"]
 
 [params]
 

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://f1fa7a252fd9"
-path.bptc="res://.godot/imported/ach_no_damage_boss_96.png-f1fa7a252fd9c79f45ddc9d6cfd13f8d.bptc.ctex"
+uid="uid://f1fa7a252fea"
+path.bptc="res://.godot/imported/ach_no_damage_boss_96.png-6c5245079cef15c4a4179d3b381b995a.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/icons/ach_no_damage_boss_96.png"
-dest_files=["res://.godot/imported/ach_no_damage_boss_96.png-f1fa7a252fd9c79f45ddc9d6cfd13f8d.bptc.ctex"]
+dest_files=["res://.godot/imported/ach_no_damage_boss_96.png-6c5245079cef15c4a4179d3b381b995a.bptc.ctex"]
 
 [params]
 

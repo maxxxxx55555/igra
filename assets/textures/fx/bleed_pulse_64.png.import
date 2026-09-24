@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://396b608ca8ff"
-path.bptc="res://.godot/imported/bleed_pulse_64.png-396b608ca8ffbd253c3c283098cfa9c0.bptc.ctex"
+uid="uid://4a6b608ca8ff"
+path.bptc="res://.godot/imported/bleed_pulse_64.png-676b5a304d716640ff60553783cfbcdc.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/fx/bleed_pulse_64.png"
-dest_files=["res://.godot/imported/bleed_pulse_64.png-396b608ca8ffbd253c3c283098cfa9c0.bptc.ctex"]
+dest_files=["res://.godot/imported/bleed_pulse_64.png-676b5a304d716640ff60553783cfbcdc.bptc.ctex"]
 
 [params]
 

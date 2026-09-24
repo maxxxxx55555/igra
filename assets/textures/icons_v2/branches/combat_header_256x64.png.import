@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://f67ef7275080"
-path.bptc="res://.godot/imported/combat_header_256x64.png-f67ef7275080f0b783dc7dd233dd8f5a.bptc.ctex"
+path.bptc="res://.godot/imported/combat_header_256x64.png-d9124382d611c6338492db6296543b2b.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/icons_v2/branches/combat_header_256x64.png"
-dest_files=["res://.godot/imported/combat_header_256x64.png-f67ef7275080f0b783dc7dd233dd8f5a.bptc.ctex"]
+dest_files=["res://.godot/imported/combat_header_256x64.png-d9124382d611c6338492db6296543b2b.bptc.ctex"]
 
 [params]
 

@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://578dfa3b4025"
-path.bptc="res://.godot/imported/rarity_epic.png-578dfa3b4025b2f62984f85d9fc7b3c2.bptc.ctex"
+path.bptc="res://.godot/imported/rarity_epic.png-d133ac16fd99066b4301db22ab1de157.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/ui/rarity_epic.png"
-dest_files=["res://.godot/imported/rarity_epic.png-578dfa3b4025b2f62984f85d9fc7b3c2.bptc.ctex"]
+dest_files=["res://.godot/imported/rarity_epic.png-d133ac16fd99066b4301db22ab1de157.bptc.ctex"]
 
 [params]
 

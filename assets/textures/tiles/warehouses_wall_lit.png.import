@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://889b35fe7b68"
-path.bptc="res://.godot/imported/warehouses_wall_lit.png-889b35fe7b68b7aba5f0b0b8fc103be1.bptc.ctex"
+uid="uid://baaab35fe7b68"
+path.bptc="res://.godot/imported/warehouses_wall_lit.png-f529e7072bae14ca82a9219c8d77ed5c.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/tiles/warehouses_wall_lit.png"
-dest_files=["res://.godot/imported/warehouses_wall_lit.png-889b35fe7b68b7aba5f0b0b8fc103be1.bptc.ctex"]
+dest_files=["res://.godot/imported/warehouses_wall_lit.png-f529e7072bae14ca82a9219c8d77ed5c.bptc.ctex"]
 
 [params]
 

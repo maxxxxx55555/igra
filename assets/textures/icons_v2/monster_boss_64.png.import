@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://6483bd5b4b98"
-path.bptc="res://.godot/imported/monster_boss_64.png-6483bd5b4b987d32f397a039f91d4905.bptc.ctex"
+uid="uid://6483bd5b4ca8"
+path.bptc="res://.godot/imported/monster_boss_64.png-a67d23de2bb77b677d6eab3a8f24e00a.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/icons_v2/monster_boss_64.png"
-dest_files=["res://.godot/imported/monster_boss_64.png-6483bd5b4b987d32f397a039f91d4905.bptc.ctex"]
+dest_files=["res://.godot/imported/monster_boss_64.png-a67d23de2bb77b677d6eab3a8f24e00a.bptc.ctex"]
 
 [params]
 

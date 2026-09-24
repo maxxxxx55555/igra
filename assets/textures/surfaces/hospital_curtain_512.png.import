@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://e3b0d3d73fae"
-path.bptc="res://.godot/imported/hospital_curtain_512.png-e3b0d3d73faef169c050819d14850b62.bptc.ctex"
+path.bptc="res://.godot/imported/hospital_curtain_512.png-10b0df4273f67db8af5582de8bae76a8.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/surfaces/hospital_curtain_512.png"
-dest_files=["res://.godot/imported/hospital_curtain_512.png-e3b0d3d73faef169c050819d14850b62.bptc.ctex"]
+dest_files=["res://.godot/imported/hospital_curtain_512.png-10b0df4273f67db8af5582de8bae76a8.bptc.ctex"]
 
 [params]
 

@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c22c202054f0"
-path.bptc="res://.godot/imported/crest_industrial_96.png-c22c202054f05c838e4df054c2ec1bdf.bptc.ctex"
+path.bptc="res://.godot/imported/crest_industrial_96.png-1c0070f75420bd9484592584ed9970a3.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/crests/crest_industrial_96.png"
-dest_files=["res://.godot/imported/crest_industrial_96.png-c22c202054f05c838e4df054c2ec1bdf.bptc.ctex"]
+dest_files=["res://.godot/imported/crest_industrial_96.png-1c0070f75420bd9484592584ed9970a3.bptc.ctex"]
 
 [params]
 

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://75e4297a4ef0"
-path.bptc="res://.godot/imported/max_health_96.png-75e4297a4ef0c559152f67f469d9453b.bptc.ctex"
+uid="uid://75e43a7a4ef0"
+path.bptc="res://.godot/imported/max_health_96.png-9a925e897d05eebff155135a28c5013a.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/icons/skills/max_health_96.png"
-dest_files=["res://.godot/imported/max_health_96.png-75e4297a4ef0c559152f67f469d9453b.bptc.ctex"]
+dest_files=["res://.godot/imported/max_health_96.png-9a925e897d05eebff155135a28c5013a.bptc.ctex"]
 
 [params]
 

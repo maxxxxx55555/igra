@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://8a82ad77e0a8"
-path.bptc="res://.godot/imported/gesture_hold_96.png-8a82ad77e0a8bf585a06cb2c16501ed5.bptc.ctex"
+path.bptc="res://.godot/imported/gesture_hold_96.png-7a775404a9eee49820b1d6cd4be9e0aa.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/picto_v2/gesture_hold_96.png"
-dest_files=["res://.godot/imported/gesture_hold_96.png-8a82ad77e0a8bf585a06cb2c16501ed5.bptc.ctex"]
+dest_files=["res://.godot/imported/gesture_hold_96.png-7a775404a9eee49820b1d6cd4be9e0aa.bptc.ctex"]
 
 [params]
 

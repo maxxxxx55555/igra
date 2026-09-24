@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://a4cd988ca0ba"
-path.bptc="res://.godot/imported/journal_photo.png-a4cd988ca0ba27bb0b7740a9003111ad.bptc.ctex"
+uid="uid://4cea88ca0ba"
+path.bptc="res://.godot/imported/journal_photo.png-aee5c1cf8e4d0488969d3e04576e64c0.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/screens_v2/journal_photo.png"
-dest_files=["res://.godot/imported/journal_photo.png-a4cd988ca0ba27bb0b7740a9003111ad.bptc.ctex"]
+dest_files=["res://.godot/imported/journal_photo.png-aee5c1cf8e4d0488969d3e04576e64c0.bptc.ctex"]
 
 [params]
 

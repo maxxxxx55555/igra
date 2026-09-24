@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://657fc7341ab4"
-path.bptc="res://.godot/imported/loot_luck_96.png-657fc7341ab4f9ccbb69e1ea53a724a3.bptc.ctex"
+path.bptc="res://.godot/imported/loot_luck_96.png-3de556251f0dddf40041507dccdaa246.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/icons_v2/skills/loot_luck_96.png"
-dest_files=["res://.godot/imported/loot_luck_96.png-657fc7341ab4f9ccbb69e1ea53a724a3.bptc.ctex"]
+dest_files=["res://.godot/imported/loot_luck_96.png-3de556251f0dddf40041507dccdaa246.bptc.ctex"]
 
 [params]
 

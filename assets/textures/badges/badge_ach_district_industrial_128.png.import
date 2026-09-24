@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c02187c18f71"
-path.bptc="res://.godot/imported/badge_ach_district_industrial_128.png-c02187c18f713b38eb12d448187ee6bb.bptc.ctex"
+path.bptc="res://.godot/imported/badge_ach_district_industrial_128.png-7b4012f1d7fc9951e0fc551a4823e6ed.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/badges/badge_ach_district_industrial_128.png"
-dest_files=["res://.godot/imported/badge_ach_district_industrial_128.png-c02187c18f713b38eb12d448187ee6bb.bptc.ctex"]
+dest_files=["res://.godot/imported/badge_ach_district_industrial_128.png-7b4012f1d7fc9951e0fc551a4823e6ed.bptc.ctex"]
 
 [params]
 

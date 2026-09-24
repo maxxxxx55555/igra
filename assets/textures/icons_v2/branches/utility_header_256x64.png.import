@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://57e4cf2e82e0"
-path.bptc="res://.godot/imported/utility_header_256x64.png-57e4cf2e82e019f5a5bfb2e45a6ed411.bptc.ctex"
+path.bptc="res://.godot/imported/utility_header_256x64.png-f4bb77467ce949647f4ee75d9545c580.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/icons_v2/branches/utility_header_256x64.png"
-dest_files=["res://.godot/imported/utility_header_256x64.png-57e4cf2e82e019f5a5bfb2e45a6ed411.bptc.ctex"]
+dest_files=["res://.godot/imported/utility_header_256x64.png-f4bb77467ce949647f4ee75d9545c580.bptc.ctex"]
 
 [params]
 

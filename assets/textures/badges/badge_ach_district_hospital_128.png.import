@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://5be32797683d"
-path.bptc="res://.godot/imported/badge_ach_district_hospital_128.png-5be32797683d484068941c1589bf9ed6.bptc.ctex"
+uid="uid://5be328a7683d"
+path.bptc="res://.godot/imported/badge_ach_district_hospital_128.png-aabea3ee60b7c9354bff0e7f1a2b565d.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/badges/badge_ach_district_hospital_128.png"
-dest_files=["res://.godot/imported/badge_ach_district_hospital_128.png-5be32797683d484068941c1589bf9ed6.bptc.ctex"]
+dest_files=["res://.godot/imported/badge_ach_district_hospital_128.png-aabea3ee60b7c9354bff0e7f1a2b565d.bptc.ctex"]
 
 [params]
 

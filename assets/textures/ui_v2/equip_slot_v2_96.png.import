@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://8e4c72297ac9"
-path.bptc="res://.godot/imported/equip_slot_v2_96.png-8e4c72297ac9c93a38761244b5b770cf.bptc.ctex"
+uid="uid://8e4c723a7ada"
+path.bptc="res://.godot/imported/equip_slot_v2_96.png-fa4b1849efcacea44ffb1982306426e2.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/ui_v2/equip_slot_v2_96.png"
-dest_files=["res://.godot/imported/equip_slot_v2_96.png-8e4c72297ac9c93a38761244b5b770cf.bptc.ctex"]
+dest_files=["res://.godot/imported/equip_slot_v2_96.png-fa4b1849efcacea44ffb1982306426e2.bptc.ctex"]
 
 [params]
 

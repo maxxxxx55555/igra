@@ -2,17 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://4ab8bb89aea0"
-path.bptc="res://.godot/imported/tvar_512.png-4ab8bb89aea0c449e11c1ed09990103a.bptc.ctex"
+uid="uid://4ab8bcaaaea0"
+path="res://.godot/imported/tvar_512.png-84669fb000e8eece6ba42dcbba131833.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
 "vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/textures/enemies/tvar_512.png"
-dest_files=["res://.godot/imported/tvar_512.png-4ab8bb89aea0c449e11c1ed09990103a.bptc.ctex"]
+dest_files=["res://.godot/imported/tvar_512.png-84669fb000e8eece6ba42dcbba131833.ctex"]
 
 [params]
 

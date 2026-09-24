@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://94418e020ada"
-path.bptc="res://.godot/imported/shot_game_3d.png-94418e020adab8e95f4a2244339f9773.bptc.ctex"
+uid="uid://ba4418e020ada"
+path.bptc="res://.godot/imported/shot_game_3d.png-33f3d8cfabd8ece3e749d0dbe390447f.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/art/shot_game_3d.png"
-dest_files=["res://.godot/imported/shot_game_3d.png-94418e020adab8e95f4a2244339f9773.bptc.ctex"]
+dest_files=["res://.godot/imported/shot_game_3d.png-33f3d8cfabd8ece3e749d0dbe390447f.bptc.ctex"]
 
 [params]
 

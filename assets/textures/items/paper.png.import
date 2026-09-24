@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b28e081aaa02"
-path.bptc="res://.godot/imported/paper.png-b28e081aaa02c4d8e9fc9cc058a3309b.bptc.ctex"
+path.bptc="res://.godot/imported/paper.png-889f8ff146bfd31a4644a27a4f1ff9f2.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/items/paper.png"
-dest_files=["res://.godot/imported/paper.png-b28e081aaa02c4d8e9fc9cc058a3309b.bptc.ctex"]
+dest_files=["res://.godot/imported/paper.png-889f8ff146bfd31a4644a27a4f1ff9f2.bptc.ctex"]
 
 [params]
 

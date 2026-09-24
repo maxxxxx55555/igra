@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://3a60550a8e9f"
-path.bptc="res://.godot/imported/industrial_map_512.png-3a60550a8e9fda0560a953a4f0b3112a.bptc.ctex"
+uid="uid://3a60550a8faf"
+path.bptc="res://.godot/imported/industrial_map_512.png-02830d400013febe6f17c5e54d6a6652.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/maps/industrial_map_512.png"
-dest_files=["res://.godot/imported/industrial_map_512.png-3a60550a8e9fda0560a953a4f0b3112a.bptc.ctex"]
+dest_files=["res://.godot/imported/industrial_map_512.png-02830d400013febe6f17c5e54d6a6652.bptc.ctex"]
 
 [params]
 

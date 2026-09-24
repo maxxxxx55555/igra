@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b50a7ad4eeeb"
-path.bptc="res://.godot/imported/blueprint_flashlight_battery.png-b50a7ad4eeeb0d72262dfb1afdc40386.bptc.ctex"
+path.bptc="res://.godot/imported/blueprint_flashlight_battery.png-6f700e404616c36807f708111e41f688.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/items/blueprint_flashlight_battery.png"
-dest_files=["res://.godot/imported/blueprint_flashlight_battery.png-b50a7ad4eeeb0d72262dfb1afdc40386.bptc.ctex"]
+dest_files=["res://.godot/imported/blueprint_flashlight_battery.png-6f700e404616c36807f708111e41f688.bptc.ctex"]
 
 [params]
 

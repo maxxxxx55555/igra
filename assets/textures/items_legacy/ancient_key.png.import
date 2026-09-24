@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://82a45b021119"
-path.bptc="res://.godot/imported/ancient_key.png-82a45b0211196859632f4e1cdbfdce32.bptc.ctex"
+uid="uid://82a45b02112a"
+path.bptc="res://.godot/imported/ancient_key.png-960dd3617715038485258900cff77eee.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/items_legacy/ancient_key.png"
-dest_files=["res://.godot/imported/ancient_key.png-82a45b0211196859632f4e1cdbfdce32.bptc.ctex"]
+dest_files=["res://.godot/imported/ancient_key.png-960dd3617715038485258900cff77eee.bptc.ctex"]
 
 [params]
 

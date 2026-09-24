@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://91b785dc2070"
-path.bptc="res://.godot/imported/status_poison.png-91b785dc207067ce8eed5b50a24c4f15.bptc.ctex"
+uid="uid://ba1b785dc2070"
+path.bptc="res://.godot/imported/status_poison.png-93139119d64ba28f45ab85674820a6f6.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/ui/status_poison.png"
-dest_files=["res://.godot/imported/status_poison.png-91b785dc207067ce8eed5b50a24c4f15.bptc.ctex"]
+dest_files=["res://.godot/imported/status_poison.png-93139119d64ba28f45ab85674820a6f6.bptc.ctex"]
 
 [params]
 

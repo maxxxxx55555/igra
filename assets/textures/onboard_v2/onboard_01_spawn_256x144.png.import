@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://adae322a2343"
-path.bptc="res://.godot/imported/onboard_01_spawn_256x144.png-adae322a234341bab59d7b22c2b99feb.bptc.ctex"
+uid="uid://dae322a2343"
+path.bptc="res://.godot/imported/onboard_01_spawn_256x144.png-913be86f29e55f922d9e40114f0d95df.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/onboard_v2/onboard_01_spawn_256x144.png"
-dest_files=["res://.godot/imported/onboard_01_spawn_256x144.png-adae322a234341bab59d7b22c2b99feb.bptc.ctex"]
+dest_files=["res://.godot/imported/onboard_01_spawn_256x144.png-913be86f29e55f922d9e40114f0d95df.bptc.ctex"]
 
 [params]
 

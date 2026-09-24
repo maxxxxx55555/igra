@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://609a957ea6c4"
-path.bptc="res://.godot/imported/help_controls_96.png-609a957ea6c4461eb2d054b9384d38d0.bptc.ctex"
+uid="uid://61aba57ea6c4"
+path.bptc="res://.godot/imported/help_controls_96.png-6e8f4493f10331a624dad822a7bea2e5.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/touch/help_controls_96.png"
-dest_files=["res://.godot/imported/help_controls_96.png-609a957ea6c4461eb2d054b9384d38d0.bptc.ctex"]
+dest_files=["res://.godot/imported/help_controls_96.png-6e8f4493f10331a624dad822a7bea2e5.bptc.ctex"]
 
 [params]
 

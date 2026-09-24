@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c6b40c05c59e"
-path.bptc="res://.godot/imported/fire_rate_96.png-c6b40c05c59ee122d6b64fe04bc02bc6.bptc.ctex"
+uid="uid://c6b40c05c6ae"
+path.bptc="res://.godot/imported/fire_rate_96.png-c1fd71dd98a1ca9bff897caefee5fcb0.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/icons_v2/skills/fire_rate_96.png"
-dest_files=["res://.godot/imported/fire_rate_96.png-c6b40c05c59ee122d6b64fe04bc02bc6.bptc.ctex"]
+dest_files=["res://.godot/imported/fire_rate_96.png-c1fd71dd98a1ca9bff897caefee5fcb0.bptc.ctex"]
 
 [params]
 

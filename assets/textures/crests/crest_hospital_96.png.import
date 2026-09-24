@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c6dce1ea0599"
-path.bptc="res://.godot/imported/crest_hospital_96.png-c6dce1ea05995a22eeb4ca24680bb012.bptc.ctex"
+uid="uid://c6dce1ea06ba"
+path.bptc="res://.godot/imported/crest_hospital_96.png-2012075fa23693fed94683066a1edc6e.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/crests/crest_hospital_96.png"
-dest_files=["res://.godot/imported/crest_hospital_96.png-c6dce1ea05995a22eeb4ca24680bb012.bptc.ctex"]
+dest_files=["res://.godot/imported/crest_hospital_96.png-2012075fa23693fed94683066a1edc6e.bptc.ctex"]
 
 [params]
 

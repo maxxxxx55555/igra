@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://80ca4f9fef33"
-path.bptc="res://.godot/imported/crest_gas_station_96.png-80ca4f9fef33f3857d19e304f2730b5f.bptc.ctex"
+uid="uid://80ca4gafef33"
+path.bptc="res://.godot/imported/crest_gas_station_96.png-511c0b3072d4f88db1cb27da1c9c0370.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/crests/crest_gas_station_96.png"
-dest_files=["res://.godot/imported/crest_gas_station_96.png-80ca4f9fef33f3857d19e304f2730b5f.bptc.ctex"]
+dest_files=["res://.godot/imported/crest_gas_station_96.png-511c0b3072d4f88db1cb27da1c9c0370.bptc.ctex"]
 
 [params]
 

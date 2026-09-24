@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://5ff39640fb65"
-path.bptc="res://.godot/imported/stamina_boost_96.png-5ff39640fb65de49124d8ef8d7fc6812.bptc.ctex"
+uid="uid://5ff4a640fb65"
+path.bptc="res://.godot/imported/stamina_boost_96.png-db2f7a89299e0b5000f9e69f61a008ee.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/icons_v2/skills/stamina_boost_96.png"
-dest_files=["res://.godot/imported/stamina_boost_96.png-5ff39640fb65de49124d8ef8d7fc6812.bptc.ctex"]
+dest_files=["res://.godot/imported/stamina_boost_96.png-db2f7a89299e0b5000f9e69f61a008ee.bptc.ctex"]
 
 [params]
 

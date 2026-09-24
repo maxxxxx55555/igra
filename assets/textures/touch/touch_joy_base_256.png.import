@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://76aae9e45b29"
-path.bptc="res://.godot/imported/touch_joy_base_256.png-76aae9e45b295c74c02db9c209e0c782.bptc.ctex"
+uid="uid://76aafae45b3a"
+path.bptc="res://.godot/imported/touch_joy_base_256.png-523e32796f370f703fba73e5ef451b01.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/touch/touch_joy_base_256.png"
-dest_files=["res://.godot/imported/touch_joy_base_256.png-76aae9e45b295c74c02db9c209e0c782.bptc.ctex"]
+dest_files=["res://.godot/imported/touch_joy_base_256.png-523e32796f370f703fba73e5ef451b01.bptc.ctex"]
 
 [params]
 

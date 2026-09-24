@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b8abbc3bce07"
-path.bptc="res://.godot/imported/poison_drip_64.png-b8abbc3bce07df6e5bcd4f26800779d1.bptc.ctex"
+path.bptc="res://.godot/imported/poison_drip_64.png-10cb7da0d3e2a10def8c671d3eadab01.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/fx/poison_drip_64.png"
-dest_files=["res://.godot/imported/poison_drip_64.png-b8abbc3bce07df6e5bcd4f26800779d1.bptc.ctex"]
+dest_files=["res://.godot/imported/poison_drip_64.png-10cb7da0d3e2a10def8c671d3eadab01.bptc.ctex"]
 
 [params]
 

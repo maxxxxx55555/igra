@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c55d6915453d"
-path.bptc="res://.godot/imported/city_iso_2048.png-c55d6915453d48beb68ea196bc2ee472.bptc.ctex"
+uid="uid://c55d7a15453d"
+path.bptc="res://.godot/imported/city_iso_2048.png-71d9ccd607d2b35ab4012cd2367806fc.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/maps_v2/city_iso_2048.png"
-dest_files=["res://.godot/imported/city_iso_2048.png-c55d6915453d48beb68ea196bc2ee472.bptc.ctex"]
+dest_files=["res://.godot/imported/city_iso_2048.png-71d9ccd607d2b35ab4012cd2367806fc.bptc.ctex"]
 
 [params]
 

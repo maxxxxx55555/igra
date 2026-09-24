@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://0345924878a2"
-path.bptc="res://.godot/imported/last_streetlight.png-0345924878a20ca10f53c4c5d5ccac55.bptc.ctex"
+uid="uid://0346a24878a2"
+path.bptc="res://.godot/imported/last_streetlight.png-f0c3452bacda5eea4a30b21cce991d90.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/photos/last_streetlight.png"
-dest_files=["res://.godot/imported/last_streetlight.png-0345924878a20ca10f53c4c5d5ccac55.bptc.ctex"]
+dest_files=["res://.godot/imported/last_streetlight.png-f0c3452bacda5eea4a30b21cce991d90.bptc.ctex"]
 
 [params]
 

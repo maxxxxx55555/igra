@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://7f8de293e9f2"
-path.bptc="res://.godot/imported/rifle_holster_128.png-7f8de293e9f249e3c17748f392af6e47.bptc.ctex"
+uid="uid://7f8de3a3faf2"
+path.bptc="res://.godot/imported/rifle_holster_128.png-5c39d62c0f289e147e9373120e35a7e4.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/icons/weapons/rifle_holster_128.png"
-dest_files=["res://.godot/imported/rifle_holster_128.png-7f8de293e9f249e3c17748f392af6e47.bptc.ctex"]
+dest_files=["res://.godot/imported/rifle_holster_128.png-5c39d62c0f289e147e9373120e35a7e4.bptc.ctex"]
 
 [params]
 

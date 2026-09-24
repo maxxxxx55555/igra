@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://a69a8bfbb5a4"
-path.bptc="res://.godot/imported/hex_amber_128.png-a69a8bfbb5a48ee6360e2fe5225f9b70.bptc.ctex"
+uid="uid://7aa8bfbb5a4"
+path.bptc="res://.godot/imported/hex_amber_128.png-01d1e90a5f0b22ec7467757aa4a8ee36.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/ui_v2/hex_amber_128.png"
-dest_files=["res://.godot/imported/hex_amber_128.png-a69a8bfbb5a48ee6360e2fe5225f9b70.bptc.ctex"]
+dest_files=["res://.godot/imported/hex_amber_128.png-01d1e90a5f0b22ec7467757aa4a8ee36.bptc.ctex"]
 
 [params]
 

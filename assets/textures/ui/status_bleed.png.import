@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://4fc814fae746"
-path.bptc="res://.godot/imported/status_bleed.png-4fc814fae746910548647f14697ca42f.bptc.ctex"
+path.bptc="res://.godot/imported/status_bleed.png-5ac491bc1ec9b6470549da5676b03ea7.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/ui/status_bleed.png"
-dest_files=["res://.godot/imported/status_bleed.png-4fc814fae746910548647f14697ca42f.bptc.ctex"]
+dest_files=["res://.godot/imported/status_bleed.png-5ac491bc1ec9b6470549da5676b03ea7.bptc.ctex"]
 
 [params]
 

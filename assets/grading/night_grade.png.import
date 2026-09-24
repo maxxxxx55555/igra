@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://a0c4a0893334"
-path.bptc="res://.godot/imported/night_grade.png-a0c4a0893334322013bd0126c2af8975.bptc.ctex"
+uid="uid://0c4a1aa3334"
+path.bptc="res://.godot/imported/night_grade.png-5ee70c8b6bbe2e3e649dbbc5b4aa7811.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/grading/night_grade.png"
-dest_files=["res://.godot/imported/night_grade.png-a0c4a0893334322013bd0126c2af8975.bptc.ctex"]
+dest_files=["res://.godot/imported/night_grade.png-5ee70c8b6bbe2e3e649dbbc5b4aa7811.bptc.ctex"]
 
 [params]
 

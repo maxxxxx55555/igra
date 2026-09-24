@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://afdc36d2a0ec"
-path.bptc="res://.godot/imported/circuit.png-afdc36d2a0ecb182df46accc0d4b4e38.bptc.ctex"
+uid="uid://fdc36d2a0ec"
+path.bptc="res://.godot/imported/circuit.png-da01e416d8e91791ce0022006c930bf8.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/items/circuit.png"
-dest_files=["res://.godot/imported/circuit.png-afdc36d2a0ecb182df46accc0d4b4e38.bptc.ctex"]
+dest_files=["res://.godot/imported/circuit.png-da01e416d8e91791ce0022006c930bf8.bptc.ctex"]
 
 [params]
 

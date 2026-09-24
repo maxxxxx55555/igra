@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://01c340c9c11e"
-path.bptc="res://.godot/imported/minimap_enemy_blip_16.png-01c340c9c11efe4bf576f1ece323eaac.bptc.ctex"
+uid="uid://01c340dac11e"
+path.bptc="res://.godot/imported/minimap_enemy_blip_16.png-63fc71da0120aa447de689da9e39122d.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/ui/minimap_enemy_blip_16.png"
-dest_files=["res://.godot/imported/minimap_enemy_blip_16.png-01c340c9c11efe4bf576f1ece323eaac.bptc.ctex"]
+dest_files=["res://.godot/imported/minimap_enemy_blip_16.png-63fc71da0120aa447de689da9e39122d.bptc.ctex"]
 
 [params]
 

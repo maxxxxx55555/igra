@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://a8bee7d63ce4"
-path.bptc="res://.godot/imported/door_metal_512.png-a8bee7d63ce41301c5f6bf81953aa473.bptc.ctex"
+uid="uid://8bee7d63ce4"
+path.bptc="res://.godot/imported/door_metal_512.png-84acf5dac5b130b92789fb3bd87df924.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/surfaces/door_metal_512.png"
-dest_files=["res://.godot/imported/door_metal_512.png-a8bee7d63ce41301c5f6bf81953aa473.bptc.ctex"]
+dest_files=["res://.godot/imported/door_metal_512.png-84acf5dac5b130b92789fb3bd87df924.bptc.ctex"]
 
 [params]
 

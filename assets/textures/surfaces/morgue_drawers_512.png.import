@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b95cdc90b637"
-path.bptc="res://.godot/imported/morgue_drawers_512.png-b95cdc90b6374dbc866c80660d33d77f.bptc.ctex"
+uid="uid://ca5cdda0b637"
+path.bptc="res://.godot/imported/morgue_drawers_512.png-a3a9338c4d7b14c12602e6895159984c.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/surfaces/morgue_drawers_512.png"
-dest_files=["res://.godot/imported/morgue_drawers_512.png-b95cdc90b6374dbc866c80660d33d77f.bptc.ctex"]
+dest_files=["res://.godot/imported/morgue_drawers_512.png-a3a9338c4d7b14c12602e6895159984c.bptc.ctex"]
 
 [params]
 

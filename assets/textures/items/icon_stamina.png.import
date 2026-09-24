@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://44acfa66c3e8"
-path.bptc="res://.godot/imported/icon_stamina.png-44acfa66c3e83c4563204e3023ff3a95.bptc.ctex"
+path.bptc="res://.godot/imported/icon_stamina.png-fbcab23408065b71934a6e3daaf87f08.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/items/icon_stamina.png"
-dest_files=["res://.godot/imported/icon_stamina.png-44acfa66c3e83c4563204e3023ff3a95.bptc.ctex"]
+dest_files=["res://.godot/imported/icon_stamina.png-fbcab23408065b71934a6e3daaf87f08.bptc.ctex"]
 
 [params]
 

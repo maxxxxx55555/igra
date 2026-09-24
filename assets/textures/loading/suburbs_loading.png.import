@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bb916b92cdf3"
-path.bptc="res://.godot/imported/suburbs_loading.png-bb916b92cdf3f4a6ad38c099d470fe49.bptc.ctex"
+uid="uid://bca16ca2cdf3"
+path.bptc="res://.godot/imported/suburbs_loading.png-b034bf7814ceb74bb3f4dbc978bdae83.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/loading/suburbs_loading.png"
-dest_files=["res://.godot/imported/suburbs_loading.png-bb916b92cdf3f4a6ad38c099d470fe49.bptc.ctex"]
+dest_files=["res://.godot/imported/suburbs_loading.png-b034bf7814ceb74bb3f4dbc978bdae83.bptc.ctex"]
 
 [params]
 

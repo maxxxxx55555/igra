@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://348756d9fd79"
-path.bptc="res://.godot/imported/move_speed_96.png-348756d9fd79283e24addd1062f165ce.bptc.ctex"
+uid="uid://348756eafd8a"
+path.bptc="res://.godot/imported/move_speed_96.png-8ca27b0806679d7d8f6c8420be7476da.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/icons/skills/move_speed_96.png"
-dest_files=["res://.godot/imported/move_speed_96.png-348756d9fd79283e24addd1062f165ce.bptc.ctex"]
+dest_files=["res://.godot/imported/move_speed_96.png-8ca27b0806679d7d8f6c8420be7476da.bptc.ctex"]
 
 [params]
 

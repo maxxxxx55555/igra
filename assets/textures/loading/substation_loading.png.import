@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://591c9e4fe519"
-path.bptc="res://.godot/imported/substation_loading.png-591c9e4fe51917c54a92b800b40ef421.bptc.ctex"
+uid="uid://6a1dae4fe52a"
+path.bptc="res://.godot/imported/substation_loading.png-f9fc9776a848be52b7e43193eae0013b.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/loading/substation_loading.png"
-dest_files=["res://.godot/imported/substation_loading.png-591c9e4fe51917c54a92b800b40ef421.bptc.ctex"]
+dest_files=["res://.godot/imported/substation_loading.png-f9fc9776a848be52b7e43193eae0013b.bptc.ctex"]
 
 [params]
 

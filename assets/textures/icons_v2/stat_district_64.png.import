@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://14a5139d1cee"
-path.bptc="res://.godot/imported/stat_district_64.png-14a5139d1cee2ee4adf0a659268e2ee1.bptc.ctex"
+uid="uid://14a514ad1cee"
+path.bptc="res://.godot/imported/stat_district_64.png-524089960e61385ae787f3173f0d541b.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/icons_v2/stat_district_64.png"
-dest_files=["res://.godot/imported/stat_district_64.png-14a5139d1cee2ee4adf0a659268e2ee1.bptc.ctex"]
+dest_files=["res://.godot/imported/stat_district_64.png-524089960e61385ae787f3173f0d541b.bptc.ctex"]
 
 [params]
 

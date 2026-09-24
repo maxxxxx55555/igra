@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://873f26bf6cd8"
-path.bptc="res://.godot/imported/residential_floor.png-873f26bf6cd8850c8433c57229d7d65d.bptc.ctex"
+path.bptc="res://.godot/imported/residential_floor.png-6b3061850e8990a81f08ebe305b89c37.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/tiles/residential_floor.png"
-dest_files=["res://.godot/imported/residential_floor.png-873f26bf6cd8850c8433c57229d7d65d.bptc.ctex"]
+dest_files=["res://.godot/imported/residential_floor.png-6b3061850e8990a81f08ebe305b89c37.bptc.ctex"]
 
 [params]
 

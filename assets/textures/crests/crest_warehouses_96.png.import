@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://0017d4aa73d0"
-path.bptc="res://.godot/imported/crest_warehouses_96.png-0017d4aa73d03a11a4649d160d2e5150.bptc.ctex"
+path.bptc="res://.godot/imported/crest_warehouses_96.png-a9f737355d7346c18798761258af4a3b.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/crests/crest_warehouses_96.png"
-dest_files=["res://.godot/imported/crest_warehouses_96.png-0017d4aa73d03a11a4649d160d2e5150.bptc.ctex"]
+dest_files=["res://.godot/imported/crest_warehouses_96.png-a9f737355d7346c18798761258af4a3b.bptc.ctex"]
 
 [params]
 

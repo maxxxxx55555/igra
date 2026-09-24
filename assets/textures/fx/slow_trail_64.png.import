@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://8e31c2ab498d"
-path.bptc="res://.godot/imported/slow_trail_64.png-8e31c2ab498df3277f9ebb863673a8ab.bptc.ctex"
+uid="uid://8e31c2ab5a8d"
+path.bptc="res://.godot/imported/slow_trail_64.png-a5b2b2e2741a3818bffc3a7fa57ea603.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/fx/slow_trail_64.png"
-dest_files=["res://.godot/imported/slow_trail_64.png-8e31c2ab498df3277f9ebb863673a8ab.bptc.ctex"]
+dest_files=["res://.godot/imported/slow_trail_64.png-a5b2b2e2741a3818bffc3a7fa57ea603.bptc.ctex"]
 
 [params]
 

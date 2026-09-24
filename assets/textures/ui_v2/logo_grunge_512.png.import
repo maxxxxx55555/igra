@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://063ec60c2498"
-path.bptc="res://.godot/imported/logo_grunge_512.png-063ec60c2498fdbec035ac2de641c0ad.bptc.ctex"
+uid="uid://063ec60c25a8"
+path.bptc="res://.godot/imported/logo_grunge_512.png-b519046f1c6b26be80869f84cbe6931e.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/ui_v2/logo_grunge_512.png"
-dest_files=["res://.godot/imported/logo_grunge_512.png-063ec60c2498fdbec035ac2de641c0ad.bptc.ctex"]
+dest_files=["res://.godot/imported/logo_grunge_512.png-b519046f1c6b26be80869f84cbe6931e.bptc.ctex"]
 
 [params]
 

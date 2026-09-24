@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://a93710506dd8"
-path.bptc="res://.godot/imported/lockpick.png-a93710506dd8b1a5492d2a46b178f9ec.bptc.ctex"
+uid="uid://ba3710506dd8"
+path.bptc="res://.godot/imported/lockpick.png-9f158d276aead648aecf4441b70b14d2.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/items/lockpick.png"
-dest_files=["res://.godot/imported/lockpick.png-a93710506dd8b1a5492d2a46b178f9ec.bptc.ctex"]
+dest_files=["res://.godot/imported/lockpick.png-9f158d276aead648aecf4441b70b14d2.bptc.ctex"]
 
 [params]
 

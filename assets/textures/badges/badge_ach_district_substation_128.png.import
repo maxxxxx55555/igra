@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://7a108c74f392"
-path.bptc="res://.godot/imported/badge_ach_district_substation_128.png-7a108c74f392c4ec322ecc57fbde9ab8.bptc.ctex"
+uid="uid://7a108c74f4a2"
+path.bptc="res://.godot/imported/badge_ach_district_substation_128.png-40437824d3ef26b07a8b09f518a19951.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/badges/badge_ach_district_substation_128.png"
-dest_files=["res://.godot/imported/badge_ach_district_substation_128.png-7a108c74f392c4ec322ecc57fbde9ab8.bptc.ctex"]
+dest_files=["res://.godot/imported/badge_ach_district_substation_128.png-40437824d3ef26b07a8b09f518a19951.bptc.ctex"]
 
 [params]
 

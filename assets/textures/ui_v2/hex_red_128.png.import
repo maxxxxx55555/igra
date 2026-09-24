@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://58f107a5e1a3"
-path.bptc="res://.godot/imported/hex_red_128.png-58f107a5e1a3d1575c4adfacf41f7a17.bptc.ctex"
+path.bptc="res://.godot/imported/hex_red_128.png-70e29f8ba9e894381f4a0619eedc3cf6.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/ui_v2/hex_red_128.png"
-dest_files=["res://.godot/imported/hex_red_128.png-58f107a5e1a3d1575c4adfacf41f7a17.bptc.ctex"]
+dest_files=["res://.godot/imported/hex_red_128.png-70e29f8ba9e894381f4a0619eedc3cf6.bptc.ctex"]
 
 [params]
 

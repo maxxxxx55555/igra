@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://e34677fa3438"
-path.bptc="res://.godot/imported/icon_health.png-e34677fa343840f69c0b522dce319f45.bptc.ctex"
+path.bptc="res://.godot/imported/icon_health.png-01e2d9e685275d1254c9f12483585ed6.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/items/icon_health.png"
-dest_files=["res://.godot/imported/icon_health.png-e34677fa343840f69c0b522dce319f45.bptc.ctex"]
+dest_files=["res://.godot/imported/icon_health.png-01e2d9e685275d1254c9f12483585ed6.bptc.ctex"]
 
 [params]
 

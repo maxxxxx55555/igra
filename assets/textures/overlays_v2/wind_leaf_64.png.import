@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://6ab772b1066d"
-path.bptc="res://.godot/imported/wind_leaf_64.png-6ab772b1066dea9724379174010b5f34.bptc.ctex"
+path.bptc="res://.godot/imported/wind_leaf_64.png-851bef11606f803628979899e8768cd5.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/overlays_v2/wind_leaf_64.png"
-dest_files=["res://.godot/imported/wind_leaf_64.png-6ab772b1066dea9724379174010b5f34.bptc.ctex"]
+dest_files=["res://.godot/imported/wind_leaf_64.png-851bef11606f803628979899e8768cd5.bptc.ctex"]
 
 [params]
 

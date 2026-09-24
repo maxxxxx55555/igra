@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://87d8c1be7b1e"
-path.bptc="res://.godot/imported/badge_ach_district_police_128.png-87d8c1be7b1e233e3720e56103f50a95.bptc.ctex"
+path.bptc="res://.godot/imported/badge_ach_district_police_128.png-e0387c0d1eca5c1d6d577a4a0e6bfeba.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/badges/badge_ach_district_police_128.png"
-dest_files=["res://.godot/imported/badge_ach_district_police_128.png-87d8c1be7b1e233e3720e56103f50a95.bptc.ctex"]
+dest_files=["res://.godot/imported/badge_ach_district_police_128.png-e0387c0d1eca5c1d6d577a4a0e6bfeba.bptc.ctex"]
 
 [params]
 

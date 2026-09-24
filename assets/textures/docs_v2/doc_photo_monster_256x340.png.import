@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://42aa8c6ed542"
-path.bptc="res://.godot/imported/doc_photo_monster_256x340.png-42aa8c6ed542d55e833e959a644e8ab2.bptc.ctex"
+path.bptc="res://.godot/imported/doc_photo_monster_256x340.png-a0f0ba162cf789b0e209bf07cfbf2199.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/docs_v2/doc_photo_monster_256x340.png"
-dest_files=["res://.godot/imported/doc_photo_monster_256x340.png-42aa8c6ed542d55e833e959a644e8ab2.bptc.ctex"]
+dest_files=["res://.godot/imported/doc_photo_monster_256x340.png-a0f0ba162cf789b0e209bf07cfbf2199.bptc.ctex"]
 
 [params]
 

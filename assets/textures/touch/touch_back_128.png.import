@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://fafa0660e7fc"
-path.bptc="res://.godot/imported/touch_back_128.png-fafa0660e7fc68ecdbd71d9b5056df8c.bptc.ctex"
+path.bptc="res://.godot/imported/touch_back_128.png-35ff539fab56f3334a5fabbbd0045a25.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/touch/touch_back_128.png"
-dest_files=["res://.godot/imported/touch_back_128.png-fafa0660e7fc68ecdbd71d9b5056df8c.bptc.ctex"]
+dest_files=["res://.godot/imported/touch_back_128.png-35ff539fab56f3334a5fabbbd0045a25.bptc.ctex"]
 
 [params]
 

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://665064bddd96"
-path.bptc="res://.godot/imported/event_breaker_48.png-665064bddd96b940d26022eb1c7b044f.bptc.ctex"
+uid="uid://665064bddea6"
+path.bptc="res://.godot/imported/event_breaker_48.png-e05248a645666541fe03bd3efedd1155.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/icons_v2/event_breaker_48.png"
-dest_files=["res://.godot/imported/event_breaker_48.png-665064bddd96b940d26022eb1c7b044f.bptc.ctex"]
+dest_files=["res://.godot/imported/event_breaker_48.png-e05248a645666541fe03bd3efedd1155.bptc.ctex"]
 
 [params]
 

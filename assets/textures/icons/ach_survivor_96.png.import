@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://903017b65cd5"
-path.bptc="res://.godot/imported/ach_survivor_96.png-903017b65cd5e8495a019a0223ee2c61.bptc.ctex"
+uid="uid://ba03017b65cd5"
+path.bptc="res://.godot/imported/ach_survivor_96.png-c5e75b865d2606204796a1b42f3f18a5.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/icons/ach_survivor_96.png"
-dest_files=["res://.godot/imported/ach_survivor_96.png-903017b65cd5e8495a019a0223ee2c61.bptc.ctex"]
+dest_files=["res://.godot/imported/ach_survivor_96.png-c5e75b865d2606204796a1b42f3f18a5.bptc.ctex"]
 
 [params]
 

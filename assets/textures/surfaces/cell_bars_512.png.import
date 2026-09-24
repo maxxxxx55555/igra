@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://02b1a91451d6"
-path.bptc="res://.godot/imported/cell_bars_512.png-02b1a91451d65009f89b6b01378b6724.bptc.ctex"
+uid="uid://02b1ba1451d6"
+path.bptc="res://.godot/imported/cell_bars_512.png-2057245b877af08dc3ed42b9d96b2f0f.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/surfaces/cell_bars_512.png"
-dest_files=["res://.godot/imported/cell_bars_512.png-02b1a91451d65009f89b6b01378b6724.bptc.ctex"]
+dest_files=["res://.godot/imported/cell_bars_512.png-2057245b877af08dc3ed42b9d96b2f0f.bptc.ctex"]
 
 [params]
 

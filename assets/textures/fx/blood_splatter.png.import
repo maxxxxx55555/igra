@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://67d6b7b2e171"
-path.bptc="res://.godot/imported/blood_splatter.png-67d6b7b2e171457fc7a45f008cd51358.bptc.ctex"
+path.bptc="res://.godot/imported/blood_splatter.png-42a5343a336b04a53f937485599e74d3.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/fx/blood_splatter.png"
-dest_files=["res://.godot/imported/blood_splatter.png-67d6b7b2e171457fc7a45f008cd51358.bptc.ctex"]
+dest_files=["res://.godot/imported/blood_splatter.png-42a5343a336b04a53f937485599e74d3.bptc.ctex"]
 
 [params]
 

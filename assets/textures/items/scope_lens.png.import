@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://8f3aedc3f6e6"
-path.bptc="res://.godot/imported/scope_lens.png-8f3aedc3f6e689e432439196f6747144.bptc.ctex"
+path.bptc="res://.godot/imported/scope_lens.png-be3c3ee53cd8d8f54f1198bf99ea2222.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/items/scope_lens.png"
-dest_files=["res://.godot/imported/scope_lens.png-8f3aedc3f6e689e432439196f6747144.bptc.ctex"]
+dest_files=["res://.godot/imported/scope_lens.png-be3c3ee53cd8d8f54f1198bf99ea2222.bptc.ctex"]
 
 [params]
 

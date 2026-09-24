@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://390a2f7359c0"
-path.bptc="res://.godot/imported/weather_storm_256x144.png-390a2f7359c07cd988f949dafb4f4443.bptc.ctex"
+uid="uid://4a0a2f736ac0"
+path.bptc="res://.godot/imported/weather_storm_256x144.png-c7118912237b29ed746c8f9df144a7b5.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/ui_v2/weather_storm_256x144.png"
-dest_files=["res://.godot/imported/weather_storm_256x144.png-390a2f7359c07cd988f949dafb4f4443.bptc.ctex"]
+dest_files=["res://.godot/imported/weather_storm_256x144.png-c7118912237b29ed746c8f9df144a7b5.bptc.ctex"]
 
 [params]
 

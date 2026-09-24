@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://829fc0ec7716"
-path.bptc="res://.godot/imported/gear.png-829fc0ec77168f9dac56c0154dbe3df9.bptc.ctex"
+uid="uid://83afc0ec7716"
+path.bptc="res://.godot/imported/gear.png-6e11d423a13a53345dc02b97f7dea15d.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/items/gear.png"
-dest_files=["res://.godot/imported/gear.png-829fc0ec77168f9dac56c0154dbe3df9.bptc.ctex"]
+dest_files=["res://.godot/imported/gear.png-6e11d423a13a53345dc02b97f7dea15d.bptc.ctex"]
 
 [params]
 

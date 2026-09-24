@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://a3786ca96fda"
-path.bptc="res://.godot/imported/rotter_full_512x768.png-a3786ca96fda8c06c233073675cc4e16.bptc.ctex"
+uid="uid://3786cba6fda"
+path.bptc="res://.godot/imported/rotter_full_512x768.png-e7b7ffb549d7cfb90f21f8843b4f5d8b.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/portraits_v2/rotter_full_512x768.png"
-dest_files=["res://.godot/imported/rotter_full_512x768.png-a3786ca96fda8c06c233073675cc4e16.bptc.ctex"]
+dest_files=["res://.godot/imported/rotter_full_512x768.png-e7b7ffb549d7cfb90f21f8843b4f5d8b.bptc.ctex"]
 
 [params]
 

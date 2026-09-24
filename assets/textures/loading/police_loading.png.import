@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://49ec4b13f70d"
-path.bptc="res://.godot/imported/police_loading.png-49ec4b13f70df353b4bc71fc365f7eb3.bptc.ctex"
+uid="uid://5aec4b13f70d"
+path.bptc="res://.godot/imported/police_loading.png-a13bf310fce88878c6970da82e8bc4b2.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/loading/police_loading.png"
-dest_files=["res://.godot/imported/police_loading.png-49ec4b13f70df353b4bc71fc365f7eb3.bptc.ctex"]
+dest_files=["res://.godot/imported/police_loading.png-a13bf310fce88878c6970da82e8bc4b2.bptc.ctex"]
 
 [params]
 

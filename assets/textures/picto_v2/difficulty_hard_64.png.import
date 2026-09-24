@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://7cedc8f6b29b"
-path.bptc="res://.godot/imported/difficulty_hard_64.png-7cedc8f6b29b83c12ede2e5c5e693bde.bptc.ctex"
+uid="uid://7cedc8f6b3ab"
+path.bptc="res://.godot/imported/difficulty_hard_64.png-a976f0640a8924280f4680972d24c557.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/picto_v2/difficulty_hard_64.png"
-dest_files=["res://.godot/imported/difficulty_hard_64.png-7cedc8f6b29b83c12ede2e5c5e693bde.bptc.ctex"]
+dest_files=["res://.godot/imported/difficulty_hard_64.png-a976f0640a8924280f4680972d24c557.bptc.ctex"]
 
 [params]
 

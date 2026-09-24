@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://95ad880c3aba"
-path.bptc="res://.godot/imported/battery_capacity_96.png-95ad880c3aba627262bdc447a88a8d7b.bptc.ctex"
+uid="uid://ba5ad880c3aba"
+path.bptc="res://.godot/imported/battery_capacity_96.png-1634e1cb3c611459e91f0bcacba27adf.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/icons/skills/battery_capacity_96.png"
-dest_files=["res://.godot/imported/battery_capacity_96.png-95ad880c3aba627262bdc447a88a8d7b.bptc.ctex"]
+dest_files=["res://.godot/imported/battery_capacity_96.png-1634e1cb3c611459e91f0bcacba27adf.bptc.ctex"]
 
 [params]
 

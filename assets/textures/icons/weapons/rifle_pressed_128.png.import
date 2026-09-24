@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://3b43202da66c"
-path.bptc="res://.godot/imported/rifle_pressed_128.png-3b43202da66c3f3a0f5f964b648374d8.bptc.ctex"
+path.bptc="res://.godot/imported/rifle_pressed_128.png-ce102691bfa0f5aca2c7305b6c16ca89.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/icons/weapons/rifle_pressed_128.png"
-dest_files=["res://.godot/imported/rifle_pressed_128.png-3b43202da66c3f3a0f5f964b648374d8.bptc.ctex"]
+dest_files=["res://.godot/imported/rifle_pressed_128.png-ce102691bfa0f5aca2c7305b6c16ca89.bptc.ctex"]
 
 [params]
 

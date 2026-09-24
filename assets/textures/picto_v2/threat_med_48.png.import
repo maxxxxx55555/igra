@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://5456c069392e"
-path.bptc="res://.godot/imported/threat_med_48.png-5456c069392e0e3feb9a7056c987926f.bptc.ctex"
+uid="uid://5456c07a4a2e"
+path.bptc="res://.godot/imported/threat_med_48.png-7b81f2085373c268572c340afeebde27.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/picto_v2/threat_med_48.png"
-dest_files=["res://.godot/imported/threat_med_48.png-5456c069392e0e3feb9a7056c987926f.bptc.ctex"]
+dest_files=["res://.godot/imported/threat_med_48.png-7b81f2085373c268572c340afeebde27.bptc.ctex"]
 
 [params]
 

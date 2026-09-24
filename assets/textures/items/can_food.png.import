@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d748efae79df"
-path.bptc="res://.godot/imported/can_food.png-d748efae79dfe7d734d06ee6afa1f134.bptc.ctex"
+uid="uid://d748efae8adf"
+path.bptc="res://.godot/imported/can_food.png-8cde7e073fdd19d3a1ce772bf373a3fb.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/items/can_food.png"
-dest_files=["res://.godot/imported/can_food.png-d748efae79dfe7d734d06ee6afa1f134.bptc.ctex"]
+dest_files=["res://.godot/imported/can_food.png-8cde7e073fdd19d3a1ce772bf373a3fb.bptc.ctex"]
 
 [params]
 

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b6a6d9728f25"
-path.bptc="res://.godot/imported/stage_streets_256x144.png-b6a6d9728f25e27757f2b4ebf8a1cedd.bptc.ctex"
+uid="uid://b6a6ea728f25"
+path.bptc="res://.godot/imported/stage_streets_256x144.png-355ea3f6bbb5fcdeff859baade22a849.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/stages_v2/stage_streets_256x144.png"
-dest_files=["res://.godot/imported/stage_streets_256x144.png-b6a6d9728f25e27757f2b4ebf8a1cedd.bptc.ctex"]
+dest_files=["res://.godot/imported/stage_streets_256x144.png-355ea3f6bbb5fcdeff859baade22a849.bptc.ctex"]
 
 [params]
 

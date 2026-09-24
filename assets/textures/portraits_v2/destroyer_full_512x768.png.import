@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://3afb5ae6add9"
-path.bptc="res://.godot/imported/destroyer_full_512x768.png-3afb5ae6add99bb28f4eab5b0616aa9c.bptc.ctex"
+uid="uid://3afb5ae6adea"
+path.bptc="res://.godot/imported/destroyer_full_512x768.png-3a46ac9f38e03bdb016f94a12c77edb2.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/portraits_v2/destroyer_full_512x768.png"
-dest_files=["res://.godot/imported/destroyer_full_512x768.png-3afb5ae6add99bb28f4eab5b0616aa9c.bptc.ctex"]
+dest_files=["res://.godot/imported/destroyer_full_512x768.png-3a46ac9f38e03bdb016f94a12c77edb2.bptc.ctex"]
 
 [params]
 

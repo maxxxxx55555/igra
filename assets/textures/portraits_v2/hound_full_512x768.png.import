@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://51c1390cbd67"
-path.bptc="res://.godot/imported/hound_full_512x768.png-51c1390cbd6722d980971b72988e78ab.bptc.ctex"
+uid="uid://51c14a0cbd67"
+path.bptc="res://.godot/imported/hound_full_512x768.png-43e3417e7851b8c0bcc63ad6369130fd.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/portraits_v2/hound_full_512x768.png"
-dest_files=["res://.godot/imported/hound_full_512x768.png-51c1390cbd6722d980971b72988e78ab.bptc.ctex"]
+dest_files=["res://.godot/imported/hound_full_512x768.png-43e3417e7851b8c0bcc63ad6369130fd.bptc.ctex"]
 
 [params]
 

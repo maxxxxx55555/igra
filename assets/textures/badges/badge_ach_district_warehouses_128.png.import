@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://f33dfc6f9b7e"
-path.bptc="res://.godot/imported/badge_ach_district_warehouses_128.png-f33dfc6f9b7e2708b84ccdb5958fc338.bptc.ctex"
+uid="uid://f33dfc6gab7e"
+path.bptc="res://.godot/imported/badge_ach_district_warehouses_128.png-ed74c3b0222683168add142c7b1d43ed.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/badges/badge_ach_district_warehouses_128.png"
-dest_files=["res://.godot/imported/badge_ach_district_warehouses_128.png-f33dfc6f9b7e2708b84ccdb5958fc338.bptc.ctex"]
+dest_files=["res://.godot/imported/badge_ach_district_warehouses_128.png-ed74c3b0222683168add142c7b1d43ed.bptc.ctex"]
 
 [params]
 

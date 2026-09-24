@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://f5113bc93fea"
-path.bptc="res://.godot/imported/hospital_floor_lit.png-f5113bc93fea1196f5c25d393f1766fc.bptc.ctex"
+uid="uid://f5113bda3fea"
+path.bptc="res://.godot/imported/hospital_floor_lit.png-d1ab280bab4a2240171d83e30887341f.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/tiles/hospital_floor_lit.png"
-dest_files=["res://.godot/imported/hospital_floor_lit.png-f5113bc93fea1196f5c25d393f1766fc.bptc.ctex"]
+dest_files=["res://.godot/imported/hospital_floor_lit.png-d1ab280bab4a2240171d83e30887341f.bptc.ctex"]
 
 [params]
 

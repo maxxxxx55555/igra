@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c79374c0f997"
-path.bptc="res://.godot/imported/stun_stars_64.png-c79374c0f99796403612bce6be1e3758.bptc.ctex"
+uid="uid://c8a374c0gba7"
+path.bptc="res://.godot/imported/stun_stars_64.png-a13a03c117d11e33c03f1c8a4a7f1e2e.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/fx/stun_stars_64.png"
-dest_files=["res://.godot/imported/stun_stars_64.png-c79374c0f99796403612bce6be1e3758.bptc.ctex"]
+dest_files=["res://.godot/imported/stun_stars_64.png-a13a03c117d11e33c03f1c8a4a7f1e2e.bptc.ctex"]
 
 [params]
 

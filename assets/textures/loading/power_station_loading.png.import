@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://e96c3b937d2a"
-path.bptc="res://.godot/imported/power_station_loading.png-e96c3b937d2ae98ca3fba29990f86030.bptc.ctex"
+uid="uid://fa6c3ca37d2a"
+path.bptc="res://.godot/imported/power_station_loading.png-e5cd91f0205d6874d6d8fe67c61eaf32.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/loading/power_station_loading.png"
-dest_files=["res://.godot/imported/power_station_loading.png-e96c3b937d2ae98ca3fba29990f86030.bptc.ctex"]
+dest_files=["res://.godot/imported/power_station_loading.png-e5cd91f0205d6874d6d8fe67c61eaf32.bptc.ctex"]
 
 [params]
 

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://5eb2729c5860"
-path.bptc="res://.godot/imported/tools_128.png-5eb2729c58603a09164fa53a55c7ad8f.bptc.ctex"
+uid="uid://5eb273ac5860"
+path.bptc="res://.godot/imported/tools_128.png-2f0dfe9f4b87edd7012df81a22aed190.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/icons_v2/tools_128.png"
-dest_files=["res://.godot/imported/tools_128.png-5eb2729c58603a09164fa53a55c7ad8f.bptc.ctex"]
+dest_files=["res://.godot/imported/tools_128.png-2f0dfe9f4b87edd7012df81a22aed190.bptc.ctex"]
 
 [params]
 

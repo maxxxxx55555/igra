@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://fd7fa96e5466"
-path.bptc="res://.godot/imported/crest_police_96.png-fd7fa96e54661d2ab4c44333757bee41.bptc.ctex"
+uid="uid://fd7fba6e5466"
+path.bptc="res://.godot/imported/crest_police_96.png-55631a5973e68dad5b6a8043c8822abf.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/crests/crest_police_96.png"
-dest_files=["res://.godot/imported/crest_police_96.png-fd7fa96e54661d2ab4c44333757bee41.bptc.ctex"]
+dest_files=["res://.godot/imported/crest_police_96.png-55631a5973e68dad5b6a8043c8822abf.bptc.ctex"]
 
 [params]
 

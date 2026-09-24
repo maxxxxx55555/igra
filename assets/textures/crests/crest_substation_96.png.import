@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://3a15ead544e8"
-path.bptc="res://.godot/imported/crest_substation_96.png-3a15ead544e8d971f8aae28cbdb9aac4.bptc.ctex"
+path.bptc="res://.godot/imported/crest_substation_96.png-916996cfb1b7a89bc51bf8fab34ad605.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/crests/crest_substation_96.png"
-dest_files=["res://.godot/imported/crest_substation_96.png-3a15ead544e8d971f8aae28cbdb9aac4.bptc.ctex"]
+dest_files=["res://.godot/imported/crest_substation_96.png-916996cfb1b7a89bc51bf8fab34ad605.bptc.ctex"]
 
 [params]
 

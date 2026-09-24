@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://e5b2f26525fe"
-path.bptc="res://.godot/imported/help_stealth_96.png-e5b2f26525feb7733066d8295a45e7fd.bptc.ctex"
+path.bptc="res://.godot/imported/help_stealth_96.png-8a74f5021021eef626aa864ae4387a99.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/touch/help_stealth_96.png"
-dest_files=["res://.godot/imported/help_stealth_96.png-e5b2f26525feb7733066d8295a45e7fd.bptc.ctex"]
+dest_files=["res://.godot/imported/help_stealth_96.png-8a74f5021021eef626aa864ae4387a99.bptc.ctex"]
 
 [params]
 

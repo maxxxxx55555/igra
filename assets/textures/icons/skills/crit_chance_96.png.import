@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://a3c00f0f39a2"
-path.bptc="res://.godot/imported/crit_chance_96.png-a3c00f0f39a29390f9cb029336720fb6.bptc.ctex"
+uid="uid://3c00f0f4aa2"
+path.bptc="res://.godot/imported/crit_chance_96.png-8a211926935f0b764fcb5f1c61f0d794.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/icons/skills/crit_chance_96.png"
-dest_files=["res://.godot/imported/crit_chance_96.png-a3c00f0f39a29390f9cb029336720fb6.bptc.ctex"]
+dest_files=["res://.godot/imported/crit_chance_96.png-8a211926935f0b764fcb5f1c61f0d794.bptc.ctex"]
 
 [params]
 

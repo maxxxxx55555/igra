@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://d07517cc7c4f"
-path.bptc="res://.godot/imported/industrial_loading.png-d07517cc7c4f923fc95eb2c1273c573b.bptc.ctex"
+path.bptc="res://.godot/imported/industrial_loading.png-9ea019324fffd431f034f052f3c87e40.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/loading/industrial_loading.png"
-dest_files=["res://.godot/imported/industrial_loading.png-d07517cc7c4f923fc95eb2c1273c573b.bptc.ctex"]
+dest_files=["res://.godot/imported/industrial_loading.png-9ea019324fffd431f034f052f3c87e40.bptc.ctex"]
 
 [params]
 

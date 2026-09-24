@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d3be8a91a3bc"
-path.bptc="res://.godot/imported/icon_ammo.png-d3be8a91a3bc75e007486b188e297f0f.bptc.ctex"
+uid="uid://d3be8ba1a3bc"
+path.bptc="res://.godot/imported/icon_ammo.png-13c41fea1aa2cc3c8c9f720aaf5ea3a9.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/items/icon_ammo.png"
-dest_files=["res://.godot/imported/icon_ammo.png-d3be8a91a3bc75e007486b188e297f0f.bptc.ctex"]
+dest_files=["res://.godot/imported/icon_ammo.png-13c41fea1aa2cc3c8c9f720aaf5ea3a9.bptc.ctex"]
 
 [params]
 

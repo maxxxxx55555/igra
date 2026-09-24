@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://940742d13769"
-path.bptc="res://.godot/imported/onboard_05_light_cone_1024x576.png-940742d1376968506adfc99c1ce50c16.bptc.ctex"
+uid="uid://ba40742d1377a"
+path.bptc="res://.godot/imported/onboard_05_light_cone_1024x576.png-0cf7ab3ac63378d825b0eab31e2ba4e1.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/onboard_v2/onboard_05_light_cone_1024x576.png"
-dest_files=["res://.godot/imported/onboard_05_light_cone_1024x576.png-940742d1376968506adfc99c1ce50c16.bptc.ctex"]
+dest_files=["res://.godot/imported/onboard_05_light_cone_1024x576.png-0cf7ab3ac63378d825b0eab31e2ba4e1.bptc.ctex"]
 
 [params]
 

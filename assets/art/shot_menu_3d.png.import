@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://33127a628f9a"
-path.bptc="res://.godot/imported/shot_menu_3d.png-33127a628f9a2ec29efd2912f4da2883.bptc.ctex"
+uid="uid://33127a628gaa"
+path.bptc="res://.godot/imported/shot_menu_3d.png-1ac8a35d0c19b53e32ff2df5f3090541.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/art/shot_menu_3d.png"
-dest_files=["res://.godot/imported/shot_menu_3d.png-33127a628f9a2ec29efd2912f4da2883.bptc.ctex"]
+dest_files=["res://.godot/imported/shot_menu_3d.png-1ac8a35d0c19b53e32ff2df5f3090541.bptc.ctex"]
 
 [params]
 

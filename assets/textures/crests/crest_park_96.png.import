@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://06916c98e740"
-path.bptc="res://.godot/imported/crest_park_96.png-06916c98e740a2a1c96b4e1c23c7535f.bptc.ctex"
+uid="uid://07a16da8e740"
+path.bptc="res://.godot/imported/crest_park_96.png-46dcc50c75f7951be88a1e2aa6f00a80.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/crests/crest_park_96.png"
-dest_files=["res://.godot/imported/crest_park_96.png-06916c98e740a2a1c96b4e1c23c7535f.bptc.ctex"]
+dest_files=["res://.godot/imported/crest_park_96.png-46dcc50c75f7951be88a1e2aa6f00a80.bptc.ctex"]
 
 [params]
 

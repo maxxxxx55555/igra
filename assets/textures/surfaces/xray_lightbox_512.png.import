@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://4078ce8636f7"
-path.bptc="res://.godot/imported/xray_lightbox_512.png-4078ce8636f7efa91b66d8903d60f35b.bptc.ctex"
+path.bptc="res://.godot/imported/xray_lightbox_512.png-96d719a859766d461e5bf6dace889703.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/surfaces/xray_lightbox_512.png"
-dest_files=["res://.godot/imported/xray_lightbox_512.png-4078ce8636f7efa91b66d8903d60f35b.bptc.ctex"]
+dest_files=["res://.godot/imported/xray_lightbox_512.png-96d719a859766d461e5bf6dace889703.bptc.ctex"]
 
 [params]
 

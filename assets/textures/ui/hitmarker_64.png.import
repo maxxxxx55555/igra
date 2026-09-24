@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://49ca078d6800"
-path.bptc="res://.godot/imported/hitmarker_64.png-49ca078d6800152e121224319084bea7.bptc.ctex"
+uid="uid://5aca078d6800"
+path.bptc="res://.godot/imported/hitmarker_64.png-d18ac51a2f0d3a1ae834eb8af51e6d9f.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/ui/hitmarker_64.png"
-dest_files=["res://.godot/imported/hitmarker_64.png-49ca078d6800152e121224319084bea7.bptc.ctex"]
+dest_files=["res://.godot/imported/hitmarker_64.png-d18ac51a2f0d3a1ae834eb8af51e6d9f.bptc.ctex"]
 
 [params]
 

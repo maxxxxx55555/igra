@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://00102091d510"
-path.bptc="res://.godot/imported/gesture_tap_96.png-00102091d51092ff28bc5218032e161f.bptc.ctex"
+uid="uid://001021a1d510"
+path.bptc="res://.godot/imported/gesture_tap_96.png-e6481bff20fa4a8528aba899d34247c2.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/picto_v2/gesture_tap_96.png"
-dest_files=["res://.godot/imported/gesture_tap_96.png-00102091d51092ff28bc5218032e161f.bptc.ctex"]
+dest_files=["res://.godot/imported/gesture_tap_96.png-e6481bff20fa4a8528aba899d34247c2.bptc.ctex"]
 
 [params]
 

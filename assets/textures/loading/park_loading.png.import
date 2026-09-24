@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dc226352067f"
-path.bptc="res://.godot/imported/park_loading.png-dc226352067f8b7cfb65d6e24572db58.bptc.ctex"
+path.bptc="res://.godot/imported/park_loading.png-c0c1280ed1f695289116733b80f7b1d9.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/loading/park_loading.png"
-dest_files=["res://.godot/imported/park_loading.png-dc226352067f8b7cfb65d6e24572db58.bptc.ctex"]
+dest_files=["res://.godot/imported/park_loading.png-c0c1280ed1f695289116733b80f7b1d9.bptc.ctex"]
 
 [params]
 

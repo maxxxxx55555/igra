@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c45f05a65259"
-path.bptc="res://.godot/imported/rain_streaks_1080.png-c45f05a65259a438aa9247b5e72f6387.bptc.ctex"
+uid="uid://c45f05a6526a"
+path.bptc="res://.godot/imported/rain_streaks_1080.png-5a83493cd0341375eb1a2e07244e7905.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/overlays_v2/rain_streaks_1080.png"
-dest_files=["res://.godot/imported/rain_streaks_1080.png-c45f05a65259a438aa9247b5e72f6387.bptc.ctex"]
+dest_files=["res://.godot/imported/rain_streaks_1080.png-5a83493cd0341375eb1a2e07244e7905.bptc.ctex"]
 
 [params]
 

@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://e67407bcf184"
-path.bptc="res://.godot/imported/chalkboard_512.png-e67407bcf18406662aeb7e702a99efe5.bptc.ctex"
+path.bptc="res://.godot/imported/chalkboard_512.png-075f7622c1efe3bd991e1976dee44c78.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/surfaces/chalkboard_512.png"
-dest_files=["res://.godot/imported/chalkboard_512.png-e67407bcf18406662aeb7e702a99efe5.bptc.ctex"]
+dest_files=["res://.godot/imported/chalkboard_512.png-075f7622c1efe3bd991e1976dee44c78.bptc.ctex"]
 
 [params]
 

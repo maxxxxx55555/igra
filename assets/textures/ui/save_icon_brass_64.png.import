@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://2e4191795ce0"
-path.bptc="res://.godot/imported/save_icon_brass_64.png-2e4191795ce00f7ea50fb64376762a7d.bptc.ctex"
+uid="uid://2e42a18a5ce0"
+path.bptc="res://.godot/imported/save_icon_brass_64.png-6a0f210a7883c70764a9a5c5fe0a9f13.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/ui/save_icon_brass_64.png"
-dest_files=["res://.godot/imported/save_icon_brass_64.png-2e4191795ce00f7ea50fb64376762a7d.bptc.ctex"]
+dest_files=["res://.godot/imported/save_icon_brass_64.png-6a0f210a7883c70764a9a5c5fe0a9f13.bptc.ctex"]
 
 [params]
 

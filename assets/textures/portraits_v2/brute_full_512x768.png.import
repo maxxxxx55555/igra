@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://2459d421e43b"
-path.bptc="res://.godot/imported/brute_full_512x768.png-2459d421e43bda1ba2f1b58fc1443d8d.bptc.ctex"
+uid="uid://246ad421e43b"
+path.bptc="res://.godot/imported/brute_full_512x768.png-ed480f32cec4d7e132eee4c93a8a1410.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/portraits_v2/brute_full_512x768.png"
-dest_files=["res://.godot/imported/brute_full_512x768.png-2459d421e43bda1ba2f1b58fc1443d8d.bptc.ctex"]
+dest_files=["res://.godot/imported/brute_full_512x768.png-ed480f32cec4d7e132eee4c93a8a1410.bptc.ctex"]
 
 [params]
 

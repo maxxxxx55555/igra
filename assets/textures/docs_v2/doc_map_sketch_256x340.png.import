@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://a3b9c7ba7004"
-path.bptc="res://.godot/imported/doc_map_sketch_256x340.png-a3b9c7ba700479cffd759cde8a2b70a9.bptc.ctex"
+uid="uid://3cac7ba7004"
+path.bptc="res://.godot/imported/doc_map_sketch_256x340.png-5e7e02c7080152425911354fa54d2d9a.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/docs_v2/doc_map_sketch_256x340.png"
-dest_files=["res://.godot/imported/doc_map_sketch_256x340.png-a3b9c7ba700479cffd759cde8a2b70a9.bptc.ctex"]
+dest_files=["res://.godot/imported/doc_map_sketch_256x340.png-5e7e02c7080152425911354fa54d2d9a.bptc.ctex"]
 
 [params]
 

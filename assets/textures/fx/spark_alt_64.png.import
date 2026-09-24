@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://98129965cfb3"
-path.bptc="res://.godot/imported/spark_alt_64.png-98129965cfb3854e02bb26bb8b6e2136.bptc.ctex"
+uid="uid://ba813ba65cfb3"
+path.bptc="res://.godot/imported/spark_alt_64.png-afc6f04774821a62fd52a241eb8a8ad0.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/fx/spark_alt_64.png"
-dest_files=["res://.godot/imported/spark_alt_64.png-98129965cfb3854e02bb26bb8b6e2136.bptc.ctex"]
+dest_files=["res://.godot/imported/spark_alt_64.png-afc6f04774821a62fd52a241eb8a8ad0.bptc.ctex"]
 
 [params]
 

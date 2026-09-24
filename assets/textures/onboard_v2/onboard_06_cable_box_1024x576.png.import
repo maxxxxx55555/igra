@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://4d7631849ca9"
-path.bptc="res://.godot/imported/onboard_06_cable_box_1024x576.png-4d7631849ca95c615cb332e9945797b6.bptc.ctex"
+uid="uid://4d763185acba"
+path.bptc="res://.godot/imported/onboard_06_cable_box_1024x576.png-bf5cdf384b79115302de9f793d98a65b.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/onboard_v2/onboard_06_cable_box_1024x576.png"
-dest_files=["res://.godot/imported/onboard_06_cable_box_1024x576.png-4d7631849ca95c615cb332e9945797b6.bptc.ctex"]
+dest_files=["res://.godot/imported/onboard_06_cable_box_1024x576.png-bf5cdf384b79115302de9f793d98a65b.bptc.ctex"]
 
 [params]
 

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://e329f516f5b7"
-path.bptc="res://.godot/imported/panel_olive_256.png-e329f516f5b7ba7d4ce1b5555653b54b.bptc.ctex"
+uid="uid://e33af516f5b7"
+path.bptc="res://.godot/imported/panel_olive_256.png-ccd7b29e360b52bfd61682fc87d86830.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/ui_v2/panel_olive_256.png"
-dest_files=["res://.godot/imported/panel_olive_256.png-e329f516f5b7ba7d4ce1b5555653b54b.bptc.ctex"]
+dest_files=["res://.godot/imported/panel_olive_256.png-ccd7b29e360b52bfd61682fc87d86830.bptc.ctex"]
 
 [params]
 

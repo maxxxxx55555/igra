@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://f8958dcf154c"
-path.bptc="res://.godot/imported/pistol_128.png-f8958dcf154c91c546c812c66c1d258d.bptc.ctex"
+uid="uid://gaa58dcf154c"
+path.bptc="res://.godot/imported/pistol_128.png-cd52de47cc4224924ee5dbcfba7af080.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/icons/weapons/pistol_128.png"
-dest_files=["res://.godot/imported/pistol_128.png-f8958dcf154c91c546c812c66c1d258d.bptc.ctex"]
+dest_files=["res://.godot/imported/pistol_128.png-cd52de47cc4224924ee5dbcfba7af080.bptc.ctex"]
 
 [params]
 

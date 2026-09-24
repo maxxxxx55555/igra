@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://73d6feacfce9"
-path.bptc="res://.godot/imported/lut_night.png-73d6feacfce9d3fb02c0c0e30805f25f.bptc.ctex"
+uid="uid://73d6feacfcfa"
+path.bptc="res://.godot/imported/lut_night.png-d9da05fc7c7e8bb772d496b061cccf4a.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/grading/lut_night.png"
-dest_files=["res://.godot/imported/lut_night.png-73d6feacfce9d3fb02c0c0e30805f25f.bptc.ctex"]
+dest_files=["res://.godot/imported/lut_night.png-d9da05fc7c7e8bb772d496b061cccf4a.bptc.ctex"]
 
 [params]
 

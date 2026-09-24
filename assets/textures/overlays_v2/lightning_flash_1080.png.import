@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bdde5a0b86f7"
-path.bptc="res://.godot/imported/lightning_flash_1080.png-bdde5a0b86f775cae8b2661304273881.bptc.ctex"
+path.bptc="res://.godot/imported/lightning_flash_1080.png-d6c0e40de62abba3d27d93a61083c4af.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/overlays_v2/lightning_flash_1080.png"
-dest_files=["res://.godot/imported/lightning_flash_1080.png-bdde5a0b86f775cae8b2661304273881.bptc.ctex"]
+dest_files=["res://.godot/imported/lightning_flash_1080.png-d6c0e40de62abba3d27d93a61083c4af.bptc.ctex"]
 
 [params]
 

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://270e86db691e"
-path.bptc="res://.godot/imported/strobe_flash_128.png-270e86db691ed1180a6bb47c4f3b7f4d.bptc.ctex"
+uid="uid://270e86db7a1e"
+path.bptc="res://.godot/imported/strobe_flash_128.png-cebdf4805be015f550ca6d767bd48d5d.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/fx/strobe_flash_128.png"
-dest_files=["res://.godot/imported/strobe_flash_128.png-270e86db691ed1180a6bb47c4f3b7f4d.bptc.ctex"]
+dest_files=["res://.godot/imported/strobe_flash_128.png-cebdf4805be015f550ca6d767bd48d5d.bptc.ctex"]
 
 [params]
 

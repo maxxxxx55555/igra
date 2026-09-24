@@ -3,16 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://d042df4eae85"
-path.bptc="res://.godot/imported/architect_512.png-d042df4eae856ef11c9d62d76926880f.bptc.ctex"
+path="res://.godot/imported/architect_512.png-3ea6a474012d8b20dd5e038d77e1178b.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
 "vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/textures/enemies/architect_512.png"
-dest_files=["res://.godot/imported/architect_512.png-d042df4eae856ef11c9d62d76926880f.bptc.ctex"]
+dest_files=["res://.godot/imported/architect_512.png-3ea6a474012d8b20dd5e038d77e1178b.ctex"]
 
 [params]
 

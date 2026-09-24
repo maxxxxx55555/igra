@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b35a95f0a0b5"
-path.bptc="res://.godot/imported/school_lockers_512.png-b35a95f0a0b520ea1ed917685022444f.bptc.ctex"
+uid="uid://b35ba5f0a0b5"
+path.bptc="res://.godot/imported/school_lockers_512.png-974e6f0208f9cb1a8304b49bd343b89e.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/surfaces/school_lockers_512.png"
-dest_files=["res://.godot/imported/school_lockers_512.png-b35a95f0a0b520ea1ed917685022444f.bptc.ctex"]
+dest_files=["res://.godot/imported/school_lockers_512.png-974e6f0208f9cb1a8304b49bd343b89e.bptc.ctex"]
 
 [params]
 

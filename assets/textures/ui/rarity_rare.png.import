@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://7f389b8a9b97"
-path.bptc="res://.godot/imported/rarity_rare.png-7f389b8a9b9772526bec312ead39c7a2.bptc.ctex"
+uid="uid://7f4aab8baca7"
+path.bptc="res://.godot/imported/rarity_rare.png-d28b73b09d62b67315b1ea2694af8d17.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/ui/rarity_rare.png"
-dest_files=["res://.godot/imported/rarity_rare.png-7f389b8a9b9772526bec312ead39c7a2.bptc.ctex"]
+dest_files=["res://.godot/imported/rarity_rare.png-d28b73b09d62b67315b1ea2694af8d17.bptc.ctex"]
 
 [params]
 

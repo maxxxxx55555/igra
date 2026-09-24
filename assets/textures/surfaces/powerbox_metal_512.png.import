@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://1064c28889d9"
-path.bptc="res://.godot/imported/powerbox_metal_512.png-1064c28889d98dfd9d8de98420081d89.bptc.ctex"
+uid="uid://1064c3aaaaea"
+path.bptc="res://.godot/imported/powerbox_metal_512.png-3d627bd29e824490af481e449bc31090.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/surfaces/powerbox_metal_512.png"
-dest_files=["res://.godot/imported/powerbox_metal_512.png-1064c28889d98dfd9d8de98420081d89.bptc.ctex"]
+dest_files=["res://.godot/imported/powerbox_metal_512.png-3d627bd29e824490af481e449bc31090.bptc.ctex"]
 
 [params]
 

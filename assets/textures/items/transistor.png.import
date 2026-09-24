@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://e731ce998280"
-path.bptc="res://.godot/imported/transistor.png-e731ce998280b7e3d1471adacd73c813.bptc.ctex"
+uid="uid://e731cfba8280"
+path.bptc="res://.godot/imported/transistor.png-124db0d032cc9aeeba3fbb2f65c05c4b.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/items/transistor.png"
-dest_files=["res://.godot/imported/transistor.png-e731ce998280b7e3d1471adacd73c813.bptc.ctex"]
+dest_files=["res://.godot/imported/transistor.png-124db0d032cc9aeeba3fbb2f65c05c4b.bptc.ctex"]
 
 [params]
 

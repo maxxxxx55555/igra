@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://19f063ce0cd7"
-path.bptc="res://.godot/imported/dust.png-19f063ce0cd751857cda3f092abbc2e5.bptc.ctex"
+uid="uid://2af063ce0cd7"
+path.bptc="res://.godot/imported/dust.png-8e236544bb2ab8fa80c0dba3261e1e6e.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/fx/dust.png"
-dest_files=["res://.godot/imported/dust.png-19f063ce0cd751857cda3f092abbc2e5.bptc.ctex"]
+dest_files=["res://.godot/imported/dust.png-8e236544bb2ab8fa80c0dba3261e1e6e.bptc.ctex"]
 
 [params]
 

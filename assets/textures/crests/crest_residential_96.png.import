@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://6cd58538a5cf"
-path.bptc="res://.godot/imported/crest_residential_96.png-6cd58538a5cf81fb498f6311ece33719.bptc.ctex"
+path.bptc="res://.godot/imported/crest_residential_96.png-f949db010d257571dcd7be8c09002713.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/crests/crest_residential_96.png"
-dest_files=["res://.godot/imported/crest_residential_96.png-6cd58538a5cf81fb498f6311ece33719.bptc.ctex"]
+dest_files=["res://.godot/imported/crest_residential_96.png-f949db010d257571dcd7be8c09002713.bptc.ctex"]
 
 [params]
 

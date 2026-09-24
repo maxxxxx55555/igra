@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://f9df088ca362"
-path.bptc="res://.godot/imported/event_siren_48.png-f9df088ca362ee5a169ae554c3d33813.bptc.ctex"
+uid="uid://gadf088ca362"
+path.bptc="res://.godot/imported/event_siren_48.png-83198892a013b0537b91a3584dbfbe65.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/icons_v2/event_siren_48.png"
-dest_files=["res://.godot/imported/event_siren_48.png-f9df088ca362ee5a169ae554c3d33813.bptc.ctex"]
+dest_files=["res://.godot/imported/event_siren_48.png-83198892a013b0537b91a3584dbfbe65.bptc.ctex"]
 
 [params]
 

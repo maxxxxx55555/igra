@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://72c231b1bc4b"
-path.bptc="res://.godot/imported/industrial_floor_lit.png-72c231b1bc4bf891275d1c7bbbad47e9.bptc.ctex"
+path.bptc="res://.godot/imported/industrial_floor_lit.png-aa5e859580e9ebd5f2b50f12868c7162.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/tiles/industrial_floor_lit.png"
-dest_files=["res://.godot/imported/industrial_floor_lit.png-72c231b1bc4bf891275d1c7bbbad47e9.bptc.ctex"]
+dest_files=["res://.godot/imported/industrial_floor_lit.png-aa5e859580e9ebd5f2b50f12868c7162.bptc.ctex"]
 
 [params]
 

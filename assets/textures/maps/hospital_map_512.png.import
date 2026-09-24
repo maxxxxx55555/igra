@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://47b32d9abf1a"
-path.bptc="res://.godot/imported/hospital_map_512.png-47b32d9abf1a26251082dac16d0df9ac.bptc.ctex"
+uid="uid://47b32eaabf1a"
+path.bptc="res://.godot/imported/hospital_map_512.png-8fc313ac0c1641811beba554dabaa44f.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/maps/hospital_map_512.png"
-dest_files=["res://.godot/imported/hospital_map_512.png-47b32d9abf1a26251082dac16d0df9ac.bptc.ctex"]
+dest_files=["res://.godot/imported/hospital_map_512.png-8fc313ac0c1641811beba554dabaa44f.bptc.ctex"]
 
 [params]
 

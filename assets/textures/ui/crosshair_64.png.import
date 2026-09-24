@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://a796190db114"
-path.bptc="res://.godot/imported/crosshair_64.png-a796190db1143b6c5a8a6e4915078499.bptc.ctex"
+uid="uid://8a62a0db114"
+path.bptc="res://.godot/imported/crosshair_64.png-e33d66462cd69eb4bc899567a1716ba1.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/ui/crosshair_64.png"
-dest_files=["res://.godot/imported/crosshair_64.png-a796190db1143b6c5a8a6e4915078499.bptc.ctex"]
+dest_files=["res://.godot/imported/crosshair_64.png-e33d66462cd69eb4bc899567a1716ba1.bptc.ctex"]
 
 [params]
 

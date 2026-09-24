@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://70e442cdd0c4"
-path.bptc="res://.godot/imported/suburbs_wall_lit.png-70e442cdd0c43c1479d18179032569eb.bptc.ctex"
+path.bptc="res://.godot/imported/suburbs_wall_lit.png-bc7a66e95e5914df911076116395081e.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/tiles/suburbs_wall_lit.png"
-dest_files=["res://.godot/imported/suburbs_wall_lit.png-70e442cdd0c43c1479d18179032569eb.bptc.ctex"]
+dest_files=["res://.godot/imported/suburbs_wall_lit.png-bc7a66e95e5914df911076116395081e.bptc.ctex"]
 
 [params]
 

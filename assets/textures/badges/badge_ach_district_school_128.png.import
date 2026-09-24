@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://116549ef35b7"
-path.bptc="res://.godot/imported/badge_ach_district_school_128.png-116549ef35b7c0a2131d14fcd629db76.bptc.ctex"
+uid="uid://11655aef35b7"
+path.bptc="res://.godot/imported/badge_ach_district_school_128.png-7578b704d26ca109e623b6c6a051804f.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/badges/badge_ach_district_school_128.png"
-dest_files=["res://.godot/imported/badge_ach_district_school_128.png-116549ef35b7c0a2131d14fcd629db76.bptc.ctex"]
+dest_files=["res://.godot/imported/badge_ach_district_school_128.png-7578b704d26ca109e623b6c6a051804f.bptc.ctex"]
 
 [params]
 

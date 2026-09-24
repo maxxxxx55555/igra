@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://e309d2aede1c"
-path.bptc="res://.godot/imported/blueprint_flashlight_brightness.png-e309d2aede1c9f411ee21bc2f947c757.bptc.ctex"
+uid="uid://e31ad2aede1c"
+path.bptc="res://.godot/imported/blueprint_flashlight_brightness.png-381bb833c8906ad7e0ec9075d0496f36.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/items/blueprint_flashlight_brightness.png"
-dest_files=["res://.godot/imported/blueprint_flashlight_brightness.png-e309d2aede1c9f411ee21bc2f947c757.bptc.ctex"]
+dest_files=["res://.godot/imported/blueprint_flashlight_brightness.png-381bb833c8906ad7e0ec9075d0496f36.bptc.ctex"]
 
 [params]
 

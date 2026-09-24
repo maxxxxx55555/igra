@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://6b0232451241"
-path.bptc="res://.godot/imported/wiring.png-6b02324512419ebd32483be7d5653662.bptc.ctex"
+path.bptc="res://.godot/imported/wiring.png-870ddf335f91e1fa55222ef93bd69aa9.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/items_legacy/wiring.png"
-dest_files=["res://.godot/imported/wiring.png-6b02324512419ebd32483be7d5653662.bptc.ctex"]
+dest_files=["res://.godot/imported/wiring.png-870ddf335f91e1fa55222ef93bd69aa9.bptc.ctex"]
 
 [params]
 

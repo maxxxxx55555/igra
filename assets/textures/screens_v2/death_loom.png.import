@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c17ec6a43e5c"
-path.bptc="res://.godot/imported/death_loom.png-c17ec6a43e5c7114c3837a5eb4d911c4.bptc.ctex"
+path.bptc="res://.godot/imported/death_loom.png-bae87c31dc7a64b4874520d77e03e35f.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/screens_v2/death_loom.png"
-dest_files=["res://.godot/imported/death_loom.png-c17ec6a43e5c7114c3837a5eb4d911c4.bptc.ctex"]
+dest_files=["res://.godot/imported/death_loom.png-bae87c31dc7a64b4874520d77e03e35f.bptc.ctex"]
 
 [params]
 

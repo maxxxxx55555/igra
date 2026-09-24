@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://46c9c192a21a"
-path.bptc="res://.godot/imported/interact_icon_64.png-46c9c192a21a2599ba61506811b09c50.bptc.ctex"
+uid="uid://46dac2a2a21a"
+path.bptc="res://.godot/imported/interact_icon_64.png-7fac0e9d343ca38b69a4f339329cce3a.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/ui/interact_icon_64.png"
-dest_files=["res://.godot/imported/interact_icon_64.png-46c9c192a21a2599ba61506811b09c50.bptc.ctex"]
+dest_files=["res://.godot/imported/interact_icon_64.png-7fac0e9d343ca38b69a4f339329cce3a.bptc.ctex"]
 
 [params]
 

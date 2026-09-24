@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c042b41c766b"
-path.bptc="res://.godot/imported/hunter_full_512x768.png-c042b41c766b10033b3e32e07eb03eb2.bptc.ctex"
+path.bptc="res://.godot/imported/hunter_full_512x768.png-dd74cb957065198518c83c6476228327.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/portraits_v2/hunter_full_512x768.png"
-dest_files=["res://.godot/imported/hunter_full_512x768.png-c042b41c766b10033b3e32e07eb03eb2.bptc.ctex"]
+dest_files=["res://.godot/imported/hunter_full_512x768.png-dd74cb957065198518c83c6476228327.bptc.ctex"]
 
 [params]
 

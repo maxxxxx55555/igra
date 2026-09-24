@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://edb9553957c4"
-path.bptc="res://.godot/imported/btn_special_hold_128.png-edb9553957c4f0a74d523679f2c4d339.bptc.ctex"
+uid="uid://edca554a57c4"
+path.bptc="res://.godot/imported/btn_special_hold_128.png-cd399dd169634129561435e89617d743.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/ui/btn_special_hold_128.png"
-dest_files=["res://.godot/imported/btn_special_hold_128.png-edb9553957c4f0a74d523679f2c4d339.bptc.ctex"]
+dest_files=["res://.godot/imported/btn_special_hold_128.png-cd399dd169634129561435e89617d743.bptc.ctex"]
 
 [params]
 

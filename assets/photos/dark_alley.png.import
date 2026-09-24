@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://462ef98e3a04"
-path.bptc="res://.godot/imported/dark_alley.png-462ef98e3a042b88f336c32d15f801d0.bptc.ctex"
+uid="uid://462ega8e3a04"
+path.bptc="res://.godot/imported/dark_alley.png-f214ba24755cac13f1fed898cb274a82.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/photos/dark_alley.png"
-dest_files=["res://.godot/imported/dark_alley.png-462ef98e3a042b88f336c32d15f801d0.bptc.ctex"]
+dest_files=["res://.godot/imported/dark_alley.png-f214ba24755cac13f1fed898cb274a82.bptc.ctex"]
 
 [params]
 

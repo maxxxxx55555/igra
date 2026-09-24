@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://851f2274b63f"
-path.bptc="res://.godot/imported/ember.png-851f2274b63ff9a5180aa5439f6e1494.bptc.ctex"
+path.bptc="res://.godot/imported/ember.png-66a3cc7b051917a003b3508d2a03c75f.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/fx/ember.png"
-dest_files=["res://.godot/imported/ember.png-851f2274b63ff9a5180aa5439f6e1494.bptc.ctex"]
+dest_files=["res://.godot/imported/ember.png-66a3cc7b051917a003b3508d2a03c75f.bptc.ctex"]
 
 [params]
 

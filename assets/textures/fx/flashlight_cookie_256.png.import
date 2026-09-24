@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ceeffff11900"
-path.bptc="res://.godot/imported/flashlight_cookie_256.png-ceeffff11900dfe5cee4df8c4574b5db.bptc.ctex"
+uid="uid://ceeffff12a00"
+path.bptc="res://.godot/imported/flashlight_cookie_256.png-09937995478581fe98b0319b3006f356.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/fx/flashlight_cookie_256.png"
-dest_files=["res://.godot/imported/flashlight_cookie_256.png-ceeffff11900dfe5cee4df8c4574b5db.bptc.ctex"]
+dest_files=["res://.godot/imported/flashlight_cookie_256.png-09937995478581fe98b0319b3006f356.bptc.ctex"]
 
 [params]
 

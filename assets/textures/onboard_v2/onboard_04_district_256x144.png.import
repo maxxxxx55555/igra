@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://54dbf7601b8f"
-path.bptc="res://.godot/imported/onboard_04_district_256x144.png-54dbf7601b8fcee9ab7e2dda3560fbe2.bptc.ctex"
+path.bptc="res://.godot/imported/onboard_04_district_256x144.png-863eb18ef4e01c506f36359f78abc259.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/onboard_v2/onboard_04_district_256x144.png"
-dest_files=["res://.godot/imported/onboard_04_district_256x144.png-54dbf7601b8fcee9ab7e2dda3560fbe2.bptc.ctex"]
+dest_files=["res://.godot/imported/onboard_04_district_256x144.png-863eb18ef4e01c506f36359f78abc259.bptc.ctex"]
 
 [params]
 

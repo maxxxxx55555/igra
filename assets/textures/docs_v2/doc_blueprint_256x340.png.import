@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b5966afcf031"
-path.bptc="res://.godot/imported/doc_blueprint_256x340.png-b5966afcf0311d28ef40b2b86af998ee.bptc.ctex"
+uid="uid://b6a66afcf031"
+path.bptc="res://.godot/imported/doc_blueprint_256x340.png-b075140dc4f511656f6a0e96d39add3b.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,7 +12,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/docs_v2/doc_blueprint_256x340.png"
-dest_files=["res://.godot/imported/doc_blueprint_256x340.png-b5966afcf0311d28ef40b2b86af998ee.bptc.ctex"]
+dest_files=["res://.godot/imported/doc_blueprint_256x340.png-b075140dc4f511656f6a0e96d39add3b.bptc.ctex"]
 
 [params]
 

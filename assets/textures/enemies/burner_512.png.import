@@ -2,17 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b42d706392ce"
-path.bptc="res://.godot/imported/burner_512.png-b42d706392cebe2a3468ef5af779152c.bptc.ctex"
+uid="uid://b42d7064a2ce"
+path="res://.godot/imported/burner_512.png-c93a8b009b247bc9cd7f436cff610f6e.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
 "vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/textures/enemies/burner_512.png"
-dest_files=["res://.godot/imported/burner_512.png-b42d706392cebe2a3468ef5af779152c.bptc.ctex"]
+dest_files=["res://.godot/imported/burner_512.png-c93a8b009b247bc9cd7f436cff610f6e.ctex"]
 
 [params]
 
