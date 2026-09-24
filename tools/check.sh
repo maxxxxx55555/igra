@@ -230,6 +230,11 @@ if "$PY" tools/qa_sim/drawcall_estimate.py >/dev/null 2>&1; then
 else
   bad "drawcall_estimate"
 fi
+if "$PY" tools/qa_sim/release_export_check.py >/dev/null 2>&1; then
+  ok "release_export_check (SECURITY_PATCH_SPEC C-08/D-04: no committed encryption key or debug keystore creds)"
+else
+  bad "release_export_check (см. 'python tools/qa_sim/release_export_check.py')"
+fi
 
 # ─────────────────────────── проверки в движке ───────────────────────────
 if [[ $STATIC_ONLY -eq 1 ]]; then
