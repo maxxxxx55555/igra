@@ -1,231 +1,37 @@
-# RELEASE_ARTIFACTS.md — index of release-pass evidence
+# Release artifacts (C9 owner-prep)
 
-One line per artifact: what it is, where it lives, what it proves. Source of truth for a
-claim always stays in the artifact itself — this file only points at it. Started
-2026-09-12 (RELEASE CONVERGENCE PASS), updated 2026-09-13 through FINAL CONSOLIDATION.
+Status at 2026-09-24. Nothing here is a signed build yet; this file says exactly what exists and
+what blocks the rest.
 
-## RC finish pass v7.2 (2026-09-20) — OC/Cline lanes absorbed, arena design+QA consumed, IRON RULE established
+## Done
+- **Release keystore generated** with `keytool` (PKCS12, RSA 4096, alias `tls_release`, 10000-day
+  validity) at `.signing/tls-release.keystore`. SHA-256 fingerprint:
+  `4F:6B:E6:41:5C:26:0B:34:1F:A0:CF:88:46:60:3B:82:64:0F:8B:6B:0D:5F:97:FD:FD:3A:FF:93:DD:89:59:09`.
+- Its random password is in `.signing/release.env` (three `GODOT_ANDROID_KEYSTORE_RELEASE_*`
+  variables). `.signing/`, `*.keystore` and `*.jks` are gitignored (`git check-ignore` verified).
+- `export_presets.cfg` deliberately keeps the release keystore fields EMPTY: the file is committed, so
+  putting a password in it would publish it (`tools/qa_sim/release_export_check.py` enforces this).
+  Godot reads the env vars above instead.
 
-Two sessions same day. First caught and reverted a real regression shipped the session
-before (player speed "fix" that softlocked the bot 0/3 — see `docs/GAME_AUDIT.md`'s
-CORRECTION and `docs/RUN_STATE.md`). Second consumed the arena design audit's 8 proposals
-(P1, P4, P5, P6, P7, P8 applied; P2/P3 partially - NG+ UI+copy done, new stealth skills
-deferred to the locale owner's own judgment) and one arena QA doc merge, absorbed the never-
-started OpenCode/Cline lanes into the integrator zone, added an accessibility probe gate, and
-established the IRON RULE: no balance/number commit without a 3-seed `autoplay_bot` run
-recorded in the commit message.
+**Back up `.signing/` outside this machine.** A lost upload key means no updates to the same listing
+unless Play App Signing is enabled (recommended: upload this as the *upload* key only).
 
-| Artifact | Where | What it proves |
-|---|---|---|
-| Speed-regression revert | `data/balance/player_stats.tres`, `docs/GAME_AUDIT.md`, commit `d6c86cc` | reverted 1.7/3.0/0.9 back to 170/300/90; bot 0/3 -> 3/3 confirmed before/after |
-| Zone rebaseline | `docs/AGENT_ZONES.md`, commit `ddbfaab` | oc/visual-w10 and cl/a11y-i18n verified at their exact branch-creation commit (zero work), marked INACTIVE, scope absorbed |
-| P4 audio pause | `scripts/audio/proc_audio.gd`, commit `f9bbfd7` | explicit PROCESS_MODE_PAUSABLE + guards at the two mid-flight pause races; not a balance change |
-| P5 battery + P8 telegraph | `scripts/player/player_3d.gd`, `scripts/systems/skill_tree_manager.gd`, `scripts/enemies/monster_telegraph.gd`, `tools/qa_sim/balance_sim.py`, commit `24ceb68` | battery_max composition bug + 4 hardcoded clamps fixed; boss P1 warning was invisible (dead mesh lookup + invalid 2D property on a 3D mesh), fixed; bot 1/3 win recorded in commit |
-| P2/P3 NG+ clarity + lan_menu i18n | `scripts/ui/{main_menu,new_game_plus_ui,win_screen}.gd`, `scripts/net/lan_menu.gd`, `data/i18n/*.json` (19 new keys x 13 locales), commit `4e7560e` | Play button now shows NG+ level + confirms before reset; lan_menu fully localized; i18n parity + key-usage gates green |
-| P3 a11y probe | `scripts/tools/_a11y_probe.gd`, `scenes/tools/a11y_probe_scene.tscn`, commit `c889b41` | proves reduce_flash/reduce_time_fx/reduce_ui_motion actually gate their juice sites + survive save->reload; wired into `tools/check.sh` |
-| P4 visual W9 | `scripts/ui/theme_provider.gd`, commit `2d5e702` | focus ring + distinct disabled state, VISUAL_PASS.md's one safely-verifiable item this pass (no windowed render capability in this environment) |
-| Ideal-gap: achievement toggle | `scripts/systems/achievements_manager.gd`, commit `e0458af` | Ghost NG+ modifier's achievement-disable now actually covers all 31 achievements, not 4 |
-| Boss-softlock diagnosis | `scripts/tools/_qa_autoplay_runner.gd`, `docs/KNOWN_ISSUES.md`, commit `e0458af` | battery/light-gate hypothesis tested and disproven via real telemetry; likely cause (occasional navigation Y-dip) documented, unconfirmed |
-| Arena docs merge | `docs/DESIGN_AUDIT_ARENA.md`, `docs/QA_MATRIX.md`, commit `1d3de3c`; renamed `docs/RC_OWNER_CHECKLIST.md`, commit follows | --no-ff merge of `arena/01a0bdfa-igra`, zero code conflicts. Its `docs/RELEASE_CHECKLIST.md` collided case-insensitively with the pre-existing `docs/release_checklist.md` on this Windows checkout (same physical file, two git index entries) - restored the original lowercase file's content and renamed the merged-in one to `docs/RC_OWNER_CHECKLIST.md` so both survive as distinct documents. Caught before any further commit built on the corrupted state. |
-| Sign-off | `docs/IDEAL_GAP_REPORT.md`, `docs/RELEASE_READINESS_REPORT.md` v7.2 | this pass's own scoring + top-10 gap-to-ideal list |
+## Blocked (not attempted)
+- **Signed AAB/APK export.** `%APPDATA%\Godot\export_templates\4.7.stable` is empty, so
+  `--export-release` cannot run. Installing the official 4.7 templates is a large download from
+  godotengine.org; not done without your OK. Gradle build is also enabled in the preset
+  (`gradle_build/use_gradle_build=true`) and `android/build/` (the Android build template) is not
+  installed; Godot editor: Project > Install Android Build Template.
+- **Signature verification and size vs budget:** cannot be reported until an AAB exists. No number is
+  claimed here.
 
-## v7 closure pass (2026-09-17) — 4 of 5 DEV-REMAINING items closed, one self-caught correction
+## Exact steps once templates exist
+1. Editor: Editor > Manage Export Templates > install 4.7.stable; Project > Install Android Build Template.
+2. `set -a; . .signing/release.env; set +a`
+3. `godot --headless --path . --export-release "Android" build/tls.aab`
+4. Verify: `jarsigner -verify -verbose -certs build/tls.aab` and note the size.
 
-Closed v7's DEV-REMAINING list: fixed the `flow_check.py` tool bug, got a definitive (not
-"appears to be") answer on audio bitrate, added all 13 locales' short store descriptions, and
-deliberately did NOT force through the full W2-W10 visual pass blind. The size-budget narrowing
-(item 2) is the notable one: a first attempt over-excluded 6 real, documented, planned-but-unwired
-asset directories on zero-code-reference evidence alone — caught by cross-checking delivery docs
-instead of trusting the grep, reverted in the same pass, and reported honestly rather than left as
-a wrong 36.6%/27.7% number.
-
-| Artifact | Where | What it proves |
-|---|---|---|
-| `flow_check.py` fix | `tools/flow_check.py`, commit `822642f` | Master-bus check no longer fails on a valid bus layout; static gates 12/12 |
-| Size narrowing + correction | `export_presets.cfg`, `docs/SIZE_BUDGET.md`, commits `f29bbfc` then `3eab8e3` | real, corrected 23.5% total payload cut (215,512,000 bytes); the wrong-then-fixed methodology is documented, not hidden |
-| Audio bitrate — definitive | `docs/KNOWN_ISSUES.md`, commit `ce8f7b6` | checked Godot's own `ResourceImporterWAV` reference doc; no safe control exists, no files touched |
-| W2-W10 not attempted | `docs/KNOWN_ISSUES.md`, commit `3980737` | honest reasoning: only W1 wired, live/dead ground-material ambiguity found, no visual verification capability |
-| 13-locale short descriptions | `docs/STORE_KIT.md`, commit `2ce2be6` | all 13 locales, char-count verified ≤80 |
-| Readiness v7.1 | `docs/RELEASE_READINESS_REPORT.md` | weighted 67% (up from 62%), every row cited to a real commit or run |
-
-## Premium release pack + juice accessibility gating (2026-09-17) — v7 readiness, 27.7% payload cut, real not fabricated
-
-Commissioned as a 6-phase autonomous premium-release push assuming no prior arena-session work
-existed. Checked against the repo first: the security signing/tamper-probe system it asked for
-already existed and was gated (`scripts/core/save_system.gd`, `scripts/tools/_save_integrity_check.gd`)
-— reused and re-verified instead of duplicated. A headless-viewport screenshot tool it asked for
-was already tried and proven impossible by a prior session (`tools/qa_sim/capture_stills.gd`'s own
-header) — not rebuilt to fail the same way twice.
-
-| Artifact | Where | What it proves |
-|---|---|---|
-| Docs pack | `docs/GAMEFEEL_SPEC.md`, `docs/SECURITY_THREAT_MODEL.md`, `docs/EXPORT_HARDENING.md`, `docs/SIZE_BUDGET.md`, `docs/STORE_KIT.md`, commit `6d356f6` | per-event juice caps + toggle names; honest "NOT protectable client-side" security scope; bytecode/PCK-key export workflow; real dead-asset methodology; store locale/privacy/shot-list plan reusing the existing GDD-sourced listing copy |
-| Size cut | `export_presets.cfg`, commit `11cbb4e` | **27.7% real measured `.pck` cut** (281,710,668 → 203,681,544 bytes, `godot --export-pack`) via export-filter exclusion of documented archive/orphan/marketing directories — no files deleted, fully revertible |
-| Juice + accessibility | `scripts/systems/wow_director.gd`, `scripts/systems/uisfx.gd`, `scripts/ui/toast_manager.gd`, `scripts/enemies/base_monster.gd`, `scripts/gameplay/exploding_barrel.gd`, `scripts/ui/settings_screen.gd`, `data/i18n/*.json`, commit `f372a5c` | 3 new accessibility toggles (reduce_flash/reduce_time_fx/reduce_ui_motion), translated to all 13 locales; hit-stop/explosion-shake/toast-pop/button-pulse wired at real shared call sites, every effect gated |
-| Known issues (updated) | `docs/KNOWN_ISSUES.md`, top 3 entries, commit `f83e783` | owner-only `_orphaned`/`_pre_norm` deletion command, audio-bitrate skip reasoning, stills owner-run command — plus a newly-spotted `res://_QUARANTINE/` directory for the next size pass |
-| Release readiness v7 | `docs/RELEASE_READINESS_REPORT.md` | weighted readiness %, OWNER-ONLY vs DEV-REMAINING split, every row cited to a real run or commit |
-
-**Not done, stated plainly rather than faked:** audio bitrate re-encode (E7 — investigated,
-skipped on purpose, see `docs/KNOWN_ISSUES.md`), physical deletion of `_orphaned`/`_pre_norm`
-(blocked by this environment's tool-permission layer, not by evidence), windowed stills/store
-screenshots (owner-run, exact command in `docs/KNOWN_ISSUES.md`), hero key art (no image-generation
-tool available in this session).
-
-## Visual pass bridge + graphics-tier seam (2026-09-16) — 1 of 3 named lanes real, seam wired, 26th gate added
-
-A follow-up task named three branches to bridge; verified against `origin` first rather than
-trusted — only one (`arena/01a0a4c3-igra`, visual pass) actually exists. Merged it for real
-after a dry-run proved it clean, then wired the one real gap its own doc named (Settings
-graphics-tier dropdown never reached the live Environment) and added a headless regression gate
-proving two Phase-3 checklist items for real instead of leaving them unverified.
-
-| Artifact | Where | What it proves |
-|---|---|---|
-| Merge commit | `1de306d` | the real visual-pass lane, clean 3-way merge, ancestor-proven, static-gate green |
-| Graphics-tier seam | `scripts/world_env_setup.gd`, commit `77d11ac` | Settings tier dropdown now actually changes the live WorldEnvironment (tonemap/glow/fog/SSAO), not just a stored int |
-| Settings-persistence gate (new, #26 in `tools/check.sh`) | `scripts/tools/_settings_persist_probe.gd`, `scenes/tools/settings_persist_probe_scene.tscn` | real headless evidence for two checklist items: tier switch reaches the Environment (glow 0.40→0.55, SSAO false→true), and an accessibility setting survives save→reload |
-| Known issues (updated) | `docs/KNOWN_ISSUES.md`, top entry | which of the 3 named lanes is real, what was and wasn't wired, and the still-blocked stills gap |
-
-## Arena bridge + real boss win (2026-09-15) — merged 2 branches, bot wins 6/10, 10/11 NG+ knobs
-
-Bridged `arena/01a09aec-igra` (PR #17: card art, i18n, boss-fight fixes, NG+ knobs) and
-`arena/texture-optimization` (ASTC compression, edge-case fixes) into `main`, hand-resolving
-the one real overlap with this session's own prior boss-fight fixes rather than letting either
-side silently clobber the other. The combined result is the first real, repeatable bot win of
-the entire session: 6/10 seeds won in a 10-seed sample. Also wired 2 more NG+ knobs (10/11
-total), ran the onboarding telemetry sample that was pending (already well inside target, no
-tuning needed), built a headless-safe still-capture tool, and caught an unverified "≥30%
-smaller APK" claim that arrived with the merge.
-
-| Artifact | Where | What it proves |
-|---|---|---|
-| Release readiness report (supersedes the 2026-09-14/15 version below) | `docs/RELEASE_READINESS_REPORT.md` | all 11 items re-verified on the actual merged tree — 8 PASS, 1 partial-with-caveat, 2 FAIL, stated plainly |
-| Known issues (boss winnability, updated) | `docs/KNOWN_ISSUES.md`, top entry | the merged fix set, the 3-seed and 10-seed win-rate tables, and the remaining attack-stall/nav-flake gaps |
-| Known issues (onboarding timing, new) | `docs/KNOWN_ISSUES.md` | real 10-seed median table, all metrics already inside the ≤8min target |
-| Known issues (texture-size caveat, new) | `docs/KNOWN_ISSUES.md` | why the merged texture pass's APK-size claim shouldn't be trusted at face value, with a real spot check |
-| Known issues (NG+ knobs, updated) | `docs/KNOWN_ISSUES.md` | 10/11 wired, `extra_dark_districts`'s premise mismatch explained |
-| Still-capture tool | `tools/qa_sim/capture_stills.gd`, `scenes/tools/capture_stills_scene.tscn` | headless-safe no-op, verified; windowed capture unverified (standing policy) |
-| Owner release packet (refreshed) | `docs/OWNER_RELEASE_PACKET.md` | boss-fight and card-art lines updated to the real current state |
-
-## Boss-fight bug hunt (2026-09-14/15) — six real defects fixed, 0/3 bot wins still stands
-
-Commissioned as "Phases 2-5" of a plan whose CONTEXT section claimed two arena branches were
-already merged delivering boss winnability and texture optimization. Checked first: neither
-branch exists, on `main` or the remote — the premise was false, so this was a first real
-attempt, not a re-verification. Chasing autoplay-bot winnability found six genuine bugs (a
-revive death-spiral, broken dodge invulnerability, an unreachable boss weakness, a
-stun-immune boss phase, a floor-fall-through chase bug, and a too-short melee hitbox) — none
-of them balance numbers. The fight went from instantly breaking to stable with real sustained
-damage (up to 28.5% of the boss's HP in the 240s window), but has not yet produced a
-bot-verified win.
-
-| Artifact | Where | What it proves |
-|---|---|---|
-| Release readiness report | `docs/RELEASE_READINESS_REPORT.md` | all 11 brief checklist items, each with real evidence — 5 PASS, 1 PARTIAL, 1 reframed-but-real, 4 FAIL/unattempted, stated plainly |
-| Known issues (boss-fight entry) | `docs/KNOWN_ISSUES.md`, top entry | the six bugs found and fixed, the honest remaining gap, and what would close it |
-| Known issues (NG+ knobs entry) | `docs/KNOWN_ISSUES.md` | corrected count: 7 of 11 knobs now genuinely wired (grep-verified), 4 still data-only |
-| Owner release packet | `docs/OWNER_RELEASE_PACKET.md` | item 11 (the boss-fight playtest line) updated to the real current state |
-
-## MEGA FINAL PASS (2026-09-13) — 3 of 4 branches merged, secrets made reachable, 6 review agents
-
-The pass that took secrets from "exists in content, unreachable in the build" to findable,
-wired the retention content, and put both content validators into the standing gate.
-
-| Artifact | Where | What it proves |
-|---|---|---|
-| Audio mix report | `docs/artifacts/audio-mix/audio_mix_report.md` | ffmpeg-measured bus tree + LUFS/RMS/peak per file; 7 findings, 3 fixed, 3 logged as deliberate non-goals, 1 pass |
-| Retention & fun review | `docs/artifacts/retention-fun/retention_fun_review.md` | return-loop score 5/10 with reasons; proof that only 1 of 26 secrets was reachable at game start; top-3 friction, all fixed |
-| Content-depth validator | `docs/artifacts/content-depth/audit_content_depth.py` | 26 secrets + world canon; now gate-enforced, 0 ERROR |
-| Retention validator | `docs/artifacts/retention/validate_retention.py` | 60 dailies / 6 NG+ modifiers / 28 captions; 270 checks ALL PASS; now gate-enforced |
-| Known issues | `docs/KNOWN_ISSUES.md` | the four gaps this pass leaves open, each with reproducible evidence |
-| Player-visible Batch 18 | `docs/PLAYER_VISIBLE_CHANGES.md` | what the owner should verify by hand, headed by the secrets fix |
-
-**Branch decisions.** Merged: `arena/01a09a11-igra` (content-depth, `bcd2bc9`),
-`arena/01a09a0b-igra` (ui-audio, `8c334ef`), `arena/01a09a4a-igra` (retention, `e75204d`).
-**Rejected: `arena/card-unique-rescue`** — it certifies a 22/22 district-card scene match
-while its own blob hashes are byte-identical to main. Zero card art changed, and it would
-have replaced the real 1024×1536 contact sheet with a single 512×512 card. Full evidence in
-`KNOWN_ISSUES.md`; the underlying 4-of-22 duplicate-photo defect remains open.
-
-**Verification.** 6 agents run this pass: 4 pre-merge scope-checks (1 caught the fabricated
-card cert), plus audio-mix, retention-fun, edge-case and visual-consistency reviews. Their
-findings were fixed or documented, never dismissed — including one regression the reviews
-caught in my own work (guarding `audio_manager`'s procedural click silenced screen
-navigation outright) and one latent autoload-order crash (UISFX at autoload 68 referencing
-EndingsManager at 107).
-
-## FINAL CONSOLIDATION (2026-09-13) — arena/store-sync + arena/art-final merged, badges/cards wired, owner packet
-
-Merged 2 of the 4 branches the task named (`arena/content-depth`, `arena/ui-audio` were
-never pushed to origin — skipped, not fabricated). Both merged branches passed an
-independent subagent scope-check first (2 subagents, both PASS, no violations). Wired this
-pass: achievement badge icons (`scripts/ui/achievement_screen.gd`) and district collection
-cards (`scripts/ui/collection_ui.gd`) from `arena/art-final`'s new texture set. 3 more
-verification subagents ran post-wiring: i18n (PASS, MISSING:0), store-copy vaporware audit
-(PASS, all claims backed incl. the corrected 31-achievement count), asset legibility/crop
-check (found one real, non-blocking gap — 4 of 22 district cards share a base photo,
-`docs/KNOWN_ISSUES.md`). New `docs/OWNER_RELEASE_PACKET.md`: one consolidated, copy-paste
-document for every remaining owner step, including a gh-pages-ready privacy-policy page
-already built and pushed to a new `gh-pages` branch this pass. See
-`docs/CONTENT_PIPELINE_AUDIT.md` §18 (store-sync) and §19 (art-final scope note).
-
-## AUDIO/VISUAL FINALE merge (2026-09-13) — postfx presets wired live
-
-Merged `arena/01a09712-igra` (`36c3673`) on top of RC FINAL v2: 11-district cinematic
-post-fx presets (bloom/vignette/chroma/grain), 4 trailer hero stills, finale ledger +
-certificate. Wired this pass: bloom into `world_env_setup.gd`'s `_apply_postfx()` (the live
-WorldEnvironment), vignette/grain into `post_process_overlay.gd`'s existing setters, and a
-new `set_chroma_amount()` (no shipped consumer before this merge). Audio side needed no new
-wiring — all 11 `AMBIENCE_LIT_BY_DISTRICT` rows were already filled. See
-`docs/CONTENT_PIPELINE_AUDIT.md` §17, `docs/ASSET_LICENSES.md` "Added 2026-09-13".
-
-## FINAL HARDENING PASS (2026-09-13) — 3 named blockers closed
-
-| Blocker | Result | Evidence |
-|---|---|---|
-| 1. Autoplay bot boot-lifecycle | **Root cause found and fixed** (not deferred) — `scenes/main_3d.tscn`'s Splash child unconditionally redirected to boot after ~3s, a real bug hitting real players; plus a fall-recovery gap and a dead item-effect listener, both fixed. 0/11→11/11 districts in the clear majority of runs. Boss P2 phase remains a bot-sophistication gap, not this blocker. | `docs/KNOWN_ISSUES.md` "Autoplay bot", commits `84cd280`/`85af9f9`/`8f5925e` |
-| 2. Texture compression | **Executed and measured** — 74 files VRAM-compressed, individually PSNR-verified ≥40dB; real ~4x VRAM reduction, small on-disk increase (honest, not the naive expectation) | `docs/artifacts/texture_compression_audit.md`, commit `a2c4074` |
-| 3. Touch feel | **Timing proven in simulation** — 4 new budget assertions, caught and fixed a real animation-rate bug; touch tuning presets + one-time calibration added; real-device feel honestly stays unprovable headlessly | `docs/KNOWN_ISSUES.md` "Touch feel", commit `a3e34b1` |
-| STEP 4 anti-tamper | Save versioning hook, 3-generation backup rotation, independent progress signature (closes a real downgrade gap), Play Integrity stub | `docs/artifacts/security_report.md` §7, commit `8d9140e` |
-
-## Arena delivery ledgers + certificates (kept on disk, consolidated into canon docs)
-
-| Artifact | Path | Proves | Consolidated into |
-|---|---|---|---|
-| Visual ledger | `docs/LEDGER_VISUAL.md` | 11 LUTs + 8 screenshots + 4 trailer re-grades, attempt log | `docs/ASSET_LICENSES.md` (2026-09-12 section) |
-| Audio ledger | `docs/LEDGER_AUDIO.md` | 8 lit beds + 3 wow cues, attempt log incl. failed CC0/music-gen search | `docs/ASSET_LICENSES.md` (2026-09-12 section) |
-| Visual certificate | `docs/CERT_VISUAL.md` | 0 defects — dims/purity/palette/LUT-monotonicity/letterbox, all measured | `docs/CONTENT_PIPELINE_AUDIT.md` §14 |
-| Audio certificate | `docs/CERT_AUDIO.md` | 0 defects — header/granule/loudness/contract-pass, all measured | `docs/CONTENT_PIPELINE_AUDIT.md` §15 |
-| Store certificate | `docs/CERT_STORE.md` | 0 open defects — 13/13 locale parity, char limits, master-hash unchanged | `docs/CONTENT_PIPELINE_AUDIT.md` §16 |
-| Finale ledger | `docs/LEDGER_FINALE.md` | postfx presets + trailer heroes, full attempt log incl. license rows for the docs owner | `docs/ASSET_LICENSES.md` (2026-09-13 section) |
-| Finale certificate | `docs/CERT_FINALE.md` | 0 defects — presets schema/clamps, full-strength sim, trailer dims/purity, scope hygiene | `docs/CONTENT_PIPELINE_AUDIT.md` §17 |
-
-## QA / gate reports
-
-| Artifact | Path | Proves |
-|---|---|---|
-| Static gate suite | `tools/check.sh --static` (run output, not persisted to disk) | 10/10 checks green, re-run after every merge/edit this pass |
-| Flow check | `tools/flow_check.py` (53 checks) | full game-loop wiring intact |
-| i18n audit | `tools/i18n_audit.py` | `MISSING: 0` across 13 locales |
-| Headless suite | `tools/qa_sim/headless_suite` | scripted P0-P6 scenario + all `scenes/tools/*_scene.tscn` gates, run ×2 consecutive |
-| Touch probe | `scenes/tools/touch_probe_scene.tscn` / `scripts/tools/_touch_probe.gd` | all green incl. 200-event input fuzz, 30-value settings fuzz, timing budgets, and the touch-calibration overlay (2026-09-13) |
-| Autoplay bot | `tools/qa_sim/autoplay_bot` | **11/11 districts in the clear majority of runs** (was 0/11, every run — see `docs/KNOWN_ISSUES.md` "Autoplay bot" for the fix and the remaining boss-fight gap) |
-| Balance sim | `tools/qa_sim/balance_sim.py` | economy/time-to-win modeling, DARK/PARTIAL margins |
-
-## docs/artifacts/ (this pass's new reports — all delivered)
-
-| Artifact | Path | Proves |
-|---|---|---|
-| Final gate report | `docs/artifacts/final_gate_report.md` | 22/23 engine gates green (1 pre-existing documented stall), headless_suite ×3, 7/7 qa_sim, i18n MISSING:0 |
-| Security / anti-tamper report | `docs/artifacts/security_report.md` | HMAC-SHA256 save signing, 50-mutant corruption fuzz (0 crashes), stat clamps, dev-tool export exclusion, 0 shipped debug prints found |
-| APK size report | `docs/artifacts/apk_size_report.md` | updated 2026-09-13 with the real measured before/after (was an estimate) |
-| Texture compression audit | `docs/artifacts/texture_compression_audit.md` | full PSNR method + per-category results for the 74 compressed files (new 2026-09-13) |
-| Owner-only items | `docs/artifacts/known_owner_only_items.md` | exactly 4 items, zero technical, as of 2026-09-13 |
-| PSNR verification tool | `tools/texture_psnr_check.gd` | reusable headless PSNR checker — decodes a reimported texture, diffs against the original PNG pixel-for-pixel |
-
-## Canon docs this pass touches (not new artifacts, but the record of truth)
-
-`docs/HONEST_ASSESSMENT.md` (5.5/10 baseline + delta), `docs/VISUAL_AUDIO_SPEC.md` (wiring
-contract), `docs/KNOWN_ISSUES.md` (every open gap), `PLAN.md` (milestone stamps),
-`docs/PLAYER_VISIBLE_CHANGES.md` (player-facing changelog), `RELEASE_CHECKLIST.md` (owner
-click-by-click), `docs/HANDOFF.md` (owner TODO).
+## Owner-only (Play Console)
+Create the app listing, complete content rating/data-safety, upload the AAB to Internal testing, add
+testers, roll out. Needs your Google account; not automatable here. `gh` auth is optional (git push
+already works without it). Music generation is excluded by owner decision.
