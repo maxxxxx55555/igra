@@ -41,6 +41,7 @@ func _ready() -> void:
 	_check_main_authority_schema()
 	_check_district_id_and_player_pos_validated()
 	_check_integrity_guard_wired()
+	_check_lan_payload_validation()
 	_check_coin_wallet_absurd_values()
 	_check_district_id_injection_defended()
 	_check_cross_save_swap_rejected()
@@ -409,6 +410,38 @@ func _check_integrity_guard_wired() -> void:
 	_ok(CoinWallet.get_coins() <= ig.MAX_COINS,
 		"IntegrityGuard's live economy check clamps an absurd wallet value (got %d, cap %d)" % [CoinWallet.get_coins(), ig.MAX_COINS])
 	CoinWallet.coins = before
+
+## SECURITY_PATCH_SPEC R-07: LAN RPC payloads (non-finite position, unknown
+## district) used to be trusted and re-emitted directly. Covers the payload
+## half here (finite/allowlist checks) - the sender-binding half needs a
+## real second peer to exercise multiplayer.get_remote_sender_id()
+## meaningfully, which a single-process headless test can't simulate; a
+## direct call here always presents as sender_id 0 (the local-echo case
+## the fix deliberately doesn't reject), so that half isn't covered by
+## this gate. No consumer of these signals exists yet either way
+## (confirmed by grep), so there is no live exploitable effect today.
+func _check_lan_payload_validation() -> void:
+	var got_state := [false]
+	var state_listener := func(_id, _pos, _yaw, _district): got_state[0] = true
+	EventBus.remote_player_state.connect(state_listener)
+	LANNetwork.rpc_player_state(1, Vector3(NAN, 0.0, 0.0), 0.0, &"suburbs")
+	_ok(not got_state[0], "non-finite remote player position is rejected, not re-emitted")
+	got_state[0] = false
+	LANNetwork.rpc_player_state(1, Vector3.ZERO, 0.0, &"not_a_real_district")
+	_ok(not got_state[0], "unknown district in remote player state is rejected")
+	got_state[0] = false
+	LANNetwork.rpc_player_state(1, Vector3.ZERO, 0.0, &"suburbs")
+	_ok(got_state[0], "a valid remote player state still gets through")
+	EventBus.remote_player_state.disconnect(state_listener)
+
+	var got_power := [false]
+	var power_listener := func(_d, _p): got_power[0] = true
+	EventBus.remote_power_changed.connect(power_listener)
+	LANNetwork.rpc_power_changed(&"not_a_real_district", true)
+	_ok(not got_power[0], "unknown district in remote power event is rejected")
+	LANNetwork.rpc_power_changed(&"suburbs", true)
+	_ok(got_power[0], "a valid remote power event still gets through")
+	EventBus.remote_power_changed.disconnect(power_listener)
 
 # ── economy: absurd values can't desync CoinWallet ─────────────────────
 func _check_coin_wallet_absurd_values() -> void:

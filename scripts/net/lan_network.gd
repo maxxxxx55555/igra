@@ -71,14 +71,31 @@ func _on_server_disconnected() -> void:
 	push_warning("[LAN] server disconnected")
 	leave()
 
+## SECURITY_PATCH_SPEC R-07: any connected peer could claim to be a
+## DIFFERENT peer_id, send a non-finite position, or name a district
+## outside the real roster - nothing validated the sender or the payload.
+## No consumer of remote_player_state/remote_power_changed exists yet
+## (both are dead signals today, confirmed by grep), so there's no live
+## exploitable effect - closed anyway since this is the exact boundary a
+## future consumer would trust without knowing to re-check it.
 @rpc("any_peer", "call_local", "unreliable")
 func rpc_player_state(peer_id: int, pos: Vector3, yaw: float, district: StringName) -> void:
+	var sender := multiplayer.get_remote_sender_id()
+	# call_local delivers this to the sender's own local call with sender_id
+	# 0 (no RPC in flight) - only reject a REMOTE call impersonating another
+	# peer_id, not the host's own local echo of its own state.
+	if sender != 0 and sender != peer_id:
+		return
+	if not pos.is_finite() or not is_finite(yaw) or not DistrictManager.DISTRICTS.has(String(district)):
+		return
 	var bus := get_node_or_null("/root/EventBus")
 	if bus != null:
 		bus.remote_player_state.emit(peer_id, pos, yaw, district)
 
 @rpc("any_peer", "call_local", "reliable")
 func rpc_power_changed(district: StringName, powered: bool) -> void:
+	if not DistrictManager.DISTRICTS.has(String(district)):
+		return
 	var bus := get_node_or_null("/root/EventBus")
 	if bus != null:
 		bus.remote_power_changed.emit(district, powered)
