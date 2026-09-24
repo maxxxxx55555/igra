@@ -115,7 +115,7 @@ const WOW_CUE_BY_KIND: Dictionary = {
 }
 const LAYER_DB: float = -12.0
 const LAYER_LERP: float = 1.5
-const FADE_TIME: float = 2.2          ## Длительность кроссфейда, с
+const FADE_TIME: float = 2.0          ## Длительность кроссфейда, с (GDD.md:359-362, A02)
 const FULL_DB: float = -8.0           ## Рабочая громкость трека
 const MUTE_DB: float = -60.0
 const EVAL_INTERVAL: float = 0.5      ## Как часто пересчитываем настроение, с

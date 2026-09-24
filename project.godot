@@ -12,8 +12,8 @@ config_version=5
 
 config/name="The Last Streetlight"
 run/main_scene="res://scenes/ui/boot_loading.tscn"
-run/max_fps=60
 config/features=PackedStringArray("4.7", "GL Compatibility")
+run/max_fps=60
 config/icon="res://assets/ui/icon.png"
 sprint={
 "deadzone": 0.5,
@@ -298,30 +298,25 @@ quick_wheel={
 ]
 }
 
-[rendering]
-
-renderer/rendering_method="gl_compatibility"
-renderer/rendering_method.mobile="gl_compatibility"
-lights_and_shadows/directional_shadow/size=1024
-lights_and_shadows/directional_shadow/soft_shadow_filter_quality=1
-textures/default_filters/anisotropic_filtering_level=1
-anti_aliasing/quality/msaa_3d=2
-scaling_3d/scale=1.0
-environment/defaults/default_clear_color=Color(0.03, 0.03, 0.05, 1)
-scaling_3d/fsr_upscale=true
-mesh_lod/threshold_pixels=0.75
-
 [monetization]
 
-; AppLovin MAX — see docs/store/HUMAN_CHECKLIST.md. Empty = ad_service.gd
-; falls back to the debug stub; nothing here is required to run the game.
 applovin_sdk_key=""
 applovin_rewarded_unit_id=""
 applovin_interstitial_unit_id=""
 
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+lights_and_shadows/directional_shadow/size=2048
+lights_and_shadows/directional_shadow/size.mobile=1024
+lights_and_shadows/directional_shadow/soft_shadow_filter_quality=1
+textures/default_filters/anisotropic_filtering_level=1
+anti_aliasing/quality/msaa_3d=2
+environment/defaults/default_clear_color=Color(0.03, 0.03, 0.05, 1)
+scaling_3d/fsr_upscale=true
+mesh_lod/threshold_pixels=0.75
+
 [world]
 
-; TRUTH WAVE P1: street_props.gd used to build flat emissive decals with
-; no real Light3D and no district-power reactivity. true restores that
-; old behavior; see docs/KNOWN_ISSUES.md.
 legacy_streetlights=false

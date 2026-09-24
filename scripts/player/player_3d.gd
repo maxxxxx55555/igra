@@ -610,6 +610,8 @@ func _physics_process(delta: float) -> void:
 	if _fps_cam and is_instance_valid(_fps_cam):
 		if _fps_cam.has_method("set_pitch"):
 			_fps_cam.set_pitch(_pitch)
+		if _fps_cam.has_method("set_running"):
+			_fps_cam.set_running(current_state == State.RUN)
 	# Один пивот для света, конуса, пыли и «фонаря в руке» — иначе они смотрят врозь.
 	flashlight_pivot.global_rotation = Vector3(_pitch, global_rotation.y, 0.0)
 	human_body.visible = enable_human_body and not _is_fps_view()

@@ -278,14 +278,16 @@ class EnergyBall:
 		sphere.height = 0.7
 		mesh.mesh = sphere
 		var mat := StandardMaterial3D.new()
-		mat.albedo_color = Color(0.9, 0.2, 0.9)
+		# Ember token #b4452f (GDD.md:280 V02 - no neon/acid colors), was raw
+		# magenta (0.9,0.2,0.9)/(1.0,0.3,1.0), a banned hue.
+		mat.albedo_color = Color("#b4452f")
 		mat.emission_enabled = true
-		mat.emission = Color(1.0, 0.3, 1.0)
+		mat.emission = Color("#b4452f")
 		mat.emission_energy_multiplier = 3.0
 		mesh.material_override = mat
 		add_child(mesh)
 		var light := OmniLight3D.new()
-		light.light_color = Color(1.0, 0.3, 1.0)
+		light.light_color = Color("#b4452f")
 		light.light_energy = 2.0
 		light.omni_range = 6.0
 		light.shadow_enabled = false

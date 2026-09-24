@@ -16,6 +16,13 @@ extends Node3D
 @export var fps_eye_height: float = 1.7
 @export var fps_follow_speed: float = 15.0
 
+## GDD.md:45-46 (G02/G03): sprint headbob amplitude (capped low - "не выше,
+## укачивание") and the short sprint FOV punch. Gated by reduce_ui_motion,
+## same accessibility API uisfx.gd already reads (SettingsManager.get_setting).
+const SPRINT_BOB_AMP: float = 0.1
+const SPRINT_BOB_FREQ: float = 8.0   ## matches player_3d.gd's own walk-sway rate
+const SPRINT_FOV_BONUS: float = 5.0
+
 var _cam: Camera3D = null
 var _target: Node3D = null
 var _is_interior: bool = false
@@ -23,6 +30,8 @@ var _current_height: float
 var _current_distance: float
 var _current_fov: float
 var _pitch: float = 0.0
+var _running: bool = false
+var _bob_t: float = 0.0
 
 func _ready() -> void:
 	_cam = _find_cam(self)
@@ -47,6 +56,9 @@ func set_pitch(v: float) -> void:
 func set_fps(v: bool) -> void:
 	fps_mode = v
 
+func set_running(v: bool) -> void:
+	_running = v
+
 
 func _process(delta: float) -> void:
 	if _cam == null:
@@ -62,11 +74,22 @@ func _process(delta: float) -> void:
 
 func _tick_fps(delta: float) -> void:
 	var tp: Vector3 = _target.global_position
-	var desired: Vector3 = tp + Vector3(0.0, fps_eye_height, 0.0)
+	var eye_y := fps_eye_height
+	var reduce_motion := false
+	var sm := get_node_or_null("/root/SettingsManager")
+	if sm != null and sm.has_method("get_setting"):
+		reduce_motion = bool(sm.get_setting("reduce_ui_motion", false))
+	if _running and not reduce_motion:
+		_bob_t += delta * SPRINT_BOB_FREQ
+		eye_y += sin(_bob_t) * SPRINT_BOB_AMP
+	else:
+		_bob_t = 0.0
+	var desired: Vector3 = tp + Vector3(0.0, eye_y, 0.0)
 	_cam.global_position = _cam.global_position.lerp(desired, clampf(delta * fps_follow_speed, 0.0, 1.0))
 	var yaw: float = _target.rotation.y
 	_cam.rotation = Vector3(_pitch, yaw, 0.0)
-	_cam.fov = lerpf(_cam.fov, _current_fov, clampf(delta * interior_lerp_speed, 0.0, 1.0))
+	var target_fov := _current_fov + (SPRINT_FOV_BONUS if _running else 0.0)
+	_cam.fov = lerpf(_cam.fov, target_fov, clampf(delta * interior_lerp_speed, 0.0, 1.0))
 	_tick_interior_target()
 
 func _tick_third(delta: float) -> void:

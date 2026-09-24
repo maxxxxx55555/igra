@@ -15,8 +15,10 @@ const _PRESETS: Dictionary = {
 	"first_light": {"trauma": 0.30, "flash": Color(1.00, 0.82, 0.45), "flash_a": 0.20, "flash_t": 0.5, "slowmo": 1.0, "fov": 0.0},
 	"cascade":     {"trauma": 0.55, "flash": Color(1.00, 0.95, 0.80), "flash_a": 0.28, "flash_t": 0.8, "slowmo": 0.5, "fov": 4.0},
 	"ending":      {"trauma": 0.45, "flash": Color(0.92, 0.62, 0.32), "flash_a": 0.26, "flash_t": 1.0, "slowmo": 0.4, "fov": 3.0},
-	# docs/GAMEFEEL_SPEC.md — explosions: shake only, no flash/slowmo.
-	"explosion":   {"trauma": 0.35, "flash": Color.WHITE, "flash_a": 0.0, "flash_t": 0.1, "slowmo": 1.0, "fov": 0.0},
+	# docs/GAMEFEEL_SPEC.md - explosions: shake only, no flash/slowmo (flash_a=0
+	# means this never draws). Token itself kept off pure white anyway
+	# (GDD.md:280 V02 bans #fff) using the same warm palette as the others.
+	"explosion":   {"trauma": 0.35, "flash": Color(1.00, 0.82, 0.45), "flash_a": 0.0, "flash_t": 0.1, "slowmo": 1.0, "fov": 0.0},
 }
 
 var _first_light_done: bool = false
