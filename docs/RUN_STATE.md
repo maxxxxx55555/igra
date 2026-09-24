@@ -1,5 +1,98 @@
 # Run state — orchestrator pass (2026-09-20)
 
+## Session 9 continued: C3 SLOP-CLEAN — SLOP_REPORT.md items closed
+
+C2 SEC-CLOSE finished. Per the studio-lead directive's phase order, moved to C3: consume every
+§1 item in `docs/SLOP_REPORT.md` (15 ranked slop findings) plus the one actionable §2 threshold
+finding, same discipline as before - verify each claim against the current file, apply the
+smallest correct fix, verify with a real check, commit. Commit hashes in order:
+
+1. **Export filter gap (debug prints/dead code shipping in every build)** - `scripts/security/*`
+   and top-level `tools/*` were never excluded from `export_filter="all_resources"`, unlike
+   `scripts/tools/*`/`scenes/tools/*`. Verified nothing outside those tools-scoped paths
+   references any of them before adding the exclusion to all 3 presets. `855a278`.
+2. **Audio truth gate reported green without testing anything** - both `audio_truth_gate.gd` and
+   `_perf_check_runner.gd` self-skipped under headless via `quit(0)`, identical to a genuine pass;
+   `check.sh`'s `run_gate()` only ever mapped exit 0 to "ok". Both now `quit(3)`; `run_gate()`
+   prints "пропуск" on rc==3. Verified via a full `tools/check.sh` run with Godot present - both
+   lines now correctly show skip, not green. That run surfaced one unrelated, already-tracked
+   pre-existing failure (`game_test_3d` phase 8 death screen, `docs/FUNCTION_MATRIX.md` X22) -
+   confirmed reproducible standalone, confirmed unrelated, not touched. `1fcf157`.
+3. **i18n gate's short-string exemption was uncapped** - any base string under 12 chars could
+   translate to any length with zero signal. Added a bounded `SHORT_STRING_RATIO_CAP=3.0`; a
+   normal 2-3x short-word expansion still passes, a genuinely blown-out one is still caught.
+   Also fixed the log's own `[:3]` truncation (full lists now print) and corrected RUN_STATE's
+   own stale "a handful" wording to the real measured counts (fr=52, the worst locale). Does NOT
+   resolve the gate's still-red 4/12 state - that's a content decision, not papered over.
+   `bbdaa8e`.
+4. **`silent_steps` applied twice** - the comment said "here instead, to speed_noise only" but
+   the old second `noise_radius *= ...` application remained nine lines later. Deleted.
+5. **`NUDGE_SEC` comment contradicted its own math** - claimed the 43m worst-case nudge stays
+   inside a ~40m district half-size even from a 22m starting radius (22+43=65>40). Reworded to
+   state it as a rate reduction (204m->43m), not an in-bounds guarantee.
+6. **Two mixed-script checkers disagreed** - `gui_explore_runner.gd` tracked Latin as a script
+   (flagging Latin+CJK titles as BUG) while `i18n_truth_gate.py` deliberately has no Latin entry
+   at all (brand/tech tokens stay Latin on purpose, this project's own convention) and would PASS
+   the same string. Removed Latin tracking from the GDScript version to match. Compile-verified
+   only - this tool needs `--windowed`, not part of the headless suite. `855a278`.
+7. **Disabled-button StyleBox hand-rebuilt instead of duplicated** - `btn_d` re-typed the same
+   border/corner/margin triple already on `btn_n` from scratch, unlike the sibling `btn_focus`
+   which correctly duplicates. Now duplicates too - one source of metrics.
+8. **`proc_audio.gd`'s threat-reactive tunables were unnamed literals** - an enum value
+   (`base_monster.gd`'s State, read across an autoload boundary) as raw ints 3/4, plus five P5
+   feel-tunable literals. Named all six; verified the hum-spread modulo base is still exactly 800
+   via the new `_HUM_SPREAD_HZ*200` relationship - byte-identical behavior. `53353d5`.
+9. **Dead `else` fallback + a duplicated `25`** - `skill_tree_manager.gd`'s
+   `player.battery_max += 25` else-branch was unreachable (every player node has
+   `refresh_battery_max()` since this same wave added it); the `25` also existed unnamed in
+   `player_3d.gd`'s own formula. Deleted the branch, named `BATTERY_PER_SKILL_LVL` once.
+10. **Dead ternary in HUD badge refresh** - `_SLOT_ITEMS` has no empty-string entry, so the false
+    branch could never fire. Simplified.
+11. **Scratch-slot comment contradicted its own code** - `attack_sim.gd`'s `_SLOT=96` claimed to
+    avoid `_save_integrity_check.gd`'s slot 97, but the swap test's `_SLOT+1` was exactly 97.
+    Moved to 95 (pair 95/96), verified no other file uses 95.
+12. **`BTN_ONE_MORE_RUN` orphaned in all 13 locales** - `win_screen.gd` switched buttons in the
+    same wave that introduced the string; zero code references left (confirmed by grep). Removed
+    via a JSON-aware script (not sed) - verified via `git diff --stat`: exactly 1 line removed per
+    file, no reformatting noise. `2948e23`.
+13. **Hand-rolled HSV converter next to the PIL dependency that provides it** - 22 lines of
+    per-pixel math where `Image.convert("HSV")` (PIL already imported for image I/O) does the
+    same thing. Verified equivalent, not just "looks right": `--demo` self-check still passes,
+    and A/B against the real evidence frames shows the old converter measured 0.06/0.04/0.06%
+    magenta vs the PIL version's 0.05/0.03/0.04% - the small delta is exactly the expected 8-bit
+    hue quantization, both comfortably under threshold, both PASS. `363add0`.
+14. **Two unnamed magic numbers with clear rationale already in prose** - `base_monster.gd`'s
+    measured Y-dip rescue threshold (3.0) and the "suburbs" start-district literal duplicated
+    three times across two files. Named `_Y_DIP_TELEPORT` and `DistrictManager.START_DISTRICT`.
+15. **Unused signal param, handler re-derived the data it ignored** - `proc_audio.gd`'s
+    `_on_district_entered(_district_id)` ignored its own parameter and unconditionally re-read
+    `DistrictManager.current_district`, a duplicate source of truth that's safe today only
+    because the manager updates before emitting - not guaranteed for every emitter. Now uses the
+    param, falling back to the manager read only for the one `_ready()`-time seeding call that
+    passes an empty id. `d06fe48` (items 4/9/10/11/14/15 landed together in this one commit;
+    7/8/12/13 and the §2 tightening got their own commits as noted above).
+
+**§2 threshold finding also closed**: `BLACK_FAIL_PCT` (`visual_truth_gate.py`) was 85.0, nearly
+vacuous per the report's own measurement (real healthy frames run 7.6-9.8% black; a half-black
+corrupted frame would still pass at 85%). `MAGENTA_FAIL_PCT` was already at the report's
+recommended 0.5% from an earlier pass. Tightened `BLACK_FAIL_PCT` to 40.0 - still a 4-5x margin
+over real healthy readings. Verified: `--demo` still passes, all three real evidence frames still
+PASS comfortably under the new threshold. `7bbc0ca`.
+
+**§3 (symptom-masking) findings — reviewed, no new action needed.** All three items the report
+names (residential-softlock nudge-duration "fix", boss Y-dip rescue, park-travel INF softlock)
+are already honestly tracked in `docs/KNOWN_ISSUES.md` as reductions/rescues/open-not-masked,
+exactly as the report itself confirms ("Nothing in range pretends otherwise" for the park-travel
+case). Re-verified those `KNOWN_ISSUES.md` entries are still accurate rather than re-litigating
+already-honest documentation as if it were a new finding.
+
+**C3 SLOP-CLEAN is done.** Full battery re-verified clean after the whole batch: compile gate,
+attack_sim, GOLD MASTER suite all 0 fails; static gates 20/21 (only the pre-existing, now
+more-honestly-measured `i18n_truth_gate` FAIL); `flow_check.py`/`scene_node_check.py` OK.
+
+**Next**: per the studio-lead directive's own phase order, move to C4 TZ-CLOSE
+(`docs/TZ_COMPLIANCE_AUDIT.md`).
+
 ## Session 9 continued: C2 SEC-CLOSE — SECURITY_PATCH_SPEC.md findings closed
 
 C1 BREAK-CLOSE finished (all of B1-B16 + Q1). Per the studio-lead directive's own phase order,
