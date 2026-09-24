@@ -60,29 +60,6 @@ QUICKBAR_BAND = (0.85, 1.0)
 HUD_BOX = (0, 0, 360, 220)  # kept for the existing HUD-presence check
 
 
-def _rgb_to_hsv(arr: np.ndarray) -> np.ndarray:
-    """arr: (H,W,3) float32 in 0..1 -> (H,W,3) HSV, H in degrees."""
-    r, g, b = arr[..., 0], arr[..., 1], arr[..., 2]
-    maxc = np.max(arr, axis=-1)
-    minc = np.min(arr, axis=-1)
-    v = maxc
-    delta = maxc - minc
-    s = np.where(maxc > 0, delta / np.where(maxc == 0, 1, maxc), 0.0)
-    with np.errstate(divide="ignore", invalid="ignore"):
-        rc = np.where(delta > 0, (maxc - r) / np.where(delta == 0, 1, delta), 0.0)
-        gc = np.where(delta > 0, (maxc - g) / np.where(delta == 0, 1, delta), 0.0)
-        bc = np.where(delta > 0, (maxc - b) / np.where(delta == 0, 1, delta), 0.0)
-    h = np.zeros_like(v)
-    is_r = (maxc == r) & (delta > 0)
-    is_g = (maxc == g) & (delta > 0)
-    is_b = (maxc == b) & (delta > 0)
-    h[is_r] = (bc - gc)[is_r]
-    h[is_g] = 2.0 + (rc - bc)[is_g]
-    h[is_b] = 4.0 + (gc - rc)[is_b]
-    h = (h / 6.0) % 1.0
-    return np.stack([h * 360.0, s, v], axis=-1)
-
-
 def _band(arr: np.ndarray, frac: tuple[float, float]) -> np.ndarray:
     h = arr.shape[0]
     y0, y1 = int(h * frac[0]), int(h * frac[1])
@@ -95,7 +72,13 @@ def measure(path: str) -> dict:
     world = _band(arr, WORLD_BAND)
     world_total = world.shape[0] * world.shape[1]
 
-    hsv = _rgb_to_hsv(world)
+    # PIL's own HSV conversion (8-bit per channel: H,S,V all 0..255) instead
+    # of a hand-rolled per-pixel converter - PIL is already imported for
+    # image I/O, and ~1.4deg/step quantization is fine for an 85deg-wide
+    # magenta band.
+    hsv_full = np.asarray(img.convert("HSV"), dtype=np.float32)
+    hsv_full = np.stack([hsv_full[..., 0] * 360.0 / 255.0, hsv_full[..., 1] / 255.0, hsv_full[..., 2] / 255.0], axis=-1)
+    hsv = _band(hsv_full, WORLD_BAND)
     hue, sat, val = hsv[..., 0], hsv[..., 1], hsv[..., 2]
     magenta_mask = (hue >= HUE_LOW) & (hue <= HUE_HIGH) & (sat >= MIN_SAT) & (val >= MIN_VAL)
     median_sat = float(np.median(sat))
