@@ -303,8 +303,7 @@ func load_all() -> bool:
 	Encyclopedia.from_dict(data.get("encyclopedia", {}))
 	ProgressTracker.from_dict(data.get("progress", {}))
 	SettingsManager.from_dict(data.get("settings", {}))
-	var pp = data.get("player_pos", null)
-	_pending_player_pos = Vector3(pp[0], pp[1], pp[2]) if (pp is Array and pp.size() >= 3) else Vector3.INF
+	_pending_player_pos = _parse_player_pos(data.get("player_pos", null))
 	_quest_data = data.get("quests", {})
 	# Прогресс квестов раньше оседал в буфере _quest_data и никому не отдавался:
 	# после загрузки все 19 квестов снова были на нуле.
@@ -313,7 +312,12 @@ func load_all() -> bool:
 	# возвращала игрока в стартовые пригороды.
 	var dm := get_node_or_null("/root/DistrictManager")
 	var did: String = String(data.get("district", ""))
-	if dm != null and not did.is_empty():
+	# SECURITY_PATCH_SPEC R-03/R-05: a forged/corrupt district id used to be
+	# written straight to DistrictManager.current_district with no check -
+	# DistrictSceneFactory.build() already falls back safely so this never
+	# crashed, but the tainted string persisted as "current district" for
+	# every OTHER reader (UI, minimap, achievement/quest conditions).
+	if dm != null and not did.is_empty() and dm.DISTRICTS.has(did):
 		dm.current_district = did
 	_photos = data.get("photos", [])
 	_daily_streak = int(data.get("daily_streak", 0))
@@ -374,6 +378,18 @@ func reset_all() -> void:
 	# NG+ unreachable in practice - activating it and starting the run
 	# immediately reset it to 0. A genuinely fresh save (NG+ level already 0)
 	# is unaffected either way.
+
+## SECURITY_PATCH_SPEC R-03: a forged/corrupt save could supply a
+## non-finite (NaN) or wildly-out-of-bounds-but-finite player_pos and it
+## was applied directly - Vector3.INF is the existing "no saved position,
+## use the district's own spawn" sentinel, so routing a bad value through
+## that same sentinel is the natural, minimal fix rather than inventing a
+## new failure mode.
+func _parse_player_pos(pp) -> Vector3:
+	if not (pp is Array) or pp.size() < 3:
+		return Vector3.INF
+	var v := Vector3(pp[0], pp[1], pp[2])
+	return v if v.is_finite() else Vector3.INF
 
 func consume_pending_player_pos() -> Vector3:
 	var p := _pending_player_pos
@@ -490,8 +506,7 @@ func load_slot(slot: int) -> bool:
 	Encyclopedia.from_dict(data.get("encyclopedia", {}))
 	ProgressTracker.from_dict(data.get("progress", {}))
 	SettingsManager.from_dict(data.get("settings", {}))
-	var pp = data.get("player_pos", null)
-	_pending_player_pos = Vector3(pp[0], pp[1], pp[2]) if (pp is Array and pp.size() >= 3) else Vector3.INF
+	_pending_player_pos = _parse_player_pos(data.get("player_pos", null))
 	_quest_data = data.get("quests", {})
 	QuestManager.from_dict(_quest_data)
 	# Mirror load_all(): restore current district so a slot load returns
@@ -499,7 +514,12 @@ func load_slot(slot: int) -> bool:
 	# suburbs the same way the main save was before TRUTH WAVE P0.2).
 	var dm := get_node_or_null("/root/DistrictManager")
 	var did: String = String(data.get("district", ""))
-	if dm != null and not did.is_empty():
+	# SECURITY_PATCH_SPEC R-03/R-05: a forged/corrupt district id used to be
+	# written straight to DistrictManager.current_district with no check -
+	# DistrictSceneFactory.build() already falls back safely so this never
+	# crashed, but the tainted string persisted as "current district" for
+	# every OTHER reader (UI, minimap, achievement/quest conditions).
+	if dm != null and not did.is_empty() and dm.DISTRICTS.has(did):
 		dm.current_district = did
 	_photos = data.get("photos", [])
 	_daily_streak = int(data.get("daily_streak", 0))

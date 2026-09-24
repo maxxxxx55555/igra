@@ -39,6 +39,7 @@ func _ready() -> void:
 	_check_daily_challenge_forgery_rejected()
 	_check_progress_tracker_grant_unlocks_real_achievement()
 	_check_main_authority_schema()
+	_check_district_id_and_player_pos_validated()
 	_check_coin_wallet_absurd_values()
 	_check_district_id_injection_defended()
 	_check_cross_save_swap_rejected()
@@ -352,6 +353,41 @@ func _check_main_authority_schema() -> void:
 	_ok(not bool(forged_q.get("done", false)),
 		"forged done=true with progress=0 is not accepted as a real completion")
 	QuestManager.reset()
+
+## SECURITY_PATCH_SPEC R-03: a forged/corrupt main save could set district
+## to an id outside DistrictManager.DISTRICTS, or player_pos to a value
+## that overflows to a non-finite float once narrowed into a real
+## Vector3 (1e40 is valid finite JSON but exceeds float32 range) - both
+## used to be applied directly with no check.
+func _check_district_id_and_player_pos_validated() -> void:
+	var main_path := "user://tls_savegame.save"
+	var backups: Dictionary = {}
+	for p in [main_path, main_path + ".bak"]:
+		if FileAccess.file_exists(p):
+			var bf := FileAccess.open(p, FileAccess.READ)
+			backups[p] = bf.get_as_text()
+			bf.close()
+	var dm := get_node_or_null("/root/DistrictManager")
+	var before_district: String = String(dm.current_district) if dm else ""
+	SaveSystem._write_atomic(main_path, {
+		"version": SaveSystem.SAVE_VERSION,
+		"district": "hacked_evil_district",
+		"player_pos": [1e40, 0.0, 0.0],
+	})
+	SaveSystem.load_all()
+	_ok(dm == null or String(dm.current_district) != "hacked_evil_district",
+		"forged district id 'hacked_evil_district' is not adopted (current_district=%s)" % (String(dm.current_district) if dm else "?"))
+	_ok(SaveSystem.consume_pending_player_pos() == Vector3.INF,
+		"a player_pos that overflows to non-finite is treated as 'no saved position', not applied")
+	for p in backups:
+		var wf := FileAccess.open(p, FileAccess.WRITE)
+		wf.store_string(backups[p])
+		wf.close()
+	if backups.is_empty():
+		for p in [main_path, main_path + ".bak"]:
+			if FileAccess.file_exists(p):
+				DirAccess.remove_absolute(p)
+	SaveSystem.load_all()
 
 # ── economy: absurd values can't desync CoinWallet ─────────────────────
 func _check_coin_wallet_absurd_values() -> void:
