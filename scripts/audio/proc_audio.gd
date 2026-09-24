@@ -88,7 +88,7 @@ func _on_district_entered(district_id: StringName) -> void:
 	# per district, not random per visit. Small spread (+-4Hz on a 65Hz base)
 	# so districts stay in the same family, just not identical.
 	var h := hash(id)
-	_district_hum_offset = float(h % 800) / 100.0 - 4.0
+	_district_hum_offset = float(h % int(_HUM_SPREAD_HZ * 200.0)) / 100.0 - _HUM_SPREAD_HZ
 
 
 func _on_flashlight_toggled(enabled: bool) -> void:
@@ -214,6 +214,20 @@ func _play_moan() -> void:
 ## no new signal plumbing.
 const _THREAT_CHECK_SEC := 0.5
 const _THREAT_RADIUS := 20.0
+## base_monster.gd's State enum, read by value (not by name - GDScript enums
+## aren't importable by ref across an autoload boundary without a class_name
+## dependency). A reorder of that enum silently breaks threat audio; named
+## here so at least the intent survives that.
+const _AI_STATE_CHASE := 3
+const _AI_STATE_ATTACK := 4
+## P5 feel tunables: how much the ambient hum reacts to nearby threat.
+const _THREAT_HZ := 6.0
+const _THREAT_VOL := 0.35
+const _THREAT_LFO := 0.5
+const _THREAT_MOAN := 0.5
+## Per-district hum offset spread: +-4Hz around ambient_hum_freq so
+## districts stay in the same family without being identical.
+const _HUM_SPREAD_HZ := 4.0
 var _threat_check_timer: float = 0.0
 
 func _update_threat_level() -> void:
@@ -229,10 +243,7 @@ func _update_threat_level() -> void:
 		var ai_state = m.get("ai_state")
 		if ai_state == null:
 			continue
-		# State.CHASE=3, State.ATTACK=4 (base_monster.gd's enum) - read by
-		# value, not by name, since GDScript enums aren't importable by ref
-		# across an autoload boundary without a class_name dependency.
-		if int(ai_state) != 3 and int(ai_state) != 4:
+		if int(ai_state) != _AI_STATE_CHASE and int(ai_state) != _AI_STATE_ATTACK:
 			continue
 		if ppos.distance_to((m as Node3D).global_position) <= _THREAT_RADIUS:
 			level = 1.0
@@ -254,12 +265,12 @@ func _process(delta: float) -> void:
 			if frames > 0:
 				var buf := PackedVector2Array()
 				buf.resize(frames)
-				var freq := ambient_hum_freq + _district_hum_offset + _threat_level * 6.0
-				var vol_mult := 1.0 + _threat_level * 0.35
+				var freq := ambient_hum_freq + _district_hum_offset + _threat_level * _THREAT_HZ
+				var vol_mult := 1.0 + _threat_level * _THREAT_VOL
 				for i in frames:
 					var t := _time + float(i) / 24000.0
 					var hum := sin(t * freq * TAU) * _ambient_current_volume * 0.5 * vol_mult
-					var mod_slow := sin(t * (0.3 + _threat_level * 0.5)) * 0.5 + 0.5
+					var mod_slow := sin(t * (0.3 + _threat_level * _THREAT_LFO)) * 0.5 + 0.5
 					var v := hum * (0.6 + mod_slow * 0.4)
 					buf[i] = Vector2(v, v)
 				playback.push_buffer(buf)
@@ -268,7 +279,7 @@ func _process(delta: float) -> void:
 		_moan_timer = 0.0
 		# Threat-reactive density: moans stack up to ~2x more often mid-chase
 		# instead of the flat interval used at rest.
-		_moan_cooldown = randf_range(moan_interval_min, moan_interval_max) * (1.0 - _threat_level * 0.5)
+		_moan_cooldown = randf_range(moan_interval_min, moan_interval_max) * (1.0 - _threat_level * _THREAT_MOAN)
 		_play_moan()
 	var player := get_tree().get_first_node_in_group("player")
 	if player and player.has_method("is_moving"):
