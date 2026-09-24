@@ -1,5 +1,24 @@
 # Run state — orchestrator pass (2026-09-20)
 
+## Session 11 (2026-09-25): R0 real root cause, C5 matrix 0 UNTESTED, retro-verify
+
+**NEXT-ROW: G16** (then G04, G15-capsule, G18-G22, G24-G27, G31-G34, S01, S02, S04, A01, A03, D03/V01;
+then C5 flaky P2l/P2m/P3, C6 i18n 13/13, C9 AAB, C7, C8).
+
+- `bafb740` **R0 root cause**: 11 district LUTs imported as Texture2D = 1D gradient; now Texture3D.
+  World hue-magenta 13% -> 0.01-0.30% (windowed, textures actually loaded). The old R0 "fix" frames
+  were clean only because textures never loaded. check.sh pins every LUT as `3d_texture`.
+- `37581d7` committed `.import` files as Godot 4.7 writes them. **ENV RULE**: run
+  `godot --editor --quit --path .` (windowed) before engine gates - now inside `tools/check.sh`
+  (`TLS_SKIP_REIMPORT=1` to skip) - and **never `git checkout` `.import` files afterwards**.
+- `2547fff` C06 real (fog 0.012-0.015, particles 50-150% on every GPUParticles3D).
+- `f983926` `scenes/tools/tz_verify_scene.tscn`: 13 windowed checks, fails=0, 10 frames read.
+- `0d3d533` C5: X22 (test bug), X20 (PAUSED; bot recovery A/B), P2q autoload asserts, dead inputs
+  removed. FUNCTION_MATRIX: 0 UNTESTED; BUG rows left: X20 PARTIAL, X21 residential flakiness.
+- `648cfd2` interstitial 1 ad/hour; TZ_COMPLIANCE retro-verified; `docs/CORRECTION_LOG.md` (10 rows).
+- `7af80d2` release keystore generated in gitignored `.signing/`; export blocked on 4.7 templates.
+- Unverified since last suite run: `648cfd2` P2q ad-cooldown assert (compile-checked only by reading).
+
 ## Session 10 (2026-09-24): C4 TZ-CLOSE started
 
 `docs/EXEC_PLAN.md` written (plan-only pass) covering C4-C9. `docs/DESIGN_DECISIONS.md` confirmed
