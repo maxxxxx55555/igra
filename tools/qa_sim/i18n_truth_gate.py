@@ -35,6 +35,15 @@ LENGTH_RATIO_MAX = 1.6
 # the raw ratio - a naive 1.6x-on-everything gate would permanently FAIL on
 # fine translations across 8 of 12 locales.
 SHORT_STRING_FLOOR = 12
+# The short-string exemption above was originally uncapped: any base string
+# under SHORT_STRING_FLOOR chars could translate to ANY length with zero
+# signal, which is real l10n practice for normal expansion (4-11 char words
+# routinely 2-3x) but would also wave through a genuinely broken/garbage
+# translation of a short string. A looser hard ratio still catches that
+# without re-flagging the legitimate short-word expansions this floor exists
+# for (measured against the first real run's flagged strings, all comfortably
+# under 3x).
+SHORT_STRING_RATIO_CAP = 3.0
 BASE_LOCALE = "en"
 SUPPORTED = ["ru", "en", "es", "de", "fr", "it", "pt_BR", "tr", "ja", "ko", "zh", "zh_TW", "ar"]
 
@@ -78,7 +87,9 @@ def check_locale(base: dict, code: str, strings: dict) -> dict:
         if _is_mixed_script(val):
             mixed.append(key)
         base_len = len(str(base_val))
-        if base_len >= SHORT_STRING_FLOOR and len(val) / base_len > LENGTH_RATIO_MAX:
+        ratio = len(val) / base_len
+        ratio_max = LENGTH_RATIO_MAX if base_len >= SHORT_STRING_FLOOR else SHORT_STRING_RATIO_CAP
+        if ratio > ratio_max:
             overflow.append(key)
     return {"locale": code, "missing": missing, "mixed": mixed, "overflow": overflow}
 
@@ -106,11 +117,13 @@ def main(argv: list[str]) -> int:
         status = "PASS" if r["ok"] else "FAIL"
         print("%s %s -- missing=%d mixed=%d overflow=%d" % (
             status, r["locale"], len(r["missing"]), len(r["mixed"]), len(r["overflow"])))
-        for key in r["missing"][:3]:
+        # Full lists, not a [:3] sample - a truncated log hid the real scale
+        # of a red gate (e.g. fr's 49 overflow flags read as "a handful").
+        for key in r["missing"]:
             print("    missing: %s" % key)
-        for key in r["mixed"][:3]:
+        for key in r["mixed"]:
             print("    mixed-script: %s" % key)
-        for key in r["overflow"][:3]:
+        for key in r["overflow"]:
             print("    overflow (>%.1fx): %s" % (LENGTH_RATIO_MAX, key))
     n_pass = sum(1 for r in results if r["ok"])
     print("%d/%d locales PASS" % (n_pass, len(results)))
@@ -129,6 +142,13 @@ def _demo() -> None:
     assert "A" in r_bad["mixed"], r_bad
     overflow_case = check_locale({"A": "Hello there friend"}, "zz", {"A": "H" * 40})
     assert "A" in overflow_case["overflow"], overflow_case
+    # Short-string exemption is bounded, not a blank check: a normal 2-3x
+    # short-word expansion still passes, but a short string blown out past
+    # SHORT_STRING_RATIO_CAP is still caught.
+    short_ok = check_locale({"A": "Save"}, "ww", {"A": "Sauvegarder"})  # 4 -> 11 chars, 2.75x
+    assert "A" not in short_ok["overflow"], short_ok
+    short_bad = check_locale({"A": "Save"}, "vv", {"A": "S" * 20})  # 4 -> 20 chars, 5x
+    assert "A" in short_bad["overflow"], short_bad
     print("demo OK")
 
 

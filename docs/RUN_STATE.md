@@ -1276,9 +1276,15 @@ residual note above) before reaching for headless scripted probes for the rest.
   and length ratio >1.6x (only for base strings ≥12 chars — the first real run flagged ~100
   strings per locale that were all short single words like "Save"→"Sauvegarder", a completely
   normal, correct translation expansion, not a bug; hand-verified before adding the floor
-  rather than shipping a gate that cries wolf on fine translations). Wired as a blocking static
-  check. **Current real result: 4/12 PASS** (ja/ko/zh/zh_TW clean; ru/es/de/fr/it/pt_BR/tr/ar
-  each still show a handful of length-ratio flags, e.g. `AD_REVIVE`, `Crouch Input`). Zero
+  rather than shipping a gate that cries wolf on fine translations). **SLOP_REPORT item 3
+  correction**: that short-string exemption was originally uncapped (any base string under the
+  floor could translate to ANY length with zero signal); bounded to a looser 3.0x hard ratio so
+  it still catches a genuinely blown-out short translation. Also fixed the log's own `[:3]`
+  sample truncation to print full per-locale lists - the truncated version made a red gate read
+  as "a handful" per locale when the real counts are much higher. Wired as a blocking static
+  check. **Current real result: 4/12 PASS** (ja/ko/zh/zh_TW clean; overflow counts measured after
+  the cap fix: ru=27, es=36, de=22, fr=52, it=32, pt_BR=26, tr=6, ar=9 - fr is the worst locale at
+  52 flags, not "a handful"). Zero
   missing keys, zero mixed-script anywhere — matches the `gui_explore_runner.gd` G1 finding of
   solid i18n plumbing. **Honest residual for P3**: the remaining overflow flags are a STATIC
   PROXY (raw character count), not a confirmed visual bug — several of the flagged rows already
