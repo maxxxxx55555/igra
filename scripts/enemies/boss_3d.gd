@@ -288,7 +288,9 @@ class EnergyBall:
 		mesh.material_override = mat
 		add_child(mesh)
 		var light := OmniLight3D.new()
-		light.light_color = Color("#b4452f")
+		# Brass, not ember: the cold district LUTs push an ember spill on the
+		# pavement into pink (measured 0.59% world magenta in the V02 frame).
+		light.light_color = Color("#c9a24a")
 		light.light_energy = 2.0
 		light.omni_range = 6.0
 		light.shadow_enabled = false
