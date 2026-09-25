@@ -21,7 +21,7 @@ by memory, so completeness can be proven instead of assumed.
 - **Status legend**: `WORKS` (verified this pass, method stated) · `BUG` (verified broken,
   see linked doc for detail) · `CANNOT-TEST-HEADLESS` (needs a live window/audio device this
   environment's automated battery can't provide, see `docs/RUN_STATE.md`'s G0/P0 findings) ·
-  `BY-DESIGN-LIMIT` (working as intended, limited by something outside the codebase) ·
+  `BY-DESIGN-LIMIT` (working as intended, limited by something outside the codebase) · `FIXED` (was `BUG` or `UNTESTED`-then-broken; fixed this pass, commit stated in the row) · `PARTIAL` (part verified, the unverified part stated in the row) ·
   `UNTESTED` (not yet exercised this pass — the P2 sweep's job, not a claim of "broken").
 
 ## Spine: autoloads (AL) and input actions (IN)

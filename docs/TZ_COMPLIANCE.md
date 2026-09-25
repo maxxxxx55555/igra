@@ -31,7 +31,7 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 | A04 | Audio size caps | MET-STATIC | Exported: non-music ≈ 23.5 MB (sfx 6.3 + one_shots 1.1 + ambience 16.1) < 50; music ≈ 38 MB < 100. `ambience/wav_src` (29.9 MB) is in `export_presets.cfg` `exclude_filter` |
 | A01 | Bus graph SFX(Footsteps, Combat, UI, Environment) | DEFERRED-STRUCTURAL | Re-routing plus an ear re-mix (current buses: Master, Music, SFX, Voice, Ambient, UI, Hum) |
 | V02 | No neon / #fff | MET | `V02_energy_ball.png`; monster hit flash is brass and restores the original material (suite P2b, C8 rc4) |
-| V05 | Moon shadow 2048² | MET | tz_verify size=2048; frames clean at 2048 |
+| V05 | Moon shadow 2048² | MET (desktop) / DECIDED (mobile 1024, TZ_DECISIONS V05-mobile) | tz_verify size=2048 (desktop setting); frames clean at 2048. `project.godot` `directional_shadow/size.mobile=1024` |
 | V01 | "No day" | MET-STATIC | Dead daytime painter removed from DayNight |
 | D03 | Night ambient canon | DECIDED (DR-3) | Recorded "unplayable black" rejection |
 | V03 | Bebas Neue Bold | GAP-OWNER | No Bold font file exists |

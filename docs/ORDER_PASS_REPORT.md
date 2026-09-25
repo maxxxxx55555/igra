@@ -45,6 +45,7 @@ latest `v8.0.0-rcN` tag (the last row of "C8 verifier loop" names it). Every num
 | 6 | `v8.0.0-rc6` (`4061f1b`) | CONFIRMED 94 / PARTIAL 10 / FAKE 0 | No game-code defects. Fixes: a failed restore now fails the run (`udg_restore || exit 97` in every EXIT trap); a failed copy drops its partial snapshot; the demo covers the failed-copy path (mutation-tested) and keeps its temp inside its own dir; `tools/qa_sim/tz_verify` runs the probe under the guard. Docs: ARENA B7's deferred half, S03 edge share 70-98%, R0 lock wording, candidate line, correction ranges; CORRECTION_LOG 34. rc7: check.sh full **44 green**; tz_verify through the wrapper 17 checks `fails=0`, all 11 profile files sha256-identical. Tools and docs only. |
 | 7 | `v8.0.0-rc7` (`8c0e01c`) | CONFIRMED 105 / PARTIAL 3 / FAKE 0 | No game-code defects. tz_verify now refuses a direct launch (only the guarded wrapper may run it); wrapper made executable; B7 deferral listed in the open defers and residuals; S03 hue wording; CORRECTION_LOG 35. rc8: a direct launch exits 2 with nothing touched; wrapper run 17 checks `fails=0`, all 11 profile files sha256-identical; static 24 green. The engine battery was first skipped on a wrong premise: the compile gate loads every `.gd`, so it does see these files (CORRECTION_LOG 36). Re-run on the rc8 code: check.sh full **44 green**. |
 | 8 | `v8.0.0-rc8` (`9936ab3`) | CONFIRMED 106 / PARTIAL 3 / FAKE 0 | No code defects. Fixed the skipped-battery claim (re-run: 44 green), the G18/G19 GDD line range (168-181) and the missing R-02 residual row; CORRECTION_LOG 36. rc9: docs only on top of the rc8 code measured above. |
+| 9 | `v8.0.0-rc9` (`94af752`) | CONFIRMED 114 / PARTIAL 4 / FAKE 0 | No code defects. V05 split into MET (desktop 2048) / DECIDED (mobile 1024, new V05-mobile row); G28/D04 no longer cites a precedence rule the GDD does not have; I02 key count 1301; FUNCTION_MATRIX legend defines FIXED and PARTIAL. CORRECTION_LOG 37. rc10: docs only. Nothing outside `docs/` has changed since the 44-green run on `9936ab3`. |
 
 rc2 evidence: tz_verify 15 checks `DONE fails=0`; footstep probe `fails=0` and mutation-tested
 (`fails=3`, rc 1, with stealth mapped onto walk's file); `tools/check.sh` full **42 green**; bot 1/3 won, 11/11
@@ -64,7 +65,7 @@ No external `docs/CLOSURE_VERIFICATION.md` exists.
 
 ## Corrections
 
-36 entries in `docs/CORRECTION_LOG.md` (14 at rc1, 15-21 from C8 round 1, 22 from round 2, 23-28 from round 3, 29-31 from round 4, 32-33 from round 5, 34 from round 6, 35 from round 7, 36 from round 8), including the false R0 fix, the dead C06 fog write, and two
+37 entries in `docs/CORRECTION_LOG.md` (14 at rc1, 15-21 from C8 round 1, 22 from round 2, 23-28 from round 3, 29-31 from round 4, 32-33 from round 5, 34 from round 6, 35 from round 7, 36 from round 8, 37 from round 9), including the false R0 fix, the dead C06 fog write, and two
 wrong claims in this pass's own commit messages.
 
 ## Residual (honest)
