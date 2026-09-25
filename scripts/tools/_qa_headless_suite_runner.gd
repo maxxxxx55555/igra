@@ -786,6 +786,12 @@ func _p2r_respawn_keeps_progress() -> void:
 	var disk: Dictionary = SaveSystem._read_validated(SaveSystem.SAVE_PATH)
 	var disk_saved: int = int(disk.get("power", {}).get("stages", {}).get(did, -1))
 	var bat_before: float = 37.0
+	# C8 round 2: bought flashlight upgrades must survive the respawn (in
+	# memory only - nothing here calls the manager's _save()).
+	var flm := get_node("/root/FlashlightUpgradeManager")
+	var fl_snap: Dictionary = flm._levels.duplicate()
+	flm._levels["stability"] = flm.get_max_level()
+	flm._levels["brightness"] = 1
 	p.set("battery", bat_before)
 	p.set("_damage_grace_timer", 0.0)
 	p.set("_iframes", 0.0)
@@ -818,6 +824,14 @@ func _p2r_respawn_keeps_progress() -> void:
 		_fail("P2r respawn battery %s, expected unchanged %s" % [bat, bat_before])
 	else:
 		_log("P2r respawn keeps district/stage, HP 50%, battery not refilled - OK")
+	var want_energy: float = float(q.get("_scene_flashlight_energy")) * (1.0 + flm.get_bonus("brightness"))
+	var energy: float = q.flashlight.light_energy
+	var maxed: bool = bool(q.get("_flashlight_stability_maxed"))
+	flm._levels = fl_snap
+	if not maxed or absf(energy - want_energy) > 0.01 or want_energy < 20.0:
+		_fail("P2r flashlight upgrades lost on respawn (stability L5 maxed=%s, energy %s, want %s)" % [maxed, energy, want_energy])
+	else:
+		_log("P2r flashlight upgrades survive respawn (energy %0.1f, stability L5) - OK" % energy)
 
 # ── P3 ────────────────────────────────────────────────────────────────
 func _p3_save_load_lang() -> void:

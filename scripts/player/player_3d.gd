@@ -236,8 +236,15 @@ func _ready() -> void:
 	# battery_capacity, move_speed, inventory_space, light_radius) - every
 	# Continue silently reset them to unboosted base. Reapply here, once,
 	# before stats/hp/stamina/battery below read their now-correct values.
+	_scene_flashlight_energy = flashlight.light_energy
+	_scene_flashlight_range = flashlight.spot_range
 	if SkillTreeManager:
 		SkillTreeManager.reapply_all_effects()
+	# Flashlight upgrades were only applied at purchase, so every respawn or
+	# Continue dropped them (C8 round 2). Same reapply as the skills above.
+	var fl_up := get_node_or_null("/root/FlashlightUpgradeManager")
+	if fl_up:
+		apply_flashlight_upgrades(fl_up._levels)
 	var mh = stats.max_hp if (stats and stats.max_hp > 0) else 100.0
 	hp = float(mh)
 	stamina = stats.stamina_max
@@ -1116,6 +1123,11 @@ func _exit_hiding() -> void:
 ## caches the former so _refresh_flashlight_range() can recompute the sum
 ## whenever either one changes, instead of one call overwriting the other.
 var _upgrade_range_bonus: float = 0.0
+## Scene-authored flashlight (24 energy, 16 m) is the base every upgrade and
+## skill scales; the formulas used to hard-code 1.0 / 8.0, so buying
+## Brightness dimmed the light ~20x and light_radius shortened it.
+var _scene_flashlight_energy: float = 1.0
+var _scene_flashlight_range: float = 8.0
 
 func _update_low_battery_flicker() -> void:
 	if flashlight_stats == null:
@@ -1144,7 +1156,7 @@ func apply_flashlight_upgrades(levels: Dictionary) -> void:
 	var a_bonus: float = fl_up.get_bonus("angle")
 	var bat_bonus: float = fl_up.get_bonus("battery")
 	_upgrade_range_bonus = fl_up.get_bonus("range")
-	flashlight.light_energy = 1.0 * (1.0 + b_bonus)
+	flashlight.light_energy = _scene_flashlight_energy * (1.0 + b_bonus)
 	flashlight.spot_angle = 45.0 + a_bonus
 	var sm := cone.material_override as ShaderMaterial
 	if sm:
@@ -1180,6 +1192,6 @@ func refresh_battery_max() -> void:
 ## changes last still sees the other's contribution.
 func refresh_flashlight_range() -> void:
 	var skill_lvl: int = SkillTreeManager.get_skill_level(&"light_radius") if SkillTreeManager else 0
-	flashlight.spot_range = 8.0 * (1.0 + 0.2 * skill_lvl) + _upgrade_range_bonus
+	flashlight.spot_range = _scene_flashlight_range * (1.0 + 0.2 * skill_lvl) + _upgrade_range_bonus
 
 

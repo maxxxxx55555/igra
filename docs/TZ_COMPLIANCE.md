@@ -12,6 +12,7 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 | **DECIDED** | A DR rule kept the current behavior. |
 | **DEFERRED-STRUCTURAL** | A real gap, but out of scope for a mechanical fix. |
 | **NEEDS-EYES** | Subjective look or feel only. |
+| **NEEDS-MEASUREMENT** | Needs a device or windowed measurement that has not been run. |
 | **GAP-OWNER** | Needs an owner action. |
 
 ## Evidence sources
@@ -42,7 +43,7 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 | G08 | Flashlight `#c9a24a`, 45° | MET (colour, cone) / NEEDS-EYES (8 m range, energy 2.0) | `G08_flashlight.png` |
 | G09 | Drain 1% per 2 s | DECIDED (DR-3) | Recorded boss-fight failure at a milder value |
 | G10 | Battery item +25% | DECIDED (DR-3) | `balance_sim` FAILs at +25 |
-| G12b | Flicker below 20%, cleared by Stability L5 | MET | tz_verify: spread 16.2 at 10% battery, 0.000 with Stability L5 through `apply_flashlight_upgrades`; `G12b_low_battery.png` |
+| G12b | Flicker below 20%, cleared by Stability L5 | MET | tz_verify: spread 16.2 at 10% battery, 0.000 with Stability L5; suite P2r: L5 + Brightness survive a real respawn (C8 rc3); `G12b_low_battery.png` |
 | G13 | Combo 8/12/20 | DECIDED (DR-3) | Recorded winnability tuning |
 | G15 | Capsule 1.6 m, attack box | MET-STATIC (capsule 1.6) / DECIDED (DR-3, attack box) | Bot 1/3 with the capsule; all 3 seeds reached the boss; stalls = known boss-phase type |
 | G16 | Respawn: district entry, 50% HP, battery kept | MET | Suite P2r (exact button path) |
@@ -69,7 +70,7 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 | C04 | Arachnophobia rename | MET | "Слепые псы"; `C04_arachnophobia_label.png` |
 | C06 | Tier fog + particles 50–150% | MET | tz_verify fog 0.012 / 0.015, 6/6 emitters; `C06_tier_*.png` |
 | P01 | Draw calls < 200 (D1) / < 350 (D11) | DEFERRED-STRUCTURAL | Windowed `perf_check_scene`: D1 = 246 (over 200), under the D11 350 cap. Needs material/mesh batching, not a value swap. |
-| P02 | Particles < 500, RAM/VRAM | NEEDS measurement | Windowed only |
+| P02 | Particles < 500, RAM/VRAM | NEEDS-MEASUREMENT | Windowed or device profiling only; see TZ_DECISIONS P02 |
 | N01, I02, T01 | Owner rows | GAP-OWNER | See TZ_DECISIONS |
 
 **Open GAP-DEV rows: 0.** Every audit row now has a verdict above.

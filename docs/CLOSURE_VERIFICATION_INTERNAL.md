@@ -1,107 +1,150 @@
-# Closure verification (internal)
+# Round 2, HEAD 5724544, tag v8.0.0-rc2
 
-Independent re-check of the v8.0.0-rc1 closure claims at HEAD `27ba1d5`, done on 2026-09-25.
-The method was static only. Commit existence: `git merge-base --is-ancestor <hash> HEAD`. Fix
-survival: every non-trivial added line (>=15 chars, non-comment, non-.md) of each cited commit was
-looked up in the HEAD version of its file. Lines that did not survive were read by hand. Semantics
-were read file by file. Godot was not run, so runtime-only claims (bot n/3, suite `fails=0 x3`,
-windowed magenta A/B) are recorded as not re-run and are not counted against a row.
+Independent re-check of the rc2 closure claims, done on 2026-09-25. Everything was checked statically; Godot was not run.
+Commit existence was checked with `git merge-base --is-ancestor <hash> HEAD`. Fix survival: each cited commit's
+non-trivial added lines (>=15 chars, non-comment, non-.md) were looked up in the HEAD copy of the file, and
+every line that did not survive was read by hand. For the fixes in `0873f38`, each regression check was compared
+with `git show 27ba1d5:<path>` to decide whether it would fail on the pre-fix code. Runtime-only numbers (bot n/3,
+suite x3, tz_verify r/warmth values, the D1 draw-call count of 246) were not re-run and are not counted against a row.
 
-All 47 cited ARENA_CLOSURE commits exist on HEAD. Added-line survival is 90-100% for every
-commit, and every line that did not survive was a later i18n value edit or a test refactor. One
-side effect: `bash tools/check.sh --static` regenerated `docs/artifacts/content-depth/i18n_only_texts.md`
-(112 -> 113 keys, `FIRST_RESTORE`), which means the committed copy is stale. I reverted it to HEAD.
+The working tree before the run had `M project.godot`, a line-ending-only difference (`git diff` is empty). The same
+difference was there after `check.sh`, which touched no tracked file.
 
-| Source | Item | Verdict | Evidence (file:line / command output) |
+| Source | Item | Verdict | Evidence |
 |---|---|---|---|
-| ARENA A | B1 finale boss timing `5e1093b` | CONFIRMED | 39/39 added lines present |
-| ARENA A | B2 document id before add_child `7034bcd` | CONFIRMED | 32/32 |
-| ARENA A | B3 skill bonus compounding `afadb4b` | CONFIRMED | 42/42 |
-| ARENA A | B4 reject checksum-only / no progress_hmac `92934a7` (+`ac877a5`) | CONFIRMED | save_system.gd:199 rejects missing `hmac`; :222 missing `progress_hmac` resets power/progress. Note: the stale comment at save_system.gd:116-120 still says legacy checksum is accepted |
-| ARENA A | B5 NG+ bypasses `fe7ef0e` | CONFIRMED | new_game_plus_ui.gd:55 `at_cap = ng >= max_ng or _activated_this_visit`; 56/58 lines present (2 attack_sim lines refactored into `_write_ngp_test_file`) |
-| ARENA A | B6 signed daily `e9686d7` | CONFIRMED | 28/28 |
-| ARENA A | B7 duplicate autoloads `bb662b4` | CONFIRMED | HEAD project.godot [autoload] has exactly one RewardsManager (:109) and one RandomEvents (:110) |
-| ARENA A | B8 kills pay wallet `1cf3aaf` | CONFIRMED | 28/28 |
-| ARENA A | B9+B14 atomic try_add `36d44be` | CONFIRMED | 84/84 |
-| ARENA A | B10 district-enter save order `cc1e0b3` | CONFIRMED | 46/46 |
-| ARENA A | B11 lock in transition_to `d7a0692` | CONFIRMED | 22/22; district_manager.gd:84-90 |
-| ARENA A | B12 streetlight event once `c814621` | CONFIRMED | 21/21 |
-| ARENA A | B13 import refresh / autosave slot `a36ac8b` | CONFIRMED | 43/43 |
-| ARENA A | B15 fall-recovery net on spawn `8c99689` | CONFIRMED | player_3d.gd:113,360; the suite assertion was reworked to a sentinel check, _qa_headless_suite_runner.gd:662-673 |
-| ARENA A | B16 offline not networked `cb73c83` | CONFIRMED | 14/14 |
-| ARENA A | Q1 heartbeat split `a0ec4ee` | CONFIRMED | 35/35 |
-| ARENA B | P-01 legacy checksum `92934a7` | CONFIRMED | save_system.gd:199 |
+| ARENA A | B1 `5e1093b` | CONFIRMED | ancestor; 39/39 added lines at HEAD |
+| ARENA A | B2 `7034bcd` | CONFIRMED | 32/32 |
+| ARENA A | B3 `afadb4b` | CONFIRMED | 42/42 |
+| ARENA A | B4 `92934a7` + `ac877a5` | CONFIRMED | 45/45, 4/4 |
+| ARENA A | B5 `fe7ef0e` | CONFIRMED | 56/58; the 2 misses are attack_sim lines refactored into a helper |
+| ARENA A | B6 `e9686d7` | CONFIRMED | 28/28 |
+| ARENA A | B7 `bb662b4` | CONFIRMED | 21/21; project.godot has one RewardsManager and one RandomEvents |
+| ARENA A | B8 `1cf3aaf` | CONFIRMED | 28/28 |
+| ARENA A | B9+B14 `36d44be` | CONFIRMED | 84/84 |
+| ARENA A | B10 `cc1e0b3` | CONFIRMED | 46/46 |
+| ARENA A | B11 `d7a0692` | CONFIRMED | 22/22 |
+| ARENA A | B12 `c814621` | CONFIRMED | 21/21 |
+| ARENA A | B13 `a36ac8b` | CONFIRMED | 43/43 |
+| ARENA A | B15 `8c99689` | CONFIRMED | 33/35; the 2 misses are a suite assert later reworked to a sentinel check |
+| ARENA A | B16 `cb73c83` | CONFIRMED | 14/14 |
+| ARENA A | Q1 `a0ec4ee` | CONFIRMED | 35/35 |
+| ARENA B | P-01 `92934a7` | CONFIRMED | 45/45 |
 | ARENA B | P-03/P-04/P-06/P-07 `9b7a46b` | CONFIRMED | 116/116 |
-| ARENA B | P-05 daily tamper `e9686d7` + wall-clock defer | CONFIRMED | Tamper fix present; the defer reason (client clock) is honest |
-| ARENA B | R-01 watchdog `2278cf9` | CONFIRMED | HEAD project.godot:113 `IntegrityGuard` autoload |
-| ARENA B | R-02 speed watchdog defer | CONFIRMED | Honest: integrity_guard.gd:83 covers only non-finite / y<=-50 |
-| ARENA B | R-08, D-01, D-02 inherent defers | CONFIRMED | SECURITY_THREAT_MODEL.md:67,81 document the client-side key limit |
-| ARENA B | D-03 PCK key owner defer | CONFIRMED | release_export_check.py:37-40 forbids a committed `encryption_key` |
-| ARENA B | R-03 position/district `60a289b` | CONFIRMED | 39/39 |
-| ARENA B | D-04 debug keystore creds `60a289b` | CONFIRMED | HEAD export_presets.cfg:23-28 empty; no keystore tracked. The debug creds are still in pre-`60a289b` history |
-| ARENA B | R-07 LAN payloads `cef6ae6` | CONFIRMED | 26/26 in lan_network.gd |
-| ARENA B | C-08 release-export gate `a453425` | CONFIRMED | tools/check.sh:250-253 |
-| ARENA C | R0 magenta, root cause `bafb740` | PARTIAL | The fix is present: all 11 `lut_*.png.import` are `importer="3d_texture"`, and check.sh:200-204 pins it. The claimed "0.01-0.30%" is not what the committed HEAD frames show: `visual_truth_gate.py docs/stills/tzverify/*.png` gives world magenta 0.17-0.66%, 6/11 frames are above 0.30%, and S03_noise_vignette FAILs at 0.66% |
-| ARENA C | RENDERING_DIAGNOSIS (b) Lossless A/B | CONFIRMED | Part of `bafb740` (12 files); the A/B is runtime and was not re-run |
-| ARENA C | RENDERING_DIAGNOSIS (d) SSR/SSAO tier-driven | CONFIRMED | world_env_setup.gd:182-185 reads ssao/ssil/volumetric from visual_quality.tres |
-| ARENA C | TG-SEE/HEAR/PLAY `5257745`,`4c6ca10` | CONFIRMED | 110/111 + 7/7 (the one missing line was replaced by PIL HSV, visual_truth_gate.py:84) |
-| ARENA C | CHALLENGE-01 `fe3007a` | CONFIRMED | 19/21, 2 message-format lines reworded |
-| ARENA C | CHALLENGE-02 partial `c783544` | CONFIRMED | Stated honestly as Partial; X21 is BUG in the matrix |
-| ARENA C | CHALLENGE-03 settings_full deleted `0f9685a` | CONFIRMED | File absent; no non-doc reference |
-| ARENA C | MISSED-00..05 | CONFIRMED | FUNCTION_MATRIX AL35/AL50/AL55 are "WORKS (smoke)" and say "NO behavioural assertion"; AL57 P2q; IN89 P1b. Matches the claim wording |
-| ARENA C | I18N native pass `43c9ecd` / truth gate `21c6563` | CONFIRMED | 159/159; the gate is 12/12 now |
-| ARENA D | Items 1,6 `855a278` | CONFIRMED | 5/5 |
-| ARENA D | Item 2 `1fcf157` | CONFIRMED | exit 3 = SKIP in check.sh |
-| ARENA D | Item 3 `bbdaa8e` | CONFIRMED | 11/11 |
-| ARENA D | Items 4,5,7,9,10,11,14,15 `d06fe48` | CONFIRMED | 16/16 (message mislabel acknowledged in CORRECTION_LOG #10) |
-| ARENA D | Item 8 `53353d5` | CONFIRMED | 13/13 |
-| ARENA D | Item 12 `2948e23` | CONFIRMED | `BTN_ONE_MORE_RUN` is absent from data/ and scripts/ |
-| ARENA D | Item 13 `363add0` | CONFIRMED | visual_truth_gate.py:84 `img.convert("HSV")` |
-| ARENA D | §2 BLACK_FAIL_PCT 40 `7bbc0ca` | CONFIRMED | visual_truth_gate.py:50 |
-| ARENA D | §3 symptom masks reviewed | CONFIRMED | Doc-only claim, consistent with CORRECTION_LOG #6 |
-| ARENA Design | P1 `2a88503` | CONFIRMED | silent_steps now scales speed_noise (player_3d.gd) |
-| ARENA Design | P2 `c2dbeb4`,`4e7560e` | CONFIRMED | quiet_pace skill_tree_manager.gd:168,289; player_3d.gd:693 |
-| ARENA Design | P3 `4e7560e` | CONFIRMED | 334/340; the missing lines are later locale rewordings |
+| ARENA B | P-05 tamper `e9686d7` + wall-clock defer | CONFIRMED | Fix present; the client-clock defer is honest |
+| ARENA B | R-01 `2278cf9` | CONFIRMED | 11/11; project.godot:113 IntegrityGuard autoload |
+| ARENA B | R-02 defer | CONFIRMED | Honest: integrity_guard.gd:83 checks only non-finite position and y<=-50 |
+| ARENA B | R-08 / D-01 / D-02 inherent defers | CONFIRMED | SECURITY_THREAT_MODEL.md:67,81 |
+| ARENA B | D-03 owner defer | CONFIRMED | release_export_check.py:37-39 forbids a committed encryption_key |
+| ARENA B | R-03 + D-04 `60a289b` | CONFIRMED | 39/39; export_presets.cfg keystore fields are empty; no keystore is tracked |
+| ARENA B | R-07 `cef6ae6` | CONFIRMED | 26/26 |
+| ARENA B | C-08 `a453425` | CONFIRMED | 52/52; check.sh:250-253 |
+| ARENA C | R0 `bafb740` + numbers | CONFIRMED | 112/112; 11/11 lut imports are `3d_texture`/CompressedTexture3D; check.sh:201 pins it. Gate on the rc2 frames: 10 frames 0.17-0.46%, G03 1.01%. Hue-only: 0.00-0.18%, G03 1.01%. Matches the row |
+| ARENA C | RENDERING_DIAGNOSIS (b) | CONFIRMED | Part of `bafb740`; the A/B is runtime, not re-run |
+| ARENA C | RENDERING_DIAGNOSIS (d) | CONFIRMED | world_env_setup.gd reads the SSAO/SSIL/SSR settings from visual_quality.tres |
+| ARENA C | TG gates `5257745`, `4c6ca10` | CONFIRMED | 110/111 (the one miss was replaced by PIL HSV) and 7/7 |
+| ARENA C | CHALLENGE-01 `fe3007a` | CONFIRMED | 19/21; 2 message lines reworded |
+| ARENA C | CHALLENGE-02 partial `c783544` | CONFIRMED | 8/8; honestly Partial, X21 is BUG |
+| ARENA C | CHALLENGE-03 `0f9685a` | CONFIRMED | scripts/ui/settings_full.gd is absent |
+| ARENA C | MISSED-00..05 `0d3d533` | CONFIRMED | 80/80; matrix rows present |
+| ARENA C | I18N `43c9ecd` / `21c6563` | CONFIRMED | 159/159 and 203/204 (a gate line refactored); gate is 12/12 |
+| ARENA D | 1,6 `855a278` | CONFIRMED | 5/5 |
+| ARENA D | 2 `1fcf157` | CONFIRMED | 3/3; check.sh:281 treats rc 3 as a skip |
+| ARENA D | 3 `bbdaa8e` | CONFIRMED | 11/11 |
+| ARENA D | 4,5,7,9,10,11,14,15 `d06fe48` | CONFIRMED | 16/16 |
+| ARENA D | 8 `53353d5` | CONFIRMED | 13/13 |
+| ARENA D | 12 `2948e23` | CONFIRMED | Key absent |
+| ARENA D | 13 `363add0` | CONFIRMED | visual_truth_gate.py uses `img.convert("HSV")` |
+| ARENA D | §2 `7bbc0ca` | CONFIRMED | visual_truth_gate.py:50 BLACK_FAIL_PCT = 40.0 |
+| ARENA D | §3 reviewed | CONFIRMED | Doc-only; consistent with CORRECTION_LOG #6 |
+| ARENA Design | P1 `2a88503` | CONFIRMED | 2/2; player_3d.gd:543-544 |
+| ARENA Design | P2 `c2dbeb4`, `4e7560e` | CONFIRMED | 73/79; the misses are later locale rewordings |
+| ARENA Design | P3 `4e7560e` | CONFIRMED | 334/340; the misses are locale rewordings |
 | ARENA Design | P4 `f9bbfd7` | CONFIRMED | 12/12 |
-| ARENA Design | P5 `24ceb68` | CONFIRMED | player_3d.gd:1171-1175 `refresh_battery_max()` composes both sources |
+| ARENA Design | P5 `24ceb68` | CONFIRMED | 31/33; the formula was renamed to BATTERY_PER_SKILL_LVL (player_3d.gd:1173) |
 | ARENA Design | P6/P7 `8f48faf` | CONFIRMED | 31/31 |
-| ARENA Design | P8 `ee273ee`,`24ceb68` | CONFIRMED | boss energy ball goes through `_telegraph.warn` |
-| TZ | A02 crossfade 2.0 | CONFIRMED | music_manager.gd:118 `FADE_TIME = 2.0`, used :209,:262-263; tz_verify :85 |
-| TZ | A03 footsteps 6x3, "stealth/walk/run distinct samples" | FAKE | footstep_system.gd:33,129: STEALTH and WALK share the "walk" sample. :35-42: per-speed files exist only for concrete/metal/wood (+grass/gravel/tile); GDD asphalt/puddle/glass have one sample at every speed. The probe _footstep_check.gd:12 prints `DONE fails=0` unconditionally after `demo()` (assert-based), so it cannot fail |
-| TZ | A04 audio caps (by role) | CONFIRMED | du: music 38M + ambience 47M = 85M < 100; sfx 7M + one_shots 2M + ui/jingles ~2M < 50; _pre_norm excluded (export_presets.cfg:3) |
-| TZ | V02 no neon/#fff | CONFIRMED | boss_3d.gd emission `#b4452f`, energy-ball light `#c9a24a`; V02_energy_ball.png PASS 0.41% |
-| TZ | V05 shadow 2048 | CONFIRMED | HEAD project.godot:296 `=2048` (.mobile 1024); tz_verify :88 |
-| TZ | V01 no day | CONFIRMED | day_night.gd (31 lines) has no sky/ambient painter left |
-| TZ | G02 headbob 0.1 | CONFIRMED | camera_follow_3d.gd:22 `SPRINT_BOB_AMP = 0.1`. tz_verify :114 only bounds the span to 0.02-0.25, which is looser than the claim |
-| TZ | G03 sprint FOV +5 | CONFIRMED | camera_follow_3d.gd:24,91. tz_verify :112 only asserts >3 |
-| TZ | G06 sprint x1.6 | CONFIRMED | player_stats.tres:6-7 170/272; tz_verify :115 exact |
-| TZ | G07 crouch speed x0.4 / noise x0.3 (static) | CONFIRMED | player_3d.gd:87-88,535,556 |
-| TZ | G08 colour #c9a24a + cone 45 | CONFIRMED | player_3d.tscn:179,182; player_3d.gd:1148; tz_verify :92. Caveat: Godot `spot_angle` is a half-angle |
-| TZ | G12b flicker below 20% | CONFIRMED | flashlight_stats.tres:11 `20.0`; player_3d.gd:1126 |
-| TZ | G12b "cleared by Stability L5" | FAKE | player_3d.gd:1127 needs `_flashlight_stability_bonus < 1.0` to be false, but flashlight_upgrade_manager.gd:42 caps stability at 0.5 and get_bonus :72-79 returns the per-level value, so L5 = 0.5 and the flicker is never cleared. The comment at player_3d.gd:1164-1165 wrongly says "bonus 1.0". tz_verify does not test this |
-| TZ | G15 capsule 1.6 | CONFIRMED | player_3d.tscn:8-9 r 0.3 / h 1.6 |
-| TZ | G16 respawn | CONFIRMED | Suite P2r _qa_headless_suite_runner.gd:777-820 asserts stage kept, HP 50-60%, battery not refilled; game_manager.gd:113-125 |
-| TZ | G17 hardcore death deletes save | PARTIAL | game_manager.gd:172-173 calls `wipe_all_saves()`, but save_system.gd:567-572 (+delete_slot :545-552) deletes only the main file and `.bak`. `.bak2`/`.bak3` survive, and `_read_validated` :257-263 falls back to them. tz_verify :220 checks only `has_save()`, which is main-file-only (:105-106) |
-| TZ | G18/G19 roster + Shadow | CONFIRMED | enemy_roster_data.gd via AI_TO_ROSTER: every HP/damage matches GDD.md:167-178; shadow_3d.gd:12-21 = 30/15, vision 0, hearing 15 |
-| TZ | G20 boss 70/30, beams 40 | CONFIRMED | boss_3d.gd:9,48,50 |
-| TZ | G24 point of no return at D10 | PARTIAL | district_manager.gd:25-40: the gate closes only once D1-D9 are FULL, so entering D10 is not a point of no return as GDD.md:341 states. TZ_DECISIONS.md:38 itself files this as DR-2, so the verdict should be DECIDED, not MET. The P2q assert (:752-761) tests the conditional gate |
-| TZ | G34 bunker = real secret; endings reachable | CONFIRMED | progress_tracker.gd:128-130; content/secrets.json:397 zone z_bunker; P2q :763-767; `endings_sim.py`: "PASS: all 5 GDD endings reachable." |
-| TZ | S03 ember vignette noise pulse | FAKE | hud_3d.gd:648 sets an ember RGB, but the vignette shader post_process_overlay.gd:141 outputs `vec4(BG_DEEP, COLOR.a*v)`, which discards the RGB, so the ember never renders. The base alpha is 0.55 (:125) and hud caps the pulse at 0.5 under `maxf(default_a, …)`, so no visible pulse. tz_verify :116 `vig_a > 0.0` passes with zero noise (vacuous). S03 and G03 frames are visually identical |
-| TZ | S04 search 10 s / 5 m | CONFIRMED | base_monster.gd:45-46, used :345,:424,:495,:625; P2q :748 |
-| TZ | E03/T02 cooldown 3600 + skip mechanism (static) | CONFIRMED | ad_service.gd:27,31,111-116; P2q :746. The missing modal is stated honestly |
-| TZ | C03 auto-aim | PARTIAL | weapon_base.gd:45,143 works on a synthetic WeaponBase (tz_verify :175-188). No gameplay path instantiates a weapon: weapon_*.tscn are referenced only by scripts/tools/_probe_inst.gd:26-28, and TZ G25 itself says "No weapon system in any scene". The setting has no player-visible effect |
-| TZ | C04 arachnophobia rename | CONFIRMED | `MONSTER_CRAWLER_ARACHNOPHOBIA` in 13/13 locales (ru "Слепые псы"); tz_verify :171 |
-| TZ | C06 tier fog + particles | CONFIRMED | visual_quality.tres low 0.012 / ultra 0.015, particle_ratio 0.5-1.5; world_env_setup.gd:169-181; settings_manager.gd:434-456; tz_verify :129,:135 |
-| TZ | Evidence line "tz_verify: 13 checks" | PARTIAL | TZ_COMPLIANCE.md:19 is stale: _tz_verify_runner.gd has 14 `_check` assertions (the tutorial check at :204 was added in `ad051fc`) |
-| CORRECTION_LOG | #1 LUTs Texture3D | CONFIRMED | All 11 `lut_*.png.import`: `importer="3d_texture"`, `CompressedTexture3D`, 16 h-slices; PNGs are 256x16; world_env_setup.gd:223-226 |
-| CORRECTION_LOG | #2 .import committed (`37581d7`) | CONFIRMED | 539 tracked .import files; all 539 `path=` targets exist in .godot/imported |
-| CORRECTION_LOG | #3 fog per tier single source (`2547fff`) | CONFIRMED | visual_quality.tres + world_env_setup.gd:163-187. The other fog writers (weather_vfx.gd:51-64, district_themes) are on the procedural path, which is dead because all 11 scenes/districts/*.tscn exist and contain no WorldEnvironment |
-| CORRECTION_LOG | #8 _sign_progress round-trip; P2m fix `c00f118` | PARTIAL | save_system.gd:131-133 signs the `JSON.parse_string(JSON.stringify(...))` copy (correct). But the cited `c00f118` is docs-only (ARENA_CLOSURE/RUN_STATE/TZ_DECISIONS). The P2m `_ensure_playing()` fix (_qa_headless_suite_runner.gd:92,540) landed in `9fc8665` |
-| FUNCTION_MATRIX | Footer status counts | CONFIRMED | Script recount of 114 rows: WORKS 99, FIXED 6, CANNOT-TEST-HEADLESS 6, BY-DESIGN-LIMIT 1, PARTIAL 1, BUG 1, UNTESTED 0. Exact match, no duplicate IDs |
-| FUNCTION_MATRIX | Footer row breakdown | PARTIAL | FUNCTION_MATRIX.md:153-154 says "Spine: 87 … Extra: 27 X-rows". The real rows are 58 AL + 32 IN = 90 spine and 24 X (X01-X24); the totals only match 114 by coincidence. The header at :13 still says "89 spine rows (57 autoloads…)" |
-| i18n | `i18n_truth_gate.py` | CONFIRMED | `12/12 locales PASS` (each missing=0 mixed=0 overflow=0) |
-| i18n | `hardcoded_text_gate.py` | CONFIRMED | `hardcoded_text_gate: 0 hit(s)` |
-| i18n | `hardcoded_text_gate.py --demo` | CONFIRMED | `demo OK` |
-| check.sh | `bash tools/check.sh --static` | CONFIRMED | exit 0; `Всё зелёное. Проверок пройдено: 23`, 0 FAIL lines (sub-gate "53 проверок пройдено") |
+| ARENA Design | P8 `ee273ee`, `24ceb68` | CONFIRMED | 2/2 |
+| TZ MET | A02 crossfade 2.0 | CONFIRMED | music_manager.gd:118,209,262; tz_verify:100 |
+| TZ MET-STATIC | A04 audio caps | CONFIRMED | music 38M + ambience 47M < 100; sfx 6.9M + one_shots 1.1M + ui/jingles < 50; _pre_norm is excluded from export |
+| TZ MET | V02 no neon | CONFIRMED | boss_3d.gd:293 `#c9a24a`; V02_energy_ball.png PASS 0.33% |
+| TZ MET | V05 shadow 2048 | CONFIRMED | project.godot:296; tz_verify:103 |
+| TZ MET-STATIC | V01 no day | CONFIRMED | day_night.gd (31 lines) has no environment writer |
+| TZ MET | G02 headbob 0.1 | CONFIRMED | camera_follow_3d.gd:22,84. Note: tz_verify:134 only bounds the span to 0.02-0.25 |
+| TZ MET | G03 FOV +5 | CONFIRMED | camera_follow_3d.gd:24,91. Note: tz_verify:132 only asserts >3 |
+| TZ MET | G06 sprint x1.6 | CONFIRMED | player_stats.tres 170/272; tz_verify:135 is exact |
+| TZ MET-STATIC | G07 crouch speed x0.4 / noise x0.3 | CONFIRMED | player_3d.gd:87-88,535,556 |
+| TZ MET | G08 colour + 45 degrees | CONFIRMED | player_3d.tscn:179,182; tz_verify:107 |
+| TZ MET | G12b flicker <20%, cleared by Stability L5 | PARTIAL | The <20% flicker is real (flashlight_stats.tres:11, player_3d.gd:1126). Clearing is only set inside `apply_flashlight_upgrades` (player_3d.gd:1153), and that function's only caller is `try_purchase` -> `_apply_to_flashlight` (flashlight_upgrade_manager.gd:98,123-128). No _ready, spawn or load path calls it, so `_flashlight_stability_maxed` defaults to false (player_3d.gd:1166) on every fresh player: a new session, and a respawn (suite P2r asserts `q != p`). An L5 player flickers again after any restart. tz_verify:171-172 calls the function by hand, which hides this |
+| TZ MET | G15 capsule 1.6 | CONFIRMED | player_3d.tscn:8-9 |
+| TZ MET | G16 respawn | CONFIRMED | game_manager.gd:113-133; suite P2r _qa_headless_suite_runner.gd:777-820 |
+| TZ MET | G17 hardcore wipe | CONFIRMED | game_manager.gd:172-173 -> save_system.gd:569-570 `_remove_with_backups` (:550-555) removes .bak/.bak2/.bak3 + main for SAVE_PATH and each slot; this covers every loader fallback at :257-263 |
+| TZ MET-STATIC | G18/G19 roster + Shadow | CONFIRMED | All 11 GDD.md:170-180 HP/damage pairs match via AI_TO_ROSTER (crawler->dog 50/20 etc.); shadow_3d.gd:13-21 |
+| TZ MET-STATIC | G20 boss 70/30, beams 40 | CONFIRMED | boss_3d.gd:9,48,50 |
+| TZ MET | G34 bunker = real secret | CONFIRMED | progress_tracker.gd:128-130; secrets.json:400; P2q :763-767; `endings_sim.py` PASS all 5 |
+| TZ MET | S03 ember vignette pulse | CONFIRMED | The shader keeps COLOR.rgb (post_process_overlay.gd:141). hud_3d.gd:639-647 lerps bg-deep->ember by the pulse on the 0-1 noise scale (player_3d.gd:532-545: RUN 0.8) |
+| TZ MET-STATIC | S04 search 10 s / 5 m | CONFIRMED | base_monster.gd:45-46; P2q :748 |
+| TZ MET-STATIC | E03/T02 cooldown + skip | CONFIRMED | ad_service.gd:27,31,111-115; P2q :746 |
+| TZ MET | C04 arachnophobia | CONFIRMED | Key present in 13/13 locales, ru "Слепые псы"; tz_verify:205 |
+| TZ MET | C06 fog + particles | CONFIRMED | visual_quality.tres:9-12 fog 0.012/0.015, ratio 0.5-1.5; settings_manager.gd:445-447; tz_verify:150,156 |
+| TZ evidence | "tz_verify: 15 checks" | CONFIRMED | 16 `_check` call sites; :238/:242 are exclusive branches, so 15 run (27ba1d5 had 14) |
+| TZ 0873f38 | S03 check non-vacuous | CONFIRMED | tz_verify:136 needs vig_r>0.4 AND edge warmth +0.03. On 27ba1d5 the shader dropped RGB, so the warmth delta is ~0 and the check fails. The old check (27ba1d5:116 `vig_a > 0`) was vacuous |
+| TZ 0873f38 | G12b check non-vacuous | CONFIRMED | tz_verify:178 spread==0 at max level. On 27ba1d5 the bonus 0.5 < 1.0 kept the flicker, so it fails. It covers only the purchase-time path (see G12b) |
+| TZ 0873f38 | A03 probe can fail | CONFIRMED | _footstep_check.gd:13-15 quits 1 on fails>0. footstep_system.gd:190-204 counts a missing file or a duplicate (sample,pitch). The 27ba1d5 probe printed fails=0 unconditionally. For single-sample surfaces the distinctness comes only from the SPEED_PITCH constants |
+| TZ 0873f38 | G17 check non-vacuous | CONFIRMED | tz_verify:250-258 seeds .bak-.bak3 and asserts no tls_savegame* file is left. The 27ba1d5 wipe left .bak2/.bak3, so it fails; the old check (27ba1d5:220) was main-file-only |
+| TZ DECIDED | A03 DR-A03 | CONFIRMED | footstep_system.gd:32,47-49; walk/jog/sprint files exist for concrete/wood/metal (+grass/gravel/tile); asphalt/puddle/glass have one step_*.wav each. The TZ_DECISIONS reason is honest |
+| TZ DEFERRED | A01 bus graph | CONFIRMED | TZ_DECISIONS row A01 |
+| TZ DECIDED | D03 / V01 | CONFIRMED | TZ_DECISIONS D03/V01 |
+| TZ DECIDED | G01 | CONFIRMED | TZ_DECISIONS G01 |
+| TZ DECIDED | G04 | CONFIRMED | TZ_DECISIONS G04 |
+| TZ DEFERRED | G07 visibility + capsule | CONFIRMED | TZ_DECISIONS S02/G07-visibility, G07-capsule |
+| TZ DECIDED | G09 | CONFIRMED | TZ_DECISIONS G09 (recorded, not re-run; stated) |
+| TZ DECIDED | G10 | CONFIRMED | TZ_DECISIONS G10 |
+| TZ DECIDED | G13 / G15 attack box | CONFIRMED | TZ_DECISIONS G13/G15 |
+| TZ DEFERRED | G21 | CONFIRMED | TZ_DECISIONS G21 |
+| TZ DECIDED | G22 | CONFIRMED | TZ_DECISIONS G22 |
+| TZ DECIDED | G24 DR-2 | CONFIRMED | district_manager.gd:25-42 closes after D1-D9 FULL, used at :88; P2q :750-762 asserts both sides |
+| TZ DEFERRED | G25 | CONFIRMED | weapon scenes are referenced only by tools and the unplaced pickup |
+| TZ DECIDED | G26 DR-5 | CONFIRMED | TZ_DECISIONS G26 |
+| TZ DECIDED | G27 | CONFIRMED | TZ_DECISIONS G27 |
+| TZ GAP-OWNER | G28/D04 | CONFIRMED | TZ_DECISIONS G28/D04 |
+| TZ DECIDED | G31/G32/G33 | CONFIRMED | TZ_DECISIONS row |
+| TZ DR-5 | G34 audio/photos aliased | CONFIRMED | TZ_DECISIONS G34 |
+| TZ DECIDED | S01 | CONFIRMED | TZ_DECISIONS S01 (added in `c00f118`) |
+| TZ DEFERRED | S02 | CONFIRMED | TZ_DECISIONS S02/G07-visibility |
+| TZ DECIDED | D02 | CONFIRMED | TZ_DECISIONS D02 |
+| TZ BY-DESIGN-ABSENT | E03 modal | CONFIRMED | TZ_DECISIONS E03 modal |
+| TZ DECIDED | E05 | CONFIRMED | TZ_DECISIONS E05 |
+| TZ DEFERRED | C03 | CONFIRMED | player_3d.gd:318-320 2.7 m melee sphere; no gameplay weapon (G25) |
+| TZ DEFERRED | P01 draw calls | PARTIAL | TZ_COMPLIANCE.md:3 says every non-MET row's reasoning is in TZ_DECISIONS, but TZ_DECISIONS.md has no P01 row. The reason exists only inline (TZ_COMPLIANCE.md:71) and in CORRECTION_LOG #13. The 246 figure is runtime, not re-run. P02's "NEEDS measurement" (:72) is not a verdict in the legend |
+| TZ_DECISIONS | C06 (partial) row | PARTIAL | TZ_DECISIONS.md:19 still says particle_ratio is "not applied". That is stale: settings_manager.gd:445-447 applies it, and C06 is MET. It contradicts the ledger |
+| CORRECTION_LOG | #1 | CONFIRMED | `bafb740` = LUT Texture3D (11 imports); `24116c4`'s scale change is gone from HEAD |
+| CORRECTION_LOG | #2 `37581d7` | CONFIRMED | 528 .import files committed |
+| CORRECTION_LOG | #3 `2547fff` | CONFIRMED | visual_quality.tres + world_env_setup.gd:181 single source |
+| CORRECTION_LOG | #4 | CONFIRMED | V05 stays 2048 (project.godot:296) |
+| CORRECTION_LOG | #5 `0d3d533` | CONFIRMED | Commit subject "X22/X20 root causes"; matrix X22 FIXED |
+| CORRECTION_LOG | #6 `0d3d533` | CONFIRMED | X20 PARTIAL with the same wording |
+| CORRECTION_LOG | #7 | CONFIRMED | 0 UNTESTED by recount |
+| CORRECTION_LOG | #8 `ac877a5`, `9fc8665` | CONFIRMED | `9fc8665` adds `_ensure_playing()`; the x3 suite is runtime, not re-run |
+| CORRECTION_LOG | #9 `4bb5772` | CONFIRMED | Adds the A04 DR-7 row |
+| CORRECTION_LOG | #10 | CONFIRMED | The `d06fe48` body labels the btn_d change "6."; SLOP_REPORT.md:134 is item 7 |
+| CORRECTION_LOG | #11 `ae410b9` | CONFIRMED | The `ad051fc` body says "all PASS". Its V02 frame reads 0.59% hue-only (1.00% gate FAIL); `ae410b9` gives 0.02% |
+| CORRECTION_LOG | #12 | CONFIRMED | The `ae410b9` body says "C06 ultra tier 0.66% FAIL"; its frames give S03 0.66% FAIL and C06 ultra PASS |
+| CORRECTION_LOG | #13 | CONFIRMED | Ledger row updated; the 246 number is runtime, not re-run |
+| CORRECTION_LOG | #14 `c00f118` | CONFIRMED | Adds the S01 DR-3 row |
+| CORRECTION_LOG | #15 | CONFIRMED | Gate re-run: 0.17-0.46% + G03 1.01% |
+| CORRECTION_LOG | #16 | CONFIRMED | 27ba1d5: shader BG_DEEP-only, /10.4 (RUN 0.8 -> 0.077), alpha max(0.55, <=0.5), `vig_a > 0`. All fixed in `0873f38` |
+| CORRECTION_LOG | #17 | PARTIAL | The rc1 fact is right and the level-keyed fix is present. "Through the real upgrade path" covers only the purchase path: a fresh player never gets `apply_flashlight_upgrades` (flashlight_upgrade_manager.gd:98,123-128 are the only caller) |
+| CORRECTION_LOG | #18 | CONFIRMED | Matches 27ba1d5 footstep_system/_footstep_check and the HEAD fix |
+| CORRECTION_LOG | #19 | CONFIRMED | save_system.gd:545-555 |
+| CORRECTION_LOG | #20 | CONFIRMED | Ledger rows G24 DECIDED, C03 DEFERRED |
+| CORRECTION_LOG | #21 | CONFIRMED | `9fc8665` has `_ensure_playing`; 58 AL + 32 IN, 24 X; 14 -> 15 checks |
+| FUNCTION_MATRIX | Status counts | CONFIRMED | Script recount of 114 rows, no duplicate IDs: WORKS 99, FIXED 6, CANNOT-TEST-HEADLESS 6, BY-DESIGN-LIMIT 1, PARTIAL 1, BUG 1, UNTESTED 0. Equals the footer |
+| FUNCTION_MATRIX | Footer spine/extra | CONFIRMED | 58 AL + 32 IN = 90, 24 X (X01-X24) |
+| FUNCTION_MATRIX | Header "Current:" line | PARTIAL | "90 spine rows (58 autoloads + 32 ...; 29 live actions)" matches project.godot (58 autoloads, 29 inputs). The same bullet (FUNCTION_MATRIX.md:8) still says "rows AL01-AL57", but AL58 exists (:88) |
+| Gate | i18n_truth_gate.py | CONFIRMED | 12/12 locales PASS |
+| Gate | hardcoded_text_gate.py | CONFIRMED | 0 hit(s) |
+| Gate | hardcoded_text_gate.py --demo | CONFIRMED | demo OK |
+| Gate | visual_truth_gate.py tzverify vs ORDER_PASS C8 / R0 | CONFIRMED | 10/11 PASS 0.17-0.46%; G03 FAIL 1.01%, 87% of its hits in the left/right 15% edge band (89% counting all four edges). Matches both docs |
+| ORDER_PASS_REPORT | "14 entries in CORRECTION_LOG" | PARTIAL | ORDER_PASS_REPORT.md:60 is stale: CORRECTION_LOG has 21 rows |
+| check.sh | `TLS_SKIP_REIMPORT=1 bash tools/check.sh --static` | CONFIRMED | exit 0, `Всё зелёное. Проверок пройдено: 23`, 0 FAIL lines (sub-gate "53 проверок пройдено"); no tracked file touched |
 
-CONFIRMED=79 PARTIAL=7 FAKE=3
+CONFIRMED=128 PARTIAL=6 FAKE=0
