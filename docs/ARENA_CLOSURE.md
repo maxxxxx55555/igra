@@ -98,7 +98,7 @@ JSON), so every load wiped district power and ProgressTracker. Found and fixed i
 ## Open defers
 
 - **Inherent client-side limits:** P-05, R-08, D-01, D-02.
-- **Owner-held:** D-03 (PCK encryption key).
+- **Owner-held:** D-03 (PCK encryption key); B7's legacy-achievements half (reject unsigned legacy `achievements.cfg`, a P-02 UX call).
 - **Scoped:** R-02 (speed watchdog) and the CHALLENGE-02 spine stall (X21).
 
 No P0 is deferred.

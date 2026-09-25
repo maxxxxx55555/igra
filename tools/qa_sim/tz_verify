@@ -16,6 +16,7 @@ source tools/qa_sim/user_data_guard.sh
 udg_snapshot || exit 99
 trap 'udg_restore || exit 97' EXIT
 trap 'exit 130' INT TERM
+export TLS_UDG_GUARDED=1  # the runner refuses to start without it
 mkdir -p .qa_logs
 timeout 300 "$GODOT" --path . res://scenes/tools/tz_verify_scene.tscn > .qa_logs/tz_verify.log 2>&1
 rc=$?

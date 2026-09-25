@@ -43,6 +43,7 @@ latest `v8.0.0-rcN` tag (the last row of "C8 verifier loop" names it). Every num
 | 4 | `v8.0.0-rc4` (`b8b20c0`) | CONFIRMED 186 / PARTIAL 12 / FAKE 0 | No game-code defects. The user-data guard could delete the whole profile if its snapshot was lost; restore now refuses in that case. tz_verify and direct suite runs bypassed the shell guard; both now take an in-process snapshot first. P2r measures the Stability drain through `_update_battery` instead of reading a field. Figures and wording fixed; CORRECTION_LOG 29-31. rc5: check.sh full **44 green** (24 static + reimport + 18 engine + guard restore); direct suite `fails=0` and tz_verify 17 checks `fails=0`, each leaving all 11 profile files sha256-identical; drain and lost-snapshot mutations caught. Tools and docs only, so no IRON RULE bot. |
 | 5 | `v8.0.0-rc5` (`3ee3568`) | CONFIRMED 132 / PARTIAL 4 / FAKE 0 | No game-code defects. A failed snapshot did not stop the run (shell `cp` unchecked; null in-process snapshot ignored). Every runner now aborts before starting the game, and `udg_snapshot` verifies each copy and a failed `mktemp`. rc4 check count and S03 reason corrected; CORRECTION_LOG 32-33. rc6: check.sh full **44 green**; direct suite `fails=0` and tz_verify `fails=0` left all 11 profile files sha256-identical; guard `--demo` covers the snapshot-failure and lost-snapshot cases. Tools and docs only. |
 | 6 | `v8.0.0-rc6` (`4061f1b`) | CONFIRMED 94 / PARTIAL 10 / FAKE 0 | No game-code defects. Fixes: a failed restore now fails the run (`udg_restore || exit 97` in every EXIT trap); a failed copy drops its partial snapshot; the demo covers the failed-copy path (mutation-tested) and keeps its temp inside its own dir; `tools/qa_sim/tz_verify` runs the probe under the guard. Docs: ARENA B7's deferred half, S03 edge share 70-98%, R0 lock wording, candidate line, correction ranges; CORRECTION_LOG 34. rc7: check.sh full **44 green**; tz_verify through the wrapper 17 checks `fails=0`, all 11 profile files sha256-identical. Tools and docs only. |
+| 7 | `v8.0.0-rc7` (`8c0e01c`) | CONFIRMED 105 / PARTIAL 3 / FAKE 0 | No game-code defects. tz_verify now refuses a direct launch (only the guarded wrapper may run it); wrapper made executable; B7 deferral listed in the open defers and residuals; S03 hue wording; CORRECTION_LOG 35. rc8: a direct launch exits 2 with nothing touched; wrapper run 17 checks `fails=0`, all 11 profile files sha256-identical; static 24 green. The engine battery (44 at rc7) is not re-run, because the diff touches only tz_verify files and docs, which no check.sh engine gate loads. |
 
 rc2 evidence: tz_verify 15 checks `DONE fails=0`; footstep probe `fails=0` and mutation-tested
 (`fails=3`, rc 1, with stealth mapped onto walk's file); `tools/check.sh` full **42 green**; bot 1/3 won, 11/11
@@ -62,7 +63,7 @@ No external `docs/CLOSURE_VERIFICATION.md` exists.
 
 ## Corrections
 
-34 entries in `docs/CORRECTION_LOG.md` (14 at rc1, 15-21 from C8 round 1, 22 from round 2, 23-28 from round 3, 29-31 from round 4, 32-33 from round 5, 34 from round 6), including the false R0 fix, the dead C06 fog write, and two
+35 entries in `docs/CORRECTION_LOG.md` (14 at rc1, 15-21 from C8 round 1, 22 from round 2, 23-28 from round 3, 29-31 from round 4, 32-33 from round 5, 34 from round 6, 35 from round 7), including the false R0 fix, the dead C06 fog write, and two
 wrong claims in this pass's own commit messages.
 
 ## Residual (honest)
@@ -79,5 +80,5 @@ wrong claims in this pass's own commit messages.
 | X20 | Harness recovery proven; the keypress trigger is inferred. |
 | D1 draw calls 246 > 200 | Needs batching work (DEFERRED-STRUCTURAL). |
 | Deferred structural rows | S02 visibility model, S04 hiding-spot placement, G21 blueprints, G25 weapons in HUD, C03 auto-aim (needs G25), G26 photos, A01 bus graph, G07 crouch capsule, P01 draw calls. |
-| Security inherent limits | P-05, R-08, D-01, D-02; D-03 needs an owner-held PCK key. |
+| Security inherent limits | P-05, R-08, D-01, D-02; D-03 needs an owner-held PCK key; B7 legacy unsigned `achievements.cfg` still trusted once (owner decides whether to reject legacy files, P-02). |
 | User-data folder reset | `app_userdata/The Last Streetlight` was deleted and recreated about 2026-09-25 00:24, cause unknown. Save files were backed up earlier to `%TEMP%\tls_save_backup`; `settings.cfg`/`onboarding.cfg`/`save.tres` were not. |

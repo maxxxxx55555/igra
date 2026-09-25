@@ -3,7 +3,8 @@ extends Node
 ## TZ row into its state, saves one frame per row to docs/stills/tzverify/
 ## and prints the row's numeric evidence. A saved PNG is REBACK_UNVERIFIED
 ## until someone actually looks at it.
-##   godot --path . --rendering-method gl_compatibility res://scenes/tools/tz_verify_scene.tscn
+##   tools/qa_sim/tz_verify   (the runner refuses a direct godot launch: it rewrites the
+##   real user:// profile and only the wrapper's guard restores it after a crash)
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS

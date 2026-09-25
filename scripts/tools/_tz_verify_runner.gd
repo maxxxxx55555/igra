@@ -68,6 +68,10 @@ func _wait_until(pred: Callable, timeout_sec: float) -> bool:
 	return pred.call()
 
 func _run() -> void:
+	if OS.get_environment("TLS_UDG_GUARDED") != "1":
+		_log("FAIL run via tools/qa_sim/tz_verify - a direct launch has no crash-safe user:// restore")
+		get_tree().quit(2)
+		return
 	if DisplayServer.get_name() == "headless":
 		_log("SKIP headless - frames need a real display")
 		get_tree().quit(3)
