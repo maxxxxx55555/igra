@@ -1,44 +1,75 @@
 # TZ compliance — live ledger (C4 TZ-CLOSE)
 
-Source: `docs/TZ_COMPLIANCE_AUDIT.md` (static read, 2026-09-21), TZ = `docs/GDD.md`. This file tracks
-what C4 changed and how each row was verified. `docs/TZ_DECISIONS.md` holds the DR reasoning.
+Source: `docs/TZ_COMPLIANCE_AUDIT.md` (static read, 2026-09-21); TZ = `docs/GDD.md`. The reasoning
+for every non-MET row is in `docs/TZ_DECISIONS.md`.
 
-Verdicts: **MET** (run evidence: a check in `scenes/tools/tz_verify_scene.tscn` passed on a real
-windowed run AND the frame below was read by eye) · **MET-STATIC** (code/data matches, no run
-evidence) · **DECIDED** (a DR rule kept the current behavior, reason in TZ_DECISIONS) ·
-**DEFERRED-STRUCTURAL** · **NEEDS-EYES** (subjective feel only) · **GAP-OWNER** · **GAP-DEV** (open).
+## Verdicts
 
-Verify run: `godot --path . --rendering-method gl_compatibility res://scenes/tools/tz_verify_scene.tscn`
-→ 13 checks, `DONE fails=0` (2026-09-25, HEAD `2547fff`). Frames: `docs/stills/tzverify/` (half-res
-copies, all PASS `visual_truth_gate.py`).
+| Verdict | Meaning |
+|---|---|
+| **MET** | Checked in a real engine run. Visual rows also have a frame in `docs/stills/tzverify/` that was read by eye. |
+| **MET-STATIC** | Code or data matches the GDD. No run evidence. |
+| **DECIDED** | A DR rule kept the current behavior. |
+| **DEFERRED-STRUCTURAL** | A real gap, but out of scope for a mechanical fix. |
+| **NEEDS-EYES** | Subjective look or feel only. |
+| **GAP-OWNER** | Needs an owner action. |
 
-| ID | Requirement (short) | Verdict | Run evidence / frame | Commit |
-|---|---|---|---|---|
-| A02 | Music crossfade 2.0 s | MET-STATIC (audio: numeric check only, no frame possible) | probe: `FADE_TIME=2.0` | `fa5fee4` |
-| V02 | No neon / #fff | MET | `V02_energy_ball.png` - ember-rimmed warm ball, no magenta | `fa5fee4` |
-| V05 | Moon shadow 2048² | MET | probe `size=2048`; `baseline.png` clean at 2048 (A/B vs 1024: equal) | `fa5fee4` |
-| G02 | Sprint headbob 0.1 | MET | probe: eye-height span 0.049 while running; `G03_sprint_fov.png` | `fa5fee4` |
-| G03 | Sprint FOV +5° | MET | probe: FOV 80.0 -> 85.0; `G03_sprint_fov.png` | `fa5fee4` |
-| G06 | Sprint x1.6 | MET | probe: run 272 = walk 170 x 1.6; bot 3/3 | `c0817d8` |
-| G07 | Crouch speed/noise/visibility/capsule | MET-STATIC (noise x0.3, speed x0.4) / DEFERRED-STRUCTURAL (visibility x0.5, 1.2 m capsule) | — | `c0817d8` |
-| G08 | Flashlight 45° / `#c9a24a` | MET (colour, cone) / NEEDS-EYES (8 m range, energy 2.0 - renderer-unit mismatch) | probe `c9a24a / 45.0`; `G08_flashlight.png` | `63179a7` |
-| G12b | Flicker <20%, cleared by Stability L5 | MET | probe: light_energy spread 13.7 at 10% battery; `G12b_low_battery.png` | `547afd3` |
-| C06 | Tiers: fog, particles 50–150% | MET | probe: fog 0.012 (low) / 0.015 (ultra), 6/6 emitters at 150%; `C06_tier_low.png`, `C06_tier_ultra.png` | `2547fff` |
-| G17 | Hardcore: death deletes save | MET | probe: save before=true after=false; `G17_hardcore_death.png` | `f738e99` |
-| E03/T02 | Ad: 1 h cooldown, skip -100 | MET-STATIC (cooldown, skip mechanism) / DECIDED (modal: see below) | — | `f738e99` |
-| C04 | Arachnophobia renames Crawler | MET | probe: label "Слепые псы"; `C04_arachnophobia_label.png` | `f738e99` |
-| S03 | Noise = ember vignette pulse | MET | probe: vignette alpha 0.5 while running; `S03_noise_vignette.png` | `40fd8a8` |
-| C03 | Auto-aim | MET | probe: bends to an 8° target only when on (not visual, numeric) | `40fd8a8` |
-| G09 | Drain 1%/2 s | DECIDED (DR-3) | recorded boss-fight failure at a milder value | — |
-| G10 | Battery item +25% | DECIDED (DR-3) | `balance_sim` FAILs at +25 | — |
-| G13 / G15 | Combo 8/12/20, attack box, capsule 1.6 | DECIDED (DR-3) | recorded winnability tuning | — |
-| V03 | Bebas Neue Bold | GAP-OWNER (residual: no Bold font file exists; owner supplies it) | — | — |
-| G01 | FPS canon / TPS option | DECIDED (DR-2, already true) | `baseline.png` is first-person | — |
-| D02 | District unlock graph | DECIDED (DR-2, consistent with D01 order) | — | — |
-| A04 | Audio size caps | MET-STATIC (re-scored by role) | — | — |
-| G28/D04, N01, I02, T01 | owner rows | GAP-OWNER | see TZ_DECISIONS | — |
+## Evidence sources
 
-## Still open
+- **tz_verify:** `scenes/tools/tz_verify_scene.tscn`, run windowed. 13 checks, `fails=0`.
+- **Suite:** GOLD MASTER, `fails=0` on 3 consecutive runs.
+- **footstep:** `footstep_check_scene`, `fails=0`.
 
-GAP-DEV not yet reached: G04, G15-capsule, G16, G18, G19, G20, G21, G22, G24, G25, G26, G27,
-G31-G34, S01, S02, S04, A01, A03 (re-score pending), D03/V01.
+## Rows
+
+| ID | Requirement | Verdict | Evidence |
+|---|---|---|---|
+| A02 | Music crossfade 2.0 s | MET | tz_verify `FADE_TIME=2.0` (audio: no frame applies) |
+| A03 | Footsteps: 6 surfaces × 3 speeds, downward ray | MET | footstep probe: surface × speed map. Stealth/walk/run use distinct samples and volumes. |
+| A04 | Audio size caps | MET-STATIC | Re-scored by role: `ambience/` holds A02's music layers |
+| A01 | Bus graph SFX(Footsteps, Combat, UI, Environment) | DEFERRED-STRUCTURAL | Re-routing plus an ear re-mix |
+| V02 | No neon / #fff | MET | `V02_energy_ball.png` |
+| V05 | Moon shadow 2048² | MET | tz_verify size=2048; frames clean at 2048 |
+| V01 | "No day" | MET-STATIC | Dead daytime painter removed from DayNight |
+| D03 | Night ambient canon | DECIDED (DR-3) | Recorded "unplayable black" rejection |
+| V03 | Bebas Neue Bold | GAP-OWNER | No Bold font file exists |
+| G01 | FPS canon / TPS option | DECIDED (DR-2) | `baseline.png` is first-person |
+| G02 | Sprint headbob 0.1 | MET | tz_verify span 0.049; `G03_sprint_fov.png` |
+| G03 | Sprint FOV +5° | MET | tz_verify 80 → 85 |
+| G04 | 3 m interaction ray | DECIDED (DR-1) | Reach is 3.2 m. Tightening pickup/interaction reach is on the REJECTED list. |
+| G06 | Sprint ×1.6 | MET | tz_verify run 272 = 170 × 1.6; bot 3/3 |
+| G07 | Crouch speed/noise/visibility/capsule | MET-STATIC (speed ×0.4, noise ×0.3) / DEFERRED-STRUCTURAL (visibility, 1.2 m capsule) | — |
+| G08 | Flashlight `#c9a24a`, 45° | MET (colour, cone) / NEEDS-EYES (8 m range, energy 2.0) | `G08_flashlight.png` |
+| G09 | Drain 1% per 2 s | DECIDED (DR-3) | Recorded boss-fight failure at a milder value |
+| G10 | Battery item +25% | DECIDED (DR-3) | `balance_sim` FAILs at +25 |
+| G12b | Flicker below 20%, cleared by Stability L5 | MET | tz_verify spread 13.7; `G12b_low_battery.png` |
+| G13 | Combo 8/12/20 | DECIDED (DR-3) | Recorded winnability tuning |
+| G15 | Capsule 1.6 m, attack box | MET-STATIC (capsule 1.6) / DECIDED (DR-3, attack box) | Bot 1/3 with the capsule; all 3 seeds reached the boss; stalls = known boss-phase type |
+| G16 | Respawn: district entry, 50% HP, battery kept | MET | Suite P2r (exact button path) |
+| G17 | Hardcore death deletes save | MET | tz_verify before=true / after=false; `G17_hardcore_death.png` |
+| G18 / G19 | Roster stats, Shadow | MET-STATIC | All 11 + boss HP/damage equal the GDD table |
+| G20 | Boss phases 70/30%, beams 40 | MET-STATIC | Constants; the bot boss phase exercises them |
+| G21 | §9 blueprints | DEFERRED-STRUCTURAL | New mechanics plus 5 blueprint locations |
+| G22 | 3 + 1 save slots UI | DECIDED (DR-3) | Recorded archive decision |
+| G24 | Point of no return at D10 | MET | Suite P2q asserts both sides of the gate |
+| G25 | HUD slots incl. weapons ×2 | DEFERRED-STRUCTURAL | No weapon system in any scene |
+| G26 | 200 photos, 50/100/200 achievements | DEFERRED-STRUCTURAL (DR-5) | No photo can be collected in play |
+| G27 | Touch: left half = camera | DECIDED (DR-2) | The GDD table has no movement input |
+| G28 / D04 | All FULL → win vs boss | GAP-OWNER (DR-2 default kept) | — |
+| G31 / G32 / G33 | Ending edge cases | DECIDED (DR-2) | — |
+| G34 | Truth: docs + audio + photos + bunker | MET (bunker = real secret) / DR-5 (audio/photos aliased) | Suite P2q bunker assert; `endings_sim` all 5 reachable |
+| S01 | Hit 5 m/1.0, dodge 3 m/0.4 noise | DECIDED (DR-3, measured) | Bot bisect: with 0/3, without 2/3 |
+| S02 | Visibility modifiers | DEFERRED-STRUCTURAL | Detection-model rework |
+| S03 | Ember vignette noise pulse | MET | tz_verify alpha 0.5; `S03_noise_vignette.png` |
+| S04 | Search 10 s within 5 m | MET-STATIC | Constants asserted in suite P2q; in the IRON RULE batch (2/3) |
+| D02 | Unlock graph | DECIDED (DR-2) | — |
+| E03 / T02 | 1 ad per hour, skip −100 | MET-STATIC (cooldowns asserted in suite, skip mechanism) / BY-DESIGN-ABSENT (modal trigger) | — |
+| E05 | Coin curve 0–200 (D1) → 8000+ (D11) | DECIDED (DR-3) | Reachable ≈ 2200 districts + 1300 secrets + 3100 achievements, plus kills. Design audit P6 says keep base rewards and report the gap. |
+| C03 | Auto-aim | MET | tz_verify numeric |
+| C04 | Arachnophobia rename | MET | "Слепые псы"; `C04_arachnophobia_label.png` |
+| C06 | Tier fog + particles 50–150% | MET | tz_verify fog 0.012 / 0.015, 6/6 emitters; `C06_tier_*.png` |
+| P01 | Draw calls < 200/350 | MET-STATIC | `drawcall_estimate.py` PASS. Real GPU number: `perf_check_scene` (windowed). |
+| P02 | Particles < 500, RAM/VRAM | NEEDS measurement | Windowed only |
+| N01, I02, T01 | Owner rows | GAP-OWNER | See TZ_DECISIONS |
+
+**Open GAP-DEV rows: 0.** Every audit row now has a verdict above.

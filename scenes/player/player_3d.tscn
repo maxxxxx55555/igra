@@ -6,7 +6,7 @@
 
 [sub_resource type="CapsuleShape3D" id="capsule_shape"]
 radius = 0.3
-height = 1.8
+height = 1.6
 
 [sub_resource type="StandardMaterial3D" id="body_mat"]
 albedo_color = Color(0.290, 0.310, 0.341, 0.0)
