@@ -1,7 +1,7 @@
 # Order-pass report (v8 sign-off candidate)
 
 Covers C4–C7 of the studio-lead directive. Base is `c73cf7c` (C3 close-out); the candidate is the
-`v8.0.0-rc1` tag. Every number below was produced by a run in this pass; logs are in `.qa_logs/`
+latest `v8.0.0-rcN` tag (rc5 at the last update; see "C8 verifier loop"). Every number below was produced by a run in this pass; logs are in `.qa_logs/`
 (local only).
 
 ## Phase deltas
@@ -20,7 +20,7 @@ Covers C4–C7 of the studio-lead directive. Base is `c73cf7c` (C3 close-out); t
 
 | Gate | Result |
 |---|---|
-| `tools/check.sh` (static + all engine gates, windowed reimport first) | **Всё зелёное, 42 checks**; 2 windowed-only skips |
+| `tools/check.sh` (static + all engine gates, windowed reimport first) | rc1-rc4: **Всё зелёное, 42 checks**; rc5 (with the user-data guard): see "C8 verifier loop"; 2 windowed-only skips |
 | Static only (incl. i18n truth, hardcoded text, R0 pin, release export) | all green |
 | GOLD MASTER suite | `DONE fails=0`, 3 consecutive runs, 0 SCRIPT ERROR |
 | attack_sim / save_integrity / craft_check / a11y_probe / ui_layout | fails=0 each |
@@ -29,7 +29,7 @@ Covers C4–C7 of the studio-lead directive. Base is `c73cf7c` (C3 close-out); t
 | Audio truth (windowed) | PASS: Music −19.3 dB, all buses under −1.5 dB |
 | Perf (windowed) | D1 **246** draw calls: under the D11 350 cap, **over the D1 200 target** |
 | GUI exploration (windowed) | 19 PASS, 0 BUG, all 13 locales |
-| Visual truth (frames below) | rc4 tzverify frames, half res: 10/11 PASS (0.15–0.42%); `G03_sprint_fov` FAIL 1.28%, 85% of hits in the outer 15% edge band = canon ember vignette over blue (TZ_DECISIONS S03). Blocking R0 lock (`check.sh`) PASS. Known-bad `magenta_corruption_suburbs.png` still FAILs (9.49%). |
+| Visual truth (frames below) | rc4 tzverify frames, half res: 10/11 PASS (0.15–0.42%); `G03_sprint_fov` FAIL 1.28%, 85% of hits in the outer 15% edge band = canon ember vignette over blue (TZ_DECISIONS S03). Blocking R0 lock (`check.sh`) PASS. Known-bad `magenta_corruption_suburbs.png` still FAILs (13.19%). |
 | Bot (3 seeds) | Latest shipped trees: 2/3 (batch `c00f118`), 1/3 (capsule `97c8bf4`, all 3 seeds reached the boss) |
 | AAB signed-verify | **not run**: no export templates (see Residual) |
 
@@ -40,6 +40,7 @@ Covers C4–C7 of the studio-lead directive. Base is `c73cf7c` (C3 close-out); t
 | 1 | `v8.0.0-rc1` (`27ba1d5`) | CONFIRMED 79 / PARTIAL 7 / FAKE 3 (`docs/CLOSURE_VERIFICATION_INTERNAL.md`) | FAKE: S03 (vignette never drew), G12b (L5 never cleared flicker), A03 (stealth = walk sample; probe could not fail). PARTIAL: G17 backups survived, G24/C03 mislabelled, R0 numbers, #8 hash, matrix breakdown, check count. All fixed in `0873f38`; CORRECTION_LOG 15-21. |
 | 2 | `v8.0.0-rc2` (`5724544`) | CONFIRMED 128 / PARTIAL 6 / FAKE 0 | G12b fix only held until respawn: flashlight upgrades were applied at purchase only, and the formulas used base 1.0 / 8 m instead of the scene's 24 / 16 m (buying Brightness dimmed the light). Fixed in the rc3 commit with suite P2r (mutation-tested: fails with the reapply removed). Doc partials: P01/P02 decision rows, stale C06 row, matrix AL range, correction count. CORRECTION_LOG 22. rc3: check.sh full 42 green, suite `DONE fails=0`, bot 1/3 (boss-phase + X21 spine stalls, both known types). |
 | 3 | `v8.0.0-rc3` (`5402640`) | CONFIRMED 145 / PARTIAL 14 / FAKE 0 | Flashlight upgrades leaked across New Game/hardcore/slots (now per-run save data, cleared by `reset_all`); Stability L1-L4 did nothing (now -10..-50% drain, GDD §3.3); `fog_setup.gd` overrode tier fog on every load; monster hit flash left monsters pure white. Ledger: A04 reason, A01 Hum bus, S04 hiding spots, legend, stale report lists. CORRECTION_LOG 23-27. rc4: check.sh full 42 green, suite `fails=0`, tz_verify `fails=0`, each new check mutation-tested. Bot: seed 1 X21 spine stall (known), seed 2 **WIN** 11/11; seed 3 unmeasured, since Godot runs under `timeout` were killed with exit 127 from 10:11 (committed HEAD killed the same way in an A/B, so environmental; seed 2 won when run without the wrapper). |
+| 4 | `v8.0.0-rc4` (`b8b20c0`) | CONFIRMED 186 / PARTIAL 12 / FAKE 0 | No game-code defects. The user-data guard could delete the whole profile if its snapshot was lost; restore now refuses in that case. tz_verify and direct suite runs bypassed the shell guard; both now take an in-process snapshot first. P2r measures the Stability drain through `_update_battery` instead of reading a field. Figures and wording fixed; CORRECTION_LOG 29-31. rc5: check.sh full **44 green** (24 static + reimport + 18 engine + guard restore); direct suite `fails=0` and tz_verify 17 checks `fails=0`, each leaving all 11 profile files sha256-identical; drain and lost-snapshot mutations caught. Tools and docs only, so no IRON RULE bot. |
 
 rc2 evidence: tz_verify 15 checks `DONE fails=0`; footstep probe `fails=0` and mutation-tested
 (`fails=3`, rc 1, with stealth mapped onto walk's file); `tools/check.sh` full **42 green**; bot 1/3 won, 11/11
@@ -55,11 +56,11 @@ No external `docs/CLOSURE_VERIFICATION.md` exists.
 - `docs/stills/tzverify/C06_tier_ultra.png`: Ultra tier, fog 0.015.
 - `docs/stills/tzverify/G12b_low_battery.png`: 10% battery.
 - `docs/stills/tzverify/TUT_hint_layout.png`: tutorial box laid out correctly.
-- `docs/stills/tzverify/V02_energy_ball.png`: warm ball; a faint dim-red smudge on the pavement below (0.05% hue-magenta).
+- `docs/stills/tzverify/V02_energy_ball.png`: warm ball; a faint dim-red smudge on the pavement below (rc4 frame: hue-only 0.01%, gate 0.42%).
 
 ## Corrections
 
-28 entries in `docs/CORRECTION_LOG.md` (14 at rc1, 15-21 from C8 round 1, 22 from round 2, 23-28 from round 3), including the false R0 fix, the dead C06 fog write, and two
+31 entries in `docs/CORRECTION_LOG.md` (14 at rc1, 15-21 from C8 round 1, 22 from round 2, 23-28 from round 3, 29-31 from round 4), including the false R0 fix, the dead C06 fog write, and two
 wrong claims in this pass's own commit messages.
 
 ## Residual (honest)

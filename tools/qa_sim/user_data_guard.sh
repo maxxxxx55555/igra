@@ -44,6 +44,13 @@ udg_restore() {
 	[[ "${UDG_ACTIVE:-0}" == 1 ]] || return 0
 	UDG_ACTIVE=0
 	local f bad=0
+	# A lost/unreadable snapshot must never turn into "delete everything the
+	# snapshot doesn't list" - refuse and leave the profile as it is.
+	if [[ ! -r "$UDG_SNAP/list" || ! -d "$UDG_SNAP/files" ]] \
+		|| [[ $(wc -l < "$UDG_SNAP/list") -ne $(find "$UDG_SNAP/files" -type f | wc -l) ]]; then
+		echo "  user-data guard: FAIL snapshot $UDG_SNAP missing or incomplete - nothing restored or removed"
+		return 1
+	fi
 	while IFS= read -r f; do
 		grep -qxF -- "$f" "$UDG_SNAP/list" || rm -f -- "$UDG_DIR/$f"
 	done < <(_udg_list "$UDG_DIR")
@@ -78,6 +85,11 @@ _udg_demo() {
 	[[ "$(cat "$d/saves/slot1.save")" == slot ]] || { echo "demo FAIL: deleted slot not restored"; return 1; }
 	[[ ! -e "$d/tls_savegame.save.bak2" ]] || { echo "demo FAIL: QA-created file left behind"; return 1; }
 	[[ -e "$d/logs/godot.log" ]] || { echo "demo FAIL: engine log dir touched"; return 1; }
+	# Lost snapshot: restore must fail and delete nothing.
+	udg_snapshot "$d" > /dev/null
+	rm -rf -- "$UDG_SNAP"
+	if udg_restore > /dev/null; then echo "demo FAIL: restore succeeded without a snapshot"; return 1; fi
+	[[ -e "$d/tls_savegame.save" && -e "$d/saves/slot1.save" ]] || { echo "demo FAIL: lost snapshot deleted owner files"; return 1; }
 	rm -rf -- "$d"
 	echo "demo OK"
 }

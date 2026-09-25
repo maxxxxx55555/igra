@@ -18,7 +18,7 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 
 ## Evidence sources
 
-- **tz_verify:** `scenes/tools/tz_verify_scene.tscn`, run windowed. 15 checks, `fails=0` (C8 rc2 run).
+- **tz_verify:** `scenes/tools/tz_verify_scene.tscn`, run windowed. 17 checks at rc5 (incl. C06 fog at load and the user:// restore check), `fails=0`.
 - **Suite:** GOLD MASTER, `fails=0` on 3 consecutive runs.
 - **footstep:** `footstep_check_scene`, `fails=0`; exits 1 when any surface lacks 3 distinct steps (mutation-tested in C8).
 
@@ -75,4 +75,4 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 | P02 | Particles < 500, RAM/VRAM | NEEDS-MEASUREMENT | Windowed or device profiling only; see TZ_DECISIONS P02 |
 | N01, I02, T01 | Owner rows | GAP-OWNER | See TZ_DECISIONS |
 
-**Open GAP-DEV rows: 0.** Every audit row now has a verdict above.
+**Open GAP-DEV rows: 0.** Every audit row the audit scored GAP-DEV or GAP-OWNER has a verdict above. Rows the audit already scored MET, EXTRA or BY-DESIGN are not repeated here; their audit verdicts stand (see `docs/TZ_COMPLIANCE_AUDIT.md`).

@@ -1,6 +1,6 @@
 # Correction log
 
-Earlier claims later contradicted by evidence. Newest first. Each row: what was claimed, what is
+Earlier claims later contradicted by evidence. Oldest first. Each row: what was claimed, what is
 actually true, and the commit that establishes it.
 
 | # | Old claim (where) | New fact | Commit |
@@ -33,3 +33,6 @@ actually true, and the commit that establishes it.
 | 26 | TZ V02 "No neon / #fff" MET | The monster hit flash set pure white, and its restore duplicated the flash material, so a monster stayed white after its first hit. The flash is now brass and restores the original material; suite P2b is the regression (mutation-tested). | C8 rc4 |
 | 27 | ORDER_PASS_REPORT phase and residual lists after C8 round 1 | G24/C03 still listed as "Applied", A03 missing from "Decided", C5 row cited docs-only `c00f118`, visual row showed rc1 numbers. All corrected. | C8 rc4 |
 | 28 | Tag `v8.0.0-rc4` on origin pointed at `5cf3b27` (QA guard only) | It was pushed by mistake: a failing docs script did not stop the tag/push commands after it. Deleted from origin within minutes. The real `v8.0.0-rc4` is on the round-3 fix commit. | C8 rc4 |
+| 29 | #25: "P2r covers ... drain (mutation-tested)" | At rc4, P2r only read the `_flashlight_drain_cut` field, so deleting the drain line in `_update_battery` still passed. P2r now calls `_update_battery(1.0)` on the respawned player and measures the battery drop (cut 0.5 at L5); deleting the drain line fails it (measured cut 0.0). | C8 rc5 |
+| 30 | `5cf3b27`: the guard "only removes files the run itself created" | A lost snapshot dir made restore delete every profile file and still report success; restore now refuses unless the snapshot list and files are intact (`--demo` covers it, mutation-tested). tz_verify and direct suite runs bypassed the shell guard: tz_verify backed up only save files and only after `start_game` had already reset and autosaved. Both runners now take an in-process snapshot (`scripts/tools/_user_data_snapshot.gd`) before anything runs and verify the restore; direct runs left all 11 profile files sha256-identical. | C8 rc5 |
+| 31 | ORDER_PASS_REPORT / TZ_COMPLIANCE / ARENA_CLOSURE figures after round 3 | Known-bad frame reads 13.19% (not 9.49%); the V02 frame is hue-only 0.01% (not 0.05%); the candidate line still named rc1; "42 checks" predates the guard gates (commit `b8b20c0` also says 42); the R0 row cited rc2 frame numbers; the tz_verify count was stale; the TZ footer claimed every audit row is in the ledger (only GAP rows are); CORRECTION_LOG said "Newest first". All corrected. | C8 rc5 |

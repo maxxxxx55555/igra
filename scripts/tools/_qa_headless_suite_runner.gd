@@ -37,6 +37,10 @@ const DISTRICTS: Array[StringName] = [
 	&"substation", &"power_station",
 ]
 const ENDINGS: Array[StringName] = [&"light", &"hope", &"survivor", &"dark", &"truth"]
+const UserDataSnapshot := preload("res://scripts/tools/_user_data_snapshot.gd")
+## P1/P2l/P2m/P2r/P3 New-Game, save and reset the real user:// profile; a
+## direct run (not via check.sh's shell guard) must still leave it as found.
+var _user_data: Variant = null
 ## One real key per user-facing surface (menu / HUD / journal / settings /
 ## endings / toast) — must resolve to a non-empty, non-key string in every
 ## locale. The bulk check below is full key-parity against en.
@@ -108,6 +112,7 @@ func _wait_until(pred: Callable, timeout_sec: float) -> bool:
 	return pred.call()
 
 func _run() -> void:
+	_user_data = UserDataSnapshot.take()
 	await _p0_autoloads()
 	await _p1_new_game()
 	await _p1b_input_coverage()
@@ -840,7 +845,15 @@ func _p2r_respawn_keeps_progress() -> void:
 	var want_energy: float = float(q.get("_scene_flashlight_energy")) * (1.0 + flm.get_bonus("brightness"))
 	var energy: float = q.flashlight.light_energy
 	var maxed: bool = bool(q.get("_flashlight_stability_maxed"))
-	var drain_cut: float = float(q.get("_flashlight_drain_cut"))  # GDD 3.3: Stability L5 = -50% drain
+	# GDD 3.3: Stability L5 = -50% drain, measured through the real per-frame
+	# battery update (a field check alone passes with the drain line deleted).
+	q.set("flashlight_enabled", true)
+	q.set("battery", 50.0)
+	q.call("_update_battery", 1.0)
+	var drop: float = 50.0 - float(q.get("battery"))
+	var ng_mult: float = NewGamePlus.get_modifier_multiplier("battery")
+	var base_drop: float = q.BATTERY_DRAIN_PER_SEC / ng_mult if ng_mult > 0.0 else q.BATTERY_DRAIN_PER_SEC
+	var drain_cut: float = 1.0 - drop / base_drop if base_drop > 0.0 else -1.0
 	# New Game must clear them again (reset_all), and the cfg mirror with it.
 	SaveSystem.reset_all()
 	var st_after: int = flm.get_level("stability")
@@ -848,8 +861,8 @@ func _p2r_respawn_keeps_progress() -> void:
 	flm.from_dict(fl_snap)
 	if not cleared:
 		_fail("P2r reset_all kept flashlight upgrades (stability %d)" % st_after)
-	if not maxed or not is_equal_approx(drain_cut, 0.5) or absf(energy - want_energy) > 0.01 or want_energy < 20.0:
-		_fail("P2r flashlight upgrades lost on respawn (stability L5 maxed=%s, drain cut %s, energy %s, want %s)" % [maxed, drain_cut, energy, want_energy])
+	if not maxed or absf(drain_cut - 0.5) > 0.001 or absf(energy - want_energy) > 0.01 or want_energy < 20.0:
+		_fail("P2r flashlight upgrades lost on respawn (stability L5 maxed=%s, measured drain cut %s, energy %s, want %s)" % [maxed, drain_cut, energy, want_energy])
 	else:
 		_log("P2r flashlight upgrades survive respawn (energy %0.1f, stability L5) - OK" % energy)
 
@@ -1160,6 +1173,9 @@ func _finish() -> void:
 	if _done:
 		return
 	_done = true
+	var diff: int = UserDataSnapshot.restore(_user_data)
+	if diff != 0:
+		_fail("user:// profile not restored byte-identical (%d file(s) differ, -1 = no snapshot)" % diff)
 	for f in _fails:
 		print("[qa] FAIL ", f)
 	print("[qa] DONE fails=", _fails.size())

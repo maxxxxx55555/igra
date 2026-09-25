@@ -2,6 +2,10 @@ extends Node
 ## Runner for _tz_verify.gd (lives under /root so Routes scene swaps don't free it).
 
 const OUT := "res://docs/stills/tzverify/"
+const UserDataSnapshot := preload("res://scripts/tools/_user_data_snapshot.gd")
+## The whole probe runs on the real user:// profile (start_game resets and
+## autosaves, G17 wipes, G12b rewrites the upgrade cfg): snapshot it first.
+var _user_data: Variant = null
 var _fails: int = 0
 
 func _ready() -> void:
@@ -44,23 +48,9 @@ func _save_paths() -> Array[String]:
 			out.append(String(base) + suffix)
 	return out
 
-func _backup_saves() -> Dictionary:
-	var b := {}
-	for path in _save_paths():
-		if FileAccess.file_exists(path):
-			b[path] = FileAccess.get_file_as_bytes(path)
-	_log("backed up %d save files" % b.size())
-	return b
-
-func _restore_saves(b: Dictionary) -> void:
-	for path in _save_paths():
-		if b.has(path):
-			var f := FileAccess.open(path, FileAccess.WRITE)
-			f.store_buffer(b[path])
-			f.close()
-		elif FileAccess.file_exists(path):
-			DirAccess.remove_absolute(path)
-	_log("restored %d save files" % b.size())
+func _restore_user_data() -> void:
+	var diff: int = UserDataSnapshot.restore(_user_data)
+	_check(diff == 0, "user:// profile restored byte-identical (%d file(s) differ, -1 = no snapshot)" % diff)
 
 func _frames(n: int) -> void:
 	for i in n:
@@ -84,11 +74,13 @@ func _run() -> void:
 	var ads := get_node_or_null("/root/AdService")
 	if ads:
 		ads.enabled = false
+	_user_data = UserDataSnapshot.take()
 	await get_tree().create_timer(1.0).timeout
 	Routes.start_game()
 	var ready_pred := func() -> bool: return GameManager.is_playing() and get_tree().get_first_node_in_group("player") != null
 	if not await _wait_until(ready_pred, 20.0):
 		_log("FAIL never reached gameplay")
+		_restore_user_data()
 		get_tree().quit(1)
 		return
 	await get_tree().create_timer(3.0).timeout
@@ -249,9 +241,7 @@ func _run() -> void:
 		_check(false, "tutorial hint/skip nodes not found")
 
 	# G17 - hardcore death wipes the save (last: it ends the run). The wipe is
-	# real, so every file it touches is backed up first and restored after -
-	# this probe must never cost the machine's owner their actual progress.
-	var backup := _backup_saves()
+	# real; the run-wide snapshot above puts every file back afterwards.
 	SaveSystem.save_all()
 	# Seed every rotated backup so the check covers the load step-4 fallbacks.
 	for suffix in [".bak", ".bak2", ".bak3"]:
@@ -264,7 +254,7 @@ func _run() -> void:
 	var left := _save_paths().filter(func(path: String) -> bool: return path.contains("tls_savegame") and FileAccess.file_exists(path))
 	_check(had_save and left.is_empty(), "G17 hardcore death: save before=%s, files left=%s" % [had_save, left])
 	SettingsManager.set_setting("hardcore", false)
-	_restore_saves(backup)
 
+	_restore_user_data()
 	_log("DONE fails=%d" % _fails)
 	get_tree().quit(0 if _fails == 0 else 1)
