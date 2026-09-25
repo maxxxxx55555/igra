@@ -270,7 +270,7 @@ else
     # Engine gates run the real game on the owner's user:// profile (New
     # Game, autosave, forged upgrade cfgs): snapshot it, restore on any exit.
     source tools/qa_sim/user_data_guard.sh
-    udg_snapshot
+    udg_snapshot || { echo "  ${RED}FAIL${OFF} user-data guard: снимок профиля не удался - движковые проверки не запускаются"; exit 1; }
     trap 'udg_restore' EXIT
     trap 'exit 130' INT TERM
     # RELEASE CONVERGENCE STEP 4: game_test_3d_scene.tscn's phase1+ combat

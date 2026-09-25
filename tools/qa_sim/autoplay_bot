@@ -19,7 +19,7 @@ echo "# Godot binary: $GODOT"
 # Runs the real game on the owner's user:// profile: snapshot it, restore on
 # any exit (tools/qa_sim/user_data_guard.sh).
 source tools/qa_sim/user_data_guard.sh
-udg_snapshot
+udg_snapshot || exit 99
 trap 'udg_restore' EXIT
 trap 'exit 130' INT TERM
 mkdir -p .qa_logs

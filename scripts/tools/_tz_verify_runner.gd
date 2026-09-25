@@ -75,6 +75,10 @@ func _run() -> void:
 	if ads:
 		ads.enabled = false
 	_user_data = UserDataSnapshot.take()
+	if _user_data == null:
+		_log("FAIL cannot snapshot user:// - not running the game against this profile")
+		get_tree().quit(1)
+		return
 	await get_tree().create_timer(1.0).timeout
 	Routes.start_game()
 	var ready_pred := func() -> bool: return GameManager.is_playing() and get_tree().get_first_node_in_group("player") != null

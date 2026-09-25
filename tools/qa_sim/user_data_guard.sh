@@ -28,13 +28,20 @@ _udg_list() { # dir -> sorted relative paths of the game's own files
 
 udg_snapshot() { # [dir]
 	UDG_DIR="${1:-$(udg_dir)}"
-	UDG_SNAP=$(mktemp -d "${TMPDIR:-/tmp}/tls_udg.XXXXXX")
+	UDG_ACTIVE=0
+	UDG_SNAP=$(mktemp -d "${TMPDIR:-/tmp}/tls_udg.XXXXXX" 2>/dev/null) && [[ -n "$UDG_SNAP" ]] || {
+		echo "  user-data guard: FAIL cannot create a snapshot dir - do not run the game against this profile"
+		return 1
+	}
 	mkdir -p "$UDG_SNAP/files"
 	_udg_list "$UDG_DIR" > "$UDG_SNAP/list"
 	local f
 	while IFS= read -r f; do
 		mkdir -p "$UDG_SNAP/files/$(dirname "$f")"
-		cp -p "$UDG_DIR/$f" "$UDG_SNAP/files/$f"
+		cp -p "$UDG_DIR/$f" "$UDG_SNAP/files/$f" && cmp -s "$UDG_DIR/$f" "$UDG_SNAP/files/$f" || {
+			echo "  user-data guard: FAIL cannot snapshot $f - do not run the game against this profile"
+			return 1
+		}
 	done < "$UDG_SNAP/list"
 	UDG_ACTIVE=1
 	echo "  user-data guard: $(wc -l < "$UDG_SNAP/list") file(s) snapshotted from $UDG_DIR"
@@ -85,6 +92,9 @@ _udg_demo() {
 	[[ "$(cat "$d/saves/slot1.save")" == slot ]] || { echo "demo FAIL: deleted slot not restored"; return 1; }
 	[[ ! -e "$d/tls_savegame.save.bak2" ]] || { echo "demo FAIL: QA-created file left behind"; return 1; }
 	[[ -e "$d/logs/godot.log" ]] || { echo "demo FAIL: engine log dir touched"; return 1; }
+	# Snapshot that cannot be taken: must report failure and arm nothing.
+	if TMPDIR="$d/no/such/dir" udg_snapshot "$d" > /dev/null; then echo "demo FAIL: snapshot succeeded without a dir"; return 1; fi
+	[[ "${UDG_ACTIVE:-0}" == 0 ]] || { echo "demo FAIL: failed snapshot left restore armed"; return 1; }
 	# Lost snapshot: restore must fail and delete nothing.
 	udg_snapshot "$d" > /dev/null
 	rm -rf -- "$UDG_SNAP"

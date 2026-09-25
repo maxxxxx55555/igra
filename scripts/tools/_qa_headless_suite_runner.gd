@@ -113,6 +113,10 @@ func _wait_until(pred: Callable, timeout_sec: float) -> bool:
 
 func _run() -> void:
 	_user_data = UserDataSnapshot.take()
+	if _user_data == null:
+		_fail("cannot snapshot user:// - not running the game against this profile")
+		_finish()
+		return
 	await _p0_autoloads()
 	await _p1_new_game()
 	await _p1b_input_coverage()

@@ -1,210 +1,147 @@
-# Round 4, HEAD b8b20c0, tag v8.0.0-rc4
+# Round 5, HEAD 3ee3568, tag v8.0.0-rc5
 
 Static verification only: code and data read at HEAD, history via `git show`, python and bash gates
 run locally. The Godot binary was not run. Runtime-only numbers (bot, suite, tz_verify output, draw
-calls) are accepted when the code does not contradict them. Code outside the 7 scripts and 4 tool
-files touched by `5cf3b27`/`b8b20c0` is byte-identical to rc3 (`git diff --stat 5402640 HEAD`), so
-rc3 line evidence for untouched files still applies. The values were re-grepped at HEAD anyway.
+calls, full check.sh count) are accepted when the code does not contradict them. Local and origin
+tags rc1-rc5 resolve to 27ba1d5 / 5724544 / 5402640 / b8b20c0 / 3ee3568.
 
 | Source | Item | Verdict | Evidence |
 |---|---|---|---|
-| ARENA A | B1 finale boss timing `5e1093b` | CONFIRMED | Ancestor of HEAD; 39/39 added code lines present |
-| ARENA A | B2 document id `7034bcd` | CONFIRMED | Ancestor; 33/33 lines present |
-| ARENA A | B3 skill compounding `afadb4b` | CONFIRMED | Ancestor; 44/44; player_stats.tres:4 `resource_local_to_scene` |
-| ARENA A | B4 checksum-only saves `92934a7` + `ac877a5` | CONFIRMED | Both ancestors; 49/49 and 4/4 present; save_system.gd:199 rejects no-hmac |
-| ARENA A | B5 NG+ bypasses `fe7ef0e` | CONFIRMED | Ancestor; 68/70 (2 reworded later); wipe_all_saves removes ng_plus_data.json (save_system.gd:586-590) |
-| ARENA A | B6 daily signing `e9686d7` | CONFIRMED | Ancestor; 33/33 |
-| ARENA A | B7 duplicate autoloads `bb662b4` | CONFIRMED | Ancestor; 21/21; 58 unique autoloads |
-| ARENA A | B8 kills pay wallet `1cf3aaf` | CONFIRMED | Ancestor; 28/28 |
-| ARENA A | B9+B14 atomic try_add `36d44be` | CONFIRMED | Ancestor; 88/88 |
-| ARENA A | B10 `cc1e0b3` | CONFIRMED | Ancestor; 47/47; world_runtime.gd:72-76 saves after placement |
-| ARENA A | B11 `d7a0692` | CONFIRMED | Ancestor; 22/22 |
-| ARENA A | B12 `c814621` | CONFIRMED | Ancestor; 23/23 |
-| ARENA A | B13 `a36ac8b` | CONFIRMED | Ancestor; 50/50; import calls load_all (save_system.gd:69-70), autosave writes SAVE_PATH (:104) |
-| ARENA A | B15 `8c99689` | CONFIRMED | Ancestor; 34/36 (2 reworded) |
-| ARENA A | B16 `cb73c83` | CONFIRMED | Ancestor; 14/14 |
-| ARENA A | Q1 `a0ec4ee` | CONFIRMED | Ancestor; 35/35 |
+| ARENA A | B1 finale boss timing `5e1093b` | CONFIRMED | Commit exists, ancestor of HEAD, 36/36 added code lines still at HEAD |
+| ARENA A | B2 document id `7034bcd` | CONFIRMED | Exists, 26/26 lines present |
+| ARENA A | B3 skill bonuses `afadb4b` | CONFIRMED | Exists, 40/40 |
+| ARENA A | B4 progress_hmac `92934a7` (+`ac877a5`) | CONFIRMED | 42/42 and 4/4; save_system.gd:131-138 signs progress, :222 rejects a missing hmac |
+| ARENA A | B5 NG+ bypasses `fe7ef0e` | CONFIRMED | 51/53; wipe_all_saves also resets NG+ (save_system.gd:586-590) |
+| ARENA A | B6 daily signing `e9686d7` | CONFIRMED | 27/27 |
+| ARENA A | B7 duplicate autoloads `bb662b4` | CONFIRMED | 20/20; project.godot has 58 unique autoloads |
+| ARENA A | B8 kills pay wallet `1cf3aaf` | CONFIRMED | 25/25 |
+| ARENA A | B9+B14 atomic try_add `36d44be` | CONFIRMED | 72/72 |
+| ARENA A | B10 district-enter save `cc1e0b3` | CONFIRMED | 41/41 |
+| ARENA A | B11 district lock `d7a0692` | CONFIRMED | 20/20 |
+| ARENA A | B12 streetlight event `c814621` | CONFIRMED | 21/21 |
+| ARENA A | B13 import/autosave `a36ac8b` | CONFIRMED | 40/40 |
+| ARENA A | B15 fall-recovery `8c99689` | CONFIRMED | 29/31 |
+| ARENA A | B16 offline player `cb73c83` | CONFIRMED | 13/13 |
+| ARENA A | Q1 heartbeat `a0ec4ee` | CONFIRMED | 32/32; 16 rows cover 17 items (B9+B14 merged) |
 | ARENA B | P-01 `92934a7` | CONFIRMED | As B4 |
-| ARENA B | P-03 `9b7a46b` | CONFIRMED | Ancestor; 131/131 lines present |
-| ARENA B | P-04 `9b7a46b` | CONFIRMED | flashlight_upgrade_manager.gd:132-167 signed envelope + clamp; the levels now also live in the HMAC-signed save (save_system.gd:293) |
-| ARENA B | P-05 tamper closed / clock defer | CONFIRMED | `e9686d7` present; wall-clock trust is inherently client-side |
-| ARENA B | P-06 slot swap | CONFIRMED | load_slot checks slot_id (save_system.gd:510-511) |
-| ARENA B | P-07 semantic validation | CONFIRMED | `9b7a46b` lines present; from_dict clamps every branch (flashlight_upgrade_manager.gd:176) |
-| ARENA B | R-01 `2278cf9` | CONFIRMED | Ancestor; 12/12; IntegrityGuard autoload |
-| ARENA B | R-02 defer | CONFIRMED | integrity_guard.gd checks only non-finite position and the fall floor, as the reason says |
-| ARENA B | R-08 defer | CONFIRMED | Same inherent reason as P-05 |
-| ARENA B | D-01 defer | CONFIRMED | Inherent; threat model |
-| ARENA B | D-02 defer | CONFIRMED | Inherent; key is client-held (save_system.gd:23) |
-| ARENA B | D-03 defer (owner) | CONFIRMED | release_export_check OK in check.sh; .gitignore:85 `.signing/`, nothing tracked |
-| ARENA B | R-03 `60a289b` | CONFIRMED | Ancestor; 41/41; district id whitelisted (save_system.gd:327,533) |
-| ARENA B | R-07 `cef6ae6` | CONFIRMED | Ancestor; 26/26 |
-| ARENA B | D-04 `60a289b` | CONFIRMED | As R-03 |
-| ARENA B | C-08 `a453425` | CONFIRMED | Ancestor; 59/59; gate OK in check.sh --static |
-| ARENA C | R0 `bafb740` | PARTIAL | Root cause is real: 11/11 LUT .import files are `importer="3d_texture"`, pin OK. But the numbers in ARENA_CLOSURE.md:62 (0.17–0.46%, G03 1.01%) are from the rc2 frames. The committed rc4 frames (refreshed in `b8b20c0`) read 0.15–0.42% and G03 **1.28%**. ORDER_PASS_REPORT.md:32 already has the rc4 numbers |
-| ARENA C | RENDERING (b) lossless | CONFIRMED | Folded into `bafb740` (runtime A/B, not contradicted) |
-| ARENA C | RENDERING (d) SSR/SSAO | CONFIRMED | visual_quality.tres ssao/ssr per tier |
-| ARENA C | TG gates `5257745`, `4c6ca10` | CONFIRMED | Ancestors; 118/119 and 7/7 |
-| ARENA C | CHALLENGE-01 `fe3007a` | CONFIRMED | Ancestor; 20/22 |
-| ARENA C | CHALLENGE-02 partial `c783544` | CONFIRMED | Ancestor; 10/10; residual honestly tracked as matrix X21 BUG |
-| ARENA C | CHALLENGE-03 `0f9685a` | CONFIRMED | scripts/ui/settings_full.gd absent |
-| ARENA C | MISSED-00..05 | CONFIRMED | Matrix rows WORKS; `0d3d533` 81/81 lines present |
-| ARENA C | I18N `43c9ecd` / `21c6563` | CONFIRMED | 159/159 and 217/218 present; i18n_truth_gate 12/12 PASS now |
-| ARENA D | SLOP 1, 6 `855a278` | CONFIRMED | 5/5 present |
-| ARENA D | SLOP 2 `1fcf157` | CONFIRMED | 3/3 |
-| ARENA D | SLOP 3 `bbdaa8e` | CONFIRMED | 11/11 |
-| ARENA D | SLOP 4,5,7,9,10,11,14,15 `d06fe48` | CONFIRMED | 16/16 |
-| ARENA D | SLOP 8 `53353d5` | CONFIRMED | 13/13 |
-| ARENA D | SLOP 12 `2948e23` | CONFIRMED | BTN_ONE_MORE_RUN absent |
-| ARENA D | SLOP 13 `363add0` | CONFIRMED | visual_truth_gate.py:84 PIL HSV |
-| ARENA D | SLOP §2 `7bbc0ca` | CONFIRMED | BLACK_FAIL_PCT = 40.0 |
-| ARENA D | SLOP §3 reviewed | CONFIRMED | Consistent with X20 row and CORRECTION_LOG #6 |
-| ARENA Design | P1 `2a88503` | CONFIRMED | 2/2 |
-| ARENA Design | P2 `c2dbeb4`, `4e7560e` | CONFIRMED | 80/86 and 336/342 |
-| ARENA Design | P3 `4e7560e` | CONFIRMED | As above |
-| ARENA Design | P4 `f9bbfd7` | CONFIRMED | 12/12 |
-| ARENA Design | P5 `24ceb68` | CONFIRMED | 35/37; refresh_battery_max recomputes from both sources |
-| ARENA Design | P6/P7 `8f48faf` | CONFIRMED | 34/34 |
-| ARENA Design | P8 `ee273ee`, `24ceb68` | CONFIRMED | 3/3 |
-| ARENA | Open defers / "No P0 deferred" | CONFIRMED | Matches the table rows |
-| TZ | Every verdict is in the legend | CONFIRMED | MET, MET-STATIC, DECIDED, DEFERRED-STRUCTURAL, NEEDS-EYES, BY-DESIGN-ABSENT, NEEDS-MEASUREMENT, GAP-OWNER all defined (TZ_COMPLIANCE.md:8-17) |
-| TZ | Evidence: "tz_verify 15 checks, fails=0 (C8 rc2 run)" | PARTIAL | The HEAD runner has **16** checks: `b8b20c0` added the C06 at-load check at _tz_verify_runner.gd:104. The C06 and G17 rows (TZ_COMPLIANCE.md) cite an rc4 tz_verify run, but the evidence line at TZ_COMPLIANCE.md:21 still names the rc2 run and 15 checks |
-| TZ | Evidence: footstep probe exits 1 | CONFIRMED | _footstep_check.gd:13-15 |
-| TZ | Evidence: suite fails=0 | CONFIRMED | Runtime; not contradicted |
-| TZ | A02 crossfade 2.0 s | CONFIRMED | music_manager.gd:118, used :209,262 |
-| TZ | A03 DECIDED DR-A03 | CONFIRMED | footstep_system.gd:47-49 walk/jog/sprint + pitch 0.9/1.0/1.12 |
-| TZ | A04 caps MET-STATIC | CONFIRMED | Tracked sizes: sfx 6.64 MB, one_shots 1.12, ambience non-src 16.8 MB (16.0 MiB), music 39.0 MB (37.2 MiB), wav_src 31.4 MB (29.9 MiB). export_presets.cfg:3 excludes `ambience/wav_src/**` |
-| TZ | A01 DEFERRED | CONFIRMED | default_bus_layout.tres:15-54 has 7 buses incl. Hum, as the row now says |
-| TZ | V02 no neon / #fff MET | CONFIRMED | base_monster.gd:663-690 brass #c9a24a flash, restores the original via meta; P2b (suite:290-303) |
-| TZ | V05 shadow 2048 | CONFIRMED | project.godot:296 |
-| TZ | V01 no day | CONFIRMED | day_night.gd is a 31-line clock |
-| TZ | D03 DECIDED | CONFIRMED | TZ_DECISIONS D03/V01 row |
-| TZ | V03 GAP-OWNER | CONFIRMED | TZ_DECISIONS V03 row |
-| TZ | G01 DECIDED | CONFIRMED | main_3d.tscn:61 fps_mode = true |
-| TZ | G02 headbob 0.1 | CONFIRMED | camera_follow_3d.gd:22 |
-| TZ | G03 FOV +5 | CONFIRMED | camera_follow_3d.gd:24 |
-| TZ | G04 DECIDED 3.2 m | CONFIRMED | interactor.gd:24 |
-| TZ | G06 sprint ×1.6 | CONFIRMED | player_stats.tres:6-7 170/272 |
-| TZ | G07 crouch | CONFIRMED | player_3d.gd:87-88,542,563; deferred halves in TZ_DECISIONS |
-| TZ | G08 colour/cone MET, range/energy NEEDS-EYES | CONFIRMED | player_3d.tscn:179-184 (#c9a24a, 45°, 24, 16 m); upgrades now scale from the scene base (player_3d.gd:1160) |
-| TZ | G09 DECIDED | CONFIRMED | player_3d.gd:96 100/450 |
-| TZ | G10 DECIDED | CONFIRMED | battery.tres:14 effect_value 35 |
-| TZ | G12b flicker <20%, cleared by L5 | CONFIRMED | flashlight_stats.tres:11 threshold 20; player_3d.gd:1140 gated on `_flashlight_stability_maxed` (:1164); upgrades restored from the save on respawn/Continue (save_system.gd:335). "L5 cuts drain 50%" is only asserted as a variable (see the b8b20c0 drain-check row) |
-| TZ | G13 DECIDED | CONFIRMED | player_3d.gd:79-81 14/21/35 |
-| TZ | G15 capsule 1.6 | CONFIRMED | player_3d.tscn:9 |
-| TZ | G16 respawn | CONFIRMED | game_manager.gd:113-136 |
-| TZ | G17 hardcore wipe | CONFIRMED | game_manager.gd:172-173 -> wipe_all_saves (save_system.gd:575-589): main+slots+.bak..bak3, then reset_all (:579), which clears flashlight (:367). P2r calls reset_all directly; the wipe reaches it transitively |
-| TZ | G18/G19 roster | CONFIRMED | Unchanged since rc3 (GDD.md:170-181 values) |
-| TZ | G20 boss 70/30, beams 40 | CONFIRMED | boss_3d.gd:9,48,50 |
-| TZ | G21 DEFERRED | CONFIRMED | TZ_DECISIONS G21 row |
-| TZ | G22 DECIDED | CONFIRMED | TZ_DECISIONS G22 row |
-| TZ | G24 DECIDED | CONFIRMED | district_manager.gd:32-42 |
-| TZ | G25 DEFERRED | CONFIRMED | weapon_manager not instanced by any scene |
-| TZ | G26 DEFERRED | CONFIRMED | take_photo has no caller |
-| TZ | G27 DECIDED | CONFIRMED | player_3d.gd:413 JOY_ZONE_RATIO 0.35 |
-| TZ | G28/D04 GAP-OWNER | CONFIRMED | TZ_DECISIONS row |
-| TZ | G31-33 DECIDED | CONFIRMED | TZ_DECISIONS row |
-| TZ | G34 MET / DECIDED | CONFIRMED | progress_tracker.gd:128 bunker secret; now labelled DECIDED (DR-5) |
-| TZ | S01 DECIDED | CONFIRMED | No hit/dodge noise in player_3d.gd |
-| TZ | S02 DEFERRED | CONFIRMED | base_monster.gd reads no player visibility |
-| TZ | S03 ember pulse MET | CONFIRMED | post_process_overlay.gd:141 keeps COLOR.rgb; tz_verify:143 warmth delta |
-| TZ | S04 search MET-STATIC | CONFIRMED | base_monster.gd:45-46 10 s / 5 m |
-| TZ | S04-hide DEFERRED | CONFIRMED | HidingSpot is referenced by no scene or spawner (only its class file and validate_list) |
-| TZ | D02 DECIDED | CONFIRMED | TZ_DECISIONS row |
-| TZ | E03/T02 | CONFIRMED | ad_service.gd:27,31,111-115 |
-| TZ | E05 DECIDED | CONFIRMED | TZ_DECISIONS E05 row, balance_sim ledger |
-| TZ | C03 DEFERRED | CONFIRMED | Melee sphere 2.7 m at player_3d.gd:326; no gameplay weapon |
-| TZ | C04 MET | CONFIRMED | ru.json:276 "Слепые псы", en.json:276 "Blind Dogs" |
-| TZ | C06 tier fog + particles MET | CONFIRMED | fog_setup.gd no longer writes density; WorldEnvSetup (main_3d.tscn:87) applies the tier. The other fog writers are dead or weather-only: district_grading's Environment branch per KNOWN_ISSUES, and weather_vfx reads `/root/WorldEnvironment` |
-| TZ | P01 DEFERRED | CONFIRMED | TZ_DECISIONS P01 row |
-| TZ | P02 NEEDS-MEASUREMENT | CONFIRMED | TZ_DECISIONS P02 row |
-| TZ | N01 / I02 / T01 GAP-OWNER | CONFIRMED | TZ_DECISIONS rows |
-| TZ | Every non-MET row has a TZ_DECISIONS reason | CONFIRMED | All MET-STATIC/DECIDED/DEFERRED/GAP-OWNER/NEEDS-*/BY-DESIGN-ABSENT ids have a row |
-| TZ | Footer "Every audit row now has a verdict above" | PARTIAL | 0 GAP-DEV is true. But 27 of the 81 audit rows are not in the ledger: 20 MET (e.g. S05, S06), 4 EXTRA and 3 BY-DESIGN (G29, E02, V08). They keep only the audit's verdict, and EXTRA and BY-DESIGN are not in the ledger legend (TZ_COMPLIANCE.md:78) |
-| TZ_DECISIONS | C06 row "SUPERSEDED: C06 is MET since `2547fff`" | PARTIAL | Contradicted by CORRECTION_LOG #24: until `b8b20c0`, fog_setup.gd reset every load to 0.015, so C06 was not met at load from `2547fff` to rc3 (TZ_DECISIONS.md:19) |
-| Fix 0873f38 | S03 vignette keeps RGB | CONFIRMED | post_process_overlay.gd:141 still present |
-| Fix 0873f38 | S03 check non-vacuous | CONFIRMED | tz_verify:143 needs r>0.4 and warmth +0.03 (27ba1d5 checked `alpha > 0`) |
-| Fix 0873f38 | G12b keyed on max level | CONFIRMED | player_3d.gd:1164 |
-| Fix 0873f38 | G12b L5 check non-vacuous | CONFIRMED | tz_verify:176-185 |
-| Fix 0873f38 | A03 walk/jog/sprint + pitch | CONFIRMED | footstep_system.gd:47-49 |
-| Fix 0873f38 | A03 probe can fail | CONFIRMED | _footstep_check.gd:13-15 exits 1 on fails |
-| Fix 0873f38 | G17 backups removed | CONFIRMED | save_system.gd:556-560 `_remove_with_backups` |
-| Fix 0873f38 | G17 check non-vacuous | CONFIRMED | tz_verify:252-265 seeds .bak..bak3 |
-| Fix 5402640 | Reapply upgrades on every player `_ready` | CONFIRMED | player_3d.gd:245-247 |
-| Fix 5402640 | Scale from scene base 24 / 16 m | CONFIRMED | player_3d.gd:239-240,1160 |
-| Fix 5402640 | P2r respawn check non-vacuous | CONFIRMED | Still fails without the reapply (maxed false) |
-| Fix b8b20c0 | "flashlight" key written by `_save` and `save_slot` | CONFIRMED | save_system.gd:293,490; the envelope HMAC covers it |
-| Fix b8b20c0 | Load paths: Continue, import, respawn, load_slot | CONFIRMED | load_all :335 (continue_game, respawn_after_death game_manager.gd:119/139, import :69-70), load_slot :543 |
-| Fix b8b20c0 | Clear paths: New Game, hardcore wipe, Reset Progress | CONFIRMED | start_new_game -> reset_all :367; trigger_death and settings_screen.gd:344 -> wipe_all_saves -> reset_all (:579) |
-| Fix b8b20c0 | Purchase path | CONFIRMED | try_purchase (flashlight_upgrade_manager.gd:85-99) changes the in-memory wallet and levels. Neither reaches the save until the next `_save`, so a death or reload reverts both together. No exploit |
-| Fix b8b20c0 | Old save without the "flashlight" key | CONFIRMED | Fallback is `to_dict()` (:335,:543), i.e. the live levels, which always mirror the cfg (every mutation goes through `_save`). Same behavior as before the fix until the first new save writes the key, so no regression. Residual: a legacy slot inherits the active run's levels |
-| Fix b8b20c0 | from_dict writes the cfg on every load | CONFIRMED | flashlight_upgrade_manager.gd:177. Harmless extra write; the cfg is now only a mirror and is still signed |
-| Fix b8b20c0 | P2r reset/respawn checks fail on pre-fix code | CONFIRMED | At 5cf3b27 the save has no key, so after respawn the zeroed levels stay: maxed=false, FAIL. The reset mutation (keep the key, drop :367) gives stability 5 after reset_all, FAIL. `_flashlight_drain_cut` is missing at the parent |
-| Fix b8b20c0 | Stability L1-L5 cut drain 10-50% | CONFIRMED | player_3d.gd:760 `drain *= 1.0 - _flashlight_drain_cut`, set at :1163 from LEVEL_BONUSES 0.1..0.5 (GDD.md:88-93); the dead softness write is removed |
-| Fix b8b20c0 | Stability drain regression check | PARTIAL | P2r asserts only the field: suite:843 `q.get("_flashlight_drain_cut") == 0.5`. No battery drain is measured, so removing player_3d.gd:760 still passes P2r. CORRECTION_LOG #25 says "P2r covers ... drain (mutation-tested)" |
-| Fix b8b20c0 | fog_setup.gd density line removed | CONFIRMED | fog_setup.gd:16-17 comment only; WorldEnvSetup (tscn:87) runs before FogSetup (:90) |
-| Fix b8b20c0 | tz_verify C06 at-load check non-vacuous | CONFIRMED | _tz_verify_runner.gd:99-104. Default tier 2 (and the owner's settings.cfg tier 2) wants 0.014, and pre-fix code gave 0.015, so the check fails. It would be vacuous only at tier 3 (0.015) |
-| Fix b8b20c0 | Hit flash brass + restore | CONFIRMED | base_monster.gd:663-690. Overlapping hits restore the original via meta; a stale restore is skipped by `material_override == mat` |
-| Fix b8b20c0 | P2b check non-vacuous | CONFIRMED | Pre-fix restore assigned `material_override.duplicate()`, a new object, so suite:299 `!= mats_before[i]` fails. An empty mesh list is a FAIL (:303). Min roster HP 30 > the 25 damage |
-| Fix 5cf3b27 | Guard wired into check.sh / headless_suite / autoplay_bot | CONFIRMED | check.sh:272-275,347; headless_suite:23-28; autoplay_bot:19-24. Each cds to the repo root first |
-| Fix 5cf3b27 | "never deletes a file the owner had" | PARTIAL | True while the snapshot dir survives. If `$UDG_SNAP` is lost (TEMP cleanup, second run), user_data_guard.sh:48 `grep -qxF -- "$f" "$UDG_SNAP/list" \|\| rm -f` fails open and deletes every profile file. :55 then compares two empty strings and :57 prints "restored byte-identical", rc 0. Reproduced on a scratch dir: 2/2 owner files deleted, success reported |
-| Fix 5cf3b27 | Restore on timeout / Ctrl-C | CONFIRMED | EXIT trap + `trap 'exit 130' INT TERM`. Per-gate `timeout` does not end the script; outer TERM/INT reach the EXIT trap. SIGKILL cannot, as with any trap |
-| Fix 5cf3b27 | `--demo` exercises the real functions | CONFIRMED | _udg_demo calls the real udg_snapshot/udg_restore. Mutants: no-op restore gives "save not restored" rc 1; no-delete gives rc 1. udg_dir and the trap wiring are not exercised (udg_dir resolved by hand to the 11-file profile) |
-| Fix 5cf3b27 | `set -u` / pipefail safety | CONFIRMED | Every optional var is defaulted (`${APPDATA:-}`, `${UDG_ACTIVE:-0}`, `${TMPDIR:-/tmp}`, `${1:-}`); no `set -e` in the callers |
-| Fix 5cf3b27 | Coverage of all QA runs that touch the profile | PARTIAL | tz_verify, the main TZ evidence runner (TZ_COMPLIANCE.md:21), is run directly and is not wrapped. Routes.start_game (_tz_verify_runner.gd:88) -> reset_all, and world_runtime.gd:76 save_all overwrites the owner's save before `_backup_saves` runs at :252. Since `b8b20c0`, reset_all also rewrites flashlight_upgrades.cfg, which _save_paths (:40-45) does not cover. A direct suite run is equally unguarded: P2r save_all/reset_all (suite:802,845), then P3 save_all (:858) writes a reset-state save |
-| CORRECTION_LOG | Header "Newest first" | PARTIAL | Rows run oldest to newest, #1 to #28 (CORRECTION_LOG.md:3) |
-| CORRECTION_LOG | #1 R0 `bafb740` | CONFIRMED | LUT imports are Texture3D; 11 LUT .import changes |
-| CORRECTION_LOG | #2 `37581d7` | CONFIRMED | 530 .import paths in the commit |
-| CORRECTION_LOG | #3 C06 `2547fff` | CONFIRMED | Commit rebuilt tier fog; "single source" now true at HEAD, and #24 records it was not until rc4 |
-| CORRECTION_LOG | #4 V05 | CONFIRMED | project.godot:296 2048 |
-| CORRECTION_LOG | #5 X22 `0d3d533` | CONFIRMED | Matrix X22 FIXED (test bug) |
-| CORRECTION_LOG | #6 X20 `0d3d533` | CONFIRMED | Matrix X20 PARTIAL |
-| CORRECTION_LOG | #7 footer 61/40 | CONFIRMED | As rc3 (0d3d533^ matrix) |
-| CORRECTION_LOG | #8 `ac877a5`, `9fc8665` | CONFIRMED | `_ensure_playing` in 9fc8665 |
-| CORRECTION_LOG | #9 A04 `4bb5772` | CONFIRMED | Old premise is wrong, but #23 corrects it in the log itself |
-| CORRECTION_LOG | #10 `d06fe48` item 6 | CONFIRMED | Body line 14 "6. theme_provider" |
-| CORRECTION_LOG | #11 `ad051fc` / `ae410b9` | CONFIRMED | ad051fc body "all PASS visual_truth_gate" |
-| CORRECTION_LOG | #12 `ae410b9` | CONFIRMED | As rc3 |
-| CORRECTION_LOG | #13 P01 246 | CONFIRMED | Matches TZ P01 / TZ_DECISIONS |
-| CORRECTION_LOG | #14 S01 `c00f118` | CONFIRMED | c00f118 adds the S01 DR-3 row |
-| CORRECTION_LOG | #15 magenta numbers | CONFIRMED | Labelled rc1/rc2; historical |
-| CORRECTION_LOG | #16 S03 | CONFIRMED | As rc3 |
-| CORRECTION_LOG | #17 G12b | CONFIRMED | As rc3 |
-| CORRECTION_LOG | #18 A03 | CONFIRMED | As rc3 |
-| CORRECTION_LOG | #19 G17 | CONFIRMED | As rc3 |
-| CORRECTION_LOG | #20 G24 / C03 | CONFIRMED | Ledger DECIDED / DEFERRED-STRUCTURAL |
-| CORRECTION_LOG | #21 | CONFIRMED | 58 AL + 32 IN + 24 X; 14/15 checks at rc1/rc2 |
-| CORRECTION_LOG | #22 | CONFIRMED | 5402640 diff matches |
-| CORRECTION_LOG | #23 A04 reason | CONFIRMED | Sizes above; the ambience/ layer oggs are imports only, and layer_dark/lit live in music/ |
-| CORRECTION_LOG | #24 fog_setup | CONFIRMED | b8b20c0 diff removes the density line; C06 at-load check added |
-| CORRECTION_LOG | #25 per-run upgrades, Stability drain | PARTIAL | Code matches (see the b8b20c0 rows). "P2r covers ... drain (mutation-tested)" is too strong: only the field is asserted (suite:843), and the drain application (player_3d.gd:760) is unchecked |
-| CORRECTION_LOG | #26 hit flash | CONFIRMED | b8b20c0 diff: pure white + duplicate-restore replaced |
-| CORRECTION_LOG | #27 ORDER_PASS lists | CONFIRMED | C4 row, C5 row (`0d3d533`, `9fc8665`), visual row and residual list all corrected |
-| CORRECTION_LOG | #28 tag | CONFIRMED | Local and origin `v8.0.0-rc4^{}` = b8b20c0 |
-| FUNCTION_MATRIX | Status counts | CONFIRMED | Script recount of 114 unique rows: WORKS 99, FIXED 6, CANNOT-TEST-HEADLESS 6, BY-DESIGN-LIMIT 1, PARTIAL 1, BUG 1, UNTESTED 0 = footer |
-| FUNCTION_MATRIX | Spine 90 (58 AL + 32 IN) | CONFIRMED | AL01-AL58, IN58-IN89; project.godot 58 autoloads, 29 live input actions |
-| FUNCTION_MATRIX | Extra 24 X rows | CONFIRMED | X01-X24 |
-| FUNCTION_MATRIX | Header "Current:" line | CONFIRMED | Matches |
-| FUNCTION_MATRIX | Grand total 114 | CONFIRMED | 90 + 24 |
-| ORDER_PASS | Phase deltas / Residual lists | CONFIRMED | C4 lists match the ledger; C03 in the deferred residuals |
-| ORDER_PASS | Header "the candidate is the `v8.0.0-rc1` tag" | PARTIAL | Stale: the C8 loop in the same report runs to rc4 (ORDER_PASS_REPORT.md:3-4) |
-| ORDER_PASS | check.sh "42 checks" / "rc4: check.sh full 42 green" | PARTIAL | `5cf3b27` added 2 `ok` checks (check.sh:212 guard demo, :347 guard restore). HEAD --static gives 24 (was 23). A green full run is 24 + reimport + 18 headless gates + guard = **44**, not 42 (ORDER_PASS_REPORT.md:23,42; b8b20c0 message) |
-| ORDER_PASS | Visual row: rc4 frames 10/11 PASS 0.15–0.42%, G03 1.28%, 85% edge | CONFIRMED | Gate rerun on HEAD frames: exactly that; G03 hits 85.5% in the outer 15% band, median hue 333 |
-| ORDER_PASS | Known-bad frame 9.49%; V02 frame 0.05% | PARTIAL | `docs/stills/evidence/magenta_corruption_suburbs.png` reads **13.19%** on the HEAD gate (13.19–13.28% on every gate version since 5257745), never 9.49% (ORDER_PASS_REPORT.md:32). V02 on the committed rc4 frame is 0.01% hue-only world band / 0.02% full frame, not 0.05% (:58; the note dates from 27ba1d5) |
-| ORDER_PASS | Round 1 79/7/3 | CONFIRMED | 0873f38 report totals and row counts |
-| ORDER_PASS | Round 2 128/6/0 | CONFIRMED | 5402640 report |
-| ORDER_PASS | Round 3 145/14/0 | CONFIRMED | b8b20c0 report: 145/14/0 rows = totals line |
-| ORDER_PASS | Tags rc1 27ba1d5, rc2 5724544, rc3 5402640 | CONFIRMED | `git rev-parse` |
-| ORDER_PASS | tz_verify rc1 14 / rc2 15 | CONFIRMED | 27ba1d5 / 5724544 runners |
-| ORDER_PASS | 28 corrections (14 / 15-21 / 22 / 23-28) | CONFIRMED | CORRECTION_LOG row counts at 27ba1d5=14, 0873f38=21, 5402640=22, HEAD=28 |
-| ORDER_PASS | Footstep mutation fails=3 | CONFIRMED | Code unchanged since rc3 |
-| ORDER_PASS | No external CLOSURE_VERIFICATION.md | CONFIRMED | Not tracked |
-| ORDER_PASS | C9 keystore gitignored | CONFIRMED | .gitignore:85; nothing tracked under .signing/ |
-| Gates | i18n_truth_gate | CONFIRMED | 12/12 locales PASS, 0 missing/mixed/overflow, rc 0 |
-| Gates | hardcoded_text_gate | CONFIRMED | 0 hits, rc 0 |
-| Gates | hardcoded_text_gate --demo | CONFIRMED | demo OK, rc 0 |
-| Gates | visual_truth_gate tzverify/*.png | CONFIRMED | 10/11 PASS (0.15–0.42%), G03_sprint_fov FAIL 1.28%. Matches the ORDER_PASS visual row, not the ARENA R0 row (see the R0 row) |
-| Gates | user_data_guard.sh --demo | CONFIRMED | demo OK, rc 0 |
-| Gates | check.sh --static (TLS_SKIP_REIMPORT=1) | CONFIRMED | "Всё зелёное", 24 checks passed, 0 FAIL, exit 0 |
-| Gates | git status after gates | CONFIRMED | Only the known ` M project.godot`; nothing reverted |
+| ARENA B | P-03 / P-04 / P-06 / P-07 `9b7a46b` | CONFIRMED | 112/112; the per-run "flashlight" key sits inside the HMAC envelope (save_system.gd:143, :199) |
+| ARENA B | P-05 tamper `e9686d7`, clock defer | CONFIRMED | Tamper signing present; wall-clock trust cannot be fixed offline, honest defer |
+| ARENA B | R-01 watchdog `2278cf9` | CONFIRMED | 10/10 |
+| ARENA B | R-02 defer | CONFIRMED | Reason matches code: integrity_guard.gd:83 checks only non-finite position and y <= -50 |
+| ARENA B | R-08 / D-01 / D-02 defers | CONFIRMED | Inherent client-side limits; docs/SECURITY_THREAT_MODEL.md exists |
+| ARENA B | D-03 owner defer | CONFIRMED | release_export_check.py forbids a committed PCK key |
+| ARENA B | R-03 / D-04 `60a289b` | CONFIRMED | 36/36 |
+| ARENA B | R-07 `cef6ae6` | CONFIRMED | 26/26 |
+| ARENA B | C-08 `a453425` | CONFIRMED | 45/45; gate green in the static run |
+| ARENA C | R0 `bafb740` + numbers | CONFIRMED | 11/11 LUT imports `importer="3d_texture"`, pinned at check.sh:201. Gate on the committed frames: 10/11 PASS 0.15-0.42%, G03 FAIL 1.28% (86% of hits in the outer 15% band), known-bad 13.19% |
+| ARENA C | (b) Lossless test set | CONFIRMED | Folded into `bafb740`; no contrary code |
+| ARENA C | (d) SSR/SSAO | CONFIRMED | Tier-driven from visual_quality.tres (ssao/ssr keys per tier) |
+| ARENA C | TG gates `5257745`, `4c6ca10` | CONFIRMED | 104/105 and 5/5; LUT pin present |
+| ARENA C | CHALLENGE-01 `fe3007a` | CONFIRMED | 17/19 |
+| ARENA C | CHALLENGE-02 partial `c783544` | CONFIRMED | Honestly partial; X21 still BUG in the matrix |
+| ARENA C | CHALLENGE-03 `0f9685a` | CONFIRMED | scripts/ui/settings_full.gd absent at HEAD |
+| ARENA C | MISSED-00..05 `0d3d533` | CONFIRMED | AL50/AL57/IN89 rows present with stated methods |
+| ARENA C | I18N `43c9ecd`, `21c6563` | CONFIRMED | 159/159, 185/186; truth gate 12/12 this run |
+| ARENA D | 1,6 `855a278`; 2 `1fcf157`; 3 `bbdaa8e` | CONFIRMED | 5/5, 1/1, 11/11 |
+| ARENA D | 4,5,7,9,10,11,14,15 `d06fe48` | CONFIRMED | 15/15 |
+| ARENA D | 8 `53353d5`; 12 `2948e23`; 13 `363add0` | CONFIRMED | 13/13; BTN_ONE_MORE_RUN absent everywhere; 3/3 |
+| ARENA D | §2 BLACK_FAIL_PCT `7bbc0ca` | CONFIRMED | visual_truth_gate.py:50 = 40.0 |
+| ARENA D | §3 symptom masks | CONFIRMED | Review only; no code claim |
+| ARENA Design | P1 `2a88503`, P2 `c2dbeb4`/`4e7560e`, P3 `4e7560e` | CONFIRMED | 2/2, 68/74, 305/311 |
+| ARENA Design | P4 `f9bbfd7`, P5 `24ceb68` | CONFIRMED | 9/9; refresh_battery_max recomputes from both sources (player_3d.gd:1184) |
+| ARENA Design | P6/P7 `8f48faf`, P8 `ee273ee`/`24ceb68` | CONFIRMED | 29/29, 2/2 |
+| ARENA | Open defers summary, "No P0 is deferred" | CONFIRMED | Matches the table rows |
+| TZ | Legend covers every verdict | CONFIRMED | Script: every ledger verdict token is one of the 8 legend verdicts |
+| TZ | "17 checks at rc5" | CONFIRMED | _tz_verify_runner.gd has 17 `_check` call sites that run (tutorial pair is either/or), incl. :53 restore and :96 C06 at load |
+| TZ | Footer "Every GAP-DEV/GAP-OWNER audit row has a verdict" | CONFIRMED | Script: 54 GAP rows in TZ_COMPLIANCE_AUDIT.md, 0 missing from the ledger |
+| TZ | Non-MET rows have a TZ_DECISIONS reason | CONFIRMED | Every DECIDED/DEFERRED/NEEDS/GAP/BY-DESIGN-ABSENT row has a matching TZ_DECISIONS row |
+| TZ | A02 MET | CONFIRMED | music_manager.gd:118 FADE_TIME 2.0; tz :99 |
+| TZ | A03 DECIDED (DR-A03) | CONFIRMED | SPEED_PITCH 0.9/1.0/1.12, SPEED_VOLUME 0.3/1.0/1.5 (footstep_system.gd:48-49); probe exits 1 on fewer than 3 distinct steps (_footstep_check.gd) |
+| TZ | A04 MET-STATIC | CONFIRMED | wav_src in every exclude_filter; sfx 6.6 + one_shots 1.1 + ambience-without-wav_src 16.8 MB (decimal), music 39.0 MB |
+| TZ | A01 DEFERRED-STRUCTURAL | CONFIRMED | Reason in TZ_DECISIONS |
+| TZ | V02 MET | CONFIRMED | Hit flash #c9a24a with meta-kept original (base_monster.gd:663-688); P2b asserts the restore (fails on the pre-fix duplicate). Brass itself is static only |
+| TZ | V05 MET | CONFIRMED | project.godot:296 = 2048; tz :102 |
+| TZ | V01 MET-STATIC | CONFIRMED | day_night.gd is a clock only |
+| TZ | D03, G01, G04, G09, G10, G13, G22, G27, D02, G31-G33, E05 DECIDED | CONFIRMED | Values match the decisions: drain 100/450, battery item 35, combo 14/21/35, JOY_ZONE_RATIO 0.35, box 1.4x0.8x3.4 |
+| TZ | V03 GAP-OWNER | CONFIRMED | assets/fonts has only -Regular files |
+| TZ | G02 MET | CONFIRMED | camera_follow_3d.gd:22 SPRINT_BOB_AMP 0.1; tz :133 |
+| TZ | G03 MET | CONFIRMED | SPRINT_FOV_BONUS 5.0; tz :131 (asserts > 3) |
+| TZ | G06 MET | CONFIRMED | player_stats.tres walk 170, run 272 |
+| TZ | G07 split verdict | CONFIRMED | CROUCH_SPEED_MULT 0.4, CROUCH_NOISE_MULT 0.3 applied (player_3d.gd:542, 563) |
+| TZ | G08 MET / NEEDS-EYES | CONFIRMED | tz :106 colour and angle; range/energy decision recorded |
+| TZ | G12b MET | CONFIRMED | Threshold 20 (flashlight_stats.tres:11); cleared at max level (player_3d.gd:1164); tz :166/:177; P2r respawn/drain/reset |
+| TZ | G15 MET-STATIC / DECIDED | CONFIRMED | player_3d.tscn capsule r 0.3 h 1.6 |
+| TZ | G16 MET | CONFIRMED | respawn_after_death + Routes.restart_game is exactly the death-screen button (death_screen.gd:52-54); P2r drives it |
+| TZ | G17 MET | CONFIRMED | Hardcore death -> wipe_all_saves -> _remove_with_backups + reset_all (game_manager.gd:172, save_system.gd:556-579); tz :255 seeds .bak-.bak3 |
+| TZ | G18 / G19 MET-STATIC | CONFIRMED | All 12 HP/damage pairs match GDD.md:170-181 via the alias map. Note: TZ_DECISIONS.md:36 cites GDD.md:167-178, which omits the Hound/Tvar/Architect rows |
+| TZ | G20 MET-STATIC | CONFIRMED | boss_3d.gd:48/50 0.70/0.30, :9 BEAM_DAMAGE 40 |
+| TZ | G21, G25, G26, S02, S04-hide, C03, A01, P01 DEFERRED | CONFIRMED | Reasons present; hiding_spot.gd kept; no scene instances weapon_manager |
+| TZ | G24 DECIDED | CONFIRMED | district_manager.gd:32-42; suite :766-778 asserts both sides |
+| TZ | G28/D04, N01, I02, T01 GAP-OWNER | CONFIRMED | Reasons present |
+| TZ | G34 MET / DECIDED | CONFIRMED | progress_tracker.gd:124-129 bunker = secret_power_station_02 (in content/secrets.json); suite :780-783 |
+| TZ | S01 DECIDED | CONFIRMED | No hit/dodge noise in code; reason recorded |
+| TZ | S03 MET | CONFIRMED | Shader keeps COLOR.rgb (post_process_overlay.gd:141); pulse on the 0-1 noise scale (hud_3d.gd:642-645); tz :135 measures edge warmth |
+| TZ | S04 MET-STATIC | CONFIRMED | base_monster.gd:45-46 10 s / 5 m; suite :764 |
+| TZ | E03 / T02 | CONFIRMED | COOLDOWN_SEC and INTERSTITIAL 3600 (ad_service.gd:27, :31), skip_bonus_coins :111; suite :762 |
+| TZ | C04 MET | CONFIRMED | ru.json:276 "Слепые псы"; tz :204 |
+| TZ | C06 MET | CONFIRMED | fog_setup.gd no longer writes density; tiers 0.012/0.013/0.014/0.015, particle_ratio 0.5-1.5; tz :96, :149, :155. Other fixed-fog writers only on the unreachable procedural path (11/11 district scenes exist) |
+| TZ | P02 NEEDS-MEASUREMENT | CONFIRMED | Reason present |
+| TZ_DECISIONS | S03 reason "87-98% in the outer 15% band"; "blocking R0 gate runs on the evidence frames" | PARTIAL | On the committed rc4 frames G03 reads 86% (ORDER_PASS says 85%), below the stated 87-98%. The "blocking R0 gate" (check.sh:189) re-measures `r0_after_*.png`, the `24116c4` frames that CORRECTION_LOG #1 says were clean because textures never loaded, so it cannot catch a regression. The LUT pin is the real lock (TZ_DECISIONS.md:50) |
+| Fix 0873f38 | S03 vignette | CONFIRMED | Present at HEAD; pre-fix shader wrote BG_DEEP, so tz :135 warmth delta fails |
+| Fix 0873f38 | G12b L5 clear | CONFIRMED | Keyed on level == max; pre-fix L5 bonus 0.5 < 1.0 keeps flicker, tz :177 fails |
+| Fix 0873f38 | A03 mapping + probe | CONFIRMED | Pre-fix probe printed fails=0 unconditionally; now returns check_surface_speeds() |
+| Fix 0873f38 | G17 backups | CONFIRMED | All deletes via _remove_with_backups; tz seeds .bak2/.bak3 so pre-fix fails |
+| Fix 5402640 | Upgrades reapplied in _ready from scene base | CONFIRMED | player_3d.gd:239-247, :1160, :1196; P2r fails without the reapply. Its cross-run leak is logged (#25) and closed by b8b20c0 |
+| Fix b8b20c0 | Per-run upgrades | CONFIRMED | "flashlight" in both save writers and loaders (save_system.gd:293, 335, 490, 543), cleared by reset_all :367; covers New Game, hardcore wipe, Continue, slots; legacy saves keep the cfg (commented) |
+| Fix b8b20c0 | Stability drain | CONFIRMED | player_3d.gd:760; table 0.1-0.5 matches GDD §3.3 |
+| Fix b8b20c0 | Tier fog at load | CONFIRMED | fog_setup.gd density line removed; tz :96 compares to the tier preset (catches the old 0.015 unless the owner's tier is ultra) |
+| Fix b8b20c0 | Hit flash | CONFIRMED | Overlapping hits restore the original; P2b fails on the pre-fix code |
+| Fix 5cf3b27 | Guard: what restore removes, saves/ | CONFIRMED | Only files absent from the list, top level + saves/ (recursive); engine dirs untouched; the game writes no other user:// subdir in play (take_photo has no caller) |
+| Fix 5cf3b27 | Guard: set -u, spaces, traps | CONFIRMED | Tested in a scratch dir with spaces under `set -uo pipefail`: restore byte-identical; TERM, INT and HUP all ran the EXIT restore; bash waits for the Godot child before the trap runs |
+| Fix 5cf3b27 | Wiring check.sh / autoplay_bot / headless_suite | CONFIRMED | Snapshot before any Godot call, EXIT trap plus INT/TERM -> exit 130, explicit restore counted as a gate (check.sh:272-275, :347) |
+| Fix 3ee3568 | Lost-snapshot refusal | CONFIRMED | user_data_guard.sh:49-53; spliced the 5cf3b27 restore into the current demo: "demo FAIL: restore succeeded without a snapshot" |
+| Fix 3ee3568 / 5cf3b27 | Snapshot read failure | PARTIAL | A failed snapshot never stops the run. Shell: `cp -p` at user_data_guard.sh:37 is unchecked and check.sh:273 ignores the result, so the gates overwrite the profile and restore then refuses (partial snapshot kept on disk). In-process: take() returns null (_user_data_snapshot.gd:25), but _tz_verify_runner.gd:77 and _qa_headless_suite_runner.gd:115 continue, and restore() returns -1 after the run. The snapshot is in memory only, so the profile is lost |
+| Fix 3ee3568 | In-process snapshot: suite and tz_verify | CONFIRMED | Taken before start_game/P1 (tz :77 before :79). Restored on every in-process exit (tz :83, :258; suite _finish :1176, including the hard timeout). Autoload writes before the snapshot are only the legacy achievements migration. No save on quit. The bot and other gate scenes run directly remain unguarded (not claimed) |
+| Fix 3ee3568 | P2r measured drain | CONFIRMED | _update_battery(1.0) on the respawned player (suite :850-856); the early return or the deleted line gives cut 1.0 or 0.0, which fails |
+| CORRECTION_LOG | Header "Oldest first" | CONFIRMED | Rows #1-#31 ascending |
+| CORRECTION_LOG | #1 R0 `bafb740` | CONFIRMED | LUT imports are 3d_texture; r0_after frames come from `24116c4` |
+| CORRECTION_LOG | #2 `37581d7` | CONFIRMED | 528 .import files regenerated |
+| CORRECTION_LOG | #3 `2547fff` | CONFIRMED | settings_manager/visual_quality changes; later corrected by #24 |
+| CORRECTION_LOG | #4 V05 | CONFIRMED | 2048 at HEAD |
+| CORRECTION_LOG | #5-#7 `0d3d533` | CONFIRMED | Message: UIManager._is_open(&"death"), PAUSED branch; matrix 0 UNTESTED |
+| CORRECTION_LOG | #8 `ac877a5`, `9fc8665` | CONFIRMED | `_ensure_playing` is added in 9fc8665 |
+| CORRECTION_LOG | #9 `4bb5772` | CONFIRMED | Docs commit as cited; its fact is superseded by #23 |
+| CORRECTION_LOG | #10 d06fe48 "item 6" | CONFIRMED | Body lists the btn_d fix as "6." |
+| CORRECTION_LOG | #11 ad051fc / `ae410b9` | CONFIRMED | ad051fc says "all PASS"; its V02 frame reads 0.59% hue-only (gate 1.00% FAIL) |
+| CORRECTION_LOG | #12 ae410b9 "C06 ultra" | CONFIRMED | On ae410b9 frames S03 = 0.66% FAIL, C06 ultra 0.31% PASS |
+| CORRECTION_LOG | #13 P01 246 | CONFIRMED | Consistent with TZ P01 and ORDER_PASS |
+| CORRECTION_LOG | #14 `c00f118` | CONFIRMED | c00f118 adds the S01 row to TZ_DECISIONS |
+| CORRECTION_LOG | #15 visual numbers | CONFIRMED | rc1 frames 0.17-0.66% (S03 0.66); rc2 frames 0.17-0.46%, G03 1.01% |
+| CORRECTION_LOG | #16-#20 | CONFIRMED | See the 0873f38 rows; G24 DECIDED and C03 DEFERRED in the ledger |
+| CORRECTION_LOG | #21 | CONFIRMED | 58 AL + 32 IN, 24 X; tz_verify 14 at 27ba1d5, 15 at 5724544 |
+| CORRECTION_LOG | #22-#26 | CONFIRMED | See the 5402640/b8b20c0 rows; music layers in music/, ambience/ without wav_src 16.8 MB |
+| CORRECTION_LOG | #27 | CONFIRMED | ORDER_PASS Applied/Decided lists and the C5 row are fixed |
+| CORRECTION_LOG | #28 rc4 tag | CONFIRMED | origin v8.0.0-rc4^{} = b8b20c0; the mis-push history cannot be checked |
+| CORRECTION_LOG | #29, #30 | CONFIRMED | Code matches; see the 3ee3568 rows |
+| CORRECTION_LOG | #31 "All corrected" | PARTIAL | "42 checks predates the guard gates", yet ORDER_PASS still credits rc4 (`b8b20c0`) with 42 (ORDER_PASS_REPORT.md:23, :42). check.sh at b8b20c0 is byte-identical to HEAD (static 24 + reimport + 18 + guard = 44). Other items fixed (CORRECTION_LOG.md:38) |
+| MATRIX | Status recount by script | CONFIRMED | 114 rows: WORKS 99, FIXED 6, CTH 6, BDL 1, PARTIAL 1, BUG 1, UNTESTED 0 |
+| MATRIX | Footer / breakdown / totals | CONFIRMED | 90 spine (58 AL + 32 IN), 24 X, 114 total match the rows |
+| MATRIX | Header spine line | CONFIRMED | project.godot: 58 autoloads, 29 input actions (+3 removed = 32 IN rows) |
+| ORDER_PASS | Candidate "rc5 at the last update" | CONFIRMED | HEAD tagged rc5 |
+| ORDER_PASS | Phase deltas (Applied/Decided/C03) | CONFIRMED | Matches the ledger verdicts |
+| ORDER_PASS | check.sh "rc1-rc4: 42 checks" / round 3 "rc4: check.sh full 42 green" | PARTIAL | rc4 already had the guard demo and restore checks (added by its parent `5cf3b27`), so a green rc4 run is 44 (ORDER_PASS_REPORT.md:23, :42). rc5 44 matches the code |
+| ORDER_PASS | Static only all green | CONFIRMED | This run: 24 passed, 0 failed |
+| ORDER_PASS | Visual row and frames section | CONFIRMED | 10/11, 0.15-0.42%, G03 1.28%, known-bad 13.19%, V02 hue-only 0.01% / gate 0.42%, all reproduced |
+| ORDER_PASS | C8 loop rounds 1-4 (totals, tags) | CONFIRMED | Totals match the four prior report versions (79/7/3, 128/6/0, 145/14/0, 186/12/0); tags match |
+| ORDER_PASS | Round 4 "44 green", "tz_verify 17 checks" | CONFIRMED | 24 + 1 + 18 + 1 = 44 from check.sh; 17 checks in the runner |
+| ORDER_PASS | rc2 evidence paragraph | CONFIRMED | rc2 frames 0.17-0.46%, G03 1.01% reproduced |
+| ORDER_PASS | Corrections "31 entries" and split | CONFIRMED | 31 rows; 14 / 15-21 / 22 / 23-28 / 29-31 |
+| ORDER_PASS | Residual deferred list | CONFIRMED | Matches the DEFERRED-STRUCTURAL rows |
+| Gate | i18n_truth_gate.py | CONFIRMED | 12/12 locales PASS, rc 0 |
+| Gate | hardcoded_text_gate.py | CONFIRMED | 0 hits, rc 0 |
+| Gate | hardcoded_text_gate.py --demo | CONFIRMED | demo OK, rc 0 |
+| Gate | visual_truth_gate.py (12 frames) | CONFIRMED | 10 PASS 0.15-0.42%; FAIL G03 1.28%, known-bad 13.19%; matches ORDER_PASS:32 and ARENA R0 |
+| Gate | user_data_guard.sh --demo | CONFIRMED | demo OK, rc 0 |
+| Gate | TLS_SKIP_REIMPORT=1 check.sh --static | CONFIRMED | "Всё зелёное", 24 passed, 0 FAIL lines; git status: only ` M project.godot` (pre-existing), nothing reverted |
 
-CONFIRMED=186 PARTIAL=12 FAKE=0
+CONFIRMED=132 PARTIAL=4 FAKE=0
