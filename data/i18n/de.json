@@ -1291,5 +1291,6 @@
   "DAILY_PLAY_15_FLAVOR": "Fünfzehn Minuten auf der Leitung. Stille Arbeit.",
   "DAILY_PLAY_20_FLAVOR": "Zwanzig Minuten. Das ist eine Schicht, Wächter.",
   "NGP_KNOBS_SUMMARY": "Hinweise: %s · Nachtzyklus: x%.2f · Zeitdruck: %s · Extra dunkel: %d",
-  "opt_on": "An"
+  "opt_on": "An",
+  "NO_RETURN_BLOCKED": "Der Rückweg ist dunkel. Nur noch das Werk voraus."
 }

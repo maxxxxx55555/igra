@@ -22,6 +22,25 @@ var current_district: String = START_DISTRICT
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
+## GDD.md:341 (G24): "Точка невозврата: вход в D10". The finale needs all 11
+## districts FULL (power_grid.gd _check_victory), so locking the way back the
+## moment a player steps into D10 would strand anyone who arrived early with
+## an unfinished district behind them. The gate closes only once D1-D9 are
+## all FULL: from then on, D10/D11 cannot travel back.
+const NO_RETURN_DISTRICT: String = "substation"
+
+func is_past_no_return(target: String) -> bool:
+	var gate: int = DISTRICTS.find(NO_RETURN_DISTRICT)
+	if DISTRICTS.find(current_district) < gate or DISTRICTS.find(target) >= gate:
+		return false
+	var pg := _grid()
+	if pg == null:
+		return false
+	for i in gate:
+		if int(pg.get_stage(StringName(DISTRICTS[i]))) < DistrictData.Stage.FULL:
+			return false
+	return true
+
 func _grid() -> Node:
 	return get_node_or_null("/root/PowerGrid")
 
@@ -65,6 +84,9 @@ func transition_to(district_id: String) -> void:
 		return
 	var pg := _grid()
 	if pg != null and not pg.is_unlocked(StringName(district_id)):
+		return
+	if is_past_no_return(district_id):
+		EventBus.inventory_notice.emit(LocalizationManager.t("NO_RETURN_BLOCKED"))
 		return
 	current_district = district_id
 	EventBus.district_entered.emit(StringName(district_id))

@@ -6,7 +6,7 @@ extends "res://scripts/enemies/base_monster.gd"
 enum Phase { P1, P2, P3 }
 
 const BALL_DAMAGE: float = 20.0
-const BEAM_DAMAGE: float = 25.0
+const BEAM_DAMAGE: float = 40.0  ## GDD.md:192 "балки 40 dmg" (the player-side 12/hit cap still applies)
 const MAX_MINIONS: int = 3
 const TELEPORT_INTERVAL: float = 6.0
 const BEAM_INTERVAL: float = 4.0
@@ -44,9 +44,10 @@ func _tick_ai(delta: float) -> void:
 			md.enter_boss()
 			_play_intro_sting("res://assets/audio/sfx/architect_sting.ogg")
 	var ratio: float = hp / max_hp
-	if ratio > 0.66:
+	# GDD.md:190-192 (G20): P1 100-70%, P2 70-30%, P3 30-0%.
+	if ratio > 0.70:
 		phase = Phase.P1
-	elif ratio > 0.33:
+	elif ratio > 0.30:
 		if phase == Phase.P1:
 			_switch_to_p2()
 		phase = Phase.P2

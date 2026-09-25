@@ -1291,5 +1291,6 @@
   "DAILY_PLAY_15_FLAVOR": "Fifteen minutes on the wire. Steady work.",
   "DAILY_PLAY_20_FLAVOR": "Twenty minutes. That is a shift, Keeper.",
   "NGP_KNOBS_SUMMARY": "Hints: %s · Night cycle: x%.2f · Time pressure: %s · Extra dark: %d",
-  "opt_on": "On"
+  "opt_on": "On",
+  "NO_RETURN_BLOCKED": "The way back is dark now. Only the station ahead."
 }

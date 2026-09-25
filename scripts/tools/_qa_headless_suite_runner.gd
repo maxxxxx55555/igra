@@ -87,6 +87,17 @@ func _fail(m: String) -> void:
 	_fails.append(m)
 	print("[qa] FAIL ", m)
 
+## The gate scene's stale boot/menu flow can drop PLAYING to MENU (see P2m).
+## Bounded: resume via the same Continue path a player uses, then poll.
+func _ensure_playing() -> bool:
+	if GameManager.is_playing():
+		return true
+	if GameManager.current_state == GameManager.GameState.MENU and SaveSystem.has_save():
+		GameManager.continue_game()
+	elif GameManager.is_paused():
+		GameManager.resume_game()
+	return await _wait_until(func() -> bool: return GameManager.is_playing(), 10.0)
+
 func _wait_until(pred: Callable, timeout_sec: float) -> bool:
 	var waited := 0.0
 	while waited < timeout_sec:
@@ -523,11 +534,18 @@ func _p2m_autosave_writes_real_save() -> void:
 	if not FileAccess.file_exists(SaveSystem.SAVE_PATH):
 		_fail("P2m no save file present to check")
 		return
+	# SaveSystem._process() only ticks while PLAYING, and this gate scene's
+	# stale boot/menu flow snaps PLAYING->MENU every ~8 s (KNOWN_ISSUES) - the
+	# old intermittent FAIL was this phase landing in a MENU window.
+	if not await _ensure_playing():
+		_fail("P2m could not get back to PLAYING to test the autosave tick")
+		return
 	var before := FileAccess.get_modified_time(SaveSystem.SAVE_PATH)
 	# Real filesystem mtimes are 1-second granularity on some platforms;
 	# without this the write can land in the same second and look like a
 	# no-op even when it genuinely wrote.
 	await get_tree().create_timer(1.1).timeout
+	await _ensure_playing()
 	SaveSystem._process(999.0)
 	var after := FileAccess.get_modified_time(SaveSystem.SAVE_PATH)
 	if after <= before:
@@ -727,6 +745,27 @@ func _p2q_autoload_behaviour() -> void:
 		_fail("P2q NoisePropagation.get_noise_at() far from every source is not 0")
 	if AdService.COOLDOWN_SEC != 3600.0 or AdService.INTERSTITIAL_COOLDOWN_SEC != 3600.0:
 		_fail("P2q ad cooldowns differ from GDD.md:616 (1 ad per hour)")
+	if BaseMonster.SEARCH_TIME != 10.0 or BaseMonster.SEARCH_RADIUS != 5.0:
+		_fail("P2q S04 search window differs from GDD.md:214-215 (10 s / 5 m)")
+	# TZ G24: from D10 the way back is closed only once D1-D9 are all FULL.
+	var grid_snap: Dictionary = PowerGrid.to_dict()
+	var cur_snap: String = DistrictManager.current_district
+	DistrictManager.current_district = "substation"
+	PowerGrid._set_stage_direct(&"school", 0)
+	var open_early: bool = not DistrictManager.is_past_no_return("park")
+	for i in DistrictManager.DISTRICTS.find("substation"):
+		PowerGrid._set_stage_direct(StringName(DistrictManager.DISTRICTS[i]), 3)
+	var closed_after: bool = DistrictManager.is_past_no_return("park") and not DistrictManager.is_past_no_return("power_station")
+	DistrictManager.current_district = cur_snap
+	PowerGrid.from_dict(grid_snap)
+	if not (open_early and closed_after):
+		_fail("P2q G24 no-return gate wrong (open while D1-D9 unfinished=%s, closed once all FULL=%s)" % [open_early, closed_after])
+	var pt_snap: Dictionary = ProgressTracker.to_dict()
+	var bunker_before: bool = ProgressTracker.is_bunker_accessed()
+	EventBus.secret_found.emit(ProgressTracker.BUNKER_SECRET_ID)
+	if bunker_before or not ProgressTracker.is_bunker_accessed():
+		_fail("P2q G34 bunker flag must follow the bunker secret (before=%s after=%s)" % [bunker_before, ProgressTracker.is_bunker_accessed()])
+	ProgressTracker.from_dict(pt_snap)
 	_log("P2q autoload behavioural asserts run - OK")
 
 # ── P2r ───────────────────────────────────────────────────────────────

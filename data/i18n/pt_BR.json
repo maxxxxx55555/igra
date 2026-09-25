@@ -1291,5 +1291,6 @@
   "DAILY_PLAY_15_FLAVOR": "Quinze minutos na linha. Trabalho firme.",
   "DAILY_PLAY_20_FLAVOR": "Vinte minutos. Isso é um turno, Guardião.",
   "NGP_KNOBS_SUMMARY": "Dicas: %s · Ciclo noturno: x%.2f · Pressão de tempo: %s · Escuridão extra: %d",
-  "opt_on": "Ativo"
+  "opt_on": "Ativo",
+  "NO_RETURN_BLOCKED": "O caminho de volta apagou. Só resta a usina."
 }

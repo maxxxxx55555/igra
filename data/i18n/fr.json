@@ -1291,5 +1291,6 @@
   "DAILY_PLAY_15_FLAVOR": "Quinze minutes sur la ligne. Travail régulier.",
   "DAILY_PLAY_20_FLAVOR": "Vingt minutes. C'est un quart, Gardien.",
   "NGP_KNOBS_SUMMARY": "Indices : %s · Cycle nocturne : x%.2f · Pression du temps : %s · Obscurité en plus : %d",
-  "opt_on": "Activé"
+  "opt_on": "Activé",
+  "NO_RETURN_BLOCKED": "Le chemin du retour est éteint. Il ne reste que la centrale."
 }

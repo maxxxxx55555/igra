@@ -1291,5 +1291,6 @@
   "DAILY_PLAY_15_FLAVOR": "On beş dakika hatta. Düzenli iş.",
   "DAILY_PLAY_20_FLAVOR": "Yirmi dakika. Bu bir vardiya, Bekçi.",
   "NGP_KNOBS_SUMMARY": "İpuçları: %s · Gece döngüsü: x%.2f · Zaman baskısı: %s · Ek karanlık: %d",
-  "opt_on": "Açık"
+  "opt_on": "Açık",
+  "NO_RETURN_BLOCKED": "Dönüş yolu karardı. Önde yalnızca santral var."
 }

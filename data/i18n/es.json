@@ -1291,5 +1291,6 @@
   "DAILY_PLAY_15_FLAVOR": "Quince minutos en la línea. Trabajo parejo.",
   "DAILY_PLAY_20_FLAVOR": "Veinte minutos. Eso ya es un turno, Guardián.",
   "NGP_KNOBS_SUMMARY": "Pistas: %s · Ciclo nocturno: x%.2f · Presión de tiempo: %s · Oscuridad extra: %d",
-  "opt_on": "Activo"
+  "opt_on": "Activo",
+  "NO_RETURN_BLOCKED": "El camino de vuelta está a oscuras. Solo queda la central."
 }

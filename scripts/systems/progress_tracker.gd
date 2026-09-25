@@ -121,12 +121,13 @@ func has_all_audio_logs() -> bool:
 func has_all_photos() -> bool:
 	return count_docs() >= Endings.get_total_documents()
 
-## Бункер в 11-м районе = электростанция восстановлена полностью.
+## GDD.md:350 (G34) "бункер D11": the bunker is real content - secret
+## secret_power_station_02 (content/secrets.json, zone z_bunker, spawned by
+## DistrictLoot). It used to be aliased to "power station FULL", which every
+## winning run already has, so the Truth ending never asked for the bunker.
+const BUNKER_SECRET_ID: String = "secret_power_station_02"
 func is_bunker_accessed() -> bool:
-	var pg := get_node_or_null("/root/PowerGrid")
-	if pg == null:
-		return false
-	return pg.get_stage(&"power_station") >= DistrictData.Stage.FULL
+	return is_secret_found(BUNKER_SECRET_ID)
 
 func get_stats() -> Dictionary:
 	return {"secrets": secrets, "kills": kills, "puzzles": puzzles, "time_played": time_played, "districts": _districts_restored()}

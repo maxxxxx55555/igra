@@ -1291,5 +1291,6 @@
   "DAILY_PLAY_15_FLAVOR": "십오 분, 선 위에서. 꾸준한 작업.",
   "DAILY_PLAY_20_FLAVOR": "이십 분. 그건 하나의 교대다, 관리인.",
   "NGP_KNOBS_SUMMARY": "힌트: %s · 밤 주기: x%.2f · 시간 압박: %s · 추가 어둠: %d",
-  "opt_on": "켜짐"
+  "opt_on": "켜짐",
+  "NO_RETURN_BLOCKED": "돌아갈 길은 이미 어둡다. 앞에는 발전소뿐이다."
 }

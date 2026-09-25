@@ -1291,5 +1291,6 @@
   "DAILY_PLAY_15_FLAVOR": "Quindici minuti sulla linea. Lavoro stabile.",
   "DAILY_PLAY_20_FLAVOR": "Venti minuti. È un turno, Custode.",
   "NGP_KNOBS_SUMMARY": "Suggerimenti: %s · Ciclo notturno: x%.2f · Pressione del tempo: %s · Buio extra: %d",
-  "opt_on": "Attivo"
+  "opt_on": "Attivo",
+  "NO_RETURN_BLOCKED": "La strada del ritorno è buia. Resta solo la centrale."
 }

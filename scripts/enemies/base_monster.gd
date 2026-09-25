@@ -40,6 +40,11 @@ var _stun_timer: float = 0.0
 var _flee_timer: float = 0.0
 var _investigate_timer: float = 0.0
 var _investigate_point: Vector3 = Vector3.ZERO
+## GDD.md:214-215 (S04): after losing the player a monster searches for
+## 10 s within 5 m of the last known point (was 5 s standing on the point).
+const SEARCH_TIME: float = 10.0
+const SEARCH_RADIUS: float = 5.0
+var _search_center: Vector3 = Vector3.INF
 var _player_hiding: bool = false
 var _death_timer: float = 0.0
 var _rage_active: bool = false
@@ -337,7 +342,8 @@ func _update_timers(delta: float) -> void:
 			_flee_timer = 0.0
 			if player_ref and is_instance_valid(player_ref):
 				_investigate_point = player_ref.global_position
-				_investigate_timer = 5.0
+				_investigate_timer = SEARCH_TIME
+				_search_center = _investigate_point
 				_change_state(State.INVESTIGATE)
 			else:
 				_change_state(State.PATROL)
@@ -411,6 +417,12 @@ func _state_investigate(delta: float) -> void:
 	# (_detect_ambient() below still runs) while the rank-scaled timer set by
 	# _enter_investigate_at()/other entry points counts down normally.
 	_move_to(_base_speed * 0.6)
+	# Arrived: pick the next spot inside the search radius instead of
+	# standing on the last known point for the whole search.
+	if _search_center.is_finite() and global_position.distance_to(_investigate_point) < 1.0:
+		var a := randf() * TAU
+		var r := randf_range(1.5, SEARCH_RADIUS)
+		_investigate_point = _search_center + Vector3(cos(a), 0.0, sin(a)) * r
 	_detect_ambient()
 
 func _state_chase(delta: float) -> void:
@@ -480,7 +492,8 @@ func _enter_investigate_at(pos: Vector3) -> void:
 	# PLAN.md Stage 3: Stealth skill "cold_trail" (0.2/level, max 2) -
 	# shortens how long enemies keep searching after losing the player.
 	var cold_trail_lvl: int = SkillTreeManager.get_skill_level(&"cold_trail") if SkillTreeManager else 0
-	_investigate_timer = 5.0 * (1.0 - 0.2 * cold_trail_lvl)
+	_investigate_timer = SEARCH_TIME * (1.0 - 0.2 * cold_trail_lvl)
+	_search_center = pos
 	_change_state(State.INVESTIGATE)
 
 func _on_player_hiding_changed(hiding: bool) -> void:
@@ -609,7 +622,8 @@ func _on_detect_body_entered(body: Node) -> void:
 				_change_state(State.CHASE)
 			else:
 				_investigate_point = body.global_position
-				_investigate_timer = 5.0
+				_investigate_timer = SEARCH_TIME
+				_search_center = _investigate_point
 				_change_state(State.INVESTIGATE)
 
 func _on_detect_body_exited(body: Node) -> void:
