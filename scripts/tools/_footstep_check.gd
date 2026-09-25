@@ -10,5 +10,6 @@ func _run() -> void:
 	var fs := FootstepSystem.new()
 	add_child(fs)
 	fs.demo()
-	print("[footstep-check] DONE fails=0")
-	get_tree().quit(0)
+	var fails := fs.check_surface_speeds()
+	print("[footstep-check] DONE fails=%d" % fails)
+	get_tree().quit(0 if fails == 0 else 1)

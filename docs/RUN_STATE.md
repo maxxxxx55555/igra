@@ -26,7 +26,7 @@ export templates need an owner-approved download), C7, C8.
   geometry even without a settle pass.
 - User-data folder `app_userdata/The Last Streetlight` was deleted and recreated around 2026-09-25 00:24
   (cause unknown; nothing in this session's commands targets it). Lost: settings.cfg, onboarding.cfg,
-  save.tres (Jul 31), saves/. The 7 save files taken earlier are in `%TEMP%	ls_save_backup`.
+  save.tres (Jul 31), saves/. The 7 save files taken earlier are in `%TEMP%\tls_save_backup`.
 
 ## Session 11 (2026-09-25): R0 real root cause, C5 matrix 0 UNTESTED, retro-verify
 

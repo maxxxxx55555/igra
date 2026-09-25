@@ -25,21 +25,11 @@ const MATERIALS := {
 	"default":     {"volume": -8.0, "pitch_range": [0.94, 1.06], "sample": "footstep_concrete"},
 }
 
-## RESCUE WAVE P1: ox alpha delivered per-speed sets (assets/audio/sfx/
-## footsteps/<surface>_{walk,jog,sprint}.wav) for 6 surfaces. The player
-## only has 3 movement states that reach play_step (WALK, STEALTH, RUN —
-## CROUCH/IDLE are silent, see play_step()), so "jog" has no state to map
-## to and stays unused rather than inventing a jog mechanic that doesn't
-## exist (DEFAULT_CHOICE). WALK and STEALTH both use the "walk" sample;
-## RUN uses "sprint". Volume/pitch still come from MATERIALS above.
-const SPEED_SAMPLES := {
-	"concrete": {"walk": "footsteps/concrete_walk", "run": "footsteps/concrete_sprint"},
-	"metal":    {"walk": "footsteps/metal_walk",    "run": "footsteps/metal_sprint"},
-	"wood":     {"walk": "footsteps/wood_walk",     "run": "footsteps/wood_sprint"},
-	"grass":    {"walk": "footsteps/grass_walk",    "run": "footsteps/grass_sprint"},
-	"gravel":   {"walk": "footsteps/gravel_walk",   "run": "footsteps/gravel_sprint"},
-	"tile":     {"walk": "footsteps/tile_walk",     "run": "footsteps/tile_sprint"},
-}
+## GDD A03 (6 surfaces x 3 speeds): the three audible player states
+## STEALTH/WALK/RUN map onto the delivered footsteps/<surface>_{walk,jog,
+## sprint}.wav sets. Surfaces with a single sample (asphalt, puddle, glass)
+## carry speed in volume + pitch instead (TZ_DECISIONS DR-A03).
+const SPEED_SURFACES: Array[String] = ["concrete", "metal", "wood", "grass", "gravel", "tile"]
 
 const CLANK_VOLUME: float = 0.0
 const CLANK_PITCH_RANGE := [0.92, 1.05]
@@ -53,6 +43,10 @@ const STATE_WALK: int = 1
 const STATE_RUN: int = 2
 const STATE_STEALTH: int = 3
 const STATE_CROUCH: int = 4
+const AUDIBLE_STATES: Array[int] = [STATE_STEALTH, STATE_WALK, STATE_RUN]
+const SPEED_FILE := {STATE_STEALTH: "walk", STATE_WALK: "jog", STATE_RUN: "sprint"}
+const SPEED_VOLUME := {STATE_STEALTH: 0.3, STATE_WALK: 1.0, STATE_RUN: 1.5}
+const SPEED_PITCH := {STATE_STEALTH: 0.9, STATE_WALK: 1.0, STATE_RUN: 1.12}
 
 var _player: Node3D
 var _raycast: RayCast3D
@@ -74,9 +68,9 @@ func _load_samples() -> void:
 	var names: Array = [CLANK_SAMPLE]
 	for key in MATERIALS:
 		names.append(String(MATERIALS[key]["sample"]))
-	for surface in SPEED_SAMPLES:
-		for speed_key in SPEED_SAMPLES[surface]:
-			names.append(String(SPEED_SAMPLES[surface][speed_key]))
+	for surface in SPEED_SURFACES:
+		for state in AUDIBLE_STATES:
+			names.append(_step_sample(surface, state))
 	for n in names:
 		var path: String = SFX_DIR + String(n) + ".wav"
 		if not _streams.has(n) and ResourceLoader.exists(path):
@@ -124,17 +118,18 @@ func play_step(state: int, _speed: float, weight_kg: float) -> void:
 		return
 
 	var mat: Dictionary = MATERIALS.get(surface, MATERIALS["default"])
-	var sample_name: String = String(mat["sample"])
-	if SPEED_SAMPLES.has(surface):
-		var speed_key: String = "run" if state == STATE_RUN else "walk"
-		sample_name = String(SPEED_SAMPLES[surface][speed_key])
-	var speed_mult := 1.0
-	match state:
-		STATE_RUN: speed_mult = 1.5
-		STATE_WALK: speed_mult = 1.0
-		STATE_STEALTH: speed_mult = 0.3
-		_: speed_mult = 1.0
-	_play(_sample(sample_name), float(mat["volume"]) + linear_to_db(speed_mult), mat["pitch_range"])
+	_play(_sample(_step_sample(surface, state)), float(mat["volume"]) + linear_to_db(float(SPEED_VOLUME.get(state, 1.0))),
+		_step_pitch(surface, state))
+
+func _step_sample(surface: String, state: int) -> String:
+	if surface in SPEED_SURFACES:
+		return "footsteps/%s_%s" % [surface, SPEED_FILE.get(state, "jog")]
+	return String(MATERIALS.get(surface, MATERIALS["default"])["sample"])
+
+func _step_pitch(surface: String, state: int) -> Array:
+	var r: Array = MATERIALS.get(surface, MATERIALS["default"])["pitch_range"]
+	var k: float = 1.0 if surface in SPEED_SURFACES else float(SPEED_PITCH.get(state, 1.0))
+	return [float(r[0]) * k, float(r[1]) * k]
 
 func _play(stream: AudioStream, volume_db: float, pitch_range: Array) -> void:
 	if stream == null:
@@ -187,13 +182,23 @@ func demo() -> void:
 		assert(float(r[0]) <= float(r[1]), "bad pitch range: %s" % key)
 		assert(String(MATERIALS[key]["sample"]) != "", "missing sample: %s" % key)
 	assert(STATE_CROUCH == 4 and STATE_STEALTH == 3, "state constants must mirror player enum")
-	# RESCUE WAVE P1: prove the walk/run -> per-speed-file mapping actually
-	# resolves to real loaded streams, not just that the dict entries exist.
-	for surface in SPEED_SAMPLES:
-		for speed_key in ["walk", "run"]:
-			var sample_name: String = String(SPEED_SAMPLES[surface][speed_key])
-			var stream := _sample(sample_name)
-			assert(stream != null and stream != _step_stream,
-				"footstep speed sample failed to load: %s (%s)" % [sample_name, speed_key])
-			print("[footstep] ", surface, "/", speed_key, " -> ", sample_name, ".wav OK")
 	print("[footstep] demo OK samples=", _streams.size())
+
+## A03 regression: every GDD surface must give 3 distinct (sample, pitch)
+## steps across STEALTH/WALK/RUN, each backed by a real loaded file.
+## Returns the failure count (asserts don't stop a headless probe).
+func check_surface_speeds() -> int:
+	var fails := 0
+	for surface in ["asphalt_dry", "asphalt_wet", "concrete", "wood", "metal", "puddle", "glass"]:
+		var seen := {}
+		for state in AUDIBLE_STATES:
+			var sample_name := _step_sample(surface, state)
+			var key := "%s@%0.2f" % [sample_name, _step_pitch(surface, state)[0]]
+			var loaded := _streams.has(sample_name)
+			if not loaded or seen.has(key):
+				fails += 1
+			seen[key] = true
+			print("[footstep] %s/%d -> %s pitch %0.2f %s" % [surface, state, sample_name, _step_pitch(surface, state)[0], "OK" if loaded else "MISSING"])
+		if seen.size() != AUDIBLE_STATES.size():
+			print("[footstep] FAIL %s: only %d distinct steps" % [surface, seen.size()])
+	return fails

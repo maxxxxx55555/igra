@@ -99,6 +99,7 @@ CODE decides whether to adopt each into a content file or wire it.
 | `DAILY_STREETS_16_FLAVOR` | Sixteen streets. Light the city like it's Night Zero in reverse. |
 | `DISTRICT_2_TOAST` | District 2 restored! The city breathes again. |
 | `Dyslexia Font (OpenDyslexic)` | Dyslexia Font (OpenDyslexic) |
+| `FIRST_RESTORE` | First district restored! |
 | `Level: %d\nPlaytime: %s\n%s` | Level: %d\nPlaytime: %s\n%s |
 | `NGP_BLACKOUT_PLUS_DESC` | One extra district starts DARK. No head start, no mercy. |
 | `NGP_GHOST_DESC` | Crawlers ignore you. Achievements disabled. Unseen, unrecorded. |
@@ -122,7 +123,7 @@ CODE decides whether to adopt each into a content file or wire it.
 | `tip3` | Use cover when HP is low. |
 | `tutorial_done` | Tutorial complete. Good luck! |
 
-Total: 112 keys.
+Total: 113 keys.
 
 Verified: none of these keys appears in any `.gd`, `.tscn` or
 `.tres` under `scripts/`, `scenes/` or `components/`, and none is

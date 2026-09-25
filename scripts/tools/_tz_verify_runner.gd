@@ -16,11 +16,26 @@ func _check(cond: bool, m: String) -> void:
 		_fails += 1
 	_log(("OK   " if cond else "FAIL ") + m)
 
-func _shot(row: String) -> void:
+func _shot(row: String) -> Image:
 	await RenderingServer.frame_post_draw
 	var img := get_tree().root.get_texture().get_image()
 	img.save_png(ProjectSettings.globalize_path(OUT + row + ".png"))
 	_log("frame %s.png" % row)
+	return img
+
+## Mean (r - b) over a left-edge strip at mid height: where the vignette is
+## strong and no HUD widget sits. bg-deep is bluish (< 0), ember is > 0.
+func _edge_warmth(img: Image) -> float:
+	var w := img.get_width()
+	var h := img.get_height()
+	var sum := 0.0
+	var n := 0
+	for y in range(int(h * 0.4), int(h * 0.6), 4):
+		for x in range(0, int(w * 0.03), 2):
+			var c := img.get_pixel(x, y)
+			sum += c.r - c.b
+			n += 1
+	return sum / maxf(n, 1)
 
 func _save_paths() -> Array[String]:
 	var out: Array[String] = ["user://ng_plus_data.json"]
@@ -79,7 +94,7 @@ func _run() -> void:
 	await get_tree().create_timer(3.0).timeout
 	var p: Node3D = get_tree().get_first_node_in_group("player")
 	var cam := get_viewport().get_camera_3d()
-	await _shot("baseline")
+	var base_warmth := _edge_warmth(await _shot("baseline"))
 
 	# A02 - audio, numeric only.
 	_check(is_equal_approx(MusicManager.FADE_TIME, 2.0), "A02 MusicManager.FADE_TIME=%s (GDD 2.0)" % MusicManager.FADE_TIME)
@@ -105,15 +120,21 @@ func _run() -> void:
 		ys.append(cam.global_position.y - p.global_position.y)
 	await _shot("G03_sprint_fov")
 	var vig: ColorRect = get_tree().root.find_child("VignetteOverlay", true, false)
-	var vig_a: float = vig.color.a if vig else -1.0
-	await _shot("S03_noise_vignette")
+	var vig_r := 0.0
+	for i in 60:
+		vig_r = vig.color.r if vig else -1.0
+		if vig_r > 0.4:
+			break
+		await get_tree().process_frame
+	var run_warmth := _edge_warmth(await _shot("S03_noise_vignette"))
 	Input.action_release("run")
 	Input.action_release("move_up")
 	_check(fov_run - fov0 > 3.0, "G03 sprint FOV %0.1f -> %0.1f (+5 target)" % [fov0, fov_run])
 	var span: float = ys.max() - ys.min()
 	_check(span > 0.02 and span <= 0.25, "G02 headbob eye-height span while running=%0.3f (amp 0.1)" % span)
 	_check(is_equal_approx(p.stats.run_speed, p.stats.walk_speed * 1.6), "G06 run_speed=%s walk=%s" % [p.stats.run_speed, p.stats.walk_speed])
-	_check(vig_a > 0.0, "S03 vignette alpha while running=%s" % vig_a)
+	_check(vig_r > 0.4 and run_warmth - base_warmth > 0.03,
+		"S03 ember pulse while running: vignette r=%0.2f, edge warmth %0.3f -> %0.3f" % [vig_r, base_warmth, run_warmth])
 
 	# C06 - fog per tier.
 	var we := get_tree().root.find_child("WorldEnvironment", true, false) as WorldEnvironment
@@ -144,6 +165,19 @@ func _run() -> void:
 	await _shot("G12b_low_battery")
 	var espread: float = energies.max() - energies.min()
 	_check(espread > 0.01, "G12b light_energy spread at 10%% battery=%0.3f" % espread)
+	# G12b - max-level Stability clears the flicker (through the real upgrade path).
+	var flm := get_node("/root/FlashlightUpgradeManager")
+	var st_lvl: int = flm._levels["stability"]
+	flm._levels["stability"] = flm.get_max_level()
+	p.apply_flashlight_upgrades(flm._levels)
+	energies.clear()
+	for i in 20:
+		await get_tree().process_frame
+		energies.append(fl.light_energy)
+	var espread_l5: float = energies.max() - energies.min()
+	_check(espread_l5 == 0.0, "G12b Stability L5 at 10%% battery: spread=%0.3f (0 = cleared)" % espread_l5)
+	flm._levels["stability"] = st_lvl
+	p.apply_flashlight_upgrades(flm._levels)
 	p.battery = p.battery_max
 
 	# V02 - boss energy ball colour, in front of the camera.
@@ -212,12 +246,16 @@ func _run() -> void:
 	# this probe must never cost the machine's owner their actual progress.
 	var backup := _backup_saves()
 	SaveSystem.save_all()
+	# Seed every rotated backup so the check covers the load step-4 fallbacks.
+	for suffix in [".bak", ".bak2", ".bak3"]:
+		DirAccess.copy_absolute(SaveSystem.SAVE_PATH, SaveSystem.SAVE_PATH + suffix)
 	var had_save: bool = SaveSystem.has_save()
 	SettingsManager.set_setting("hardcore", true)
 	GameManager.trigger_death()
 	await get_tree().create_timer(1.0).timeout
 	await _shot("G17_hardcore_death")
-	_check(had_save and not SaveSystem.has_save(), "G17 hardcore death: save before=%s after=%s" % [had_save, SaveSystem.has_save()])
+	var left := _save_paths().filter(func(path: String) -> bool: return path.contains("tls_savegame") and FileAccess.file_exists(path))
+	_check(had_save and left.is_empty(), "G17 hardcore death: save before=%s, files left=%s" % [had_save, left])
 	SettingsManager.set_setting("hardcore", false)
 	_restore_saves(backup)
 

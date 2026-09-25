@@ -130,15 +130,15 @@ func _build_vignette() -> void:
 	mat.shader = _vignette_shader()
 	_vignette.material = mat
 
-## Виньетка уходит в #0c1016 (bg-deep), а не в чистый чёрный — канон GDD §11.2.
+## Виньетка уходит в #0c1016 (bg-deep, цвет ColorRect по умолчанию), а не в чистый
+## чёрный — канон GDD §11.2. RGB берётся из COLOR, чтобы S03 мог тонировать край в ember.
 func _vignette_shader() -> Shader:
 	var s := Shader.new()
 	s.code = "shader_type canvas_item;\n" \
-		+ "const vec3 BG_DEEP = vec3(0.047, 0.062, 0.086);\n" \
 		+ "void fragment(){\n" \
 		+ "  vec2 d = (UV - 0.5) * vec2(1.7, 1.0);\n" \
 		+ "  float v = smoothstep(0.3, 1.0, length(d));\n" \
-		+ "  COLOR = vec4(BG_DEEP, COLOR.a * v);\n" \
+		+ "  COLOR = vec4(COLOR.rgb, COLOR.a * v);\n" \
 		+ "}"
 	return s
 

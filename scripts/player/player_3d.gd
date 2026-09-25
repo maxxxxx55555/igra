@@ -1124,7 +1124,7 @@ func _update_low_battery_flicker() -> void:
 		_base_flashlight_energy = flashlight.light_energy
 	var ratio_pct: float = battery / maxf(battery_max, 0.001) * 100.0
 	var flicker: bool = flashlight_enabled and ratio_pct < flashlight_stats.flicker_battery_threshold \
-		and _flashlight_stability_bonus < 1.0 \
+		and not _flashlight_stability_maxed \
 		and not bool(SettingsManager.get_setting("reduce_flash", false))
 	if flicker:
 		_flickering = true
@@ -1150,7 +1150,7 @@ func apply_flashlight_upgrades(levels: Dictionary) -> void:
 	if sm:
 		sm.set_shader_parameter("softness", 0.3 * (1.0 - s_bonus))
 	_flashlight_battery_bonus = bat_bonus
-	_flashlight_stability_bonus = s_bonus
+	_flashlight_stability_maxed = fl_up.get_level("stability") >= fl_up.get_max_level()
 	_base_flashlight_energy = flashlight.light_energy
 	refresh_battery_max()
 	refresh_flashlight_range()
@@ -1162,8 +1162,8 @@ func apply_flashlight_upgrades(levels: Dictionary) -> void:
 ## every time either changes, so order no longer matters.
 var _flashlight_battery_bonus: float = 0.0
 ## GDD.md:79 (G12b): flicker below the low-battery threshold, cleared by the
-## max-level Stability upgrade (bonus 1.0).
-var _flashlight_stability_bonus: float = 0.0
+## max-level Stability upgrade (L5).
+var _flashlight_stability_maxed: bool = false
 var _base_flashlight_energy: float = -1.0
 var _flickering: bool = false
 const BATTERY_PER_SKILL_LVL: float = 25.0

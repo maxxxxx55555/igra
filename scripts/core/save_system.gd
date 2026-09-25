@@ -543,13 +543,15 @@ func load_slot(slot: int) -> bool:
 	return true
 
 func delete_slot(slot: int) -> bool:
-	var path = _get_slot_path(slot)
-	if FileAccess.file_exists(path + ".bak"):
-		DirAccess.remove_absolute(path + ".bak")
-	if FileAccess.file_exists(path):
-		var err = DirAccess.remove_absolute(path)
-		return err == OK
-	return false
+	return _remove_with_backups(_get_slot_path(slot))
+
+## G17: load step 4 falls back through .bak/.bak2/.bak3, so a delete that
+## leaves any of them lets the "wiped" save come back.
+func _remove_with_backups(path: String) -> bool:
+	for suffix in [".bak", ".bak2", ".bak3"]:
+		if FileAccess.file_exists(path + suffix):
+			DirAccess.remove_absolute(path + suffix)
+	return FileAccess.file_exists(path) and DirAccess.remove_absolute(path) == OK
 
 func get_all_slots_info() -> Array:
 	var result: Array = []
@@ -565,9 +567,7 @@ func get_all_slots_info() -> Array:
 ## alone only clears autoload state in memory, it never touched the actual
 ## save files, so a restart would resurrect the old progress via Continue.
 func wipe_all_saves() -> void:
-	for p in [SAVE_PATH, SAVE_PATH + ".bak"]:
-		if FileAccess.file_exists(p):
-			DirAccess.remove_absolute(p)
+	_remove_with_backups(SAVE_PATH)
 	for i in range(1, MAX_SLOTS + 1):
 		delete_slot(i)
 	reset_all()

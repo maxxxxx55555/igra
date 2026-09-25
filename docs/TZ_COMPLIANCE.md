@@ -16,16 +16,16 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 
 ## Evidence sources
 
-- **tz_verify:** `scenes/tools/tz_verify_scene.tscn`, run windowed. 13 checks, `fails=0`.
+- **tz_verify:** `scenes/tools/tz_verify_scene.tscn`, run windowed. 15 checks, `fails=0` (C8 rc2 run).
 - **Suite:** GOLD MASTER, `fails=0` on 3 consecutive runs.
-- **footstep:** `footstep_check_scene`, `fails=0`.
+- **footstep:** `footstep_check_scene`, `fails=0`; exits 1 when any surface lacks 3 distinct steps (mutation-tested in C8).
 
 ## Rows
 
 | ID | Requirement | Verdict | Evidence |
 |---|---|---|---|
 | A02 | Music crossfade 2.0 s | MET | tz_verify `FADE_TIME=2.0` (audio: no frame applies) |
-| A03 | Footsteps: 6 surfaces × 3 speeds, downward ray | MET | footstep probe: surface × speed map. Stealth/walk/run use distinct samples and volumes. |
+| A03 | Footsteps: 6 surfaces × 3 speeds, downward ray | DECIDED (DR-A03) | footstep probe: every GDD surface gives 3 distinct steps. Concrete/wood/metal: walk/jog/sprint files for stealth/walk/run. Asphalt/puddle/glass: one recorded sample, speed carried by volume + pitch 0.9/1.0/1.12. |
 | A04 | Audio size caps | MET-STATIC | Re-scored by role: `ambience/` holds A02's music layers |
 | A01 | Bus graph SFX(Footsteps, Combat, UI, Environment) | DEFERRED-STRUCTURAL | Re-routing plus an ear re-mix |
 | V02 | No neon / #fff | MET | `V02_energy_ball.png` |
@@ -42,16 +42,16 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 | G08 | Flashlight `#c9a24a`, 45° | MET (colour, cone) / NEEDS-EYES (8 m range, energy 2.0) | `G08_flashlight.png` |
 | G09 | Drain 1% per 2 s | DECIDED (DR-3) | Recorded boss-fight failure at a milder value |
 | G10 | Battery item +25% | DECIDED (DR-3) | `balance_sim` FAILs at +25 |
-| G12b | Flicker below 20%, cleared by Stability L5 | MET | tz_verify spread 13.7; `G12b_low_battery.png` |
+| G12b | Flicker below 20%, cleared by Stability L5 | MET | tz_verify: spread 16.2 at 10% battery, 0.000 with Stability L5 through `apply_flashlight_upgrades`; `G12b_low_battery.png` |
 | G13 | Combo 8/12/20 | DECIDED (DR-3) | Recorded winnability tuning |
 | G15 | Capsule 1.6 m, attack box | MET-STATIC (capsule 1.6) / DECIDED (DR-3, attack box) | Bot 1/3 with the capsule; all 3 seeds reached the boss; stalls = known boss-phase type |
 | G16 | Respawn: district entry, 50% HP, battery kept | MET | Suite P2r (exact button path) |
-| G17 | Hardcore death deletes save | MET | tz_verify before=true / after=false; `G17_hardcore_death.png` |
+| G17 | Hardcore death deletes save | MET | tz_verify: main + .bak/.bak2/.bak3 seeded, 0 files left after death; `G17_hardcore_death.png` |
 | G18 / G19 | Roster stats, Shadow | MET-STATIC | All 11 + boss HP/damage equal the GDD table |
 | G20 | Boss phases 70/30%, beams 40 | MET-STATIC | Constants; the bot boss phase exercises them |
 | G21 | §9 blueprints | DEFERRED-STRUCTURAL | New mechanics plus 5 blueprint locations |
 | G22 | 3 + 1 save slots UI | DECIDED (DR-3) | Recorded archive decision |
-| G24 | Point of no return at D10 | MET | Suite P2q asserts both sides of the gate |
+| G24 | Point of no return at D10 | DECIDED (DR-2) | Gate closes once D1–D9 are FULL, not on first D10 entry; suite P2q asserts both sides |
 | G25 | HUD slots incl. weapons ×2 | DEFERRED-STRUCTURAL | No weapon system in any scene |
 | G26 | 200 photos, 50/100/200 achievements | DEFERRED-STRUCTURAL (DR-5) | No photo can be collected in play |
 | G27 | Touch: left half = camera | DECIDED (DR-2) | The GDD table has no movement input |
@@ -60,12 +60,12 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 | G34 | Truth: docs + audio + photos + bunker | MET (bunker = real secret) / DR-5 (audio/photos aliased) | Suite P2q bunker assert; `endings_sim` all 5 reachable |
 | S01 | Hit 5 m/1.0, dodge 3 m/0.4 noise | DECIDED (DR-3, measured) | Bot bisect: with 0/3, without 2/3 |
 | S02 | Visibility modifiers | DEFERRED-STRUCTURAL | Detection-model rework |
-| S03 | Ember vignette noise pulse | MET | tz_verify alpha 0.5; `S03_noise_vignette.png` |
+| S03 | Ember vignette noise pulse | MET | tz_verify: vignette r 0.55 while running, frame edge warmth −0.015 → 0.066; `S03_noise_vignette.png` |
 | S04 | Search 10 s within 5 m | MET-STATIC | Constants asserted in suite P2q; in the IRON RULE batch (2/3) |
 | D02 | Unlock graph | DECIDED (DR-2) | — |
 | E03 / T02 | 1 ad per hour, skip −100 | MET-STATIC (cooldowns asserted in suite, skip mechanism) / BY-DESIGN-ABSENT (modal trigger) | — |
 | E05 | Coin curve 0–200 (D1) → 8000+ (D11) | DECIDED (DR-3) | Reachable ≈ 2200 districts + 1300 secrets + 3100 achievements, plus kills. Design audit P6 says keep base rewards and report the gap. |
-| C03 | Auto-aim | MET | tz_verify numeric |
+| C03 | Auto-aim | DEFERRED-STRUCTURAL (dormant until G25) | Cone logic in `WeaponBase` passes tz_verify on a probe weapon, but no gameplay path creates a weapon (G25). Live melee already hits anything within its 2.7 m sphere regardless of facing. |
 | C04 | Arachnophobia rename | MET | "Слепые псы"; `C04_arachnophobia_label.png` |
 | C06 | Tier fog + particles 50–150% | MET | tz_verify fog 0.012 / 0.015, 6/6 emitters; `C06_tier_*.png` |
 | P01 | Draw calls < 200 (D1) / < 350 (D11) | DEFERRED-STRUCTURAL | Windowed `perf_check_scene`: D1 = 246 (over 200), under the D11 350 cap. Needs material/mesh batching, not a value swap. |

@@ -59,7 +59,7 @@ JSON), so every load wiped district power and ProgressTracker. Found and fixed i
 
 | Item | Status |
 |---|---|
-| R0 magenta 3D world on real GPU (P0) | **Closed `bafb740`, the real root cause.** The 11 LUTs were imported as Texture2D (1D gradient). Measured on a windowed A/B with textures actually loaded: world hue-magenta 13% → 0.01–0.30%. The earlier `24116c4` "fix" is corrected in CORRECTION_LOG #1. |
+| R0 magenta 3D world on real GPU (P0) | **Closed `bafb740`, the real root cause.** The 11 LUTs were imported as Texture2D (1D gradient). Measured on a windowed A/B with textures actually loaded: world hue-magenta 13% → 0.01–0.30% (hue-only, full res, frames without the noise vignette). The gate's combined detector (hue OR saturation outlier) reads 0.17–0.46% on the half-res tzverify frames and 1.01% on the running `G03_sprint_fov` frame, where the canon ember vignette blends into blue at the edges (TZ_DECISIONS S03; CORRECTION_LOG #15). The earlier `24116c4` "fix" is corrected in CORRECTION_LOG #1. |
 | RENDERING_DIAGNOSIS (b) Lossless test set | Done as part of `bafb740`: Lossless and S3TC were both A/B'd and ruled out. |
 | RENDERING_DIAGNOSIS (d) SSR/SSAO elimination void | The diagnosis's premise is superseded by the LUT root cause. The effects stay tier-driven from `visual_quality.tres`. |
 | TG-SEE / TG-HEAR / TG-PLAY hardened gates (P1) | Closed `5257745`, `4c6ca10`. The R0 lock now pins the proven cause (`bafb740`). |

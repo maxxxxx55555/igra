@@ -10,7 +10,7 @@ by memory, so completeness can be proven instead of assumed.
   one row per input-map action. Re-run it after adding/removing an autoload or input action;
   its stderr line (`Total spine rows: N (A autoloads + B input actions)`) must match
   `grep -c "^AL\|^\w\+="` against the live `project.godot` sections, proving no row was dropped
-  or invented by hand. **Current: 89 spine rows (57 autoloads + 32 input actions).**
+  or invented by hand. **Current: 90 spine rows (58 autoloads + 32 input-action rows; 29 live actions, the 3 dead ones removed in `0d3d533` keep their rows as FIXED).**
 - **Extra rows** (rows X01+): non-autoload systems the spine can't see on its own — UI screens
   reached only through `Routes`, gameplay mechanics living on scene-local scripts (stealth,
   boss), and the three standing bugs the order-pass directive explicitly names as matrix rows.
@@ -150,7 +150,7 @@ by memory, so completeness can be proven instead of assumed.
 
 ## Totals
 
-- Spine: 87 (58 autoloads + 29 input actions; 3 dead actions removed in `0d3d533`, rows kept as FIXED)
-- Extra: 27 X-rows
+- Spine: 90 (58 AL rows + 32 IN rows; 3 dead actions removed in `0d3d533`, rows kept as FIXED)
+- Extra: 24 X-rows (X01-X24)
 - **Grand total: 114 rows** (recounted from the rows by script, 2026-09-25): WORKS 99 · FIXED 6 · CANNOT-TEST-HEADLESS 6 · BY-DESIGN-LIMIT 1 · PARTIAL 1 · BUG 1 · UNTESTED 0.
 - Open: X21 BUG (bot-harness spine stall; game side verified reachable), X20 PARTIAL (harness recovery A/B-proven, keypress trigger inferred). The older footer (58 WORKS / 43 UNTESTED) was stale; see `docs/CORRECTION_LOG.md` #7.
