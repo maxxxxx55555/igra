@@ -1,5 +1,15 @@
 # Run state — orchestrator pass (2026-09-20)
 
+## Session 12 (2026-09-25): C8 verifier loop, round 1 closed -> rc2
+
+**NEXT-ROW: C8 round 2 (independent verifier on `v8.0.0-rc2`)**, loop until FAKE=0 PARTIAL=0; then C9 AAB
+once export templates exist (owner-approved ~1 GB download).
+- Round 1 on rc1: CONFIRMED 79 / PARTIAL 7 / FAKE 3. All closed at root in `0873f38` (S03 shader + noise
+  scale, G12b L5 key, A03 walk/jog/sprint + pitch, G17 all backups; G24 DECIDED, C03 DEFERRED-STRUCTURAL).
+- Gates: tz_verify 15 fails=0; check.sh full 42 green; bot 1/3 (11/11 FULL x3, boss-phase stalls = known).
+- ENV: no concurrent Godot; `default_bus_layout.tres` untouched this run; `project.godot` diff is CRLF-only
+  noise, never staged.
+
 ## Session 11c (2026-09-25): C4 closed, C5/C6 green, C7 sign-off candidate
 
 **NEXT-ROW: C8 verifier loop on tag v8.0.0-rc1** (then C9 AAB once export templates exist).

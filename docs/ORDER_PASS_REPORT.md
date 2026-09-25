@@ -25,13 +25,26 @@ Covers C4–C7 of the studio-lead directive. Base is `c73cf7c` (C3 close-out); t
 | GOLD MASTER suite | `DONE fails=0`, 3 consecutive runs, 0 SCRIPT ERROR |
 | attack_sim / save_integrity / craft_check / a11y_probe / ui_layout | fails=0 each |
 | `balance_sim` / `endings_sim` | PASS / all 5 endings reachable |
-| TZ-verify (windowed, `scenes/tools/tz_verify_scene.tscn`) | 14 checks, `DONE fails=0` |
+| TZ-verify (windowed, `scenes/tools/tz_verify_scene.tscn`) | rc1: 14 checks; rc2: 15 checks, `DONE fails=0` |
 | Audio truth (windowed) | PASS: Music −19.3 dB, all buses under −1.5 dB |
 | Perf (windowed) | D1 **246** draw calls: under the D11 350 cap, **over the D1 200 target** |
 | GUI exploration (windowed) | 19 PASS, 0 BUG, all 13 locales |
 | Visual truth (frames below) | Hue-magenta ≤0.05% at full res on all 11 frames. Half res: 10/11 PASS; 1 FAIL (`S03_noise_vignette`, 0.66%, saturation-outlier sub-detector on the ember vignette). Known-bad `magenta_corruption_suburbs.png` still FAILs (9.49%). |
 | Bot (3 seeds) | Latest shipped trees: 2/3 (batch `c00f118`), 1/3 (capsule `97c8bf4`, all 3 seeds reached the boss) |
 | AAB signed-verify | **not run**: no export templates (see Residual) |
+
+## C8 verifier loop
+
+| Round | Tag | Verifier result | Action |
+|---|---|---|---|
+| 1 | `v8.0.0-rc1` (`27ba1d5`) | CONFIRMED 79 / PARTIAL 7 / FAKE 3 (`docs/CLOSURE_VERIFICATION_INTERNAL.md`) | FAKE: S03 (vignette never drew), G12b (L5 never cleared flicker), A03 (stealth = walk sample; probe could not fail). PARTIAL: G17 backups survived, G24/C03 mislabelled, R0 numbers, #8 hash, matrix breakdown, check count. All fixed in `0873f38`; CORRECTION_LOG 15-21. |
+
+rc2 evidence: tz_verify 15 checks `DONE fails=0`; footstep probe `fails=0` and mutation-tested
+(`fails=3`, rc 1, with stealth mapped onto walk's file); `tools/check.sh` full **42 green**; bot 1/3 won, 11/11
+districts FULL on all three seeds, both stalls in the boss phase (same type as the rc1 baseline).
+Visual gate on the rc2 tzverify frames (half res): 10/11 PASS (0.17–0.46%); `G03_sprint_fov` FAIL 1.01%,
+87% of the hits in the outer 15% edge band = canon ember vignette over blue (TZ_DECISIONS S03).
+No external `docs/CLOSURE_VERIFICATION.md` exists.
 
 ## Frames (read by eye this pass)
 
