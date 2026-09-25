@@ -1,5 +1,25 @@
 # Run state — orchestrator pass (2026-09-20)
 
+## Session 11b (2026-09-25): save-signature bug, G16, C6 green, batch + X21
+
+**NEXT-ROW: batch commit after the X21 bot run** (uncommitted, tested by suite x3 clean: S01 noise,
+S04 search, G20 boss thresholds, G24 no-return gate, G34 bunker secret, V01 DayNight painter removed,
+P2m/S01 suite determinism, X21 bot creep fix). Then G15-capsule (IRON RULE), A03 re-score, C9 (blocked:
+export templates need an owner-approved download), C7, C8.
+
+- `ac877a5` **critical**: progress signature never matched on load (int vs float after JSON) - every
+  Continue reset district power + ProgressTracker. A/B via suite P2r; the "flaky" P2l/P2m/P3 passed after.
+- `e067756` G16: Retry respawns at district entry, 50% HP, battery kept (was: new game on every death).
+- `21c6563` C6: i18n_truth_gate 12/12 (13/13 with en); Keeper voice; new hardcoded_text_gate (2 real leaks).
+- Batch bot (pre-X21-fix) went 0/3 - all three the spine stall. Root cause of the spine stall (X21): the bot
+  stops at PICKUP_TOUCH 1.4 m but contact needs ~1.0 m, so it parks forever. Harness now creeps in at
+  APPROACH_MIN_SCALE (constant untouched - tightening it is REJECTED).
+- Falsified and reverted (not committed): "loot scattered inside props" - 0/98 pickups overlap layer-1
+  geometry even without a settle pass.
+- User-data folder `app_userdata/The Last Streetlight` was deleted and recreated around 2026-09-25 00:24
+  (cause unknown; nothing in this session's commands targets it). Lost: settings.cfg, onboarding.cfg,
+  save.tres (Jul 31), saves/. The 7 save files taken earlier are in `%TEMP%	ls_save_backup`.
+
 ## Session 11 (2026-09-25): R0 real root cause, C5 matrix 0 UNTESTED, retro-verify
 
 **NEXT-ROW: G16** (then G04, G15-capsule, G18-G22, G24-G27, G31-G34, S01, S02, S04, A01, A03, D03/V01;
