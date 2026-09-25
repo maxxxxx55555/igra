@@ -16,6 +16,12 @@ if [[ -z "$GODOT" ]] || [[ ! -x "$GODOT" ]]; then
   exit 99
 fi
 echo "# Godot binary: $GODOT"
+# Runs the real game on the owner's user:// profile: snapshot it, restore on
+# any exit (tools/qa_sim/user_data_guard.sh).
+source tools/qa_sim/user_data_guard.sh
+udg_snapshot
+trap 'udg_restore' EXIT
+trap 'exit 130' INT TERM
 mkdir -p .qa_logs
 GREEN=$'\033[32m'; RED=$'\033[31m'; OFF=$'\033[0m'
 SEEDS="${QA_SEEDS:-1 2 3}"

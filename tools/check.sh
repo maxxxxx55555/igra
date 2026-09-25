@@ -208,6 +208,11 @@ if "$PY" tools/qa_sim/i18n_truth_gate.py >/dev/null 2>&1; then
 else
   bad "i18n_truth_gate (см. 'python tools/qa_sim/i18n_truth_gate.py' - overflow это статическая эвристика по длине строки, не подтверждённый визуально баг, см. docs/RUN_STATE.md)"
 fi
+if bash tools/qa_sim/user_data_guard.sh --demo >/dev/null 2>&1; then
+  ok "user_data_guard --demo (snapshot/restore профиля)"
+else
+  bad "user_data_guard --demo (snapshot/restore профиля)"
+fi
 if "$PY" tools/qa_sim/hardcoded_text_gate.py >/dev/null 2>&1; then
   ok "hardcoded_text_gate (no untranslated words assigned to .text)"
 else
@@ -262,6 +267,12 @@ else
     echo "  ${DIM}Godot не найден в PATH. Укажите путь: GODOT=/путь/к/godot ./tools/check.sh${OFF}"
     echo "  ${DIM}Скачать: https://godotengine.org/download${OFF}"
   else
+    # Engine gates run the real game on the owner's user:// profile (New
+    # Game, autosave, forged upgrade cfgs): snapshot it, restore on any exit.
+    source tools/qa_sim/user_data_guard.sh
+    udg_snapshot
+    trap 'udg_restore' EXIT
+    trap 'exit 130' INT TERM
     # RELEASE CONVERGENCE STEP 4: game_test_3d_scene.tscn's phase1+ combat
     # step stalls intermittently under --headless (pre-existing,
     # docs/KNOWN_ISSUES.md "game_test_3d_scene.tscn gate stalls silently") -
@@ -333,6 +344,7 @@ else
     #   godot --windowed --path . scenes/tools/audio_truth_gate_scene.tscn
     run_gate "аудио: Music bus не в тишине (только --windowed)" "res://scenes/tools/audio_truth_gate_scene.tscn" 60
     run_gate "тач-инпут (joystick/deadzone/HUD-кнопки)" "res://scenes/tools/touch_probe_scene.tscn"
+    if udg_restore; then ok "user-data guard: профиль игрока восстановлен байт-в-байт"; else bad "user-data guard: профиль игрока НЕ восстановлен"; fi
   fi
 fi
 
