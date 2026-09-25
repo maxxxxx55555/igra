@@ -165,3 +165,15 @@ func _load() -> void:
 	var data: Dictionary = inner.data
 	for b in BRANCH_NAMES:
 		_levels[b] = clampi(int(data.get(b, 0)), 0, MAX_LEVEL)
+## Upgrades are bought with the run's coins, so they are per-run state: saved
+## in the save file next to skill_tree and cleared by SaveSystem.reset_all()
+## (New Game, hardcore wipe). The cfg above only mirrors the active run.
+func to_dict() -> Dictionary:
+	return _levels.duplicate()
+
+func from_dict(data: Dictionary) -> void:
+	for b in BRANCH_NAMES:
+		_levels[b] = clampi(int(data.get(b, 0)), 0, MAX_LEVEL)
+	_save()
+	stats_changed.emit()
+	_apply_to_flashlight()

@@ -12,6 +12,7 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 | **DECIDED** | A DR rule kept the current behavior. |
 | **DEFERRED-STRUCTURAL** | A real gap, but out of scope for a mechanical fix. |
 | **NEEDS-EYES** | Subjective look or feel only. |
+| **BY-DESIGN-ABSENT** | The GDD names no trigger for it, so nothing was built (see TZ_DECISIONS). |
 | **NEEDS-MEASUREMENT** | Needs a device or windowed measurement that has not been run. |
 | **GAP-OWNER** | Needs an owner action. |
 
@@ -27,9 +28,9 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 |---|---|---|---|
 | A02 | Music crossfade 2.0 s | MET | tz_verify `FADE_TIME=2.0` (audio: no frame applies) |
 | A03 | Footsteps: 6 surfaces × 3 speeds, downward ray | DECIDED (DR-A03) | footstep probe: every GDD surface gives 3 distinct steps. Concrete/wood/metal: walk/jog/sprint files for stealth/walk/run. Asphalt/puddle/glass: one recorded sample, speed carried by volume + pitch 0.9/1.0/1.12. |
-| A04 | Audio size caps | MET-STATIC | Re-scored by role: `ambience/` holds A02's music layers |
-| A01 | Bus graph SFX(Footsteps, Combat, UI, Environment) | DEFERRED-STRUCTURAL | Re-routing plus an ear re-mix |
-| V02 | No neon / #fff | MET | `V02_energy_ball.png` |
+| A04 | Audio size caps | MET-STATIC | Exported: non-music ≈ 23.5 MB (sfx 6.3 + one_shots 1.1 + ambience 16.1) < 50; music ≈ 38 MB < 100. `ambience/wav_src` (29.9 MB) is in `export_presets.cfg` `exclude_filter` |
+| A01 | Bus graph SFX(Footsteps, Combat, UI, Environment) | DEFERRED-STRUCTURAL | Re-routing plus an ear re-mix (current buses: Master, Music, SFX, Voice, Ambient, UI, Hum) |
+| V02 | No neon / #fff | MET | `V02_energy_ball.png`; monster hit flash is brass and restores the original material (suite P2b, C8 rc4) |
 | V05 | Moon shadow 2048² | MET | tz_verify size=2048; frames clean at 2048 |
 | V01 | "No day" | MET-STATIC | Dead daytime painter removed from DayNight |
 | D03 | Night ambient canon | DECIDED (DR-3) | Recorded "unplayable black" rejection |
@@ -43,11 +44,11 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 | G08 | Flashlight `#c9a24a`, 45° | MET (colour, cone) / NEEDS-EYES (8 m range, energy 2.0) | `G08_flashlight.png` |
 | G09 | Drain 1% per 2 s | DECIDED (DR-3) | Recorded boss-fight failure at a milder value |
 | G10 | Battery item +25% | DECIDED (DR-3) | `balance_sim` FAILs at +25 |
-| G12b | Flicker below 20%, cleared by Stability L5 | MET | tz_verify: spread 16.2 at 10% battery, 0.000 with Stability L5; suite P2r: L5 + Brightness survive a real respawn (C8 rc3); `G12b_low_battery.png` |
+| G12b | Flicker below 20%, cleared by Stability L5 | MET | tz_verify: spread 16.2 at 10% battery, 0.000 with Stability L5; suite P2r: L5 + Brightness survive a real respawn, L5 cuts drain 50% (GDD §3.3), New Game clears them (C8 rc4); `G12b_low_battery.png` |
 | G13 | Combo 8/12/20 | DECIDED (DR-3) | Recorded winnability tuning |
 | G15 | Capsule 1.6 m, attack box | MET-STATIC (capsule 1.6) / DECIDED (DR-3, attack box) | Bot 1/3 with the capsule; all 3 seeds reached the boss; stalls = known boss-phase type |
 | G16 | Respawn: district entry, 50% HP, battery kept | MET | Suite P2r (exact button path) |
-| G17 | Hardcore death deletes save | MET | tz_verify: main + .bak/.bak2/.bak3 seeded, 0 files left after death; `G17_hardcore_death.png` |
+| G17 | Hardcore death deletes save | MET | tz_verify: main + .bak/.bak2/.bak3 seeded, 0 files left after death; the wipe's `reset_all()` also clears flashlight upgrades (suite P2r, C8 rc4); `G17_hardcore_death.png` |
 | G18 / G19 | Roster stats, Shadow | MET-STATIC | All 11 + boss HP/damage equal the GDD table |
 | G20 | Boss phases 70/30%, beams 40 | MET-STATIC | Constants; the bot boss phase exercises them |
 | G21 | §9 blueprints | DEFERRED-STRUCTURAL | New mechanics plus 5 blueprint locations |
@@ -58,17 +59,18 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 | G27 | Touch: left half = camera | DECIDED (DR-2) | The GDD table has no movement input |
 | G28 / D04 | All FULL → win vs boss | GAP-OWNER (DR-2 default kept) | — |
 | G31 / G32 / G33 | Ending edge cases | DECIDED (DR-2) | — |
-| G34 | Truth: docs + audio + photos + bunker | MET (bunker = real secret) / DR-5 (audio/photos aliased) | Suite P2q bunker assert; `endings_sim` all 5 reachable |
+| G34 | Truth: docs + audio + photos + bunker | MET (bunker = real secret) / DECIDED (DR-5: audio/photos aliased) | Suite P2q bunker assert; `endings_sim` all 5 reachable |
 | S01 | Hit 5 m/1.0, dodge 3 m/0.4 noise | DECIDED (DR-3, measured) | Bot bisect: with 0/3, without 2/3 |
 | S02 | Visibility modifiers | DEFERRED-STRUCTURAL | Detection-model rework |
 | S03 | Ember vignette noise pulse | MET | tz_verify: vignette r 0.55 while running, frame edge warmth −0.015 → 0.066; `S03_noise_vignette.png` |
 | S04 | Search 10 s within 5 m | MET-STATIC | Constants asserted in suite P2q; in the IRON RULE batch (2/3) |
+| S04-hide | Hiding spots: lockers, bushes, car trunks, dark corners | DEFERRED-STRUCTURAL | `hiding_spot.gd` (locker/dumpster/car/crate) is not placed in any district; see TZ_DECISIONS |
 | D02 | Unlock graph | DECIDED (DR-2) | — |
 | E03 / T02 | 1 ad per hour, skip −100 | MET-STATIC (cooldowns asserted in suite, skip mechanism) / BY-DESIGN-ABSENT (modal trigger) | — |
 | E05 | Coin curve 0–200 (D1) → 8000+ (D11) | DECIDED (DR-3) | Reachable ≈ 2200 districts + 1300 secrets + 3100 achievements, plus kills. Design audit P6 says keep base rewards and report the gap. |
 | C03 | Auto-aim | DEFERRED-STRUCTURAL (dormant until G25) | Cone logic in `WeaponBase` passes tz_verify on a probe weapon, but no gameplay path creates a weapon (G25). Live melee already hits anything within its 2.7 m sphere regardless of facing. |
 | C04 | Arachnophobia rename | MET | "Слепые псы"; `C04_arachnophobia_label.png` |
-| C06 | Tier fog + particles 50–150% | MET | tz_verify fog 0.012 / 0.015, 6/6 emitters; `C06_tier_*.png` |
+| C06 | Tier fog + particles 50–150% | MET | tz_verify fog at load = tier preset (C8 rc4: `fog_setup.gd` no longer overrides it), 0.012 / 0.015 on change, 6/6 emitters; `C06_tier_*.png` |
 | P01 | Draw calls < 200 (D1) / < 350 (D11) | DEFERRED-STRUCTURAL | Windowed `perf_check_scene`: D1 = 246 (over 200), under the D11 350 cap. Needs material/mesh batching, not a value swap. |
 | P02 | Particles < 500, RAM/VRAM | NEEDS-MEASUREMENT | Windowed or device profiling only; see TZ_DECISIONS P02 |
 | N01, I02, T01 | Owner rows | GAP-OWNER | See TZ_DECISIONS |

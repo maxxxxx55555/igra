@@ -13,7 +13,8 @@ func _configure_fog() -> void:
 		var env: Environment = world_env.environment
 		if env:
 			env.fog_enabled = true
-			env.fog_density = 0.015
+			# Density is per graphics tier (visual_quality.tres via
+			# WorldEnvSetup); a fixed 0.015 here overrode it on every load.
 			env.fog_light_color = Color("#1a2133")
 			env.fog_sun_scatter = 0.1
 

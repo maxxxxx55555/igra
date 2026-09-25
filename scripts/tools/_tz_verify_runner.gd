@@ -95,6 +95,13 @@ func _run() -> void:
 	var p: Node3D = get_tree().get_first_node_in_group("player")
 	var cam := get_viewport().get_camera_3d()
 	var base_warmth := _edge_warmth(await _shot("baseline"))
+	# C06 at load, before any tier change: FogSetup used to reset the density
+	# to a fixed 0.015 right after WorldEnvSetup applied the tier.
+	var we0 := get_tree().root.find_child("WorldEnvironment", true, false) as WorldEnvironment
+	var tier0: int = clampi(int(SettingsManager.get_setting("graphics_tier", 2)), 0, 3)
+	var want_fog: float = float(load("res://assets/config/visual_quality.tres").get_meta(["low", "medium", "high", "ultra"][tier0], {}).get("fog_density", -1.0))
+	var fog0: float = we0.environment.fog_density if we0 else -1.0
+	_check(is_equal_approx(fog0, want_fog), "C06 fog at load (tier %d) = %s, tier preset %s" % [tier0, fog0, want_fog])
 
 	# A02 - audio, numeric only.
 	_check(is_equal_approx(MusicManager.FADE_TIME, 2.0), "A02 MusicManager.FADE_TIME=%s (GDD 2.0)" % MusicManager.FADE_TIME)

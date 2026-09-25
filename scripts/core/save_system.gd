@@ -290,6 +290,7 @@ func _save() -> void:
 		"quests": QuestManager.serialize(),
 		"xp": XpManager.save_data(),
 		"skill_tree": SkillTreeManager.save_data(),
+		"flashlight": FlashlightUpgradeManager.to_dict(),
 		"photos": _photos,
 		"daily_streak": _daily_streak,
 		"last_daily_time": _last_daily_time,
@@ -330,6 +331,8 @@ func load_all() -> bool:
 	_last_daily_time = int(data.get("last_daily_time", 0))
 	SkillTreeManager.load_data(data.get("skill_tree", {}))
 	XpManager.load_data(data.get("xp", {}))
+	# Saves from before C8 round 3 lack the key: keep the cfg-loaded levels.
+	FlashlightUpgradeManager.from_dict(data.get("flashlight", FlashlightUpgradeManager.to_dict()))
 	_onboard_done = bool(data.get("onboard_done", false))
 	return true
 
@@ -361,6 +364,7 @@ func reset_all() -> void:
 	# с уровнем/скиллами от прошлого забега на этом сейв-профиле.
 	XpManager.reset()
 	SkillTreeManager.reset()
+	FlashlightUpgradeManager.from_dict({})
 	# Тот же класс ошибки, что и TRUTH WAVE P0.2 выше, только про другую
 	# систему. ProgressTracker несёт счётчики секретов/убийств/пазлов и список
 	# уже найденных секретов. Без сброса «новая игра» стартовала бы со
@@ -483,6 +487,7 @@ func save_slot(slot: int) -> bool:
 		"quests": QuestManager.serialize(),
 		"xp": XpManager.save_data(),
 		"skill_tree": SkillTreeManager.save_data(),
+		"flashlight": FlashlightUpgradeManager.to_dict(),
 		"photos": _photos,
 		"daily_streak": _daily_streak,
 		"last_daily_time": _last_daily_time,
@@ -535,6 +540,7 @@ func load_slot(slot: int) -> bool:
 	# Load skill tree
 	if SkillTreeManager:
 		SkillTreeManager.load_data(data.get("skill_tree", {}))
+	FlashlightUpgradeManager.from_dict(data.get("flashlight", FlashlightUpgradeManager.to_dict()))
 
 	# Load XP
 	if XpManager:

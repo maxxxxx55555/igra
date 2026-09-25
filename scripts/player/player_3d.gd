@@ -757,6 +757,7 @@ func _update_battery(delta: float) -> void:
 	# элемента, то есть ручка делит запас, а значит умножает расход.
 	var batt_mult: float = NewGamePlus.get_modifier_multiplier("battery")
 	var drain: float = BATTERY_DRAIN_PER_SEC / batt_mult if batt_mult > 0.0 else BATTERY_DRAIN_PER_SEC
+	drain *= 1.0 - _flashlight_drain_cut
 	battery = clampf(battery - drain * delta, 0.0, battery_max)
 	if absf(battery - prev) > 0.01:
 		EventBus.player_battery_changed.emit(battery / battery_max)
@@ -1158,10 +1159,8 @@ func apply_flashlight_upgrades(levels: Dictionary) -> void:
 	_upgrade_range_bonus = fl_up.get_bonus("range")
 	flashlight.light_energy = _scene_flashlight_energy * (1.0 + b_bonus)
 	flashlight.spot_angle = 45.0 + a_bonus
-	var sm := cone.material_override as ShaderMaterial
-	if sm:
-		sm.set_shader_parameter("softness", 0.3 * (1.0 - s_bonus))
 	_flashlight_battery_bonus = bat_bonus
+	_flashlight_drain_cut = s_bonus
 	_flashlight_stability_maxed = fl_up.get_level("stability") >= fl_up.get_max_level()
 	_base_flashlight_energy = flashlight.light_energy
 	refresh_battery_max()
@@ -1176,6 +1175,8 @@ var _flashlight_battery_bonus: float = 0.0
 ## GDD.md:79 (G12b): flicker below the low-battery threshold, cleared by the
 ## max-level Stability upgrade (L5).
 var _flashlight_stability_maxed: bool = false
+## GDD.md:88-93: Stability L1-L5 = -10%..-50% battery drain.
+var _flashlight_drain_cut: float = 0.0
 var _base_flashlight_energy: float = -1.0
 var _flickering: bool = false
 const BATTERY_PER_SKILL_LVL: float = 25.0

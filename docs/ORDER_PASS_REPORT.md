@@ -8,10 +8,10 @@ Covers C4–C7 of the studio-lead directive. Base is `c73cf7c` (C3 close-out); t
 
 | Phase | What changed | Key commits |
 |---|---|---|
-| C4 TZ-CLOSE | Every row in `docs/TZ_COMPLIANCE_AUDIT.md` has a verdict (0 open GAP-DEV). Applied: A02, V02, V05, G02, G03, G06, G07 (noise), G08 (colour/cone), G12b, G15 (capsule), G16, G17, G20, G24, G34 (bunker), C03, C04, C06, E03 (cooldowns), S03, S04, V01. Decided with evidence: G09, G10, G13, S01 (IRON RULE bisect), G04, G22, G27, G31–G33, D02, D03, E05. | `fa5fee4` … `97c8bf4` |
-| R0 (reopened) | Real root cause of the magenta world: district LUTs imported as a 1D gradient. World magenta 13% → ≤0.30%. | `bafb740` |
+| C4 TZ-CLOSE | Every row in `docs/TZ_COMPLIANCE_AUDIT.md` has a verdict (0 open GAP-DEV). Applied: A02, V02, V05, G02, G03, G06, G07 (noise), G08 (colour/cone), G12b, G15 (capsule), G16, G17, G20, G34 (bunker), C04, C06, E03 (cooldowns), S03, S04, V01. Decided with evidence: A03, G24, G09, G10, G13, S01 (IRON RULE bisect), G04, G22, G27, G31–G33, D02, D03, E05. C03 moved to DEFERRED-STRUCTURAL in C8. | `fa5fee4` … `97c8bf4` |
+| R0 (reopened) | Real root cause of the magenta world: district LUTs imported as a 1D gradient. World hue-magenta 13% → ≤0.30% (hue-only metric, full res). | `bafb740` |
 | Save | Progress signature never matched on load, so every Continue wiped district power and progress. | `ac877a5` |
-| C5 MATRIX | 0 UNTESTED. X22 (test bug), X20 (PAUSED, harness recovery), P2q/P2r regressions, dead inputs removed, suite deterministic. | `0d3d533`, `c00f118` |
+| C5 MATRIX | 0 UNTESTED. X22 (test bug), X20 (PAUSED, harness recovery), P2q/P2r regressions, dead inputs removed, suite deterministic. | `0d3d533`, `9fc8665` (P2m) |
 | C6 I18N | `i18n_truth_gate` 12/12 non-base (13/13 with en), no cap loosened. Keeper voice fixed. New `hardcoded_text_gate` found 2 leaks plus 7 missing tutorial keys. | `43c9ecd`, `21c6563`, `ad051fc` |
 | UI | Tutorial hint box drew over the HUD bars (anchors never applied); map button covered the VISIBILITY caption. | `ad051fc` |
 | C9 prep | Release keystore generated (gitignored `.signing/`). AAB export blocked: no Godot 4.7 export templates on the machine. | `7af80d2` |
@@ -29,7 +29,7 @@ Covers C4–C7 of the studio-lead directive. Base is `c73cf7c` (C3 close-out); t
 | Audio truth (windowed) | PASS: Music −19.3 dB, all buses under −1.5 dB |
 | Perf (windowed) | D1 **246** draw calls: under the D11 350 cap, **over the D1 200 target** |
 | GUI exploration (windowed) | 19 PASS, 0 BUG, all 13 locales |
-| Visual truth (frames below) | Hue-magenta ≤0.05% at full res on all 11 frames. Half res: 10/11 PASS; 1 FAIL (`S03_noise_vignette`, 0.66%, saturation-outlier sub-detector on the ember vignette). Known-bad `magenta_corruption_suburbs.png` still FAILs (9.49%). |
+| Visual truth (frames below) | rc4 tzverify frames, half res: 10/11 PASS (0.15–0.42%); `G03_sprint_fov` FAIL 1.28%, 85% of hits in the outer 15% edge band = canon ember vignette over blue (TZ_DECISIONS S03). Blocking R0 lock (`check.sh`) PASS. Known-bad `magenta_corruption_suburbs.png` still FAILs (9.49%). |
 | Bot (3 seeds) | Latest shipped trees: 2/3 (batch `c00f118`), 1/3 (capsule `97c8bf4`, all 3 seeds reached the boss) |
 | AAB signed-verify | **not run**: no export templates (see Residual) |
 
@@ -39,6 +39,7 @@ Covers C4–C7 of the studio-lead directive. Base is `c73cf7c` (C3 close-out); t
 |---|---|---|---|
 | 1 | `v8.0.0-rc1` (`27ba1d5`) | CONFIRMED 79 / PARTIAL 7 / FAKE 3 (`docs/CLOSURE_VERIFICATION_INTERNAL.md`) | FAKE: S03 (vignette never drew), G12b (L5 never cleared flicker), A03 (stealth = walk sample; probe could not fail). PARTIAL: G17 backups survived, G24/C03 mislabelled, R0 numbers, #8 hash, matrix breakdown, check count. All fixed in `0873f38`; CORRECTION_LOG 15-21. |
 | 2 | `v8.0.0-rc2` (`5724544`) | CONFIRMED 128 / PARTIAL 6 / FAKE 0 | G12b fix only held until respawn: flashlight upgrades were applied at purchase only, and the formulas used base 1.0 / 8 m instead of the scene's 24 / 16 m (buying Brightness dimmed the light). Fixed in the rc3 commit with suite P2r (mutation-tested: fails with the reapply removed). Doc partials: P01/P02 decision rows, stale C06 row, matrix AL range, correction count. CORRECTION_LOG 22. rc3: check.sh full 42 green, suite `DONE fails=0`, bot 1/3 (boss-phase + X21 spine stalls, both known types). |
+| 3 | `v8.0.0-rc3` (`5402640`) | CONFIRMED 145 / PARTIAL 14 / FAKE 0 | Flashlight upgrades leaked across New Game/hardcore/slots (now per-run save data, cleared by `reset_all`); Stability L1-L4 did nothing (now -10..-50% drain, GDD §3.3); `fog_setup.gd` overrode tier fog on every load; monster hit flash left monsters pure white. Ledger: A04 reason, A01 Hum bus, S04 hiding spots, legend, stale report lists. CORRECTION_LOG 23-27. rc4: check.sh full 42 green, suite `fails=0`, tz_verify `fails=0`, each new check mutation-tested. Bot: seed 1 X21 spine stall (known), seed 2 **WIN** 11/11; seed 3 unmeasured, since Godot runs under `timeout` were killed with exit 127 from 10:11 (committed HEAD killed the same way in an A/B, so environmental; seed 2 won when run without the wrapper). |
 
 rc2 evidence: tz_verify 15 checks `DONE fails=0`; footstep probe `fails=0` and mutation-tested
 (`fails=3`, rc 1, with stealth mapped onto walk's file); `tools/check.sh` full **42 green**; bot 1/3 won, 11/11
@@ -58,7 +59,7 @@ No external `docs/CLOSURE_VERIFICATION.md` exists.
 
 ## Corrections
 
-22 entries in `docs/CORRECTION_LOG.md` (14 at rc1, 15-21 from C8 round 1, 22 from round 2), including the false R0 fix, the dead C06 fog write, and two
+28 entries in `docs/CORRECTION_LOG.md` (14 at rc1, 15-21 from C8 round 1, 22 from round 2, 23-28 from round 3), including the false R0 fix, the dead C06 fog write, and two
 wrong claims in this pass's own commit messages.
 
 ## Residual (honest)
@@ -74,6 +75,6 @@ wrong claims in this pass's own commit messages.
 | X21 bot spine stall | Open (bot harness). Game side verified reachable; the bot wins 1–2/3 per run. |
 | X20 | Harness recovery proven; the keypress trigger is inferred. |
 | D1 draw calls 246 > 200 | Needs batching work (DEFERRED-STRUCTURAL). |
-| Deferred structural rows | S02 visibility model, G21 blueprints, G25 weapons in HUD, G26 photos, A01 bus graph, G07 crouch capsule. |
+| Deferred structural rows | S02 visibility model, S04 hiding-spot placement, G21 blueprints, G25 weapons in HUD, C03 auto-aim (needs G25), G26 photos, A01 bus graph, G07 crouch capsule, P01 draw calls. |
 | Security inherent limits | P-05, R-08, D-01, D-02; D-03 needs an owner-held PCK key. |
 | User-data folder reset | `app_userdata/The Last Streetlight` was deleted and recreated about 2026-09-25 00:24, cause unknown. Save files were backed up earlier to `%TEMP%\tls_save_backup`; `settings.cfg`/`onboarding.cfg`/`save.tres` were not. |

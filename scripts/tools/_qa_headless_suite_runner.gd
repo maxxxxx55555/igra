@@ -287,9 +287,20 @@ func _p2b_combat() -> void:
 		_fail("P2b monster has no take_damage()")
 		holder.queue_free()
 		return
+	# V02 regression: the hit flash must hand the original material back.
+	var flash_meshes: Array[Node] = []
+	var vr: Node = m.get_node_or_null("VisualRoot")
+	if vr:
+		flash_meshes = vr.find_children("*", "MeshInstance3D", true, false).filter(func(n: Node) -> bool: return n.material_override != null)
+	var mats_before: Array = flash_meshes.map(func(n: Node) -> Material: return n.material_override)
 	m.take_damage(25.0)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await get_tree().create_timer(0.3).timeout
+	for i in flash_meshes.size():
+		if is_instance_valid(flash_meshes[i]) and flash_meshes[i].material_override != mats_before[i]:
+			_fail("P2b hit flash did not restore the monster material on %s" % flash_meshes[i].name)
+			break
+	if flash_meshes.is_empty():
+		_fail("P2b hit-flash check found no material_override meshes to test")
 	if not is_instance_valid(m):
 		_log("P2b combat: hp %.1f -> monster died (lethal damage) — OK" % hp0)
 	else:
@@ -782,16 +793,18 @@ func _p2r_respawn_keeps_progress() -> void:
 	var did := String(DistrictManager.current_district)
 	PowerGrid.advance_district(StringName(did), 2)
 	var stage_before: int = int(PowerGrid.get_stage(StringName(did)))
+	# C8 rounds 2-3: saved flashlight upgrades must come back with the
+	# respawn's load (they are per-run save data, like the wallet).
+	var flm := get_node("/root/FlashlightUpgradeManager")
+	var fl_snap: Dictionary = flm.to_dict()
+	flm._levels["stability"] = flm.get_max_level()
+	flm._levels["brightness"] = 1
 	SaveSystem.save_all()
+	flm._levels["stability"] = 0
+	flm._levels["brightness"] = 0
 	var disk: Dictionary = SaveSystem._read_validated(SaveSystem.SAVE_PATH)
 	var disk_saved: int = int(disk.get("power", {}).get("stages", {}).get(did, -1))
 	var bat_before: float = 37.0
-	# C8 round 2: bought flashlight upgrades must survive the respawn (in
-	# memory only - nothing here calls the manager's _save()).
-	var flm := get_node("/root/FlashlightUpgradeManager")
-	var fl_snap: Dictionary = flm._levels.duplicate()
-	flm._levels["stability"] = flm.get_max_level()
-	flm._levels["brightness"] = 1
 	p.set("battery", bat_before)
 	p.set("_damage_grace_timer", 0.0)
 	p.set("_iframes", 0.0)
@@ -827,9 +840,16 @@ func _p2r_respawn_keeps_progress() -> void:
 	var want_energy: float = float(q.get("_scene_flashlight_energy")) * (1.0 + flm.get_bonus("brightness"))
 	var energy: float = q.flashlight.light_energy
 	var maxed: bool = bool(q.get("_flashlight_stability_maxed"))
-	flm._levels = fl_snap
-	if not maxed or absf(energy - want_energy) > 0.01 or want_energy < 20.0:
-		_fail("P2r flashlight upgrades lost on respawn (stability L5 maxed=%s, energy %s, want %s)" % [maxed, energy, want_energy])
+	var drain_cut: float = float(q.get("_flashlight_drain_cut"))  # GDD 3.3: Stability L5 = -50% drain
+	# New Game must clear them again (reset_all), and the cfg mirror with it.
+	SaveSystem.reset_all()
+	var st_after: int = flm.get_level("stability")
+	var cleared: bool = st_after == 0 and flm.get_level("brightness") == 0
+	flm.from_dict(fl_snap)
+	if not cleared:
+		_fail("P2r reset_all kept flashlight upgrades (stability %d)" % st_after)
+	if not maxed or not is_equal_approx(drain_cut, 0.5) or absf(energy - want_energy) > 0.01 or want_energy < 20.0:
+		_fail("P2r flashlight upgrades lost on respawn (stability L5 maxed=%s, drain cut %s, energy %s, want %s)" % [maxed, drain_cut, energy, want_energy])
 	else:
 		_log("P2r flashlight upgrades survive respawn (energy %0.1f, stability L5) - OK" % energy)
 

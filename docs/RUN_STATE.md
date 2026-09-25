@@ -1,14 +1,23 @@
 # Run state — orchestrator pass (2026-09-20)
 
-## Session 12 (2026-09-25): C8 verifier loop, rounds 1-2 closed -> rc3
+## Session 12 (2026-09-25): C8 verifier loop, rounds 1-3 closed -> rc4
 
-**NEXT-ROW: C8 round 3 (independent verifier on `v8.0.0-rc3`)**, loop until FAKE=0 PARTIAL=0; then C9 AAB
+**NEXT-ROW: C8 round 4 (independent verifier on `v8.0.0-rc4`)**, loop until FAKE=0 PARTIAL=0; then C9 AAB
 once export templates exist (owner-approved ~1 GB download).
 - Round 1 on rc1: CONFIRMED 79 / PARTIAL 7 / FAKE 3. All closed at root in `0873f38` (S03 shader + noise
   scale, G12b L5 key, A03 walk/jog/sprint + pitch, G17 all backups; G24 DECIDED, C03 DEFERRED-STRUCTURAL).
 - Gates: tz_verify 15 fails=0; check.sh full 42 green; bot 1/3 (11/11 FULL x3, boss-phase stalls = known).
 - Round 2 on rc2: CONFIRMED 128 / PARTIAL 6 / FAKE 0. Flashlight upgrades now reapplied on spawn from the
   scene base (24 / 16 m); suite P2r locks it (mutation-tested). rc3: check.sh 42 green, suite fails=0, bot 1/3.
+- Round 3 on rc3: CONFIRMED 145 / PARTIAL 14 / FAKE 0. Fixed: flashlight upgrades per-run (save key
+  `flashlight`, reset_all), Stability drain cut, fog_setup tier override, monster hit flash; ledger rows.
+  Bot: s1 X21 stall, s2 WIN; s3 unmeasured.
+- ENV (new): since ~10:11 Godot runs under `timeout` die with rc=127 mid-run, no crash output. HEAD without
+  rc4 dies the same way (A/B), and a run without the wrapper finished normally (seed 2 WIN). Cause unknown;
+  on rc=127 re-run the seed directly: `QA_SEED=N godot --headless --path . res://scenes/tools/qa_autoplay_scene.tscn`.
+- QA runs now snapshot/restore the real user:// profile (`tools/qa_sim/user_data_guard.sh`, `5cf3b27`).
+- A tag `v8.0.0-rc4` was pushed by mistake on `5cf3b27` (a failed docs script did not stop the chain) and
+  deleted from origin within minutes; the real rc4 tag is on the round-3 fix commit.
 - ENV: no concurrent Godot; `default_bus_layout.tres` untouched this run; `project.godot` diff is CRLF-only
   noise, never staged.
 

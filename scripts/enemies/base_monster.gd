@@ -660,20 +660,34 @@ func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, type: EnemyRos
 	if hp <= 0.0:
 		_die()
 
+const _HIT_FLASH_COLOR := Color("#c9a24a")
+
 func _hit_flash() -> void:
 	var root = get_node_or_null("VisualRoot")
 	if not root:
 		return
+	# V02: brass, not pure #fff. The restore used to duplicate the flash
+	# material itself, so a monster stayed lit after its first hit; the
+	# original is kept in meta so overlapping hits restore it too.
 	for mesh in root.find_children("*", "MeshInstance3D", true, false):
-		if mesh.material_override:
-			var mat = mesh.material_override.duplicate() as StandardMaterial3D
-			mat.albedo_color = Color(1, 1, 1)
-			mat.emission_enabled = true
-			mat.emission = Color(1, 1, 1)
-			mat.emission_energy_multiplier = 2.0
-			mesh.material_override = mat
-			var tw = create_tween()
-			tw.tween_callback(func(): mesh.material_override = mesh.material_override.duplicate()).set_delay(0.1)
+		if not mesh.material_override:
+			continue
+		if not mesh.has_meta(&"hit_flash_orig"):
+			mesh.set_meta(&"hit_flash_orig", mesh.material_override)
+		var orig: Material = mesh.get_meta(&"hit_flash_orig")
+		var mat := orig.duplicate() as StandardMaterial3D
+		if mat == null:
+			continue
+		mat.albedo_color = _HIT_FLASH_COLOR
+		mat.emission_enabled = true
+		mat.emission = _HIT_FLASH_COLOR
+		mat.emission_energy_multiplier = 2.0
+		mesh.material_override = mat
+		var restore := func() -> void:
+			if is_instance_valid(mesh) and mesh.material_override == mat:
+				mesh.material_override = orig
+				mesh.remove_meta(&"hit_flash_orig")
+		create_tween().tween_callback(restore).set_delay(0.1)
 
 @rpc("any_peer", "reliable")
 func _request_damage(amount: float, type: int = int(EnemyRosterData.DamageType.BULLET)) -> void:
