@@ -1,24 +1,13 @@
 #!/usr/bin/env bash
 # Windowed TZ probe (scenes/tools/tz_verify_scene.tscn) under the user-data
-# guard. The probe's own in-process snapshot is lost if the window is closed or
-# a script error stalls it; this wrapper's trap restores the profile on any exit.
+# guard (tools/qa_sim/guarded_windowed). The probe's own in-process snapshot
+# is lost if the window is closed or a script error stalls it; the guard's
+# trap restores the profile on any exit.
 #
-#   tools/qa_sim/tz_verify          # frames -> docs/stills/tzverify/, log -> .qa_logs/tz_verify.log
+#   tools/qa_sim/tz_verify          # frames -> docs/stills/tzverify/, log -> .qa_logs/tz_verify_scene.log
 set -uo pipefail
 cd "$(dirname "$0")/../.."
-
-GODOT="$(bash tools/qa_sim/_resolve_godot.sh 2>/dev/null)"
-if [[ -z "$GODOT" ]] || [[ ! -x "$GODOT" ]]; then
-	bash tools/qa_sim/_resolve_godot.sh >&2
-	exit 99
-fi
-source tools/qa_sim/user_data_guard.sh
-udg_snapshot || exit 99
-trap 'udg_restore || exit 97' EXIT
-trap 'exit 130' INT TERM
-export TLS_UDG_GUARDED=1  # the runner refuses to start without it
-mkdir -p .qa_logs
-timeout 300 "$GODOT" --path . res://scenes/tools/tz_verify_scene.tscn > .qa_logs/tz_verify.log 2>&1
+bash tools/qa_sim/guarded_windowed res://scenes/tools/tz_verify_scene.tscn 300
 rc=$?
-grep -E "^\[tzv\] (OK|FAIL|DONE)" .qa_logs/tz_verify.log
+grep -E "^\[tzv\] (OK|FAIL|DONE)" .qa_logs/tz_verify_scene.log
 exit $rc

@@ -295,7 +295,7 @@ cannot be changed afterward for the same listing.
 - [ ] CHK057 Optional, non-blocking, doc-listed: real AppLovin SDK key (root
       `RELEASE_CHECKLIST.md` §2 — "ships fine on the no-ad debug stub without it";
       account at `https://dash.applovin.com`); extra platforms (§6); version bump
-      timing (§7); one windowed `perf_check_scene.tscn` run.
+      timing (§7); one windowed `perf_check_scene.tscn` run (`tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn`, which protects your saves).
 
 **Evidence**: root `RELEASE_CHECKLIST.md` §5.1–5.5 (URL, every button label and card
 answer above verbatim, rollout-path labels, "Set up your app" green-check rule,

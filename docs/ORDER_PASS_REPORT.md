@@ -27,7 +27,7 @@ latest `v8.0.0-rcN` tag (the last row of "C8 verifier loop" names it). Every num
 | `balance_sim` / `endings_sim` | PASS / all 5 endings reachable |
 | TZ-verify (windowed, `scenes/tools/tz_verify_scene.tscn`) | rc1: 14 checks; rc2: 15 checks, `DONE fails=0` |
 | Audio truth (windowed) | PASS: Music −19.3 dB, all buses under −1.5 dB |
-| Perf (windowed) | D1 **246** draw calls: under the D11 350 cap, **over the D1 200 target** |
+| Perf (windowed) | D1 **246** draw calls (C7), **253** (rc11 run via `tools/qa_sim/guarded_windowed`): under the D11 350 cap, **over the D1 200 target** |
 | GUI exploration (windowed) | 19 PASS, 0 BUG, all 13 locales |
 | Visual truth (frames below) | rc4 tzverify frames, half res: 10/11 PASS (0.15–0.42%); `G03_sprint_fov` FAIL 1.28%, 85% of hits in the outer 15% edge band = canon ember vignette over blue (TZ_DECISIONS S03). The R0 regression lock is the LUT import pin in `check.sh` (PASS); the visual gate's `r0_after_*` run only checks the gate against committed frames. Known-bad `magenta_corruption_suburbs.png` still FAILs (13.19%). |
 | Bot (3 seeds) | Latest shipped trees: 2/3 (batch `c00f118`), 1/3 (capsule `97c8bf4`, all 3 seeds reached the boss) |
@@ -46,6 +46,7 @@ latest `v8.0.0-rcN` tag (the last row of "C8 verifier loop" names it). Every num
 | 7 | `v8.0.0-rc7` (`8c0e01c`) | CONFIRMED 105 / PARTIAL 3 / FAKE 0 | No game-code defects. tz_verify now refuses a direct launch (only the guarded wrapper may run it); wrapper made executable; B7 deferral listed in the open defers and residuals; S03 hue wording; CORRECTION_LOG 35. rc8: a direct launch exits 2 with nothing touched; wrapper run 17 checks `fails=0`, all 11 profile files sha256-identical; static 24 green. The engine battery was first skipped on a wrong premise: the compile gate loads every `.gd`, so it does see these files (CORRECTION_LOG 36). Re-run on the rc8 code: check.sh full **44 green**. |
 | 8 | `v8.0.0-rc8` (`9936ab3`) | CONFIRMED 106 / PARTIAL 3 / FAKE 0 | No code defects. Fixed the skipped-battery claim (re-run: 44 green), the G18/G19 GDD line range (168-181) and the missing R-02 residual row; CORRECTION_LOG 36. rc9: docs only on top of the rc8 code measured above. |
 | 9 | `v8.0.0-rc9` (`94af752`) | CONFIRMED 114 / PARTIAL 4 / FAKE 0 | No code defects. V05 split into MET (desktop 2048) / DECIDED (mobile 1024, new V05-mobile row); G28/D04 no longer cites a precedence rule the GDD does not have; I02 key count 1301; FUNCTION_MATRIX legend defines FIXED and PARTIAL. CORRECTION_LOG 37. rc10: docs only. Nothing outside `docs/` has changed since the 44-green run on `9936ab3`. |
+| 10 | `v8.0.0-rc10` (`c46d8a3`) | CONFIRMED 121 / PARTIAL 3 / FAKE 0 | The windowed perf and audio probes start a New Game but had no save guard on their documented direct launch; both runners now refuse to start unguarded, and `tools/qa_sim/guarded_windowed` runs any windowed probe under the guard (`tz_verify` delegates to it). V05-mobile had no measurement behind DR-3: the mobile 1024 override is removed (GDD 2048, DR-1). The six FIXED matrix rows name their commits. CORRECTION_LOG 38. rc11: direct launches exit 2 with the profile untouched; guarded perf (D1 253 draw calls, D11 cap OK), audio (Music -20.3 dB, PASS) and tz_verify (`fails=0`, V05 desktop+mobile 2048) each restored all 11 profile files byte-identical; check.sh full **44 green**. Mobile-only render setting, no gameplay change: no IRON RULE bot. |
 
 rc2 evidence: tz_verify 15 checks `DONE fails=0`; footstep probe `fails=0` and mutation-tested
 (`fails=3`, rc 1, with stealth mapped onto walk's file); `tools/check.sh` full **42 green**; bot 1/3 won, 11/11
@@ -65,7 +66,7 @@ No external `docs/CLOSURE_VERIFICATION.md` exists.
 
 ## Corrections
 
-37 entries in `docs/CORRECTION_LOG.md` (14 at rc1, 15-21 from C8 round 1, 22 from round 2, 23-28 from round 3, 29-31 from round 4, 32-33 from round 5, 34 from round 6, 35 from round 7, 36 from round 8, 37 from round 9), including the false R0 fix, the dead C06 fog write, and two
+38 entries in `docs/CORRECTION_LOG.md` (14 at rc1, 15-21 from C8 round 1, 22 from round 2, 23-28 from round 3, 29-31 from round 4, 32-33 from round 5, 34 from round 6, 35 from round 7, 36 from round 8, 37 from round 9, 38 from round 10), including the false R0 fix, the dead C06 fog write, and two
 wrong claims in this pass's own commit messages.
 
 ## Residual (honest)
@@ -80,7 +81,7 @@ wrong claims in this pass's own commit messages.
 | GDD text amendments (G28/D04, N01, I02) | Owner edits `GDD.md` or accepts the recorded defaults. |
 | X21 bot spine stall | Open (bot harness). Game side verified reachable; the bot wins 1–2/3 per run. |
 | X20 | Harness recovery proven; the keypress trigger is inferred. |
-| D1 draw calls 246 > 200 | Needs batching work (DEFERRED-STRUCTURAL). |
+| D1 draw calls 246-253 > 200 | Needs batching work (DEFERRED-STRUCTURAL). |
 | Deferred structural rows | S02 visibility model, S04 hiding-spot placement, G21 blueprints, G25 weapons in HUD, C03 auto-aim (needs G25), G26 photos, A01 bus graph, G07 crouch capsule, P01 draw calls. |
 | R-02 speed/teleport watchdog | Deferred (ARENA_CLOSURE R-02): IntegrityGuard covers non-finite position and falling through the floor; a speed watchdog needs per-state bounds. |
 | Security inherent limits | P-05, R-08, D-01, D-02; D-03 needs an owner-held PCK key; B7 legacy unsigned `achievements.cfg` still trusted once (owner decides whether to reject legacy files, P-02). |

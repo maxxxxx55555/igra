@@ -65,7 +65,7 @@ table). What remains is P2/OWNER.
   (`draw_calls=0`). `drawcall_estimate.py` models ~38 mesh/2D draw calls +
   ~18 active lights/frame D1 after distance-fade; last real measurement
   was 234 (D11<350 met, D1<200 GDD aspiration not). OWNER: one
-  `godot --windowed --path . scenes/tools/perf_check_scene.tscn` run on a
+  `tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn` run on a
   target device tier. If a low-end tier is bad → P1 design call (fewer
   concurrent monsters/pickups, or a Profiler-guided material merge).
 - **Screenshots for the store.** `store/screenshots-plan.md` names the 8

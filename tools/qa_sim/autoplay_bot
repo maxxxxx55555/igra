@@ -22,6 +22,7 @@ source tools/qa_sim/user_data_guard.sh
 udg_snapshot || exit 99
 trap 'udg_restore || exit 97' EXIT
 trap 'exit 130' INT TERM
+export TLS_UDG_GUARDED=1  # probe runners that start a game refuse to run without it
 mkdir -p .qa_logs
 GREEN=$'\033[32m'; RED=$'\033[31m'; OFF=$'\033[0m'
 SEEDS="${QA_SEEDS:-1 2 3}"

@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Runs one windowed QA scene under the user-data guard. The windowed probes
+# (tz_verify, perf_check, audio_truth_gate) start a real game on the owner's
+# user:// profile (New Game -> reset_all, autosave); their runners refuse to
+# start unless a guarded shell set TLS_UDG_GUARDED=1.
+#
+#   tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn [timeout-sec]
+#   log -> .qa_logs/<scene>.log
+set -uo pipefail
+cd "$(dirname "$0")/../.."
+SCENE="${1:?usage: tools/qa_sim/guarded_windowed <res://scenes/tools/NAME.tscn> [timeout-sec]}"
+T="${2:-300}"
+
+GODOT="$(bash tools/qa_sim/_resolve_godot.sh 2>/dev/null)"
+if [[ -z "$GODOT" ]] || [[ ! -x "$GODOT" ]]; then
+	bash tools/qa_sim/_resolve_godot.sh >&2
+	exit 99
+fi
+source tools/qa_sim/user_data_guard.sh
+udg_snapshot || exit 99
+trap 'udg_restore || exit 97' EXIT
+trap 'exit 130' INT TERM
+export TLS_UDG_GUARDED=1
+mkdir -p .qa_logs
+LOG=".qa_logs/$(basename "$SCENE" .tscn).log"
+timeout "$T" "$GODOT" --windowed --path . "$SCENE" > "$LOG" 2>&1
+rc=$?
+echo "  $SCENE rc=$rc (log: $LOG)"
+exit $rc

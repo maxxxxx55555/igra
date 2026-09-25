@@ -107,9 +107,10 @@ func _run() -> void:
 
 	# A02 - audio, numeric only.
 	_check(is_equal_approx(MusicManager.FADE_TIME, 2.0), "A02 MusicManager.FADE_TIME=%s (GDD 2.0)" % MusicManager.FADE_TIME)
-	# V05 - project setting (desktop value; .mobile override is 1024).
+	# V05 - project setting, desktop and the .mobile override (GDD.md:317 has no mobile exception).
 	var atlas := int(ProjectSettings.get_setting("rendering/lights_and_shadows/directional_shadow/size"))
-	_check(atlas == 2048, "V05 directional shadow size=%d (GDD 2048)" % atlas)
+	var atlas_m := int(ProjectSettings.get_setting("rendering/lights_and_shadows/directional_shadow/size.mobile", atlas))
+	_check(atlas == 2048 and atlas_m == 2048, "V05 directional shadow size=%d mobile=%d (GDD 2048)" % [atlas, atlas_m])
 
 	# G08 - flashlight colour and cone.
 	var fl: SpotLight3D = p.get_node("ModelPivot/FlashlightPivot/Flashlight")

@@ -7,7 +7,7 @@ extends Node
 ## clamped to -80dB, .play() never called) and the static check would still
 ## pass. Needs real audio output, so --headless (dummy driver, always-zero
 ## peaks) would make this trivially pass for the wrong reason - run windowed
-## only.
+## only: tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn
 ##
 ## R2 hardening (docs/REDTEAM_CHALLENGE.md TG-HEAR, arena finding): the
 ## original version only checked the Music bus wasn't silent. Hardened to
@@ -47,6 +47,11 @@ func _peak_over(bus_idx: int, seconds: float) -> float:
 	return peak_db
 
 func _run() -> void:
+	# Starts a real New Game (reset_all + autosave) on the owner's profile.
+	if OS.get_environment("TLS_UDG_GUARDED") != "1":
+		printerr("[audio-truth] FAIL run via tools/qa_sim/guarded_windowed - an unguarded launch would overwrite user://")
+		get_tree().quit(2)
+		return
 	print("[audio-truth] driver=%s output_device=%s devices=%s" % [
 		AudioServer.get_driver_name(), AudioServer.get_output_device(),
 		AudioServer.get_output_device_list()])

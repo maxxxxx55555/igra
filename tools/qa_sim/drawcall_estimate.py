@@ -114,7 +114,7 @@ def main():
     print("interactables in view, and HUD 2D. Getting D1 under the <200 GDD")
     print("target from here needs a design call (fewer concurrent monsters /")
     print("pickups) or a Profiler-guided material merge — not a static edit.")
-    print("Owner: re-run perf_check_scene.tscn --windowed after this change.")
+    print("Owner: re-run tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn after this change.")
 
     ok = lamp_fade and pick_fade and lights_after < lights_before
     print("\nPASS" if ok else "\nFAIL")

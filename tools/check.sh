@@ -273,6 +273,7 @@ else
     udg_snapshot || { echo "  ${RED}FAIL${OFF} user-data guard: снимок профиля не удался - движковые проверки не запускаются"; exit 1; }
     trap 'udg_restore || exit 97' EXIT
     trap 'exit 130' INT TERM
+    export TLS_UDG_GUARDED=1  # probe runners that start a game refuse to run without it
     # RELEASE CONVERGENCE STEP 4: game_test_3d_scene.tscn's phase1+ combat
     # step stalls intermittently under --headless (pre-existing,
     # docs/KNOWN_ISSUES.md "game_test_3d_scene.tscn gate stalls silently") -
@@ -335,13 +336,13 @@ else
     # Draw-call budget: --headless всегда даёт draw_calls=0 (dummy renderer) -
     # гейт сам это обнаруживает и молча пропускает (SKIP, не OK/FAIL). Реальная
     # проверка бюджета D11<350 требует --windowed:
-    #   godot --windowed --path . scenes/tools/perf_check_scene.tscn
+    #   tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn
     run_gate "перф-бюджет (draw calls, только --windowed)" "res://scenes/tools/perf_check_scene.tscn" 120
     # Order-pass v8 P0: то же ограничение, что у перф-бюджета выше -
     # --headless не даёт реального аудио-устройства, гейт сам это видит
     # (DisplayServer.get_name()=="headless") и молча пропускает. Реальная
     # проверка ("Music bus реально не в тишине") требует --windowed:
-    #   godot --windowed --path . scenes/tools/audio_truth_gate_scene.tscn
+    #   tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn
     run_gate "аудио: Music bus не в тишине (только --windowed)" "res://scenes/tools/audio_truth_gate_scene.tscn" 60
     run_gate "тач-инпут (joystick/deadzone/HUD-кнопки)" "res://scenes/tools/touch_probe_scene.tscn"
     if udg_restore; then ok "user-data guard: профиль игрока восстановлен байт-в-байт"; else bad "user-data guard: профиль игрока НЕ восстановлен"; fi

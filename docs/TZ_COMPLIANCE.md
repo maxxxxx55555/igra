@@ -31,7 +31,7 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 | A04 | Audio size caps | MET-STATIC | Exported: non-music ≈ 23.5 MB (sfx 6.3 + one_shots 1.1 + ambience 16.1) < 50; music ≈ 38 MB < 100. `ambience/wav_src` (29.9 MB) is in `export_presets.cfg` `exclude_filter` |
 | A01 | Bus graph SFX(Footsteps, Combat, UI, Environment) | DEFERRED-STRUCTURAL | Re-routing plus an ear re-mix (current buses: Master, Music, SFX, Voice, Ambient, UI, Hum) |
 | V02 | No neon / #fff | MET | `V02_energy_ball.png`; monster hit flash is brass and restores the original material (suite P2b, C8 rc4) |
-| V05 | Moon shadow 2048² | MET (desktop) / DECIDED (mobile 1024, TZ_DECISIONS V05-mobile) | tz_verify size=2048 (desktop setting); frames clean at 2048. `project.godot` `directional_shadow/size.mobile=1024` |
+| V05 | Moon shadow 2048² | MET | tz_verify: `directional_shadow/size` 2048 and no smaller `.mobile` override (removed in C8 rc11); frames clean at 2048. On-device mobile cost not measured (P02). |
 | V01 | "No day" | MET-STATIC | Dead daytime painter removed from DayNight |
 | D03 | Night ambient canon | DECIDED (DR-3) | Recorded "unplayable black" rejection |
 | V03 | Bebas Neue Bold | GAP-OWNER | No Bold font file exists |
@@ -71,7 +71,7 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 | C03 | Auto-aim | DEFERRED-STRUCTURAL (dormant until G25) | Cone logic in `WeaponBase` passes tz_verify on a probe weapon, but no gameplay path creates a weapon (G25). Live melee already hits anything within its 2.7 m sphere regardless of facing. |
 | C04 | Arachnophobia rename | MET | "Слепые псы"; `C04_arachnophobia_label.png` |
 | C06 | Tier fog + particles 50–150% | MET | tz_verify fog at load = tier preset (C8 rc4: `fog_setup.gd` no longer overrides it), 0.012 / 0.015 on change, 6/6 emitters; `C06_tier_*.png` |
-| P01 | Draw calls < 200 (D1) / < 350 (D11) | DEFERRED-STRUCTURAL | Windowed `perf_check_scene`: D1 = 246 (over 200), under the D11 350 cap. Needs material/mesh batching, not a value swap. |
+| P01 | Draw calls < 200 (D1) / < 350 (D11) | DEFERRED-STRUCTURAL | Windowed `perf_check_scene`: D1 = 246 (C7) and 253 (rc11), over 200; under the D11 350 cap. Needs material/mesh batching, not a value swap. |
 | P02 | Particles < 500, RAM/VRAM | NEEDS-MEASUREMENT | Windowed or device profiling only; see TZ_DECISIONS P02 |
 | N01, I02, T01 | Owner rows | GAP-OWNER | See TZ_DECISIONS |
 
