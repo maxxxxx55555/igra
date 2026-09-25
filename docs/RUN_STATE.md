@@ -1,5 +1,13 @@
 # Run state — orchestrator pass (2026-09-20)
 
+## Session 11c (2026-09-25): C4 closed, C5/C6 green, C7 sign-off candidate
+
+**NEXT-ROW: C8 verifier loop on tag v8.0.0-rc1** (then C9 AAB once export templates exist).
+Report: `docs/ORDER_PASS_REPORT.md`. Ledgers: `docs/TZ_COMPLIANCE.md` (0 open GAP-DEV),
+`docs/ARENA_CLOSURE.md`, `docs/CORRECTION_LOG.md` (14), `docs/FUNCTION_MATRIX.md` (114 rows, 0 UNTESTED,
+1 BUG = X21 bot harness, 1 PARTIAL = X20). check.sh full: 42 green. Suite fails=0 x3. Bot 1-2/3.
+Blocked: signed AAB (no Godot 4.7 export templates; the ~1 GB download needs owner OK).
+
 ## Session 11b (2026-09-25): save-signature bug, G16, C6 green, batch + X21
 
 **NEXT-ROW: batch commit after the X21 bot run** (uncommitted, tested by suite x3 clean: S01 noise,

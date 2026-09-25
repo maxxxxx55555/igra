@@ -68,7 +68,7 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 | C03 | Auto-aim | MET | tz_verify numeric |
 | C04 | Arachnophobia rename | MET | "Слепые псы"; `C04_arachnophobia_label.png` |
 | C06 | Tier fog + particles 50–150% | MET | tz_verify fog 0.012 / 0.015, 6/6 emitters; `C06_tier_*.png` |
-| P01 | Draw calls < 200/350 | MET-STATIC | `drawcall_estimate.py` PASS. Real GPU number: `perf_check_scene` (windowed). |
+| P01 | Draw calls < 200 (D1) / < 350 (D11) | DEFERRED-STRUCTURAL | Windowed `perf_check_scene`: D1 = 246 (over 200), under the D11 350 cap. Needs material/mesh batching, not a value swap. |
 | P02 | Particles < 500, RAM/VRAM | NEEDS measurement | Windowed only |
 | N01, I02, T01 | Owner rows | GAP-OWNER | See TZ_DECISIONS |
 
