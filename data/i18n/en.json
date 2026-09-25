@@ -1292,5 +1292,12 @@
   "DAILY_PLAY_20_FLAVOR": "Twenty minutes. That is a shift, Keeper.",
   "NGP_KNOBS_SUMMARY": "Hints: %s · Night cycle: x%.2f · Time pressure: %s · Extra dark: %d",
   "opt_on": "On",
-  "NO_RETURN_BLOCKED": "The way back is dark now. Only the station ahead."
+  "NO_RETURN_BLOCKED": "The way back is dark now. Only the station ahead.",
+  "TUT_FLASHLIGHT": "Turn on your flashlight. The dark is not empty.",
+  "TUT_MOVE": "Move. Stay where the light falls.",
+  "TUT_PICKUP": "Pick up what you find. Parts bring the lamps back.",
+  "TUT_CROUCH": "Sneak. Slow steps carry less sound.",
+  "TUT_DODGE": "Dodge when something lunges.",
+  "TUT_ATTACK": "Strike back if it reaches you.",
+  "TUT_INVENTORY": "Open your pack to see what you carry."
 }

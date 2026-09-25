@@ -1292,5 +1292,12 @@
   "DAILY_PLAY_20_FLAVOR": "Vingt minutes. C'est un quart, Gardien.",
   "NGP_KNOBS_SUMMARY": "Indices : %s · Cycle nocturne : x%.2f · Pression du temps : %s · Obscurité en plus : %d",
   "opt_on": "Activé",
-  "NO_RETURN_BLOCKED": "Le chemin du retour est éteint. Il ne reste que la centrale."
+  "NO_RETURN_BLOCKED": "Le chemin du retour est éteint. Il ne reste que la centrale.",
+  "TUT_FLASHLIGHT": "Allume ta lampe. L'obscurité n'est pas vide.",
+  "TUT_MOVE": "Avance. Reste là où tombe la lumière.",
+  "TUT_PICKUP": "Ramasse ce que tu trouves. Les pièces rallument les lampadaires.",
+  "TUT_CROUCH": "Avance sans bruit. Des pas lents s'entendent moins.",
+  "TUT_DODGE": "Esquive quand quelque chose bondit.",
+  "TUT_ATTACK": "Riposte s'il t'atteint.",
+  "TUT_INVENTORY": "Ouvre ton sac pour voir ce que tu portes."
 }

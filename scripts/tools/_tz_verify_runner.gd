@@ -189,6 +189,24 @@ func _run() -> void:
 	tgt.queue_free()
 	wb.queue_free()
 
+	# Tutorial hint layout: the box and its Skip button must sit in the bottom
+	# half, clear of the HUD bars (they used to collapse onto them).
+	var hint := get_tree().root.find_child("TutorialHint", true, false) as Control
+	var skip := get_tree().root.find_child("SkipButton", true, false) as Control
+	if hint != null and skip != null:
+		var lbl_t := hint.find_child("HintText", true, false) as Label
+		if lbl_t != null:
+			lbl_t.text = LocalizationManager.t("TUT_MOVE")
+		hint.visible = true
+		await _frames(3)
+		await _shot("TUT_hint_layout")
+		var vp_h: float = get_viewport().get_visible_rect().size.y
+		_check(skip.get_global_rect().position.y > vp_h * 0.5 and lbl_t != null and not lbl_t.text.begins_with("TUT_"),
+			"tutorial hint in bottom half (skip y=%d of %d), text='%s'" % [int(skip.get_global_rect().position.y), int(vp_h), lbl_t.text if lbl_t else "?"])
+		hint.visible = false
+	else:
+		_check(false, "tutorial hint/skip nodes not found")
+
 	# G17 - hardcore death wipes the save (last: it ends the run). The wipe is
 	# real, so every file it touches is backed up first and restored after -
 	# this probe must never cost the machine's owner their actual progress.

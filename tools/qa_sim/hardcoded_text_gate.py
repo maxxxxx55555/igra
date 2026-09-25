@@ -8,15 +8,28 @@ Flags `<x>.text = "<literal>"` (and `+=`) where the literal contains a run of
 2+ letters (any script). Numbers, symbols and emoji pass. Literals that are
 key/tech tokens identical in every locale go in ALLOW with a reason.
 
+Also: every `"<...>_key": "KEY"` literal in a GDScript data dict (tutorial
+steps, recipe tables) must exist in data/i18n/en.json. The tutorial shipped
+7 of 11 hint keys missing in every locale because such keys never pass
+through a t()/tr() call the other checks look for.
+
 Usage: python tools/qa_sim/hardcoded_text_gate.py [--demo]
 Exit 0 clean, 1 on any hit.
 """
+import json
 import re
 import sys
 from pathlib import Path
 
 ASSIGN = re.compile(r'\.text\s*\+?=\s*"((?:[^"\\]|\\.)*)"')
 WORD = re.compile(r"[^\W\d_]{2,}")
+DATA_KEY = re.compile(r'"([a-z_]*_key)"\s*:\s*"([A-Za-z0-9_]+)"')
+
+
+def missing_data_keys(text: str, known: set) -> list[str]:
+    return [m.group(2) for m in DATA_KEY.finditer(text) if m.group(2) not in known]
+
+
 # Literal -> reason it is locale-independent.
 ALLOW = {
     "[ESC]  /  [TAP]": "physical key / gesture names, same on every keyboard layout",
@@ -37,12 +50,16 @@ def scan_text(text: str) -> list[str]:
 
 def main() -> int:
     root = Path(__file__).resolve().parents[2]
+    known = set(json.loads((root / "data/i18n/en.json").read_text(encoding="utf-8")))
     bad = []
     for p in sorted((root / "scripts").rglob("*.gd")):
         if "tools" in p.relative_to(root).parts:
             continue  # dev-only probes, excluded from export
-        for lit in scan_text(p.read_text(encoding="utf-8", errors="ignore")):
+        text = p.read_text(encoding="utf-8", errors="ignore")
+        for lit in scan_text(text):
             bad.append(f"{p.relative_to(root).as_posix()}: \"{lit}\"")
+        for key in missing_data_keys(text, known):
+            bad.append(f"{p.relative_to(root).as_posix()}: data key {key} not in en.json")
     for b in bad:
         print("HARDCODED", b)
     print("hardcoded_text_gate: %d hit(s)" % len(bad))
@@ -60,6 +77,8 @@ def _demo() -> None:
     assert scan_text('btn.text = "[✓] " + btn.text') == []
     assert scan_text(r'lbl.text = "%s\nx%d"') == []  # escape + one letter is not a word
     assert scan_text(r'lbl.text = "Line\nTwo"') == [r"Line\nTwo"]
+    assert missing_data_keys('{"text_key": "TUT_MOVE"}', {"TUT_MOVE"}) == []
+    assert missing_data_keys('{"text_key": "TUT_GONE"}', {"TUT_MOVE"}) == ["TUT_GONE"]
     print("demo OK")
 
 

@@ -1292,5 +1292,12 @@
   "DAILY_PLAY_20_FLAVOR": "Vinte minutos. Isso é um turno, Guardião.",
   "NGP_KNOBS_SUMMARY": "Dicas: %s · Ciclo noturno: x%.2f · Pressão de tempo: %s · Escuridão extra: %d",
   "opt_on": "Ativo",
-  "NO_RETURN_BLOCKED": "O caminho de volta apagou. Só resta a usina."
+  "NO_RETURN_BLOCKED": "O caminho de volta apagou. Só resta a usina.",
+  "TUT_FLASHLIGHT": "Ligue a lanterna. O escuro não está vazio.",
+  "TUT_MOVE": "Ande. Fique onde a luz cai.",
+  "TUT_PICKUP": "Pegue o que encontrar. As peças trazem os postes de volta.",
+  "TUT_CROUCH": "Ande furtivo. Passos lentos fazem menos barulho.",
+  "TUT_DODGE": "Desvie quando algo avançar.",
+  "TUT_ATTACK": "Revide se ele te alcançar.",
+  "TUT_INVENTORY": "Abra a mochila para ver o que você carrega."
 }

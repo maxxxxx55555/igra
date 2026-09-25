@@ -123,33 +123,44 @@ func _build_ui() -> void:
 	_hint_panel.name = "TutorialHint"
 	_hint_panel.process_mode = Node.PROCESS_MODE_ALWAYS
 	_hint_panel.visible = false
-	
+	# Assigning `anchors_preset` only stores the enum - it never applied any
+	# anchors/offsets, so this zero-size panel sat at (0,0) and the hint box
+	# collapsed onto the HUD's HP/stamina/battery bars (seen in every
+	# docs/stills/tzverify frame). set_anchors_preset() actually lays it out.
+	_hint_panel.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_hint_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
 	var bg := PanelContainer.new()
-	bg.size = Vector2(500, 120)
-	bg.anchors_preset = Control.PRESET_BOTTOM_WIDE
-	bg.offset_bottom = -80
-	bg.offset_top = 80
+	bg.name = "HintBox"
+	bg.custom_minimum_size = Vector2(500, 120)
+	bg.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
+	bg.offset_left = -250.0
+	bg.offset_right = 250.0
+	bg.offset_top = -200.0
+	bg.offset_bottom = -80.0
 	bg.add_theme_stylebox_override("panel", _make_stylebox())
 	_hint_panel.add_child(bg)
-	
+
+	# PanelContainer stacks every direct child on top of each other - the
+	# label and the Skip button need a VBox to sit one above the other.
+	var box := VBoxContainer.new()
+	bg.add_child(box)
+
 	var lbl := Label.new()
 	lbl.name = "HintText"
-	lbl.size = Vector2(460, 80)
-	lbl.position = Vector2(20, 20)
+	lbl.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	lbl.add_theme_font_size_override("font_size", 18)
-	bg.add_child(lbl)
-	
+	box.add_child(lbl)
+
 	_skip_btn = Button.new()
+	_skip_btn.name = "SkipButton"
 	_skip_btn.text = LocalizationManager.t("UI_SKIP")
-	_skip_btn.size = Vector2(100, 30)
-	_skip_btn.anchors_preset = Control.PRESET_BOTTOM_RIGHT
-	_skip_btn.offset_bottom = -10
-	_skip_btn.offset_right = -10
+	_skip_btn.size_flags_horizontal = Control.SIZE_SHRINK_END
 	_skip_btn.pressed.connect(_skip_tutorial)
-	bg.add_child(_skip_btn)
+	box.add_child(_skip_btn)
 	
 	add_child(_hint_panel)
 

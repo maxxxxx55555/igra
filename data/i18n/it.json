@@ -1292,5 +1292,12 @@
   "DAILY_PLAY_20_FLAVOR": "Venti minuti. È un turno, Custode.",
   "NGP_KNOBS_SUMMARY": "Suggerimenti: %s · Ciclo notturno: x%.2f · Pressione del tempo: %s · Buio extra: %d",
   "opt_on": "Attivo",
-  "NO_RETURN_BLOCKED": "La strada del ritorno è buia. Resta solo la centrale."
+  "NO_RETURN_BLOCKED": "La strada del ritorno è buia. Resta solo la centrale.",
+  "TUT_FLASHLIGHT": "Accendi la torcia. Il buio non è vuoto.",
+  "TUT_MOVE": "Muoviti. Resta dove cade la luce.",
+  "TUT_PICKUP": "Raccogli ciò che trovi. I pezzi riaccendono i lampioni.",
+  "TUT_CROUCH": "Muoviti furtivo. I passi lenti fanno meno rumore.",
+  "TUT_DODGE": "Schiva quando qualcosa ti salta addosso.",
+  "TUT_ATTACK": "Contrattacca se ti raggiunge.",
+  "TUT_INVENTORY": "Apri lo zaino per vedere cosa porti."
 }

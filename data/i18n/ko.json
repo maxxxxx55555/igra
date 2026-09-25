@@ -1292,5 +1292,12 @@
   "DAILY_PLAY_20_FLAVOR": "이십 분. 그건 하나의 교대다, 관리인.",
   "NGP_KNOBS_SUMMARY": "힌트: %s · 밤 주기: x%.2f · 시간 압박: %s · 추가 어둠: %d",
   "opt_on": "켜짐",
-  "NO_RETURN_BLOCKED": "돌아갈 길은 이미 어둡다. 앞에는 발전소뿐이다."
+  "NO_RETURN_BLOCKED": "돌아갈 길은 이미 어둡다. 앞에는 발전소뿐이다.",
+  "TUT_FLASHLIGHT": "손전등을 켜라. 어둠은 비어 있지 않다.",
+  "TUT_MOVE": "움직여라. 빛이 떨어지는 곳에 머물러라.",
+  "TUT_PICKUP": "찾은 것은 주워라. 부품이 가로등을 되살린다.",
+  "TUT_CROUCH": "살금살금 걸어라. 느린 걸음은 소리가 작다.",
+  "TUT_DODGE": "무언가 달려들면 피해라.",
+  "TUT_ATTACK": "닿으면 반격해라.",
+  "TUT_INVENTORY": "배낭을 열어 가진 것을 확인해라."
 }

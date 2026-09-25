@@ -940,7 +940,9 @@ func _refresh_slot_badges() -> void:
 func _add_map_button() -> void:
 	var btn := Button.new()
 	btn.name = "MapButton"
-	btn.position = Vector2(16, 182)
+	# Below the 5th status row (VISIBILITY at y~190): at y=182 the button
+	# covered the caption ("…ILITY" in docs/stills/tzverify frames).
+	btn.position = Vector2(16, 216)
 	btn.size = Vector2(48, 48)
 	btn.add_theme_color_override("font_color", Color(0.788, 0.635, 0.290))
 	btn.add_theme_font_size_override("font_size", 20)

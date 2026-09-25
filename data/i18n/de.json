@@ -1292,5 +1292,12 @@
   "DAILY_PLAY_20_FLAVOR": "Zwanzig Minuten. Das ist eine Schicht, Wächter.",
   "NGP_KNOBS_SUMMARY": "Hinweise: %s · Nachtzyklus: x%.2f · Zeitdruck: %s · Extra dunkel: %d",
   "opt_on": "An",
-  "NO_RETURN_BLOCKED": "Der Rückweg ist dunkel. Nur noch das Werk voraus."
+  "NO_RETURN_BLOCKED": "Der Rückweg ist dunkel. Nur noch das Werk voraus.",
+  "TUT_FLASHLIGHT": "Schalte die Taschenlampe ein. Die Dunkelheit ist nicht leer.",
+  "TUT_MOVE": "Geh los. Bleib, wo das Licht hinfällt.",
+  "TUT_PICKUP": "Heb auf, was du findest. Teile bringen die Laternen zurück.",
+  "TUT_CROUCH": "Schleich. Langsame Schritte sind leiser.",
+  "TUT_DODGE": "Weiche aus, wenn etwas zuspringt.",
+  "TUT_ATTACK": "Schlag zurück, wenn es dich erreicht.",
+  "TUT_INVENTORY": "Öffne den Rucksack, um zu sehen, was du trägst."
 }

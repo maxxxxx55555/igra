@@ -1292,5 +1292,12 @@
   "DAILY_PLAY_20_FLAVOR": "Veinte minutos. Eso ya es un turno, Guardián.",
   "NGP_KNOBS_SUMMARY": "Pistas: %s · Ciclo nocturno: x%.2f · Presión de tiempo: %s · Oscuridad extra: %d",
   "opt_on": "Activo",
-  "NO_RETURN_BLOCKED": "El camino de vuelta está a oscuras. Solo queda la central."
+  "NO_RETURN_BLOCKED": "El camino de vuelta está a oscuras. Solo queda la central.",
+  "TUT_FLASHLIGHT": "Enciende la linterna. La oscuridad no está vacía.",
+  "TUT_MOVE": "Muévete. Quédate donde cae la luz.",
+  "TUT_PICKUP": "Recoge lo que encuentres. Las piezas devuelven las farolas.",
+  "TUT_CROUCH": "Avanza sigiloso. Los pasos lentos hacen menos ruido.",
+  "TUT_DODGE": "Esquiva cuando algo se abalance.",
+  "TUT_ATTACK": "Devuelve el golpe si te alcanza.",
+  "TUT_INVENTORY": "Abre la mochila para ver lo que llevas."
 }

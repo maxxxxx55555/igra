@@ -1292,5 +1292,12 @@
   "DAILY_PLAY_20_FLAVOR": "Yirmi dakika. Bu bir vardiya, Bekçi.",
   "NGP_KNOBS_SUMMARY": "İpuçları: %s · Gece döngüsü: x%.2f · Zaman baskısı: %s · Ek karanlık: %d",
   "opt_on": "Açık",
-  "NO_RETURN_BLOCKED": "Dönüş yolu karardı. Önde yalnızca santral var."
+  "NO_RETURN_BLOCKED": "Dönüş yolu karardı. Önde yalnızca santral var.",
+  "TUT_FLASHLIGHT": "Feneri yak. Karanlık boş değil.",
+  "TUT_MOVE": "Yürü. Işığın düştüğü yerde kal.",
+  "TUT_PICKUP": "Bulduğunu topla. Parçalar lambaları geri getirir.",
+  "TUT_CROUCH": "Sessizce ilerle. Yavaş adımlar daha az ses çıkarır.",
+  "TUT_DODGE": "Bir şey üstüne atılınca kaç.",
+  "TUT_ATTACK": "Sana ulaşırsa karşılık ver.",
+  "TUT_INVENTORY": "Ne taşıdığını görmek için çantanı aç."
 }

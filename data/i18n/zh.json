@@ -1292,5 +1292,12 @@
   "DAILY_PLAY_20_FLAVOR": "二十分钟。这就算一个班了，守灯人。",
   "NGP_KNOBS_SUMMARY": "提示：%s · 夜晚周期：x%.2f · 时间压力：%s · 额外黑暗：%d",
   "opt_on": "开启",
-  "NO_RETURN_BLOCKED": "回去的路已经熄灭了。前方只剩发电站。"
+  "NO_RETURN_BLOCKED": "回去的路已经熄灭了。前方只剩发电站。",
+  "TUT_FLASHLIGHT": "打开手电筒。黑暗并不空。",
+  "TUT_MOVE": "移动。待在有光的地方。",
+  "TUT_PICKUP": "捡起你找到的东西。零件能让路灯重新亮起。",
+  "TUT_CROUCH": "潜行。慢步声音更小。",
+  "TUT_DODGE": "有东西扑来时闪避。",
+  "TUT_ATTACK": "它靠近你就还击。",
+  "TUT_INVENTORY": "打开背包查看你携带的物品。"
 }
