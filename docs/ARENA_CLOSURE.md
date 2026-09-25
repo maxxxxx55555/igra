@@ -9,7 +9,7 @@ defer. Commit hashes come from `git log` on `main`.
 - **D** = `docs/SLOP_REPORT.md`
 - **Design** = `docs/DESIGN_AUDIT_ARENA.md`
 
-## A: BREAK_REPORT (17/17 closed)
+## A: BREAK_REPORT (17/17 closed; B7's legacy-achievements half deferred, see B7 row)
 
 | Item | Closed by |
 |---|---|
@@ -19,7 +19,7 @@ defer. Commit hashes come from `git log` on `main`.
 | B4 checksum-only / no progress_hmac saves | `92934a7` (+ the signing fix `ac877a5`, see note) |
 | B5 NG+ file/UI/reset bypasses | `fe7ef0e` |
 | B6 unsigned daily file | `e9686d7` |
-| B7 duplicate RewardsManager/RandomEvents autoloads | `bb662b4` |
+| B7 duplicate RewardsManager/RandomEvents autoloads | `bb662b4` (payout half). **Deferred half:** an unsigned legacy `achievements.cfg` is still trusted once and re-signed (`achievements_manager.gd` `_load`). SECURITY_PATCH_SPEC P-02 records this as a UX trade-off, and attack_sim `_check_achievements_legacy_migrates` locks the migration on purpose. Closing it means rejecting legacy files, which is an owner call. |
 | B8 kills paid a display signal only | `1cf3aaf` |
 | B9 + B14 non-atomic try_add | `36d44be` |
 | B10 district-enter save before placement | `cc1e0b3` |

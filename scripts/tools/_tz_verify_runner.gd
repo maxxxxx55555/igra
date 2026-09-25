@@ -5,6 +5,8 @@ const OUT := "res://docs/stills/tzverify/"
 const UserDataSnapshot := preload("res://scripts/tools/_user_data_snapshot.gd")
 ## The whole probe runs on the real user:// profile (start_game resets and
 ## autosaves, G17 wipes, G12b rewrites the upgrade cfg): snapshot it first.
+## This in-memory copy dies with the process; run via tools/qa_sim/tz_verify,
+## whose shell guard also restores after a crash, closed window or timeout.
 var _user_data: Variant = null
 var _fails: int = 0
 

@@ -24,7 +24,7 @@ echo "# Godot binary: $GODOT"
 # any exit (tools/qa_sim/user_data_guard.sh).
 source tools/qa_sim/user_data_guard.sh
 udg_snapshot || exit 99
-trap 'udg_restore' EXIT
+trap 'udg_restore || exit 97' EXIT
 trap 'exit 130' INT TERM
 
 LOG_DIR=".qa_logs"

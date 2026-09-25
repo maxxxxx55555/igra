@@ -40,6 +40,7 @@ udg_snapshot() { # [dir]
 		mkdir -p "$UDG_SNAP/files/$(dirname "$f")"
 		cp -p "$UDG_DIR/$f" "$UDG_SNAP/files/$f" && cmp -s "$UDG_DIR/$f" "$UDG_SNAP/files/$f" || {
 			echo "  user-data guard: FAIL cannot snapshot $f - do not run the game against this profile"
+			rm -rf -- "$UDG_SNAP"  # partial copy only; the profile itself was not touched
 			return 1
 		}
 	done < "$UDG_SNAP/list"
@@ -77,8 +78,17 @@ udg_restore() {
 }
 
 _udg_demo() {
-	local d; d=$(mktemp -d "${TMPDIR:-/tmp}/tls_udg_demo.XXXXXX")
-	mkdir -p "$d/saves" "$d/logs"
+	local d; d=$(mktemp -d "${TMPDIR:-/tmp}/tls_udg_demo.XXXXXX") && [[ -n "$d" ]] || { echo "demo FAIL: no temp dir"; return 1; }
+	_udg_demo_steps "$d"
+	local rc=$?
+	rm -rf -- "$d"
+	return $rc
+}
+
+_udg_demo_steps() { # synthetic profile dir; every demo snapshot lives under it
+	local d="$1"
+	local TMPDIR="$d/tmp"
+	mkdir -p "$d/saves" "$d/logs" "$TMPDIR"
 	printf 'owner-progress' > "$d/tls_savegame.save"
 	printf 'slot' > "$d/saves/slot1.save"
 	printf 'untouched' > "$d/settings.cfg"
@@ -95,12 +105,15 @@ _udg_demo() {
 	# Snapshot that cannot be taken: must report failure and arm nothing.
 	if TMPDIR="$d/no/such/dir" udg_snapshot "$d" > /dev/null; then echo "demo FAIL: snapshot succeeded without a dir"; return 1; fi
 	[[ "${UDG_ACTIVE:-0}" == 0 ]] || { echo "demo FAIL: failed snapshot left restore armed"; return 1; }
+	# A file that cannot be copied: snapshot must fail, disarm and drop its partial copy.
+	local before; before=$(find "${TMPDIR:-/tmp}" -maxdepth 1 -name 'tls_udg.*' | wc -l)
+	if ( cp() { return 1; }; udg_snapshot "$d" > /dev/null ); then echo "demo FAIL: snapshot ignored a failed copy"; return 1; fi
+	[[ $(find "${TMPDIR:-/tmp}" -maxdepth 1 -name 'tls_udg.*' | wc -l) -eq $before ]] || { echo "demo FAIL: partial snapshot left in temp"; return 1; }
 	# Lost snapshot: restore must fail and delete nothing.
 	udg_snapshot "$d" > /dev/null
 	rm -rf -- "$UDG_SNAP"
 	if udg_restore > /dev/null; then echo "demo FAIL: restore succeeded without a snapshot"; return 1; fi
 	[[ -e "$d/tls_savegame.save" && -e "$d/saves/slot1.save" ]] || { echo "demo FAIL: lost snapshot deleted owner files"; return 1; }
-	rm -rf -- "$d"
 	echo "demo OK"
 }
 

@@ -187,9 +187,9 @@ fi
 # pattern as perf_check_scene.tscn's draw-call gate).
 head_ "Truth gates: visual/i18n (данные уже в репозитории)"
 if "$PY" tools/qa_sim/visual_truth_gate.py docs/stills/evidence/r0_after_*.png >/dev/null 2>&1; then
-  ok "visual_truth_gate (R0 regression lock)"
+  ok "visual_truth_gate (gate self-consistency on committed frames; R0 lock = LUT pin below)"
 else
-  bad "visual_truth_gate (R0 regression lock)"
+  bad "visual_truth_gate (gate self-consistency on committed frames; R0 lock = LUT pin below)"
 fi
 # The PNG lock above only re-measures OLD committed frames. The real R0
 # cause (2026-09-25, windowed A/B): the 11 district LUTs were imported as
@@ -271,7 +271,7 @@ else
     # Game, autosave, forged upgrade cfgs): snapshot it, restore on any exit.
     source tools/qa_sim/user_data_guard.sh
     udg_snapshot || { echo "  ${RED}FAIL${OFF} user-data guard: снимок профиля не удался - движковые проверки не запускаются"; exit 1; }
-    trap 'udg_restore' EXIT
+    trap 'udg_restore || exit 97' EXIT
     trap 'exit 130' INT TERM
     # RELEASE CONVERGENCE STEP 4: game_test_3d_scene.tscn's phase1+ combat
     # step stalls intermittently under --headless (pre-existing,
