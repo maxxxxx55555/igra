@@ -1240,7 +1240,7 @@
   "CAPTION_GALLERY_LAST_STREETLIGHT": "L'ultimo lampione. Finché brucia, la città vive.",
   "NGP_PICK_TITLE": "Modificatori scelti: %d / %d",
   "NGP_ACTIVE_LABEL": "Modificatori attivi: %s",
-  "NGP_SETUP_ACTION": "Configura New Game+",
+  "NGP_SETUP_ACTION": "Configura Nuova Partita+",
   "NGP_ACTIVATE_ACTION": "Attiva NG+%d",
   "NGP_ACTIVATE_HELP": "La rete può essere percorsa di nuovo. Attiva NG+ per aumentare la difficoltà. Poi scegli «Nuova partita» dal menu principale — «Continua» carica solo questo salvataggio.",
   "NGP_AT_LIMIT": "Livello NG+ massimo raggiunto",

@@ -1240,7 +1240,7 @@
   "CAPTION_GALLERY_LAST_STREETLIGHT": "O último poste de luz. Enquanto queimar, a cidade vive.",
   "NGP_PICK_TITLE": "Modificadores escolhidos: %d / %d",
   "NGP_ACTIVE_LABEL": "Modificadores ativos: %s",
-  "NGP_SETUP_ACTION": "Configurar New Game+",
+  "NGP_SETUP_ACTION": "Configurar Novo Jogo+",
   "NGP_ACTIVATE_ACTION": "Ativar NG+%d",
   "NGP_ACTIVATE_HELP": "A rede pode ser percorrida de novo. Ative o NG+ para aumentar a dificuldade. Depois escolha «Novo Jogo» no menu principal — «Continuar» apenas recarrega este save.",
   "NGP_AT_LIMIT": "Nível máximo de NG+ atingido",

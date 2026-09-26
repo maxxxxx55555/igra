@@ -1110,10 +1110,10 @@
   "tt_comfort": "快適",
   "tt_default": "標準",
   "tt_responsive": "俊敏",
-  "TOUCH_CAL_TITLE": "操作に慣れよう",
-  "TOUCH_CAL_STEP_DRAG": "スティックをドラッグして移動しよう。",
-  "TOUCH_CAL_STEP_INTERACT": "次にインタラクトをタップしよう。",
-  "TOUCH_CAL_STEP_HAPTIC": "今の振動を感じた?これがハプティックフィードバックだよ。タップして続けよう。",
+  "TOUCH_CAL_TITLE": "操作に慣れろ",
+  "TOUCH_CAL_STEP_DRAG": "スティックをドラッグして移動しろ。",
+  "TOUCH_CAL_STEP_INTERACT": "次にインタラクトをタップしろ。",
+  "TOUCH_CAL_STEP_HAPTIC": "今の振動を感じたか？これがハプティックフィードバックだ。タップして続けろ。",
   "TOUCH_CAL_BTN_INTERACT": "インタラクト",
   "TOUCH_CAL_BTN_CONTINUE": "続ける",
   "SECRET_SUBURBS_01_TITLE": "柱の身長印",
@@ -1298,6 +1298,6 @@
   "TUT_PICKUP": "見つけたものは拾え。部品が街灯を取り戻す。",
   "TUT_CROUCH": "忍び足で進め。ゆっくりした足音は小さい。",
   "TUT_DODGE": "何かが飛びかかってきたら避けろ。",
-  "TUT_ATTACK": "届かれたら反撃しろ。",
+  "TUT_ATTACK": "襲われたら反撃しろ。",
   "TUT_INVENTORY": "荷物を開いて、持ち物を確かめろ。"
 }
