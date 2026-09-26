@@ -159,3 +159,38 @@ Nits (not counted):
 ## RECOMMENDATION
 
 Fix these 7 first (the 4 PARTIALs and H1–H3: one code change in the failed-restore path of `qa_launch_guard.gd`, six doc edits). Then end C8 with one final round scoped to game code and shipped autoloads, and sign off, instead of looping on QA tooling and report wording.
+
+---
+
+## Status on `cloud/audit-ce782f8` (fix pass, same day)
+
+| Finding | Fixed in |
+|---|---|
+| PARTIAL 1: guard item (5), failed restore on a normal launch | `a6f4fdb`: any launch over an unrestorable copy aborts; release exports skip the guard; new `qa_guard_e2e` case |
+| PARTIAL 2: R-08 same-session half | `c2e9b86`: wall clock read once per launch, `<=` replay floor, frame deltas capped; `attack_sim` check. ARENA row split in `7f13092` |
+| PARTIAL 3: G08 NEEDS-EYES | `7f13092`: NEEDS-MEASUREMENT with the DR-4/DR-3 measurement spec |
+| PARTIAL 4: residual table | `326fda1`: P02, G08, the GUI re-run and this branch's code added |
+| H1: rc13 tag overclaim | `326fda1`: CORRECTION_LOG 41 (tags are not moved) |
+| H2: "Tools and docs only" | `326fda1`: the round-12 row names the shipped autoload |
+| H3: stale GUI row | `326fda1`: row removed; the re-run is a residual |
+| N1, N2, N5 | `326fda1` |
+| N3 | `7f13092` |
+| N4 | Left as is ("псы" is a synonym) |
+
+## Addendum: max-squeeze findings (not in the counts above)
+
+- **A1. ARENA Design P4 is a no-op fix.** Task 1 counted it CONFIRMED from line presence (18/18), but
+  `f9bbfd7` edits `scripts/audio/proc_audio.gd`, which nothing instantiates. It's PARTIAL.
+  Corrected tally: **CONFIRMED 94, PARTIAL 5**; 4 are fixed on this branch, and the P4 doc correction
+  is `docs/SLOP_REPORT_V2.md` D1. *Method limit:* "n/m lines at HEAD" proves a fix survives, not
+  that its code runs. The reference sweep (SLOP_REPORT_V2 §S, 64 unreferenced shipped scripts)
+  covers that gap.
+- **A2. FUNCTION_MATRIX AL33 WORKS overstates.** 10 of the 20 base achievements have no grant path
+  (`docs/SECURITY_SWEEP_V2.md` #4 note). This is a PARTIAL-G for Local and the owner.
+- **A3. Static release blockers:**
+  - ETC2/ASTC import is off, so Android export refuses.
+  - The preset exports an APK, not an AAB.
+  - The debug ad stub grants revive and battery with no ad in every current release build.
+  - Fixes: `docs/RELEASE_RUNBOOK.md` B1–B3, `docs/SECURITY_SWEEP_V2.md` #2.
+- **A4. New docs.** `docs/STAGNATION_ANALYSIS.md` (loop verdict data and anti-loop rule),
+  `docs/PERF_PASS.md`, `docs/MERGE_PLAN.md` (merge order and the Godot re-verification list).
