@@ -90,7 +90,7 @@ JSON), so every load wiped district power and ProgressTracker. Found and fixed i
 | P1 stealth investment repair | `2a88503` |
 | P2 stealth skills | `c2dbeb4`, `4e7560e` |
 | P3 NG+ activation clarity | `4e7560e` |
-| P4 pause procedural audio | `f9bbfd7` |
+| P4 pause procedural audio | No-op, corrected in rc14 (SLOP_REPORT_V2 D1): `f9bbfd7` edited `scripts/audio/proc_audio.gd`, which nothing instantiates (now in `_QUARANTINE/`). The live audio layers keep their documented pause policy: `audio_manager`, `music_manager` and `streetlight_hum_pool` are `PROCESS_MODE_ALWAYS` by design; footsteps stop with the player. |
 | P5 battery capacity composition | `24ceb68` |
 | P6 coin reporting / P7 duration scoping | `8f48faf` (docs + simulator per the audit's own "retain" acceptance criteria) |
 | P8 boss P1 telegraph | `ee273ee`, `24ceb68` |

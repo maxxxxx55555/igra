@@ -17,11 +17,9 @@ const COLOR_AMBER_HI  := Color("#d8d2c4")   # bone — заголовки
 const COLOR_TEXT      := Color("#d8d2c4")   # bone-text
 const COLOR_TEXT_DIM  := Color("#aeb6bf")   # steel-text
 const COLOR_DANGER    := Color("#b4452f")   # ember
-const COLOR_STAMINA   := Color("#5f8a4e")   # stamina green
 
 const FONT_SIZE_BODY: int = 16
 const FONT_SIZE_TITLE: int = 22
-const FONT_SIZE_HUGE: int = 30
 
 ## SystemFont спрашивает шрифт у ОС по имени — на машине/устройстве без
 ## Rajdhani/Saira установленными это молча откатывалось на системный шрифт

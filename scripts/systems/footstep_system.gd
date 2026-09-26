@@ -172,33 +172,3 @@ func _detect_material() -> String:
 
 func register_surface(node: Node3D, material: String) -> void:
 	node.set("surface_material", material)
-
-func demo() -> void:
-	# Self-check: surface mapping and crouch silence must hold.
-	assert(MATERIALS.has("default"))
-	for key in ["asphalt_dry", "puddle", "metal", "glass"]:
-		assert(MATERIALS.has(key), "missing surface: %s" % key)
-		var r: Array = MATERIALS[key]["pitch_range"]
-		assert(float(r[0]) <= float(r[1]), "bad pitch range: %s" % key)
-		assert(String(MATERIALS[key]["sample"]) != "", "missing sample: %s" % key)
-	assert(STATE_CROUCH == 4 and STATE_STEALTH == 3, "state constants must mirror player enum")
-	print("[footstep] demo OK samples=", _streams.size())
-
-## A03 regression: every GDD surface must give 3 distinct (sample, pitch)
-## steps across STEALTH/WALK/RUN, each backed by a real loaded file.
-## Returns the failure count (asserts don't stop a headless probe).
-func check_surface_speeds() -> int:
-	var fails := 0
-	for surface in ["asphalt_dry", "asphalt_wet", "concrete", "wood", "metal", "puddle", "glass"]:
-		var seen := {}
-		for state in AUDIBLE_STATES:
-			var sample_name := _step_sample(surface, state)
-			var key := "%s@%0.2f" % [sample_name, _step_pitch(surface, state)[0]]
-			var loaded := _streams.has(sample_name)
-			if not loaded or seen.has(key):
-				fails += 1
-			seen[key] = true
-			print("[footstep] %s/%d -> %s pitch %0.2f %s" % [surface, state, sample_name, _step_pitch(surface, state)[0], "OK" if loaded else "MISSING"])
-		if seen.size() != AUDIBLE_STATES.size():
-			print("[footstep] FAIL %s: only %d distinct steps" % [surface, seen.size()])
-	return fails

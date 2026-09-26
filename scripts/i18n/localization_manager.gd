@@ -166,8 +166,7 @@ func has_key(key: String) -> bool:
 ## "Crawler" in either place.
 func _display_monster_id(id: StringName) -> StringName:
 	if id == &"crawler":
-		var sm := get_node_or_null("/root/SettingsManager")
-		if sm != null and sm.has_method("get_setting") and bool(sm.get_setting("arachnophobia", false)):
+		if bool(SettingsManager.get_setting("arachnophobia", false)):
 			return &"crawler_arachnophobia"
 	return id
 

@@ -13,7 +13,6 @@ var _step: int = 0
 var _joy: Control = null
 var _label: Label = null
 var _btn: Button = null
-var _dot_labels: Array[Label] = []
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP

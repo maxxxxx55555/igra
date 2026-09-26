@@ -616,6 +616,9 @@ func _outline_recursive(node: Node, oc: Color, sc: Color) -> void:
 ## suppresses juice like this).
 const _VIGNETTE_BG_DEEP := Color(0.047, 0.062, 0.086)
 const _VIGNETTE_EMBER := Color(0.706, 0.271, 0.184)
+const _VIGNETTE_PULSE_RATE: float = 0.006  # radians per ms (~1 s period)
+## Cached for the per-frame vignette; re-fetched only after the player is freed.
+var _vignette_player: Node = null
 var _noise_reduce_flash_cache: bool = false
 var _noise_reduce_flash_t: float = 0.0
 
@@ -634,13 +637,14 @@ func _process_noise_vignette(delta: float) -> void:
 	_noise_reduce_flash_t += delta
 	if _noise_reduce_flash_t >= 1.0:
 		_noise_reduce_flash_t = 0.0
-		var sm := get_node_or_null("/root/SettingsManager")
-		_noise_reduce_flash_cache = sm != null and sm.has_method("get_setting") and bool(sm.get_setting("reduce_flash", false))
+		_noise_reduce_flash_cache = bool(SettingsManager.get_setting("reduce_flash", false))
 	var pulse := 0.0
-	var player := get_tree().get_first_node_in_group("player")
+	if not is_instance_valid(_vignette_player):
+		_vignette_player = get_tree().get_first_node_in_group("player")
+	var player := _vignette_player
 	if not _noise_reduce_flash_cache and player != null and player.has_method("get_noise_level"):
 		var noise_ratio: float = clampf(float(player.get_noise_level()), 0.0, 1.0)
-		pulse = (sin(Time.get_ticks_msec() * 0.006) * 0.5 + 0.5) * noise_ratio
+		pulse = (sin(Time.get_ticks_msec() * _VIGNETTE_PULSE_RATE) * 0.5 + 0.5) * noise_ratio
 	# Only the tint pulses; alpha stays with the damage/low-HP tweens.
 	var c := Color(_VIGNETTE_BG_DEEP, v.color.a).lerp(Color(_VIGNETTE_EMBER, v.color.a), pulse)
 	if not v.color.is_equal_approx(c):
@@ -936,12 +940,14 @@ func _refresh_slot_badges() -> void:
 		var item_id: StringName = _SLOT_ITEMS[i]
 		badge.text = str(inv.count_of(item_id))
 
+## Below the 5th status row (VISIBILITY at y~190): at y=182 the button
+## covered the caption ("...ILITY" in docs/stills/tzverify frames).
+const _MAP_BUTTON_POS := Vector2(16, 216)
+
 func _add_map_button() -> void:
 	var btn := Button.new()
 	btn.name = "MapButton"
-	# Below the 5th status row (VISIBILITY at y~190): at y=182 the button
-	# covered the caption ("…ILITY" in docs/stills/tzverify frames).
-	btn.position = Vector2(16, 216)
+	btn.position = _MAP_BUTTON_POS
 	btn.size = Vector2(48, 48)
 	btn.add_theme_color_override("font_color", Color(0.788, 0.635, 0.290))
 	btn.add_theme_font_size_override("font_size", 20)

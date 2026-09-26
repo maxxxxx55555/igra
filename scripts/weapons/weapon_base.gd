@@ -143,8 +143,7 @@ const _AUTO_AIM_CONE_DEG: float = 12.0
 func _apply_auto_aim(from_pos: Vector3, direction: Vector3) -> Vector3:
 	if _owner == null or not _owner.is_in_group("player"):
 		return direction
-	var sm := _owner.get_tree().root.get_node_or_null("/root/SettingsManager")
-	if sm == null or not sm.has_method("get_setting") or not bool(sm.get_setting("auto_aim", false)):
+	if not bool(SettingsManager.get_setting("auto_aim", false)):
 		return direction
 	var best: Node3D = null
 	var best_dot: float = cos(deg_to_rad(_AUTO_AIM_CONE_DEG))

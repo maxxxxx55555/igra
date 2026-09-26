@@ -196,9 +196,7 @@ func _load() -> void:
 		return
 	var envelope = JSON.parse_string(f.get_as_text())
 	if envelope is Dictionary and envelope.has("hmac") and envelope.has("data_json"):
-		if String(envelope["hmac"]) != String(SaveSystem.call("_sign", envelope["data_json"])):
-			return
-		var data = JSON.parse_string(String(envelope["data_json"]))
+		var data: Variant = SaveSystem.read_signed(_pref_path)
 		if data is Dictionary:
 			_unlocked = data.get("unlocked", {})
 			_progress = data.get("progress", {})
@@ -211,10 +209,7 @@ func _load() -> void:
 		_save()
 
 func _save() -> void:
-	var f = FileAccess.open(_pref_path, FileAccess.WRITE)
-	if f:
-		var body: String = JSON.stringify({"unlocked": _unlocked, "progress": _progress})
-		f.store_string(JSON.stringify({"hmac": SaveSystem.call("_sign", body), "data_json": body}))
+	SaveSystem.write_signed(_pref_path, {"unlocked": _unlocked, "progress": _progress})
 
 func is_unlocked(achievement_id: StringName) -> bool:
 	return _unlocked.get(String(achievement_id), false)

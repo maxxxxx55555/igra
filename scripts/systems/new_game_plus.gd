@@ -184,18 +184,6 @@ func reset_for_new_game() -> void:
 	_save_save()
 
 func _load_save() -> void:
-	var path = "user://ng_plus_data.json"
-	if not FileAccess.file_exists(path):
-		return
-	var file = FileAccess.open(path, FileAccess.READ)
-	if not file:
-		return
-	var txt = file.get_as_text()
-	file.close()
-	var outer := JSON.new()
-	if outer.parse(txt) != OK or not (outer.data is Dictionary):
-		return
-	var envelope: Dictionary = outer.data
 	# SECURITY_PATCH_SPEC P-03: this file was entirely unsigned plain JSON -
 	# ng_plus/active/modifiers control real difficulty, rewards, battery and
 	# time-pressure scaling (get_*_multiplier() below), so a hand edit could
@@ -204,14 +192,10 @@ func _load_save() -> void:
 	# legacy-plain-JSON trust-once compat (no real installed base to
 	# protect). Doesn't prove the level was legitimately earned - only that
 	# the file wasn't hand-edited after this game itself last wrote it.
-	if not envelope.has("hmac") or not envelope.has("data_json"):
+	var signed: Variant = SaveSystem.read_signed("user://ng_plus_data.json")
+	if not (signed is Dictionary):
 		return
-	if String(envelope["hmac"]) != String(SaveSystem.call("_sign", String(envelope["data_json"]))):
-		return
-	var inner := JSON.new()
-	if inner.parse(String(envelope["data_json"])) != OK or not (inner.data is Dictionary):
-		return
-	var data: Dictionary = inner.data
+	var data: Dictionary = signed
 	# QA_SWARM_FINDINGS.md P2 (cheater): a hand-edited/forged ng_plus_data.json
 	# with an absurd level had nothing clamping it back down - every
 	# get_*_multiplier() below scales off this value, so an unclamped level
@@ -239,8 +223,4 @@ func _save_save() -> void:
 		"active": _is_ng_plus_active,
 		"modifiers": _active_modifiers,
 	}
-	var body := JSON.stringify(data)
-	var file = FileAccess.open(path, FileAccess.WRITE)
-	if file:
-		file.store_string(JSON.stringify({"hmac": SaveSystem.call("_sign", body), "data_json": body}))
-		file.close()
+	SaveSystem.write_signed(path, data)

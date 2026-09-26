@@ -28,6 +28,12 @@ var _owned_snapshot: String = ""
 func _enter_tree() -> void:
 	if not OS.is_debug_build():
 		return
+	# ShotTool lives in export-excluded scripts/tools/, so as an autoload it made every
+	# release boot log "Failed to instantiate an autoload"; load it on demand instead.
+	if _has_arg("--shot"):
+		var shot: Node = load("res://scripts/tools/shot_tool.gd").new()
+		shot.name = "ShotTool"
+		get_tree().root.add_child.call_deferred(shot)
 	var base := OS.get_user_data_dir()
 	var snap := base + SNAPSHOT_SUFFIX
 	var guarded := OS.get_environment("TLS_UDG_GUARDED") == "1"
@@ -75,6 +81,12 @@ func _exit_tree() -> void:
 func _block(why: String) -> void:
 	printerr("[qa-guard] ABORT: " + why + " - no launch runs until the profile is restored")
 	OS.crash("[qa-guard] ABORT: " + why)
+
+static func _has_arg(prefix: String) -> bool:
+	for a in OS.get_cmdline_args() + OS.get_cmdline_user_args():
+		if a.begins_with(prefix):
+			return true
+	return false
 
 static func _is_qa_launch() -> bool:
 	for a in OS.get_cmdline_args() + OS.get_cmdline_user_args():

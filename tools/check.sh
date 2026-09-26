@@ -59,7 +59,7 @@ for n,p in auto:
     f=p[6:]
     if not os.path.exists(f): continue
     t=open(f,encoding='utf-8').read()
-    mem[n]=(set(re.findall(r'^func (\w+)',t,re.M))
+    mem[n]=(set(re.findall(r'^(?:static\s+)?func (\w+)',t,re.M))
       |set(re.findall(r'^(?:@export\s+)?(?:var|const)\s+(\w+)',t,re.M))
       |set(re.findall(r'^signal (\w+)',t,re.M))
       |set(re.findall(r'^enum (\w+)',t,re.M)))

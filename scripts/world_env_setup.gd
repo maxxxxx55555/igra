@@ -158,8 +158,8 @@ func _on_district_stage_changed(_id: StringName, stage: int) -> void:
 	apply_for_stage(stage)
 
 ## VISUAL_PASS W1: graphics_tier (SettingsManager, 0..3) selects a preset
-## dict from visual_quality.tres (tier 3/Ultra reuses "high", per its own
-## metadata/graphics_tier_map which only defines low/medium/high). Runs
+## dict from visual_quality.tres (each tier, Ultra included, has its own
+## preset). Runs
 ## before the district stage/LUT/postfx application below, which refine
 ## rather than replace this base — matches the wiring spec's stated order.
 func _apply_graphics_tier(tier: int) -> void:
@@ -183,8 +183,6 @@ func _apply_graphics_tier(tier: int) -> void:
 	_env.fog_density = float(p.get("fog_density", _env.fog_density))
 	_env.fog_sky_affect = float(p.get("fog_sky_affect", _env.fog_sky_affect))
 	_env.ssao_enabled = bool(p.get("ssao_enabled", false))
-	_env.ssil_enabled = bool(p.get("ssil_enabled", false))
-	_env.volumetric_fog_enabled = bool(p.get("volumetric_fog_enabled", false))
 	_env.adjustment_enabled = true
 	_env.adjustment_contrast = float(p.get("contrast", 1.0))
 	_env.adjustment_saturation = float(p.get("saturation", 1.0))

@@ -75,10 +75,7 @@ func _process(delta: float) -> void:
 func _tick_fps(delta: float) -> void:
 	var tp: Vector3 = _target.global_position
 	var eye_y := fps_eye_height
-	var reduce_motion := false
-	var sm := get_node_or_null("/root/SettingsManager")
-	if sm != null and sm.has_method("get_setting"):
-		reduce_motion = bool(sm.get_setting("reduce_ui_motion", false))
+	var reduce_motion := bool(SettingsManager.get_setting("reduce_ui_motion", false))
 	if _running and not reduce_motion:
 		_bob_t += delta * SPRINT_BOB_FREQ
 		eye_y += sin(_bob_t) * SPRINT_BOB_AMP

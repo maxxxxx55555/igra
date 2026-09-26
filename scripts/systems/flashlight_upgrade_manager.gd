@@ -130,13 +130,10 @@ func _apply_to_flashlight() -> void:
 const MAX_LEVEL: int = 5
 
 func _save() -> void:
-	var f: FileAccess = FileAccess.open(_pref_path, FileAccess.WRITE)
-	if f:
-		var data: Dictionary = {}
-		for b in BRANCH_NAMES:
-			data[b] = _levels[b]
-		var body := JSON.stringify(data)
-		f.store_string(JSON.stringify({"hmac": SaveSystem.call("_sign", body), "data_json": body}))
+	var data: Dictionary = {}
+	for b in BRANCH_NAMES:
+		data[b] = _levels[b]
+	SaveSystem.write_signed(_pref_path, data)
 
 ## SECURITY_PATCH_SPEC P-04: this file was entirely unsigned, unclamped
 ## gameplay authority - all five flashlight branches directly change light
@@ -146,23 +143,10 @@ func _save() -> void:
 ## to [0, MAX_LEVEL] regardless, so even a legitimately-signed-but-corrupt
 ## value can't grant more than the level-5 table provides.
 func _load() -> void:
-	if not FileAccess.file_exists(_pref_path):
+	var signed: Variant = SaveSystem.read_signed(_pref_path)
+	if not (signed is Dictionary):
 		return
-	var f: FileAccess = FileAccess.open(_pref_path, FileAccess.READ)
-	if f == null:
-		return
-	var outer := JSON.new()
-	if outer.parse(f.get_as_text()) != OK or not (outer.data is Dictionary):
-		return
-	var envelope: Dictionary = outer.data
-	if not envelope.has("hmac") or not envelope.has("data_json"):
-		return
-	if String(envelope["hmac"]) != String(SaveSystem.call("_sign", String(envelope["data_json"]))):
-		return
-	var inner := JSON.new()
-	if inner.parse(String(envelope["data_json"])) != OK or not (inner.data is Dictionary):
-		return
-	var data: Dictionary = inner.data
+	var data: Dictionary = signed
 	for b in BRANCH_NAMES:
 		_levels[b] = clampi(int(data.get(b, 0)), 0, MAX_LEVEL)
 ## Upgrades are bought with the run's coins, so they are per-run state: saved

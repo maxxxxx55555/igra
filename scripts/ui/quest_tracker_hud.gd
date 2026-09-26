@@ -9,14 +9,12 @@ const PANEL_HEIGHT := 200
 const PANEL_MARGIN := 20
 const PANEL_TOP := 140  ## ниже миникарты
 
-var _settings: Node = null
 var _container: VBoxContainer
 var _title_lbl: Label
 var _objectives_vbox: VBoxContainer
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	_settings = get_node_or_null("/root/SettingsManager")
 	_build_ui()
 	
 	QuestManager.quest_started.connect(_refresh)
@@ -100,7 +98,7 @@ func _refresh(_a: Variant = null, _b: Variant = null, _c: Variant = null) -> voi
 	
 	_container.visible = true
 	
-	var show_markers = _settings and _settings.get_setting("objective_markers", true)
+	var show_markers := bool(SettingsManager.get_setting("objective_markers", true))
 	
 	_title_lbl.text = LocalizationManager.t("QUEST_OBJECTIVES")
 	_title_lbl.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)

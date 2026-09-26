@@ -96,8 +96,7 @@ func _show(data: Dictionary) -> void:
 	# GPUParticles scene needed. Gated: a repeated pop-in is exactly the
 	# kind of motion Reduce UI Motion exists to turn off. Deferred one frame
 	# so row.size reflects the icon+label layout, not zero.
-	var sm := get_node_or_null("/root/SettingsManager")
-	var reduce_motion: bool = sm != null and sm.has_method("get_setting") and bool(sm.get_setting("reduce_ui_motion", false))
+	var reduce_motion := bool(SettingsManager.get_setting("reduce_ui_motion", false))
 	if not reduce_motion:
 		call_deferred("_pop_in", row)
 

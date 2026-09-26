@@ -176,26 +176,13 @@ func is_completed_today() -> bool:
 ## mode as a first launch - unlike the main save (B4), there's no case
 ## here where rejecting outright is a real cost worth a compat exception.
 func _save_state() -> void:
-	var f := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
-	if f != null:
-		var body: String = JSON.stringify({
-			"today_id": _today_id, "progress": _progress,
-			"last_completed_day": _last_completed_day,
-		})
-		f.store_string(JSON.stringify({"hmac": SaveSystem.call("_sign", body), "data_json": body}))
+	SaveSystem.write_signed(SAVE_PATH, {
+		"today_id": _today_id, "progress": _progress,
+		"last_completed_day": _last_completed_day,
+	})
 
 func _load_state() -> void:
-	if not FileAccess.file_exists(SAVE_PATH):
-		return
-	var f := FileAccess.open(SAVE_PATH, FileAccess.READ)
-	if f == null:
-		return
-	var envelope = JSON.parse_string(f.get_as_text())
-	if not (envelope is Dictionary) or not envelope.has("hmac") or not envelope.has("data_json"):
-		return
-	if String(envelope["hmac"]) != String(SaveSystem.call("_sign", envelope["data_json"])):
-		return
-	var parsed = JSON.parse_string(String(envelope["data_json"]))
+	var parsed: Variant = SaveSystem.read_signed(SAVE_PATH)
 	if parsed is Dictionary:
 		_today_id = String(parsed.get("today_id", ""))
 		_progress = int(parsed.get("progress", 0))

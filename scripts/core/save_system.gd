@@ -23,6 +23,31 @@ const _HMAC_KEY: String = "TLS-savegame-v1-4f1c9e6b2a8d5f03"
 static func _sign(body: String) -> String:
 	return Crypto.new().hmac_digest(HashingContext.HASH_SHA256, _HMAC_KEY.to_utf8_buffer(), body.to_utf8_buffer()).hex_encode()
 
+## Signed side files (NG+, flashlight upgrades, achievements, daily):
+## {"hmac": _sign(body), "data_json": body}. write_signed() returns false
+## when the file cannot be opened.
+static func write_signed(path: String, data: Variant) -> bool:
+	var body := JSON.stringify(data)
+	var f := FileAccess.open(path, FileAccess.WRITE)
+	if f == null:
+		return false
+	f.store_string(JSON.stringify({"hmac": _sign(body), "data_json": body}))
+	f.close()
+	return true
+
+## The data of a signed side file, or null when it is missing, not an
+## envelope, tampered with, or its body does not parse.
+static func read_signed(path: String) -> Variant:
+	if not FileAccess.file_exists(path):
+		return null
+	var envelope: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	if not (envelope is Dictionary) or not envelope.has("hmac") or not envelope.has("data_json"):
+		return null
+	var body := String(envelope["data_json"])
+	if String(envelope["hmac"]) != _sign(body):
+		return null
+	return JSON.parse_string(body)
+
 ## RELEASE CONVERGENCE STEP 6 (anti "lost phone"): the live save is the one
 ## Continue reads (SAVE_PATH, via has_save()/load_all()) - the 4-slot API
 ## below already carries a static-audit note that its own UI is archived/

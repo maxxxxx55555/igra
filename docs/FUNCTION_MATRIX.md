@@ -10,7 +10,7 @@ by memory, so completeness can be proven instead of assumed.
   one row per input-map action. Re-run it after adding/removing an autoload or input action;
   its stderr line (`Total spine rows: N (A autoloads + B input actions)`) must match
   `grep -c "^AL\|^\w\+="` against the live `project.godot` sections, proving no row was dropped
-  or invented by hand. **Current: 91 spine rows (59 autoloads + 32 input-action rows; 29 live actions, the 3 dead ones removed in `0d3d533` keep their rows as FIXED).**
+  or invented by hand. **Current: 91 spine rows (59 AL rows = 58 live autoloads + AL11 ShotTool, on demand since rc14; 32 input-action rows; 29 live actions, the 3 dead ones removed in `0d3d533` keep their rows as FIXED).**
 - **Extra rows** (rows X01+): non-autoload systems the spine can't see on its own — UI screens
   reached only through `Routes`, gameplay mechanics living on scene-local scripts (stealth,
   boss), and the three standing bugs the order-pass directive explicitly names as matrix rows.
@@ -38,7 +38,7 @@ by memory, so completeness can be proven instead of assumed.
 | AL08 | EventBus (autoload) | `scripts/events/event_bus.gd` | smoke only: live through P1 new-game + P6 soak with 0 script errors; 2143 API refs checked by `autoload_api_check_scene`; NO behavioural assertion | WORKS (smoke) |
 | AL09 | Routes (autoload) | `scripts/core/routes.gd` | GUI-ENGINE (`gui_explore_runner.gd`) | **WORKS** — MENU/SETTINGS/DIFFICULTY/CREDITS navigation verified |
 | AL10 | Bootstrap (autoload) | `scripts/_bootstrap.gd` | smoke only: live through P1 new-game + P6 soak with 0 script errors; 2143 API refs checked by `autoload_api_check_scene`; NO behavioural assertion | WORKS (smoke) |
-| AL11 | ShotTool (autoload) | `scripts/tools/shot_tool.gd` | windowed self-use throughout R0 | **WORKS** — used for every R0 evidence capture this pass |
+| AL11 | ShotTool (on demand since rc14; was an autoload) | `scripts/tools/shot_tool.gd` | QaLaunchGuard adds it under /root when a `--shot` arg is present (SLOP_REPORT_V2 C1: as an export-excluded autoload it made every release boot fail to instantiate it); rc14 `--shot` run wrote its PNG | **WORKS** |
 | AL12 | WorldBootstrap (autoload) | `scripts/world/world_bootstrap.gd` | smoke only: live through P1 new-game + P6 soak with 0 script errors; 2143 API refs checked by `autoload_api_check_scene`; NO behavioural assertion | WORKS (smoke) |
 | AL13 | UISFX (autoload) | `scripts/systems/uisfx.gd` | smoke only: live through P1 new-game + P6 soak with 0 script errors; 2143 API refs checked by `autoload_api_check_scene`; NO behavioural assertion | WORKS (smoke) |
 | AL14 | LightGrid (autoload) | `scripts/lighting/light_grid.gd` | smoke only: live through P1 new-game + P6 soak with 0 script errors; 2143 API refs checked by `autoload_api_check_scene`; NO behavioural assertion | WORKS (smoke) |

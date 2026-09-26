@@ -29,7 +29,6 @@ var look_dir: Vector3 = Vector3.FORWARD
 var flashlight_enabled: bool = true
 var gameplay_active: bool = false
 var noise_level: float = 0.0
-var detection_state: String = "HIDDEN"
 var can_move: bool = false
 var _walk_t: float = 0.0
 var _movechk_timer: float = 0.0
@@ -88,7 +87,6 @@ const CROUCH_SPEED_MULT: float = 0.4
 const CROUCH_NOISE_MULT: float = 0.3
 const CROUCH_VISIBILITY_MULT: float = 0.5
 
-const DEBUG_FLASHLIGHT: bool = true
 ## Базовый расход батареи: полного заряда хватает на 7.5 минут света —
 ## достаточно, чтобы дойти до финальной ночи и пережить бой с Архитектором
 ## с одной-двумя подзарядками (раньше 5 минут не дотягивали до босса:
@@ -100,7 +98,6 @@ const BATTERY_DRAIN_PER_SEC: float = 100.0 / 450.0
 ## (милли + луч + тени) не пробивал мгновенную смерть.
 const _BASE_HP_REGEN_PER_SEC: float = 18.0
 
-var _battery_log_timer: float = 0.0
 var _coyote_timer: float = 0.0
 var _jump_buffer_timer: float = 0.0
 var _was_on_floor: bool = true
@@ -244,7 +241,7 @@ func _ready() -> void:
 	# Continue dropped them (C8 round 2). Same reapply as the skills above.
 	var fl_up := get_node_or_null("/root/FlashlightUpgradeManager")
 	if fl_up:
-		apply_flashlight_upgrades(fl_up._levels)
+		apply_flashlight_upgrades(fl_up.to_dict())
 	var mh = stats.max_hp if (stats and stats.max_hp > 0) else 100.0
 	hp = float(mh)
 	stamina = stats.stamina_max
@@ -645,9 +642,6 @@ func _physics_process(delta: float) -> void:
 
 	_update_stamina(delta)
 	_update_battery(delta)
-	_battery_log_timer += delta
-	if DEBUG_FLASHLIGHT and _battery_log_timer >= 1.0:
-		_battery_log_timer = 0.0
 
 	if _dodge_cooldown > 0.0:
 		_dodge_cooldown -= delta

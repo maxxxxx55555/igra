@@ -661,6 +661,8 @@ func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, type: EnemyRos
 		_die()
 
 const _HIT_FLASH_COLOR := Color("#c9a24a")
+const _HIT_FLASH_ENERGY: float = 2.0
+const _HIT_FLASH_SEC: float = 0.1
 
 func _hit_flash() -> void:
 	var root = get_node_or_null("VisualRoot")
@@ -681,13 +683,13 @@ func _hit_flash() -> void:
 		mat.albedo_color = _HIT_FLASH_COLOR
 		mat.emission_enabled = true
 		mat.emission = _HIT_FLASH_COLOR
-		mat.emission_energy_multiplier = 2.0
+		mat.emission_energy_multiplier = _HIT_FLASH_ENERGY
 		mesh.material_override = mat
 		var restore := func() -> void:
 			if is_instance_valid(mesh) and mesh.material_override == mat:
 				mesh.material_override = orig
 				mesh.remove_meta(&"hit_flash_orig")
-		create_tween().tween_callback(restore).set_delay(0.1)
+		create_tween().tween_callback(restore).set_delay(_HIT_FLASH_SEC)
 
 @rpc("any_peer", "reliable")
 func _request_damage(amount: float, type: int = int(EnemyRosterData.DamageType.BULLET)) -> void:

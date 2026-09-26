@@ -94,8 +94,7 @@ func hover() -> void:
 func press_pulse(control: Control) -> void:
 	if not is_instance_valid(control):
 		return
-	var sm := get_node_or_null("/root/SettingsManager")
-	if sm != null and sm.has_method("get_setting") and bool(sm.get_setting("reduce_ui_motion", false)):
+	if bool(SettingsManager.get_setting("reduce_ui_motion", false)):
 		return
 	control.pivot_offset = control.size / 2.0
 	control.scale = Vector2(0.92, 0.92)

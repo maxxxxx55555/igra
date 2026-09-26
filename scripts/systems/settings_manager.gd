@@ -431,12 +431,18 @@ func _apply_arachnophobia() -> void:
 ## next to fog in visual_quality.tres (single source; world_env_setup.gd
 ## applies the fog half). amount_ratio caps at 1.0 in Godot, so a >1 tier
 ## scales `amount` from a remembered base instead.
+## Read once per tier: every GPUParticles3D entering the tree asks for it, and
+## the tier value can change through set_graphics_tier(), set_setting() or a load.
+var _particle_ratio_by_tier: Dictionary = {}
+
 func _particle_ratio() -> float:
-	var vq := load("res://assets/config/visual_quality.tres")
 	var names := ["low", "medium", "high", "ultra"]
 	var tier: int = clampi(int(_settings.get("graphics_tier", 2)), 0, names.size() - 1)
-	var p: Dictionary = vq.get_meta(names[tier], {}) if vq else {}
-	return float(p.get("particle_ratio", 1.0))
+	if not _particle_ratio_by_tier.has(tier):
+		var vq := load("res://assets/config/visual_quality.tres")
+		var p: Dictionary = vq.get_meta(names[tier], {}) if vq else {}
+		_particle_ratio_by_tier[tier] = float(p.get("particle_ratio", 1.0))
+	return _particle_ratio_by_tier[tier]
 
 func _scale_emitter(n: Node, ratio: float) -> void:
 	var e := n as GPUParticles3D

@@ -61,8 +61,7 @@ func _trailer_on() -> bool:
 	return _setting("trailer_mode", false)
 
 func _setting(key: String, default: bool) -> bool:
-	var sm := get_node_or_null("/root/SettingsManager")
-	return bool(sm.get_setting(key, default)) if sm != null and sm.has_method("get_setting") else default
+	return bool(SettingsManager.get_setting(key, default))
 
 ## docs/GAMEFEEL_SPEC.md hit-stop: brief real-time Engine.time_scale dip,
 ## capped at 80ms wall-clock (ignore_time_scale timer) so it can't be
