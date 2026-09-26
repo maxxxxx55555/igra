@@ -342,6 +342,8 @@ else
       mkdir -p "$snap/files"; printf x > "$snap/files/lang.cfg"; printf '{"pid": 1, "files": {"lang.cfg": "0"}}' > "$snap/manifest.json"
       _e2e --write && { echo "         damaged copy did not abort the run"; rm -rf -- "$snap"; return 1; }
       [[ ! -e "$probe" && -d "$snap" ]] || { echo "         abort was not airtight"; rm -rf -- "$snap"; return 1; }
+      # Normal play must not start over it either: its saves would be reverted by the restore that follows.
+      env -u TLS_UDG_GUARDED timeout 60 "$GODOT" --headless --path . --quit-after 2 >/dev/null 2>&1 && { echo "         normal launch ran over an unrestorable copy"; rm -rf -- "$snap"; return 1; }
       rm -rf -- "$snap"  # the fake copy made just above
     }
     if qa_guard_e2e; then ok "QaLaunchGuard: жизненный цикл (выход, крах, восстановление) на реальном профиле"; else bad "QaLaunchGuard: жизненный цикл на реальном профиле"; fi
