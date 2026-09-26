@@ -29,7 +29,7 @@ latest `v8.0.0-rcN` tag (the last row of "C8 verifier loop" names it). Every num
 | Audio truth (windowed) | PASS: Music −19.3 dB, all buses under −1.5 dB |
 | Perf (windowed) | D1 **246** draw calls (C7), **253** (rc11 run via `tools/qa_sim/guarded_windowed`): under the D11 350 cap, **over the D1 200 target** |
 | GUI exploration (windowed) | 19 PASS, 0 BUG, all 13 locales |
-| Visual truth (frames below) | rc4 tzverify frames, half res: 10/11 PASS (0.15–0.42%); `G03_sprint_fov` FAIL 1.28%, 85% of hits in the outer 15% edge band = canon ember vignette over blue (TZ_DECISIONS S03). The R0 regression lock is the LUT import pin in `check.sh` (PASS); the visual gate's `r0_after_*` run only checks the gate against committed frames. Known-bad `magenta_corruption_suburbs.png` still FAILs (13.19%). |
+| Visual truth (frames below) | rc12 tzverify frames (14, incl. D03 x3), half res: 12/14 PASS (0.14–0.46%); the two running frames FAIL: `G03_sprint_fov` 0.79% (98% of hits in the outer 15% edge band) and `S03_noise_vignette` 1.02% (88%) = canon ember vignette over blue (TZ_DECISIONS S03). The R0 regression lock is the LUT import pin in `check.sh` (PASS); the visual gate's `r0_after_*` run only checks the gate against committed frames. Known-bad `magenta_corruption_suburbs.png` still FAILs (13.19%). |
 | Bot (3 seeds) | Latest shipped trees: 2/3 (batch `c00f118`), 1/3 (capsule `97c8bf4`, all 3 seeds reached the boss) |
 | AAB signed-verify | **not run**: no export templates (see Residual) |
 
@@ -47,6 +47,7 @@ latest `v8.0.0-rcN` tag (the last row of "C8 verifier loop" names it). Every num
 | 8 | `v8.0.0-rc8` (`9936ab3`) | CONFIRMED 106 / PARTIAL 3 / FAKE 0 | No code defects. Fixed the skipped-battery claim (re-run: 44 green), the G18/G19 GDD line range (168-181) and the missing R-02 residual row; CORRECTION_LOG 36. rc9: docs only on top of the rc8 code measured above. |
 | 9 | `v8.0.0-rc9` (`94af752`) | CONFIRMED 114 / PARTIAL 4 / FAKE 0 | No code defects. V05 split into MET (desktop 2048) / DECIDED (mobile 1024, new V05-mobile row); G28/D04 no longer cites a precedence rule the GDD does not have; I02 key count 1301; FUNCTION_MATRIX legend defines FIXED and PARTIAL. CORRECTION_LOG 37. rc10: docs only. Nothing outside `docs/` has changed since the 44-green run on `9936ab3`. |
 | 10 | `v8.0.0-rc10` (`c46d8a3`) | CONFIRMED 121 / PARTIAL 3 / FAKE 0 | The windowed perf and audio probes start a New Game but had no save guard on their documented direct launch; both runners now refuse to start unguarded, and `tools/qa_sim/guarded_windowed` runs any windowed probe under the guard (`tz_verify` delegates to it). V05-mobile had no measurement behind DR-3: the mobile 1024 override is removed (GDD 2048, DR-1). The six FIXED matrix rows name their commits. CORRECTION_LOG 38. rc11: direct launches exit 2 with the profile untouched; guarded perf (D1 253 draw calls, D11 cap OK), audio (Music -20.3 dB, PASS) and tz_verify (`fails=0`, V05 desktop+mobile 2048) each restored all 11 profile files byte-identical; check.sh full **44 green**. Mobile-only render setting, no gameplay change: no IRON RULE bot. |
+| 11 | `v8.0.0-rc11` (`1430516`) | CONFIRMED 121 / PARTIAL 15 / FAKE 0 | Root fix for every QA launch on the owner's profile: the first autoload `QaLaunchGuard` snapshots on any `scenes/tools/*` or `--shot` launch not wrapped by the shell guard, restores at exit, and keeps a crash copy the next unguarded launch restores (replaces the per-runner refusals and `_user_data_snapshot.gd`). DR-4 applied where DR-3 had no measurement: D03 stage lighting now GDD (0.03/0.12, 0.11/0.25, 0.16/0.40) and E05 district reward 200 + 100 per district. Labels: S03 note, V05-mobile DR-4, A03 DR-5, G22 DR-6; G34 audio logs counted; S02 text; X12 verified (suite P2r); X24 text; headless_suite treats exit 3 as skip; P2m retries a MENU window; tz_verify no longer reads a stale log. CORRECTION_LOG 39. rc12: `qa_guard_check` OK; direct unguarded suite x3 and a killed run recovered, profile sha256-identical each time; tz_verify 19 checks `fails=0`; X12 / E05 / drain / flash mutations caught; check.sh full **45 green**; IRON RULE bot **2/3 WIN** (s2 X21-type spine stall at power_station), coins earned 8718-8975 on the wins. |
 
 rc2 evidence: tz_verify 15 checks `DONE fails=0`; footstep probe `fails=0` and mutation-tested
 (`fails=3`, rc 1, with stealth mapped onto walk's file); `tools/check.sh` full **42 green**; bot 1/3 won, 11/11
@@ -61,12 +62,13 @@ No external `docs/CLOSURE_VERIFICATION.md` exists.
 - `docs/stills/tzverify/C04_arachnophobia_label.png`: "Blind Dogs" spotted label (en locale this run; the ru run showed "Слепые псы").
 - `docs/stills/tzverify/C06_tier_ultra.png`: Ultra tier, fog 0.015.
 - `docs/stills/tzverify/G12b_low_battery.png`: 10% battery.
-- `docs/stills/tzverify/TUT_hint_layout.png`: tutorial box laid out correctly.
-- `docs/stills/tzverify/V02_energy_ball.png`: warm ball; a faint dim-red smudge on the pavement below (rc4 frame: hue-only 0.01%, gate 0.42%).
+- `docs/stills/tzverify/TUT_hint_layout.png`: tutorial box laid out correctly
+- `docs/stills/tzverify/D03_stage_dark.png` / `D03_stage_full.png`: GDD stage lighting (rc12); DARK shows silhouettes, road edges and the tree, FULL a moonlit street.
+- `docs/stills/tzverify/V02_energy_ball.png`: warm ball; a faint dim-red smudge on the pavement below (rc12 frame: hue-only 0.01%, gate 0.37%).
 
 ## Corrections
 
-38 entries in `docs/CORRECTION_LOG.md` (14 at rc1, 15-21 from C8 round 1, 22 from round 2, 23-28 from round 3, 29-31 from round 4, 32-33 from round 5, 34 from round 6, 35 from round 7, 36 from round 8, 37 from round 9, 38 from round 10), including the false R0 fix, the dead C06 fog write, and two
+39 entries in `docs/CORRECTION_LOG.md` (14 at rc1, 15-21 from C8 round 1, 22 from round 2, 23-28 from round 3, 29-31 from round 4, 32-33 from round 5, 34 from round 6, 35 from round 7, 36 from round 8, 37 from round 9, 38 from round 10, 39 from round 11), including the false R0 fix, the dead C06 fog write, and two
 wrong claims in this pass's own commit messages.
 
 ## Residual (honest)
@@ -79,6 +81,8 @@ wrong claims in this pass's own commit messages.
 | `gh` auth | Optional. Git push works without it. |
 | Bebas Neue Bold (V03) | Owner supplies the font file. |
 | GDD text amendments (G28/D04, N01, I02) | Owner edits `GDD.md` or accepts the recorded defaults. |
+| G22 save-slot picker (DR-6) | Owner re-enables the archived 3+1 slot UI or amends GDD G22 (PLAN.md §В Этап 1 recorded "archive"). |
+| A03 per-speed footsteps (DR-5) | Owner supplies walk/jog/sprint recordings for asphalt, puddle and glass; the code already maps the other three surfaces. |
 | X21 bot spine stall | Open (bot harness). Game side verified reachable; the bot wins 1–2/3 per run. |
 | X20 | Harness recovery proven; the keypress trigger is inferred. |
 | D1 draw calls 246-253 > 200 | Needs batching work (DEFERRED-STRUCTURAL). |

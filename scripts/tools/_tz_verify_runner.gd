@@ -2,12 +2,8 @@ extends Node
 ## Runner for _tz_verify.gd (lives under /root so Routes scene swaps don't free it).
 
 const OUT := "res://docs/stills/tzverify/"
-const UserDataSnapshot := preload("res://scripts/tools/_user_data_snapshot.gd")
-## The whole probe runs on the real user:// profile (start_game resets and
-## autosaves, G17 wipes, G12b rewrites the upgrade cfg): snapshot it first.
-## This in-memory copy dies with the process; run via tools/qa_sim/tz_verify,
-## whose shell guard also restores after a crash, closed window or timeout.
-var _user_data: Variant = null
+## The probe runs on the real user:// profile (start_game resets and autosaves,
+## G17 wipes, G12b rewrites the upgrade cfg); QaLaunchGuard snapshots and restores it.
 var _fails: int = 0
 
 func _ready() -> void:
@@ -50,10 +46,6 @@ func _save_paths() -> Array[String]:
 			out.append(String(base) + suffix)
 	return out
 
-func _restore_user_data() -> void:
-	var diff: int = UserDataSnapshot.restore(_user_data)
-	_check(diff == 0, "user:// profile restored byte-identical (%d file(s) differ, -1 = no snapshot)" % diff)
-
 func _frames(n: int) -> void:
 	for i in n:
 		await get_tree().process_frame
@@ -68,10 +60,6 @@ func _wait_until(pred: Callable, timeout_sec: float) -> bool:
 	return pred.call()
 
 func _run() -> void:
-	if OS.get_environment("TLS_UDG_GUARDED") != "1":
-		_log("FAIL run via tools/qa_sim/tz_verify - a direct launch has no crash-safe user:// restore")
-		get_tree().quit(2)
-		return
 	if DisplayServer.get_name() == "headless":
 		_log("SKIP headless - frames need a real display")
 		get_tree().quit(3)
@@ -80,17 +68,11 @@ func _run() -> void:
 	var ads := get_node_or_null("/root/AdService")
 	if ads:
 		ads.enabled = false
-	_user_data = UserDataSnapshot.take()
-	if _user_data == null:
-		_log("FAIL cannot snapshot user:// - not running the game against this profile")
-		get_tree().quit(1)
-		return
 	await get_tree().create_timer(1.0).timeout
 	Routes.start_game()
 	var ready_pred := func() -> bool: return GameManager.is_playing() and get_tree().get_first_node_in_group("player") != null
 	if not await _wait_until(ready_pred, 20.0):
 		_log("FAIL never reached gameplay")
-		_restore_user_data()
 		get_tree().quit(1)
 		return
 	await get_tree().create_timer(3.0).timeout
@@ -165,6 +147,18 @@ func _run() -> void:
 			scaled += 1
 	_check(em.size() > 0 and scaled == em.size(), "C06 ultra: %d/%d GPUParticles3D emitters at 150%% amount" % [scaled, em.size()])
 	SettingsManager.set_graphics_tier(2)
+
+	# D03 - stage lighting, GDD.md:107-110 (ambient / moon per district stage).
+	var wes := get_tree().root.find_child("WorldEnvSetup", true, false)
+	for row in [[0, "dark", 0.03, 0.12], [2, "streets", 0.11, 0.25], [3, "full", 0.16, 0.40]]:
+		wes.apply_for_stage(row[0])
+		await _frames(3)
+		await _shot("D03_stage_%s" % row[1])
+		var amb: float = wes._env.ambient_light_energy
+		var moon: float = wes._moon.light_energy if wes._moon else -1.0
+		_check(is_equal_approx(amb, row[2]) and is_equal_approx(moon, row[3]),
+			"D03 %s ambient=%0.2f moon=%0.2f (GDD %0.2f/%0.2f)" % [row[1], amb, moon, row[2], row[3]])
+	wes.apply_for_stage(DistrictManager.get_stage(DistrictManager.current_district))
 
 	# G12b - low-battery flicker.
 	p.battery = p.battery_max * 0.1
@@ -266,6 +260,5 @@ func _run() -> void:
 	_check(had_save and left.is_empty(), "G17 hardcore death: save before=%s, files left=%s" % [had_save, left])
 	SettingsManager.set_setting("hardcore", false)
 
-	_restore_user_data()
 	_log("DONE fails=%d" % _fails)
 	get_tree().quit(0 if _fails == 0 else 1)

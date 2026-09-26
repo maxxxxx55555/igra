@@ -28,7 +28,7 @@ const MATERIALS := {
 ## GDD A03 (6 surfaces x 3 speeds): the three audible player states
 ## STEALTH/WALK/RUN map onto the delivered footsteps/<surface>_{walk,jog,
 ## sprint}.wav sets. Surfaces with a single sample (asphalt, puddle, glass)
-## carry speed in volume + pitch instead (TZ_DECISIONS DR-A03).
+## carry speed in volume + pitch instead (TZ_DECISIONS A03, DR-5).
 const SPEED_SURFACES: Array[String] = ["concrete", "metal", "wood", "grass", "gravel", "tile"]
 
 const CLANK_VOLUME: float = 0.0

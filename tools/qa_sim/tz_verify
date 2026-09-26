@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
-# Windowed TZ probe (scenes/tools/tz_verify_scene.tscn) under the user-data
-# guard (tools/qa_sim/guarded_windowed). The probe's own in-process snapshot
-# is lost if the window is closed or a script error stalls it; the guard's
-# trap restores the profile on any exit.
+# Windowed TZ probe (scenes/tools/tz_verify_scene.tscn) under the shell
+# user-data guard (tools/qa_sim/guarded_windowed): its trap restores the
+# profile on any exit and fails the run when the restore does not match.
 #
 #   tools/qa_sim/tz_verify          # frames -> docs/stills/tzverify/, log -> .qa_logs/tz_verify_scene.log
 set -uo pipefail
 cd "$(dirname "$0")/../.."
 bash tools/qa_sim/guarded_windowed res://scenes/tools/tz_verify_scene.tscn 300
 rc=$?
-grep -E "^\[tzv\] (OK|FAIL|DONE)" .qa_logs/tz_verify_scene.log
+grep -E "^\[tzv\] (OK|FAIL|DONE)" .qa_logs/tz_verify_scene.log 2>/dev/null
 exit $rc

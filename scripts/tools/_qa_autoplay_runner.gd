@@ -66,6 +66,10 @@ var _nudge_count := 0  # R2 hardening (docs/REDTEAM_CHALLENGE.md TG-PLAY): a "cl
 var _score := -1.0
 var _score_t := 0.0
 var _deaths := 0
+## GDD E05 coin curve (0-200 at D1 -> 8000+ by D11): sum of every wallet
+## increase from New Game on (spending does not count against it).
+var _coins_earned := 0
+var _coins_last := 0
 var _timeline: Array = []          # [ "district:stage@t" ]
 var _part_log: Array = []          # [ "picked cable @suburbs t=.." ]
 var _act_cd := 0.0
@@ -88,6 +92,11 @@ var _t_first_secret_found := -1.0
 var _t_first_district_full := -1.0
 var _iact_pending := {"want": &"", "before": -1, "at": 0.0}
 
+func _on_coins_changed(amount: int) -> void:
+	if amount > _coins_last:
+		_coins_earned += amount - _coins_last
+	_coins_last = amount
+
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_seed = int(OS.get_environment("QA_SEED")) if OS.get_environment("QA_SEED") != "" else 1
@@ -96,6 +105,7 @@ func _ready() -> void:
 	get_tree().create_timer(HARD_TIMEOUT_SEC).timeout.connect(_on_hard_timeout)
 	EventBus.game_won.connect(func() -> void: _win_seen = true)
 	EventBus.player_died.connect(func() -> void: _deaths += 1)
+	CoinWallet.coins_changed.connect(_on_coins_changed)
 	EventBus.secret_found.connect(func(_id: String) -> void:
 		if _t_first_secret_found < 0.0:
 			_t_first_secret_found = _now())
@@ -137,6 +147,8 @@ func _start() -> void:
 	var ss := get_node_or_null("/root/SaveSystem")
 	if ss != null and ss.has_method("save_all"):
 		ss.save_all()
+	_coins_earned = 0
+	_coins_last = CoinWallet.get_coins()
 	_log("New Game stable, player at %s" % str(_player.global_position.round() if _player_ok() else Vector3.ZERO))
 	_phase = "spine"
 	_score_t = _now()
@@ -622,6 +634,7 @@ func _finish() -> void:
 	print("[bot s%d]   wall time    : %.1fs" % [_seed, _now()])
 	print("[bot s%d]   districts FULL: %d/11" % [_seed, full])
 	print("[bot s%d]   deaths       : %d" % [_seed, _deaths])
+	print("[bot s%d]   coins earned : %d (wallet %d)" % [_seed, _coins_earned, CoinWallet.get_coins()])
 	print("[bot s%d]   nudges       : %d (>1 means the win leaned on nudge rescues, not clean nav — docs/REDTEAM_CHALLENGE.md TG-PLAY)" % [_seed, _nudge_count])
 	print("[bot s%d]   onboarding   : first_interactable=%.1f first_secret_hint=%.1f first_secret_found=%.1f first_district_full=%.1f" % [
 		_seed, _t_first_interact, _t_first_secret_hint, _t_first_secret_found, _t_first_district_full])

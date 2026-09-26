@@ -37,10 +37,6 @@ const DISTRICTS: Array[StringName] = [
 	&"substation", &"power_station",
 ]
 const ENDINGS: Array[StringName] = [&"light", &"hope", &"survivor", &"dark", &"truth"]
-const UserDataSnapshot := preload("res://scripts/tools/_user_data_snapshot.gd")
-## P1/P2l/P2m/P2r/P3 New-Game, save and reset the real user:// profile; a
-## direct run (not via check.sh's shell guard) must still leave it as found.
-var _user_data: Variant = null
 ## One real key per user-facing surface (menu / HUD / journal / settings /
 ## endings / toast) — must resolve to a non-empty, non-key string in every
 ## locale. The bulk check below is full key-parity against en.
@@ -112,11 +108,6 @@ func _wait_until(pred: Callable, timeout_sec: float) -> bool:
 	return pred.call()
 
 func _run() -> void:
-	_user_data = UserDataSnapshot.take()
-	if _user_data == null:
-		_fail("cannot snapshot user:// - not running the game against this profile")
-		_finish()
-		return
 	await _p0_autoloads()
 	await _p1_new_game()
 	await _p1b_input_coverage()
@@ -561,15 +552,23 @@ func _p2m_autosave_writes_real_save() -> void:
 		_fail("P2m could not get back to PLAYING to test the autosave tick")
 		return
 	var before := FileAccess.get_modified_time(SaveSystem.SAVE_PATH)
-	# Real filesystem mtimes are 1-second granularity on some platforms;
-	# without this the write can land in the same second and look like a
-	# no-op even when it genuinely wrote.
-	await get_tree().create_timer(1.1).timeout
-	await _ensure_playing()
-	SaveSystem._process(999.0)
-	var after := FileAccess.get_modified_time(SaveSystem.SAVE_PATH)
+	var after := before
+	var ticked := false
+	# Real filesystem mtimes are 1-second granularity on some platforms, so each
+	# try waits past the second. The tick only runs while PLAYING and the gate
+	# scene can snap back to MENU (the old unchecked _ensure_playing() here let
+	# the tick land in a MENU window: rc11 direct run, 1 of 3).
+	for attempt in 3:
+		await get_tree().create_timer(1.1).timeout
+		if not await _ensure_playing():
+			continue
+		ticked = true
+		SaveSystem._process(999.0)
+		after = FileAccess.get_modified_time(SaveSystem.SAVE_PATH)
+		if after > before:
+			break
 	if after <= before:
-		_fail("P2m periodic autosave tick did not write SAVE_PATH (mtime unchanged: %d)" % before)
+		_fail("P2m periodic autosave tick did not write SAVE_PATH (mtime unchanged: %d, ticked while PLAYING: %s)" % [before, ticked])
 		return
 	_log("P2m periodic autosave writes the real save Continue reads - OK")
 
@@ -786,6 +785,18 @@ func _p2q_autoload_behaviour() -> void:
 	if bunker_before or not ProgressTracker.is_bunker_accessed():
 		_fail("P2q G34 bunker flag must follow the bunker secret (before=%s after=%s)" % [bunker_before, ProgressTracker.is_bunker_accessed()])
 	ProgressTracker.from_dict(pt_snap)
+	# E05 / GDD.md:229 coin curve: restoring D1 pays 200, D11 pays 1200 (x NG+ rewards).
+	var rm := get_node("/root/RewardsManager")
+	var wallet_snap: Dictionary = CoinWallet.to_dict()
+	var w0: int = CoinWallet.get_coins()
+	rm._on_district(&"suburbs", 3)
+	var pay_d1: int = CoinWallet.get_coins() - w0
+	rm._on_district(&"power_station", 3)
+	var pay_d11: int = CoinWallet.get_coins() - w0 - pay_d1
+	CoinWallet.from_dict(wallet_snap)
+	var rmult: float = NewGamePlus.get_modifier_multiplier("rewards")
+	if pay_d1 != int(200 * rmult) or pay_d11 != int(1200 * rmult):
+		_fail("P2q E05 district reward curve D1=%d D11=%d (want %d/%d)" % [pay_d1, pay_d11, int(200 * rmult), int(1200 * rmult)])
 	_log("P2q autoload behavioural asserts run - OK")
 
 # ── P2r ───────────────────────────────────────────────────────────────
@@ -859,7 +870,14 @@ func _p2r_respawn_keeps_progress() -> void:
 	var base_drop: float = q.BATTERY_DRAIN_PER_SEC / ng_mult if ng_mult > 0.0 else q.BATTERY_DRAIN_PER_SEC
 	var drain_cut: float = 1.0 - drop / base_drop if base_drop > 0.0 else -1.0
 	# New Game must clear them again (reset_all), and the cfg mirror with it.
+	# TRUTH WAVE / X12: the same reset must also clear XP and skill points.
+	XpManager.add_xp(1000)
+	var xp_before_reset: int = XpManager.get_level()
 	SaveSystem.reset_all()
+	if xp_before_reset <= 1 or XpManager.get_level() != 1 or XpManager.get_current_xp() != 0 \
+			or XpManager.get_total_skill_points() != 0 or SkillTreeManager.get_skill_points() != 0:
+		_fail("P2r reset_all kept XP/skills (level %d -> %d, xp %d, total sp %d, sp %d)" % [xp_before_reset,
+			XpManager.get_level(), XpManager.get_current_xp(), XpManager.get_total_skill_points(), SkillTreeManager.get_skill_points()])
 	var st_after: int = flm.get_level("stability")
 	var cleared: bool = st_after == 0 and flm.get_level("brightness") == 0
 	flm.from_dict(fl_snap)
@@ -1177,9 +1195,6 @@ func _finish() -> void:
 	if _done:
 		return
 	_done = true
-	var diff: int = UserDataSnapshot.restore(_user_data)
-	if diff != 0:
-		_fail("user:// profile not restored byte-identical (%d file(s) differ, -1 = no snapshot)" % diff)
 	for f in _fails:
 		print("[qa] FAIL ", f)
 	print("[qa] DONE fails=", _fails.size())

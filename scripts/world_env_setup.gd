@@ -7,22 +7,24 @@ extends Node
 # силуэта монстра, играть было невозможно. Держим низкую, но ненулевую засветку,
 # а разницу между стадиями восстановления города показываем контрастом.
 
-@export var ambient_energy_default: float = 0.12
-@export var moon_energy_default: float = 0.09
+@export var ambient_energy_default: float = 0.03  # = AMBIENT_DARK until the stage applies
+@export var moon_energy_default: float = 0.12  # = MOON_DARK
 @export var moon_rotation_deg: Vector3 = Vector3(-55.0, -35.0, 0.0)
 @export var fog_density: float = 0.012
 @export var glow_intensity: float = 0.5
 
 # Стадия района: DARK — только фонарик и луна, FULL — восстановленный свет.
-const AMBIENT_DARK: float = 0.12
-const AMBIENT_LIT: float = 0.20
-const AMBIENT_FULL: float = 0.30
+# Энергии ambient/луны — канон GDD.md:107-110 (DARK 0.03/0.12, STREETS 0.11/0.25,
+# FULL 0.16/0.40); PARTIAL в GDD чисел не имеет и берёт DARK.
+const AMBIENT_DARK: float = 0.03
+const AMBIENT_LIT: float = 0.11
+const AMBIENT_FULL: float = 0.16
 const AMBIENT_COLOR_DARK: Color = Color(0.075, 0.094, 0.137)
 const AMBIENT_COLOR_LIT: Color = Color(0.098, 0.125, 0.184)
 const AMBIENT_COLOR_FULL: Color = Color(0.125, 0.153, 0.212)
-const MOON_DARK: float = 0.09
-const MOON_LIT: float = 0.14
-const MOON_FULL: float = 0.20
+const MOON_DARK: float = 0.12
+const MOON_LIT: float = 0.25
+const MOON_FULL: float = 0.40
 # Свечение вокруг игрока: в тёмном районе его нет, с восстановлением растёт.
 const GLOW_DARK: float = 0.0
 const GLOW_LIT: float = 0.35

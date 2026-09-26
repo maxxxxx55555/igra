@@ -53,6 +53,7 @@ strobe={
 
 [autoload]
 
+QaLaunchGuard="*res://scripts/core/qa_launch_guard.gd"
 FadeTransition="*res://scripts/ui/fade_transition.gd"
 ObjectPool="*res://scripts/systems/object_pool.gd"
 LightLimiter="*res://scripts/systems/light_limiter.gd"

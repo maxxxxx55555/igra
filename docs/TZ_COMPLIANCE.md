@@ -18,7 +18,7 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 
 ## Evidence sources
 
-- **tz_verify:** `scenes/tools/tz_verify_scene.tscn`, run windowed. 17 checks at rc5 (incl. C06 fog at load and the user:// restore check), `fails=0`.
+- **tz_verify:** `scenes/tools/tz_verify_scene.tscn`, run windowed. 19 checks at rc12 (incl. C06 fog at load and D03 per stage; the user:// restore moved to the QaLaunchGuard autoload), `fails=0`.
 - **Suite:** GOLD MASTER, `fails=0` on 3 consecutive runs.
 - **footstep:** `footstep_check_scene`, `fails=0`; exits 1 when any surface lacks 3 distinct steps (mutation-tested in C8).
 
@@ -27,13 +27,13 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 | ID | Requirement | Verdict | Evidence |
 |---|---|---|---|
 | A02 | Music crossfade 2.0 s | MET | tz_verify `FADE_TIME=2.0` (audio: no frame applies) |
-| A03 | Footsteps: 6 surfaces × 3 speeds, downward ray | DECIDED (DR-A03) | footstep probe: every GDD surface gives 3 distinct steps. Concrete/wood/metal: walk/jog/sprint files for stealth/walk/run. Asphalt/puddle/glass: one recorded sample, speed carried by volume + pitch 0.9/1.0/1.12. |
+| A03 | Footsteps: 6 surfaces × 3 speeds, downward ray | DECIDED (DR-5: per-speed recordings for asphalt/puddle/glass are an asset residual) | footstep probe: every GDD surface gives 3 distinct steps. Concrete/wood/metal: walk/jog/sprint files for stealth/walk/run. Asphalt/puddle/glass: one recorded sample, speed carried by volume + pitch 0.9/1.0/1.12. |
 | A04 | Audio size caps | MET-STATIC | Exported: non-music ≈ 23.5 MB (sfx 6.3 + one_shots 1.1 + ambience 16.1) < 50; music ≈ 38 MB < 100. `ambience/wav_src` (29.9 MB) is in `export_presets.cfg` `exclude_filter` |
 | A01 | Bus graph SFX(Footsteps, Combat, UI, Environment) | DEFERRED-STRUCTURAL | Re-routing plus an ear re-mix (current buses: Master, Music, SFX, Voice, Ambient, UI, Hum) |
 | V02 | No neon / #fff | MET | `V02_energy_ball.png`; monster hit flash is brass and restores the original material (suite P2b, C8 rc4) |
 | V05 | Moon shadow 2048² | MET | tz_verify: `directional_shadow/size` 2048 and no smaller `.mobile` override (removed in C8 rc11); frames clean at 2048. On-device mobile cost not measured (P02). |
 | V01 | "No day" | MET-STATIC | Dead daytime painter removed from DayNight |
-| D03 | Night ambient canon | DECIDED (DR-3) | Recorded "unplayable black" rejection |
+| D03 | Stage ambient/moon (GDD.md:107-110) | MET | tz_verify asserts DARK 0.03/0.12, STREETS 0.11/0.25, FULL 0.16/0.40; `D03_stage_*.png` read by eye and PASS the visual gate at half res (C8 rc12) |
 | V03 | Bebas Neue Bold | GAP-OWNER | No Bold font file exists |
 | G01 | FPS canon / TPS option | DECIDED (DR-2) | `baseline.png` is first-person |
 | G02 | Sprint headbob 0.1 | MET | tz_verify span 0.049; `G03_sprint_fov.png` |
@@ -52,14 +52,14 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 | G18 / G19 | Roster stats, Shadow | MET-STATIC | All 11 + boss HP/damage equal the GDD table |
 | G20 | Boss phases 70/30%, beams 40 | MET-STATIC | Constants; the bot boss phase exercises them |
 | G21 | §9 blueprints | DEFERRED-STRUCTURAL | New mechanics plus 5 blueprint locations |
-| G22 | 3 + 1 save slots UI | DECIDED (DR-3) | Recorded archive decision |
+| G22 | 3 + 1 save slots UI | GAP-OWNER (DR-6) | Owner's archive decision on record (PLAN.md §В, Этап 1); owner re-enables the slot picker or amends G22 |
 | G24 | Point of no return at D10 | DECIDED (DR-2) | Gate closes once D1–D9 are FULL, not on first D10 entry; suite P2q asserts both sides |
 | G25 | HUD slots incl. weapons ×2 | DEFERRED-STRUCTURAL | No weapon system in any scene |
 | G26 | 200 photos, 50/100/200 achievements | DEFERRED-STRUCTURAL (DR-5) | No photo can be collected in play |
 | G27 | Touch: left half = camera | DECIDED (DR-2) | The GDD table has no movement input |
 | G28 / D04 | All FULL → win vs boss | GAP-OWNER (DR-2 default kept) | — |
 | G31 / G32 / G33 | Ending edge cases | DECIDED (DR-2) | — |
-| G34 | Truth: docs + audio + photos + bunker | MET (bunker = real secret) / DECIDED (DR-5: audio/photos aliased) | Suite P2q bunker assert; `endings_sim` all 5 reachable |
+| G34 | Truth: docs + audio + photos + bunker | MET (bunker = real secret) / MET-STATIC (the 22 audio-log and 24 photo lore notes are inside the all-documents total) | Suite P2q bunker assert; `endings_sim` all 5 reachable |
 | S01 | Hit 5 m/1.0, dodge 3 m/0.4 noise | DECIDED (DR-3, measured) | Bot bisect: with 0/3, without 2/3 |
 | S02 | Visibility modifiers | DEFERRED-STRUCTURAL | Detection-model rework |
 | S03 | Ember vignette noise pulse | MET | tz_verify: vignette r 0.55 while running, frame edge warmth −0.015 → 0.066; `S03_noise_vignette.png` |
@@ -67,7 +67,7 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 | S04-hide | Hiding spots: lockers, bushes, car trunks, dark corners | DEFERRED-STRUCTURAL | `hiding_spot.gd` (locker/dumpster/car/crate) is not placed in any district; see TZ_DECISIONS |
 | D02 | Unlock graph | DECIDED (DR-2) | — |
 | E03 / T02 | 1 ad per hour, skip −100 | MET-STATIC (cooldowns asserted in suite, skip mechanism) / BY-DESIGN-ABSENT (modal trigger) | — |
-| E05 | Coin curve 0–200 (D1) → 8000+ (D11) | DECIDED (DR-3) | Reachable ≈ 2200 districts + 1300 secrets + 3100 achievements, plus kills. Design audit P6 says keep base rewards and report the gap. |
+| E05 | Coin curve 0–200 (D1) → 8000+ (D11) | MET (C8 rc12, DR-4) | District reward now follows the curve: D1 200 ... D11 1200 (7700 in all). Suite P2q asserts the D1/D11 payouts. A winning bot run earned 3439 coins by D11 on the old flat 200 and 8718-8975 on the new curve (achievements already unlocked on this profile, so a first run earns more). |
 | C03 | Auto-aim | DEFERRED-STRUCTURAL (dormant until G25) | Cone logic in `WeaponBase` passes tz_verify on a probe weapon, but no gameplay path creates a weapon (G25). Live melee already hits anything within its 2.7 m sphere regardless of facing. |
 | C04 | Arachnophobia rename | MET | "Слепые псы"; `C04_arachnophobia_label.png` |
 | C06 | Tier fog + particles 50–150% | MET | tz_verify fog at load = tier preset (C8 rc4: `fog_setup.gd` no longer overrides it), 0.012 / 0.015 on change, 6/6 emitters; `C06_tier_*.png` |

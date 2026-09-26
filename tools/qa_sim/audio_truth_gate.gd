@@ -47,11 +47,6 @@ func _peak_over(bus_idx: int, seconds: float) -> float:
 	return peak_db
 
 func _run() -> void:
-	# Starts a real New Game (reset_all + autosave) on the owner's profile.
-	if OS.get_environment("TLS_UDG_GUARDED") != "1":
-		printerr("[audio-truth] FAIL run via tools/qa_sim/guarded_windowed - an unguarded launch would overwrite user://")
-		get_tree().quit(2)
-		return
 	print("[audio-truth] driver=%s output_device=%s devices=%s" % [
 		AudioServer.get_driver_name(), AudioServer.get_output_device(),
 		AudioServer.get_output_device_list()])

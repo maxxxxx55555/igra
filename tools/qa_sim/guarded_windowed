@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-# Runs one windowed QA scene under the user-data guard. The windowed probes
-# (tz_verify, perf_check, audio_truth_gate) start a real game on the owner's
-# user:// profile (New Game -> reset_all, autosave); their runners refuse to
-# start unless a guarded shell set TLS_UDG_GUARDED=1.
+# Runs one windowed QA scene under the shell user-data guard. The windowed
+# probes (tz_verify, perf_check, audio_truth_gate, capture_stills, ...) start
+# a real game on the owner's user:// profile. A direct launch is covered by
+# the QaLaunchGuard autoload too; this wrapper adds the shell trap and a
+# non-zero exit code when the restore fails.
 #
 #   tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn [timeout-sec]
 #   log -> .qa_logs/<scene>.log
@@ -10,6 +11,9 @@ set -uo pipefail
 cd "$(dirname "$0")/../.."
 SCENE="${1:?usage: tools/qa_sim/guarded_windowed <res://scenes/tools/NAME.tscn> [timeout-sec]}"
 T="${2:-300}"
+mkdir -p .qa_logs
+LOG=".qa_logs/$(basename "$SCENE" .tscn).log"
+rm -f "$LOG"  # an aborted launch must not leave an old log to be read as this run's
 
 GODOT="$(bash tools/qa_sim/_resolve_godot.sh 2>/dev/null)"
 if [[ -z "$GODOT" ]] || [[ ! -x "$GODOT" ]]; then
@@ -20,9 +24,7 @@ source tools/qa_sim/user_data_guard.sh
 udg_snapshot || exit 99
 trap 'udg_restore || exit 97' EXIT
 trap 'exit 130' INT TERM
-export TLS_UDG_GUARDED=1
-mkdir -p .qa_logs
-LOG=".qa_logs/$(basename "$SCENE" .tscn).log"
+export TLS_UDG_GUARDED=1  # tells QaLaunchGuard this shell guard covers the run
 timeout "$T" "$GODOT" --windowed --path . "$SCENE" > "$LOG" 2>&1
 rc=$?
 echo "  $SCENE rc=$rc (log: $LOG)"

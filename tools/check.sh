@@ -273,7 +273,7 @@ else
     udg_snapshot || { echo "  ${RED}FAIL${OFF} user-data guard: снимок профиля не удался - движковые проверки не запускаются"; exit 1; }
     trap 'udg_restore || exit 97' EXIT
     trap 'exit 130' INT TERM
-    export TLS_UDG_GUARDED=1  # probe runners that start a game refuse to run without it
+    export TLS_UDG_GUARDED=1  # tells QaLaunchGuard (qa_launch_guard.gd) this shell guard covers the run
     # RELEASE CONVERGENCE STEP 4: game_test_3d_scene.tscn's phase1+ combat
     # step stalls intermittently under --headless (pre-existing,
     # docs/KNOWN_ISSUES.md "game_test_3d_scene.tscn gate stalls silently") -
@@ -322,6 +322,7 @@ else
     run_gate "adversarial: achievement/NG+/economy/district-id forgery" "res://scenes/tools/attack_sim_scene.tscn"
     run_gate "boot-flow (меню/новая игра/сейв)" "res://scenes/tools/boot_check_scene.tscn" 200
     run_gate "footstep-маппер (surface x speed)" "res://scenes/tools/footstep_check_scene.tscn"
+    run_gate "QaLaunchGuard: snapshot/restore профиля (синтетический каталог)" "res://scenes/tools/qa_guard_check_scene.tscn"
     run_gate "аудио: тишина до первого ввода" "res://scenes/tools/audio_hum_check_scene.tscn"
     run_gate "единая тема: chrome виден на всех экранах" "res://scenes/tools/theme_unify_probe_scene.tscn"
     run_gate "настройки: тир графики и accessibility переживают рестарт" "res://scenes/tools/settings_persist_probe_scene.tscn"

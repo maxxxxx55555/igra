@@ -26,7 +26,7 @@ source tools/qa_sim/user_data_guard.sh
 udg_snapshot || exit 99
 trap 'udg_restore || exit 97' EXIT
 trap 'exit 130' INT TERM
-export TLS_UDG_GUARDED=1  # probe runners that start a game refuse to run without it
+export TLS_UDG_GUARDED=1  # tells QaLaunchGuard (qa_launch_guard.gd) this shell guard covers the run
 
 LOG_DIR=".qa_logs"
 mkdir -p "$LOG_DIR"
@@ -59,6 +59,7 @@ run_scene() { # label, res-path, timeout-sec
 	timeout "$t" "$GODOT" --headless --path . "$scene" >"$log" 2>&1
 	local rc=$?
 	if [[ $rc -eq 0 ]]; then echo "  ${GREEN}OK  ${OFF} $label"
+	elif [[ $rc -eq 3 ]]; then echo "  ${DIM}skip${OFF} $label (windowed-only, same exit 3 as check.sh run_gate)"
 	else FAILS=$((FAILS+1)); echo "  ${RED}FAIL${OFF} $label (rc=$rc)"; tail -12 "$log" | sed 's/^/         /'; fi
 	scan_log "$log" "$label"
 }
@@ -76,6 +77,7 @@ run_scene "assets"                     "res://scenes/tools/asset_check_scene.tsc
 run_scene "save integrity"             "res://scenes/tools/save_integrity_check_scene.tscn"  90
 run_scene "boot-flow"                  "res://scenes/tools/boot_check_scene.tscn"            200
 run_scene "footstep mapper"            "res://scenes/tools/footstep_check_scene.tscn"        90
+run_scene "qa launch guard"            "res://scenes/tools/qa_guard_check_scene.tscn"        90
 run_scene "audio silence-before-input" "res://scenes/tools/audio_hum_check_scene.tscn"       90
 run_scene "theme unify"               "res://scenes/tools/theme_unify_probe_scene.tscn"      90
 run_scene "perf budget (self-skips headless)" "res://scenes/tools/perf_check_scene.tscn"     120

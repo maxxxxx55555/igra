@@ -137,13 +137,14 @@ def time_to_win(style_minutes):
 # ── coin economy (source of truth: rewards_manager.gd, achievements_manager.gd,
 #    content/secrets.json, data/shop/*.tres) ─────────────────────────────
 # arena design audit P6 (2026-09-20, docs/DESIGN_AUDIT_ARENA.md): only wallet-
-# crediting events count as income — repeatable "kill coins" are HUD-only
-# (no CoinWallet.add caller), so they are NOT counted here on purpose.
+# crediting events count as income. Kill coins (5-15 per kill, base_monster.gd)
+# depend on play style, so they are NOT counted here on purpose.
 def coin_economy():
     rw = read("scripts/economy/rewards_manager.gd")
     reward = lambda name: int(re.search(rf"REWARD_{name}:\s*int\s*=\s*(\d+)", rw).group(1))
     secret_reward = reward("SECRET")
     district_reward = reward("DISTRICT_RESTORED")
+    district_step = reward("DISTRICT_STEP")
     achievement_reward = reward("ACHIEVEMENT")
     n_secrets = len(re.findall(r'"id"\s*:', read("content/secrets.json")))
     n_achievements = len(re.findall(r'"id"\s*:', read("scripts/systems/achievements_manager.gd")))
@@ -154,7 +155,7 @@ def coin_economy():
             prices.append(int(m.group(1)))
     prices.sort()
     return {
-        "secret_reward": secret_reward, "district_reward": district_reward,
+        "secret_reward": secret_reward, "district_reward": district_reward, "district_step": district_step,
         "achievement_reward": achievement_reward, "n_secrets": n_secrets,
         "n_districts": len(SPINE), "n_achievements": n_achievements,
         "cheapest_two": prices[:2],
@@ -281,11 +282,12 @@ def main():
     #    instead of assuming kill-income or secret-discovery fund progress.
     ce = coin_economy()
     print("\n[7] Coin economy (reachable wallet income vs. catalog prices, no runtime change)")
-    fresh_no_secrets = ce["n_districts"] * ce["district_reward"]
+    fresh_no_secrets = sum(ce["district_reward"] + ce["district_step"] * i for i in range(ce["n_districts"]))
     all_secrets = ce["n_secrets"] * ce["secret_reward"]
     all_achievements = ce["n_achievements"] * ce["achievement_reward"]
     cheapest_two_cost = sum(ce["cheapest_two"])
-    print(f"    districts x reward: {ce['n_districts']} x {ce['district_reward']} = {fresh_no_secrets}")
+    last = ce['district_reward'] + ce['district_step'] * (ce['n_districts'] - 1)
+    print(f"    districts (GDD.md:229 curve): {ce['n_districts']} x {ce['district_reward']}..{last} = {fresh_no_secrets}")
     print(f"    all secrets x reward: {ce['n_secrets']} x {ce['secret_reward']} = {all_secrets}")
     print(f"    all achievements x reward: {ce['n_achievements']} x {ce['achievement_reward']} = {all_achievements} (profile-persistent, not per-run)")
     print(f"    cheapest 2 catalog items: {ce['cheapest_two']} = {cheapest_two_cost}")
