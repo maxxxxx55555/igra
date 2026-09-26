@@ -1,8 +1,10 @@
 # Order-pass report (v8 sign-off candidate)
 
 Covers C4–C7 of the studio-lead directive. Base is `c73cf7c` (C3 close-out); the candidate is the
-latest `v8.0.0-rcN` tag (the last row of "C8 verifier loop" names it). Every number below was produced by a run in this pass; logs are in `.qa_logs/`
-(local only).
+latest `v8.0.0-rcN` tag (the last row of "C8 verifier loop" names it). Numbers tagged
+**RECONFIRM-AT-SIGNOFF** come from engine or windowed runs whose logs are local only (`.qa_logs/`, never
+committed) and must be re-run at sign-off; every other number was recomputed statically at `ce782f8` by
+the cloud cross-audit (`docs/CLOUD_AUDIT.md`).
 
 ## Phase deltas
 
@@ -12,7 +14,7 @@ latest `v8.0.0-rcN` tag (the last row of "C8 verifier loop" names it). Every num
 | R0 (reopened) | Real root cause of the magenta world: district LUTs imported as a 1D gradient. World hue-magenta 13% → ≤0.30% (hue-only metric, full res). | `bafb740` |
 | Save | Progress signature never matched on load, so every Continue wiped district power and progress. | `ac877a5` |
 | C5 MATRIX | 0 UNTESTED. X22 (test bug), X20 (PAUSED, harness recovery), P2q/P2r regressions, dead inputs removed, suite deterministic. | `0d3d533`, `9fc8665` (P2m) |
-| C6 I18N | `i18n_truth_gate` 12/12 non-base (13/13 with en), no cap loosened. Keeper voice fixed. New `hardcoded_text_gate` found 2 leaks plus 7 missing tutorial keys. | `43c9ecd`, `21c6563`, `ad051fc` |
+| C6 I18N | `i18n_truth_gate` 12/12 translated locales against `en` (all 13 files hold the same 1301 keys), no cap loosened. Keeper voice fixed. New `hardcoded_text_gate` found 2 leaks plus 7 missing tutorial keys. | `43c9ecd`, `21c6563`, `ad051fc` |
 | UI | Tutorial hint box drew over the HUD bars (anchors never applied); map button covered the VISIBILITY caption. | `ad051fc` |
 | C9 prep | Release keystore generated (gitignored `.signing/`). AAB export blocked: no Godot 4.7 export templates on the machine. | `7af80d2` |
 
@@ -20,17 +22,16 @@ latest `v8.0.0-rcN` tag (the last row of "C8 verifier loop" names it). Every num
 
 | Gate | Result |
 |---|---|
-| `tools/check.sh` (static + all engine gates, windowed reimport first) | rc1-rc3 and the rc4 game code before `5cf3b27`: **Всё зелёное, 42 checks**; with the user-data guard (rc4 tag onward): **44** (measured at rc5); **45** at rc12 (QaLaunchGuard copy check), **46** at rc13 (QaLaunchGuard lifecycle on the real profile); 2 windowed-only skips |
-| Static only (incl. i18n truth, hardcoded text, R0 pin, release export) | all green |
-| GOLD MASTER suite | `DONE fails=0`, 3 consecutive runs, 0 SCRIPT ERROR |
-| attack_sim / save_integrity / craft_check / a11y_probe / ui_layout | fails=0 each |
-| `balance_sim` / `endings_sim` | PASS / all 5 endings reachable |
-| TZ-verify (windowed, `scenes/tools/tz_verify_scene.tscn`) | rc1: 14 checks; rc2: 15; rc5: 17; rc12: 19 (D03 per stage added, profile restore moved to QaLaunchGuard); `DONE fails=0` each |
-| Audio truth (windowed) | PASS: Music −19.3 dB, all buses under −1.5 dB |
-| Perf (windowed) | D1 **246** draw calls (C7), **253** (rc11 run via `tools/qa_sim/guarded_windowed`): under the D11 350 cap, **over the D1 200 target** |
-| GUI exploration (windowed) | 19 PASS, 0 BUG, all 13 locales |
-| Visual truth (frames below) | rc12 tzverify frames (14, incl. D03 x3), half res: 12/14 PASS (0.14–0.46%); the two running frames FAIL: `G03_sprint_fov` 0.79% (0.51% hue-band hits, 98% of them in the outer 15% edge band, plus 0.29% saturation outliers) and `S03_noise_vignette` 1.02% (all hue-band, 88% in the edge band) = canon ember vignette over blue (TZ_DECISIONS S03). The R0 regression lock is the LUT import pin in `check.sh` (PASS); the visual gate's `r0_after_*` run only checks the gate against committed frames. Known-bad `magenta_corruption_suburbs.png` still FAILs (13.19%). |
-| Bot (3 seeds) | C7: 2/3 (batch `c00f118`), 1/3 (capsule `97c8bf4`). C8: rc2 1/3, rc3 1/3, rc4 1 WIN (seeds 2-3 of that run were killed by the environment), rc12 **2/3** (s2 spine stall at power_station, known X21 type); stalls of known types only |
+| `tools/check.sh` (static + all engine gates, windowed reimport first) | rc1-rc3 and the rc4 game code before `5cf3b27`: **Всё зелёное, 42 checks**; with the user-data guard (rc4 tag onward): **44** (measured at rc5); **45** at rc12 (QaLaunchGuard copy check), **46** at rc13 (QaLaunchGuard lifecycle on the real profile); 2 windowed-only skips. Full runs RECONFIRM-AT-SIGNOFF; the count itself holds at `ce782f8` (24 static + reimport + 19 engine + lifecycle + guard restore) |
+| Static only (incl. i18n truth, hardcoded text, R0 pin, release export) | **24/24** green, recomputed at `ce782f8` and on every `cloud/audit-ce782f8` commit |
+| GOLD MASTER suite | `DONE fails=0`, 3 consecutive runs, 0 SCRIPT ERROR; RECONFIRM-AT-SIGNOFF |
+| attack_sim / save_integrity / craft_check / a11y_probe / ui_layout | fails=0 each; RECONFIRM-AT-SIGNOFF (attack_sim gains `_check_daily_clock_rollback_rejected` on `cloud/audit-ce782f8`) |
+| `balance_sim` / `endings_sim` | PASS (districts 11 x 200..1200 = 7700 coins; battery budget 12.8 min vs need 12.6) / all 5 endings reachable; recomputed at `ce782f8` |
+| TZ-verify (windowed, `scenes/tools/tz_verify_scene.tscn`) | rc1: 14 checks; rc2: 15; rc5: 17; rc12: 19 (D03 per stage added, profile restore moved to QaLaunchGuard); rc13: 19 (`ce782f8` message); `DONE fails=0` each; RECONFIRM-AT-SIGNOFF |
+| Audio truth (windowed) | PASS: Music −19.3 dB (C7) and −20.3 dB (rc11, guarded), all buses under −1.5 dB; RECONFIRM-AT-SIGNOFF |
+| Perf (windowed) | D1 **246** draw calls (C7), **253** (rc11 run via `tools/qa_sim/guarded_windowed`): under the D11 350 cap, **over the D1 200 target**; RECONFIRM-AT-SIGNOFF. Static estimate (`drawcall_estimate.py`, recomputed): ~38 mesh/2D draw calls and 18 active real-time lights in D1, see `docs/PERF_PASS.md` |
+| Visual truth (frames below) | Recomputed at `ce782f8`, same figures: rc12 tzverify frames (14, incl. D03 x3), half res: 12/14 PASS (0.14–0.46%); the two running frames FAIL: `G03_sprint_fov` 0.79% (0.51% hue-band hits, 98% of them in the outer 15% edge band, plus 0.29% saturation outliers) and `S03_noise_vignette` 1.02% (all hue-band, 88% in the edge band) = canon ember vignette over blue (TZ_DECISIONS S03). The R0 regression lock is the LUT import pin in `check.sh` (PASS); the visual gate's `r0_after_*` run only checks the gate against committed frames. Known-bad `magenta_corruption_suburbs.png` still FAILs (13.19%). |
+| Bot (3 seeds) | C7: 2/3 (batch `c00f118`), 1/3 (capsule `97c8bf4`). C8: rc2 1/3, rc3 1/3, rc4 1 WIN (seeds 2-3 of that run were killed by the environment), rc12 **2/3** (s2 spine stall at power_station, known X21 type); stalls of known types only; RECONFIRM-AT-SIGNOFF |
 | AAB signed-verify | **not run**: no export templates (see Residual) |
 
 ## C8 verifier loop
@@ -48,7 +49,10 @@ latest `v8.0.0-rcN` tag (the last row of "C8 verifier loop" names it). Every num
 | 9 | `v8.0.0-rc9` (`94af752`) | CONFIRMED 114 / PARTIAL 4 / FAKE 0 | No code defects. V05 split into MET (desktop 2048) / DECIDED (mobile 1024, new V05-mobile row); G28/D04 no longer cites a precedence rule the GDD does not have; I02 key count 1301; FUNCTION_MATRIX legend defines FIXED and PARTIAL. CORRECTION_LOG 37. rc10: docs only. Nothing outside `docs/` has changed since the 44-green run on `9936ab3`. |
 | 10 | `v8.0.0-rc10` (`c46d8a3`) | CONFIRMED 121 / PARTIAL 3 / FAKE 0 | The windowed perf and audio probes start a New Game but had no save guard on their documented direct launch; both runners now refuse to start unguarded, and `tools/qa_sim/guarded_windowed` runs any windowed probe under the guard (`tz_verify` delegates to it). V05-mobile had no measurement behind DR-3: the mobile 1024 override is removed (GDD 2048, DR-4). The six FIXED matrix rows name their commits. CORRECTION_LOG 38. rc11: direct launches exit 2 with the profile untouched; guarded perf (D1 253 draw calls, D11 cap OK), audio (Music -20.3 dB, PASS) and tz_verify (`fails=0`, V05 desktop+mobile 2048) each restored all 11 profile files byte-identical; check.sh full **44 green**. Mobile-only render setting, no gameplay change: no IRON RULE bot. |
 | 11 | `v8.0.0-rc11` (`1430516`) | CONFIRMED 121 / PARTIAL 15 / FAKE 0 | Root fix for QA launches on the owner's profile (round 12 added autopilot coverage, a verified manifest, an airtight abort and a lifecycle gate): the first autoload `QaLaunchGuard` snapshots on any `scenes/tools/*` or `--shot` launch not wrapped by the shell guard, restores at exit, and keeps a crash copy the next unguarded launch restores (replaces the per-runner refusals and `_user_data_snapshot.gd`). DR-4 applied where DR-3 had no measurement: D03 stage lighting now GDD (0.03/0.12, 0.11/0.25, 0.16/0.40) and E05 district reward 200 + 100 per district. Labels: S03 note, V05-mobile DR-4, A03 DR-5, G22 DR-6; G34 audio logs counted; S02 text; X12 verified (suite P2r); X24 text; headless_suite treats exit 3 as skip; P2m retries a MENU window; tz_verify no longer reads a stale log. CORRECTION_LOG 39. rc12: `qa_guard_check` OK; direct unguarded suite x3 and a killed run recovered, profile sha256-identical each time; tz_verify 19 checks `fails=0`; X12 / E05 / drain / flash mutations caught; check.sh full **45 green**; IRON RULE bot **2/3 WIN** (s2 X21-type spine stall at power_station), coins earned 8718-8975 on the wins. |
-| 12 | `v8.0.0-rc12` (`b8abb2e`) | CONFIRMED 132 / PARTIAL 11 / FAKE 0 | QaLaunchGuard hardened: sha256 manifest written last and pid ownership (a partial, empty or damaged copy is never restored), airtight `OS.crash` abort, verified copies, every `tools/` scene or script counts as a QA launch (autopilot included), and the shell guard refuses while a copy is pending. New check.sh lifecycle check on the real profile. Fog-at-load check loads on High (Ultra profiles masked it). D03 cite GDD.md:108-111. Report rows fixed (C4 lists, battery, visual breakdown, DR-4 label). CORRECTION_LOG 40. rc13: guard copy check 13/13, lifecycle check OK and mutation-caught, damaged-copy abort rc 132 with no probe written, check.sh full **46 green**. Tools and docs only. |
+| 12 | `v8.0.0-rc12` (`b8abb2e`) | CONFIRMED 132 / PARTIAL 11 / FAKE 0 | QaLaunchGuard hardened: sha256 manifest written last and pid ownership (a partial, empty or damaged copy is never restored), airtight `OS.crash` abort, verified copies, every `tools/` scene or script counts as a QA launch (autopilot included), and the shell guard refuses while a copy is pending. New check.sh lifecycle check on the real profile. Fog-at-load check loads on High (Ultra profiles masked it). D03 cite GDD.md:108-111. Report rows fixed (C4 lists, battery, visual breakdown, DR-4 label). CORRECTION_LOG 40. rc13: guard copy check 13/13, lifecycle check OK and mutation-caught, damaged-copy abort rc 132 with no probe written, check.sh full **46 green**. QA tooling and docs: the rewritten QaLaunchGuard autoload ships but acts only on QA launches, so no IRON RULE bot. |
+
+Cloud cross-audit of rc13 (`docs/CLOUD_AUDIT.md`): CONFIRMED 95 / PARTIAL 4 / FAKE 0 and 3 honesty findings,
+all fixed on `cloud/audit-ce782f8` (`a6f4fdb` guard, `c2e9b86` daily clock, docs); CORRECTION_LOG 41-43.
 
 rc2 evidence: tz_verify 15 checks `DONE fails=0`; footstep probe `fails=0` and mutation-tested
 (`fails=3`, rc 1, with stealth mapped onto walk's file); `tools/check.sh` full **42 green**; bot 1/3 won, 11/11
@@ -69,7 +73,7 @@ No external `docs/CLOSURE_VERIFICATION.md` exists.
 
 ## Corrections
 
-40 entries in `docs/CORRECTION_LOG.md` (14 at rc1, 15-21 from C8 round 1, 22 from round 2, 23-28 from round 3, 29-31 from round 4, 32-33 from round 5, 34 from round 6, 35 from round 7, 36 from round 8, 37 from round 9, 38 from round 10, 39 from round 11, 40 from round 12), including the false R0 fix, the dead C06 fog write, and two
+43 entries in `docs/CORRECTION_LOG.md` (14 at rc1, 15-21 from C8 round 1, 22 from round 2, 23-28 from round 3, 29-31 from round 4, 32-33 from round 5, 34 from round 6, 35 from round 7, 36 from round 8, 37 from round 9, 38 from round 10, 39 from round 11, 40 from round 12, 41-43 from the cloud cross-audit), including the false R0 fix, the dead C06 fog write, and two
 wrong claims in this pass's own commit messages.
 
 ## Residual (honest)
@@ -89,5 +93,9 @@ wrong claims in this pass's own commit messages.
 | D1 draw calls 246-253 > 200 | Needs batching work (DEFERRED-STRUCTURAL). |
 | Deferred structural rows | S02 visibility model, S04 hiding-spot placement, G21 blueprints, G25 weapons in HUD, C03 auto-aim (needs G25), G26 photos, A01 bus graph, G07 crouch capsule, P01 draw calls. |
 | R-02 speed/teleport watchdog | Deferred (ARENA_CLOSURE R-02): IntegrityGuard covers non-finite position and falling through the floor; a speed watchdog needs per-state bounds. |
-| Security inherent limits | P-05, R-08, D-01, D-02; D-03 needs an owner-held PCK key; B7 legacy unsigned `achievements.cfg` still trusted once (owner decides whether to reject legacy files, P-02). |
+| Security inherent limits | P-05 and R-08 (a clock set forward across launches; R-08's same-session half is closed in `c2e9b86`), D-01, D-02; D-03 needs an owner-held PCK key; B7 legacy unsigned `achievements.cfg` still trusted once (owner decides whether to reject legacy files, P-02). |
 | User-data folder reset | `app_userdata/The Last Streetlight` was deleted and recreated about 2026-09-25 00:24, cause unknown. Save files were backed up earlier to `%TEMP%\tls_save_backup`; `settings.cfg`/`onboarding.cfg`/`save.tres` were not. |
+| P02 particles < 500, RAM/VRAM | NEEDS-MEASUREMENT (TZ P02): windowed or on-device profile; the same run prices V05's 2048 moon shadow on a phone. |
+| G08 flashlight range 8 m / energy 2.0 | NEEDS-MEASUREMENT (TZ_DECISIONS G08): guarded windowed G08 frame and a 3-seed IRON RULE bot at the GDD values, then DR-4 or DR-3. |
+| GUI exploration | Not run this pass (last run 2026-09-22, before the C6 locale edits): re-run `gui_explore_scene` for the 13-locale settings sweep. |
+| `cloud/audit-ce782f8` code | `a6f4fdb` (guard) and `c2e9b86` (daily clock) are gate-covered but not engine-run: check.sh full (new lifecycle case) and attack_sim after the merge. |

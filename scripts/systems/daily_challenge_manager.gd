@@ -22,6 +22,15 @@ const DATA_PATH: String = "res://content/daily_challenges.json"
 const DATA_PATH_LEGACY: String = "res://data/daily_challenges.json"
 const SAVE_PATH: String = "user://tls_daily.json"
 const SECONDS_PER_DAY: int = 86400
+## SECURITY_PATCH_SPEC R-08, same-session half: the wall clock is read once,
+## at launch (_day); after that the session only uses the engine's monotonic
+## frame delta, each frame capped at MAX_FRAME_DELTA so a suspend or a stall
+## cannot credit minutes at once. Setting the OS clock mid-session changes
+## nothing, and a clock set back before a later launch cannot reopen a claimed
+## day (_roll_for_day). Setting it forward across launches stays an inherent
+## client-side limit (P-05).
+const MAX_FRAME_DELTA: float = 0.25
+var _day: int = -1
 
 var _templates: Array = []
 var _streak_rewards: Array = []
@@ -43,7 +52,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_load_templates()
 	_load_state()
-	_roll_for_today()
+	_roll_for_day(_today_index())
 	EventBus.enemy_killed.connect(func(_id): _tick("kill_enemies", 1))
 	# "find_secrets" считает и документы, и собственно секреты. Раньше секреты
 	# было физически не найти (secret.gd был 2D-нодой и не попадал в
@@ -64,12 +73,13 @@ func _process(delta: float) -> void:
 		return
 	if not GameManager.is_playing():
 		return
+	var step := minf(delta, MAX_FRAME_DELTA)
 	if String(_today.get("type", "")) == "play_minutes":
-		_play_seconds += delta
+		_play_seconds += step
 		if int(_play_seconds / 60.0) > _progress:
 			_tick("play_minutes", 1)
 	elif String(_today.get("type", "")) == "no_flashlight_segment" and not _flashlight_on:
-		_dark_seconds += delta
+		_dark_seconds += step
 		if _dark_seconds >= SEGMENT_SECONDS:
 			_dark_seconds = 0.0
 			_tick("no_flashlight_segment", 1)
@@ -89,11 +99,11 @@ func _load_templates() -> void:
 func _today_index() -> int:
 	return int(Time.get_unix_time_from_system() / SECONDS_PER_DAY)
 
-func _roll_for_today() -> void:
+func _roll_for_day(day: int) -> void:
 	if _templates.is_empty():
 		return
-	var day := _today_index()
-	if day == _last_completed_day:
+	_day = day
+	if day <= _last_completed_day:
 		_completed_today = true
 	elif _today_id != "" and _today_id == _id_for_day(day):
 		pass  # already rolled, progress carries within the same day
@@ -120,7 +130,7 @@ func _tick(type: String, amount: int) -> void:
 
 func _complete() -> void:
 	_completed_today = true
-	_last_completed_day = _today_index()
+	_last_completed_day = _day
 	var reward := int(_today.get("reward", 0))
 	var wallet := get_node_or_null("/root/CoinWallet")
 	if wallet != null and wallet.has_method("add"):

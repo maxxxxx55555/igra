@@ -12,7 +12,12 @@ extends Node
 ## stays on disk until a verified restore; a crash or kill therefore loses
 ## nothing, and the next unguarded launch (normal play included) restores it
 ## first. If the copy cannot be made, the process aborts on the spot
-## (OS.crash: quit() would still let the QA scene's first frame run).
+## (OS.crash: quit() would still let the QA scene's first frame run). A copy
+## that cannot be restored (damaged, owned by a live QA run, or a failed
+## restore) stops normal play too: its saves would be reverted by the restore
+## that follows. Release exports carry no tools/ and are never QA launches, so
+## the guard does nothing there (a player's --shot must not make a session
+## revertible or reach OS.crash).
 
 const SNAPSHOT_SUFFIX := ".qa_snapshot"
 const SUBDIRS: Array[String] = ["", "saves/"]
@@ -21,6 +26,8 @@ const MANIFEST := "manifest.json"
 var _owned_snapshot: String = ""
 
 func _enter_tree() -> void:
+	if not OS.is_debug_build():
+		return
 	var base := OS.get_user_data_dir()
 	var snap := base + SNAPSHOT_SUFFIX
 	var guarded := OS.get_environment("TLS_UDG_GUARDED") == "1"
@@ -35,9 +42,9 @@ func _enter_tree() -> void:
 		var manifest := read_manifest(snap)
 		var pid := int(manifest.get("pid", -1))
 		if manifest.is_empty():
-			_block(qa, "%s is damaged (a file no longer matches its manifest); it is kept for manual recovery" % snap)
+			_block("%s is damaged (a file no longer matches its manifest); it is kept for manual recovery" % snap)
 		elif pid != OS.get_process_id() and OS.is_process_running(pid):
-			_block(qa, "another QA run (pid %d) owns %s" % [pid, snap])
+			_block("another QA run (pid %d) owns %s; wait for it to exit" % [pid, snap])
 		elif guarded:
 			# The shell guard copied the current (dirty) profile and would put it back
 			# over a recovery made here - leave the copy for the next unguarded launch.
@@ -47,13 +54,13 @@ func _enter_tree() -> void:
 			if bad == 0:
 				print("[qa-guard] restored the profile left by an interrupted QA run")
 			else:
-				_block(qa, "could not restore %s (%d mismatch(es)); the copy is kept" % [snap, bad])
+				_block("could not restore %s (%d mismatch(es)); the copy is kept" % [snap, bad])
 	if guarded or not qa or DirAccess.dir_exists_absolute(snap):
 		return
 	if snapshot(base, snap, OS.get_process_id()):
 		_owned_snapshot = snap
 	else:
-		_block(true, "cannot copy the profile to %s" % snap)
+		_block("cannot copy the profile to %s" % snap)
 
 func _exit_tree() -> void:
 	if _owned_snapshot == "":
@@ -64,12 +71,9 @@ func _exit_tree() -> void:
 	else:
 		push_error("[qa-guard] FAIL restore: %d mismatch(es); the copy is kept at %s" % [bad, _owned_snapshot])
 
-## A QA launch that cannot be protected must not reach its first frame.
-func _block(abort: bool, why: String) -> void:
-	if not abort:
-		push_warning("[qa-guard] " + why)
-		return
-	printerr("[qa-guard] ABORT: " + why + " - the QA run would write to an unprotected profile")
+## Nothing may reach its first frame on a profile that is not protected.
+func _block(why: String) -> void:
+	printerr("[qa-guard] ABORT: " + why + " - no launch runs until the profile is restored")
 	OS.crash("[qa-guard] ABORT: " + why)
 
 static func _is_qa_launch() -> bool:
