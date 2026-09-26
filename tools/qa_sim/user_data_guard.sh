@@ -29,6 +29,13 @@ _udg_list() { # dir -> sorted relative paths of the game's own files
 udg_snapshot() { # [dir]
 	UDG_DIR="${1:-$(udg_dir)}"
 	UDG_ACTIVE=0
+	# QaLaunchGuard (scripts/core/qa_launch_guard.gd) keeps its copy next to the profile
+	# while a QA run is live or after one was interrupted; a shell snapshot taken now
+	# would capture that run's writes and later put them back over the recovery.
+	if [[ -d "$UDG_DIR.qa_snapshot" ]]; then
+		echo "  user-data guard: FAIL $UDG_DIR.qa_snapshot exists (a QA run is live or was interrupted) - launch the game once without TLS_UDG_GUARDED to restore it"
+		return 1
+	fi
 	UDG_SNAP=$(mktemp -d "${TMPDIR:-/tmp}/tls_udg.XXXXXX" 2>/dev/null) && [[ -n "$UDG_SNAP" ]] || {
 		echo "  user-data guard: FAIL cannot create a snapshot dir - do not run the game against this profile"
 		return 1
@@ -114,6 +121,9 @@ _udg_demo_steps() { # synthetic profile dir; every demo snapshot lives under it
 	rm -rf -- "$UDG_SNAP"
 	if udg_restore > /dev/null; then echo "demo FAIL: restore succeeded without a snapshot"; return 1; fi
 	[[ -e "$d/tls_savegame.save" && -e "$d/saves/slot1.save" ]] || { echo "demo FAIL: lost snapshot deleted owner files"; return 1; }
+	# A pending QaLaunchGuard copy next to a profile: the shell guard must refuse to start.
+	mkdir -p "$d/prof2" "$d/prof2.qa_snapshot"
+	if udg_snapshot "$d/prof2" > /dev/null; then echo "demo FAIL: snapshot ignored a pending QaLaunchGuard copy"; return 1; fi
 	echo "demo OK"
 }
 

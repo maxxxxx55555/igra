@@ -14,7 +14,7 @@ extends Node
 @export var glow_intensity: float = 0.5
 
 # Стадия района: DARK — только фонарик и луна, FULL — восстановленный свет.
-# Энергии ambient/луны — канон GDD.md:107-110 (DARK 0.03/0.12, STREETS 0.11/0.25,
+# Энергии ambient/луны — канон GDD.md:108-111 (DARK 0.03/0.12, STREETS 0.11/0.25,
 # FULL 0.16/0.40); PARTIAL в GDD чисел не имеет и берёт DARK.
 const AMBIENT_DARK: float = 0.03
 const AMBIENT_LIT: float = 0.11

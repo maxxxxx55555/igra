@@ -33,7 +33,7 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 | V02 | No neon / #fff | MET | `V02_energy_ball.png`; monster hit flash is brass and restores the original material (suite P2b, C8 rc4) |
 | V05 | Moon shadow 2048² | MET | tz_verify: `directional_shadow/size` 2048 and no smaller `.mobile` override (removed in C8 rc11); frames clean at 2048. On-device mobile cost not measured (P02). |
 | V01 | "No day" | MET-STATIC | Dead daytime painter removed from DayNight |
-| D03 | Stage ambient/moon (GDD.md:107-110) | MET | tz_verify asserts DARK 0.03/0.12, STREETS 0.11/0.25, FULL 0.16/0.40; `D03_stage_*.png` read by eye and PASS the visual gate at half res (C8 rc12) |
+| D03 | Stage ambient/moon (GDD.md:108-111) | MET | tz_verify asserts DARK 0.03/0.12, STREETS 0.11/0.25, FULL 0.16/0.40; `D03_stage_*.png` read by eye and PASS the visual gate at half res (C8 rc12) |
 | V03 | Bebas Neue Bold | GAP-OWNER | No Bold font file exists |
 | G01 | FPS canon / TPS option | DECIDED (DR-2) | `baseline.png` is first-person |
 | G02 | Sprint headbob 0.1 | MET | tz_verify span 0.049; `G03_sprint_fov.png` |
@@ -70,7 +70,7 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 | E05 | Coin curve 0–200 (D1) → 8000+ (D11) | MET (C8 rc12, DR-4) | District reward now follows the curve: D1 200 ... D11 1200 (7700 in all). Suite P2q asserts the D1/D11 payouts. A winning bot run earned 3439 coins by D11 on the old flat 200 and 8718-8975 on the new curve (achievements already unlocked on this profile, so a first run earns more). |
 | C03 | Auto-aim | DEFERRED-STRUCTURAL (dormant until G25) | Cone logic in `WeaponBase` passes tz_verify on a probe weapon, but no gameplay path creates a weapon (G25). Live melee already hits anything within its 2.7 m sphere regardless of facing. |
 | C04 | Arachnophobia rename | MET | "Слепые псы"; `C04_arachnophobia_label.png` |
-| C06 | Tier fog + particles 50–150% | MET | tz_verify fog at load = tier preset (C8 rc4: `fog_setup.gd` no longer overrides it), 0.012 / 0.015 on change, 6/6 emitters; `C06_tier_*.png` |
+| C06 | Tier fog + particles 50–150% | MET | tz_verify fog at load = tier preset (C8 rc4: `fog_setup.gd` no longer overrides it; since rc13 the probe loads on the High tier, 0.014, so an Ultra profile cannot mask it), 0.012 / 0.015 on change, 6/6 emitters; `C06_tier_*.png` |
 | P01 | Draw calls < 200 (D1) / < 350 (D11) | DEFERRED-STRUCTURAL | Windowed `perf_check_scene`: D1 = 246 (C7) and 253 (rc11), over 200; under the D11 350 cap. Needs material/mesh batching, not a value swap. |
 | P02 | Particles < 500, RAM/VRAM | NEEDS-MEASUREMENT | Windowed or device profiling only; see TZ_DECISIONS P02 |
 | N01, I02, T01 | Owner rows | GAP-OWNER | See TZ_DECISIONS |

@@ -1,14 +1,17 @@
 # Run state — orchestrator pass (2026-09-20)
 
-## Session 12 (2026-09-25/26): C8 verifier loop, rounds 1-11 closed -> rc12
+## Session 12 (2026-09-25/26): C8 verifier loop, rounds 1-12 closed -> rc13
 
-**NEXT-ROW: C8 round 12 (independent verifier on `v8.0.0-rc12`)**, loop until FAKE=0 PARTIAL=0; then C9 AAB
+**NEXT-ROW: C8 round 13 (independent verifier on `v8.0.0-rc13`)**, loop until FAKE=0 PARTIAL=0; then C9 AAB
 once export templates exist (owner-approved ~1 GB download).
 - Round 1 on rc1: CONFIRMED 79 / PARTIAL 7 / FAKE 3. All closed at root in `0873f38` (S03 shader + noise
   scale, G12b L5 key, A03 walk/jog/sprint + pitch, G17 all backups; G24 DECIDED, C03 DEFERRED-STRUCTURAL).
 - Gates: tz_verify 15 fails=0; check.sh full 42 green; bot 1/3 (11/11 FULL x3, boss-phase stalls = known).
 - Round 2 on rc2: CONFIRMED 128 / PARTIAL 6 / FAKE 0. Flashlight upgrades now reapplied on spawn from the
   scene base (24 / 16 m); suite P2r locks it (mutation-tested). rc3: check.sh 42 green, suite fails=0, bot 1/3.
+- Round 12 on rc12: CONFIRMED 132 / PARTIAL 11 / FAKE 0. QaLaunchGuard: manifest + pid + OS.crash abort +
+  autopilot coverage; the shell guard refuses while `<profile>.qa_snapshot` exists (launch the game once
+  unguarded to recover). check.sh lifecycle check; check.sh full 46 green.
 - Round 11 on rc11: CONFIRMED 121 / PARTIAL 15 / FAKE 0. New first autoload `QaLaunchGuard`
   (`scripts/core/qa_launch_guard.gd`): any unguarded `scenes/tools/*` or `--shot` launch snapshots the profile to
   `%APPDATA%/Godot/app_userdata/The Last Streetlight.qa_snapshot` and restores it at exit; after a crash the next

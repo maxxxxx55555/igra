@@ -69,6 +69,10 @@ func _run() -> void:
 	if ads:
 		ads.enabled = false
 	await get_tree().create_timer(1.0).timeout
+	# Load on the High tier whatever the profile says: its fog preset (0.014) differs
+	# from the fixed 0.015 FogSetup used to force, so the C06 at-load check below can
+	# fail on that regression even for an Ultra profile (whose preset is 0.015).
+	SettingsManager.set_setting("graphics_tier", 2)  # the value only; set_graphics_tier() would also re-apply effects/resolution
 	Routes.start_game()
 	var ready_pred := func() -> bool: return GameManager.is_playing() and get_tree().get_first_node_in_group("player") != null
 	if not await _wait_until(ready_pred, 20.0):
@@ -148,7 +152,7 @@ func _run() -> void:
 	_check(em.size() > 0 and scaled == em.size(), "C06 ultra: %d/%d GPUParticles3D emitters at 150%% amount" % [scaled, em.size()])
 	SettingsManager.set_graphics_tier(2)
 
-	# D03 - stage lighting, GDD.md:107-110 (ambient / moon per district stage).
+	# D03 - stage lighting, GDD.md:108-111 (ambient / moon per district stage).
 	var wes := get_tree().root.find_child("WorldEnvSetup", true, false)
 	for row in [[0, "dark", 0.03, 0.12], [2, "streets", 0.11, 0.25], [3, "full", 0.16, 0.40]]:
 		wes.apply_for_stage(row[0])

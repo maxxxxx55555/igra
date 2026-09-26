@@ -323,6 +323,28 @@ else
     run_gate "boot-flow (меню/новая игра/сейв)" "res://scenes/tools/boot_check_scene.tscn" 200
     run_gate "footstep-маппер (surface x speed)" "res://scenes/tools/footstep_check_scene.tscn"
     run_gate "QaLaunchGuard: snapshot/restore профиля (синтетический каталог)" "res://scenes/tools/qa_guard_check_scene.tscn"
+    # QaLaunchGuard lifecycle on the real profile (this shell guard still covers it):
+    # an unguarded QA run restores at exit; a killed one leaves a verified copy that a
+    # guarded launch keeps and the next unguarded launch restores.
+    qa_guard_e2e() {
+      local U snap probe before
+      U=$(udg_dir); snap="$U.qa_snapshot"; probe="$U/qa_guard_probe.save"
+      _e2e() { env -u TLS_UDG_GUARDED timeout 60 "$GODOT" --headless --path . res://scenes/tools/qa_guard_e2e_scene.tscn -- "$1" >/dev/null 2>&1; }
+      _hash() { (cd "$U" && { find . -maxdepth 1 -type f; find ./saves -type f 2>/dev/null; } | sort | xargs -d '\n' sha256sum); }
+      before=$(_hash)
+      _e2e --write; [[ ! -e "$probe" && ! -d "$snap" ]] || { echo "         --write: probe or copy left behind"; return 1; }
+      _e2e --die;   [[ -e "$probe" && -f "$snap/manifest.json" ]] || { echo "         --die: no crash copy"; return 1; }
+      timeout 60 "$GODOT" --headless --path . res://scenes/tools/qa_guard_e2e_scene.tscn -- --noop >/dev/null 2>&1
+      [[ -f "$snap/manifest.json" ]] || { echo "         guarded launch consumed the crash copy"; return 1; }
+      _e2e --noop;  [[ ! -e "$probe" && ! -d "$snap" ]] || { echo "         recovery did not restore the crash copy"; return 1; }
+      [[ "$(_hash)" == "$before" ]] || { echo "         profile differs after recovery"; return 1; }
+      # A copy that fails its manifest must stop an unguarded QA run before its first frame.
+      mkdir -p "$snap/files"; printf x > "$snap/files/lang.cfg"; printf '{"pid": 1, "files": {"lang.cfg": "0"}}' > "$snap/manifest.json"
+      _e2e --write && { echo "         damaged copy did not abort the run"; rm -rf -- "$snap"; return 1; }
+      [[ ! -e "$probe" && -d "$snap" ]] || { echo "         abort was not airtight"; rm -rf -- "$snap"; return 1; }
+      rm -rf -- "$snap"  # the fake copy made just above
+    }
+    if qa_guard_e2e; then ok "QaLaunchGuard: жизненный цикл (выход, крах, восстановление) на реальном профиле"; else bad "QaLaunchGuard: жизненный цикл на реальном профиле"; fi
     run_gate "аудио: тишина до первого ввода" "res://scenes/tools/audio_hum_check_scene.tscn"
     run_gate "единая тема: chrome виден на всех экранах" "res://scenes/tools/theme_unify_probe_scene.tscn"
     run_gate "настройки: тир графики и accessibility переживают рестарт" "res://scenes/tools/settings_persist_probe_scene.tscn"
