@@ -18,7 +18,7 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 
 ## Evidence sources
 
-- **tz_verify:** `scenes/tools/tz_verify_scene.tscn`, run windowed. 19 checks at rc12 (incl. C06 fog at load and D03 per stage; the user:// restore moved to the QaLaunchGuard autoload), `fails=0`.
+- **tz_verify:** `scenes/tools/tz_verify_scene.tscn`, run windowed. 19 checks at rc12 and rc13 (incl. C06 fog at load and D03 per stage; the user:// restore moved to the QaLaunchGuard autoload), `fails=0` (local logs; RECONFIRM-AT-SIGNOFF).
 - **Suite:** GOLD MASTER, `fails=0` on 3 consecutive runs.
 - **footstep:** `footstep_check_scene`, `fails=0`; exits 1 when any surface lacks 3 distinct steps (mutation-tested in C8).
 
@@ -41,7 +41,7 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 | G04 | 3 m interaction ray | DECIDED (DR-1) | Reach is 3.2 m. Tightening pickup/interaction reach is on the REJECTED list. |
 | G06 | Sprint ×1.6 | MET | tz_verify run 272 = 170 × 1.6; bot 3/3 |
 | G07 | Crouch speed/noise/visibility/capsule | MET-STATIC (speed ×0.4, noise ×0.3) / DEFERRED-STRUCTURAL (visibility, 1.2 m capsule) | — |
-| G08 | Flashlight `#c9a24a`, 45° | MET (colour, cone) / NEEDS-EYES (8 m range, energy 2.0) | `G08_flashlight.png` |
+| G08 | Flashlight `#c9a24a`, 45° | MET (colour, cone) / NEEDS-MEASUREMENT (8 m range, energy 2.0: DR-4 unless a measurement rejects them, see TZ_DECISIONS G08) | `G08_flashlight.png`; shipped 16 m / 24 (`player_3d.tscn:180`, `:184`) |
 | G09 | Drain 1% per 2 s | DECIDED (DR-3) | Recorded boss-fight failure at a milder value |
 | G10 | Battery item +25% | DECIDED (DR-3) | `balance_sim` FAILs at +25 |
 | G12b | Flicker below 20%, cleared by Stability L5 | MET | tz_verify: spread 16.2 at 10% battery, 0.000 with Stability L5; suite P2r: L5 + Brightness survive a real respawn, L5 cuts drain 50% (GDD §3.3), New Game clears them (C8 rc4); `G12b_low_battery.png` |
@@ -62,7 +62,7 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 | G34 | Truth: docs + audio + photos + bunker | MET (bunker = real secret) / MET-STATIC (the 22 audio-log and 24 photo lore notes are inside the all-documents total) | Suite P2q bunker assert; `endings_sim` all 5 reachable |
 | S01 | Hit 5 m/1.0, dodge 3 m/0.4 noise | DECIDED (DR-3, measured) | Bot bisect: with 0/3, without 2/3 |
 | S02 | Visibility modifiers | DEFERRED-STRUCTURAL | Detection-model rework |
-| S03 | Ember vignette noise pulse | MET | tz_verify: vignette r 0.55 while running, frame edge warmth −0.015 → 0.066; `S03_noise_vignette.png` |
+| S03 | Ember vignette noise pulse | MET | tz_verify: vignette r 0.55 while running, frame edge warmth −0.015 → 0.168 on the committed rc12 frames (`baseline.png` → `S03_noise_vignette.png`, `_edge_warmth` of `_tz_verify_runner.gd:30-40` recomputed by the cloud audit; the rc2 run read 0.066); `S03_noise_vignette.png` |
 | S04 | Search 10 s within 5 m | MET-STATIC | Constants asserted in suite P2q; in the IRON RULE batch (2/3) |
 | S04-hide | Hiding spots: lockers, bushes, car trunks, dark corners | DEFERRED-STRUCTURAL | `hiding_spot.gd` (locker/dumpster/car/crate) is not placed in any district; see TZ_DECISIONS |
 | D02 | Unlock graph | DECIDED (DR-2) | — |

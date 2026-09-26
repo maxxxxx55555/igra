@@ -46,7 +46,7 @@ JSON), so every load wiped district power and ProgressTracker. Found and fixed i
 | P-07 semantic validation (P1/P2) | Closed `9b7a46b` |
 | R-01 dormant integrity watchdog (P1) | Closed `2278cf9` |
 | R-02 speed/teleport/memory-edit bounds (P1) | **Defer.** IntegrityGuard covers non-finite position and fell-through-floor. A speed watchdog needs per-state speed envelopes, and false positives risk yanking a legitimate player. Offline single-player with no server trust boundary. |
-| R-08 wall-clock trust (P1/P2) | **Defer (inherent):** same as P-05. |
+| R-08 wall-clock trust (P1/P2) | Same-session half closed `c2e9b86` (the daily reads the wall clock once per launch, a rolled-back day stays claimed, play-time frame deltas capped; attack_sim `_check_daily_clock_rollback_rejected`). **Defer (inherent):** a clock set forward across launches, same as P-05. |
 | D-01 PCK overlay (P1) | **Defer (inherent):** no client-side self-verification is possible (`docs/SECURITY_THREAT_MODEL.md`). |
 | D-02 HMAC key in client (P1) | **Defer (inherent):** documented in the threat model. |
 | D-03 bytecode on / no encryption (P1/P2) | **Defer (owner):** PCK encryption needs a key kept outside the repo at export time. `release_export_check.py` forbids committing one. |
@@ -97,7 +97,7 @@ JSON), so every load wiped district power and ProgressTracker. Found and fixed i
 
 ## Open defers
 
-- **Inherent client-side limits:** P-05, R-08, D-01, D-02.
+- **Inherent client-side limits:** P-05, R-08 (forward clock across launches only), D-01, D-02.
 - **Owner-held:** D-03 (PCK encryption key); B7's legacy-achievements half (reject unsigned legacy `achievements.cfg`, a P-02 UX call).
 - **Scoped:** R-02 (speed watchdog) and the CHALLENGE-02 spine stall (X21).
 
