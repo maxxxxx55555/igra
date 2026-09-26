@@ -37,6 +37,7 @@ func _ready() -> void:
 	_check_reset_progress_clears_ng_plus()
 	_check_flashlight_upgrade_forgery_rejected()
 	_check_daily_challenge_forgery_rejected()
+	_check_daily_clock_rollback_rejected()
 	_check_progress_tracker_grant_unlocks_real_achievement()
 	_check_main_authority_schema()
 	_check_district_id_and_player_pos_validated()
@@ -155,6 +156,24 @@ func _check_daily_challenge_forgery_rejected() -> void:
 	elif FileAccess.file_exists(path):
 		DirAccess.remove_absolute(path)
 	DailyChallengeManager.call("_load_state")
+
+## SECURITY_PATCH_SPEC R-08: a launch whose clock was set back after a claim
+## must not reopen an earlier day (the replay test used to be `==`).
+func _check_daily_clock_rollback_rejected() -> void:
+	var saved := [DailyChallengeManager._day, DailyChallengeManager._last_completed_day,
+		DailyChallengeManager._completed_today, DailyChallengeManager._today,
+		DailyChallengeManager._today_id]
+	var today: int = DailyChallengeManager.call("_today_index")
+	DailyChallengeManager._last_completed_day = today
+	DailyChallengeManager._completed_today = false
+	DailyChallengeManager.call("_roll_for_day", today - 1)
+	_ok(DailyChallengeManager._completed_today and DailyChallengeManager._day == today - 1,
+		"daily: a clock set back after a claim does not reopen an earlier day")
+	DailyChallengeManager._day = saved[0]
+	DailyChallengeManager._last_completed_day = saved[1]
+	DailyChallengeManager._completed_today = saved[2]
+	DailyChallengeManager._today = saved[3]
+	DailyChallengeManager._today_id = saved[4]
 
 # ── ProgressTracker short-id grants must go through the real API ─────────
 ## BREAK_REPORT B7: ProgressTracker._grant() used to emit
