@@ -15,6 +15,7 @@ every row.
 | zh_TW contains Simplified | OpenCC `s2tw` round trip | 0 real leaks. The 38 hits are OpenCC over-conversions (背包→揹包, 證明了→證明瞭, 不准→不準) and must not be applied |
 | English left in non-Latin locales | Latin words also present in the en string | 8 real (rows A); brand or proper names kept: SOS, EON, OpenDyslexic |
 | Identical to English in Latin locales | exact match | Cognates and accepted gaming terms only (Hospital, Park, Radio, Journal, Speedrunner) |
+| Accents on capitals | fr/es/it/pt_BR all-caps words vs their accented lowercase forms, plus a read of all 88 fr all-caps strings | 2 real (rows D) |
 | Glossary | each locale's own `NEW_GAME_PLUS` term across all New Game+ keys; ru flashlight vs streetlight | rows B |
 | Voice (register) | pronouns and imperative endings in the tutorial / onboarding / tips / hints / touch-calibration family (lore excluded) | ru, fr, tr, ja, ko mixed in one flow (rows C); de, es, it, pt_BR, zh, zh_TW consistent |
 
@@ -31,7 +32,7 @@ every row.
   -세요/-습니다 for instructions, flip the other 24 instead. What matters is one register.
 
 
-Rows: **77**. By class: latin 8, glossary 17, voice 51, grammar 1. By locale: ar 3, de 3, fr 13, it 1, ja 5, ko 20, pt_BR 1, ru 27, tr 4.
+Rows: **79**. By class: latin 8, glossary 17, voice 51, grammar 1, accent 2. By locale: ar 3, de 3, fr 15, it 1, ja 5, ko 20, pt_BR 1, ru 27, tr 4.
 
 | # | Locale | Key | OLD | NEW | Class |
 |---|---|---|---|---|---|
@@ -112,6 +113,8 @@ Rows: **77**. By class: latin 8, glossary 17, voice 51, grammar 1. By locale: ar
 | 75 | ko | `TUT_LIGHT_SHIELD` | 빛은 당신의 방패입니다. 괴물은 빛줄기를 두려워합니다. | 빛은 당신의 방패다. 괴물은 빛줄기를 두려워한다. | voice |
 | 76 | ko | `TUT_TO_GARAGE` | 차고로 가세요. 발전기가 그곳에 있습니다. | 차고로 가라. 발전기가 그곳에 있다. | voice |
 | 77 | ko | `TUT_WAKE_UP` | 잠에서 깼습니다. 도시는 어둠에 잠겼습니다. | 잠에서 깼다. 도시는 어둠에 잠겼다. | voice |
+| 78 | fr | `menu_title` | LE DERNIER REVERBERE | LE DERNIER RÉVERBÈRE | accent |
+| 79 | fr | `victory` | NIVEAU TERMINE | NIVEAU TERMINÉ | accent |
 
 Class meanings:
 - **latin:** an English word left inside a non-Latin locale.
@@ -119,6 +122,7 @@ Class meanings:
   locale's `NEW_GAME_PLUS`. For ru, the flashlight is фонарик, because фонарь is the streetlight
   (title: ПОСЛЕДНИЙ ФОНАРЬ).
 - **voice:** a register break inside one flow.
+- **accent:** fr capitals keep their accents (every other fr all-caps string already does).
 - **grammar:**
   - ja `TUT_ATTACK` 届かれたら is not idiomatic.
   - ru `ONBOARD_05` "поддерживают фонарь горящим" is a calque, and "остался" is gendered.
@@ -206,6 +210,8 @@ Keep each file's existing formatting, then run the i18n gate.
 ["ko", "TUT_GENERATOR_STEP1", "케이블을 올바른 순서로 연결하세요.", "케이블을 올바른 순서로 연결하라."],
 ["ko", "TUT_LIGHT_SHIELD", "빛은 당신의 방패입니다. 괴물은 빛줄기를 두려워합니다.", "빛은 당신의 방패다. 괴물은 빛줄기를 두려워한다."],
 ["ko", "TUT_TO_GARAGE", "차고로 가세요. 발전기가 그곳에 있습니다.", "차고로 가라. 발전기가 그곳에 있다."],
-["ko", "TUT_WAKE_UP", "잠에서 깼습니다. 도시는 어둠에 잠겼습니다.", "잠에서 깼다. 도시는 어둠에 잠겼다."]
+["ko", "TUT_WAKE_UP", "잠에서 깼습니다. 도시는 어둠에 잠겼습니다.", "잠에서 깼다. 도시는 어둠에 잠겼다."],
+["fr", "menu_title", "LE DERNIER REVERBERE", "LE DERNIER RÉVERBÈRE"],
+["fr", "victory", "NIVEAU TERMINE", "NIVEAU TERMINÉ"]
 ]
 ```
