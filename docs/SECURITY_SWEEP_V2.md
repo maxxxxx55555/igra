@@ -137,3 +137,13 @@ calls AchievementManager WORKS on "get_all non-empty" only. Tracked in `docs/MER
   signed save is the inherent D-02 class.
 - **Permissions:** `internet` (ads) and `vibrate` (`hud_3d.gd:799`, `virtual_joystick.gd:61`) are both
   used.
+
+## Status after the rc14 pass
+
+| # | Status | Evidence |
+|---|---|---|
+| 1 | Closed in `a6f4fdb` | QaLaunchGuard returns at once in release builds |
+| 2 | Closed in rc14 | `ad_service.gd` `_default_provider(debug)`: release builds without an AppLovin key get no provider, so the revive and battery offers hide themselves. `attack_sim` `_check_release_has_no_ad_stub` (fails with the old always-stub line) |
+| 3 | Deferred, dormant (owner) | No socket opens in normal play. If LAN returns, apply the RPC validation list in section 3 first; if not, quarantine the three LAN autoloads (MERGE_PLAN §7 owner decision) |
+| 4 | Not needed now | No reward depends on hardcore (`ach_18`/`iron_man` have no grant path). Signing the hardcore flag is part of wiring `ach_18` |
+| 5 | Closed in rc14 | `local_leaderboard.gd` writes through `SaveSystem.write_signed`, rejects a tampered signed file, keeps only well-formed entries (capped), and re-saves a pre-rc14 plain file signed once (same stance as achievements, B7). `attack_sim` `_check_leaderboard_signed_and_validated` (fails with the old adopt-any-Array load) |

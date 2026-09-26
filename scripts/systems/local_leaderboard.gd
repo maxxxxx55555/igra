@@ -43,16 +43,40 @@ func has_runs() -> bool:
 	return not _runs.is_empty()
 
 func _save() -> void:
-	var f := FileAccess.open(PATH, FileAccess.WRITE)
-	if f != null:
-		f.store_string(JSON.stringify(_runs))
+	SaveSystem.write_signed(PATH, _runs)
 
+## SECURITY_SWEEP_V2 #5: the file was unsigned and any Array was adopted as is,
+## so a hand edit showed fake records and a non-Dictionary entry raised script
+## errors. A tampered signed file is rejected; a pre-rc14 plain file is trusted
+## once and re-saved signed (same stance as achievements' legacy file, B7).
+## Either way only well-formed entries survive, capped at MAX_ENTRIES.
 func _load() -> void:
 	if not FileAccess.file_exists(PATH):
 		return
-	var f := FileAccess.open(PATH, FileAccess.READ)
-	if f == null:
+	var parsed: Variant = SaveSystem.read_signed(PATH)
+	var legacy := false
+	if parsed == null:
+		parsed = JSON.parse_string(FileAccess.get_file_as_string(PATH))
+		legacy = parsed is Array
+	if not (parsed is Array):
 		return
-	var parsed = JSON.parse_string(f.get_as_text())
-	if parsed is Array:
-		_runs = parsed
+	_runs = valid_runs(parsed)
+	if legacy:
+		_save()
+
+static func valid_runs(raw: Array) -> Array:
+	var out: Array = []
+	for e in raw:
+		if not (e is Dictionary):
+			continue
+		var ok := true
+		for k in ["time", "kills", "districts", "unix"]:
+			if not (e.get(k) is float or e.get(k) is int) or float(e.get(k)) < 0.0:
+				ok = false
+		if ok:
+			out.append({"time": float(e["time"]), "kills": int(e["kills"]), "districts": clampi(int(e["districts"]), 0, 11),
+				"ending": String(e.get("ending", "")), "unix": float(e["unix"])})
+	out.sort_custom(func(a, b) -> bool: return a["time"] < b["time"])
+	if out.size() > MAX_ENTRIES:
+		out.resize(MAX_ENTRIES)
+	return out

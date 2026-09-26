@@ -47,20 +47,23 @@ const AppLovinProvider := preload("res://scripts/monetization/applovin_provider.
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS  # ролик показывается и на паузе
-	set_provider(_default_provider())
+	set_provider(_default_provider(OS.is_debug_build()))
 	EventBus.district_entered.connect(func(_id: StringName) -> void: show_interstitial())
 
 ## SDK-ключ берём из project settings (monetization/applovin_sdk_key,
 ## пусто по умолчанию) — так подстановка реального ключа перед релизом
 ## не требует правки кода, см. docs/store/HUMAN_CHECKLIST.md.
-## Пусто/веб/ключ не задан -> отладочная заглушка, игровой код не знает разницы.
-func _default_provider() -> Object:
+## No key: debug builds get the claim-button stub; release builds get no
+## provider, so every reward offer hides itself (SECURITY_SWEEP_V2 #2: the
+## stub granted revives and battery with no ad shown). `debug` is a
+## parameter so attack_sim can drive both branches.
+func _default_provider(debug: bool) -> Object:
 	if OS.has_feature("web"):
 		return CrazyGamesStub.new(self)
 	var sdk_key: String = str(ProjectSettings.get_setting("monetization/applovin_sdk_key", ""))
 	if OS.has_feature("mobile") and not sdk_key.is_empty():
 		return AppLovinProvider.new(self, sdk_key)
-	return StubAdProvider.new(self)
+	return StubAdProvider.new(self) if debug else null
 
 ## Подмена поставщика: сюда придёт настоящий SDK, отсюда же его берут тесты.
 func set_provider(provider: Object) -> void:
