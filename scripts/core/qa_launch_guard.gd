@@ -38,6 +38,11 @@ func _enter_tree() -> void:
 	var snap := base + SNAPSHOT_SUFFIX
 	var guarded := OS.get_environment("TLS_UDG_GUARDED") == "1"
 	var qa := _is_qa_launch()
+	# Owner, rc14: QA runs must be silent. Deferred so it lands after GameManager
+	# unmutes Master in its _ready. Each bus meters its own output, so
+	# audio_truth_gate still measures Music while nothing reaches the speakers.
+	if qa:
+		AudioServer.set_bus_mute.call_deferred(0, true)
 	# Leftovers that can never hold owner data: an interrupted copy (.tmp, never
 	# renamed) and an interrupted discard (a copy whose manifest was already
 	# deleted after a verified restore).

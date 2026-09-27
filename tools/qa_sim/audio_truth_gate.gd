@@ -99,8 +99,11 @@ func _run() -> void:
 		var over_ceiling := peak > TRUE_PEAK_CEILING_DB
 		if over_ceiling:
 			all_ok = false
+		# QA runs mute Master (qa_launch_guard.gd, owner request): its meter reads
+		# silence then, so its ceiling is only covered through the child buses.
+		var verdict := "CLIP-FAIL" if over_ceiling else ("muted for QA" if AudioServer.is_bus_mute(idx) else "ok")
 		print("[audio-truth] %s bus peak=%.1fdB (ceiling <=%.1fdB) %s" % [
-			bus_name, peak, TRUE_PEAK_CEILING_DB, "CLIP-FAIL" if over_ceiling else "ok"])
+			bus_name, peak, TRUE_PEAK_CEILING_DB, verdict])
 
 	var music_peak: float = results.get("Music", -80.0)
 	var music_ok := music_peak > MUSIC_SILENCE_DB

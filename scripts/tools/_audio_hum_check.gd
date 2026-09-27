@@ -30,5 +30,8 @@ func _run() -> void:
 		if p.playing:
 			printerr("[audio-hum] player still playing pre-input: ", p.get_path())
 			bad += 1
+	if not AudioServer.is_bus_mute(0):
+		printerr("[audio-hum] Master is not muted in a QA run (qa_launch_guard.gd)")
+		bad += 1
 	print("[audio-hum] players checked=", players.size(), " (none may play before the first input) -> bad=", bad)
 	get_tree().quit(bad)
