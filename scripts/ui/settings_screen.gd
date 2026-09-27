@@ -22,6 +22,8 @@ func _build() -> void:
 	
 	var panel := PanelContainer.new()
 	panel.set_anchors_preset(Control.PRESET_CENTER)
+	panel.grow_horizontal = Control.GROW_DIRECTION_BOTH  # centre anchor + grow both = centred
+	panel.grow_vertical = Control.GROW_DIRECTION_BOTH
 	panel.custom_minimum_size = Vector2(520, 580)
 	add_child(panel)
 	
@@ -319,6 +321,8 @@ func _confirm_reset_progress() -> void:
 
 	var panel := PanelContainer.new()
 	panel.set_anchors_preset(Control.PRESET_CENTER)
+	panel.grow_horizontal = Control.GROW_DIRECTION_BOTH  # centre anchor + grow both = centred
+	panel.grow_vertical = Control.GROW_DIRECTION_BOTH
 	panel.custom_minimum_size = Vector2(420, 0)
 	dim.add_child(panel)
 

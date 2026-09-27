@@ -63,6 +63,8 @@ func _build() -> void:
 
 	var panel := PanelContainer.new()
 	panel.set_anchors_preset(Control.PRESET_CENTER)
+	panel.grow_horizontal = Control.GROW_DIRECTION_BOTH  # centre anchor + grow both = centred
+	panel.grow_vertical = Control.GROW_DIRECTION_BOTH
 	panel.custom_minimum_size = Vector2(720, 560)
 	add_child(panel)
 	# V2 SKIN WIRING P4: real isometric city backdrop under the district

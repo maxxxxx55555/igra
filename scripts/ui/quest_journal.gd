@@ -43,6 +43,8 @@ func _build_ui() -> void:
 		panel.set_anchors_preset(Control.PRESET_FULL_RECT)
 	else:
 		panel.set_anchors_preset(Control.PRESET_CENTER)
+		panel.grow_horizontal = Control.GROW_DIRECTION_BOTH  # centre anchor + grow both = centred
+		panel.grow_vertical = Control.GROW_DIRECTION_BOTH
 	panel.custom_minimum_size = Vector2(760, 520)
 	add_child(panel)
 

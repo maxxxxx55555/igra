@@ -48,6 +48,8 @@ func _build() -> void:
 		panel.set_anchors_preset(Control.PRESET_FULL_RECT)
 	else:
 		panel.set_anchors_preset(Control.PRESET_CENTER)
+		panel.grow_horizontal = Control.GROW_DIRECTION_BOTH  # centre anchor + grow both = centred
+		panel.grow_vertical = Control.GROW_DIRECTION_BOTH
 	panel.custom_minimum_size = Vector2(660, 480)
 	add_child(panel)
 	var vb := VBoxContainer.new()
@@ -149,6 +151,8 @@ func _open_detail(id: StringName) -> void:
 
 	var card := PanelContainer.new()
 	card.set_anchors_preset(Control.PRESET_CENTER)
+	card.grow_horizontal = Control.GROW_DIRECTION_BOTH  # centre anchor + grow both = centred
+	card.grow_vertical = Control.GROW_DIRECTION_BOTH
 	card.custom_minimum_size = Vector2(420, 420)
 	d.add_child(card)
 	var vb := VBoxContainer.new()

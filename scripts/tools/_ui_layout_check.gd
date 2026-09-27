@@ -45,6 +45,16 @@ func _check_screen(id: StringName, view: Vector2) -> void:
 		_fail("%s: корень %dx%d вместо %dx%d — вероятно set_anchors_preset() без offsets"
 			% [id, int(r.size.x), int(r.size.y), int(view.x), int(view.y)])
 	_check_children(id, root, view)
+	# A centre-anchored box must really be centred: without grow-both it grows right
+	# and down from the centre (the win and death panels sat off-centre at rc14).
+	for c in root.get_children():
+		if not (c is Container) or not c.visible:
+			continue
+		var cc := c as Control
+		if is_equal_approx(cc.anchor_left, 0.5) and is_equal_approx(cc.anchor_right, 0.5) and is_equal_approx(cc.anchor_top, 0.5) and is_equal_approx(cc.anchor_bottom, 0.5):
+			var off: Vector2 = cc.get_global_rect().get_center() - view / 2.0
+			if off.length() > 4.0:
+				_fail("%s/%s: centre-anchored box off-centre by (%d,%d)" % [id, cc.name, int(off.x), int(off.y)])
 	root.visible = false
 
 ## Видимый элемент с реальным размером обязан пересекаться с кадром хотя бы

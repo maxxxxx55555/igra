@@ -32,6 +32,10 @@ func _build() -> void:
 	add_child(bg)
 	var vb := VBoxContainer.new()
 	vb.set_anchors_preset(Control.PRESET_CENTER)
+	# Grow both ways: a centre anchor alone grows the box right and down from the
+	# centre, so the whole panel sat off-centre (docs/stills/final/06 at rc14).
+	vb.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	vb.grow_vertical = Control.GROW_DIRECTION_BOTH
 	vb.add_theme_constant_override("separation", 16)
 	add_child(vb)
 
