@@ -19,7 +19,7 @@ func _ready() -> void:
 		n.free()
 	for a in ["res://assets/mesh/mesh_streetlight_pole.res", "res://assets/mesh/mesh_bench.res",
 			"res://assets/mesh/mesh_house_small.res", "res://assets/mesh/mesh_trash_can.res",
-			"res://assets/mesh/mesh_hydrant.res", "res://assets/audio/sfx/amb_lamp_hum.wav",
+			"res://assets/mesh/mesh_hydrant.res",
 			"res://assets/audio/sfx/amb_wind.wav", "res://assets/audio/sfx/step_concrete.wav",
 			"res://assets/audio/sfx/sfx_flashlight_on.wav", "res://assets/audio/sfx/sfx_flashlight_off.wav",
 			"res://assets/ui/ui_heart.svg", "res://assets/ui/ui_battery.svg",

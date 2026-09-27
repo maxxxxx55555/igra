@@ -6,8 +6,8 @@ extends Node3D
 ## FINAL PERFECTION P3: street_props.gd batches every lamp's Pole+Lamp mesh
 ## into two shared MultiMeshInstance3D (their material/transform never
 ## change per-instance - only the lights below do), so a district's own
-## Pole/Lamp copies would just double-draw the same geometry. Lights, Hum
-## and LightArea stay per-instance (can't be MultiMesh'd; they weren't the
+## Pole/Lamp copies would just double-draw the same geometry. Lights and
+## LightArea stay per-instance (can't be MultiMesh'd; they weren't the
 ## draw-call problem - see docs/SESSION_REPORT_FINAL_PERFECTION.md).
 @export var mesh_visible: bool = true
 
@@ -80,7 +80,6 @@ func _update_light(stage: int = -1) -> void:
 	var glow: OmniLight3D = $Glow
 	spot.visible = _on
 	glow.visible = _on
-	_update_hum()
 	if _on and stage >= 3:
 		spot.light_energy = 3.5 * _light_energy_mult
 		spot.spot_attenuation = 1.0
@@ -97,13 +96,3 @@ func _update_light(stage: int = -1) -> void:
 		spot.spot_attenuation = 2.0
 		glow.light_energy = 0.5 * _light_energy_mult
 		glow.omni_range = 4.0
-
-## P4 (CONTENT UX wave): gул лампы теперь идёт через общий пул на
-## StreetlightHumPool (max 8 голосов, ближайшие к игроку горящие фонари) -
-## раньше каждый горящий столб держал свой AudioStreamPlayer3D, до 24
-## одновременных 3D-потоков на район, большинство неслышны за max_distance.
-func _update_hum() -> void:
-	if _on:
-		StreetlightHumPool.register(self)
-	else:
-		StreetlightHumPool.unregister(self)

@@ -1,4 +1,4 @@
-# AudioManager — autoload 18. Смесь процедурного звука (шаги/гул/щелчки/рык/
+# AudioManager — autoload 18. Смесь процедурного звука (шаги/щелчки/рык/
 # события) и реальных сэмплов там, где они есть (ветер, дождь по металлу,
 # гром, фонарик, урон, низкое HP). Громкость через бусы SFX/Master.
 extends Node
@@ -6,10 +6,8 @@ extends Node
 const MIX: int = 22050
 const POOL: int = 4
 
-var _ambient: AudioStreamPlayer
 var _wind: AudioStreamPlayer
 var _rain: AudioStreamPlayer
-var _threat: AudioStreamPlayer
 var _action: AudioStreamPlayer
 var _heartbeat: AudioStreamPlayer
 var _breath: AudioStreamPlayer
@@ -17,37 +15,27 @@ var _pool: Array = []
 var _last_state: int = 0
 var _step_timer: float = 0.0
 var _thunder_timer: float = 0.0
-var _threat_timer: float = 0.0
 var _low_hp: bool = false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	_ambient = _make_player()
 	_rain = _make_player()
-	_threat = _make_player()
-	_threat.name = "ThreatLayer"
 	_action = _make_player()
 	_action.name = "ActionLayer"
 	for i in POOL:
 		_pool.append(_make_player())
-	_ambient.stream = _gen_drone(2.0)
-	_ambient.volume_db = -18.0
-	_ambient.play()
-	# Ветер — реальный зацикленный сэмпл поверх процедурного дрона.
 	_wind = _make_player()
 	_wind.name = "WindLayer"
 	_wind.stream = WIND_SFX
 	_wind.volume_db = -26.0
-	_wind.play()
 	# CONTENT UX / FINAL INTEGRATION wave: real mastered rain over metal
 	# roofs/cars replaces the procedural white-noise placeholder.
 	_rain.stream = _force_loop(RAIN_SFX)
 	_rain.volume_db = -40.0
-	_rain.play()
-	# Слой threat: тихий пульсирующий гул, громкость ведёт близость монстров (_update_threat).
-	_threat.stream = _gen_threat_drone(2.0)
-	_threat.volume_db = -80.0
-	_threat.play()
+	# Wind and rain wait for the first input like the music: boot stays silent (X17).
+	MusicManager.audio_unlocked.connect(func() -> void:
+		_wind.play()
+		_rain.play())
 	_action.volume_db = -80.0
 	# Player-state loops (GDD low-HP tension cue): silent until HP<30%,
 	# started/stopped once on threshold cross in _on_player_health, not
@@ -159,16 +147,8 @@ func play_music(stream: AudioStream) -> void:
 	add_child(player)
 	player.play()
 
-func set_threat_level(level: float) -> void:
-	_threat.volume_db = lerpf(-80.0, -10.0, clampf(level, 0.0, 1.0))
-
 func set_action_active(active: bool) -> void:
 	_action.volume_db = -10.0 if active else -80.0
-
-func set_threat_stream(stream: AudioStream) -> void:
-	_threat.stream = stream
-	if stream and not _threat.playing:
-		_threat.play()
 
 func set_action_stream(stream: AudioStream) -> void:
 	_action.stream = stream
@@ -198,25 +178,6 @@ func _process(delta: float) -> void:
 			var clap: AudioStream = THUNDER_NEAR_SFX if randf() < 0.4 else THUNDER_FAR_SFX
 			_one_shot(clap, -6.0)
 			_thunder_timer = randf_range(6.0, 14.0)
-	_threat_timer -= delta
-	if _threat_timer <= 0.0:
-		_threat_timer = 0.25
-		_update_threat()
-
-## Громкость слоя напряжения = близость ближайшего монстра (18 м -> 0, вплотную -> 1).
-func _update_threat() -> void:
-	var player := get_tree().get_first_node_in_group("player")
-	if player == null or not is_instance_valid(player):
-		set_threat_level(0.0)
-		return
-	var nearest: float = 1e9
-	for e in get_tree().get_nodes_in_group("enemies"):
-		if e is Node3D and is_instance_valid(e):
-			nearest = minf(nearest, (e as Node3D).global_position.distance_to(player.global_position))
-	if nearest > 18.0:
-		set_threat_level(0.0)
-		return
-	set_threat_level(clampf(1.0 - nearest / 18.0, 0.0, 1.0) * 0.85)
 
 func _on_weather(_w: int, _name: String, _fog: float, rain: float) -> void:
 	_rain.volume_db = linear_to_db(clampf(rain, 0.0, 1.0)) - 12.0
@@ -245,22 +206,6 @@ func _wrap(b: PackedByteArray) -> AudioStreamWAV:
 	s.stereo = false
 	s.data = b
 	return s
-
-func _wrap_loop(b: PackedByteArray) -> AudioStreamWAV:
-	var s := _wrap(b)
-	s.loop_mode = AudioStreamWAV.LOOP_FORWARD
-	s.loop_begin = 0
-	s.loop_end = b.size()
-	return s
-
-func _gen_drone(seconds: float) -> AudioStreamWAV:
-	var b := _buf(seconds)
-	for i in b.size():
-		var t := float(i) / float(MIX)
-		var v := sin(t * 55.0 * TAU) * 0.4 + sin(t * 82.5 * TAU) * 0.2
-		v += (float(randi() % 100) / 100.0 - 0.5) * 0.1
-		b[i] = clampi(int(128.0 + v * 90.0), 0, 255)
-	return _wrap_loop(b)
 
 func _gen_step() -> AudioStreamWAV:
 	var b := _buf(0.08)
@@ -355,15 +300,3 @@ func _gen_boom() -> AudioStreamWAV:
 		v += (float(prev) / 255.0 - 0.5) * 0.5 * env
 		b[i] = clampi(int(128.0 + v * 150.0), 0, 255)
 	return _wrap(b)
-
-## Пульсирующий гул напряжения (луп) — громкостью управляет _update_threat().
-func _gen_threat_drone(seconds: float) -> AudioStreamWAV:
-	var b := _buf(seconds)
-	for i in b.size():
-		var t := float(i) / float(MIX)
-		var pulse := 0.55 + 0.45 * sin(t * 1.6 * TAU)
-		var v := sin(t * 42.0 * TAU) * 0.5 * pulse
-		v += sin(t * 63.0 * TAU) * 0.22 * pulse
-		v += (float(randi() % 100) / 100.0 - 0.5) * 0.08
-		b[i] = clampi(int(128.0 + v * 95.0), 0, 255)
-	return _wrap_loop(b)

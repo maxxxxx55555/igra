@@ -25,7 +25,6 @@ func _ready() -> void:
 	made += _step_dirt()
 	made += _clank()
 	# ambience loops
-	made += _lamp_hum()
 	made += _wind_ambient()
 	# equipment
 	made += _flashlight_on()
@@ -213,19 +212,6 @@ func _step_dirt() -> int:
 	return _save("step_dirt")
 
 # ---------------- ambience loops ----------------
-
-## Streetlight ballast hum: 50/100 Hz bed + faint 150 Hz + noise floor (loopable).
-## 3.0 s minus a 0.20 s crossfade = 2.8 s, a whole number of 50 Hz periods,
-## so the head/tail blend stays phase-coherent.
-func _lamp_hum() -> int:
-	_new(3.0)
-	_saw(0.0, 50.0, 0.12, 3.0, 400.0, 2)     # 50 Hz + 100 Hz partial
-	_saw(0.0, 100.0, 0.05, 3.0, 400.0, 1)    # 100 Hz body
-	_saw(0.0, 150.0, 0.022, 3.0, 400.0, 1)   # faint 3rd
-	_noise(0.0, 3.0, 0.030, 260.0, 400.0, 0.0008)
-	_loop_fade(0.20)
-	_wobble(4, 0.10)                          # slight ~0.7 s amplitude wobble
-	return _save("amb_lamp_hum", true)
 
 ## Wind: low-cut noise bed with slow gusts (loopable).
 ## Two coprime wobbles (~1.9 s and ~1.4 s) give an irregular but periodic gust.

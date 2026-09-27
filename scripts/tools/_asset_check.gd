@@ -124,15 +124,12 @@ func _check_audio() -> void:
 		_ok(AudioManager.has_method(g), "AudioManager.%s есть" % g)
 	var s: AudioStream = AudioManager.call("_gen_pickup")
 	_ok(s != null and (s as AudioStreamWAV).data.size() > 0, "_gen_pickup даёт непустой WAV")
-	var drone: AudioStream = AudioManager.call("_gen_threat_drone", 0.5)
-	_ok(drone != null and (drone as AudioStreamWAV).loop_mode == AudioStreamWAV.LOOP_FORWARD, "threat-гул зациклен")
 
 	# Событийные хуки подключены
 	_ok(EventBus.item_picked_up.get_connections().size() > 0, "item_picked_up озвучен")
 	_ok(EventBus.puzzle_solved.get_connections().size() > 0, "puzzle_solved озвучен")
 	_ok(EventBus.achievement_unlocked.get_connections().size() > 0, "achievement_unlocked озвучен")
 	_ok(EventBus.player_damaged.get_connections().size() > 0, "player_damaged озвучен")
-	_ok(AudioManager.has_method("set_threat_level"), "слой threat управляем")
 
 ## Музыка: все треки на диске, импортированы, зациклены; эмбиент меняется по району.
 func _check_music() -> void:

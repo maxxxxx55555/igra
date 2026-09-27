@@ -1,8 +1,9 @@
 extends Node
 ## FINAL PERFECTION P0: proves the boot-hum fix holds — no music/ambience
 ## player may be .playing before the player's first input. Waits several
-## idle frames (no input simulated) after boot, then inspects MusicManager's
-## real player nodes directly (not the mood enum, which is state-only now).
+## idle frames (no input simulated) after boot, then inspects every audio
+## player in the tree (rc14: it only read MusicManager's, so AudioManager's
+## 55 Hz drone hummed from boot under a green gate).
 ## Scene: scenes/tools/audio_hum_check_scene.tscn
 
 func _ready() -> void:
@@ -21,12 +22,13 @@ func _run() -> void:
 	if mm.get("_audio_unlocked") != false:
 		printerr("[audio-hum] _audio_unlocked should still be false pre-input")
 		bad += 1
-	var players: Array = [mm.get("_a"), mm.get("_b")]
-	for key in (mm.get("_layers") as Dictionary):
-		players.append(mm._layers[key])
+	var players: Array = []
+	for n in get_tree().root.find_children("*", "", true, false):
+		if n is AudioStreamPlayer or n is AudioStreamPlayer2D or n is AudioStreamPlayer3D:
+			players.append(n)
 	for p in players:
-		if p != null and p is AudioStreamPlayer and (p as AudioStreamPlayer).playing:
-			printerr("[audio-hum] player still playing pre-input: ", (p as AudioStreamPlayer).name)
+		if p.playing:
+			printerr("[audio-hum] player still playing pre-input: ", p.get_path())
 			bad += 1
-	print("[audio-hum] players checked=", players.size(), " playing=0 audio_unlocked=false -> bad=", bad)
+	print("[audio-hum] players checked=", players.size(), " (none may play before the first input) -> bad=", bad)
 	get_tree().quit(bad)

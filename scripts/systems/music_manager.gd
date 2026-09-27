@@ -12,6 +12,7 @@ extends Node
 
 #region Signals
 signal track_changed(state: int)
+signal audio_unlocked  ## first real input; AudioManager starts its wind/rain beds on it (X17)
 #endregion
 
 #region Enums
@@ -193,6 +194,7 @@ func _unlock_audio() -> void:
 		return
 	_audio_unlocked = true
 	set_process_input(false)
+	audio_unlocked.emit()
 	for key in _layers:
 		var pl: AudioStreamPlayer = _layers[key]
 		if not pl.playing:
