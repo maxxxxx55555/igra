@@ -600,8 +600,11 @@ func _move_to(spd: float) -> void:
 		velocity.y += get_gravity().y * get_physics_process_delta_time()
 	_look_at_smooth(dir)
 
+## atan2(-x, -z) turns -Z (the vision forward, line 543) toward dir; the old
+## atan2(x, -z) faced the X-mirrored direction, so a monster walking sideways
+## looked away from where it went (rc14).
 func _look_at_smooth(dir: Vector3) -> void:
-	var target_angle: float = atan2(dir.x, -dir.z)
+	var target_angle: float = atan2(-dir.x, -dir.z)
 	rotation.y = lerp_angle(rotation.y, target_angle, 10.0 * get_physics_process_delta_time())
 
 func _pick_patrol_target() -> Vector3:

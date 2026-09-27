@@ -13,6 +13,7 @@ var _boss_step: int = 0
 ## Одноразовые флаги вместо окон вида `_sub < 0.05`: в headless кадр может быть
 ## длиннее окна, и шаг молча пропускался — тест падал на ровном месте.
 var _dmg_done: bool = false
+var _melee_started: bool = false
 var _death_done: bool = false
 
 ## Overall ceiling: a phase that stalls (seen intermittently in the phase1
@@ -45,6 +46,11 @@ func _process(delta: float) -> void:
 				_player = get_tree().get_first_node_in_group("player")
 				_sb = get_tree().root.find_child("StreetBuilder", true, false)
 				_check(_player != null, "player spawned")
+				# rc14: ScreenShake wrote the camera position every frame and pinned the FPS
+				# camera at its scene spot; player_3d.gd's own FPS test is < 2.5 m.
+				var cam := get_viewport().get_camera_3d()
+				_check(cam != null and _player != null and cam.global_position.distance_to(_player.global_position) < 2.5,
+					"camera follows the player (%s vs %s)" % [cam.global_position if cam else Vector3.INF, _player.global_position if _player else Vector3.INF])
 				_check(_sb != null, "street builder exists")
 				var monsters: Array = get_tree().get_nodes_in_group("destroyers") + get_tree().get_nodes_in_group("shadow") + get_tree().get_nodes_in_group("crawlers")
 				_check(monsters.size() > 0, "monsters spawned: %d" % monsters.size())
@@ -53,6 +59,15 @@ func _process(delta: float) -> void:
 				var constants: Dictionary = load("res://scripts/world/street_builder.gd").get_script_constant_map()
 				_check(constants.get("GENERATOR_FUEL", &"") == &"gas_canister", "generator uses registered fuel item")
 				_target = monsters[0] if monsters.size() > 0 else null
+				# rc14: _look_at_smooth faced the X-mirrored direction, so the vision cone
+				# (-Z) looked away from where the monster walked.
+				if _target != null and _target.has_method("_look_at_smooth"):
+					var yaw0: float = _target.rotation.y
+					for i in 60:
+						_target._look_at_smooth(Vector3.RIGHT)
+					var fwd: Vector3 = -_target.global_transform.basis.z
+					_target.rotation.y = yaw0
+					_check(fwd.dot(Vector3.RIGHT) > 0.95, "monster faces where it moves (forward %s for +X)" % fwd.snappedf(0.01))
 				_phase = 1; _sub = 0.0; _log("phase1 combat: damage " + (_target.name if _target else "NONE"))
 		1:
 			_sub += delta
@@ -62,12 +77,24 @@ func _process(delta: float) -> void:
 					_hp_before = _target.get("hp") if _target.get("hp") != null else -1.0
 					if _target.has_method("take_damage"):
 						_target.take_damage(10.0)
-			elif _sub > 0.5:
+			elif _sub > 0.5 and not _melee_started:
 				if _target and is_instance_valid(_target):
 					var hp_after: float = _target.get("hp") if _target.get("hp") != null else -1.0
 					_check(hp_after < _hp_before, "monster hp %s -> %s" % [str(_hp_before), str(hp_after)])
 				else:
 					_check(false, "monster freed unexpectedly, hp_before=%s" % str(_hp_before))
+				# rc14: a real swing, not a direct take_damage call, with the monster
+				# 1.2 m in front of the view (-Z).
+				_melee_started = true
+				if _target and is_instance_valid(_target) and _player.has_method("_handle_attack"):
+					var fwd: Vector3 = -_player.global_transform.basis.z
+					_target.global_position = _player.global_position + Vector3(fwd.x, 0.0, fwd.z).normalized() * 1.2
+					_hp_before = _target.get("hp") if _target.get("hp") != null else -1.0
+					_player._handle_attack()
+			elif _melee_started and _sub > 1.4:
+				if _target and is_instance_valid(_target):
+					var hp_m: float = _target.get("hp") if _target.get("hp") != null else -1.0
+					_check(hp_m < _hp_before, "melee swing damages the monster in front (hp %s -> %s)" % [str(_hp_before), str(hp_m)])
 				_phase = 2; _sub = 0.0; _log("phase2 inventory")
 		2:
 			var before: int = InventoryManager.count_of(&"battery")

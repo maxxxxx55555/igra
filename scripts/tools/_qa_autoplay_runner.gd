@@ -418,7 +418,7 @@ func _face(target: Vector3) -> void:
 	to_target.y = 0.0
 	if to_target.length() < 0.01:
 		return
-	var wanted_yaw := atan2(to_target.x, -to_target.z)
+	var wanted_yaw := atan2(-to_target.x, -to_target.z)  # -Z faces the target; atan2(x, -z) mirrored X (rc14)
 	var yaw_delta := wrapf(wanted_yaw - _player.rotation.y, -PI, PI)
 	_player.call("_apply_look", yaw_delta, 0.0)
 

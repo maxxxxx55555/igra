@@ -252,6 +252,14 @@ if "$PY" tools/qa_sim/drawcall_estimate.py >/dev/null 2>&1; then
 else
   bad "drawcall_estimate"
 fi
+# rc14: rotation.y = atan2(v.x, -v.z) turns -Z toward the X-mirrored direction
+# (Godot faces v with atan2(-v.x, -v.z)); it mirrored monster vision, the
+# third-person body and the bot's aim.
+if grep -rnE --include=*.gd 'atan2\(\s*[A-Za-z_.]+\.x\s*,\s*-\s*[A-Za-z_.]+\.z\s*\)' scripts >/dev/null; then
+  bad "mirrored yaw: atan2(v.x, -v.z) in scripts/ (atan2(-v.x, -v.z) faces v)"
+else
+  ok "no mirrored yaw formula (atan2(-v.x, -v.z) faces v)"
+fi
 if "$PY" tools/qa_sim/release_export_check.py >/dev/null 2>&1; then
   ok "release_export_check (SECURITY_PATCH_SPEC C-08/D-04: no committed encryption key or debug keystore creds)"
 else

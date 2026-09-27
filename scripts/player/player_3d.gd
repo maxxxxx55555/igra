@@ -309,11 +309,9 @@ func _ready() -> void:
 	attack_shape.position = Vector3(0.0, 0.2, 1.4)
 	attack_shape.shape = attack_box
 	_attack_area.add_child(attack_shape)
-	# Winnability: вторая форма — сфера радиусом 2.7 м вокруг игрока.
-	# Автоплей-бот в бою с Архитектором периодически «орбитит» босса с
-	# зеркально ошибочным рысканием (его _face считает yaw по формуле
-	# atan2(dx,-dz), дающей зеркало по X), и направленный бокс мазал.
-	# Сфера гарантирует попадание вплотную независимо от разворота.
+	# Winnability: a second shape, a 2.7 m sphere around the player, lands a
+	# hit up close whatever the facing (the bot's mirrored aim that first
+	# showed the need is fixed in rc14; the sphere stays as melee reach).
 	# (This supersedes an earlier same-session fix that offset the whole
 	# _attack_area forward instead — this branch's bigger/offset box plus
 	# this sphere already solve the same "hitbox too short" root cause more
@@ -588,7 +586,7 @@ func _physics_process(delta: float) -> void:
 		# В FPS-виде поворотом владеет обзор (мышь/палец); доворачивать корпус к
 		# направлению движения нужно только в виде от третьего лица.
 		if not _is_fps_view():
-			var target_angle: float = atan2(dir.x, -dir.z)
+			var target_angle: float = atan2(-dir.x, -dir.z)
 			# Winnability: мягче доворачиваем корпус (12 -> 2 рад/с) — иначе
 			# доворот пересиливал ввод обзора (мышь/_apply_look), и в бою с
 			# Архитектором фонарь с хитбоксом уезжали в сторону от цели.
