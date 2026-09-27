@@ -71,7 +71,7 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 | C03 | Auto-aim | DEFERRED-STRUCTURAL (dormant until G25) | Cone logic in `WeaponBase` passes tz_verify on a probe weapon, but no gameplay path creates a weapon (G25). Live melee already hits anything within its 2.7 m sphere regardless of facing. |
 | C04 | Arachnophobia rename | MET | "Слепые псы"; `C04_arachnophobia_label.png` |
 | C06 | Tier fog + particles 50–150% | MET | tz_verify fog at load = tier preset (C8 rc4: `fog_setup.gd` no longer overrides it; since rc13 the probe loads on the High tier, 0.014, so an Ultra profile cannot mask it), 0.012 / 0.015 on change, 6/6 emitters; `C06_tier_*.png` |
-| P01 | Draw calls < 200 (D1) / < 350 (D11) | DEFERRED-STRUCTURAL | Windowed `perf_check_scene`: D1 = 246 (C7) and 253 (rc11), over 200; under the D11 350 cap. Needs material/mesh batching, not a value swap. |
+| P01 | Draw calls < 200 (D1) / < 350 (D11) | MET (measured rc14) | Windowed `perf_check_scene`, camera at the player: D1 168-170, D11 175-186 (`docs/PERF_PASS.md` §0). The earlier 246/253 came from the camera ScreenShake pinned at (0, 1.7, 0) (CORRECTION_LOG 46). Primitives stay over budget (PERF_PASS #18). |
 | P02 | Particles < 500, RAM/VRAM | NEEDS-MEASUREMENT | Windowed or device profiling only; see TZ_DECISIONS P02 |
 | N01, I02, T01 | Owner rows | GAP-OWNER | See TZ_DECISIONS |
 

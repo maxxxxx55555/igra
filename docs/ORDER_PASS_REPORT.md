@@ -125,5 +125,5 @@ wrong claims in this pass's own commit messages.
 | User-data folder reset | `app_userdata/The Last Streetlight` was deleted and recreated about 2026-09-25 00:24, cause unknown. Save files were backed up earlier to `%TEMP%\tls_save_backup`; `settings.cfg`/`onboarding.cfg`/`save.tres` were not. |
 | P02 particles < 500, RAM/VRAM | NEEDS-MEASUREMENT (TZ P02): windowed or on-device profile; the same run prices V05's 2048 moon shadow on a phone. |
 | G08 flashlight range and energy | **Decided rc14**: DR-3 keeps 16 m / 24; the GDD's 8 m / 2.0 leaves no readable pool (TZ_DECISIONS G08). |
-| GUI exploration | Not run in rc14 (last run 2026-09-22): re-run `gui_explore_scene` for the 13-locale settings sweep. |
+| GUI exploration | **Re-run rc14**: `gui_explore_scene` (windowed, muted) `DONE -- 19 PASS, 0 BUG`: all 13 locales switch the settings title, 0 mixed-script, 0 empty. |
 | `cloud/audit-ce782f8` code | **Engine-run rc14**: check.sh full 47 green (guard lifecycle case) and attack_sim `fails=0` on the merged tree. |
