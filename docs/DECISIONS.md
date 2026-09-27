@@ -49,3 +49,21 @@ opencode. 6 файлов, ~17 КБ.
 **Круг save/load проверяется через `CoinWallet.coins`.** Нужно одно поле, которое
 заведомо сериализуется и легко сравнивается. Автопилот пишет в слот 99, чтобы не
 затирать сохранения игрока, и удаляет его за собой.
+
+## 2026-09-27 (rc14)
+
+**The hum is removed from the project (owner request).** The owner asked, while the
+QA windows ran: "remove this humming sound from the game, remove it from the project,
+it is unpleasant". The game had three constant low-frequency beds, all over 99% energy
+below 150 Hz: AudioManager's procedural 55 + 82.5 Hz drone (from boot, everywhere), its
+42 + 63 Hz threat pulse (near monsters, up to -10 dB), and the streetlight ballast hum
+`amb_lamp_hum` (50/100 Hz, up to 8 voices around lit lamps). All three are deleted:
+the owner named one sound, and removing only one of three identical-sounding hums
+would leave the complaint standing. Kept: the Destroyer's machinery hum (a monster
+warning cue with a hearing radius, GDD §9.2) and the four district detail loops
+(park, gas station, industrial, substation); they are the next candidates if the
+owner still hears a hum there. The music's TENSION mood keeps the threat cue.
+
+**Screen shake moves the camera's offsets, not its position.** Writing the position
+fought the follow camera and pinned it; `h_offset`/`v_offset` compose with any camera
+controller and need no stored base position.

@@ -99,7 +99,9 @@ CODE decides whether to adopt each into a content file or wire it.
 | `DAILY_STREETS_16_FLAVOR` | Sixteen streets. Light the city like it's Night Zero in reverse. |
 | `DISTRICT_2_TOAST` | District 2 restored! The city breathes again. |
 | `Dyslexia Font (OpenDyslexic)` | Dyslexia Font (OpenDyslexic) |
+| `END_NONE_HINT` | No ending conditions were met. |
 | `FIRST_RESTORE` | First district restored! |
+| `HINT_INVENTORY` | Tab — inventory. Watch your weight |
 | `Level: %d\nPlaytime: %s\n%s` | Level: %d\nPlaytime: %s\n%s |
 | `NGP_BLACKOUT_PLUS_DESC` | One extra district starts DARK. No head start, no mercy. |
 | `NGP_GHOST_DESC` | Crawlers ignore you. Achievements disabled. Unseen, unrecorded. |
@@ -116,6 +118,7 @@ CODE decides whether to adopt each into a content file or wire it.
 | `TUT_FIND_FLASHLIGHT` | Find the flashlight. Press F to switch it on. |
 | `TUT_FIRST_SHADOW` | A Shadow is close. Hold it in the beam. |
 | `TUT_GENERATOR_STEP1` | Connect the cables in the right order. |
+| `TUT_LIGHT_SHIELD` | Light is your shield. Monsters fear the beam. |
 | `TUT_TO_GARAGE` | Head to the garage. The generator is there. |
 | `menu_subtitle` | A survivor in an eternal night. Bring the light back to the city. |
 | `tip1` | Keep the flashlight on - enemies fear light. |
@@ -123,7 +126,7 @@ CODE decides whether to adopt each into a content file or wire it.
 | `tip3` | Use cover when HP is low. |
 | `tutorial_done` | Tutorial complete. Good luck! |
 
-Total: 113 keys.
+Total: 116 keys.
 
 Verified: none of these keys appears in any `.gd`, `.tscn` or
 `.tres` under `scripts/`, `scenes/` or `components/`, and none is

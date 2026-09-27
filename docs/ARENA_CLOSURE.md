@@ -90,10 +90,19 @@ JSON), so every load wiped district power and ProgressTracker. Found and fixed i
 | P1 stealth investment repair | `2a88503` |
 | P2 stealth skills | `c2dbeb4`, `4e7560e` |
 | P3 NG+ activation clarity | `4e7560e` |
-| P4 pause procedural audio | No-op, corrected in rc14 (SLOP_REPORT_V2 D1): `f9bbfd7` edited `scripts/audio/proc_audio.gd`, which nothing instantiates (now in `_QUARANTINE/`). The live audio layers keep their documented pause policy: `audio_manager`, `music_manager` and `streetlight_hum_pool` are `PROCESS_MODE_ALWAYS` by design; footsteps stop with the player. |
+| P4 pause procedural audio | No-op, corrected in rc14 (SLOP_REPORT_V2 D1): `f9bbfd7` edited `scripts/audio/proc_audio.gd`, which nothing instantiates (now in `_QUARANTINE/`). The live audio layers keep their documented pause policy: `audio_manager` and `music_manager` are `PROCESS_MODE_ALWAYS` by design (the streetlight hum pool was deleted in rc14, `6224a85`); footsteps stop with the player. |
 | P5 battery capacity composition | `24ceb68` |
 | P6 coin reporting / P7 duration scoping | `8f48faf` (docs + simulator per the audit's own "retain" acceptance criteria) |
 | P8 boss P1 telegraph | `ee273ee`, `24ceb68` |
+
+## Cloud audit PARTIALs (`docs/CLOUD_AUDIT.md`, 4 of 4 closed)
+
+| Item | Closed by |
+|---|---|
+| 1. QaLaunchGuard r12 sub-item (5): a failed startup restore only warned on a normal launch | `a6f4fdb` (merged in `7e5f706`): any launch over an unrestorable QA copy is blocked, so no session runs on a half-restored profile |
+| 2. R-08's same-session half was deferred as inherent | `c2e9b86` (merged in `7e5f706`): the daily reads the wall clock once per session and refuses rolled-back days; attack_sim `_check_daily_clock_rollback_rejected` |
+| 3. G08 range and energy were labelled NEEDS-EYES | Measured at rc14 (DR-3, TZ_DECISIONS G08): the GDD's 8 m / 2.0 adds +0.014 luminance on the pole ahead against +0.198 shipped, no readable pool; `docs/stills/evidence/g08_*.png` |
+| 4. The honest-residual table missed P02, V05 on device and the G08 half | ORDER_PASS_REPORT rc14 residual table (P02 and V05 rows added; G08 now decided) |
 
 ## Open defers
 

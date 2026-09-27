@@ -18,7 +18,32 @@ the cloud cross-audit (`docs/CLOUD_AUDIT.md`).
 | UI | Tutorial hint box drew over the HUD bars (anchors never applied); map button covered the VISIBILITY caption. | `ad051fc` |
 | C9 prep | Release keystore generated (gitignored `.signing/`). AAB export blocked: no Godot 4.7 export templates on the machine. | `7af80d2` |
 
-## Battery (this pass)
+## rc14 re-verify (merged tree, 2026-09-27)
+
+Cloud audit merged (`7e5f706`), then STEP 2 (`31a4bb7` i18n 79 rows, `c785b2c` slop, `2062558` security)
+and the runtime re-verify below. Every RECONFIRM-AT-SIGNOFF row of the history table was re-run here.
+All QA runs are muted since `d90abcd` (owner request).
+
+| Gate | rc14 result |
+|---|---|
+| `tools/check.sh` full (windowed reimport first) | **Всё зелёное, 47 checks**; the 2 windowed-only skips (perf, audio) run separately below |
+| Static (`--static`) + `flow_check` + `scene_node_check` | **25/25** (new: mirrored-yaw rule), 53 flow checks, scene nodes clean |
+| GOLD MASTER suite, attack_sim, save_integrity, craft, boot flow, a11y, ui_layout | inside check.sh full, all `fails=0`; ui_layout now 18 screens incl. the main menu |
+| `game_test_3d` | ALL PASSED, with 3 new asserts: camera follows the player, monster faces where it moves, real melee swing hits |
+| TZ-verify (windowed) | **19 checks, `DONE fails=0`** (S03 edge warmth -0.016 -> 0.127) |
+| Audio truth (windowed, Master muted) | **PASS**: Music peak -14.0 dB (> -45), Ambient -28.5, every bus under -1.5 dB |
+| Perf (windowed, 4 runs) | D1 **168-170** draw calls (< 200, met for the first time: older figures came from the pinned camera), D11 **175-186** (< 350); p95 33.3-34.2 ms D1 / 40.3-40.4 ms D11 on quiet runs; 1.34 M primitives (over 50K); `docs/PERF_PASS.md` §0 |
+| Visual truth (18 gameplay frames) | 10 PASS / 8 FAIL on the saturation heuristic, all explained by content, none by corruption: final 02/03 are 95-98% green (tree canopy), final 05 98% ember (the detection warning band), tz S03 the ember vignette over the night (mean value 0.14), tz C06/D03/G03/V02 0.53-1.15% mostly blue snow and sky outliers; hue-band magenta at most 1.07% |
+| Bot | rc14 before the fixes: 2/3 WIN (s3 spine stall, suburbs). After the camera and yaw fixes (IRON RULE run): **1/3 WIN**, all 3 seeds 11/11 districts FULL. Extra 10-seed run (seeds 4-13): **2/10 WIN**, 9/10 restored all 11 districts; 7 boss-phase stalls, 1 spine stall (s11). Post-fix total 3/13 WIN, spine stalls 1/13 |
+| AAB signed-verify | **`build/tls.aab` 183.1 MB, `jar verified.`**, signer SHA-256 `4F:6B:E6:41:…:59:09` = release keystore; base module about 27 MB, install-time asset pack 155.1 MB; no NDK (`docs/RELEASE_ARTIFACTS.md`) |
+| G08 A/B (windowed) | GDD 8 m / 2.0 adds +0.014 luminance on the pole ahead against +0.198 shipped: DR-3 keeps 16 m / 24 (`docs/stills/evidence/g08_*.png`) |
+
+rc14 fixes found by this re-verify, each with a regression check: the owner's hum removed (`6224a85`), the
+FPS camera pinned by ScreenShake and the mirrored yaw (`b6187a3`), off-centre panels (`d407b05`), the menu
+hero art and the inverted detection overlay (`b0de63d`), QA runs muted (`d90abcd`), dead Destroyer code
+(`cbb9508`). CORRECTION_LOG 45-49.
+
+## Battery (history, before rc14)
 
 | Gate | Result |
 |---|---|
@@ -63,24 +88,27 @@ No external `docs/CLOSURE_VERIFICATION.md` exists.
 
 ## Frames (read by eye this pass)
 
-- `docs/stills/tzverify/baseline.png`: night street, brass-lit pool, tutorial hint bottom-centre.
-- `docs/stills/tzverify/C04_arachnophobia_label.png`: "Blind Dogs" spotted label (en locale this run; the ru run showed "Слепые псы").
-- `docs/stills/tzverify/C06_tier_ultra.png`: Ultra tier, fog 0.015.
-- `docs/stills/tzverify/G12b_low_battery.png`: 10% battery.
-- `docs/stills/tzverify/TUT_hint_layout.png`: tutorial box laid out correctly
-- `docs/stills/tzverify/D03_stage_dark.png` / `D03_stage_full.png`: GDD stage lighting (rc12); DARK shows silhouettes, road edges and the tree, FULL a moonlit street.
-- `docs/stills/tzverify/V02_energy_ball.png`: warm ball; a faint dim-red smudge on the pavement below (rc12 frame: hue-only 0.01%, gate 0.37%).
+rc14 sign-off frames, `docs/stills/final/` (windowed, half res, `_final_frames_runner.gd`):
+- `01_main_menu.png`: hero art full screen (was never drawn), outlined title readable over the lamp, six equal buttons in the light cone.
+- `03_district_night_dark.png`: first-person view from the player down the spawn street, lamps off, tree canopy on the left, tutorial hint.
+- `02_district_day_full.png`: same view after FULL: the nearest lamps lit (LightLimiter keeps the closest ones on), +200 coins, level up.
+- `04_combat.png`: a monster 3 m ahead in its hit flash, red hit marker.
+- `05_boss.png`: the Architect at the crosshair on the lit power-station street, ember detection band at the edges only, a Crawler bar.
+- `06_victory_ngplus.png`: "The City Burns Bright", 11/11 districts, Set up New Game+ / Share / Main menu, centred.
+
+Also read: `docs/stills/evidence/g08_shipped_16m_e24.png`, `g08_gdd_8m_e2.png`, `g08_off_baseline.png`, and
+the re-captured `docs/stills/tzverify/*.png` (camera at the player now).
 
 ## Corrections
 
-43 entries in `docs/CORRECTION_LOG.md` (14 at rc1, 15-21 from C8 round 1, 22 from round 2, 23-28 from round 3, 29-31 from round 4, 32-33 from round 5, 34 from round 6, 35 from round 7, 36 from round 8, 37 from round 9, 38 from round 10, 39 from round 11, 40 from round 12, 41-43 from the cloud cross-audit), including the false R0 fix, the dead C06 fog write, and two
+49 entries in `docs/CORRECTION_LOG.md` (14 at rc1, 15-21 from C8 round 1, 22 from round 2, 23-28 from round 3, 29-31 from round 4, 32-33 from round 5, 34 from round 6, 35 from round 7, 36 from round 8, 37 from round 9, 38 from round 10, 39 from round 11, 40 from round 12, 41-43 from the cloud cross-audit), including the false R0 fix, the dead C06 fog write, and two
 wrong claims in this pass's own commit messages.
 
 ## Residual (honest)
 
 | Item | Owner action / status |
 |---|---|
-| Signed AAB/APK export | Install the Godot 4.7 export templates and the Android build template (a ~1 GB download from godotengine.org; not downloaded without your OK), then run the steps in `docs/RELEASE_ARTIFACTS.md`. |
+| Signed AAB/APK export | **Done rc14**: `build/tls.aab` signed and verified (`docs/RELEASE_ARTIFACTS.md`). Device smoke test before promotion stays an owner step (RELEASE_RUNBOOK §4). |
 | Play Console upload | Owner (credentials). |
 | Music | Excluded by owner. |
 | `gh` auth | Optional. Git push works without it. |
@@ -88,14 +116,14 @@ wrong claims in this pass's own commit messages.
 | GDD text amendments (G28/D04, N01, I02) | Owner edits `GDD.md` or accepts the recorded defaults. |
 | G22 save-slot picker (DR-6) | Owner re-enables the archived 3+1 slot UI or amends GDD G22 (PLAN.md §В Этап 1 recorded "archive"). |
 | A03 per-speed footsteps (DR-5) | Owner supplies walk/jog/sprint recordings for asphalt, puddle and glass; the code already maps the other three surfaces. |
-| X21 bot spine stall | Open (bot harness). Game side verified reachable; the bot wins 1–2/3 per run. |
+| X21 bot spine stall | Open, rarer after rc14's camera and yaw fixes: 1 spine stall in 13 post-fix seeds (s11, power_station) against about 1 in 3 before; 12/13 seeds restored all 11 districts. The boss phase is now the main bot stall (9 of 13 seeds): a bot skill gate, not a game softlock. |
 | X20 | Harness recovery proven; the keypress trigger is inferred. |
-| D1 draw calls 246-253 > 200 | Needs batching work (DEFERRED-STRUCTURAL). |
+| Primitives 1.34 M > 50K per district | Measured rc14 (PERF_PASS #18); needs geometry reduction work (DEFERRED-STRUCTURAL, P01). D1 draw calls are now 168-170 < 200. |
 | Deferred structural rows | S02 visibility model, S04 hiding-spot placement, G21 blueprints, G25 weapons in HUD, C03 auto-aim (needs G25), G26 photos, A01 bus graph, G07 crouch capsule, P01 draw calls. |
 | R-02 speed/teleport watchdog | Deferred (ARENA_CLOSURE R-02): IntegrityGuard covers non-finite position and falling through the floor; a speed watchdog needs per-state bounds. |
 | Security inherent limits | P-05 and R-08 (a clock set forward across launches; R-08's same-session half is closed in `c2e9b86`), D-01, D-02; D-03 needs an owner-held PCK key; B7 legacy unsigned `achievements.cfg` still trusted once (owner decides whether to reject legacy files, P-02). |
 | User-data folder reset | `app_userdata/The Last Streetlight` was deleted and recreated about 2026-09-25 00:24, cause unknown. Save files were backed up earlier to `%TEMP%\tls_save_backup`; `settings.cfg`/`onboarding.cfg`/`save.tres` were not. |
 | P02 particles < 500, RAM/VRAM | NEEDS-MEASUREMENT (TZ P02): windowed or on-device profile; the same run prices V05's 2048 moon shadow on a phone. |
-| G08 flashlight range 8 m / energy 2.0 | NEEDS-MEASUREMENT (TZ_DECISIONS G08): guarded windowed G08 frame and a 3-seed IRON RULE bot at the GDD values, then DR-4 or DR-3. |
-| GUI exploration | Not run this pass (last run 2026-09-22, before the C6 locale edits): re-run `gui_explore_scene` for the 13-locale settings sweep. |
-| `cloud/audit-ce782f8` code | `a6f4fdb` (guard) and `c2e9b86` (daily clock) are gate-covered but not engine-run: check.sh full (new lifecycle case) and attack_sim after the merge. |
+| G08 flashlight range and energy | **Decided rc14**: DR-3 keeps 16 m / 24; the GDD's 8 m / 2.0 leaves no readable pool (TZ_DECISIONS G08). |
+| GUI exploration | Not run in rc14 (last run 2026-09-22): re-run `gui_explore_scene` for the 13-locale settings sweep. |
+| `cloud/audit-ce782f8` code | **Engine-run rc14**: check.sh full 47 green (guard lifecycle case) and attack_sim `fails=0` on the merged tree. |

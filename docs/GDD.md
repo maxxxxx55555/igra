@@ -555,7 +555,7 @@ ID: ach_01 … ach_15 (+ секретные). См. §S17 в GDD_SUPPLEMENT:
   music_combat, music_menu_dark, music_tension, music_victory
 
 ### SFX (assets/audio/sfx/)
-- amb_lamp_hum, amb_wind — эмбиент
+- amb_wind — эмбиент (amb_lamp_hum removed by the owner in rc14, see PRODUCTION_BIBLE §3)
 - mon_crawler_scratch, mon_destroyer_hum, mon_hunter_roar, mon_shadow_teleport,
   mon_watcher_breath, mon_watcher_scream — монстры
 - sfx_click, sfx_flashlight_on/off, sfx_hit, sfx_hurt, sfx_jump, sfx_reload,

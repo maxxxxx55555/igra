@@ -53,7 +53,8 @@ Zone ids are shared with `item_spawns.json` (`zones`) and `lore_notes.json`
   `park_fix_blueprint_01` (blueprint, PARTIAL+).
 - Examine: `props/examine.tscn` → document `park_note_06` (work orders, PARTIAL+),
   `props/examine.tscn` → audio_log `park_note_07` (radio loop, readable in DARK).
-- Ambience: faint `amb_lamp_hum.wav` (sfx) inside — the only warm room in the park.
+- Ambience: none of its own (the lamp hum was removed at the owner's request, rc14); the
+  warm light alone marks the only warm room in the park.
 - Purpose: Act I radio voice source; the shed is the content anchor for `char_keeper`.
 
 ### z_bandstand — manifesto monument (m cell)

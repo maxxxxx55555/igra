@@ -1079,6 +1079,11 @@ this list.
 
 ## Draw calls: 234 measured vs GDD's <200 (D1) / <350 (D11) — D11 met, D1 not
 
+**Update rc14 (2026-09-27): D1 met.** Every D1 figure below (370, 234, and the later 246/253) was
+taken while ScreenShake pinned the FPS camera at (0, 1.7, 0) (CORRECTION_LOG 46). From the player's
+real position D1 is 168-170 and D11 175-186 draw calls, both under budget (`docs/PERF_PASS.md` §0).
+Primitives, 1.34 M per frame, stay far over the GDD's 50K.
+
 **Update 2026-09-08 (autonomous wave)**: the root cause this entry used
 to describe (unbatched per-streetlight Pole/Lamp `MeshInstance3D`) was
 fixed in an intervening "FINAL PERFECTION P3" wave — `street_props.gd`

@@ -9,7 +9,7 @@ Targets: SFX -14 LUFS / ambience -18 LUFS, TP <= -1.5 dBFS. ffmpeg loudnorm appl
 | assets/audio/ambience/ambient_lit_loop.ogg | -14.0 / -3.1 | -16.7 / -5.6 | NORMALIZED |
 | assets/audio/ambience/threat_high_loop.ogg | -22.3 / -2.5 | -18.3 / -1.3 | NORMALIZED |
 | assets/audio/ambience/threat_low_loop.ogg | -19.2 / -2.4 | - | OK (within 3 dB) |
-| assets/audio/sfx/amb_lamp_hum.wav | -8.5 / -2.9 | -10.9 / -5.2 | NORMALIZED |
+| assets/audio/sfx/amb_lamp_hum.wav | -8.5 / -2.9 | -10.9 / -5.2 | REMOVED (owner, rc14) |
 | assets/audio/sfx/amb_wind.wav | -14.2 / -2.9 | - | OK (within 3 dB) |
 | assets/audio/sfx/footstep_concrete.wav | -15.5 / -1.4 | - | OK (within 3 dB) |
 | assets/audio/sfx/footstep_metal.wav | -20.5 / -1.4 | -20.6 / -1.5 | NORMALIZED |

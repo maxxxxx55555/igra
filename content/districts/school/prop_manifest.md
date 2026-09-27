@@ -95,7 +95,7 @@ player owns until PARTIAL.
   (`tool_cage`), `surfaces/fusebox_512.png` panel, pipe runs to the shelter.
 - Pickups: fixed `school_fix_puzzle_02` (2× fuse); 1 rolled `tool_cage`.
 - Ambience: `substation_cable_hum.ogg` at −10 dB as the boiler feeder hum (existing file,
-  reused; no new audio required), plus `amb_lamp_hum` behaviour once the pad is powered.
+  reused; no new audio required).
 - Purpose: the district's power puzzle and the physical link to the shelter — the pipes the
   voice travels through are modelled here and reappear in `z_basement_shelter`.
 

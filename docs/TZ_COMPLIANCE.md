@@ -41,7 +41,7 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 | G04 | 3 m interaction ray | DECIDED (DR-1) | Reach is 3.2 m. Tightening pickup/interaction reach is on the REJECTED list. |
 | G06 | Sprint ×1.6 | MET | tz_verify run 272 = 170 × 1.6; bot 3/3 |
 | G07 | Crouch speed/noise/visibility/capsule | MET-STATIC (speed ×0.4, noise ×0.3) / DEFERRED-STRUCTURAL (visibility, 1.2 m capsule) | — |
-| G08 | Flashlight `#c9a24a`, 45° | MET (colour, cone) / NEEDS-MEASUREMENT (8 m range, energy 2.0: DR-4 unless a measurement rejects them, see TZ_DECISIONS G08) | `G08_flashlight.png`; shipped 16 m / 24 (`player_3d.tscn:180`, `:184`) |
+| G08 | Flashlight `#c9a24a`, 45° | MET (colour, cone) / BY-DESIGN DR-3 (16 m / 24 kept: the GDD's 8 m / 2.0 leaves no readable pool, measured at rc14, see TZ_DECISIONS G08) | `G08_flashlight.png`; `docs/stills/evidence/g08_*.png` |
 | G09 | Drain 1% per 2 s | DECIDED (DR-3) | Recorded boss-fight failure at a milder value |
 | G10 | Battery item +25% | DECIDED (DR-3) | `balance_sim` FAILs at +25 |
 | G12b | Flicker below 20%, cleared by Stability L5 | MET | tz_verify: spread 16.2 at 10% battery, 0.000 with Stability L5; suite P2r: L5 + Brightness survive a real respawn, L5 cuts drain 50% (GDD §3.3), New Game clears them (C8 rc4); `G12b_low_battery.png` |

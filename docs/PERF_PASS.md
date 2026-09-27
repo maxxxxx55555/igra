@@ -1,4 +1,4 @@
-# Perf pass: static consolidation at `ce782f8`
+# Perf pass: static consolidation at `ce782f8`, re-measured at rc14
 
 Every performance number that can be sourced without running Godot, next to its budget. Budgets
 come from GDD §15 (`docs/GDD.md:385-389`, mobile) unless noted.
@@ -9,28 +9,43 @@ Tags:
 - **NEEDS-GODOT-RECONFIRM:** only a windowed or on-device run can settle it. The last measured value
   is given if one exists.
 
+## 0. rc14 windowed re-measure (Local, 2026-09-27)
+
+`tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn`, 4 runs, window 1965x1080,
+AMD Radeon integrated GPU (OpenGL 3.3, `gl_compatibility`), Master muted (QA runs are silent).
+The camera now follows the player: every D1 number before rc14 was taken from (0, 1.7, 0), where
+ScreenShake pinned the FPS camera (CORRECTION_LOG 46), so they measured a view no player sees.
+
+| District | Draw calls | Primitives | Objects | Frame p95 | GPU mean | Render CPU | Frame process |
+|---|---|---|---|---|---|---|---|
+| D1 suburbs spawn | 168-170 (< 200 OK) | 1.34 M | 389-391 | 33.3 / 34.2 ms; 79.9 / 90.8 ms in the 2 runs taken under background load | 20.2-23.7 ms | 0.9-1.0 ms | 32.0-34.8 ms |
+| D11 power_station | 175-186 (< 350 OK) | 1.34 M | 410 | 40.3 / 40.4 ms; 40.1 / 52.7 ms under load | 23.4-26.4 ms | 1.1-1.2 ms | 40.2-44.3 ms |
+
+Texture memory 138.9-144.7 MiB, video memory 160.5-166.3 MiB (desktop BPTC). This iGPU is
+GPU-bound at about 30-40 fps at 1080p; primitives stay about 27x over the GDD's 50K per district.
+
 ## 1. Numbers
 
 | # | Metric | Budget | Value | Source | Tag |
 |---|---|---|---|---|---|
-| 1 | D1 draw calls | < 200 | **246** (C7), **253** (rc11), windowed, suburbs spawn | ORDER_PASS battery, TZ P01, FUNCTION_MATRIX X24 | NEEDS-GODOT-RECONFIRM |
+| 1 | D1 draw calls | < 200 | **168-170** (rc14, 4 windowed runs, camera at the player). The old 246 (C7) / 253 (rc11) were taken from the pinned camera at (0, 1.7, 0) | perf probe (§0) | MEASURED rc14, OK |
 | 2 | D1 structural draw calls | — | ~38 = 13 batched (street MultiMesh 3, props 5, windows 1, ground/sky 2, panorama/moon 2) + 25 per-instance (6 monsters, 6 pickups/documents, 3 interactables, 10 HUD). The 246–253 measured also counts light and material passes, which this estimate leaves out | `tools/qa_sim/drawcall_estimate.py` | STATIC-ESTIMATE |
-| 3 | D11 draw calls | < 350 | Not recorded separately: `_perf_check_runner.gd:33-52` measures the spawn district and gates its count against 350 | perf probe | NEEDS-GODOT-RECONFIRM (load power_station explicitly) |
+| 3 | D11 draw calls | < 350 | **175-186** (rc14, power_station, same runs; the probe now travels there and gates this count) | perf probe (§0) | MEASURED rc14, OK |
 | 4 | Real-time lights, D1 frame | < 8 dynamic, rest baked (`GDD.md:385-386`) | **18** active after distance fade (8 lamps × 2 + 2 pickup lights), 58 without fade. No `LightmapGI` exists anywhere, so nothing is baked | `drawcall_estimate.py`; scene/script scan | STATIC-ESTIMATE, **over budget** |
 | 5 | Concurrent particles | < 500 | Live emitters: ash 80 (`main_3d.tscn`) and player dust 60, so 140 at High, 70 at Low, 210 at Ultra. Tier ratios 0.5 / 0.75 / 1.0 / 1.5; Ultra raises `amount` (`settings_manager.gd:441-451`). Transients per event: blood 28, hit spark 10, muzzle 8, explosion 8, checkpoint 20. `vfx_rain` (300), `vfx_dust` (60) and `vfx_strobe` (24) are never instanced | `.tscn` scan | STATIC-ESTIMATE, under budget |
 | 6 | RAM | < 800 MB | never measured | TZ P02 | NEEDS-GODOT-RECONFIRM (device) |
-| 7 | VRAM, textures | < 400 MB (whole VRAM) | ≤ **74.3 MiB** if all 528 2D textures were resident: 520 VRAM-compressed at 8 bpp, 8 lossless at 32 bpp, mipmaps included. Add about 16 MiB for the 2048² directional shadow map, plus render targets (MSAA 4x) | `.import` scan + PIL sizes | STATIC-ESTIMATE (texture part only) |
+| 7 | VRAM, textures | < 400 MB (whole VRAM) | Measured on desktop: texture memory **138.9-144.7 MiB**, video memory **160.5-166.3 MiB** (rc14, §0). Static bound before: ≤ 74.3 MiB if all 528 2D textures were resident at 8 bpp, plus about 16 MiB for the shadow map and the MSAA targets | perf probe; `.import` scan | MEASURED rc14 (desktop); device NEEDS-GODOT-RECONFIRM |
 | 8 | Texture size | ≤ 2048² hero / ≤ 512² props | 0 textures over 2048 px; 25 over 1024 px | `.import` scan | STATIC-ESTIMATE |
-| 9 | Texture format | ETC2/ASTC (`GDD.md:387`) | 520 of 528 are VRAM-compressed, but **imported as BPTC only**. `rendering/textures/vram_compression/import_etc2_astc` is not set in `project.godot`, and the Android preset's `texture_format/etc2_astc=true` (`export_presets.cfg:39`) is not what Godot checks. Godot's Android exporter refuses to export without the project setting: `platform/android/export/export_plugin.cpp` → "ETC2/ASTC texture compression is required for Android export" | `project.godot`, `.import` scan, Godot source | CONFIG, **AAB export blocker** (RELEASE_RUNBOOK step 1) |
-| 10 | Package size | Play caps the base module at 200 MB compressed download; check the current limit in Play Console at upload | Desktop PCK **205.5 MB** after the E2–E4 exclude pass (`docs/SIZE_BUDGET.md:171`), measured on an older tree | `SIZE_BUDGET.md` | NEEDS-GODOT-RECONFIRM: build the AAB and read its download size |
+| 9 | Texture format | ETC2/ASTC (`GDD.md:387`) | rc14: `rendering/textures/vram_compression/import_etc2_astc=true` in `project.godot`; the 520 VRAM-compressed textures now import BPTC (desktop) and ASTC (Android) | `project.godot`, `.import` scan | CONFIG, done |
+| 10 | Package size | Play caps the base module at 200 MB compressed download; check the current limit in Play Console at upload | Signed AAB **183.1 MB** (rc14, arm64-v8a): base module about 27 MB compressed (libs 24.5, dex 1.8, res 0.7); game data in the install-time asset pack, 155.1 MB compressed. The old 205.5 MB was a desktop PCK | `docs/RELEASE_ARTIFACTS.md` | MEASURED rc14; per-device download size is read in Play Console |
 | 11 | Audio, exported | music < 100 MB, SFX < 50 MB | music 37.2 MiB; non-music 24.0 MiB (sfx, one-shots, ambience without `wav_src`, UI, jingles, ending music, `_build`) | file sizes | STATIC-ESTIMATE |
 | 12 | Renderer | — | `gl_compatibility` on desktop and mobile (`project.godot:295-296`) | project.godot | CONFIG |
-| 13 | Tier effects | GDD C06 | High and Ultra turn on SSAO (supported by Compatibility per godot-docs master), SSIL and volumetric fog (**not** supported by Compatibility, so no-ops), and `ssr_enabled` (applied by no script; Compatibility has no SSR either). 21 of the 52 keys in `visual_quality.tres` are read by no shipped script (list in `docs/SLOP_REPORT_V2.md`) | `world_env_setup.gd:176-190`; godot-docs `tutorials/rendering/renderers.rst` | CONFIG |
-| 14 | Resolution scaling | — | `scaling_3d/fsr_upscale=true` (`project.godot:302`) is not a Godot setting (the real keys are `scaling_3d/mode`, `scale`, `fsr_sharpness`), and FSR 1/2 need Forward+ anyway. Compatibility uses bilinear. The Render Scale slider (0.5–1.0) sets `Viewport.scaling_3d_scale` (`settings_manager.gd:492-497`) | project.godot; godot-docs `tutorials/3d/resolution_scaling.rst` | CONFIG; the slider's effect is NEEDS-GODOT-RECONFIRM |
+| 13 | Tier effects | GDD C06 | rc14 (`c785b2c`): the no-op SSIL, SSR and volumetric-fog keys are gone from `visual_quality.tres` (13 keys per tier); SSAO is the one tier effect left, and Compatibility supports it | `world_env_setup.gd`, `visual_quality.tres` | CONFIG |
+| 14 | Resolution scaling | — | rc14 (`c785b2c`): the bogus `scaling_3d/fsr_upscale` key is removed; Compatibility uses bilinear. The Render Scale slider (0.5-1.0) sets `Viewport.scaling_3d_scale` (`settings_manager.gd`) | project.godot | CONFIG; the slider's effect is NEEDS-GODOT-RECONFIRM |
 | 15 | MSAA 3D | — | `msaa_3d=2` (4x) on every tier, not scaled by the graphics tier (`project.godot:300`) | project.godot | CONFIG |
-| 16 | Frame rate | 30–60 FPS | `max_fps=60` (`project.godot:16`); FPS never measured on a device | project.godot | NEEDS-GODOT-RECONFIRM |
+| 16 | Frame rate | 30–60 FPS | Desktop iGPU, windowed 1080p: p95 **33.3-34.2 ms** D1 and **40.3-40.4 ms** D11 on quiet runs (§0); device FPS never measured. `max_fps=60` | perf probe (§0) | MEASURED rc14 (desktop); device NEEDS-GODOT-RECONFIRM |
 | 17 | Shader warm-up | — | None: no warm-up or precompile code anywhere. Compatibility compiles each material variant on first use | code scan | STATIC; the first-use hitch is NEEDS-GODOT-RECONFIRM |
-| 18 | Polygons per district | < 50K | Geometry is procedural (MultiMesh builders), so it can't be counted statically. The perf probe already logs `RENDER_TOTAL_PRIMITIVES_IN_FRAME` (`_perf_check_runner.gd:34`) to a local log | perf probe | NEEDS-GODOT-RECONFIRM |
+| 18 | Polygons per district | < 50K | **1.34 M** primitives per frame in D1 and in D11 (rc14, §0): about 27x the budget | perf probe (§0) | MEASURED rc14, **OVER** |
 | 19 | Shadows | — | Directional 2048², soft filter 1 (`project.godot:297-298`); the flashlight casts shadows on desktop and none on mobile (`player_3d.gd:256-258`) | project.godot, player | CONFIG |
 | 20 | LOD | — | `mesh_lod/threshold_pixels=0.75` (`project.godot:303`) | project.godot | CONFIG |
 

@@ -1,5 +1,17 @@
 # Run state — orchestrator pass (2026-09-20)
 
+## Session 13 (2026-09-27): cloud merge + rc14 runtime re-verify
+
+**NEXT-ROW: owner wave "finish the game to the GDD with an agent swarm" (lead = this session).**
+- Merged the cloud audit (`7e5f706`), then i18n 79 rows `31a4bb7`, slop `c785b2c`, security `2062558`.
+- Owner requests: the hum removed from the project `6224a85`; QA runs muted `d90abcd`; launch Godot only when needed.
+- Found by reading frames: FPS camera pinned by ScreenShake and mirrored yaw `b6187a3`; off-centre panels `d407b05`;
+  menu hero art never drawn and inverted detection overlay `b0de63d`; dead Destroyer code `cbb9508`.
+- Gates: check.sh full 47 green; static 25; tz_verify 19 fails=0; audio PASS (Music -14.0 dB, Master muted);
+  perf D1 168-170 / D11 175-186 draw calls; bot 1/3 then 2/10 (3/13 post-fix, spine stalls 1/13); AAB 183.1 MB
+  signed and verified. Toolchain (owner-approved): 4.7 templates, Android build template, Gradle 8.11.1, SDK 36,
+  Build-Tools 36.1.0; no NDK (`android.builder.sdkDownload=false`).
+
 ## Session 12 (2026-09-25/26): C8 verifier loop, rounds 1-12 closed -> rc13
 
 **NEXT-ROW: C8 round 13 (independent verifier on `v8.0.0-rc13`)**, loop until FAKE=0 PARTIAL=0; then C9 AAB

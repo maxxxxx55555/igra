@@ -1,7 +1,6 @@
 # Release artifacts (C9 owner-prep)
 
-Status at 2026-09-24. Nothing here is a signed build yet; this file says exactly what exists and
-what blocks the rest.
+Status at 2026-09-27 (rc14): a signed release AAB exists and is verified below.
 
 ## Done
 - **Release keystore generated** with `keytool` (PKCS12, RSA 4096, alias `tls_release`, 10000-day
@@ -16,20 +15,36 @@ what blocks the rest.
 **Back up `.signing/` outside this machine.** A lost upload key means no updates to the same listing
 unless Play App Signing is enabled (recommended: upload this as the *upload* key only).
 
-## Blocked (not attempted)
-- **Signed AAB/APK export.** `%APPDATA%\Godot\export_templates\4.7.stable` is empty, so
-  `--export-release` cannot run. Installing the official 4.7 templates is a large download from
-  godotengine.org; not done without your OK. Gradle build is also enabled in the preset
-  (`gradle_build/use_gradle_build=true`) and `android/build/` (the Android build template) is not
-  installed; Godot editor: Project > Install Android Build Template.
-- **Signature verification and size vs budget:** cannot be reported until an AAB exists. No number is
-  claimed here.
+## Signed AAB (rc14, 2026-09-27)
 
-## Exact steps once templates exist
-1. Editor: Editor > Manage Export Templates > install 4.7.stable; Project > Install Android Build Template.
-2. `set -a; . .signing/release.env; set +a`
-3. `godot --headless --path . --export-release "Android" build/tls.aab`
-4. Verify: `jarsigner -verify -verbose -certs build/tls.aab` and note the size.
+- **Built:** `build/tls.aab`, **183,064,789 bytes (183.1 MB)**, `godot --headless --path . --export-release
+  "Android" build/tls.aab` with the three `GODOT_ANDROID_KEYSTORE_RELEASE_*` variables loaded from
+  `.signing/release.env`. Gradle build, arm64-v8a only. `build/` and `*.aab` are gitignored.
+- **Contents:** base module about 27 MB compressed (native libs 24.5 MB, dex 1.8 MB, res 0.7 MB); the
+  game data ships in the install-time asset pack `assetPackInstallTime` (155.1 MB compressed, 213.4 MB
+  raw). Play caps the base module's compressed download at 200 MB and sizes asset packs separately
+  **(check the App bundle explorer at upload)**.
+- **Signature:** `jarsigner -verify build/tls.aab` prints `jar verified.`, with the usual upload-key
+  warnings (self-signed, no timestamp) and a JarInputStream manifest-order note that AGP-built
+  bundles commonly carry. `keytool -printcert -jarfile build/tls.aab`: owner `CN=Maxsim Kasky,
+  O=Maxsim Kasky, C=RU`, SHA-256 `4F:6B:E6:41:5C:26:0B:34:1F:A0:CF:88:46:60:3B:82:64:0F:8B:6B:0D:5F:97:FD:FD:3A:FF:93:DD:89:59:09`,
+  identical to `keytool -list -v` on `.signing/tls-release.keystore` (alias `tls_release`).
+- **Toolchain installed for it (owner-approved downloads):** Godot 4.7.stable export templates in
+  `%APPDATA%\Godot\export_templates\4.7.stable`; the Android build template extracted into
+  `android/build/` (gitignored, `android/.build_version` = `4.7.stable`); Gradle 8.11.1 plus the Android
+  Gradle Plugin 8.6.1 dependencies; Android SDK Platform 36 and Build-Tools 36.1.0 (sdkmanager, under the
+  SDK license already accepted on this machine). `android/build/gradle.properties` sets
+  `android.builder.sdkDownload=false`, so Gradle cannot fetch the NDK on its own; none was installed.
+- **Ads:** the preset ships with the AppLovin plugin off (RELEASE_RUNBOOK B3 option A: no key, no ads;
+  release builds hide every reward offer). `docs/store/HUMAN_CHECKLIST.md` step 4 turns it back on.
+- **Not verified here:** install and run on a device (RELEASE_RUNBOOK §4). `bundletool` is not on this
+  machine, so the per-device download size is read in Play Console.
+
+## Rebuild
+1. `set -a; . .signing/release.env; set +a`
+2. `godot --headless --path . --export-release "Android" build/tls.aab`
+3. Verify: `jarsigner -verify build/tls.aab` and `keytool -printcert -jarfile build/tls.aab` (SHA-256 as above).
+4. Bump `version/code` in `export_presets.cfg` before every upload after the first.
 
 ## Owner-only (Play Console)
 Create the app listing, complete content rating/data-safety, upload the AAB to Internal testing, add

@@ -86,6 +86,12 @@ glassmorphism, no rounded corners, no gradients on icons.
   switch crossfade (see Known Issues / next-wave backlog).
 - Buses: `Master → Music | SFX (Footsteps, Combat, UI, Environment) |
   Voice`.
+- No hum beds (owner, rc14: "remove this humming sound from the project, it
+  is unpleasant"). The procedural 55 Hz ambient drone, the 42 Hz threat
+  pulse and the streetlight ballast hum (`amb_lamp_hum`) are deleted. Do not
+  add a constant low-frequency bed back; `Ambient_Dark` and the district
+  beds carry the night. Nothing plays before the first input:
+  `audio_hum_check_scene` checks every audio player in the tree.
 
 ## 4. Asset budgets
 
