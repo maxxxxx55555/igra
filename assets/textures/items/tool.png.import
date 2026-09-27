@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://703807ddf07b"
 path.bptc="res://.godot/imported/tool.png-554592e2b29b4662f95696d2e26d5f47.bptc.ctex"
+path.astc="res://.godot/imported/tool.png-554592e2b29b4662f95696d2e26d5f47.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/items/tool.png"
-dest_files=["res://.godot/imported/tool.png-554592e2b29b4662f95696d2e26d5f47.bptc.ctex"]
+dest_files=["res://.godot/imported/tool.png-554592e2b29b4662f95696d2e26d5f47.bptc.ctex", "res://.godot/imported/tool.png-554592e2b29b4662f95696d2e26d5f47.astc.ctex"]
 
 [params]
 

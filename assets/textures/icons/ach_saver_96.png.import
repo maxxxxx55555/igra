@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://1af67474646a"
 path.bptc="res://.godot/imported/ach_saver_96.png-66a78bbbba45e955093e5fea49e07491.bptc.ctex"
+path.astc="res://.godot/imported/ach_saver_96.png-66a78bbbba45e955093e5fea49e07491.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/icons/ach_saver_96.png"
-dest_files=["res://.godot/imported/ach_saver_96.png-66a78bbbba45e955093e5fea49e07491.bptc.ctex"]
+dest_files=["res://.godot/imported/ach_saver_96.png-66a78bbbba45e955093e5fea49e07491.bptc.ctex", "res://.godot/imported/ach_saver_96.png-66a78bbbba45e955093e5fea49e07491.astc.ctex"]
 
 [params]
 

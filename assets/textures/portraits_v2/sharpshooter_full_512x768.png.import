@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://ba3a4e6a0acb"
 path.bptc="res://.godot/imported/sharpshooter_full_512x768.png-5be9aae749a1eb79048a5b9439a14f97.bptc.ctex"
+path.astc="res://.godot/imported/sharpshooter_full_512x768.png-5be9aae749a1eb79048a5b9439a14f97.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/portraits_v2/sharpshooter_full_512x768.png"
-dest_files=["res://.godot/imported/sharpshooter_full_512x768.png-5be9aae749a1eb79048a5b9439a14f97.bptc.ctex"]
+dest_files=["res://.godot/imported/sharpshooter_full_512x768.png-5be9aae749a1eb79048a5b9439a14f97.bptc.ctex", "res://.godot/imported/sharpshooter_full_512x768.png-5be9aae749a1eb79048a5b9439a14f97.astc.ctex"]
 
 [params]
 

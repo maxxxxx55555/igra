@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://ba23dab67ef42"
 path.bptc="res://.godot/imported/ui_corner_accent.png-359de07bd2cf99f27c2ca4638f3efd06.bptc.ctex"
+path.astc="res://.godot/imported/ui_corner_accent.png-359de07bd2cf99f27c2ca4638f3efd06.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/ui/ui_corner_accent.png"
-dest_files=["res://.godot/imported/ui_corner_accent.png-359de07bd2cf99f27c2ca4638f3efd06.bptc.ctex"]
+dest_files=["res://.godot/imported/ui_corner_accent.png-359de07bd2cf99f27c2ca4638f3efd06.bptc.ctex", "res://.godot/imported/ui_corner_accent.png-359de07bd2cf99f27c2ca4638f3efd06.astc.ctex"]
 
 [params]
 

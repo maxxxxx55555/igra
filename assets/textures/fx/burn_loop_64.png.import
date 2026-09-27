@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://b52b0822a7b2"
 path.bptc="res://.godot/imported/burn_loop_64.png-3f7d45574727c7ddaef560a36c0b40ae.bptc.ctex"
+path.astc="res://.godot/imported/burn_loop_64.png-3f7d45574727c7ddaef560a36c0b40ae.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/fx/burn_loop_64.png"
-dest_files=["res://.godot/imported/burn_loop_64.png-3f7d45574727c7ddaef560a36c0b40ae.bptc.ctex"]
+dest_files=["res://.godot/imported/burn_loop_64.png-3f7d45574727c7ddaef560a36c0b40ae.bptc.ctex", "res://.godot/imported/burn_loop_64.png-3f7d45574727c7ddaef560a36c0b40ae.astc.ctex"]
 
 [params]
 

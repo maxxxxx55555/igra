@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://ba7ad1241add8"
 path.bptc="res://.godot/imported/alcohol.png-0204fcba057330e9823fc05f10c09a81.bptc.ctex"
+path.astc="res://.godot/imported/alcohol.png-0204fcba057330e9823fc05f10c09a81.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/items/alcohol.png"
-dest_files=["res://.godot/imported/alcohol.png-0204fcba057330e9823fc05f10c09a81.bptc.ctex"]
+dest_files=["res://.godot/imported/alcohol.png-0204fcba057330e9823fc05f10c09a81.bptc.ctex", "res://.godot/imported/alcohol.png-0204fcba057330e9823fc05f10c09a81.astc.ctex"]
 
 [params]
 

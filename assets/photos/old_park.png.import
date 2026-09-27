@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://25c5ba4c064d"
 path.bptc="res://.godot/imported/old_park.png-08401c62e8e941ec4341bfd93389d188.bptc.ctex"
+path.astc="res://.godot/imported/old_park.png-08401c62e8e941ec4341bfd93389d188.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/photos/old_park.png"
-dest_files=["res://.godot/imported/old_park.png-08401c62e8e941ec4341bfd93389d188.bptc.ctex"]
+dest_files=["res://.godot/imported/old_park.png-08401c62e8e941ec4341bfd93389d188.bptc.ctex", "res://.godot/imported/old_park.png-08401c62e8e941ec4341bfd93389d188.astc.ctex"]
 
 [params]
 

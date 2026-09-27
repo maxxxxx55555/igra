@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://ef2dcfac7a25"
 path.bptc="res://.godot/imported/ach_combo_master_96.png-0bb1a5dbc17e39ec3fd923a2d610f907.bptc.ctex"
+path.astc="res://.godot/imported/ach_combo_master_96.png-0bb1a5dbc17e39ec3fd923a2d610f907.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/icons/ach_combo_master_96.png"
-dest_files=["res://.godot/imported/ach_combo_master_96.png-0bb1a5dbc17e39ec3fd923a2d610f907.bptc.ctex"]
+dest_files=["res://.godot/imported/ach_combo_master_96.png-0bb1a5dbc17e39ec3fd923a2d610f907.bptc.ctex", "res://.godot/imported/ach_combo_master_96.png-0bb1a5dbc17e39ec3fd923a2d610f907.astc.ctex"]
 
 [params]
 

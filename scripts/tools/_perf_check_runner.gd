@@ -54,12 +54,56 @@ func _run() -> void:
 		# the exit-0 "ok" a real windowed pass reports (SLOP_REPORT item 2).
 		get_tree().quit(3)
 		return
-	var over_d11 := draw_calls >= BUDGET_D11
-	print("[perf] budget D1<%d D11<%d -> %s%s" % [BUDGET_D1, BUDGET_D11,
-		"OK" if draw_calls < BUDGET_D11 else "OVER D11 BUDGET",
-		"" if draw_calls < BUDGET_D1 else " (also over D1, known gap)"])
+	var d1_p95 := await _frame_p95_ms(300)
+	print("[perf] %s frame_p95_ms=%0.2f texture_mem_mib=%0.1f video_mem_mib=%0.1f" % [district, d1_p95,
+		Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED) / 1048576.0,
+		Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) / 1048576.0])
+	# D11: jump straight to power_station (QA only; the profile guard restores
+	# the save), then measure the busiest district against its own budget.
+	var wr := get_tree().root.find_child("WorldRuntime", true, false)
+	DistrictManager.current_district = "power_station"
+	EventBus.district_entered.emit(&"power_station")
+	var d11_loaded := func() -> bool: return wr != null and wr._current_id == &"power_station" and not wr._loading
+	if not await _wait_until(d11_loaded, 20.0):
+		printerr("[perf] power_station never loaded")
+		get_tree().quit(1)
+		return
+	for i in 60:
+		await get_tree().process_frame
+	var d11_calls := int(Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME))
+	var d11_prims := int(Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME))
+	var d11_objects := int(Performance.get_monitor(Performance.RENDER_TOTAL_OBJECTS_IN_FRAME))
+	var d11_p95 := await _frame_p95_ms(300)
+	print("[perf] district=power_station draw_calls=%d primitives=%d objects_in_frame=%d frame_p95_ms=%0.2f" % [
+		d11_calls, d11_prims, d11_objects, d11_p95])
+	var over_d11 := d11_calls >= BUDGET_D11
+	print("[perf] budget D1<%d: %d %s; D11<%d: %d %s" % [BUDGET_D1, draw_calls,
+		"OK" if draw_calls < BUDGET_D1 else "OVER (known gap, TZ P01)", BUDGET_D11, d11_calls,
+		"OK" if not over_d11 else "OVER D11 BUDGET"])
 	print("[perf] DONE fails=", 1 if over_d11 else 0)
 	get_tree().quit(1 if over_d11 else 0)
+
+## 95th-percentile frame time over the next n frames, in ms. Also prints the
+## mean GPU and CPU render time and script/physics time over the same frames,
+## so a slow p95 says which side is the bottleneck.
+func _frame_p95_ms(n: int) -> float:
+	var vp := get_viewport().get_viewport_rid()
+	RenderingServer.viewport_set_measure_render_time(vp, true)
+	var ms: Array[float] = []
+	var gpu := 0.0
+	var cpu := 0.0
+	var script := 0.0
+	var phys := 0.0
+	for i in n:
+		await get_tree().process_frame
+		ms.append(get_process_delta_time() * 1000.0)
+		gpu += RenderingServer.viewport_get_measured_render_time_gpu(vp)
+		cpu += RenderingServer.viewport_get_measured_render_time_cpu(vp)
+		script += Performance.get_monitor(Performance.TIME_PROCESS) * 1000.0
+		phys += Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS) * 1000.0
+	print("[perf] mean over %d frames: gpu_ms=%0.2f render_cpu_ms=%0.2f process_ms=%0.2f physics_ms=%0.2f" % [n, gpu / n, cpu / n, script / n, phys / n])
+	ms.sort()
+	return ms[int(ms.size() * 0.95)]
 
 func _menu_reachable() -> bool:
 	var cs := get_tree().current_scene

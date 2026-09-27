@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://fe3510c1a8d2"
 path.bptc="res://.godot/imported/weather_wind_256x144.png-c357625ff02a5ffd3654454267fa80e4.bptc.ctex"
+path.astc="res://.godot/imported/weather_wind_256x144.png-c357625ff02a5ffd3654454267fa80e4.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/ui_v2/weather_wind_256x144.png"
-dest_files=["res://.godot/imported/weather_wind_256x144.png-c357625ff02a5ffd3654454267fa80e4.bptc.ctex"]
+dest_files=["res://.godot/imported/weather_wind_256x144.png-c357625ff02a5ffd3654454267fa80e4.bptc.ctex", "res://.godot/imported/weather_wind_256x144.png-c357625ff02a5ffd3654454267fa80e4.astc.ctex"]
 
 [params]
 

@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://14a514ad1cee"
 path.bptc="res://.godot/imported/stat_district_64.png-524089960e61385ae787f3173f0d541b.bptc.ctex"
+path.astc="res://.godot/imported/stat_district_64.png-524089960e61385ae787f3173f0d541b.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/icons_v2/stat_district_64.png"
-dest_files=["res://.godot/imported/stat_district_64.png-524089960e61385ae787f3173f0d541b.bptc.ctex"]
+dest_files=["res://.godot/imported/stat_district_64.png-524089960e61385ae787f3173f0d541b.bptc.ctex", "res://.godot/imported/stat_district_64.png-524089960e61385ae787f3173f0d541b.astc.ctex"]
 
 [params]
 

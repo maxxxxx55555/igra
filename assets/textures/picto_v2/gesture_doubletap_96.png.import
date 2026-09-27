@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://d87e62a0dafc"
 path.bptc="res://.godot/imported/gesture_doubletap_96.png-9eabfc9b07e52c34a40ead69674a477c.bptc.ctex"
+path.astc="res://.godot/imported/gesture_doubletap_96.png-9eabfc9b07e52c34a40ead69674a477c.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/picto_v2/gesture_doubletap_96.png"
-dest_files=["res://.godot/imported/gesture_doubletap_96.png-9eabfc9b07e52c34a40ead69674a477c.bptc.ctex"]
+dest_files=["res://.godot/imported/gesture_doubletap_96.png-9eabfc9b07e52c34a40ead69674a477c.bptc.ctex", "res://.godot/imported/gesture_doubletap_96.png-9eabfc9b07e52c34a40ead69674a477c.astc.ctex"]
 
 [params]
 

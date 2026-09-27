@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://51c14a0cbd67"
 path.bptc="res://.godot/imported/hound_full_512x768.png-43e3417e7851b8c0bcc63ad6369130fd.bptc.ctex"
+path.astc="res://.godot/imported/hound_full_512x768.png-43e3417e7851b8c0bcc63ad6369130fd.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/portraits_v2/hound_full_512x768.png"
-dest_files=["res://.godot/imported/hound_full_512x768.png-43e3417e7851b8c0bcc63ad6369130fd.bptc.ctex"]
+dest_files=["res://.godot/imported/hound_full_512x768.png-43e3417e7851b8c0bcc63ad6369130fd.bptc.ctex", "res://.godot/imported/hound_full_512x768.png-43e3417e7851b8c0bcc63ad6369130fd.astc.ctex"]
 
 [params]
 

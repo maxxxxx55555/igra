@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://42aa8c6ed542"
 path.bptc="res://.godot/imported/doc_photo_monster_256x340.png-a0f0ba162cf789b0e209bf07cfbf2199.bptc.ctex"
+path.astc="res://.godot/imported/doc_photo_monster_256x340.png-a0f0ba162cf789b0e209bf07cfbf2199.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/docs_v2/doc_photo_monster_256x340.png"
-dest_files=["res://.godot/imported/doc_photo_monster_256x340.png-a0f0ba162cf789b0e209bf07cfbf2199.bptc.ctex"]
+dest_files=["res://.godot/imported/doc_photo_monster_256x340.png-a0f0ba162cf789b0e209bf07cfbf2199.bptc.ctex", "res://.godot/imported/doc_photo_monster_256x340.png-a0f0ba162cf789b0e209bf07cfbf2199.astc.ctex"]
 
 [params]
 

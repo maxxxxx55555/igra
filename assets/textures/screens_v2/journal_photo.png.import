@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://4cea88ca0ba"
 path.bptc="res://.godot/imported/journal_photo.png-aee5c1cf8e4d0488969d3e04576e64c0.bptc.ctex"
+path.astc="res://.godot/imported/journal_photo.png-aee5c1cf8e4d0488969d3e04576e64c0.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/screens_v2/journal_photo.png"
-dest_files=["res://.godot/imported/journal_photo.png-aee5c1cf8e4d0488969d3e04576e64c0.bptc.ctex"]
+dest_files=["res://.godot/imported/journal_photo.png-aee5c1cf8e4d0488969d3e04576e64c0.bptc.ctex", "res://.godot/imported/journal_photo.png-aee5c1cf8e4d0488969d3e04576e64c0.astc.ctex"]
 
 [params]
 

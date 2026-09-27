@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://48c1d3f38a58"
 path.bptc="res://.godot/imported/minimap_player_arrow_32.png-9b87df370fe6b22bdf1a746e196e9e6d.bptc.ctex"
+path.astc="res://.godot/imported/minimap_player_arrow_32.png-9b87df370fe6b22bdf1a746e196e9e6d.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/ui/minimap_player_arrow_32.png"
-dest_files=["res://.godot/imported/minimap_player_arrow_32.png-9b87df370fe6b22bdf1a746e196e9e6d.bptc.ctex"]
+dest_files=["res://.godot/imported/minimap_player_arrow_32.png-9b87df370fe6b22bdf1a746e196e9e6d.bptc.ctex", "res://.godot/imported/minimap_player_arrow_32.png-9b87df370fe6b22bdf1a746e196e9e6d.astc.ctex"]
 
 [params]
 

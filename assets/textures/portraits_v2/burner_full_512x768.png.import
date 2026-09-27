@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://3caccc783c10"
 path.bptc="res://.godot/imported/burner_full_512x768.png-b37849feed220be1b6e03d62331f2fc0.bptc.ctex"
+path.astc="res://.godot/imported/burner_full_512x768.png-b37849feed220be1b6e03d62331f2fc0.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/portraits_v2/burner_full_512x768.png"
-dest_files=["res://.godot/imported/burner_full_512x768.png-b37849feed220be1b6e03d62331f2fc0.bptc.ctex"]
+dest_files=["res://.godot/imported/burner_full_512x768.png-b37849feed220be1b6e03d62331f2fc0.bptc.ctex", "res://.godot/imported/burner_full_512x768.png-b37849feed220be1b6e03d62331f2fc0.astc.ctex"]
 
 [params]
 

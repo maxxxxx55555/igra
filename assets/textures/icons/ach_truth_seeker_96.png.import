@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://1c3bebddeb67"
 path.bptc="res://.godot/imported/ach_truth_seeker_96.png-56033a386fbbdd3ee72c030fc3b44f4f.bptc.ctex"
+path.astc="res://.godot/imported/ach_truth_seeker_96.png-56033a386fbbdd3ee72c030fc3b44f4f.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/icons/ach_truth_seeker_96.png"
-dest_files=["res://.godot/imported/ach_truth_seeker_96.png-56033a386fbbdd3ee72c030fc3b44f4f.bptc.ctex"]
+dest_files=["res://.godot/imported/ach_truth_seeker_96.png-56033a386fbbdd3ee72c030fc3b44f4f.bptc.ctex", "res://.godot/imported/ach_truth_seeker_96.png-56033a386fbbdd3ee72c030fc3b44f4f.astc.ctex"]
 
 [params]
 

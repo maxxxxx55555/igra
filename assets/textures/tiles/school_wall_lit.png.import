@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://2d3aafc1d35d"
 path.bptc="res://.godot/imported/school_wall_lit.png-b2ea2acb8526a1368c3aa728d8289cbb.bptc.ctex"
+path.astc="res://.godot/imported/school_wall_lit.png-b2ea2acb8526a1368c3aa728d8289cbb.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/tiles/school_wall_lit.png"
-dest_files=["res://.godot/imported/school_wall_lit.png-b2ea2acb8526a1368c3aa728d8289cbb.bptc.ctex"]
+dest_files=["res://.godot/imported/school_wall_lit.png-b2ea2acb8526a1368c3aa728d8289cbb.bptc.ctex", "res://.godot/imported/school_wall_lit.png-b2ea2acb8526a1368c3aa728d8289cbb.astc.ctex"]
 
 [params]
 

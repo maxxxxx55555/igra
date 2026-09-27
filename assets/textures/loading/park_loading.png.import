@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dc226352067f"
 path.bptc="res://.godot/imported/park_loading.png-c0c1280ed1f695289116733b80f7b1d9.bptc.ctex"
+path.astc="res://.godot/imported/park_loading.png-c0c1280ed1f695289116733b80f7b1d9.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/loading/park_loading.png"
-dest_files=["res://.godot/imported/park_loading.png-c0c1280ed1f695289116733b80f7b1d9.bptc.ctex"]
+dest_files=["res://.godot/imported/park_loading.png-c0c1280ed1f695289116733b80f7b1d9.bptc.ctex", "res://.godot/imported/park_loading.png-c0c1280ed1f695289116733b80f7b1d9.astc.ctex"]
 
 [params]
 

@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://358386eda3af"
 path.bptc="res://.godot/imported/radio_part.png-3bd0cc0f330f4e9c84e79820c9fd3c77.bptc.ctex"
+path.astc="res://.godot/imported/radio_part.png-3bd0cc0f330f4e9c84e79820c9fd3c77.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/items/radio_part.png"
-dest_files=["res://.godot/imported/radio_part.png-3bd0cc0f330f4e9c84e79820c9fd3c77.bptc.ctex"]
+dest_files=["res://.godot/imported/radio_part.png-3bd0cc0f330f4e9c84e79820c9fd3c77.bptc.ctex", "res://.godot/imported/radio_part.png-3bd0cc0f330f4e9c84e79820c9fd3c77.astc.ctex"]
 
 [params]
 

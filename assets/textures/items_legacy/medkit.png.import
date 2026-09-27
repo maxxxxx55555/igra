@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://d2ed4cce1d4d"
 path.bptc="res://.godot/imported/medkit.png-24f0c42b2bbc937dab517e8d7b21346e.bptc.ctex"
+path.astc="res://.godot/imported/medkit.png-24f0c42b2bbc937dab517e8d7b21346e.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/items_legacy/medkit.png"
-dest_files=["res://.godot/imported/medkit.png-24f0c42b2bbc937dab517e8d7b21346e.bptc.ctex"]
+dest_files=["res://.godot/imported/medkit.png-24f0c42b2bbc937dab517e8d7b21346e.bptc.ctex", "res://.godot/imported/medkit.png-24f0c42b2bbc937dab517e8d7b21346e.astc.ctex"]
 
 [params]
 

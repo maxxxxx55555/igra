@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://58a1ea7a2753"
 path.bptc="res://.godot/imported/metal_rust_512.png-1d16f8c1e0aa4fc93a60dc73eb4d7d50.bptc.ctex"
+path.astc="res://.godot/imported/metal_rust_512.png-1d16f8c1e0aa4fc93a60dc73eb4d7d50.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/surfaces/metal_rust_512.png"
-dest_files=["res://.godot/imported/metal_rust_512.png-1d16f8c1e0aa4fc93a60dc73eb4d7d50.bptc.ctex"]
+dest_files=["res://.godot/imported/metal_rust_512.png-1d16f8c1e0aa4fc93a60dc73eb4d7d50.bptc.ctex", "res://.godot/imported/metal_rust_512.png-1d16f8c1e0aa4fc93a60dc73eb4d7d50.astc.ctex"]
 
 [params]
 

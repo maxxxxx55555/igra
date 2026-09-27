@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://caee046ae18e"
 path.bptc="res://.godot/imported/gas_station_wall_lit.png-f04c09d1dcaba8725d7949a74cab0951.bptc.ctex"
+path.astc="res://.godot/imported/gas_station_wall_lit.png-f04c09d1dcaba8725d7949a74cab0951.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/tiles/gas_station_wall_lit.png"
-dest_files=["res://.godot/imported/gas_station_wall_lit.png-f04c09d1dcaba8725d7949a74cab0951.bptc.ctex"]
+dest_files=["res://.godot/imported/gas_station_wall_lit.png-f04c09d1dcaba8725d7949a74cab0951.bptc.ctex", "res://.godot/imported/gas_station_wall_lit.png-f04c09d1dcaba8725d7949a74cab0951.astc.ctex"]
 
 [params]
 

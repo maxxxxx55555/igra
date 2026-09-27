@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://8cca1765baa8"
 path.bptc="res://.godot/imported/hex_green_128.png-31c3813718a10b5ab816585a9cbe4906.bptc.ctex"
+path.astc="res://.godot/imported/hex_green_128.png-31c3813718a10b5ab816585a9cbe4906.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/ui_v2/hex_green_128.png"
-dest_files=["res://.godot/imported/hex_green_128.png-31c3813718a10b5ab816585a9cbe4906.bptc.ctex"]
+dest_files=["res://.godot/imported/hex_green_128.png-31c3813718a10b5ab816585a9cbe4906.bptc.ctex", "res://.godot/imported/hex_green_128.png-31c3813718a10b5ab816585a9cbe4906.astc.ctex"]
 
 [params]
 

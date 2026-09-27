@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bac551a3e51be"
 path.bptc="res://.godot/imported/help_puzzle_96.png-114aca806b34aaf2708a73d7a1749e86.bptc.ctex"
+path.astc="res://.godot/imported/help_puzzle_96.png-114aca806b34aaf2708a73d7a1749e86.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/touch/help_puzzle_96.png"
-dest_files=["res://.godot/imported/help_puzzle_96.png-114aca806b34aaf2708a73d7a1749e86.bptc.ctex"]
+dest_files=["res://.godot/imported/help_puzzle_96.png-114aca806b34aaf2708a73d7a1749e86.bptc.ctex", "res://.godot/imported/help_puzzle_96.png-114aca806b34aaf2708a73d7a1749e86.astc.ctex"]
 
 [params]
 

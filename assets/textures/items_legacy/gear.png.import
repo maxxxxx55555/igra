@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://1d72d82a071f"
 path.bptc="res://.godot/imported/gear.png-a1d9d615da40c71b2e341900d6f369f0.bptc.ctex"
+path.astc="res://.godot/imported/gear.png-a1d9d615da40c71b2e341900d6f369f0.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/items_legacy/gear.png"
-dest_files=["res://.godot/imported/gear.png-a1d9d615da40c71b2e341900d6f369f0.bptc.ctex"]
+dest_files=["res://.godot/imported/gear.png-a1d9d615da40c71b2e341900d6f369f0.bptc.ctex", "res://.godot/imported/gear.png-a1d9d615da40c71b2e341900d6f369f0.astc.ctex"]
 
 [params]
 

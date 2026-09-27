@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://fa560f1abdc6"
 path.bptc="res://.godot/imported/abandoned_street.png-4b046aa36cb24ba83824b82ee79e1ec8.bptc.ctex"
+path.astc="res://.godot/imported/abandoned_street.png-4b046aa36cb24ba83824b82ee79e1ec8.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/photos/abandoned_street.png"
-dest_files=["res://.godot/imported/abandoned_street.png-4b046aa36cb24ba83824b82ee79e1ec8.bptc.ctex"]
+dest_files=["res://.godot/imported/abandoned_street.png-4b046aa36cb24ba83824b82ee79e1ec8.bptc.ctex", "res://.godot/imported/abandoned_street.png-4b046aa36cb24ba83824b82ee79e1ec8.astc.ctex"]
 
 [params]
 

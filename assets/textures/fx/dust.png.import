@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://2af063ce0cd7"
 path.bptc="res://.godot/imported/dust.png-8e236544bb2ab8fa80c0dba3261e1e6e.bptc.ctex"
+path.astc="res://.godot/imported/dust.png-8e236544bb2ab8fa80c0dba3261e1e6e.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/fx/dust.png"
-dest_files=["res://.godot/imported/dust.png-8e236544bb2ab8fa80c0dba3261e1e6e.bptc.ctex"]
+dest_files=["res://.godot/imported/dust.png-8e236544bb2ab8fa80c0dba3261e1e6e.bptc.ctex", "res://.godot/imported/dust.png-8e236544bb2ab8fa80c0dba3261e1e6e.astc.ctex"]
 
 [params]
 

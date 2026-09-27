@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://b08d04ad23cb"
 path.bptc="res://.godot/imported/btn_dodge_pressed_128.png-cf5a10a1fb0383bb10b5fda402fa0873.bptc.ctex"
+path.astc="res://.godot/imported/btn_dodge_pressed_128.png-cf5a10a1fb0383bb10b5fda402fa0873.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/ui/btn_dodge_pressed_128.png"
-dest_files=["res://.godot/imported/btn_dodge_pressed_128.png-cf5a10a1fb0383bb10b5fda402fa0873.bptc.ctex"]
+dest_files=["res://.godot/imported/btn_dodge_pressed_128.png-cf5a10a1fb0383bb10b5fda402fa0873.bptc.ctex", "res://.godot/imported/btn_dodge_pressed_128.png-cf5a10a1fb0383bb10b5fda402fa0873.astc.ctex"]
 
 [params]
 

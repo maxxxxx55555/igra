@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://3bb86ad17ee3"
 path.bptc="res://.godot/imported/crest_suburbs_96.png-c55501017aeb85932b9366b86ff7187e.bptc.ctex"
+path.astc="res://.godot/imported/crest_suburbs_96.png-c55501017aeb85932b9366b86ff7187e.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/crests/crest_suburbs_96.png"
-dest_files=["res://.godot/imported/crest_suburbs_96.png-c55501017aeb85932b9366b86ff7187e.bptc.ctex"]
+dest_files=["res://.godot/imported/crest_suburbs_96.png-c55501017aeb85932b9366b86ff7187e.bptc.ctex", "res://.godot/imported/crest_suburbs_96.png-c55501017aeb85932b9366b86ff7187e.astc.ctex"]
 
 [params]
 

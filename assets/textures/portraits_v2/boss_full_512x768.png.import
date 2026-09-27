@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://21082a6aa487"
 path.bptc="res://.godot/imported/boss_full_512x768.png-5af8bb6e931749806782f631dc877f60.bptc.ctex"
+path.astc="res://.godot/imported/boss_full_512x768.png-5af8bb6e931749806782f631dc877f60.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/portraits_v2/boss_full_512x768.png"
-dest_files=["res://.godot/imported/boss_full_512x768.png-5af8bb6e931749806782f631dc877f60.bptc.ctex"]
+dest_files=["res://.godot/imported/boss_full_512x768.png-5af8bb6e931749806782f631dc877f60.bptc.ctex", "res://.godot/imported/boss_full_512x768.png-5af8bb6e931749806782f631dc877f60.astc.ctex"]
 
 [params]
 

@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://ba3bfc42bd2dc"
 path.bptc="res://.godot/imported/metal_64.png-15589d061669c10e45141033289c35b4.bptc.ctex"
+path.astc="res://.godot/imported/metal_64.png-15589d061669c10e45141033289c35b4.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/icons_v2/craft/metal_64.png"
-dest_files=["res://.godot/imported/metal_64.png-15589d061669c10e45141033289c35b4.bptc.ctex"]
+dest_files=["res://.godot/imported/metal_64.png-15589d061669c10e45141033289c35b4.bptc.ctex", "res://.godot/imported/metal_64.png-15589d061669c10e45141033289c35b4.astc.ctex"]
 
 [params]
 

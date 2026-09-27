@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://18c65f704a70"
 path.bptc="res://.godot/imported/monster_crawler_64.png-12dba3492a3261fa148724f035aef741.bptc.ctex"
+path.astc="res://.godot/imported/monster_crawler_64.png-12dba3492a3261fa148724f035aef741.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/icons_v2/monster_crawler_64.png"
-dest_files=["res://.godot/imported/monster_crawler_64.png-12dba3492a3261fa148724f035aef741.bptc.ctex"]
+dest_files=["res://.godot/imported/monster_crawler_64.png-12dba3492a3261fa148724f035aef741.bptc.ctex", "res://.godot/imported/monster_crawler_64.png-12dba3492a3261fa148724f035aef741.astc.ctex"]
 
 [params]
 

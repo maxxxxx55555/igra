@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://5b47881c0244"
 path.bptc="res://.godot/imported/warehouses_map_512.png-288a42802118c4f29b48d4bc7e75c04b.bptc.ctex"
+path.astc="res://.godot/imported/warehouses_map_512.png-288a42802118c4f29b48d4bc7e75c04b.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/maps/warehouses_map_512.png"
-dest_files=["res://.godot/imported/warehouses_map_512.png-288a42802118c4f29b48d4bc7e75c04b.bptc.ctex"]
+dest_files=["res://.godot/imported/warehouses_map_512.png-288a42802118c4f29b48d4bc7e75c04b.bptc.ctex", "res://.godot/imported/warehouses_map_512.png-288a42802118c4f29b48d4bc7e75c04b.astc.ctex"]
 
 [params]
 

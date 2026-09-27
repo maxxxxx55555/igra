@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://fc7d3eb1dabd"
 path.bptc="res://.godot/imported/ach_speedrunner_96.png-0e3ce9832aff3c10ce4cdfb569e5c080.bptc.ctex"
+path.astc="res://.godot/imported/ach_speedrunner_96.png-0e3ce9832aff3c10ce4cdfb569e5c080.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/icons/ach_speedrunner_96.png"
-dest_files=["res://.godot/imported/ach_speedrunner_96.png-0e3ce9832aff3c10ce4cdfb569e5c080.bptc.ctex"]
+dest_files=["res://.godot/imported/ach_speedrunner_96.png-0e3ce9832aff3c10ce4cdfb569e5c080.bptc.ctex", "res://.godot/imported/ach_speedrunner_96.png-0e3ce9832aff3c10ce4cdfb569e5c080.astc.ctex"]
 
 [params]
 

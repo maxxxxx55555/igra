@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://0e7180faaea7"
 path.bptc="res://.godot/imported/coin_500.png-6eb8d8e31e2d53b1037e68b6bfbefa48.bptc.ctex"
+path.astc="res://.godot/imported/coin_500.png-6eb8d8e31e2d53b1037e68b6bfbefa48.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/ui_v2/coin_500.png"
-dest_files=["res://.godot/imported/coin_500.png-6eb8d8e31e2d53b1037e68b6bfbefa48.bptc.ctex"]
+dest_files=["res://.godot/imported/coin_500.png-6eb8d8e31e2d53b1037e68b6bfbefa48.bptc.ctex", "res://.godot/imported/coin_500.png-6eb8d8e31e2d53b1037e68b6bfbefa48.astc.ctex"]
 
 [params]
 

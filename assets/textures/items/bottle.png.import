@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://c21c0c2b6148"
 path.bptc="res://.godot/imported/bottle.png-af5ee8e7980027cdcc5a55668ab52c97.bptc.ctex"
+path.astc="res://.godot/imported/bottle.png-af5ee8e7980027cdcc5a55668ab52c97.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/items/bottle.png"
-dest_files=["res://.godot/imported/bottle.png-af5ee8e7980027cdcc5a55668ab52c97.bptc.ctex"]
+dest_files=["res://.godot/imported/bottle.png-af5ee8e7980027cdcc5a55668ab52c97.bptc.ctex", "res://.godot/imported/bottle.png-af5ee8e7980027cdcc5a55668ab52c97.astc.ctex"]
 
 [params]
 

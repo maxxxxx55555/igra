@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://343df83ea835"
 path.bptc="res://.godot/imported/rarity_common.png-7a0ed6bc5c7c3deff37982d920cabeca.bptc.ctex"
+path.astc="res://.godot/imported/rarity_common.png-7a0ed6bc5c7c3deff37982d920cabeca.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/ui/rarity_common.png"
-dest_files=["res://.godot/imported/rarity_common.png-7a0ed6bc5c7c3deff37982d920cabeca.bptc.ctex"]
+dest_files=["res://.godot/imported/rarity_common.png-7a0ed6bc5c7c3deff37982d920cabeca.bptc.ctex", "res://.godot/imported/rarity_common.png-7a0ed6bc5c7c3deff37982d920cabeca.astc.ctex"]
 
 [params]
 

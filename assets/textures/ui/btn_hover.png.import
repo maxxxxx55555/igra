@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://c36ba8gaa1ab"
 path.bptc="res://.godot/imported/btn_hover.png-9167a78f44b1c06ea5cf5140262e1485.bptc.ctex"
+path.astc="res://.godot/imported/btn_hover.png-9167a78f44b1c06ea5cf5140262e1485.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/ui/btn_hover.png"
-dest_files=["res://.godot/imported/btn_hover.png-9167a78f44b1c06ea5cf5140262e1485.bptc.ctex"]
+dest_files=["res://.godot/imported/btn_hover.png-9167a78f44b1c06ea5cf5140262e1485.bptc.ctex", "res://.godot/imported/btn_hover.png-9167a78f44b1c06ea5cf5140262e1485.astc.ctex"]
 
 [params]
 

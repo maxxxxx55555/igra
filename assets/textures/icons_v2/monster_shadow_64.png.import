@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://fa3cd76a215a"
 path.bptc="res://.godot/imported/monster_shadow_64.png-fb21e025cf64bb3621a300fe87815587.bptc.ctex"
+path.astc="res://.godot/imported/monster_shadow_64.png-fb21e025cf64bb3621a300fe87815587.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/icons_v2/monster_shadow_64.png"
-dest_files=["res://.godot/imported/monster_shadow_64.png-fb21e025cf64bb3621a300fe87815587.bptc.ctex"]
+dest_files=["res://.godot/imported/monster_shadow_64.png-fb21e025cf64bb3621a300fe87815587.bptc.ctex", "res://.godot/imported/monster_shadow_64.png-fb21e025cf64bb3621a300fe87815587.astc.ctex"]
 
 [params]
 

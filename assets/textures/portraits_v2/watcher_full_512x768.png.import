@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://e56a1d3702af"
 path.bptc="res://.godot/imported/watcher_full_512x768.png-2933b1a943ae897dde12014fdaefd817.bptc.ctex"
+path.astc="res://.godot/imported/watcher_full_512x768.png-2933b1a943ae897dde12014fdaefd817.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/portraits_v2/watcher_full_512x768.png"
-dest_files=["res://.godot/imported/watcher_full_512x768.png-2933b1a943ae897dde12014fdaefd817.bptc.ctex"]
+dest_files=["res://.godot/imported/watcher_full_512x768.png-2933b1a943ae897dde12014fdaefd817.bptc.ctex", "res://.godot/imported/watcher_full_512x768.png-2933b1a943ae897dde12014fdaefd817.astc.ctex"]
 
 [params]
 

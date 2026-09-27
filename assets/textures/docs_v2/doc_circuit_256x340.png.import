@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://e3a83f726344"
 path.bptc="res://.godot/imported/doc_circuit_256x340.png-3cb7997f37e94d89af8ce38cccf5eac3.bptc.ctex"
+path.astc="res://.godot/imported/doc_circuit_256x340.png-3cb7997f37e94d89af8ce38cccf5eac3.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/docs_v2/doc_circuit_256x340.png"
-dest_files=["res://.godot/imported/doc_circuit_256x340.png-3cb7997f37e94d89af8ce38cccf5eac3.bptc.ctex"]
+dest_files=["res://.godot/imported/doc_circuit_256x340.png-3cb7997f37e94d89af8ce38cccf5eac3.bptc.ctex", "res://.godot/imported/doc_circuit_256x340.png-3cb7997f37e94d89af8ce38cccf5eac3.astc.ctex"]
 
 [params]
 

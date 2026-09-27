@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://48ac6c40ddce"
 path.bptc="res://.godot/imported/onboard_07_crouch_hunter_1024x576.png-b026db6da5d232f41cfa3541d70d881f.bptc.ctex"
+path.astc="res://.godot/imported/onboard_07_crouch_hunter_1024x576.png-b026db6da5d232f41cfa3541d70d881f.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/onboard_v2/onboard_07_crouch_hunter_1024x576.png"
-dest_files=["res://.godot/imported/onboard_07_crouch_hunter_1024x576.png-b026db6da5d232f41cfa3541d70d881f.bptc.ctex"]
+dest_files=["res://.godot/imported/onboard_07_crouch_hunter_1024x576.png-b026db6da5d232f41cfa3541d70d881f.bptc.ctex", "res://.godot/imported/onboard_07_crouch_hunter_1024x576.png-b026db6da5d232f41cfa3541d70d881f.astc.ctex"]
 
 [params]
 

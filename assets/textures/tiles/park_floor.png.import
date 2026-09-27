@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://65517bb8ae7b"
 path.bptc="res://.godot/imported/park_floor.png-b925916b39b30f55bbb4da4eeab2322d.bptc.ctex"
+path.astc="res://.godot/imported/park_floor.png-b925916b39b30f55bbb4da4eeab2322d.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/tiles/park_floor.png"
-dest_files=["res://.godot/imported/park_floor.png-b925916b39b30f55bbb4da4eeab2322d.bptc.ctex"]
+dest_files=["res://.godot/imported/park_floor.png-b925916b39b30f55bbb4da4eeab2322d.bptc.ctex", "res://.godot/imported/park_floor.png-b925916b39b30f55bbb4da4eeab2322d.astc.ctex"]
 
 [params]
 

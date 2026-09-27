@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://d4685a7becd0"
 path.bptc="res://.godot/imported/fuel_pump_512.png-cab692b88c113d6a0e151d2050e6e2ca.bptc.ctex"
+path.astc="res://.godot/imported/fuel_pump_512.png-cab692b88c113d6a0e151d2050e6e2ca.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/surfaces/fuel_pump_512.png"
-dest_files=["res://.godot/imported/fuel_pump_512.png-cab692b88c113d6a0e151d2050e6e2ca.bptc.ctex"]
+dest_files=["res://.godot/imported/fuel_pump_512.png-cab692b88c113d6a0e151d2050e6e2ca.bptc.ctex", "res://.godot/imported/fuel_pump_512.png-cab692b88c113d6a0e151d2050e6e2ca.astc.ctex"]
 
 [params]
 

@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://0e6eee8f25a0"
 path.bptc="res://.godot/imported/foggy_avenue.png-b4a3adc56fc082c6865ce26ff8075533.bptc.ctex"
+path.astc="res://.godot/imported/foggy_avenue.png-b4a3adc56fc082c6865ce26ff8075533.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/photos/foggy_avenue.png"
-dest_files=["res://.godot/imported/foggy_avenue.png-b4a3adc56fc082c6865ce26ff8075533.bptc.ctex"]
+dest_files=["res://.godot/imported/foggy_avenue.png-b4a3adc56fc082c6865ce26ff8075533.bptc.ctex", "res://.godot/imported/foggy_avenue.png-b4a3adc56fc082c6865ce26ff8075533.astc.ctex"]
 
 [params]
 

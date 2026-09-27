@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://4a806b06dbae"
 path.bptc="res://.godot/imported/tvar_full_512x768.png-38c09ab518e2aafc3110bbfcf9cfed1f.bptc.ctex"
+path.astc="res://.godot/imported/tvar_full_512x768.png-38c09ab518e2aafc3110bbfcf9cfed1f.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/portraits_v2/tvar_full_512x768.png"
-dest_files=["res://.godot/imported/tvar_full_512x768.png-38c09ab518e2aafc3110bbfcf9cfed1f.bptc.ctex"]
+dest_files=["res://.godot/imported/tvar_full_512x768.png-38c09ab518e2aafc3110bbfcf9cfed1f.bptc.ctex", "res://.godot/imported/tvar_full_512x768.png-38c09ab518e2aafc3110bbfcf9cfed1f.astc.ctex"]
 
 [params]
 

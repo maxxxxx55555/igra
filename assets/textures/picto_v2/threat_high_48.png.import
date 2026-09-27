@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cc38f5887e2e"
 path.bptc="res://.godot/imported/threat_high_48.png-3dca7f2f94741634caaa97aef25cafa9.bptc.ctex"
+path.astc="res://.godot/imported/threat_high_48.png-3dca7f2f94741634caaa97aef25cafa9.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/picto_v2/threat_high_48.png"
-dest_files=["res://.godot/imported/threat_high_48.png-3dca7f2f94741634caaa97aef25cafa9.bptc.ctex"]
+dest_files=["res://.godot/imported/threat_high_48.png-3dca7f2f94741634caaa97aef25cafa9.bptc.ctex", "res://.godot/imported/threat_high_48.png-3dca7f2f94741634caaa97aef25cafa9.astc.ctex"]
 
 [params]
 

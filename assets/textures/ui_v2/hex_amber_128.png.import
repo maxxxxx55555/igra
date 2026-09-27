@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://7aa8bfbb5a4"
 path.bptc="res://.godot/imported/hex_amber_128.png-01d1e90a5f0b22ec7467757aa4a8ee36.bptc.ctex"
+path.astc="res://.godot/imported/hex_amber_128.png-01d1e90a5f0b22ec7467757aa4a8ee36.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/ui_v2/hex_amber_128.png"
-dest_files=["res://.godot/imported/hex_amber_128.png-01d1e90a5f0b22ec7467757aa4a8ee36.bptc.ctex"]
+dest_files=["res://.godot/imported/hex_amber_128.png-01d1e90a5f0b22ec7467757aa4a8ee36.bptc.ctex", "res://.godot/imported/hex_amber_128.png-01d1e90a5f0b22ec7467757aa4a8ee36.astc.ctex"]
 
 [params]
 

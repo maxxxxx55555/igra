@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://4ab251a37aae"
 path.bptc="res://.godot/imported/stage_partial_256x144.png-6e6212013c136b4b26b9e7e2c8de9d3e.bptc.ctex"
+path.astc="res://.godot/imported/stage_partial_256x144.png-6e6212013c136b4b26b9e7e2c8de9d3e.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/stages_v2/stage_partial_256x144.png"
-dest_files=["res://.godot/imported/stage_partial_256x144.png-6e6212013c136b4b26b9e7e2c8de9d3e.bptc.ctex"]
+dest_files=["res://.godot/imported/stage_partial_256x144.png-6e6212013c136b4b26b9e7e2c8de9d3e.bptc.ctex", "res://.godot/imported/stage_partial_256x144.png-6e6212013c136b4b26b9e7e2c8de9d3e.astc.ctex"]
 
 [params]
 

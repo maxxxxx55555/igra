@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://028a1f57b457"
 path.bptc="res://.godot/imported/reload_speed_96.png-6dc34d017501af38d8dcc779713885ef.bptc.ctex"
+path.astc="res://.godot/imported/reload_speed_96.png-6dc34d017501af38d8dcc779713885ef.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/icons_v2/skills/reload_speed_96.png"
-dest_files=["res://.godot/imported/reload_speed_96.png-6dc34d017501af38d8dcc779713885ef.bptc.ctex"]
+dest_files=["res://.godot/imported/reload_speed_96.png-6dc34d017501af38d8dcc779713885ef.bptc.ctex", "res://.godot/imported/reload_speed_96.png-6dc34d017501af38d8dcc779713885ef.astc.ctex"]
 
 [params]
 

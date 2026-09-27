@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://0ad4bdc7816a"
 path.bptc="res://.godot/imported/shadow_full_512x768.png-45708677de9b7a3ce7fc8332acbfcbe5.bptc.ctex"
+path.astc="res://.godot/imported/shadow_full_512x768.png-45708677de9b7a3ce7fc8332acbfcbe5.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/portraits_v2/shadow_full_512x768.png"
-dest_files=["res://.godot/imported/shadow_full_512x768.png-45708677de9b7a3ce7fc8332acbfcbe5.bptc.ctex"]
+dest_files=["res://.godot/imported/shadow_full_512x768.png-45708677de9b7a3ce7fc8332acbfcbe5.bptc.ctex", "res://.godot/imported/shadow_full_512x768.png-45708677de9b7a3ce7fc8332acbfcbe5.astc.ctex"]
 
 [params]
 

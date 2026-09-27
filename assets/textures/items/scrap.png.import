@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://8ab11663e040"
 path.bptc="res://.godot/imported/scrap.png-8d438c5f576a60e50aab2257ea27f81e.bptc.ctex"
+path.astc="res://.godot/imported/scrap.png-8d438c5f576a60e50aab2257ea27f81e.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/items/scrap.png"
-dest_files=["res://.godot/imported/scrap.png-8d438c5f576a60e50aab2257ea27f81e.bptc.ctex"]
+dest_files=["res://.godot/imported/scrap.png-8d438c5f576a60e50aab2257ea27f81e.bptc.ctex", "res://.godot/imported/scrap.png-8d438c5f576a60e50aab2257ea27f81e.astc.ctex"]
 
 [params]
 

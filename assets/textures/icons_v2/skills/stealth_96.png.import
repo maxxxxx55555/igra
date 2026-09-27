@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://6cf4b2a6bd35"
 path.bptc="res://.godot/imported/stealth_96.png-cc8f751f296b505462fd406380417a0c.bptc.ctex"
+path.astc="res://.godot/imported/stealth_96.png-cc8f751f296b505462fd406380417a0c.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/icons_v2/skills/stealth_96.png"
-dest_files=["res://.godot/imported/stealth_96.png-cc8f751f296b505462fd406380417a0c.bptc.ctex"]
+dest_files=["res://.godot/imported/stealth_96.png-cc8f751f296b505462fd406380417a0c.bptc.ctex", "res://.godot/imported/stealth_96.png-cc8f751f296b505462fd406380417a0c.astc.ctex"]
 
 [params]
 

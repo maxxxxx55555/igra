@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://0a3e3a4fc738"
 path.bptc="res://.godot/imported/makeshift_lamp.png-23e7f9aea36f2d7022d2d93270646fef.bptc.ctex"
+path.astc="res://.godot/imported/makeshift_lamp.png-23e7f9aea36f2d7022d2d93270646fef.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/items/makeshift_lamp.png"
-dest_files=["res://.godot/imported/makeshift_lamp.png-23e7f9aea36f2d7022d2d93270646fef.bptc.ctex"]
+dest_files=["res://.godot/imported/makeshift_lamp.png-23e7f9aea36f2d7022d2d93270646fef.bptc.ctex", "res://.godot/imported/makeshift_lamp.png-23e7f9aea36f2d7022d2d93270646fef.astc.ctex"]
 
 [params]
 

@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://0ec04f6b065a"
 path.bptc="res://.godot/imported/fog_patch_512.png-00623840f637a61805fe39180521e2a8.bptc.ctex"
+path.astc="res://.godot/imported/fog_patch_512.png-00623840f637a61805fe39180521e2a8.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/overlays_v2/fog_patch_512.png"
-dest_files=["res://.godot/imported/fog_patch_512.png-00623840f637a61805fe39180521e2a8.bptc.ctex"]
+dest_files=["res://.godot/imported/fog_patch_512.png-00623840f637a61805fe39180521e2a8.bptc.ctex", "res://.godot/imported/fog_patch_512.png-00623840f637a61805fe39180521e2a8.astc.ctex"]
 
 [params]
 

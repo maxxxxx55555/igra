@@ -130,7 +130,8 @@ func _run() -> void:
 	_check(span > 0.02 and span <= 0.25, "G02 headbob eye-height span while running=%0.3f (amp 0.1)" % span)
 	_check(is_equal_approx(p.stats.run_speed, p.stats.walk_speed * 1.6), "G06 run_speed=%s walk=%s" % [p.stats.run_speed, p.stats.walk_speed])
 	_check(vig_r > 0.4 and run_warmth - base_warmth > 0.03,
-		"S03 ember pulse while running: vignette r=%0.2f, edge warmth %0.3f -> %0.3f" % [vig_r, base_warmth, run_warmth])
+		"S03 ember pulse while running: vignette r=%0.2f a=%0.2f visible=%s, edge warmth %0.3f -> %0.3f" % [vig_r,
+		vig.color.a if vig else -1.0, vig.is_visible_in_tree() if vig else false, base_warmth, run_warmth])
 
 	# C06 - fog per tier.
 	var we := get_tree().root.find_child("WorldEnvironment", true, false) as WorldEnvironment

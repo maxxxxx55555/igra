@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://daa2556baa5b"
 path.bptc="res://.godot/imported/transformer.png-c86aa572c67c60adc8850c7d3d3e1f92.bptc.ctex"
+path.astc="res://.godot/imported/transformer.png-c86aa572c67c60adc8850c7d3d3e1f92.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/items/transformer.png"
-dest_files=["res://.godot/imported/transformer.png-c86aa572c67c60adc8850c7d3d3e1f92.bptc.ctex"]
+dest_files=["res://.godot/imported/transformer.png-c86aa572c67c60adc8850c7d3d3e1f92.bptc.ctex", "res://.godot/imported/transformer.png-c86aa572c67c60adc8850c7d3d3e1f92.astc.ctex"]
 
 [params]
 

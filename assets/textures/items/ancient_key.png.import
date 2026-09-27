@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://baeed6c81c1ef"
 path.bptc="res://.godot/imported/ancient_key.png-0df70e922eccae4793ecaa9f17341be7.bptc.ctex"
+path.astc="res://.godot/imported/ancient_key.png-0df70e922eccae4793ecaa9f17341be7.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/items/ancient_key.png"
-dest_files=["res://.godot/imported/ancient_key.png-0df70e922eccae4793ecaa9f17341be7.bptc.ctex"]
+dest_files=["res://.godot/imported/ancient_key.png-0df70e922eccae4793ecaa9f17341be7.bptc.ctex", "res://.godot/imported/ancient_key.png-0df70e922eccae4793ecaa9f17341be7.astc.ctex"]
 
 [params]
 

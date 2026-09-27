@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://ba301caec45ce"
 path.bptc="res://.godot/imported/cabinet_wood_512.png-32871e38693b68f03fc525a8770303dc.bptc.ctex"
+path.astc="res://.godot/imported/cabinet_wood_512.png-32871e38693b68f03fc525a8770303dc.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/surfaces/cabinet_wood_512.png"
-dest_files=["res://.godot/imported/cabinet_wood_512.png-32871e38693b68f03fc525a8770303dc.bptc.ctex"]
+dest_files=["res://.godot/imported/cabinet_wood_512.png-32871e38693b68f03fc525a8770303dc.bptc.ctex", "res://.godot/imported/cabinet_wood_512.png-32871e38693b68f03fc525a8770303dc.astc.ctex"]
 
 [params]
 

@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://6bec1b6ee3da"
 path.bptc="res://.godot/imported/substation_wall.png-6823a52ef7391564e5187b71e2539730.bptc.ctex"
+path.astc="res://.godot/imported/substation_wall.png-6823a52ef7391564e5187b71e2539730.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/tiles/substation_wall.png"
-dest_files=["res://.godot/imported/substation_wall.png-6823a52ef7391564e5187b71e2539730.bptc.ctex"]
+dest_files=["res://.godot/imported/substation_wall.png-6823a52ef7391564e5187b71e2539730.bptc.ctex", "res://.godot/imported/substation_wall.png-6823a52ef7391564e5187b71e2539730.astc.ctex"]
 
 [params]
 

@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://16faf3a6b614"
 path.bptc="res://.godot/imported/night_substation.png-13d24b5c8a89eab6aede2469a8f48231.bptc.ctex"
+path.astc="res://.godot/imported/night_substation.png-13d24b5c8a89eab6aede2469a8f48231.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/photos/night_substation.png"
-dest_files=["res://.godot/imported/night_substation.png-13d24b5c8a89eab6aede2469a8f48231.bptc.ctex"]
+dest_files=["res://.godot/imported/night_substation.png-13d24b5c8a89eab6aede2469a8f48231.bptc.ctex", "res://.godot/imported/night_substation.png-13d24b5c8a89eab6aede2469a8f48231.astc.ctex"]
 
 [params]
 

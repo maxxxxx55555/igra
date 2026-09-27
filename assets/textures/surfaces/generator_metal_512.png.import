@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://b84a7b3e2a63"
 path.bptc="res://.godot/imported/generator_metal_512.png-8ecc706b7646de5ff46d0b52a29f1ef8.bptc.ctex"
+path.astc="res://.godot/imported/generator_metal_512.png-8ecc706b7646de5ff46d0b52a29f1ef8.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/surfaces/generator_metal_512.png"
-dest_files=["res://.godot/imported/generator_metal_512.png-8ecc706b7646de5ff46d0b52a29f1ef8.bptc.ctex"]
+dest_files=["res://.godot/imported/generator_metal_512.png-8ecc706b7646de5ff46d0b52a29f1ef8.bptc.ctex", "res://.godot/imported/generator_metal_512.png-8ecc706b7646de5ff46d0b52a29f1ef8.astc.ctex"]
 
 [params]
 

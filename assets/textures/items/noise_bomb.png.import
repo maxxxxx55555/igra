@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://fa04ace62ff4"
 path.bptc="res://.godot/imported/noise_bomb.png-9d530a18a130226aba81233147018c79.bptc.ctex"
+path.astc="res://.godot/imported/noise_bomb.png-9d530a18a130226aba81233147018c79.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/items/noise_bomb.png"
-dest_files=["res://.godot/imported/noise_bomb.png-9d530a18a130226aba81233147018c79.bptc.ctex"]
+dest_files=["res://.godot/imported/noise_bomb.png-9d530a18a130226aba81233147018c79.bptc.ctex", "res://.godot/imported/noise_bomb.png-9d530a18a130226aba81233147018c79.astc.ctex"]
 
 [params]
 

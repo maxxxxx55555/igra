@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://4b35ce4d227c"
 path.bptc="res://.godot/imported/ach_medal_v2_05_96.png-d549641d85feb6e59453ae93049fb05c.bptc.ctex"
+path.astc="res://.godot/imported/ach_medal_v2_05_96.png-d549641d85feb6e59453ae93049fb05c.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/icons_v2/ach_medal_v2_05_96.png"
-dest_files=["res://.godot/imported/ach_medal_v2_05_96.png-d549641d85feb6e59453ae93049fb05c.bptc.ctex"]
+dest_files=["res://.godot/imported/ach_medal_v2_05_96.png-d549641d85feb6e59453ae93049fb05c.bptc.ctex", "res://.godot/imported/ach_medal_v2_05_96.png-d549641d85feb6e59453ae93049fb05c.astc.ctex"]
 
 [params]
 

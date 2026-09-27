@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://4e022037d6a2"
 path.bptc="res://.godot/imported/menu_hero.png-b2afe055cafdde99b8adcb4d67a7bc3a.bptc.ctex"
+path.astc="res://.godot/imported/menu_hero.png-b2afe055cafdde99b8adcb4d67a7bc3a.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/screens_v2/menu_hero.png"
-dest_files=["res://.godot/imported/menu_hero.png-b2afe055cafdde99b8adcb4d67a7bc3a.bptc.ctex"]
+dest_files=["res://.godot/imported/menu_hero.png-b2afe055cafdde99b8adcb4d67a7bc3a.bptc.ctex", "res://.godot/imported/menu_hero.png-b2afe055cafdde99b8adcb4d67a7bc3a.astc.ctex"]
 
 [params]
 

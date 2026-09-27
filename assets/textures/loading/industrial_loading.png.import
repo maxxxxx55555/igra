@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://d07517cc7c4f"
 path.bptc="res://.godot/imported/industrial_loading.png-9ea019324fffd431f034f052f3c87e40.bptc.ctex"
+path.astc="res://.godot/imported/industrial_loading.png-9ea019324fffd431f034f052f3c87e40.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/loading/industrial_loading.png"
-dest_files=["res://.godot/imported/industrial_loading.png-9ea019324fffd431f034f052f3c87e40.bptc.ctex"]
+dest_files=["res://.godot/imported/industrial_loading.png-9ea019324fffd431f034f052f3c87e40.bptc.ctex", "res://.godot/imported/industrial_loading.png-9ea019324fffd431f034f052f3c87e40.astc.ctex"]
 
 [params]
 

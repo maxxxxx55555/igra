@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bad8408be2a71"
 path.bptc="res://.godot/imported/quickslot_v2_72.png-fa5e499539a3bf6287e56306de22c559.bptc.ctex"
+path.astc="res://.godot/imported/quickslot_v2_72.png-fa5e499539a3bf6287e56306de22c559.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/ui_v2/quickslot_v2_72.png"
-dest_files=["res://.godot/imported/quickslot_v2_72.png-fa5e499539a3bf6287e56306de22c559.bptc.ctex"]
+dest_files=["res://.godot/imported/quickslot_v2_72.png-fa5e499539a3bf6287e56306de22c559.bptc.ctex", "res://.godot/imported/quickslot_v2_72.png-fa5e499539a3bf6287e56306de22c559.astc.ctex"]
 
 [params]
 

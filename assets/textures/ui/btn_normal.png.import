@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://4e83e52fa2b6"
 path.bptc="res://.godot/imported/btn_normal.png-155e14f989cbb816f2941f7286354e36.bptc.ctex"
+path.astc="res://.godot/imported/btn_normal.png-155e14f989cbb816f2941f7286354e36.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/ui/btn_normal.png"
-dest_files=["res://.godot/imported/btn_normal.png-155e14f989cbb816f2941f7286354e36.bptc.ctex"]
+dest_files=["res://.godot/imported/btn_normal.png-155e14f989cbb816f2941f7286354e36.bptc.ctex", "res://.godot/imported/btn_normal.png-155e14f989cbb816f2941f7286354e36.astc.ctex"]
 
 [params]
 

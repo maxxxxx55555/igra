@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://773ef383a144"
 path.bptc="res://.godot/imported/minimap_frame_256.png-19bb90cce8c4715390c2235eeee12537.bptc.ctex"
+path.astc="res://.godot/imported/minimap_frame_256.png-19bb90cce8c4715390c2235eeee12537.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/ui/minimap_frame_256.png"
-dest_files=["res://.godot/imported/minimap_frame_256.png-19bb90cce8c4715390c2235eeee12537.bptc.ctex"]
+dest_files=["res://.godot/imported/minimap_frame_256.png-19bb90cce8c4715390c2235eeee12537.bptc.ctex", "res://.godot/imported/minimap_frame_256.png-19bb90cce8c4715390c2235eeee12537.astc.ctex"]
 
 [params]
 

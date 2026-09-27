@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://33705ba47cd5"
 path.bptc="res://.godot/imported/gesture_swipe_96.png-fb5e0b9d0ae157310aaf1694b8b1fec4.bptc.ctex"
+path.astc="res://.godot/imported/gesture_swipe_96.png-fb5e0b9d0ae157310aaf1694b8b1fec4.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/picto_v2/gesture_swipe_96.png"
-dest_files=["res://.godot/imported/gesture_swipe_96.png-fb5e0b9d0ae157310aaf1694b8b1fec4.bptc.ctex"]
+dest_files=["res://.godot/imported/gesture_swipe_96.png-fb5e0b9d0ae157310aaf1694b8b1fec4.bptc.ctex", "res://.godot/imported/gesture_swipe_96.png-fb5e0b9d0ae157310aaf1694b8b1fec4.astc.ctex"]
 
 [params]
 

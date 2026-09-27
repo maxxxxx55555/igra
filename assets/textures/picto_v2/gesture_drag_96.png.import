@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://b881361edce8"
 path.bptc="res://.godot/imported/gesture_drag_96.png-f1ab944dc4976e949c87e5f6bbd721f6.bptc.ctex"
+path.astc="res://.godot/imported/gesture_drag_96.png-f1ab944dc4976e949c87e5f6bbd721f6.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/picto_v2/gesture_drag_96.png"
-dest_files=["res://.godot/imported/gesture_drag_96.png-f1ab944dc4976e949c87e5f6bbd721f6.bptc.ctex"]
+dest_files=["res://.godot/imported/gesture_drag_96.png-f1ab944dc4976e949c87e5f6bbd721f6.bptc.ctex", "res://.godot/imported/gesture_drag_96.png-f1ab944dc4976e949c87e5f6bbd721f6.astc.ctex"]
 
 [params]
 

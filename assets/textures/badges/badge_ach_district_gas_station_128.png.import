@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://32a732554a83"
 path.bptc="res://.godot/imported/badge_ach_district_gas_station_128.png-ed83bd9ce243070870eb1ef0d5c903f5.bptc.ctex"
+path.astc="res://.godot/imported/badge_ach_district_gas_station_128.png-ed83bd9ce243070870eb1ef0d5c903f5.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/badges/badge_ach_district_gas_station_128.png"
-dest_files=["res://.godot/imported/badge_ach_district_gas_station_128.png-ed83bd9ce243070870eb1ef0d5c903f5.bptc.ctex"]
+dest_files=["res://.godot/imported/badge_ach_district_gas_station_128.png-ed83bd9ce243070870eb1ef0d5c903f5.bptc.ctex", "res://.godot/imported/badge_ach_district_gas_station_128.png-ed83bd9ce243070870eb1ef0d5c903f5.astc.ctex"]
 
 [params]
 

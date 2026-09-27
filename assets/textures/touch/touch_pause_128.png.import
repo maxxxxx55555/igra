@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://fdf7e17688cf"
 path.bptc="res://.godot/imported/touch_pause_128.png-e665d83af8a7ce570bfe1d100e5f79e7.bptc.ctex"
+path.astc="res://.godot/imported/touch_pause_128.png-e665d83af8a7ce570bfe1d100e5f79e7.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/touch/touch_pause_128.png"
-dest_files=["res://.godot/imported/touch_pause_128.png-e665d83af8a7ce570bfe1d100e5f79e7.bptc.ctex"]
+dest_files=["res://.godot/imported/touch_pause_128.png-e665d83af8a7ce570bfe1d100e5f79e7.bptc.ctex", "res://.godot/imported/touch_pause_128.png-e665d83af8a7ce570bfe1d100e5f79e7.astc.ctex"]
 
 [params]
 

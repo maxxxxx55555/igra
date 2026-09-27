@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://74a2b1181aac"
 path.bptc="res://.godot/imported/ruined_school.png-681987b37eb1a017612d5d4037fb3389.bptc.ctex"
+path.astc="res://.godot/imported/ruined_school.png-681987b37eb1a017612d5d4037fb3389.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/photos/ruined_school.png"
-dest_files=["res://.godot/imported/ruined_school.png-681987b37eb1a017612d5d4037fb3389.bptc.ctex"]
+dest_files=["res://.godot/imported/ruined_school.png-681987b37eb1a017612d5d4037fb3389.bptc.ctex", "res://.godot/imported/ruined_school.png-681987b37eb1a017612d5d4037fb3389.astc.ctex"]
 
 [params]
 

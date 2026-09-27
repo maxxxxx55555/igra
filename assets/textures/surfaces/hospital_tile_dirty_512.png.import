@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://816b0d8d373a"
 path.bptc="res://.godot/imported/hospital_tile_dirty_512.png-bb8c3cbdb45bc32d290e75dd0a390cc2.bptc.ctex"
+path.astc="res://.godot/imported/hospital_tile_dirty_512.png-bb8c3cbdb45bc32d290e75dd0a390cc2.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/surfaces/hospital_tile_dirty_512.png"
-dest_files=["res://.godot/imported/hospital_tile_dirty_512.png-bb8c3cbdb45bc32d290e75dd0a390cc2.bptc.ctex"]
+dest_files=["res://.godot/imported/hospital_tile_dirty_512.png-bb8c3cbdb45bc32d290e75dd0a390cc2.bptc.ctex", "res://.godot/imported/hospital_tile_dirty_512.png-bb8c3cbdb45bc32d290e75dd0a390cc2.astc.ctex"]
 
 [params]
 

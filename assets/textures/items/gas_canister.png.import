@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://22c86f3515f1"
 path.bptc="res://.godot/imported/gas_canister.png-faac859ceaa0e628b144737bde53e8d8.bptc.ctex"
+path.astc="res://.godot/imported/gas_canister.png-faac859ceaa0e628b144737bde53e8d8.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/items/gas_canister.png"
-dest_files=["res://.godot/imported/gas_canister.png-faac859ceaa0e628b144737bde53e8d8.bptc.ctex"]
+dest_files=["res://.godot/imported/gas_canister.png-faac859ceaa0e628b144737bde53e8d8.bptc.ctex", "res://.godot/imported/gas_canister.png-faac859ceaa0e628b144737bde53e8d8.astc.ctex"]
 
 [params]
 

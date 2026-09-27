@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://5eeaf5576a60"
 path.bptc="res://.godot/imported/broken_lamp.png-c683a3a9db7328b52372d65cd6915e73.bptc.ctex"
+path.astc="res://.godot/imported/broken_lamp.png-c683a3a9db7328b52372d65cd6915e73.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/photos/broken_lamp.png"
-dest_files=["res://.godot/imported/broken_lamp.png-c683a3a9db7328b52372d65cd6915e73.bptc.ctex"]
+dest_files=["res://.godot/imported/broken_lamp.png-c683a3a9db7328b52372d65cd6915e73.bptc.ctex", "res://.godot/imported/broken_lamp.png-c683a3a9db7328b52372d65cd6915e73.astc.ctex"]
 
 [params]
 

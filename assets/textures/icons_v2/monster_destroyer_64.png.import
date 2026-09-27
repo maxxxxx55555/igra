@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://f702063dba5e"
 path.bptc="res://.godot/imported/monster_destroyer_64.png-8370b22e1dff43dac30fda31a00fe605.bptc.ctex"
+path.astc="res://.godot/imported/monster_destroyer_64.png-8370b22e1dff43dac30fda31a00fe605.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/icons_v2/monster_destroyer_64.png"
-dest_files=["res://.godot/imported/monster_destroyer_64.png-8370b22e1dff43dac30fda31a00fe605.bptc.ctex"]
+dest_files=["res://.godot/imported/monster_destroyer_64.png-8370b22e1dff43dac30fda31a00fe605.bptc.ctex", "res://.godot/imported/monster_destroyer_64.png-8370b22e1dff43dac30fda31a00fe605.astc.ctex"]
 
 [params]
 

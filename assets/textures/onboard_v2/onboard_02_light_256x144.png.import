@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://6aa05607748b"
 path.bptc="res://.godot/imported/onboard_02_light_256x144.png-523cdaffc61d2dd532e3968cb24b47ae.bptc.ctex"
+path.astc="res://.godot/imported/onboard_02_light_256x144.png-523cdaffc61d2dd532e3968cb24b47ae.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/onboard_v2/onboard_02_light_256x144.png"
-dest_files=["res://.godot/imported/onboard_02_light_256x144.png-523cdaffc61d2dd532e3968cb24b47ae.bptc.ctex"]
+dest_files=["res://.godot/imported/onboard_02_light_256x144.png-523cdaffc61d2dd532e3968cb24b47ae.bptc.ctex", "res://.godot/imported/onboard_02_light_256x144.png-523cdaffc61d2dd532e3968cb24b47ae.astc.ctex"]
 
 [params]
 

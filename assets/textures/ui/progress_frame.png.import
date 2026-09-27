@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://ff26c1274e0d"
 path.bptc="res://.godot/imported/progress_frame.png-b924de061e4fd40dd7356cd089faf328.bptc.ctex"
+path.astc="res://.godot/imported/progress_frame.png-b924de061e4fd40dd7356cd089faf328.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/ui/progress_frame.png"
-dest_files=["res://.godot/imported/progress_frame.png-b924de061e4fd40dd7356cd089faf328.bptc.ctex"]
+dest_files=["res://.godot/imported/progress_frame.png-b924de061e4fd40dd7356cd089faf328.bptc.ctex", "res://.godot/imported/progress_frame.png-b924de061e4fd40dd7356cd089faf328.astc.ctex"]
 
 [params]
 

@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://43a33b8ebf4a"
 path.bptc="res://.godot/imported/explosive.png-89f6850cec38abeafe4c4b9c1f3bad8d.bptc.ctex"
+path.astc="res://.godot/imported/explosive.png-89f6850cec38abeafe4c4b9c1f3bad8d.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/items/explosive.png"
-dest_files=["res://.godot/imported/explosive.png-89f6850cec38abeafe4c4b9c1f3bad8d.bptc.ctex"]
+dest_files=["res://.godot/imported/explosive.png-89f6850cec38abeafe4c4b9c1f3bad8d.bptc.ctex", "res://.godot/imported/explosive.png-89f6850cec38abeafe4c4b9c1f3bad8d.astc.ctex"]
 
 [params]
 

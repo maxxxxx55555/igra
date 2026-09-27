@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cd02b4c3cfaf"
 path.bptc="res://.godot/imported/door_wood_512.png-0652bec0c73f9914b3d6aca4cc9669c1.bptc.ctex"
+path.astc="res://.godot/imported/door_wood_512.png-0652bec0c73f9914b3d6aca4cc9669c1.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/surfaces/door_wood_512.png"
-dest_files=["res://.godot/imported/door_wood_512.png-0652bec0c73f9914b3d6aca4cc9669c1.bptc.ctex"]
+dest_files=["res://.godot/imported/door_wood_512.png-0652bec0c73f9914b3d6aca4cc9669c1.bptc.ctex", "res://.godot/imported/door_wood_512.png-0652bec0c73f9914b3d6aca4cc9669c1.astc.ctex"]
 
 [params]
 

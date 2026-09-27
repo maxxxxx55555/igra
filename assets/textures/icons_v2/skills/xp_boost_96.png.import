@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://5bd7aa732dfc"
 path.bptc="res://.godot/imported/xp_boost_96.png-7982c39763315c2113af1e2cbecf533d.bptc.ctex"
+path.astc="res://.godot/imported/xp_boost_96.png-7982c39763315c2113af1e2cbecf533d.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/icons_v2/skills/xp_boost_96.png"
-dest_files=["res://.godot/imported/xp_boost_96.png-7982c39763315c2113af1e2cbecf533d.bptc.ctex"]
+dest_files=["res://.godot/imported/xp_boost_96.png-7982c39763315c2113af1e2cbecf533d.bptc.ctex", "res://.godot/imported/xp_boost_96.png-7982c39763315c2113af1e2cbecf533d.astc.ctex"]
 
 [params]
 

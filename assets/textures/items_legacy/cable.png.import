@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://b165737c3cb5"
 path.bptc="res://.godot/imported/cable.png-328a7a6442dda86911554fe611228dbb.bptc.ctex"
+path.astc="res://.godot/imported/cable.png-328a7a6442dda86911554fe611228dbb.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/items_legacy/cable.png"
-dest_files=["res://.godot/imported/cable.png-328a7a6442dda86911554fe611228dbb.bptc.ctex"]
+dest_files=["res://.godot/imported/cable.png-328a7a6442dda86911554fe611228dbb.bptc.ctex", "res://.godot/imported/cable.png-328a7a6442dda86911554fe611228dbb.astc.ctex"]
 
 [params]
 

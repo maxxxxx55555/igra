@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://6e7111a650d2"
 path.bptc="res://.godot/imported/btn_flashlight_pressed_128.png-cd6ca78a0e623eeb1f5445ad2e0bf43b.bptc.ctex"
+path.astc="res://.godot/imported/btn_flashlight_pressed_128.png-cd6ca78a0e623eeb1f5445ad2e0bf43b.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/ui/btn_flashlight_pressed_128.png"
-dest_files=["res://.godot/imported/btn_flashlight_pressed_128.png-cd6ca78a0e623eeb1f5445ad2e0bf43b.bptc.ctex"]
+dest_files=["res://.godot/imported/btn_flashlight_pressed_128.png-cd6ca78a0e623eeb1f5445ad2e0bf43b.bptc.ctex", "res://.godot/imported/btn_flashlight_pressed_128.png-cd6ca78a0e623eeb1f5445ad2e0bf43b.astc.ctex"]
 
 [params]
 

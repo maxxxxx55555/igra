@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://700873c1bba4"
 path.bptc="res://.godot/imported/molotov.png-b5861900bc92ff28b8c2a65f0453751e.bptc.ctex"
+path.astc="res://.godot/imported/molotov.png-b5861900bc92ff28b8c2a65f0453751e.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/items/molotov.png"
-dest_files=["res://.godot/imported/molotov.png-b5861900bc92ff28b8c2a65f0453751e.bptc.ctex"]
+dest_files=["res://.godot/imported/molotov.png-b5861900bc92ff28b8c2a65f0453751e.bptc.ctex", "res://.godot/imported/molotov.png-b5861900bc92ff28b8c2a65f0453751e.astc.ctex"]
 
 [params]
 

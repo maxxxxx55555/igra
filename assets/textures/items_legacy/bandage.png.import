@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://5586d7f48206"
 path.bptc="res://.godot/imported/bandage.png-dae03b170658897a62da7285d6c4a171.bptc.ctex"
+path.astc="res://.godot/imported/bandage.png-dae03b170658897a62da7285d6c4a171.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/items_legacy/bandage.png"
-dest_files=["res://.godot/imported/bandage.png-dae03b170658897a62da7285d6c4a171.bptc.ctex"]
+dest_files=["res://.godot/imported/bandage.png-dae03b170658897a62da7285d6c4a171.bptc.ctex", "res://.godot/imported/bandage.png-dae03b170658897a62da7285d6c4a171.astc.ctex"]
 
 [params]
 

@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://54e8d755eba6"
 path.bptc="res://.godot/imported/light_radius_96.png-8b0ab271eeaefb523471b674928ed877.bptc.ctex"
+path.astc="res://.godot/imported/light_radius_96.png-8b0ab271eeaefb523471b674928ed877.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/icons_v2/skills/light_radius_96.png"
-dest_files=["res://.godot/imported/light_radius_96.png-8b0ab271eeaefb523471b674928ed877.bptc.ctex"]
+dest_files=["res://.godot/imported/light_radius_96.png-8b0ab271eeaefb523471b674928ed877.bptc.ctex", "res://.godot/imported/light_radius_96.png-8b0ab271eeaefb523471b674928ed877.astc.ctex"]
 
 [params]
 

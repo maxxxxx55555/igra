@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://e8ed57b1ce2d"
 path.bptc="res://.godot/imported/school_floor_512.png-165a2aaed9bec6c0d2746b156113215c.bptc.ctex"
+path.astc="res://.godot/imported/school_floor_512.png-165a2aaed9bec6c0d2746b156113215c.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/surfaces/school_floor_512.png"
-dest_files=["res://.godot/imported/school_floor_512.png-165a2aaed9bec6c0d2746b156113215c.bptc.ctex"]
+dest_files=["res://.godot/imported/school_floor_512.png-165a2aaed9bec6c0d2746b156113215c.bptc.ctex", "res://.godot/imported/school_floor_512.png-165a2aaed9bec6c0d2746b156113215c.astc.ctex"]
 
 [params]
 

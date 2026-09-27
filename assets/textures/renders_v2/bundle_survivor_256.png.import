@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://0f58aaee4a6e"
 path.bptc="res://.godot/imported/bundle_survivor_256.png-cf90683bb516e18ed43db47ee9521fdb.bptc.ctex"
+path.astc="res://.godot/imported/bundle_survivor_256.png-cf90683bb516e18ed43db47ee9521fdb.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/renders_v2/bundle_survivor_256.png"
-dest_files=["res://.godot/imported/bundle_survivor_256.png-cf90683bb516e18ed43db47ee9521fdb.bptc.ctex"]
+dest_files=["res://.godot/imported/bundle_survivor_256.png-cf90683bb516e18ed43db47ee9521fdb.bptc.ctex", "res://.godot/imported/bundle_survivor_256.png-cf90683bb516e18ed43db47ee9521fdb.astc.ctex"]
 
 [params]
 

@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://c5212b38aea8"
 path.bptc="res://.godot/imported/firework.png-3972f50bd29d8928499b2ba5c278ecb9.bptc.ctex"
+path.astc="res://.godot/imported/firework.png-3972f50bd29d8928499b2ba5c278ecb9.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/items/firework.png"
-dest_files=["res://.godot/imported/firework.png-3972f50bd29d8928499b2ba5c278ecb9.bptc.ctex"]
+dest_files=["res://.godot/imported/firework.png-3972f50bd29d8928499b2ba5c278ecb9.bptc.ctex", "res://.godot/imported/firework.png-3972f50bd29d8928499b2ba5c278ecb9.astc.ctex"]
 
 [params]
 

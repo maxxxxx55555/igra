@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://8c153acfed0c"
 path.bptc="res://.godot/imported/loading_street.png-cb640c6571001e09d1943dfbe1f17dc8.bptc.ctex"
+path.astc="res://.godot/imported/loading_street.png-cb640c6571001e09d1943dfbe1f17dc8.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/screens_v2/loading_street.png"
-dest_files=["res://.godot/imported/loading_street.png-cb640c6571001e09d1943dfbe1f17dc8.bptc.ctex"]
+dest_files=["res://.godot/imported/loading_street.png-cb640c6571001e09d1943dfbe1f17dc8.bptc.ctex", "res://.godot/imported/loading_street.png-cb640c6571001e09d1943dfbe1f17dc8.astc.ctex"]
 
 [params]
 

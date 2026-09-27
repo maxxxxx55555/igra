@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bccc24520a66"
 path.bptc="res://.godot/imported/police_map_512.png-72bf58eae19d448528b8015baf82e361.bptc.ctex"
+path.astc="res://.godot/imported/police_map_512.png-72bf58eae19d448528b8015baf82e361.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/maps/police_map_512.png"
-dest_files=["res://.godot/imported/police_map_512.png-72bf58eae19d448528b8015baf82e361.bptc.ctex"]
+dest_files=["res://.godot/imported/police_map_512.png-72bf58eae19d448528b8015baf82e361.bptc.ctex", "res://.godot/imported/police_map_512.png-72bf58eae19d448528b8015baf82e361.astc.ctex"]
 
 [params]
 

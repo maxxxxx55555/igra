@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://e02ga5d1dccf"
 path.bptc="res://.godot/imported/ach_explorer_96.png-92a56a2bf98abd473e851db2620e457a.bptc.ctex"
+path.astc="res://.godot/imported/ach_explorer_96.png-92a56a2bf98abd473e851db2620e457a.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/icons/ach_explorer_96.png"
-dest_files=["res://.godot/imported/ach_explorer_96.png-92a56a2bf98abd473e851db2620e457a.bptc.ctex"]
+dest_files=["res://.godot/imported/ach_explorer_96.png-92a56a2bf98abd473e851db2620e457a.bptc.ctex", "res://.godot/imported/ach_explorer_96.png-92a56a2bf98abd473e851db2620e457a.astc.ctex"]
 
 [params]
 

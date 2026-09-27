@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://156cee3c4f54"
 path.bptc="res://.godot/imported/stat_clock_64.png-f5ef0e96fd086263959e7cc681aba481.bptc.ctex"
+path.astc="res://.godot/imported/stat_clock_64.png-f5ef0e96fd086263959e7cc681aba481.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/icons_v2/stat_clock_64.png"
-dest_files=["res://.godot/imported/stat_clock_64.png-f5ef0e96fd086263959e7cc681aba481.bptc.ctex"]
+dest_files=["res://.godot/imported/stat_clock_64.png-f5ef0e96fd086263959e7cc681aba481.bptc.ctex", "res://.godot/imported/stat_clock_64.png-f5ef0e96fd086263959e7cc681aba481.astc.ctex"]
 
 [params]
 

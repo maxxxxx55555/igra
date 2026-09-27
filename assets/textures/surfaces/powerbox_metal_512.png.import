@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://1064c3aaaaea"
 path.bptc="res://.godot/imported/powerbox_metal_512.png-3d627bd29e824490af481e449bc31090.bptc.ctex"
+path.astc="res://.godot/imported/powerbox_metal_512.png-3d627bd29e824490af481e449bc31090.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/surfaces/powerbox_metal_512.png"
-dest_files=["res://.godot/imported/powerbox_metal_512.png-3d627bd29e824490af481e449bc31090.bptc.ctex"]
+dest_files=["res://.godot/imported/powerbox_metal_512.png-3d627bd29e824490af481e449bc31090.bptc.ctex", "res://.godot/imported/powerbox_metal_512.png-3d627bd29e824490af481e449bc31090.astc.ctex"]
 
 [params]
 

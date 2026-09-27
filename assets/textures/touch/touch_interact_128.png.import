@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://ba4a0af8b27d5"
 path.bptc="res://.godot/imported/touch_interact_128.png-af9919386ce33b7f87b4f50edc81bbcc.bptc.ctex"
+path.astc="res://.godot/imported/touch_interact_128.png-af9919386ce33b7f87b4f50edc81bbcc.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/touch/touch_interact_128.png"
-dest_files=["res://.godot/imported/touch_interact_128.png-af9919386ce33b7f87b4f50edc81bbcc.bptc.ctex"]
+dest_files=["res://.godot/imported/touch_interact_128.png-af9919386ce33b7f87b4f50edc81bbcc.bptc.ctex", "res://.godot/imported/touch_interact_128.png-af9919386ce33b7f87b4f50edc81bbcc.astc.ctex"]
 
 [params]
 

@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://34f1f4a16b4a"
 path.bptc="res://.godot/imported/save_sparkle_64.png-49d0bcb06f9eddf65b8544752c86a580.bptc.ctex"
+path.astc="res://.godot/imported/save_sparkle_64.png-49d0bcb06f9eddf65b8544752c86a580.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/fx/save_sparkle_64.png"
-dest_files=["res://.godot/imported/save_sparkle_64.png-49d0bcb06f9eddf65b8544752c86a580.bptc.ctex"]
+dest_files=["res://.godot/imported/save_sparkle_64.png-49d0bcb06f9eddf65b8544752c86a580.bptc.ctex", "res://.godot/imported/save_sparkle_64.png-49d0bcb06f9eddf65b8544752c86a580.astc.ctex"]
 
 [params]
 

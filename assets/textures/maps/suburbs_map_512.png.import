@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://3a206c36f55e"
 path.bptc="res://.godot/imported/suburbs_map_512.png-b11b24245e4b83107dbf4a8e5806e28c.bptc.ctex"
+path.astc="res://.godot/imported/suburbs_map_512.png-b11b24245e4b83107dbf4a8e5806e28c.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/maps/suburbs_map_512.png"
-dest_files=["res://.godot/imported/suburbs_map_512.png-b11b24245e4b83107dbf4a8e5806e28c.bptc.ctex"]
+dest_files=["res://.godot/imported/suburbs_map_512.png-b11b24245e4b83107dbf4a8e5806e28c.bptc.ctex", "res://.godot/imported/suburbs_map_512.png-b11b24245e4b83107dbf4a8e5806e28c.astc.ctex"]
 
 [params]
 

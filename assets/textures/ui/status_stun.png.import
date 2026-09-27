@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://d6d25ca3a660"
 path.bptc="res://.godot/imported/status_stun.png-87eec9eaa2af213e2075d3d199208604.bptc.ctex"
+path.astc="res://.godot/imported/status_stun.png-87eec9eaa2af213e2075d3d199208604.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/ui/status_stun.png"
-dest_files=["res://.godot/imported/status_stun.png-87eec9eaa2af213e2075d3d199208604.bptc.ctex"]
+dest_files=["res://.godot/imported/status_stun.png-87eec9eaa2af213e2075d3d199208604.bptc.ctex", "res://.godot/imported/status_stun.png-87eec9eaa2af213e2075d3d199208604.astc.ctex"]
 
 [params]
 

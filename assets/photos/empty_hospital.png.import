@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://6a4f77824504"
 path.bptc="res://.godot/imported/empty_hospital.png-664fafaa482d7ea43ebabff482fc79db.bptc.ctex"
+path.astc="res://.godot/imported/empty_hospital.png-664fafaa482d7ea43ebabff482fc79db.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/photos/empty_hospital.png"
-dest_files=["res://.godot/imported/empty_hospital.png-664fafaa482d7ea43ebabff482fc79db.bptc.ctex"]
+dest_files=["res://.godot/imported/empty_hospital.png-664fafaa482d7ea43ebabff482fc79db.bptc.ctex", "res://.godot/imported/empty_hospital.png-664fafaa482d7ea43ebabff482fc79db.astc.ctex"]
 
 [params]
 

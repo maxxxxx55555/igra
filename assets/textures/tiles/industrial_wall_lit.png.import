@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://68b63b7ca61f"
 path.bptc="res://.godot/imported/industrial_wall_lit.png-8e631f71b2171852bad6b976c8eb1b22.bptc.ctex"
+path.astc="res://.godot/imported/industrial_wall_lit.png-8e631f71b2171852bad6b976c8eb1b22.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/tiles/industrial_wall_lit.png"
-dest_files=["res://.godot/imported/industrial_wall_lit.png-8e631f71b2171852bad6b976c8eb1b22.bptc.ctex"]
+dest_files=["res://.godot/imported/industrial_wall_lit.png-8e631f71b2171852bad6b976c8eb1b22.bptc.ctex", "res://.godot/imported/industrial_wall_lit.png-8e631f71b2171852bad6b976c8eb1b22.astc.ctex"]
 
 [params]
 

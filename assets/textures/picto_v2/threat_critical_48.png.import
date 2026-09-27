@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://b56a6584f715"
 path.bptc="res://.godot/imported/threat_critical_48.png-b213d35bc4c740e95f1f86b5c78de2a8.bptc.ctex"
+path.astc="res://.godot/imported/threat_critical_48.png-b213d35bc4c740e95f1f86b5c78de2a8.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/picto_v2/threat_critical_48.png"
-dest_files=["res://.godot/imported/threat_critical_48.png-b213d35bc4c740e95f1f86b5c78de2a8.bptc.ctex"]
+dest_files=["res://.godot/imported/threat_critical_48.png-b213d35bc4c740e95f1f86b5c78de2a8.bptc.ctex", "res://.godot/imported/threat_critical_48.png-b213d35bc4c740e95f1f86b5c78de2a8.astc.ctex"]
 
 [params]
 

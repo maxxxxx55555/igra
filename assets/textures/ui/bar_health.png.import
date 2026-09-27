@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://eb4c33031d6f"
 path.bptc="res://.godot/imported/bar_health.png-a4310c71f9748edd973674bcdcb80b47.bptc.ctex"
+path.astc="res://.godot/imported/bar_health.png-a4310c71f9748edd973674bcdcb80b47.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/ui/bar_health.png"
-dest_files=["res://.godot/imported/bar_health.png-a4310c71f9748edd973674bcdcb80b47.bptc.ctex"]
+dest_files=["res://.godot/imported/bar_health.png-a4310c71f9748edd973674bcdcb80b47.bptc.ctex", "res://.godot/imported/bar_health.png-a4310c71f9748edd973674bcdcb80b47.astc.ctex"]
 
 [params]
 

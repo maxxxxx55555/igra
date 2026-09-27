@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://401ede31473"
 path.bptc="res://.godot/imported/bar_stamina.png-2a80fc710ad4acb2d9a1ef16c4f71af8.bptc.ctex"
+path.astc="res://.godot/imported/bar_stamina.png-2a80fc710ad4acb2d9a1ef16c4f71af8.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/ui/bar_stamina.png"
-dest_files=["res://.godot/imported/bar_stamina.png-2a80fc710ad4acb2d9a1ef16c4f71af8.bptc.ctex"]
+dest_files=["res://.godot/imported/bar_stamina.png-2a80fc710ad4acb2d9a1ef16c4f71af8.bptc.ctex", "res://.godot/imported/bar_stamina.png-2a80fc710ad4acb2d9a1ef16c4f71af8.astc.ctex"]
 
 [params]
 

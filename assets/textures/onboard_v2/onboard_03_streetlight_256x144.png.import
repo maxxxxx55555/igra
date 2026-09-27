@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://2171574b2161"
 path.bptc="res://.godot/imported/onboard_03_streetlight_256x144.png-334cdd0125235f8cdd1524c02d501cec.bptc.ctex"
+path.astc="res://.godot/imported/onboard_03_streetlight_256x144.png-334cdd0125235f8cdd1524c02d501cec.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/onboard_v2/onboard_03_streetlight_256x144.png"
-dest_files=["res://.godot/imported/onboard_03_streetlight_256x144.png-334cdd0125235f8cdd1524c02d501cec.bptc.ctex"]
+dest_files=["res://.godot/imported/onboard_03_streetlight_256x144.png-334cdd0125235f8cdd1524c02d501cec.bptc.ctex", "res://.godot/imported/onboard_03_streetlight_256x144.png-334cdd0125235f8cdd1524c02d501cec.astc.ctex"]
 
 [params]
 

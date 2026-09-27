@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://4a6b608ca8ff"
 path.bptc="res://.godot/imported/bleed_pulse_64.png-676b5a304d716640ff60553783cfbcdc.bptc.ctex"
+path.astc="res://.godot/imported/bleed_pulse_64.png-676b5a304d716640ff60553783cfbcdc.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/fx/bleed_pulse_64.png"
-dest_files=["res://.godot/imported/bleed_pulse_64.png-676b5a304d716640ff60553783cfbcdc.bptc.ctex"]
+dest_files=["res://.godot/imported/bleed_pulse_64.png-676b5a304d716640ff60553783cfbcdc.bptc.ctex", "res://.godot/imported/bleed_pulse_64.png-676b5a304d716640ff60553783cfbcdc.astc.ctex"]
 
 [params]
 

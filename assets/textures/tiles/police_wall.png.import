@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://e78aaf60d2ac"
 path.bptc="res://.godot/imported/police_wall.png-515dbbe08adc8d6d17fbab28c93c9841.bptc.ctex"
+path.astc="res://.godot/imported/police_wall.png-515dbbe08adc8d6d17fbab28c93c9841.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/tiles/police_wall.png"
-dest_files=["res://.godot/imported/police_wall.png-515dbbe08adc8d6d17fbab28c93c9841.bptc.ctex"]
+dest_files=["res://.godot/imported/police_wall.png-515dbbe08adc8d6d17fbab28c93c9841.bptc.ctex", "res://.godot/imported/police_wall.png-515dbbe08adc8d6d17fbab28c93c9841.astc.ctex"]
 
 [params]
 

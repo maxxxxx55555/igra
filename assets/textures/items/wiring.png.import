@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://66a30bbe46a5"
 path.bptc="res://.godot/imported/wiring.png-0a32950f57d41208b0eb014bea2ba9b3.bptc.ctex"
+path.astc="res://.godot/imported/wiring.png-0a32950f57d41208b0eb014bea2ba9b3.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/items/wiring.png"
-dest_files=["res://.godot/imported/wiring.png-0a32950f57d41208b0eb014bea2ba9b3.bptc.ctex"]
+dest_files=["res://.godot/imported/wiring.png-0a32950f57d41208b0eb014bea2ba9b3.bptc.ctex", "res://.godot/imported/wiring.png-0a32950f57d41208b0eb014bea2ba9b3.astc.ctex"]
 
 [params]
 

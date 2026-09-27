@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://50fd77ed5c25"
 path.bptc="res://.godot/imported/ach_full_district_96.png-08e3501b216b376ceca90e71a7ccb346.bptc.ctex"
+path.astc="res://.godot/imported/ach_full_district_96.png-08e3501b216b376ceca90e71a7ccb346.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/icons/ach_full_district_96.png"
-dest_files=["res://.godot/imported/ach_full_district_96.png-08e3501b216b376ceca90e71a7ccb346.bptc.ctex"]
+dest_files=["res://.godot/imported/ach_full_district_96.png-08e3501b216b376ceca90e71a7ccb346.bptc.ctex", "res://.godot/imported/ach_full_district_96.png-08e3501b216b376ceca90e71a7ccb346.astc.ctex"]
 
 [params]
 

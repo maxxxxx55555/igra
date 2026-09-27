@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://6483bd5b4ca8"
 path.bptc="res://.godot/imported/monster_boss_64.png-a67d23de2bb77b677d6eab3a8f24e00a.bptc.ctex"
+path.astc="res://.godot/imported/monster_boss_64.png-a67d23de2bb77b677d6eab3a8f24e00a.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/icons_v2/monster_boss_64.png"
-dest_files=["res://.godot/imported/monster_boss_64.png-a67d23de2bb77b677d6eab3a8f24e00a.bptc.ctex"]
+dest_files=["res://.godot/imported/monster_boss_64.png-a67d23de2bb77b677d6eab3a8f24e00a.bptc.ctex", "res://.godot/imported/monster_boss_64.png-a67d23de2bb77b677d6eab3a8f24e00a.astc.ctex"]
 
 [params]
 

@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://1c3700f60d7a"
 path.bptc="res://.godot/imported/inventory_space_96.png-008e09a978554c0f4c08f97500348b46.bptc.ctex"
+path.astc="res://.godot/imported/inventory_space_96.png-008e09a978554c0f4c08f97500348b46.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/icons_v2/skills/inventory_space_96.png"
-dest_files=["res://.godot/imported/inventory_space_96.png-008e09a978554c0f4c08f97500348b46.bptc.ctex"]
+dest_files=["res://.godot/imported/inventory_space_96.png-008e09a978554c0f4c08f97500348b46.bptc.ctex", "res://.godot/imported/inventory_space_96.png-008e09a978554c0f4c08f97500348b46.astc.ctex"]
 
 [params]
 

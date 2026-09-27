@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cd66fa580db7"
 path.bptc="res://.godot/imported/btn_action_128.png-770efcef437307d41282d49c34c5ae77.bptc.ctex"
+path.astc="res://.godot/imported/btn_action_128.png-770efcef437307d41282d49c34c5ae77.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/ui/btn_action_128.png"
-dest_files=["res://.godot/imported/btn_action_128.png-770efcef437307d41282d49c34c5ae77.bptc.ctex"]
+dest_files=["res://.godot/imported/btn_action_128.png-770efcef437307d41282d49c34c5ae77.bptc.ctex", "res://.godot/imported/btn_action_128.png-770efcef437307d41282d49c34c5ae77.astc.ctex"]
 
 [params]
 

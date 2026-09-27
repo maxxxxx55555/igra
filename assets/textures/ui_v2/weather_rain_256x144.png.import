@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://72cc1720e83c"
 path.bptc="res://.godot/imported/weather_rain_256x144.png-257aa76082f749ae7cc679266b7594c8.bptc.ctex"
+path.astc="res://.godot/imported/weather_rain_256x144.png-257aa76082f749ae7cc679266b7594c8.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/ui_v2/weather_rain_256x144.png"
-dest_files=["res://.godot/imported/weather_rain_256x144.png-257aa76082f749ae7cc679266b7594c8.bptc.ctex"]
+dest_files=["res://.godot/imported/weather_rain_256x144.png-257aa76082f749ae7cc679266b7594c8.bptc.ctex", "res://.godot/imported/weather_rain_256x144.png-257aa76082f749ae7cc679266b7594c8.astc.ctex"]
 
 [params]
 

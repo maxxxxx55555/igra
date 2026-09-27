@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cac2dcda164c"
 path.bptc="res://.godot/imported/suburbs_floor.png-930fd80d398cdbbcd47edb254ddf889f.bptc.ctex"
+path.astc="res://.godot/imported/suburbs_floor.png-930fd80d398cdbbcd47edb254ddf889f.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/tiles/suburbs_floor.png"
-dest_files=["res://.godot/imported/suburbs_floor.png-930fd80d398cdbbcd47edb254ddf889f.bptc.ctex"]
+dest_files=["res://.godot/imported/suburbs_floor.png-930fd80d398cdbbcd47edb254ddf889f.bptc.ctex", "res://.godot/imported/suburbs_floor.png-930fd80d398cdbbcd47edb254ddf889f.astc.ctex"]
 
 [params]
 

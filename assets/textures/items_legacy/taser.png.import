@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://ba0b8c228365b"
 path.bptc="res://.godot/imported/taser.png-0fefdbda5b61ad5bf9006aa8015bfaf5.bptc.ctex"
+path.astc="res://.godot/imported/taser.png-0fefdbda5b61ad5bf9006aa8015bfaf5.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/items_legacy/taser.png"
-dest_files=["res://.godot/imported/taser.png-0fefdbda5b61ad5bf9006aa8015bfaf5.bptc.ctex"]
+dest_files=["res://.godot/imported/taser.png-0fefdbda5b61ad5bf9006aa8015bfaf5.bptc.ctex", "res://.godot/imported/taser.png-0fefdbda5b61ad5bf9006aa8015bfaf5.astc.ctex"]
 
 [params]
 

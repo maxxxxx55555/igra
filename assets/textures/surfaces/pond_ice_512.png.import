@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bba488b678fea"
 path.bptc="res://.godot/imported/pond_ice_512.png-dabb1e346642a37f487b9f8d51abbcca.bptc.ctex"
+path.astc="res://.godot/imported/pond_ice_512.png-dabb1e346642a37f487b9f8d51abbcca.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/surfaces/pond_ice_512.png"
-dest_files=["res://.godot/imported/pond_ice_512.png-dabb1e346642a37f487b9f8d51abbcca.bptc.ctex"]
+dest_files=["res://.godot/imported/pond_ice_512.png-dabb1e346642a37f487b9f8d51abbcca.bptc.ctex", "res://.godot/imported/pond_ice_512.png-dabb1e346642a37f487b9f8d51abbcca.astc.ctex"]
 
 [params]
 

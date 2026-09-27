@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://5c2a7f711bcd"
 path.bptc="res://.godot/imported/monster_hunter_64.png-08032f9e38f229e1750b0188916913e9.bptc.ctex"
+path.astc="res://.godot/imported/monster_hunter_64.png-08032f9e38f229e1750b0188916913e9.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/icons_v2/monster_hunter_64.png"
-dest_files=["res://.godot/imported/monster_hunter_64.png-08032f9e38f229e1750b0188916913e9.bptc.ctex"]
+dest_files=["res://.godot/imported/monster_hunter_64.png-08032f9e38f229e1750b0188916913e9.bptc.ctex", "res://.godot/imported/monster_hunter_64.png-08032f9e38f229e1750b0188916913e9.astc.ctex"]
 
 [params]
 

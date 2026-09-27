@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://0378c566c15"
 path.bptc="res://.godot/imported/park_wall_lit.png-7756f57831f95e0c12f46a2dbd405d60.bptc.ctex"
+path.astc="res://.godot/imported/park_wall_lit.png-7756f57831f95e0c12f46a2dbd405d60.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/tiles/park_wall_lit.png"
-dest_files=["res://.godot/imported/park_wall_lit.png-7756f57831f95e0c12f46a2dbd405d60.bptc.ctex"]
+dest_files=["res://.godot/imported/park_wall_lit.png-7756f57831f95e0c12f46a2dbd405d60.bptc.ctex", "res://.godot/imported/park_wall_lit.png-7756f57831f95e0c12f46a2dbd405d60.astc.ctex"]
 
 [params]
 

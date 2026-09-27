@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://ba02fa011ae8e"
 path.bptc="res://.godot/imported/school_map_512.png-e9d425d2af96252fbb5220f8c44aa72e.bptc.ctex"
+path.astc="res://.godot/imported/school_map_512.png-e9d425d2af96252fbb5220f8c44aa72e.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/maps/school_map_512.png"
-dest_files=["res://.godot/imported/school_map_512.png-e9d425d2af96252fbb5220f8c44aa72e.bptc.ctex"]
+dest_files=["res://.godot/imported/school_map_512.png-e9d425d2af96252fbb5220f8c44aa72e.bptc.ctex", "res://.godot/imported/school_map_512.png-e9d425d2af96252fbb5220f8c44aa72e.astc.ctex"]
 
 [params]
 

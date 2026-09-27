@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://0a54baf7ca"
 path.bptc="res://.godot/imported/fusebox_512.png-54dfeea40c4e19a7cc4f73d0400ddadc.bptc.ctex"
+path.astc="res://.godot/imported/fusebox_512.png-54dfeea40c4e19a7cc4f73d0400ddadc.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/surfaces/fusebox_512.png"
-dest_files=["res://.godot/imported/fusebox_512.png-54dfeea40c4e19a7cc4f73d0400ddadc.bptc.ctex"]
+dest_files=["res://.godot/imported/fusebox_512.png-54dfeea40c4e19a7cc4f73d0400ddadc.bptc.ctex", "res://.godot/imported/fusebox_512.png-54dfeea40c4e19a7cc4f73d0400ddadc.astc.ctex"]
 
 [params]
 

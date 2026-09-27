@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://3751078bb8c1"
 path.bptc="res://.godot/imported/residential_map_512.png-8ffeb296b0e3152d3c9d9f391b87e950.bptc.ctex"
+path.astc="res://.godot/imported/residential_map_512.png-8ffeb296b0e3152d3c9d9f391b87e950.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/maps/residential_map_512.png"
-dest_files=["res://.godot/imported/residential_map_512.png-8ffeb296b0e3152d3c9d9f391b87e950.bptc.ctex"]
+dest_files=["res://.godot/imported/residential_map_512.png-8ffeb296b0e3152d3c9d9f391b87e950.bptc.ctex", "res://.godot/imported/residential_map_512.png-8ffeb296b0e3152d3c9d9f391b87e950.astc.ctex"]
 
 [params]
 

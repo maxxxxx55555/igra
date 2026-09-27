@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://7515d1c5bc78"
 path.bptc="res://.godot/imported/ach_slayer_96.png-28d13b2ae409dd61ba23721fc3a2c5dd.bptc.ctex"
+path.astc="res://.godot/imported/ach_slayer_96.png-28d13b2ae409dd61ba23721fc3a2c5dd.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/icons/ach_slayer_96.png"
-dest_files=["res://.godot/imported/ach_slayer_96.png-28d13b2ae409dd61ba23721fc3a2c5dd.bptc.ctex"]
+dest_files=["res://.godot/imported/ach_slayer_96.png-28d13b2ae409dd61ba23721fc3a2c5dd.bptc.ctex", "res://.godot/imported/ach_slayer_96.png-28d13b2ae409dd61ba23721fc3a2c5dd.astc.ctex"]
 
 [params]
 

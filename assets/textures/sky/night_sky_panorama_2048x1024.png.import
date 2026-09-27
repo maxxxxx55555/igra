@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dc54a27deea0"
 path.bptc="res://.godot/imported/night_sky_panorama_2048x1024.png-d6b555c178eb00270d5b1d63a0047ab9.bptc.ctex"
+path.astc="res://.godot/imported/night_sky_panorama_2048x1024.png-d6b555c178eb00270d5b1d63a0047ab9.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/sky/night_sky_panorama_2048x1024.png"
-dest_files=["res://.godot/imported/night_sky_panorama_2048x1024.png-d6b555c178eb00270d5b1d63a0047ab9.bptc.ctex"]
+dest_files=["res://.godot/imported/night_sky_panorama_2048x1024.png-d6b555c178eb00270d5b1d63a0047ab9.bptc.ctex", "res://.godot/imported/night_sky_panorama_2048x1024.png-d6b555c178eb00270d5b1d63a0047ab9.astc.ctex"]
 
 [params]
 

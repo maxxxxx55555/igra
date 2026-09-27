@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://d8a5aa23075a"
 path.bptc="res://.godot/imported/warehouse_shadow.png-398003367680ee36ca4629980550f852.bptc.ctex"
+path.astc="res://.godot/imported/warehouse_shadow.png-398003367680ee36ca4629980550f852.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/photos/warehouse_shadow.png"
-dest_files=["res://.godot/imported/warehouse_shadow.png-398003367680ee36ca4629980550f852.bptc.ctex"]
+dest_files=["res://.godot/imported/warehouse_shadow.png-398003367680ee36ca4629980550f852.bptc.ctex", "res://.godot/imported/warehouse_shadow.png-398003367680ee36ca4629980550f852.astc.ctex"]
 
 [params]
 

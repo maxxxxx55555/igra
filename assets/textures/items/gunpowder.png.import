@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://2bc62dffbd6a"
 path.bptc="res://.godot/imported/gunpowder.png-8252ca0207c882c6fa4b747627caafac.bptc.ctex"
+path.astc="res://.godot/imported/gunpowder.png-8252ca0207c882c6fa4b747627caafac.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/items/gunpowder.png"
-dest_files=["res://.godot/imported/gunpowder.png-8252ca0207c882c6fa4b747627caafac.bptc.ctex"]
+dest_files=["res://.godot/imported/gunpowder.png-8252ca0207c882c6fa4b747627caafac.bptc.ctex", "res://.godot/imported/gunpowder.png-8252ca0207c882c6fa4b747627caafac.astc.ctex"]
 
 [params]
 

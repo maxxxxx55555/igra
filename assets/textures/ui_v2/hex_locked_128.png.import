@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://577211cb6fbc"
 path.bptc="res://.godot/imported/hex_locked_128.png-c1f223deb6b548840d2b65f5deef1071.bptc.ctex"
+path.astc="res://.godot/imported/hex_locked_128.png-c1f223deb6b548840d2b65f5deef1071.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/ui_v2/hex_locked_128.png"
-dest_files=["res://.godot/imported/hex_locked_128.png-c1f223deb6b548840d2b65f5deef1071.bptc.ctex"]
+dest_files=["res://.godot/imported/hex_locked_128.png-c1f223deb6b548840d2b65f5deef1071.bptc.ctex", "res://.godot/imported/hex_locked_128.png-c1f223deb6b548840d2b65f5deef1071.astc.ctex"]
 
 [params]
 

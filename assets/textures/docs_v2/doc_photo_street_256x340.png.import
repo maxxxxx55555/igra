@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://4cf35eb5a5f0"
 path.bptc="res://.godot/imported/doc_photo_street_256x340.png-aa68a8b60f2698de2c5567988adea004.bptc.ctex"
+path.astc="res://.godot/imported/doc_photo_street_256x340.png-aa68a8b60f2698de2c5567988adea004.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/docs_v2/doc_photo_street_256x340.png"
-dest_files=["res://.godot/imported/doc_photo_street_256x340.png-aa68a8b60f2698de2c5567988adea004.bptc.ctex"]
+dest_files=["res://.godot/imported/doc_photo_street_256x340.png-aa68a8b60f2698de2c5567988adea004.bptc.ctex", "res://.godot/imported/doc_photo_street_256x340.png-aa68a8b60f2698de2c5567988adea004.astc.ctex"]
 
 [params]
 

@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://6738f80d576e"
 path.bptc="res://.godot/imported/brick_512.png-21f26b5f1d848e983e40ad2985cb6bf2.bptc.ctex"
+path.astc="res://.godot/imported/brick_512.png-21f26b5f1d848e983e40ad2985cb6bf2.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/surfaces/brick_512.png"
-dest_files=["res://.godot/imported/brick_512.png-21f26b5f1d848e983e40ad2985cb6bf2.bptc.ctex"]
+dest_files=["res://.godot/imported/brick_512.png-21f26b5f1d848e983e40ad2985cb6bf2.bptc.ctex", "res://.godot/imported/brick_512.png-21f26b5f1d848e983e40ad2985cb6bf2.astc.ctex"]
 
 [params]
 

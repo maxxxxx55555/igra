@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://e44be8a15087"
 path.bptc="res://.godot/imported/grid_panel_512.png-4175d700e2ec37a01c3ef562c2790f0e.bptc.ctex"
+path.astc="res://.godot/imported/grid_panel_512.png-4175d700e2ec37a01c3ef562c2790f0e.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/maps_v2/grid_panel_512.png"
-dest_files=["res://.godot/imported/grid_panel_512.png-4175d700e2ec37a01c3ef562c2790f0e.bptc.ctex"]
+dest_files=["res://.godot/imported/grid_panel_512.png-4175d700e2ec37a01c3ef562c2790f0e.bptc.ctex", "res://.godot/imported/grid_panel_512.png-4175d700e2ec37a01c3ef562c2790f0e.astc.ctex"]
 
 [params]
 

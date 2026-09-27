@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://578dfa3b4025"
 path.bptc="res://.godot/imported/rarity_epic.png-d133ac16fd99066b4301db22ab1de157.bptc.ctex"
+path.astc="res://.godot/imported/rarity_epic.png-d133ac16fd99066b4301db22ab1de157.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/ui/rarity_epic.png"
-dest_files=["res://.godot/imported/rarity_epic.png-d133ac16fd99066b4301db22ab1de157.bptc.ctex"]
+dest_files=["res://.godot/imported/rarity_epic.png-d133ac16fd99066b4301db22ab1de157.bptc.ctex", "res://.godot/imported/rarity_epic.png-d133ac16fd99066b4301db22ab1de157.astc.ctex"]
 
 [params]
 

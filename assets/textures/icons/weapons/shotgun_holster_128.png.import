@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dca0166d7b8b"
 path.bptc="res://.godot/imported/shotgun_holster_128.png-7bb613c8887d424eddd322361e6859d7.bptc.ctex"
+path.astc="res://.godot/imported/shotgun_holster_128.png-7bb613c8887d424eddd322361e6859d7.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/icons/weapons/shotgun_holster_128.png"
-dest_files=["res://.godot/imported/shotgun_holster_128.png-7bb613c8887d424eddd322361e6859d7.bptc.ctex"]
+dest_files=["res://.godot/imported/shotgun_holster_128.png-7bb613c8887d424eddd322361e6859d7.bptc.ctex", "res://.godot/imported/shotgun_holster_128.png-7bb613c8887d424eddd322361e6859d7.astc.ctex"]
 
 [params]
 

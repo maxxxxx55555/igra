@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://f33aaf3cbe14"
 path.bptc="res://.godot/imported/shotgun_pressed_128.png-99de2ab2372c4fa3330f5be969a03000.bptc.ctex"
+path.astc="res://.godot/imported/shotgun_pressed_128.png-99de2ab2372c4fa3330f5be969a03000.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/icons/weapons/shotgun_pressed_128.png"
-dest_files=["res://.godot/imported/shotgun_pressed_128.png-99de2ab2372c4fa3330f5be969a03000.bptc.ctex"]
+dest_files=["res://.godot/imported/shotgun_pressed_128.png-99de2ab2372c4fa3330f5be969a03000.bptc.ctex", "res://.godot/imported/shotgun_pressed_128.png-99de2ab2372c4fa3330f5be969a03000.astc.ctex"]
 
 [params]
 

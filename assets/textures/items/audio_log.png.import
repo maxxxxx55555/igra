@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://330ebccf2ad0"
 path.bptc="res://.godot/imported/audio_log.png-a7b38e51079e8a2a504920fdd62c4809.bptc.ctex"
+path.astc="res://.godot/imported/audio_log.png-a7b38e51079e8a2a504920fdd62c4809.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/items/audio_log.png"
-dest_files=["res://.godot/imported/audio_log.png-a7b38e51079e8a2a504920fdd62c4809.bptc.ctex"]
+dest_files=["res://.godot/imported/audio_log.png-a7b38e51079e8a2a504920fdd62c4809.bptc.ctex", "res://.godot/imported/audio_log.png-a7b38e51079e8a2a504920fdd62c4809.astc.ctex"]
 
 [params]
 

@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://28660bae40ba"
 path.bptc="res://.godot/imported/bar_fill_brass_256x24.png-396ff34edb86da9908aaaf6701c93373.bptc.ctex"
+path.astc="res://.godot/imported/bar_fill_brass_256x24.png-396ff34edb86da9908aaaf6701c93373.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/ui/bar_fill_brass_256x24.png"
-dest_files=["res://.godot/imported/bar_fill_brass_256x24.png-396ff34edb86da9908aaaf6701c93373.bptc.ctex"]
+dest_files=["res://.godot/imported/bar_fill_brass_256x24.png-396ff34edb86da9908aaaf6701c93373.bptc.ctex", "res://.godot/imported/bar_fill_brass_256x24.png-396ff34edb86da9908aaaf6701c93373.astc.ctex"]
 
 [params]
 

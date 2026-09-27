@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://f6b5a5155e2f"
 path.bptc="res://.godot/imported/ui_divider_brass.png-f66be13bef92fbd8d0757cbd8341b4ad.bptc.ctex"
+path.astc="res://.godot/imported/ui_divider_brass.png-f66be13bef92fbd8d0757cbd8341b4ad.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/ui/ui_divider_brass.png"
-dest_files=["res://.godot/imported/ui_divider_brass.png-f66be13bef92fbd8d0757cbd8341b4ad.bptc.ctex"]
+dest_files=["res://.godot/imported/ui_divider_brass.png-f66be13bef92fbd8d0757cbd8341b4ad.bptc.ctex", "res://.godot/imported/ui_divider_brass.png-f66be13bef92fbd8d0757cbd8341b4ad.astc.ctex"]
 
 [params]
 

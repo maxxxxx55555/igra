@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://d8aa001ca62b"
 path.bptc="res://.godot/imported/case.png-2b5de6bc161923850e1d85ea9dfbe90a.bptc.ctex"
+path.astc="res://.godot/imported/case.png-2b5de6bc161923850e1d85ea9dfbe90a.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/items/case.png"
-dest_files=["res://.godot/imported/case.png-2b5de6bc161923850e1d85ea9dfbe90a.bptc.ctex"]
+dest_files=["res://.godot/imported/case.png-2b5de6bc161923850e1d85ea9dfbe90a.bptc.ctex", "res://.godot/imported/case.png-2b5de6bc161923850e1d85ea9dfbe90a.astc.ctex"]
 
 [params]
 

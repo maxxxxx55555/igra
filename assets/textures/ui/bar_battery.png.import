@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://b5a24f218fed"
 path.bptc="res://.godot/imported/bar_battery.png-50651ffd5eb3bb168171924a5d718908.bptc.ctex"
+path.astc="res://.godot/imported/bar_battery.png-50651ffd5eb3bb168171924a5d718908.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/ui/bar_battery.png"
-dest_files=["res://.godot/imported/bar_battery.png-50651ffd5eb3bb168171924a5d718908.bptc.ctex"]
+dest_files=["res://.godot/imported/bar_battery.png-50651ffd5eb3bb168171924a5d718908.bptc.ctex", "res://.godot/imported/bar_battery.png-50651ffd5eb3bb168171924a5d718908.astc.ctex"]
 
 [params]
 

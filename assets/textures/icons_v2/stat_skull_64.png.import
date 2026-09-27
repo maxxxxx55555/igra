@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://78444d552c70"
 path.bptc="res://.godot/imported/stat_skull_64.png-f457d8b4b10e60316e1fa1d49c1ff03c.bptc.ctex"
+path.astc="res://.godot/imported/stat_skull_64.png-f457d8b4b10e60316e1fa1d49c1ff03c.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/icons_v2/stat_skull_64.png"
-dest_files=["res://.godot/imported/stat_skull_64.png-f457d8b4b10e60316e1fa1d49c1ff03c.bptc.ctex"]
+dest_files=["res://.godot/imported/stat_skull_64.png-f457d8b4b10e60316e1fa1d49c1ff03c.bptc.ctex", "res://.godot/imported/stat_skull_64.png-f457d8b4b10e60316e1fa1d49c1ff03c.astc.ctex"]
 
 [params]
 

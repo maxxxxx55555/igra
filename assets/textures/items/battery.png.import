@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://278ce2f330ea"
 path.bptc="res://.godot/imported/battery.png-9947f95ad73944d76ec6c1984fb8dd0b.bptc.ctex"
+path.astc="res://.godot/imported/battery.png-9947f95ad73944d76ec6c1984fb8dd0b.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/items/battery.png"
-dest_files=["res://.godot/imported/battery.png-9947f95ad73944d76ec6c1984fb8dd0b.bptc.ctex"]
+dest_files=["res://.godot/imported/battery.png-9947f95ad73944d76ec6c1984fb8dd0b.bptc.ctex", "res://.godot/imported/battery.png-9947f95ad73944d76ec6c1984fb8dd0b.astc.ctex"]
 
 [params]
 

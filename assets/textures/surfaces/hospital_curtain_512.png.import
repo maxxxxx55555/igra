@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://e3b0d3d73fae"
 path.bptc="res://.godot/imported/hospital_curtain_512.png-10b0df4273f67db8af5582de8bae76a8.bptc.ctex"
+path.astc="res://.godot/imported/hospital_curtain_512.png-10b0df4273f67db8af5582de8bae76a8.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/surfaces/hospital_curtain_512.png"
-dest_files=["res://.godot/imported/hospital_curtain_512.png-10b0df4273f67db8af5582de8bae76a8.bptc.ctex"]
+dest_files=["res://.godot/imported/hospital_curtain_512.png-10b0df4273f67db8af5582de8bae76a8.bptc.ctex", "res://.godot/imported/hospital_curtain_512.png-10b0df4273f67db8af5582de8bae76a8.astc.ctex"]
 
 [params]
 

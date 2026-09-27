@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://ceb4aa702b00"
 path.bptc="res://.godot/imported/moon_glow_256.png-88ff8986ba45e28c3395290862b00335.bptc.ctex"
+path.astc="res://.godot/imported/moon_glow_256.png-88ff8986ba45e28c3395290862b00335.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/sky/moon_glow_256.png"
-dest_files=["res://.godot/imported/moon_glow_256.png-88ff8986ba45e28c3395290862b00335.bptc.ctex"]
+dest_files=["res://.godot/imported/moon_glow_256.png-88ff8986ba45e28c3395290862b00335.bptc.ctex", "res://.godot/imported/moon_glow_256.png-88ff8986ba45e28c3395290862b00335.astc.ctex"]
 
 [params]
 

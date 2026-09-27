@@ -38,6 +38,8 @@ builds/
 *.bak
 
 # Build artifacts
+android/build/
+android/.build_version
 *.apk
 *.aab
 *.keystore

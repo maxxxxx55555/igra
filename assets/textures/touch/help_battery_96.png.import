@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://ed1e14a1fba0"
 path.bptc="res://.godot/imported/help_battery_96.png-c69f2539b82de2a8d3e3b70d33ff8de9.bptc.ctex"
+path.astc="res://.godot/imported/help_battery_96.png-c69f2539b82de2a8d3e3b70d33ff8de9.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/touch/help_battery_96.png"
-dest_files=["res://.godot/imported/help_battery_96.png-c69f2539b82de2a8d3e3b70d33ff8de9.bptc.ctex"]
+dest_files=["res://.godot/imported/help_battery_96.png-c69f2539b82de2a8d3e3b70d33ff8de9.bptc.ctex", "res://.godot/imported/help_battery_96.png-c69f2539b82de2a8d3e3b70d33ff8de9.astc.ctex"]
 
 [params]
 

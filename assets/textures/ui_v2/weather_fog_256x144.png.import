@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://8387a150eb8"
 path.bptc="res://.godot/imported/weather_fog_256x144.png-b2098554391650b8ddca8ce76ca5d398.bptc.ctex"
+path.astc="res://.godot/imported/weather_fog_256x144.png-b2098554391650b8ddca8ce76ca5d398.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/ui_v2/weather_fog_256x144.png"
-dest_files=["res://.godot/imported/weather_fog_256x144.png-b2098554391650b8ddca8ce76ca5d398.bptc.ctex"]
+dest_files=["res://.godot/imported/weather_fog_256x144.png-b2098554391650b8ddca8ce76ca5d398.bptc.ctex", "res://.godot/imported/weather_fog_256x144.png-b2098554391650b8ddca8ce76ca5d398.astc.ctex"]
 
 [params]
 

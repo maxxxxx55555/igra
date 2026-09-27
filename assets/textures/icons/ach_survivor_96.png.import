@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://ba03017b65cd5"
 path.bptc="res://.godot/imported/ach_survivor_96.png-c5e75b865d2606204796a1b42f3f18a5.bptc.ctex"
+path.astc="res://.godot/imported/ach_survivor_96.png-c5e75b865d2606204796a1b42f3f18a5.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/icons/ach_survivor_96.png"
-dest_files=["res://.godot/imported/ach_survivor_96.png-c5e75b865d2606204796a1b42f3f18a5.bptc.ctex"]
+dest_files=["res://.godot/imported/ach_survivor_96.png-c5e75b865d2606204796a1b42f3f18a5.bptc.ctex", "res://.godot/imported/ach_survivor_96.png-c5e75b865d2606204796a1b42f3f18a5.astc.ctex"]
 
 [params]
 
