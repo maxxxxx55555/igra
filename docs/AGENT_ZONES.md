@@ -1,30 +1,49 @@
-# Agent zones
+# Agent zones (owner wave "finish the game to the GDD", 2026-09-27)
 
-Multi-agent write access to this repo, each agent scoped to a non-overlapping zone. **A zone
-violation — editing outside your own row's zone — is a stop-and-report, not a push-through.**
+The owner asked for a swarm: one agent per area, and one lead that directs and checks all of them.
+Source of truth for what to build: `docs/GDD.md` (§25.2 "Нужно доделать", Appendix V milestone
+tags `[M0]`-`[M4]`, the section each row cites) and `docs/TZ_COMPLIANCE.md` (DEFERRED rows).
+`docs/PRODUCTION_BIBLE.md` holds the visual and audio canon.
 
-| Agent | Branch | Zone | State file |
-|---|---|---|---|
-| OpenCode Desktop — **INACTIVE** (2026-09-20: `oc/visual-w10` tip is `86228c6`, identical to `cl/a11y-i18n` and to `main` at branch-creation time — zero commits since creation, never started; scope absorbed below) | `oc/visual-w10` | ~~`scripts/world_env_setup.gd`, `shaders/**`, `assets/shaders/**`, visual `.tres`, VFX scenes, `docs/stills/**`, `docs/store_screens/**`, AUTO-DELETABLE-only deletion of `assets/_orphaned`/`assets/audio/_pre_norm`/`res://_QUARANTINE` per `docs/QUARANTINE_AUDIT.md`~~ | `docs/RUN_STATE_OC.md` (never created) |
-| Cline Desktop — **INACTIVE** (same evidence as above) | `cl/a11y-i18n` | ~~`data/i18n/*.json`, `scripts/ui/*` accessibility code, `scripts/tools/_a11y_probe.gd`, `docs/ACCESSIBILITY.md`~~ | `docs/RUN_STATE_CL.md` (never created) |
-| Claude Code (this tool) | `main` (integrator + both absorbed zones) | Everything, including OpenCode's and Cline's former zones above (now unstruck) — verify-before-write remains the standing rule, own-zone-only no longer applies while both lanes are inactive | `docs/RUN_STATE.md` |
+Each agent works in its own git worktree and writes only inside its zone. A needed change outside the
+zone is a request in the agent's report (exact file, exact patch), not an edit. A zone violation
+means stop and report.
 
-Full contracts: [AGENTS.md](../AGENTS.md) (OpenCode, auto-read), [.clinerules/zone.md](../.clinerules/zone.md)
-(Cline, auto-read).
+## Zones
 
-## Why these zones don't overlap
-Checked file-by-file against the current `main` tree before writing this table — no path in one
-zone is a path either other zone touches. The one shared concern (both OpenCode's visual work and
-Cline's accessibility work read `docs/GAMEFEEL_SPEC.md`) is read-only for both; neither zone owns
-that file, and both contracts flag the same real, unresolved conflict against unmerged branch
-`arena/01a0ab24-igra`'s more detailed version — see either contract for the trace.
+| Agent | Owns (exclusive write) | Mission |
+|---|---|---|
+| lead (main session) | `docs/**`, `project.godot`, `tools/check.sh`, `export_presets.cfg`, merges, every Godot run | Assign, integrate, verify (engine gates, bot, frames read by eye), commit, push |
+| enemies | `scripts/enemies/**`, `scenes/enemies/**`, `data/monsters/**`, `data/balance/**` | GDD §6: the 11-type roster in districts, §6.2 stats, group behaviour, danger levels, encyclopedia entries, monster-side detection (S02), monster and boss look per §11 |
+| player | `scripts/player/**`, `scenes/player/**`, `scripts/weapons/**`, `scripts/gameplay/**`, `scenes/weapons/**` | G25 weapons (2 slots) and C03 auto-aim live in play (GDD §18), G07 crouch capsule and visibility, player-side S02 visibility modifiers |
+| hud | `scripts/ui/hud_3d.gd`, `scenes/ui/hud_3d.tscn`, `scripts/ui/toast_manager.gd`, `scripts/ui/quest_tracker_hud.gd`, `scripts/effects/damage_indicator.gd`, minimap scripts under `scripts/ui/` | Appendix V.1 HUD modules 3.3-3.16 |
+| menus | `scripts/ui/**` and `scenes/ui/**` except the hud files, `scripts/inventory/**`, `scripts/systems/settings_manager.gd` | Appendix V.2 menus (5.4 settings tabs, 5.5 load, 5.7 delete save, M4 menu backgrounds), V.5 inventory (equipment, rarity, sorting, detail, comparison), M4 quick wheel |
+| world | `scripts/world/**` (except `district_atmosphere.gd`), `scripts/pickups/**`, `scripts/economy/**`, `scripts/systems/progress_tracker.gd`, `scripts/systems/achievements_manager.gd`, `scripts/systems/photo_mode.gd`, `data/items/**`, `scenes/districts/**` | G21 blueprints (§9, §20), G26 photos (§24.2), M4 temperature, weapon pickup placement, prop look per §11 |
+| audio | `default_bus_layout.tres`, `scripts/systems/audio_manager.gd`, `scripts/systems/music_manager.gd`, `scripts/systems/footstep_system.gd`, `scripts/systems/uisfx.gd`, `scripts/world/district_atmosphere.gd` | A01 bus graph (§13 / PRODUCTION_BIBLE §3), routing every player onto it |
+| qa | `scripts/tools/_qa_autoplay_runner.gd`, `tools/qa_sim/**` | Bot boss-phase skill and the X21 spine stall; regression checks for the new features |
 
-## Merge order (integrator only, on "MERGE NOW")
-`cl/a11y-i18n` first (smaller, more contained diff), then `oc/visual-w10`. Both `--no-ff`, gates
-green after each, ancestry proven (`git merge-base --is-ancestor <branch-tip> main`). Moot while
-both lanes stay inactive/empty — nothing to merge from them.
+Shared, append-only for every agent: `scripts/events/event_bus.gd` (new signals only) and the 13
+`data/i18n/*.json` locale files (new keys only, all 13 locales, real translations). The lead merges
+their conflicts as a union.
 
-## Reactivation
-If the owner opens OpenCode Desktop or Cline Desktop on their branch after this pass, their zone
-row reverts to active for whatever they touch from that point — this doc doesn't retroactively
-own work they do later. Re-strike this entry and restore the owned-zone table above.
+## Rules for every agent
+
+- `CLAUDE.md` applies: ponytail (reuse before writing, shortest diff), full 13-locale i18n for every
+  user-facing string, zero TODO/FIXME/commented-out code/debug prints/BOM, English comments and
+  commit messages, keep each file's CRLF line endings, never delete a file unless proven dead and not
+  planned.
+- **Never launch Godot** (no editor, windowed or headless run): concurrent runs collide on the
+  owner's `user://` profile guard and the import cache. The lead runs every engine check. Agents run
+  only `TLS_SKIP_REIMPORT=1 bash tools/check.sh --static`, `python tools/flow_check.py` and
+  `python tools/scene_node_check.py`.
+- REJECTED forever: PICKUP_TOUCH tightening; NavigationAgent3D navigation changes.
+- A behaviour or balance change is verified by the lead with the 3-seed bot (IRON RULE).
+- Commit in the worktree, small English imperative messages ending with
+  `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`. Never push.
+- Report: commits, files, GDD/TZ rows done, what the lead must run and look at, i18n keys added,
+  cross-zone requests as exact patches, risks.
+
+## Earlier lanes
+
+The OpenCode Desktop (`oc/visual-w10`) and Cline Desktop (`cl/a11y-i18n`) lanes of 2026-09-20 stay
+inactive and absorbed into `main` (contracts: `AGENTS.md`, `.clinerules/zone.md`; history of this file).
