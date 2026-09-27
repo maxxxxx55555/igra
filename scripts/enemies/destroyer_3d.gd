@@ -30,14 +30,6 @@ func _physics_process(delta: float) -> void:
 	else:
 		_combo_step = 0
 
-func _state_patrol(delta: float) -> void:
-	super._state_patrol(delta)
-	_try_break_nearby_lights()
-
-func _state_investigate(delta: float) -> void:
-	super._state_investigate(delta)
-	_try_break_nearby_lights()
-
 func _state_chase(delta: float) -> void:
 	if not player_ref or not is_instance_valid(player_ref):
 		_change_state(State.PATROL)
@@ -69,15 +61,6 @@ func _perform_combo_attack() -> void:
 	var dmg: float = attack_damage * (0.7 + float(_combo_step) * 0.3)
 	player_ref.take_damage(dmg)
 	EventBus.enemy_attack.emit(dmg)
-
-func _try_break_nearby_lights() -> void:
-	var lights := get_tree().get_nodes_in_group("streetlights")
-	for l in lights:
-		if l.has_method("force_lit") and l.get("is_lit"):
-			if global_position.distance_to(l.global_position) < 2.5:
-				l.force_lit(false)
-
-				return
 
 func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, type: EnemyRosterData.DamageType = EnemyRosterData.DamageType.BULLET) -> void:
 	super.take_damage(amount, _src_pos, type)
