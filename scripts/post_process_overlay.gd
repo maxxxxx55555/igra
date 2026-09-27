@@ -30,9 +30,12 @@ func _build_visibility_overlay() -> void:
 	mat.shader = _visibility_shader()
 	_visibility_overlay.material = mat
 
+## Detection warning at the screen EDGE: 0 inside the middle 70 %, rising to
+## the border. It was inverted (1 - smoothstep), so every detection painted
+## the centre of the view ember and left the edges clear (rc14 boss frame).
 func _visibility_shader() -> Shader:
 	var s := Shader.new()
-	s.code = "shader_type canvas_item; uniform vec4 edge_color : source_color = vec4(0.706, 0.271, 0.184, 1.0); uniform float pulse : hint_range(0.0, 1.0) = 0.0; void fragment(){ vec2 uv = UV; vec2 d = abs(uv - 0.5); float v = smoothstep(0.5, 0.35, max(d.x, d.y)); float edge = 1.0 - smoothstep(0.35, 0.5, max(d.x, d.y)); COLOR = vec4(edge_color.rgb, edge * pulse * 0.6); }"
+	s.code = "shader_type canvas_item; uniform vec4 edge_color : source_color = vec4(0.706, 0.271, 0.184, 1.0); uniform float pulse : hint_range(0.0, 1.0) = 0.0; void fragment(){ vec2 d = abs(UV - 0.5); float edge = smoothstep(0.35, 0.5, max(d.x, d.y)); COLOR = vec4(edge_color.rgb, edge * pulse * 0.6); }"
 	return s
 
 func _on_player_detected(_monster_id: StringName) -> void:
