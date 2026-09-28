@@ -118,6 +118,7 @@ func _ready() -> void:
 	_setup_damage_indicator()
 	_setup_heal_flash()
 	_setup_blackout_flash()
+	_setup_context_hints()
 	$BtnPause.pressed.connect(_on_pause)
 	_add_map_button()
 	EventBus.game_state_changed.connect(_on_game_state)
@@ -909,6 +910,7 @@ func _on_district_blackout(district_id: StringName) -> void:
 	if StringName(DistrictManager.current_district) != district_id:
 		return
 	_pulse_blackout_flash()
+	_hint_light_source()
 
 ## 50 + 70 ms = the 120 ms the spec allows, one pulse per event, and a full-rect
 ## tint, so it goes through the same reduce_flash gate as the damage and heal
@@ -925,6 +927,35 @@ func _pulse_blackout_flash() -> void:
 	tween.tween_callback(func() -> void:
 		if is_instance_valid(_blackout_flash):
 			_blackout_flash.visible = false)
+
+## GDD V.1 3.8: contextual hints. The sheet's example line is exactly the
+## situation this covers - the player is in the dark with no light of their own,
+## either because the district they stand in just lost power or because they
+## walked into one that already has none. The "hints" toggle from
+## settings_screen.gd (and the NG+ Keeper's Pact knob built on the same setting)
+## is the switch such a hint is expected to honour, and the notice label the
+## tracker already uses for messages is the surface for it.
+var _flashlight_on: bool = true
+
+func _setup_context_hints() -> void:
+	EventBus.flashlight_state_changed.connect(func(on: bool) -> void:
+		_flashlight_on = on)
+	EventBus.district_entered.connect(func(id: StringName) -> void:
+		if PowerGrid.get_stage(id) == DistrictData.Stage.DARK:
+			_hint_light_source())
+	# A load can restore a run that already had the flashlight switched off, and
+	# no state_changed fires for it - read the field once so the hint is not
+	# skipped for someone who is genuinely standing in the dark.
+	var player := get_tree().get_first_node_in_group("player")
+	if player != null and "flashlight_enabled" in player:
+		_flashlight_on = bool(player.flashlight_enabled)
+
+func _hint_light_source() -> void:
+	if not bool(SettingsManager.get_setting("hints", true)):
+		return
+	if _flashlight_on:
+		return
+	_show_notice(LocalizationManager.t("HUD_HINT_DARK"))
 
 func _on_hp(ratio: float) -> void:
 	_hp = ratio
@@ -1129,123 +1160,4 @@ func _setup_slot_placeholders() -> void:
 		icon_parent.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		slot.add_child(icon_parent)
 		var item_id: StringName = order[i] if i < order.size() else &""
-		item_icons.draw_icon(icon_parent, item_id, 32.0)
-		var badge := Label.new()
-		badge.name = "Badge"
-		badge.text = "0"
-		badge.add_theme_color_override("font_color", Color(0.847, 0.824, 0.769))
-		badge.add_theme_font_size_override("font_size", 11)
-		badge.position = Vector2(34, 34)
-		slot.add_child(badge)
-		if inv and item_id != &"":
-			var cnt: int = inv.count_of(item_id)
-			if cnt > 0:
-				badge.text = str(cnt)
-		var si := i
-		slot.gui_input.connect(func(event: InputEvent):
-			if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-				_use_quick_slot(si)
-		)
-	var slot0 := get_node("BottomCenter/Slot0")
-	if slot0:
-		var border := slot0.get_node_or_null("Border")
-		if border is ColorRect:
-			(border as ColorRect).color = Color(0.788, 0.635, 0.290)
-		elif border is CanvasItem:
-			(border as CanvasItem).modulate = Color(0.788, 0.635, 0.290)
-
-func _on_quick_slot_key(index: int) -> void:
-	_use_quick_slot(index)
-
-func _use_quick_slot(index: int) -> void:
-	var inv := get_tree().root.get_node_or_null("InventoryManager")
-	if not inv or not inv.has_method("use_item"):
-		return
-	inv.use_item(index)
-
-func _refresh_slot_badges() -> void:
-	var inv := get_tree().root.get_node_or_null("InventoryManager")
-	if not inv:
-		return
-	for i in _SLOT_ITEMS.size():
-		var slot := get_node_or_null("BottomCenter/Slot" + str(i))
-		var badge: Label = slot.get_node_or_null("Badge") if slot else null
-		if not badge:
-			continue
-		var item_id: StringName = _SLOT_ITEMS[i]
-		badge.text = str(inv.count_of(item_id))
-
-## docs/GAMEFEEL_SPEC.md, "New events to juice": item_picked_up -> a brief
-## flash on the quick slot that received the item, opacity ramp only, <= 120 ms,
-## skipped entirely under reduce_flash (that spec's toggle for HUD flash beats).
-## The slot only holds one flash at a time, so a fast double pickup restarts the
-## ramp instead of stacking overlays.
-const _SLOT_FLASH_SEC: float = 0.12
-const _SLOT_FLASH_ALPHA: float = 0.45
-const _SLOT_FLASH_NAME: String = "PickupFlash"
-
-func _on_item_picked_up(item_id: StringName) -> void:
-	var index := _SLOT_ITEMS.find(item_id)
-	if index < 0:
-		return
-	if bool(SettingsManager.get_setting("reduce_flash", false)):
-		return
-	var slot := get_node_or_null("BottomCenter/Slot" + str(index)) as Control
-	if slot == null:
-		return
-	var flash := slot.get_node_or_null(_SLOT_FLASH_NAME) as ColorRect
-	if flash == null:
-		flash = ColorRect.new()
-		flash.name = _SLOT_FLASH_NAME
-		flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		flash.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		slot.add_child(flash)
-	flash.color = Color(ThemeProvider.COLOR_AMBER, _SLOT_FLASH_ALPHA)
-	var tw := create_tween()
-	tw.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	tw.tween_property(flash, "color:a", 0.0, _SLOT_FLASH_SEC)
-	tw.tween_callback(flash.queue_free)
-
-## Below the 5th status row (VISIBILITY at y~190): at y=182 the button
-## covered the caption ("...ILITY" in docs/stills/tzverify frames).
-const _MAP_BUTTON_POS := Vector2(16, 216)
-
-func _add_map_button() -> void:
-	var btn := Button.new()
-	btn.name = "MapButton"
-	btn.position = _MAP_BUTTON_POS
-	btn.size = Vector2(48, 48)
-	btn.add_theme_color_override("font_color", Color(0.788, 0.635, 0.290))
-	btn.add_theme_font_size_override("font_size", 20)
-	btn.text = "🗺"
-	btn.pressed.connect(_on_map_btn)
-	add_child(btn)
-
-func _on_map_btn() -> void:
-	if UIManager and UIManager.has_method("open"):
-		UIManager.open(&"city_map")
-
-func _setup_radar() -> void:
-	var frame := $TopRight/RadarFrame
-	if not frame:
-		return
-	for c in frame.get_children():
-		c.queue_free()
-	var radar_script = load("res://scripts/ui/radar.gd")
-	if not radar_script:
-		return
-	var radar := Control.new()
-	radar.set_script(radar_script)
-	radar.name = "Radar"
-	frame.add_child(radar)
-	radar.set_anchors_preset(Control.PRESET_FULL_RECT)
-
-func _show_notice(msg: String) -> void:
-	notice.text = msg
-	await get_tree().create_timer(3.0).timeout
-	# The HUD can be torn down (death -> scene reload) during the 3s wait —
-	# don't touch `notice` on a freed instance.
-	if not is_instance_valid(notice):
-		return
-	if notice.text == msg:
-		notice.text = ""
+		item_icons.draw_icon(ico

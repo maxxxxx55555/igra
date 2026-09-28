@@ -1305,5 +1305,6 @@
   "HUD_LOG_EMPTY": "لا توجد رسائل بعد",
   "HUD_LEGEND_TITLE": "مفتاح الخريطة",
   "HUD_LEGEND_PLAYER": "أنت (اللاعب)",
-  "HUD_LEGEND_CURRENT": "المنطقة الحالية"
+  "HUD_LEGEND_CURRENT": "المنطقة الحالية",
+  "HUD_HINT_DARK": "ابحث عن مصدر ضوء — مفتاح الكهرباء أو مصباحك اليدوي."
 }

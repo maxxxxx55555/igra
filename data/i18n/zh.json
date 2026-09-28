@@ -1305,5 +1305,6 @@
   "HUD_LOG_EMPTY": "暂无消息",
   "HUD_LEGEND_TITLE": "地图图例",
   "HUD_LEGEND_PLAYER": "你（玩家）",
-  "HUD_LEGEND_CURRENT": "当前区域"
+  "HUD_LEGEND_CURRENT": "当前区域",
+  "HUD_HINT_DARK": "寻找光源——电源开关或手电筒。"
 }

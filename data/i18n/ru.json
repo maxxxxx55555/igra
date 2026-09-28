@@ -1305,5 +1305,6 @@
   "HUD_LOG_EMPTY": "Сообщений пока нет",
   "HUD_LEGEND_TITLE": "ЛЕГЕНДА КАРТЫ",
   "HUD_LEGEND_PLAYER": "Вы (игрок)",
-  "HUD_LEGEND_CURRENT": "Текущий район"
+  "HUD_LEGEND_CURRENT": "Текущий район",
+  "HUD_HINT_DARK": "Найдите источник света — рубильник или фонарик."
 }

@@ -1305,5 +1305,6 @@
   "HUD_LOG_EMPTY": "No messages yet",
   "HUD_LEGEND_TITLE": "MAP LEGEND",
   "HUD_LEGEND_PLAYER": "You (player)",
-  "HUD_LEGEND_CURRENT": "Current district"
+  "HUD_LEGEND_CURRENT": "Current district",
+  "HUD_HINT_DARK": "Find a light source — a power switch or your flashlight."
 }

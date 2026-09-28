@@ -1305,5 +1305,6 @@
   "HUD_LOG_EMPTY": "Noch keine Nachrichten",
   "HUD_LEGEND_TITLE": "KARTENLEGENDE",
   "HUD_LEGEND_PLAYER": "Du (Spieler)",
-  "HUD_LEGEND_CURRENT": "Aktueller Bezirk"
+  "HUD_LEGEND_CURRENT": "Aktueller Bezirk",
+  "HUD_HINT_DARK": "Finde eine Lichtquelle — Schalter oder Taschenlampe."
 }

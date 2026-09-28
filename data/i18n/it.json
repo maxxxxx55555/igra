@@ -1305,5 +1305,6 @@
   "HUD_LOG_EMPTY": "Ancora nessun messaggio",
   "HUD_LEGEND_TITLE": "LEGENDA MAPPA",
   "HUD_LEGEND_PLAYER": "Tu (giocatore)",
-  "HUD_LEGEND_CURRENT": "Distretto attuale"
+  "HUD_LEGEND_CURRENT": "Distretto attuale",
+  "HUD_HINT_DARK": "Trova una fonte di luce: un interruttore o la torcia."
 }

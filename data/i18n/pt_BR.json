@@ -1305,5 +1305,6 @@
   "HUD_LOG_EMPTY": "Nenhuma mensagem ainda",
   "HUD_LEGEND_TITLE": "LEGENDA DO MAPA",
   "HUD_LEGEND_PLAYER": "Você (jogador)",
-  "HUD_LEGEND_CURRENT": "Distrito atual"
+  "HUD_LEGEND_CURRENT": "Distrito atual",
+  "HUD_HINT_DARK": "Ache uma fonte de luz — um interruptor ou sua lanterna."
 }
