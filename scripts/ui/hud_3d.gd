@@ -99,6 +99,7 @@ func _ready() -> void:
 	# them on pickup/use/craft even though inventory_changed fires for all
 	# three (inventory_manager.gd).
 	EventBus.inventory_changed.connect(_refresh_slot_badges)
+	EventBus.item_picked_up.connect(_on_item_picked_up)
 	EventBus.inventory_notice.connect(func(msg: String): _show_notice(msg))
 	EventBus.player_detected.connect(_on_monster_spotted)
 	EventBus.enemy_hp_updated.connect(_on_enemy_hp_updated)
@@ -993,6 +994,37 @@ func _refresh_slot_badges() -> void:
 			continue
 		var item_id: StringName = _SLOT_ITEMS[i]
 		badge.text = str(inv.count_of(item_id))
+
+## docs/GAMEFEEL_SPEC.md, "New events to juice": item_picked_up -> a brief
+## flash on the quick slot that received the item, opacity ramp only, <= 120 ms,
+## skipped entirely under reduce_flash (that spec's toggle for HUD flash beats).
+## The slot only holds one flash at a time, so a fast double pickup restarts the
+## ramp instead of stacking overlays.
+const _SLOT_FLASH_SEC: float = 0.12
+const _SLOT_FLASH_ALPHA: float = 0.45
+const _SLOT_FLASH_NAME: String = "PickupFlash"
+
+func _on_item_picked_up(item_id: StringName) -> void:
+	var index := _SLOT_ITEMS.find(item_id)
+	if index < 0:
+		return
+	if bool(SettingsManager.get_setting("reduce_flash", false)):
+		return
+	var slot := get_node_or_null("BottomCenter/Slot" + str(index)) as Control
+	if slot == null:
+		return
+	var flash := slot.get_node_or_null(_SLOT_FLASH_NAME) as ColorRect
+	if flash == null:
+		flash = ColorRect.new()
+		flash.name = _SLOT_FLASH_NAME
+		flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		flash.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		slot.add_child(flash)
+	flash.color = Color(ThemeProvider.COLOR_AMBER, _SLOT_FLASH_ALPHA)
+	var tw := create_tween()
+	tw.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tw.tween_property(flash, "color:a", 0.0, _SLOT_FLASH_SEC)
+	tw.tween_callback(flash.queue_free)
 
 ## Below the 5th status row (VISIBILITY at y~190): at y=182 the button
 ## covered the caption ("...ILITY" in docs/stills/tzverify frames).
