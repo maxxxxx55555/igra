@@ -741,7 +741,14 @@ func _on_enemy_hp_updated(_monster_id: StringName, ratio: float) -> void:
 
 ## Вспышка виньетки при уроне. Возврат идёт к фактической базовой прозрачности,
 ## а не к константе 0.4: иначе каждое попадание навсегда затемняло экран.
+## This is a full-screen beat (VignetteOverlay is a full-rect ColorRect), so it
+## honours reduce_flash — the same toggle that already silences the noise
+## vignette pulse below, and the one docs/GAMEFEEL_SPEC.md §2 lists for
+## full-screen flash ColorRects. The sustained low-HP state in _on_hp() stays:
+## that is legibility, not a flash.
 func _on_damage_vignette(ratio: float) -> void:
+	if bool(SettingsManager.get_setting("reduce_flash", false)):
+		return
 	var v := vignette
 	if ratio < _hp and v != null:
 		var tween := create_tween()

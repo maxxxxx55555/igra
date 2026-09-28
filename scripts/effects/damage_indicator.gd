@@ -61,7 +61,12 @@ func _make_pointer_texture() -> ImageTexture:
 				img.set_pixel(x, y, Color(1, 1, 1, alpha))
 	return ImageTexture.create_from_image(img)
 
+## GDD 3.15: the screen-edge beat is a full-screen layer, so reduce_flash
+## silences it (docs/GAMEFEEL_SPEC.md §2). The direction pointer below is
+## untouched — that one is information the player needs, not spectacle.
 func _on_damaged(_amount: int) -> void:
+	if bool(SettingsManager.get_setting("reduce_flash", false)):
+		return
 	_vignette_mat.set_shader_parameter("strength", 1.0)
 	var tween := create_tween()
 	tween.tween_method(func(v: float) -> void: _vignette_mat.set_shader_parameter("strength", v), 1.0, 0.0, _FADE_TIME)
