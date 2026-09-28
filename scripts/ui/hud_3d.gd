@@ -93,7 +93,7 @@ func _ready() -> void:
 	EventBus.player_interact_available.connect(func(avail: bool): prompt.visible = avail)
 	EventBus.player_interact_available.connect(_pulse_interact_button)
 	# Подсказка была вечно пустой строкой: текст в неё никто не писал.
-	EventBus.interact_prompt_changed.connect(func(text: String) -> void: prompt.text = text)
+	EventBus.interact_prompt_changed.connect(func(text: String) -> void: prompt.text = _interact_key_hint() + text)
 	EventBus.inventory_weight_changed.connect(_on_weight_changed)
 	# Badge counts froze at their _ready()-time snapshot: nothing refreshed
 	# them on pickup/use/craft even though inventory_changed fires for all
@@ -585,6 +585,23 @@ func _on_hud_visibility(v: bool) -> void:
 
 func has_touch_ui() -> bool:
 	return DisplayServer.is_touchscreen_available() or OS.has_feature("mobile")
+
+## GDD V.1 3.7: the prompt said what the interaction does ("Open", "Search",
+## "Repair") but never which button does it. The key is read from the project's
+## own "interact" action, so a rebound control shows the player's own binding;
+## touch builds already get an on-screen button (_pulse_interact_button) and
+## take no key prefix. The action is bound by physical keycode in project.godot,
+## so keycode == KEY_NONE is the normal case here, not an edge one.
+func _interact_key_hint() -> String:
+	if has_touch_ui() or not InputMap.has_action(&"interact"):
+		return ""
+	for ev in InputMap.action_get_events(&"interact"):
+		if ev is InputEventKey:
+			var key := ev as InputEventKey
+			var code: int = key.keycode if key.keycode != KEY_NONE else key.physical_keycode
+			if code != KEY_NONE:
+				return "[%s] " % OS.get_keycode_string(code)
+	return ""
 
 func _apply_touch_visibility() -> void:
 	if not has_touch_ui():
