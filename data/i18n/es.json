@@ -1306,5 +1306,6 @@
   "HUD_LEGEND_TITLE": "LEYENDA DEL MAPA",
   "HUD_LEGEND_PLAYER": "Tú (jugador)",
   "HUD_LEGEND_CURRENT": "Distrito actual",
-  "HUD_HINT_DARK": "Busca una fuente de luz: un interruptor o tu linterna."
+  "HUD_HINT_DARK": "Busca una fuente de luz: un interruptor o tu linterna.",
+  "QUEST_MORE_ACTIVE": "+%d objetivos más"
 }

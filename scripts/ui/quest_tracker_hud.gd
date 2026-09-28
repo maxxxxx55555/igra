@@ -39,9 +39,10 @@ func _ready() -> void:
 	
 	EventBus.settings_changed.connect(_on_settings_changed)
 	# Static audit 2026-09-08: title on this always-on gameplay HUD was set
-	# once and never retranslated.
-	LocalizationManager.language_changed.connect(func(_l: String) -> void:
-		_title_lbl.text = LocalizationManager.t("QUEST_OBJECTIVES"))
+	# once and never retranslated. The objective rows themselves are built from
+	# get_title()/tf() inside _refresh(), so the same switch has to rebuild them
+	# too - re-texting the title alone left the list in the old language.
+	LocalizationManager.language_changed.connect(func(_l: String) -> void: _refresh())
 	_refresh()
 
 func _build_ui() -> void:
@@ -161,6 +162,18 @@ func _refresh(_a: Variant = null, _b: Variant = null, _c: Variant = null) -> voi
 		_markers.append({"arrow": arrow, "quest": quest, "pos": null})
 
 		count += 1
+
+	# GDD V.1 3.3/3.16: the sheet's list is "up to 3 active" and the loop above
+	# stops there, but anything past the third used to vanish without a word - a
+	# player holding four objectives could not tell whether the tracker had lost
+	# one. Count them instead of hiding them.
+	if count < active_quests.size():
+		var more := Label.new()
+		more.name = "MoreActiveLabel"
+		more.text = LocalizationManager.tf("QUEST_MORE_ACTIVE", [active_quests.size() - count])
+		more.add_theme_font_size_override("font_size", 12)
+		more.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
+		_objectives_vbox.add_child(more)
 
 func _process(delta: float) -> void:
 	if _markers.is_empty() or not _container.visible:
