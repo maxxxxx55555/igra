@@ -117,6 +117,7 @@ func _ready() -> void:
 	_setup_grain_overlay()
 	_setup_damage_indicator()
 	_setup_heal_flash()
+	_setup_blackout_flash()
 	$BtnPause.pressed.connect(_on_pause)
 	_add_map_button()
 	EventBus.game_state_changed.connect(_on_game_state)
@@ -882,6 +883,48 @@ func _flash_heal() -> void:
 	tween.tween_callback(func() -> void:
 		if is_instance_valid(_heal_flash):
 			_heal_flash.visible = false)
+
+## GAMEFEEL_SPEC.md (`district_blackout` / `light_disrupted`): "screen flash to
+## black transition", "flash <= 120ms per pulse, no repeated strobe", and the
+## spec marks reduce_flash on this row as a *hard* requirement - it is the one
+## beat in the table called out as a real photosensitivity risk. So with the
+## toggle on the flash is skipped outright, never shortened into something that
+## still pulses. The blackout event names a district and the player only sees
+## their own lights die, so the beat filters on where they are standing
+## (DistrictManager.current_district is the authoritative field).
+var _blackout_flash: ColorRect = null
+
+func _setup_blackout_flash() -> void:
+	_blackout_flash = ColorRect.new()
+	_blackout_flash.name = "BlackoutFlash"
+	_blackout_flash.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_blackout_flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_blackout_flash.color = Color(0.0, 0.0, 0.0, 0.0)
+	_blackout_flash.visible = false
+	add_child(_blackout_flash)
+	EventBus.district_blackout.connect(_on_district_blackout)
+	EventBus.light_disrupted.connect(_pulse_blackout_flash)
+
+func _on_district_blackout(district_id: StringName) -> void:
+	if StringName(DistrictManager.current_district) != district_id:
+		return
+	_pulse_blackout_flash()
+
+## 50 + 70 ms = the 120 ms the spec allows, one pulse per event, and a full-rect
+## tint, so it goes through the same reduce_flash gate as the damage and heal
+## beats above.
+func _pulse_blackout_flash() -> void:
+	if _blackout_flash == null or not is_instance_valid(_blackout_flash):
+		return
+	if bool(SettingsManager.get_setting("reduce_flash", false)):
+		return
+	_blackout_flash.visible = true
+	var tween := create_tween()
+	tween.tween_property(_blackout_flash, "color:a", 0.55, 0.05)
+	tween.tween_property(_blackout_flash, "color:a", 0.0, 0.07)
+	tween.tween_callback(func() -> void:
+		if is_instance_valid(_blackout_flash):
+			_blackout_flash.visible = false)
 
 func _on_hp(ratio: float) -> void:
 	_hp = ratio
