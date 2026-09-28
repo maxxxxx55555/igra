@@ -1302,5 +1302,8 @@
   "TUT_INVENTORY": "荷物を開いて、持ち物を確かめろ。",
   "HUD_LOG_TITLE": "メッセージログ",
   "HUD_LOG_TOGGLE": "ログ",
-  "HUD_LOG_EMPTY": "メッセージはまだありません"
+  "HUD_LOG_EMPTY": "メッセージはまだありません",
+  "HUD_LEGEND_TITLE": "地図の凡例",
+  "HUD_LEGEND_PLAYER": "自分（プレイヤー）",
+  "HUD_LEGEND_CURRENT": "現在の地区"
 }

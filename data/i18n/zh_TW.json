@@ -1302,5 +1302,8 @@
   "TUT_INVENTORY": "打開背包查看你攜帶的物品。",
   "HUD_LOG_TITLE": "訊息記錄",
   "HUD_LOG_TOGGLE": "記錄",
-  "HUD_LOG_EMPTY": "尚無訊息"
+  "HUD_LOG_EMPTY": "尚無訊息",
+  "HUD_LEGEND_TITLE": "地圖圖例",
+  "HUD_LEGEND_PLAYER": "你（玩家）",
+  "HUD_LEGEND_CURRENT": "目前區域"
 }

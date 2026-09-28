@@ -1302,5 +1302,8 @@
   "TUT_INVENTORY": "Ouvrez votre sac pour voir ce que vous portez.",
   "HUD_LOG_TITLE": "JOURNAL DES MESSAGES",
   "HUD_LOG_TOGGLE": "JOURNAL",
-  "HUD_LOG_EMPTY": "Aucun message"
+  "HUD_LOG_EMPTY": "Aucun message",
+  "HUD_LEGEND_TITLE": "LÉGENDE DE LA CARTE",
+  "HUD_LEGEND_PLAYER": "Vous (joueur)",
+  "HUD_LEGEND_CURRENT": "District actuel"
 }

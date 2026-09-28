@@ -1302,5 +1302,8 @@
   "TUT_INVENTORY": "افتح حقيبتك لترى ما تحمله.",
   "HUD_LOG_TITLE": "سجل الرسائل",
   "HUD_LOG_TOGGLE": "السجل",
-  "HUD_LOG_EMPTY": "لا توجد رسائل بعد"
+  "HUD_LOG_EMPTY": "لا توجد رسائل بعد",
+  "HUD_LEGEND_TITLE": "مفتاح الخريطة",
+  "HUD_LEGEND_PLAYER": "أنت (اللاعب)",
+  "HUD_LEGEND_CURRENT": "المنطقة الحالية"
 }

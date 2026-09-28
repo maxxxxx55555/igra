@@ -1302,5 +1302,8 @@
   "TUT_INVENTORY": "Öffne den Rucksack, um zu sehen, was du trägst.",
   "HUD_LOG_TITLE": "NACHRICHTENPROTOKOLL",
   "HUD_LOG_TOGGLE": "LOG",
-  "HUD_LOG_EMPTY": "Noch keine Nachrichten"
+  "HUD_LOG_EMPTY": "Noch keine Nachrichten",
+  "HUD_LEGEND_TITLE": "KARTENLEGENDE",
+  "HUD_LEGEND_PLAYER": "Du (Spieler)",
+  "HUD_LEGEND_CURRENT": "Aktueller Bezirk"
 }

@@ -1302,5 +1302,8 @@
   "TUT_INVENTORY": "배낭을 열어 가진 것을 확인해라.",
   "HUD_LOG_TITLE": "메시지 기록",
   "HUD_LOG_TOGGLE": "기록",
-  "HUD_LOG_EMPTY": "아직 메시지가 없습니다"
+  "HUD_LOG_EMPTY": "아직 메시지가 없습니다",
+  "HUD_LEGEND_TITLE": "지도 범례",
+  "HUD_LEGEND_PLAYER": "나 (플레이어)",
+  "HUD_LEGEND_CURRENT": "현재 구역"
 }

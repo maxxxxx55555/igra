@@ -1302,5 +1302,8 @@
   "TUT_INVENTORY": "Apri lo zaino per vedere cosa porti.",
   "HUD_LOG_TITLE": "REGISTRO MESSAGGI",
   "HUD_LOG_TOGGLE": "REGISTRO",
-  "HUD_LOG_EMPTY": "Ancora nessun messaggio"
+  "HUD_LOG_EMPTY": "Ancora nessun messaggio",
+  "HUD_LEGEND_TITLE": "LEGENDA MAPPA",
+  "HUD_LEGEND_PLAYER": "Tu (giocatore)",
+  "HUD_LEGEND_CURRENT": "Distretto attuale"
 }

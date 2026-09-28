@@ -1302,5 +1302,8 @@
   "TUT_INVENTORY": "Открой рюкзак — посмотри, что несёшь.",
   "HUD_LOG_TITLE": "ЖУРНАЛ СООБЩЕНИЙ",
   "HUD_LOG_TOGGLE": "ЛОГ",
-  "HUD_LOG_EMPTY": "Сообщений пока нет"
+  "HUD_LOG_EMPTY": "Сообщений пока нет",
+  "HUD_LEGEND_TITLE": "ЛЕГЕНДА КАРТЫ",
+  "HUD_LEGEND_PLAYER": "Вы (игрок)",
+  "HUD_LEGEND_CURRENT": "Текущий район"
 }

@@ -1302,5 +1302,8 @@
   "TUT_INVENTORY": "Abre la mochila para ver lo que llevas.",
   "HUD_LOG_TITLE": "REGISTRO DE MENSAJES",
   "HUD_LOG_TOGGLE": "REGISTRO",
-  "HUD_LOG_EMPTY": "Aún no hay mensajes"
+  "HUD_LOG_EMPTY": "Aún no hay mensajes",
+  "HUD_LEGEND_TITLE": "LEYENDA DEL MAPA",
+  "HUD_LEGEND_PLAYER": "Tú (jugador)",
+  "HUD_LEGEND_CURRENT": "Distrito actual"
 }

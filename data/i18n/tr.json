@@ -1302,5 +1302,8 @@
   "TUT_INVENTORY": "Ne taşıdığını görmek için çantanı aç.",
   "HUD_LOG_TITLE": "MESAJ KAYDI",
   "HUD_LOG_TOGGLE": "KAYIT",
-  "HUD_LOG_EMPTY": "Henüz mesaj yok"
+  "HUD_LOG_EMPTY": "Henüz mesaj yok",
+  "HUD_LEGEND_TITLE": "HARİTA GÖSTERGESİ",
+  "HUD_LEGEND_PLAYER": "Sen (oyuncu)",
+  "HUD_LEGEND_CURRENT": "Mevcut bölge"
 }
