@@ -160,6 +160,7 @@ func _setup_nv_poll() -> void:
 	nv_poll.autostart = true
 	nv_poll.timeout.connect(_poll_noise_visibility)
 	nv_poll.timeout.connect(_poll_status_effects)
+	nv_poll.timeout.connect(_poll_aim_target)
 	add_child(nv_poll)
 
 ## 3.12/6.5: полоска статусов игрока (BLEED/BURN/POISON/SLOW/STUN) — иконка 32x32
@@ -454,13 +455,78 @@ func _on_crosshair_state(state: StringName) -> void:
 ## 3.6: the state table has a "disabled" colour documented as "недоступно", but
 ## nothing could ever reach it. An empty magazine is the one such condition the
 ## HUD can see for itself (EventBus.ammo_changed, already connected here), so it
-## overrides the bus-reported state until a reload refills. The "enemy" colour
-## still needs the weapon-side emitter - see the cross-zone request in the PR.
+## overrides the bus-reported state until a reload refills. "enemy" comes from
+## the aim scan below - the bus itself only ever reports "default" (on fire) and
+## the one-shot "hit" (enemy damaged).
 func _apply_crosshair_state() -> void:
 	if _ammo_current == 0:
 		_update_crosshair(&"disabled")
+	elif _aiming_at_enemy:
+		_update_crosshair(&"enemy")
 	else:
 		_update_crosshair(_crosshair_state)
+
+## The "enemy" colour had no producer anywhere in the project: the weapon emits
+## "default" on fire, an enemy emits "hit" when hurt, and nothing ever said what
+## the crosshair was pointed at. The HUD resolves the missing state itself, over
+## the cone weapon_base.gd::_apply_auto_aim uses (12 deg), so the crosshair
+## lights up on exactly the target auto-aim would help with. Runs on the
+## existing 0.1 s NV poll.
+const _AIM_CONE_DEG: float = 12.0
+const _AIM_RANGE: float = 40.0
+var _aiming_at_enemy: bool = false
+
+func _poll_aim_target() -> void:
+	if not GameManager.is_playing() or UIManager.is_hud_blocked():
+		_set_aiming_at_enemy(false)
+		return
+	var cam := get_viewport().get_camera_3d() if is_inside_tree() else null
+	if cam == null:
+		_set_aiming_at_enemy(false)
+		return
+	var from: Vector3 = cam.global_position
+	var forward: Vector3 = -cam.global_transform.basis.z
+	var min_dot: float = cos(deg_to_rad(_AIM_CONE_DEG))
+	var best: Node3D = null
+	var best_dot: float = min_dot
+	for e in get_tree().get_nodes_in_group("enemies"):
+		if not (e is Node3D) or not is_instance_valid(e) or not ("monster_id" in e):
+			continue
+		if "ai_state" in e and int(e.ai_state) == BaseMonster.State.DEAD:
+			continue
+		var to_enemy: Vector3 = (e as Node3D).global_position - from
+		var dist: float = to_enemy.length()
+		if dist > _AIM_RANGE or dist < 0.01:
+			continue
+		var dot: float = forward.dot(to_enemy / dist)
+		if dot > best_dot:
+			best_dot = dot
+			best = e
+	_set_aiming_at_enemy(best != null and _has_clear_shot(cam, best))
+
+## One raycast for the single best candidate rather than one per enemy per tick:
+## the crosshair must not light up on a monster standing behind a wall. The ray
+## starts at the camera, which sits inside the player's own capsule, so that
+## body is excluded; whatever it does hit has to belong to an enemy.
+func _has_clear_shot(cam: Camera3D, enemy: Node3D) -> bool:
+	var space := cam.get_world_3d().direct_space_state
+	var query := PhysicsRayQueryParameters3D.create(cam.global_position, enemy.global_position + Vector3(0, 1.0, 0))
+	var player := get_tree().get_first_node_in_group("player")
+	var exclude_rids: Array[RID] = []
+	if player is CollisionObject3D:
+		exclude_rids.append((player as CollisionObject3D).get_rid())
+	query.exclude = exclude_rids
+	var result := space.intersect_ray(query)
+	if result.is_empty():
+		return false
+	var collider: Object = result.get("collider")
+	return collider is Node3D and (collider as Node3D).is_in_group("enemies")
+
+func _set_aiming_at_enemy(on: bool) -> void:
+	if on == _aiming_at_enemy:
+		return
+	_aiming_at_enemy = on
+	_apply_crosshair_state()
 
 
 func _poll_weight() -> void:
