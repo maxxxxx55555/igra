@@ -26,9 +26,19 @@ Shared, append-only for every agent: `scripts/events/event_bus.gd` (new signals 
 `data/i18n/*.json` locale files (new keys only, all 13 locales, real translations). The lead merges
 their conflicts as a union.
 
+## Running the swarm from ZCode
+
+- **Lead:** a ZCode task in the main checkout (`TLS_Build`, branch `main`), or a Claude Code session.
+  Never both at once.
+- **Zone agent:** its own ZCode task in its own worktree. From `TLS_Build`, run
+  `git worktree add ..\TLS_<zone> -b swarm/<zone> origin/main`, open `..\TLS_<zone>` in ZCode, and
+  give that task its row from the table above plus the rules below.
+- **Integration:** the lead merges `swarm/<zone>` into `main`, runs the engine checks, pushes, then
+  removes the worktree (`git worktree remove ..\TLS_<zone>`).
+
 ## Rules for every agent
 
-- `CLAUDE.md` applies: ponytail (reuse before writing, shortest diff), full 13-locale i18n for every
+- `AGENTS.md` applies (`CLAUDE.md` imports it): ponytail (reuse before writing, shortest diff), full 13-locale i18n for every
   user-facing string, zero TODO/FIXME/commented-out code/debug prints/BOM, English comments and
   commit messages, keep each file's CRLF line endings, never delete a file unless proven dead and not
   planned.
@@ -39,11 +49,13 @@ their conflicts as a union.
 - REJECTED forever: PICKUP_TOUCH tightening; NavigationAgent3D navigation changes.
 - A behaviour or balance change is verified by the lead with the 3-seed bot (IRON RULE).
 - Commit in the worktree, small English imperative messages ending with
-  `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`. Never push.
+  the writing agent's own co-author line (Claude agents:
+  `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`). Never push.
 - Report: commits, files, GDD/TZ rows done, what the lead must run and look at, i18n keys added,
   cross-zone requests as exact patches, risks.
 
 ## Earlier lanes
 
 The OpenCode Desktop (`oc/visual-w10`) and Cline Desktop (`cl/a11y-i18n`) lanes of 2026-09-20 stay
-inactive and absorbed into `main` (contracts: `AGENTS.md`, `.clinerules/zone.md`; history of this file).
+inactive and absorbed into `main` (contracts: `docs/AGENTS_OPENCODE_ARCHIVED.md`, `.clinerules/zone.md`; history of this file).
+The root `AGENTS.md` is now the shared instructions file for every agent.
