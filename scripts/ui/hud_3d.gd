@@ -118,12 +118,37 @@ func _ready() -> void:
 	_add_map_button()
 	EventBus.game_state_changed.connect(_on_game_state)
 	EventBus.hud_visibility_changed.connect(_on_hud_visibility)
+	_apply_hud_opacity_setting()
 	_on_game_state(int(GameManager.current_state))
 
 func _cache_vignette_default() -> void:
 	var v := vignette
 	if v != null:
 		_vignette_default_color = v.color
+
+## Settings' "HUD Opacity" slider dims every node in the "hud" group
+## (settings_manager.gd::set_hud_opacity), and nothing in the project ever
+## joined that group — the 0.5..1.0 slider did nothing at all. hud_3d itself is
+## a CanvasLayer, not a CanvasItem, so the group marks its top-level Controls
+## instead: set_hud_opacity() skips non-CanvasItems, and a Control's modulate
+## carries down to its whole subtree. Toasts are deliberately left out — they
+## carry text the player may still need at 50 % opacity (QA-AC-03).
+func _apply_hud_opacity_setting() -> void:
+	for child in get_children():
+		if child is Control:
+			(child as Control).add_to_group("hud")
+	# from_dict() re-applies the accessibility toggles after a config load, but
+	# not the opacity slider, so the HUD paints the stored value itself.
+	_apply_hud_opacity(float(SettingsManager.get_setting("hud_opacity", 1.0)))
+	EventBus.settings_changed.connect(func(key: String, value: Variant) -> void:
+		if key == "hud_opacity":
+			_apply_hud_opacity(float(value)))
+
+func _apply_hud_opacity(v: float) -> void:
+	var a := clampf(v, 0.0, 1.0)
+	for child in get_children():
+		if child is Control:
+			(child as Control).modulate.a = a
 
 func _setup_nv_poll() -> void:
 	var nv_poll := Timer.new()
