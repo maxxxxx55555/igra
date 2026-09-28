@@ -113,6 +113,7 @@ func _ready() -> void:
 	_setup_weapon_compare()
 	_setup_quick_wheel()
 	_setup_grain_overlay()
+	_setup_damage_indicator()
 	$BtnPause.pressed.connect(_on_pause)
 	_add_map_button()
 	EventBus.game_state_changed.connect(_on_game_state)
@@ -272,6 +273,32 @@ func _apply_grain_tier(tier: int) -> void:
 	if _grain_rect:
 		_grain_rect.visible = tier > 0
 
+## 3.15: damage direction indicator. `scripts/effects/damage_indicator.gd` and
+## `scenes/effects/damage_indicator.tscn` were both committed and complete
+## (pointer texture, screen-space direction math, its own ember shader) and
+## player_3d.gd already emits EventBus.player_damage_direction from the real
+## hit path — but no scene anywhere instantiated the indicator, so the pointer
+## never rendered. This is the missing instance link only; the effect itself is
+## unchanged.
+var _damage_indicator: CanvasLayer = null
+
+func _setup_damage_indicator() -> void:
+	if _damage_indicator != null:
+		return
+	var indicator_scene: PackedScene = load("res://scenes/effects/damage_indicator.tscn")
+	if indicator_scene == null:
+		return
+	_damage_indicator = indicator_scene.instantiate() as CanvasLayer
+	if _damage_indicator == null:
+		return
+	add_child(_damage_indicator)
+
+## A nested CanvasLayer keeps drawing even when the HUD layer it hangs under is
+## hidden, so the indicator mirrors the HUD's own visibility instead.
+func _sync_damage_indicator_visibility() -> void:
+	if _damage_indicator != null and is_instance_valid(_damage_indicator):
+		_damage_indicator.visible = visible
+
 ## T15: колесо быстрых слотов (удержание + аналоговый выбор из 6).
 var _quick_wheel: Control = null
 
@@ -429,11 +456,13 @@ func _on_game_state(state: int) -> void:
 		# бары и кнопка паузы рисовались ПОВЕРХ меню паузы и «Кодекса».
 		# UIManager уже сообщает, когда открыт блокирующий экран, — слушаем его.
 		visible = not UIManager.is_hud_blocked()
+	_sync_damage_indicator_visibility()
 
 ## UIManager шлёт это при открытии/закрытии любого блокирующего экрана
 ## (пауза, кодекс, карта, настройки) и при входе/выходе из фоторежима.
 func _on_hud_visibility(v: bool) -> void:
 	visible = v and (GameManager.is_playing() or GameManager.is_paused())
+	_sync_damage_indicator_visibility()
 
 func has_touch_ui() -> bool:
 	return DisplayServer.is_touchscreen_available() or OS.has_feature("mobile")
