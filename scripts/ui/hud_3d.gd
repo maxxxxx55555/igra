@@ -100,6 +100,7 @@ func _ready() -> void:
 	# three (inventory_manager.gd).
 	EventBus.inventory_changed.connect(_refresh_slot_badges)
 	EventBus.item_picked_up.connect(_on_item_picked_up)
+	EventBus.item_consumed.connect(_on_item_consumed)
 	EventBus.inventory_notice.connect(func(msg: String): _show_notice(msg))
 	EventBus.player_detected.connect(_on_monster_spotted)
 	EventBus.enemy_hp_updated.connect(_on_enemy_hp_updated)
@@ -115,6 +116,7 @@ func _ready() -> void:
 	_setup_quick_wheel()
 	_setup_grain_overlay()
 	_setup_damage_indicator()
+	_setup_heal_flash()
 	$BtnPause.pressed.connect(_on_pause)
 	_add_map_button()
 	EventBus.game_state_changed.connect(_on_game_state)
@@ -777,6 +779,43 @@ func _on_damage_vignette(ratio: float) -> void:
 		var tween := create_tween()
 		tween.tween_property(v, "color:a", 0.8, 0.15)
 		tween.tween_property(v, "color:a", _vignette_default_color.a, 0.25)
+
+## GAMEFEEL_SPEC.md (`player_healed`): "soft green flash on HUD, no shake",
+## cap "flash <= 120ms", toggle reduce_flash. EventBus.player_healed exists but
+## has no emitter on it (player_3d.gd::heal() restores hp and stays quiet), so
+## the HUD keys off the signal the consume path does send: inventory_manager.gd
+## emits EventBus.item_consumed with _effect_name() == &"HEAL" for every
+## healing consumable.
+var _heal_flash: ColorRect = null
+
+func _setup_heal_flash() -> void:
+	_heal_flash = ColorRect.new()
+	_heal_flash.name = "HealFlash"
+	_heal_flash.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_heal_flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_heal_flash.color = Color(0.373, 0.541, 0.306, 0.0)
+	_heal_flash.visible = false
+	add_child(_heal_flash)
+
+func _on_item_consumed(_item_id: StringName, effect: String, _value: float) -> void:
+	if effect == "HEAL":
+		_flash_heal()
+
+## 50 + 70 ms = the 120 ms the spec allows, and a full-rect tint, so it goes
+## through the same reduce_flash gate as the damage beat above (GAMEFEEL_SPEC.md
+## §2 lists full-screen flash ColorRects). No shake, no strobe: one pulse.
+func _flash_heal() -> void:
+	if _heal_flash == null or not is_instance_valid(_heal_flash):
+		return
+	if bool(SettingsManager.get_setting("reduce_flash", false)):
+		return
+	_heal_flash.visible = true
+	var tween := create_tween()
+	tween.tween_property(_heal_flash, "color:a", 0.28, 0.05)
+	tween.tween_property(_heal_flash, "color:a", 0.0, 0.07)
+	tween.tween_callback(func() -> void:
+		if is_instance_valid(_heal_flash):
+			_heal_flash.visible = false)
 
 func _on_hp(ratio: float) -> void:
 	_hp = ratio
