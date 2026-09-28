@@ -7,7 +7,15 @@ class_name QuestTrackerHUD
 const PANEL_WIDTH := 300
 const PANEL_HEIGHT := 200
 const PANEL_MARGIN := 20
-const PANEL_TOP := 140  ## ниже миникарты
+## Below the top-right maps, not just below the radar. The comment here used to
+## read "ниже миникарты" at 140, which was never true: the radar spans y 16..180
+## (radar.gd) and the bigger UIManager minimap y 16..236 (minimap.gd SIZE 220),
+## so the panel sat on top of both - they all live on UIManager's layer 10 and
+## this panel is added last, so it drew over the minimap and hid the minimap's
+## lower-left corner (96 px of overlap, including the legend chip/minimap.gd).
+## 236 + PANEL_MARGIN clears the taller disc, so the panel stays put whichever of
+## the two maps survives the pending "which top-right map wins" decision.
+const PANEL_TOP := 252
 
 var _container: VBoxContainer
 var _title_lbl: Label
