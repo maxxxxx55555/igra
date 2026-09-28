@@ -1299,5 +1299,8 @@
   "TUT_CROUCH": "Sessizce ilerle. Yavaş adımlar daha az ses çıkarır.",
   "TUT_DODGE": "Bir şey üstüne atılınca kaç.",
   "TUT_ATTACK": "Sana ulaşırsa karşılık ver.",
-  "TUT_INVENTORY": "Ne taşıdığını görmek için çantanı aç."
+  "TUT_INVENTORY": "Ne taşıdığını görmek için çantanı aç.",
+  "HUD_LOG_TITLE": "MESAJ KAYDI",
+  "HUD_LOG_TOGGLE": "KAYIT",
+  "HUD_LOG_EMPTY": "Henüz mesaj yok"
 }

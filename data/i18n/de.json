@@ -1299,5 +1299,8 @@
   "TUT_CROUCH": "Schleich. Langsame Schritte sind leiser.",
   "TUT_DODGE": "Weiche aus, wenn etwas zuspringt.",
   "TUT_ATTACK": "Schlag zurück, wenn es dich erreicht.",
-  "TUT_INVENTORY": "Öffne den Rucksack, um zu sehen, was du trägst."
+  "TUT_INVENTORY": "Öffne den Rucksack, um zu sehen, was du trägst.",
+  "HUD_LOG_TITLE": "NACHRICHTENPROTOKOLL",
+  "HUD_LOG_TOGGLE": "LOG",
+  "HUD_LOG_EMPTY": "Noch keine Nachrichten"
 }

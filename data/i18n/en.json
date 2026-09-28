@@ -1299,5 +1299,8 @@
   "TUT_CROUCH": "Sneak. Slow steps carry less sound.",
   "TUT_DODGE": "Dodge when something lunges.",
   "TUT_ATTACK": "Strike back if it reaches you.",
-  "TUT_INVENTORY": "Open your pack to see what you carry."
+  "TUT_INVENTORY": "Open your pack to see what you carry.",
+  "HUD_LOG_TITLE": "MESSAGE LOG",
+  "HUD_LOG_TOGGLE": "LOG",
+  "HUD_LOG_EMPTY": "No messages yet"
 }

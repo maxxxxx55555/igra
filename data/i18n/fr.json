@@ -1299,5 +1299,8 @@
   "TUT_CROUCH": "Avancez sans bruit. Des pas lents s'entendent moins.",
   "TUT_DODGE": "Esquivez quand quelque chose bondit.",
   "TUT_ATTACK": "Ripostez s'il vous atteint.",
-  "TUT_INVENTORY": "Ouvrez votre sac pour voir ce que vous portez."
+  "TUT_INVENTORY": "Ouvrez votre sac pour voir ce que vous portez.",
+  "HUD_LOG_TITLE": "JOURNAL DES MESSAGES",
+  "HUD_LOG_TOGGLE": "JOURNAL",
+  "HUD_LOG_EMPTY": "Aucun message"
 }

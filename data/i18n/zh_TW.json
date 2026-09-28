@@ -1299,5 +1299,8 @@
   "TUT_CROUCH": "潛行。慢步聲音更小。",
   "TUT_DODGE": "有東西撲來時閃避。",
   "TUT_ATTACK": "它靠近你就還擊。",
-  "TUT_INVENTORY": "打開背包查看你攜帶的物品。"
+  "TUT_INVENTORY": "打開背包查看你攜帶的物品。",
+  "HUD_LOG_TITLE": "訊息記錄",
+  "HUD_LOG_TOGGLE": "記錄",
+  "HUD_LOG_EMPTY": "尚無訊息"
 }

@@ -1299,5 +1299,8 @@
   "TUT_CROUCH": "Muoviti furtivo. I passi lenti fanno meno rumore.",
   "TUT_DODGE": "Schiva quando qualcosa ti salta addosso.",
   "TUT_ATTACK": "Contrattacca se ti raggiunge.",
-  "TUT_INVENTORY": "Apri lo zaino per vedere cosa porti."
+  "TUT_INVENTORY": "Apri lo zaino per vedere cosa porti.",
+  "HUD_LOG_TITLE": "REGISTRO MESSAGGI",
+  "HUD_LOG_TOGGLE": "REGISTRO",
+  "HUD_LOG_EMPTY": "Ancora nessun messaggio"
 }

@@ -1299,5 +1299,8 @@
   "TUT_CROUCH": "Ande furtivo. Passos lentos fazem menos barulho.",
   "TUT_DODGE": "Desvie quando algo avançar.",
   "TUT_ATTACK": "Revide se ele te alcançar.",
-  "TUT_INVENTORY": "Abra a mochila para ver o que você carrega."
+  "TUT_INVENTORY": "Abra a mochila para ver o que você carrega.",
+  "HUD_LOG_TITLE": "REGISTRO DE MENSAGENS",
+  "HUD_LOG_TOGGLE": "REGISTRO",
+  "HUD_LOG_EMPTY": "Nenhuma mensagem ainda"
 }
