@@ -432,10 +432,33 @@ func _flash_hit_marker() -> void:
 	_hit_tween = create_tween()
 	_hit_tween.tween_property(_hit_marker, "modulate:a", 0.0, 0.25)
 
+## Last state the bus reported, so the empty-magazine override below can be
+## lifted again the moment ammo comes back.
+var _crosshair_state: StringName = &"default"
+## -1 = no ammo_changed has arrived yet, so nothing overrides the crosshair.
+var _ammo_current: int = -1
+
 ## Triggered по сигналу EventBus.crosshair_state_changed.
 ## Caller: игрок или система взаимодействия.
 func _on_crosshair_state(state: StringName) -> void:
-	_update_crosshair(state)
+	# "hit" is a one-shot marker flash, not a persistent colour state - it must
+	# keep working even with an empty magazine.
+	if state == &"hit":
+		_update_crosshair(state)
+		return
+	_crosshair_state = state
+	_apply_crosshair_state()
+
+## 3.6: the state table has a "disabled" colour documented as "недоступно", but
+## nothing could ever reach it. An empty magazine is the one such condition the
+## HUD can see for itself (EventBus.ammo_changed, already connected here), so it
+## overrides the bus-reported state until a reload refills. The "enemy" colour
+## still needs the weapon-side emitter - see the cross-zone request in the PR.
+func _apply_crosshair_state() -> void:
+	if _ammo_current == 0:
+		_update_crosshair(&"disabled")
+	else:
+		_update_crosshair(_crosshair_state)
 
 
 func _poll_weight() -> void:
@@ -817,6 +840,8 @@ func _add_battery_ad_button() -> void:
 
 func _on_ammo_changed(current: int, max_ammo: int) -> void:
 	ammo_val.text = "%d / %d" % [current, max_ammo]
+	_ammo_current = current
+	_apply_crosshair_state()
 
 func _tween_fill(cr: ColorRect, ratio: float) -> void:
 	var target: float = clampf(ratio, 0.0, 1.0) * BAR_W
