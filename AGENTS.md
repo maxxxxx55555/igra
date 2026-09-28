@@ -96,7 +96,7 @@ gate, not just a past commit message.
 ## Multi-agent zones
 `docs/AGENT_ZONES.md` lists which agent may write where. Zone agents commit in their own worktree
 and never push or launch Godot; the lead merges, runs every engine check and pushes. Only one lead
-runs at a time, in ZCode or in Claude Code, never both. A zone violation (editing outside your row)
+runs at a time, in ZCode, OpenCode, or Claude Code, never more than one. A zone violation (editing outside your row)
 means stop and report, not push through.
 
 ## Not built yet

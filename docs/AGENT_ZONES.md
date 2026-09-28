@@ -28,9 +28,9 @@ their conflicts as a union.
 
 ## Running the swarm from ZCode
 
-- **Lead:** a ZCode task in the main checkout (`TLS_Build`, branch `main`), or a Claude Code session.
-  Never both at once.
-- **Zone agent:** its own ZCode task in its own worktree. From `TLS_Build`, run
+- **Lead:** a ZCode or OpenCode task in the main checkout (`TLS_Build`, branch `main`), or a Claude
+  Code session. Never more than one at once.
+- **Zone agent:** its own ZCode or OpenCode task in its own worktree. From `TLS_Build`, run
   `git worktree add ..\TLS_<zone> -b swarm/<zone> origin/main`, open `..\TLS_<zone>` in ZCode, and
   give that task its row from the table above plus the rules below.
 - **Integration:** the lead merges `swarm/<zone>` into `main`, runs the engine checks, pushes, then
