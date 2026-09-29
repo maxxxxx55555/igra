@@ -11,6 +11,10 @@ var _stam: float = 1.0
 var _bat: float = 1.0
 var _battery_ad_button: Button = null
 var _vignette_default_color: Color
+## Shared by the hit beat and the sustained low-HP tint (see _on_hp).
+var _vignette_tween: Tween
+## Whether the dense low-HP state is currently on, so entry/exit is a one-shot.
+var _vignette_low: bool = false
 var _enemy_hp_tween: Tween
 ## PHASE 1 (languages = settings): HP/Stam/Bat captions are plain Labels
 ## created once in _add_captions(); cached here so a live language switch
@@ -82,7 +86,6 @@ func _ready() -> void:
 	_setup_button_feedback()
 	_apply_text_outlines()
 	EventBus.player_health_changed.connect(_on_hp)
-	EventBus.player_health_changed.connect(_on_damage_vignette)
 	if EventBus.has_signal(&"crosshair_state_changed"):
 		EventBus.crosshair_state_changed.connect(_on_crosshair_state)
 	EventBus.player_stamina_changed.connect(_on_stam)
@@ -897,21 +900,7 @@ func _hp_ratio_of(enemy: Node3D) -> float:
 		return -1.0
 	return clampf(float(enemy.get("hp")) / maxf(float(enemy.get("max_hp")), 0.001), 0.0, 1.0)
 
-## Вспышка виньетки при уроне. Возврат идёт к фактической базовой прозрачности,
-## а не к константе 0.4: иначе каждое попадание навсегда затемняло экран.
-## This is a full-screen beat (VignetteOverlay is a full-rect ColorRect), so it
-## honours reduce_flash — the same toggle that already silences the noise
-## vignette pulse below, and the one docs/GAMEFEEL_SPEC.md §2 lists for
-## full-screen flash ColorRects. The sustained low-HP state in _on_hp() stays:
-## that is legibility, not a flash.
-func _on_damage_vignette(ratio: float) -> void:
-	if bool(SettingsManager.get_setting("reduce_flash", false)):
-		return
-	var v := vignette
-	if ratio < _hp and v != null:
-		var tween := create_tween()
-		tween.tween_property(v, "color:a", 0.8, 0.15)
-		tween.tween_property(v, "color:a", _vignette_default_color.a, 0.25)
+
 
 ## GAMEFEEL_SPEC.md (`player_healed`): "soft green flash on HUD, no shake",
 ## cap "flash <= 120ms", toggle reduce_flash. EventBus.player_healed exists but
@@ -920,6 +909,7 @@ func _on_damage_vignette(ratio: float) -> void:
 ## emits EventBus.item_consumed with _effect_name() == &"HEAL" for every
 ## healing consumable.
 var _heal_flash: ColorRect = null
+var _heal_tween: Tween
 
 func _setup_heal_flash() -> void:
 	_heal_flash = ColorRect.new()
@@ -943,10 +933,15 @@ func _flash_heal() -> void:
 	if bool(SettingsManager.get_setting("reduce_flash", false)):
 		return
 	_heal_flash.visible = true
-	var tween := create_tween()
-	tween.tween_property(_heal_flash, "color:a", 0.28, 0.05)
-	tween.tween_property(_heal_flash, "color:a", 0.0, 0.07)
-	tween.tween_callback(func() -> void:
+	# Same one-owner rule as the vignette: two medkits in quick succession used to
+	# leave two tweens on color:a, and the older one's completion callback hid the
+	# rect in the middle of the newer pulse.
+	if _heal_tween != null and _heal_tween.is_valid():
+		_heal_tween.kill()
+	_heal_tween = create_tween()
+	_heal_tween.tween_property(_heal_flash, "color:a", 0.28, 0.05)
+	_heal_tween.tween_property(_heal_flash, "color:a", 0.0, 0.07)
+	_heal_tween.tween_callback(func() -> void:
 		if is_instance_valid(_heal_flash):
 			_heal_flash.visible = false)
 
@@ -959,6 +954,7 @@ func _flash_heal() -> void:
 ## their own lights die, so the beat filters on where they are standing
 ## (DistrictManager.current_district is the authoritative field).
 var _blackout_flash: ColorRect = null
+var _blackout_tween: Tween
 
 func _setup_blackout_flash() -> void:
 	_blackout_flash = ColorRect.new()
@@ -986,10 +982,12 @@ func _pulse_blackout_flash() -> void:
 	if bool(SettingsManager.get_setting("reduce_flash", false)):
 		return
 	_blackout_flash.visible = true
-	var tween := create_tween()
-	tween.tween_property(_blackout_flash, "color:a", 0.55, 0.05)
-	tween.tween_property(_blackout_flash, "color:a", 0.0, 0.07)
-	tween.tween_callback(func() -> void:
+	if _blackout_tween != null and _blackout_tween.is_valid():
+		_blackout_tween.kill()
+	_blackout_tween = create_tween()
+	_blackout_tween.tween_property(_blackout_flash, "color:a", 0.55, 0.05)
+	_blackout_tween.tween_property(_blackout_flash, "color:a", 0.0, 0.07)
+	_blackout_tween.tween_callback(func() -> void:
 		if is_instance_valid(_blackout_flash):
 			_blackout_flash.visible = false)
 
@@ -1022,16 +1020,59 @@ func _hint_light_source() -> void:
 		return
 	_show_notice(LocalizationManager.t("HUD_HINT_DARK"))
 
+## Peak of the screen-wide ember beat, and the HP below which the vignette stays
+## dense. Named because docs/GAMEFEEL_SPEC.md §1 measures full-screen beats by
+## alpha and ramp length - this is the documented exceedance the lead still has
+## to rule on (see the PR).
+const _VIGNETTE_BEAT_PEAK: float = 0.8
+const _LOW_HP: float = 0.3
+
+## Vignette ownership: one handler, one tween.
+##
+## The ember beat used to be a *second* handler on this same signal, connected
+## after _on_hp and guarded by `ratio < _hp` - but _on_hp had already written _hp
+## by the time it ran, so that comparison was never true and the beat never
+## played at all. The sustained low-HP state had the mirror problem: it animated
+## only downward, so healing back above the threshold left the dense tint on
+## screen for the rest of the run. Both are driven from here now, with the
+## previous value in hand, and the alpha they settle on is always recomputed from
+## the current HP.
 func _on_hp(ratio: float) -> void:
+	var took_damage: bool = ratio < _hp
 	_hp = ratio
 	_tween_fill(hp_fill, ratio)
 	hp_val.text = str(int(ratio * 100))
-	# На низком HP виньетка остаётся заметно плотнее базовой, но не «залипает».
+	# This is a full-screen beat (VignetteOverlay is a full-rect ColorRect), so it
+	# honours reduce_flash - the same toggle that already silences the noise
+	# vignette pulse below, and the one GAMEFEEL_SPEC.md §2 lists for full-screen
+	# flash ColorRects. The sustained low-HP state below stays: legibility, not a
+	# flash.
+	if took_damage and not bool(SettingsManager.get_setting("reduce_flash", false)):
+		_animate_vignette(_VIGNETTE_BEAT_PEAK, 0.25)
+	_refresh_low_hp_vignette()
+
+func _sustained_vignette_alpha() -> float:
+	return maxf(_vignette_default_color.a, 0.6) if _hp < _LOW_HP else _vignette_default_color.a
+
+## The single tween for both animations on vignette.color:a - a newer beat kills
+## the older one instead of the two racing to write the same property.
+func _animate_vignette(peak: float, settle_time: float) -> void:
 	var v := vignette
-	if ratio < 0.3 and v != null:
-		var tween := create_tween()
-		tween.tween_property(v, "color:a", 0.8, 0.15)
-		tween.tween_property(v, "color:a", maxf(_vignette_default_color.a, 0.6), 0.15)
+	if v == null:
+		return
+	if _vignette_tween != null and _vignette_tween.is_valid():
+		_vignette_tween.kill()
+	_vignette_tween = create_tween()
+	_vignette_tween.tween_property(v, "color:a", peak, 0.15)
+	_vignette_tween.tween_property(v, "color:a", _sustained_vignette_alpha(), settle_time)
+
+## Entering the dense state pulses once; leaving it relaxes without a spike.
+func _refresh_low_hp_vignette() -> void:
+	var low: bool = _hp < _LOW_HP
+	if low == _vignette_low:
+		return
+	_vignette_low = low
+	_animate_vignette(_VIGNETTE_BEAT_PEAK if low else _vignette_default_color.a, 0.15)
 
 func _on_stam(ratio: float) -> void:
 	_stam = ratio
