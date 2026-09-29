@@ -92,20 +92,28 @@ func _on_damage_direction(amount: float, src_pos: Vector3) -> void:
 	t2.tween_callback(func(): _pointer.visible = false)
 	_pointer.set_meta("tween", t2)
 
-## World Vector3 → 2D direction на камере.
+## World Vector3 → 2D direction on the *camera's* plane.
+##
+## This used to project the world X/Z axes straight onto the screen, so a hit
+## from the north always painted the pointer at the top of the screen even when
+## the player had turned to face east - a direction indicator that agreed with
+## the world axes instead of with what the player sees, i.e. wrong in every
+## direction but one. Camera-local axes are the right frame: -z is straight
+## ahead (screen up), +x is right, +y is up, so the screen bearing is
+## (local.x, local.z) with the vertical offset folded in as a small bias. Same
+## convention as the HUD's aim scan and the quest tracker's arrow.
 func _world_dir_to_screen(src_pos: Vector3) -> Vector2:
-	var player := get_tree().get_first_node_in_group("player")
-	if player == null or not player is Node3D:
-		return Vector2.RIGHT
-	var p3: Node3D = player
-	if not p3.has_method("get_global_transform"):
-		return Vector2.RIGHT
 	var cam: Camera3D = get_viewport().get_camera_3d()
 	if cam == null:
 		return Vector2.RIGHT
-	var to_src: Vector3 = (src_pos - cam.global_transform.origin)
-	var to_cam: Vector3 = -cam.global_transform.basis.z
-	# Проекция на 2D: x — в горизонталь (yaw), y — вертикаль (pitch).
-	var dir_xy: Vector2 = Vector2(to_src.x, to_src.z).normalized()
-	var dir_y: float = clampf(to_src.y * 0.4, -1.0, 1.0)
-	return Vector2(dir_xy.x, -dir_y)  # minus: вверх = -y в screen
+	var to_src: Vector3 = src_pos - cam.global_position
+	var local: Vector3 = cam.global_transform.basis.inverse() * to_src
+	# Ahead is -z, so a source in front lands on negative y (screen up); a source
+	# above the camera (rooftop, falling debris) pushes it further up, matching
+	# the vertical bias the old world-space version tried to add.
+	var dir := Vector2(local.x, local.z - local.y * 0.4)
+	# Directly overhead/underfoot has no on-screen bearing: keep the fallback
+	# rather than snapping the pointer to an arbitrary edge.
+	if dir.length_squared() < 0.0001:
+		return Vector2.RIGHT
+	return dir.normalized()
