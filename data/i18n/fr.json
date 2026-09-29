@@ -1308,5 +1308,6 @@
   "HUD_LEGEND_CURRENT": "District actuel",
   "HUD_HINT_DARK": "Trouvez une source de lumière — un interrupteur ou votre lampe.",
   "QUEST_MORE_ACTIVE": "+%d autres objectifs",
-  "HUD_MELEE": "MÊLÉE"
+  "HUD_MELEE": "MÊLÉE",
+  "HUD_LEGEND_MARKER": "Signal radio"
 }

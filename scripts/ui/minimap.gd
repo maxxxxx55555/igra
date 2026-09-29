@@ -26,7 +26,23 @@ const DISTRICT_LABELS: Dictionary = {
 ## parked to the left of the frame, where nothing else is anchored.
 const LEGEND_W: float = 300.0
 const LEGEND_H: float = 180.0
-const _LEGEND_ROW_H: float = 22.0
+## Rows were 22 px with a 6 px separation: with the radio-marker row below that
+## is 231 px of content against a 180 px panel, and it left the panel's bottom
+## 5 px away from the quest tracker. 20/4 keeps the same reading order and puts
+## the auto-height panel ~33 px clear of it instead.
+const _LEGEND_ROW_H: float = 20.0
+
+## V.4 8.5 lists a "point" among the things the minimap is supposed to show, and
+## it had no producer until radio.gd: tuning a channel that carries coordinates
+## emits EventBus.radar_marker_added(ch.coords) - RADIO_EMERGENCY2 (137, 89) and
+## RADIO_DISTRESS (203, 56), the same world metres the district offsets below are
+## laid out in. Nothing in the project listened, so the revealed coordinates were
+## text on the radio panel and nothing else. They are drawn here as amber
+## diamonds. Markers persist for the run (the radio gives no completion signal to
+## clear them), duplicates are ignored, and the list is capped so a long session
+## cannot grow it without bound.
+const _MAX_MARKERS: int = 12
+var _markers: Array[Vector2] = []
 
 var _tick: float = 0.0
 var _current_district: StringName = &""
@@ -59,6 +75,7 @@ func _ready() -> void:
 	_update_legend_visibility()
 	LocalizationManager.language_changed.connect(func(_l: String) -> void: _retranslate_legend())
 	EventBus.power_grid_updated.connect(func() -> void: queue_redraw())
+	EventBus.radar_marker_added.connect(_on_radar_marker_added)
 	if EventBus.has_signal("district_entered"):
 		EventBus.district_entered.connect(func(id: StringName) -> void:
 			_current_district = id
@@ -99,7 +116,7 @@ func _build_legend() -> void:
 	add_child(_legend)
 
 	var vb := VBoxContainer.new()
-	vb.add_theme_constant_override("separation", 6)
+	vb.add_theme_constant_override("separation", 4)
 	_legend.add_child(vb)
 	_legend_title = Label.new()
 	_legend_title.add_theme_font_size_override("font_size", 14)
@@ -108,6 +125,30 @@ func _build_legend() -> void:
 	_add_legend_row(vb, "HUD_LEGEND_PLAYER", _arrow_swatch())
 	_add_legend_row(vb, "HUD_LEGEND_CURRENT", _ring_swatch())
 	_add_stage_legend_rows(vb)
+	_add_legend_row(vb, "HUD_LEGEND_MARKER", _diamond_swatch())
+	# The panel used to be a fixed 180 px while its own rows need more than that
+	# (a title, seven 22 px rows, separations and margins), so the last row could
+	# paint outside the panel's background. Grow the rect to what the content
+	# actually asks for, the same way _fix_radar_anchor() sizes TopRight in
+	# hud_3d.gd. LEGEND_H stays as the floor so a terse locale cannot collapse it.
+	_legend.offset_bottom = _legend.offset_top + maxf(LEGEND_H, _legend.get_combined_minimum_size().y)
+
+## The radio ping is a diamond so it cannot be mistaken for a district dot
+## (circles) or the player arrow, and so the swatch can mirror it exactly.
+func _diamond_swatch() -> Control:
+	var holder := Control.new()
+	holder.custom_minimum_size = Vector2(16, 16)
+	holder.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	holder.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var rect := ColorRect.new()
+	rect.color = ThemeProvider.COLOR_AMBER
+	rect.size = Vector2(10, 10)
+	rect.position = Vector2(3, 3)
+	rect.pivot_offset = Vector2(5, 5)
+	rect.rotation = deg_to_rad(45.0)
+	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	holder.add_child(rect)
+	return holder
 
 ## The four power-grid stages, reusing the city map's keys. Written as four
 ## explicit calls, not "MAP_STAGE_%d" in a loop: the localization audits read
@@ -185,6 +226,16 @@ func _toggle_legend() -> void:
 	if _legend.visible:
 		_retranslate_legend()
 
+## Duplicates are ignored, so re-tuning the same channel is a no-op, and the
+## oldest ping is dropped past the cap rather than refusing new ones.
+func _on_radar_marker_added(pos: Vector2) -> void:
+	if _markers.has(pos):
+		return
+	_markers.append(pos)
+	if _markers.size() > _MAX_MARKERS:
+		_markers.pop_front()
+	queue_redraw()
+
 func _retranslate_legend() -> void:
 	if _legend_chip != null:
 		_legend_chip.tooltip_text = LocalizationManager.t("HUD_LEGEND_TITLE")
@@ -248,6 +299,21 @@ func _draw() -> void:
 			if label != "":
 				draw_string(ThemeDB.fallback_font, p + Vector2(10, 4), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 11, ThemeProvider.COLOR_AMBER)
 	draw_texture_rect(_ARROW_TEX, Rect2(center - Vector2(8, 8), Vector2(16, 16)), false)
+	for m in _markers:
+		var mp := center + (m - _player_pos()) * SCALE
+		# Off-disc markers are clamped to the rim instead of being dropped: the
+		# point of a radio coordinate is finding it, and a ping that vanishes
+		# because it is far away is worse than one sitting at the edge.
+		var rim: float = r.size.x * 0.5 - 10.0
+		var off := mp - center
+		if off.length() > rim:
+			mp = center + off.normalized() * rim
+		var diamond := PackedVector2Array([
+			mp + Vector2(0.0, -5.0), mp + Vector2(5.0, 0.0),
+			mp + Vector2(0.0, 5.0), mp + Vector2(-5.0, 0.0), mp + Vector2(0.0, -5.0),
+		])
+		draw_colored_polygon(diamond, ThemeProvider.COLOR_AMBER)
+		draw_polyline(diamond, ThemeProvider.COLOR_BG_DARK, 1.0)
 	draw_texture_rect(_FRAME_TEX, Rect2(Vector2.ZERO, r.size), false)
 func _player_pos() -> Vector2:
 	var p := get_tree().get_first_node_in_group("player")

@@ -1308,5 +1308,6 @@
   "HUD_LEGEND_CURRENT": "現在の地区",
   "HUD_HINT_DARK": "光源を探そう。電源スイッチか懐中電灯で明かりを。",
   "QUEST_MORE_ACTIVE": "他に目標%d件",
-  "HUD_MELEE": "格闘"
+  "HUD_MELEE": "格闘",
+  "HUD_LEGEND_MARKER": "無線の座標"
 }
