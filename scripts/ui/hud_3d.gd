@@ -504,7 +504,10 @@ func _poll_aim_target() -> void:
 		if dot > best_dot:
 			best_dot = dot
 			best = e
-	_set_aiming_at_enemy(best != null and _has_clear_shot(cam, best))
+	var target: Node3D = best if (best != null and _has_clear_shot(cam, best)) else null
+	_set_aiming_at_enemy(target != null)
+	if target != null:
+		_show_enemy_bar(StringName(target.get("monster_id")), _hp_ratio_of(target))
 
 ## One raycast for the single best candidate rather than one per enemy per tick:
 ## the crosshair must not light up on a monster standing behind a wall. The ray
@@ -794,6 +797,7 @@ func _process(delta: float) -> void:
 	else:
 		bat_fill.color = Color(0.788, 0.635, 0.290)
 	_process_noise_vignette(delta)
+	_process_enemy_bar(delta)
 
 func _process_noise_vignette(delta: float) -> void:
 	var v := vignette
@@ -820,34 +824,67 @@ func _process_noise_vignette(delta: float) -> void:
 ## на каждой встрече с монстром в любой локали. Имя берём из тех же i18n-
 ## ключей, что уже наполнены для энциклопедии (MONSTER_SHADOW и т.д.).
 func _on_monster_spotted(monster_id: StringName) -> void:
+	_show_enemy_bar(monster_id, -1.0)
+
+func _on_enemy_hp_updated(monster_id: StringName, ratio: float) -> void:
+	_show_enemy_bar(monster_id, ratio)
+
+## The enemy name/HP readout lives here, fed by three producers: the "spotted"
+## event, a damage report, and - in the build that actually ships - the aim scan
+## above, because EventBus.enemy_hp_updated still has no emitter (see the PR's
+## cross-zone request). Each handler used to build its own tween and restart its
+## own 2 s fade, so two producers could fight over the same nodes; the hold
+## timer below is now the single owner of the fade-out and aiming at a living
+## enemy simply keeps refreshing it.
+const _ENEMY_BAR_HOLD: float = 2.0
+var _enemy_bar_hold: float = 0.0
+var _enemy_bar_id: String = ""
+
+func _show_enemy_bar(monster_id: StringName, ratio: float) -> void:
+	_enemy_bar_hold = _ENEMY_BAR_HOLD
+	if ratio >= 0.0:
+		enemy_hp_bar.scale.x = clampf(ratio, 0.0, 1.0)
+	# Fresh target: (re)name the readout and fade it in once. Repeated ticks for
+	# the same enemy only move the bar, so the fade cannot thrash at 10 Hz.
+	if String(monster_id) == _enemy_bar_id and enemy_hp_bar.visible:
+		return
+	_enemy_bar_id = String(monster_id)
 	# C04: routes through the same arachnophobia name-swap the encyclopedia
 	# uses, so the "spotted" label never shows "Crawler" with the toggle on.
 	var key := "MONSTER_" + String(LocalizationManager._display_monster_id(monster_id)).to_upper()
 	enemy_name_label.text = LocalizationManager.t(key)
 	enemy_name_label.visible = true
 	enemy_hp_bar.visible = true
-	if _enemy_hp_tween:
+	if _enemy_hp_tween and _enemy_hp_tween.is_valid():
 		_enemy_hp_tween.kill()
 	_enemy_hp_tween = create_tween()
 	_enemy_hp_tween.tween_property(enemy_name_label, "modulate:a", 1.0, 0.3).from(0.0)
 	_enemy_hp_tween.parallel().tween_property(enemy_hp_bar, "modulate:a", 1.0, 0.3).from(0.0)
-	_enemy_hp_tween.tween_interval(2.0)
-	_enemy_hp_tween.tween_property(enemy_name_label, "modulate:a", 0.0, 0.3)
-	_enemy_hp_tween.parallel().tween_property(enemy_hp_bar, "modulate:a", 0.0, 0.3)
-	_enemy_hp_tween.tween_callback(func():
-		enemy_name_label.visible = false
-		enemy_hp_bar.visible = false)
 
-func _on_enemy_hp_updated(_monster_id: StringName, ratio: float) -> void:
-	enemy_hp_bar.scale.x = clampf(ratio, 0.0, 1.0)
-	enemy_hp_bar.visible = true
-	if _enemy_hp_tween:
+func _process_enemy_bar(delta: float) -> void:
+	if _enemy_bar_hold <= 0.0:
+		return
+	_enemy_bar_hold -= delta
+	if _enemy_bar_hold > 0.0:
+		return
+	_enemy_bar_id = ""
+	if _enemy_hp_tween and _enemy_hp_tween.is_valid():
 		_enemy_hp_tween.kill()
 	_enemy_hp_tween = create_tween()
-	_enemy_hp_tween.tween_interval(2.0)
-	_enemy_hp_tween.tween_property(enemy_hp_bar, "modulate:a", 0.0, 0.3)
-	_enemy_hp_tween.tween_callback(func():
-		enemy_hp_bar.visible = false)
+	_enemy_hp_tween.tween_property(enemy_name_label, "modulate:a", 0.0, 0.3)
+	_enemy_hp_tween.parallel().tween_property(enemy_hp_bar, "modulate:a", 0.0, 0.3)
+	_enemy_hp_tween.tween_callback(func() -> void:
+		if is_instance_valid(enemy_name_label):
+			enemy_name_label.visible = false
+		if is_instance_valid(enemy_hp_bar):
+			enemy_hp_bar.visible = false)
+
+## -1 means "this enemy does not publish a health pool", which _show_enemy_bar
+## reads as "leave the bar as it is" rather than as a full or empty pool.
+func _hp_ratio_of(enemy: Node3D) -> float:
+	if not ("hp" in enemy) or not ("max_hp" in enemy):
+		return -1.0
+	return clampf(float(enemy.get("hp")) / maxf(float(enemy.get("max_hp")), 0.001), 0.0, 1.0)
 
 ## Вспышка виньетки при уроне. Возврат идёт к фактической базовой прозрачности,
 ## а не к константе 0.4: иначе каждое попадание навсегда затемняло экран.
