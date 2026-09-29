@@ -167,6 +167,10 @@ func _legend_style() -> StyleBoxFlat:
 		ThemeProvider.COLOR_BG_PANEL.b, 0.92)
 	sb.border_color = ThemeProvider.COLOR_BORDER
 	sb.set_border_width_all(1)
+	# GDD 11.4: light drop shadow, same as every other HUD panel.
+	sb.shadow_color = Color(0.0, 0.0, 0.0, 0.35)
+	sb.shadow_size = 4
+	sb.shadow_offset = Vector2(0.0, 2.0)
 	sb.content_margin_left = 10
 	sb.content_margin_right = 10
 	sb.content_margin_top = 8

@@ -87,7 +87,12 @@ func _build_ui() -> void:
 func _make_stylebox() -> StyleBoxFlat:
 	var sb := StyleBoxFlat.new()
 	sb.bg_color = Color(0.04, 0.05, 0.07, 0.85)
-	sb.border_color = ThemeProvider.COLOR_AMBER
+	# GDD 11.4: panel fill + 1 px panel-edge frame + light drop shadow. The
+	# amber accent stays on the title and the checkbox row, not on the frame.
+	sb.border_color = ThemeProvider.COLOR_BORDER
+	sb.shadow_color = Color(0.0, 0.0, 0.0, 0.35)
+	sb.shadow_size = 4
+	sb.shadow_offset = Vector2(0.0, 2.0)
 	sb.border_width_left = 1
 	sb.border_width_right = 1
 	sb.border_width_top = 1

@@ -162,12 +162,18 @@ func _build_log_panel() -> void:
 	_log_rows.add_theme_constant_override("separation", 4)
 	_log_scroll.add_child(_log_rows)
 
+## GDD 11.4: panels are `panel` fill, a 1 px `panel-edge` frame, chamfer (radius
+## 0) and a light drop shadow; amber is the accent for active text, not for every
+## message frame - the toast rectangle used to outline itself in brass.
 func _panel_style() -> StyleBoxFlat:
 	var sb := StyleBoxFlat.new()
 	sb.bg_color = Color(ThemeProvider.COLOR_BG_PANEL.r, ThemeProvider.COLOR_BG_PANEL.g,
 		ThemeProvider.COLOR_BG_PANEL.b, 0.92)
-	sb.border_color = ThemeProvider.COLOR_AMBER
+	sb.border_color = ThemeProvider.COLOR_BORDER
 	sb.set_border_width_all(1)
+	sb.shadow_color = Color(0.0, 0.0, 0.0, 0.35)
+	sb.shadow_size = 4
+	sb.shadow_offset = Vector2(0.0, 2.0)
 	sb.content_margin_left = 10
 	sb.content_margin_right = 10
 	sb.content_margin_top = 6
