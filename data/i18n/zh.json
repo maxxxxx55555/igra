@@ -1309,5 +1309,8 @@
   "HUD_HINT_DARK": "寻找光源——电源开关或手电筒。",
   "QUEST_MORE_ACTIVE": "还有%d个目标",
   "HUD_MELEE": "近战",
-  "HUD_LEGEND_MARKER": "无线电信号"
+  "HUD_LEGEND_MARKER": "无线电信号",
+  "HUD_ENEMY_RESIST_WEAK": "近战易伤 ×%.1f",
+  "HUD_ENEMY_RESIST_HARD": "抗近战 ×%.1f",
+  "HUD_ENEMY_RESIST_IMMUNE": "免疫近战"
 }

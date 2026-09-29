@@ -1309,5 +1309,8 @@
   "HUD_HINT_DARK": "Trova una fonte di luce: un interruttore o la torcia.",
   "QUEST_MORE_ACTIVE": "+%d altri obiettivi",
   "HUD_MELEE": "MISCHIA",
-  "HUD_LEGEND_MARKER": "Segnale radio"
+  "HUD_LEGEND_MARKER": "Segnale radio",
+  "HUD_ENEMY_RESIST_WEAK": "DEBOLE AL CORPO A CORPO ×%.1f",
+  "HUD_ENEMY_RESIST_HARD": "RESISTE ×%.1f",
+  "HUD_ENEMY_RESIST_IMMUNE": "IMMUNE AL CORPO A CORPO"
 }

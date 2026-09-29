@@ -1309,5 +1309,8 @@
   "HUD_HINT_DARK": "Найдите источник света — рубильник или фонарик.",
   "QUEST_MORE_ACTIVE": "+%d ещё заданий",
   "HUD_MELEE": "БЛИЖНИЙ БОЙ",
-  "HUD_LEGEND_MARKER": "Сигнал радио"
+  "HUD_LEGEND_MARKER": "Сигнал радио",
+  "HUD_ENEMY_RESIST_WEAK": "УЯЗВИМ К БЛИЖНЕМУ БОЮ ×%.1f",
+  "HUD_ENEMY_RESIST_HARD": "СОПРОТИВЛЯЕТСЯ ×%.1f",
+  "HUD_ENEMY_RESIST_IMMUNE": "ИММУНЕН К БЛИЖНЕМУ БОЮ"
 }

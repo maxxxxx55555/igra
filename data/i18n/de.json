@@ -1309,5 +1309,8 @@
   "HUD_HINT_DARK": "Finde eine Lichtquelle — Schalter oder Taschenlampe.",
   "QUEST_MORE_ACTIVE": "+%d weitere Ziele",
   "HUD_MELEE": "NAHKAMPF",
-  "HUD_LEGEND_MARKER": "Funksignal"
+  "HUD_LEGEND_MARKER": "Funksignal",
+  "HUD_ENEMY_RESIST_WEAK": "SCHWACH GEGEN NAHKAMPF ×%.1f",
+  "HUD_ENEMY_RESIST_HARD": "WIDERSTEHT NAHKAMPF ×%.1f",
+  "HUD_ENEMY_RESIST_IMMUNE": "IMMUN GEGEN NAHKAMPF"
 }

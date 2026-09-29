@@ -1309,5 +1309,8 @@
   "HUD_HINT_DARK": "ابحث عن مصدر ضوء — مفتاح الكهرباء أو مصباحك اليدوي.",
   "QUEST_MORE_ACTIVE": "+%d أهداف أخرى",
   "HUD_MELEE": "قتال قريب",
-  "HUD_LEGEND_MARKER": "إشارة راديو"
+  "HUD_LEGEND_MARKER": "إشارة راديو",
+  "HUD_ENEMY_RESIST_WEAK": "ضعيف ضد القتال القريب ×%.1f",
+  "HUD_ENEMY_RESIST_HARD": "يقاوم القتال القريب ×%.1f",
+  "HUD_ENEMY_RESIST_IMMUNE": "مناعته ضد القتال القريب"
 }

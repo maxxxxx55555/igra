@@ -1309,5 +1309,8 @@
   "HUD_HINT_DARK": "Bir ışık kaynağı bul — şalter ya da el feneri.",
   "QUEST_MORE_ACTIVE": "+%d hedef daha",
   "HUD_MELEE": "YAKIN DÖVÜŞ",
-  "HUD_LEGEND_MARKER": "Telsiz sinyali"
+  "HUD_LEGEND_MARKER": "Telsiz sinyali",
+  "HUD_ENEMY_RESIST_WEAK": "YAKIN DÖVÜŞE ZAYIF ×%.1f",
+  "HUD_ENEMY_RESIST_HARD": "YAKIN DÖVÜŞE DAYANIKLI ×%.1f",
+  "HUD_ENEMY_RESIST_IMMUNE": "YAKIN DÖVÜŞE BAĞIŞIK"
 }

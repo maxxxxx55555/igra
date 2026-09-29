@@ -1309,5 +1309,8 @@
   "HUD_HINT_DARK": "Ache uma fonte de luz — um interruptor ou sua lanterna.",
   "QUEST_MORE_ACTIVE": "+%d mais objetivos",
   "HUD_MELEE": "CORPO A CORPO",
-  "HUD_LEGEND_MARKER": "Sinal de rádio"
+  "HUD_LEGEND_MARKER": "Sinal de rádio",
+  "HUD_ENEMY_RESIST_WEAK": "FRACO EM COMBATE ×%.1f",
+  "HUD_ENEMY_RESIST_HARD": "RESISTE EM COMBATE ×%.1f",
+  "HUD_ENEMY_RESIST_IMMUNE": "IMUNE EM COMBATE"
 }

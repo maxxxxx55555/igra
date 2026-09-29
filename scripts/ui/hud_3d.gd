@@ -126,6 +126,7 @@ func _ready() -> void:
 	# scene's placeholder "0 / 0" up for the first poll interval.
 	_poll_weapon_state()
 	_setup_status_row()
+	_setup_enemy_resist_label()
 	_setup_weapon_compare()
 	_setup_quick_wheel()
 	_setup_grain_overlay()
@@ -866,6 +867,61 @@ const _ENEMY_BAR_HOLD: float = 2.0
 var _enemy_bar_hold: float = 0.0
 var _enemy_bar_id: String = ""
 
+## GDD 6.4 / 25.2: "DamageType: HUD-визуализация матрицы (система уже работает -
+## UI нет)". The matrix itself is `resistances` on the roster entry, the player's
+## own attack is canon-melee (BLUNT - player_3d.gd:1003), so the readout names
+## how melee fares against the enemy being aimed at. The full six-type matrix
+## belongs to the enemy encyclopedia (V.3.16), not to a HUD line - see the PR.
+const _ROSTER := preload("res://data/balance/enemy_stats.tres")
+const _PLAYER_DAMAGE_TYPE: int = EnemyRosterData.DamageType.BLUNT
+## Multipliers inside this band are "normal": the line stays hidden rather than
+## printing a half-true "x1.0" badge.
+const _RESIST_NEUTRAL_BAND: float = 0.05
+var _resist_label: Label = null
+
+func _setup_enemy_resist_label() -> void:
+	_resist_label = Label.new()
+	_resist_label.name = "EnemyResist"
+	_resist_label.set_anchors_preset(Control.PRESET_CENTER_TOP)
+	_resist_label.offset_left = -200.0
+	_resist_label.offset_top = 120.0
+	_resist_label.offset_right = 200.0
+	_resist_label.offset_bottom = 140.0
+	_resist_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_resist_label.add_theme_font_size_override("font_size", 13)
+	_resist_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_resist_label.visible = false
+	add_child(_resist_label)
+
+## Same table base_monster.gd reads for its own resistances (it hands the very
+## same monster_id to get_entry_for_ai), so the HUD cannot disagree with the
+## damage the enemy actually takes. Returns 1.0 when the id is unknown.
+func _enemy_resist_multiplier(monster_id: StringName) -> float:
+	var entry: Dictionary = _ROSTER.get_entry_for_ai(monster_id)
+	if not entry.has("resistances"):
+		return 1.0
+	var res: Dictionary = entry["resistances"]
+	return float(res.get(_PLAYER_DAMAGE_TYPE, 1.0))
+
+func _update_enemy_resist(monster_id: StringName) -> void:
+	if _resist_label == null:
+		return
+	var mult: float = _enemy_resist_multiplier(monster_id)
+	if absf(mult - 1.0) <= _RESIST_NEUTRAL_BAND:
+		_resist_label.visible = false
+		_resist_label.text = ""
+		return
+	if mult <= 0.0:
+		_resist_label.text = LocalizationManager.t("HUD_ENEMY_RESIST_IMMUNE")
+		_resist_label.add_theme_color_override("font_color", ThemeProvider.COLOR_DANGER)
+	elif mult > 1.0:
+		_resist_label.text = LocalizationManager.tf("HUD_ENEMY_RESIST_WEAK", [mult])
+		_resist_label.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
+	else:
+		_resist_label.text = LocalizationManager.tf("HUD_ENEMY_RESIST_HARD", [mult])
+		_resist_label.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
+	_resist_label.visible = true
+
 func _show_enemy_bar(monster_id: StringName, ratio: float) -> void:
 	_enemy_bar_hold = _ENEMY_BAR_HOLD
 	if ratio >= 0.0:
@@ -881,11 +937,14 @@ func _show_enemy_bar(monster_id: StringName, ratio: float) -> void:
 	enemy_name_label.text = LocalizationManager.t(key)
 	enemy_name_label.visible = true
 	enemy_hp_bar.visible = true
+	_update_enemy_resist(monster_id)
 	if _enemy_hp_tween and _enemy_hp_tween.is_valid():
 		_enemy_hp_tween.kill()
 	_enemy_hp_tween = create_tween()
 	_enemy_hp_tween.tween_property(enemy_name_label, "modulate:a", 1.0, 0.3).from(0.0)
 	_enemy_hp_tween.parallel().tween_property(enemy_hp_bar, "modulate:a", 1.0, 0.3).from(0.0)
+	if _resist_label != null and _resist_label.visible:
+		_enemy_hp_tween.parallel().tween_property(_resist_label, "modulate:a", 1.0, 0.3).from(0.0)
 
 func _process_enemy_bar(delta: float) -> void:
 	if _enemy_bar_hold <= 0.0:
@@ -899,11 +958,15 @@ func _process_enemy_bar(delta: float) -> void:
 	_enemy_hp_tween = create_tween()
 	_enemy_hp_tween.tween_property(enemy_name_label, "modulate:a", 0.0, 0.3)
 	_enemy_hp_tween.parallel().tween_property(enemy_hp_bar, "modulate:a", 0.0, 0.3)
+	if _resist_label != null and _resist_label.visible:
+		_enemy_hp_tween.parallel().tween_property(_resist_label, "modulate:a", 0.0, 0.3)
 	_enemy_hp_tween.tween_callback(func() -> void:
 		if is_instance_valid(enemy_name_label):
 			enemy_name_label.visible = false
 		if is_instance_valid(enemy_hp_bar):
-			enemy_hp_bar.visible = false)
+			enemy_hp_bar.visible = false
+		if _resist_label != null and is_instance_valid(_resist_label):
+			_resist_label.visible = false)
 
 ## -1 means "this enemy does not publish a health pool", which _show_enemy_bar
 ## reads as "leave the bar as it is" rather than as a full or empty pool.
