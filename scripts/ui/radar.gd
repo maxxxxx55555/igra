@@ -28,12 +28,26 @@ func _ready() -> void:
 	# killed monster's dot was only removed when it happened to die within
 	# 0.1 m of that same spawn point. No signal bookkeeping is needed now.
 
-func _process(_delta: float) -> void:
-	if not radar_enabled:
+## The scan walks five groups (lights, interactives, pickups, objectives, props)
+## plus enemies every frame, and the overlay redraws straight after. The minimap
+## - a bigger version of the same thing - has ticked at 10 Hz since it was
+## written; on this 164 px disc a 4 m/s chaser moves under 2 px per tick, so the
+## radar now ticks at the same rate instead of at display refresh. It also skips
+## the walk entirely while the HUD is hidden (menus, pause, photo mode), when
+## nothing it could find is on screen anyway.
+const SCAN_INTERVAL: float = 0.1
+var _scan_timer: float = 0.0
+
+func _process(delta: float) -> void:
+	if not radar_enabled or not is_visible_in_tree():
 		return
 	_find_player()
 	if not _player:
 		return
+	_scan_timer -= delta
+	if _scan_timer > 0.0:
+		return
+	_scan_timer = SCAN_INTERVAL
 	_scan_entities()
 	queue_redraw()
 
