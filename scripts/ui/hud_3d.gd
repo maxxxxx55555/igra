@@ -1391,6 +1391,10 @@ func _setup_slot_placeholders() -> void:
 		var badge := Label.new()
 		badge.name = "Badge"
 		badge.text = "0"
+		# Slot 0 is the flashlight - a tool, not an item, so its stack count is
+		# forever zero. A permanent "0" next to a slot that works reads as broken;
+		# the badge only means something for the five item slots.
+		badge.visible = item_id != &"flashlight"
 		badge.add_theme_color_override("font_color", Color(0.847, 0.824, 0.769))
 		badge.add_theme_font_size_override("font_size", 11)
 		badge.position = Vector2(34, 34)
@@ -1452,6 +1456,7 @@ func _refresh_slot_badges() -> void:
 			continue
 		var item_id: StringName = _SLOT_ITEMS[i]
 		badge.text = str(inv.count_of(item_id))
+		badge.visible = item_id != &"flashlight"
 
 ## docs/GAMEFEEL_SPEC.md, "New events to juice": item_picked_up -> a brief
 ## flash on the quick slot that received the item, opacity ramp only, <= 120 ms,
