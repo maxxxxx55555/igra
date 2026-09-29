@@ -279,11 +279,14 @@ func _draw() -> void:
 	draw_circle(r.size * 0.5, r.size.x * 0.5, ThemeProvider.COLOR_BG_PANEL)
 	draw_arc(r.size * 0.5, r.size.x * 0.5 - 1, 0.0, TAU, 32, ThemeProvider.COLOR_BORDER, 2.0, true)
 	var center := r.size * 0.5
+	# Hoisted out of the loop below: it used to be called once per district dot
+	# (11 tree walks) and again per marker, ten times a second.
+	var pp := _player_pos()
 	for d in PowerGrid.all_districts():
 		var off: Vector2i = DISTRICT_OFFSETS.get(d.id, Vector2i(-99, -99))
 		if off.x < 0: continue
 		var wp := Vector2(off.x * SLOT_W * TILE_SIZE, off.y * SLOT_H * TILE_SIZE)
-		var p := center + (wp - _player_pos()) * SCALE
+		var p := center + (wp - pp) * SCALE
 		var c := _stage_color(d.stage)
 		var theme_c := DistrictThemes.get_district_color(d.id)
 		var mix := c.lerp(theme_c, 0.45)
@@ -300,7 +303,7 @@ func _draw() -> void:
 				draw_string(ThemeDB.fallback_font, p + Vector2(10, 4), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 11, ThemeProvider.COLOR_AMBER)
 	draw_texture_rect(_ARROW_TEX, Rect2(center - Vector2(8, 8), Vector2(16, 16)), false)
 	for m in _markers:
-		var mp := center + (m - _player_pos()) * SCALE
+		var mp := center + (m - pp) * SCALE
 		# Off-disc markers are clamped to the rim instead of being dropped: the
 		# point of a radio coordinate is finding it, and a ping that vanishes
 		# because it is far away is worse than one sitting at the edge.
