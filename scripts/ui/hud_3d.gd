@@ -172,6 +172,15 @@ func _setup_nv_poll() -> void:
 ## 3.12/6.5: полоска статусов игрока (BLEED/BURN/POISON/SLOW/STUN) — иконка 32x32
 ## с полоской длительности снизу, tween при появлении/исчезновении.
 ## glyph — запасной вариант, если PNG от арт-агента вдруг нет на диске.
+##
+## FEAR is deliberately absent from this table. Monsters do inflict it (the
+## `roster` entry carrying [BLEED, FEAR] and base_monster.gd::_inflict_statuses
+## pass it to the player, where status_effects.gd records it in `active`), but
+## the effect itself is mob-only: it drives `_trigger_flee()` / State.FLEE, and
+## the player has neither. On the player it is an inert timer, so drawing an
+## icon would advertise an effect that does not exist - see the cross-zone note
+## in the PR. DOT (BLEED/BURN/POISON) and SLOW are real on the player: the HUD
+## reads the same `status_fx.active` the tick loop writes.
 const _STATUS_ICONS: Dictionary = {
 	EnemyRosterData.Status.BLEED: ["🩸", Color(0.706, 0.271, 0.184), "res://assets/textures/ui/status_bleed.png"],
 	EnemyRosterData.Status.BURN: ["🔥", Color(0.851, 0.408, 0.176), "res://assets/textures/ui/status_burn.png"],
@@ -1129,9 +1138,6 @@ func _tween_fill(cr: ColorRect, ratio: float) -> void:
 	var tween := create_tween()
 	tween.tween_property(cr, "offset_right", target, 0.15)
 	tween.play()
-
-func _set_fill(cr: ColorRect, ratio: float) -> void:
-	cr.offset_right = clampf(ratio, 0.0, 1.0) * BAR_W
 
 func _on_pause() -> void:
 	if UIManager and UIManager.has_method("toggle"):
