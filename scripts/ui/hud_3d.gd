@@ -1352,11 +1352,31 @@ func _setup_slot_placeholders() -> void:
 func _on_quick_slot_key(index: int) -> void:
 	_use_quick_slot(index)
 
+## V.1 3.2: the bar's six slots are a fixed item order (_SLOT_ITEMS), but
+## InventoryManager::use_item() takes an *inventory slot* index. The two were
+## conflated, so pressing the medkit consumed whatever happened to sit in that
+## inventory slot - the icon, the badge and the effect could all disagree.
+## Resolve the pressed slot's item to the inventory stack that actually holds
+## it, the same way _refresh_slot_badges() counts it.
 func _use_quick_slot(index: int) -> void:
-	var inv := get_tree().root.get_node_or_null("InventoryManager")
-	if not inv or not inv.has_method("use_item"):
+	if index < 0 or index >= _SLOT_ITEMS.size():
 		return
-	inv.use_item(index)
+	var item_id: StringName = _SLOT_ITEMS[index]
+	# Slot 0 is the flashlight: it is a tool, not an inventory item (no
+	# "flashlight" entry exists in ItemDatabase, so its stack count is forever
+	# zero), and toggling the light is what the icon promises.
+	if item_id == &"flashlight":
+		InputService.request_flashlight()
+		return
+	var inv := get_tree().root.get_node_or_null("InventoryManager")
+	if inv == null or not inv.has_method("use_item") or not ("slots" in inv):
+		return
+	var inv_slots: Array = inv.slots
+	for i in inv_slots.size():
+		var s = inv_slots[i]
+		if s != null and s.get("item_id") == item_id:
+			inv.use_item(i)
+			return
 
 func _refresh_slot_badges() -> void:
 	var inv := get_tree().root.get_node_or_null("InventoryManager")
