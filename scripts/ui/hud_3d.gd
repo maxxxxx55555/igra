@@ -65,6 +65,14 @@ func _ready() -> void:
 		hp_ratio = clampf(p_hp / p_max_hp, 0.0, 1.0) if (p_hp != null) else 1.0
 		var p_bat = player.get("battery")
 		bat_ratio = clampf(p_bat / 100.0, 0.0, 1.0) if (p_bat != null) else 1.0
+	# _hp/_stam/_bat are the HUD's own memory of the last reported values (the
+	# bars' widths are painted straight from the ratios above). Leaving _hp at its
+	# 1.0 default meant a run that starts already hurt - continue after death, a
+	# loaded save - had a stale "full health" until the first health event, which
+	# every damage comparison and the low-HP tint below read.
+	_hp = hp_ratio
+	_stam = stam_ratio
+	_bat = bat_ratio
 	hp_fill.offset_right = hp_ratio * BAR_W
 	stam_fill.offset_right = stam_ratio * BAR_W
 	bat_fill.offset_right = bat_ratio * BAR_W
@@ -136,6 +144,10 @@ func _cache_vignette_default() -> void:
 	var v := vignette
 	if v != null:
 		_vignette_default_color = v.color
+		# The overlay does not exist on the HUD's _ready frame, so the dense
+		# low-HP state has to wait for its colour: a run that starts below the
+		# threshold (respawn, loaded save) gets its tint here instead of never.
+		_refresh_low_hp_vignette()
 
 ## Settings' "HUD Opacity" slider dims every node in the "hud" group
 ## (settings_manager.gd::set_hud_opacity), and nothing in the project ever
@@ -921,7 +933,10 @@ func _setup_heal_flash() -> void:
 	add_child(_heal_flash)
 
 func _on_item_consumed(_item_id: StringName, effect: String, _value: float) -> void:
-	if effect == "HEAL":
+	# inventory_manager emits this *before* the effect is applied, so _hp here is
+	# the pre-heal value: at full health the medkit is wasted and a green "you
+	# were healed" flash would be a lie.
+	if effect == "HEAL" and _hp < 1.0:
 		_flash_heal()
 
 ## 50 + 70 ms = the 120 ms the spec allows, and a full-rect tint, so it goes
