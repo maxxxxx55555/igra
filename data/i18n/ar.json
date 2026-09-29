@@ -1307,5 +1307,6 @@
   "HUD_LEGEND_PLAYER": "أنت (اللاعب)",
   "HUD_LEGEND_CURRENT": "المنطقة الحالية",
   "HUD_HINT_DARK": "ابحث عن مصدر ضوء — مفتاح الكهرباء أو مصباحك اليدوي.",
-  "QUEST_MORE_ACTIVE": "+%d أهداف أخرى"
+  "QUEST_MORE_ACTIVE": "+%d أهداف أخرى",
+  "HUD_MELEE": "قتال قريب"
 }

@@ -1307,5 +1307,6 @@
   "HUD_LEGEND_PLAYER": "Sen (oyuncu)",
   "HUD_LEGEND_CURRENT": "Mevcut bölge",
   "HUD_HINT_DARK": "Bir ışık kaynağı bul — şalter ya da el feneri.",
-  "QUEST_MORE_ACTIVE": "+%d hedef daha"
+  "QUEST_MORE_ACTIVE": "+%d hedef daha",
+  "HUD_MELEE": "YAKIN DÖVÜŞ"
 }

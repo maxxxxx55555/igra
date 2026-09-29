@@ -1307,5 +1307,6 @@
   "HUD_LEGEND_PLAYER": "Du (Spieler)",
   "HUD_LEGEND_CURRENT": "Aktueller Bezirk",
   "HUD_HINT_DARK": "Finde eine Lichtquelle — Schalter oder Taschenlampe.",
-  "QUEST_MORE_ACTIVE": "+%d weitere Ziele"
+  "QUEST_MORE_ACTIVE": "+%d weitere Ziele",
+  "HUD_MELEE": "NAHKAMPF"
 }

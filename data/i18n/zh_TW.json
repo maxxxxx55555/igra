@@ -1307,5 +1307,6 @@
   "HUD_LEGEND_PLAYER": "你（玩家）",
   "HUD_LEGEND_CURRENT": "目前區域",
   "HUD_HINT_DARK": "尋找光源——電源開關或手電筒。",
-  "QUEST_MORE_ACTIVE": "還有%d個目標"
+  "QUEST_MORE_ACTIVE": "還有%d個目標",
+  "HUD_MELEE": "近戰"
 }

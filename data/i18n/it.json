@@ -1307,5 +1307,6 @@
   "HUD_LEGEND_PLAYER": "Tu (giocatore)",
   "HUD_LEGEND_CURRENT": "Distretto attuale",
   "HUD_HINT_DARK": "Trova una fonte di luce: un interruttore o la torcia.",
-  "QUEST_MORE_ACTIVE": "+%d altri obiettivi"
+  "QUEST_MORE_ACTIVE": "+%d altri obiettivi",
+  "HUD_MELEE": "MISCHIA"
 }

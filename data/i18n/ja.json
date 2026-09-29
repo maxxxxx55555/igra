@@ -1307,5 +1307,6 @@
   "HUD_LEGEND_PLAYER": "自分（プレイヤー）",
   "HUD_LEGEND_CURRENT": "現在の地区",
   "HUD_HINT_DARK": "光源を探そう。電源スイッチか懐中電灯で明かりを。",
-  "QUEST_MORE_ACTIVE": "他に目標%d件"
+  "QUEST_MORE_ACTIVE": "他に目標%d件",
+  "HUD_MELEE": "格闘"
 }

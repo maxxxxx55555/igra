@@ -1307,5 +1307,6 @@
   "HUD_LEGEND_PLAYER": "나 (플레이어)",
   "HUD_LEGEND_CURRENT": "현재 구역",
   "HUD_HINT_DARK": "광원을 찾으세요. 배전 스위치나 손전등으로.",
-  "QUEST_MORE_ACTIVE": "목표 %d개 더"
+  "QUEST_MORE_ACTIVE": "목표 %d개 더",
+  "HUD_MELEE": "근접"
 }

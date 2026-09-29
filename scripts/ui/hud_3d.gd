@@ -111,6 +111,9 @@ func _ready() -> void:
 	prompt.visible = false
 	_setup_weight_bar()
 	_setup_nv_poll()
+	# Paint the real ammo/melee state on the first frame instead of leaving the
+	# scene's placeholder "0 / 0" up for the first poll interval.
+	_poll_weapon_state()
 	_setup_status_row()
 	_setup_weapon_compare()
 	_setup_quick_wheel()
@@ -163,6 +166,7 @@ func _setup_nv_poll() -> void:
 	nv_poll.timeout.connect(_poll_noise_visibility)
 	nv_poll.timeout.connect(_poll_status_effects)
 	nv_poll.timeout.connect(_poll_aim_target)
+	nv_poll.timeout.connect(_poll_weapon_state)
 	add_child(nv_poll)
 
 ## 3.12/6.5: полоска статусов игрока (BLEED/BURN/POISON/SLOW/STUN) — иконка 32x32
@@ -671,9 +675,7 @@ func _localize_static_labels() -> void:
 		noise_caption.text = LocalizationManager.t("HUD_NOISE")
 	if vis_caption != null:
 		vis_caption.text = LocalizationManager.t("HUD_VISIBILITY")
-	var ammo_caption := get_node_or_null("AmmoCounter/AmmoCaption") as Label
-	if ammo_caption != null:
-		ammo_caption.text = LocalizationManager.t("HUD_AMMO")
+	_apply_ammo_caption()
 	var radar_label := get_node_or_null("TopRight/RadarLabel") as Label
 	if radar_label != null:
 		radar_label.text = LocalizationManager.t("HUD_RADAR")
@@ -1075,6 +1077,52 @@ func _on_ammo_changed(current: int, max_ammo: int) -> void:
 	ammo_val.text = "%d / %d" % [current, max_ammo]
 	_ammo_current = current
 	_apply_crosshair_state()
+
+## V.1 3.13: this widget never had a live source. WeaponManager/WeaponBase are
+## committed but no scene instantiates either (weapon_pickup.gd:31-34 says so
+## itself) and GDD §5 is melee-only canon, so EventBus.ammo_changed never fires
+## in a real run and the counter sat on the scene's default "0 / 0" - a number
+## that was simply false. The HUD now does what weapon_compare_ui.gd already
+## does for the same missing manager: look for it softly on the player. With a
+## weapon attached the counter mirrors its live magazine; without one (the
+## shipping build) it reports melee mode instead of inventing ammunition.
+var _weapon_present: bool = false
+
+func _poll_weapon_state() -> void:
+	var player := get_tree().get_first_node_in_group("player")
+	var weapon: Node = _find_player_weapon(player)
+	var present: bool = weapon != null and is_instance_valid(weapon)
+	if present and "current_ammo" in weapon and "max_ammo" in weapon:
+		_on_ammo_changed(int(weapon.get("current_ammo")), int(weapon.get("max_ammo")))
+	elif _ammo_current >= 0:
+		# The weapon went away mid-run; drop the stale reading rather than
+		# leaving the crosshair greyed by an empty magazine that no longer exists.
+		_ammo_current = -1
+		_apply_crosshair_state()
+	if present != _weapon_present:
+		_weapon_present = present
+		_apply_ammo_caption()
+
+## Soft discovery, the same shape weapon_compare_ui.gd uses for the very same
+## manager: a WeaponManager child that can name its current weapon, or a bare
+## WeaponBase attached straight to the player.
+func _find_player_weapon(player: Node) -> Node:
+	if player == null or not is_instance_valid(player):
+		return null
+	var manager := player.get_node_or_null("WeaponManager")
+	if manager != null and manager.has_method("get_current_weapon"):
+		return manager.call("get_current_weapon")
+	for child in player.get_children():
+		if child is WeaponBase:
+			return child
+	return null
+
+func _apply_ammo_caption() -> void:
+	var caption := get_node_or_null("AmmoCounter/AmmoCaption") as Label
+	if caption != null:
+		caption.text = LocalizationManager.t("HUD_AMMO" if _weapon_present else "HUD_MELEE")
+	if ammo_val != null:
+		ammo_val.visible = _weapon_present
 
 func _tween_fill(cr: ColorRect, ratio: float) -> void:
 	var target: float = clampf(ratio, 0.0, 1.0) * BAR_W
