@@ -25,7 +25,7 @@ const HOUND: PackedScene = preload("res://scenes/enemies/hound_3d.tscn")
 ## Состав по районам. Порядок = порядок появления на точках спавна, поэтому
 ## первым идёт «фоновый» тип района, дальше — редкие и опасные.
 const ROSTER_BY_DISTRICT: Dictionary = {
-	&"suburbs":       [SHADOW, SHADOW, CRAWLER, HOUND],
+	&"suburbs":       [SHADOW, SHADOW, CRAWLER],
 	&"residential":   [SHADOW, CRAWLER, CRAWLER, ROTTER],
 	&"park":          [CRAWLER, HUNTER, SHADOW, HOUND, ROTTER],
 	&"school":        [SHADOW, CRAWLER, WATCHER, SHARPSHOOTER],
