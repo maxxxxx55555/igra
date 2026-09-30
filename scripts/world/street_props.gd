@@ -29,6 +29,14 @@ var _cone_positions: Array[Vector3] = []
 ## identified but previously-unfixed root cause).
 var _lamp_local_positions: Array[Vector3] = []
 
+## Emission of the batched lamp heads per power stage (DARK, PARTIAL, STREETS,
+## FULL): a district's lamps must read dead in the dark, that is the game's
+## namesake beat. Before rc15 the heads glowed at 1.6 in every stage and, from a
+## distance, read as a starfield.
+const _LAMP_HEAD_ENERGY: Array[float] = [0.0, 0.7, 1.6, 2.0]
+var _lamp_mat: StandardMaterial3D
+var _district_id: StringName = &""
+
 const _TEX_BRICK       := "res://assets/textures/environment/brick.png"
 const _TEX_RUSTY_METAL := "res://assets/textures/environment/rusty_metal.png"
 const _TEX_STREETLIGHT := "res://assets/textures/surfaces/streetlight_metal_512.png"
@@ -94,6 +102,7 @@ func build() -> void:
 		return
 	_low_tier = int(SettingsManager.get_setting("graphics_tier", 2)) == 0
 	var district_id: StringName = sb.get("district_id") if "district_id" in sb else &""
+	_district_id = district_id
 	var step: int = 4
 	for road in sb.roads:
 		var length: float = float(road.get("length", 0.0))
@@ -110,6 +119,21 @@ func build() -> void:
 				_spawn_cone(pos, road)
 	_build_streetlight_multimesh()
 	_build_prop_multimesh()
+	_build_skyline(sb, district_id)
+
+## The backdrop ring of buildings and the dark ground (skyline.gd). Its windows
+## replace the floating window wall the district scenes still carry.
+func _build_skyline(sb: Node, district_id: StringName) -> void:
+	var half := 0.0
+	for road in sb.roads:
+		half = maxf(half, maxf(float(road.end.x), float(road.end.y)) * float(sb.grid_spacing) * 0.5)
+	var skyline := CitySkyline.new()
+	skyline.name = "Skyline"
+	add_child(skyline)
+	skyline.build(district_id, half, not _low_tier)
+	var floating_windows := get_node_or_null("../EmissiveWindows")
+	if floating_windows != null:
+		floating_windows.visible = false
 
 func _side_offset(road: Dictionary, dist: float) -> Vector3:
 	var dir: String = String(road.get("dir", "h"))
@@ -155,11 +179,12 @@ func _build_streetlight_multimesh() -> void:
 	var lamp_mesh := SphereMesh.new()
 	lamp_mesh.radius = 0.08
 	lamp_mesh.height = 0.12
-	var lamp_mat := StandardMaterial3D.new()
-	lamp_mat.albedo_color = Color(0.788, 0.635, 0.290, 1.0)
-	lamp_mat.emission_enabled = true
-	lamp_mat.emission = Color(1.0, 0.82, 0.48, 1.0)
-	lamp_mat.emission_energy_multiplier = 1.6
+	_lamp_mat = StandardMaterial3D.new()
+	_lamp_mat.albedo_color = Color(0.788, 0.635, 0.290, 1.0)
+	_lamp_mat.emission_enabled = true
+	_lamp_mat.emission = Color(1.0, 0.82, 0.48, 1.0)
+	_apply_lamp_stage(PowerGrid.get_stage(_district_id))
+	EventBus.district_stage_changed.connect(_on_stage_changed)
 	var lamp_mm := MultiMesh.new()
 	lamp_mm.transform_format = MultiMesh.TRANSFORM_3D
 	lamp_mm.mesh = lamp_mesh
@@ -176,8 +201,15 @@ func _build_streetlight_multimesh() -> void:
 	var lamp_mmi := MultiMeshInstance3D.new()
 	lamp_mmi.name = "StreetlightLampsBatched"
 	lamp_mmi.multimesh = lamp_mm
-	lamp_mmi.material_override = lamp_mat
+	lamp_mmi.material_override = _lamp_mat
 	add_child(lamp_mmi)
+
+func _on_stage_changed(id: StringName, stage: int) -> void:
+	if id == _district_id:
+		_apply_lamp_stage(stage)
+
+func _apply_lamp_stage(stage: int) -> void:
+	_lamp_mat.emission_energy_multiplier = _LAMP_HEAD_ENERGY[clampi(stage, 0, _LAMP_HEAD_ENERGY.size() - 1)]
 
 func _spawn_pole_pair_legacy(center: Vector3, road: Dictionary) -> void:
 	var perp: Vector3 = _side_offset(road, 3.5)
@@ -198,32 +230,39 @@ func _spawn_pole_pair_legacy(center: Vector3, road: Dictionary) -> void:
 		l.position = p.position + Vector3(0.0, 2.2, 0.0)
 		add_child(l)
 
+## Benches and trees stand on the sidewalk (3.0-4.5 m from the road axis), not in the
+## roadway; trees are shifted along the road so they clear the streetlight poles.
 func _spawn_bench(center: Vector3, road: Dictionary) -> void:
-	_bench_positions.append(center + _side_offset(road, 2.8))
+	_bench_positions.append(center + _side_offset(road, 3.9))
 
 func _spawn_tree(center: Vector3, road: Dictionary) -> void:
-	_tree_positions.append(center + _side_offset(road, 2.8))
+	var along := Vector3(3.0, 0.0, 0.0) if String(road.get("dir", "h")) == "h" else Vector3(0.0, 0.0, 3.0)
+	_tree_positions.append(center + _side_offset(road, 3.9) + along)
 
 func _spawn_cone(center: Vector3, road: Dictionary) -> void:
 	_cone_positions.append(center + _side_offset(road, 2.4))
 
 func _build_prop_multimesh() -> void:
-	_build_one_multimesh(_bench_positions, _bench,
-		_prop_material(_TEX_BENCH, Color(0.35, 0.25, 0.15), 0.85, 0.0), "BenchesBatched")
+	_build_one_multimesh(_raised(_bench_positions, 0.2), _bench,
+		_prop_material(_TEX_BENCH, Color(0.30, 0.26, 0.22), 0.85, 0.0), "BenchesBatched")
 	if not _tree_positions.is_empty():
-		_build_one_multimesh(_tree_positions, _trunk,
-			_prop_material("", Color(0.3, 0.18, 0.08), 0.95, 0.0), "TreeTrunksBatched")
-		var leaf_positions: Array[Vector3] = []
-		for p in _tree_positions:
-			leaf_positions.append(p + Vector3(0.0, 1.8, 0.0))
-		_build_one_multimesh(leaf_positions, _leaf,
-			_prop_material("", Color(0.15, 0.45, 0.18), 0.9, 0.0), "TreeLeavesBatched")
+		_build_one_multimesh(_raised(_tree_positions, 1.25), _trunk,
+			_prop_material("", Color(0.17, 0.15, 0.125), 0.95, 0.0), "TreeTrunksBatched")
+		_build_one_multimesh(_raised(_tree_positions, 3.4), _leaf,
+			_prop_material("", Color(0.09, 0.16, 0.15), 1.0, 0.0), "TreeLeavesBatched")
 	if not _cone_positions.is_empty():
-		var cone_mat := _prop_material("", Color(1.0, 0.55, 0.1), 0.6, 0.0)
+		var cone_mat := _prop_material("", Color(0.706, 0.271, 0.184), 0.6, 0.0)
 		cone_mat.emission_enabled = true
-		cone_mat.emission = Color(1.0, 0.45, 0.05)
-		cone_mat.emission_energy_multiplier = 0.6
-		_build_one_multimesh(_cone_positions, _cone, cone_mat, "ConesBatched")
+		cone_mat.emission = Color(0.706, 0.271, 0.184)
+		cone_mat.emission_energy_multiplier = 0.25
+		_build_one_multimesh(_raised(_cone_positions, 0.35), _cone, cone_mat, "ConesBatched")
+
+## The prop meshes are centred on their origin: lift each so it rests on the ground.
+func _raised(positions: Array[Vector3], lift: float) -> Array[Vector3]:
+	var out: Array[Vector3] = []
+	for p in positions:
+		out.append(p + Vector3(0.0, lift, 0.0))
+	return out
 
 func _build_one_multimesh(positions: Array[Vector3], mesh: Mesh, material: Material, node_name: String) -> void:
 	if positions.is_empty():
