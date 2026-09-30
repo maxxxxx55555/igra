@@ -107,6 +107,10 @@ func _ready() -> void:
 	get_tree().create_timer(HARD_TIMEOUT_SEC).timeout.connect(_on_hard_timeout)
 	EventBus.game_won.connect(func() -> void: _win_seen = true)
 	EventBus.player_died.connect(func() -> void: _deaths += 1)
+	EventBus.inventory_notice.connect(func(text: String) -> void:
+		_log("inventory notice: %s" % text)
+		if text == LocalizationManager.t("INV_NO_SLOTS") or text == LocalizationManager.t("INV_OVERWEIGHT"):
+			_make_room())
 	CoinWallet.coins_changed.connect(_on_coins_changed)
 	EventBus.secret_found.connect(func(_id: String) -> void:
 		if _t_first_secret_found < 0.0:
@@ -206,10 +210,27 @@ func _process(delta: float) -> void:
 					str(_player.get("stamina")), str(_player.get("_stun_timer")), str(_player.get("_attack_phase")), str(boss.get("ai_state"))]
 			else:
 				boss_info = " boss=NULL"
+		var near_info := ""
+		for m in get_tree().get_nodes_in_group("monsters"):
+			var m3 := m as Node3D
+			if m3 != null and is_instance_valid(m3) and m3.global_position.y > -5.0 and ppos.distance_to(m3.global_position) < 5.0:
+				near_info += " near=%s@%.1f" % [m3.name, ppos.distance_to(m3.global_position)]
+		var pack_info := ""
+		var inv_hb := get_node_or_null("/root/InventoryManager")
+		if inv_hb != null:
+			var used := 0
+			for sl in inv_hb.slots:
+				if sl != null:
+					used += 1
+			pack_info = " pack=%.1f/%.0fkg slots=%d/%d" % [float(inv_hb.current_weight), float(inv_hb.stats.capacity_kg), used, inv_hb.slots.size()]
+		var hit_info := ""
+		if p_in_tree and _player is CharacterBody3D:
+			for i in (_player as CharacterBody3D).get_slide_collision_count():
+				hit_info += " col=%s" % str((_player as CharacterBody3D).get_slide_collision(i).get_collider().name)
 		_log("hb ph=%s st=%d want=%s cur=%s si=%d sc=%.0f mr=%d ppos=%s valid=%s in_tree=%s finite=%s tgt=%s tdist=%.1f npu=%d%s" % [
 			_phase, GameManager.current_state, SPINE[mini(_spine_i, SPINE.size() - 1)],
 			_current_district(), _spine_i, _compute_score(), _menu_recoveries,
-			str(ppos.round()), p_valid, p_in_tree, p_finite, str(_target_pos.round()), tdist, ncable, boss_info])
+			str(ppos.round()), p_valid, p_in_tree, p_finite, str(_target_pos.round()), tdist, ncable, boss_info + near_info + hit_info + pack_info])
 
 	# Test knob (tools-only): QA_FORCE_PAUSE_AT=<sec> reproduces the X20
 	# PAUSED state deterministically for the PAUSED-recovery A/B.
@@ -512,6 +533,27 @@ func _maintain_flashlight() -> void:
 	var b: Variant = _player.get("battery")
 	if b != null and float(b) < 20.0:
 		_use_item(&"battery")
+
+## A refused pickup (no free slot or overweight, `InventoryManager.try_add`) leaves the required part on
+## the ground and the bot standing on it: a player would drop junk, so the bot drops the heaviest stack that
+## is neither a spine part nor its medkits and batteries.
+func _make_room() -> void:
+	var inv := get_node_or_null("/root/InventoryManager")
+	if inv == null:
+		return
+	var worst: StringName = &""
+	var worst_kg := 0.0
+	for s in inv.slots:
+		if s == null or s["item_id"] in STAGE_ITEM.values() or s["item_id"] == &"medkit" or s["item_id"] == &"battery":
+			continue
+		var data: ItemData = ItemDatabase.get_item(s["item_id"])
+		var kg: float = data.weight * int(s["count"]) if data != null else 0.0
+		if kg >= worst_kg:
+			worst = s["item_id"]
+			worst_kg = kg
+	if worst != &"":
+		_log("pack refused a pickup: dropped %s (%.1f kg)" % [worst, worst_kg])
+		inv.remove(worst, inv.count_of(worst))
 
 func _use_item(item_id: StringName) -> void:
 	var inv := get_node_or_null("/root/InventoryManager")
