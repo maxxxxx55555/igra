@@ -5,7 +5,7 @@ extends Node
 ## ("no day", GDD.md:261), so "day" is the restored FULL stage and "night" the
 ## DARK stage of the spawn district. A saved PNG proves nothing until read.
 
-const OUT := "res://docs/stills/final/"
+var out_dir := "res://docs/stills/final/"
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -15,7 +15,7 @@ func _shot(frame: String) -> void:
 	await RenderingServer.frame_post_draw
 	var img := get_tree().root.get_texture().get_image()
 	img.resize(img.get_width() / 2, img.get_height() / 2, Image.INTERPOLATE_LANCZOS)
-	img.save_png(ProjectSettings.globalize_path(OUT + frame + ".png"))
+	img.save_png(ProjectSettings.globalize_path(out_dir + frame + ".png"))
 	print("[final] frame %s.png" % frame)
 
 ## Where the rendering camera and the player are: a staged frame is only
@@ -72,7 +72,7 @@ func _run() -> void:
 		print("[final] SKIP headless - frames need a real display")
 		get_tree().quit(3)
 		return
-	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(OUT))
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(out_dir))
 	var ads := get_node_or_null("/root/AdService")
 	if ads:
 		ads.enabled = false
