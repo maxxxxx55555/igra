@@ -132,8 +132,12 @@ func _build_skyline(sb: Node, district_id: StringName) -> void:
 	add_child(skyline)
 	skyline.build(district_id, half, not _low_tier)
 	var floating_windows := get_node_or_null("../EmissiveWindows")
-	if floating_windows != null:
+	if floating_windows != null and not _low_tier:
 		floating_windows.visible = false
+
+## Shift along the road so a prop clears the streetlight pole that stands at each step.
+func _along(road: Dictionary) -> Vector3:
+	return Vector3(3.0, 0.0, 0.0) if String(road.get("dir", "h")) == "h" else Vector3(0.0, 0.0, 3.0)
 
 func _side_offset(road: Dictionary, dist: float) -> Vector3:
 	var dir: String = String(road.get("dir", "h"))
@@ -233,11 +237,10 @@ func _spawn_pole_pair_legacy(center: Vector3, road: Dictionary) -> void:
 ## Benches and trees stand on the sidewalk (3.0-4.5 m from the road axis), not in the
 ## roadway; trees are shifted along the road so they clear the streetlight poles.
 func _spawn_bench(center: Vector3, road: Dictionary) -> void:
-	_bench_positions.append(center + _side_offset(road, 3.9))
+	_bench_positions.append(center + _side_offset(road, 3.9) + _along(road))
 
 func _spawn_tree(center: Vector3, road: Dictionary) -> void:
-	var along := Vector3(3.0, 0.0, 0.0) if String(road.get("dir", "h")) == "h" else Vector3(0.0, 0.0, 3.0)
-	_tree_positions.append(center + _side_offset(road, 3.9) + along)
+	_tree_positions.append(center + _side_offset(road, 3.9) + _along(road))
 
 func _spawn_cone(center: Vector3, road: Dictionary) -> void:
 	_cone_positions.append(center + _side_offset(road, 2.4))
