@@ -236,7 +236,7 @@ func _objective_position(quest: Dictionary) -> Variant:
 func _nearest_with(group: StringName, prop: StringName, value: String) -> Variant:
 	if value == "":
 		return null
-	var player := _player_position()
+	var player: Variant = _player_position()
 	if player == null:
 		return null
 	var best: Variant = null
@@ -257,7 +257,7 @@ func _nearest_with(group: StringName, prop: StringName, value: String) -> Varian
 ## Secrets all share the quest target "secret", so the arrow points at the
 ## closest one still takeable.
 func _nearest_secret() -> Variant:
-	var player := _player_position()
+	var player: Variant = _player_position()
 	if player == null:
 		return null
 	var best: Variant = null
@@ -277,7 +277,7 @@ func _nearest_secret() -> Variant:
 func _nearest_enemy(target: String) -> Variant:
 	if target == "":
 		return null
-	var player := _player_position()
+	var player: Variant = _player_position()
 	if player == null:
 		return null
 	var best: Variant = null
