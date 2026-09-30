@@ -110,7 +110,7 @@ func _build() -> void:
 		nm.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER if unlocked else ThemeProvider.COLOR_TEXT_DIM)
 		cv.add_child(nm)
 		var ds := Label.new()
-		ds.text = data.description if unlocked else LocalizationManager.t("enc_locked")
+		ds.text = LocalizationManager.name_for("MONSTER_DESC_", data.id, data.description) if unlocked else LocalizationManager.t("enc_locked")
 		ds.add_theme_font_size_override("font_size", 11)
 		ds.autowrap_mode = TextServer.AUTOWRAP_WORD
 		ds.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
@@ -180,7 +180,7 @@ func _open_detail(id: StringName) -> void:
 	vb.add_child(nm)
 
 	var ds := Label.new()
-	ds.text = data.description
+	ds.text = LocalizationManager.name_for("MONSTER_DESC_", data.id, data.description)
 	ds.autowrap_mode = TextServer.AUTOWRAP_WORD
 	ds.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	ds.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)

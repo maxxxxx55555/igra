@@ -959,7 +959,7 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 		for it in ShopService.catalog_by_kind(ShopItem.Kind.UPGRADE) + ShopService.catalog_by_kind(ShopItem.Kind.SKIN) + ShopService.catalog_by_kind(ShopItem.Kind.BUNDLE):
 			var si: ShopItem = it as ShopItem
 			if si != null:
-				items.append({"id": si.id, "desc": si.display_name, "price_coins": si.final_price_coins()})
+				items.append({"id": si.id, "desc": LocalizationManager.name_for("SHOP_ITEM_", si.id, si.display_name), "price_coins": si.final_price_coins()})
 	var grid_container := GridContainer.new()
 	grid_container.name = "ShopGrid"
 	grid_container.columns = 2

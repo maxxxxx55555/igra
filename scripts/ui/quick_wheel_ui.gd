@@ -100,6 +100,6 @@ func _draw() -> void:
 			var item := ItemDatabase.get_item(s["item_id"])
 			var label_col: Color = BONE if i == _highlight else BRASS_DIM
 			if item != null:
-				draw_string(ThemeDB.fallback_font, icon_pos - Vector2(24, 0), String(item.display_name),
+				draw_string(ThemeDB.fallback_font, icon_pos - Vector2(24, 0), LocalizationManager.name_for("ITEM_", item.id, item.display_name),
 					HORIZONTAL_ALIGNMENT_CENTER, 48, 12, label_col)
 	draw_circle(_center, 10.0, BRASS if _highlight == -1 else BRASS_DIM)
