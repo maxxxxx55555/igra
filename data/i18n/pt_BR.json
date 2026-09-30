@@ -1299,5 +1299,18 @@
   "TUT_CROUCH": "Ande furtivo. Passos lentos fazem menos barulho.",
   "TUT_DODGE": "Desvie quando algo avançar.",
   "TUT_ATTACK": "Revide se ele te alcançar.",
-  "TUT_INVENTORY": "Abra a mochila para ver o que você carrega."
+  "TUT_INVENTORY": "Abra a mochila para ver o que você carrega.",
+  "HUD_LOG_TITLE": "REGISTRO DE MENSAGENS",
+  "HUD_LOG_TOGGLE": "REGISTRO",
+  "HUD_LOG_EMPTY": "Nenhuma mensagem ainda",
+  "HUD_LEGEND_TITLE": "LEGENDA DO MAPA",
+  "HUD_LEGEND_PLAYER": "Você (jogador)",
+  "HUD_LEGEND_CURRENT": "Distrito atual",
+  "HUD_HINT_DARK": "Ache uma fonte de luz — um interruptor ou sua lanterna.",
+  "QUEST_MORE_ACTIVE": "+%d mais objetivos",
+  "HUD_MELEE": "CORPO A CORPO",
+  "HUD_LEGEND_MARKER": "Sinal de rádio",
+  "HUD_ENEMY_RESIST_WEAK": "FRACO EM COMBATE ×%.1f",
+  "HUD_ENEMY_RESIST_HARD": "RESISTE EM COMBATE ×%.1f",
+  "HUD_ENEMY_RESIST_IMMUNE": "IMUNE EM COMBATE"
 }

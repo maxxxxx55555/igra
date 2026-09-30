@@ -1299,5 +1299,18 @@
   "TUT_CROUCH": "Muoviti furtivo. I passi lenti fanno meno rumore.",
   "TUT_DODGE": "Schiva quando qualcosa ti salta addosso.",
   "TUT_ATTACK": "Contrattacca se ti raggiunge.",
-  "TUT_INVENTORY": "Apri lo zaino per vedere cosa porti."
+  "TUT_INVENTORY": "Apri lo zaino per vedere cosa porti.",
+  "HUD_LOG_TITLE": "REGISTRO MESSAGGI",
+  "HUD_LOG_TOGGLE": "REGISTRO",
+  "HUD_LOG_EMPTY": "Ancora nessun messaggio",
+  "HUD_LEGEND_TITLE": "LEGENDA MAPPA",
+  "HUD_LEGEND_PLAYER": "Tu (giocatore)",
+  "HUD_LEGEND_CURRENT": "Distretto attuale",
+  "HUD_HINT_DARK": "Trova una fonte di luce: un interruttore o la torcia.",
+  "QUEST_MORE_ACTIVE": "+%d altri obiettivi",
+  "HUD_MELEE": "MISCHIA",
+  "HUD_LEGEND_MARKER": "Segnale radio",
+  "HUD_ENEMY_RESIST_WEAK": "DEBOLE AL CORPO A CORPO ×%.1f",
+  "HUD_ENEMY_RESIST_HARD": "RESISTE ×%.1f",
+  "HUD_ENEMY_RESIST_IMMUNE": "IMMUNE AL CORPO A CORPO"
 }

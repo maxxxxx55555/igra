@@ -1299,5 +1299,18 @@
   "TUT_CROUCH": "忍び足で進め。ゆっくりした足音は小さい。",
   "TUT_DODGE": "何かが飛びかかってきたら避けろ。",
   "TUT_ATTACK": "襲われたら反撃しろ。",
-  "TUT_INVENTORY": "荷物を開いて、持ち物を確かめろ。"
+  "TUT_INVENTORY": "荷物を開いて、持ち物を確かめろ。",
+  "HUD_LOG_TITLE": "メッセージログ",
+  "HUD_LOG_TOGGLE": "ログ",
+  "HUD_LOG_EMPTY": "メッセージはまだありません",
+  "HUD_LEGEND_TITLE": "地図の凡例",
+  "HUD_LEGEND_PLAYER": "自分（プレイヤー）",
+  "HUD_LEGEND_CURRENT": "現在の地区",
+  "HUD_HINT_DARK": "光源を探そう。電源スイッチか懐中電灯で明かりを。",
+  "QUEST_MORE_ACTIVE": "他に目標%d件",
+  "HUD_MELEE": "格闘",
+  "HUD_LEGEND_MARKER": "無線の座標",
+  "HUD_ENEMY_RESIST_WEAK": "格闘に弱い ×%.1f",
+  "HUD_ENEMY_RESIST_HARD": "格闘に耐性 ×%.1f",
+  "HUD_ENEMY_RESIST_IMMUNE": "格闘無効"
 }

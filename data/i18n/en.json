@@ -1299,5 +1299,18 @@
   "TUT_CROUCH": "Sneak. Slow steps carry less sound.",
   "TUT_DODGE": "Dodge when something lunges.",
   "TUT_ATTACK": "Strike back if it reaches you.",
-  "TUT_INVENTORY": "Open your pack to see what you carry."
+  "TUT_INVENTORY": "Open your pack to see what you carry.",
+  "HUD_LOG_TITLE": "MESSAGE LOG",
+  "HUD_LOG_TOGGLE": "LOG",
+  "HUD_LOG_EMPTY": "No messages yet",
+  "HUD_LEGEND_TITLE": "MAP LEGEND",
+  "HUD_LEGEND_PLAYER": "You (player)",
+  "HUD_LEGEND_CURRENT": "Current district",
+  "HUD_HINT_DARK": "Find a light source — a power switch or your flashlight.",
+  "QUEST_MORE_ACTIVE": "+%d more objectives",
+  "HUD_MELEE": "MELEE",
+  "HUD_LEGEND_MARKER": "Radio signal",
+  "HUD_ENEMY_RESIST_WEAK": "WEAK TO MELEE ×%.1f",
+  "HUD_ENEMY_RESIST_HARD": "RESISTS MELEE ×%.1f",
+  "HUD_ENEMY_RESIST_IMMUNE": "IMMUNE TO MELEE"
 }

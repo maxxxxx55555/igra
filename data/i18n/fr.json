@@ -1299,5 +1299,18 @@
   "TUT_CROUCH": "Avancez sans bruit. Des pas lents s'entendent moins.",
   "TUT_DODGE": "Esquivez quand quelque chose bondit.",
   "TUT_ATTACK": "Ripostez s'il vous atteint.",
-  "TUT_INVENTORY": "Ouvrez votre sac pour voir ce que vous portez."
+  "TUT_INVENTORY": "Ouvrez votre sac pour voir ce que vous portez.",
+  "HUD_LOG_TITLE": "JOURNAL DES MESSAGES",
+  "HUD_LOG_TOGGLE": "JOURNAL",
+  "HUD_LOG_EMPTY": "Aucun message",
+  "HUD_LEGEND_TITLE": "LÉGENDE DE LA CARTE",
+  "HUD_LEGEND_PLAYER": "Vous (joueur)",
+  "HUD_LEGEND_CURRENT": "District actuel",
+  "HUD_HINT_DARK": "Trouvez une source de lumière — un interrupteur ou votre lampe.",
+  "QUEST_MORE_ACTIVE": "+%d autres objectifs",
+  "HUD_MELEE": "MÊLÉE",
+  "HUD_LEGEND_MARKER": "Signal radio",
+  "HUD_ENEMY_RESIST_WEAK": "FAIBLE EN MÊLÉE ×%.1f",
+  "HUD_ENEMY_RESIST_HARD": "RÉSISTE EN MÊLÉE ×%.1f",
+  "HUD_ENEMY_RESIST_IMMUNE": "IMMUNISÉ EN MÊLÉE"
 }

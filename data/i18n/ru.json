@@ -1299,5 +1299,18 @@
   "TUT_CROUCH": "Крадись. Тихий шаг почти не слышен.",
   "TUT_DODGE": "Уклоняйся, когда что-то бросается.",
   "TUT_ATTACK": "Бей в ответ, если оно добралось до тебя.",
-  "TUT_INVENTORY": "Открой рюкзак — посмотри, что несёшь."
+  "TUT_INVENTORY": "Открой рюкзак — посмотри, что несёшь.",
+  "HUD_LOG_TITLE": "ЖУРНАЛ СООБЩЕНИЙ",
+  "HUD_LOG_TOGGLE": "ЛОГ",
+  "HUD_LOG_EMPTY": "Сообщений пока нет",
+  "HUD_LEGEND_TITLE": "ЛЕГЕНДА КАРТЫ",
+  "HUD_LEGEND_PLAYER": "Вы (игрок)",
+  "HUD_LEGEND_CURRENT": "Текущий район",
+  "HUD_HINT_DARK": "Найдите источник света — рубильник или фонарик.",
+  "QUEST_MORE_ACTIVE": "+%d ещё заданий",
+  "HUD_MELEE": "БЛИЖНИЙ БОЙ",
+  "HUD_LEGEND_MARKER": "Сигнал радио",
+  "HUD_ENEMY_RESIST_WEAK": "УЯЗВИМ К БЛИЖНЕМУ БОЮ ×%.1f",
+  "HUD_ENEMY_RESIST_HARD": "СОПРОТИВЛЯЕТСЯ ×%.1f",
+  "HUD_ENEMY_RESIST_IMMUNE": "ИММУНЕН К БЛИЖНЕМУ БОЮ"
 }

@@ -6,8 +6,8 @@ extends Control
 
 var _player: Node3D = null
 var _entities: Array[Dictionary] = []
-var _enemies: Array[Vector3] = []  # Track enemy positions via signals
-var _last_radar_count: int = -1
+## Live enemy positions, refilled by _scan_entities() every frame.
+var _enemy_positions: Array[Vector3] = []
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -21,21 +21,33 @@ func _ready() -> void:
 	offset_top = 16.0
 	offset_right = -16.0
 	offset_bottom = 180.0
-	var vp := get_viewport().get_visible_rect().size if get_viewport() else Vector2(1920, 1080)
-	var r := get_global_rect()
-	var in_vp := r.size.x > 20 and r.size.y > 20 and visible and modulate.a > 0.1
+	# Enemies are scanned from the "enemies" group like every other entity type
+	# below. They used to be fed by EventBus.enemy_spawned/enemy_died into an
+	# array of Vector3 snapshots, so every red dot stayed frozen at the spot its
+	# monster first appeared (monsters move - they chase the player), and a
+	# killed monster's dot was only removed when it happened to die within
+	# 0.1 m of that same spawn point. No signal bookkeeping is needed now.
 
-	
-	# Connect to enemy signals
-	EventBus.enemy_spawned.connect(_on_enemy_spawned)
-	EventBus.enemy_died.connect(_on_enemy_died)
+## The scan walks five groups (lights, interactives, pickups, objectives, props)
+## plus enemies every frame, and the overlay redraws straight after. The minimap
+## - a bigger version of the same thing - has ticked at 10 Hz since it was
+## written; on this 164 px disc a 4 m/s chaser moves under 2 px per tick, so the
+## radar now ticks at the same rate instead of at display refresh. It also skips
+## the walk entirely while the HUD is hidden (menus, pause, photo mode), when
+## nothing it could find is on screen anyway.
+const SCAN_INTERVAL: float = 0.1
+var _scan_timer: float = 0.0
 
-func _process(_delta: float) -> void:
-	if not radar_enabled:
+func _process(delta: float) -> void:
+	if not radar_enabled or not is_visible_in_tree():
 		return
 	_find_player()
 	if not _player:
 		return
+	_scan_timer -= delta
+	if _scan_timer > 0.0:
+		return
+	_scan_timer = SCAN_INTERVAL
 	_scan_entities()
 	queue_redraw()
 
@@ -85,19 +97,16 @@ func _scan_entities() -> void:
 			if dist <= world_range_m:
 				_entities.append({"pos": p.global_position, "type": "prop", "dist": dist})
 
-	if _entities.size() != _last_radar_count:
-		_last_radar_count = _entities.size()
-
-func _on_enemy_spawned(enemy: Node3D) -> void:
-	if enemy is Node3D:
-		_enemies.append(enemy.global_position)
-
-func _on_enemy_died(pos: Vector3) -> void:
-	# Remove enemy at this position (if found)
-	for i in _enemies.size():
-		if _enemies[i].distance_to(pos) < 0.1:  # Small tolerance for floating point
-			_enemies.remove_at(i)
-			break
+	# Enemies - positions read live, so a chasing monster's dot moves with it and
+	# a dead one disappears the same frame (base_monster keeps its node around
+	# after death, so DEAD has to be filtered by state, not by validity).
+	_enemy_positions.clear()
+	for e in get_tree().get_nodes_in_group("enemies"):
+		if not (e is Node3D) or not is_instance_valid(e):
+			continue
+		if "ai_state" in e and int(e.ai_state) == BaseMonster.State.DEAD:
+			continue
+		_enemy_positions.append((e as Node3D).global_position)
 
 func _draw() -> void:
 	if not _player:
@@ -134,8 +143,8 @@ func _draw() -> void:
 			"prop":
 				draw_circle(ep, 1.5, Color(0.682, 0.714, 0.749, 0.5))
 	
-	# Draw enemies from signals (ember color #b4452f)
-	for enemy_pos in _enemies:
+	# Draw enemies (ember color #b4452f)
+	for enemy_pos in _enemy_positions:
 		var dx: float = enemy_pos.x - pp.x
 		var dz: float = enemy_pos.z - pp.z
 		var lv := Vector2(dx * scale_f, dz * scale_f)

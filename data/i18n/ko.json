@@ -1299,5 +1299,18 @@
   "TUT_CROUCH": "살금살금 걸어라. 느린 걸음은 소리가 작다.",
   "TUT_DODGE": "무언가 달려들면 피해라.",
   "TUT_ATTACK": "닿으면 반격해라.",
-  "TUT_INVENTORY": "배낭을 열어 가진 것을 확인해라."
+  "TUT_INVENTORY": "배낭을 열어 가진 것을 확인해라.",
+  "HUD_LOG_TITLE": "메시지 기록",
+  "HUD_LOG_TOGGLE": "기록",
+  "HUD_LOG_EMPTY": "아직 메시지가 없습니다",
+  "HUD_LEGEND_TITLE": "지도 범례",
+  "HUD_LEGEND_PLAYER": "나 (플레이어)",
+  "HUD_LEGEND_CURRENT": "현재 구역",
+  "HUD_HINT_DARK": "광원을 찾으세요. 배전 스위치나 손전등으로.",
+  "QUEST_MORE_ACTIVE": "목표 %d개 더",
+  "HUD_MELEE": "근접",
+  "HUD_LEGEND_MARKER": "무선 신호",
+  "HUD_ENEMY_RESIST_WEAK": "근접에 약함 ×%.1f",
+  "HUD_ENEMY_RESIST_HARD": "근접 저항 ×%.1f",
+  "HUD_ENEMY_RESIST_IMMUNE": "근접 면역"
 }

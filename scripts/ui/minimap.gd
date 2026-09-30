@@ -19,8 +19,39 @@ const DISTRICT_LABELS: Dictionary = {
 	&"hospital": "DIST_HOSPITAL", &"gas_station": "DIST_GAS", &"police": "DIST_POLICE", &"warehouses": "DIST_WAREHOUSES",
 	&"industrial": "DIST_INDUSTRIAL", &"substation": "DIST_SUBSTATION", &"power_station": "DIST_POWER",
 }
+## GDD V.1 3.4 / V.4 8.5: the minimap drew district dots, a stage colour and a
+## player arrow with no key to read them by ("Minimap есть, легенда отсутствует").
+## On a 1280x720 phone every corner already belongs to another HUD element, so
+## the legend is on demand: a chip in the frame's lower-left corner opens a panel
+## parked to the left of the frame, where nothing else is anchored.
+const LEGEND_W: float = 300.0
+const LEGEND_H: float = 180.0
+## Rows were 22 px with a 6 px separation: with the radio-marker row below that
+## is 231 px of content against a 180 px panel, and it left the panel's bottom
+## 5 px away from the quest tracker. 20/4 keeps the same reading order and puts
+## the auto-height panel ~33 px clear of it instead.
+const _LEGEND_ROW_H: float = 20.0
+
+## V.4 8.5 lists a "point" among the things the minimap is supposed to show, and
+## it had no producer until radio.gd: tuning a channel that carries coordinates
+## emits EventBus.radar_marker_added(ch.coords) - RADIO_EMERGENCY2 (137, 89) and
+## RADIO_DISTRESS (203, 56), the same world metres the district offsets below are
+## laid out in. Nothing in the project listened, so the revealed coordinates were
+## text on the radio panel and nothing else. They are drawn here as amber
+## diamonds. Markers persist for the run (the radio gives no completion signal to
+## clear them), duplicates are ignored, and the list is capped so a long session
+## cannot grow it without bound.
+const _MAX_MARKERS: int = 12
+var _markers: Array[Vector2] = []
+
 var _tick: float = 0.0
 var _current_district: StringName = &""
+var _legend: PanelContainer = null
+var _legend_title: Label = null
+var _legend_chip: Button = null
+## [Label] of every legend row, so a language switch can re-text them in place.
+var _legend_row_labels: Array[Label] = []
+
 func _ready() -> void:
 	# Нажатие по миникарте открывает полную карту города — привычный жест
 	# из мобильных игр. Раньше стоял MOUSE_FILTER_IGNORE, и клик проваливался
@@ -39,11 +70,193 @@ func _ready() -> void:
 	offset_right = -16
 	offset_top = 16
 	offset_bottom = 16 + SIZE.y
+	_build_legend()
+	_retranslate_legend()
+	_update_legend_visibility()
+	LocalizationManager.language_changed.connect(func(_l: String) -> void: _retranslate_legend())
 	EventBus.power_grid_updated.connect(func() -> void: queue_redraw())
+	EventBus.radar_marker_added.connect(_on_radar_marker_added)
 	if EventBus.has_signal("district_entered"):
 		EventBus.district_entered.connect(func(id: StringName) -> void:
 			_current_district = id
 			queue_redraw())
+
+## 3.4/8.5: what the minimap actually draws, in reading order - the player
+## arrow, the ringed current district, and the three power-grid stages the
+## district dots are tinted by.
+func _build_legend() -> void:
+	_legend_chip = Button.new()
+	_legend_chip.name = "LegendChip"
+	_legend_chip.text = "?"
+	_legend_chip.focus_mode = Control.FOCUS_NONE
+	_legend_chip.custom_minimum_size = Vector2(24, 24)
+	_legend_chip.anchor_left = 0.0
+	_legend_chip.anchor_top = 0.0
+	_legend_chip.offset_left = 6.0
+	_legend_chip.offset_top = SIZE.y - 30.0
+	_legend_chip.offset_right = 30.0
+	_legend_chip.offset_bottom = SIZE.y - 6.0
+	_legend_chip.visible = false
+	_legend_chip.pressed.connect(_toggle_legend)
+	add_child(_legend_chip)
+
+	_legend = PanelContainer.new()
+	_legend.name = "MinimapLegend"
+	_legend.visible = false
+	_legend.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_legend.anchor_left = 1.0
+	_legend.anchor_right = 1.0
+	_legend.anchor_top = 0.0
+	_legend.anchor_bottom = 0.0
+	_legend.offset_left = -(SIZE.x + LEGEND_W + 24.0)
+	_legend.offset_right = -(SIZE.x + 24.0)
+	_legend.offset_top = 16.0
+	_legend.offset_bottom = 16.0 + LEGEND_H
+	_legend.add_theme_stylebox_override("panel", _legend_style())
+	add_child(_legend)
+
+	var vb := VBoxContainer.new()
+	vb.add_theme_constant_override("separation", 4)
+	_legend.add_child(vb)
+	_legend_title = Label.new()
+	_legend_title.add_theme_font_size_override("font_size", 14)
+	_legend_title.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
+	vb.add_child(_legend_title)
+	_add_legend_row(vb, "HUD_LEGEND_PLAYER", _arrow_swatch())
+	_add_legend_row(vb, "HUD_LEGEND_CURRENT", _ring_swatch())
+	_add_stage_legend_rows(vb)
+	_add_legend_row(vb, "HUD_LEGEND_MARKER", _diamond_swatch())
+	# The panel used to be a fixed 180 px while its own rows need more than that
+	# (a title, seven 22 px rows, separations and margins), so the last row could
+	# paint outside the panel's background. Grow the rect to what the content
+	# actually asks for, the same way _fix_radar_anchor() sizes TopRight in
+	# hud_3d.gd. LEGEND_H stays as the floor so a terse locale cannot collapse it.
+	_legend.offset_bottom = _legend.offset_top + maxf(LEGEND_H, _legend.get_combined_minimum_size().y)
+
+## The radio ping is a diamond so it cannot be mistaken for a district dot
+## (circles) or the player arrow, and so the swatch can mirror it exactly.
+func _diamond_swatch() -> Control:
+	var holder := Control.new()
+	holder.custom_minimum_size = Vector2(16, 16)
+	holder.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	holder.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var rect := ColorRect.new()
+	rect.color = ThemeProvider.COLOR_AMBER
+	rect.size = Vector2(10, 10)
+	rect.position = Vector2(3, 3)
+	rect.pivot_offset = Vector2(5, 5)
+	rect.rotation = deg_to_rad(45.0)
+	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	holder.add_child(rect)
+	return holder
+
+## The four power-grid stages, reusing the city map's keys. Written as four
+## explicit calls, not "MAP_STAGE_%d" in a loop: the localization audits read
+## keys straight out of the source, so a concatenated key is invisible to them
+## (same reason city_map.gd keeps STAGE_KEYS as literals). Swatches come from
+## _stage_color(), so a recolour of the dots cannot leave the legend behind.
+func _add_stage_legend_rows(parent: VBoxContainer) -> void:
+	_add_legend_row(parent, "MAP_STAGE_3", _square_swatch(_stage_color(DistrictData.Stage.FULL)))
+	_add_legend_row(parent, "MAP_STAGE_2", _square_swatch(_stage_color(DistrictData.Stage.STREETS)))
+	_add_legend_row(parent, "MAP_STAGE_1", _square_swatch(_stage_color(DistrictData.Stage.PARTIAL)))
+	_add_legend_row(parent, "MAP_STAGE_0", _square_swatch(_stage_color(DistrictData.Stage.DARK)))
+
+func _legend_style() -> StyleBoxFlat:
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color(ThemeProvider.COLOR_BG_PANEL.r, ThemeProvider.COLOR_BG_PANEL.g,
+		ThemeProvider.COLOR_BG_PANEL.b, 0.92)
+	sb.border_color = ThemeProvider.COLOR_BORDER
+	sb.set_border_width_all(1)
+	# GDD 11.4: light drop shadow, same as every other HUD panel.
+	sb.shadow_color = Color(0.0, 0.0, 0.0, 0.35)
+	sb.shadow_size = 4
+	sb.shadow_offset = Vector2(0.0, 2.0)
+	sb.content_margin_left = 10
+	sb.content_margin_right = 10
+	sb.content_margin_top = 8
+	sb.content_margin_bottom = 8
+	return sb
+
+func _add_legend_row(parent: VBoxContainer, key: String, swatch: Control) -> void:
+	var hb := HBoxContainer.new()
+	hb.add_theme_constant_override("separation", 8)
+	hb.custom_minimum_size = Vector2(0, _LEGEND_ROW_H)
+	parent.add_child(hb)
+	hb.add_child(swatch)
+	var lbl := Label.new()
+	lbl.text = LocalizationManager.t(key)
+	lbl.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT)
+	lbl.set_meta("i18n_key", key)
+	hb.add_child(lbl)
+	_legend_row_labels.append(lbl)
+
+## The player marker is the real arrow texture, not a stand-in square.
+func _arrow_swatch() -> TextureRect:
+	var tex := TextureRect.new()
+	tex.texture = _ARROW_TEX
+	tex.custom_minimum_size = Vector2(16, 16)
+	tex.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	tex.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	return tex
+
+## The current district is the only dot drawn with an amber ring (_draw()).
+## A round swatch is deliberate here: it mirrors a circular marker, which is the
+## one case the chamfer-only chrome rule exempts.
+func _ring_swatch() -> Control:
+	var ring := Panel.new()
+	ring.custom_minimum_size = Vector2(16, 16)
+	ring.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	ring.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color(0, 0, 0, 0)
+	sb.border_color = ThemeProvider.COLOR_AMBER
+	sb.set_border_width_all(2)
+	sb.corner_radius_top_left = 8
+	sb.corner_radius_top_right = 8
+	sb.corner_radius_bottom_left = 8
+	sb.corner_radius_bottom_right = 8
+	ring.add_theme_stylebox_override("panel", sb)
+	return ring
+
+func _square_swatch(color: Color) -> ColorRect:
+	var rect := ColorRect.new()
+	rect.color = color
+	rect.custom_minimum_size = Vector2(12, 12)
+	rect.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	return rect
+
+func _toggle_legend() -> void:
+	_legend.visible = not _legend.visible
+	if _legend.visible:
+		_retranslate_legend()
+
+## Duplicates are ignored, so re-tuning the same channel is a no-op, and the
+## oldest ping is dropped past the cap rather than refusing new ones.
+func _on_radar_marker_added(pos: Vector2) -> void:
+	if _markers.has(pos):
+		return
+	_markers.append(pos)
+	if _markers.size() > _MAX_MARKERS:
+		_markers.pop_front()
+	queue_redraw()
+
+func _retranslate_legend() -> void:
+	if _legend_chip != null:
+		_legend_chip.tooltip_text = LocalizationManager.t("HUD_LEGEND_TITLE")
+	if _legend_title != null:
+		_legend_title.text = LocalizationManager.t("HUD_LEGEND_TITLE")
+	for lbl in _legend_row_labels:
+		lbl.text = LocalizationManager.t(String(lbl.get_meta("i18n_key", "")))
+
+## _draw() early-returns outside play, but child nodes keep rendering - the chip
+## and the open panel follow the minimap's own gate instead of floating over
+## menus, the pause screen or photo mode.
+func _update_legend_visibility() -> void:
+	var shown: bool = GameManager.is_playing() and not UIManager.is_hud_blocked()
+	if _legend_chip.visible != shown:
+		_legend_chip.visible = shown
+	if not shown:
+		_legend.visible = false
 ## Открывает полноэкранную карту города по тапу/клику.
 func _gui_input(event: InputEvent) -> void:
 	if not GameManager.is_playing():
@@ -60,18 +273,24 @@ func _gui_input(event: InputEvent) -> void:
 
 func _process(delta: float) -> void:
 	_tick += delta
-	if _tick >= 0.1: _tick = 0.0; queue_redraw()
+	if _tick >= 0.1:
+		_tick = 0.0
+		queue_redraw()
+		_update_legend_visibility()
 func _draw() -> void:
 	if not GameManager.is_playing(): return
 	var r := get_rect()
 	draw_circle(r.size * 0.5, r.size.x * 0.5, ThemeProvider.COLOR_BG_PANEL)
 	draw_arc(r.size * 0.5, r.size.x * 0.5 - 1, 0.0, TAU, 32, ThemeProvider.COLOR_BORDER, 2.0, true)
 	var center := r.size * 0.5
+	# Hoisted out of the loop below: it used to be called once per district dot
+	# (11 tree walks) and again per marker, ten times a second.
+	var pp := _player_pos()
 	for d in PowerGrid.all_districts():
 		var off: Vector2i = DISTRICT_OFFSETS.get(d.id, Vector2i(-99, -99))
 		if off.x < 0: continue
 		var wp := Vector2(off.x * SLOT_W * TILE_SIZE, off.y * SLOT_H * TILE_SIZE)
-		var p := center + (wp - _player_pos()) * SCALE
+		var p := center + (wp - pp) * SCALE
 		var c := _stage_color(d.stage)
 		var theme_c := DistrictThemes.get_district_color(d.id)
 		var mix := c.lerp(theme_c, 0.45)
@@ -87,6 +306,21 @@ func _draw() -> void:
 			if label != "":
 				draw_string(ThemeDB.fallback_font, p + Vector2(10, 4), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 11, ThemeProvider.COLOR_AMBER)
 	draw_texture_rect(_ARROW_TEX, Rect2(center - Vector2(8, 8), Vector2(16, 16)), false)
+	for m in _markers:
+		var mp := center + (m - pp) * SCALE
+		# Off-disc markers are clamped to the rim instead of being dropped: the
+		# point of a radio coordinate is finding it, and a ping that vanishes
+		# because it is far away is worse than one sitting at the edge.
+		var rim: float = r.size.x * 0.5 - 10.0
+		var off := mp - center
+		if off.length() > rim:
+			mp = center + off.normalized() * rim
+		var diamond := PackedVector2Array([
+			mp + Vector2(0.0, -5.0), mp + Vector2(5.0, 0.0),
+			mp + Vector2(0.0, 5.0), mp + Vector2(-5.0, 0.0), mp + Vector2(0.0, -5.0),
+		])
+		draw_colored_polygon(diamond, ThemeProvider.COLOR_AMBER)
+		draw_polyline(diamond, ThemeProvider.COLOR_BG_DARK, 1.0)
 	draw_texture_rect(_FRAME_TEX, Rect2(Vector2.ZERO, r.size), false)
 func _player_pos() -> Vector2:
 	var p := get_tree().get_first_node_in_group("player")

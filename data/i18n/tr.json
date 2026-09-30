@@ -1299,5 +1299,18 @@
   "TUT_CROUCH": "Sessizce ilerle. Yavaş adımlar daha az ses çıkarır.",
   "TUT_DODGE": "Bir şey üstüne atılınca kaç.",
   "TUT_ATTACK": "Sana ulaşırsa karşılık ver.",
-  "TUT_INVENTORY": "Ne taşıdığını görmek için çantanı aç."
+  "TUT_INVENTORY": "Ne taşıdığını görmek için çantanı aç.",
+  "HUD_LOG_TITLE": "MESAJ KAYDI",
+  "HUD_LOG_TOGGLE": "KAYIT",
+  "HUD_LOG_EMPTY": "Henüz mesaj yok",
+  "HUD_LEGEND_TITLE": "HARİTA GÖSTERGESİ",
+  "HUD_LEGEND_PLAYER": "Sen (oyuncu)",
+  "HUD_LEGEND_CURRENT": "Mevcut bölge",
+  "HUD_HINT_DARK": "Bir ışık kaynağı bul — şalter ya da el feneri.",
+  "QUEST_MORE_ACTIVE": "+%d hedef daha",
+  "HUD_MELEE": "YAKIN DÖVÜŞ",
+  "HUD_LEGEND_MARKER": "Telsiz sinyali",
+  "HUD_ENEMY_RESIST_WEAK": "YAKIN DÖVÜŞE ZAYIF ×%.1f",
+  "HUD_ENEMY_RESIST_HARD": "YAKIN DÖVÜŞE DAYANIKLI ×%.1f",
+  "HUD_ENEMY_RESIST_IMMUNE": "YAKIN DÖVÜŞE BAĞIŞIK"
 }

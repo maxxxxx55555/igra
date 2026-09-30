@@ -11,6 +11,10 @@ var _stam: float = 1.0
 var _bat: float = 1.0
 var _battery_ad_button: Button = null
 var _vignette_default_color: Color
+## Shared by the hit beat and the sustained low-HP tint (see _on_hp).
+var _vignette_tween: Tween
+## Whether the dense low-HP state is currently on, so entry/exit is a one-shot.
+var _vignette_low: bool = false
 var _enemy_hp_tween: Tween
 ## PHASE 1 (languages = settings): HP/Stam/Bat captions are plain Labels
 ## created once in _add_captions(); cached here so a live language switch
@@ -61,6 +65,14 @@ func _ready() -> void:
 		hp_ratio = clampf(p_hp / p_max_hp, 0.0, 1.0) if (p_hp != null) else 1.0
 		var p_bat = player.get("battery")
 		bat_ratio = clampf(p_bat / 100.0, 0.0, 1.0) if (p_bat != null) else 1.0
+	# _hp/_stam/_bat are the HUD's own memory of the last reported values (the
+	# bars' widths are painted straight from the ratios above). Leaving _hp at its
+	# 1.0 default meant a run that starts already hurt - continue after death, a
+	# loaded save - had a stale "full health" until the first health event, which
+	# every damage comparison and the low-HP tint below read.
+	_hp = hp_ratio
+	_stam = stam_ratio
+	_bat = bat_ratio
 	hp_fill.offset_right = hp_ratio * BAR_W
 	stam_fill.offset_right = stam_ratio * BAR_W
 	bat_fill.offset_right = bat_ratio * BAR_W
@@ -82,7 +94,6 @@ func _ready() -> void:
 	_setup_button_feedback()
 	_apply_text_outlines()
 	EventBus.player_health_changed.connect(_on_hp)
-	EventBus.player_health_changed.connect(_on_damage_vignette)
 	if EventBus.has_signal(&"crosshair_state_changed"):
 		EventBus.crosshair_state_changed.connect(_on_crosshair_state)
 	EventBus.player_stamina_changed.connect(_on_stam)
@@ -93,12 +104,14 @@ func _ready() -> void:
 	EventBus.player_interact_available.connect(func(avail: bool): prompt.visible = avail)
 	EventBus.player_interact_available.connect(_pulse_interact_button)
 	# Подсказка была вечно пустой строкой: текст в неё никто не писал.
-	EventBus.interact_prompt_changed.connect(func(text: String) -> void: prompt.text = text)
+	EventBus.interact_prompt_changed.connect(func(text: String) -> void: prompt.text = _interact_key_hint() + text)
 	EventBus.inventory_weight_changed.connect(_on_weight_changed)
 	# Badge counts froze at their _ready()-time snapshot: nothing refreshed
 	# them on pickup/use/craft even though inventory_changed fires for all
 	# three (inventory_manager.gd).
 	EventBus.inventory_changed.connect(_refresh_slot_badges)
+	EventBus.item_picked_up.connect(_on_item_picked_up)
+	EventBus.item_consumed.connect(_on_item_consumed)
 	EventBus.inventory_notice.connect(func(msg: String): _show_notice(msg))
 	EventBus.player_detected.connect(_on_monster_spotted)
 	EventBus.enemy_hp_updated.connect(_on_enemy_hp_updated)
@@ -109,20 +122,57 @@ func _ready() -> void:
 	prompt.visible = false
 	_setup_weight_bar()
 	_setup_nv_poll()
+	# Paint the real ammo/melee state on the first frame instead of leaving the
+	# scene's placeholder "0 / 0" up for the first poll interval.
+	_poll_weapon_state()
 	_setup_status_row()
+	_setup_enemy_resist_label()
 	_setup_weapon_compare()
 	_setup_quick_wheel()
 	_setup_grain_overlay()
+	_setup_damage_indicator()
+	_setup_heal_flash()
+	_setup_blackout_flash()
+	_setup_context_hints()
 	$BtnPause.pressed.connect(_on_pause)
 	_add_map_button()
 	EventBus.game_state_changed.connect(_on_game_state)
 	EventBus.hud_visibility_changed.connect(_on_hud_visibility)
+	_apply_hud_opacity_setting()
 	_on_game_state(int(GameManager.current_state))
 
 func _cache_vignette_default() -> void:
 	var v := vignette
 	if v != null:
 		_vignette_default_color = v.color
+		# The overlay does not exist on the HUD's _ready frame, so the dense
+		# low-HP state has to wait for its colour: a run that starts below the
+		# threshold (respawn, loaded save) gets its tint here instead of never.
+		_refresh_low_hp_vignette()
+
+## Settings' "HUD Opacity" slider dims every node in the "hud" group
+## (settings_manager.gd::set_hud_opacity), and nothing in the project ever
+## joined that group — the 0.5..1.0 slider did nothing at all. hud_3d itself is
+## a CanvasLayer, not a CanvasItem, so the group marks its top-level Controls
+## instead: set_hud_opacity() skips non-CanvasItems, and a Control's modulate
+## carries down to its whole subtree. Toasts are deliberately left out — they
+## carry text the player may still need at 50 % opacity (QA-AC-03).
+func _apply_hud_opacity_setting() -> void:
+	for child in get_children():
+		if child is Control:
+			(child as Control).add_to_group("hud")
+	# from_dict() re-applies the accessibility toggles after a config load, but
+	# not the opacity slider, so the HUD paints the stored value itself.
+	_apply_hud_opacity(float(SettingsManager.get_setting("hud_opacity", 1.0)))
+	EventBus.settings_changed.connect(func(key: String, value: Variant) -> void:
+		if key == "hud_opacity":
+			_apply_hud_opacity(float(value)))
+
+func _apply_hud_opacity(v: float) -> void:
+	var a := clampf(v, 0.0, 1.0)
+	for child in get_children():
+		if child is Control:
+			(child as Control).modulate.a = a
 
 func _setup_nv_poll() -> void:
 	var nv_poll := Timer.new()
@@ -131,11 +181,22 @@ func _setup_nv_poll() -> void:
 	nv_poll.autostart = true
 	nv_poll.timeout.connect(_poll_noise_visibility)
 	nv_poll.timeout.connect(_poll_status_effects)
+	nv_poll.timeout.connect(_poll_aim_target)
+	nv_poll.timeout.connect(_poll_weapon_state)
 	add_child(nv_poll)
 
 ## 3.12/6.5: полоска статусов игрока (BLEED/BURN/POISON/SLOW/STUN) — иконка 32x32
 ## с полоской длительности снизу, tween при появлении/исчезновении.
 ## glyph — запасной вариант, если PNG от арт-агента вдруг нет на диске.
+##
+## FEAR is deliberately absent from this table. Monsters do inflict it (the
+## `roster` entry carrying [BLEED, FEAR] and base_monster.gd::_inflict_statuses
+## pass it to the player, where status_effects.gd records it in `active`), but
+## the effect itself is mob-only: it drives `_trigger_flee()` / State.FLEE, and
+## the player has neither. On the player it is an inert timer, so drawing an
+## icon would advertise an effect that does not exist - see the cross-zone note
+## in the PR. DOT (BLEED/BURN/POISON) and SLOW are real on the player: the HUD
+## reads the same `status_fx.active` the tick loop writes.
 const _STATUS_ICONS: Dictionary = {
 	EnemyRosterData.Status.BLEED: ["🩸", Color(0.706, 0.271, 0.184), "res://assets/textures/ui/status_bleed.png"],
 	EnemyRosterData.Status.BURN: ["🔥", Color(0.851, 0.408, 0.176), "res://assets/textures/ui/status_burn.png"],
@@ -272,6 +333,32 @@ func _apply_grain_tier(tier: int) -> void:
 	if _grain_rect:
 		_grain_rect.visible = tier > 0
 
+## 3.15: damage direction indicator. `scripts/effects/damage_indicator.gd` and
+## `scenes/effects/damage_indicator.tscn` were both committed and complete
+## (pointer texture, screen-space direction math, its own ember shader) and
+## player_3d.gd already emits EventBus.player_damage_direction from the real
+## hit path — but no scene anywhere instantiated the indicator, so the pointer
+## never rendered. This is the missing instance link only; the effect itself is
+## unchanged.
+var _damage_indicator: CanvasLayer = null
+
+func _setup_damage_indicator() -> void:
+	if _damage_indicator != null:
+		return
+	var indicator_scene: PackedScene = load("res://scenes/effects/damage_indicator.tscn")
+	if indicator_scene == null:
+		return
+	_damage_indicator = indicator_scene.instantiate() as CanvasLayer
+	if _damage_indicator == null:
+		return
+	add_child(_damage_indicator)
+
+## A nested CanvasLayer keeps drawing even when the HUD layer it hangs under is
+## hidden, so the indicator mirrors the HUD's own visibility instead.
+func _sync_damage_indicator_visibility() -> void:
+	if _damage_indicator != null and is_instance_valid(_damage_indicator):
+		_damage_indicator.visible = visible
+
 ## T15: колесо быстрых слотов (удержание + аналоговый выбор из 6).
 var _quick_wheel: Control = null
 
@@ -379,10 +466,101 @@ func _flash_hit_marker() -> void:
 	_hit_tween = create_tween()
 	_hit_tween.tween_property(_hit_marker, "modulate:a", 0.0, 0.25)
 
+## Last state the bus reported, so the empty-magazine override below can be
+## lifted again the moment ammo comes back.
+var _crosshair_state: StringName = &"default"
+## -1 = no ammo_changed has arrived yet, so nothing overrides the crosshair.
+var _ammo_current: int = -1
+
 ## Triggered по сигналу EventBus.crosshair_state_changed.
 ## Caller: игрок или система взаимодействия.
 func _on_crosshair_state(state: StringName) -> void:
-	_update_crosshair(state)
+	# "hit" is a one-shot marker flash, not a persistent colour state - it must
+	# keep working even with an empty magazine.
+	if state == &"hit":
+		_update_crosshair(state)
+		return
+	_crosshair_state = state
+	_apply_crosshair_state()
+
+## 3.6: the state table has a "disabled" colour documented as "недоступно", but
+## nothing could ever reach it. An empty magazine is the one such condition the
+## HUD can see for itself (EventBus.ammo_changed, already connected here), so it
+## overrides the bus-reported state until a reload refills. "enemy" comes from
+## the aim scan below - the bus itself only ever reports "default" (on fire) and
+## the one-shot "hit" (enemy damaged).
+func _apply_crosshair_state() -> void:
+	if _ammo_current == 0:
+		_update_crosshair(&"disabled")
+	elif _aiming_at_enemy:
+		_update_crosshair(&"enemy")
+	else:
+		_update_crosshair(_crosshair_state)
+
+## The "enemy" colour had no producer anywhere in the project: the weapon emits
+## "default" on fire, an enemy emits "hit" when hurt, and nothing ever said what
+## the crosshair was pointed at. The HUD resolves the missing state itself, over
+## the cone weapon_base.gd::_apply_auto_aim uses (12 deg), so the crosshair
+## lights up on exactly the target auto-aim would help with. Runs on the
+## existing 0.1 s NV poll.
+const _AIM_CONE_DEG: float = 12.0
+const _AIM_RANGE: float = 40.0
+var _aiming_at_enemy: bool = false
+
+func _poll_aim_target() -> void:
+	if not GameManager.is_playing() or UIManager.is_hud_blocked():
+		_set_aiming_at_enemy(false)
+		return
+	var cam := get_viewport().get_camera_3d() if is_inside_tree() else null
+	if cam == null:
+		_set_aiming_at_enemy(false)
+		return
+	var from: Vector3 = cam.global_position
+	var forward: Vector3 = -cam.global_transform.basis.z
+	var min_dot: float = cos(deg_to_rad(_AIM_CONE_DEG))
+	var best: Node3D = null
+	var best_dot: float = min_dot
+	for e in get_tree().get_nodes_in_group("enemies"):
+		if not (e is Node3D) or not is_instance_valid(e) or not ("monster_id" in e):
+			continue
+		if "ai_state" in e and int(e.ai_state) == BaseMonster.State.DEAD:
+			continue
+		var to_enemy: Vector3 = (e as Node3D).global_position - from
+		var dist: float = to_enemy.length()
+		if dist > _AIM_RANGE or dist < 0.01:
+			continue
+		var dot: float = forward.dot(to_enemy / dist)
+		if dot > best_dot:
+			best_dot = dot
+			best = e
+	var target: Node3D = best if (best != null and _has_clear_shot(cam, best)) else null
+	_set_aiming_at_enemy(target != null)
+	if target != null:
+		_show_enemy_bar(StringName(target.get("monster_id")), _hp_ratio_of(target))
+
+## One raycast for the single best candidate rather than one per enemy per tick:
+## the crosshair must not light up on a monster standing behind a wall. The ray
+## starts at the camera, which sits inside the player's own capsule, so that
+## body is excluded; whatever it does hit has to belong to an enemy.
+func _has_clear_shot(cam: Camera3D, enemy: Node3D) -> bool:
+	var space := cam.get_world_3d().direct_space_state
+	var query := PhysicsRayQueryParameters3D.create(cam.global_position, enemy.global_position + Vector3(0, 1.0, 0))
+	var player := get_tree().get_first_node_in_group("player")
+	var exclude_rids: Array[RID] = []
+	if player is CollisionObject3D:
+		exclude_rids.append((player as CollisionObject3D).get_rid())
+	query.exclude = exclude_rids
+	var result := space.intersect_ray(query)
+	if result.is_empty():
+		return false
+	var collider: Object = result.get("collider")
+	return collider is Node3D and (collider as Node3D).is_in_group("enemies")
+
+func _set_aiming_at_enemy(on: bool) -> void:
+	if on == _aiming_at_enemy:
+		return
+	_aiming_at_enemy = on
+	_apply_crosshair_state()
 
 
 func _poll_weight() -> void:
@@ -429,14 +607,33 @@ func _on_game_state(state: int) -> void:
 		# бары и кнопка паузы рисовались ПОВЕРХ меню паузы и «Кодекса».
 		# UIManager уже сообщает, когда открыт блокирующий экран, — слушаем его.
 		visible = not UIManager.is_hud_blocked()
+	_sync_damage_indicator_visibility()
 
 ## UIManager шлёт это при открытии/закрытии любого блокирующего экрана
 ## (пауза, кодекс, карта, настройки) и при входе/выходе из фоторежима.
 func _on_hud_visibility(v: bool) -> void:
 	visible = v and (GameManager.is_playing() or GameManager.is_paused())
+	_sync_damage_indicator_visibility()
 
 func has_touch_ui() -> bool:
 	return DisplayServer.is_touchscreen_available() or OS.has_feature("mobile")
+
+## GDD V.1 3.7: the prompt said what the interaction does ("Open", "Search",
+## "Repair") but never which button does it. The key is read from the project's
+## own "interact" action, so a rebound control shows the player's own binding;
+## touch builds already get an on-screen button (_pulse_interact_button) and
+## take no key prefix. The action is bound by physical keycode in project.godot,
+## so keycode == KEY_NONE is the normal case here, not an edge one.
+func _interact_key_hint() -> String:
+	if has_touch_ui() or not InputMap.has_action(&"interact"):
+		return ""
+	for ev in InputMap.action_get_events(&"interact"):
+		if ev is InputEventKey:
+			var key := ev as InputEventKey
+			var code: int = key.keycode if key.keycode != KEY_NONE else key.physical_keycode
+			if code != KEY_NONE:
+				return "[%s] " % OS.get_keycode_string(code)
+	return ""
 
 func _apply_touch_visibility() -> void:
 	if not has_touch_ui():
@@ -503,9 +700,7 @@ func _localize_static_labels() -> void:
 		noise_caption.text = LocalizationManager.t("HUD_NOISE")
 	if vis_caption != null:
 		vis_caption.text = LocalizationManager.t("HUD_VISIBILITY")
-	var ammo_caption := get_node_or_null("AmmoCounter/AmmoCaption") as Label
-	if ammo_caption != null:
-		ammo_caption.text = LocalizationManager.t("HUD_AMMO")
+	_apply_ammo_caption()
 	var radar_label := get_node_or_null("TopRight/RadarLabel") as Label
 	if radar_label != null:
 		radar_label.text = LocalizationManager.t("HUD_RADAR")
@@ -629,6 +824,7 @@ func _process(delta: float) -> void:
 	else:
 		bat_fill.color = Color(0.788, 0.635, 0.290)
 	_process_noise_vignette(delta)
+	_process_enemy_bar(delta)
 
 func _process_noise_vignette(delta: float) -> void:
 	var v := vignette
@@ -655,54 +851,306 @@ func _process_noise_vignette(delta: float) -> void:
 ## на каждой встрече с монстром в любой локали. Имя берём из тех же i18n-
 ## ключей, что уже наполнены для энциклопедии (MONSTER_SHADOW и т.д.).
 func _on_monster_spotted(monster_id: StringName) -> void:
+	_show_enemy_bar(monster_id, -1.0)
+
+func _on_enemy_hp_updated(monster_id: StringName, ratio: float) -> void:
+	_show_enemy_bar(monster_id, ratio)
+
+## The enemy name/HP readout lives here, fed by three producers: the "spotted"
+## event, a damage report, and - in the build that actually ships - the aim scan
+## above, because EventBus.enemy_hp_updated still has no emitter (see the PR's
+## cross-zone request). Each handler used to build its own tween and restart its
+## own 2 s fade, so two producers could fight over the same nodes; the hold
+## timer below is now the single owner of the fade-out and aiming at a living
+## enemy simply keeps refreshing it.
+const _ENEMY_BAR_HOLD: float = 2.0
+var _enemy_bar_hold: float = 0.0
+var _enemy_bar_id: String = ""
+
+## GDD 6.4 / 25.2: "DamageType: HUD-визуализация матрицы (система уже работает -
+## UI нет)". The matrix itself is `resistances` on the roster entry, the player's
+## own attack is canon-melee (BLUNT - player_3d.gd:1003), so the readout names
+## how melee fares against the enemy being aimed at. The full six-type matrix
+## belongs to the enemy encyclopedia (V.3.16), not to a HUD line - see the PR.
+const _ROSTER := preload("res://data/balance/enemy_stats.tres")
+const _PLAYER_DAMAGE_TYPE: int = EnemyRosterData.DamageType.BLUNT
+## Multipliers inside this band are "normal": the line stays hidden rather than
+## printing a half-true "x1.0" badge.
+const _RESIST_NEUTRAL_BAND: float = 0.05
+var _resist_label: Label = null
+
+func _setup_enemy_resist_label() -> void:
+	_resist_label = Label.new()
+	_resist_label.name = "EnemyResist"
+	_resist_label.set_anchors_preset(Control.PRESET_CENTER_TOP)
+	_resist_label.offset_left = -200.0
+	_resist_label.offset_top = 120.0
+	_resist_label.offset_right = 200.0
+	_resist_label.offset_bottom = 140.0
+	_resist_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_resist_label.add_theme_font_size_override("font_size", 13)
+	_resist_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_resist_label.visible = false
+	add_child(_resist_label)
+
+## Same table base_monster.gd reads for its own resistances (it hands the very
+## same monster_id to get_entry_for_ai), so the HUD cannot disagree with the
+## damage the enemy actually takes. Returns 1.0 when the id is unknown.
+func _enemy_resist_multiplier(monster_id: StringName) -> float:
+	var entry: Dictionary = _ROSTER.get_entry_for_ai(monster_id)
+	if not entry.has("resistances"):
+		return 1.0
+	var res: Dictionary = entry["resistances"]
+	return float(res.get(_PLAYER_DAMAGE_TYPE, 1.0))
+
+func _update_enemy_resist(monster_id: StringName) -> void:
+	if _resist_label == null:
+		return
+	var mult: float = _enemy_resist_multiplier(monster_id)
+	if absf(mult - 1.0) <= _RESIST_NEUTRAL_BAND:
+		_resist_label.visible = false
+		_resist_label.text = ""
+		return
+	if mult <= 0.0:
+		_resist_label.text = LocalizationManager.t("HUD_ENEMY_RESIST_IMMUNE")
+		_resist_label.add_theme_color_override("font_color", ThemeProvider.COLOR_DANGER)
+	elif mult > 1.0:
+		_resist_label.text = LocalizationManager.tf("HUD_ENEMY_RESIST_WEAK", [mult])
+		_resist_label.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
+	else:
+		_resist_label.text = LocalizationManager.tf("HUD_ENEMY_RESIST_HARD", [mult])
+		_resist_label.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
+	_resist_label.visible = true
+
+func _show_enemy_bar(monster_id: StringName, ratio: float) -> void:
+	_enemy_bar_hold = _ENEMY_BAR_HOLD
+	if ratio >= 0.0:
+		enemy_hp_bar.scale.x = clampf(ratio, 0.0, 1.0)
+	# Fresh target: (re)name the readout and fade it in once. Repeated ticks for
+	# the same enemy only move the bar, so the fade cannot thrash at 10 Hz.
+	if String(monster_id) == _enemy_bar_id and enemy_hp_bar.visible:
+		return
+	_enemy_bar_id = String(monster_id)
 	# C04: routes through the same arachnophobia name-swap the encyclopedia
 	# uses, so the "spotted" label never shows "Crawler" with the toggle on.
 	var key := "MONSTER_" + String(LocalizationManager._display_monster_id(monster_id)).to_upper()
 	enemy_name_label.text = LocalizationManager.t(key)
 	enemy_name_label.visible = true
 	enemy_hp_bar.visible = true
-	if _enemy_hp_tween:
+	_update_enemy_resist(monster_id)
+	if _enemy_hp_tween and _enemy_hp_tween.is_valid():
 		_enemy_hp_tween.kill()
 	_enemy_hp_tween = create_tween()
 	_enemy_hp_tween.tween_property(enemy_name_label, "modulate:a", 1.0, 0.3).from(0.0)
 	_enemy_hp_tween.parallel().tween_property(enemy_hp_bar, "modulate:a", 1.0, 0.3).from(0.0)
-	_enemy_hp_tween.tween_interval(2.0)
-	_enemy_hp_tween.tween_property(enemy_name_label, "modulate:a", 0.0, 0.3)
-	_enemy_hp_tween.parallel().tween_property(enemy_hp_bar, "modulate:a", 0.0, 0.3)
-	_enemy_hp_tween.tween_callback(func():
-		enemy_name_label.visible = false
-		enemy_hp_bar.visible = false)
+	if _resist_label != null and _resist_label.visible:
+		_enemy_hp_tween.parallel().tween_property(_resist_label, "modulate:a", 1.0, 0.3).from(0.0)
 
-func _on_enemy_hp_updated(_monster_id: StringName, ratio: float) -> void:
-	enemy_hp_bar.scale.x = clampf(ratio, 0.0, 1.0)
-	enemy_hp_bar.visible = true
-	if _enemy_hp_tween:
+func _process_enemy_bar(delta: float) -> void:
+	if _enemy_bar_hold <= 0.0:
+		return
+	_enemy_bar_hold -= delta
+	if _enemy_bar_hold > 0.0:
+		return
+	_enemy_bar_id = ""
+	if _enemy_hp_tween and _enemy_hp_tween.is_valid():
 		_enemy_hp_tween.kill()
 	_enemy_hp_tween = create_tween()
-	_enemy_hp_tween.tween_interval(2.0)
-	_enemy_hp_tween.tween_property(enemy_hp_bar, "modulate:a", 0.0, 0.3)
-	_enemy_hp_tween.tween_callback(func():
-		enemy_hp_bar.visible = false)
+	_enemy_hp_tween.tween_property(enemy_name_label, "modulate:a", 0.0, 0.3)
+	_enemy_hp_tween.parallel().tween_property(enemy_hp_bar, "modulate:a", 0.0, 0.3)
+	if _resist_label != null and _resist_label.visible:
+		_enemy_hp_tween.parallel().tween_property(_resist_label, "modulate:a", 0.0, 0.3)
+	_enemy_hp_tween.tween_callback(func() -> void:
+		if is_instance_valid(enemy_name_label):
+			enemy_name_label.visible = false
+		if is_instance_valid(enemy_hp_bar):
+			enemy_hp_bar.visible = false
+		if _resist_label != null and is_instance_valid(_resist_label):
+			_resist_label.visible = false)
 
-## Вспышка виньетки при уроне. Возврат идёт к фактической базовой прозрачности,
-## а не к константе 0.4: иначе каждое попадание навсегда затемняло экран.
-func _on_damage_vignette(ratio: float) -> void:
-	var v := vignette
-	if ratio < _hp and v != null:
-		var tween := create_tween()
-		tween.tween_property(v, "color:a", 0.8, 0.15)
-		tween.tween_property(v, "color:a", _vignette_default_color.a, 0.25)
+## -1 means "this enemy does not publish a health pool", which _show_enemy_bar
+## reads as "leave the bar as it is" rather than as a full or empty pool.
+func _hp_ratio_of(enemy: Node3D) -> float:
+	if not ("hp" in enemy) or not ("max_hp" in enemy):
+		return -1.0
+	return clampf(float(enemy.get("hp")) / maxf(float(enemy.get("max_hp")), 0.001), 0.0, 1.0)
 
+
+
+## GAMEFEEL_SPEC.md (`player_healed`): "soft green flash on HUD, no shake",
+## cap "flash <= 120ms", toggle reduce_flash. EventBus.player_healed exists but
+## has no emitter on it (player_3d.gd::heal() restores hp and stays quiet), so
+## the HUD keys off the signal the consume path does send: inventory_manager.gd
+## emits EventBus.item_consumed with _effect_name() == &"HEAL" for every
+## healing consumable.
+var _heal_flash: ColorRect = null
+var _heal_tween: Tween
+
+func _setup_heal_flash() -> void:
+	_heal_flash = ColorRect.new()
+	_heal_flash.name = "HealFlash"
+	_heal_flash.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_heal_flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_heal_flash.color = Color(0.373, 0.541, 0.306, 0.0)
+	_heal_flash.visible = false
+	add_child(_heal_flash)
+
+func _on_item_consumed(_item_id: StringName, effect: String, _value: float) -> void:
+	# inventory_manager emits this *before* the effect is applied, so _hp here is
+	# the pre-heal value: at full health the medkit is wasted and a green "you
+	# were healed" flash would be a lie.
+	if effect == "HEAL" and _hp < 1.0:
+		_flash_heal()
+
+## 50 + 70 ms = the 120 ms the spec allows, and a full-rect tint, so it goes
+## through the same reduce_flash gate as the damage beat above (GAMEFEEL_SPEC.md
+## §2 lists full-screen flash ColorRects). No shake, no strobe: one pulse.
+func _flash_heal() -> void:
+	if _heal_flash == null or not is_instance_valid(_heal_flash):
+		return
+	if bool(SettingsManager.get_setting("reduce_flash", false)):
+		return
+	_heal_flash.visible = true
+	# Same one-owner rule as the vignette: two medkits in quick succession used to
+	# leave two tweens on color:a, and the older one's completion callback hid the
+	# rect in the middle of the newer pulse.
+	if _heal_tween != null and _heal_tween.is_valid():
+		_heal_tween.kill()
+	_heal_tween = create_tween()
+	_heal_tween.tween_property(_heal_flash, "color:a", 0.28, 0.05)
+	_heal_tween.tween_property(_heal_flash, "color:a", 0.0, 0.07)
+	_heal_tween.tween_callback(func() -> void:
+		if is_instance_valid(_heal_flash):
+			_heal_flash.visible = false)
+
+## GAMEFEEL_SPEC.md (`district_blackout` / `light_disrupted`): "screen flash to
+## black transition", "flash <= 120ms per pulse, no repeated strobe", and the
+## spec marks reduce_flash on this row as a *hard* requirement - it is the one
+## beat in the table called out as a real photosensitivity risk. So with the
+## toggle on the flash is skipped outright, never shortened into something that
+## still pulses. The blackout event names a district and the player only sees
+## their own lights die, so the beat filters on where they are standing
+## (DistrictManager.current_district is the authoritative field).
+var _blackout_flash: ColorRect = null
+var _blackout_tween: Tween
+
+func _setup_blackout_flash() -> void:
+	_blackout_flash = ColorRect.new()
+	_blackout_flash.name = "BlackoutFlash"
+	_blackout_flash.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_blackout_flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_blackout_flash.color = Color(0.0, 0.0, 0.0, 0.0)
+	_blackout_flash.visible = false
+	add_child(_blackout_flash)
+	EventBus.district_blackout.connect(_on_district_blackout)
+	EventBus.light_disrupted.connect(_pulse_blackout_flash)
+
+func _on_district_blackout(district_id: StringName) -> void:
+	if StringName(DistrictManager.current_district) != district_id:
+		return
+	_pulse_blackout_flash()
+	_hint_light_source()
+
+## 50 + 70 ms = the 120 ms the spec allows, one pulse per event, and a full-rect
+## tint, so it goes through the same reduce_flash gate as the damage and heal
+## beats above.
+func _pulse_blackout_flash() -> void:
+	if _blackout_flash == null or not is_instance_valid(_blackout_flash):
+		return
+	if bool(SettingsManager.get_setting("reduce_flash", false)):
+		return
+	_blackout_flash.visible = true
+	if _blackout_tween != null and _blackout_tween.is_valid():
+		_blackout_tween.kill()
+	_blackout_tween = create_tween()
+	_blackout_tween.tween_property(_blackout_flash, "color:a", 0.55, 0.05)
+	_blackout_tween.tween_property(_blackout_flash, "color:a", 0.0, 0.07)
+	_blackout_tween.tween_callback(func() -> void:
+		if is_instance_valid(_blackout_flash):
+			_blackout_flash.visible = false)
+
+## GDD V.1 3.8: contextual hints. The sheet's example line is exactly the
+## situation this covers - the player is in the dark with no light of their own,
+## either because the district they stand in just lost power or because they
+## walked into one that already has none. The "hints" toggle from
+## settings_screen.gd (and the NG+ Keeper's Pact knob built on the same setting)
+## is the switch such a hint is expected to honour, and the notice label the
+## tracker already uses for messages is the surface for it.
+var _flashlight_on: bool = true
+
+func _setup_context_hints() -> void:
+	EventBus.flashlight_state_changed.connect(func(on: bool) -> void:
+		_flashlight_on = on)
+	EventBus.district_entered.connect(func(id: StringName) -> void:
+		if PowerGrid.get_stage(id) == DistrictData.Stage.DARK:
+			_hint_light_source())
+	# A load can restore a run that already had the flashlight switched off, and
+	# no state_changed fires for it - read the field once so the hint is not
+	# skipped for someone who is genuinely standing in the dark.
+	var player := get_tree().get_first_node_in_group("player")
+	if player != null and "flashlight_enabled" in player:
+		_flashlight_on = bool(player.flashlight_enabled)
+
+func _hint_light_source() -> void:
+	if not bool(SettingsManager.get_setting("hints", true)):
+		return
+	if _flashlight_on:
+		return
+	_show_notice(LocalizationManager.t("HUD_HINT_DARK"))
+
+## Peak of the screen-wide ember beat, and the HP below which the vignette stays
+## dense. Named because docs/GAMEFEEL_SPEC.md §1 measures full-screen beats by
+## alpha and ramp length - this is the documented exceedance the lead still has
+## to rule on (see the PR).
+const _VIGNETTE_BEAT_PEAK: float = 0.8
+const _LOW_HP: float = 0.3
+
+## Vignette ownership: one handler, one tween.
+##
+## The ember beat used to be a *second* handler on this same signal, connected
+## after _on_hp and guarded by `ratio < _hp` - but _on_hp had already written _hp
+## by the time it ran, so that comparison was never true and the beat never
+## played at all. The sustained low-HP state had the mirror problem: it animated
+## only downward, so healing back above the threshold left the dense tint on
+## screen for the rest of the run. Both are driven from here now, with the
+## previous value in hand, and the alpha they settle on is always recomputed from
+## the current HP.
 func _on_hp(ratio: float) -> void:
+	var took_damage: bool = ratio < _hp
 	_hp = ratio
 	_tween_fill(hp_fill, ratio)
 	hp_val.text = str(int(ratio * 100))
-	# На низком HP виньетка остаётся заметно плотнее базовой, но не «залипает».
+	# This is a full-screen beat (VignetteOverlay is a full-rect ColorRect), so it
+	# honours reduce_flash - the same toggle that already silences the noise
+	# vignette pulse below, and the one GAMEFEEL_SPEC.md §2 lists for full-screen
+	# flash ColorRects. The sustained low-HP state below stays: legibility, not a
+	# flash.
+	if took_damage and not bool(SettingsManager.get_setting("reduce_flash", false)):
+		_animate_vignette(_VIGNETTE_BEAT_PEAK, 0.25)
+	_refresh_low_hp_vignette()
+
+func _sustained_vignette_alpha() -> float:
+	return maxf(_vignette_default_color.a, 0.6) if _hp < _LOW_HP else _vignette_default_color.a
+
+## The single tween for both animations on vignette.color:a - a newer beat kills
+## the older one instead of the two racing to write the same property.
+func _animate_vignette(peak: float, settle_time: float) -> void:
 	var v := vignette
-	if ratio < 0.3 and v != null:
-		var tween := create_tween()
-		tween.tween_property(v, "color:a", 0.8, 0.15)
-		tween.tween_property(v, "color:a", maxf(_vignette_default_color.a, 0.6), 0.15)
+	if v == null:
+		return
+	if _vignette_tween != null and _vignette_tween.is_valid():
+		_vignette_tween.kill()
+	_vignette_tween = create_tween()
+	_vignette_tween.tween_property(v, "color:a", peak, 0.15)
+	_vignette_tween.tween_property(v, "color:a", _sustained_vignette_alpha(), settle_time)
+
+## Entering the dense state pulses once; leaving it relaxes without a spike.
+func _refresh_low_hp_vignette() -> void:
+	var low: bool = _hp < _LOW_HP
+	if low == _vignette_low:
+		return
+	_vignette_low = low
+	_animate_vignette(_VIGNETTE_BEAT_PEAK if low else _vignette_default_color.a, 0.15)
 
 func _on_stam(ratio: float) -> void:
 	_stam = ratio
@@ -755,15 +1203,60 @@ func _add_battery_ad_button() -> void:
 
 func _on_ammo_changed(current: int, max_ammo: int) -> void:
 	ammo_val.text = "%d / %d" % [current, max_ammo]
+	_ammo_current = current
+	_apply_crosshair_state()
+
+## V.1 3.13: this widget never had a live source. WeaponManager/WeaponBase are
+## committed but no scene instantiates either (weapon_pickup.gd:31-34 says so
+## itself) and GDD §5 is melee-only canon, so EventBus.ammo_changed never fires
+## in a real run and the counter sat on the scene's default "0 / 0" - a number
+## that was simply false. The HUD now does what weapon_compare_ui.gd already
+## does for the same missing manager: look for it softly on the player. With a
+## weapon attached the counter mirrors its live magazine; without one (the
+## shipping build) it reports melee mode instead of inventing ammunition.
+var _weapon_present: bool = false
+
+func _poll_weapon_state() -> void:
+	var player := get_tree().get_first_node_in_group("player")
+	var weapon: Node = _find_player_weapon(player)
+	var present: bool = weapon != null and is_instance_valid(weapon)
+	if present and "current_ammo" in weapon and "max_ammo" in weapon:
+		_on_ammo_changed(int(weapon.get("current_ammo")), int(weapon.get("max_ammo")))
+	elif _ammo_current >= 0:
+		# The weapon went away mid-run; drop the stale reading rather than
+		# leaving the crosshair greyed by an empty magazine that no longer exists.
+		_ammo_current = -1
+		_apply_crosshair_state()
+	if present != _weapon_present:
+		_weapon_present = present
+		_apply_ammo_caption()
+
+## Soft discovery, the same shape weapon_compare_ui.gd uses for the very same
+## manager: a WeaponManager child that can name its current weapon, or a bare
+## WeaponBase attached straight to the player.
+func _find_player_weapon(player: Node) -> Node:
+	if player == null or not is_instance_valid(player):
+		return null
+	var manager := player.get_node_or_null("WeaponManager")
+	if manager != null and manager.has_method("get_current_weapon"):
+		return manager.call("get_current_weapon")
+	for child in player.get_children():
+		if child is WeaponBase:
+			return child
+	return null
+
+func _apply_ammo_caption() -> void:
+	var caption := get_node_or_null("AmmoCounter/AmmoCaption") as Label
+	if caption != null:
+		caption.text = LocalizationManager.t("HUD_AMMO" if _weapon_present else "HUD_MELEE")
+	if ammo_val != null:
+		ammo_val.visible = _weapon_present
 
 func _tween_fill(cr: ColorRect, ratio: float) -> void:
 	var target: float = clampf(ratio, 0.0, 1.0) * BAR_W
 	var tween := create_tween()
 	tween.tween_property(cr, "offset_right", target, 0.15)
 	tween.play()
-
-func _set_fill(cr: ColorRect, ratio: float) -> void:
-	cr.offset_right = clampf(ratio, 0.0, 1.0) * BAR_W
 
 func _on_pause() -> void:
 	if UIManager and UIManager.has_method("toggle"):
@@ -898,6 +1391,10 @@ func _setup_slot_placeholders() -> void:
 		var badge := Label.new()
 		badge.name = "Badge"
 		badge.text = "0"
+		# Slot 0 is the flashlight - a tool, not an item, so its stack count is
+		# forever zero. A permanent "0" next to a slot that works reads as broken;
+		# the badge only means something for the five item slots.
+		badge.visible = item_id != &"flashlight"
 		badge.add_theme_color_override("font_color", Color(0.847, 0.824, 0.769))
 		badge.add_theme_font_size_override("font_size", 11)
 		badge.position = Vector2(34, 34)
@@ -922,11 +1419,31 @@ func _setup_slot_placeholders() -> void:
 func _on_quick_slot_key(index: int) -> void:
 	_use_quick_slot(index)
 
+## V.1 3.2: the bar's six slots are a fixed item order (_SLOT_ITEMS), but
+## InventoryManager::use_item() takes an *inventory slot* index. The two were
+## conflated, so pressing the medkit consumed whatever happened to sit in that
+## inventory slot - the icon, the badge and the effect could all disagree.
+## Resolve the pressed slot's item to the inventory stack that actually holds
+## it, the same way _refresh_slot_badges() counts it.
 func _use_quick_slot(index: int) -> void:
-	var inv := get_tree().root.get_node_or_null("InventoryManager")
-	if not inv or not inv.has_method("use_item"):
+	if index < 0 or index >= _SLOT_ITEMS.size():
 		return
-	inv.use_item(index)
+	var item_id: StringName = _SLOT_ITEMS[index]
+	# Slot 0 is the flashlight: it is a tool, not an inventory item (no
+	# "flashlight" entry exists in ItemDatabase, so its stack count is forever
+	# zero), and toggling the light is what the icon promises.
+	if item_id == &"flashlight":
+		InputService.request_flashlight()
+		return
+	var inv := get_tree().root.get_node_or_null("InventoryManager")
+	if inv == null or not inv.has_method("use_item") or not ("slots" in inv):
+		return
+	var inv_slots: Array = inv.slots
+	for i in inv_slots.size():
+		var s = inv_slots[i]
+		if s != null and s.get("item_id") == item_id:
+			inv.use_item(i)
+			return
 
 func _refresh_slot_badges() -> void:
 	var inv := get_tree().root.get_node_or_null("InventoryManager")
@@ -939,6 +1456,38 @@ func _refresh_slot_badges() -> void:
 			continue
 		var item_id: StringName = _SLOT_ITEMS[i]
 		badge.text = str(inv.count_of(item_id))
+		badge.visible = item_id != &"flashlight"
+
+## docs/GAMEFEEL_SPEC.md, "New events to juice": item_picked_up -> a brief
+## flash on the quick slot that received the item, opacity ramp only, <= 120 ms,
+## skipped entirely under reduce_flash (that spec's toggle for HUD flash beats).
+## The slot only holds one flash at a time, so a fast double pickup restarts the
+## ramp instead of stacking overlays.
+const _SLOT_FLASH_SEC: float = 0.12
+const _SLOT_FLASH_ALPHA: float = 0.45
+const _SLOT_FLASH_NAME: String = "PickupFlash"
+
+func _on_item_picked_up(item_id: StringName) -> void:
+	var index := _SLOT_ITEMS.find(item_id)
+	if index < 0:
+		return
+	if bool(SettingsManager.get_setting("reduce_flash", false)):
+		return
+	var slot := get_node_or_null("BottomCenter/Slot" + str(index)) as Control
+	if slot == null:
+		return
+	var flash := slot.get_node_or_null(_SLOT_FLASH_NAME) as ColorRect
+	if flash == null:
+		flash = ColorRect.new()
+		flash.name = _SLOT_FLASH_NAME
+		flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		flash.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		slot.add_child(flash)
+	flash.color = Color(ThemeProvider.COLOR_AMBER, _SLOT_FLASH_ALPHA)
+	var tw := create_tween()
+	tw.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tw.tween_property(flash, "color:a", 0.0, _SLOT_FLASH_SEC)
+	tw.tween_callback(flash.queue_free)
 
 ## Below the 5th status row (VISIBILITY at y~190): at y=182 the button
 ## covered the caption ("...ILITY" in docs/stills/tzverify frames).

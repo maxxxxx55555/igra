@@ -1299,5 +1299,18 @@
   "TUT_CROUCH": "تسلّل. الخطى البطيئة أقل صوتًا.",
   "TUT_DODGE": "تفادَ عندما ينقضّ شيء عليك.",
   "TUT_ATTACK": "رُدّ الضربة إن وصل إليك.",
-  "TUT_INVENTORY": "افتح حقيبتك لترى ما تحمله."
+  "TUT_INVENTORY": "افتح حقيبتك لترى ما تحمله.",
+  "HUD_LOG_TITLE": "سجل الرسائل",
+  "HUD_LOG_TOGGLE": "السجل",
+  "HUD_LOG_EMPTY": "لا توجد رسائل بعد",
+  "HUD_LEGEND_TITLE": "مفتاح الخريطة",
+  "HUD_LEGEND_PLAYER": "أنت (اللاعب)",
+  "HUD_LEGEND_CURRENT": "المنطقة الحالية",
+  "HUD_HINT_DARK": "ابحث عن مصدر ضوء — مفتاح الكهرباء أو مصباحك اليدوي.",
+  "QUEST_MORE_ACTIVE": "+%d أهداف أخرى",
+  "HUD_MELEE": "قتال قريب",
+  "HUD_LEGEND_MARKER": "إشارة راديو",
+  "HUD_ENEMY_RESIST_WEAK": "ضعيف ضد القتال القريب ×%.1f",
+  "HUD_ENEMY_RESIST_HARD": "يقاوم القتال القريب ×%.1f",
+  "HUD_ENEMY_RESIST_IMMUNE": "مناعته ضد القتال القريب"
 }
