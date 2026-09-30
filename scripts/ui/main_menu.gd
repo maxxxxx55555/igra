@@ -89,6 +89,9 @@ func _style_title(vb: VBoxContainer) -> void:
 	var title := vb.get_node_or_null("Title") as Label if vb != null else null
 	if title == null:
 		return
+	# A CRLF checkout turns the scene's two-line title into CR+LF, which the Label
+	# draws as two line breaks: a blank line between the words.
+	title.text = title.text.replace("\r", "")
 	title.add_theme_color_override("font_outline_color", Color(0.047, 0.062, 0.086))
 	title.add_theme_constant_override("outline_size", 12)
 

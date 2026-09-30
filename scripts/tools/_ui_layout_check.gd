@@ -44,6 +44,10 @@ func _ready() -> void:
 	await get_tree().process_frame
 	_checked += 1
 	_check_full_rect(&"main_menu", menu)
+	# A CRLF checkout puts CR into the scene's two-line title: the Label draws a blank line.
+	var menu_title := menu.find_child("Title", true, false) as Label
+	if menu_title == null or menu_title.text.contains("\r"):
+		_fail("main_menu/Title: missing or its text carries a CR (blank line between the words)")
 	menu.queue_free()
 	for scene_name in LIVE_SCENES:
 		var inst: Node = (load("res://scenes/ui/%s.tscn" % scene_name) as PackedScene).instantiate()
