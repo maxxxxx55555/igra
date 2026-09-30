@@ -131,6 +131,40 @@ const RADIUS_MIN: float = 6.0
 const RADIUS_MAX: float = 22.0
 const DROP_Y: float = 0.6
 
+## street_builder.gd lays a 3x3 grid of 16 m blocks centred on the district; floor exists only on its
+## streets, each a band from axis - 3.75 to axis + 5 (road and sidewalk tiles). Loot scattered into the
+## blocks between them hung over the void and could not be walked to, required repair parts included
+## (11 districts, 2-4 pickups each: the root cause of the bot's pickup-orbit stall X21).
+const STREET_AXES: Array[float] = [-24.0, -8.0, 8.0, 24.0]
+const STREET_BAND_LO: float = -3.25
+const STREET_BAND_HI: float = 4.5
+const STREET_BAND_MID: float = 0.625
+
+static func _on_street(v: float) -> bool:
+	for axis in STREET_AXES:
+		if v >= axis + STREET_BAND_LO and v <= axis + STREET_BAND_HI:
+			return true
+	return false
+
+static func _nearest_axis(v: float) -> float:
+	var best: float = STREET_AXES[0]
+	for axis in STREET_AXES:
+		if absf(v - axis) < absf(v - best):
+			best = axis
+	return best
+
+## A point over a street stays; one over the void between streets moves onto the nearest street.
+static func _snap_to_street(local: Vector3) -> Vector3:
+	if _on_street(local.x) or _on_street(local.z):
+		return local
+	var to_x: float = _nearest_axis(local.x) + STREET_BAND_MID
+	var to_z: float = _nearest_axis(local.z) + STREET_BAND_MID
+	if absf(local.x - to_x) <= absf(local.z - to_z):
+		local.x = to_x
+	else:
+		local.z = to_z
+	return local
+
 ## Раскладывает лут внутри уже собранного района.
 static func populate(district_root: Node3D, district_id: StringName) -> int:
 	if district_root == null:
@@ -229,7 +263,7 @@ static func _spawn_secrets(root: Node3D, district_id: StringName) -> int:
 		var keys: Dictionary = row.get("i18n_keys", {})
 		node.set("title_key", String(keys.get("title", "")))
 		root.add_child(node)
-		node.global_position = root.global_position + Vector3(cos(ang) * rad, DROP_Y, sin(ang) * rad)
+		node.global_position = root.global_position + _snap_to_street(Vector3(cos(ang) * rad, DROP_Y, sin(ang) * rad))
 		placed += 1
 	return placed
 
@@ -254,7 +288,7 @@ static func _load_secrets() -> void:
 static func _scatter(root: Node3D, rng: RandomNumberGenerator) -> Vector3:
 	var ang := rng.randf_range(0.0, TAU)
 	var rad := rng.randf_range(RADIUS_MIN, RADIUS_MAX)
-	return root.global_position + Vector3(cos(ang) * rad, DROP_Y, sin(ang) * rad)
+	return root.global_position + _snap_to_street(Vector3(cos(ang) * rad, DROP_Y, sin(ang) * rad))
 
 static func _spawn_item(root: Node3D, item_id: StringName, pos: Vector3) -> bool:
 	var node := PICKUP_SCENE.instantiate() as Node3D
