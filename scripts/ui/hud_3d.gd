@@ -158,8 +158,9 @@ func _cache_vignette_default() -> void:
 ## carries down to its whole subtree. Toasts are deliberately left out — they
 ## carry text the player may still need at 50 % opacity (QA-AC-03).
 func _apply_hud_opacity_setting() -> void:
+	# The hit marker rests at alpha 0 and flashes on a hit: the opacity slider must not raise it.
 	for child in get_children():
-		if child is Control:
+		if child is Control and child != _hit_marker:
 			(child as Control).add_to_group("hud")
 	# from_dict() re-applies the accessibility toggles after a config load, but
 	# not the opacity slider, so the HUD paints the stored value itself.
@@ -171,7 +172,7 @@ func _apply_hud_opacity_setting() -> void:
 func _apply_hud_opacity(v: float) -> void:
 	var a := clampf(v, 0.0, 1.0)
 	for child in get_children():
-		if child is Control:
+		if child is Control and child != _hit_marker:
 			(child as Control).modulate.a = a
 
 func _setup_nv_poll() -> void:
@@ -1484,7 +1485,7 @@ func _on_item_picked_up(item_id: StringName) -> void:
 		flash.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		slot.add_child(flash)
 	flash.color = Color(ThemeProvider.COLOR_AMBER, _SLOT_FLASH_ALPHA)
-	var tw := create_tween()
+	var tw := flash.create_tween()
 	tw.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	tw.tween_property(flash, "color:a", 0.0, _SLOT_FLASH_SEC)
 	tw.tween_callback(flash.queue_free)

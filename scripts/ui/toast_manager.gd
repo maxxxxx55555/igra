@@ -120,8 +120,11 @@ func _record(text: String, type: String) -> Dictionary:
 	if _history.size() > HISTORY_MAX:
 		_history.remove_at(0)
 	if _log_panel.visible:
-		_append_log_row(entry)
-		_scroll_log_to_end()
+		if _history.size() == 1:
+			_rebuild_log()
+		else:
+			_append_log_row(entry)
+			_scroll_log_to_end()
 	return entry
 
 func _build_log_header() -> void:
