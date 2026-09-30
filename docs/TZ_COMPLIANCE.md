@@ -71,8 +71,16 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 | C03 | Auto-aim | DEFERRED-STRUCTURAL (dormant until G25) | Cone logic in `WeaponBase` passes tz_verify on a probe weapon, but no gameplay path creates a weapon (G25). Live melee already hits anything within its 2.7 m sphere regardless of facing. |
 | C04 | Arachnophobia rename | MET | "Слепые псы"; `C04_arachnophobia_label.png` |
 | C06 | Tier fog + particles 50–150% | MET | tz_verify fog at load = tier preset (C8 rc4: `fog_setup.gd` no longer overrides it; since rc13 the probe loads on the High tier, 0.014, so an Ultra profile cannot mask it), 0.012 / 0.015 on change, 6/6 emitters; `C06_tier_*.png` |
-| P01 | Draw calls < 200 (D1) / < 350 (D11) | MET (measured rc14) | Windowed `perf_check_scene`, camera at the player: D1 168-170, D11 175-186 (`docs/PERF_PASS.md` §0). The earlier 246/253 came from the camera ScreenShake pinned at (0, 1.7, 0) (CORRECTION_LOG 46). Primitives stay over budget (PERF_PASS #18). |
-| P02 | Particles < 500, RAM/VRAM | NEEDS-MEASUREMENT | Windowed or device profiling only; see TZ_DECISIONS P02 |
+| P01 | Draw calls < 200 (D1) / < 350 (D11) | MET (measured rc14) | Windowed `perf_check_scene`, camera at the player: D1 175, D11 165 after the skyline, re-run at sign-off (`docs/PERF_PASS.md` §0; 168-170 and 175-186 before it). The earlier 246/253 came from the camera ScreenShake pinned at (0, 1.7, 0) (CORRECTION_LOG 46). Primitives stay over budget (PERF_PASS #18). |
+| P02 | Particles < 500, RAM/VRAM | MET (desktop, rc14) | 140 emitting particles, texture 144.7 MiB, video 168.3 MiB (windowed `perf_check_scene`, sign-off run); on-device profile stays an owner step, see TZ_DECISIONS P02 |
 | N01, I02, T01 | Owner rows | GAP-OWNER | See TZ_DECISIONS |
 
 **Open GAP-DEV rows: 0.** Every audit row the audit scored GAP-DEV or GAP-OWNER has a verdict above. Rows the audit already scored MET, EXTRA or BY-DESIGN are not repeated here; their audit verdicts stand (see `docs/TZ_COMPLIANCE_AUDIT.md`).
+
+## Totals (recounted from the table by script, 2026-09-30)
+
+48 table rows (several rows group IDs, e.g. G18/G19, G31/G32/G33, N01, I02, T01): **MET 18 + MET-STATIC 9 = 27 met**,
+DECIDED 11, **GAP-OWNER 4** (V03 Bebas Neue Bold file, G22 save-slot picker, G28/D04 and N01/I02/T01 GDD text
+amendments), **DEFERRED-STRUCTURAL 6** (G21 blueprints, G25 weapons, G26 photos, S02 visibility model, S04-hide
+hiding-spot placement, C03 auto-aim). GAP-DEV 0, NEEDS-MEASUREMENT 0.
+

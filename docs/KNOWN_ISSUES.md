@@ -1,5 +1,56 @@
 # Known issues
 
+## CLOSED (2026-09-30, rc14 sign-off): Russian text reached every other locale
+
+Key parity passed the i18n gates while text that never goes through the dictionary did not (CORRECTION_LOG 55).
+Found by reading a frame, then by scanning the bot logs and the scene files for Cyrillic:
+
+- District names in the power switch label and toasts, the district lock hints and the city map; item names in the
+  switch prompts, the generator prompt and the quick wheel; shop item names and notices; monster descriptions in the
+  encyclopedia (six newer monsters were English only); 7 component items had no key at all.
+- 33 legacy documents (title and body) in the catalog were raw Russian: world pickups, the pickup toast and the journal.
+- The main scene showed the Russian word for Loading on every launch.
+
+All routed through the dictionary (93 new keys, 1407 per locale). Guards: `hardcoded_text_gate` (a `display_name`
+read outside `name_for()`, a resource without its name key, a catalog entry with raw text), `ui_layout_check` (18 screens
+and 18 live scenes opened in English must show no Cyrillic), suite P5c and P5d. Each fails on the old tree.
+
+**Still open (honest):** `data/documents.json`, `data/dialogs.json`, `data/dialogs/*.json` and `data/lore/lore.json` hold
+Russian or transliterated text that no runtime code reads (legacy data, CERT_CONTENTDEPTH); item `description` fields
+are read nowhere; `scenes/ui/game_over.tscn` and `pause_menu.tscn` keep Russian placeholders but only the scene smoke
+loads them. The translations of the 33 documents and the 27 name keys are written by this pass, not by a native
+speaker: a native read (NATIVE_QA_FINDINGS) would still help.
+
+## CLOSED (2026-09-30, rc14 sign-off): the boss-phase and spine "bot stalls" were game bugs, not skill gates
+
+Two standing entries of this file (the boss-phase stall, 9 of 13 bot seeds, and the X21 spine stall) were
+filed as bot-harness limits. Both were real game defects, found by tracing stalled runs instead of tuning the bot:
+
+- **Melee swing spent on the wrong body** (`scripts/player/player_3d.gd` `_on_attack_hit`, X30). The attack
+  `Area3D` is a child of the player's body, so it reports the player itself and any wall or prop before the
+  enemy; the first body marked the swing spent. A boss-only bot trace showed `body=1` (the player) entering before
+  `BossArchitect` on hundreds of swings, each one wasted and each one damaging the player. Fixed: the swing is
+  spent only by another body that can take damage. `game_test_3d` asserts both cases (mutation-tested).
+  The boss collider holds a player 2.6-2.8 m out; the bot's swing gate was 2.6 m and is now 3.4 m (bot side).
+- **Loot hovering over the void** (`scripts/world/district_loot.gd`, X37/X21). The 3x3 street grid has floor only
+  on its streets; loot was scattered over a 6-22 m disk. A ray down from every pickup, document and secret found
+  2-4 floating ones in 10 of 11 districts, repair parts included, so a real player could not collect them either.
+  Positions now snap onto the nearest street band; `loot_floor_check_scene` (11 districts) is a blocking gate.
+- **Pickup reach shorter than the approach** (`scenes/pickups/item_pickup_3d.tscn`). The contact sphere reached
+  1.0 m from the player body while an approach stops at about 1.4 m; radius 0.7 -> 1.1 m.
+- **Full pack** (bot side): a required part is refused while the pack is 12/12; the bot now drops junk.
+
+Result: 13-seed bot 3/13 -> 13/13 WIN, 11/11 districts FULL on every seed, 0 watchdog stalls. The bot is
+nondeterministic between runs, so this is evidence, not proof; the sign-off records the stalls of every run.
+Also fixed in the same pass (found by frames, `docs/stills/beauty/`): lamp heads glowing in every power stage,
+star panorama drawn as blocky diamonds, roads in a void, trees and benches in the roadway, ash drawn white,
+a dead brute still slamming, the HUD opacity setting raising the hit marker to the screen centre.
+Found reading the final frames: the menu title drew a blank line between its words on CRLF checkouts (Windows autocrlf, the
+AAB included; a multi-line string in a scene file), fixed and gated in `ui_layout_check`.
+
+**Still open (honest):** 1.34 M primitives per frame against the 50K budget (PERF_PASS 18, DEFERRED-STRUCTURAL,
+needs real low-poly geometry); the deferred GDD rows in `docs/TZ_COMPLIANCE.md` (G21, G25, G26, S02, C03).
+
 ## DIAGNOSED (2026-09-21, P8): the "прогон 3D-сцены" gate's real failure point, captured for the first time
 
 Named as a pre-existing stall across v7 through v7.3.2's reports, always as an opaque 90s

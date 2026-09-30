@@ -1,5 +1,36 @@
 # Run state — orchestrator pass (2026-09-20)
 
+## Session 14 (2026-09-30): swarm attempt, melee root cause, beauty pass, rc14 sign-off
+
+**NEXT-ROW: the GDD rows the swarm did not deliver (G25 weapons, C03, G07 capsule, S02, G21, G26, V.2/V.5 menus, quick
+wheel, SFX wiring of the delivered interact sounds). X21 is closed (13/13 bot seeds).**
+- Swarm: four worktree agents (player, menus, world, audio) were launched; the usage limit stopped them. Only audio
+  delivered (A01 bus graph, merged `5114d23`, patches `18b01e59`); the three others left no commits and their empty
+  worktrees were auto-removed. Their missions are unbuilt and listed in RESUME_NOTE.
+- Outside-AI HUD branch (`arena/01a0e817-igra`, 30 commits) merged `6e5acaf`; its parse error fixed `419c184`; the
+  verifier found its hit-marker regression (fixed `77646f0f`).
+- Melee root cause (CORRECTION_LOG 50): the swing was spent on walls, props and the player's own body; 3-seed bot 0/3 -> 3/3,
+  boss-phase stalls 9/13 -> 0/13, boss-only trials 6/6.
+- Beauty pass (frames `docs/stills/beauty/before` vs `after`, 8 states, read by eye): star panorama dimmed, ash material,
+  `skyline.gd` (visual-only buildings with stage-lit windows + dark ground), lamp heads follow the power stage, props on
+  the sidewalk and resting on the ground, palette-canon prop colours. Perf D1 178 / D11 173 draw calls.
+- Roster: five newer monster types in districts 2-11 (dark-stage slots); the first district keeps its original roster.
+- Asset sweep: `docs/ASSET_SHOPPING_LIST.md` (17 rows) and the delivered-but-unwired table.
+- One read-only verifier round (2 P1, 5 P2, all applied once; 3 claims TRUE). It ran before the loot-floor work below;
+  that work is covered by its own blocking gate and the bot, not by a second independent round (ANTI-LOOP).
+- X21 root causes (CORRECTION_LOG 54): loot floating over the void between streets (`district_loot.gd`, gate
+  `loot_floor_check_scene`), a full pack refusing a required part (bot drops junk), pickup contact sphere 0.4 m short of
+  the approach distance (radius 0.7 -> 1.1, `9b6b456`). 13-seed bot 3/13 -> 8/13 -> 11/13 -> **13/13 WIN**, 0 stalls.
+- i18n sweep (CORRECTION_LOG 55): Russian data-driven text reached every other locale (district, item, shop and monster
+  names, 33 legacy documents, the boot title). 93 new keys (1407 per locale), `name_for()` at every site, four new guards
+  (`hardcoded_text_gate` x3 rules, `ui_layout_check` Cyrillic scan of 18 screens + 18 live scenes, suite P5c/P5d).
+- Frames harness (CORRECTION_LOG 56): canopy-aware sight lines (trees are collision-free), feeder-first restore; six final
+  frames and eight beauty frames re-shot and read on the final tree.
+- Sign-off battery: check.sh full 49 green (three runs, the last on the final code tree `7da97f5`), static 25 / flow 56, suite fails=0, perf D1 175 / D11 165,
+  audio PASS (Music -12.0 dB), tz_verify 19 fails=0, gui_explore 19 PASS 0 BUG, i18n 12/12, bot 13/13 (`9b6b456`) and 3/3
+  (final tree), AAB 183,140,397 bytes signed and verified (rebuilt after the menu title fix, CORRECTION_LOG 57). Visual gate on the six final frames 3 PASS / 3 FAIL (content, see
+  ORDER_PASS_REPORT). Tag `v8.0.0-rc14`.
+
 ## Session 13 (2026-09-27): cloud merge + rc14 runtime re-verify
 
 **NEXT-ROW: owner wave "finish the game to the GDD with an agent swarm" (lead = this session).**

@@ -24,16 +24,23 @@ ScreenShake pinned the FPS camera (CORRECTION_LOG 46), so they measured a view n
 Texture memory 138.9-144.7 MiB, video memory 160.5-166.3 MiB (desktop BPTC). This iGPU is
 GPU-bound at about 30-40 fps at 1080p; primitives stay about 27x over the GDD's 50K per district.
 
+**rc14 final, re-run on the sign-off tree `1fc90f1` (2026-10-01, same probe, windowed, muted):** D1 **175** draw calls, 1.338 M primitives,
+392 objects, frame p95 **28.8 ms**; D11 **165** draw calls, 1.330 M primitives, 398 objects, p95 **30.0 ms**; texture
+memory 144.7 MiB, video memory 168.3 MiB, `DONE fails=0`. (The same probe right after the beauty pass, before the loot and
+i18n work: D1 178, D11 173, p95 24.4 / 25.8 ms, 144.8 / 168.5 MiB; the p95 spread between runs is machine load.) The skyline (`skyline.gd`: two MultiMesh draws and one ground plane) and
+the stage-lit windows cost about 8-10 draw calls and no measurable frame time; the lower p95 than in the table above
+is the quiet machine, not the change.
+
 ## 1. Numbers
 
 | # | Metric | Budget | Value | Source | Tag |
 |---|---|---|---|---|---|
-| 1 | D1 draw calls | < 200 | **168-170** (rc14, 4 windowed runs, camera at the player). The old 246 (C7) / 253 (rc11) were taken from the pinned camera at (0, 1.7, 0) | perf probe (§0) | MEASURED rc14, OK |
+| 1 | D1 draw calls | < 200 | **175** after the skyline, sign-off run (178 right after the beauty pass, 168-170 before it; rc14, windowed runs, camera at the player). The old 246 (C7) / 253 (rc11) were taken from the pinned camera at (0, 1.7, 0) | perf probe (§0) | MEASURED rc14, OK |
 | 2 | D1 structural draw calls | — | ~38 = 13 batched (street MultiMesh 3, props 5, windows 1, ground/sky 2, panorama/moon 2) + 25 per-instance (6 monsters, 6 pickups/documents, 3 interactables, 10 HUD). The 246–253 measured also counts light and material passes, which this estimate leaves out | `tools/qa_sim/drawcall_estimate.py` | STATIC-ESTIMATE |
-| 3 | D11 draw calls | < 350 | **175-186** (rc14, power_station, same runs; the probe now travels there and gates this count) | perf probe (§0) | MEASURED rc14, OK |
+| 3 | D11 draw calls | < 350 | **165** after the skyline, sign-off run (173 right after the beauty pass, 175-186 before it; rc14, power_station, same runs; the probe now travels there and gates this count) | perf probe (§0) | MEASURED rc14, OK |
 | 4 | Real-time lights, D1 frame | < 8 dynamic, rest baked (`GDD.md:385-386`) | **18** active after distance fade (8 lamps × 2 + 2 pickup lights), 58 without fade. No `LightmapGI` exists anywhere, so nothing is baked | `drawcall_estimate.py`; scene/script scan | STATIC-ESTIMATE, **over budget** |
 | 5 | Concurrent particles | < 500 | Live emitters: ash 80 (`main_3d.tscn`) and player dust 60, so 140 at High, 70 at Low, 210 at Ultra. Tier ratios 0.5 / 0.75 / 1.0 / 1.5; Ultra raises `amount` (`settings_manager.gd:441-451`). Transients per event: blood 28, hit spark 10, muzzle 8, explosion 8, checkpoint 20. `vfx_rain` (300), `vfx_dust` (60) and `vfx_strobe` (24) are never instanced | `.tscn` scan | STATIC-ESTIMATE, under budget |
-| 6 | RAM | < 800 MB | never measured | TZ P02 | NEEDS-GODOT-RECONFIRM (device) |
+| 6 | RAM | < 800 MB | desktop: one Godot process about 205 MB working set during a bot run (rc14, `tasklist`); never measured on a device | TZ P02 | MEASURED desktop, device step is the owner's |
 | 7 | VRAM, textures | < 400 MB (whole VRAM) | Measured on desktop: texture memory **138.9-144.7 MiB**, video memory **160.5-166.3 MiB** (rc14, §0). Static bound before: ≤ 74.3 MiB if all 528 2D textures were resident at 8 bpp, plus about 16 MiB for the shadow map and the MSAA targets | perf probe; `.import` scan | MEASURED rc14 (desktop); device NEEDS-GODOT-RECONFIRM |
 | 8 | Texture size | ≤ 2048² hero / ≤ 512² props | 0 textures over 2048 px; 25 over 1024 px | `.import` scan | STATIC-ESTIMATE |
 | 9 | Texture format | ETC2/ASTC (`GDD.md:387`) | rc14: `rendering/textures/vram_compression/import_etc2_astc=true` in `project.godot`; the 520 VRAM-compressed textures now import BPTC (desktop) and ASTC (Android) | `project.godot`, `.import` scan | CONFIG, done |

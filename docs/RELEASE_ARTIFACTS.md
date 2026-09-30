@@ -1,6 +1,6 @@
 # Release artifacts (C9 owner-prep)
 
-Status at 2026-09-27 (rc14): a signed release AAB exists and is verified below.
+Status at 2026-10-01 (rc14 sign-off): a signed release AAB exists, was rebuilt from the tagged tree and is verified below.
 
 ## Done
 - **Release keystore generated** with `keytool` (PKCS12, RSA 4096, alias `tls_release`, 10000-day
@@ -15,14 +15,14 @@ Status at 2026-09-27 (rc14): a signed release AAB exists and is verified below.
 **Back up `.signing/` outside this machine.** A lost upload key means no updates to the same listing
 unless Play App Signing is enabled (recommended: upload this as the *upload* key only).
 
-## Signed AAB (rc14, 2026-09-27)
+## Signed AAB (rc14 sign-off, rebuilt 2026-10-01; first built 2026-09-27)
 
-- **Built:** `build/tls.aab`, **183,064,789 bytes (183.1 MB)**, `godot --headless --path . --export-release
+- **Built:** `build/tls.aab`, **183,140,397 bytes (183.1 MB)** (183,064,789 on 2026-09-27; rebuilt a second time on 2026-10-01 after the menu title fix), `godot --headless --path . --export-release
   "Android" build/tls.aab` with the three `GODOT_ANDROID_KEYSTORE_RELEASE_*` variables loaded from
   `.signing/release.env`. Gradle build, arm64-v8a only. `build/` and `*.aab` are gitignored.
-- **Contents:** base module about 27 MB compressed (native libs 24.5 MB, dex 1.8 MB, res 0.7 MB); the
-  game data ships in the install-time asset pack `assetPackInstallTime` (155.1 MB compressed, 213.4 MB
-  raw). Play caps the base module's compressed download at 200 MB and sizes asset packs separately
+- **Contents:** base module 27.0 MB compressed (78.5 MB raw; native libs 24.5 MB, dex 1.8 MB, res 0.7 MB at the first
+  build); the game data ships in the install-time asset pack `assetPackInstallTime` (155.2 MB compressed, 213.6 MB
+  raw), 2840 entries in all. Play caps the base module's compressed download at 200 MB and sizes asset packs separately
   **(check the App bundle explorer at upload)**.
 - **Signature:** `jarsigner -verify build/tls.aab` prints `jar verified.`, with the usual upload-key
   warnings (self-signed, no timestamp) and a JarInputStream manifest-order note that AGP-built

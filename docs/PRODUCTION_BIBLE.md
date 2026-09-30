@@ -60,6 +60,12 @@ just design targets):
 Depth fog: single canon color `#1a2133`, density 0.012–0.015 scaled by
 graphics tier (GDD §11.6, `district_grading.gd::_fog_multiplier`).
 
+**World backdrop (rc14, `docs/stills/beauty`):** the streets sit inside a ring of dark building blocks with windows that
+light by power stage (`scripts/world/skyline.gd`: visual only, no collision or navigation) over a dark ground plane;
+streetlight heads are dead in DARK and follow the stage (`street_props.gd` `_LAMP_HEAD_ENERGY`); the star panorama stays
+at `energy_multiplier` 0.35; trees, benches and cones use palette colours and rest on the sidewalk. Anything new that
+glows must follow the district's power stage, or it breaks the "darkness, then the streetlights turn on" pillar.
+
 **Fonts** (GDD §11.3, canon since the 2026-08-10 summit): **Bebas Neue
 Bold** for headings, **Roboto Condensed** for body, **Share Tech Mono**
 for numbers/stats. The old Chakra/Saira/Rajdhani set is stored but must

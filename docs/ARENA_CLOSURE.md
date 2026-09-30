@@ -64,7 +64,7 @@ JSON), so every load wiped district power and ProgressTracker. Found and fixed i
 | RENDERING_DIAGNOSIS (d) SSR/SSAO elimination void | The diagnosis's premise is superseded by the LUT root cause. The effects stay tier-driven from `visual_quality.tres`. |
 | TG-SEE / TG-HEAR / TG-PLAY hardened gates (P1) | Closed `5257745`, `4c6ca10`. The R0 lock now pins the proven cause (`bafb740`). |
 | CHALLENGE-01 phase-7 harness (P1) | Closed `fe3007a` |
-| CHALLENGE-02 residential nudge (P1) | Partial `c783544`. Residual: the spine-stall softlock type stays open (FUNCTION_MATRIX X21) and appears at different districts run to run. |
+| CHALLENGE-02 residential nudge (P1) | Closed at rc14. `c783544` covered the position invariant; the spine-stall softlock type (FUNCTION_MATRIX X21) was three real causes, none a harness limit: loot over the void between streets (`d350b97`, gate `loot_floor_check_scene`), a full pack refusing a part (`72442dc`), pickup reach shorter than the approach (`9b6b456`). 13-seed bot 13/13 WIN, 11/11 districts FULL, 0 watchdog stalls (CORRECTION_LOG 54). The bot is nondeterministic: every sign-off records its stalls. |
 | CHALLENGE-03 settings_full dead code | Closed `0f9685a` |
 | MISSED-00..05 (LocalLeaderboard, quick_wheel, hum pool, RandomEvents, PlayIntegrity) | Matrix rows now WORKS/smoke via GOLD MASTER P1b/P2q (`0d3d533`) |
 | I18N_DEFECTS native-quality pass | Applied as a value-level merge `43c9ecd`; truth gate 12/12 `21c6563` |
@@ -104,10 +104,19 @@ JSON), so every load wiped district power and ProgressTracker. Found and fixed i
 | 3. G08 range and energy were labelled NEEDS-EYES | Measured at rc14 (DR-3, TZ_DECISIONS G08): the GDD's 8 m / 2.0 adds +0.014 luminance on the pole ahead against +0.198 shipped, no readable pool; `docs/stills/evidence/g08_*.png` |
 | 4. The honest-residual table missed P02, V05 on device and the G08 half | ORDER_PASS_REPORT rc14 residual table (P02 and V05 rows added; G08 now decided) |
 
+## Arena HUD wave (`arena/01a0e817-igra`, 2026-09-28/29, merged rc14)
+
+30 commits for GDD Appendix V.1 modules 3.3-3.16 (damage pointer, minimap legend and radar, message log, quest tracker
+arrow, crosshair target colour, enemy bar, ammo counter, panel shadows) from the outside Arena AI. Merged `6e5acaf`. Three
+defects found in it during this pass and closed: a GDScript parse error in `quest_tracker_hud.gd` that the static gates did
+not see (`419c184`, CORRECTION_LOG 52); the HUD Opacity fix raising the hit marker so an ember X stood at screen centre
+(`77646f0f`, found by the read-only verifier); an empty-state row left in the message log and a slot-flash tween that
+could outlive its node (`77646f0f`). The wave's own claims were not re-verified beyond the gates.
+
 ## Open defers
 
 - **Inherent client-side limits:** P-05, R-08 (forward clock across launches only), D-01, D-02.
 - **Owner-held:** D-03 (PCK encryption key); B7's legacy-achievements half (reject unsigned legacy `achievements.cfg`, a P-02 UX call).
-- **Scoped:** R-02 (speed watchdog) and the CHALLENGE-02 spine stall (X21).
+- **Scoped:** R-02 (speed watchdog).
 
 No P0 is deferred.

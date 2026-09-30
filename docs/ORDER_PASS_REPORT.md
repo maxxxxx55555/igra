@@ -43,6 +43,79 @@ FPS camera pinned by ScreenShake and the mirrored yaw (`b6187a3`), off-centre pa
 hero art and the inverted detection overlay (`b0de63d`), QA runs muted (`d90abcd`), dead Destroyer code
 (`cbb9508`). CORRECTION_LOG 45-49.
 
+## rc14 final (sign-off, 2026-10-01)
+
+Everything since the re-verify above: the audio bus graph A01 and the arena HUD wave merged, the melee and loot root
+causes, the beauty pass, the asset list, an i18n sweep, and the final battery on the tagged tree. The agent swarm
+(audio, player, menus, world) stopped at a usage limit; only audio delivered, so **2 merges** reached `main`
+(arena HUD wave `6e5acaf`, audio A01 `5114d23`) and the player, menus and world missions are unbuilt (RESUME_NOTE).
+
+| Area | What changed | Key commits |
+|---|---|---|
+| Combat | A melee swing was spent on the first body its attack area touched: a wall, a prop, or the player's own body (the area is a child of the player). Root cause of the boss-phase bot stall (9 of 13 seeds) | `e880fbe`, `c1ef834` |
+| World | Pickups, documents and secrets hovered over the void between streets (2-4 per district in 10 of 11); positions snap onto the street bands, blocking gate `loot_floor_check_scene`; pickup contact sphere 0.7 -> 1.1 m (X21 root causes) | `d350b97`, `9b6b456` |
+| Beauty | Star panorama dimmed, ash material assigned, `skyline.gd` (visual-only building ring with stage-lit windows and a dark ground), lamp heads follow the power stage, props on the sidewalk and grounded, palette-canon prop colours: **7 items kept** | `b1b5744`, `e5febe4`, `77646f0` |
+| Enemies, HUD | Five newer monster types in districts 2-11; a dead brute no longer slams; the HUD opacity setting no longer raises the hit marker; arena HUD parse error fixed | `e266255`, `b7b607c`, `a17cc3b`, `419c184` |
+| Audio | Bus graph A01 (Music, SFX, Voice, Ambient; UI, Footsteps, Combat, Environment under SFX) plus the stragglers routed, blocking gate `audio_bus_check_scene` | `5114d23`, `18b01e5` |
+| i18n | Russian text reached every other locale through data-driven names (district, item, shop, monster), 33 legacy lore documents and the boot title; 93 new keys, 1407 per locale; four new guards | `0b6f234`, `6f78e9a`, `e052488`, `1fc90f1` |
+| UI | The menu title drew a blank line between its two words on CRLF checkouts, AAB included (CORRECTION_LOG 57) | `2fcab22` |
+| QA harness | The bot drops junk when the pack is full; the frames harness keeps trees off the sight line and lights a district through its feeders | `72442dc`, `f068598` |
+| Docs | `docs/ASSET_SHOPPING_LIST.md` (17 rows plus the delivered-but-unwired table), KNOWN_ISSUES, CORRECTION_LOG 50-57, FUNCTION_MATRIX X30-X42 | `85cb7d7` and this commit |
+
+### Final battery (code tree `7da97f5`; the windowed probes ran at `1fc90f1`, the only game-code change since is the menu title CR strip `2fcab22`; all QA runs muted)
+
+| Gate | Result |
+|---|---|
+| `tools/check.sh` full (windowed reimport first) | **Всё зелёное, 49 checks** (2 windowed-only skips, run separately below); three runs, at `9b6b456`, `1fc90f1` and the final code tree `7da97f5`, 49 each |
+| Static `--static`, `flow_check`, `scene_node_check` | 25/25, 56 flow checks, scene nodes clean |
+| GOLD MASTER suite | `DONE fails=0` with P5c (district lock name in 12 locales) and P5d (document title in 12 locales), both mutation-tested |
+| `game_test_3d`, attack_sim, balance_sim, save_integrity, craft, boot flow, a11y, ui_layout | inside check.sh, all green; ui_layout now opens 18 screens and 18 live scenes in English and fails on Cyrillic |
+| Audio truth (windowed, Master muted) | **PASS**: Music peak -12.0 dB (> -45), SFX -67.6, Ambient -29.6, every bus under -1.5 dB |
+| Perf (windowed) | D1 **175** draw calls (< 200), D11 **165** (< 350), p95 28.8 / 30.0 ms, 1.338 M primitives (over the 50K budget, DEFERRED-STRUCTURAL), texture 144.7 MiB, video 168.3 MiB, `DONE fails=0` |
+| TZ-verify (windowed) | 19 checks, `DONE fails=0` |
+| GUI exploration (windowed) | `DONE -- 19 PASS, 0 BUG` (13 locales switch, 0 mixed-script, 0 empty), re-run after the title fix |
+| i18n truth gate | **12/12** translated locales against `en` (1407 keys in all 13 files), no cap loosened; `hardcoded_text_gate` 0 hits |
+| Visual truth, six final frames | 3 PASS / 3 FAIL, all explained by content, none by corruption: 01 (0.71%) and 03 (0.88%) are saturation outliers from the brass lamp, menu art and windows (true hue-band magenta 0.000% and 0.005%); 05 (0.51% against 0.50%) is the ember detection band blending into the blue sky (hue band; TZ_DECISIONS S03). The outlier rule was written before the skyline existed and cannot tell brass windows from noise; left unchanged (no threshold fudging) |
+| Bot (IRON RULE) | **3/3 WIN** on the final tree (seeds 1-3: 11/11 districts FULL each, 0 watchdog stalls, 0 Cyrillic notices in the logs); the 13-seed run at `9b6b456` was **13/13 WIN**. Nothing that changes behaviour was touched after that commit (text, data keys, tools), so the 3-seed run is the IRON RULE check for the final tree |
+| Verifier round | One independent read-only round ran before the loot, i18n and harness work (2 P1, 5 P2, all applied once; 3 claims confirmed TRUE; CORRECTION_LOG 50-53). The later work (X37-X42) is covered by its own mutation-tested gates and was not re-verified by an independent agent (ANTI-LOOP: one round only) |
+| AAB signed-verify | **Signed and verified**: `build/tls.aab` **183,140,397 bytes (183.1 MB)** built from the sign-off tree (headless `--export-release`, rebuilt after the menu title fix), `jarsigner -verify` prints `jar verified.`, signer SHA-256 `4F:6B:E6:41:…:59:09` = the release keystore; base module 27.0 MB compressed, install-time asset pack 155.2 MB; no NDK. Not tested here: install and run on a device (RELEASE_RUNBOOK §4) |
+
+### Bot ladder (what the melee, loot and pickup fixes did)
+
+| Tree | 13-seed result | Stalls |
+|---|---|---|
+| before the melee fix | 3/13 | 9 boss-phase, 1 spine |
+| melee swing fix (`e880fbe`, `c1ef834`) | 8/13 | boss phase mostly gone, spine stalls left |
+| + boss swing range 3.4 m (bot side) | 10/13 | spine stalls at pickups over the void |
+| + stall tracing, first junk-drop version | 9/13, 9/13 | run-to-run noise around the same spine stalls |
+| + loot over the void fixed, bot drops junk (`d350b97`, `72442dc`) | 11/13 | 2 spine stalls at the contact boundary (bot 1.4-1.5 m from the pickup) |
+| + pickup contact radius 1.1 m (`9b6b456`) | **13/13** | none; 11/11 districts FULL on every seed |
+
+The bot is nondeterministic run to run, so the 13/13 run is evidence and not proof; the sign-off records the stalls of
+every run (0 stalls in the 13 + 3 sign-off seeds).
+
+### Frames read by eye (final, `docs/stills/final/`, windowed, half resolution)
+
+- `01_main_menu.png`: hero art, the title inside the lamp, six equal buttons in the light cone, the silhouette and parked cars.
+- `02_district_day_full.png`: the spawn street after FULL: the lamp head lit, a tree silhouette left, blocks with lit windows behind, "+200 coins" toast, no stray hit marker.
+- `03_district_night_dark.png`: the same view in DARK: lamp head dim, windows mostly dark, "You wake up. The city has gone dark."
+- `04_combat.png`: a monster 3 m ahead in its hit flash with the brass hit marker at the crosshair, lit blocks behind.
+- `05_boss.png`: the Architect (a tall tapered column) at the crosshair on the lit power-station street, towers with lit windows on both sides, the ember detection band around the edges, a Crawler bar. The first capture of this pass hid him behind a tree canopy (harness fix, CORRECTION_LOG 56).
+- `06_victory_ngplus.png`: "The City Burns Bright", 11/11 districts, Set up New Game+ / Share / Main menu, centred.
+
+Beauty frames (`docs/stills/beauty/before` and `after`, 8 states, regenerated on the final tree): menu, suburbs dark and
+lit, residential, park, hospital, industrial dark, and the power station lit through its feeders (towers with lit windows).
+
+### Residual (rc14 final)
+
+| Item | State |
+|---|---|
+| Swarm missions not built | G25 weapons, C03 auto-aim, G07 crouch capsule, S02 visibility model, G21 blueprints, G26 photos, S04 hiding-spot placement, menu rows V.2 / V.5 and the quick wheel, SFX wiring of the delivered interact sounds (RESUME_NOTE, TZ_COMPLIANCE DEFERRED-STRUCTURAL) |
+| Primitives 1.34 M against 50K per district | needs real low-poly geometry (assets rows 1-4), PERF_PASS 18 |
+| Placeholder art | capsule monsters, primitive boss, CSG weapon box, sphere-on-cylinder trees: `docs/ASSET_SHOPPING_LIST.md` |
+| Native read of the new translations | 27 name keys and 33 documents were written by this pass (not a native speaker) |
+| Owner actions | assets per the shopping list, music per OWNER_HANDOFF, Play Console per RELEASE_RUNBOOK, Bebas Neue Bold file (V03), save-slot picker decision (G22) |
+
 ## Battery (history, before rc14)
 
 | Gate | Result |
@@ -88,20 +161,14 @@ No external `docs/CLOSURE_VERIFICATION.md` exists.
 
 ## Frames (read by eye this pass)
 
-rc14 sign-off frames, `docs/stills/final/` (windowed, half res, `_final_frames_runner.gd`):
-- `01_main_menu.png`: hero art full screen (was never drawn), outlined title readable over the lamp, six equal buttons in the light cone.
-- `03_district_night_dark.png`: first-person view from the player down the spawn street, lamps off, tree canopy on the left, tutorial hint.
-- `02_district_day_full.png`: same view after FULL: the nearest lamps lit (LightLimiter keeps the closest ones on), +200 coins, level up.
-- `04_combat.png`: a monster 3 m ahead in its hit flash, red hit marker.
-- `05_boss.png`: the Architect at the crosshair on the lit power-station street, ember detection band at the edges only, a Crawler bar.
-- `06_victory_ngplus.png`: "The City Burns Bright", 11/11 districts, Set up New Game+ / Share / Main menu, centred.
-
-Also read: `docs/stills/evidence/g08_shipped_16m_e24.png`, `g08_gdd_8m_e2.png`, `g08_off_baseline.png`, and
-the re-captured `docs/stills/tzverify/*.png` (camera at the player now).
+The rc14 sign-off frames are listed with what each shows in "rc14 final" above (`docs/stills/final/`, six frames, and
+`docs/stills/beauty/before` / `after`, eight states). Also read: `docs/stills/evidence/g08_shipped_16m_e24.png`,
+`g08_gdd_8m_e2.png`, `g08_off_baseline.png`, and the re-captured `docs/stills/tzverify/*.png` (camera at the player
+now; the sign-off tz_verify run re-captured them again but only C06 and V02 were read, so those PNGs stay as committed).
 
 ## Corrections
 
-49 entries in `docs/CORRECTION_LOG.md` (14 at rc1, 15-21 from C8 round 1, 22 from round 2, 23-28 from round 3, 29-31 from round 4, 32-33 from round 5, 34 from round 6, 35 from round 7, 36 from round 8, 37 from round 9, 38 from round 10, 39 from round 11, 40 from round 12, 41-43 from the cloud cross-audit), including the false R0 fix, the dead C06 fog write, and two
+57 entries in `docs/CORRECTION_LOG.md` (14 at rc1, 15-21 from C8 round 1, 22 from round 2, 23-28 from round 3, 29-31 from round 4, 32-33 from round 5, 34 from round 6, 35 from round 7, 36 from round 8, 37 from round 9, 38 from round 10, 39 from round 11, 40 from round 12, 41-43 from the cloud cross-audit, 44-49 from the rc14 re-verify, 50-57 from the rc14 sign-off), including the false R0 fix, the dead C06 fog write, and two
 wrong claims in this pass's own commit messages.
 
 ## Residual (honest)
@@ -116,10 +183,11 @@ wrong claims in this pass's own commit messages.
 | GDD text amendments (G28/D04, N01, I02) | Owner edits `GDD.md` or accepts the recorded defaults. |
 | G22 save-slot picker (DR-6) | Owner re-enables the archived 3+1 slot UI or amends GDD G22 (PLAN.md §В Этап 1 recorded "archive"). |
 | A03 per-speed footsteps (DR-5) | Owner supplies walk/jog/sprint recordings for asphalt, puddle and glass; the code already maps the other three surfaces. |
-| X21 bot spine stall | Open, rarer after rc14's camera and yaw fixes: 1 spine stall in 13 post-fix seeds (s11, power_station) against about 1 in 3 before; 12/13 seeds restored all 11 districts. The boss phase is now the main bot stall (9 of 13 seeds): a bot skill gate, not a game softlock. |
+| X21 bot spine stall, boss-phase stall | **Closed rc14**: both were game bugs (melee swing spent on the wrong body, loot over the void, pickup reach) plus a full-pack case; 13/13 and 3/3 bot seeds, 0 stalls (CORRECTION_LOG 50, 54). The bot is nondeterministic, so the sign-off records every run's stalls. |
 | X20 | Harness recovery proven; the keypress trigger is inferred. |
 | Primitives 1.34 M > 50K per district | Measured rc14 (PERF_PASS #18); needs geometry reduction work (DEFERRED-STRUCTURAL, P01). D1 draw calls are now 168-170 < 200. |
-| Deferred structural rows | S02 visibility model, S04 hiding-spot placement, G21 blueprints, G25 weapons in HUD, C03 auto-aim (needs G25), G26 photos, A01 bus graph, G07 crouch capsule, P01 draw calls. |
+| Deferred structural rows | G21 blueprints, G25 weapons, G26 photos, S02 visibility model, S04 hiding-spot placement, C03 auto-aim (needs G25); plus the menu rows V.2 / V.5, the quick wheel and the SFX wiring of the delivered interact sounds (A01 bus graph and P01 draw calls are done). The swarm that was to build them stopped at a usage limit (RESUME_NOTE). |
+| Data-driven text | `data/documents.json`, `data/dialogs*.json`, `data/lore/lore.json` are Russian or transliterated legacy data no code reads; `game_over.tscn` and `pause_menu.tscn` keep Russian placeholders nothing instantiates; the 27 name keys and 33 documents added at rc14 are not native-reviewed (KNOWN_ISSUES, NATIVE_QA_FINDINGS). |
 | R-02 speed/teleport watchdog | Deferred (ARENA_CLOSURE R-02): IntegrityGuard covers non-finite position and falling through the floor; a speed watchdog needs per-state bounds. |
 | Security inherent limits | P-05 and R-08 (a clock set forward across launches; R-08's same-session half is closed in `c2e9b86`), D-01, D-02; D-03 needs an owner-held PCK key; B7 legacy unsigned `achievements.cfg` still trusted once (owner decides whether to reject legacy files, P-02). |
 | User-data folder reset | `app_userdata/The Last Streetlight` was deleted and recreated about 2026-09-25 00:24, cause unknown. Save files were backed up earlier to `%TEMP%\tls_save_backup`; `settings.cfg`/`onboarding.cfg`/`save.tres` were not. |
