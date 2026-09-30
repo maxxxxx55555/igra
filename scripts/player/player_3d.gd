@@ -984,11 +984,9 @@ func _tick_attack(delta: float) -> void:
 func _on_attack_hit(body: Node) -> void:
 	if _attack_phase != "active":
 		return
-	if _hit_registered:
+	if _hit_registered or not body.has_method("take_damage"):
 		return
 	_hit_registered = true
-	if not body.has_method("take_damage"):
-		return
 	var cd3: Dictionary = COMBO_DATA[_attack_idx]
 	var bonus: float = 0.0
 	if flashlight_enabled:

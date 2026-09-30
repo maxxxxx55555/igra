@@ -95,6 +95,13 @@ func _process(delta: float) -> void:
 				if _target and is_instance_valid(_target):
 					var hp_m: float = _target.get("hp") if _target.get("hp") != null else -1.0
 					_check(hp_m < _hp_before, "melee swing damages the monster in front (hp %s -> %s)" % [str(_hp_before), str(hp_m)])
+				var wall := StaticBody3D.new()
+				_player._attack_phase = "active"
+				_player._hit_registered = false
+				_player._on_attack_hit(wall)
+				_check(not _player._hit_registered, "a swing touching a wall is not consumed")
+				_player._attack_phase = "none"
+				wall.free()
 				_phase = 2; _sub = 0.0; _log("phase2 inventory")
 		2:
 			var before: int = InventoryManager.count_of(&"battery")
