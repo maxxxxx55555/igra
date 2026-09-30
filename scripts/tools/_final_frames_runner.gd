@@ -30,10 +30,35 @@ func _where(frame: String) -> void:
 func _face(p: Node3D, at: Vector3) -> void:
 	p.look_at(Vector3(at.x, p.global_position.y, at.z), Vector3.UP)
 
+## Street trees are collision-free MultiMesh instances, so a raycast never sees
+## them: a sight line counts as blocked when a canopy (radius 1.2) stands within
+## 1.8 m of it on the ground plane.
+func _canopies() -> Array[Vector2]:
+	var out: Array[Vector2] = []
+	for n in get_tree().root.find_children("*", "MultiMeshInstance3D", true, false):
+		var mmi := n as MultiMeshInstance3D
+		if mmi.multimesh == null or not (mmi.multimesh.mesh is SphereMesh):
+			continue
+		if (mmi.multimesh.mesh as SphereMesh).radius < 1.0:
+			continue
+		for i in mmi.multimesh.instance_count:
+			var at := mmi.global_transform * mmi.multimesh.get_instance_transform(i).origin
+			out.append(Vector2(at.x, at.z))
+	return out
+
+func _sight_blocked(canopies: Array[Vector2], a: Vector3, b: Vector3) -> bool:
+	var from := Vector2(a.x, a.z)
+	var to := Vector2(b.x, b.z)
+	for c in canopies:
+		if c.distance_to(Geometry2D.get_closest_point_to_segment(c, from, to)) < 1.8:
+			return true
+	return false
+
 ## Turn toward the most street lights (Spot/Omni, not the player's own) 3-40 m
 ## away inside a +-35 deg view cone, so the DARK and FULL frames show the same
-## street with its lamps off and on.
+## street with its lamps off and on. A tree 7 m ahead would hide the street.
 func _face_lamps(p: Node3D) -> void:
+	var canopies := _canopies()
 	var lamps: Array[Vector2] = []
 	for n in get_tree().root.find_children("*", "Light3D", true, false):
 		if not (n is DirectionalLight3D) and not p.is_ancestor_of(n):
@@ -45,6 +70,8 @@ func _face_lamps(p: Node3D) -> void:
 	for i in 36:
 		var yaw := TAU * i / 36.0
 		var fwd := Vector2(-sin(yaw), -cos(yaw))
+		if _sight_blocked(canopies, p.global_position, p.global_position + Vector3(fwd.x, 0.0, fwd.y) * 7.0):
+			continue
 		var count := 0
 		for d in lamps:
 			if d.dot(fwd) > cos(deg_to_rad(35.0)):
@@ -150,7 +177,20 @@ func _run() -> void:
 		player.heal(1000.0)
 	var back := player.global_position - boss.global_position
 	back.y = 0.0
-	player.global_position = boss.global_position + back.normalized() * 5.0 + Vector3(0.0, 0.5, 0.0)
+	back = back.normalized()
+	# The side nearest to where the player arrived, with floor under it and no
+	# canopy on the sight line (the Architect spawns 14 m ahead of the arrival).
+	var canopies := _canopies()
+	var space := player.get_world_3d().direct_space_state
+	var spot := boss.global_position + back * 5.0
+	for k in 16:
+		var turn := ceili(k / 2.0) * TAU / 16.0 * (1.0 if k % 2 == 1 else -1.0)
+		var cand := boss.global_position + back.rotated(Vector3.UP, turn) * 5.0
+		var floor_hit := space.intersect_ray(PhysicsRayQueryParameters3D.create(cand + Vector3(0.0, 4.0, 0.0), cand + Vector3(0.0, -2.0, 0.0)))
+		if not floor_hit.is_empty() and not _sight_blocked(canopies, cand, boss.global_position):
+			spot = cand
+			break
+	player.global_position = spot + Vector3(0.0, 0.5, 0.0)
 	_face(player, boss.global_position)
 	if player.has_method("toggle_flashlight") and not bool(player.get("flashlight_enabled")):
 		player.toggle_flashlight()

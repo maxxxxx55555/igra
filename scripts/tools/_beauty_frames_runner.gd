@@ -19,6 +19,14 @@ func _apply_hide() -> void:
 		for n in get_tree().root.find_children("*", "WorldEnvironment", true, false):
 			(n as WorldEnvironment).environment.sky = null
 
+## A district only takes power once its feeders are FULL (the power station
+## needs the substation), so restore those first.
+func _restore(id: StringName, stage: int) -> void:
+	for feeder in PowerGrid.get_district(id).powered_by:
+		_restore(feeder, DistrictData.Stage.FULL)
+	if PowerGrid.get_stage(id) < stage:
+		PowerGrid.advance_district(id, stage)
+
 func _visit(index: int, id: StringName, stage: int) -> bool:
 	EventBus.district_entered.emit(id)
 	var there := func() -> bool:
@@ -31,7 +39,7 @@ func _visit(index: int, id: StringName, stage: int) -> bool:
 	if player.has_method("heal"):
 		player.heal(1000.0)
 	if stage > 0:
-		PowerGrid.advance_district(id, stage)
+		_restore(id, stage)
 		await get_tree().create_timer(1.5).timeout
 	elif player.has_method("toggle_flashlight") and not bool(player.get("flashlight_enabled")):
 		player.toggle_flashlight()
