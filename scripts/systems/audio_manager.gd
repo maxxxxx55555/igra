@@ -1,6 +1,7 @@
 # AudioManager — autoload 18. Смесь процедурного звука (шаги/щелчки/рык/
 # события) и реальных сэмплов там, где они есть (ветер, дождь по металлу,
 # гром, фонарик, урон, низкое HP). Громкость через бусы SFX/Master.
+# Every sound is routed to a child of SFX (A01): Footsteps, Combat, UI, Environment.
 extends Node
 
 const MIX: int = 22050
@@ -19,12 +20,12 @@ var _low_hp: bool = false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	_rain = _make_player()
-	_action = _make_player()
+	_rain = _make_player(&"Environment")
+	_action = _make_player(&"Combat")
 	_action.name = "ActionLayer"
 	for i in POOL:
 		_pool.append(_make_player())
-	_wind = _make_player()
+	_wind = _make_player(&"Environment")
 	_wind.name = "WindLayer"
 	_wind.stream = WIND_SFX
 	_wind.volume_db = -26.0
@@ -40,11 +41,11 @@ func _ready() -> void:
 	# Player-state loops (GDD low-HP tension cue): silent until HP<30%,
 	# started/stopped once on threshold cross in _on_player_health, not
 	# every frame - see _low_hp guard.
-	_heartbeat = _make_player()
+	_heartbeat = _make_player(&"Combat")
 	_heartbeat.name = "HeartbeatLayer"
 	_heartbeat.stream = _force_loop(HEARTBEAT_SFX)
 	_heartbeat.volume_db = -6.0
-	_breath = _make_player()
+	_breath = _make_player(&"Combat")
 	_breath.name = "BreathLayer"
 	_breath.stream = _force_loop(BREATH_SFX)
 	_breath.volume_db = -6.0
@@ -52,30 +53,30 @@ func _ready() -> void:
 	EventBus.player_health_changed.connect(_on_player_health)
 	EventBus.player_state_changed.connect(func(s: int) -> void: _last_state = s)
 	EventBus.flashlight_state_changed.connect(_on_flashlight_toggled)
-	EventBus.light_disrupted.connect(func() -> void: _one_shot(_gen_glitch(), -8.0))
-	EventBus.player_detected.connect(func(_id: StringName) -> void: _one_shot(_gen_growl(), -12.0))
-	EventBus.enemy_attack.connect(func(_dmg: int) -> void: _one_shot(_gen_growl(), -8.0))
+	EventBus.light_disrupted.connect(func() -> void: _one_shot(_gen_glitch(), -8.0, &"Environment"))
+	EventBus.player_detected.connect(func(_id: StringName) -> void: _one_shot(_gen_growl(), -12.0, &"Combat"))
+	EventBus.enemy_attack.connect(func(_dmg: int) -> void: _one_shot(_gen_growl(), -8.0, &"Combat"))
 	# Озвучка игровых событий (раньше были немыми).
-	EventBus.item_picked_up.connect(func(_id: StringName) -> void: _one_shot(_gen_pickup(), -10.0))
-	EventBus.purchase_success.connect(func(_id: StringName) -> void: _one_shot(_gen_coin(), -8.0))
-	EventBus.purchase_failed.connect(func(_id: String, _r: String) -> void: _one_shot(_gen_error(), -12.0))
-	EventBus.puzzle_solved.connect(func(_p: StringName, _d: StringName) -> void: _one_shot(_gen_success(), -6.0))
-	EventBus.district_restored.connect(func(_a: StringName, _b: int) -> void: _one_shot(_gen_powerup(), -4.0))
+	EventBus.item_picked_up.connect(func(_id: StringName) -> void: _one_shot(_gen_pickup(), -10.0, &"UI"))
+	EventBus.purchase_success.connect(func(_id: StringName) -> void: _one_shot(_gen_coin(), -8.0, &"UI"))
+	EventBus.purchase_failed.connect(func(_id: String, _r: String) -> void: _one_shot(_gen_error(), -12.0, &"UI"))
+	EventBus.puzzle_solved.connect(func(_p: StringName, _d: StringName) -> void: _one_shot(_gen_success(), -6.0, &"UI"))
+	EventBus.district_restored.connect(func(_a: StringName, _b: int) -> void: _one_shot(_gen_powerup(), -4.0, &"UI"))
 	# Пять событий теперь озвучивает UISFX настоящими стингерами на шине UI
 	# (docs/CERT_UIAUDIO.md §4). Процедурный вариант остаётся запасным и молчит,
 	# пока файл стингера на месте, иначе на событие звучали бы оба сразу.
 	EventBus.achievement_unlocked.connect(func(_id: StringName) -> void:
-		if not _has_ui_sting("achievement_sting"): _one_shot(_gen_fanfare(), -6.0))
+		if not _has_ui_sting("achievement_sting"): _one_shot(_gen_fanfare(), -6.0, &"UI"))
 	EventBus.quest_completed.connect(func(_id: StringName) -> void:
-		if not _has_ui_sting("daily_complete_sting"): _one_shot(_gen_fanfare(), -8.0))
+		if not _has_ui_sting("daily_complete_sting"): _one_shot(_gen_fanfare(), -8.0, &"UI"))
 	EventBus.secret_found.connect(func(_id: StringName) -> void:
-		if not _has_ui_sting("secret_discovery_sting"): _one_shot(_gen_chime(), -8.0))
-	EventBus.enemy_killed.connect(func(_id: StringName) -> void: _one_shot(_gen_thud(), -10.0))
+		if not _has_ui_sting("secret_discovery_sting"): _one_shot(_gen_chime(), -8.0, &"UI"))
+	EventBus.enemy_killed.connect(func(_id: StringName) -> void: _one_shot(_gen_thud(), -10.0, &"Combat"))
 	EventBus.boss_defeated.connect(func() -> void:
-		if not _has_ui_sting("boss_sting"): _one_shot(_gen_boom(), -3.0))
+		if not _has_ui_sting("boss_sting"): _one_shot(_gen_boom(), -3.0, &"UI"))
 	EventBus.player_damaged.connect(_on_player_damaged)
 	EventBus.ui_screen_opened.connect(func(_id: StringName) -> void:
-		if not _has_ui_sting("menu_click"): _one_shot(_gen_click(), -16.0))
+		if not _has_ui_sting("menu_click"): _one_shot(_gen_click(), -16.0, &"UI"))
 
 static func _has_ui_sting(name: String) -> bool:
 	return ResourceLoader.exists("res://assets/audio/ui/ui_" + name + ".ogg")
@@ -114,24 +115,27 @@ func _on_player_health(ratio: float) -> void:
 
 ## Щелчок фонаря: реальные сэмплы вместо процедурного клика.
 func _on_flashlight_toggled(enabled: bool) -> void:
-	_one_shot(FLASHLIGHT_ON_SFX if enabled else FLASHLIGHT_OFF_SFX, -10.0)
+	_one_shot(FLASHLIGHT_ON_SFX if enabled else FLASHLIGHT_OFF_SFX, -10.0, &"Environment")
 
 func _on_player_damaged(_amount: int) -> void:
-	_one_shot(HURT_SFX, -8.0)
+	_one_shot(HURT_SFX, -8.0, &"Combat")
 
 const SFX_DIR := "res://assets/audio/sfx/"
 
-func play_sfx(stream: AudioStream, volume_db: float = 0.0) -> void:
+## bus: an SFX child (Footsteps, Combat, UI, Environment); plain SFX when nothing fits better.
+func play_sfx(stream: AudioStream, volume_db: float = 0.0, bus: StringName = &"SFX") -> void:
 	if stream:
-		_one_shot(stream, volume_db)
+		_one_shot(stream, volume_db, bus)
 
-func play_sound_3d(stream: AudioStream, position: Vector3, volume_db: float = 0.0) -> void:
+## Positional one-shot. Every current caller is a combat sound (weapons, monster
+## cues, hits, player hurt), so Combat is the default; pass &"Environment" for props.
+func play_sound_3d(stream: AudioStream, position: Vector3, volume_db: float = 0.0, bus: StringName = &"Combat") -> void:
 	if not stream:
 		return
 	var player := AudioStreamPlayer3D.new()
 	player.stream = stream
 	player.volume_db = volume_db
-	player.bus = "SFX" if AudioServer.get_bus_index("SFX") >= 0 else "Master"
+	player.bus = bus
 	player.finished.connect(player.queue_free)
 	add_child(player)
 	player.global_position = position
@@ -155,9 +159,9 @@ func set_action_stream(stream: AudioStream) -> void:
 	if stream and not _action.playing:
 		_action.play()
 
-func _make_player() -> AudioStreamPlayer:
+func _make_player(bus: StringName = &"SFX") -> AudioStreamPlayer:
 	var p := AudioStreamPlayer.new()
-	p.bus = "SFX" if AudioServer.get_bus_index("SFX") >= 0 else "Master"
+	p.bus = bus
 	add_child(p)
 	return p
 
@@ -169,14 +173,14 @@ func _process(delta: float) -> void:
 		_step_timer -= delta
 		if _step_timer <= 0.0:
 			_step_timer = 0.32 if _last_state == 1 else 0.22
-			_one_shot(_gen_step(), -14.0)
+			_one_shot(_gen_step(), -14.0, &"Footsteps")
 	if _thunder_timer > 0.0:
 		_thunder_timer -= delta
 		if _thunder_timer <= 0.0:
 			# ~40% near / 60% far - a storm reads as mostly distant rolls
 			# with the occasional close crack, not every strike overhead.
 			var clap: AudioStream = THUNDER_NEAR_SFX if randf() < 0.4 else THUNDER_FAR_SFX
-			_one_shot(clap, -6.0)
+			_one_shot(clap, -6.0, &"Environment")
 			_thunder_timer = randf_range(6.0, 14.0)
 
 func _on_weather(_w: int, _name: String, _fog: float, rain: float) -> void:
@@ -186,11 +190,12 @@ func _on_weather(_w: int, _name: String, _fog: float, rain: float) -> void:
 	else:
 		_thunder_timer = 0.0
 
-func _one_shot(stream: AudioStream, vol: float) -> void:
+func _one_shot(stream: AudioStream, vol: float, bus: StringName) -> void:
 	for p in _pool:
 		if not p.playing:
 			p.stream = stream
 			p.volume_db = vol
+			p.bus = bus
 			p.play()
 			return
 

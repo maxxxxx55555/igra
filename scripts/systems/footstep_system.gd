@@ -58,6 +58,7 @@ var _streams: Dictionary = {}
 func _ready() -> void:
 	_audio_player = AudioStreamPlayer3D.new()
 	_audio_player.name = "FootstepAudio"
+	_audio_player.bus = &"Footsteps"
 	_audio_player.max_distance = 20.0
 	add_child(_audio_player)
 	_step_stream = _resolve_step_stream()
