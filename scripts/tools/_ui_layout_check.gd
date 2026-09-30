@@ -13,9 +13,19 @@ extends Node
 ##   2. каждый видимый потомок с ненулевым размером попадает в кадр;
 ##   3. a FULL_RECT-anchored child really fills its parent (checked on the
 ##      main menu scene too);
-##   4. in English no label shows Cyrillic: data resources keep Russian names.
+##   4. in English no label shows Cyrillic: data resources keep Russian names,
+##      and the scene files still hold Russian placeholder text (the main scene
+##      showed "ЗАГРУЗКА" to every player until its script localized it).
 ##
 ## Запуск: godot --headless --path . res://scenes/tools/ui_layout_check_scene.tscn
+
+## Scenes the game instantiates; game_over.tscn and pause_menu.tscn are legacy
+## files only the scene smoke loads, their Russian placeholders never show.
+const LIVE_SCENES: Array[String] = [
+	"boot_loading", "main_menu", "hud_3d", "tutorial", "new_game_plus", "difficulty_screen", "save_slots",
+	"district_banner", "daily_events", "epilogue", "lobby", "photo_album", "coin_hud", "quest_tracker_hud",
+	"splash", "pre_loading", "confirm_quit", "credits",
+]
 
 var _fails: int = 0
 var _checked: int = 0
@@ -35,6 +45,13 @@ func _ready() -> void:
 	_checked += 1
 	_check_full_rect(&"main_menu", menu)
 	menu.queue_free()
+	for scene_name in LIVE_SCENES:
+		var inst: Node = (load("res://scenes/ui/%s.tscn" % scene_name) as PackedScene).instantiate()
+		get_tree().root.add_child(inst)
+		await get_tree().process_frame
+		await get_tree().process_frame
+		_scan_cyrillic(StringName("scene/" + scene_name), inst)
+		inst.queue_free()
 	print("[uilay] экранов проверено: ", _checked)
 	print("[uilay] DONE fails=", _fails)
 	get_tree().quit(1 if _fails > 0 else 0)
