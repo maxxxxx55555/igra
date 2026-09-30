@@ -29,7 +29,7 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 | A02 | Music crossfade 2.0 s | MET | tz_verify `FADE_TIME=2.0` (audio: no frame applies) |
 | A03 | Footsteps: 6 surfaces × 3 speeds, downward ray | DECIDED (DR-5: per-speed recordings for asphalt/puddle/glass are an asset residual) | footstep probe: every GDD surface gives 3 distinct steps. Concrete/wood/metal: walk/jog/sprint files for stealth/walk/run. Asphalt/puddle/glass: one recorded sample, speed carried by volume + pitch 0.9/1.0/1.12. |
 | A04 | Audio size caps | MET-STATIC | Exported: non-music ≈ 23.5 MB (sfx 6.3 + one_shots 1.1 + ambience 16.1) < 50; music ≈ 38 MB < 100. `ambience/wav_src` (29.9 MB) is in `export_presets.cfg` `exclude_filter` |
-| A01 | Bus graph SFX(Footsteps, Combat, UI, Environment) | DEFERRED-STRUCTURAL | Re-routing plus an ear re-mix (current buses: Master, Music, SFX, Voice, Ambient, UI, Hum) |
+| A01 | Bus graph SFX(Footsteps, Combat, UI, Environment) | MET-STATIC (rc14, `audio_bus_check_scene`: 9 buses, every player routed) / owner ear re-mix pending | Buses: Master, Music, SFX, Voice, Ambient, then UI, Footsteps, Combat, Environment under SFX; the Hum bus is gone |
 | V02 | No neon / #fff | MET | `V02_energy_ball.png`; monster hit flash is brass and restores the original material (suite P2b, C8 rc4) |
 | V05 | Moon shadow 2048² | MET | tz_verify: `directional_shadow/size` 2048 and no smaller `.mobile` override (removed in C8 rc11); frames clean at 2048. On-device mobile cost not measured (P02). |
 | V01 | "No day" | MET-STATIC | Dead daytime painter removed from DayNight |

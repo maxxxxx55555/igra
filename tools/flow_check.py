@@ -143,7 +143,7 @@ buses = read("default_bus_layout.tres")
 # isn't a missing bus, it's the check expecting a line Godot never writes.
 check("аудио-шина Master существует",
       'name = &"Master"' in buses or not re.search(r"bus/0/name\s*=", buses))
-for bus in ("Music", "SFX", "Ambient", "UI"):
+for bus in ("Music", "SFX", "Ambient", "UI", "Footsteps", "Combat", "Environment"):
     check("аудио-шина %s существует" % bus, 'name = &"%s"' % bus in buses)
 check("Master не заглушен на старте", "set_bus_mute(0, false)" in gm)
 missing_audio: list[str] = []

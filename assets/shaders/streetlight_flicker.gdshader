@@ -8,9 +8,8 @@
 // Uniforms:
 //   lit            : float — district lamp state 0 (DARK) .. 1 (lit).
 //                    Tween 0->1 on restore for the turn-on ramp.
-//   hum_level      : float — 0..1 live level of the Hum audio bus
-//                    (local agent drives from AudioServer bus peak;
-//                    1.0 = full shimmer, static fallback on mobile-low).
+//   hum_level      : float — 0..1 lamp shimmer amount (static 1.0; not tied
+//                    to audio, the Hum bus was removed in rc14).
 //   energy_mult    : float — HDR push so lit lamps cross the glow
 //                    threshold (1.6 = live lamp_mat emission energy).
 // Usage (wiring spec W4): assign mat_lamp_flicker.tres as

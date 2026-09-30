@@ -11,5 +11,5 @@ muzzle_flash_scene = ExtResource("2_vfx")
 target_position = Vector3(0, 0, -10)
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
-bus = &"SFX"
+bus = &"Combat"
 

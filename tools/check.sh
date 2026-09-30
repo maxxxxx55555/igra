@@ -356,6 +356,7 @@ else
     }
     if qa_guard_e2e; then ok "QaLaunchGuard: жизненный цикл (выход, крах, восстановление) на реальном профиле"; else bad "QaLaunchGuard: жизненный цикл на реальном профиле"; fi
     run_gate "аудио: тишина до первого ввода" "res://scenes/tools/audio_hum_check_scene.tscn"
+    run_gate "аудио: граф шин A01" "res://scenes/tools/audio_bus_check_scene.tscn"
     run_gate "единая тема: chrome виден на всех экранах" "res://scenes/tools/theme_unify_probe_scene.tscn"
     run_gate "настройки: тир графики и accessibility переживают рестарт" "res://scenes/tools/settings_persist_probe_scene.tscn"
     run_gate "accessibility: reduce_flash/time_fx/ui_motion гейтят juice-сайты" "res://scenes/tools/a11y_probe_scene.tscn"
