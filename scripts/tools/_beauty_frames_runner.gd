@@ -8,6 +8,17 @@ const VISITS: Array = [
 	[&"hospital", 0], [&"industrial", 0], [&"power_station", 3],
 ]
 
+## BEAUTY_HIDE=ash,sky switches those layers off so a look-development A/B can
+## name the source of a visual artefact.
+func _apply_hide() -> void:
+	var hide := OS.get_environment("BEAUTY_HIDE")
+	if hide.contains("ash"):
+		for n in get_tree().root.find_children("Ash", "GPUParticles3D", true, false):
+			(n as Node3D).visible = false
+	if hide.contains("sky"):
+		for n in get_tree().root.find_children("*", "WorldEnvironment", true, false):
+			(n as WorldEnvironment).environment.sky = null
+
 func _visit(index: int, id: StringName, stage: int) -> bool:
 	EventBus.district_entered.emit(id)
 	var there := func() -> bool:
@@ -25,6 +36,7 @@ func _visit(index: int, id: StringName, stage: int) -> bool:
 	elif player.has_method("toggle_flashlight") and not bool(player.get("flashlight_enabled")):
 		player.toggle_flashlight()
 	_face_lamps(player)
+	_apply_hide()
 	await get_tree().create_timer(0.4).timeout
 	await _shot("%02d_%s_%s" % [index, String(id), "dark" if stage == 0 else "lit"])
 	return true
