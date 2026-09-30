@@ -52,6 +52,8 @@ func _process(delta: float) -> void:
 				_check(cam != null and _player != null and cam.global_position.distance_to(_player.global_position) < 2.5,
 					"camera follows the player (%s vs %s)" % [cam.global_position if cam else Vector3.INF, _player.global_position if _player else Vector3.INF])
 				_check(_sb != null, "street builder exists")
+				var hit_marker := get_tree().root.find_child("HitMarker", true, false) as CanvasItem
+				_check(hit_marker != null and hit_marker.modulate.a == 0.0, "the HUD hit marker rests invisible (opacity setting must not raise it)")
 				var monsters: Array = get_tree().get_nodes_in_group("destroyers") + get_tree().get_nodes_in_group("shadow") + get_tree().get_nodes_in_group("crawlers")
 				_check(monsters.size() > 0, "monsters spawned: %d" % monsters.size())
 				var pickups: Array = get_tree().get_nodes_in_group("pickups")
@@ -100,6 +102,10 @@ func _process(delta: float) -> void:
 				_player._hit_registered = false
 				_player._on_attack_hit(wall)
 				_check(not _player._hit_registered, "a swing touching a wall is not consumed")
+				var hp_self: float = _player.get("hp")
+				_player._hit_registered = false
+				_player._on_attack_hit(_player)
+				_check(not _player._hit_registered and float(_player.get("hp")) == hp_self, "a swing is not spent on the player's own body")
 				_player._attack_phase = "none"
 				wall.free()
 				_phase = 2; _sub = 0.0; _log("phase2 inventory")

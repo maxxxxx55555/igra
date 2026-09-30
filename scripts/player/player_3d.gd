@@ -984,7 +984,9 @@ func _tick_attack(delta: float) -> void:
 func _on_attack_hit(body: Node) -> void:
 	if _attack_phase != "active":
 		return
-	if _hit_registered or not body.has_method("take_damage"):
+	# The attack area is a child of this body, so it reports the player itself: that
+	# spent the swing (and damaged the player) whenever it came first.
+	if body == self or _hit_registered or not body.has_method("take_damage"):
 		return
 	_hit_registered = true
 	var cd3: Dictionary = COMBO_DATA[_attack_idx]

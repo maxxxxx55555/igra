@@ -74,6 +74,8 @@ var _timeline: Array = []          # [ "district:stage@t" ]
 var _part_log: Array = []          # [ "picked cable @suburbs t=.." ]
 var _act_cd := 0.0
 var _strobe_cd := 0.0
+## The boss collider holds the player 2.6-2.8 m out, so a tighter swing gate never fires.
+const BOSS_SWING_RANGE := 3.4
 var _boss_deadline := 0.0
 var _win_seen := false
 var _hb := 0.0
@@ -152,6 +154,12 @@ func _start() -> void:
 	_log("New Game stable, player at %s" % str(_player.global_position.round() if _player_ok() else Vector3.ZERO))
 	_phase = "spine"
 	_score_t = _now()
+	if OS.get_environment("QA_BOSS_ONLY") == "1":
+		# Boss trials without the two-minute spine: restore every district, then enter the power station.
+		for id in PowerGrid._by_id.keys():
+			PowerGrid.advance_district(id, DistrictData.Stage.FULL)
+		DistrictManager.current_district = "power_station"
+		EventBus.district_entered.emit(&"power_station")
 
 # ── main tick ─────────────────────────────────────────────────────────
 func _process(delta: float) -> void:
@@ -349,16 +357,13 @@ func _tick_boss(delta: float) -> void:
 	if d <= 10.0 and _strobe_cd <= 0.0:
 		InputService.request_strobe()
 		_strobe_cd = 1.0
-	if d > 2.6:
-		_move(_dir_to(bp))
-	else:
-		_move(_dir_to(bp))
-		if _act_cd <= 0.0:
-			InputService.request_attack()
-			_act_cd = 0.45
-			# occasional dodge away from the boss to shed damage
-			if _rng.randf() < 0.18:
-				InputService.request_dodge(-_dir_to(bp))
+	_move(_dir_to(bp))
+	if d <= BOSS_SWING_RANGE and _act_cd <= 0.0:
+		InputService.request_attack()
+		_act_cd = 0.45
+		# occasional dodge away from the boss to shed damage
+		if _rng.randf() < 0.18:
+			InputService.request_dodge(-_dir_to(bp))
 
 func _enter_boss_phase() -> void:
 	if _phase == "boss":
