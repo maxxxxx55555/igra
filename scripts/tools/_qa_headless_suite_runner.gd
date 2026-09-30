@@ -951,6 +951,15 @@ func _p5_i18n_locales() -> void:
 		if loc != "ru" and PowerGrid.missing_prerequisite_name(&"residential") != LocalizationManager.t("DISTRICT_NAME_SUBURBS"):
 			_fail("P5 %s: the district lock shows the data name, not DISTRICT_NAME_SUBURBS" % loc)
 			missing += 1
+		# 5d: a catalog document takes its title from the dictionary, not from Russian raw text.
+		if loc != "ru":
+			var doc := DocumentPickup.new()
+			doc.document_id = "doc_blackout_news"
+			doc._load_from_catalog()
+			if doc.document_title != LocalizationManager.t("DOC_BLACKOUT_NEWS_TITLE"):
+				_fail("P5 %s: document title '%s' is not DOC_BLACKOUT_NEWS_TITLE" % [loc, doc.document_title])
+				missing += 1
+			doc.free()
 	suburbs.stage = suburbs_stage
 	LocalizationManager.set_language("en")
 	_log("P5 i18n: %d locales x (%d en keys + %d surface keys), %d MISSING" % [

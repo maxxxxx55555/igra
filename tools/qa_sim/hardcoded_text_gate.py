@@ -18,6 +18,8 @@ appear as the fallback argument of LocalizationManager.name_for(). The power
 switch, the quick wheel and the shop showed Russian names in every locale.
 name_for() only helps when the key exists, so every district, item, shop item
 and monster resource must have its name key (monsters also a description key).
+Every catalog document carries title_key/content_key that exist in en.json (33
+legacy documents were Russian-only raw text in all 13 locales).
 
 Usage: python tools/qa_sim/hardcoded_text_gate.py [--demo]
 Exit 0 clean, 1 on any hit.
@@ -56,6 +58,19 @@ def missing_name_keys(root: Path, known: set) -> list[str]:
                 key = prefix + m.group(1).upper()
                 if key not in known:
                     out.append(f"{res.relative_to(root).as_posix()}: {key} not in en.json")
+    return out
+
+
+def missing_document_keys(root: Path, known: set) -> list[str]:
+    out = []
+    catalog = json.loads((root / "data/documents/documents_catalog.json").read_text(encoding="utf-8"))
+    for entry in catalog:
+        for field in ("title", "content"):
+            key = entry.get(field + "_key")
+            if key is None:
+                out.append(f"documents_catalog {entry['doc_id']}: raw {field} text, use {field}_key")
+            elif key not in known:
+                out.append(f"documents_catalog {entry['doc_id']}: {key} not in en.json")
     return out
 
 
@@ -105,6 +120,7 @@ def main() -> int:
         for code in scan_display_names(text):
             bad.append(f"{p.relative_to(root).as_posix()}: display_name outside name_for(): {code}")
     bad += missing_name_keys(root, known)
+    bad += missing_document_keys(root, known)
     for b in bad:
         print("HARDCODED", b)
     print("hardcoded_text_gate: %d hit(s)" % len(bad))
