@@ -1,4 +1,4 @@
-# Release Checklist — The Last Streetlight
+# Release Checklist — Last Streetlight
 
 See also: `docs/store/play_store.md` (descriptions/tags/rating notes),
 `docs/store/steam.md` (secondary platform), `docs/store/HUMAN_CHECKLIST.md`

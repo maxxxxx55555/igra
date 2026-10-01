@@ -21,7 +21,7 @@ anchor_left = 0.5
 anchor_top = 0.2
 anchor_right = 0.5
 anchor_bottom = 0.2
-text = "THE LAST STREETLIGHT"
+text = "LAST STREETLIGHT"
 
 [node name="VBox" type="VBoxContainer" parent="."]
 anchors_preset = 8

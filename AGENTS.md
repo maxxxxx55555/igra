@@ -1,4 +1,4 @@
-# The Last Streetlight: agent instructions
+# Last Streetlight: agent instructions
 
 One source of truth for every coding agent. ZCode loads this file at the start of each task;
 Claude Code loads it through `CLAUDE.md` (`@AGENTS.md`). Edit this file, never a copy.

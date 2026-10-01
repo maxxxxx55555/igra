@@ -53,7 +53,7 @@ page"). Skeleton, grounded in the game's actual data footprint (verified this se
 analytics SDK, no account system found in `scripts/`):
 
 ```
-# Privacy Policy — THE LAST STREETLIGHT
+# Privacy Policy — LAST STREETLIGHT
 
 Effective date: <fill in at publish>
 

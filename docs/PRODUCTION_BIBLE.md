@@ -1,4 +1,4 @@
-# Production Bible — THE LAST STREETLIGHT
+# Production Bible — LAST STREETLIGHT
 
 Single reference for pillars, visual/audio canon, budgets, and the
 launch checklist. `docs/GDD.md` is still the design source of truth for

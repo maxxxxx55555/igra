@@ -1,4 +1,4 @@
-# TRAILER_STORYBOARD.md — THE LAST STREETLIGHT (60–90 s target cut: ~75 s)
+# TRAILER_STORYBOARD.md — LAST STREETLIGHT (60–90 s target cut: ~75 s)
 For human capture/recording. All referenced assets exist in-repo. No text overlays except the existing game logo at shot 10 (added in edit, frame left clear). Palette lock for grading: warm brass #c9a24a vs cold night #1a2133; apply assets/shaders/grain_overlay.gdshader look (grain 10%, vignette 35%) over all footage.
 
 | # | Time | Camera | Action | Lighting note | Asset reference |

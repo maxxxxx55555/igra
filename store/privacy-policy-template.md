@@ -25,13 +25,13 @@ name and dates are already filled in, EN and RU alike).
 
 ---
 
-# Privacy Policy — The Last Streetlight
+# Privacy Policy — Last Streetlight
 
 _Effective date: 2026-09-13_
 _Last updated: 2026-09-13_
 
 ## 1. Who we are
-This policy explains what data, if any, the game **The Last Streetlight** ("the App", "we", "us")
+This policy explains what data, if any, the game **Last Streetlight** ("the App", "we", "us")
 collects. The developer can be reached at: **[contact email / support URL]**.
 
 ## 2. Summary

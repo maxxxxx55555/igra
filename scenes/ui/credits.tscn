@@ -36,7 +36,7 @@ horizontal_alignment = 1
 
 [node name="L1" type="Label" parent="VBox"]
 layout_mode = 2
-text = "THE LAST STREETLIGHT"
+text = "LAST STREETLIGHT"
 horizontal_alignment = 1
 
 [node name="L2" type="Label" parent="VBox"]

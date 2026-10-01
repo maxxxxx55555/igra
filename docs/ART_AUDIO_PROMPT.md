@@ -1,4 +1,4 @@
-# THE LAST STREETLIGHT — ART & AUDIO PROMPT (10/10 Target)
+# LAST STREETLIGHT — ART & AUDIO PROMPT (10/10 Target)
 
 ## General Style Direction
 - Dark post-apocalyptic urban atmosphere. Muted palette dominated by deep charcoal (#1a1a1a), slate blue (#2c3e50), rust orange (#b4452f), and amber/gold (#c9a24a) as the only warm accent.
@@ -135,7 +135,7 @@
 - **Top-center (objective)**: Current quest objective text, 300×30px, #d8d2c4
 
 ### Menu Screens (all 26 screens per SCREEN_LIST)
-- **Main Menu**: 1920×1080, bg #0c1016, title "THE LAST STREETLIGHT" in #c9a24a (font_size 48), 5 buttons stacked vertically (each 300×50px, #141b24 bg, #2a3340 border, #c9a24a text on hover)
+- **Main Menu**: 1920×1080, bg #0c1016, title "LAST STREETLIGHT" in #c9a24a (font_size 48), 5 buttons stacked vertically (each 300×50px, #141b24 bg, #2a3340 border, #c9a24a text on hover)
 - **Settings**: 800×600 panel, sliders for volume (0-100, #c9a24a fill), toggle for fullscreen, sensitivity 0.5-2.0×, deadzone 5-25%
 - **Inventory**: 600×400, grid of 4×3 slots (64×64px each, #141b24 bg, #2a3340 border, item icon centered)
 - **Journal**: 700×500, quest list with checkboxes, objectives indented

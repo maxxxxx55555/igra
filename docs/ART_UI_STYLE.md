@@ -1,4 +1,4 @@
-# Арт-библия — The Last Streetlight
+# Арт-библия — Last Streetlight
 
 ## Принцип температуры
 

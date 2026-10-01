@@ -1,4 +1,4 @@
-# Google Play Store listing — THE LAST STREETLIGHT
+# Google Play Store listing — LAST STREETLIGHT
 
 Source of truth for every gameplay claim below: `docs/GDD.md`. Every
 number in this file traces to a specific GDD section (cited inline) — if
