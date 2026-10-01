@@ -155,6 +155,10 @@ func _install_daily_card(vb: VBoxContainer) -> void:
 		streak.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		streak.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
 		card.add_child(streak)
+		# the card sits over the lamp's bright glow: the title's own dark outline, thinner, keeps the three lines legible
+		for line in [title, body, streak]:
+			line.add_theme_color_override("font_outline_color", Color(0.047, 0.062, 0.086))
+			line.add_theme_constant_override("outline_size", 5)
 	_refresh_daily_card(vb)
 
 func _refresh_daily_card(vb: VBoxContainer) -> void:

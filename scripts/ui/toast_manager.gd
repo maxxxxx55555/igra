@@ -57,12 +57,15 @@ var _visible_count: int = 0
 ## 3.14: newest last, capped at HISTORY_MAX.
 var _history: Array[Dictionary] = []
 
+## The column starts under the HUD's stat panel (about 260 px tall): at the corner, the LOG button sat on its first label.
+const COLUMN_TOP := 290.0
+
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	layer = 90
 	var root := Control.new()
 	root.set_anchors_preset(Control.PRESET_TOP_LEFT)
-	root.position = Vector2(16, 16)
+	root.position = Vector2(16, COLUMN_TOP)
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(root)
 	_column = VBoxContainer.new()

@@ -920,6 +920,16 @@ func build_Events(content: ColorRect, card: ColorRect, cw: float, ch: float) -> 
 		frame.add_child(timer_lbl)
 		list_y += 46
 
+## The shop's rows start below the coin header and end above the Close button; a row is 88 px, four rows fit.
+const SHOP_TOP := 36.0
+const SHOP_CLOSE_ZONE := 44.0
+const SHOP_ROW := 88.0
+## Upgrades and the kit borrow the pack icons; the skins keep the generic square.
+const SHOP_ICON: Dictionary = {
+	&"upgrade_flashlight_brightness": &"flashlight", &"upgrade_flashlight_battery": &"battery",
+	&"upgrade_backpack_capacity": &"backpack", &"upgrade_backpack_slots": &"backpack", &"bundle_starter": &"medkit",
+}
+
 func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 	var header := Label.new()
 	header.text = LocalizationManager.t("SCR_MONETY_0")
@@ -937,47 +947,51 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 		var si: ShopItem = it as ShopItem
 		if si != null:
 			items.append({"id": si.id, "desc": LocalizationManager.name_for("SHOP_ITEM_", si.id, si.display_name), "price_coins": si.final_price_coins()})
+	var scroll := ScrollContainer.new()
+	scroll.name = "ShopScroll"
+	scroll.size = Vector2(content.size.x, content.size.y - SHOP_TOP - SHOP_CLOSE_ZONE)
+	scroll.position = Vector2(0, SHOP_TOP)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	content.add_child(scroll)
 	var grid_container := GridContainer.new()
 	grid_container.name = "ShopGrid"
 	grid_container.columns = 2
-	grid_container.size = Vector2(content.size.x, content.size.y - 40)
-	grid_container.position = Vector2(0, 36)
 	grid_container.mouse_filter = Control.MOUSE_FILTER_PASS
-	content.add_child(grid_container)
+	scroll.add_child(grid_container)
 	var item_icons := preload("res://scripts/ui/item_icons.gd")
-	grid_container.size.y = maxi(grid_container.size.y, items.size() / 2 * 110)
+	var card_w := (content.size.x - 10) / 2.0
 	for it in items:
 		var card_item := ColorRect.new()
 		card_item.color = Color(0.047, 0.063, 0.086, 0.6)
-		card_item.custom_minimum_size = Vector2((content.size.x - 10) / 2.0, 100)
-		card_item.size = Vector2((content.size.x - 10) / 2.0, 100)
+		card_item.custom_minimum_size = Vector2(card_w, SHOP_ROW)
 		card_item.mouse_filter = Control.MOUSE_FILTER_PASS
 		grid_container.add_child(card_item)
 		var icon_parent := Control.new()
-		icon_parent.size = Vector2(32, 32)
-		icon_parent.position = Vector2(card_item.size.x / 2.0 - 16, 6)
+		icon_parent.size = Vector2(28, 28)
+		icon_parent.position = Vector2(card_w / 2.0 - 14, 2)
 		icon_parent.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		card_item.add_child(icon_parent)
-		item_icons.draw_icon(icon_parent, StringName(it.get("id", "")), 28.0)
+		item_icons.draw_icon(icon_parent, SHOP_ICON.get(it.id, it.id), 26.0)
 		var name_lbl := Label.new()
 		name_lbl.text = it.get("desc", it.id)
-		name_lbl.size = Vector2(card_item.size.x - 10, 18)
-		name_lbl.position = Vector2(5, 42)
+		name_lbl.size = Vector2(card_w - 10, 18)
+		name_lbl.position = Vector2(5, 30)
 		name_lbl.add_theme_color_override("font_color", Color(0.847, 0.824, 0.769))
-		name_lbl.add_theme_font_size_override("font_size", 10)
+		name_lbl.add_theme_font_size_override("font_size", 13)
 		name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		name_lbl.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		card_item.add_child(name_lbl)
 		var price: float = it.get("price_coins", 0)
 		# IAP-путь удалён — только монеты.
 		var pl := Label.new()
 		pl.text = str(int(price)) + LocalizationManager.t("SCR_MONET")
-		pl.size = Vector2(card_item.size.x - 10, 16)
-		pl.position = Vector2(5, 60)
+		pl.size = Vector2(card_w - 10, 16)
+		pl.position = Vector2(5, 48)
 		pl.add_theme_color_override("font_color", Color(0.788, 0.635, 0.290))
-		pl.add_theme_font_size_override("font_size", 11)
+		pl.add_theme_font_size_override("font_size", 13)
 		pl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		card_item.add_child(pl)
-		var btn := _make_btn(LocalizationManager.t("SCR_KUPIT"), Vector2(card_item.size.x / 2.0 - 60, 76), Vector2(120, 22))
+		var btn := _make_btn(LocalizationManager.t("SCR_KUPIT"), Vector2(card_w / 2.0 - 60, 64), Vector2(120, 22))
 		btn.pressed.connect(_on_buy.bind(it.id, btn))
 		card_item.add_child(btn)
 		if ShopService.is_owned(it.id):

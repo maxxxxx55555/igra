@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/splash.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/ui/icon.png" id="2"]
 
 [node name="Splash" type="Control"]
 layout_mode = 3
@@ -19,18 +20,20 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color(0.0471, 0.0627, 0.0863, 1.0000)
 
-[node name="Logo" type="ColorRect" parent="."]
+[node name="Logo" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -60.0
-offset_top = -60.0
-offset_right = 60.0
-offset_bottom = 60.0
-color = Color(0.7882, 0.6353, 0.2902, 1.0000)
+offset_left = -128.0
+offset_top = -190.0
+offset_right = 128.0
+offset_bottom = 66.0
+texture = ExtResource("2")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Title" type="Label" parent="."]
 layout_mode = 1

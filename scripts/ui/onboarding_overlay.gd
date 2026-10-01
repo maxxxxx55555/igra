@@ -65,6 +65,8 @@ func _build() -> void:
 
 	var card := PanelContainer.new()
 	card.set_anchors_preset(Control.PRESET_CENTER)
+	card.grow_horizontal = Control.GROW_DIRECTION_BOTH  # a centre anchor alone hangs the card from the middle of the screen
+	card.grow_vertical = Control.GROW_DIRECTION_BOTH
 	card.custom_minimum_size = Vector2(340, 280)
 	_root.add_child(card)
 	var vb := VBoxContainer.new()
