@@ -66,27 +66,44 @@ func _ready() -> void:
 	_init_meshes()
 	call_deferred("build")
 
+## Segment counts of the batched props: a canopy of 16 x 8 is 256 triangles, a bulb 8 x 4 is 64.
+const CANOPY_SEGMENTS := 16
+const CANOPY_RINGS := 8
+const BULB_SEGMENTS := 8
+const BULB_RINGS := 4
+const POST_SEGMENTS := 8
+
 func _init_meshes() -> void:
 	_pole = CylinderMesh.new()
 	_pole.top_radius = 0.06
 	_pole.bottom_radius = 0.08
 	_pole.height = 4.0
+	_pole.radial_segments = POST_SEGMENTS
+	_pole.rings = 1
 	_lamp = SphereMesh.new()
 	_lamp.radius = 0.18
 	_lamp.height = 0.36
+	_lamp.radial_segments = BULB_SEGMENTS
+	_lamp.rings = BULB_RINGS
 	_bench = BoxMesh.new()
 	_bench.size = Vector3(1.6, 0.4, 0.5)
 	_trunk = CylinderMesh.new()
 	_trunk.top_radius = 0.12
 	_trunk.bottom_radius = 0.18
 	_trunk.height = 2.5
+	_trunk.radial_segments = POST_SEGMENTS
+	_trunk.rings = 1
 	_leaf = SphereMesh.new()
 	_leaf.radius = 1.2
 	_leaf.height = 2.4
+	_leaf.radial_segments = CANOPY_SEGMENTS
+	_leaf.rings = CANOPY_RINGS
 	_cone = CylinderMesh.new()
 	_cone.top_radius = 0.0
 	_cone.bottom_radius = 0.35
 	_cone.height = 0.7
+	_cone.radial_segments = POST_SEGMENTS
+	_cone.rings = 1
 
 ## P2 (EMISSIVE FIX + PERF wave): D1 draw calls measured 234 with full
 ## density on every tier - benches/trees/cones are the only remaining
@@ -183,6 +200,8 @@ func _build_streetlight_multimesh() -> void:
 	var lamp_mesh := SphereMesh.new()
 	lamp_mesh.radius = 0.08
 	lamp_mesh.height = 0.12
+	lamp_mesh.radial_segments = BULB_SEGMENTS
+	lamp_mesh.rings = BULB_RINGS
 	_lamp_mat = StandardMaterial3D.new()
 	_lamp_mat.albedo_color = Color(0.788, 0.635, 0.290, 1.0)
 	_lamp_mat.emission_enabled = true
@@ -280,6 +299,7 @@ func _build_one_multimesh(positions: Array[Vector3], mesh: Mesh, material: Mater
 	mmi.name = node_name
 	mmi.multimesh = mm
 	mmi.material_override = material
+	mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF if node_name == "TreeLeavesBatched" else GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	add_child(mmi)
 
 ## Convenience: build a wall MeshInstance3D with brick or rusty_metal texture.
