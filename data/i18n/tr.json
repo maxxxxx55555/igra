@@ -1513,5 +1513,6 @@
   "DEATH_KILLED_BY": "Öldüren: %s",
   "DEATH_TIME": "Hayatta kalma: %s",
   "DEATH_DISTRICTS": "Kurtarılan bölgeler: %d / %d (%%%d)",
-  "DEATH_DOCS": "Bulunan belgeler: %d / %d"
+  "DEATH_DOCS": "Bulunan belgeler: %d / %d",
+  "Stealth": "Gizlilik"
 }

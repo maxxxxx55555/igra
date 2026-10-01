@@ -1513,5 +1513,6 @@
   "DEATH_KILLED_BY": "Tué par : %s",
   "DEATH_TIME": "Temps survécu : %s",
   "DEATH_DISTRICTS": "Quartiers restaurés : %d / %d (%d %%)",
-  "DEATH_DOCS": "Documents trouvés : %d / %d"
+  "DEATH_DOCS": "Documents trouvés : %d / %d",
+  "Stealth": "Discrétion"
 }

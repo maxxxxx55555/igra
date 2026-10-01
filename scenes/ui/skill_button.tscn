@@ -10,7 +10,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_script")
-custom_minimum_size = Vector2(140, 120)
+custom_minimum_size = Vector2(210, 150)
 theme_type_variation = "skill"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]

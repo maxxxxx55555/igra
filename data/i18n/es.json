@@ -1513,5 +1513,6 @@
   "DEATH_KILLED_BY": "Te mató: %s",
   "DEATH_TIME": "Tiempo vivo: %s",
   "DEATH_DISTRICTS": "Distritos restaurados: %d / %d (%d%%)",
-  "DEATH_DOCS": "Documentos hallados: %d / %d"
+  "DEATH_DOCS": "Documentos hallados: %d / %d",
+  "Stealth": "Sigilo"
 }

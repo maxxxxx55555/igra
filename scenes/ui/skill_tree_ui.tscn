@@ -11,6 +11,15 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_script")
 
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.047, 0.063, 0.086, 0.96)
+
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
@@ -39,12 +48,9 @@ theme_override_font_sizes/font_size = 20
 theme_override_colors/font_color = Color(0.7882, 0.6353, 0.2902, 1)
 
 [node name="TreeTabs" type="TabContainer" parent="MarginContainer/VBoxContainer"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="CloseButton" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2

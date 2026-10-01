@@ -1513,5 +1513,6 @@
   "DEATH_KILLED_BY": "死因：%s",
   "DEATH_TIME": "生存時間：%s",
   "DEATH_DISTRICTS": "復旧した地区：%d / %d (%d%%)",
-  "DEATH_DOCS": "見つけた文書：%d / %d"
+  "DEATH_DOCS": "見つけた文書：%d / %d",
+  "Stealth": "ステルス"
 }

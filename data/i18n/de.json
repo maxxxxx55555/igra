@@ -1513,5 +1513,6 @@
   "DEATH_KILLED_BY": "Getötet von: %s",
   "DEATH_TIME": "Überlebt: %s",
   "DEATH_DISTRICTS": "Bezirke gerettet: %d / %d (%d %%)",
-  "DEATH_DOCS": "Dokumente gefunden: %d / %d"
+  "DEATH_DOCS": "Dokumente gefunden: %d / %d",
+  "Stealth": "Heimlichkeit"
 }

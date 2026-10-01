@@ -1513,5 +1513,6 @@
   "DEATH_KILLED_BY": "Ucciso da: %s",
   "DEATH_TIME": "Tempo di gioco: %s",
   "DEATH_DISTRICTS": "Distretti ripristinati: %d / %d (%d%%)",
-  "DEATH_DOCS": "Documenti trovati: %d / %d"
+  "DEATH_DOCS": "Documenti trovati: %d / %d",
+  "Stealth": "Furtività"
 }

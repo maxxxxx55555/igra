@@ -1513,5 +1513,6 @@
   "DEATH_KILLED_BY": "死于：%s",
   "DEATH_TIME": "存活时间：%s",
   "DEATH_DISTRICTS": "已修复区域：%d / %d (%d%%)",
-  "DEATH_DOCS": "找到的文件：%d / %d"
+  "DEATH_DOCS": "找到的文件：%d / %d",
+  "Stealth": "潜行"
 }

@@ -1513,5 +1513,6 @@
   "DEATH_KILLED_BY": "Killed by %s",
   "DEATH_TIME": "Time survived: %s",
   "DEATH_DISTRICTS": "Districts restored: %d / %d (%d%%)",
-  "DEATH_DOCS": "Documents found: %d / %d"
+  "DEATH_DOCS": "Documents found: %d / %d",
+  "Stealth": "Stealth"
 }

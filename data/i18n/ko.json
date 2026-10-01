@@ -1513,5 +1513,6 @@
   "DEATH_KILLED_BY": "사망 원인: %s",
   "DEATH_TIME": "생존 시간: %s",
   "DEATH_DISTRICTS": "복구한 지구: %d / %d (%d%%)",
-  "DEATH_DOCS": "찾은 문서: %d / %d"
+  "DEATH_DOCS": "찾은 문서: %d / %d",
+  "Stealth": "은신"
 }
