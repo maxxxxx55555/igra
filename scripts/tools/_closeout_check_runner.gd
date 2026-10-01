@@ -999,6 +999,10 @@ func _check_shop() -> void:
 	for c in grid.get_children():
 		lowest = maxf(lowest, (c as Control).get_global_rect().end.y)
 	_ok(lowest <= close_button.get_global_rect().position.y, "SH1 every row ends above the Close button (%.0f <= %.0f)" % [lowest, close_button.get_global_rect().position.y])
+	var biggest := 0.0
+	for icon in grid.find_children("IconTex_*", "TextureRect", true, false):
+		biggest = maxf(biggest, (icon as Control).size.x)
+	_ok(biggest > 0.0 and biggest <= 30.0, "SH1 the pack icons are the size they were asked for (%.0f px, 128 when the size was lost)" % biggest)
 	var buy := grid.get_child(0).find_children("*", "Button", true, false)[0] as Button
 	var owned_before := _shop_owned_count()
 	buy.pressed.emit()
@@ -1161,7 +1165,9 @@ func _check_scene_screens_fill_the_window() -> void:
 	_ok(tree != null and tree.visible, "SCR1 the T key opens the skill tree from a fresh game")
 	if tree != null:
 		var tree_rect := tree.get_global_rect()
-		_ok((tree_rect.get_center() - window / 2.0).length() < 8.0 and tree_rect.size.x >= 590.0, "SCR1 the skill tree sits in the middle of the window (%s at %s)" % [tree_rect.size, tree_rect.position])
+		_ok(tree_rect.size.is_equal_approx(window) and tree_rect.position.length() < 1.0, "SCR1 the skill tree covers the window (%s at %s)" % [tree_rect.size, tree_rect.position])
+		var branch_tabs := tree.find_children("*", "TabContainer", true, false)[0] as Control
+		_ok(branch_tabs.size.y > 200.0, "SCR1 the branch tabs have room for the skills (%.0f px tall; the tab bar alone is about 30)" % branch_tabs.size.y)
 	UIManager.close(&"skill_tree")
 	key.pressed = false
 	Input.parse_input_event(key)

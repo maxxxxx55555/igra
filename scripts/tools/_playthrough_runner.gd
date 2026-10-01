@@ -562,7 +562,7 @@ func _a05_death() -> void:
 		samples.append("%.0f/%.0f" % [float(_player.get("hp")), float(_player.get("battery"))])
 		await get_tree().create_timer(0.25).timeout
 	_say("[pt] note A05c new player: a different node from the dead one: %s; hp/battery each 0.25 s: %s; battery at death %.0f; pending respawn %s" % [_player != old_player, " ".join(samples), battery_at_death, GameManager.get("_respawn_battery")])
-	var hp_ratio: float = float(_player.get("hp")) / float(_player.stats.max_hp)
+	var hp_ratio: float = float(samples[0].split("/")[0]) / float(_player.stats.max_hp)
 	_step("A05c", res == "ok" and back and hp_ratio >= 0.45 and hp_ratio <= 0.55, "Retry respawns the player at HP %.0f%% (click: %s; buttons %s)" % [hp_ratio * 100.0, res, ", ".join(names)], await _shot("A05_respawn"))
 
 func _a06_inventory() -> void:
@@ -692,15 +692,14 @@ func _a07_map() -> void:
 func _a08_battery() -> void:
 	if not bool(_player.get("flashlight_enabled")):
 		await _tap(KEY_F)
-	var depleted := [false]
-	EventBus.flashlight_depleted.connect(func() -> void: depleted[0] = true, CONNECT_ONE_SHOT)
 	_player.call("consume_battery", float(_player.get("battery")) - 18.0)
 	await get_tree().create_timer(1.6).timeout
 	var hud := _scene().get_node("HUD")
 	_step("A08", String(hud.notice.text) == LocalizationManager.t("HUD_HINT_BATTERY") or hud._hints_shown.has("battery"), "a light at 18%% shows the battery hint ('%s')" % hud.notice.text, await _shot("A08_battery_low"))
 	_player.call("consume_battery", float(_player.get("battery")))
 	await get_tree().create_timer(1.4).timeout
-	_step("A08b", depleted[0], "at 0%% the light goes out (flashlight_depleted: %s)" % depleted[0], await _shot("A08_battery_0"))
+	var went_out := not bool(_player.get("flashlight_enabled")) and bool(_player.get("_light_died"))
+	_step("A08b", went_out, "at 0%% the light goes out and stays out until a battery (enabled %s, died %s)" % [_player.get("flashlight_enabled"), _player.get("_light_died")], await _shot("A08_battery_0"))
 	_player.call("consume_battery", -90.0)
 	await get_tree().create_timer(0.5).timeout
 
