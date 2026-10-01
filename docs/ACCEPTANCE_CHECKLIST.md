@@ -268,3 +268,20 @@ Play-through steps (GUI-engine input injection, a frame read at each): **A01** b
 | I9.8 | Sort by type / weight / rarity | V.5 | closeout_check | PASS(closeout) |
 | I9.12 | Confirm on drop | V.5 | closeout_check | PASS(closeout) |
 | I9.13 | Rarity filter | V.5 | closeout_check | PASS(closeout) |
+
+## 25. Play-through findings (wave 3, rc15)
+
+Rows the first play-through added: each was a defect a frame or a measured number showed, none a promise a gate had covered. Evidence is `docs/artifacts/rc15/closeout_check_wave3.txt` (212 checks, 0 fails) and, for the old behaviour, `closeout_mutation_wave3.txt` (the same checks fail on the code before the fix).
+
+| ID | Promise | GDD | Proof | Result |
+|---|---|---|---|---|
+| MV1 | One second of the stick forward walks a person's pace, 1.4 to 3.5 m/s (3.00 m measured; 170.60 m on the old file) | 2.4 | closeout_check MV1 | PASS(closeout) |
+| MV2 | A fall gathers speed and ends on the ground (1.35 m in half a second; g = 9.8 gives 1.2) | 2.4 | closeout_check MV2 | PASS(closeout) |
+| MV3 | The block between four streets is floor and the building fronts are walls | 2.1 | closeout_check MV3 (ray hits GroundBody; wall at x 31.8) | PASS(closeout) |
+| MV4 | Holding a direction is not a dodge; a quick second press after a release is (3 m dash) | 2.4 | closeout_check MV4 | PASS(closeout) |
+| FL6b | A light that died with the battery lights again with the next charge; one switched off by hand stays off | 3.2 | closeout_check FL6 | PASS(closeout) |
+| ON1 | A fresh profile's first game opens the onboarding cards, holds the game, and remembers after the seventh | 12 | closeout_check ON1 | PASS(closeout) |
+| MENU1 | One menu: the overlay is gone once Settings, Difficulty or Credits is the scene | 12 | closeout_check MENU1 (old `ui_manager.gd` fails it) | PASS(closeout) |
+| SH1 | The Shop card lists every catalog item, an empty wallet buys nothing, coins buy it, grant it and mark the card | 12.2 | closeout_check SH1 (old `screens.gd`: `-1 cards of 7`) | PASS(closeout) |
+| CB4b | The death screen names the monster that landed the hit, the time, the districts and the documents | 5.4 | closeout_check CB4 | PASS(closeout) |
+| BOT3 | The bot at a person's pace (3.0 m/s, solid ground, strobe held back, batteries picked up) wins 3 of 3, 0 deaths | 5, 6.3 | `docs/artifacts/rc15/bot_wave3_summary.txt` (QA_TIME_SCALE=4) | PASS(bot) |

@@ -98,11 +98,78 @@ CODE decides whether to adopt each into a content file or wire it.
 | `DAILY_STREETS_12_FLAVOR` | Twelve streets. A whole district's worth of dawn. |
 | `DAILY_STREETS_16_FLAVOR` | Sixteen streets. Light the city like it's Night Zero in reverse. |
 | `DISTRICT_2_TOAST` | District 2 restored! The city breathes again. |
+| `DOC_BLACKOUT_NEWS_TEXT` | “EON announces: the outage will last no more than a day. Residents are asked to remain calm...” |
+| `DOC_BOSS_SUIT_TEXT` | “Surname blacked out. Position: director. Special notes: never once seen in daylight.” |
+| `DOC_BOSS_SUIT_TITLE` | EON Director's Personnel File |
+| `DOC_CABLE_MATH_TEXT` | “Total reserve capacity: 0. Extent of damage: the entire city.” |
+| `DOC_CABLE_MATH_TITLE` | Power Grid Calculation (Illegible) |
+| `DOC_CHILDREN_COUNTING_TEXT` | “One — the light went out. Two — it's here with us. Three — don't look. Four — don't be the seeker.” |
+| `DOC_CHILDREN_COUNTING_TITLE` | Schoolyard Counting Rhyme (Basement Version) |
+| `DOC_CORE_STATION_TEXT` | “Central station: output 800 MW, reserve of 3 generators. Special conditions: DO NOT START AFTER 23:00.” |
+| `DOC_CORE_STATION_TITLE` | Central Station Technical Passport |
+| `DOC_ENGINEER_WARNING_TEXT` | “To all crews: DO NOT OPEN the substations without an order. What we found inside is not what we expected.” |
+| `DOC_ENGINEER_WARNING_TITLE` | Chief Engineer's Warning |
+| `DOC_EON_CONTRACT_TEXT` | “Clause 13: the city grants EON the right to use the power grid for research purposes.” |
+| `DOC_EVACUATION_ORDER_TEXT` | “Second list: 47 people. Assembly point: the schoolyard, 04:00.” |
+| `DOC_EVACUATION_ORDER_TITLE` | Evacuation Order: List No. 2 |
+| `DOC_FACTORY_LOG_TEXT` | “22:00 — strange hum from the generator. 23:15 — the light in workshop B is flickering.” |
+| `DOC_FINAL_LIGHT_TEXT` | “My father lit the streetlights, my grandfather lit the streetlights. I am the last. When I left the city, the light went out.” |
+| `DOC_FINAL_LIGHT_TITLE` | The Lamplighter's Last Will |
+| `DOC_FIRST_DEATH_TEXT` | “A city without light is like a house without doors. I saw her come out of the wall.” |
+| `DOC_FIRST_DEATH_TITLE` | Note from a Dead Man's Pocket |
+| `DOC_FOREMAN_NOTE_TEXT` | “The conveyor has started to think it's the foreman. No, I haven't lost my mind. I've worked here for 20 years.” |
+| `DOC_GENERATOR_MANUAL_TEXT` | “Step 1: Make sure the room is ventilated. Step 2: Make sure there are no wires nearby.” |
+| `DOC_GENERATOR_MANUAL_TITLE` | GT-3000 Generator Manual |
+| `DOC_HOSPITAL_NOTE_TEXT` | “Patient brought in from substation Zh-3. Does not speak, does not eat, stares at the lamp.” |
+| `DOC_HYMN_TEXT` | “Holy light that burns in the night, protect us from those who live in the wires. Amen.” |
+| `DOC_HYMN_TITLE` | The Lamplighters' Prayer |
+| `DOC_KING_NOTE_TEXT` | “You made it to the center. So I was right about you. Put out the light at the station — not for yourself.” |
+| `DOC_LAST_WILL_TEXT` | “Whoever finds this note: do not look for my body. I went into substation Zh-3 with a lamp in my hands.” |
+| `DOC_MACHINE_DIARY_TEXT` | “Day 1: I am a conveyor. Day 3: I remember the hands that assembled me. Day 7: I assemble hands.” |
+| `DOC_MACHINE_DIARY_TITLE` | The Machine's Diary (Unsigned) |
+| `DOC_MURDER_LETTERS_TEXT` | “Dear neighbor! I switch off your light at 23:00, because it disturbs my peace.” |
+| `DOC_OLD_WOMAN_TEXT` | “Sonny, if you're reading this, you're alive, and that's what matters. Granny Manya says: the light in this city isn't electricity.” |
+| `DOC_OLD_WOMAN_TITLE` | Letter from the Old Woman at No. 24 |
+| `DOC_PROTOCOL_DAWN_TEXT` | Secret EON order No. 7: in case of irreversible failure of the power grid, launch Protocol DAWN. |
+| `DOC_RADIO_DIARY_01_TEXT` | “Friday. The grid died at 03:14. The radio still picks up static from the north.” |
+| `DOC_RADIO_DIARY_01_TITLE` | Radio Operator's Diary: Day 1 |
+| `DOC_RADIO_DIARY_02_TEXT` | “The Morse from the north has become clearer. They are transmitting: ‘LIGHT-LIGHT-LIGHT-NOT-LIGHT-LIGHT’.” |
+| `DOC_RADIO_DIARY_02_TITLE` | Radio Operator's Diary: Day 12 |
+| `DOC_RELAY_NOTES_TEXT` | “Relay 4-7 trips every 47 minutes, exactly. It started the very day of the outage.” |
+| `DOC_RESEARCHER_FINAL_TEXT` | “Experiment ‘Conductor’: we connected the substations to the anomaly. It responds to power.” |
+| `DOC_RESEARCHER_FINAL_TITLE` | EON Researcher's Final Report |
+| `DOC_SCAVENGER_TEXT` | “Haul for the night: batteries — 14, ammo — 3 boxes, food — not food, but what she left behind.” |
+| `DOC_SCHOOL_INCIDENT_TEXT` | “Teacher on duty: March 15, classes cancelled. All 300 students were in the basement.” |
+| `DOC_SCHOOL_INCIDENT_TITLE` | School Logbook: Last Entry |
+| `DOC_STATION_LOG_FINAL_TEXT` | “23:59 — Power: 0%. Anomaly: 100%. The station: no longer a station. Me: no longer me.” |
+| `DOC_STREETLIGHT_MANIFESTO_TEXT` | “As long as a single streetlight burns, the city lives. I repaired them for forty years. Now I repair them the other way round.” |
+| `DOC_STREETLIGHT_MANIFESTO_TITLE` | The Lamplighter's Manifesto |
+| `DOC_STRIKE_TEXT` | “Workers of Factory No. 9, March 12: we demand the night shift be abolished! At night the machines run by themselves.” |
+| `DOC_SUBSTATION_GUARD_TEXT` | “Shift 12, security: the facility cannot be entered, the door is welded shut.” |
+| `DOC_SURVIVOR_TIPS_TEXT` | “1. Don't run — running attracts them. 2. Light — turn it on for only 10 seconds, then switch it off.” |
+| `DOC_SURVIVOR_TIPS_TITLE` | Survivor's Notes: How to Walk at Night |
+| `DOC_VOICE_IN_WIRES_TEXT` | “— Do you hear it? The hum in the wires. It isn't a hum. It's speech. Slow speech, carried on current.” |
+| `DOC_VOICE_IN_WIRES_TITLE` | Dictaphone Recording (Transcript) |
 | `Dyslexia Font (OpenDyslexic)` | Dyslexia Font (OpenDyslexic) |
 | `END_NONE_HINT` | No ending conditions were met. |
 | `FIRST_RESTORE` | First district restored! |
 | `HINT_INVENTORY` | Tab — inventory. Watch your weight |
+| `ITEM_BLUEPRINT_ENHANCED_BATTERY` | Blueprint: enhanced battery |
+| `ITEM_BLUEPRINT_PORTABLE_WORKBENCH` | Blueprint: portable bench |
 | `Level: %d\nPlaytime: %s\n%s` | Level: %d\nPlaytime: %s\n%s |
+| `MONSTER_DESC_BOSS` | The source of the power plant disaster. Light does not harm it. |
+| `MONSTER_DESC_BRUTE` | A heavy charger that winds up a slam and follows through with a lunge, then needs to recover. |
+| `MONSTER_DESC_BURNER` | Spits a burning payload from range and flees in panic when caught in the light. |
+| `MONSTER_DESC_CRAWLER` | A darting creature. It lunges at any noise, so do not run near it. |
+| `MONSTER_DESC_CRAWLER_ARACHNOPHOBIA` | A darting creature. It lunges at any noise, so do not run near it. |
+| `MONSTER_DESC_DESTROYER` | A slow bruiser. At point-blank range it knocks out your flashlight, and in the dark you are defenseless. |
+| `MONSTER_DESC_HOUND` | A fast pack hunter that howls for allies the instant it spots you. |
+| `MONSTER_DESC_HUNTER` | Follows your trail. When it loses sight of you, it combs the spot of the last noise for a long time. |
+| `MONSTER_DESC_ROTTER` | A slow, omnidirectional tank that poisons on contact and ignores light entirely. |
+| `MONSTER_DESC_SHADOW` | A clot of darkness. It cannot stand light: in a flashlight beam it writhes and dies. |
+| `MONSTER_DESC_SHARPSHOOTER` | A ranged sentry that fires from cover and retreats if you close the distance. |
+| `MONSTER_DESC_TVAR` | A hulking mini-boss that slows under light and staggers only after a landed combo. |
+| `MONSTER_DESC_WATCHER` | A motionless sentry with a narrow field of view. Once it spots you, it raises the alarm. |
 | `NGP_BLACKOUT_PLUS_DESC` | One extra district starts DARK. No head start, no mercy. |
 | `NGP_GHOST_DESC` | Crawlers ignore you. Achievements disabled. Unseen, unrecorded. |
 | `NGP_KEEPERS_PACT_DESC` | No hints. Lore insight doubled. He never explained either. |
@@ -114,6 +181,7 @@ CODE decides whether to adopt each into a content file or wire it.
 | `SCR_PROGRESS_DOSTIZHENIY_28_56_50` | ACHIEVEMENT PROGRESS 28/56 (50%) |
 | `SCR_VKLYUCHITE_PERVYY_FONAR` | Switch on the first streetlight |
 | `SCR_VOSSTANOVITE_100_FONAREY` | Restore 100 streetlights |
+| `SHOP_ITEM_UPGRADE_FLASHLIGHT_BRIGHTNESS` | Flashlight brightness +1 |
 | `Server created! Waiting for players...` | Server created! Waiting for players... |
 | `TUT_FIND_FLASHLIGHT` | Find the flashlight. Press F to switch it on. |
 | `TUT_FIRST_SHADOW` | A Shadow is close. Hold it in the beam. |
@@ -126,7 +194,7 @@ CODE decides whether to adopt each into a content file or wire it.
 | `tip3` | Use cover when HP is low. |
 | `tutorial_done` | Tutorial complete. Good luck! |
 
-Total: 116 keys.
+Total: 184 keys.
 
 Verified: none of these keys appears in any `.gd`, `.tscn` or
 `.tres` under `scripts/`, `scenes/` or `components/`, and none is

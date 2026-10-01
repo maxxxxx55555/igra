@@ -76,9 +76,22 @@ var _act_cd := 0.0
 var _strobe_cd := 0.0
 ## The boss collider holds the player 2.6-2.8 m out, so a tighter swing gate never fires.
 const BOSS_SWING_RANGE := 3.4
+## The second phase hurts the Architect only in the light: a stun is not worth the charge below this.
+const BOSS_STROBE_MIN_BATTERY := 30.0
 var _boss_deadline := 0.0
 var _win_seen := false
 var _hb := 0.0
+## Flashlight discipline: on within this many metres of a monster and for the boss, at most one switch per gap.
+const LIGHT_NEAR_M := 22.0
+const LIGHT_TOGGLE_GAP := 1.5
+var _light_cd := 0.0
+const LOOT_DETOUR_M := 14.0
+const LOOT_GIVE_UP_SEC := 10.0
+const LOOT_BLOCK_SEC := 30.0
+const BATTERY_STOCK := 3
+const MEDKIT_STOCK := 1
+var _loot_since := 0.0
+var _loot_block_until := 0.0
 var _menu_recoveries := 0
 
 ## Onboarding timing telemetry (PLAYABLE IDEAL P3): first-run pacing to the
@@ -104,6 +117,9 @@ func _ready() -> void:
 	_seed = int(OS.get_environment("QA_SEED")) if OS.get_environment("QA_SEED") != "" else 1
 	_rng.seed = _seed * 2654435761
 	_t0 = Time.get_ticks_msec()
+	# A walking-pace run is long; a scaled clock (headless only) shortens it without touching a rule of the game.
+	if OS.get_environment("QA_TIME_SCALE") != "":
+		Engine.time_scale = clampf(float(OS.get_environment("QA_TIME_SCALE")), 1.0, 8.0)
 	get_tree().create_timer(HARD_TIMEOUT_SEC).timeout.connect(_on_hard_timeout)
 	EventBus.game_won.connect(func() -> void: _win_seen = true)
 	EventBus.player_died.connect(func() -> void: _deaths += 1)
@@ -143,6 +159,7 @@ func _start() -> void:
 		_fail("menu not reached in 14s (state=%d)" % GameManager.current_state); return _finish()
 	# The bot plays the game as tuned, whatever difficulty the profile holds (monsters scale with it).
 	SettingsManager.set_difficulty(1)
+	SaveSystem.mark_onboard_done()
 	Routes.start_game()
 	if not await _wait(func() -> bool: return GameManager.is_playing(), 15.0):
 		_fail("New Game never reached PLAYING"); return _finish()
@@ -224,7 +241,7 @@ func _process(delta: float) -> void:
 			for sl in inv_hb.slots:
 				if sl != null:
 					used += 1
-			pack_info = " pack=%.1f/%.0fkg slots=%d/%d" % [float(inv_hb.current_weight), float(inv_hb.stats.capacity_kg), used, inv_hb.slots.size()]
+			pack_info = " pack=%.1f/%.0fkg slots=%d/%d batteries=%d charge=%.0f" % [float(inv_hb.current_weight), float(inv_hb.stats.capacity_kg), used, inv_hb.slots.size(), inv_hb.count_of(&"battery"), float(_player.get("battery"))]
 		var hit_info := ""
 		if p_in_tree and _player is CharacterBody3D:
 			for i in (_player as CharacterBody3D).get_slide_collision_count():
@@ -323,6 +340,13 @@ func _tick_spine(_delta: float) -> void:
 		_bump_score()
 		return
 
+	var spare := _spare_pickup()
+	if spare != null:
+		_target_pos = (spare as Node3D).global_position
+		_have_target = true
+		_move(_approach_dir(_target_pos) if _player.global_position.distance_to(_target_pos) > PICKUP_TOUCH else Vector2.ZERO)
+		return
+
 	var need: StringName = STAGE_ITEM[stage + 1]
 	var inv := get_node_or_null("/root/InventoryManager")
 	var have_it: bool = inv != null and inv.has(need, 1)
@@ -377,7 +401,7 @@ func _tick_boss(delta: float) -> void:
 	## (docs/artifacts/ ... boss chase logs, 2026-09-14). trigger_strobe()
 	## stuns everything in a 12m cone on a real 10s/5-battery cooldown, so
 	## spamming the request here is harmless — it silently no-ops off cooldown.
-	if d <= 10.0 and _strobe_cd <= 0.0:
+	if d <= 10.0 and _strobe_cd <= 0.0 and float(_player.get("battery")) >= BOSS_STROBE_MIN_BATTERY:
 		InputService.request_strobe()
 		_strobe_cd = 1.0
 	_move(_dir_to(bp))
@@ -515,6 +539,30 @@ func _switch_node(district_id: StringName) -> Node:
 			return n
 	return null
 
+## A person takes the batteries and the medkit that lie close to the road: the Architect's second phase needs the
+## light, and the pack is the only supply of charge. A refused pickup is walked away from, not waited on.
+func _spare_pickup() -> Node:
+	var inv := get_node_or_null("/root/InventoryManager")
+	if inv == null or _now() < _loot_block_until:
+		return null
+	var found: Node = null
+	for stock in [[&"battery", BATTERY_STOCK], [&"medkit", MEDKIT_STOCK]]:
+		if inv.has(stock[0], stock[1]):
+			continue
+		var p := _nearest_pickup(stock[0])
+		if p != null and _player.global_position.distance_to((p as Node3D).global_position) <= LOOT_DETOUR_M:
+			found = p
+			break
+	if found == null:
+		_loot_since = 0.0
+	elif _loot_since == 0.0:
+		_loot_since = _now()
+	elif _now() - _loot_since > LOOT_GIVE_UP_SEC:
+		_loot_since = 0.0
+		_loot_block_until = _now() + LOOT_BLOCK_SEC
+		found = null
+	return found
+
 func _nearest_pickup(item_id: StringName) -> Node:
 	var best: Node = null
 	var best_d := 1e9
@@ -539,6 +587,21 @@ func _maintain_flashlight() -> void:
 	var b: Variant = _player.get("battery")
 	if b != null and float(b) < 20.0:
 		_use_item(&"battery")
+	# At a walking pace the run is minutes long: like a person, the bot keeps the light off between fights and on
+	# for the boss, so the battery lasts to the Architect.
+	_light_cd = maxf(0.0, _light_cd - get_process_delta_time())
+	if _light_cd > 0.0 or b == null or float(b) <= 0.0:
+		return
+	var want_on := _phase == "boss" or _monster_near(LIGHT_NEAR_M)
+	if bool(_player.get("flashlight_enabled")) != want_on:
+		InputService.request_flashlight()
+		_light_cd = LIGHT_TOGGLE_GAP
+
+func _monster_near(radius: float) -> bool:
+	for m in get_tree().get_nodes_in_group("monsters"):
+		if m.get("ai_state") != null and int(m.get("ai_state")) != 7 and m.global_position.distance_to(_player.global_position) <= radius:
+			return true
+	return false
 
 ## A refused pickup (no free slot or overweight, `InventoryManager.try_add`) leaves the required part on
 ## the ground and the bot standing on it: a player would drop junk, so the bot drops the heaviest stack that
@@ -701,4 +764,5 @@ func _finish() -> void:
 	var code := 0
 	if not won:
 		code = 2 if _fails.size() > 0 and String(_fails[0]).begins_with("SOFTLOCK") else 1
-	get_tree().quit(code)
+	if OS.get_environment("QA_NO_QUIT") != "1":
+		get_tree().quit(code)

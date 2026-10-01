@@ -25,6 +25,7 @@ func _ok(cond: bool, what: String) -> void:
 		print("[closeout] FAIL ", what)
 
 func _run() -> void:
+	SaveSystem.mark_onboard_done()
 	GameManager._change_state(GameManager.GameState.PLAYING)
 	_main = (load("res://scenes/main_3d.tscn") as PackedScene).instantiate()
 	add_child(_main)
@@ -52,6 +53,9 @@ func _run() -> void:
 	await _check_bestiary()
 	await _check_hints_and_log()
 	_check_daily()
+	await _check_movement()
+	await _check_onboarding_and_death()
+	await _check_shop()
 	_check_difficulty()
 	await _check_settings_back()
 	_finish()
@@ -507,6 +511,10 @@ func _check_difficulty() -> void:
 
 # ── the settings screen reached from the main menu has a way back ───────────
 func _check_settings_back() -> void:
+	GameManager._change_state(GameManager.GameState.MENU)
+	await get_tree().process_frame
+	var overlay: Control = UIManager._cache.get(&"main_menu", null)
+	_ok(overlay != null and overlay.visible, "MENU1 the menu state opens the main-menu screen")
 	Routes.goto(Routes.SETTINGS)
 	var reached := false
 	for n in 50:
@@ -518,6 +526,8 @@ func _check_settings_back() -> void:
 	_ok(reached, "the Settings scene opens")
 	if not reached:
 		return
+	var menu_screen: Control = UIManager._cache.get(&"main_menu", null)
+	_ok(menu_screen == null or not menu_screen.visible, "MENU1 the main-menu screen is gone once Settings is the scene (it covered Settings, Difficulty and Credits)")
 	await get_tree().create_timer(0.5).timeout
 	var back: Button = null
 	for button in get_tree().current_scene.find_children("*", "Button", true, false):
@@ -843,3 +853,135 @@ func _check_daily() -> void:
 	_ok(CoinWallet.get_coins() - coins == roundi(base * 2.0) + bonus, "DL2 the fifth day pays double (%d + %d)" % [roundi(base * 2.0), bonus])
 	SaveSystem._daily_streak = streak_before
 	SaveSystem._last_daily_time = last_before
+
+# ── the play-through's findings (docs/artifacts/rc15/playthrough_*.txt): a person's pace, solid ground, one dodge per
+#    double tap, a light that comes back, the onboarding cards, the death screen ──
+func _check_movement() -> void:
+	_playing()
+	_player.set("gameplay_active", true)
+	_player.global_position = Vector3(-8.0, 1.0, -8.0)
+	_player.rotation.y = 0.0
+	await get_tree().create_timer(0.6).timeout
+	var from := _player.global_position
+	InputService.set_joy_active(true)
+	InputService.set_joy_move_dir(Vector2(0.0, -1.0))
+	await get_tree().create_timer(1.0).timeout
+	InputService.set_joy_active(false)
+	InputService.set_joy_move_dir(Vector2.ZERO)
+	var walked := Vector2(_player.global_position.x - from.x, _player.global_position.z - from.z).length()
+	_ok(walked > 2.0 and walked < 3.6, "MV1 one second of the stick forward walks %.2f m (a person walks 1.4 to 3.5 m/s)" % walked)
+	await get_tree().create_timer(0.4).timeout
+	_player.global_position = Vector3(-8.0, 6.0, -8.0)
+	_player.velocity = Vector3.ZERO
+	await get_tree().create_timer(0.5).timeout
+	var fell := 6.0 - _player.global_position.y
+	_ok(fell > 0.9, "MV2 a fall gathers speed: %.2f m in half a second (g = 9.8 gives 1.2)" % fell)
+	await get_tree().create_timer(1.2).timeout
+	_ok(_player.is_on_floor(), "MV2 the fall ends on the ground (y %.2f)" % _player.global_position.y)
+	var space := _player.get_world_3d().direct_space_state
+	var hit := space.intersect_ray(PhysicsRayQueryParameters3D.create(Vector3(0.0, 5.0, 0.0), Vector3(0.0, -2.0, 0.0)))
+	_ok(not hit.is_empty() and String(hit["collider"].name) == "GroundBody", "MV3 the block between four streets is floor (hit %s)" % [hit["collider"].name if not hit.is_empty() else "nothing"])
+	hit = space.intersect_ray(PhysicsRayQueryParameters3D.create(Vector3(20.0, 8.0, 0.0), Vector3(45.0, 8.0, 0.0)))
+	_ok(not hit.is_empty() and absf(float(hit["position"].x) - 32.0) < 0.5, "MV3 a wall stops the player at the building fronts (x %.1f)" % [float(hit["position"].x) if not hit.is_empty() else -1.0])
+	# one press is not a dodge; a press, a release and a press within the window is
+	_player.set("stamina", 100.0)
+	_player.set("_dodge_cooldown", 0.0)
+	_player.set("_stun_timer", 0.0)
+	_player.set("_tap_age", 99.0)
+	_player.set("_tap_held", false)
+	for n in 40:
+		_player._track_dodge_tap(Vector2(0.0, -1.0), 0.016)
+	_ok(is_equal_approx(float(_player.get("stamina")), 100.0), "MV4 holding a direction is not a dodge (stamina %.0f)" % float(_player.get("stamina")))
+	for n in 2:
+		_player._track_dodge_tap(Vector2.ZERO, 0.016)
+		_player._track_dodge_tap(Vector2(0.0, -1.0), 0.016)
+	_ok(float(_player.get("stamina")) < 100.0, "MV4 a quick second press after a release is a dodge (stamina %.0f)" % float(_player.get("stamina")))
+	await get_tree().create_timer(1.0).timeout
+	# the light that went out with the battery comes back with the next charge; a light put out by hand stays out
+	_player.set("flashlight_enabled", true)
+	_player.set("battery", 0.0)
+	await get_tree().create_timer(0.3).timeout
+	_ok(not bool(_player.get("flashlight_enabled")), "FL6 at 0% the light goes out")
+	_player.add_battery(35.0)
+	_ok(bool(_player.get("flashlight_enabled")), "FL6 a battery lights it again")
+	_player.toggle_flashlight()
+	_player.add_battery(10.0)
+	_ok(not bool(_player.get("flashlight_enabled")), "FL6 a light switched off by hand stays off after a recharge")
+	_player.toggle_flashlight()
+	_player.set("battery", 100.0)
+
+func _check_onboarding_and_death() -> void:
+	var was: bool = SaveSystem.is_onboard_done()
+	SaveSystem._onboard_done = false
+	var cards := CanvasLayer.new()
+	cards.set_script(load("res://scripts/ui/onboarding_overlay.gd"))
+	add_child(cards)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	_ok(bool(cards.get("_showing")) and get_tree().paused, "ON1 a running game with no profile mark opens the onboarding cards and holds the game")
+	for n in 7:
+		cards._on_next()
+	_ok(not bool(cards.get("_showing")) and not get_tree().paused and SaveSystem.is_onboard_done(), "ON1 seven cards later the game runs and the profile remembers")
+	SaveSystem._onboard_done = was
+	cards.queue_free()
+	_playing()
+	# the death screen: the cause, the time, the city and the documents
+	var crawler := _monster("crawler_3d", _player.global_position + Vector3(1.0, 0.0, 0.0))
+	_player.set("_damage_grace_timer", 0.0)
+	_player.set("_iframes", 0.0)
+	_player.take_damage(1.0, crawler.global_position)
+	_ok(ProgressTracker.last_hit_by == &"crawler", "CB4 a hit remembers the monster that landed it (%s)" % ProgressTracker.last_hit_by)
+	var screen := Control.new()
+	screen.set_script(load("res://scripts/ui/death_screen.gd"))
+	add_child(screen)
+	await get_tree().process_frame
+	var lines: Array[String] = []
+	for label in screen.find_children("*", "Label", true, false):
+		lines.append((label as Label).text)
+	var all := "\n".join(lines)
+	_ok(all.contains(LocalizationManager.name_for("MONSTER_", &"crawler", "Crawler")), "CB4 the death screen names the monster")
+	for key in ["DEATH_TIME", "DEATH_DISTRICTS", "DEATH_DOCS"]:
+		_ok(all.contains(LocalizationManager.t(key).split("%")[0].strip_edges()), "CB4 the death screen shows %s" % key)
+	screen.queue_free()
+	crawler.queue_free()
+	ProgressTracker.last_hit_by = &""
+
+# ── the play-through's shop finding (docs/stills/playthrough/A06_shop.png): the card was empty and Buy took coins and gave nothing ──
+func _shop_owned_count() -> int:
+	var owned := 0
+	for kind in [ShopItem.Kind.UPGRADE, ShopItem.Kind.SKIN, ShopItem.Kind.BUNDLE]:
+		for it in ShopService.catalog_by_kind(kind):
+			owned += int(ShopService.is_owned((it as ShopItem).id))
+	return owned
+
+func _check_shop() -> void:
+	_playing()
+	var screens := _main.get_node_or_null("Screens")
+	_ok(screens != null, "SH1 the game scene carries the Screens layer")
+	if screens == null:
+		return
+	CoinWallet.spend_clamped(CoinWallet.get_coins())
+	screens.show_screen("Shop")
+	await get_tree().process_frame
+	var grid := screens.find_child("ShopGrid", true, false) as GridContainer
+	var want := 0
+	for kind in [ShopItem.Kind.UPGRADE, ShopItem.Kind.SKIN, ShopItem.Kind.BUNDLE]:
+		want += ShopService.catalog_by_kind(kind).size()
+	var cards := grid.get_child_count() if grid != null else -1
+	_ok(want > 0 and cards == want, "SH1 the Shop card shows every catalog item (%d cards of %d)" % [cards, want])
+	if cards <= 0:
+		return
+	var buy := grid.get_child(0).find_children("*", "Button", true, false)[0] as Button
+	var owned_before := _shop_owned_count()
+	buy.pressed.emit()
+	_ok(_shop_owned_count() == owned_before and not buy.disabled, "SH1 Buy with an empty wallet buys nothing")
+	CoinWallet.add(5000)
+	var coins_before := CoinWallet.get_coins()
+	buy.pressed.emit()
+	_ok(_shop_owned_count() > owned_before and CoinWallet.get_coins() < coins_before and buy.disabled, "SH1 Buy with coins grants the item, spends the price and marks the card (coins %d -> %d)" % [coins_before, CoinWallet.get_coins()])
+	var header := screens.find_child("ShopCoinHeader", true, false) as Label
+	_ok(header != null and header.text.ends_with(str(CoinWallet.get_coins())), "SH1 the coin header follows the wallet (%s)" % [header.text if header != null else "none"])
+	screens.hide_all()
+	ShopService.from_dict({})
+	UpgradeSystem.reset()
+	CoinWallet.spend_clamped(CoinWallet.get_coins())
