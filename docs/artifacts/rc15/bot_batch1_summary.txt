@@ -1,0 +1,15 @@
+[bot s1]   result       : WIN
+[bot s1]   districts FULL: 11/11
+[bot s1]   deaths       : 0
+[bot s1]   coins earned : 9375 (wallet 9375)
+[bot s1]   nudges       : 15 (>1 means the win leaned on nudge rescues, not clean nav — docs/REDTEAM_CHALLENGE.md TG-PLAY)
+[bot s2]   result       : WIN
+[bot s2]   districts FULL: 11/11
+[bot s2]   deaths       : 0
+[bot s2]   coins earned : 8628 (wallet 8628)
+[bot s2]   nudges       : 7 (>1 means the win leaned on nudge rescues, not clean nav — docs/REDTEAM_CHALLENGE.md TG-PLAY)
+[bot s3]   result       : WIN
+[bot s3]   districts FULL: 11/11
+[bot s3]   deaths       : 0
+[bot s3]   coins earned : 8730 (wallet 8730)
+[bot s3]   nudges       : 13 (>1 means the win leaned on nudge rescues, not clean nav — docs/REDTEAM_CHALLENGE.md TG-PLAY)
