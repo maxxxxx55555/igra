@@ -6,6 +6,11 @@ class_name CitySkyline
 ## stage, so the city reads as a city that is waking up (GDD 4.2, STYLE_GUIDE 1).
 
 const RING_GAP := 8.0
+## The ground slab is flush with the street tiles (their top is 0.05 m); the facade walls stop the player at the ring.
+const GROUND_TOP := 0.05
+const GROUND_THICKNESS := 0.2
+const WALL_HEIGHT := 12.0
+const WALL_THICKNESS := 0.4
 const WIN_SIZE := Vector2(0.9, 1.3)
 const GROUND_COLOR := Color(0.055, 0.066, 0.082)
 const FACADES: Array[Color] = [Color("#0f151d"), Color("#141b24"), Color("#182029")]
@@ -82,6 +87,7 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 		EventBus.district_stage_changed.connect(_on_stage_changed)
 		_light_windows(PowerGrid.get_stage(district_id))
 	_add_ground()
+	_add_solid_ground(edge)
 
 func _add_multimesh(node_name: String, mesh: Mesh, xforms: Array[Transform3D], tints: Array[Color], unshaded: bool) -> void:
 	var mm := MultiMesh.new()
@@ -121,6 +127,26 @@ func _add_ground() -> void:
 	ground.position.y = -0.05
 	ground.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(ground)
+
+## The dark ground is a floor, not a picture: the blocks between the streets can be walked, and four walls along the
+## building fronts keep the player inside the district (the buildings themselves stay visual).
+func _add_solid_ground(edge: float) -> void:
+	var body := StaticBody3D.new()
+	body.name = "GroundBody"
+	add_child(body)
+	var reach := edge + 12.0
+	_add_box(body, Vector3(reach * 2.0, GROUND_THICKNESS, reach * 2.0), Vector3(0.0, GROUND_TOP - GROUND_THICKNESS * 0.5, 0.0))
+	for side in [-1.0, 1.0]:
+		_add_box(body, Vector3(WALL_THICKNESS, WALL_HEIGHT, reach * 2.0), Vector3(side * edge, WALL_HEIGHT * 0.5, 0.0))
+		_add_box(body, Vector3(reach * 2.0, WALL_HEIGHT, WALL_THICKNESS), Vector3(0.0, WALL_HEIGHT * 0.5, side * edge))
+
+func _add_box(body: StaticBody3D, size: Vector3, at: Vector3) -> void:
+	var shape := CollisionShape3D.new()
+	var box := BoxShape3D.new()
+	box.size = size
+	shape.shape = box
+	shape.position = at
+	body.add_child(shape)
 
 func _on_stage_changed(id: StringName, stage: int) -> void:
 	if id == _district_id:

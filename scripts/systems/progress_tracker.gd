@@ -44,6 +44,8 @@ var items_picked: int = 0
 var crafted: int = 0
 var damage_taken: float = 0.0
 var kills_by: Dictionary = {}
+## The monster that landed the last hit on the player (the death screen's cause); cleared when a run starts.
+var last_hit_by: StringName = &""
 const DOC_ON_DISTRICT := "doc_engineer_log"
 const DOC_ON_SECRET := "doc_family_letter"
 func _ready() -> void:
@@ -54,6 +56,7 @@ func _ready() -> void:
 	EventBus.district_restored.connect(func(_a, _b): _unlock_doc(DOC_ON_DISTRICT); _post())
 	EventBus.item_picked_up.connect(_on_item_picked_up)
 	EventBus.game_over.connect(func() -> void: deaths += 1)
+	EventBus.game_started.connect(func() -> void: last_hit_by = &"")
 	EventBus.player_damaged.connect(func(amount: float) -> void: damage_taken += amount)
 	EventBus.quest_completed.connect(func(id: String) -> void: _add_photo("quest_" + id))
 	EventBus.district_entered.connect(func(id: StringName) -> void: _add_photo("district_%s_entered" % id))

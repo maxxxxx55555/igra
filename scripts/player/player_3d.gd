@@ -31,7 +31,6 @@ var gameplay_active: bool = false
 var noise_level: float = 0.0
 var can_move: bool = false
 var _walk_t: float = 0.0
-var _movechk_timer: float = 0.0
 var _footstep_dust_node: GPUParticles3D = null
 var _step_timer: float = 0.0
 var cone_add_ok: bool = false
@@ -62,8 +61,12 @@ var _damage_grace_timer: float = 0.0
 const _DAMAGE_GRACE_SEC: float = 0.8
 var _combo_break: bool = false
 var _chain_landed: bool = false
-var _dodge_input_timer: float = 0.0
-var _dodge_input_dir: Vector2 = Vector2.ZERO
+var _light_died: bool = false
+var _tap_age: float = 99.0
+var _tap_dir: Vector2 = Vector2.ZERO
+var _tap_held: bool = false
+var _dash_timer: float = 0.0
+var _dash_dir: Vector3 = Vector3.ZERO
 var _crouch_held: bool = false
 var _crouch_timer: float = 0.0
 var _hiding_spot: Node3D = null
@@ -84,6 +87,11 @@ const COMBO_WINDOW: float = 1.2
 const DODGE_COST: float = 15.0
 const DODGE_COOLDOWN: float = 0.8
 const DODGE_IFRAMES: float = 0.35
+## GDD 5.2: the dodge is a dash of about 3 m in 0.2 s on top of the invulnerability.
+const DODGE_DASH_SEC: float = 0.2
+const DODGE_DASH_SPEED: float = 15.0
+## A double tap is the same direction pressed again, after a release, within this many seconds of the first press.
+const DODGE_TAP_WINDOW: float = 0.35
 const CROUCH_SPEED_MULT: float = 0.4
 const CROUCH_NOISE_MULT: float = 0.3
 const CROUCH_VISIBILITY_MULT: float = 0.5
@@ -501,11 +509,6 @@ func _physics_process(delta: float) -> void:
 			# Winnability: базовая регенерация (аналогично скиллу выше) —
 			# в затяжном боях без пикапов-лечилок иначе неоткуда взяться.
 			heal(_BASE_HP_REGEN_PER_SEC * delta)
-	#DEBUG_MOVECHK
-	_movechk_timer += delta
-	if _movechk_timer >= 1.0:
-		_movechk_timer = 0.0
-
 	visibility = get_visibility_scale()
 	if gameplay_active and Input.is_action_pressed("attack"):
 		_hold_fire()
@@ -515,29 +518,8 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		return
 	var dir_2d: Vector2 = InputService.get_move_dir()
-	if dir_2d.length_squared() > 0.1:
-		if _dodge_input_timer > 0.0 and _dodge_input_timer < 0.35 and dir_2d.dot(_dodge_input_dir) > 0.6:
-			_handle_dodge(dir_2d)
-			_dodge_input_timer = 0.0
-		else:
-			_dodge_input_dir = dir_2d
-			_dodge_input_timer = 0.001
-	if _dodge_input_timer > 0.0:
-		_dodge_input_timer += delta
-		if _dodge_input_timer > 0.4:
-			_dodge_input_timer = 0.0
-	var dir: Vector3
-	if not is_instance_valid(_fps_cam):
-		_resolve_camera()
-	if _fps_cam and is_instance_valid(_fps_cam):
-		var fbasis := _fps_cam.global_transform.basis
-		var fwd := -fbasis.z
-		var right := fbasis.x
-		fwd.y = 0.0; right.y = 0.0
-		fwd = fwd.normalized(); right = right.normalized()
-		dir = fwd * (-dir_2d.y) + right * dir_2d.x
-	else:
-		dir = Vector3(dir_2d.x, 0, dir_2d.y)
+	_track_dodge_tap(dir_2d, delta)
+	var dir: Vector3 = _view_dir(dir_2d)
 	var moving: bool = dir.length_squared() > 0.0001
 	if not moving:
 		velocity.x = 0.0
@@ -608,11 +590,11 @@ func _physics_process(delta: float) -> void:
 	var weight_speed_mult := 1.0 - weight_ratio * 0.5
 	var crouch_speed_mult := CROUCH_SPEED_MULT if current_state == State.CROUCH else 1.0
 	var final_speed: float = speed * weight_speed_mult * crouch_speed_mult
-
-
-
-
-	velocity = dir.normalized() * final_speed if moving else Vector3.ZERO
+	var planar := dir.normalized() * final_speed if moving else Vector3.ZERO
+	if _dash_timer > 0.0:
+		_dash_timer -= delta
+		planar = _dash_dir * DODGE_DASH_SPEED
+	velocity = Vector3(planar.x, velocity.y, planar.z)
 	if is_on_floor():
 		_coyote_timer = coyote_time
 		_was_on_floor = true
@@ -858,6 +840,7 @@ func _update_battery(delta: float) -> void:
 		EventBus.player_battery_changed.emit(battery / battery_max)
 	if battery <= 0.0 and flashlight_enabled:
 		flashlight_enabled = false
+		_light_died = true
 		EventBus.flashlight_state_changed.emit(false)
 		flashlight.visible = false
 		dust.emitting = false
@@ -865,6 +848,7 @@ func _update_battery(delta: float) -> void:
 func toggle_flashlight() -> void:
 	if battery <= 0.0:
 		return
+	_light_died = false
 	flashlight_enabled = not flashlight_enabled
 	EventBus.flashlight_state_changed.emit(flashlight_enabled)
 
@@ -897,6 +881,7 @@ func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, _type: EnemyRo
 	if _damage_grace_timer > 0.0:
 		return
 	_damage_grace_timer = _DAMAGE_GRACE_SEC
+	_note_attacker(_src_pos)
 	# Winnability: кап одиночного удара. В бою с Архитектором связка
 	# «милли 40 + сферы по 20» без уклонений уходила в спираль смертей;
 	# 12 урона за хит оставляет давление, но даёт шанс выстоять вплотную.
@@ -912,6 +897,19 @@ func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, _type: EnemyRo
 
 	if hp <= 0.0:
 		EventBus.game_over.emit()
+
+## The nearest monster to where the hit came from is the cause shown if this was the last one.
+const ATTACKER_REACH: float = 4.0
+
+func _note_attacker(src_pos: Vector3) -> void:
+	if src_pos == Vector3.ZERO:
+		return
+	var nearest: Node3D = null
+	for m in get_tree().get_nodes_in_group("monsters"):
+		if nearest == null or m.global_position.distance_to(src_pos) < nearest.global_position.distance_to(src_pos):
+			nearest = m
+	if nearest != null and nearest.global_position.distance_to(src_pos) <= ATTACKER_REACH and "monster_id" in nearest:
+		ProgressTracker.last_hit_by = nearest.monster_id
 
 @rpc("any_peer", "reliable")
 func _request_player_damage(amount: float) -> void:
@@ -937,6 +935,8 @@ func consume_battery(amount: float) -> void:
 func add_battery(amount: float) -> void:
 	battery = clampf(battery + amount, 0.0, battery_max)
 	EventBus.player_battery_changed.emit(battery / battery_max)
+	if _light_died and battery > 0.0:
+		toggle_flashlight()
 
 ## Ported from the dead scripts/player/player.gd - same match, same two
 ## effects (ItemData.Effect only defines HEAL/RECHARGE today; anything
@@ -1211,6 +1211,31 @@ func apply_stun(duration: float = 0.3) -> void:
 	_stun_timer = duration
 
 
+## Keys or stick (x right, y back) turned into a world direction relative to where the view looks.
+func _view_dir(dir_2d: Vector2) -> Vector3:
+	if not is_instance_valid(_fps_cam):
+		_resolve_camera()
+	if _fps_cam and is_instance_valid(_fps_cam):
+		var fbasis := _fps_cam.global_transform.basis
+		var fwd := -fbasis.z
+		var right := fbasis.x
+		fwd.y = 0.0
+		right.y = 0.0
+		return fwd.normalized() * (-dir_2d.y) + right.normalized() * dir_2d.x
+	return Vector3(dir_2d.x, 0.0, dir_2d.y)
+
+func _track_dodge_tap(dir_2d: Vector2, delta: float) -> void:
+	_tap_age += delta
+	var held := dir_2d.length_squared() > 0.1
+	if held and not _tap_held:
+		if _tap_age < DODGE_TAP_WINDOW and dir_2d.dot(_tap_dir) > 0.6:
+			_handle_dodge(dir_2d)
+			_tap_age = 99.0
+		else:
+			_tap_age = 0.0
+			_tap_dir = dir_2d
+	_tap_held = held
+
 func _handle_dodge(dir: Vector2) -> void:
 	if _dodge_cooldown > 0.0 or _stun_timer > 0.0 or not gameplay_active:
 		return
@@ -1219,14 +1244,11 @@ func _handle_dodge(dir: Vector2) -> void:
 	stamina -= DODGE_COST
 	_dodge_cooldown = DODGE_COOLDOWN
 	_iframes = DODGE_IFRAMES
-	var d := Vector3(dir.x, 0, dir.y).normalized()
+	var d := _view_dir(dir).normalized()
 	if d.length_squared() < 0.01:
 		d = look_dir
-	# Winnability: множитель рывка 3.0 -> 0.9 — на ×3 автоплей-бот улетал
-	# за 100+ метров от арены (додж в сторону от босса) и терял десятки
-	# секунд на возврат; ×0.9 сохраняет сам факт уклонения, но держит бой
-	# в арене (у бота и так есть mercy i-frames для выживания).
-	velocity = d * stats.run_speed * 0.9
+	_dash_dir = d
+	_dash_timer = DODGE_DASH_SEC
 	var dust_particles := GPUParticles3D.new()
 	dust_particles.one_shot = true
 	dust_particles.emitting = true
