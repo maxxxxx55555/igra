@@ -1,5 +1,25 @@
 # Run state — orchestrator pass (2026-09-20)
 
+## Session 15 (2026-10-01): PLAYER-PROOF CLOSEOUT (rc15), directive "ZERO-PROSE, NO FABRICATION"
+
+**NEXT-ROW: first engine verification of the closeout batch** (compile gate, `tools/qa_sim/closeout_check`, then the 3-seed
+bot IRON RULE run, then the play-through R0). Baseline `v8.0.0-rc14` @ `651a2a0`. Nothing in this section is a closure
+until `docs/PROOFS.md` holds its evidence line.
+
+- Launch ledger (budget 10, one entry per top-level launch command, a battery or a bot invocation counts as one): see
+  `docs/PROOFS.md` "Launch ledger". Launches so far this session: 0.
+- Written, never run yet (all static gates green: `check.sh --static` 25/25, flow 56): V03 emboldened Bebas Neue; GDD
+  amendments (I02 key census, G28/D04 win through the boss, N01 the NG+ rule, section 12.5); S02 relative visibility model
+  (`player_3d.get_visibility_scale`, `base_monster._sight_ranges`); S04 hiding spots placed (3 per district, `bush` and
+  `dark_corner` types, enter/exit with collider exception, HUD dimming); G25 firearms (`WeaponManager` on the player,
+  hitscan in `WeaponBase`, pickups in D2/D7/D8, ammo, HUD weapon slots 1-2, `reload` R); C03 auto-aim setting in
+  Settings; G21 five blueprints + `WorkbenchLogic` + stationary workbenches (D1/D7/D9) + UV light (U) + strobe gated
+  behind its recipe + portable workbench (B) + battery capacity; G26 photo album (`ProgressTracker._add_photo`, Codex tab);
+  inventory screen on Tab; pause menu entries (inventory, shop, upgrades, save and quit); settings Back dead end fixed;
+  Shadow id; damage source position; difficulty consumer + descriptions; 12 achievements got triggers (bed, hallucination).
+- Explorer audit (read-only subagent) of GDD Appendix V / s24 / s25 vs code: 94 rows, 32 BUILT / 38 PARTIAL / 24 MISSING at
+  HEAD; the closeout batch above closes the player-blocking ones. Rows still open are listed in `docs/ACCEPTANCE_CHECKLIST.md`.
+
 ## Session 14 (2026-09-30): swarm attempt, melee root cause, beauty pass, rc14 sign-off
 
 **NEXT-ROW: the GDD rows the swarm did not deliver (G25 weapons, C03, G07 capsule, S02, G21, G26, V.2/V.5 menus, quick
