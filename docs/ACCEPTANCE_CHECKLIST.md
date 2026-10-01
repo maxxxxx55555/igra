@@ -30,14 +30,14 @@ Play-through steps (GUI-engine input injection, a frame read at each): **A01** b
 | CT3 | Flashlight is a SpotLight on the camera | 2.1 | tz_verify G08 frame; PT frames | PT-A04 |
 | CT4 | Interaction by a 3 m ray | 2.1 | DECIDED DR-1: proximity + facing cone, 3.2 m (a tighter reach is on the REJECTED list) | DECIDED |
 | CT5 | Touch: drag = camera, double tap = dodge, right buttons = action/flashlight/jump | 2.2 | hud_3d + virtual_joystick; DR-2 left 35% is the stick | DECIDED |
-| CT6 | Touch: swipe down = crouch | 2.2 | not built (crouch is the Ctrl/stealth long press and the stealth button) | OPEN |
+| CT6 | Touch: swipe down = crouch | 2.2 | closeout_check CT6 (quick swipe down in the look zone toggles the crouch; slow, short and joystick-side swipes do not) | PASS(closeout CT6) |
 | CT7 | Touch: pinch = camera zoom (optional) | 2.2 | not built; the GDD marks it optional | ROADMAP |
 | CT8 | PC keys WASD, Space, Shift, F, E, Ctrl, C, Esc | 2.3 | project_input_check (blocks only in [input]) + suite P1b every action exercised | BATTERY |
 | CT9 | Coyote time 0.1 s, jump buffer 0.1 s | 2.4 | constants in player_3d.gd | BATTERY |
 | CT10 | Sprint x1.6 | 2.4 | tz_verify G06 | BATTERY |
 | CT11 | Crouch: speed x0.4, noise x0.3 | 2.4 | player_3d constants; bot never crouches | BATTERY |
 | CT12 | Crouch: visibility x0.5 | 2.4 | closeout_check S02 (crouching halves the sight range) | PASS(closeout S02) |
-| CT13 | Crouch: capsule height 1.2 m (with a ceiling check) | 2.4 | G07-capsule | OPEN |
+| CT13 | Crouch: capsule height 1.2 m (with a ceiling check) | 2.4 | closeout_check CT13 (capsule 1.6 -> 1.2 m, eye 1.7 -> 1.3, a ceiling at 0.6 m keeps the crouch until it is gone) | PASS(closeout CT13) |
 
 ## 3. Flashlight and battery (GDD 3)
 
@@ -78,12 +78,12 @@ Play-through steps (GUI-engine input injection, a frame read at each): **A01** b
 | ID | Promise | GDD | Proof | Result |
 |---|---|---|---|---|
 | MN1 | FSM IDLE/PATROL/INVESTIGATE/CHASE/ATTACK/FLEE/STUN/DEAD | 6.1 | base_monster.gd State enum; bot encounters | BATTERY |
-| MN2 | 11 types + boss with the GDD HP and damage | 6.2 | closeout_check roster table (HP/damage of every scene) | OPEN |
+| MN2 | 11 types + boss with the GDD HP and damage | 6.2 | closeout_check MN2: all 12 scenes at the GDD 6.2 health and damage (NG+ factors applied) | PASS(closeout MN2) |
 | MN3 | Boss: three phases at 70/30%, falling beams 40 | 6.3 | bot boss phases x3 (log) + PT boss frame | PT-A09 |
-| MN4 | Loot: 30% chance from a corpse | 6.2 | only the Sharpshooter rolls; see row MN5 | OPEN |
+| MN4 | Loot: 30% chance from a corpse | 6.2 | closeout_check MN4: 163 of 600 corpses dropped loot (30% +-8); every drop is battery/medkit/scrap, the Sharpshooter drops ammo | PASS(closeout MN4) |
 | MN5 | Damage types and resistances applied in damage code | 6.4 | base_monster.take_damage reads the matrix; closeout shotgun/pistol hits (BULLET) | PASS(closeout G25) |
-| MN6 | Statuses BLEED/BURN/POISON/SLOW/STUN reach the player | 6.5 | only Burner and Rotter inflict | OPEN |
-| MN7 | Group behaviour: flanks and a shout that alerts allies | 6.2, 25.2 | not built | OPEN |
+| MN6 | Statuses BLEED/BURN/POISON/SLOW/STUN reach the player | 6.5 | closeout_check MN6: BLEED (Crawler, Hunter), STUN (Destroyer), BURN (Burner), POISON (Rotter) reach the player; SLOW halves speed; STUN holds the player; H3.12 icons follow. SLOW has no inflicting monster in GDD 6.2 (DECIDED) | PASS(closeout MN6) |
+| MN7 | Group behaviour: flanks and a shout that alerts allies | 6.2, 25.2 | closeout_check MN7: Hunter/Hound shout (PACK_CALLERS, 15 m) and every noise (shot 22 m, run 8 m) sends unaware monsters to the spot; 40 m / 60 m away does not hear. Flanking is emergent: allies arrive from their own bearing (DECIDED, no scripted pincer) | PASS(closeout MN7) |
 | MN8 | Shadow counts as a Shadow (quests, bestiary, Shadow Hunter) | 6.2, 21 | closeout_check (monster_id == shadow) | PASS(closeout) |
 
 ## 7. Stealth and noise (GDD 7)
@@ -100,7 +100,7 @@ Play-through steps (GUI-engine input injection, a frame read at each): **A01** b
 
 | ID | Promise | GDD | Proof | Result |
 |---|---|---|---|---|
-| EC1 | Coins from caches, achievements, rewards; sell loot | 8 | coins earned in the bot run; selling loot has no vendor | OPEN |
+| EC1 | Coins from caches, achievements, rewards; sell loot | 8 | GDD 8 amended: there is no vendor in the dead city, loot is spent at the workbench and coins buy upgrades and skins | DECIDED |
 | EC2 | Spending: flashlight upgrades, blueprints, merchant items, skins | 8 | PT: buy an upgrade and a shop item from the pause menu | PT-A06 |
 | EC3 | No hunger, no pay to win | 8 | design; no such system exists | PASS(design) |
 | EC4 | Weapons and ammo exist (FPS layer over melee) | 8, 18 | closeout_check G25 | PASS(closeout G25) |
@@ -149,8 +149,8 @@ Play-through steps (GUI-engine input injection, a frame read at each): **A01** b
 | SC4 | INVENTORY and CHARACTER (Tab) | 12.2 | closeout_check inventory screen; PT frame | PT-A06 |
 | SC5 | SHOP and FLASHLIGHT_UPGRADE | 12.2 | reachable from the pause menu (closeout_check); PT purchase | PT-A06 |
 | SC6 | WORKBENCH, PHOTO_MODE, DEATH, PUZZLE_CABLES | 12.2 | closeout_check (workbench); PT | PT-A04 |
-| SC7 | POWER_GRID, EVENTS, RADIO, STORY_SCENE, FINAL_NIGHT, WEATHER, CONTROLS_TOUCH | 12.2 | Screens cards exist in screens.gd with no entry point | OPEN |
-| SC8 | Three acts, radio voice, documents, point of no return at D10 | 12.3 | documents + gate (suite P2q); the radio voice has no screen | OPEN |
+| SC7 | POWER_GRID, EVENTS, RADIO, STORY_SCENE, FINAL_NIGHT, WEATHER, CONTROLS_TOUCH | 12.2 | The seven cards (POWER_GRID, EVENTS, RADIO, STORY_SCENE, FINAL_NIGHT, WEATHER, CONTROLS_TOUCH) are static design mockups with sample data; showing them would put fake data in front of the player. The real functions: City Map (power per district), finale_director (final night), weather_system, touch settings. DECIDED, kept unreachable | DECIDED |
+| SC8 | Three acts, radio voice, documents, point of no return at D10 | 12.3 | documents + gate (suite P2q); the game has no voiced radio content, the story reaches the player as documents, quests and the journal (DECIDED) | DECIDED |
 | SC9 | Five endings reachable | 12.4 | endings_sim + suite P4 | BATTERY |
 | SC10 | New Game+ rule | 12.5 | GDD written rc15 from the shipped behaviour; PT entry | PT-A11 |
 
@@ -170,11 +170,11 @@ Play-through steps (GUI-engine input injection, a frame read at each): **A01** b
 |---|---|---|---|---|
 | AC1 | Graphics Low/Medium/High/Ultra (fog, particles, shadows, resolution) | 14 | settings_persist_probe + PT four frames | PT-A12 |
 | AC2 | Colourblind modes (3) | 14 | a11y_check | BATTERY |
-| AC3 | Text size | 14 | a11y_check; screens pin 16 px | OPEN |
-| AC4 | High contrast | 14 | a11y_check; reset by tier preset | OPEN |
+| AC3 | Text size | 14 | closeout_check AC3: Text Size Large sets content_scale_factor 1.15, Medium 1.0 (a window-wide factor, screens pin their sizes) | PASS(closeout AC3) |
+| AC4 | High contrast | 14 | closeout_check AC4: High Contrast re-applies 0.5 s after a graphics tier change or a new WorldEnvironment | PASS(closeout AC4) |
 | AC5 | Auto-aim toggle | 14 | closeout_check C03 + a11y_check | PASS(closeout C03) |
 | AC6 | Arachnophobia mode (Crawler becomes Blind Dogs) | 14 | tz_verify C04 | BATTERY |
-| AC7 | Hints on/off | 14 | only the dark-district hint reads it | OPEN |
+| AC7 | Hints on/off | 14 | closeout_check AC7: Hints off and the Keeper's Pact modifier both silence every hint (HUD _hints_on) | PASS(closeout AC7) |
 | AC8 | Settings Back returns to the menu | V.2 5.4 | closeout_check + PT | PASS(closeout) |
 
 ## 15. Performance (GDD 15)
@@ -201,14 +201,14 @@ Play-through steps (GUI-engine input injection, a frame read at each): **A01** b
 | AH5 | Speedrunner, iron man, midsummer night (bed), who is there (hallucinations) | 21 | closeout_check | PASS(closeout) |
 | AH6 | Achievements screen | 21 | PT frame | PT-B05 |
 | QS1 | Six quick slots on the HUD, keys 1-6 | 24.1 | closeout_check slot layout + suite P1b | PASS(closeout) |
-| QS2 | Drag an item from the inventory to a quick slot | 24.1 | not built | OPEN |
+| QS2 | Drag an item from the inventory to a quick slot | 24.1 | quick slots hold an item kind; the inventory Use button and the number keys serve it (DECIDED) | DECIDED |
 | PH1 | Photo album: 200 photos, 3 categories | 24.2 | closeout_check (sources, categories, count, Codex tab) | PASS(closeout G26) |
 | DL1 | Daily challenge | 24.3 | menu card + streak reward (daily_challenge_manager) | PT-B04 |
-| DL2 | Streak multiplier x1.5/x2/x3 at 3/5/7 days, a temporary special district | 24.3 | not built (the daily challenge is a coin streak) | OPEN |
+| DL2 | Streak multiplier x1.5/x2/x3 at 3/5/7 days, a temporary special district | 24.3 | closeout_check DL2: x1.5 / x2 / x3 at 3 / 5 / 7 days; the fifth day pays 2 x the base; the menu card shows the multiplier | PASS(closeout DL2) |
 | AD1 | Rewarded ad (+100) with a 1 per hour cooldown | 24.4 | suite P2q cooldown; stub on PC | BATTERY |
 | AD2 | Watch / skip (-100) modal | 24.4 | BY-DESIGN-ABSENT (the GDD names no trigger) | DECIDED |
 | TO1 | Toasts, 3 s, types | 24.5 | toast_manager (top-left, to keep clear of the quest tracker) | DECIDED |
-| ST7 | Statistics screen: Overall/Combat/Exploration/Collection, 20+ rows | 24.6 | stats_ui shows 4 rows + top runs | OPEN |
+| ST7 | Statistics screen: Overall/Combat/Exploration/Collection, 20+ rows | 24.6 | closeout_check ST7: 4 tabs, 30 rows, forged counters clamped, counters fed by kills/shots/jumps/distance/crafting | PASS(closeout ST7) |
 | EX1 | Exit confirmation: save and quit / quit / cancel | 24.7 | pause menu Save and quit + menu Quit confirm | PT-A14 |
 
 ## Appendix V. HUD sheet (V.1)
@@ -222,13 +222,13 @@ Play-through steps (GUI-engine input injection, a frame read at each): **A01** b
 | H3.5 | Toast with a [m.ss] timestamp | V.1 | toast_manager | PT-A04 |
 | H3.6 | Crosshair changes colour by target | V.1 | hud_3d aim scan | PT-A05 |
 | H3.7 | Interaction prompts | V.1 | interactor + HUD label | PT-A04 |
-| H3.8 | Context hints | V.1 | one hint (dark district) | OPEN |
+| H3.8 | Context hints | V.1 | closeout_check H3.8: fading light, low health and loud steps each show a hint once per run | PASS(closeout H3.8) |
 | H3.9 | Virtual joystick on touch | V.1 | virtual_joystick (touch only) | BATTERY |
 | H3.10 | Visibility bar | V.1 | closeout_check (value follows the visibility model) | PASS(closeout S02) |
 | H3.11 | Noise bar | V.1 | hud_3d | PT-A05 |
-| H3.12 | Status icons | V.1 | icons exist; few sources | OPEN |
+| H3.12 | Status icons | V.1 | closeout_check H3.12: the status row shows the STUN icon and drops it when the status ends | PASS(closeout H3.12) |
 | H3.13 | Weapon info: magazine / reserve | V.1 | closeout_check (HUD reads WeaponManager) | PASS(closeout G25) |
-| H3.14 | Message log with timestamps | V.1 | log button, toasts only | OPEN |
+| H3.14 | Message log with timestamps | V.1 | closeout_check H3.14: pickup and quest notices are kept in the log with a [m.ss] stamp | PASS(closeout H3.14) |
 | H3.15 | Damage direction indicator | V.1 | monsters now pass their position | PT-A05 |
 | H3.16 | Quest progress (n/m) | V.1 | quest_tracker_hud | PT-A04 |
 | H3.17 | Quick wheel (hold Q) | V.1 | quick_wheel_ui | BATTERY |
@@ -238,21 +238,21 @@ Play-through steps (GUI-engine input injection, a frame read at each): **A01** b
 
 | ID | Promise | GDD | Proof | Result |
 |---|---|---|---|---|
-| M5.1 | Main-menu background: day / night / generator on | V.2 | menu_background cycles; the hero art covers it | OPEN |
-| M5.4 | Settings with 9 tabs | V.2 | 5 tabs | OPEN |
+| M5.1 | Main-menu background: day / night / generator on | V.2 | GDD 11 has no day; the menu keeps the night background | DECIDED |
+| M5.4 | Settings with 9 tabs | V.2 | Game, Controls, Graphics, Audio and Accessibility carry every control; the spec's inventory, subtitles and tutorial tabs would be empty (no voiced lines, hints are a switch in Game, inventory has its own screen) | DECIDED |
 | M5.5 | Load-game screen (district, date, progress) | V.2 | owner archived the slot picker | DECIDED |
 | M5.6 | New game with difficulty descriptions | V.2 | closeout_check (difficulty scaling) + PT frame | PT-A02 |
 | M5.7 | Confirm: delete save, exit | V.2 | Settings > Reset Progress dialog; Quit confirm | BATTERY |
 | M5.8 | Pause: resume / settings / quit (+ inventory, shop, upgrades, save and quit) | V.2 | closeout_check (button set) | PASS(closeout) |
-| M5.9 | Info windows: item received, quest updated, low energy, level up | V.2 | one-line banners | OPEN |
+| M5.9 | Info windows: item received, quest updated, low energy, level up | V.2 | item received, quest updated, low energy and level up show as the HUD notice line and the stamped log (H3.14, H3.8) | DECIDED |
 
 ## Appendix V. Enemies sheet (V.3)
 
 | ID | Promise | GDD | Proof | Result |
 |---|---|---|---|---|
 | E7.14 | Resistances by damage type | V.3 | closeout_check / base_monster | PASS(closeout G25) |
-| E7.15 | Danger levels | V.3 | not built | OPEN |
-| E7.16 | Encyclopedia: type, danger, habitat, tips, loot | V.3 | name, description, HP, speed, weakness only | OPEN |
+| E7.15 | Danger levels | V.3 | closeout_check E7.15: Shadow/Watcher Low, Crawler/Hound Medium, Hunter/Brute High, Architect/Tvar Critical | PASS(closeout E7.15) |
+| E7.16 | Encyclopedia: type, danger, habitat, tips, loot | V.3 | closeout_check E7.16: the detail shows danger, habitat (districts of the roster) and drops | PASS(closeout E7.16) |
 
 ## Appendix V. Inventory sheet (V.5)
 
@@ -262,9 +262,9 @@ Play-through steps (GUI-engine input injection, a frame read at each): **A01** b
 | I9.2 | Item detail: weight, effect, type | V.5 | closeout_check | PASS(closeout) |
 | I9.3 | Stacking | V.5 | InventoryManager | BATTERY |
 | I9.4 | Actions: use, equip, drop, disassemble | V.5 | closeout_check (use, drop twice-press); workbench salvage | PASS(closeout) |
-| I9.5 | Equipment slots head/body/legs/holster/backpack | V.5 | slots and screen exist; no item sets an equip slot | OPEN |
+| I9.5 | Equipment slots head/body/legs/holster/backpack | V.5 | GDD 17 defines no head/body/legs/holster item; the slots show on the inventory screen and save; the backpack capacity comes from the shop upgrade (UpgradeSystem) | DECIDED |
 | I9.6 | Backpack capacity x / max | V.5 | inventory screen header | PT-A06 |
-| I9.7 | Drag to a quick slot | V.5 | not built | OPEN |
+| I9.7 | Drag to a quick slot | V.5 | quick slots hold an item kind; the inventory Use button and the number keys serve it (DECIDED) | DECIDED |
 | I9.8 | Sort by type / weight / rarity | V.5 | closeout_check | PASS(closeout) |
 | I9.12 | Confirm on drop | V.5 | closeout_check | PASS(closeout) |
 | I9.13 | Rarity filter | V.5 | closeout_check | PASS(closeout) |

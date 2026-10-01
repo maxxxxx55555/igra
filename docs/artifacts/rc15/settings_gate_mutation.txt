@@ -1,0 +1,9 @@
+gate run against the committed tree at HEAD (731c791), before the settings fixes:
+FAIL Settings screen writes 'dodge_gesture' but the table names no reader
+FAIL 'autosave': scripts/core/save_system.gd no longer contains 'get_setting("autosave"'
+FAIL 'button_size': scripts/ui/hud_3d.gd no longer contains 'get_setting("button_size"'
+FAIL 'crouch_input': scripts/player/player_3d.gd no longer contains 'get_setting("crouch_input"'
+FAIL 'sensitivity': scripts/player/player_3d.gd no longer contains 'get_setting("sensitivity"'
+FAIL 'text_size': scripts/systems/settings_manager.gd no longer contains 'content_scale_factor'
+FAIL 'vsync': scripts/systems/settings_manager.gd no longer contains '"vsync": _apply_vsync()'
+41 keys, 7 problem(s)
