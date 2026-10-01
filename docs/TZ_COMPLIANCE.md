@@ -47,7 +47,7 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 | G12b | Flicker below 20%, cleared by Stability L5 | MET | tz_verify: spread 16.2 at 10% battery, 0.000 with Stability L5; suite P2r: L5 + Brightness survive a real respawn, L5 cuts drain 50% (GDD §3.3), New Game clears them (C8 rc4); `G12b_low_battery.png` |
 | G13 | Combo 8/12/20 | DECIDED (DR-3) | Recorded winnability tuning |
 | G15 | Capsule 1.6 m, attack box | MET-STATIC (capsule 1.6) / DECIDED (DR-3, attack box) | Bot 1/3 with the capsule; all 3 seeds reached the boss; stalls = known boss-phase type |
-| G16 | Respawn: district entry, 50% HP, battery kept | MET | Suite P2r (exact button path) |
+| G16 | Respawn: district entry, 50% HP, battery kept | MET (re-proved rc15; the suite P2r evidence read the scene being left, CORRECTION_LOG 72) | `closeout_check` RESP1 (the dead player does not take it, the new one does: hp 50, battery 37); play-through A05c samples health and battery every 0.25 s after the reload |
 | G17 | Hardcore death deletes save | MET | tz_verify: main + .bak/.bak2/.bak3 seeded, 0 files left after death; the wipe's `reset_all()` also clears flashlight upgrades (suite P2r, C8 rc4); `G17_hardcore_death.png` |
 | G18 / G19 | Roster stats, Shadow | MET-STATIC | All 11 + boss HP/damage equal the GDD table |
 | G20 | Boss phases 70/30%, beams 40 | MET-STATIC | Constants; the bot boss phase exercises them |

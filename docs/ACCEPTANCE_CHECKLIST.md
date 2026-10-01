@@ -124,7 +124,7 @@ Play-through steps (GUI-engine input injection, a frame read at each): **A01** b
 | ID | Promise | GDD | Proof | Result |
 |---|---|---|---|---|
 | SV1 | 3 manual slots + 1 autosave | 10 | owner archived the slot picker (PLAN.md stage 1); Continue loads the latest | DECIDED |
-| SV2 | What is saved: position, vitals, battery, inventory, upgrades, blueprints, stages, quests, bestiary, stats, settings | 10 | suite P3 + save_integrity + PT relaunch | PT-B02 |
+| SV2 | What is saved: position, vitals, battery, inventory, upgrades, blueprints, stages, quests, bestiary, stats, settings | 10 | suite P3 + save_integrity + closeout_check SV2 (health, stamina and battery were not saved before rc15) + PT relaunch | PT-B02 |
 | SV3 | Autosave on district change, lamp, puzzle, purchase, secret, death, every 60 s | 10 | suite P2m | BATTERY |
 | SV4 | A forged save cannot add weapons, blueprints or ammo | 10 | closeout_check (clamped from_dict) + attack_sim | PASS(closeout) |
 
@@ -291,3 +291,6 @@ Rows the first play-through added: each was a defect a frame or a measured numbe
 | HUD1 | The message-log button covers nothing in the HUD stat panel | V.1 | closeout_check HUD1 | PASS(closeout) |
 | ON1b | The onboarding card sits in the middle of the screen | 12 | closeout_check ON1 (220 px off before) | PASS(closeout) |
 | SH1b | Every shop row ends above the Close button | 12.2 | closeout_check SH1 | PASS(closeout) |
+| RESP1 | Retry respawns the new player at half health with the battery it died with (the dead player of the scene being left does not take it) | 5.4 | closeout_check RESP1; play-through A05c | PASS(closeout) |
+| HP1 | Health comes back in peace (2.5 HP/s from 5 s after the last hit), not in a fight; a player can die | 5.3 | closeout_check HP1 (the old 18 HP/s gives 68 HP a second after 50) | PASS(closeout) |
+| SV2b | Health, stamina and battery are saved, a forged number is clamped, a dead player saves none | 10 | closeout_check SV2 | PASS(closeout) |

@@ -58,7 +58,11 @@ func _run() -> void:
 	await _check_shop()
 	await _check_map()
 	await _check_hud_corner()
+	await _check_scene_screens_fill_the_window()
 	_check_language_survives_a_save()
+	_check_respawn_waits_for_the_new_player()
+	_check_vitals_are_saved()
+	await _check_regeneration_waits_for_peace()
 	_check_difficulty()
 	await _check_settings_back()
 	_finish()
@@ -881,6 +885,8 @@ func _check_movement() -> void:
 	await get_tree().create_timer(1.0).timeout
 	InputService.set_joy_active(false)
 	InputService.set_joy_move_dir(Vector2.ZERO)
+	var camera := get_viewport().get_camera_3d()
+	print("[closeout] note this headless run: active camera %s, first-person view %s" % [str(camera.get_path()) if camera != null else "none", _player.call("_is_fps_view")])
 	var walked := Vector2(_player.global_position.x - from.x, _player.global_position.z - from.z).length()
 	_ok(walked > 2.0 and walked < 3.6, "MV1 one second of the stick forward walks %.2f m (a person walks 1.4 to 3.5 m/s)" % walked)
 	await get_tree().create_timer(0.4).timeout
@@ -1060,3 +1066,102 @@ func _check_hud_corner() -> void:
 		if control.is_visible_in_tree() and control.get_global_rect().intersects(log_button.get_global_rect()):
 			covered.append(String(control.name))
 	_ok(covered.is_empty(), "HUD1 the message-log button covers nothing in the stat panel (%s)" % ", ".join(covered))
+
+# ── the play-through's Retry: the respawn (half health, the battery it died with) went to the dead player of the scene
+#    being left, and the reloaded scene started with full health and a full battery ──
+func _check_respawn_waits_for_the_new_player() -> void:
+	var stand_in := GDScript.new()
+	stand_in.source_code = "extends Node
+var hp := 0.0
+var battery := 100.0
+var battery_max := 100.0
+var stats = null
+"
+	stand_in.reload()
+	var dead := Node.new()
+	dead.set_script(stand_in)
+	var fresh := Node.new()
+	fresh.set_script(stand_in)
+	fresh.set("hp", 100.0)
+	GameManager._respawn_battery = 37.0
+	GameManager.apply_pending_respawn(dead)
+	_ok(GameManager._respawn_battery == 37.0 and float(dead.get("hp")) == 0.0, "RESP1 the dead player of the scene being left does not take the respawn")
+	GameManager.apply_pending_respawn(fresh)
+	_ok(is_equal_approx(float(fresh.get("hp")), 50.0) and is_equal_approx(float(fresh.get("battery")), 37.0) and GameManager._respawn_battery < 0.0,
+		"RESP1 the new player respawns at half health with the battery it died with (hp %.0f, battery %.0f)" % [fresh.get("hp"), fresh.get("battery")])
+	dead.free()
+	fresh.free()
+
+# ── GDD 10: health, stamina and the battery are saved ──
+func _check_vitals_are_saved() -> void:
+	_playing()
+	_player.set("hp", 61.0)
+	_player.set("stamina", 42.0)
+	_player.set("battery", 33.0)
+	SaveSystem.save_all()
+	_player.set("hp", 100.0)
+	_player.set("stamina", 100.0)
+	_player.set("battery", 100.0)
+	_ok(SaveSystem.load_all(), "SV2 the file just written loads")
+	SaveSystem.apply_pending_vitals(_player)
+	_ok(is_equal_approx(float(_player.get("hp")), 61.0) and is_equal_approx(float(_player.get("stamina")), 42.0) and is_equal_approx(float(_player.get("battery")), 33.0),
+		"SV2 health, stamina and battery come back from the save (%.0f / %.0f / %.0f)" % [_player.get("hp"), _player.get("stamina"), _player.get("battery")])
+	_ok(SaveSystem._parse_vitals({"hp": NAN, "stamina": 1.0, "battery": 1.0}).is_empty() and SaveSystem._parse_vitals({"hp": "full", "stamina": 1.0, "battery": 1.0}).is_empty() and SaveSystem._parse_vitals(null).is_empty(),
+		"SV2 a block with a non-number, a NaN or no dictionary is dropped")
+	var forged: Dictionary = SaveSystem._parse_vitals({"hp": 1e9, "stamina": -4.0, "battery": 5.0})
+	_ok(forged == {"hp": SaveSystem.MAX_VITAL, "stamina": 0.0, "battery": 5.0}, "SV2 a forged number is clamped (%s)" % str(forged))
+	_player.set("hp", 0.0)
+	SaveSystem.save_all()
+	SaveSystem.load_all()
+	_ok(SaveSystem._pending_vitals.is_empty(), "SV2 a dead player saves no vitals (Continue would bring back 0 health)")
+	_player.set("hp", 100.0)
+	_player.set("stamina", 100.0)
+	_player.set("battery", 100.0)
+	SaveSystem.save_all()
+
+# ── a person recovers in peace, not in a fight (it was 18 HP/s at every moment) ──
+func _check_regeneration_waits_for_peace() -> void:
+	_playing()
+	_player.set("_damage_grace_timer", 0.0)
+	_player.set("_iframes", 0.0)
+	_player.set("hp", 50.0)
+	_player.set("_since_hurt", 99.0)
+	await get_tree().create_timer(1.0).timeout
+	var resting := float(_player.get("hp"))
+	_ok(resting > 50.5 and resting < 55.0, "HP1 in peace health comes back slowly (%.1f after a second at 50, not 68)" % resting)
+	_player.set("hp", 50.0)
+	_player.take_damage(10.0, Vector3.ZERO)
+	await get_tree().create_timer(2.0).timeout
+	var fighting := float(_player.get("hp"))
+	_ok(fighting <= 40.0, "HP1 two seconds after a hit nothing has come back (%.1f)" % fighting)
+	_player.set("hp", 100.0)
+
+# ── the play-through's New Game+ frame: five scenes had their anchors in the node header, where the engine ignores them ──
+func _check_scene_screens_fill_the_window() -> void:
+	_playing()
+	var window := get_viewport().get_visible_rect().size
+	UIManager.open(&"new_game_plus")
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var ngp: Control = UIManager._cache.get(&"new_game_plus", null)
+	var rect := ngp.get_global_rect() if ngp != null else Rect2()
+	_ok(ngp != null and ngp.visible and rect.size.is_equal_approx(window) and rect.position.length() < 1.0,
+		"SCR1 the New Game+ screen covers the window (%s of %s at %s)" % [rect.size, window, rect.position])
+	UIManager.close(&"new_game_plus")
+	# the skill tree: reachable from a fresh game with the T key (it toggled itself, so it never opened), then centred
+	_ok(UIManager._cache.get(&"skill_tree", null) == null, "SCR1 the skill tree has not been opened yet")
+	var key := InputEventKey.new()
+	key.physical_keycode = KEY_T
+	key.keycode = KEY_T
+	key.pressed = true
+	Input.parse_input_event(key)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var tree: Control = UIManager._cache.get(&"skill_tree", null)
+	_ok(tree != null and tree.visible, "SCR1 the T key opens the skill tree from a fresh game")
+	if tree != null:
+		var tree_rect := tree.get_global_rect()
+		_ok((tree_rect.get_center() - window / 2.0).length() < 8.0 and tree_rect.size.x >= 590.0, "SCR1 the skill tree sits in the middle of the window (%s at %s)" % [tree_rect.size, tree_rect.position])
+	UIManager.close(&"skill_tree")
+	key.pressed = false
+	Input.parse_input_event(key)

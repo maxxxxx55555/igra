@@ -277,8 +277,8 @@ func _state() -> Dictionary:
 		if slot != null:
 			inv[String(slot["item_id"])] = int(inv.get(String(slot["item_id"]), 0)) + int(slot["count"])
 	var stages := {}
-	for id in PowerGrid.all_districts():
-		stages[String(id)] = PowerGrid.get_stage(id)
+	for district in PowerGrid.all_districts():
+		stages[String(district.id)] = district.stage
 	return {"district": String(DistrictManager.current_district), "coins": CoinWallet.get_coins(), "level": XpManager.get_level(),
 		"ng": NewGamePlus.get_current_ng_plus(), "inventory": inv, "stages": stages, "kills": ProgressTracker.kills,
 		"docs": ProgressTracker.count_docs(), "photos": SaveSystem.get_photo_count(), "deaths": ProgressTracker.deaths}
@@ -321,6 +321,7 @@ func _mode_a() -> void:
 	await _a06_shop()
 	await _a07_map()
 	await _a08_battery()
+	await _a09_skills()
 	await _a12_tiers()
 	await _a13_languages()
 	await _a15_back_to_menu()
@@ -551,10 +552,16 @@ func _a05_death() -> void:
 		retry = _button_with(death, LocalizationManager.t("retry"))
 		for b in _buttons(death):
 			names.append("%s(%s)" % [b.text, b.is_visible_in_tree()])
+	var old_player := get_tree().get_first_node_in_group("player")
+	var battery_at_death := float(_player.get("battery"))
 	var res := await _click(retry)
-	var back := await _wait_until(func() -> bool: return GameManager.is_playing() and get_tree().get_first_node_in_group("player") != null, 40.0)
-	await get_tree().create_timer(2.0).timeout
+	var back := await _wait_until(func() -> bool: return GameManager.is_playing() and get_tree().get_first_node_in_group("player") != null and get_tree().get_first_node_in_group("player") != old_player, 40.0)
 	_player = get_tree().get_first_node_in_group("player") as Node3D
+	var samples: PackedStringArray = []
+	for n in 8:
+		samples.append("%.0f/%.0f" % [float(_player.get("hp")), float(_player.get("battery"))])
+		await get_tree().create_timer(0.25).timeout
+	_say("[pt] note A05c new player: a different node from the dead one: %s; hp/battery each 0.25 s: %s; battery at death %.0f; pending respawn %s" % [_player != old_player, " ".join(samples), battery_at_death, GameManager.get("_respawn_battery")])
 	var hp_ratio: float = float(_player.get("hp")) / float(_player.stats.max_hp)
 	_step("A05c", res == "ok" and back and hp_ratio >= 0.45 and hp_ratio <= 0.55, "Retry respawns the player at HP %.0f%% (click: %s; buttons %s)" % [hp_ratio * 100.0, res, ", ".join(names)], await _shot("A05_respawn"))
 
@@ -683,6 +690,8 @@ func _a07_map() -> void:
 	_step("A07b", res == "ok" and arrived and GameManager.is_playing() and ghosts.is_empty(), "Travel on the open row moves the player to %s and leaves no map rows on screen (click: %s; stray: %s)" % [DistrictManager.current_district, res, ", ".join(ghosts)], await _shot("A07_travel_residential"))
 
 func _a08_battery() -> void:
+	if not bool(_player.get("flashlight_enabled")):
+		await _tap(KEY_F)
 	var depleted := [false]
 	EventBus.flashlight_depleted.connect(func() -> void: depleted[0] = true, CONNECT_ONE_SHOT)
 	_player.call("consume_battery", float(_player.get("battery")) - 18.0)
@@ -694,6 +703,17 @@ func _a08_battery() -> void:
 	_step("A08b", depleted[0], "at 0%% the light goes out (flashlight_depleted: %s)" % depleted[0], await _shot("A08_battery_0"))
 	_player.call("consume_battery", -90.0)
 	await get_tree().create_timer(0.5).timeout
+
+func _a09_skills() -> void:
+	await _tap(KEY_T)
+	var open := await _wait_until(func() -> bool: return _ui_open(&"skill_tree"), 3.0)
+	await get_tree().create_timer(0.6).timeout
+	var tree := _ui(&"skill_tree")
+	var tabs := tree.find_children("*", "TabContainer", true, false) if tree != null else []
+	_step("A09", open and tabs.size() > 0, "T opens the skill tree with its branches (%d tab group)" % tabs.size(), await _shot("A09_skill_tree"))
+	await _tap(KEY_T)
+	await get_tree().create_timer(0.4).timeout
+	_step("A09b", not _ui_open(&"skill_tree") and GameManager.is_playing(), "T closes it and the game runs on")
 
 func _open_settings() -> Control:
 	if not await _pause_open():
@@ -821,9 +841,10 @@ func _mode_v() -> void:
 	progress.autostart = true
 	progress.timeout.connect(func() -> void:
 		var full := 0
-		for id in PowerGrid.all_districts():
-			full += int(PowerGrid.get_stage(id) >= DistrictData.Stage.FULL)
-		_say("[pt] note V the bot is in %s, %d of %d districts FULL, %.0f s in" % [DistrictManager.current_district, full, PowerGrid.all_districts().size(), float(Time.get_ticks_msec() - _t0) / 1000.0]))
+		for district in PowerGrid.all_districts():
+			full += int(district.stage >= DistrictData.Stage.FULL)
+		var seconds := int(float(Time.get_ticks_msec() - _t0) / 1000.0)
+		_say("[pt] note V the bot is in %s, %d of %d districts FULL, %d s in; frame=%s" % [DistrictManager.current_district, full, PowerGrid.all_districts().size(), seconds, await _shot("V_t%04d" % seconds)]))
 	add_child(progress)
 	OS.set_environment("QA_NO_QUIT", "1")
 	var bot := Node.new()
@@ -869,16 +890,17 @@ func _v11_new_game_plus() -> void:
 	await get_tree().create_timer(0.5).timeout
 	_step("V11c", picked != "" and NewGamePlus.get_active_modifiers().size() == 1, "one modifier can be taken for the new level ('%s')" % picked.left(40), await _shot("V11_ngp_modifier"))
 	await _click(ngp.back_button)
-	var in_menu := await _wait_scene(Routes.MENU, WAIT_SCENE)
-	await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(1.5).timeout
 	var vb: Node = _menu_vbox()
+	var in_menu := vb != null
 	var play := vb.get_node("Play") as Button
 	_step("V11d", in_menu and play.text == LocalizationManager.tf("NGP_NEW_GAME_ACTION", [NewGamePlus.get_current_ng_plus()]), "the menu says Play is New Game+ %d ('%s')" % [NewGamePlus.get_current_ng_plus(), play.text], await _shot("V11_menu_ngp"))
 	var res_play := await _click(play)
 	await get_tree().create_timer(0.6).timeout
 	var dialog: ConfirmationDialog = null
-	for n in _scene().find_children("*", "ConfirmationDialog", true, false):
-		dialog = n as ConfirmationDialog
+	for n in get_tree().root.find_children("*", "ConfirmationDialog", true, false):
+		if (n as ConfirmationDialog).visible:
+			dialog = n as ConfirmationDialog
 	var shot_confirm := await _shot("V11_confirm")
 	var res_ok := "no dialog"
 	if dialog != null:
@@ -1034,8 +1056,9 @@ func _b03_hardcore() -> void:
 	await _click(_menu_vbox().get_node("Play") as Button)
 	await get_tree().create_timer(0.6).timeout
 	var dialog: ConfirmationDialog = null
-	for n in _scene().find_children("*", "ConfirmationDialog", true, false):
-		dialog = n as ConfirmationDialog
+	for n in get_tree().root.find_children("*", "ConfirmationDialog", true, false):
+		if (n as ConfirmationDialog).visible:
+			dialog = n as ConfirmationDialog
 	if dialog != null:
 		await _click(dialog.get_ok_button())
 	var started := await _wait_playing()
