@@ -141,6 +141,8 @@ func _start() -> void:
 			var s := get_tree().current_scene
 			return s != null and s.name == "MainMenu", 14.0):
 		_fail("menu not reached in 14s (state=%d)" % GameManager.current_state); return _finish()
+	# The bot plays the game as tuned, whatever difficulty the profile holds (monsters scale with it).
+	SettingsManager.set_difficulty(1)
 	Routes.start_game()
 	if not await _wait(func() -> bool: return GameManager.is_playing(), 15.0):
 		_fail("New Game never reached PLAYING"); return _finish()
@@ -391,6 +393,10 @@ func _enter_boss_phase() -> void:
 		return
 	_phase = "boss"
 	_bump_score()
+	# A player has the strobe by now (the blueprint lies in the police district, a workbench builds it): the harness
+	# hands the bot the finished ability instead of walking it through a detour. suite P7 covers the recipe itself.
+	ProgressTracker.learn_blueprint("strobe_flashlight")
+	ProgressTracker.mark_crafted("strobe_flashlight")
 	_log("all 11 districts FULL — final night; bot is standing in power_station")
 
 # ── movement / turning ───────────────────────────────────────────────

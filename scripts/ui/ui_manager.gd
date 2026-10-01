@@ -19,6 +19,7 @@ const SCREENS: Dictionary = {
 	&"achievements":    "res://scripts/ui/achievements_ui.gd",
 	&"stats":           "res://scripts/ui/stats_ui.gd",
 	&"workbench":       "res://scripts/ui/workbench.gd",
+	&"inventory":       "res://scripts/ui/inventory_ui.gd",
 	&"skill_tree":      "res://scenes/ui/skill_tree_ui.tscn",
 	&"new_game_plus":   "res://scenes/ui/new_game_plus.tscn",
 	# GOLD MASTER v4 mobile-art pass: controls (keyboard+touch) + mechanics
@@ -28,7 +29,7 @@ const SCREENS: Dictionary = {
 	&"collection":      "res://scripts/ui/collection_ui.gd",
 }
 const BLOCKING: Array = [&"main_menu", &"pause", &"settings", &"death", &"win",
-	&"city_map", &"codex", &"encyclopedia", &"journal", &"quest_journal", &"achievements", &"stats", &"workbench", &"photo", &"skill_tree", &"new_game_plus", &"help", &"collection"]
+	&"city_map", &"codex", &"encyclopedia", &"journal", &"quest_journal", &"achievements", &"stats", &"workbench", &"inventory", &"photo", &"skill_tree", &"new_game_plus", &"help", &"collection"]
 
 ## Старый id раздела -> вкладка «Кодекса». Экраны перечислены и в SCREENS,
 ## но открываются уже не поодиночке, а как вкладка общего экрана.
@@ -137,6 +138,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			toggle(&"encyclopedia")
 		elif event.is_action_pressed("journal_toggle"):
 			toggle(&"journal")
+		elif event.is_action_pressed("inventory_toggle") and GameManager.is_playing():
+			toggle(&"inventory")
 ## Последний открытый блокирующий экран, который Escape вправе закрыть.
 ## Само меню и экраны смерти/победы не трогаем: из них выходят кнопками.
 const _ESC_KEEP: Array = [&"main_menu", &"death", &"win", &"pause"]

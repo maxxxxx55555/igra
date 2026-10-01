@@ -77,7 +77,12 @@ func _build() -> void:
 	var b := Button.new()
 	b.text = LocalizationManager.t("Back")
 	b.focus_mode = Control.FOCUS_NONE
-	b.pressed.connect(func() -> void: UIManager.close(&"settings"))
+	b.pressed.connect(func() -> void:
+		# From the main menu this screen is the scene itself: Back returns to the menu. As a pause overlay it just closes.
+		if get_tree().current_scene == self:
+			Routes.to_menu()
+		else:
+			UIManager.close(&"settings"))
 	vb.add_child(b)
 
 func _build_game_tab(parent: VBoxContainer) -> void:
@@ -259,6 +264,9 @@ func _build_accessibility_tab(parent: VBoxContainer) -> void:
 
 	# Arachnophobia mode
 	_toggle(parent, LocalizationManager.t("Arachnophobia Mode"), "arachnophobia")
+
+	# C03 (GDD 14): firearms lean toward a monster near the crosshair (weapon_base.gd _apply_auto_aim)
+	_toggle(parent, LocalizationManager.t("Auto Aim"), "auto_aim")
 
 	# Reduce screen shake (vestibular) — consumed in screen_shake.gd::add_trauma
 	_toggle(parent, LocalizationManager.t("Reduce Screen Shake"), "reduce_screen_shake")

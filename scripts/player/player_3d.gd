@@ -61,6 +61,7 @@ var _stun_timer: float = 0.0
 var _damage_grace_timer: float = 0.0
 const _DAMAGE_GRACE_SEC: float = 0.8
 var _combo_break: bool = false
+var _chain_landed: bool = false
 var _dodge_input_timer: float = 0.0
 var _dodge_input_dir: Vector2 = Vector2.ZERO
 var _crouch_held: bool = false
@@ -86,6 +87,11 @@ const DODGE_IFRAMES: float = 0.35
 const CROUCH_SPEED_MULT: float = 0.4
 const CROUCH_NOISE_MULT: float = 0.3
 const CROUCH_VISIBILITY_MULT: float = 0.5
+## GDD §7 / S02, relative to walking with the flashlight on (the shipped baseline, 1.0): the light off halves
+## how far monsters notice the player (the GDD's "+100% in the flashlight cone" read from the other side, so the
+## balance the bot was tuned on stays put), running adds 20%, crouching halves, hiding is 0.
+const VISIBILITY_FLASHLIGHT_OFF: float = 0.5
+const VISIBILITY_RUN: float = 1.2
 
 ## Базовый расход батареи: полного заряда хватает на 7.5 минут света —
 ## достаточно, чтобы дойти до финальной ночи и пережить бой с Архитектором
@@ -331,9 +337,12 @@ func _ready() -> void:
 	EventBus.player_stamina_changed.emit(1.0)
 	EventBus.player_battery_changed.emit(1.0)
 	EventBus.game_started.connect(_on_game_started)
+	var weapons := WeaponManager.new()
+	weapons.name = "WeaponManager"
+	add_child(weapons)
 	var isv := get_node_or_null("/root/InputService")
 	if isv:
-		isv.attack_requested.connect(_handle_attack)
+		isv.attack_requested.connect(_on_attack_input)
 		isv.jump_requested.connect(_buffer_jump)
 		isv.flashlight_requested.connect(toggle_flashlight)
 		isv.dodge_requested.connect(_handle_dodge)
@@ -460,6 +469,10 @@ func _physics_process(delta: float) -> void:
 	if _movechk_timer >= 1.0:
 		_movechk_timer = 0.0
 
+	visibility = get_visibility_scale()
+	if gameplay_active and Input.is_action_pressed("attack"):
+		_hold_fire()
+	_tick_uv(delta)
 	if not can_move:
 		velocity = Vector3.ZERO
 		move_and_slide()
@@ -658,8 +671,11 @@ func _physics_process(delta: float) -> void:
 	if _combo_timer > 0.0:
 		_combo_timer -= delta
 	else:
+		if _combo_count > 0 and not _chain_landed:
+			EventBus.combo_chain_broken.emit()
 		_combo_count = 0
 		_combo_break = false
+		_chain_landed = false
 
 func compute_velocity(dir_2d: Vector2, state: State = State.WALK) -> Vector3:
 	var dir: Vector3 = Vector3(dir_2d.x, 0, dir_2d.y)
@@ -700,6 +716,19 @@ func _speed_for(state: State) -> float:
 ## gate the sight-range reduction (sneaking + flashlight off only).
 func is_sneaking() -> bool:
 	return current_state == State.STEALTH or current_state == State.CROUCH
+
+## How visible the player is to monsters, 0 (hidden) to VISIBILITY_RUN; the HUD bar and base_monster.gd read it.
+func get_visibility_scale() -> float:
+	if _in_hiding:
+		return 0.0
+	var v: float = 1.0
+	if not flashlight_enabled:
+		v *= VISIBILITY_FLASHLIGHT_OFF
+	if current_state == State.RUN:
+		v *= VISIBILITY_RUN
+	elif current_state == State.CROUCH:
+		v *= CROUCH_VISIBILITY_MULT
+	return v
 
 ## Публичный вход для статусов НА игрока (укус, коготь, ожог) — см. base_monster.gd.
 func apply_status(status: int, duration: float, dps: float = 0.0, power: float = 0.0) -> void:
@@ -750,6 +779,8 @@ func _update_battery(delta: float) -> void:
 	var batt_mult: float = NewGamePlus.get_modifier_multiplier("battery")
 	var drain: float = BATTERY_DRAIN_PER_SEC / batt_mult if batt_mult > 0.0 else BATTERY_DRAIN_PER_SEC
 	drain *= 1.0 - _flashlight_drain_cut
+	if _uv_on:
+		drain *= UV_BATTERY_DRAIN_MULT
 	battery = clampf(battery - drain * delta, 0.0, battery_max)
 	if absf(battery - prev) > 0.01:
 		EventBus.player_battery_changed.emit(battery / battery_max)
@@ -843,12 +874,26 @@ func _on_item_consumed(_id: StringName, effect: StringName, value: float) -> voi
 	match effect:
 		&"HEAL": heal(value)
 		&"RECHARGE": add_battery(value)
+		&"CAPACITY":
+			ProgressTracker.raise_battery_bonus(value / 100.0)
+			refresh_battery_max()
+			EventBus.inventory_notice.emit(LocalizationManager.tf("CAPACITY_UP", [int(value)]))
 
 func _unhandled_input(event: InputEvent) -> void:
 	if _net_active and not is_multiplayer_authority():
 		return
-	if event.is_action_pressed("attack") or event.is_action_pressed("melee"):
+	if event.is_action_pressed("attack"):
+		_on_attack_input()
+	if event.is_action_pressed("melee"):
 		_handle_attack()
+	if event.is_action_pressed("reload"):
+		var weapons := get_node_or_null("WeaponManager") as WeaponManager
+		if weapons != null:
+			weapons.reload()
+	if event.is_action_pressed("uv_toggle"):
+		toggle_uv()
+	if event.is_action_pressed("workbench"):
+		_toggle_portable_workbench()
 	if event.is_action_pressed("flashlight_toggle"):
 		toggle_flashlight()
 	if event.is_action_pressed("interact"):
@@ -872,22 +917,16 @@ func get_strobe_cooldown_ratio() -> float:
 func trigger_strobe() -> bool:
 	if _strobe_cooldown > 0.0 or not gameplay_active:
 		return false
+	if not ProgressTracker.has_crafted("strobe_flashlight"):
+		EventBus.inventory_notice.emit(LocalizationManager.t("STROBE_NEEDS_BLUEPRINT"))
+		return false
 	if not flashlight_enabled or battery < STROBE_BATTERY_COST:
 		EventBus.inventory_notice.emit(LocalizationManager.t("STROBE_NO_POWER"))
 		return false
 	_strobe_cooldown = STROBE_COOLDOWN
 	consume_battery(STROBE_BATTERY_COST)
-	var origin: Vector3 = global_position + Vector3(0.0, 1.4, 0.0)
-	var forward: Vector3 = -flashlight_pivot.global_transform.basis.z
 	var hits: int = 0
-	for m in get_tree().get_nodes_in_group("monsters"):
-		if not (m is Node3D) or not is_instance_valid(m):
-			continue
-		var to_target: Vector3 = (m as Node3D).global_position - origin
-		if to_target.length() > STROBE_RANGE:
-			continue
-		if forward.normalized().dot(to_target.normalized()) < cos(STROBE_HALF_ANGLE * PI):
-			continue
+	for m in _monsters_in_cone(STROBE_RANGE, cos(STROBE_HALF_ANGLE * PI)):
 		if m.has_method("stun"):
 			m.call("stun", STROBE_STUN)
 			hits += 1
@@ -902,6 +941,68 @@ func trigger_strobe() -> bool:
 ## story flash already respects reduce_flash, this player-triggerable ability
 ## didn't. The stun itself (trigger_strobe, above) is unaffected - only the
 ## visual flicker is reduced to a single gentle pulse.
+## Monsters within `range_m` of the player and no further than `min_dot` (a cosine) off where the light points.
+func _monsters_in_cone(range_m: float, min_dot: float) -> Array[Node3D]:
+	var out: Array[Node3D] = []
+	var origin: Vector3 = global_position + Vector3(0.0, 1.4, 0.0)
+	var forward: Vector3 = -flashlight_pivot.global_transform.basis.z
+	for m in get_tree().get_nodes_in_group("monsters"):
+		if not (m is Node3D) or not is_instance_valid(m):
+			continue
+		var to_target: Vector3 = (m as Node3D).global_position - origin
+		if to_target.length() <= range_m and forward.normalized().dot(to_target.normalized()) >= min_dot:
+			out.append(m as Node3D)
+	return out
+
+## GDD §9: the ultraviolet flashlight, crafted at the workbench: 5 damage a second to everything in the cone,
+## for half as much again battery.
+const UV_DPS: float = 5.0
+const UV_TICK_SEC: float = 0.25
+const UV_RANGE: float = 12.0
+const UV_BATTERY_DRAIN_MULT: float = 1.5
+const UV_LIGHT_COLOR := Color(0.62, 0.56, 0.82)
+var _uv_on: bool = false
+var _uv_tick: float = 0.0
+var _flashlight_color: Color = Color.WHITE
+
+func toggle_uv() -> void:
+	if not ProgressTracker.has_crafted("uv_flashlight"):
+		EventBus.inventory_notice.emit(LocalizationManager.t("UV_NEEDS_BLUEPRINT"))
+		return
+	_set_uv(not _uv_on and flashlight_enabled)
+	EventBus.inventory_notice.emit(LocalizationManager.t("UV_ON" if _uv_on else "UV_OFF"))
+
+func _set_uv(on: bool) -> void:
+	if on == _uv_on:
+		return
+	_uv_on = on
+	if on:
+		_flashlight_color = flashlight.light_color
+	flashlight.light_color = UV_LIGHT_COLOR if on else _flashlight_color
+
+func _tick_uv(delta: float) -> void:
+	if not _uv_on:
+		return
+	if not flashlight_enabled:
+		_set_uv(false)
+		return
+	_uv_tick -= delta
+	if _uv_tick > 0.0:
+		return
+	_uv_tick = UV_TICK_SEC
+	for m in _monsters_in_cone(UV_RANGE, cos(deg_to_rad(flashlight.spot_angle))):
+		if m.has_method("take_damage"):
+			m.call("take_damage", UV_DPS * UV_TICK_SEC, global_position, EnemyRosterData.DamageType.ELECTRIC)
+
+## The portable workbench (a crafted ability) opens the workbench screen anywhere.
+func _toggle_portable_workbench() -> void:
+	if not gameplay_active or not ProgressTracker.has_crafted("portable_workbench"):
+		EventBus.inventory_notice.emit(LocalizationManager.t("WORKBENCH_NEEDS_BLUEPRINT"))
+	elif UIManager.is_hud_blocked():
+		UIManager.close(&"workbench")
+	else:
+		UIManager.open(&"workbench")
+
 func _strobe_flash() -> void:
 	var base_energy: float = flashlight.light_energy
 	var tw := create_tween()
@@ -931,6 +1032,21 @@ func set_battery_params(max_val: float) -> void:
 	battery_max = max_val
 	battery = minf(battery, battery_max)
 
+
+## The attack button fires the drawn weapon; with none drawn it is the melee combo (the "melee" key always is).
+func _on_attack_input() -> void:
+	var weapons := get_node_or_null("WeaponManager") as WeaponManager
+	if weapons == null or not weapons.has_weapon_equipped():
+		_handle_attack()
+	elif gameplay_active and _stun_timer <= 0.0:
+		weapons.fire()
+
+## An automatic weapon (the rifle) keeps firing while the button is held.
+func _hold_fire() -> void:
+	var weapons := get_node_or_null("WeaponManager") as WeaponManager
+	var weapon := weapons.get_current_weapon() if weapons != null else null
+	if weapon != null and weapon.automatic and _stun_timer <= 0.0:
+		weapons.fire()
 
 func _handle_attack() -> void:
 	if _stun_timer > 0.0 or not _can_attack or not gameplay_active:
@@ -989,6 +1105,9 @@ func _on_attack_hit(body: Node) -> void:
 	if body == self or _hit_registered or not body.has_method("take_damage"):
 		return
 	_hit_registered = true
+	if _attack_idx == COMBO_DATA.size() - 1:
+		_chain_landed = true
+		EventBus.combo_chain_landed.emit()
 	var cd3: Dictionary = COMBO_DATA[_attack_idx]
 	var bonus: float = 0.0
 	if flashlight_enabled:
@@ -1097,7 +1216,7 @@ func _enter_hiding(spot: Node3D) -> void:
 	_in_hiding = true
 	can_move = false
 	velocity = Vector3.ZERO
-	global_position = spot.global_position
+	global_position = Vector3(spot.global_position.x, global_position.y, spot.global_position.z)
 	visibility = 0.0
 	EventBus.player_hiding_changed.emit(true)
 
@@ -1175,7 +1294,7 @@ const BATTERY_PER_SKILL_LVL: float = 25.0
 
 func refresh_battery_max() -> void:
 	var skill_lvl: int = SkillTreeManager.get_skill_level(&"battery_capacity") if SkillTreeManager else 0
-	battery_max = 100.0 * (1.0 + _flashlight_battery_bonus) + BATTERY_PER_SKILL_LVL * skill_lvl
+	battery_max = 100.0 * (1.0 + _flashlight_battery_bonus + ProgressTracker.battery_bonus) + BATTERY_PER_SKILL_LVL * skill_lvl
 	battery = minf(battery, battery_max)
 	EventBus.player_battery_changed.emit(battery / battery_max)
 

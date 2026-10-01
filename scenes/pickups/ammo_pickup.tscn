@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/gameplay/ammo_pickup.gd" id="1_dddd"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2"]
-size = Vector3(0.6, 0.6, 0.6)
+size = Vector3(1.6, 1.6, 1.6)
 
 [sub_resource type="BoxMesh" id="BoxMesh_2"]
 size = Vector3(0.6, 0.6, 0.6)

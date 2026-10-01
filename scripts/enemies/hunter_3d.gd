@@ -75,7 +75,7 @@ func _tick_charge(delta: float) -> void:
 			move_and_slide()
 			var charge_dist := global_position.distance_to(player_ref.global_position)
 			if charge_dist < attack_range + 0.5:
-				player_ref.take_damage(attack_damage)
+				player_ref.take_damage(attack_damage, global_position)
 				EventBus.enemy_attack.emit(attack_damage)
 
 			_charging = false

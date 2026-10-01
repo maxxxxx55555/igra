@@ -31,6 +31,7 @@ func _run() -> void:
 		for n in get_tree().get_nodes_in_group("interactable"):
 			if n.get("secret_id") != null:
 				spots.append(n)
+		spots.append_array(get_tree().get_nodes_in_group("hiding_spot"))
 		for p in spots:
 			var node := p as Node3D
 			if node == null or not node.is_visible_in_tree():

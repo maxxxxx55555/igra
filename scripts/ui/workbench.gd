@@ -11,16 +11,8 @@ const STEEL_TEXT := Color("#aeb6bf")
 const BONE_TEXT := Color("#d8d2c4")
 const STAMINA := Color("#5f8a4e")
 
-const RECIPES: Array[Dictionary] = [
-	{"id":"medkit","name_key":"ITEM_MEDKIT","result":"medkit","count":1,"components":[["fabric",2],["alcohol",1]]},
-	{"id":"battery","name_key":"ITEM_BATTERY","result":"battery","count":1,"components":[["cable",1],["fuse",1]]},
-	{"id":"noise_bomb","name_key":"ITEM_NOISE_BOMB","result":"noise_bomb","count":1,"components":[["gunpowder",2],["case",1]]},
-	{"id":"lockpick","name_key":"ITEM_LOCKPICK","result":"lockpick","count":1,"components":[["metal",2]]},
-	{"id":"repair_kit","name_key":"ITEM_REPAIR_KIT","result":"repair_kit","count":1,"components":[["fabric",3],["tool",1]]},
-	{"id":"firework","name_key":"ITEM_FIREWORK","result":"firework","count":1,"components":[["gunpowder",1],["paper",1]]},
-	{"id":"molotov","name_key":"ITEM_MOLOTOV","result":"molotov","count":1,"components":[["bottle",1],["fabric",1],["alcohol",1]]},
-	{"id":"makeshift_lamp","name_key":"ITEM_MAKESHIFT_LAMP","result":"makeshift_lamp","count":1,"components":[["metal",2],["battery",1]]},
-]
+const Logic := preload("res://scripts/crafting/workbench_logic.gd")
+const RECIPES: Array[Dictionary] = Logic.RECIPES
 
 ## P2 (FINAL INTEGRATION wave): craft material icons -> ingredient chips
 ## only, result icons stay V1 per the brief. icons_v2/craft/ (delivered
@@ -65,6 +57,9 @@ func _ready() -> void:
 	_build_craft_panel()
 	_build_salvage_panel()
 	_switch_tab(0)
+	visibility_changed.connect(func() -> void:
+		if visible:
+			_refresh_list())
 
 func _build_tabs() -> void:
 	# The old "Upgrade" tab only ever showed a "coming soon" placeholder —
@@ -113,6 +108,7 @@ func _build_craft_panel() -> void:
 		row.color = PANEL_EDGE
 		row.custom_minimum_size = Vector2(list_w - 6, 34)
 		row.size = Vector2(list_w - 6, 34)
+		row.visible = Logic.is_available(r)
 		list_vbox.add_child(row)
 		var lbl := Label.new()
 		lbl.text = tr(r["name_key"])
@@ -243,7 +239,7 @@ func _update_detail() -> void:
 
 func _change_qty(delta: int) -> void:
 	if _selected_recipe < 0: return
-	var max_qty := 99
+	var max_qty := 1 if RECIPES[_selected_recipe].has("flag") else 99
 	var r := RECIPES[_selected_recipe]
 	for comp in r["components"]:
 		var item_id = comp[0] as String
@@ -255,25 +251,14 @@ func _change_qty(delta: int) -> void:
 	_update_detail()
 
 func _can_craft_recipe(idx: int) -> bool:
-	if not InventoryManager or idx < 0 or idx >= RECIPES.size(): return false
-	var r := RECIPES[idx]
-	for comp in r["components"]:
-		if InventoryManager.count_of(comp[0]) < comp[1]: return false
-	return true
+	return idx >= 0 and idx < RECIPES.size() and Logic.can_craft(RECIPES[idx])
 
 func _can_craft_qty(idx: int, qty: int) -> bool:
-	if not InventoryManager or idx < 0 or idx >= RECIPES.size(): return false
-	var r := RECIPES[idx]
-	for comp in r["components"]:
-		if InventoryManager.count_of(comp[0]) < comp[1] * qty: return false
-	return qty > 0
+	return idx >= 0 and idx < RECIPES.size() and Logic.can_craft(RECIPES[idx], qty)
 
 func _do_craft() -> void:
-	if _selected_recipe < 0 or not _can_craft_qty(_selected_recipe, _craft_qty): return
+	if _selected_recipe < 0 or not Logic.craft(RECIPES[_selected_recipe], _craft_qty): return
 	var r := RECIPES[_selected_recipe]
-	for comp in r["components"]:
-		InventoryManager.remove(comp[0], comp[1] * _craft_qty)
-	InventoryManager.try_add(r["result"], r["count"] * _craft_qty)
 	# q_craft_items only advanced via crafting_manager.gd, which is never
 	# autoloaded/instantiated anywhere - the real crafting path (here)
 	# never satisfied it, so the quest was permanently uncompletable.
@@ -289,6 +274,7 @@ func _refresh_list() -> void:
 	for i in _recipe_btns.size():
 		var row = _recipe_btns[i]
 		if not is_instance_valid(row): continue
+		row.visible = Logic.is_available(RECIPES[i])
 		var stlbl := row.get_node_or_null("Status") as Label
 		if stlbl:
 			var can := _can_craft_recipe(i)
@@ -411,7 +397,7 @@ func _do_salvage() -> void:
 					InventoryManager.remove(item_id, 1)
 					if EventBus and EventBus.has_signal("inventory_notice"):
 						var key := "ITEM_" + String(item_id).to_upper()
-						EventBus.inventory_notice.emit("Salvaged: " + tr(key))
+						EventBus.inventory_notice.emit(tr("WORKBENCH_SALVAGED") % tr(key))
 					_selected_salvage = -1
 					_refresh_salvage()
 					return

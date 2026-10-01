@@ -4,7 +4,10 @@ const BAR_W: float = 220.0
 const BAR_H: float = 16.0
 const BAR_ROW_PITCH: float = 34.0
 const BAR_ROW_TOP: float = 30.0
-const _SLOT_ITEMS: Array = [&"flashlight", &"battery", &"medkit", &"key", &"cable", &"fuse"]
+## GDD §24.1: weapon x2, battery, medkit, grenade, special item (the flashlight).
+const _SLOT_ITEMS: Array = [&"pistol", &"rifle", &"battery", &"medkit", &"molotov", &"flashlight"]
+## The two weapon slots and the guns each one cycles through (GDD §18: pistol, rifle, shotgun).
+const _WEAPON_SLOTS: Array = [[&"pistol"], [&"rifle", &"shotgun"]]
 
 var _hp: float = 1.0
 var _stam: float = 1.0
@@ -101,6 +104,7 @@ func _ready() -> void:
 	_add_battery_ad_button()
 	_maybe_show_touch_calibration()
 	EventBus.ammo_changed.connect(_on_ammo_changed)
+	EventBus.player_hiding_changed.connect(_on_player_hiding_changed)
 	EventBus.player_interact_available.connect(func(avail: bool): prompt.visible = avail)
 	EventBus.player_interact_available.connect(_pulse_interact_button)
 	# Подсказка была вечно пустой строкой: текст в неё никто не писал.
@@ -1202,10 +1206,32 @@ func _add_battery_ad_button() -> void:
 	bat_row.add_child(btn)
 	_battery_ad_button = btn
 
-func _on_ammo_changed(current: int, max_ammo: int) -> void:
-	ammo_val.text = "%d / %d" % [current, max_ammo]
+## S04 (GDD §7): inside a hiding spot visibility is 0, and the view dims to say so.
+var _hide_overlay: ColorRect = null
+
+func _on_player_hiding_changed(hiding: bool) -> void:
+	if _hide_overlay == null:
+		_hide_overlay = ColorRect.new()
+		_hide_overlay.name = "HideOverlay"
+		_hide_overlay.color = Color(ThemeProvider.COLOR_BG_DARK, 0.55)
+		_hide_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		add_child(_hide_overlay)
+		_hide_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		var caption := Label.new()
+		caption.name = "HideCaption"
+		caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		caption.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
+		_hide_overlay.add_child(caption)
+		caption.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM, Control.PRESET_MODE_MINSIZE)
+		caption.offset_top = -160.0
+	(_hide_overlay.get_node("HideCaption") as Label).text = LocalizationManager.t("HUD_HIDDEN")
+	_hide_overlay.visible = hiding
+
+func _on_ammo_changed(current: int, reserve: int) -> void:
+	ammo_val.text = "%d / %d" % [current, reserve]
 	_ammo_current = current
 	_apply_crosshair_state()
+	_refresh_slot_badges()
 
 ## V.1 3.13: this widget never had a live source. WeaponManager/WeaponBase are
 ## committed but no scene instantiates either (weapon_pickup.gd:31-34 says so
@@ -1222,7 +1248,7 @@ func _poll_weapon_state() -> void:
 	var weapon: Node = _find_player_weapon(player)
 	var present: bool = weapon != null and is_instance_valid(weapon)
 	if present and "current_ammo" in weapon and "max_ammo" in weapon:
-		_on_ammo_changed(int(weapon.get("current_ammo")), int(weapon.get("max_ammo")))
+		_on_ammo_changed(int(weapon.get("current_ammo")), ProgressTracker.ammo)
 	elif _ammo_current >= 0:
 		# The weapon went away mid-run; drop the stale reading rather than
 		# leaving the crosshair greyed by an empty magazine that no longer exists.
@@ -1409,16 +1435,24 @@ func _setup_slot_placeholders() -> void:
 			if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 				_use_quick_slot(si)
 		)
-	var slot0 := get_node("BottomCenter/Slot0")
+	var slot0 := get_node("BottomCenter/Slot" + str(_SLOT_ITEMS.find(&"flashlight")))
 	if slot0:
 		var border := slot0.get_node_or_null("Border")
 		if border is ColorRect:
 			(border as ColorRect).color = Color(0.788, 0.635, 0.290)
 		elif border is CanvasItem:
 			(border as CanvasItem).modulate = Color(0.788, 0.635, 0.290)
+	_refresh_slot_badges()
 
 func _on_quick_slot_key(index: int) -> void:
 	_use_quick_slot(index)
+
+func _weapon_manager() -> WeaponManager:
+	var player := get_tree().get_first_node_in_group("player")
+	return player.get_node_or_null("WeaponManager") as WeaponManager if player != null else null
+
+func _weapon_slot_owned(index: int) -> bool:
+	return _WEAPON_SLOTS[index].any(func(id: StringName) -> bool: return ProgressTracker.has_weapon(String(id)))
 
 ## V.1 3.2: the bar's six slots are a fixed item order (_SLOT_ITEMS), but
 ## InventoryManager::use_item() takes an *inventory slot* index. The two were
@@ -1428,6 +1462,11 @@ func _on_quick_slot_key(index: int) -> void:
 ## it, the same way _refresh_slot_badges() counts it.
 func _use_quick_slot(index: int) -> void:
 	if index < 0 or index >= _SLOT_ITEMS.size():
+		return
+	if index < _WEAPON_SLOTS.size():
+		var weapons := _weapon_manager()
+		if weapons != null:
+			weapons.cycle(_WEAPON_SLOTS[index])
 		return
 	var item_id: StringName = _SLOT_ITEMS[index]
 	# Slot 0 is the flashlight: it is a tool, not an inventory item (no
@@ -1456,6 +1495,10 @@ func _refresh_slot_badges() -> void:
 		if not badge:
 			continue
 		var item_id: StringName = _SLOT_ITEMS[i]
+		if i < _WEAPON_SLOTS.size():
+			badge.text = str(ProgressTracker.ammo) if _weapon_slot_owned(i) else "-"
+			badge.visible = true
+			continue
 		badge.text = str(inv.count_of(item_id))
 		badge.visible = item_id != &"flashlight"
 

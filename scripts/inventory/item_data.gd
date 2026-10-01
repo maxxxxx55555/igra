@@ -4,7 +4,7 @@ extends Resource
 ## Rarity: GDD §V.5 9.13 — фильтры «обычные/редкие/эпические».
 ## Исходный набор расширен EPIC по требованию спеки.
 enum Rarity { COMMON, UNCOMMON, RARE, EPIC }
-enum Effect { NONE, HEAL, RECHARGE }
+enum Effect { NONE, HEAL, RECHARGE, CAPACITY }
 ## GDD §V.5 9.5: слоты экипировки; NONE = не экипируется.
 enum EquipSlot { NONE, HEAD, BODY, LEGS, HOLSTER, BACKPACK }
 

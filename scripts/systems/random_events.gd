@@ -1,12 +1,16 @@
 extends Node
-enum Ev { BLACKOUT, SURGE, DISTRESS, ACCIDENT }
-const EV_COUNT: int = 4
+enum Ev { BLACKOUT, SURGE, DISTRESS, ACCIDENT, HALLUCINATION }
+const EV_COUNT: int = 5
 const NAMES := {
 	Ev.BLACKOUT: "EVENT_BLACKOUT",
 	Ev.SURGE: "EVENT_SURGE",
 	Ev.DISTRESS: "EVENT_DISTRESS",
 	Ev.ACCIDENT: "EVENT_ACCIDENT",
+	Ev.HALLUCINATION: "EVENT_HALLUCINATION",
 }
+## A step that is not there (GDD achievement "Who's There?"): the shadows' click, close behind the player.
+const HALLUCINATION_SOUND: AudioStream = preload("res://assets/audio/sfx/mon_shadow_teleport.wav")
+const HALLUCINATION_DISTANCE: float = 9.0
 var _timer: float = 0.0
 @export var min_interval: float = 60.0
 @export var max_interval: float = 95.0
@@ -44,6 +48,12 @@ func _fire() -> void:
 			var p := get_tree().get_first_node_in_group("player")
 			if is_instance_valid(p):
 				EventBus.noise_emitted.emit(Vector2(p.global_position.x, p.global_position.z), 320.0)
+		Ev.HALLUCINATION:
+			var listener := get_tree().get_first_node_in_group("player") as Node3D
+			if is_instance_valid(listener):
+				var behind := listener.global_position + Vector3.RIGHT.rotated(Vector3.UP, randf() * TAU) * HALLUCINATION_DISTANCE
+				AudioManager.play_sound_3d(HALLUCINATION_SOUND, behind)
+			EventBus.hallucination_heard.emit()
 func _random_non_full_district() -> StringName:
 	var candidates: Array = []
 	for d in PowerGrid.all_districts():

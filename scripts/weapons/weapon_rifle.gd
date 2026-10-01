@@ -1,39 +1,17 @@
 extends WeaponBase
 class_name WeaponRifle
 
-@export var hitscan_damage: int = 12
-@export var hitscan_spread: float = 0.05
-
-@onready var _ray: RayCast3D = $RayCast3D
-@onready var _sfx: AudioStreamPlayer3D = $AudioStreamPlayer3D
+const SHOOT := preload("res://assets/audio/sfx/sfx_shoot.wav")
+const RELOAD := preload("res://assets/audio/sfx/sfx_reload.wav")
 
 func _ready() -> void:
-	super._ready()
-	# P2 (FINAL INTEGRATION wave): was never set here (unlike weapon_pistol.gd),
-	# so weapon_compare_ui.gd's "from -> to" title showed a blank name every
-	# time the player switched to or from the rifle.
 	weapon_name = "Rifle"
-	damage = hitscan_damage
-	if _sfx and ResourceLoader.exists("res://assets/audio/sfx/sfx_shoot.wav"):
-		_sfx.stream = load("res://assets/audio/sfx/sfx_shoot.wav")
-
-func fire(from_pos: Vector3 = Vector3.ZERO, direction: Vector3 = Vector3.FORWARD) -> bool:
-	if not can_fire():
-		return false
-	_fire_timer = fire_rate
-	current_ammo -= 1
-	ammo_changed.emit(current_ammo, max_ammo)
-	if _ray:
-		_ray.target_position = Vector3(randf() - 0.5, randf() - 0.5, -1) * hitscan_spread + Vector3(0, 0, -10)
-		_ray.force_raycast_update()
-		if _ray.is_colliding():
-			var target := _ray.get_collider()
-			if target and target.has_method("take_damage"):
-				target.take_damage(hitscan_damage, Vector3.ZERO, EnemyRosterData.DamageType.BULLET)
-			elif target and target.has_node("HealthComponent"):
-				target.get_node("HealthComponent").take_damage(hitscan_damage)
-	if _sfx:
-		_sfx.pitch_scale = 1.2
-		_sfx.play()
-	fired.emit()
-	return true
+	damage = 14.0
+	fire_rate = 0.12
+	max_ammo = 30
+	reload_time = 2.2
+	spread = 0.012
+	automatic = true
+	fire_sound = SHOOT
+	reload_sound = RELOAD
+	super._ready()

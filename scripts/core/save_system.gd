@@ -351,7 +351,7 @@ func load_all() -> bool:
 	# every OTHER reader (UI, minimap, achievement/quest conditions).
 	if dm != null and not did.is_empty() and dm.DISTRICTS.has(did):
 		dm.current_district = did
-	_photos = data.get("photos", [])
+	_photos = _clean_photos(data.get("photos", []))
 	_daily_streak = int(data.get("daily_streak", 0))
 	_last_daily_time = int(data.get("last_daily_time", 0))
 	SkillTreeManager.load_data(data.get("skill_tree", {}))
@@ -438,11 +438,22 @@ func get_quest_data() -> Dictionary:
 	return _quest_data.duplicate()
 
 func add_photo(photo_id: String) -> bool:
-	if photo_id in _photos:
+	if photo_id in _photos or not PHOTO_ID_PATTERN.search(photo_id) or _photos.size() >= MAX_PHOTOS:
 		return false
 	_photos.append(photo_id)
-	_save()
 	return true
+
+## Ids are file names under user://photos: lowercase words only, and no more than a game can give.
+const MAX_PHOTOS: int = 400
+static var PHOTO_ID_PATTERN := RegEx.create_from_string("^[a-z0-9_]{1,80}$")
+
+static func _clean_photos(raw: Variant) -> Array:
+	var out: Array = []
+	if raw is Array:
+		for id in raw:
+			if id is String and PHOTO_ID_PATTERN.search(id) != null and not out.has(id) and out.size() < MAX_PHOTOS:
+				out.append(id)
+	return out
 
 func get_photos() -> Array:
 	return _photos.duplicate()
@@ -557,7 +568,7 @@ func load_slot(slot: int) -> bool:
 	# every OTHER reader (UI, minimap, achievement/quest conditions).
 	if dm != null and not did.is_empty() and dm.DISTRICTS.has(did):
 		dm.current_district = did
-	_photos = data.get("photos", [])
+	_photos = _clean_photos(data.get("photos", []))
 	_daily_streak = int(data.get("daily_streak", 0))
 	_last_daily_time = int(data.get("last_daily_time", 0))
 	_onboard_done = bool(data.get("onboard_done", false))

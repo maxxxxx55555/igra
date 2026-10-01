@@ -64,14 +64,14 @@ const ACHIEVEMENTS: Dictionary = {
 		"name": "ACH_09_NAME",
 		"description": "ACH_09_DESC",
 		"secret": false,
-		"condition": "photos_10"
+		"condition": "photos_50"
 	},
 	"ach_10": {
 		"id": &"ach_10",
 		"name": "ACH_10_NAME",
 		"description": "ACH_10_DESC",
 		"secret": false,
-		"condition": "secrets_10"
+		"condition": "photos_100"
 	},
 	"ach_11": {
 		"id": &"ach_11",
@@ -120,7 +120,7 @@ const ACHIEVEMENTS: Dictionary = {
 		"name": "ACH_17_NAME",
 		"description": "ACH_17_DESC",
 		"secret": true,
-		"condition": "all_flashlight_skins"
+		"condition": "photos_200"
 	},
 	"ach_18": {
 		"id": &"ach_18",
@@ -170,13 +170,18 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_load()
 	EventBus.enemy_killed.connect(_on_enemy_killed)
-	EventBus.secret_found.connect(_on_secret_found)
 	EventBus.district_restored.connect(_on_district_restored)
 	EventBus.streetlight_activated.connect(_on_streetlight_activated)
 	EventBus.document_unlocked.connect(_on_document_unlocked)
 	EventBus.quest_completed.connect(_on_quest_completed)
 	EventBus.game_won.connect(_on_game_won)
-	EventBus.item_consumed.connect(_on_item_consumed)
+	EventBus.game_over.connect(_on_player_died)
+	EventBus.combo_chain_landed.connect(_on_combo_chain_landed)
+	EventBus.combo_chain_broken.connect(func() -> void: _progress["ach_07"] = 0)
+	EventBus.player_detected.connect(func(_monster: StringName) -> void: _remember(&"seen_", &"park"))
+	EventBus.player_damaged.connect(func(_amount: float) -> void: _remember(&"hurt_", &"school"))
+	EventBus.slept.connect(func() -> void: _check_unlock(&"ach_19", true))
+	EventBus.hallucination_heard.connect(_on_hallucination)
 
 ## QA_SWARM_FINDINGS.md P2 (cheater): this file used to be plain JSON, unlike
 ## save_system.gd's HMAC-signed envelope - hand-editing "unlocked": true was
@@ -310,12 +315,48 @@ func _on_enemy_killed(monster_id: StringName) -> void:
 		_check_unlock(&"ach_05", 50)
 	_increment_progress(&"ach_13")
 
-func _on_secret_found(secret_id: StringName) -> void:
-	_increment_progress(&"ach_10")
-	_check_unlock(&"ach_10", 10)
+## "Quiet as a Mouse" (District 3) and "Without a Scratch" (District 4): the district is restored with no monster
+## having noticed the player there / no damage taken there. The marks live in _progress, so a save keeps them.
+const SPEEDRUN_SEC: float = 4.0 * 3600.0
+const OVERLOAD_KG: float = 39.0
+const OVERLOAD_SEC: float = 300.0
+const COMBO_CHAINS: int = 10
+const COINS_GOAL: int = 5000
+var _poll: float = 0.0
+var _overload_sec: float = 0.0
+
+func _remember(prefix: StringName, district: StringName) -> void:
+	if DistrictManager.current_district == String(district):
+		_progress[String(prefix) + String(district)] = 1
+
+func _on_player_died() -> void:
+	_check_unlock(&"ach_15", true)
+
+func _on_combo_chain_landed() -> void:
+	_increment_progress(&"ach_07")
+	_check_unlock(&"ach_07", COMBO_CHAINS)
+
+func _on_hallucination() -> void:
+	_increment_progress(&"ach_20")
+	_check_unlock(&"ach_20", 5)
+
+func _process(delta: float) -> void:
+	if not GameManager.is_playing():
+		return
+	_poll += delta
+	if _poll < 1.0:
+		return
+	_overload_sec = _overload_sec + _poll if InventoryManager.current_weight > OVERLOAD_KG else 0.0
+	_poll = 0.0
+	_check_unlock(&"ach_08", _overload_sec >= OVERLOAD_SEC)
+	_check_unlock(&"ach_11", CoinWallet.get_coins() >= COINS_GOAL)
 
 func _on_district_restored(district_id: StringName, stage: int) -> void:
 	if stage >= 3:
+		if district_id == &"park":
+			_check_unlock(&"ach_06", not _progress.has("seen_park"))
+		if district_id == &"school":
+			_check_unlock(&"ach_12", not _progress.has("hurt_school"))
 		_check_unlock(&"ach_02", true)
 		_check_unlock(&"ach_03", _all_districts_full())
 		# GOLD MASTER v5 hooks pass: one achievement per district, generic
@@ -342,11 +383,11 @@ func _on_quest_completed(quest_id: StringName) -> void:
 
 func _on_game_won() -> void:
 	_check_unlock(&"ach_13", true)
-
-func _on_item_consumed(item_id: StringName, effect: StringName, value: float) -> void:
-	if item_id == &"photo":
-		_increment_progress(&"ach_09")
-		_check_unlock(&"ach_09", 10)
+	for ending in Endings.evaluate():
+		if ending.get("id", "") == "truth":
+			_check_unlock(&"ach_14", true)
+	_check_unlock(&"ach_16", ProgressTracker.time_played < SPEEDRUN_SEC)
+	_check_unlock(&"ach_18", bool(SettingsManager.get_setting("hardcore", false)))
 
 ## condition is either a bool (milestone already met/not) or an int target
 ## (compared against the running _progress counter _increment_progress()

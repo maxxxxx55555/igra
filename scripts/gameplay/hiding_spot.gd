@@ -1,26 +1,32 @@
 extends Node3D
 class_name HidingSpot
 
-## S2.3 hiding spot: locker / dumpster / car. Player enters with interact,
-## monsters lose track while occupied. Builds its own mesh + body when the
-## scene has no children (StreetBuilder spawns bare nodes).
+## S2.3 hiding spot: locker / dumpster / car / crate / bush / dark corner (GDD §7). Player enters with
+## interact, monsters lose track while occupied. Builds its own mesh + body when the
+## scene has no children (DistrictLoot spawns bare nodes).
 
 @export var spot_type: String = "locker"
 @export var capacity: int = 1
 ## Monsters within this radius can still spot the player entering.
 @export var enter_radius: float = 2.0
+## Where the player steps out: the unit direction from the spot toward the street.
+@export var exit_dir: Vector3 = Vector3(0.0, 0.0, 1.0)
 
 const TYPE_SIZES := {
 	"locker":   Vector3(0.9, 2.0, 0.7),
 	"dumpster": Vector3(1.8, 1.2, 1.0),
-	"car":      Vector3(2.0, 1.4, 4.2),
+	"car":      Vector3(4.2, 1.4, 2.0),
 	"crate":    Vector3(1.2, 1.2, 1.2),
+	"bush":     Vector3(1.6, 1.1, 1.0),
+	"dark_corner": Vector3(1.6, 2.2, 0.5),
 }
 const TYPE_COLORS := {
 	"locker":   Color(0.22, 0.26, 0.30),
 	"dumpster": Color(0.18, 0.28, 0.22),
 	"car":      Color(0.24, 0.22, 0.26),
 	"crate":    Color(0.30, 0.24, 0.16),
+	"bush":     Color(0.09, 0.16, 0.12),
+	"dark_corner": Color(0.043, 0.059, 0.078),
 }
 
 var _occupied: bool = false
@@ -73,11 +79,24 @@ func enter(player: Node3D) -> bool:
 		return false
 	_occupied = true
 	_occupant = player
+	# The player stands inside the spot's own collider while hidden: let it through.
+	var body := get_node_or_null("Body") as CollisionObject3D
+	if body != null and player is PhysicsBody3D:
+		(player as PhysicsBody3D).add_collision_exception_with(body)
 	return true
 
 func exit() -> void:
+	var player := _occupant
 	_occupied = false
 	_occupant = null
+	if player == null or not is_instance_valid(player):
+		return
+	var body := get_node_or_null("Body") as CollisionObject3D
+	if body != null and player is PhysicsBody3D:
+		(player as PhysicsBody3D).remove_collision_exception_with(body)
+	var half_depth: float = (TYPE_SIZES.get(spot_type, TYPE_SIZES["locker"]) as Vector3).z * 0.5
+	var out := global_position + exit_dir.normalized() * (half_depth + 0.9)
+	player.global_position = Vector3(out.x, player.global_position.y, out.z)
 
 func is_occupied() -> bool:
 	return _occupied

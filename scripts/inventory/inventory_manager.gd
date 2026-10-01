@@ -339,6 +339,7 @@ func _effect_name(e: int) -> StringName:
 	match e:
 		ItemData.Effect.HEAL: return &"HEAL"
 		ItemData.Effect.RECHARGE: return &"RECHARGE"
+		ItemData.Effect.CAPACITY: return &"CAPACITY"
 		_: return &"NONE"
 
 @rpc("any_peer", "reliable")

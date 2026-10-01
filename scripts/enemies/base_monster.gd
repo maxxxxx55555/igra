@@ -208,12 +208,19 @@ func _ensure_hp() -> void:
 	_hp_initialized = true
 	hp = max_hp
 
+## The Difficulty screen's pick (Easy, Normal, Hard) scales what a monster has and deals; Normal is the game as tuned.
+const DIFFICULTY_HP: Array[float] = [0.8, 1.0, 1.2]
+const DIFFICULTY_DAMAGE: Array[float] = [0.75, 1.0, 1.25]
+
 ## Вызывается до _ensure_hp(), чтобы hp сразу считался от отмасштабированного
 ## max_hp. Раньше шёл через call_deferred и накручивал множители повторно.
 func _apply_ng_scaling() -> void:
 	if _ng_scaled:
 		return
 	_ng_scaled = true
+	var level: int = clampi(int(SettingsManager.get_setting("difficulty", 1)), 0, 2)
+	max_hp *= DIFFICULTY_HP[level]
+	attack_damage *= DIFFICULTY_DAMAGE[level]
 	var ngp := get_node_or_null("/root/NewGamePlus")
 	if ngp == null or not ngp.is_ng_plus_active():
 		return
@@ -512,7 +519,7 @@ func _deal_damage() -> void:
 		return
 	if player_ref and is_instance_valid(player_ref) and player_ref.has_method("take_damage"):
 		if global_position.distance_to(player_ref.global_position) <= attack_range + 0.5:
-			player_ref.take_damage(attack_damage)
+			player_ref.take_damage(attack_damage, global_position)
 			_inflict_statuses(player_ref)
 			EventBus.enemy_attack.emit(attack_damage)
 
@@ -523,18 +530,9 @@ func _can_see_player() -> bool:
 	# Модификатор NG+ "ghost": Crawlers полностью игнорируют игрока.
 	if monster_id == &"crawler" and NewGamePlus.get_modifier_toggle("crawlers_ignore"):
 		return false
-	var vrange := vision_range
-	var prange := peripheral_range
-	# docs/DESIGN_AUDIT_ARENA.md P2 low_profile: -10%/level to both sight
-	# ranges, avoidance only. Acquire-states only (not an active CHASE),
-	# player must be sneaking with the flashlight off, boss excluded.
-	if not is_in_group("boss") and ai_state in [State.IDLE, State.PATROL, State.INVESTIGATE] \
-			and player_ref.has_method("is_sneaking") and player_ref.is_sneaking() \
-			and player_ref.get("flashlight_enabled") == false:
-		var lp_lvl: int = SkillTreeManager.get_skill_level(&"low_profile") if SkillTreeManager else 0
-		var mult := 1.0 - 0.10 * lp_lvl
-		vrange *= mult
-		prange *= mult
+	var ranges := _sight_ranges()
+	var vrange := ranges.x
+	var prange := ranges.y
 	var dist := global_position.distance_to(player_ref.global_position)
 	if dist > vrange:
 		# Check peripheral vision
@@ -554,6 +552,33 @@ func _can_see_player() -> bool:
 			return _check_line_of_sight()
 		return false
 	return _check_line_of_sight()
+
+## GDD §7 / S02: without a light in a dark district a monster notices the player from 3 m at most.
+const DARK_SIGHT_CAP: float = 3.0
+
+## Vision and peripheral range after the player's visibility and the low_profile skill.
+func _sight_ranges() -> Vector2:
+	var vrange := vision_range
+	var prange := peripheral_range
+	var acquiring: bool = ai_state in [State.IDLE, State.PATROL, State.INVESTIGATE]
+	var light_off: bool = player_ref.get("flashlight_enabled") == false
+	# docs/DESIGN_AUDIT_ARENA.md P2 low_profile: -10%/level to both sight
+	# ranges, avoidance only. Acquire-states only (not an active CHASE),
+	# player must be sneaking with the flashlight off, boss excluded.
+	if not is_in_group("boss") and acquiring and player_ref.has_method("is_sneaking") \
+			and player_ref.is_sneaking() and light_off:
+		var lp_lvl: int = SkillTreeManager.get_skill_level(&"low_profile") if SkillTreeManager else 0
+		var mult := 1.0 - 0.10 * lp_lvl
+		vrange *= mult
+		prange *= mult
+	if player_ref.has_method("get_visibility_scale"):
+		var vis: float = player_ref.get_visibility_scale()
+		vrange *= vis
+		prange *= vis
+		if acquiring and light_off and PowerGrid.get_stage(StringName(DistrictManager.current_district)) < DistrictData.Stage.STREETS:
+			vrange = minf(vrange, DARK_SIGHT_CAP)
+			prange = minf(prange, DARK_SIGHT_CAP)
+	return Vector2(vrange, prange)
 
 func _check_line_of_sight() -> bool:
 	var space := get_world_3d().direct_space_state

@@ -259,6 +259,106 @@ def draw_backpack_l2():
     return _backpack(2)
 
 
+def draw_rifle():
+    cv = Canvas()
+    rrect(cv, 32, 80, 42, 18, 5, -0.15, BROWN)            # приклад
+    rrect(cv, 62, 70, 36, 16, 4, 0, STEEL_DK)             # ствольная коробка
+    caps(cv, 76, 66, 118, 62, 4, STEEL)                    # ствол
+    rrect(cv, 56, 88, 10, 22, 3, 0.2, BROWN)               # рукоять
+    flat(cv, 92, 56, 20, 4, 1, 0, mul(STEEL, 1.2), 1.0)    # прицельная планка
+    return cv
+
+
+def draw_shotgun():
+    cv = Canvas()
+    rrect(cv, 30, 82, 40, 20, 5, -0.2, BROWN)              # приклад
+    rrect(cv, 58, 70, 28, 14, 4, 0, STEEL_DK)              # ствольная коробка
+    caps(cv, 70, 66, 118, 62, 5, STEEL)                    # ствол
+    caps(cv, 72, 75, 108, 72, 4, STEEL_DK)                 # трубчатый магазин
+    rrect(cv, 94, 80, 22, 10, 3, 0, BROWN)                 # цевьё
+    return cv
+
+
+def draw_plank():
+    cv = Canvas()
+    rrect(cv, 64, 48, 96, 22, 3, 0.05, BROWN)
+    rrect(cv, 62, 78, 100, 22, 3, -0.04, mul(BROWN, 1.15))
+    for x in (30, 98):
+        circ(cv, x, 48, 3, STEEL, outline=1.2, grad=0.2)
+        circ(cv, x - 2, 78, 3, STEEL, outline=1.2, grad=0.2)
+    return cv
+
+
+def _battery(cv, cx, cy, mark):
+    rrect(cv, cx, cy, 46, 72, 7, 0, GREEN)
+    flat(cv, cx, cy - 42, 18, 8, 2, 0, STEEL, 1.0)
+    if mark == "plus":
+        flat(cv, cx, cy, 24, 7, 2, 0, AMBER_HI, 1.0)
+        flat(cv, cx, cy, 7, 24, 2, 0, AMBER_HI, 1.0)
+    else:
+        for i in range(2):
+            flat(cv, cx - 8 + i * 16, cy, 7, 30, 2, 0, AMBER_HI, 1.0)
+
+
+def draw_enhanced_battery():
+    cv = Canvas()
+    _battery(cv, 64, 70, "plus")
+    return cv
+
+
+def draw_battery_l2():
+    cv = Canvas()
+    _battery(cv, 64, 70, "bars")
+    return cv
+
+
+def _sheet():
+    cv = Canvas()
+    rrect(cv, 64, 64, 88, 100, 4, 0, mul(GLASS, 0.55))
+    for i in range(5):
+        flat(cv, 64, 28 + i * 18, 80, 1.5, 0, 0, mul(CREAM, 1.0), 0.28)
+    return cv
+
+
+def draw_blueprint_enhanced_battery():
+    cv = _sheet()
+    _battery(cv, 64, 66, "plus")
+    return cv
+
+
+def draw_blueprint_battery_l2():
+    cv = _sheet()
+    _battery(cv, 64, 66, "bars")
+    return cv
+
+
+def draw_blueprint_uv_flashlight():
+    cv = _sheet()
+    violet = (120, 104, 168)
+    circ(cv, 64, 64, 14, violet, outline=2.0, grad=0.2)
+    for k in range(8):
+        a = k * math.pi / 4
+        caps(cv, 64 + math.cos(a) * 22, 64 + math.sin(a) * 22, 64 + math.cos(a) * 32, 64 + math.sin(a) * 32, 2.6, violet)
+    return cv
+
+
+def draw_blueprint_strobe_flashlight():
+    cv = _sheet()
+    caps(cv, 70, 34, 52, 66, 4, AMBER_HI)
+    caps(cv, 52, 66, 76, 66, 4, AMBER_HI)
+    caps(cv, 76, 66, 58, 98, 4, AMBER_HI)
+    return cv
+
+
+def draw_blueprint_portable_workbench():
+    cv = _sheet()
+    rrect(cv, 64, 58, 62, 12, 3, 0, BROWN)
+    for x in (42, 86):
+        caps(cv, x, 64, x, 92, 3.2, BROWN)
+    flat(cv, 64, 80, 52, 4, 1, 0, STEEL_DK, 1.0)
+    return cv
+
+
 TARGETS = {
     "document": draw_document,
     "photo": draw_photo,
@@ -267,12 +367,25 @@ TARGETS = {
     "transformer": draw_transformer,
     "backpack_l1": draw_backpack_l1,
     "backpack_l2": draw_backpack_l2,
+    "rifle": draw_rifle,
+    "shotgun": draw_shotgun,
+    "plank": draw_plank,
+    "enhanced_battery": draw_enhanced_battery,
+    "battery_l2": draw_battery_l2,
+    "blueprint_enhanced_battery": draw_blueprint_enhanced_battery,
+    "blueprint_battery_l2": draw_blueprint_battery_l2,
+    "blueprint_uv_flashlight": draw_blueprint_uv_flashlight,
+    "blueprint_strobe_flashlight": draw_blueprint_strobe_flashlight,
+    "blueprint_portable_workbench": draw_blueprint_portable_workbench,
 }
 
 if __name__ == "__main__":
     import sys
     outdir = sys.argv[1] if len(sys.argv) > 1 else "assets/textures/items"
+    only = sys.argv[2:]
     for name, fn in TARGETS.items():
+        if only and name not in only:
+            continue
         cv = fn()
         path = f"{outdir}/{name}.png"
         cv.save(path)

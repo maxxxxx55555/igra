@@ -90,6 +90,14 @@ signal radar_marker_added(position: Vector2)
 signal secret_found(secret_id: String)
 ## Снимок в фоторежиме сохранён. Нужен ежедневкам типа photo_subject.
 signal photo_captured(path: String)
+## G26: a photo joined the album; `total` is its size.
+signal photo_added(total: int)
+## Achievements: a third hit of the combo landed; a chain was left unfinished; the player slept in a bed;
+## a random event played a sound with nothing behind it.
+signal combo_chain_landed
+signal combo_chain_broken
+signal slept
+signal hallucination_heard
 signal settings_changed(key: String, value: Variant)
 signal shop_toggle_requested
 signal skin_unlocked(skin_id: String)

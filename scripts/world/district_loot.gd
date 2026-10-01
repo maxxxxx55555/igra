@@ -14,6 +14,10 @@ class_name DistrictLoot
 const PICKUP_SCENE: PackedScene = preload("res://scenes/pickups/item_pickup_3d.tscn")
 const DOC_SCENE: PackedScene = preload("res://scenes/pickups/document_pickup.tscn")
 const SECRET_SCENE: PackedScene = preload("res://scenes/props/secret.tscn")
+const WEAPON_PICKUP_SCENE: PackedScene = preload("res://scenes/pickups/weapon_pickup.tscn")
+const AMMO_PICKUP_SCENE: PackedScene = preload("res://scenes/pickups/ammo_pickup.tscn")
+const STATION_SCENE: PackedScene = preload("res://scenes/gameplay/craft_station.tscn")
+const BED_SCRIPT: Script = preload("res://scripts/gameplay/bed.gd")
 
 ## content/secrets.json — 26 секретов, авторский контент. Читается один раз
 ## на запуск: populate() статический и вызывается по разу на район.
@@ -214,7 +218,38 @@ static func populate(district_root: Node3D, district_id: StringName) -> int:
 			if _spawn_document(district_root, String(doc_id), lpos):
 				placed += 1
 	placed += _spawn_secrets(district_root, district_id)
+	_spawn_hiding_spots(district_root, district_id)
+	_spawn_extras(district_root, district_id, already_looted)
 	return placed
+
+## S04 (GDD §7): lockers, car trunks, bushes and dark corners to hide in. Three per district on the outer
+## edge of a sidewalk (the benches' and trees' line, floor under the footprint), facing the road. Own rng
+## stream, so the loot positions above stay where they were. Not counted in `placed`: they are not loot.
+const HIDING_TYPES: Array[String] = ["locker", "dumpster", "car", "crate", "bush", "dark_corner"]
+const HIDING_PER_DISTRICT: int = 3
+const HIDING_SIDEWALK: float = 3.7
+const HIDING_ALONG: float = 20.0
+
+static func _spawn_hiding_spots(root: Node3D, district_id: StringName) -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash(String(district_id) + "_hiding")
+	var first: int = maxi(DistrictSceneFactory.DISTRICTS.find(district_id), 0) * HIDING_PER_DISTRICT
+	for i in HIDING_PER_DISTRICT:
+		var pose := _sidewalk_pose(rng)
+		var spot := HidingSpot.new()
+		spot.spot_type = HIDING_TYPES[(first + i) % HIDING_TYPES.size()]
+		spot.exit_dir = pose[1]
+		spot.rotation.y = atan2(spot.exit_dir.x, spot.exit_dir.z)
+		root.add_child(spot)
+		spot.global_position = root.global_position + pose[0]
+
+## A spot on the outer edge of a sidewalk: x = the position, y = the direction toward the road.
+static func _sidewalk_pose(rng: RandomNumberGenerator) -> Array[Vector3]:
+	var axis: float = STREET_AXES[rng.randi() % STREET_AXES.size()]
+	var along: float = rng.randf_range(-HIDING_ALONG, HIDING_ALONG)
+	if rng.randf() < 0.5:
+		return [Vector3(along, 0.0, axis + HIDING_SIDEWALK), Vector3(0.0, 0.0, -1.0)]
+	return [Vector3(axis + HIDING_SIDEWALK, 0.0, along), Vector3(-1.0, 0.0, 0.0)]
 
 ## Секреты района из content/secrets.json.
 ##
@@ -290,14 +325,14 @@ static func _scatter(root: Node3D, rng: RandomNumberGenerator) -> Vector3:
 	var rad := rng.randf_range(RADIUS_MIN, RADIUS_MAX)
 	return root.global_position + _snap_to_street(Vector3(cos(ang) * rad, DROP_Y, sin(ang) * rad))
 
-static func _spawn_item(root: Node3D, item_id: StringName, pos: Vector3) -> bool:
+static func _spawn_item(root: Node3D, item_id: StringName, pos: Vector3, count: int = 1) -> bool:
 	var node := PICKUP_SCENE.instantiate() as Node3D
 	if node == null:
 		return false
 	root.add_child(node)
 	node.global_position = pos
 	if node.has_method("set_item"):
-		node.call("set_item", item_id, 1)
+		node.call("set_item", item_id, count)
 	return true
 
 static func _spawn_document(root: Node3D, doc_id: String, pos: Vector3) -> bool:
@@ -315,6 +350,70 @@ static func _spawn_document(root: Node3D, doc_id: String, pos: Vector3) -> bool:
 	root.add_child(node)
 	node.global_position = pos
 	return true
+
+## G25 (GDD §18) and G21 (GDD §9): what the GDD adds to the loot, on an own rng stream so the positions above stay
+## put. Weapons and blueprints wait on the street until they are taken; ammo and parts come once, like the loot.
+const WORKBENCH_BLUEPRINTS: Dictionary = {
+	&"residential": &"blueprint_enhanced_battery",
+	&"school": &"blueprint_uv_flashlight",
+	&"police": &"blueprint_strobe_flashlight",
+	&"warehouses": &"blueprint_portable_workbench",
+	&"industrial": &"blueprint_battery_l2",
+}
+const WEAPON_FINDS: Dictionary = {&"residential": &"pistol", &"police": &"rifle", &"warehouses": &"shotgun"}
+## Parts the workbench recipes ask for that no district list carried: boards for the portable workbench,
+## transformers for the strobe and the level 2 battery.
+const EXTRA_PARTS: Dictionary = {
+	&"police": [&"transformer"], &"warehouses": [&"plank", &"metal"], &"industrial": [&"transformer"],
+}
+const PICKUP_AMOUNT: Dictionary = {&"plank": 5}
+const AMMO_PER_PICKUP: int = 12
+## Ammo lies in every district but the first, twice from the sixth on (police): the guns come late.
+const AMMO_DOUBLE_FROM: int = 6
+const WORKBENCH_DISTRICTS: Array[StringName] = [&"suburbs", &"police", &"industrial"]
+## The bed of the "Midsummer Night's Dream" achievement stands in the first district.
+const BED_DISTRICT: StringName = &"suburbs"
+
+static func _spawn_extras(root: Node3D, district_id: StringName, already_looted: bool) -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash(String(district_id) + "_extras")
+	if WORKBENCH_BLUEPRINTS.has(district_id):
+		var blueprint: StringName = WORKBENCH_BLUEPRINTS[district_id]
+		if not ProgressTracker.knows_blueprint(String(blueprint).trim_prefix(ProgressTracker.BLUEPRINT_ITEM_PREFIX)):
+			_spawn_item(root, blueprint, _scatter(root, rng))
+	if WEAPON_FINDS.has(district_id) and not ProgressTracker.has_weapon(String(WEAPON_FINDS[district_id])):
+		_spawn_pickup(root, WEAPON_PICKUP_SCENE, _scatter(root, rng), String(WEAPON_FINDS[district_id]))
+	if WORKBENCH_DISTRICTS.has(district_id):
+		var pose := _sidewalk_pose(rng)
+		var station := STATION_SCENE.instantiate() as Node3D
+		station.rotation.y = atan2(pose[1].x, pose[1].z)
+		root.add_child(station)
+		station.global_position = root.global_position + pose[0]
+	if district_id == BED_DISTRICT:
+		var bed_pose := _sidewalk_pose(rng)
+		var bed := Node3D.new()
+		bed.set_script(BED_SCRIPT)
+		bed.rotation.y = atan2(bed_pose[1].x, bed_pose[1].z)
+		root.add_child(bed)
+		bed.global_position = root.global_position + bed_pose[0]
+	if already_looted:
+		return
+	for part in EXTRA_PARTS.get(district_id, []):
+		_spawn_item(root, part, _scatter(root, rng), int(PICKUP_AMOUNT.get(part, 1)))
+	var index: int = DistrictSceneFactory.DISTRICTS.find(district_id)
+	var ammo_count: int = 0 if index <= 0 else (1 if index < AMMO_DOUBLE_FROM else 2)
+	for i in ammo_count:
+		_spawn_pickup(root, AMMO_PICKUP_SCENE, _scatter(root, rng), "", AMMO_PER_PICKUP)
+
+## A weapon or ammo pickup (Area3D scenes in scenes/pickups); `weapon` names the gun, "" is plain ammo.
+static func _spawn_pickup(root: Node3D, scene: PackedScene, pos: Vector3, weapon: String, ammo: int = 0) -> void:
+	var node := scene.instantiate() as Node3D
+	if weapon != "":
+		node.set("weapon_name", weapon)
+	if ammo > 0:
+		node.set("ammo_amount", ammo)
+	root.add_child(node)
+	node.global_position = pos
 
 ## static funcs have no self/get_node - same autoload-access pattern as
 ## core/endings.gd's _root().
