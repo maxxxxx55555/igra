@@ -250,6 +250,11 @@ if "$PY" tools/qa_sim/settings_consumer_check.py >/dev/null 2>&1 && "$PY" tools/
 else
   bad "settings_consumer_check (см. 'python tools/qa_sim/settings_consumer_check.py')"
 fi
+if "$PY" tools/qa_sim/tscn_header_check.py >/dev/null 2>&1 && "$PY" tools/qa_sim/tscn_header_check.py --demo >/dev/null 2>&1; then
+  ok "tscn_header_check (a scene's layout properties are lines under the node, not attributes of its header)"
+else
+  bad "tscn_header_check (см. 'python tools/qa_sim/tscn_header_check.py')"
+fi
 if "$PY" tools/qa_sim/a11y_check.py >/dev/null 2>&1; then
   ok "a11y_check (every a11y toggle traces UI -> real effect)"
 else

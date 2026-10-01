@@ -141,6 +141,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			toggle(&"journal")
 		elif event.is_action_pressed("inventory_toggle") and GameManager.is_playing():
 			toggle(&"inventory")
+		elif event.is_action_pressed("skill_tree_toggle") and GameManager.is_playing():
+			toggle(&"skill_tree")
 ## Последний открытый блокирующий экран, который Escape вправе закрыть.
 ## Само меню и экраны смерти/победы не трогаем: из них выходят кнопками.
 const _ESC_KEEP: Array = [&"main_menu", &"death", &"win", &"pause"]

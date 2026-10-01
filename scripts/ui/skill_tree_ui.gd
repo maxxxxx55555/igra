@@ -54,11 +54,3 @@ func _refresh(_skill_id: Variant = null) -> void:
 
 func _close() -> void:
 	UIManager.close(&"skill_tree")
-
-func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and not event.echo:
-		if event.is_action_pressed("skill_tree_toggle"):
-			if UIManager._is_open(&"skill_tree"):
-				UIManager.close(&"skill_tree")
-			else:
-				UIManager.open(&"skill_tree")
