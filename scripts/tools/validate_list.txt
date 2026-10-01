@@ -149,7 +149,6 @@ scripts/ui/item_icons.gd
 scripts/ui/journal_ui.gd
 scripts/ui/lobby_menu.gd
 scripts/ui/main_menu.gd
-scripts/ui/map_controller.gd
 scripts/ui/menu.gd
 scripts/ui/minimap.gd
 scripts/ui/new_game_plus_ui.gd
