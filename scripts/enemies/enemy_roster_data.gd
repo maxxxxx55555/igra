@@ -36,12 +36,13 @@ const AI_TO_ROSTER := {
 		# WAVE 6 P1: GDD §6.2 Hunter = hp 120 / damage 35 / hearing 12m
 		# (was 80/8/14 - a data-mapping bug, Hunter's real stats never
 		# matched its own design doc; charge attack dealt <1/4 documented
-		# damage). speed left untouched - see docs/PLANS.md for why.
+		# damage). Speed: 0.9 x the 3.0 m/s walk (GDD 6.2). docs/PLANS.md had left it open because the player's own speed
+		# was in pixels; with that fixed (CORRECTION_LOG 63) the column of the table has a base.
 		"name": "ENEMY_RUNNER", "hp": 120, "damage": 35, "armor": 2,
 		"weak_spot": "body", "behaviors": [Behavior.CHASE],
 		"inflicts": [Status.BLEED],
 		"resistances": {DamageType.BULLET: 1.1, DamageType.SLASH: 1.0, DamageType.BLUNT: 1.0, DamageType.FIRE: 1.0, DamageType.ELECTRIC: 1.0, DamageType.POISON: 1.0},
-		"speed": 5.5, "attack_range": 1.4, "detect_range": 12.0,
+		"speed": 2.7, "attack_range": 1.4, "detect_range": 12.0,
 	},
 	&"rotter": {
 		"name": "ENEMY_ROTTER", "hp": 140, "damage": 10, "armor": 15,
@@ -109,12 +110,12 @@ const AI_TO_ROSTER := {
 		# WAVE 6 P1: this entry drives Crawler (see AI_TO_ROSTER), not
 		# Hound (a separate, already-correct &"hound" entry exists below
 		# for the real Hound). GDD §6.2 Crawler = hp 50 / damage 20 /
-		# hearing 10m (was 70/9/16 - less than a quarter documented damage).
+		# hearing 10m (was 70/9/16 - less than a quarter documented damage). Speed 1.5 x the 3.0 m/s walk.
 		"name": "ENEMY_HOUND", "hp": 50, "damage": 20, "armor": 3,
 		"weak_spot": "head", "behaviors": [Behavior.CHASE, Behavior.SWARM],
 		"inflicts": [Status.BLEED, Status.FEAR],
 		"resistances": {DamageType.BULLET: 1.0, DamageType.SLASH: 1.1, DamageType.BLUNT: 1.0, DamageType.FIRE: 1.0, DamageType.ELECTRIC: 1.0, DamageType.POISON: 1.0},
-		"speed": 6.0, "attack_range": 1.4, "detect_range": 10.0,
+		"speed": 4.5, "attack_range": 1.4, "detect_range": 10.0,
 	},
 	&"sharpshooter": {
 		"name": "ENEMY_SHARPSHOOTER", "hp": 60, "damage": 50, "armor": 10,

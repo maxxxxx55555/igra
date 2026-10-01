@@ -1249,10 +1249,6 @@ func _handle_dodge(dir: Vector2) -> void:
 		d = look_dir
 	_dash_dir = d
 	_dash_timer = DODGE_DASH_SEC
-	var dust_particles := GPUParticles3D.new()
-	dust_particles.one_shot = true
-	dust_particles.emitting = true
-	add_child(dust_particles)
 	EventBus.noise_emitted.emit(Vector2(global_position.x, global_position.z), 3.0)
 	EventBus.player_stamina_changed.emit(stamina / stats.stamina_max)
 
