@@ -27,6 +27,22 @@ const ENDING_DATA: Dictionary = {
 ## tracks mid-session (assets/audio/ending_music/), so light/dark now play
 ## their real 60s loop-safe full track instead; hope/survivor/truth keep
 ## their stings, per the brief's own "other endings keep stings."
+##
+## W2 (ending art): the five ending plates, canon-ordered coldest -> warmest
+## by GDD §12.4 (ASSET_HANDOFF.md W1). They sit in assets/store/endings/, a
+## folder that is marketing art for everything else, but ASSET_HANDOFF.md and
+## SIZE_BUDGET.md both name these five specifically as the EndingScreen /
+## win_screen art, so they ship with the game.
+## Paths, not preloads: a file that is missing or not imported yet must fall
+## back to the screen's flat background, never fail to open the screen.
+const ENDING_ART: Dictionary = {
+	"light":    "res://assets/store/endings/ending_light.png",
+	"hope":     "res://assets/store/endings/ending_hope.png",
+	"survivor": "res://assets/store/endings/ending_survivor.png",
+	"dark":     "res://assets/store/endings/ending_dark.png",
+	"truth":    "res://assets/store/endings/ending_truth.png",
+}
+
 const _STING_PATH: Dictionary = {
 	"light": "res://assets/audio/jingles/ending_light_sting.ogg",
 	"hope": "res://assets/audio/jingles/ending_hope_sting.ogg",
@@ -137,6 +153,18 @@ func get_ending() -> StringName:
 func get_ending_data(ending_id: StringName = "") -> Dictionary:
 	var id: StringName = ending_id if ending_id else _achieved_ending
 	return _localized(ENDING_DATA.get(String(id), {}))
+
+## Путь к фоновой картинке концовки, или "" если её нет.
+## "" — не ошибка: вызывающий экран в этом случае рисует обычный плоский фон.
+## Проверка exists() здесь, а не на вызывающей стороне: PNG без .import (ещё
+## не открытый в редакторе проект) не является загружаемым ресурсом, и load()
+## на нём уронил бы экран концовки вместо того, чтобы показать текст.
+func get_ending_art(ending_id: StringName = "") -> String:
+	var id: StringName = ending_id if ending_id else _achieved_ending
+	var path: String = String(ENDING_ART.get(String(id), ""))
+	if path == "" or not ResourceLoader.exists(path):
+		return ""
+	return path
 
 func get_all_endings() -> Dictionary:
 	var out: Dictionary = {}

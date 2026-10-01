@@ -20,6 +20,15 @@ bin/
 !assets/photos/*.import
 !assets/textures/**/*.import
 assets/textures/cards/*.import
+# EXCEPTION (W2 ending art, 2026-10-02): the five plates under
+# assets/store/endings/ are the one part of store/ that ships. ASSET_HANDOFF.md
+# and SIZE_BUDGET.md name them as the EndingScreen / win_screen backgrounds,
+# and win_screen.gd loads them at runtime through
+# EndingsManager.get_ending_art(). So their import settings (VRAM compression)
+# have to survive a clean checkout like the rest of the shipping textures,
+# instead of silently reverting to Lossless on the next --import. Every other
+# file under store/ stays non-shipping marketing art.
+!assets/store/endings/*.import
 
 # Tools / env
 *.pyc

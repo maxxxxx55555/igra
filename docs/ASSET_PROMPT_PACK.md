@@ -153,7 +153,16 @@ the other two from it with an image prompt or variation so the framing stays ide
 
 Folder `assets/store/endings/`, all 1920×1080, 16:9, STYLE-PHOTO, no people. Warmth runs coldest to
 warmest in the order below (GDD §12.4, `ASSET_HANDOFF.md` W1), keep that order or the ending screens
-stop reading correctly. Not wired to any ending screen yet.
+stop reading correctly.
+
+**Wired 2026-10-02** (was: "Not wired to any ending screen yet"): `scripts/ui/win_screen.gd` now
+draws the earned ending's plate as its background, resolved through
+`EndingsManager.get_ending_art()`. The path is asked for, not assumed — a plate that is missing or
+not yet imported falls back to the old flat tint, so a bad file costs the picture, not the screen.
+`scripts/ui/death_screen.gd` deliberately keeps `screens_v2/death_loom.png`: on death the ending is
+always `dark`/`survivor`, and swapping that art is a visual call for a lead session with Godot, not
+a text edit. Two consequences for regeneration: keep the same five filenames (the map is keyed on
+them), and keep the warmth order, because the five now appear in play one after another.
 
 | File | Condition | SUBJECT |
 |---|---|---|

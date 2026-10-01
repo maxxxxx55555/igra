@@ -26,10 +26,30 @@ func _build() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = ThemeProvider.build_theme()
-	var bg := ColorRect.new()
-	bg.color = Color(0.12, 0.09, 0.02, 0.92)
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	add_child(bg)
+	# W2 (ending art): the earned ending's plate as the background, over the
+	# old flat tint. Same guard-and-fallback shape as death_screen.gd, which
+	# has loaded screens_v2/death_loom.png this way since the V2 skin pass:
+	# the plate only wins when it really is a loadable resource, so a missing
+	# or not-yet-imported PNG costs the picture, never the screen.
+	# The tint stays: ending_light is a whole brass city at full brightness and
+	# the amber title over it needs the extra contrast to stay readable.
+	var art_path := _ending_art_path()
+	if art_path != "":
+		var art := TextureRect.new()
+		art.texture = load(art_path)
+		art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		art.stretch_mode = TextureRect.STRETCH_SCALE
+		art.set_anchors_preset(Control.PRESET_FULL_RECT)
+		add_child(art)
+		var art_tint := ColorRect.new()
+		art_tint.color = Color(0.06, 0.04, 0.01, 0.58)
+		art_tint.set_anchors_preset(Control.PRESET_FULL_RECT)
+		add_child(art_tint)
+	else:
+		var bg := ColorRect.new()
+		bg.color = Color(0.12, 0.09, 0.02, 0.92)
+		bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+		add_child(bg)
 	var vb := VBoxContainer.new()
 	vb.set_anchors_preset(Control.PRESET_CENTER)
 	# Grow both ways: a centre anchor alone grows the box right and down from the
@@ -84,6 +104,15 @@ func _build() -> void:
 	_menu_btn.custom_minimum_size = Vector2(220, 44)
 	_menu_btn.pressed.connect(func() -> void: GameManager.return_to_menu())
 	vb.add_child(_menu_btn)
+
+## Путь к картинке заслуженной концовки, "" если её нет.
+## EndingsManager сам отвечает за exists(), но узел ещё может отсутствовать
+## (ранний вызов, тестовый прогон без автозагрузок) — оба случая дают "".
+func _ending_art_path() -> String:
+	var em := get_node_or_null("/root/EndingsManager")
+	if em == null or not em.has_method("get_ending_art"):
+		return ""
+	return String(em.get_ending_art())
 
 func _refresh() -> void:
 	if _title == null:
