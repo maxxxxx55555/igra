@@ -124,11 +124,12 @@ const VISIBILITY_RUN: float = 1.2
 ## с одной-двумя подзарядками (раньше 5 минут не дотягивали до босса:
 ## фонарь гас посреди фазы, где свет — условие урона).
 const BATTERY_DRAIN_PER_SEC: float = 100.0 / 450.0
-## Winnability: базовая регенерация 18 HP/с — перекрывает устойчивый урон
-## Архитектора вплотную (милли ≤12 + сферы ≤12 с капом в take_damage) и
-## держит HP у максимума, чтобы залп из нескольких источников в P3
-## (милли + луч + тени) не пробивал мгновенную смерть.
-const _BASE_HP_REGEN_PER_SEC: float = 18.0
+## Health comes back slowly once nothing has hurt the player for a while: out of a fight, never in one. It was 18 HP/s
+## at every moment (added so the bot could beat the Architect), more than the hit rule can deal (12 per 0.8 s = 15 HP/s),
+## so no number of monsters could kill the player. The GDD gives no base regeneration; the health_regen skill adds its own.
+const _BASE_HP_REGEN_PER_SEC: float = 2.5
+const _REGEN_DELAY_SEC: float = 5.0
+var _since_hurt: float = 99.0
 
 var _coyote_timer: float = 0.0
 var _jump_buffer_timer: float = 0.0
@@ -503,11 +504,10 @@ func _physics_process(delta: float) -> void:
 		# nothing ever read it - buying it did nothing. Gated on is_playing()
 		# so it stops on death/menu like the FPS sampling above.
 		var regen_lvl: int = SkillTreeManager.get_skill_level(&"health_regen") if SkillTreeManager else 0
+		_since_hurt += delta
 		if regen_lvl > 0 and hp > 0.0:
 			heal(2.0 * regen_lvl * delta)
-		elif hp > 0.0:
-			# Winnability: базовая регенерация (аналогично скиллу выше) —
-			# в затяжном боях без пикапов-лечилок иначе неоткуда взяться.
+		elif hp > 0.0 and _since_hurt >= _REGEN_DELAY_SEC:
 			heal(_BASE_HP_REGEN_PER_SEC * delta)
 	visibility = get_visibility_scale()
 	if gameplay_active and Input.is_action_pressed("attack"):
@@ -873,6 +873,7 @@ func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, _type: EnemyRo
 	## ate the whole 240s deadline. grant_iframes() below feeds both cases.
 	if _iframes > 0.0:
 		return
+	_since_hurt = 0.0
 	# Winnability: «mercy i-frames» — после попадания 0.8 с неуязвимости.
 	# В P3 Архитектора милли + луч + сферы + тени били по 3-4 хита в секунду
 	# (до 48 урона/с), и никакой реген не спасал от мгновенной смерти.

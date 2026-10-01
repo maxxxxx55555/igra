@@ -127,7 +127,9 @@ func respawn_after_death() -> void:
 
 ## Called by WorldRuntime right after it places the player in the district.
 func apply_pending_respawn(player: Node) -> void:
-	if _respawn_battery < 0.0 or player == null:
+	# The scene being left still holds the dead player and rebuilds its district around it when game_started fires:
+	# that player took the respawn, then the reload put a fresh one in with full health and a full battery.
+	if _respawn_battery < 0.0 or player == null or float(player.get("hp")) <= 0.0:
 		return
 	var max_hp: float = player.stats.max_hp if ("stats" in player and player.stats) else 100.0
 	player.set("hp", max_hp * RESPAWN_HP_RATIO)
