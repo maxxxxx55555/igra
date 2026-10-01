@@ -1509,5 +1509,9 @@
   "STATS_TAB_OVERALL": "全体",
   "STATS_TAB_COMBAT": "戦闘",
   "STATS_TAB_EXPLORATION": "探索",
-  "STATS_TAB_COLLECTION": "収集"
+  "STATS_TAB_COLLECTION": "収集",
+  "DEATH_KILLED_BY": "死因：%s",
+  "DEATH_TIME": "生存時間：%s",
+  "DEATH_DISTRICTS": "復旧した地区：%d / %d (%d%%)",
+  "DEATH_DOCS": "見つけた文書：%d / %d"
 }

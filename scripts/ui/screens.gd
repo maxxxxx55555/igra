@@ -931,40 +931,17 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 	header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	content.add_child(header)
 	header.text = LocalizationManager.t("SCR_MONETY_2") + str(CoinWallet.get_coins())
-	# BREAK_REPORT B8: was EventBus's own (now-removed) coins_changed, which
-	# nothing but a kill roll ever emitted - a real shop purchase never
-	# refreshed this header.
-	CoinWallet.coins_changed.connect(func(v: int): header.text = LocalizationManager.t("SCR_MONETY_2") + str(v), CONNECT_ONE_SHOT)
-	var tab_h := HBoxContainer.new()
-	tab_h.size = Vector2(content.size.x, 28)
-	tab_h.position = Vector2(0, 34)
-	tab_h.alignment = BoxContainer.ALIGNMENT_CENTER
-	content.add_child(tab_h)
-	var tabs := [LocalizationManager.t("SCR_ULUCHSHENIYA"), LocalizationManager.t("SCR_PREDMETY"), LocalizationManager.t("SCR_MONETY")]
-	var current_tab := 0
-	var tab_btns := []
-	for t in tabs:
-		var btn := Button.new()
-		btn.text = t
-		btn.flat = true
-		btn.add_theme_color_override("font_color", Color(0.682, 0.714, 0.749))
-		btn.add_theme_font_size_override("font_size", 11)
-		btn.custom_minimum_size = Vector2(80, 24)
-		tab_h.add_child(btn)
-		tab_btns.append(btn)
 	# Каталог: ShopService (CoinWallet-магазин). IAP-паки (Kind.COIN_PACK) исключены — донат/реклама отключены.
-	var catalog = get_tree().root.get_node_or_null("ShopCatalog")
-	var items: Array[Dictionary] = catalog.items if catalog else []
-	if items.is_empty():
-		for it in ShopService.catalog_by_kind(ShopItem.Kind.UPGRADE) + ShopService.catalog_by_kind(ShopItem.Kind.SKIN) + ShopService.catalog_by_kind(ShopItem.Kind.BUNDLE):
-			var si: ShopItem = it as ShopItem
-			if si != null:
-				items.append({"id": si.id, "desc": LocalizationManager.name_for("SHOP_ITEM_", si.id, si.display_name), "price_coins": si.final_price_coins()})
+	var items: Array[Dictionary] = []
+	for it in ShopService.catalog_by_kind(ShopItem.Kind.UPGRADE) + ShopService.catalog_by_kind(ShopItem.Kind.SKIN) + ShopService.catalog_by_kind(ShopItem.Kind.BUNDLE):
+		var si: ShopItem = it as ShopItem
+		if si != null:
+			items.append({"id": si.id, "desc": LocalizationManager.name_for("SHOP_ITEM_", si.id, si.display_name), "price_coins": si.final_price_coins()})
 	var grid_container := GridContainer.new()
 	grid_container.name = "ShopGrid"
 	grid_container.columns = 2
-	grid_container.size = Vector2(content.size.x, content.size.y - 70)
-	grid_container.position = Vector2(0, 66)
+	grid_container.size = Vector2(content.size.x, content.size.y - 40)
+	grid_container.position = Vector2(0, 36)
 	grid_container.mouse_filter = Control.MOUSE_FILTER_PASS
 	content.add_child(grid_container)
 	var item_icons := preload("res://scripts/ui/item_icons.gd")
@@ -993,28 +970,32 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 		var price: float = it.get("price_coins", 0)
 		# IAP-путь удалён — только монеты.
 		var pl := Label.new()
-		pl.text = str(price) + LocalizationManager.t("SCR_MONET")
+		pl.text = str(int(price)) + LocalizationManager.t("SCR_MONET")
 		pl.size = Vector2(card_item.size.x - 10, 16)
 		pl.position = Vector2(5, 60)
 		pl.add_theme_color_override("font_color", Color(0.788, 0.635, 0.290))
 		pl.add_theme_font_size_override("font_size", 11)
 		pl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		card_item.add_child(pl)
-		var btn := _make_btn(LocalizationManager.t("SCR_KUPIT"), Vector2(card_item.size.x / 2.0 - 45, 76), Vector2(90, 22))
-		btn.pressed.connect(_on_buy.bind(it.id, int(price)))
+		var btn := _make_btn(LocalizationManager.t("SCR_KUPIT"), Vector2(card_item.size.x / 2.0 - 60, 76), Vector2(120, 22))
+		btn.pressed.connect(_on_buy.bind(it.id, btn))
 		card_item.add_child(btn)
+		if ShopService.is_owned(it.id):
+			_mark_owned(btn)
 	# Реклама отключена (кнопка удалена)
 
+func _mark_owned(btn: Button) -> void:
+	btn.disabled = true
+	btn.text = LocalizationManager.t("SHOP_ALREADY_OWNED")
 
-
-	var shop_is_grid := grid_container != null
-	var shop_tabs := tab_btns.size() >= 3
-	var shop_header := header != null
-	var shop_icons := items.size() > 0
-
-func _on_buy(item_id: String, price: int) -> void:
-	if CoinWallet.try_spend(price):
-		EventBus.purchase_done.emit(item_id, true)
+## The purchase is ShopService's: it spends, grants the upgrade or the skin, saves, and the card only reports it.
+func _on_buy(item_id: StringName, btn: Button) -> void:
+	ShopService.buy(item_id)
+	var coins := find_child("ShopCoinHeader", true, false) as Label
+	if coins != null:
+		coins.text = LocalizationManager.t("SCR_MONETY_2") + str(CoinWallet.get_coins())
+	if ShopService.is_owned(item_id):
+		_mark_owned(btn)
 		_show_toast(LocalizationManager.t("SCR_KUPLENO"))
 	else:
 		_show_toast(LocalizationManager.t("SCR_NE_HVATAET_MONET"))

@@ -6,6 +6,7 @@ func _ready() -> void:
 
 var _t: Label
 var _s: Label
+var _d: Label
 var _b: Button
 var _b2: Button
 
@@ -48,6 +49,14 @@ func _build() -> void:
 	_s.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_s.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
 	vb.add_child(_s)
+	_d = Label.new()
+	_d.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_d.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
+	vb.add_child(_d)
+	# The screen is built once and shown on every death: the figures are read when it appears.
+	visibility_changed.connect(func() -> void:
+		if visible:
+			_apply_localization())
 	_b = Button.new()
 	_b.focus_mode = Control.FOCUS_NONE
 	# respawn_after_death() (G16) не трогает дерево сцен, поэтому одного его
@@ -65,6 +74,14 @@ func _build() -> void:
 
 func _apply_localization() -> void:
 	_t.text = LocalizationManager.t("DEATH_TITLE")
-	_s.text = LocalizationManager.t("DEATH_BY")
+	var killer := ProgressTracker.last_hit_by
+	_s.text = LocalizationManager.tf("DEATH_KILLED_BY", [LocalizationManager.name_for("MONSTER_", killer, String(killer).capitalize())]) if killer != &"" else LocalizationManager.t("DEATH_BY")
+	var seconds := int(GameManager.play_time)
+	var districts: int = ProgressTracker.get_stats()["districts"]
+	var total: int = PowerGrid.all_districts().size()
+	_d.text = "\n".join([
+		LocalizationManager.tf("DEATH_TIME", ["%d:%02d" % [seconds / 60, seconds % 60]]),
+		LocalizationManager.tf("DEATH_DISTRICTS", [districts, total, 100 * districts / maxi(total, 1)]),
+		LocalizationManager.tf("DEATH_DOCS", [ProgressTracker.count_docs(), Endings.get_total_documents()])])
 	_b.text = LocalizationManager.t("retry")
 	_b2.text = LocalizationManager.t("back_menu")

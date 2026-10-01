@@ -1509,5 +1509,9 @@
   "STATS_TAB_OVERALL": "总览",
   "STATS_TAB_COMBAT": "战斗",
   "STATS_TAB_EXPLORATION": "探索",
-  "STATS_TAB_COLLECTION": "收藏"
+  "STATS_TAB_COLLECTION": "收藏",
+  "DEATH_KILLED_BY": "死于：%s",
+  "DEATH_TIME": "存活时间：%s",
+  "DEATH_DISTRICTS": "已修复区域：%d / %d (%d%%)",
+  "DEATH_DOCS": "找到的文件：%d / %d"
 }

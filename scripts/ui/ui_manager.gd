@@ -63,6 +63,7 @@ func _ready() -> void:
 	_quest_hud.visible = false
 	EventBus.game_state_changed.connect(_on_game_state)
 	EventBus.game_started.connect(func() -> void: close(&"main_menu"))
+	Routes.route_changed.connect(func(_path: String) -> void: close(&"main_menu"))
 	_on_game_state(GameManager.current_state)
 
 func _mk_overlay(path: String, node_name: String) -> Control:
@@ -170,6 +171,10 @@ func close(id: StringName) -> void:
 	var scr: Control = _cache.get(id, null)
 	if scr != null:
 		scr.visible = false
+		# The menu is built again on each open: its Continue button and daily card describe the profile at that moment.
+		if id == &"main_menu":
+			_cache.erase(id)
+			scr.queue_free()
 	if _open_blocking.has(id):
 		_open_blocking.erase(id)
 		if _open_blocking.is_empty():
@@ -260,7 +265,7 @@ func _on_game_state(state: int) -> void:
 			# Если игрок уже НА сцене меню, второй экран поверх неё не нужен —
 			# иначе main_menu.gd -> return_to_menu() -> MENU -> open(main_menu)
 			# уходило в самоповтор и рисовало меню поверх меню.
-			if not _in_menu_scene():
+			if get_tree().current_scene != null and not _in_menu_scene():
 				open(&"main_menu")
 		GameManager.GameState.PLAYING:
 			# Меню закрывалось только по EventBus.game_started. Любой другой путь

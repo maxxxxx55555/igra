@@ -1509,5 +1509,9 @@
   "STATS_TAB_OVERALL": "Общее",
   "STATS_TAB_COMBAT": "Бой",
   "STATS_TAB_EXPLORATION": "Исследование",
-  "STATS_TAB_COLLECTION": "Коллекция"
+  "STATS_TAB_COLLECTION": "Коллекция",
+  "DEATH_KILLED_BY": "Вас убил: %s",
+  "DEATH_TIME": "Время в игре: %s",
+  "DEATH_DISTRICTS": "Районов восстановлено: %d / %d (%d%%)",
+  "DEATH_DOCS": "Документов найдено: %d / %d"
 }

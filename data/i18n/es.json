@@ -1509,5 +1509,9 @@
   "STATS_TAB_OVERALL": "General",
   "STATS_TAB_COMBAT": "Combate",
   "STATS_TAB_EXPLORATION": "Exploración",
-  "STATS_TAB_COLLECTION": "Colección"
+  "STATS_TAB_COLLECTION": "Colección",
+  "DEATH_KILLED_BY": "Te mató: %s",
+  "DEATH_TIME": "Tiempo vivo: %s",
+  "DEATH_DISTRICTS": "Distritos restaurados: %d / %d (%d%%)",
+  "DEATH_DOCS": "Documentos hallados: %d / %d"
 }

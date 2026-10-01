@@ -1509,5 +1509,9 @@
   "STATS_TAB_OVERALL": "전체",
   "STATS_TAB_COMBAT": "전투",
   "STATS_TAB_EXPLORATION": "탐험",
-  "STATS_TAB_COLLECTION": "수집"
+  "STATS_TAB_COLLECTION": "수집",
+  "DEATH_KILLED_BY": "사망 원인: %s",
+  "DEATH_TIME": "생존 시간: %s",
+  "DEATH_DISTRICTS": "복구한 지구: %d / %d (%d%%)",
+  "DEATH_DOCS": "찾은 문서: %d / %d"
 }

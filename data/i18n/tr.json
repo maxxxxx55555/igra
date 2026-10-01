@@ -1509,5 +1509,9 @@
   "STATS_TAB_OVERALL": "Genel",
   "STATS_TAB_COMBAT": "Savaş",
   "STATS_TAB_EXPLORATION": "Keşif",
-  "STATS_TAB_COLLECTION": "Koleksiyon"
+  "STATS_TAB_COLLECTION": "Koleksiyon",
+  "DEATH_KILLED_BY": "Öldüren: %s",
+  "DEATH_TIME": "Hayatta kalma: %s",
+  "DEATH_DISTRICTS": "Kurtarılan bölgeler: %d / %d (%%%d)",
+  "DEATH_DOCS": "Bulunan belgeler: %d / %d"
 }
