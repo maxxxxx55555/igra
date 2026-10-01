@@ -285,3 +285,9 @@ Rows the first play-through added: each was a defect a frame or a measured numbe
 | SH1 | The Shop card lists every catalog item, an empty wallet buys nothing, coins buy it, grant it and mark the card | 12.2 | closeout_check SH1 (old `screens.gd`: `-1 cards of 7`) | PASS(closeout) |
 | CB4b | The death screen names the monster that landed the hit, the time, the districts and the documents | 5.4 | closeout_check CB4 | PASS(closeout) |
 | BOT3 | The bot at a person's pace (3.0 m/s, solid ground, strobe held back, batteries picked up) wins 3 of 3, 0 deaths | 5, 6.3 | `docs/artifacts/rc15/bot_wave3_summary.txt` (QA_TIME_SCALE=4) | PASS(bot) |
+| MN2s | Each monster chases at the GDD 6.2 multiple of the 3.0 m/s walk (margin 0.45 m/s) | 6.2 | closeout_check MN2 (Hunter 2.7, was 5.5) | PASS(closeout) |
+| MAP1 | One city map exists; Close leaves none on screen | 12 | closeout_check MAP1 (the old `MapController` made a second) | PASS(closeout) |
+| LANG1 | A save or settings file written while the game shows German carries German, not the settings default `en` | 14 | closeout_check LANG1 | PASS(closeout) |
+| HUD1 | The message-log button covers nothing in the HUD stat panel | V.1 | closeout_check HUD1 | PASS(closeout) |
+| ON1b | The onboarding card sits in the middle of the screen | 12 | closeout_check ON1 (220 px off before) | PASS(closeout) |
+| SH1b | Every shop row ends above the Close button | 12.2 | closeout_check SH1 | PASS(closeout) |

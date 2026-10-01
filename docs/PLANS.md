@@ -627,6 +627,8 @@ first.
   rather than inventing a conversion factor with real regression risk
   (wrong speed could make an enemy uncontrollably fast or a pushover to
   outrun).
+  **RESOLVED (rc15):** the player's 170 was pixels per second, not a different scale of metres (CORRECTION_LOG 63); with
+  the walk at 3.0 m/s the multiples have a base (docs/TZ_DECISIONS.md MN2-speed).
 - DEFAULT_CHOICE: Architect (boss)'s vision cone left at 360°(omni) -
   GDD's table gives no cone parenthetical for this row, same formatting
   as Tvar/Rotter which both use 360° - matched that established

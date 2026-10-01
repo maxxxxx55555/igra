@@ -445,7 +445,7 @@ func _a04_controls() -> void:
 	var dashed := _flat(_player.global_position - p0).length()
 	_key_event(KEY_W, false)
 	await get_tree().create_timer(0.6).timeout
-	_step("A04g", stamina3 <= stamina2 - 10.0 and dashed > 1.5, "a double tap of W dodges (stamina %.0f -> %.0f, %.1f m in 0.4 s)" % [stamina2, stamina3, dashed])
+	_step("A04g", stamina3 < stamina2 and dashed > 2.5, "a double tap of W dashes %.1f m in 0.4 s (a walk covers 1.2) and costs stamina (%.0f -> %.0f, part of it regained meanwhile)" % [dashed, stamina2, stamina3])
 	var capsule := (_player.get_node("CollisionShape3D") as CollisionShape3D).shape as CapsuleShape3D
 	_key_event(KEY_CTRL, true)
 	_key_event(KEY_W, true)
@@ -522,6 +522,8 @@ func _a05_monster() -> void:
 
 func _a05_death() -> void:
 	var deaths0 := ProgressTracker.deaths
+	SaveSystem.save_all()
+	_say("[pt] note A05 setup: the profile is saved first (the autosave a first repair writes); with no save at all a retry is a new game")
 	_player.set("hp", 5.0)
 	_player.set("_damage_grace_timer", 0.0)
 	_player.call("take_damage", 12.0)
@@ -591,8 +593,8 @@ func _a06_inventory() -> void:
 	_step("A06c", not _ui_open(&"inventory") and GameManager.is_playing(), "Tab closes it and the game runs on")
 
 func _a06_shop() -> void:
-	CoinWallet.add(900)
-	_say("[pt] note A06 setup: 900 coins added")
+	CoinWallet.add(3000)
+	_say("[pt] note A06 setup: 3000 coins added (the cheapest shop item costs 1000)")
 	var opened := await _pause_open()
 	_step("A06d", opened, "Esc opens the pause menu", await _shot("A06_pause"))
 	var pause := _ui(&"pause")
@@ -610,8 +612,9 @@ func _a06_shop() -> void:
 	var shot_shop := await _shot("A06_shop")
 	var res_buy := await _click(buy)
 	await get_tree().create_timer(0.5).timeout
-	_step("A06e", res == "ok" and in_shop and res_buy == "ok" and CoinWallet.get_coins() < coins0,
-		"Pause > Shop opens the card; Buy takes %d coins (clicks: %s / %s)" % [coins0 - CoinWallet.get_coins(), res, res_buy], shot_shop)
+	_step("A06e", res == "ok" and in_shop and res_buy == "ok" and CoinWallet.get_coins() < coins0 and buy.disabled,
+		"Pause > Shop opens the card; Buy takes %d coins, grants the item and marks the card '%s' (clicks: %s / %s)" % [coins0 - CoinWallet.get_coins(), buy.text, res, res_buy], await _shot("A06_shop_bought"))
+	_say("[pt] note A06 the card before the purchase: frame=%s" % shot_shop)
 	await _click(_button_with(screens, LocalizationManager.t("SCR_ZAKRYT")))
 	await get_tree().create_timer(0.4).timeout
 	var res_up := await _click(_button_with(pause, LocalizationManager.t("CRAFT_UPGRADE")))
@@ -688,7 +691,7 @@ func _a08_battery() -> void:
 	_step("A08", String(hud.notice.text) == LocalizationManager.t("HUD_HINT_BATTERY") or hud._hints_shown.has("battery"), "a light at 18%% shows the battery hint ('%s')" % hud.notice.text, await _shot("A08_battery_low"))
 	_player.call("consume_battery", float(_player.get("battery")))
 	await get_tree().create_timer(1.4).timeout
-	_step("A08b", depleted[0], "at 0% the light goes out (flashlight_depleted: %s)" % depleted[0], await _shot("A08_battery_0"))
+	_step("A08b", depleted[0], "at 0%% the light goes out (flashlight_depleted: %s)" % depleted[0], await _shot("A08_battery_0"))
 	_player.call("consume_battery", -90.0)
 	await get_tree().create_timer(0.5).timeout
 

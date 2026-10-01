@@ -13,7 +13,16 @@ prop spheres are ~4 000 triangles each), R5 breaker + explorer, R6 security, R8 
   0 softlocks, coins 9440 / 8636 / 8676), i18n 12/12, static 27, flow 56. Closed: CT6, CT13, MN2, MN4, MN6, MN7, AC3, AC4,
   AC7, DL2, ST7, H3.8, H3.12, H3.14, E7.15, E7.16 plus the settings that did nothing (Auto-save, Button Size, Crouch Input,
   Sensitivity, VSync, Dodge Gesture) and the dead noise chain (shots and shouts alerted no monster).
-- Launch ledger: 13 launches against a budget of 10 (CORRECTION_LOG 62).
+- Launch ledger: 13 launches against a budget of 10 at the end of batch 2 (CORRECTION_LOG 62); about 34 more since (transcript
+  tally: 11 compile gates, 6 closeout runs, 6 bot invocations, 4 play-throughs, 3 walk probes, 4 `check.sh`).
+- **Wave 3 (play-through findings), pushed `2b4e756`:** player speed was px/s in a metre world (170.60 m per second of W),
+  void blocks between the streets, floaty gravity, a dodge on every move start, the main-menu overlay on top of Settings,
+  no onboarding on a first game, a minimal death screen, an empty Shop card whose Buy granted nothing, a light that stayed
+  off after a recharge. Fixed `08566e0`, `11f1efd`, `932d1e8`; bot at a person's pace (strobe reserve, battery pickups)
+  3/3 WIN 0 deaths; `closeout_check` 212/212 (old code fails MV1, MV3, SH1, MENU1); static 27, flow 56, scene_node clean.
+  Corrections 63-67; checklist section 25. **NEXT: re-run PT-A (frames now 1280 px JPEG) and read every frame; open:
+  A04e jump, A05 click-attack/death/retry, A08 hint (use consume_battery), ghost map rows, roster speed alignment
+  (Hunter 5.5 -> 2.7, Crawler 6.0 -> 4.5 per GDD 6.2 x 3.0), then PT-V, PT-B.**
 - Windowed frames: a multi-shot windowed run reads stale frames when nothing animates (gui_explore header); the play-through
   saves every frame after `frame_post_draw` and hashes it against the previous one.
 

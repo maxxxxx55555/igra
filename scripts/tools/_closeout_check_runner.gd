@@ -56,6 +56,9 @@ func _run() -> void:
 	await _check_movement()
 	await _check_onboarding_and_death()
 	await _check_shop()
+	await _check_map()
+	await _check_hud_corner()
+	_check_language_survives_a_save()
 	_check_difficulty()
 	await _check_settings_back()
 	_finish()
@@ -553,6 +556,12 @@ const GDD_ROSTER: Dictionary = {
 	"destroyer_3d": [200.0, 25.0], "sharpshooter_3d": [60.0, 50.0], "brute_3d": [350.0, 30.0], "burner_3d": [90.0, 15.0],
 	"rotter_3d": [140.0, 10.0], "hound_3d": [40.0, 18.0], "tvar_3d": [1200.0, 40.0], "boss_architect_3d": [800.0, 40.0],
 }
+## GDD 6.2 speed column: a multiple of the player's walk. The roster's own figures are rounded, so 0.45 m/s is the margin.
+const GDD_SPEED: Dictionary = {
+	"shadow_3d": 1.2, "crawler_3d": 1.5, "watcher_3d": 1.0, "hunter_3d": 0.9, "destroyer_3d": 0.7, "sharpshooter_3d": 0.6,
+	"brute_3d": 0.5, "burner_3d": 1.0, "rotter_3d": 0.4, "hound_3d": 1.8, "tvar_3d": 1.0, "boss_architect_3d": 1.1,
+}
+const SPEED_MARGIN: float = 0.45
 const LOOT_ROLLS: int = 600
 
 func _check_roster() -> void:
@@ -566,6 +575,10 @@ func _check_roster() -> void:
 		var damage: float = monster.attack_damage
 		_ok(is_equal_approx(hp, float(want[0]) * ng_hp) and is_equal_approx(damage, float(want[1]) * ng_damage),
 			"MN2 %s has the GDD health %.0f and damage %.0f (%.1f / %.1f)" % [scene, want[0], want[1], hp, damage])
+		var walk := float((_player.get("stats") as Resource).get("walk_speed"))
+		var want_speed: float = float(GDD_SPEED[scene]) * walk
+		_ok(absf(monster.chase_speed - want_speed) <= SPEED_MARGIN,
+			"MN2 %s chases at %.1f m/s, the GDD %.1fx of the %.1f m/s walk is %.1f" % [scene, monster.chase_speed, GDD_SPEED[scene], walk, want_speed])
 		monster.queue_free()
 
 # ── CT13 / CT6 / Crouch Input: the capsule, the ceiling, the swipe, the three modes ──
@@ -919,6 +932,9 @@ func _check_onboarding_and_death() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	_ok(bool(cards.get("_showing")) and get_tree().paused, "ON1 a running game with no profile mark opens the onboarding cards and holds the game")
+	var card := cards.find_children("*", "PanelContainer", true, false)[0] as Control
+	var off_centre := (card.get_global_rect().get_center() - get_viewport().get_visible_rect().size / 2.0).length()
+	_ok(off_centre < 8.0, "ON1 the card sits in the middle of the screen (%.0f px off)" % off_centre)
 	for n in 7:
 		cards._on_next()
 	_ok(not bool(cards.get("_showing")) and not get_tree().paused and SaveSystem.is_onboard_done(), "ON1 seven cards later the game runs and the profile remembers")
@@ -971,6 +987,12 @@ func _check_shop() -> void:
 	_ok(want > 0 and cards == want, "SH1 the Shop card shows every catalog item (%d cards of %d)" % [cards, want])
 	if cards <= 0:
 		return
+	await get_tree().process_frame
+	var close_button := ((screens.get("_screen_data") as Dictionary)["Shop"] as Dictionary)["close_btn"] as Button
+	var lowest := 0.0
+	for c in grid.get_children():
+		lowest = maxf(lowest, (c as Control).get_global_rect().end.y)
+	_ok(lowest <= close_button.get_global_rect().position.y, "SH1 every row ends above the Close button (%.0f <= %.0f)" % [lowest, close_button.get_global_rect().position.y])
 	var buy := grid.get_child(0).find_children("*", "Button", true, false)[0] as Button
 	var owned_before := _shop_owned_count()
 	buy.pressed.emit()
@@ -985,3 +1007,56 @@ func _check_shop() -> void:
 	ShopService.from_dict({})
 	UpgradeSystem.reset()
 	CoinWallet.spend_clamped(CoinWallet.get_coins())
+
+# ── the play-through's ghost map: MapController built a second city map in the root, and Close, Travel and K closed
+#    only one of the two ──
+func _city_maps() -> Array[Control]:
+	var maps: Array[Control] = []
+	for n in get_tree().root.find_children("*", "Control", true, false):
+		var script: Script = (n as Control).get_script()
+		if script != null and script.resource_path == "res://scripts/ui/city_map.gd":
+			maps.append(n as Control)
+	return maps
+
+func _check_map() -> void:
+	_playing()
+	UIManager.open(&"city_map")
+	await get_tree().process_frame
+	var paths: Array[String] = []
+	for m in _city_maps():
+		paths.append(str(m.get_path()))
+	_ok(paths.size() == 1, "MAP1 one city map exists once K opens it (%d: %s)" % [paths.size(), ", ".join(paths)])
+	UIManager.close(&"city_map")
+	await get_tree().process_frame
+	var shown := 0
+	for m in _city_maps():
+		shown += int(m.is_visible_in_tree())
+	_ok(shown == 0, "MAP1 closing it leaves no map on screen (%d visible)" % shown)
+
+# ── the play-through's flip to English after a retry: a fresh profile's settings said "en" whatever the screen showed ──
+func _check_language_survives_a_save() -> void:
+	var shown: String = LocalizationManager.current_lang
+	var other := "de" if shown != "de" else "fr"
+	LocalizationManager.set_language(other)
+	_ok(SettingsManager.to_dict()["language"] == other, "LANG1 a save written while the game shows %s carries %s (not the settings default)" % [other, SettingsManager.to_dict()["language"]])
+	SettingsManager.save_to_cfg()
+	var cfg := ConfigFile.new()
+	cfg.load(SettingsManager.CFG_PATH)
+	_ok(cfg.get_value("game", "language", "") == other, "LANG1 the settings file carries it too (%s)" % cfg.get_value("game", "language", ""))
+	LocalizationManager.set_language(shown)
+
+# ── the play-through's HUD frame: the LOG button of the message log sat on the first label of the stat panel ──
+func _check_hud_corner() -> void:
+	_playing()
+	await get_tree().process_frame
+	var log_button := get_tree().root.find_child("LogToggle", true, false) as Button
+	var corner := _main.get_node("HUD").get_node("TopLeft") as Control
+	_ok(log_button != null and log_button.is_visible_in_tree(), "HUD1 the message-log button is on screen")
+	if log_button == null:
+		return
+	var covered: Array[String] = []
+	for c in corner.find_children("*", "Control", true, false):
+		var control := c as Control
+		if control.is_visible_in_tree() and control.get_global_rect().intersects(log_button.get_global_rect()):
+			covered.append(String(control.name))
+	_ok(covered.is_empty(), "HUD1 the message-log button covers nothing in the stat panel (%s)" % ", ".join(covered))
