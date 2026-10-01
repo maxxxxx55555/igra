@@ -42,7 +42,9 @@ func _run() -> void:
 	var high_ssao := env.ssao_enabled
 	print("[settings-persist] tier=High glow_intensity=%.2f ssao=%s" % [high_glow, high_ssao])
 
-	var tier_switch_ok: bool = not is_equal_approx(low_glow, high_glow) and low_ssao == false and high_ssao == true
+	# SSAO is a Forward+ effect: the compatibility renderer the game ships on keeps it off at every tier
+	var screen_space := RenderingServer.get_current_rendering_method() == "forward_plus"
+	var tier_switch_ok: bool = not is_equal_approx(low_glow, high_glow) and low_ssao == false and high_ssao == screen_space
 	print("[settings-persist] item12 graphics preset switch applies to live Environment: ", tier_switch_ok)
 	if not tier_switch_ok:
 		bad += 1

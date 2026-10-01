@@ -182,7 +182,7 @@ func _apply_graphics_tier(tier: int) -> void:
 	_env.glow_hdr_threshold = float(p.get("glow_hdr_threshold", _env.glow_hdr_threshold))
 	_env.fog_density = float(p.get("fog_density", _env.fog_density))
 	_env.fog_sky_affect = float(p.get("fog_sky_affect", _env.fog_sky_affect))
-	_env.ssao_enabled = bool(p.get("ssao_enabled", false))
+	_env.ssao_enabled = bool(p.get("ssao_enabled", false)) and RenderingServer.get_current_rendering_method() == "forward_plus"
 	_env.adjustment_enabled = true
 	_env.adjustment_contrast = float(p.get("contrast", 1.0))
 	_env.adjustment_saturation = float(p.get("saturation", 1.0))

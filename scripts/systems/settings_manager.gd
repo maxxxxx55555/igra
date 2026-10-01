@@ -141,8 +141,12 @@ func _apply_locale(lang: String) -> void:
 	else:
 		TranslationServer.set_locale(lang)
 
+## The language on screen is LocalizationManager's (the saved choice, else the system's). `_language` only said "en"
+## until a player opened Settings, so every save and settings file of a fresh profile carried "en" and the next
+## load (a retry after a death, Continue, the next launch) put English back over a Russian or German game.
 func get_language() -> String:
-	return _language
+	var lm := get_node_or_null("/root/LocalizationManager")
+	return String(lm.get("current_lang")) if lm != null else _language
 
 func get_languages() -> Array:
 	return LANGUAGES.duplicate()
@@ -233,7 +237,7 @@ func _tier(value: Variant) -> int:
 func save_to_cfg() -> void:
 	var cfg := ConfigFile.new()
 	cfg.set_value("audio", "volumes", _volumes)
-	cfg.set_value("game", "language", _language)
+	cfg.set_value("game", "language", get_language())
 	cfg.set_value("game", "settings", _settings)
 	var err := cfg.save(CFG_PATH)
 	if err != OK:
@@ -540,8 +544,9 @@ func set_effects_quality(idx: int) -> void:
 	var env := _find_environment()
 	if env != null:
 		env.glow_enabled = idx >= 1
-		env.ssao_enabled = idx >= 2
-		env.ssr_enabled = idx >= 2
+		var forward_plus := RenderingServer.get_current_rendering_method() == "forward_plus"
+		env.ssao_enabled = forward_plus and idx >= 2
+		env.ssr_enabled = forward_plus and idx >= 2
 	EventBus.settings_changed.emit("effects", idx)
 
 func set_draw_distance(v: float) -> void:
@@ -608,7 +613,7 @@ func _apply(bus: String) -> void:
 		AudioServer.set_bus_volume_db(idx, linear_to_db(maxf(_volumes[bus], 0.0001)))
 
 func to_dict() -> Dictionary:
-	return {"volumes": _volumes.duplicate(), "language": _language, "settings": _settings.duplicate()}
+	return {"volumes": _volumes.duplicate(), "language": get_language(), "settings": _settings.duplicate()}
 
 func from_dict(d: Dictionary) -> void:
 	var v: Dictionary = d.get("volumes", {}) as Dictionary
