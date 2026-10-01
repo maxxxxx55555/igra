@@ -1,18 +1,23 @@
-
 extends Area3D
+## G25 (GDD §18): a box of rounds (DistrictLoot.AMMO_PER_PICKUP) for the shared reserve, whatever gun is drawn.
 
-@export 
-var weapon_name: String = "pistol"
-
-@export 
-var ammo_amount: int = 15
+@export var ammo_amount: int = 12
 
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
+	var mesh := get_node_or_null("MeshInstance3D") as MeshInstance3D
+	if mesh != null:
+		var mat := StandardMaterial3D.new()
+		mat.albedo_color = Color(0.682, 0.714, 0.749)
+		mat.emission_enabled = true
+		mat.emission = Color(0.682, 0.714, 0.749)
+		mat.emission_energy_multiplier = 0.4
+		mesh.material_override = mat
 
 func _on_body_entered(body: Node3D) -> void:
-	if not body.is_in_group("player"):
+	var manager := body.get_node_or_null("WeaponManager") as WeaponManager
+	if manager == null or not body.is_in_group("player"):
 		return
-	if body.has_method("add_ammo"):
-		body.add_ammo(weapon_name, ammo_amount)
+	manager.add_ammo(ammo_amount)
+	EventBus.inventory_notice.emit(LocalizationManager.tf("AMMO_FOUND", [ammo_amount]))
 	queue_free()

@@ -58,6 +58,7 @@ func _play_warn_sfx() -> void:
 		return
 	var player := AudioStreamPlayer3D.new()
 	player.stream = sfx
+	player.bus = &"Combat"
 	player.max_distance = 12.0
 	player.attenuation_model = AudioStreamPlayer3D.ATTENUATION_INVERSE_SQUARE_DISTANCE
 	get_parent().add_child(player)

@@ -1,10 +1,7 @@
 class_name HoundMonster
 extends "res://scripts/enemies/base_monster.gd"
 
-## GDD §6.2 Hound: fast swarm chaser, short light-stun, calls allies once when
-## it first spots the player (watcher_3d.gd's noise-scream idiom, one-shot).
-
-const CALL_RANGE: float = 15.0
+## GDD §6.2 Hound: fast swarm chaser, short light-stun; calls allies when it first spots the player (base_monster.gd PACK_CALLERS).
 
 func _init() -> void:
 	monster_id = &"hound"
@@ -29,8 +26,3 @@ func _handle_light_reaction(_delta: float) -> void:
 	if ai_state == State.STUN or ai_state == State.DEAD:
 		return
 	stun(stun_duration)
-
-func _change_state(new_state: State) -> void:
-	if new_state == State.CHASE and ai_state != State.CHASE:
-		EventBus.noise_emitted.emit(Vector2(global_position.x, global_position.z), CALL_RANGE)
-	super._change_state(new_state)

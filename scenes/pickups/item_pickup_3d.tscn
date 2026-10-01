@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/pickups/item_pickup_3d.gd" id="1_script"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_pick"]
-radius = 0.7
+radius = 1.1
 
 [sub_resource type="BoxMesh" id="BoxMesh_pick"]
 size = Vector3(0.34, 0.34, 0.34)

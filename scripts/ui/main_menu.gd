@@ -89,6 +89,9 @@ func _style_title(vb: VBoxContainer) -> void:
 	var title := vb.get_node_or_null("Title") as Label if vb != null else null
 	if title == null:
 		return
+	# A CRLF checkout turns the scene's two-line title into CR+LF, which the Label
+	# draws as two line breaks: a blank line between the words.
+	title.text = title.text.replace("\r", "")
 	title.add_theme_color_override("font_outline_color", Color(0.047, 0.062, 0.086))
 	title.add_theme_constant_override("outline_size", 12)
 
@@ -173,7 +176,7 @@ func _refresh_daily_card(vb: VBoxContainer) -> void:
 		desc, mini(progress, target), target,
 		("  " + LocalizationManager.t("DAILY_COMPLETED_LABEL")) if done else ""]
 	var streak: int = SaveSystem.get_daily_streak() if SaveSystem != null else 0
-	(card.get_node("Streak") as Label).text = LocalizationManager.tf("DAILY_STREAK_LABEL", [streak])
+	(card.get_node("Streak") as Label).text = LocalizationManager.tf("DAILY_STREAK_LABEL", [streak, DailyChallengeManager.streak_multiplier(streak)])
 
 func _connect(vb: Node, node_name: String, cb: Callable) -> void:
 	var b := vb.get_node_or_null(node_name) as Button

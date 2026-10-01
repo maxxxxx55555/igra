@@ -25,5 +25,5 @@ target_position = Vector3(0.05, -0.05, -10)
 target_position = Vector3(-0.05, -0.05, -10)
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
-bus = &"SFX"
+bus = &"Combat"
 

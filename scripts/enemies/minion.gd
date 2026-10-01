@@ -121,7 +121,7 @@ func _chase() -> void:
 func _attack() -> void:
 	_attack_timer = attack_cooldown
 	if _player and _player.has_method("take_damage"):
-		_player.take_damage(attack_damage)
+		_player.take_damage(attack_damage, global_position)
 
 func take_damage(amount: float) -> void:
 	hp -= amount

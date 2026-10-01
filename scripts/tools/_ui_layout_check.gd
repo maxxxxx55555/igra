@@ -12,14 +12,27 @@ extends Node
 ##   1. корневой Control покрывает вьюпорт (это полноэкранный оверлей);
 ##   2. каждый видимый потомок с ненулевым размером попадает в кадр;
 ##   3. a FULL_RECT-anchored child really fills its parent (checked on the
-##      main menu scene too).
+##      main menu scene too);
+##   4. in English no label shows Cyrillic: data resources keep Russian names,
+##      and the scene files still hold Russian placeholder text (the main scene
+##      showed "ЗАГРУЗКА" to every player until its script localized it).
 ##
 ## Запуск: godot --headless --path . res://scenes/tools/ui_layout_check_scene.tscn
 
+## Scenes the game instantiates; game_over.tscn and pause_menu.tscn are legacy
+## files only the scene smoke loads, their Russian placeholders never show.
+const LIVE_SCENES: Array[String] = [
+	"boot_loading", "main_menu", "hud_3d", "tutorial", "new_game_plus", "difficulty_screen", "save_slots",
+	"district_banner", "daily_events", "epilogue", "lobby", "photo_album", "coin_hud", "quest_tracker_hud",
+	"splash", "pre_loading", "confirm_quit", "credits",
+]
+
 var _fails: int = 0
 var _checked: int = 0
+var _cyrillic := RegEx.create_from_string("[\\x{0400}-\\x{04FF}]")
 
 func _ready() -> void:
+	LocalizationManager.set_language("en")
 	await get_tree().process_frame
 	var view := Vector2(get_viewport().get_visible_rect().size)
 	print("[uilay] viewport = %dx%d" % [int(view.x), int(view.y)])
@@ -31,7 +44,18 @@ func _ready() -> void:
 	await get_tree().process_frame
 	_checked += 1
 	_check_full_rect(&"main_menu", menu)
+	# A CRLF checkout puts CR into the scene's two-line title: the Label draws a blank line.
+	var menu_title := menu.find_child("Title", true, false) as Label
+	if menu_title == null or menu_title.text.contains("\r"):
+		_fail("main_menu/Title: missing or its text carries a CR (blank line between the words)")
 	menu.queue_free()
+	for scene_name in LIVE_SCENES:
+		var inst: Node = (load("res://scenes/ui/%s.tscn" % scene_name) as PackedScene).instantiate()
+		get_tree().root.add_child(inst)
+		await get_tree().process_frame
+		await get_tree().process_frame
+		_scan_cyrillic(StringName("scene/" + scene_name), inst)
+		inst.queue_free()
 	print("[uilay] экранов проверено: ", _checked)
 	print("[uilay] DONE fails=", _fails)
 	get_tree().quit(1 if _fails > 0 else 0)
@@ -55,6 +79,7 @@ func _check_screen(id: StringName, view: Vector2) -> void:
 			% [id, int(r.size.x), int(r.size.y), int(view.x), int(view.y)])
 	_check_children(id, root, view)
 	_check_full_rect(id, root)
+	_scan_cyrillic(id, root)
 	# A centre-anchored box must really be centred: without grow-both it grows right
 	# and down from the centre (the win and death panels sat off-centre at rc14).
 	for c in root.get_children():
@@ -112,6 +137,15 @@ func _check_full_rect(id: StringName, node: Node) -> void:
 				_fail("%s/%s: full-rect anchors but %dx%d in a %dx%d parent (use set_anchors_and_offsets_preset)" % [id, cc.name, int(cc.size.x), int(cc.size.y), int(ps.x), int(ps.y)])
 		if not (c is ScrollContainer):
 			_check_full_rect(id, c)
+
+## The language picker lists native names on purpose, so dropdowns are skipped.
+func _scan_cyrillic(id: StringName, node: Node) -> void:
+	for c in node.get_children():
+		if not (c is OptionButton):
+			for prop in ["text", "tooltip_text", "placeholder_text"]:
+				if prop in c and _cyrillic.search(String(c.get(prop))) != null:
+					_fail("%s/%s.%s shows Cyrillic in English: %s" % [id, c.name, prop, String(c.get(prop)).left(60)])
+		_scan_cyrillic(id, c)
 
 func _fail(msg: String) -> void:
 	_fails += 1

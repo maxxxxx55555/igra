@@ -1,168 +1,168 @@
 [
     {
         "doc_id": "doc_blackout_news",
-        "title": "Газета «Городской Вестник»: Последний выпуск",
-        "content": "«ЭОН объявляет: отключение продлится не более суток. Жители просят сохранять спокойствие...»"
+        "title_key": "DOC_BLACKOUT_NEWS_TITLE",
+        "content_key": "DOC_BLACKOUT_NEWS_TEXT"
     },
     {
         "doc_id": "doc_protocol_dawn",
-        "title": "Протокол «РАССВЕТ»",
-        "content": "Секретный приказ ЭОН №7: в случае необратимого отказа энергосети запустить Протокол РАССВЕТ."
+        "title_key": "DOC_PROTOCOL_DAWN_TITLE",
+        "content_key": "DOC_PROTOCOL_DAWN_TEXT"
     },
     {
         "doc_id": "doc_streetlight_manifesto",
-        "title": "Манифест смотрителя фонарей",
-        "content": "«Пока горит хоть один фонарь — город жив. Я чинил их сорок лет. Теперь чиню наоборот.»"
+        "title_key": "DOC_STREETLIGHT_MANIFESTO_TITLE",
+        "content_key": "DOC_STREETLIGHT_MANIFESTO_TEXT"
     },
     {
         "doc_id": "doc_first_death",
-        "title": "Записка из кармана мертвеца",
-        "content": "«Город без света — как дом без дверей. Я видел, как она вышла из стены.»"
+        "title_key": "DOC_FIRST_DEATH_TITLE",
+        "content_key": "DOC_FIRST_DEATH_TEXT"
     },
     {
         "doc_id": "doc_radio_diary_01",
-        "title": "Дневник радиста: день 1",
-        "content": "«Пятница. Сеть умерла в 03:14. Радио ещё ловит помехи с севера.»"
+        "title_key": "DOC_RADIO_DIARY_01_TITLE",
+        "content_key": "DOC_RADIO_DIARY_01_TEXT"
     },
     {
         "doc_id": "doc_engineer_warning",
-        "title": "Предупреждение главного инженера",
-        "content": "«Всем бригадам: НЕ ВСКРЫВАТЬ подстанции без приказа. Внутри мы нашли не то, что ожидали.»"
+        "title_key": "DOC_ENGINEER_WARNING_TITLE",
+        "content_key": "DOC_ENGINEER_WARNING_TEXT"
     },
     {
         "doc_id": "doc_school_incident",
-        "title": "Школьный журнал: последняя запись",
-        "content": "«Дежурный учитель: 15 марта, уроки отменены. Все 300 учеников были в подвале.»"
+        "title_key": "DOC_SCHOOL_INCIDENT_TITLE",
+        "content_key": "DOC_SCHOOL_INCIDENT_TEXT"
     },
     {
         "doc_id": "doc_evacuation_order",
-        "title": "Приказ об эвакуации: список №2",
-        "content": "«Второй список: 47 человек. Сбор — школьный двор, 04:00.»"
+        "title_key": "DOC_EVACUATION_ORDER_TITLE",
+        "content_key": "DOC_EVACUATION_ORDER_TEXT"
     },
     {
         "doc_id": "doc_old_woman",
-        "title": "Письмо старухи из дома 24",
-        "content": "«Сынок, если читаешь это — ты живой, и это главное. Бабка Маня говорит: свет в этом городе — не электричество.»"
+        "title_key": "DOC_OLD_WOMAN_TITLE",
+        "content_key": "DOC_OLD_WOMAN_TEXT"
     },
     {
         "doc_id": "doc_hymn",
-        "title": "Молитва фонарщиков",
-        "content": "«Святой свет, что горит в ночи, защити нас от тех, кто живёт в проводах. Аминь»."
+        "title_key": "DOC_HYMN_TITLE",
+        "content_key": "DOC_HYMN_TEXT"
     },
     {
         "doc_id": "doc_factory_log",
-        "title": "Журнал смены завода №9",
-        "content": "«22:00 — странный гул от генератора. 23:15 — свет в цехе B мигает.»"
+        "title_key": "DOC_FACTORY_LOG_TITLE",
+        "content_key": "DOC_FACTORY_LOG_TEXT"
     },
     {
         "doc_id": "doc_foreman_note",
-        "title": "Записка мастера цеха",
-        "content": "«Конвейер стал считать себя мастером. Нет, я не сошёл с ума. Я работаю здесь 20 лет.»"
+        "title_key": "DOC_FOREMAN_NOTE_TITLE",
+        "content_key": "DOC_FOREMAN_NOTE_TEXT"
     },
     {
         "doc_id": "doc_cable_math",
-        "title": "Расчёт электросети (неразборчиво)",
-        "content": "«Суммарная мощность резерва: 0. Протяжённость повреждений: весь город.»"
+        "title_key": "DOC_CABLE_MATH_TITLE",
+        "content_key": "DOC_CABLE_MATH_TEXT"
     },
     {
         "doc_id": "doc_strike",
-        "title": "Листовка забастовки",
-        "content": "«Рабочие завода №9, 12 марта: требуем отключить ночную смену! Ночью станки работают сами.»"
+        "title_key": "DOC_STRIKE_TITLE",
+        "content_key": "DOC_STRIKE_TEXT"
     },
     {
         "doc_id": "doc_hospital_note",
-        "title": "Карточка пациента «N»",
-        "content": "«Пациент доставлен с подстанции Ж-3. Не говорит, не ест, смотрит на лампу.»"
+        "title_key": "DOC_HOSPITAL_NOTE_TITLE",
+        "content_key": "DOC_HOSPITAL_NOTE_TEXT"
     },
     {
         "doc_id": "doc_substation_guard",
-        "title": "Постовая ведомость подстанции",
-        "content": "«Смена 12-я, охрана: на объект проникнуть невозможно — дверь заварена.»"
+        "title_key": "DOC_SUBSTATION_GUARD_TITLE",
+        "content_key": "DOC_SUBSTATION_GUARD_TEXT"
     },
     {
         "doc_id": "doc_relay_notes",
-        "title": "Заметки диспетчера сети",
-        "content": "«Реле 4-7 срабатывает каждые 47 минут, ровно. Начал ровно в день отключения.»"
+        "title_key": "DOC_RELAY_NOTES_TITLE",
+        "content_key": "DOC_RELAY_NOTES_TEXT"
     },
     {
         "doc_id": "doc_voice_in_wires",
-        "title": "Запись с диктофона (расшифровка)",
-        "content": "«— Слышишь? Гул в проводах. Это не гул. Это речь. Медленная речь на токе.»"
+        "title_key": "DOC_VOICE_IN_WIRES_TITLE",
+        "content_key": "DOC_VOICE_IN_WIRES_TEXT"
     },
     {
         "doc_id": "doc_core_station",
-        "title": "Техпаспорт центральной станции",
-        "content": "«Центральная станция: мощность 800 МВт, резерв 3 генератора. Особые условия: НЕ ЗАПУСКАТЬ ПОСЛЕ 23:00.»"
+        "title_key": "DOC_CORE_STATION_TITLE",
+        "content_key": "DOC_CORE_STATION_TEXT"
     },
     {
         "doc_id": "doc_eon_contract",
-        "title": "Контракт города с ЭОН",
-        "content": "«Пункт 13: город уступает ЭОН право на использование электросети в исследовательских целях.»"
+        "title_key": "DOC_EON_CONTRACT_TITLE",
+        "content_key": "DOC_EON_CONTRACT_TEXT"
     },
     {
         "doc_id": "doc_researcher_final",
-        "title": "Последний отчёт исследователя ЭОН",
-        "content": "«Эксперимент „Проводник“: мы подключили подстанции к аномалии. Она отзывается на питание.»"
+        "title_key": "DOC_RESEARCHER_FINAL_TITLE",
+        "content_key": "DOC_RESEARCHER_FINAL_TEXT"
     },
     {
         "doc_id": "doc_king_note",
-        "title": "Записка «Смотрителя»",
-        "content": "«Ты дошёл до центра. Значит, я был прав насчёт тебя. Погаси свет на станции — не для себя.»"
+        "title_key": "DOC_KING_NOTE_TITLE",
+        "content_key": "DOC_KING_NOTE_TEXT"
     },
     {
         "doc_id": "doc_survivor_tips",
-        "title": "Записки выжившего: как ходить ночью",
-        "content": "«1. Не беги — бег привлекает. 2. Свет — включай только на 10 секунд, потом гасни.»"
+        "title_key": "DOC_SURVIVOR_TIPS_TITLE",
+        "content_key": "DOC_SURVIVOR_TIPS_TEXT"
     },
     {
         "doc_id": "doc_murder_letters",
-        "title": "Подшивка странных писем",
-        "content": "«Уважаемый сосед! Я выключаю ваш свет в 23:00, так как он мешает моему покою.»"
+        "title_key": "DOC_MURDER_LETTERS_TITLE",
+        "content_key": "DOC_MURDER_LETTERS_TEXT"
     },
     {
         "doc_id": "doc_generator_manual",
-        "title": "Инструкция к генератору ГТ-3000",
-        "content": "«Шаг 1: Убедитесь, что помещение проветриваемое. Шаг 2: Убедитесь, что поблизости нет проводов.»"
+        "title_key": "DOC_GENERATOR_MANUAL_TITLE",
+        "content_key": "DOC_GENERATOR_MANUAL_TEXT"
     },
     {
         "doc_id": "doc_children_counting",
-        "title": "Школьная считалочка (подвальная)",
-        "content": "«Раз — свет погас. Два — он у нас. Три — не смотри. Четыре — не води.»"
+        "title_key": "DOC_CHILDREN_COUNTING_TITLE",
+        "content_key": "DOC_CHILDREN_COUNTING_TEXT"
     },
     {
         "doc_id": "doc_boss_suit",
-        "title": "Личное дело директора ЭОН",
-        "content": "«Фамилия вымарана. Должность: директор. Особые отметки: ни разу не был замечен днём.»"
+        "title_key": "DOC_BOSS_SUIT_TITLE",
+        "content_key": "DOC_BOSS_SUIT_TEXT"
     },
     {
         "doc_id": "doc_final_light",
-        "title": "Завещание фонарщика",
-        "content": "«Мой отец зажигал фонари, мой дед зажигал фонари. Я — последний. Когда я ушёл из города, свет погас.»"
+        "title_key": "DOC_FINAL_LIGHT_TITLE",
+        "content_key": "DOC_FINAL_LIGHT_TEXT"
     },
     {
         "doc_id": "doc_radio_diary_02",
-        "title": "Дневник радиста: день 12",
-        "content": "«Морзянка с севера стала понятнее. Передают: „СВЕТ-СВЕТ-СВЕТ-НЕ-СВЕТ-СВЕТ“.»"
+        "title_key": "DOC_RADIO_DIARY_02_TITLE",
+        "content_key": "DOC_RADIO_DIARY_02_TEXT"
     },
     {
         "doc_id": "doc_scavenger",
-        "title": "Список мародёра",
-        "content": "«Добыча за ночь: батареи — 14 шт., патроны — 3 коробки, еда — не еда, а то, что она оставила.»"
+        "title_key": "DOC_SCAVENGER_TITLE",
+        "content_key": "DOC_SCAVENGER_TEXT"
     },
     {
         "doc_id": "doc_station_log_final",
-        "title": "Последний лог станции",
-        "content": "«23:59 — Питание: 0%. Аномалия: 100%. Станция: больше не станция. Я: больше не я.»"
+        "title_key": "DOC_STATION_LOG_FINAL_TITLE",
+        "content_key": "DOC_STATION_LOG_FINAL_TEXT"
     },
     {
         "doc_id": "doc_machine_diary",
-        "title": "Дневник автомата (без подписи)",
-        "content": "«День 1: я конвейер. День 3: я помню руки, которые меня собрали. День 7: я собираю руки.»"
+        "title_key": "DOC_MACHINE_DIARY_TITLE",
+        "content_key": "DOC_MACHINE_DIARY_TEXT"
     },
     {
         "doc_id": "doc_last_will",
-        "title": "Предсмертная записка",
-        "content": "«Тот, кто найдёт эту записку: не ищи моё тело. Я ушёл в подстанцию Ж-3 с фонарём в руках.»"
+        "title_key": "DOC_LAST_WILL_TITLE",
+        "content_key": "DOC_LAST_WILL_TEXT"
     },
     {
         "doc_id": "suburbs_note_01",

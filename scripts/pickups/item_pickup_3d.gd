@@ -88,7 +88,7 @@ func _on_body_entered(body: Node) -> void:
 	var data := ItemDatabase.get_item(item_id)
 	if data != null:
 		UIManager.fly_pickup_icon(global_position, data.icon)
-	AudioManager.play_sfx(_PICKUP_BLIP, -8.0)
+	AudioManager.play_sfx(_PICKUP_BLIP, -8.0, &"UI")
 
 	# Сигнал item_picked_up уже отправлен внутри InventoryManager.try_add(),
 	# который сам же занимается и сетевой синхронизацией инвентаря.

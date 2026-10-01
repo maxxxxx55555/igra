@@ -73,7 +73,6 @@ func _load_defaults() -> void:
 	_settings["language"] = 0
 	_settings["sensitivity"] = 1.0
 	_settings["deadzone"] = 0.15
-	_settings["dodge_gesture"] = 0
 	_settings["crouch_input"] = 0
 	_settings["hud_opacity"] = 1.0
 	_settings["button_size"] = 1.0
@@ -164,6 +163,7 @@ func set_setting(key: String, value: Variant) -> void:
 		"dyslexia_font": _apply_dyslexia_font()
 		"colorblind": _apply_colorblind()
 		"text_size": _apply_text_size()
+		"vsync": _apply_vsync()
 		"trailer_mode": EventBus.hud_visibility_changed.emit(not bool(value))
 	EventBus.settings_changed.emit(key, value)
 
@@ -207,8 +207,7 @@ func apply_graphics(d: Dictionary) -> void:
 		set_draw_distance(float(d["draw_distance"]))
 	if d.has("vsync"):
 		_settings["vsync"] = bool(d["vsync"])
-		DisplayServer.window_set_vsync_mode(
-			DisplayServer.VSYNC_ENABLED if _settings["vsync"] else DisplayServer.VSYNC_DISABLED)
+		_apply_vsync()
 	if d.has("fps"):
 		# Экран отдаёт сам FPS ("60"), а хранится индекс шага — переводим.
 		var fps: int = int(d["fps"])
@@ -280,10 +279,6 @@ func set_deadzone(v: float) -> void:
 	for act in InputMap.get_actions():
 		InputMap.action_set_deadzone(act, _settings["deadzone"])
 	EventBus.settings_changed.emit("deadzone", _settings["deadzone"])
-
-func set_dodge_gesture(idx: int) -> void:
-	_settings["dodge_gesture"] = clampi(idx, 0, 2)
-	EventBus.settings_changed.emit("dodge_gesture", _settings["dodge_gesture"])
 
 func set_crouch_input(idx: int) -> void:
 	_settings["crouch_input"] = clampi(idx, 0, 2)
@@ -358,9 +353,18 @@ var _base_font_size: int = 0
 ## so it did nothing (and compounded if it had). Scale the root theme's
 ## default font size from a captured base instead — affects every Control
 ## that doesn't hard-override its own font size. Locale-agnostic.
+## GDD 14: Small / Medium / Large scale every Control (a window-wide factor): screens build their own themes with
+## pinned sizes, so a default font size alone never reached them.
+const TEXT_SCALE: Array[float] = [0.9, 1.0, 1.15]
+## The world's environment is written when the district loads and when the tier changes; High Contrast goes on top after.
+const HIGH_CONTRAST_DELAY: float = 0.5
+
 func _apply_text_size() -> void:
 	var tree := get_tree()
-	if tree == null or tree.root == null or tree.root.theme == null:
+	if tree == null or tree.root == null:
+		return
+	tree.root.content_scale_factor = TEXT_SCALE[clampi(int(_settings.get("text_size", 1)), 0, TEXT_SCALE.size() - 1)]
+	if tree.root.theme == null:
 		return
 	var rt: Theme = tree.root.theme
 	if _base_font_size <= 0:
@@ -388,6 +392,10 @@ func _apply_dyslexia_font() -> void:
 	for ctrl in get_tree().get_nodes_in_group("ui_text"):
 		if ctrl is Control:
 			(ctrl as Control).add_theme_font_override("font", f)
+
+func _apply_vsync() -> void:
+	DisplayServer.window_set_vsync_mode(
+		DisplayServer.VSYNC_ENABLED if bool(_settings.get("vsync", true)) else DisplayServer.VSYNC_DISABLED)
 
 func set_high_contrast(enabled: bool) -> void:
 	_settings["high_contrast"] = enabled
@@ -462,6 +470,8 @@ func _apply_particle_ratio() -> void:
 func _on_node_added(n: Node) -> void:
 	if n is GPUParticles3D:
 		_scale_emitter(n, _particle_ratio())
+	elif n is WorldEnvironment:
+		get_tree().create_timer(HIGH_CONTRAST_DELAY).timeout.connect(_apply_high_contrast)
 
 func set_graphics_tier(idx: int) -> void:
 	idx = clampi(idx, 0, GRAPHICS_TIERS.size() - 1)
@@ -474,6 +484,7 @@ func set_graphics_tier(idx: int) -> void:
 	set_resolution(preset["resolution"])
 	_apply_particle_ratio()
 	EventBus.settings_changed.emit("graphics_tier", idx)
+	get_tree().create_timer(HIGH_CONTRAST_DELAY).timeout.connect(_apply_high_contrast)
 
 func set_resolution(idx: int) -> void:
 	idx = clampi(idx, 0, RESOLUTIONS.size() - 1)

@@ -44,7 +44,7 @@ func missing_prerequisite_name(id: StringName) -> String:
 	for parent_id in d.powered_by:
 		if get_stage(parent_id) < DistrictData.Stage.FULL:
 			var p := get_district(parent_id)
-			return p.display_name if p != null else String(parent_id)
+			return LocalizationManager.name_for("DISTRICT_NAME_", parent_id, p.display_name if p != null else "")
 	return ""
 func advance_district(id: StringName, new_stage: int) -> bool:
 	var d := get_district(id)

@@ -35,7 +35,7 @@ func _handle_light_reaction(_delta: float) -> void:
 	pass
 
 func _physics_process(delta: float) -> void:
-	if _winding_up:
+	if _winding_up and ai_state != State.DEAD:
 		_tick_windup(delta)
 		return
 	super._physics_process(delta)
@@ -64,7 +64,8 @@ func _slam_and_charge() -> void:
 	if player_ref and is_instance_valid(player_ref):
 		var dist := global_position.distance_to(player_ref.global_position)
 		if dist <= attack_range + 0.5:
-			player_ref.take_damage(attack_damage * SLAM_MULT)
+			player_ref.take_damage(attack_damage * SLAM_MULT, global_position)
+			_inflict_statuses(player_ref)
 			EventBus.enemy_attack.emit(attack_damage * SLAM_MULT)
 		var dir := (player_ref.global_position - global_position).normalized()
 		dir.y = 0.0

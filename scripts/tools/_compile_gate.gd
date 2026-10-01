@@ -45,10 +45,12 @@ func _scan(dir_path: String) -> void:
 		f = d.get_next()
 	d.list_dir_end()
 
-## Загрузка .gd уже компилирует его: null => ошибка парсинга.
+## Загрузка .gd компилирует его, но скрипт с ошибкой парсинга load() всё равно отдаёт (rc15: дубль ключа в словаре
+## дал `Parse Error` в логе и `bad=0` в итоге): годен только тот, что можно инстанцировать.
 func _check_scripts() -> void:
 	for p in _scripts:
-		if load(p) as Script == null:
+		var script := load(p) as Script
+		if script == null or not script.can_instantiate():
 			_fails.append("SCRIPT " + p)
 
 func _check_resources() -> void:

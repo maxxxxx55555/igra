@@ -48,16 +48,16 @@ func _grant(item: ShopItem) -> void:
 	match item.kind:
 		ShopItem.Kind.UPGRADE:
 			UpgradeSystem.apply(item.id)
-			EventBus.inventory_notice.emit(LocalizationManager.tf("SHOP_UPGRADE_APPLIED", [item.display_name]))
+			EventBus.inventory_notice.emit(LocalizationManager.tf("SHOP_UPGRADE_APPLIED", [LocalizationManager.name_for("SHOP_ITEM_", item.id, item.display_name)]))
 		ShopItem.Kind.SKIN:
 			EventBus.skin_unlocked.emit(item.id)
-			EventBus.inventory_notice.emit(LocalizationManager.tf("SHOP_SKIN_GRANTED", [item.display_name]))
+			EventBus.inventory_notice.emit(LocalizationManager.tf("SHOP_SKIN_GRANTED", [LocalizationManager.name_for("SHOP_ITEM_", item.id, item.display_name)]))
 		ShopItem.Kind.BUNDLE:
 			for content_id in item.bundle_contents:
 				var c := get_item(content_id)
 				if c != null:
 					_grant(c)
-			EventBus.inventory_notice.emit(LocalizationManager.tf("SHOP_BUNDLE_GRANTED", [item.display_name]))
+			EventBus.inventory_notice.emit(LocalizationManager.tf("SHOP_BUNDLE_GRANTED", [LocalizationManager.name_for("SHOP_ITEM_", item.id, item.display_name)]))
 func to_dict() -> Dictionary:
 	return {"owned": _owned.keys().map(func(k): return String(k))}
 func from_dict(d: Dictionary) -> void:

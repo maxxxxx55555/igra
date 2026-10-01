@@ -1,8 +1,12 @@
-[gd_resource type="Theme" load_steps=14 format=3]
+[gd_resource type="Theme" load_steps=15 format=3]
 
 [ext_resource type="FontFile" path="res://assets/fonts/BebasNeue-Regular.ttf" id="1_bebas"]
 [ext_resource type="FontFile" path="res://assets/fonts/RobotoCondensed-Regular.ttf" id="2_roboto"]
 [ext_resource type="FontFile" path="res://assets/fonts/ShareTechMono-Regular.ttf" id="3_mono"]
+
+[sub_resource type="FontVariation" id="font_bebas_bold"]
+base_font = ExtResource("1_bebas")
+variation_embolden = 0.35
 
 [sub_resource type="StyleBoxFlat" id="style_panel"]
 content_margin_left = 12
@@ -163,11 +167,11 @@ Label/fonts/font = ExtResource("2_roboto")
 header/base_type = &"Label"
 header/colors/font_color = Color(0.788, 0.635, 0.29, 1.0)
 header/font_sizes/font_size = 44
-header/fonts/font = ExtResource("1_bebas")
+header/fonts/font = SubResource("font_bebas_bold")
 title/base_type = &"Label"
 title/colors/font_color = Color(0.847, 0.824, 0.769, 1.0)
 title/font_sizes/font_size = 22
-title/fonts/font = ExtResource("1_bebas")
+title/fonts/font = SubResource("font_bebas_bold")
 small/base_type = &"Label"
 small/colors/font_color = Color(0.682, 0.714, 0.749, 1.0)
 small/font_sizes/font_size = 13
@@ -189,7 +193,7 @@ Button/colors/font_pressed_color = Color(0.788, 0.635, 0.29, 1.0)
 Button/colors/font_disabled_color = Color(0.682, 0.714, 0.749, 1.0)
 Button/colors/font_focus_color = Color(0.847, 0.824, 0.769, 1.0)
 Button/font_sizes/font_size = 16
-Button/fonts/font = ExtResource("1_bebas")
+Button/fonts/font = SubResource("font_bebas_bold")
 LineEdit/styles/normal = SubResource("style_edit_normal")
 LineEdit/styles/focus = SubResource("style_edit_focus")
 LineEdit/colors/font_color = Color(0.847, 0.824, 0.769, 1.0)

@@ -196,7 +196,7 @@ func _spawn_falling_beam() -> void:
 func _perform_melee() -> void:
 	if not player_ref or not is_instance_valid(player_ref):
 		return
-	player_ref.take_damage(attack_damage)
+	player_ref.take_damage(attack_damage, global_position)
 	EventBus.enemy_attack.emit(attack_damage)
 	attack_timer = attack_cooldown * 0.5
 

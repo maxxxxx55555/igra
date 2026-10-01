@@ -24,6 +24,8 @@ const TABS: Array[Dictionary] = [
 	# GOLD MASTER v5 hooks pass: collectible-album read of the same
 	# document-unlock data journal_ui.gd lists as text.
 	{"id": &"collection", "label": "COLLECTION_TITLE", "script": "res://scripts/ui/collection_ui.gd"},
+	# G26 (GDD 24.2): the photo album.
+	{"id": &"photos", "label": "PHOTO_ALBUM_TITLE", "script": "res://scripts/ui/photo_album_ui.gd"},
 ]
 
 var _content: Control = null

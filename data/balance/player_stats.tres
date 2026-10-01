@@ -3,9 +3,9 @@
 [resource]
 resource_local_to_scene = true
 script = ExtResource("1_stats")
-walk_speed = 170.0
-run_speed = 272.0
-stealth_speed = 90.0
+walk_speed = 3.0
+run_speed = 4.8
+stealth_speed = 1.6
 stamina_max = 100.0
 stamina_drain_per_sec = 22.0
 stamina_regen_per_sec = 14.0

@@ -40,6 +40,8 @@ func is_active(status: int) -> bool:
 	return active.has(status)
 
 func speed_multiplier() -> float:
+	if active.has(Status.STUN):
+		return 0.0
 	if active.has(Status.SLOW):
 		return maxf(0.1, 1.0 - float(active[Status.SLOW]["power"]))
 	return 1.0

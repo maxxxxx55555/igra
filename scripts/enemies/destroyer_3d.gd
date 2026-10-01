@@ -59,7 +59,8 @@ func _perform_combo_attack() -> void:
 	_combo_step = mini(_combo_step + 1, 3)
 	_combo_timer = 2.0
 	var dmg: float = attack_damage * (0.7 + float(_combo_step) * 0.3)
-	player_ref.take_damage(dmg)
+	player_ref.take_damage(dmg, global_position)
+	_inflict_statuses(player_ref)
 	EventBus.enemy_attack.emit(dmg)
 
 func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, type: EnemyRosterData.DamageType = EnemyRosterData.DamageType.BULLET) -> void:

@@ -1,6 +1,7 @@
 extends Control
 
 @onready var bar: ProgressBar = $Panel/VBox/Bar
+@onready var title: Label = $Panel/VBox/Title
 @onready var tip: Label = $Panel/VBox/Tip
 
 const TIPS: Array[String] = ["TIP_1", "TIP_2", "TIP_3", "TIP_4", "TIP_5"]
@@ -11,6 +12,7 @@ var _left: bool = false
 
 func _ready() -> void:
 	add_to_group("ui_root")
+	title.text = LocalizationManager.t("loading")
 	tip.text = LocalizationManager.t(TIPS[randi() % TIPS.size()])
 	tip.add_theme_color_override("font_color", Color("#CFC9B8"))
 

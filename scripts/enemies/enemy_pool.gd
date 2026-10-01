@@ -16,21 +16,26 @@ const CRAWLER: PackedScene = preload("res://scenes/enemies/crawler_3d.tscn")
 const HUNTER: PackedScene = preload("res://scenes/enemies/hunter_3d.tscn")
 const WATCHER: PackedScene = preload("res://scenes/enemies/watcher_3d.tscn")
 const DESTROYER: PackedScene = preload("res://scenes/enemies/destroyer_3d.tscn")
+const SHARPSHOOTER: PackedScene = preload("res://scenes/enemies/sharpshooter_3d.tscn")
+const BRUTE: PackedScene = preload("res://scenes/enemies/brute_3d.tscn")
+const BURNER: PackedScene = preload("res://scenes/enemies/burner_3d.tscn")
+const ROTTER: PackedScene = preload("res://scenes/enemies/rotter_3d.tscn")
+const HOUND: PackedScene = preload("res://scenes/enemies/hound_3d.tscn")
 
 ## Состав по районам. Порядок = порядок появления на точках спавна, поэтому
 ## первым идёт «фоновый» тип района, дальше — редкие и опасные.
 const ROSTER_BY_DISTRICT: Dictionary = {
 	&"suburbs":       [SHADOW, SHADOW, CRAWLER],
-	&"residential":   [SHADOW, CRAWLER, CRAWLER],
-	&"park":          [CRAWLER, HUNTER, SHADOW],
-	&"school":        [SHADOW, CRAWLER, WATCHER],
-	&"hospital":      [WATCHER, SHADOW, CRAWLER],
-	&"gas_station":   [HUNTER, SHADOW, CRAWLER],
-	&"police":        [WATCHER, HUNTER, DESTROYER],
-	&"warehouses":    [CRAWLER, DESTROYER, HUNTER],
-	&"industrial":    [DESTROYER, HUNTER, WATCHER],
-	&"substation":    [DESTROYER, WATCHER, HUNTER],
-	&"power_station": [DESTROYER, DESTROYER, WATCHER],
+	&"residential":   [SHADOW, CRAWLER, CRAWLER, ROTTER],
+	&"park":          [CRAWLER, HUNTER, SHADOW, HOUND, ROTTER],
+	&"school":        [SHADOW, CRAWLER, WATCHER, SHARPSHOOTER],
+	&"hospital":      [WATCHER, SHADOW, CRAWLER, ROTTER, ROTTER],
+	&"gas_station":   [HUNTER, SHADOW, CRAWLER, BURNER, HOUND],
+	&"police":        [WATCHER, HUNTER, DESTROYER, SHARPSHOOTER, BRUTE],
+	&"warehouses":    [CRAWLER, DESTROYER, HUNTER, BRUTE, HOUND],
+	&"industrial":    [DESTROYER, HUNTER, WATCHER, BRUTE, BURNER],
+	&"substation":    [DESTROYER, WATCHER, HUNTER, SHARPSHOOTER, BURNER],
+	&"power_station": [DESTROYER, DESTROYER, WATCHER, BRUTE, SHARPSHOOTER, BURNER],
 }
 
 ## Смещения точек спавна вокруг центра района — используются, когда в сцене

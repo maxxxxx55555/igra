@@ -1,0 +1,8 @@
+[closeout] FAIL MV1 one second of the stick forward walks 170.60 m (a person walks 1.4 to 3.5 m/s)
+[closeout] FAIL MV3 the block between four streets is floor (hit nothing)
+[closeout] FAIL MV3 a wall stops the player at the building fronts (x -1.0)
+[closeout] FAIL SH1 the Shop card shows every catalog item (-1 cards of 7)
+[closeout] DONE checks=208 fails=4
+[closeout] ok   MENU1 the menu state opens the main-menu screen
+[closeout] FAIL MENU1 the main-menu screen is gone once Settings is the scene (it covered Settings, Difficulty and Credits)
+[closeout] DONE checks=212 fails=1

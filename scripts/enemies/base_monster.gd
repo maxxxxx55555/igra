@@ -90,7 +90,6 @@ func apply_status(status: int, duration: float, dps: float = 0.0, power: float =
 		_status_node.apply(status, duration, dps, power)
 
 ## Накладывает на цель статусы из поля inflicts ростера (если цель их поддерживает).
-## ponytail: у игрока пока нет apply_status — вызов graceful no-op, проводка на монстрах есть.
 func _inflict_statuses(target: Node) -> void:
 	var inf: Array = roster_entry.get("inflicts", [])
 	if inf.is_empty() or not target.has_method("apply_status"):
@@ -99,10 +98,24 @@ func _inflict_statuses(target: Node) -> void:
 		var p: Dictionary = _STATUS_PARAMS.get(int(s), {"duration": 2.0})
 		target.apply_status(int(s), float(p.get("duration", 2.0)), float(p.get("dps", 0.0)), float(p.get("power", 0.0)))
 
+## GDD 6.2 group behaviour: Hounds and Hunters shout when they first see the player; the allies inside the radius
+## come to the spot, each from wherever it stands (no scripted pincer).
+const PACK_CALLERS: Array[StringName] = [&"hound", &"hunter"]
+const PACK_CALL_RANGE: float = 15.0
+
+## GDD 7: a noise (a shot, a shout, a run) inside its radius sends a monster that has not seen the player to the spot.
+func _on_noise_emitted(pos: Vector2, radius: float) -> void:
+	if ai_state != State.IDLE and ai_state != State.PATROL and ai_state != State.INVESTIGATE:
+		return
+	var heard: float = radius * NewGamePlus.get_modifier_multiplier("hunter_hearing")
+	if Vector2(global_position.x, global_position.z).distance_to(pos) <= heard:
+		_enter_investigate_at(Vector3(pos.x, global_position.y, pos.y))
+
 func _ready() -> void:
 	_apply_roster_stats()
 	_apply_ng_scaling()
 	_ensure_hp()
+	EventBus.noise_emitted.connect(_on_noise_emitted)
 	_nav_agent = get_node_or_null("NavigationAgent3D")
 	if not _nav_agent:
 		_nav_agent = NavigationAgent3D.new()
@@ -208,12 +221,19 @@ func _ensure_hp() -> void:
 	_hp_initialized = true
 	hp = max_hp
 
+## The Difficulty screen's pick (Easy, Normal, Hard) scales what a monster has and deals; Normal is the game as tuned.
+const DIFFICULTY_HP: Array[float] = [0.8, 1.0, 1.2]
+const DIFFICULTY_DAMAGE: Array[float] = [0.75, 1.0, 1.25]
+
 ## Вызывается до _ensure_hp(), чтобы hp сразу считался от отмасштабированного
 ## max_hp. Раньше шёл через call_deferred и накручивал множители повторно.
 func _apply_ng_scaling() -> void:
 	if _ng_scaled:
 		return
 	_ng_scaled = true
+	var level: int = clampi(int(SettingsManager.get_setting("difficulty", 1)), 0, 2)
+	max_hp *= DIFFICULTY_HP[level]
+	attack_damage *= DIFFICULTY_DAMAGE[level]
 	var ngp := get_node_or_null("/root/NewGamePlus")
 	if ngp == null or not ngp.is_ng_plus_active():
 		return
@@ -512,7 +532,7 @@ func _deal_damage() -> void:
 		return
 	if player_ref and is_instance_valid(player_ref) and player_ref.has_method("take_damage"):
 		if global_position.distance_to(player_ref.global_position) <= attack_range + 0.5:
-			player_ref.take_damage(attack_damage)
+			player_ref.take_damage(attack_damage, global_position)
 			_inflict_statuses(player_ref)
 			EventBus.enemy_attack.emit(attack_damage)
 
@@ -523,18 +543,9 @@ func _can_see_player() -> bool:
 	# Модификатор NG+ "ghost": Crawlers полностью игнорируют игрока.
 	if monster_id == &"crawler" and NewGamePlus.get_modifier_toggle("crawlers_ignore"):
 		return false
-	var vrange := vision_range
-	var prange := peripheral_range
-	# docs/DESIGN_AUDIT_ARENA.md P2 low_profile: -10%/level to both sight
-	# ranges, avoidance only. Acquire-states only (not an active CHASE),
-	# player must be sneaking with the flashlight off, boss excluded.
-	if not is_in_group("boss") and ai_state in [State.IDLE, State.PATROL, State.INVESTIGATE] \
-			and player_ref.has_method("is_sneaking") and player_ref.is_sneaking() \
-			and player_ref.get("flashlight_enabled") == false:
-		var lp_lvl: int = SkillTreeManager.get_skill_level(&"low_profile") if SkillTreeManager else 0
-		var mult := 1.0 - 0.10 * lp_lvl
-		vrange *= mult
-		prange *= mult
+	var ranges := _sight_ranges()
+	var vrange := ranges.x
+	var prange := ranges.y
 	var dist := global_position.distance_to(player_ref.global_position)
 	if dist > vrange:
 		# Check peripheral vision
@@ -554,6 +565,33 @@ func _can_see_player() -> bool:
 			return _check_line_of_sight()
 		return false
 	return _check_line_of_sight()
+
+## GDD §7 / S02: without a light in a dark district a monster notices the player from 3 m at most.
+const DARK_SIGHT_CAP: float = 3.0
+
+## Vision and peripheral range after the player's visibility and the low_profile skill.
+func _sight_ranges() -> Vector2:
+	var vrange := vision_range
+	var prange := peripheral_range
+	var acquiring: bool = ai_state in [State.IDLE, State.PATROL, State.INVESTIGATE]
+	var light_off: bool = player_ref.get("flashlight_enabled") == false
+	# docs/DESIGN_AUDIT_ARENA.md P2 low_profile: -10%/level to both sight
+	# ranges, avoidance only. Acquire-states only (not an active CHASE),
+	# player must be sneaking with the flashlight off, boss excluded.
+	if not is_in_group("boss") and acquiring and player_ref.has_method("is_sneaking") \
+			and player_ref.is_sneaking() and light_off:
+		var lp_lvl: int = SkillTreeManager.get_skill_level(&"low_profile") if SkillTreeManager else 0
+		var mult := 1.0 - 0.10 * lp_lvl
+		vrange *= mult
+		prange *= mult
+	if player_ref.has_method("get_visibility_scale"):
+		var vis: float = player_ref.get_visibility_scale()
+		vrange *= vis
+		prange *= vis
+		if acquiring and light_off and PowerGrid.get_stage(StringName(DistrictManager.current_district)) < DistrictData.Stage.STREETS:
+			vrange = minf(vrange, DARK_SIGHT_CAP)
+			prange = minf(prange, DARK_SIGHT_CAP)
+	return Vector2(vrange, prange)
 
 func _check_line_of_sight() -> bool:
 	var space := get_world_3d().direct_space_state
@@ -730,27 +768,30 @@ func _die() -> void:
 	_death_effect()
 	_maybe_drop_loot()
 
-## §6.2: "Loot: 30% шанс с трупа". Roster-flag loot_ammo — обозначает дроп
-## с "боеприпасников" (Sharpshooter). Изначально использовал
-## scenes/pickups/ammo_pickup.tscn -> player.add_ammo(), но add_ammo() нигде
-## не определён (WeaponManager/ammo-экономика — незадействованный
-## каркас, см. weapon_pickup.gd) — подбор молча ничего не делал. Даёт
-## реальный предмет через уже рабочую систему инвентаря вместо этого.
+## GDD §6.2: "Loot: 30% chance from a corpse". Every monster rolls; the Sharpshooter (roster flag loot_ammo) drops a box of
+## rounds, the others a battery, a medkit or scrap.
 const _ITEM_PICKUP := preload("res://scenes/pickups/item_pickup_3d.tscn")
-const _LOOT_ITEM: StringName = &"battery"
+const _AMMO_BOX := preload("res://scenes/pickups/ammo_pickup.tscn")
+const LOOT_CHANCE: float = 0.3
+const LOOT_TABLE: Array[StringName] = [&"battery", &"medkit", &"scrap", &"scrap"]
 const _VFX_HIT := preload("res://scenes/vfx/vfx_hit_spark.tscn")
 const _VFX_DEATH := preload("res://scenes/vfx/vfx_blood.tscn")
 
 func _maybe_drop_loot() -> void:
-	if not bool(roster_entry.get("loot_ammo", false)):
+	if randf() > LOOT_CHANCE * NewGamePlus.get_loot_chance_multiplier():
 		return
-	if randf() > 0.3 * NewGamePlus.get_loot_chance_multiplier():
+	var at := global_position + Vector3(0, 0.5, 0)
+	# Ammunition carriers (Sharpshooter) drop rounds, everything else a part or a supply.
+	if bool(roster_entry.get("loot_ammo", false)):
+		var box := _AMMO_BOX.instantiate() as Node3D
+		get_tree().current_scene.add_child(box)
+		box.global_position = at
 		return
 	var pickup := _ITEM_PICKUP.instantiate()
 	get_tree().current_scene.add_child(pickup)
-	pickup.global_position = global_position + Vector3(0, 0.5, 0)
+	pickup.global_position = at
 	if pickup.has_method("set_item"):
-		pickup.set_item(_LOOT_ITEM, 1)
+		pickup.set_item(LOOT_TABLE[randi() % LOOT_TABLE.size()], 1)
 
 func _death_effect() -> void:
 	_spawn_vfx(_VFX_DEATH, global_position + Vector3(0, 1.0, 0))
@@ -789,6 +830,8 @@ func _change_state(new_state: State) -> void:
 		if new_state == State.CHASE:
 			EventBus.player_detected.emit(monster_id)
 			play_cue(&"chase")
+			if monster_id in PACK_CALLERS:
+				EventBus.noise_emitted.emit(Vector2(global_position.x, global_position.z), PACK_CALL_RANGE)
 		elif new_state == State.INVESTIGATE:
 			play_cue(&"investigate")
 		elif new_state == State.ATTACK:

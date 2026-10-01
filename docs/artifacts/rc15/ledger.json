@@ -1,0 +1,15 @@
+[
+  {"cmd": "godot --headless --path . res://scenes/tools/compile_gate_scene.tscn", "why": "parse and instantiate everything after the closeout batch", "result": "`COMPILE_GATE bad=0` (gd=364 tscn=169 tres=102)"},
+  {"cmd": "tools/qa_sim/closeout_check", "why": "first run of the closeout gate", "result": "fails=5 plus 2 engine errors, every one in the check script (a `%` in a message, `String(null)`, a disabled process mode took the test monster's collider out of the physics space, wrong aim height on a 0.8 m crawler)"},
+  {"cmd": "tools/qa_sim/closeout_check", "why": "after the test-script fixes", "result": "fails=3 (auto-aim aimed at the monster's feet: fixed in the game; a pack-weight set-up in the test)"},
+  {"cmd": "tools/qa_sim/closeout_check", "why": "after the auto-aim fix (aim at the collider centre)", "result": "fails=1 (the test's target had died to the earlier shots)"},
+  {"cmd": "tools/qa_sim/closeout_check", "why": "fresh auto-aim target", "result": "`DONE checks=114 fails=0`"},
+  {"cmd": "QA_SEEDS=\"1 2 3\" tools/qa_sim/autoplay_bot", "why": "IRON RULE for the closeout batch (the harness grants the strobe at the boss door)", "result": "3/3 WIN, 11/11 districts FULL, 0 deaths, 0 softlocks"},
+  {"cmd": "godot --editor --quit --path .", "why": "import the ten new item icons", "result": "rc=0, ten `.import` files committed"},
+  {"cmd": "godot --headless --path . res://scenes/tools/compile_gate_scene.tscn", "why": "compile after closeout batch 2", "result": "`SCRIPT ERROR: Parse Error: Key \"crafted\" was already used in this dictionary (at line 264)` in progress_tracker.gd while the same log ends `COMPILE_GATE bad=0`: the raw gate line is not parse-green, the log has to be scanned (the counter's save key was renamed `crafted_items`)"},
+  {"cmd": "godot --headless --path . res://scenes/tools/compile_gate_scene.tscn", "why": "compile after the key fix, log scanned for SCRIPT ERROR / Parse Error", "result": "no engine error, `COMPILE_GATE bad=0`"},
+  {"cmd": "tools/qa_sim/closeout_check", "why": "closeout gate with the batch 2 checks", "result": "`DONE checks=188 fails=0`, 0 engine errors"},
+  {"cmd": "QA_SEEDS=\"1 2 3\" bash tools/qa_sim/autoplay_bot", "why": "IRON RULE after the batch 2 behaviour changes (loot, statuses, noise, crouch, settings)", "result": "3/3 WIN, 11/11 districts FULL, 0 deaths, 0 softlocks, 0 engine errors"},
+  {"cmd": "godot --headless --path . res://scenes/tools/compile_gate_scene.tscn", "why": "hardened compile gate (can_instantiate) on the clean tree", "result": "`COMPILE_GATE bad=0`"},
+  {"cmd": "godot --headless --path . res://scenes/tools/compile_gate_scene.tscn", "why": "mutation of the hardened gate: a temporary script with a duplicate dictionary key", "result": "`GATE FAIL SCRIPT res://scripts/tools/_mut_parse_error.gd`, `COMPILE_GATE bad=1`, exit 1 (the file was deleted afterwards)"}
+]

@@ -8,6 +8,10 @@ const TELEPORT_COOLDOWN: float = 3.0
 
 var _teleport_cooldown: float = 0.0
 
+## The Shadow kept the base id, so its kill counted for no quest, achievement or bestiary entry.
+func _init() -> void:
+	monster_id = &"shadow"
+
 func _ready() -> void:
 	detect_range = 15.0
 	max_hp = 30.0
@@ -99,7 +103,8 @@ func _teleport_behind_player() -> void:
 func _shadow_attack() -> void:
 	if not player_ref or not is_instance_valid(player_ref):
 		return
-	player_ref.take_damage(attack_damage)
+	player_ref.take_damage(attack_damage, global_position)
+	_inflict_statuses(player_ref)
 	EventBus.enemy_attack.emit(attack_damage)
 
 func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, type: EnemyRosterData.DamageType = EnemyRosterData.DamageType.BULLET) -> void:

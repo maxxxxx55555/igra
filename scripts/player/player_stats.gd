@@ -1,8 +1,8 @@
 class_name PlayerStats
 extends Resource
-@export var walk_speed: float = 170.0
-@export var run_speed: float = 300.0
-@export var stealth_speed: float = 90.0
+@export var walk_speed: float = 3.0
+@export var run_speed: float = 4.8
+@export var stealth_speed: float = 1.6
 @export var stamina_max: float = 100.0
 @export var stamina_drain_per_sec: float = 22.0
 @export var stamina_regen_per_sec: float = 14.0

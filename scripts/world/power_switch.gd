@@ -108,7 +108,7 @@ func _district_name() -> String:
 	if pg != null:
 		var d = pg.get_district(district_id)
 		if d != null and not String(d.display_name).is_empty():
-			return String(d.display_name)
+			return LocalizationManager.name_for("DISTRICT_NAME_", district_id, String(d.display_name))
 	return String(district_id).to_upper()
 
 func _stage() -> int:
@@ -195,10 +195,10 @@ func _item_name(item_id: StringName) -> String:
 	if db != null and db.has_method("get_item"):
 		var d = db.call("get_item", item_id)
 		if d != null and not String(d.display_name).is_empty():
-			return String(d.display_name)
+			return LocalizationManager.name_for("ITEM_", item_id, String(d.display_name))
 	var res_path := "res://data/items/%s.tres" % String(item_id)
 	if ResourceLoader.exists(res_path):
 		var data = load(res_path)
 		if data != null and not String(data.display_name).is_empty():
-			return String(data.display_name)
+			return LocalizationManager.name_for("ITEM_", item_id, String(data.display_name))
 	return String(item_id)

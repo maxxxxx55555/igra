@@ -120,7 +120,7 @@ func _play(file: String, fallback_freq: float, fallback_dur: float) -> void:
 	var path := _DIR + file + ".wav"
 	if ResourceLoader.exists(path):
 		var p := AudioStreamPlayer.new()
-		p.bus = &"SFX"
+		p.bus = &"UI"
 		p.stream = load(path)
 		add_child(p)
 		p.play()
@@ -143,7 +143,7 @@ func _beep(freq: float, dur: float) -> void:
 	stream.mix_rate = sr
 	stream.data = data
 	var p := AudioStreamPlayer.new()
-	p.bus = &"SFX"
+	p.bus = &"UI"
 	p.stream = stream
 	add_child(p)
 	p.play()

@@ -13,12 +13,20 @@ signal ammo_changed(current: int, max: int)
 @export var reload_time: float = 2.0
 @export var spread: float = 0.02
 @export var recoil: float = 0.5
-@export var bullet_scene: PackedScene
+## Shots that leave the barrel per trigger pull (the shotgun's pellets), each doing `damage`.
+@export var pellets: int = 1
+## Holding the trigger keeps firing (the rifle).
+@export var automatic: bool = false
 @export var muzzle_flash_scene: PackedScene
 @export var fire_sound: AudioStream
 @export var reload_sound: AudioStream
 
+## How far a shot is heard (EventBus.noise_emitted): monsters inside it come to investigate.
+const NOISE_RADIUS: float = 22.0
+
 var current_ammo: int = 30
+## WeaponManager: keeps the reserve every weapon draws from (GDD §18: universal ammo).
+var manager: Node = null
 var _fire_timer: float = 0.0
 var _reloading: bool = false
 var _reload_timer: float = 0.0
@@ -43,16 +51,9 @@ func fire(from_pos: Vector3, direction: Vector3) -> bool:
 	current_ammo -= 1
 	ammo_changed.emit(current_ammo, max_ammo)
 	direction = _apply_auto_aim(from_pos, direction)
+	for i in pellets:
+		_hitscan(from_pos, _spread_direction(direction), _effective_damage())
 
-	# Spawn bullet
-	if bullet_scene:
-		var bullet = bullet_scene.instantiate()
-		bullet.global_position = from_pos
-		bullet.look_at(from_pos + direction)
-		if bullet.has_method("initialize"):
-			bullet.initialize(_effective_damage(), range, _owner)
-		get_tree().root.add_child(bullet)
-	
 	# Muzzle flash
 	if muzzle_flash_scene:
 		var flash = muzzle_flash_scene.instantiate()
@@ -64,11 +65,13 @@ func fire(from_pos: Vector3, direction: Vector3) -> bool:
 	# Sound
 	if fire_sound:
 		AudioManager.play_sound_3d(fire_sound, from_pos)
-	
+	if _owner != null and _owner.is_in_group("player"):
+		EventBus.noise_emitted.emit(Vector2(_owner.global_position.x, _owner.global_position.z), NOISE_RADIUS)
+
 	# Visual recoil
 	if _owner and _owner.has_method("apply_recoil"):
 		_owner.apply_recoil(recoil)
-	
+
 	fired.emit()
 	# WAVE 6 P4: crosshair_state_changed was never emitted anywhere - the
 	# HUD crosshair was a static, always-the-same-color ColorRect for the
@@ -79,6 +82,26 @@ func fire(from_pos: Vector3, direction: Vector3) -> bool:
 	if EventBus.has_signal(&"crosshair_state_changed"):
 		EventBus.crosshair_state_changed.emit(&"default")
 	return true
+
+## One ray from the camera: the first body it meets that can take damage is hurt (GDD §18 range 50 m).
+func _hitscan(from_pos: Vector3, dir: Vector3, dmg: float) -> void:
+	var query := PhysicsRayQueryParameters3D.create(from_pos, from_pos + dir * range)
+	if _owner is CollisionObject3D:
+		query.exclude = [(_owner as CollisionObject3D).get_rid()]
+	var hit := get_world_3d().direct_space_state.intersect_ray(query)
+	if hit.is_empty():
+		return
+	var target := hit["collider"] as Object
+	if target != null and target.has_method("take_damage"):
+		target.take_damage(dmg, from_pos, EnemyRosterData.DamageType.BULLET)
+
+## A random direction inside a cone of half-angle `spread` (radians) around `dir`.
+func _spread_direction(dir: Vector3) -> Vector3:
+	if spread <= 0.0:
+		return dir
+	var up := Vector3.UP if absf(dir.normalized().y) < 0.99 else Vector3.FORWARD
+	var aim := Basis.looking_at(dir, up)
+	return (aim * Vector3(tan(randf_range(-spread, spread)), tan(randf_range(-spread, spread)), -1.0)).normalized()
 
 func _muzzle_flash(pos: Vector3) -> void:
 	var flash := OmniLight3D.new()
@@ -96,26 +119,29 @@ func _muzzle_flash(pos: Vector3) -> void:
 func try_reload() -> bool:
 	if _reloading or current_ammo >= max_ammo:
 		return false
-	
+	if manager != null and int(manager.call("reserve")) <= 0:
+		return false
+
 	_reloading = true
 	_reload_duration = reload_time * _reload_time_multiplier()
 	_reload_timer = _reload_duration
-	
+
 	if reload_sound:
 		AudioManager.play_sound_3d(reload_sound, global_position)
-	
+
 	reloaded.emit()
 	return true
 
 func _process(delta: float) -> void:
 	if _fire_timer > 0.0:
 		_fire_timer -= delta
-	
+
 	if _reloading:
 		_reload_timer -= delta
 		if _reload_timer <= 0.0:
 			_reloading = false
-			current_ammo = max_ammo
+			var need := max_ammo - current_ammo
+			current_ammo += need if manager == null else int(manager.call("take_ammo", need))
 			ammo_changed.emit(current_ammo, max_ammo)
 
 func get_ammo_ratio() -> float:
@@ -140,6 +166,8 @@ func get_reload_progress() -> float:
 ## WeaponBase). Biases toward the nearest living enemy within a narrow
 ## cone rather than a hard snap, so it reads as assistance, not an aimbot.
 const _AUTO_AIM_CONE_DEG: float = 12.0
+## Aim at the middle of the monster's collider, not at the feet its origin stands on.
+const _AIM_FALLBACK_HEIGHT: float = 1.0
 func _apply_auto_aim(from_pos: Vector3, direction: Vector3) -> Vector3:
 	if _owner == null or not _owner.is_in_group("player"):
 		return direction
@@ -152,7 +180,7 @@ func _apply_auto_aim(from_pos: Vector3, direction: Vector3) -> Vector3:
 			continue
 		if "ai_state" in e and int(e.ai_state) == BaseMonster.State.DEAD:
 			continue
-		var to_e: Vector3 = ((e as Node3D).global_position - from_pos)
+		var to_e: Vector3 = _aim_point(e as Node3D) - from_pos
 		if to_e.length() > range or to_e.length() < 0.01:
 			continue
 		var dot := direction.normalized().dot(to_e.normalized())
@@ -161,7 +189,11 @@ func _apply_auto_aim(from_pos: Vector3, direction: Vector3) -> Vector3:
 			best = e
 	if best == null:
 		return direction
-	return (best.global_position - from_pos).normalized()
+	return (_aim_point(best) - from_pos).normalized()
+
+func _aim_point(monster: Node3D) -> Vector3:
+	var body := monster.get_node_or_null("CollisionShape3D") as Node3D
+	return body.global_position if body != null else monster.global_position + Vector3.UP * _AIM_FALLBACK_HEIGHT
 
 func _effective_damage() -> float:
 	if _owner == null or not _owner.is_in_group("player"):

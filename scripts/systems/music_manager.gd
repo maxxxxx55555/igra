@@ -389,7 +389,7 @@ func _build_layers() -> void:
 			continue
 		var pl := AudioStreamPlayer.new()
 		pl.name = "Layer_" + String(key)
-		pl.bus = "Music" if AudioServer.get_bus_index("Music") >= 0 else "Master"
+		pl.bus = &"Environment" if key == "rain" or key == "wind" else &"Music"
 		var s := load(path) as AudioStream
 		_force_loop(s)
 		pl.stream = s

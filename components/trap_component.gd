@@ -34,7 +34,7 @@ func _trigger() -> void:
 func _visual_trigger() -> void:
 	var am := get_node_or_null("/root/AudioManager")
 	if am and am.has_method("play_sfx"):
-		am.play_sfx(preload("res://assets/audio/sfx/sfx_click.wav"))
+		am.play_sfx(preload("res://assets/audio/sfx/sfx_click.wav"), 0.0, &"Environment")
 	var mesh := get_node_or_null("MeshInstance3D")
 	if mesh:
 		mesh.visible = false

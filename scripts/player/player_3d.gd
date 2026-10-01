@@ -31,7 +31,6 @@ var gameplay_active: bool = false
 var noise_level: float = 0.0
 var can_move: bool = false
 var _walk_t: float = 0.0
-var _movechk_timer: float = 0.0
 var _footstep_dust_node: GPUParticles3D = null
 var _step_timer: float = 0.0
 var cone_add_ok: bool = false
@@ -61,8 +60,13 @@ var _stun_timer: float = 0.0
 var _damage_grace_timer: float = 0.0
 const _DAMAGE_GRACE_SEC: float = 0.8
 var _combo_break: bool = false
-var _dodge_input_timer: float = 0.0
-var _dodge_input_dir: Vector2 = Vector2.ZERO
+var _chain_landed: bool = false
+var _light_died: bool = false
+var _tap_age: float = 99.0
+var _tap_dir: Vector2 = Vector2.ZERO
+var _tap_held: bool = false
+var _dash_timer: float = 0.0
+var _dash_dir: Vector3 = Vector3.ZERO
 var _crouch_held: bool = false
 var _crouch_timer: float = 0.0
 var _hiding_spot: Node3D = null
@@ -83,9 +87,37 @@ const COMBO_WINDOW: float = 1.2
 const DODGE_COST: float = 15.0
 const DODGE_COOLDOWN: float = 0.8
 const DODGE_IFRAMES: float = 0.35
+## GDD 5.2: the dodge is a dash of about 3 m in 0.2 s on top of the invulnerability.
+const DODGE_DASH_SEC: float = 0.2
+const DODGE_DASH_SPEED: float = 15.0
+## A double tap is the same direction pressed again, after a release, within this many seconds of the first press.
+const DODGE_TAP_WINDOW: float = 0.35
 const CROUCH_SPEED_MULT: float = 0.4
 const CROUCH_NOISE_MULT: float = 0.3
 const CROUCH_VISIBILITY_MULT: float = 0.5
+## GDD §2.4: crouching shrinks the capsule to 1.2 m and drops the eye; standing up needs the headroom above.
+const STAND_CAPSULE_HEIGHT: float = 1.6
+const CROUCH_CAPSULE_HEIGHT: float = 1.2
+const CROUCH_EYE_DROP: float = 0.4
+const STAND_CLEARANCE: float = 0.05
+const EYE_LERP_SPEED: float = 12.0
+var _crouching: bool = false
+## Settings > Crouch Input: how long the stealth key is held before the crouch, and the other two choices.
+const CROUCH_HOLD_SEC: float = 0.5
+const CROUCH_INPUT_BUTTON: int = 1
+const CROUCH_INPUT_DISABLED: int = 2
+## GDD 2.2, touch: a quick swipe down in the look zone toggles the crouch.
+const SWIPE_CROUCH_MIN_PX: float = 160.0
+const SWIPE_CROUCH_MAX_MS: int = 300
+const SWIPE_CROUCH_SLANT: float = 0.5
+var _crouch_toggled: bool = false
+var _swipe_start: Dictionary = {}
+var _stand_eye_height: float = 1.7
+## GDD §7 / S02, relative to walking with the flashlight on (the shipped baseline, 1.0): the light off halves
+## how far monsters notice the player (the GDD's "+100% in the flashlight cone" read from the other side, so the
+## balance the bot was tuned on stays put), running adds 20%, crouching halves, hiding is 0.
+const VISIBILITY_FLASHLIGHT_OFF: float = 0.5
+const VISIBILITY_RUN: float = 1.2
 
 ## Базовый расход батареи: полного заряда хватает на 7.5 минут света —
 ## достаточно, чтобы дойти до финальной ночи и пережить бой с Архитектором
@@ -204,6 +236,9 @@ func _ready() -> void:
 
 	gameplay_active = true
 	add_to_group("player")
+	# The scene's capsule is a shared sub-resource: crouching edits this player's own copy.
+	var body_shape := $CollisionShape3D as CollisionShape3D
+	body_shape.shape = body_shape.shape.duplicate()
 	# FINAL HARDENING PASS (2026-09-12): using a medkit/battery from any
 	# inventory UI (character_screen.gd, hud_3d.gd quickbar, inventory_ui.gd,
 	# quick_wheel_ui.gd) has always routed through InventoryManager.use_item()
@@ -331,9 +366,12 @@ func _ready() -> void:
 	EventBus.player_stamina_changed.emit(1.0)
 	EventBus.player_battery_changed.emit(1.0)
 	EventBus.game_started.connect(_on_game_started)
+	var weapons := WeaponManager.new()
+	weapons.name = "WeaponManager"
+	add_child(weapons)
 	var isv := get_node_or_null("/root/InputService")
 	if isv:
-		isv.attack_requested.connect(_handle_attack)
+		isv.attack_requested.connect(_on_attack_input)
 		isv.jump_requested.connect(_buffer_jump)
 		isv.flashlight_requested.connect(toggle_flashlight)
 		isv.dodge_requested.connect(_handle_dodge)
@@ -414,13 +452,29 @@ func _input(event: InputEvent) -> void:
 	if _net_active and not is_multiplayer_authority():
 		return
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
-		_apply_look(-event.relative.x * mouse_sens, -event.relative.y * mouse_sens)
+		var sens: float = mouse_sens * float(SettingsManager.get_setting("sensitivity", 1.0))
+		_apply_look(-event.relative.x * sens, -event.relative.y * sens)
+	elif event is InputEventScreenTouch:
+		_track_swipe(event)
 	elif event is InputEventScreenDrag:
 		var vp_w: float = get_viewport().get_visible_rect().size.x if get_viewport() else 1000.0
 		if event.position.x < vp_w * JOY_ZONE_RATIO:
 			return
 		var touch_mult: float = SettingsManager.get_touch_sensitivity() if SettingsManager != null else 1.0
 		_apply_look(-event.relative.x * TOUCH_LOOK_SENS * touch_mult, -event.relative.y * TOUCH_LOOK_SENS * touch_mult)
+
+func _track_swipe(event: InputEventScreenTouch) -> void:
+	if event.pressed:
+		_swipe_start[event.index] = {"pos": event.position, "ms": Time.get_ticks_msec()}
+		return
+	var start: Dictionary = _swipe_start.get(event.index, {})
+	_swipe_start.erase(event.index)
+	if start.is_empty() or event.position.x < get_viewport().get_visible_rect().size.x * JOY_ZONE_RATIO:
+		return
+	var swipe: Vector2 = event.position - start["pos"]
+	if swipe.y >= SWIPE_CROUCH_MIN_PX and absf(swipe.x) <= swipe.y * SWIPE_CROUCH_SLANT \
+			and Time.get_ticks_msec() - int(start["ms"]) <= SWIPE_CROUCH_MAX_MS:
+		_crouch_toggled = not _crouch_toggled
 
 ## GOLD MASTER v4: Invert Look flips only the vertical (pitch) axis — the
 ## conventional meaning of "invert look", not left/right.
@@ -455,39 +509,17 @@ func _physics_process(delta: float) -> void:
 			# Winnability: базовая регенерация (аналогично скиллу выше) —
 			# в затяжном боях без пикапов-лечилок иначе неоткуда взяться.
 			heal(_BASE_HP_REGEN_PER_SEC * delta)
-	#DEBUG_MOVECHK
-	_movechk_timer += delta
-	if _movechk_timer >= 1.0:
-		_movechk_timer = 0.0
-
+	visibility = get_visibility_scale()
+	if gameplay_active and Input.is_action_pressed("attack"):
+		_hold_fire()
+	_tick_uv(delta)
 	if not can_move:
 		velocity = Vector3.ZERO
 		move_and_slide()
 		return
 	var dir_2d: Vector2 = InputService.get_move_dir()
-	if dir_2d.length_squared() > 0.1:
-		if _dodge_input_timer > 0.0 and _dodge_input_timer < 0.35 and dir_2d.dot(_dodge_input_dir) > 0.6:
-			_handle_dodge(dir_2d)
-			_dodge_input_timer = 0.0
-		else:
-			_dodge_input_dir = dir_2d
-			_dodge_input_timer = 0.001
-	if _dodge_input_timer > 0.0:
-		_dodge_input_timer += delta
-		if _dodge_input_timer > 0.4:
-			_dodge_input_timer = 0.0
-	var dir: Vector3
-	if not is_instance_valid(_fps_cam):
-		_resolve_camera()
-	if _fps_cam and is_instance_valid(_fps_cam):
-		var fbasis := _fps_cam.global_transform.basis
-		var fwd := -fbasis.z
-		var right := fbasis.x
-		fwd.y = 0.0; right.y = 0.0
-		fwd = fwd.normalized(); right = right.normalized()
-		dir = fwd * (-dir_2d.y) + right * dir_2d.x
-	else:
-		dir = Vector3(dir_2d.x, 0, dir_2d.y)
+	_track_dodge_tap(dir_2d, delta)
+	var dir: Vector3 = _view_dir(dir_2d)
 	var moving: bool = dir.length_squared() > 0.0001
 	if not moving:
 		velocity.x = 0.0
@@ -503,11 +535,12 @@ func _physics_process(delta: float) -> void:
 	if InputService.is_stealth_just_released():
 		_crouch_held = false
 		_crouch_timer = 0.0
+	_update_crouch_body(delta)
 
 	if moving:
 		if _in_hiding:
 			desired = State.CROUCH
-		elif _crouch_held and _crouch_timer > 0.5:
+		elif _crouch_wanted():
 			desired = State.CROUCH
 		elif InputService.is_stealth_toggled():
 			desired = State.STEALTH
@@ -557,11 +590,11 @@ func _physics_process(delta: float) -> void:
 	var weight_speed_mult := 1.0 - weight_ratio * 0.5
 	var crouch_speed_mult := CROUCH_SPEED_MULT if current_state == State.CROUCH else 1.0
 	var final_speed: float = speed * weight_speed_mult * crouch_speed_mult
-
-
-
-
-	velocity = dir.normalized() * final_speed if moving else Vector3.ZERO
+	var planar := dir.normalized() * final_speed if moving else Vector3.ZERO
+	if _dash_timer > 0.0:
+		_dash_timer -= delta
+		planar = _dash_dir * DODGE_DASH_SPEED
+	velocity = Vector3(planar.x, velocity.y, planar.z)
 	if is_on_floor():
 		_coyote_timer = coyote_time
 		_was_on_floor = true
@@ -576,10 +609,14 @@ func _physics_process(delta: float) -> void:
 		_jump_buffer_timer -= delta
 	if _jump_buffer_timer > 0.0 and _coyote_timer > 0.0:
 		velocity.y = jump_velocity
+		_crouch_toggled = false
+		ProgressTracker.jumps += 1
 		_coyote_timer = 0.0
 		_jump_buffer_timer = 0.0
 	velocity += get_gravity() * delta
 	move_and_slide()
+	if is_on_floor():
+		ProgressTracker.distance += Vector2(velocity.x, velocity.z).length() * delta
 	_check_fall_recovery()
 
 	if moving:
@@ -658,8 +695,11 @@ func _physics_process(delta: float) -> void:
 	if _combo_timer > 0.0:
 		_combo_timer -= delta
 	else:
+		if _combo_count > 0 and not _chain_landed:
+			EventBus.combo_chain_broken.emit()
 		_combo_count = 0
 		_combo_break = false
+		_chain_landed = false
 
 func compute_velocity(dir_2d: Vector2, state: State = State.WALK) -> Vector3:
 	var dir: Vector3 = Vector3(dir_2d.x, 0, dir_2d.y)
@@ -700,6 +740,49 @@ func _speed_for(state: State) -> float:
 ## gate the sight-range reduction (sneaking + flashlight off only).
 func is_sneaking() -> bool:
 	return current_state == State.STEALTH or current_state == State.CROUCH
+
+## Settings > Crouch Input: Long Press (hold the key), Button (crouch while it is down), Disabled; a swipe down also toggles it.
+func _crouch_wanted() -> bool:
+	var mode := int(SettingsManager.get_setting("crouch_input", 0))
+	if mode == CROUCH_INPUT_DISABLED:
+		return false
+	return _crouch_toggled or (_crouch_held and (mode == CROUCH_INPUT_BUTTON or _crouch_timer > CROUCH_HOLD_SEC))
+
+## The body follows the crouch key: the capsule shrinks with its feet on the ground, the eye lowers smoothly, and
+## a low ceiling keeps the player crouched until there is room to stand.
+func _update_crouch_body(delta: float) -> void:
+	var want := _crouch_wanted()
+	if want != _crouching and (want or _has_headroom()):
+		_crouching = want
+		var shape := ($CollisionShape3D as CollisionShape3D)
+		var height := CROUCH_CAPSULE_HEIGHT if _crouching else STAND_CAPSULE_HEIGHT
+		(shape.shape as CapsuleShape3D).height = height
+		shape.position.y = -(STAND_CAPSULE_HEIGHT - height) * 0.5
+	_resolve_camera()
+	if _fps_cam != null and "fps_eye_height" in _fps_cam:
+		var eye := _stand_eye_height - (CROUCH_EYE_DROP if _crouching else 0.0)
+		_fps_cam.fps_eye_height = lerpf(_fps_cam.fps_eye_height, eye, clampf(EYE_LERP_SPEED * delta, 0.0, 1.0))
+
+## Room to stand: nothing between the crouched head and the standing head.
+func _has_headroom() -> bool:
+	var crouched_top := CROUCH_CAPSULE_HEIGHT * 0.5 - (STAND_CAPSULE_HEIGHT - CROUCH_CAPSULE_HEIGHT) * 0.5
+	var query := PhysicsRayQueryParameters3D.create(global_position + Vector3(0.0, crouched_top, 0.0),
+		global_position + Vector3(0.0, STAND_CAPSULE_HEIGHT * 0.5 + STAND_CLEARANCE, 0.0))
+	query.exclude = [get_rid()]
+	return get_world_3d().direct_space_state.intersect_ray(query).is_empty()
+
+## How visible the player is to monsters, 0 (hidden) to VISIBILITY_RUN; the HUD bar and base_monster.gd read it.
+func get_visibility_scale() -> float:
+	if _in_hiding:
+		return 0.0
+	var v: float = 1.0
+	if not flashlight_enabled:
+		v *= VISIBILITY_FLASHLIGHT_OFF
+	if current_state == State.RUN:
+		v *= VISIBILITY_RUN
+	elif current_state == State.CROUCH:
+		v *= CROUCH_VISIBILITY_MULT
+	return v
 
 ## Публичный вход для статусов НА игрока (укус, коготь, ожог) — см. base_monster.gd.
 func apply_status(status: int, duration: float, dps: float = 0.0, power: float = 0.0) -> void:
@@ -750,11 +833,14 @@ func _update_battery(delta: float) -> void:
 	var batt_mult: float = NewGamePlus.get_modifier_multiplier("battery")
 	var drain: float = BATTERY_DRAIN_PER_SEC / batt_mult if batt_mult > 0.0 else BATTERY_DRAIN_PER_SEC
 	drain *= 1.0 - _flashlight_drain_cut
+	if _uv_on:
+		drain *= UV_BATTERY_DRAIN_MULT
 	battery = clampf(battery - drain * delta, 0.0, battery_max)
 	if absf(battery - prev) > 0.01:
 		EventBus.player_battery_changed.emit(battery / battery_max)
 	if battery <= 0.0 and flashlight_enabled:
 		flashlight_enabled = false
+		_light_died = true
 		EventBus.flashlight_state_changed.emit(false)
 		flashlight.visible = false
 		dust.emitting = false
@@ -762,6 +848,7 @@ func _update_battery(delta: float) -> void:
 func toggle_flashlight() -> void:
 	if battery <= 0.0:
 		return
+	_light_died = false
 	flashlight_enabled = not flashlight_enabled
 	EventBus.flashlight_state_changed.emit(flashlight_enabled)
 
@@ -794,6 +881,7 @@ func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, _type: EnemyRo
 	if _damage_grace_timer > 0.0:
 		return
 	_damage_grace_timer = _DAMAGE_GRACE_SEC
+	_note_attacker(_src_pos)
 	# Winnability: кап одиночного удара. В бою с Архитектором связка
 	# «милли 40 + сферы по 20» без уклонений уходила в спираль смертей;
 	# 12 урона за хит оставляет давление, но даёт шанс выстоять вплотную.
@@ -809,6 +897,19 @@ func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, _type: EnemyRo
 
 	if hp <= 0.0:
 		EventBus.game_over.emit()
+
+## The nearest monster to where the hit came from is the cause shown if this was the last one.
+const ATTACKER_REACH: float = 4.0
+
+func _note_attacker(src_pos: Vector3) -> void:
+	if src_pos == Vector3.ZERO:
+		return
+	var nearest: Node3D = null
+	for m in get_tree().get_nodes_in_group("monsters"):
+		if nearest == null or m.global_position.distance_to(src_pos) < nearest.global_position.distance_to(src_pos):
+			nearest = m
+	if nearest != null and nearest.global_position.distance_to(src_pos) <= ATTACKER_REACH and "monster_id" in nearest:
+		ProgressTracker.last_hit_by = nearest.monster_id
 
 @rpc("any_peer", "reliable")
 func _request_player_damage(amount: float) -> void:
@@ -834,6 +935,8 @@ func consume_battery(amount: float) -> void:
 func add_battery(amount: float) -> void:
 	battery = clampf(battery + amount, 0.0, battery_max)
 	EventBus.player_battery_changed.emit(battery / battery_max)
+	if _light_died and battery > 0.0:
+		toggle_flashlight()
 
 ## Ported from the dead scripts/player/player.gd - same match, same two
 ## effects (ItemData.Effect only defines HEAL/RECHARGE today; anything
@@ -843,12 +946,26 @@ func _on_item_consumed(_id: StringName, effect: StringName, value: float) -> voi
 	match effect:
 		&"HEAL": heal(value)
 		&"RECHARGE": add_battery(value)
+		&"CAPACITY":
+			ProgressTracker.raise_battery_bonus(value / 100.0)
+			refresh_battery_max()
+			EventBus.inventory_notice.emit(LocalizationManager.tf("CAPACITY_UP", [int(value)]))
 
 func _unhandled_input(event: InputEvent) -> void:
 	if _net_active and not is_multiplayer_authority():
 		return
-	if event.is_action_pressed("attack") or event.is_action_pressed("melee"):
+	if event.is_action_pressed("attack"):
+		_on_attack_input()
+	if event.is_action_pressed("melee"):
 		_handle_attack()
+	if event.is_action_pressed("reload"):
+		var weapons := get_node_or_null("WeaponManager") as WeaponManager
+		if weapons != null:
+			weapons.reload()
+	if event.is_action_pressed("uv_toggle"):
+		toggle_uv()
+	if event.is_action_pressed("workbench"):
+		_toggle_portable_workbench()
 	if event.is_action_pressed("flashlight_toggle"):
 		toggle_flashlight()
 	if event.is_action_pressed("interact"):
@@ -872,22 +989,16 @@ func get_strobe_cooldown_ratio() -> float:
 func trigger_strobe() -> bool:
 	if _strobe_cooldown > 0.0 or not gameplay_active:
 		return false
+	if not ProgressTracker.has_crafted("strobe_flashlight"):
+		EventBus.inventory_notice.emit(LocalizationManager.t("STROBE_NEEDS_BLUEPRINT"))
+		return false
 	if not flashlight_enabled or battery < STROBE_BATTERY_COST:
 		EventBus.inventory_notice.emit(LocalizationManager.t("STROBE_NO_POWER"))
 		return false
 	_strobe_cooldown = STROBE_COOLDOWN
 	consume_battery(STROBE_BATTERY_COST)
-	var origin: Vector3 = global_position + Vector3(0.0, 1.4, 0.0)
-	var forward: Vector3 = -flashlight_pivot.global_transform.basis.z
 	var hits: int = 0
-	for m in get_tree().get_nodes_in_group("monsters"):
-		if not (m is Node3D) or not is_instance_valid(m):
-			continue
-		var to_target: Vector3 = (m as Node3D).global_position - origin
-		if to_target.length() > STROBE_RANGE:
-			continue
-		if forward.normalized().dot(to_target.normalized()) < cos(STROBE_HALF_ANGLE * PI):
-			continue
+	for m in _monsters_in_cone(STROBE_RANGE, cos(STROBE_HALF_ANGLE * PI)):
 		if m.has_method("stun"):
 			m.call("stun", STROBE_STUN)
 			hits += 1
@@ -902,6 +1013,68 @@ func trigger_strobe() -> bool:
 ## story flash already respects reduce_flash, this player-triggerable ability
 ## didn't. The stun itself (trigger_strobe, above) is unaffected - only the
 ## visual flicker is reduced to a single gentle pulse.
+## Monsters within `range_m` of the player and no further than `min_dot` (a cosine) off where the light points.
+func _monsters_in_cone(range_m: float, min_dot: float) -> Array[Node3D]:
+	var out: Array[Node3D] = []
+	var origin: Vector3 = global_position + Vector3(0.0, 1.4, 0.0)
+	var forward: Vector3 = -flashlight_pivot.global_transform.basis.z
+	for m in get_tree().get_nodes_in_group("monsters"):
+		if not (m is Node3D) or not is_instance_valid(m):
+			continue
+		var to_target: Vector3 = (m as Node3D).global_position - origin
+		if to_target.length() <= range_m and forward.normalized().dot(to_target.normalized()) >= min_dot:
+			out.append(m as Node3D)
+	return out
+
+## GDD §9: the ultraviolet flashlight, crafted at the workbench: 5 damage a second to everything in the cone,
+## for half as much again battery.
+const UV_DPS: float = 5.0
+const UV_TICK_SEC: float = 0.25
+const UV_RANGE: float = 12.0
+const UV_BATTERY_DRAIN_MULT: float = 1.5
+const UV_LIGHT_COLOR := Color(0.62, 0.56, 0.82)
+var _uv_on: bool = false
+var _uv_tick: float = 0.0
+var _flashlight_color: Color = Color.WHITE
+
+func toggle_uv() -> void:
+	if not ProgressTracker.has_crafted("uv_flashlight"):
+		EventBus.inventory_notice.emit(LocalizationManager.t("UV_NEEDS_BLUEPRINT"))
+		return
+	_set_uv(not _uv_on and flashlight_enabled)
+	EventBus.inventory_notice.emit(LocalizationManager.t("UV_ON" if _uv_on else "UV_OFF"))
+
+func _set_uv(on: bool) -> void:
+	if on == _uv_on:
+		return
+	_uv_on = on
+	if on:
+		_flashlight_color = flashlight.light_color
+	flashlight.light_color = UV_LIGHT_COLOR if on else _flashlight_color
+
+func _tick_uv(delta: float) -> void:
+	if not _uv_on:
+		return
+	if not flashlight_enabled:
+		_set_uv(false)
+		return
+	_uv_tick -= delta
+	if _uv_tick > 0.0:
+		return
+	_uv_tick = UV_TICK_SEC
+	for m in _monsters_in_cone(UV_RANGE, cos(deg_to_rad(flashlight.spot_angle))):
+		if m.has_method("take_damage"):
+			m.call("take_damage", UV_DPS * UV_TICK_SEC, global_position, EnemyRosterData.DamageType.ELECTRIC)
+
+## The portable workbench (a crafted ability) opens the workbench screen anywhere.
+func _toggle_portable_workbench() -> void:
+	if not gameplay_active or not ProgressTracker.has_crafted("portable_workbench"):
+		EventBus.inventory_notice.emit(LocalizationManager.t("WORKBENCH_NEEDS_BLUEPRINT"))
+	elif UIManager.is_hud_blocked():
+		UIManager.close(&"workbench")
+	else:
+		UIManager.open(&"workbench")
+
 func _strobe_flash() -> void:
 	var base_energy: float = flashlight.light_energy
 	var tw := create_tween()
@@ -931,6 +1104,21 @@ func set_battery_params(max_val: float) -> void:
 	battery_max = max_val
 	battery = minf(battery, battery_max)
 
+
+## The attack button fires the drawn weapon; with none drawn it is the melee combo (the "melee" key always is).
+func _on_attack_input() -> void:
+	var weapons := get_node_or_null("WeaponManager") as WeaponManager
+	if weapons == null or not weapons.has_weapon_equipped():
+		_handle_attack()
+	elif gameplay_active and _stun_timer <= 0.0:
+		weapons.fire()
+
+## An automatic weapon (the rifle) keeps firing while the button is held.
+func _hold_fire() -> void:
+	var weapons := get_node_or_null("WeaponManager") as WeaponManager
+	var weapon := weapons.get_current_weapon() if weapons != null else null
+	if weapon != null and weapon.automatic and _stun_timer <= 0.0:
+		weapons.fire()
 
 func _handle_attack() -> void:
 	if _stun_timer > 0.0 or not _can_attack or not gameplay_active:
@@ -984,11 +1172,14 @@ func _tick_attack(delta: float) -> void:
 func _on_attack_hit(body: Node) -> void:
 	if _attack_phase != "active":
 		return
-	if _hit_registered:
+	# The attack area is a child of this body, so it reports the player itself: that
+	# spent the swing (and damaged the player) whenever it came first.
+	if body == self or _hit_registered or not body.has_method("take_damage"):
 		return
 	_hit_registered = true
-	if not body.has_method("take_damage"):
-		return
+	if _attack_idx == COMBO_DATA.size() - 1:
+		_chain_landed = true
+		EventBus.combo_chain_landed.emit()
 	var cd3: Dictionary = COMBO_DATA[_attack_idx]
 	var bonus: float = 0.0
 	if flashlight_enabled:
@@ -1020,6 +1211,31 @@ func apply_stun(duration: float = 0.3) -> void:
 	_stun_timer = duration
 
 
+## Keys or stick (x right, y back) turned into a world direction relative to where the view looks.
+func _view_dir(dir_2d: Vector2) -> Vector3:
+	if not is_instance_valid(_fps_cam):
+		_resolve_camera()
+	if _fps_cam and is_instance_valid(_fps_cam):
+		var fbasis := _fps_cam.global_transform.basis
+		var fwd := -fbasis.z
+		var right := fbasis.x
+		fwd.y = 0.0
+		right.y = 0.0
+		return fwd.normalized() * (-dir_2d.y) + right.normalized() * dir_2d.x
+	return Vector3(dir_2d.x, 0.0, dir_2d.y)
+
+func _track_dodge_tap(dir_2d: Vector2, delta: float) -> void:
+	_tap_age += delta
+	var held := dir_2d.length_squared() > 0.1
+	if held and not _tap_held:
+		if _tap_age < DODGE_TAP_WINDOW and dir_2d.dot(_tap_dir) > 0.6:
+			_handle_dodge(dir_2d)
+			_tap_age = 99.0
+		else:
+			_tap_age = 0.0
+			_tap_dir = dir_2d
+	_tap_held = held
+
 func _handle_dodge(dir: Vector2) -> void:
 	if _dodge_cooldown > 0.0 or _stun_timer > 0.0 or not gameplay_active:
 		return
@@ -1028,14 +1244,11 @@ func _handle_dodge(dir: Vector2) -> void:
 	stamina -= DODGE_COST
 	_dodge_cooldown = DODGE_COOLDOWN
 	_iframes = DODGE_IFRAMES
-	var d := Vector3(dir.x, 0, dir.y).normalized()
+	var d := _view_dir(dir).normalized()
 	if d.length_squared() < 0.01:
 		d = look_dir
-	# Winnability: множитель рывка 3.0 -> 0.9 — на ×3 автоплей-бот улетал
-	# за 100+ метров от арены (додж в сторону от босса) и терял десятки
-	# секунд на возврат; ×0.9 сохраняет сам факт уклонения, но держит бой
-	# в арене (у бота и так есть mercy i-frames для выживания).
-	velocity = d * stats.run_speed * 0.9
+	_dash_dir = d
+	_dash_timer = DODGE_DASH_SEC
 	var dust_particles := GPUParticles3D.new()
 	dust_particles.one_shot = true
 	dust_particles.emitting = true
@@ -1097,7 +1310,7 @@ func _enter_hiding(spot: Node3D) -> void:
 	_in_hiding = true
 	can_move = false
 	velocity = Vector3.ZERO
-	global_position = spot.global_position
+	global_position = Vector3(spot.global_position.x, global_position.y, spot.global_position.z)
 	visibility = 0.0
 	EventBus.player_hiding_changed.emit(true)
 
@@ -1175,7 +1388,7 @@ const BATTERY_PER_SKILL_LVL: float = 25.0
 
 func refresh_battery_max() -> void:
 	var skill_lvl: int = SkillTreeManager.get_skill_level(&"battery_capacity") if SkillTreeManager else 0
-	battery_max = 100.0 * (1.0 + _flashlight_battery_bonus) + BATTERY_PER_SKILL_LVL * skill_lvl
+	battery_max = 100.0 * (1.0 + _flashlight_battery_bonus + ProgressTracker.battery_bonus) + BATTERY_PER_SKILL_LVL * skill_lvl
 	battery = minf(battery, battery_max)
 	EventBus.player_battery_changed.emit(battery / battery_max)
 

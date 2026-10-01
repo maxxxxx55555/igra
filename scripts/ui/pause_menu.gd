@@ -25,7 +25,7 @@ func _build() -> void:
 	# Панель
 	var panel := PanelContainer.new()
 	panel.name = "Panel"
-	panel.custom_minimum_size = Vector2(380, 320)
+	panel.custom_minimum_size = Vector2(380, 580)
 	panel.modulate = Color(1, 1, 1, 0.0)  # начало tween
 	add_child(panel)
 	panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER, Control.PRESET_MODE_KEEP_SIZE)
@@ -55,10 +55,23 @@ func _build() -> void:
 	_btn(vb, LocalizationManager.t("resume"),   func() -> void: UIManager.close(&"pause"); GameManager.resume_game())
 	# «Кодекс» (журнал, задания, достижения, характеристики, бестиарий) раньше
 	# открывался только с клавиатуры — на телефоне разделы были недоступны.
+	_btn(vb, LocalizationManager.t("inventory"), func() -> void: UIManager.open(&"inventory"))
 	_btn(vb, LocalizationManager.t("CODEX_TITLE"), func() -> void: UIManager.open_codex(&"journal"))
+	# The shop and the flashlight upgrades are cards of the Screens layer: coins have nothing to buy without them.
+	_btn(vb, LocalizationManager.t("SHOP_COINS"), func() -> void: _open_card("Shop"))
+	_btn(vb, LocalizationManager.t("CRAFT_UPGRADE"), func() -> void: _open_card("FlashlightUpgrade"))
 	_btn(vb, LocalizationManager.t("settings"), func() -> void: UIManager.open(&"settings"))
 	_btn(vb, LocalizationManager.t("restart"),  func() -> void: FadeTransition.fade_to(func() -> void: Routes.restart_game()))
 	_btn(vb, LocalizationManager.t("back_menu"),func() -> void: FadeTransition.fade_to(func() -> void: GameManager.return_to_menu()))
+	# GDD 24.7: the exit offers to keep the progress.
+	_btn(vb, LocalizationManager.t("PAUSE_SAVE_QUIT"), func() -> void:
+		SaveSystem.save_all()
+		get_tree().quit())
+
+func _open_card(card: String) -> void:
+	var screens := get_tree().current_scene.get_node_or_null("Screens")
+	if screens != null:
+		screens.show_screen(card)
 
 func _animate_in() -> void:
 	var bg: ColorRect = get_node_or_null("BG")

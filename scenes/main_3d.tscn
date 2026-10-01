@@ -20,20 +20,21 @@
 [sub_resource type="ParticleProcessMaterial" id="ash_mat"]
 emission_shape = 2
 emission_box_extents = Vector3(15, 5, 25)
-color = Color(0.416, 0.384, 0.345, 0.6)
+color = Color(0.68, 0.71, 0.75, 0.6)
 gravity = Vector3(0, -0.2, -0.5)
-
-[sub_resource type="SphereMesh" id="ash_mesh"]
-radius = 0.025
-height = 0.05
-radial_segments = 6
-rings = 3
 
 [sub_resource type="StandardMaterial3D" id="ash_mesh_mat"]
 transparency = 1
 shading_mode = 0
 vertex_color_use_as_albedo = true
-albedo_color = Color(0.416, 0.384, 0.345, 0.45)
+albedo_color = Color(0.68, 0.71, 0.75, 0.35)
+
+[sub_resource type="SphereMesh" id="ash_mesh"]
+material = SubResource("ash_mesh_mat")
+radius = 0.025
+height = 0.05
+radial_segments = 6
+rings = 3
 
 [node name="Main3D" type="Node3D"]
 script = ExtResource("11")

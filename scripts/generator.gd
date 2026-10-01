@@ -115,5 +115,5 @@ func _item_name(item_id: StringName) -> String:
 	if ResourceLoader.exists(res_path):
 		var data = load(res_path)
 		if data != null and not String(data.display_name).is_empty():
-			return String(data.display_name)
+			return LocalizationManager.name_for("ITEM_", item_id, String(data.display_name))
 	return String(item_id)

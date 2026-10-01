@@ -45,6 +45,14 @@ const _ITEMS: Array = [
 	preload("res://data/items/firework.tres"),
 	preload("res://data/items/molotov.tres"),
 	preload("res://data/items/makeshift_lamp.tres"),
+	preload("res://data/items/plank.tres"),
+	preload("res://data/items/enhanced_battery.tres"),
+	preload("res://data/items/battery_l2.tres"),
+	preload("res://data/items/blueprint_enhanced_battery.tres"),
+	preload("res://data/items/blueprint_uv_flashlight.tres"),
+	preload("res://data/items/blueprint_strobe_flashlight.tres"),
+	preload("res://data/items/blueprint_portable_workbench.tres"),
+	preload("res://data/items/blueprint_battery_l2.tres"),
 ]
 const ICON_DIR: String = "res://assets/textures/items/"
 var _by_id: Dictionary = {}

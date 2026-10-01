@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# rc15 closeout gate: firearms, workbench blueprints, photo album, hiding spots, the visibility model, the
+# inventory screen, the achievement triggers, difficulty and the settings Back button, in one headless run of the
+# real game scene (scripts/tools/_closeout_check_runner.gd). Under the user-data guard like every QA launch.
+#
+#   tools/qa_sim/closeout_check          # log -> .qa_logs/closeout_check.log
+set -uo pipefail
+cd "$(dirname "$0")/../.."
+
+GODOT="$(bash tools/qa_sim/_resolve_godot.sh 2>/dev/null)"
+if [[ -z "$GODOT" ]] || [[ ! -x "$GODOT" ]]; then
+	bash tools/qa_sim/_resolve_godot.sh >&2
+	exit 99
+fi
+source tools/qa_sim/user_data_guard.sh
+udg_snapshot || exit 99
+trap 'udg_restore || exit 97' EXIT
+trap 'exit 130' INT TERM
+export TLS_UDG_GUARDED=1
+mkdir -p .qa_logs
+LOG=.qa_logs/closeout_check.log
+rm -f "$LOG"
+timeout "${1:-240}" "$GODOT" --headless --path . res://scenes/tools/closeout_check_scene.tscn >"$LOG" 2>&1
+rc=$?
+BAD='SCRIPT ERROR|Parse Error|Compile Error|Nonexistent function|freed instance|Failed to load script|Invalid call|Invalid get index|Invalid set index|Cannot infer the type'
+errs=$(grep -aE "$BAD" "$LOG" | head -12)
+grep -aE "^\[closeout\] (FAIL|DONE)" "$LOG" | tail -40
+if [[ -n "$errs" ]]; then
+	echo "engine errors in the log:"
+	echo "$errs"
+	rc=1
+fi
+echo "  closeout_check rc=$rc (log: $LOG)"
+exit $rc

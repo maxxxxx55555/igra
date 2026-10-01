@@ -77,7 +77,12 @@ func _build() -> void:
 	var b := Button.new()
 	b.text = LocalizationManager.t("Back")
 	b.focus_mode = Control.FOCUS_NONE
-	b.pressed.connect(func() -> void: UIManager.close(&"settings"))
+	b.pressed.connect(func() -> void:
+		# From the main menu this screen is the scene itself: Back returns to the menu. As a pause overlay it just closes.
+		if get_tree().current_scene == self:
+			Routes.to_menu()
+		else:
+			UIManager.close(&"settings"))
 	vb.add_child(b)
 
 func _build_game_tab(parent: VBoxContainer) -> void:
@@ -157,10 +162,6 @@ func _build_controls_tab(parent: VBoxContainer) -> void:
 	_slider(parent, LocalizationManager.t("Deadzone"), "deadzone", 0.05, 0.25, 0.01,
 		func(v: float) -> void: SettingsManager.set_deadzone(v))
 	
-	_dropdown(parent, LocalizationManager.t("Dodge Gesture"), "dodge_gesture",
-		[LocalizationManager.t("dg_double"), LocalizationManager.t("dg_swipe"), LocalizationManager.t("dg_button")],
-		func(idx: int) -> void: SettingsManager.set_dodge_gesture(idx))
-
 	_dropdown(parent, LocalizationManager.t("Crouch Input"), "crouch_input",
 		[LocalizationManager.t("ci_long"), LocalizationManager.t("ci_button"), LocalizationManager.t("ci_disabled")],
 		func(idx: int) -> void: SettingsManager.set_crouch_input(idx))
@@ -259,6 +260,9 @@ func _build_accessibility_tab(parent: VBoxContainer) -> void:
 
 	# Arachnophobia mode
 	_toggle(parent, LocalizationManager.t("Arachnophobia Mode"), "arachnophobia")
+
+	# C03 (GDD 14): firearms lean toward a monster near the crosshair (weapon_base.gd _apply_auto_aim)
+	_toggle(parent, LocalizationManager.t("Auto Aim"), "auto_aim")
 
 	# Reduce screen shake (vestibular) — consumed in screen_shake.gd::add_trauma
 	_toggle(parent, LocalizationManager.t("Reduce Screen Shake"), "reduce_screen_shake")

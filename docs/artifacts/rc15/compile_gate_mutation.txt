@@ -1,0 +1,7 @@
+hardened compile gate, clean tree (scripts/tools/_compile_gate.gd: load() as Script, can_instantiate()):
+COMPILE_GATE bad=0
+same gate with scripts/tools/_mut_parse_error.gd (a dictionary with a duplicate key) present:
+SCRIPT ERROR: Parse Error: Key "crafted" was already used in this dictionary (at line 4).
+GATE FAIL SCRIPT res://scripts/tools/_mut_parse_error.gd
+COMPILE_GATE bad=1
+exit code of the mutated run: 1

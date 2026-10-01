@@ -33,6 +33,9 @@ func _ready() -> void:
 	layer = 95
 	EventBus.game_started.connect(_on_game_started)
 	EventBus.district_stage_changed.connect(_on_district_stage_changed)
+	# game_started fires before the game scene exists (Routes.start_game), so a new game's first frame is this call.
+	if GameManager.is_playing():
+		call_deferred("_on_game_started")
 
 func _on_game_started() -> void:
 	if SaveSystem.is_onboard_done() or _showing:
@@ -49,6 +52,7 @@ func _on_district_stage_changed(district_id: StringName, stage: int) -> void:
 
 func _build() -> void:
 	_showing = true
+	get_tree().paused = true
 	_root = Control.new()
 	_root.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_root.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -118,6 +122,7 @@ func _finish() -> void:
 	if not _showing:
 		return
 	_showing = false
+	get_tree().paused = false
 	SaveSystem.mark_onboard_done()
 	if _root != null:
 		_root.queue_free()
