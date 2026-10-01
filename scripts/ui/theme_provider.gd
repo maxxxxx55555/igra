@@ -28,6 +28,16 @@ const FONT_SIZE_TITLE: int = 22
 static func _load_font(path: String, fallback: Font) -> Font:
 	return load(path) if ResourceLoader.exists(path) else fallback
 
+## GDD 11.3 asks for Bebas Neue Bold; the family ships a single weight (Regular),
+## so the heading face is that file emboldened (theme_tls.tres does the same).
+const HEADING_EMBOLDEN: float = 0.35
+
+static func _bold(base: Font) -> Font:
+	var f := FontVariation.new()
+	f.base_font = base
+	f.variation_embolden = HEADING_EMBOLDEN
+	return f
+
 static func _load_tex(path: String) -> Texture2D:
 	return load(path) if ResourceLoader.exists(path) else null
 
@@ -51,6 +61,8 @@ static func build_theme() -> Theme:
 	var theme := Theme.new()
 	var font_body: Font = _load_font("res://assets/fonts/RobotoCondensed-Regular.ttf", ThemeDB.fallback_font)
 	var font_heading: Font = _load_font("res://assets/fonts/BebasNeue-Regular.ttf", font_body)
+	if font_heading is FontFile:
+		font_heading = _bold(font_heading)
 	var font_panel := font_heading
 	var font_mono: Font = _load_font("res://assets/fonts/ShareTechMono-Regular.ttf", font_body)
 	theme.default_font = font_body

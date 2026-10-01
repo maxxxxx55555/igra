@@ -39,7 +39,8 @@ CASES = {
     "arachnophobia": {"in_ui": '"arachnophobia"' in SCR, "effect": "AltMesh", "kept": True},
     "reduce_screen_shake": {"in_ui": '"reduce_screen_shake"' in SCR, "effect": None, "kept": True},
     "dyslexia_font": {"in_ui": '"dyslexia_font"' in SCR, "effect": None, "kept": False},
-    "auto_aim":    {"in_ui": '"auto_aim"' in SCR,    "effect": None, "kept": False},
+    # rc15 (G25/C03): the weapons are live, so the toggle has a reader (weapon_base.gd _apply_auto_aim) and is kept.
+    "auto_aim":    {"in_ui": '"auto_aim"' in SCR,    "effect": None, "kept": True},
 }
 
 dispatches = re.search(r'func set_setting.*?EventBus', SM, re.S)

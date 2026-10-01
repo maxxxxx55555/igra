@@ -240,6 +240,11 @@ if "$PY" tools/qa_sim/lighting_stage_sim.py >/dev/null 2>&1; then
 else
   bad "lighting_stage_sim"
 fi
+if "$PY" tools/qa_sim/project_input_check.py >/dev/null 2>&1 && "$PY" tools/qa_sim/project_input_check.py --demo >/dev/null 2>&1; then
+  ok "project_input_check (action blocks only in [input], every action the scripts read is defined)"
+else
+  bad "project_input_check (см. 'python tools/qa_sim/project_input_check.py')"
+fi
 if "$PY" tools/qa_sim/a11y_check.py >/dev/null 2>&1; then
   ok "a11y_check (every a11y toggle traces UI -> real effect)"
 else
@@ -362,6 +367,9 @@ else
     run_gate "настройки: тир графики и accessibility переживают рестарт" "res://scenes/tools/settings_persist_probe_scene.tscn"
     run_gate "accessibility: reduce_flash/time_fx/ui_motion гейтят juice-сайты" "res://scenes/tools/a11y_probe_scene.tscn"
     run_gate "вёрстка: все экраны UIManager в кадре" "res://scenes/tools/ui_layout_check_scene.tscn"
+    # rc15 closeout (FUNCTION_MATRIX X43-X53): firearms, blueprints, photo album, hiding, visibility, inventory screen,
+    # achievement triggers, difficulty, the settings Back button - one run of the real game scene.
+    run_gate "rc15 closeout: оружие/чертежи/фото/укрытия/инвентарь/достижения/сложность/Back" "res://scenes/tools/closeout_check_scene.tscn" 200
     # GOLD MASTER suite (P0 autoloads, P1 new-game, P1b every input action
     # exercised, P2 districts+loot, P3 save/load+lang, P4 endings, P5 i18n,
     # P6 soak). Built 2026-09 but never wired in until now (P2 matrix-sweep
