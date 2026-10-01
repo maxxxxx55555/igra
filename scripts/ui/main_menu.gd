@@ -176,7 +176,7 @@ func _refresh_daily_card(vb: VBoxContainer) -> void:
 		desc, mini(progress, target), target,
 		("  " + LocalizationManager.t("DAILY_COMPLETED_LABEL")) if done else ""]
 	var streak: int = SaveSystem.get_daily_streak() if SaveSystem != null else 0
-	(card.get_node("Streak") as Label).text = LocalizationManager.tf("DAILY_STREAK_LABEL", [streak])
+	(card.get_node("Streak") as Label).text = LocalizationManager.tf("DAILY_STREAK_LABEL", [streak, DailyChallengeManager.streak_multiplier(streak)])
 
 func _connect(vb: Node, node_name: String, cb: Callable) -> void:
 	var b := vb.get_node_or_null(node_name) as Button

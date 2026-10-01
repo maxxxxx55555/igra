@@ -78,6 +78,8 @@ func _ready() -> void:
 	_column.add_child(_stack)
 	_build_log_panel()
 	EventBus.toast_requested.connect(_on_toast_requested)
+	# Pickup, quest and level-up notices (inventory_notice) go to the HUD's notice line; the log keeps them with a stamp.
+	EventBus.inventory_notice.connect(func(text: String) -> void: _record(text, "finding"))
 	EventBus.hud_visibility_changed.connect(_on_hud_visibility)
 	LocalizationManager.language_changed.connect(_retranslate)
 	_retranslate()

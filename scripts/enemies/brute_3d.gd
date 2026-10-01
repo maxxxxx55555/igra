@@ -65,6 +65,7 @@ func _slam_and_charge() -> void:
 		var dist := global_position.distance_to(player_ref.global_position)
 		if dist <= attack_range + 0.5:
 			player_ref.take_damage(attack_damage * SLAM_MULT, global_position)
+			_inflict_statuses(player_ref)
 			EventBus.enemy_attack.emit(attack_damage * SLAM_MULT)
 		var dir := (player_ref.global_position - global_position).normalized()
 		dir.y = 0.0

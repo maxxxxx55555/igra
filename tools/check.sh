@@ -245,6 +245,11 @@ if "$PY" tools/qa_sim/project_input_check.py >/dev/null 2>&1 && "$PY" tools/qa_s
 else
   bad "project_input_check (см. 'python tools/qa_sim/project_input_check.py')"
 fi
+if "$PY" tools/qa_sim/settings_consumer_check.py >/dev/null 2>&1 && "$PY" tools/qa_sim/settings_consumer_check.py --demo >/dev/null 2>&1; then
+  ok "settings_consumer_check (every Settings control has a named reader or applier)"
+else
+  bad "settings_consumer_check (см. 'python tools/qa_sim/settings_consumer_check.py')"
+fi
 if "$PY" tools/qa_sim/a11y_check.py >/dev/null 2>&1; then
   ok "a11y_check (every a11y toggle traces UI -> real effect)"
 else

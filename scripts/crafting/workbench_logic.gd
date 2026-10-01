@@ -43,8 +43,10 @@ static func craft(recipe: Dictionary, qty: int = 1) -> bool:
 		InventoryManager.remove(StringName(comp[0]), int(comp[1]) * qty)
 	if recipe.has("flag"):
 		ProgressTracker.mark_crafted(String(recipe["flag"]))
+		ProgressTracker.crafted += 1
 		return true
 	if InventoryManager.try_add(StringName(recipe["result"]), int(recipe["count"]) * qty):
+		ProgressTracker.crafted += 1
 		return true
 	for comp in recipe["components"]:
 		InventoryManager.try_add(StringName(comp[0]), int(comp[1]) * qty)

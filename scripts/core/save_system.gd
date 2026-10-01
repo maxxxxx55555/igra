@@ -108,10 +108,10 @@ var _onboard_done: bool = false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	EventBus.district_restored.connect(func(_a, _b): _save())
-	EventBus.puzzle_solved.connect(func(_a, _b): _save())
-	EventBus.purchase_success.connect(func(_a): _save())
-	EventBus.secret_found.connect(func(_a): _save())
+	EventBus.district_restored.connect(func(_a, _b): autosave())
+	EventBus.puzzle_solved.connect(func(_a, _b): autosave())
+	EventBus.purchase_success.connect(func(_a): autosave())
+	EventBus.secret_found.connect(func(_a): autosave())
 
 func _process(delta: float) -> void:
 	if not GameManager.is_playing():
@@ -125,7 +125,7 @@ func _process(delta: float) -> void:
 		# A crash rolled back to the last event-driven _save() (travel,
 		# secret, puzzle, purchase), not to within 30 seconds. Writing the
 		# real save here is what "protects a crash" actually requires.
-		_save()
+		autosave()
 
 func has_save() -> bool:
 	return FileAccess.file_exists(SAVE_PATH)
@@ -298,6 +298,11 @@ func set_checkpoint(_scene_path: String, pos: Vector3) -> void:
 
 func save_all() -> void:
 	_save()
+
+## Settings > Auto-save: the timer, the milestone saves and the district-entry save go through here.
+func autosave() -> void:
+	if bool(SettingsManager.get_setting("autosave", true)):
+		_save()
 
 func _save() -> void:
 	var payload: Dictionary = {

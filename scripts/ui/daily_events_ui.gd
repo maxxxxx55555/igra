@@ -50,8 +50,7 @@ func _update_display() -> void:
 func _get_bonus() -> float:
 	if not SaveSystem:
 		return 1.0
-	var streak: int = SaveSystem.get_daily_streak()
-	return 1.0 + minf(2.0, streak * 0.5)
+	return DailyChallengeManager.streak_multiplier(SaveSystem.get_daily_streak())
 
 func _on_start() -> void:
 	_event_active = true

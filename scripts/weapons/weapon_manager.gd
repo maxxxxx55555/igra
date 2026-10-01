@@ -40,6 +40,7 @@ func _spawn(id: StringName) -> void:
 	weapon.visible = false
 	weapon.manager = self
 	weapon.set_shooter(get_parent() as Node3D)
+	weapon.fired.connect(func() -> void: ProgressTracker.shots += 1)
 	weapon.ammo_changed.connect(func(_current: int, _mag: int) -> void:
 		if weapon == get_current_weapon():
 			_emit_ammo())

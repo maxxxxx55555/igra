@@ -90,7 +90,6 @@ func apply_status(status: int, duration: float, dps: float = 0.0, power: float =
 		_status_node.apply(status, duration, dps, power)
 
 ## Накладывает на цель статусы из поля inflicts ростера (если цель их поддерживает).
-## ponytail: у игрока пока нет apply_status — вызов graceful no-op, проводка на монстрах есть.
 func _inflict_statuses(target: Node) -> void:
 	var inf: Array = roster_entry.get("inflicts", [])
 	if inf.is_empty() or not target.has_method("apply_status"):
@@ -99,10 +98,24 @@ func _inflict_statuses(target: Node) -> void:
 		var p: Dictionary = _STATUS_PARAMS.get(int(s), {"duration": 2.0})
 		target.apply_status(int(s), float(p.get("duration", 2.0)), float(p.get("dps", 0.0)), float(p.get("power", 0.0)))
 
+## GDD 6.2 group behaviour: Hounds and Hunters shout when they first see the player; the allies inside the radius
+## come to the spot, each from wherever it stands (no scripted pincer).
+const PACK_CALLERS: Array[StringName] = [&"hound", &"hunter"]
+const PACK_CALL_RANGE: float = 15.0
+
+## GDD 7: a noise (a shot, a shout, a run) inside its radius sends a monster that has not seen the player to the spot.
+func _on_noise_emitted(pos: Vector2, radius: float) -> void:
+	if ai_state != State.IDLE and ai_state != State.PATROL and ai_state != State.INVESTIGATE:
+		return
+	var heard: float = radius * NewGamePlus.get_modifier_multiplier("hunter_hearing")
+	if Vector2(global_position.x, global_position.z).distance_to(pos) <= heard:
+		_enter_investigate_at(Vector3(pos.x, global_position.y, pos.y))
+
 func _ready() -> void:
 	_apply_roster_stats()
 	_apply_ng_scaling()
 	_ensure_hp()
+	EventBus.noise_emitted.connect(_on_noise_emitted)
 	_nav_agent = get_node_or_null("NavigationAgent3D")
 	if not _nav_agent:
 		_nav_agent = NavigationAgent3D.new()
@@ -755,27 +768,30 @@ func _die() -> void:
 	_death_effect()
 	_maybe_drop_loot()
 
-## §6.2: "Loot: 30% шанс с трупа". Roster-flag loot_ammo — обозначает дроп
-## с "боеприпасников" (Sharpshooter). Изначально использовал
-## scenes/pickups/ammo_pickup.tscn -> player.add_ammo(), но add_ammo() нигде
-## не определён (WeaponManager/ammo-экономика — незадействованный
-## каркас, см. weapon_pickup.gd) — подбор молча ничего не делал. Даёт
-## реальный предмет через уже рабочую систему инвентаря вместо этого.
+## GDD §6.2: "Loot: 30% chance from a corpse". Every monster rolls; the Sharpshooter (roster flag loot_ammo) drops a box of
+## rounds, the others a battery, a medkit or scrap.
 const _ITEM_PICKUP := preload("res://scenes/pickups/item_pickup_3d.tscn")
-const _LOOT_ITEM: StringName = &"battery"
+const _AMMO_BOX := preload("res://scenes/pickups/ammo_pickup.tscn")
+const LOOT_CHANCE: float = 0.3
+const LOOT_TABLE: Array[StringName] = [&"battery", &"medkit", &"scrap", &"scrap"]
 const _VFX_HIT := preload("res://scenes/vfx/vfx_hit_spark.tscn")
 const _VFX_DEATH := preload("res://scenes/vfx/vfx_blood.tscn")
 
 func _maybe_drop_loot() -> void:
-	if not bool(roster_entry.get("loot_ammo", false)):
+	if randf() > LOOT_CHANCE * NewGamePlus.get_loot_chance_multiplier():
 		return
-	if randf() > 0.3 * NewGamePlus.get_loot_chance_multiplier():
+	var at := global_position + Vector3(0, 0.5, 0)
+	# Ammunition carriers (Sharpshooter) drop rounds, everything else a part or a supply.
+	if bool(roster_entry.get("loot_ammo", false)):
+		var box := _AMMO_BOX.instantiate() as Node3D
+		get_tree().current_scene.add_child(box)
+		box.global_position = at
 		return
 	var pickup := _ITEM_PICKUP.instantiate()
 	get_tree().current_scene.add_child(pickup)
-	pickup.global_position = global_position + Vector3(0, 0.5, 0)
+	pickup.global_position = at
 	if pickup.has_method("set_item"):
-		pickup.set_item(_LOOT_ITEM, 1)
+		pickup.set_item(LOOT_TABLE[randi() % LOOT_TABLE.size()], 1)
 
 func _death_effect() -> void:
 	_spawn_vfx(_VFX_DEATH, global_position + Vector3(0, 1.0, 0))
@@ -814,6 +830,8 @@ func _change_state(new_state: State) -> void:
 		if new_state == State.CHASE:
 			EventBus.player_detected.emit(monster_id)
 			play_cue(&"chase")
+			if monster_id in PACK_CALLERS:
+				EventBus.noise_emitted.emit(Vector2(global_position.x, global_position.z), PACK_CALL_RANGE)
 		elif new_state == State.INVESTIGATE:
 			play_cue(&"investigate")
 		elif new_state == State.ATTACK:

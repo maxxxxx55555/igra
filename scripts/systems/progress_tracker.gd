@@ -35,6 +35,15 @@ const PHOTO_SIZE := Vector2i(128, 72)
 const CREATURE_IDS: Array[String] = ["shadow", "crawler", "watcher", "hunter", "destroyer", "sharpshooter", "brute", "burner", "rotter", "hound", "boss"]
 const ARTIFACT_ITEMS: Array[String] = ["ancient_key", "scope_lens", "serum", "radio_part"]
 const PHOTO_MILESTONES: Dictionary = {50: "ach_09", 100: "ach_10", 200: "ach_17"}
+## GDD 24.6, the statistics screen: counters beside kills and time. Saved with the run.
+var deaths: int = 0
+var shots: int = 0
+var jumps: int = 0
+var distance: float = 0.0
+var items_picked: int = 0
+var crafted: int = 0
+var damage_taken: float = 0.0
+var kills_by: Dictionary = {}
 const DOC_ON_DISTRICT := "doc_engineer_log"
 const DOC_ON_SECRET := "doc_family_letter"
 func _ready() -> void:
@@ -44,10 +53,13 @@ func _ready() -> void:
 	EventBus.puzzle_solved.connect(func(_a, _b): puzzles += 1; _post())
 	EventBus.district_restored.connect(func(_a, _b): _unlock_doc(DOC_ON_DISTRICT); _post())
 	EventBus.item_picked_up.connect(_on_item_picked_up)
+	EventBus.game_over.connect(func() -> void: deaths += 1)
+	EventBus.player_damaged.connect(func(amount: float) -> void: damage_taken += amount)
 	EventBus.quest_completed.connect(func(id: String) -> void: _add_photo("quest_" + id))
 	EventBus.district_entered.connect(func(id: StringName) -> void: _add_photo("district_%s_entered" % id))
 	EventBus.district_stage_changed.connect(_on_stage_photo)
 func _on_item_picked_up(item_id: StringName) -> void:
+	items_picked += 1
 	var id := String(item_id)
 	if ARTIFACT_ITEMS.has(id):
 		_add_photo("artifact_" + id)
@@ -124,6 +136,9 @@ func mark_crafted(id: String) -> void:
 func has_crafted(id: String) -> bool:
 	return _crafted.has(id)
 
+func blueprints_known() -> int:
+	return _blueprints.size()
+
 func raise_battery_bonus(bonus: float) -> void:
 	battery_bonus = clampf(maxf(battery_bonus, bonus), 0.0, MAX_BATTERY_BONUS)
 
@@ -157,6 +172,7 @@ func found_secret_ids() -> Array:
 
 func _on_kill(id: StringName) -> void:
 	kills += 1
+	kills_by[String(id)] = int(kills_by.get(String(id), 0)) + 1
 	if CREATURE_IDS.has(String(id)):
 		_add_photo("creature_" + String(id))
 	if id == &"shadow":
@@ -246,7 +262,8 @@ func to_dict() -> Dictionary:
 		"secret_ids": _secrets_found.keys().map(func(k): return String(k)),
 		"looted_districts": _districts_looted.keys().map(func(k): return String(k)),
 		"weapons": _weapons.keys(), "ammo": ammo, "blueprints": _blueprints.keys(), "crafted": _crafted.keys(),
-		"battery_bonus": battery_bonus}
+		"battery_bonus": battery_bonus, "deaths": deaths, "shots": shots, "jumps": jumps, "distance": distance,
+		"items_picked": items_picked, "crafted_items": crafted, "damage_taken": damage_taken, "kills_by": kills_by}
 ## content/secrets.json ships exactly 26 secrets (district_loot.gd/secret.gd
 ## both document this) - a real, fixed content total, unlike kills/puzzles
 ## below which have no such fixed roster in this project (kills accumulate
@@ -291,3 +308,16 @@ func from_dict(d: Dictionary) -> void:
 		if BLUEPRINT_IDS.has(String(k)):
 			_crafted[String(k)] = true
 	battery_bonus = clampf(float(d.get("battery_bonus", 0.0)), 0.0, MAX_BATTERY_BONUS)
+	deaths = maxi(0, int(d.get("deaths", 0)))
+	shots = maxi(0, int(d.get("shots", 0)))
+	jumps = maxi(0, int(d.get("jumps", 0)))
+	distance = maxf(0.0, float(d.get("distance", 0.0)))
+	items_picked = maxi(0, int(d.get("items_picked", 0)))
+	crafted = maxi(0, int(d.get("crafted_items", 0)))
+	damage_taken = maxf(0.0, float(d.get("damage_taken", 0.0)))
+	kills_by.clear()
+	var by: Variant = d.get("kills_by", {})
+	if by is Dictionary:
+		for k in by:
+			if String(k).length() <= 24 and int(by[k]) > 0:
+				kills_by[String(k)] = int(by[k])

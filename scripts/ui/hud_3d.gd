@@ -647,7 +647,20 @@ func _apply_touch_visibility() -> void:
 			if n != null:
 				n.visible = false
 		return
+	_apply_button_size()
+	EventBus.settings_changed.connect(func(key: String, _value: Variant) -> void:
+		if key == "button_size":
+			_apply_button_size())
 	_install_joystick()
+
+## Settings > Button Size: the joystick and the action buttons grow or shrink around the corner they sit in.
+func _apply_button_size() -> void:
+	var factor := float(SettingsManager.get_setting("button_size", 1.0))
+	for path in ["BottomLeft", "BottomRight"]:
+		var cluster := get_node_or_null(path) as Control
+		if cluster != null:
+			cluster.pivot_offset = Vector2(0.0 if path == "BottomLeft" else cluster.size.x, cluster.size.y)
+			cluster.scale = Vector2(factor, factor)
 
 ## JoystickRing в сцене был просто нарисованным кольцом — двигать им игрока было
 ## нельзя. Вешаем на него virtual_joystick.gd, который пишет в InputService;
@@ -1089,6 +1102,11 @@ func _setup_context_hints() -> void:
 	EventBus.district_entered.connect(func(id: StringName) -> void:
 		if PowerGrid.get_stage(id) == DistrictData.Stage.DARK:
 			_hint_light_source())
+	var hint_timer := Timer.new()
+	hint_timer.wait_time = 1.0
+	hint_timer.autostart = true
+	hint_timer.timeout.connect(_poll_context_hints)
+	add_child(hint_timer)
 	# A load can restore a run that already had the flashlight switched off, and
 	# no state_changed fires for it - read the field once so the hint is not
 	# skipped for someone who is genuinely standing in the dark.
@@ -1096,8 +1114,34 @@ func _setup_context_hints() -> void:
 	if player != null and "flashlight_enabled" in player:
 		_flashlight_on = bool(player.flashlight_enabled)
 
+## More hints (GDD V.1 3.8), each shown once a run: the light is fading, the player is badly hurt, the player is loud.
+const _HINT_BATTERY: float = 0.25
+const _HINT_NOISE: float = 0.8
+var _hints_shown: Dictionary = {}
+
+## The Hints switch in Settings and the Keeper's Pact modifier both turn every hint off.
+func _hints_on() -> bool:
+	return bool(SettingsManager.get_setting("hints", true)) and NewGamePlus.are_hints_enabled()
+
+func _poll_context_hints() -> void:
+	if not _hints_on() or UIManager.is_hud_blocked():
+		return
+	var player := get_tree().get_first_node_in_group("player")
+	if _bat < _HINT_BATTERY and _flashlight_on:
+		_hint_once("battery", "HUD_HINT_BATTERY")
+	elif _hp < _LOW_HP:
+		_hint_once("hp", "HUD_HINT_HP")
+	elif player != null and float(player.get_noise_level()) > _HINT_NOISE:
+		_hint_once("noise", "HUD_HINT_NOISE")
+
+func _hint_once(id: String, key: String) -> void:
+	if _hints_shown.has(id):
+		return
+	_hints_shown[id] = true
+	_show_notice(LocalizationManager.t(key))
+
 func _hint_light_source() -> void:
-	if not bool(SettingsManager.get_setting("hints", true)):
+	if not _hints_on():
 		return
 	if _flashlight_on:
 		return

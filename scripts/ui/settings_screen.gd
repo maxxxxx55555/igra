@@ -162,10 +162,6 @@ func _build_controls_tab(parent: VBoxContainer) -> void:
 	_slider(parent, LocalizationManager.t("Deadzone"), "deadzone", 0.05, 0.25, 0.01,
 		func(v: float) -> void: SettingsManager.set_deadzone(v))
 	
-	_dropdown(parent, LocalizationManager.t("Dodge Gesture"), "dodge_gesture",
-		[LocalizationManager.t("dg_double"), LocalizationManager.t("dg_swipe"), LocalizationManager.t("dg_button")],
-		func(idx: int) -> void: SettingsManager.set_dodge_gesture(idx))
-
 	_dropdown(parent, LocalizationManager.t("Crouch Input"), "crouch_input",
 		[LocalizationManager.t("ci_long"), LocalizationManager.t("ci_button"), LocalizationManager.t("ci_disabled")],
 		func(idx: int) -> void: SettingsManager.set_crouch_input(idx))

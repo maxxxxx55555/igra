@@ -128,16 +128,27 @@ func _tick(type: String, amount: int) -> void:
 	if _progress >= int(_today.get("target", 1)):
 		_complete()
 
+## GDD 24.3: [days in a row, multiplier on the daily reward], longest streak first.
+const STREAK_MULTIPLIERS: Array = [[7, 3.0], [5, 2.0], [3, 1.5]]
+
+static func streak_multiplier(days: int) -> float:
+	for row in STREAK_MULTIPLIERS:
+		if days >= int(row[0]):
+			return float(row[1])
+	return 1.0
+
 func _complete() -> void:
 	_completed_today = true
 	_last_completed_day = _day
-	var reward := int(_today.get("reward", 0))
+	var streak := 0
+	if SaveSystem != null and SaveSystem.has_method("increment_daily_streak"):
+		SaveSystem.increment_daily_streak()
+		streak = SaveSystem.get_daily_streak()
+	var reward := roundi(int(_today.get("reward", 0)) * streak_multiplier(streak))
 	var wallet := get_node_or_null("/root/CoinWallet")
 	if wallet != null and wallet.has_method("add"):
 		wallet.add(reward)
-	if SaveSystem != null and SaveSystem.has_method("increment_daily_streak"):
-		SaveSystem.increment_daily_streak()
-		reward += _streak_bonus(SaveSystem.get_daily_streak())
+	reward += _streak_bonus(streak)
 	completed.emit(reward)
 	_save_state()
 

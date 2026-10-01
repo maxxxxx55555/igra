@@ -3,6 +3,7 @@ extends Control
 ## и кнопку закрытия — их даёт общая рамка, — а панель растягивается на всю
 ## вкладку вместо центрирования.
 var embedded: bool = false
+const DIFFICULTY_KEYS: Array[String] = ["diff_easy", "diff_normal", "diff_hard"]
 
 func _ready() -> void:
 	_build()
@@ -68,11 +69,42 @@ func _build() -> void:
 	t.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
 	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vb.add_child(t)
+	var tabs := TabContainer.new()
+	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	vb.add_child(tabs)
 	var s := ProgressTracker.get_stats()
-	_line(vb, LocalizationManager.t("STATS_DISTRICTS"), "%d / %d" % [s["districts"], PowerGrid.all_districts().size()], "district")
-	_line(vb, LocalizationManager.t("STATS_SECRETS"), "%d" % s["secrets"], "document")
-	_line(vb, LocalizationManager.t("STATS_KILLS"), "%d" % s["kills"], "skull")
-	_line(vb, LocalizationManager.t("STATS_TIME"), LocalizationManager.tf("STATS_SECONDS", [int(s["time_played"])]), "clock")
+	var overall := _tab(tabs, "STATS_TAB_OVERALL")
+	_line(overall, LocalizationManager.t("STATS_LEVEL"), "%d" % XpManager.get_level())
+	_line(overall, LocalizationManager.t("STATS_COINS"), "%d" % CoinWallet.get_coins())
+	_line(overall, LocalizationManager.t("STATS_TIME"), LocalizationManager.tf("STATS_SECONDS", [int(s["time_played"])]), "clock")
+	_line(overall, LocalizationManager.t("STATS_DIFFICULTY"), LocalizationManager.t(DIFFICULTY_KEYS[clampi(int(SettingsManager.get_setting("difficulty", 1)), 0, 2)]))
+	_line(overall, LocalizationManager.t("STATS_NGPLUS"), "%d" % NewGamePlus.get_current_ng_plus())
+	_line(overall, LocalizationManager.t("STATS_DISTRICTS"), "%d / %d" % [s["districts"], PowerGrid.all_districts().size()], "district")
+	_line(overall, LocalizationManager.t("STATS_DEATHS"), "%d" % ProgressTracker.deaths)
+	var combat := _tab(tabs, "STATS_TAB_COMBAT")
+	_line(combat, LocalizationManager.t("STATS_KILLS"), "%d" % s["kills"], "skull")
+	_line(combat, LocalizationManager.t("STATS_SHADOWS"), "%d" % ProgressTracker.shadow_kills)
+	_line(combat, LocalizationManager.t("STATS_SHOTS"), "%d" % ProgressTracker.shots)
+	_line(combat, LocalizationManager.t("STATS_DAMAGE_TAKEN"), "%d" % int(ProgressTracker.damage_taken))
+	for id in ProgressTracker.kills_by:
+		_line(combat, LocalizationManager.name_for("MONSTER_", StringName(id), String(id).capitalize()), "%d" % ProgressTracker.kills_by[id])
+	var explore := _tab(tabs, "STATS_TAB_EXPLORATION")
+	_line(explore, LocalizationManager.t("STATS_SECRETS"), "%d / %d" % [s["secrets"], ProgressTracker.MAX_SECRETS], "document")
+	_line(explore, LocalizationManager.t("STATS_PUZZLES"), "%d" % s["puzzles"])
+	_line(explore, LocalizationManager.t("STATS_DISTANCE"), LocalizationManager.tf("STATS_METERS", [int(ProgressTracker.distance)]))
+	_line(explore, LocalizationManager.t("STATS_JUMPS"), "%d" % ProgressTracker.jumps)
+	_line(explore, LocalizationManager.t("STATS_ITEMS"), "%d" % ProgressTracker.items_picked)
+	var collection := _tab(tabs, "STATS_TAB_COLLECTION")
+	_line(collection, LocalizationManager.t("STATS_CRAFTED"), "%d" % ProgressTracker.crafted)
+	_line(collection, LocalizationManager.t("STATS_DOCUMENTS"), "%d / %d" % [ProgressTracker.count_docs(), Endings.get_total_documents()])
+	_line(collection, LocalizationManager.t("STATS_PHOTOS"), "%d / %d" % [SaveSystem.get_photo_count(), ProgressTracker.photo_total()])
+	_line(collection, LocalizationManager.t("STATS_BLUEPRINTS"), "%d / %d" % [ProgressTracker.blueprints_known(), ProgressTracker.BLUEPRINT_IDS.size()])
+	_line(collection, LocalizationManager.t("STATS_WEAPONS"), "%d / %d" % [ProgressTracker.get_weapons().size(), ProgressTracker.WEAPON_IDS.size()])
+	var seen := 0
+	for id in Encyclopedia.all_ids():
+		seen += int(Encyclopedia.is_unlocked(id))
+	_line(collection, LocalizationManager.t("STATS_BESTIARY"), "%d / %d" % [seen, Encyclopedia.all_ids().size()])
+	_line(collection, LocalizationManager.t("STATS_SKILLS"), "%d" % SkillTreeManager.get_unlocked_skills().size())
 
 	# GOLD MASTER v5 hooks pass: local leaderboard — top runs by fastest
 	# win, independent of SaveSystem's save/reset cycle (a New Game must
@@ -81,12 +113,12 @@ func _build() -> void:
 		var lb_title := Label.new()
 		lb_title.text = LocalizationManager.t("LEADERBOARD_TITLE")
 		lb_title.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
-		vb.add_child(lb_title)
+		overall.add_child(lb_title)
 		var i := 1
 		for run in LocalLeaderboard.get_top_runs(5):
 			var mins := int(run["time"]) / 60
 			var secs := int(run["time"]) % 60
-			_line(vb, "#%d" % i, "%02d:%02d — %d districts, %d kills" %
+			_line(overall, "#%d" % i, "%02d:%02d — %d districts, %d kills" %
 				[mins, secs, run["districts"], run["kills"]], "")
 			i += 1
 
@@ -96,6 +128,17 @@ func _build() -> void:
 		b.focus_mode = Control.FOCUS_NONE
 		b.pressed.connect(func() -> void: UIManager.close(&"stats"))
 		vb.add_child(b)
+## One tab page: a scrolling column of rows, named by its translated title.
+func _tab(tabs: TabContainer, title_key: String) -> VBoxContainer:
+	var scroll := ScrollContainer.new()
+	scroll.name = LocalizationManager.t(title_key)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	tabs.add_child(scroll)
+	var column := VBoxContainer.new()
+	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.add_child(column)
+	return column
+
 ## icon_id: V2 SKIN WIRING P1: icons_v2/stat_[id]_64.png, drawn before the
 ## label when present on disk.
 func _line(p: Node, k: String, v: String, icon_id: String = "") -> void:

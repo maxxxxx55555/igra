@@ -73,7 +73,7 @@ func load_district(district_id: StringName) -> void:
 	# of the two emits triggered it. Moved the save to here, after the
 	# district pointer and player position are both actually correct.
 	if GameManager.is_playing():
-		SaveSystem.save_all()
+		SaveSystem.autosave()
 
 ## Ставит игрока на сохранённую позицию, иначе на точку старта района.
 ## Восстановление позиции жило в world_map.gd, которого нет в игровой сцене,

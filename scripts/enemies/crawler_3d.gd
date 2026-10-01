@@ -76,6 +76,7 @@ func _tick_leap(delta: float) -> void:
 			var dist := global_position.distance_to(player_ref.global_position)
 			if dist < 2.0:
 				player_ref.take_damage(attack_damage, global_position)
+				_inflict_statuses(player_ref)
 				EventBus.enemy_attack.emit(attack_damage)
 
 		_change_state(State.CHASE)

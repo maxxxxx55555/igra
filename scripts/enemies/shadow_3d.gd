@@ -104,6 +104,7 @@ func _shadow_attack() -> void:
 	if not player_ref or not is_instance_valid(player_ref):
 		return
 	player_ref.take_damage(attack_damage, global_position)
+	_inflict_statuses(player_ref)
 	EventBus.enemy_attack.emit(attack_damage)
 
 func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, type: EnemyRosterData.DamageType = EnemyRosterData.DamageType.BULLET) -> void:

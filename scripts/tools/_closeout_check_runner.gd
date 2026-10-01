@@ -5,6 +5,7 @@ extends Node
 const Logic := preload("res://scripts/crafting/workbench_logic.gd")
 const AlbumScript := preload("res://scripts/ui/photo_album_ui.gd")
 const FAR := Vector3(500.0, 0.0, 500.0)
+const Status := EnemyRosterData.Status
 
 var _checked: int = 0
 var _fails: int = 0
@@ -41,6 +42,16 @@ func _run() -> void:
 	await _check_photos()
 	await _check_achievements()
 	await _check_inventory_and_pause()
+	_check_roster()
+	await _check_crouch()
+	_check_loot()
+	await _check_statuses()
+	_check_noise_and_pack()
+	await _check_settings_effects()
+	await _check_stats()
+	await _check_bestiary()
+	await _check_hints_and_log()
+	_check_daily()
 	_check_difficulty()
 	await _check_settings_back()
 	_finish()
@@ -524,3 +535,311 @@ func _check_settings_back() -> void:
 			returned = true
 			break
 	_ok(returned, "Back returns from Settings to the main menu")
+
+# ── batch 2: the GDD roster table ───────────────────────────────────────────
+## GDD 6.2: scene -> [health, damage] at Normal difficulty.
+const GDD_ROSTER: Dictionary = {
+	"shadow_3d": [30.0, 15.0], "crawler_3d": [50.0, 20.0], "watcher_3d": [80.0, 12.0], "hunter_3d": [120.0, 35.0],
+	"destroyer_3d": [200.0, 25.0], "sharpshooter_3d": [60.0, 50.0], "brute_3d": [350.0, 30.0], "burner_3d": [90.0, 15.0],
+	"rotter_3d": [140.0, 10.0], "hound_3d": [40.0, 18.0], "tvar_3d": [1200.0, 40.0], "boss_architect_3d": [800.0, 40.0],
+}
+const LOOT_ROLLS: int = 600
+
+func _check_roster() -> void:
+	SettingsManager.set_difficulty(1)
+	var ng_hp: float = NewGamePlus.get_enemy_hp_multiplier() if NewGamePlus.is_ng_plus_active() else 1.0
+	var ng_damage: float = NewGamePlus.get_enemy_damage_multiplier() if NewGamePlus.is_ng_plus_active() else 1.0
+	for scene in GDD_ROSTER:
+		var want: Array = GDD_ROSTER[scene]
+		var monster := _monster(scene)
+		var hp: float = monster.max_hp
+		var damage: float = monster.attack_damage
+		_ok(is_equal_approx(hp, float(want[0]) * ng_hp) and is_equal_approx(damage, float(want[1]) * ng_damage),
+			"MN2 %s has the GDD health %.0f and damage %.0f (%.1f / %.1f)" % [scene, want[0], want[1], hp, damage])
+		monster.queue_free()
+
+# ── CT13 / CT6 / Crouch Input: the capsule, the ceiling, the swipe, the three modes ──
+func _swipe(from: Vector2, by: Vector2, hold: float) -> void:
+	var press := InputEventScreenTouch.new()
+	press.index = 7
+	press.pressed = true
+	press.position = from
+	_player._input(press)
+	await get_tree().create_timer(hold).timeout
+	var release := InputEventScreenTouch.new()
+	release.index = 7
+	release.pressed = false
+	release.position = from + by
+	_player._input(release)
+
+func _check_crouch() -> void:
+	_playing()
+	SettingsManager.set_setting("crouch_input", 0)
+	_player.set("gameplay_active", true)
+	var body := _player.get_node("CollisionShape3D") as CollisionShape3D
+	var capsule := body.shape as CapsuleShape3D
+	_ok(is_equal_approx(capsule.height, 1.6), "CT13 the standing capsule is 1.6 m")
+	_player.set("_crouch_held", true)
+	_player.set("_crouch_timer", 1.0)
+	await get_tree().create_timer(0.5).timeout
+	var cam: Variant = _player.get("_fps_cam")
+	_ok(is_equal_approx(capsule.height, 1.2), "CT13 crouching shrinks the capsule to 1.2 m (%.2f)" % capsule.height)
+	_ok(cam != null and float(cam.fps_eye_height) < 1.4, "CT13 crouching lowers the eye (%.2f)" % float(cam.fps_eye_height))
+	var ceiling := StaticBody3D.new()
+	var slab := CollisionShape3D.new()
+	var box := BoxShape3D.new()
+	box.size = Vector3(2.0, 0.1, 2.0)
+	slab.shape = box
+	ceiling.add_child(slab)
+	add_child(ceiling)
+	ceiling.global_position = _player.global_position + Vector3(0.0, 0.6, 0.0)
+	_player.set("_crouch_held", false)
+	await get_tree().create_timer(0.4).timeout
+	_ok(is_equal_approx(capsule.height, 1.2), "CT13 a low ceiling keeps the player crouched (%.2f)" % capsule.height)
+	ceiling.queue_free()
+	await get_tree().create_timer(0.4).timeout
+	_ok(is_equal_approx(capsule.height, 1.6), "CT13 the player stands up once there is room (%.2f)" % capsule.height)
+	# GDD 2.2, touch: a quick swipe down in the look zone toggles the crouch; a slow or short one does not
+	var view := get_viewport().get_visible_rect().size
+	var start := Vector2(view.x * 0.8, view.y * 0.3)
+	await _swipe(start, Vector2(10.0, 200.0), 0.05)
+	_ok(bool(_player.get("_crouch_toggled")), "CT6 a quick swipe down toggles the crouch")
+	await _swipe(start, Vector2(10.0, 200.0), 0.05)
+	_ok(not bool(_player.get("_crouch_toggled")), "CT6 a second swipe stands up")
+	await _swipe(start, Vector2(10.0, 200.0), 0.6)
+	_ok(not bool(_player.get("_crouch_toggled")), "CT6 a slow drag (a look) does not crouch")
+	await _swipe(start, Vector2(10.0, 80.0), 0.05)
+	_ok(not bool(_player.get("_crouch_toggled")), "CT6 a short swipe does not crouch")
+	await _swipe(Vector2(view.x * 0.1, view.y * 0.3), Vector2(10.0, 200.0), 0.05)
+	_ok(not bool(_player.get("_crouch_toggled")), "CT6 a swipe on the joystick side does not crouch")
+	# Settings > Crouch Input
+	SettingsManager.set_setting("crouch_input", 2)
+	_player.set("_crouch_toggled", true)
+	_ok(not _player._crouch_wanted(), "Crouch Input Disabled: nothing crouches the player")
+	SettingsManager.set_setting("crouch_input", 1)
+	_player.set("_crouch_toggled", false)
+	_player.set("_crouch_held", true)
+	_player.set("_crouch_timer", 0.0)
+	_ok(_player._crouch_wanted(), "Crouch Input Button: the key crouches at once")
+	SettingsManager.set_setting("crouch_input", 0)
+	_ok(not _player._crouch_wanted(), "Crouch Input Long Press: a tap does not crouch")
+	_player.set("_crouch_timer", 0.6)
+	_ok(_player._crouch_wanted(), "Crouch Input Long Press: a hold crouches")
+	_player.set("_crouch_held", false)
+	_player.set("_crouch_timer", 0.0)
+
+# ── MN4: a corpse drops loot 30% of the time (a part, a supply, or ammunition for the Sharpshooter) ──
+func _check_loot() -> void:
+	var scene := get_tree().current_scene
+	var crawler := _monster("crawler_3d")
+	var before := scene.get_child_count()
+	for n in LOOT_ROLLS:
+		crawler._maybe_drop_loot()
+	var drops := scene.get_children().slice(before)
+	var want: float = BaseMonster.LOOT_CHANCE * NewGamePlus.get_loot_chance_multiplier()
+	var share := float(drops.size()) / LOOT_ROLLS
+	_ok(absf(share - want) < 0.08, "MN4 a corpse drops loot %.0f%% of the time (%d of %d)" % [want * 100.0, drops.size(), LOOT_ROLLS])
+	var in_table := true
+	for drop in drops:
+		in_table = in_table and BaseMonster.LOOT_TABLE.has(drop.item_id)
+		drop.queue_free()
+	_ok(in_table, "MN4 every drop is a battery, a medkit or scrap")
+	var sharp := _monster("sharpshooter_3d")
+	before = scene.get_child_count()
+	for n in 60:
+		sharp._maybe_drop_loot()
+	drops = scene.get_children().slice(before)
+	var ammo := not drops.is_empty()
+	for drop in drops:
+		ammo = ammo and String(drop.scene_file_path).ends_with("ammo_pickup.tscn")
+		drop.queue_free()
+	_ok(ammo, "MN4 the Sharpshooter drops a box of rounds")
+	crawler.queue_free()
+	sharp.queue_free()
+
+# ── MN6: the statuses a monster inflicts reach the player, and STUN holds the player in place ──
+func _check_statuses() -> void:
+	var fx: Node = _player.get("status_fx")
+	var inflicted := {"crawler_3d": Status.BLEED, "hunter_3d": Status.BLEED, "destroyer_3d": Status.STUN,
+		"burner_3d": Status.BURN, "rotter_3d": Status.POISON}
+	for scene in inflicted:
+		fx.active.clear()
+		fx._immune.clear()
+		var monster := _monster(scene)
+		monster._inflict_statuses(_player)
+		_ok(fx.is_active(inflicted[scene]), "MN6 a %s hit puts %s on the player" % [scene, Status.keys()[inflicted[scene]]])
+		monster.queue_free()
+	fx.active.clear()
+	fx._immune.clear()
+	_player.apply_status(Status.SLOW, 2.0, 0.0, 0.5)
+	_ok(is_equal_approx(fx.speed_multiplier(), 0.5), "MN6 SLOW halves the player's speed")
+	fx.active.clear()
+	_player.apply_status(Status.STUN, 1.5)
+	_ok(fx.speed_multiplier() == 0.0, "MN6 STUN holds the player in place")
+	var hud := _main.get_node_or_null("HUD")
+	await get_tree().create_timer(0.4).timeout
+	_ok(hud._status_icons.has(Status.STUN), "H3.12 the status row shows the STUN icon")
+	fx.active.clear()
+	fx._immune.clear()
+	await get_tree().create_timer(0.4).timeout
+	_ok(not hud._status_icons.has(Status.STUN), "H3.12 the icon goes when the status ends")
+
+# ── MN7: noise sends monsters to its source; Hounds and Hunters shout when they see the player ──
+func _check_noise_and_pack() -> void:
+	var hunter := _monster("hunter_3d")
+	var near := _monster("hound_3d", FAR + Vector3(8.0, 0.0, 0.0))
+	var far := _monster("crawler_3d", FAR + Vector3(40.0, 0.0, 0.0))
+	for monster in [hunter, near, far]:
+		monster._change_state(BaseMonster.State.PATROL)
+	hunter._change_state(BaseMonster.State.CHASE)
+	_ok(near.ai_state == BaseMonster.State.INVESTIGATE, "MN7 a Hunter that sees the player shouts: a Hound 8 m away comes to look")
+	_ok(far.ai_state == BaseMonster.State.PATROL, "MN7 a monster 40 m away does not hear the shout")
+	EventBus.noise_emitted.emit(Vector2(far.global_position.x, far.global_position.z), 22.0)
+	_ok(far.ai_state == BaseMonster.State.INVESTIGATE, "MN7 a gunshot (22 m) sends the monster beside it to investigate")
+	var lone := _monster("shadow_3d", FAR + Vector3(0.0, 0.0, -60.0))
+	lone._change_state(BaseMonster.State.PATROL)
+	EventBus.noise_emitted.emit(Vector2(FAR.x, FAR.z), 22.0)
+	_ok(lone.ai_state == BaseMonster.State.PATROL, "MN7 a gunshot 60 m away is not heard")
+	for monster in [hunter, near, far, lone]:
+		monster.queue_free()
+
+# ── settings that act: Auto-save, Button Size, Text Size, High Contrast ──────
+func _check_settings_effects() -> void:
+	_playing()
+	var coins_before: int = CoinWallet.get_coins()
+	CoinWallet.coins = 424242
+	SettingsManager.set_setting("autosave", false)
+	SaveSystem.autosave()
+	var saved: Dictionary = SaveSystem._read_validated(SaveSystem.SAVE_PATH)
+	_ok(not JSON.stringify(saved.get("wallet", {})).contains("424242"), "Auto-save off: the autosave writes nothing")
+	SettingsManager.set_setting("autosave", true)
+	SaveSystem.autosave()
+	saved = SaveSystem._read_validated(SaveSystem.SAVE_PATH)
+	_ok(JSON.stringify(saved.get("wallet", {})).contains("424242"), "Auto-save on: the autosave writes")
+	CoinWallet.coins = coins_before
+	var hud := _main.get_node_or_null("HUD")
+	SettingsManager.set_setting("button_size", 1.4)
+	hud._apply_button_size()
+	var cluster := hud.get_node("BottomRight") as Control
+	_ok(is_equal_approx(cluster.scale.x, 1.4), "Button Size scales the touch buttons (%.2f)" % cluster.scale.x)
+	SettingsManager.set_setting("button_size", 1.0)
+	hud._apply_button_size()
+	SettingsManager.set_setting("text_size", 2)
+	_ok(is_equal_approx(get_tree().root.content_scale_factor, 1.15), "AC3 Text Size Large scales the whole UI (%.2f)" % get_tree().root.content_scale_factor)
+	SettingsManager.set_setting("text_size", 1)
+	_ok(is_equal_approx(get_tree().root.content_scale_factor, 1.0), "AC3 Text Size Medium is the normal scale")
+	var tier_before: int = int(SettingsManager.get_setting("graphics_tier", 2))
+	SettingsManager.set_setting("high_contrast", true)
+	var env: Environment = SettingsManager._find_environment()
+	env.adjustment_contrast = 1.1
+	SettingsManager.set_graphics_tier(1 if tier_before != 1 else 2)
+	await get_tree().create_timer(0.9).timeout
+	_ok(env != null and is_equal_approx(env.adjustment_contrast, 1.3), "AC4 High Contrast survives a graphics tier change")
+	SettingsManager.set_graphics_tier(tier_before)
+	SettingsManager.set_setting("high_contrast", false)
+
+# ── ST7: the statistics screen (4 tabs, 20+ rows) and the counters behind it ──
+func _check_stats() -> void:
+	var saved := ProgressTracker.to_dict()
+	var forged := saved.duplicate(true)
+	forged["shots"] = -5
+	forged["distance"] = -1.0
+	forged["kills_by"] = {"crawler": 4, "shadow": -2, "x".repeat(40): 9}
+	ProgressTracker.from_dict(forged)
+	_ok(ProgressTracker.shots == 0 and ProgressTracker.distance == 0.0, "ST7 forged counters are clamped")
+	_ok(ProgressTracker.kills_by.size() == 1 and int(ProgressTracker.kills_by.get("crawler", 0)) == 4, "ST7 forged kill rows are dropped")
+	ProgressTracker.from_dict(saved)
+	ProgressTracker._on_kill(&"crawler")
+	_ok(int(ProgressTracker.kills_by.get("crawler", 0)) >= 1, "ST7 a kill is counted by type")
+	var made: int = ProgressTracker.crafted
+	InventoryManager.from_dict({})
+	InventoryManager.try_add(&"metal", 2)
+	Logic.craft(Logic.find("lockpick"))
+	_ok(ProgressTracker.crafted == made + 1, "ST7 crafting is counted")
+	var stats := Control.new()
+	stats.set_script(load("res://scripts/ui/stats_ui.gd"))
+	add_child(stats)
+	await get_tree().process_frame
+	var tabs := stats.find_children("*", "TabContainer", true, false)[0] as TabContainer
+	_ok(tabs.get_tab_count() == 4, "ST7 four tabs: Overall, Combat, Exploration, Collection")
+	var rows := 0
+	for tab in tabs.get_children():
+		rows += tab.get_child(0).get_child_count()
+	_ok(rows >= 20, "ST7 twenty or more rows (%d)" % rows)
+	var texts: Array[String] = []
+	for label in stats.find_children("*", "Label", true, false):
+		texts.append((label as Label).text)
+	_ok(texts.has(str(XpManager.get_level())) and texts.has(LocalizationManager.t("STATS_LEVEL")), "ST7 the level row shows the real level")
+	stats.queue_free()
+
+# ── E7.15 / E7.16: the bestiary detail names the danger, the habitat and the drops ──
+func _check_bestiary() -> void:
+	var enc := preload("res://scripts/ui/encyclopedia_ui.gd")
+	var expected := {&"shadow": 0, &"watcher": 0, &"crawler": 1, &"hound": 1, &"hunter": 2, &"brute": 2, &"boss": 3, &"tvar": 3}
+	for id in expected:
+		var level: int = enc.danger_level(Encyclopedia.get_data(id))
+		_ok(level == expected[id], "E7.15 %s danger is %s (%d)" % [id, enc.DANGER_KEYS[expected[id]], level])
+	Encyclopedia.unlock(&"hunter")
+	var ui := Control.new()
+	ui.set_script(enc)
+	add_child(ui)
+	await get_tree().process_frame
+	ui._open_detail(&"hunter")
+	var texts: Array[String] = []
+	for label in ui.find_children("*", "Label", true, false):
+		texts.append((label as Label).text)
+	for key in ["ENC_STAT_DANGER", "ENC_STAT_HABITAT", "ENC_STAT_LOOT"]:
+		_ok(texts.has(LocalizationManager.t(key)), "E7.16 the detail has a %s row" % key)
+	_ok(texts.has(LocalizationManager.t("DANGER_HIGH")), "E7.15 the Hunter reads High")
+	_ok(texts.any(func(t: String) -> bool: return t.contains(LocalizationManager.name_for("DISTRICT_NAME_", &"park", "park"))), "E7.16 the Hunter's habitat names the park")
+	ui.queue_free()
+
+# ── H3.8 / AC7 hints and H3.14 the stamped log ───────────────────────────────
+func _check_hints_and_log() -> void:
+	_playing()
+	var hud := _main.get_node_or_null("HUD")
+	SettingsManager.set_setting("hints", true)
+	hud._hints_shown.clear()
+	hud._bat = 0.1
+	hud._flashlight_on = true
+	hud._poll_context_hints()
+	_ok(hud.notice.text == LocalizationManager.t("HUD_HINT_BATTERY"), "H3.8 a fading light shows the battery hint")
+	hud.notice.text = ""
+	hud._hints_shown.clear()
+	SettingsManager.set_setting("hints", false)
+	hud._poll_context_hints()
+	_ok(hud.notice.text == "", "AC7 Hints off: no hint")
+	SettingsManager.set_setting("hints", true)
+	NewGamePlus._active_modifiers = ["keepers_pact"]
+	hud._poll_context_hints()
+	_ok(hud.notice.text == "", "AC7 the Keeper's Pact silences the hints")
+	NewGamePlus._active_modifiers = []
+	hud._bat = 1.0
+	hud.notice.text = ""
+	EventBus.inventory_notice.emit("closeout probe")
+	var toasts := _main.get_node("ToastManager")
+	var last: Dictionary = toasts._history.back()
+	_ok(String(last["text"]) == "closeout probe" and String(last["stamp"]).begins_with("["), "H3.14 the log keeps a pickup notice with its stamp (%s)" % last["stamp"])
+
+# ── DL2: the daily reward grows with the streak ──────────────────────────────
+func _check_daily() -> void:
+	var m := DailyChallengeManager
+	var table := {1: 1.0, 2: 1.0, 3: 1.5, 4: 1.5, 5: 2.0, 6: 2.0, 7: 3.0, 30: 3.0}
+	var ok := true
+	for days in table:
+		ok = ok and m.streak_multiplier(days) == table[days]
+	_ok(ok, "DL2 the streak multiplier is x1.5 / x2 / x3 at 3 / 5 / 7 days")
+	var streak_before: int = SaveSystem._daily_streak
+	var last_before: int = SaveSystem._last_daily_time
+	SaveSystem._daily_streak = 4
+	SaveSystem._last_daily_time = int(Time.get_unix_time_from_system())
+	var base: int = int(m.get_today().get("reward", 0))
+	var coins: int = CoinWallet.get_coins()
+	m._complete()
+	var bonus := 0
+	for row in m._streak_rewards:
+		if int(row.get("days", -1)) == 5:
+			bonus += int(row.get("reward", 0))
+	_ok(CoinWallet.get_coins() - coins == roundi(base * 2.0) + bonus, "DL2 the fifth day pays double (%d + %d)" % [roundi(base * 2.0), bonus])
+	SaveSystem._daily_streak = streak_before
+	SaveSystem._last_daily_time = last_before

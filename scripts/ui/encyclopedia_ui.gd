@@ -122,6 +122,37 @@ func _build() -> void:
 		b.pressed.connect(func() -> void: UIManager.close(&"encyclopedia"))
 		vb.add_child(b)
 
+## V.3 7.15 danger: health and damage weighed together (a Shadow is Low, the Architect Critical).
+const DANGER_KEYS: Array[String] = ["DANGER_LOW", "DANGER_MEDIUM", "DANGER_HIGH", "DANGER_CRITICAL"]
+const DANGER_STEPS: Array[float] = [20.0, 36.0, 60.0]
+const DANGER_HP_WEIGHT: float = 0.05
+const _POOL := preload("res://scripts/enemies/enemy_pool.gd")
+
+static func danger_level(data: MonsterData) -> int:
+	var score: float = data.max_hp * DANGER_HP_WEIGHT + data.melee_damage
+	var level := 0
+	for step in DANGER_STEPS:
+		if score >= step:
+			level += 1
+	return level
+
+## V.3 7.16 habitat: the districts whose roster lists the monster (the Architect keeps the power station).
+func _habitat_text(id: StringName) -> String:
+	var names: Array[String] = []
+	for district in _POOL.ROSTER_BY_DISTRICT:
+		for scene in _POOL.ROSTER_BY_DISTRICT[district]:
+			if (scene as PackedScene).resource_path.get_file().begins_with(String(id) + "_"):
+				names.append(LocalizationManager.name_for("DISTRICT_NAME_", district, String(district)))
+				break
+	if id == &"boss":
+		names.append(LocalizationManager.name_for("DISTRICT_NAME_", &"power_station", "power_station"))
+	return ", ".join(names) if not names.is_empty() else "-"
+
+func _loot_key(id: StringName) -> String:
+	if id == &"boss" or id == &"tvar":
+		return "ENC_LOOT_NONE"
+	return "ENC_LOOT_AMMO" if id == &"sharpshooter" else "ENC_LOOT_COMMON"
+
 ## P1: detail panel for one already-unlocked entry, built in place (not a
 ## new scene) as a full-rect overlay on top of the grid. Real portrait if
 ## portraits_v2 delivered one for this monster, else the existing thumb
@@ -193,6 +224,9 @@ func _open_detail(id: StringName) -> void:
 	var weak_spot: String = String(_ROSTER.get_entry_for_ai(id).get("weak_spot", ""))
 	if _WEAKSPOT_KEY.has(weak_spot):
 		_stat_row(stats, "ENC_STAT_WEAKNESS", LocalizationManager.t(_WEAKSPOT_KEY[weak_spot]))
+	_stat_row(stats, "ENC_STAT_DANGER", LocalizationManager.t(DANGER_KEYS[danger_level(data)]))
+	_stat_row(stats, "ENC_STAT_HABITAT", _habitat_text(id))
+	_stat_row(stats, "ENC_STAT_LOOT", LocalizationManager.t(_loot_key(id)))
 	_stat_row(stats, "ENC_STAT_STATUS", LocalizationManager.t("ENC_DISCOVERED"))
 
 	var close := Button.new()

@@ -87,6 +87,24 @@ const DODGE_IFRAMES: float = 0.35
 const CROUCH_SPEED_MULT: float = 0.4
 const CROUCH_NOISE_MULT: float = 0.3
 const CROUCH_VISIBILITY_MULT: float = 0.5
+## GDD §2.4: crouching shrinks the capsule to 1.2 m and drops the eye; standing up needs the headroom above.
+const STAND_CAPSULE_HEIGHT: float = 1.6
+const CROUCH_CAPSULE_HEIGHT: float = 1.2
+const CROUCH_EYE_DROP: float = 0.4
+const STAND_CLEARANCE: float = 0.05
+const EYE_LERP_SPEED: float = 12.0
+var _crouching: bool = false
+## Settings > Crouch Input: how long the stealth key is held before the crouch, and the other two choices.
+const CROUCH_HOLD_SEC: float = 0.5
+const CROUCH_INPUT_BUTTON: int = 1
+const CROUCH_INPUT_DISABLED: int = 2
+## GDD 2.2, touch: a quick swipe down in the look zone toggles the crouch.
+const SWIPE_CROUCH_MIN_PX: float = 160.0
+const SWIPE_CROUCH_MAX_MS: int = 300
+const SWIPE_CROUCH_SLANT: float = 0.5
+var _crouch_toggled: bool = false
+var _swipe_start: Dictionary = {}
+var _stand_eye_height: float = 1.7
 ## GDD §7 / S02, relative to walking with the flashlight on (the shipped baseline, 1.0): the light off halves
 ## how far monsters notice the player (the GDD's "+100% in the flashlight cone" read from the other side, so the
 ## balance the bot was tuned on stays put), running adds 20%, crouching halves, hiding is 0.
@@ -210,6 +228,9 @@ func _ready() -> void:
 
 	gameplay_active = true
 	add_to_group("player")
+	# The scene's capsule is a shared sub-resource: crouching edits this player's own copy.
+	var body_shape := $CollisionShape3D as CollisionShape3D
+	body_shape.shape = body_shape.shape.duplicate()
 	# FINAL HARDENING PASS (2026-09-12): using a medkit/battery from any
 	# inventory UI (character_screen.gd, hud_3d.gd quickbar, inventory_ui.gd,
 	# quick_wheel_ui.gd) has always routed through InventoryManager.use_item()
@@ -423,13 +444,29 @@ func _input(event: InputEvent) -> void:
 	if _net_active and not is_multiplayer_authority():
 		return
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
-		_apply_look(-event.relative.x * mouse_sens, -event.relative.y * mouse_sens)
+		var sens: float = mouse_sens * float(SettingsManager.get_setting("sensitivity", 1.0))
+		_apply_look(-event.relative.x * sens, -event.relative.y * sens)
+	elif event is InputEventScreenTouch:
+		_track_swipe(event)
 	elif event is InputEventScreenDrag:
 		var vp_w: float = get_viewport().get_visible_rect().size.x if get_viewport() else 1000.0
 		if event.position.x < vp_w * JOY_ZONE_RATIO:
 			return
 		var touch_mult: float = SettingsManager.get_touch_sensitivity() if SettingsManager != null else 1.0
 		_apply_look(-event.relative.x * TOUCH_LOOK_SENS * touch_mult, -event.relative.y * TOUCH_LOOK_SENS * touch_mult)
+
+func _track_swipe(event: InputEventScreenTouch) -> void:
+	if event.pressed:
+		_swipe_start[event.index] = {"pos": event.position, "ms": Time.get_ticks_msec()}
+		return
+	var start: Dictionary = _swipe_start.get(event.index, {})
+	_swipe_start.erase(event.index)
+	if start.is_empty() or event.position.x < get_viewport().get_visible_rect().size.x * JOY_ZONE_RATIO:
+		return
+	var swipe: Vector2 = event.position - start["pos"]
+	if swipe.y >= SWIPE_CROUCH_MIN_PX and absf(swipe.x) <= swipe.y * SWIPE_CROUCH_SLANT \
+			and Time.get_ticks_msec() - int(start["ms"]) <= SWIPE_CROUCH_MAX_MS:
+		_crouch_toggled = not _crouch_toggled
 
 ## GOLD MASTER v4: Invert Look flips only the vertical (pitch) axis — the
 ## conventional meaning of "invert look", not left/right.
@@ -516,11 +553,12 @@ func _physics_process(delta: float) -> void:
 	if InputService.is_stealth_just_released():
 		_crouch_held = false
 		_crouch_timer = 0.0
+	_update_crouch_body(delta)
 
 	if moving:
 		if _in_hiding:
 			desired = State.CROUCH
-		elif _crouch_held and _crouch_timer > 0.5:
+		elif _crouch_wanted():
 			desired = State.CROUCH
 		elif InputService.is_stealth_toggled():
 			desired = State.STEALTH
@@ -589,10 +627,14 @@ func _physics_process(delta: float) -> void:
 		_jump_buffer_timer -= delta
 	if _jump_buffer_timer > 0.0 and _coyote_timer > 0.0:
 		velocity.y = jump_velocity
+		_crouch_toggled = false
+		ProgressTracker.jumps += 1
 		_coyote_timer = 0.0
 		_jump_buffer_timer = 0.0
 	velocity += get_gravity() * delta
 	move_and_slide()
+	if is_on_floor():
+		ProgressTracker.distance += Vector2(velocity.x, velocity.z).length() * delta
 	_check_fall_recovery()
 
 	if moving:
@@ -716,6 +758,36 @@ func _speed_for(state: State) -> float:
 ## gate the sight-range reduction (sneaking + flashlight off only).
 func is_sneaking() -> bool:
 	return current_state == State.STEALTH or current_state == State.CROUCH
+
+## Settings > Crouch Input: Long Press (hold the key), Button (crouch while it is down), Disabled; a swipe down also toggles it.
+func _crouch_wanted() -> bool:
+	var mode := int(SettingsManager.get_setting("crouch_input", 0))
+	if mode == CROUCH_INPUT_DISABLED:
+		return false
+	return _crouch_toggled or (_crouch_held and (mode == CROUCH_INPUT_BUTTON or _crouch_timer > CROUCH_HOLD_SEC))
+
+## The body follows the crouch key: the capsule shrinks with its feet on the ground, the eye lowers smoothly, and
+## a low ceiling keeps the player crouched until there is room to stand.
+func _update_crouch_body(delta: float) -> void:
+	var want := _crouch_wanted()
+	if want != _crouching and (want or _has_headroom()):
+		_crouching = want
+		var shape := ($CollisionShape3D as CollisionShape3D)
+		var height := CROUCH_CAPSULE_HEIGHT if _crouching else STAND_CAPSULE_HEIGHT
+		(shape.shape as CapsuleShape3D).height = height
+		shape.position.y = -(STAND_CAPSULE_HEIGHT - height) * 0.5
+	_resolve_camera()
+	if _fps_cam != null and "fps_eye_height" in _fps_cam:
+		var eye := _stand_eye_height - (CROUCH_EYE_DROP if _crouching else 0.0)
+		_fps_cam.fps_eye_height = lerpf(_fps_cam.fps_eye_height, eye, clampf(EYE_LERP_SPEED * delta, 0.0, 1.0))
+
+## Room to stand: nothing between the crouched head and the standing head.
+func _has_headroom() -> bool:
+	var crouched_top := CROUCH_CAPSULE_HEIGHT * 0.5 - (STAND_CAPSULE_HEIGHT - CROUCH_CAPSULE_HEIGHT) * 0.5
+	var query := PhysicsRayQueryParameters3D.create(global_position + Vector3(0.0, crouched_top, 0.0),
+		global_position + Vector3(0.0, STAND_CAPSULE_HEIGHT * 0.5 + STAND_CLEARANCE, 0.0))
+	query.exclude = [get_rid()]
+	return get_world_3d().direct_space_state.intersect_ray(query).is_empty()
 
 ## How visible the player is to monsters, 0 (hidden) to VISIBILITY_RUN; the HUD bar and base_monster.gd read it.
 func get_visibility_scale() -> float:
