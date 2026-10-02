@@ -21,3 +21,4 @@
 [pt] PASS S_hud_help the HUD button '?' answers a click (ok)  frame=S_hud_help.jpg
 [pt] PASS S_workbench the workbench screen opens  frame=S_workbench.jpg
 [pt] PASS S_credits the main menu's Credits opens the credits, all in the language of the UI (click: ok; Latin text: none)  frame=S_credits.jpg
+[pt] DONE mode=S steps=23 fails=0 time=35s

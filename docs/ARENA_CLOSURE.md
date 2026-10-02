@@ -113,6 +113,14 @@ not see (`419c184`, CORRECTION_LOG 52); the HUD Opacity fix raising the hit mark
 (`77646f0f`, found by the read-only verifier); an empty-state row left in the message log and a slot-flash tween that
 could outlive its node (`77646f0f`). The wave's own claims were not re-verified beyond the gates.
 
+## rc15 sign-off (2026-10-02)
+
+No arena item changed state in rc15; what was added are regression locks. The rc15 breaker pass (`docs/artifacts/rc15/breaker_report.md`) found
+19 items: B1-B5 closed, of E1-E14 ten closed, two partly (E1, E14) and two deferred (E11, E13), each closed one with a `closeout_check` that fails on the
+old code (`closeout_mutation_batch9.txt`). `attack_sim` on the sign-off tree: 41 OK, `DONE fails=0` (`docs/artifacts/rc15/attack_sim_signoff.txt`); the regrep of
+signed saves, NG+, flashlight, daily, slot binding, schema validation, IntegrityGuard and the export exclusions is `docs/artifacts/rc15/security_regrep.txt`. The
+rendering truth gate was re-adjudicated against real frames and mutation-tested (CORRECTION_LOG 94); the i18n gate is 12/12.
+
 ## Open defers
 
 - **Inherent client-side limits:** P-05, R-08 (forward clock across launches only), D-01, D-02.

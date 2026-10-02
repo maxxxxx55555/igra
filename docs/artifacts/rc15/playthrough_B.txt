@@ -10,3 +10,4 @@
 [pt] note B03 after Play: dialog Start again at NG+1? District progress, inventory, coins, sh, top control , frame=B03_play_click.jpg
 [pt] PASS B03b Play starts a run with Hardcore on (started true, the run's hardcore true, state 2)
 [pt] PASS B03c dying on hardcore deletes the save (has_save: false)  frame=B03_hardcore_death.jpg
+[pt] DONE mode=B steps=12 fails=0 time=35s

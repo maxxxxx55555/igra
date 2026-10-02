@@ -171,5 +171,5 @@ by memory, so completeness can be proven instead of assumed.
 
 - Spine: 91 (59 AL rows + 32 IN rows; 3 dead actions removed in `0d3d533`, rows kept as FIXED; AL35 REMOVED at the owner's request)
 - Extra: 42 X-rows (X01-X42)
-- **Grand total: 133 rows** (recounted from the rows by script, 2026-10-01): WORKS 98 · FIXED 26 · CANNOT-TEST-HEADLESS 6 · BY-DESIGN-LIMIT 1 · PARTIAL 1 · REMOVED 1 · BUG 0 · UNTESTED 0.
+- **Grand total: 133 rows** (recounted at the rc15 sign-off, 2026-10-02, by script from the first word of every Status cell): WORKS 97 · FIXED 26 · CANNOT-TEST-HEADLESS 6 · BY-DESIGN-LIMIT 2 (AL56, X20) · REMOVED 2 (AL05, AL35) · PARTIAL 0 · BUG 0 · UNTESTED 0.
 - Open: none. X20 is BY-DESIGN-LIMIT since rc15 (the only writer of PAUSED is the Escape key; the bot recovers, A/B-proven). X21 is FIXED since rc14 (13/13 and 3/3 bot seeds); a bot run is nondeterministic, so the sign-off records its stalls.

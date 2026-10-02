@@ -67,3 +67,4 @@
 [pt] PASS A13.zh_TW language zh_TW: the settings screen reads in it, 0 control(s) run past the window  frame=A13_lang_zh_TW.jpg
 [pt] PASS A13.ar language ar: the settings screen reads in it, 0 control(s) run past the window  frame=A13_lang_ar.jpg
 [pt] PASS A15 Main menu from the pause menu: one menu (1), Continue offered (true)  frame=A15_menu_after_play.jpg
+[pt] DONE mode=A steps=67 fails=0 time=102s
