@@ -87,3 +87,4 @@ tools/autopilot_report/
 .signing/
 *.keystore
 *.jks
+docs/stills/playthrough/V_t*.jpg

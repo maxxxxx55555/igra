@@ -1045,11 +1045,19 @@ func _b02_continue() -> void:
 	var vb: Node = _menu_vbox()
 	var res := await _click(vb.get_node("Continue") as Button)
 	var started := await _wait_playing()
+	var early := _state()
 	await get_tree().create_timer(3.0).timeout
 	var got: Dictionary = JSON.parse_string(JSON.stringify(_state()))
+	_say("[pt] note B02 the run as loaded (2 s in): coins %s, kills %s; 3 s later: coins %s, kills %s" % [early["coins"], early["kills"], got["coins"], got["kills"]])
 	var diffs: Array[String] = []
+	# the game runs for the 3 s before the comparison: a roaming monster killed by the light earns a kill and its coins, so
+	# what only grows may grow; a Continue that loses any of it is the failure
+	var may_grow := ["coins", "kills", "docs", "photos"]
 	for key in ["district", "coins", "level", "ng", "inventory", "stages", "kills", "docs", "photos"]:
-		if want.has(key) and JSON.stringify(want[key]) != JSON.stringify(got[key]):
+		if not want.has(key):
+			continue
+		var lost: bool = float(got[key]) < float(want[key]) if key in may_grow else JSON.stringify(want[key]) != JSON.stringify(got[key])
+		if lost:
 			diffs.append("%s %s -> %s" % [key, JSON.stringify(want[key]).left(60), JSON.stringify(got[key]).left(60)])
 	var moved := 0.0
 	if want.has("pos"):
