@@ -294,3 +294,12 @@ Rows the first play-through added: each was a defect a frame or a measured numbe
 | RESP1 | Retry respawns the new player at half health with the battery it died with (the dead player of the scene being left does not take it) | 5.4 | closeout_check RESP1; play-through A05c | PASS(closeout) |
 | HP1 | Health comes back in peace (2.5 HP/s from 5 s after the last hit), not in a fight; a player can die | 5.3 | closeout_check HP1 (the old 18 HP/s gives 68 HP a second after 50) | PASS(closeout) |
 | SV2b | Health, stamina and battery are saved, a forged number is clamped, a dead player saves none | 10 | closeout_check SV2 | PASS(closeout) |
+| LOOT2 | What is left on the street when a district is rebuilt (death, Continue, travel back) is still there; what was picked up is not | 7 | closeout_check LOOT2 | PASS(closeout) |
+| FIN1 | A game loaded with every district FULL starts the final night and the Architect comes; a new game does not | 6.3 | closeout_check FIN1 | PASS(closeout) |
+| DIFF1 | A Difficulty pick is a setting: it starts nothing and wipes nothing | V.2 | closeout_check DIFF1 | PASS(closeout) |
+| HC1 | Hardcore belongs to the run: the box is locked in a running game and a mid-run toggle changes neither the wipe nor Iron Man | 5.4 | closeout_check HC1 | PASS(closeout) |
+| SET1 | Settings changes reach the config file by themselves; a Continue keeps the device's volume and text size | 14 | closeout_check SET1 | PASS(closeout) |
+| INV2 | The pack the skill or the shop grew is as big after a load, with its items | 17 | closeout_check INV2, UPG1 | PASS(closeout) |
+| PUZ1 | A solved puzzle is saved and a new game clears it | 12 | closeout_check PUZ1 | PASS(closeout) |
+| DEAD1 | A dead player and a won game are not at the controls; a hit after the victory does nothing | 5.4 | closeout_check DEAD1, WIN1 | PASS(closeout) |
+| STROBE1 | The strobe stuns the 52 degree cone it says, not 162 | 3.1 | closeout_check STROBE1 | PASS(closeout) |

@@ -20,9 +20,17 @@ prop spheres are ~4 000 triangles each), R5 breaker + explorer, R6 security, R8 
   no onboarding on a first game, a minimal death screen, an empty Shop card whose Buy granted nothing, a light that stayed
   off after a recharge. Fixed `08566e0`, `11f1efd`, `932d1e8`; bot at a person's pace (strobe reserve, battery pickups)
   3/3 WIN 0 deaths; `closeout_check` 212/212 (old code fails MV1, MV3, SH1, MENU1); static 27, flow 56, scene_node clean.
-  Corrections 63-67; checklist section 25. **NEXT: re-run PT-A (frames now 1280 px JPEG) and read every frame; open:
-  A04e jump, A05 click-attack/death/retry, A08 hint (use consume_battery), ghost map rows, roster speed alignment
-  (Hunter 5.5 -> 2.7, Crawler 6.0 -> 4.5 per GDD 6.2 x 3.0), then PT-V, PT-B.**
+  Corrections 63-67; checklist section 25.
+- **Batches 4-7 (pushed to `f941bfa`):** Shop layout/icons/scroll, onboarding card centred, LOG button off the HUD stats, splash =
+  the lamp icon, daily card and NG+ line outlined, single city map (MapController removed), language saved from the live one
+  (a Retry flipped Russian to English), SSR/SSAO only on Forward+, monster speeds on the GDD 6.2 column (Hunter 5.5 -> 2.7),
+  **Retry respawn (dead player took it), base regen 18 HP/s -> 2.5 HP/s after 5 s (the player could not die), saved vitals
+  (GDD 10), five UI scenes with anchors in the node header (New Game+ panel hung from the screen centre), T key opens the skill
+  tree (it toggled itself and never existed), skill tree branches visible, "Stealth" key in 13 locales, bot faces its targets
+  (nudges 62-115 -> 7-8 a run)**. Gates: `closeout_check` 247/247, bot 3/3 WIN 0 deaths after each behaviour batch, static 28
+  (new `tscn_header_check`), flow 56, scene_node clean, PT-A 63/63, PT-V reached the victory screen at real time (windowed).
+  Corrections 68-76. **NEXT: PT-V/B green (B02 compares Continue with the V state, B03 hardcore), breaker report, R3 visual
+  gate adjudication on the final frames, R5 explorer sweep, R6 attack_sim + regrep, R7 windowed perf, R8 verifier, sign-off.**
 - Windowed frames: a multi-shot windowed run reads stale frames when nothing animates (gui_explore header); the play-through
   saves every frame after `frame_post_draw` and hashes it against the previous one.
 

@@ -315,6 +315,7 @@ func _mode_a() -> void:
 		return
 	await _a03_onboarding()
 	await _a04_controls()
+	await _a04_ghosts()
 	await _a05_monster()
 	await _a05_death()
 	await _a06_inventory()
@@ -357,11 +358,15 @@ func _a02_start() -> bool:
 	if normal == null:
 		return false
 	res = await _click(normal)
+	var back_in_menu := await _wait_scene(Routes.MENU, WAIT_SCENE)
+	await get_tree().create_timer(1.0).timeout
+	_step("A02b", res == "ok" and back_in_menu and int(SettingsManager.get_setting("difficulty", -1)) == 1 and not GameManager.is_playing(),
+		"Normal sets the difficulty and returns to the menu: a pick starts nothing (click: %s)" % res, await _shot("A02_difficulty_picked"))
+	var res_play := await _click(_menu_vbox().get_node("Play") as Button)
 	var started := await _wait_playing()
 	if started:
 		_spawn_pos = _player.global_position
-	_step("A02b", res == "ok" and started and int(SettingsManager.get_setting("difficulty", -1)) == 1,
-		"Normal starts the game and the player spawns (click: %s)" % res, await _shot("A02_game_start"))
+	_step("A02c", res_play == "ok" and started, "Play starts the game and the player spawns (click: %s)" % res_play, await _shot("A02_game_start"))
 	return started
 
 func _a03_onboarding() -> void:
@@ -385,6 +390,32 @@ func _a03_onboarding() -> void:
 		clicks += 1
 	_step("A03b", not bool(overlay.get("_showing")) and SaveSystem.is_onboard_done() and clicks == 7,
 		"Next seven times closes the card and the profile remembers it (%d clicks)" % clicks, await _shot("A03_onboarding_done"))
+
+## The pale translucent squares in the corners of the world frames: which node draws them? One frame with everything on,
+## then one with each candidate hidden in turn.
+func _a04_ghosts() -> void:
+	var main := _scene()
+	var candidates := {
+		"hand_light": _player.get_node_or_null("ModelPivot/FlashlightPivot/HandLight"),
+		"backpack": _player.get_node_or_null("ModelPivot/Backpack"),
+		"marker": _player.get_node_or_null("Marker"),
+		"dust": _player.get_node_or_null("ModelPivot/FlashlightPivot/Dust"),
+		"footstep_dust": _player.get_node_or_null("FootstepDust"),
+		"ash": main.get_node_or_null("Ash"),
+	}
+	_key_event(KEY_W, true)
+	await get_tree().create_timer(1.2).timeout
+	_key_event(KEY_W, false)
+	var report: PackedStringArray = ["all=%s" % await _shot("A04_ghost_all")]
+	for key in candidates:
+		var node := candidates[key] as Node3D
+		if node == null:
+			report.append("%s=missing" % key)
+			continue
+		node.visible = false
+		report.append("%s=%s" % [key, await _shot("A04_ghost_no_%s" % key)])
+		node.visible = true
+	_say("[pt] note A04 frames with one candidate hidden each: %s" % ", ".join(report))
 
 func _a04_controls() -> void:
 	_playing_or_fail()
@@ -889,10 +920,10 @@ func _v11_new_game_plus() -> void:
 	await get_tree().create_timer(0.5).timeout
 	_step("V11c", picked != "" and NewGamePlus.get_active_modifiers().size() == 1, "one modifier can be taken for the new level ('%s')" % picked.left(40), await _shot("V11_ngp_modifier"))
 	await _click(ngp.back_button)
-	await get_tree().create_timer(1.5).timeout
+	var in_menu := await _wait_until(func() -> bool: return _menu_vbox() != null, 20.0)
+	await get_tree().create_timer(1.0).timeout
 	var vb: Node = _menu_vbox()
-	var in_menu := vb != null
-	var play := vb.get_node("Play") as Button
+	var play := vb.get_node("Play") as Button if vb != null else null
 	_step("V11d", in_menu and play.text == LocalizationManager.tf("NGP_NEW_GAME_ACTION", [NewGamePlus.get_current_ng_plus()]), "the menu says Play is New Game+ %d ('%s')" % [NewGamePlus.get_current_ng_plus(), play.text], await _shot("V11_menu_ngp"))
 	var res_play := await _click(play)
 	await get_tree().create_timer(0.6).timeout
@@ -903,7 +934,7 @@ func _v11_new_game_plus() -> void:
 	var shot_confirm := await _shot("V11_confirm")
 	var res_ok := "no dialog"
 	if dialog != null:
-		res_ok = await _click(dialog.get_ok_button())
+		res_ok = _press_dialog_ok(dialog)
 	var started := await _wait_playing()
 	_step("V11e", res_play == "ok" and res_ok == "ok" and started and NewGamePlus.get_current_ng_plus() == level0 + 1,
 		"Play asks before it erases the save, and starts New Game+ %d (clicks: %s / %s)" % [NewGamePlus.get_current_ng_plus(), res_play, res_ok], shot_confirm)
@@ -919,6 +950,13 @@ func _v11_new_game_plus() -> void:
 				weak += 1
 	_step("V11f", strong > 0 and weak == 0, "New Game+ monsters carry the scaled health (%d scaled, %d not)" % [strong, weak], await _shot("V11_ng_run"))
 	await _v14_save_quit()
+
+## A ConfirmationDialog is an embedded window: the viewport's hit test cannot see into it, so its button is pressed by
+## its signal and the dialog's presence and text are read from the frame.
+func _press_dialog_ok(dialog: ConfirmationDialog) -> String:
+	dialog.get_ok_button().pressed.emit()
+	dialog.hide()
+	return "ok"
 
 func _victory_screen() -> Control:
 	var s := _ui(&"win")
@@ -1058,11 +1096,17 @@ func _b03_hardcore() -> void:
 	for n in get_tree().root.find_children("*", "ConfirmationDialog", true, false):
 		if (n as ConfirmationDialog).visible:
 			dialog = n as ConfirmationDialog
+	_say("[pt] note B03 after Play: dialog %s, top control %s, frame=%s" % [dialog.dialog_text.left(60) if dialog != null else "none", await _top_at(_center()), await _shot("B03_play_click")])
 	if dialog != null:
-		await _click(dialog.get_ok_button())
+		_press_dialog_ok(dialog)
 	var started := await _wait_playing()
-	_step("B03b", started and bool(SettingsManager.get_setting("hardcore", false)), "Play starts a run with Hardcore on")
-	_player.call("take_damage", 9999.0)
+	_step("B03b", started and bool(SettingsManager.get_setting("hardcore", false)), "Play starts a run with Hardcore on (started %s, hardcore %s, state %s)" % [started, SettingsManager.get_setting("hardcore", false), GameManager.current_state])
+	if not started:
+		return
+	_player.set("hp", 5.0)
+	_player.set("_damage_grace_timer", 0.0)
+	_player.set("_iframes", 0.0)
+	_player.call("take_damage", 12.0)
 	await get_tree().create_timer(3.0).timeout
 	_step("B03c", not SaveSystem.has_save(), "dying on hardcore deletes the save (has_save: %s)" % SaveSystem.has_save(), await _shot("B03_hardcore_death"))
 	SettingsManager.set_setting("hardcore", false)

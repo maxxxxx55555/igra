@@ -1,0 +1,24 @@
+[closeout] FAIL STROBE1 a monster 12 degrees off the aim is stunned, one 50 degrees off is not (6 / 6)
+[closeout] FAIL LOOT2 a rebuilt district lays out what was left on the street (13 of 13, one picked up)
+[closeout] FAIL LOOT2 the item that was picked up is the one that stays gone (suburbs:0)
+[closeout] FAIL FIN1 a loaded game with every district FULL starts the final night when its player enters the power station
+[closeout] FAIL INV2 a pack grown by the skill is as big after a load (12 of 17)
+[closeout] FAIL SET1 a change in the Settings screen reaches the config file by itself (text size 1, Master 1.0)
+[closeout] FAIL SET1 a game file does not overwrite this device's volume or text size
+[closeout] FAIL PUZ1 a solved puzzle is still solved after a save and a load
+[closeout] FAIL PUZ1 a forged puzzle id is ignored (0 solved)
+[closeout] FAIL SAVE3 a position with a string is dropped, numbers pass
+[closeout] FAIL UPG1 the backpack blueprint from the warehouses applies its upgrade
+[closeout] FAIL UPG1 and the pack has the four slots at once (12 of 16)
+[closeout] FAIL DAILY1 a new player announces its light at once (<null>), so the dark-segment daily does not count lit time
+[closeout] FAIL SCR1 the cached New Game+ screen starts every visit fresh
+[closeout] FAIL WIN1 what the Architect threw does not outlive him
+[closeout] FAIL WIN1 after the victory a hit takes no health (0)
+[closeout] FAIL WIN1 a death after the win leaves the win (state 4)
+[closeout] FAIL DIFF1 and starts nothing: the wallet is kept (0 of 777) and the game is not running
+[closeout] FAIL HC1 in a running game the Hardcore box cannot be changed
+[closeout] FAIL HC1 nor can a save be imported under a running world
+[closeout] FAIL HC1 ticking Hardcore in the middle of a run does not make its death delete the save
+[closeout] FAIL PUZ1 the wipe (a new game) clears the solved puzzles
+[closeout] FAIL DEAD1 the dead player does not walk (1.65 m in 0.6 s of the stick)
+[closeout] DONE checks=281 fails=23

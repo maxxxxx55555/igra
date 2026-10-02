@@ -1,0 +1,15 @@
+[bot s1]   result       : WIN
+[bot s1]   wall time    : 92.7s
+[bot s1]   deaths       : 0
+[bot s1]   coins earned : 9462 (wallet 9462)
+[bot s1]   nudges       : 9 (>1 means the win leaned on nudge rescues, not clean nav — docs/REDTEAM_CHALLENGE.md TG-PL
+[bot s2]   result       : WIN
+[bot s2]   wall time    : 92.3s
+[bot s2]   deaths       : 0
+[bot s2]   coins earned : 8784 (wallet 8784)
+[bot s2]   nudges       : 13 (>1 means the win leaned on nudge rescues, not clean nav — docs/REDTEAM_CHALLENGE.md TG-P
+[bot s3]   result       : WIN
+[bot s3]   wall time    : 91.2s
+[bot s3]   deaths       : 0
+[bot s3]   coins earned : 9012 (wallet 9012)
+[bot s3]   nudges       : 6 (>1 means the win leaned on nudge rescues, not clean nav — docs/REDTEAM_CHALLENGE.md TG-PL

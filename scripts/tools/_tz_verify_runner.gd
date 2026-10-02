@@ -258,6 +258,7 @@ func _run() -> void:
 		DirAccess.copy_absolute(SaveSystem.SAVE_PATH, SaveSystem.SAVE_PATH + suffix)
 	var had_save: bool = SaveSystem.has_save()
 	SettingsManager.set_setting("hardcore", true)
+	GameManager.run_hardcore = true
 	GameManager.trigger_death()
 	await get_tree().create_timer(1.0).timeout
 	await _shot("G17_hardcore_death")

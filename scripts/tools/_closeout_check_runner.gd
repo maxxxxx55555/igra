@@ -46,6 +46,15 @@ func _run() -> void:
 	_check_roster()
 	await _check_crouch()
 	_check_loot()
+	await _check_loot_survives_a_rebuild()
+	await _check_finale_follows_the_grid()
+	_check_bigger_pack_survives_a_load()
+	await _check_settings_persist_and_survive_a_continue()
+	_check_solved_puzzles_are_saved()
+	_check_a_written_save_reads_back()
+	_check_forged_position_and_equipment()
+	_check_blueprints_and_the_shop_grow_the_pack()
+	_check_the_dark_segment_knows_the_light_is_on()
 	await _check_statuses()
 	_check_noise_and_pack()
 	await _check_settings_effects()
@@ -61,10 +70,13 @@ func _run() -> void:
 	await _check_scene_screens_fill_the_window()
 	_check_language_survives_a_save()
 	_check_respawn_waits_for_the_new_player()
+	await _check_victory_is_final()
 	_check_vitals_are_saved()
 	await _check_regeneration_waits_for_peace()
 	_check_difficulty()
 	await _check_settings_back()
+	await _check_difficulty_pick_is_a_setting()
+	await _check_hardcore_belongs_to_the_run()
 	_finish()
 
 func _finish() -> void:
@@ -288,6 +300,20 @@ func _check_workbench() -> void:
 	_ok(Logic.craft(strobe) and ProgressTracker.has_crafted("strobe_flashlight") and InventoryManager.count_of(&"fuse") == 0 and InventoryManager.count_of(&"transformer") == 0, "G21 crafting spends the parts and gives the ability")
 	_ok(not Logic.can_craft(strobe), "G21 an ability is crafted once")
 	_ok(_player.trigger_strobe(), "G21 the built strobe works")
+	# the cone is the 52 degrees the constant says, not the 162 that cos(0.45 * PI) made of it (the breaker's E10)
+	_player.set("_strobe_cooldown", 0.0)
+	_player.set("battery", 100.0)
+	_player.set("flashlight_enabled", true)
+	var aim: Vector3 = -_player.flashlight_pivot.global_transform.basis.z
+	aim.y = 0.0
+	aim = aim.normalized()
+	var in_cone := _monster("crawler_3d", _player.global_position + aim.rotated(Vector3.UP, deg_to_rad(12.0)) * 6.0)
+	var off_cone := _monster("crawler_3d", _player.global_position + aim.rotated(Vector3.UP, deg_to_rad(50.0)) * 6.0)
+	_player.trigger_strobe()
+	_ok(int(in_cone.ai_state) == 6 and int(off_cone.ai_state) != 6, "STROBE1 a monster 12 degrees off the aim is stunned, one 50 degrees off is not (%d / %d)" % [in_cone.ai_state, off_cone.ai_state])
+	in_cone.queue_free()
+	off_cone.queue_free()
+	_player.set("_strobe_cooldown", 0.0)
 	# capacity: enhanced battery +20%, level 2 +40%
 	InventoryManager.try_add(&"blueprint_enhanced_battery", 1)
 	InventoryManager.try_add(&"battery", 2)
@@ -442,9 +468,9 @@ func _check_achievements() -> void:
 	AchievementManager._on_player_died()
 	_ok(AchievementManager.is_unlocked(&"ach_15"), "ach_15 dying reaches the Darkness ending")
 	ProgressTracker.time_played = 100.0
-	SettingsManager.set_setting("hardcore", true)
+	GameManager.run_hardcore = true
 	AchievementManager._on_game_won()
-	SettingsManager.set_setting("hardcore", false)
+	GameManager.run_hardcore = false
 	_ok(AchievementManager.is_unlocked(&"ach_16") and AchievementManager.is_unlocked(&"ach_18") and AchievementManager.is_unlocked(&"ach_13"), "ach_16 / ach_18 a fast hardcore win unlocks Speedrunner and Iron Man")
 	var bed := Node3D.new()
 	bed.set_script(load("res://scripts/gameplay/bed.gd"))
@@ -1151,6 +1177,14 @@ func _check_scene_screens_fill_the_window() -> void:
 	var rect := ngp.get_global_rect() if ngp != null else Rect2()
 	_ok(ngp != null and ngp.visible and rect.size.is_equal_approx(window) and rect.position.length() < 1.0,
 		"SCR1 the New Game+ screen covers the window (%s of %s at %s)" % [rect.size, window, rect.position])
+	var column := ngp.find_child("VBoxContainer", true, false) as Control
+	_ok(column != null and absf(column.get_global_rect().get_center().x - window.x / 2.0) < 4.0 and column.size.x <= 600.0,
+		"SCR1 the New Game+ column is centred and no wider than 600 px (%s at %s)" % [column.size.x if column != null else -1.0, column.get_global_rect().get_center().x if column != null else -1.0])
+	ngp.set("_activated_this_visit", true)
+	UIManager.close(&"new_game_plus")
+	UIManager.open(&"new_game_plus")
+	await get_tree().process_frame
+	_ok(not bool(ngp.get("_activated_this_visit")), "SCR1 the cached New Game+ screen starts every visit fresh")
 	UIManager.close(&"new_game_plus")
 	# the skill tree: reachable from a fresh game with the T key (it toggled itself, so it never opened), then centred
 	_ok(UIManager._cache.get(&"skill_tree", null) == null, "SCR1 the skill tree has not been opened yet")
@@ -1171,3 +1205,243 @@ func _check_scene_screens_fill_the_window() -> void:
 	UIManager.close(&"skill_tree")
 	key.pressed = false
 	Input.parse_input_event(key)
+
+# ── the play-through's V11 frame was the death screen: the Architect's last beam killed the player behind the victory screen ──
+func _check_victory_is_final() -> void:
+	_playing()
+	var ball := Node3D.new()
+	ball.add_to_group("boss_hazard")
+	add_child(ball)
+	var boss := _monster("boss_architect_3d")
+	boss.call("_clear_hazards")
+	await get_tree().process_frame
+	_ok(not is_instance_valid(ball) or ball.is_queued_for_deletion(), "WIN1 what the Architect threw does not outlive him")
+	boss.queue_free()
+	_playing()
+	GameManager._change_state(GameManager.GameState.WIN)
+	_player.set("hp", 5.0)
+	_player.set("_damage_grace_timer", 0.0)
+	_player.set("_iframes", 0.0)
+	_player.take_damage(50.0, Vector3.ZERO)
+	_ok(is_equal_approx(float(_player.get("hp")), 5.0), "WIN1 after the victory a hit takes no health (%.0f)" % float(_player.get("hp")))
+	GameManager.trigger_death()
+	_ok(GameManager.is_win(), "WIN1 a death after the win leaves the win (state %d)" % GameManager.current_state)
+	_playing()
+	GameManager._change_state(GameManager.GameState.PLAYING)
+	_player.set("hp", 100.0)
+
+# ── the breaker's B2: a district was flagged looted when its items SPAWNED, so what lay on the street when the player died
+#    or quit (repair parts included) never came back ──
+func _items_in(root: Node) -> Array[Node]:
+	var found: Array[Node] = []
+	for n in root.get_children():
+		if n.is_in_group("pickups"):
+			found.append(n)
+	return found
+
+func _check_loot_survives_a_rebuild() -> void:
+	_playing()
+	var taken_before: Dictionary = ProgressTracker._loot_taken.duplicate()
+	var pack_before: Dictionary = InventoryManager.to_dict()
+	ProgressTracker._loot_taken.clear()
+	var first := Node3D.new()
+	add_child(first)
+	DistrictLoot.populate(first, &"suburbs")
+	var all := _items_in(first).size()
+	var one := _items_in(first)[0]
+	var key: String = one.loot_key
+	one._on_body_entered(_player)
+	first.queue_free()
+	await get_tree().process_frame
+	var second := Node3D.new()
+	add_child(second)
+	DistrictLoot.populate(second, &"suburbs")
+	var left := _items_in(second).size()
+	_ok(all > 3 and left == all - 1, "LOOT2 a rebuilt district lays out what was left on the street (%d of %d, one picked up)" % [left, all])
+	_ok(key != "" and ProgressTracker.is_loot_taken(key), "LOOT2 the item that was picked up is the one that stays gone (%s)" % key)
+	var third := Node3D.new()
+	add_child(third)
+	DistrictLoot.populate(third, &"suburbs")
+	_ok(_items_in(third).size() == left, "LOOT2 a third visit changes nothing (%d)" % _items_in(third).size())
+	second.queue_free()
+	third.queue_free()
+	ProgressTracker._loot_taken = taken_before
+	InventoryManager.from_dict(pack_before)
+
+# ── the breaker's B1: the finale was armed by the moment the last district was restored, so a game loaded with all eleven
+#    FULL never met the Architect; and the flag outlived a new game ──
+func _check_finale_follows_the_grid() -> void:
+	_playing()
+	var grid_before: Dictionary = PowerGrid.to_dict()
+	var triggered_before: bool = FinaleDirector._triggered
+	FinaleDirector._triggered = false
+	for district in PowerGrid.all_districts():
+		district.stage = DistrictData.Stage.FULL
+	FinaleDirector._on_district_entered(&"power_station")
+	_ok(FinaleDirector._triggered, "FIN1 a loaded game with every district FULL starts the final night when its player enters the power station")
+	FinaleDirector._triggered = false
+	PowerGrid.reset()
+	FinaleDirector._on_district_entered(&"power_station")
+	_ok(not FinaleDirector._triggered, "FIN1 a new game (all DARK) does not")
+	FinaleDirector._triggered = true
+	FinaleDirector._on_game_started()
+	_ok(not FinaleDirector._triggered, "FIN1 a new run clears the announcement flag")
+	PowerGrid.from_dict(grid_before)
+	FinaleDirector._triggered = triggered_before
+	FinaleDirector._spawn_retries = FinaleDirector.MAX_SPAWN_RETRIES + 1  # this run is in the suburbs: the boss would only wait for a rebuild
+
+# ── the breaker's B3: Difficulty > a pick started a new game and wiped the save, with no question ──
+func _check_difficulty_pick_is_a_setting() -> void:
+	CoinWallet.add(777)
+	var coins := CoinWallet.get_coins()
+	var screen := (load(Routes.DIFFICULTY) as PackedScene).instantiate() as Control
+	add_child(screen)
+	await get_tree().process_frame
+	screen.call("_pick", 2)
+	await get_tree().process_frame
+	var picked: int = int(SettingsManager.get_setting("difficulty", -1))
+	_ok(picked == 2, "DIFF1 a pick sets the difficulty (%d)" % picked)
+	_ok(CoinWallet.get_coins() == coins and not GameManager.is_playing(), "DIFF1 and starts nothing: the wallet is kept (%d of %d) and the game is not running" % [CoinWallet.get_coins(), coins])
+	SettingsManager.set_difficulty(1)
+	screen.queue_free()
+
+# ── the breaker's B4: the slots the skill added vanished on every load, and so did the items in them ──
+func _check_bigger_pack_survives_a_load() -> void:
+	var pack_before: Dictionary = InventoryManager.to_dict()
+	var base: int = InventoryManager.slots.size()
+	InventoryManager.add_slots(5)
+	InventoryManager.slots[base + 2] = {"item_id": &"battery", "count": 2}
+	var saved: Dictionary = InventoryManager.to_dict()
+	InventoryManager.from_dict(saved)
+	_ok(InventoryManager.slots.size() == base + 5, "INV2 a pack grown by the skill is as big after a load (%d of %d)" % [InventoryManager.slots.size(), base + 5])
+	_ok(InventoryManager.slots[base + 2] != null and InventoryManager.slots[base + 2]["item_id"] == &"battery", "INV2 the item in an extra slot is still there")
+	var forged: Dictionary = {"slots": []}
+	for i in 500:
+		forged["slots"].append(null)
+	InventoryManager.from_dict(forged)
+	_ok(InventoryManager.slots.size() <= InventoryManager.MAX_SAVED_SLOTS, "INV2 a file cannot ask for 500 slots (%d)" % InventoryManager.slots.size())
+	InventoryManager.from_dict(pack_before)
+
+# ── the breaker's B5: Hardcore was read live, so the toggle could cancel the wipe or buy Iron Man ──
+func _check_hardcore_belongs_to_the_run() -> void:
+	GameManager._change_state(GameManager.GameState.PLAYING)
+	var screen := Control.new()
+	screen.set_script(load("res://scripts/ui/settings_screen.gd"))
+	add_child(screen)
+	await get_tree().process_frame
+	var box: CheckBox = null
+	for row in screen.find_children("*", "HBoxContainer", true, false):
+		var kids := row.get_children()
+		if kids.size() == 2 and kids[0] is Label and (kids[0] as Label).text == LocalizationManager.t("Hardcore Mode") and kids[1] is CheckBox:
+			box = kids[1] as CheckBox
+	_ok(box != null and box.disabled, "HC1 in a running game the Hardcore box cannot be changed")
+	var import_button: Button = null
+	for b in screen.find_children("*", "Button", true, false):
+		if (b as Button).text == LocalizationManager.t("Import Save"):
+			import_button = b as Button
+	_ok(import_button != null and import_button.disabled, "HC1 nor can a save be imported under a running world")
+	screen.queue_free()
+	SaveSystem.save_all()
+	SettingsManager.set_setting("hardcore", true)
+	GameManager.run_hardcore = false
+	GameManager.trigger_death()
+	_ok(SaveSystem.has_save(), "HC1 ticking Hardcore in the middle of a run does not make its death delete the save")
+	GameManager._change_state(GameManager.GameState.PLAYING)
+	GameManager.run_hardcore = true
+	SettingsManager.set_setting("hardcore", false)
+	PuzzleSystem._solved["fuse_substation"] = true
+	GameManager.trigger_death()
+	_ok(not SaveSystem.has_save(), "HC1 unticking it in the middle of a hardcore run does not cancel the wipe")
+	_ok(not PuzzleSystem.is_solved("fuse_substation"), "PUZ1 the wipe (a new game) clears the solved puzzles")
+	GameManager.run_hardcore = false
+	# the breaker's E9: a dead player kept walking behind the death screen
+	GameManager._change_state(GameManager.GameState.PLAYING)
+	_player.set("gameplay_active", true)
+	_player.set("hp", 5.0)
+	_player.set("_damage_grace_timer", 0.0)
+	_player.set("_iframes", 0.0)
+	_player.take_damage(12.0, Vector3.ZERO)
+	_ok(not bool(_player.get("gameplay_active")), "DEAD1 a lethal hit takes the controls away")
+	var from := _player.global_position
+	InputService.set_joy_active(true)
+	InputService.set_joy_move_dir(Vector2(0.0, -1.0))
+	await get_tree().create_timer(0.6).timeout
+	InputService.set_joy_active(false)
+	InputService.set_joy_move_dir(Vector2.ZERO)
+	var drift := Vector2(_player.global_position.x - from.x, _player.global_position.z - from.z).length()
+	_ok(drift < 0.2, "DEAD1 the dead player does not walk (%.2f m in 0.6 s of the stick)" % drift)
+
+# ── the breaker's E7: a Continue overwrote the preferences chosen in the menu with the save's, and nothing but the
+#    Difficulty screen wrote the config file, so a relaunch lost the rest ──
+func _check_settings_persist_and_survive_a_continue() -> void:
+	var master_before: float = SettingsManager.get_volume("Master")
+	var size_before: Variant = SettingsManager.get_setting("text_size", 1)
+	SettingsManager.set_volume("Master", 0.37)
+	SettingsManager.set_setting("text_size", 2)
+	await get_tree().create_timer(SettingsManager.SAVE_DELAY_SEC + 0.4).timeout
+	var cfg := ConfigFile.new()
+	cfg.load(SettingsManager.CFG_PATH)
+	var written: Dictionary = cfg.get_value("game", "settings", {})
+	var volumes: Dictionary = cfg.get_value("audio", "volumes", {})
+	_ok(int(written.get("text_size", -1)) == 2 and is_equal_approx(float(volumes.get("Master", -1.0)), 0.37), "SET1 a change in the Settings screen reaches the config file by itself (text size %s, Master %s)" % [written.get("text_size"), volumes.get("Master")])
+	var day_of_the_save := {"volumes": {"Master": 1.0}, "settings": {"difficulty": 2, "hardcore": true, "text_size": 0}}
+	SettingsManager.apply_run_settings(day_of_the_save)
+	_ok(is_equal_approx(SettingsManager.get_volume("Master"), 0.37) and int(SettingsManager.get_setting("text_size", -1)) == 2,
+		"SET1 a game file does not overwrite this device's volume or text size")
+	_ok(int(SettingsManager.get_setting("difficulty", -1)) == 2 and bool(SettingsManager.get_setting("hardcore", false)), "SET1 it does put back the run's own rules (difficulty, hardcore)")
+	SettingsManager.set_setting("hardcore", false)
+	SettingsManager.set_difficulty(1)
+	SettingsManager.set_volume("Master", master_before)
+	SettingsManager.set_setting("text_size", size_before)
+
+# ── the breaker's E2: a solved puzzle was neither saved nor cleared by a new game ──
+func _check_solved_puzzles_are_saved() -> void:
+	var before: Dictionary = PuzzleSystem.to_dict()
+	PuzzleSystem.reset()
+	PuzzleSystem._solved["fuse_substation"] = true
+	var saved: Dictionary = PuzzleSystem.to_dict()
+	PuzzleSystem.reset()
+	PuzzleSystem.from_dict(saved)
+	_ok(PuzzleSystem.is_solved("fuse_substation"), "PUZ1 a solved puzzle is still solved after a save and a load")
+	PuzzleSystem.from_dict({"solved": ["not_a_puzzle", "fuse_substation"]})
+	_ok(PuzzleSystem.get_solved_count() == 1, "PUZ1 a forged puzzle id is ignored (%d solved)" % PuzzleSystem.get_solved_count())
+	PuzzleSystem.from_dict(before)
+
+# ── the breaker's E3 and E4: the shop's backpack slots grew the pack only at the next load, and the four blueprints lying
+#    in the districts named upgrades that do not exist ──
+func _check_blueprints_and_the_shop_grow_the_pack() -> void:
+	var pack_before: Dictionary = InventoryManager.to_dict()
+	var applied_before: Dictionary = UpgradeSystem.to_dict()
+	UpgradeSystem.reset()
+	var slots := InventoryManager.slots.size()
+	UpgradeSystem._on_pickup(&"blueprint_backpack_slots")
+	_ok(UpgradeSystem.is_applied(&"upgrade_backpack_slots"), "UPG1 the backpack blueprint from the warehouses applies its upgrade")
+	_ok(InventoryManager.slots.size() == slots + 4, "UPG1 and the pack has the four slots at once (%d of %d)" % [InventoryManager.slots.size(), slots + 4])
+	UpgradeSystem._on_pickup(&"blueprint_portable_workbench")
+	_ok(not UpgradeSystem.is_applied(&"upgrade_portable_workbench"), "UPG1 a workbench blueprint is not an upgrade")
+	UpgradeSystem.from_dict(applied_before)
+	InventoryManager.from_dict(pack_before)
+
+# ── the breaker's E5: the daily "30 s in the dark" counted time with the light on, because nobody told it the light starts on ──
+func _check_the_dark_segment_knows_the_light_is_on() -> void:
+	var seen := [null]
+	var watch := func(on: bool) -> void: seen[0] = on
+	EventBus.flashlight_state_changed.connect(watch)
+	var fresh := (load("res://scenes/player/player_3d.tscn") as PackedScene).instantiate()
+	add_child(fresh)
+	await get_tree().process_frame
+	EventBus.flashlight_state_changed.disconnect(watch)
+	_ok(seen[0] == true, "DAILY1 a new player announces its light at once (%s), so the dark-segment daily does not count lit time" % str(seen[0]))
+	fresh.queue_free()
+
+# ── the breaker's E12: the temp file is read back before it replaces the save and rotates into the backups ──
+func _check_a_written_save_reads_back() -> void:
+	SaveSystem.save_all()
+	SaveSystem.save_all()
+	_ok(not SaveSystem._read_envelope(SaveSystem.SAVE_PATH).is_empty() and not SaveSystem._read_envelope(SaveSystem.SAVE_PATH + ".bak").is_empty(),
+		"SAVE2 two saves in a row leave a valid file and a valid backup")
+	_ok(not FileAccess.file_exists(SaveSystem.SAVE_PATH + ".tmp"), "SAVE2 and no temp file behind")
+
+# ── the breaker's E14: a position of strings aborted the load half way; equipment survived a reload as a second copy ──
+func _check_forged_position_and_equipment() -> void:
+	_ok(SaveSystem._parse_player_pos(["a", 1.0, 2.0]) == Vector3.INF and SaveSystem._parse_player_pos([1, 2, 3]) == Vector3(1.0, 2.0, 3.0), "SAVE3 a position with a string is dropped, numbers pass")
