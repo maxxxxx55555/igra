@@ -263,7 +263,7 @@ Codex tab, **S_hud_*** the HUD buttons, **S_workbench**, **S_credits**.
 | I9.1 | Overview with equipment | V.5 | closeout_check inventory screen + PT frame | PT-A06 |
 | I9.2 | Item detail: weight, effect, type | V.5 | closeout_check I9.2 (the detail shows name, rarity, weight and effect) | PASS(closeout) |
 | I9.3 | Stacking | V.5 | InventoryManager | BATTERY |
-| I9.4 | Actions: use, equip, drop, disassemble | V.5 | closeout_check V.5 (Use consumes one battery; Drop asks, then throws the stack away); workbench salvage G21 | PASS(closeout) |
+| I9.4 | Actions: use, drop, disassemble (equip is built and no item sets an equip slot: see I9.5) | V.5 | closeout_check V.5 (Use consumes one battery; Drop asks, then throws the stack away), I9.4 (the workbench Salvage tab returns half the parts of an enhanced battery) | PASS(closeout) |
 | I9.5 | Equipment slots head/body/legs/holster/backpack | V.5 | GDD 17 defines no head/body/legs/holster item; the slots show on the inventory screen and save; the backpack capacity comes from the shop upgrade (UpgradeSystem) | DECIDED |
 | I9.6 | Backpack capacity x / max | V.5 | inventory screen header | PT-A06 |
 | I9.7 | Drag to a quick slot | V.5 | quick slots hold an item kind; the inventory Use button and the number keys serve it (DECIDED) | DECIDED |

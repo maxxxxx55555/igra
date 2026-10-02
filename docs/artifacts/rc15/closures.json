@@ -17,9 +17,9 @@
  },
  {
   "id": "G28/D04, N01, I02",
-  "claim": "GDD amended: the win goes through the Architect (4.3), the New Game+ rule is written (12.5), the key census is the real 1407 per locale",
+  "claim": "GDD amended: the win goes through the Architect (4.3), the New Game+ rule is written (12.5), the key census is the real count per locale (1407 at `3d936da`, 1523 at the sign-off)",
   "cmd": "git show 3d936da -- docs/GDD.md",
-  "evidence": "three hunks in `docs/GDD.md` (line 22, line 119, new section 12.5); `python tools/qa_sim/i18n_truth_gate.py` prints `12/12 locales PASS` on 1407 keys per file",
+  "evidence": "three hunks in `docs/GDD.md` (line 22, line 119, new section 12.5); `python tools/qa_sim/i18n_truth_gate.py` prints `12/12 locales PASS` on 1407 keys per file at `3d936da` (1523 at the sign-off)",
   "commit": "3d936da"
  },
  {
@@ -910,7 +910,7 @@
  },
  {
   "id": "I9",
-  "claim": "The inventory screen's filter narrows the grid, sorting by weight puts the heaviest stack first and the detail shows the weight and effect",
+  "claim": "The inventory screen's filter narrows the grid, sorting by weight puts the heaviest stack first, the detail shows the weight and effect, and the workbench's Salvage tab returns half the parts",
   "cmd": "tools/qa_sim/closeout_check",
   "evidence": [
    [
@@ -924,6 +924,10 @@
    [
     "closeout_check_signoff.txt",
     "I9.2 the item detail"
+   ],
+   [
+    "closeout_check_signoff.txt",
+    "I9.4 salvaging an enhanced battery"
    ]
   ],
   "commit": "705b2be"

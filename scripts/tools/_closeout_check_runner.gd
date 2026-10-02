@@ -57,6 +57,7 @@ func _run() -> void:
 	await _check_photos()
 	await _check_achievements()
 	await _check_inventory_and_pause()
+	await _check_workbench_salvage()
 	_check_roster()
 	await _check_crouch()
 	_check_loot()
@@ -559,6 +560,24 @@ func _check_inventory_and_pause() -> void:
 	for key in ["inventory", "SHOP_COINS", "CRAFT_UPGRADE", "PAUSE_SAVE_QUIT"]:
 		_ok(texts.has(LocalizationManager.t(key)), "the pause menu offers %s" % key)
 	UIManager.close(&"pause")
+
+# ── I9.4: the workbench's Salvage tab takes a crafted item apart into half its parts ──
+func _check_workbench_salvage() -> void:
+	_playing()
+	InventoryManager.from_dict({})
+	InventoryManager.try_add(&"enhanced_battery", 1)
+	UIManager.open(&"workbench")
+	await get_tree().process_frame
+	var bench: Control = UIManager._get_screen(&"workbench")
+	bench._refresh_salvage()
+	bench._select_salvage(_slot_of(&"enhanced_battery"))
+	bench._do_salvage()
+	var batteries := InventoryManager.count_of(&"battery")
+	var cables := InventoryManager.count_of(&"cable")
+	_ok(InventoryManager.count_of(&"enhanced_battery") == 0 and batteries == 1 and cables == 1,
+		"I9.4 salvaging an enhanced battery returns half its parts (battery %d, cable %d, enhanced battery left %d)" % [batteries, cables, InventoryManager.count_of(&"enhanced_battery")])
+	UIManager.close(&"workbench")
+	InventoryManager.from_dict({})
 
 # ── difficulty scales the monsters ──────────────────────────────────────────
 func _check_difficulty() -> void:

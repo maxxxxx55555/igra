@@ -9,7 +9,7 @@ Status at 2026-10-02 (rc15 sign-off): a signed release AAB exists, was rebuilt f
 - Its random password is in `.signing/release.env` (three `GODOT_ANDROID_KEYSTORE_RELEASE_*`
   variables). `.signing/`, `*.keystore` and `*.jks` are gitignored (`git check-ignore` verified).
 - `tools/make_keystore.ps1` is the generator of a **debug** keystore (alias `tlsdebug`, the debug password written in `docs/ANDROID_BUILD.md`). It holds no
-  key material, the keystore it writes (`tls_debug.keystore`) is gitignored, and it is the only tracked file whose name contains "keystore".
+  release key material (it embeds the debug store password written in `docs/ANDROID_BUILD.md`), the keystore it writes (`tls_debug.keystore`) is gitignored, and it is the only tracked file whose name contains "keystore".
   `release.env` and `*.p12` are gitignored by name as well as through `.signing/` (R8 round 13, `705b2be`).
 - `export_presets.cfg` deliberately keeps the release keystore fields EMPTY: the file is committed, so
   putting a password in it would publish it (`tools/qa_sim/release_export_check.py` enforces this).

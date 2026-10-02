@@ -113,6 +113,7 @@ Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
 [closeout] ok   the pause menu offers SHOP_COINS
 [closeout] ok   the pause menu offers CRAFT_UPGRADE
 [closeout] ok   the pause menu offers PAUSE_SAVE_QUIT
+[closeout] ok   I9.4 salvaging an enhanced battery returns half its parts (battery 1, cable 1, enhanced battery left 0)
 [closeout] ok   MN2 shadow_3d has the GDD health 30 and damage 15 (30.0 / 15.0)
 [closeout] ok   MN2 shadow_3d chases at 4.0 m/s, the GDD 1.2x of the 3.0 m/s walk is 3.6
 [closeout] ok   MN2 crawler_3d has the GDD health 50 and damage 20 (50.0 / 20.0)
@@ -151,7 +152,7 @@ Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
 [closeout] ok   Crouch Input Button: the key crouches at once
 [closeout] ok   Crouch Input Long Press: a tap does not crouch
 [closeout] ok   Crouch Input Long Press: a hold crouches
-[closeout] ok   MN4 a corpse drops loot 30% of the time (187 of 600)
+[closeout] ok   MN4 a corpse drops loot 30% of the time (189 of 600)
 [closeout] ok   MN4 every drop is a battery, a medkit or scrap
 [closeout] ok   MN4 the Sharpshooter drops a box of rounds
 [closeout] ok   LOOT2 a rebuilt district lays out what was left on the street (12 of 13, one picked up)
@@ -241,7 +242,7 @@ Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
 [closeout] ok   CB4 the death screen shows DEATH_DOCS
 [closeout] ok   SH1 the game scene carries the Screens layer
 [closeout] ok   SH1 the Shop card shows every catalog item (7 cards of 7)
-[closeout] ok   SH1 every row ends above the Close button (1116 <= 1166)
+[closeout] ok   SH1 every row ends above the Close button (1124 <= 1174)
 [closeout] ok   SH1 the pack icons are the size they were asked for (22 px, 128 when the size was lost)
 [closeout] ok   SH1 Buy with an empty wallet buys nothing
 [closeout] ok   SH1 Buy with coins grants the item, spends the price and marks the card (coins 5000 -> 3800)
@@ -270,7 +271,7 @@ Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
 [closeout] ok   SV2 a forged number is clamped ({ "hp": 1000.0, "stamina": 0.0, "battery": 5.0 })
 [closeout] ok   SV2 a dead player saves no vitals (Continue would bring back 0 health)
 [closeout] ok   HP1 in peace health comes back slowly (52.2 after a second at 50, not 68)
-[closeout] ok   HP1 two seconds after a hit nothing has come back (40.0)
+[closeout] ok   HP1 two seconds after a hit nothing has come back (38.0)
 [closeout] ok   difficulty Easy: monsters at 80% health, 75% damage (40.0 / 15.0)
 [closeout] ok   difficulty Hard: monsters at 120% health, 125% damage (60.0 / 25.0)
 [closeout] ok   MENU1 the menu state opens the main-menu screen
@@ -311,7 +312,7 @@ Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
 [closeout] ok   PERF2 the moon casts no shadow in a dark district (energy 0.12)
 [closeout] ok   PERF2 and does in a restored one (energy 0.40)
 [closeout] ok   PERF2 and not at the Low shadow quality
-[closeout] DONE checks=310 fails=0
+[closeout] DONE checks=311 fails=0
 ERROR: 4 RID allocations of type 'PN13RendererDummy14TextureStorage12DummyTextureE' were leaked at exit.
 ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
 ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
