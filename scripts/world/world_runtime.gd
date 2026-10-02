@@ -12,6 +12,9 @@ extends Node3D
 var _district_root: Node3D = null
 var _current_id: StringName = &""
 var _loading: bool = false
+## What the last load_district cost, in milliseconds: "district", "total_ms" and the scene/enemies/loot phases of
+## DistrictSceneFactory.build. get_last_load_stats() adds the street and prop phases, which finish a frame later.
+var last_load_stats: Dictionary = {}
 ## Точка появления по умолчанию — перекрёсток (-8, -8): сетка улиц идёт по
 ## x/z = -24, -8, 8, 24, поэтому ровный ноль пришёлся бы на середину квартала.
 ## Высота чуть выше дороги, чтобы игрок встал на неё, а не застрял в плитке.
@@ -52,11 +55,13 @@ func load_district(district_id: StringName) -> void:
 	if not is_inside_tree() or _loading or district_id == _current_id:
 		return
 	_loading = true
+	var started: int = Time.get_ticks_usec()
 	if is_instance_valid(_district_root):
 		_district_root.queue_free()
 		_district_root = null
 	_current_id = district_id
-	_district_root = DistrictSceneFactory.build(self, district_id)
+	var stats: Dictionary = {}
+	_district_root = DistrictSceneFactory.build(self, district_id, stats)
 	if _district_root != null:
 		_place_player(_district_root)
 	var dm := get_node_or_null("/root/DistrictManager")
@@ -74,6 +79,22 @@ func load_district(district_id: StringName) -> void:
 	# district pointer and player position are both actually correct.
 	if GameManager.is_playing():
 		SaveSystem.autosave()
+	stats["district"] = String(district_id)
+	stats["total_ms"] = float(Time.get_ticks_usec() - started) / 1000.0
+	last_load_stats = stats
+
+## last_load_stats plus the street and prop phases, which run a frame after load_district returns and are read off their nodes
+## (0.0 until they have run).
+func get_last_load_stats() -> Dictionary:
+	var stats: Dictionary = last_load_stats.duplicate()
+	if is_instance_valid(_district_root):
+		var streets := _district_root.get_node_or_null("StreetBuilder") as StreetBuilder
+		if streets != null:
+			stats["streets_ms"] = streets.build_ms
+		var props := _district_root.get_node_or_null("Props") as CityStreetProps
+		if props != null:
+			stats["props_ms"] = props.build_ms
+	return stats
 
 ## Ставит игрока на сохранённую позицию, иначе на точку старта района.
 ## Восстановление позиции жило в world_map.gd, которого нет в игровой сцене,

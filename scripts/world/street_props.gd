@@ -112,8 +112,11 @@ func _init_meshes() -> void:
 ## the finished array, so spacing along the street stays even instead
 ## of leaving one dense half and one empty half. MED/HIGH/ULTRA unchanged.
 var _low_tier: bool = false
+## Milliseconds the deferred build() took (props, lamps, skyline), for WorldRuntime.get_last_load_stats().
+var build_ms: float = 0.0
 
 func build() -> void:
+	var started: int = Time.get_ticks_usec()
 	var sb: Node = get_node_or_null(street_builder_path)
 	if sb == null:
 		return
@@ -137,6 +140,7 @@ func build() -> void:
 	_build_streetlight_multimesh()
 	_build_prop_multimesh()
 	_build_skyline(sb, district_id)
+	build_ms = float(Time.get_ticks_usec() - started) / 1000.0
 
 ## The backdrop ring of buildings and the dark ground (skyline.gd). Its windows
 ## replace the floating window wall the district scenes still carry.

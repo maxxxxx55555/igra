@@ -20,6 +20,8 @@ const MARKING_LIFT: float = 0.02
 
 var roads: Array[Dictionary] = []
 var _center: Vector2 = Vector2.ZERO
+## Milliseconds the deferred build() took, for WorldRuntime.get_last_load_stats().
+var build_ms: float = 0.0
 
 var _road_mm: MultiMeshInstance3D
 var _sidewalk_mm: MultiMeshInstance3D
@@ -80,10 +82,12 @@ func _init_mm(mm: MultiMeshInstance3D, mesh: Mesh) -> void:
 	mm.multimesh.mesh = mesh
 
 func build() -> void:
+	var started: int = Time.get_ticks_usec()
 	_layout()
 	_fill_roads()
 	_fill_sidewalks()
 	_fill_markings()
+	build_ms = float(Time.get_ticks_usec() - started) / 1000.0
 	streets_ready.emit()
 
 func _layout() -> void:
