@@ -1,11 +1,20 @@
 extends CanvasLayer
 
+## The graphics tier (0 Low .. 3 Ultra) picks the layers: Low keeps the vignette alone, Medium adds the grain, High the
+## chromatic aberration. A layer with nothing to show is hidden: a screen-texture shader copies the whole frame every
+## frame, even at amount 0, and a phone pays for that.
+const TIER_GRAIN: int = 1
+const TIER_CHROMA: int = 2
+const VISIBILITY_IDLE: float = 0.01  # below this the detection edge cannot be seen
+
 var _grain: ColorRect = null
 var _vignette: ColorRect = null
 var _chroma: ColorRect = null
 var _visibility_overlay: ColorRect = null
 var _visibility_detected: bool = false
 var _visibility_timer: float = 0.0
+var _tier: int = 2
+var _chroma_base: float = 0.0
 
 func _ready() -> void:
 	layer = 100
@@ -17,11 +26,24 @@ func _ready() -> void:
 	_build_vignette()
 	_build_visibility_overlay()
 	visible = true
+	_tier = int(SettingsManager.get_setting("graphics_tier", 2))
+	_apply_tier()
+	EventBus.settings_changed.connect(_on_settings_changed)
 	EventBus.player_detected.connect(_on_player_detected)
+
+func _on_settings_changed(key: String, value: Variant) -> void:
+	if key == "graphics_tier":
+		_tier = int(value)
+		_apply_tier()
+
+func _apply_tier() -> void:
+	_grain.visible = _tier >= TIER_GRAIN
+	_sync_chroma()
 
 func _build_visibility_overlay() -> void:
 	_visibility_overlay = ColorRect.new()
 	_visibility_overlay.name = "VisibilityOverlay"
+	_visibility_overlay.visible = false
 	_visibility_overlay.color = Color(0.706, 0.271, 0.184, 0.0)
 	_visibility_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_visibility_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -51,6 +73,7 @@ func _process(delta: float) -> void:
 	var current_pulse: float = _visibility_overlay.color.a
 	var new_pulse: float = lerpf(current_pulse, target_pulse, clampf(delta * 4.0, 0.0, 1.0))
 	_visibility_overlay.color.a = new_pulse
+	_visibility_overlay.visible = new_pulse > VISIBILITY_IDLE
 	var mat := _visibility_overlay.material as ShaderMaterial
 	if mat != null:
 		mat.set_shader_parameter("pulse", new_pulse)
@@ -88,11 +111,20 @@ func _chroma_shader() -> Shader:
 	return s
 
 func set_chroma_amount(px_1080p: float) -> void:
-	if _chroma and _chroma.material is ShaderMaterial:
-		var vp := get_viewport()
-		var h: float = float(vp.get_visible_rect().size.y) if vp else 1080.0
-		_chroma.material.set_shader_parameter("amount_px_1080p", clampf(px_1080p, 0.0, 3.0))
-		_chroma.material.set_shader_parameter("viewport_height", h)
+	_chroma_base = clampf(px_1080p, 0.0, 3.0)
+	_sync_chroma()
+
+## The shader gets an amount from the High tier up only, and the layer is drawn only while there is something to separate.
+func _sync_chroma() -> void:
+	if _chroma == null:
+		return
+	var mat := _chroma.material as ShaderMaterial
+	var px: float = _chroma_base if _tier >= TIER_CHROMA else 0.0
+	var vp := get_viewport()
+	var h: float = float(vp.get_visible_rect().size.y) if vp else 1080.0
+	_chroma.visible = px > 0.0
+	mat.set_shader_parameter("amount_px_1080p", px)
+	mat.set_shader_parameter("viewport_height", h)
 
 func _build_grain() -> void:
 	_grain = ColorRect.new()
