@@ -83,7 +83,8 @@ func show_notification(msg: String) -> void:
 		_toast.add_theme_color_override("font_color", Color("#d8d2c4"))  # bone-text
 		_toast.add_theme_font_size_override("font_size", 20)
 		_toast.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)
-		_toast.offset_bottom = -80
+		_toast.offset_top = -260.0  # above the quick bar (16 to 64 px up) and the tutorial hint (80 to 200 px up)
+		_toast.offset_bottom = -230.0
 		_layer.add_child(_toast)
 	_toast.text = msg
 	_toast.visible = true

@@ -13,7 +13,6 @@ func _ready() -> void:
 		spawn_points = [Vector3(0, 0, 5), Vector3(10, 0, -3), Vector3(-8, 0, 12), Vector3(5, 0, -10), Vector3(-5, 0, -15)]
 	for i in range(min(max_enemies, spawn_points.size())):
 		_spawn_at(i)
-	print("ENEMY_SPAWNER ready points=", spawn_points.size(), " max=", max_enemies)
 
 func _process(delta: float) -> void:
 	_alive = _alive.filter(func(e): return is_instance_valid(e))

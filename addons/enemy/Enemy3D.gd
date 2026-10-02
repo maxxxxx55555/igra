@@ -35,7 +35,6 @@ func _ready() -> void:
 	_nav_agent.target_desired_distance = 1.5
 	add_to_group("enemies")
 	EventBus.enemy_spawned.emit(self)
-	# print("ENEMY3D ready id=", monster_id, " hp=", hp, " state=", ai_state)
 
 func _physics_process(delta: float) -> void:
 	_ai_timer += delta
@@ -102,7 +101,6 @@ func _update_ai() -> void:
 				var dist := global_position.distance_to(_player.global_position)
 				if dist < attack_range:
 					EventBus.enemy_attack.emit(int(attack_damage))
-					# print("ENEMY3D attack damage=", attack_damage)
 				ai_state = AIState.CHASE
 
 func _can_see_player() -> bool:
@@ -130,7 +128,6 @@ func _set_nav_target(pos: Vector3) -> void:
 
 func take_damage(amount: float) -> void:
 	hp -= amount
-	# print("ENEMY3D hit hp=", hp)
 	if hp <= 0:
 		_die()
 

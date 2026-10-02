@@ -517,7 +517,6 @@ static func set_interstitial_ad_listener(listener: InterstitialAdEventListener) 
 	
 	_plugin.connect("interstitial_on_ad_loaded", func(ad_unit_identifier: String, ad_info: Dictionary):
 		if _interstitial_ad_listener:
-			print("[TEST] inter loaded, listener")
 			_interstitial_ad_listener.on_ad_loaded.call(ad_unit_identifier, AdInfo.new(ad_info))
 	)
 	_plugin.connect("interstitial_on_ad_load_failed", func(ad_unit_identifier: String, error_info: Dictionary):
@@ -808,13 +807,6 @@ static func _generate_metadata() -> Dictionary:
 	}
 
 
-#func get_rect_from_string(rect_prop_string: String) -> Rect:
-#	var rect_dict = parse_json(rect_prop_string)
-#	var origin_x = AppLovinMAXDictionaryUtils.get_float(rect_dict, "origin_x", 0)
-#	var origin_y = AppLovinMAXDictionaryUtils.get_float(rect_dict, "origin_y", 0)
-#	var width = AppLovinMAXDictionaryUtils.get_float(rect_dict, "width", 0)
-#	var height = AppLovinMAXDictionaryUtils.get_float(rect_dict, "height", 0)
-#	return Rect2(origin_x, origin_y, width, height)
 
 
 enum AppTrackingStatus {

@@ -264,8 +264,6 @@ func _migrate(data: Dictionary) -> Dictionary:
 	var from_version: int = int(data.get("version", 1))
 	if from_version >= SAVE_VERSION:
 		return data
-	# match from_version:
-	#   1: data = _migrate_v1_to_v2(data)  # (no such change has shipped yet)
 	data["version"] = SAVE_VERSION
 	return data
 

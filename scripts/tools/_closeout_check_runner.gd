@@ -44,6 +44,8 @@ func _run() -> void:
 		await _check_scroll_bars_have_a_width()
 		await _check_victory_screen_shows_this_ending()
 		_check_help_rows_are_real()
+		await _check_quick_bar_is_on_screen()
+		await _check_tier_names()
 		_check_the_moon_shadow_follows_its_light()
 		_finish()
 		return
@@ -96,6 +98,8 @@ func _run() -> void:
 	await _check_scroll_bars_have_a_width()
 	await _check_victory_screen_shows_this_ending()
 	_check_help_rows_are_real()
+	await _check_quick_bar_is_on_screen()
+	await _check_tier_names()
 	_check_the_moon_shadow_follows_its_light()
 	_finish()
 
@@ -516,9 +520,24 @@ func _check_inventory_and_pause() -> void:
 	var ui: Control = UIManager._get_screen(&"inventory")
 	_ok(ui != null and ui.visible, "V.5 the inventory screen opens")
 	_ok(ui._grid.get_child_count() == 2, "V.5 one cell per stack (%d)" % ui._grid.get_child_count())
+	ui._on_filter(1)
+	await get_tree().process_frame
+	_ok(ui._grid.get_child_count() == 1, "I9.13 the Common filter leaves the one common stack of two (%d cells)" % ui._grid.get_child_count())
+	ui._on_filter(0)
+	await get_tree().process_frame
+	_ok(ui._grid.get_child_count() == 2, "I9.13 All shows every stack again (%d cells)" % ui._grid.get_child_count())
+	ui._on_sort(1)
+	_ok(InventoryManager.slots[0]["item_id"] == &"medkit", "I9.8 sorting by weight puts the heaviest stack, the medkit, first (%s)" % InventoryManager.slots[0]["item_id"])
 	var battery_slot := _slot_of(&"battery")
 	ui._selected = battery_slot
 	ui._refresh()
+	await get_tree().process_frame
+	var detail: PackedStringArray = []
+	for label in ui._detail.find_children("*", "Label", true, false):
+		detail.append((label as Label).text)
+	var battery_count: int = int(InventoryManager.slots[battery_slot]["count"])
+	var battery_weight: float = ItemDatabase.get_item(&"battery").weight
+	_ok(detail.size() >= 4 and detail.has(LocalizationManager.tf("INV_ITEM_WEIGHT", [battery_weight * battery_count, battery_count])), "I9.2 the item detail shows name, rarity, weight and effect (%s)" % " | ".join(detail))
 	_player.set("battery", 10.0)
 	ui._on_use()
 	await get_tree().process_frame
@@ -529,10 +548,6 @@ func _check_inventory_and_pause() -> void:
 	_ok(InventoryManager.count_of(&"medkit") == 1, "V.5 the first press of Drop only asks")
 	ui._on_drop()
 	_ok(InventoryManager.count_of(&"medkit") == 0, "V.5 the second press throws the stack away")
-	ui._on_sort(1)
-	ui._on_filter(1)
-	_ok(ui._filter == 0, "V.5 the rarity filter narrows the grid")
-	ui._on_filter(0)
 	UIManager.close(&"inventory")
 	_ok(not ui.visible, "V.5 the inventory screen closes")
 	UIManager.open(&"pause")
@@ -1624,6 +1639,19 @@ func _check_victory_screen_shows_this_ending() -> void:
 		"WIN2 a win with every district FULL and few documents shows Hope, not the ending left from before (%s, '%s')" % [EndingsManager.get_ending(), title.text])
 	GameManager._change_state(GameManager.GameState.PLAYING)
 	UIManager.close(&"win")
+	# every document, every district and three secrets earn the Truth ending, and with it its achievement
+	var docs_before: Dictionary = ProgressTracker._docs.duplicate()
+	var secrets_before: int = ProgressTracker.secrets
+	for i in Endings.get_total_documents():
+		ProgressTracker._docs["closeout_doc_%d" % i] = true
+	ProgressTracker.secrets = 3
+	GameManager.trigger_win()
+	await get_tree().process_frame
+	_ok(AchievementManager.is_unlocked(&"ach_14"), "ach_14 a win with every document, every district and three secrets unlocks Truth")
+	ProgressTracker._docs = docs_before
+	ProgressTracker.secrets = secrets_before
+	GameManager._change_state(GameManager.GameState.PLAYING)
+	UIManager.close(&"win")
 	PowerGrid.from_dict(grid_before)
 	_player.set("gameplay_active", true)
 
@@ -1643,6 +1671,41 @@ func _check_help_rows_are_real() -> void:
 			if not LocalizationManager.has_key(String(key)) or LocalizationManager.t(String(key)).contains("%"):
 				bad.append("%s = '%s'" % [key, LocalizationManager.t(String(key))])
 	_ok(LocalizationManager.has_key("HELP_GLOSSARY") and bad.is_empty(), "HELP1 every row of the help screen names a real action and a translated text without a format placeholder (%s)" % ", ".join(bad))
+
+# ── the quick bar was anchored to the left screen edge, so the HUD's own sweep of duplicates in the lower-left corner freed it at the start ──
+func _check_quick_bar_is_on_screen() -> void:
+	_playing()
+	var hud := _main.get_node_or_null("HUD")
+	var screen := Rect2(Vector2.ZERO, get_viewport().get_visible_rect().size)
+	var slots: Array = hud.find_children("Slot?", "Panel", true, false) if hud != null else []
+	var inside := 0
+	for slot in slots:
+		inside += int(screen.encloses((slot as Control).get_global_rect()))
+	_ok(hud != null and hud._SLOT_ITEMS == [&"pistol", &"rifle", &"battery", &"medkit", &"molotov", &"flashlight"] and slots.size() == 6 and inside == 6,
+		"H3.2 the quick bar holds six slots on screen: two weapons, battery, medkit, grenade and the light as the special (%d slot nodes, %d inside the %s screen)" % [slots.size(), inside, screen.size])
+
+# ── the play-through's tier names: the Graphics Tier dropdown said Low / Medium / High / Ultra in English in every language ──
+func _check_tier_names() -> void:
+	var shown: String = LocalizationManager.current_lang
+	LocalizationManager.set_language("ru")
+	var screen := Control.new()
+	screen.set_script(load("res://scripts/ui/settings_screen.gd"))
+	add_child(screen)
+	await get_tree().process_frame
+	var items: PackedStringArray = []
+	for ob in screen.find_children("*", "OptionButton", true, false):
+		var tiers := ob as OptionButton
+		if tiers.item_count == 4 and tiers.get_item_text(0).begins_with(LocalizationManager.t("opt_low")):
+			for i in 4:
+				items.append(tiers.get_item_text(i))
+	var keys: Array[String] = ["opt_low", "opt_medium", "opt_high", "opt_ultra"]
+	var english: Array[String] = ["Low", "Medium", "High", "Ultra"]
+	var named := items.size() == 4
+	for i in items.size():
+		named = named and items[i].begins_with(LocalizationManager.t(keys[i])) and not items[i].begins_with(english[i])
+	_ok(named, "TIER1 the Graphics Tier names follow the language (ru: %s)" % ", ".join(items))
+	screen.queue_free()
+	LocalizationManager.set_language(shown)
 
 # ── the moon's shadow cost a quarter of the first district's draw calls where it cannot be seen (energy 0.12) ──
 func _check_the_moon_shadow_follows_its_light() -> void:

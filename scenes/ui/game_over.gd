@@ -47,13 +47,11 @@ func _build_ui() -> void:
             "LOAD": btn.pressed.connect(_on_load)
             "MAIN_MENU": btn.pressed.connect(_on_main_menu)
         bg.add_child(btn)
-    print("GAME_OVER_READY")
 
 func _show_ui(reason: String = "") -> void:
     _reason = reason
     visible = true
     get_tree().paused = true
-    print("GAME_OVER show=true reason=", reason)
 
 func _on_restart() -> void:
     get_tree().paused = false
