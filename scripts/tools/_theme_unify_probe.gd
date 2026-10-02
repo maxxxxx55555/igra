@@ -40,7 +40,8 @@ func _run() -> void:
 		if not is_canon:
 			bad += 1
 	else:
-		print("[theme-unify] Slot0 not present at runtime on this platform (touch-only UI) - skipped, not a failure")
+		print("[theme-unify] hud_3d has no Slot0: the quick bar is missing")
+		bad += 1
 
 	print("[theme-unify] DONE bad=", bad)
 	get_tree().quit(bad)
