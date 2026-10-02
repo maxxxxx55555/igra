@@ -131,6 +131,8 @@ func _build_game_tab(parent: VBoxContainer) -> void:
 	import_btn.pressed.connect(func() -> void:
 		var key := "SAVE_IMPORTED" if SaveSystem.import_save_from_file() else "SAVE_IMPORT_FAILED"
 		EventBus.inventory_notice.emit(LocalizationManager.t(key)))
+	# an import swaps the whole state under a running world: only from the menu, where Continue then rebuilds it
+	import_btn.disabled = not GameManager.is_menu()
 	parent.add_child(import_btn)
 
 	# TRUTH WAVE P0.3: раньше единственный способ стереть прогресс —
@@ -308,6 +310,8 @@ func _toggle(parent: Node, label: String, key: String) -> void:
 	cb.toggled.connect(func(pressed: bool) -> void:
 		SettingsManager.set_setting(key, pressed)
 	)
+	# Hardcore is chosen before a run: in a running game the box is shown but cannot be changed
+	cb.disabled = key == "hardcore" and not GameManager.is_menu()
 	row.add_child(cb)
 
 ## Процедурное окно подтверждения (как ad_popup.gd/confirm_quit.gd) —

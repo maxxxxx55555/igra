@@ -52,6 +52,7 @@ func _ready() -> void:
 		_volumes[b] = 1.0
 		_ensure_bus(b)
 		_apply(b)
+	EventBus.settings_changed.connect(_on_any_setting_changed)
 	_load_defaults()
 	# Настройки сохранялись в user://settings.cfg, но никто их не читал —
 	# каждый запуск игра стартовала с дефолтов.
@@ -233,6 +234,30 @@ func apply_controls(d: Dictionary) -> void:
 
 func _tier(value: Variant) -> int:
 	return clampi(_index_from(value, TIER_LABELS, 2), 0, 2)
+
+## Every change is written to the config file half a second later (a burst of slider moves is one write). Nothing but the
+## Difficulty screen wrote it before, so a relaunch lost whatever the Settings screen had changed.
+const SAVE_DELAY_SEC: float = 0.5
+var _save_timer: Timer = null
+
+func _on_any_setting_changed(_key: String, _value: Variant) -> void:
+	if _save_timer == null:
+		_save_timer = Timer.new()
+		_save_timer.one_shot = true
+		_save_timer.wait_time = SAVE_DELAY_SEC
+		_save_timer.process_mode = Node.PROCESS_MODE_ALWAYS
+		_save_timer.timeout.connect(save_to_cfg)
+		add_child(_save_timer)
+	_save_timer.start()
+
+## A game file puts back the run's own rules. Volume, language, graphics and accessibility are this device's preferences,
+## and a Continue or a Retry used to overwrite them with the values from the day of the save.
+func apply_run_settings(d: Dictionary) -> void:
+	var s: Dictionary = d.get("settings", {}) as Dictionary
+	if s.has("difficulty"):
+		set_difficulty(_difficulty_index(s["difficulty"]))
+	if s.has("hardcore"):
+		_settings["hardcore"] = bool(s["hardcore"])
 
 func save_to_cfg() -> void:
 	var cfg := ConfigFile.new()

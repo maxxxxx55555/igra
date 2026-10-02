@@ -67,6 +67,7 @@ func revive_player() -> void:
 	if p.has_method("heal"):
 		var max_hp: float = p.stats.max_hp if ("stats" in p and p.stats) else 100.0
 		p.heal(max_hp * 0.5)
+	p.set("gameplay_active", true)
 	if p.has_method("grant_iframes"):
 		p.grant_iframes(2.0)  # a breath before the fight can kill them again
 	_change_state(GameState.PLAYING)
@@ -98,8 +99,13 @@ func _change_state(new_state: GameState) -> void:
 	current_state = new_state
 	EventBus.game_state_changed.emit(int(new_state))
 
+## Hardcore belongs to the run, not to the live setting: it is read when a run starts or is loaded, so unticking it in the
+## pause menu cannot cancel the wipe and ticking it before the last boss cannot buy Iron Man.
+var run_hardcore: bool = false
+
 func start_new_game() -> void:
 	SaveSystem.reset_all()
+	run_hardcore = bool(SettingsManager.get_setting("hardcore", false))
 	_enter_play_and_reload()
 
 ## GDD.md:147 (G16): respawn at the district entry with 50% HP, battery NOT
@@ -141,6 +147,7 @@ func continue_game() -> void:
 	if not SaveSystem.load_all():
 		EventBus.inventory_notice.emit(LocalizationManager.t("NO_SAVE"))
 		return
+	run_hardcore = bool(SettingsManager.get_setting("hardcore", false))
 	_enter_play_and_reload()
 
 ## Переводит автолоады в боевое состояние, но НЕ трогает дерево сцен.
@@ -162,7 +169,8 @@ func resume_game() -> void:
 		get_tree().paused = false
 
 func trigger_death() -> void:
-	if current_state == GameState.DEAD:
+	# a won game is over: a beam or a shadow still in the air after the Architect fell must not turn the victory into a death
+	if current_state == GameState.DEAD or current_state == GameState.WIN:
 		return
 	Endings.mark_ended()
 	# GDD §12.4: death resolves the Dark / Survivor ending (was never
@@ -171,7 +179,7 @@ func trigger_death() -> void:
 	# GDD.md:148 (G17): Hardcore - 1 life, death deletes the save. Evaluated
 	# after the ending above so a Hardcore death still resolves an ending
 	# on this run before the profile is wiped for the next one.
-	if SettingsManager != null and bool(SettingsManager.get_setting("hardcore", false)):
+	if run_hardcore:
 		SaveSystem.wipe_all_saves()
 	_change_state(GameState.DEAD)
 	get_tree().paused = false
@@ -181,6 +189,9 @@ func trigger_death() -> void:
 
 func trigger_win() -> void:
 	Endings.mark_ended()
+	var winner := get_tree().get_first_node_in_group("player")
+	if winner != null:
+		winner.set("gameplay_active", false)
 	_change_state(GameState.WIN)
 	EventBus.game_won.emit()
 

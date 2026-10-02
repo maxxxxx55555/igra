@@ -387,7 +387,7 @@ func _on_game_won() -> void:
 		if ending.get("id", "") == "truth":
 			_check_unlock(&"ach_14", true)
 	_check_unlock(&"ach_16", ProgressTracker.time_played < SPEEDRUN_SEC)
-	_check_unlock(&"ach_18", bool(SettingsManager.get_setting("hardcore", false)))
+	_check_unlock(&"ach_18", GameManager.run_hardcore)
 
 ## condition is either a bool (milestone already met/not) or an int target
 ## (compared against the running _progress counter _increment_progress()

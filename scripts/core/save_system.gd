@@ -172,6 +172,10 @@ func _write_atomic(path: String, payload: Dictionary) -> bool:
 		return false
 	f.store_string(JSON.stringify(envelope))
 	f.close()
+	# a write that came out short (a full disk) must not rotate into the backups: three of them would push out every good one
+	if _read_envelope(tmp_path).is_empty():
+		DirAccess.remove_absolute(tmp_path)
+		return false
 	if FileAccess.file_exists(path):
 		_rotate_backups(path)
 	var err := DirAccess.rename_absolute(tmp_path, path)
@@ -317,6 +321,7 @@ func _save() -> void:
 		"settings": SettingsManager.to_dict(),
 		"player_pos": _read_player_pos(),
 		"vitals": _read_player_vitals(),
+		"puzzles": PuzzleSystem.to_dict(),
 		"district": _current_district(),
 		"quests": QuestManager.serialize(),
 		"xp": XpManager.save_data(),
@@ -340,7 +345,8 @@ func load_all() -> bool:
 	InventoryManager.from_dict(data.get("inventory", {}))
 	Encyclopedia.from_dict(data.get("encyclopedia", {}))
 	ProgressTracker.from_dict(data.get("progress", {}))
-	SettingsManager.from_dict(data.get("settings", {}))
+	SettingsManager.apply_run_settings(data.get("settings", {}))
+	PuzzleSystem.from_dict(data.get("puzzles", {}))
 	_pending_player_pos = _parse_player_pos(data.get("player_pos", null))
 	_pending_vitals = _parse_vitals(data.get("vitals", null))
 	_quest_data = data.get("quests", {})
@@ -386,6 +392,7 @@ func reset_all() -> void:
 	Encyclopedia.from_dict({})
 	_pending_player_pos = Vector3.INF
 	_pending_vitals = {}
+	PuzzleSystem.reset()
 	_quest_data = {}
 	QuestManager.reset()
 	_photos = []
@@ -431,6 +438,9 @@ func reset_all() -> void:
 func _parse_player_pos(pp) -> Vector3:
 	if not (pp is Array) or pp.size() < 3:
 		return Vector3.INF
+	for coordinate in pp.slice(0, 3):
+		if not (coordinate is float or coordinate is int):
+			return Vector3.INF
 	var v := Vector3(pp[0], pp[1], pp[2])
 	return v if v.is_finite() else Vector3.INF
 
@@ -566,6 +576,7 @@ func save_slot(slot: int) -> bool:
 		"settings": SettingsManager.to_dict(),
 		"player_pos": _read_player_pos(),
 		"vitals": _read_player_vitals(),
+		"puzzles": PuzzleSystem.to_dict(),
 		"district": _current_district(),
 		"quests": QuestManager.serialize(),
 		"xp": XpManager.save_data(),
@@ -599,7 +610,8 @@ func load_slot(slot: int) -> bool:
 	InventoryManager.from_dict(data.get("inventory", {}))
 	Encyclopedia.from_dict(data.get("encyclopedia", {}))
 	ProgressTracker.from_dict(data.get("progress", {}))
-	SettingsManager.from_dict(data.get("settings", {}))
+	SettingsManager.apply_run_settings(data.get("settings", {}))
+	PuzzleSystem.from_dict(data.get("puzzles", {}))
 	_pending_player_pos = _parse_player_pos(data.get("player_pos", null))
 	_pending_vitals = _parse_vitals(data.get("vitals", null))
 	_quest_data = data.get("quests", {})
