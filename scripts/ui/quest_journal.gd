@@ -75,12 +75,15 @@ func _build_ui() -> void:
 	_quest_list.add_theme_constant_override("separation", 6)
 	var scroll := ScrollContainer.new()
 	scroll.custom_minimum_size = Vector2(0, 400)
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_quest_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.add_child(_quest_list)
 	left_vb.add_child(scroll)
 
 	# Right side - detail panel
 	var right_vb := VBoxContainer.new()
 	right_vb.custom_minimum_size = Vector2(360, 0)
+	right_vb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	main_hb.add_child(right_vb)
 
 	var detail_title := Label.new()
@@ -94,6 +97,8 @@ func _build_ui() -> void:
 	_detail_panel.add_theme_constant_override("separation", 8)
 	var detail_scroll := ScrollContainer.new()
 	detail_scroll.custom_minimum_size = Vector2(0, 400)
+	detail_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_detail_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	detail_scroll.add_child(_detail_panel)
 	right_vb.add_child(detail_scroll)
 

@@ -191,6 +191,29 @@ if "$PY" tools/qa_sim/visual_truth_gate.py docs/stills/evidence/r0_after_*.png >
 else
   bad "visual_truth_gate (gate self-consistency on committed frames; R0 lock = LUT pin below)"
 fi
+# R3 (rc15): the gate is judged on frames it must fail and frames it must pass, not on its own numbers. The four committed
+# corruption frames (R0/R1 evidence) must all FAIL; the sign-off, beauty and clean evidence frames must all PASS; --demo runs
+# the synthetic mutation patterns (a magenta or dim wash or scattered vivid noise fails, a damage vignette, a brass lamp,
+# lit windows and a moonlit sidewalk pass). Thresholds and their measured margins: tools/qa_sim/visual_truth_gate.py.
+if "$PY" tools/qa_sim/visual_truth_gate.py --demo >/dev/null 2>&1; then
+  ok "visual_truth_gate --demo (defect patterns fail, canon patterns pass)"
+else
+  bad "visual_truth_gate --demo (defect patterns fail, canon patterns pass)"
+fi
+gate_missed=0
+for f in docs/stills/evidence/r0_before_*.png docs/stills/evidence/magenta_corruption_suburbs.png docs/stills/evidence/r1_scale08*.png; do
+  if "$PY" tools/qa_sim/visual_truth_gate.py "$f" >/dev/null 2>&1; then gate_missed=$((gate_missed + 1)); fi
+done
+if [[ $gate_missed -eq 0 ]]; then
+  ok "visual_truth_gate fails all four committed corruption frames"
+else
+  bad "visual_truth_gate lets $gate_missed committed corruption frame(s) through"
+fi
+if "$PY" tools/qa_sim/visual_truth_gate.py docs/stills/final/*.png docs/stills/beauty/after/*.png >/dev/null 2>&1; then
+  ok "visual_truth_gate passes the sign-off and beauty frames"
+else
+  bad "visual_truth_gate fails a sign-off or beauty frame (python tools/qa_sim/visual_truth_gate.py docs/stills/final/*.png)"
+fi
 # The PNG lock above only re-measures OLD committed frames. The real R0
 # cause (2026-09-25, windowed A/B): the 11 district LUTs were imported as
 # CompressedTexture2D, which Environment.adjustment_color_correction reads

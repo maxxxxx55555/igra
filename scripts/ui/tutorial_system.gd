@@ -113,6 +113,7 @@ func _ready() -> void:
 		_skip_btn.text = LocalizationManager.t("UI_SKIP"))
 	
 	EventBus.game_started.connect(_on_game_started)
+	EventBus.district_stage_changed.connect(_on_district_stage_changed)
 	InputService.attack_requested.connect(_on_attack)
 	InputService.dodge_requested.connect(_on_dodge)
 	InputService.flashlight_requested.connect(_on_flashlight)
@@ -253,6 +254,12 @@ func _check_action(action: String) -> void:
 		return
 	var step = STEPS[_current_step]
 	if step["trigger"] == "action" and step["action"] == action:
+		_complete_step()
+
+## "Start the generator" is done when a district is repaired, however the player got there (the hint waited for a trigger
+## area that only the first street has, so it stayed up for the rest of the game when the player never walked into it).
+func _on_district_stage_changed(_id: StringName, stage: int) -> void:
+	if _tutorial_active and _current_step < STEPS.size() and STEPS[_current_step]["id"] == "generator" and stage >= 1:
 		_complete_step()
 
 func _on_tutorial_area_entered(body: Node) -> void:

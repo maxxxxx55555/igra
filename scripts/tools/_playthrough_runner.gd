@@ -6,6 +6,7 @@ extends Node
 ##      the four graphics tiers, the 13 languages
 ##   V  the bot plays the whole game with a frame at each milestone, then the victory screen, New Game+ and Save and quit
 ##   B  relaunch, Continue, the daily card, achievements, hardcore
+##   S  the screens the others do not open: the eight Codex tabs one by one, the HUD's log and help buttons, the workbench, the credits
 ## A line "[pt] PASS|FAIL <id> <what> frame=<file>" per step; setup that is not input (items, coins, a teleport next to a
 ## monster) is named in the line. The frames are read by eye afterwards; each saved frame is hashed against the previous
 ## one, because a windowed run can hand back a stale frame when nothing animates (tools/qa_sim/gui_explore_runner.gd).
@@ -64,6 +65,8 @@ func _run() -> void:
 			await _mode_v()
 		"B":
 			await _mode_b()
+		"S":
+			await _mode_s()
 		_:
 			_step("PT", false, "unknown PT_MODE '%s'" % _mode)
 	_finish()
@@ -1145,6 +1148,128 @@ func _b03_hardcore() -> void:
 	SettingsManager.set_setting("hardcore", false)
 
 ## From the pause menu back to the main menu: one menu on screen, and Continue offered because a save exists.
+# ── mode S: the screens the other modes do not open ──────────────────────────
+## The visible texts that still hold a format specifier (\"Repair panel (needs: %s)\" as the label of a key): a string that
+## was meant for tf() and reached a label raw.
+func _raw_placeholders(root: Node) -> PackedStringArray:
+	var found: PackedStringArray = []
+	var specifier := RegEx.create_from_string("(?<!%)%[0-9.]*[sdif]")
+	for n in root.find_children("*", "Control", true, false):
+		var text := ""
+		if n is Label:
+			text = (n as Label).text
+		elif n is Button:
+			text = (n as Button).text
+		if text != "" and (n as Control).is_visible_in_tree() and specifier.search(text) != null:
+			found.append(text)
+	return found
+
+## Visible texts with a run of four Latin letters in a Russian UI: a string that skipped the translation (the credits' four
+## lines were English in every language). Names, key caps and technical suffixes are left out.
+const LATIN_OK := ["THE LAST STREETLIGHT", "TLS Team", "NG+", "FPS", "fps", "VSync", "Escape", "Shift", "Ctrl", "Space", "Tab", "720p", "1080p", "1440p", "Easy", "Normal", "Hard"]
+
+func _latin_texts(root: Node) -> PackedStringArray:
+	var found: PackedStringArray = []
+	var latin := RegEx.create_from_string("[A-Za-z]{4,}")
+	for n in root.find_children("*", "Control", true, false):
+		var text := ""
+		if n is Label:
+			text = (n as Label).text
+		elif n is Button:
+			text = (n as Button).text
+		if text == "" or not (n as Control).is_visible_in_tree() or latin.search(text) == null:
+			continue
+		var scrubbed := text
+		for ok in LATIN_OK:
+			scrubbed = scrubbed.replace(ok, "")
+		if latin.search(scrubbed) != null:
+			found.append(text)
+	return found
+
+## A list that scrolls must have a window of at least a third of the screen: a list cut to 7 of 31 rows by a 330 px window
+## in a 600 px page is the defect the first run of this mode found.
+const S_MIN_LIST_SHARE := 0.35
+
+func _mode_s() -> void:
+	if not await _a01_boot():
+		return
+	if not await _a02_start():
+		return
+	await _a03_onboarding()
+	await _s_codex()
+	await _s_hud_buttons()
+	await _s_workbench()
+	await _s_credits()
+
+func _s_codex() -> void:
+	UIManager.open(&"codex")
+	await _wait_until(func() -> bool: return _ui_open(&"codex"), 3.0)
+	await get_tree().create_timer(0.6).timeout
+	var codex := _ui(&"codex")
+	var viewport := get_viewport().get_visible_rect().size
+	var tabs: Array = codex.get("_buttons")
+	var specs: Array = (codex.get_script() as Script).get_script_constant_map()["TABS"]
+	for i in tabs.size():
+		var res := await _click(tabs[i] as Button)
+		await get_tree().create_timer(0.7).timeout
+		var worst := 1.0
+		var seen := 0
+		for sc in codex.find_children("*", "ScrollContainer", true, false):
+			var scroll := sc as ScrollContainer
+			if not scroll.is_visible_in_tree() or scroll.get_child_count() == 0:
+				continue
+			seen += 1
+			if (scroll.get_child(0) as Control).size.y > scroll.size.y + 1.0:
+				worst = minf(worst, scroll.size.y / viewport.y)
+		var id := String(specs[i]["id"])
+		var raw := _raw_placeholders(codex)
+		var latin := _latin_texts(codex)
+		if not latin.is_empty():
+			_say("[pt] note S_codex_%s Latin text in a Russian UI: %s" % [String(specs[i]["id"]), " | ".join(latin).left(400)])
+		_step("S_codex_" + id, res == "ok" and String(codex.call("current_tab")) == id and worst >= S_MIN_LIST_SHARE and raw.is_empty(),
+			"the Codex tab %s opens by a click; its lists that scroll have a window of %.0f%% of the screen at least (%d lists); raw format specifiers on screen: %s" % [id, worst * 100.0, seen, ", ".join(raw) if not raw.is_empty() else "none"], await _shot("S_codex_" + id))
+	UIManager.close_all_blocking()
+	GameManager.resume_game()
+	await get_tree().create_timer(0.5).timeout
+
+func _s_hud_buttons() -> void:
+	for text in [LocalizationManager.t("HUD_LOG_TOGGLE"), "?"]:
+		var button: Button = null
+		for b in _buttons(get_tree().root):
+			if b.text == text and b.is_visible_in_tree():
+				button = b
+		var res := await _click(button)
+		await get_tree().create_timer(0.7).timeout
+		_step("S_hud_" + ("log" if text != "?" else "help"), res == "ok", "the HUD button '%s' answers a click (%s)" % [text, res], await _shot("S_hud_" + ("log" if text != "?" else "help")))
+		if text == "?":
+			UIManager.close_all_blocking()
+			GameManager.resume_game()
+		else:
+			await _click(button)
+		await get_tree().create_timer(0.4).timeout
+
+func _s_workbench() -> void:
+	UIManager.open(&"workbench")
+	var open := await _wait_until(func() -> bool: return _ui_open(&"workbench"), 3.0)
+	await get_tree().create_timer(0.7).timeout
+	var latin := _latin_texts(_ui(&"workbench"))
+	if not latin.is_empty():
+		_say("[pt] note S_workbench Latin text in a Russian UI: %s" % " | ".join(latin).left(400))
+	_step("S_workbench", open, "the workbench screen opens", await _shot("S_workbench"))
+	UIManager.close_all_blocking()
+	GameManager.resume_game()
+	await get_tree().create_timer(0.4).timeout
+
+func _s_credits() -> void:
+	if not await _go_menu():
+		_step("S_credits", false, "the menu did not come back")
+		return
+	var res := await _click(_menu_vbox().get_node("Credits") as Button)
+	var reached := await _wait_scene(Routes.CREDITS, WAIT_SCENE)
+	await get_tree().create_timer(1.0).timeout
+	var latin := _latin_texts(_scene())
+	_step("S_credits", res == "ok" and reached and latin.is_empty(), "the main menu's Credits opens the credits, all in the language of the UI (click: %s; Latin text: %s)" % [res, " | ".join(latin) if not latin.is_empty() else "none"], await _shot("S_credits"))
+
 func _a15_back_to_menu() -> void:
 	SaveSystem.save_all()
 	var opened := await _pause_open()

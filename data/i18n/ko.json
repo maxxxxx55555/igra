@@ -1515,5 +1515,11 @@
   "DEATH_DISTRICTS": "복구한 지구: %d / %d (%d%%)",
   "DEATH_DOCS": "찾은 문서: %d / %d",
   "Stealth": "은신",
-  "opt_ultra": "울트라"
+  "opt_ultra": "울트라",
+  "HELP_GLOSSARY": "용어집",
+  "HELP_STREETLIGHTS": "가로등",
+  "CREDITS_DESIGN": "게임 디자인 및 코드: TLS Team",
+  "CREDITS_MUSIC": "음악 및 효과음: TLS Team",
+  "CREDITS_ART": "아트 및 UI: TLS Team",
+  "CREDITS_THANKS": "플레이어 여러분께 특별히 감사드립니다"
 }

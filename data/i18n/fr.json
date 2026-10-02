@@ -1515,5 +1515,11 @@
   "DEATH_DISTRICTS": "Quartiers restaurés : %d / %d (%d %%)",
   "DEATH_DOCS": "Documents trouvés : %d / %d",
   "Stealth": "Discrétion",
-  "opt_ultra": "Ultra"
+  "opt_ultra": "Ultra",
+  "HELP_GLOSSARY": "Glossaire",
+  "HELP_STREETLIGHTS": "Lampadaires",
+  "CREDITS_DESIGN": "Conception du jeu et code : TLS Team",
+  "CREDITS_MUSIC": "Musique et effets sonores : TLS Team",
+  "CREDITS_ART": "Visuels et interface : TLS Team",
+  "CREDITS_THANKS": "Remerciements spéciaux aux joueurs"
 }

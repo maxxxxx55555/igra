@@ -42,6 +42,8 @@ func _run() -> void:
 		await _check_tutorial_follows_the_real_input()
 		await _check_street_layers_do_not_fight()
 		await _check_scroll_bars_have_a_width()
+		await _check_victory_screen_shows_this_ending()
+		_check_help_rows_are_real()
 		_finish()
 		return
 	_check_theme()
@@ -91,6 +93,8 @@ func _run() -> void:
 	await _check_tutorial_follows_the_real_input()
 	await _check_street_layers_do_not_fight()
 	await _check_scroll_bars_have_a_width()
+	await _check_victory_screen_shows_this_ending()
+	_check_help_rows_are_real()
 	_finish()
 
 func _finish() -> void:
@@ -1553,6 +1557,12 @@ func _check_tutorial_follows_the_real_input() -> void:
 	InputService.set_joy_active(false)
 	InputService.set_joy_move_dir(Vector2.ZERO)
 	_ok("move" in (tut.get("_completed_steps") as Array), "TUT2 moving completes the move hint")
+	# the generator hint waits for a trigger area only the first street has: a repaired district ends it
+	tut.set("_completed_steps", [])
+	tut.set("_current_step", _tutorial_index("generator"))
+	tut.set("_waiting_for_action", true)
+	EventBus.district_stage_changed.emit(&"suburbs", 1)
+	_ok("generator" in (tut.get("_completed_steps") as Array), "TUT2 repairing a district completes the generator hint")
 	# the double tap of a move key is the dodge the hint asks for
 	tut.set("_completed_steps", [])
 	tut.set("_current_step", _tutorial_index("dodge"))
@@ -1591,3 +1601,37 @@ func _check_scroll_bars_have_a_width() -> void:
 	await get_tree().process_frame
 	_ok(bar.get_combined_minimum_size().x >= 8.0, "SCROLL1 a vertical scroll bar of the UI theme is at least 8 px wide (%.0f)" % bar.get_combined_minimum_size().x)
 	bar.queue_free()
+
+# ── the victory screen opens on the state change, before the ending is worked out: every win showed the ending left from earlier ──
+func _check_victory_screen_shows_this_ending() -> void:
+	_playing()
+	var grid_before: Dictionary = PowerGrid.to_dict()
+	for district in PowerGrid.all_districts():
+		district.stage = DistrictData.Stage.FULL
+	EndingsManager.force_ending(&"dark")  # what an earlier run (or a death) left behind
+	GameManager.trigger_win()
+	await get_tree().process_frame
+	var title := (UIManager._get_screen(&"win") as Control).get("_title") as Label
+	_ok(EndingsManager.get_ending() == &"hope" and title.text == LocalizationManager.t("ENDING_HOPE_TITLE"),
+		"WIN2 a win with every district FULL and few documents shows Hope, not the ending left from before (%s, '%s')" % [EndingsManager.get_ending(), title.text])
+	GameManager._change_state(GameManager.GameState.PLAYING)
+	UIManager.close(&"win")
+	PowerGrid.from_dict(grid_before)
+	_player.set("gameplay_active", true)
+
+# ── the help screen named the sprint action "sprint" (the project's is "run"), showed a prompt with its "%s" as the label of
+#    the interact key and a glossary title that is not the glossary entry's subject ──
+func _check_help_rows_are_real() -> void:
+	var consts := (load("res://scripts/ui/help_ui.gd") as Script).get_script_constant_map()
+	var bad: PackedStringArray = []
+	for row in consts["CONTROLS"]:
+		if not InputMap.has_action(String(row["action"])):
+			bad.append("action %s" % row["action"])
+		for key in [row["label"], row["touch"]]:
+			if not LocalizationManager.has_key(String(key)) or LocalizationManager.t(String(key)).contains("%"):
+				bad.append("%s = '%s'" % [key, LocalizationManager.t(String(key))])
+	for entry in consts["GLOSSARY"]:
+		for key in [entry["title"], entry["desc"]]:
+			if not LocalizationManager.has_key(String(key)) or LocalizationManager.t(String(key)).contains("%"):
+				bad.append("%s = '%s'" % [key, LocalizationManager.t(String(key))])
+	_ok(LocalizationManager.has_key("HELP_GLOSSARY") and bad.is_empty(), "HELP1 every row of the help screen names a real action and a translated text without a format placeholder (%s)" % ", ".join(bad))

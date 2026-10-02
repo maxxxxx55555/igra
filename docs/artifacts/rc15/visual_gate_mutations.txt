@@ -1,0 +1,9 @@
+baseline   unmutated                                      corruption frames missed 0 of 4, canon frames failed 0 of 14, demo passes
+CAUGHT     BRIGHT_MIN_VAL 0.35 -> 0.12 (vignette counts)  corruption frames missed 0 of 4, canon frames failed 1 of 14, demo FAILS on dim_wash_vignette_5pct
+CAUGHT     MAGENTA_FAIL_PCT 0.5 -> 100                    corruption frames missed 0 of 4, canon frames failed 0 of 14, demo FAILS on bright_purple_patch
+CAUGHT     DIM_FAIL_PCT 10 -> 100                         corruption frames missed 0 of 4, canon frames failed 0 of 14, demo FAILS on dim_magenta_wash_20pct
+CAUGHT     VIVID_FAIL_PCT 0.05 -> 100                     corruption frames missed 0 of 4, canon frames failed 0 of 14, demo FAILS on scattered_vivid_noise
+CAUGHT     VIVID_SAT 0.85 -> 0.5 (canon colours count)    corruption frames missed 0 of 4, canon frames failed 12 of 14, demo FAILS on brass_lamp_blob
+CAUGHT     HUE_HIGH 345 -> 300 (pink escapes the band)    corruption frames missed 0 of 4, canon frames failed 0 of 14, demo FAILS on bright_pink_patch
+CAUGHT     HUE_LOW 260 -> 300 (purple escapes the band)   corruption frames missed 0 of 4, canon frames failed 0 of 14, demo FAILS on bright_purple_patch
+CAUGHT     BLACK_FAIL_PCT 40 -> 100                       corruption frames missed 0 of 4, canon frames failed 0 of 14, demo FAILS on half_black_frame

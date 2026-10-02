@@ -1515,5 +1515,11 @@
   "DEATH_DISTRICTS": "Районов восстановлено: %d / %d (%d%%)",
   "DEATH_DOCS": "Документов найдено: %d / %d",
   "Stealth": "Скрытность",
-  "opt_ultra": "Ультра"
+  "opt_ultra": "Ультра",
+  "HELP_GLOSSARY": "Глоссарий",
+  "HELP_STREETLIGHTS": "Фонари",
+  "CREDITS_DESIGN": "Геймдизайн и код: TLS Team",
+  "CREDITS_MUSIC": "Музыка и звуки: TLS Team",
+  "CREDITS_ART": "Графика и интерфейс: TLS Team",
+  "CREDITS_THANKS": "Особая благодарность игрокам"
 }

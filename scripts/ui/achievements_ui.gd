@@ -57,6 +57,7 @@ func _build() -> void:
 	# Двадцать достижений с описаниями в фиксированную панель не помещаются.
 	var scroll := ScrollContainer.new()
 	scroll.custom_minimum_size = Vector2(440, 330)
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL  # in the Codex page the 330 px minimum left 7 of 31 rows in a 600 px page
 	vb.add_child(scroll)
 	_list = VBoxContainer.new()
 	_list.add_theme_constant_override("separation", 8)

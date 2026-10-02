@@ -1515,5 +1515,11 @@
   "DEATH_DISTRICTS": "復旧した地区：%d / %d (%d%%)",
   "DEATH_DOCS": "見つけた文書：%d / %d",
   "Stealth": "ステルス",
-  "opt_ultra": "ウルトラ"
+  "opt_ultra": "ウルトラ",
+  "HELP_GLOSSARY": "用語集",
+  "HELP_STREETLIGHTS": "街灯",
+  "CREDITS_DESIGN": "ゲームデザインとコード: TLS Team",
+  "CREDITS_MUSIC": "音楽と効果音: TLS Team",
+  "CREDITS_ART": "アートとUI: TLS Team",
+  "CREDITS_THANKS": "プレイヤーの皆さまに感謝を込めて"
 }

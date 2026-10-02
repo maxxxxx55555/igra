@@ -1,0 +1,24 @@
+# Security regrep (rc15 R6), 2026-10-02 at fda6834
+
+OK   signed main save (HMAC over the envelope): 15 hit(s), e.g. scripts/core/save_system.gd:11:## matching sha256_text() with no secret needed. HMAC-SHA256 needs this key
+OK   slot id bound into the signed body: 3 hit(s), e.g. scripts/core/save_system.gd:590:		"slot_id": slot,
+OK   atomic write via temp file and rename: 5 hit(s), e.g. scripts/core/save_system.gd:79:## .bak first (the same convention _write_atomic() already uses), so an
+OK   3-generation .bak rotation: 15 hit(s), e.g. scripts/core/save_system.gd:79:## .bak first (the same convention _write_atomic() already uses), so an
+OK   temp file read back before it replaces the save (E12): 4 hit(s), e.g. scripts/core/save_system.gd:151:## Signs a JSON round-tripped copy so write and verify see the same text:
+OK   domain envelopes for NG+, flashlight upgrades, daily, achievements: 27 hit(s), e.g. scripts/systems/achievements_manager.gd:187:## save_system.gd's HMAC-signed envelope - hand-editing "unlocked"
+OK   schema validation on from_dict (bounds/allowlists): 18 hit(s), e.g. scripts/core/save_system.gd:6:const MAX_SLOTS: int = 4
+OK   IntegrityGuard watchdog autoload: 1 hit(s), e.g. project.godot:76:IntegrityGuard="*res://scripts/systems/integrity_guard.gd"
+OK   IntegrityGuard re-validates economy/position/vitals: 8 hit(s), e.g. scripts/systems/integrity_guard.gd:52:func _check_economy() -> void:
+OK   forged position rejected (E14): 8 hit(s), e.g. scripts/core/save_system.gd:97:var _pending_player_pos: Vector3 = Vector3.INF
+OK   RPC sender-id binding: 3 hit(s), e.g. scripts/net/lan_network.gd:83:	var sender := multiplayer.get_remote_sender_id()
+OK   release build has no ad stub / debug provider: 1 hit(s), e.g. scripts/monetization/ad_service.gd:50:	set_provider(_default_provider(OS.is_debug_build()))
+
+export exclusions (export_presets.cfg):
+3:exclude_filter="scenes/tools/*,scenes/tools/**,scripts/tools/*,scripts/tools/**,assets/audio/_pre_norm/*,assets/audio/_pre_norm/**,assets/_orphaned/*,assets/_orphaned/**,assets/store/storyboard/*,as
+44:exclude_filter="scenes/tools/*,scenes/tools/**,scripts/tools/*,scripts/tools/**,assets/audio/_pre_norm/*,assets/audio/_pre_norm/**,assets/_orphaned/*,assets/_orphaned/**,assets/store/storyboard/*,a
+68:exclude_filter="scenes/tools/*,scenes/tools/**,scripts/tools/*,scripts/tools/**,assets/audio/_pre_norm/*,assets/audio/_pre_norm/**,assets/_orphaned/*,assets/_orphaned/**,assets/store/storyboard/*,a
+
+signing material in the tree:
+OK   .signing is git-ignored
+NOTE release.env not matched by .gitignore
+(no tracked key material above = OK)

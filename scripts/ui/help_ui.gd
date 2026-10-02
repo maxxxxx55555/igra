@@ -16,12 +16,12 @@ var embedded: bool = false
 const CONTROLS: Array[Dictionary] = [
 	{"action": "move_up", "label": "tutorial_move", "touch": "TOUCH_JOYSTICK"},
 	{"action": "flashlight_toggle", "label": "SCR_FONARIK", "touch": "TOUCH_FLASH_BTN"},
-	{"action": "interact", "label": "PROMPT_REPAIR", "touch": "TOUCH_INTERACT_BTN"},
+	{"action": "interact", "label": "PROMPT_INTERACT", "touch": "TOUCH_INTERACT_BTN"},
 	{"action": "stealth", "label": "HUD_STEALTH", "touch": "TOUCH_STEALTH_BTN"},
-	{"action": "sprint", "label": "HUD_SPRINT", "touch": "TOUCH_SPRINT_BTN"},
-	{"action": "city_map_toggle", "label": "SCR_RAYONOV", "touch": "TOUCH_MAP_BTN"},
+	{"action": "run", "label": "HUD_SPRINT", "touch": "TOUCH_SPRINT_BTN"},
+	{"action": "city_map_toggle", "label": "MAP_TITLE", "touch": "TOUCH_MAP_BTN"},
 	{"action": "journal_toggle", "label": "JOURNAL_TITLE", "touch": "TOUCH_MENU_BTN"},
-	{"action": "ui_pause", "label": "back_menu", "touch": "TOUCH_PAUSE_BTN"},
+	{"action": "ui_pause", "label": "paused", "touch": "TOUCH_PAUSE_BTN"},
 ]
 
 ## Glossary: title key (existing, short) -> description key (existing,
@@ -30,7 +30,7 @@ const GLOSSARY: Array[Dictionary] = [
 	{"title": "HUD_BATTERY", "desc": "TUT_BATTERY_FOUND", "icon": "battery"},
 	{"title": "Cable Puzzle", "desc": "ONBOARD_06_CAPTION", "icon": "puzzle"},
 	{"title": "HUD_STEALTH", "desc": "ONBOARD_07_CAPTION", "icon": "stealth"},
-	{"title": "SCR_RAYONOV", "desc": "ONBOARD_04_CAPTION", "icon": ""},
+	{"title": "HELP_STREETLIGHTS", "desc": "ONBOARD_04_CAPTION", "icon": ""},
 	{"title": "SCR_FONARIK", "desc": "HINT_FLASHLIGHT", "icon": ""},
 ]
 
@@ -72,7 +72,7 @@ func _build() -> void:
 		_control_row(col, LocalizationManager.t(String(row["label"])),
 			_keycap_for(String(row["action"])), LocalizationManager.t(String(row["touch"])))
 
-	_section_header(col, "Glossary", "controls")
+	_section_header(col, "HELP_GLOSSARY", "controls")
 	for g in GLOSSARY:
 		_glossary_entry(col, LocalizationManager.t(String(g["title"])),
 			LocalizationManager.t(String(g["desc"])), String(g["icon"]))
@@ -104,17 +104,17 @@ func _control_row(parent: Node, label: String, keycap: String, touch: String) ->
 	parent.add_child(row)
 	var lk := Label.new()
 	lk.text = label
-	lk.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	lk.custom_minimum_size.x = 300  # the three columns sit together: an expanding label put the keycap a screen away from its action
 	lk.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	row.add_child(lk)
 	var lkey := Label.new()
 	lkey.text = keycap
-	lkey.custom_minimum_size.x = 90
+	lkey.custom_minimum_size.x = 110
 	lkey.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
 	row.add_child(lkey)
 	var ltouch := Label.new()
 	ltouch.text = touch
-	ltouch.custom_minimum_size.x = 170
+	ltouch.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	ltouch.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	ltouch.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
 	row.add_child(ltouch)
