@@ -1,4 +1,4 @@
-tools/check.sh (full, windowed reimport first) at 8ad0b93, 2026-10-02, no other Godot process running
+tools/check.sh (full, windowed reimport first) at 9e8c6b0, 2026-10-02, no other Godot process running
 ── Статические проверки (Godot не нужен)
   OK   ссылки на ресурсы (0 битых)
   OK   автозагрузки (56 шт., 0 битых)

@@ -145,7 +145,7 @@ rows: `docs/ACCEPTANCE_CHECKLIST.md` (200 rows); decisions: `docs/TZ_DECISIONS.m
 
 | Gate | Result |
 |---|---|
-| `tools/check.sh` full (windowed reimport first) | **Всё зелёное, 56 checks**, EXIT 0, at `8ad0b93` (`check_full_signoff.txt`); two windowed-only gates (perf budget, Music bus) skip in a headless run and are run below. Earlier batteries of the day were not green: the 3D scene gate and the touch probe (CORRECTION_LOG 90-91), then the theme probe on the quick bar's slot colour (97) |
+| `tools/check.sh` full (windowed reimport first) | **Всё зелёное, 56 checks**, EXIT 0, at `8ad0b93` and again at `9e8c6b0` (`check_full_signoff.txt`, the later run); two windowed-only gates (perf budget, Music bus) skip in a headless run and are run below. Earlier batteries of the day were not green: the 3D scene gate and the touch probe (CORRECTION_LOG 90-91), then the theme probe on the quick bar's slot colour (97) |
 | Static `--static`, `flow_check`, `scene_node_check`, compile gate | 31 checks, 56 flow checks, scene nodes clean (all inside the battery), `COMPILE_GATE bad=0` |
 | `closeout_check` | **311 checks, 0 fails** (`closeout_check_signoff.txt`; the 311th, the workbench salvage I9.4, was added after verifier round 14, a tools-only change) |
 | Closeout mutations | 16 mutations, 20 of the 32 combat checks fail on the mutated tree, the tree is restored byte for byte (`closeout_mutation_signoff.txt`, `tools/qa_sim/closeout_mutations.py`) |
