@@ -366,6 +366,8 @@ func _ready() -> void:
 	EventBus.player_health_changed.emit(1.0)
 	EventBus.player_stamina_changed.emit(1.0)
 	EventBus.player_battery_changed.emit(1.0)
+	# listeners (the daily "dark segment") assumed the light started off; it starts on
+	EventBus.flashlight_state_changed.emit(flashlight_enabled)
 	EventBus.game_started.connect(_on_game_started)
 	var weapons := WeaponManager.new()
 	weapons.name = "WeaponManager"
@@ -517,7 +519,8 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector3.ZERO
 		move_and_slide()
 		return
-	var dir_2d: Vector2 = InputService.get_move_dir()
+	# a dead player (or one behind the victory screen) is not at the controls
+	var dir_2d: Vector2 = InputService.get_move_dir() if gameplay_active else Vector2.ZERO
 	_track_dodge_tap(dir_2d, delta)
 	var dir: Vector3 = _view_dir(dir_2d)
 	var moving: bool = dir.length_squared() > 0.0001
@@ -871,7 +874,7 @@ func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, _type: EnemyRo
 	## in front of the Architect at half HP with no grace window, so the
 	## very next energy ball (every ~2-3s) killed them again — a loop that
 	## ate the whole 240s deadline. grant_iframes() below feeds both cases.
-	if _iframes > 0.0:
+	if _iframes > 0.0 or GameManager.is_win():
 		return
 	_since_hurt = 0.0
 	# Winnability: «mercy i-frames» — после попадания 0.8 с неуязвимости.
@@ -897,6 +900,7 @@ func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, _type: EnemyRo
 		Input.vibrate_handheld(60)
 
 	if hp <= 0.0:
+		gameplay_active = false
 		EventBus.game_over.emit()
 
 ## The nearest monster to where the hit came from is the cause shown if this was the last one.
@@ -979,7 +983,7 @@ func _unhandled_input(event: InputEvent) -> void:
 const STROBE_COOLDOWN: float = 10.0
 const STROBE_STUN: float = 1.5
 const STROBE_RANGE: float = 12.0
-const STROBE_HALF_ANGLE: float = 0.45  # ~26° от оси = конус 52°
+const STROBE_HALF_ANGLE: float = 0.45  # radians, ~26° от оси = конус 52° (it was multiplied by PI: a 162° cone)
 const STROBE_BATTERY_COST: float = 5.0
 
 var _strobe_cooldown: float = 0.0
@@ -999,7 +1003,7 @@ func trigger_strobe() -> bool:
 	_strobe_cooldown = STROBE_COOLDOWN
 	consume_battery(STROBE_BATTERY_COST)
 	var hits: int = 0
-	for m in _monsters_in_cone(STROBE_RANGE, cos(STROBE_HALF_ANGLE * PI)):
+	for m in _monsters_in_cone(STROBE_RANGE, cos(STROBE_HALF_ANGLE)):
 		if m.has_method("stun"):
 			m.call("stun", STROBE_STUN)
 			hits += 1

@@ -14,6 +14,7 @@ var _rewarded_unit: String
 var _interstitial_unit: String
 var _sdk_ready: bool = false
 var _pending_reward_id: StringName = &""
+var _reward_received: bool = false
 
 func _init(service: Node, sdk_key: String) -> void:
 	_service = service
@@ -26,9 +27,13 @@ func initialize() -> void:
 	rewarded_listener.on_ad_display_failed = func(_id: String, _err, _info) -> void:
 		_service._on_provider_failed("ad display failed")
 	rewarded_listener.on_ad_hidden = func(_id: String, _info) -> void:
+		# closed before the end: no reward is coming, and the service stayed "in flight" for the rest of the session
+		if not _reward_received:
+			_service._on_provider_failed("ad closed")
 		if not _rewarded_unit.is_empty():
 			AppLovinMAX.load_rewarded_ad(_rewarded_unit)
 	rewarded_listener.on_ad_received_reward = func(_id: String, _reward, _info) -> void:
+		_reward_received = true
 		_service._on_provider_reward(_pending_reward_id)
 	AppLovinMAX.set_rewarded_ad_listener(rewarded_listener)
 
@@ -55,6 +60,7 @@ func is_ready() -> bool:
 
 func show(reward_id: StringName) -> void:
 	_pending_reward_id = reward_id
+	_reward_received = false
 	AppLovinMAX.show_rewarded_ad(_rewarded_unit)
 
 func is_interstitial_ready() -> bool:

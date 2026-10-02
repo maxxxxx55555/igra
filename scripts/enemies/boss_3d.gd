@@ -138,6 +138,7 @@ func _throw_energy_ball() -> void:
 	if dir.length_squared() < 0.001:
 		return
 	var ball := EnergyBall.new(dir, BALL_DAMAGE)
+	ball.add_to_group("boss_hazard")
 	get_tree().current_scene.add_child(ball)
 	ball.global_position = global_position + Vector3(0, 1.8, 0)
 
@@ -190,6 +191,7 @@ func _spawn_falling_beam() -> void:
 	if not player_ref or not is_instance_valid(player_ref):
 		return
 	var beam := FallingBeam.new(BEAM_DAMAGE)
+	beam.add_to_group("boss_hazard")
 	get_tree().current_scene.add_child(beam)
 	beam.global_position = player_ref.global_position + Vector3(randf_range(-2.0, 2.0), 0.0, randf_range(-2.0, 2.0))
 
@@ -231,7 +233,15 @@ func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, type: EnemyRos
 ## концовка (EndingsManager по документам и секретам) не считалась вовсе.
 ## Теперь босс только сообщает о смерти, а финал ведёт FinaleDirector:
 ## boss_defeated -> trigger_win() -> состояние WIN -> экран победы UIManager.
+## What the Architect threw and summoned does not outlive him.
+func _clear_hazards() -> void:
+	get_tree().call_group("boss_hazard", "queue_free")
+	for minion in _minions:
+		if is_instance_valid(minion):
+			minion.queue_free()
+
 func _trigger_death() -> void:
+	_clear_hazards()
 	EventBus.boss_defeated.emit()
 	super._trigger_death()
 

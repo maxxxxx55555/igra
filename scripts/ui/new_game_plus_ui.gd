@@ -1,11 +1,11 @@
 extends Control
 class_name NewGamePlusUI
 
-@onready var ng_label: Label = $MarginContainer/VBoxContainer/NGLabel
-@onready var current_level: Label = $MarginContainer/VBoxContainer/CurrentLevel
-@onready var multiplier_label: Label = $MarginContainer/VBoxContainer/MultiplierLabel
-@onready var activate_button: Button = $MarginContainer/VBoxContainer/ActivateButton
-@onready var back_button: Button = $MarginContainer/VBoxContainer/BackButton
+@onready var ng_label: Label = $Scroll/Center/VBoxContainer/NGLabel
+@onready var current_level: Label = $Scroll/Center/VBoxContainer/CurrentLevel
+@onready var multiplier_label: Label = $Scroll/Center/VBoxContainer/MultiplierLabel
+@onready var activate_button: Button = $Scroll/Center/VBoxContainer/ActivateButton
+@onready var back_button: Button = $Scroll/Center/VBoxContainer/BackButton
 
 var _mod_box: VBoxContainer = null
 var _help_label: Label = null
@@ -26,6 +26,11 @@ func _ready() -> void:
 	# freed, just hidden) - a language change while it's closed left it
 	# stale next time it reopened, since nothing called _refresh() again.
 	LocalizationManager.language_changed.connect(func(_l: String) -> void: _refresh())
+	# the screen is cached: every showing is a new visit (it stayed "activated" and the list stale until the app restarted)
+	visibility_changed.connect(func() -> void:
+		if visible:
+			_activated_this_visit = false
+			_refresh())
 
 func _refresh() -> void:
 	var ng = NewGamePlus.get_current_ng_plus()
@@ -75,6 +80,7 @@ func _refresh_modifiers() -> void:
 	if _mod_box == null:
 		_mod_box = VBoxContainer.new()
 		ng_label.get_parent().add_child(_mod_box)
+		ng_label.get_parent().move_child(_mod_box, back_button.get_index())
 	for child in _mod_box.get_children():
 		child.queue_free()
 	var mods: Array = NewGamePlus.get_modifiers()
