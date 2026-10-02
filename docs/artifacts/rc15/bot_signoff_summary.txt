@@ -1,0 +1,20 @@
+autoplay bot at 61b151f, 2026-10-02, QA_TIME_SCALE=4 QA_SEEDS="1 2 3", game code identical to a57f9dd
+[bot s1]   result       : WIN
+[bot s1]   wall time    : 119.2s
+[bot s1]   districts FULL: 11/11
+[bot s1]   deaths       : 0
+[bot s1]   coins earned : 9751 (wallet 9751)
+[bot s1]   nudges       : 18 (>1 means the win leaned on nudge rescues, not clean nav — docs/REDTEAM_CHALLENGE.md TG-PLAY)
+[bot s2]   result       : WIN
+[bot s2]   wall time    : 109.0s
+[bot s2]   districts FULL: 11/11
+[bot s2]   deaths       : 0
+[bot s2]   coins earned : 9004 (wallet 9004)
+[bot s2]   nudges       : 18 (>1 means the win leaned on nudge rescues, not clean nav — docs/REDTEAM_CHALLENGE.md TG-PLAY)
+[bot s3]   result       : WIN
+[bot s3]   wall time    : 116.3s
+[bot s3]   districts FULL: 11/11
+[bot s3]   deaths       : 0
+[bot s3]   coins earned : 9052 (wallet 9052)
+[bot s3]   nudges       : 16 (>1 means the win leaned on nudge rescues, not clean nav — docs/REDTEAM_CHALLENGE.md TG-PLAY)
+autoplay bot: 3/3 seeds won, 0 softlock(s)

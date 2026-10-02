@@ -26,8 +26,13 @@ rules fired on canon:
     flagged the lamps, lit windows and moonlit sidewalks of every dark street
     (0.5-0.7% of the world band, hue 20-80 and 200-260 degrees): replaced by
     VIVID, pixels of nearly full saturation AND brightness, a colour the palette
-    never produces (canon <= 0.001% of the band, the four corruption frames
-    0.29-3.37%).
+    never produces (canon <= 0.005% of the band, the four corruption frames
+    0.29-3.37%). The one canon effect that reaches it is the death burst of
+    scenes/vfx/vfx_blood.tscn (28 dark red particles, 0.55/0.06/0.06, the PEGI 16
+    blood of docs/PRODUCTION_BIBLE.md section 6): a final combat frame caught it
+    at its peak and measured 0.062%. The threshold sits between that and the
+    lightest corruption frame (0.294%), at 0.13%: 2.1x over the canon peak, 2.3x
+    under the corruption minimum.
   - the magenta hue band (260-345 degrees) counted the ember damage vignette
     over a night scene: ember #b4452f blended into the blue-black ambient lands
     on hue 290-340 at value 0.12-0.34 (6.1% of the band at the worst, a heavy
@@ -38,7 +43,7 @@ rules fired on canon:
     own, area-based threshold (10%: canon max 6.1%, the dim corruption frame
     15.1%).
 Thresholds therefore: magenta (bright, hue band) <= 0.5%, dim wash <= 10%, vivid
-<= 0.05%, black <= 40%, HUD present. `--demo` runs the mutation self-test on
+<= 0.13%, black <= 40%, HUD present. `--demo` runs the mutation self-test on
 synthetic frames: every defect pattern must fail, every canon pattern must pass.
 
 Usage: python tools/qa_sim/visual_truth_gate.py <png> [<png> ...]
@@ -51,7 +56,7 @@ from PIL import Image
 
 MAGENTA_FAIL_PCT = 0.5
 DIM_FAIL_PCT = 10.0
-VIVID_FAIL_PCT = 0.05
+VIVID_FAIL_PCT = 0.13
 # SLOP_REPORT item (§2, under-tight): was 85.0, nearly vacuous - a half-black
 # corrupted frame would still pass. Real committed evidence frames
 # (docs/stills/evidence/r0_after_*.png) measure 7.6-9.8% black on confirmed-
@@ -176,6 +181,7 @@ def _demo() -> None:
     cases.append(("brass_lamp_blob", _frame((0.4, 0.6, 0.3, 0.5, (201, 162, 74))), True))          # canon brass #c9a24a, 4% of the band
     cases.append(("lit_window_row", _frame((0.1, 0.9, 0.4, 0.45, (230, 200, 90))), True))          # saturated warm light, sat 0.61
     cases.append(("moonlit_sidewalk", _frame((0.0, 1.0, 0.7, 0.8, (170, 190, 235))), True))
+    cases.append(("blood_burst_peak", _frame((0.0, 0.13, 0.5, 0.5061, (140, 15, 15))), True))          # 13 of 16500 px (0.079%) of the death burst's red 0.55/0.06/0.06, above the 0.062% measured peak
     noise = Image.new("RGB", (100, 300), (40, 60, 90))
     rng = random.Random(7)
     npx = noise.load()

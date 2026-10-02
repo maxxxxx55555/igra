@@ -181,10 +181,10 @@ Play-through steps (GUI-engine input injection, a frame read at each): **A01** b
 
 | ID | Promise | GDD | Proof | Result |
 |---|---|---|---|---|
-| PF1 | Draw calls < 200 (D1) / < 350 (D11) | 15 | windowed perf_check_scene rc15: D1 169, D11 168 (279 / 272 before the moon-shadow change); `perf_rc15.txt` | PASS(perf) |
-| PF2 | Particles < 500, RAM < 800 MB, VRAM < 400 MB | 15 | windowed perf_check_scene rc15: 140 particles, 96.6 MiB static, 153.0 MiB video, 127.6 MiB textures | PASS(perf) |
-| PF3 | 30-60 FPS | 15 | windowed p95 frame time rc15 (AMD iGPU): D1 16.67 ms, D11 18.06 ms (60 and 55 fps) | PASS(perf) |
-| PF4 | Polygons < 50K per district | 15 | rc15: the district's own geometry is 49 174 primitives (hiding the district root saves that many, `perf_rc15.txt`), under 50K; the frame total is 76 551 with the player's flashlight shadow pass (35 502) and the monsters (3 x 4 992); it was 1.34 M before the prop mesh cut | PASS(perf, per-district reading; frame total 53% over) |
+| PF1 | Draw calls < 200 (D1) / < 350 (D11) | 15 | windowed perf_check_scene on the running game, two runs: D1 134 / 132, D11 136 / 133 (279 / 272 before the moon-shadow change; the 169 / 168 of `perf_rc15.txt` were a paused tree, CORRECTION_LOG 93); `perf_rc15_final.txt` | PASS(perf) |
+| PF2 | Particles < 500, RAM < 800 MB, VRAM < 400 MB | 15 | windowed perf_check_scene, two runs of the running game: 140 particles, 100.1 to 100.2 MiB static, 153.0 MiB video, 127.5 MiB textures (`perf_rc15_final.txt`) | PASS(perf) |
+| PF3 | 30-60 FPS | 15 | windowed p95 frame time on the running game (AMD iGPU), two runs: D1 31.94 / 32.02 ms (31 fps), D11 26.19 / 26.67 ms (38 fps); the 60 and 55 fps of rc15 were a paused scene (CORRECTION_LOG 93); `perf_rc15_final.txt` | PASS(perf, 31 fps at D1: a 4% margin over the floor on this iGPU; a phone is T01) |
+| PF4 | Polygons < 50K per district | 15 | the district's own geometry at D1 is 44 830 / 35 616 primitives (hiding the district root, `perf_rc15_final.txt`); the whole frame measures 48 935 / 39 721 at D1 and 50 161 / 45 105 at D11 (it was 76 551 on the paused tree, 1.34 M before the prop mesh cut) | PASS(perf; the frame total is under 50K at D1 and 0.3% over in one of two D11 runs) |
 
 ## 17-24. Items, weapons, skills, achievements, album, daily, ads, toasts, stats, exit
 
@@ -315,3 +315,5 @@ Rows the first play-through added: each was a defect a frame or a measured numbe
 | HELP1 | The Help screen's rows name real actions and carry translated text without a format placeholder | V.2 | closeout_check HELP1 (the old `sprint` row fails it); play-through S_codex_help | PASS(closeout) |
 | UIS1 | Every Codex tab opens by a click, its scroll list has a window of a third of the screen, and no raw format specifier is on screen | V.2 | play-through S_codex_* (the achievements list failed it at 31%) | PT |
 | VG1 | The visual gate fails the four committed corruption frames and passes the sign-off, beauty and clean evidence frames; every threshold mutation fails | V.1 | `tools/check.sh --static` (visual_truth_gate x3), `visual_gate_mutations.txt` | PASS(static) |
+| G3D2 | The 3D scene test's real swing lands on a fresh profile: the onboarding overlay no longer holds the tree paused under the swing | 5.1 | `tools/check.sh` gate "прогон 3D-сцены" (`the tree runs while the swing plays`, `melee swing damages the monster in front`), `docs/artifacts/rc15/check_full_signoff.txt`; failed 20 -> 20 before (CORRECTION_LOG 90) | BATTERY |
+| DL3 | The closeout leaves the daily challenge as it found it, so a later gate on the same profile reads a consistent file (boot, closeout, touch in order) | 24 | `docs/artifacts/rc15/signoff_gate_sequence.txt` (before and after), the touch probe in `tools/check.sh` | BATTERY |

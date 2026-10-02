@@ -18,6 +18,8 @@ func _run() -> void:
 		printerr("[perf] menu never reachable")
 		get_tree().quit(1)
 		return
+	# a fresh profile opens the onboarding cards on game_started: they pause the tree and dim the frame, and these runs measure the game
+	SaveSystem.mark_onboard_done()
 	Routes.start_game()
 	if not await _wait_until(func() -> bool: return GameManager.is_playing(), 10.0):
 		printerr("[perf] never entered PLAYING")
