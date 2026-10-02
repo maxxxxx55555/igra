@@ -9,6 +9,37 @@ Canon this pack obeys: `PRODUCTION_BIBLE.md` §2 (palette, banned colours, fonts
 the seven district cards and the trailer stills. Numbers below were measured on disk on 2026-10-01
 (924 PNG + 11 SVG) with a script, not copied from older reports.
 
+## Status: Tier 1 is generated (2026-10-02)
+
+All 73 rows of §4 are generated and committed, plus the 7 derived squares - 80 files, every one at
+its stated size, 52.5 MB total. Nothing under §4 is a placeholder any more.
+
+They were not generated row by row in isolation. Rows that must read as one set were made as one set:
+the four `menu_hero_*` plates share a camera (the other three are derived from `menu_hero_lit`), as do
+the four `stage_*` plates. Every plate then goes through `tools/art_finish.py` - crop to the row's
+aspect ratio, LANCZOS resize to the stated size, a light unsharp mask where the step was an upscale,
+then the house grade: black lifted to the bg-deep `#0c1016` floor and highlights given a soft rolloff,
+because pure `#000000` and `#ffffff` are banned, plus mild desaturation for the muted low-key look.
+
+Sets are luminance-matched, individually generated pictures are not a set. The nine district loading
+screens arrived spread over 33.5-57.3 and now sit in 34-42; the ten photos arrived at 29.4-68.1 and
+now sit at 29.3-45.5; the seven tutorial frames at 30.7-60.3, now 33.5-45.5. Warmth is deliberately
+left alone - the districts are supposed to differ, so the gas station stays warmest and the hospital
+coldest. Where an order is canon, it is graded in: the five endings run ascending on both luminance
+and R-B (19/28/33/39/54 and -28/-20/-6/+5/+30).
+
+Measured on all 80 files: zero blown highlights, zero pure black.
+
+Two honest limits. The generator emits 1376x768 natively, so every 1920x1080 plate is a 1.4x
+upscale - sharpened, but not native 1080p; that is the one thing worth re-shooting later. And it
+capped at 10 images per turn, so this took eight turns.
+
+Text was verified by OCR (RapidOCR), not trusted from the prompts. Of 80 files, six returned
+detections of two or more characters and none is a word: the documents returned scribble fragments
+('lytm', 'Btee') and the night plates returned noise off high-contrast patterns ('八#', '0400'). One
+plate did return a readable unit mark ('44mV' on the blueprint) and was re-shot until clean, because
+the game localises all copy into 13 languages and draws it over the picture.
+
 ## 0. The rename: what it touched, what it did not
 
 An OCR pass over every PNG in the repo (RapidOCR, 924 files) found the old title baked into exactly
