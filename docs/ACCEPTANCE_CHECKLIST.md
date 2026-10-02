@@ -181,10 +181,10 @@ Play-through steps (GUI-engine input injection, a frame read at each): **A01** b
 
 | ID | Promise | GDD | Proof | Result |
 |---|---|---|---|---|
-| PF1 | Draw calls < 200 (D1) / < 350 (D11) | 15 | windowed perf_check_scene | BATTERY |
-| PF2 | Particles < 500, RAM < 800 MB, VRAM < 400 MB | 15 | windowed perf_check_scene | BATTERY |
-| PF3 | 30-60 FPS | 15 | windowed p95 frame time | BATTERY |
-| PF4 | Polygons < 50K per district | 15 | 1.34 M primitives measured (PERF_PASS 18) | OPEN |
+| PF1 | Draw calls < 200 (D1) / < 350 (D11) | 15 | windowed perf_check_scene rc15: D1 169, D11 168 (279 / 272 before the moon-shadow change); `perf_rc15.txt` | PASS(perf) |
+| PF2 | Particles < 500, RAM < 800 MB, VRAM < 400 MB | 15 | windowed perf_check_scene rc15: 140 particles, 96.6 MiB static, 153.0 MiB video, 127.6 MiB textures | PASS(perf) |
+| PF3 | 30-60 FPS | 15 | windowed p95 frame time rc15 (AMD iGPU): D1 16.67 ms, D11 18.06 ms (60 and 55 fps) | PASS(perf) |
+| PF4 | Polygons < 50K per district | 15 | rc15: the district's own geometry is 49 174 primitives (hiding the district root saves that many, `perf_rc15.txt`), under 50K; the frame total is 76 551 with the player's flashlight shadow pass (35 502) and the monsters (3 x 4 992); it was 1.34 M before the prop mesh cut | PASS(perf, per-district reading; frame total 53% over) |
 
 ## 17-24. Items, weapons, skills, achievements, album, daily, ads, toasts, stats, exit
 

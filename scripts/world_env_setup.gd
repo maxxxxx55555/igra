@@ -25,6 +25,9 @@ const AMBIENT_COLOR_FULL: Color = Color(0.125, 0.153, 0.212)
 const MOON_DARK: float = 0.12
 const MOON_LIT: float = 0.25
 const MOON_FULL: float = 0.40
+## The moon casts a shadow only where it is bright enough to show one: at 0.12 (the dark stages) the shadow is invisible and
+## cost a quarter of the first district's draw calls (66 of 235, windowed perf_check_scene).
+const MOON_SHADOW_MIN: float = 0.2
 # Свечение вокруг игрока: в тёмном районе его нет, с восстановлением растёт.
 const GLOW_DARK: float = 0.0
 const GLOW_LIT: float = 0.35
@@ -79,7 +82,7 @@ func _ready() -> void:
 	_moon.light_energy = moon_energy_default
 	_moon.light_color = Color(0.439, 0.502, 0.753)  # #7080C0
 	_moon.rotation_degrees = moon_rotation_deg
-	_moon.shadow_enabled = true
+	_moon.shadow_enabled = moon_energy_default >= MOON_SHADOW_MIN and int(SettingsManager.get_setting("shadows", 2)) > 0
 
 	# Flashlight defaults (set on player scene)
 	# - spot_range = 8.0, spot_angle = 45, light_energy = 1.0, color = #c9a24a
@@ -132,6 +135,7 @@ func apply_for_stage(stage: int) -> void:
 	_env.ambient_light_color = ambient_color
 	if _moon:
 		_moon.light_energy = moon_energy
+		_moon.shadow_enabled = moon_energy >= MOON_SHADOW_MIN and int(SettingsManager.get_setting("shadows", 2)) > 0
 	if _player_glow:
 		_player_glow.light_energy = glow_energy
 
@@ -188,6 +192,10 @@ func _apply_graphics_tier(tier: int) -> void:
 	_env.adjustment_saturation = float(p.get("saturation", 1.0))
 
 func _on_settings_changed(key: String, value: Variant) -> void:
+	if key == "shadows":
+		var dm := get_node_or_null("/root/DistrictManager")
+		if dm:
+			apply_for_stage(dm.get_stage(dm.current_district))
 	if key != "graphics_tier":
 		return
 	_apply_graphics_tier(int(value))

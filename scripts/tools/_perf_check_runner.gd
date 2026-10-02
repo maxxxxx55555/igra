@@ -54,10 +54,18 @@ func _run() -> void:
 		# the exit-0 "ok" a real windowed pass reports (SLOP_REPORT item 2).
 		get_tree().quit(3)
 		return
+	await _print_breakdown(district)
 	var d1_p95 := await _frame_p95_ms(300)
 	print("[perf] %s frame_p95_ms=%0.2f texture_mem_mib=%0.1f video_mem_mib=%0.1f" % [district, d1_p95,
 		Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED) / 1048576.0,
 		Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) / 1048576.0])
+	var particles := 0
+	for node in get_tree().root.find_children("*", "GPUParticles3D", true, false):
+		var emitter := node as GPUParticles3D
+		if emitter.emitting and emitter.is_visible_in_tree():
+			particles += emitter.amount
+	print("[perf] %s static_memory_mib=%0.1f particles_emitting=%d (GDD PF2: RAM < 800 MiB, VRAM < 400 MiB, particles < 500)" % [district,
+		Performance.get_monitor(Performance.MEMORY_STATIC) / 1048576.0, particles])
 	# D11: jump straight to power_station (QA only; the profile guard restores
 	# the save), then measure the busiest district against its own budget.
 	var wr := get_tree().root.find_child("WorldRuntime", true, false)
@@ -82,6 +90,41 @@ func _run() -> void:
 		"OK" if not over_d11 else "OVER D11 BUDGET"])
 	print("[perf] DONE fails=", 1 if over_d11 else 0)
 	get_tree().quit(1 if over_d11 else 0)
+
+## What the draw calls of the first district are made of: every direct child of the main scene and of the district root is
+## hidden in turn and the frame's draw calls are counted again (the biggest savers first). A 3D node and a UI layer hide
+## the same way; the sum is not the total (shadow passes and batching overlap) but the ranking is what a fix is chosen by.
+func _print_breakdown(district: String) -> void:
+	var base := _calls()
+	var base_prims := int(Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME))
+	var rows: Array = []
+	var main := get_tree().current_scene
+	var roots: Array[Node] = [main]
+	var world := main.find_child("district_" + district, true, false)
+	if world != null:
+		roots.append(world)
+	for root in roots:
+		for child in root.get_children():
+			if not (child is CanvasItem or child is Node3D or child is CanvasLayer):
+				continue
+			var was: bool = child.visible
+			if not was:
+				continue
+			child.visible = false
+			for i in 3:
+				await get_tree().process_frame
+			rows.append([base - _calls(), "%s/%s (%s) %d primitives" % [root.name, child.name, child.get_class(), base_prims - int(Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME))]])
+			child.visible = true
+	rows.sort_custom(func(a: Array, b: Array) -> bool: return a[0] > b[0])
+	var lines: PackedStringArray = []
+	for row in rows.slice(0, 14):
+		lines.append("%d %s" % [row[0], row[1]])
+	print("[perf] breakdown of %d draw calls in %s, calls saved by hiding each node: %s" % [base, district, " | ".join(lines)])
+	for i in 3:
+		await get_tree().process_frame
+
+func _calls() -> int:
+	return int(Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME))
 
 ## 95th-percentile frame time over the next n frames, in ms. Also prints the
 ## mean GPU and CPU render time and script/physics time over the same frames,

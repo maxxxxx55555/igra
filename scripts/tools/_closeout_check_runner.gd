@@ -44,6 +44,7 @@ func _run() -> void:
 		await _check_scroll_bars_have_a_width()
 		await _check_victory_screen_shows_this_ending()
 		_check_help_rows_are_real()
+		_check_the_moon_shadow_follows_its_light()
 		_finish()
 		return
 	_check_theme()
@@ -95,6 +96,7 @@ func _run() -> void:
 	await _check_scroll_bars_have_a_width()
 	await _check_victory_screen_shows_this_ending()
 	_check_help_rows_are_real()
+	_check_the_moon_shadow_follows_its_light()
 	_finish()
 
 func _finish() -> void:
@@ -1635,3 +1637,23 @@ func _check_help_rows_are_real() -> void:
 			if not LocalizationManager.has_key(String(key)) or LocalizationManager.t(String(key)).contains("%"):
 				bad.append("%s = '%s'" % [key, LocalizationManager.t(String(key))])
 	_ok(LocalizationManager.has_key("HELP_GLOSSARY") and bad.is_empty(), "HELP1 every row of the help screen names a real action and a translated text without a format placeholder (%s)" % ", ".join(bad))
+
+# ── the moon's shadow cost a quarter of the first district's draw calls where it cannot be seen (energy 0.12) ──
+func _check_the_moon_shadow_follows_its_light() -> void:
+	var env: Node = _main.get_node("WorldEnvSetup")
+	var moon := DirectionalLight3D.new()  # earlier checks leave the setup's own moon freed: it is handed a live one
+	add_child(moon)
+	var moon_before: Variant = env.get("_moon")
+	env.set("_moon", moon)
+	var setting: Variant = SettingsManager.get_setting("shadows", 2)
+	SettingsManager.set_shadow_quality(2)
+	env.call("apply_for_stage", 0)
+	_ok(not moon.shadow_enabled, "PERF2 the moon casts no shadow in a dark district (energy %.2f)" % moon.light_energy)
+	env.call("apply_for_stage", 3)
+	_ok(moon.shadow_enabled, "PERF2 and does in a restored one (energy %.2f)" % moon.light_energy)
+	SettingsManager.set_shadow_quality(0)
+	env.call("apply_for_stage", 3)
+	_ok(not moon.shadow_enabled, "PERF2 and not at the Low shadow quality")
+	SettingsManager.set_shadow_quality(int(setting))
+	env.set("_moon", moon_before)
+	moon.queue_free()
