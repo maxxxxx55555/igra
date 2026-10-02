@@ -1,13 +1,18 @@
 extends CanvasLayer
 
 ## The graphics tier (0 Low .. 3 Ultra) picks the layers: Low keeps the vignette alone, Medium adds the grain, High the
-## chromatic aberration. A layer with nothing to show is hidden: a screen-texture shader copies the whole frame every
-## frame, even at amount 0, and a phone pays for that.
+## chromatic aberration, Ultra the sprint motion blur. A layer with nothing to show is hidden: a screen-texture shader
+## copies the whole frame every frame, even at amount 0, and a phone pays for that.
 const TIER_GRAIN: int = 1
 const TIER_CHROMA: int = 2
+const TIER_BLUR: int = 3
 const VISIBILITY_IDLE: float = 0.01  # below this the detection edge cannot be seen
 const CHROMA_PULSE_PX: float = 2.0  # the aberration a hit starts from, in 1080p pixels
 const CHROMA_PULSE_SEC: float = 0.25
+const BLUR_MAX: float = 0.35
+const BLUR_RATE: float = 8.0  # per second: how fast the blur follows the sprint
+const BLUR_IDLE: float = 0.005  # below this the blur cannot be seen
+const PLAYER_RUN: int = 2  # mirrors player_3d.gd: enum State { IDLE, WALK, RUN, STEALTH, CROUCH }
 
 var _grain: ColorRect = null
 var _vignette: ColorRect = null
@@ -19,12 +24,16 @@ var _tier: int = 2
 var _chroma_base: float = 0.0
 var _chroma_pulse: float = 0.0
 var _pulse_tween: Tween = null
+var _blur: ColorRect = null
+var _blur_strength: float = 0.0
+var _player: Node = null
 
 func _ready() -> void:
 	layer = 100
-	# Chroma samples SCREEN_TEXTURE, so it must draw before the grain/vignette
-	# overlays (plain color layers, no screen sampling) or it would pick up
-	# their tint on its R/B offset taps.
+	# Blur and chroma sample SCREEN_TEXTURE, so they must draw before the
+	# grain/vignette overlays (plain color layers, no screen sampling) or they
+	# would pick up their tint on the offset taps.
+	_build_blur()
 	_build_chroma()
 	_build_grain()
 	_build_vignette()
@@ -35,6 +44,13 @@ func _ready() -> void:
 	EventBus.settings_changed.connect(_on_settings_changed)
 	EventBus.player_detected.connect(_on_player_detected)
 	EventBus.player_damaged.connect(_on_player_damaged)
+	EventBus.game_state_changed.connect(_on_game_state)
+
+## A paused tree stops _process, which would leave a half-faded blur over the menu: any state but PLAYING clears it now.
+func _on_game_state(state: int) -> void:
+	if state != GameManager.GameState.PLAYING:
+		_blur_strength = 0.0
+		_blur.visible = false
 
 func _on_settings_changed(key: String, value: Variant) -> void:
 	if key == "graphics_tier":
@@ -59,6 +75,39 @@ func _set_chroma_pulse(px: float) -> void:
 func _apply_tier() -> void:
 	_grain.visible = _tier >= TIER_GRAIN
 	_sync_chroma()
+	if _tier < TIER_BLUR:
+		_blur_strength = 0.0
+		_blur.visible = false
+
+func _build_blur() -> void:
+	_blur = ColorRect.new()
+	_blur.name = "MotionBlurOverlay"
+	_blur.visible = false
+	_blur.color = Color(0.047, 0.062, 0.086, 0.0)
+	_blur.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_blur.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(_blur)
+	var mat := ShaderMaterial.new()
+	mat.shader = load("res://assets/shaders/motion_blur.gdshader") as Shader
+	_blur.material = mat
+
+## The blur follows the sprint by an exponential approach, so the same ramp plays at any frame rate.
+func _process_blur(delta: float) -> void:
+	var target: float = BLUR_MAX if _wants_blur() else 0.0
+	if target == 0.0 and _blur_strength == 0.0:
+		return
+	_blur_strength = lerpf(_blur_strength, target, 1.0 - exp(-BLUR_RATE * delta))
+	if target == 0.0 and _blur_strength < BLUR_IDLE:
+		_blur_strength = 0.0
+	_blur.visible = _blur_strength > 0.0
+	(_blur.material as ShaderMaterial).set_shader_parameter("strength", _blur_strength)
+
+func _wants_blur() -> bool:
+	if _tier < TIER_BLUR or UIManager.is_hud_blocked() or bool(SettingsManager.get_setting("reduce_time_fx", false)):
+		return false
+	if not is_instance_valid(_player):
+		_player = get_tree().get_first_node_in_group("player")
+	return _player != null and int(_player.get("current_state")) == PLAYER_RUN
 
 func _build_visibility_overlay() -> void:
 	_visibility_overlay = ColorRect.new()
@@ -85,6 +134,7 @@ func _on_player_detected(_monster_id: StringName) -> void:
 	_visibility_timer = 3.0
 
 func _process(delta: float) -> void:
+	_process_blur(delta)
 	if _visibility_detected:
 		_visibility_timer -= delta
 		if _visibility_timer <= 0.0:

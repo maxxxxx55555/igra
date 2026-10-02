@@ -8,6 +8,7 @@ const LAYER_LETTERS: Dictionary = {"VignetteOverlay": "V", "GrainOverlay": "G", 
 static func run(r: Node) -> void:
 	await _post_fx_tiers(r)
 	await _damage_pulse(r)
+	await _sprint_blur(r)
 
 static func _chroma_px(overlay: Node) -> float:
 	var mat := (overlay.get_node("ChromaOverlay") as ColorRect).material as ShaderMaterial
@@ -70,3 +71,44 @@ static func _damage_pulse(r: Node) -> void:
 	SettingsManager.set_setting("reduce_flash", flash0)
 	overlay.call("set_chroma_amount", chroma0)
 	SettingsManager.set_graphics_tier(tier0)
+
+static func _blur_strength(blur: CanvasItem) -> float:
+	return float(((blur as ColorRect).material as ShaderMaterial).get_shader_parameter("strength"))
+
+## A real sprint (the stick forward with run held, as the movement check drives it) through the Ultra tier.
+static func _sprint_blur(r: Node) -> void:
+	var overlay: Node = r._main.get_node_or_null("PostProcessOverlay")
+	var blur: CanvasItem = overlay.get_node_or_null("MotionBlurOverlay") as CanvasItem if overlay != null else null
+	r._ok(blur != null, "UIFX1 the overlay has a motion blur layer")
+	if blur == null:
+		return
+	r._playing()
+	var player: Node3D = r._player
+	var tier0: int = int(SettingsManager.get_setting("graphics_tier", 2))
+	var pos0: Vector3 = player.global_position
+	SettingsManager.set_graphics_tier(3)
+	player.global_position = Vector3(-8.0, 1.0, -8.0)  # open ground, where the movement check walks
+	player.rotation.y = 0.0
+	player.set("gameplay_active", true)
+	player.set("stamina", 100.0)
+	await r.get_tree().create_timer(0.6).timeout
+	var still_clear: bool = not blur.visible
+	InputService.set_joy_active(true)
+	InputService.set_joy_move_dir(Vector2(0.0, -1.0))
+	InputService.set_joy_run_held(true)
+	await r.get_tree().create_timer(0.8).timeout
+	var running: bool = int(player.get("current_state")) == int(player.State.RUN)
+	var strength: float = _blur_strength(blur)
+	var ultra_shows: bool = blur.visible
+	SettingsManager.set_graphics_tier(2)
+	var high_shows: bool = blur.visible
+	SettingsManager.set_graphics_tier(3)
+	InputService.set_joy_run_held(false)
+	InputService.set_joy_active(false)
+	InputService.set_joy_move_dir(Vector2.ZERO)
+	await r.get_tree().create_timer(1.2).timeout
+	var faded: bool = not blur.visible and _blur_strength(blur) == 0.0
+	r._ok(still_clear and running and ultra_shows and strength > 0.2 and strength <= 0.35 and not high_shows and faded,
+		"UIFX1 sprinting at Ultra blurs up to 0.35 (%.2f, state RUN %s), the layer is hidden when still, below Ultra and 1.2 s after the sprint (%s, %s, %s)" % [strength, running, still_clear, not high_shows, faded])
+	SettingsManager.set_graphics_tier(tier0)
+	player.global_position = pos0
