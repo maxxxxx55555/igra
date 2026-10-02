@@ -79,7 +79,7 @@ Batch 1 `c71b722`, batch 2 `1536009` + `e5b154f` (hardened compile gate).
   fail (98); (3) 35 shipped debug and commented-out lines removed from 13 files (99); (4) stale or unsupported sentences, the play-through step ids and the row count (200)
   (100). Archived: the before-fix moon A/B (D1 214 draw calls with the old shadow, 167 now) and the windowed Music-bus gate (PASS, -11.8 dB). Gates on the final tree
   `8ad0b93`: `check.sh` full 56 green, `closeout_check` 310/310 (311/311 after the salvage check I9.4 of round 14), bot 3/3 WIN 0 deaths (121 / 104 / 107 s), attack_sim 41 OK, balance_sim PASS, i18n 12/12, visual gate
-  6/6, PT A 67/0 V 29 steps/0 B 12/0 S 23/0, signed AAB 183,257,097 bytes. **NEXT: a second verifier round on the fixed items, the tag `v8.0.0-rc15`, push, memory.**
+  6/6, PT A 67/0 V 29 steps/0 B 12/0 S 23/0, signed AAB 183,257,097 bytes. Round 14 (CONFIRMED 27 / FAIL 5, all fixed in `9e8c6b0`) and round 15 (CONFIRMED 19 / FAIL 0 / UNVERIFIED 0, on `10cd7ae`) closed the verifier loop; the tag `v8.0.0-rc15` is on the commit that records round 15. **NEXT: the owner rows and decisions of `docs/RESUME_NOTE.md`.**
 - Windowed frames: a multi-shot windowed run reads stale frames when nothing animates (gui_explore header); the play-through
   saves every frame after `frame_post_draw` and hashes it against the previous one.
 

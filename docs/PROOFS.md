@@ -9,7 +9,7 @@ by `gen_proofs` at the time of writing, so they cannot drift from the logs.
 Budget: 10 Godot launches. One entry per top-level launch command; `tools/check.sh` and an `autoplay_bot` invocation
 count as one entry each however many engine processes they start.
 
-Batches 3 to 14 ran far more launches than that (CORRECTION_LOG 62): the ledger stops at batch 2 and the closures below cite the artifact of the run that counts as the evidence. An evidence item may carry a label (`now:`, `old code:`) before its quoted line.
+Batches 3 to 15 ran far more launches than that (CORRECTION_LOG 62): the ledger stops at batch 2 and the closures below cite the artifact of the run that counts as the evidence. An evidence item may carry a label (`now:`, `old code:`) before its quoted line.
 
 | # | command | purpose | result |
 |---|---|---|---|
