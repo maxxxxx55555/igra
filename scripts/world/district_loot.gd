@@ -198,15 +198,20 @@ static func populate(district_root: Node3D, district_id: StringName) -> int:
 	## district (world_runtime.gd rebuilds the scene each visit) restocked
 	## every common item AND repair part for free, indefinitely. Secrets
 	## already had this gate (_spawn_secrets below); items didn't.
+	## The district is rebuilt on every visit, a Continue and a Retry. What was picked up stays gone (the farming
+	## fix above), but the flag used to be set when the items SPAWNED: whatever was left on the street when the player
+	## died or quit, repair parts included, never came back, and the first district gates every other. Each pickup
+	## has a key (district and place in this deterministic list) and only the keys taken are skipped; every position
+	## is still drawn from the seeded sequence, so the layout of the rest does not move between visits.
 	var pt := (Engine.get_main_loop() as SceneTree).root.get_node_or_null("/root/ProgressTracker")
-	var already_looted: bool = pt != null and pt.is_district_looted(String(district_id))
-	if not already_looted:
-		for item_id in items:
-			var pos := _scatter(district_root, rng)
-			if _spawn_item(district_root, item_id, pos):
+	var n := 0
+	for item_id in items:
+		var pos := _scatter(district_root, rng)
+		var key := "%s:%d" % [district_id, n]
+		n += 1
+		if pt == null or not pt.is_loot_taken(key):
+			if _spawn_item(district_root, item_id, pos, 1, key):
 				placed += 1
-		if pt != null:
-			pt.mark_district_looted(String(district_id))
 
 	if DOCUMENTS.has(district_id):
 		var dpos := _scatter(district_root, rng)
@@ -219,7 +224,7 @@ static func populate(district_root: Node3D, district_id: StringName) -> int:
 				placed += 1
 	placed += _spawn_secrets(district_root, district_id)
 	_spawn_hiding_spots(district_root, district_id)
-	_spawn_extras(district_root, district_id, already_looted)
+	_spawn_extras(district_root, district_id)
 	return placed
 
 ## S04 (GDD §7): lockers, car trunks, bushes and dark corners to hide in. Three per district on the outer
@@ -325,10 +330,11 @@ static func _scatter(root: Node3D, rng: RandomNumberGenerator) -> Vector3:
 	var rad := rng.randf_range(RADIUS_MIN, RADIUS_MAX)
 	return root.global_position + _snap_to_street(Vector3(cos(ang) * rad, DROP_Y, sin(ang) * rad))
 
-static func _spawn_item(root: Node3D, item_id: StringName, pos: Vector3, count: int = 1) -> bool:
+static func _spawn_item(root: Node3D, item_id: StringName, pos: Vector3, count: int = 1, key: String = "") -> bool:
 	var node := PICKUP_SCENE.instantiate() as Node3D
 	if node == null:
 		return false
+	node.set("loot_key", key)
 	root.add_child(node)
 	node.global_position = pos
 	if node.has_method("set_item"):
@@ -374,7 +380,7 @@ const WORKBENCH_DISTRICTS: Array[StringName] = [&"suburbs", &"police", &"industr
 ## The bed of the "Midsummer Night's Dream" achievement stands in the first district.
 const BED_DISTRICT: StringName = &"suburbs"
 
-static func _spawn_extras(root: Node3D, district_id: StringName, already_looted: bool) -> void:
+static func _spawn_extras(root: Node3D, district_id: StringName) -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = hash(String(district_id) + "_extras")
 	if WORKBENCH_BLUEPRINTS.has(district_id):
@@ -396,22 +402,29 @@ static func _spawn_extras(root: Node3D, district_id: StringName, already_looted:
 		bed.rotation.y = atan2(bed_pose[1].x, bed_pose[1].z)
 		root.add_child(bed)
 		bed.global_position = root.global_position + bed_pose[0]
-	if already_looted:
-		return
+	var extra := 0
 	for part in EXTRA_PARTS.get(district_id, []):
-		_spawn_item(root, part, _scatter(root, rng), int(PICKUP_AMOUNT.get(part, 1)))
+		var part_pos := _scatter(root, rng)
+		var part_key := "%s:x%d" % [district_id, extra]
+		extra += 1
+		if not ProgressTracker.is_loot_taken(part_key):
+			_spawn_item(root, part, part_pos, int(PICKUP_AMOUNT.get(part, 1)), part_key)
 	var index: int = DistrictSceneFactory.DISTRICTS.find(district_id)
 	var ammo_count: int = 0 if index <= 0 else (1 if index < AMMO_DOUBLE_FROM else 2)
 	for i in ammo_count:
-		_spawn_pickup(root, AMMO_PICKUP_SCENE, _scatter(root, rng), "", AMMO_PER_PICKUP)
+		var ammo_pos := _scatter(root, rng)
+		var ammo_key := "%s:a%d" % [district_id, i]
+		if not ProgressTracker.is_loot_taken(ammo_key):
+			_spawn_pickup(root, AMMO_PICKUP_SCENE, ammo_pos, "", AMMO_PER_PICKUP, ammo_key)
 
 ## A weapon or ammo pickup (Area3D scenes in scenes/pickups); `weapon` names the gun, "" is plain ammo.
-static func _spawn_pickup(root: Node3D, scene: PackedScene, pos: Vector3, weapon: String, ammo: int = 0) -> void:
+static func _spawn_pickup(root: Node3D, scene: PackedScene, pos: Vector3, weapon: String, ammo: int = 0, key: String = "") -> void:
 	var node := scene.instantiate() as Node3D
 	if weapon != "":
 		node.set("weapon_name", weapon)
 	if ammo > 0:
 		node.set("ammo_amount", ammo)
+	node.set("loot_key", key)
 	root.add_child(node)
 	node.global_position = pos
 

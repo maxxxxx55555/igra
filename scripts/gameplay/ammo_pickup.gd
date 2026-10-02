@@ -2,6 +2,8 @@ extends Area3D
 ## G25 (GDD §18): a box of rounds (DistrictLoot.AMMO_PER_PICKUP) for the shared reserve, whatever gun is drawn.
 
 @export var ammo_amount: int = 12
+## Where this box sits in its district's loot list (DistrictLoot): a taken key is not spawned again.
+var loot_key: String = ""
 
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
@@ -19,5 +21,7 @@ func _on_body_entered(body: Node3D) -> void:
 	if manager == null or not body.is_in_group("player"):
 		return
 	manager.add_ammo(ammo_amount)
+	if loot_key != "":
+		ProgressTracker.mark_loot_taken(loot_key)
 	EventBus.inventory_notice.emit(LocalizationManager.tf("AMMO_FOUND", [ammo_amount]))
 	queue_free()
