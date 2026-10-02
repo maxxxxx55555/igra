@@ -1,5 +1,13 @@
 # Run state — orchestrator pass (2026-09-20)
 
+## Session 16 (2026-10-02): UNIFIED RELEASE CLOSEOUT (rc16), directive "ZERO-PROSE, TOP-STUDIO BAR, ANTI-FABRICATION" + swarm amendment
+
+**NEXT-ROW: wave 1 (seven zone agents, no Godot) is being spawned; meanwhile the orchestrator builds the harnesses (timing equivalence 30/60/120, streaming probe, polish frames, AF3 frame check, AF5 citation check).**
+Baseline tag `v8.0.0-rc15` @ `e4bb4df` (settled). Target `v8.0.0-rc16`. Launch budget 12 Godot launches (agents use 0); used so far: 0.
+- Scope: O1 streaming and pooling, O2 frame-independent timing, O3 polish, O4 utilities, O5 the 24 non-proven acceptance rows (OV3, OV4, CT4, CT5, CT7, FL5, CB3, SN2, EC1, SV1, SC7, SC8, AU3, AU4, QS2, AD2, TO1, H3.18, M5.1, M5.4, M5.5, M5.9, I9.5, I9.7), O6 verifier.
+- Tools on this machine (O4 survey, 2026-10-02): ruff 0.16.9, flake8 7.3.0, pyflakes 3.4.0, black 26.5.1, ffmpeg present; gdlint (gdtoolkit), shellcheck, mypy, pngquant, oggenc absent (each needs a download that is not approved: exception list in `docs/UTILITIES_REPORT.md`).
+- `tools/qa_sim/timing_inventory.py` (new): 92 scripts with timing sites, 52 `_process`, 11 `_physics_process`, 60 Tween, 21 Timer sites, 23 suspects at the baseline; the gate fails on any suspect that is neither fixed nor in `tools/qa_sim/timing_whitelist.json`.
+
 ## Session 15 (2026-10-01): PLAYER-PROOF CLOSEOUT (rc15), directive "ZERO-PROSE, NO FABRICATION"
 
 **NEXT-ROW: none in flight. rc15 is signed off (the tag `v8.0.0-rc15` goes on the commit that records the last verifier round); the next work is the owner rows and decisions of `docs/RESUME_NOTE.md`
