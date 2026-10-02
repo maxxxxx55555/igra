@@ -21,7 +21,6 @@ Usage: python tools/qa_sim/i18n_truth_gate.py [data/i18n]
 Exit 0 if every locale passes every check, 1 otherwise.
 """
 import json
-import re
 import sys
 from pathlib import Path
 

@@ -85,7 +85,6 @@ def rrect(cv, cx, cy, w, h, rad, ang, base, outline=2.0, grad=0.34, hi=True):
                 cv.blend(x, y, col, cov)
                 if hi and py < -hh * 0.45:
                     cv.blend(x, y, mul(base, 1.35), 0.18 * cov)
-            ocov = max(0.0, min(1.0, 1.0 - abs(d) / outline)) if d > -outline else 0.0
             if d > -1.2:
                 cv.blend(x, y, DARK, 0.85 * max(0.0, min(1.0, (outline - abs(d)) / outline)))
 

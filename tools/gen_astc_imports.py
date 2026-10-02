@@ -113,7 +113,7 @@ def read_image_size(path: Path):
         sig = f.read(8)
         if sig != b"\x89PNG\r\n\x1a\n":
             return None
-        length = struct.unpack(">I", f.read(4))[0]
+        f.read(4)  # the IHDR chunk length
         chunk = f.read(4)
         if chunk != b"IHDR":
             return None
@@ -234,8 +234,6 @@ def main():
             img = read_image_size(png)
             if img:
                 w, h = img
-                # RGBA8 uncompressed
-                vram_before = w * h * 4
                 # ASTC 6x6 is 128 bits per 6x6 = 16 bytes per 36 px
                 vram_after = int(w * h * 16 / 36) + 16
                 sizes_after_est += vram_after

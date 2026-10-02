@@ -104,7 +104,6 @@ def battery_economy():
 # ── skill branches (source of truth: skill_tree_manager.gd) ────────────
 def skill_branches():
     txt = read("scripts/systems/skill_tree_manager.gd")
-    branches = re.findall(r'"(\w+)":\s*\{\s*"name":\s*"(\w+)"', txt)
     out = {}
     for m in re.finditer(r'"(\w+)":\s*\{\s*"name":\s*"(\w+)".*?"skills":\s*\{(.*?)\n\t\t\}', txt, re.S):
         bid, name, body = m.groups()

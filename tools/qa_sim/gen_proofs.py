@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Regenerates docs/PROOFS.md from LEDGER and CLOSURES; evidence lines are quoted from the saved artifacts so a
 quote cannot drift from the log. Run again after every verified batch."""
-import re, io, json, sys
+import re, io, json
 import pathlib
 ROOT = str(pathlib.Path(__file__).resolve().parents[2]) + "/"
 ART = ROOT + "docs/artifacts/rc15/"

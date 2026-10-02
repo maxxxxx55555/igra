@@ -16,7 +16,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import re
 import sys
 from dataclasses import asdict, dataclass
@@ -168,7 +167,6 @@ def make_audit(root: Path) -> list[Verdict]:
     candidates = candidate_files(root)
     runtime = [(p.relative_to(root), read_text(p)) for p in runtime_files(root)]
     docs = [(p.relative_to(root), read_text(p)) for p in docs_files(root)]
-    candidate_count = len(candidates)
 
     # Build one-pass indexes for the two independent grep-equivalent scans.
     # Keeping the indexes separate prevents a path hit from masquerading as a

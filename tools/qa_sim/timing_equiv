@@ -18,9 +18,10 @@ trap 'exit 130' INT TERM
 export TLS_UDG_GUARDED=1
 mkdir -p .qa_logs
 label="${1:-run}"
-for fps in 30 60 120; do
+for fps in ${TIMING_ONLY:-30 60 120}; do
 	timeout 300 "$GODOT" --headless --fixed-fps "$fps" --path . res://scenes/tools/timing_equiv_scene.tscn -- --tfps="$fps" >".qa_logs/timing_${label}_${fps}.log" 2>&1
 	echo "  run at ${fps} fps: rc=$? ($(grep -ac '^\[timing\]' ".qa_logs/timing_${label}_${fps}.log") timing lines)"
 done
+[[ -n "${TIMING_ONLY:-}" ]] && exit 0
 python tools/qa_sim/timing_compare.py ".qa_logs/timing_${label}_30.log" ".qa_logs/timing_${label}_60.log" ".qa_logs/timing_${label}_120.log" | tee ".qa_logs/timing_${label}.txt"
 exit "${PIPESTATUS[0]}"

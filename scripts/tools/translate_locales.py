@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Generate all locale JSON files from en.json using comprehensive dictionary."""
 import json
-import os
 
 with open("data/i18n/en.json", "r", encoding="utf-8") as f:
     en = json.load(f)

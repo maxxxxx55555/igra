@@ -25,6 +25,8 @@ var _ticks: int = 0
 var _main: Node = null
 var _player: Node3D = null
 var _shots: int = 0
+var _first_shot_t: float = -1.0
+var _last_shot_t: float = -1.0
 var _hits: int = 0
 var _hit_total: float = 0.0
 
@@ -55,6 +57,9 @@ func _flat(v: Vector3) -> Vector3:
 
 func _on_fired() -> void:
 	_shots += 1
+	if _first_shot_t < 0.0:
+		_first_shot_t = _t
+	_last_shot_t = _t
 
 func _on_player_damaged(amount: float) -> void:
 	_hits += 1
@@ -176,12 +181,15 @@ func _measure_weapon(weapons: WeaponManager, id: StringName) -> void:
 	weapon.current_ammo = 100000
 	weapon.fired.connect(_on_fired)
 	_shots = 0
+	_first_shot_t = -1.0
+	_last_shot_t = -1.0
 	var from := _player.global_position + Vector3(0.0, 1.5, 0.0)
 	var t0 := _t
 	while _t < t0 + FIRE_SEC:
 		await get_tree().physics_frame
 		weapon.fire(from, Vector3(0.0, 0.0, -1.0))
-	_report(String(id) + "_shots_per_s", float(_shots) / (_t - t0))
+	# the rate between the first and the last shot: the window's own edges do not count
+	_report(String(id) + "_shots_per_s", float(_shots - 1) / maxf(_last_shot_t - _first_shot_t, 0.001))
 	weapon.fired.disconnect(_on_fired)
 
 func _measure_reload(weapons: WeaponManager) -> void:
@@ -214,7 +222,8 @@ func _measure_melee() -> void:
 				swings += 1
 	_report("melee_swings_per_s", float(swings) / (_t - t0))
 
-# ── a monster standing next to the player: hits it lands and the damage that arrives, per second ──
+# ── a monster put into CHASE next to the player (a free AI wanders by chance, and the global random numbers other scripts draw per
+# frame differ between frame rates): hits it lands and the damage that arrives, per second ──
 func _measure_monster() -> void:
 	_place_player()
 	await _wait(0.3)
@@ -222,14 +231,20 @@ func _measure_monster() -> void:
 	add_child(monster)
 	monster.global_position = _player.global_position + Vector3(0.0, 0.0, -1.2)
 	monster.set("player_ref", _player)
+	monster.look_at(Vector3(_player.global_position.x, monster.global_position.y, _player.global_position.z), Vector3.UP)
+	monster.call("_change_state", BaseMonster.State.CHASE)
 	_hits = 0
 	_hit_total = 0.0
 	EventBus.player_damaged.connect(_on_player_damaged)
 	var smax: float = float((_player.get("stats") as Resource).get("max_hp"))
 	var t0 := _t
+	var next_dbg := _t
 	while _t < t0 + MONSTER_SEC:
 		await get_tree().physics_frame
 		_player.set("hp", smax)
+		if _t >= next_dbg:
+			next_dbg += 0.5
+			print("[timing-dbg] fps=%d t=%.2f state=%s dist=%.2f hits=%d" % [_fps, _t - t0, str(monster.get("ai_state")), monster.global_position.distance_to(_player.global_position), _hits])
 	_report("monster_hits_per_s", float(_hits) / (_t - t0))
 	_report("monster_damage_per_s", _hit_total / (_t - t0))
 	EventBus.player_damaged.disconnect(_on_player_damaged)
@@ -251,9 +266,10 @@ func _measure_pickups() -> void:
 		await _wait(PICKUP_WALK_SEC)
 		InputService.set_joy_move_dir(Vector2.ZERO)
 		InputService.set_joy_active(false)
-		if bool(pickup.get("_picked_up")):
+		if not is_instance_valid(pickup) or bool(pickup.get("_picked_up")):
 			reach = offset
-		pickup.queue_free()
+		if is_instance_valid(pickup):
+			pickup.queue_free()
 	_report("pickup_reach_m", reach)
 
 # ── the Architect as a dummy (his own AI off): seconds of held rifle fire until he dies ──
@@ -273,11 +289,12 @@ func _measure_boss(weapons: WeaponManager) -> void:
 	boss.set_process(false)
 	boss.set_physics_process(false)
 	await _wait(0.3)
+	weapon.spread = 0.0
 	var from := _player.global_position + Vector3(0.0, 1.5, 0.0)
 	var aim := (boss.global_position + Vector3(0.0, 1.0, 0.0) - from).normalized()
 	_report("boss_hp0", float(boss.get("hp")))
 	var t0 := _t
-	while float(boss.get("hp")) > 0.0 and _t < t0 + BOSS_DEADLINE_SEC:
+	while is_instance_valid(boss) and float(boss.get("hp")) > 0.0 and _t < t0 + BOSS_DEADLINE_SEC:
 		await get_tree().physics_frame
 		weapon.fire(from, aim)
 	_report("boss_ttk_s", _t - t0)

@@ -78,7 +78,7 @@ def main():
 
     ok = (pre == 1) and (cur == len(cur_rows) == 1)
     print("PRE-FIX: 10 of 11 rows were dead data cited as 'canon' by content packs.")
-    print(f"DECISION: (b) delete the dead path — keep only the reachable row.")
+    print("DECISION: (b) delete the dead path — keep only the reachable row.")
     print("PASS" if ok else "FAIL")
     return 0 if ok else 1
 
