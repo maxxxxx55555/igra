@@ -34,7 +34,7 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 | V05 | Moon shadow 2048² | MET | tz_verify: `directional_shadow/size` 2048 and no smaller `.mobile` override (removed in C8 rc11); frames clean at 2048. On-device mobile cost not measured (P02). |
 | V01 | "No day" | MET-STATIC | Dead daytime painter removed from DayNight |
 | D03 | Stage ambient/moon (GDD.md:108-111) | MET | tz_verify asserts DARK 0.03/0.12, STREETS 0.11/0.25, FULL 0.16/0.40; `D03_stage_*.png` read by eye and PASS the visual gate at half res (C8 rc12) |
-| V03 | Bebas Neue Bold | GAP-OWNER | No Bold font file exists |
+| V03 | Bebas Neue Bold | GAP-OWNER (asset only; headings use the emboldened Regular, `closeout_check` V03) | No Bold font file exists; proof R4-1 below |
 | G01 | FPS canon / TPS option | DECIDED (DR-2) | `baseline.png` is first-person |
 | G02 | Sprint headbob 0.1 | MET | tz_verify span 0.049; `G03_sprint_fov.png` |
 | G03 | Sprint FOV +5° | MET | tz_verify 80 → 85 |
@@ -45,7 +45,7 @@ for every non-MET row is in `docs/TZ_DECISIONS.md`.
 | G09 | Drain 1% per 2 s | DECIDED (DR-3) | Recorded boss-fight failure at a milder value |
 | G10 | Battery item +25% | DECIDED (DR-3) | `balance_sim` FAILs at +25 |
 | G12b | Flicker below 20%, cleared by Stability L5 | MET | tz_verify: spread 16.2 at 10% battery, 0.000 with Stability L5; suite P2r: L5 + Brightness survive a real respawn, L5 cuts drain 50% (GDD §3.3), New Game clears them (C8 rc4); `G12b_low_battery.png` |
-| G13 | Combo 8/12/20 | DECIDED (DR-3) | Recorded winnability tuning |
+| G13 | Combo 8/12/20 | MET (rc15) | `COMBO_DATA` is the GDD 5.1 table again; the x1.75 of DR-3 was a reserve for the bot's Architect fight while only the Architect could be hit (`closeout_check` G13; bot 3/3 with the canon values, 106 to 126 s) |
 | G15 | Capsule 1.6 m, attack box | MET-STATIC (capsule 1.6) / DECIDED (DR-3, attack box) | Bot 1/3 with the capsule; all 3 seeds reached the boss; stalls = known boss-phase type |
 | G16 | Respawn: district entry, 50% HP, battery kept | MET (re-proved rc15; the suite P2r evidence read the scene being left, CORRECTION_LOG 72) | `closeout_check` RESP1 (the dead player does not take it, the new one does: hp 50, battery 37); play-through A05c samples health and battery every 0.25 s after the reload |
 | G17 | Hardcore death deletes save | MET | tz_verify: main + .bak/.bak2/.bak3 seeded, 0 files left after death; the wipe's `reset_all()` also clears flashlight upgrades (suite P2r, C8 rc4); `G17_hardcore_death.png` |
@@ -84,3 +84,15 @@ DECIDED 11, **GAP-OWNER 4** (V03 Bebas Neue Bold file, G22 save-slot picker, G28
 amendments), **DEFERRED-STRUCTURAL 6** (G21 blueprints, G25 weapons, G26 photos, S02 visibility model, S04-hide
 hiding-spot placement, C03 auto-aim). GAP-DEV 0, NEEDS-MEASUREMENT 0.
 
+
+## R4: the four owner rows are asset or decision only (two greps each, 2026-10-02)
+
+Each row below was checked twice, once for the missing input and once for the code that would consume it. In all four the
+code is in place and the open item is a file or a decision that only the owner can supply.
+
+| Row | grep 1: the input is missing or decided | grep 2: the code path exists | Owner action |
+|---|---|---|---|
+| V03 Bebas Neue Bold | `ls assets/fonts | grep -i bebas` prints `BebasNeue-Regular.ttf` and its `.import` only | `scripts/ui/theme_provider.gd:35-38`: `_bold()` builds a `FontVariation` with `variation_embolden`; `closeout_check` V03 asserts headings and the project theme's Button font are that variation | drop `BebasNeue-Bold.ttf` into `assets/fonts/` and point `build_theme()` at it (one line) |
+| G22 3 + 1 save slots UI | `PLAN.md:1313`: "Судьба lobby/save-slots экранов ... **DECIDED: archive**" (the owner's own decision) | `scripts/core/save_system.gd`: `MAX_SLOTS = 4`, `save_slot()`, `load_slot()` (slot id inside the signed payload) are live; `screens.gd` lists the "Saves" card but no route opens it | re-enable the slot picker, or amend GDD G22 to the archive decision |
+| G28 / D04 all FULL -> win | `docs/GDD.md:122`: all eleven FULL -> final night -> the Architect on the power station -> his death is the win (GDD amended rc15; it had said the win was immediate) | `scripts/world/finale_director.gd:135-136` calls `trigger_win()` on `boss_defeated`; `scripts/world/power_grid.gd:92` calls it only when no FinaleDirector exists; `closeout_check` FIN1 | none (decided); the owner may delete the GAP-OWNER tag |
+| N01 / I02 / T01 | N01 NG+ rule text and I02 the key census (GDD:22, "198 keys / ~2574 total") are GDD lines, not code: `grep -c '"' data/i18n/en.json` counts the real keys | T01: `ls .signing` prints `release.env` and `tls-release.keystore`, `git check-ignore -v .signing/release.env` prints `.gitignore:87:.signing/`; `export_presets.cfg:23-28` keystore fields are empty strings (the release build reads the environment) | write the NG+ rule or accept the modifier set, amend the census line, and put the signed AAB on a phone (the one step no machine here can do) |

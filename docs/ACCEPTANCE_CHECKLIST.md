@@ -66,7 +66,7 @@ Play-through steps (GUI-engine input injection, a frame read at each): **A01** b
 
 | ID | Promise | GDD | Proof | Result |
 |---|---|---|---|---|
-| CB1 | Combo of three hits, window 1.2 s, stamina cost, flashlight bonus, backstab x1.5 | 5.1 | bot wins use the combo; values DECIDED DR-3 (14/21/35) | BATTERY |
+| CB1 | Combo of three hits, window 1.2 s, stamina cost, flashlight bonus, backstab x1.5 | 5.1 | the swing lands on every monster kind (`closeout_check` MELEE1) with the GDD damage 8/12/20 (G13); bot 3/3 | BATTERY |
 | CB2 | Dodge: 15 stamina, i-frames 0.35 s, cooldown 0.8 s | 5.2 | constants + bot dodges | BATTERY |
 | CB3 | Hitboxes: capsule 1.6 m; attack volume | 5.3 | DECIDED DR-3 (attack box 1.4x0.8x3.4 + 2.7 m sphere) | DECIDED |
 | CB4 | Death: fall, then a screen with cause, time, % districts, documents | 5.4 | PT death frame | PT-A05 |
@@ -303,3 +303,6 @@ Rows the first play-through added: each was a defect a frame or a measured numbe
 | PUZ1 | A solved puzzle is saved and a new game clears it | 12 | closeout_check PUZ1 | PASS(closeout) |
 | DEAD1 | A dead player and a won game are not at the controls; a hit after the victory does nothing | 5.4 | closeout_check DEAD1, WIN1 | PASS(closeout) |
 | STROBE1 | The strobe stuns the 52 degree cone it says, not 162 | 3.1 | closeout_check STROBE1 | PASS(closeout) |
+| MELEE1 | A swing lands on every monster kind, whatever it is doing; the nearest body that takes damage is hit | 5.1 | closeout_check MELEE1 (the Area3D it replaced fails it for all eight kinds, `closeout_mutation_batch10.txt`); play-through A05 on a spawned crawler | PASS(closeout) |
+| G13b | The combo deals the GDD damage 8 / 12 / 20 | 5.1 | closeout_check G13; bot 3/3 with these values (`bot_batch10_canon_combo_summary.txt`) | PASS(closeout) |
+| CRAWL1 | A crawler stops when idle and goes to the spot it heard (it ran on at its last velocity) | 6.2 | closeout_check CRAWL1 | PASS(closeout) |

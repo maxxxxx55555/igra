@@ -42,7 +42,7 @@ var _combo_timer: float = 0.0
 var _combo_count: int = 0
 var _dodge_cooldown: float = 0.0
 var _iframes: float = 0.0
-var _attack_area: Area3D = null
+var _melee_query: PhysicsShapeQueryParameters3D = null
 var _can_attack: bool = true
 var _play_t0: float = -1.0
 var _fps_sum: float = 0.0
@@ -75,13 +75,12 @@ var _footstep_system: Node = null
 const INTERACTOR_SCRIPT: Script = preload("res://scripts/player/interactor.gd")
 var _interactor: Node = null
 
-## Winnability: урон мили-комбо поднят (~×1.75) — бот в бою с Архитектором
-## регулярно вылетает за пределы арены (сталк-надж вотчдога в старый таргет)
-## и теряет время на возврат; запас по DPS нужен, чтобы уложиться в дедлайн.
+## GDD 5.1: Jab 8 / Cross 12 / Slam 20. They were 14 / 21 / 35 (x1.75) as a reserve for the bot's Architect fight, back
+## when only the Architect could be hit; with the swing landing on every monster the bot wins at these values too.
 const COMBO_DATA: Array = [
-	{ "windup": 0.25, "active": 0.15, "recovery": 0.15, "dmg": 14, "stam": 5, "knockback": 0.0 },
-	{ "windup": 0.30, "active": 0.15, "recovery": 0.15, "dmg": 21, "stam": 5, "knockback": 0.0 },
-	{ "windup": 0.45, "active": 0.20, "recovery": 0.20, "dmg": 35, "stam": 8, "knockback": 1.5 }
+	{ "windup": 0.25, "active": 0.15, "recovery": 0.15, "dmg": 8, "stam": 5, "knockback": 0.0 },
+	{ "windup": 0.30, "active": 0.15, "recovery": 0.15, "dmg": 12, "stam": 5, "knockback": 0.0 },
+	{ "windup": 0.45, "active": 0.20, "recovery": 0.20, "dmg": 20, "stam": 8, "knockback": 1.5 }
 ]
 const COMBO_WINDOW: float = 1.2
 const DODGE_COST: float = 15.0
@@ -333,36 +332,6 @@ func _ready() -> void:
 		add_child(fs_instance)
 		_footstep_system = fs_instance
 	
-	_attack_area = Area3D.new()
-	_attack_area.name = "AttackArea"
-	var attack_shape := CollisionShape3D.new()
-	var attack_box := BoxShape3D.new()
-	# Winnability: дотягиваем хитбокс удара до дистанции, на которой игрок
-	# реально стоит вплотную к Архитектору (контакт капсул ~2.5 м) — старый
-	# бокс (0.6 м вперёд) почти не пересекал капсулу босса, и бой упирался
-	# в таймаут.
-	attack_box.size = Vector3(1.4, 0.8, 3.4)
-	attack_shape.position = Vector3(0.0, 0.2, 1.4)
-	attack_shape.shape = attack_box
-	_attack_area.add_child(attack_shape)
-	# Winnability: a second shape, a 2.7 m sphere around the player, lands a
-	# hit up close whatever the facing (the bot's mirrored aim that first
-	# showed the need is fixed in rc14; the sphere stays as melee reach).
-	# (This supersedes an earlier same-session fix that offset the whole
-	# _attack_area forward instead — this branch's bigger/offset box plus
-	# this sphere already solve the same "hitbox too short" root cause more
-	# thoroughly; stacking both offsets would have double-shifted it.)
-	var melee_shape := CollisionShape3D.new()
-	var melee_sphere := SphereShape3D.new()
-	melee_sphere.radius = 2.7
-	melee_shape.shape = melee_sphere
-	melee_shape.position = Vector3(0.0, 0.2, 0.0)
-	_attack_area.add_child(melee_shape)
-	add_child(_attack_area)
-	_attack_area.monitoring = false
-	_attack_area.body_entered.connect(_on_attack_hit)
-
-
 	EventBus.player_health_changed.emit(1.0)
 	EventBus.player_stamina_changed.emit(1.0)
 	EventBus.player_battery_changed.emit(1.0)
@@ -1145,7 +1114,6 @@ func _handle_attack() -> void:
 	_attack_phase = "windup"
 	_attack_timer = cd["windup"]
 	_combo_timer = COMBO_WINDOW
-	_attack_area.monitoring = false
 	if OS.has_feature("mobile"):
 		Input.vibrate_handheld(25)
 
@@ -1160,25 +1128,48 @@ func _tick_attack(delta: float) -> void:
 			if _attack_timer <= 0.0:
 				_attack_phase = "active"
 				_attack_timer = cd2["active"]
-				_attack_area.monitoring = true
 				_combo_count += 1
 
 		"active":
+			_swing_hits()
 			if _attack_timer <= 0.0 or _hit_registered:
 				_attack_phase = "recovery"
 				_attack_timer = cd2["recovery"]
-				_attack_area.monitoring = false
 
 		"recovery":
 			if _attack_timer <= 0.0:
 				_attack_phase = "none"
 
 
+## Every physics tick of a swing's active phase: a 2.7 m sphere around the player is tested against the world and the monsters
+## (layers 1 and 2); the nearest body that can take damage is hit. It is a query, not an Area3D: an area reports only the layers of its mask, which was layer 1 alone, so
+## no swing ever landed on a monster, and it reports only after its pairs update. The street's own bodies come back in the
+## same list, so the cap is high: a low one cut the monsters off.
+const MELEE_REACH: float = 2.7
+const MELEE_MASK: int = 1 | 2
+const MELEE_MAX_RESULTS: int = 64
+
+func _swing_hits() -> void:
+	if _melee_query == null:
+		var reach := SphereShape3D.new()
+		reach.radius = MELEE_REACH
+		_melee_query = PhysicsShapeQueryParameters3D.new()
+		_melee_query.shape = reach
+		_melee_query.collision_mask = MELEE_MASK
+		_melee_query.exclude = [get_rid()]
+	_melee_query.transform = Transform3D(Basis.IDENTITY, global_position + Vector3(0.0, 0.2, 0.0))
+	var nearest: Node3D = null
+	for hit in get_world_3d().direct_space_state.intersect_shape(_melee_query, MELEE_MAX_RESULTS):
+		var body := hit["collider"] as Node3D
+		if body != null and body.has_method("take_damage") and (nearest == null or body.global_position.distance_squared_to(global_position) < nearest.global_position.distance_squared_to(global_position)):
+			nearest = body
+	if nearest != null:
+		_on_attack_hit(nearest)
+
 func _on_attack_hit(body: Node) -> void:
 	if _attack_phase != "active":
 		return
-	# The attack area is a child of this body, so it reports the player itself: that
-	# spent the swing (and damaged the player) whenever it came first.
+	# a swing must never be spent on the player's own body (the query excludes it; the check stays for direct callers)
 	if body == self or _hit_registered or not body.has_method("take_damage"):
 		return
 	_hit_registered = true
@@ -1212,7 +1203,6 @@ func apply_stun(duration: float = 0.3) -> void:
 		_combo_break = true
 		_attack_phase = "none"
 		_attack_timer = 0.0
-		_attack_area.monitoring = false
 	_stun_timer = duration
 
 

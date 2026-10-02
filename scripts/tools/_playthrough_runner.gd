@@ -317,6 +317,8 @@ func _mode_a() -> void:
 	await _a04_controls()
 	await _a04_ghosts()
 	await _a05_monster()
+	if OS.get_environment("PT_STOP") == "A05":
+		return
 	await _a05_death()
 	await _a06_inventory()
 	await _a06_shop()
@@ -498,40 +500,32 @@ func _playing_or_fail() -> void:
 	if not GameManager.is_playing():
 		GameManager.resume_game()
 
-## The nearest monster, or one placed 7 m ahead when the first street has none in reach.
-func _monster_ahead() -> Node3D:
-	var best: Node3D = null
-	for m in get_tree().get_nodes_in_group("monsters"):
-		if m.get("ai_state") != null and int(m.get("ai_state")) != 7 and not m.is_in_group("boss"):
-			if best == null or m.global_position.distance_to(_player.global_position) < best.global_position.distance_to(_player.global_position):
-				best = m
-	return best
-
 func _face(target: Vector3) -> void:
 	var to := _flat(target - _player.global_position)
 	_player.rotation.y = atan2(-to.x, -to.z)
 
+## A crawler is placed 5 m ahead, turned to face the player. The nearest monster of the street would not do: a shadow dies
+## in the flashlight without a swing (the first version of this step passed that way while no swing ever landed).
 func _a05_monster() -> void:
-	var m := _monster_ahead()
-	var spawned := false
-	if m == null:
-		m = (load("res://scenes/enemies/crawler_3d.tscn") as PackedScene).instantiate() as Node3D
-		_scene().add_child(m)
-		spawned = true
+	var m := (load("res://scenes/enemies/crawler_3d.tscn") as PackedScene).instantiate() as Node3D
+	_scene().add_child(m)
 	var ahead := -_player.global_transform.basis.z
 	m.global_position = _player.global_position + _flat(ahead).normalized() * 5.0
+	m.rotation.y = atan2(ahead.x, ahead.z)
 	m.set("player_ref", _player)
 	_face(m.global_position)
 	await get_tree().create_timer(0.6).timeout
 	var hp0 := float(m.get("hp"))
 	var seen := await _shot("A05_monster_sight")
-	_say("[pt] note A05 setup: monster %s placed 5 m ahead (spawned for the test: %s); crosshair state '%s'" % [m.get("monster_id"), spawned, _crosshair])
+	_say("[pt] note A05 setup: a %s spawned 5 m ahead, turned to face the player; crosshair state '%s'" % [m.get("monster_id"), _crosshair])
 	var hp_taken := ProgressTracker.damage_taken
 	var t := 0.0
 	var hit_frame := ""
+	var start := _player.global_position
+	var gap := 0.0
 	while t < 25.0 and is_instance_valid(m) and int(m.get("ai_state")) != 7:
 		_face(m.global_position)
-		var gap := _flat(m.global_position - _player.global_position).length()
+		gap = _flat(m.global_position - _player.global_position).length()
 		if gap > 2.2:
 			_key_event(KEY_W, true)
 		else:
@@ -545,7 +539,8 @@ func _a05_monster() -> void:
 			break
 	_key_event(KEY_W, false)
 	var hp1 := float(m.get("hp")) if is_instance_valid(m) else 0.0
-	_step("A05", hp1 < hp0, "injected left clicks hurt the monster (hp %.0f -> %.0f in %.1f s; the player took %.0f)" % [hp0, hp1, t, ProgressTracker.damage_taken - hp_taken], hit_frame if hit_frame != "" else seen)
+	var where := "last gap %.1f m, walked %.1f m" % [gap, _flat(_player.global_position - start).length()]
+	_step("A05", hp1 < hp0, "injected left clicks hurt the monster (hp %.0f -> %.0f in %.1f s; the player took %.0f; %s)" % [hp0, hp1, t, ProgressTracker.damage_taken - hp_taken, where], hit_frame if hit_frame != "" else seen)
 	if is_instance_valid(m) and int(m.get("ai_state")) == 7:
 		_say("[pt] note A05 the monster died; frame=%s" % await _shot("A05_monster_dead"))
 	elif is_instance_valid(m):
@@ -1014,7 +1009,7 @@ func _b02_continue() -> void:
 	var res := await _click(vb.get_node("Continue") as Button)
 	var started := await _wait_playing()
 	await get_tree().create_timer(3.0).timeout
-	var got := _state()
+	var got: Dictionary = JSON.parse_string(JSON.stringify(_state()))
 	var diffs: Array[String] = []
 	for key in ["district", "coins", "level", "ng", "inventory", "stages", "kills", "docs", "photos"]:
 		if want.has(key) and JSON.stringify(want[key]) != JSON.stringify(got[key]):
@@ -1076,10 +1071,13 @@ func _b05_achievements() -> void:
 	GameManager.resume_game()
 
 func _b03_hardcore() -> void:
-	var settings := await _open_settings()
-	if settings == null:
-		_step("B03", false, "the settings screen did not open")
+	if not await _go_menu():
+		_step("B03", false, "the menu did not come back")
 		return
+	var opened := await _click(_menu_vbox().get_node("Settings") as Button)
+	await _wait_scene(Routes.SETTINGS, WAIT_SCENE)
+	await get_tree().create_timer(0.8).timeout
+	var settings := _scene()
 	var hardcore: CheckBox = null
 	for row in settings.find_children("*", "HBoxContainer", true, false):
 		var kids := row.get_children()
@@ -1087,9 +1085,10 @@ func _b03_hardcore() -> void:
 			hardcore = kids[1] as CheckBox
 	var res := await _click(hardcore)
 	await get_tree().create_timer(0.4).timeout
-	_step("B03", res == "ok" and bool(SettingsManager.get_setting("hardcore", false)), "the Hardcore checkbox turns it on (click: %s)" % res, await _shot("B03_hardcore_on"))
-	await _close_settings()
-	await _go_menu()
+	_step("B03", opened == "ok" and res == "ok" and bool(SettingsManager.get_setting("hardcore", false)), "the main menu's Settings has a Hardcore box that turns it on (clicks: %s / %s)" % [opened, res], await _shot("B03_hardcore_on"))
+	await _click(_button_with(settings, LocalizationManager.t("Back")))
+	await _wait_scene(Routes.MENU, WAIT_SCENE)
+	await get_tree().create_timer(0.8).timeout
 	await _click(_menu_vbox().get_node("Play") as Button)
 	await get_tree().create_timer(0.6).timeout
 	var dialog: ConfirmationDialog = null
@@ -1100,7 +1099,7 @@ func _b03_hardcore() -> void:
 	if dialog != null:
 		_press_dialog_ok(dialog)
 	var started := await _wait_playing()
-	_step("B03b", started and bool(SettingsManager.get_setting("hardcore", false)), "Play starts a run with Hardcore on (started %s, hardcore %s, state %s)" % [started, SettingsManager.get_setting("hardcore", false), GameManager.current_state])
+	_step("B03b", started and GameManager.run_hardcore, "Play starts a run with Hardcore on (started %s, the run's hardcore %s, state %s)" % [started, GameManager.run_hardcore, GameManager.current_state])
 	if not started:
 		return
 	_player.set("hp", 5.0)

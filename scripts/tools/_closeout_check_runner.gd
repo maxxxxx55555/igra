@@ -35,6 +35,11 @@ func _run() -> void:
 	if _player == null:
 		_finish()
 		return
+	if OS.get_environment("CLOSEOUT_ONLY") == "monsters":
+		await _check_melee_reaches_monsters()
+		await _check_crawler_idles_and_investigates()
+		_finish()
+		return
 	_check_theme()
 	_check_placement()
 	await _check_weapons()
@@ -77,6 +82,8 @@ func _run() -> void:
 	await _check_settings_back()
 	await _check_difficulty_pick_is_a_setting()
 	await _check_hardcore_belongs_to_the_run()
+	await _check_melee_reaches_monsters()
+	await _check_crawler_idles_and_investigates()
 	_finish()
 
 func _finish() -> void:
@@ -1445,3 +1452,46 @@ func _check_a_written_save_reads_back() -> void:
 # ── the breaker's E14: a position of strings aborted the load half way; equipment survived a reload as a second copy ──
 func _check_forged_position_and_equipment() -> void:
 	_ok(SaveSystem._parse_player_pos(["a", 1.0, 2.0]) == Vector3.INF and SaveSystem._parse_player_pos([1, 2, 3]) == Vector3(1.0, 2.0, 3.0), "SAVE3 a position with a string is dropped, numbers pass")
+
+# ── the swing is the only attack an unarmed player has: it must land on every kind of monster, whatever the monster is doing ──
+func _check_melee_reaches_monsters() -> void:
+	_playing()
+	for wanderer in get_tree().get_nodes_in_group("monsters"):
+		wanderer.queue_free()  # the street's own monsters roam: one of them in reach would take the swing (the nearest body is hit)
+	await get_tree().physics_frame
+	var aim: Vector3 = -_player.global_transform.basis.z
+	aim.y = 0.0
+	var missed: PackedStringArray = []
+	for scene in ["shadow_3d", "crawler_3d", "hound_3d", "hunter_3d", "brute_3d", "rotter_3d", "watcher_3d", "sharpshooter_3d"]:
+		var target := _monster(scene, _player.global_position + aim.normalized() * 1.6)
+		target.process_mode = Node.PROCESS_MODE_INHERIT  # a monster on screen: the visibility enabler of the hunter, watcher and destroyer leaves a hidden one out of the physics space
+		await get_tree().physics_frame
+		var hp0: float = float(target.get("hp"))
+		_player.set("stamina", 100.0)
+		_player.set("gameplay_active", true)
+		_player.set("_stun_timer", 0.0)
+		while str(_player.get("_attack_phase")) != "none":
+			await get_tree().physics_frame
+		_player.call("_handle_attack")  # the melee key: the attack button fires a drawn weapon instead, and earlier checks draw one
+		var started: bool = str(_player.get("_attack_phase")) == "windup"
+		await get_tree().create_timer(0.9).timeout
+		if not started or float(target.get("hp")) >= hp0:
+			missed.append("%s%s hp %.0f -> %.0f, combo %d, phase %s" % [scene, "" if started else " (no swing)", hp0, float(target.get("hp")), int(_player.get("_combo_count")), str(_player.get("_attack_phase"))])
+		target.queue_free()
+	_ok(missed.is_empty(), "MELEE1 a swing damages a monster 1.6 m ahead, for every kind (missed: %s)" % ", ".join(missed))
+	var combo: Array = (_player.get_script() as Script).get_script_constant_map()["COMBO_DATA"]
+	_ok(int(combo[0]["dmg"]) == 8 and int(combo[1]["dmg"]) == 12 and int(combo[2]["dmg"]) == 20, "G13 the combo deals the GDD 5.1 damage, 8 / 12 / 20 (it was 14 / 21 / 35 while no swing could land on a monster)")
+
+# ── a crawler had no handler for IDLE or INVESTIGATE: it kept its last velocity for good (toward the world origin once a search ended) ──
+func _check_crawler_idles_and_investigates() -> void:
+	var crawler := _monster("crawler_3d")
+	crawler.set("ai_state", 0)
+	crawler.velocity = Vector3(4.0, 0.0, 3.0)
+	crawler.call("_tick_ai", 0.016)
+	_ok(crawler.velocity.length() < 0.01, "CRAWL1 an idle crawler stands still instead of running on at its last velocity (%s)" % crawler.velocity)
+	crawler.set("_investigate_point", crawler.global_position + Vector3(10.0, 0.0, 0.0))
+	crawler.set("ai_state", 2)
+	crawler.velocity = Vector3.ZERO
+	crawler.call("_tick_ai", 0.016)
+	_ok(crawler.velocity.length() > 0.5, "CRAWL1 an investigating crawler goes to the spot it heard instead of standing (velocity %s)" % crawler.velocity)
+	crawler.queue_free()
