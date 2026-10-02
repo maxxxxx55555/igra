@@ -1,0 +1,22 @@
+Sign-off battery, 2026-10-02: the touch probe failed after the closeout gate on a day whose daily challenge is a progress type.
+Reproduction: the stateful engine gates run in check.sh order on one profile under the user-data guard, tls_daily.json printed after each.
+Today's template is play_15 (play_minutes, target 15); the owner's profile file says last_completed_day 20721, progress 4, today_id restore_04.
+
+BEFORE the fix (closeout DL2 calls DailyChallengeManager._complete() and never puts the manager back):
+[start]    last_completed_day 20721, progress 4,  today_id restore_04
+[g3d]      last_completed_day 20721, progress 4,  today_id restore_04
+[save]     last_completed_day 20721, progress 4,  today_id restore_04
+[craft]    last_completed_day 20721, progress 4,  today_id restore_04
+[attack]   last_completed_day 20721, progress 4,  today_id restore_04
+[boot]     last_completed_day 20721, progress 1,  today_id play_15
+[closeout] last_completed_day 20728, progress 1,  today_id play_15      <- "done today" with 1 of 15
+touch probe: FAIL already-completed-today state is internally consistent (loaded from a prior gate this run)
+
+AFTER the fix (DL2 restores _completed_today and _last_completed_day and saves):
+[start]    last_completed_day 20721, progress 4,  today_id restore_04
+[boot]     last_completed_day 20721, progress 1,  today_id play_15
+[closeout] last_completed_day 20721, progress 1,  today_id play_15
+[touch]    last_completed_day 20721, progress 1,  today_id play_15
+[closeout] DONE checks=304 fails=0
+[touch-probe] DONE fails=0
+user-data guard: 11 file(s) restored byte-identical

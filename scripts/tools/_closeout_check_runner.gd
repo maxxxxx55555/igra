@@ -904,6 +904,8 @@ func _check_daily() -> void:
 	_ok(ok, "DL2 the streak multiplier is x1.5 / x2 / x3 at 3 / 5 / 7 days")
 	var streak_before: int = SaveSystem._daily_streak
 	var last_before: int = SaveSystem._last_daily_time
+	var done_before: bool = m._completed_today
+	var day_before: int = m._last_completed_day
 	SaveSystem._daily_streak = 4
 	SaveSystem._last_daily_time = int(Time.get_unix_time_from_system())
 	var base: int = int(m.get_today().get("reward", 0))
@@ -916,6 +918,10 @@ func _check_daily() -> void:
 	_ok(CoinWallet.get_coins() - coins == roundi(base * 2.0) + bonus, "DL2 the fifth day pays double (%d + %d)" % [roundi(base * 2.0), bonus])
 	SaveSystem._daily_streak = streak_before
 	SaveSystem._last_daily_time = last_before
+	# _complete() also wrote "done today" with the progress it had; a later gate on the same profile reads that file
+	m._completed_today = done_before
+	m._last_completed_day = day_before
+	m._save_state()
 
 # ── the play-through's findings (docs/artifacts/rc15/playthrough_*.txt): a person's pace, solid ground, one dodge per
 #    double tap, a light that comes back, the onboarding cards, the death screen ──
