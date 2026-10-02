@@ -39,6 +39,16 @@ prop spheres are ~4 000 triangles each), R5 breaker + explorer, R6 security, R8 
   fail all three), bot 3/3 WIN 0 deaths at x1.75 (92/94/99 s) and at the canon values (106/110/126 s), static 28, flow 56,
   scene_node clean. Corrections 83. PT harness: A05 spawns its own crawler, B02 compares through JSON, B03 opens Settings from the main
   menu (the box is locked in a running game). **NEXT: full PT A V B on this tree and read every frame, then R3, R5, R6, R7, R8.**
+- **Batch 11 (`892e715`): five defects read past in every first-minute frame.** (1) The tutorial could not be completed on a desktop
+  (the steps waited for `InputService` request signals only touch controls emitted: "Turn on your flashlight" stayed up until Skip while the
+  light starts on): steps now end on the real key, click, stick or double tap, the flashlight step is skipped with the light on. (2) Stacked
+  dark stripes on the lit road: the white marking tiles z-fought with the road tiles, now `MARKING_LIFT` 2 cm (A/B frames in
+  `docs/artifacts/rc15/frames/`). (3) Scroll bars of the UI theme were 0 px wide (the city map's 11 rows had no bar), now 10 px; the map rows fit
+  their list (A07c). (4) The flashlight dust was a billboard that ignored the particle scale: 8 cm pale squares in the lower right (4 of 8
+  frames), now `BILLBOARD_PARTICLES` + fade within 0.8 m (A04h 0 of 8; `ghost_sweep_*.txt`). (5) Tier names English in every locale
+  (`opt_ultra` x13); a hit on a dead player counted a second death. `closeout_check` 298/298 (11 new, the old code fails every one), compile
+  gate bad=0, bot 3/3 WIN 0 deaths (100/111/126 s), PT-A 72/72, static 28, flow 56, i18n 12/12. Corrections 84-85.
+  **NEXT: full PT A V B on this tree and read every frame, R3 (visual gate on recaptured final frames), R5 explorer, R6, R7, R8, sign-off.**
 - Windowed frames: a multi-shot windowed run reads stale frames when nothing animates (gui_explore header); the play-through
   saves every frame after `frame_post_draw` and hashes it against the previous one.
 
