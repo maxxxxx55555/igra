@@ -35,9 +35,13 @@ func _run() -> void:
 	if _player == null:
 		_finish()
 		return
-	if OS.get_environment("CLOSEOUT_ONLY") == "monsters":
+	if OS.get_environment("CLOSEOUT_ONLY") == "combat":
 		await _check_melee_reaches_monsters()
 		await _check_crawler_idles_and_investigates()
+		await _check_hardcore_belongs_to_the_run()
+		await _check_tutorial_follows_the_real_input()
+		await _check_street_layers_do_not_fight()
+		await _check_scroll_bars_have_a_width()
 		_finish()
 		return
 	_check_theme()
@@ -84,6 +88,9 @@ func _run() -> void:
 	await _check_hardcore_belongs_to_the_run()
 	await _check_melee_reaches_monsters()
 	await _check_crawler_idles_and_investigates()
+	await _check_tutorial_follows_the_real_input()
+	await _check_street_layers_do_not_fight()
+	await _check_scroll_bars_have_a_width()
 	_finish()
 
 func _finish() -> void:
@@ -1369,6 +1376,10 @@ func _check_hardcore_belongs_to_the_run() -> void:
 	_player.set("_iframes", 0.0)
 	_player.take_damage(12.0, Vector3.ZERO)
 	_ok(not bool(_player.get("gameplay_active")), "DEAD1 a lethal hit takes the controls away")
+	var deaths_after_the_first := ProgressTracker.deaths
+	_player.set("_damage_grace_timer", 0.0)
+	_player.take_damage(12.0, Vector3.ZERO)
+	_ok(ProgressTracker.deaths == deaths_after_the_first, "DEAD1 a hit on a dead player is not a second death (%d, was %d)" % [ProgressTracker.deaths, deaths_after_the_first])
 	var from := _player.global_position
 	InputService.set_joy_active(true)
 	InputService.set_joy_move_dir(Vector2(0.0, -1.0))
@@ -1495,3 +1506,88 @@ func _check_crawler_idles_and_investigates() -> void:
 	crawler.call("_tick_ai", 0.016)
 	_ok(crawler.velocity.length() > 0.5, "CRAWL1 an investigating crawler goes to the spot it heard instead of standing (velocity %s)" % crawler.velocity)
 	crawler.queue_free()
+
+# ── the tutorial steps waited for touch controls: on a desktop "Turn on your flashlight" stayed up until Skip, and the light starts on ──
+func _tutorial_index(id: String) -> int:
+	for i in TutorialSystem.STEPS.size():
+		if TutorialSystem.STEPS[i]["id"] == id:
+			return i
+	return -1
+
+func _check_tutorial_follows_the_real_input() -> void:
+	_playing()
+	var tut := TutorialSystem
+	var done_before: Variant = tut.get("_completed_steps")
+	var step_before: Variant = tut.get("_current_step")
+	var lit_before: Variant = _player.get("flashlight_enabled")
+	tut.set("_tutorial_active", true)
+	# the light starts on, so "Turn on your flashlight" is skipped; with the light off it stays until a key press
+	tut.set("_completed_steps", [])
+	_player.set("flashlight_enabled", true)
+	tut.set("_current_step", _tutorial_index("flashlight"))
+	tut.call("_show_step")
+	_ok(int(tut.get("_current_step")) == _tutorial_index("move"), "TUT1 with the light on the flashlight hint is skipped (step %d)" % int(tut.get("_current_step")))
+	tut.set("_completed_steps", [])
+	_player.set("flashlight_enabled", false)
+	tut.set("_current_step", _tutorial_index("flashlight"))
+	tut.call("_show_step")
+	_ok(int(tut.get("_current_step")) == _tutorial_index("flashlight"), "TUT1 with the light off the flashlight hint stays")
+	# every other step ends on the real key, button or stick, not on a touch control
+	for pair in [["flashlight", "flashlight_toggle"], ["crouch", "stealth"], ["attack", "attack"], ["inventory", "inventory_toggle"]]:
+		tut.set("_completed_steps", [])
+		tut.set("_current_step", _tutorial_index(pair[0]))
+		tut.set("_waiting_for_action", true)
+		await get_tree().process_frame  # a press made at the start of a frame is seen by that frame's _process
+		Input.action_press(pair[1])
+		await get_tree().process_frame
+		Input.action_release(pair[1])
+		await get_tree().process_frame
+		_ok(pair[0] in (tut.get("_completed_steps") as Array), "TUT2 the %s key completes the %s hint" % [pair[1], pair[0]])
+	tut.set("_completed_steps", [])
+	tut.set("_current_step", _tutorial_index("move"))
+	tut.set("_waiting_for_action", true)
+	InputService.set_joy_active(true)
+	InputService.set_joy_move_dir(Vector2(0.0, -1.0))
+	await get_tree().process_frame
+	await get_tree().process_frame
+	InputService.set_joy_active(false)
+	InputService.set_joy_move_dir(Vector2.ZERO)
+	_ok("move" in (tut.get("_completed_steps") as Array), "TUT2 moving completes the move hint")
+	# the double tap of a move key is the dodge the hint asks for
+	tut.set("_completed_steps", [])
+	tut.set("_current_step", _tutorial_index("dodge"))
+	tut.set("_waiting_for_action", true)
+	_player.call("_track_dodge_tap", Vector2(0.0, -1.0), 0.01)
+	_player.call("_track_dodge_tap", Vector2.ZERO, 0.01)
+	_player.call("_track_dodge_tap", Vector2(0.0, -1.0), 0.01)
+	_ok("dodge" in (tut.get("_completed_steps") as Array), "TUT2 a double tap completes the dodge hint")
+	_player.call("_track_dodge_tap", Vector2.ZERO, 0.01)
+	tut.set("_tutorial_active", false)
+	tut.set("_waiting_for_action", false)
+	(tut.get("_hint_panel") as Control).visible = false
+	tut.set("_completed_steps", done_before)
+	tut.set("_current_step", step_before)
+	_player.set("flashlight_enabled", lit_before)
+
+# ── the white marking tiles lay on the road tiles at the same height: z-fighting drew stacked dark stripes wherever the road was lit ──
+func _check_street_layers_do_not_fight() -> void:
+	var builder := StreetBuilder.new()
+	builder.district_id = &"suburbs"
+	add_child(builder)
+	await builder.streets_ready
+	# headless the rendering server keeps no instance transforms, so the placement functions are asked, not the multimesh
+	var lowest := INF
+	for road in builder.roads:
+		for step in int(road.length / builder.lane_mark_spacing):
+			lowest = minf(lowest, builder.marking_origin(road, step).y - builder.road_step_pos(road, 0).y)
+	_ok(builder.roads.size() > 0 and lowest >= 0.01, "STREET1 every marking tile stands at least 1 cm above the road tiles (%.3f m)" % lowest)
+	builder.queue_free()
+
+# ── a flat stylebox has no size: the theme's scroll bars were 0 px wide, so the city map's eleven rows (440 px window) had no bar to find ──
+func _check_scroll_bars_have_a_width() -> void:
+	var bar := VScrollBar.new()
+	bar.theme = ThemeProvider.build_theme()
+	add_child(bar)
+	await get_tree().process_frame
+	_ok(bar.get_combined_minimum_size().x >= 8.0, "SCROLL1 a vertical scroll bar of the UI theme is at least 8 px wide (%.0f)" % bar.get_combined_minimum_size().x)
+	bar.queue_free()

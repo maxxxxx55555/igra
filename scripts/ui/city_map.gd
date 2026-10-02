@@ -40,6 +40,13 @@ const STAGE_KEYS: Array[String] = [
 	"MAP_STAGE_0", "MAP_STAGE_1", "MAP_STAGE_2", "MAP_STAGE_3",
 ]
 
+## A row is the crest, the stage pip, the name, the stage and this button: 32 + 16 + 190 + 150 + 230 + 4 gaps of 12 = 666 px,
+## inside the 680 px list less its scroll bar. At 190 px for the button the longest lock text ("Закрыт: Жилые кварталы") ran
+## past the row and the list got a horizontal bar of its own.
+const NAME_WIDTH: float = 190.0
+const STAGE_WIDTH: float = 150.0
+const ACTION_SIZE := Vector2(230, 34)
+
 var _list: VBoxContainer = null
 var _title: Label = null
 
@@ -90,6 +97,7 @@ func _build() -> void:
 
 	var scroll := ScrollContainer.new()
 	scroll.custom_minimum_size = Vector2(680, 440)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	root.add_child(scroll)
 
 	_list = VBoxContainer.new()
@@ -164,19 +172,21 @@ func _make_row(id: StringName, pg: Node, current: StringName) -> Control:
 
 	var name_lbl := Label.new()
 	name_lbl.text = _display_name(id, pg)
-	name_lbl.custom_minimum_size = Vector2(200, 34)
+	name_lbl.custom_minimum_size = Vector2(NAME_WIDTH, 34)
 	name_lbl.add_theme_color_override("font_color",
 		ThemeProvider.COLOR_TEXT if unlocked else ThemeProvider.COLOR_TEXT_DIM)
 	hb.add_child(name_lbl)
 
 	var stage_lbl := Label.new()
 	stage_lbl.text = LocalizationManager.t(STAGE_KEYS[clampi(stage, 0, 3)])
-	stage_lbl.custom_minimum_size = Vector2(190, 34)
+	stage_lbl.custom_minimum_size = Vector2(STAGE_WIDTH, 34)
 	stage_lbl.add_theme_color_override("font_color", STAGE_COLORS[clampi(stage, 0, 3)])
 	hb.add_child(stage_lbl)
 
 	var action := Button.new()
-	action.custom_minimum_size = Vector2(190, 34)
+	action.custom_minimum_size = ACTION_SIZE
+	action.clip_text = true
+	action.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	if is_here:
 		action.text = LocalizationManager.t("MAP_YOU_ARE_HERE")
 		action.disabled = true

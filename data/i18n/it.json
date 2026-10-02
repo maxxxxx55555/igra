@@ -1514,5 +1514,6 @@
   "DEATH_TIME": "Tempo di gioco: %s",
   "DEATH_DISTRICTS": "Distretti ripristinati: %d / %d (%d%%)",
   "DEATH_DOCS": "Documenti trovati: %d / %d",
-  "Stealth": "Furtività"
+  "Stealth": "Furtività",
+  "opt_ultra": "Ultra"
 }

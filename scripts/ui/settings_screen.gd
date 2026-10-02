@@ -193,8 +193,8 @@ func _build_graphics_tab(parent: VBoxContainer) -> void:
 	parent.add_theme_constant_override("separation", 14)
 	
 	var _tier_opts: Array = []
-	for s in ["Low (30fps, 720p)", "Medium (30fps, 1080p)", "High (60fps, 1080p)", "Ultra (60fps, 1440p)"]:
-		_tier_opts.append(s)  # технические токены, не переводим — формат fps/px общепонятен
+	for tier in [["opt_low", "30fps, 720p"], ["opt_medium", "30fps, 1080p"], ["opt_high", "60fps, 1080p"], ["opt_ultra", "60fps, 1440p"]]:
+		_tier_opts.append("%s (%s)" % [LocalizationManager.t(tier[0]), tier[1]])  # the name is translated, the fps and pixel format is not
 	_dropdown(parent, LocalizationManager.t("Graphics Tier"), "graphics_tier", _tier_opts,
 		func(idx: int) -> void: SettingsManager.set_graphics_tier(idx))
 	

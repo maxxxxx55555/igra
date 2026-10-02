@@ -316,6 +316,8 @@ func _mode_a() -> void:
 	await _a03_onboarding()
 	await _a04_controls()
 	await _a04_ghosts()
+	if OS.get_environment("PT_STOP") == "A04g":
+		return
 	await _a05_monster()
 	if OS.get_environment("PT_STOP") == "A05":
 		return
@@ -323,6 +325,8 @@ func _mode_a() -> void:
 	await _a06_inventory()
 	await _a06_shop()
 	await _a07_map()
+	if OS.get_environment("PT_STOP") == "A07":
+		return
 	await _a08_battery()
 	await _a09_skills()
 	await _a12_tiers()
@@ -393,31 +397,49 @@ func _a03_onboarding() -> void:
 	_step("A03b", not bool(overlay.get("_showing")) and SaveSystem.is_onboard_done() and clicks == 7,
 		"Next seven times closes the card and the profile remembers it (%d clicks)" % clicks, await _shot("A03_onboarding_done"))
 
-## The pale translucent squares in the corners of the world frames: which node draws them? One frame with everything on,
-## then one with each candidate hidden in turn.
+## The pale translucent squares that came and went in the lower right of the world frames (the flashlight's dust: a
+## billboard that ignored the particle scale, so each speck was an 8 cm square by the hand). Eight frames of the standing
+## player: the lower-right corner may not be brighter than the clearest of them by more than GHOST_LEVEL (0 to 255 after
+## averaging the corner down). Measured: the defect 4 to 8 above the clearest in 2 to 4 of 8 frames; the same scene with the
+## fix 1.9 and without any dust 1.5 to 2.4 over 24 frames (`docs/artifacts/rc15/ghost_sweep_*.txt`).
+const GHOST_FRAMES := 8
+const GHOST_LEVEL := 3.5
+
+func _corner_level() -> float:
+	await get_tree().process_frame
+	await RenderingServer.frame_post_draw
+	var img := get_tree().root.get_texture().get_image()
+	var corner := img.get_region(Rect2i(int(img.get_width() * 0.7), int(img.get_height() * 0.82), int(img.get_width() * 0.3), int(img.get_height() * 0.18)))
+	corner.resize(16, 6, Image.INTERPOLATE_BILINEAR)
+	var sum := 0.0
+	for y in 6:
+		for x in 16:
+			sum += corner.get_pixel(x, y).get_luminance()
+	return sum / 96.0 * 255.0
+
 func _a04_ghosts() -> void:
-	var main := _scene()
-	var candidates := {
-		"hand_light": _player.get_node_or_null("ModelPivot/FlashlightPivot/HandLight"),
-		"backpack": _player.get_node_or_null("ModelPivot/Backpack"),
-		"marker": _player.get_node_or_null("Marker"),
-		"dust": _player.get_node_or_null("ModelPivot/FlashlightPivot/Dust"),
-		"footstep_dust": _player.get_node_or_null("FootstepDust"),
-		"ash": main.get_node_or_null("Ash"),
-	}
 	_key_event(KEY_W, true)
 	await get_tree().create_timer(1.2).timeout
 	_key_event(KEY_W, false)
-	var report: PackedStringArray = ["all=%s" % await _shot("A04_ghost_all")]
-	for key in candidates:
-		var node := candidates[key] as Node3D
-		if node == null:
-			report.append("%s=missing" % key)
-			continue
-		node.visible = false
-		report.append("%s=%s" % [key, await _shot("A04_ghost_no_%s" % key)])
-		node.visible = true
-	_say("[pt] note A04 frames with one candidate hidden each: %s" % ", ".join(report))
+	await get_tree().create_timer(0.4).timeout
+	var ghosts := 0
+	var levels: Array[float] = []
+	var hurt := 0.0
+	for attempt in 4:
+		# a hit makes the screen edges flash ember, which is no ghost: that window is measured again
+		var damage0 := ProgressTracker.damage_taken
+		levels.clear()
+		for i in GHOST_FRAMES:
+			levels.append(await _corner_level())
+			await get_tree().create_timer(0.2).timeout
+		hurt = ProgressTracker.damage_taken - damage0
+		if hurt == 0.0:
+			break
+		await get_tree().create_timer(3.0).timeout
+	ghosts = 0
+	for level in levels:
+		ghosts += 1 if level - levels.min() > GHOST_LEVEL else 0
+	_step("A04h", ghosts == 0 and hurt == 0.0, "no pale square comes and goes in the lower-right corner (%d of %d frames brighter than the clearest by more than %.1f; corner %.1f to %.1f; hurt in the window %.0f by %s)" % [ghosts, GHOST_FRAMES, GHOST_LEVEL, levels.min(), levels.max(), hurt, ProgressTracker.last_hit_by], await _shot("A04_corner"))
 
 func _a04_controls() -> void:
 	_playing_or_fail()
@@ -571,7 +593,7 @@ func _a05_death() -> void:
 			if prefix != "" and line.contains(prefix):
 				shown += 1
 				break
-	_step("A05b", reached and ProgressTracker.deaths == deaths0 + 1 and shown == need.size(), "HP 0 ends in the death screen with cause, time, districts and documents (%s)" % " | ".join(texts), await _shot("A05_death_screen"))
+	_step("A05b", reached and ProgressTracker.deaths == deaths0 + 1 and shown == need.size(), "HP 0 ends in the death screen with cause, time, districts and documents, one death counted (%s; deaths %d -> %d)" % [" | ".join(texts), deaths0, ProgressTracker.deaths], await _shot("A05_death_screen"))
 	var retry: Button = null
 	var names: PackedStringArray = []
 	if death != null:
@@ -685,12 +707,24 @@ func _a07_map() -> void:
 	var enabled := 0
 	if open:
 		for b in _buttons(map):
-			if b.custom_minimum_size == Vector2(190, 34):
+			if b.custom_minimum_size == map.get_script().get_script_constant_map()["ACTION_SIZE"]:
 				if b.disabled:
 					disabled += 1
 				else:
 					enabled += 1
 	_step("A07", open and disabled == 11 and enabled == 0, "K opens the city map; on a fresh profile every row is the street you stand on or locked (%d disabled, %d travel)" % [disabled, enabled], await _shot("A07_map_fresh"))
+	var list: ScrollContainer = null
+	if open:
+		list = map.find_children("*", "ScrollContainer", true, false)[0] as ScrollContainer
+	var bar := list.get_v_scroll_bar() if list != null else null
+	var hbar := list.get_h_scroll_bar() if list != null else null
+	_step("A07c", bar != null and bar.visible and bar.size.x >= 8.0 and bar.max_value > bar.page and not hbar.visible,
+		"the map's list is longer than its window and shows a scroll bar (%s px wide, %.0f of %.0f), with no horizontal bar (rows fit: %s)" % [bar.size.x if bar != null else 0, bar.page if bar != null else 0, bar.max_value if bar != null else 0, str(hbar != null and not hbar.visible)])
+	if list != null:
+		list.scroll_vertical = int(bar.max_value)
+		await get_tree().process_frame
+		_say("[pt] note A07 the list scrolled to its end, frame=%s" % await _shot("A07_map_scrolled"))
+		list.scroll_vertical = 0
 	await _tap(KEY_K)
 	await get_tree().create_timer(0.4).timeout
 	for id in [&"suburbs"]:

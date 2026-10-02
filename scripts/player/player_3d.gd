@@ -219,7 +219,11 @@ func _setup_cone(force_off: bool) -> void:
 	dust_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	dust_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	dust_mat.albedo_color = Color(1.0, 1.0, 0.95, 0.20)
-	dust_mat.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
+	dust_mat.billboard_mode = BaseMaterial3D.BILLBOARD_PARTICLES  # BILLBOARD_ENABLED dropped the particle scale: 8 cm squares by the hand, pale 100 px blocks in the lower right
+	# a speck within a metre of the camera is a pale block however small it is: the motes start by the hand
+	dust_mat.distance_fade_mode = BaseMaterial3D.DISTANCE_FADE_PIXEL_ALPHA
+	dust_mat.distance_fade_min_distance = 0.8
+	dust_mat.distance_fade_max_distance = 1.5
 	dust_mesh.material = dust_mat
 	dust.draw_pass_1 = dust_mesh
 	var log_code := code.replace("\n", " ")
@@ -843,7 +847,7 @@ func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, _type: EnemyRo
 	## in front of the Architect at half HP with no grace window, so the
 	## very next energy ball (every ~2-3s) killed them again — a loop that
 	## ate the whole 240s deadline. grant_iframes() below feeds both cases.
-	if _iframes > 0.0 or GameManager.is_win():
+	if _iframes > 0.0 or GameManager.is_win() or hp <= 0.0:  # a dead player is not killed a second time (deaths were counted per hit)
 		return
 	_since_hurt = 0.0
 	# Winnability: «mercy i-frames» — после попадания 0.8 с неуязвимости.
@@ -1224,7 +1228,7 @@ func _track_dodge_tap(dir_2d: Vector2, delta: float) -> void:
 	var held := dir_2d.length_squared() > 0.1
 	if held and not _tap_held:
 		if _tap_age < DODGE_TAP_WINDOW and dir_2d.dot(_tap_dir) > 0.6:
-			_handle_dodge(dir_2d)
+			InputService.request_dodge(dir_2d)
 			_tap_age = 99.0
 		else:
 			_tap_age = 0.0

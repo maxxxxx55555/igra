@@ -1,4 +1,14 @@
-[closeout] FAIL MELEE1 a swing damages a monster 1.6 m ahead, for every kind (missed: shadow_3d hp 30 -> 30, combo 1, phase none, crawler_3d hp 50 -> 50, combo 2, phase none, hound_3d hp 40 -> 40, combo 3, phase none, hunter_3d hp 120 -> 120, combo 1, phase none, brute_3d hp 350 -> 350, combo 2, phase none, rotter_3d hp 140 -> 140, combo 3, phase none, watcher_3d hp 80 -> 80, combo 1, phase none, sharpshooter_3d hp 6
+[closeout] FAIL MELEE1 a swing damages a monster 1.6 m ahead, for every kind (missed: shadow_3d hp 30 -> 30, combo 1, phase none, crawler_3d hp 50 -> 50, combo 2, phase none, hound_3d hp 40 -> 40, com
 [closeout] FAIL CRAWL1 an idle crawler stands still instead of running on at its last velocity ((4.0, 0.0, 3.0))
 [closeout] FAIL CRAWL1 an investigating crawler goes to the spot it heard instead of standing (velocity (0.0, 0.0, 0.0))
-[closeout] DONE checks=4 fails=3
+[closeout] FAIL DEAD1 a hit on a dead player is not a second death (2, was 1)
+[closeout] FAIL TUT1 with the light on the flashlight hint is skipped (step 1)
+[closeout] FAIL TUT2 the flashlight_toggle key completes the flashlight hint
+[closeout] FAIL TUT2 the stealth key completes the crouch hint
+[closeout] FAIL TUT2 the attack key completes the attack hint
+[closeout] FAIL TUT2 the inventory_toggle key completes the inventory hint
+[closeout] FAIL TUT2 moving completes the move hint
+[closeout] FAIL TUT2 a double tap completes the dodge hint
+[closeout] FAIL STREET1 every marking tile stands at least 1 cm above the road tiles (0.000 m)
+[closeout] FAIL SCROLL1 a vertical scroll bar of the UI theme is at least 8 px wide (0)
+[closeout] DONE checks=23 fails=13

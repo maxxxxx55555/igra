@@ -1514,5 +1514,6 @@
   "DEATH_TIME": "Time survived: %s",
   "DEATH_DISTRICTS": "Districts restored: %d / %d (%d%%)",
   "DEATH_DOCS": "Documents found: %d / %d",
-  "Stealth": "Stealth"
+  "Stealth": "Stealth",
+  "opt_ultra": "Ultra"
 }

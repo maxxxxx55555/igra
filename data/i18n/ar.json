@@ -1514,5 +1514,6 @@
   "DEATH_TIME": "وقت البقاء: %s",
   "DEATH_DISTRICTS": "المناطق المستعادة: %d / %d (%d%%)",
   "DEATH_DOCS": "الوثائق التي وُجدت: %d / %d",
-  "Stealth": "التسلل"
+  "Stealth": "التسلل",
+  "opt_ultra": "فائقة"
 }

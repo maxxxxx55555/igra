@@ -1514,5 +1514,6 @@
   "DEATH_TIME": "Tiempo vivo: %s",
   "DEATH_DISTRICTS": "Distritos restaurados: %d / %d (%d%%)",
   "DEATH_DOCS": "Documentos hallados: %d / %d",
-  "Stealth": "Sigilo"
+  "Stealth": "Sigilo",
+  "opt_ultra": "Ultra"
 }

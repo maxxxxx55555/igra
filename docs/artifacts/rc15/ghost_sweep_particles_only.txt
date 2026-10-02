@@ -1,0 +1,1 @@
+[pt] note A04 corner level spread over 24 frames with BILLBOARD_PARTICLES only (no distance fade): dust min 19.3 median 20.7 p90 23.0 max 24.6 | no_dust min 19.4 median 20.4 p90 20.9 max 21.3 | dust2 min 19.6 median 20.6 p90 22.3 max 25.6 | no_dust2 min 19.6 median 20.4 p90 21.0 max 21.2

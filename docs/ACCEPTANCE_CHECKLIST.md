@@ -306,3 +306,8 @@ Rows the first play-through added: each was a defect a frame or a measured numbe
 | MELEE1 | A swing lands on every monster kind, whatever it is doing; the nearest body that takes damage is hit | 5.1 | closeout_check MELEE1 (the Area3D it replaced fails it for all eight kinds, `closeout_mutation_batch10.txt`); play-through A05 on a spawned crawler | PASS(closeout) |
 | G13b | The combo deals the GDD damage 8 / 12 / 20 | 5.1 | closeout_check G13; bot 3/3 with these values (`bot_batch10_canon_combo_summary.txt`) | PASS(closeout) |
 | CRAWL1 | A crawler stops when idle and goes to the spot it heard (it ran on at its last velocity) | 6.2 | closeout_check CRAWL1 | PASS(closeout) |
+| TUT1 | The flashlight hint is skipped while the light is on (it starts on) and stays while it is off | 12 | closeout_check TUT1 | PASS(closeout) |
+| TUT2 | Each hint ends on the real key, click, stick or double tap (flashlight, move, crouch, dodge, attack, inventory) | 12 | closeout_check TUT2 (all six fail on the old code, `closeout_mutation_batch10.txt`) | PASS(closeout) |
+| A04h | No pale translucent square comes and goes in the lower-right corner of the world frame | V.1 | play-through A04h (4 of 8 frames before the dust fix, 0 after) | PT |
+| STREET1 | The road markings stand above the road tiles (no z-fighting stripes on the lit road) | V.1 | closeout_check STREET1 (fails on the old height); frames `docs/artifacts/rc15/frames/A07_street_all.jpg` (stripes) and `A07_street_markings_raised.jpg` (clean) | PASS(closeout) |
+| SCROLL1 | A scroll list longer than its window shows a scroll bar | V.2 | closeout_check SCROLL1 (the bar was 0 px wide); play-through A07 note on the map list | PASS(closeout) |

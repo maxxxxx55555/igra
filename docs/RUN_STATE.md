@@ -31,6 +31,14 @@ prop spheres are ~4 000 triangles each), R5 breaker + explorer, R6 security, R8 
   (new `tscn_header_check`), flow 56, scene_node clean, PT-A 63/63, PT-V reached the victory screen at real time (windowed).
   Corrections 68-76. **NEXT: PT-V/B green (B02 compares Continue with the V state, B03 hardcore), breaker report, R3 visual
   gate adjudication on the final frames, R5 explorer sweep, R6 attack_sim + regrep, R7 windowed perf, R8 verifier, sign-off.**
+- **Batch 10 (`5cbaff5`): no swing had ever landed on a regular monster.** The PT-A rerun after batch 9 failed A05 on a crawler
+  (hp 50 -> 50 in 25 s, 37 swings): the swing was an Area3D on layer 1, monsters sit on layer 2 (the earlier A05 PASS was a shadow dying
+  in the flashlight). Now a per-tick 2.7 m sphere query on layers 1+2 hitting the nearest body that takes damage (`player_3d.gd`
+  `_swing_hits`); combo damage back to the GDD 8/12/20 (the x1.75 was a bot reserve for the Architect fight); a crawler handles IDLE and
+  INVESTIGATE (it ran on at its last velocity toward the world origin). `closeout_check` 287/287 (MELEE1, CRAWL1, G13; mutations
+  fail all three), bot 3/3 WIN 0 deaths at x1.75 (92/94/99 s) and at the canon values (106/110/126 s), static 28, flow 56,
+  scene_node clean. Corrections 83. PT harness: A05 spawns its own crawler, B02 compares through JSON, B03 opens Settings from the main
+  menu (the box is locked in a running game). **NEXT: full PT A V B on this tree and read every frame, then R3, R5, R6, R7, R8.**
 - Windowed frames: a multi-shot windowed run reads stale frames when nothing animates (gui_explore header); the play-through
   saves every frame after `frame_post_draw` and hashes it against the previous one.
 

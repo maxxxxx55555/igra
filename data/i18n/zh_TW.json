@@ -1514,5 +1514,6 @@
   "DEATH_TIME": "存活時間：%s",
   "DEATH_DISTRICTS": "已修復區域：%d / %d (%d%%)",
   "DEATH_DOCS": "找到的文件：%d / %d",
-  "Stealth": "潛行"
+  "Stealth": "潛行",
+  "opt_ultra": "超高"
 }

@@ -1514,5 +1514,6 @@
   "DEATH_TIME": "생존 시간: %s",
   "DEATH_DISTRICTS": "복구한 지구: %d / %d (%d%%)",
   "DEATH_DOCS": "찾은 문서: %d / %d",
-  "Stealth": "은신"
+  "Stealth": "은신",
+  "opt_ultra": "울트라"
 }
