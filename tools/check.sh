@@ -338,7 +338,7 @@ else
       if [[ $rc -eq 0 ]]; then ok "$name"
       elif [[ $rc -eq 3 ]]; then echo "  ${DIM}пропуск${OFF} $name (нужен --windowed, не OK/FAIL)"
       elif [[ $rc -eq 124 ]]; then bad "$name (таймаут ${t}s)"; echo "$out" | tail -15 | sed 's/^/         /'
-      else bad "$name (код $rc)"; echo "$out" | tail -15 | sed 's/^/         /'; fi
+      else bad "$name (код $rc)"; echo "$out" | grep -aE "FAIL|fails=[1-9]" | head -12 | sed 's/^/         /'; echo "$out" | tail -15 | sed 's/^/         /'; fi
     }
     # ENV RULE (RUN_STATE 2026-09-24): a --headless run cannot regenerate
     # BPTC-compressed textures, and a stale .godot/imported/ cache for the
