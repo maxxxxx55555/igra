@@ -6,6 +6,8 @@ extends CanvasLayer
 const TIER_GRAIN: int = 1
 const TIER_CHROMA: int = 2
 const VISIBILITY_IDLE: float = 0.01  # below this the detection edge cannot be seen
+const CHROMA_PULSE_PX: float = 2.0  # the aberration a hit starts from, in 1080p pixels
+const CHROMA_PULSE_SEC: float = 0.25
 
 var _grain: ColorRect = null
 var _vignette: ColorRect = null
@@ -15,6 +17,8 @@ var _visibility_detected: bool = false
 var _visibility_timer: float = 0.0
 var _tier: int = 2
 var _chroma_base: float = 0.0
+var _chroma_pulse: float = 0.0
+var _pulse_tween: Tween = null
 
 func _ready() -> void:
 	layer = 100
@@ -30,11 +34,27 @@ func _ready() -> void:
 	_apply_tier()
 	EventBus.settings_changed.connect(_on_settings_changed)
 	EventBus.player_detected.connect(_on_player_detected)
+	EventBus.player_damaged.connect(_on_player_damaged)
 
 func _on_settings_changed(key: String, value: Variant) -> void:
 	if key == "graphics_tier":
 		_tier = int(value)
 		_apply_tier()
+
+## A hit smears the colour channels for a quarter of a second. It is a flash, so Reduce Flash turns it off. A tween that
+## runs through the pause: a paused tree would freeze a half-decayed pulse on screen for as long as the menu stays open.
+func _on_player_damaged(_amount: float) -> void:
+	if _tier < TIER_CHROMA or bool(SettingsManager.get_setting("reduce_flash", false)):
+		return
+	if _pulse_tween != null and _pulse_tween.is_valid():
+		_pulse_tween.kill()
+	_pulse_tween = create_tween()
+	_pulse_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	_pulse_tween.tween_method(_set_chroma_pulse, CHROMA_PULSE_PX, 0.0, CHROMA_PULSE_SEC)
+
+func _set_chroma_pulse(px: float) -> void:
+	_chroma_pulse = px
+	_sync_chroma()
 
 func _apply_tier() -> void:
 	_grain.visible = _tier >= TIER_GRAIN
@@ -119,7 +139,7 @@ func _sync_chroma() -> void:
 	if _chroma == null:
 		return
 	var mat := _chroma.material as ShaderMaterial
-	var px: float = _chroma_base if _tier >= TIER_CHROMA else 0.0
+	var px: float = maxf(_chroma_base, _chroma_pulse) if _tier >= TIER_CHROMA else 0.0
 	var vp := get_viewport()
 	var h: float = float(vp.get_visible_rect().size.y) if vp else 1080.0
 	_chroma.visible = px > 0.0
