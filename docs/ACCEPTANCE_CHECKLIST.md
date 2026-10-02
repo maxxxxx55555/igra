@@ -6,10 +6,12 @@ evidence named (see `docs/PROOFS.md`), `BATTERY` proven by a gate that the sign-
 by the play-through step, `DECIDED` a recorded deviation (docs/TZ_DECISIONS.md), `OWNER` needs the owner or an asset,
 `ROADMAP` the GDD itself tags it M4 or vision, `NOT-VERIFIABLE` no honest measurement exists, `OPEN` promised and not built.
 
-Play-through steps (GUI-engine input injection, a frame read at each): **A01** boot to menu, **A02** Play, **A03** onboarding,
-**A04** first repair, **A05** first monster, **A06** inventory/shop use, **A07** map travel, **A08** battery low,
-**A09** boss, **A10** victory, **A11** New Game+, **A12** graphics tiers, **A13** 13 languages, **A14** save and quit;
-**B01** relaunch, **B02** Continue, **B03** hardcore, **B04** daily challenge, **B05** achievements.
+Play-through steps (GUI-engine input injection, a frame read at each; the step logs are `docs/artifacts/rc15/playthrough_A/V/B/S.txt`):
+mode A **A01** boot to menu, **A02** Play, **A03** onboarding, **A04** first repair and the controls, **A05** first monster,
+**A06** inventory, pause menu, shop and upgrades, **A07** map travel, **A08** battery low, **A09** the skill tree, **A12** graphics tiers,
+**A13** 13 languages; mode V (the bot plays on) **V09** the Architect, **V10** victory, **V11** New Game+, **V14** Save and quit;
+mode B **B01** relaunch, **B02** Continue, **B03** hardcore, **B04** daily challenge, **B05** achievements; mode S **S_codex_*** every
+Codex tab, **S_hud_*** the HUD buttons, **S_workbench**, **S_credits**.
 
 
 ## 1. Overview (GDD 1)
@@ -59,7 +61,7 @@ Play-through steps (GUI-engine input injection, a frame read at each): **A01** b
 | PG2 | Stage effects DARK 0.03/0.12, STREETS 0.11/0.25, FULL 0.16/0.40 | 4.2 | tz_verify D03 + frames | BATTERY |
 | PG3 | A locked district says what to restore first | 4.3 | suite P5c (district name in 12 locales) | BATTERY |
 | PG4 | Switches and puzzles toggle STREETS/DARK; parts repair a district | 4.3 | PT first repair (real input) | PT-A04 |
-| PG5 | All 11 FULL -> final night -> the Architect -> win -> ending | 4.3, 6.3, 12.3 | GDD amended rc15 (G28); bot win x3; PT boss + victory frames | PT-A09 |
+| PG5 | All 11 FULL -> final night -> the Architect -> win -> ending | 4.3, 6.3, 12.3 | GDD amended rc15 (G28); bot win x3; PT V09 (the Architect appears) and V10 (the victory screen follows the win) | PT-V10 |
 | PG6 | Stages are saved and loaded | 4.3, 10 | suite P3 + PT continue | PT-B02 |
 
 ## 5. Combat (GDD 5)
@@ -79,12 +81,12 @@ Play-through steps (GUI-engine input injection, a frame read at each): **A01** b
 |---|---|---|---|---|
 | MN1 | FSM IDLE/PATROL/INVESTIGATE/CHASE/ATTACK/FLEE/STUN/DEAD | 6.1 | base_monster.gd State enum; bot encounters | BATTERY |
 | MN2 | 11 types + boss with the GDD HP and damage | 6.2 | closeout_check MN2: all 12 scenes at the GDD 6.2 health and damage (NG+ factors applied) | PASS(closeout MN2) |
-| MN3 | Boss: three phases at 70/30%, falling beams 40 | 6.3 | bot boss phases x3 (log) + PT boss frame | PT-A09 |
+| MN3 | Boss: three phases at 70/30%, falling beams 40 | 6.3 | bot boss phases x3 (log) + PT V09 boss frames | PT-V09 |
 | MN4 | Loot: 30% chance from a corpse | 6.2 | closeout_check MN4: 163 of 600 corpses dropped loot (30% +-8); every drop is battery/medkit/scrap, the Sharpshooter drops ammo | PASS(closeout MN4) |
 | MN5 | Damage types and resistances applied in damage code | 6.4 | base_monster.take_damage reads the matrix; closeout shotgun/pistol hits (BULLET) | PASS(closeout G25) |
 | MN6 | Statuses BLEED/BURN/POISON/SLOW/STUN reach the player | 6.5 | closeout_check MN6: BLEED (Crawler, Hunter), STUN (Destroyer), BURN (Burner), POISON (Rotter) reach the player; SLOW halves speed; STUN holds the player; H3.12 icons follow. SLOW has no inflicting monster in GDD 6.2 (DECIDED) | PASS(closeout MN6) |
 | MN7 | Group behaviour: flanks and a shout that alerts allies | 6.2, 25.2 | closeout_check MN7: Hunter/Hound shout (PACK_CALLERS, 15 m) and every noise (shot 22 m, run 8 m) sends unaware monsters to the spot; 40 m / 60 m away does not hear. Flanking is emergent: allies arrive from their own bearing (DECIDED, no scripted pincer) | PASS(closeout MN7) |
-| MN8 | Shadow counts as a Shadow (quests, bestiary, Shadow Hunter) | 6.2, 21 | closeout_check (monster_id == shadow) | PASS(closeout) |
+| MN8 | Shadow counts as a Shadow (quests, bestiary, Shadow Hunter) | 6.2, 21 | closeout_check `the Shadow carries its own id` (quests, the bestiary and Shadow Hunter read it) | PASS(closeout) |
 
 ## 7. Stealth and noise (GDD 7)
 
@@ -126,14 +128,14 @@ Play-through steps (GUI-engine input injection, a frame read at each): **A01** b
 | SV1 | 3 manual slots + 1 autosave | 10 | owner archived the slot picker (PLAN.md stage 1); Continue loads the latest | DECIDED |
 | SV2 | What is saved: position, vitals, battery, inventory, upgrades, blueprints, stages, quests, bestiary, stats, settings | 10 | suite P3 + save_integrity + closeout_check SV2 (health, stamina and battery were not saved before rc15) + PT relaunch | PT-B02 |
 | SV3 | Autosave on district change, lamp, puzzle, purchase, secret, death, every 60 s | 10 | suite P2m | BATTERY |
-| SV4 | A forged save cannot add weapons, blueprints or ammo | 10 | closeout_check (clamped from_dict) + attack_sim | PASS(closeout) |
+| SV4 | A forged save cannot add weapons, blueprints or ammo | 10 | closeout_check G25 (a forged save cannot add a weapon or overfill the reserve), SV2 (a forged number is clamped); attack_sim | PASS(closeout) |
 
 ## 11. Style (GDD 11)
 
 | ID | Promise | GDD | Proof | Result |
 |---|---|---|---|---|
 | ST1 | Permanent night, no day | 11.1 | V01 + frames | BATTERY |
-| ST2 | Palette tokens; no pure black/white, no neon | 11.2 | visual_truth_gate on the sign-off frames | PT-A09 |
+| ST2 | Palette tokens; no pure black/white, no neon | 11.2 | `tools/check.sh --static` (visual_truth_gate on the sign-off and beauty frames), `visual_gate_mutations.txt` | PASS(static) |
 | ST3 | Fonts: Bebas Neue Bold, Roboto Condensed, Share Tech Mono | 11.3 | closeout_check (emboldened heading font) | PASS(closeout V03) |
 | ST4 | Panels: 1 px edge, chamfered, no rounded corners | 11.4 | StyleBoxFlat radius 0; collection cards were 6 (fixed) | BATTERY |
 | ST5 | Grain and vignette over the view | 11.4 | frames | PT-A04 |
@@ -152,13 +154,13 @@ Play-through steps (GUI-engine input injection, a frame read at each): **A01** b
 | SC7 | POWER_GRID, EVENTS, RADIO, STORY_SCENE, FINAL_NIGHT, WEATHER, CONTROLS_TOUCH | 12.2 | The seven cards (POWER_GRID, EVENTS, RADIO, STORY_SCENE, FINAL_NIGHT, WEATHER, CONTROLS_TOUCH) are static design mockups with sample data; showing them would put fake data in front of the player. The real functions: City Map (power per district), finale_director (final night), weather_system, touch settings. DECIDED, kept unreachable | DECIDED |
 | SC8 | Three acts, radio voice, documents, point of no return at D10 | 12.3 | documents + gate (suite P2q); the game has no voiced radio content, the story reaches the player as documents, quests and the journal (DECIDED) | DECIDED |
 | SC9 | Five endings reachable | 12.4 | endings_sim + suite P4 | BATTERY |
-| SC10 | New Game+ rule | 12.5 | GDD written rc15 from the shipped behaviour; PT entry | PT-A11 |
+| SC10 | New Game+ rule | 12.5 | GDD written rc15 from the shipped behaviour; PT V11 to V11f (setup, activate, modifier, menu, confirm, scaled monsters) | PT-V11 |
 
 ## 13. Audio (GDD 13)
 
 | ID | Promise | GDD | Proof | Result |
 |---|---|---|---|---|
-| AU1 | Bus graph Master > Music | SFX(Footsteps, Combat, UI, Environment) | Voice | 13 | audio_bus_check | BATTERY |
+| AU1 | Bus graph Master: Music, SFX (Footsteps, Combat, UI, Environment), Voice | 13 | audio_bus_check | BATTERY |
 | AU2 | Adaptive layers with a 2 s crossfade | 13 | tz_verify A02 + audio_truth_gate | BATTERY |
 | AU3 | Dark-ambient music without melodic themes | 13 | owner music per OWNER_HANDOFF | OWNER |
 | AU4 | Footsteps: 6 surfaces x 3 speeds | 13 | footstep_check (DECIDED DR-5 for per-speed recordings) | DECIDED |
@@ -175,16 +177,16 @@ Play-through steps (GUI-engine input injection, a frame read at each): **A01** b
 | AC5 | Auto-aim toggle | 14 | closeout_check C03 + a11y_check | PASS(closeout C03) |
 | AC6 | Arachnophobia mode (Crawler becomes Blind Dogs) | 14 | tz_verify C04 | BATTERY |
 | AC7 | Hints on/off | 14 | closeout_check AC7: Hints off and the Keeper's Pact modifier both silence every hint (HUD _hints_on) | PASS(closeout AC7) |
-| AC8 | Settings Back returns to the menu | V.2 5.4 | closeout_check + PT | PASS(closeout) |
+| AC8 | Settings Back returns to the menu | V.2 5.4 | closeout_check `Back returns from Settings to the main menu`; PT B03 (Settings opened from the main menu) | PASS(closeout) |
 
 ## 15. Performance (GDD 15)
 
 | ID | Promise | GDD | Proof | Result |
 |---|---|---|---|---|
-| PF1 | Draw calls < 200 (D1) / < 350 (D11) | 15 | windowed perf_check_scene on the running game, two runs: D1 134 / 132, D11 136 / 133 (279 / 272 before the moon-shadow change; the 169 / 168 of `perf_rc15.txt` were a paused tree, CORRECTION_LOG 93); `perf_rc15_final.txt` | PASS(perf) |
-| PF2 | Particles < 500, RAM < 800 MB, VRAM < 400 MB | 15 | windowed perf_check_scene, two runs of the running game: 140 particles, 100.1 to 100.2 MiB static, 153.0 MiB video, 127.5 MiB textures (`perf_rc15_final.txt`) | PASS(perf) |
-| PF3 | 30-60 FPS | 15 | windowed p95 frame time on the running game (AMD iGPU), two runs: D1 31.94 / 32.02 ms (31 fps), D11 26.19 / 26.67 ms (38 fps); the 60 and 55 fps of rc15 were a paused scene (CORRECTION_LOG 93); `perf_rc15_final.txt` | PASS(perf, 31 fps at D1: a 4% margin over the floor on this iGPU; a phone is T01) |
-| PF4 | Polygons < 50K per district | 15 | the district's own geometry at D1 is 44 830 / 35 616 primitives (hiding the district root, `perf_rc15_final.txt`); the whole frame measures 48 935 / 39 721 at D1 and 50 161 / 45 105 at D11 (it was 76 551 on the paused tree, 1.34 M before the prop mesh cut) | PASS(perf; the frame total is under 50K at D1 and 0.3% over in one of two D11 runs) |
+| PF1 | Draw calls < 200 (D1) / < 350 (D11) | 15 | windowed perf_check_scene on the running game with the quick bar, two runs: D1 167 / 166, D11 166 / 168 (the same tree with the pre-`a57f9dd` moon shadow: D1 214; the 169 / 168 of `perf_rc15.txt` were a paused tree, CORRECTION_LOG 93); `perf_rc15_final.txt` | PASS(perf) |
+| PF2 | Particles < 500, RAM < 800 MB, VRAM < 400 MB | 15 | windowed perf_check_scene, two runs of the running game with the quick bar: 140 particles, 100.5 / 100.6 MiB static, 153.4 MiB video, 127.9 MiB textures (`perf_rc15_final.txt`) | PASS(perf) |
+| PF3 | 30-60 FPS | 15 | windowed p95 frame time on the running game (AMD iGPU), four runs: D1 20.37 to 32.02 ms (31 to 49 fps), D11 20.37 to 26.67 ms (37 to 49 fps); the 60 and 55 fps of rc15 were a paused scene (CORRECTION_LOG 93); `perf_rc15_final.txt` | PASS(perf, 31 fps in the worst D1 run: a 4% margin over the floor on this iGPU; a phone is T01) |
+| PF4 | Polygons < 50K per district | 15 | the whole frame measures 44 205 / 44 141 primitives at D1 and 45 301 / 45 429 at D11 with the quick bar (39.7K to 50.2K in the earlier runs; 76 551 on the paused tree, 106 829 with the pre-`a57f9dd` moon shadow, 1.34 M before the prop mesh cut; `perf_rc15_final.txt`) | PASS(perf; every run of the final tree is under 50K) |
 
 ## 17-24. Items, weapons, skills, achievements, album, daily, ads, toasts, stats, exit
 
@@ -195,12 +197,12 @@ Play-through steps (GUI-engine input injection, a frame read at each): **A01** b
 | WP2 | Weapons found in the world; two weapon quick slots | 18, 24.1 | closeout_check (placement, slot cycling) | PASS(closeout G25) |
 | WP3 | Weapon comparison shown on switching | V.5 9.9 | weapon_compare_ui on weapon_switched | PT-A06 |
 | AH1 | Achievement: first light, electrician, beacon, librarian | 21 | achievements_manager triggers | BATTERY |
-| AH2 | Shadow hunter (50), quiet as a mouse (D3), combo master (10), overloaded (5 min) | 21 | closeout_check | PASS(closeout) |
+| AH2 | Shadow hunter (50), quiet as a mouse (D3), combo master (10), overloaded (5 min) | 21 | closeout_check ach_06 (quiet as a mouse), ach_07 (combo master), ach_08 (overloaded) and `the Shadow carries its own id` (Shadow Hunter) | PASS(closeout) |
 | AH3 | Photographer 50, seeker 100, collector 200 photos | 24.2 | closeout_check (50th photo; total >= 200) | PASS(closeout G26) |
-| AH4 | Economist (5000), without a scratch (D4), architect, truth, darkness | 21 | closeout_check | PASS(closeout) |
-| AH5 | Speedrunner, iron man, midsummer night (bed), who is there (hallucinations) | 21 | closeout_check | PASS(closeout) |
+| AH4 | Economist (5000), without a scratch (D4), architect, truth, darkness | 21 | closeout_check ach_11 (economist), ach_12 (without a scratch), ach_13 (architect, in the ach_16 / ach_18 win check), ach_14 (truth, with the Truth ending's conditions), ach_15 (darkness) | PASS(closeout) |
+| AH5 | Speedrunner, iron man, midsummer night (bed), who is there (hallucinations) | 21 | closeout_check ach_16 / ach_18 (speedrunner, iron man), ach_19 (the bed), ach_20 (five hallucinations) | PASS(closeout) |
 | AH6 | Achievements screen | 21 | PT frame | PT-B05 |
-| QS1 | Six quick slots on the HUD, keys 1-6 | 24.1 | closeout_check slot layout + suite P1b | PASS(closeout) |
+| QS1 | Six quick slots on the HUD, keys 1-6 | 24.1 | closeout_check H3.2 (six slots in the GDD order), G25 (keys 1 and 2 draw and lower the weapons) + suite P1b (every action exercised) | PASS(closeout) |
 | QS2 | Drag an item from the inventory to a quick slot | 24.1 | quick slots hold an item kind; the inventory Use button and the number keys serve it (DECIDED) | DECIDED |
 | PH1 | Photo album: 200 photos, 3 categories | 24.2 | closeout_check (sources, categories, count, Codex tab) | PASS(closeout G26) |
 | DL1 | Daily challenge | 24.3 | menu card + streak reward (daily_challenge_manager) | PT-B04 |
@@ -209,14 +211,14 @@ Play-through steps (GUI-engine input injection, a frame read at each): **A01** b
 | AD2 | Watch / skip (-100) modal | 24.4 | BY-DESIGN-ABSENT (the GDD names no trigger) | DECIDED |
 | TO1 | Toasts, 3 s, types | 24.5 | toast_manager (top-left, to keep clear of the quest tracker) | DECIDED |
 | ST7 | Statistics screen: Overall/Combat/Exploration/Collection, 20+ rows | 24.6 | closeout_check ST7: 4 tabs, 30 rows, forged counters clamped, counters fed by kills/shots/jumps/distance/crafting | PASS(closeout ST7) |
-| EX1 | Exit confirmation: save and quit / quit / cancel | 24.7 | pause menu Save and quit + menu Quit confirm | PT-A14 |
+| EX1 | Exit confirmation: save and quit / quit / cancel | 24.7 | PT V14 (Esc offers Save and quit, then the process ends); the main menu's Quit confirmation is built (`main_menu.gd`) and no step clicks it | PT-V14 |
 
 ## Appendix V. HUD sheet (V.1)
 
 | ID | Promise | GDD | Proof | Result |
 |---|---|---|---|---|
 | H3.1 | HP / stamina / energy bars | V.1 | PT frame | PT-A04 |
-| H3.2 | Six quick slots: weapon x2, battery, medkit, grenade, special | V.1 | closeout_check | PASS(closeout) |
+| H3.2 | Six quick slots: weapon x2, battery, medkit, grenade, special | V.1 | closeout_check H3.2 (the bar holds two weapons, battery, medkit, grenade and the light as the special) | PASS(closeout) |
 | H3.3 | Up to 3 active objectives | V.1 | quest_tracker_hud | PT-A04 |
 | H3.4 | Minimap with legend | V.1 | minimap legend chip (player, district, stages) | PT-A07 |
 | H3.5 | Toast with a [m.ss] timestamp | V.1 | toast_manager | PT-A04 |
@@ -243,7 +245,7 @@ Play-through steps (GUI-engine input injection, a frame read at each): **A01** b
 | M5.5 | Load-game screen (district, date, progress) | V.2 | owner archived the slot picker | DECIDED |
 | M5.6 | New game with difficulty descriptions | V.2 | closeout_check (difficulty scaling) + PT frame | PT-A02 |
 | M5.7 | Confirm: delete save, exit | V.2 | Settings > Reset Progress dialog; Quit confirm | BATTERY |
-| M5.8 | Pause: resume / settings / quit (+ inventory, shop, upgrades, save and quit) | V.2 | closeout_check (button set) | PASS(closeout) |
+| M5.8 | Pause: resume / settings / quit (+ inventory, shop, upgrades, save and quit) | V.2 | closeout_check `the pause menu offers` inventory, SHOP_COINS, CRAFT_UPGRADE, PAUSE_SAVE_QUIT; PT A06d | PASS(closeout) |
 | M5.9 | Info windows: item received, quest updated, low energy, level up | V.2 | item received, quest updated, low energy and level up show as the HUD notice line and the stamped log (H3.14, H3.8) | DECIDED |
 
 ## Appendix V. Enemies sheet (V.3)
@@ -259,15 +261,15 @@ Play-through steps (GUI-engine input injection, a frame read at each): **A01** b
 | ID | Promise | GDD | Proof | Result |
 |---|---|---|---|---|
 | I9.1 | Overview with equipment | V.5 | closeout_check inventory screen + PT frame | PT-A06 |
-| I9.2 | Item detail: weight, effect, type | V.5 | closeout_check | PASS(closeout) |
+| I9.2 | Item detail: weight, effect, type | V.5 | closeout_check I9.2 (the detail shows name, rarity, weight and effect) | PASS(closeout) |
 | I9.3 | Stacking | V.5 | InventoryManager | BATTERY |
-| I9.4 | Actions: use, equip, drop, disassemble | V.5 | closeout_check (use, drop twice-press); workbench salvage | PASS(closeout) |
+| I9.4 | Actions: use, equip, drop, disassemble | V.5 | closeout_check V.5 (Use consumes one battery; Drop asks, then throws the stack away); workbench salvage G21 | PASS(closeout) |
 | I9.5 | Equipment slots head/body/legs/holster/backpack | V.5 | GDD 17 defines no head/body/legs/holster item; the slots show on the inventory screen and save; the backpack capacity comes from the shop upgrade (UpgradeSystem) | DECIDED |
 | I9.6 | Backpack capacity x / max | V.5 | inventory screen header | PT-A06 |
 | I9.7 | Drag to a quick slot | V.5 | quick slots hold an item kind; the inventory Use button and the number keys serve it (DECIDED) | DECIDED |
-| I9.8 | Sort by type / weight / rarity | V.5 | closeout_check | PASS(closeout) |
-| I9.12 | Confirm on drop | V.5 | closeout_check | PASS(closeout) |
-| I9.13 | Rarity filter | V.5 | closeout_check | PASS(closeout) |
+| I9.8 | Sort by type / weight / rarity | V.5 | closeout_check I9.8 (sorting by weight puts the heaviest stack first) | PASS(closeout) |
+| I9.12 | Confirm on drop | V.5 | closeout_check V.5 (the first press of Drop only asks, the second throws the stack away) | PASS(closeout) |
+| I9.13 | Rarity filter | V.5 | closeout_check I9.13 (the Common filter leaves the one common stack of two, All shows both) | PASS(closeout) |
 
 ## 25. Play-through findings (wave 3, rc15)
 
@@ -314,6 +316,7 @@ Rows the first play-through added: each was a defect a frame or a measured numbe
 | WIN2 | The victory screen shows the ending this win earned (11 FULL and few documents: Hope), not the one left from before | 12.4 | closeout_check WIN2 (fails on the old code with Darkness); play-through V10 | PASS(closeout) |
 | HELP1 | The Help screen's rows name real actions and carry translated text without a format placeholder | V.2 | closeout_check HELP1 (the old `sprint` row fails it); play-through S_codex_help | PASS(closeout) |
 | UIS1 | Every Codex tab opens by a click, its scroll list has a window of a third of the screen, and no raw format specifier is on screen | V.2 | play-through S_codex_* (the achievements list failed it at 31%) | PT |
+| TIER1 | The Graphics Tier names follow the language (Low / Medium / High / Ultra were English in every locale) | 14, V.2 | closeout_check TIER1 (ru: Низкое, Среднее, Высокое, Ультра; the English names fail it, `closeout_mutations.py`) | PASS(closeout) |
 | VG1 | The visual gate fails the four committed corruption frames and passes the sign-off, beauty and clean evidence frames; every threshold mutation fails | V.1 | `tools/check.sh --static` (visual_truth_gate x3), `visual_gate_mutations.txt` | PASS(static) |
 | G3D2 | The 3D scene test's real swing lands on a fresh profile: the onboarding overlay no longer holds the tree paused under the swing | 5.1 | `tools/check.sh` gate "прогон 3D-сцены" (`the tree runs while the swing plays`, `melee swing damages the monster in front`), `docs/artifacts/rc15/check_full_signoff.txt`; failed 20 -> 20 before (CORRECTION_LOG 90) | BATTERY |
 | DL3 | The closeout leaves the daily challenge as it found it, so a later gate on the same profile reads a consistent file (boot, closeout, touch in order) | 24 | `docs/artifacts/rc15/signoff_gate_sequence.txt` (before and after), the touch probe in `tools/check.sh` | BATTERY |

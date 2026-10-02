@@ -1,14 +1,15 @@
 # Resume note (2026-10-02, rc15 sign-off)
 
-State: `main` is the rc15 sign-off (tag `v8.0.0-rc15`). Nothing is in flight; no worktree agent is running.
-Numbers and proofs: `docs/ORDER_PASS_REPORT.md` (rc15 final section), `docs/PROOFS.md`, `docs/ACCEPTANCE_CHECKLIST.md` (198 rows),
-`docs/ARENA_CLOSURE.md`, `docs/CORRECTION_LOG.md` (96 rows).
+State: `main` is the rc15 sign-off (the tag `v8.0.0-rc15` goes on the commit that records the last verifier round). Nothing is in flight; no worktree agent is running.
+Numbers and proofs: `docs/ORDER_PASS_REPORT.md` (rc15 final section), `docs/PROOFS.md`, `docs/ACCEPTANCE_CHECKLIST.md` (200 rows),
+`docs/ARENA_CLOSURE.md`, `docs/CORRECTION_LOG.md` (100 rows).
 
 ## What rc15 did
 The missions the rc14 swarm never delivered (weapons and HUD slots, auto-aim, the crouch capsule, the visibility model, blueprints and
 the workbench, photos, hiding spots, the inventory screen) were built in rc15 batches 1 and 2 and are closed in `docs/TZ_COMPLIANCE.md`
-(CORRECTION_LOG 96). Batches 3 to 14 were a player-proof pass: the real game played through injected input events with a frame read at every
-step (`tools/qa_sim/playthrough`, modes A V B S), every finding fixed at its root with a `closeout_check` assertion that fails on the old code.
+(CORRECTION_LOG 96). Batches 3 to 15 were a player-proof pass: the real game played through injected input events with a frame read at every
+step (`tools/qa_sim/playthrough`, modes A V B S), every finding fixed at its root with a `closeout_check` assertion or a play-through step that fails on the old code;
+batch 15 added the first independent verifier round, which found that the quick bar had never been on screen (CORRECTION_LOG 97).
 
 ## Next (priority C, then B, then A)
 1. Release (owner): install `build/tls.aab` on a phone (T01; it is signed, 183.3 MB), then the Play Console steps of `docs/RELEASE_RUNBOOK.md`.

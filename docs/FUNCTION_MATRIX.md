@@ -166,10 +166,11 @@ by memory, so completeness can be proven instead of assumed.
 | X40 | NEW FINDING: the main scene showed the Russian word for Loading to every player | `scripts/boot_loading.gd`, `scenes/ui/boot_loading.tscn` | `ui_layout_check` scene scan (flagged the title before the fix) | **FIXED rc14 (`1fc90f1`)** - the title reads the `loading` key; the gate now scans 18 live scenes in English |
 | X41 | NEW FINDING (QA harness): a tree canopy hid the Architect in the boss frame; the power station "lit" beauty frame never lit | `scripts/tools/_final_frames_runner.gd`, `_beauty_frames_runner.gd` | frames read by eye | **FIXED rc14 (`f068598`)** - the runner counts canopies near each sight line (trees are collision-free), the beauty runner restores the feeder chain first; CORRECTION_LOG 56 |
 | X42 | NEW FINDING: the menu title drew a blank line between its two words on CRLF checkouts, AAB included | `scripts/ui/main_menu.gd` (`_style_title`), `scenes/ui/main_menu.tscn` | menu frames read by eye; `ui_layout_check` title CR check (fails=1 on the old script) | **FIXED rc14 (`2fcab22`)** - the CR is stripped; CORRECTION_LOG 57 |
+| X43 | NEW FINDING (R8 round 13): the six-slot quick bar was never on screen; the HUD freed it at the start, headless and in a window | `scenes/ui/hud_3d.tscn` (`BottomCenter` anchors), `scripts/ui/hud_3d.gd` (`_remove_dup_leftbottom`, `_setup_slot_placeholders`), `scripts/ui/ui_manager.gd` (`show_notification`) | `closeout_check` H3.2 (six slots fully on screen, the item order; fails on the old anchors), `theme_unify_probe` (Slot0 present, canon colour), final frames 02-05 and the play-through A frames read by eye | **FIXED rc15 (`705b2be`, `8ad0b93`)** - anchored bottom centre, the level-up toast above bar and hint, CORRECTION_LOG 97 |
 
 ## Totals
 
 - Spine: 91 (59 AL rows + 32 IN rows; 3 dead actions removed in `0d3d533`, rows kept as FIXED; AL35 REMOVED at the owner's request)
-- Extra: 42 X-rows (X01-X42)
-- **Grand total: 133 rows** (recounted at the rc15 sign-off, 2026-10-02, by script from the first word of every Status cell): WORKS 97 · FIXED 26 · CANNOT-TEST-HEADLESS 6 · BY-DESIGN-LIMIT 2 (AL56, X20) · REMOVED 2 (AL05, AL35) · PARTIAL 0 · BUG 0 · UNTESTED 0.
+- Extra: 43 X-rows (X01-X43)
+- **Grand total: 134 rows** (recounted at the rc15 sign-off, 2026-10-02, by script from the first word of every Status cell): WORKS 97 · FIXED 27 · CANNOT-TEST-HEADLESS 6 · BY-DESIGN-LIMIT 2 (AL56, X20) · REMOVED 2 (AL05, AL35) · PARTIAL 0 · BUG 0 · UNTESTED 0.
 - Open: none. X20 is BY-DESIGN-LIMIT since rc15 (the only writer of PAUSED is the Escape key; the bot recovers, A/B-proven). X21 is FIXED since rc14 (13/13 and 3/3 bot seeds); a bot run is nondeterministic, so the sign-off records its stalls.

@@ -1,0 +1,44 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+[closeout] ok   the player spawned
+[closeout] FAIL MELEE1 a swing damages a monster 1.6 m ahead, for every kind (missed: shadow_3d hp 30 -> 30, combo 1, phase none, crawler_3d hp 50 -> 50, combo 2, phase none, hound_3d hp 40 -> 40, combo 3, phase none, hunter_3d hp 120 -> 120, combo 1, phase none, brute_3d hp 350 -> 350, combo 2, phase none, rotter_3d hp 140 -> 140, combo 3, phase none, watcher_3d hp 80 -> 80, combo 1, phase none, sharpshooter_3d hp 60 -> 60, combo 2, phase none)
+[closeout] FAIL G13 the combo deals the GDD 5.1 damage, 8 / 12 / 20 (it was 14 / 21 / 35 while no swing could land on a monster)
+[closeout] FAIL CRAWL1 an idle crawler stands still instead of running on at its last velocity ((4.0, 0.0, 3.0))
+[closeout] FAIL CRAWL1 an investigating crawler goes to the spot it heard instead of standing (velocity (0.0, 0.0, 0.0))
+[closeout] ok   HC1 in a running game the Hardcore box cannot be changed
+[closeout] ok   HC1 nor can a save be imported under a running world
+[closeout] ok   HC1 ticking Hardcore in the middle of a run does not make its death delete the save
+[closeout] ok   HC1 unticking it in the middle of a hardcore run does not cancel the wipe
+[closeout] ok   PUZ1 the wipe (a new game) clears the solved puzzles
+[closeout] ok   DEAD1 a lethal hit takes the controls away
+[closeout] FAIL DEAD1 a hit on a dead player is not a second death (2, was 1)
+[closeout] ok   DEAD1 the dead player does not walk (0.00 m in 0.6 s of the stick)
+[closeout] FAIL TUT1 with the light on the flashlight hint is skipped (step 1)
+[closeout] ok   TUT1 with the light off the flashlight hint stays
+[closeout] FAIL TUT2 the flashlight_toggle key completes the flashlight hint
+[closeout] FAIL TUT2 the stealth key completes the crouch hint
+[closeout] FAIL TUT2 the attack key completes the attack hint
+[closeout] FAIL TUT2 the inventory_toggle key completes the inventory hint
+[closeout] FAIL TUT2 moving completes the move hint
+[closeout] FAIL TUT2 repairing a district completes the generator hint
+[closeout] FAIL TUT2 a double tap completes the dodge hint
+[closeout] FAIL STREET1 every marking tile stands at least 1 cm above the road tiles (0.000 m)
+[closeout] FAIL SCROLL1 a vertical scroll bar of the UI theme is at least 8 px wide (0)
+[closeout] FAIL WIN2 a win with every district FULL and few documents shows Hope, not the ending left from before (hope, 'Darkness')
+[closeout] ok   ach_14 a win with every document, every district and three secrets unlocks Truth
+[closeout] FAIL HELP1 every row of the help screen names a real action and a translated text without a format placeholder (PROMPT_REPAIR = 'Repair panel (needs: %s)', action sprint)
+[closeout] FAIL H3.2 the quick bar holds six slots on screen: two weapons, battery, medkit, grenade and the light as the special (0 slot nodes, 0 inside the (1920.0, 1920.0) screen)
+[closeout] FAIL TIER1 the Graphics Tier names follow the language (ru: )
+[closeout] FAIL PERF2 the moon casts no shadow in a dark district (energy 0.12)
+[closeout] ok   PERF2 and does in a restored one (energy 0.40)
+[closeout] ok   PERF2 and not at the Low shadow quality
+[closeout] DONE checks=32 fails=20
+ERROR: 2 RID allocations of type 'PN13RendererDummy14TextureStorage12DummyTextureE' were leaked at exit.
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 69 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 18 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

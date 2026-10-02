@@ -546,6 +546,11 @@
    [
     "closeout_check_signoff.txt",
     "G13 the combo deals"
+   ],
+   [
+    "closeout_mutation_signoff.txt",
+    "FAIL G13",
+    "dmg 14:"
    ]
   ],
   "commit": "5cbaff5"
@@ -884,5 +889,94 @@
    ]
   ],
   "commit": "2840f8f"
+ },
+ {
+  "id": "H3.2",
+  "claim": "The six-slot quick bar is on screen, in the GDD order (it was freed at the start by the HUD's own duplicate sweep)",
+  "cmd": "tools/qa_sim/closeout_check",
+  "evidence": [
+   [
+    "closeout_check_signoff.txt",
+    "H3.2 the quick bar holds six slots",
+    "now:"
+   ],
+   [
+    "closeout_mutation_signoff.txt",
+    "FAIL H3.2",
+    "old anchors:"
+   ]
+  ],
+  "commit": "705b2be"
+ },
+ {
+  "id": "I9",
+  "claim": "The inventory screen's filter narrows the grid, sorting by weight puts the heaviest stack first and the detail shows the weight and effect",
+  "cmd": "tools/qa_sim/closeout_check",
+  "evidence": [
+   [
+    "closeout_check_signoff.txt",
+    "I9.13 the Common filter"
+   ],
+   [
+    "closeout_check_signoff.txt",
+    "I9.8 sorting by weight"
+   ],
+   [
+    "closeout_check_signoff.txt",
+    "I9.2 the item detail"
+   ]
+  ],
+  "commit": "705b2be"
+ },
+ {
+  "id": "ach_14",
+  "claim": "A win with every document, every district and three secrets unlocks Truth",
+  "cmd": "tools/qa_sim/closeout_check",
+  "evidence": [
+   [
+    "closeout_check_signoff.txt",
+    "ach_14 a win with every document"
+   ]
+  ],
+  "commit": "705b2be"
+ },
+ {
+  "id": "TIER1",
+  "claim": "The Graphics Tier names follow the language (they were English in every locale)",
+  "cmd": "tools/qa_sim/closeout_check",
+  "evidence": [
+   [
+    "closeout_check_signoff.txt",
+    "TIER1 the Graphics Tier names",
+    "now:"
+   ],
+   [
+    "closeout_mutation_signoff.txt",
+    "FAIL TIER1",
+    "English names:"
+   ]
+  ],
+  "commit": "705b2be"
+ },
+ {
+  "id": "MUT-tool",
+  "claim": "The committed mutation tool breaks 16 sources and the rc15 combat checks fail on them (20 of 32)",
+  "cmd": "python tools/qa_sim/closeout_mutations.py apply; CLOSEOUT_ONLY=combat tools/qa_sim/closeout_check 300; python tools/qa_sim/closeout_mutations.py restore",
+  "evidence": [
+   [
+    "closeout_mutation_signoff.txt",
+    "DONE checks=32 fails=20"
+   ]
+  ],
+  "commit": "705b2be"
+ },
+ {
+  "id": "HYGIENE",
+  "claim": "No debug print, push_warning trace or commented-out code ships (R8 round 13 found 35 lines in 13 files; the zero-shipped grep and the compile gate are clean)",
+  "cmd": "git show --stat 705b2be; GODOT --headless res://scenes/tools/compile_gate_scene.tscn",
+  "evidence": [
+   "CORRECTION_LOG 99; `COMPILE_GATE bad=0`; static gate green in check_full_signoff.txt"
+  ],
+  "commit": "705b2be"
  }
 ]

@@ -1,9 +1,9 @@
 [pt] PASS B01 a relaunch shows Continue and the New Game+ status ('Continue saved progress')  frame=B01_menu.jpg
-[pt] note B02 the run as loaded (2 s in): coins 0, kills 0; 3 s later: coins 0.0, kills 0.0
+[pt] note B02 the run as loaded (2 s in): coins 13, kills 1; 3 s later: coins 13.0, kills 1.0
 [pt] PASS B02 Continue restores the saved run (click: ok; differences: none; start 0.0 m from where it was saved)  frame=B02_continued.jpg
-[pt] PASS B04 the menu shows the daily challenge and the streak with its multiplier ('Play for 15 minutes  (6/15)' / 'Streak: 0 days (x1.0)')  frame=B04_daily_card.jpg
+[pt] PASS B04 the menu shows the daily challenge and the streak with its multiplier ('Play for 15 minutes  (7/15)' / 'Streak: 0 days (x1.0)')  frame=B04_daily_card.jpg
 [pt] note B04 setup: today's challenge (play_minutes x15) completed through the manager
-[pt] PASS B04b the finished challenge paid coins (0 -> 100, already done by the run: false) and the card says Completed  frame=B04_daily_done.jpg
+[pt] PASS B04b the finished challenge paid coins (13 -> 113, already done by the run: false) and the card says Completed  frame=B04_daily_done.jpg
 [pt] PASS B05 Pause > Codex > Achievements opens the list (click: ok, 21 unlocked)  frame=B05_achievements.jpg
 [pt] note B05 statistics tab frame=B05_stats.jpg
 [pt] PASS B03 the main menu's Settings has a Hardcore box that turns it on (clicks: ok / ok)  frame=B03_hardcore_on.jpg

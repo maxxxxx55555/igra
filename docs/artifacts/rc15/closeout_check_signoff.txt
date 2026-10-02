@@ -101,10 +101,13 @@ Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
 [closeout] ok   ach_19 sleeping in the bed heals and unlocks Midsummer Night's Dream
 [closeout] ok   V.5 the inventory screen opens
 [closeout] ok   V.5 one cell per stack (2)
+[closeout] ok   I9.13 the Common filter leaves the one common stack of two (1 cells)
+[closeout] ok   I9.13 All shows every stack again (2 cells)
+[closeout] ok   I9.8 sorting by weight puts the heaviest stack, the medkit, first (medkit)
+[closeout] ok   I9.2 the item detail shows name, rarity, weight and effect (Battery | Common | 0.6 kg (x2) | Recharges the flashlight by 35%)
 [closeout] ok   V.5 Use consumes one battery and recharges the light
 [closeout] ok   V.5 the first press of Drop only asks
 [closeout] ok   V.5 the second press throws the stack away
-[closeout] ok   V.5 the rarity filter narrows the grid
 [closeout] ok   V.5 the inventory screen closes
 [closeout] ok   the pause menu offers inventory
 [closeout] ok   the pause menu offers SHOP_COINS
@@ -148,7 +151,7 @@ Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
 [closeout] ok   Crouch Input Button: the key crouches at once
 [closeout] ok   Crouch Input Long Press: a tap does not crouch
 [closeout] ok   Crouch Input Long Press: a hold crouches
-[closeout] ok   MN4 a corpse drops loot 30% of the time (168 of 600)
+[closeout] ok   MN4 a corpse drops loot 30% of the time (187 of 600)
 [closeout] ok   MN4 every drop is a battery, a medkit or scrap
 [closeout] ok   MN4 the Sharpshooter drops a box of rounds
 [closeout] ok   LOOT2 a rebuilt district lays out what was left on the street (12 of 13, one picked up)
@@ -238,7 +241,7 @@ Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
 [closeout] ok   CB4 the death screen shows DEATH_DOCS
 [closeout] ok   SH1 the game scene carries the Screens layer
 [closeout] ok   SH1 the Shop card shows every catalog item (7 cards of 7)
-[closeout] ok   SH1 every row ends above the Close button (1116 <= 1165)
+[closeout] ok   SH1 every row ends above the Close button (1116 <= 1166)
 [closeout] ok   SH1 the pack icons are the size they were asked for (22 px, 128 when the size was lost)
 [closeout] ok   SH1 Buy with an empty wallet buys nothing
 [closeout] ok   SH1 Buy with coins grants the item, spends the price and marks the card (coins 5000 -> 3800)
@@ -301,17 +304,20 @@ Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
 [closeout] ok   STREET1 every marking tile stands at least 1 cm above the road tiles (0.020 m)
 [closeout] ok   SCROLL1 a vertical scroll bar of the UI theme is at least 8 px wide (10)
 [closeout] ok   WIN2 a win with every district FULL and few documents shows Hope, not the ending left from before (hope, 'Hope')
+[closeout] ok   ach_14 a win with every document, every district and three secrets unlocks Truth
 [closeout] ok   HELP1 every row of the help screen names a real action and a translated text without a format placeholder ()
+[closeout] ok   H3.2 the quick bar holds six slots on screen: two weapons, battery, medkit, grenade and the light as the special (6 slot nodes, 6 inside the (1920.0, 1920.0) screen)
+[closeout] ok   TIER1 the Graphics Tier names follow the language (ru: Низкое (30fps, 720p), Среднее (30fps, 1080p), Высокое (60fps, 1080p), Ультра (60fps, 1440p))
 [closeout] ok   PERF2 the moon casts no shadow in a dark district (energy 0.12)
 [closeout] ok   PERF2 and does in a restored one (energy 0.40)
 [closeout] ok   PERF2 and not at the Low shadow quality
-[closeout] DONE checks=304 fails=0
+[closeout] DONE checks=310 fails=0
 ERROR: 4 RID allocations of type 'PN13RendererDummy14TextureStorage12DummyTextureE' were leaked at exit.
 ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
 ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
 WARNING: 6 RIDs of type "CanvasItem" were leaked.
    at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
-WARNING: 109 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+WARNING: 43 ObjectDB instances were leaked at exit (run with `--verbose` for details).
    at: cleanup (core/object/object.cpp:2535)
-ERROR: 39 resources still in use at exit (run with --verbose for details).
+ERROR: 7 resources still in use at exit (run with --verbose for details).
    at: clear (core/io/resource.cpp:822)

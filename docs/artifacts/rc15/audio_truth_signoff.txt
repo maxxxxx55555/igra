@@ -1,0 +1,9 @@
+windowed audio_truth_gate_scene at 8ad0b93, 2026-10-02 (Master muted by QaLaunchGuard)
+[audio-truth] driver=WASAPI output_device=Default devices=["Default", "Speaker (Realtek(R) Audio)"]
+[audio-truth] Master bus peak=-80.0dB (ceiling <=-1.5dB) muted for QA
+[audio-truth] Music bus peak=-11.8dB (ceiling <=-1.5dB) ok
+[audio-truth] SFX bus peak=-67.5dB (ceiling <=-1.5dB) ok
+[audio-truth] Ambient bus peak=-29.5dB (ceiling <=-1.5dB) ok
+[audio-truth] PASS -- Music bus peak=-11.8dB (threshold >-45.0dB)
+[audio-truth] SFX peak=-67.5dB Ambient peak=-29.5dB (reported, not blocking -- best-effort footstep/hum trigger, see class comment)
+[audio-truth] PASS overall
