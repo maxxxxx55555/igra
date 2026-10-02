@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# rc16 O2: the frame-independence probe at 30, 60 and 120 FPS of simulated time (the engine's --fixed-fps) and the comparison of the
+# three runs (tools/qa_sim/timing_compare.py). Headless, so nothing is heard or shown; under the user-data guard like every QA launch.
+#
+#   tools/qa_sim/timing_equiv [label]     # logs -> .qa_logs/timing_<label>_<fps>.log, table -> .qa_logs/timing_<label>.txt
+set -uo pipefail
+cd "$(dirname "$0")/../.."
+
+GODOT="$(bash tools/qa_sim/_resolve_godot.sh 2>/dev/null)"
+if [[ -z "$GODOT" ]] || [[ ! -x "$GODOT" ]]; then
+	bash tools/qa_sim/_resolve_godot.sh >&2
+	exit 99
+fi
+source tools/qa_sim/user_data_guard.sh
+udg_snapshot || exit 99
+trap 'udg_restore || exit 97' EXIT
+trap 'exit 130' INT TERM
+export TLS_UDG_GUARDED=1
+mkdir -p .qa_logs
+label="${1:-run}"
+for fps in 30 60 120; do
+	timeout 300 "$GODOT" --headless --fixed-fps "$fps" --path . res://scenes/tools/timing_equiv_scene.tscn -- --tfps="$fps" >".qa_logs/timing_${label}_${fps}.log" 2>&1
+	echo "  run at ${fps} fps: rc=$? ($(grep -ac '^\[timing\]' ".qa_logs/timing_${label}_${fps}.log") timing lines)"
+done
+python tools/qa_sim/timing_compare.py ".qa_logs/timing_${label}_30.log" ".qa_logs/timing_${label}_60.log" ".qa_logs/timing_${label}_120.log" | tee ".qa_logs/timing_${label}.txt"
+exit "${PIPESTATUS[0]}"

@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# rc16 AF1: runs ONE command and keeps its untrimmed output, with the exit code, as raw evidence.
+#   tools/qa_sim/proof_run [--launch] [--attach FILE]... <id> -- <command> [args...]
+# Output file: .qa_logs/proofs/<id>.out (a copy is kept in docs/artifacts/rc16/proofs/): a header (id, UTC time, git HEAD, command),
+# the command's whole stdout and stderr, then "# EXIT=<code>". --attach copies a log the command wrote itself (for instance the full engine log
+# behind a wrapper that prints a filtered summary) next to it as <id>.attach.<name>. --launch adds one row to
+# docs/artifacts/rc16/launch_ledger.tsv (one row per top-level Godot launch command; check.sh, the bot and the wrappers count once).
+set -uo pipefail
+cd "$(dirname "$0")/../.."
+launch=0
+attach=()
+while [[ "${1:-}" == --* ]]; do
+	case "$1" in
+		--launch) launch=1; shift ;;
+		--attach) attach+=("$2"); shift 2 ;;
+		*) echo "proof_run: unknown option $1" >&2; exit 2 ;;
+	esac
+done
+id="${1:?usage: tools/qa_sim/proof_run [--launch] [--attach FILE]... <id> -- <command...>}"
+shift
+[[ "${1:-}" == "--" ]] && shift
+[[ $# -gt 0 ]] || { echo "proof_run: no command" >&2; exit 2; }
+mkdir -p .qa_logs/proofs docs/artifacts/rc16/proofs
+out=".qa_logs/proofs/${id}.out"
+utc="$(date -u +%Y%m%dT%H%M%SZ)"
+head_="$(git rev-parse --short HEAD)"
+dirty="$(git status --porcelain | wc -l | tr -d ' ')"
+{
+	echo "# proof ${id}"
+	echo "# utc ${utc}"
+	echo "# head ${head_} (uncommitted paths: ${dirty})"
+	echo "# cmd $*"
+} > "$out"
+"$@" >> "$out" 2>&1
+rc=$?
+echo "# EXIT=${rc}" >> "$out"
+for f in "${attach[@]+"${attach[@]}"}"; do
+	[[ -f "$f" ]] && cp "$f" ".qa_logs/proofs/${id}.attach.$(basename "$f")"
+done
+cp ".qa_logs/proofs/${id}".* docs/artifacts/rc16/proofs/ 2>/dev/null
+if [[ $launch -eq 1 ]]; then
+	ledger=docs/artifacts/rc16/launch_ledger.tsv
+	[[ -f "$ledger" ]] || printf 'n\tutc\thead\tid\texit\tcommand\n' > "$ledger"
+	n=$(( $(wc -l < "$ledger") ))
+	printf '%d\t%s\t%s\t%s\t%d\t%s\n' "$n" "$utc" "$head_" "$id" "$rc" "$*" >> "$ledger"
+fi
+echo "proof_run ${id}: exit=${rc} -> ${out} ($(wc -l < "$out") lines)"
+exit $rc

@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# rc16: the streaming / perf / polish-frames probe (scripts/tools/_rc16_probe_runner.gd), windowed and muted, under the user-data guard.
+#   tools/qa_sim/rc16_probe <label> <hash> [timeout-sec]
+#     label: before | after      hash: the short hash of the code tree that is measured (it is part of every frame name)
+#   log -> .qa_logs/rc16_probe_<label>.log      frames -> docs/stills/polish/<state>_<label>_<hash>_<UTC>.png
+set -uo pipefail
+cd "$(dirname "$0")/../.."
+LABEL="${1:?usage: tools/qa_sim/rc16_probe <label> <hash> [timeout-sec]}"
+HASH="${2:?usage: tools/qa_sim/rc16_probe <label> <hash> [timeout-sec]}"
+T="${3:-900}"
+mkdir -p .qa_logs
+LOG=".qa_logs/rc16_probe_${LABEL}.log"
+rm -f "$LOG"
+
+GODOT="$(bash tools/qa_sim/_resolve_godot.sh 2>/dev/null)"
+if [[ -z "$GODOT" ]] || [[ ! -x "$GODOT" ]]; then
+	bash tools/qa_sim/_resolve_godot.sh >&2
+	exit 99
+fi
+source tools/qa_sim/user_data_guard.sh
+udg_snapshot || exit 99
+trap 'udg_restore || exit 97' EXIT
+trap 'exit 130' INT TERM
+export TLS_UDG_GUARDED=1
+timeout "$T" "$GODOT" --windowed --path . res://scenes/tools/rc16_probe_scene.tscn -- --tlabel="$LABEL" --thash="$HASH" > "$LOG" 2>&1
+rc=$?
+echo "  rc16_probe rc=$rc (log: $LOG, $(grep -ac '^\[probe\]' "$LOG") probe lines)"
+exit $rc
