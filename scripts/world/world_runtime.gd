@@ -57,6 +57,9 @@ func load_district(district_id: StringName) -> void:
 	_loading = true
 	var started: int = Time.get_ticks_usec()
 	if is_instance_valid(_district_root):
+		# Out of the tree at once: queue_free alone keeps its bodies, lights and MultiMeshes alive next to the new
+		# district's until the end of the frame.
+		remove_child(_district_root)
 		_district_root.queue_free()
 		_district_root = null
 	_current_id = district_id
