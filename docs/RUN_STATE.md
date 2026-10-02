@@ -49,6 +49,17 @@ prop spheres are ~4 000 triangles each), R5 breaker + explorer, R6 security, R8 
   (`opt_ultra` x13); a hit on a dead player counted a second death. `closeout_check` 298/298 (11 new, the old code fails every one), compile
   gate bad=0, bot 3/3 WIN 0 deaths (100/111/126 s), PT-A 72/72, static 28, flow 56, i18n 12/12. Corrections 84-85.
   **NEXT: full PT A V B on this tree and read every frame, R3 (visual gate on recaptured final frames), R5 explorer, R6, R7, R8, sign-off.**
+- **Batches 12-13 (`e89d370`, `a57f9dd`): the screens nobody had opened, the ending screen, the draw calls.** New play-through mode S
+  (`tools/qa_sim/playthrough S`: the eight Codex tabs clicked one by one, HUD log/help, workbench, credits; 23/23). It found: the victory
+  screen showed the ending left from earlier ("Darkness" over 11/11 districts; refreshes on `ending_reached` now, WIN2), achievements/quest
+  lists in 330/400 px windows of a 600 px page, the Help screen's `sprint` action / raw `%s` / wrong glossary title / English header, the
+  credits in English in every locale (4 keys x 13), the generator hint that never left, the workbench without a backdrop. Visual gate (R3):
+  bright magenta / dim wash / vivid primaries replace the outlier rule; fails the 4 committed corruption frames, passes 14 canon frames, 8
+  threshold mutations and 15 synthetic patterns bite (`visual_gate_mutations.txt`); wired into `check.sh --static` (31 checks). R6:
+  attack_sim `DONE fails=0` (41 OK lines), regrep `security_regrep.txt`. R7 (windowed, AMD iGPU): D1 279 -> 169 draw calls, D11 272 -> 168,
+  primitives 198 871 -> 76 551, p95 18.06 -> 16.67 ms (moon shadow: one 40 m cascade, none below energy 0.2 or at Low; PERF2); PF1-PF4
+  PASS, 140 particles, 96.6 MiB RAM, 153 MiB VRAM. X20 closed BY-DESIGN-LIMIT. `closeout_check` 304/304; the thirteen mutations fail 17
+  checks. Corrections 86-89. **NEXT: full PT A V B S on this tree and read the key frames, R5/R8 verifier, sign-off battery, final frames, AAB, tag.**
 - Windowed frames: a multi-shot windowed run reads stale frames when nothing animates (gui_explore header); the play-through
   saves every frame after `frame_post_draw` and hashes it against the previous one.
 
