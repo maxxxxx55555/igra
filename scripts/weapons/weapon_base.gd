@@ -56,9 +56,7 @@ func fire(from_pos: Vector3, direction: Vector3) -> bool:
 
 	# Muzzle flash
 	if muzzle_flash_scene:
-		var flash = muzzle_flash_scene.instantiate()
-		get_tree().root.add_child(flash)
-		flash.global_position = from_pos
+		preload("res://scripts/effects/vfx_pool.gd").spawn(muzzle_flash_scene, from_pos, get_tree())
 	else:
 		_muzzle_flash(from_pos)
 
