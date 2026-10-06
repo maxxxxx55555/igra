@@ -1,4 +1,4 @@
-# THE LAST STREETLIGHT
+# LAST STREETLIGHT
 
 3D FPS survival-horror стелс-игра. Godot 4.7, рендерер GL Compatibility.
 Платформы: Android (основная), Windows/Web (пресеты добавлены, экспорт

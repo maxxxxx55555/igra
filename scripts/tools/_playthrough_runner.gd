@@ -1174,7 +1174,7 @@ func _raw_placeholders(root: Node) -> PackedStringArray:
 
 ## Visible texts with a run of four Latin letters in a Russian UI: a string that skipped the translation (the credits' four
 ## lines were English in every language). Names, key caps and technical suffixes are left out.
-const LATIN_OK := ["THE LAST STREETLIGHT", "TLS Team", "NG+", "FPS", "fps", "VSync", "Escape", "Shift", "Ctrl", "Space", "Tab", "720p", "1080p", "1440p", "Easy", "Normal", "Hard"]
+const LATIN_OK := ["LAST STREETLIGHT", "TLS Team", "NG+", "FPS", "fps", "VSync", "Escape", "Shift", "Ctrl", "Space", "Tab", "720p", "1080p", "1440p", "Easy", "Normal", "Hard"]
 
 func _latin_texts(root: Node) -> PackedStringArray:
 	var found: PackedStringArray = []

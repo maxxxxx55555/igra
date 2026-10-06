@@ -125,9 +125,9 @@ as-is, but no ad revenue happens until you do this:
    filling the brackets:
 
 ```
-Subject: Integration review request — THE LAST STREETLIGHT (Android)
+Subject: Integration review request — LAST STREETLIGHT (Android)
 
-App name: THE LAST STREETLIGHT
+App name: LAST STREETLIGHT
 Package name: com.maxsimkasky.laststreetlight
 Platform: Android (Godot 4.7, AppLovin MAX Godot plugin)
 Ad formats integrated: Rewarded (revive / extra battery), Interstitial
@@ -188,7 +188,7 @@ Do these in order. Play Console won't let you roll out until every
 **Dashboard → "Set up your app"** task has a green check.
 
 1. https://play.google.com/console → **Create app**. Name
-   `THE LAST STREETLIGHT`, default language **English (United States)**,
+   `LAST STREETLIGHT`, default language **English (United States)**,
    type **Game**, **Free**, accept the declarations.
 2. **App content** (left nav → Policy → App content). Complete each card:
    a. **Privacy policy** → paste the URL from step 3.
