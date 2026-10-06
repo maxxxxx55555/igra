@@ -19,6 +19,7 @@ const COLOR_TEXT_DIM  := Color("#aeb6bf")   # steel-text
 const COLOR_DANGER    := Color("#b4452f")   # ember
 
 const FONT_SIZE_BODY: int = 16
+const SCROLLBAR_MARGIN: float = 5.0
 const FONT_SIZE_TITLE: int = 22
 
 ## SystemFont спрашивает шрифт у ОС по имени — на машине/устройстве без
@@ -148,14 +149,17 @@ static func build_theme() -> Theme:
 	theme.set_stylebox("background", "ProgressBar", pb_bg)
 	theme.set_stylebox("fill", "ProgressBar", pb_fill)
 
-	# Скроллбары: тонкая латунь.
+	# Скроллбары: тонкая латунь. A flat stylebox has no size of its own and a bar is as wide as its two styleboxes, so the
+	# bars were 0 px wide: a list longer than its window (the city map, 11 rows) showed no scroll bar at all.
 	var sb := StyleBoxFlat.new()
 	sb.bg_color = COLOR_AMBER_DIM
 	sb.set_corner_radius_all(0)
+	sb.set_content_margin_all(SCROLLBAR_MARGIN)
 	theme.set_stylebox("grabber", "VScrollBar", sb)
 	theme.set_stylebox("grabber", "HScrollBar", sb)
 	var sb_bg := StyleBoxFlat.new()
 	sb_bg.bg_color = COLOR_BG_DARK
+	sb_bg.set_content_margin_all(SCROLLBAR_MARGIN)
 	theme.set_stylebox("scroll", "VScrollBar", sb_bg)
 	theme.set_stylebox("scroll", "HScrollBar", sb_bg)
 	return theme

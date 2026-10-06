@@ -104,6 +104,17 @@ func get_progress() -> float:
 		return 0.0
 	return float(_solved.size()) / float(_puzzle_data.size())
 
+## Solved puzzles are saved with the game: they were not, so the cable box paid its 200 coins again on every launch, and
+## after a New Game in the same session it stayed solved.
+func to_dict() -> Dictionary:
+	return {"solved": _solved.keys().map(func(k): return String(k))}
+
+func from_dict(d: Dictionary) -> void:
+	_solved.clear()
+	for id in d.get("solved", []):
+		if _puzzle_data.has(String(id)):
+			_solved[String(id)] = true
+
 func reset() -> void:
 	_solved.clear()
 	_active_puzzle = ""

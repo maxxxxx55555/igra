@@ -113,6 +113,7 @@ func _ready() -> void:
 		_skip_btn.text = LocalizationManager.t("UI_SKIP"))
 	
 	EventBus.game_started.connect(_on_game_started)
+	EventBus.district_stage_changed.connect(_on_district_stage_changed)
 	InputService.attack_requested.connect(_on_attack)
 	InputService.dodge_requested.connect(_on_dodge)
 	InputService.flashlight_requested.connect(_on_flashlight)
@@ -210,6 +211,13 @@ func _show_step() -> void:
 		_show_step()
 		return
 	
+	# the light starts on ("Turn on your flashlight" would contradict the screen): this step is only for a light that is off
+	var player := get_tree().get_first_node_in_group("player")
+	if step["id"] == "flashlight" and player != null and bool(player.get("flashlight_enabled")):
+		_completed_steps.append(step["id"])
+		_current_step += 1
+		_show_step()
+		return
 	var lbl = _hint_panel.find_child("HintText", true, false) as Label
 	if lbl:
 		lbl.text = tr(step["text_key"])
@@ -248,6 +256,12 @@ func _check_action(action: String) -> void:
 	if step["trigger"] == "action" and step["action"] == action:
 		_complete_step()
 
+## "Start the generator" is done when a district is repaired, however the player got there (the hint waited for a trigger
+## area that only the first street has, so it stayed up for the rest of the game when the player never walked into it).
+func _on_district_stage_changed(_id: StringName, stage: int) -> void:
+	if _tutorial_active and _current_step < STEPS.size() and STEPS[_current_step]["id"] == "generator" and stage >= 1:
+		_complete_step()
+
 func _on_tutorial_area_entered(body: Node) -> void:
 	if not body.is_in_group("player"):
 		return
@@ -277,6 +291,19 @@ func _process(delta: float) -> void:
 		_step_timer -= delta
 		if _step_timer <= 0.0:
 			_complete_step()
+	elif _waiting_for_action and step["trigger"] == "action" and _real_input_done(String(step["action"])):
+		_check_action(String(step["action"]))
+
+## The keys and the mouse never reached the steps: only the touch controls went through InputService's request signals (a
+## keyboard's interact was the one exception), so on a desktop "Turn on your flashlight" stayed up until Skip. Interact and
+## the dodge keep their signals (the player routes its double tap through InputService.request_dodge).
+func _real_input_done(action: String) -> bool:
+	match action:
+		"move":
+			return InputService.get_move_dir().length_squared() > 0.1
+		"flashlight_toggle", "stealth", "attack", "inventory_toggle":
+			return Input.is_action_just_pressed(action)
+	return false
 
 func _skip_tutorial() -> void:
 	_tutorial_active = false

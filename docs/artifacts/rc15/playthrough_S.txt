@@ -1,0 +1,24 @@
+[pt] PASS A01a the launch shows the loading screen, not a menu (top control /root/Splash/Logo)  frame=A01_boot_loading.jpg
+[pt] PASS A01 boot reaches the main menu in 7.6 s, no Continue on a fresh profile (language ru)  frame=A01_menu.jpg
+[pt] PASS A02 the Difficulty button opens the screen on top, with a description under each pick (click: ok, top control /root/Difficulty/Panel)  frame=A02_difficulty.jpg
+[pt] PASS A02b Normal sets the difficulty and returns to the menu: a pick starts nothing (click: ok)  frame=A02_difficulty_picked.jpg
+[pt] PASS A02c Play starts the game and the player spawns (click: ok)  frame=A02_game_start.jpg
+[pt] PASS A03 the onboarding card opens on the first start of a fresh profile  frame=A03_onboarding_1.jpg
+[pt] note A03 the player walked 0.0 m in 1 s of W while the card covers the screen
+[pt] note A03 card 4 frame=A03_onboarding_4.jpg
+[pt] note A03 card 7 frame=A03_onboarding_7.jpg
+[pt] PASS A03b Next seven times closes the card and the profile remembers it (7 clicks)  frame=A03_onboarding_done.jpg
+[pt] PASS S_codex_journal the Codex tab journal opens by a click; its lists that scroll have a window of 81% of the screen at least (1 lists); raw format specifiers on screen: none  frame=S_codex_journal.jpg
+[pt] PASS S_codex_quests the Codex tab quests opens by a click; its lists that scroll have a window of 80% of the screen at least (2 lists); raw format specifiers on screen: none  frame=S_codex_quests.jpg
+[pt] PASS S_codex_achievements the Codex tab achievements opens by a click; its lists that scroll have a window of 78% of the screen at least (1 lists); raw format specifiers on screen: none  frame=S_codex_achievements.jpg
+[pt] PASS S_codex_stats the Codex tab stats opens by a click; its lists that scroll have a window of 100% of the screen at least (1 lists); raw format specifiers on screen: none  frame=S_codex_stats.jpg
+[pt] PASS S_codex_bestiary the Codex tab bestiary opens by a click; its lists that scroll have a window of 100% of the screen at least (0 lists); raw format specifiers on screen: none  frame=S_codex_bestiary.jpg
+[pt] note S_codex_help Latin text in a Russian UI: WASD — движение
+[pt] PASS S_codex_help the Codex tab help opens by a click; its lists that scroll have a window of 100% of the screen at least (1 lists); raw format specifiers on screen: none  frame=S_codex_help.jpg
+[pt] PASS S_codex_collection the Codex tab collection opens by a click; its lists that scroll have a window of 86% of the screen at least (1 lists); raw format specifiers on screen: none  frame=S_codex_collection.jpg
+[pt] PASS S_codex_photos the Codex tab photos opens by a click; its lists that scroll have a window of 100% of the screen at least (1 lists); raw format specifiers on screen: none  frame=S_codex_photos.jpg
+[pt] PASS S_hud_log the HUD button 'ЛОГ' answers a click (ok)  frame=S_hud_log.jpg
+[pt] PASS S_hud_help the HUD button '?' answers a click (ok)  frame=S_hud_help.jpg
+[pt] PASS S_workbench the workbench screen opens  frame=S_workbench.jpg
+[pt] PASS S_credits the main menu's Credits opens the credits, all in the language of the UI (click: ok; Latin text: none)  frame=S_credits.jpg
+[pt] DONE mode=S steps=23 fails=0 time=35s

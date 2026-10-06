@@ -33,6 +33,9 @@ func _tick_ai(delta: float) -> void:
 		_tick_leap(delta)
 		return
 	match ai_state:
+		# no handler here left a crawler's last velocity running for good (toward the world origin once a search ended)
+		State.IDLE, State.INVESTIGATE:
+			super._tick_ai(delta)
 		State.PATROL:
 			if _nav_agent and _nav_agent.is_navigation_finished():
 				_idle_timer = randf_range(1.0, 3.0)

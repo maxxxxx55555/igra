@@ -1513,5 +1513,13 @@
   "DEATH_KILLED_BY": "Öldüren: %s",
   "DEATH_TIME": "Hayatta kalma: %s",
   "DEATH_DISTRICTS": "Kurtarılan bölgeler: %d / %d (%%%d)",
-  "DEATH_DOCS": "Bulunan belgeler: %d / %d"
+  "DEATH_DOCS": "Bulunan belgeler: %d / %d",
+  "Stealth": "Gizlilik",
+  "opt_ultra": "Ultra",
+  "HELP_GLOSSARY": "Sözlük",
+  "HELP_STREETLIGHTS": "Sokak lambaları",
+  "CREDITS_DESIGN": "Oyun tasarımı ve kod: TLS Team",
+  "CREDITS_MUSIC": "Müzik ve ses efektleri: TLS Team",
+  "CREDITS_ART": "Grafik ve arayüz: TLS Team",
+  "CREDITS_THANKS": "Oyunculara özel teşekkürler"
 }

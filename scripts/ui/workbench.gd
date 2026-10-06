@@ -53,6 +53,11 @@ var _selected_salvage: int = -1
 func _ready() -> void:
 	theme = ThemeProvider.build_theme()
 	if not enable_workbench: return
+	# the screen had no backdrop: the recipe names were 11 px text straight over the street
+	var bg := ColorRect.new()
+	bg.color = Color(0.04, 0.05, 0.07, 0.94)
+	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	add_child(bg)
 	_build_tabs()
 	_build_craft_panel()
 	_build_salvage_panel()

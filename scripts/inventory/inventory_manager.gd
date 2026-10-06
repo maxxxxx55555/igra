@@ -33,7 +33,6 @@ func _ready() -> void:
 		if loaded_stats != null:
 			stats = loaded_stats
 		else:
-			# push_warning("InventoryManager: falling back to a new InventoryStats instance")
 			stats = InventoryStats.new()
 	_init_empty_slots()
 func _init_empty_slots() -> void:
@@ -43,6 +42,11 @@ func _init_empty_slots() -> void:
 	_recompute_weight()
 ## Навык "inventory_space" расширяет сумку. Существующие слоты не трогаем —
 ## только дописываем пустые в конец, иначе содержимое сместится.
+## The pack has at least this many slots (never fewer, existing ones are not touched).
+func ensure_slots(count: int) -> void:
+	while slots.size() < count:
+		slots.append(null)
+
 func add_slots(amount: int) -> void:
 	if amount <= 0:
 		return
@@ -237,9 +241,15 @@ func to_dict() -> Dictionary:
 			equip_ids[str(int(slot))] = String(equipment[slot]["item_id"])
 	return {"slots": data, "equipment": equip_ids}
 
+## A pack the inventory_space skill or the shop grew saves its extra slots; a file cannot ask for more than this many.
+const MAX_SAVED_SLOTS: int = 64
+
 func from_dict(d: Dictionary) -> void:
 	_init_empty_slots()
+	for slot in equipment:
+		equipment[slot] = null
 	var saved: Array = d.get("slots", []) as Array
+	ensure_slots(mini(saved.size(), MAX_SAVED_SLOTS))
 	for i in mini(saved.size(), slots.size()):
 		var s = saved[i]
 		if s == null:

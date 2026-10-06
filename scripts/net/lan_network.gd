@@ -14,13 +14,10 @@ func host(port: int = DEFAULT_PORT) -> int:
 	_peer = ENetMultiplayerPeer.new()
 	var err := _peer.create_server(port, MAX_CLIENTS)
 	if err != OK:
-		# push_warning("[LAN] host failed err=%d" % err)
 		return err
 	multiplayer.multiplayer_peer = _peer
 	role = Role.HOST
 	connected = true
-	multiplayer.peer_connected.connect(_on_peer_connected)
-	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 	var bus := get_node_or_null("/root/EventBus")
 	if bus != null:
 		bus.lan_hosted.emit(port)
@@ -31,7 +28,6 @@ func join(host_ip: String, port: int = DEFAULT_PORT) -> int:
 	_peer = ENetMultiplayerPeer.new()
 	var err := _peer.create_client(host_ip, port)
 	if err != OK:
-		# push_warning("[LAN] join failed err=%d" % err)
 		return err
 	multiplayer.multiplayer_peer = _peer
 	role = Role.CLIENT
@@ -55,12 +51,7 @@ func is_host() -> bool: return role == Role.HOST
 func is_client() -> bool: return role == Role.CLIENT
 func is_online() -> bool: return connected
 
-func _on_peer_connected(id: int) -> void:
-	push_warning("[LAN] peer connected ", id)
-func _on_peer_disconnected(id: int) -> void:
-	push_warning("[LAN] peer disconnected ", id)
 func _on_connected_to_server() -> void:
-	push_warning("[LAN] connected to server")
 	var bus := get_node_or_null("/root/EventBus")
 	if bus != null:
 		bus.lan_joined.emit(multiplayer.get_unique_id())

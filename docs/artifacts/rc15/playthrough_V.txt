@@ -1,0 +1,30 @@
+[pt] PASS V00 menu reached  frame=V00_menu.jpg
+[pt] note V the bot is in suburbs, 0 of 11 districts FULL, 40 s in; frame=V_t0040.jpg
+[pt] PASS V04 the first repair lights the Suburbs (stage 1)  frame=V04_first_repair.jpg
+[pt] note V the bot is in residential, 2 of 11 districts FULL, 70 s in; frame=V_t0070.jpg
+[pt] PASS V05 the first monster notices the player (hound)  frame=V05_first_monster.jpg
+[pt] note V the bot is in park, 2 of 11 districts FULL, 100 s in; frame=V_t0100.jpg
+[pt] note V the bot is in hospital, 4 of 11 districts FULL, 130 s in; frame=V_t0130.jpg
+[pt] note V the bot is in gas_station, 5 of 11 districts FULL, 160 s in; frame=V_t0160.jpg
+[pt] note V the bot is in police, 6 of 11 districts FULL, 191 s in; frame=V_t0191.jpg
+[pt] note V the bot is in warehouses, 7 of 11 districts FULL, 221 s in; frame=V_t0221.jpg
+[pt] note V the bot is in substation, 9 of 11 districts FULL, 251 s in; frame=V_t0251.jpg
+[pt] note V the bot is in power_station, 10 of 11 districts FULL, 281 s in; frame=V_t0281.jpg
+[pt] PASS V09 the Architect appears  frame=V09_boss_spawn.jpg
+[pt] note V the bot is in power_station, 11 of 11 districts FULL, 311 s in; frame=V_t0311.jpg
+[pt] note V the bot is in power_station, 11 of 11 districts FULL, 341 s in; frame=V_t0341.jpg
+[pt] note V the bot is in power_station, 11 of 11 districts FULL, 371 s in; frame=V_t0371.jpg
+[pt] note V the bot is in power_station, 11 of 11 districts FULL, 401 s in; frame=V_t0401.jpg
+[pt] PASS V05b the first hit lands on the player (12)  frame=V05_first_hit.jpg
+[pt] note V the bot is in power_station, 11 of 11 districts FULL, 431 s in; frame=V_t0431.jpg
+[pt] PASS V08 the bot reaches the win ending (won)
+[pt] PASS V10 the victory screen follows the win (state win: true)  frame=V10_victory.jpg
+[pt] PASS V11 the victory screen offers New Game+ setup (click: ok)  frame=V11_ngp_screen.jpg
+[pt] PASS V11b Activate raises New Game+ to 1 (click: ok)  frame=V11_ngp_activated.jpg
+[pt] PASS V11c one modifier can be taken for the new level ('Long Night — Battery yields 20% less lig')  frame=V11_ngp_modifier.jpg
+[pt] PASS V11d the menu says Play is New Game+ 1 ('New Game (NG+1)')  frame=V11_menu_ngp.jpg
+[pt] PASS V11e Play asks before it erases the save, and starts New Game+ 1 (clicks: ok / ok)  frame=V11_confirm.jpg
+[pt] PASS V11f New Game+ monsters carry the scaled health (2 scaled, 0 not)  frame=V11_ng_run.jpg
+[pt] PASS V14 Esc offers Save and quit  frame=V14_pause.jpg
+[pt] note V14 state before quitting: {"coins":13,"deaths":0,"district":"suburbs","docs":0,"inventory":{"cable":1},"kills":1,"level":1,"ng":1,"photos":2,"pos":[-8.0,0.860232591629028,-8.0],"stages":{"gas_station":0,"hospital":0,"industrial":0,"park":0,"police":0,"power_station":0,"residential":0,"school":0,"substation":0,"suburbs":0,"warehouses":0}}
+[pt] DONE mode=V steps=29 fails=0 (Save and quit pressed next)

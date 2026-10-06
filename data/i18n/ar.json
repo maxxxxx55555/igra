@@ -1513,5 +1513,13 @@
   "DEATH_KILLED_BY": "قتلك: %s",
   "DEATH_TIME": "وقت البقاء: %s",
   "DEATH_DISTRICTS": "المناطق المستعادة: %d / %d (%d%%)",
-  "DEATH_DOCS": "الوثائق التي وُجدت: %d / %d"
+  "DEATH_DOCS": "الوثائق التي وُجدت: %d / %d",
+  "Stealth": "التسلل",
+  "opt_ultra": "فائقة",
+  "HELP_GLOSSARY": "المسرد",
+  "HELP_STREETLIGHTS": "أعمدة الإنارة",
+  "CREDITS_DESIGN": "تصميم اللعبة والبرمجة: TLS Team",
+  "CREDITS_MUSIC": "الموسيقى والمؤثرات الصوتية: TLS Team",
+  "CREDITS_ART": "الفن والواجهة: TLS Team",
+  "CREDITS_THANKS": "شكر خاص للاعبين"
 }

@@ -8,9 +8,6 @@ class_name SkillTreeUI
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	theme = ThemeProvider.build_theme()
-	set_anchors_preset(Control.PRESET_CENTER)
-	custom_minimum_size = Vector2(600, 500)
-	
 	SkillTreeManager.skill_unlocked.connect(_refresh)
 	EventBus.settings_changed.connect(_on_settings_changed)
 	LocalizationManager.language_changed.connect(_on_language_changed)
@@ -54,11 +51,3 @@ func _refresh(_skill_id: Variant = null) -> void:
 
 func _close() -> void:
 	UIManager.close(&"skill_tree")
-
-func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and not event.echo:
-		if event.is_action_pressed("skill_tree_toggle"):
-			if UIManager._is_open(&"skill_tree"):
-				UIManager.close(&"skill_tree")
-			else:
-				UIManager.open(&"skill_tree")

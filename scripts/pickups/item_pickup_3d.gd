@@ -19,6 +19,8 @@ class_name ItemPickup3D
 var _base_y: float = 0.0
 var _time: float = 0.0
 var _picked_up: bool = false
+## Where this pickup sits in its district's loot list (DistrictLoot): taken keys are not spawned again, the rest are.
+var loot_key: String = ""
 
 const _PICKUP_BLIP := preload("res://assets/audio/sfx/ui_hover.wav")
 
@@ -84,6 +86,8 @@ func _on_body_entered(body: Node) -> void:
 		# Рюкзак перегружен — предмет остаётся лежать, уведомление шлёт инвентарь.
 		return
 	_picked_up = true
+	if loot_key != "":
+		ProgressTracker.mark_loot_taken(loot_key)
 	set_deferred("monitoring", false)
 	var data := ItemDatabase.get_item(item_id)
 	if data != null:

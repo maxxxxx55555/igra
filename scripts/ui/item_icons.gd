@@ -7,10 +7,11 @@ static func draw_icon(parent: Control, item_id: StringName, size: float) -> void
 		if tex != null:
 			var tr := TextureRect.new()
 			tr.name = "IconTex_" + str(item_id)
-			tr.texture = tex
-			tr.size = Vector2(size, size)
+			# expand first: with the default keep-size mode the 128 px texture sets the minimum size and the size below is lost
 			tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 			tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			tr.texture = tex
+			tr.size = Vector2(size, size)
 			tr.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			parent.add_child(tr)
 			return

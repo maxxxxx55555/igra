@@ -14,7 +14,8 @@ var _secrets_found: Dictionary = {}
 ## (which rebuilds the scene, world_runtime.gd) restocked every common item
 ## and repair part for free, indefinitely. One flag per district, same
 ## idempotent-dict shape as _secrets_found.
-var _districts_looted: Dictionary = {}
+## Loot keys picked up ("district:index"); DistrictLoot spawns the others again on every rebuild.
+var _loot_taken: Dictionary = {}
 ## G25 (GDD §18): firearms found in the world and the one ammo reserve they share.
 const WEAPON_IDS: Array[String] = ["pistol", "rifle", "shotgun"]
 const MAX_AMMO_RESERVE: int = 240
@@ -164,11 +165,11 @@ func _on_secret_found(id: StringName) -> void:
 func is_secret_found(id: String) -> bool:
 	return _secrets_found.get(id, false)
 
-func is_district_looted(id: String) -> bool:
-	return _districts_looted.get(id, false)
+func is_loot_taken(key: String) -> bool:
+	return _loot_taken.get(key, false)
 
-func mark_district_looted(id: String) -> void:
-	_districts_looted[id] = true
+func mark_loot_taken(key: String) -> void:
+	_loot_taken[key] = true
 
 func found_secret_ids() -> Array:
 	return _secrets_found.keys()
@@ -263,7 +264,7 @@ func to_dict() -> Dictionary:
 		"ach": _ach_done.keys().map(func(k): return String(k)),
 		"docs": _docs.keys().filter(func(k): return _docs[k]).map(func(k): return String(k)),
 		"secret_ids": _secrets_found.keys().map(func(k): return String(k)),
-		"looted_districts": _districts_looted.keys().map(func(k): return String(k)),
+		"loot_taken": _loot_taken.keys().map(func(k): return String(k)),
 		"weapons": _weapons.keys(), "ammo": ammo, "blueprints": _blueprints.keys(), "crafted": _crafted.keys(),
 		"battery_bonus": battery_bonus, "deaths": deaths, "shots": shots, "jumps": jumps, "distance": distance,
 		"items_picked": items_picked, "crafted_items": crafted, "damage_taken": damage_taken, "kills_by": kills_by}
@@ -294,9 +295,9 @@ func from_dict(d: Dictionary) -> void:
 	_secrets_found.clear()
 	for k in d.get("secret_ids", []):
 		_secrets_found[String(k)] = true
-	_districts_looted.clear()
-	for k in d.get("looted_districts", []):
-		_districts_looted[String(k)] = true
+	_loot_taken.clear()
+	for k in d.get("loot_taken", []):
+		_loot_taken[String(k)] = true
 	_weapons.clear()
 	for k in d.get("weapons", []):
 		if WEAPON_IDS.has(String(k)):

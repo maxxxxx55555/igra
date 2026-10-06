@@ -9,6 +9,7 @@ const UPGRADE_TABLE: Dictionary = {
 	&"upgrade_backpack_slots":        {"target": "inventory",  "field": "base_slots", "delta": 4.0},
 }
 const BLUEPRINT_PREFIX: String = "blueprint_"
+const UPGRADE_PREFIX: String = "upgrade_"
 var _applied: Dictionary = {}
 var _base: Dictionary = {}
 var _flash_stats: FlashlightStats = preload("res://data/balance/flashlight_stats.tres")
@@ -55,6 +56,8 @@ func apply(upgrade_id: StringName) -> bool:
 		return false
 	_applied[upgrade_id] = true
 	apply_all()
+	# the pack grows now, not at the next load
+	InventoryManager.ensure_slots(int(_inv_stats.base_slots))
 	return true
 func reset() -> void:
 	_applied.clear()
@@ -64,7 +67,8 @@ func is_applied(upgrade_id: StringName) -> bool:
 func _on_pickup(item_id: StringName) -> void:
 	var s := String(item_id)
 	if s.begins_with(BLUEPRINT_PREFIX):
-		var up_id := StringName(s.substr(BLUEPRINT_PREFIX.length()))
+		# the four blueprints on the streets name the shop's upgrades: blueprint_backpack_slots is upgrade_backpack_slots
+		var up_id := StringName(UPGRADE_PREFIX + s.substr(BLUEPRINT_PREFIX.length()))
 		if apply(up_id):
 			EventBus.inventory_notice.emit(LocalizationManager.t("BLUEPRINT_APPLIED"))
 func to_dict() -> Dictionary:

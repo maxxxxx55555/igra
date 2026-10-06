@@ -1,6 +1,5 @@
 extends Control
 
-@onready var logo: ColorRect = $Logo
 @onready var label: Label = $Title
 
 ## FINAL HARDENING PASS (2026-09-12) — ROOT CAUSE of "world torn down ~8s
@@ -26,7 +25,6 @@ func _ready() -> void:
 		queue_free()
 		return
 	add_to_group("ui_root")
-	logo.color = Color("#1D1812")
 	label.text = LocalizationManager.t("menu_title")
 	label.add_theme_color_override("font_color", Color("#E2A33C"))
 	var tw = create_tween()

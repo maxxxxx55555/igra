@@ -1513,5 +1513,13 @@
   "DEATH_KILLED_BY": "Getötet von: %s",
   "DEATH_TIME": "Überlebt: %s",
   "DEATH_DISTRICTS": "Bezirke gerettet: %d / %d (%d %%)",
-  "DEATH_DOCS": "Dokumente gefunden: %d / %d"
+  "DEATH_DOCS": "Dokumente gefunden: %d / %d",
+  "Stealth": "Heimlichkeit",
+  "opt_ultra": "Ultra",
+  "HELP_GLOSSARY": "Glossar",
+  "HELP_STREETLIGHTS": "Straßenlaternen",
+  "CREDITS_DESIGN": "Spieldesign und Code: TLS Team",
+  "CREDITS_MUSIC": "Musik und Soundeffekte: TLS Team",
+  "CREDITS_ART": "Grafik und Oberfläche: TLS Team",
+  "CREDITS_THANKS": "Besonderer Dank an die Spieler"
 }

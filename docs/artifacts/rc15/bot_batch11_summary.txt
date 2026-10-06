@@ -1,0 +1,27 @@
+[bot s1]   result       : WIN
+[bot s1]   wall time    : 100.2s
+[bot s1]   districts FULL: 11/11
+[bot s1]   deaths       : 0
+[bot s1]   coins earned : 9610 (wallet 9610)
+[bot s1]   nudges       : 11 (>1 means the win leaned on nudge rescues, not clean nav — docs/REDTEAM_CHALLENGE.md TG-PLAY)
+[bot s1]   onboarding   : first_interactable=9.2 first_secret_hint=3.4 first_secret_found=-1.0 first_district_full=10.0
+[bot s1]   stage timeline: suburbs:0@2.1, suburbs:1@9.2, suburbs:2@9.6, suburbs:3@10.0, residential:0@10.9, residential:1@14.9, residential:2@16.7, residential:3@18.1, park:0@18.5, park:1@20.6, park:2
+[bot s1]   part economy : suburbs stage 0->1 @t=9.2 | suburbs stage 1->2 @t=9.5 | suburbs stage 2->3 @t=9.9 | residential stage 0->1 @t=14.8 | residential stage 1->2 @t=16.7 | residential stage 2->3 @
+[bot s2]   result       : WIN
+[bot s2]   wall time    : 111.3s
+[bot s2]   districts FULL: 11/11
+[bot s2]   deaths       : 0
+[bot s2]   coins earned : 9047 (wallet 9047)
+[bot s2]   nudges       : 21 (>1 means the win leaned on nudge rescues, not clean nav — docs/REDTEAM_CHALLENGE.md TG-PLAY)
+[bot s2]   onboarding   : first_interactable=7.1 first_secret_hint=3.4 first_secret_found=-1.0 first_district_full=8.0
+[bot s2]   stage timeline: suburbs:0@2.2, suburbs:1@7.2, suburbs:2@7.4, suburbs:3@8.0, residential:0@8.4, residential:1@12.0, residential:2@13.8, residential:3@15.2, park:0@15.6, park:1@17.6, park:2@1
+[bot s2]   part economy : suburbs stage 0->1 @t=7.1 | suburbs stage 1->2 @t=7.4 | suburbs stage 2->3 @t=8.0 | residential stage 0->1 @t=12.0 | residential stage 1->2 @t=13.7 | residential stage 2->3 @
+[bot s3]   result       : WIN
+[bot s3]   wall time    : 125.7s
+[bot s3]   districts FULL: 11/11
+[bot s3]   deaths       : 0
+[bot s3]   coins earned : 9061 (wallet 9061)
+[bot s3]   nudges       : 23 (>1 means the win leaned on nudge rescues, not clean nav — docs/REDTEAM_CHALLENGE.md TG-PLAY)
+[bot s3]   onboarding   : first_interactable=7.1 first_secret_hint=3.4 first_secret_found=-1.0 first_district_full=7.9
+[bot s3]   stage timeline: suburbs:0@2.2, suburbs:1@7.1, suburbs:2@7.4, suburbs:3@7.9, residential:0@8.4, residential:1@12.0, residential:2@13.7, residential:3@15.1, park:0@15.5, park:1@17.6, park:2@1
+[bot s3]   part economy : suburbs stage 0->1 @t=7.1 | suburbs stage 1->2 @t=7.4 | suburbs stage 2->3 @t=7.9 | residential stage 0->1 @t=12.0 | residential stage 1->2 @t=13.7 | residential stage 2->3 @

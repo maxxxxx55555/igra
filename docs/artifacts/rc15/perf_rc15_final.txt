@@ -1,0 +1,58 @@
+windowed perf_check_scene, AMD iGPU dev machine, the game RUNNING (tree not paused); the runner marks the onboarding done before Routes.start_game()
+
+== at 8ad0b93 (the final code tree, the quick bar on screen): two runs
+-- run 1
+[perf] district=suburbs draw_calls=167 primitives=44205 objects_in_frame=452
+[perf] breakdown of 167 draw calls in suburbs, calls saved by hiding each node: 105 Main3D/HUD (CanvasLayer) 6275 primitives | 28 Main3D/WorldRuntime (Node3D) 39904 primitives | 16 Main3D/MultiplayerManager (Node3D) 22158 primitives | 15 district_suburbs/Props (Node3D) 25996 primitives | 11 district_suburbs/StreetBuilder (Node3D) 19650 primitives | 8 Main3D/PostProcessOverlay (CanvasLayer) 5066 primitives | 7 district_suburbs/@Area3D@177 (Area3D) 5850 primitives | 7 district_suburbs/@Area3D@178 (Area3D) 5850 primitives | 7 district_suburbs/@Area3D@181 (Area3D) 5850 primitives | 7 Main3D/ToastManager (CanvasLayer) 5854 primitives | 7 district_suburbs/@Node3D@196 (Node3D) 5162 primitives | 6 district_suburbs/@Area3D@187 (Area3D) 5838 primitives | 5 district_suburbs/Secret (Node3D) 5826 primitives | 5 district_suburbs/@Area3D@194 (Area3D) 5826 primitives
+[perf] mean over 300 frames: gpu_ms=14.77 render_cpu_ms=0.89 process_ms=34.76 physics_ms=9.33
+[perf] suburbs frame_p95_ms=25.38 texture_mem_mib=127.9 video_mem_mib=153.4
+[perf] suburbs static_memory_mib=100.5 particles_emitting=140 (GDD PF2: RAM < 800 MiB, VRAM < 400 MiB, particles < 500)
+[perf] mean over 300 frames: gpu_ms=15.51 render_cpu_ms=0.81 process_ms=21.10 physics_ms=1.54
+[perf] district=power_station draw_calls=166 primitives=45301 objects_in_frame=455 frame_p95_ms=20.37
+[perf] budget D1<200: 167 OK; D11<350: 166 OK
+[perf] DONE fails=0
+-- run 2
+[perf] district=suburbs draw_calls=166 primitives=44141 objects_in_frame=451
+[perf] breakdown of 166 draw calls in suburbs, calls saved by hiding each node: 105 Main3D/HUD (CanvasLayer) 6979 primitives | 27 Main3D/WorldRuntime (Node3D) 39840 primitives | 15 Main3D/MultiplayerManager (Node3D) 22094 primitives | 14 district_suburbs/Props (Node3D) 25932 primitives | 10 district_suburbs/StreetBuilder (Node3D) 19586 primitives | 7 Main3D/PostProcessOverlay (CanvasLayer) 5002 primitives | 6 district_suburbs/@Area3D@177 (Area3D) 5786 primitives | 6 district_suburbs/@Area3D@178 (Area3D) 5786 primitives | 6 district_suburbs/@Area3D@181 (Area3D) 5786 primitives | 6 Main3D/ToastManager (CanvasLayer) 5790 primitives | 5 district_suburbs/@Area3D@187 (Area3D) 5774 primitives | 4 district_suburbs/@Node3D@196 (Node3D) 5762 primitives | 4 district_suburbs/Secret (Node3D) 5762 primitives | 4 district_suburbs/@Area3D@179 (Area3D) 5762 primitives
+[perf] mean over 300 frames: gpu_ms=13.45 render_cpu_ms=0.87 process_ms=22.87 physics_ms=8.37
+[perf] suburbs frame_p95_ms=20.37 texture_mem_mib=127.9 video_mem_mib=153.4
+[perf] suburbs static_memory_mib=100.6 particles_emitting=140 (GDD PF2: RAM < 800 MiB, VRAM < 400 MiB, particles < 500)
+[perf] mean over 300 frames: gpu_ms=15.69 render_cpu_ms=1.06 process_ms=33.03 physics_ms=1.76
+[perf] district=power_station draw_calls=168 primitives=45429 objects_in_frame=457 frame_p95_ms=22.73
+[perf] budget D1<200: 166 OK; D11<350: 168 OK
+[perf] DONE fails=0
+
+== A/B on the same tree: the moon's shadow as it was before a57f9dd (scenes/main_3d.tscn Moon: the two lines directional_shadow_mode = 0 and directional_shadow_max_distance = 40.0 removed, so four cascades over 100 m; scripts/world_env_setup.gd MOON_SHADOW_MIN 0.2 -> 0.0, so the shadow is on in the dark stage too)
+[perf] district=suburbs draw_calls=214 primitives=106829 objects_in_frame=485
+[perf] breakdown of 214 draw calls in suburbs, calls saved by hiding each node: 103 Main3D/HUD (CanvasLayer) -1469 primitives | 75 Main3D/WorldRuntime (Node3D) 102240 primitives | 47 Main3D/Moon (DirectionalLight3D) 61920 primitives | 29 Main3D/MultiplayerManager (Node3D) 18926 primitives | 28 district_suburbs/Props (Node3D) 42540 primitives | 21 district_suburbs/StreetBuilder (Node3D) 31874 primitives | 11 district_suburbs/@CharacterBody3D@172 (CharacterBody3D) 17282 primitives | 8 district_suburbs/@Area3D@178 (Area3D) -2638 primitives | 8 district_suburbs/@Area3D@177 (Area3D) -2638 primitives | 7 Main3D/PostProcessOverlay (CanvasLayer) -2678 primitives | 5 district_suburbs/@Area3D@181 (Area3D) -7642 primitives | 5 district_suburbs/Shadow (CharacterBody3D) 2306 primitives | 5 Main3D/ToastManager (CanvasLayer) -2658 primitives | 4 district_suburbs/@Area3D@187 (Area3D) -7654 primitives
+[perf] mean over 300 frames: gpu_ms=15.16 render_cpu_ms=1.45 process_ms=30.10 physics_ms=9.12
+[perf] suburbs frame_p95_ms=25.00 texture_mem_mib=127.9 video_mem_mib=153.4
+[perf] suburbs static_memory_mib=100.5 particles_emitting=140 (GDD PF2: RAM < 800 MiB, VRAM < 400 MiB, particles < 500)
+[perf] mean over 300 frames: gpu_ms=17.79 render_cpu_ms=1.86 process_ms=27.89 physics_ms=2.03
+[perf] district=power_station draw_calls=214 primitives=107273 objects_in_frame=488 frame_p95_ms=26.19
+[perf] budget D1<200: 214 OVER (known gap, TZ P01); D11<350: 214 OK
+[perf] DONE fails=0
+
+== earlier, at 2840f8f (the quick bar was not on screen, see CORRECTION_LOG 97): two runs
+-- run 1
+[perf] district=suburbs draw_calls=134 primitives=48935 objects_in_frame=414
+[perf] breakdown of 134 draw calls in suburbs, calls saved by hiding each node: 70 Main3D/HUD (CanvasLayer) 2557 primitives | 28 Main3D/WorldRuntime (Node3D) 44830 primitives | 14 Main3D/MultiplayerManager (Node3D) 22092 primitives | 11 district_suburbs/Props (Node3D) 20938 primitives | 7 district_suburbs/StreetBuilder (Node3D) 14592 primitives | 5 district_suburbs/@CharacterBody3D@172 (CharacterBody3D) 10752 primitives | 5 Main3D/PostProcessOverlay (CanvasLayer) 776 primitives | 3 Main3D/ToastManager (CanvasLayer) 796 primitives | 3 district_suburbs/@Area3D@181 (Area3D) 696 primitives | 2 district_suburbs/@Area3D@177 (Area3D) 584 primitives | 2 district_suburbs/@Area3D@178 (Area3D) 584 primitives | 2 district_suburbs/@Area3D@187 (Area3D) 686 primitives | 1 district_suburbs/@Area3D@194 (Area3D) 674 primitives | 1 district_suburbs/@Area3D@182 (Area3D) 672 primitives
+[perf] mean over 300 frames: gpu_ms=18.44 render_cpu_ms=0.98 process_ms=33.10 physics_ms=3.69
+[perf] suburbs frame_p95_ms=31.94 texture_mem_mib=127.5 video_mem_mib=153.0
+[perf] suburbs static_memory_mib=100.2 particles_emitting=140 (GDD PF2: RAM < 800 MiB, VRAM < 400 MiB, particles < 500)
+[perf] mean over 300 frames: gpu_ms=19.19 render_cpu_ms=1.05 process_ms=27.51 physics_ms=2.15
+[perf] district=power_station draw_calls=136 primitives=50161 objects_in_frame=420 frame_p95_ms=26.19
+[perf] budget D1<200: 134 OK; D11<350: 136 OK
+[perf] DONE fails=0
+-- run 2
+[perf] district=suburbs draw_calls=132 primitives=39721 objects_in_frame=412
+[perf] breakdown of 132 draw calls in suburbs, calls saved by hiding each node: 71 Main3D/HUD (CanvasLayer) 2559 primitives | 26 Main3D/WorldRuntime (Node3D) 35616 primitives | 14 Main3D/MultiplayerManager (Node3D) 17870 primitives | 13 district_suburbs/Props (Node3D) 21708 primitives | 9 district_suburbs/StreetBuilder (Node3D) 15362 primitives | 7 Main3D/PostProcessOverlay (CanvasLayer) 1546 primitives | 5 district_suburbs/@Area3D@178 (Area3D) 1418 primitives | 5 district_suburbs/@Area3D@181 (Area3D) 1418 primitives | 5 Main3D/ToastManager (CanvasLayer) 1566 primitives | 4 district_suburbs/@Area3D@177 (Area3D) 1354 primitives | 4 district_suburbs/@Area3D@184 (Area3D) 1506 primitives | 4 district_suburbs/@Area3D@187 (Area3D) 752 primitives | 3 district_suburbs/@Area3D@189 (Area3D) 740 primitives | 3 district_suburbs/@Area3D@190 (Area3D) 740 primitives
+[perf] mean over 300 frames: gpu_ms=16.85 render_cpu_ms=1.05 process_ms=31.11 physics_ms=3.63
+[perf] suburbs frame_p95_ms=32.02 texture_mem_mib=127.5 video_mem_mib=153.0
+[perf] suburbs static_memory_mib=100.1 particles_emitting=140 (GDD PF2: RAM < 800 MiB, VRAM < 400 MiB, particles < 500)
+[perf] mean over 300 frames: gpu_ms=18.79 render_cpu_ms=1.25 process_ms=28.02 physics_ms=2.09
+[perf] district=power_station draw_calls=133 primitives=45105 objects_in_frame=417 frame_p95_ms=26.67
+[perf] budget D1<200: 132 OK; D11<350: 133 OK
+[perf] DONE fails=0
+
+-- for contrast: perf_rc15.txt (batch 13) was measured with the tree PAUSED under the onboarding overlay (its breakdown lists '8 Main3D/OnboardingOverlay', physics_ms=0.08): D1 169, D11 168, p95 16.67 / 18.06 ms

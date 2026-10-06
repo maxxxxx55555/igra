@@ -1513,5 +1513,13 @@
   "DEATH_KILLED_BY": "死于：%s",
   "DEATH_TIME": "存活时间：%s",
   "DEATH_DISTRICTS": "已修复区域：%d / %d (%d%%)",
-  "DEATH_DOCS": "找到的文件：%d / %d"
+  "DEATH_DOCS": "找到的文件：%d / %d",
+  "Stealth": "潜行",
+  "opt_ultra": "超高",
+  "HELP_GLOSSARY": "术语表",
+  "HELP_STREETLIGHTS": "路灯",
+  "CREDITS_DESIGN": "游戏设计与代码：TLS Team",
+  "CREDITS_MUSIC": "音乐与音效：TLS Team",
+  "CREDITS_ART": "美术与界面：TLS Team",
+  "CREDITS_THANKS": "特别感谢玩家们"
 }

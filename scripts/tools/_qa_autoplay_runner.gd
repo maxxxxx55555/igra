@@ -242,6 +242,15 @@ func _process(delta: float) -> void:
 				if sl != null:
 					used += 1
 			pack_info = " pack=%.1f/%.0fkg slots=%d/%d batteries=%d charge=%.0f" % [float(inv_hb.current_weight), float(inv_hb.stats.capacity_kg), used, inv_hb.slots.size(), inv_hb.count_of(&"battery"), float(_player.get("battery"))]
+		var aim_info := ""
+		var interactor := _player.get_node_or_null("Interactor") if p_in_tree else null
+		if interactor != null:
+			var aimed: Variant = interactor.call("current_target")
+			var to_target := _target_pos - ppos
+			to_target.y = 0.0
+			var forward := -(_player as Node3D).global_transform.basis.z
+			forward.y = 0.0
+			aim_info = " itarget=%s aim_dot=%.2f yaw=%.0f" % [str((aimed as Node).name) if aimed != null else "none", forward.normalized().dot(to_target.normalized()) if to_target.length() > 0.01 else 1.0, rad_to_deg((_player as Node3D).rotation.y)]
 		var hit_info := ""
 		if p_in_tree and _player is CharacterBody3D:
 			for i in (_player as CharacterBody3D).get_slide_collision_count():
@@ -249,7 +258,7 @@ func _process(delta: float) -> void:
 		_log("hb ph=%s st=%d want=%s cur=%s si=%d sc=%.0f mr=%d ppos=%s valid=%s in_tree=%s finite=%s tgt=%s tdist=%.1f npu=%d%s" % [
 			_phase, GameManager.current_state, SPINE[mini(_spine_i, SPINE.size() - 1)],
 			_current_district(), _spine_i, _compute_score(), _menu_recoveries,
-			str(ppos.round()), p_valid, p_in_tree, p_finite, str(_target_pos.round()), tdist, ncable, boss_info + near_info + hit_info + pack_info])
+			str(ppos.round()), p_valid, p_in_tree, p_finite, str(_target_pos.round()), tdist, ncable, boss_info + near_info + hit_info + pack_info + aim_info])
 
 	# Test knob (tools-only): QA_FORCE_PAUSE_AT=<sec> reproduces the X20
 	# PAUSED state deterministically for the PAUSED-recovery A/B.
@@ -344,6 +353,7 @@ func _tick_spine(_delta: float) -> void:
 	if spare != null:
 		_target_pos = (spare as Node3D).global_position
 		_have_target = true
+		_face(_target_pos)
 		_move(_approach_dir(_target_pos) if _player.global_position.distance_to(_target_pos) > PICKUP_TOUCH else Vector2.ZERO)
 		return
 
@@ -358,6 +368,7 @@ func _tick_spine(_delta: float) -> void:
 			return
 		_target_pos = (p as Node3D).global_position
 		_have_target = true
+		_face(_target_pos)
 		if _player.global_position.distance_to(_target_pos) > PICKUP_TOUCH:
 			_move(_approach_dir(_target_pos))
 		else:
@@ -370,6 +381,8 @@ func _tick_spine(_delta: float) -> void:
 		return
 	_target_pos = (sw as Node3D).global_position
 	_have_target = true
+	# The interactor takes what the player faces (a cone of about 70 degrees), so a person looks at the switch they walk to
+	_face(_target_pos)
 	_move(_dir_to(_target_pos))
 	if _player.global_position.distance_to(_target_pos) <= REACH and _act_cd <= 0.0:
 		InputService.request_interact()

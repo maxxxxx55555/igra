@@ -1,0 +1,134 @@
+tools/check.sh (full, windowed reimport first) at 9e8c6b0, 2026-10-02, no other Godot process running
+── Статические проверки (Godot не нужен)
+  OK   ссылки на ресурсы (0 битых)
+  OK   автозагрузки (56 шт., 0 битых)
+  OK   вызовы к автозагрузкам (0 несуществующих)
+  OK   локализация: 13 языков x 1523 ключей, паритет=True
+  OK   ключи из кода найдены в словаре (0 потеряно)
+  OK   плейсхолдеры ru/en (0 расхождений)
+  OK   validate_list (216 записей, 0 отсутствуют)
+  OK   критический путь игры (8/8)
+  OK   музыкальные треки на диске (0 нет)
+── Сцены и ссылки на ноды
+── Комментарии в файлах ресурсов (Godot их не поддерживает)
+  OK   проверено 263 файлов
+── Ресурсы, ошибочно объявленные как [node]
+  OK   проверено 166 сцен
+── Ссылки $NodePath на несуществующие ноды сцены
+  OK   проверено 114 пар скрипт/сцена
+──────────────────────────────────────────────────
+Всё чисто.
+  OK   scene_node_check
+── Игровой цикл
+  OK    главная сцена — boot_loading                    
+  OK    boot уводит в меню                              
+  OK    кнопка «Играть» стартует игру                   
+  OK    start_game ведёт в игровую сцену                
+  OK    игровая сцена существует                        
+  OK    экран загрузки уходит в игру                    
+  OK    подбор не шлёт RPC самому себе                  
+  OK    подбор кладёт вещь в инвентарь                  
+  OK    высота лута фиксируется после спавна            
+  OK    инвентарь шлёт item_picked_up                   
+  OK    инвентарь не шлёт RPC вне сети                  
+  OK    сигнал подбора кто-то слушает                   
+  OK    лут раскладывается по районам                   
+  OK    HUD: нода NoiseLabel есть в сцене               
+  OK    HUD: нода NoiseF есть в сцене                   
+  OK    HUD: нода VisibilityLabel есть в сцене          
+  OK    HUD: нода VisibilityF есть в сцене              
+  OK    HUD показывает здоровье                         
+  OK    HUD показывает батарею                          
+  OK    HUD показывает шум                              
+  OK    HUD прячется под блокирующими экранами          
+  OK    игрок отдаёт уровень шума                       
+  OK    игрок шлёт изменение батареи                    
+  OK    Escape ставит паузу                             
+  OK    Escape сперва закрывает справочники             
+  OK    пауза морозит дерево                            
+  OK    снятие паузы размораживает                      
+  OK    в паузе есть выход в меню                       
+  OK    затемнение работает на паузе                    
+  OK    UIManager работает на паузе                     
+  OK    смерть игрока кем-то обрабатывается             
+  OK    смерть переводит в состояние DEAD               
+  OK    экран смерти открывается по состоянию           
+  OK    экран победы открывается по состоянию           
+  OK    с экрана смерти можно выйти в меню              
+  OK    «Заново» перезагружает сцену                    
+  OK    кодекс открывается                              
+  OK    кодекс закрывается                              
+  OK    карта переключается клавишей                    
+  OK    журнал переключается клавишей                   
+  OK    действие ui_pause объявлено в проекте           
+  OK    действие city_map_toggle объявлено в проекте    
+  OK    действие journal_toggle объявлено в проекте     
+  OK    действие encyclopedia_toggle объявлено в проекте
+  OK    аудио-шина Master существует                    
+  OK    аудио-шина Music существует                     
+  OK    аудио-шина SFX существует                       
+  OK    аудио-шина Ambient существует                   
+  OK    аудио-шина UI существует                        
+  OK    аудио-шина Footsteps существует                 
+  OK    аудио-шина Combat существует                    
+  OK    аудио-шина Environment существует               
+  OK    Master не заглушен на старте                    
+  OK    все аудиофайлы из кода на диске                 
+  OK    все preload/load ведут в существующие файлы     
+  OK    арность подписок на сигналы совпадает           
+────────────────────────────────────────────────────────────
+  OK   flow_check
+── Контент: глубина и удержание
+  OK   audit_content_depth
+  OK   validate_retention
+── Truth gates: visual/i18n (данные уже в репозитории)
+  OK   visual_truth_gate (gate self-consistency on committed frames; R0 lock = LUT pin below)
+  OK   visual_truth_gate --demo (defect patterns fail, canon patterns pass)
+  OK   visual_truth_gate fails all four committed corruption frames
+  OK   visual_truth_gate passes the sign-off and beauty frames
+  OK   R0 root cause pinned (11 district LUTs import as Texture3D)
+  OK   i18n_truth_gate
+  OK   user_data_guard --demo (snapshot/restore профиля)
+  OK   hardcoded_text_gate (no untranslated words assigned to .text)
+  OK   puzzle_economy_sim (STATIC_AUDIT #31 reachability)
+  OK   endings_sim (all 5 GDD endings reachable)
+  OK   balance_sim (economy/battery/skill-branch/time-to-win)
+  OK   lighting_stage_sim (DARK/PARTIAL/STREETS/FULL pairwise-distinct)
+  OK   project_input_check (action blocks only in [input], every action the scripts read is defined)
+  OK   settings_consumer_check (every Settings control has a named reader or applier)
+  OK   tscn_header_check (a scene's layout properties are lines under the node, not attributes of its header)
+  OK   a11y_check (every a11y toggle traces UI -> real effect)
+  OK   drawcall_estimate (structural draw-call/light estimate, D1)
+  OK   no mirrored yaw formula (atan2(-v.x, -v.z) faces v)
+  OK   release_export_check (SECURITY_PATCH_SPEC C-08/D-04: no committed encryption key or debug keystore creds)
+── Проверки в движке (нужен Godot 4.x)
+  OK   реимпорт ассетов (оконный, GPU-сжатие)
+  OK   компиляция всех скриптов
+  OK   арность сигналов
+  OK   API автозагрузок
+  OK   локализация
+  OK   ассеты
+  OK   прогон 3D-сцены
+  OK   целостность сейва
+  OK   крафт-флоу + концовки
+  OK   adversarial: achievement/NG+/economy/district-id forgery
+  OK   boot-flow (меню/новая игра/сейв)
+  OK   footstep-маппер (surface x speed)
+  OK   QaLaunchGuard: snapshot/restore профиля (синтетический каталог)
+  OK   QaLaunchGuard: жизненный цикл (выход, крах, восстановление) на реальном профиле
+  OK   аудио: тишина до первого ввода
+  OK   аудио: граф шин A01
+  OK   лут: под каждым предметом есть пол (X21)
+  OK   единая тема: chrome виден на всех экранах
+  OK   настройки: тир графики и accessibility переживают рестарт
+  OK   accessibility: reduce_flash/time_fx/ui_motion гейтят juice-сайты
+  OK   вёрстка: все экраны UIManager в кадре
+  OK   rc15 closeout: оружие/чертежи/фото/укрытия/инвентарь/достижения/сложность/Back
+  OK   GOLD MASTER suite (autoloads/input/districts/save-load/endings/i18n/soak)
+  пропуск перф-бюджет (draw calls, только --windowed) (нужен --windowed, не OK/FAIL)
+  пропуск аудио: Music bus не в тишине (только --windowed) (нужен --windowed, не OK/FAIL)
+  OK   тач-инпут (joystick/deadzone/HUD-кнопки)
+  OK   user-data guard: профиль игрока восстановлен байт-в-байт
+──────────────────────────────────────
+Всё зелёное. Проверок пройдено: 56
+EXIT 0

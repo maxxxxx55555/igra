@@ -35,6 +35,20 @@ func _run() -> void:
 	if _player == null:
 		_finish()
 		return
+	if OS.get_environment("CLOSEOUT_ONLY") == "combat":
+		await _check_melee_reaches_monsters()
+		await _check_crawler_idles_and_investigates()
+		await _check_hardcore_belongs_to_the_run()
+		await _check_tutorial_follows_the_real_input()
+		await _check_street_layers_do_not_fight()
+		await _check_scroll_bars_have_a_width()
+		await _check_victory_screen_shows_this_ending()
+		_check_help_rows_are_real()
+		await _check_quick_bar_is_on_screen()
+		await _check_tier_names()
+		_check_the_moon_shadow_follows_its_light()
+		_finish()
+		return
 	_check_theme()
 	_check_placement()
 	await _check_weapons()
@@ -43,9 +57,19 @@ func _run() -> void:
 	await _check_photos()
 	await _check_achievements()
 	await _check_inventory_and_pause()
+	await _check_workbench_salvage()
 	_check_roster()
 	await _check_crouch()
 	_check_loot()
+	await _check_loot_survives_a_rebuild()
+	await _check_finale_follows_the_grid()
+	_check_bigger_pack_survives_a_load()
+	await _check_settings_persist_and_survive_a_continue()
+	_check_solved_puzzles_are_saved()
+	_check_a_written_save_reads_back()
+	_check_forged_position_and_equipment()
+	_check_blueprints_and_the_shop_grow_the_pack()
+	_check_the_dark_segment_knows_the_light_is_on()
 	await _check_statuses()
 	_check_noise_and_pack()
 	await _check_settings_effects()
@@ -56,8 +80,28 @@ func _run() -> void:
 	await _check_movement()
 	await _check_onboarding_and_death()
 	await _check_shop()
+	await _check_map()
+	await _check_hud_corner()
+	await _check_scene_screens_fill_the_window()
+	_check_language_survives_a_save()
+	_check_respawn_waits_for_the_new_player()
+	await _check_victory_is_final()
+	_check_vitals_are_saved()
+	await _check_regeneration_waits_for_peace()
 	_check_difficulty()
 	await _check_settings_back()
+	await _check_difficulty_pick_is_a_setting()
+	await _check_hardcore_belongs_to_the_run()
+	await _check_melee_reaches_monsters()
+	await _check_crawler_idles_and_investigates()
+	await _check_tutorial_follows_the_real_input()
+	await _check_street_layers_do_not_fight()
+	await _check_scroll_bars_have_a_width()
+	await _check_victory_screen_shows_this_ending()
+	_check_help_rows_are_real()
+	await _check_quick_bar_is_on_screen()
+	await _check_tier_names()
+	_check_the_moon_shadow_follows_its_light()
 	_finish()
 
 func _finish() -> void:
@@ -281,6 +325,20 @@ func _check_workbench() -> void:
 	_ok(Logic.craft(strobe) and ProgressTracker.has_crafted("strobe_flashlight") and InventoryManager.count_of(&"fuse") == 0 and InventoryManager.count_of(&"transformer") == 0, "G21 crafting spends the parts and gives the ability")
 	_ok(not Logic.can_craft(strobe), "G21 an ability is crafted once")
 	_ok(_player.trigger_strobe(), "G21 the built strobe works")
+	# the cone is the 52 degrees the constant says, not the 162 that cos(0.45 * PI) made of it (the breaker's E10)
+	_player.set("_strobe_cooldown", 0.0)
+	_player.set("battery", 100.0)
+	_player.set("flashlight_enabled", true)
+	var aim: Vector3 = -_player.flashlight_pivot.global_transform.basis.z
+	aim.y = 0.0
+	aim = aim.normalized()
+	var in_cone := _monster("crawler_3d", _player.global_position + aim.rotated(Vector3.UP, deg_to_rad(12.0)) * 6.0)
+	var off_cone := _monster("crawler_3d", _player.global_position + aim.rotated(Vector3.UP, deg_to_rad(50.0)) * 6.0)
+	_player.trigger_strobe()
+	_ok(int(in_cone.ai_state) == 6 and int(off_cone.ai_state) != 6, "STROBE1 a monster 12 degrees off the aim is stunned, one 50 degrees off is not (%d / %d)" % [in_cone.ai_state, off_cone.ai_state])
+	in_cone.queue_free()
+	off_cone.queue_free()
+	_player.set("_strobe_cooldown", 0.0)
 	# capacity: enhanced battery +20%, level 2 +40%
 	InventoryManager.try_add(&"blueprint_enhanced_battery", 1)
 	InventoryManager.try_add(&"battery", 2)
@@ -435,9 +493,9 @@ func _check_achievements() -> void:
 	AchievementManager._on_player_died()
 	_ok(AchievementManager.is_unlocked(&"ach_15"), "ach_15 dying reaches the Darkness ending")
 	ProgressTracker.time_played = 100.0
-	SettingsManager.set_setting("hardcore", true)
+	GameManager.run_hardcore = true
 	AchievementManager._on_game_won()
-	SettingsManager.set_setting("hardcore", false)
+	GameManager.run_hardcore = false
 	_ok(AchievementManager.is_unlocked(&"ach_16") and AchievementManager.is_unlocked(&"ach_18") and AchievementManager.is_unlocked(&"ach_13"), "ach_16 / ach_18 a fast hardcore win unlocks Speedrunner and Iron Man")
 	var bed := Node3D.new()
 	bed.set_script(load("res://scripts/gameplay/bed.gd"))
@@ -463,9 +521,24 @@ func _check_inventory_and_pause() -> void:
 	var ui: Control = UIManager._get_screen(&"inventory")
 	_ok(ui != null and ui.visible, "V.5 the inventory screen opens")
 	_ok(ui._grid.get_child_count() == 2, "V.5 one cell per stack (%d)" % ui._grid.get_child_count())
+	ui._on_filter(1)
+	await get_tree().process_frame
+	_ok(ui._grid.get_child_count() == 1, "I9.13 the Common filter leaves the one common stack of two (%d cells)" % ui._grid.get_child_count())
+	ui._on_filter(0)
+	await get_tree().process_frame
+	_ok(ui._grid.get_child_count() == 2, "I9.13 All shows every stack again (%d cells)" % ui._grid.get_child_count())
+	ui._on_sort(1)
+	_ok(InventoryManager.slots[0]["item_id"] == &"medkit", "I9.8 sorting by weight puts the heaviest stack, the medkit, first (%s)" % InventoryManager.slots[0]["item_id"])
 	var battery_slot := _slot_of(&"battery")
 	ui._selected = battery_slot
 	ui._refresh()
+	await get_tree().process_frame
+	var detail: PackedStringArray = []
+	for label in ui._detail.find_children("*", "Label", true, false):
+		detail.append((label as Label).text)
+	var battery_count: int = int(InventoryManager.slots[battery_slot]["count"])
+	var battery_weight: float = ItemDatabase.get_item(&"battery").weight
+	_ok(detail.size() >= 4 and detail.has(LocalizationManager.tf("INV_ITEM_WEIGHT", [battery_weight * battery_count, battery_count])), "I9.2 the item detail shows name, rarity, weight and effect (%s)" % " | ".join(detail))
 	_player.set("battery", 10.0)
 	ui._on_use()
 	await get_tree().process_frame
@@ -476,10 +549,6 @@ func _check_inventory_and_pause() -> void:
 	_ok(InventoryManager.count_of(&"medkit") == 1, "V.5 the first press of Drop only asks")
 	ui._on_drop()
 	_ok(InventoryManager.count_of(&"medkit") == 0, "V.5 the second press throws the stack away")
-	ui._on_sort(1)
-	ui._on_filter(1)
-	_ok(ui._filter == 0, "V.5 the rarity filter narrows the grid")
-	ui._on_filter(0)
 	UIManager.close(&"inventory")
 	_ok(not ui.visible, "V.5 the inventory screen closes")
 	UIManager.open(&"pause")
@@ -491,6 +560,24 @@ func _check_inventory_and_pause() -> void:
 	for key in ["inventory", "SHOP_COINS", "CRAFT_UPGRADE", "PAUSE_SAVE_QUIT"]:
 		_ok(texts.has(LocalizationManager.t(key)), "the pause menu offers %s" % key)
 	UIManager.close(&"pause")
+
+# ── I9.4: the workbench's Salvage tab takes a crafted item apart into half its parts ──
+func _check_workbench_salvage() -> void:
+	_playing()
+	InventoryManager.from_dict({})
+	InventoryManager.try_add(&"enhanced_battery", 1)
+	UIManager.open(&"workbench")
+	await get_tree().process_frame
+	var bench: Control = UIManager._get_screen(&"workbench")
+	bench._refresh_salvage()
+	bench._select_salvage(_slot_of(&"enhanced_battery"))
+	bench._do_salvage()
+	var batteries := InventoryManager.count_of(&"battery")
+	var cables := InventoryManager.count_of(&"cable")
+	_ok(InventoryManager.count_of(&"enhanced_battery") == 0 and batteries == 1 and cables == 1,
+		"I9.4 salvaging an enhanced battery returns half its parts (battery %d, cable %d, enhanced battery left %d)" % [batteries, cables, InventoryManager.count_of(&"enhanced_battery")])
+	UIManager.close(&"workbench")
+	InventoryManager.from_dict({})
 
 # ── difficulty scales the monsters ──────────────────────────────────────────
 func _check_difficulty() -> void:
@@ -553,6 +640,12 @@ const GDD_ROSTER: Dictionary = {
 	"destroyer_3d": [200.0, 25.0], "sharpshooter_3d": [60.0, 50.0], "brute_3d": [350.0, 30.0], "burner_3d": [90.0, 15.0],
 	"rotter_3d": [140.0, 10.0], "hound_3d": [40.0, 18.0], "tvar_3d": [1200.0, 40.0], "boss_architect_3d": [800.0, 40.0],
 }
+## GDD 6.2 speed column: a multiple of the player's walk. The roster's own figures are rounded, so 0.45 m/s is the margin.
+const GDD_SPEED: Dictionary = {
+	"shadow_3d": 1.2, "crawler_3d": 1.5, "watcher_3d": 1.0, "hunter_3d": 0.9, "destroyer_3d": 0.7, "sharpshooter_3d": 0.6,
+	"brute_3d": 0.5, "burner_3d": 1.0, "rotter_3d": 0.4, "hound_3d": 1.8, "tvar_3d": 1.0, "boss_architect_3d": 1.1,
+}
+const SPEED_MARGIN: float = 0.45
 const LOOT_ROLLS: int = 600
 
 func _check_roster() -> void:
@@ -566,6 +659,10 @@ func _check_roster() -> void:
 		var damage: float = monster.attack_damage
 		_ok(is_equal_approx(hp, float(want[0]) * ng_hp) and is_equal_approx(damage, float(want[1]) * ng_damage),
 			"MN2 %s has the GDD health %.0f and damage %.0f (%.1f / %.1f)" % [scene, want[0], want[1], hp, damage])
+		var walk := float((_player.get("stats") as Resource).get("walk_speed"))
+		var want_speed: float = float(GDD_SPEED[scene]) * walk
+		_ok(absf(monster.chase_speed - want_speed) <= SPEED_MARGIN,
+			"MN2 %s chases at %.1f m/s, the GDD %.1fx of the %.1f m/s walk is %.1f" % [scene, monster.chase_speed, GDD_SPEED[scene], walk, want_speed])
 		monster.queue_free()
 
 # ── CT13 / CT6 / Crouch Input: the capsule, the ceiling, the swipe, the three modes ──
@@ -841,6 +938,8 @@ func _check_daily() -> void:
 	_ok(ok, "DL2 the streak multiplier is x1.5 / x2 / x3 at 3 / 5 / 7 days")
 	var streak_before: int = SaveSystem._daily_streak
 	var last_before: int = SaveSystem._last_daily_time
+	var done_before: bool = m._completed_today
+	var day_before: int = m._last_completed_day
 	SaveSystem._daily_streak = 4
 	SaveSystem._last_daily_time = int(Time.get_unix_time_from_system())
 	var base: int = int(m.get_today().get("reward", 0))
@@ -853,6 +952,10 @@ func _check_daily() -> void:
 	_ok(CoinWallet.get_coins() - coins == roundi(base * 2.0) + bonus, "DL2 the fifth day pays double (%d + %d)" % [roundi(base * 2.0), bonus])
 	SaveSystem._daily_streak = streak_before
 	SaveSystem._last_daily_time = last_before
+	# _complete() also wrote "done today" with the progress it had; a later gate on the same profile reads that file
+	m._completed_today = done_before
+	m._last_completed_day = day_before
+	m._save_state()
 
 # ── the play-through's findings (docs/artifacts/rc15/playthrough_*.txt): a person's pace, solid ground, one dodge per
 #    double tap, a light that comes back, the onboarding cards, the death screen ──
@@ -868,6 +971,8 @@ func _check_movement() -> void:
 	await get_tree().create_timer(1.0).timeout
 	InputService.set_joy_active(false)
 	InputService.set_joy_move_dir(Vector2.ZERO)
+	var camera := get_viewport().get_camera_3d()
+	print("[closeout] note this headless run: active camera %s, first-person view %s" % [str(camera.get_path()) if camera != null else "none", _player.call("_is_fps_view")])
 	var walked := Vector2(_player.global_position.x - from.x, _player.global_position.z - from.z).length()
 	_ok(walked > 2.0 and walked < 3.6, "MV1 one second of the stick forward walks %.2f m (a person walks 1.4 to 3.5 m/s)" % walked)
 	await get_tree().create_timer(0.4).timeout
@@ -919,6 +1024,9 @@ func _check_onboarding_and_death() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	_ok(bool(cards.get("_showing")) and get_tree().paused, "ON1 a running game with no profile mark opens the onboarding cards and holds the game")
+	var card := cards.find_children("*", "PanelContainer", true, false)[0] as Control
+	var off_centre := (card.get_global_rect().get_center() - get_viewport().get_visible_rect().size / 2.0).length()
+	_ok(off_centre < 8.0, "ON1 the card sits in the middle of the screen (%.0f px off)" % off_centre)
 	for n in 7:
 		cards._on_next()
 	_ok(not bool(cards.get("_showing")) and not get_tree().paused and SaveSystem.is_onboard_done(), "ON1 seven cards later the game runs and the profile remembers")
@@ -971,6 +1079,16 @@ func _check_shop() -> void:
 	_ok(want > 0 and cards == want, "SH1 the Shop card shows every catalog item (%d cards of %d)" % [cards, want])
 	if cards <= 0:
 		return
+	await get_tree().process_frame
+	var close_button := ((screens.get("_screen_data") as Dictionary)["Shop"] as Dictionary)["close_btn"] as Button
+	var lowest := 0.0
+	for c in grid.get_children():
+		lowest = maxf(lowest, (c as Control).get_global_rect().end.y)
+	_ok(lowest <= close_button.get_global_rect().position.y, "SH1 every row ends above the Close button (%.0f <= %.0f)" % [lowest, close_button.get_global_rect().position.y])
+	var biggest := 0.0
+	for icon in grid.find_children("IconTex_*", "TextureRect", true, false):
+		biggest = maxf(biggest, (icon as Control).size.x)
+	_ok(biggest > 0.0 and biggest <= 30.0, "SH1 the pack icons are the size they were asked for (%.0f px, 128 when the size was lost)" % biggest)
 	var buy := grid.get_child(0).find_children("*", "Button", true, false)[0] as Button
 	var owned_before := _shop_owned_count()
 	buy.pressed.emit()
@@ -985,3 +1103,645 @@ func _check_shop() -> void:
 	ShopService.from_dict({})
 	UpgradeSystem.reset()
 	CoinWallet.spend_clamped(CoinWallet.get_coins())
+
+# ── the play-through's ghost map: MapController built a second city map in the root, and Close, Travel and K closed
+#    only one of the two ──
+func _city_maps() -> Array[Control]:
+	var maps: Array[Control] = []
+	for n in get_tree().root.find_children("*", "Control", true, false):
+		var script: Script = (n as Control).get_script()
+		if script != null and script.resource_path == "res://scripts/ui/city_map.gd":
+			maps.append(n as Control)
+	return maps
+
+func _check_map() -> void:
+	_playing()
+	UIManager.open(&"city_map")
+	await get_tree().process_frame
+	var paths: Array[String] = []
+	for m in _city_maps():
+		paths.append(str(m.get_path()))
+	_ok(paths.size() == 1, "MAP1 one city map exists once K opens it (%d: %s)" % [paths.size(), ", ".join(paths)])
+	UIManager.close(&"city_map")
+	await get_tree().process_frame
+	var shown := 0
+	for m in _city_maps():
+		shown += int(m.is_visible_in_tree())
+	_ok(shown == 0, "MAP1 closing it leaves no map on screen (%d visible)" % shown)
+
+# ── the play-through's flip to English after a retry: a fresh profile's settings said "en" whatever the screen showed ──
+func _check_language_survives_a_save() -> void:
+	var shown: String = LocalizationManager.current_lang
+	var other := "de" if shown != "de" else "fr"
+	LocalizationManager.set_language(other)
+	_ok(SettingsManager.to_dict()["language"] == other, "LANG1 a save written while the game shows %s carries %s (not the settings default)" % [other, SettingsManager.to_dict()["language"]])
+	SettingsManager.save_to_cfg()
+	var cfg := ConfigFile.new()
+	cfg.load(SettingsManager.CFG_PATH)
+	_ok(cfg.get_value("game", "language", "") == other, "LANG1 the settings file carries it too (%s)" % cfg.get_value("game", "language", ""))
+	LocalizationManager.set_language(shown)
+
+# ── the play-through's HUD frame: the LOG button of the message log sat on the first label of the stat panel ──
+func _check_hud_corner() -> void:
+	_playing()
+	await get_tree().process_frame
+	var log_button := get_tree().root.find_child("LogToggle", true, false) as Button
+	var corner := _main.get_node("HUD").get_node("TopLeft") as Control
+	_ok(log_button != null and log_button.is_visible_in_tree(), "HUD1 the message-log button is on screen")
+	if log_button == null:
+		return
+	var covered: Array[String] = []
+	for c in corner.find_children("*", "Control", true, false):
+		var control := c as Control
+		if control.is_visible_in_tree() and control.get_global_rect().intersects(log_button.get_global_rect()):
+			covered.append(String(control.name))
+	_ok(covered.is_empty(), "HUD1 the message-log button covers nothing in the stat panel (%s)" % ", ".join(covered))
+
+# ── the play-through's Retry: the respawn (half health, the battery it died with) went to the dead player of the scene
+#    being left, and the reloaded scene started with full health and a full battery ──
+func _check_respawn_waits_for_the_new_player() -> void:
+	var stand_in := GDScript.new()
+	stand_in.source_code = "extends Node
+var hp := 0.0
+var battery := 100.0
+var battery_max := 100.0
+var stats = null
+"
+	stand_in.reload()
+	var dead := Node.new()
+	dead.set_script(stand_in)
+	var fresh := Node.new()
+	fresh.set_script(stand_in)
+	fresh.set("hp", 100.0)
+	GameManager._respawn_battery = 37.0
+	GameManager.apply_pending_respawn(dead)
+	_ok(GameManager._respawn_battery == 37.0 and float(dead.get("hp")) == 0.0, "RESP1 the dead player of the scene being left does not take the respawn")
+	GameManager.apply_pending_respawn(fresh)
+	_ok(is_equal_approx(float(fresh.get("hp")), 50.0) and is_equal_approx(float(fresh.get("battery")), 37.0) and GameManager._respawn_battery < 0.0,
+		"RESP1 the new player respawns at half health with the battery it died with (hp %.0f, battery %.0f)" % [fresh.get("hp"), fresh.get("battery")])
+	dead.free()
+	fresh.free()
+
+# ── GDD 10: health, stamina and the battery are saved ──
+func _check_vitals_are_saved() -> void:
+	_playing()
+	_player.set("hp", 61.0)
+	_player.set("stamina", 42.0)
+	_player.set("battery", 33.0)
+	SaveSystem.save_all()
+	_player.set("hp", 100.0)
+	_player.set("stamina", 100.0)
+	_player.set("battery", 100.0)
+	_ok(SaveSystem.load_all(), "SV2 the file just written loads")
+	SaveSystem.apply_pending_vitals(_player)
+	_ok(is_equal_approx(float(_player.get("hp")), 61.0) and is_equal_approx(float(_player.get("stamina")), 42.0) and is_equal_approx(float(_player.get("battery")), 33.0),
+		"SV2 health, stamina and battery come back from the save (%.0f / %.0f / %.0f)" % [_player.get("hp"), _player.get("stamina"), _player.get("battery")])
+	_ok(SaveSystem._parse_vitals({"hp": NAN, "stamina": 1.0, "battery": 1.0}).is_empty() and SaveSystem._parse_vitals({"hp": "full", "stamina": 1.0, "battery": 1.0}).is_empty() and SaveSystem._parse_vitals(null).is_empty(),
+		"SV2 a block with a non-number, a NaN or no dictionary is dropped")
+	var forged: Dictionary = SaveSystem._parse_vitals({"hp": 1e9, "stamina": -4.0, "battery": 5.0})
+	_ok(forged == {"hp": SaveSystem.MAX_VITAL, "stamina": 0.0, "battery": 5.0}, "SV2 a forged number is clamped (%s)" % str(forged))
+	_player.set("hp", 0.0)
+	SaveSystem.save_all()
+	SaveSystem.load_all()
+	_ok(SaveSystem._pending_vitals.is_empty(), "SV2 a dead player saves no vitals (Continue would bring back 0 health)")
+	_player.set("hp", 100.0)
+	_player.set("stamina", 100.0)
+	_player.set("battery", 100.0)
+	SaveSystem.save_all()
+
+# ── a person recovers in peace, not in a fight (it was 18 HP/s at every moment) ──
+func _check_regeneration_waits_for_peace() -> void:
+	_playing()
+	_player.set("_damage_grace_timer", 0.0)
+	_player.set("_iframes", 0.0)
+	_player.set("hp", 50.0)
+	_player.set("_since_hurt", 99.0)
+	await get_tree().create_timer(1.0).timeout
+	var resting := float(_player.get("hp"))
+	_ok(resting > 50.5 and resting < 55.0, "HP1 in peace health comes back slowly (%.1f after a second at 50, not 68)" % resting)
+	_player.set("hp", 50.0)
+	_player.take_damage(10.0, Vector3.ZERO)
+	await get_tree().create_timer(2.0).timeout
+	var fighting := float(_player.get("hp"))
+	_ok(fighting <= 40.0, "HP1 two seconds after a hit nothing has come back (%.1f)" % fighting)
+	_player.set("hp", 100.0)
+
+# ── the play-through's New Game+ frame: five scenes had their anchors in the node header, where the engine ignores them ──
+func _check_scene_screens_fill_the_window() -> void:
+	_playing()
+	var window := get_viewport().get_visible_rect().size
+	UIManager.open(&"new_game_plus")
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var ngp: Control = UIManager._cache.get(&"new_game_plus", null)
+	var rect := ngp.get_global_rect() if ngp != null else Rect2()
+	_ok(ngp != null and ngp.visible and rect.size.is_equal_approx(window) and rect.position.length() < 1.0,
+		"SCR1 the New Game+ screen covers the window (%s of %s at %s)" % [rect.size, window, rect.position])
+	var column := ngp.find_child("VBoxContainer", true, false) as Control
+	_ok(column != null and absf(column.get_global_rect().get_center().x - window.x / 2.0) < 4.0 and column.size.x <= 600.0,
+		"SCR1 the New Game+ column is centred and no wider than 600 px (%s at %s)" % [column.size.x if column != null else -1.0, column.get_global_rect().get_center().x if column != null else -1.0])
+	ngp.set("_activated_this_visit", true)
+	UIManager.close(&"new_game_plus")
+	UIManager.open(&"new_game_plus")
+	await get_tree().process_frame
+	_ok(not bool(ngp.get("_activated_this_visit")), "SCR1 the cached New Game+ screen starts every visit fresh")
+	UIManager.close(&"new_game_plus")
+	# the skill tree: reachable from a fresh game with the T key (it toggled itself, so it never opened), then centred
+	_ok(UIManager._cache.get(&"skill_tree", null) == null, "SCR1 the skill tree has not been opened yet")
+	var key := InputEventKey.new()
+	key.physical_keycode = KEY_T
+	key.keycode = KEY_T
+	key.pressed = true
+	Input.parse_input_event(key)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var tree: Control = UIManager._cache.get(&"skill_tree", null)
+	_ok(tree != null and tree.visible, "SCR1 the T key opens the skill tree from a fresh game")
+	if tree != null:
+		var tree_rect := tree.get_global_rect()
+		_ok(tree_rect.size.is_equal_approx(window) and tree_rect.position.length() < 1.0, "SCR1 the skill tree covers the window (%s at %s)" % [tree_rect.size, tree_rect.position])
+		var branch_tabs := tree.find_children("*", "TabContainer", true, false)[0] as Control
+		_ok(branch_tabs.size.y > 200.0, "SCR1 the branch tabs have room for the skills (%.0f px tall; the tab bar alone is about 30)" % branch_tabs.size.y)
+	UIManager.close(&"skill_tree")
+	key.pressed = false
+	Input.parse_input_event(key)
+
+# ── the play-through's V11 frame was the death screen: the Architect's last beam killed the player behind the victory screen ──
+func _check_victory_is_final() -> void:
+	_playing()
+	var ball := Node3D.new()
+	ball.add_to_group("boss_hazard")
+	add_child(ball)
+	var boss := _monster("boss_architect_3d")
+	boss.call("_clear_hazards")
+	await get_tree().process_frame
+	_ok(not is_instance_valid(ball) or ball.is_queued_for_deletion(), "WIN1 what the Architect threw does not outlive him")
+	boss.queue_free()
+	_playing()
+	GameManager._change_state(GameManager.GameState.WIN)
+	_player.set("hp", 5.0)
+	_player.set("_damage_grace_timer", 0.0)
+	_player.set("_iframes", 0.0)
+	_player.take_damage(50.0, Vector3.ZERO)
+	_ok(is_equal_approx(float(_player.get("hp")), 5.0), "WIN1 after the victory a hit takes no health (%.0f)" % float(_player.get("hp")))
+	GameManager.trigger_death()
+	_ok(GameManager.is_win(), "WIN1 a death after the win leaves the win (state %d)" % GameManager.current_state)
+	_playing()
+	GameManager._change_state(GameManager.GameState.PLAYING)
+	_player.set("hp", 100.0)
+
+# ── the breaker's B2: a district was flagged looted when its items SPAWNED, so what lay on the street when the player died
+#    or quit (repair parts included) never came back ──
+func _items_in(root: Node) -> Array[Node]:
+	var found: Array[Node] = []
+	for n in root.get_children():
+		if n.is_in_group("pickups"):
+			found.append(n)
+	return found
+
+func _check_loot_survives_a_rebuild() -> void:
+	_playing()
+	var taken_before: Dictionary = ProgressTracker._loot_taken.duplicate()
+	var pack_before: Dictionary = InventoryManager.to_dict()
+	ProgressTracker._loot_taken.clear()
+	var first := Node3D.new()
+	add_child(first)
+	DistrictLoot.populate(first, &"suburbs")
+	var all := _items_in(first).size()
+	var one := _items_in(first)[0]
+	var key: String = one.loot_key
+	one._on_body_entered(_player)
+	first.queue_free()
+	await get_tree().process_frame
+	var second := Node3D.new()
+	add_child(second)
+	DistrictLoot.populate(second, &"suburbs")
+	var left := _items_in(second).size()
+	_ok(all > 3 and left == all - 1, "LOOT2 a rebuilt district lays out what was left on the street (%d of %d, one picked up)" % [left, all])
+	_ok(key != "" and ProgressTracker.is_loot_taken(key), "LOOT2 the item that was picked up is the one that stays gone (%s)" % key)
+	var third := Node3D.new()
+	add_child(third)
+	DistrictLoot.populate(third, &"suburbs")
+	_ok(_items_in(third).size() == left, "LOOT2 a third visit changes nothing (%d)" % _items_in(third).size())
+	second.queue_free()
+	third.queue_free()
+	ProgressTracker._loot_taken = taken_before
+	InventoryManager.from_dict(pack_before)
+
+# ── the breaker's B1: the finale was armed by the moment the last district was restored, so a game loaded with all eleven
+#    FULL never met the Architect; and the flag outlived a new game ──
+func _check_finale_follows_the_grid() -> void:
+	_playing()
+	var grid_before: Dictionary = PowerGrid.to_dict()
+	var triggered_before: bool = FinaleDirector._triggered
+	FinaleDirector._triggered = false
+	for district in PowerGrid.all_districts():
+		district.stage = DistrictData.Stage.FULL
+	FinaleDirector._on_district_entered(&"power_station")
+	_ok(FinaleDirector._triggered, "FIN1 a loaded game with every district FULL starts the final night when its player enters the power station")
+	FinaleDirector._triggered = false
+	PowerGrid.reset()
+	FinaleDirector._on_district_entered(&"power_station")
+	_ok(not FinaleDirector._triggered, "FIN1 a new game (all DARK) does not")
+	FinaleDirector._triggered = true
+	FinaleDirector._on_game_started()
+	_ok(not FinaleDirector._triggered, "FIN1 a new run clears the announcement flag")
+	PowerGrid.from_dict(grid_before)
+	FinaleDirector._triggered = triggered_before
+	FinaleDirector._spawn_retries = FinaleDirector.MAX_SPAWN_RETRIES + 1  # this run is in the suburbs: the boss would only wait for a rebuild
+
+# ── the breaker's B3: Difficulty > a pick started a new game and wiped the save, with no question ──
+func _check_difficulty_pick_is_a_setting() -> void:
+	CoinWallet.add(777)
+	var coins := CoinWallet.get_coins()
+	var screen := (load(Routes.DIFFICULTY) as PackedScene).instantiate() as Control
+	add_child(screen)
+	await get_tree().process_frame
+	screen.call("_pick", 2)
+	await get_tree().process_frame
+	var picked: int = int(SettingsManager.get_setting("difficulty", -1))
+	_ok(picked == 2, "DIFF1 a pick sets the difficulty (%d)" % picked)
+	_ok(CoinWallet.get_coins() == coins and not GameManager.is_playing(), "DIFF1 and starts nothing: the wallet is kept (%d of %d) and the game is not running" % [CoinWallet.get_coins(), coins])
+	SettingsManager.set_difficulty(1)
+	screen.queue_free()
+
+# ── the breaker's B4: the slots the skill added vanished on every load, and so did the items in them ──
+func _check_bigger_pack_survives_a_load() -> void:
+	var pack_before: Dictionary = InventoryManager.to_dict()
+	var base: int = InventoryManager.slots.size()
+	InventoryManager.add_slots(5)
+	InventoryManager.slots[base + 2] = {"item_id": &"battery", "count": 2}
+	var saved: Dictionary = InventoryManager.to_dict()
+	InventoryManager.from_dict(saved)
+	_ok(InventoryManager.slots.size() == base + 5, "INV2 a pack grown by the skill is as big after a load (%d of %d)" % [InventoryManager.slots.size(), base + 5])
+	_ok(InventoryManager.slots[base + 2] != null and InventoryManager.slots[base + 2]["item_id"] == &"battery", "INV2 the item in an extra slot is still there")
+	var forged: Dictionary = {"slots": []}
+	for i in 500:
+		forged["slots"].append(null)
+	InventoryManager.from_dict(forged)
+	_ok(InventoryManager.slots.size() <= InventoryManager.MAX_SAVED_SLOTS, "INV2 a file cannot ask for 500 slots (%d)" % InventoryManager.slots.size())
+	InventoryManager.from_dict(pack_before)
+
+# ── the breaker's B5: Hardcore was read live, so the toggle could cancel the wipe or buy Iron Man ──
+func _check_hardcore_belongs_to_the_run() -> void:
+	GameManager._change_state(GameManager.GameState.PLAYING)
+	var screen := Control.new()
+	screen.set_script(load("res://scripts/ui/settings_screen.gd"))
+	add_child(screen)
+	await get_tree().process_frame
+	var box: CheckBox = null
+	for row in screen.find_children("*", "HBoxContainer", true, false):
+		var kids := row.get_children()
+		if kids.size() == 2 and kids[0] is Label and (kids[0] as Label).text == LocalizationManager.t("Hardcore Mode") and kids[1] is CheckBox:
+			box = kids[1] as CheckBox
+	_ok(box != null and box.disabled, "HC1 in a running game the Hardcore box cannot be changed")
+	var import_button: Button = null
+	for b in screen.find_children("*", "Button", true, false):
+		if (b as Button).text == LocalizationManager.t("Import Save"):
+			import_button = b as Button
+	_ok(import_button != null and import_button.disabled, "HC1 nor can a save be imported under a running world")
+	screen.queue_free()
+	SaveSystem.save_all()
+	SettingsManager.set_setting("hardcore", true)
+	GameManager.run_hardcore = false
+	GameManager.trigger_death()
+	_ok(SaveSystem.has_save(), "HC1 ticking Hardcore in the middle of a run does not make its death delete the save")
+	GameManager._change_state(GameManager.GameState.PLAYING)
+	GameManager.run_hardcore = true
+	SettingsManager.set_setting("hardcore", false)
+	PuzzleSystem._solved["fuse_substation"] = true
+	GameManager.trigger_death()
+	_ok(not SaveSystem.has_save(), "HC1 unticking it in the middle of a hardcore run does not cancel the wipe")
+	_ok(not PuzzleSystem.is_solved("fuse_substation"), "PUZ1 the wipe (a new game) clears the solved puzzles")
+	GameManager.run_hardcore = false
+	# the breaker's E9: a dead player kept walking behind the death screen
+	GameManager._change_state(GameManager.GameState.PLAYING)
+	_player.set("gameplay_active", true)
+	_player.set("hp", 5.0)
+	_player.set("_damage_grace_timer", 0.0)
+	_player.set("_iframes", 0.0)
+	_player.take_damage(12.0, Vector3.ZERO)
+	_ok(not bool(_player.get("gameplay_active")), "DEAD1 a lethal hit takes the controls away")
+	var deaths_after_the_first := ProgressTracker.deaths
+	_player.set("_damage_grace_timer", 0.0)
+	_player.take_damage(12.0, Vector3.ZERO)
+	_ok(ProgressTracker.deaths == deaths_after_the_first, "DEAD1 a hit on a dead player is not a second death (%d, was %d)" % [ProgressTracker.deaths, deaths_after_the_first])
+	var from := _player.global_position
+	InputService.set_joy_active(true)
+	InputService.set_joy_move_dir(Vector2(0.0, -1.0))
+	await get_tree().create_timer(0.6).timeout
+	InputService.set_joy_active(false)
+	InputService.set_joy_move_dir(Vector2.ZERO)
+	var drift := Vector2(_player.global_position.x - from.x, _player.global_position.z - from.z).length()
+	_ok(drift < 0.2, "DEAD1 the dead player does not walk (%.2f m in 0.6 s of the stick)" % drift)
+
+# ── the breaker's E7: a Continue overwrote the preferences chosen in the menu with the save's, and nothing but the
+#    Difficulty screen wrote the config file, so a relaunch lost the rest ──
+func _check_settings_persist_and_survive_a_continue() -> void:
+	var master_before: float = SettingsManager.get_volume("Master")
+	var size_before: Variant = SettingsManager.get_setting("text_size", 1)
+	SettingsManager.set_volume("Master", 0.37)
+	SettingsManager.set_setting("text_size", 2)
+	await get_tree().create_timer(SettingsManager.SAVE_DELAY_SEC + 0.4).timeout
+	var cfg := ConfigFile.new()
+	cfg.load(SettingsManager.CFG_PATH)
+	var written: Dictionary = cfg.get_value("game", "settings", {})
+	var volumes: Dictionary = cfg.get_value("audio", "volumes", {})
+	_ok(int(written.get("text_size", -1)) == 2 and is_equal_approx(float(volumes.get("Master", -1.0)), 0.37), "SET1 a change in the Settings screen reaches the config file by itself (text size %s, Master %s)" % [written.get("text_size"), volumes.get("Master")])
+	var day_of_the_save := {"volumes": {"Master": 1.0}, "settings": {"difficulty": 2, "hardcore": true, "text_size": 0}}
+	SettingsManager.apply_run_settings(day_of_the_save)
+	_ok(is_equal_approx(SettingsManager.get_volume("Master"), 0.37) and int(SettingsManager.get_setting("text_size", -1)) == 2,
+		"SET1 a game file does not overwrite this device's volume or text size")
+	_ok(int(SettingsManager.get_setting("difficulty", -1)) == 2 and bool(SettingsManager.get_setting("hardcore", false)), "SET1 it does put back the run's own rules (difficulty, hardcore)")
+	SettingsManager.set_setting("hardcore", false)
+	SettingsManager.set_difficulty(1)
+	SettingsManager.set_volume("Master", master_before)
+	SettingsManager.set_setting("text_size", size_before)
+
+# ── the breaker's E2: a solved puzzle was neither saved nor cleared by a new game ──
+func _check_solved_puzzles_are_saved() -> void:
+	var before: Dictionary = PuzzleSystem.to_dict()
+	PuzzleSystem.reset()
+	PuzzleSystem._solved["fuse_substation"] = true
+	var saved: Dictionary = PuzzleSystem.to_dict()
+	PuzzleSystem.reset()
+	PuzzleSystem.from_dict(saved)
+	_ok(PuzzleSystem.is_solved("fuse_substation"), "PUZ1 a solved puzzle is still solved after a save and a load")
+	PuzzleSystem.from_dict({"solved": ["not_a_puzzle", "fuse_substation"]})
+	_ok(PuzzleSystem.get_solved_count() == 1, "PUZ1 a forged puzzle id is ignored (%d solved)" % PuzzleSystem.get_solved_count())
+	PuzzleSystem.from_dict(before)
+
+# ── the breaker's E3 and E4: the shop's backpack slots grew the pack only at the next load, and the four blueprints lying
+#    in the districts named upgrades that do not exist ──
+func _check_blueprints_and_the_shop_grow_the_pack() -> void:
+	var pack_before: Dictionary = InventoryManager.to_dict()
+	var applied_before: Dictionary = UpgradeSystem.to_dict()
+	UpgradeSystem.reset()
+	var slots := InventoryManager.slots.size()
+	UpgradeSystem._on_pickup(&"blueprint_backpack_slots")
+	_ok(UpgradeSystem.is_applied(&"upgrade_backpack_slots"), "UPG1 the backpack blueprint from the warehouses applies its upgrade")
+	_ok(InventoryManager.slots.size() == slots + 4, "UPG1 and the pack has the four slots at once (%d of %d)" % [InventoryManager.slots.size(), slots + 4])
+	UpgradeSystem._on_pickup(&"blueprint_portable_workbench")
+	_ok(not UpgradeSystem.is_applied(&"upgrade_portable_workbench"), "UPG1 a workbench blueprint is not an upgrade")
+	UpgradeSystem.from_dict(applied_before)
+	InventoryManager.from_dict(pack_before)
+
+# ── the breaker's E5: the daily "30 s in the dark" counted time with the light on, because nobody told it the light starts on ──
+func _check_the_dark_segment_knows_the_light_is_on() -> void:
+	var seen := [null]
+	var watch := func(on: bool) -> void: seen[0] = on
+	EventBus.flashlight_state_changed.connect(watch)
+	var fresh := (load("res://scenes/player/player_3d.tscn") as PackedScene).instantiate()
+	add_child(fresh)
+	await get_tree().process_frame
+	EventBus.flashlight_state_changed.disconnect(watch)
+	_ok(seen[0] == true, "DAILY1 a new player announces its light at once (%s), so the dark-segment daily does not count lit time" % str(seen[0]))
+	fresh.queue_free()
+
+# ── the breaker's E12: the temp file is read back before it replaces the save and rotates into the backups ──
+func _check_a_written_save_reads_back() -> void:
+	SaveSystem.save_all()
+	SaveSystem.save_all()
+	_ok(not SaveSystem._read_envelope(SaveSystem.SAVE_PATH).is_empty() and not SaveSystem._read_envelope(SaveSystem.SAVE_PATH + ".bak").is_empty(),
+		"SAVE2 two saves in a row leave a valid file and a valid backup")
+	_ok(not FileAccess.file_exists(SaveSystem.SAVE_PATH + ".tmp"), "SAVE2 and no temp file behind")
+
+# ── the breaker's E14: a position of strings aborted the load half way; equipment survived a reload as a second copy ──
+func _check_forged_position_and_equipment() -> void:
+	_ok(SaveSystem._parse_player_pos(["a", 1.0, 2.0]) == Vector3.INF and SaveSystem._parse_player_pos([1, 2, 3]) == Vector3(1.0, 2.0, 3.0), "SAVE3 a position with a string is dropped, numbers pass")
+
+# ── the swing is the only attack an unarmed player has: it must land on every kind of monster, whatever the monster is doing ──
+func _check_melee_reaches_monsters() -> void:
+	_playing()
+	for wanderer in get_tree().get_nodes_in_group("monsters"):
+		wanderer.queue_free()  # the street's own monsters roam: one of them in reach would take the swing (the nearest body is hit)
+	await get_tree().physics_frame
+	var aim: Vector3 = -_player.global_transform.basis.z
+	aim.y = 0.0
+	var missed: PackedStringArray = []
+	for scene in ["shadow_3d", "crawler_3d", "hound_3d", "hunter_3d", "brute_3d", "rotter_3d", "watcher_3d", "sharpshooter_3d"]:
+		var target := _monster(scene, _player.global_position + aim.normalized() * 1.6)
+		target.process_mode = Node.PROCESS_MODE_INHERIT  # a monster on screen: the visibility enabler of the hunter, watcher and destroyer leaves a hidden one out of the physics space
+		await get_tree().physics_frame
+		var hp0: float = float(target.get("hp"))
+		_player.set("stamina", 100.0)
+		_player.set("gameplay_active", true)
+		_player.set("_stun_timer", 0.0)
+		while str(_player.get("_attack_phase")) != "none":
+			await get_tree().physics_frame
+		_player.call("_handle_attack")  # the melee key: the attack button fires a drawn weapon instead, and earlier checks draw one
+		var started: bool = str(_player.get("_attack_phase")) == "windup"
+		await get_tree().create_timer(0.9).timeout
+		if not started or float(target.get("hp")) >= hp0:
+			missed.append("%s%s hp %.0f -> %.0f, combo %d, phase %s" % [scene, "" if started else " (no swing)", hp0, float(target.get("hp")), int(_player.get("_combo_count")), str(_player.get("_attack_phase"))])
+		target.queue_free()
+	_ok(missed.is_empty(), "MELEE1 a swing damages a monster 1.6 m ahead, for every kind (missed: %s)" % ", ".join(missed))
+	var combo: Array = (_player.get_script() as Script).get_script_constant_map()["COMBO_DATA"]
+	_ok(int(combo[0]["dmg"]) == 8 and int(combo[1]["dmg"]) == 12 and int(combo[2]["dmg"]) == 20, "G13 the combo deals the GDD 5.1 damage, 8 / 12 / 20 (it was 14 / 21 / 35 while no swing could land on a monster)")
+
+# ── a crawler had no handler for IDLE or INVESTIGATE: it kept its last velocity for good (toward the world origin once a search ended) ──
+func _check_crawler_idles_and_investigates() -> void:
+	var crawler := _monster("crawler_3d")
+	crawler.set("ai_state", 0)
+	crawler.velocity = Vector3(4.0, 0.0, 3.0)
+	crawler.call("_tick_ai", 0.016)
+	_ok(crawler.velocity.length() < 0.01, "CRAWL1 an idle crawler stands still instead of running on at its last velocity (%s)" % crawler.velocity)
+	crawler.set("_investigate_point", crawler.global_position + Vector3(10.0, 0.0, 0.0))
+	crawler.set("ai_state", 2)
+	crawler.velocity = Vector3.ZERO
+	crawler.call("_tick_ai", 0.016)
+	_ok(crawler.velocity.length() > 0.5, "CRAWL1 an investigating crawler goes to the spot it heard instead of standing (velocity %s)" % crawler.velocity)
+	crawler.queue_free()
+
+# ── the tutorial steps waited for touch controls: on a desktop "Turn on your flashlight" stayed up until Skip, and the light starts on ──
+func _tutorial_index(id: String) -> int:
+	for i in TutorialSystem.STEPS.size():
+		if TutorialSystem.STEPS[i]["id"] == id:
+			return i
+	return -1
+
+func _check_tutorial_follows_the_real_input() -> void:
+	_playing()
+	var tut := TutorialSystem
+	var done_before: Variant = tut.get("_completed_steps")
+	var step_before: Variant = tut.get("_current_step")
+	var lit_before: Variant = _player.get("flashlight_enabled")
+	tut.set("_tutorial_active", true)
+	# the light starts on, so "Turn on your flashlight" is skipped; with the light off it stays until a key press
+	tut.set("_completed_steps", [])
+	_player.set("flashlight_enabled", true)
+	tut.set("_current_step", _tutorial_index("flashlight"))
+	tut.call("_show_step")
+	_ok(int(tut.get("_current_step")) == _tutorial_index("move"), "TUT1 with the light on the flashlight hint is skipped (step %d)" % int(tut.get("_current_step")))
+	tut.set("_completed_steps", [])
+	_player.set("flashlight_enabled", false)
+	tut.set("_current_step", _tutorial_index("flashlight"))
+	tut.call("_show_step")
+	_ok(int(tut.get("_current_step")) == _tutorial_index("flashlight"), "TUT1 with the light off the flashlight hint stays")
+	# every other step ends on the real key, button or stick, not on a touch control
+	for pair in [["flashlight", "flashlight_toggle"], ["crouch", "stealth"], ["attack", "attack"], ["inventory", "inventory_toggle"]]:
+		tut.set("_completed_steps", [])
+		tut.set("_current_step", _tutorial_index(pair[0]))
+		tut.set("_waiting_for_action", true)
+		await get_tree().process_frame  # a press made at the start of a frame is seen by that frame's _process
+		Input.action_press(pair[1])
+		await get_tree().process_frame
+		Input.action_release(pair[1])
+		await get_tree().process_frame
+		_ok(pair[0] in (tut.get("_completed_steps") as Array), "TUT2 the %s key completes the %s hint" % [pair[1], pair[0]])
+	tut.set("_completed_steps", [])
+	tut.set("_current_step", _tutorial_index("move"))
+	tut.set("_waiting_for_action", true)
+	InputService.set_joy_active(true)
+	InputService.set_joy_move_dir(Vector2(0.0, -1.0))
+	await get_tree().process_frame
+	await get_tree().process_frame
+	InputService.set_joy_active(false)
+	InputService.set_joy_move_dir(Vector2.ZERO)
+	_ok("move" in (tut.get("_completed_steps") as Array), "TUT2 moving completes the move hint")
+	# the generator hint waits for a trigger area only the first street has: a repaired district ends it
+	tut.set("_completed_steps", [])
+	tut.set("_current_step", _tutorial_index("generator"))
+	tut.set("_waiting_for_action", true)
+	EventBus.district_stage_changed.emit(&"suburbs", 1)
+	_ok("generator" in (tut.get("_completed_steps") as Array), "TUT2 repairing a district completes the generator hint")
+	# the double tap of a move key is the dodge the hint asks for
+	tut.set("_completed_steps", [])
+	tut.set("_current_step", _tutorial_index("dodge"))
+	tut.set("_waiting_for_action", true)
+	_player.call("_track_dodge_tap", Vector2(0.0, -1.0), 0.01)
+	_player.call("_track_dodge_tap", Vector2.ZERO, 0.01)
+	_player.call("_track_dodge_tap", Vector2(0.0, -1.0), 0.01)
+	_ok("dodge" in (tut.get("_completed_steps") as Array), "TUT2 a double tap completes the dodge hint")
+	_player.call("_track_dodge_tap", Vector2.ZERO, 0.01)
+	tut.set("_tutorial_active", false)
+	tut.set("_waiting_for_action", false)
+	(tut.get("_hint_panel") as Control).visible = false
+	tut.set("_completed_steps", done_before)
+	tut.set("_current_step", step_before)
+	_player.set("flashlight_enabled", lit_before)
+
+# ── the white marking tiles lay on the road tiles at the same height: z-fighting drew stacked dark stripes wherever the road was lit ──
+func _check_street_layers_do_not_fight() -> void:
+	var builder := StreetBuilder.new()
+	builder.district_id = &"suburbs"
+	add_child(builder)
+	await builder.streets_ready
+	# headless the rendering server keeps no instance transforms, so the placement functions are asked, not the multimesh
+	var lowest := INF
+	for road in builder.roads:
+		for step in int(road.length / builder.lane_mark_spacing):
+			lowest = minf(lowest, builder.marking_origin(road, step).y - builder.road_step_pos(road, 0).y)
+	_ok(builder.roads.size() > 0 and lowest >= 0.01, "STREET1 every marking tile stands at least 1 cm above the road tiles (%.3f m)" % lowest)
+	builder.queue_free()
+
+# ── a flat stylebox has no size: the theme's scroll bars were 0 px wide, so the city map's eleven rows (440 px window) had no bar to find ──
+func _check_scroll_bars_have_a_width() -> void:
+	var bar := VScrollBar.new()
+	bar.theme = ThemeProvider.build_theme()
+	add_child(bar)
+	await get_tree().process_frame
+	_ok(bar.get_combined_minimum_size().x >= 8.0, "SCROLL1 a vertical scroll bar of the UI theme is at least 8 px wide (%.0f)" % bar.get_combined_minimum_size().x)
+	bar.queue_free()
+
+# ── the victory screen opens on the state change, before the ending is worked out: every win showed the ending left from earlier ──
+func _check_victory_screen_shows_this_ending() -> void:
+	_playing()
+	var grid_before: Dictionary = PowerGrid.to_dict()
+	for district in PowerGrid.all_districts():
+		district.stage = DistrictData.Stage.FULL
+	EndingsManager.force_ending(&"dark")  # what an earlier run (or a death) left behind
+	GameManager.trigger_win()
+	await get_tree().process_frame
+	var title := (UIManager._get_screen(&"win") as Control).get("_title") as Label
+	_ok(EndingsManager.get_ending() == &"hope" and title.text == LocalizationManager.t("ENDING_HOPE_TITLE"),
+		"WIN2 a win with every district FULL and few documents shows Hope, not the ending left from before (%s, '%s')" % [EndingsManager.get_ending(), title.text])
+	GameManager._change_state(GameManager.GameState.PLAYING)
+	UIManager.close(&"win")
+	# every document, every district and three secrets earn the Truth ending, and with it its achievement
+	var docs_before: Dictionary = ProgressTracker._docs.duplicate()
+	var secrets_before: int = ProgressTracker.secrets
+	for i in Endings.get_total_documents():
+		ProgressTracker._docs["closeout_doc_%d" % i] = true
+	ProgressTracker.secrets = 3
+	GameManager.trigger_win()
+	await get_tree().process_frame
+	_ok(AchievementManager.is_unlocked(&"ach_14"), "ach_14 a win with every document, every district and three secrets unlocks Truth")
+	ProgressTracker._docs = docs_before
+	ProgressTracker.secrets = secrets_before
+	GameManager._change_state(GameManager.GameState.PLAYING)
+	UIManager.close(&"win")
+	PowerGrid.from_dict(grid_before)
+	_player.set("gameplay_active", true)
+
+# ── the help screen named the sprint action "sprint" (the project's is "run"), showed a prompt with its "%s" as the label of
+#    the interact key and a glossary title that is not the glossary entry's subject ──
+func _check_help_rows_are_real() -> void:
+	var consts := (load("res://scripts/ui/help_ui.gd") as Script).get_script_constant_map()
+	var bad: PackedStringArray = []
+	for row in consts["CONTROLS"]:
+		if not InputMap.has_action(String(row["action"])):
+			bad.append("action %s" % row["action"])
+		for key in [row["label"], row["touch"]]:
+			if not LocalizationManager.has_key(String(key)) or LocalizationManager.t(String(key)).contains("%"):
+				bad.append("%s = '%s'" % [key, LocalizationManager.t(String(key))])
+	for entry in consts["GLOSSARY"]:
+		for key in [entry["title"], entry["desc"]]:
+			if not LocalizationManager.has_key(String(key)) or LocalizationManager.t(String(key)).contains("%"):
+				bad.append("%s = '%s'" % [key, LocalizationManager.t(String(key))])
+	_ok(LocalizationManager.has_key("HELP_GLOSSARY") and bad.is_empty(), "HELP1 every row of the help screen names a real action and a translated text without a format placeholder (%s)" % ", ".join(bad))
+
+# ── the quick bar was anchored to the left screen edge, so the HUD's own sweep of duplicates in the lower-left corner freed it at the start ──
+func _check_quick_bar_is_on_screen() -> void:
+	_playing()
+	var hud := _main.get_node_or_null("HUD")
+	var screen := Rect2(Vector2.ZERO, get_viewport().get_visible_rect().size)
+	var slots: Array = hud.find_children("Slot?", "Panel", true, false) if hud != null else []
+	var inside := 0
+	for slot in slots:
+		inside += int(screen.encloses((slot as Control).get_global_rect()))
+	_ok(hud != null and hud._SLOT_ITEMS == [&"pistol", &"rifle", &"battery", &"medkit", &"molotov", &"flashlight"] and slots.size() == 6 and inside == 6,
+		"H3.2 the quick bar holds six slots on screen: two weapons, battery, medkit, grenade and the light as the special (%d slot nodes, %d inside the %s screen)" % [slots.size(), inside, screen.size])
+
+# ── the play-through's tier names: the Graphics Tier dropdown said Low / Medium / High / Ultra in English in every language ──
+func _check_tier_names() -> void:
+	var shown: String = LocalizationManager.current_lang
+	LocalizationManager.set_language("ru")
+	var screen := Control.new()
+	screen.set_script(load("res://scripts/ui/settings_screen.gd"))
+	add_child(screen)
+	await get_tree().process_frame
+	var items: PackedStringArray = []
+	for ob in screen.find_children("*", "OptionButton", true, false):
+		var tiers := ob as OptionButton
+		if tiers.item_count == 4 and tiers.get_item_text(0).begins_with(LocalizationManager.t("opt_low")):
+			for i in 4:
+				items.append(tiers.get_item_text(i))
+	var keys: Array[String] = ["opt_low", "opt_medium", "opt_high", "opt_ultra"]
+	var english: Array[String] = ["Low", "Medium", "High", "Ultra"]
+	var named := items.size() == 4
+	for i in items.size():
+		named = named and items[i].begins_with(LocalizationManager.t(keys[i])) and not items[i].begins_with(english[i])
+	_ok(named, "TIER1 the Graphics Tier names follow the language (ru: %s)" % ", ".join(items))
+	screen.queue_free()
+	LocalizationManager.set_language(shown)
+
+# ── the moon's shadow cost a quarter of the first district's draw calls where it cannot be seen (energy 0.12) ──
+func _check_the_moon_shadow_follows_its_light() -> void:
+	var env: Node = _main.get_node("WorldEnvSetup")
+	var moon := DirectionalLight3D.new()  # earlier checks leave the setup's own moon freed: it is handed a live one
+	add_child(moon)
+	var moon_before: Variant = env.get("_moon")
+	env.set("_moon", moon)
+	var setting: Variant = SettingsManager.get_setting("shadows", 2)
+	SettingsManager.set_shadow_quality(2)
+	env.call("apply_for_stage", 0)
+	_ok(not moon.shadow_enabled, "PERF2 the moon casts no shadow in a dark district (energy %.2f)" % moon.light_energy)
+	env.call("apply_for_stage", 3)
+	_ok(moon.shadow_enabled, "PERF2 and does in a restored one (energy %.2f)" % moon.light_energy)
+	SettingsManager.set_shadow_quality(0)
+	env.call("apply_for_stage", 3)
+	_ok(not moon.shadow_enabled, "PERF2 and not at the Low shadow quality")
+	SettingsManager.set_shadow_quality(int(setting))
+	env.set("_moon", moon_before)
+	moon.queue_free()

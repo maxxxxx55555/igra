@@ -88,6 +88,11 @@ func _process(delta: float) -> void:
 				# rc14: a real swing, not a direct take_damage call, with the monster
 				# 1.2 m in front of the view (-Z).
 				_melee_started = true
+				# a fresh profile opens the onboarding overlay on game_started and pauses the tree; a swing needs time to pass
+				var onboarding := get_tree().root.find_child("OnboardingOverlay", true, false)
+				if onboarding != null:
+					onboarding._finish()
+				_check(not get_tree().paused, "the tree runs while the swing plays (paused %s)" % str(get_tree().paused))
 				if _target and is_instance_valid(_target) and _player.has_method("_handle_attack"):
 					var fwd: Vector3 = -_player.global_transform.basis.z
 					_target.global_position = _player.global_position + Vector3(fwd.x, 0.0, fwd.z).normalized() * 1.2

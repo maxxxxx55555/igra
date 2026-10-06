@@ -1513,5 +1513,13 @@
   "DEATH_KILLED_BY": "死於：%s",
   "DEATH_TIME": "存活時間：%s",
   "DEATH_DISTRICTS": "已修復區域：%d / %d (%d%%)",
-  "DEATH_DOCS": "找到的文件：%d / %d"
+  "DEATH_DOCS": "找到的文件：%d / %d",
+  "Stealth": "潛行",
+  "opt_ultra": "超高",
+  "HELP_GLOSSARY": "術語表",
+  "HELP_STREETLIGHTS": "路燈",
+  "CREDITS_DESIGN": "遊戲設計與程式碼：TLS Team",
+  "CREDITS_MUSIC": "音樂與音效：TLS Team",
+  "CREDITS_ART": "美術與介面：TLS Team",
+  "CREDITS_THANKS": "特別感謝玩家們"
 }

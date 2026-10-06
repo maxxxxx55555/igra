@@ -8,6 +8,9 @@ signal streets_ready
 @export var road_width: float = 6.0
 @export var sidewalk_width: float = 1.5
 @export var lane_mark_spacing: float = 2.0
+## The markings are whole tiles lying on the road tiles: at the same height they z-fought, which drew stacked dark stripes and
+## wedges wherever the lamp or the flashlight lit the road (the first screen of a game).
+const MARKING_LIFT: float = 0.02
 ## Шаг сетки кварталов в метрах. roads хранит перекрёстки в клетках (0..3),
 ## и без умножения на этот шаг четыре параллельные улицы ложились на
 ## z = 0,1,2,3 — то есть слипались в одну полосу шириной 3 метра вместо
@@ -165,6 +168,10 @@ func _fill_sidewalks() -> void:
 					_create_collision(t)
 					idx += 1
 
+## Разметка идёт со своим шагом, а не с шагом плитки дороги, и лежит над дорогой на MARKING_LIFT.
+func marking_origin(road: Dictionary, step: int) -> Vector3:
+	return road_pos_at(road, float(step) * lane_mark_spacing) + Vector3(0.0, MARKING_LIFT, 0.0)
+
 func _fill_markings() -> void:
 	var total := 0
 	for r in roads:
@@ -174,10 +181,8 @@ func _fill_markings() -> void:
 	for r in roads:
 		var count := int(r.length / lane_mark_spacing)
 		for s in range(count):
-			# Разметка идёт со своим шагом, а не с шагом плитки дороги.
-			var pos: Vector3 = road_pos_at(r, float(s) * lane_mark_spacing)
 			var t := Transform3D()
-			t.origin = pos
+			t.origin = marking_origin(r, s)
 			if r.dir == "v":
 				t.basis = t.basis.rotated(Vector3.UP, PI * 0.5)
 			_marking_mm.multimesh.set_instance_transform(idx, t)

@@ -52,6 +52,7 @@ func _ready() -> void:
 		_volumes[b] = 1.0
 		_ensure_bus(b)
 		_apply(b)
+	EventBus.settings_changed.connect(_on_any_setting_changed)
 	_load_defaults()
 	# Настройки сохранялись в user://settings.cfg, но никто их не читал —
 	# каждый запуск игра стартовала с дефолтов.
@@ -106,7 +107,6 @@ func _load_defaults() -> void:
 func set_volume(bus: String, v: float) -> void:
 	var b := _canon_bus(bus)
 	if not b in BUSES:
-		# push_warning("SettingsManager: unknown audio bus '%s'" % bus)
 		return
 	_volumes[b] = clampf(v, 0.0, 1.0)
 	_settings[b] = _volumes[b]
@@ -141,8 +141,12 @@ func _apply_locale(lang: String) -> void:
 	else:
 		TranslationServer.set_locale(lang)
 
+## The language on screen is LocalizationManager's (the saved choice, else the system's). `_language` only said "en"
+## until a player opened Settings, so every save and settings file of a fresh profile carried "en" and the next
+## load (a retry after a death, Continue, the next launch) put English back over a Russian or German game.
 func get_language() -> String:
-	return _language
+	var lm := get_node_or_null("/root/LocalizationManager")
+	return String(lm.get("current_lang")) if lm != null else _language
 
 func get_languages() -> Array:
 	return LANGUAGES.duplicate()
@@ -230,10 +234,34 @@ func apply_controls(d: Dictionary) -> void:
 func _tier(value: Variant) -> int:
 	return clampi(_index_from(value, TIER_LABELS, 2), 0, 2)
 
+## Every change is written to the config file half a second later (a burst of slider moves is one write). Nothing but the
+## Difficulty screen wrote it before, so a relaunch lost whatever the Settings screen had changed.
+const SAVE_DELAY_SEC: float = 0.5
+var _save_timer: Timer = null
+
+func _on_any_setting_changed(_key: String, _value: Variant) -> void:
+	if _save_timer == null:
+		_save_timer = Timer.new()
+		_save_timer.one_shot = true
+		_save_timer.wait_time = SAVE_DELAY_SEC
+		_save_timer.process_mode = Node.PROCESS_MODE_ALWAYS
+		_save_timer.timeout.connect(save_to_cfg)
+		add_child(_save_timer)
+	_save_timer.start()
+
+## A game file puts back the run's own rules. Volume, language, graphics and accessibility are this device's preferences,
+## and a Continue or a Retry used to overwrite them with the values from the day of the save.
+func apply_run_settings(d: Dictionary) -> void:
+	var s: Dictionary = d.get("settings", {}) as Dictionary
+	if s.has("difficulty"):
+		set_difficulty(_difficulty_index(s["difficulty"]))
+	if s.has("hardcore"):
+		_settings["hardcore"] = bool(s["hardcore"])
+
 func save_to_cfg() -> void:
 	var cfg := ConfigFile.new()
 	cfg.set_value("audio", "volumes", _volumes)
-	cfg.set_value("game", "language", _language)
+	cfg.set_value("game", "language", get_language())
 	cfg.set_value("game", "settings", _settings)
 	var err := cfg.save(CFG_PATH)
 	if err != OK:
@@ -540,8 +568,9 @@ func set_effects_quality(idx: int) -> void:
 	var env := _find_environment()
 	if env != null:
 		env.glow_enabled = idx >= 1
-		env.ssao_enabled = idx >= 2
-		env.ssr_enabled = idx >= 2
+		var forward_plus := RenderingServer.get_current_rendering_method() == "forward_plus"
+		env.ssao_enabled = forward_plus and idx >= 2
+		env.ssr_enabled = forward_plus and idx >= 2
 	EventBus.settings_changed.emit("effects", idx)
 
 func set_draw_distance(v: float) -> void:
@@ -608,7 +637,7 @@ func _apply(bus: String) -> void:
 		AudioServer.set_bus_volume_db(idx, linear_to_db(maxf(_volumes[bus], 0.0001)))
 
 func to_dict() -> Dictionary:
-	return {"volumes": _volumes.duplicate(), "language": _language, "settings": _settings.duplicate()}
+	return {"volumes": _volumes.duplicate(), "language": get_language(), "settings": _settings.duplicate()}
 
 func from_dict(d: Dictionary) -> void:
 	var v: Dictionary = d.get("volumes", {}) as Dictionary

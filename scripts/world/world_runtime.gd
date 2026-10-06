@@ -106,6 +106,7 @@ func _place_player(root: Node3D) -> void:
 	# closes that specific gap without needing to wait for a real floor.
 	if player.has_method("mark_spawn_as_grounded"):
 		player.mark_spawn_as_grounded(target)
+	SaveSystem.apply_pending_vitals(player)
 	GameManager.apply_pending_respawn(player)
 
 func current_district() -> StringName:

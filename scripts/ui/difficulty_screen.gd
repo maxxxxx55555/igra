@@ -33,10 +33,11 @@ func _apply_localization(_lang: Variant = null) -> void:
 	for i in PICKS.size():
 		($Panel.get_node(PICKS[i] + "Desc") as Label).text = LocalizationManager.t(DESC_KEYS[i])
 
+## A pick is a setting: it used to start a new game, which wiped the save with no question (only Play asks).
 func _pick(level: int = 0) -> void:
 	SettingsManager.set_difficulty(level)
 	SettingsManager.save_to_cfg()
-	Routes.start_game()
+	Routes.to_menu()
 
 func _on_back() -> void:
 	Routes.to_menu()

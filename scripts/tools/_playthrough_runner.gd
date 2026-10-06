@@ -6,6 +6,7 @@ extends Node
 ##      the four graphics tiers, the 13 languages
 ##   V  the bot plays the whole game with a frame at each milestone, then the victory screen, New Game+ and Save and quit
 ##   B  relaunch, Continue, the daily card, achievements, hardcore
+##   S  the screens the others do not open: the eight Codex tabs one by one, the HUD's log and help buttons, the workbench, the credits
 ## A line "[pt] PASS|FAIL <id> <what> frame=<file>" per step; setup that is not input (items, coins, a teleport next to a
 ## monster) is named in the line. The frames are read by eye afterwards; each saved frame is hashed against the previous
 ## one, because a windowed run can hand back a stale frame when nothing animates (tools/qa_sim/gui_explore_runner.gd).
@@ -64,6 +65,8 @@ func _run() -> void:
 			await _mode_v()
 		"B":
 			await _mode_b()
+		"S":
+			await _mode_s()
 		_:
 			_step("PT", false, "unknown PT_MODE '%s'" % _mode)
 	_finish()
@@ -277,8 +280,8 @@ func _state() -> Dictionary:
 		if slot != null:
 			inv[String(slot["item_id"])] = int(inv.get(String(slot["item_id"]), 0)) + int(slot["count"])
 	var stages := {}
-	for id in PowerGrid.all_districts():
-		stages[String(id)] = PowerGrid.get_stage(id)
+	for district in PowerGrid.all_districts():
+		stages[String(district.id)] = district.stage
 	return {"district": String(DistrictManager.current_district), "coins": CoinWallet.get_coins(), "level": XpManager.get_level(),
 		"ng": NewGamePlus.get_current_ng_plus(), "inventory": inv, "stages": stages, "kills": ProgressTracker.kills,
 		"docs": ProgressTracker.count_docs(), "photos": SaveSystem.get_photo_count(), "deaths": ProgressTracker.deaths}
@@ -315,12 +318,20 @@ func _mode_a() -> void:
 		return
 	await _a03_onboarding()
 	await _a04_controls()
+	await _a04_ghosts()
+	if OS.get_environment("PT_STOP") == "A04g":
+		return
 	await _a05_monster()
+	if OS.get_environment("PT_STOP") == "A05":
+		return
 	await _a05_death()
 	await _a06_inventory()
 	await _a06_shop()
 	await _a07_map()
+	if OS.get_environment("PT_STOP") == "A07":
+		return
 	await _a08_battery()
+	await _a09_skills()
 	await _a12_tiers()
 	await _a13_languages()
 	await _a15_back_to_menu()
@@ -356,11 +367,15 @@ func _a02_start() -> bool:
 	if normal == null:
 		return false
 	res = await _click(normal)
+	var back_in_menu := await _wait_scene(Routes.MENU, WAIT_SCENE)
+	await get_tree().create_timer(1.0).timeout
+	_step("A02b", res == "ok" and back_in_menu and int(SettingsManager.get_setting("difficulty", -1)) == 1 and not GameManager.is_playing(),
+		"Normal sets the difficulty and returns to the menu: a pick starts nothing (click: %s)" % res, await _shot("A02_difficulty_picked"))
+	var res_play := await _click(_menu_vbox().get_node("Play") as Button)
 	var started := await _wait_playing()
 	if started:
 		_spawn_pos = _player.global_position
-	_step("A02b", res == "ok" and started and int(SettingsManager.get_setting("difficulty", -1)) == 1,
-		"Normal starts the game and the player spawns (click: %s)" % res, await _shot("A02_game_start"))
+	_step("A02c", res_play == "ok" and started, "Play starts the game and the player spawns (click: %s)" % res_play, await _shot("A02_game_start"))
 	return started
 
 func _a03_onboarding() -> void:
@@ -384,6 +399,50 @@ func _a03_onboarding() -> void:
 		clicks += 1
 	_step("A03b", not bool(overlay.get("_showing")) and SaveSystem.is_onboard_done() and clicks == 7,
 		"Next seven times closes the card and the profile remembers it (%d clicks)" % clicks, await _shot("A03_onboarding_done"))
+
+## The pale translucent squares that came and went in the lower right of the world frames (the flashlight's dust: a
+## billboard that ignored the particle scale, so each speck was an 8 cm square by the hand). Eight frames of the standing
+## player: the lower-right corner may not be brighter than the clearest of them by more than GHOST_LEVEL (0 to 255 after
+## averaging the corner down). Measured: the defect 4 to 8 above the clearest in 2 to 4 of 8 frames; the same scene with the
+## fix 1.9 and without any dust 1.5 to 2.4 over 24 frames (`docs/artifacts/rc15/ghost_sweep_*.txt`).
+const GHOST_FRAMES := 8
+const GHOST_LEVEL := 3.5
+
+func _corner_level() -> float:
+	await get_tree().process_frame
+	await RenderingServer.frame_post_draw
+	var img := get_tree().root.get_texture().get_image()
+	var corner := img.get_region(Rect2i(int(img.get_width() * 0.7), int(img.get_height() * 0.82), int(img.get_width() * 0.3), int(img.get_height() * 0.18)))
+	corner.resize(16, 6, Image.INTERPOLATE_BILINEAR)
+	var sum := 0.0
+	for y in 6:
+		for x in 16:
+			sum += corner.get_pixel(x, y).get_luminance()
+	return sum / 96.0 * 255.0
+
+func _a04_ghosts() -> void:
+	_key_event(KEY_W, true)
+	await get_tree().create_timer(1.2).timeout
+	_key_event(KEY_W, false)
+	await get_tree().create_timer(0.4).timeout
+	var ghosts := 0
+	var levels: Array[float] = []
+	var hurt := 0.0
+	for attempt in 4:
+		# a hit makes the screen edges flash ember, which is no ghost: that window is measured again
+		var damage0 := ProgressTracker.damage_taken
+		levels.clear()
+		for i in GHOST_FRAMES:
+			levels.append(await _corner_level())
+			await get_tree().create_timer(0.2).timeout
+		hurt = ProgressTracker.damage_taken - damage0
+		if hurt == 0.0:
+			break
+		await get_tree().create_timer(3.0).timeout
+	ghosts = 0
+	for level in levels:
+		ghosts += 1 if level - levels.min() > GHOST_LEVEL else 0
+	_step("A04h", ghosts == 0 and hurt == 0.0, "no pale square comes and goes in the lower-right corner (%d of %d frames brighter than the clearest by more than %.1f; corner %.1f to %.1f; hurt in the window %.0f by %s)" % [ghosts, GHOST_FRAMES, GHOST_LEVEL, levels.min(), levels.max(), hurt, ProgressTracker.last_hit_by], await _shot("A04_corner"))
 
 func _a04_controls() -> void:
 	_playing_or_fail()
@@ -445,7 +504,7 @@ func _a04_controls() -> void:
 	var dashed := _flat(_player.global_position - p0).length()
 	_key_event(KEY_W, false)
 	await get_tree().create_timer(0.6).timeout
-	_step("A04g", stamina3 <= stamina2 - 10.0 and dashed > 1.5, "a double tap of W dodges (stamina %.0f -> %.0f, %.1f m in 0.4 s)" % [stamina2, stamina3, dashed])
+	_step("A04g", stamina3 < stamina2 and dashed > 2.5, "a double tap of W dashes %.1f m in 0.4 s (a walk covers 1.2) and costs stamina (%.0f -> %.0f, part of it regained meanwhile)" % [dashed, stamina2, stamina3])
 	var capsule := (_player.get_node("CollisionShape3D") as CollisionShape3D).shape as CapsuleShape3D
 	_key_event(KEY_CTRL, true)
 	_key_event(KEY_W, true)
@@ -466,40 +525,32 @@ func _playing_or_fail() -> void:
 	if not GameManager.is_playing():
 		GameManager.resume_game()
 
-## The nearest monster, or one placed 7 m ahead when the first street has none in reach.
-func _monster_ahead() -> Node3D:
-	var best: Node3D = null
-	for m in get_tree().get_nodes_in_group("monsters"):
-		if m.get("ai_state") != null and int(m.get("ai_state")) != 7 and not m.is_in_group("boss"):
-			if best == null or m.global_position.distance_to(_player.global_position) < best.global_position.distance_to(_player.global_position):
-				best = m
-	return best
-
 func _face(target: Vector3) -> void:
 	var to := _flat(target - _player.global_position)
 	_player.rotation.y = atan2(-to.x, -to.z)
 
+## A crawler is placed 5 m ahead, turned to face the player. The nearest monster of the street would not do: a shadow dies
+## in the flashlight without a swing (the first version of this step passed that way while no swing ever landed).
 func _a05_monster() -> void:
-	var m := _monster_ahead()
-	var spawned := false
-	if m == null:
-		m = (load("res://scenes/enemies/crawler_3d.tscn") as PackedScene).instantiate() as Node3D
-		_scene().add_child(m)
-		spawned = true
+	var m := (load("res://scenes/enemies/crawler_3d.tscn") as PackedScene).instantiate() as Node3D
+	_scene().add_child(m)
 	var ahead := -_player.global_transform.basis.z
 	m.global_position = _player.global_position + _flat(ahead).normalized() * 5.0
+	m.rotation.y = atan2(ahead.x, ahead.z)
 	m.set("player_ref", _player)
 	_face(m.global_position)
 	await get_tree().create_timer(0.6).timeout
 	var hp0 := float(m.get("hp"))
 	var seen := await _shot("A05_monster_sight")
-	_say("[pt] note A05 setup: monster %s placed 5 m ahead (spawned for the test: %s); crosshair state '%s'" % [m.get("monster_id"), spawned, _crosshair])
+	_say("[pt] note A05 setup: a %s spawned 5 m ahead, turned to face the player; crosshair state '%s'" % [m.get("monster_id"), _crosshair])
 	var hp_taken := ProgressTracker.damage_taken
 	var t := 0.0
 	var hit_frame := ""
+	var start := _player.global_position
+	var gap := 0.0
 	while t < 25.0 and is_instance_valid(m) and int(m.get("ai_state")) != 7:
 		_face(m.global_position)
-		var gap := _flat(m.global_position - _player.global_position).length()
+		gap = _flat(m.global_position - _player.global_position).length()
 		if gap > 2.2:
 			_key_event(KEY_W, true)
 		else:
@@ -513,7 +564,8 @@ func _a05_monster() -> void:
 			break
 	_key_event(KEY_W, false)
 	var hp1 := float(m.get("hp")) if is_instance_valid(m) else 0.0
-	_step("A05", hp1 < hp0, "injected left clicks hurt the monster (hp %.0f -> %.0f in %.1f s; the player took %.0f)" % [hp0, hp1, t, ProgressTracker.damage_taken - hp_taken], hit_frame if hit_frame != "" else seen)
+	var where := "last gap %.1f m, walked %.1f m" % [gap, _flat(_player.global_position - start).length()]
+	_step("A05", hp1 < hp0, "injected left clicks hurt the monster (hp %.0f -> %.0f in %.1f s; the player took %.0f; %s)" % [hp0, hp1, t, ProgressTracker.damage_taken - hp_taken, where], hit_frame if hit_frame != "" else seen)
 	if is_instance_valid(m) and int(m.get("ai_state")) == 7:
 		_say("[pt] note A05 the monster died; frame=%s" % await _shot("A05_monster_dead"))
 	elif is_instance_valid(m):
@@ -522,6 +574,8 @@ func _a05_monster() -> void:
 
 func _a05_death() -> void:
 	var deaths0 := ProgressTracker.deaths
+	SaveSystem.save_all()
+	_say("[pt] note A05 setup: the profile is saved first (the autosave a first repair writes); with no save at all a retry is a new game")
 	_player.set("hp", 5.0)
 	_player.set("_damage_grace_timer", 0.0)
 	_player.call("take_damage", 12.0)
@@ -542,18 +596,24 @@ func _a05_death() -> void:
 			if prefix != "" and line.contains(prefix):
 				shown += 1
 				break
-	_step("A05b", reached and ProgressTracker.deaths == deaths0 + 1 and shown == need.size(), "HP 0 ends in the death screen with cause, time, districts and documents (%s)" % " | ".join(texts), await _shot("A05_death_screen"))
+	_step("A05b", reached and ProgressTracker.deaths == deaths0 + 1 and shown == need.size(), "HP 0 ends in the death screen with cause, time, districts and documents, one death counted (%s; deaths %d -> %d)" % [" | ".join(texts), deaths0, ProgressTracker.deaths], await _shot("A05_death_screen"))
 	var retry: Button = null
 	var names: PackedStringArray = []
 	if death != null:
 		retry = _button_with(death, LocalizationManager.t("retry"))
 		for b in _buttons(death):
 			names.append("%s(%s)" % [b.text, b.is_visible_in_tree()])
+	var old_player := get_tree().get_first_node_in_group("player")
+	var battery_at_death := float(_player.get("battery"))
 	var res := await _click(retry)
-	var back := await _wait_until(func() -> bool: return GameManager.is_playing() and get_tree().get_first_node_in_group("player") != null, 40.0)
-	await get_tree().create_timer(2.0).timeout
+	var back := await _wait_until(func() -> bool: return GameManager.is_playing() and get_tree().get_first_node_in_group("player") != null and get_tree().get_first_node_in_group("player") != old_player, 40.0)
 	_player = get_tree().get_first_node_in_group("player") as Node3D
-	var hp_ratio: float = float(_player.get("hp")) / float(_player.stats.max_hp)
+	var samples: PackedStringArray = []
+	for n in 8:
+		samples.append("%.0f/%.0f" % [float(_player.get("hp")), float(_player.get("battery"))])
+		await get_tree().create_timer(0.25).timeout
+	_say("[pt] note A05c new player: a different node from the dead one: %s; hp/battery each 0.25 s: %s; battery at death %.0f; pending respawn %s" % [_player != old_player, " ".join(samples), battery_at_death, GameManager.get("_respawn_battery")])
+	var hp_ratio: float = float(samples[0].split("/")[0]) / float(_player.stats.max_hp)
 	_step("A05c", res == "ok" and back and hp_ratio >= 0.45 and hp_ratio <= 0.55, "Retry respawns the player at HP %.0f%% (click: %s; buttons %s)" % [hp_ratio * 100.0, res, ", ".join(names)], await _shot("A05_respawn"))
 
 func _a06_inventory() -> void:
@@ -591,8 +651,8 @@ func _a06_inventory() -> void:
 	_step("A06c", not _ui_open(&"inventory") and GameManager.is_playing(), "Tab closes it and the game runs on")
 
 func _a06_shop() -> void:
-	CoinWallet.add(900)
-	_say("[pt] note A06 setup: 900 coins added")
+	CoinWallet.add(3000)
+	_say("[pt] note A06 setup: 3000 coins added (the cheapest shop item costs 1000)")
 	var opened := await _pause_open()
 	_step("A06d", opened, "Esc opens the pause menu", await _shot("A06_pause"))
 	var pause := _ui(&"pause")
@@ -610,8 +670,9 @@ func _a06_shop() -> void:
 	var shot_shop := await _shot("A06_shop")
 	var res_buy := await _click(buy)
 	await get_tree().create_timer(0.5).timeout
-	_step("A06e", res == "ok" and in_shop and res_buy == "ok" and CoinWallet.get_coins() < coins0,
-		"Pause > Shop opens the card; Buy takes %d coins (clicks: %s / %s)" % [coins0 - CoinWallet.get_coins(), res, res_buy], shot_shop)
+	_step("A06e", res == "ok" and in_shop and res_buy == "ok" and CoinWallet.get_coins() < coins0 and buy.disabled,
+		"Pause > Shop opens the card; Buy takes %d coins, grants the item and marks the card '%s' (clicks: %s / %s)" % [coins0 - CoinWallet.get_coins(), buy.text, res, res_buy], await _shot("A06_shop_bought"))
+	_say("[pt] note A06 the card before the purchase: frame=%s" % shot_shop)
 	await _click(_button_with(screens, LocalizationManager.t("SCR_ZAKRYT")))
 	await get_tree().create_timer(0.4).timeout
 	var res_up := await _click(_button_with(pause, LocalizationManager.t("CRAFT_UPGRADE")))
@@ -649,12 +710,24 @@ func _a07_map() -> void:
 	var enabled := 0
 	if open:
 		for b in _buttons(map):
-			if b.custom_minimum_size == Vector2(190, 34):
+			if b.custom_minimum_size == map.get_script().get_script_constant_map()["ACTION_SIZE"]:
 				if b.disabled:
 					disabled += 1
 				else:
 					enabled += 1
 	_step("A07", open and disabled == 11 and enabled == 0, "K opens the city map; on a fresh profile every row is the street you stand on or locked (%d disabled, %d travel)" % [disabled, enabled], await _shot("A07_map_fresh"))
+	var list: ScrollContainer = null
+	if open:
+		list = map.find_children("*", "ScrollContainer", true, false)[0] as ScrollContainer
+	var bar := list.get_v_scroll_bar() if list != null else null
+	var hbar := list.get_h_scroll_bar() if list != null else null
+	_step("A07c", bar != null and bar.visible and bar.size.x >= 8.0 and bar.max_value > bar.page and not hbar.visible,
+		"the map's list is longer than its window and shows a scroll bar (%s px wide, %.0f of %.0f), with no horizontal bar (rows fit: %s)" % [bar.size.x if bar != null else 0, bar.page if bar != null else 0, bar.max_value if bar != null else 0, str(hbar != null and not hbar.visible)])
+	if list != null:
+		list.scroll_vertical = int(bar.max_value)
+		await get_tree().process_frame
+		_say("[pt] note A07 the list scrolled to its end, frame=%s" % await _shot("A07_map_scrolled"))
+		list.scroll_vertical = 0
 	await _tap(KEY_K)
 	await get_tree().create_timer(0.4).timeout
 	for id in [&"suburbs"]:
@@ -680,17 +753,29 @@ func _a07_map() -> void:
 	_step("A07b", res == "ok" and arrived and GameManager.is_playing() and ghosts.is_empty(), "Travel on the open row moves the player to %s and leaves no map rows on screen (click: %s; stray: %s)" % [DistrictManager.current_district, res, ", ".join(ghosts)], await _shot("A07_travel_residential"))
 
 func _a08_battery() -> void:
-	var depleted := [false]
-	EventBus.flashlight_depleted.connect(func() -> void: depleted[0] = true, CONNECT_ONE_SHOT)
+	if not bool(_player.get("flashlight_enabled")):
+		await _tap(KEY_F)
 	_player.call("consume_battery", float(_player.get("battery")) - 18.0)
 	await get_tree().create_timer(1.6).timeout
 	var hud := _scene().get_node("HUD")
 	_step("A08", String(hud.notice.text) == LocalizationManager.t("HUD_HINT_BATTERY") or hud._hints_shown.has("battery"), "a light at 18%% shows the battery hint ('%s')" % hud.notice.text, await _shot("A08_battery_low"))
 	_player.call("consume_battery", float(_player.get("battery")))
 	await get_tree().create_timer(1.4).timeout
-	_step("A08b", depleted[0], "at 0% the light goes out (flashlight_depleted: %s)" % depleted[0], await _shot("A08_battery_0"))
+	var went_out := not bool(_player.get("flashlight_enabled")) and bool(_player.get("_light_died"))
+	_step("A08b", went_out, "at 0%% the light goes out and stays out until a battery (enabled %s, died %s)" % [_player.get("flashlight_enabled"), _player.get("_light_died")], await _shot("A08_battery_0"))
 	_player.call("consume_battery", -90.0)
 	await get_tree().create_timer(0.5).timeout
+
+func _a09_skills() -> void:
+	await _tap(KEY_T)
+	var open := await _wait_until(func() -> bool: return _ui_open(&"skill_tree"), 3.0)
+	await get_tree().create_timer(0.6).timeout
+	var tree := _ui(&"skill_tree")
+	var tabs := tree.find_children("*", "TabContainer", true, false) if tree != null else []
+	_step("A09", open and tabs.size() > 0, "T opens the skill tree with its branches (%d tab group)" % tabs.size(), await _shot("A09_skill_tree"))
+	await _tap(KEY_T)
+	await get_tree().create_timer(0.4).timeout
+	_step("A09b", not _ui_open(&"skill_tree") and GameManager.is_playing(), "T closes it and the game runs on")
 
 func _open_settings() -> Control:
 	if not await _pause_open():
@@ -818,9 +903,10 @@ func _mode_v() -> void:
 	progress.autostart = true
 	progress.timeout.connect(func() -> void:
 		var full := 0
-		for id in PowerGrid.all_districts():
-			full += int(PowerGrid.get_stage(id) >= DistrictData.Stage.FULL)
-		_say("[pt] note V the bot is in %s, %d of %d districts FULL, %.0f s in" % [DistrictManager.current_district, full, PowerGrid.all_districts().size(), float(Time.get_ticks_msec() - _t0) / 1000.0]))
+		for district in PowerGrid.all_districts():
+			full += int(district.stage >= DistrictData.Stage.FULL)
+		var seconds := int(float(Time.get_ticks_msec() - _t0) / 1000.0)
+		_say("[pt] note V the bot is in %s, %d of %d districts FULL, %d s in; frame=%s" % [DistrictManager.current_district, full, PowerGrid.all_districts().size(), seconds, await _shot("V_t%04d" % seconds)]))
 	add_child(progress)
 	OS.set_environment("QA_NO_QUIT", "1")
 	var bot := Node.new()
@@ -866,20 +952,21 @@ func _v11_new_game_plus() -> void:
 	await get_tree().create_timer(0.5).timeout
 	_step("V11c", picked != "" and NewGamePlus.get_active_modifiers().size() == 1, "one modifier can be taken for the new level ('%s')" % picked.left(40), await _shot("V11_ngp_modifier"))
 	await _click(ngp.back_button)
-	var in_menu := await _wait_scene(Routes.MENU, WAIT_SCENE)
+	var in_menu := await _wait_until(func() -> bool: return _menu_vbox() != null, 20.0)
 	await get_tree().create_timer(1.0).timeout
 	var vb: Node = _menu_vbox()
-	var play := vb.get_node("Play") as Button
+	var play := vb.get_node("Play") as Button if vb != null else null
 	_step("V11d", in_menu and play.text == LocalizationManager.tf("NGP_NEW_GAME_ACTION", [NewGamePlus.get_current_ng_plus()]), "the menu says Play is New Game+ %d ('%s')" % [NewGamePlus.get_current_ng_plus(), play.text], await _shot("V11_menu_ngp"))
 	var res_play := await _click(play)
 	await get_tree().create_timer(0.6).timeout
 	var dialog: ConfirmationDialog = null
-	for n in _scene().find_children("*", "ConfirmationDialog", true, false):
-		dialog = n as ConfirmationDialog
+	for n in get_tree().root.find_children("*", "ConfirmationDialog", true, false):
+		if (n as ConfirmationDialog).visible:
+			dialog = n as ConfirmationDialog
 	var shot_confirm := await _shot("V11_confirm")
 	var res_ok := "no dialog"
 	if dialog != null:
-		res_ok = await _click(dialog.get_ok_button())
+		res_ok = _press_dialog_ok(dialog)
 	var started := await _wait_playing()
 	_step("V11e", res_play == "ok" and res_ok == "ok" and started and NewGamePlus.get_current_ng_plus() == level0 + 1,
 		"Play asks before it erases the save, and starts New Game+ %d (clicks: %s / %s)" % [NewGamePlus.get_current_ng_plus(), res_play, res_ok], shot_confirm)
@@ -895,6 +982,13 @@ func _v11_new_game_plus() -> void:
 				weak += 1
 	_step("V11f", strong > 0 and weak == 0, "New Game+ monsters carry the scaled health (%d scaled, %d not)" % [strong, weak], await _shot("V11_ng_run"))
 	await _v14_save_quit()
+
+## A ConfirmationDialog is an embedded window: the viewport's hit test cannot see into it, so its button is pressed by
+## its signal and the dialog's presence and text are read from the frame.
+func _press_dialog_ok(dialog: ConfirmationDialog) -> String:
+	dialog.get_ok_button().pressed.emit()
+	dialog.hide()
+	return "ok"
 
 func _victory_screen() -> Control:
 	var s := _ui(&"win")
@@ -951,11 +1045,19 @@ func _b02_continue() -> void:
 	var vb: Node = _menu_vbox()
 	var res := await _click(vb.get_node("Continue") as Button)
 	var started := await _wait_playing()
+	var early := _state()
 	await get_tree().create_timer(3.0).timeout
-	var got := _state()
+	var got: Dictionary = JSON.parse_string(JSON.stringify(_state()))
+	_say("[pt] note B02 the run as loaded (2 s in): coins %s, kills %s; 3 s later: coins %s, kills %s" % [early["coins"], early["kills"], got["coins"], got["kills"]])
 	var diffs: Array[String] = []
+	# the game runs for the 3 s before the comparison: a roaming monster killed by the light earns a kill and its coins, so
+	# what only grows may grow; a Continue that loses any of it is the failure
+	var may_grow := ["coins", "kills", "docs", "photos"]
 	for key in ["district", "coins", "level", "ng", "inventory", "stages", "kills", "docs", "photos"]:
-		if want.has(key) and JSON.stringify(want[key]) != JSON.stringify(got[key]):
+		if not want.has(key):
+			continue
+		var lost: bool = float(got[key]) < float(want[key]) if key in may_grow else JSON.stringify(want[key]) != JSON.stringify(got[key])
+		if lost:
 			diffs.append("%s %s -> %s" % [key, JSON.stringify(want[key]).left(60), JSON.stringify(got[key]).left(60)])
 	var moved := 0.0
 	if want.has("pos"):
@@ -1014,10 +1116,13 @@ func _b05_achievements() -> void:
 	GameManager.resume_game()
 
 func _b03_hardcore() -> void:
-	var settings := await _open_settings()
-	if settings == null:
-		_step("B03", false, "the settings screen did not open")
+	if not await _go_menu():
+		_step("B03", false, "the menu did not come back")
 		return
+	var opened := await _click(_menu_vbox().get_node("Settings") as Button)
+	await _wait_scene(Routes.SETTINGS, WAIT_SCENE)
+	await get_tree().create_timer(0.8).timeout
+	var settings := _scene()
 	var hardcore: CheckBox = null
 	for row in settings.find_children("*", "HBoxContainer", true, false):
 		var kids := row.get_children()
@@ -1025,24 +1130,154 @@ func _b03_hardcore() -> void:
 			hardcore = kids[1] as CheckBox
 	var res := await _click(hardcore)
 	await get_tree().create_timer(0.4).timeout
-	_step("B03", res == "ok" and bool(SettingsManager.get_setting("hardcore", false)), "the Hardcore checkbox turns it on (click: %s)" % res, await _shot("B03_hardcore_on"))
-	await _close_settings()
-	await _go_menu()
+	_step("B03", opened == "ok" and res == "ok" and bool(SettingsManager.get_setting("hardcore", false)), "the main menu's Settings has a Hardcore box that turns it on (clicks: %s / %s)" % [opened, res], await _shot("B03_hardcore_on"))
+	await _click(_button_with(settings, LocalizationManager.t("Back")))
+	await _wait_scene(Routes.MENU, WAIT_SCENE)
+	await get_tree().create_timer(0.8).timeout
 	await _click(_menu_vbox().get_node("Play") as Button)
 	await get_tree().create_timer(0.6).timeout
 	var dialog: ConfirmationDialog = null
-	for n in _scene().find_children("*", "ConfirmationDialog", true, false):
-		dialog = n as ConfirmationDialog
+	for n in get_tree().root.find_children("*", "ConfirmationDialog", true, false):
+		if (n as ConfirmationDialog).visible:
+			dialog = n as ConfirmationDialog
+	_say("[pt] note B03 after Play: dialog %s, top control %s, frame=%s" % [dialog.dialog_text.left(60) if dialog != null else "none", await _top_at(_center()), await _shot("B03_play_click")])
 	if dialog != null:
-		await _click(dialog.get_ok_button())
+		_press_dialog_ok(dialog)
 	var started := await _wait_playing()
-	_step("B03b", started and bool(SettingsManager.get_setting("hardcore", false)), "Play starts a run with Hardcore on")
-	_player.call("take_damage", 9999.0)
+	_step("B03b", started and GameManager.run_hardcore, "Play starts a run with Hardcore on (started %s, the run's hardcore %s, state %s)" % [started, GameManager.run_hardcore, GameManager.current_state])
+	if not started:
+		return
+	_player.set("hp", 5.0)
+	_player.set("_damage_grace_timer", 0.0)
+	_player.set("_iframes", 0.0)
+	_player.call("take_damage", 12.0)
 	await get_tree().create_timer(3.0).timeout
 	_step("B03c", not SaveSystem.has_save(), "dying on hardcore deletes the save (has_save: %s)" % SaveSystem.has_save(), await _shot("B03_hardcore_death"))
 	SettingsManager.set_setting("hardcore", false)
 
 ## From the pause menu back to the main menu: one menu on screen, and Continue offered because a save exists.
+# ── mode S: the screens the other modes do not open ──────────────────────────
+## The visible texts that still hold a format specifier (\"Repair panel (needs: %s)\" as the label of a key): a string that
+## was meant for tf() and reached a label raw.
+func _raw_placeholders(root: Node) -> PackedStringArray:
+	var found: PackedStringArray = []
+	var specifier := RegEx.create_from_string("(?<!%)%[0-9.]*[sdif]")
+	for n in root.find_children("*", "Control", true, false):
+		var text := ""
+		if n is Label:
+			text = (n as Label).text
+		elif n is Button:
+			text = (n as Button).text
+		if text != "" and (n as Control).is_visible_in_tree() and specifier.search(text) != null:
+			found.append(text)
+	return found
+
+## Visible texts with a run of four Latin letters in a Russian UI: a string that skipped the translation (the credits' four
+## lines were English in every language). Names, key caps and technical suffixes are left out.
+const LATIN_OK := ["THE LAST STREETLIGHT", "TLS Team", "NG+", "FPS", "fps", "VSync", "Escape", "Shift", "Ctrl", "Space", "Tab", "720p", "1080p", "1440p", "Easy", "Normal", "Hard"]
+
+func _latin_texts(root: Node) -> PackedStringArray:
+	var found: PackedStringArray = []
+	var latin := RegEx.create_from_string("[A-Za-z]{4,}")
+	for n in root.find_children("*", "Control", true, false):
+		var text := ""
+		if n is Label:
+			text = (n as Label).text
+		elif n is Button:
+			text = (n as Button).text
+		if text == "" or not (n as Control).is_visible_in_tree() or latin.search(text) == null:
+			continue
+		var scrubbed := text
+		for ok in LATIN_OK:
+			scrubbed = scrubbed.replace(ok, "")
+		if latin.search(scrubbed) != null:
+			found.append(text)
+	return found
+
+## A list that scrolls must have a window of at least a third of the screen: a list cut to 7 of 31 rows by a 330 px window
+## in a 600 px page is the defect the first run of this mode found.
+const S_MIN_LIST_SHARE := 0.35
+
+func _mode_s() -> void:
+	if not await _a01_boot():
+		return
+	if not await _a02_start():
+		return
+	await _a03_onboarding()
+	await _s_codex()
+	await _s_hud_buttons()
+	await _s_workbench()
+	await _s_credits()
+
+func _s_codex() -> void:
+	UIManager.open(&"codex")
+	await _wait_until(func() -> bool: return _ui_open(&"codex"), 3.0)
+	await get_tree().create_timer(0.6).timeout
+	var codex := _ui(&"codex")
+	var viewport := get_viewport().get_visible_rect().size
+	var tabs: Array = codex.get("_buttons")
+	var specs: Array = (codex.get_script() as Script).get_script_constant_map()["TABS"]
+	for i in tabs.size():
+		var res := await _click(tabs[i] as Button)
+		await get_tree().create_timer(0.7).timeout
+		var worst := 1.0
+		var seen := 0
+		for sc in codex.find_children("*", "ScrollContainer", true, false):
+			var scroll := sc as ScrollContainer
+			if not scroll.is_visible_in_tree() or scroll.get_child_count() == 0:
+				continue
+			seen += 1
+			if (scroll.get_child(0) as Control).size.y > scroll.size.y + 1.0:
+				worst = minf(worst, scroll.size.y / viewport.y)
+		var id := String(specs[i]["id"])
+		var raw := _raw_placeholders(codex)
+		var latin := _latin_texts(codex)
+		if not latin.is_empty():
+			_say("[pt] note S_codex_%s Latin text in a Russian UI: %s" % [String(specs[i]["id"]), " | ".join(latin).left(400)])
+		_step("S_codex_" + id, res == "ok" and String(codex.call("current_tab")) == id and worst >= S_MIN_LIST_SHARE and raw.is_empty(),
+			"the Codex tab %s opens by a click; its lists that scroll have a window of %.0f%% of the screen at least (%d lists); raw format specifiers on screen: %s" % [id, worst * 100.0, seen, ", ".join(raw) if not raw.is_empty() else "none"], await _shot("S_codex_" + id))
+	UIManager.close_all_blocking()
+	GameManager.resume_game()
+	await get_tree().create_timer(0.5).timeout
+
+func _s_hud_buttons() -> void:
+	for text in [LocalizationManager.t("HUD_LOG_TOGGLE"), "?"]:
+		var button: Button = null
+		for b in _buttons(get_tree().root):
+			if b.text == text and b.is_visible_in_tree():
+				button = b
+		var res := await _click(button)
+		await get_tree().create_timer(0.7).timeout
+		_step("S_hud_" + ("log" if text != "?" else "help"), res == "ok", "the HUD button '%s' answers a click (%s)" % [text, res], await _shot("S_hud_" + ("log" if text != "?" else "help")))
+		if text == "?":
+			UIManager.close_all_blocking()
+			GameManager.resume_game()
+		else:
+			await _click(button)
+		await get_tree().create_timer(0.4).timeout
+
+func _s_workbench() -> void:
+	UIManager.open(&"workbench")
+	var open := await _wait_until(func() -> bool: return _ui_open(&"workbench"), 3.0)
+	await get_tree().create_timer(0.7).timeout
+	var latin := _latin_texts(_ui(&"workbench"))
+	if not latin.is_empty():
+		_say("[pt] note S_workbench Latin text in a Russian UI: %s" % " | ".join(latin).left(400))
+	_step("S_workbench", open, "the workbench screen opens", await _shot("S_workbench"))
+	UIManager.close_all_blocking()
+	GameManager.resume_game()
+	await get_tree().create_timer(0.4).timeout
+
+func _s_credits() -> void:
+	if not await _go_menu():
+		_step("S_credits", false, "the menu did not come back")
+		return
+	var res := await _click(_menu_vbox().get_node("Credits") as Button)
+	var reached := await _wait_scene(Routes.CREDITS, WAIT_SCENE)
+	await get_tree().create_timer(1.0).timeout
+	var latin := _latin_texts(_scene())
+	_step("S_credits", res == "ok" and reached and latin.is_empty(), "the main menu's Credits opens the credits, all in the language of the UI (click: %s; Latin text: %s)" % [res, " | ".join(latin) if not latin.is_empty() else "none"], await _shot("S_credits"))
+
 func _a15_back_to_menu() -> void:
 	SaveSystem.save_all()
 	var opened := await _pause_open()

@@ -20,6 +20,10 @@ func _ready() -> void:
 	visibility_changed.connect(func() -> void:
 		if visible:
 			_refresh())
+	# the screen opens on the state change, a moment before the ending is worked out: it showed the one left from before
+	var endings := get_node_or_null("/root/EndingsManager")
+	if endings != null:
+		endings.ending_reached.connect(func(_id: StringName) -> void: _refresh())
 	_refresh()
 
 func _build() -> void:

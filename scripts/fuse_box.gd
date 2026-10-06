@@ -26,8 +26,6 @@ func interact() -> void:
 		return
 	if _has_fuse_in_inventory():
 		_insert_fuse()
-	else:
-		push_warning("FuseBox: No fuse in inventory.")
 
 
 func _has_fuse_in_inventory() -> bool:

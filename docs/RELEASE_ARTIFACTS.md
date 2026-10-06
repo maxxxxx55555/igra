@@ -1,6 +1,6 @@
 # Release artifacts (C9 owner-prep)
 
-Status at 2026-10-01 (rc14 sign-off): a signed release AAB exists, was rebuilt from the tagged tree and is verified below.
+Status at 2026-10-02 (rc15 sign-off): a signed release AAB exists, was rebuilt from the sign-off tree and is verified below.
 
 ## Done
 - **Release keystore generated** with `keytool` (PKCS12, RSA 4096, alias `tls_release`, 10000-day
@@ -8,6 +8,9 @@ Status at 2026-10-01 (rc14 sign-off): a signed release AAB exists, was rebuilt f
   `4F:6B:E6:41:5C:26:0B:34:1F:A0:CF:88:46:60:3B:82:64:0F:8B:6B:0D:5F:97:FD:FD:3A:FF:93:DD:89:59:09`.
 - Its random password is in `.signing/release.env` (three `GODOT_ANDROID_KEYSTORE_RELEASE_*`
   variables). `.signing/`, `*.keystore` and `*.jks` are gitignored (`git check-ignore` verified).
+- `tools/make_keystore.ps1` is the generator of a **debug** keystore (alias `tlsdebug`, the debug password written in `docs/ANDROID_BUILD.md`). It holds no
+  release key material (it embeds the debug store password written in `docs/ANDROID_BUILD.md`), the keystore it writes (`tls_debug.keystore`) is gitignored, and it is the only tracked file whose name contains "keystore".
+  `release.env` and `*.p12` are gitignored by name as well as through `.signing/` (R8 round 13, `705b2be`).
 - `export_presets.cfg` deliberately keeps the release keystore fields EMPTY: the file is committed, so
   putting a password in it would publish it (`tools/qa_sim/release_export_check.py` enforces this).
   Godot reads the env vars above instead.
@@ -15,14 +18,14 @@ Status at 2026-10-01 (rc14 sign-off): a signed release AAB exists, was rebuilt f
 **Back up `.signing/` outside this machine.** A lost upload key means no updates to the same listing
 unless Play App Signing is enabled (recommended: upload this as the *upload* key only).
 
-## Signed AAB (rc14 sign-off, rebuilt 2026-10-01; first built 2026-09-27)
+## Signed AAB (rc15 sign-off, rebuilt 2026-10-02; first built 2026-09-27)
 
-- **Built:** `build/tls.aab`, **183,140,397 bytes (183.1 MB)** (183,064,789 on 2026-09-27; rebuilt a second time on 2026-10-01 after the menu title fix), `godot --headless --path . --export-release
+- **Built:** `build/tls.aab`, **183,257,097 bytes (183.3 MB)**, built from commit `8ad0b93` (183,257,435 before the verifier round's code changes on the same day, 183,140,397 at the rc14 sign-off on 2026-10-01, 183,064,789 on 2026-09-27); the export holds no `docs/`, `tools/` or tool-scene files, so a later commit that touches only those leaves it valid (`git diff --name-only 8ad0b93 <tag>`), `godot --headless --path . --export-release
   "Android" build/tls.aab` with the three `GODOT_ANDROID_KEYSTORE_RELEASE_*` variables loaded from
   `.signing/release.env`. Gradle build, arm64-v8a only. `build/` and `*.aab` are gitignored.
 - **Contents:** base module 27.0 MB compressed (78.5 MB raw; native libs 24.5 MB, dex 1.8 MB, res 0.7 MB at the first
-  build); the game data ships in the install-time asset pack `assetPackInstallTime` (155.2 MB compressed, 213.6 MB
-  raw), 2840 entries in all. Play caps the base module's compressed download at 200 MB and sizes asset packs separately
+  build); the game data ships in the install-time asset pack `assetPackInstallTime` (155.3 MB compressed, 213.7 MB
+  raw), 2882 entries in all. Play caps the base module's compressed download at 200 MB and sizes asset packs separately
   **(check the App bundle explorer at upload)**.
 - **Signature:** `jarsigner -verify build/tls.aab` prints `jar verified.`, with the usual upload-key
   warnings (self-signed, no timestamp) and a JarInputStream manifest-order note that AGP-built

@@ -1,0 +1,8 @@
+[closeout] FAIL SCR1 the New Game+ screen covers the window ((0.0, 0.0) of (1920.0, 1920.0) at (960.0, 960.0))
+[closeout] FAIL SCR1 the T key opens the skill tree from a fresh game
+[closeout] FAIL RESP1 the dead player of the scene being left does not take the respawn
+[closeout] FAIL RESP1 the new player respawns at half health with the battery it died with (hp 100, battery 100)
+[closeout] FAIL SV2 health, stamina and battery come back from the save (100 / 100 / 100)
+[closeout] FAIL HP1 in peace health comes back slowly (67.7 after a second at 50, not 68)
+[closeout] FAIL HP1 two seconds after a hit nothing has come back (76.3)
+[closeout] DONE checks=244 fails=7

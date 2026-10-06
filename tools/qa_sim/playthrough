@@ -5,13 +5,14 @@
 #   V  the bot plays to the victory with frames at the milestones, then New Game+ and Save and quit
 #   B  relaunch, Continue (compared with what V saved), the daily card, achievements, hardcore
 #
-#   tools/qa_sim/playthrough            # A V B in that order, the profile wiped before A
-#   tools/qa_sim/playthrough A          # one mode (the profile is wiped only when A runs first)
+#   tools/qa_sim/playthrough            # A V B S in that order, the profile wiped before A and before S
+#   tools/qa_sim/playthrough A          # one mode (the profile is wiped only when A or S runs first)
+#   tools/qa_sim/playthrough S          # the screens the others do not open: the Codex tabs, HUD buttons, workbench, credits
 #   frames -> docs/stills/playthrough/, steps -> .qa_logs/playthrough_<mode>.txt, engine log -> .qa_logs/playthrough_<mode>.log
 set -uo pipefail
 cd "$(dirname "$0")/../.."
 MODES=("$@")
-[[ ${#MODES[@]} -gt 0 ]] || MODES=(A V B)
+[[ ${#MODES[@]} -gt 0 ]] || MODES=(A V B S)
 
 GODOT="$(bash tools/qa_sim/_resolve_godot.sh 2>/dev/null)"
 if [[ -z "$GODOT" ]] || [[ ! -x "$GODOT" ]]; then
@@ -25,15 +26,17 @@ trap 'exit 130' INT TERM
 export TLS_UDG_GUARDED=1
 mkdir -p .qa_logs docs/stills/playthrough
 
-if [[ "${MODES[0]}" == "A" ]]; then
-	# a fresh install: no settings, no save, no achievements, no daily state
+# a fresh install: no settings, no save, no achievements, no daily state (A and S start from one)
+fresh_profile() {
 	while IFS= read -r f; do rm -f -- "$UDG_DIR/$f"; done < "$UDG_SNAP/list"
 	rm -f .qa_logs/pt_state.json
 	echo "  fresh profile: $(wc -l < "$UDG_SNAP/list") game file(s) set aside (restored at the end)"
-fi
+}
+[[ "${MODES[0]}" == "A" || "${MODES[0]}" == "S" ]] && fresh_profile
 
 rc_all=0
 for MODE in "${MODES[@]}"; do
+	[[ "$MODE" == "S" && "${MODES[0]}" != "S" ]] && fresh_profile
 	LOG=".qa_logs/playthrough_$MODE.log"
 	rm -f "$LOG" ".qa_logs/playthrough_$MODE.txt"
 	PT_MODE="$MODE" timeout 1500 "$GODOT" --windowed --path . res://scenes/tools/playthrough_scene.tscn > "$LOG" 2>&1

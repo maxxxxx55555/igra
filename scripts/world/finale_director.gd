@@ -50,8 +50,19 @@ func _ready() -> void:
 	EventBus.district_restored.connect(_on_district_restored)
 	EventBus.district_entered.connect(_on_district_entered)
 	EventBus.boss_defeated.connect(_on_boss_defeated)
+	EventBus.game_started.connect(_on_game_started)
+
+## A new game or a Continue starts from the grid as it is: the flag only says "the night was announced this run".
+func _on_game_started() -> void:
+	_triggered = false
+	_spawn_retries = 0
 
 func _on_district_restored(_id: StringName, _stage: int) -> void:
+	_begin_final_night()
+
+## The finale follows the grid, not a flag set when the last district was restored: a game loaded with all eleven FULL
+## never sees that moment again, and the Architect never came. A new game starts DARK, so he cannot come early either.
+func _begin_final_night() -> void:
 	if _triggered:
 		return
 	var pg := get_node_or_null("/root/PowerGrid")
@@ -68,6 +79,7 @@ func _on_district_restored(_id: StringName, _stage: int) -> void:
 
 ## Босс ждёт игрока на электростанции: приходить туда нужно самому.
 func _on_district_entered(district_id: StringName) -> void:
+	_begin_final_night()
 	if not _triggered or district_id != &"power_station":
 		return
 	if is_instance_valid(_boss):

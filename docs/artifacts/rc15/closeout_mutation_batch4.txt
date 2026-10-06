@@ -1,0 +1,8 @@
+[closeout] FAIL MN2 hunter_3d chases at 5.5 m/s, the GDD 0.9x of the 3.0 m/s walk is 2.7
+[closeout] FAIL ON1 the card sits in the middle of the screen (220 px off)
+[closeout] FAIL SH1 every row ends above the Close button (1200 <= 1171)
+[closeout] FAIL MAP1 one city map exists once K opens it (2: /root/UIManager/@CanvasLayer@3/city_map, /root/CityMap)
+[closeout] FAIL HUD1 the message-log button covers nothing in the stat panel (HP, Icon, HPT, HPF, @Label@78)
+[closeout] FAIL LANG1 a save written while the game shows de carries en (not the settings default)
+[closeout] FAIL LANG1 the settings file carries it too (en)
+[closeout] DONE checks=232 fails=7

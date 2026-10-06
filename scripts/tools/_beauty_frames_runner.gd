@@ -70,6 +70,8 @@ func _run() -> void:
 			return
 	await get_tree().create_timer(1.5).timeout
 	await _shot("00_main_menu")
+	# a fresh profile opens the onboarding cards on game_started: they pause the tree and dim the frame, and these runs measure the game
+	SaveSystem.mark_onboard_done()
 	Routes.start_game()
 	var playing := func() -> bool: return GameManager.is_playing() and get_tree().get_first_node_in_group("player") != null
 	if not await _wait_until(playing, 20.0):

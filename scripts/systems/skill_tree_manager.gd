@@ -265,8 +265,12 @@ func _apply_skill_effect(skill_id: StringName, level: int, is_replay: bool = fal
 			if player.has_method("refresh_flashlight_range"):
 				player.refresh_flashlight_range()
 		"inventory_space":
-			if not is_replay:
-				InventoryManager.add_slots(5)
+			var per_level: int = int(SKILL_TREES["utility"]["skills"]["inventory_space"]["effect_per_level"])
+			if is_replay:
+				# the loaded pack already has them; a pack saved before the skill was bought still gets them
+				InventoryManager.ensure_slots(InventoryManager.stats.base_slots + per_level * level)
+			else:
+				InventoryManager.add_slots(per_level)
 		"move_speed":
 			if player.stats:
 				player.stats.walk_speed *= 1.1

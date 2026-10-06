@@ -172,6 +172,10 @@ func _write_atomic(path: String, payload: Dictionary) -> bool:
 		return false
 	f.store_string(JSON.stringify(envelope))
 	f.close()
+	# a write that came out short (a full disk) must not rotate into the backups: three of them would push out every good one
+	if _read_envelope(tmp_path).is_empty():
+		DirAccess.remove_absolute(tmp_path)
+		return false
 	if FileAccess.file_exists(path):
 		_rotate_backups(path)
 	var err := DirAccess.rename_absolute(tmp_path, path)
@@ -260,8 +264,6 @@ func _migrate(data: Dictionary) -> Dictionary:
 	var from_version: int = int(data.get("version", 1))
 	if from_version >= SAVE_VERSION:
 		return data
-	# match from_version:
-	#   1: data = _migrate_v1_to_v2(data)  # (no such change has shipped yet)
 	data["version"] = SAVE_VERSION
 	return data
 
@@ -316,6 +318,8 @@ func _save() -> void:
 		"progress": ProgressTracker.to_dict(),
 		"settings": SettingsManager.to_dict(),
 		"player_pos": _read_player_pos(),
+		"vitals": _read_player_vitals(),
+		"puzzles": PuzzleSystem.to_dict(),
 		"district": _current_district(),
 		"quests": QuestManager.serialize(),
 		"xp": XpManager.save_data(),
@@ -339,8 +343,10 @@ func load_all() -> bool:
 	InventoryManager.from_dict(data.get("inventory", {}))
 	Encyclopedia.from_dict(data.get("encyclopedia", {}))
 	ProgressTracker.from_dict(data.get("progress", {}))
-	SettingsManager.from_dict(data.get("settings", {}))
+	SettingsManager.apply_run_settings(data.get("settings", {}))
+	PuzzleSystem.from_dict(data.get("puzzles", {}))
 	_pending_player_pos = _parse_player_pos(data.get("player_pos", null))
+	_pending_vitals = _parse_vitals(data.get("vitals", null))
 	_quest_data = data.get("quests", {})
 	# Прогресс квестов раньше оседал в буфере _quest_data и никому не отдавался:
 	# после загрузки все 19 квестов снова были на нуле.
@@ -383,6 +389,8 @@ func reset_all() -> void:
 	InventoryManager.from_dict({})
 	Encyclopedia.from_dict({})
 	_pending_player_pos = Vector3.INF
+	_pending_vitals = {}
+	PuzzleSystem.reset()
 	_quest_data = {}
 	QuestManager.reset()
 	_photos = []
@@ -428,6 +436,9 @@ func reset_all() -> void:
 func _parse_player_pos(pp) -> Vector3:
 	if not (pp is Array) or pp.size() < 3:
 		return Vector3.INF
+	for coordinate in pp.slice(0, 3):
+		if not (coordinate is float or coordinate is int):
+			return Vector3.INF
 	var v := Vector3(pp[0], pp[1], pp[2])
 	return v if v.is_finite() else Vector3.INF
 
@@ -435,6 +446,44 @@ func consume_pending_player_pos() -> Vector3:
 	var p := _pending_player_pos
 	_pending_player_pos = Vector3.INF
 	return p
+
+## GDD 10 saves health, stamina and the battery; a Continue used to start with all three full. A dead player saves
+## none (the death autosave would bring Continue back with 0 health), and a file's numbers are clamped like any input.
+const MAX_VITAL: float = 1000.0
+var _pending_vitals: Dictionary = {}
+
+func _read_player_vitals() -> Dictionary:
+	var p := get_tree().get_first_node_in_group("player")
+	if not is_instance_valid(p) or float(p.get("hp")) <= 0.0:
+		return {}
+	return {"hp": float(p.get("hp")), "stamina": float(p.get("stamina")), "battery": float(p.get("battery"))}
+
+func _parse_vitals(v: Variant) -> Dictionary:
+	if not (v is Dictionary):
+		return {}
+	var out := {}
+	for key in ["hp", "stamina", "battery"]:
+		var n: Variant = v.get(key, null)
+		if not (n is float or n is int) or not is_finite(float(n)):
+			return {}
+		out[key] = clampf(float(n), 0.0, MAX_VITAL)
+	return out
+
+## Called when the loaded game places its player (WorldRuntime), before a respawn's half health is applied over it.
+func apply_pending_vitals(player: Node) -> void:
+	if _pending_vitals.is_empty() or player == null:
+		return
+	var stats: Variant = player.get("stats")
+	var max_hp: float = float(stats.max_hp) if stats != null else 100.0
+	var max_stamina: float = float(stats.stamina_max) if stats != null else 100.0
+	var max_battery: float = float(player.get("battery_max"))
+	player.set("hp", clampf(float(_pending_vitals["hp"]), 1.0, max_hp))
+	player.set("stamina", clampf(float(_pending_vitals["stamina"]), 0.0, max_stamina))
+	player.set("battery", clampf(float(_pending_vitals["battery"]), 0.0, max_battery))
+	_pending_vitals = {}
+	EventBus.player_health_changed.emit(float(player.get("hp")) / max_hp)
+	EventBus.player_stamina_changed.emit(float(player.get("stamina")) / max_stamina)
+	EventBus.player_battery_changed.emit(float(player.get("battery")) / maxf(max_battery, 0.001))
 
 func set_quest_data(data: Dictionary) -> void:
 	_quest_data = data
@@ -524,6 +573,8 @@ func save_slot(slot: int) -> bool:
 		"progress": ProgressTracker.to_dict(),
 		"settings": SettingsManager.to_dict(),
 		"player_pos": _read_player_pos(),
+		"vitals": _read_player_vitals(),
+		"puzzles": PuzzleSystem.to_dict(),
 		"district": _current_district(),
 		"quests": QuestManager.serialize(),
 		"xp": XpManager.save_data(),
@@ -557,8 +608,10 @@ func load_slot(slot: int) -> bool:
 	InventoryManager.from_dict(data.get("inventory", {}))
 	Encyclopedia.from_dict(data.get("encyclopedia", {}))
 	ProgressTracker.from_dict(data.get("progress", {}))
-	SettingsManager.from_dict(data.get("settings", {}))
+	SettingsManager.apply_run_settings(data.get("settings", {}))
+	PuzzleSystem.from_dict(data.get("puzzles", {}))
 	_pending_player_pos = _parse_player_pos(data.get("player_pos", null))
+	_pending_vitals = _parse_vitals(data.get("vitals", null))
 	_quest_data = data.get("quests", {})
 	QuestManager.from_dict(_quest_data)
 	# Mirror load_all(): restore current district so a slot load returns

@@ -22,7 +22,7 @@ corner_radius_bottom_left = 80
 corner_radius_bottom_right = 80
 
 [sub_resource type="StyleBoxFlat" id="style_slot"]
-bg_color = Color(0.078, 0.106, 0.141, 1.0)
+bg_color = Color(0.0784314, 0.105882, 0.141176, 1)
 border_width_left = 1
 border_width_right = 1
 border_width_top = 1
@@ -301,13 +301,16 @@ custom_minimum_size = Vector2(164, 164)
 theme_override_styles/panel = SubResource("style_radar")
 
 [node name="BottomCenter" type="HBoxContainer" parent="."]
-anchors_preset = 6
+anchors_preset = 7
+anchor_left = 0.5
 anchor_top = 1.0
+anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -192.0
 offset_top = -64.0
 offset_right = 192.0
 offset_bottom = -16.0
+grow_horizontal = 2
 grow_vertical = 0
 size_flags_horizontal = 4
 

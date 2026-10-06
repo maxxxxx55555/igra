@@ -76,13 +76,11 @@ func open() -> void:
     _is_open = true
     visible = true
     get_tree().paused = true
-    print("PAUSE_MENU open=true")
 
 func close() -> void:
     _is_open = false
     visible = false
     get_tree().paused = false
-    print("PAUSE_MENU open=false")
 
 func _on_resume() -> void: close()
 func _on_save() -> void:
@@ -104,7 +102,6 @@ func _on_main_menu() -> void:
     if gm and gm.has_method("return_to_menu"):
         gm.return_to_menu()
     get_tree().change_scene_to_file("res://scenes/main_3d.tscn")
-    print("PAUSE_MENU main_menu=true")
 
 func _show_feedback(text: String) -> void:
     var lbl := Label.new()

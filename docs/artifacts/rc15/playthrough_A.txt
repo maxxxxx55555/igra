@@ -1,0 +1,70 @@
+[pt] PASS A01a the launch shows the loading screen, not a menu (top control /root/Splash/Logo)  frame=A01_boot_loading.jpg
+[pt] PASS A01 boot reaches the main menu in 7.6 s, no Continue on a fresh profile (language ru)  frame=A01_menu.jpg
+[pt] PASS A02 the Difficulty button opens the screen on top, with a description under each pick (click: ok, top control /root/Difficulty/Panel)  frame=A02_difficulty.jpg
+[pt] PASS A02b Normal sets the difficulty and returns to the menu: a pick starts nothing (click: ok)  frame=A02_difficulty_picked.jpg
+[pt] PASS A02c Play starts the game and the player spawns (click: ok)  frame=A02_game_start.jpg
+[pt] PASS A03 the onboarding card opens on the first start of a fresh profile  frame=A03_onboarding_1.jpg
+[pt] note A03 the player walked 0.0 m in 1 s of W while the card covers the screen
+[pt] note A03 card 4 frame=A03_onboarding_4.jpg
+[pt] note A03 card 7 frame=A03_onboarding_7.jpg
+[pt] PASS A03b Next seven times closes the card and the profile remembers it (7 clicks)  frame=A03_onboarding_done.jpg
+[pt] PASS A04 the mouse is captured while playing (mode 2)
+[pt] PASS A04a a 200 px mouse move turns the view -0.61 rad (expected -0.60)
+[pt] PASS A04b F toggles the flashlight (true -> false)  frame=A04_flashlight_off.jpg
+[pt] PASS A04c W walks 5.9 m in 2 s (2.9 m/s, a person walks 1.4 to 3.5)  frame=A04_walk.jpg
+[pt] PASS A04c2 starting to walk costs no stamina (100 -> 100): one press is not a dodge
+[pt] PASS A04d Shift+W runs 7.3 m in 1.5 s (4.9 m/s), stamina 100 -> 66, state 2  frame=A04_run.jpg
+[pt] PASS A04e Space jumps 0.80 m and counts
+[pt] PASS A04g a double tap of W dashes 3.6 m in 0.4 s (a walk covers 1.2) and costs stamina (96 -> 88, part of it regained meanwhile)
+[pt] PASS A04f holding Ctrl crouches (capsule 1.2 m, state 4) and releasing stands up (1.6 m)  frame=A04_crouch.jpg
+[pt] PASS A04h no pale square comes and goes in the lower-right corner (0 of 8 frames brighter than the clearest by more than 3.5; corner 19.0 to 21.1; hurt in the window 0 by )  frame=A04_corner.jpg
+[pt] note A05 setup: a crawler spawned 5 m ahead, turned to face the player; crosshair state 'default'
+[pt] PASS A05 injected left clicks hurt the monster (hp 50 -> -8 in 3.0 s; the player took 14; last gap 0.7 m, walked 1.1 m)  frame=A05_monster_hit.jpg
+[pt] note A05 the monster died; frame=A05_monster_dead.jpg
+[pt] note A05 setup: the profile is saved first (the autosave a first repair writes); with no save at all a retry is a new game
+[pt] PASS A05b HP 0 ends in the death screen with cause, time, districts and documents, one death counted (ВЫ ПОГИБЛИ | Вас убил: Ползун | Время в игре: 0:26
+Районов восстановлено: 0 / 11 (0%)
+Документов найдено: 0 / 101; deaths 0 -> 1)  frame=A05_death_screen.jpg
+[pt] note A05c new player: a different node from the dead one: true; hp/battery each 0.25 s: 50/96 51/96 52/96 52/96 53/95 54/95 54/95 55/95; battery at death 96; pending respawn -1.0
+[pt] PASS A05c Retry respawns the player at HP 50% (click: ok; buttons Повторить(true), Главное меню(true))  frame=A05_respawn.jpg
+[pt] note A06 setup: two batteries and a medkit added to the pack
+[pt] PASS A06 Tab opens the inventory screen  frame=A06_inventory.jpg
+[pt] PASS A06b select the battery, press Use: one battery spent, the light recharged to 55% (clicks: ok / ok)  frame=A06_inventory_selected.jpg
+[pt] PASS A06c Tab closes it and the game runs on
+[pt] note A06 setup: 3000 coins added (the cheapest shop item costs 1000)
+[pt] PASS A06d Esc opens the pause menu  frame=A06_pause.jpg
+[pt] PASS A06e0 the shop lists something to buy (7 items; grid [P: (722.5, 372.0), S: (514.0, 332.0)], 7 cards, visible true)
+[pt] PASS A06e Pause > Shop opens the card; Buy takes 1200 coins, grants the item and marks the card 'Уже куплено' (clicks: ok / ok)  frame=A06_shop_bought.jpg
+[pt] note A06 the card before the purchase: frame=A06_shop.jpg
+[pt] PASS A06f Pause > Upgrades opens the five branches; a cost button buys one level (0 -> 1, clicks: ok / ok)  frame=A06_upgrades.jpg
+[pt] PASS A06g Resume returns to the game
+[pt] PASS A07 K opens the city map; on a fresh profile every row is the street you stand on or locked (11 disabled, 0 travel)  frame=A07_map_fresh.jpg
+[pt] PASS A07c the map's list is longer than its window and shows a scroll bar (10.0 px wide, 440 of 753), with no horizontal bar (rows fit: true)
+[pt] note A07 the list scrolled to its end, frame=A07_map_scrolled.jpg
+[pt] note A07 setup: the Suburbs set to FULL so that Residential opens
+[pt] PASS A07b Travel on the open row moves the player to residential and leaves no map rows on screen (click: ok; stray: )  frame=A07_travel_residential.jpg
+[pt] PASS A08 a light at 18% shows the battery hint ('Свет гаснет: нажмите 3, чтобы взять батарейку.')  frame=A08_battery_low.jpg
+[pt] PASS A08b at 0% the light goes out and stays out until a battery (enabled false, died true)  frame=A08_battery_0.jpg
+[pt] PASS A09 T opens the skill tree with its branches (1 tab group)  frame=A09_skill_tree.jpg
+[pt] PASS A09b T closes it and the game runs on
+[pt] note A12 the tier dropdown opens by a real click: ok frame=A12_dropdown_open.jpg
+[pt] PASS A12.0 graphics tier Low applies live (draw calls 165, 30 fps)  frame=A12_tier_0_low.jpg
+[pt] PASS A12.1 graphics tier Medium applies live (draw calls 181, 30 fps)  frame=A12_tier_1_medium.jpg
+[pt] PASS A12.2 graphics tier High applies live (draw calls 181, 43 fps)  frame=A12_tier_2_high.jpg
+[pt] PASS A12.3 graphics tier Ultra applies live (draw calls 181, 25 fps)  frame=A12_tier_3_ultra.jpg
+[pt] PASS A12.2 graphics tier High applies live (draw calls 181, 43 fps)  frame=A12_tier_2_high.jpg
+[pt] PASS A13.ru language ru: the settings screen reads in it, 0 control(s) run past the window  frame=A13_lang_ru.jpg
+[pt] PASS A13.en language en: the settings screen reads in it, 0 control(s) run past the window  frame=A13_lang_en.jpg
+[pt] PASS A13.es language es: the settings screen reads in it, 0 control(s) run past the window  frame=A13_lang_es.jpg
+[pt] PASS A13.de language de: the settings screen reads in it, 0 control(s) run past the window  frame=A13_lang_de.jpg
+[pt] PASS A13.fr language fr: the settings screen reads in it, 0 control(s) run past the window  frame=A13_lang_fr.jpg
+[pt] PASS A13.it language it: the settings screen reads in it, 0 control(s) run past the window  frame=A13_lang_it.jpg
+[pt] PASS A13.pt_BR language pt_BR: the settings screen reads in it, 0 control(s) run past the window  frame=A13_lang_pt_BR.jpg
+[pt] PASS A13.tr language tr: the settings screen reads in it, 0 control(s) run past the window  frame=A13_lang_tr.jpg
+[pt] PASS A13.ja language ja: the settings screen reads in it, 0 control(s) run past the window  frame=A13_lang_ja.jpg
+[pt] PASS A13.ko language ko: the settings screen reads in it, 0 control(s) run past the window  frame=A13_lang_ko.jpg
+[pt] PASS A13.zh language zh: the settings screen reads in it, 0 control(s) run past the window  frame=A13_lang_zh.jpg
+[pt] PASS A13.zh_TW language zh_TW: the settings screen reads in it, 0 control(s) run past the window  frame=A13_lang_zh_TW.jpg
+[pt] PASS A13.ar language ar: the settings screen reads in it, 0 control(s) run past the window  frame=A13_lang_ar.jpg
+[pt] PASS A15 Main menu from the pause menu: one menu (1), Continue offered (true)  frame=A15_menu_after_play.jpg
+[pt] DONE mode=A steps=67 fails=0 time=103s

@@ -48,8 +48,7 @@ a dead brute still slamming, the HUD opacity setting raising the hit marker to t
 Found reading the final frames: the menu title drew a blank line between its words on CRLF checkouts (Windows autocrlf, the
 AAB included; a multi-line string in a scene file), fixed and gated in `ui_layout_check`.
 
-**Still open (honest):** 1.34 M primitives per frame against the 50K budget (PERF_PASS 18, DEFERRED-STRUCTURAL,
-needs real low-poly geometry); the deferred GDD rows in `docs/TZ_COMPLIANCE.md` (G21, G25, G26, S02, C03).
+**Still open (honest), rc14 text, superseded in rc15:** the 1.34 M primitives per frame fell to 39.7K-50.2K (PF4) and the deferred GDD rows G21, G25, G26, S02, S04-hide and C03 were built (`docs/TZ_COMPLIANCE.md`, CORRECTION_LOG 96); the open list is the rc15 residual table in `docs/ORDER_PASS_REPORT.md`.
 
 ## DIAGNOSED (2026-09-21, P8): the "прогон 3D-сцены" gate's real failure point, captured for the first time
 

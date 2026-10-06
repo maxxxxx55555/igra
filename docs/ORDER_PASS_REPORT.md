@@ -110,11 +110,80 @@ lit, residential, park, hospital, industrial dark, and the power station lit thr
 
 | Item | State |
 |---|---|
-| Swarm missions not built | G25 weapons, C03 auto-aim, G07 crouch capsule, S02 visibility model, G21 blueprints, G26 photos, S04 hiding-spot placement, menu rows V.2 / V.5 and the quick wheel, SFX wiring of the delivered interact sounds (RESUME_NOTE, TZ_COMPLIANCE DEFERRED-STRUCTURAL) |
+| Swarm missions not built | **Built in rc15 (CORRECTION_LOG 96), except the SFX wiring (still listed in `docs/ASSET_SHOPPING_LIST.md`); the quick wheel is wired (matrix IN89).** Was: G25 weapons, C03 auto-aim, G07 crouch capsule, S02 visibility model, G21 blueprints, G26 photos, S04 hiding-spot placement, menu rows V.2 / V.5 and the quick wheel, SFX wiring of the delivered interact sounds (RESUME_NOTE, TZ_COMPLIANCE DEFERRED-STRUCTURAL) |
 | Primitives 1.34 M against 50K per district | needs real low-poly geometry (assets rows 1-4), PERF_PASS 18 |
 | Placeholder art | capsule monsters, primitive boss, CSG weapon box, sphere-on-cylinder trees: `docs/ASSET_SHOPPING_LIST.md` |
 | Native read of the new translations | 27 name keys and 33 documents were written by this pass (not a native speaker) |
 | Owner actions | assets per the shopping list, music per OWNER_HANDOFF, Play Console per RELEASE_RUNBOOK, Bebas Neue Bold file (V03), save-slot picker decision (G22) |
+
+## rc15 final (sign-off, 2026-10-02)
+
+Baseline `v8.0.0-rc14` @ `651a2a0`; 41 commits on `main` up to the code tree `8ad0b93` (game code last changed in `8ad0b93`; the commits after it are records
+and artifacts). One player-proof pass: the real game played through injected input events with a frame read at every step (`tools/qa_sim/playthrough`:
+A boot, onboarding, controls, first monster, death, inventory, shop, map, tiers and 13 languages; V the bot to the victory and New Game+; B relaunch,
+Continue, hardcore, daily, achievements; S every Codex tab, the HUD buttons, the workbench and the credits). Every finding was fixed at its root and locked
+by a `closeout_check` assertion or a play-through step that fails on the old code (`closeout_mutation_signoff.txt`: 16 mutations, 20 of the 32 combat checks
+fail on the mutated tree; the earlier `closeout_mutation_batch10.txt`: 13 mutations, 17 checks). Evidence per closure: `docs/PROOFS.md` (53 closures);
+rows: `docs/ACCEPTANCE_CHECKLIST.md` (200 rows); decisions: `docs/TZ_DECISIONS.md`; corrections 58-100: `docs/CORRECTION_LOG.md`.
+
+| Area | What was wrong or changed | Key commits |
+|---|---|---|
+| Combat | No swing had ever landed on a regular monster: the swing was an Area3D on layer 1 and every monster sits on layer 2 (the earlier A05 PASS was a shadow dying in the flashlight). Now a per-tick 2.7 m sphere query on layers 1 and 2 hits the nearest body that takes damage; combo damage back to the GDD 8 / 12 / 20; a crawler idles and investigates; a dead player is not killed twice (CORRECTION_LOG 83) | `5cbaff5` |
+| Movement and world | Player speed was px/s in a metre world (170.60 m per second of W), void blocks between streets, floaty gravity, a dodge on every move start, a light that stayed off after a recharge; road markings z-fought the road tiles (stacked stripes on every lit road, read past in every earlier frame, CORRECTION_LOG 85); dust ghosts in the flashlight cone | `08566e0`, `11f1efd`, `932d1e8`, `892e715` |
+| Menus and UI | Menu overlay over Settings, no onboarding on a first game, minimal death screen, empty Shop card, five UI scenes laid out in the node header, skill tree without room for its branches, scroll bars 0 px wide, city map rows clipped, Help rows naming dead actions, Codex tabs and credits untranslated or empty (CORRECTION_LOG 87) | `11f1efd`, `45c08b5`, `17a1bfa`, `98f2b83`, `892e715`, `e89d370` |
+| Quick bar | The six-slot quick bar never showed: `hud_3d.tscn` anchored it to the left screen edge and the HUD's own sweep of duplicates in the lower-left corner freed it at the start; every HUD frame of the pass had read as normal. Bottom centre now, the level-up toast above bar and hint, the slot colour the exact palette value, the theme probe fails without it (CORRECTION_LOG 97) | `705b2be`, `8ad0b93` |
+| Tutorial | A desktop player could not finish a hint: every step waited for a touch-only signal (CORRECTION_LOG 84); the generator hint now ends on the first repair | `892e715`, `e89d370` |
+| Victory | The victory screen showed the wrong ending on every win (`trigger_win()` changes the state before the ending is evaluated; CORRECTION_LOG 86) | `e89d370` |
+| Breaker pass (R5) | Nineteen findings; B1-B5 (the finale never armed from a loaded grid, loot lost at a death, a Difficulty pick wiping the save, packs losing their extra slots, Hardcore read live) all closed; of E1-E14, 10 closed, 2 partly (E1, E14), 2 deferred (E11, E13) (`docs/artifacts/rc15/breaker_report.md`) | `f299c7e`, `fb06cbb`, `5d0863f`, `e146182` |
+| Performance | The moon's four shadow cascades cost draw calls and 62K primitives in the first district; one 40 m cascade and no moon shadow in the dark stages. The first numbers were then found to be a paused scene (CORRECTION_LOG 93); on the running game D1 134 / 132 and D11 136 / 133 before the quick bar came on screen, D1 167 / 166 and D11 166 / 168 after it; an A/B on the same tree with the old moon shadow puts D1 at 214 (over the 200 budget) | `a57f9dd`, `2840f8f`, `8ad0b93` |
+| Visual gate (R3) | Rewritten against the 272 images under docs/ (217 committed, 55 local bot-timeline frames): a bright-magenta rule, a dim-wash rule and a vivid rule replace the saturation outlier that fired on every dark street; the vivid limit moved from 0.05% to 0.13% when a combat frame caught the blood burst at 0.062%; nine mutations all caught (`python tools/qa_sim/visual_gate_mutations.py`) | `e89d370`, `2840f8f` |
+| Sign-off finds | The 3D scene test failed on a fresh profile (the onboarding paused the tree under the swing); the closeout's streak check left "done today" saved and failed the touch probe on a day with a progress-type challenge; a failing gate's own FAIL line was cut off by its log tail; the FUNCTION_MATRIX totals line was stale (CORRECTION_LOG 90-92, 95); TZ_COMPLIANCE still called six built rows deferred (96) | `0828c5e`, `f494525`, `61b151f`, `71d815f` |
+| R8 round 13 | An independent read-only verifier (199 tool calls) returned CONFIRMED 72 / FAIL 11 / UNVERIFIED 9 on `e314dec`: the quick bar, six rows without an assertion that bites, 14 rows without a check id, 35 shipped debug and commented-out lines, play-through step ids that do not exist, stale or unsupported sentences, an unarchived before-fix perf run, no windowed Music-bus run (CORRECTION_LOG 97-100); all fixed, the before-fix perf and the audio gate archived | `705b2be`, `8ad0b93` and this commit |
+| Docs | GDD amended to the shipped rules, acceptance checklist, proofs, decisions, corrections, function matrix, the R4 two-grep proof that the four owner rows are asset or decision only | `3d936da`, `0844233`, `e146182`, `71d815f` and this commit |
+
+### Final battery (code tree `8ad0b93`; all QA runs muted)
+
+| Gate | Result |
+|---|---|
+| `tools/check.sh` full (windowed reimport first) | **Всё зелёное, 56 checks**, EXIT 0, at `8ad0b93` and again at `9e8c6b0` (`check_full_signoff.txt`, the later run); two windowed-only gates (perf budget, Music bus) skip in a headless run and are run below. Earlier batteries of the day were not green: the 3D scene gate and the touch probe (CORRECTION_LOG 90-91), then the theme probe on the quick bar's slot colour (97) |
+| Static `--static`, `flow_check`, `scene_node_check`, compile gate | 31 checks, 56 flow checks, scene nodes clean (all inside the battery), `COMPILE_GATE bad=0` |
+| `closeout_check` | **311 checks, 0 fails** (`closeout_check_signoff.txt`; the 311th, the workbench salvage I9.4, was added after verifier round 14, a tools-only change) |
+| Closeout mutations | 16 mutations, 20 of the 32 combat checks fail on the mutated tree, the tree is restored byte for byte (`closeout_mutation_signoff.txt`, `tools/qa_sim/closeout_mutations.py`) |
+| attack_sim | 41 OK, `DONE fails=0` (`attack_sim_signoff.txt`); regrep of signed saves, NG+, flashlight, daily, slot binding, schema validation, IntegrityGuard and export exclusions in `security_regrep.txt` |
+| balance_sim | PASS (DARK solvable with at least 20% margin in every district, no resource dead end) |
+| i18n truth gate | **12/12** translated locales against `en`; 1523 keys in all 13 files; no empty value |
+| Visual truth, six final frames | **6/6 PASS** (`04_combat.png` vivid 0.001%); the four committed corruption frames fail; nine of nine threshold mutations caught |
+| Audio truth (windowed, Master muted by the guard) | **PASS**: Music peak -11.8 dB (> -45), SFX -67.5, Ambient -29.5 (`audio_truth_signoff.txt`) |
+| Perf (windowed, the game running, two runs with the quick bar) | D1 **167 / 166** draw calls (< 200), D11 **166 / 168** (< 350), p95 25.38 / 20.37 ms at D1 and 20.37 / 22.73 ms at D11, 140 particles, 100.5 / 100.6 MiB static, 153.4 MiB video, 127.9 MiB textures, frame primitives 44.1K to 45.4K, `DONE fails=0`; earlier runs without the bar: 134 / 132 and 136 / 133 draw calls, p95 31.9 to 32.0 ms at D1; A/B with the pre-`a57f9dd` moon shadow: D1 **214**, 106.8K primitives (`perf_rc15_final.txt`) |
+| Play-through (windowed, input injection, a frame read per step) | A 67 steps / 0 fails (103 s), V reached the victory screen (29 steps / 0 fails), B 12 / 0, S 23 / 0 (`playthrough_A/V/B/S.txt`; frames in `docs/stills/playthrough/`) |
+| Bot (IRON RULE) | **3/3 WIN** on the final tree (11/11 districts FULL, 0 deaths, 0 softlocks; 121 / 104 / 107 s at 4x), `bot_signoff_summary.txt` |
+| AAB signed-verify | **Signed and verified**: `build/tls.aab` **183,257,097 bytes (183.3 MB)** built from `8ad0b93` (headless `--export-release`; base module 27.0 MB, install-time asset pack 155.3 MB compressed / 213.7 MB raw, 2882 entries); `jarsigner -verify` prints `jar verified.`; `keytool -printcert -jarfile` shows `CN=Maxsim Kasky` and SHA-256 `4F:6B:E6:41:5C:26:0B:34:1F:A0:CF:88:46:60:3B:82:64:0F:8B:6B:0D:5F:97:FD:FD:3A:FF:93:DD:89:59:09`, the fingerprint of `.signing/tls-release.keystore` (`docs/RELEASE_ARTIFACTS.md`) |
+| R8 verifier | round 13 on `e314dec`: CONFIRMED 72 / FAIL 11 / UNVERIFIED 9; round 14 on `2b4a3ad`: CONFIRMED 27 / FAIL 5 / UNVERIFIED 0 (every round-13 item closed, five new nits fixed); **round 15 on `10cd7ae`: CONFIRMED 19 / FAIL 0 / UNVERIFIED 0**; the tag is on the commit that records it |
+
+### Frames read by eye (final, `docs/stills/final/`, windowed, half resolution, recaptured on the sign-off tree)
+
+- `01_main_menu.png`: the title inside the lamp, the daily card ("Play for 15 minutes (0/15)", streak 0), six equal buttons in the light cone, the silhouette and parked cars.
+- `02_district_day_full.png`: the first street after FULL: the lamp head lit, a tree, blocks with lit windows behind, the "+200 coins for a district" toast, the "Level up" line above the tutorial hint, and under the hint the six-slot quick bar (two weapons, battery, medkit, grenade, light).
+- `03_district_night_dark.png`: the same street dark: lamp head dim, windows dark, "You wake up. The city has gone dark." (the first capture of this pass showed the onboarding cards over this frame because the profile had not finished them: CORRECTION_LOG 93).
+- `04_combat.png`: a monster in its hit flash on a lit tile with the death-burst spray of the blood effect around it (the frame that moved the vivid limit), the quick bar below the hint.
+- `05_boss.png`: the Architect (a tall column, placeholder art) at the crosshair on the power-station street, towers with lit windows on both sides, the log lines "The city is lit again. But something is coming." and "THE ARCHITECT", the quick bar with real counts.
+- `06_victory_ngplus.png`: the "Hope" ending (11/11 districts, 1/101 documents), Set up New Game+ / Share / Main menu, centred.
+
+### Residual (rc15 final)
+
+| Item | State and owner action |
+|---|---|
+| Owner rows (V03, G22, G28/D04, N01/I02/T01) | Asset or decision only, two greps each in `docs/TZ_COMPLIANCE.md` R4: the Bebas Neue Bold file, the save-slot picker or an amended G22, the GDD text lines |
+| Device test of the AAB (T01) | Install and run on a phone; the per-device download size is read in Play Console (`bundletool` is not on this machine) |
+| Frame rate on a phone | p95 20 to 32 ms at D1 on the dev iGPU across four runs (31 to 49 fps) against the 30 fps floor (PF3); a mid-range phone is untested, and the quick bar added about 33 draw calls (D1 167 of 200) |
+| Placeholder art | Boss, capsule monsters, primitive weapon box, sphere-on-cylinder trees (`docs/ASSET_SHOPPING_LIST.md`); the boss art is an asset row, not code |
+| Cosmetic P2/P3 from the S sweep | Encyclopedia grid small at three columns, journal paper placeholder, small type in the workbench |
+| Deferred breaker rows | E1 second half (New Game+ can be banked again from the pre-boss save), E11 collect quests count refunds, E13 the battery does not drain behind a blocking screen: owner decisions (TZ_DECISIONS `DEFERRED-P3`) |
+| Damage cap | A hit is capped at 12 with 0.8 s of mercy; whether that is the intended difficulty is the owner's call |
+| Security inherent limits | P-05, R-08 across launches, D-01, D-02, D-03 (owner-held PCK key), B7's legacy achievements half, R-02 speed watchdog (`docs/ARENA_CLOSURE.md`) |
+| Unexercised paths | The main menu's Quit confirmation and the SFX wiring of the delivered interact sounds (`docs/ASSET_SHOPPING_LIST.md`); no step clicks the first, the second is unwired |
+| Music | Excluded by owner (`OWNER_HANDOFF.md`) |
+| Play Console upload | Owner (credentials); `version/code` stays 1 until the first upload |
 
 ## Battery (history, before rc14)
 
@@ -148,6 +217,9 @@ lit, residential, park, hospital, industrial dark, and the power station lit thr
 | 10 | `v8.0.0-rc10` (`c46d8a3`) | CONFIRMED 121 / PARTIAL 3 / FAKE 0 | The windowed perf and audio probes start a New Game but had no save guard on their documented direct launch; both runners now refuse to start unguarded, and `tools/qa_sim/guarded_windowed` runs any windowed probe under the guard (`tz_verify` delegates to it). V05-mobile had no measurement behind DR-3: the mobile 1024 override is removed (GDD 2048, DR-4). The six FIXED matrix rows name their commits. CORRECTION_LOG 38. rc11: direct launches exit 2 with the profile untouched; guarded perf (D1 253 draw calls, D11 cap OK), audio (Music -20.3 dB, PASS) and tz_verify (`fails=0`, V05 desktop+mobile 2048) each restored all 11 profile files byte-identical; check.sh full **44 green**. Mobile-only render setting, no gameplay change: no IRON RULE bot. |
 | 11 | `v8.0.0-rc11` (`1430516`) | CONFIRMED 121 / PARTIAL 15 / FAKE 0 | Root fix for QA launches on the owner's profile (round 12 added autopilot coverage, a verified manifest, an airtight abort and a lifecycle gate): the first autoload `QaLaunchGuard` snapshots on any `scenes/tools/*` or `--shot` launch not wrapped by the shell guard, restores at exit, and keeps a crash copy the next unguarded launch restores (replaces the per-runner refusals and `_user_data_snapshot.gd`). DR-4 applied where DR-3 had no measurement: D03 stage lighting now GDD (0.03/0.12, 0.11/0.25, 0.16/0.40) and E05 district reward 200 + 100 per district. Labels: S03 note, V05-mobile DR-4, A03 DR-5, G22 DR-6; G34 audio logs counted; S02 text; X12 verified (suite P2r); X24 text; headless_suite treats exit 3 as skip; P2m retries a MENU window; tz_verify no longer reads a stale log. CORRECTION_LOG 39. rc12: `qa_guard_check` OK; direct unguarded suite x3 and a killed run recovered, profile sha256-identical each time; tz_verify 19 checks `fails=0`; X12 / E05 / drain / flash mutations caught; check.sh full **45 green**; IRON RULE bot **2/3 WIN** (s2 X21-type spine stall at power_station), coins earned 8718-8975 on the wins. |
 | 12 | `v8.0.0-rc12` (`b8abb2e`) | CONFIRMED 132 / PARTIAL 11 / FAKE 0 | QaLaunchGuard hardened: sha256 manifest written last and pid ownership (a partial, empty or damaged copy is never restored), airtight `OS.crash` abort, verified copies, every `tools/` scene or script counts as a QA launch (autopilot included), and the shell guard refuses while a copy is pending. New check.sh lifecycle check on the real profile. Fog-at-load check loads on High (Ultra profiles masked it). D03 cite GDD.md:108-111. Report rows fixed (C4 lists, battery, visual breakdown, DR-4 label). CORRECTION_LOG 40. rc13: guard copy check 13/13, lifecycle check OK and mutation-caught, damaged-copy abort rc 132 with no probe written, check.sh full **46 green**. QA tooling and docs: the rewritten QaLaunchGuard autoload ships but acts only on QA launches, so no IRON RULE bot. |
+| 13 | `v8.0.0-rc15` pre-tag (`e314dec`) | CONFIRMED 72 / FAIL 11 / UNVERIFIED 9 (a read-only subagent, 199 tool calls) | The six-slot quick bar was never on screen (CORRECTION_LOG 97); six rows without an assertion that bites got one (I9.2, I9.8, I9.13 on the grid, H3.2, ach_14, TIER1) and 14 rows now name their check id (98); 35 shipped debug and commented-out lines removed (99); play-through step ids, the row count (200) and the unsupported or stale sentences of RUN_STATE and ORDER_PASS_REPORT fixed (100); the before-fix moon perf, the Music-bus gate and the mutation tool archived |
+| 14 | `v8.0.0-rc15` pre-tag (`2b4a3ad`) | CONFIRMED 27 / FAIL 5 / UNVERIFIED 0 (a read-only subagent, 149 tool calls; all eleven round-13 FAILs and nine UNVERIFIED re-checked, every one of them closed) | The I9.4 row promised equip and disassemble with no assertion (equip has no item data, decided in I9.5-equip; the workbench salvage is asserted now, I9.4); the image count (272 under docs/, 217 committed, 55 local); `docs/PROOFS.md` regenerated (three quotes had drifted from the artifacts); RUN_STATE's closure count (53); the GDD's key count (1523 per locale, 19 799 in all) |
+| 15 | `v8.0.0-rc15` pre-tag (`10cd7ae`) | **CONFIRMED 19 / FAIL 0 / UNVERIFIED 0** (a read-only subagent, 76 tool calls; the five round-14 items and the regression spot checks) | None; one nit, the generator header of PROOFS.md said batches 3 to 14 (now 15). The tag `v8.0.0-rc15` goes on the commit that records this round |
 
 Cloud cross-audit of rc13 (`docs/CLOUD_AUDIT.md`): CONFIRMED 95 / PARTIAL 4 / FAKE 0 and 3 honesty findings,
 all fixed on `cloud/audit-ce782f8` (`a6f4fdb` guard, `c2e9b86` daily clock, docs); CORRECTION_LOG 41-43.
@@ -161,14 +233,14 @@ No external `docs/CLOSURE_VERIFICATION.md` exists.
 
 ## Frames (read by eye this pass)
 
-The rc14 sign-off frames are listed with what each shows in "rc14 final" above (`docs/stills/final/`, six frames, and
+The rc15 sign-off frames (`docs/stills/final/`, recaptured on the sign-off tree) are listed in "rc15 final" above; each play-through frame (`docs/stills/playthrough/`) was read at its step. The rc14 sign-off frames are listed with what each shows in "rc14 final" above (`docs/stills/final/`, six frames, and
 `docs/stills/beauty/before` / `after`, eight states). Also read: `docs/stills/evidence/g08_shipped_16m_e24.png`,
 `g08_gdd_8m_e2.png`, `g08_off_baseline.png`, and the re-captured `docs/stills/tzverify/*.png` (camera at the player
 now; the sign-off tz_verify run re-captured them again but only C06 and V02 were read, so those PNGs stay as committed).
 
 ## Corrections
 
-57 entries in `docs/CORRECTION_LOG.md` (14 at rc1, 15-21 from C8 round 1, 22 from round 2, 23-28 from round 3, 29-31 from round 4, 32-33 from round 5, 34 from round 6, 35 from round 7, 36 from round 8, 37 from round 9, 38 from round 10, 39 from round 11, 40 from round 12, 41-43 from the cloud cross-audit, 44-49 from the rc14 re-verify, 50-57 from the rc14 sign-off), including the false R0 fix, the dead C06 fog write, and two
+100 entries in `docs/CORRECTION_LOG.md` (14 at rc1, 15-21 from C8 round 1, 22 from round 2, 23-28 from round 3, 29-31 from round 4, 32-33 from round 5, 34 from round 6, 35 from round 7, 36 from round 8, 37 from round 9, 38 from round 10, 39 from round 11, 40 from round 12, 41-43 from the cloud cross-audit, 44-49 from the rc14 re-verify, 50-57 from the rc14 sign-off, 58-100 from the rc15 player-proof pass), including the false R0 fix, the dead C06 fog write, and two
 wrong claims in this pass's own commit messages.
 
 ## Residual (honest)
@@ -184,14 +256,14 @@ wrong claims in this pass's own commit messages.
 | G22 save-slot picker (DR-6) | Owner re-enables the archived 3+1 slot UI or amends GDD G22 (PLAN.md §В Этап 1 recorded "archive"). |
 | A03 per-speed footsteps (DR-5) | Owner supplies walk/jog/sprint recordings for asphalt, puddle and glass; the code already maps the other three surfaces. |
 | X21 bot spine stall, boss-phase stall | **Closed rc14**: both were game bugs (melee swing spent on the wrong body, loot over the void, pickup reach) plus a full-pack case; 13/13 and 3/3 bot seeds, 0 stalls (CORRECTION_LOG 50, 54). The bot is nondeterministic, so the sign-off records every run's stalls. |
-| X20 | Harness recovery proven; the keypress trigger is inferred. |
-| Primitives 1.34 M > 50K per district | Measured rc14 (PERF_PASS #18); needs geometry reduction work (DEFERRED-STRUCTURAL, P01). D1 draw calls are now 168-170 < 200. |
-| Deferred structural rows | G21 blueprints, G25 weapons, G26 photos, S02 visibility model, S04 hiding-spot placement, C03 auto-aim (needs G25); plus the menu rows V.2 / V.5, the quick wheel and the SFX wiring of the delivered interact sounds (A01 bus graph and P01 draw calls are done). The swarm that was to build them stopped at a usage limit (RESUME_NOTE). |
+| X20 | **Closed rc15 as BY-DESIGN-LIMIT**: the only writer of PAUSED is the Escape key (`GameManager.pause_game()` has one caller); there is no position bug to find. |
+| Primitives 1.34 M > 50K per district | **Closed rc15**: the prop mesh cut and the moon-shadow change leave the frame at 39.7K-48.9K primitives at D1 and 45.1K-50.2K at D11 (PF4, `perf_rc15_final.txt`); D1 draw calls are 132-134 < 200. |
+| Deferred structural rows | **Closed rc15 (CORRECTION_LOG 96): G21, G25, G26, S02, S04-hide, C03 and V.5 were built in batches 1 and 2; the quick wheel is wired (matrix IN89); only the SFX wiring of the delivered interact sounds stays open (`docs/ASSET_SHOPPING_LIST.md`).** Was: G21 blueprints, G25 weapons, G26 photos, S02 visibility model, S04 hiding-spot placement, C03 auto-aim (needs G25); plus the menu rows V.2 / V.5, the quick wheel and the SFX wiring of the delivered interact sounds (A01 bus graph and P01 draw calls are done). The swarm that was to build them stopped at a usage limit (RESUME_NOTE). |
 | Data-driven text | `data/documents.json`, `data/dialogs*.json`, `data/lore/lore.json` are Russian or transliterated legacy data no code reads; `game_over.tscn` and `pause_menu.tscn` keep Russian placeholders nothing instantiates; the 27 name keys and 33 documents added at rc14 are not native-reviewed (KNOWN_ISSUES, NATIVE_QA_FINDINGS). |
 | R-02 speed/teleport watchdog | Deferred (ARENA_CLOSURE R-02): IntegrityGuard covers non-finite position and falling through the floor; a speed watchdog needs per-state bounds. |
 | Security inherent limits | P-05 and R-08 (a clock set forward across launches; R-08's same-session half is closed in `c2e9b86`), D-01, D-02; D-03 needs an owner-held PCK key; B7 legacy unsigned `achievements.cfg` still trusted once (owner decides whether to reject legacy files, P-02). |
 | User-data folder reset | `app_userdata/The Last Streetlight` was deleted and recreated about 2026-09-25 00:24, cause unknown. Save files were backed up earlier to `%TEMP%\tls_save_backup`; `settings.cfg`/`onboarding.cfg`/`save.tres` were not. |
-| P02 particles < 500, RAM/VRAM | NEEDS-MEASUREMENT (TZ P02): windowed or on-device profile; the same run prices V05's 2048 moon shadow on a phone. |
+| P02 particles < 500, RAM/VRAM | **Measured rc15** (PF2, `perf_rc15_final.txt`): 140 particles, 100.1 MiB static, 153.0 MiB video, 127.5 MiB textures; a phone profile stays T01. |
 | G08 flashlight range and energy | **Decided rc14**: DR-3 keeps 16 m / 24; the GDD's 8 m / 2.0 leaves no readable pool (TZ_DECISIONS G08). |
 | GUI exploration | **Re-run rc14**: `gui_explore_scene` (windowed, muted) `DONE -- 19 PASS, 0 BUG`: all 13 locales switch the settings title, 0 mixed-script, 0 empty. |
 | `cloud/audit-ce782f8` code | **Engine-run rc14**: check.sh full 47 green (guard lifecycle case) and attack_sim `fails=0` on the merged tree. |
