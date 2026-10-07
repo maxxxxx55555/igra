@@ -67,9 +67,14 @@ func _make_pointer_texture() -> ImageTexture:
 func _on_damaged(_amount: int) -> void:
 	if bool(SettingsManager.get_setting("reduce_flash", false)):
 		return
-	_vignette_mat.set_shader_parameter("strength", 1.0)
+	_set_flash_age(0.0)
 	var tween := create_tween()
-	tween.tween_method(func(v: float) -> void: _vignette_mat.set_shader_parameter("strength", v), 1.0, 0.0, _FADE_TIME)
+	tween.tween_method(_set_flash_age, 0.0, _FADE_TIME, _FADE_TIME)
+
+## The beat is a cosine of the age: every hit starts on its peak, not wherever the free-running clock stood.
+func _set_flash_age(age: float) -> void:
+	_vignette_mat.set_shader_parameter("age", age)
+	_vignette_mat.set_shader_parameter("strength", 1.0 - age / _FADE_TIME)
 
 ## 3.15: при ударе — показываем по краю экрана, откуда пришёл урон.
 func _on_damage_direction(amount: float, src_pos: Vector3) -> void:
