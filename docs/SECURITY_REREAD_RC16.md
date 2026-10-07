@@ -15,6 +15,16 @@ Evidence: `tools/sec_reread.sh` through `tools/qa_sim/proof_run sec_reread` on `
 | files the player can edit | 6 and 7 | the save, the New Game+ file, achievements, the daily state, the flashlight upgrades and the leaderboard go through `write_signed` (`scripts/core/save_system.gd:29`) and `read_signed` (`scripts/core/save_system.gd:40`) | an edited signed file resets that state; the unsigned files are the language code, the captions "seen" list (`scripts/systems/captions_manager.gd:79`) and the settings, which change presentation only |
 | the New Game+ run ledger (rc16, E1) | closeout `E1A` to `E1D`, attack_sim | a forged ledger of 500 entries loads as at most 64 well-formed names | `docs/TZ_DECISIONS.md` row E1 |
 
+## Exploit attempts against the rc16 changes (the breaker pass)
+
+| # | attempt | evidence | result |
+|---|---|---|---|
+| 1 | win, load the pre-boss save, win again to bank a second New Game+ level | closeout `E1A` and `E1B` (`docs/artifacts/rc16/proofs/s3s4_gates_8bb881b.attach.closeout_check.log`): the second activation is refused, the level stays, one notice | closed |
+| 2 | write a New Game+ file with 500 run names, 5000-character names, a dictionary and numbers | closeout `E1C`: it loads as at most 64 well-formed names | closed |
+| 3 | write a `quick_slots` setting that is not six known items | closeout `QS2`, fourth check: the defaults come back | closed |
+| 4 | edit the language file to a path | `scripts/i18n/localization_manager.gd:49` takes it only when it is in `SUPPORTED` | closed (read) |
+| 5 | call an inventory request from a peer | no peer can exist: `scripts/ui/lobby_menu.gd:41` and `:58` have no opener (`docs/artifacts/rc16/proofs/sec_reread.out`, section 4) | F1, dormant |
+
 ## Finding
 
 F1 (dormant, no player can reach it): the six inventory requests check `is_multiplayer_authority()` only; they do not check the sender id or clamp `amount`. They run only if a peer exists, and a peer exists only after `create_server` (`scripts/ui/lobby_menu.gd:41`) or `join_server` (`scripts/ui/lobby_menu.gd:58`), which no shipped screen opens. Owner action if the lobby is ever opened: compare `multiplayer.get_remote_sender_id()` with the peer that owns the inventory and clamp the amount to the pack size, then add a case to attack_sim.

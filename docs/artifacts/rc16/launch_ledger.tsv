@@ -21,3 +21,4 @@ n	utc	head	id	exit	command
 20	20261007T192700Z	a459b9c	s8_check_all_a459b9c	0	bash tools/check.sh --all
 21	20261007T232405Z	8cb22ba	af2_pre	1	bash tools/qa_sim/closeout_check 300
 22	20261007T232444Z	8cb22ba	af2_post	0	bash tools/qa_sim/closeout_check 300
+23	20261007T232747Z	f49a5cf	s8_bot_3seeds_f49a5cf	0	bash tools/qa_sim/autoplay_bot

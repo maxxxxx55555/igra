@@ -1,0 +1,14 @@
+# proof s8_bot_3seeds_f49a5cf
+# utc 20261007T232747Z
+# head f49a5cf (uncommitted paths: 0)
+# cmd bash tools/qa_sim/autoplay_bot
+# Godot binary: /c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/godot
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/The Last Streetlight
+  [32mWIN [0m seed 1  ([bot s1]   result       : WIN)
+  [32mWIN [0m seed 2  ([bot s2]   result       : WIN)
+  [32mWIN [0m seed 3  ([bot s3]   result       : WIN)
+
+──────────────────────────────────────
+autoplay bot: 3/3 seeds won, 0 softlock(s)
+  user-data guard: 11 file(s) restored byte-identical
+# EXIT=0

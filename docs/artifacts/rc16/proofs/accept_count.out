@@ -1,0 +1,27 @@
+# proof accept_count
+# utc 20261007T233043Z
+# head f49a5cf (uncommitted paths: 4)
+# cmd python tools/accept_count.py
+accept=179/200
+OV3      OWNER
+OV4      NOT-VERIFIABLE
+CT4      DECIDED
+CT5      DECIDED
+FL5      DECIDED
+CB3      DECIDED
+SN2      DECIDED
+EC1      DECIDED
+SV1      DECIDED
+SC7      DECIDED
+SC8      DECIDED
+AU3      OWNER
+AU4      DECIDED
+AD2      DECIDED
+TO1      DECIDED
+H3.18    ROADMAP
+M5.1     DECIDED
+M5.4     DECIDED
+M5.5     DECIDED
+M5.9     DECIDED
+I9.5     DECIDED
+# EXIT=0

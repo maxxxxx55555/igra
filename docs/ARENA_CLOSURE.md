@@ -121,10 +121,21 @@ old code (`closeout_mutation_batch9.txt`). `attack_sim` on the sign-off tree: 41
 signed saves, NG+, flashlight, daily, slot binding, schema validation, IntegrityGuard and the export exclusions is `docs/artifacts/rc15/security_regrep.txt`. The
 rendering truth gate was re-adjudicated against real frames and mutation-tested (CORRECTION_LOG 94); the i18n gate is 12/12.
 
+## rc16 sign-off (2026-10-08)
+
+Three items of the rc15 breaker pass changed state, all by code: E1 (New Game+ levels could be banked again from the pre-boss save) is closed by a run name in the
+signed save and a ledger of banked runs in the signed New Game+ file (`70af3bb`, `ed01eed`; closeout `E1A` to `E1D`; a forged ledger of 500 entries loads as 64 well-formed names);
+E13 (the battery did not drain behind the open inventory) is closed (`115ad00`); E11 is closed in its first half (a craft refund no longer counts as a find, `c93bfab`) and stays
+deferred in its second half with an owner action (`docs/TZ_DECISIONS.md`, row E11). E14 is unchanged. `attack_sim` is `DONE fails=0` inside `tools/check.sh --all`
+(`docs/artifacts/rc16/proofs/s8_check_all_a459b9c.out`, the adversarial gate OK). The re-read of the risky APIs of the shipped scripts is `docs/SECURITY_REREAD_RC16.md`:
+no process or code execution API, the 13 `any_peer` handlers are dormant because the lobby that would open a socket has no opener, finding F1 (the inventory requests check
+authority only) is recorded for the day the lobby is opened. The i18n gate is 12/12.
+
 ## Open defers
 
 - **Inherent client-side limits:** P-05, R-08 (forward clock across launches only), D-01, D-02.
 - **Owner-held:** D-03 (PCK encryption key); B7's legacy-achievements half (reject unsigned legacy `achievements.cfg`, a P-02 UX call).
 - **Scoped:** R-02 (speed watchdog).
+- **Owner decision (rc16):** E11 second half (a quest reward that does not fit in a full pack: the fix reverses the B14 design and breaks the pinned regression P2g); F1 (inventory RPC requests, dormant until the lobby has an opener).
 
 No P0 is deferred.

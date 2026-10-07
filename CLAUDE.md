@@ -15,7 +15,7 @@ Installed (`.specify/`, `.claude/skills/speckit-*`) — owner asked to always us
 - Never clone repos into the project tree; never touch `.git/` hooks.
 - Never delete a file unless proven dead *and* not a planned feature (lesson: `hiding_spot.gd`).
 - Zero shipped: TODO, FIXME, commented-out code, debug prints, BOM.
-- Autoloads via `/root`; `PROCESS_MODE_ALWAYS` on anything that runs while paused.
+- Autoloads via `/root`; `PROCESS_MODE_ALWAYS` on anything that runs while paused. An autoload script must not name a world class (`DistrictSceneFactory` did it): it moves the compile order and a `preload`ed scene came out empty (rc16, `e32fa77`).
 - Full i18n, 13 locales, every user-facing string.
 - Small English imperative commits; push every 2-3.
 
@@ -24,7 +24,9 @@ Installed (`.specify/`, `.claude/skills/speckit-*`) — owner asked to always us
 bash tools/check.sh --static
 python3 tools/flow_check.py
 python3 tools/scene_node_check.py
+python tools/lint_changed.py   # gdparse, gdlint (gdlintrc), ruff, shellcheck, actionlint on the files changed since the last tag; CI (.github/workflows/static.yml) runs it
 ```
+Evidence rules (rc16): every launch goes through `tools/qa_sim/proof_run --launch <id> -- <cmd>` (raw log + `docs/artifacts/rc16/launch_ledger.tsv`); every doc claim cites `file:line` and `python tools/af5_check.py` holds it; a frame is evidence only with its code hash and UTC time in the name (`tools/qa_sim/af3_frame_check.py`).
 Godot: `C:\Users\Maxsim\Desktop\TLS_Build\godot_extracted\Godot_v4.7-stable_win64_console.exe --path .`
 Headless scene smoke: `tools/scene_smoke.gd`.
 
