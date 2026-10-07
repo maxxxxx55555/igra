@@ -19,3 +19,5 @@ n	utc	head	id	exit	command
 18	20261007T185520Z	4c9b3fd	s7_closeout_timing_4c9b3fd	1	bash -c CLOSEOUT_ONLY=rc16 bash tools/qa_sim/closeout_check 300; a=$?; bash tools/qa_sim/timing_equiv after; b=$?; echo "closeout_rc16=$a timing_after=$b"; [ $a -eq 0 ] && [ $b -eq 0 ]
 19	20261007T191557Z	c3e79e5	s6_reimport_probe_after_c3e79e5	0	bash -c GODOT="$(bash tools/qa_sim/_resolve_godot.sh 2>/dev/null)"; timeout 420 "$GODOT" --editor --quit --path . > .qa_logs/reimport_beauty.log 2>&1; echo "reimport rc=$?"; bash tools/qa_sim/rc16_probe after c3e79e5 900
 20	20261007T192700Z	a459b9c	s8_check_all_a459b9c	0	bash tools/check.sh --all
+21	20261007T232405Z	8cb22ba	af2_pre	1	bash tools/qa_sim/closeout_check 300
+22	20261007T232444Z	8cb22ba	af2_post	0	bash tools/qa_sim/closeout_check 300

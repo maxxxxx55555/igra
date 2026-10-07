@@ -1,0 +1,48 @@
+# proof af2_pre
+# utc 20261007T232405Z
+# head 8cb22ba (uncommitted paths: 56)
+# cmd bash tools/qa_sim/closeout_check 300
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/The Last Streetlight
+[closeout] FAIL PERF5 the preloader asked the loader for 0 paths after the build and every one exists
+[closeout] FAIL PERF7 an OmniLight3D that enters the tree joins the light limiter's group
+[closeout] FAIL FIRE1 the cooldown runs on the physics tick: the rifle is ready 0.5 s after a shot with _process off
+[closeout] FAIL CT7 the camera exposes its zoom factor
+[closeout] FAIL E11 the refunded transistor is not counted as found (1 -> 2)
+[closeout] FAIL E11 a real pickup of a transistor still counts once (1 -> 3)
+[closeout] FAIL E13 the battery drains by about 0.222 in 1 s behind the open inventory (0.000)
+[closeout] FAIL CAM1 the interior blend covers the same share of the way in 0.1 s at 30 and at 120 FPS (0.784 / 0.998)
+[closeout] FAIL UIFX1 the tier table while sprinting: Low the vignette alone, Medium + grain, High + chromatic aberration, Ultra + motion blur up to 0.35 (Low..Ultra: VGC, VGC, VGC, VGC; blur -1.00; 1.2 s after the sprint: VGC)
+[closeout] FAIL UIFX2 a hit pulses the chromatic aberration up to 2 px and it is gone 0.5 s later, the layer hidden again (0.00 px, gone false)
+[closeout] FAIL UIFX2 the pulse stays 0 at the Low tier and under Reduce Flash (0.00 px, 0.00 px)
+[closeout] FAIL QS2 dragging the medkit cell onto quick slot 1 binds it (drag data <null>, the target accepts false, the HUD's slot 1 is <null>)
+[closeout] FAIL QS2 key 1 then uses a medkit (false, one of 2 gone, health up from 40)
+[closeout] FAIL QS2 a right-click on the slot puts the default item back (<null>)
+[closeout] FAIL QS2 a saved list that is not six known items falls back to the defaults
+[closeout] FAIL UIFX3 hovering a button scales it to 1.05 about its centre in 0.12 s and back, and Reduce UI Motion keeps it at 1.0 (1.000, centred false, 1.000, 1.000)
+[closeout] FAIL UIFX5 a hit shakes the health bar by at most 4 px and it is on its exact place 0.4 s later, and Reduce Screen Shake keeps it still (shaken, home, shaken, home: [false, true, false, true])
+[closeout] FAIL UIFX4 a monster hit for 5 shows that number and it is back in the pool of 12 after 1.0 s (shown [], pool missing, signal false)
+[closeout] FAIL UIFX6 an opened screen rises and fades in, then rests on its exact place at full alpha after 0.5 s (rising false, home true)
+[closeout] FAIL MENUBG1 four background changes show ["DAY", "GENERATOR", "NIGHT", "DAY"]: night and generator-on, no day
+[closeout] FAIL TO1 a toast is on screen at 2.7 s and gone by 3.5 s (shown true, at 2.7 s true, gone false)
+[closeout] FAIL ATK1 the attack button is grey at 4 stamina and not at 5 or 100 ([(1.0, 1.0, 1.0, 1.0), (1.0, 1.0, 1.0, 1.0), (1.0, 1.0, 1.0, 1.0)])
+[closeout] FAIL UIFX7 the overlay has no blur, chroma and back-buffer copy node (blur false, chroma true, copy false)
+[closeout] FAIL E1A the game names no run and keeps no ledger of banked runs (SaveSystem.get_run_id, NewGamePlus.get_banked_runs)
+[closeout] FAIL E1B the same run winning again banks nothing (accepted true, level 1 of 0, ledger <null>)
+[closeout] FAIL E1B and the player is told once, in words ([])
+[closeout] FAIL E1B a different run still banks its level (level 2)
+[closeout] FAIL E1D a refused activation shows its reason on the screen (level 3 of 2, toast NG+3 is active. Choose a modifier, or continue to the main menu to start again.)
+[closeout] FAIL E1C a forged ledger of 500 entries loads as at most 64 well-formed names, the newest kept (no ledger)
+[closeout] FAIL AUD1 the audio manager names no distance low-pass (ATTEN_CUTOFF_HZ, ATTEN_FILTER_DB)
+[closeout] FAIL AUD4 40 sounds share a pool of at most <null> players (40 players were added)
+[closeout] FAIL AUD2 the reverb of the Footsteps, Combat and Environment buses is off at Low and on at Medium, High, Ultra (["0F=false", "0C=false", "0E=false", "1F=false", "1C=false", "1E=false", "2F=false", "2C=false", "2E=false", "3F=false", "3C=false", "3E=false"])
+[closeout] FAIL AUD3 the audio manager senses no place and its Combat bus has no reverb
+[closeout] FAIL AUD5 entering the park asks the loader thread for the beds of [&"residential", &"school"] (status [0, 0])
+[closeout] FAIL AUD5 and the bed of power_station is let go of (cached true)
+[closeout] FAIL BEAUTY1 the HUD grain pass samples the screen with a plain linear filter and no mipmap filter (uniform sampler2D screen_tex : hint_screen_texture, filter_linear_mipmap;)
+[closeout] FAIL BEAUTY2 a hit starts the damage vignette on its peak: the beat runs on age, not TIME, a hit sets age 0 and strength 1 at once and the strength is 0 when the fade is over (float beat = 0.55 + 0.45 * sin(TIME * pulse_bpm * 6.283185 / 60.0);; age <null>, strength 1.0, then 0.64 at 0.2 s, 0.00 at 1.0 s)
+[closeout] FAIL BEAUTY3 the HUD grain hash has no 127.1 / 311.7 multipliers (a 10 px repeat) and is the 0.1031 / 33.33 hash
+[closeout] FAIL BEAUTY4 the post-process grain hashes the pixel with the 0.1031 hash and has no 234.34 / 435.345 multipliers (476 characters of shader)
+[closeout] DONE checks=51 fails=44
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 11 file(s) restored byte-identical
+# EXIT=1

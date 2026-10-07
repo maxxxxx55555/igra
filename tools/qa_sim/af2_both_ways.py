@@ -22,6 +22,7 @@ sys.path.insert(0, str(ROOT / "tools" / "qa_sim"))
 import af3_frame_check  # noqa: E402
 
 LINE = re.compile(r"^\[closeout\] (ok  |FAIL) +(\S+)")
+CHECK_ID = re.compile(r"[A-Z][A-Z0-9.]*")  # a closeout line starts with its check id; "the player spawned" is the set-up line, not the check of a fix
 ASIDE = ".af2aside"
 
 
@@ -37,7 +38,7 @@ def parse(log_text):
     seen = {}
     for line in log_text.splitlines():
         m = LINE.match(line)
-        if m:
+        if m and CHECK_ID.fullmatch(m.group(2)):
             status = "ok" if m.group(1).startswith("ok") else "FAIL"
             seen[m.group(2)] = "FAIL" if seen.get(m.group(2)) == "FAIL" or status == "FAIL" else "ok"
     return seen
@@ -58,20 +59,52 @@ def judge(pre, post, ids):
     return rows, bad
 
 
+def log_text(run_id):
+    """The full engine log a run attached (every ok and FAIL line). The proof's own .out holds only the FAIL and DONE lines the wrapper prints."""
+    proofs = ROOT / ".qa_logs" / "proofs"
+    attach = proofs / (run_id + ".attach.closeout_check.log")
+    return (attach if attach.exists() else proofs / (run_id + ".out")).read_text(encoding="utf-8", errors="replace")
+
+
 def run_closeout(run_id, only):
     env = dict(os.environ, CLOSEOUT_ONLY=only)
     subprocess.run(["bash", "tools/qa_sim/proof_run", "--launch", "--attach", ".qa_logs/closeout_check.log", run_id, "--",
                     "bash", "tools/qa_sim/closeout_check", "300"], cwd=ROOT, env=env)
-    return (ROOT / ".qa_logs" / "proofs" / (run_id + ".out")).read_text(encoding="utf-8", errors="replace")
+    return log_text(run_id)
+
+
+def report(base, only, pre_text, post_text):
+    pre, post = parse(pre_text), parse(post_text)
+    ids = sorted(set(pre) | set(post))
+    rows, bad = judge(pre, post, ids)
+    done = [ln for ln in post_text.splitlines() if ln.startswith("[closeout] DONE")]
+    out = ["AF2 both ways: base %s, HEAD %s, group %s" % (base, git("rev-parse", "--short", "HEAD").strip(), only)] + rows
+    out.append("post run: %s" % (done[-1] if done else "no DONE line"))
+    out.append("AF2 verdict=%s ids=%d bad=%d" % ("PASS" if bad == 0 and ids else "FAIL", len(ids), bad))
+    text = "\n".join(out)
+    print(text)
+    (ROOT / "docs" / "artifacts" / "rc16" / "af2_both_ways.txt").write_text(text + "\n", encoding="utf-8", newline="\n")
+    return 0 if bad == 0 and ids else 1
 
 
 def demo():
-    sample = "[closeout] ok   PERF1 a\n[closeout] FAIL PERF1 b\n[closeout] ok   PERF2 c\n[closeout] ok   X9 d\nnoise\n"
+    sample = "[closeout] ok   the player spawned\n[closeout] ok   PERF1 a\n[closeout] FAIL PERF1 b\n[closeout] ok   PERF2 c\n[closeout] ok   X9 d\nnoise\n"
     seen = parse(sample)
     assert seen == {"PERF1": "FAIL", "PERF2": "ok", "X9": "ok"}, seen
     rows, bad = judge({"A": "FAIL", "B": "ok", "C": "ok"}, {"A": "ok", "B": "ok", "C": "FAIL"}, ["A", "B", "C", "D"])
     assert [r.split()[-1] for r in rows] == ["BITES", "VACUOUS", "BROKEN", "BROKEN"] and bad == 3, rows
-    print("af2_both_ways demo OK (id parsing, bites / vacuous / broken)")
+    import tempfile
+    proofs = ROOT / ".qa_logs" / "proofs"
+    proofs.mkdir(parents=True, exist_ok=True)
+    stem = "af2_demo_%d" % os.getpid()
+    (proofs / (stem + ".out")).write_text("[closeout] DONE checks=1 fails=0\n", encoding="utf-8")
+    assert parse(log_text(stem)) == {}, "without an attached log the filtered .out has no id"
+    (proofs / (stem + ".attach.closeout_check.log")).write_text("[closeout] ok   PERF1 a\n[closeout] DONE checks=1 fails=0\n", encoding="utf-8")
+    assert parse(log_text(stem)) == {"PERF1": "ok"}, "the attached full log is the one that is read"
+    for f in proofs.glob(stem + "*"):
+        f.unlink()
+    del tempfile
+    print("af2_both_ways demo OK (id parsing, bites / vacuous / broken, the attached log is read)")
 
 
 def main():
@@ -79,8 +112,10 @@ def main():
     if "--demo" in args:
         demo()
         return 0
-    base = args[args.index("--base") + 1]
+    base = args[args.index("--base") + 1] if "--base" in args else "e4bb4df"
     only = args[args.index("--only") + 1] if "--only" in args else "rc16"
+    if "--analyze" in args:
+        return report(base, only, log_text("af2_pre"), log_text("af2_post"))
     dirty = [x for x in git("status", "--porcelain").splitlines() if not x.startswith("??")]
     if dirty:
         raise SystemExit("the tree has modified tracked files, commit or stash first: %s" % dirty[:3])
@@ -105,17 +140,7 @@ def main():
         for src in moved:
             pathlib.Path(str(src) + ASIDE).rename(src)
     post_text = run_closeout("af2_post", only)
-    pre, post = parse(pre_text), parse(post_text)
-    ids = sorted(set(pre) | set(post))
-    rows, bad = judge(pre, post, ids)
-    done = [ln for ln in post_text.splitlines() if ln.startswith("[closeout] DONE")]
-    out = ["AF2 both ways: base %s, HEAD %s, group %s" % (base, git("rev-parse", "--short", "HEAD").strip(), only)] + rows
-    out.append("post run: %s" % (done[-1] if done else "no DONE line"))
-    out.append("AF2 verdict=%s ids=%d bad=%d" % ("PASS" if bad == 0 and ids else "FAIL", len(ids), bad))
-    text = "\n".join(out)
-    print(text)
-    (ROOT / "docs" / "artifacts" / "rc16" / "af2_both_ways.txt").write_text(text + "\n", encoding="utf-8", newline="\n")
-    return 0 if bad == 0 and ids else 1
+    return report(base, only, pre_text, post_text)
 
 
 if __name__ == "__main__":

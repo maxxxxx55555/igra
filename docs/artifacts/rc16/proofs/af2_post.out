@@ -1,0 +1,9 @@
+# proof af2_post
+# utc 20261007T232444Z
+# head 8cb22ba (uncommitted paths: 3)
+# cmd bash tools/qa_sim/closeout_check 300
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/The Last Streetlight
+[closeout] DONE checks=64 fails=0
+  closeout_check rc=0 (log: .qa_logs/closeout_check.log)
+  user-data guard: 11 file(s) restored byte-identical
+# EXIT=0
