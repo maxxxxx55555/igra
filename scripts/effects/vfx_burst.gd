@@ -17,6 +17,9 @@ extends GPUParticles3D
 @export var particle_scale_min: float = 0.04
 @export var particle_scale_max: float = 0.09
 @export var emit_direction: Vector3 = Vector3(0.0, 1.0, 0.0)
+## Set by VFXPool: a pooled burst parks itself when it finishes (replay() plays it again) instead of freeing itself.
+var pooled: bool = false
+var parked: bool = false
 
 func _ready() -> void:
 	var mat := ParticleProcessMaterial.new()
@@ -41,5 +44,16 @@ func _ready() -> void:
 		mesh.material = m
 	draw_pass_1 = mesh
 	if one_shot:
-		finished.connect(queue_free)
+		finished.connect(_on_finished)
 	emitting = true
+
+func _on_finished() -> void:
+	if pooled:
+		parked = true
+	else:
+		queue_free()
+
+## Plays a pooled burst again from where the pool put it. The material and mesh built in _ready stay: nothing is rebuilt.
+func replay() -> void:
+	parked = false
+	restart()

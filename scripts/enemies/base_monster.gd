@@ -797,9 +797,7 @@ func _death_effect() -> void:
 	_spawn_vfx(_VFX_DEATH, global_position + Vector3(0, 1.0, 0))
 
 func _spawn_vfx(scene: PackedScene, pos: Vector3) -> void:
-	var fx: Node3D = scene.instantiate()
-	get_tree().root.add_child(fx)
-	fx.global_position = pos
+	preload("res://scripts/effects/vfx_pool.gd").spawn(scene, pos, get_tree())
 
 func _trigger_death() -> void:
 	_die()

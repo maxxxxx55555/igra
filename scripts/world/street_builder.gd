@@ -11,6 +11,8 @@ signal streets_ready
 ## The markings are whole tiles lying on the road tiles: at the same height they z-fought, which drew stacked dark stripes and
 ## wedges wherever the lamp or the flashlight lit the road (the first screen of a game).
 const MARKING_LIFT: float = 0.02
+## Height of every street tile, mesh and collision box alike.
+const TILE_THICKNESS: float = 0.1
 ## Шаг сетки кварталов в метрах. roads хранит перекрёстки в клетках (0..3),
 ## и без умножения на этот шаг четыре параллельные улицы ложились на
 ## z = 0,1,2,3 — то есть слипались в одну полосу шириной 3 метра вместо
@@ -20,10 +22,13 @@ const MARKING_LIFT: float = 0.02
 
 var roads: Array[Dictionary] = []
 var _center: Vector2 = Vector2.ZERO
+## Milliseconds the deferred build() took, for WorldRuntime.get_last_load_stats().
+var build_ms: float = 0.0
 
 var _road_mm: MultiMeshInstance3D
 var _sidewalk_mm: MultiMeshInstance3D
 var _marking_mm: MultiMeshInstance3D
+var _collision: StaticBody3D
 
 ## WAVE 6 P4: registers the item that fuels scripts/generator.gd
 ## (gas_station.tscn's GasGenerator instance) - previously no constant
@@ -44,7 +49,7 @@ func _ready() -> void:
 
 func _make_road_mesh() -> BoxMesh:
 	var m := BoxMesh.new()
-	m.size = Vector3(tile_size, 0.1, tile_size)
+	m.size = Vector3(tile_size, TILE_THICKNESS, tile_size)
 	var mat := StandardMaterial3D.new()
 	mat.albedo_color = Color(0.15, 0.15, 0.15)
 	var tex: Texture2D = load(_TEX_ASPHALT)
@@ -56,7 +61,7 @@ func _make_road_mesh() -> BoxMesh:
 
 func _make_sidewalk_mesh() -> BoxMesh:
 	var m := BoxMesh.new()
-	m.size = Vector3(tile_size, 0.1, tile_size)
+	m.size = Vector3(tile_size, TILE_THICKNESS, tile_size)
 	var mat := StandardMaterial3D.new()
 	mat.albedo_color = Color(0.4, 0.4, 0.4)
 	var tex: Texture2D = load(_TEX_CONCRETE)
@@ -68,7 +73,7 @@ func _make_sidewalk_mesh() -> BoxMesh:
 
 func _make_box_mesh(color: Color) -> BoxMesh:
 	var m := BoxMesh.new()
-	m.size = Vector3(tile_size, 0.1, tile_size)
+	m.size = Vector3(tile_size, TILE_THICKNESS, tile_size)
 	var mat := StandardMaterial3D.new()
 	mat.albedo_color = color
 	m.material = mat
@@ -80,10 +85,12 @@ func _init_mm(mm: MultiMeshInstance3D, mesh: Mesh) -> void:
 	mm.multimesh.mesh = mesh
 
 func build() -> void:
+	var started: int = Time.get_ticks_usec()
 	_layout()
 	_fill_roads()
 	_fill_sidewalks()
 	_fill_markings()
+	build_ms = float(Time.get_ticks_usec() - started) / 1000.0
 	streets_ready.emit()
 
 func _layout() -> void:
@@ -140,7 +147,8 @@ func _fill_roads() -> void:
 				if r.dir == "v":
 					t.basis = t.basis.rotated(Vector3.UP, PI * 0.5)
 				_road_mm.multimesh.set_instance_transform(idx, t)
-				_create_collision(t)
+				if s == 0:
+					_create_collision(t.origin, r, steps)
 				idx += 1
 
 func _fill_sidewalks() -> void:
@@ -165,7 +173,8 @@ func _fill_sidewalks() -> void:
 					if r.dir == "v":
 						t.basis = t.basis.rotated(Vector3.UP, PI * 0.5)
 					_sidewalk_mm.multimesh.set_instance_transform(idx, t)
-					_create_collision(t)
+					if s == 0:
+						_create_collision(t.origin, r, steps)
 					idx += 1
 
 ## Разметка идёт со своим шагом, а не с шагом плитки дороги, и лежит над дорогой на MARKING_LIFT.
@@ -202,12 +211,19 @@ func _ensure_mm() -> void:
 		_marking_mm.name = "MarkingMM"
 		add_child(_marking_mm)
 
-func _create_collision(t: Transform3D) -> void:
-	var body := StaticBody3D.new()
-	var shape := CollisionShape3D.new()
+## One long box per lane strip instead of one body per tile (about 384 bodies per district): `first` is the origin of the
+## strip's first tile and the box runs from it along the road over `steps` tiles. The strips share one StreetCollision body
+## and are made from build(), deferred exactly as the tile bodies were.
+func _create_collision(first: Vector3, road: Dictionary, steps: int) -> void:
+	if _collision == null:
+		_collision = StaticBody3D.new()
+		_collision.name = "StreetCollision"
+		add_child(_collision)
+	var horizontal: bool = road.dir == "h"
+	var length: float = float(steps) * tile_size
 	var box := BoxShape3D.new()
-	box.size = Vector3(tile_size, 0.1, tile_size)
+	box.size = Vector3(length, TILE_THICKNESS, tile_size) if horizontal else Vector3(tile_size, TILE_THICKNESS, length)
+	var shape := CollisionShape3D.new()
 	shape.shape = box
-	body.add_child(shape)
-	body.transform = t
-	add_child(body)
+	shape.position = first + (Vector3.RIGHT if horizontal else Vector3.BACK) * (length - tile_size) * 0.5
+	_collision.add_child(shape)

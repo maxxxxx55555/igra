@@ -8,17 +8,22 @@ const DISTRICTS: Array[StringName] = [
 ]
 const ENEMY_POOL_SCRIPT: Script = preload("res://scripts/enemies/enemy_pool.gd")
 
-static func build(parent: Node, district_id: StringName) -> Node3D:
+## `stats` receives the milliseconds of each phase (scene, enemies, loot) for WorldRuntime.last_load_stats.
+static func build(parent: Node, district_id: StringName, stats: Dictionary = {}) -> Node3D:
 	var resolved_id: StringName = district_id if DISTRICTS.has(district_id) else &"suburbs"
-	var scene_path: String = "res://scenes/districts/%s.tscn" % String(resolved_id)
+	var scene_path: String = district_scene_path(resolved_id)
 	if ResourceLoader.exists(scene_path):
+		var lap: int = Time.get_ticks_usec()
 		var district_scene: PackedScene = load(scene_path) as PackedScene
 		if district_scene != null:
 			var district_root: Node3D = district_scene.instantiate() as Node3D
 			if district_root != null:
 				parent.add_child(district_root)
+				lap = _lap(stats, "scene_ms", lap)
 				_spawn_district_enemies(district_root)
+				lap = _lap(stats, "enemies_ms", lap)
 				DistrictLoot.populate(district_root, resolved_id)
+				_lap(stats, "loot_ms", lap)
 				EventBus.district_entered.emit(resolved_id)
 				return district_root
 	var root: Node3D = Node3D.new()
@@ -52,11 +57,20 @@ static func build(parent: Node, district_id: StringName) -> Node3D:
 	EventBus.district_entered.emit(resolved_id)
 	return root
 
+## Stores the milliseconds since `since_usec` under `key` and returns the new reference time, so phases chain.
+static func _lap(stats: Dictionary, key: String, since_usec: int) -> int:
+	var now: int = Time.get_ticks_usec()
+	stats[key] = float(now - since_usec) / 1000.0
+	return now
+
 static func _spawn_district_enemies(district_root: Node3D) -> void:
 	var pool: Node = ENEMY_POOL_SCRIPT.new()
 	pool.name = "EnemyPool"
 	district_root.add_child(pool)
 	pool.spawn_for_district(district_root)
+
+static func district_scene_path(district_id: StringName) -> String:
+	return "res://scenes/districts/%s.tscn" % String(district_id)
 
 static func district_count() -> int:
 	return DISTRICTS.size()
