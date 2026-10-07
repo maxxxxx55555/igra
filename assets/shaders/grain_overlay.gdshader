@@ -9,7 +9,7 @@
 //        with this ShaderMaterial; reads screen below automatically.
 shader_type canvas_item;
 
-uniform sampler2D screen_tex : hint_screen_texture, filter_linear_mipmap;
+uniform sampler2D screen_tex : hint_screen_texture, filter_linear; // read 1:1 at SCREEN_UV: no coarser level is ever used
 uniform float grain_amount : hint_range(0.0, 0.3) = 0.10;
 uniform float grain_scale : hint_range(0.5, 4.0) = 1.0;
 uniform float vignette : hint_range(0.0, 1.0) = 0.35;
