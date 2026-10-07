@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Optional pre-commit hook: the repository does not install it (CLAUDE.md: never touch .git/hooks). Opt in with
+#   git config core.hooksPath tools/hooks
+# It runs the static battery (no Godot): the same gates `bash tools/check.sh --static` runs.
+set -euo pipefail
+cd "$(git rev-parse --show-toplevel)"
+exec bash tools/check.sh --static

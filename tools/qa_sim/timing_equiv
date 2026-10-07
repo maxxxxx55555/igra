@@ -11,11 +11,13 @@ if [[ -z "$GODOT" ]] || [[ ! -x "$GODOT" ]]; then
 	bash tools/qa_sim/_resolve_godot.sh >&2
 	exit 99
 fi
-source tools/qa_sim/user_data_guard.sh
-udg_snapshot || exit 99
-trap 'udg_restore || exit 97' EXIT
-trap 'exit 130' INT TERM
-export TLS_UDG_GUARDED=1
+if [[ "${TLS_UDG_GUARDED:-}" != "1" ]]; then  # tools/check.sh --all already holds the guard
+	source tools/qa_sim/user_data_guard.sh
+	udg_snapshot || exit 99
+	trap 'udg_restore || exit 97' EXIT
+	trap 'exit 130' INT TERM
+	export TLS_UDG_GUARDED=1
+fi
 mkdir -p .qa_logs
 label="${1:-run}"
 for fps in ${TIMING_ONLY:-30 60 120}; do

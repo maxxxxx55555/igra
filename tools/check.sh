@@ -3,6 +3,7 @@
 #
 #   ./tools/check.sh                  # все проверки
 #   ./tools/check.sh --static         # только те, что не требуют Godot
+#   ./tools/check.sh --all            # всё, плюс равенство геймплея при 30/60/120 FPS (timing_equiv)
 #   GODOT=/path/to/godot ./tools/check.sh
 #
 # Код возврата 0 — всё зелёное, иначе число проваленных проверок.
@@ -17,6 +18,8 @@ PY="${PY:-}"
 [[ -z "$PY" ]] && { echo "Python не найден"; exit 1; }
 STATIC_ONLY=0
 [[ "${1:-}" == "--static" ]] && STATIC_ONLY=1
+ALL=0
+[[ "${1:-}" == "--all" ]] && ALL=1   # the full battery and the 30/60/120 FPS equivalence run (tools/qa_sim/timing_equiv)
 
 PASS=0
 FAIL=0
@@ -304,6 +307,46 @@ else
   bad "release_export_check (см. 'python tools/qa_sim/release_export_check.py')"
 fi
 
+# ─────────────────────────── rc16: lint, frame-independence, AF gates ───────────────────────────
+head_ "rc16: lint, frame-independence inventory, AF2/AF3/AF5 tools (Godot не нужен)"
+# Python correctness lint: syntax errors and pyflakes rules over every python gate and tool. ruff when installed, else pyflakes; the
+# stricter style rule sets are not a gate (docs/UTILITIES_REPORT.md lists what they find).
+if "$PY" -m ruff --version >/dev/null 2>&1; then
+  if "$PY" -m ruff check tools scripts --select E9,F --quiet >/dev/null 2>&1; then ok "ruff E9,F on tools/ and scripts/ (syntax and pyflakes correctness)"; else bad "ruff E9,F (см. 'python -m ruff check tools scripts --select E9,F')"; fi
+elif "$PY" -m pyflakes --version >/dev/null 2>&1; then
+  if "$PY" -m pyflakes tools scripts >/dev/null 2>&1; then ok "pyflakes on tools/ and scripts/"; else bad "pyflakes (см. 'python -m pyflakes tools scripts')"; fi
+else
+  echo "  ${DIM}пропуск${OFF} python lint (ни ruff, ни pyflakes не установлены)"
+fi
+# Shell syntax: every .sh, every hook and every extensionless wrapper under tools/qa_sim.
+sh_bad=0
+for f in tools/*.sh tools/qa_sim/*.sh tools/hooks/* tools/qa_sim/*; do
+  [[ -f "$f" ]] || continue
+  [[ "$f" == *.* && "$f" != *.sh ]] && continue
+  bash -n "$f" 2>/dev/null || { echo "         bash -n: $f"; sh_bad=$((sh_bad+1)); }
+done
+if [[ $sh_bad -eq 0 ]]; then ok "bash -n on every shell script, hook and wrapper"; else bad "bash -n ($sh_bad scripts)"; fi
+if "$PY" tools/qa_sim/timing_inventory.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/timing_inventory.py --gate >/dev/null 2>&1; then
+  ok "timing_inventory (no per-frame constant step outside the whitelist: frame-independent timing)"
+else
+  bad "timing_inventory (см. 'python tools/qa_sim/timing_inventory.py --gate')"
+fi
+for t in timing_compare af2_both_ways af3_frame_check; do
+  if "$PY" "tools/qa_sim/$t.py" --demo >/dev/null 2>&1; then ok "$t --demo (the tool's self-check)"; else bad "$t --demo"; fi
+done
+if "$PY" tools/qa_sim/af3_frame_check.py >/dev/null 2>&1; then
+  ok "af3_frame_check (every polish frame names the code tree and the capture time it came from)"
+else
+  bad "af3_frame_check (см. 'python tools/qa_sim/af3_frame_check.py')"
+fi
+if [[ -f tools/af5_check.py ]]; then
+  if "$PY" tools/af5_check.py --demo >/dev/null 2>&1 && "$PY" tools/af5_check.py >/dev/null 2>&1; then
+    ok "af5_check (every file:line citation added to docs/ since e4bb4df holds at HEAD)"
+  else
+    bad "af5_check (см. 'python tools/af5_check.py')"
+  fi
+fi
+
 # ─────────────────────────── проверки в движке ───────────────────────────
 if [[ $STATIC_ONLY -eq 1 ]]; then
   echo; echo "${DIM}Проверки в движке пропущены (--static).${OFF}"
@@ -421,6 +464,9 @@ else
     #   tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn
     run_gate "аудио: Music bus не в тишине (только --windowed)" "res://scenes/tools/audio_truth_gate_scene.tscn" 60
     run_gate "тач-инпут (joystick/deadzone/HUD-кнопки)" "res://scenes/tools/touch_probe_scene.tscn"
+    if [[ $ALL -eq 1 ]]; then
+      if bash tools/qa_sim/timing_equiv check >/dev/null 2>&1; then ok "timing_equiv: gameplay quantities agree at 30, 60 and 120 FPS of simulated time"; else bad "timing_equiv (см. .qa_logs/timing_check.txt)"; fi
+    fi
     if udg_restore; then ok "user-data guard: профиль игрока восстановлен байт-в-байт"; else bad "user-data guard: профиль игрока НЕ восстановлен"; fi
   fi
 fi

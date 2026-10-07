@@ -109,7 +109,7 @@ def delta_weighted(weight, body_text):
     if "delta" in weight:
         return True
     if re.fullmatch(r"[A-Za-z_]\w*", weight):
-        return re.search(r"\b" + re.escape(weight) + r"\b\s*(:=|=)[^\n]*delta", body_text) is not None
+        return re.search(r"\b" + re.escape(weight) + r"\b\s*(?::\s*[\w\[\]]+\s*)?(?::=|=)[^\n]*delta", body_text) is not None
     return False
 
 
@@ -206,6 +206,8 @@ def demo():
         "func _process(delta: float) -> void:",
         "\tvar k := 1.0 - exp(-6.0 * delta)",
         "\tx = lerpf(x, 1.0, k)",
+        "\tvar k2: float = clamp(delta * 4.0, 0.0, 1.0)",
+        "\tx = lerpf(x, 1.0, k2)",
         "\ty = lerpf(y, 1.0, 0.1)",
         "\t_t += 1",
         "\trotate_y(0.02)",

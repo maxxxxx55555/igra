@@ -1,1 +1,18 @@
-[]
+[
+  {"file": "scripts/cutscenes/cutscene_manager.gd", "text": "await get_tree().process_frame", "why": "the shake loop ends on accumulated get_process_delta_time() seconds; the awaited frame is only the redraw step, the duration is seconds at any frame rate"},
+  {"file": "scripts/enemies/status_effects.gd", "text": "_tick_timer -= TICK", "why": "wraps a timer that is accumulated by delta: it subtracts the one-second period, so a damage tick lands once per accumulated second at any frame rate"},
+  {"file": "scripts/player/flashlight.gd", "text": "var radial: float = lerpf(1.0, stats.radial_falloff, len_norm)", "why": "a blend over the cone's distance (len_norm) inside a texture bake loop, not a time step; the legacy 2D flashlight script"},
+  {"file": "scripts/player/player_3d.gd", "text": "ProgressTracker.jumps += 1", "why": "an event counter (one per jump), not a per-frame value"},
+  {"file": "scripts/player/player_3d.gd", "text": "_combo_count += 1", "why": "an event counter (one per landed swing phase), advanced from the fixed physics tick"},
+  {"file": "scripts/systems/integrity_guard.gd", "text": "_missing_player_ticks += 1", "why": "counts watchdog ticks: the watchdog runs once per WATCHDOG_INTERVAL (1.0 s) off a delta timer, so three ticks are three seconds at any frame rate"},
+  {"file": "scripts/systems/footstep_system.gd", "text": "if weight_kg > WEIGHT_CLANK_THRESHOLD and _step_counter % 4 == 0:", "why": "_step_counter counts emitted footsteps (an event count): every fourth step of a heavy pack clanks"},
+  {"file": "scripts/ui/hud_3d.gd", "text": "bat_fill.color = Color(0.788, 0.635, 0.290).lerp(Color(0.706, 0.271, 0.184), pulse)", "why": "a colour blend by a sine of the wall clock (pulse), not a per-frame step"},
+  {"file": "scripts/ui/hud_3d.gd", "text": "var c := Color(_VIGNETTE_BG_DEEP, v.color.a).lerp(Color(_VIGNETTE_EMBER, v.color.a), pulse)", "why": "a colour blend by a sine of the wall clock (pulse), not a per-frame step"},
+  {"file": "scripts/ui/menu_background.gd", "text": "wy += 10", "why": "pixel stepping of the skyline texture generator (once per theme change), not motion"},
+  {"file": "scripts/ui/menu_background.gd", "text": "wx += 8", "why": "pixel stepping of the skyline texture generator (once per theme change), not motion"},
+  {"file": "scripts/ui/menu_background.gd", "text": "t.position.x -= dx", "why": "dx is the layer speed times delta, passed in by _process"},
+  {"file": "scripts/ui/menu_background.gd", "text": "t.position.x += TEX_W", "why": "the seamless wrap by one texture width, not a time step"},
+  {"file": "scripts/ui/touch_calibration_overlay.gd", "text": "_step += 1", "why": "the calibration step advances on events (stick moved, button pressed), not per frame"},
+  {"file": "scripts/ui/tutorial_system.gd", "text": "_current_step += 1", "why": "the tutorial advances on events (an action, a stage change), not per frame"},
+  {"file": "scripts/world_env_setup.gd", "text": "_override_frames -= 1", "why": "a deferral of five frames that re-applies the stage after an override so late nodes catch up; a frame count by design, not a duration"}
+]
