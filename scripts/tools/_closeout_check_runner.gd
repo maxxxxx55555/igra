@@ -10,6 +10,7 @@ const Rc16Perf := preload("res://scripts/tools/rc16/perf_checks.gd")
 const Rc16Content := preload("res://scripts/tools/rc16/content_checks.gd")
 const Rc16Uifx := preload("res://scripts/tools/rc16/uifx_checks.gd")
 const Rc16Sec := preload("res://scripts/tools/rc16/sec_checks.gd")
+const Rc16Audio := preload("res://scripts/tools/rc16/audio_checks.gd")
 
 var _checked: int = 0
 var _fails: int = 0
@@ -124,6 +125,7 @@ func _rc16_checks() -> void:
 	await Rc16Content.run(self)
 	await Rc16Uifx.run(self)
 	await Rc16Sec.run(self)
+	await Rc16Audio.run(self)
 
 ## A monster standing still in the far corner of the world: its collider answers rays, its AI never runs
 ## (a disabled process mode would also take the collider out of the physics space).
