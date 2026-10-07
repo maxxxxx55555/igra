@@ -5,7 +5,7 @@
 #   PROBE_ONLY=frames tools/qa_sim/rc16_probe ...   only the eight staged states (no district cycle, no perf)
 #   log -> .qa_logs/rc16_probe_<label>.log      frames -> docs/stills/polish/<state>_<label>_<hash>_<UTC>.png
 set -uo pipefail
-cd "$(dirname "$0")/../.."
+cd "$(dirname "$0")/../.." || exit 2
 LABEL="${1:?usage: tools/qa_sim/rc16_probe <label> <hash> [timeout-sec]}"
 HASH="${2:?usage: tools/qa_sim/rc16_probe <label> <hash> [timeout-sec]}"
 T="${3:-900}"

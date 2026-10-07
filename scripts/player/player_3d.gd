@@ -326,7 +326,7 @@ func _ready() -> void:
 	fd_quad.material = fd_mat
 	_footstep_dust_node.draw_pass_1 = fd_quad
 	add_child(_footstep_dust_node)
-	
+
 	# Footstep system
 	var fs_script: Script = load("res://scripts/systems/footstep_system.gd")
 	if fs_script:
@@ -335,7 +335,7 @@ func _ready() -> void:
 		fs_instance.set_player(self)
 		add_child(fs_instance)
 		_footstep_system = fs_instance
-	
+
 	EventBus.player_health_changed.emit(1.0)
 	EventBus.player_stamina_changed.emit(1.0)
 	EventBus.player_battery_changed.emit(1.0)

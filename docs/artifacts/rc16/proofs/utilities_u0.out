@@ -1,0 +1,115 @@
+# proof utilities_u0
+# utc 20261007T184525Z
+# head 2e0ada0 (uncommitted paths: 17)
+# cmd bash tools/utilities_report.sh
+== availability (pip --user scripts directory: C:\Users\Maxsim\AppData\Roaming\Python\Python311\Scripts)
+gdparse: gdparse 4.5.0
+gdlint: gdlint 4.5.0
+gdformat: gdformat 4.5.0
+shellcheck: ShellCheck - shell script analysis tool version: 0.11.0 
+actionlint: 1.7.12 installed by downloading from release page 
+mypy: mypy 2.4.0 (compiled: yes) 
+ruff: ruff 0.16.9 
+pre_commit: pre-commit 4.6.2
+pngquant: ABSENT
+oggenc: ABSENT
+ffmpeg: ffmpeg version 8.1.2-full_build-www.gyan.dev Copyright (c) 2000-2026 the FFmpeg developers   built with gcc 16.1.0 (Rev2, Built by MSYS2 project) 
+flake8: 7.3.0 (mccabe: 0.7.0, pycodestyle: 2.14.0, pyflakes: 3.4.0, radon: 6.0.1) CPython 3.11.8 on Windows 
+black: black, 26.5.1 (compiled: yes) Python (CPython) 3.11.8 
+
+== ruff E9,F (syntax errors and pyflakes correctness) on tools/ and scripts/
+All checks passed!
+exit=0
+
+== ruff default rule set, findings per rule (style and modernisation: reported, not a gate)
+  1	C401   	[ ] unnecessary-generator-set
+  1	PIE808 	[*] unnecessary-range-start
+Found 227 errors.
+[*] 69 fixable with the `--fix` option (81 hidden fixes can be enabled with the `--unsafe-fixes` option).
+
+== python compile of every .py (py_compile)
+compiled=52 failed=0
+
+== gdparse over every tracked .gd (378 files at the time of the report): which files does gdtoolkit not read?
+files=379 parse_failures=4 seconds=7.5
+  scripts/tools/_closeout_check_runner.gd | No terminal matches '"' in the current parser context, at line 1183 col 25 stand_in.source_code = "e
+  scripts/ui/character_screen.gd | Unexpected token Token('RPAR', ')') at line 281, column 56. Expected one of: * _NL
+  scripts/ui/hud_3d.gd | Unexpected token Token('RPAR', ')') at line 1520, column 92. Expected one of: * _NL
+  scripts/ui/puzzle_cables.gd | Unexpected token Token('RPAR', ')') at line 204, column 73. Expected one of: * _NL
+
+== gdlint default rules on the .gd files changed since e4bb4df, findings per rule (style rules: rejected as a gate; the defect-class subset is gdlintrc)
+changed .gd files: 40
+    377 max-line-length
+    261 class-definitions-order
+      6 unused-argument
+      6 max-returns
+      3 max-public-methods
+      2 class-variable-name
+      1 max-file-lines
+      1 function-variable-name
+-- gdlintrc (defect-class rules) through tools/lint_changed.py:
+lint_changed demo: 6 fixtures, 0 wrong
+
+lint_changed: 41 gd, 15 py, 7 sh, 1 workflow, skipped tools for: none, 0 finding(s)
+exit=0
+
+== shellcheck -S warning on every shell script, hook and extensionless wrapper (carriage returns stripped)
+tools/qa_sim/_resolve_godot.sh:21:1: warning: Use 'cd ... || exit' or 'cd ... || return' in case cd fails. [SC2164]
+tools/qa_sim/autoplay_bot:11:1: warning: Use 'cd ... || exit' or 'cd ... || return' in case cd fails. [SC2164]
+tools/qa_sim/autoplay_bot:37:2: warning: districts appears unused. Verify use (or export if used externally). [SC2034]
+tools/qa_sim/closeout_check:8:1: warning: Use 'cd ... || exit' or 'cd ... || return' in case cd fails. [SC2164]
+tools/qa_sim/guarded_windowed:11:1: warning: Use 'cd ... || exit' or 'cd ... || return' in case cd fails. [SC2164]
+tools/qa_sim/headless_suite:15:1: warning: Use 'cd ... || exit' or 'cd ... || return' in case cd fails. [SC2164]
+tools/qa_sim/playthrough:13:1: warning: Use 'cd ... || exit' or 'cd ... || return' in case cd fails. [SC2164]
+tools/qa_sim/static_syntax_check.sh:10:1: warning: Use 'cd ... || exit' or 'cd ... || return' in case cd fails. [SC2164]
+tools/qa_sim/tz_verify:8:1: warning: Use 'cd ... || exit' or 'cd ... || return' in case cd fails. [SC2164]
+shellcheck files=18 findings=9
+
+== mypy over every tracked tools/ and scripts/ .py (--ignore-missing-imports)
+     16 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Found 16 errors in 6 files (checked 39 source files)
+
+== pre-commit: the config validates
+exit=0
+
+== actionlint on the workflows
+exit=0
+
+== assets changed since e4bb4df (pngquant and oggenc only matter for shipped assets; docs/ frames are evidence, not assets)
+changed assets: 0
+
+== Everything Claude Code (ECC_DIR=C:/Users/Maxsim/AppData/Local/Temp/ecc_inspect)
+commit: ef648e01899ba3e8dc6371642deaaf64b4477775
+skills: 293  agents: 68  commands: 94
+files that mention godot or gdscript in skills, agents, rules, commands, hooks, scripts: 0
+hooks.json: 24 hook commands; per event {'PreToolUse': 9, 'PreCompact': 1, 'SessionStart': 2, 'PostToolUse': 2, 'PostToolUseFailure': 2, 'Stop': 7, 'SessionEnd': 1}; run by {'node': 24}
+skill verification-loop: description: Run a six-phase verification of a Claude Code session's work — build, type check, lint, tests with coverage, security grep, and diff review — then produce a PASS/FAIL verification report. Use w
+skill continuous-learning: description: "[DEPRECATED - use continuous-learning-v2] Legacy v1 stop-hook skill extractor. v2 is a strict superset with instinct-based, project-scoped, hook-reliable learning. Do not invoke v1: when continuou
+skill continuous-learning-v2: description: Instinct-based learning system that observes sessions via hooks, creates atomic instincts with confidence scoring, and evolves them into skills/commands/agents. v2.1 adds project-scoped instincts t
+skill config-gc: description: Garbage collection for your Claude Code configuration. Periodically scans ~/.claude (skills, memory, hooks, permissions, MCP servers, caches) for redundant, stale, orphaned, or low-value items, the
+skill strategic-compact: description: Suggests manual context compaction at logical intervals to preserve context through task phases rather than arbitrary auto-compaction. Use when a session is approaching a context limit and a task p
+skill token-budget-advisor: description: Offer a choice of response depth (25%/50%/75%/100%) with token estimates before answering, then answer at that level. Use when the user asks to control response length or token budget, such as 'tok
+verification-loop build/test commands: 4 lines name npm, pnpm, pytest, cargo, go, mvn or gradle; godot: 0
+
+== godot-git-plugin
+an editor extension (a native library under addons/) that shows git status in the Godot editor; it is not a merge driver, and scene files (.tscn) are text that git merges as it merges any text
+
+== CI
+static.yml
+# EXIT=0

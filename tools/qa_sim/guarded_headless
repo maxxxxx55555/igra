@@ -4,7 +4,7 @@
 #   tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn [timeout-sec]
 #   log -> .qa_logs/<scene>.log
 set -uo pipefail
-cd "$(dirname "$0")/../.."
+cd "$(dirname "$0")/../.." || exit 2
 SCENE="${1:?usage: tools/qa_sim/guarded_headless <res://scenes/tools/NAME.tscn> [timeout-sec]}"
 T="${2:-120}"
 mkdir -p .qa_logs

@@ -9,7 +9,7 @@
 # Код возврата 0 — всё зелёное, иначе число проваленных проверок.
 
 set -uo pipefail
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/.." || exit 2
 
 GODOT="${GODOT:-godot}"
 # На Windows `python3`/`py` часто это заглушка Microsoft Store — берём первый реально работающий.
@@ -338,6 +338,12 @@ if "$PY" tools/qa_sim/af3_frame_check.py >/dev/null 2>&1; then
   ok "af3_frame_check (every polish frame names the code tree and the capture time it came from)"
 else
   bad "af3_frame_check (см. 'python tools/qa_sim/af3_frame_check.py')"
+fi
+# U0: gdparse, gdlint (gdlintrc: defect-class rules), ruff, shellcheck and actionlint on the files changed since the rc15 tag; the self-check first.
+if "$PY" tools/lint_changed.py --demo >/dev/null 2>&1 && "$PY" tools/lint_changed.py >/dev/null 2>&1; then
+  ok "lint_changed (gdparse, gdlint, ruff E9,F, shellcheck, actionlint on every file changed since e4bb4df)"
+else
+  bad "lint_changed (см. 'python tools/lint_changed.py')"
 fi
 if [[ -f tools/af5_check.py ]]; then
   if "$PY" tools/af5_check.py --demo >/dev/null 2>&1 && "$PY" tools/af5_check.py >/dev/null 2>&1; then

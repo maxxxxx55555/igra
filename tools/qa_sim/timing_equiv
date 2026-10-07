@@ -4,7 +4,7 @@
 #
 #   tools/qa_sim/timing_equiv [label]     # logs -> .qa_logs/timing_<label>_<fps>.log, table -> .qa_logs/timing_<label>.txt
 set -uo pipefail
-cd "$(dirname "$0")/../.."
+cd "$(dirname "$0")/../.." || exit 2
 
 GODOT="$(bash tools/qa_sim/_resolve_godot.sh 2>/dev/null)"
 if [[ -z "$GODOT" ]] || [[ ! -x "$GODOT" ]]; then

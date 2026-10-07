@@ -6,7 +6,7 @@
 # behind a wrapper that prints a filtered summary) next to it as <id>.attach.<name>. --launch adds one row to
 # docs/artifacts/rc16/launch_ledger.tsv (one row per top-level Godot launch command; check.sh, the bot and the wrappers count once).
 set -uo pipefail
-cd "$(dirname "$0")/../.."
+cd "$(dirname "$0")/../.." || exit 2
 launch=0
 attach=()
 while [[ "${1:-}" == --* ]]; do

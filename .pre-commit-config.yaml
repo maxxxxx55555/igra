@@ -15,6 +15,9 @@
 # PR-level enforcement (exact "git diff --stat content/cards/" semantics):
 # run in CI — python3 scripts/check_card_art_changes.py --ci-base origin/<base>
 # Stdlib only; no hook dependencies to install for the script itself.
+#
+# The `lint-changed` hook (rc16 U0) lints only the staged files: gdparse and gdlint (gdlintrc), ruff E9,F, shellcheck, actionlint.
+# Install what it uses once: python -m pip install gdtoolkit==4.5.0 ruff==0.16.9 shellcheck-py==0.11.0.1 actionlint-py==1.7.12.25
 
 repos:
   - repo: local
@@ -26,3 +29,9 @@ repos:
         pass_filenames: false
         always_run: true
         verbose: true
+      - id: lint-changed
+        name: "lint: gdparse, gdlint, ruff, shellcheck, actionlint on the staged files"
+        entry: python tools/lint_changed.py --staged
+        language: system
+        pass_filenames: false
+        always_run: true

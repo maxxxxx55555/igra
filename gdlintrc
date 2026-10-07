@@ -1,0 +1,25 @@
+disable:
+- class-definitions-order
+- class-load-variable-name
+- class-name
+- class-variable-name
+- constant-name
+- enum-element-name
+- enum-name
+- function-argument-name
+- function-arguments-number
+- function-name
+- function-preload-variable-name
+- function-variable-name
+- load-constant-name
+- loop-variable-name
+- max-file-lines
+- max-line-length
+- max-public-methods
+- max-returns
+- no-elif-return
+- no-else-return
+- signal-name
+- sub-class-name
+- tab-characters
+- unused-argument
