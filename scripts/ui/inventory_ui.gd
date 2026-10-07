@@ -23,6 +23,7 @@ const QUICK_CELL := preload("res://scripts/ui/quick_slot_cell.gd")
 const ITEM_ICONS := preload("res://scripts/ui/item_icons.gd")
 const QUICK_TARGET := Vector2(64, 64)
 const QUICK_ICON: float = 40.0
+const QUICK_KEY_POS := Vector2(6.0, 2.0)
 
 var _selected: int = -1
 var _filter: int = -1
@@ -190,7 +191,7 @@ func _quick_strip() -> VBoxContainer:
 		target.custom_minimum_size = QUICK_TARGET
 		var key := Label.new()
 		key.text = str(i + 1)
-		key.position = Vector2(6.0, 2.0)
+		key.position = QUICK_KEY_POS
 		key.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		key.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
 		target.add_child(key)

@@ -867,6 +867,8 @@ const _NUMBER_HEAD := Vector3(0.0, 2.0, 0.0)
 const _NUMBER_BONE := Color("#d8d2c4")
 const _NUMBER_BRASS := Color("#c9a24a")
 const _NUMBER_OUTLINE := Color("#0c1016")
+const _NUMBER_FONT_PX: int = 22
+const _NUMBER_OUTLINE_PX: int = 4
 var _number_layer: CanvasLayer = null
 var _numbers: Array[Label] = []
 
@@ -879,9 +881,9 @@ func _setup_damage_numbers() -> void:
 		var label := Label.new()
 		label.visible = false
 		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		label.add_theme_font_size_override("font_size", 22)
+		label.add_theme_font_size_override("font_size", _NUMBER_FONT_PX)
 		label.add_theme_color_override("font_outline_color", _NUMBER_OUTLINE)
-		label.add_theme_constant_override("outline_size", 4)
+		label.add_theme_constant_override("outline_size", _NUMBER_OUTLINE_PX)
 		_number_layer.add_child(label)
 		_numbers.append(label)
 	if EventBus.has_signal(&"enemy_damaged"):
