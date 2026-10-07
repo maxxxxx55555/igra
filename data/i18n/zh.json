@@ -1521,5 +1521,7 @@
   "CREDITS_DESIGN": "游戏设计与代码：TLS Team",
   "CREDITS_MUSIC": "音乐与音效：TLS Team",
   "CREDITS_ART": "美术与界面：TLS Team",
-  "CREDITS_THANKS": "特别感谢玩家们"
+  "CREDITS_THANKS": "特别感谢玩家们",
+  "INV_QUICKSLOT_HINT": "将物品拖到快速访问槽位上。右键点击槽位可清空。",
+  "NGP_RUN_ALREADY_COUNTED": "这一夜已经计入。"
 }

@@ -1521,5 +1521,7 @@
   "CREDITS_DESIGN": "Геймдизайн и код: TLS Team",
   "CREDITS_MUSIC": "Музыка и звуки: TLS Team",
   "CREDITS_ART": "Графика и интерфейс: TLS Team",
-  "CREDITS_THANKS": "Особая благодарность игрокам"
+  "CREDITS_THANKS": "Особая благодарность игрокам",
+  "INV_QUICKSLOT_HINT": "Перетащите предмет на слот быстрого доступа. Правый клик по слоту очищает его.",
+  "NGP_RUN_ALREADY_COUNTED": "Эта ночь уже засчитана."
 }

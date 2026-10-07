@@ -1521,5 +1521,7 @@
   "CREDITS_DESIGN": "Diseño de juego y código: TLS Team",
   "CREDITS_MUSIC": "Música y efectos de sonido: TLS Team",
   "CREDITS_ART": "Arte e interfaz: TLS Team",
-  "CREDITS_THANKS": "Un agradecimiento especial a los jugadores"
+  "CREDITS_THANKS": "Un agradecimiento especial a los jugadores",
+  "INV_QUICKSLOT_HINT": "Arrastra un objeto a un hueco de acceso rápido. Clic derecho en un hueco para vaciarlo.",
+  "NGP_RUN_ALREADY_COUNTED": "Esta noche ya está contabilizada."
 }
