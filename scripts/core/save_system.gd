@@ -106,6 +106,31 @@ var _last_daily_time: int = 0
 ## across New Game resets on the same save slot and only ever shows once.
 var _onboard_done: bool = false
 
+## One New Game+ level per run (NewGamePlus.activate_ng_plus asks for the name): reset_all() starts a run under a new name, every save of
+## the run carries it, and a Continue or a Retry loads the same one back, so the pre-boss save is still the same run. Hex of a fixed
+## length, so a name read from a file is checked by its shape; Crypto bytes, not randi(), because a seeded RNG hands two runs one name.
+const RUN_ID_BYTES: int = 8
+static var RUN_ID_PATTERN := RegEx.create_from_string("^[0-9a-f]{%d}$" % (RUN_ID_BYTES * 2))
+var _run_id: String = _new_run_id()
+
+static func _new_run_id() -> String:
+	return Crypto.new().generate_random_bytes(RUN_ID_BYTES).hex_encode()
+
+func get_run_id() -> String:
+	return _run_id
+
+## The name a file claims, or "" when it is not one this game could have written (5000 characters, a dictionary, a number).
+static func clean_run_id(raw: Variant) -> String:
+	if raw is String and RUN_ID_PATTERN.search(raw) != null:
+		return String(raw)
+	return ""
+
+## A save with no name (every save from before this field) or a forged one starts a new run on load, so it counts as unbanked once.
+func _adopt_run_id(raw: Variant) -> void:
+	_run_id = clean_run_id(raw)
+	if _run_id.is_empty():
+		_run_id = _new_run_id()
+
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	EventBus.district_restored.connect(func(_a, _b): autosave())
@@ -329,6 +354,7 @@ func _save() -> void:
 		"daily_streak": _daily_streak,
 		"last_daily_time": _last_daily_time,
 		"onboard_done": _onboard_done,
+		"run_id": _run_id,
 	}
 	_write_atomic(SAVE_PATH, payload)
 
@@ -370,6 +396,7 @@ func load_all() -> bool:
 	# Saves from before C8 round 3 lack the key: keep the cfg-loaded levels.
 	FlashlightUpgradeManager.from_dict(data.get("flashlight", FlashlightUpgradeManager.to_dict()))
 	_onboard_done = bool(data.get("onboard_done", false))
+	_adopt_run_id(data.get("run_id", ""))
 	return true
 
 func is_onboard_done() -> bool:
@@ -382,6 +409,7 @@ func mark_onboard_done() -> void:
 	_save()
 
 func reset_all() -> void:
+	_run_id = _new_run_id()
 	PowerGrid.reset()
 	UpgradeSystem.reset()
 	CoinWallet.from_dict({})
@@ -584,6 +612,7 @@ func save_slot(slot: int) -> bool:
 		"daily_streak": _daily_streak,
 		"last_daily_time": _last_daily_time,
 		"onboard_done": _onboard_done,
+		"run_id": _run_id,
 		"timestamp": Time.get_unix_time_from_system(),
 		"slot_id": slot,
 	}
@@ -630,6 +659,7 @@ func load_slot(slot: int) -> bool:
 	_daily_streak = int(data.get("daily_streak", 0))
 	_last_daily_time = int(data.get("last_daily_time", 0))
 	_onboard_done = bool(data.get("onboard_done", false))
+	_adopt_run_id(data.get("run_id", ""))
 
 	# Load skill tree
 	if SkillTreeManager:
