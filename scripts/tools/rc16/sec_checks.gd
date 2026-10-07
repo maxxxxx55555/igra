@@ -24,6 +24,7 @@ static func run(r: Node) -> void:
 	NewGamePlus.reset_for_new_game()
 	_names_and_banks(r)
 	_second_win(r)
+	_refusal_toast(r)
 	_forged_ledger(r)
 	_restore(kept)
 
@@ -68,6 +69,19 @@ static func _second_win(r: Node) -> void:
 		"E1B and the player is told once, in words (%s)" % [seen])
 	SaveSystem.set("_run_id", OTHER_RUN)
 	r._ok(NewGamePlus.activate_ng_plus() and NewGamePlus.get_current_ng_plus() == level + 1, "E1B a different run still banks its level (level %d)" % NewGamePlus.get_current_ng_plus())
+
+## E1D: a refused activation on the New Game+ screen is told as a toast, because the HUD's notice line is hidden behind a blocking screen.
+## The old screen says nothing when the activation is refused.
+static func _refusal_toast(r: Node) -> void:
+	var screen: Control = UIManager._get_screen(&"new_game_plus")
+	if screen == null or not screen.has_method("_on_activate"):
+		r._ok(false, "E1D the New Game+ screen is not there to press (%s)" % [screen])
+		return
+	var level: int = NewGamePlus.get_current_ng_plus()
+	screen.call("_on_activate")
+	var toast: Label = UIManager._toast
+	r._ok(NewGamePlus.get_current_ng_plus() == level and toast != null and toast.visible and toast.text == LocalizationManager.t(NOTICE_KEY),
+		"E1D a refused activation shows its reason on the screen (level %d of %d, toast %s)" % [NewGamePlus.get_current_ng_plus(), level, toast.text if toast != null else "none"])
 
 ## E1C: a forged ledger (5000-character strings, a dictionary, numbers, 500 entries) loads as well-formed names only, the newest
 ## LEDGER_CAP of them. The old code has no ledger to load.

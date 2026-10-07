@@ -130,6 +130,8 @@ func _on_activate() -> void:
 		_activated_this_visit = true
 		_refresh()
 		UIManager.show_notification(LocalizationManager.tf("NGP_ACTIVATE_FEEDBACK", [NewGamePlus.get_current_ng_plus()]))
+	elif NewGamePlus.get_banked_runs().has(SaveSystem.get_run_id()):
+		UIManager.show_notification(LocalizationManager.t("NGP_RUN_ALREADY_COUNTED"))
 
 ## arena design audit P3: before activation this just closes the overlay
 ## (back to the ending/wherever it was opened from); after an activation
