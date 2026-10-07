@@ -23,6 +23,13 @@ const SPRINT_BOB_AMP: float = 0.1
 const SPRINT_BOB_FREQ: float = 8.0   ## matches player_3d.gd's own walk-sway rate
 const SPRINT_FOV_BONUS: float = 5.0
 
+## GDD 2.2 (CT7): a pinch zooms the camera. The factor only scales the target the camera eases toward (the FOV in
+## first person, the boom offset in third person), so the interior blend and the sprint punch keep working on top
+## of it; 1.0 is the camera as it was before the pinch existed.
+const ZOOM_MIN: float = 0.8
+const ZOOM_MAX: float = 1.35
+const ZOOM_BLEND_PER_SEC: float = 12.0
+
 var _cam: Camera3D = null
 var _target: Node3D = null
 var _is_interior: bool = false
@@ -32,6 +39,8 @@ var _current_fov: float
 var _pitch: float = 0.0
 var _running: bool = false
 var _bob_t: float = 0.0
+var _zoom: float = 1.0
+var _zoom_target: float = 1.0
 
 func _ready() -> void:
 	_cam = _find_cam(self)
@@ -58,6 +67,14 @@ func set_fps(v: bool) -> void:
 func set_running(v: bool) -> void:
 	_running = v
 
+## A pinch or a trackpad magnify: `mult` above 1 zooms in, below 1 out. Every call carries one step of the gesture,
+## so the steps multiply into the target; letting go simply stops the calls and the zoom stays.
+func zoom_by(mult: float) -> void:
+	_zoom_target = clampf(_zoom_target * mult, ZOOM_MIN, ZOOM_MAX)
+
+func get_zoom_factor() -> float:
+	return _zoom
+
 
 func _process(delta: float) -> void:
 	if _cam == null:
@@ -66,6 +83,7 @@ func _process(delta: float) -> void:
 		_target = _resolve_target()
 	if _target == null:
 		return
+	_zoom = lerpf(_zoom, _zoom_target, 1.0 - exp(-ZOOM_BLEND_PER_SEC * delta))
 	if fps_mode:
 		_tick_fps(delta)
 	else:
@@ -84,14 +102,14 @@ func _tick_fps(delta: float) -> void:
 	_cam.global_position = _cam.global_position.lerp(desired, clampf(delta * fps_follow_speed, 0.0, 1.0))
 	var yaw: float = _target.rotation.y
 	_cam.rotation = Vector3(_pitch, yaw, 0.0)
-	var target_fov := _current_fov + (SPRINT_FOV_BONUS if _running else 0.0)
+	var target_fov := _current_fov / _zoom + (SPRINT_FOV_BONUS if _running else 0.0)
 	_cam.fov = lerpf(_cam.fov, target_fov, clampf(delta * interior_lerp_speed, 0.0, 1.0))
 	_tick_interior_target()
 
 func _tick_third(delta: float) -> void:
 	_tick_interior()
 	var tp: Vector3 = _target.global_position
-	var desired: Vector3 = tp + Vector3(0.0, _current_height, _current_distance)
+	var desired: Vector3 = tp + Vector3(0.0, _current_height, _current_distance) / _zoom
 	_cam.global_position = _cam.global_position.lerp(desired, clampf(delta * follow_speed, 0.0, 1.0))
 	_cam.look_at(tp + Vector3(0.0, look_height_offset, 0.0), Vector3.UP)
 	_cam.fov = lerpf(_cam.fov, _current_fov, clampf(delta * interior_lerp_speed, 0.0, 1.0))
