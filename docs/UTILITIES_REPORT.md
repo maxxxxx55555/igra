@@ -36,7 +36,7 @@ Evidence: `tools/utilities_report.sh` run through `tools/qa_sim/proof_run utilit
 Exceptions, all listed in the raw output:
 1. gdparse cannot read 4 files (`scripts/tools/_closeout_check_runner.gd:1183`, `scripts/ui/character_screen.gd:281`, `scripts/ui/hud_3d.gd:1520`, `scripts/ui/puzzle_cables.gd:204`): a one-line `if` inside a lambda body, and a string literal with raw newlines. The engine compile gate is the parse proof for them.
 2. shellcheck, 9 findings in wrappers not changed in this pass: SC2164 in `tools/qa_sim/_resolve_godot.sh:21`, `autoplay_bot:11`, `closeout_check:8`, `guarded_windowed:11`, `headless_suite:15`, `playthrough:13`, `static_syntax_check.sh:10`, `tz_verify:8`, and SC2034 in `tools/qa_sim/autoplay_bot:37`. The lint gates a file only when it changes.
-3. The CI run is UNVERIFIABLE-HERE (no runner is reachable from this machine); the commands of the workflow pass locally. Owner action: open the Actions tab after the push and read the `static` run.
+3. The CI run on `599cd89` (run 37669887172, `https://github.com/maxxxxx55555/igra/actions/runs/37669887172`) completed with conclusion success: 8 steps (checkout, python, pip install, lint demo, lint of the diff, flow_check, scene_node_check, af5_check) all success, 3 min 55 s; the job JSON read from the public API is `docs/artifacts/rc16/proofs/ci_static_599cd89.json`. The workflow runs on pushes to main and pull requests only.
 
 ## Installed on the dev machine
 

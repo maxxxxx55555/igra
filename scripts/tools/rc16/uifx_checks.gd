@@ -251,7 +251,7 @@ static func _screen_slide(r: Node) -> void:
 	SettingsManager.set_setting("reduce_ui_motion", still0)
 	r._ok(rising and home, "UIFX6 an opened screen rises and fades in, then rests on its exact place at full alpha after 0.5 s (rising %s, home %s)" % [rising, home])
 
-## MENU1 (TZ_DECISIONS M5.1-day): the main-menu background that changes every 24 s shows night and generator-on only; the game has no day
+## MENUBG1 (TZ_DECISIONS M5.1-day): the main-menu background that changes every 24 s shows night and generator-on only; the game has no day
 ## (GDD 11.1). Four changes in a row: the old script runs night, day, generator, night, day through them.
 static func _menu_has_no_day(r: Node) -> void:
 	var bg := (load("res://scripts/ui/menu_background.gd") as GDScript).new() as Control
@@ -263,7 +263,7 @@ static func _menu_has_no_day(r: Node) -> void:
 		bg.call("_advance_theme")
 		seen.append(str(themes.find_key(bg.get("_theme"))))
 	bg.queue_free()
-	r._ok(not seen.has("DAY") and seen.has("NIGHT") and seen.has("GENERATOR"), "MENU1 four background changes show %s: night and generator-on, no day" % [seen])
+	r._ok(not seen.has("DAY") and seen.has("NIGHT") and seen.has("GENERATOR"), "MENUBG1 four background changes show %s: night and generator-on, no day" % [seen])
 
 ## TO1 (GDD 24.5): a toast lives 3 s. Still on screen at 2.7 s, gone by 3.5 s; the old hold of 3.5 s keeps it until 4.0 s.
 static func _toast_lifetime(r: Node) -> void:
@@ -277,11 +277,12 @@ static func _toast_lifetime(r: Node) -> void:
 	await r.get_tree().process_frame
 	var fresh: Array = stack.get_children().filter(func(c: Node) -> bool: return not before.has(c))
 	var row: Node = fresh[0] if fresh.size() == 1 else null
+	var shown: bool = row != null  # a freed row compares equal to null, so this is read before the waits
 	await r.get_tree().create_timer(2.7).timeout
-	var still: bool = row != null and is_instance_valid(row)
+	var still: bool = shown and is_instance_valid(row)
 	await r.get_tree().create_timer(0.8).timeout
-	var gone: bool = row != null and not is_instance_valid(row)
-	r._ok(still and gone, "TO1 a toast is on screen at 2.7 s and gone by 3.5 s (row %s, at 2.7 s %s, gone %s)" % [row != null, still, gone])
+	var gone: bool = shown and not is_instance_valid(row)
+	r._ok(still and gone, "TO1 a toast is on screen at 2.7 s and gone by 3.5 s (shown %s, at 2.7 s %s, gone %s)" % [shown, still, gone])
 
 ## ATK1 (GDD 5.3): under 5 stamina the touch attack button is grey; at 5 it is not. The old HUD only fills the bar.
 static func _attack_button_grey(r: Node) -> void:

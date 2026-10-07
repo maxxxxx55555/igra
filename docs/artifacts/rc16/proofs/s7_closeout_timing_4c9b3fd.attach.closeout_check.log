@@ -1,0 +1,81 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+[closeout] ok   the player spawned
+[closeout] ok   PERF1 street collision is a few strips on the tile surface (1 StaticBody3D, at most 40; 0 of 24 road and sidewalk points off the street at y 0.05-0.07; 0 of 4 block centres solid)
+[closeout] ok   PERF2 40 hit effects through the pool leave at most 24 bursts alive and replay one (24 alive, replayed true)
+[closeout] ok   PERF6 a finished burst parks itself and the next spawn replays it instead of making one (parked true, bursts 1 -> 1)
+[closeout] ok   PERF3 the old district is out of the tree as load_district returns and one district root is left (true, 1 children)
+[closeout] ok   PERF4 the load stats name the district and time the load, the streets and the props ({ "scene_ms": 0.564, "enemies_ms": 4.343, "loot_ms": 14.606, "district": "residential", "total_ms": 64.202, "streets_ms": 1.104, "props_ms": 68.512 })
+[closeout] ok   PERF5 the preloader asked the loader for 6 paths after the build and every one exists
+[closeout] ok   PERF7 an OmniLight3D that enters the tree joins the light limiter's group
+[closeout] ok   FIRE1 a shot starts the cooldown
+[closeout] ok   FIRE1 the cooldown runs on the physics tick: the rifle is ready 0.5 s after a shot with _process off
+[closeout] ok   CT7 the camera exposes its zoom factor
+[closeout] ok   CT7 the camera rests at zoom 1.0
+[closeout] ok   CT7 two fingers spreading from 300 to 450 px zoom in to the 1.35 limit (1.350)
+[closeout] ok   CT7 the pinch does not turn the view
+[closeout] ok   CT7 the fingers closing back to 300 px zoom out to 1.35 x 300 / 450 = 0.9 (0.901)
+[closeout] ok   CT7 letting go keeps the zoom
+[closeout] ok   CT7 one finger still turns the view
+[closeout] ok   CT7 a finger that lands long after the first looks around and does not zoom
+[closeout] ok   CT7 a trackpad magnify gesture zooms in too
+[closeout] ok   E11 the refund path ran: the transformer did not fit and the transistor came back
+[closeout] ok   E11 the refunded transistor is not counted as found (1 -> 1)
+[closeout] ok   E11 a real pickup of a transistor still counts once (1 -> 2)
+[closeout] ok   E13 the open inventory counts as a blocking screen
+[closeout] ok   E13 the battery drains by about 0.222 in 1 s behind the open inventory (0.222)
+[closeout] ok   CAM1 the interior blend covers the same share of the way in 0.1 s at 30 and at 120 FPS (0.953 / 0.953)
+[closeout] ok   CAM1 one 60 FPS frame still closes 40% of the gap (0.400)
+[closeout] ok   UIFX1 the tier table while sprinting: Low the vignette alone, Medium + grain, High + chromatic aberration, Ultra + motion blur up to 0.35 (Low..Ultra: V, VG, VGC, VGCB; blur 0.35; 1.2 s after the sprint: VGC)
+[closeout] ok   UIFX2 a hit pulses the chromatic aberration up to 2 px and it is gone 0.5 s later, the layer hidden again (1.58 px, gone true)
+[closeout] ok   UIFX2 the pulse stays 0 at the Low tier and under Reduce Flash (0.00 px, 0.00 px)
+ERROR: Condition "!get_viewport()->gui_is_dragging()" is true.
+   at: set_drag_preview (scene/gui/control.cpp:2887)
+   GDScript backtrace (most recent call first):
+       [0] _get_drag_data (res://scripts/ui/quick_slot_cell.gd:20)
+       [1] _quick_slot_drag (res://scripts/tools/rc16/uifx_checks.gd:139)
+[closeout] ok   QS2 dragging the medkit cell onto quick slot 1 binds it (drag data { "quick_item": &"medkit" }, the target accepts true, the HUD's slot 1 is pistol)
+[closeout] ok   QS2 key 1 then uses a medkit (true, one of 2 gone, health up from 40)
+[closeout] ok   QS2 a right-click on the slot puts the default item back (pistol)
+[closeout] ok   QS2 a saved list that is not six known items falls back to the defaults
+ERROR: The object does not have any 'meta' values with the key 'hover_tween'.
+   at: get_meta (core/object/object.cpp:1052)
+   GDScript backtrace (most recent call first):
+       [0] _hover (res://scripts/theme_setup.gd:36)
+       [1] _hover (res://scripts/tools/rc16/uifx_checks.gd:178)
+[closeout] ok   UIFX3 hovering a button scales it to 1.05 about its centre in 0.12 s and back, and Reduce UI Motion keeps it at 1.0 (1.050, centred true, 1.000, 1.000)
+[closeout] ok   UIFX5 a hit shakes the health bar by at most 4 px and it is on its exact place 0.4 s later, and Reduce Screen Shake keeps it still (shaken, home, shaken, home: [true, true, false, true])
+[closeout] ok   UIFX4 a monster hit for 5 shows that number and it is back in the pool of 12 after 1.0 s (shown ["5"], pool 12, signal true)
+[closeout] ok   UIFX6 an opened screen rises and fades in, then rests on its exact place at full alpha after 0.5 s (rising true, home true)
+[closeout] ok   MENU1 four background changes show ["GENERATOR", "NIGHT", "GENERATOR", "NIGHT"]: night and generator-on, no day
+[closeout] FAIL TO1 a toast is on screen at 2.7 s and gone by 3.5 s (row false, at 2.7 s true, gone false)
+[closeout] ok   ATK1 the attack button is grey at 4 stamina and not at 5 or 100 ([(0.5, 0.5, 0.5, 1.0), (1.0, 1.0, 1.0, 1.0), (1.0, 1.0, 1.0, 1.0)])
+[closeout] ok   E1A a fresh game has a well-formed run name (23d78f95d0d97a25)
+[closeout] ok   E1A the name is in the signed save and a Continue or a Retry brings the same one back (file 23d78f95d0d97a25, loaded 23d78f95d0d97a25)
+[closeout] ok   E1A winning banks the run once: one level more and its name in the ledger (level 1 of 1, ledger ["23d78f95d0d97a25"])
+[closeout] ok   E1B the same run winning again banks nothing (accepted false, level 1 of 1, ledger ["23d78f95d0d97a25"])
+[closeout] ok   E1B and the player is told once, in words (["This night is already counted."])
+[closeout] ok   E1B a different run still banks its level (level 2)
+[closeout] ok   E1D a refused activation shows its reason on the screen (level 2 of 2, toast This night is already counted.)
+[closeout] ok   E1C a forged ledger of 500 entries loads as at most 64 well-formed names, the newest kept (64)
+[closeout] ok   AUD1 a positional sound is low-passed at 2400.0 Hz with a drop of -14.0 dB (player @AudioStreamPlayer3D@608:<AudioStreamPlayer3D#392888847769>)
+[closeout] ok   AUD1 and so are the footsteps (2400.0)
+[closeout] ok   AUD4 40 sounds share a pool of at most 12 players (11 players were added)
+[closeout] ok   AUD2 the reverb of the Footsteps, Combat and Environment buses is off at Low and on at Medium, High, Ultra (["0F=false", "0C=false", "0E=false", "1F=true", "1C=true", "1E=true", "2F=true", "2C=true", "2E=true", "3F=true", "3C=true", "3E=true"])
+[closeout] ok   AUD3 one physics timer senses the place every 0.25 s (1 found)
+[closeout] ok   AUD3 the reverb is wet 0.040 in the open (rests at 0.040) and 0.300 walled in (grows to 0.300)
+[closeout] ok   AUD3 and the room is bigger walled in (room size 0.35 in the open, 0.70 walled in)
+[closeout] ok   AUD5 the dark bed table lists the districts in the order of DistrictSceneFactory.DISTRICTS ([&"suburbs", &"residential", &"park", &"school", &"hospital", &"gas_station", &"police", &"warehouses", &"industrial", &"substation", &"power_station"])
+[closeout] ok   AUD5 entering the park asks the loader thread for the beds of [&"residential", &"school"] (status [3, 1])
+[closeout] ok   AUD5 and the bed of power_station is let go of (cached false)
+[closeout] ok   AUD5 while the bed of the park itself stays
+[closeout] DONE checks=59 fails=1
+ERROR: 3 RID allocations of type 'PN13RendererDummy14TextureStorage12DummyTextureE' were leaked at exit.
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 8 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 51 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 8 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

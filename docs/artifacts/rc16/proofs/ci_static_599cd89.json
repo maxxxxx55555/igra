@@ -1,0 +1,129 @@
+{
+  "total_count": 1,
+  "jobs": [
+    {
+      "id": 112958620046,
+      "run_id": 37669887172,
+      "workflow_name": "static",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/maxxxxx55555/igra/actions/runs/37669887172",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTqjW9c8AAAAaTNvBjg",
+      "head_sha": "599cd89fa275c1a7ceb5dfcda28354691e4311a3",
+      "url": "https://api.github.com/repos/maxxxxx55555/igra/actions/jobs/112958620046",
+      "html_url": "https://github.com/maxxxxx55555/igra/actions/runs/37669887172/job/112958620046",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-07T18:50:23Z",
+      "started_at": "2026-10-07T18:50:25Z",
+      "completed_at": "2026-10-07T18:54:20Z",
+      "name": "static",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-07T18:50:26Z",
+          "completed_at": "2026-10-07T18:50:26Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-07T18:50:26Z",
+          "completed_at": "2026-10-07T18:54:05Z"
+        },
+        {
+          "name": "Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-07T18:54:05Z",
+          "completed_at": "2026-10-07T18:54:05Z"
+        },
+        {
+          "name": "Run python -m pip install gdtoolkit==4.5.0 ruff==0.16.9 shellcheck-py==0.11.0.1 actionlint-py==1.7.12.25 pillow",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-07T18:54:05Z",
+          "completed_at": "2026-10-07T18:54:11Z"
+        },
+        {
+          "name": "Run python tools/lint_changed.py --demo",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-07T18:54:11Z",
+          "completed_at": "2026-10-07T18:54:14Z"
+        },
+        {
+          "name": "Run python tools/lint_changed.py --base \"${BASE/#0000000000000000000000000000000000000000/e4bb4df}\"",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-07T18:54:14Z",
+          "completed_at": "2026-10-07T18:54:17Z"
+        },
+        {
+          "name": "Run python tools/flow_check.py",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-07T18:54:17Z",
+          "completed_at": "2026-10-07T18:54:17Z"
+        },
+        {
+          "name": "Run python tools/scene_node_check.py",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-07T18:54:17Z",
+          "completed_at": "2026-10-07T18:54:17Z"
+        },
+        {
+          "name": "Run python tools/af5_check.py --demo && python tools/af5_check.py",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-07T18:54:17Z",
+          "completed_at": "2026-10-07T18:54:18Z"
+        },
+        {
+          "name": "Post Run actions/setup-python@v5",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-07T18:54:18Z",
+          "completed_at": "2026-10-07T18:54:18Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-10-07T18:54:18Z",
+          "completed_at": "2026-10-07T18:54:18Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-07T18:54:18Z",
+          "completed_at": "2026-10-07T18:54:18Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/maxxxxx55555/igra/check-runs/112958620046",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000000046,
+      "runner_name": "GitHub Actions 1000000046",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+# proof s7_closeout_timing_4c9b3fd
+# utc 20261007T185520Z
+# head 4c9b3fd (uncommitted paths: 0)
+# cmd bash -c CLOSEOUT_ONLY=rc16 bash tools/qa_sim/closeout_check 300; a=$?; bash tools/qa_sim/timing_equiv after; b=$?; echo "closeout_rc16=$a timing_after=$b"; [ $a -eq 0 ] && [ $b -eq 0 ]
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/The Last Streetlight
+[closeout] FAIL TO1 a toast is on screen at 2.7 s and gone by 3.5 s (row false, at 2.7 s true, gone false)
+[closeout] DONE checks=59 fails=1
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 11 file(s) restored byte-identical
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/The Last Streetlight
+  run at 30 fps: rc=0 (19 timing lines)
+  run at 60 fps: rc=0 (19 timing lines)
+  run at 120 fps: rc=0 (19 timing lines)
+key                              30         60        120     max dev tolerance verdict
+timer_1s                     1.0333     1.0000     1.0083      0.0333 abs 0.050 ok
+tween_1s                     1.0000     0.9833     1.0000      0.0167 abs 0.050 ok
+walk_mps                     2.9921     2.9682     2.9684      0.0081 rel 0.030 ok
+sprint_mps                   4.7107     4.7109     4.6912      0.0042 rel 0.030 ok
+stamina_drain_per_s         22.4125    22.4125    22.3195      0.0041 rel 0.050 ok
+battery_drain_per_s          0.2222     0.2222     0.2225      0.0010 rel 0.030 ok
+rifle_shots_per_s            7.5000     7.5000     7.5000      0.0000 rel 0.050 ok
+pistol_shots_per_s           3.1579     3.1579     3.1579      0.0000 rel 0.050 ok
+rifle_reload_s               2.2000     2.2000     2.2000      0.0000 abs 0.050 ok
+melee_swings_per_s           1.4938     1.4969     1.4969      0.0021 rel 0.050 ok
+monster_hits_per_s           0.6648     0.6657     0.6662      0.0009 abs 0.100 ok
+monster_damage_per_s         6.6482     6.6574     6.6620      0.0014 rel 0.100 ok
+player_damage_per_s          2.2022     2.2053     2.2068      0.0014 rel 0.150 ok
+pickup_reach_m               1.2500     1.2500     1.2500      0.0000 abs 0.250 ok
+boss_ttk_s                  20.3000    20.2833    20.2833      0.0008 rel 0.050 ok
+TIMING_EQUIV verdict=PASS keys=15 failures=0
+  user-data guard: 11 file(s) restored byte-identical
+closeout_rc16=1 timing_after=0
+# EXIT=1
