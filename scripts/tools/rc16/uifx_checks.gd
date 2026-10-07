@@ -2,6 +2,8 @@ extends RefCounted
 ## rc16 closeout checks of uifx: wired by the orchestrator into _closeout_check_runner.gd as `await <Preload>.run(self)`
 
 const CHROMA_PX: float = 0.75
+## Loaded at run time: the file does not exist on the code this check is proven against.
+const QUICK_SLOTS_PATH: String = "res://scripts/ui/quick_slots.gd"
 ## Overlay layer name -> its letter in the tier table: vignette, grain, chromatic aberration.
 const LAYER_LETTERS: Dictionary = {"VignetteOverlay": "V", "GrainOverlay": "G", "ChromaOverlay": "C"}
 
@@ -9,6 +11,7 @@ static func run(r: Node) -> void:
 	await _post_fx_tiers(r)
 	await _damage_pulse(r)
 	await _sprint_blur(r)
+	await _quick_slot_drag(r)
 
 static func _chroma_px(overlay: Node) -> float:
 	var mat := (overlay.get_node("ChromaOverlay") as ColorRect).material as ShaderMaterial
@@ -112,3 +115,84 @@ static func _sprint_blur(r: Node) -> void:
 		"UIFX1 sprinting at Ultra blurs up to 0.35 (%.2f, state RUN %s), the layer is hidden when still, below Ultra and 1.2 s after the sprint (%s, %s, %s)" % [strength, running, still_clear, not high_shows, faded])
 	SettingsManager.set_graphics_tier(tier0)
 	player.global_position = pos0
+
+## One tap of a key action through the real input path: a press, a frame, a release, a frame.
+static func _tap(r: Node, action: StringName) -> void:
+	var down := InputEventAction.new()
+	down.action = action
+	down.pressed = true
+	Input.parse_input_event(down)
+	await r.get_tree().process_frame
+	var up := InputEventAction.new()
+	up.action = action
+	up.pressed = false
+	Input.parse_input_event(up)
+	await r.get_tree().process_frame
+
+static func _bound_item(hud: Node, index: int) -> Variant:
+	var bound: Variant = hud.get("_slot_items") if hud != null else null
+	return (bound as Array)[index] if bound is Array else null
+
+## QS2 / I9.7: the medkit cell is dragged onto quick-slot target 1, key 1 then uses a medkit, a right-click restores the pistol.
+static func _quick_slot_drag(r: Node) -> void:
+	r._playing()
+	var hud: Node = r._main.get_node_or_null("HUD")
+	var player: Node = r._player
+	var quick_slots: Resource = load(QUICK_SLOTS_PATH) if ResourceLoader.exists(QUICK_SLOTS_PATH) else null
+	var saved_slots: Variant = SettingsManager.get_setting("quick_slots", null)
+	var saved_pack: Dictionary = InventoryManager.to_dict()
+	var hp0: float = float(player.get("hp"))
+	InventoryManager.from_dict({})
+	InventoryManager.try_add(&"medkit", 2)
+	var defaults: Variant = hud.get("_SLOT_ITEMS") if hud != null else null
+	var default_ok: bool = quick_slots != null and defaults is Array and hud.get("_slot_items") == defaults \
+		and (quick_slots as Script).get_script_constant_map()["DEFAULTS"] == defaults
+	UIManager.open(&"inventory")
+	await r.get_tree().process_frame
+	await r.get_tree().process_frame
+	var ui: Control = UIManager._get_screen(&"inventory")
+	var cell: Node = null
+	for child in ui.get("_grid").get_children():
+		if child.get("item_id") == &"medkit":
+			cell = child
+	var target: Node = ui.find_child("QuickSlot0", true, false)
+	var data: Variant = null
+	if cell != null and cell.has_method("_get_drag_data"):
+		data = cell.call("_get_drag_data", Vector2.ZERO)
+	if data != null:
+		r.get_viewport().gui_cancel_drag()  # drops the preview the drag would be showing
+	for child in ui.get_children():
+		if String(child.name).begins_with("DragPreview"):
+			child.queue_free()
+	var carries: bool = data is Dictionary and (data as Dictionary).values().has(&"medkit")
+	var accepts: bool = target != null and target.has_method("_can_drop_data") and bool(target.call("_can_drop_data", Vector2.ZERO, data))
+	if accepts:
+		target.call("_drop_data", Vector2.ZERO, data)
+	var rebound: bool = _bound_item(hud, 0) == &"medkit"
+	UIManager.close(&"inventory")
+	player.set("hp", 40.0)
+	var medkits0: int = InventoryManager.count_of(&"medkit")
+	await _tap(r, &"quick_slot_1")
+	var medkits1: int = InventoryManager.count_of(&"medkit")
+	var hp1: float = float(player.get("hp"))
+	var click := InputEventMouseButton.new()
+	click.button_index = MOUSE_BUTTON_RIGHT
+	click.pressed = true
+	if target != null and target.has_method("_gui_input"):
+		target.call("_gui_input", click)
+	var restored: bool = defaults is Array and _bound_item(hud, 0) == (defaults as Array)[0]
+	var forged_ok := false
+	if quick_slots != null and defaults is Array:
+		SettingsManager.set_setting("quick_slots", [&"medkit"])
+		var short_list: Variant = quick_slots.call("read")
+		SettingsManager.set_setting("quick_slots", [&"battery", &"bogus_item", &"medkit", &"battery", &"battery", &"battery"])
+		forged_ok = short_list == defaults and quick_slots.call("read") == defaults
+	r._ok(default_ok, "QS2 untouched, the six bindings are the bar's own order and the HUD reads them from the setting")
+	r._ok(carries and accepts and rebound, "QS2 dragging the medkit cell onto quick slot 1 binds it (drag data %s, the target accepts %s, the HUD's slot 1 is %s)" % [data, accepts, _bound_item(hud, 0)])
+	r._ok(rebound and medkits1 == medkits0 - 1 and hp1 > 40.0, "QS2 key 1 then uses a medkit (medkits %d -> %d, health 40 -> %.0f)" % [medkits0, medkits1, hp1])
+	r._ok(rebound and restored, "QS2 a right-click on the slot puts the default item back (%s)" % [_bound_item(hud, 0)])
+	r._ok(forged_ok, "QS2 a saved list that is not six known items falls back to the defaults")
+	SettingsManager.set_setting("quick_slots", saved_slots)
+	player.set("hp", hp0)
+	EventBus.player_health_changed.emit(hp0 / float(player.stats.max_hp))  # the HUD's own memory of the health
+	InventoryManager.from_dict(saved_pack)
