@@ -686,6 +686,7 @@ func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, type: EnemyRos
 		mult = float(res.get(int(type), 1.0))
 	var reduced: float = amount * mult * (1.0 - armor)
 	hp -= reduced
+	EventBus.enemy_damaged.emit(self, reduced)
 	AudioManager.play_sound_3d(_HIT_SFX, global_position, -6.0)
 	_hit_flash()
 	if is_in_group("boss"):

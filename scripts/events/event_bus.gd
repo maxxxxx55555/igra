@@ -30,6 +30,7 @@ func emit_lives(l: int) -> void:
 signal ammo_changed(current: int, max: int)
 signal enemy_attack(damage: int)
 signal enemy_died(position: Vector3)
+signal enemy_damaged(monster: Node3D, amount: float)
 signal enemy_killed(monster_id: StringName)
 signal enemy_spawned(enemy: Node3D)
 signal item_picked_up(item_id: StringName)
