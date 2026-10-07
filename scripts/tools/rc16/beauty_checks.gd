@@ -11,6 +11,7 @@ const FLASH_REST_SEC: float = 0.8
 static func run(r: Node) -> void:
 	_grain_sampler(r)
 	await _damage_flash(r)
+	_grain_hash(r)
 
 static func _shader_code(path: String) -> String:
 	var shader: Shader = load(path) as Shader
@@ -51,3 +52,9 @@ static func _damage_flash(r: Node) -> void:
 		"BEAUTY2 a hit starts the damage vignette on its peak: the beat runs on age, not TIME, a hit sets age 0 and strength 1 at once and the strength is 0 when the fade is over (%s; age %s, strength %s, then %.2f at %.1f s, %.2f at %.1f s)" % [beat_line.strip_edges(), age, first, mid, FLASH_MID_SEC, last, FLASH_MID_SEC + FLASH_REST_SEC])
 	indicator.queue_free()
 	SettingsManager.set_setting("reduce_flash", flash0)
+
+## BEAUTY3: the HUD grain hashes each pixel cell without a repeat. The old hash took fract(cell * (127.1, 311.7)): the multipliers are whole numbers plus .1 and .7, so the noise was one 10 x 10 px tile repeated over the screen (autocorrelation 0.96 at a lag of 10 px in the shader's own float math, about 0 for the new hash).
+static func _grain_hash(r: Node) -> void:
+	var code: String = _shader_code(GRAIN_SHADER_PATH)
+	r._ok(not code.contains("127.1") and not code.contains("311.7") and code.contains("0.1031") and code.contains("33.33"),
+		"BEAUTY3 the HUD grain hash has no 127.1 / 311.7 multipliers (a 10 px repeat) and is the 0.1031 / 33.33 hash")

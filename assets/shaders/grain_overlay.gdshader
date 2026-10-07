@@ -15,16 +15,17 @@ uniform float grain_scale : hint_range(0.5, 4.0) = 1.0;
 uniform float vignette : hint_range(0.0, 1.0) = 0.35;
 uniform float vignette_soft : hint_range(0.05, 1.0) = 0.45;
 
+// The cell hash used to repeat every 10 px (the fractions of its two multipliers were .1 and .7): a visible mosaic, not grain.
 float hash(vec2 p) {
-    p = fract(p * vec2(127.1, 311.7) + TIME);
-    p += dot(p, p + 34.23);
-    return fract(p.x * p.y);
+    vec3 p3 = fract(p.xyx * 0.1031);
+    p3 += dot(p3, p3.yzx + 33.33);
+    return fract((p3.x + p3.y) * p3.z);
 }
 
 void fragment() {
     vec3 col = texture(screen_tex, SCREEN_UV).rgb;
     vec2 gp = floor(FRAGCOORD.xy * grain_scale);
-    float g = hash(gp) - 0.5;
+    float g = hash(gp + TIME * vec2(61.7, 37.3)) - 0.5;
     col += g * grain_amount * (0.35 + 0.65 * (1.0 - dot(col, vec3(0.333))));
     vec2 c = SCREEN_UV - 0.5;
     float v = smoothstep(0.25, 0.25 + vignette_soft, length(c));
