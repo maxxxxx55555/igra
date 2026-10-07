@@ -14,6 +14,7 @@ const SPRINT_SEC: float = 0.9
 const MIB: float = 1048576.0
 
 var _label: String = "after"
+var _only: String = ""
 var _hash: String = "unknown"
 var _recording: bool = false
 var _frame_ms: Array[float] = []
@@ -171,6 +172,7 @@ func _stage_states() -> void:
 		away = away.normalized() * 3.0 if away.length() > 0.1 else Vector3(0.0, 0.0, 3.0)
 		player.global_position = monster.global_position + away + Vector3(0.0, 0.5, 0.0)
 		_face(player, monster.global_position)
+		var monster_pos := monster.global_position
 		await get_tree().create_timer(0.6).timeout
 		monster.take_damage(8.0, player.global_position, EnemyRosterData.DamageType.BLUNT)
 		await get_tree().create_timer(0.15).timeout
@@ -178,7 +180,7 @@ func _stage_states() -> void:
 		await get_tree().create_timer(1.0).timeout
 		player.set("_damage_grace_timer", 0.0)
 		player.set("_iframes", 0.0)
-		player.take_damage(10.0, monster.global_position)
+		player.take_damage(10.0, monster_pos)
 		await get_tree().create_timer(0.06).timeout
 		await _snap("05_damage_taken")
 	# 6: a sprint at the Ultra tier (the motion blur tier), then the default tier again
@@ -231,6 +233,8 @@ func _run() -> void:
 			_label = s.substr(9)
 		elif s.begins_with("--thash="):
 			_hash = s.substr(8)
+		elif s.begins_with("--tonly="):
+			_only = s.substr(8)
 	var ads := get_node_or_null("/root/AdService")
 	if ads:
 		ads.enabled = false
@@ -251,6 +255,11 @@ func _run() -> void:
 		return
 	await get_tree().create_timer(3.0).timeout
 	print("[probe] start label=%s hash=%s tier=%d display=%s %s" % [_label, _hash, int(SettingsManager.get_setting("graphics_tier", 2)), DisplayServer.get_name(), _mem()])
+	if _only == "frames":
+		await _stage_states()
+		print("[probe] DONE label=%s hash=%s only=frames" % [_label, _hash])
+		get_tree().quit(0)
+		return
 	await _perf(&"suburbs")
 	for i in range(1, ORDER.size()):
 		await _transition(ORDER[i], "cold")

@@ -2,6 +2,7 @@
 # rc16: the streaming / perf / polish-frames probe (scripts/tools/_rc16_probe_runner.gd), windowed and muted, under the user-data guard.
 #   tools/qa_sim/rc16_probe <label> <hash> [timeout-sec]
 #     label: before | after      hash: the short hash of the code tree that is measured (it is part of every frame name)
+#   PROBE_ONLY=frames tools/qa_sim/rc16_probe ...   only the eight staged states (no district cycle, no perf)
 #   log -> .qa_logs/rc16_probe_<label>.log      frames -> docs/stills/polish/<state>_<label>_<hash>_<UTC>.png
 set -uo pipefail
 cd "$(dirname "$0")/../.."
@@ -22,7 +23,7 @@ udg_snapshot || exit 99
 trap 'udg_restore || exit 97' EXIT
 trap 'exit 130' INT TERM
 export TLS_UDG_GUARDED=1
-timeout "$T" "$GODOT" --windowed --path . res://scenes/tools/rc16_probe_scene.tscn -- --tlabel="$LABEL" --thash="$HASH" > "$LOG" 2>&1
+timeout "$T" "$GODOT" --windowed --path . res://scenes/tools/rc16_probe_scene.tscn -- --tlabel="$LABEL" --thash="$HASH" ${PROBE_ONLY:+--tonly="$PROBE_ONLY"} > "$LOG" 2>&1
 rc=$?
 echo "  rc16_probe rc=$rc (log: $LOG, $(grep -ac '^\[probe\]' "$LOG") probe lines)"
 exit $rc
