@@ -1,0 +1,15 @@
+# UNVERIFIABLE-HERE (AF6, rc16)
+
+Things this environment cannot prove: each has the reason and one sentence for the owner. None of them is counted as verified anywhere in the
+rc16 documents (`docs/ORDER_PASS_REPORT.md`, `docs/PERF_PASS.md`, `docs/ACCEPTANCE_CHECKLIST.md`). The environment is one Windows 11 desktop with an
+integrated AMD GPU, `gl_compatibility`, no phone, no Play Console session, no listener.
+
+| # | What | Why it cannot be proven here | Owner action (one sentence) |
+|---|---|---|---|
+| U1 | Frame rate, heat and memory of the game on a phone (acceptance OV3, T01, PF3; the 30 FPS floor at the D1 spawn) | No Android device is attached; the desktop iGPU is not a mobile GPU, and `--fixed-fps` simulates frame time, not GPU load | Install `build/tls.aab` on a mid-range phone and read the frame time at the D1 spawn and in the power station. |
+| U2 | Play Console upload, review and the Play Integrity verdict | Needs the owner's Play account and a credential that is not (and must not be) in the repository | Upload the signed bundle per `docs/RELEASE_RUNBOOK.md` (`version/code` is still 1). |
+| U3 | How the reverb by place, the distance low-pass and the SFX mix sound | Nobody listens here: the checks prove that the effect exists, is gated by tier and reacts to the place, not that it sounds right | Walk the street, an alley and an interior with headphones and say which of the three reverb levels is too wet. |
+| U4 | Human playtime of one ending (acceptance OV4, "8-12 h") and the fairness of the 12 HP hit cap (`dmg-cap`) | No human plays here: the bot clears the game in about 10 minutes at the cap and `balance_sim.py` models 4.9 to 6.9 h, neither is a person's time | Time one full human run and say whether the fights at the cap are too soft. |
+| U5 | The feel of the two-finger pinch zoom (CT7) and of the drag to a quick slot (QS2) on a real touch screen | Synthetic `InputEventScreenTouch`, `InputEventScreenDrag` and `InputEventMagnifyGesture` events prove the logic and the clamps, not the feel under a thumb | Pinch and drag on the phone and say whether the 0.8 to 1.35 range and the 250 ms pairing window feel right. |
+| U6 | Whether the blind visual effects (alley mist, window light shafts, manhole steam, sprint blur, chromatic pulse) look good on a phone GPU and in daylight conditions | Frames were captured on the desktop iGPU only; a mobile GPU may differ in blending and fill rate | Look at the same eight states on the phone (`tools/qa_sim/rc16_probe` lists them) and keep or switch off an effect with its `*_ENABLED` constant. |
+| U7 | `gdlint`, `shellcheck`, `mypy`, `pngquant`, `oggenc` | Not installed, and installing them is a download that has not been approved in this environment; the stand-ins are listed in `docs/UTILITIES_REPORT.md` and are weaker (the engine compile gate for GDScript, `bash -n` for shell, `ruff` for Python correctness) | `pip install gdtoolkit mypy` and `winget install koalaman.shellcheck`, then run `gdlint scripts`, `shellcheck tools/*.sh tools/qa_sim/*` and `mypy tools`. |

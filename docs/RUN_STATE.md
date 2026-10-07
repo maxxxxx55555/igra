@@ -2,11 +2,19 @@
 
 ## Session 16 (2026-10-02 to 10-07): UNIFIED RELEASE CLOSEOUT (rc16), directive "ZERO-PROSE, TOP-STUDIO BAR, ANTI-FABRICATION" + swarm amendment
 
-**NEXT-ROW (updated at `8a07041`, 2026-10-07): wave 1 is half merged. Merged: perf (`318b55f`). Running in their own worktrees: uifx (branch `worktree-agent-a8dd8b39a6743bd85`: U1-U3 committed,
-U4/U5/checks pending), content (branch `worktree-agent-ab9b0de029444e847`: C5 committed, C1-C4/checks pending). Not started: sec, audio (worktree `agent-a9d93688011f12bdb`, no commits), i18n, beauty.
-On each hand-back: review the diff, merge `--no-ff`, add the agent's checks file to `_rc16_checks()` of `scripts/tools/_closeout_check_runner.gd`, remove the worktree and branch.
-After the last merge, in this order: compile gate, `python tools/qa_sim/af2_both_ways.py --base e4bb4df`, full closeout, `tools/qa_sim/timing_equiv after`, `tools/qa_sim/rc16_probe after <hash>`,
-IRON RULE bot (3 seeds), play-through, `closeout_mutations`, `bash tools/check.sh --all`, final frames, docs (TIMING_AUDIT, PERF_PASS, UTILITIES_REPORT, UNVERIFIABLE_HERE, ACCEPTANCE gap table, PROOFS, CORRECTION_LOG), verifier round, tag.**
+**NEXT-ROW (updated at `401ca41` + docs drafts, 2026-10-07): wave 1 is two thirds merged. Merged: perf (`318b55f`), content (`d5d095b`), the two locale keys (`7d3edc6`), the closeout wiring for perf and content
+(`bfa3e58`), check.sh `--all` + rc16 block + timing whitelist (`401ca41`). Running in their own worktrees when the 5-hour limit stopped the session (resume them with SendMessage, they keep their commits):
+uifx `a8dd8b39a6743bd85` (branch `worktree-agent-a8dd8b39a6743bd85`; U1-U3 committed, U4/U5/checks pending), sec `ac5abdf50f70def2b` (fresh; E1 NG+ banking and `tools/af5_check.py`),
+audio `a9d93688011f12bdb` (branch `worktree-agent-a9d93688011f12bdb`; A1-A4 and `audio_checks.gd` pending). Not started: beauty (optional: blind visuals; only if budget allows, else the polish count is honest and lower).
+On each hand-back: review the diff (ponytail-review), `git merge --no-ff <branch>`, add the agent's `scripts/tools/rc16/<id>_checks.gd` to `_rc16_checks()` of `scripts/tools/_closeout_check_runner.gd`
+(const + one `await`), `git worktree remove --force <path>` and `git branch -D <branch>`; apply the NEEDS-OTHER-ZONE lines (content: `scripts/ui/workbench.gd:401` salvage `try_add(comp[0], half, false)` after the uifx merge).
+After the last merge, in this order (each through `tools/qa_sim/proof_run --launch <id> -- <cmd>`): quick compile gate (`res://scenes/tools/compile_gate_scene.tscn`), `python tools/qa_sim/af2_both_ways.py --base e4bb4df`
+(needs a clean tracked tree), `tools/qa_sim/timing_equiv after`, `tools/qa_sim/rc16_probe after <hash>` (frames land in `docs/stills/polish/`, compare with the `before` ones), IRON RULE bot (3 seeds, `tools/qa_sim/autoplay_bot`),
+play-through (`tools/qa_sim/playthrough A V B S`), `python tools/qa_sim/closeout_mutations.py`, `bash tools/check.sh --all`, final frames (6, `scripts/tools/_final_frames_runner.gd`), then the docs: TIMING_AUDIT.md,
+PERF_PASS.md (section rc16 with the before/after numbers), UTILITIES_REPORT.md (cite `docs/artifacts/rc16/proofs/utilities.out`), UNVERIFIABLE_HERE.md (drafted), the acceptance gap table for the 24 rows (ACCEPTANCE_CHECKLIST + a new section),
+ASSET_SHOPPING_LIST (AU4 per-speed samples for asphalt, puddle, glass; SC8 voice lines), TZ_DECISIONS (E1/E11/E13 closed, E11 second half deferred with the reason below), CORRECTION_LOG (launch budget exceeded, harness artifacts, the monster
+measure), `docs/artifacts/rc16/closures.json` + `python tools/qa_sim/gen_proofs16.py`, FUNCTION_MATRIX, ARENA_CLOSURE, ORDER_PASS_REPORT; then the verifier subagent (O6), fix once, tag `v8.0.0-rc16`, push main + tag, memory-keeper.
+E11 second half stays DEFERRED-P3 (owner decision): a full pack leaves a quest reward unpaid; the obvious fix reverses the B14 design and breaks the pinned regression P2g (`_qa_headless_suite_runner.gd:1146-1168`), see the content agent's trace in the commit `115ad00` era notes.
 Baseline tag `v8.0.0-rc15` @ `e4bb4df` (settled). Target `v8.0.0-rc16`. Launch budget 12 Godot launches (agents use 0); ledger `docs/artifacts/rc16/launch_ledger.tsv`: 11 rows at `b71ffbd`, 8 of them harness development
 (four timing_before runs found and fixed harness artifacts, three debug runs); the budget will be exceeded and is to be logged in CORRECTION_LOG at the end, with the reason.
 - Incident: the first wave (seven agents) was killed within minutes by the 5-hour usage limit with no commit; a second attempt hit the weekly limit; both were restarted (SendMessage resume for perf, uifx, content; a fresh content agent) after the resets.
