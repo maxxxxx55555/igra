@@ -421,6 +421,12 @@ func _is_touch_device() -> bool:
 ## поворот камеры сам себя превращал в атаку; удар теперь только по кнопке.
 const JOY_ZONE_RATIO: float = 0.35
 const TOUCH_LOOK_SENS: float = 0.004
+## GDD 2.2 (CT7), touch: two fingers that land together in the look zone pinch the camera zoom instead of turning the
+## view. The second finger has to land within PINCH_PAIR_MS of the first, so a finger resting on a HUD button while
+## the other one looks around never becomes a zoom; a third finger, or lifting one, ends the pinch.
+const PINCH_PAIR_MS: int = 250
+var _touch_pos: Dictionary = {}
+var _pinch_dist: float = 0.0
 
 func _input(event: InputEvent) -> void:
 	if not gameplay_active:
@@ -430,9 +436,14 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		var sens: float = mouse_sens * float(SettingsManager.get_setting("sensitivity", 1.0))
 		_apply_look(-event.relative.x * sens, -event.relative.y * sens)
+	elif event is InputEventMagnifyGesture:
+		_zoom_camera((event as InputEventMagnifyGesture).factor)
 	elif event is InputEventScreenTouch:
 		_track_swipe(event)
+		_track_pinch(event)
 	elif event is InputEventScreenDrag:
+		if _pinch_drag(event):
+			return
 		var vp_w: float = get_viewport().get_visible_rect().size.x if get_viewport() else 1000.0
 		if event.position.x < vp_w * JOY_ZONE_RATIO:
 			return
@@ -451,6 +462,52 @@ func _track_swipe(event: InputEventScreenTouch) -> void:
 	if swipe.y >= SWIPE_CROUCH_MIN_PX and absf(swipe.x) <= swipe.y * SWIPE_CROUCH_SLANT \
 			and Time.get_ticks_msec() - int(start["ms"]) <= SWIPE_CROUCH_MAX_MS:
 		_crouch_toggled = not _crouch_toggled
+
+## Follows every finger down in the look zone; the moment the second one lands together with the first, the pair
+## is a pinch and neither of them is a crouch swipe any more.
+func _track_pinch(event: InputEventScreenTouch) -> void:
+	if not event.pressed:
+		if _touch_pos.erase(event.index):
+			_pinch_dist = 0.0
+		return
+	if event.position.x < get_viewport().get_visible_rect().size.x * JOY_ZONE_RATIO:
+		return
+	if _touch_pos.has(event.index):
+		_touch_pos.clear()
+	_pinch_dist = 0.0
+	_touch_pos[event.index] = {"pos": event.position, "ms": Time.get_ticks_msec()}
+	if _touch_pos.size() != 2:
+		return
+	var first: Dictionary = _touch_pos.values()[0]
+	var second: Dictionary = _touch_pos.values()[1]
+	if absi(int(first["ms"]) - int(second["ms"])) > PINCH_PAIR_MS:
+		return
+	var pos_a: Vector2 = first["pos"]
+	var pos_b: Vector2 = second["pos"]
+	_pinch_dist = pos_a.distance_to(pos_b)
+	for finger in _touch_pos:
+		_swipe_start.erase(finger)
+
+## Moves a finger of the look zone and, in a pinch, zooms by how much the pair spread or closed since the last
+## drag; true while the drag belongs to a pinch, so the look does not turn with it.
+func _pinch_drag(event: InputEventScreenDrag) -> bool:
+	if not _touch_pos.has(event.index):
+		return false
+	_touch_pos[event.index]["pos"] = event.position
+	if _pinch_dist <= 0.0:
+		return false
+	var fingers: Array = _touch_pos.values()
+	var pos_a: Vector2 = fingers[0]["pos"]
+	var pos_b: Vector2 = fingers[1]["pos"]
+	var dist: float = pos_a.distance_to(pos_b)
+	if dist > 0.0:
+		_zoom_camera(dist / _pinch_dist)
+		_pinch_dist = dist
+	return true
+
+func _zoom_camera(mult: float) -> void:
+	if GameManager.is_playing() and is_instance_valid(_fps_cam) and _fps_cam.has_method("zoom_by"):
+		_fps_cam.zoom_by(mult)
 
 ## GOLD MASTER v4: Invert Look flips only the vertical (pitch) axis — the
 ## conventional meaning of "invert look", not left/right.
@@ -800,8 +857,9 @@ func _update_stamina(delta: float) -> void:
 
 
 func _update_battery(delta: float) -> void:
-	var menu_is_open: bool = UIManager.is_hud_blocked()
-	if not flashlight_enabled or not gameplay_active or get_tree().paused or menu_is_open:
+	# E13: a screen over the world (inventory, map, journal, workbench) does not stop it, so the light keeps burning
+	# behind it; only a state that stops the world (menu, pause, death, victory) holds the battery.
+	if not flashlight_enabled or not gameplay_active or get_tree().paused or not GameManager.is_playing():
 		return
 	var prev := battery
 	# Модификатор NG+ "long_night": battery 0.8 = на 20% меньше света с

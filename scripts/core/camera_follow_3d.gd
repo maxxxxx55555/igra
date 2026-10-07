@@ -23,6 +23,16 @@ const SPRINT_BOB_AMP: float = 0.1
 const SPRINT_BOB_FREQ: float = 8.0   ## matches player_3d.gd's own walk-sway rate
 const SPRINT_FOV_BONUS: float = 5.0
 
+## GDD 2.2 (CT7): a pinch zooms the camera. The factor only scales the target the camera eases toward (the FOV in
+## first person, the boom offset in third person), so the interior blend and the sprint punch keep working on top
+## of it; 1.0 is the camera as it was before the pinch existed.
+const ZOOM_MIN: float = 0.8
+const ZOOM_MAX: float = 1.35
+const ZOOM_BLEND_PER_SEC: float = 12.0
+## The interior blend closed 40% of the gap on every frame, four times quicker at 120 FPS than at 30. Per second it is
+## the same feel at 60 FPS (-60 * ln(1 - 0.4)) and now the same at any frame rate.
+const INTERIOR_BLEND_PER_SEC: float = 30.65
+
 var _cam: Camera3D = null
 var _target: Node3D = null
 var _is_interior: bool = false
@@ -32,6 +42,8 @@ var _current_fov: float
 var _pitch: float = 0.0
 var _running: bool = false
 var _bob_t: float = 0.0
+var _zoom: float = 1.0
+var _zoom_target: float = 1.0
 
 func _ready() -> void:
 	_cam = _find_cam(self)
@@ -58,6 +70,14 @@ func set_fps(v: bool) -> void:
 func set_running(v: bool) -> void:
 	_running = v
 
+## A pinch or a trackpad magnify: `mult` above 1 zooms in, below 1 out. Every call carries one step of the gesture,
+## so the steps multiply into the target; letting go simply stops the calls and the zoom stays.
+func zoom_by(mult: float) -> void:
+	_zoom_target = clampf(_zoom_target * mult, ZOOM_MIN, ZOOM_MAX)
+
+func get_zoom_factor() -> float:
+	return _zoom
+
 
 func _process(delta: float) -> void:
 	if _cam == null:
@@ -66,6 +86,7 @@ func _process(delta: float) -> void:
 		_target = _resolve_target()
 	if _target == null:
 		return
+	_zoom = lerpf(_zoom, _zoom_target, 1.0 - exp(-ZOOM_BLEND_PER_SEC * delta))
 	if fps_mode:
 		_tick_fps(delta)
 	else:
@@ -84,19 +105,19 @@ func _tick_fps(delta: float) -> void:
 	_cam.global_position = _cam.global_position.lerp(desired, clampf(delta * fps_follow_speed, 0.0, 1.0))
 	var yaw: float = _target.rotation.y
 	_cam.rotation = Vector3(_pitch, yaw, 0.0)
-	var target_fov := _current_fov + (SPRINT_FOV_BONUS if _running else 0.0)
+	var target_fov := _current_fov / _zoom + (SPRINT_FOV_BONUS if _running else 0.0)
 	_cam.fov = lerpf(_cam.fov, target_fov, clampf(delta * interior_lerp_speed, 0.0, 1.0))
-	_tick_interior_target()
+	_tick_interior_target(delta)
 
 func _tick_third(delta: float) -> void:
-	_tick_interior()
+	_tick_interior(delta)
 	var tp: Vector3 = _target.global_position
-	var desired: Vector3 = tp + Vector3(0.0, _current_height, _current_distance)
+	var desired: Vector3 = tp + Vector3(0.0, _current_height, _current_distance) / _zoom
 	_cam.global_position = _cam.global_position.lerp(desired, clampf(delta * follow_speed, 0.0, 1.0))
 	_cam.look_at(tp + Vector3(0.0, look_height_offset, 0.0), Vector3.UP)
 	_cam.fov = lerpf(_cam.fov, _current_fov, clampf(delta * interior_lerp_speed, 0.0, 1.0))
 
-func _tick_interior() -> void:
+func _tick_interior(delta: float) -> void:
 	var in_interior: bool = false
 	if _target and is_instance_valid(_target):
 		var zones := get_tree().get_nodes_in_group("interior_zone")
@@ -104,9 +125,9 @@ func _tick_interior() -> void:
 			if z is Area3D and _target in z.get_overlapping_bodies():
 				in_interior = true
 				break
-	_apply_interior(in_interior)
+	_apply_interior(in_interior, delta)
 
-func _tick_interior_target() -> void:
+func _tick_interior_target(delta: float) -> void:
 	var in_interior: bool = false
 	if _target and is_instance_valid(_target):
 		var zones := get_tree().get_nodes_in_group("interior_zone")
@@ -114,9 +135,9 @@ func _tick_interior_target() -> void:
 			if z is Area3D and _target in z.get_overlapping_bodies():
 				in_interior = true
 				break
-	_apply_interior(in_interior)
+	_apply_interior(in_interior, delta)
 
-func _apply_interior(in_interior: bool) -> void:
+func _apply_interior(in_interior: bool, delta: float) -> void:
 	if in_interior and not _is_interior:
 		_is_interior = true
 
@@ -126,9 +147,10 @@ func _apply_interior(in_interior: bool) -> void:
 	var target_h := interior_height if _is_interior else height
 	var target_d := interior_distance if _is_interior else distance
 	var target_f := interior_fov if _is_interior else fov_deg
-	_current_height = lerpf(_current_height, target_h, 0.4)
-	_current_distance = lerpf(_current_distance, target_d, 0.4)
-	_current_fov = lerpf(_current_fov, target_f, 0.4)
+	var blend := 1.0 - exp(-INTERIOR_BLEND_PER_SEC * delta)
+	_current_height = lerpf(_current_height, target_h, blend)
+	_current_distance = lerpf(_current_distance, target_d, blend)
+	_current_fov = lerpf(_current_fov, target_f, blend)
 
 func set_interior(v: bool) -> void:
 	if v != _is_interior:
