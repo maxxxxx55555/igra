@@ -1,0 +1,20 @@
+# proof s4_closeout_truth_ab_e32fa77
+# utc 20261007T142426Z
+# head e32fa77 (uncommitted paths: 2)
+# cmd bash -c bash tools/qa_sim/closeout_check 420; b=$?; bash tools/qa_sim/guarded_headless res://scenes/tools/audio_bus_check_scene.tscn 120; c=$?; bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 300; d=$?; cp .qa_logs/audio_truth_gate_scene.log .qa_logs/audio_truth_head.log; F="scripts/systems/audio_manager.gd scripts/systems/music_manager.gd scripts/systems/footstep_system.gd default_bus_layout.tres"; git restore --source=b69ed90 --worktree -- $F; bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 300; e=$?; cp .qa_logs/audio_truth_gate_scene.log .qa_logs/audio_truth_audio_at_b69ed90.log; git restore --worktree -- $F; echo "closeout=$b audio_bus=$c truth_head=$d truth_audio_files_b69ed90=$e"; [ $b -eq 0 ] && [ $c -eq 0 ] && [ $d -eq 0 ]
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/The Last Streetlight
+[closeout] FAIL AUD3 the reverb is wet 0.040 in the open (rests at 0.040) and 0.251 walled in (grows to 0.300)
+[closeout] DONE checks=366 fails=1
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 11 file(s) restored byte-identical
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/The Last Streetlight
+  res://scenes/tools/audio_bus_check_scene.tscn rc=0 (log: .qa_logs/audio_bus_check_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/The Last Streetlight
+  res://scenes/tools/audio_truth_gate_scene.tscn rc=1 (log: .qa_logs/audio_truth_gate_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/The Last Streetlight
+  res://scenes/tools/audio_truth_gate_scene.tscn rc=0 (log: .qa_logs/audio_truth_gate_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+closeout=1 audio_bus=0 truth_head=1 truth_audio_files_b69ed90=0
+# EXIT=1

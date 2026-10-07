@@ -1,0 +1,37 @@
+# proof s3s4_gates_8bb881b
+# utc 20261007T141437Z
+# head 8bb881b (uncommitted paths: 0)
+# cmd bash -c bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 420; a=$?; bash tools/qa_sim/closeout_check 420; b=$?; bash tools/qa_sim/guarded_headless res://scenes/tools/attack_sim_scene.tscn 300; c=$?; bash tools/qa_sim/guarded_headless res://scenes/tools/audio_bus_check_scene.tscn 120; d=$?; bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 300; e=$?; echo "compile=$a closeout=$b attack_sim=$c audio_bus=$d audio_truth_windowed=$e"; [ $a -eq 0 ] && [ $b -eq 0 ] && [ $c -eq 0 ] && [ $d -eq 0 ] && [ $e -eq 0 ]
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/The Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/The Last Streetlight
+[closeout] FAIL MN4 a corpse drops loot 30% of the time (0 of 600)
+[closeout] FAIL AUD3 the reverb is wet 0.040 in the open (rests at 0.040) and 0.249 walled in (grows to 0.300)
+[closeout] DONE checks=365 fails=2
+engine errors in the log:
+SCRIPT ERROR: Invalid assignment of property or key 'global_position' with value of type 'Vector3' on a base object of type 'null instance'.
+SCRIPT ERROR: Invalid assignment of property or key 'global_position' with value of type 'Vector3' on a base object of type 'null instance'.
+SCRIPT ERROR: Invalid assignment of property or key 'global_position' with value of type 'Vector3' on a base object of type 'null instance'.
+SCRIPT ERROR: Invalid assignment of property or key 'global_position' with value of type 'Vector3' on a base object of type 'null instance'.
+SCRIPT ERROR: Invalid assignment of property or key 'global_position' with value of type 'Vector3' on a base object of type 'null instance'.
+SCRIPT ERROR: Invalid assignment of property or key 'global_position' with value of type 'Vector3' on a base object of type 'null instance'.
+SCRIPT ERROR: Invalid assignment of property or key 'global_position' with value of type 'Vector3' on a base object of type 'null instance'.
+SCRIPT ERROR: Invalid assignment of property or key 'global_position' with value of type 'Vector3' on a base object of type 'null instance'.
+SCRIPT ERROR: Invalid assignment of property or key 'global_position' with value of type 'Vector3' on a base object of type 'null instance'.
+SCRIPT ERROR: Invalid assignment of property or key 'global_position' with value of type 'Vector3' on a base object of type 'null instance'.
+SCRIPT ERROR: Invalid assignment of property or key 'global_position' with value of type 'Vector3' on a base object of type 'null instance'.
+SCRIPT ERROR: Invalid assignment of property or key 'global_position' with value of type 'Vector3' on a base object of type 'null instance'.
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 11 file(s) restored byte-identical
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/The Last Streetlight
+  res://scenes/tools/attack_sim_scene.tscn rc=0 (log: .qa_logs/attack_sim_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/The Last Streetlight
+  res://scenes/tools/audio_bus_check_scene.tscn rc=0 (log: .qa_logs/audio_bus_check_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/The Last Streetlight
+  res://scenes/tools/audio_truth_gate_scene.tscn rc=1 (log: .qa_logs/audio_truth_gate_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+compile=0 closeout=1 attack_sim=0 audio_bus=0 audio_truth_windowed=1
+# EXIT=1
