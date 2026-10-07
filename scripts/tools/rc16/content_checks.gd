@@ -11,6 +11,7 @@ static func run(r: Node) -> void:
 	await _fire1_cooldown_ticks_with_physics(r)
 	await _ct7_pinch_zooms_the_camera(r)
 	_e11_a_refund_is_not_a_find(r)
+	await _e13_battery_drains_behind_a_screen(r)
 
 ## FIRE1: the cooldown and the reload count on the physics tick that polls the trigger, not on the frame.
 static func _fire1_cooldown_ticks_with_physics(r: Node) -> void:
@@ -125,3 +126,24 @@ static func _e11_a_refund_is_not_a_find(r: Node) -> void:
 	QuestManager.from_dict(saved_quests)
 	InventoryManager.from_dict(saved_pack)
 	ProgressTracker.items_picked = saved_picked
+
+## E13: the inventory is a screen over a world that keeps running (the player walks, monsters act), so the flashlight
+## battery keeps draining behind it.
+static func _e13_battery_drains_behind_a_screen(r: Node) -> void:
+	r._playing()
+	var player: Node3D = r._player
+	var light0: bool = bool(player.get("flashlight_enabled"))
+	var battery0: float = float(player.get("battery"))
+	var start: float = float(player.get("battery_max")) * 0.5
+	player.set("flashlight_enabled", true)
+	player.set("battery", start)
+	UIManager.open(&"inventory")
+	var blocked: bool = UIManager.is_hud_blocked()
+	await r.get_tree().create_timer(1.0).timeout
+	var drained: float = start - float(player.get("battery"))
+	UIManager.close(&"inventory")
+	var rate: float = float(player.get("BATTERY_DRAIN_PER_SEC"))
+	r._ok(blocked, "E13 the open inventory counts as a blocking screen")
+	r._ok(absf(drained - rate) <= rate * 0.3, "E13 the battery drains by about %.3f in 1 s behind the open inventory (%.3f)" % [rate, drained])
+	player.set("battery", battery0)
+	player.set("flashlight_enabled", light0)

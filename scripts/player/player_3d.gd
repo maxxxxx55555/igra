@@ -857,8 +857,9 @@ func _update_stamina(delta: float) -> void:
 
 
 func _update_battery(delta: float) -> void:
-	var menu_is_open: bool = UIManager.is_hud_blocked()
-	if not flashlight_enabled or not gameplay_active or get_tree().paused or menu_is_open:
+	# E13: a screen over the world (inventory, map, journal, workbench) does not stop it, so the light keeps burning
+	# behind it; only a state that stops the world (menu, pause, death, victory) holds the battery.
+	if not flashlight_enabled or not gameplay_active or get_tree().paused or not GameManager.is_playing():
 		return
 	var prev := battery
 	# Модификатор NG+ "long_night": battery 0.8 = на 20% меньше света с
