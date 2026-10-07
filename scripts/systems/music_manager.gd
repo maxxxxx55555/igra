@@ -317,6 +317,27 @@ func _load(m: Mood) -> AudioStream:
 func _on_district_entered(district_id: StringName) -> void:
 	_current_district = district_id
 	_refresh_district_ambience()
+	_preload_around(district_id)
+
+## A4: the beds of the districts next to this one (index +-1 in DistrictSceneFactory.DISTRICTS) are asked of the loader thread, so a
+## border crossing finds them cached (load() takes a finished request without waiting), and the bed of every district farther away
+## leaves _cache. A player that still holds a stream keeps it alive: only this cache lets go.
+func _preload_around(district_id: StringName) -> void:
+	var ids: Array[StringName] = DistrictSceneFactory.DISTRICTS
+	var at: int = ids.find(district_id)
+	if at < 0:
+		return
+	var keep: Array[String] = [_ambience_path_for(district_id)]
+	for idx in [at - 1, at + 1]:
+		if idx >= 0 and idx < ids.size():
+			keep.append(_ambience_path_for(ids[idx]))
+	for path in keep:
+		if path != "" and not _cache.has(path) and ResourceLoader.exists(path):
+			ResourceLoader.load_threaded_request(path)
+	for table in [AMBIENT_BY_DISTRICT, AMBIENCE_DARK_BY_DISTRICT, AMBIENCE_LIT_BY_DISTRICT]:
+		for path in table.values():
+			if not keep.has(path) and path != _ambient_path:
+				_cache.erase(path)
 
 ## Восстановление питания района, в котором сейчас находится игрок,
 ## должно быть слышно, а не только видно (GDD §11.1 — свет и звук вместе).

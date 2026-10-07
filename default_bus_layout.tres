@@ -1,4 +1,4 @@
-[gd_resource type="AudioBusLayout" load_steps=3 format=3 uid="uid://audiobuses00"]
+[gd_resource type="AudioBusLayout" load_steps=6 format=3 uid="uid://audiobuses00"]
 
 [sub_resource type="AudioEffectCompressor" id="AudioEffectCompressor_music"]
 threshold = -12.0
@@ -10,6 +10,24 @@ release_ms = 200.0
 predelay_msec = 30.0
 room_size = 0.8
 wet = 0.15
+
+[sub_resource type="AudioEffectReverb" id="AudioEffectReverb_footsteps"]
+predelay_msec = 30.0
+room_size = 0.35
+damping = 0.6
+wet = 0.04
+
+[sub_resource type="AudioEffectReverb" id="AudioEffectReverb_combat"]
+predelay_msec = 30.0
+room_size = 0.35
+damping = 0.6
+wet = 0.04
+
+[sub_resource type="AudioEffectReverb" id="AudioEffectReverb_environment"]
+predelay_msec = 30.0
+room_size = 0.35
+damping = 0.6
+wet = 0.04
 
 [resource]
 bus/0/name = &"Master"
@@ -57,15 +75,21 @@ bus/6/mute = false
 bus/6/bypass_fx = false
 bus/6/volume_db = 0.0
 bus/6/send = &"SFX"
+bus/6/effect/0/effect = SubResource("AudioEffectReverb_footsteps")
+bus/6/effect/0/enabled = true
 bus/7/name = &"Combat"
 bus/7/solo = false
 bus/7/mute = false
 bus/7/bypass_fx = false
 bus/7/volume_db = 0.0
 bus/7/send = &"SFX"
+bus/7/effect/0/effect = SubResource("AudioEffectReverb_combat")
+bus/7/effect/0/enabled = true
 bus/8/name = &"Environment"
 bus/8/solo = false
 bus/8/mute = false
 bus/8/bypass_fx = false
 bus/8/volume_db = 0.0
 bus/8/send = &"SFX"
+bus/8/effect/0/effect = SubResource("AudioEffectReverb_environment")
+bus/8/effect/0/enabled = true

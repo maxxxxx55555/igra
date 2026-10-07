@@ -6,7 +6,7 @@ extends Node
 ## owns land on the bus their sound belongs to.
 ## Scene: scenes/tools/audio_bus_check_scene.tscn (headless). Ends "[audio-bus] DONE fails=N".
 
-## bus -> [index, send, effect count]. Godot routes a send that points at the same or a
+## bus -> [index, send, effect count]; the three world buses carry one reverb each (A2). Godot routes a send that points at the same or a
 ## later index straight to Master, so every send must sit at a lower index than its bus.
 const GRAPH := {
 	"Master": [0, "", 0],
@@ -15,9 +15,9 @@ const GRAPH := {
 	"Voice": [3, "Master", 0],
 	"Ambient": [4, "Master", 0],
 	"UI": [5, "SFX", 0],
-	"Footsteps": [6, "SFX", 0],
-	"Combat": [7, "SFX", 0],
-	"Environment": [8, "SFX", 0],
+	"Footsteps": [6, "SFX", 1],
+	"Combat": [7, "SFX", 1],
+	"Environment": [8, "SFX", 1],
 }
 
 ## Players the autoloads build at boot: node path -> the bus they must use.
@@ -92,10 +92,8 @@ func _check_probes() -> int:
 	var fails := 0
 	var am := get_node("/root/AudioManager")
 	var clip: AudioStream = am.call("_gen_click")
-	am.play_sound_3d(clip, Vector3.ZERO, -80.0)
-	fails += _expect(am.get_child(am.get_child_count() - 1), "Combat")
-	am.play_sound_3d(clip, Vector3.ZERO, -80.0, &"Environment")
-	fails += _expect(am.get_child(am.get_child_count() - 1), "Environment")
+	fails += _expect(am.play_sound_3d(clip, Vector3.ZERO, -80.0), "Combat")
+	fails += _expect(am.play_sound_3d(clip, Vector3.ZERO, -80.0, &"Environment"), "Environment")
 	am.play_sfx(clip, -80.0, &"UI")
 	var pooled := false
 	for p in am.get("_pool"):

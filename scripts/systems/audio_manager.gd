@@ -9,6 +9,22 @@ const POOL: int = 4
 ## Distance low-pass of every positional sound: past the unit size the highs fall away (engine defaults: 5000 Hz, -24 dB).
 const ATTEN_CUTOFF_HZ: float = 2400.0
 const ATTEN_FILTER_DB: float = -14.0
+## Positional one-shots share POOL_3D players instead of building one per sound.
+const POOL_3D: int = 12
+## Reverb by place (A2): the buses that sound in the world share a room that grows with the walls round the head. The tier gate keeps
+## Low dry; the four sides and the sky are sensed from the head height every REVERB_SENSE_SEC; REVERB_MASK is the world layer.
+const REVERB_BUSES: Array[StringName] = [&"Footsteps", &"Combat", &"Environment"]
+const REVERB_MIN_TIER: int = 1
+const REVERB_SENSE_SEC: float = 0.25
+const REVERB_HEAD_M: float = 1.6
+const REVERB_RAY_M: float = 12.0
+const REVERB_MASK: int = 1
+const REVERB_DIRECTIONS: Array[Vector3] = [Vector3.UP, Vector3.FORWARD, Vector3.BACK, Vector3.LEFT, Vector3.RIGHT]
+const REVERB_WET_OPEN: float = 0.04
+const REVERB_WET_CLOSED: float = 0.30
+const REVERB_ROOM_OPEN: float = 0.35
+const REVERB_ROOM_CLOSED: float = 0.70
+const REVERB_FADE_SEC: float = 0.6
 
 var _wind: AudioStreamPlayer
 var _rain: AudioStreamPlayer
@@ -16,6 +32,10 @@ var _action: AudioStreamPlayer
 var _heartbeat: AudioStreamPlayer
 var _breath: AudioStreamPlayer
 var _pool: Array = []
+var _pool_3d: Array[AudioStreamPlayer3D] = []
+var _next_3d: int = 0
+var _reverbs: Array[AudioEffectReverb] = []
+var _reverb_tween: Tween
 var _last_state: int = 0
 var _step_timer: float = 0.0
 var _thunder_timer: float = 0.0
@@ -28,6 +48,7 @@ func _ready() -> void:
 	_action.name = "ActionLayer"
 	for i in POOL:
 		_pool.append(_make_player())
+	_setup_reverb()
 	_wind = _make_player(&"Environment")
 	_wind.name = "WindLayer"
 	_wind.stream = WIND_SFX
@@ -131,20 +152,76 @@ func play_sfx(stream: AudioStream, volume_db: float = 0.0, bus: StringName = &"S
 		_one_shot(stream, volume_db, bus)
 
 ## Positional one-shot. Every current caller is a combat sound (weapons, monster
-## cues, hits, player hurt), so Combat is the default; pass &"Environment" for props.
-func play_sound_3d(stream: AudioStream, position: Vector3, volume_db: float = 0.0, bus: StringName = &"Combat") -> void:
+## cues, hits, player hurt), so Combat is the default; pass &"Environment" for props. Returns the pooled player that took it.
+func play_sound_3d(stream: AudioStream, position: Vector3, volume_db: float = 0.0, bus: StringName = &"Combat") -> AudioStreamPlayer3D:
 	if not stream:
-		return
-	var player := AudioStreamPlayer3D.new()
+		return null
+	var player := _take_player_3d()
 	player.stream = stream
 	player.volume_db = volume_db
 	player.bus = bus
-	player.attenuation_filter_cutoff_hz = ATTEN_CUTOFF_HZ
-	player.attenuation_filter_db = ATTEN_FILTER_DB
-	player.finished.connect(player.queue_free)
-	add_child(player)
 	player.global_position = position
 	player.play()
+	return player
+
+## A free player of the pool (A3). It grows one player at a time up to POOL_3D; with every one busy the next in turn is cut off.
+func _take_player_3d() -> AudioStreamPlayer3D:
+	for pooled in _pool_3d:
+		if not pooled.playing:
+			return pooled
+	if _pool_3d.size() < POOL_3D:
+		var fresh := AudioStreamPlayer3D.new()
+		fresh.attenuation_filter_cutoff_hz = ATTEN_CUTOFF_HZ
+		fresh.attenuation_filter_db = ATTEN_FILTER_DB
+		add_child(fresh)
+		_pool_3d.append(fresh)
+		return fresh
+	_next_3d = (_next_3d + 1) % POOL_3D
+	return _pool_3d[_next_3d]
+
+func _setup_reverb() -> void:
+	for bus in REVERB_BUSES:
+		_reverbs.append(AudioServer.get_bus_effect(AudioServer.get_bus_index(bus), 0) as AudioEffectReverb)
+	_apply_reverb_tier(int(SettingsManager.get_setting("graphics_tier", 2)))
+	EventBus.settings_changed.connect(func(key: String, value: Variant) -> void:
+		if key == "graphics_tier":
+			_apply_reverb_tier(int(value)))
+	var timer := Timer.new()
+	timer.process_callback = Timer.TIMER_PROCESS_PHYSICS
+	timer.wait_time = REVERB_SENSE_SEC
+	timer.timeout.connect(_sense_reverb)
+	add_child(timer)
+	timer.start()
+
+func _apply_reverb_tier(tier: int) -> void:
+	for bus in REVERB_BUSES:
+		AudioServer.set_bus_effect_enabled(AudioServer.get_bus_index(bus), 0, tier >= REVERB_MIN_TIER)
+
+## The share of the five rays (sky and four sides, REVERB_RAY_M long) that meet the world from the player's head. The query needs the
+## physics step, hence the physics timer.
+func _sense_reverb() -> void:
+	var player := get_tree().get_first_node_in_group("player") as CollisionObject3D
+	if player == null:
+		return
+	var head: Vector3 = player.global_position + Vector3.UP * REVERB_HEAD_M
+	var space := player.get_world_3d().direct_space_state
+	var hits: int = 0
+	for direction in REVERB_DIRECTIONS:
+		var query := PhysicsRayQueryParameters3D.create(head, head + direction * REVERB_RAY_M, REVERB_MASK)
+		query.exclude = [player.get_rid()]
+		if not space.intersect_ray(query).is_empty():
+			hits += 1
+	set_enclosure(float(hits) / REVERB_DIRECTIONS.size())
+
+## 0 is open sky, 1 is walled in: the reverbs follow it over REVERB_FADE_SEC so a doorway does not click.
+func set_enclosure(amount: float) -> void:
+	var closed: float = clampf(amount, 0.0, 1.0)
+	if _reverb_tween != null and _reverb_tween.is_valid():
+		_reverb_tween.kill()
+	_reverb_tween = create_tween().set_parallel(true)
+	for reverb in _reverbs:
+		_reverb_tween.tween_property(reverb, "wet", lerpf(REVERB_WET_OPEN, REVERB_WET_CLOSED, closed), REVERB_FADE_SEC)
+		_reverb_tween.tween_property(reverb, "room_size", lerpf(REVERB_ROOM_OPEN, REVERB_ROOM_CLOSED, closed), REVERB_FADE_SEC)
 
 func play_music(stream: AudioStream) -> void:
 	if not stream:
