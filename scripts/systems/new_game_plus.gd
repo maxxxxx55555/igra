@@ -19,10 +19,16 @@ const ENEMY_HP_MULTIPLIER_PER_NG = 0.2
 const PLAYER_DAMAGE_MULTIPLIER_PER_NG = 0.1
 const LOOT_CHANCE_MULTIPLIER_PER_NG = 0.1
 
+## One level per run: the run names (SaveSystem.get_run_id) that have already paid one out, so loading the pre-boss save and beating
+## the Architect again banks nothing. Profile data like the level: it survives a New Game and a Retry, Reset progress wipes it. The cap
+## drops the oldest name, and the level cap (MAX_NG_PLUS) stops the banking long before it fills.
+const MAX_BANKED_RUNS: int = 64
+
 var _current_ng_plus: int = 0
 var _is_ng_plus_active: bool = false
 var _modifiers: Array = []
 var _active_modifiers: Array = []
+var _banked_runs: Array = []
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -106,9 +112,19 @@ func get_max_ng_plus() -> int:
 func is_ng_plus_active() -> bool:
 	return _is_ng_plus_active
 
+func get_banked_runs() -> Array:
+	return _banked_runs.duplicate()
+
 func activate_ng_plus() -> bool:
 	if _current_ng_plus >= MAX_NG_PLUS:
 		return false
+	var run_id: String = SaveSystem.get_run_id()
+	if run_id in _banked_runs:
+		EventBus.inventory_notice.emit(LocalizationManager.t("NGP_RUN_ALREADY_COUNTED"))
+		return false
+	_banked_runs.append(run_id)
+	if _banked_runs.size() > MAX_BANKED_RUNS:
+		_banked_runs.pop_front()
 	_current_ng_plus += 1
 	_is_ng_plus_active = true
 	ng_plus_activated.emit(_current_ng_plus)
@@ -181,6 +197,7 @@ func reset_for_new_game() -> void:
 	_current_ng_plus = 0
 	_is_ng_plus_active = false
 	_active_modifiers.clear()
+	_banked_runs.clear()
 	_save_save()
 
 func _load_save() -> void:
@@ -215,6 +232,17 @@ func _load_save() -> void:
 		var sid := String(id)
 		if can_select(sid):
 			_active_modifiers.append(sid)
+	_banked_runs = _clean_banked_runs(data.get("banked_runs", []))
+
+## A forged ledger shrinks to the names this game could have written (SaveSystem.clean_run_id), each once, the newest MAX_BANKED_RUNS kept.
+func _clean_banked_runs(raw: Variant) -> Array:
+	var out: Array = []
+	if raw is Array:
+		for entry in raw:
+			var clean: String = SaveSystem.clean_run_id(entry)
+			if not clean.is_empty() and not out.has(clean):
+				out.append(clean)
+	return out.slice(maxi(0, out.size() - MAX_BANKED_RUNS))
 
 func _save_save() -> void:
 	var path = "user://ng_plus_data.json"
@@ -222,5 +250,6 @@ func _save_save() -> void:
 		"ng_plus": _current_ng_plus,
 		"active": _is_ng_plus_active,
 		"modifiers": _active_modifiers,
+		"banked_runs": _banked_runs,
 	}
 	SaveSystem.write_signed(path, data)
