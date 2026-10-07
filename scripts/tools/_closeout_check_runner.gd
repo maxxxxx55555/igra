@@ -7,6 +7,7 @@ const AlbumScript := preload("res://scripts/ui/photo_album_ui.gd")
 const FAR := Vector3(500.0, 0.0, 500.0)
 const Status := EnemyRosterData.Status
 const Rc16Perf := preload("res://scripts/tools/rc16/perf_checks.gd")
+const Rc16Content := preload("res://scripts/tools/rc16/content_checks.gd")
 
 var _checked: int = 0
 var _fails: int = 0
@@ -118,6 +119,7 @@ func _finish() -> void:
 ## executes them against the pre-fix runtime files and against HEAD.
 func _rc16_checks() -> void:
 	await Rc16Perf.run(self)
+	await Rc16Content.run(self)
 
 ## A monster standing still in the far corner of the world: its collider answers rays, its AI never runs
 ## (a disabled process mode would also take the collider out of the physics space).
