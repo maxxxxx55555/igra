@@ -18,6 +18,7 @@ static func run(r: Node) -> void:
 	await _menu_has_no_day(r)
 	await _toast_lifetime(r)
 	_attack_button_grey(r)
+	await _blur_copy(r)
 
 static func _overlay(r: Node) -> Node:
 	return r._main.get_node_or_null("PostProcessOverlay")
@@ -143,7 +144,8 @@ static func _quick_slot_drag(r: Node) -> void:
 	var accepts: bool = target != null and target.has_method("_can_drop_data") and bool(target.call("_can_drop_data", Vector2.ZERO, data))
 	if accepts:
 		target.call("_drop_data", Vector2.ZERO, data)
-	var rebound: bool = _bound_item(hud, 0) == &"medkit"
+	var bound_after_drop: Variant = _bound_item(hud, 0)
+	var rebound: bool = bound_after_drop == &"medkit"
 	UIManager.close(&"inventory")
 	player.set("hp", 40.0)
 	var medkits0: int = InventoryManager.count_of(&"medkit")
@@ -158,7 +160,7 @@ static func _quick_slot_drag(r: Node) -> void:
 	for forged in [[&"medkit"], [&"battery", &"bogus_item", &"medkit", &"battery", &"battery", &"battery"]]:
 		SettingsManager.set_setting("quick_slots", forged)
 		forged_ok = forged_ok and quick_slots.call("read") == defaults
-	r._ok(carries and accepts and rebound, "QS2 dragging the medkit cell onto quick slot 1 binds it (drag data %s, the target accepts %s, the HUD's slot 1 is %s)" % [data, accepts, _bound_item(hud, 0)])
+	r._ok(carries and accepts and rebound, "QS2 dragging the medkit cell onto quick slot 1 binds it (drag data %s, the target accepts %s, the HUD's slot 1 is %s)" % [data, accepts, bound_after_drop])
 	r._ok(rebound and used, "QS2 key 1 then uses a medkit (%s, one of %d gone, health up from 40)" % [used, medkits0])
 	r._ok(rebound and defaults is Array and _bound_item(hud, 0) == (defaults as Array)[0], "QS2 a right-click on the slot puts the default item back (%s)" % [_bound_item(hud, 0)])
 	r._ok(forged_ok, "QS2 a saved list that is not six known items falls back to the defaults")
@@ -297,3 +299,25 @@ static func _attack_button_grey(r: Node) -> void:
 		seen.append(attack.modulate)
 	EventBus.player_stamina_changed.emit(float(r._player.get("stamina")) / float(r._player.get("stats").stamina_max))
 	r._ok(seen[0].r < 0.8 and seen[1] == Color.WHITE and seen[2] == Color.WHITE, "ATK1 the attack button is grey at 4 stamina and not at 5 or 100 (%s)" % [seen])
+
+## UIFX7: the sprint blur is seen. The canvas takes one screen copy per layer, so the chroma pass that follows the blur would paint the
+## unblurred picture over it; a BackBufferCopy between them takes a fresh copy while the blur is on screen. It sits between the two in the
+## draw order and follows the blur's visibility.
+static func _blur_copy(r: Node) -> void:
+	var overlay := _overlay(r)
+	var blur := overlay.get_node_or_null("MotionBlurOverlay") as CanvasItem
+	var chroma := overlay.get_node_or_null("ChromaOverlay") as CanvasItem
+	var copy := overlay.get_node_or_null("MotionBlurCopy") as BackBufferCopy
+	if blur == null or chroma == null or copy == null:
+		r._ok(false, "UIFX7 the overlay has no blur, chroma and back-buffer copy node (blur %s, chroma %s, copy %s)" % [blur != null, chroma != null, copy != null])
+		return
+	var ordered: bool = blur.get_index() < copy.get_index() and copy.get_index() < chroma.get_index()
+	var blur0: bool = blur.visible
+	blur.visible = true
+	await r.get_tree().process_frame
+	var on: bool = copy.visible
+	blur.visible = false
+	await r.get_tree().process_frame
+	var off: bool = not copy.visible
+	blur.visible = blur0
+	r._ok(ordered and on and off, "UIFX7 a back-buffer copy sits between the blur and the chroma layers and is on exactly while the blur is (order %s, on with the blur %s, off without %s)" % [ordered, on, off])

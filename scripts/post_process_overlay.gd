@@ -25,6 +25,7 @@ var _chroma_base: float = 0.0
 var _chroma_pulse: float = 0.0
 var _pulse_tween: Tween = null
 var _blur: ColorRect = null
+var _blur_copy: BackBufferCopy = null
 var _blur_strength: float = 0.0
 var _player: Node = null
 
@@ -90,6 +91,14 @@ func _build_blur() -> void:
 	var mat := ShaderMaterial.new()
 	mat.shader = load("res://assets/shaders/motion_blur.gdshader") as Shader
 	_blur.material = mat
+	# The canvas takes one screen copy per layer: without this node the chroma pass after the blur would read the unblurred copy and paint
+	# it over the streaks. The node takes a fresh copy at its place in the draw order while the blur is on screen, and none otherwise.
+	_blur_copy = BackBufferCopy.new()
+	_blur_copy.name = "MotionBlurCopy"
+	_blur_copy.copy_mode = BackBufferCopy.COPY_MODE_VIEWPORT
+	_blur_copy.visible = false
+	add_child(_blur_copy)
+	_blur.visibility_changed.connect(func() -> void: _blur_copy.visible = _blur.visible)
 
 ## The blur follows the sprint by an exponential approach, so the same ramp plays at any frame rate.
 func _process_blur(delta: float) -> void:
@@ -210,16 +219,17 @@ func _build_grain() -> void:
 ## Плёночное зерно по GDD §11.4 (8–12% непрозрачности). Раньше здесь были
 ## статичные строки развёртки (mod по Y) — это скан-лайны из CRT-эффекта,
 ## а не зерно: картинка выглядела как старый телевизор и не шевелилась.
+## The hash takes a pixel cell plus a time shift of a few thousand at most. The old one multiplied
+## (UV + TIME * 0.24) * 110 by 234.34 and 435.345, a number float32 cannot tell apart after
+## about 20 minutes of uptime, and the grain faded to a constant.
 func _grain_shader() -> Shader:
 	var s := Shader.new()
 	s.code = "shader_type canvas_item;\n" \
 		+ "uniform float intensity : hint_range(0.0, 0.2) = 0.10;\n" \
 		+ "uniform float speed : hint_range(0.0, 3.0) = 0.8;\n" \
-		+ "uniform float scale : hint_range(40.0, 200.0) = 110.0;\n" \
-		+ "float hash(vec2 p){ p = fract(p * vec2(234.34, 435.345)); p += dot(p, p + 34.23); return fract(p.x * p.y); }\n" \
+		+ "float hash(vec2 p){ vec3 p3 = fract(p.xyx * 0.1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }\n" \
 		+ "void fragment(){\n" \
-		+ "  vec2 off = vec2(TIME * speed * 0.3, TIME * speed * 0.17);\n" \
-		+ "  float g = hash((UV + off) * scale);\n" \
+		+ "  float g = hash(floor(FRAGCOORD.xy) + TIME * speed * vec2(61.7, 37.3));\n" \
 		+ "  COLOR = vec4(vec3(g), (g - 0.5) * intensity + intensity * 0.5);\n" \
 		+ "}"
 	return s

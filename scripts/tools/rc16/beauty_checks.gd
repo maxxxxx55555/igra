@@ -12,6 +12,7 @@ static func run(r: Node) -> void:
 	_grain_sampler(r)
 	await _damage_flash(r)
 	_grain_hash(r)
+	_overlay_grain_hash(r)
 
 static func _shader_code(path: String) -> String:
 	var shader: Shader = load(path) as Shader
@@ -58,3 +59,13 @@ static func _grain_hash(r: Node) -> void:
 	var code: String = _shader_code(GRAIN_SHADER_PATH)
 	r._ok(not code.contains("127.1") and not code.contains("311.7") and code.contains("0.1031") and code.contains("33.33"),
 		"BEAUTY3 the HUD grain hash has no 127.1 / 311.7 multipliers (a 10 px repeat) and is the 0.1031 / 33.33 hash")
+
+## BEAUTY4: the grain of the post-process overlay does not fade with uptime. The old hash multiplied (UV + TIME * 0.24) * 110 by 234.34 and
+## 435.345: after about 20 minutes float32 cannot tell those numbers apart and the grain became a constant (alpha 0 from about 1400 s). The new hash
+## takes the pixel and a time shift of a few thousand at most, and has no such multiplier.
+static func _overlay_grain_hash(r: Node) -> void:
+	var overlay: Node = r._main.get_node_or_null("PostProcessOverlay")
+	var shader: Shader = overlay.call("_grain_shader") as Shader if overlay != null else null
+	var code: String = shader.code if shader != null else ""
+	r._ok(code != "" and not code.contains("234.34") and not code.contains("435.345") and code.contains("0.1031") and code.contains("FRAGCOORD"),
+		"BEAUTY4 the post-process grain hashes the pixel with the 0.1031 hash and has no 234.34 / 435.345 multipliers (%d characters of shader)" % code.length())

@@ -33,7 +33,7 @@ func _on_node_added(node: Node) -> void:
 func _hover(button: BaseButton, on: bool) -> void:
 	if on and (button.disabled or InputService.is_touch_device() or bool(SettingsManager.get_setting("reduce_ui_motion", false))):
 		return
-	var old: Tween = button.get_meta(&"hover_tween", null)
+	var old: Tween = button.get_meta(&"hover_tween") if button.has_meta(&"hover_tween") else null
 	if old != null and old.is_valid():
 		old.kill()
 	button.pivot_offset = button.size / 2.0
