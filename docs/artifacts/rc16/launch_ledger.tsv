@@ -11,3 +11,4 @@ n	utc	head	id	exit	command
 10	20261007T082017Z	942d92b	frames_before	0	tools/qa_sim/rc16_probe before e4bb4df 300
 11	20261007T082151Z	2af53cf	frames_before	0	tools/qa_sim/rc16_probe before e4bb4df 300
 12	20261007T133937Z	c407e60	s1_compile_c407e60	0	bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 420
+13	20261007T135214Z	b69ed90	s2_compile_closeout_b69ed90	0	bash -c bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 420; rc1=$?; bash tools/qa_sim/closeout_check 420; rc2=$?; echo "compile_rc=$rc1 closeout_rc=$rc2"; [ $rc1 -eq 0 ] && [ $rc2 -eq 0 ]

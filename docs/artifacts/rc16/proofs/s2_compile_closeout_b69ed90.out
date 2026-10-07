@@ -1,0 +1,13 @@
+# proof s2_compile_closeout_b69ed90
+# utc 20261007T135214Z
+# head b69ed90 (uncommitted paths: 1)
+# cmd bash -c bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 420; rc1=$?; bash tools/qa_sim/closeout_check 420; rc2=$?; echo "compile_rc=$rc1 closeout_rc=$rc2"; [ $rc1 -eq 0 ] && [ $rc2 -eq 0 ]
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/The Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/The Last Streetlight
+[closeout] DONE checks=347 fails=0
+  closeout_check rc=0 (log: .qa_logs/closeout_check.log)
+  user-data guard: 11 file(s) restored byte-identical
+compile_rc=0 closeout_rc=0
+# EXIT=0
