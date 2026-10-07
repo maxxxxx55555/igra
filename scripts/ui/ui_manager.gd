@@ -42,6 +42,10 @@ const CODEX_TABS: Dictionary = {
 	&"help": &"help",
 	&"collection": &"collection",
 }
+## An opened screen fades in and rises into place; a close settles it back at once. A screen built from a scene keeps its
+## instant show: its own layout centres it and the layout checks measure it as soon as it opens.
+const _SLIDE_PX: float = 24.0
+const _SLIDE_SEC: float = 0.3
 var _layer: CanvasLayer
 var _cache: Dictionary = {}
 var _open_blocking: Array = []
@@ -164,7 +168,10 @@ func open(id: StringName) -> void:
 	var scr: Control = _get_screen(id)
 	if scr == null:
 		return
+	var was_open: bool = scr.visible
 	scr.visible = true
+	if not was_open:
+		_slide_in(id, scr)
 	if BLOCKING.has(id):
 		if not _open_blocking.has(id):
 			_open_blocking.append(id)
@@ -173,6 +180,7 @@ func open(id: StringName) -> void:
 func close(id: StringName) -> void:
 	var scr: Control = _cache.get(id, null)
 	if scr != null:
+		_settle(scr)
 		scr.visible = false
 		# The menu is built again on each open: its Continue button and daily card describe the profile at that moment.
 		if id == &"main_menu":
@@ -205,13 +213,44 @@ func open_codex(tab: StringName) -> void:
 	var codex: Control = _get_screen(&"codex")
 	if codex == null:
 		return
+	var was_open: bool = codex.visible
 	codex.visible = true
+	if not was_open:
+		_slide_in(&"codex", codex)
 	if not _open_blocking.has(&"codex"):
 		_open_blocking.append(&"codex")
 	_set_hud(false)
 	if codex.has_method("open_tab"):
 		codex.call("open_tab", tab)
 	EventBus.ui_screen_opened.emit(&"codex")
+
+func _slide_in(id: StringName, scr: Control) -> void:
+	if String(SCREENS.get(id, "")).ends_with(".tscn") or bool(SettingsManager.get_setting("reduce_ui_motion", false)):
+		return
+	_settle(scr)
+	var rest: Vector2 = scr.position
+	var alpha: float = scr.modulate.a
+	scr.position = rest + Vector2(0.0, _SLIDE_PX)
+	scr.modulate.a = 0.0
+	var tween := scr.create_tween()
+	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tween.set_parallel(true)
+	tween.tween_property(scr, "position", rest, _SLIDE_SEC).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tween.tween_property(scr, "modulate:a", alpha, _SLIDE_SEC)
+	scr.set_meta(&"slide", [tween, rest, alpha])
+
+## Stops a slide that is still running and puts the screen exactly where it rests.
+func _settle(scr: Control) -> void:
+	var slide: Array = scr.get_meta(&"slide", [])
+	if slide.is_empty():
+		return
+	scr.remove_meta(&"slide")
+	var tween: Tween = slide[0]
+	if tween.is_valid():
+		tween.kill()
+		scr.position = slide[1]
+		scr.modulate.a = slide[2]
+
 func close_all_blocking() -> void:
 	for id in _open_blocking.duplicate():
 		close(id)

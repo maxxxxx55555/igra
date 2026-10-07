@@ -14,6 +14,7 @@ static func run(r: Node) -> void:
 	await _hover(r)
 	await _bar_shake(r)
 	await _damage_numbers(r)
+	await _screen_slide(r)
 
 static func _overlay(r: Node) -> Node:
 	return r._main.get_node_or_null("PostProcessOverlay")
@@ -30,11 +31,9 @@ static func _layers_on(overlay: Node) -> String:
 	var shown := ""
 	for layer_name in LAYER_LETTERS:
 		var layer := overlay.get_node_or_null(String(layer_name)) as CanvasItem
-		if layer != null and layer.visible:
-			shown += String(LAYER_LETTERS[layer_name])
+		shown += String(LAYER_LETTERS[layer_name]) if layer != null and layer.visible else ""
 	return shown
 
-## The stick forward with run held, as the movement check drives it, or released.
 static func _stick(on: bool) -> void:
 	InputService.set_joy_active(on)
 	InputService.set_joy_move_dir(Vector2(0.0, -1.0) if on else Vector2.ZERO)
@@ -43,8 +42,8 @@ static func _stick(on: bool) -> void:
 ## The tier table while the player sprints for real (the blur follows the sprint).
 static func _post_fx_tiers(r: Node) -> void:
 	var overlay: Node = _overlay(r)
-	r._ok(overlay != null, "UIFX1 the game scene carries the post-fx overlay")
 	if overlay == null:
+		r._ok(false, "UIFX1 the game scene has no post-fx overlay")
 		return
 	r._playing()
 	var player: Node3D = r._player
@@ -99,7 +98,6 @@ static func _damage_pulse(r: Node) -> void:
 	overlay.call("set_chroma_amount", chroma0)
 	SettingsManager.set_graphics_tier(tier0)
 
-## One tap of a key action through the real input path: a press, a frame, a release, a frame.
 static func _tap(r: Node, action: StringName) -> void:
 	for pressed in [true, false]:
 		var event := InputEventAction.new()
@@ -147,23 +145,19 @@ static func _quick_slot_drag(r: Node) -> void:
 	player.set("hp", 40.0)
 	var medkits0: int = InventoryManager.count_of(&"medkit")
 	await _tap(r, &"quick_slot_1")
-	var medkits1: int = InventoryManager.count_of(&"medkit")
-	var hp1: float = float(player.get("hp"))
+	var used: bool = InventoryManager.count_of(&"medkit") == medkits0 - 1 and float(player.get("hp")) > 40.0
 	var click := InputEventMouseButton.new()
 	click.button_index = MOUSE_BUTTON_RIGHT
 	click.pressed = true
 	if target != null and target.has_method("_gui_input"):
 		target.call("_gui_input", click)
-	var restored: bool = defaults is Array and _bound_item(hud, 0) == (defaults as Array)[0]
-	var forged_ok := false
-	if quick_slots != null and defaults is Array:
-		SettingsManager.set_setting("quick_slots", [&"medkit"])
-		var short_list: Variant = quick_slots.call("read")
-		SettingsManager.set_setting("quick_slots", [&"battery", &"bogus_item", &"medkit", &"battery", &"battery", &"battery"])
-		forged_ok = short_list == defaults and quick_slots.call("read") == defaults
+	var forged_ok: bool = quick_slots != null and defaults is Array
+	for forged in [[&"medkit"], [&"battery", &"bogus_item", &"medkit", &"battery", &"battery", &"battery"]]:
+		SettingsManager.set_setting("quick_slots", forged)
+		forged_ok = forged_ok and quick_slots.call("read") == defaults
 	r._ok(carries and accepts and rebound, "QS2 dragging the medkit cell onto quick slot 1 binds it (drag data %s, the target accepts %s, the HUD's slot 1 is %s)" % [data, accepts, _bound_item(hud, 0)])
-	r._ok(rebound and medkits1 == medkits0 - 1 and hp1 > 40.0, "QS2 key 1 then uses a medkit (medkits %d -> %d, health 40 -> %.0f)" % [medkits0, medkits1, hp1])
-	r._ok(rebound and restored, "QS2 a right-click on the slot puts the default item back (%s)" % [_bound_item(hud, 0)])
+	r._ok(rebound and used, "QS2 key 1 then uses a medkit (%s, one of %d gone, health up from 40)" % [used, medkits0])
+	r._ok(rebound and defaults is Array and _bound_item(hud, 0) == (defaults as Array)[0], "QS2 a right-click on the slot puts the default item back (%s)" % [_bound_item(hud, 0)])
 	r._ok(forged_ok, "QS2 a saved list that is not six known items falls back to the defaults")
 	SettingsManager.set_setting("quick_slots", saved_slots)
 	player.set("hp", hp0)
@@ -176,7 +170,6 @@ static func _hover(r: Node) -> void:
 	var button := Button.new()
 	button.custom_minimum_size = Vector2(120.0, 40.0)
 	r.add_child(button)
-	await r.get_tree().process_frame
 	await r.get_tree().process_frame
 	SettingsManager.set_setting("reduce_ui_motion", false)
 	button.mouse_entered.emit()
@@ -196,30 +189,26 @@ static func _hover(r: Node) -> void:
 	button.queue_free()
 	SettingsManager.set_setting("reduce_ui_motion", still0)
 
-## UIFX5: a hit shakes the health bar by at most 4 px and it is back on its exact place after 0.4 s; Reduce Screen Shake keeps it still.
+## UIFX5: a hit shakes the health bar by at most 4 px and it is on its exact place 0.4 s later; Reduce Screen Shake keeps it still.
 static func _bar_shake(r: Node) -> void:
 	var hud: Node = r._main.get_node_or_null("HUD")
 	var bar: Control = hud.get_node_or_null("TopLeft/HP") as Control if hud != null else null
-	r._ok(bar != null, "UIFX5 the HUD has its health bar row")
 	if bar == null:
+		r._ok(false, "UIFX5 the HUD has no health bar row")
 		return
 	var shake0: bool = bool(SettingsManager.get_setting("reduce_screen_shake", false))
 	var rest: Vector2 = bar.position
-	SettingsManager.set_setting("reduce_screen_shake", false)
-	EventBus.player_damaged.emit(5.0)
-	await r.get_tree().create_timer(0.08).timeout
-	var off: Vector2 = (bar.position - rest).abs()
-	var shaken: bool = off != Vector2.ZERO and off.x <= 4.0 and off.y <= 4.0
-	await r.get_tree().create_timer(0.4).timeout
-	var home: bool = bar.position == rest
-	SettingsManager.set_setting("reduce_screen_shake", true)
-	EventBus.player_damaged.emit(5.0)
-	await r.get_tree().create_timer(0.08).timeout
-	var calm: bool = bar.position == rest
-	await r.get_tree().create_timer(0.3).timeout
+	var seen: Array = []  # shaken, home again: once as usual, once under Reduce Screen Shake
+	for reduce in [false, true]:
+		SettingsManager.set_setting("reduce_screen_shake", reduce)
+		EventBus.player_damaged.emit(5.0)
+		await r.get_tree().create_timer(0.08).timeout
+		var off: Vector2 = (bar.position - rest).abs()
+		seen.append(off != Vector2.ZERO and off.x <= 4.0 and off.y <= 4.0)
+		await r.get_tree().create_timer(0.4).timeout
+		seen.append(bar.position == rest)
 	SettingsManager.set_setting("reduce_screen_shake", shake0)
-	r._ok(shaken and home, "UIFX5 a hit shakes the health bar by at most 4 px (%s) and it is on its exact place 0.4 s later (%s)" % [off, home])
-	r._ok(shaken and calm, "UIFX5 under Reduce Screen Shake the health bar stays where it is")
+	r._ok(seen == [true, true, false, true], "UIFX5 a hit shakes the health bar by at most 4 px and it is on its exact place 0.4 s later, and Reduce Screen Shake keeps it still (shaken, home, shaken, home: %s)" % [seen])
 
 static func _visible_numbers(pool: Node) -> Array:
 	var shown: Array = []
@@ -234,9 +223,7 @@ static func _damage_numbers(r: Node) -> void:
 	var hud: Node = r._main.get_node_or_null("HUD")
 	var pool: Node = hud.get_node_or_null("DamageNumbers") if hud != null else null
 	var player: Node3D = r._player
-	var aim: Vector3 = -player.global_transform.basis.z
-	aim.y = 0.0
-	var monster: Node3D = r._monster("rotter_3d", player.global_position + aim.normalized() * 4.0)
+	var monster: Node3D = r._monster("rotter_3d", player.global_position - player.global_transform.basis.z * 4.0)
 	var hp0: float = float(monster.get("hp"))
 	monster.call("take_damage", 7.0)
 	await r.get_tree().process_frame
@@ -246,3 +233,17 @@ static func _damage_numbers(r: Node) -> void:
 	r._ok(pool != null and shown == [dealt] and _visible_numbers(pool).is_empty() and pool.get_child_count() == 12,
 		"UIFX4 a monster hit for %s shows that number and it is back in the pool of 12 after 1.0 s (shown %s, pool %s, signal %s)" % [dealt, shown, pool.get_child_count() if pool != null else "missing", EventBus.has_signal(&"enemy_damaged")])
 	monster.queue_free()
+
+static func _screen_slide(r: Node) -> void:
+	var still0: bool = bool(SettingsManager.get_setting("reduce_ui_motion", false))
+	SettingsManager.set_setting("reduce_ui_motion", false)
+	var screen: Control = UIManager._get_screen(&"city_map")
+	var rest: Vector2 = screen.position
+	UIManager.open(&"city_map")
+	await r.get_tree().create_timer(0.1).timeout
+	var rising: bool = screen.position.y > rest.y and screen.modulate.a < 1.0
+	await r.get_tree().create_timer(0.4).timeout
+	var home: bool = screen.position == rest and screen.modulate.a == 1.0
+	UIManager.close(&"city_map")
+	SettingsManager.set_setting("reduce_ui_motion", still0)
+	r._ok(rising and home, "UIFX6 an opened screen rises and fades in, then rests on its exact place at full alpha after 0.5 s (rising %s, home %s)" % [rising, home])
