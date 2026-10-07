@@ -15,6 +15,9 @@ static func run(r: Node) -> void:
 	await _bar_shake(r)
 	await _damage_numbers(r)
 	await _screen_slide(r)
+	await _menu_has_no_day(r)
+	await _toast_lifetime(r)
+	_attack_button_grey(r)
 
 static func _overlay(r: Node) -> Node:
 	return r._main.get_node_or_null("PostProcessOverlay")
@@ -247,3 +250,49 @@ static func _screen_slide(r: Node) -> void:
 	UIManager.close(&"city_map")
 	SettingsManager.set_setting("reduce_ui_motion", still0)
 	r._ok(rising and home, "UIFX6 an opened screen rises and fades in, then rests on its exact place at full alpha after 0.5 s (rising %s, home %s)" % [rising, home])
+
+## MENU1 (TZ_DECISIONS M5.1-day): the main-menu background that changes every 24 s shows night and generator-on only; the game has no day
+## (GDD 11.1). Four changes in a row: the old script runs night, day, generator, night, day through them.
+static func _menu_has_no_day(r: Node) -> void:
+	var bg := (load("res://scripts/ui/menu_background.gd") as GDScript).new() as Control
+	r.add_child(bg)
+	await r.get_tree().process_frame
+	var themes: Dictionary = (bg.get_script() as GDScript).get_script_constant_map().get("BgTheme", {})
+	var seen: Array = []
+	for i in 4:
+		bg.call("_advance_theme")
+		seen.append(str(themes.find_key(bg.get("_theme"))))
+	bg.queue_free()
+	r._ok(not seen.has("DAY") and seen.has("NIGHT") and seen.has("GENERATOR"), "MENU1 four background changes show %s: night and generator-on, no day" % [seen])
+
+## TO1 (GDD 24.5): a toast lives 3 s. Still on screen at 2.7 s, gone by 3.5 s; the old hold of 3.5 s keeps it until 4.0 s.
+static func _toast_lifetime(r: Node) -> void:
+	var stack: Control = r._main.get_node("ToastManager").get("_stack")
+	var waited: float = 0.0
+	while stack.get_child_count() > 0 and waited < 5.0:
+		await r.get_tree().create_timer(0.25).timeout
+		waited += 0.25
+	var before: Array = stack.get_children()
+	EventBus.toast_requested.emit("closeout toast lifetime", "finding")
+	await r.get_tree().process_frame
+	var fresh: Array = stack.get_children().filter(func(c: Node) -> bool: return not before.has(c))
+	var row: Node = fresh[0] if fresh.size() == 1 else null
+	await r.get_tree().create_timer(2.7).timeout
+	var still: bool = row != null and is_instance_valid(row)
+	await r.get_tree().create_timer(0.8).timeout
+	var gone: bool = row != null and not is_instance_valid(row)
+	r._ok(still and gone, "TO1 a toast is on screen at 2.7 s and gone by 3.5 s (row %s, at 2.7 s %s, gone %s)" % [row != null, still, gone])
+
+## ATK1 (GDD 5.3): under 5 stamina the touch attack button is grey; at 5 it is not. The old HUD only fills the bar.
+static func _attack_button_grey(r: Node) -> void:
+	var hud: Node = r._main.get_node_or_null("HUD")
+	var attack := hud.get_node_or_null("BottomRight/BtnAttack") as CanvasItem if hud != null else null
+	if attack == null:
+		r._ok(false, "ATK1 the HUD has no attack button")
+		return
+	var seen: Array = []
+	for ratio in [0.04, 0.05, 1.0]:
+		EventBus.player_stamina_changed.emit(ratio)
+		seen.append(attack.modulate)
+	EventBus.player_stamina_changed.emit(float(r._player.get("stamina")) / float(r._player.get("stats").stamina_max))
+	r._ok(seen[0].r < 0.8 and seen[1] == Color.WHITE and seen[2] == Color.WHITE, "ATK1 the attack button is grey at 4 stamina and not at 5 or 100 (%s)" % [seen])

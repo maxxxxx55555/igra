@@ -1,11 +1,11 @@
 extends Control
-## T14: 3 динамических фона меню (NIGHT/DAY/GENERATOR) с параллаксом.
+## T14: 2 динамических фона меню (NIGHT/GENERATOR) с параллаксом; дня в игре нет (GDD §11.1).
 ##
 ## Ассетов нет и не будет (assets/** — чужая зона), поэтому силуэт города
 ## рисуется процедурно в ImageTexture, как и остальной UI этого проекта
 ## (см. shot_tool/pointer texture в damage_indicator.gd).
 
-enum BgTheme { NIGHT, DAY, GENERATOR }
+enum BgTheme { NIGHT, GENERATOR }
 
 const CYCLE_TIME: float = 24.0
 const CROSSFADE_TIME: float = 2.5
@@ -16,15 +16,13 @@ const NEAR_SPEED: float = 16.0
 
 const _SKY := {
 	BgTheme.NIGHT: Color(0.043, 0.055, 0.082),
-	BgTheme.DAY: Color(0.243, 0.271, 0.318),
 	BgTheme.GENERATOR: Color(0.071, 0.055, 0.043),
 }
 const _WINDOW := {
 	BgTheme.NIGHT: Color(0.788, 0.635, 0.290),
-	BgTheme.DAY: Color(0.4, 0.42, 0.46, 0.5),
 	BgTheme.GENERATOR: Color(0.706, 0.271, 0.184),
 }
-const _LIT_CHANCE := {BgTheme.NIGHT: 0.5, BgTheme.DAY: 0.06, BgTheme.GENERATOR: 0.85}
+const _LIT_CHANCE := {BgTheme.NIGHT: 0.5, BgTheme.GENERATOR: 0.85}
 
 var _layers: Array = []  # [{"far": [TextureRect,TextureRect], "near": [...]}] per active container
 var _containers: Array[Control] = []
@@ -44,9 +42,8 @@ func _ready() -> void:
 		add_child(c)
 		_containers.append(c)
 		_layers.append({"far": [], "near": []})
-	# Всегда стартуем с NIGHT: у игры нет дня (GDD §11.1, «Дня нет»), а
-	# случайный выбор темы раньше на треть запусков встречал игрока в меню
-	# светлым DAY-фоном или тёплым GENERATOR прямо на первом экране.
+	# Всегда стартуем с NIGHT: у игры нет дня (GDD §11.1, «Дня нет»); смена
+	# тем чередует только NIGHT и GENERATOR.
 	_theme = BgTheme.NIGHT
 	_build_theme(0, _theme)
 	_containers[0].modulate.a = 1.0
@@ -93,8 +90,7 @@ func _make_skyline(theme: int, building_count: int, min_h: float, max_h: float) 
 		var bw: int = rng.randi_range(28, 60)
 		var bh: int = int(TEX_H * rng.randf_range(min_h, max_h))
 		var top: int = TEX_H - bh
-		var body := Color(0.06, 0.055, 0.05) if theme != BgTheme.DAY else Color(0.18, 0.19, 0.21)
-		_fill_rect(img, x, top, bw, bh, body)
+		_fill_rect(img, x, top, bw, bh, Color(0.06, 0.055, 0.05))
 		if theme == BgTheme.GENERATOR and rng.randf() < 0.2:
 			_fill_rect(img, x, top, bw, 4, _WINDOW[BgTheme.GENERATOR])
 		var wx := x + 4
@@ -136,7 +132,7 @@ func _scroll(pair: Array, dx: float) -> void:
 			t.position.x += TEX_W
 
 func _advance_theme() -> void:
-	_theme = (_theme + 1) % 3
+	_theme = BgTheme.GENERATOR if _theme == BgTheme.NIGHT else BgTheme.NIGHT
 	var next_idx := 1 - _active
 	_build_theme(next_idx, _theme)
 	var from_c := _containers[_active]

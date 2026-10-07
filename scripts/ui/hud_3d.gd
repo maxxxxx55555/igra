@@ -1303,10 +1303,17 @@ func _refresh_low_hp_vignette() -> void:
 	_vignette_low = low
 	_animate_vignette(_VIGNETTE_BEAT_PEAK if low else _vignette_default_color.a, 0.15)
 
+## GDD 5.3: under 5 stamina (the price of the cheapest swing; stamina_max is 100) the attack button is grey.
+const ATTACK_MIN_STAMINA: float = 0.05
+const ATTACK_GREY := Color(0.5, 0.5, 0.5, 1.0)
+
 func _on_stam(ratio: float) -> void:
 	_stam = ratio
 	_tween_fill(stam_fill, ratio)
 	stam_val.text = str(int(ratio * 100))
+	var attack := get_node_or_null("BottomRight/BtnAttack") as CanvasItem
+	if attack != null:
+		attack.modulate = ATTACK_GREY if ratio < ATTACK_MIN_STAMINA else Color.WHITE
 
 func _on_bat(ratio: float) -> void:
 	_bat = ratio

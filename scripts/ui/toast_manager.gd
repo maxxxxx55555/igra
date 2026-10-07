@@ -19,12 +19,12 @@ extends CanvasLayer
 ## GDD V.1 3.5/3.14: every toast now carries a run-clock stamp in the GDD's
 ## own "[12.42]" shape (minutes.seconds off GameManager.play_time), and this
 ## manager keeps a rolling history the player can read back - a toast fades
-## after 3.5 s and used to be unrecoverable, so any message missed while
+## after 3 s (GDD 24.5: 0.2 in, 2.5 held, 0.3 out) and used to be unrecoverable, so any message missed while
 ## fighting was lost for good.
 
 const MAX_VISIBLE: int = 3
 const FADE_IN: float = 0.2
-const HOLD: float = 3.5
+const HOLD: float = 2.5
 const FADE_OUT: float = 0.3
 
 ## 3.14: how many read-back entries the log keeps.
