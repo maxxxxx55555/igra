@@ -1,0 +1,70 @@
+# proof utilities
+# utc 20261007T083143Z
+# head 401ca41 (uncommitted paths: 0)
+# cmd bash tools/utilities_report.sh
+== availability (the downloads a missing tool needs are not approved in this environment)
+gdlint: ABSENT
+gdformat: ABSENT
+shellcheck: ABSENT
+mypy: ABSENT
+pngquant: ABSENT
+oggenc: ABSENT
+ruff: ruff 0.16.9
+flake8: 7.3.0 (mccabe: 0.7.0, pycodestyle: 2.14.0, pyflakes: 3.4.0) CPython 3.11.8 on
+pyflakes: 3.4.0 Python 3.11.8 on Windows
+black: python -m black, 26.5.1 (compiled: yes)
+ffmpeg: ffmpeg version 8.1.2-full_build-www.gyan.dev Copyright (c) 2000-2026 the FFmpeg developers
+
+== ruff E9,F (syntax errors and pyflakes correctness) on tools/ and scripts/
+All checks passed!
+exit=0
+
+== ruff default rule set, findings per rule (style and modernisation: reported, not a gate)
+14	I001   	[*] unsorted-imports
+11	C408   	[ ] unnecessary-collection-call
+ 8	RUF059 	[ ] unused-unpacked-variable
+ 5	UP020  	[*] open-alias
+ 5	UP009  	[*] utf8-encoding-declaration
+ 4	PLW1510	[ ] subprocess-run-without-check
+ 3	UP034  	[*] extraneous-parentheses
+ 2	SIM114 	[*] if-with-same-arms
+ 2	RUF046 	[ ] unnecessary-cast-to-int
+ 2	RUF100 	[*] unused-noqa
+ 1	BLE001 	[ ] blind-except
+ 1	SIM102 	[ ] collapsible-if
+ 1	UP035  	[*] deprecated-import
+ 1	PLC0206	[ ] dict-index-missing-items
+ 1	S102   	[ ] exec-builtin
+ 1	UP032  	[*] f-string
+ 1	UP030  	[ ] format-literals
+ 1	PLR1730	[*] if-stmt-min-max
+ 1	ISC004 	[ ] implicit-string-concatenation-in-collection-literal
+ 1	EXE005 	[ ] shebang-not-first-line
+ 1	S112   	[ ] try-except-continue
+ 1	C401   	[ ] unnecessary-generator-set
+ 1	PIE808 	[*] unnecessary-range-start
+Found 195 errors.
+[*] 64 fixable with the `--fix` option (67 hidden fixes can be enabled with the `--unsafe-fixes` option).
+exit=0
+
+== flake8 correctness subset (E9, F63, F7, F82)
+0
+exit=0
+
+== python compile of every .py (py_compile)
+compiled=50 failed=0
+
+== bash -n (shellcheck is absent: syntax only) on every shell script, hook and extensionless wrapper
+checked=15 failed=0
+
+== GDScript: gdlint is absent; the engine compile gate (COMPILE_GATE bad=0 in tools/check.sh) is the parse proof; static gates:
+
+──────────────────────────────────────
+[32mВсё зелёное.[0m Проверок пройдено: 38
+
+== assets changed since e4bb4df (pngquant and oggenc only matter for shipped assets; docs/ frames are evidence, not assets)
+changed assets: 0
+
+== CI
+no .github/workflows: none created (a workflow is a standing remote configuration nobody asked for); tools/check.sh --all is the one command, tools/hooks/pre-commit the opt-in hook
+# EXIT=0
