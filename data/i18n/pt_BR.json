@@ -1522,6 +1522,6 @@
   "CREDITS_MUSIC": "Música e efeitos sonoros: TLS Team",
   "CREDITS_ART": "Arte e interface: TLS Team",
   "CREDITS_THANKS": "Agradecimento especial aos jogadores",
-  "INV_QUICKSLOT_HINT": "Arraste um item para um slot de acesso rápido. Clique com o botão direito no slot para limpá-lo.",
+  "INV_QUICKSLOT_HINT": "Arraste um item para um slot de acesso rápido. Clique com o botão direito no slot para redefini-lo.",
   "NGP_RUN_ALREADY_COUNTED": "Esta noite já foi contabilizada."
 }

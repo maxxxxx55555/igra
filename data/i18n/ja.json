@@ -1522,6 +1522,6 @@
   "CREDITS_MUSIC": "音楽と効果音: TLS Team",
   "CREDITS_ART": "アートとUI: TLS Team",
   "CREDITS_THANKS": "プレイヤーの皆さまに感謝を込めて",
-  "INV_QUICKSLOT_HINT": "アイテムをクイックアクセスのスロットにドラッグします。スロットを右クリックすると空にできます。",
+  "INV_QUICKSLOT_HINT": "アイテムをクイックアクセスのスロットにドラッグします。スロットを右クリックすると初期状態に戻せます。",
   "NGP_RUN_ALREADY_COUNTED": "この夜はすでにカウントされています。"
 }

@@ -1522,6 +1522,6 @@
   "CREDITS_MUSIC": "Musique et effets sonores : TLS Team",
   "CREDITS_ART": "Visuels et interface : TLS Team",
   "CREDITS_THANKS": "Remerciements spéciaux aux joueurs",
-  "INV_QUICKSLOT_HINT": "Glissez un objet sur un emplacement d'accès rapide. Clic droit sur un emplacement pour le vider.",
+  "INV_QUICKSLOT_HINT": "Glissez un objet sur un emplacement d'accès rapide. Clic droit sur un emplacement pour le rétablir.",
   "NGP_RUN_ALREADY_COUNTED": "Cette nuit est déjà comptabilisée."
 }

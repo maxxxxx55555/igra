@@ -1522,6 +1522,6 @@
   "CREDITS_MUSIC": "Musik und Soundeffekte: TLS Team",
   "CREDITS_ART": "Grafik und Oberfläche: TLS Team",
   "CREDITS_THANKS": "Besonderer Dank an die Spieler",
-  "INV_QUICKSLOT_HINT": "Zieh einen Gegenstand auf einen Schnellzugriff-Platz. Rechtsklick auf einen Platz leert ihn.",
+  "INV_QUICKSLOT_HINT": "Zieh einen Gegenstand auf einen Schnellzugriff-Platz. Rechtsklick auf einen Platz setzt ihn zurück.",
   "NGP_RUN_ALREADY_COUNTED": "Diese Nacht wurde bereits gewertet."
 }
