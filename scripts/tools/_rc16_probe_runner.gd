@@ -12,6 +12,8 @@ const DWELL_SEC: float = 1.5
 const PERF_FRAMES: int = 300
 const SPRINT_SEC: float = 0.9
 const MIB: float = 1048576.0
+const WINDOW_SIZE := Vector2i(1280, 720)
+const CAPTURE_SIZE := Vector2i(960, 540)
 
 var _label: String = "after"
 var _only: String = ""
@@ -97,6 +99,13 @@ func _perf(id: StringName) -> void:
 	var objects := int(Performance.get_monitor(Performance.RENDER_TOTAL_OBJECTS_IN_FRAME))
 	var p95 := await _frame_p95(PERF_FRAMES)
 	print("[probe] perf district=%s draw_calls=%d primitives=%d objects_in_frame=%d frame_p95_ms=%.2f %s" % [String(id), calls, prims, objects, p95, _mem()])
+
+## Every frame has the same size, so a before and an after frame of one state can be laid side by side.
+func _shot(frame: String) -> void:
+	await RenderingServer.frame_post_draw
+	var img := get_tree().root.get_texture().get_image()
+	img.resize(CAPTURE_SIZE.x, CAPTURE_SIZE.y, Image.INTERPOLATE_LANCZOS)
+	img.save_png(ProjectSettings.globalize_path(out_dir + frame + ".png"))
 
 func _snap(state: String) -> void:
 	out_dir = "res://docs/stills/polish/"
@@ -246,6 +255,7 @@ func _run() -> void:
 		if not await _wait_until(menu_up, 10.0):
 			_fail("main menu never came up")
 			return
+	get_window().size = WINDOW_SIZE
 	await get_tree().create_timer(1.0).timeout
 	SaveSystem.mark_onboard_done()
 	Routes.start_game()
