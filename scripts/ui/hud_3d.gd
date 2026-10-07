@@ -8,7 +8,13 @@ const BAR_ROW_TOP: float = 30.0
 const _SLOT_ITEMS: Array = [&"pistol", &"rifle", &"battery", &"medkit", &"molotov", &"flashlight"]
 ## The two weapon slots and the guns each one cycles through (GDD §18: pistol, rifle, shotgun).
 const _WEAPON_SLOTS: Array = [[&"pistol"], [&"rifle", &"shotgun"]]
+## _SLOT_ITEMS is the default order: the player rewires the six keys in the inventory (quick_slots.gd), and the bar
+## follows _slot_items.
+const _QUICK_SLOTS := preload("res://scripts/ui/quick_slots.gd")
+const _SLOT_SPECIAL_COLOR := Color(0.788, 0.635, 0.290)
+const _SLOT_FALLBACK_COLOR := Color(0.165, 0.200, 0.251)
 
+var _slot_items: Array = _SLOT_ITEMS.duplicate()
 var _hp: float = 1.0
 var _stam: float = 1.0
 var _bat: float = 1.0
@@ -97,6 +103,7 @@ func _ready() -> void:
 	_setup_button_feedback()
 	_apply_text_outlines()
 	EventBus.player_health_changed.connect(_on_hp)
+	EventBus.player_damaged.connect(_on_player_damaged)
 	if EventBus.has_signal(&"crosshair_state_changed"):
 		EventBus.crosshair_state_changed.connect(_on_crosshair_state)
 	EventBus.player_stamina_changed.connect(_on_stam)
@@ -135,6 +142,7 @@ func _ready() -> void:
 	_setup_quick_wheel()
 	_setup_grain_overlay()
 	_setup_damage_indicator()
+	_setup_damage_numbers()
 	_setup_heal_flash()
 	_setup_blackout_flash()
 	_setup_context_hints()
@@ -363,6 +371,8 @@ func _setup_damage_indicator() -> void:
 func _sync_damage_indicator_visibility() -> void:
 	if _damage_indicator != null and is_instance_valid(_damage_indicator):
 		_damage_indicator.visible = visible
+	if _number_layer != null:
+		_number_layer.visible = visible
 
 ## T15: колесо быстрых слотов (удержание + аналоговый выбор из 6).
 var _quick_wheel: Control = null
@@ -843,6 +853,98 @@ func _process(delta: float) -> void:
 		bat_fill.color = Color(0.788, 0.635, 0.290)
 	_process_noise_vignette(delta)
 	_process_enemy_bar(delta)
+	_process_bar_shake(delta)
+	_process_numbers(delta)
+
+## Floating damage numbers: twelve Labels in a CanvasLayer of their own, reused. A monster that takes a hit shows the
+## damage above its head; the number rises 40 px and fades in 0.6 s (it stays level under Reduce UI Motion). A visible
+## Label is one in use. The layer follows the HUD's visibility like the damage indicator's (nested layers ignore it).
+const _NUMBER_POOL: int = 12
+const _NUMBER_RISE_PX: float = 40.0
+const _NUMBER_SEC: float = 0.6
+const _NUMBER_BIG_HIT: float = 15.0
+const _NUMBER_HEAD := Vector3(0.0, 2.0, 0.0)
+const _NUMBER_BONE := Color("#d8d2c4")
+const _NUMBER_BRASS := Color("#c9a24a")
+const _NUMBER_OUTLINE := Color("#0c1016")
+const _NUMBER_FONT_PX: int = 22
+const _NUMBER_OUTLINE_PX: int = 4
+var _number_layer: CanvasLayer = null
+var _numbers: Array[Label] = []
+
+func _setup_damage_numbers() -> void:
+	_number_layer = CanvasLayer.new()
+	_number_layer.name = "DamageNumbers"
+	_number_layer.layer = layer - 1
+	add_child(_number_layer)
+	for i in _NUMBER_POOL:
+		var label := Label.new()
+		label.visible = false
+		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		label.add_theme_font_size_override("font_size", _NUMBER_FONT_PX)
+		label.add_theme_color_override("font_outline_color", _NUMBER_OUTLINE)
+		label.add_theme_constant_override("outline_size", _NUMBER_OUTLINE_PX)
+		_number_layer.add_child(label)
+		_numbers.append(label)
+	if EventBus.has_signal(&"enemy_damaged"):
+		EventBus.connect(&"enemy_damaged", _on_enemy_damaged)
+
+func _on_enemy_damaged(monster: Node3D, amount: float) -> void:
+	if not is_instance_valid(monster) or roundi(amount) < 1:
+		return
+	for label in _numbers:
+		if label.visible:
+			continue
+		label.text = str(roundi(amount))
+		label.add_theme_color_override("font_color", _NUMBER_BRASS if amount > _NUMBER_BIG_HIT else _NUMBER_BONE)
+		label.set_meta(&"anchor", monster.global_position + _NUMBER_HEAD)
+		label.set_meta(&"age", 0.0)
+		label.visible = true
+		_place_number(label)
+		return
+
+func _process_numbers(delta: float) -> void:
+	for label in _numbers:
+		if not label.visible:
+			continue
+		var age: float = float(label.get_meta(&"age")) + delta
+		label.visible = age < _NUMBER_SEC
+		label.set_meta(&"age", age)
+		if label.visible:
+			_place_number(label)
+
+## Over the monster's head on screen: out of sight (alpha 0) while the point is behind the camera.
+func _place_number(label: Label) -> void:
+	var camera := get_viewport().get_camera_3d()
+	var anchor: Vector3 = label.get_meta(&"anchor")
+	var age: float = float(label.get_meta(&"age"))
+	if camera == null or camera.is_position_behind(anchor):
+		label.modulate.a = 0.0
+		return
+	var rise: float = 0.0 if bool(SettingsManager.get_setting("reduce_ui_motion", false)) else _NUMBER_RISE_PX * age / _NUMBER_SEC
+	label.modulate.a = 1.0 - age / _NUMBER_SEC
+	label.position = camera.unproject_position(anchor) - Vector2(label.get_minimum_size().x / 2.0, rise)
+
+## The health bar's row shakes for a moment when the player is hit, the amplitude running down with the time left, and ends
+## on its exact place. Reduce Screen Shake keeps it still.
+const _BAR_SHAKE_PX: float = 4.0
+const _BAR_SHAKE_SEC: float = 0.2
+var _bar_shake_left: float = 0.0
+var _bar_rest: Vector2 = Vector2.ZERO
+
+func _on_player_damaged(_amount: float) -> void:
+	if bool(SettingsManager.get_setting("reduce_screen_shake", false)):
+		return
+	if _bar_shake_left <= 0.0:
+		_bar_rest = (hp_fill.get_parent() as Control).position
+	_bar_shake_left = _BAR_SHAKE_SEC
+
+func _process_bar_shake(delta: float) -> void:
+	if _bar_shake_left <= 0.0:
+		return
+	_bar_shake_left = maxf(_bar_shake_left - delta, 0.0)
+	var amp: float = _BAR_SHAKE_PX * _bar_shake_left / _BAR_SHAKE_SEC
+	(hp_fill.get_parent() as Control).position = _bar_rest + Vector2(randf_range(-amp, amp), randf_range(-amp, amp))
 
 func _process_noise_vignette(delta: float) -> void:
 	var v := vignette
@@ -1425,8 +1527,9 @@ func _request_strobe() -> void:
 		p.call("trigger_strobe")
 
 func _setup_slot_placeholders() -> void:
-	var item_icons := preload("res://scripts/ui/item_icons.gd")
-	var order := _SLOT_ITEMS
+	_slot_items = _QUICK_SLOTS.read()
+	EventBus.settings_changed.connect(_on_quick_slots_changed)
+	var order := _slot_items
 	var inv := get_tree().root.get_node_or_null("InventoryManager")
 	for i in 6:
 		var slot := get_node("BottomCenter/Slot" + str(i))
@@ -1446,7 +1549,7 @@ func _setup_slot_placeholders() -> void:
 			border = tex_border
 		else:
 			border = ColorRect.new()
-			(border as ColorRect).color = Color(0.165, 0.200, 0.251)
+			(border as ColorRect).color = _SLOT_FALLBACK_COLOR
 		border.name = "Border"
 		border.size = Vector2(54, 54)
 		border.position = Vector2(-1, -1)
@@ -1458,7 +1561,6 @@ func _setup_slot_placeholders() -> void:
 		icon_parent.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		slot.add_child(icon_parent)
 		var item_id: StringName = order[i] if i < order.size() else &""
-		item_icons.draw_icon(icon_parent, item_id, 32.0)
 		var badge := Label.new()
 		badge.name = "Badge"
 		badge.text = "0"
@@ -1479,14 +1581,31 @@ func _setup_slot_placeholders() -> void:
 			if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 				_use_quick_slot(si)
 		)
-	var slot0 := get_node("BottomCenter/Slot" + str(_SLOT_ITEMS.find(&"flashlight")))
-	if slot0:
-		var border := slot0.get_node_or_null("Border")
+	_apply_slot_bindings()
+
+## Draws every slot for the item it is bound to: the icon, the brass border of the special slot (the flashlight), the badge.
+func _apply_slot_bindings() -> void:
+	var item_icons := preload("res://scripts/ui/item_icons.gd")
+	for i in _slot_items.size():
+		var slot := get_node_or_null("BottomCenter/Slot" + str(i))
+		var icon_parent: Control = slot.get_node_or_null("IconParent") as Control if slot else null
+		if icon_parent == null:
+			continue
+		for child in icon_parent.get_children():
+			child.queue_free()
+		item_icons.draw_icon(icon_parent, _slot_items[i], 32.0)
+		var special: bool = _slot_items[i] == &"flashlight"
+		var border := slot.get_node_or_null("Border")
 		if border is ColorRect:
-			(border as ColorRect).color = Color(0.788, 0.635, 0.290)
+			(border as ColorRect).color = _SLOT_SPECIAL_COLOR if special else _SLOT_FALLBACK_COLOR
 		elif border is CanvasItem:
-			(border as CanvasItem).modulate = Color(0.788, 0.635, 0.290)
+			(border as CanvasItem).modulate = _SLOT_SPECIAL_COLOR if special else Color.WHITE
 	_refresh_slot_badges()
+
+func _on_quick_slots_changed(key: String, _value: Variant) -> void:
+	if key == _QUICK_SLOTS.KEY:
+		_slot_items = _QUICK_SLOTS.read()
+		_apply_slot_bindings()
 
 func _on_quick_slot_key(index: int) -> void:
 	_use_quick_slot(index)
@@ -1495,24 +1614,32 @@ func _weapon_manager() -> WeaponManager:
 	var player := get_tree().get_first_node_in_group("player")
 	return player.get_node_or_null("WeaponManager") as WeaponManager if player != null else null
 
-func _weapon_slot_owned(index: int) -> bool:
-	return _WEAPON_SLOTS[index].any(func(id: StringName) -> bool: return ProgressTracker.has_weapon(String(id)))
+func _weapon_group_owned(group: Array) -> bool:
+	return group.any(func(id: StringName) -> bool: return ProgressTracker.has_weapon(String(id)))
 
-## V.1 3.2: the bar's six slots are a fixed item order (_SLOT_ITEMS), but
+## The guns a weapon id cycles through (_WEAPON_SLOTS); empty for anything that is not a gun.
+func _weapon_group_of(item_id: StringName) -> Array:
+	for group in _WEAPON_SLOTS:
+		if group.has(item_id):
+			return group
+	return []
+
+## V.1 3.2: the bar's six slots follow an item order (_slot_items), but
 ## InventoryManager::use_item() takes an *inventory slot* index. The two were
 ## conflated, so pressing the medkit consumed whatever happened to sit in that
 ## inventory slot - the icon, the badge and the effect could all disagree.
 ## Resolve the pressed slot's item to the inventory stack that actually holds
 ## it, the same way _refresh_slot_badges() counts it.
 func _use_quick_slot(index: int) -> void:
-	if index < 0 or index >= _SLOT_ITEMS.size():
+	if index < 0 or index >= _slot_items.size():
 		return
-	if index < _WEAPON_SLOTS.size():
+	var item_id: StringName = _slot_items[index]
+	var group: Array = _weapon_group_of(item_id)
+	if not group.is_empty():
 		var weapons := _weapon_manager()
 		if weapons != null:
-			weapons.cycle(_WEAPON_SLOTS[index])
+			weapons.cycle(group)
 		return
-	var item_id: StringName = _SLOT_ITEMS[index]
 	# Slot 0 is the flashlight: it is a tool, not an inventory item (no
 	# "flashlight" entry exists in ItemDatabase, so its stack count is forever
 	# zero), and toggling the light is what the icon promises.
@@ -1533,14 +1660,15 @@ func _refresh_slot_badges() -> void:
 	var inv := get_tree().root.get_node_or_null("InventoryManager")
 	if not inv:
 		return
-	for i in _SLOT_ITEMS.size():
+	for i in _slot_items.size():
 		var slot := get_node_or_null("BottomCenter/Slot" + str(i))
 		var badge: Label = slot.get_node_or_null("Badge") if slot else null
 		if not badge:
 			continue
-		var item_id: StringName = _SLOT_ITEMS[i]
-		if i < _WEAPON_SLOTS.size():
-			badge.text = str(ProgressTracker.ammo) if _weapon_slot_owned(i) else "-"
+		var item_id: StringName = _slot_items[i]
+		var group: Array = _weapon_group_of(item_id)
+		if not group.is_empty():
+			badge.text = str(ProgressTracker.ammo) if _weapon_group_owned(group) else "-"
 			badge.visible = true
 			continue
 		badge.text = str(inv.count_of(item_id))
@@ -1556,7 +1684,7 @@ const _SLOT_FLASH_ALPHA: float = 0.45
 const _SLOT_FLASH_NAME: String = "PickupFlash"
 
 func _on_item_picked_up(item_id: StringName) -> void:
-	var index := _SLOT_ITEMS.find(item_id)
+	var index := _slot_items.find(item_id)
 	if index < 0:
 		return
 	if bool(SettingsManager.get_setting("reduce_flash", false)):

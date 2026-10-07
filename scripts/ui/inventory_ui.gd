@@ -17,6 +17,13 @@ const EQUIP_KEYS: Dictionary = {
 	ItemData.EquipSlot.HOLSTER: "CHAR_HOLSTER", ItemData.EquipSlot.BACKPACK: "CHAR_BACKPACK",
 }
 const WEAPONS: Array[StringName] = [&"pistol", &"rifle", &"shotgun"]
+## GDD 9.7: the quick bar's six keys are rewired by dragging an item cell onto one of six targets under the pack.
+const QUICK_SLOTS := preload("res://scripts/ui/quick_slots.gd")
+const QUICK_CELL := preload("res://scripts/ui/quick_slot_cell.gd")
+const ITEM_ICONS := preload("res://scripts/ui/item_icons.gd")
+const QUICK_TARGET := Vector2(64, 64)
+const QUICK_ICON: float = 40.0
+const QUICK_KEY_POS := Vector2(6.0, 2.0)
 
 var _selected: int = -1
 var _filter: int = -1
@@ -30,6 +37,8 @@ var _close: Button
 var _hints: Label
 var _sort_buttons: Array[Button] = []
 var _filter_buttons: Array[Button] = []
+var _quick_targets: Array[Button] = []
+var _quick_hint: Label
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
@@ -80,6 +89,7 @@ func _ready() -> void:
 	_grid.add_theme_constant_override("h_separation", 8)
 	_grid.add_theme_constant_override("v_separation", 8)
 	scroll.add_child(_grid)
+	left.add_child(_quick_strip())
 	var right := VBoxContainer.new()
 	right.add_theme_constant_override("separation", 12)
 	right.custom_minimum_size = Vector2(380, 0)
@@ -94,6 +104,9 @@ func _ready() -> void:
 	_hints.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
 	root.add_child(_hints)
 	EventBus.inventory_changed.connect(_refresh)
+	EventBus.settings_changed.connect(func(key: String, _value: Variant) -> void:
+		if key == QUICK_SLOTS.KEY:
+			_refresh_quick_strip())
 	EventBus.ammo_changed.connect(func(_current: int, _reserve: int) -> void: _refresh())
 	LocalizationManager.language_changed.connect(func(_lang: String) -> void: _refresh())
 	visibility_changed.connect(func() -> void:
@@ -161,6 +174,48 @@ func _refresh() -> void:
 			_grid.add_child(_cell(index, data, int(slot["count"])))
 	_refresh_detail()
 	_refresh_side()
+	_refresh_quick_strip()
+
+## One target per quick-bar key: drop an item on it to bind it, right-click puts the slot back to its default.
+func _quick_strip() -> VBoxContainer:
+	var strip := VBoxContainer.new()
+	strip.add_theme_constant_override("separation", 6)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 8)
+	strip.add_child(row)
+	for i in QUICK_SLOTS.SLOTS:
+		var target: Button = QUICK_CELL.new()
+		target.name = "QuickSlot%d" % i
+		target.slot = i
+		target.focus_mode = Control.FOCUS_NONE
+		target.custom_minimum_size = QUICK_TARGET
+		var key := Label.new()
+		key.text = str(i + 1)
+		key.position = QUICK_KEY_POS
+		key.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		key.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
+		target.add_child(key)
+		var icon_box := Control.new()
+		icon_box.name = "IconBox"
+		icon_box.position = (QUICK_TARGET - Vector2(QUICK_ICON, QUICK_ICON)) / 2.0
+		icon_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		target.add_child(icon_box)
+		row.add_child(target)
+		_quick_targets.append(target)
+	_quick_hint = _label("", ThemeProvider.COLOR_TEXT_DIM)
+	strip.add_child(_quick_hint)
+	return strip
+
+func _refresh_quick_strip() -> void:
+	var bound: Array = QUICK_SLOTS.read()
+	for i in _quick_targets.size():
+		var icon_box := _quick_targets[i].get_node("IconBox") as Control
+		for child in icon_box.get_children():
+			child.queue_free()
+		ITEM_ICONS.draw_icon(icon_box, bound[i], QUICK_ICON)
+		var data := ItemDatabase.get_item(bound[i])
+		_quick_targets[i].tooltip_text = _item_name(data) if data != null else ""
+	_quick_hint.text = LocalizationManager.t("INV_QUICKSLOT_HINT")
 
 func _used_slots() -> int:
 	var used := 0
@@ -170,7 +225,8 @@ func _used_slots() -> int:
 	return used
 
 func _cell(index: int, data: ItemData, count: int) -> Button:
-	var button := Button.new()
+	var button: Button = QUICK_CELL.new()
+	button.item_id = data.id
 	button.focus_mode = Control.FOCUS_NONE
 	button.custom_minimum_size = CELL
 	button.icon = data.icon
