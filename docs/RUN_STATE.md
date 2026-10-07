@@ -1,13 +1,15 @@
 # Run state — orchestrator pass (2026-09-20)
 
-## Session 17 (2026-10-07): RC16 FULL-POWER CLOSEOUT, directive "ZERO-PROSE, SWARM, UTILITIES, ANTI-FABRICATION"; target `v8.0.0-rc16`
+## Session 17 (2026-10-07): RC16 AUTONOMOUS SWARM CLOSEOUT, directive "ZERO-PROSE, SWARM, UTILITIES, ANTI-FABRICATION" (final text); target `v8.0.0-rc16`
 
-**NEXT-ROW (rewritten after every commit):** U0 (utilities inventory), then S2 (apply the two uifx cross-zone one-liners, merge `worktree-agent-a8dd8b39a6743bd85` @ `7601ea5`), S3 sec, S4 audio, S5 wave 2, S6 to S10. The Session 16 NEXT-ROW below stays the hand-off text for the three branches.
-**Working copy:** the owner's repo `C:\Users\Maxsim\Desktop\TLS_Build\THE_LAST_STREETLIGHT` (origin `maxxxxx55555/igra`; engine `Godot_v4.7-stable_win64_console.exe` under `TLS_Build\godot_extracted`, `4.7.stable.official.5b4e0cb0f`), resumed at `c407e60`: 30 commits on top of `e4bb4df` (the `v8.0.0-rc15` tag) that existed only on the dev machine; the three worktree branches are local only as well. Safety tag `backup-rc16-start` (local) marks `c407e60`.
-**Skills:** the `/ponytail` command was not registered in the session that started in a scratch folder; the project skills (`ponytail`, `ponytail-review` in `.claude/skills/`; `godot-style`, `backup-first`, `memory-keeper`, `token-saver` in `TLS_Build\.claude\skills\`) were read and are applied by hand.
-**Launch budget (amendment A, CORRECTION_LOG 101): 20 launches, counted from ledger row 12.** Used 1: row 12 `s1_compile_c407e60` (compile gate on `c407e60`, `COMPILE_GATE bad=0`, no engine error line in the log; raw output `docs/artifacts/rc16/proofs/s1_compile_c407e60.out`). New wrapper `tools/qa_sim/guarded_headless` (the headless twin of `guarded_windowed`: user-data snapshot, restore, log in `.qa_logs/`).
-**Push proofs (amendment B):** none yet (the first push follows this commit).
-**Done (this pass):** S1 compile gate green on `c407e60`.
+**NEXT-ROW (rewritten after every commit):** S5 spawn wave 2 (A-i18n, A-content, A-beauty) from `dc2844d`; in parallel S3 (merge sec `a82814d`, AF5 checker, security re-read, attack_sim), S4 (merge audio `9f8b032`, A2-A4, windowed audio gate), U0 (utilities). The Session 16 NEXT-ROW below stays the hand-off text for the sec and audio branches.
+**Working copy:** the owner's repo `C:\Users\Maxsim\Desktop\TLS_Build\THE_LAST_STREETLIGHT` (origin `maxxxxx55555/igra`; engine `Godot_v4.7-stable_win64_console.exe` under `TLS_Build\godot_extracted`, `4.7.stable.official.5b4e0cb0f`), resumed at `c407e60`: 30 commits on top of `e4bb4df` (the `v8.0.0-rc15` tag) that existed only on the dev machine; the three worktree branches were local only as well. Safety tag `backup-rc16-start` (local) marks `c407e60`.
+**Skills:** the project skills `ponytail`, `ponytail-review` (`.claude/skills/`) and `godot-style`, `backup-first`, `memory-keeper`, `token-saver` (`TLS_Build\.claude\skills\`) were read and are applied by hand (the session started in a scratch folder, where `/ponytail` was not registered).
+**Launch budget (amendment A, CORRECTION_LOG 101): used 2 of 20**, rows 12 and up of `docs/artifacts/rc16/launch_ledger.tsv`; each launch names the question it answers. New wrapper `tools/qa_sim/guarded_headless` (the headless twin of `guarded_windowed`).
+- L1 (row 12, headless, `s1_compile_c407e60`): does `c407e60` (perf and content merged, never compiled) parse every script? Answer: `COMPILE_GATE bad=0`, 0 engine error lines.
+- L2 (row 13, headless, one command running two gates, `s2_compile_closeout_b69ed90`, about 2 min): does `b69ed90` (uifx merged, `enemy_damaged` signal, silent salvage) parse every script and pass every closeout check including UIFX1-6 and QS2? Answer: `COMPILE_GATE bad=0`, `[closeout] DONE checks=347 fails=0`, 0 engine error lines.
+**Push proofs (amendment B):** `be84a29` (31 commits, `e4bb4df..be84a29`) and `dc2844d`: `git ls-remote origin refs/heads/main` equal to `git rev-parse HEAD` after each push.
+**Done (this pass):** S1 compile gate green on `c407e60`; S2 uifx merged (`d511716`) with the three cross-zone lines (`6f5887d`: `scripts/events/event_bus.gd:33` signal, `scripts/enemies/base_monster.gd:689` emit, `scripts/ui/workbench.gd:401` silent salvage) and wired into the closeout (`b69ed90`), L2 green, uifx worktree and branch removed.
 
 ## Session 16 (2026-10-02 to 10-07): UNIFIED RELEASE CLOSEOUT (rc16), directive "ZERO-PROSE, TOP-STUDIO BAR, ANTI-FABRICATION" + swarm amendment
 
