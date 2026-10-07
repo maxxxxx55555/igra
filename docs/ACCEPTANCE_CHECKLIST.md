@@ -1,4 +1,4 @@
-# Acceptance checklist (rc15 closeout)
+# Acceptance checklist (rc15 closeout, rc16 update at the end)
 
 Source: `docs/GDD.md` (the owner's specification), plus the read-only explorer audit of Appendix V, sections 24-25 and the
 screen list against the code. One row per player-visible promise. **Result** values: `PASS(...)` proven by the
@@ -33,7 +33,7 @@ Codex tab, **S_hud_*** the HUD buttons, **S_workbench**, **S_credits**.
 | CT4 | Interaction by a 3 m ray | 2.1 | DECIDED DR-1: proximity + facing cone, 3.2 m (a tighter reach is on the REJECTED list) | DECIDED |
 | CT5 | Touch: drag = camera, double tap = dodge, right buttons = action/flashlight/jump | 2.2 | hud_3d + virtual_joystick; DR-2 left 35% is the stick | DECIDED |
 | CT6 | Touch: swipe down = crouch | 2.2 | closeout_check CT6 (quick swipe down in the look zone toggles the crouch; slow, short and joystick-side swipes do not) | PASS(closeout CT6) |
-| CT7 | Touch: pinch = camera zoom (optional) | 2.2 | not built; the GDD marks it optional | ROADMAP |
+| CT7 | Touch: pinch = camera zoom (optional) | 2.2 | closeout_check CT7, 9 checks: zoom 1.0 at rest, a 450 px spread reaches the 1.35 limit, closing to 300 px gives 0.901, the view does not turn, one finger still looks, a late finger does not zoom, a trackpad magnify zooms (`docs/artifacts/rc16/proofs/s2_compile_closeout_b69ed90.attach.closeout_check.log`); the feel on a touch screen is U5 | PASS(closeout) |
 | CT8 | PC keys WASD, Space, Shift, F, E, Ctrl, C, Esc | 2.3 | project_input_check (blocks only in [input]) + suite P1b every action exercised | BATTERY |
 | CT9 | Coyote time 0.1 s, jump buffer 0.1 s | 2.4 | constants in player_3d.gd | BATTERY |
 | CT10 | Sprint x1.6 | 2.4 | tz_verify G06 | BATTERY |
@@ -70,7 +70,7 @@ Codex tab, **S_hud_*** the HUD buttons, **S_workbench**, **S_credits**.
 |---|---|---|---|---|
 | CB1 | Combo of three hits, window 1.2 s, stamina cost, flashlight bonus, backstab x1.5 | 5.1 | the swing lands on every monster kind (`closeout_check` MELEE1) with the GDD damage 8/12/20 (G13); bot 3/3 | BATTERY |
 | CB2 | Dodge: 15 stamina, i-frames 0.35 s, cooldown 0.8 s | 5.2 | constants + bot dodges | BATTERY |
-| CB3 | Hitboxes: capsule 1.6 m; attack volume | 5.3 | DECIDED DR-3 (attack box 1.4x0.8x3.4 + 2.7 m sphere) | DECIDED |
+| CB3 | Hitboxes: capsule 1.6 m; attack volume | 5.3 | DECIDED DR-3, then MELEE-query (`docs/TZ_DECISIONS.md:86`): the 1.4 x 0.8 x 3.4 box is gone, the attack is a 2.7 m sphere query in the active phase | DECIDED |
 | CB4 | Death: fall, then a screen with cause, time, % districts, documents | 5.4 | PT death frame | PT-A05 |
 | CB5 | Respawn at the district entry, HP 50%, battery kept | 5.4 | suite P2r | BATTERY |
 | CB6 | Hardcore: one life, death deletes the save | 5.4 | tz_verify G17 + PT toggle | PT-B03 |
@@ -203,7 +203,7 @@ Codex tab, **S_hud_*** the HUD buttons, **S_workbench**, **S_credits**.
 | AH5 | Speedrunner, iron man, midsummer night (bed), who is there (hallucinations) | 21 | closeout_check ach_16 / ach_18 (speedrunner, iron man), ach_19 (the bed), ach_20 (five hallucinations) | PASS(closeout) |
 | AH6 | Achievements screen | 21 | PT frame | PT-B05 |
 | QS1 | Six quick slots on the HUD, keys 1-6 | 24.1 | closeout_check H3.2 (six slots in the GDD order), G25 (keys 1 and 2 draw and lower the weapons) + suite P1b (every action exercised) | PASS(closeout) |
-| QS2 | Drag an item from the inventory to a quick slot | 24.1 | quick slots hold an item kind; the inventory Use button and the number keys serve it (DECIDED) | DECIDED |
+| QS2 | Drag an item from the inventory to a quick slot | 24.1 | closeout_check QS2, 4 checks: the medkit cell dragged onto quick slot 1 binds it, key 1 then uses a medkit, a right-click puts the pistol back, a forged saved list falls back to the defaults (same log); the feel on a touch screen is U5 | PASS(closeout) |
 | PH1 | Photo album: 200 photos, 3 categories | 24.2 | closeout_check (sources, categories, count, Codex tab) | PASS(closeout G26) |
 | DL1 | Daily challenge | 24.3 | menu card + streak reward (daily_challenge_manager) | PT-B04 |
 | DL2 | Streak multiplier x1.5/x2/x3 at 3/5/7 days, a temporary special district | 24.3 | closeout_check DL2: x1.5 / x2 / x3 at 3 / 5 / 7 days; the fifth day pays 2 x the base; the menu card shows the multiplier | PASS(closeout DL2) |
@@ -266,7 +266,7 @@ Codex tab, **S_hud_*** the HUD buttons, **S_workbench**, **S_credits**.
 | I9.4 | Actions: use, drop, disassemble (equip is built and no item sets an equip slot: see I9.5) | V.5 | closeout_check V.5 (Use consumes one battery; Drop asks, then throws the stack away), I9.4 (the workbench Salvage tab returns half the parts of an enhanced battery) | PASS(closeout) |
 | I9.5 | Equipment slots head/body/legs/holster/backpack | V.5 | GDD 17 defines no head/body/legs/holster item; the slots show on the inventory screen and save; the backpack capacity comes from the shop upgrade (UpgradeSystem) | DECIDED |
 | I9.6 | Backpack capacity x / max | V.5 | inventory screen header | PT-A06 |
-| I9.7 | Drag to a quick slot | V.5 | quick slots hold an item kind; the inventory Use button and the number keys serve it (DECIDED) | DECIDED |
+| I9.7 | Drag to a quick slot | V.5 | closeout_check QS2 (the same four checks, on the inventory screen's cells and its six targets) | PASS(closeout) |
 | I9.8 | Sort by type / weight / rarity | V.5 | closeout_check I9.8 (sorting by weight puts the heaviest stack first) | PASS(closeout) |
 | I9.12 | Confirm on drop | V.5 | closeout_check V.5 (the first press of Drop only asks, the second throws the stack away) | PASS(closeout) |
 | I9.13 | Rarity filter | V.5 | closeout_check I9.13 (the Common filter leaves the one common stack of two, All shows both) | PASS(closeout) |
@@ -320,3 +320,33 @@ Rows the first play-through added: each was a defect a frame or a measured numbe
 | VG1 | The visual gate fails the four committed corruption frames and passes the sign-off, beauty and clean evidence frames; every threshold mutation fails | V.1 | `tools/check.sh --static` (visual_truth_gate x3), `visual_gate_mutations.txt` | PASS(static) |
 | G3D2 | The 3D scene test's real swing lands on a fresh profile: the onboarding overlay no longer holds the tree paused under the swing | 5.1 | `tools/check.sh` gate "прогон 3D-сцены" (`the tree runs while the swing plays`, `melee swing damages the monster in front`), `docs/artifacts/rc15/check_full_signoff.txt`; failed 20 -> 20 before (CORRECTION_LOG 90) | BATTERY |
 | DL3 | The closeout leaves the daily challenge as it found it, so a later gate on the same profile reads a consistent file (boot, closeout, touch in order) | 24 | `docs/artifacts/rc15/signoff_gate_sequence.txt` (before and after), the touch probe in `tools/check.sh` | BATTERY |
+
+## rc16 gap table: the 24 rows that were not proven at rc15
+
+Result after rc16: 179 of 200 rows are proven (176 at rc15, plus CT7, QS2 and I9.7). The 21 rows below stay open for the reason in the last column. The two-grep proof of each (the GDD text, then the code) was read by the wave-2 content agent; the citations were re-read at HEAD and are checked by `tools/af5_check.py`.
+
+| Row | Result | What the code has | What is open, and who decides |
+|---|---|---|---|
+| OV3 | OWNER | the signed bundle `build/tls.aab` | the run on a phone (`docs/UNVERIFIABLE_HERE.md` U1): the owner installs it |
+| OV4 | NOT-VERIFIABLE | the bot clears the game in about 10 min | no gate measures a person's time: the owner plays one ending |
+| CT4 | DECIDED | `REACH` (`scripts/player/interactor.gd:24`) 3.2 m and `AIM_DOT` (`scripts/player/interactor.gd:27`), the scan of the group `interactable` (`scripts/player/interactor.gd:87`) | the GDD's 3 m camera ray; a shorter reach is on the REJECTED list (`docs/TZ_DECISIONS.md:30`, G04) |
+| CT5 | DECIDED | `JOY_ZONE_RATIO` (`scripts/player/player_3d.gd:422`) 0.35: the left 35% of the screen is the stick, the rest looks | `docs/TZ_DECISIONS.md:31` (G27) |
+| FL5 | DECIDED | `BATTERY_DRAIN_PER_SEC` (`scripts/player/player_3d.gd:125`) is 100/450, 1% per 4.5 s; the battery item gives `effect_value` (`data/items/battery.tres:14`) 35 | the GDD's 1% per 2 s and +25 fail the balance simulation and the Architect fight (`docs/TZ_DECISIONS.md:20` G09, `docs/TZ_DECISIONS.md:21` G10) |
+| CB3 | DECIDED | the capsule `radius` (`scenes/player/player_3d.tscn:8`) 0.3 and `height` (`scenes/player/player_3d.tscn:9`) 1.6 meet the GDD; the attack is a 2.7 m sphere query in the active phase | the box of 1.4 x 0.8 x 3.4 m is gone (`docs/TZ_DECISIONS.md:86`, MELEE-query) |
+| SN2 | DECIDED | run noise 8 m and 0.8 (`State.RUN` at `scripts/player/player_3d.gd:602` and `scripts/player/player_3d.gd:618`); a dodge emits `noise_emitted` with radius 3 (`scripts/player/player_3d.gd:1309`) | hit noise 5 m / 1.0 and the 0.4 / 1.0 levels were reverted after the IRON RULE bisect (`docs/TZ_DECISIONS.md:35`, S01: batch with it 0/3, without 2/3); that row reads "dodge noise NOT applied", the 3 m event has existed since the first commit |
+| EC1 | DECIDED | rewards `REWARD_SECRET` (`scripts/economy/rewards_manager.gd:2`) 50, district 200 + 100 per step, achievement 100 | GDD 8 has no vendor (`docs/TZ_DECISIONS.md:59`, EC1-sell); the +100 for an ad has no entry point (`skip_bonus_coins` at `scripts/monetization/ad_service.gd:114`) |
+| SV1 | DECIDED | `MAX_SLOTS` (`scripts/core/save_system.gd:6`) 4: the slot API exists and no screen opens it | owner decision G22 (`docs/TZ_DECISIONS.md:42`): re-enable the slot picker with a Continue per slot, or amend GDD 10 to one save |
+| SC7 | DECIDED | `SCREEN_LIST` (`scripts/ui/screens.gd:18`) holds the seven cards; the pause menu opens the shop and the flashlight upgrade only (`scripts/ui/pause_menu.gd:61`) | the cards are mock-ups with sample data (`docs/TZ_DECISIONS.md:60`) |
+| SC8 | DECIDED | the radio line reaches the player as a lore note; no voiced content | `docs/TZ_DECISIONS.md:61`; voice lines are an asset task (`docs/ASSET_SHOPPING_LIST.md` row 19) |
+| AU3 | OWNER | none | music is excluded (`docs/OWNER_HANDOFF.md`) |
+| AU4 | DECIDED | walk, jog and sprint files for six surfaces (`SPEED_SURFACES` at `scripts/systems/footstep_system.gd:32`) | asphalt, puddle and glass have one recording each and carry speed in volume and pitch (`docs/TZ_DECISIONS.md:48`, A03); per-speed samples are an asset task (`docs/ASSET_SHOPPING_LIST.md` row 18) |
+| AD2 | DECIDED | `skip_bonus_coins` (`scripts/monetization/ad_service.gd:114`) has no call site | the GDD names no trigger (`docs/TZ_DECISIONS.md:28`, E03 modal) |
+| TO1 | DECIDED | `HOLD` (`scripts/ui/toast_manager.gd:27`) 2.5 s: a toast lives 3.0 s with its fades (closeout TO1); the column is top-left | the position and the type names are a decision recorded here and in the code header of `scripts/ui/toast_manager.gd` |
+| H3.18 | ROADMAP | no mechanism: `rg -i temperature scripts scenes data --glob '!data/i18n/**'` lists 0 files | the GDD defines only a light form ("cold in DARK, better in FULL", not a survival loop) with no scale and no place: the owner picks both |
+| M5.1 | DECIDED | `BgTheme` (`scripts/ui/menu_background.gd:8`) has night and generator-on; the cycle never reaches a day (closeout MENUBG1) | GDD 11.1 has no day (`docs/TZ_DECISIONS.md:68`, M5.1-day) |
+| M5.4 | DECIDED | five tabs: game, controls, graphics, audio, accessibility (`scripts/ui/settings_screen.gd:42`) | the spec's inventory, subtitles and tutorial tabs would be empty (`docs/TZ_DECISIONS.md:65`) |
+| M5.5 | DECIDED | the same slot API as SV1 | owner decision G22, as SV1 |
+| M5.9 | DECIDED | the notice line and the stamped message log | `docs/TZ_DECISIONS.md:66` |
+| I9.5 | DECIDED | `equipment` (`scripts/inventory/inventory_manager.gd:9`) holds the five slots, saved and shown; no item sets one | GDD 17 has no head, body, legs or holster item (`docs/TZ_DECISIONS.md:64`) |
+
+Defects the wave-2 content agent found while reading, not among the 24 rows: D1 `apply_stun` (`scripts/player/player_3d.gd:1263`) has no caller, so a hit in the windup does not reset the combo or stun for 0.3 s as GDD 5.1 says (the fix changes the boss fight and needs the 3-seed bot; left, owner decision); D5 the inventory sort mode "recent" is a stub (`scripts/inventory/inventory_manager.gd:205`).

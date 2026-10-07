@@ -77,3 +77,29 @@ is the quiet machine, not the change.
   `SIZE_BUDGET.md` lists as not done.
 - **Tier table (#13):** drop the no-op SSIL, SSR and volumetric-fog keys, so High and Ultra stop
   promising effects the renderer never draws.
+
+## rc16 before and after (same machine, same probe, windowed, tier 2)
+
+Probe: `tools/qa_sim/rc16_probe <label> <hash> 900` (`scripts/tools/_rc16_probe_runner.gd`): a district cycle (10 cold loads, 10 warm loads), three 300-frame perf reads, the eight staged frames.
+Before: `e4bb4df`, `docs/artifacts/rc16/proofs/probe_before.out` with the log `docs/artifacts/rc16/proofs/probe_before.attach.rc16_probe_before.log`.
+After: `c3e79e5`, launch 19 (ledger row 19), `docs/artifacts/rc16/proofs/s6_reimport_probe_after_c3e79e5.out` with `...attach.rc16_probe_after.log`; 0 SHADER ERROR, SCRIPT ERROR or Parse Error lines in the log.
+
+| quantity | before | after |
+|---|---|---|
+| nodes at the start of the probe | 1784 | 1061 |
+| nodes with one district built (20 loads, min to max) | 1786 to 1825 | 1062 to 1101 |
+| objects at the start | 4886 | 3809 |
+| draw calls, D1 (three reads: first, after the cycle) | 179, 160 | 160, 161 |
+| draw calls, D11 | 166 | 163 |
+| frame p95 ms, D1 | 76.19, 51.45 | 33.70, 50.00 |
+| frame p95 ms, D11 | 50.00 | 51.01 |
+| cold load ms (10 districts: min, mean, max) | 264, 354, 482 | 214, 317, 384 |
+| warm load ms (10 districts: min, mean, max) | 248, 359, 473 | 201, 275, 356 |
+| hitches (frames over 50 ms) per transition, mean cold, warm | 1.8, 2.3 | 3.0, 4.1 |
+| longest frame of a transition ms, max cold, warm | 144, 150 | 150, 147 |
+| texture MiB with a district built | 71.3 to 71.8 | 69.2 to 69.7 |
+| video MiB with a district built | 96.8 to 97.3 | 96.8 to 97.2 |
+
+Over the 22 transitions the node count stays inside the band above in both runs (no growth), orphans stay at 6.
+The frame p95 differs between reads of the same code by up to 16 ms (D1 after: 33.70 and 50.00; before: 76.19 and 51.45); the machine load during a read is not controlled here.
+The package size is not re-measured in this pass (no export was run): the signed bundle of rc15 is `build/tls.aab`, 183257097 bytes.

@@ -36,6 +36,8 @@ see PERF_PASS 18): a building kit must be low-poly modular, not detailed.
 | 15 | Bebas Neue **Bold** (heading font) | 11.3 (V03) | Free, SIL OFL, from Google Fonts (owner download; the repo ships Bebas Neue Regular) | one `.ttf` | Regular only |
 | 16 | Hand-drawn or photographic loading and menu keyart per district (optional polish) | 12 | Illustration commission | 1920 x 1080 | district loading images exist (`assets/textures/loading`) |
 | 17 | Sound: monster voice and footstep sets for the 6 newer monster types, weapon foley beyond the delivered set, generator loop | 13, 22 | SFX library (CC0 or royalty-free) | each under 1 MB, total SFX under 50 MB | see the delivered-but-unwired table |
+| 18 | Footstep recordings per speed (walk, jog, sprint) for the three surfaces that have one recording each: asphalt, puddle, glass | 13 (AU4), TZ_DECISIONS A03 | SFX library or a field recording (CC0 or royalty-free) | 9 files, each 0.2 to 0.5 s, wav 44.1 kHz | one recording per surface; speed is carried by volume and pitch |
+| 19 | Radio voice lines for the three acts (a voice actor or a licensed voice pack) | 12.3 (SC8), TZ_DECISIONS SC8-radio | Voice recordings | about 20 short lines; every line would also need the 13 locales | none: the story reaches the player as documents, quests and the journal |
 
 ## Delivered but not wired (found by the rc14 two-grep sweep, no purchase needed)
 

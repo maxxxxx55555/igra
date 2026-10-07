@@ -1,0 +1,9 @@
+# proof s6_reimport_probe_after_c3e79e5
+# utc 20261007T191557Z
+# head c3e79e5 (uncommitted paths: 2)
+# cmd bash -c GODOT="$(bash tools/qa_sim/_resolve_godot.sh 2>/dev/null)"; timeout 420 "$GODOT" --editor --quit --path . > .qa_logs/reimport_beauty.log 2>&1; echo "reimport rc=$?"; bash tools/qa_sim/rc16_probe after c3e79e5 900
+reimport rc=0
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/The Last Streetlight
+  rc16_probe rc=0 (log: .qa_logs/rc16_probe_after.log, 40 probe lines)
+  user-data guard: 11 file(s) restored byte-identical
+# EXIT=0

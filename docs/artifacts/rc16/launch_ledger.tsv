@@ -17,3 +17,4 @@ n	utc	head	id	exit	command
 16	20261007T142905Z	7c49500	s4_truth_bisect_7c49500	0	bash docs/artifacts/rc16/audio_truth_bisect.sh
 17	20261007T183113Z	2e0ada0	s4_truth_bisect2_2e0ada0	0	bash docs/artifacts/rc16/audio_truth_bisect2.sh
 18	20261007T185520Z	4c9b3fd	s7_closeout_timing_4c9b3fd	1	bash -c CLOSEOUT_ONLY=rc16 bash tools/qa_sim/closeout_check 300; a=$?; bash tools/qa_sim/timing_equiv after; b=$?; echo "closeout_rc16=$a timing_after=$b"; [ $a -eq 0 ] && [ $b -eq 0 ]
+19	20261007T191557Z	c3e79e5	s6_reimport_probe_after_c3e79e5	0	bash -c GODOT="$(bash tools/qa_sim/_resolve_godot.sh 2>/dev/null)"; timeout 420 "$GODOT" --editor --quit --path . > .qa_logs/reimport_beauty.log 2>&1; echo "reimport rc=$?"; bash tools/qa_sim/rc16_probe after c3e79e5 900

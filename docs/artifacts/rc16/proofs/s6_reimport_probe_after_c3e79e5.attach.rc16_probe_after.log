@@ -1,0 +1,59 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[probe] start label=after hash=c3e79e5 tier=2 display=Windows nodes=1061 objects=3809 orphans=6 tex_mib=69.6 vid_mib=97.1 static_mib=96.7
+[probe] perf_mean gpu_ms=14.24
+[probe] perf district=suburbs draw_calls=160 primitives=43263 objects_in_frame=395 frame_p95_ms=33.70 nodes=1061 objects=3804 orphans=6 tex_mib=69.6 vid_mib=97.1 static_mib=96.9
+[probe] stream pass=cold district=residential ok=true load_ms=264.4 settled_ms=372.7 hitches=4 max_frame_ms=134.8 over_budget_ms=322.1 nodes=1070 objects=3829 orphans=6 tex_mib=69.2 vid_mib=96.8 static_mib=98.1 stats={"district":"residential","enemies_ms":5.584,"loot_ms":19.807,"props_ms":105.369,"scene_ms":0.857,"streets_ms":1.44,"total_ms":50.243}
+[probe] stream pass=cold district=park ok=true load_ms=372.4 settled_ms=514.6 hitches=13 max_frame_ms=141.4 over_budget_ms=534.4 nodes=1068 objects=3836 orphans=6 tex_mib=69.7 vid_mib=97.2 static_mib=98.8 stats={"district":"park","enemies_ms":15.544,"loot_ms":32.528,"props_ms":139.64,"scene_ms":1.7,"streets_ms":2.93,"total_ms":85.826}
+[probe] stream pass=cold district=school ok=true load_ms=383.9 settled_ms=518.7 hitches=2 max_frame_ms=140.2 over_budget_ms=363.4 nodes=1071 objects=3852 orphans=6 tex_mib=69.3 vid_mib=96.9 static_mib=99.0 stats={"district":"school","enemies_ms":8.963,"loot_ms":22.15,"props_ms":124.02,"scene_ms":1.006,"streets_ms":1.561,"total_ms":57.935}
+[probe] stream pass=cold district=hospital ok=true load_ms=328.9 settled_ms=486.5 hitches=3 max_frame_ms=149.5 over_budget_ms=229.7 nodes=1070 objects=3852 orphans=6 tex_mib=69.7 vid_mib=97.2 static_mib=99.4 stats={"district":"hospital","enemies_ms":7.852,"loot_ms":23.538,"props_ms":141.727,"scene_ms":1.024,"streets_ms":2.354,"total_ms":64.236}
+[probe] stream pass=cold district=gas_station ok=true load_ms=214.4 settled_ms=261.1 hitches=2 max_frame_ms=135.8 over_budget_ms=153.1 nodes=1072 objects=3869 orphans=6 tex_mib=69.3 vid_mib=96.8 static_mib=99.7 stats={"district":"gas_station","enemies_ms":6.993,"loot_ms":18.764,"props_ms":86.283,"scene_ms":0.9,"streets_ms":1.305,"total_ms":49.201}
+[probe] stream pass=cold district=police ok=true load_ms=252.3 settled_ms=301.3 hitches=1 max_frame_ms=131.4 over_budget_ms=98.1 nodes=1101 objects=3909 orphans=6 tex_mib=69.7 vid_mib=97.2 static_mib=100.4 stats={"district":"police","enemies_ms":6.492,"loot_ms":19.993,"props_ms":101.766,"scene_ms":0.717,"streets_ms":1.886,"total_ms":50.011}
+[probe] stream pass=cold district=warehouses ok=true load_ms=373.5 settled_ms=427.1 hitches=1 max_frame_ms=131.5 over_budget_ms=106.0 nodes=1088 objects=3904 orphans=6 tex_mib=69.3 vid_mib=96.9 static_mib=100.6 stats={"district":"warehouses","enemies_ms":13.923,"loot_ms":37.469,"props_ms":162.021,"scene_ms":1.749,"streets_ms":2.803,"total_ms":89.17}
+[probe] stream pass=cold district=industrial ok=true load_ms=382.9 settled_ms=443.7 hitches=2 max_frame_ms=129.4 over_budget_ms=157.0 nodes=1096 objects=3921 orphans=6 tex_mib=69.7 vid_mib=97.2 static_mib=101.1 stats={"district":"industrial","enemies_ms":8.9,"loot_ms":27.65,"props_ms":167.465,"scene_ms":1.153,"streets_ms":2.122,"total_ms":68.145}
+[probe] stream pass=cold district=substation ok=true load_ms=292.4 settled_ms=344.1 hitches=1 max_frame_ms=140.9 over_budget_ms=109.3 nodes=1078 objects=3905 orphans=6 tex_mib=69.3 vid_mib=96.9 static_mib=101.4 stats={"district":"substation","enemies_ms":7.588,"loot_ms":23.968,"props_ms":135.109,"scene_ms":1.032,"streets_ms":1.892,"total_ms":59.013}
+[probe] stream pass=cold district=power_station ok=true load_ms=306.0 settled_ms=377.9 hitches=1 max_frame_ms=143.5 over_budget_ms=119.9 nodes=1075 objects=3899 orphans=6 tex_mib=69.7 vid_mib=97.2 static_mib=101.5 stats={"district":"power_station","enemies_ms":8.813,"loot_ms":27.805,"props_ms":148.073,"scene_ms":0.977,"streets_ms":1.889,"total_ms":64.891}
+[probe] stream pass=warm district=substation ok=true load_ms=298.6 settled_ms=353.4 hitches=1 max_frame_ms=146.9 over_budget_ms=117.1 nodes=1078 objects=3896 orphans=6 tex_mib=69.3 vid_mib=96.9 static_mib=101.4 stats={"district":"substation","enemies_ms":11.301,"loot_ms":31.038,"props_ms":144.696,"scene_ms":1.141,"streets_ms":1.804,"total_ms":69.426}
+[probe] stream pass=warm district=industrial ok=true load_ms=228.5 settled_ms=280.4 hitches=1 max_frame_ms=128.6 over_budget_ms=98.6 nodes=1096 objects=3924 orphans=6 tex_mib=69.7 vid_mib=97.2 static_mib=101.7 stats={"district":"industrial","enemies_ms":8.205,"loot_ms":23.326,"props_ms":98.048,"scene_ms":0.839,"streets_ms":1.579,"total_ms":61.883}
+[probe] stream pass=warm district=warehouses ok=true load_ms=317.9 settled_ms=411.6 hitches=2 max_frame_ms=145.0 over_budget_ms=148.8 nodes=1088 objects=3916 orphans=6 tex_mib=69.3 vid_mib=96.9 static_mib=101.6 stats={"district":"warehouses","enemies_ms":8.943,"loot_ms":29.361,"props_ms":137.425,"scene_ms":1.023,"streets_ms":2.425,"total_ms":72.467}
+[probe] stream pass=warm district=police ok=true load_ms=287.9 settled_ms=430.5 hitches=10 max_frame_ms=136.7 over_budget_ms=587.8 nodes=1101 objects=3936 orphans=6 tex_mib=69.7 vid_mib=97.2 static_mib=101.7 stats={"district":"police","enemies_ms":9.789,"loot_ms":23.008,"props_ms":137.676,"scene_ms":0.763,"streets_ms":1.588,"total_ms":55.911}
+[probe] stream pass=warm district=gas_station ok=true load_ms=356.1 settled_ms=480.5 hitches=2 max_frame_ms=136.8 over_budget_ms=219.4 nodes=1072 objects=3906 orphans=6 tex_mib=69.3 vid_mib=96.8 static_mib=101.5 stats={"district":"gas_station","enemies_ms":12.902,"loot_ms":38.839,"props_ms":186.212,"scene_ms":1.768,"streets_ms":2.681,"total_ms":94.01}
+[probe] stream pass=warm district=hospital ok=true load_ms=269.7 settled_ms=356.9 hitches=3 max_frame_ms=145.0 over_budget_ms=349.1 nodes=1070 objects=3892 orphans=6 tex_mib=69.7 vid_mib=97.2 static_mib=101.6 stats={"district":"hospital","enemies_ms":10.199,"loot_ms":36.888,"props_ms":117.659,"scene_ms":1.059,"streets_ms":2.454,"total_ms":83.353}
+[probe] stream pass=warm district=school ok=true load_ms=263.6 settled_ms=435.6 hitches=8 max_frame_ms=130.7 over_budget_ms=523.7 nodes=1071 objects=3899 orphans=6 tex_mib=69.3 vid_mib=96.9 static_mib=101.6 stats={"district":"school","enemies_ms":8.45,"loot_ms":20.68,"props_ms":114.364,"scene_ms":1.104,"streets_ms":1.513,"total_ms":53.726}
+[probe] stream pass=warm district=park ok=true load_ms=294.5 settled_ms=429.4 hitches=2 max_frame_ms=142.3 over_budget_ms=177.1 nodes=1068 objects=3895 orphans=6 tex_mib=69.7 vid_mib=97.2 static_mib=101.6 stats={"district":"park","enemies_ms":8.257,"loot_ms":24.537,"props_ms":134.734,"scene_ms":0.851,"streets_ms":1.574,"total_ms":56.746}
+[probe] stream pass=warm district=residential ok=true load_ms=232.1 settled_ms=381.6 hitches=5 max_frame_ms=135.5 over_budget_ms=252.6 nodes=1071 objects=3914 orphans=6 tex_mib=69.3 vid_mib=96.9 static_mib=101.8 stats={"district":"residential","enemies_ms":7.696,"loot_ms":18.961,"props_ms":120.392,"scene_ms":0.978,"streets_ms":1.491,"total_ms":52.253}
+[probe] stream pass=warm district=suburbs ok=true load_ms=201.4 settled_ms=355.8 hitches=7 max_frame_ms=137.1 over_budget_ms=258.3 nodes=1062 objects=3894 orphans=6 tex_mib=69.7 vid_mib=97.2 static_mib=101.7 stats={"district":"suburbs","enemies_ms":7.468,"loot_ms":24.787,"props_ms":93.942,"scene_ms":1.062,"streets_ms":1.315,"total_ms":57.708}
+[probe] perf_mean gpu_ms=18.66
+[probe] perf district=suburbs draw_calls=161 primitives=43265 objects_in_frame=396 frame_p95_ms=50.00 nodes=1062 objects=3893 orphans=6 tex_mib=69.7 vid_mib=97.2 static_mib=101.7
+[probe] stream pass=perf district=power_station ok=true load_ms=302.4 settled_ms=370.1 hitches=1 max_frame_ms=141.8 over_budget_ms=124.6 nodes=1075 objects=3896 orphans=6 tex_mib=69.7 vid_mib=97.2 static_mib=101.8 stats={"district":"power_station","enemies_ms":6.695,"loot_ms":27.882,"props_ms":152.033,"scene_ms":0.855,"streets_ms":1.523,"total_ms":58.169}
+[probe] perf_mean gpu_ms=20.44
+[probe] perf district=power_station draw_calls=163 primitives=45197 objects_in_frame=403 frame_p95_ms=51.01 nodes=1075 objects=3896 orphans=6 tex_mib=69.7 vid_mib=97.2 static_mib=101.8
+[probe] stream pass=frames district=suburbs ok=true load_ms=244.9 settled_ms=377.4 hitches=2 max_frame_ms=150.0 over_budget_ms=168.4 nodes=1062 objects=3897 orphans=6 tex_mib=69.7 vid_mib=97.2 static_mib=101.6 stats={"district":"suburbs","enemies_ms":9.633,"loot_ms":32.885,"props_ms":101.555,"scene_ms":1.309,"streets_ms":2.147,"total_ms":71.407}
+[final] facing 37 of 116 street lights
+[probe] frame state=01_dark_street file=01_dark_street_after_c3e79e5_20261007T191815Z.png
+[final] facing 37 of 116 street lights
+[probe] frame state=02_lit_street file=02_lit_street_after_c3e79e5_20261007T191818Z.png
+[probe] stream pass=frames district=residential ok=true load_ms=175.4 settled_ms=270.6 hitches=5 max_frame_ms=138.2 over_budget_ms=359.6 nodes=1074 objects=3918 orphans=6 tex_mib=69.5 vid_mib=99.1 static_mib=103.1 stats={"district":"residential","enemies_ms":7.621,"loot_ms":20.561,"props_ms":98.027,"scene_ms":1.325,"streets_ms":2.202,"total_ms":51.167}
+[probe] frame state=03_flashlight_shadow file=03_flashlight_shadow_after_c3e79e5_20261007T191820Z.png
+[probe] frame state=04_combat_hit file=04_combat_hit_after_c3e79e5_20261007T191821Z.png
+[probe] frame state=05_damage_taken file=05_damage_taken_after_c3e79e5_20261007T191823Z.png
+[probe] frame state=06_sprint_ultra file=06_sprint_ultra_after_c3e79e5_20261007T191825Z.png
+[probe] stream pass=frames district=industrial ok=true load_ms=397.0 settled_ms=1209.8 hitches=22 max_frame_ms=147.2 over_budget_ms=1172.2 nodes=1107 objects=3947 orphans=6 tex_mib=130.0 vid_mib=159.6 static_mib=102.0 stats={"district":"industrial","enemies_ms":14.786,"loot_ms":48.983,"props_ms":197.33,"scene_ms":1.861,"streets_ms":2.589,"total_ms":110.687}
+[final] facing 37 of 124 street lights
+[probe] frame state=07_steam_street file=07_steam_street_after_c3e79e5_20261007T191829Z.png
+[probe] frame state=08_inventory_ui file=08_inventory_ui_after_c3e79e5_20261007T191831Z.png
+[probe] DONE label=after hash=c3e79e5
+ERROR: 2 RID allocations of type 'N5GLES37TextureE' were leaked at exit.
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+ERROR: Texture with GL ID of 93: leaked 131072 bytes.
+   at: ~Utilities (drivers/gles3/storage/utilities.cpp:82)
+ERROR: Texture with GL ID of 134: leaked 131072 bytes.
+   at: ~Utilities (drivers/gles3/storage/utilities.cpp:82)
+WARNING: 57 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

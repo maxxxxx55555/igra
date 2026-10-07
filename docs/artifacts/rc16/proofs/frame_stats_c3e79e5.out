@@ -1,0 +1,31 @@
+# proof frame_stats_c3e79e5
+# utc 20261007T192315Z
+# head c3e79e5 (uncommitted paths: 18)
+# cmd python tools/qa_sim/frame_stats.py --hash c3e79e5
+state                  label    luma    std    hue   lit%  grain  file
+01_dark_street         before   35.4   41.7     77    5.6  104.7  01_dark_street_before_e4bb4df_20261007T082229Z.png
+01_dark_street         after    35.7   41.7     48    5.8   38.1  01_dark_street_after_c3e79e5_20261007T191815Z.png
+                       change luma +0.4, hue -29 deg, grain 104.7 -> 38.1
+02_lit_street          before   42.0   49.1     99    7.0  103.8  02_lit_street_before_e4bb4df_20261007T082231Z.png
+02_lit_street          after    42.6   49.1     43    6.1   26.8  02_lit_street_after_c3e79e5_20261007T191818Z.png
+                       change luma +0.6, hue -55 deg, grain 103.8 -> 26.8
+03_flashlight_shadow   before   47.9   47.8     98    6.9  139.4  03_flashlight_shadow_before_e4bb4df_20261007T082234Z.png
+03_flashlight_shadow   after    39.4   41.8     47    6.5   30.9  03_flashlight_shadow_after_c3e79e5_20261007T191820Z.png
+                       change luma -8.4, hue -51 deg, grain 139.4 -> 30.9
+04_combat_hit          before   33.3   38.0     90    3.5  200.1  04_combat_hit_before_e4bb4df_20261007T082235Z.png
+04_combat_hit          after    45.8   41.0     41    7.9  596.5  04_combat_hit_after_c3e79e5_20261007T191821Z.png
+                       change luma +12.5, hue -50 deg, grain 200.1 -> 596.5
+05_damage_taken        before   32.6   39.0     92    3.8  196.5  05_damage_taken_before_e4bb4df_20261007T082237Z.png
+05_damage_taken        after    49.1   37.9     39    6.9 1148.0  05_damage_taken_after_c3e79e5_20261007T191823Z.png
+                       change luma +16.5, hue -54 deg, grain 196.5 -> 1148.0
+06_sprint_ultra        before   31.6   46.9     42    6.5  412.9  06_sprint_ultra_before_e4bb4df_20261007T082238Z.png
+06_sprint_ultra        after    42.9   32.5     35    4.9 2796.8  06_sprint_ultra_after_c3e79e5_20261007T191825Z.png
+                       change luma +11.3, hue -7 deg, grain 412.9 -> 2796.8
+07_steam_street        before   33.5   46.8     45    6.4  314.1  07_steam_street_before_e4bb4df_20261007T082242Z.png
+07_steam_street        after    33.3   46.7     45    6.3  321.1  07_steam_street_after_c3e79e5_20261007T191829Z.png
+                       change luma -0.2, hue -0 deg, grain 314.1 -> 321.1
+08_inventory_ui        before   25.9    8.7    103    0.0  506.9  08_inventory_ui_before_e4bb4df_20261007T082244Z.png
+08_inventory_ui        after    25.9    9.2     86    0.0  504.5  08_inventory_ui_after_c3e79e5_20261007T191831Z.png
+                       change luma +0.0, hue -17 deg, grain 506.9 -> 504.5
+frames with a deviation under 2: 0
+# EXIT=0
