@@ -12,6 +12,7 @@ static func run(r: Node) -> void:
 	await _damage_pulse(r)
 	await _sprint_blur(r)
 	await _quick_slot_drag(r)
+	await _hover(r)
 
 static func _chroma_px(overlay: Node) -> float:
 	var mat := (overlay.get_node("ChromaOverlay") as ColorRect).material as ShaderMaterial
@@ -196,3 +197,29 @@ static func _quick_slot_drag(r: Node) -> void:
 	player.set("hp", hp0)
 	EventBus.player_health_changed.emit(hp0 / float(player.stats.max_hp))  # the HUD's own memory of the health
 	InventoryManager.from_dict(saved_pack)
+
+## UIFX3: a button under the mouse swells to 1.05 about its centre and settles back; Reduce UI Motion keeps it still.
+static func _hover(r: Node) -> void:
+	var still0: bool = bool(SettingsManager.get_setting("reduce_ui_motion", false))
+	var button := Button.new()
+	button.custom_minimum_size = Vector2(120.0, 40.0)
+	r.add_child(button)
+	await r.get_tree().process_frame
+	await r.get_tree().process_frame
+	SettingsManager.set_setting("reduce_ui_motion", false)
+	button.mouse_entered.emit()
+	await r.get_tree().create_timer(0.2).timeout
+	var swollen: float = button.scale.x
+	var centred: bool = button.pivot_offset.is_equal_approx(button.size / 2.0)
+	button.mouse_exited.emit()
+	await r.get_tree().create_timer(0.2).timeout
+	var settled: float = button.scale.x
+	SettingsManager.set_setting("reduce_ui_motion", true)
+	button.mouse_entered.emit()
+	await r.get_tree().create_timer(0.2).timeout
+	var calm: float = button.scale.x
+	var grown: float = 1.0 if InputService.is_touch_device() else 1.05  # a touch device never grows buttons
+	r._ok(absf(swollen - grown) < 0.01 and centred and absf(settled - 1.0) < 0.01 and calm == 1.0,
+		"UIFX3 hovering a button scales it to 1.05 about its centre in 0.12 s and back, and Reduce UI Motion keeps it at 1.0 (%.3f, centred %s, %.3f, %.3f)" % [swollen, centred, settled, calm])
+	button.queue_free()
+	SettingsManager.set_setting("reduce_ui_motion", still0)
