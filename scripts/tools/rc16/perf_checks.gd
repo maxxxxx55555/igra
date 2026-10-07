@@ -16,6 +16,16 @@ static func run(r: Node) -> void:
 	await _street_collision(r)
 	await _vfx_pool(r)
 	await _district_swap(r)
+	await _light_group(r)
+
+## PERF7: a light that enters the tree joins the light limiter's group, so the limiter sorts a short list instead of walking the whole tree
+## (about 1800 nodes) four times a second.
+static func _light_group(r: Node) -> void:
+	var light := OmniLight3D.new()
+	r._main.add_child(light)
+	await r.get_tree().process_frame
+	r._ok(light.is_in_group(&"omni_lights"), "PERF7 an OmniLight3D that enters the tree joins the light limiter's group")
+	light.queue_free()
 
 static func _world_runtime(r: Node) -> Node:
 	return r._main.get_node_or_null("WorldRuntime")

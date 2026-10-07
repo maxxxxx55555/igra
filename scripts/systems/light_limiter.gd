@@ -6,8 +6,17 @@ extends Node
 
 const MAX_VISIBLE: int = 8
 const CHECK_INTERVAL: float = 0.25  # секунды между проверками
+## Every OmniLight3D that enters the tree joins this group, so a check sorts the lights instead of walking the whole tree (about 1800 nodes) four times a second.
+const GROUP: StringName = &"omni_lights"
 
 var _timer: float = 0.0
+
+func _ready() -> void:
+	get_tree().node_added.connect(_on_node_added)
+
+func _on_node_added(node: Node) -> void:
+	if node is OmniLight3D:
+		node.add_to_group(GROUP)
 
 func _process(delta: float) -> void:
 	_timer -= delta
@@ -21,11 +30,7 @@ func _update_lights() -> void:
 	if cam == null:
 		return
 	var cam_pos: Vector3 = cam.global_position
-	var lights: Array = get_tree().get_nodes_in_group("omni_lights")
-	if lights.is_empty():
-		# Fallback: find all OmniLight3D in scene
-		lights = []
-		_collect_lights(get_tree().root, lights)
+	var lights: Array = get_tree().get_nodes_in_group(GROUP)
 	if lights.is_empty():
 		return
 	# Sort by distance to camera
@@ -37,12 +42,6 @@ func _update_lights() -> void:
 		if light == null:
 			continue
 		light.visible = i < MAX_VISIBLE
-
-func _collect_lights(node: Node, result: Array) -> void:
-	if node is OmniLight3D:
-		result.append(node)
-	for child in node.get_children():
-		_collect_lights(child, result)
 
 func _get_camera() -> Camera3D:
 	var vp := get_viewport()
