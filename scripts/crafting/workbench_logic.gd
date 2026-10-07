@@ -49,7 +49,7 @@ static func craft(recipe: Dictionary, qty: int = 1) -> bool:
 		ProgressTracker.crafted += 1
 		return true
 	for comp in recipe["components"]:
-		InventoryManager.try_add(StringName(comp[0]), int(comp[1]) * qty)
+		InventoryManager.try_add(StringName(comp[0]), int(comp[1]) * qty, false)
 	return false
 
 static func find(id: String) -> Dictionary:

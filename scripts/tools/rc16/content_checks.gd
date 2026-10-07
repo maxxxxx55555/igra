@@ -4,11 +4,13 @@ extends RefCounted
 const RIFLE: PackedScene = preload("res://scenes/weapons/weapon_rifle.tscn")
 ## A point high above the street: a shot straight up from here meets nothing that can take damage.
 const SKY_SHOT_FROM := Vector3(480.0, 60.0, 480.0)
+const WORKBENCH := preload("res://scripts/crafting/workbench_logic.gd")
 const PINCH_STEPS: int = 5
 
 static func run(r: Node) -> void:
 	await _fire1_cooldown_ticks_with_physics(r)
 	await _ct7_pinch_zooms_the_camera(r)
+	_e11_a_refund_is_not_a_find(r)
 
 ## FIRE1: the cooldown and the reload count on the physics tick that polls the trigger, not on the frame.
 static func _fire1_cooldown_ticks_with_physics(r: Node) -> void:
@@ -96,3 +98,30 @@ static func _ct7_pinch_zooms_the_camera(r: Node) -> void:
 	cam.set("_zoom_target", 1.0)
 	player.rotation.y = yaw0
 	player.set("_pitch", pitch0)
+
+## E11: a craft that does not fit gives its parts back, and the workbench's refund is not a find: a collect quest does
+## not move, while a real pickup still counts once.
+static func _e11_a_refund_is_not_a_find(r: Node) -> void:
+	r._playing()
+	var saved_quests: Dictionary = QuestManager.serialize()
+	var saved_pack: Dictionary = InventoryManager.to_dict()
+	var saved_picked: int = ProgressTracker.items_picked
+	var capacity0: float = InventoryManager.stats.capacity_kg
+	var quest: Dictionary = QuestManager.get_quest("q_collect_components")
+	quest["progress"] = 0
+	quest["done"] = false
+	InventoryManager.from_dict({})
+	InventoryManager.try_add(&"scrap", 1)
+	InventoryManager.try_add(&"transistor", 1)
+	var before: int = int(quest["progress"])
+	InventoryManager.stats.capacity_kg = InventoryManager.current_weight + 0.5
+	var heavy := {"id": "t", "name_key": "x", "result": "transformer", "count": 1, "components": [["transistor", 1]]}
+	var crafted: bool = WORKBENCH.craft(heavy)
+	r._ok(not crafted and InventoryManager.count_of(&"transistor") == 1, "E11 the refund path ran: the transformer did not fit and the transistor came back")
+	r._ok(int(quest["progress"]) == before, "E11 the refunded transistor is not counted as found (%d -> %d)" % [before, int(quest["progress"])])
+	InventoryManager.stats.capacity_kg = capacity0
+	InventoryManager.try_add(&"transistor", 1)
+	r._ok(int(quest["progress"]) == before + 1, "E11 a real pickup of a transistor still counts once (%d -> %d)" % [before, int(quest["progress"])])
+	QuestManager.from_dict(saved_quests)
+	InventoryManager.from_dict(saved_pack)
+	ProgressTracker.items_picked = saved_picked

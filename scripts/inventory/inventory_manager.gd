@@ -98,7 +98,9 @@ func can_add(item_id: StringName, amount: int = 1) -> bool:
 ## part that already landed. Now a dry run first: compute real capacity
 ## (existing partial stacks + empty slots) before touching any state, so
 ## a failure is always all-or-nothing.
-func try_add(item_id: StringName, amount: int = 1) -> bool:
+## E11: `announce` = false is for a refund (a craft that gives its parts back): the items return to the pack without
+## item_picked_up, so they are not counted a second time as found (collect quests, the items-picked stat, the blip).
+func try_add(item_id: StringName, amount: int = 1, announce: bool = true) -> bool:
 	var data := ItemDatabase.get_item(item_id)
 	if data == null or amount <= 0:
 		return false
@@ -125,7 +127,8 @@ func try_add(item_id: StringName, amount: int = 1) -> bool:
 		remaining -= put
 	_recompute_weight()
 	EventBus.inventory_changed.emit()
-	EventBus.item_picked_up.emit(item_id)
+	if announce:
+		EventBus.item_picked_up.emit(item_id)
 	if _is_networked() and is_multiplayer_authority():
 		_sync_inventory.rpc(to_dict())
 	elif _is_networked():
