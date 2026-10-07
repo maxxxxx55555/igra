@@ -15,6 +15,9 @@ var _loading: bool = false
 ## What the last load_district cost, in milliseconds: "district", "total_ms" and the scene/enemies/loot phases of
 ## DistrictSceneFactory.build. get_last_load_stats() adds the street and prop phases, which finish a frame later.
 var last_load_stats: Dictionary = {}
+const _PRELOADER_SCRIPT := preload("res://scripts/world/district_preloader.gd")
+## Background-loads what the neighbouring districts will need; requested_paths() lists what it asked the loader for.
+var district_preloader: RefCounted = _PRELOADER_SCRIPT.new()
 ## Точка появления по умолчанию — перекрёсток (-8, -8): сетка улиц идёт по
 ## x/z = -24, -8, 8, 24, поэтому ровный ноль пришёлся бы на середину квартала.
 ## Высота чуть выше дороги, чтобы игрок встал на неё, а не застрял в плитке.
@@ -70,6 +73,7 @@ func load_district(district_id: StringName) -> void:
 	var dm := get_node_or_null("/root/DistrictManager")
 	if dm != null:
 		dm.current_district = String(district_id)
+	district_preloader.request_around(district_id)
 	_loading = false
 	# BREAK_REPORT B10: the autosave used to be a separate listener on
 	# EventBus.district_entered - the same signal that ALSO (via

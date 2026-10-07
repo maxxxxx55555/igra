@@ -11,7 +11,7 @@ const ENEMY_POOL_SCRIPT: Script = preload("res://scripts/enemies/enemy_pool.gd")
 ## `stats` receives the milliseconds of each phase (scene, enemies, loot) for WorldRuntime.last_load_stats.
 static func build(parent: Node, district_id: StringName, stats: Dictionary = {}) -> Node3D:
 	var resolved_id: StringName = district_id if DISTRICTS.has(district_id) else &"suburbs"
-	var scene_path: String = "res://scenes/districts/%s.tscn" % String(resolved_id)
+	var scene_path: String = district_scene_path(resolved_id)
 	if ResourceLoader.exists(scene_path):
 		var lap: int = Time.get_ticks_usec()
 		var district_scene: PackedScene = load(scene_path) as PackedScene
@@ -68,6 +68,9 @@ static func _spawn_district_enemies(district_root: Node3D) -> void:
 	pool.name = "EnemyPool"
 	district_root.add_child(pool)
 	pool.spawn_for_district(district_root)
+
+static func district_scene_path(district_id: StringName) -> String:
+	return "res://scenes/districts/%s.tscn" % String(district_id)
 
 static func district_count() -> int:
 	return DISTRICTS.size()
