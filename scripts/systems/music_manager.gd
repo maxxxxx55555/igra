@@ -319,11 +319,12 @@ func _on_district_entered(district_id: StringName) -> void:
 	_refresh_district_ambience()
 	_preload_around(district_id)
 
-## A4: the beds of the districts next to this one (index +-1 in DistrictSceneFactory.DISTRICTS) are asked of the loader thread, so a
-## border crossing finds them cached (load() takes a finished request without waiting), and the bed of every district farther away
-## leaves _cache. A player that still holds a stream keeps it alive: only this cache lets go.
+## A4: the beds of the districts next to this one are asked of the loader thread, so a border crossing finds them cached (load() takes a
+## finished request without waiting), and the bed of every district farther away leaves _cache. A player that still holds a stream keeps
+## it alive: only this cache lets go. The order of the dark table is the order of DistrictSceneFactory.DISTRICTS (the AUD5 check holds
+## them together); naming that class here would make this autoload depend on the world code, which moves the order scripts compile in.
 func _preload_around(district_id: StringName) -> void:
-	var ids: Array[StringName] = DistrictSceneFactory.DISTRICTS
+	var ids: Array = AMBIENCE_DARK_BY_DISTRICT.keys()
 	var at: int = ids.find(district_id)
 	if at < 0:
 		return

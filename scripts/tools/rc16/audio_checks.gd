@@ -106,7 +106,7 @@ static func _reverb_by_place(r: Node) -> void:
 	var interval: float = float(_constant(AudioManager, "REVERB_SENSE_SEC"))
 	r._ok(sensing.size() == 1 and is_equal_approx((sensing[0] as Timer).wait_time, interval) and not (sensing[0] as Timer).is_stopped(),
 		"AUD3 one physics timer senses the place every %s s (%d found)" % [interval, sensing.size()])
-	var player: Node3D = r._player
+	var player := r.get_tree().get_first_node_in_group("player") as Node3D
 	var home: Vector3 = player.global_position
 	var was_physics: bool = player.is_physics_processing()
 	player.set_physics_process(false)
@@ -141,8 +141,14 @@ static func _reverb_by_place(r: Node) -> void:
 	r._ok(closed[1] > open[1], "AUD3 and the room is bigger walled in (room size %.2f in the open, %.2f walled in)" % [open[1], closed[1]])
 
 ## AUD5: entering a district asks the loader thread for the beds of its two neighbours and lets go of the bed of a far district;
-## the bed of the district itself stays. A marker stream stands for a bed that was loaded. The old code does neither.
+## the bed of the district itself stays. A marker stream stands for a bed that was loaded. The old code does neither. The neighbours
+## are those of the order of the dark table, which has to be the order of the districts.
 static func _preload_and_unload(r: Node) -> void:
+	var order: Array = MusicManager.AMBIENCE_DARK_BY_DISTRICT.keys()
+	var same: bool = order.size() == DistrictSceneFactory.DISTRICTS.size()
+	for i in mini(order.size(), DistrictSceneFactory.DISTRICTS.size()):
+		same = same and order[i] == DistrictSceneFactory.DISTRICTS[i]
+	r._ok(same, "AUD5 the dark bed table lists the districts in the order of DistrictSceneFactory.DISTRICTS (%s)" % [order])
 	var cache: Dictionary = MusicManager.get("_cache")
 	var next_paths: Array[String] = []
 	for id in NEXT_TO_PARK:
