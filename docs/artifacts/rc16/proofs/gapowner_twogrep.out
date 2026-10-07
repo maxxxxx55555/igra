@@ -1,0 +1,40 @@
+# proof gapowner_twogrep
+# utc 20261007T232233Z
+# head a459b9c (uncommitted paths: 9)
+# cmd bash tools/gapowner_check.sh
+== V03 Bebas Neue Bold (asset only)
+-- spec: the heading font
+292:> **Канон-саммит 2026-08-10: листы UI/UX побеждают.** Bebas Neue Bold + Roboto Condensed —
+298:| Заголовки экранов | **Bebas Neue Bold** | `[M0]` (уже в `assets/fonts/`) |
+-- state: the font files the repository holds
+BebasNeue-Regular.ttf
+BebasNeue-Regular.ttf.import
+
+== G22 save-slot picker (owner decision)
+-- spec: the slots
+256:- Слоты: 3 ручных + 1 автосейв. Формат: `.tres` (`SaveData extends Resource`) или JSON.
+-- state: the slot API exists, MAX_SLOTS
+6:const MAX_SLOTS: int = 4
+-- state: the two slot screens and what opens them (an opener would be a line below that is not in the screen files themselves)
+scripts/core/save_system.gd:582:	# save_slot_entry.gd, both archived/unreachable per KNOWN_ISSUES.md -
+scripts/ui/save_slots_ui.gd:5:class_name SaveSlotsUI
+scenes/ui/save_slots.tscn:5:[node name="SaveSlotsUI" type="Control"]
+
+== G28/D04 all FULL, then the boss (GDD text)
+-- spec: the amended line
+122:- Все 11 районов FULL → финальная ночь: Архитектор (§6.3) появляется на электростанции; его смерть → `GameManager.trigger_win()` → 
+-- state: the win goes through the finale director
+scripts/world/finale_director.gd:15:##   -> его смерть -> GameManager.trigger_win() -> EndingsManager выбирает
+scripts/world/finale_director.gd:135:	if gm != null and gm.has_method("trigger_win"):
+scripts/world/finale_director.gd:136:		gm.trigger_win()
+scripts/world/power_grid.gd:92:		GameManager.trigger_win()
+
+== N01 / I02 / T01 (owner text and keys)
+-- N01 the New Game+ carryover rule
+15:| N01 | DR-6 (GAP-OWNER) | `GDD.md:652` is a status checkbox ("[x] ... New Game+ ... done"), not a carryover/modifier/difficulty-curve rule. `content/ngp_modifiers.json` + `new_game_plus.gd` are EXTRA (own d
+-- I02 the key census: keys per locale in en.json, the GDD line
+1525
+-- T01 the keystore and the bundle (the device test is not a file)
+-rw-r--r-- 4322 Sep 24 22:33 .signing/tls-release.keystore
+-rw-r--r-- 1 Maxsim 197121 183257097 Oct  2 21:16 build/tls.aab
+# EXIT=0

@@ -84,6 +84,8 @@ DECIDED 10, **GAP-OWNER 4** (V03 Bebas Neue Bold file, G22 save-slot picker, G28
 amendments), DEFERRED-STRUCTURAL 0 (G21, G25, G26, S02, S04-hide, C03 and the G07 visibility and capsule were built in rc15 batches 1 and 2;
 CORRECTION_LOG 96). GAP-DEV 0, NEEDS-MEASUREMENT 0.
 
+rc16 two-grep re-check of the four GAP-OWNER rows (`tools/gapowner_check.sh`, raw output `docs/artifacts/rc16/proofs/gapowner_twogrep.out`): the first grep reads the spec, the second what the repository holds. V03: the spec names Bebas Neue Bold, `assets/fonts` holds `BebasNeue-Regular.ttf` only (asset). G22: the spec says 3 manual slots and 1 autosave, the slot API has `MAX_SLOTS` 4, the two slot screens have no opener (owner decision). G28/D04: the amended GDD line says all FULL, then the Architect, then the win; `finale_director.gd` calls `trigger_win` (GDD text). N01, I02, T01: no carryover rule text, a key census that moves with every added key (1525 per locale now, the GDD line is refreshed), a keystore and a bundle with no device test (owner). No row has code that could close it: 4 of 4 stay GAP-OWNER.
+
 
 ## R4: the four owner rows are asset or decision only (two greps each, 2026-10-02)
 

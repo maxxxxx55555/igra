@@ -1,0 +1,166 @@
+# proof sec_reread
+# utc 20261007T192831Z
+# head a459b9c (uncommitted paths: 1)
+# cmd bash tools/sec_reread.sh
+
+== 1 process, shell and code execution: OS.execute, create_process, shell_open, kill, Expression, GDScript.new, source_code, str_to_var, bytes_to_var, JavaClassWrapper, JavaScriptBridge
+hits=0
+
+== 2 environment and command line in shipped code
+scripts/core/qa_launch_guard.gd:39:	var guarded := OS.get_environment("TLS_UDG_GUARDED") == "1"
+scripts/core/qa_launch_guard.gd:91:	for a in OS.get_cmdline_args() + OS.get_cmdline_user_args():
+scripts/core/qa_launch_guard.gd:97:	for a in OS.get_cmdline_args() + OS.get_cmdline_user_args():
+
+== 3 network: peers, sockets, RPC annotations
+scripts/multiplayer/lan_discovery.gd:13:var _udp: PacketPeerUDP = null
+scripts/multiplayer/lan_discovery.gd:27:	_udp = PacketPeerUDP.new()
+scripts/multiplayer/lan_discovery.gd:35:	_udp = PacketPeerUDP.new()
+scripts/multiplayer/network_manager.gd:17:var _peer: ENetMultiplayerPeer
+scripts/multiplayer/network_manager.gd:38:	_peer = ENetMultiplayerPeer.new()
+scripts/multiplayer/network_manager.gd:52:	_peer = ENetMultiplayerPeer.new()
+scripts/net/lan_network.gd:10:var _peer: ENetMultiplayerPeer
+scripts/net/lan_network.gd:14:	_peer = ENetMultiplayerPeer.new()
+scripts/net/lan_network.gd:28:	_peer = ENetMultiplayerPeer.new()
+scripts/enemies/base_monster.gd:736:@rpc("any_peer", "reliable")
+scripts/enemies/base_monster.gd:896:@rpc("any_peer", "unreliable")
+scripts/enemies/boss_3d.gd:174:@rpc("authority", "reliable")
+scripts/inventory/inventory_manager.gd:358:@rpc("any_peer", "reliable")
+scripts/inventory/inventory_manager.gd:365:@rpc("any_peer", "reliable")
+scripts/inventory/inventory_manager.gd:372:@rpc("any_peer", "reliable")
+scripts/inventory/inventory_manager.gd:379:@rpc("any_peer", "reliable")
+scripts/inventory/inventory_manager.gd:386:@rpc("any_peer", "reliable")
+scripts/inventory/inventory_manager.gd:393:@rpc("any_peer", "reliable")
+scripts/net/lan_network.gd:72:@rpc("any_peer", "call_local", "unreliable")
+scripts/net/lan_network.gd:86:@rpc("any_peer", "call_local", "reliable")
+scripts/player/player_3d.gd:950:@rpc("any_peer", "reliable")
+scripts/player/player_3d.gd:1323:@rpc("any_peer", "unreliable")
+scripts/ui/lobby_menu.gd:65:@rpc("call_local")
+
+== 4 reachability of the network code: every shipped mention of the lobby, of create_server, create_client, host and join
+scripts/multiplayer/network_manager.gd:25:	# Раньше connect() вызывался в create_server()/join_server(), и цикл
+scripts/multiplayer/network_manager.gd:36:func create_server() -> void:
+scripts/multiplayer/network_manager.gd:39:	var err = _peer.create_server(DEFAULT_PORT, MAX_PLAYERS)
+scripts/multiplayer/network_manager.gd:53:	var err = _peer.create_client(ip, DEFAULT_PORT)
+scripts/net/lan_network.gd:15:	var err := _peer.create_server(port, MAX_CLIENTS)
+scripts/net/lan_network.gd:29:	var err := _peer.create_client(host_ip, port)
+scripts/ui/lobby_menu.gd:34:	LANDiscovery.start_client()
+scripts/ui/lobby_menu.gd:41:	NetworkManager.create_server()
+scripts/ui/lobby_menu.gd:42:	LANDiscovery.start_host(player_name)
+scripts/ui/lobby_menu.gd:58:	NetworkManager.join_server(host_data.ip)
+scripts/ui/lobby_menu.gd:70:	LANDiscovery.stop()
+scripts/ui/lobby_menu.gd:76:	LANDiscovery.stop()
+scripts/ui/lobby_menu.gd:77:	LANDiscovery.start_client()
+scripts/ui/lobby_menu.gd:115:	LANDiscovery.start_client()
+scripts/ui/lobby_menu.gd:124:	LANDiscovery.stop()
+
+== 5 paths built from values: DirAccess.remove_absolute, ResourceLoader.load and load() of a variable path
+scripts/core/qa_launch_guard.gd:165:			DirAccess.remove_absolute(base + "/" + rel)
+scripts/core/qa_launch_guard.gd:175:		DirAccess.remove_absolute(snap + "/" + MANIFEST)
+scripts/core/qa_launch_guard.gd:186:		DirAccess.remove_absolute(dir + "/" + f)
+scripts/core/qa_launch_guard.gd:187:	DirAccess.remove_absolute(dir)
+scripts/core/save_system.gd:202:		DirAccess.remove_absolute(tmp_path)
+scripts/core/save_system.gd:683:			DirAccess.remove_absolute(path + suffix)
+scripts/core/save_system.gd:684:	return FileAccess.file_exists(path) and DirAccess.remove_absolute(path) == OK
+scripts/core/save_system.gd:714:		DirAccess.remove_absolute(ngp_path)
+scripts/security/attack_sim.gd:159:		DirAccess.remove_absolute(path)
+scripts/security/attack_sim.gd:245:		DirAccess.remove_absolute(path)
+scripts/security/attack_sim.gd:277:		DirAccess.remove_absolute(path)
+scripts/security/attack_sim.gd:307:		DirAccess.remove_absolute(path)
+scripts/security/attack_sim.gd:337:		DirAccess.remove_absolute(path)
+scripts/security/attack_sim.gd:412:				DirAccess.remove_absolute(p)
+scripts/security/attack_sim.gd:517:				DirAccess.remove_absolute(p)
+scripts/security/attack_sim.gd:593:		DirAccess.remove_absolute(path)
+scripts/systems/save_slot_manager.gd:36:		DirAccess.remove_absolute(path)
+scripts/enemies/base_monster.gd:867:	var stream: AudioStream = load(path)
+scripts/enemies/base_monster.gd:883:	am.play_sound_3d(load(path), global_position, db)
+scripts/inventory/item_database.gd:67:					item.icon = load(p) as Texture2D
+scripts/systems/endings_manager.gd:173:	_sting_player.stream = load(path)
+scripts/systems/footstep_system.gd:80:			_streams[n] = load(path)
+scripts/systems/music_manager.gd:307:	var s := load(path) as AudioStream
+scripts/systems/music_manager.gd:415:		var s := load(path) as AudioStream
+scripts/systems/music_manager.gd:457:	_wow_cue.stream = load(path) as AudioStream
+scripts/systems/settings_manager.gd:419:	var f: Font = load(path)
+scripts/systems/uisfx.gd:77:	p.stream = load(path)
+scripts/systems/uisfx.gd:124:		p.stream = load(path)
+scripts/ui/asset_registry.gd:18:		var res: Variant = load(path)
+scripts/ui/help_ui.gd:150:	tr.texture = load(path)
+scripts/ui/hud.gd:38:	var tex: Texture2D = load(path)
+scripts/ui/main_menu.gd:76:	hero.texture = load(path)
+scripts/ui/photo_album.gd:44:			tex_rect.texture = load(path)
+scripts/ui/screens.gd:148:	bg.texture = load(path)
+scripts/ui/theme_provider.gd:30:	return load(path) if ResourceLoader.exists(path) else fallback
+scripts/ui/theme_provider.gd:43:	return load(path) if ResourceLoader.exists(path) else null
+scripts/ui/ui_manager.gd:75:	var s: Script = load(path)
+scripts/ui/ui_manager.gd:268:		var ps: PackedScene = load(path)
+scripts/ui/ui_manager.gd:272:		var scr: Script = load(path)
+scripts/ui/weapon_compare_ui.gd:140:	icon.texture = load(path)
+scripts/world/district_atmosphere.gd:73:	var stream: AudioStream = load(path)
+
+== 6 files the player can edit: FileAccess.open and JSON.parse_string
+scripts/core/qa_launch_guard.gd:129:	var f := FileAccess.open(tmp + "/" + MANIFEST, FileAccess.WRITE)
+scripts/core/qa_launch_guard.gd:139:	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(snap + "/" + MANIFEST))
+scripts/core/save_system.gd:31:	var f := FileAccess.open(path, FileAccess.WRITE)
+scripts/core/save_system.gd:43:	var envelope: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+scripts/core/save_system.gd:49:	return JSON.parse_string(body)
+scripts/core/save_system.gd:182:	var canon: Variant = JSON.parse_string(JSON.stringify({"power": power, "progress": progress}))
+scripts/core/save_system.gd:195:	var f := FileAccess.open(tmp_path, FileAccess.WRITE)
+scripts/core/save_system.gd:229:	var f := FileAccess.open(path, FileAccess.READ)
+scripts/core/save_system.gd:235:	var outer := JSON.new()
+scripts/core/save_system.gd:256:	var inner := JSON.new()
+scripts/document_pickup.gd:78:	var f := FileAccess.open(CATALOG_PATH, FileAccess.READ)
+scripts/document_pickup.gd:81:	var parsed: Variant = JSON.parse_string(f.get_as_text())
+scripts/i18n/localization_manager.gd:103:	var f = FileAccess.open(path, FileAccess.READ)
+scripts/i18n/localization_manager.gd:107:	var parsed = JSON.parse_string(f.get_as_text())
+scripts/i18n/localization_manager.gd:117:	var f := FileAccess.open(path, FileAccess.READ)
+scripts/i18n/localization_manager.gd:120:	var parsed = JSON.parse_string(f.get_as_text())
+scripts/i18n/localization_manager.gd:191:	var f = FileAccess.open(_pref_path(), FileAccess.WRITE)
+scripts/i18n/localization_manager.gd:196:	var f = FileAccess.open(_pref_path(), FileAccess.READ)
+scripts/systems/achievements_manager.gd:199:	var f = FileAccess.open(_pref_path, FileAccess.READ)
+scripts/systems/achievements_manager.gd:202:	var envelope = JSON.parse_string(f.get_as_text())
+scripts/systems/captions_manager.gd:35:	var f := FileAccess.open(DATA_PATH, FileAccess.READ)
+scripts/systems/captions_manager.gd:38:	var parsed = JSON.parse_string(f.get_as_text())
+scripts/systems/captions_manager.gd:79:	var f := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
+scripts/systems/captions_manager.gd:86:	var f := FileAccess.open(SAVE_PATH, FileAccess.READ)
+scripts/systems/captions_manager.gd:89:	var parsed = JSON.parse_string(f.get_as_text())
+scripts/systems/daily_challenge_manager.gd:91:	var f := FileAccess.open(path, FileAccess.READ)
+scripts/systems/daily_challenge_manager.gd:94:	var parsed = JSON.parse_string(f.get_as_text())
+scripts/systems/local_leaderboard.gd:59:		parsed = JSON.parse_string(FileAccess.get_file_as_string(PATH))
+scripts/systems/new_game_plus.gd:41:	var f := FileAccess.open(MODIFIERS_PATH, FileAccess.READ)
+scripts/systems/new_game_plus.gd:44:	var parsed = JSON.parse_string(f.get_as_text())
+scripts/systems/save_slot_manager.gd:16:	var f = FileAccess.open(path, FileAccess.WRITE)
+scripts/systems/save_slot_manager.gd:24:	var f = FileAccess.open(path, FileAccess.READ)
+scripts/systems/save_slot_manager.gd:27:	var data = JSON.parse_string(f.get_as_text())
+scripts/systems/save_slot_manager.gd:41:	var f = FileAccess.open(path, FileAccess.WRITE)
+scripts/ui/journal_ui.gd:41:	var f := FileAccess.open(CATALOG_PATH, FileAccess.READ)
+scripts/ui/journal_ui.gd:44:	var parsed: Variant = JSON.parse_string(f.get_as_text())
+scripts/ui/tutorial_system.gd:185:	var f = FileAccess.open("user://tutorial.cfg", FileAccess.READ)
+scripts/ui/tutorial_system.gd:187:		var data = JSON.parse_string(f.get_as_text())
+scripts/ui/tutorial_system.gd:192:	var f = FileAccess.open("user://tutorial.cfg", FileAccess.WRITE)
+scripts/world/district_loot.gd:316:	var f := FileAccess.open(SECRETS_PATH, FileAccess.READ)
+scripts/world/district_loot.gd:319:	var parsed = JSON.parse_string(f.get_as_text())
+scripts/world/world_bible.gd:41:	var f := FileAccess.open(path, FileAccess.READ)
+scripts/world/world_bible.gd:44:	var parsed: Variant = JSON.parse_string(f.get_as_text())
+scripts/world_env_setup.gd:249:	var parsed = JSON.parse_string(FileAccess.get_file_as_string(path))
+
+== 7 signed state: who writes and who reads the signed envelopes
+scripts/core/save_system.gd:27:## {"hmac": _sign(body), "data_json": body}. write_signed() returns false
+scripts/core/save_system.gd:29:static func write_signed(path: String, data: Variant) -> bool:
+scripts/core/save_system.gd:40:static func read_signed(path: String) -> Variant:
+scripts/core/save_system.gd:83:	if not FileAccess.file_exists(path) or _read_envelope(path).is_empty():
+scripts/core/save_system.gd:169:## (_read_envelope) still accepts a pre-HMAC save signed with the old
+scripts/core/save_system.gd:174:## then. Verified in _read_envelope() below; a mismatch resets power/
+scripts/core/save_system.gd:201:	if _read_envelope(tmp_path).is_empty():
+scripts/core/save_system.gd:226:func _read_envelope(path: String, out_reason: Array = []) -> Dictionary:
+scripts/core/save_system.gd:303:	var data := _read_envelope(path, main_reason)
+scripts/core/save_system.gd:312:		data = _read_envelope(path + suffix, bak_reason)
+scripts/systems/achievements_manager.gd:204:		var data: Variant = SaveSystem.read_signed(_pref_path)
+scripts/systems/achievements_manager.gd:217:	SaveSystem.write_signed(_pref_path, {"unlocked": _unlocked, "progress": _progress})
+scripts/systems/daily_challenge_manager.gd:190:	SaveSystem.write_signed(SAVE_PATH, {
+scripts/systems/daily_challenge_manager.gd:196:	var parsed: Variant = SaveSystem.read_signed(SAVE_PATH)
+scripts/systems/flashlight_upgrade_manager.gd:136:	SaveSystem.write_signed(_pref_path, data)
+scripts/systems/flashlight_upgrade_manager.gd:146:	var signed: Variant = SaveSystem.read_signed(_pref_path)
+scripts/systems/local_leaderboard.gd:46:	SaveSystem.write_signed(PATH, _runs)
+scripts/systems/local_leaderboard.gd:56:	var parsed: Variant = SaveSystem.read_signed(PATH)
+scripts/systems/new_game_plus.gd:212:	var signed: Variant = SaveSystem.read_signed("user://ng_plus_data.json")
+scripts/systems/new_game_plus.gd:255:	SaveSystem.write_signed(path, data)
+# EXIT=0
