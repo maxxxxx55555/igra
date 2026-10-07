@@ -1,0 +1,9 @@
+# proof timing_dbg_chase
+# utc 20261002T231008Z
+# head 37db979 (uncommitted paths: 2)
+# cmd tools/qa_sim/timing_equiv dbg
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/The Last Streetlight
+  run at 30 fps: rc=0 (18 timing lines)
+  run at 60 fps: rc=0 (18 timing lines)
+  user-data guard: 11 file(s) restored byte-identical
+# EXIT=0

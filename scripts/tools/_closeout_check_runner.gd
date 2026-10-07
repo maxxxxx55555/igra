@@ -6,6 +6,7 @@ const Logic := preload("res://scripts/crafting/workbench_logic.gd")
 const AlbumScript := preload("res://scripts/ui/photo_album_ui.gd")
 const FAR := Vector3(500.0, 0.0, 500.0)
 const Status := EnemyRosterData.Status
+const Rc16Perf := preload("res://scripts/tools/rc16/perf_checks.gd")
 
 var _checked: int = 0
 var _fails: int = 0
@@ -33,6 +34,10 @@ func _run() -> void:
 	_player = get_tree().get_first_node_in_group("player") as Node3D
 	_ok(_player != null, "the player spawned")
 	if _player == null:
+		_finish()
+		return
+	if OS.get_environment("CLOSEOUT_ONLY") == "rc16":
+		await _rc16_checks()
 		_finish()
 		return
 	if OS.get_environment("CLOSEOUT_ONLY") == "combat":
@@ -102,11 +107,17 @@ func _run() -> void:
 	await _check_quick_bar_is_on_screen()
 	await _check_tier_names()
 	_check_the_moon_shadow_follows_its_light()
+	await _rc16_checks()
 	_finish()
 
 func _finish() -> void:
 	print("[closeout] DONE checks=%d fails=%d" % [_checked, _fails])
 	get_tree().quit(1 if _fails > 0 else 0)
+
+## The checks of the rc16 pass, one file per zone (scripts/tools/rc16/). CLOSEOUT_ONLY=rc16 runs only these: tools/qa_sim/af2_both_ways.py
+## executes them against the pre-fix runtime files and against HEAD.
+func _rc16_checks() -> void:
+	await Rc16Perf.run(self)
 
 ## A monster standing still in the far corner of the world: its collider answers rays, its AI never runs
 ## (a disabled process mode would also take the collider out of the physics space).

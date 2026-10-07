@@ -1,0 +1,29 @@
+# proof timing_before
+# utc 20261002T230425Z
+# head 557c9f3 (uncommitted paths: 3)
+# cmd tools/qa_sim/timing_equiv before
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/The Last Streetlight
+  run at 30 fps: rc=0 (18 timing lines)
+  run at 60 fps: rc=0 (18 timing lines)
+  run at 120 fps: rc=0 (18 timing lines)
+key                              30         60        120     max dev tolerance verdict
+timer_1s                     1.0333     1.0000     1.0083      0.0333 abs 0.050 ok
+tween_1s                     1.0000     0.9833     1.0000      0.0167 abs 0.050 ok
+walk_mps                     2.9921     2.9682     2.9684      0.0081 rel 0.030 ok
+sprint_mps                   4.7107     4.7109     4.6912      0.0042 rel 0.030 ok
+stamina_drain_per_s         22.4125    22.4125    22.3195      0.0041 rel 0.050 ok
+battery_drain_per_s          0.2222     0.2222     0.2225      0.0010 rel 0.030 ok
+rifle_shots_per_s            7.5000     7.5000     7.5000      0.0000 rel 0.050 ok
+pistol_shots_per_s           3.0000     3.1579     3.3333      0.0556 rel 0.050 FAIL
+rifle_reload_s               2.2000     2.2167     2.2083      0.0167 abs 0.050 ok
+melee_swings_per_s           1.4938     1.4969     1.4969      0.0021 rel 0.050 ok
+monster_hits_per_s           0.0000     0.4993     0.4996      0.4993 abs 0.100 FAIL
+monster_damage_per_s         0.0000     1.4563     1.4573      1.0000 rel 0.150 FAIL
+pickup_reach_m               1.2500     1.2500     1.2500      0.0000 abs 0.250 ok
+boss_ttk_s                  20.3000    20.2833    20.2833      0.0008 rel 0.050 ok
+FAIL: pistol_shots_per_s outside rel 0.050
+FAIL: monster_hits_per_s outside abs 0.100
+FAIL: monster_damage_per_s outside rel 0.150
+TIMING_EQUIV verdict=FAIL keys=14 failures=3
+  user-data guard: 11 file(s) restored byte-identical
+# EXIT=1
