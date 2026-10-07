@@ -1,12 +1,23 @@
 # Run state — orchestrator pass (2026-09-20)
 
-## Session 16 (2026-10-02): UNIFIED RELEASE CLOSEOUT (rc16), directive "ZERO-PROSE, TOP-STUDIO BAR, ANTI-FABRICATION" + swarm amendment
+## Session 16 (2026-10-02 to 10-07): UNIFIED RELEASE CLOSEOUT (rc16), directive "ZERO-PROSE, TOP-STUDIO BAR, ANTI-FABRICATION" + swarm amendment
 
-**NEXT-ROW: wave 1 (seven zone agents, no Godot) is being spawned; meanwhile the orchestrator builds the harnesses (timing equivalence 30/60/120, streaming probe, polish frames, AF3 frame check, AF5 citation check).**
-Baseline tag `v8.0.0-rc15` @ `e4bb4df` (settled). Target `v8.0.0-rc16`. Launch budget 12 Godot launches (agents use 0); used so far: 0.
+**NEXT-ROW (updated at `8a07041`, 2026-10-07): wave 1 is half merged. Merged: perf (`318b55f`). Running in their own worktrees: uifx (branch `worktree-agent-a8dd8b39a6743bd85`: U1-U3 committed,
+U4/U5/checks pending), content (branch `worktree-agent-ab9b0de029444e847`: C5 committed, C1-C4/checks pending). Not started: sec, audio (worktree `agent-a9d93688011f12bdb`, no commits), i18n, beauty.
+On each hand-back: review the diff, merge `--no-ff`, add the agent's checks file to `_rc16_checks()` of `scripts/tools/_closeout_check_runner.gd`, remove the worktree and branch.
+After the last merge, in this order: compile gate, `python tools/qa_sim/af2_both_ways.py --base e4bb4df`, full closeout, `tools/qa_sim/timing_equiv after`, `tools/qa_sim/rc16_probe after <hash>`,
+IRON RULE bot (3 seeds), play-through, `closeout_mutations`, `bash tools/check.sh --all`, final frames, docs (TIMING_AUDIT, PERF_PASS, UTILITIES_REPORT, UNVERIFIABLE_HERE, ACCEPTANCE gap table, PROOFS, CORRECTION_LOG), verifier round, tag.**
+Baseline tag `v8.0.0-rc15` @ `e4bb4df` (settled). Target `v8.0.0-rc16`. Launch budget 12 Godot launches (agents use 0); ledger `docs/artifacts/rc16/launch_ledger.tsv`: 11 rows at `b71ffbd`, 8 of them harness development
+(four timing_before runs found and fixed harness artifacts, three debug runs); the budget will be exceeded and is to be logged in CORRECTION_LOG at the end, with the reason.
+- Incident: the first wave (seven agents) was killed within minutes by the 5-hour usage limit with no commit; a second attempt hit the weekly limit; both were restarted (SendMessage resume for perf, uifx, content; a fresh content agent) after the resets.
+  The agents now run in stages, not all at once. Usage at `8a07041`: 5-hour 63 %, weekly 6 %.
 - Scope: O1 streaming and pooling, O2 frame-independent timing, O3 polish, O4 utilities, O5 the 24 non-proven acceptance rows (OV3, OV4, CT4, CT5, CT7, FL5, CB3, SN2, EC1, SV1, SC7, SC8, AU3, AU4, QS2, AD2, TO1, H3.18, M5.1, M5.4, M5.5, M5.9, I9.5, I9.7), O6 verifier.
-- Tools on this machine (O4 survey, 2026-10-02): ruff 0.16.9, flake8 7.3.0, pyflakes 3.4.0, black 26.5.1, ffmpeg present; gdlint (gdtoolkit), shellcheck, mypy, pngquant, oggenc absent (each needs a download that is not approved: exception list in `docs/UTILITIES_REPORT.md`).
-- `tools/qa_sim/timing_inventory.py` (new): 92 scripts with timing sites, 52 `_process`, 11 `_physics_process`, 60 Tween, 21 Timer sites, 23 suspects at the baseline; the gate fails on any suspect that is neither fixed nor in `tools/qa_sim/timing_whitelist.json`.
+  Closable in code: CT7 (pinch zoom, content), QS2 and I9.7 (drag to a quick slot, uifx); AU4 is an asset row (three surfaces have one recording each); the rest are decisions, owner rows or roadmap.
+- Baseline evidence (all on the runtime tree of `e4bb4df`, which `git diff` proves identical to HEAD at the time): `docs/artifacts/rc16/proofs/timing_before.out` (14 of 15 quantities agree at 30, 60 and 120 FPS of simulated time; the pistol rate does not: 3.00 / 3.16 / 3.33),
+  `probe_before.out` (district load 248-483 ms with a 130-150 ms frame spike per transition, no leak over 22 transitions: nodes 1786-1825, texture 71.5-71.8 MiB, video 96.9-97.3 MiB; D1 160-179 and D11 166 draw calls), `frames_before.out` and eight frames in `docs/stills/polish/`.
+- Tools added: `tools/qa_sim/timing_inventory.py` (23 suspects at the baseline), `timing_equiv` + `timing_compare.py`, `rc16_probe`, `proof_run`, `af2_both_ways.py`, `af3_frame_check.py`; ruff E9,F is clean on tools and scripts (`tools/patch_scenes.py` removed: E999, no reference).
+- Perf agent result (merged): load stats, old district out of the tree at once, street collision 32 lane strips instead of about 384 bodies, burst pool, neighbour preload; P6 (draw-distance constants) deliberately not built (props are MultiMesh batches, `visibility_range` is per instance of a node: the constants would be dead code).
+  The orchestrator added: the light limiter sorts a group instead of walking the whole tree four times a second (`8a07041`, check PERF7).
 
 ## Session 15 (2026-10-01): PLAYER-PROOF CLOSEOUT (rc15), directive "ZERO-PROSE, NO FABRICATION"
 
