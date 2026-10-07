@@ -36,6 +36,7 @@ var _pool_3d: Array[AudioStreamPlayer3D] = []
 var _next_3d: int = 0
 var _reverbs: Array[AudioEffectReverb] = []
 var _reverb_tween: Tween
+var _enclosure: float = 0.0
 var _last_state: int = 0
 var _step_timer: float = 0.0
 var _thunder_timer: float = 0.0
@@ -213,9 +214,13 @@ func _sense_reverb() -> void:
 			hits += 1
 	set_enclosure(float(hits) / REVERB_DIRECTIONS.size())
 
-## 0 is open sky, 1 is walled in: the reverbs follow it over REVERB_FADE_SEC so a doorway does not click.
+## 0 is open sky, 1 is walled in: the reverbs follow it over REVERB_FADE_SEC so a doorway does not click. The same amount again keeps the
+## running fade: restarting it on every sensing tick would stretch the fade to a crawl.
 func set_enclosure(amount: float) -> void:
 	var closed: float = clampf(amount, 0.0, 1.0)
+	if is_equal_approx(closed, _enclosure):
+		return
+	_enclosure = closed
 	if _reverb_tween != null and _reverb_tween.is_valid():
 		_reverb_tween.kill()
 	_reverb_tween = create_tween().set_parallel(true)
