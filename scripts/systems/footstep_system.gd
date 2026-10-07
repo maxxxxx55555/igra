@@ -60,6 +60,8 @@ func _ready() -> void:
 	_audio_player.name = "FootstepAudio"
 	_audio_player.bus = &"Footsteps"
 	_audio_player.max_distance = 20.0
+	_audio_player.attenuation_filter_cutoff_hz = AudioManager.ATTEN_CUTOFF_HZ
+	_audio_player.attenuation_filter_db = AudioManager.ATTEN_FILTER_DB
 	add_child(_audio_player)
 	_step_stream = _resolve_step_stream()
 	_load_samples()

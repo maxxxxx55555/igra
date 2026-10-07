@@ -6,6 +6,9 @@ extends Node
 
 const MIX: int = 22050
 const POOL: int = 4
+## Distance low-pass of every positional sound: past the unit size the highs fall away (engine defaults: 5000 Hz, -24 dB).
+const ATTEN_CUTOFF_HZ: float = 2400.0
+const ATTEN_FILTER_DB: float = -14.0
 
 var _wind: AudioStreamPlayer
 var _rain: AudioStreamPlayer
@@ -136,6 +139,8 @@ func play_sound_3d(stream: AudioStream, position: Vector3, volume_db: float = 0.
 	player.stream = stream
 	player.volume_db = volume_db
 	player.bus = bus
+	player.attenuation_filter_cutoff_hz = ATTEN_CUTOFF_HZ
+	player.attenuation_filter_db = ATTEN_FILTER_DB
 	player.finished.connect(player.queue_free)
 	add_child(player)
 	player.global_position = position
