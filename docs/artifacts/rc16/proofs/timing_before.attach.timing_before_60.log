@@ -1,0 +1,30 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+[timing] fps=60 timer_1s=1.00000
+[timing] fps=60 tween_1s=0.98333
+[timing] fps=60 walk_mps=2.96817
+[timing] fps=60 sprint_mps=4.71088
+[timing] fps=60 stamina_drain_per_s=22.41250
+[timing] fps=60 battery_drain_per_s=0.22222
+[timing] fps=60 rifle_shots_per_s=7.50000
+[timing] fps=60 rifle_reload_s=2.21667
+[timing] fps=60 pistol_shots_per_s=3.15789
+[timing] fps=60 melee_swings_per_s=1.49688
+[timing] fps=60 monster_hits_per_s=0.66574
+[timing] fps=60 monster_damage_per_s=6.65742
+[timing] fps=60 player_damage_per_s=2.20527
+[timing] fps=60 pickup_reach_m=1.25000
+[timing] fps=60 boss_hp0=800.00000
+[timing] fps=60 boss_ttk_s=20.28333
+[timing] fps=60 delta_mean=0.01667
+[timing] fps=60 physics_ticks_per_sim_s=59.98994
+[timing] DONE fps=60 frames=5964 sim_s=99.400 physics_ticks=5963
+ERROR: 2 RID allocations of type 'PN13RendererDummy14TextureStorage12DummyTextureE' were leaked at exit.
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 72 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 22 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

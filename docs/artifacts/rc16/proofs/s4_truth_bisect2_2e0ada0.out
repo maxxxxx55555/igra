@@ -1,0 +1,21 @@
+# proof s4_truth_bisect2_2e0ada0
+# utc 20261007T183113Z
+# head 2e0ada0 (uncommitted paths: 0)
+# cmd bash docs/artifacts/rc16/audio_truth_bisect2.sh
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/The Last Streetlight
+  res://scenes/tools/audio_truth_gate_scene.tscn rc=0 (log: .qa_logs/audio_truth_gate_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+VARIANT all_reverbs_disabled rc=0 Master bus peak=-80.0dB muted for QA;Music bus peak=-9.3dB ok;SFX bus peak=-67.1dB ok;Ambient bus peak=-26.2dB ok;PASS -- Music bus peak=-9.3dB (threshold >-45.0dB);
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/The Last Streetlight
+  res://scenes/tools/audio_truth_gate_scene.tscn rc=0 (log: .qa_logs/audio_truth_gate_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+VARIANT environment_only rc=0 Master bus peak=-80.0dB muted for QA;Music bus peak=-10.8dB ok;SFX bus peak=-67.1dB ok;Ambient bus peak=-25.6dB ok;PASS -- Music bus peak=-10.8dB (threshold >-45.0dB);
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/The Last Streetlight
+  res://scenes/tools/audio_truth_gate_scene.tscn rc=0 (log: .qa_logs/audio_truth_gate_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+VARIANT footsteps_and_combat_only rc=0 Master bus peak=-80.0dB muted for QA;Music bus peak=-11.8dB ok;SFX bus peak=-67.8dB ok;Ambient bus peak=-31.1dB ok;PASS -- Music bus peak=-11.8dB (threshold >-45.0dB);
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/The Last Streetlight
+  res://scenes/tools/audio_truth_gate_scene.tscn rc=0 (log: .qa_logs/audio_truth_gate_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+VARIANT head_layout_repeat rc=0 Master bus peak=-80.0dB muted for QA;Music bus peak=-11.6dB ok;SFX bus peak=-66.3dB ok;Ambient bus peak=-28.1dB ok;PASS -- Music bus peak=-11.6dB (threshold >-45.0dB);
+# EXIT=0

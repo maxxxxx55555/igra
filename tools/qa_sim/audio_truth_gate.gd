@@ -36,6 +36,11 @@ func _ready() -> void:
 		return
 	call_deferred("_run")
 
+## What the music was doing: the mood name, the combat hold, the nearest monster in metres. A peak is only explainable next to it:
+## the same code read -12 dB in one run and +0.5 dB in the next (CORRECTION_LOG 102).
+func _music_context() -> String:
+	return "mood=%s in_combat=%s nearest_monster_m=%.1f" % [MusicManager.Mood.keys()[MusicManager.mood], MusicManager.is_in_combat(), MusicManager.call("_nearest_enemy_distance")]
+
 func _peak_over(bus_idx: int, seconds: float) -> float:
 	var peak_db := -80.0
 	var samples := maxi(1, int(seconds / 0.05))
@@ -94,7 +99,10 @@ func _run() -> void:
 			print("[audio-truth] FAIL -- no '%s' bus" % bus_name)
 			all_ok = false
 			continue
+		var before := _music_context() if bus_name == "Music" else ""
 		var peak := await _peak_over(idx, 1.0)
+		if bus_name == "Music":
+			print("[audio-truth] music context before: %s, after: %s" % [before, _music_context()])
 		results[bus_name] = peak
 		var over_ceiling := peak > TRUE_PEAK_CEILING_DB
 		if over_ceiling:

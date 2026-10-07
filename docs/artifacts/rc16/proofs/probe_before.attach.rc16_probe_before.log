@@ -1,0 +1,66 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[probe] start label=before hash=e4bb4df tier=2 display=Windows nodes=1784 objects=4886 orphans=6 tex_mib=127.9 vid_mib=153.4 static_mib=100.5
+[probe] perf_mean gpu_ms=23.88
+[probe] perf district=suburbs draw_calls=179 primitives=48257 objects_in_frame=398 frame_p95_ms=76.19 nodes=1788 objects=4896 orphans=6 tex_mib=71.7 vid_mib=97.2 static_mib=100.7
+[probe] stream pass=cold district=residential ok=true load_ms=264.0 settled_ms=323.3 hitches=1 max_frame_ms=130.1 over_budget_ms=110.9 nodes=1795 objects=4878 orphans=6 tex_mib=71.3 vid_mib=96.8 static_mib=101.4
+[probe] stream pass=cold district=park ok=true load_ms=300.6 settled_ms=392.8 hitches=2 max_frame_ms=138.5 over_budget_ms=176.5 nodes=1792 objects=4874 orphans=6 tex_mib=71.8 vid_mib=97.3 static_mib=102.0
+[probe] stream pass=cold district=school ok=true load_ms=423.2 settled_ms=931.7 hitches=2 max_frame_ms=142.4 over_budget_ms=201.2 nodes=1795 objects=4892 orphans=6 tex_mib=71.5 vid_mib=96.9 static_mib=102.4
+[probe] stream pass=cold district=hospital ok=true load_ms=482.5 settled_ms=575.6 hitches=2 max_frame_ms=138.3 over_budget_ms=189.8 nodes=1794 objects=4882 orphans=6 tex_mib=71.8 vid_mib=97.3 static_mib=102.6
+[probe] stream pass=cold district=gas_station ok=true load_ms=373.5 settled_ms=440.2 hitches=2 max_frame_ms=143.5 over_budget_ms=156.5 nodes=1796 objects=4891 orphans=6 tex_mib=71.5 vid_mib=96.9 static_mib=103.1
+[probe] stream pass=cold district=police ok=true load_ms=327.5 settled_ms=387.6 hitches=2 max_frame_ms=135.9 over_budget_ms=127.3 nodes=1825 objects=4920 orphans=6 tex_mib=71.8 vid_mib=97.3 static_mib=103.5
+[probe] stream pass=cold district=warehouses ok=true load_ms=359.9 settled_ms=450.6 hitches=2 max_frame_ms=135.1 over_budget_ms=160.7 nodes=1812 objects=4910 orphans=6 tex_mib=71.5 vid_mib=96.9 static_mib=103.9
+[probe] stream pass=cold district=industrial ok=true load_ms=380.2 settled_ms=440.5 hitches=2 max_frame_ms=130.5 over_budget_ms=188.8 nodes=1820 objects=4916 orphans=6 tex_mib=71.8 vid_mib=97.3 static_mib=104.2
+[probe] stream pass=cold district=substation ok=true load_ms=325.9 settled_ms=377.3 hitches=1 max_frame_ms=132.7 over_budget_ms=113.7 nodes=1802 objects=4889 orphans=6 tex_mib=71.5 vid_mib=96.9 static_mib=104.1
+[probe] stream pass=cold district=power_station ok=true load_ms=304.7 settled_ms=364.9 hitches=2 max_frame_ms=134.8 over_budget_ms=123.7 nodes=1799 objects=4885 orphans=6 tex_mib=71.8 vid_mib=97.3 static_mib=104.4
+[probe] stream pass=warm district=substation ok=true load_ms=297.4 settled_ms=352.5 hitches=2 max_frame_ms=137.6 over_budget_ms=139.1 nodes=1802 objects=4886 orphans=6 tex_mib=71.5 vid_mib=96.9 static_mib=104.3
+[probe] stream pass=warm district=industrial ok=true load_ms=248.1 settled_ms=298.6 hitches=2 max_frame_ms=147.6 over_budget_ms=132.4 nodes=1820 objects=4907 orphans=6 tex_mib=71.8 vid_mib=97.3 static_mib=104.7
+[probe] stream pass=warm district=warehouses ok=true load_ms=472.7 settled_ms=569.9 hitches=2 max_frame_ms=143.0 over_budget_ms=194.4 nodes=1812 objects=4907 orphans=6 tex_mib=71.5 vid_mib=96.9 static_mib=105.2
+[probe] stream pass=warm district=police ok=true load_ms=317.2 settled_ms=377.7 hitches=2 max_frame_ms=138.5 over_budget_ms=336.3 nodes=1825 objects=4926 orphans=6 tex_mib=71.8 vid_mib=97.3 static_mib=104.9
+[probe] stream pass=warm district=gas_station ok=true load_ms=471.8 settled_ms=628.5 hitches=3 max_frame_ms=133.9 over_budget_ms=606.1 nodes=1796 objects=4893 orphans=6 tex_mib=71.5 vid_mib=96.9 static_mib=104.9
+[probe] stream pass=warm district=hospital ok=true load_ms=398.3 settled_ms=539.6 hitches=3 max_frame_ms=150.0 over_budget_ms=612.9 nodes=1794 objects=4883 orphans=6 tex_mib=71.8 vid_mib=97.3 static_mib=104.9
+[probe] stream pass=warm district=school ok=true load_ms=459.4 settled_ms=615.3 hitches=3 max_frame_ms=138.3 over_budget_ms=373.0 nodes=1795 objects=4888 orphans=6 tex_mib=71.5 vid_mib=96.9 static_mib=105.2
+[probe] stream pass=warm district=park ok=true load_ms=247.8 settled_ms=307.5 hitches=2 max_frame_ms=144.0 over_budget_ms=132.2 nodes=1792 objects=4886 orphans=6 tex_mib=71.8 vid_mib=97.3 static_mib=105.4
+[probe] stream pass=warm district=residential ok=true load_ms=283.1 settled_ms=349.0 hitches=2 max_frame_ms=141.6 over_budget_ms=144.2 nodes=1795 objects=4899 orphans=6 tex_mib=71.5 vid_mib=97.0 static_mib=105.5
+[probe] stream pass=warm district=suburbs ok=true load_ms=393.8 settled_ms=459.9 hitches=2 max_frame_ms=134.8 over_budget_ms=151.6 nodes=1786 objects=4890 orphans=6 tex_mib=71.8 vid_mib=97.3 static_mib=106.0
+[probe] perf_mean gpu_ms=31.29
+[probe] perf district=suburbs draw_calls=160 primitives=37265 objects_in_frame=410 frame_p95_ms=51.45 nodes=1790 objects=4914 orphans=6 tex_mib=71.8 vid_mib=97.3 static_mib=106.2
+[probe] stream pass=perf district=power_station ok=true load_ms=376.8 settled_ms=544.1 hitches=12 max_frame_ms=135.4 over_budget_ms=686.0 nodes=1803 objects=4891 orphans=6 tex_mib=71.8 vid_mib=97.3 static_mib=105.6
+[probe] perf_mean gpu_ms=25.92
+[probe] perf district=power_station draw_calls=166 primitives=43271 objects_in_frame=461 frame_p95_ms=50.00 nodes=1803 objects=4894 orphans=6 tex_mib=71.8 vid_mib=97.3 static_mib=105.6
+[probe] stream pass=frames district=suburbs ok=true load_ms=235.8 settled_ms=291.3 hitches=1 max_frame_ms=144.8 over_budget_ms=126.0 nodes=1790 objects=4889 orphans=6 tex_mib=71.8 vid_mib=97.3 static_mib=106.0
+[final] facing 42 of 119 street lights
+[final] frame 01_dark_street_before_e4bb4df_20261007T081905Z.png
+[probe] frame state=01_dark_street file=01_dark_street_before_e4bb4df_20261007T081905Z.png
+[final] facing 42 of 119 street lights
+[final] frame 02_lit_street_before_e4bb4df_20261007T081907Z.png
+[probe] frame state=02_lit_street file=02_lit_street_before_e4bb4df_20261007T081907Z.png
+[probe] stream pass=frames district=residential ok=true load_ms=392.6 settled_ms=560.5 hitches=19 max_frame_ms=140.0 over_budget_ms=757.5 nodes=1802 objects=4916 orphans=6 tex_mib=71.6 vid_mib=99.1 static_mib=107.0
+[final] facing 39 of 124 street lights
+[final] frame 03_flashlight_shadow_before_e4bb4df_20261007T081910Z.png
+[probe] frame state=03_flashlight_shadow file=03_flashlight_shadow_before_e4bb4df_20261007T081910Z.png
+[final] frame 04_combat_hit_before_e4bb4df_20261007T081911Z.png
+[probe] frame state=04_combat_hit file=04_combat_hit_before_e4bb4df_20261007T081911Z.png
+SCRIPT ERROR: Invalid access to property or key 'global_position' on a base object of type 'previously freed'.
+   at: _stage_states (res://scripts/tools/_rc16_probe_runner.gd:181)
+   GDScript backtrace (most recent call first):
+       [0] _stage_states (res://scripts/tools/_rc16_probe_runner.gd:181)
+[probe] DONE label=before hash=e4bb4df
+ERROR: 4 RID allocations of type 'N5GLES37TextureE' were leaked at exit.
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+ERROR: Texture with GL ID of 92: leaked 131072 bytes.
+   at: ~Utilities (drivers/gles3/storage/utilities.cpp:82)
+ERROR: Texture with GL ID of 132: leaked 131072 bytes.
+   at: ~Utilities (drivers/gles3/storage/utilities.cpp:82)
+ERROR: Texture with GL ID of 134: leaked 131072 bytes.
+   at: ~Utilities (drivers/gles3/storage/utilities.cpp:82)
+ERROR: Texture with GL ID of 160: leaked 131072 bytes.
+   at: ~Utilities (drivers/gles3/storage/utilities.cpp:82)
+WARNING: 35 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

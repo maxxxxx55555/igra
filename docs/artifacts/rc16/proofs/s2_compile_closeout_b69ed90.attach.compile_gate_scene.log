@@ -1,0 +1,197 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+GATE scan: gd=377 tscn=173 tres/res=102
+WARNING: Auto-exposure is only available when using the Forward+ renderer.
+   at: camera_attributes_set_auto_exposure (servers/rendering/storage/camera_attributes_storage.cpp:152)
+   GDScript backtrace (most recent call first):
+       [0] _check_resources (res://scripts/tools/_compile_gate.gd:58)
+       [1] _ready (res://scripts/tools/_compile_gate.gd:19)
+WARNING: Screen-space indirect lighting (SSIL) is only available when using the Forward+ renderer.
+   at: environment_set_ssil (servers/rendering/storage/environment_storage.cpp:775)
+   GDScript backtrace (most recent call first):
+       [0] _check_resources (res://scripts/tools/_compile_gate.gd:58)
+       [1] _ready (res://scripts/tools/_compile_gate.gd:19)
+WARNING: Screen-space reflections (SSR) are only available when using the Forward+ renderer.
+   at: environment_set_ssr (servers/rendering/storage/environment_storage.cpp:653)
+   GDScript backtrace (most recent call first):
+       [0] _check_resources (res://scripts/tools/_compile_gate.gd:58)
+       [1] _ready (res://scripts/tools/_compile_gate.gd:19)
+WARNING: Volumetric fog is only available when using the Forward+ renderer.
+   at: environment_set_volumetric_fog (servers/rendering/storage/environment_storage.cpp:458)
+   GDScript backtrace (most recent call first):
+       [0] _check_resources (res://scripts/tools/_compile_gate.gd:58)
+       [1] _ready (res://scripts/tools/_compile_gate.gd:19)
+GATE inst res://assets/textures/items/backpack_icon.tscn
+GATE inst res://assets/textures/items/can_icon.tscn
+GATE inst res://assets/textures/items/flashlight_icon.tscn
+GATE inst res://assets/textures/items/key_icon.tscn
+GATE inst res://assets/textures/items/medkit_icon.tscn
+GATE inst res://assets/textures/items/tool_icon.tscn
+GATE inst res://assets/textures/items/water_icon.tscn
+GATE inst res://scenes/districts/gas_station.tscn
+GATE inst res://scenes/districts/hospital.tscn
+GATE inst res://scenes/districts/industrial.tscn
+GATE inst res://scenes/districts/park.tscn
+GATE inst res://scenes/districts/police.tscn
+GATE inst res://scenes/districts/power_station.tscn
+GATE inst res://scenes/districts/residential.tscn
+GATE inst res://scenes/districts/school.tscn
+GATE inst res://scenes/districts/substation.tscn
+GATE inst res://scenes/districts/suburbs.tscn
+GATE inst res://scenes/districts/warehouses.tscn
+GATE inst res://scenes/effects/damage_indicator.tscn
+GATE inst res://scenes/enemies/boss_architect_3d.tscn
+GATE inst res://scenes/enemies/brute_3d.tscn
+GATE inst res://scenes/enemies/burner_3d.tscn
+GATE inst res://scenes/enemies/crawler_3d.tscn
+GATE inst res://scenes/enemies/destroyer_3d.tscn
+GATE inst res://scenes/enemies/enemy_model.tscn
+GATE inst res://scenes/enemies/hound_3d.tscn
+GATE inst res://scenes/enemies/hunter_3d.tscn
+GATE inst res://scenes/enemies/rotter_3d.tscn
+GATE inst res://scenes/enemies/shadow_3d.tscn
+GATE inst res://scenes/enemies/sharpshooter_3d.tscn
+GATE inst res://scenes/enemies/tvar_3d.tscn
+GATE inst res://scenes/enemies/watcher_3d.tscn
+GATE inst res://scenes/environment/world_env.tscn
+GATE inst res://scenes/gameplay/checkpoint.tscn
+GATE inst res://scenes/gameplay/craft_station.tscn
+GATE inst res://scenes/gameplay/document_pickup.tscn
+GATE inst res://scenes/gameplay/door.tscn
+GATE inst res://scenes/gameplay/exploding_barrel.tscn
+GATE inst res://scenes/gameplay/puzzle_cables.tscn
+GATE inst res://scenes/gameplay/zones/engineer_camp.tscn
+GATE inst res://scenes/gameplay/zones/school_zone.tscn
+GATE inst res://scenes/gameplay/zone_trigger.tscn
+GATE inst res://scenes/main_3d.tscn
+GATE inst res://scenes/pickups/ammo_pickup.tscn
+GATE inst res://scenes/pickups/document_pickup.tscn
+GATE inst res://scenes/pickups/health_pickup.tscn
+GATE inst res://scenes/pickups/item_pickup_3d.tscn
+GATE inst res://scenes/pickups/key_item.tscn
+GATE inst res://scenes/pickups/weapon_pickup.tscn
+GATE inst res://scenes/player/player.tscn
+GATE inst res://scenes/player/player_3d.tscn
+GATE inst res://scenes/props/examine.tscn
+GATE inst res://scenes/props/pickup.tscn
+GATE inst res://scenes/props/puzzle.tscn
+GATE inst res://scenes/props/puzzle_3d.tscn
+GATE inst res://scenes/props/secret.tscn
+GATE inst res://scenes/props/streetlight.tscn
+GATE inst res://scenes/props/streetlight_3d.tscn
+GATE inst res://scenes/secrets/secret_room_01.tscn
+GATE inst res://scenes/secrets/secret_room_02.tscn
+GATE inst res://scenes/secrets/secret_room_03.tscn
+GATE inst res://scenes/secrets/secret_room_04.tscn
+GATE inst res://scenes/secrets/secret_room_05.tscn
+GATE inst res://scenes/secrets/secret_room_06.tscn
+GATE inst res://scenes/secrets/secret_room_07.tscn
+GATE inst res://scenes/secrets/secret_room_08.tscn
+GATE inst res://scenes/secrets/secret_room_09.tscn
+GATE inst res://scenes/secrets/secret_room_10.tscn
+GATE inst res://scenes/secrets/secret_room_11.tscn
+GATE inst res://scenes/secrets/secret_room_12.tscn
+GATE inst res://scenes/tools/a11y_probe_scene.tscn
+GATE inst res://scenes/tools/asset_check_scene.tscn
+GATE inst res://scenes/tools/attack_sim_scene.tscn
+GATE inst res://scenes/tools/audio_bus_check_scene.tscn
+GATE inst res://scenes/tools/audio_hum_check_scene.tscn
+GATE inst res://scenes/tools/audio_truth_gate_scene.tscn
+GATE inst res://scenes/tools/autoload_api_check_scene.tscn
+GATE inst res://scenes/tools/beauty_frames_scene.tscn
+GATE inst res://scenes/tools/boot_check_scene.tscn
+GATE inst res://scenes/tools/capture_stills_scene.tscn
+GATE inst res://scenes/tools/closeout_check_scene.tscn
+GATE inst res://scenes/tools/compile_gate_scene.tscn
+GATE inst res://scenes/tools/compile_scene.tscn
+GATE inst res://scenes/tools/craft_check_scene.tscn
+GATE inst res://scenes/tools/diag_3d_scene.tscn
+GATE inst res://scenes/tools/final_frames_scene.tscn
+GATE inst res://scenes/tools/footstep_check_scene.tscn
+GATE inst res://scenes/tools/gameplay_shot_scene.tscn
+GATE inst res://scenes/tools/game_test.tscn
+GATE inst res://scenes/tools/game_test_3d_scene.tscn
+GATE inst res://scenes/tools/gen_icon_scene.tscn
+GATE inst res://scenes/tools/gen_meshes_scene.tscn
+GATE inst res://scenes/tools/gen_music_scene.tscn
+GATE inst res://scenes/tools/gen_photos_scene.tscn
+GATE inst res://scenes/tools/gen_sfx_scene.tscn
+GATE inst res://scenes/tools/gen_sprites_scene.tscn
+GATE inst res://scenes/tools/gui_explore_scene.tscn
+GATE inst res://scenes/tools/i18n_check_scene.tscn
+GATE inst res://scenes/tools/i18n_dump_scene.tscn
+GATE inst res://scenes/tools/light_check_scene.tscn
+GATE inst res://scenes/tools/loot_floor_check_scene.tscn
+GATE inst res://scenes/tools/music_probe_scene.tscn
+GATE inst res://scenes/tools/perf_check_scene.tscn
+GATE inst res://scenes/tools/playthrough_scene.tscn
+GATE inst res://scenes/tools/qa_autoplay_scene.tscn
+GATE inst res://scenes/tools/qa_guard_check_scene.tscn
+GATE inst res://scenes/tools/qa_guard_e2e_scene.tscn
+GATE inst res://scenes/tools/qa_headless_suite_scene.tscn
+GATE inst res://scenes/tools/rc16_probe_scene.tscn
+GATE inst res://scenes/tools/save_integrity_check_scene.tscn
+GATE inst res://scenes/tools/screen_test.tscn
+GATE inst res://scenes/tools/settings_persist_probe_scene.tscn
+GATE inst res://scenes/tools/shot_3d_scene.tscn
+GATE inst res://scenes/tools/shot_scene.tscn
+GATE inst res://scenes/tools/signal_arity_check_scene.tscn
+GATE inst res://scenes/tools/smoke_fps_flow_scene.tscn
+GATE inst res://scenes/tools/step3_check_scene.tscn
+GATE inst res://scenes/tools/theme_unify_probe_scene.tscn
+GATE inst res://scenes/tools/timing_equiv_scene.tscn
+GATE inst res://scenes/tools/touch_probe_scene.tscn
+GATE inst res://scenes/tools/tz_verify_scene.tscn
+GATE inst res://scenes/tools/ui_dump_scene.tscn
+GATE inst res://scenes/tools/ui_layout_check_scene.tscn
+GATE inst res://scenes/tools/walk_probe_scene.tscn
+GATE inst res://scenes/ui/achievement_screen.tscn
+GATE inst res://scenes/ui/boot_loading.tscn
+GATE inst res://scenes/ui/coin_hud.tscn
+GATE inst res://scenes/ui/confirm_quit.tscn
+GATE inst res://scenes/ui/credits.tscn
+GATE inst res://scenes/ui/daily_events.tscn
+GATE inst res://scenes/ui/death_screen.tscn
+GATE inst res://scenes/ui/difficulty_screen.tscn
+GATE inst res://scenes/ui/district_banner.tscn
+GATE inst res://scenes/ui/epilogue.tscn
+GATE inst res://scenes/ui/fade_transition.tscn
+GATE inst res://scenes/ui/game_over.tscn
+GATE inst res://scenes/ui/hud.tscn
+GATE inst res://scenes/ui/hud_3d.tscn
+GATE inst res://scenes/ui/inventory_panel.tscn
+GATE inst res://scenes/ui/lobby.tscn
+GATE inst res://scenes/ui/main_menu.tscn
+GATE inst res://scenes/ui/menu.tscn
+GATE inst res://scenes/ui/new_game_plus.tscn
+GATE inst res://scenes/ui/pause_menu.tscn
+GATE inst res://scenes/ui/photo_album.tscn
+GATE inst res://scenes/ui/pre_loading.tscn
+GATE inst res://scenes/ui/quest_tracker_hud.tscn
+GATE inst res://scenes/ui/save_slots.tscn
+GATE inst res://scenes/ui/screens.tscn
+GATE inst res://scenes/ui/settings_screen.tscn
+GATE inst res://scenes/ui/skill_button.tscn
+GATE inst res://scenes/ui/skill_tree_tab.tscn
+GATE inst res://scenes/ui/skill_tree_ui.tscn
+GATE inst res://scenes/ui/splash.tscn
+GATE inst res://scenes/ui/stats_screen.tscn
+GATE inst res://scenes/ui/transition_manager.tscn
+GATE inst res://scenes/ui/tutorial.tscn
+GATE inst res://scenes/vfx/vfx_blood.tscn
+GATE inst res://scenes/vfx/vfx_dust.tscn
+GATE inst res://scenes/vfx/vfx_hit_spark.tscn
+GATE inst res://scenes/vfx/vfx_muzzle_flash.tscn
+GATE inst res://scenes/vfx/vfx_rain.tscn
+GATE inst res://scenes/vfx/vfx_strobe.tscn
+GATE inst res://scenes/weapons/weapon_model.tscn
+GATE inst res://scenes/weapons/weapon_pistol.tscn
+GATE inst res://scenes/weapons/weapon_rifle.tscn
+GATE inst res://scenes/weapons/weapon_shotgun.tscn
+GATE inst res://scenes/world/test_zone.tscn
+GATE inst res://tools/autopilot/autopilot.tscn
+GATE inst res://_QUARANTINE/scenes/effects/blood_particles.tscn
+GATE inst res://_QUARANTINE/scenes/effects/footstep_dust.tscn
+GATE inst res://_QUARANTINE/scenes/effects/hit_spark.tscn
+GATE inst res://_QUARANTINE/scenes/effects/muzzle_flash.tscn
+COMPILE_GATE bad=0

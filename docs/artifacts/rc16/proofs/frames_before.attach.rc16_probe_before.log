@@ -1,0 +1,32 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[probe] start label=before hash=e4bb4df tier=2 display=Windows nodes=1780 objects=4848 orphans=6 tex_mib=69.6 vid_mib=95.1 static_mib=99.1
+[probe] stream pass=frames district=suburbs ok=true load_ms=0.2 settled_ms=129.5 hitches=1 max_frame_ms=83.3 over_budget_ms=68.4 nodes=1780 objects=4858 orphans=6 tex_mib=69.6 vid_mib=95.1 static_mib=99.3
+[final] facing 37 of 116 street lights
+[probe] frame state=01_dark_street file=01_dark_street_before_e4bb4df_20261007T082229Z.png
+[final] facing 37 of 117 street lights
+[probe] frame state=02_lit_street file=02_lit_street_before_e4bb4df_20261007T082231Z.png
+[probe] stream pass=frames district=residential ok=true load_ms=267.5 settled_ms=339.8 hitches=2 max_frame_ms=137.0 over_budget_ms=202.5 nodes=1796 objects=4870 orphans=6 tex_mib=69.3 vid_mib=96.9 static_mib=102.4
+[probe] frame state=03_flashlight_shadow file=03_flashlight_shadow_before_e4bb4df_20261007T082234Z.png
+[probe] frame state=04_combat_hit file=04_combat_hit_before_e4bb4df_20261007T082235Z.png
+[probe] frame state=05_damage_taken file=05_damage_taken_before_e4bb4df_20261007T082237Z.png
+[probe] frame state=06_sprint_ultra file=06_sprint_ultra_before_e4bb4df_20261007T082238Z.png
+[probe] stream pass=frames district=industrial ok=true load_ms=322.6 settled_ms=478.9 hitches=2 max_frame_ms=130.0 over_budget_ms=187.1 nodes=1817 objects=4859 orphans=6 tex_mib=129.8 vid_mib=157.3 static_mib=101.8
+[final] facing 37 of 124 street lights
+[probe] frame state=07_steam_street file=07_steam_street_before_e4bb4df_20261007T082242Z.png
+[probe] frame state=08_inventory_ui file=08_inventory_ui_before_e4bb4df_20261007T082244Z.png
+[probe] DONE label=before hash=e4bb4df only=frames
+ERROR: 2 RID allocations of type 'N5GLES37TextureE' were leaked at exit.
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+ERROR: Texture with GL ID of 93: leaked 131072 bytes.
+   at: ~Utilities (drivers/gles3/storage/utilities.cpp:82)
+ERROR: Texture with GL ID of 132: leaked 131072 bytes.
+   at: ~Utilities (drivers/gles3/storage/utilities.cpp:82)
+WARNING: 31 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

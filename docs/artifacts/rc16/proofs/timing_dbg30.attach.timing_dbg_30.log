@@ -1,0 +1,54 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+[timing] fps=30 timer_1s=1.03333
+[timing] fps=30 tween_1s=1.00000
+[timing] fps=30 walk_mps=2.99209
+[timing] fps=30 sprint_mps=4.71073
+[timing] fps=30 stamina_drain_per_s=22.41250
+[timing] fps=30 battery_drain_per_s=0.22222
+[timing] fps=30 rifle_shots_per_s=7.50000
+[timing] fps=30 rifle_reload_s=2.20000
+[timing] fps=30 pistol_shots_per_s=3.00000
+[timing] fps=30 melee_swings_per_s=1.49378
+[timing-dbg] fps=30 t=0.03 state=0 dist=1.20 hits=0
+[timing-dbg] fps=30 t=0.53 state=2 dist=1.47 hits=0
+[timing-dbg] fps=30 t=1.03 state=2 dist=1.78 hits=0
+[timing-dbg] fps=30 t=1.53 state=2 dist=2.10 hits=0
+[timing-dbg] fps=30 t=2.03 state=2 dist=2.43 hits=0
+[timing-dbg] fps=30 t=2.53 state=2 dist=2.77 hits=0
+[timing-dbg] fps=30 t=3.03 state=2 dist=3.12 hits=0
+[timing-dbg] fps=30 t=3.53 state=2 dist=3.47 hits=0
+[timing-dbg] fps=30 t=4.03 state=2 dist=3.81 hits=0
+[timing-dbg] fps=30 t=4.53 state=2 dist=4.17 hits=0
+[timing-dbg] fps=30 t=5.03 state=2 dist=4.52 hits=0
+[timing-dbg] fps=30 t=5.53 state=2 dist=4.87 hits=0
+[timing-dbg] fps=30 t=6.03 state=2 dist=5.23 hits=0
+[timing-dbg] fps=30 t=6.53 state=2 dist=5.58 hits=0
+[timing-dbg] fps=30 t=7.03 state=2 dist=5.94 hits=0
+[timing-dbg] fps=30 t=7.53 state=2 dist=6.29 hits=0
+[timing-dbg] fps=30 t=8.03 state=2 dist=6.65 hits=0
+[timing-dbg] fps=30 t=8.53 state=2 dist=7.01 hits=0
+[timing-dbg] fps=30 t=9.03 state=2 dist=7.37 hits=0
+[timing-dbg] fps=30 t=9.53 state=2 dist=7.72 hits=0
+[timing-dbg] fps=30 t=10.03 state=2 dist=8.08 hits=0
+[timing-dbg] fps=30 t=10.53 state=1 dist=8.26 hits=0
+[timing-dbg] fps=30 t=11.03 state=1 dist=8.44 hits=0
+[timing-dbg] fps=30 t=11.53 state=1 dist=8.62 hits=0
+[timing-dbg] fps=30 t=12.03 state=1 dist=8.80 hits=0
+[timing] fps=30 monster_hits_per_s=0.00000
+[timing] fps=30 monster_damage_per_s=0.00000
+[timing] fps=30 pickup_reach_m=1.25000
+[timing] fps=30 boss_hp0=800.00000
+[timing] fps=30 boss_ttk_s=20.30000
+[timing] fps=30 delta_mean=0.03333
+[timing] fps=30 physics_ticks_per_sim_s=59.98500
+[timing] DONE fps=30 frames=3000 sim_s=99.992 physics_ticks=5998
+ERROR: 2 RID allocations of type 'PN13RendererDummy14TextureStorage12DummyTextureE' were leaked at exit.
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 84 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 26 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
