@@ -103,6 +103,7 @@ func _ready() -> void:
 	_setup_button_feedback()
 	_apply_text_outlines()
 	EventBus.player_health_changed.connect(_on_hp)
+	EventBus.player_damaged.connect(_on_player_damaged)
 	if EventBus.has_signal(&"crosshair_state_changed"):
 		EventBus.crosshair_state_changed.connect(_on_crosshair_state)
 	EventBus.player_stamina_changed.connect(_on_stam)
@@ -849,6 +850,28 @@ func _process(delta: float) -> void:
 		bat_fill.color = Color(0.788, 0.635, 0.290)
 	_process_noise_vignette(delta)
 	_process_enemy_bar(delta)
+	_process_bar_shake(delta)
+
+## The health bar's row shakes for a moment when the player is hit, the amplitude running down with the time left, and ends
+## on its exact place. Reduce Screen Shake keeps it still.
+const _BAR_SHAKE_PX: float = 4.0
+const _BAR_SHAKE_SEC: float = 0.2
+var _bar_shake_left: float = 0.0
+var _bar_rest: Vector2 = Vector2.ZERO
+
+func _on_player_damaged(_amount: float) -> void:
+	if bool(SettingsManager.get_setting("reduce_screen_shake", false)):
+		return
+	if _bar_shake_left <= 0.0:
+		_bar_rest = (hp_fill.get_parent() as Control).position
+	_bar_shake_left = _BAR_SHAKE_SEC
+
+func _process_bar_shake(delta: float) -> void:
+	if _bar_shake_left <= 0.0:
+		return
+	_bar_shake_left = maxf(_bar_shake_left - delta, 0.0)
+	var amp: float = _BAR_SHAKE_PX * _bar_shake_left / _BAR_SHAKE_SEC
+	(hp_fill.get_parent() as Control).position = _bar_rest + Vector2(randf_range(-amp, amp), randf_range(-amp, amp))
 
 func _process_noise_vignette(delta: float) -> void:
 	var v := vignette
