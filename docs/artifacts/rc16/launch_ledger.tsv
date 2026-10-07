@@ -10,3 +10,4 @@ n	utc	head	id	exit	command
 9	20261007T081657Z	1ac9dd3	probe_before	0	tools/qa_sim/rc16_probe before e4bb4df 900
 10	20261007T082017Z	942d92b	frames_before	0	tools/qa_sim/rc16_probe before e4bb4df 300
 11	20261007T082151Z	2af53cf	frames_before	0	tools/qa_sim/rc16_probe before e4bb4df 300
+12	20261007T133937Z	c407e60	s1_compile_c407e60	0	bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 420

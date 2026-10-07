@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Runs one headless QA scene under the shell user-data guard (the headless twin of guarded_windowed).
+#
+#   tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn [timeout-sec]
+#   log -> .qa_logs/<scene>.log
+set -uo pipefail
+cd "$(dirname "$0")/../.."
+SCENE="${1:?usage: tools/qa_sim/guarded_headless <res://scenes/tools/NAME.tscn> [timeout-sec]}"
+T="${2:-120}"
+mkdir -p .qa_logs
+LOG=".qa_logs/$(basename "$SCENE" .tscn).log"
+rm -f "$LOG"  # an aborted launch must not leave an old log to be read as this run's
+
+GODOT="$(bash tools/qa_sim/_resolve_godot.sh 2>/dev/null)"
+if [[ -z "$GODOT" ]] || [[ ! -x "$GODOT" ]]; then
+	bash tools/qa_sim/_resolve_godot.sh >&2
+	exit 99
+fi
+source tools/qa_sim/user_data_guard.sh
+udg_snapshot || exit 99
+trap 'udg_restore || exit 97' EXIT
+trap 'exit 130' INT TERM
+export TLS_UDG_GUARDED=1
+timeout "$T" "$GODOT" --headless --path . "$SCENE" > "$LOG" 2>&1
+rc=$?
+echo "  $SCENE rc=$rc (log: $LOG)"
+exit $rc
