@@ -4,16 +4,16 @@ extends RefCounted
 const CHROMA_PX: float = 0.75
 ## Loaded at run time: the file does not exist on the code this check is proven against.
 const QUICK_SLOTS_PATH: String = "res://scripts/ui/quick_slots.gd"
-## Overlay layer name -> its letter in the tier table: vignette, grain, chromatic aberration.
-const LAYER_LETTERS: Dictionary = {"VignetteOverlay": "V", "GrainOverlay": "G", "ChromaOverlay": "C"}
+## Overlay layer name -> its letter in the tier table: vignette, grain, chromatic aberration, sprint motion blur.
+const LAYER_LETTERS: Dictionary = {"VignetteOverlay": "V", "GrainOverlay": "G", "ChromaOverlay": "C", "MotionBlurOverlay": "B"}
 
 static func run(r: Node) -> void:
 	await _post_fx_tiers(r)
 	await _damage_pulse(r)
-	await _sprint_blur(r)
 	await _quick_slot_drag(r)
 	await _hover(r)
 	await _bar_shake(r)
+	await _damage_numbers(r)
 
 static func _overlay(r: Node) -> Node:
 	return r._main.get_node_or_null("PostProcessOverlay")
@@ -21,6 +21,10 @@ static func _overlay(r: Node) -> Node:
 static func _chroma_px(overlay: Node) -> float:
 	var mat := (overlay.get_node("ChromaOverlay") as ColorRect).material as ShaderMaterial
 	return float(mat.get_shader_parameter("amount_px_1080p"))
+
+static func _blur_strength(overlay: Node) -> float:
+	var blur := overlay.get_node_or_null("MotionBlurOverlay") as ColorRect
+	return float((blur.material as ShaderMaterial).get_shader_parameter("strength")) if blur != null else -1.0
 
 static func _layers_on(overlay: Node) -> String:
 	var shown := ""
@@ -30,24 +34,42 @@ static func _layers_on(overlay: Node) -> String:
 			shown += String(LAYER_LETTERS[layer_name])
 	return shown
 
+## The stick forward with run held, as the movement check drives it, or released.
+static func _stick(on: bool) -> void:
+	InputService.set_joy_active(on)
+	InputService.set_joy_move_dir(Vector2(0.0, -1.0) if on else Vector2.ZERO)
+	InputService.set_joy_run_held(on)
+
+## The tier table while the player sprints for real (the blur follows the sprint).
 static func _post_fx_tiers(r: Node) -> void:
 	var overlay: Node = _overlay(r)
 	r._ok(overlay != null, "UIFX1 the game scene carries the post-fx overlay")
 	if overlay == null:
 		return
+	r._playing()
+	var player: Node3D = r._player
 	var tier0: int = int(SettingsManager.get_setting("graphics_tier", 2))
+	var pos0: Vector3 = player.global_position
 	SettingsManager.set_graphics_tier(2)
 	var chroma0: float = _chroma_px(overlay)
 	overlay.call("set_chroma_amount", CHROMA_PX)  # a district preset: the aberration has something to show
+	player.set("gameplay_active", true)
+	_stick(true)
 	var seen := PackedStringArray()
 	for tier in 4:
 		SettingsManager.set_graphics_tier(tier)
-		await r.get_tree().process_frame
+		player.set("stamina", 100.0)
+		await r.get_tree().create_timer(0.8).timeout
 		seen.append(_layers_on(overlay))
-	r._ok(seen == PackedStringArray(["V", "VG", "VGC", "VGC"]),
-		"UIFX1 the tier table: Low draws the vignette alone, Medium adds the grain, High the chromatic aberration (Low..Ultra: %s)" % ", ".join(seen))
+	var strength: float = _blur_strength(overlay)
+	_stick(false)
+	await r.get_tree().create_timer(1.2).timeout
+	var after: String = _layers_on(overlay)
+	r._ok(seen == PackedStringArray(["V", "VG", "VGC", "VGCB"]) and strength > 0.2 and strength <= 0.35 and after == "VGC",
+		"UIFX1 the tier table while sprinting: Low the vignette alone, Medium + grain, High + chromatic aberration, Ultra + motion blur up to 0.35 (Low..Ultra: %s; blur %.2f; 1.2 s after the sprint: %s)" % [", ".join(seen), strength, after])
 	overlay.call("set_chroma_amount", chroma0)
 	SettingsManager.set_graphics_tier(tier0)
+	player.global_position = pos0
 
 ## One hit through the real signal at a tier and Reduce Flash setting; the aberration on screen 0.05 s later.
 static func _hit_at(r: Node, tier: int, reduce_flash: bool) -> float:
@@ -76,45 +98,6 @@ static func _damage_pulse(r: Node) -> void:
 	SettingsManager.set_setting("reduce_flash", flash0)
 	overlay.call("set_chroma_amount", chroma0)
 	SettingsManager.set_graphics_tier(tier0)
-
-static func _blur_strength(blur: CanvasItem) -> float:
-	return float(((blur as ColorRect).material as ShaderMaterial).get_shader_parameter("strength"))
-
-## The stick forward with run held, as the movement check drives it, or released.
-static func _stick(on: bool) -> void:
-	InputService.set_joy_active(on)
-	InputService.set_joy_move_dir(Vector2(0.0, -1.0) if on else Vector2.ZERO)
-	InputService.set_joy_run_held(on)
-
-## A real sprint through the Ultra tier.
-static func _sprint_blur(r: Node) -> void:
-	var overlay: Node = _overlay(r)
-	var blur: CanvasItem = overlay.get_node_or_null("MotionBlurOverlay") as CanvasItem if overlay != null else null
-	r._ok(blur != null, "UIFX1 the overlay has a motion blur layer")
-	if blur == null:
-		return
-	r._playing()
-	var player: Node3D = r._player
-	var tier0: int = int(SettingsManager.get_setting("graphics_tier", 2))
-	var pos0: Vector3 = player.global_position
-	SettingsManager.set_graphics_tier(3)
-	player.set("gameplay_active", true)
-	player.set("stamina", 100.0)
-	_stick(true)
-	await r.get_tree().create_timer(0.8).timeout
-	var running: bool = int(player.get("current_state")) == int(player.State.RUN)
-	var strength: float = _blur_strength(blur)
-	var ultra_shows: bool = blur.visible
-	SettingsManager.set_graphics_tier(2)
-	var high_shows: bool = blur.visible
-	SettingsManager.set_graphics_tier(3)
-	_stick(false)
-	await r.get_tree().create_timer(1.2).timeout
-	var faded: bool = not blur.visible and _blur_strength(blur) == 0.0
-	r._ok(running and ultra_shows and strength > 0.2 and strength <= 0.35 and not high_shows and faded,
-		"UIFX1 sprinting at Ultra blurs up to 0.35 (%.2f, state RUN %s), the layer is hidden below Ultra (%s) and 1.2 s after the sprint (%s)" % [strength, running, not high_shows, faded])
-	SettingsManager.set_graphics_tier(tier0)
-	player.global_position = pos0
 
 ## One tap of a key action through the real input path: a press, a frame, a release, a frame.
 static func _tap(r: Node, action: StringName) -> void:
@@ -237,3 +220,29 @@ static func _bar_shake(r: Node) -> void:
 	SettingsManager.set_setting("reduce_screen_shake", shake0)
 	r._ok(shaken and home, "UIFX5 a hit shakes the health bar by at most 4 px (%s) and it is on its exact place 0.4 s later (%s)" % [off, home])
 	r._ok(shaken and calm, "UIFX5 under Reduce Screen Shake the health bar stays where it is")
+
+static func _visible_numbers(pool: Node) -> Array:
+	var shown: Array = []
+	for label in (pool.get_children() if pool != null else []):
+		if label.visible:
+			shown.append(label.text)
+	return shown
+
+## UIFX4: a monster that takes a hit shows its damage as a floating number from the HUD's pool of 12, back in the pool 1.0 s later.
+static func _damage_numbers(r: Node) -> void:
+	r._playing()
+	var hud: Node = r._main.get_node_or_null("HUD")
+	var pool: Node = hud.get_node_or_null("DamageNumbers") if hud != null else null
+	var player: Node3D = r._player
+	var aim: Vector3 = -player.global_transform.basis.z
+	aim.y = 0.0
+	var monster: Node3D = r._monster("rotter_3d", player.global_position + aim.normalized() * 4.0)
+	var hp0: float = float(monster.get("hp"))
+	monster.call("take_damage", 7.0)
+	await r.get_tree().process_frame
+	var dealt: String = str(roundi(hp0 - float(monster.get("hp"))))
+	var shown: Array = _visible_numbers(pool)
+	await r.get_tree().create_timer(1.0).timeout
+	r._ok(pool != null and shown == [dealt] and _visible_numbers(pool).is_empty() and pool.get_child_count() == 12,
+		"UIFX4 a monster hit for %s shows that number and it is back in the pool of 12 after 1.0 s (shown %s, pool %s, signal %s)" % [dealt, shown, pool.get_child_count() if pool != null else "missing", EventBus.has_signal(&"enemy_damaged")])
+	monster.queue_free()

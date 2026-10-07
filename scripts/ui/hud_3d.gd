@@ -142,6 +142,7 @@ func _ready() -> void:
 	_setup_quick_wheel()
 	_setup_grain_overlay()
 	_setup_damage_indicator()
+	_setup_damage_numbers()
 	_setup_heal_flash()
 	_setup_blackout_flash()
 	_setup_context_hints()
@@ -370,6 +371,8 @@ func _setup_damage_indicator() -> void:
 func _sync_damage_indicator_visibility() -> void:
 	if _damage_indicator != null and is_instance_valid(_damage_indicator):
 		_damage_indicator.visible = visible
+	if _number_layer != null:
+		_number_layer.visible = visible
 
 ## T15: колесо быстрых слотов (удержание + аналоговый выбор из 6).
 var _quick_wheel: Control = null
@@ -851,6 +854,74 @@ func _process(delta: float) -> void:
 	_process_noise_vignette(delta)
 	_process_enemy_bar(delta)
 	_process_bar_shake(delta)
+	_process_numbers(delta)
+
+## Floating damage numbers: twelve Labels in a CanvasLayer of their own, reused. A monster that takes a hit shows the
+## damage above its head; the number rises 40 px and fades in 0.6 s (it stays level under Reduce UI Motion). A visible
+## Label is one in use. The layer follows the HUD's visibility like the damage indicator's (nested layers ignore it).
+const _NUMBER_POOL: int = 12
+const _NUMBER_RISE_PX: float = 40.0
+const _NUMBER_SEC: float = 0.6
+const _NUMBER_BIG_HIT: float = 15.0
+const _NUMBER_HEAD := Vector3(0.0, 2.0, 0.0)
+const _NUMBER_BONE := Color("#d8d2c4")
+const _NUMBER_BRASS := Color("#c9a24a")
+const _NUMBER_OUTLINE := Color("#0c1016")
+var _number_layer: CanvasLayer = null
+var _numbers: Array[Label] = []
+
+func _setup_damage_numbers() -> void:
+	_number_layer = CanvasLayer.new()
+	_number_layer.name = "DamageNumbers"
+	_number_layer.layer = layer - 1
+	add_child(_number_layer)
+	for i in _NUMBER_POOL:
+		var label := Label.new()
+		label.visible = false
+		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		label.add_theme_font_size_override("font_size", 22)
+		label.add_theme_color_override("font_outline_color", _NUMBER_OUTLINE)
+		label.add_theme_constant_override("outline_size", 4)
+		_number_layer.add_child(label)
+		_numbers.append(label)
+	if EventBus.has_signal(&"enemy_damaged"):
+		EventBus.connect(&"enemy_damaged", _on_enemy_damaged)
+
+func _on_enemy_damaged(monster: Node3D, amount: float) -> void:
+	if not is_instance_valid(monster) or roundi(amount) < 1:
+		return
+	for label in _numbers:
+		if label.visible:
+			continue
+		label.text = str(roundi(amount))
+		label.add_theme_color_override("font_color", _NUMBER_BRASS if amount > _NUMBER_BIG_HIT else _NUMBER_BONE)
+		label.set_meta(&"anchor", monster.global_position + _NUMBER_HEAD)
+		label.set_meta(&"age", 0.0)
+		label.visible = true
+		_place_number(label)
+		return
+
+func _process_numbers(delta: float) -> void:
+	for label in _numbers:
+		if not label.visible:
+			continue
+		var age: float = float(label.get_meta(&"age")) + delta
+		label.visible = age < _NUMBER_SEC
+		label.set_meta(&"age", age)
+		if label.visible:
+			_place_number(label)
+
+## Over the monster's head on screen: out of sight (alpha 0) while the point is behind the camera.
+func _place_number(label: Label) -> void:
+	var camera := get_viewport().get_camera_3d()
+	var anchor: Vector3 = label.get_meta(&"anchor")
+	var age: float = float(label.get_meta(&"age"))
+	if camera == null or camera.is_position_behind(anchor):
+		label.modulate.a = 0.0
+		return
+	var rise: float = 0.0 if bool(SettingsManager.get_setting("reduce_ui_motion", false)) else _NUMBER_RISE_PX * age / _NUMBER_SEC
+	label.modulate.a = 1.0 - age / _NUMBER_SEC
+	label.position = camera.unproject_position(anchor) - Vector2(label.get_minimum_size().x / 2.0, rise)
 
 ## The health bar's row shakes for a moment when the player is hit, the amplitude running down with the time left, and ends
 ## on its exact place. Reduce Screen Shake keeps it still.
