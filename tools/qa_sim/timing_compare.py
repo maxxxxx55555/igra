@@ -17,7 +17,7 @@ TOL = {
     "stamina_drain_per_s": ("rel", 0.05), "battery_drain_per_s": ("rel", 0.03),
     "rifle_shots_per_s": ("rel", 0.05), "pistol_shots_per_s": ("rel", 0.05), "rifle_reload_s": ("abs", 0.05),
     "melee_swings_per_s": ("rel", 0.05),
-    "monster_hits_per_s": ("abs", 0.1), "monster_damage_per_s": ("rel", 0.15),
+    "monster_hits_per_s": ("abs", 0.1), "monster_damage_per_s": ("rel", 0.1), "player_damage_per_s": ("rel", 0.15),
     "pickup_reach_m": ("abs", 0.25),
     "boss_ttk_s": ("rel", 0.05),
 }

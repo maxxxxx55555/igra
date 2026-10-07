@@ -29,6 +29,8 @@ var _first_shot_t: float = -1.0
 var _last_shot_t: float = -1.0
 var _hits: int = 0
 var _hit_total: float = 0.0
+var _melee: int = 0
+var _melee_total: float = 0.0
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -64,6 +66,10 @@ func _on_fired() -> void:
 func _on_player_damaged(amount: float) -> void:
 	_hits += 1
 	_hit_total += amount
+
+func _on_enemy_attack(damage: int) -> void:
+	_melee += 1
+	_melee_total += float(damage)
 
 func _run() -> void:
 	for a in OS.get_cmdline_user_args():
@@ -221,9 +227,12 @@ func _measure_melee() -> void:
 			if String(_player.get("_attack_phase")) == "windup":
 				swings += 1
 	_report("melee_swings_per_s", float(swings) / (_t - t0))
+	_player.set("_attack_phase", "none")
+	_player.set("_combo_timer", 0.0)
 
-# ── a monster put into CHASE next to the player (a free AI wanders by chance, and the global random numbers other scripts draw per
-# frame differ between frame rates): hits it lands and the damage that arrives, per second ──
+# ── a monster put into ATTACK next to the player (a free AI wanders by chance, its chase path needs the navigation mesh that only the
+# streets have, and the global random numbers other scripts draw per frame differ between frame rates): melee hits it lands and the
+# damage, per second; and what the player actually takes (the 12 HP cap, the grace time and the status ticks included) ──
 func _measure_monster() -> void:
 	_place_player()
 	await _wait(0.3)
@@ -232,22 +241,24 @@ func _measure_monster() -> void:
 	monster.global_position = _player.global_position + Vector3(0.0, 0.0, -1.2)
 	monster.set("player_ref", _player)
 	monster.look_at(Vector3(_player.global_position.x, monster.global_position.y, _player.global_position.z), Vector3.UP)
-	monster.call("_change_state", BaseMonster.State.CHASE)
+	monster.call("_change_state", BaseMonster.State.ATTACK)
 	_hits = 0
 	_hit_total = 0.0
+	_melee = 0
+	_melee_total = 0.0
 	EventBus.player_damaged.connect(_on_player_damaged)
+	EventBus.enemy_attack.connect(_on_enemy_attack)
 	var smax: float = float((_player.get("stats") as Resource).get("max_hp"))
 	var t0 := _t
-	var next_dbg := _t
 	while _t < t0 + MONSTER_SEC:
 		await get_tree().physics_frame
 		_player.set("hp", smax)
-		if _t >= next_dbg:
-			next_dbg += 0.5
-			print("[timing-dbg] fps=%d t=%.2f state=%s dist=%.2f hits=%d" % [_fps, _t - t0, str(monster.get("ai_state")), monster.global_position.distance_to(_player.global_position), _hits])
-	_report("monster_hits_per_s", float(_hits) / (_t - t0))
-	_report("monster_damage_per_s", _hit_total / (_t - t0))
+	var window := _t - t0
+	_report("monster_hits_per_s", float(_melee) / window)
+	_report("monster_damage_per_s", _melee_total / window)
+	_report("player_damage_per_s", _hit_total / window)
 	EventBus.player_damaged.disconnect(_on_player_damaged)
+	EventBus.enemy_attack.disconnect(_on_enemy_attack)
 	monster.queue_free()
 	await _wait(0.3)
 
