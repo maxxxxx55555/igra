@@ -965,6 +965,8 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 		card_item.color = Color(0.047, 0.063, 0.086, 0.6)
 		card_item.custom_minimum_size = Vector2(card_w, SHOP_ROW)
 		card_item.mouse_filter = Control.MOUSE_FILTER_PASS
+		## Its children sit at absolute positions set before the card has a size; under a right-to-left layout (Arabic) they land one card width to the right.
+		card_item.layout_direction = Control.LAYOUT_DIRECTION_LTR
 		grid_container.add_child(card_item)
 		var icon_parent := Control.new()
 		icon_parent.size = Vector2(22, 22)

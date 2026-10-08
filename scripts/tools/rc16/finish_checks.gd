@@ -81,6 +81,8 @@ static func _shop_buy_buttons(r: Node) -> void:
 				grid_widths.append(grid.size.x)
 			if lang == FRAME_LANG and size_idx == 1:
 				await _frame(r, "A06_shop")
+			if lang == "ar" and size_idx == 1:
+				await _frame(r, "A06_shop_ar")
 			var where: String = _button_outside(grid)
 			if where != "":
 				outside.append(tag)
