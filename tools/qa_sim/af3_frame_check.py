@@ -8,8 +8,10 @@ Rules; every violation prints "FAIL <file>: <reason>" and the exit code is 1:
   F1 the name parses
   F2 the hash resolves to a commit of this repository
   F3 the capture time is not before that commit's committer time (a frame cannot show code that did not exist yet)
-  F4 label "after": no runtime path differs between the hash and HEAD (the frame shows the code that ships); label "before": the hash is the
-     declared baseline (--baseline, default e4bb4df)
+  F4 label "after": no runtime path differs between the hash and HEAD (the frame shows the code that ships), except a change declared in
+     tools/qa_sim/af3_f4_scope.tsv (path, blob before, blob after, frame-name glob): a change read by hand to reach only the frames whose name
+     matches the glob, so it fails those and no other; any other change of that path still fails every older frame (CORRECTION_LOG 113);
+     label "before": the hash is the declared baseline (--baseline, default e4bb4df)
   F5 a frame git has not committed yet (untracked or modified): its modification time is within 15 minutes of the capture time in its name, so a
      renamed old frame is caught when it is added. A committed frame is judged by the commit that added it, which cannot be older than the capture
      time: a clone or a pull sets every modification time to the checkout time, and the mtime rule failed 8 of 8 polish frames on any fresh copy
@@ -19,6 +21,7 @@ Runtime paths are everything the game ships: scripts/ (not scripts/tools/), scen
 android/, localization/, project.godot, export_presets.cfg, default_bus_layout.tres.
 """
 import calendar
+import fnmatch
 import hashlib
 import pathlib
 import re
@@ -33,6 +36,7 @@ RUNTIME_PREFIXES = ("scripts/", "scenes/", "assets/", "data/", "addons/", "andro
 RUNTIME_FILES = ("project.godot", "export_presets.cfg", "default_bus_layout.tres")
 NOT_RUNTIME = ("scripts/tools/", "scenes/tools/")
 MTIME_SLACK_S = 15 * 60
+SCOPE = ROOT / "tools" / "qa_sim" / "af3_f4_scope.tsv"
 
 
 def git(*args):
@@ -43,6 +47,24 @@ def is_runtime(path):
     if path.startswith(NOT_RUNTIME):
         return False
     return path.startswith(RUNTIME_PREFIXES) or path in RUNTIME_FILES
+
+
+def scopes():
+    """{(path, blob before, blob after): glob} from the scope file."""
+    rows = [ln.split("\t") for ln in SCOPE.read_text(encoding="utf-8").splitlines() if ln.strip() and not ln.startswith("#")] if SCOPE.exists() else []
+    return {(p, a, b): glob for p, a, b, glob in rows}
+
+
+def blob(rev, path):
+    return git("rev-parse", "--verify", "%s:%s" % (rev, path)).stdout.strip()
+
+
+def reaches(path, before, after, frame, scoped):
+    """False when the change of `path` from blob `before` to blob `after` is a declared one that does not reach this frame."""
+    for (p, a, b), glob in scoped.items():
+        if p == path and before.startswith(a) and after.startswith(b):
+            return fnmatch.fnmatch(frame, glob)
+    return True
 
 
 def utc_to_epoch(stamp):
@@ -75,7 +97,7 @@ def image_size(path):
 
 
 def check(directories, baseline, since):
-    fails, seen, total = [], {}, 0
+    fails, seen, total, scoped = [], {}, 0, scopes()
     for d in directories:
         frames = sorted([*pathlib.Path(d).glob("*.png"), *pathlib.Path(d).glob("*.jpg")])
         if not frames:
@@ -97,7 +119,8 @@ def check(directories, baseline, since):
             if taken < ctime:
                 fails.append("%s: F3 captured %s, %d s before commit %s existed" % (rel, m["utc"], ctime - taken, m["hash"]))
             if m["label"] == "after":
-                changed = [x for x in git("diff", "--name-only", full, "HEAD").stdout.splitlines() if is_runtime(x)]
+                changed = [x for x in git("diff", "--name-only", full, "HEAD").stdout.splitlines()
+                           if is_runtime(x) and reaches(x, blob(full, x), blob("HEAD", x), p.name, scoped)]
                 if changed:
                     fails.append("%s: F4 %d runtime path(s) differ between %s and HEAD, first: %s" % (rel, len(changed), m["hash"], changed[0]))
             else:
@@ -126,6 +149,11 @@ def demo():
     assert is_runtime("scripts/player/player_3d.gd") and is_runtime("project.godot") and is_runtime("assets/shaders/a.gdshader")
     assert not is_runtime("scripts/tools/_x.gd") and not is_runtime("docs/PROOFS.md") and not is_runtime("tools/check.sh")
     assert utc_to_epoch("19700101T000010Z") == 10
+    declared = {("p.gd", "aaa", "bbb"): "A06_shop*"}
+    assert reaches("p.gd", "aaa111", "bbb222", "A06_shop_after_x.jpg", declared)
+    assert not reaches("p.gd", "aaa111", "bbb222", "A01_menu_after_x.jpg", declared)
+    assert reaches("p.gd", "aaa111", "ccc333", "A01_menu_after_x.jpg", declared) and reaches("q.gd", "aaa111", "bbb222", "A01_menu_after_x.jpg", declared)
+    assert reaches("p.gd", "", "bbb222", "A01_menu_after_x.jpg", declared)
     tmp = pathlib.Path(__import__("tempfile").mkdtemp())
     good = tmp / "a.png"
     good.write_bytes(b"\x89PNG\r\n\x1a\n" + struct.pack(">I", 13) + b"IHDR" + struct.pack(">II", 960, 527) + b"\x08\x02\x00\x00\x00")
@@ -140,7 +168,7 @@ def demo():
     this = pathlib.Path(__file__)
     assert time_fault(this, 4102444800, True) != "" and time_fault(this, 0, True) == ""
     assert time_fault(good, int(good.stat().st_mtime), False) == "" and "differ" in time_fault(good, int(good.stat().st_mtime) - 4000, False)
-    print("af3_frame_check demo OK (name grammar, runtime path classes, PNG and JPEG header, empty directory, F5 for a committed and an uncommitted frame)")
+    print("af3_frame_check demo OK (name grammar, runtime path classes, F4 scope, PNG and JPEG header, empty directory, F5 for a committed and an uncommitted frame)")
 
 
 def main():

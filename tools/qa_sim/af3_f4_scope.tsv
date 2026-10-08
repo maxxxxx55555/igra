@@ -1,0 +1,5 @@
+# AF3 F4 scope (tools/qa_sim/af3_frame_check.py, CORRECTION_LOG 113): a runtime path whose change from blob <before> to blob <after> was read by hand
+# and reaches only the frames whose file name matches <glob>. Any other change of the path still fails every older "after" frame.
+# Columns, tab separated: path, git blob id before (12 or more characters), git blob id after, frame-name glob.
+scripts/ui/skill_tree_ui.gd	81ea9f50ec18	0ad48a3c1599	A09_skill_tree*
+scripts/ui/screens.gd	42f9c73ab6e4	dbb0f3ea441e	A06_shop*
