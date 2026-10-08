@@ -1,0 +1,8 @@
+# proof s8_gui_explorer_26eef24
+# utc 20261008T002500Z
+# head 26eef24 (uncommitted paths: 0)
+# cmd bash tools/qa_sim/guarded_windowed res://scenes/tools/gui_explore_scene.tscn 600
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/The Last Streetlight
+  res://scenes/tools/gui_explore_scene.tscn rc=0 (log: .qa_logs/gui_explore_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+# EXIT=0

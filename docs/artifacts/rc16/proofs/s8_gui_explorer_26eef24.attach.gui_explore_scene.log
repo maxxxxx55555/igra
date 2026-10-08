@@ -1,0 +1,23 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[gui-explore] PASS boot_to_menu
+[gui-explore] PASS menu_button_Settings
+[gui-explore] PASS menu_button_Difficulty
+[gui-explore] PASS menu_button_Credits
+[gui-explore] PASS i18n_language_ru  title='Настройки' current_lang=ru
+[gui-explore] PASS i18n_language_en  title='Settings' current_lang=en
+[gui-explore] PASS i18n_language_es  title='Ajustes' current_lang=es
+[gui-explore] PASS i18n_language_de  title='Einstellungen' current_lang=de
+[gui-explore] PASS i18n_language_fr  title='Paramètres' current_lang=fr
+[gui-explore] PASS i18n_language_it  title='Impostazioni' current_lang=it
+[gui-explore] PASS i18n_language_pt_BR  title='Configurações' current_lang=pt_BR
+[gui-explore] PASS i18n_language_tr  title='Ayarlar' current_lang=tr
+[gui-explore] PASS i18n_language_ja  title='設定' current_lang=ja
+[gui-explore] PASS i18n_language_ko  title='설정' current_lang=ko
+[gui-explore] PASS i18n_language_zh  title='设置' current_lang=zh
+[gui-explore] PASS i18n_language_zh_TW  title='設定' current_lang=zh_TW
+[gui-explore] PASS i18n_language_ar  title='الإعدادات' current_lang=ar
+[gui-explore] PASS i18n_no_mixed_script  0/13 locales had mixed-script title
+[gui-explore] PASS i18n_no_empty_strings  0/13 locales had an empty title
+[gui-explore] DONE -- 19 PASS, 0 BUG, 1 shots
