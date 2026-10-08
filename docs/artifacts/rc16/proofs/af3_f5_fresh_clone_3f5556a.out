@@ -1,0 +1,16 @@
+# proof af3_f5_fresh_clone_3f5556a
+# utc 20261008T001702Z
+# head 3f5556a (uncommitted paths: 0)
+# cmd bash tools/qa_sim/fresh_clone_check.sh bash -c echo "== old gate (bca7d33) on the fresh clone"; git show bca7d33:tools/qa_sim/af3_frame_check.py > tools/qa_sim/_old_af3.py; python tools/qa_sim/_old_af3.py --dir docs/stills/polish | tail -3; echo "== new gate on the fresh clone"; python tools/qa_sim/af3_frame_check.py | tail -3; echo "== mutation: an old frame renamed to a later capture time, not committed"; cp docs/stills/polish/01_dark_street_after_c3e79e5_20261007T191815Z.png docs/stills/polish/99_renamed_after_c3e79e5_20261007T200000Z.png; python tools/qa_sim/af3_frame_check.py | tail -3
+fresh clone of 3f5556a: 3494 tracked files, checkout time 20261008T001710Z
+== old gate (bca7d33) on the fresh clone
+FAIL 08_inventory_ui_after_c3e79e5_20261007T191831Z.png: F5 file time and the name's capture time differ by 17918 s
+FAIL 08_inventory_ui_before_e4bb4df_20261007T082244Z.png: F5 file time and the name's capture time differ by 57265 s
+af3 frames=16 fail=16
+== new gate on the fresh clone
+af3 frames=42 fail=0
+== mutation: an old frame renamed to a later capture time, not committed
+FAIL 99_renamed_after_c3e79e5_20261007T200000Z.png: F5 file time and the name's capture time differ by 15454 s
+FAIL 99_renamed_after_c3e79e5_20261007T200000Z.png: F6 byte-identical to 01_dark_street_after_c3e79e5_20261007T191815Z.png
+af3 frames=43 fail=2
+# EXIT=0
