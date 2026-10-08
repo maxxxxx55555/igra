@@ -1,0 +1,8 @@
+# proof s8_audio_truth_924e3dd
+# utc 20261008T002652Z
+# head 924e3dd (uncommitted paths: 0)
+# cmd bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/The Last Streetlight
+  res://scenes/tools/audio_truth_gate_scene.tscn rc=0 (log: .qa_logs/audio_truth_gate_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+# EXIT=0
