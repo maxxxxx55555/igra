@@ -1,0 +1,9 @@
+# proof s0_install_omniroute_graphify
+# utc 20261008T081444Z
+# head 9255216 (uncommitted paths: 1)
+# env none
+# cmd bash /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s0_install.sh
+skip ponytail: name collision with the project's own ponytail
+omniroute entries installed: 45
+graphify installed: SKILL.md + 8 references
+# EXIT=0

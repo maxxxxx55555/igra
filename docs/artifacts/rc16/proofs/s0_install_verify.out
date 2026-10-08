@@ -1,0 +1,8 @@
+# proof s0_install_verify
+# utc 20261008T081541Z
+# head 9255216 (uncommitted paths: 48)
+# env none
+# cmd bash /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s0_verify.sh
+pins: OmniRoute 26d48292ce163b6ce5a9ac994ff3a7f388cd1da7 graphify 6478eb71237c86ee5fb6a35c702835e987ca445d
+identical=46 mismatches=0 installed_dirs=63 bytes_omni=213855
+# EXIT=0

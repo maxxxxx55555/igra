@@ -1,0 +1,12 @@
+# skill_bootstrap utc 20261008T081109Z head 9255216
+## clone OmniRoute (blobless, sparse: skills)
+# EXIT=0
+# EXIT=0
+pin OmniRoute 26d48292ce163b6ce5a9ac994ff3a7f388cd1da7
+## clone graphify (blobless, sparse: skill.md, skills/claude, LICENSE)
+# EXIT=0
+# EXIT=0
+pin graphify 6478eb71237c86ee5fb6a35c702835e987ca445d
+fatal: cannot change to '/c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/skills_src/graphify': No such file or directory
+# EXIT=128 (graphify sparse, no path conversion)
+# EXIT=0 (graphify sparse, literal patterns)

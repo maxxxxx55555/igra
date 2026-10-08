@@ -1,0 +1,16 @@
+# proof s0_arena_plan_agents4
+# utc 20261008T081129Z
+# head 9255216 (uncommitted paths: 0)
+# env none
+# cmd python -I .claude/skills/arena/bracket.py plan --agents 4
+4 agents, 2 rounds, waves of 10
+
+  round  alive  matches  bye  sub-agent calls  waves
+  spawn      4        -    -                4      1
+      1      4        2    -               10      3
+      2      2        1    -                5      3
+  total                                  19      7
+
+  alive per round: 4 -> 2 -> 1
+  plus 1 call for the final check when there is a rejected answer to beat
+# EXIT=0

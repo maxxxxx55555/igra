@@ -1,0 +1,613 @@
+# proof s0_skill_scan
+# utc 20261008T081557Z
+# head 9255216 (uncommitted paths: 49)
+# env none
+# cmd python -I /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/skill_scan.py /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/skills_src/OmniRoute/skills /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/skills_src/graphify/graphify
+=== C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/skills_src/OmniRoute/skills
+cli-a2a/SKILL.md: 1692B fm_valid=True name_eq_dir=True invisible=0 hits=0 comments=1
+   hosts: -
+cli-backup-sync/SKILL.md: 3791B fm_valid=True name_eq_dir=True invisible=0 hits=0 comments=1
+   hosts: -
+cli-batches/SKILL.md: 2260B fm_valid=True name_eq_dir=True invisible=0 hits=0 comments=1
+   hosts: -
+cli-chat/SKILL.md: 1377B fm_valid=True name_eq_dir=True invisible=0 hits=0 comments=1
+   hosts: -
+cli-compression/SKILL.md: 2084B fm_valid=True name_eq_dir=True invisible=0 hits=0 comments=1
+   hosts: -
+cli-contexts/SKILL.md: 4666B fm_valid=True name_eq_dir=True invisible=0 hits=3 comments=1
+   hosts: -
+   cred L234: - `--api-key <k>`
+   cred L235: - `--api-key-stdin`
+   cred L337: Move legacy plaintext context credentials to the OS keychain
+cli-cost-usage/SKILL.md: 2772B fm_valid=True name_eq_dir=True invisible=0 hits=3 comments=1
+   hosts: -
+   cred L28: - `--api-key <key>`
+   cred L210: - `--api-key <k>`
+   cred L222: - `--api-key <k>`
+cli-eval/SKILL.md: 5285B fm_valid=True name_eq_dir=True invisible=0 hits=47 comments=4
+   hosts: raw.githubusercontent.com
+   COMMENT: skill:custom-start
+   COMMENT: Migrated from skills/omniroute-cli-eval/SKILL.md (preserved curated co
+   COMMENT: skill:custom-end
+   shellpipe L2: name: cli-eval
+   shellpipe L3: description: Create and run evaluation suites, watch live benchmark progress, view scorecards, compare model performance, and integrate eval runs with CI workfl
+   shellpipe L9: Create and run evaluation suites, watch live benchmark progress, view scorecards, compare model performance, and integrate eval runs with CI workflows from the 
+   shellpipe L20: ### `eval`
+   shellpipe L25: omniroute eval
+   shellpipe L28: ### `eval suites`
+   shellpipe L33: omniroute eval suites
+   shellpipe L36: ### `eval list`
+   shellpipe L41: omniroute eval list
+   shellpipe L44: ### `eval get <suiteId>`
+   shellpipe L49: omniroute eval get <suiteId>
+   shellpipe L52: ### `eval create`
+   shellpipe L61: omniroute eval create
+   shellpipe L64: ### `eval run <suiteId>`
+   shellpipe L77: omniroute eval run <suiteId>
+   shellpipe L80: ### `eval list`
+   shellpipe L92: omniroute eval list
+   shellpipe L95: ### `eval get <runId>`
+   shellpipe L100: omniroute eval get <runId>
+   shellpipe L103: ### `eval results <runId>`
+   shellpipe L112: omniroute eval results <runId>
+   shellpipe L115: ### `eval cancel <runId>`
+   shellpipe L124: omniroute eval cancel <runId>
+   shellpipe L127: ### `eval scorecard <runId>`
+   shellpipe L132: omniroute eval scorecard <runId>
+   shellpipe L153: <!-- Migrated from skills/omniroute-cli-eval/SKILL.md (preserved curated content) -->
+   shellpipe L163: ## Eval suites
+   shellpipe L166: omniroute eval suites list                       # List all eval suites
+   shellpipe L167: omniroute eval suites list --json                # JSON output
+   shellpipe L169: omniroute eval suites get <suiteId>              # Full suite definition
+   shellpipe L175: omniroute eval suites create \
+   shellpipe L190: ## Run an eval
+   shellpipe L193: omniroute eval suites run <suiteId> \
+   shellpipe L196: omniroute eval suites run <suiteId> \
+   shellpipe L204: RUN_ID=$(omniroute eval suites run <suiteId> --model claude-sonnet-4-6 --output json | jq -r '.id')
+   shellpipe L205: omniroute eval get $RUN_ID
+   shellpipe L211: omniroute eval list                              # List all eval runs
+   shellpipe L212: omniroute eval list --json
+   shellpipe L214: omniroute eval get <runId>                       # Run details (status, model, score)
+   shellpipe L215: omniroute eval results <runId>                   # Per-sample results
+   shellpipe L216: omniroute eval scorecard <runId>                 # Full scorecard with pass/fail per sample
+   shellpipe L217: omniroute eval cancel <runId>                    # Cancel a running eval
+   shellpipe L223: omniroute eval scorecard <runId> --output json
+   shellpipe L245: omniroute eval suites run $SUITE_ID --model $MODEL --output json | jq '{model: .model, score: .score}'
+   shellpipe L253: SCORE=$(omniroute eval suites run $SUITE_ID --model claude-sonnet-4-6 --output json | jq -r '.score')
+   shellpipe L261: - `eval get` shows `status: failed` → check `omniroute logs --search eval` for error details
+   shellpipe L262: - `scorecard` returns empty results → the run may still be `running`; poll `omniroute eval get <runId>` until `status` is `completed`
+cli-health/SKILL.md: 1305B fm_valid=True name_eq_dir=True invisible=0 hits=0 comments=1
+   hosts: -
+cli-keys/SKILL.md: 2483B fm_valid=True name_eq_dir=True invisible=0 hits=2 comments=1
+   hosts: -
+   cred L28: ### `keys add <provider> [apiKey]`
+   cred L37: omniroute keys add <provider> [apiKey]
+cli-mcp/SKILL.md: 1217B fm_valid=True name_eq_dir=True invisible=0 hits=0 comments=1
+   hosts: -
+cli-models/SKILL.md: 2214B fm_valid=True name_eq_dir=True invisible=0 hits=0 comments=1
+   hosts: -
+cli-plugins-skills/SKILL.md: 4195B fm_valid=True name_eq_dir=True invisible=0 hits=5 comments=1
+   hosts: -
+   cred L34: - `--api-key <key>`
+   cred L51: - `--api-key <key>`
+   cred L65: - `--api-key <key>`
+   cred L80: - `--api-key <key>`
+   cred L272: - `--api-key <key>`
+cli-policy-audit/SKILL.md: 2932B fm_valid=True name_eq_dir=True invisible=0 hits=2 comments=1
+   hosts: -
+   cred L109: - `--api-key <key>`
+   cred L191: - `--api-key <k>`
+cli-providers/SKILL.md: 8623B fm_valid=True name_eq_dir=True invisible=0 hits=4 comments=4
+   hosts: raw.githubusercontent.com
+   COMMENT: skill:custom-start
+   COMMENT: Migrated from skills/omniroute-cli-providers/SKILL.md (preserved curat
+   COMMENT: skill:custom-end
+   cred L201: omniroute providers available --category api-key     # Filter by category
+   cred L205: Categories: `api-key`, `oauth`, `free`, `local`, `combo`.
+   cred L234: omniroute keys add <provider> [apiKey]               # Add an API key for a provider
+   cred L282: omniroute nodes add <provider> --api-key <key>       # Add a node
+cli-resilience/SKILL.md: 2495B fm_valid=True name_eq_dir=True invisible=0 hits=1 comments=1
+   hosts: -
+   cred L49: - `--api-key-id <id>`
+cli-routing/SKILL.md: 1368B fm_valid=True name_eq_dir=True invisible=0 hits=0 comments=1
+   hosts: -
+cli-serve/SKILL.md: 10433B fm_valid=True name_eq_dir=True invisible=0 hits=9 comments=4
+   hosts: localhost:20128, raw.githubusercontent.com, your-server.com
+   COMMENT: skill:custom-start
+   COMMENT: Aggregated from: omniroute-cli (setup + index), omniroute-cli-admin (l
+   COMMENT: skill:custom-end
+   cred L106: | API key  | `OMNIROUTE_API_KEY` or `--api-key`   |
+   cred L126: | `--api-key <key>`   | Override API key for this invocation                     |
+   shellpipe L166: | Evals & benchmarking                 | https://raw.githubusercontent.com/diegosouzapw/OmniRoute/main/skills/omniroute-cli-eval/SKILL.md      |
+   cred L208: --password 'admin-password' \
+   cred L211: --api-key 'sk-...' \
+   cred L219: | `OMNIROUTE_SETUP_PASSWORD`    | Admin password (≥8 chars)                    |
+   cred L248: omniroute backup                       # Snapshot config + SQLite DB to ~/.omniroute/backups/
+   cred L260: On Linux: creates a **systemd user service** (`~/.config/systemd/user/omniroute.service`) and enables **linger** so the service can start after reboot without a
+   cred L288: omniroute reset-password               # Reset the admin password interactively
+cli-setup/SKILL.md: 3155B fm_valid=True name_eq_dir=True invisible=0 hits=2 comments=1
+   hosts: -
+   cred L239: - `--password <value>`
+   cred L243: - `--api-key <value>`
+cli-skill-collector/SKILL.md: 8440B fm_valid=True name_eq_dir=True invisible=0 hits=13 comments=4
+   hosts: localhost:20128
+   COMMENT: skill:custom-start
+   COMMENT: Preserved curated content from #6294 (skills/cli-skill-collector autho
+   COMMENT: skill:custom-end
+   cred L239: - `--password <value>`
+   cred L243: - `--api-key <value>`
+   send L349: curl -X POST http://localhost:20128/api/skills/collect/install \
+   cred L361: - **claude** → `~/.claude/skills/{category}/`
+   cred L362: - **codex** → `~/.codex/skills/{category}/`
+   cred L364: - **opencode** → `~/.opencode/skills/{category}/`
+   cred L365: - **gemini** → `~/.gemini/skills/{category}/`
+   cred L377: ls -la ~/.codex/skills/imported-github/*/SKILL.md
+   cred L380: ls -la ~/.claude/skills/imported-github/*/SKILL.md
+   shellpipe L403: TOOL=$(echo "$DETECT" | python3 -c "import sys,json;d=json.load(sys.stdin);print(d['installedToolIds'][0] if d['installedToolIds'] else '')")
+   shellpipe L404: SKILL=$(echo "$DETECT" | python3 -c "import sys,json;d=json.load(sys.stdin);ms=d.get('matchedSkills',[]);print(ms[0]['repo'] if ms else '')")
+   send L408: curl -s -X POST http://localhost:20128/api/skills/collect/install \
+   cred L421: - The `/api/skills/collect/*` and `/api/github-skills` endpoints require **management-scoped authentication** the same way every other `/api/skills/*` route doe
+cli-tunnel/SKILL.md: 1355B fm_valid=True name_eq_dir=True invisible=0 hits=0 comments=1
+   hosts: -
+config-codex-cli/SKILL.md: 2742B fm_valid=True name_eq_dir=True invisible=0 hits=0 comments=3
+   hosts: -
+   COMMENT: skill:custom-start
+   COMMENT: skill:custom-end
+omni-agents-a2a/SKILL.md: 3174B fm_valid=True name_eq_dir=True invisible=0 hits=1 comments=4
+   hosts: github.com, raw.githubusercontent.com
+   COMMENT: skill:custom-start
+   COMMENT: Migrated from skills/omniroute-a2a/SKILL.md (preserved curated content
+   COMMENT: skill:custom-end
+   send L53: curl -X POST $OMNIROUTE_URL/a2a \
+omni-api-keys/SKILL.md: 5692B fm_valid=True name_eq_dir=True invisible=0 hits=7 comments=1
+   hosts: localhost:20128
+   send L31: curl -X POST https://localhost:20128/api/keys \
+   send L79: curl -X POST https://localhost:20128/api/keys/{id}/access \
+   send L101: curl -X POST https://localhost:20128/api/keys/{id}/regenerate \
+   send L139: curl -X POST https://localhost:20128/api/keys/groups \
+   send L159: curl -X PUT https://localhost:20128/api/keys/groups/{id} \
+   send L188: curl -X POST https://localhost:20128/api/keys/groups/{id}/keys \
+   send L217: curl -X POST https://localhost:20128/api/keys/groups/{id}/permissions \
+omni-auth/SKILL.md: 7380B fm_valid=True name_eq_dir=True invisible=0 hits=8 comments=4
+   hosts: localhost:20128, raw.githubusercontent.com
+   COMMENT: skill:custom-start
+   COMMENT: Migrated from skills/omniroute/SKILL.md (preserved curated content)
+   COMMENT: skill:custom-end
+   cred L13: Remote API requests use a Bearer credential. Dashboard login is different: `POST /api/auth/login` accepts a management password and returns an `auth_token` sess
+   send L22: curl -X POST https://localhost:20128/api/auth/login \
+   cred L25: -d '{"password":"<management-password>"}'
+   shellpipe L33: CSRF_TOKEN=$(curl -s https://localhost:20128/api/auth/csrf -b cookie.jar | jq -r .token)
+   send L34: curl -X POST https://localhost:20128/api/auth/logout \
+   cred L47: sets a short-lived `oidc_state` cookie, and redirects the browser. Password login
+   cred L64: JWT used by password login and redirects to `/dashboard`.
+   shellpipe L151: | CLI evals & benchmarks | https://raw.githubusercontent.com/diegosouzapw/OmniRoute/main/skills/omniroute-cli-eval/SKILL.md      |
+omni-budget/SKILL.md: 1185B fm_valid=True name_eq_dir=True invisible=0 hits=1 comments=1
+   hosts: localhost:20128
+   send L31: curl -X POST https://localhost:20128/api/rate-limit \
+omni-cache/SKILL.md: 2114B fm_valid=True name_eq_dir=True invisible=0 hits=0 comments=1
+   hosts: localhost:20128
+omni-cli-tools/references/endpoints.md: 23306B fm_valid=None name_eq_dir=None invisible=0 hits=32 comments=1
+   hosts: localhost:20128
+   send L97: curl -X POST https://localhost:20128/api/cli-tools/backups \
+   send L135: curl -X POST https://localhost:20128/api/cli-tools/antigravity-mitm \
+   send L164: curl -X PUT https://localhost:20128/api/cli-tools/antigravity-mitm/alias \
+   send L184: curl -X POST https://localhost:20128/api/cli-tools/claude-settings \
+   send L213: curl -X POST https://localhost:20128/api/cli-tools/cline-settings \
+   send L242: curl -X POST https://localhost:20128/api/cli-tools/codex-profiles \
+   send L253: curl -X PUT https://localhost:20128/api/cli-tools/codex-profiles \
+   send L282: curl -X POST https://localhost:20128/api/cli-tools/codex-settings \
+   send L311: curl -X POST https://localhost:20128/api/cli-tools/droid-settings \
+   send L340: curl -X POST https://localhost:20128/api/cli-tools/kilo-settings \
+   send L369: curl -X POST https://localhost:20128/api/cli-tools/openclaw-settings \
+   send L402: curl -X POST https://localhost:20128/api/cli-tools/crush-settings \
+   cred L423: Local-only. Reads the OmniRoute config block from `~/.codewhale/config.toml` (with `~/.deepseek/config.toml` legacy fallback).
+   send L437: curl -X POST https://localhost:20128/api/cli-tools/codewhale-settings \
+   cred L467: Submit the original toolId, apiKey, optional baseUrl/model and optional dryRun in the JSON body. Returned content is a redacted, non-cacheable preview, not an i
+   send L470: curl -X POST https://localhost:20128/api/cli-tools/apply \
+   cred L473: -d '{"toolId":"claude","apiKey":"<configuration-api-key>","dryRun":true}'
+   cred L480: Returns redacted, non-cacheable previews. Send the configuration API key in x-omniroute-config-api-key, separate from management authentication. API keys in que
+   cred L485: -H "x-omniroute-config-api-key: <configuration-api-key>"
+   cred L492: Submit toolId, apiKey and optional baseUrl/model as JSON. Unknown fields are rejected. Returned content is a redacted, non-cacheable preview, not an importable 
+   send L495: curl -X POST https://localhost:20128/api/cli-tools/config \
+   cred L498: -d '{"toolId":"claude","apiKey":"<configuration-api-key>"}'
+   send L515: curl -X POST https://localhost:20128/api/cli-tools/deepseek-tui-settings \
+   send L553: curl -X POST https://localhost:20128/api/cli-tools/forge-settings \
+   send L582: curl -X POST https://localhost:20128/api/cli-tools/grok-build-settings \
+   send L611: curl -X POST https://localhost:20128/api/cli-tools/hermes-agent-settings \
+   send L631: curl -X POST https://localhost:20128/api/cli-tools/jcode-settings \
+   send L669: curl -X POST https://localhost:20128/api/cli-tools/letta-settings \
+   send L707: curl -X POST https://localhost:20128/api/cli-tools/omp-settings \
+   send L745: curl -X POST https://localhost:20128/api/cli-tools/pi-settings \
+   send L774: curl -X POST https://localhost:20128/api/cli-tools/qwen-settings \
+   send L803: curl -X POST https://localhost:20128/api/cli-tools/smelt-settings \
+omni-cli-tools/SKILL.md: 8139B fm_valid=True name_eq_dir=True invisible=0 hits=0 comments=1
+   hosts: -
+omni-combos-routing/SKILL.md: 8543B fm_valid=True name_eq_dir=True invisible=0 hits=11 comments=4
+   hosts: localhost:20128, raw.githubusercontent.com
+   COMMENT: skill:custom-start
+   COMMENT: Migrated from skills/omniroute-routing/SKILL.md (preserved curated con
+   COMMENT: skill:custom-end
+   send L31: curl -X POST https://localhost:20128/api/combos \
+   send L53: curl -X PUT https://localhost:20128/api/combos/{id} \
+   send L95: curl -X POST https://localhost:20128/api/combos/test \
+   send L119: curl -X POST https://localhost:20128/api/fallback/chains \
+   send L157: curl -X POST https://localhost:20128/api/combos/duplicate \
+   send L168: curl -X POST https://localhost:20128/api/combos/reorder \
+   send L201: curl -X POST $OMNIROUTE_URL/api/combos \
+   send L243: curl -X POST $OMNIROUTE_URL/api/combos \
+   send L260: curl -X POST $OMNIROUTE_URL/v1/chat/completions \
+   send L270: curl -X PUT $OMNIROUTE_URL/api/combos/{id}/toggle \
+   send L287: curl -X POST $OMNIROUTE_URL/api/routing/simulate \
+omni-compression/SKILL.md: 6443B fm_valid=True name_eq_dir=True invisible=0 hits=11 comments=4
+   hosts: localhost:20128, raw.githubusercontent.com
+   COMMENT: skill:custom-start
+   COMMENT: Migrated from skills/omniroute-compression/SKILL.md (preserved curated
+   COMMENT: skill:custom-end
+   send L22: curl -X POST https://localhost:20128/api/compression/preview \
+   send L51: curl -X POST https://localhost:20128/api/compression/compare \
+   send L62: curl -X POST https://localhost:20128/api/compression/compare/verify \
+   send L82: curl -X POST https://localhost:20128/api/compression/retrieve \
+   send L120: curl -X PUT $OMNIROUTE_URL/api/settings/compression \
+   send L129: curl -X PUT $OMNIROUTE_URL/api/settings/compression \
+   send L142: curl -X PUT $OMNIROUTE_URL/api/settings/compression \
+   send L153: curl -X POST $OMNIROUTE_URL/api/compression/preview \
+   send L169: curl -X PUT $OMNIROUTE_URL/api/settings/compression \
+   send L189: curl -X PUT $OMNIROUTE_URL/api/settings/compression \
+   send L212: curl -X PUT $OMNIROUTE_URL/api/settings/compression \
+omni-context-rtk/SKILL.md: 2470B fm_valid=True name_eq_dir=True invisible=0 hits=4 comments=1
+   hosts: localhost:20128
+   send L31: curl -X PUT https://localhost:20128/api/context/rtk/config \
+   send L51: curl -X POST https://localhost:20128/api/context/rtk/import \
+   send L62: curl -X POST https://localhost:20128/api/context/rtk/test \
+   send L73: curl https://localhost:20128/api/context/rtk/raw-output/{id} \
+omni-db-backups/SKILL.md: 1577B fm_valid=True name_eq_dir=True invisible=0 hits=2 comments=1
+   hosts: localhost:20128
+   send L31: curl -X POST https://localhost:20128/api/system/env/repair \
+   send L51: curl -X POST https://localhost:20128/api/system/version \
+omni-github-skills/SKILL.md: 1287B fm_valid=True name_eq_dir=True invisible=0 hits=0 comments=1
+   hosts: -
+omni-inference/references/endpoints.md: 41907B fm_valid=None name_eq_dir=None invisible=0 hits=63 comments=1
+   hosts: api.elevenlabs.io, localhost:20128
+   send L149: curl -X POST https://localhost:20128/api/v1/session-leases \
+   send L173: curl -X POST https://localhost:20128/api/v1/search \
+   send L186: curl -X POST https://localhost:20128/api/v1/chat/completions \
+   send L210: curl -X POST https://localhost:20128/api/v1/providers/{provider}/chat/completions \
+   send L223: curl -X POST https://localhost:20128/api/v1/api/chat \
+   send L236: curl -X POST https://localhost:20128/api/v1/messages \
+   send L247: curl -X POST https://localhost:20128/api/v1/messages/count_tokens \
+   send L260: curl -X POST https://localhost:20128/api/v1/responses \
+   send L271: curl -X POST https://localhost:20128/api/v1/embeddings \
+   send L293: curl -X POST https://localhost:20128/api/v1/multimodal-embeddings \
+   send L304: curl -X POST https://localhost:20128/api/v1/providers/{provider}/embeddings \
+   send L315: curl -X POST https://localhost:20128/api/v1/images/generations \
+   send L326: curl -X POST https://localhost:20128/api/v1/providers/{provider}/images/generations \
+   send L339: curl -X POST https://localhost:20128/api/v1/audio/speech \
+   send L352: curl -X POST https://localhost:20128/api/v1/audio/transcriptions \
+   send L365: curl -X POST https://localhost:20128/api/v1/moderations \
+   send L378: curl -X POST https://localhost:20128/api/v1/rerank \
+   send L424: curl -X POST https://localhost:20128/api/v1/management/proxy-subscriptions \
+   send L481: curl -X POST https://localhost:20128/api/v1/management/proxy-subscriptions/{id}/refresh \
+   send L494: curl -X POST https://localhost:20128/api/v1/ocr \
+   send L507: curl -X POST https://localhost:20128/api/v1/audio/translations \
+   cred L517: Proxies `GET https://api.elevenlabs.io/v1/voices` using the stored `elevenlabs` provider credentials (the caller never sends `xi-api-key`). The incoming query s
+   send L531: curl -X POST https://localhost:20128/api/v1/speech-to-text \
+   send L544: curl -X POST https://localhost:20128/api/v1/text-to-speech/{voiceId} \
+   send L597: curl -X POST https://localhost:20128/api/v1/{omnirouteCatchAll} \
+   send L608: curl -X PUT https://localhost:20128/api/v1/{omnirouteCatchAll} \
+   send L648: curl -X PUT https://localhost:20128/api/v1/accounts/{id}/limits \
+   send L668: curl -X POST https://localhost:20128/api/v1/agents/credentials \
+   send L697: curl -X POST https://localhost:20128/api/v1/agents/tasks \
+   send L726: curl -X POST https://localhost:20128/api/v1/agents/tasks/{id} \
+   send L746: curl -X POST https://localhost:20128/api/v1/antigravity \
+   send L775: curl -X POST https://localhost:20128/api/v1/batches \
+   send L804: curl -X POST https://localhost:20128/api/v1/batches/{id}/cancel \
+   send L824: curl -X POST https://localhost:20128/api/v1/classify \
+   send L844: curl -X POST https://localhost:20128/api/v1/completions \
+   send L864: curl -X POST https://localhost:20128/api/v1/files \
+   send L902: curl -X POST https://localhost:20128/api/v1/images/edits \
+   send L922: curl -X POST https://localhost:20128/api/v1/images/upscale \
+   send L933: curl -X POST https://localhost:20128/api/v1/issues/report \
+   send L953: curl -X POST https://localhost:20128/api/v1/management/proxies \
+   send L993: curl -X PUT https://localhost:20128/api/v1/management/proxies/assignments \
+   send L1004: curl -X PUT https://localhost:20128/api/v1/management/proxies/bulk-assign \
+   send L1051: curl -X POST https://localhost:20128/api/v1/music/generations \
+   send L1071: curl -X PUT https://localhost:20128/api/v1/providers/{provider}/limits \
+   send L1100: curl -X POST https://localhost:20128/api/v1/registered-keys \
+   send L1129: curl -X POST https://localhost:20128/api/v1/registered-keys/{id}/revoke \
+   send L1140: curl -X POST https://localhost:20128/api/v1/relay/chat/completions \
+   send L1151: curl -X POST https://localhost:20128/api/v1/relay/chat/completions/bifrost \
+   send L1162: curl -X POST https://localhost:20128/api/v1/responses/{path} \
+   send L1182: curl -X POST https://localhost:20128/api/v1/segment \
+   send L1220: curl -X POST https://localhost:20128/api/v1/videos/generations \
+   send L1240: curl -X POST https://localhost:20128/api/v1/vscode/{token}/api/chat \
+   send L1251: curl -X POST https://localhost:20128/api/v1/vscode/{token}/api/show \
+   send L1280: curl -X POST https://localhost:20128/api/v1/vscode/{token}/chat/completions \
+   send L1309: curl -X POST https://localhost:20128/api/v1/vscode/{token}/responses \
+   send L1320: curl -X POST https://localhost:20128/api/v1/vscode/{token}/v1/chat/completions \
+   send L1349: curl -X POST https://localhost:20128/api/v1/vscode/combos/{token}/{{slug}} \
+   send L1369: curl -X POST https://localhost:20128/api/v1/vscode/raw/{token}/api/chat \
+   send L1380: curl -X POST https://localhost:20128/api/v1/vscode/raw/{token}/api/show \
+   send L1409: curl -X POST https://localhost:20128/api/v1/vscode/raw/{token}/chat/completions \
+   send L1438: curl -X POST https://localhost:20128/api/v1/vscode/raw/{token}/responses \
+   send L1449: curl -X POST https://localhost:20128/api/v1/vscode/raw/{token}/v1/chat/completions \
+   send L1469: curl -X POST https://localhost:20128/api/v1/web/fetch \
+omni-inference/SKILL.md: 21859B fm_valid=True name_eq_dir=True invisible=0 hits=15 comments=4
+   hosts: anthropic.com, raw.githubusercontent.com
+   COMMENT: skill:custom-start
+   COMMENT: Aggregated from: omniroute-chat, omniroute-image, omniroute-tts, omnir
+   COMMENT: skill:custom-end
+   shellpipe L164: curl $OMNIROUTE_URL/v1/models | jq '.data[].id'
+   send L172: curl -X POST $OMNIROUTE_URL/v1/chat/completions \
+   send L185: curl -X POST $OMNIROUTE_URL/v1/messages \
+   shellpipe L228: curl $OMNIROUTE_URL/v1/models/image | jq '.data[]'
+   send L236: curl -X POST $OMNIROUTE_URL/v1/images/generations \
+   shellpipe L267: curl $OMNIROUTE_URL/v1/models/tts | jq '.data[]'
+   send L275: curl -X POST $OMNIROUTE_URL/v1/audio/speech \
+   shellpipe L309: curl $OMNIROUTE_URL/v1/models/stt | jq '.data[]'
+   send L315: curl -X POST $OMNIROUTE_URL/v1/audio/transcriptions \
+   shellpipe L346: curl $OMNIROUTE_URL/v1/models/embedding | jq '.data[]'
+   send L354: curl -X POST $OMNIROUTE_URL/v1/embeddings \
+   shellpipe L387: curl $OMNIROUTE_URL/v1/models/web | jq '.data[] | select(.kind == "webSearch")'
+   send L393: curl -X POST $OMNIROUTE_URL/v1/web/search \
+   shellpipe L432: curl $OMNIROUTE_URL/v1/models/web | jq '.data[] | select(.kind == "webFetch")'
+   send L438: curl -X POST $OMNIROUTE_URL/v1/web/fetch \
+omni-mcp/SKILL.md: 5205B fm_valid=True name_eq_dir=True invisible=0 hits=2 comments=4
+   hosts: github.com, localhost:20128, raw.githubusercontent.com
+   COMMENT: skill:custom-start
+   COMMENT: Migrated from skills/omniroute-mcp/SKILL.md (preserved curated content
+   COMMENT: skill:custom-end
+   send L49: curl -X POST https://localhost:20128/api/mcp/sse \
+   send L78: curl -X POST https://localhost:20128/api/mcp/stream \
+omni-models/SKILL.md: 2355B fm_valid=True name_eq_dir=True invisible=0 hits=3 comments=1
+   hosts: localhost:20128
+   send L42: curl -X POST https://localhost:20128/api/models/alias \
+   send L71: curl -X POST https://localhost:20128/api/models/test \
+   send L82: curl -X POST https://localhost:20128/api/models/test-all \
+omni-providers/references/endpoints.md: 25174B fm_valid=None name_eq_dir=None invisible=0 hits=46 comments=1
+   hosts: localhost:20128
+   send L94: curl -X POST https://localhost:20128/api/providers \
+   send L134: curl -X POST https://localhost:20128/api/providers/{id}/test \
+   send L165: curl -X POST https://localhost:20128/api/providers/test-batch \
+   send L178: curl -X POST https://localhost:20128/api/providers/validate \
+   send L198: curl -X POST https://localhost:20128/api/providers/agy-auth/import \
+   send L209: curl -X POST https://localhost:20128/api/providers/agy-auth/import-bulk \
+   send L220: curl -X POST https://localhost:20128/api/providers/agy-auth/zip-extract \
+   send L231: curl -X POST https://localhost:20128/api/providers/agy-auth/apply-local \
+   send L251: curl -X POST https://localhost:20128/api/provider-nodes \
+   send L282: curl -X POST https://localhost:20128/api/provider-nodes/validate \
+   send L304: curl -X POST https://localhost:20128/api/provider-models/validate-and-add \
+   send L324: curl -X PUT https://localhost:20128/api/providers/{id}/cc-alias \
+   send L344: curl -X POST https://localhost:20128/api/providers/{id}/claude-auth/apply-local \
+   send L355: curl -X POST https://localhost:20128/api/providers/{id}/claude-auth/export \
+   send L366: curl -X POST https://localhost:20128/api/providers/{id}/codex-auth/apply-local \
+   send L377: curl -X POST https://localhost:20128/api/providers/{id}/codex-auth/export \
+   send L397: curl -X PUT https://localhost:20128/api/providers/{id}/interception-rules \
+   send L417: curl -X POST https://localhost:20128/api/providers/{id}/login \
+   send L437: curl -X PUT https://localhost:20128/api/providers/{id}/param-filters \
+   send L457: curl -X POST https://localhost:20128/api/providers/{id}/refresh \
+   send L468: curl -X POST https://localhost:20128/api/providers/{id}/refresh-cursor \
+   send L479: curl -X POST https://localhost:20128/api/providers/{id}/refresh-token \
+   send L490: curl -X POST https://localhost:20128/api/providers/{id}/sync-models \
+   send L503: curl -X POST https://localhost:20128/api/providers/bulk \
+   send L514: curl -X POST https://localhost:20128/api/providers/bulk-web-session \
+   send L525: curl -X POST https://localhost:20128/api/providers/claude-auth/import \
+   send L536: curl -X POST https://localhost:20128/api/providers/claude-auth/import-bulk \
+   send L547: curl -X POST https://localhost:20128/api/providers/claude-auth/zip-extract \
+   send L558: curl -X POST https://localhost:20128/api/providers/codex-auth/import \
+   send L569: curl -X POST https://localhost:20128/api/providers/codex-auth/import-bulk \
+   send L580: curl -X POST https://localhost:20128/api/providers/codex-auth/zip-extract \
+   send L591: curl -X POST https://localhost:20128/api/providers/command-code/auth/apply \
+   send L602: curl -X POST https://localhost:20128/api/providers/command-code/auth/callback \
+   send L613: curl -X POST https://localhost:20128/api/providers/command-code/auth/start \
+   send L633: curl -X POST https://localhost:20128/api/providers/command-code/auth/status \
+   send L662: curl -X POST https://localhost:20128/api/providers/free-onboarding \
+   send L682: curl -X POST https://localhost:20128/api/providers/health-autopilot/actions \
+   send L704: curl -X POST https://localhost:20128/api/providers/import \
+   send L733: curl -X POST https://localhost:20128/api/providers/volcengine-plan/connect \
+   send L744: curl -X POST https://localhost:20128/api/providers/volcengine-plan/connect/{sessionId}/cancel \
+   send L755: curl -X POST https://localhost:20128/api/providers/volcengine-plan/connect/{sessionId}/code \
+   send L766: curl -X POST https://localhost:20128/api/providers/volcengine-plan/connect/{sessionId}/identity \
+   send L777: curl -X POST https://localhost:20128/api/providers/volcengine-plan/connect/{sessionId}/resend \
+   send L806: curl -X POST https://localhost:20128/api/providers/zed/discover \
+   send L817: curl -X POST https://localhost:20128/api/providers/zed/import \
+   send L828: curl -X POST https://localhost:20128/api/providers/zed/manual-import \
+omni-providers/SKILL.md: 9661B fm_valid=True name_eq_dir=True invisible=0 hits=1 comments=3
+   hosts: localhost:20128
+   COMMENT: skill:custom-start
+   COMMENT: skill:custom-end
+   send L101: curl -X POST https://localhost:20128/api/providers/{id}/refresh \
+omni-proxies/SKILL.md: 825B fm_valid=True name_eq_dir=True invisible=0 hits=0 comments=1
+   hosts: -
+omni-resilience/SKILL.md: 4814B fm_valid=True name_eq_dir=True invisible=0 hits=1 comments=4
+   hosts: localhost:20128, raw.githubusercontent.com
+   COMMENT: skill:custom-start
+   COMMENT: Migrated from skills/omniroute-monitoring/SKILL.md (preserved curated 
+   COMMENT: skill:custom-end
+   send L132: curl -X POST $OMNIROUTE_URL/api/budget/guard \
+omni-settings/references/endpoints.md: 41005B fm_valid=None name_eq_dir=None invisible=0 hits=64 comments=1
+   hosts: localhost:20128
+   send L156: curl -X PUT https://localhost:20128/api/settings/memory \
+   cred L166: Returns current Qdrant configuration. The `apiKey` field is never returned raw — use `hasApiKey` / `apiKeyMasked` instead.
+   cred L177: Update Qdrant configuration. Pass `apiKey: ""` to remove the stored key. Schema: `QdrantSettingsUpdateSchema`.
+   send L180: curl -X PUT https://localhost:20128/api/settings/qdrant \
+   send L204: curl -X POST https://localhost:20128/api/settings/qdrant/search \
+   send L217: curl -X POST https://localhost:20128/api/settings/qdrant/cleanup \
+   send L261: curl -X POST https://localhost:20128/api/settings/purge-request-history \
+   send L281: curl -X PUT https://localhost:20128/api/settings/compression \
+   send L303: curl -X PUT https://localhost:20128/api/settings/compression/mcp-accessibility \
+   send L335: curl -X PUT https://localhost:20128/api/settings/payload-rules \
+   send L375: curl -X POST https://localhost:20128/api/settings/proxy/test \
+   send L386: curl -X POST https://localhost:20128/api/settings/require-login \
+   send L411: curl -X PUT https://localhost:20128/api/settings/ip-filter \
+   send L433: curl -X PUT https://localhost:20128/api/settings/system-prompt \
+   send L455: curl -X PUT https://localhost:20128/api/settings/thinking-budget \
+   send L488: curl -X PUT https://localhost:20128/api/settings/quota-store \
+   send L501: curl -X POST https://localhost:20128/api/settings/purge-usage-history \
+   send L530: curl -X PUT https://localhost:20128/api/settings/auto-disable-accounts \
+   send L550: curl -X POST https://localhost:20128/api/settings/background-degradation \
+   send L561: curl -X PUT https://localhost:20128/api/settings/background-degradation \
+   send L581: curl -X PUT https://localhost:20128/api/settings/cache-config \
+   send L646: curl -X PUT https://localhost:20128/api/settings/database \
+   send L668: curl -X POST https://localhost:20128/api/settings/database/refresh-stats \
+   send L688: curl -X POST https://localhost:20128/api/settings/database/vacuum \
+   send L726: curl -X PUT https://localhost:20128/api/settings/feature-flags \
+   send L764: curl -X POST https://localhost:20128/api/settings/free-proxies/{id}/add-to-pool \
+   send L775: curl -X POST https://localhost:20128/api/settings/free-proxies/bulk-add-to-pool \
+   send L795: curl -X POST https://localhost:20128/api/settings/free-proxies/sync \
+   send L806: curl -X POST https://localhost:20128/api/settings/import-json \
+   send L835: curl -X POST https://localhost:20128/api/settings/local-corpus \
+   send L864: curl -X POST https://localhost:20128/api/settings/mitm \
+   send L875: curl -X PUT https://localhost:20128/api/settings/mitm \
+   send L895: curl -X POST https://localhost:20128/api/settings/model-aliases \
+   send L906: curl -X PUT https://localhost:20128/api/settings/model-aliases \
+   send L935: curl -X POST https://localhost:20128/api/settings/models-dev \
+   send L955: curl -X POST https://localhost:20128/api/settings/notion \
+   send L984: curl -X POST https://localhost:20128/api/settings/obsidian \
+   send L1013: curl -X POST https://localhost:20128/api/settings/obsidian/webdav \
+   send L1042: curl -X POST https://localhost:20128/api/settings/oneproxy \
+   send L1062: curl -X POST https://localhost:20128/api/settings/oneproxy/rotate \
+   send L1082: curl -X POST https://localhost:20128/api/settings/proxies \
+   send L1113: curl -X POST https://localhost:20128/api/settings/proxies/{id}/repair-relay \
+   send L1133: curl -X PUT https://localhost:20128/api/settings/proxies/assignments \
+   send L1144: curl -X POST https://localhost:20128/api/settings/proxies/auto-test \
+   send L1155: curl -X POST https://localhost:20128/api/settings/proxies/batch-activate \
+   send L1166: curl -X POST https://localhost:20128/api/settings/proxies/batch-delete \
+   send L1177: curl -X PUT https://localhost:20128/api/settings/proxies/bulk-assign \
+   send L1188: curl -X POST https://localhost:20128/api/settings/proxies/bulk-import \
+   send L1208: curl -X POST https://localhost:20128/api/settings/proxies/egress \
+   send L1228: curl -X POST https://localhost:20128/api/settings/proxies/migrate \
+   send L1248: curl -X PUT https://localhost:20128/api/settings/proxies/pool \
+   send L1290: curl -X POST https://localhost:20128/api/settings/proxy/cloudflare-deploy \
+   send L1301: curl -X POST https://localhost:20128/api/settings/proxy/deno-deploy \
+   send L1312: curl -X POST https://localhost:20128/api/settings/proxy/vercel-deploy \
+   send L1323: curl -X POST https://localhost:20128/api/settings/purge-call-logs \
+   send L1334: curl -X POST https://localhost:20128/api/settings/purge-detailed-logs \
+   send L1345: curl -X POST https://localhost:20128/api/settings/purge-logs \
+   send L1356: curl -X POST https://localhost:20128/api/settings/purge-quota-snapshots \
+   send L1376: curl -X POST https://localhost:20128/api/settings/quota/state \
+   send L1396: curl -X POST https://localhost:20128/api/settings/reasoning-routing-rules \
+   send L1436: curl -X POST https://localhost:20128/api/settings/reasoning-routing-rules/simulate \
+   send L1456: curl -X POST https://localhost:20128/api/settings/task-routing \
+   send L1467: curl -X PUT https://localhost:20128/api/settings/task-routing \
+   send L1487: curl -X PUT https://localhost:20128/api/settings/tier-config \
+omni-settings/SKILL.md: 14297B fm_valid=True name_eq_dir=True invisible=0 hits=1 comments=4
+   hosts: localhost:20128
+   COMMENT: skill:custom-start
+   COMMENT: Thinking budget behavior (preserved curated content — #10169)
+   COMMENT: skill:custom-end
+   send L169: curl -X PUT https://localhost:20128/api/settings/thinking-budget \
+omni-sync-cloud/SKILL.md: 3153B fm_valid=True name_eq_dir=True invisible=0 hits=7 comments=1
+   hosts: localhost:20128
+   send L24: curl -X POST https://localhost:20128/api/cloud/auth \
+   send L35: curl -X PUT https://localhost:20128/api/cloud/credentials/update \
+   send L48: curl -X POST https://localhost:20128/api/cloud/model/resolve \
+   send L68: curl -X PUT https://localhost:20128/api/cloud/models/alias \
+   send L79: curl -X POST https://localhost:20128/api/sync/cloud \
+   send L90: curl -X POST https://localhost:20128/api/sync/initialize \
+   send L119: curl -X POST https://localhost:20128/api/sync/tokens \
+omni-tunnels/SKILL.md: 833B fm_valid=True name_eq_dir=True invisible=0 hits=0 comments=1
+   hosts: -
+omni-usage-logs/SKILL.md: 8090B fm_valid=True name_eq_dir=True invisible=0 hits=4 comments=1
+   hosts: localhost:20128
+   send L118: curl -X POST https://localhost:20128/api/usage/budget \
+   send L174: curl -X POST https://localhost:20128/api/usage/codex-reset-credit \
+   send L257: curl -X POST https://localhost:20128/api/usage/provider-limits \
+   send L315: curl -X POST https://localhost:20128/api/usage/token-limits \
+omni-version-manager/references/endpoints.md: 26996B fm_valid=None name_eq_dir=None invisible=0 hits=49 comments=1
+   hosts: localhost:20128
+   send L75: curl -X POST https://localhost:20128/api/services/9router/install \
+   send L88: curl -X POST https://localhost:20128/api/services/9router/start \
+   send L101: curl -X POST https://localhost:20128/api/services/9router/stop \
+   send L114: curl -X POST https://localhost:20128/api/services/9router/restart \
+   send L127: curl -X POST https://localhost:20128/api/services/9router/update \
+   send L140: curl -X POST https://localhost:20128/api/services/9router/rotate-key \
+   send L164: curl -X POST https://localhost:20128/api/services/9router/auto-start \
+   send L177: curl -X POST https://localhost:20128/api/services/9router/auto-restart-adopted \
+   send L190: curl -X POST https://localhost:20128/api/services/cliproxy/install \
+   send L203: curl -X POST https://localhost:20128/api/services/cliproxy/start \
+   send L216: curl -X POST https://localhost:20128/api/services/cliproxy/stop \
+   send L229: curl -X POST https://localhost:20128/api/services/cliproxy/restart \
+   send L242: curl -X POST https://localhost:20128/api/services/cliproxy/update \
+   send L266: curl -X POST https://localhost:20128/api/services/cliproxy/auto-start \
+   send L279: curl -X POST https://localhost:20128/api/services/cliproxy/auto-restart-adopted \
+   send L292: curl -X POST https://localhost:20128/api/services/mux/install \
+   send L305: curl -X POST https://localhost:20128/api/services/mux/start \
+   send L318: curl -X POST https://localhost:20128/api/services/mux/stop \
+   send L331: curl -X POST https://localhost:20128/api/services/mux/restart \
+   send L344: curl -X POST https://localhost:20128/api/services/mux/update \
+   send L368: curl -X POST https://localhost:20128/api/services/mux/auto-start \
+   send L381: curl -X POST https://localhost:20128/api/services/mux/auto-restart-adopted \
+   send L394: curl -X POST https://localhost:20128/api/services/openwa/install \
+   send L407: curl -X POST https://localhost:20128/api/services/openwa/start \
+   send L420: curl -X POST https://localhost:20128/api/services/openwa/stop \
+   send L433: curl -X POST https://localhost:20128/api/services/openwa/restart \
+   send L446: curl -X POST https://localhost:20128/api/services/openwa/update \
+   send L470: curl -X POST https://localhost:20128/api/services/openwa/auto-start \
+   send L483: curl -X POST https://localhost:20128/api/services/openwa/auto-restart-adopted \
+   send L496: curl -X POST https://localhost:20128/api/services/bifrost/install \
+   send L509: curl -X POST https://localhost:20128/api/services/bifrost/start \
+   send L522: curl -X POST https://localhost:20128/api/services/bifrost/stop \
+   send L535: curl -X POST https://localhost:20128/api/services/bifrost/restart \
+   send L548: curl -X POST https://localhost:20128/api/services/bifrost/update \
+   send L572: curl -X POST https://localhost:20128/api/services/bifrost/auto-start \
+   send L585: curl -X POST https://localhost:20128/api/services/bifrost/auto-restart-adopted \
+   send L598: curl -X POST https://localhost:20128/api/services/dario/install \
+   send L611: curl -X POST https://localhost:20128/api/services/dario/start \
+   send L624: curl -X POST https://localhost:20128/api/services/dario/stop \
+   send L637: curl -X POST https://localhost:20128/api/services/dario/restart \
+   send L650: curl -X POST https://localhost:20128/api/services/dario/update \
+   send L674: curl -X POST https://localhost:20128/api/services/dario/auto-start \
+   send L687: curl -X POST https://localhost:20128/api/services/dario/auto-restart-adopted \
+   send L700: curl -X POST https://localhost:20128/api/services/dario/admin/login-start \
+   send L713: curl -X POST https://localhost:20128/api/services/dario/admin/login-complete \
+   cred L756: Writes the source connection's access/refresh token pair directly into Dario's own account-file store (`~/.dario/accounts/<alias>.json`), reusing the shared Cla
+   send L759: curl -X POST https://localhost:20128/api/services/dario/admin/import-from-omniroute \
+   send L790: curl -X POST https://localhost:20128/api/services/9router/provider-expose \
+   send L810: curl -X POST https://localhost:20128/api/services/cliproxy/provider-expose \
+omni-version-manager/SKILL.md: 6820B fm_valid=True name_eq_dir=True invisible=0 hits=0 comments=1
+   hosts: -
+omni-webhooks/SKILL.md: 2376B fm_valid=True name_eq_dir=True invisible=0 hits=4 comments=1
+   hosts: localhost:20128
+   send L31: curl -X POST https://localhost:20128/api/webhooks \
+   send L51: curl -X PUT https://localhost:20128/api/webhooks/{id} \
+   send L80: curl -X POST https://localhost:20128/api/webhooks/{id}/test \
+   send L91: curl -X POST https://localhost:20128/api/webhooks/validate-url \
+ponytail/SKILL.md: 7398B fm_valid=True name_eq_dir=True invisible=0 hits=0 comments=3
+   hosts: -
+   COMMENT: skill:custom-start
+   COMMENT: skill:custom-end
+README.md: 14766B fm_valid=None name_eq_dir=None invisible=0 hits=1 comments=0
+   hosts: raw.githubusercontent.com
+   shellpipe L76: | `cli-eval`            | CLI: Evals                    | Create and run evaluation suites, watch live benchmark progress, view scorecards, compare model perfor
+=== C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/skills_src/graphify/graphify
+skill.md: 42172B fm_valid=True name_eq_dir=None invisible=0 hits=5 comments=0
+   hosts: github.com
+   delete L247: Path('graphify-out/.graphify_cached.json').unlink(missing_ok=True)
+   delete L252: stale.unlink()
+   delete L367: Clean up temp files: `rm -f graphify-out/.graphify_cached.json graphify-out/.graphify_uncached.txt graphify-out/.graphify_semantic_new.json`
+   delete L631: rm -f graphify-out/.graphify_detect.json graphify-out/.graphify_extract.json graphify-out/.graphify_ast.json graphify-out/.graphify_semantic.json graphify-out/.
+   delete L633: rm -f graphify-out/.needs_update 2>/dev/null || true
+skills/claude/references/add-watch.md: 2692B fm_valid=None name_eq_dir=None invisible=0 hits=0 comments=0
+   hosts: -
+skills/claude/references/exports.md: 3360B fm_valid=None name_eq_dir=None invisible=0 hits=1 comments=0
+   hosts: -
+   cred L26: graphify export neo4j --push bolt://localhost:7687 --user neo4j --password PASSWORD
+skills/claude/references/extraction-spec.md: 7933B fm_valid=None name_eq_dir=None invisible=0 hits=0 comments=0
+   hosts: -
+skills/claude/references/github-and-merge.md: 2163B fm_valid=None name_eq_dir=None invisible=0 hits=5 comments=0
+   hosts: github.com
+   cred L16: graphify clone <url1>   # → ~/.graphify/repos/<owner1>/<repo1>
+   cred L17: graphify clone <url2>   # → ~/.graphify/repos/<owner2>/<repo2>
+   cred L21: ~/.graphify/repos/<owner1>/<repo1>/graphify-out/graph.json \
+   cred L22: ~/.graphify/repos/<owner2>/<repo2>/graphify-out/graph.json \
+   cred L26: Graphify clones into `~/.graphify/repos/<owner>/<repo>` and reuses existing clones on repeat runs. Each node in the merged graph carries a `repo` attribute so y
+skills/claude/references/hooks.md: 1267B fm_valid=None name_eq_dir=None invisible=0 hits=0 comments=0
+   hosts: -
+skills/claude/references/query.md: 13410B fm_valid=None name_eq_dir=None invisible=0 hits=0 comments=0
+   hosts: -
+skills/claude/references/transcribe.md: 3165B fm_valid=None name_eq_dir=None invisible=0 hits=0 comments=0
+   hosts: -
+skills/claude/references/update.md: 10386B fm_valid=None name_eq_dir=None invisible=0 hits=1 comments=0
+   hosts: -
+   delete L198: Clean up after: `rm -f graphify-out/.graphify_old.json`
+# EXIT=0
