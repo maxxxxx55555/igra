@@ -100,6 +100,6 @@ After: `c3e79e5`, launch 19 (ledger row 19), `docs/artifacts/rc16/proofs/s6_reim
 | texture MiB with a district built | 71.3 to 71.8 | 69.2 to 69.7 |
 | video MiB with a district built | 96.8 to 97.3 | 96.8 to 97.2 |
 
-Over the 22 transitions the node count stays inside the band above in both runs (no growth), orphans stay at 6.
+Over the 22 transitions before the staged frames the node count stays inside the band above in both runs (no growth), orphans stay at 6. The probe then stages its frames; the transition after the staged Ultra sprint frame (frame 06, the default tier is set again after it) reads 130.0 MiB texture and 159.6 MiB video with 22 hitches and 1210 ms to settle in the rc16 run (`docs/artifacts/rc16/proofs/s6_reimport_probe_after_c3e79e5.attach.rc16_probe_after.log`, the `stream pass=frames district=industrial` line) and 129.8 MiB, 157.3 MiB, 2 hitches and 479 ms in the rc15 run (`docs/artifacts/rc16/proofs/frames_before.attach.rc16_probe_before.log`): the step up of about 60 MiB in each is in both runs and was not traced.
 The frame p95 differs between reads of the same code by up to 16 ms (D1 after: 33.70 and 50.00; before: 76.19 and 51.45); the machine load during a read is not controlled here.
 The package size is not re-measured in this pass (no export was run): the signed bundle of rc15 is `build/tls.aab`, 183257097 bytes.

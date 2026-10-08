@@ -27,3 +27,4 @@ n	utc	head	id	exit	command
 26	20261008T002122Z	41afa7e	s8_final_frames_41afa7e	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 900
 27	20261008T002500Z	26eef24	s8_gui_explorer_26eef24	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/gui_explore_scene.tscn 600
 28	20261008T002652Z	924e3dd	s8_audio_truth_924e3dd	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120
+29	20261008T011644Z	21c2046	s8_closeout_rc16_21c2046	0	bash tools/qa_sim/closeout_check 300

@@ -3,7 +3,7 @@
 ## OPEN (2026-10-08, rc16 sign-off): two defects of rc15 found by the S8 frame read, not fixed in rc16
 
 Found by reading the fresh play-through frames next to their rc15 twins (`docs/stills/rc16_playthrough/` against `docs/stills/playthrough/`; the four pairs A06_shop, A09_skill_tree, B03_hardcore_on and S_workbench are identical).
-Neither is a regression of rc16. A runtime change after the stamped frames would fail F4 of `tools/qa_sim/af3_frame_check.py` for all 42 of them and the pass had one launch of slack, so they are listed, not fixed.
+Neither is a regression of rc16. A runtime change after the stamped frames would fail F4 of `tools/qa_sim/af3_frame_check.py` for every stamped `after` frame (34 when this was written, 41 of the 49 now) and the fix, with its check and the re-capture of those frames, would have cost more launches than the budget had left, so they are listed, not fixed.
 
 - **The skill tree Close button is English in 12 locales.** It is the scene literal `Close` (`scenes/ui/skill_tree_ui.tscn:57`) and `_refresh` (`scripts/ui/skill_tree_ui.gd:45`, which also runs on a live language switch) never sets it; the key `BTN_CLOSE` exists in all 13 locale files.
   Fix: `close_button.text = LocalizationManager.t("BTN_CLOSE")` as the first line of `_refresh`, and a closeout check that opens the scene under `ru` and reads the button. The `hardcoded_text_gate` scans `.text = "..."` in scripts only, so a scene literal that no script overwrites is invisible to it.
