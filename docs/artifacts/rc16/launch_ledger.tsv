@@ -33,3 +33,4 @@ n	utc	head	id	exit	command
 32	20261008T084633Z	a41d4b3	f1_post_a41d4b3	1	bash tools/qa_sim/closeout_check 300
 33	20261008T085707Z	3840ac9	f1_post2_3840ac9	1	bash -c bash tools/qa_sim/guarded_windowed res://scenes/tools/closeout_check_scene.tscn 300; rc=$?; grep -aE "^\[closeout\] (FAIL|DONE)" .qa_logs/closeout_check_scene.log; exit $rc
 34	20261008T090242Z	7bc23c6	f1_post3_7bc23c6	1	bash -c bash tools/qa_sim/guarded_windowed res://scenes/tools/closeout_check_scene.tscn 300; rc=$?; grep -aE "^\[closeout\] (FAIL|DONE)" .qa_logs/closeout_check_scene.log; exit $rc
+35	20261008T091531Z	74f710b	l24_f1_f3_74f710b	0	bash -c bash tools/qa_sim/guarded_windowed res://scenes/tools/closeout_check_scene.tscn 300; rc1=$?; grep -aE "^\[closeout\] (FAIL|DONE)" .qa_logs/closeout_check_scene.log; echo "--- F3 audio A/B"; bash tools/qa_sim/audio_ab 3; rc2=$?; echo "rc finish=$rc1 audio_ab=$rc2"; exit $rc1
