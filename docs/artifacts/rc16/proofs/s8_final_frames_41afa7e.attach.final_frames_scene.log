@@ -1,0 +1,28 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[final] frame 01_main_menu.png
+[final] facing 37 of 116 street lights
+[final] 03 camera /root/Main3D/Camera3D at (-8.0, 2.560233, -8.0), player at (-8.0, 0.860233, -8.0) hp=100.0, paused=false
+[final] frame 03_district_night_dark.png
+[final] frame 02_district_day_full.png
+[final] 04 camera /root/Main3D/Camera3D at (6.880241, 2.560076, -12.75522), player at (6.880241, 0.860076, -12.75522) hp=100.0, paused=false
+[final] frame 04_combat.png
+[final] 05 camera /root/Main3D/Camera3D at (-11.90646, 2.559923, -9.959029), player at (-11.90646, 0.859923, -9.95903) hp=100.0, paused=false
+[final] 05 boss at (-16.37594, 1.2, -12.20041)
+[final] frame 05_boss.png
+[final] frame 06_victory_ngplus.png
+[final] DONE frames=6
+ERROR: 2 RID allocations of type 'N5GLES37TextureE' were leaked at exit.
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+ERROR: Texture with GL ID of 93: leaked 131072 bytes.
+   at: ~Utilities (drivers/gles3/storage/utilities.cpp:82)
+ERROR: Texture with GL ID of 134: leaked 131072 bytes.
+   at: ~Utilities (drivers/gles3/storage/utilities.cpp:82)
+WARNING: 42 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

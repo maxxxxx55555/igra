@@ -34,3 +34,15 @@ Also fixed during the pass (not beauty, same package): the toast lives 3 s (TO1)
 | frame 07 "steam street" | no node is in the group `steam_vent`: there is no steam to polish; the frame shows the lamps |
 
 Frames not comparable between before and after: in the combat states 04 to 06 the staged monster stands close in front of the camera in the after frames and farther away in the before frames, so their luma and grain numbers are not a like-for-like change.
+
+## The final frames and the play-through frames (S8)
+
+Six final frames from launch 15 (`tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 900`, log `docs/artifacts/rc16/proofs/s8_final_frames_41afa7e.attach.final_frames_scene.log`, `[final] DONE frames=6`),
+stamped into `docs/stills/rc16_final/` under their AF3 names (`41afa7e`, capture UTC 20261008T002148Z to 002202Z), each read once:
+01 the menu (English: Continue, Play, Settings, Difficulty, Credits, Quit, the daily card; the brass cone without the day palette); 02 a lit district with the level-up and coin toasts; 03 the same district dark ("You wake up. The city has gone dark.");
+04 combat (the crawler at point-blank, white from the hit flash and the glow, a hit number and a crit mark, the name bar reads "Crawler" in a 4x crop); 05 the boss (the dark monolith in the centre, an ember hit vignette over the whole frame and a "Crawler" name bar at the top; the runner heals the player
+before it stages 05 (`scripts/tools/_final_frames_runner.gd:176`), so the vignette is the hit feedback and not the low-health tint, and which hit landed was not traced); 06 victory with the "Set up New Game+" action ("Districts restored: 11/11").
+The rc15 frames of the same names show no vignette in 05 and no monster in 04; the staged camera differs, so the pairs are not like-for-like.
+
+The 26 play-through frames kept in `docs/stills/rc16_playthrough/` (read once each, observations in `docs/RUN_STATE.md`, S8 frame read) show the rc16 changes in the real game: the quick-slot hint that says a right-click resets the slot, the floating damage number with the ember vignette and the chroma pulse at a hit,
+the menu without the day palette, the mirrored Arabic and the Japanese settings screens. They also hold the two rc15 defects listed above (X8 and the skill tree Close, `docs/KNOWN_ISSUES.md`).
