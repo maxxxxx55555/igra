@@ -2,12 +2,12 @@
 
 State: `main` is the rc16 sign-off (the tag `v8.0.0-rc16` goes on the commit that records the last verifier round). Nothing is in flight. Three finished agent worktrees remain under
 `.claude/worktrees/` (`agent-a2d98b0eb4e6daa56`, `agent-a9d93688011f12bdb`, `agent-ac5abdf50f70def2b`); their branches are merged, `git worktree remove` clears them when convenient.
-Numbers and proofs: `docs/ORDER_PASS_REPORT.md` (rc16 final section), `docs/PROOFS.md` (rc16 section, 30 closures with raw logs), `docs/ACCEPTANCE_CHECKLIST.md` (179 of 200 proven, gap table),
-`docs/ARENA_CLOSURE.md`, `docs/CORRECTION_LOG.md` (105 rows), `docs/RUN_STATE.md` (Session 17: every launch with its question and answer), `docs/UNVERIFIABLE_HERE.md` (what only a phone or an ear can say).
+Numbers and proofs: `docs/ORDER_PASS_REPORT.md` (rc16 final section), `docs/PROOFS.md` (rc16 section, one row per closure with its raw log), `docs/ACCEPTANCE_CHECKLIST.md` (179 of 200 proven, gap table),
+`docs/ARENA_CLOSURE.md`, `docs/CORRECTION_LOG.md` (rows 101 to 116 are this pass), `docs/RUN_STATE.md` (Session 17: every launch with its question and answer), `docs/UNVERIFIABLE_HERE.md` (what only a phone or an ear can say).
 
 ## What rc16 did
 Two sessions. Session 16 built wave 1 with agents in their own worktrees (perf, content, uifx, sec, audio) and the evidence harness; Session 17 merged and finished it, ran wave 2 (beauty, i18n, content),
-the utilities pass and the verification (17 engine launches of a budget of 20, each a row of `docs/artifacts/rc16/launch_ledger.tsv`).
+the utilities pass and the verification; the RC16 FINISH directive (2026-10-08) then installed the skill stack, closed the two rc15 UI defects and traced the open questions (24 launch rows of a budget of 24, the amendment is CORRECTION_LOG 111, each a row of `docs/artifacts/rc16/launch_ledger.tsv`).
 Streaming and pooling (nodes 1784 to 1061, cold load 354 to 317 ms), frame-independent timing (15 of 15 quantities agree at 30, 60 and 120 FPS), tier-gated UI motion and post-fx, pinch zoom and
 quick-slot drag, one New Game+ level per run (signed run name and ledger), distant 3D sounds low-passed with a reverb that follows the walls, six beauty changes kept (grain, damage vignette, LUT warm
 highlights, blur copy), three GDD deviations found by reading (toast time, menu day palette, attack button under 5 stamina), gdparse/gdlint/ruff/shellcheck/actionlint on changed files with a pre-commit hook and a CI workflow.
@@ -18,9 +18,10 @@ Every closure has a check that fails on the code before it and passes at HEAD (`
    (T01), then the Play Console steps. The frame rate, heat and memory on a phone, the feel of pinch and drag and the look of the rc16 effects on a phone GPU are unmeasured (U1, U5, U6).
 2. Listen: how the reverb, the low-pass and the mix sound, and whether the music clips in a fight (U3, U8). The windowed audio gate is bimodal on one code tree: the final audio code at HEAD read -11.6, -11.7, +1.8, +0.6 and -12.4 dB against a ceiling of -1.5 dB, and with the reverb-fade fix `7c49500` reverted alone the split is the same (CORRECTION_LOG 114): a failing run at HEAD is not by itself a regression, and the cause of the high readings is not isolated. The gate prints the music context (mood, combat hold, nearest monster) next to the reading.
 3. Decide: E11 second half (a quest reward that does not fit in a full pack stays unpaid; the obvious fix breaks the pinned regression P2g), D1 `apply_stun` (no caller; the fix changes the boss fight and needs the 3-seed bot),
-   beauty X4 to X8 (`docs/BEAUTY_RC16.md`), the skill tree Close button that is English in 12 locales and the shop buy buttons that overlap the next row (both rc15 defects, `docs/KNOWN_ISSUES.md`: one line and a check each), G22, H3.18, F1 when a lobby gets an opener.
+   beauty X4 to X7 (`docs/BEAUTY_RC16.md`), the Arabic shop (its content is drawn outside the panel, an older defect found by the F1 frame read, `docs/KNOWN_ISSUES.md`: the fix to try and the check to extend are written there), G22, H3.18, F1 when a lobby gets an opener.
 4. Assets: `docs/ASSET_SHOPPING_LIST.md`, now with rows 18 (per-speed footsteps for asphalt, puddle, glass) and 19 (radio voice lines); music per `docs/OWNER_HANDOFF.md`.
-5. Tools on the owner's machine: `python -m pip install gdtoolkit==4.5.0 ruff==0.16.9 shellcheck-py==0.11.0.1 actionlint-py==1.7.12.25`, then `pre-commit install` for the hook; CI needs nothing.
+5. Run `bash tools/check.sh --all` once after pulling: the engine battery was not re-run after the F1 edits (the launch budget was spent); read a red audio gate in it as the known flake (CORRECTION_LOG 114).
+6. Tools on the owner's machine: `python -m pip install gdtoolkit==4.5.0 ruff==0.16.9 shellcheck-py==0.11.0.1 actionlint-py==1.7.12.25`, then `pre-commit install` for the hook; CI needs nothing.
 
 ## Rules that still hold
 - Never run two Godot processes at once; QA launches are muted (`QaLaunchGuard`); never delete `<profile>.qa_snapshot`; tools that start the game go through the user-data guard (`tools/qa_sim/guarded_windowed`, `guarded_headless`, `playthrough`, `tools/check.sh`).
@@ -32,6 +33,7 @@ Every closure has a check that fails on the code before it and passes at HEAD (`
 - Evidence (AF1 to AF7): a launch is `tools/qa_sim/proof_run --launch [--attach LOG] <id> -- <command>` (raw log, exit code, ledger row); a fix without a check that fails on the old code is not a fix (`af2_both_ways.py` reads the attached full log, not the wrapper's filtered stdout: CORRECTION_LOG 103);
   frames are stamped `<state>_<label>_<hash>_<UTC>` (`tools/qa_sim/stamp_frames.py`) and judged by `tools/qa_sim/af3_frame_check.py` (a committed frame by its commit time, a new one by its file time; a clone or pull rewrites file times: CORRECTION_LOG 105;
   `tools/qa_sim/fresh_clone_check.sh <command>` runs any gate in a fresh clone); every file:line citation in the documents is checked by `tools/af5_check.py`; `docs/PROOFS.md` is generated from `docs/artifacts/rc16/closures.json` by `tools/qa_sim/gen_proofs16.py`.
-- Batch the runtime fixes before the capture runs: a change to a runtime path after the frames are stamped fails AF3 F4 for every stamped frame and costs the launches again.
+- Batch the runtime fixes before the capture runs: a change to a runtime path after the frames are stamped fails AF3 F4 for every stamped frame. A reviewed change that reaches only some frames can be declared in `tools/qa_sim/af3_f4_scope.tsv` (path, blob before, blob after, frame glob; CORRECTION_LOG 113), and the frames it does reach are re-shot.
+- Read the frame of a right-to-left language: a layout check against the card's own children passed in Arabic while the whole shop was drawn outside its panel. Controls placed by `.position` before they have a parent land one parent width off under the right-to-left layout (launches 22 and 23).
 - Working copies are CRLF (`core.autocrlf`): a Python patch helper must read bytes and keep `\r\n`. The Bash tool's heredocs lose backslashes (`\b`, `\n`): write patch scripts with the Write tool or use the Edit tool.
 - The bot is nondeterministic run to run: judge stalls over several seeds, and record them (IRON RULE: at least one win over seeds 1 to 3, else revert).

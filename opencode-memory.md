@@ -81,7 +81,7 @@
 - Validator: `C:\Users\Maxsim\AppData\Local\Temp\opencode\check_parents.ps1`
 
 ## 2026-10-08 rc16 closeout (Claude Sonnet 5.5, swarm + orchestrator)
-- State and numbers: `docs/RUN_STATE.md` (Session 17 block), `docs/ORDER_PASS_REPORT.md` (rc16 final), `docs/PROOFS.md` (rc16 section, 30 closures from `docs/artifacts/rc16/closures.json`), `docs/CORRECTION_LOG.md` rows 101-105, `docs/RESUME_NOTE.md`.
+- State and numbers: `docs/RUN_STATE.md` (Session 17 block), `docs/ORDER_PASS_REPORT.md` (rc16 final), `docs/PROOFS.md` (rc16 section, one row per closure from `docs/artifacts/rc16/closures.json`), `docs/CORRECTION_LOG.md` rows 101-105, `docs/RESUME_NOTE.md`.
 - Changed: wave 1 merged (perf, content, uifx, sec, audio A1-A4), wave 2 (beauty merged; i18n and content returned 0 commits), three UI fixes from the content agent, LUT warm highlights, grain and blur fixes. Runtime tree is `c3e79e5`; every later commit is docs, tools or evidence.
 - Tools added: `tools/qa_sim/proof_run` (raw logs + launch ledger), `guarded_headless`, `af2_both_ways.py`, `af3_frame_check.py` (png and jpg, clone-safe), `fresh_clone_check.sh`, `frame_stats.py`, `stamp_frames.py`, `gen_proofs16.py`, `tools/af5_check.py` (doc citations), `tools/lint_changed.py` + `gdlintrc` + `.github/workflows/static.yml` + pre-commit hook `lint-changed`, `tools/sec_reread.sh`, `tools/gapowner_check.sh`.
 - Decisions: ECC rejected (0 Godot content, 24 node hooks), mypy rejected, gdformat rejected (no mass reformat); E11 second half deferred (breaks the pinned regression P2g); X4-X8 beauty items, D1 `apply_stun` and the skill tree Close button (English in 12 locales, rc15 defect found by the S8 frame read) left as owner decisions; freeze rule: no runtime change after the evidence frames are stamped.

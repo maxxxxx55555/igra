@@ -1,0 +1,134 @@
+# proof final_static_f4
+# utc 20261008T093643Z
+# head 40966b1 (uncommitted paths: 0)
+# env none
+# cmd bash tools/check.sh --static
+
+── Статические проверки (Godot не нужен)
+  OK   ссылки на ресурсы (0 битых)
+  OK   автозагрузки (56 шт., 0 битых)
+  OK   вызовы к автозагрузкам (0 несуществующих)
+  OK   локализация: 13 языков x 1525 ключей, паритет=True
+  OK   ключи из кода найдены в словаре (0 потеряно)
+  OK   плейсхолдеры ru/en (0 расхождений)
+  OK   validate_list (216 записей, 0 отсутствуют)
+  OK   критический путь игры (8/8)
+  OK   музыкальные треки на диске (0 нет)
+
+── Сцены и ссылки на ноды
+── Комментарии в файлах ресурсов (Godot их не поддерживает)
+  OK   проверено 265 файлов
+
+── Ресурсы, ошибочно объявленные как [node]
+  OK   проверено 168 сцен
+
+── Ссылки $NodePath на несуществующие ноды сцены
+  OK   проверено 116 пар скрипт/сцена
+
+──────────────────────────────────────────────────
+Всё чисто.
+  [32mOK[0m   scene_node_check
+
+── Игровой цикл
+  OK    главная сцена — boot_loading                    
+  OK    boot уводит в меню                              
+  OK    кнопка «Играть» стартует игру                   
+  OK    start_game ведёт в игровую сцену                
+  OK    игровая сцена существует                        
+  OK    экран загрузки уходит в игру                    
+  OK    подбор не шлёт RPC самому себе                  
+  OK    подбор кладёт вещь в инвентарь                  
+  OK    высота лута фиксируется после спавна            
+  OK    инвентарь шлёт item_picked_up                   
+  OK    инвентарь не шлёт RPC вне сети                  
+  OK    сигнал подбора кто-то слушает                   
+  OK    лут раскладывается по районам                   
+  OK    HUD: нода NoiseLabel есть в сцене               
+  OK    HUD: нода NoiseF есть в сцене                   
+  OK    HUD: нода VisibilityLabel есть в сцене          
+  OK    HUD: нода VisibilityF есть в сцене              
+  OK    HUD показывает здоровье                         
+  OK    HUD показывает батарею                          
+  OK    HUD показывает шум                              
+  OK    HUD прячется под блокирующими экранами          
+  OK    игрок отдаёт уровень шума                       
+  OK    игрок шлёт изменение батареи                    
+  OK    Escape ставит паузу                             
+  OK    Escape сперва закрывает справочники             
+  OK    пауза морозит дерево                            
+  OK    снятие паузы размораживает                      
+  OK    в паузе есть выход в меню                       
+  OK    затемнение работает на паузе                    
+  OK    UIManager работает на паузе                     
+  OK    смерть игрока кем-то обрабатывается             
+  OK    смерть переводит в состояние DEAD               
+  OK    экран смерти открывается по состоянию           
+  OK    экран победы открывается по состоянию           
+  OK    с экрана смерти можно выйти в меню              
+  OK    «Заново» перезагружает сцену                    
+  OK    кодекс открывается                              
+  OK    кодекс закрывается                              
+  OK    карта переключается клавишей                    
+  OK    журнал переключается клавишей                   
+  OK    действие ui_pause объявлено в проекте           
+  OK    действие city_map_toggle объявлено в проекте    
+  OK    действие journal_toggle объявлено в проекте     
+  OK    действие encyclopedia_toggle объявлено в проекте
+  OK    аудио-шина Master существует                    
+  OK    аудио-шина Music существует                     
+  OK    аудио-шина SFX существует                       
+  OK    аудио-шина Ambient существует                   
+  OK    аудио-шина UI существует                        
+  OK    аудио-шина Footsteps существует                 
+  OK    аудио-шина Combat существует                    
+  OK    аудио-шина Environment существует               
+  OK    Master не заглушен на старте                    
+  OK    все аудиофайлы из кода на диске                 
+  OK    все preload/load ведут в существующие файлы     
+  OK    арность подписок на сигналы совпадает           
+
+────────────────────────────────────────────────────────────
+Игровой цикл собран целиком: 56 проверок пройдено.
+  [32mOK[0m   flow_check
+
+── Контент: глубина и удержание
+  [32mOK[0m   audit_content_depth
+  [32mOK[0m   validate_retention
+
+── Truth gates: visual/i18n (данные уже в репозитории)
+  [32mOK[0m   visual_truth_gate (gate self-consistency on committed frames; R0 lock = LUT pin below)
+  [32mOK[0m   visual_truth_gate --demo (defect patterns fail, canon patterns pass)
+  [32mOK[0m   visual_truth_gate fails all four committed corruption frames
+  [32mOK[0m   visual_truth_gate passes the sign-off and beauty frames
+  [32mOK[0m   R0 root cause pinned (11 district LUTs import as Texture3D)
+  [32mOK[0m   i18n_truth_gate
+  [32mOK[0m   user_data_guard --demo (snapshot/restore профиля)
+  [32mOK[0m   hardcoded_text_gate (no untranslated words assigned to .text)
+  [32mOK[0m   puzzle_economy_sim (STATIC_AUDIT #31 reachability)
+  [32mOK[0m   endings_sim (all 5 GDD endings reachable)
+  [32mOK[0m   balance_sim (economy/battery/skill-branch/time-to-win)
+  [32mOK[0m   lighting_stage_sim (DARK/PARTIAL/STREETS/FULL pairwise-distinct)
+  [32mOK[0m   project_input_check (action blocks only in [input], every action the scripts read is defined)
+  [32mOK[0m   settings_consumer_check (every Settings control has a named reader or applier)
+  [32mOK[0m   tscn_header_check (a scene's layout properties are lines under the node, not attributes of its header)
+  [32mOK[0m   a11y_check (every a11y toggle traces UI -> real effect)
+  [32mOK[0m   drawcall_estimate (structural draw-call/light estimate, D1)
+  [32mOK[0m   no mirrored yaw formula (atan2(-v.x, -v.z) faces v)
+  [32mOK[0m   release_export_check (SECURITY_PATCH_SPEC C-08/D-04: no committed encryption key or debug keystore creds)
+
+── rc16: lint, frame-independence inventory, AF2/AF3/AF5 tools (Godot не нужен)
+  [32mOK[0m   ruff E9,F on tools/ and scripts/ (syntax and pyflakes correctness)
+  [32mOK[0m   bash -n on every shell script, hook and wrapper
+  [32mOK[0m   timing_inventory (no per-frame constant step outside the whitelist: frame-independent timing)
+  [32mOK[0m   timing_compare --demo (the tool's self-check)
+  [32mOK[0m   af2_both_ways --demo (the tool's self-check)
+  [32mOK[0m   af3_frame_check --demo (the tool's self-check)
+  [32mOK[0m   af3_frame_check (every polish frame names the code tree and the capture time it came from)
+  [32mOK[0m   lint_changed (gdparse, gdlint, ruff E9,F, shellcheck, actionlint on every file changed since e4bb4df)
+  [32mOK[0m   af5_check (every file:line citation added to docs/ since e4bb4df holds at HEAD)
+
+[2mПроверки в движке пропущены (--static).[0m
+
+──────────────────────────────────────
+[32mВсё зелёное.[0m Проверок пройдено: 40
+# EXIT=0

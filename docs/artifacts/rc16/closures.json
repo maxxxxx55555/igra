@@ -1,5 +1,42 @@
 [
  {
+  "id": "S0-ARENA",
+  "claim": "The arena skill is present and its bracket is capped for this pass: `bracket.py plan --agents 4` is 19 sub-agent calls (the default is 100 competitors; it is a parameter, so the skill is not quarantined).",
+  "cmd": "python -I .claude/skills/arena/bracket.py plan --agents 4",
+  "proof": "s0_arena_plan_agents4",
+  "quotes": [
+   "4 agents, 2 rounds",
+   "total"
+  ],
+  "frames": [],
+  "commit": "9255216"
+ },
+ {
+  "id": "S0-SKILL-SCAN",
+  "claim": "Every third-party skill file (45 OmniRoute entries and graphify) was scanned line by line before it was copied: the network targets in the instructions are the user's own gateway on localhost:20128 and documentation links, and the only deletes are inside `graphify-out/`.",
+  "cmd": "python -I /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/skill_scan.py /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/skills_src/OmniRoute/skills /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/skills_src/graphify/graphify",
+  "proof": "s0_skill_scan",
+  "quotes": [
+   "omni-auth/SKILL.md: ",
+   "skill.md: ",
+   "   hosts: localhost:20128"
+  ],
+  "frames": [],
+  "commit": "9255216"
+ },
+ {
+  "id": "S0-SKILL-INSTALL",
+  "claim": "The installed copies are byte-identical to the scanned sources: 46 directories, 0 mismatches, the pinned commits are printed.",
+  "cmd": "bash /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s0_verify.sh",
+  "proof": "s0_install_verify",
+  "quotes": [
+   "pins:",
+   "identical=46 mismatches=0"
+  ],
+  "frames": [],
+  "commit": "9255216"
+ },
+ {
   "id": "S2-COMPILE",
   "claim": "The merged tree compiles: the compile gate reports no bad script after the uifx merge.",
   "cmd": "bash -c bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 420; rc1=$?; bash tools/qa_sim/closeout_check 420; rc2=$?; echo \"compile_rc=$rc1 closeout_rc=$rc2\"; [ $rc1 -eq 0 ] && [ $rc2 -eq 0 ]",
@@ -58,7 +95,7 @@
  },
  {
   "id": "S4-U8",
-  "claim": "The Music bus peak of the windowed audio gate spreads on identical code (this run: HEAD layout unchanged); the layout was not the cause (CORRECTION_LOG 102).",
+  "claim": "Launch 6: the Music bus peak of the windowed audio gate on unmodified HEAD (-11.6 dB) and with a reverb bus disabled (-9.3, -10.8, -11.8) is under the ceiling; the bus layout alone was not the cause (CORRECTION_LOG 102); the run counts and the cause of the readings over the ceiling are corrected in CORRECTION_LOG 106 and 114 (the same code reads both).",
   "cmd": "bash docs/artifacts/rc16/audio_truth_bisect2.sh",
   "proof": "s4_truth_bisect2_2e0ada0",
   "quotes": [
@@ -124,7 +161,7 @@
  },
  {
   "id": "AF2-PRE",
-  "claim": "On the runtime code of e4bb4df the rc16 checks fail: 44 of 51.",
+  "claim": "On the runtime code of e4bb4df the rc16 group of the closeout (CLOSEOUT_ONLY=rc16, set by af2_both_ways.py) fails: 44 of 51 checks.",
   "cmd": "bash tools/qa_sim/closeout_check 300",
   "proof": "af2_pre",
   "quotes": [
@@ -135,7 +172,7 @@
  },
  {
   "id": "AF2-POST",
-  "claim": "At HEAD the whole closeout passes: 64 checks, 0 fails; af2_both_ways.txt pairs the two runs id by id (36 ids, verdict PASS).",
+  "claim": "At 8cb22ba the rc16 group of the closeout (CLOSEOUT_ONLY=rc16, set by af2_both_ways.py) passes: 64 checks, 0 fails; it is not the whole closeout (347 checks at b69ed90, 366 at e32fa77); af2_both_ways.txt pairs the two runs id by id (36 ids, verdict PASS).",
   "cmd": "bash tools/qa_sim/closeout_check 300",
   "proof": "af2_post",
   "quotes": [
@@ -146,7 +183,7 @@
  },
  {
   "id": "S8-BATTERY",
-  "claim": "tools/check.sh --all, one command: every gate green, 65 checks.",
+  "claim": "tools/check.sh --all: every gate green, 65 checks; run without the windowed asset reimport (TLS_SKIP_REIMPORT=1, tools/check.sh:400; the owner's plain command adds that step: 66 checks, 34 processes). It ran on the code tree before the F1 edits.",
   "cmd": "bash tools/check.sh --all",
   "proof": "s8_check_all_a459b9c",
   "quotes": [
@@ -157,7 +194,7 @@
  },
  {
   "id": "S8-BOT",
-  "claim": "The autoplay bot wins 3 of 3 seeds (IRON RULE: at least one), 0 softlocks.",
+  "claim": "The autoplay bot wins 3 of 3 seeds (IRON RULE: at least one), 0 softlocks; its death counter was dead in this run (each seed was revived 1, 1 and 2 times; CORRECTION_LOG 107).",
   "cmd": "bash tools/qa_sim/autoplay_bot",
   "proof": "s8_bot_3seeds_f49a5cf",
   "quotes": [
@@ -194,7 +231,7 @@
  },
  {
   "id": "S8-PT-FRAMES",
-  "claim": "26 of the 97 fresh play-through frames were read once each and kept under their AF3 names.",
+  "claim": "24 play-through frames were read once each and kept under their AF3 names (26 were kept; the shop and the skill tree were replaced after the F1 fixes, see F1-POST-FIX).",
   "cmd": "bash -c TZ=UTC ls -l --time-style=+%Y%m%dT%H%M%SZ docs/stills/playthrough | awk \"NR>1 && \\$6 >= \\\"20261007T2340\\\" {print \\$6, \\$7}\"",
   "proof": "playthrough_frames_utc",
   "quotes": [
@@ -209,10 +246,8 @@
    "docs/stills/rc16_playthrough/A05_monster_hit_after_bca7d33_20261007T234809Z.jpg",
    "docs/stills/rc16_playthrough/A06_inventory_after_bca7d33_20261007T234821Z.jpg",
    "docs/stills/rc16_playthrough/A06_inventory_selected_after_bca7d33_20261007T234822Z.jpg",
-   "docs/stills/rc16_playthrough/A06_shop_after_bca7d33_20261007T234825Z.jpg",
    "docs/stills/rc16_playthrough/A07_map_fresh_after_bca7d33_20261007T234830Z.jpg",
    "docs/stills/rc16_playthrough/A08_battery_low_after_bca7d33_20261007T234837Z.jpg",
-   "docs/stills/rc16_playthrough/A09_skill_tree_after_bca7d33_20261007T234840Z.jpg",
    "docs/stills/rc16_playthrough/A12_tier_0_low_after_bca7d33_20261007T234845Z.jpg",
    "docs/stills/rc16_playthrough/A12_tier_3_ultra_after_bca7d33_20261007T234859Z.jpg",
    "docs/stills/rc16_playthrough/A13_lang_ar_after_bca7d33_20261007T234916Z.jpg",
@@ -231,11 +266,66 @@
   "commit": "bca7d33"
  },
  {
+  "id": "S8-CLOSEOUT-RC16-AFTER",
+  "claim": "After two uifx assertions were restored (QS2 untouched, a health bar that does not move under Reduce Screen Shake) the rc16 group passes: 65 checks, 0 fails (CORRECTION_LOG 108).",
+  "cmd": "bash tools/qa_sim/closeout_check 300",
+  "proof": "s8_closeout_rc16_21c2046",
+  "quotes": [
+   "QS2 untouched",
+   "UIFX5",
+   "[closeout] DONE checks=65 fails=0"
+  ],
+  "frames": [],
+  "commit": "21c2046",
+  "attach": "closeout_check.log"
+ },
+ {
+  "id": "BOT-COUNTER-BEFORE",
+  "claim": "The death-counter check run on the three L12 seed logs flags all of them: the counter read 0 while each seed was revived 1, 1 and 2 times (CORRECTION_LOG 107).",
+  "cmd": "bash -c for s in 1 2 3; do out=$(bash tools/qa_sim/bot_counter_check.sh docs/artifacts/rc16/proofs/s8_bot_3seeds_f49a5cf.attach.autoplay_seed$s.log); rc=$?; echo \"seed $s (L12 log, counter as shipped in rc15 and rc16): $out, exit $rc\"; done",
+  "proof": "bot_counter_before_l12",
+  "quotes": [
+   "seed 1",
+   "seed 2",
+   "seed 3"
+  ],
+  "frames": [],
+  "commit": "73fd314"
+ },
+ {
+  "id": "S8-BOT-COUNTER",
+  "claim": "With the repaired death counter the bot still wins 3 of 3 seeds at 1x, 0 softlocks, and its counter is not below its revive lines in any seed (CORRECTION_LOG 107).",
+  "cmd": "bash tools/qa_sim/autoplay_bot",
+  "proof": "s8_bot_counter_21c2046",
+  "quotes": [
+   "deaths counted",
+   "autoplay bot: 3/3 seeds won, 0 softlock(s)",
+   "bot death counters below their revive lines: 0"
+  ],
+  "frames": [],
+  "commit": "21c2046"
+ },
+ {
   "id": "S8-MUTATIONS",
-  "claim": "The 16 closeout mutations are caught: 32 checks, 20 fails, the same 13 ids as the rc15 sign-off.",
+  "claim": "The 16 closeout mutations are caught, each by its own failing line (quoted): 32 checks, 20 fails, the same 13 ids as the rc15 sign-off; HELP1 is one line that names both help_ui mutations (PROMPT_REPAIR and the action sprint), TUT2 has three distinct lines for its three mutations.",
   "cmd": "bash -c trap \"python tools/qa_sim/closeout_mutations.py restore\" EXIT; python tools/qa_sim/closeout_mutations.py apply && CLOSEOUT_ONLY=combat bash tools/qa_sim/closeout_check 300",
   "proof": "s8_mutations_46723a7",
   "quotes": [
+   "FAIL MELEE1",
+   "FAIL DEAD1",
+   "FAIL CRAWL1 an idle",
+   "FAIL TUT2 the attack key",
+   "FAIL TUT1",
+   "FAIL TUT2 a double tap",
+   "FAIL STREET1",
+   "FAIL SCROLL1",
+   "FAIL WIN2",
+   "FAIL TUT2 repairing a district",
+   "FAIL HELP1",
+   "FAIL PERF2",
+   "FAIL TIER1",
+   "FAIL G13",
+   "FAIL H3.2",
    "[closeout] DONE checks=32 fails=20"
   ],
   "frames": [],
@@ -243,7 +333,7 @@
  },
  {
   "id": "S8-FINAL-FRAMES",
-  "claim": "The six final frames render at the final runtime tree.",
+  "claim": "The six final frames render at the runtime tree before the F1 edits.",
   "cmd": "bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 900",
   "proof": "s8_final_frames_41afa7e",
   "quotes": [
@@ -276,7 +366,7 @@
  },
  {
   "id": "S8-AUDIO",
-  "claim": "The windowed audio truth gate passes at the final tree and prints the music context for the first time (one sample of a gate that spreads, U8).",
+  "claim": "The windowed audio truth gate passes on unmodified HEAD with the final audio files (-11.7 dB) and prints the music context for the first time; it is one of 17 windowed readings, 8 of them over the ceiling (U8, CORRECTION_LOG 106 and 114).",
   "cmd": "bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120",
   "proof": "s8_audio_truth_924e3dd",
   "quotes": [
@@ -286,6 +376,123 @@
   "frames": [],
   "commit": "924e3dd",
   "attach": "audio_truth_gate_scene.log"
+ },
+ {
+  "id": "F1-PRE-FIX",
+  "claim": "AF2, pre side of F1: on the runtime code before the two fixes the new checks fail, CLOSE1 (12 languages show Close) and SHOP1 (the Buy button lies outside its card); TEXT1 failed too and was deleted because its premise was wrong (CORRECTION_LOG 112); the other 65 rc16 checks pass.",
+  "cmd": "bash tools/qa_sim/closeout_check 300",
+  "proof": "f1_pre_b7aee72",
+  "quotes": [
+   "FAIL CLOSE1",
+   "FAIL SHOP1",
+   "FAIL TEXT1",
+   "[closeout] DONE checks=68 fails=3"
+  ],
+  "frames": [],
+  "commit": "b7aee72"
+ },
+ {
+  "id": "F1-L21",
+  "claim": "Launch 21, the rc16 group on the first version of the shop fix: 67 checks, CLOSE1 passes, SHOP1 fails in Arabic only (36 of 39 cases pass), the other 65 pass.",
+  "cmd": "bash tools/qa_sim/closeout_check 300",
+  "proof": "f1_post_a41d4b3",
+  "quotes": [
+   "FAIL SHOP1",
+   "[closeout] DONE checks=67 fails=1"
+  ],
+  "frames": [],
+  "commit": "a41d4b3"
+ },
+ {
+  "id": "F1-L22",
+  "claim": "Launch 22: the rects of the failing Arabic case name the cause: the Buy button lies at the card's x plus the card width (a right-to-left card): absolute child positions land one parent width off under the right-to-left layout.",
+  "cmd": "bash -c bash tools/qa_sim/guarded_windowed res://scenes/tools/closeout_check_scene.tscn 300; rc=$?; grep -aE \"^\\[closeout\\] (FAIL|DONE)\" .qa_logs/closeout_check_scene.log; exit $rc",
+  "proof": "f1_post2_3840ac9",
+  "quotes": [
+   "first outside: ar/0"
+  ],
+  "frames": [],
+  "commit": "3840ac9"
+ },
+ {
+  "id": "F1-L23",
+  "claim": "Launch 23: with a left-to-right card the same displacement flips sign (the button at the card's x minus 187.5): the cause is the position of a Control built without a parent, not the card's own direction.",
+  "cmd": "bash -c bash tools/qa_sim/guarded_windowed res://scenes/tools/closeout_check_scene.tscn 300; rc=$?; grep -aE \"^\\[closeout\\] (FAIL|DONE)\" .qa_logs/closeout_check_scene.log; exit $rc",
+  "proof": "f1_post3_7bc23c6",
+  "quotes": [
+   "first outside: ar/0"
+  ],
+  "frames": [],
+  "commit": "7bc23c6"
+ },
+ {
+  "id": "F1-POST-FIX",
+  "claim": "AF2, post side of F1, on the final tree: CLOSE1 and SHOP1 pass in 13 languages (SHOP1: 13 languages x 3 text sizes, 39 cases) in a windowed run that also wrote the three frames; the Arabic frame shows the shop's content outside the panel, which SHOP1 does not see (open, docs/KNOWN_ISSUES.md).",
+  "cmd": "bash -c bash tools/qa_sim/guarded_windowed res://scenes/tools/closeout_check_scene.tscn 300; rc1=$?; grep -aE \"^\\[closeout\\] (FAIL|DONE)\" .qa_logs/closeout_check_scene.log; echo \"--- F3 audio A/B\"; bash tools/qa_sim/audio_ab 3; rc2=$?; echo \"rc finish=$rc1 audio_ab=$rc2\"; exit $rc1",
+  "proof": "l24_f1_f3_74f710b",
+  "quotes": [
+   "CLOSE1",
+   "SHOP1",
+   "[closeout] DONE checks=3 fails=0"
+  ],
+  "frames": [
+   "docs/stills/rc16_f1/A06_shop_after_74f710b_20261008T091547Z.png",
+   "docs/stills/rc16_f1/A06_shop_ar_after_74f710b_20261008T091603Z.png",
+   "docs/stills/rc16_f1/A09_skill_tree_after_74f710b_20261008T091545Z.png"
+  ],
+  "commit": "74f710b",
+  "attach": "closeout_check_scene.log"
+ },
+ {
+  "id": "F3-AUDIO-AB",
+  "claim": "Reverting 7c49500 alone does not move the Music peak of the windowed audio gate: three runs per arm, alternating, against a ceiling of -1.5 dB (HEAD +1.8, +0.6, -12.4 dB; reverted -10.5, +0.6, +0.7 dB); verdict not isolated, the peak is bimodal on one code tree (CORRECTION_LOG 114).",
+  "cmd": "bash -c bash tools/qa_sim/guarded_windowed res://scenes/tools/closeout_check_scene.tscn 300; rc1=$?; grep -aE \"^\\[closeout\\] (FAIL|DONE)\" .qa_logs/closeout_check_scene.log; echo \"--- F3 audio A/B\"; bash tools/qa_sim/audio_ab 3; rc2=$?; echo \"rc finish=$rc1 audio_ab=$rc2\"; exit $rc1",
+  "proof": "l24_f1_f3_74f710b",
+  "quotes": [
+   "run 1 arm A",
+   "run 1 arm B",
+   "run 2 arm A",
+   "run 2 arm B",
+   "run 3 arm A",
+   "run 3 arm B"
+  ],
+  "frames": [],
+  "commit": "74f710b"
+ },
+ {
+  "id": "F2-TRACE",
+  "claim": "The seed-2 extra death (deaths counted 2, revive lines 1) is traced read-only: the counter agrees with the only emitter of game_over, a second revive line would exist for any death after the cool-down, so the death fell in the last 0.2 s before the win (derived, CORRECTION_LOG 115).",
+  "cmd": "bash /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/f2_trace.sh",
+  "proof": "f2_seed2_death_trace",
+  "quotes": [
+   "deaths counted 2, revive lines 1",
+   "t=373.5 WIN ending fired",
+   "EventBus.game_over.emit()"
+  ],
+  "frames": [],
+  "commit": "fa6afc0"
+ },
+ {
+  "id": "AF3-F4-BEFORE",
+  "claim": "AF4 measurement: with the two F1 edits in the runtime tree the unchanged AF3 gate fails 41 of 49 frames on F4.",
+  "cmd": "python tools/qa_sim/af3_frame_check.py",
+  "proof": "af3_f4_before_b4c1db0",
+  "quotes": [
+   "af3 frames=49 fail=41"
+  ],
+  "frames": [],
+  "commit": "b4c1db0"
+ },
+ {
+  "id": "AF3-F4-AFTER",
+  "claim": "AF4 measurement: with the declared scope (tools/qa_sim/af3_f4_scope.tsv) and the two frames of the fixed screens removed the gate passes: 47 frames, 0 fails (CORRECTION_LOG 113).",
+  "cmd": "python tools/qa_sim/af3_frame_check.py",
+  "proof": "af3_f4_after_3766b13",
+  "quotes": [
+   "af3 frames=47 fail=0"
+  ],
+  "frames": [],
+  "commit": "3766b13"
  },
  {
   "id": "AF3-FRESH-CLONE",
@@ -354,18 +561,18 @@
    "12/12 locales PASS"
   ],
   "frames": [],
-  "commit": "ce67ca7"
+  "commit": "40966b1"
  },
  {
   "id": "FINAL-AF5",
-  "claim": "Every file:line citation added to the documents since e4bb4df holds.",
+  "claim": "Every file:line citation added to the documents since e4bb4df holds (0 findings; the count is in the quoted line).",
   "cmd": "python tools/af5_check.py",
   "proof": "af5_final",
   "quotes": [
    "citation(s)"
   ],
   "frames": [],
-  "commit": "ce67ca7"
+  "commit": "40966b1"
  },
  {
   "id": "FINAL-LINT",
@@ -376,40 +583,40 @@
    "0 finding(s)"
   ],
   "frames": [],
-  "commit": "ce67ca7"
+  "commit": "40966b1"
  },
  {
   "id": "FINAL-STATIC",
-  "claim": "tools/check.sh --static at the sign-off HEAD: every static gate green, 40 checks.",
+  "claim": "tools/check.sh --static at the final code tree: every static gate green, 40 checks.",
   "cmd": "bash tools/check.sh --static",
-  "proof": "final_static_ce67ca7",
+  "proof": "final_static_f4",
   "quotes": [
    "Проверок пройдено: 40"
   ],
   "frames": [],
-  "commit": "ce67ca7"
+  "commit": "40966b1"
  },
  {
   "id": "FINAL-AF3",
-  "claim": "Every stamped frame (49: polish, play-through, final, explorer) names the code tree and the capture time it came from.",
+  "claim": "Every stamped frame (polish, play-through, final, explorer and the F1 re-shoot) names the code tree and the capture time it came from.",
   "cmd": "python tools/qa_sim/af3_frame_check.py",
   "proof": "af3_final",
   "quotes": [
-   "af3 frames=49 fail=0"
+   "af3 frames=50 fail=0"
   ],
   "frames": [],
-  "commit": "ce67ca7"
+  "commit": "40966b1"
  },
  {
   "id": "FINAL-AF3-FRESH",
-  "claim": "The same frame gate in a fresh clone of HEAD, where every file time is the checkout time: 49 frames, 0 fails.",
+  "claim": "The same frame gate in a fresh clone of HEAD, where every file time is the checkout time: 50 frames, 0 fails.",
   "cmd": "bash tools/qa_sim/fresh_clone_check.sh python tools/qa_sim/af3_frame_check.py",
   "proof": "af3_fresh_final",
   "quotes": [
    "fresh clone of",
-   "af3 frames=49 fail=0"
+   "af3 frames=50 fail=0"
   ],
   "frames": [],
-  "commit": "ce67ca7"
+  "commit": "40966b1"
  }
 ]

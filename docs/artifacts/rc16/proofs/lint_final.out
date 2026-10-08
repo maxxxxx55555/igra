@@ -1,7 +1,8 @@
 # proof lint_final
-# utc 20261008T003818Z
-# head ce67ca7 (uncommitted paths: 3)
+# utc 20261008T093828Z
+# head 40966b1 (uncommitted paths: 3)
+# env none
 # cmd python tools/lint_changed.py
 
-lint_changed: 45 gd, 18 py, 10 sh, 1 workflow, skipped tools for: none, 0 finding(s)
+lint_changed: 49 gd, 18 py, 13 sh, 1 workflow, skipped tools for: none, 0 finding(s)
 # EXIT=0
