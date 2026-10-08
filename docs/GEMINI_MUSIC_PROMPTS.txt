@@ -1,0 +1,661 @@
+THE LAST STREETLIGHT - ПАКЕТ ПРОМПТОВ ДЛЯ GEMINI (МУЗЫКА)
+69 промптов. Файл для телефона: простой текст, один промпт = один абзац.
+
+==== 0. КАК ПОЛЬЗОВАТЬСЯ ====
+1. Открой приложение Gemini и включи создание музыки (в меню инструментов "Create music" / "Создать музыку"; названия могут отличаться. Если кнопки нет, начни сообщение словами "Create a music track:").
+2. Если есть переключатель, выбери Instrumental (без вокала). Для треков длиннее 30 секунд выбирай длинный вариант (Pro / Thinking / полный трек): короткий режим выдаёт только ~30 секунд.
+3. Первым сообщением можно вставить ПРАЙМЕР (раздел 1), он необязателен: каждый промпт ниже самодостаточный.
+4. Дальше по порядку: долгое нажатие на абзац после слова PROMPT, выделить, копировать, вставить в Gemini, отправить.
+5. Делай 3-4 дубля, оставляй лучший (готовый трек в Gemini изменить нельзя, только сгенерировать заново). Скачай и переименуй по строке "save as".
+6. Отмечай готовое в ИНДЕКСЕ (раздел 2): [x].
+7. Лимит упрёшься - иди по порядку A01-A17 (этого в игре ещё нет), потом B. Группа B уже есть в игре: перегенерируй только то, что не нравится.
+
+ЕСЛИ GEMINI ВЕРНУЛ НЕ ТО (допиши в конец промпта и сгенерируй заново):
+- слышен голос или хор: Absolutely no human voice or choir-like sounds; pads and instruments only.
+- слишком много нот или слишком бодро: Fewer notes, much more space and silence, quieter and slower, less busy.
+- слишком ярко или кинематографично: Darker, lower register, no bells, no heroic or trailer feeling.
+- слышен конец трека (затухание, финальный аккорд): No ending: the last second must sound exactly like the first second.
+- отказ или фильтр: замени слова violent / desperate / catastrophic на tense / urgent / heavy и повтори.
+- у коротких звуков (стингеры, UI) Gemini делает клип ~30 секунд: так и задумано, в промпте просьба сделать несколько дублей через тишину, лучший вырезается.
+
+ЧТО ДАЛЬШЕ:
+Скачанные файлы (mp3, mp4, любой формат) переименуй по "save as". Потом нужна обработка под игру: обрезка в петлю по нулевому пересечению, фейды по краям 3 мс, loudnorm (музыка и фоны -18 LUFS, стингеры и UI -14 LUFS, пик не выше -1.5 dBFS), экспорт OGG q4 mono 44.1 кГц в путь из строки "file". Команды ffmpeg есть в docs/AUDIO_CONVERT.md, или скажи мне, куда положил файлы, и я сделаю это.
+Перед релизом: проверь условия Google на коммерческое использование музыки из Gemini, отметь AI-контент в Steam / Play (docs/store/) и запиши каждый трек в docs/ASSET_LICENSES.md.
+
+==== 1. ПРАЙМЕР (необязательно, первым сообщением) ====
+You are the music director for a dark stealth-horror video game called The Last Streetlight. Do NOT generate any music in reply to this message; reply with the single word READY. Rules for every track I request afterwards: (1) all music is instrumental, never any vocals, choir, voice-like humming or spoken words; (2) the mood is nocturnal, muted, melancholic and atmospheric, cold darkness against one warm light, never cheerful, never epic-trailer, never EDM, never heroic; (3) sound palette: felt piano, analog pads, sub drones that slowly breathe, tape hiss, wind and night air, glassy bells, brass-like warm tones, metallic textures, distant industrial sounds; (4) loops must be seamless: the last seconds return to the exact texture, level and harmony of the first seconds, with no ending cadence, fade-out or dying reverb tail; (5) one-shots start instantly and end in total silence; (6) when a brief gives tempo, key, instruments, a [mm:ss] timeline or a length, follow it literally; (7) when a brief says no drums, use no drum kit; (8) generate exactly one track per message and add no commentary. In my next messages I will paste one brief at a time.
+
+==== 2. ИНДЕКС ====
+
+-- A. НУЖНЫ В ПЕРВУЮ ОЧЕРЕДЬ: этого в игре ещё нет --
+[ ] A01  music/music_menu_dark.ogg
+[ ] A02  music/suburbs.ogg
+[ ] A03  music/school.ogg
+[ ] A04  music/hospital.ogg
+[ ] A05  music/gas_station.ogg
+[ ] A06  music/police.ogg
+[ ] A07  music/warehouses.ogg
+[ ] A08  music/substation.ogg
+[ ] A09  music/power_station.ogg
+[ ] A10  music/music_boss_dark_p1.ogg
+[ ] A11  music/music_boss_dark_p2.ogg
+[ ] A12  music/music_boss_dark_p3.ogg
+[ ] A13  music/music_victory.wav
+[ ] A14  music/cue_death.ogg
+[ ] A15  ui/ui_district_restored_sting.ogg
+[ ] A16  sfx/ui_xp_tick.wav
+[ ] A17  sfx/ui_heal_soft.wav
+
+-- B. УЖЕ ЕСТЬ В ИГРЕ: перегенерируй только то, что не нравится --
+[ ] B01  music/residential.wav
+[ ] B02  music/park.wav
+[ ] B03  music/industrial.wav
+[ ] B04  music/layer_threat_low.ogg
+[ ] B05  music/layer_threat_high.ogg
+[ ] B06  music/layer_action.ogg
+[ ] B07  music/music_combat.ogg
+[ ] B08  music/music_battle.wav
+[ ] B09  music/music_tension.wav
+[ ] B10  music/music_boss_dark.wav
+[ ] B11  sfx/architect_sting.ogg
+[ ] B12  sfx/tvar_sting.ogg
+[ ] B13  ui/ui_boss_sting.ogg
+[ ] B14  music/cue_first_light.ogg
+[ ] B15  music/cue_grid_cascade.ogg
+[ ] B16  music/cue_victory.ogg
+[ ] B17  ui/ui_secret_discovery_sting.ogg
+[ ] B18  ui/ui_daily_complete_sting.ogg
+[ ] B19  jingles/quest_complete.ogg
+[ ] B20  ui/ui_achievement_sting.ogg
+[ ] B21  jingles/ending_light_sting.ogg
+[ ] B22  jingles/ending_hope_sting.ogg
+[ ] B23  jingles/ending_truth_sting.ogg
+[ ] B24  jingles/ending_survivor_sting.ogg
+[ ] B25  jingles/ending_dark_sting.ogg
+[ ] B26  ambience/districts/suburbs_dark.ogg
+[ ] B27  ambience/districts/suburbs_lit.ogg
+[ ] B28  ambience/districts/residential_dark.ogg
+[ ] B29  ambience/districts/residential_lit.ogg
+[ ] B30  ambience/districts/park_dark.ogg
+[ ] B31  ambience/districts/park_lit.ogg
+[ ] B32  ambience/districts/school_dark.ogg
+[ ] B33  ambience/districts/school_lit.ogg
+[ ] B34  ambience/districts/hospital_dark.ogg
+[ ] B35  ambience/districts/hospital_lit.ogg
+[ ] B36  ambience/districts/gas_station_dark.ogg
+[ ] B37  ambience/districts/gas_station_lit.ogg
+[ ] B38  ambience/districts/police_dark.ogg
+[ ] B39  ambience/districts/police_lit.ogg
+[ ] B40  ambience/districts/warehouses_dark.ogg
+[ ] B41  ambience/districts/warehouses_lit.ogg
+[ ] B42  ambience/districts/industrial_dark.ogg
+[ ] B43  ambience/districts/industrial_lit.ogg
+[ ] B44  ambience/districts/substation_dark.ogg
+[ ] B45  ambience/districts/substation_lit.ogg
+[ ] B46  ambience/districts/power_station_dark.ogg
+[ ] B47  ambience/districts/power_station_lit.ogg
+[ ] B48  sfx/ui_hover.wav
+[ ] B49  ui/ui_menu_click.ogg
+[ ] B50  sfx/ui_error.wav
+[ ] B51  sfx/ui_save.wav
+[ ] B52  sfx/ui_back.wav + sfx/ui_tab.wav
+
+==== 3. ПРОМПТЫ ====
+
+######## A. НУЖНЫ В ПЕРВУЮ ОЧЕРЕДЬ ########
+
+----------------------------------------
+A01/69  MAIN MENU THEME (replace)
+file: music/music_menu_dark.ogg
+type: seamless loop, target 120 s
+save as: A01_music_menu_dark
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Main-menu theme. Dark ambient nocturne, slow and spacious, around 66 BPM, D minor, 4/4. A lonely felt piano with soft hammers plays a sparse six-note hook, repeating with small variations and long silences between phrases, over a warm analog pad with a faint brass tone, a deep sub drone, soft tape hiss and distant night-city air. Melancholic, suspended, solitary, nocturnal, quietly hopeful; intimate close-miked piano in a wide reverb, one warm glow in cold darkness. No drums. Structure: [00:00] pad, hiss and night air only, very quiet. [00:12] the felt-piano six-note hook enters alone. [00:45] pad opens a little warmer, the hook repeats an octave lower with one note changed. [01:20] piano thins to single notes, the drone deepens. [01:50] only pad, hiss and air remain, at the same level as the start. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 120 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+A02/69  SUBURBS THEME
+file: music/suburbs.ogg
+type: seamless loop, target 37.333 s
+save as: A02_suburbs
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Suburbs district theme. Around 90 BPM, C major pentatonic, 4/4. A gentle generative arpeggio like a music box remembered from childhood, played by a soft round warm pad, over a cold low green-grey drone. Sparse, drifting, slightly detuned. Wistful, homespun, muted, open, unguarded: a sleeping suburb at night with one amber streetlight, a faint far-off dog and wind in hedges. No drums. Structure: [00:00] arpeggio alone. [00:10] the cold drone swells underneath. [00:24] the arpeggio thins to every other note. [00:33] back to the opening texture. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 37 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+A03/69  SCHOOL THEME
+file: music/school.ogg
+type: seamless loop, target 33.6 s
+save as: A03_school
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. School district theme. Around 100 BPM, E tonality wavering between minor and major, 4/4, long cold hall reverb. A glassy pad ostinato like a music classroom heard through walls, a faint flickering fluorescent-tube metallic tick, chalk-dust air. Fluorescent, nostalgic but broken, austere, echoey, cold; vacant corridors with a faint gold institutional glow. No drums, no percussion. Structure: [00:00] ostinato alone. [00:10] a major colour appears in the pad. [00:22] minor returns and the ostinato slows slightly. [00:30] back to the opening. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 34 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+A04/69  HOSPITAL THEME
+file: music/hospital.ogg
+type: seamless loop, target 40 s
+save as: A04_hospital
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Hospital district theme. Around 60 BPM, whole-tone scale on F sharp, 4/4. Weightless floating pads that never resolve, a clinical airy hum filtered so it breathes, a very faint monitor blip every few bars, a metallic trickle. Adrift, calm-sick, antiseptic, hollow, wrong; cyan clinical coldness, a hospital that must never feel like home, no warmth at all. No drums, no percussion. Structure: [00:00] floating pad. [00:10] the first faint monitor blip. [00:24] the pad drifts upward without any cadence. [00:34] dissolves back to the opening pad. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 40 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+A05/69  GAS STATION THEME
+file: music/gas_station.ogg
+type: seamless loop, target 34.909 s
+save as: A05_gas_station
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Gas station district theme. Around 110 BPM, E blues scale, 4/4, laid-back swing feel. Muted bluesy pad licks and a single dry muted twang note, over a buzzing electrical sign hum that pulses, wind under a metal canopy. Roadside, restless, oily, electric, lonely; an ember-orange canopy lamp in the darkness, idle danger, not cozy. No drums. Structure: [00:00] hum and sign buzz only. [00:08] a pad lick calls. [00:20] the twang note answers. [00:30] hum returns alone. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 35 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+A06/69  POLICE STATION THEME
+file: music/police.ogg
+type: seamless loop, target 28 s
+save as: A06_police
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Police station district theme. Around 120 BPM, F minor, 4/4. Terse staccato synth pads and a quiet ticking pulse like a wall clock, a faint radio-static ghost, concrete-corridor air. Indigo-cold authority, surveillance stillness: procedural, restrained, hard, grim, airless, no warmth. No drums. Structure: [00:00] ticking alone. [00:06] staccato pads enter. [00:16] the pads tighten and shorten. [00:24] ticking alone again. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 28 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+A07/69  WAREHOUSES THEME
+file: music/warehouses.ogg
+type: seamless loop, target 38.4 s
+save as: A07_warehouses
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Warehouse district theme. Around 75 BPM, C dorian, 4/4. Low drifting dorian pads with distant chain-clank and metal-creak ghosts in a cavernous reverb, fog-softened edges, slow breathing swells. Cavernous, patient, foggy, metallic, minor-hopeful; an ember glow that stays distant through fog. No drums. Structure: [00:00] low pad. [00:10] a distant clank with a long reverb tail. [00:24] the pad rises one step. [00:33] settles back to the opening. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 38 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+A08/69  SUBSTATION THEME
+file: music/substation.ogg
+type: seamless loop, target 33.6 s
+save as: A08_substation
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Substation district theme. Around 100 BPM, D phrygian dominant, 4/4. A nervous short ostinato under a high thin voltage whine, arc-crackle texture, pale desaturated air, a transformer buzz modulated so it never sits still. Energized, alien, crackling, cold, watchful; the grid's nervous system with almost no colour. No drums. Structure: [00:00] whine and crackle. [00:08] the ostinato enters. [00:20] the ostinato shifts up a semitone. [00:29] back to whine and crackle. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 34 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+A09/69  POWER STATION THEME
+file: music/power_station.ogg
+type: seamless loop, target 32 s
+save as: A09_power_station
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Power station district theme, the final area. Around 105 BPM, G mixolydian, 4/4. Broad resolute pads and slow rising swells over a monumental generator thrum that pulses rather than holds, pale light pressure. Charged, humming, finale-facing, monumental, resolute: the city's dead heart, still charged. No drums. Structure: [00:00] thrum. [00:06] a broad pad enters. [00:16] swell to a peak without a climax. [00:26] the pad sinks back to the opening level. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 32 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+A10/69  BOSS PHASE 1 - TENSION
+file: music/music_boss_dark_p1.ogg
+type: seamless loop, target 45 s
+save as: A10_music_boss_dark_p1
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Boss fight phase 1, tension. Around 80 BPM, D minor, 4/4. A low sustained cello-like drone, a muted heartbeat pulse, airy noise swells, no melody. Coiled, patient, predatory, subterranean, clinical: the thing in the dark has noticed you. No drums. Structure: [00:00] drone alone. [00:10] the muted heartbeat enters. [00:25] an air swell builds but never releases. [00:38] drone alone, as at the start. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 45 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+A11/69  BOSS PHASE 2 - ESCALATION
+file: music/music_boss_dark_p2.ogg
+type: seamless loop, target 45 s
+save as: A11_music_boss_dark_p2
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Boss fight phase 2, escalation. Around 100 BPM, D phrygian dominant, 4/4. A pulsing distorted bass ostinato, dissonant string-like stabs, metallic industrial hits, rising filter tension. Menacing, urgent, industrial, relentless, bared teeth. No lead melody, no drum kit, metallic hits only. Structure: [00:00] bass ostinato alone. [00:10] string stabs enter. [00:24] the metallic hits double up. [00:38] the filter drops back to the bare ostinato. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 45 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+A12/69  BOSS PHASE 3 - FINAL
+file: music/music_boss_dark_p3.ogg
+type: seamless loop, target 45 s
+save as: A12_music_boss_dark_p3
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Boss fight phase 3, final. Around 120 BPM, G mixolydian over a low G pedal, 4/4. An aggressive industrial percussion battery, brass-like synth swells, sustained open fifths, sirens of feedback. Desperate, colossal, final, defiant, catastrophic. Structure: [00:00] low G pedal with percussion. [00:12] a brass-like swell. [00:26] open fifths with a feedback siren. [00:40] back to pedal and percussion alone. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 45 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+A13/69  VICTORY SCREEN BED (replace)
+file: music/music_victory.wav
+type: seamless loop, target 64 s
+save as: A13_music_victory
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Victory-screen bed that must loop unnoticed. Around 70 BPM, D major with minor colour, 4/4. A modest warm-dim pad and a short held piano figure every four bars, with no cadence that sounds like an ending. Bittersweet, held, quiet. No drums. Structure: [00:00] pad alone. [00:06] the first held piano figure, then one about every 14 seconds. [00:58] pad alone at the opening level. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 64 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+A14/69  PLAYER DEATH CUE
+file: music/cue_death.ogg
+type: one-shot, target 8 s
+save as: A14_cue_death
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Player death cue. A low D drone sinks down a fifth, a failing-streetlight flicker of sound, then everything dies to one dark soft tail. Extinguished, sinking, cold, final, merciful. No percussion. Structure: [00:00] low D drone at medium level. [00:03] the drone sinks a fifth with a flicker of sound. [00:05] one dark soft tail. [00:08] total silence. Instrumental only: no vocals, no choir, no spoken words. One-shot, not a loop: it starts immediately with no lead-in silence and ends in complete silence; if the clip is longer than the piece, stay silent for the rest. Dark, muted, never cheerful.
+
+----------------------------------------
+A15/69  DISTRICT RESTORED STING
+file: ui/ui_district_restored_sting.ogg
+type: short sound, target 2 s - the prompt asks for 6 takes in one clip, cut the best
+save as: A15_ui_district_restored_sting
+PROMPT:
+Sound-design clip, not a song, for a dark stealth-horror video game. Two-second sting: a low electrical hum resolves upward into a warm brass perfect fifth, like a streetlight igniting, ending on a soft click of a breaker. Relief, warming, earned, quiet triumph. Make 6 separate takes of this one sound in a row, each separated by 4 seconds of complete silence, so the best one can be cut out. Instrumental only: no vocals, no choir, no spoken words. Nothing else in the clip: no music bed underneath, no drum kit.
+
+----------------------------------------
+A16/69  XP TICK (UI)
+file: sfx/ui_xp_tick.wav
+type: short sound, target 0.06 s - the prompt asks for 8 takes in one clip, cut the best
+save as: A16_ui_xp_tick
+PROMPT:
+Sound-design clip, not a song, for a dark stealth-horror video game. UI sound effect about 60 milliseconds long: one soft muted felt-piano note, low-middle register, dry, barely there, no reverb, no sustain. Make 8 separate takes of this one sound in a row, each separated by 4 seconds of complete silence, so the best one can be cut out. Instrumental only: no vocals, no choir, no spoken words. Nothing else in the clip: no music bed underneath, no drum kit.
+
+----------------------------------------
+A17/69  HEAL SOFT (UI)
+file: sfx/ui_heal_soft.wav
+type: short sound, target 0.3 s - the prompt asks for 6 takes in one clip, cut the best
+save as: A17_ui_heal_soft
+PROMPT:
+Sound-design clip, not a song, for a dark stealth-horror video game. UI sound effect about 300 milliseconds long: two warm soft synth notes a third apart, rising, like a candle relit in a dark room. Gentle, relieved, dark-warm, quiet, not cheerful. Make 6 separate takes of this one sound in a row, each separated by 4 seconds of complete silence, so the best one can be cut out. Instrumental only: no vocals, no choir, no spoken words. Nothing else in the clip: no music bed underneath, no drum kit.
+
+######## B. УЖЕ ЕСТЬ В ИГРЕ (необязательный перерендер) ########
+
+----------------------------------------
+B01/69  RESIDENTIAL THEME
+file: music/residential.wav
+type: seamless loop, target 42 s
+save as: B01_residential
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Residential district theme. Around 80 BPM, D major, 4/4. Slow generative major pads with long attacks and soft chord changes every two bars, a faint distant TV murmur and a creaking-pipe overtone far in the background. Bittersweet, domestic, gentle, muted, remembered: apartments where the lights were switched off mid-evening, amber memory over a cold hollow base. No drums. Structure: [00:00] pad chord A. [00:10] chord B, warmer. [00:21] chord C, hollow. [00:33] back to chord A. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 42 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B02/69  PARK THEME
+file: music/park.wav
+type: seamless loop, target 22.4 s
+save as: B02_park
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Park district theme. Around 75 BPM, C lydian, 4/4. Airy shimmering lydian pads, breath-like synth wind through bare trees, soft organic rustle, a faint glassy bell tone every few bars. Airy, half-light, drifting, fragile, green-cold: an empty night park that still breathes, the city's last living thing. No drums. Structure: [00:00] shimmer pad. [00:07] a wind swell. [00:14] a glassy bell tone. [00:19] settles to the opening. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 22 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B03/69  INDUSTRIAL THEME
+file: music/industrial.wav
+type: seamless loop, target 24 s
+save as: B03_industrial
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Industrial district theme. Around 85 BPM, B-flat minor, 4/4. A heavy minor drone that slowly grinds, a soft mechanical pulse like distant pistons in fog, steam-hiss texture. Grinding, bleak, heavy, foggy, relentless: sleeping machinery and ember silhouettes of dead cranes. No lead melody, no drum kit. Structure: [00:00] grinding drone. [00:06] the mechanical pulse enters. [00:14] a steam release. [00:20] the pulse fades back to the drone. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 24 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B04/69  THREAT STEM - LOW
+file: music/layer_threat_low.ogg
+type: seamless loop, target 60 s
+save as: B04_layer_threat_low
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Threat stem, level low: a monster is far away but near enough to sense. Around 70 BPM, D minor drone. Almost still: a low drone that slowly breathes, a faint irregular sub throb, cold dark air. Watchful, creeping, uneasy, patient, quiet dread. Designed to layer under other stems: single-purpose, no melody, no rhythm, no drums. Structure: [00:00] drone. [00:20] the irregular throb deepens slightly. [00:40] the air thins. [00:55] back to the opening. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 60 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B05/69  THREAT STEM - HIGH
+file: music/layer_threat_high.ogg
+type: seamless loop, target 60 s
+save as: B05_layer_threat_high
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Threat stem, level high: a monster is very close. Around 100 BPM, D minor. A tight muted pulse like an accelerating heart, whispering noise sweeps, a dissonant cluster pad. Hunted, anxious, closing-in, cold sweat, alert. Stackable stem over a D drone: single-purpose, no lead, no drums. Structure: [00:00] pulse. [00:20] noise sweeps enter. [00:40] the cluster pad swells. [00:55] the pulse returns alone. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 60 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B06/69  COMBAT STEM - ACTION
+file: music/layer_action.ogg
+type: seamless loop, target 60 s
+save as: B06_layer_action
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Combat stem, level action: a monster is in contact. Around 140 BPM, D minor. Driving distorted bass, urgent metallic percussion, siren-like synth stabs. Adrenaline, panic, pursuit, violent, desperate. Stackable combat stem, single-purpose, no melodic lead. Structure: [00:00] bass drive. [00:15] metallic percussion enters. [00:30] siren stabs. [00:50] percussion drops out, bass alone. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 60 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B07/69  COMBAT LOOP
+file: music/music_combat.ogg
+type: seamless loop, target 45 s
+save as: B07_music_combat
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Combat loop. Around 130 BPM, D minor. A pounding low synth pulse, dirty metallic hits, tense rising filter sweeps, one repeating dissonant two-note motif. Cornered, urgent, claustrophobic. No lead melody. Structure: [00:00] pulse. [00:12] metal hits. [00:28] filter sweeps rise. [00:40] drops back to the pulse. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 45 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B08/69  BATTLE LOOP
+file: music/music_battle.wav
+type: seamless loop, target 24.5 s
+save as: B08_music_battle
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Battle loop. Around 135 BPM, D minor. A heavy distorted bass ostinato, clanging industrial percussion, short stabbing string-synth hits, constant forward motion. Violent but muted, never heroic. Structure: [00:00] bass ostinato. [00:08] percussion enters. [00:17] stabs. [00:22] back to the ostinato. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 24 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B09/69  TENSION BED
+file: music/music_tension.wav
+type: seamless loop, target 40 s
+save as: B09_music_tension
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Tension bed for the something-is-near state. Around 85 BPM, D minor. A slow dissonant pad, a faint pulsing high harmonic, a distant metallic scrape, no beat. Unease, held breath. No drums. Structure: [00:00] pad. [00:15] the high harmonic pulses. [00:28] a metallic scrape. [00:36] back to the pad alone. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 40 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B10/69  BOSS INTRO UNDERLAY
+file: music/music_boss_dark.wav
+type: seamless loop, target 30.5 s
+save as: B10_music_boss_dark
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Boss intro underlay. Around 90 BPM, D minor. A deep cello-like drone, a slow heartbeat, metallic scrapes, rising and falling air. Ominous arrival, subterranean, clinical. No melody, no drums. Structure: [00:00] drone. [00:10] heartbeat. [00:20] a scrape. [00:27] back to the opening. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 30 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B11/69  BOSS REVEAL STING (Architect)
+file: sfx/architect_sting.ogg
+type: short sound, target 3 s - the prompt asks for 5 takes in one clip, cut the best
+save as: B11_architect_sting
+PROMPT:
+Sound-design clip, not a song, for a dark stealth-horror video game. Boss reveal sting, three seconds: a huge low metallic tone swells from silence into a dissonant cluster and cuts dead. Dread, a vast mind noticing you. No percussion. Make 5 separate takes of this one sound in a row, each separated by 4 seconds of complete silence, so the best one can be cut out. Instrumental only: no vocals, no choir, no spoken words. Nothing else in the clip: no music bed underneath, no drum kit.
+
+----------------------------------------
+B12/69  MONSTER REVEAL STING (Tvar)
+file: sfx/tvar_sting.ogg
+type: short sound, target 2 s - the prompt asks for 5 takes in one clip, cut the best
+save as: B12_tvar_sting
+PROMPT:
+Sound-design clip, not a song, for a dark stealth-horror video game. Monster reveal sting, two seconds: a wet low growl-like synth drop with a high tearing glissando on top, abrupt cut. Predatory, wrong. Make 5 separate takes of this one sound in a row, each separated by 4 seconds of complete silence, so the best one can be cut out. Instrumental only: no vocals, no choir, no spoken words. Nothing else in the clip: no music bed underneath, no drum kit.
+
+----------------------------------------
+B13/69  BOSS DEFEATED STING
+file: ui/ui_boss_sting.ogg
+type: short sound, target 3 s - the prompt asks for 5 takes in one clip, cut the best
+save as: B13_ui_boss_sting
+PROMPT:
+Sound-design clip, not a song, for a dark stealth-horror video game. Boss defeated sting, three seconds: a dense dissonant chord collapses downward and resolves to a single quiet open fifth that rings out. Exhausted relief, not triumph. No percussion. Make 5 separate takes of this one sound in a row, each separated by 4 seconds of complete silence, so the best one can be cut out. Instrumental only: no vocals, no choir, no spoken words. Nothing else in the clip: no music bed underneath, no drum kit.
+
+----------------------------------------
+B14/69  FIRST LIGHT CUE
+file: music/cue_first_light.ogg
+type: one-shot, target 60 s
+save as: B14_cue_first_light
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. First streetlight cue, one slow piece. A single warm pad tone ignites from silence like a lamp warming up, a soft felt-piano motif joins, hope that is still afraid of itself. Dark to warm, tender, tentative. Ends fading to near silence. No drums. Structure: [00:00] silence, then one tone. [00:15] the piano motif. [00:35] the pad opens warm. [00:50] fade to near silence. Instrumental only: no vocals, no choir, no spoken words. One-shot, not a loop: it starts immediately with no lead-in silence and ends in complete silence; if the clip is longer than the piece, stay silent for the rest. Dark, muted, never cheerful.
+
+----------------------------------------
+B15/69  GRID CASCADE CUE
+file: music/cue_grid_cascade.ogg
+type: one-shot, target 90 s
+save as: B15_cue_grid_cascade
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. All-districts-restored cue. The city's power returns in a slow cascade: a low hum climbs by fifths, layers of warm brass pads stack, a distant bell tone marks each district, building to a luminous but exhausted chord, then settling. Awe, relief, earned, never bombastic. No drums. Structure: [00:00] the hum rising. [00:20] the first layers stack with bell tones. [00:40] more layers. [01:00] the peak chord. [01:15] settle to quiet and end in silence. Instrumental only: no vocals, no choir, no spoken words. One-shot, not a loop: it starts immediately with no lead-in silence and ends in complete silence; if the clip is longer than the piece, stay silent for the rest. Dark, muted, never cheerful.
+
+----------------------------------------
+B16/69  VICTORY CUE
+file: music/cue_victory.ogg
+type: one-shot, target 120 s
+save as: B16_cue_victory
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Victory cue. Bittersweet, swelling, ambiguous, resolving, tired peace. Slow felt piano and a warm strings-like pad, three gentle swells at 30, 60 and 90 seconds, a final resolution to a quiet sustained chord that fades out. No drums. Structure: [00:00] piano and pad, quiet. [00:30] the first swell. [01:00] the second swell. [01:30] the third swell, the biggest. [01:45] resolve to a quiet chord and fade to silence. Instrumental only: no vocals, no choir, no spoken words. One-shot, not a loop: it starts immediately with no lead-in silence and ends in complete silence; if the clip is longer than the piece, stay silent for the rest. Dark, muted, never cheerful.
+
+----------------------------------------
+B17/69  SECRET FOUND STING
+file: ui/ui_secret_discovery_sting.ogg
+type: short sound, target 0.4 s - the prompt asks for 8 takes in one clip, cut the best
+save as: B17_ui_secret_discovery_sting
+PROMPT:
+Sound-design clip, not a song, for a dark stealth-horror video game. UI sting about 0.4 seconds long: two soft brass-warm chime notes rising a fourth, small reverb. Hushed, secretive, brightening. Make 8 separate takes of this one sound in a row, each separated by 4 seconds of complete silence, so the best one can be cut out. Instrumental only: no vocals, no choir, no spoken words. Nothing else in the clip: no music bed underneath, no drum kit.
+
+----------------------------------------
+B18/69  DAILY COMPLETE STING
+file: ui/ui_daily_complete_sting.ogg
+type: short sound, target 0.65 s - the prompt asks for 6 takes in one clip, cut the best
+save as: B18_ui_daily_complete_sting
+PROMPT:
+Sound-design clip, not a song, for a dark stealth-horror video game. UI sting about 0.6 seconds long: a short dry three-note resolve on soft felt piano, settled and neat, warm, no reverb tail. Make 6 separate takes of this one sound in a row, each separated by 4 seconds of complete silence, so the best one can be cut out. Instrumental only: no vocals, no choir, no spoken words. Nothing else in the clip: no music bed underneath, no drum kit.
+
+----------------------------------------
+B19/69  QUEST COMPLETE JINGLE
+file: jingles/quest_complete.ogg
+type: short sound, target 3 s - the prompt asks for 5 takes in one clip, cut the best
+save as: B19_quest_complete
+PROMPT:
+Sound-design clip, not a song, for a dark stealth-horror video game. Jingle, three seconds: a four-note pad cadence, gentle, tidy, warm, closed, ending on a resolved chord. Modest, not triumphant. Make 5 separate takes of this one sound in a row, each separated by 4 seconds of complete silence, so the best one can be cut out. Instrumental only: no vocals, no choir, no spoken words. Nothing else in the clip: no music bed underneath, no drum kit.
+
+----------------------------------------
+B20/69  ACHIEVEMENT STING
+file: ui/ui_achievement_sting.ogg
+type: short sound, target 1.5 s - the prompt asks for 6 takes in one clip, cut the best
+save as: B20_ui_achievement_sting
+PROMPT:
+Sound-design clip, not a song, for a dark stealth-horror video game. UI sting about 1.5 seconds long: a warm bell tone and a soft rising pad swell, quiet pride, understated. Make 6 separate takes of this one sound in a row, each separated by 4 seconds of complete silence, so the best one can be cut out. Instrumental only: no vocals, no choir, no spoken words. Nothing else in the clip: no music bed underneath, no drum kit.
+
+----------------------------------------
+B21/69  ENDING STING - LIGHT
+file: jingles/ending_light_sting.ogg
+type: one-shot, target 12 s
+save as: B21_ending_light_sting
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Ending sting, D major. Warm pad and soft felt piano rise into a luminous open chord with gentle bell overtones, full resolution, long soft tail. Radiant, grateful, tender, still serious. No drums. Structure: [00:00] warm pad and piano. [00:05] rise into the luminous open chord. [00:09] the long soft tail into silence. Instrumental only: no vocals, no choir, no spoken words. One-shot, not a loop: it starts immediately with no lead-in silence and ends in complete silence; if the clip is longer than the piece, stay silent for the rest. Dark, muted, never cheerful.
+
+----------------------------------------
+B22/69  ENDING STING - HOPE
+file: jingles/ending_hope_sting.ogg
+type: one-shot, target 11 s
+save as: B22_ending_hope_sting
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Ending sting, A major with minor ambiguity. A quiet pad and a lone piano line climbing hesitantly, the final chord left slightly open. Cautious hope, dawn after a long night. No drums. Structure: [00:00] quiet pad. [00:03] the lone piano line climbs. [00:08] the open final chord rings into silence. Instrumental only: no vocals, no choir, no spoken words. One-shot, not a loop: it starts immediately with no lead-in silence and ends in complete silence; if the clip is longer than the piece, stay silent for the rest. Dark, muted, never cheerful.
+
+----------------------------------------
+B23/69  ENDING STING - TRUTH
+file: jingles/ending_truth_sting.ogg
+type: one-shot, target 10 s
+save as: B23_ending_truth_sting
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Ending sting, D minor. A bare cold pad, one sustained piano note, a thin high drone, no vibrato, the final chord is an empty fifth. Stark, honest, unadorned. No drums. Structure: [00:00] bare pad and one piano note. [00:05] the thin high drone. [00:08] the empty fifth rings into silence. Instrumental only: no vocals, no choir, no spoken words. One-shot, not a loop: it starts immediately with no lead-in silence and ends in complete silence; if the clip is longer than the piece, stay silent for the rest. Dark, muted, never cheerful.
+
+----------------------------------------
+B24/69  ENDING STING - SURVIVOR
+file: jingles/ending_survivor_sting.ogg
+type: one-shot, target 11 s
+save as: B24_ending_survivor_sting
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Ending sting, G minor. A slow tired pad, a low muted strings-like tone dragging downward then settling, a faint warm note at the very end. Weary, alive, battered. No drums. Structure: [00:00] slow tired pad. [00:04] the low tone drags downward. [00:09] one faint warm note, then silence. Instrumental only: no vocals, no choir, no spoken words. One-shot, not a loop: it starts immediately with no lead-in silence and ends in complete silence; if the clip is longer than the piece, stay silent for the rest. Dark, muted, never cheerful.
+
+----------------------------------------
+B25/69  ENDING STING - DARK
+file: jingles/ending_dark_sting.ogg
+type: one-shot, target 12 s
+save as: B25_ending_dark_sting
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Ending sting, D minor, very low. A sub drone sinks, a dissonant cluster pad fades in and out, a distant metal tone rings once and decays into silence. Abyssal, cold, no resolution, no warmth. No percussion. Structure: [00:00] the sub drone sinks. [00:04] the cluster pad fades in and out. [00:08] one distant metal tone rings and decays into silence. Instrumental only: no vocals, no choir, no spoken words. One-shot, not a loop: it starts immediately with no lead-in silence and ends in complete silence; if the clip is longer than the piece, stay silent for the rest. Dark, muted, never cheerful.
+
+----------------------------------------
+B26/69  BED - SUBURBS (dark)
+file: ambience/districts/suburbs_dark.ogg
+type: seamless loop, target 36 s
+save as: B26_suburbs_dark
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Ambient bed for the Suburbs district, dark state. Instrumental dark ambient soundscape, a non-metric texture. A sleeping suburb at night: a low warm pad like remembered domestic life over a cold green-grey drone, faint sodium-lamp shimmer, far dogs and wind. The base is cold and green-grey; the only warmth is one distant amber glow. Key centre C. Muted, atmospheric, nocturnal. No drums, no percussion, no melody, no beat. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 36 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B27/69  BED - SUBURBS (lit)
+file: ambience/districts/suburbs_lit.ogg
+type: seamless loop, target 36 s
+save as: B27_suburbs_lit
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Ambient bed for the Suburbs district, restored (lit) state: a twin of the dark bed, same textures and same length, re-voiced warmer. A sleeping suburb at night: a low warm pad like remembered domestic life over a cold green-grey drone, faint sodium-lamp shimmer, far dogs and wind. The cold base thins, the amber glow is now close and steady, and one soft warm pad is added. Key centre C. Muted, atmospheric, still nocturnal. No drums, no percussion, no melody, no beat. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 36 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B28/69  BED - RESIDENTIAL BLOCKS (dark)
+file: ambience/districts/residential_dark.ogg
+type: seamless loop, target 36 s
+save as: B28_residential_dark
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Ambient bed for the Residential blocks district, dark state. Instrumental dark ambient soundscape, a non-metric texture. A sleeping apartment district at night: a low warm pad like remembered domestic life, creaking pipes, window rattle, a faint TV murmur through walls. The base is cold and green-grey; the only warmth is one distant amber glow. Key centre D. Muted, atmospheric, nocturnal. No drums, no percussion, no melody, no beat. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 36 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B29/69  BED - RESIDENTIAL BLOCKS (lit)
+file: ambience/districts/residential_lit.ogg
+type: seamless loop, target 36 s
+save as: B29_residential_lit
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Ambient bed for the Residential blocks district, restored (lit) state: a twin of the dark bed, same textures and same length, re-voiced warmer. A sleeping apartment district at night: a low warm pad like remembered domestic life, creaking pipes, window rattle, a faint TV murmur through walls. The cold base thins, the amber glow is now close and steady, and one soft warm pad is added. Key centre D. Muted, atmospheric, still nocturnal. No drums, no percussion, no melody, no beat. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 36 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B30/69  BED - PARK (dark)
+file: ambience/districts/park_dark.ogg
+type: seamless loop, target 36 s
+save as: B30_park_dark
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Ambient bed for the Park district, dark state. Instrumental dark ambient soundscape, a non-metric texture. An empty night park that still breathes: airy synth wind through bare trees, soft organic rustle, distant city hum. The base is cold and blue-green; the only warmth is one distant yellow-green glow. Key centre C. Muted, atmospheric, nocturnal. No drums, no percussion, no melody, no beat. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 36 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B31/69  BED - PARK (lit)
+file: ambience/districts/park_lit.ogg
+type: seamless loop, target 36 s
+save as: B31_park_lit
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Ambient bed for the Park district, restored (lit) state: a twin of the dark bed, same textures and same length, re-voiced warmer. An empty night park that still breathes: airy synth wind through bare trees, soft organic rustle, distant city hum. The cold base thins, the yellow-green glow is now close and steady, and one soft warm pad is added. Key centre C. Muted, atmospheric, still nocturnal. No drums, no percussion, no melody, no beat. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 36 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B32/69  BED - SCHOOL (dark)
+file: ambience/districts/school_dark.ogg
+type: seamless loop, target 36 s
+save as: B32_school_dark
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Ambient bed for the School district, dark state. Instrumental dark ambient soundscape, a non-metric texture. A vacant school at night: cold blue-grey air, distant metallic flicker like dying fluorescent tubes, hollow corridors, a faint desk scrape and a far bell echo. The base is cold and blue-grey; the only warmth is one distant gold glow. Key centre E. Muted, atmospheric, nocturnal. No drums, no percussion, no melody, no beat. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 36 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B33/69  BED - SCHOOL (lit)
+file: ambience/districts/school_lit.ogg
+type: seamless loop, target 36 s
+save as: B33_school_lit
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Ambient bed for the School district, restored (lit) state: a twin of the dark bed, same textures and same length, re-voiced warmer. A vacant school at night: cold blue-grey air, distant metallic flicker like dying fluorescent tubes, hollow corridors, a faint desk scrape and a far bell echo. The cold base thins, the gold glow is now close and steady, and one soft warm pad is added. Key centre E. Muted, atmospheric, still nocturnal. No drums, no percussion, no melody, no beat. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 36 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B34/69  BED - HOSPITAL (dark)
+file: ambience/districts/hospital_dark.ogg
+type: seamless loop, target 36 s
+save as: B34_hospital_dark
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Ambient bed for the Hospital district, dark state. Instrumental dark ambient soundscape, a non-metric texture. An abandoned hospital ward: clinical air, an empty echoing hum, metallic trickle, a monitor-like blip far away; deliberately un-homey and antiseptic. The base is cold and cyan; the only warmth is one distant cyan glow. Key centre F sharp. Muted, atmospheric, nocturnal. No drums, no percussion, no melody, no beat. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 36 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B35/69  BED - HOSPITAL (lit)
+file: ambience/districts/hospital_lit.ogg
+type: seamless loop, target 36 s
+save as: B35_hospital_lit
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Ambient bed for the Hospital district, restored (lit) state: a twin of the dark bed, same textures and same length, re-voiced warmer. An abandoned hospital ward: clinical air, an empty echoing hum, metallic trickle, a monitor-like blip far away; deliberately un-homey and antiseptic. The cyan light is steadier and the hum slightly more present, but there is NO warmth added: the hospital must never feel like home. Key centre F sharp. Muted, atmospheric, still nocturnal. No drums, no percussion, no melody, no beat. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 36 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B36/69  BED - GAS STATION (dark)
+file: ambience/districts/gas_station_dark.ogg
+type: seamless loop, target 36 s
+save as: B36_gas_station_dark
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Ambient bed for the Gas station district, dark state. Instrumental dark ambient soundscape, a non-metric texture. A dark highway forecourt: electrical sign buzz, wind under a metal canopy, gravel crunch, idle danger in the air. The base is cold and black-blue; the only warmth is one distant ember-orange glow. Key centre E. Muted, atmospheric, nocturnal. No drums, no percussion, no melody, no beat. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 36 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B37/69  BED - GAS STATION (lit)
+file: ambience/districts/gas_station_lit.ogg
+type: seamless loop, target 36 s
+save as: B37_gas_station_lit
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Ambient bed for the Gas station district, restored (lit) state: a twin of the dark bed, same textures and same length, re-voiced warmer. A dark highway forecourt: electrical sign buzz, wind under a metal canopy, gravel crunch, idle danger in the air. The cold base thins, the ember-orange glow is now close and steady, and one soft warm pad is added. Key centre E. Muted, atmospheric, still nocturnal. No drums, no percussion, no melody, no beat. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 36 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B38/69  BED - POLICE STATION (dark)
+file: ambience/districts/police_dark.ogg
+type: seamless loop, target 36 s
+save as: B38_police_dark
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Ambient bed for the Police station district, dark state. Instrumental dark ambient soundscape, a non-metric texture. A cold authorities' building: a restrained flood-light hum, a radio-static ghost, concrete corridor air, boots far away, a watched feeling. The base is cold and indigo; the only warmth is one distant sodium glow. Key centre F. Muted, atmospheric, nocturnal. No drums, no percussion, no melody, no beat. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 36 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B39/69  BED - POLICE STATION (lit)
+file: ambience/districts/police_lit.ogg
+type: seamless loop, target 36 s
+save as: B39_police_lit
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Ambient bed for the Police station district, restored (lit) state: a twin of the dark bed, same textures and same length, re-voiced warmer. A cold authorities' building: a restrained flood-light hum, a radio-static ghost, concrete corridor air, boots far away, a watched feeling. The cold base thins, the sodium glow is now close and steady, and one soft warm pad is added. Key centre F. Muted, atmospheric, still nocturnal. No drums, no percussion, no melody, no beat. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 36 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B40/69  BED - WAREHOUSE COMPLEX (dark)
+file: ambience/districts/warehouses_dark.ogg
+type: seamless loop, target 36 s
+save as: B40_warehouses_dark
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Ambient bed for the Warehouse complex district, dark state. Instrumental dark ambient soundscape, a non-metric texture. Vast fog-bound warehouses: cavernous reverb tail, far metal creaks and chain clinks, a distant forklift. The base is cold and fog-grey; the only warmth is one distant ember glow. Key centre C. Muted, atmospheric, nocturnal. No drums, no percussion, no melody, no beat. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 36 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B41/69  BED - WAREHOUSE COMPLEX (lit)
+file: ambience/districts/warehouses_lit.ogg
+type: seamless loop, target 36 s
+save as: B41_warehouses_lit
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Ambient bed for the Warehouse complex district, restored (lit) state: a twin of the dark bed, same textures and same length, re-voiced warmer. Vast fog-bound warehouses: cavernous reverb tail, far metal creaks and chain clinks, a distant forklift. The cold base thins, the ember glow is now close and steady, and one soft warm pad is added. Key centre C. Muted, atmospheric, still nocturnal. No drums, no percussion, no melody, no beat. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 36 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B42/69  BED - INDUSTRIAL ZONE (dark)
+file: ambience/districts/industrial_dark.ogg
+type: seamless loop, target 33.994 s
+save as: B42_industrial_dark
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Ambient bed for the Industrial zone district, dark state. Instrumental dark ambient soundscape, a non-metric texture. A sleeping machinery district: a slow metallic grinding pad, steam hiss, vent rattle, dense fog. The base is cold and steel-grey; the only warmth is one distant ember glow. Key centre B flat. Muted, atmospheric, nocturnal. No drums, no percussion, no melody, no beat. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 34 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B43/69  BED - INDUSTRIAL ZONE (lit)
+file: ambience/districts/industrial_lit.ogg
+type: seamless loop, target 33.994 s
+save as: B43_industrial_lit
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Ambient bed for the Industrial zone district, restored (lit) state: a twin of the dark bed, same textures and same length, re-voiced warmer. A sleeping machinery district: a slow metallic grinding pad, steam hiss, vent rattle, dense fog. The cold base thins, the ember glow is now close and steady, and one soft warm pad is added. Key centre B flat. Muted, atmospheric, still nocturnal. No drums, no percussion, no melody, no beat. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 34 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B44/69  BED - SUBSTATION (dark)
+file: ambience/districts/substation_dark.ogg
+type: seamless loop, target 36 s
+save as: B44_substation_dark
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Ambient bed for the Substation district, dark state. Instrumental dark ambient soundscape, a non-metric texture. The grid's nervous system: a pale transformer buzz, a high thin whine, arc-crackle ghosts, almost no colour, airless. The base is cold and desaturated pale; the only warmth is one distant pale yellow glow. Key centre D. Muted, atmospheric, nocturnal. No drums, no percussion, no melody, no beat. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 36 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B45/69  BED - SUBSTATION (lit)
+file: ambience/districts/substation_lit.ogg
+type: seamless loop, target 36 s
+save as: B45_substation_lit
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Ambient bed for the Substation district, restored (lit) state: a twin of the dark bed, same textures and same length, re-voiced warmer. The grid's nervous system: a pale transformer buzz, a high thin whine, arc-crackle ghosts, almost no colour, airless. The cold base thins, the pale yellow glow is now close and steady, and one soft warm pad is added. Key centre D. Muted, atmospheric, still nocturnal. No drums, no percussion, no melody, no beat. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 36 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B46/69  BED - POWER STATION (dark)
+file: ambience/districts/power_station_dark.ogg
+type: seamless loop, target 36 s
+save as: B46_power_station_dark
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Ambient bed for the Power station district, dark state. Instrumental dark ambient soundscape, a non-metric texture. The city's dead heart, still charged: a monumental low thrum, a huge transformer pulse through fog, a breaker clunk far away. The base is cold and pale grey; the only warmth is one distant pale white glow. Key centre G. Muted, atmospheric, nocturnal. No drums, no percussion, no melody, no beat. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 36 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B47/69  BED - POWER STATION (lit)
+file: ambience/districts/power_station_lit.ogg
+type: seamless loop, target 36 s
+save as: B47_power_station_lit
+PROMPT:
+Score for a nocturnal stealth-horror video game set in a dead city whose streetlights went out: cold darkness against one warm light. Ambient bed for the Power station district, restored (lit) state: a twin of the dark bed, same textures and same length, re-voiced warmer. The city's dead heart, still charged: a monumental low thrum, a huge transformer pulse through fog, a breaker clunk far away. The cold base thins, the pale white glow is now close and steady, and one soft warm pad is added. Key centre G. Muted, atmospheric, still nocturnal. No drums, no percussion, no melody, no beat. Instrumental only: no vocals, no choir, no spoken words. Seamless loop of about 36 seconds: the last seconds return to exactly the texture, level and harmony of the first seconds, with no ending cadence, no fade-out, no final hit and no dying reverb tail. Any drone must slowly breathe or evolve, never a flat constant low hum. Dark, muted, atmospheric, never cheerful, never epic-trailer, never EDM.
+
+----------------------------------------
+B48/69  UI HOVER
+file: sfx/ui_hover.wav
+type: short sound, target 0.1 s - the prompt asks for 10 takes in one clip, cut the best
+save as: B48_ui_hover
+PROMPT:
+Sound-design clip, not a song, for a dark stealth-horror video game. UI sound effect about 100 milliseconds long: one tiny dry neutral click-tone, very quiet. Make 10 separate takes of this one sound in a row, each separated by 4 seconds of complete silence, so the best one can be cut out. Instrumental only: no vocals, no choir, no spoken words. Nothing else in the clip: no music bed underneath, no drum kit.
+
+----------------------------------------
+B49/69  UI CLICK
+file: ui/ui_menu_click.ogg
+type: short sound, target 0.1 s - the prompt asks for 8 takes in one clip, cut the best
+save as: B49_ui_menu_click
+PROMPT:
+Sound-design clip, not a song, for a dark stealth-horror video game. UI sound effect about 100 milliseconds long: a dry soft wooden thock with a faint low tone, decisive. Make 8 separate takes of this one sound in a row, each separated by 4 seconds of complete silence, so the best one can be cut out. Instrumental only: no vocals, no choir, no spoken words. Nothing else in the clip: no music bed underneath, no drum kit.
+
+----------------------------------------
+B50/69  UI ERROR
+file: sfx/ui_error.wav
+type: short sound, target 0.2 s - the prompt asks for 6 takes in one clip, cut the best
+save as: B50_ui_error
+PROMPT:
+Sound-design clip, not a song, for a dark stealth-horror video game. UI sound effect about 200 milliseconds long: a muted low buzz, two quick pulses, denied but not harsh. Make 6 separate takes of this one sound in a row, each separated by 4 seconds of complete silence, so the best one can be cut out. Instrumental only: no vocals, no choir, no spoken words. Nothing else in the clip: no music bed underneath, no drum kit.
+
+----------------------------------------
+B51/69  UI SAVE
+file: sfx/ui_save.wav
+type: short sound, target 0.1 s - the prompt asks for 8 takes in one clip, cut the best
+save as: B51_ui_save
+PROMPT:
+Sound-design clip, not a song, for a dark stealth-horror video game. UI sound effect about 100 milliseconds long: two tiny soft ticks a tone apart, reassured, small. Make 8 separate takes of this one sound in a row, each separated by 4 seconds of complete silence, so the best one can be cut out. Instrumental only: no vocals, no choir, no spoken words. Nothing else in the clip: no music bed underneath, no drum kit.
+
+----------------------------------------
+B52/69  UI BACK + TAB (one clip, cut in two)
+file: sfx/ui_back.wav + sfx/ui_tab.wav
+type: short sound, target 0.2 s - the prompt asks for 5 takes in one clip, cut the best
+save as: B52_ui_back_ui_tab
+PROMPT:
+Sound-design clip, not a song, for a dark stealth-horror video game. Two UI sound effects as a pair: first a soft dry tick (this is the BACK sound, slightly lower), then after 1 second of silence a slightly higher and shorter dry tick (this is the TAB sound). Make 5 separate takes of this one sound in a row, each separated by 4 seconds of complete silence, so the best one can be cut out. Instrumental only: no vocals, no choir, no spoken words. Nothing else in the clip: no music bed underneath, no drum kit.
+
+==== КОНЕЦ ====
