@@ -2,7 +2,9 @@
 """Writes the rc16 section of docs/PROOFS.md (AF1) from docs/artifacts/rc16/closures.json.
 
 usage: python tools/qa_sim/gen_proofs16.py [--demo]
-A closure is {"id", "claim", "cmd", "proof", "quotes": [needle, ...], "frames": [path, ...], "commit"}. `proof` names a raw log written by
+A closure is {"id", "claim", "cmd", "proof", "attach" (optional), "quotes": [needle, ...], "frames": [path, ...], "commit"}. `attach` names the full engine log
+that proof_run kept next to the proof (<proof>.attach.<attach>) when the proof's own output is only the wrapper's summary; the quotes are then taken from it,
+with the colour escape codes removed. `proof` names a raw log written by
 tools/qa_sim/proof_run (docs/artifacts/rc16/proofs/<proof>.out, untrimmed, with its exit code); every quote is the FIRST line of that log that
 contains the needle, copied verbatim, so a quote cannot drift from the log; a needle that no line contains stops the generator. A frame is
 cited by path with the capture time written in its name. The section sits between two markers in docs/PROOFS.md and is rewritten in place.
@@ -19,7 +21,8 @@ CLOSURES = ROOT / "docs" / "artifacts" / "rc16" / "closures.json"
 LOGS = ROOT / "docs" / "artifacts" / "rc16" / "proofs"
 BEGIN, END = "<!-- rc16:begin -->", "<!-- rc16:end -->"
 EXIT = re.compile(r"^# EXIT=(\d+)$", re.M)
-STAMP = re.compile(r"_(\d{8}T\d{6}Z)\.png$")
+STAMP = re.compile(r"_(\d{8}T\d{6}Z)\.(?:png|jpg)$")
+ANSI = re.compile("\x1b\\[[0-9;]*m")
 
 
 def cell(text):
@@ -32,7 +35,8 @@ def row(c):
     text = data.decode("utf-8", errors="replace")
     m = EXIT.search(text)
     code = m.group(1) if m else "?"
-    lines = text.splitlines()
+    source = (LOGS / (c["proof"] + ".attach." + c["attach"])).read_text(encoding="utf-8", errors="replace") if c.get("attach") else text
+    lines = ANSI.sub("", source).splitlines()
     quotes = []
     for needle in c.get("quotes", []):
         hit = next((ln for ln in lines if needle in ln), None)
@@ -72,6 +76,8 @@ def demo():
     assert cell("a|b\nc") == "a\\|b c"
     assert STAMP.search("x_after_a1b2c3d_20261003T014512Z.png").group(1) == "20261003T014512Z"
     assert EXIT.search("body\n# EXIT=0\n").group(1) == "0"
+    assert STAMP.search("A01_menu_after_bca7d33_20261007T235629Z.jpg").group(1) == "20261007T235629Z"
+    assert ANSI.sub("", "\x1b[32mWIN\x1b[0m seed 1") == "WIN seed 1"
     print("gen_proofs16 demo OK")
 
 

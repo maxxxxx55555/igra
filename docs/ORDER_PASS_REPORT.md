@@ -185,6 +185,74 @@ rows: `docs/ACCEPTANCE_CHECKLIST.md` (200 rows); decisions: `docs/TZ_DECISIONS.m
 | Music | Excluded by owner (`OWNER_HANDOFF.md`) |
 | Play Console upload | Owner (credentials); `version/code` stays 1 until the first upload |
 
+## rc16 final (sign-off, 2026-10-08)
+
+Baseline `v8.0.0-rc15` @ `e4bb4df`; 76 commits on `main` up to the sign-off; the game code last changed in `c3e79e5` (every commit after it is a record, a tool or evidence, which `tools/qa_sim/af3_frame_check.py` proves for the frames:
+no runtime path differs between `c3e79e5` and HEAD). Two sessions: Session 16 built wave 1 with agents in their own worktrees (perf, content, uifx, sec, audio) and the harness; Session 17 merged and finished it,
+ran wave 2 (beauty, i18n, content), the utilities pass and the verification. Every launch is a row of `docs/artifacts/rc16/launch_ledger.tsv`: 17 rows of the budget of 20 (rows 12 to 28), about 72 engine processes.
+Evidence per closure: `docs/PROOFS.md` (the rc16 section: raw log, sha256, quoted lines); rows: `docs/ACCEPTANCE_CHECKLIST.md` (179 of 200 proven, gap table of the 21 open rows); decisions:
+`docs/TZ_DECISIONS.md`; corrections 101 to 105: `docs/CORRECTION_LOG.md`.
+
+| Area | What was wrong or changed | Key commits | Evidence |
+|---|---|---|---|
+| Streaming and pooling (O1) | The old district stayed in the tree while the next was built; street collision was about 384 bodies; hit, blood and muzzle bursts were instantiated per call; the neighbours' files were read on the main thread; the light limiter walked the tree four times a second. Now the old district leaves the tree first, the collision is 32 lane strips, bursts are pooled, the neighbours' scene and street textures are requested from the loader thread, the limiter sorts a group. Nodes 1784 to 1061, cold load mean 354 to 317 ms, warm 359 to 275 ms; the longest frame of a transition stayed 144 to 150 ms and the hitches per transition rose (1.8 and 2.3 to 3.0 and 4.1). | `f4d823f`, `dc0ce30`, `daa2c27`, `39f8fa6`, `8a07041` | `docs/PERF_PASS.md` (rc16 section), closeout `PERF1` to `PERF7` |
+| Frame-independent timing (O2) | The pistol shot 3.00 / 3.16 / 3.33 times a second at 30 / 60 / 120 FPS and the camera interior blend closed 40% a frame. Now both run on the physics step or on seconds: 15 of 15 quantities agree. | `0dd072a`, `6196c1f`, `a5a40c3` | `docs/TIMING_AUDIT.md`, `timing_equiv` before FAIL and after PASS |
+| UI motion and post-fx (uifx) | Tier-gated post-fx, a chromatic pulse on a hit, an Ultra sprint blur, hover swell, screen slide, health-bar shake, floating damage numbers, quick-slot drag from the inventory (QS2, I9.7). | `901a569`, `58eb7b0`, `36ef92f`, `e172d7d`, `1ccfa49`, `8db1009`, `efe39f8`, `deb622c`, merge `d511716` | closeout `UIFX1` to `UIFX7`, `QS2` |
+| Content | Two-finger pinch zoom (CT7), a craft refund no longer counts as a find (E11 first half), the battery drains behind the open inventory (E13), the melee count through `enemy_attack`. | `6504272`, `c93bfab`, `115ad00`, `1ac9dd3`, merge `d5d095b` | closeout `CT7`, `E11`, `E13` |
+| Security | One New Game+ level per run: a run name in the signed save, a ledger of banked runs in the signed New Game+ file, the refusal told on the New Game+ screen (E1); the security re-read of the shipped scripts; the AF5 citation gate. | `a82814d`, `70af3bb`, `ed01eed`, `c581e19` | closeout `E1A` to `E1D`, `docs/SECURITY_REREAD_RC16.md`, attack_sim `fails=0` |
+| Audio | Distant 3D sounds low-passed, a pool of 12 3D players, a reverb on the world buses that follows the walls round the head, the next districts' beds loaded ahead. Found on the way: an autoload that named `DistrictSceneFactory` emptied a `preload`ed scene (172 engine errors in the loot check) and a reverb fade restarted every sensing tick. | `9f8b032`, `925f494`, `e32fa77`, `7c49500`, merge `e241004` | closeout `AUD1` to `AUD5`; the windowed audio gate: `docs/UNVERIFIABLE_HERE.md` U3 and U8 |
+| Beauty (O3) | The HUD grain repeated every 10 px, the damage vignette started anywhere on its beat, the suburbs and residential LUT turned light green, the overlay grain faded to a constant after about 20 minutes, the sprint blur was painted over by the chroma pass. 6 changes kept, 0 reverted. | `a9844cf`, `69e9017`, `60dac76`, `08af752`, merge `e082665` | `docs/BEAUTY_RC16.md`, 8 after frames each read once, closeout `BEAUTY1` to `BEAUTY4`, `UIFX7` |
+| GDD deviations found by reading | A toast lived 4 s (GDD 3 s), the menu background reached a day palette after 24 s, the touch attack button stayed lit under 5 stamina; the quick-slot hint said "clear" where a right-click resets. | `4c9b3fd`, `617d83e`, `c3e79e5` | closeout `TO1`, `MENUBG1`, `ATK1` |
+| Utilities (O4) | gdparse, gdlint (6 defect rules), ruff, shellcheck, actionlint on the changed files, a pre-commit hook and a CI workflow; ECC, mypy, gdformat, pngquant, oggenc, godot-git-plugin rejected with the measurement. The lint found five `cd` lines without an exit and two trailing-whitespace lines. | `c5bd451` | `docs/UTILITIES_REPORT.md`, CI run `599cd89` success |
+| Acceptance (O5) | 176 to 179 of 200 proven (CT7, QS2, I9.7); the 21 open rows each have the GDD text, the code and who decides. | `a459b9c` | `docs/ACCEPTANCE_CHECKLIST.md` (gap table), `docs/artifacts/rc16/proofs/accept_count.out` |
+| Evidence harness (AF1 to AF7) | Every launch is one row of the ledger with its question and an untrimmed log (`tools/qa_sim/proof_run`); every fix is shown to fail on the code before it and pass at HEAD (`tools/qa_sim/af2_both_ways.py`, 36 ids); frames carry the code tree and the capture time in their name and are rejected when stale (`tools/qa_sim/af3_frame_check.py`, 49 frames); every file:line citation of the documents is checked (`tools/af5_check.py`). Found on the way: the AF3 gate failed every frame on a fresh clone or pull and ignored `.jpg` (CORRECTION_LOG 105); the AF2 script read a filtered log (CORRECTION_LOG 103). | `942d92b`, `f49a5cf`, `3f5556a`, `c581e19` | `docs/artifacts/rc16/launch_ledger.tsv`, `docs/artifacts/rc16/proofs/af3_f5_fresh_clone_3f5556a.out`, `docs/PROOFS.md` |
+
+### Final battery (code tree `c3e79e5`, HEAD `b9ea686` at the last launch; all QA runs muted)
+
+| Gate | Result |
+|---|---|
+| `tools/check.sh --all` (one command, 33 engine processes) | **Всё зелёное, 65 checks**, EXIT 0 (`s8_check_all_a459b9c.out`); two windowed-only gates (perf budget, Music bus) skip in a headless run |
+| Compile gate | `COMPILE_GATE bad=0` (`s2_compile_closeout_b69ed90.attach.compile_gate_scene.log`) and inside the battery |
+| closeout, rc16 group | **64 checks, 0 fails** at HEAD; **51 checks, 44 fail** on the runtime code of `e4bb4df` (AF2: `docs/artifacts/rc16/af2_both_ways.txt`, 36 ids, `AF2 verdict=PASS`) |
+| timing | `TIMING_EQUIV verdict=PASS keys=15 failures=0`; before `FAIL keys=15 failures=1` |
+| Bot (IRON RULE, 3 seeds, 1x) | **3/3 WIN**, 11/11 districts FULL, 0 deaths, 0 softlocks (`s8_bot_3seeds_f49a5cf.out`) |
+| Play-through (windowed, input injection, A V B S) | A 67 steps, V 27, B 12, S 23: **0 fails in all four modes**, rc 0 (`s8_playthrough_AVBS.out`); 97 frames were written, 26 read once each and kept in `docs/stills/rc16_playthrough/` |
+| Closeout mutations | **16 of 16** rc15 mutations caught: `checks=32 fails=20`, the same 13 ids and counts as the rc15 sign-off (`s8_mutations_46723a7.out`); with the 36 rc16 ids that fail on `e4bb4df` (AF2 row above) 52 of 52 |
+| attack_sim | `DONE fails=0` inside the battery (adversarial gate OK) |
+| i18n truth gate | **12/12**, `hardcoded_text_gate` 0 hits, 1525 keys in each of the 13 files |
+| Visual truth | static gate green; the final frames: the six final frames at `41afa7e` (`docs/stills/rc16_final/`), each read once: menu, lit and dark district, combat, boss (an ember hit vignette over it), victory with the NG+ action; the 26 play-through frames and the 8 beauty after frames were read once each; no frame is blank or corrupt (`frame_stats_c3e79e5.out`) |
+| Audio truth (windowed) | PASS in the run at `924e3dd`: Music -11.7 dB, SFX -67.7 dB, Ambient -28.5 dB, context mood BATTLE, no combat hold, nearest monster 4.6 m (`s8_audio_truth_924e3dd.out`); the same gate read between -12.3 and +1.5 dB over 11 runs, 5 over the ceiling, so this PASS is one sample (U8, CORRECTION_LOG 102) |
+| GUI explorer (windowed) | 19 PASS, 0 BUG, 1 shot; the settings title in 13 languages without mixed script (`s8_gui_explorer_26eef24.out`) |
+| Perf probe (windowed) | D1 160 / 161 draw calls, D11 163 (budgets 200 and 350); p95 33.7 to 50.0 ms at D1 on the dev iGPU (16 ms spread between reads of the same code); texture 69.2 to 69.7 MiB, video 96.8 to 97.2 MiB; `docs/PERF_PASS.md` |
+| Lint, AF5, AF3 | `lint_changed` 0 findings; `af5_check` 127 citations, 0 findings; `af3_frame_check` frames=49 fail=0 (and on a fresh clone: `docs/artifacts/rc16/proofs/af3_f5_fresh_clone_3f5556a.out`) |
+| Runtime freeze | No runtime path differs between `c3e79e5` and HEAD (`git diff --name-only c3e79e5 HEAD` through `is_runtime` of `tools/qa_sim/af3_frame_check.py`: 0 runtime paths among the files that differ), so every engine result above describes the code that ships |
+| Verifier (read-only subagent) | pending: the verifier subagent reads this report, so its verdict is recorded in `docs/RUN_STATE.md` after the run (FAIL=0 before the tag) |
+
+### Frames read by eye (final, `docs/stills/rc16_final/`, windowed, half resolution, captured at `41afa7e`; names carry the hash and the UTC capture time, `af3_frame_check` frames=49 fail=0)
+
+- `01_main_menu`: the title inside the lamp, the daily card ("Kill 40 enemies (0/40)", streak 0), six equal buttons (Continue, Play, Settings, Difficulty, Credits, Quit) in the light cone, the silhouette and parked cars; the brass palette, no day tint.
+- `02_district_day_full`: the lit first street: the lamp head, a tree, blocks with lit windows, the "+200 coins for a district" and "Level up! Now level 2" toasts above the tutorial hint, the six-slot quick bar.
+- `03_district_night_dark`: the same street dark: lamp head dim, windows dark, "You wake up. The city has gone dark."
+- `04_combat`: the crawler at point-blank, white from its hit flash and the glow, a hit number with a crit mark, "+200 coins for a district", the name bar "Crawler" (4x crop).
+- `05_boss`: the dark monolith of the boss in the centre of a street with towers on both sides, the log lines "The city is lit again. But something is coming." and "THE ARCHITECT", an ember hit vignette over the whole frame and a "Crawler" name bar at the top (the runner heals the player before staging it, `scripts/tools/_final_frames_runner.gd:176`, so this is the hit feedback and not the low-health tint; which hit landed was not traced). The rc15 frame of the same name has neither.
+- `06_victory_ngplus`: the "Hope" ending (11/11 districts, 1/101 documents), Set up New Game+ / Share / Main menu, centred.
+
+### Residual (rc16 final)
+
+| Item | State and owner action |
+|---|---|
+| Signed AAB | `build/tls.aab` is the rc15 bundle (183,257,097 bytes, built from `8ad0b93`); it is not rebuilt in this pass. Owner: rebuild from the tag with the one command of `docs/RELEASE_RUNBOOK.md` and run `jarsigner -verify`. |
+| Phone | Frame rate, heat, memory, the feel of pinch and drag, the look of the rc16 effects on a phone GPU: `docs/UNVERIFIABLE_HERE.md` U1, U5, U6 |
+| Sound | How the reverb, the low-pass and the mix sound (U3); whether the music clips in a fight, the windowed gate reads the Music bus between -12.3 and +1.5 dB on identical code (U8, CORRECTION_LOG 102) |
+| E11 second half | A quest reward that does not fit in a full pack stays unpaid: the obvious fix breaks the pinned regression P2g; owner decides (TZ_DECISIONS E11) |
+| D1 | `apply_stun` (`scripts/player/player_3d.gd:1263`) has no caller: a hit in the windup does not reset the combo as GDD 5.1 says; the fix changes the boss fight (needs the 3-seed bot and a playtest); owner decides |
+| Beauty X4 to X8 | Duplicate HUD grain and vignette, the district LUT switched off by the tier timer, glow at Low, flashlight shadows by tier, the shop's buy buttons overlapping the next row (an rc15 defect found by the S8 frame read): `docs/BEAUTY_RC16.md` |
+| Skill tree Close | The Close button of the skill tree is the scene literal `Close` (`scenes/ui/skill_tree_ui.tscn:57`), English in 12 locales; an rc15 defect found by the S8 frame read, one line plus a check (`docs/KNOWN_ISSUES.md`). Not fixed in rc16: a runtime change after the stamped frames fails AF3 F4 for all 49. Owner: take it into rc17 or say "fix now" |
+| F1 | The inventory RPC requests check authority only: dormant until the lobby has an opener (`docs/SECURITY_REREAD_RC16.md`) |
+| Owner rows | V03, G22, G28/D04, N01/I02/T01: asset or decision only, two greps each (`docs/artifacts/rc16/proofs/gapowner_twogrep.out`) |
+| Assets | `docs/ASSET_SHOPPING_LIST.md`, now with row 18 (per-speed footsteps for asphalt, puddle, glass) and row 19 (radio voice lines) |
+| Utilities on the owner's machine | `python -m pip install gdtoolkit==4.5.0 ruff==0.16.9 shellcheck-py==0.11.0.1 actionlint-py==1.7.12.25` and `pre-commit install` for the hook; CI needs nothing |
+
 ## Battery (history, before rc14)
 
 | Gate | Result |

@@ -1,0 +1,392 @@
+[
+ {
+  "id": "S2-COMPILE",
+  "claim": "The merged tree compiles: the compile gate reports no bad script after the uifx merge.",
+  "cmd": "bash -c bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 420; rc1=$?; bash tools/qa_sim/closeout_check 420; rc2=$?; echo \"compile_rc=$rc1 closeout_rc=$rc2\"; [ $rc1 -eq 0 ] && [ $rc2 -eq 0 ]",
+  "proof": "s2_compile_closeout_b69ed90",
+  "quotes": [
+   "COMPILE_GATE"
+  ],
+  "frames": [],
+  "commit": "b69ed90",
+  "attach": "compile_gate_scene.log"
+ },
+ {
+  "id": "S2-CLOSEOUT",
+  "claim": "The whole closeout passes after the uifx merge: 347 checks, 0 fails.",
+  "cmd": "bash -c bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 420; rc1=$?; bash tools/qa_sim/closeout_check 420; rc2=$?; echo \"compile_rc=$rc1 closeout_rc=$rc2\"; [ $rc1 -eq 0 ] && [ $rc2 -eq 0 ]",
+  "proof": "s2_compile_closeout_b69ed90",
+  "quotes": [
+   "[closeout] DONE checks=347 fails=0"
+  ],
+  "frames": [],
+  "commit": "b69ed90"
+ },
+ {
+  "id": "S3S4-FOUND",
+  "claim": "The first closeout after the audio and security merges found two failures (a corpse dropped no loot, the reverb tail was short), neither hidden.",
+  "cmd": "bash -c bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 420; a=$?; bash tools/qa_sim/closeout_check 420; b=$?; bash tools/qa_sim/guarded_headless res://scenes/tools/attack_sim_scene.tscn 300; c=$?; bash tools/qa_sim/guarded_headless res://scenes/tools/audio_bus_check_scene.tscn 120; d=$?; bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 300; e=$?; echo \"compile=$a closeout=$b attack_sim=$c audio_bus=$d audio_truth_windowed=$e\"; [ $a -eq 0 ] && [ $b -eq 0 ] && [ $c -eq 0 ] && [ $d -eq 0 ] && [ $e -eq 0 ]",
+  "proof": "s3s4_gates_8bb881b",
+  "quotes": [
+   "FAIL MN4",
+   "FAIL AUD3"
+  ],
+  "frames": [],
+  "commit": "8bb881b"
+ },
+ {
+  "id": "S4-MN4",
+  "claim": "Dropping DistrictSceneFactory from the MusicManager autoload removed the loot failure and its 172 engine errors; one check (AUD3) was left.",
+  "cmd": "bash -c bash tools/qa_sim/closeout_check 420; b=$?; bash tools/qa_sim/guarded_headless res://scenes/tools/audio_bus_check_scene.tscn 120; c=$?; bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 300; d=$?; cp .qa_logs/audio_truth_gate_scene.log .qa_logs/audio_truth_head.log; F=\"scripts/systems/audio_manager.gd scripts/systems/music_manager.gd scripts/systems/footstep_system.gd default_bus_layout.tres\"; git restore --source=b69ed90 --worktree -- $F; bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 300; e=$?; cp .qa_logs/audio_truth_gate_scene.log .qa_logs/audio_truth_audio_at_b69ed90.log; git restore --worktree -- $F; echo \"closeout=$b audio_bus=$c truth_head=$d truth_audio_files_b69ed90=$e\"; [ $b -eq 0 ] && [ $c -eq 0 ] && [ $d -eq 0 ]",
+  "proof": "s4_closeout_truth_ab_e32fa77",
+  "quotes": [
+   "[closeout] DONE checks=366 fails=1"
+  ],
+  "frames": [],
+  "commit": "e32fa77"
+ },
+ {
+  "id": "S4-AUD3",
+  "claim": "Keeping the running reverb fade fixed AUD3: the rc16 group is 56 checks, 0 fails.",
+  "cmd": "bash docs/artifacts/rc16/audio_truth_bisect.sh",
+  "proof": "s4_truth_bisect_7c49500",
+  "quotes": [
+   "[closeout] DONE checks=56 fails=0"
+  ],
+  "frames": [],
+  "commit": "7c49500"
+ },
+ {
+  "id": "S4-U8",
+  "claim": "The Music bus peak of the windowed audio gate spreads on identical code (this run: HEAD layout unchanged); the layout was not the cause (CORRECTION_LOG 102).",
+  "cmd": "bash docs/artifacts/rc16/audio_truth_bisect2.sh",
+  "proof": "s4_truth_bisect2_2e0ada0",
+  "quotes": [
+   "Music bus peak"
+  ],
+  "frames": [],
+  "commit": "2e0ada0",
+  "attach": "audio_truth_head_layout_repeat.log"
+ },
+ {
+  "id": "S6-PROBE",
+  "claim": "The probe at c3e79e5 rendered the 8 after frames and the perf numbers; rc 0, 40 probe lines.",
+  "cmd": "bash -c GODOT=\"$(bash tools/qa_sim/_resolve_godot.sh 2>/dev/null)\"; timeout 420 \"$GODOT\" --editor --quit --path . > .qa_logs/reimport_beauty.log 2>&1; echo \"reimport rc=$?\"; bash tools/qa_sim/rc16_probe after c3e79e5 900",
+  "proof": "s6_reimport_probe_after_c3e79e5",
+  "quotes": [
+   "rc16_probe rc=0"
+  ],
+  "frames": [
+   "docs/stills/polish/01_dark_street_after_c3e79e5_20261007T191815Z.png",
+   "docs/stills/polish/02_lit_street_after_c3e79e5_20261007T191818Z.png",
+   "docs/stills/polish/03_flashlight_shadow_after_c3e79e5_20261007T191820Z.png",
+   "docs/stills/polish/04_combat_hit_after_c3e79e5_20261007T191821Z.png",
+   "docs/stills/polish/05_damage_taken_after_c3e79e5_20261007T191823Z.png",
+   "docs/stills/polish/06_sprint_ultra_after_c3e79e5_20261007T191825Z.png",
+   "docs/stills/polish/07_steam_street_after_c3e79e5_20261007T191829Z.png",
+   "docs/stills/polish/08_inventory_ui_after_c3e79e5_20261007T191831Z.png"
+  ],
+  "commit": "c3e79e5"
+ },
+ {
+  "id": "S6-STATS",
+  "claim": "No beauty frame is flat or black: the frame statistics report 0 frames with a luma deviation under 2.",
+  "cmd": "python tools/qa_sim/frame_stats.py --hash c3e79e5",
+  "proof": "frame_stats_c3e79e5",
+  "quotes": [
+   "frames with a deviation under 2: 0"
+  ],
+  "frames": [],
+  "commit": "c3e79e5"
+ },
+ {
+  "id": "S7-TIMING-BEFORE",
+  "claim": "Before the fix the pistol rate depended on the frame rate: timing_equiv FAIL, 1 of 15 quantities.",
+  "cmd": "tools/qa_sim/timing_equiv before",
+  "proof": "timing_before",
+  "quotes": [
+   "FAIL: pistol_shots_per_s",
+   "TIMING_EQUIV verdict=FAIL keys=15 failures=1"
+  ],
+  "frames": [],
+  "commit": "37db979"
+ },
+ {
+  "id": "S7-TIMING-AFTER",
+  "claim": "After the fix all 15 quantities agree at 30, 60 and 120 FPS (the exit code 1 of this proof is its closeout group: one failure, TO1, a bug of the check itself, fixed in the next commit; RUN_STATE L7).",
+  "cmd": "bash -c CLOSEOUT_ONLY=rc16 bash tools/qa_sim/closeout_check 300; a=$?; bash tools/qa_sim/timing_equiv after; b=$?; echo \"closeout_rc16=$a timing_after=$b\"; [ $a -eq 0 ] && [ $b -eq 0 ]",
+  "proof": "s7_closeout_timing_4c9b3fd",
+  "quotes": [
+   "TIMING_EQUIV verdict=PASS keys=15 failures=0"
+  ],
+  "frames": [],
+  "commit": "4c9b3fd"
+ },
+ {
+  "id": "AF2-PRE",
+  "claim": "On the runtime code of e4bb4df the rc16 checks fail: 44 of 51.",
+  "cmd": "bash tools/qa_sim/closeout_check 300",
+  "proof": "af2_pre",
+  "quotes": [
+   "[closeout] DONE checks=51 fails=44"
+  ],
+  "frames": [],
+  "commit": "8cb22ba"
+ },
+ {
+  "id": "AF2-POST",
+  "claim": "At HEAD the whole closeout passes: 64 checks, 0 fails; af2_both_ways.txt pairs the two runs id by id (36 ids, verdict PASS).",
+  "cmd": "bash tools/qa_sim/closeout_check 300",
+  "proof": "af2_post",
+  "quotes": [
+   "[closeout] DONE checks=64 fails=0"
+  ],
+  "frames": [],
+  "commit": "8cb22ba"
+ },
+ {
+  "id": "S8-BATTERY",
+  "claim": "tools/check.sh --all, one command: every gate green, 65 checks.",
+  "cmd": "bash tools/check.sh --all",
+  "proof": "s8_check_all_a459b9c",
+  "quotes": [
+   "Проверок пройдено: 65"
+  ],
+  "frames": [],
+  "commit": "a459b9c"
+ },
+ {
+  "id": "S8-BOT",
+  "claim": "The autoplay bot wins 3 of 3 seeds (IRON RULE: at least one), 0 softlocks.",
+  "cmd": "bash tools/qa_sim/autoplay_bot",
+  "proof": "s8_bot_3seeds_f49a5cf",
+  "quotes": [
+   "autoplay bot: 3/3 seeds won, 0 softlock(s)"
+  ],
+  "frames": [],
+  "commit": "f49a5cf"
+ },
+ {
+  "id": "S8-PT-ABS",
+  "claim": "The real game plays through modes A, B and S on a fresh profile with injected input: 0 fails.",
+  "cmd": "bash -c bash tools/qa_sim/playthrough; rc=$?; echo \"--- frames written by this run (name, modification time UTC):\"; ls -l --time-style=+%Y%m%dT%H%M%SZ docs/stills/playthrough | awk \"NR>1 {print \\$6, \\$7}\"; exit $rc",
+  "proof": "s8_playthrough_AVBS",
+  "quotes": [
+   "[pt] DONE mode=A",
+   "mode V rc=0",
+   "[pt] DONE mode=B",
+   "[pt] DONE mode=S"
+  ],
+  "frames": [],
+  "commit": "bca7d33"
+ },
+ {
+  "id": "S8-PT-V",
+  "claim": "Mode V (victory, New Game+, boss) plays through: 27 steps, 0 fails.",
+  "cmd": "bash -c bash tools/qa_sim/playthrough; rc=$?; echo \"--- frames written by this run (name, modification time UTC):\"; ls -l --time-style=+%Y%m%dT%H%M%SZ docs/stills/playthrough | awk \"NR>1 {print \\$6, \\$7}\"; exit $rc",
+  "proof": "s8_playthrough_AVBS",
+  "quotes": [
+   "[pt] DONE mode=V"
+  ],
+  "frames": [],
+  "commit": "bca7d33",
+  "attach": "playthrough_V.txt"
+ },
+ {
+  "id": "S8-PT-FRAMES",
+  "claim": "26 of the 97 fresh play-through frames were read once each and kept under their AF3 names.",
+  "cmd": "bash -c TZ=UTC ls -l --time-style=+%Y%m%dT%H%M%SZ docs/stills/playthrough | awk \"NR>1 && \\$6 >= \\\"20261007T2340\\\" {print \\$6, \\$7}\"",
+  "proof": "playthrough_frames_utc",
+  "quotes": [
+   "20261007T234751Z"
+  ],
+  "frames": [
+   "docs/stills/rc16_playthrough/A01_menu_after_bca7d33_20261007T235629Z.jpg",
+   "docs/stills/rc16_playthrough/A03_onboarding_done_after_bca7d33_20261007T235640Z.jpg",
+   "docs/stills/rc16_playthrough/A04_flashlight_off_after_bca7d33_20261007T234751Z.jpg",
+   "docs/stills/rc16_playthrough/A04_walk_after_bca7d33_20261007T234754Z.jpg",
+   "docs/stills/rc16_playthrough/A05_death_screen_after_bca7d33_20261007T234818Z.jpg",
+   "docs/stills/rc16_playthrough/A05_monster_hit_after_bca7d33_20261007T234809Z.jpg",
+   "docs/stills/rc16_playthrough/A06_inventory_after_bca7d33_20261007T234821Z.jpg",
+   "docs/stills/rc16_playthrough/A06_inventory_selected_after_bca7d33_20261007T234822Z.jpg",
+   "docs/stills/rc16_playthrough/A06_shop_after_bca7d33_20261007T234825Z.jpg",
+   "docs/stills/rc16_playthrough/A07_map_fresh_after_bca7d33_20261007T234830Z.jpg",
+   "docs/stills/rc16_playthrough/A08_battery_low_after_bca7d33_20261007T234837Z.jpg",
+   "docs/stills/rc16_playthrough/A09_skill_tree_after_bca7d33_20261007T234840Z.jpg",
+   "docs/stills/rc16_playthrough/A12_tier_0_low_after_bca7d33_20261007T234845Z.jpg",
+   "docs/stills/rc16_playthrough/A12_tier_3_ultra_after_bca7d33_20261007T234859Z.jpg",
+   "docs/stills/rc16_playthrough/A13_lang_ar_after_bca7d33_20261007T234916Z.jpg",
+   "docs/stills/rc16_playthrough/A13_lang_ja_after_bca7d33_20261007T234912Z.jpg",
+   "docs/stills/rc16_playthrough/B03_hardcore_on_after_bca7d33_20261007T235607Z.jpg",
+   "docs/stills/rc16_playthrough/B04_daily_card_after_bca7d33_20261007T235557Z.jpg",
+   "docs/stills/rc16_playthrough/S_codex_bestiary_after_bca7d33_20261007T235645Z.jpg",
+   "docs/stills/rc16_playthrough/S_credits_after_bca7d33_20261007T235656Z.jpg",
+   "docs/stills/rc16_playthrough/S_hud_help_after_bca7d33_20261007T235652Z.jpg",
+   "docs/stills/rc16_playthrough/S_workbench_after_bca7d33_20261007T235653Z.jpg",
+   "docs/stills/rc16_playthrough/V09_boss_spawn_after_bca7d33_20261007T235407Z.jpg",
+   "docs/stills/rc16_playthrough/V10_victory_after_bca7d33_20261007T235525Z.jpg",
+   "docs/stills/rc16_playthrough/V11_ngp_screen_after_bca7d33_20261007T235526Z.jpg",
+   "docs/stills/rc16_playthrough/V_t0190_after_bca7d33_20261007T235235Z.jpg"
+  ],
+  "commit": "bca7d33"
+ },
+ {
+  "id": "S8-MUTATIONS",
+  "claim": "The 16 closeout mutations are caught: 32 checks, 20 fails, the same 13 ids as the rc15 sign-off.",
+  "cmd": "bash -c trap \"python tools/qa_sim/closeout_mutations.py restore\" EXIT; python tools/qa_sim/closeout_mutations.py apply && CLOSEOUT_ONLY=combat bash tools/qa_sim/closeout_check 300",
+  "proof": "s8_mutations_46723a7",
+  "quotes": [
+   "[closeout] DONE checks=32 fails=20"
+  ],
+  "frames": [],
+  "commit": "46723a7"
+ },
+ {
+  "id": "S8-FINAL-FRAMES",
+  "claim": "The six final frames render at the final runtime tree.",
+  "cmd": "bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 900",
+  "proof": "s8_final_frames_41afa7e",
+  "quotes": [
+   "[final] DONE frames=6"
+  ],
+  "frames": [
+   "docs/stills/rc16_final/01_main_menu_after_41afa7e_20261008T002148Z.png",
+   "docs/stills/rc16_final/02_district_day_full_after_41afa7e_20261008T002156Z.png",
+   "docs/stills/rc16_final/03_district_night_dark_after_41afa7e_20261008T002155Z.png",
+   "docs/stills/rc16_final/04_combat_after_41afa7e_20261008T002157Z.png",
+   "docs/stills/rc16_final/05_boss_after_41afa7e_20261008T002159Z.png",
+   "docs/stills/rc16_final/06_victory_ngplus_after_41afa7e_20261008T002202Z.png"
+  ],
+  "commit": "41afa7e",
+  "attach": "final_frames_scene.log"
+ },
+ {
+  "id": "S8-EXPLORER",
+  "claim": "The windowed GUI explorer passes: 19 PASS, 0 BUG.",
+  "cmd": "bash tools/qa_sim/guarded_windowed res://scenes/tools/gui_explore_scene.tscn 600",
+  "proof": "s8_gui_explorer_26eef24",
+  "quotes": [
+   "[gui-explore] DONE"
+  ],
+  "frames": [
+   "docs/stills/rc16_gui/00_menu_after_26eef24_20261008T002508Z.png"
+  ],
+  "commit": "26eef24",
+  "attach": "gui_explore_scene.log"
+ },
+ {
+  "id": "S8-AUDIO",
+  "claim": "The windowed audio truth gate passes at the final tree and prints the music context for the first time (one sample of a gate that spreads, U8).",
+  "cmd": "bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120",
+  "proof": "s8_audio_truth_924e3dd",
+  "quotes": [
+   "music context before",
+   "[audio-truth] PASS overall"
+  ],
+  "frames": [],
+  "commit": "924e3dd",
+  "attach": "audio_truth_gate_scene.log"
+ },
+ {
+  "id": "AF3-FRESH-CLONE",
+  "claim": "The AF3 frame gate passes on a fresh clone; the old gate failed 16 of 16 there; a renamed old frame still fails (CORRECTION_LOG 105).",
+  "cmd": "bash tools/qa_sim/fresh_clone_check.sh bash -c echo \"== old gate (bca7d33) on the fresh clone\"; git show bca7d33:tools/qa_sim/af3_frame_check.py > tools/qa_sim/_old_af3.py; python tools/qa_sim/_old_af3.py --dir docs/stills/polish | tail -3; echo \"== new gate on the fresh clone\"; python tools/qa_sim/af3_frame_check.py | tail -3; echo \"== mutation: an old frame renamed to a later capture time, not committed\"; cp docs/stills/polish/01_dark_street_after_c3e79e5_20261007T191815Z.png docs/stills/polish/99_renamed_after_c3e79e5_20261007T200000Z.png; python tools/qa_sim/af3_frame_check.py | tail -3",
+  "proof": "af3_f5_fresh_clone_3f5556a",
+  "quotes": [
+   "af3 frames=16 fail=16",
+   "af3 frames=42 fail=0",
+   "af3 frames=43 fail=2"
+  ],
+  "frames": [],
+  "commit": "3f5556a"
+ },
+ {
+  "id": "S9-ACCEPT",
+  "claim": "179 of 200 acceptance rows are proven (176 before).",
+  "cmd": "python tools/accept_count.py",
+  "proof": "accept_count",
+  "quotes": [
+   "accept=179/200"
+  ],
+  "frames": [],
+  "commit": "f49a5cf"
+ },
+ {
+  "id": "U0-UTILITIES",
+  "claim": "The utilities report: what was adopted and what was rejected, with the measurements.",
+  "cmd": "bash tools/utilities_report.sh",
+  "proof": "utilities_u0",
+  "quotes": [
+   "== shellcheck -S warning",
+   "== Everything Claude Code"
+  ],
+  "frames": [],
+  "commit": "2e0ada0"
+ },
+ {
+  "id": "S3-SECURITY",
+  "claim": "The security re-read of the shipped scripts lists every RPC and signed-file call it covers.",
+  "cmd": "bash tools/sec_reread.sh",
+  "proof": "sec_reread",
+  "quotes": [
+   "any_peer"
+  ],
+  "frames": [],
+  "commit": "a459b9c"
+ },
+ {
+  "id": "GAP-OWNER",
+  "claim": "The four owner-only acceptance rows stay owner-only: two greps each.",
+  "cmd": "bash tools/gapowner_check.sh",
+  "proof": "gapowner_twogrep",
+  "quotes": [
+   "N01"
+  ],
+  "frames": [],
+  "commit": "a459b9c"
+ },
+ {
+  "id": "FINAL-I18N",
+  "claim": "The i18n truth gate: 12 of 12 locales pass.",
+  "cmd": "python tools/qa_sim/i18n_truth_gate.py",
+  "proof": "i18n_final",
+  "quotes": [
+   "12/12 locales PASS"
+  ],
+  "frames": [],
+  "commit": "bca7d33"
+ },
+ {
+  "id": "FINAL-AF5",
+  "claim": "Every file:line citation added to the documents since e4bb4df holds.",
+  "cmd": "python tools/af5_check.py",
+  "proof": "af5_final",
+  "quotes": [
+   "citation(s)"
+  ],
+  "frames": [],
+  "commit": "bca7d33"
+ },
+ {
+  "id": "FINAL-LINT",
+  "claim": "The lint of every changed file: 0 findings.",
+  "cmd": "python tools/lint_changed.py",
+  "proof": "lint_final",
+  "quotes": [
+   "0 finding(s)"
+  ],
+  "frames": [],
+  "commit": "bca7d33"
+ },
+ {
+  "id": "FINAL-AF3",
+  "claim": "Every stamped frame names the code tree and the capture time it came from.",
+  "cmd": "python tools/qa_sim/af3_frame_check.py",
+  "proof": "af3_polish",
+  "quotes": [
+   "af3 frames="
+  ],
+  "frames": [],
+  "commit": "bca7d33"
+ }
+]
