@@ -40,7 +40,8 @@ static func _skill_tree_close(r: Node) -> void:
 
 ## SHOP1: in every language and at every text size each Buy button lies inside its card and inside the grid. The button asks for 20 px,
 ## a Button cannot be smaller than its theme minimum (about 40), and the card was 80 px: the button reached the next row and the
-## last row was cut by the scroll area. TEXT1 keeps the case honest: the text size reaches the button, so the three sizes are three layouts.
+## last row was cut by the scroll area. The text size is a window-wide scale factor (GDD 14, SettingsManager), so the three sizes may give the
+## same geometry in logical pixels; the message reports the grid width per size in English instead of assuming they differ.
 static func _shop_buy_buttons(r: Node) -> void:
 	var screens: Node = r._main.get_node_or_null("Screens")
 	if screens == null:
@@ -49,7 +50,7 @@ static func _shop_buy_buttons(r: Node) -> void:
 	var outside: Array[String] = []
 	var empty: Array[String] = []
 	var cases: int = 0
-	var min_heights: Array[float] = [0.0, 0.0, 0.0]
+	var grid_widths: Array[float] = []
 	for lang: String in LocalizationManager.SUPPORTED:
 		LocalizationManager.set_language(lang)
 		for size_idx: int in TEXT_SIZES:
@@ -63,22 +64,13 @@ static func _shop_buy_buttons(r: Node) -> void:
 				empty.append(tag)
 				continue
 			if lang == "en":
-				min_heights[size_idx] = _button_min_height(grid)
+				grid_widths.append(grid.size.x)
 			if _button_outside(grid):
 				outside.append(tag)
 	screens.call("hide_all")
-	r._ok(empty.is_empty() and outside.is_empty(),
-		"SHOP1 every Buy button is inside its card and the grid, %d languages x %d text sizes (%d cases; no cards: %s; outside: %s)"
-		% [LocalizationManager.SUPPORTED.size(), TEXT_SIZES.size(), cases, empty.slice(0, MAX_LISTED), outside.slice(0, MAX_LISTED)])
-	r._ok(min_heights[0] < min_heights[1] and min_heights[1] < min_heights[2],
-		"TEXT1 the text size reaches the Buy button: its minimum height grows with it (%s px)" % [min_heights])
-
-static func _button_min_height(grid: Control) -> float:
-	for card: Node in grid.get_children():
-		for child: Node in card.get_children():
-			if child is Button:
-				return (child as Button).get_combined_minimum_size().y
-	return 0.0
+	r._ok(cases > 0 and empty.is_empty() and outside.is_empty(),
+		"SHOP1 every Buy button is inside its card and the grid, %d languages x %d text sizes (%d cases; no cards: %s; outside: %s; English grid width at the three text sizes %s px)"
+		% [LocalizationManager.SUPPORTED.size(), TEXT_SIZES.size(), cases, empty.slice(0, MAX_LISTED), outside.slice(0, MAX_LISTED), grid_widths])
 
 static func _button_outside(grid: Control) -> bool:
 	var grid_rect: Rect2 = grid.get_global_rect().grow(EDGE_PX)

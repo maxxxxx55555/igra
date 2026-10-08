@@ -920,7 +920,7 @@ func build_Events(content: ColorRect, card: ColorRect, cw: float, ch: float) -> 
 		frame.add_child(timer_lbl)
 		list_y += 46
 
-## The shop's rows start below the coin header and end above the Close button; a row is 80 px, four rows fit.
+## The shop's rows start below the coin header and end above the Close button; a row is 80 px, or as tall as its Buy button needs.
 const SHOP_TOP := 36.0
 const SHOP_CLOSE_ZONE := 44.0
 const SHOP_ROW := 80.0
@@ -994,6 +994,7 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 		var btn := _make_btn(LocalizationManager.t("SCR_KUPIT"), Vector2(card_w / 2.0 - 60, 58), Vector2(120, 20))
 		btn.pressed.connect(_on_buy.bind(it.id, btn))
 		card_item.add_child(btn)
+		card_item.custom_minimum_size.y = maxf(SHOP_ROW, btn.position.y + btn.get_combined_minimum_size().y)
 		if ShopService.is_owned(it.id):
 			_mark_owned(btn)
 	# Реклама отключена (кнопка удалена)

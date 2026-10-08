@@ -43,8 +43,9 @@ func _build_trees() -> void:
 ## skill_unlocked эмитит id навыка — без параметра дерево не перерисовывалось
 ## после покупки.
 func _refresh(_skill_id: Variant = null) -> void:
+	close_button.text = LocalizationManager.t("BTN_CLOSE")
 	skill_points_label.text = LocalizationManager.tf("Skill Points: %d", [SkillTreeManager.get_skill_points()])
-	
+
 	for tab in tree_tabs.get_children():
 		if tab is SkillTreeTab:
 			tab.refresh()
