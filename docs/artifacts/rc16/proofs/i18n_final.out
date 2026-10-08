@@ -1,6 +1,6 @@
 # proof i18n_final
-# utc 20261007T234753Z
-# head bca7d33 (uncommitted paths: 9)
+# utc 20261008T003800Z
+# head ce67ca7 (uncommitted paths: 1)
 # cmd python tools/qa_sim/i18n_truth_gate.py
 PASS ru -- missing=0 mixed=0 overflow=0
 PASS es -- missing=0 mixed=0 overflow=0

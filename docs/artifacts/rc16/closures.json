@@ -354,7 +354,7 @@
    "12/12 locales PASS"
   ],
   "frames": [],
-  "commit": "bca7d33"
+  "commit": "ce67ca7"
  },
  {
   "id": "FINAL-AF5",
@@ -365,7 +365,7 @@
    "citation(s)"
   ],
   "frames": [],
-  "commit": "bca7d33"
+  "commit": "ce67ca7"
  },
  {
   "id": "FINAL-LINT",
@@ -376,17 +376,40 @@
    "0 finding(s)"
   ],
   "frames": [],
-  "commit": "bca7d33"
+  "commit": "ce67ca7"
+ },
+ {
+  "id": "FINAL-STATIC",
+  "claim": "tools/check.sh --static at the sign-off HEAD: every static gate green, 40 checks.",
+  "cmd": "bash tools/check.sh --static",
+  "proof": "final_static_ce67ca7",
+  "quotes": [
+   "Проверок пройдено: 40"
+  ],
+  "frames": [],
+  "commit": "ce67ca7"
  },
  {
   "id": "FINAL-AF3",
-  "claim": "Every stamped frame names the code tree and the capture time it came from.",
+  "claim": "Every stamped frame (49: polish, play-through, final, explorer) names the code tree and the capture time it came from.",
   "cmd": "python tools/qa_sim/af3_frame_check.py",
-  "proof": "af3_polish",
+  "proof": "af3_final",
   "quotes": [
-   "af3 frames="
+   "af3 frames=49 fail=0"
   ],
   "frames": [],
-  "commit": "bca7d33"
+  "commit": "ce67ca7"
+ },
+ {
+  "id": "FINAL-AF3-FRESH",
+  "claim": "The same frame gate in a fresh clone of HEAD, where every file time is the checkout time: 49 frames, 0 fails.",
+  "cmd": "bash tools/qa_sim/fresh_clone_check.sh python tools/qa_sim/af3_frame_check.py",
+  "proof": "af3_fresh_final",
+  "quotes": [
+   "fresh clone of",
+   "af3 frames=49 fail=0"
+  ],
+  "frames": [],
+  "commit": "ce67ca7"
  }
 ]
