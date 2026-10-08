@@ -1,0 +1,7 @@
+# proof af3_f4_after_3766b13
+# utc 20261008T084541Z
+# head 3766b13 (uncommitted paths: 0)
+# env none
+# cmd python tools/qa_sim/af3_frame_check.py
+af3 frames=47 fail=0
+# EXIT=0
