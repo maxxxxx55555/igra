@@ -6,9 +6,10 @@
 #
 #   tools/qa_sim/autoplay_bot                 # seeds 1 2 3
 #   QA_SEEDS="7 11 42" tools/qa_sim/autoplay_bot
+#   QA_TIME_SCALE=4 tools/qa_sim/autoplay_bot     # headless clock x4, as the rc15 sign-off ran
 #   GODOT=/path/to/godot tools/qa_sim/autoplay_bot
 set -uo pipefail
-cd "$(dirname "$0")/../.."
+cd "$(dirname "$0")/../.." || exit 2
 
 GODOT="$(bash tools/qa_sim/_resolve_godot.sh 2>/dev/null)"
 if [[ -z "$GODOT" ]] || [[ ! -x "$GODOT" ]]; then
@@ -26,7 +27,7 @@ export TLS_UDG_GUARDED=1  # tells QaLaunchGuard (qa_launch_guard.gd) this shell 
 mkdir -p .qa_logs
 GREEN=$'\033[32m'; RED=$'\033[31m'; OFF=$'\033[0m'
 SEEDS="${QA_SEEDS:-1 2 3}"
-WINS=0; TOTAL=0; SOFTLOCK=0
+WINS=0; TOTAL=0; SOFTLOCK=0; COUNTER_BAD=0
 
 for s in $SEEDS; do
 	TOTAL=$((TOTAL+1))
@@ -34,7 +35,6 @@ for s in $SEEDS; do
 	QA_SEED="$s" timeout 1200 "$GODOT" --headless --path . res://scenes/tools/qa_autoplay_scene.tscn >"$log" 2>&1
 	rc=$?
 	line=$(grep -E "^\[bot s${s}\]   result" "$log" | tail -1)
-	districts=$(grep -E "districts FULL|restored=11|restored_full" "$log" | tail -3)
 	if [[ $rc -eq 0 ]]; then
 		WINS=$((WINS+1)); echo "  ${GREEN}WIN ${OFF} seed $s  ($line)"
 	elif [[ $rc -eq 2 ]]; then
@@ -44,11 +44,13 @@ for s in $SEEDS; do
 		echo "  ${RED}NO-WIN${OFF} seed $s (rc=$rc)"
 		grep -E "FAIL|RUN SUMMARY|result|districts FULL|restored_full|deaths|stage timeline|part economy|phase=|ERROR|SCRIPT ERROR" "$log" | sed 's/^/       /'
 	fi
+	bash tools/qa_sim/bot_counter_check.sh "$log" || { COUNTER_BAD=$((COUNTER_BAD+1)); echo "  ${RED}BAD ${OFF} seed $s: the death counter is below the revive lines"; }
 done
 
 echo
 echo "──────────────────────────────────────"
 echo "autoplay bot: ${WINS}/${TOTAL} seeds won, ${SOFTLOCK} softlock(s)"
-[[ $WINS -eq $TOTAL ]] && exit 0
+echo "bot death counters below their revive lines: ${COUNTER_BAD}"
+[[ $WINS -eq $TOTAL && $COUNTER_BAD -eq 0 ]] && exit 0
 [[ $SOFTLOCK -gt 0 ]] && exit 2
 exit 1

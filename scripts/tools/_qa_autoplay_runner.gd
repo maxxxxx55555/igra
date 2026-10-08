@@ -122,7 +122,7 @@ func _ready() -> void:
 		Engine.time_scale = clampf(float(OS.get_environment("QA_TIME_SCALE")), 1.0, 8.0)
 	get_tree().create_timer(HARD_TIMEOUT_SEC).timeout.connect(_on_hard_timeout)
 	EventBus.game_won.connect(func() -> void: _win_seen = true)
-	EventBus.player_died.connect(func() -> void: _deaths += 1)
+	EventBus.game_over.connect(func() -> void: _deaths += 1)  # player_3d.gd emits game_over at hp <= 0; nothing shipped emits player_died
 	EventBus.inventory_notice.connect(func(text: String) -> void:
 		_log("inventory notice: %s" % text)
 		if text == LocalizationManager.t("INV_NO_SLOTS") or text == LocalizationManager.t("INV_OVERWEIGHT"):

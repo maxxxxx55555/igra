@@ -1,0 +1,9 @@
+# proof bot_counter_before_l12
+# utc 20261008T011519Z
+# head 73fd314 (uncommitted paths: 7)
+# env none
+# cmd bash -c for s in 1 2 3; do out=$(bash tools/qa_sim/bot_counter_check.sh docs/artifacts/rc16/proofs/s8_bot_3seeds_f49a5cf.attach.autoplay_seed$s.log); rc=$?; echo "seed $s (L12 log, counter as shipped in rc15 and rc16): $out, exit $rc"; done
+seed 1 (L12 log, counter as shipped in rc15 and rc16): deaths counted 0, revive lines 1, exit 1
+seed 2 (L12 log, counter as shipped in rc15 and rc16): deaths counted 0, revive lines 1, exit 1
+seed 3 (L12 log, counter as shipped in rc15 and rc16): deaths counted 0, revive lines 2, exit 1
+# EXIT=0

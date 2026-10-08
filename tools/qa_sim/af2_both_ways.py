@@ -2,6 +2,8 @@
 """AF2 both-ways run (rc16): the checks of the pass must FAIL on the code before the fixes and PASS on the code after them.
 
 usage: python tools/qa_sim/af2_both_ways.py --base <rev> [--only rc16] [--demo]
+       python tools/qa_sim/af2_both_ways.py --analyze [--write]   (re-judges the two saved runs, from .qa_logs/proofs or the committed docs/artifacts/rc16/proofs;
+                                                                    read-only unless --write rewrites docs/artifacts/rc16/af2_both_ways.txt)
 Runs `CLOSEOUT_ONLY=<only> tools/qa_sim/closeout_check 300` twice, each through tools/qa_sim/proof_run:
   pre   every runtime file that differs between <rev> and HEAD is put back to its <rev> content (a file added since <rev> is moved aside, a
         file deleted since is restored); the checks files and the runner stay, so the new checks meet the old game
@@ -61,9 +63,11 @@ def judge(pre, post, ids):
 
 def log_text(run_id):
     """The full engine log a run attached (every ok and FAIL line). The proof's own .out holds only the FAIL and DONE lines the wrapper prints."""
-    proofs = ROOT / ".qa_logs" / "proofs"
-    attach = proofs / (run_id + ".attach.closeout_check.log")
-    return (attach if attach.exists() else proofs / (run_id + ".out")).read_text(encoding="utf-8", errors="replace")
+    for proofs in (ROOT / ".qa_logs" / "proofs", ROOT / "docs" / "artifacts" / "rc16" / "proofs"):
+        attach = proofs / (run_id + ".attach.closeout_check.log")
+        if attach.exists() or (proofs / (run_id + ".out")).exists():
+            return (attach if attach.exists() else proofs / (run_id + ".out")).read_text(encoding="utf-8", errors="replace")
+    raise SystemExit("no saved run %s in .qa_logs/proofs or docs/artifacts/rc16/proofs" % run_id)
 
 
 def run_closeout(run_id, only):
@@ -73,7 +77,7 @@ def run_closeout(run_id, only):
     return log_text(run_id)
 
 
-def report(base, only, pre_text, post_text):
+def report(base, only, pre_text, post_text, write=True):
     pre, post = parse(pre_text), parse(post_text)
     ids = sorted(set(pre) | set(post))
     rows, bad = judge(pre, post, ids)
@@ -83,7 +87,8 @@ def report(base, only, pre_text, post_text):
     out.append("AF2 verdict=%s ids=%d bad=%d" % ("PASS" if bad == 0 and ids else "FAIL", len(ids), bad))
     text = "\n".join(out)
     print(text)
-    (ROOT / "docs" / "artifacts" / "rc16" / "af2_both_ways.txt").write_text(text + "\n", encoding="utf-8", newline="\n")
+    if write:
+        (ROOT / "docs" / "artifacts" / "rc16" / "af2_both_ways.txt").write_text(text + "\n", encoding="utf-8", newline="\n")
     return 0 if bad == 0 and ids else 1
 
 
@@ -103,8 +108,12 @@ def demo():
     assert parse(log_text(stem)) == {"PERF1": "ok"}, "the attached full log is the one that is read"
     for f in proofs.glob(stem + "*"):
         f.unlink()
+    committed = ROOT / "docs" / "artifacts" / "rc16" / "proofs" / (stem + ".attach.closeout_check.log")
+    committed.write_text("[closeout] ok   PERF2 c\n[closeout] DONE checks=1 fails=0\n", encoding="utf-8")
+    assert parse(log_text(stem)) == {"PERF2": "ok"}, "a fresh clone has no .qa_logs: the committed copy is read"
+    committed.unlink()
     del tempfile
-    print("af2_both_ways demo OK (id parsing, bites / vacuous / broken, the attached log is read)")
+    print("af2_both_ways demo OK (id parsing, bites / vacuous / broken, the attached log is read, also from the committed proofs)")
 
 
 def main():
@@ -115,7 +124,7 @@ def main():
     base = args[args.index("--base") + 1] if "--base" in args else "e4bb4df"
     only = args[args.index("--only") + 1] if "--only" in args else "rc16"
     if "--analyze" in args:
-        return report(base, only, log_text("af2_pre"), log_text("af2_post"))
+        return report(base, only, log_text("af2_pre"), log_text("af2_post"), write="--write" in args)
     dirty = [x for x in git("status", "--porcelain").splitlines() if not x.startswith("??")]
     if dirty:
         raise SystemExit("the tree has modified tracked files, commit or stash first: %s" % dirty[:3])

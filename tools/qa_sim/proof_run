@@ -25,10 +25,12 @@ out=".qa_logs/proofs/${id}.out"
 utc="$(date -u +%Y%m%dT%H%M%SZ)"
 head_="$(git rev-parse --short HEAD)"
 dirty="$(git status --porcelain | wc -l | tr -d ' ')"
+settings="$(env | grep -E '^(TLS_|CLOSEOUT_|QA_|TIMING_)' | sort | tr '\n' ' ')"
 {
 	echo "# proof ${id}"
 	echo "# utc ${utc}"
 	echo "# head ${head_} (uncommitted paths: ${dirty})"
+	echo "# env ${settings:-none}"
 	echo "# cmd $*"
 } > "$out"
 "$@" >> "$out" 2>&1

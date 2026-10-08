@@ -126,6 +126,8 @@ static func _quick_slot_drag(r: Node) -> void:
 	InventoryManager.from_dict({})
 	InventoryManager.try_add(&"medkit", 2)
 	var defaults: Variant = hud.get("_SLOT_ITEMS") if hud != null else null
+	var default_ok: bool = quick_slots != null and defaults is Array and hud.get("_slot_items") == defaults \
+		and (quick_slots as Script).get_script_constant_map()["DEFAULTS"] == defaults
 	UIManager.open(&"inventory")
 	await r.get_tree().process_frame
 	await r.get_tree().process_frame
@@ -160,6 +162,7 @@ static func _quick_slot_drag(r: Node) -> void:
 	for forged in [[&"medkit"], [&"battery", &"bogus_item", &"medkit", &"battery", &"battery", &"battery"]]:
 		SettingsManager.set_setting("quick_slots", forged)
 		forged_ok = forged_ok and quick_slots.call("read") == defaults
+	r._ok(default_ok, "QS2 untouched, the six bindings are the bar's own order and the HUD reads them from the setting")
 	r._ok(carries and accepts and rebound, "QS2 dragging the medkit cell onto quick slot 1 binds it (drag data %s, the target accepts %s, the HUD's slot 1 is %s)" % [data, accepts, bound_after_drop])
 	r._ok(rebound and used, "QS2 key 1 then uses a medkit (%s, one of %d gone, health up from 40)" % [used, medkits0])
 	r._ok(rebound and defaults is Array and _bound_item(hud, 0) == (defaults as Array)[0], "QS2 a right-click on the slot puts the default item back (%s)" % [_bound_item(hud, 0)])
@@ -209,11 +212,11 @@ static func _bar_shake(r: Node) -> void:
 		EventBus.player_damaged.emit(5.0)
 		await r.get_tree().create_timer(0.08).timeout
 		var off: Vector2 = (bar.position - rest).abs()
-		seen.append(off != Vector2.ZERO and off.x <= 4.0 and off.y <= 4.0)
+		seen.append(off == Vector2.ZERO if reduce else off != Vector2.ZERO and off.x <= 4.0 and off.y <= 4.0)
 		await r.get_tree().create_timer(0.4).timeout
 		seen.append(bar.position == rest)
 	SettingsManager.set_setting("reduce_screen_shake", shake0)
-	r._ok(seen == [true, true, false, true], "UIFX5 a hit shakes the health bar by at most 4 px and it is on its exact place 0.4 s later, and Reduce Screen Shake keeps it still (shaken, home, shaken, home: %s)" % [seen])
+	r._ok(seen == [true, true, true, true], "UIFX5 a hit shakes the health bar by at most 4 px and it is on its exact place 0.4 s later, and under Reduce Screen Shake it does not move at all (shaken, home, still, home: %s)" % [seen])
 
 static func _visible_numbers(pool: Node) -> Array:
 	var shown: Array = []

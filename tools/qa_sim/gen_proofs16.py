@@ -66,8 +66,8 @@ def build(closures):
     ledger = ROOT / "docs" / "artifacts" / "rc16" / "launch_ledger.tsv"
     if ledger.exists():
         lines = ledger.read_text(encoding="utf-8").splitlines()
-        out += ["| " + " | ".join(ln.split("\t")) + " |" for ln in lines[:1]] + ["|---|---|---|---|---|---|"]
-        out += ["| " + " | ".join(ln.split("\t")) + " |" for ln in lines[1:]]
+        out += ["| " + " | ".join(cell(x) for x in ln.split("\t")) + " |" for ln in lines[:1]] + ["|---|---|---|---|---|---|"]
+        out += ["| " + " | ".join(cell(x) for x in ln.split("\t")) + " |" for ln in lines[1:]]
     out += ["", END]
     return "\n".join(out) + "\n"
 
