@@ -1,0 +1,8 @@
+# proof f5_omniroute_probe
+# utc 20261008T094353Z
+# head f7efa35 (uncommitted paths: 0)
+# env none
+# cmd bash -c curl -s -m 3 -o /dev/null -w "http_code=%{http_code}\n" http://localhost:20128/api/health; echo "curl exit=$?"
+http_code=000
+curl exit=7
+# EXIT=0
