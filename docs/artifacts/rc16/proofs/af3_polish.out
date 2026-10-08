@@ -1,0 +1,6 @@
+# proof af3_polish
+# utc 20261007T234830Z
+# head bca7d33 (uncommitted paths: 29)
+# cmd python tools/qa_sim/af3_frame_check.py
+af3 frames=16 fail=0
+# EXIT=0

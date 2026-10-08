@@ -22,3 +22,4 @@ n	utc	head	id	exit	command
 21	20261007T232405Z	8cb22ba	af2_pre	1	bash tools/qa_sim/closeout_check 300
 22	20261007T232444Z	8cb22ba	af2_post	0	bash tools/qa_sim/closeout_check 300
 23	20261007T232747Z	f49a5cf	s8_bot_3seeds_f49a5cf	0	bash tools/qa_sim/autoplay_bot
+24	20261007T234722Z	bca7d33	s8_playthrough_AVBS	0	bash -c bash tools/qa_sim/playthrough; rc=$?; echo "--- frames written by this run (name, modification time UTC):"; ls -l --time-style=+%Y%m%dT%H%M%SZ docs/stills/playthrough | awk "NR>1 {print \$6, \$7}"; exit $rc

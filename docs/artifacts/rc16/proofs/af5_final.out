@@ -1,0 +1,6 @@
+# proof af5_final
+# utc 20261007T234754Z
+# head bca7d33 (uncommitted paths: 11)
+# cmd python tools/af5_check.py
+af5_check: 114 citation(s) in 411 doc line(s), 0 finding(s)
+# EXIT=0

@@ -1,0 +1,166 @@
+# proof s8_playthrough_AVBS
+# utc 20261007T234722Z
+# head bca7d33 (uncommitted paths: 0)
+# cmd bash -c bash tools/qa_sim/playthrough; rc=$?; echo "--- frames written by this run (name, modification time UTC):"; ls -l --time-style=+%Y%m%dT%H%M%SZ docs/stills/playthrough | awk "NR>1 {print \$6, \$7}"; exit $rc
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/The Last Streetlight
+  fresh profile: 11 game file(s) set aside (restored at the end)
+  mode A rc=0 (log: .qa_logs/playthrough_A.log)
+[pt] DONE mode=A steps=67 fails=0 time=109s
+  mode V rc=0 (log: .qa_logs/playthrough_V.log)
+  mode B rc=0 (log: .qa_logs/playthrough_B.log)
+[pt] DONE mode=B steps=12 fails=0 time=35s
+  fresh profile: 11 game file(s) set aside (restored at the end)
+  mode S rc=0 (log: .qa_logs/playthrough_S.log)
+[pt] DONE mode=S steps=23 fails=0 time=35s
+  user-data guard: 11 file(s) restored byte-identical
+--- frames written by this run (name, modification time UTC):
+20261008T025622Z A01_boot_loading.jpg
+20261008T025629Z A01_menu.jpg
+20261008T025630Z A02_difficulty.jpg
+20261008T025632Z A02_difficulty_picked.jpg
+20261008T025636Z A02_game_start.jpg
+20261008T025637Z A03_onboarding_1.jpg
+20261008T025638Z A03_onboarding_4.jpg
+20261008T025639Z A03_onboarding_7.jpg
+20261008T025640Z A03_onboarding_done.jpg
+20261008T024806Z A04_corner.jpg
+20261008T024801Z A04_crouch.jpg
+20261008T024751Z A04_flashlight_off.jpg
+20261002T080737Z A04_ghost_all.jpg
+20261002T080738Z A04_ghost_no_ash.jpg
+20261002T080737Z A04_ghost_no_backpack.jpg
+20261002T080738Z A04_ghost_no_dust.jpg
+20261002T080738Z A04_ghost_no_footstep_dust.jpg
+20261002T080737Z A04_ghost_no_hand_light.jpg
+20261002T080737Z A04_ghost_no_marker.jpg
+20261008T024757Z A04_run.jpg
+20261008T024754Z A04_walk.jpg
+20261008T024817Z A05_death_fall.jpg
+20261008T024818Z A05_death_screen.jpg
+20261008T024816Z A05_monster_dead.jpg
+20261008T024809Z A05_monster_hit.jpg
+20261008T024807Z A05_monster_sight.jpg
+20261008T024820Z A05_respawn.jpg
+20261008T024821Z A06_inventory.jpg
+20261008T024822Z A06_inventory_selected.jpg
+20261008T024823Z A06_pause.jpg
+20261008T024825Z A06_shop.jpg
+20261008T024825Z A06_shop_bought.jpg
+20261008T024827Z A06_upgrades.jpg
+20261008T024830Z A07_map_fresh.jpg
+20261008T024830Z A07_map_scrolled.jpg
+20261008T024835Z A07_travel_residential.jpg
+20261008T024838Z A08_battery_0.jpg
+20261008T024837Z A08_battery_low.jpg
+20261008T024840Z A09_skill_tree.jpg
+20261008T024842Z A12_dropdown_open.jpg
+20261008T024845Z A12_tier_0_low.jpg
+20261008T024850Z A12_tier_1_medium.jpg
+20261008T024903Z A12_tier_2_high.jpg
+20261008T024859Z A12_tier_3_ultra.jpg
+20261008T024916Z A13_lang_ar.jpg
+20261008T024908Z A13_lang_de.jpg
+20261008T024906Z A13_lang_en.jpg
+20261008T024907Z A13_lang_es.jpg
+20261008T024908Z A13_lang_fr.jpg
+20261008T024909Z A13_lang_it.jpg
+20261008T024912Z A13_lang_ja.jpg
+20261008T024913Z A13_lang_ko.jpg
+20261008T024910Z A13_lang_pt_BR.jpg
+20261008T024905Z A13_lang_ru.jpg
+20261008T024911Z A13_lang_tr.jpg
+20261008T024914Z A13_lang_zh.jpg
+20261008T024915Z A13_lang_zh_TW.jpg
+20261008T024920Z A15_menu_after_play.jpg
+20261008T025549Z B01_menu.jpg
+20261008T025556Z B02_continued.jpg
+20261008T025616Z B03_hardcore_death.jpg
+20261008T025607Z B03_hardcore_on.jpg
+20261008T025609Z B03_play_click.jpg
+20261008T025557Z B04_daily_card.jpg
+20261008T025558Z B04_daily_done.jpg
+20261008T025603Z B05_achievements.jpg
+20261008T025604Z B05_stats.jpg
+20261008T025643Z S_codex_achievements.jpg
+20261008T025645Z S_codex_bestiary.jpg
+20261008T025648Z S_codex_collection.jpg
+20261008T025647Z S_codex_help.jpg
+20261008T025641Z S_codex_journal.jpg
+20261008T025649Z S_codex_photos.jpg
+20261008T025642Z S_codex_quests.jpg
+20261008T025644Z S_codex_stats.jpg
+20261008T025656Z S_credits.jpg
+20261008T025652Z S_hud_help.jpg
+20261008T025650Z S_hud_log.jpg
+20261008T025653Z S_workbench.jpg
+20261008T024933Z V00_menu.jpg
+20261008T024957Z V04_first_repair.jpg
+20261008T025500Z V05_first_hit.jpg
+20261008T025027Z V05_first_monster.jpg
+20261008T025159Z V07_map_travel.jpg
+20261008T025407Z V09_boss_spawn.jpg
+20261008T025525Z V10_victory.jpg
+20261008T025530Z V11_confirm.jpg
+20261008T025529Z V11_menu_ngp.jpg
+20261008T025536Z V11_ng_run.jpg
+20261008T025527Z V11_ngp_activated.jpg
+20261008T025528Z V11_ngp_modifier.jpg
+20261008T025526Z V11_ngp_screen.jpg
+20261008T025536Z V14_pause.jpg
+20261002T075708Z V_t0039.jpg
+20261008T025005Z V_t0040.jpg
+20261002T120131Z V_t0041.jpg
+20261002T024634Z V_t0042.jpg
+20261002T064118Z V_t0069.jpg
+20261008T025035Z V_t0070.jpg
+20261002T112012Z V_t0071.jpg
+20261002T120201Z V_t0072.jpg
+20261008T025105Z V_t0100.jpg
+20261002T112042Z V_t0101.jpg
+20261002T120232Z V_t0102.jpg
+20261008T025135Z V_t0130.jpg
+20261002T112112Z V_t0131.jpg
+20261002T120302Z V_t0132.jpg
+20261002T024805Z V_t0133.jpg
+20261008T025205Z V_t0160.jpg
+20261002T121513Z V_t0161.jpg
+20261002T120332Z V_t0163.jpg
+20261002T023714Z V_t0164.jpg
+20261008T025235Z V_t0190.jpg
+20261002T210419Z V_t0191.jpg
+20261002T112212Z V_t0192.jpg
+20261002T120403Z V_t0193.jpg
+20261002T023744Z V_t0194.jpg
+20261008T025305Z V_t0220.jpg
+20261002T210449Z V_t0221.jpg
+20261002T112243Z V_t0222.jpg
+20261002T120433Z V_t0223.jpg
+20261002T023815Z V_t0224.jpg
+20261002T064419Z V_t0250.jpg
+20261008T025335Z V_t0251.jpg
+20261002T112313Z V_t0252.jpg
+20261002T120503Z V_t0253.jpg
+20261002T023845Z V_t0254.jpg
+20261002T064449Z V_t0280.jpg
+20261008T025406Z V_t0281.jpg
+20261002T112343Z V_t0282.jpg
+20261002T120533Z V_t0283.jpg
+20261002T023915Z V_t0285.jpg
+20261002T064519Z V_t0310.jpg
+20261008T025436Z V_t0311.jpg
+20261002T112413Z V_t0312.jpg
+20261002T120603Z V_t0313.jpg
+20261002T023945Z V_t0315.jpg
+20261008T025506Z V_t0341.jpg
+20261002T112443Z V_t0342.jpg
+20261002T120633Z V_t0343.jpg
+20261002T024015Z V_t0345.jpg
+20261002T210719Z V_t0371.jpg
+20261002T112513Z V_t0372.jpg
+20261002T120703Z V_t0373.jpg
+20261002T024045Z V_t0375.jpg
+20261002T210749Z V_t0401.jpg
+20261002T120733Z V_t0403.jpg
+20261002T210819Z V_t0431.jpg
+20261002T022508Z before
+# EXIT=0
