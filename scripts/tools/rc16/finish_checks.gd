@@ -100,8 +100,8 @@ static func _button_outside(grid: Control) -> String:
 		if card == null:
 			continue
 		var card_rect: Rect2 = card.get_global_rect().grow(EDGE_PX)
-		for child: Node in card.get_children():
-			var button: Button = child as Button
+		for node: Node in card.find_children("*", "Button", true, false):
+			var button: Button = node as Button
 			if button != null and not (card_rect.encloses(button.get_global_rect()) and grid_rect.encloses(button.get_global_rect())):
 				return "button %s '%s' minimum %s, card %s, grid %s" % [button.get_global_rect(), button.text, button.get_combined_minimum_size(), card_rect, grid_rect]
 	return ""

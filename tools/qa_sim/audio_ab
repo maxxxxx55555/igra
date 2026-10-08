@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# rc16 F3: does reverting 7c49500 alone move the Music peak of the windowed audio truth gate? Arm A is HEAD, arm B is HEAD with
+# scripts/systems/audio_manager.gd as it was before 7c49500 (the only file that commit touched, and nothing has changed it since).
+#   tools/qa_sim/audio_ab [runs-per-arm]     # default 3, the arms alternate A B A B ...; one gate run takes about 35 s
+# Every run is the real gate (guarded_windowed on res://scenes/tools/audio_truth_gate_scene.tscn); the file is put back after every B run and at exit.
+set -uo pipefail
+cd "$(dirname "$0")/../.." || exit 2
+FILE=scripts/systems/audio_manager.gd
+runs="${1:-3}"
+trap 'git checkout -- "$FILE"' EXIT
+[[ -z "$(git status --porcelain -- "$FILE")" ]] || { echo "audio_ab: $FILE has uncommitted changes"; exit 2; }
+for i in $(seq 1 "$runs"); do
+	for arm in A B; do
+		[[ "$arm" == B ]] && git show "7c49500^:$FILE" > "$FILE"
+		bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120 > /dev/null
+		rc=$?
+		cp .qa_logs/audio_truth_gate_scene.log ".qa_logs/audio_ab_${i}_${arm}.log"
+		echo "run $i arm $arm rc=$rc: $(grep -a 'music context\|Music bus peak' .qa_logs/audio_truth_gate_scene.log | tr '\n' ' ')"
+		[[ "$arm" == B ]] && git checkout -- "$FILE"
+	done
+done
+exit 0

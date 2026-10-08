@@ -960,48 +960,45 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 	scroll.add_child(grid_container)
 	var item_icons := preload("res://scripts/ui/item_icons.gd")
 	var card_w := (content.size.x - 10) / 2.0
+	var card_style := StyleBoxFlat.new()
+	card_style.bg_color = Color(0.047, 0.063, 0.086, 0.6)
 	for it in items:
-		var card_item := ColorRect.new()
-		card_item.color = Color(0.047, 0.063, 0.086, 0.6)
+		## A panel sizes the card from its content and a vertical box places it: absolute child positions land one card width off under the
+		## right-to-left layout of Arabic (launches 21 to 23, CORRECTION_LOG 113).
+		var card_item := PanelContainer.new()
+		card_item.add_theme_stylebox_override("panel", card_style)
 		card_item.custom_minimum_size = Vector2(card_w, SHOP_ROW)
 		card_item.mouse_filter = Control.MOUSE_FILTER_PASS
-		## Its children sit at absolute positions set before the card has a size; under a right-to-left layout (Arabic) they land one card width to the right.
-		card_item.layout_direction = Control.LAYOUT_DIRECTION_LTR
 		grid_container.add_child(card_item)
+		var column := VBoxContainer.new()
+		column.add_theme_constant_override("separation", 0)
+		card_item.add_child(column)
 		var icon_parent := Control.new()
-		icon_parent.size = Vector2(22, 22)
-		icon_parent.position = Vector2(card_w / 2.0 - 11, 0)
+		icon_parent.custom_minimum_size = Vector2(22, 22)
+		icon_parent.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		icon_parent.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		card_item.add_child(icon_parent)
+		column.add_child(icon_parent)
 		item_icons.draw_icon(icon_parent, SHOP_ICON.get(it.id, it.id), 22.0)
 		var name_lbl := Label.new()
 		name_lbl.text = it.get("desc", it.id)
-		name_lbl.size = Vector2(card_w - 10, 18)
-		name_lbl.position = Vector2(5, 23)
 		name_lbl.add_theme_color_override("font_color", Color(0.847, 0.824, 0.769))
 		name_lbl.add_theme_font_size_override("font_size", 13)
 		name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		name_lbl.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-		card_item.add_child(name_lbl)
+		column.add_child(name_lbl)
 		var price: float = it.get("price_coins", 0)
 		# IAP-путь удалён — только монеты.
 		var pl := Label.new()
 		pl.text = str(int(price)) + LocalizationManager.t("SCR_MONET")
-		pl.size = Vector2(card_w - 10, 16)
-		pl.position = Vector2(5, 41)
 		pl.add_theme_color_override("font_color", Color(0.788, 0.635, 0.290))
 		pl.add_theme_font_size_override("font_size", 13)
 		pl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		card_item.add_child(pl)
-		var btn := _make_btn(LocalizationManager.t("SCR_KUPIT"), Vector2(card_w / 2.0 - 60, 58), Vector2(120, 20))
+		column.add_child(pl)
+		var btn := _make_btn(LocalizationManager.t("SCR_KUPIT"), Vector2.ZERO, Vector2(120, 20))
+		btn.custom_minimum_size.x = 120.0
+		btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		btn.pressed.connect(_on_buy.bind(it.id, btn))
-		## The Buy button's minimum height follows its text (a fallback font, the owned label), so the card follows the button.
-		var fit_card := func() -> void:
-			if is_instance_valid(card_item):
-				card_item.custom_minimum_size.y = maxf(SHOP_ROW, btn.position.y + btn.get_combined_minimum_size().y)
-		btn.minimum_size_changed.connect(fit_card)
-		card_item.add_child(btn)
-		fit_card.call()
+		column.add_child(btn)
 		if ShopService.is_owned(it.id):
 			_mark_owned(btn)
 	# Реклама отключена (кнопка удалена)
