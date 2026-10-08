@@ -1,0 +1,56 @@
+# proof f2_seed2_death_trace
+# utc 20261008T093038Z
+# head fa6afc0 (uncommitted paths: 0)
+# env none
+# cmd bash /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/f2_trace.sh
+== 1. what each seed log says about deaths, revives and the end (line number, time)
+-- seed 1
+226:[bot s1] t=363.4 revived after death (1 total)
+230:[bot s1] t=365.8 WIN ending fired
+232:[bot s1]   result       : WIN
+235:[bot s1]   deaths       : 1
+deaths counted 1, revive lines 1
+bot_counter_check exit=0
+-- seed 2
+223:[bot s2] t=367.8 revived after death (1 total)
+227:[bot s2] t=373.5 WIN ending fired
+229:[bot s2]   result       : WIN
+232:[bot s2]   deaths       : 2
+deaths counted 2, revive lines 1
+bot_counter_check exit=0
+-- seed 3
+224:[bot s3] t=364.0 revived after death (1 total)
+227:[bot s3] t=369.2 WIN ending fired
+229:[bot s3]   result       : WIN
+232:[bot s3]   deaths       : 1
+deaths counted 1, revive lines 1
+bot_counter_check exit=0
+== 2. the only emitter of game_over, and its guard against a second death (scripts/player/player_3d.gd)
+935:		EventBus.game_over.emit()
+	if _iframes > 0.0 or GameManager.is_win() or hp <= 0.0:  # a dead player is not killed a second time (deaths were counted per hit)
+== 3. every listener of game_over that counts (they all count the same signal)
+scripts/core/game_manager.gd:43:	EventBus.game_over.connect(_on_player_game_over)
+scripts/systems/achievements_manager.gd:178:	EventBus.game_over.connect(_on_player_died)
+scripts/systems/progress_tracker.gd:59:	EventBus.game_over.connect(func() -> void: deaths += 1)
+scripts/tools/_qa_autoplay_runner.gd:125:	EventBus.game_over.connect(func() -> void: _deaths += 1)  # player_3d.gd emits game_over at hp <= 0; nothing shipped emits player_died
+== 4. what the bot prints: the revive line shows the DEATH counter, not a revive counter (scripts/tools/_qa_autoplay_runner.gd)
+func _try_revive() -> void:
+	if _act_cd > 0.0:
+		return
+	_act_cd = 2.0
+	var gm := get_node_or_null("/root/GameManager")
+	if gm != null and gm.has_method("revive_player"):
+		gm.revive_player()
+		_log("revived after death (%d total)" % _deaths)
+== 5. the last 7 s of seed 2 (heartbeats every 5 s; the bot logs revives, not deaths)
+[bot s2] t=367.8 revived after death (1 total)
+[bot s2] t=367.8 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1262 mr=0 ppos=(30.0, 1.0, -2.0) valid=tr
+[bot s2] t=372.8 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1275 mr=0 ppos=(30.0, 1.0, 1.0) valid=tru
+[bot s2] t=373.4 inventory notice: Photo added (54)
+[bot s2] t=373.5 WIN ending fired
+[bot s2] ── RUN SUMMARY ──────────────────────────────
+[bot s2]   result       : WIN
+== 6. finale order: boss death -> boss_defeated -> trigger_win (scripts/enemies/boss_3d.gd)
+243:func _trigger_death() -> void:
+245:	EventBus.boss_defeated.emit()
+# EXIT=0

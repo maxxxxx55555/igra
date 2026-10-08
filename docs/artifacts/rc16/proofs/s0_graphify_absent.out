@@ -1,0 +1,7 @@
+# proof s0_graphify_absent
+# utc 20261008T093114Z
+# head fa6afc0 (uncommitted paths: 1)
+# env none
+# cmd python -I -c import importlib.util as u; print('graphifyy installed:', u.find_spec('graphify') is not None)
+graphifyy installed: False
+# EXIT=0
