@@ -223,6 +223,9 @@ func _apply_localization(_lang: Variant = null) -> void:
 	var vb: Node = get_node_or_null("VBox")
 	if vb == null:
 		return
+	var title := vb.get_node_or_null("Title") as Label
+	if title != null:
+		title.text = LocalizationManager.t("menu_title")
 	for node_name in LABELS:
 		var b := vb.get_node_or_null(String(node_name)) as Button
 		if b != null:

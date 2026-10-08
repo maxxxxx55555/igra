@@ -41,8 +41,7 @@ layout_mode = 2
 custom_minimum_size = Vector2(0, 120)
 theme_override_font_sizes/font_size = 44
 theme_override_colors/font_color = Color(0.7882353, 0.6352941, 0.2901961, 1)
-text = "THE LAST
-STREETLIGHT"
+text = "Last Streetlight"
 horizontal_alignment = 1
 vertical_alignment = 1
 
