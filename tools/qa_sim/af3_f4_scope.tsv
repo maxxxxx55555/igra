@@ -2,4 +2,4 @@
 # and reaches only the frames whose file name matches <glob>. Any other change of the path still fails every older "after" frame.
 # Columns, tab separated: path, git blob id before (12 or more characters), git blob id after, frame-name glob.
 scripts/ui/skill_tree_ui.gd	81ea9f50ec18	0ad48a3c1599	A09_skill_tree*
-scripts/ui/screens.gd	42f9c73ab6e4	dbb0f3ea441e	A06_shop*
+scripts/ui/screens.gd	42f9c73ab6e4	f342acbc8ec5	A06_shop*

@@ -993,8 +993,13 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 		card_item.add_child(pl)
 		var btn := _make_btn(LocalizationManager.t("SCR_KUPIT"), Vector2(card_w / 2.0 - 60, 58), Vector2(120, 20))
 		btn.pressed.connect(_on_buy.bind(it.id, btn))
+		## The Buy button's minimum height follows its text (a fallback font, the owned label), so the card follows the button.
+		var fit_card := func() -> void:
+			if is_instance_valid(card_item):
+				card_item.custom_minimum_size.y = maxf(SHOP_ROW, btn.position.y + btn.get_combined_minimum_size().y)
+		btn.minimum_size_changed.connect(fit_card)
 		card_item.add_child(btn)
-		card_item.custom_minimum_size.y = maxf(SHOP_ROW, btn.position.y + btn.get_combined_minimum_size().y)
+		fit_card.call()
 		if ShopService.is_owned(it.id):
 			_mark_owned(btn)
 	# Реклама отключена (кнопка удалена)

@@ -46,6 +46,10 @@ func _run() -> void:
 		await _rc16_checks()
 		_finish()
 		return
+	if OS.get_environment("CLOSEOUT_ONLY") == "finish":
+		await Rc16Finish.run(self)
+		_finish()
+		return
 	if OS.get_environment("CLOSEOUT_ONLY") == "combat":
 		await _check_melee_reaches_monsters()
 		await _check_crawler_idles_and_investigates()

@@ -1,0 +1,11 @@
+# proof f1_post_a41d4b3
+# utc 20261008T084633Z
+# head a41d4b3 (uncommitted paths: 0)
+# env CLOSEOUT_ONLY=rc16 
+# cmd bash tools/qa_sim/closeout_check 300
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/The Last Streetlight
+[closeout] FAIL SHOP1 every Buy button is inside its card and the grid, 13 languages x 3 text sizes (39 cases; no cards: []; outside: ["ar/0", "ar/1", "ar/2"]; English grid width at the three text sizes [514.0, 514.0, 514.0] px)
+[closeout] DONE checks=67 fails=1
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 11 file(s) restored byte-identical
+# EXIT=1
