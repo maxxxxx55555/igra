@@ -1,0 +1,92 @@
+# proof f5_af5_overlap
+# utc 20261009T182955Z
+# head 2dbfa25 (uncommitted paths: 1)
+# env none
+# cmd bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/f5_af5_overlap.sh
+== script af5_overlap.py
+"""Citation overlap: for each citation of the AF5 scope, do the numbers and the longer words of the 140 characters before it occur in the cited lines?
+A citation whose sentence shares no number and no word of 5 or more letters with the cited lines is listed with both texts, to be read by hand.
+usage: af5_overlap.py <repo-root>"""
+import importlib.util
+import pathlib
+import re
+import sys
+
+root = pathlib.Path(sys.argv[1])
+spec = importlib.util.spec_from_file_location("af5", root / "tools" / "af5_check.py")
+af5 = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(af5)
+
+NUMBER = re.compile(r"(?<![\w.])\d+(?:\.\d+)?(?![\w.])")
+WORD = re.compile(r"[A-Za-z_][A-Za-z0-9_]{4,}")
+STOP = {"which", "their", "there", "these", "those", "about", "after", "before", "where", "while", "being", "other", "every", "under", "above", "should",
+        "would", "could", "stays", "stay", "holds", "hold", "shown", "shows", "found", "same", "with", "that", "this", "from", "into", "than", "then", "when",
+        "only", "docs", "scripts", "tools", "scenes", "assets", "gdscript"}
+
+rows, total = [], 0
+for doc, number, text in af5.added_lines("e4bb4df"):
+    for m in af5.CITE.finditer(text):
+        path = af5.resolve(m.group("path"))
+        if path is None:
+            continue
+        total += 1
+        src = (root / path).read_text(encoding="utf-8", errors="replace").replace("\r\n", "\n").split("\n")
+        cited = []
+        for part in m.group("spec").split(","):
+            a, b = (int(x) for x in (part.split("-") * 2)[:2])
+            cited += src[a - 1:b]
+        cited_text = " ".join(cited).lower()
+        before = text[max(0, m.start() - 140):m.start()]
+        before = af5.CITE.sub(" ", before)
+        tokens = [n for n in NUMBER.findall(before) if len(n) >= 2] + [w for w in WORD.findall(before) if w.lower() not in STOP]
+        if not tokens:
+            continue
+        if not any(t.lower() in cited_text for t in tokens):
+            rows.append((doc, number, m.group(0), before.strip().replace("\n", " ")[-110:], " / ".join(s.strip() for s in cited)[:100]))
+
+for doc, number, cite, before, cited in rows:
+    print("%s:%d | %s | BEFORE: ...%s | CITED: %s" % (doc, number, cite, before, cited))
+print("citations: %d, without any shared number or word: %d" % (total, len(rows)))
+== output
+docs/ACCEPTANCE_CHECKLIST.md:73 | docs/TZ_DECISIONS.md:90 | BEFORE: ...| CB3 | Hitboxes: capsule 1.6 m; attack volume | 5.3 | DECIDED DR-3, then MELEE-query (` | CITED: 
+docs/ACCEPTANCE_CHECKLIST.md:335 | docs/TZ_DECISIONS.md:90 | BEFORE: ...meet the GDD; the attack is a 2.7 m sphere query in the active phase | the box of 1.4 x 0.8 x 3.4 m is gone (` | CITED: 
+docs/ACCEPTANCE_CHECKLIST.md:339 | scripts/ui/pause_menu.gd:61 | BEFORE: ... | `SCREEN_LIST` (` `) holds the seven cards; the pause menu opens the shop and the flashlight upgrade only (` | CITED: _btn(vb, LocalizationManager.t("SHOP_COINS"), func() -> void: _open_card("Shop"))
+docs/ACCEPTANCE_CHECKLIST.md:344 | scripts/ui/toast_manager.gd:27 | BEFORE: ...| TO1 | DECIDED | `HOLD` (` | CITED: const HOLD: float = 2.5
+docs/ACCEPTANCE_CHECKLIST.md:347 | scripts/ui/settings_screen.gd:42 | BEFORE: ...| M5.4 | DECIDED | five tabs: game, controls, graphics, audio, accessibility (` | CITED: var tab_container := TabContainer.new()
+docs/BEAUTY_RC16.md:13 | assets/shaders/damage_vignette.gdshader:24 | BEFORE: ...| O3.2 | the damage vignette beat runs on the age of the hit (`age` in ` | CITED: float beat = 0.55 + 0.45 * cos(age * pulse_bpm * 6.283185 / 60.0);
+docs/BEAUTY_RC16.md:14 | assets/shaders/grain_overlay.gdshader:19 | BEFORE: ...| O3.3 | the HUD grain hash without the 10 px repeat (` | CITED: float hash(vec2 p) {
+docs/BEAUTY_RC16.md:26 | scripts/systems/settings_manager.gd:433 | BEFORE: ...t LUT is switched off 0.5 s after every graphics-tier change and every `WorldEnvironment` entering the tree (` | CITED: func _apply_high_contrast() -> void:
+docs/BEAUTY_RC16.md:28 | scripts/player/player_3d.gd:292 | BEFORE: ...| X7 the flashlight shadow is not tier-gated (` | CITED: if OS.has_feature("mobile"):
+docs/BEAUTY_RC16.md:44 | scripts/tools/_final_frames_runner.gd:176 | BEFORE: ...before it stages 05 (` | CITED: # Arrive healthy (the staged combat above cost HP; the low-HP vignette would
+docs/CORRECTION_LOG.md:112 | docs/TZ_DECISIONS.md:90 | BEFORE: ...bed the reverted noise-level mechanism only; the CB3 row named a box that the MELEE-query decision replaced (` | CITED: 
+docs/CORRECTION_LOG.md:115 | scripts/player/player_3d.gd:935 | BEFORE: ...y_runner.gd`; nothing shipped emits that signal (the only emitter is ` `); a real death goes ` | CITED: EventBus.game_over.emit()
+docs/PROOFS.md:135 | scripts/enemies/base_monster.gd:736 | BEFORE: .... | `bash tools/sec_reread.sh` | 0 | `docs/artifacts/rc16/proofs/sec_reread.out` sha256 `189f39aa12817fc9` | ` | CITED: @rpc("any_peer", "reliable")
+docs/RUN_STATE.md:63 | scripts/events/event_bus.gd:33 | BEFORE: ...**Done (this pass):** S1 compile gate green; S2 uifx merged (`d511716`) with the three cross-zone lines (` | CITED: signal enemy_damaged(monster: Node3D, amount: float)
+docs/RUN_STATE.md:63 | scripts/enemies/base_monster.gd:689 | BEFORE: ...*Done (this pass):** S1 compile gate green; S2 uifx merged (`d511716`) with the three cross-zone lines (` `, ` | CITED: EventBus.enemy_damaged.emit(self, reduced)
+docs/RUN_STATE.md:63 | scripts/ui/workbench.gd:401 | BEFORE: ...reen; S2 uifx merged (`d511716`) with the three cross-zone lines (` `, ` `, ` | CITED: InventoryManager.try_add(comp[0], half, false)
+docs/RUN_STATE.md:64 | scripts/ui/menu_background.gd:139 | BEFORE: ...d 0 commits (17 rows: 13 DECISION, 3 OWNER, 1 CROSS-ZONE; patches P1 menu background without the day palette ` | CITED: var to_c := _containers[next_idx]
+docs/SECURITY_REREAD_RC16.md:13 | scripts/inventory/inventory_manager.gd:358 | BEFORE: ...ate` at ` ` and `rpc_power_changed` at ` `); the six inventory requests (` | CITED: @rpc("any_peer", "reliable")
+docs/SECURITY_REREAD_RC16.md:14 | scripts/systems/save_slot_manager.gd:21 | BEFORE: ...the profile guard; `load` and `ResourceLoader.load` on constant or table paths | slot paths take an integer (` | CITED: var path = SAVE_DIR + "slot_%d.json" % slot
+docs/SECURITY_REREAD_RC16.md:14 | scripts/i18n/localization_manager.gd:49 | BEFORE: ...aths take an integer (` `); the language file is checked against `SUPPORTED` before it names a path (` | CITED: current_lang = saved
+docs/SECURITY_REREAD_RC16.md:15 | scripts/systems/captions_manager.gd:79 | BEFORE: ...an edited signed file resets that state; the unsigned files are the language code, the captions "seen" list (` | CITED: var f := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
+docs/SECURITY_REREAD_RC16.md:25 | scripts/i18n/localization_manager.gd:49 | BEFORE: ...| 4 | edit the language file to a path | ` | CITED: current_lang = saved
+docs/SECURITY_REREAD_RC16.md:26 | scripts/ui/lobby_menu.gd:41 | BEFORE: ...| 5 | call an inventory request from a peer | no peer can exist: ` | CITED: NetworkManager.create_server()
+docs/TZ_DECISIONS.md:14 | GDD.md:3-7 | BEFORE: ...arent conflict, but no code changes on this pass. | The GDD has no precedence rule between its own sections (` | CITED: > **Единый канон.** Этот документ — единственный источник истины: по нему можно / > собрать игру цел
+docs/TZ_DECISIONS.md:15 | GDD.md:667 | BEFORE: ...| N01 | DR-6 (GAP-OWNER) | ` | CITED: - [x] LAN discovery/multiplayer, New Game+, tutorial
+docs/TZ_DECISIONS.md:16 | GDD.md:22 | BEFORE: ...| I02 | DR-6 (GAP-OWNER) | ` | CITED: | Языки | 13 языков через I18n: RU (основной), EN, TR, ZH, ZH_TW, DE, FR, ES, pt_BR, IT, ar, JA, KO.
+docs/TZ_DECISIONS.md:27 | GDD.md:317 | BEFORE: ...| V05 (correction) | DR-4 | Stays 2048 ( | CITED: Watcher серо-голубой, Hunter тёмно-тактический, Destroyer ржавый, Босс 1024²).
+docs/TZ_DECISIONS.md:28 | GDD.md:628-631 | BEFORE: ...f, "1 ad per hour", now applies to the existing non-canon district-entry interstitial too (180 s -> 3600 s). | | CITED: ### 24.4. Рекламные награды (Ad Rewards) / - Два варианта: «Смотреть рекламу» (+100 монет) или «Проп
+docs/TZ_DECISIONS.md:31 | GDD.md:52-59 | BEFORE: ...| G27 | DR-2 | Touch: left 35% = movement joystick, rest = look. | | CITED: |------|----------| / | Левая половина экрана | Drag = поворот камеры | / | Левая половина, двойной 
+docs/TZ_DECISIONS.md:32 | GDD.md:270 | BEFORE: ...5/0.40 for DARK/STREETS/FULL (`world_env_setup.gd`). V01's latent daytime painter in `DayNight` removed (DR-4: | CITED: - Дня нет. Холодная тьма окружения × тёплый свет источников — главный
+docs/TZ_DECISIONS.md:91 | scripts/ui/toast_manager.gd:27 | BEFORE: ...asts stay in the top-left column, clear of the quest tracker; the GDD 24.5 duration of 3 s is met (`HOLD` at ` | CITED: const HOLD: float = 2.5
+docs/UTILITIES_REPORT.md:26 | tools/lint_changed.py:154 | BEFORE: ...`), shellcheck on the file with the carriage returns stripped (`check_sh` at ` `); `--demo` (`demo` at ` | CITED: def demo():
+docs/UTILITIES_REPORT.md:28 | tools/check.sh:343 | BEFORE: ...- `tools/check.sh`: the block at ` | CITED: if "$PY" tools/lint_changed.py --demo >/dev/null 2>&1 && "$PY" tools/lint_changed.py >/dev/null 2>&1
+docs/UTILITIES_REPORT.md:31 | tools/check.sh:12 | BEFORE: ...proof_run:9`, `tools/qa_sim/rc16_probe:8`, `tools/qa_sim/timing_equiv:7`, `tools/qa_sim/guarded_headless:7`, ` | CITED: cd "$(dirname "$0")/.." || exit 2
+docs/UTILITIES_REPORT.md:37 | scripts/tools/_closeout_check_runner.gd:1191 | BEFORE: ...1. gdparse cannot read 4 files (` | CITED: stand_in.source_code = "extends Node
+docs/UTILITIES_REPORT.md:37 | scripts/ui/character_screen.gd:281 | BEFORE: ...1. gdparse cannot read 4 files (` `, ` | CITED: tw.tween_callback(func(): if toast: toast.queue_free())
+docs/UTILITIES_REPORT.md:37 | scripts/ui/hud_3d.gd:1527 | BEFORE: ...1. gdparse cannot read 4 files (` `, ` `, ` | CITED: var wheel := mk.call("BtnWheel", "◎", func() -> void: if _quick_wheel: _quick_wheel.open()) as Butto
+docs/UTILITIES_REPORT.md:37 | scripts/ui/puzzle_cables.gd:204 | BEFORE: ...se cannot read 4 files (` `, ` `, ` `, ` | CITED: tw.tween_callback(func(): if _toast: _toast.queue_free(); _toast = null)
+docs/UTILITIES_REPORT.md:38 | tools/qa_sim/_resolve_godot.sh:21 | BEFORE: ...2. shellcheck, 9 findings in wrappers not changed in this pass: SC2164 in ` | CITED: cd "$(dirname "${BASH_SOURCE[0]}")/../.."
+docs/UTILITIES_REPORT.md:38 | static_syntax_check.sh:10 | BEFORE: ...` `, `autoplay_bot:11`, `closeout_check:8`, `guarded_windowed:11`, `headless_suite:15`, `playthrough:13`, ` | CITED: cd "$(dirname "$0")/../.."
+citations: 140, without any shared number or word: 40
+# EXIT=0
