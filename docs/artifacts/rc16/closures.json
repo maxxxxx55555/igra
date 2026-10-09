@@ -509,14 +509,14 @@
  },
  {
   "id": "S9-ACCEPT",
-  "claim": "179 of 200 acceptance rows are proven (176 before).",
+  "claim": "178 of 200 acceptance rows are proven (176 before; CT7, QS2 and I9.7 added, PF3 withdrawn, CORRECTION_LOG 126).",
   "cmd": "python tools/accept_count.py",
   "proof": "accept_count",
   "quotes": [
-   "accept=179/200"
+   "accept=178/200"
   ],
   "frames": [],
-  "commit": "f49a5cf"
+  "commit": "d98f1de"
  },
  {
   "id": "U0-UTILITIES",
@@ -561,7 +561,7 @@
    "12/12 locales PASS"
   ],
   "frames": [],
-  "commit": "40966b1"
+  "commit": "d98f1de"
  },
  {
   "id": "FINAL-AF5",
@@ -572,7 +572,7 @@
    "citation(s)"
   ],
   "frames": [],
-  "commit": "40966b1"
+  "commit": "d98f1de"
  },
  {
   "id": "FINAL-LINT",
@@ -583,7 +583,7 @@
    "0 finding(s)"
   ],
   "frames": [],
-  "commit": "40966b1"
+  "commit": "d98f1de"
  },
  {
   "id": "FINAL-STATIC",
@@ -594,7 +594,7 @@
    "Проверок пройдено: 40"
   ],
   "frames": [],
-  "commit": "40966b1"
+  "commit": "d98f1de"
  },
  {
   "id": "FINAL-AF3",
@@ -605,7 +605,7 @@
    "af3 frames=50 fail=0"
   ],
   "frames": [],
-  "commit": "40966b1"
+  "commit": "d98f1de"
  },
  {
   "id": "FINAL-AF3-FRESH",
@@ -617,6 +617,6 @@
    "af3 frames=50 fail=0"
   ],
   "frames": [],
-  "commit": "40966b1"
+  "commit": "d98f1de"
  }
 ]

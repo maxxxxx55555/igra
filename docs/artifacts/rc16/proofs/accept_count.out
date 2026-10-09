@@ -1,8 +1,9 @@
 # proof accept_count
-# utc 20261007T233043Z
-# head f49a5cf (uncommitted paths: 4)
+# utc 20261009T103629Z
+# head d98f1de (uncommitted paths: 1)
+# env none
 # cmd python tools/accept_count.py
-accept=179/200
+accept=178/200
 OV3      OWNER
 OV4      NOT-VERIFIABLE
 CT4      DECIDED
@@ -16,6 +17,7 @@ SC7      DECIDED
 SC8      DECIDED
 AU3      OWNER
 AU4      DECIDED
+PF3      OWNER (withdrawn at rc16, CORRECTION_LOG 126: a phone run, U1; the rc15 reading was a 4% margin over the floor on this iGPU)
 AD2      DECIDED
 TO1      DECIDED
 H3.18    ROADMAP
