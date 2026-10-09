@@ -1,0 +1,10 @@
+# proof f5_arena_strategies
+# utc 20261009T112933Z
+# head 32b8199 (uncommitted paths: 3)
+# env none
+# cmd bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/f5_arena_strategies.sh
+== python
+reasoning modes 15 | workflows 12 | strategies 12
+== a .arena folder in the project root
+.arena is absent
+# EXIT=0

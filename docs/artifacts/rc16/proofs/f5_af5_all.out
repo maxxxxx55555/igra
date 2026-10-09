@@ -1,0 +1,116 @@
+# proof f5_af5_all
+# utc 20261009T112914Z
+# head 32b8199 (uncommitted paths: 2)
+# env none
+# cmd python tools/af5_check.py --all
+FAIL docs/AUDIO_MIX_AUDIT.md:52: music_manager.gd:435: C3 none of play occurs in the cited lines
+FAIL docs/BREAK_REPORT.md:109: world_runtime.gd:79-81: C3 none of consume_pending_player_pos occurs in the cited lines
+FAIL docs/CLOSURE_VERIFICATION_INTERNAL.md:39: REDTEAM_CHALLENGE.md:131: C1 the file does not resolve to one file
+FAIL docs/CLOSURE_VERIFICATION_INTERNAL.md:48: footstep_system.gd:190-204: C2 line 190-204 is past the end (177 lines)
+FAIL docs/CLOSURE_VERIFICATION_INTERNAL.md:54: project.godot:297: C2 line 297-297 is past the end (284 lines)
+FAIL docs/CLOSURE_VERIFICATION_INTERNAL.md:54: project.godot:297: C2 line 297-297 is past the end (284 lines)
+FAIL docs/CLOSURE_VERIFICATION_INTERNAL.md:66: death_screen.gd:53-54: C1 the file does not resolve to one file
+FAIL docs/CLOSURE_VERIFICATION_INTERNAL.md:99: check.sh:274: C3 none of udg_restore, exit occurs in the cited lines
+FAIL docs/CLOSURE_VERIFICATION_INTERNAL.md:103: flashlight_upgrade_manager.gd:174-177: C2 line 174-177 is past the end (163 lines)
+FAIL docs/CLOUD_AUDIT.md:68: player_3d.gd:1182-1186: C3 none of BATTERY_PER_SKILL_LVL occurs in the cited lines
+FAIL docs/CLOUD_AUDIT.md:86: REDTEAM_CHALLENGE.md:66: C1 the file does not resolve to one file
+FAIL docs/CLOUD_AUDIT.md:103: project.godot:297: C2 line 297-297 is past the end (284 lines)
+FAIL docs/DESIGN_AUDIT_ARENA.md:20: scripts/systems/shop.gd:8-40: C1 the file does not resolve to one file
+FAIL docs/DESIGN_AUDIT_ARENA.md:91: win_screen.gd:78-82: C3 none of GameManager, return_to_menu occurs in the cited lines
+FAIL docs/DESIGN_AUDIT_ARENA.md:91: scripts/ui/victory_screen.gd:44-46: C1 the file does not resolve to one file
+FAIL docs/DESIGN_AUDIT_ARENA.md:136: streetlight_hum_pool.gd:29: C1 the file does not resolve to one file
+FAIL docs/DESIGN_AUDIT_ARENA.md:238: monster_telegraph.gd:31-36: C3 none of MeshInstance3D, modulate occurs in the cited lines
+FAIL docs/EXEC_PLAN.md:93: project.godot:306: C2 line 306-306 is past the end (284 lines)
+FAIL docs/EXEC_PLAN.md:98: scripts/core/settings_manager.gd:416-427: C1 the file does not resolve to one file
+FAIL docs/EXEC_PLAN.md:99: scripts/core/settings_manager.gd:262-267: C1 the file does not resolve to one file
+FAIL docs/GAME_AUDIT.md:61: base_monster.gd:389-405: C3 none of _state_chase occurs in the cited lines
+FAIL docs/GAME_AUDIT.md:65: player_3d.gd:1056,1065: C3 none of EventBus, player_hiding_changed occurs in the cited lines
+FAIL docs/GAME_AUDIT.md:135: death_screen.gd:53: C1 the file does not resolve to one file
+FAIL docs/KNOWN_ISSUES.md:112: project.godot:304: C2 line 304-304 is past the end (284 lines)
+FAIL docs/PERF_PASS.md:42: settings_manager.gd:441-451: C3 none of amount occurs in the cited lines
+FAIL docs/PERF_PASS.md:49: project.godot:295-296: C2 line 295-296 is past the end (284 lines)
+FAIL docs/PERF_PASS.md:52: project.godot:300: C2 line 300-300 is past the end (284 lines)
+FAIL docs/PERF_PASS.md:56: project.godot:297-298: C2 line 297-298 is past the end (284 lines)
+FAIL docs/PERF_PASS.md:57: project.godot:303: C2 line 303-303 is past the end (284 lines)
+FAIL docs/QA_MATRIX.md:141: base_monster.gd:466-475: C3 none of _player_hiding occurs in the cited lines
+FAIL docs/QA_MATRIX.md:143: hud_3d.gd:99-101: C3 none of EventBus, inventory_changed occurs in the cited lines
+FAIL docs/QA_MATRIX.md:145: death_screen.gd:53: C1 the file does not resolve to one file
+FAIL docs/QA_MATRIX.md:146: CLAUDE.md:17: C3 none of project, godot occurs in the cited lines
+FAIL docs/QA_MATRIX.md:178: scripts/player/death_sequence.gd:21-24: C1 the file does not resolve to one file
+FAIL docs/QA_MATRIX.md:198: docs/GDD.md:377: C3 none of dicts occurs in the cited lines
+FAIL docs/QA_MATRIX.md:207: settings_manager.gd:262-266: C3 none of GRAPHICS_TIERS occurs in the cited lines
+FAIL docs/QA_SWARM_FINDINGS.md:40: project.godot:304-313: C2 line 304-313 is past the end (284 lines)
+FAIL docs/ROAD_TO_POLISH.md:158: scripts/monetization/admob_provider.gd:8: C1 the file does not resolve to one file
+FAIL docs/RUN_STATE.md:1421: new_game_plus_ui.gd:46: C3 none of Cannot, infer, the, type occurs in the cited lines
+FAIL docs/SECURITY_PATCH_SPEC.md:76: scripts/systems/leaderboard.gd:3-34: C1 the file does not resolve to one file
+FAIL docs/SECURITY_PATCH_SPEC.md:77: scripts/systems/settings_manager.gd:233-250: C3 none of ConfigFile occurs in the cited lines
+FAIL docs/SECURITY_PATCH_SPEC.md:78: scripts/ui/onboarding.gd:59-68: C1 the file does not resolve to one file
+FAIL docs/SECURITY_PATCH_SPEC.md:79: scripts/systems/difficulty_manager.gd:27-34: C1 the file does not resolve to one file
+FAIL docs/SECURITY_PATCH_SPEC.md:210: scripts/economy/coin_wallet.gd:28-37: C3 none of MAX_COINS occurs in the cited lines
+FAIL docs/SECURITY_PATCH_SPEC.md:226: scripts/systems/leaderboard.gd:9-34: C1 the file does not resolve to one file
+FAIL docs/SECURITY_PATCH_SPEC.md:258: data/balance/player_stats.tres:17: C3 none of weight_speed_mult occurs in the cited lines
+FAIL docs/SECURITY_PATCH_SPEC.md:259: scripts/player/player_3d.gd:664-677: C3 none of _speed_for occurs in the cited lines
+FAIL docs/SECURITY_PATCH_SPEC.md:260: scripts/player/player_3d.gd:537-539: C3 none of weight_ratio occurs in the cited lines
+FAIL docs/SECURITY_PATCH_SPEC.md:282: scripts/core/save_system.gd:284-313: C3 none of player_pos occurs in the cited lines
+FAIL docs/SECURITY_PATCH_SPEC.md:286: scripts/world/world_runtime.gd:54-68: C3 none of DistrictManager, current_district occurs in the cited lines
+FAIL docs/SECURITY_PATCH_SPEC.md:425: export_presets.cfg:23-27: C3 none of tlsdebug occurs in the cited lines
+FAIL docs/SECURITY_PATCH_SPEC.md:686: attack_sim.gd:134-143: C3 none of _check_district_id_injection_defended occurs in the cited lines
+FAIL docs/SECURITY_SWEEP_V2.md:138: hud_3d.gd:799: C3 none of vibrate occurs in the cited lines
+FAIL docs/SIZE_BUDGET.md:156: docs/REPORT_ASSETS.md:20: C3 none of files occurs in the cited lines
+FAIL docs/SLOP_REPORT.md:51: check.sh:222-225: C3 none of bad occurs in the cited lines
+FAIL docs/SLOP_REPORT.md:96: hound_3d.gd:35: C2 line 35-35 is past the end (28 lines)
+FAIL docs/SLOP_REPORT.md:146: scripts/audio/proc_audio.gd:231,87,253-258,267: C1 the file does not resolve to one file
+FAIL docs/SLOP_REPORT.md:232: scripts/audio/proc_audio.gd:80-87: C1 the file does not resolve to one file
+FAIL docs/SLOP_REPORT.md:249: i18n_truth_gate.py:37: C3 none of SHORT_STRING_FLOOR occurs in the cited lines
+FAIL docs/SLOP_REPORT.md:259: _game_test_3d.gd:24: C3 none of HARD_TIMEOUT_SEC occurs in the cited lines
+FAIL docs/SLOP_REPORT_V2.md:24: scripts/systems/footstep_system.gd:176-204: C2 line 176-204 is past the end (177 lines)
+FAIL docs/SLOP_REPORT_V2.md:25: ui/toast_manager.gd:99: C1 the file does not resolve to one file
+FAIL docs/SLOP_REPORT_V2.md:25: ui/quest_tracker_hud.gd:19: C1 the file does not resolve to one file
+FAIL docs/SLOP_REPORT_V2.md:25: ui/hud_3d.gd:637: C1 the file does not resolve to one file
+FAIL docs/SLOP_REPORT_V2.md:25: weapons/weapon_base.gd:146: C1 the file does not resolve to one file
+FAIL docs/SLOP_REPORT_V2.md:25: systems/wow_director.gd:64: C1 the file does not resolve to one file
+FAIL docs/SLOP_REPORT_V2.md:25: systems/uisfx.gd:97: C1 the file does not resolve to one file
+FAIL docs/SLOP_REPORT_V2.md:25: core/camera_follow_3d.gd:79: C1 the file does not resolve to one file
+FAIL docs/SLOP_REPORT_V2.md:25: i18n/localization_manager.gd:169: C1 the file does not resolve to one file
+FAIL docs/SLOP_REPORT_V2.md:26: systems/new_game_plus.gd:209,245: C1 the file does not resolve to one file
+FAIL docs/SLOP_REPORT_V2.md:26: systems/flashlight_upgrade_manager.gd:139,160: C1 the file does not resolve to one file
+FAIL docs/SLOP_REPORT_V2.md:26: systems/achievements_manager.gd:199,217: C1 the file does not resolve to one file
+FAIL docs/SLOP_REPORT_V2.md:26: systems/daily_challenge_manager.gd:185,196: C1 the file does not resolve to one file
+FAIL docs/SLOP_REPORT_V2.md:27: ui/hud_3d.gd:640: C1 the file does not resolve to one file
+FAIL docs/SLOP_REPORT_V2.md:28: systems/settings_manager.gd:434-439: C1 the file does not resolve to one file
+FAIL docs/SLOP_REPORT_V2.md:29: player/player_3d.gd:247: C1 the file does not resolve to one file
+FAIL docs/SLOP_REPORT_V2.md:30: enemies/base_monster.gd:684,690: C1 the file does not resolve to one file
+FAIL docs/SLOP_REPORT_V2.md:30: ui/hud_3d.gd:643,944: C1 the file does not resolve to one file
+FAIL docs/SLOP_REPORT_V2.md:31: core/qa_launch_guard.gd:55,70: C1 the file does not resolve to one file
+FAIL docs/SLOP_REPORT_V2.md:37: player/player_3d.gd:91: C1 the file does not resolve to one file
+FAIL docs/SLOP_REPORT_V2.md:38: player/player_3d.gd:32: C1 the file does not resolve to one file
+FAIL docs/SLOP_REPORT_V2.md:39: ui/theme_provider.gd:20: C1 the file does not resolve to one file
+FAIL docs/SLOP_REPORT_V2.md:40: ui/touch_calibration_overlay.gd:16: C1 the file does not resolve to one file
+FAIL docs/SLOP_REPORT_V2.md:43: player/player_3d.gd:89: C1 the file does not resolve to one file
+FAIL docs/SLOP_REPORT_V2.md:43: enemies/shadow_3d.gd:6: C1 the file does not resolve to one file
+FAIL docs/SLOP_REPORT_V2.md:44: monetization/ad_service.gd:105-116: C1 the file does not resolve to one file
+FAIL docs/SLOP_REPORT_V2.md:51: project.godot:302: C2 line 302-302 is past the end (284 lines)
+FAIL docs/SLOP_REPORT_V2.md:88: base_monster.gd:736: C3 none of scenes, vfx, vfx_hit_spark, tscn occurs in the cited lines
+FAIL docs/SPINE_SOFTLOCK_AUDIT.md:16: _qa_autoplay_runner.gd:247-250: C3 none of distance, PICKUP_TOUCH, move, else occurs in the cited lines
+FAIL docs/SPINE_SOFTLOCK_AUDIT.md:16: data/balance/player_stats.tres:5: C3 none of walk_speed occurs in the cited lines
+FAIL docs/SPINE_SOFTLOCK_AUDIT.md:17: _qa_autoplay_runner.gd:488-489: C3 none of moved, delta occurs in the cited lines
+FAIL docs/SPINE_SOFTLOCK_AUDIT.md:32: enemy_pool.gd:24: C3 none of SHADOW, CRAWLER, CRAWLER occurs in the cited lines
+FAIL docs/SPINE_SOFTLOCK_AUDIT.md:32: crawler_3d.gd:12: C3 none of vision_range occurs in the cited lines
+FAIL docs/SPINE_SOFTLOCK_AUDIT.md:36: _qa_autoplay_runner.gd:233-236: C3 none of _maintain_flashlight occurs in the cited lines
+FAIL docs/SPINE_SOFTLOCK_AUDIT.md:44: _qa_autoplay_runner.gd:248: C3 none of distance, PICKUP_TOUCH occurs in the cited lines
+FAIL docs/SPINE_SOFTLOCK_AUDIT.md:90: item_spawns.json:73: C1 the file does not resolve to one file
+FAIL docs/SPINE_SOFTLOCK_AUDIT.md:113: _qa_autoplay_runner.gd:491-495: C3 none of nudge_until, now occurs in the cited lines
+FAIL docs/SPINE_SOFTLOCK_AUDIT.md:113: world_runtime.gd:31: C3 none of call_deferred, load_district occurs in the cited lines
+FAIL docs/STATIC_AUDIT.md:266: scripts/world/ftue_generator_3d.gd:21: C1 the file does not resolve to one file
+FAIL docs/TZ_COMPLIANCE_AUDIT.md:55: player_3d.gd:1104-1136: C3 none of apply_flashlight_upgrades occurs in the cited lines
+FAIL docs/TZ_COMPLIANCE_AUDIT.md:63: player_3d.gd:296: C3 none of Vector3 occurs in the cited lines
+FAIL docs/TZ_COMPLIANCE_AUDIT.md:70: save_system.gd:89: C3 none of user, tls_savegame_slot, save occurs in the cited lines
+FAIL docs/TZ_COMPLIANCE_AUDIT.md:74: achievements_manager.gd:67: C3 none of photos_10 occurs in the cited lines
+FAIL docs/TZ_COMPLIANCE_AUDIT.md:151: day_night.gd:36-42: C2 line 36-42 is past the end (31 lines)
+FAIL docs/TZ_COMPLIANCE_AUDIT.md:152: boss_3d.gd:283: C3 none of Color occurs in the cited lines
+FAIL docs/TZ_COMPLIANCE_AUDIT.md:154: project.godot:304-305: C2 line 304-305 is past the end (284 lines)
+FAIL docs/TZ_COMPLIANCE_AUDIT.md:155: project.godot:306: C2 line 306-306 is past the end (284 lines)
+FAIL docs/TZ_COMPLIANCE_AUDIT.md:203: settings_manager.gd:396: C3 none of _apply_high_contrast occurs in the cited lines
+FAIL docs/TZ_COMPLIANCE_AUDIT.md:205: settings_manager.gd:416-427: C3 none of _apply_arachnophobia occurs in the cited lines
+af5_check: 1300 citation(s) in 33563 doc line(s), 109 finding(s)
+# EXIT=1

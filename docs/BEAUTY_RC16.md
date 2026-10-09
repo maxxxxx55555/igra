@@ -3,7 +3,7 @@
 Method: the A-beauty agent (zone Z-visual, no engine) read the eight BEFORE frames of `e4bb4df` (`docs/stills/polish/*_before_e4bb4df_*.png`), the canon (`docs/STYLE_GUIDE.md`,
 `docs/PRODUCTION_BIBLE.md`, `docs/GDD.md`) and the engine sources, and committed one item per commit; the orchestrator merged it, applied three of its cross-zone requests,
 captured the eight AFTER frames once (`c3e79e5`, launch 19), read each one once and measured them (`tools/qa_sim/frame_stats.py`, raw output
-`docs/artifacts/rc16/proofs/frame_stats_c3e79e5.out`). Every kept item has a closeout check that fails on the code before it (`scripts/tools/rc16/beauty_checks.gd`, `scripts/tools/rc16/uifx_checks.gd`).
+`docs/artifacts/rc16/proofs/frame_stats_c3e79e5.out`). Every kept item except X1 (the LUT image, shown by the beauty frames only) has a closeout check that fails on the code before it (`scripts/tools/rc16/beauty_checks.gd`, `scripts/tools/rc16/uifx_checks.gd`).
 
 ## Kept (6)
 

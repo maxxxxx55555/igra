@@ -203,7 +203,7 @@ Codex tab, **S_hud_*** the HUD buttons, **S_workbench**, **S_credits**.
 | AH5 | Speedrunner, iron man, midsummer night (bed), who is there (hallucinations) | 21 | closeout_check ach_16 / ach_18 (speedrunner, iron man), ach_19 (the bed), ach_20 (five hallucinations) | PASS(closeout) |
 | AH6 | Achievements screen | 21 | PT frame | PT-B05 |
 | QS1 | Six quick slots on the HUD, keys 1-6 | 24.1 | closeout_check H3.2 (six slots in the GDD order), G25 (keys 1 and 2 draw and lower the weapons) + suite P1b (every action exercised) | PASS(closeout) |
-| QS2 | Drag an item from the inventory to a quick slot | 24.1 | closeout_check QS2, 4 checks: the medkit cell dragged onto quick slot 1 binds it, key 1 then uses a medkit, a right-click puts the pistol back, a forged saved list falls back to the defaults (same log); the feel on a touch screen is U5 | PASS(closeout) |
+| QS2 | Drag an item from the inventory to a quick slot | 24.1 | closeout_check QS2, 5 checks (`s8_closeout_rc16_21c2046.attach.closeout_check.log`): the six bindings untouched are the bar's own order, the medkit cell dragged onto quick slot 1 binds it, key 1 then uses a medkit, a right-click puts the pistol back, a forged saved list falls back to the defaults; the feel on a touch screen is U5 | PASS(closeout) |
 | PH1 | Photo album: 200 photos, 3 categories | 24.2 | closeout_check (sources, categories, count, Codex tab) | PASS(closeout G26) |
 | DL1 | Daily challenge | 24.3 | menu card + streak reward (daily_challenge_manager) | PT-B04 |
 | DL2 | Streak multiplier x1.5/x2/x3 at 3/5/7 days, a temporary special district | 24.3 | closeout_check DL2: x1.5 / x2 / x3 at 3 / 5 / 7 days; the fifth day pays 2 x the base; the menu card shows the multiplier | PASS(closeout DL2) |
@@ -266,7 +266,7 @@ Codex tab, **S_hud_*** the HUD buttons, **S_workbench**, **S_credits**.
 | I9.4 | Actions: use, drop, disassemble (equip is built and no item sets an equip slot: see I9.5) | V.5 | closeout_check V.5 (Use consumes one battery; Drop asks, then throws the stack away), I9.4 (the workbench Salvage tab returns half the parts of an enhanced battery) | PASS(closeout) |
 | I9.5 | Equipment slots head/body/legs/holster/backpack | V.5 | GDD 17 defines no head/body/legs/holster item; the slots show on the inventory screen and save; the backpack capacity comes from the shop upgrade (UpgradeSystem) | DECIDED |
 | I9.6 | Backpack capacity x / max | V.5 | inventory screen header | PT-A06 |
-| I9.7 | Drag to a quick slot | V.5 | closeout_check QS2 (the same four checks, on the inventory screen's cells and its six targets) | PASS(closeout) |
+| I9.7 | Drag to a quick slot | V.5 | closeout_check QS2 (the same five checks, `s8_closeout_rc16_21c2046.attach.closeout_check.log`, on the inventory screen's cells and its six targets) | PASS(closeout) |
 | I9.8 | Sort by type / weight / rarity | V.5 | closeout_check I9.8 (sorting by weight puts the heaviest stack first) | PASS(closeout) |
 | I9.12 | Confirm on drop | V.5 | closeout_check V.5 (the first press of Drop only asks, the second throws the stack away) | PASS(closeout) |
 | I9.13 | Rarity filter | V.5 | closeout_check I9.13 (the Common filter leaves the one common stack of two, All shows both) | PASS(closeout) |

@@ -66,7 +66,7 @@ AAB included; a multi-line string in a scene file), fixed and gated in `ui_layou
 Named as a pre-existing stall across v7 through v7.3.2's reports, always as an opaque 90s
 timeout with no diagnostic — because `tools/check.sh`'s own shell-level `run_gate` timeout
 (90s) was **shorter** than the test scene's own internal `HARD_TIMEOUT_SEC` (150s,
-`scripts/tools/_game_test_3d.gd:24`), so the shell always killed the process before the
+`scripts/tools/_game_test_3d.gd:25`), so the shell always killed the process before the
 scene's own graceful-timeout handler (which reports exactly which phase it's stuck on) ever
 got to run. Bumped the gate's shell timeout to 170s (`tools/check.sh`) and ran it directly —
 the scene's own diagnostic fired clean: **`[FAIL] hard timeout at phase 7 — stalled, not

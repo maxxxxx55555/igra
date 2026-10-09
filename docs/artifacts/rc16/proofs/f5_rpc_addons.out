@@ -1,0 +1,30 @@
+# proof f5_rpc_addons
+# utc 20261009T112912Z
+# head 32b8199 (uncommitted paths: 1)
+# env none
+# cmd bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/f5_rpc_addons.sh
+== handlers (file:line)
+scripts/enemies/base_monster.gd:736:@rpc("any_peer", "reliable")
+scripts/enemies/base_monster.gd:896:@rpc("any_peer", "unreliable")
+scripts/inventory/inventory_manager.gd:358:@rpc("any_peer", "reliable")
+scripts/inventory/inventory_manager.gd:365:@rpc("any_peer", "reliable")
+scripts/inventory/inventory_manager.gd:372:@rpc("any_peer", "reliable")
+scripts/inventory/inventory_manager.gd:379:@rpc("any_peer", "reliable")
+scripts/inventory/inventory_manager.gd:386:@rpc("any_peer", "reliable")
+scripts/inventory/inventory_manager.gd:393:@rpc("any_peer", "reliable")
+scripts/net/lan_network.gd:72:@rpc("any_peer", "call_local", "unreliable")
+scripts/net/lan_network.gd:86:@rpc("any_peer", "call_local", "reliable")
+scripts/player/player_3d.gd:950:@rpc("any_peer", "reliable")
+scripts/player/player_3d.gd:1323:@rpc("any_peer", "unreliable")
+addons/enemy/Enemy3D.gd:139:@rpc("any_peer", "reliable")
+== under scripts/: 12 handlers in 4 files
+== under addons/: 1 handlers in 1 files
+== the handler under addons/ (addons/enemy/Enemy3D.gd lines 138 to 143)
+
+@rpc("any_peer", "reliable")
+func _server_kill(monster_id: StringName) -> void:
+	if is_multiplayer_authority():
+		EventBus.enemy_killed.emit(monster_id)
+== lines naming EnemySpawner or _server_kill outside addons/enemy/EnemySpawner.gd (the handler's own definition is the only expected hit)
+addons/enemy/Enemy3D.gd:140:func _server_kill(monster_id: StringName) -> void:
+# EXIT=0
