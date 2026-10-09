@@ -1,0 +1,30 @@
+# proof f5_gdparse_errors
+# utc 20261009T173702Z
+# head 556f8dc (uncommitted paths: 1)
+# env none
+# cmd bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/f5_gdparse_errors.sh
+== script gdparse_errors.py
+"""Where does the gdtoolkit parser stop in the named GDScript files? gdparse_errors.py <repo-root> <file>..."""
+import pathlib
+import sys
+
+from gdtoolkit.parser import parser
+
+root = pathlib.Path(sys.argv[1])
+for name in sys.argv[2:]:
+    source = (root / name).read_text(encoding="utf-8")
+    try:
+        parser.parse(source, gather_metadata=False)
+        print("%s: parses" % name)
+    except Exception as err:
+        text = str(err).splitlines()
+        where = getattr(err, "line", None)
+        column = getattr(err, "column", None)
+        line_text = source.splitlines()[where - 1].strip()[:90] if where else ""
+        print("%s: line %s column %s | %s | %s" % (name, where, column, line_text, text[0][:80] if text else ""))
+== output
+scripts/tools/_closeout_check_runner.gd: line 1191 column 25 | stand_in.source_code = "extends Node | No terminal matches '"' in the current parser context, at line 1191 col 25
+scripts/ui/character_screen.gd: line 281 column 56 | tw.tween_callback(func(): if toast: toast.queue_free()) | Unexpected token Token('RPAR', ')') at line 281, column 56.
+scripts/ui/hud_3d.gd: line 1527 column 92 | var wheel := mk.call("BtnWheel", "◎", func() -> void: if _quick_wheel: _quick_wheel.open() | Unexpected token Token('RPAR', ')') at line 1527, column 92.
+scripts/ui/puzzle_cables.gd: line 204 column 73 | tw.tween_callback(func(): if _toast: _toast.queue_free(); _toast = null) | Unexpected token Token('RPAR', ')') at line 204, column 73.
+# EXIT=0

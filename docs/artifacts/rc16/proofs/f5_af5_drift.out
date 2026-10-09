@@ -1,0 +1,57 @@
+# proof f5_af5_drift
+# utc 20261009T173556Z
+# head 556f8dc (uncommitted paths: 0)
+# env none
+# cmd bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/f5_af5_drift.sh
+== script af5_drift.py
+"""Citation drift: for each citation in the AF5 scope, compare the cited lines as they were at the commit that last changed the document line (git blame)
+with the same lines at HEAD. A difference means the code moved or changed after the sentence was written; every flag is read by hand.
+usage: af5_drift.py <repo-root>"""
+import importlib.util
+import pathlib
+import subprocess
+import sys
+
+root = pathlib.Path(sys.argv[1])
+spec = importlib.util.spec_from_file_location("af5", root / "tools" / "af5_check.py")
+af5 = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(af5)
+
+
+def git(*args):
+    r = subprocess.run(["git", *args], cwd=root, capture_output=True, text=True, encoding="utf-8", errors="replace")
+    return r.stdout
+
+
+flags, total = [], 0
+for doc, number, text in af5.added_lines("e4bb4df"):
+    for m in af5.CITE.finditer(text):
+        path = af5.resolve(m.group("path"))
+        if path is None:
+            continue
+        total += 1
+        blame = git("blame", "--porcelain", "-L", "%d,%d" % (number, number), "--", doc).split(" ", 1)[0]
+        if not blame or set(blame) == {"0"}:
+            continue
+        old = git("show", "%s:%s" % (blame, path)).replace("\r\n", "\n").split("\n")
+        new = (root / path).read_text(encoding="utf-8", errors="replace").replace("\r\n", "\n").split("\n")
+        for part in m.group("spec").split(","):
+            a, b = (int(x) for x in (part.split("-") * 2)[:2])
+            was, now = [s.strip() for s in old[a - 1:b]], [s.strip() for s in new[a - 1:b]]
+            if was != now:
+                flags.append((doc, number, m.group(0), blame[:7], " / ".join(was)[:90], " / ".join(now)[:90]))
+                break
+
+for doc, number, cite, blame, was, now in flags:
+    print("%s:%d | %s | blame %s | WAS: %s | NOW: %s" % (doc, number, cite, blame, was, now))
+print("citations checked: %d, flagged: %d" % (total, len(flags)))
+== output
+docs/ACCEPTANCE_CHECKLIST.md:334 | docs/TZ_DECISIONS.md:20 | blame a459b9c | WAS: | G09 | DR-3 | Battery drain stays 100/450 per second (1% per 4.5 s), not the GDD's 1% per | NOW: | G09 | DR-3 | Battery drain stays 100/450 per second (1% per 4.5 s), not the GDD's 1% per
+docs/ACCEPTANCE_CHECKLIST.md:343 | docs/TZ_DECISIONS.md:28 | blame a459b9c | WAS: | E03 modal | BY-DESIGN-ABSENT | GDD §24.4 describes the watch(+100)/skip(-100) modal but  | NOW: | E03 modal | BY-DESIGN-ABSENT | GDD §24.4 describes the watch(+100)/skip(-100) modal but 
+docs/RUN_STATE.md:63 | scripts/ui/menu_background.gd:139 | blame 2e0ada0 | WAS: _theme = (_theme + 1) % 3 | NOW: var to_c := _containers[next_idx]
+docs/RUN_STATE.md:63 | scripts/ui/toast_manager.gd:27 | blame 2e0ada0 | WAS: const HOLD: float = 3.5 | NOW: const HOLD: float = 2.5
+docs/TZ_DECISIONS.md:16 | GDD.md:22 | blame a459b9c | WAS: | Языки | 13 языков через I18n: RU (основной), EN, TR, ZH, ZH_TW, DE, FR, ES, pt_BR, IT, a | NOW: | Языки | 13 языков через I18n: RU (основной), EN, TR, ZH, ZH_TW, DE, FR, ES, pt_BR, IT, a
+docs/UTILITIES_REPORT.md:37 | scripts/tools/_closeout_check_runner.gd:1183 | blame c5bd451 | WAS: stand_in.source_code = "extends Node | NOW: if control.is_visible_in_tree() and control.get_global_rect().intersects(log_button.get_gl
+docs/UTILITIES_REPORT.md:37 | scripts/ui/hud_3d.gd:1520 | blame c5bd451 | WAS: var wheel := mk.call("BtnWheel", "◎", func() -> void: if _quick_wheel: _quick_wheel.open() | NOW: var flash := mk.call("BtnFlash", "☀", func() -> void: isv.request_flashlight()) as Button
+citations checked: 140, flagged: 7
+# EXIT=0
