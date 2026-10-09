@@ -1,6 +1,6 @@
 # proof final_static_f4
-# utc 20261009T183226Z
-# head 6ca31b3 (uncommitted paths: 0)
+# utc 20261009T191957Z
+# head 30363f8 (uncommitted paths: 0)
 # env none
 # cmd bash tools/check.sh --static
 
@@ -125,7 +125,7 @@
   [32mOK[0m   af3_frame_check --demo (the tool's self-check)
   [32mOK[0m   af3_frame_check (every polish frame names the code tree and the capture time it came from)
   [32mOK[0m   lint_changed (gdparse, gdlint, ruff E9,F, shellcheck, actionlint on every file changed since e4bb4df)
-  [32mOK[0m   af5_check (every file:line citation added to docs/ since e4bb4df holds at HEAD)
+  [32mOK[0m   af5_check (file:line citations added to docs/ since e4bb4df resolve; a backticked claim before one occurs in the cited lines)
 
 [2mПроверки в движке пропущены (--static).[0m
 
