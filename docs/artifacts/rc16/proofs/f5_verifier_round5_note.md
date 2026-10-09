@@ -1,0 +1,14 @@
+# Note for the F5 verifier, round 5
+
+Read this together with `docs/artifacts/rc16/proofs/f5_verifier_brief.md`; where the two differ, this note wins. It replaces the notes of rounds 2 to 4, which you may skip.
+
+Round 1 (HEAD `32b8199`) returned `PASS=27 FAIL=17 UNVERIFIED=10`, round 2 (`650ec59`) `PASS=29 FAIL=5 UNVERIFIED=12`, round 3 (`556f8dc`) `PASS=30 FAIL=2 UNVERIFIED=11` and round 4 (`2dbfa25`) `PASS=38 FAIL=1 UNVERIFIED=11`; the four reports are kept verbatim next to this note (`f5_verifier_round1.md` to `f5_verifier_round4.md`). The orchestrator fixed each finding once (CORRECTION_LOG 129 to 133, 135 and 136); CORRECTION_LOG 134 to 136 record why this fifth round is run, and that it is the last. Do not trust those descriptions or the earlier verdicts: run the whole brief again at the HEAD you start at, and re-check the finding of round 4 (the V05 and V05-mobile rows of TZ_DECISIONS) at its original place with the original commands.
+
+Changes since round 4 (documents and proof logs only; `git diff --stat 2dbfa25 HEAD -- scripts scenes assets data addons android localization project.godot export_presets.cfg default_bus_layout.tres tools scripts/tools scenes/tools` must print nothing):
+- CORRECTION_LOG now runs 101 to 136 (use 136 where the brief says 128 or 117); the documents that said 101 to 116, 128, 132, 134 or 135 say 101 to 136.
+- New proofs: `f5_af5_overlap.out` (each citation of the AF5 scope whose sentence shares no number and no long word with the cited lines, 40 of 140 before the fix, script included) and the round 4 report.
+- The rc16 section of PROOFS.md, closures.json and the rc16 section of ORDER_PASS_REPORT were regenerated again; the claim of S8-AUDIO changed. The static proofs (final_static_f4, i18n_final, af5_final, lint_final, af3_final, af3_fresh_final, accept_count) were re-run at `6ca31b3`, after the last fix of the documents.
+- The skill log has the same 19 rows, 13 of them ok, as in the earlier rounds.
+- Citations: rounds 2 to 4 found stale citations that `tools/af5_check.py` cannot see (rule C3 tests a citation only when a backticked claim stands right before it). Read the citations without such a claim in the documents changed since `e4bb4df` against the code or the document they cite, test that the number or word of the sentence occurs in the cited line, and compare the cited lines at the commit of each sentence with HEAD; say how many you read.
+- The rules of the brief hold: read-only, no Godot, no `tools/check.sh`, nothing written into the repository (scratch only in the directory you are given), the verdict is your final message in the brief's format, at most 160 tool calls.
+- The 11 UNVERIFIED items of round 4 need the engine, a phone, the network or the session transcript; list one again only if you still cannot decide it, in one line.

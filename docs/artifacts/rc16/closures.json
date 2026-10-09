@@ -375,7 +375,7 @@
  },
  {
   "id": "S8-AUDIO",
-  "claim": "The windowed audio truth gate passes on unmodified HEAD with the final audio files (Music bus peak -11.7 dB) and prints the music context for the first time. It is one of 17 windowed readings, 8 of them over the ceiling (derived: `grep -a -h 'Music bus peak=.*ceiling' docs/artifacts/rc16/proofs/*.attach.* | wc -l` = 17 and the same lines `| grep -c CLIP-FAIL` = 8; U8, CORRECTION_LOG 106 and 114).",
+  "claim": "The windowed audio truth gate passes on unmodified HEAD at 924e3dd, before the F1 edits, with the final audio files (Music bus peak -11.7 dB) and prints the music context for the first time. It is one of 17 windowed readings, 8 of them over the ceiling (derived: `grep -a -h 'Music bus peak=.*ceiling' docs/artifacts/rc16/proofs/*.attach.* | wc -l` = 17 and the same lines `| grep -c CLIP-FAIL` = 8; U8, CORRECTION_LOG 106 and 114).",
   "cmd": "bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120",
   "proof": "s8_audio_truth_924e3dd",
   "quotes": [
@@ -526,7 +526,7 @@
    "accept=178/200"
   ],
   "frames": [],
-  "commit": "31750a6"
+  "commit": "6ca31b3"
  },
  {
   "id": "U0-UTILITIES",
@@ -571,7 +571,7 @@
    "12/12 locales PASS"
   ],
   "frames": [],
-  "commit": "31750a6"
+  "commit": "6ca31b3"
  },
  {
   "id": "FINAL-AF5",
@@ -582,7 +582,7 @@
    "citation(s)"
   ],
   "frames": [],
-  "commit": "31750a6"
+  "commit": "6ca31b3"
  },
  {
   "id": "FINAL-LINT",
@@ -593,7 +593,7 @@
    "0 finding(s)"
   ],
   "frames": [],
-  "commit": "31750a6"
+  "commit": "6ca31b3"
  },
  {
   "id": "FINAL-STATIC",
@@ -604,7 +604,7 @@
    "Проверок пройдено: 40"
   ],
   "frames": [],
-  "commit": "31750a6"
+  "commit": "6ca31b3"
  },
  {
   "id": "FINAL-AF3",
@@ -615,7 +615,7 @@
    "af3 frames=50 fail=0"
   ],
   "frames": [],
-  "commit": "31750a6"
+  "commit": "6ca31b3"
  },
  {
   "id": "FINAL-AF3-FRESH",
@@ -627,6 +627,6 @@
    "af3 frames=50 fail=0"
   ],
   "frames": [],
-  "commit": "31750a6"
+  "commit": "6ca31b3"
  }
 ]
