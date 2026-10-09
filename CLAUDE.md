@@ -27,6 +27,7 @@ python3 tools/scene_node_check.py
 python tools/lint_changed.py   # gdparse, gdlint (gdlintrc), ruff, shellcheck, actionlint on the files changed since the last tag; CI (.github/workflows/static.yml) runs it
 ```
 Evidence rules (rc16): every launch goes through `tools/qa_sim/proof_run --launch <id> -- <cmd>` (raw log + `docs/artifacts/rc16/launch_ledger.tsv`); every doc claim cites `file:line` and `python tools/af5_check.py` holds it; a frame is evidence only with its code hash and UTC time in the name (`tools/qa_sim/af3_frame_check.py`).
+Skills (rc16 stack in `.claude/skills/`, one row per call in the `docs/RUN_STATE.md` skill log): `ponytail-review` before a commit with a code fix, `godot-style` on every `.gd` edit, `backup-first` before regenerating documents, `memory-keeper` at the end of a pass. `arena` was quarantined and `omniroute` disabled by the owner's rescue directive of 2026-10-09: read that log before using either. The tag waits for a read-only verifier at FAIL=0 (`docs/RESUME_NOTE.md`).
 Godot: `C:\Users\Maxsim\Desktop\TLS_Build\godot_extracted\Godot_v4.7-stable_win64_console.exe --path .`
 Headless scene smoke: `tools/scene_smoke.gd`.
 
