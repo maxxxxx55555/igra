@@ -1,0 +1,87 @@
+# proof f5_skill_order
+# utc 20261009T102122Z
+# head 46b0606 (uncommitted paths: 0)
+# env none
+# cmd bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/f5_skill_order.sh
+== script skill_order.py
+"""Order of Skill tool calls and of commits in the session transcript (JSON lines), by line number.
+
+usage: skill_order.py <transcript.jsonl> <from UTC prefix> <commit hash>...
+A commit is placed at the first transcript line that holds its hash (the hash cannot exist before the commit does).
+"""
+import json
+import sys
+from pathlib import Path
+
+WATCH = {"ponytail", "ponytail-review", "godot-style", "backup-first", "memory-keeper", "arena", "graphify"}
+path, since, hashes = Path(sys.argv[1]), sys.argv[2], sys.argv[3:]
+
+events, first = [], {}
+with path.open(encoding="utf-8") as f:
+    for n, line in enumerate(f, 1):
+        for h in hashes:
+            if h not in first and h in line:
+                first[h] = n
+                stamp = line.split('"timestamp":"', 1)[1][:24] if '"timestamp":"' in line else ""
+                events.append((n, stamp, "COMMIT", h))
+        try:
+            o = json.loads(line)
+        except ValueError:
+            continue
+        stamp = o.get("timestamp", "")
+        content = (o.get("message") or {}).get("content")
+        if stamp < since or not isinstance(content, list):
+            continue
+        for c in content:
+            if isinstance(c, dict) and c.get("type") == "tool_use" and c.get("name") == "Skill":
+                skill = (c.get("input") or {}).get("skill", "")
+                if skill in WATCH or skill.startswith("omni-"):
+                    events.append((n, stamp, "SKILL", skill))
+
+for n, stamp, kind, text in sorted(events):
+    print(f"line {n:>6}  {stamp}  {kind:<6} {text}")
+print(f"commits not found in the transcript: {[h for h in hashes if h not in first]}")
+== transcript order (transcript: C:/Users/Maxsim/.claude/projects/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816.jsonl)
+line   5418  2026-10-08T07:02:24.289Z  SKILL  ponytail
+line   5479  2026-10-08T07:03:34.635Z  SKILL  arena
+line   5630  2026-10-08T07:18:45.944Z  COMMIT 9255216
+line   5650  2026-10-08T07:42:22.489Z  SKILL  ponytail
+line   5840  2026-10-08T08:16:06.726Z  SKILL  graphify
+line   5844  2026-10-08T08:16:07.205Z  SKILL  omni-auth
+line   5848  2026-10-08T08:16:07.342Z  SKILL  godot-style
+line   5917  2026-10-08T08:21:42.529Z  COMMIT b717092
+line   6055  2026-10-08T08:27:52.920Z  SKILL  godot-style
+line   6120  2026-10-08T08:30:09.985Z  COMMIT b7aee72
+line   6197  2026-10-08T08:34:00.958Z  SKILL  ponytail-review
+line   6286  2026-10-08T08:38:33.274Z  COMMIT b4c1db0
+line   6369  2026-10-08T08:46:23.348Z  COMMIT 3766b13
+line   6374  2026-10-08T08:47:46.016Z  COMMIT a41d4b3
+line   6477  2026-10-08T08:56:52.935Z  COMMIT 3840ac9
+line   6495  2026-10-08T08:58:35.645Z  SKILL  ponytail-review
+line   6564  2026-10-08T09:02:35.102Z  COMMIT 7bc23c6
+line   6664  2026-10-08T09:08:45.737Z  SKILL  ponytail-review
+line   6692  2026-10-08T09:15:20.011Z  COMMIT 74f710b
+line   6854  2026-10-08T09:28:51.444Z  COMMIT fa6afc0
+line   6951  2026-10-08T09:32:44.863Z  COMMIT 40966b1
+line   6954  2026-10-08T09:32:55.457Z  SKILL  backup-first
+line   7076  2026-10-08T09:43:09.560Z  COMMIT f7efa35
+line   7079  2026-10-08T09:43:50.236Z  SKILL  godot-style
+line   7094  2026-10-08T09:44:00.949Z  SKILL  omni-combos-routing
+line   7119  2026-10-08T09:45:11.548Z  COMMIT 46b0606
+line   7510  2026-10-09T10:19:32.473Z  SKILL  ponytail-review
+commits not found in the transcript: []
+== commits after 6f18ae0, oldest first, with the .gd .py .sh files each changed
+9255216 2026-10-08T10:18:40+03:00 chore(skills): install arena | code: 
+b717092 2026-10-08T11:21:32+03:00 chore(skills): bootstrap omniroute graphify godot-style backup-first m | code: 
+b7aee72 2026-10-08T11:30:01+03:00 Add the F1 closeout checks for the skill-tree Close button and the sho | code: scripts/tools/_closeout_check_runner.gd scripts/tools/rc16/finish_checks.gd 
+b4c1db0 2026-10-08T11:38:02+03:00 Translate the skill tree Close button and give each shop card the heig | code: scripts/tools/rc16/finish_checks.gd scripts/ui/screens.gd scripts/ui/skill_tree_ui.gd 
+3766b13 2026-10-08T11:45:33+03:00 Scope AF3 F4 to the reviewed change and drop the two frames of the fix | code: tools/qa_sim/af3_frame_check.py 
+a41d4b3 2026-10-08T11:46:32+03:00 Log the AF3 F4 measurement after the scope change | code: 
+3840ac9 2026-10-08T11:56:24+03:00 Let the shop card follow its Buy button and report where SHOP1 fails | code: scripts/tools/_closeout_check_runner.gd scripts/tools/rc16/finish_checks.gd scripts/ui/screens.gd 
+7bc23c6 2026-10-08T12:02:08+03:00 Lay the shop card out left to right so Arabic keeps its Buy button ins | code: scripts/tools/rc16/finish_checks.gd scripts/ui/screens.gd 
+74f710b 2026-10-08T12:13:21+03:00 Build the shop card from containers and add the F3 audio A/B wrapper | code: scripts/tools/rc16/finish_checks.gd scripts/ui/screens.gd tools/qa_sim/audio_ab 
+fa6afc0 2026-10-08T12:28:40+03:00 Close F1 and F3: frames of the fixed screens, the audio A/B verdict, t | code: tools/qa_sim/af3_frame_check.py 
+40966b1 2026-10-08T12:32:39+03:00 Trace the seed-2 extra death (F2) and log the skipped graphify sweep | code: 
+f7efa35 2026-10-08T12:43:04+03:00 Regenerate PROOFS and the rc16 report section after F1 to F3, refresh  | code: 
+46b0606 2026-10-08T12:45:06+03:00 Log the skill enforcement gaps and the omniroute routing decision befo | code: 
+# EXIT=0

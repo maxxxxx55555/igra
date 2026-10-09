@@ -1,0 +1,26 @@
+# proof f5_arena_state
+# utc 20261009T102130Z
+# head 46b0606 (uncommitted paths: 1)
+# env none
+# cmd bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/f5_arena_state.sh
+== bracket check spawn
+spawn: 4 of 4 job(s) done
+== bracket check attack
+attack: 2 of 4 job(s) done
+  missing r1-m01.a003.attack         C:\Users\Maxsim\AppData
+  missing r1-m02.a004.attack         C:\Users\Maxsim\AppData
+== bracket next
+round 1 of 2, 4 alive
+NEXT: attack. 2 of 4 job(s) to run.
+  1. python3 "C:\Users\Maxsim\Desktop\TLS_Build\THE_LAST_STREETLIGHT\.claude\skills\arena\bracket.py" prompts attack
+== files and words of the run folder (r0 = the four candidate briefs, r1 = attacks)
+   134   4189 r0/a001.md
+    89   3730 r0/a002.md
+   134   2962 r0/a003.md
+   115   3157 r0/a004.md
+    27   1339 r1/r1-m01.a002.attack.md
+    27   1396 r1/r1-m02.a001.attack.md
+   526  16773 total
+== winner file
+ls: cannot access 'r2': No such file or directory
+# EXIT=0

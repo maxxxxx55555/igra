@@ -2,8 +2,8 @@
 
 State: `main` is the rc16 sign-off (the tag `v8.0.0-rc16` goes on the commit that records the last verifier round). Nothing is in flight. Three finished agent worktrees remain under
 `.claude/worktrees/` (`agent-a2d98b0eb4e6daa56`, `agent-a9d93688011f12bdb`, `agent-ac5abdf50f70def2b`); their branches are merged, `git worktree remove` clears them when convenient.
-Numbers and proofs: `docs/ORDER_PASS_REPORT.md` (rc16 final section), `docs/PROOFS.md` (rc16 section, one row per closure with its raw log), `docs/ACCEPTANCE_CHECKLIST.md` (179 of 200 proven, gap table),
-`docs/ARENA_CLOSURE.md`, `docs/CORRECTION_LOG.md` (rows 101 to 116 are this pass), `docs/RUN_STATE.md` (Session 17: every launch with its question and answer), `docs/UNVERIFIABLE_HERE.md` (what only a phone or an ear can say).
+Numbers and proofs: `docs/ORDER_PASS_REPORT.md` (rc16 final section), `docs/PROOFS.md` (rc16 section, one row per closure with its raw log), `docs/ACCEPTANCE_CHECKLIST.md` (178 of 200 proven, gap table),
+`docs/ARENA_CLOSURE.md`, `docs/CORRECTION_LOG.md` (rows 101 to 128 are this pass), `docs/RUN_STATE.md` (Session 17: every launch with its question and answer), `docs/UNVERIFIABLE_HERE.md` (what only a phone or an ear can say).
 
 ## What rc16 did
 Two sessions. Session 16 built wave 1 with agents in their own worktrees (perf, content, uifx, sec, audio) and the evidence harness; Session 17 merged and finished it, ran wave 2 (beauty, i18n, content),
@@ -11,7 +11,7 @@ the utilities pass and the verification; the RC16 FINISH directive (2026-10-08) 
 Streaming and pooling (nodes 1784 to 1061, cold load 354 to 317 ms), frame-independent timing (15 of 15 quantities agree at 30, 60 and 120 FPS), tier-gated UI motion and post-fx, pinch zoom and
 quick-slot drag, one New Game+ level per run (signed run name and ledger), distant 3D sounds low-passed with a reverb that follows the walls, six beauty changes kept (grain, damage vignette, LUT warm
 highlights, blur copy), three GDD deviations found by reading (toast time, menu day palette, attack button under 5 stamina), gdparse/gdlint/ruff/shellcheck/actionlint on changed files with a pre-commit hook and a CI workflow.
-Every closure has a check that fails on the code before it and passes at HEAD (`tools/qa_sim/af2_both_ways.py`, 36 ids).
+The 36 ids of `docs/artifacts/rc16/af2_both_ways.txt` (`tools/qa_sim/af2_both_ways.py`, run at `8cb22ba`) each have a check that fails on the code before the fix and passes at HEAD; the fixes outside that run (the F1 Close button and shop, the bot counter, `e32fa77`, `7c49500`, the timing check) have their own before and after logs, one row each in `docs/PROOFS.md`; a closure that is a record has no pair.
 
 ## Next (owner first)
 1. Release: `build/tls.aab` is the rc15 bundle (183,257,097 bytes, built from `8ad0b93`). Rebuild it from the `v8.0.0-rc16` tag with the one command of `docs/RELEASE_RUNBOOK.md`, run `jarsigner -verify`, install it on a phone

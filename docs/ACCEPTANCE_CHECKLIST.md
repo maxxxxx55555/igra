@@ -183,10 +183,10 @@ Codex tab, **S_hud_*** the HUD buttons, **S_workbench**, **S_credits**.
 
 | ID | Promise | GDD | Proof | Result |
 |---|---|---|---|---|
-| PF1 | Draw calls < 200 (D1) / < 350 (D11) | 15 | windowed perf_check_scene on the running game with the quick bar, two runs: D1 167 / 166, D11 166 / 168 (the same tree with the pre-`a57f9dd` moon shadow: D1 214; the 169 / 168 of `perf_rc15.txt` were a paused tree, CORRECTION_LOG 93); `perf_rc15_final.txt` | PASS(perf) |
-| PF2 | Particles < 500, RAM < 800 MB, VRAM < 400 MB | 15 | windowed perf_check_scene, two runs of the running game with the quick bar: 140 particles, 100.5 / 100.6 MiB static, 153.4 MiB video, 127.9 MiB textures (`perf_rc15_final.txt`) | PASS(perf) |
-| PF3 | 30-60 FPS | 15 | windowed p95 frame time on the running game (AMD iGPU), four runs: D1 20.37 to 32.02 ms (31 to 49 fps), D11 20.37 to 26.67 ms (37 to 49 fps); the 60 and 55 fps of rc15 were a paused scene (CORRECTION_LOG 93); `perf_rc15_final.txt` | PASS(perf, 31 fps in the worst D1 run: a 4% margin over the floor on this iGPU; a phone is T01) |
-| PF4 | Polygons < 50K per district | 15 | the whole frame measures 44 205 / 44 141 primitives at D1 and 45 301 / 45 429 at D11 with the quick bar (39.7K to 50.2K in the earlier runs; 76 551 on the paused tree, 106 829 with the pre-`a57f9dd` moon shadow, 1.34 M before the prop mesh cut; `perf_rc15_final.txt`) | PASS(perf; every run of the final tree is under 50K) |
+| PF1 | Draw calls < 200 (D1) / < 350 (D11) | 15 | windowed perf_check_scene on the running game with the quick bar, two runs: D1 167 / 166, D11 166 / 168 (the same tree with the pre-`a57f9dd` moon shadow: D1 214; the 169 / 168 of `perf_rc15.txt` were a paused tree, CORRECTION_LOG 93); `perf_rc15_final.txt`; rc16 probe (`s6_reimport_probe_after_c3e79e5.attach.rc16_probe_after.log`): D1 160 / 161, D11 163 | PASS(perf) |
+| PF2 | Particles < 500, RAM < 800 MB, VRAM < 400 MB | 15 | windowed perf_check_scene, two runs of the running game with the quick bar: 140 particles, 100.5 / 100.6 MiB static, 153.4 MiB video, 127.9 MiB textures (`perf_rc15_final.txt`); rc16 probe (`s6_reimport_probe_after_c3e79e5.attach.rc16_probe_after.log`): 96.9 to 101.8 MiB static, 97.1 to 97.2 MiB video, particles not read | PASS(perf) |
+| PF3 | 30-60 FPS | 15 | windowed p95 frame time on the running game (AMD iGPU), four runs: D1 20.37 to 32.02 ms (31 to 49 fps), D11 20.37 to 26.67 ms (37 to 49 fps); the 60 and 55 fps of rc15 were a paused scene (CORRECTION_LOG 93); `perf_rc15_final.txt`; rc16 probe (a different harness, `s6_reimport_probe_after_c3e79e5.attach.rc16_probe_after.log`): D1 p95 33.70 and 50.00 ms, D11 51.01 ms, all over the 33.3 ms of the floor, and the PF3 method was not run on the rc16 tree | OWNER (withdrawn at rc16, CORRECTION_LOG 126: a phone run, U1; the rc15 reading was a 4% margin over the floor on this iGPU) |
+| PF4 | Polygons < 50K per district | 15 | the whole frame measures 44 205 / 44 141 primitives at D1 and 45 301 / 45 429 at D11 with the quick bar (39.7K to 50.2K in the earlier runs; 76 551 on the paused tree, 106 829 with the pre-`a57f9dd` moon shadow, 1.34 M before the prop mesh cut; `perf_rc15_final.txt`); rc16 probe (`s6_reimport_probe_after_c3e79e5.attach.rc16_probe_after.log`): 43 263 and 43 265 at D1, 45 197 at D11 | PASS(perf; every run of the final tree is under 50K) |
 
 ## 17-24. Items, weapons, skills, achievements, album, daily, ads, toasts, stats, exit
 
@@ -323,7 +323,7 @@ Rows the first play-through added: each was a defect a frame or a measured numbe
 
 ## rc16 gap table: the 24 rows that were not proven at rc15
 
-Result after rc16: 179 of 200 rows are proven (176 at rc15, plus CT7, QS2 and I9.7). The 21 rows below stay open for the reason in the last column. The two-grep proof of each (the GDD text, then the code) was read by the wave-2 content agent; the citations were re-read at HEAD and are checked by `tools/af5_check.py`.
+Result after rc16: 178 of 200 rows are proven (176 at rc15, plus CT7, QS2 and I9.7, minus PF3 withdrawn at rc16, CORRECTION_LOG 126). The 22 rows below stay open for the reason in the last column. The two-grep proof of each (the GDD text, then the code) was read by the wave-2 content agent; the citations were re-read at HEAD and are checked by `tools/af5_check.py`.
 
 | Row | Result | What the code has | What is open, and who decides |
 |---|---|---|---|
@@ -348,5 +348,6 @@ Result after rc16: 179 of 200 rows are proven (176 at rc15, plus CT7, QS2 and I9
 | M5.5 | DECIDED | the same slot API as SV1 | owner decision G22, as SV1 |
 | M5.9 | DECIDED | the notice line and the stamped message log | `docs/TZ_DECISIONS.md:66` |
 | I9.5 | DECIDED | `equipment` (`scripts/inventory/inventory_manager.gd:9`) holds the five slots, saved and shown; no item sets one | GDD 17 has no head, body, legs or holster item (`docs/TZ_DECISIONS.md:64`) |
+| PF3 | OWNER | `perf_check_scene` on the rc15 tree (`perf_rc15_final.txt`: p95 20.37 to 32.02 ms at D1); the rc16 probe reads D1 33.70 and 50.00 ms and D11 51.01 ms | the PF3 reading on the rc16 tree is the owner's phone run (`docs/UNVERIFIABLE_HERE.md` U1); this machine's p95 is noisy (CORRECTION_LOG 126) |
 
 Defects the wave-2 content agent found while reading, not among the 24 rows: D1 `apply_stun` (`scripts/player/player_3d.gd:1263`) has no caller, so a hit in the windup does not reset the combo or stun for 0.3 s as GDD 5.1 says (the fix changes the boss fight and needs the 3-seed bot; left, owner decision); D5 the inventory sort mode "recent" is a stub (`scripts/inventory/inventory_manager.gd:205`).
