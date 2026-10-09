@@ -13,13 +13,16 @@
  },
  {
   "id": "S0-SKILL-SCAN",
-  "claim": "Every third-party skill file (45 OmniRoute entries and graphify) was scanned line by line before it was copied: the network targets in the instructions are the user's own gateway on localhost:20128 and documentation links, and the only deletes are inside `graphify-out/`.",
+  "claim": "Every third-party skill file (OmniRoute and graphify) was scanned line by line before it was copied. The log lists each host an instruction names (the gateway localhost:20128, raw.githubusercontent.com, github.com, and once each your-server.com, api.elevenlabs.io and anthropic.com), each `send` (curl examples against that gateway, among them purge-* and batch-delete endpoints) and each `delete`: 5 of the 6 `delete` lines name `graphify-out/` (derived: `grep -a '^   delete' docs/artifacts/rc16/proofs/s0_skill_scan.out | grep -c graphify-out` = 5) and the 6th, `stale.unlink()`, removes the files of `Path('graphify-out').glob(...)` two lines above it in the graphify skill.",
   "cmd": "python -I /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/skill_scan.py /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/skills_src/OmniRoute/skills /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/skills_src/graphify/graphify",
   "proof": "s0_skill_scan",
   "quotes": [
    "omni-auth/SKILL.md: ",
-   "skill.md: ",
-   "   hosts: localhost:20128"
+   "   hosts: localhost:20128, raw.githubusercontent.com, your-server.com",
+   "api.elevenlabs.io",
+   "anthropic.com",
+   "purge-request-history",
+   "   delete L247"
   ],
   "frames": [],
   "commit": "9255216"
@@ -73,14 +76,17 @@
  },
  {
   "id": "S4-MN4",
-  "claim": "Dropping DistrictSceneFactory from the MusicManager autoload removed the loot failure and its 172 engine errors; one check (AUD3) was left.",
+  "claim": "Dropping DistrictSceneFactory from the MusicManager autoload (`e32fa77`) fixed the loot check: MN4 passes with 173 of 600 corpses dropping loot (0 of 600 in S3S4-FOUND), one check fails (AUD3) and the run has 366 checks. The 172 `Failed to instantiate scene state` engine errors of the earlier run are not in this log (derived: `grep -a -c 'Failed to instantiate scene state'` is 172 in `s3s4_gates_8bb881b.attach.closeout_check.log` and 0 in `s4_closeout_truth_ab_e32fa77.attach.closeout_check.log`).",
   "cmd": "bash -c bash tools/qa_sim/closeout_check 420; b=$?; bash tools/qa_sim/guarded_headless res://scenes/tools/audio_bus_check_scene.tscn 120; c=$?; bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 300; d=$?; cp .qa_logs/audio_truth_gate_scene.log .qa_logs/audio_truth_head.log; F=\"scripts/systems/audio_manager.gd scripts/systems/music_manager.gd scripts/systems/footstep_system.gd default_bus_layout.tres\"; git restore --source=b69ed90 --worktree -- $F; bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 300; e=$?; cp .qa_logs/audio_truth_gate_scene.log .qa_logs/audio_truth_audio_at_b69ed90.log; git restore --worktree -- $F; echo \"closeout=$b audio_bus=$c truth_head=$d truth_audio_files_b69ed90=$e\"; [ $b -eq 0 ] && [ $c -eq 0 ] && [ $d -eq 0 ]",
   "proof": "s4_closeout_truth_ab_e32fa77",
   "quotes": [
-   "[closeout] DONE checks=366 fails=1"
+   "MN4 a corpse drops loot",
+   "FAIL AUD3",
+   "DONE checks=366 fails=1"
   ],
   "frames": [],
-  "commit": "e32fa77"
+  "commit": "e32fa77",
+  "attach": "closeout_check.log"
  },
  {
   "id": "S4-AUD3",
@@ -95,7 +101,7 @@
  },
  {
   "id": "S4-U8",
-  "claim": "Launch 6: the Music bus peak of the windowed audio gate on unmodified HEAD (-11.6 dB) and with a reverb bus disabled (-9.3, -10.8, -11.8) is under the ceiling; the bus layout alone was not the cause (CORRECTION_LOG 102); the run counts and the cause of the readings over the ceiling are corrected in CORRECTION_LOG 106 and 114 (the same code reads both).",
+  "claim": "Launch 6: on unmodified HEAD the windowed audio gate reads a Music bus peak of -11.6 dB, under the ceiling; the three variants with a reverb bus disabled have their own logs next to this proof and RUN_STATE L6 lists their peaks; the bus layout alone was not the cause (CORRECTION_LOG 102); the run counts and the cause of the readings over the ceiling are corrected in CORRECTION_LOG 106 and 114 (the same code reads both).",
   "cmd": "bash docs/artifacts/rc16/audio_truth_bisect2.sh",
   "proof": "s4_truth_bisect2_2e0ada0",
   "quotes": [
@@ -366,11 +372,12 @@
  },
  {
   "id": "S8-AUDIO",
-  "claim": "The windowed audio truth gate passes on unmodified HEAD with the final audio files (-11.7 dB) and prints the music context for the first time; it is one of 17 windowed readings, 8 of them over the ceiling (U8, CORRECTION_LOG 106 and 114).",
+  "claim": "The windowed audio truth gate passes on unmodified HEAD with the final audio files (Music bus peak -11.7 dB) and prints the music context for the first time. It is one of 17 windowed readings, 8 of them over the ceiling (derived: `grep -a -h 'Music bus peak=.*ceiling' docs/artifacts/rc16/proofs/*.attach.* | wc -l` = 17 and the same lines `| grep -c CLIP-FAIL` = 8; U8, CORRECTION_LOG 106 and 114).",
   "cmd": "bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120",
   "proof": "s8_audio_truth_924e3dd",
   "quotes": [
    "music context before",
+   "Music bus peak=",
    "[audio-truth] PASS overall"
   ],
   "frames": [],
@@ -516,7 +523,7 @@
    "accept=178/200"
   ],
   "frames": [],
-  "commit": "d98f1de"
+  "commit": "e8b5ac2"
  },
  {
   "id": "U0-UTILITIES",
@@ -561,7 +568,7 @@
    "12/12 locales PASS"
   ],
   "frames": [],
-  "commit": "d98f1de"
+  "commit": "e8b5ac2"
  },
  {
   "id": "FINAL-AF5",
@@ -572,7 +579,7 @@
    "citation(s)"
   ],
   "frames": [],
-  "commit": "d98f1de"
+  "commit": "e8b5ac2"
  },
  {
   "id": "FINAL-LINT",
@@ -583,7 +590,7 @@
    "0 finding(s)"
   ],
   "frames": [],
-  "commit": "d98f1de"
+  "commit": "e8b5ac2"
  },
  {
   "id": "FINAL-STATIC",
@@ -594,7 +601,7 @@
    "Проверок пройдено: 40"
   ],
   "frames": [],
-  "commit": "d98f1de"
+  "commit": "e8b5ac2"
  },
  {
   "id": "FINAL-AF3",
@@ -605,7 +612,7 @@
    "af3 frames=50 fail=0"
   ],
   "frames": [],
-  "commit": "d98f1de"
+  "commit": "e8b5ac2"
  },
  {
   "id": "FINAL-AF3-FRESH",
@@ -617,6 +624,6 @@
    "af3 frames=50 fail=0"
   ],
   "frames": [],
-  "commit": "d98f1de"
+  "commit": "e8b5ac2"
  }
 ]
