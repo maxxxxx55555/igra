@@ -1,0 +1,40 @@
+# proof f5_shellcheck_start
+# utc 20261009T200531Z
+# head b845507 (uncommitted paths: 1)
+# env none
+# cmd bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/f5_shellcheck_start.sh
+== script sc_rev.sh
+#!/usr/bin/env bash
+# Round 6 / CORRECTION_LOG 138: shellcheck -S warning over every shell script of a revision, with the file filter and the options of tools/utilities_report.sh.
+# usage: sc_rev.sh <rev>. The files are read with git show, nothing is written.
+cd C:/Users/Maxsim/Desktop/TLS_Build/THE_LAST_STREETLIGHT || exit 2
+rev="${1:?rev}"
+SC="C:/Users/Maxsim/AppData/Roaming/Python/Python311/Scripts/shellcheck.exe"
+[[ -x "$SC" ]] || { echo "shellcheck not found at $SC"; exit 3; }
+files=0
+hits=0
+while IFS= read -r f; do
+	case "$f" in *.sh | tools/hooks/* | tools/qa_sim/*) ;; *) continue ;; esac
+	[[ "$f" == *.* && "$f" != *.sh ]] && continue
+	files=$((files + 1))
+	out="$(git show "$rev:$f" | tr -d '\r' | "$SC" -s bash -f gcc -S warning - 2>&1 | sed "s#^-:#$f:#")"
+	[[ -n "$out" ]] && { echo "$out"; hits=$((hits + $(echo "$out" | wc -l))); }
+done < <(git ls-tree -r --name-only "$rev")
+echo "revision $rev: shellcheck files=$files findings=$hits"
+== output
+tools/check.sh:12:1: warning: Use 'cd ... || exit' or 'cd ... || return' in case cd fails. [SC2164]
+tools/qa_sim/_resolve_godot.sh:21:1: warning: Use 'cd ... || exit' or 'cd ... || return' in case cd fails. [SC2164]
+tools/qa_sim/autoplay_bot:11:1: warning: Use 'cd ... || exit' or 'cd ... || return' in case cd fails. [SC2164]
+tools/qa_sim/autoplay_bot:37:2: warning: districts appears unused. Verify use (or export if used externally). [SC2034]
+tools/qa_sim/closeout_check:8:1: warning: Use 'cd ... || exit' or 'cd ... || return' in case cd fails. [SC2164]
+tools/qa_sim/guarded_headless:7:1: warning: Use 'cd ... || exit' or 'cd ... || return' in case cd fails. [SC2164]
+tools/qa_sim/guarded_windowed:11:1: warning: Use 'cd ... || exit' or 'cd ... || return' in case cd fails. [SC2164]
+tools/qa_sim/headless_suite:15:1: warning: Use 'cd ... || exit' or 'cd ... || return' in case cd fails. [SC2164]
+tools/qa_sim/playthrough:13:1: warning: Use 'cd ... || exit' or 'cd ... || return' in case cd fails. [SC2164]
+tools/qa_sim/proof_run:9:1: warning: Use 'cd ... || exit' or 'cd ... || return' in case cd fails. [SC2164]
+tools/qa_sim/rc16_probe:8:1: warning: Use 'cd ... || exit' or 'cd ... || return' in case cd fails. [SC2164]
+tools/qa_sim/static_syntax_check.sh:10:1: warning: Use 'cd ... || exit' or 'cd ... || return' in case cd fails. [SC2164]
+tools/qa_sim/timing_equiv:7:1: warning: Use 'cd ... || exit' or 'cd ... || return' in case cd fails. [SC2164]
+tools/qa_sim/tz_verify:8:1: warning: Use 'cd ... || exit' or 'cd ... || return' in case cd fails. [SC2164]
+revision c5bd451^: shellcheck files=18 findings=14
+# EXIT=0

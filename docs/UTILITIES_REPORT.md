@@ -14,7 +14,7 @@ Evidence: `tools/utilities_report.sh` run through `tools/qa_sim/proof_run utilit
 | gdtoolkit 4.5.0, `gdformat` | rejected | rewrites layout of whole files; the directive forbids a mass reformat |
 | ruff 0.16.9 | adopted for changed files (E9,F), already a gate on `tools/` and `scripts/` since Session 16 | E9,F: 0 findings; default rule set: 227 findings (style and modernisation), not a gate |
 | mypy 2.4.0 | rejected | 16 errors in 6 of 39 Python files (index 8, operator 2, misc 2, assignment 2, union-attr 1, func-returns-value 1); the code behind each location was read: a PIL call typed as a union, a name reused for a `str` and an `int`, a dict of mixed values, a guarded `Match`; no defect found |
-| shellcheck 0.11.0 (`shellcheck-py` 0.11.0.1) | adopted for changed files at `-S warning` | 18 shell scripts: 16 findings at the start (15 SC2164 `cd` without `|| exit`, 1 SC2034); 5 fixed in the scripts changed in this pass, 9 remain in unchanged wrappers (exception list below) |
+| shellcheck 0.11.0 (`shellcheck-py` 0.11.0.1) | adopted for changed files at `-S warning` | 18 shell scripts: 14 findings at the start (13 SC2164 `cd` without `|| exit`, 1 SC2034; `docs/artifacts/rc16/proofs/f5_shellcheck_start.out`, the tree before `c5bd451`); 5 fixed in the scripts changed in this pass, 9 remain in unchanged wrappers (exception list below) |
 | actionlint 1.7.12 (`actionlint-py` 1.7.12.25) | adopted for workflows | clean on `.github/workflows/static.yml` |
 | pre-commit 4.6.2 | adopted | `pre-commit validate-config .pre-commit-config.yaml` exit 0; hook `lint-changed` added next to the card-art hook |
 | CI workflow | adopted | `.github/workflows/static.yml`, tool versions pinned |
@@ -35,7 +35,7 @@ Evidence: `tools/utilities_report.sh` run through `tools/qa_sim/proof_run utilit
 `python tools/lint_changed.py` at the commit that adds it: 41 gd, 15 py, 7 sh, 1 workflow, 0 findings (raw: `docs/artifacts/rc16/proofs/utilities_u0.out`).
 Exceptions, all listed in the raw output:
 1. gdparse cannot read 4 files (`scripts/tools/_closeout_check_runner.gd:1191`, `scripts/ui/character_screen.gd:281`, `scripts/ui/hud_3d.gd:1527`, `scripts/ui/puzzle_cables.gd:204`): a one-line `if` inside a lambda body, and a string literal with raw newlines. The engine compile gate is the parse proof for them.
-2. shellcheck, 9 findings in wrappers not changed in this pass: SC2164 in `tools/qa_sim/_resolve_godot.sh:21`, `autoplay_bot:11`, `closeout_check:8`, `guarded_windowed:11`, `headless_suite:15`, `playthrough:13`, `static_syntax_check.sh:10`, `tz_verify:8`, and SC2034 in `tools/qa_sim/autoplay_bot:37`. The lint gates a file only when it changes.
+2. shellcheck, 9 findings at the evidence head `2e0ada0` in wrappers not changed in U0 (the two in `autoplay_bot` are gone since `21c2046` changed that wrapper): SC2164 in `tools/qa_sim/_resolve_godot.sh:21`, `autoplay_bot:11`, `closeout_check:8`, `guarded_windowed:11`, `headless_suite:15`, `playthrough:13`, `static_syntax_check.sh:10`, `tz_verify:8`, and SC2034 in `tools/qa_sim/autoplay_bot:37`. The lint gates a file only when it changes.
 3. The CI run on `599cd89` (run 37669887172, `https://github.com/maxxxxx55555/igra/actions/runs/37669887172`) completed with conclusion success: 8 steps (checkout, python, pip install, lint demo, lint of the diff, flow_check, scene_node_check, af5_check) all success, 3 min 55 s; the job JSON read from the public API is `docs/artifacts/rc16/proofs/ci_static_599cd89.json`. The workflow runs on pushes to main and pull requests only.
 
 ## Installed on the dev machine

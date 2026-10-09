@@ -1,0 +1,25 @@
+# proof f5_message_length
+# utc 20261009T200530Z
+# head b845507 (uncommitted paths: 0)
+# env none
+# cmd bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/f5_message_length.sh
+== script msg_len.py
+"""Length of the af5_check message of tools/check.sh before and after commit 30363f8, and of the shortened variant the ponytail-review named."""
+import re
+import subprocess
+
+
+def message(rev):
+    text = subprocess.run(["git", "show", "%s:tools/check.sh" % rev], capture_output=True, text=True, encoding="utf-8").stdout
+    m = re.search(r'ok "(af5_check \([^"]*\))"', text)
+    return m.group(1)
+
+
+short = "af5_check (cited lines exist, and match a backticked claim when one is given)"
+for name, s in (("before 30363f8", message("30363f8^")), ("at 30363f8", message("30363f8")), ("shortened variant", short)):
+    print("%-18s %3d characters | %s" % (name, len(s), s))
+== output
+before 30363f8      79 characters | af5_check (every file:line citation added to docs/ since e4bb4df holds at HEAD)
+at 30363f8         125 characters | af5_check (file:line citations added to docs/ since e4bb4df resolve; a backticked claim before one occurs in the cited lines)
+shortened variant   77 characters | af5_check (cited lines exist, and match a backticked claim when one is given)
+# EXIT=0
