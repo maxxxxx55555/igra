@@ -21,7 +21,7 @@ Evidence: `tools/sec_reread.sh` through `tools/qa_sim/proof_run sec_reread` on `
 |---|---|---|---|
 | 1 | win, load the pre-boss save, win again to bank a second New Game+ level | closeout `E1A` and `E1B` (`docs/artifacts/rc16/proofs/s3s4_gates_8bb881b.attach.closeout_check.log`): the second activation is refused, the level stays, one notice | closed |
 | 2 | write a New Game+ file with 500 run names, 5000-character names, a dictionary and numbers | closeout `E1C`: it loads as at most 64 well-formed names | closed |
-| 3 | write a `quick_slots` setting that is not six known items | closeout `QS2`, fourth check: the defaults come back | closed |
+| 3 | write a `quick_slots` setting that is not six known items | closeout `QS2`, fifth check: the defaults come back | closed |
 | 4 | edit the language file to a path | `scripts/i18n/localization_manager.gd:49` takes it only when it is in `SUPPORTED` | closed (read) |
 | 5 | call an inventory request from a peer | no peer can exist: `scripts/ui/lobby_menu.gd:41` and `:58` have no opener (`docs/artifacts/rc16/proofs/sec_reread.out`, section 4) | F1, dormant |
 

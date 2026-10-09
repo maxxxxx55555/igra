@@ -1,0 +1,82 @@
+# proof f5_ref_sweep
+# utc 20261009T191627Z
+# head 0ab9503 (uncommitted paths: 0)
+# env none
+# cmd bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/f5_ref_sweep.sh
+== script ref_sweep.py
+"""Stale references in the documents changed since e4bb4df: backticked commit hashes that are no commit, backticked repository paths that do not exist,
+backticked proof ids that have no file in docs/artifacts/rc16/proofs. Only the lines added since e4bb4df are read.
+usage: ref_sweep.py <repo-root>"""
+import pathlib
+import re
+import subprocess
+import sys
+
+root = pathlib.Path(sys.argv[1])
+
+
+def git(*args):
+    r = subprocess.run(["git", *args], cwd=root, capture_output=True, text=True, encoding="utf-8", errors="replace")
+    return r.stdout
+
+
+docs = [d for d in git("diff", "--name-only", "e4bb4df", "HEAD", "--", "docs", "opencode-memory.md", ".claude/skills/THIRD_PARTY.md").split("\n")
+        if d.endswith(".md") and not d.startswith(("docs/artifacts/", "docs/stills/"))]
+proofs = {p.name.split(".")[0] for p in (root / "docs" / "artifacts" / "rc16" / "proofs").iterdir()}
+HASH = re.compile(r"`([0-9a-f]{7,12})`")
+PATH = re.compile(r"`((?:res://)?[A-Za-z0-9_.\-]+(?:/[A-Za-z0-9_.\-{},*<>]+)+\.[A-Za-z0-9]{1,8})(?::\d+(?:-\d+)?(?:,\d+(?:-\d+)?)*)?`")
+PROOF = re.compile(r"`((?:s\d|f\d|l\d|af|accept|final|i18n|lint|bot|timing|probe|frame|perf|sec|utilities|gapowner|ci_|s0_|s1_|s2_|s3|s4|s6|s7|s8|s9)[a-z0-9_]*)`")
+
+seen = set()
+bad = []
+for doc in docs:
+    patch = git("diff", "-U0", "e4bb4df", "HEAD", "--", doc)
+    for line in patch.splitlines():
+        if not line.startswith("+") or line.startswith("+++"):
+            continue
+        text = line[1:]
+        for h in HASH.findall(text):
+            if ("hash", h) in seen:
+                continue
+            seen.add(("hash", h))
+            if subprocess.run(["git", "cat-file", "-e", h + "^{commit}"], cwd=root, capture_output=True).returncode != 0 and \
+               subprocess.run(["git", "cat-file", "-e", h], cwd=root, capture_output=True).returncode != 0:
+                bad.append((doc, "hash", h, text[:100]))
+        for p in PATH.findall(text):
+            key = ("path", p)
+            if key in seen or any(c in p for c in "*<>{},") or p.startswith(("user://", "http")):
+                continue
+            seen.add(key)
+            q = p.replace("res://", "")
+            if not any((root / base / q).exists() for base in ("", "docs", "docs/artifacts/rc16/proofs", "docs/artifacts/rc16", "scripts", "tools")):
+                bad.append((doc, "path", p, text[:100]))
+        for p in PROOF.findall(text):
+            key = ("proof", p)
+            if key in seen:
+                continue
+            seen.add(key)
+            if p not in proofs and not (root / "docs" / "artifacts" / "rc16" / (p + ".txt")).exists():
+                bad.append((doc, "proof", p, text[:100]))
+
+for doc, kind, ref, ctx in bad:
+    print("%s | %s | %s | %s" % (doc, kind, ref, ctx.replace("\n", " ")))
+print("documents: %d, distinct references checked: %d, not found: %d" % (len(docs), len(seen), len(bad)))
+== output
+.claude/skills/THIRD_PARTY.md | hash | df07b8e518e1 | | `arena` | https://github.com/Jakeschincariol/arena-skill (`skills/arena`) | `df07b8e518e1` (main a
+.claude/skills/THIRD_PARTY.md | hash | 26d48292ce16 | | `cli-*`, `omni-*`, `config-codex-cli` (45 OmniRoute entries) | https://github.com/diegosouzapw/Omn
+.claude/skills/THIRD_PARTY.md | hash | 6478eb71237c | | `graphify` | https://github.com/safishamsi/graphify (`graphify/skill.md` as `SKILL.md`, `graphify/
+.claude/skills/THIRD_PARTY.md | path | graphify/skill.md | | `graphify` | https://github.com/safishamsi/graphify (`graphify/skill.md` as `SKILL.md`, `graphify/
+docs/ACCEPTANCE_CHECKLIST.md | proof | perf_check_scene | | PF3 | OWNER | `perf_check_scene` on the rc15 tree (`perf_rc15_final.txt`: p95 20.37 to 32.02 ms at
+docs/CORRECTION_LOG.md | proof | after | | 105 | The `tools/check.sh --static` line "af3_frame_check (every polish frame names the code tree 
+docs/CORRECTION_LOG.md | proof | af3_frame_check | | 129 | RUN_STATE L1 ("`COMPILE_GATE bad=0`"), L14 ("PROOFS S8-MUTATIONS quotes 14 of them"), L15 ("
+docs/ORDER_PASS_REPORT.md | proof | f4d823f | | Streaming and pooling (O1) | The old district stayed in the tree while the next was built; street 
+docs/ORDER_PASS_REPORT.md | proof | timing_equiv | | Frame-independent timing (O2) | The pistol shot 3.00 / 3.16 / 3.33 times a second at 30 / 60 / 120
+docs/ORDER_PASS_REPORT.md | proof | f49a5cf | | Evidence harness (AF1 to AF7) | Every launch is one row of the ledger with its question and an unt
+docs/ORDER_PASS_REPORT.md | proof | lint_changed | | Static, lint, AF5, AF3 | `tools/check.sh --static` at the final code tree: 40 checks green (`final
+docs/ORDER_PASS_REPORT.md | proof | af5_check | | Static, lint, AF5, AF3 | `tools/check.sh --static` at the final code tree: 40 checks green (`final
+docs/RUN_STATE.md | hash | ef648e0 | **U0 (done):** `docs/UTILITIES_REPORT.md`; adopted gdparse, gdlint (6 defect-class rules, `gdlintrc`
+docs/RUN_STATE.md | path | tools/patch_scenes.py | - Tools added: `tools/qa_sim/timing_inventory.py` (23 suspects at the baseline), `timing_equiv` + `t
+docs/TZ_DECISIONS.md | proof | secret_power_station_02 | | G34 | DR-4 | Bunker = the real bunker secret `secret_power_station_02` (was aliased to "power stat
+docs/UTILITIES_REPORT.md | path | hooks/hooks.json | | Everything Claude Code, `affaan-m/everything-claude-code` @ `ef648e01899ba3e8dc6371642deaaf64b4477
+documents: 21, distinct references checked: 423, not found: 16
+# EXIT=0

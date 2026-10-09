@@ -1,0 +1,26 @@
+# proof f5_matrix_status
+# utc 20261009T191636Z
+# head 0ab9503 (uncommitted paths: 1)
+# env none
+# cmd bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/f5_matrix_status.sh
+== script matrix_status.py
+"""Count the rows of docs/FUNCTION_MATRIX.md by the first word of the Status cell (the last cell)."""
+import collections
+import pathlib
+import re
+import sys
+
+text = (pathlib.Path(sys.argv[1]) / "docs" / "FUNCTION_MATRIX.md").read_text(encoding="utf-8")
+counts = collections.Counter()
+rows = 0
+for line in text.splitlines():
+    if not re.match(r"^\| [A-Z]+[0-9]+ \|", line):
+        continue
+    rows += 1
+    cells = [c.strip() for c in re.split(r"(?<!\\)\|", line.strip().strip("|"))]
+    first = re.sub(r"[^A-Z-].*$", "", cells[-1].replace("**", "").strip())
+    counts[first] += 1
+print("rows", rows, dict(counts))
+== output
+rows 146 {'WORKS': 105, 'REMOVED': 2, 'CANNOT-TEST-HEADLESS': 6, 'BY-DESIGN-LIMIT': 2, 'FIXED': 31}
+# EXIT=0

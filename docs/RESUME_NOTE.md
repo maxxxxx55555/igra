@@ -3,7 +3,7 @@
 State: `main` is the rc16 sign-off (the tag `v8.0.0-rc16` goes on the commit that records the last verifier round). Nothing is in flight. Three finished agent worktrees remain under
 `.claude/worktrees/` (`agent-a2d98b0eb4e6daa56`, `agent-a9d93688011f12bdb`, `agent-ac5abdf50f70def2b`); their branches are merged, `git worktree remove` clears them when convenient.
 Numbers and proofs: `docs/ORDER_PASS_REPORT.md` (rc16 final section), `docs/PROOFS.md` (rc16 section, one row per closure with its raw log), `docs/ACCEPTANCE_CHECKLIST.md` (178 of 200 proven, gap table),
-`docs/ARENA_CLOSURE.md`, `docs/CORRECTION_LOG.md` (rows 101 to 136 are this pass), `docs/RUN_STATE.md` (Session 17: every launch with its question and answer), `docs/UNVERIFIABLE_HERE.md` (what only a phone or an ear can say).
+`docs/ARENA_CLOSURE.md`, `docs/CORRECTION_LOG.md` (rows 101 to 137 are this pass), `docs/RUN_STATE.md` (Session 17: every launch with its question and answer), `docs/UNVERIFIABLE_HERE.md` (what only a phone or an ear can say).
 
 ## What rc16 did
 Two sessions. Session 16 built wave 1 with agents in their own worktrees (perf, content, uifx, sec, audio) and the evidence harness; Session 17 merged and finished it, ran wave 2 (beauty, i18n, content),

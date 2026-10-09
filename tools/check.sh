@@ -347,7 +347,7 @@ else
 fi
 if [[ -f tools/af5_check.py ]]; then
   if "$PY" tools/af5_check.py --demo >/dev/null 2>&1 && "$PY" tools/af5_check.py >/dev/null 2>&1; then
-    ok "af5_check (every file:line citation added to docs/ since e4bb4df holds at HEAD)"
+    ok "af5_check (file:line citations added to docs/ since e4bb4df resolve; a backticked claim before one occurs in the cited lines)"
   else
     bad "af5_check (см. 'python tools/af5_check.py')"
   fi
