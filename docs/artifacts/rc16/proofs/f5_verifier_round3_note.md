@@ -1,0 +1,14 @@
+# Note for the F5 verifier, round 3
+
+Read this together with `docs/artifacts/rc16/proofs/f5_verifier_brief.md`; where the two differ, this note wins. It replaces the round 2 note (`f5_verifier_round2_note.md`), which you may skip.
+
+Round 1 (HEAD `32b8199`) returned `PASS=27 FAIL=17 UNVERIFIED=10` and round 2 (HEAD `650ec59`) `PASS=29 FAIL=5 UNVERIFIED=12`; both reports are kept verbatim next to this note (`f5_verifier_round1.md`, `f5_verifier_round2.md`). The orchestrator fixed each finding once (CORRECTION_LOG 129 to 133) and CORRECTION_LOG 134 records that this third round is run. Do not trust those descriptions or the earlier verdicts: run the whole brief again at the HEAD you start at, and re-check the 5 findings of round 2 at their original places with the original commands.
+
+Changes since round 2 (documents and proof logs only; `git diff --stat 650ec59 HEAD -- scripts scenes assets data addons android localization project.godot export_presets.cfg default_bus_layout.tres tools scripts/tools scenes/tools` must print nothing):
+- CORRECTION_LOG now runs 101 to 134 (use 134 where the brief says 128 or 117); the documents that said 101 to 116, 128 or 132 say 101 to 134.
+- New proofs: `f5_af5_unclaimed.out` and `f5_af5_claimed.out` (the citations in the AF5 scope that rule C3 of `tools/af5_check.py` does not test, 87, and does test, 53, each with the cited line; judge them against the code and the documents, not against this note), `f5_frame_size.out`, `f1_scene_literals.out` and the round 2 report.
+- The rc16 section of PROOFS.md, closures.json and the rc16 section of ORDER_PASS_REPORT were regenerated again; the claims of S0-SKILL-SCAN, F1-L22, F1-L23, S7-TIMING-AFTER, AF2-POST, S8-BATTERY and S8-BOT changed. The static proofs (final_static_f4, i18n_final, af5_final, lint_final, af3_final, af3_fresh_final, accept_count) were re-run at `97436fe`, after the last fix of the documents.
+- The skill log has the same 19 rows, 13 of them ok, as in rounds 1 and 2.
+- Citations: round 2 found that rule C3 tests a citation only when a backticked claim stands right before it. Hand-check the citations without such a claim in the documents changed since `e4bb4df` (ACCEPTANCE_CHECKLIST, BEAUTY_RC16, CORRECTION_LOG, KNOWN_ISSUES, ORDER_PASS_REPORT, RUN_STATE, SECURITY_REREAD_RC16, TZ_DECISIONS, UTILITIES_REPORT) beyond the sample that round 2 read, and say how many you read.
+- The rules of the brief hold: read-only, no Godot, no `tools/check.sh`, nothing written into the repository (scratch only in the directory you are given), the verdict is your final message in the brief's format, at most 160 tool calls.
+- The 12 UNVERIFIED items of round 2 need the engine, a phone, the network or the session transcript (two of them, the image size in RUN_STATE L16 and the scene literal list behind KNOWN_ISSUES, now have a raw log); list one again only if you still cannot decide it, in one line.

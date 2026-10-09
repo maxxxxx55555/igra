@@ -1,6 +1,6 @@
 # proof i18n_final
-# utc 20261009T113636Z
-# head e8b5ac2 (uncommitted paths: 2)
+# utc 20261009T165246Z
+# head 97436fe (uncommitted paths: 2)
 # env none
 # cmd python tools/qa_sim/i18n_truth_gate.py
 PASS ru -- missing=0 mixed=0 overflow=0

@@ -1,6 +1,6 @@
 # proof final_static_f4
-# utc 20261009T113419Z
-# head e8b5ac2 (uncommitted paths: 0)
+# utc 20261009T165050Z
+# head 97436fe (uncommitted paths: 0)
 # env none
 # cmd bash tools/check.sh --static
 

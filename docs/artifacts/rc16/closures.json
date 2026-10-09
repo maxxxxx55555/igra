@@ -13,7 +13,7 @@
  },
  {
   "id": "S0-SKILL-SCAN",
-  "claim": "Every third-party skill file (OmniRoute and graphify) was scanned line by line before it was copied. The log lists each host an instruction names (the gateway localhost:20128, raw.githubusercontent.com, github.com, and once each your-server.com, api.elevenlabs.io and anthropic.com), each `send` (curl examples against that gateway, among them purge-* and batch-delete endpoints) and each `delete`: 5 of the 6 `delete` lines name `graphify-out/` (derived: `grep -a '^   delete' docs/artifacts/rc16/proofs/s0_skill_scan.out | grep -c graphify-out` = 5) and the 6th, `stale.unlink()`, removes the files of `Path('graphify-out').glob(...)` two lines above it in the graphify skill.",
+  "claim": "Every third-party skill file (OmniRoute and graphify) was scanned line by line before it was copied. The log lists each host an instruction names (the gateway localhost:20128, raw.githubusercontent.com, github.com, and once each your-server.com, api.elevenlabs.io and anthropic.com), each `send` (curl examples against that gateway, among them purge-* and batch-delete endpoints) and each `delete`: 5 of the 6 `delete` lines name `graphify-out/` (derived: `grep -a '^   delete' docs/artifacts/rc16/proofs/s0_skill_scan.out | grep -c graphify-out` = 5) and the 6th, `stale.unlink()`, removes the files of `Path('graphify-out').glob(...)` on the line above it in the graphify skill.",
   "cmd": "python -I /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/skill_scan.py /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/skills_src/OmniRoute/skills /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/skills_src/graphify/graphify",
   "proof": "s0_skill_scan",
   "quotes": [
@@ -160,6 +160,9 @@
   "cmd": "bash -c CLOSEOUT_ONLY=rc16 bash tools/qa_sim/closeout_check 300; a=$?; bash tools/qa_sim/timing_equiv after; b=$?; echo \"closeout_rc16=$a timing_after=$b\"; [ $a -eq 0 ] && [ $b -eq 0 ]",
   "proof": "s7_closeout_timing_4c9b3fd",
   "quotes": [
+   "run at 30 fps",
+   "run at 60 fps",
+   "run at 120 fps",
    "TIMING_EQUIV verdict=PASS keys=15 failures=0"
   ],
   "frames": [],
@@ -178,7 +181,7 @@
  },
  {
   "id": "AF2-POST",
-  "claim": "At 8cb22ba the rc16 group of the closeout (CLOSEOUT_ONLY=rc16, set by af2_both_ways.py) passes: 64 checks, 0 fails; it is not the whole closeout (347 checks at b69ed90, 366 at e32fa77); af2_both_ways.txt pairs the two runs id by id (36 ids, verdict PASS).",
+  "claim": "At 8cb22ba the rc16 group of the closeout (CLOSEOUT_ONLY=rc16, set by af2_both_ways.py) passes: 64 checks, 0 fails; it is not the whole closeout (347 checks at b69ed90 is row S2-CLOSEOUT, 366 at e32fa77 is row S4-MN4); af2_both_ways.txt pairs the two runs id by id (36 ids, verdict PASS).",
   "cmd": "bash tools/qa_sim/closeout_check 300",
   "proof": "af2_post",
   "quotes": [
@@ -189,7 +192,7 @@
  },
  {
   "id": "S8-BATTERY",
-  "claim": "tools/check.sh --all: every gate green, 65 checks; run without the windowed asset reimport (TLS_SKIP_REIMPORT=1, tools/check.sh:400; the owner's plain command adds that step: 66 checks, 34 processes). It ran on the code tree before the F1 edits.",
+  "claim": "tools/check.sh --all: every gate green, 65 checks; run without the windowed asset reimport (TLS_SKIP_REIMPORT=1, tools/check.sh:400; the owner's plain command adds that step; derived, not run: 66 checks and 34 processes, one more of each). It ran on the code tree before the F1 edits.",
   "cmd": "bash tools/check.sh --all",
   "proof": "s8_check_all_a459b9c",
   "quotes": [
@@ -200,7 +203,7 @@
  },
  {
   "id": "S8-BOT",
-  "claim": "The autoplay bot wins 3 of 3 seeds (IRON RULE: at least one), 0 softlocks; its death counter was dead in this run (each seed was revived 1, 1 and 2 times; CORRECTION_LOG 107).",
+  "claim": "The autoplay bot wins 3 of 3 seeds (IRON RULE: at least one), 0 softlocks; its death counter was dead in this run (each seed was revived 1, 1 and 2 times, quoted in BOT-COUNTER-BEFORE; CORRECTION_LOG 107).",
   "cmd": "bash tools/qa_sim/autoplay_bot",
   "proof": "s8_bot_3seeds_f49a5cf",
   "quotes": [
@@ -412,7 +415,7 @@
  },
  {
   "id": "F1-L22",
-  "claim": "Launch 22: the rects of the failing Arabic case name the cause: the Buy button lies at the card's x plus the card width (a right-to-left card): absolute child positions land one parent width off under the right-to-left layout.",
+  "claim": "Launch 22: the rects of the failing Arabic case name the cause: the Buy button (x 2048.333) lies right of the card (x 1725.333, width 256, as printed: the check grows the card rect by its 0.5 px tolerance), one card width off its place (derived: 2048.333 - (1725.333 + 0.5) = 322.5 = the card width 255 plus the button's own place 67.5); absolute child positions land one parent width off under the right-to-left layout.",
   "cmd": "bash -c bash tools/qa_sim/guarded_windowed res://scenes/tools/closeout_check_scene.tscn 300; rc=$?; grep -aE \"^\\[closeout\\] (FAIL|DONE)\" .qa_logs/closeout_check_scene.log; exit $rc",
   "proof": "f1_post2_3840ac9",
   "quotes": [
@@ -423,7 +426,7 @@
  },
  {
   "id": "F1-L23",
-  "claim": "Launch 23: with a left-to-right card the same displacement flips sign (the button at the card's x minus 187.5): the cause is the position of a Control built without a parent, not the card's own direction.",
+  "claim": "Launch 23: with a left-to-right card the same displacement flips sign: the Buy button (x 1538.333) lies left of the card (x 1725.333, width 256, as printed, grown by the check's 0.5 px tolerance), at the card's own x minus 187.5 (derived: 1538.333 - (1725.333 + 0.5)); the cause is the position of a Control built without a parent, not the card's own direction.",
   "cmd": "bash -c bash tools/qa_sim/guarded_windowed res://scenes/tools/closeout_check_scene.tscn 300; rc=$?; grep -aE \"^\\[closeout\\] (FAIL|DONE)\" .qa_logs/closeout_check_scene.log; exit $rc",
   "proof": "f1_post3_7bc23c6",
   "quotes": [
@@ -523,7 +526,7 @@
    "accept=178/200"
   ],
   "frames": [],
-  "commit": "e8b5ac2"
+  "commit": "97436fe"
  },
  {
   "id": "U0-UTILITIES",
@@ -568,7 +571,7 @@
    "12/12 locales PASS"
   ],
   "frames": [],
-  "commit": "e8b5ac2"
+  "commit": "97436fe"
  },
  {
   "id": "FINAL-AF5",
@@ -579,7 +582,7 @@
    "citation(s)"
   ],
   "frames": [],
-  "commit": "e8b5ac2"
+  "commit": "97436fe"
  },
  {
   "id": "FINAL-LINT",
@@ -590,7 +593,7 @@
    "0 finding(s)"
   ],
   "frames": [],
-  "commit": "e8b5ac2"
+  "commit": "97436fe"
  },
  {
   "id": "FINAL-STATIC",
@@ -601,7 +604,7 @@
    "Проверок пройдено: 40"
   ],
   "frames": [],
-  "commit": "e8b5ac2"
+  "commit": "97436fe"
  },
  {
   "id": "FINAL-AF3",
@@ -612,7 +615,7 @@
    "af3 frames=50 fail=0"
   ],
   "frames": [],
-  "commit": "e8b5ac2"
+  "commit": "97436fe"
  },
  {
   "id": "FINAL-AF3-FRESH",
@@ -624,6 +627,6 @@
    "af3 frames=50 fail=0"
   ],
   "frames": [],
-  "commit": "e8b5ac2"
+  "commit": "97436fe"
  }
 ]
