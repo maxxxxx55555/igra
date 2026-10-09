@@ -1,0 +1,7 @@
+# proof f5_frame_size
+# utc 20261009T164824Z
+# head 650ec59 (uncommitted paths: 4)
+# env none
+# cmd python -I C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/frame_size.py docs/stills/rc16_gui/00_menu_after_26eef24_20261008T002508Z.png
+00_menu_after_26eef24_20261008T002508Z.png: 1920 x 1055
+# EXIT=0

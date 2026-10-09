@@ -1,0 +1,60 @@
+# proof f5_af5_claimed
+# utc 20261009T164645Z
+# head 650ec59 (uncommitted paths: 1)
+# env none
+# cmd python -I C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/af5_claimed.py C:/Users/Maxsim/Desktop/TLS_Build/THE_LAST_STREETLIGHT
+docs/ACCEPTANCE_CHECKLIST.md:332 | scripts/player/interactor.gd:24 | CLAIM `REACH` | CITED: const REACH: float = 3.2
+docs/ACCEPTANCE_CHECKLIST.md:332 | scripts/player/interactor.gd:27 | CLAIM `AIM_DOT` | CITED: const AIM_DOT: float = 0.35
+docs/ACCEPTANCE_CHECKLIST.md:332 | scripts/player/interactor.gd:87 | CLAIM `interactable` | CITED: for node in get_tree().get_nodes_in_group("interactable"):
+docs/ACCEPTANCE_CHECKLIST.md:333 | scripts/player/player_3d.gd:422 | CLAIM `JOY_ZONE_RATIO` | CITED: const JOY_ZONE_RATIO: float = 0.35
+docs/ACCEPTANCE_CHECKLIST.md:334 | scripts/player/player_3d.gd:125 | CLAIM `BATTERY_DRAIN_PER_SEC` | CITED: const BATTERY_DRAIN_PER_SEC: float = 100.0 / 450.0
+docs/ACCEPTANCE_CHECKLIST.md:334 | data/items/battery.tres:14 | CLAIM `effect_value` | CITED: effect_value = 35.0
+docs/ACCEPTANCE_CHECKLIST.md:335 | scenes/player/player_3d.tscn:8 | CLAIM `radius` | CITED: radius = 0.3
+docs/ACCEPTANCE_CHECKLIST.md:335 | scenes/player/player_3d.tscn:9 | CLAIM `height` | CITED: height = 1.6
+docs/ACCEPTANCE_CHECKLIST.md:336 | scripts/player/player_3d.gd:602 | CLAIM `State.RUN` | CITED: State.RUN: speed_noise = 0.8
+docs/ACCEPTANCE_CHECKLIST.md:337 | scripts/economy/rewards_manager.gd:2 | CLAIM `REWARD_SECRET` | CITED: const REWARD_SECRET: int = 50
+docs/ACCEPTANCE_CHECKLIST.md:337 | scripts/monetization/ad_service.gd:114 | CLAIM `skip_bonus_coins` | CITED: func skip_bonus_coins() -> bool:
+docs/ACCEPTANCE_CHECKLIST.md:338 | scripts/core/save_system.gd:6 | CLAIM `MAX_SLOTS` | CITED: const MAX_SLOTS: int = 4
+docs/ACCEPTANCE_CHECKLIST.md:339 | scripts/ui/screens.gd:18 | CLAIM `SCREEN_LIST` | CITED: const SCREEN_LIST: Array[String] = [
+docs/ACCEPTANCE_CHECKLIST.md:342 | scripts/systems/footstep_system.gd:32 | CLAIM `SPEED_SURFACES` | CITED: const SPEED_SURFACES: Array[String] = ["concrete", "metal", "wood", "grass", "gravel", "tile"]
+docs/ACCEPTANCE_CHECKLIST.md:343 | scripts/monetization/ad_service.gd:114 | CLAIM `skip_bonus_coins` | CITED: func skip_bonus_coins() -> bool:
+docs/ACCEPTANCE_CHECKLIST.md:344 | scripts/ui/toast_manager.gd:27 | CLAIM `HOLD` | CITED: const HOLD: float = 2.5
+docs/ACCEPTANCE_CHECKLIST.md:346 | scripts/ui/menu_background.gd:8 | CLAIM `BgTheme` | CITED: enum BgTheme { NIGHT, GENERATOR }
+docs/ACCEPTANCE_CHECKLIST.md:350 | scripts/inventory/inventory_manager.gd:9 | CLAIM `equipment` | CITED: var equipment: Dictionary = {
+docs/ACCEPTANCE_CHECKLIST.md:353 | scripts/player/player_3d.gd:1263 | CLAIM `apply_stun` | CITED: func apply_stun(duration: float = 0.3) -> void:
+docs/BEAUTY_RC16.md:13 | assets/shaders/damage_vignette.gdshader:24 | CLAIM `age` | CITED: float beat = 0.55 + 0.45 * cos(age * pulse_bpm * 6.283185 / 60.0);
+docs/CORRECTION_LOG.md:120 | scripts/systems/settings_manager.gd:386 | CLAIM `TEXT_SCALE` | CITED: const TEXT_SCALE: Array[float] = [0.9, 1.0, 1.15]
+docs/CORRECTION_LOG.md:120 | scripts/systems/settings_manager.gd:394 | CLAIM `content_scale_factor` | CITED: tree.root.content_scale_factor = TEXT_SCALE[clampi(int(_settings.get("text_size", 1)), 0, TEXT_SCALE.size() - 1)]
+docs/CORRECTION_LOG.md:123 | scripts/world/finale_director.gd:136 | CLAIM `gm.trigger_win()` | CITED: gm.trigger_win()
+docs/KNOWN_ISSUES.md:6 | scripts/ui/screens.gd:938 | CLAIM `header.position = Vector2(0, 0)` | CITED: header.position = Vector2(0, 0)
+docs/KNOWN_ISSUES.md:6 | scripts/ui/screens.gd:953 | CLAIM `scroll.position = Vector2(0, SHOP_TOP)` | CITED: scroll.position = Vector2(0, SHOP_TOP)
+docs/ORDER_PASS_REPORT.md:257 | scripts/player/player_3d.gd:1263 | CLAIM `apply_stun` | CITED: func apply_stun(duration: float = 0.3) -> void:
+docs/RUN_STATE.md:34 | base_monster.gd:791 | CLAIM `Failed to instantiate scene state of ""` | CITED: var pickup := _ITEM_PICKUP.instantiate()
+docs/RUN_STATE.md:56 | scenes/ui/skill_tree_ui.tscn:57 | CLAIM `Close` | CITED: text = "Close"
+docs/RUN_STATE.md:56 | scripts/ui/screens.gd:997 | CLAIM `_make_btn(... Vector2(120, 20))` | CITED: var btn := _make_btn(LocalizationManager.t("SCR_KUPIT"), Vector2.ZERO, Vector2(120, 20))
+docs/SECURITY_REREAD_RC16.md:10 | scripts/core/qa_launch_guard.gd:39 | CLAIM `OS.get_environment` | CITED: var guarded := OS.get_environment("TLS_UDG_GUARDED") == "1"
+docs/SECURITY_REREAD_RC16.md:11 | scripts/net/lan_network.gd:14 | CLAIM `ENetMultiplayerPeer` | CITED: _peer = ENetMultiplayerPeer.new()
+docs/SECURITY_REREAD_RC16.md:11 | scripts/multiplayer/lan_discovery.gd:27 | CLAIM `PacketPeerUDP` | CITED: _udp = PacketPeerUDP.new()
+docs/SECURITY_REREAD_RC16.md:12 | scripts/ui/lobby_menu.gd:41 | CLAIM `create_server` | CITED: NetworkManager.create_server()
+docs/SECURITY_REREAD_RC16.md:12 | scripts/ui/lobby_menu.gd:58 | CLAIM `join_server` | CITED: NetworkManager.join_server(host_data.ip)
+docs/SECURITY_REREAD_RC16.md:13 | scripts/player/player_3d.gd:951 | CLAIM `_request_player_damage` | CITED: func _request_player_damage(amount: float) -> void:
+docs/SECURITY_REREAD_RC16.md:13 | scripts/player/player_3d.gd:954 | CLAIM `get_remote_sender_id` | CITED: if multiplayer.get_remote_sender_id() != 1:
+docs/SECURITY_REREAD_RC16.md:13 | scripts/security/attack_sim.gd:448 | CLAIM `rpc_player_state` | CITED: LANNetwork.rpc_player_state(1, Vector3(NAN, 0.0, 0.0), 0.0, &"suburbs")
+docs/SECURITY_REREAD_RC16.md:13 | scripts/security/attack_sim.gd:461 | CLAIM `rpc_power_changed` | CITED: LANNetwork.rpc_power_changed(&"not_a_real_district", true)
+docs/SECURITY_REREAD_RC16.md:15 | scripts/core/save_system.gd:29 | CLAIM `write_signed` | CITED: static func write_signed(path: String, data: Variant) -> bool:
+docs/SECURITY_REREAD_RC16.md:15 | scripts/core/save_system.gd:40 | CLAIM `read_signed` | CITED: static func read_signed(path: String) -> Variant:
+docs/SECURITY_REREAD_RC16.md:30 | scripts/ui/lobby_menu.gd:41 | CLAIM `create_server` | CITED: NetworkManager.create_server()
+docs/SECURITY_REREAD_RC16.md:30 | scripts/ui/lobby_menu.gd:58 | CLAIM `join_server` | CITED: NetworkManager.join_server(host_data.ip)
+docs/TIMING_AUDIT.md:19 | scripts/weapons/weapon_base.gd:135 | CLAIM `_physics_process` | CITED: func _physics_process(delta: float) -> void:
+docs/TZ_DECISIONS.md:87 | scripts/tools/_qa_headless_suite_runner.gd:1146 | CLAIM `_p2g_quest_reward_full_backpack` | CITED: func _p2g_quest_reward_full_backpack() -> void:
+docs/TZ_DECISIONS.md:91 | scripts/ui/toast_manager.gd:27 | CLAIM `HOLD` | CITED: const HOLD: float = 2.5
+docs/UTILITIES_REPORT.md:26 | tools/lint_changed.py:27 | CLAIM `BASE` | CITED: BASE = "e4bb4df"
+docs/UTILITIES_REPORT.md:26 | tools/lint_changed.py:28 | CLAIM `SKIP_TREES` | CITED: SKIP_TREES = ("addons/", "_QUARANTINE/", "docs/", ".claude/", "android/", "build/")
+docs/UTILITIES_REPORT.md:26 | tools/lint_changed.py:95 | CLAIM `check_gd` | CITED: def check_gd(paths, known=GDPARSE_KNOWN):
+docs/UTILITIES_REPORT.md:26 | tools/lint_changed.py:127 | CLAIM `check_sh` | CITED: def check_sh(paths):
+docs/UTILITIES_REPORT.md:26 | tools/lint_changed.py:154 | CLAIM `demo` | CITED: def demo():
+docs/UTILITIES_REPORT.md:27 | tools/lint_changed.py:29 | CLAIM `GDPARSE_KNOWN` | CITED: GDPARSE_KNOWN = {
+docs/UTILITIES_REPORT.md:30 | .github/workflows/static.yml:23 | CLAIM `pip install` | CITED: - run: python -m pip install gdtoolkit==4.5.0 ruff==0.16.9 shellcheck-py==0.11.0.1 actionlint-py==1.7.12.25 pillow
+docs/UTILITIES_REPORT.md:30 | .github/workflows/static.yml:25 | CLAIM `lint_changed` | CITED: - run: python tools/lint_changed.py --base "${BASE/#0000000000000000000000000000000000000000/e4bb4df}"
+claimed citations: 53
+# EXIT=0
