@@ -1,0 +1,94 @@
+# proof f5_duration_sweep
+# utc 20261010T150116Z
+# head 41186be (uncommitted paths: 1)
+# env none
+# cmd bash /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/f5_duration_sweep.sh
+== script f5_duration_sweep.py
+"""F5 round 7 / CORRECTION_LOG 140, re-run for row 144: the duration figures (a number with min, minutes, h, hours, s or seconds) in the document lines
+added between e4bb4df and a given commit, outside CORRECTION_LOG.md and RUN_STATE.md; every hit is printed to be read.
+usage: python f5_duration_sweep.py <repo-root> <commit>
+"""
+import re
+import subprocess
+import sys
+
+root, head = sys.argv[1], sys.argv[2]
+
+
+def git(*args):
+    return subprocess.run(["git", *args], cwd=root, capture_output=True, text=True, encoding="utf-8", errors="replace").stdout
+
+
+docs = [d for d in git("diff", "--name-only", "e4bb4df", head, "--", "docs", "opencode-memory.md").split("\n")
+        if d.endswith(".md") and not d.startswith(("docs/artifacts/", "docs/stills/")) and not d.endswith(("CORRECTION_LOG.md", "RUN_STATE.md"))]
+pat = re.compile(r"(?<![\w.])(\d+(?:\.\d+)?)(?:\s?[-\u2013]\s?\d+(?:\.\d+)?)?\s?(minutes?|min|hours?|h\b|seconds?|\bs\b)(?!\w)")
+n = 0
+for d in docs:
+    for line in git("diff", "-U0", "e4bb4df", head, "--", d).splitlines():
+        if not line.startswith("+") or line.startswith("+++"):
+            continue
+        for m in pat.finditer(line):
+            n += 1
+            print("%s | ...%s" % (d.replace("docs/", ""), line[max(0, m.start() - 70):min(len(line), m.end() + 40)]))
+print("commit", head, "hits", n)
+== at ef34725 (round 7)
+ACCEPTANCE_CHECKLIST.md | ...+| OV4 | NOT-VERIFIABLE | the bot clears the game in about 10 min | no gate measures a person's time: the
+ACCEPTANCE_CHECKLIST.md | ...DRAIN_PER_SEC` (`scripts/player/player_3d.gd:125`) is 100/450, 1% per 4.5 s; the battery item gives `effect_value` 
+ACCEPTANCE_CHECKLIST.md | ...s `effect_value` (`data/items/battery.tres:14`) 35 | the GDD's 1% per 2 s and +25 fail the balance simulation and
+ACCEPTANCE_CHECKLIST.md | ...+| TO1 | DECIDED | `HOLD` (`scripts/ui/toast_manager.gd:27`) 2.5 s: a toast lives 3.0 s with its fades (cl
+ACCEPTANCE_CHECKLIST.md | ...IDED | `HOLD` (`scripts/ui/toast_manager.gd:27`) 2.5 s: a toast lives 3.0 s with its fades (closeout TO1); the colu
+ACCEPTANCE_CHECKLIST.md | ...o caller, so a hit in the windup does not reset the combo or stun for 0.3 s as GDD 5.1 says (the fix changes the bo
+ASSET_SHOPPING_LIST.md | ...ary or a field recording (CC0 or royalty-free) | 9 files, each 0.2 to 0.5 s, wav 44.1 kHz | one recording per surfa
+BEAUTY_RC16.md | ...rmula), 1.00 now | frame 05 after: the ember red is on all four edges 0.06 s after the hit; frame 05 before shows no
+BEAUTY_RC16.md | ...growing time shift by 234.34 and 435.345 and was constant after about 20 minutes (the agent's float32 model: healthy for
+BEAUTY_RC16.md | ...ut 20 minutes (the agent's float32 model: healthy for about the first 30 s, 36 distinct values at 200 s, constant 
+BEAUTY_RC16.md | ...loat32 model: healthy for about the first 30 s, 36 distinct values at 200 s, constant 0 from about 1400 s) | the mo
+BEAUTY_RC16.md | ...ut the first 30 s, 36 distinct values at 200 s, constant 0 from about 1400 s) | the model, not a run: the frames are
+BEAUTY_RC16.md | ...lso fixed during the pass (not beauty, same package): the toast lives 3 s (TO1), no day in the menu background (M
+BEAUTY_RC16.md | ...+| X5 the district LUT is switched off 0.5 s after every graphics-tier change and ev
+BEAUTY_RC16.md | ...er` already scales every `GPUParticles3D` by tier; pooled bursts live 0.6 s at most; rain, dust and strobe are neve
+FUNCTION_MATRIX.md | ... FINDING (acceptance rows, found by the content agent): a toast lived 4 s (GDD 3 s), the menu background reached 
+FUNCTION_MATRIX.md | ...(acceptance rows, found by the content agent): a toast lived 4 s (GDD 3 s), the menu background reached a day pal
+FUNCTION_MATRIX.md | ... lived 4 s (GDD 3 s), the menu background reached a day palette after 24 s (GDD 11.1 has no day), the touch attack
+FUNCTION_MATRIX.md | ...turned light green, the overlay grain faded to a constant after about 20 minutes, the sprint blur was hidden by the chro
+ORDER_PASS_REPORT.md | ...N** on the final tree (11/11 districts FULL, 0 softlocks; 121 / 104 / 107 s at 4x), `bot_signoff_summary.txt`; its 
+ORDER_PASS_REPORT.md | ...turned light green, the overlay grain faded to a constant after about 20 minutes, the sprint blur was painted over by th
+ORDER_PASS_REPORT.md | ...+| GDD deviations found by reading | A toast lived 4 s (GDD 3 s), the menu background reached 
+ORDER_PASS_REPORT.md | ...+| GDD deviations found by reading | A toast lived 4 s (GDD 3 s), the menu background reached a day pal
+ORDER_PASS_REPORT.md | ... lived 4 s (GDD 3 s), the menu background reached a day palette after 24 s, the touch attack button stayed lit und
+ORDER_PASS_REPORT.md | ...: say whether a hit in the windup should reset the combo and stun for 0.3 s as GDD 5.1 says; if yes, the change is 
+PROOFS.md | ...it shakes the health bar by at most 4 px and it is on its exact place 0.4 s later, and under Reduce Screen Shake it
+PROOFS.md | ...xist for any death after the cool-down, so the death fell in the last 0.2 s before the win (derived, CORRECTION_LOG
+TIMING_AUDIT.md | ...follows seconds (`CAM1` in the closeout: the same share of the way in 0.1 s at 30 and at 120 FPS, 0.953 and 0.953).
+TIMING_AUDIT.md | ...the three frame rates: 3.1579 shots a second is 19 physics steps of 1/60 s between shots.
+TIMING_AUDIT.md | ...UNVERIFIABLE-HERE, `docs/UNVERIFIABLE_HERE.md` U1; owner action: play 10 minutes on the phone and compare the pistol and
+TZ_DECISIONS.md | ...sites found). Implemented the underlying mechanism (cooldown fixed to 1h, `skip_bonus_coins()`/`spend_clamped()`
+TZ_DECISIONS.md | ...+| G09 | DR-3 | Battery drain stays 100/450 per second (1% per 4.5 s), not the GDD's 1% per 2 s. | the comme
+TZ_DECISIONS.md | ...y drain stays 100/450 per second (1% per 4.5 s), not the GDD's 1% per 2 s. | the comment above `BATTERY_DRAIN_PER
+TZ_DECISIONS.md | ...ot +25. | Measured: with +25, `balance_sim.py` FAILs ("battery budget 11.2 min undercuts PARTIAL-style need 12.6 min")
+TZ_DECISIONS.md | ..._sim.py` FAILs ("battery budget 11.2 min undercuts PARTIAL-style need 12.6 min"); reverted the same turn. |
+TZ_DECISIONS.md | ...ow applies to the existing non-canon district-entry interstitial too (180 s -> 3600 s). | GDD.md:628-631 |
+TZ_DECISIONS.md | ...s to the existing non-canon district-entry interstitial too (180 s -> 3600 s). | GDD.md:628-631 |
+TZ_DECISIONS.md | ...(1.0 at 5 m on a landed hit, 0.4 at 3 m on a dodge, fading over about 0.5 s) are NOT applied; the 3 m `noise_emitte
+TZ_DECISIONS.md | ... rebalance: 1.0/5 m on a landed hit, 0.4/3 m on a dodge, fading over ~0.5 s via get_noise_level(). |
+TZ_DECISIONS.md | ...+| S04 | DR-4 | Search after losing the player: 10 s, wandering within 5 m of the last known
+TZ_DECISIONS.md | ...g the player: 10 s, wandering within 5 m of the last known point (was 5 s standing on it). | IRON RULE batch run;
+TZ_DECISIONS.md | ...he bot), above the 15 HP/s the hit rule can deal at most (12 per hit, 0.8 s apart): no number of monsters could kil
+TZ_DECISIONS.md | ...part): no number of monsters could kill the player. Now 2.5 HP/s from 5 s after the last hit (the skill keeps its
+TZ_DECISIONS.md | ...c15) | Every settings change is written to the config file by itself (0.5 s debounce): only the Difficulty screen w
+TZ_DECISIONS.md | ...top-left column, clear of the quest tracker; the GDD 24.5 duration of 3 s is met (`HOLD` at `scripts/ui/toast_man
+TZ_DECISIONS.md | ...duration of 3 s is met (`HOLD` at `scripts/ui/toast_manager.gd:27` is 2.5 s, plus 0.2 s in and 0.3 s out); the type
+TZ_DECISIONS.md | ...3 s is met (`HOLD` at `scripts/ui/toast_manager.gd:27` is 2.5 s, plus 0.2 s in and 0.3 s out); the types are findin
+TZ_DECISIONS.md | ...HOLD` at `scripts/ui/toast_manager.gd:27` is 2.5 s, plus 0.2 s in and 0.3 s out); the types are finding, achievemen
+TZ_DECISIONS.md | ...asured with the canon values: the bot wins 3/3, 0 deaths, 106 / 110 / 126 s (92 / 94 / 99 s at x1.75). The attack b
+TZ_DECISIONS.md | ...anon values: the bot wins 3/3, 0 deaths, 106 / 110 / 126 s (92 / 94 / 99 s at x1.75). The attack box part of DR-3 
+UNVERIFIABLE_HERE.md | ...+| U4 | Human playtime of one ending (acceptance OV4, "8-12 h") and the fairness of the 12 HP hit cap
+UNVERIFIABLE_HERE.md | ...p (`dmg-cap`) | No human plays here: the bot clears the game in about 10 minutes at the cap and `balance_sim.py` models 
+UNVERIFIABLE_HERE.md | ...ame in about 10 minutes at the cap and `balance_sim.py` models 4.9 to 6.9 h, neither is a person's time | Time one 
+UTILITIES_REPORT.md | ... adopted for changed files | parses 375 of 379 tracked `.gd` files in 7.5 s without the engine; the 4 it cannot rea
+UTILITIES_REPORT.md | ...nt of the diff, flow_check, scene_node_check, af5_check) all success, 3 min 55 s; the job JSON read from the public
+UTILITIES_REPORT.md | ...the diff, flow_check, scene_node_check, af5_check) all success, 3 min 55 s; the job JSON read from the public API 
+commit ef34725 hits 56
+== at HEAD
+commit HEAD hits 50
+# EXIT=0

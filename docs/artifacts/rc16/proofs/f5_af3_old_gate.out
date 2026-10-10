@@ -1,0 +1,40 @@
+# proof f5_af3_old_gate
+# utc 20261010T150042Z
+# head 41186be (uncommitted paths: 0)
+# env none
+# cmd bash /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/f5_af3_old_gate.sh
+== script f5_af3_old_gate.sh
+#!/usr/bin/env bash
+# F5 round 10 / CORRECTION_LOG 144: the AF3 frame gate as committed in bca7d33 (before 3f5556a changed it), run on the jpg frames of the play-through,
+# beside the gate at HEAD, the logged run of the old gate on a fresh clone, and the number of polish frames when 3f5556a changed it. Prints the script first.
+S="C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad"
+cd C:/Users/Maxsim/Desktop/TLS_Build/THE_LAST_STREETLIGHT || exit 2
+echo "== script f5_af3_old_gate.sh"
+cat "$S/f5_af3_old_gate.sh"
+mkdir -p "$S/ti_old"
+git show bca7d33:tools/qa_sim/af3_frame_check.py | sed 's#^ROOT = pathlib.Path(__file__).resolve().parents\[2\]#ROOT = pathlib.Path("C:/Users/Maxsim/Desktop/TLS_Build/THE_LAST_STREETLIGHT")#' > "$S/ti_old/af3_old_bca7d33.py"
+grep -n '^ROOT' "$S/ti_old/af3_old_bca7d33.py"
+echo "== the frames of docs/stills/rc16_playthrough by extension"
+ls docs/stills/rc16_playthrough | sed 's/.*\.//' | sort | uniq -c
+echo "== the old gate on that directory (it globs *.png only)"
+python -I "$S/ti_old/af3_old_bca7d33.py" --dir docs/stills/rc16_playthrough
+echo "== the gate at HEAD on the same directory"
+python -I tools/qa_sim/af3_frame_check.py --dir docs/stills/rc16_playthrough | tail -1
+echo "== the logged run of the old gate on a fresh clone of 3f5556a"
+grep -n "af3 frames=" docs/artifacts/rc16/proofs/af3_f5_fresh_clone_3f5556a.out
+echo "== polish frames in the tree that 3f5556a changed"
+git ls-tree --name-only 3f5556a^ docs/stills/polish/ | wc -l
+27:ROOT = pathlib.Path("C:/Users/Maxsim/Desktop/TLS_Build/THE_LAST_STREETLIGHT")
+== the frames of docs/stills/rc16_playthrough by extension
+     24 jpg
+== the old gate on that directory (it globs *.png only)
+af3 frames=0 fail=0
+== the gate at HEAD on the same directory
+af3 frames=24 fail=0
+== the logged run of the old gate on a fresh clone of 3f5556a
+9:af3 frames=16 fail=16
+11:af3 frames=42 fail=0
+15:af3 frames=43 fail=2
+== polish frames in the tree that 3f5556a changed
+16
+# EXIT=0
