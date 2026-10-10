@@ -1,0 +1,51 @@
+# proof f5_hover_tween
+# utc 20261010T142106Z
+# head ed0057a (uncommitted paths: 1)
+# env none
+# cmd bash /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/f5_hover_tween.sh
+== script f5_hover_tween.sh
+#!/usr/bin/env bash
+# F5 round 9 / CORRECTION_LOG 143: the engine error of the hover tween meta in the raw logs of the pass, with the head of each run; 08af752 reads the meta only when it exists.
+S="C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad"
+cd C:/Users/Maxsim/Desktop/TLS_Build/THE_LAST_STREETLIGHT || exit 2
+echo "== script f5_hover_tween.sh"
+cat "$S/f5_hover_tween.sh"
+echo "== logs that hold the error (file | head of its run | count)"
+for f in docs/artifacts/rc16/proofs/*; do
+	n=$(grep -c -a "key 'hover_tween'" "$f")
+	[ "$n" -gt 0 ] || continue
+	base="${f%%.attach.*}"; base="${base%.out}.out"
+	echo "$(basename "$f") | $(grep -m1 -a '^# head' "$base" | cut -c1-40) | $n"
+done
+echo "== closeout logs of runs at or after 08af752 (they run the hover code too): file | head | count"
+for f in docs/artifacts/rc16/proofs/*closeout_check.log; do
+	base="${f%%.attach.*}.out"
+	h=$(grep -m1 -a '^# head' "$base" | awk '{print $3}')
+	if git merge-base --is-ancestor 08af752 "$h" 2>/dev/null; then
+		echo "$(basename "$f") | $h | $(grep -c -a "key 'hover_tween'" "$f")"
+	fi
+done
+echo "== the change"
+git show 08af752 --stat --format='%h %ad %s' --date=short | head -3
+git show 08af752 | grep -n "hover_tween" | head -6
+== logs that hold the error (file | head of its run | count)
+s2_compile_closeout_b69ed90.attach.closeout_check.log | # head b69ed90 (uncommitted paths: 1) | 1
+s3s4_gates_8bb881b.attach.closeout_check.log | # head 8bb881b (uncommitted paths: 0) | 1
+s4_closeout_truth_ab_e32fa77.attach.closeout_check.log | # head e32fa77 (uncommitted paths: 2) | 1
+s4_truth_bisect_7c49500.attach.audio_truth_music_manager_at_b69ed90.log | # head 7c49500 (uncommitted paths: 4) | 2
+s4_truth_bisect_7c49500.attach.closeout_check.log | # head 7c49500 (uncommitted paths: 4) | 1
+s7_closeout_timing_4c9b3fd.attach.closeout_check.log | # head 4c9b3fd (uncommitted paths: 0) | 1
+== closeout logs of runs at or after 08af752 (they run the hover code too): file | head | count
+af2_post.attach.closeout_check.log | 8cb22ba | 0
+af2_pre.attach.closeout_check.log | 8cb22ba | 0
+f1_post_a41d4b3.attach.closeout_check.log | a41d4b3 | 0
+f1_pre_b7aee72.attach.closeout_check.log | b7aee72 | 0
+s8_closeout_rc16_21c2046.attach.closeout_check.log | 21c2046 | 0
+s8_mutations_46723a7.attach.closeout_check.log | 46723a7 | 0
+== the change
+08af752 2026-10-07 Beauty: warm the highlights of the suburbs and residential LUT, keep the sprint blur visible, stop the overlay grain fading with uptime
+
+ assets/textures/luts/lut_residential.png | Bin 1546 -> 3677 bytes
+77:-	var old: Tween = button.get_meta(&"hover_tween", null)
+78:+	var old: Tween = button.get_meta(&"hover_tween") if button.has_meta(&"hover_tween") else null
+# EXIT=0

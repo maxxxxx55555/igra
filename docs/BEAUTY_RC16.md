@@ -16,7 +16,7 @@ captured the eight AFTER frames once (`c3e79e5`, launch 19), read each one once 
 | X2 | `MotionBlurCopy` (`BackBufferCopy`) between the blur and the chroma layers, on only while the blur is (`scripts/post_process_overlay.gd`) | with it the Ultra sprint blur is on screen | frame 06 after: radial streaks at all four edges; the HUD hint panel is smeared too (the overlay layer is above the HUD) |
 | X3 | the post-process grain hash does not fade with uptime (`scripts/post_process_overlay.gd`): the old one multiplied a growing time shift by 234.34 and 435.345 and was constant after about 20 minutes (the agent's float32 model: healthy for about the first 30 s, 36 distinct values at 200 s, constant 0 from about 1400 s) | the model, not a run: the frames are inside the first minute | all frames: grain present |
 
-Also fixed during the pass (not beauty, same package): the toast lives 3 s (TO1), no day in the menu background (MENUBG1), the attack button greys under 5 stamina (ATK1), the hover tween meta is read only when it exists.
+Also fixed during the pass (not beauty, same package): the toast lives 3 s (TO1), no day in the menu background (MENUBG1), the attack button greys under 5 stamina (ATK1), the hover tween meta is read only when it exists (`08af752`; the engine error about the missing `hover_tween` meta is in six logs of launches 2, 3, 4, 5 and 7 and in none of the six closeout logs after that commit, `f5_hover_tween.out`).
 
 ## Not done
 

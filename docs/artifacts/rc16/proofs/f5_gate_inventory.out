@@ -1,0 +1,256 @@
+# proof f5_gate_inventory
+# utc 20261010T142028Z
+# head ed0057a (uncommitted paths: 1)
+# env none
+# cmd bash /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/f5_gate_inventory.sh
+== script f5_gate_inventory.sh
+#!/usr/bin/env bash
+# F5 round 9 / CORRECTION_LOG 143: every later edit of the gate and tool files that the pass created (added since e4bb4df under tools, scripts/tools, scenes/tools),
+# with its added and removed line counts and the removed lines that are not comments, to be read one by one. Prints the script first.
+S="C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad"
+cd C:/Users/Maxsim/Desktop/TLS_Build/THE_LAST_STREETLIGHT || exit 2
+echo "== script f5_gate_inventory.sh"
+cat "$S/f5_gate_inventory.sh"
+echo "== files added since e4bb4df under tools, scripts/tools, scenes/tools"
+git diff --name-status --diff-filter=A e4bb4df HEAD -- tools scripts/tools scenes/tools | awk '{print $2}' > "$S/added_gates.txt"
+wc -l < "$S/added_gates.txt"
+echo "== later edits (created <commit> | edit <commit> <date> <subject> | +added -removed), with the removed non-comment lines"
+edits=0; removing=0
+while read -r f; do
+	commits=$(git log --reverse --format=%h e4bb4df..HEAD -- "$f")
+	first=$(echo "$commits" | head -1)
+	for c in $(echo "$commits" | tail -n +2); do
+		add=$(git show --numstat --format= "$c" -- "$f" | awk '{print $1}')
+		rem=$(git show --numstat --format= "$c" -- "$f" | awk '{print $2}')
+		edits=$((edits + 1))
+		echo "### $f | created $first | edit $c $(git show -s --format='%ad %s' --date=format:'%Y-%m-%dT%H:%M%z' "$c" | cut -c1-110) | +$add -$rem"
+		if [ "$rem" != "0" ]; then
+			removing=$((removing + 1))
+			git show --format= "$c" -- "$f" | grep '^-[^-]' | grep -v '^-\s*\(#\|##\|$\)' | head -8 | cut -c1-200
+		fi
+	done
+done < "$S/added_gates.txt"
+echo "== files edited after creation: $(while read -r f; do n=$(git log --format=%h e4bb4df..HEAD -- "$f" | wc -l); [ "$n" -gt 1 ] && echo x; done < "$S/added_gates.txt" | wc -l), edits: $edits, edits that remove lines: $removing"
+echo "== the first ledger rows (the timing and probe runs of the harness development and the first evidence runs)"
+head -12 docs/artifacts/rc16/launch_ledger.tsv | cut -f1-6
+echo "== row 8: its head and the quantity that only 1ac9dd3 adds"
+sed -n '2,3p' docs/artifacts/rc16/proofs/timing_before.out
+grep -n "player_damage_per_s" docs/artifacts/rc16/proofs/timing_before.out
+git show 1ac9dd3^:tools/qa_sim/timing_compare.py | grep -c "player_damage_per_s"
+echo "== the probe takes its perf readings before the staged states"
+grep -n "await _perf\|await _stage_states" scripts/tools/_rc16_probe_runner.gd
+== files added since e4bb4df under tools, scripts/tools, scenes/tools
+36
+== later edits (created <commit> | edit <commit> <date> <subject> | +added -removed), with the removed non-comment lines
+### scripts/tools/_rc16_probe_runner.gd | created 557c9f3 | edit 942d92b 2026-10-07T11:20+0300 Fix the probe's freed monster reference, add a frames-only mode and the AF2 both-ways to | +10 -1
+-		player.take_damage(10.0, monster.global_position)
+### scripts/tools/_rc16_probe_runner.gd | created 557c9f3 | edit 2af53cf 2026-10-07T11:21+0300 Capture the probe's frames at one fixed size | +10 -0
+### scripts/tools/_timing_equiv_runner.gd | created 557c9f3 | edit 37db979 2026-10-03T02:08+0300 Make the timing probe deterministic and clean the python gates | +22 -5
+-	_report(String(id) + "_shots_per_s", float(_shots) / (_t - t0))
+-		if bool(pickup.get("_picked_up")):
+-		pickup.queue_free()
+-	while float(boss.get("hp")) > 0.0 and _t < t0 + BOSS_DEADLINE_SEC:
+### scripts/tools/_timing_equiv_runner.gd | created 557c9f3 | edit 1ac9dd3 2026-10-07T11:16+0300 Count the monster's melee through enemy_attack and reset the swing before it | +20 -9
+-	monster.call("_change_state", BaseMonster.State.CHASE)
+-	var next_dbg := _t
+-		if _t >= next_dbg:
+-			next_dbg += 0.5
+-			print("[timing-dbg] fps=%d t=%.2f state=%s dist=%.2f hits=%d" % [_fps, _t - t0, str(monster.get("ai_state")), monster.global_position.distance_to(_player.global_position), _hits])
+-	_report("monster_hits_per_s", float(_hits) / (_t - t0))
+-	_report("monster_damage_per_s", _hit_total / (_t - t0))
+### scripts/tools/rc16/audio_checks.gd | created 8bb881b | edit e32fa77 2026-10-07T17:24+0300 Keep the MusicManager autoload free of the world code; AUD3 teleports the player the gam | +8 -2
+-	var player: Node3D = r._player
+### scripts/tools/rc16/beauty_checks.gd | created a9844cf | edit 69e9017 2026-10-07T21:42+0300 Z-visual O3.2: damage vignette beat clock TIME -> age since the hit | +33 -0
+### scripts/tools/rc16/beauty_checks.gd | created a9844cf | edit 60dac76 2026-10-07T21:49+0300 Z-visual O3.3: HUD grain cell hash multipliers 127.1 and 311.7 -> 0.1031 hash, no 10 px  | +7 -0
+### scripts/tools/rc16/beauty_checks.gd | created a9844cf | edit 08af752 2026-10-07T22:13+0300 Beauty: warm the highlights of the suburbs and residential LUT, keep the sprint blur vis | +11 -0
+### scripts/tools/rc16/content_checks.gd | created 0dd072a | edit 6504272 2026-10-07T11:15+0300 Zoom the camera with a two-finger pinch | +79 -0
+### scripts/tools/rc16/content_checks.gd | created 0dd072a | edit c93bfab 2026-10-07T11:16+0300 Keep a craft refund out of the collect quest count | +29 -0
+### scripts/tools/rc16/content_checks.gd | created 0dd072a | edit 115ad00 2026-10-07T11:18+0300 Drain the battery behind an open screen | +22 -0
+### scripts/tools/rc16/content_checks.gd | created 0dd072a | edit 6196c1f 2026-10-07T11:20+0300 Smooth the camera interior blend by seconds, not by frames | +34 -0
+### scripts/tools/rc16/finish_checks.gd | created b7aee72 | edit b4c1db0 2026-10-08T11:38+0300 Translate the skill tree Close button and give each shop card the height of its Buy butt | +7 -15
+-	var min_heights: Array[float] = [0.0, 0.0, 0.0]
+-				min_heights[size_idx] = _button_min_height(grid)
+-	r._ok(empty.is_empty() and outside.is_empty(),
+-		"SHOP1 every Buy button is inside its card and the grid, %d languages x %d text sizes (%d cases; no cards: %s; outside: %s)"
+-		% [LocalizationManager.SUPPORTED.size(), TEXT_SIZES.size(), cases, empty.slice(0, MAX_LISTED), outside.slice(0, MAX_LISTED)])
+-	r._ok(min_heights[0] < min_heights[1] and min_heights[1] < min_heights[2],
+-		"TEXT1 the text size reaches the Buy button: its minimum height grows with it (%s px)" % [min_heights])
+-static func _button_min_height(grid: Control) -> float:
+### scripts/tools/rc16/finish_checks.gd | created b7aee72 | edit 3840ac9 2026-10-08T11:56+0300 Let the shop card follow its Buy button and report where SHOP1 fails | +29 -10
+-	LocalizationManager.set_language("en")
+-	await r.get_tree().process_frame
+-			if _button_outside(grid):
+-		"SHOP1 every Buy button is inside its card and the grid, %d languages x %d text sizes (%d cases; no cards: %s; outside: %s; English grid width at the three text sizes %s px)"
+-		% [LocalizationManager.SUPPORTED.size(), TEXT_SIZES.size(), cases, empty.slice(0, MAX_LISTED), outside.slice(0, MAX_LISTED), grid_widths])
+-static func _button_outside(grid: Control) -> bool:
+-				return true
+-	return false
+### scripts/tools/rc16/finish_checks.gd | created b7aee72 | edit 7bc23c6 2026-10-08T12:02+0300 Lay the shop card out left to right so Arabic keeps its Buy button inside | +2 -0
+### scripts/tools/rc16/finish_checks.gd | created b7aee72 | edit 74f710b 2026-10-08T12:13+0300 Build the shop card from containers and add the F3 audio A/B wrapper | +2 -2
+-		for child: Node in card.get_children():
+-			var button: Button = child as Button
+### scripts/tools/rc16/perf_checks.gd | created fcb0fda | edit 8a07041 2026-10-07T11:25+0300 Let the light limiter sort a group instead of walking the tree | +10 -0
+### scripts/tools/rc16/sec_checks.gd | created a82814d | edit ed01eed 2026-10-07T17:05+0300 Wire the sec checks; tell a refused New Game+ activation on its own screen (E1D) | +14 -0
+### scripts/tools/rc16/uifx_checks.gd | created 901a569 | edit 58eb7b0 2026-10-03T02:09+0300 Pulse the chromatic aberration when the player is hit | +37 -2
+-	var chroma_mat := (overlay.get_node("ChromaOverlay") as ColorRect).material as ShaderMaterial
+-	var chroma0: float = float(chroma_mat.get_shader_parameter("amount_px_1080p"))
+### scripts/tools/rc16/uifx_checks.gd | created 901a569 | edit 36ef92f 2026-10-03T02:11+0300 Blur the view radially while sprinting at the Ultra tier | +42 -0
+### scripts/tools/rc16/uifx_checks.gd | created 901a569 | edit deb622c 2026-10-07T11:22+0300 Let the player drag an inventory item onto a quick slot | +84 -0
+### scripts/tools/rc16/uifx_checks.gd | created 901a569 | edit e172d7d 2026-10-07T11:24+0300 Swell a button a little under the mouse or the focus | +27 -0
+### scripts/tools/rc16/uifx_checks.gd | created 901a569 | edit 8db1009 2026-10-07T11:27+0300 Shake the health bar when the player is hit | +61 -47
+-	var overlay: Node = r._main.get_node_or_null("PostProcessOverlay")
+-static func _hit_and_read(r: Node, overlay: Node) -> PackedFloat32Array:
+-	var early: float = _chroma_px(overlay)
+-	await r.get_tree().create_timer(0.5).timeout
+-	return PackedFloat32Array([early, _chroma_px(overlay)])
+-	var overlay: Node = r._main.get_node_or_null("PostProcessOverlay")
+-	SettingsManager.set_setting("reduce_flash", false)
+-	var high: PackedFloat32Array = await _hit_and_read(r, overlay)
+### scripts/tools/rc16/uifx_checks.gd | created 901a569 | edit efe39f8 2026-10-07T11:29+0300 Float a damage number over a monster that takes a hit | +54 -45
+-const LAYER_LETTERS: Dictionary = {"VignetteOverlay": "V", "GrainOverlay": "G", "ChromaOverlay": "C"}
+-	await _sprint_blur(r)
+-		await r.get_tree().process_frame
+-	r._ok(seen == PackedStringArray(["V", "VG", "VGC", "VGC"]),
+-		"UIFX1 the tier table: Low draws the vignette alone, Medium adds the grain, High the chromatic aberration (Low..Ultra: %s)" % ", ".join(seen))
+-static func _blur_strength(blur: CanvasItem) -> float:
+-	return float(((blur as ColorRect).material as ShaderMaterial).get_shader_parameter("strength"))
+-static func _stick(on: bool) -> void:
+### scripts/tools/rc16/uifx_checks.gd | created 901a569 | edit 1ccfa49 2026-10-07T11:32+0300 Fade a screen in and rise it into place when it opens | +37 -36
+-		if layer != null and layer.visible:
+-			shown += String(LAYER_LETTERS[layer_name])
+-	r._ok(overlay != null, "UIFX1 the game scene carries the post-fx overlay")
+-	var medkits1: int = InventoryManager.count_of(&"medkit")
+-	var hp1: float = float(player.get("hp"))
+-	var restored: bool = defaults is Array and _bound_item(hud, 0) == (defaults as Array)[0]
+-	var forged_ok := false
+-	if quick_slots != null and defaults is Array:
+### scripts/tools/rc16/uifx_checks.gd | created 901a569 | edit 4c9b3fd 2026-10-07T21:55+0300 Close three UI deviations from the GDD found by the content agent: no day in the menu, 3 | +49 -0
+### scripts/tools/rc16/uifx_checks.gd | created 901a569 | edit 617d83e 2026-10-07T21:59+0300 Fix the TO1 check (a freed row equals null) and rename MENU1 to MENUBG1; record launch 7 | +6 -5
+-	r._ok(not seen.has("DAY") and seen.has("NIGHT") and seen.has("GENERATOR"), "MENU1 four background changes show %s: night and generator-on, no day" % [seen])
+-	var still: bool = row != null and is_instance_valid(row)
+-	var gone: bool = row != null and not is_instance_valid(row)
+-	r._ok(still and gone, "TO1 a toast is on screen at 2.7 s and gone by 3.5 s (row %s, at 2.7 s %s, gone %s)" % [row != null, still, gone])
+### scripts/tools/rc16/uifx_checks.gd | created 901a569 | edit 08af752 2026-10-07T22:13+0300 Beauty: warm the highlights of the suburbs and residential LUT, keep the sprint blur vis | +26 -2
+-	var rebound: bool = _bound_item(hud, 0) == &"medkit"
+-	r._ok(carries and accepts and rebound, "QS2 dragging the medkit cell onto quick slot 1 binds it (drag data %s, the target accepts %s, the HUD's slot 1 is %s)" % [data, accepts, _bound_item(hud, 0)])
+### scripts/tools/rc16/uifx_checks.gd | created 901a569 | edit 21c2046 2026-10-08T04:16+0300 Count the bot's real deaths, restore two uifx assertions and make the proof tools strict | +5 -2
+-		seen.append(off != Vector2.ZERO and off.x <= 4.0 and off.y <= 4.0)
+-	r._ok(seen == [true, true, false, true], "UIFX5 a hit shakes the health bar by at most 4 px and it is on its exact place 0.4 s later, and Reduce Screen Shake keeps it still (shaken, home, shaken, ho
+### tools/qa_sim/af2_both_ways.py | created 942d92b | edit f49a5cf 2026-10-08T02:27+0300 AF2 both ways, first real run: 36 rc16 checks fail on the code of e4bb4df and pass at HE | +41 -16
+-        if m:
+-    return (ROOT / ".qa_logs" / "proofs" / (run_id + ".out")).read_text(encoding="utf-8", errors="replace")
+-    sample = "[closeout] ok   PERF1 a\n[closeout] FAIL PERF1 b\n[closeout] ok   PERF2 c\n[closeout] ok   X9 d\nnoise\n"
+-    print("af2_both_ways demo OK (id parsing, bites / vacuous / broken)")
+-    base = args[args.index("--base") + 1]
+-    pre, post = parse(pre_text), parse(post_text)
+-    ids = sorted(set(pre) | set(post))
+-    rows, bad = judge(pre, post, ids)
+### tools/qa_sim/af2_both_ways.py | created 942d92b | edit 21c2046 2026-10-08T04:16+0300 Count the bot's real deaths, restore two uifx assertions and make the proof tools strict | +16 -7
+-    proofs = ROOT / ".qa_logs" / "proofs"
+-    attach = proofs / (run_id + ".attach.closeout_check.log")
+-    return (attach if attach.exists() else proofs / (run_id + ".out")).read_text(encoding="utf-8", errors="replace")
+-def report(base, only, pre_text, post_text):
+-    (ROOT / "docs" / "artifacts" / "rc16" / "af2_both_ways.txt").write_text(text + "\n", encoding="utf-8", newline="\n")
+-    print("af2_both_ways demo OK (id parsing, bites / vacuous / broken, the attached log is read)")
+-        return report(base, only, log_text("af2_pre"), log_text("af2_post"))
+### tools/qa_sim/af3_f4_scope.tsv | created 3766b13 | edit 3840ac9 2026-10-08T11:56+0300 Let the shop card follow its Buy button and report where SHOP1 fails | +1 -1
+-scripts/ui/screens.gd	42f9c73ab6e4	dbb0f3ea441e	A06_shop*
+### tools/qa_sim/af3_f4_scope.tsv | created 3766b13 | edit 7bc23c6 2026-10-08T12:02+0300 Lay the shop card out left to right so Arabic keeps its Buy button inside | +1 -1
+-scripts/ui/screens.gd	42f9c73ab6e4	f342acbc8ec5	A06_shop*
+### tools/qa_sim/af3_f4_scope.tsv | created 3766b13 | edit 74f710b 2026-10-08T12:13+0300 Build the shop card from containers and add the F3 audio A/B wrapper | +1 -1
+-scripts/ui/screens.gd	42f9c73ab6e4	6e5310b23d39	A06_shop*
+### tools/qa_sim/af3_frame_check.py | created 37db979 | edit 3f5556a 2026-10-08T03:16+0300 Keep the 26 read play-through frames and make the AF3 frame gate clone-safe | +51 -19
+-Frame name: <state>_<label>_<hash>_<UTC>.png   (UTC = YYYYMMDDTHHMMSSZ, written by scripts/tools/_rc16_probe_runner.gd)
+-  F5 the file's modification time is within 15 minutes of the capture time in its name (a renamed old frame is caught)
+-  F6 a valid PNG of at least 400 x 200 pixels, not byte-identical to another frame of the set
+-NAME = re.compile(r"^(?P<state>[\w-]+?)_(?P<label>before|after)_(?P<hash>[0-9a-f]{7,40})_(?P<utc>\d{8}T\d{6}Z)\.png$")
+-def png_size(path):
+-    data = path.read_bytes()[:33]
+-    if len(data) < 24 or data[:8] != b"\x89PNG\r\n\x1a\n" or data[12:16] != b"IHDR":
+-        return None
+### tools/qa_sim/af3_frame_check.py | created 37db979 | edit 26eef24 2026-10-08T03:24+0300 Record launch 15: the six final frames, read once each, under their AF3 names | +1 -1
+-    total, fails = check(dirs or [ROOT / "docs" / "stills" / d for d in ("polish", "rc16_playthrough")], baseline, since)
+### tools/qa_sim/af3_frame_check.py | created 37db979 | edit 924e3dd 2026-10-08T03:26+0300 Record launch 16: the GUI explorer passes 19, 0 bugs, with its menu frame under an AF3 n | +1 -1
+-    total, fails = check(dirs or [ROOT / "docs" / "stills" / d for d in ("polish", "rc16_playthrough", "rc16_final")], baseline, since)
+### tools/qa_sim/af3_frame_check.py | created 37db979 | edit 3766b13 2026-10-08T11:45+0300 Scope AF3 F4 to the reviewed change and drop the two frames of the fixed screens | +33 -5
+-  F4 label "after": no runtime path differs between the hash and HEAD (the frame shows the code that ships); label "before": the hash is the
+-     declared baseline (--baseline, default e4bb4df)
+-    fails, seen, total = [], {}, 0
+-                changed = [x for x in git("diff", "--name-only", full, "HEAD").stdout.splitlines() if is_runtime(x)]
+-    print("af3_frame_check demo OK (name grammar, runtime path classes, PNG and JPEG header, empty directory, F5 for a committed and an uncommitted frame)")
+### tools/qa_sim/af3_frame_check.py | created 37db979 | edit fa6afc0 2026-10-08T12:28+0300 Close F1 and F3: frames of the fixed screens, the audio A/B verdict, the Arabic shop fin | +1 -1
+-    total, fails = check(dirs or [ROOT / "docs" / "stills" / d for d in ("polish", "rc16_playthrough", "rc16_final", "rc16_gui")], baseline, since)
+### tools/qa_sim/gen_proofs16.py | created 3b85ff7 | edit ce67ca7 2026-10-08T03:36+0300 Write the rc16 sign-off report, the PROOFS section (30 closures), the resume note and th | +9 -3
+-A closure is {"id", "claim", "cmd", "proof", "quotes": [needle, ...], "frames": [path, ...], "commit"}. `proof` names a raw log written by
+-STAMP = re.compile(r"_(\d{8}T\d{6}Z)\.png$")
+-    lines = text.splitlines()
+### tools/qa_sim/gen_proofs16.py | created 3b85ff7 | edit 21c2046 2026-10-08T04:16+0300 Count the bot's real deaths, restore two uifx assertions and make the proof tools strict | +2 -2
+-        out += ["| " + " | ".join(ln.split("\t")) + " |" for ln in lines[:1]] + ["|---|---|---|---|---|---|"]
+-        out += ["| " + " | ".join(ln.split("\t")) + " |" for ln in lines[1:]]
+### tools/qa_sim/guarded_headless | created be84a29 | edit c5bd451 2026-10-07T21:50+0300 Adopt the changed-files lint (U0): gdparse, gdlint defect rules, ruff, shellcheck, actio | +1 -1
+-cd "$(dirname "$0")/../.."
+### tools/qa_sim/proof_run | created 557c9f3 | edit c5bd451 2026-10-07T21:50+0300 Adopt the changed-files lint (U0): gdparse, gdlint defect rules, ruff, shellcheck, actio | +1 -1
+-cd "$(dirname "$0")/../.."
+### tools/qa_sim/proof_run | created 557c9f3 | edit 21c2046 2026-10-08T04:16+0300 Count the bot's real deaths, restore two uifx assertions and make the proof tools strict | +2 -0
+### tools/qa_sim/rc16_probe | created 557c9f3 | edit 942d92b 2026-10-07T11:20+0300 Fix the probe's freed monster reference, add a frames-only mode and the AF2 both-ways to | +2 -1
+-timeout "$T" "$GODOT" --windowed --path . res://scenes/tools/rc16_probe_scene.tscn -- --tlabel="$LABEL" --thash="$HASH" > "$LOG" 2>&1
+### tools/qa_sim/rc16_probe | created 557c9f3 | edit c5bd451 2026-10-07T21:50+0300 Adopt the changed-files lint (U0): gdparse, gdlint defect rules, ruff, shellcheck, actio | +1 -1
+-cd "$(dirname "$0")/../.."
+### tools/qa_sim/stamp_frames.py | created bca7d33 | edit 3f5556a 2026-10-08T03:16+0300 Keep the 26 read play-through frames and make the AF3 frame gate clone-safe | +8 -6
+-usage: python tools/qa_sim/stamp_frames.py <src-dir> <dest-dir> <hash> [--label after] [--since-minutes 30] [--demo]
+-def stamp(src, dest, code_hash, label="after", since_minutes=30.0):
+-    for f in sorted(src.glob("*.png")):
+-        if now - f.stat().st_mtime > since_minutes * 60:
+-        target = dest / ("%s_%s_%s_%s.png" % (f.stem, label, code_hash, utc))
+-    names = stamp(src, dest, code_hash, label, minutes)
+### tools/qa_sim/timing_compare.py | created 557c9f3 | edit 1ac9dd3 2026-10-07T11:16+0300 Count the monster's melee through enemy_attack and reset the swing before it | +1 -1
+-    "monster_hits_per_s": ("abs", 0.1), "monster_damage_per_s": ("rel", 0.15),
+### tools/qa_sim/timing_equiv | created 557c9f3 | edit 37db979 2026-10-03T02:08+0300 Make the timing probe deterministic and clean the python gates | +2 -1
+-for fps in 30 60 120; do
+### tools/qa_sim/timing_equiv | created 557c9f3 | edit 401ca41 2026-10-07T11:31+0300 Add the rc16 block to check.sh, the timing whitelist and the utilities report | +7 -5
+-source tools/qa_sim/user_data_guard.sh
+-udg_snapshot || exit 99
+-trap 'udg_restore || exit 97' EXIT
+-trap 'exit 130' INT TERM
+-export TLS_UDG_GUARDED=1
+### tools/qa_sim/timing_equiv | created 557c9f3 | edit c5bd451 2026-10-07T21:50+0300 Adopt the changed-files lint (U0): gdparse, gdlint defect rules, ruff, shellcheck, actio | +1 -1
+-cd "$(dirname "$0")/../.."
+### tools/qa_sim/timing_inventory.py | created a5a40c3 | edit 401ca41 2026-10-07T11:31+0300 Add the rc16 block to check.sh, the timing whitelist and the utilities report | +3 -1
+-        return re.search(r"\b" + re.escape(weight) + r"\b\s*(:=|=)[^\n]*delta", body_text) is not None
+### tools/qa_sim/timing_whitelist.json | created a5a40c3 | edit 401ca41 2026-10-07T11:31+0300 Add the rc16 block to check.sh, the timing whitelist and the utilities report | +18 -1
+-[]
+### tools/utilities_report.sh | created 401ca41 | edit c5bd451 2026-10-07T21:50+0300 Adopt the changed-files lint (U0): gdparse, gdlint defect rules, ruff, shellcheck, actio | +93 -25
+-have() { command -v "$1" >/dev/null 2>&1 || "$PY" -m "$1" --version >/dev/null 2>&1; }
+-version() { { command -v "$1" >/dev/null 2>&1 && "$1" --version 2>&1 || "$PY" -m "$1" --version 2>&1; } | head -1; }
+-echo "== availability (the downloads a missing tool needs are not approved in this environment)"
+-for t in gdlint gdformat shellcheck mypy pngquant oggenc ruff flake8 pyflakes black ffmpeg; do
+-	if have "$t"; then echo "$t: $(version "$t")"; else echo "$t: ABSENT"; fi
+-"$PY" -m ruff check tools scripts --select E9,F --output-format concise; echo "exit=$?"
+-"$PY" -m ruff check tools scripts --statistics 2>&1 | tail -25; echo "exit=$?"
+-echo; echo "== flake8 correctness subset (E9, F63, F7, F82)"
+== files edited after creation: 22, edits: 54, edits that remove lines: 38
+== the first ledger rows (the timing and probe runs of the harness development and the first evidence runs)
+n	utc	head	id	exit	command
+1	20261002T230145Z	557c9f3	timing_before	1	tools/qa_sim/timing_equiv before
+2	20261002T230425Z	557c9f3	timing_before	1	tools/qa_sim/timing_equiv before
+3	20261002T230717Z	557c9f3	timing_dbg30	0	tools/qa_sim/timing_equiv dbg
+4	20261002T230828Z	37db979	timing_before	1	tools/qa_sim/timing_equiv before
+5	20261002T231008Z	37db979	timing_dbg_chase	0	tools/qa_sim/timing_equiv dbg
+6	20261002T231139Z	37db979	timing_before	1	tools/qa_sim/timing_equiv before
+7	20261002T231308Z	37db979	timing_dbg_attack	0	tools/qa_sim/timing_equiv dbg
+8	20261007T081448Z	37db979	timing_before	1	tools/qa_sim/timing_equiv before
+9	20261007T081657Z	1ac9dd3	probe_before	0	tools/qa_sim/rc16_probe before e4bb4df 900
+10	20261007T082017Z	942d92b	frames_before	0	tools/qa_sim/rc16_probe before e4bb4df 300
+11	20261007T082151Z	2af53cf	frames_before	0	tools/qa_sim/rc16_probe before e4bb4df 300
+== row 8: its head and the quantity that only 1ac9dd3 adds
+# utc 20261007T081448Z
+# head 37db979 (uncommitted paths: 3)
+22:player_damage_per_s          2.2022     2.2053     2.2068      0.0014 rel 0.150 ok
+0
+== the probe takes its perf readings before the staged states
+269:		await _stage_states()
+273:	await _perf(&"suburbs")
+278:	await _perf(&"suburbs")
+279:	await _perf(&"power_station")
+280:	await _stage_states()
+# EXIT=0
