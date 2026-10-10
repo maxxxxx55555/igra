@@ -702,6 +702,7 @@
   "menu_quit": "退出",
   "menu_subtitle": "永恒黑夜中的幸存者。让城市重获光明。",
   "menu_title": "最后一盏街灯",
+  "boot_title": "Last Streetlight",
   "msg_caught": "你被抓住了！",
   "msg_lose": "你失败了……",
   "msg_saved": "游戏已保存",

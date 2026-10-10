@@ -17,7 +17,7 @@ copy* changed only where the claim audit required it.
 
 ## Title
 
-- **EN:** The Last Streetlight
+- **EN:** Last Streetlight
 - **RU:** Последний фонарь
 
 ## Tagline (quotable — trailers, Shorts, press-kit, socials)
@@ -194,7 +194,7 @@ Title + tagline are the shipped in-game `menu_title` / `menu_subtitle`, byte-ide
 
 ### en — English
 
-- **Title:** THE LAST STREETLIGHT
+- **Title:** Last Streetlight
 - **Tagline:** A survivor in an eternal night. Bring the light back to the city.
 - **Short (70/80):** Restore the light. Stealth horror FPS where every streetlight is life.
 - **Full description:** see the EN/RU master block above (byte-untouched).
