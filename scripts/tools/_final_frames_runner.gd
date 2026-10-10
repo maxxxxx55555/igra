@@ -1,7 +1,8 @@
 extends Node
 ## Runner for _final_frames.gd (lives under /root so scene swaps don't free it).
-## Frames, half resolution: 01 main menu, 02 district "day", 03 district night,
-## 04 combat, 05 boss, 06 victory with the NG+ action. The GDD has no daytime
+## Frames, half resolution: 00 boot screen, 01 main menu (and 01_menu_<lang>_s<text size>
+## for en, ru, ar at sizes 1 and 2), 02 district "day", 03 district night, 07 skill
+## tree, 08 shop, 04 combat, 05 boss, 06 victory with the NG+ action. The GDD has no daytime
 ## ("no day", GDD.md:261), so "day" is the restored FULL stage and "night" the
 ## DARK stage of the spawn district. A saved PNG proves nothing until read.
 
@@ -103,7 +104,10 @@ func _run() -> void:
 	var ads := get_node_or_null("/root/AdService")
 	if ads:
 		ads.enabled = false
-	# Splash and boot loading take ~6.5 s before the menu is up.
+	# The boot screen routes itself to the menu once its bar is full (~6.5 s).
+	Routes.goto(Routes.BOOT)
+	await get_tree().create_timer(1.2).timeout
+	await _shot("00_boot_title")
 	var menu_up := func() -> bool:
 		var cs := get_tree().current_scene
 		return cs != null and cs.scene_file_path == Routes.MENU
@@ -114,6 +118,19 @@ func _run() -> void:
 			return
 	await get_tree().create_timer(1.5).timeout
 	await _shot("01_main_menu")
+	# en at text size 1 is 01_main_menu itself (a byte-identical twin fails AF3 rule F6).
+	var lang0: String = LocalizationManager.current_lang
+	var size0: int = int(SettingsManager.get_setting("text_size", 1))
+	for lang: String in ["en", "ru", "ar"]:
+		for size_idx: int in [1, 2]:
+			if lang == "en" and size_idx == 1:
+				continue
+			LocalizationManager.set_language(lang)
+			SettingsManager.set_text_size(size_idx)
+			await get_tree().create_timer(0.6).timeout
+			await _shot("01_menu_%s_s%d" % [lang, size_idx])
+	LocalizationManager.set_language(lang0)
+	SettingsManager.set_text_size(size0)
 
 	# a fresh profile opens the onboarding cards on game_started: they pause the tree and dim the frame, and these runs measure the game
 	SaveSystem.mark_onboard_done()
@@ -131,6 +148,20 @@ func _run() -> void:
 	PowerGrid.advance_district(StringName(DistrictManager.current_district), DistrictData.Stage.FULL)
 	await get_tree().create_timer(1.5).timeout
 	await _shot("02_district_day_full")
+
+	UIManager.open(&"skill_tree")
+	await get_tree().create_timer(0.6).timeout
+	await _shot("07_skill_tree")
+	UIManager.close(&"skill_tree")
+	var screens: Node = get_tree().current_scene.get_node_or_null("Screens")
+	if screens == null:
+		_fail("the main scene has no Screens node")
+		return
+	screens.call("show_screen", "Shop")
+	await get_tree().create_timer(0.6).timeout
+	await _shot("08_shop")
+	screens.call("hide_all")
+	await get_tree().create_timer(0.6).timeout
 
 	# Combat: the nearest monster that is in the world (pooled ones are parked
 	# far below), the player 3 m from it and facing it, one hit for the flash.
@@ -209,5 +240,5 @@ func _run() -> void:
 	GameManager.trigger_win()
 	await get_tree().create_timer(2.5).timeout
 	await _shot("06_victory_ngplus")
-	print("[final] DONE frames=6")
+	print("[final] DONE frames=14")
 	get_tree().quit(0)

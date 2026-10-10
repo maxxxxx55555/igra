@@ -12,7 +12,7 @@ var _left: bool = false
 
 func _ready() -> void:
 	add_to_group("ui_root")
-	title.text = LocalizationManager.t("loading")
+	title.text = LocalizationManager.t("boot_title")
 	tip.text = LocalizationManager.t(TIPS[randi() % TIPS.size()])
 	tip.add_theme_color_override("font_color", Color("#CFC9B8"))
 
