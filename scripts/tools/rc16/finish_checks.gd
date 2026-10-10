@@ -146,3 +146,31 @@ static func shop_in_panel(r: Node) -> void:
 	SettingsManager.set_text_size(size0)
 	r._ok(cases > 0 and outside.is_empty(), "SHOP2 the coin header and the scroll area lie inside the shop panel, %d languages x %d text sizes (%d cases; outside: %s; first outside: %s)"
 		% [LocalizationManager.SUPPORTED.size(), TEXT_SIZES.size(), cases, outside.slice(0, MAX_LISTED), first_outside])
+
+## A measurement, not a check (CLOSEOUT_ONLY=rtl): which other Screens cards, rebuilt in Arabic, keep a direct child of their content outside
+## the card. Loading, PhotoMode, PuzzleCables, StoryScene and FinalNight start flows of their own and are left out.
+static func rtl_screens_note(r: Node) -> void:
+	r._playing()
+	var screens: Node = r._main.get_node_or_null("Screens")
+	if screens == null:
+		print("[closeout] note RTL no Screens node")
+		return
+	LocalizationManager.set_language("ar")
+	var outside: Array[String] = []
+	for screen_name: String in ["Saves", "Bestiary", "FlashlightUpgrade", "ControlsTouch", "Weather", "Radio", "PowerGrid", "Events"]:
+		screens.call("show_screen", screen_name)
+		await r.get_tree().create_timer(SETTLE_SEC).timeout
+		var card: Control = screens.find_child(screen_name + "_Card", false, false) as Control
+		var content: Control = card.find_child("Content", false, false) as Control if card != null else null
+		if content == null:
+			outside.append(screen_name + ": no card")
+			continue
+		var card_rect: Rect2 = card.get_global_rect().grow(EDGE_PX)
+		var off: int = 0
+		for child: Node in content.get_children():
+			if child is Control and not child.is_queued_for_deletion() and not card_rect.encloses((child as Control).get_global_rect()):
+				off += 1
+		if off > 0:
+			outside.append("%s: %d of %d" % [screen_name, off, content.get_child_count()])
+	screens.call("hide_all")
+	print("[closeout] note RTL cards with content outside the card in Arabic: %s" % [outside])

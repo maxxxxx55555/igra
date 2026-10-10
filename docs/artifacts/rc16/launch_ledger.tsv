@@ -42,3 +42,6 @@ n	utc	head	id	exit	command
 41	20261010T220227Z	a4f2800	r0_shop2_diag_a4f2800	1	bash tools/qa_sim/closeout_check 300
 42	20261010T220332Z	a4f2800	r0_shop2_diag2_a4f2800	0	bash tools/qa_sim/closeout_check 300
 43	20261010T220400Z	a4f2800	r0_shop2_diag2_pre_a4f2800	1	bash tools/qa_sim/closeout_check 300
+44	20261010T220553Z	b82bfef	r0_af2_pre_b82bfef	1	bash tools/qa_sim/closeout_check 300
+45	20261010T220620Z	b82bfef	r0_af2_post_b82bfef	0	bash tools/qa_sim/closeout_check 300
+46	20261010T220822Z	b82bfef	r0_rtl_screens_b82bfef	0	bash tools/qa_sim/closeout_check 300
