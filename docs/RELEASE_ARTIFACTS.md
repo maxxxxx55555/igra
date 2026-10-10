@@ -1,6 +1,6 @@
 # Release artifacts (C9 owner-prep)
 
-Status at 2026-10-02 (rc15 sign-off): a signed release AAB exists, was rebuilt from the sign-off tree and is verified below.
+Status at 2026-10-10 (rc16 sign-off): the signed release AAB was rebuilt from `5bacfbe` and is verified below; the rc15 record after it is history.
 
 ## Done
 - **Release keystore generated** with `keytool` (PKCS12, RSA 4096, alias `tls_release`, 10000-day
@@ -17,6 +17,14 @@ Status at 2026-10-02 (rc15 sign-off): a signed release AAB exists, was rebuilt f
 
 **Back up `.signing/` outside this machine.** A lost upload key means no updates to the same listing
 unless Play App Signing is enabled (recommended: upload this as the *upload* key only).
+
+## Signed AAB (rc16 sign-off, rebuilt 2026-10-10)
+
+- **Built:** `build/tls.aab`, **183,290,294 bytes (183.3 MB)**, sha256 `428dd6df511b45ec625206a9aa6a1185d458016e9e55c16dcc124482707d263b`, built from commit `5bacfbe` with no uncommitted path (launch ledger row 36, `export_rc16_5bacfbe`, the EXPORT run that the owner's LOOP-BREAK directive added, CORRECTION_LOG 145): `godot --headless --path . --export-release "Android" build/tls.aab` with the three `GODOT_ANDROID_KEYSTORE_RELEASE_*` variables loaded from `.signing/release.env`, `# EXIT=0` (`docs/artifacts/rc16/proofs/export_rc16_5bacfbe.out`). The bundle was written at 19:05:26Z; the run ended only after `gradlew --stop` in `android/build` stopped the Gradle daemon, which held the output pipe of the export open. It is 33,197 bytes larger than the rc15 bundle. It holds no entry under `docs/`, `tools/`, `scenes/tools/` or `scripts/tools/` (`docs/artifacts/rc16/proofs/aab_verify_rc16.out`), so a later commit that touches only documents and proof logs carries the same game (`git diff --name-only 5bacfbe v8.0.0-rc16`).
+- **The bus layout:** the export resaved `default_bus_layout.tres` in the working tree at 19:03:11Z, the rewrite of `docs/KNOWN_ISSUES.md:1071` (the default values dropped, among them `room_size`, whose default is 0.8, and the uid text changed); `git checkout -- default_bus_layout.tres` reverted it after the run. The bundle holds the binary conversion `export-19246414aa9fb561ced4b8dce477acec-default_bus_layout.res` (3,047 bytes), which names `room_size` and `Master` (`docs/artifacts/rc16/proofs/aab_verify_rc16.out`).
+- **Contents:** 2,891 entries; the base module 26,974,670 bytes compressed (78,461,686 raw), the install-time asset pack `assetPackInstallTime` 155,283,546 bytes compressed (213,748,996 raw) (`docs/artifacts/rc16/proofs/aab_verify_rc16.out`). Play caps the base module's compressed download at 200 MB and sizes asset packs separately **(check the App bundle explorer at upload)**.
+- **Signature:** `jarsigner -verify build/tls.aab` prints `jar verified.` (exit 0), with the warnings of a self-signed upload key (no validated certificate chain, self-signed, no timestamp), a note on POSIX file attributes and 2,889 lines of the JarInputStream manifest-order note; `keytool -printcert -jarfile build/tls.aab`: owner `CN=Maxsim Kasky, O=Maxsim Kasky, C=RU`, SHA-256 equal to the upload key of the rc15 section below (`signer_match=yes`, `docs/artifacts/rc16/proofs/aab_verify_rc16.out`).
+- **The rc15 bundle** (183,257,097 bytes) is kept outside the repository at `..\_BACKUPS\2026-10-10_22-02\build\tls.aab` (`backup-first`, RUN_STATE skill log).
 
 ## Signed AAB (rc15 sign-off, rebuilt 2026-10-02; first built 2026-09-27)
 
