@@ -19,6 +19,7 @@ static func run(r: Node) -> void:
 	var size0: int = int(SettingsManager.get_setting("text_size", 1))
 	await _skill_tree_close(r)
 	await _shop_buy_buttons(r)
+	await shop_in_panel(r)
 	LocalizationManager.set_language(lang0)
 	SettingsManager.set_text_size(size0)
 
@@ -105,3 +106,32 @@ static func _button_outside(grid: Control) -> String:
 			if button != null and not (card_rect.encloses(button.get_global_rect()) and grid_rect.encloses(button.get_global_rect())):
 				return "button %s '%s' minimum %s, card %s, grid %s" % [button.get_global_rect(), button.text, button.get_combined_minimum_size(), card_rect, grid_rect]
 	return ""
+
+## SHOP2: in every language and at every text size the coin header and the scroll area lie inside the shop panel. Placed before they had a
+## parent, both stood one panel width to the right in Arabic while SHOP1 passed (rc16 F1). CLOSEOUT_ONLY=rc17 runs only this check.
+static func shop_in_panel(r: Node) -> void:
+	r._playing()
+	var lang0: String = LocalizationManager.current_lang
+	var size0: int = int(SettingsManager.get_setting("text_size", 1))
+	var screens: Node = r._main.get_node_or_null("Screens")
+	var outside: Array[String] = []
+	var cases: int = 0
+	if screens != null:
+		for lang: String in LocalizationManager.SUPPORTED:
+			LocalizationManager.set_language(lang)
+			for size_idx: int in TEXT_SIZES:
+				SettingsManager.set_text_size(size_idx)
+				screens.call("show_screen", "Shop")
+				await r.get_tree().create_timer(SETTLE_SEC).timeout
+				cases += 1
+				var scroll: Control = screens.find_child("ShopScroll", true, false) as Control
+				var panel: Control = scroll.get_parent() as Control if scroll != null else null
+				var header: Control = panel.get_node_or_null("ShopCoinHeader") as Control if panel != null else null
+				var panel_rect: Rect2 = panel.get_global_rect().grow(EDGE_PX) if panel != null else Rect2()
+				if header == null or not (panel_rect.encloses(scroll.get_global_rect()) and panel_rect.encloses(header.get_global_rect())):
+					outside.append("%s/%d" % [lang, size_idx])
+		screens.call("hide_all")
+	LocalizationManager.set_language(lang0)
+	SettingsManager.set_text_size(size0)
+	r._ok(cases > 0 and outside.is_empty(), "SHOP2 the coin header and the scroll area lie inside the shop panel, %d languages x %d text sizes (%d cases; outside: %s)"
+		% [LocalizationManager.SUPPORTED.size(), TEXT_SIZES.size(), cases, outside.slice(0, MAX_LISTED)])

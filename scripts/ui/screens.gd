@@ -934,12 +934,14 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 	var header := Label.new()
 	header.text = LocalizationManager.t("SCR_MONETY_0")
 	header.name = "ShopCoinHeader"
+	# Parent first: a Control placed before it has a parent is mirrored against a zero-width parent under a right-to-left
+	# language and lands one panel width off (Arabic, CORRECTION_LOG 147).
+	content.add_child(header)
 	header.size = Vector2(content.size.x, 30)
 	header.position = Vector2(0, 0)
 	header.add_theme_color_override("font_color", Color(0.788, 0.635, 0.290))
 	header.add_theme_font_size_override("font_size", 18)
 	header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	content.add_child(header)
 	header.text = LocalizationManager.t("SCR_MONETY_2") + str(CoinWallet.get_coins())
 	# Каталог: ShopService (CoinWallet-магазин). IAP-паки (Kind.COIN_PACK) исключены — донат/реклама отключены.
 	var items: Array[Dictionary] = []
@@ -949,10 +951,10 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 			items.append({"id": si.id, "desc": LocalizationManager.name_for("SHOP_ITEM_", si.id, si.display_name), "price_coins": si.final_price_coins()})
 	var scroll := ScrollContainer.new()
 	scroll.name = "ShopScroll"
+	content.add_child(scroll)
 	scroll.size = Vector2(content.size.x, content.size.y - SHOP_TOP - SHOP_CLOSE_ZONE)
 	scroll.position = Vector2(0, SHOP_TOP)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	content.add_child(scroll)
 	var grid_container := GridContainer.new()
 	grid_container.name = "ShopGrid"
 	grid_container.columns = 2
