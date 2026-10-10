@@ -1,6 +1,6 @@
 # Release artifacts (C9 owner-prep)
 
-Status at 2026-10-10 (rc16 sign-off): the signed release AAB was rebuilt from `5bacfbe` and is verified below; the rc15 record after it is history.
+Status at 2026-10-11 (rc17, the candidate for `v8.0.0`): the signed release AAB was rebuilt from `c76442b` and is verified below; the rc16 and rc15 records after it are history.
 
 ## Done
 - **Release keystore generated** with `keytool` (PKCS12, RSA 4096, alias `tls_release`, 10000-day
@@ -17,6 +17,13 @@ Status at 2026-10-10 (rc16 sign-off): the signed release AAB was rebuilt from `5
 
 **Back up `.signing/` outside this machine.** A lost upload key means no updates to the same listing
 unless Play App Signing is enabled (recommended: upload this as the *upload* key only).
+
+## Signed AAB (rc17, rebuilt 2026-10-11)
+
+- **Built:** `build/tls.aab`, **183,290,597 bytes (183.3 MB)**, sha256 `6608a50ac665b006070f193ccc1357775868ee4a577dfdccac48edf24214a0fe`, built from commit `c76442b` with no uncommitted path (launch ledger row 47, `export_rc17_c76442b`, EXPORT run 1 of the 2 of the owner directive of 2026-10-11): the same command and `.signing/release.env` as below, `# EXIT=0` (`docs/artifacts/rc16/proofs/export_rc17_c76442b.out`). As in rc16, the run ended after `gradlew --stop` stopped the Gradle daemon, and the export resaved `default_bus_layout.tres`, which was reverted with `git checkout`. 303 bytes larger than the rc16 bundle. No entry under `docs/`, `tools/`, `scenes/tools/` or `scripts/tools/` (`docs/artifacts/rc16/proofs/aab_verify_rc17.out`).
+- **Contents:** 2,891 entries; the base module 26,974,670 bytes compressed (78,461,686 raw), the install-time asset pack 155,283,834 bytes compressed (213,749,515 raw). The base module is far under the 200 MB cap of Play (`docs/RELEASE_RUNBOOK.md`, B6), so no compression pass is needed.
+- **Signature:** `jar verified.` (exit 0) with the same warnings as rc16; the signer's SHA-256 equals the upload key of the rc15 section (`signer_match=yes`, `docs/artifacts/rc16/proofs/aab_verify_rc17.out`).
+- **The rc16 bundle** (183,290,294 bytes) is kept outside the repository at `..\_BACKUPS\2026-10-11_01-17\build\tls.aab` (`backup-first`, RUN_STATE skill log).
 
 ## Signed AAB (rc16 sign-off, rebuilt 2026-10-10)
 

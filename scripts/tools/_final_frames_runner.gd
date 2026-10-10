@@ -2,7 +2,7 @@ extends Node
 ## Runner for _final_frames.gd (lives under /root so scene swaps don't free it).
 ## Frames, half resolution: 00 boot screen, 01 main menu (and 01_menu_<lang>_s<text size>
 ## for en, ru, ar at sizes 1 and 2), 02 district "day", 03 district night, 07 skill
-## tree, 08 shop, 04 combat, 05 boss, 06 victory with the NG+ action. The GDD has no daytime
+## tree, 08 shop (and 08_shop_ar), 04 combat, 05 boss, 06 victory with the NG+ action. The GDD has no daytime
 ## ("no day", GDD.md:261), so "day" is the restored FULL stage and "night" the
 ## DARK stage of the spawn district. A saved PNG proves nothing until read.
 
@@ -104,6 +104,11 @@ func _run() -> void:
 	var ads := get_node_or_null("/root/AdService")
 	if ads:
 		ads.enabled = false
+	# The run shows English at text size 1 whatever the profile says; the profile's own values come back at the end.
+	var lang0: String = LocalizationManager.current_lang
+	var size0: int = int(SettingsManager.get_setting("text_size", 1))
+	LocalizationManager.set_language("en")
+	SettingsManager.set_text_size(1)
 	# The boot screen routes itself to the menu once its bar is full (~6.5 s).
 	Routes.goto(Routes.BOOT)
 	await get_tree().create_timer(1.2).timeout
@@ -119,8 +124,6 @@ func _run() -> void:
 	await get_tree().create_timer(1.5).timeout
 	await _shot("01_main_menu")
 	# en at text size 1 is 01_main_menu itself (a byte-identical twin fails AF3 rule F6).
-	var lang0: String = LocalizationManager.current_lang
-	var size0: int = int(SettingsManager.get_setting("text_size", 1))
 	for lang: String in ["en", "ru", "ar"]:
 		for size_idx: int in [1, 2]:
 			if lang == "en" and size_idx == 1:
@@ -129,8 +132,8 @@ func _run() -> void:
 			SettingsManager.set_text_size(size_idx)
 			await get_tree().create_timer(0.6).timeout
 			await _shot("01_menu_%s_s%d" % [lang, size_idx])
-	LocalizationManager.set_language(lang0)
-	SettingsManager.set_text_size(size0)
+	LocalizationManager.set_language("en")
+	SettingsManager.set_text_size(1)
 
 	# a fresh profile opens the onboarding cards on game_started: they pause the tree and dim the frame, and these runs measure the game
 	SaveSystem.mark_onboard_done()
@@ -160,6 +163,11 @@ func _run() -> void:
 	screens.call("show_screen", "Shop")
 	await get_tree().create_timer(0.6).timeout
 	await _shot("08_shop")
+	LocalizationManager.set_language("ar")
+	screens.call("show_screen", "Shop")
+	await get_tree().create_timer(0.6).timeout
+	await _shot("08_shop_ar")
+	LocalizationManager.set_language("en")
 	screens.call("hide_all")
 	await get_tree().create_timer(0.6).timeout
 
@@ -240,5 +248,7 @@ func _run() -> void:
 	GameManager.trigger_win()
 	await get_tree().create_timer(2.5).timeout
 	await _shot("06_victory_ngplus")
-	print("[final] DONE frames=14")
+	LocalizationManager.set_language(lang0)
+	SettingsManager.set_text_size(size0)
+	print("[final] DONE frames=15")
 	get_tree().quit(0)
