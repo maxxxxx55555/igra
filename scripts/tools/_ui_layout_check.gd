@@ -32,6 +32,8 @@ var _checked: int = 0
 var _cyrillic := RegEx.create_from_string("[\\x{0400}-\\x{04FF}]")
 
 func _ready() -> void:
+	# SettingsManager puts the profile's saved language on with a deferred call after every _ready: English goes on after it.
+	await get_tree().process_frame
 	LocalizationManager.set_language("en")
 	await get_tree().process_frame
 	var view := Vector2(get_viewport().get_visible_rect().size)

@@ -32,6 +32,8 @@ func _ok(cond: bool, what: String) -> void:
 		print("[closeout] FAIL ", what)
 
 func _run() -> void:
+	# The checks read English layouts. The profile's saved language came on with SettingsManager's deferred call, queued before this one.
+	LocalizationManager.set_language("en")
 	SaveSystem.mark_onboard_done()
 	GameManager._change_state(GameManager.GameState.PLAYING)
 	_main = (load("res://scenes/main_3d.tscn") as PackedScene).instantiate()
