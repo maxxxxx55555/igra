@@ -52,3 +52,7 @@ n	utc	head	id	exit	command
 51	20261010T223828Z	e13d3f9	r2_sh1_pre_r0_e13d3f9	1	bash tools/qa_sim/closeout_check 300
 52	20261010T224123Z	e13d3f9	r2_closeout_sh1_e13d3f9	0	bash tools/qa_sim/closeout_check 300
 53	20261010T224258Z	e13d3f9	r2_sh1_mutation_e13d3f9	1	bash tools/qa_sim/closeout_check 300
+54	20261010T224728Z	18a2a2a	r2_closeout_18a2a2a	0	bash tools/qa_sim/closeout_check 300
+55	20261010T224903Z	18a2a2a	r2_frames_18a2a2a	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 900
+56	20261010T224941Z	18a2a2a	r2_audio_18a2a2a	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120
+57	20261010T225012Z	18a2a2a	r2_bot_18a2a2a	0	bash tools/qa_sim/autoplay_bot

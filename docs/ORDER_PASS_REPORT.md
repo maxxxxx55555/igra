@@ -185,6 +185,30 @@ rows: `docs/ACCEPTANCE_CHECKLIST.md` (200 rows); decisions: `docs/TZ_DECISIONS.m
 | Music | Excluded by owner (`OWNER_HANDOFF.md`) |
 | Play Console upload | Owner (credentials); `version/code` stays 1 until the first upload |
 
+## v8.0.0 release (rc17, Session 18, 2026-10-11)
+
+**Status: `v8.0.0-rc17` = `03fd367` is tagged and pushed. `v8.0.0` goes on the commit that records the R5 verifier round when that round reports no GAME-AFFECTING fail (owner pre-authorization of 2026-10-11); META fails become DEFERRED-HONEST rows.** Records: `docs/RUN_STATE.md` Session 18 and `docs/CORRECTION_LOG.md` 145 to 150; owner steps: `docs/release_checklist.md`.
+
+| Item | Result | Evidence |
+|---|---|---|
+| Design merge | `0cabe8b` merges `arena/9ff86ab5-igra` (`f6ceafa`, the branding slice of the design pass, 23 files) without a conflict; nothing reverted | RUN_STATE S18, D1 and D2 |
+| Title | "Last Streetlight" on the boot screen in every language, on the English menu in one line at text sizes 1 and 2, and as the window title (`config/name`, `project.godot:13`, set by no script); the other languages show their own `menu_title` (`docs/DESIGN_PREMIUM_PASS.md`, item 4) | `docs/stills/rc17/00_boot_title_*`, `docs/stills/rc17/01_menu_en_s2_*`, `docs/stills/release/01_main_menu_*` |
+| Boot screen | showed the `loading` string; shows `boot_title` (`scripts/boot_loading.gd:15`) | `a5bfe70` |
+| Arabic shop | fixed: the header and the scroll area are attached before they are placed; SHOP2 fails on the old shop in Arabic at three text sizes and passes on the fix | CORRECTION_LOG 147; `docs/stills/rc17/08_shop_ar_*` |
+| Arabic, other cards | eight Screens cards keep their content outside the card in Arabic: OPEN, the owner decides | `docs/KNOWN_ISSUES.md`; `docs/artifacts/rc16/proofs/r0_rtl_screens_b82bfef.out` |
+| Desktop `user://` | moved with the title to `app_userdata/Last Streetlight`; the phone build is not affected | `docs/KNOWN_ISSUES.md`, CORRECTION_LOG 150 |
+| Signed AAB | 183,290,597 bytes from `c76442b` (EXPORT 1 of 2), `jar verified.`, the signer is the upload key, no ad SDK code | `docs/RELEASE_ARTIFACTS.md` (rc17) |
+| Battery | `check.sh --all` at `af5225d`: 64 green, 2 red, both gate edits (the English pin, and SH1 asking for the scroll the shop has had since rc16 F1), CORRECTION_LOG 149; at `18a2a2a`: closeout `checks=379 fails=0`, audio truth PASS (Music -10.6 dB), static battery 40 green | `docs/artifacts/rc16/proofs/r2_check_all_af5225d.out`, `docs/artifacts/rc16/proofs/r2_closeout_18a2a2a.out`, `docs/artifacts/rc16/proofs/r2_audio_18a2a2a.out` |
+| Bot | 3 of 3 seeds won, 0 softlocks, at `d390826` and at `18a2a2a` | `docs/artifacts/rc16/proofs/d4_bot_d390826.out`, `docs/artifacts/rc16/proofs/r2_bot_18a2a2a.out` |
+| Balance sim | PASS | `docs/artifacts/rc16/proofs/r2_balance_sim_af5225d.out` |
+| i18n | 12 of 12 locales PASS; the i18n audit reads MISSING 0 | RUN_STATE S18, D2 |
+| Frames | `af3 frames=21 fail=0` (`docs/stills/rc17/` 15, `docs/stills/release/` 6), each read once | RUN_STATE S18-L1 and L17 |
+| Function matrix | 146 rows, no BUG | `docs/artifacts/rc16/proofs/r4_matrix_status.out` |
+| Verifier (R5) | pending | `docs/artifacts/rc16/proofs/r5_verifier_note.md` |
+| Unverifiable here | U1 to U8 | `docs/UNVERIFIABLE_HERE.md` |
+| Store | the title and the 13 locales of `store/listing.md` are ready; gaps: the screenshots are 960 x 540 (featuring asks for 1080 px), the icon has no alpha and the feature graphic has one (check at upload), the privacy policy is not hosted yet | `docs/release_checklist.md`, steps 2, 3 and 5 |
+| Owner | phone smoke test, Play Console, privacy URL, IARC and data safety, the Arabic decision, music, assets | `docs/release_checklist.md` |
+
 ## rc16 final (sign-off, 2026-10-08)
 
 **Status (2026-10-10): verifier round 11 returned FAIL=0 at `ad7f263` and the owner's LOOP-BREAK directive (CORRECTION_LOG 145) authorizes the tag, so `v8.0.0-rc16` goes on the last commit of the pass; the pass ended PARTIAL at `3bd8932`, and on the owner's CONTINUE rounds 7 to 10 returned FAIL 1, 1, 2 and 3 and round 11 FAIL 0** (`docs/CORRECTION_LOG.md` rows 129 to 145; reports `docs/artifacts/rc16/proofs/f5_verifier_round1.md` to `f5_verifier_round11.md`). The tag before it is `v8.0.0-rc15`.

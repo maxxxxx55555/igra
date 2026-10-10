@@ -1,0 +1,31 @@
+# proof r3_aab_adsdk_c76442b
+# utc 20261010T225350Z
+# head 18a2a2a (uncommitted paths: 12)
+# env none
+# cmd python -I /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/adsdk_scan.py build/tls.aab
+"""Ad SDK scan of an AAB: entries named applovin and dex references to com/applovin classes. Prints itself first."""
+import pathlib
+import sys
+import zipfile
+
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+with zipfile.ZipFile(sys.argv[1]) as z:
+    named = [i.filename for i in z.infolist() if "applovin" in i.filename.lower()]
+    refs = sum(z.read(i).count(b"Lcom/applovin/") for i in z.infolist() if i.filename.endswith(".dex"))
+    dex = sum(1 for i in z.infolist() if i.filename.endswith(".dex"))
+print("entries named applovin:", len(named))
+for n in named:
+    print("  " + n)
+print("dex files:", dex, "references to Lcom/applovin/:", refs)
+
+--- run
+entries named applovin: 6
+  assetPackInstallTime/assets/addons/applovin_max/AppLovinMAX.gd.remap
+  assetPackInstallTime/assets/addons/applovin_max/AppLovinMAX.gdc
+  assetPackInstallTime/assets/addons/applovin_max/AppLovinMAXDictionaryUtils.gd.remap
+  assetPackInstallTime/assets/addons/applovin_max/AppLovinMAXDictionaryUtils.gdc
+  assetPackInstallTime/assets/scripts/monetization/applovin_provider.gd.remap
+  assetPackInstallTime/assets/scripts/monetization/applovin_provider.gdc
+dex files: 1 references to Lcom/applovin/: 0
+# EXIT=0
