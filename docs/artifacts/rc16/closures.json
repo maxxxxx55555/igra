@@ -526,7 +526,7 @@
    "accept=178/200"
   ],
   "frames": [],
-  "commit": "f1dc912"
+  "commit": "cdf90cf"
  },
  {
   "id": "U0-UTILITIES",
@@ -571,7 +571,7 @@
    "12/12 locales PASS"
   ],
   "frames": [],
-  "commit": "f1dc912"
+  "commit": "cdf90cf"
  },
  {
   "id": "FINAL-AF5",
@@ -582,7 +582,7 @@
    "citation(s)"
   ],
   "frames": [],
-  "commit": "f1dc912"
+  "commit": "cdf90cf"
  },
  {
   "id": "FINAL-LINT",
@@ -593,7 +593,7 @@
    "0 finding(s)"
   ],
   "frames": [],
-  "commit": "f1dc912"
+  "commit": "cdf90cf"
  },
  {
   "id": "FINAL-STATIC",
@@ -604,7 +604,7 @@
    "Проверок пройдено: 40"
   ],
   "frames": [],
-  "commit": "f1dc912"
+  "commit": "cdf90cf"
  },
  {
   "id": "FINAL-AF3",
@@ -615,7 +615,7 @@
    "af3 frames=50 fail=0"
   ],
   "frames": [],
-  "commit": "f1dc912"
+  "commit": "cdf90cf"
  },
  {
   "id": "FINAL-AF3-FRESH",
@@ -627,6 +627,6 @@
    "af3 frames=50 fail=0"
   ],
   "frames": [],
-  "commit": "f1dc912"
+  "commit": "cdf90cf"
  }
 ]

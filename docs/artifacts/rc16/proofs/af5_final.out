@@ -1,7 +1,7 @@
 # proof af5_final
-# utc 20261009T225902Z
-# head f1dc912 (uncommitted paths: 3)
+# utc 20261010T203344Z
+# head cdf90cf (uncommitted paths: 2)
 # env none
 # cmd python tools/af5_check.py
-af5_check: 140 citation(s) in 736 doc line(s), 0 finding(s)
+af5_check: 144 citation(s) in 675 doc line(s), 0 finding(s)
 # EXIT=0
