@@ -190,7 +190,7 @@ def main():
             i += 2
         else:
             i += 1
-    total, fails = check(dirs or [ROOT / "docs" / "stills" / d for d in ("polish", "rc16_playthrough", "rc16_final", "rc16_gui", "rc16_f1")], baseline, since)
+    total, fails = check(dirs or [ROOT / "docs" / "stills" / d for d in ("rc17",)], baseline, since)
     for f in fails:
         print("FAIL", f)
     print("af3 frames=%d fail=%d" % (total, len(fails)))

@@ -1,0 +1,49 @@
+# proof d2_af3_rc16_set_a5bfe70
+# utc 20261010T212434Z
+# head a5bfe70 (uncommitted paths: 17)
+# env none
+# cmd python tools/qa_sim/af3_frame_check.py --dir docs/stills/polish --dir docs/stills/rc16_playthrough --dir docs/stills/rc16_final --dir docs/stills/rc16_gui --dir docs/stills/rc16_f1
+FAIL 01_dark_street_after_c3e79e5_20261007T191815Z.png: F4 22 runtime path(s) differ between c3e79e5 and HEAD, first: data/i18n/ar.json
+FAIL 02_lit_street_after_c3e79e5_20261007T191818Z.png: F4 22 runtime path(s) differ between c3e79e5 and HEAD, first: data/i18n/ar.json
+FAIL 03_flashlight_shadow_after_c3e79e5_20261007T191820Z.png: F4 22 runtime path(s) differ between c3e79e5 and HEAD, first: data/i18n/ar.json
+FAIL 04_combat_hit_after_c3e79e5_20261007T191821Z.png: F4 22 runtime path(s) differ between c3e79e5 and HEAD, first: data/i18n/ar.json
+FAIL 05_damage_taken_after_c3e79e5_20261007T191823Z.png: F4 22 runtime path(s) differ between c3e79e5 and HEAD, first: data/i18n/ar.json
+FAIL 06_sprint_ultra_after_c3e79e5_20261007T191825Z.png: F4 22 runtime path(s) differ between c3e79e5 and HEAD, first: data/i18n/ar.json
+FAIL 07_steam_street_after_c3e79e5_20261007T191829Z.png: F4 22 runtime path(s) differ between c3e79e5 and HEAD, first: data/i18n/ar.json
+FAIL 08_inventory_ui_after_c3e79e5_20261007T191831Z.png: F4 22 runtime path(s) differ between c3e79e5 and HEAD, first: data/i18n/ar.json
+FAIL A01_menu_after_bca7d33_20261007T235629Z.jpg: F4 22 runtime path(s) differ between bca7d33 and HEAD, first: data/i18n/ar.json
+FAIL A03_onboarding_done_after_bca7d33_20261007T235640Z.jpg: F4 22 runtime path(s) differ between bca7d33 and HEAD, first: data/i18n/ar.json
+FAIL A04_flashlight_off_after_bca7d33_20261007T234751Z.jpg: F4 22 runtime path(s) differ between bca7d33 and HEAD, first: data/i18n/ar.json
+FAIL A04_walk_after_bca7d33_20261007T234754Z.jpg: F4 22 runtime path(s) differ between bca7d33 and HEAD, first: data/i18n/ar.json
+FAIL A05_death_screen_after_bca7d33_20261007T234818Z.jpg: F4 22 runtime path(s) differ between bca7d33 and HEAD, first: data/i18n/ar.json
+FAIL A05_monster_hit_after_bca7d33_20261007T234809Z.jpg: F4 22 runtime path(s) differ between bca7d33 and HEAD, first: data/i18n/ar.json
+FAIL A06_inventory_after_bca7d33_20261007T234821Z.jpg: F4 22 runtime path(s) differ between bca7d33 and HEAD, first: data/i18n/ar.json
+FAIL A06_inventory_selected_after_bca7d33_20261007T234822Z.jpg: F4 22 runtime path(s) differ between bca7d33 and HEAD, first: data/i18n/ar.json
+FAIL A07_map_fresh_after_bca7d33_20261007T234830Z.jpg: F4 22 runtime path(s) differ between bca7d33 and HEAD, first: data/i18n/ar.json
+FAIL A08_battery_low_after_bca7d33_20261007T234837Z.jpg: F4 22 runtime path(s) differ between bca7d33 and HEAD, first: data/i18n/ar.json
+FAIL A12_tier_0_low_after_bca7d33_20261007T234845Z.jpg: F4 22 runtime path(s) differ between bca7d33 and HEAD, first: data/i18n/ar.json
+FAIL A12_tier_3_ultra_after_bca7d33_20261007T234859Z.jpg: F4 22 runtime path(s) differ between bca7d33 and HEAD, first: data/i18n/ar.json
+FAIL A13_lang_ar_after_bca7d33_20261007T234916Z.jpg: F4 22 runtime path(s) differ between bca7d33 and HEAD, first: data/i18n/ar.json
+FAIL A13_lang_ja_after_bca7d33_20261007T234912Z.jpg: F4 22 runtime path(s) differ between bca7d33 and HEAD, first: data/i18n/ar.json
+FAIL B03_hardcore_on_after_bca7d33_20261007T235607Z.jpg: F4 22 runtime path(s) differ between bca7d33 and HEAD, first: data/i18n/ar.json
+FAIL B04_daily_card_after_bca7d33_20261007T235557Z.jpg: F4 22 runtime path(s) differ between bca7d33 and HEAD, first: data/i18n/ar.json
+FAIL S_codex_bestiary_after_bca7d33_20261007T235645Z.jpg: F4 22 runtime path(s) differ between bca7d33 and HEAD, first: data/i18n/ar.json
+FAIL S_credits_after_bca7d33_20261007T235656Z.jpg: F4 22 runtime path(s) differ between bca7d33 and HEAD, first: data/i18n/ar.json
+FAIL S_hud_help_after_bca7d33_20261007T235652Z.jpg: F4 22 runtime path(s) differ between bca7d33 and HEAD, first: data/i18n/ar.json
+FAIL S_workbench_after_bca7d33_20261007T235653Z.jpg: F4 22 runtime path(s) differ between bca7d33 and HEAD, first: data/i18n/ar.json
+FAIL V09_boss_spawn_after_bca7d33_20261007T235407Z.jpg: F4 22 runtime path(s) differ between bca7d33 and HEAD, first: data/i18n/ar.json
+FAIL V10_victory_after_bca7d33_20261007T235525Z.jpg: F4 22 runtime path(s) differ between bca7d33 and HEAD, first: data/i18n/ar.json
+FAIL V11_ngp_screen_after_bca7d33_20261007T235526Z.jpg: F4 22 runtime path(s) differ between bca7d33 and HEAD, first: data/i18n/ar.json
+FAIL V_t0190_after_bca7d33_20261007T235235Z.jpg: F4 22 runtime path(s) differ between bca7d33 and HEAD, first: data/i18n/ar.json
+FAIL 01_main_menu_after_41afa7e_20261008T002148Z.png: F4 22 runtime path(s) differ between 41afa7e and HEAD, first: data/i18n/ar.json
+FAIL 02_district_day_full_after_41afa7e_20261008T002156Z.png: F4 22 runtime path(s) differ between 41afa7e and HEAD, first: data/i18n/ar.json
+FAIL 03_district_night_dark_after_41afa7e_20261008T002155Z.png: F4 22 runtime path(s) differ between 41afa7e and HEAD, first: data/i18n/ar.json
+FAIL 04_combat_after_41afa7e_20261008T002157Z.png: F4 22 runtime path(s) differ between 41afa7e and HEAD, first: data/i18n/ar.json
+FAIL 05_boss_after_41afa7e_20261008T002159Z.png: F4 22 runtime path(s) differ between 41afa7e and HEAD, first: data/i18n/ar.json
+FAIL 06_victory_ngplus_after_41afa7e_20261008T002202Z.png: F4 22 runtime path(s) differ between 41afa7e and HEAD, first: data/i18n/ar.json
+FAIL 00_menu_after_26eef24_20261008T002508Z.png: F4 22 runtime path(s) differ between 26eef24 and HEAD, first: data/i18n/ar.json
+FAIL A06_shop_after_74f710b_20261008T091547Z.png: F4 22 runtime path(s) differ between 74f710b and HEAD, first: data/i18n/ar.json
+FAIL A06_shop_ar_after_74f710b_20261008T091603Z.png: F4 22 runtime path(s) differ between 74f710b and HEAD, first: data/i18n/ar.json
+FAIL A09_skill_tree_after_74f710b_20261008T091545Z.png: F4 22 runtime path(s) differ between 74f710b and HEAD, first: data/i18n/ar.json
+af3 frames=50 fail=42
+# EXIT=1

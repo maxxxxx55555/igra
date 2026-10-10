@@ -1,0 +1,9 @@
+# proof d3_frames_a5bfe70
+# utc 20261010T212159Z
+# head a5bfe70 (uncommitted paths: 0)
+# env none
+# cmd bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 900
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/final_frames_scene.tscn rc=0 (log: .qa_logs/final_frames_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+# EXIT=0

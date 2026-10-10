@@ -1,0 +1,7 @@
+# proof d3_af3_rc17_a5bfe70
+# utc 20261010T212712Z
+# head a5bfe70 (uncommitted paths: 5)
+# env none
+# cmd python tools/qa_sim/af3_frame_check.py
+af3 frames=14 fail=0
+# EXIT=0
