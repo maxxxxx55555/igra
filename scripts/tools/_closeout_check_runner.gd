@@ -1121,7 +1121,14 @@ func _check_shop() -> void:
 	var lowest := 0.0
 	for c in grid.get_children():
 		lowest = maxf(lowest, (c as Control).get_global_rect().end.y)
-	_ok(lowest <= close_button.get_global_rect().position.y, "SH1 every row ends above the Close button (%.0f <= %.0f)" % [lowest, close_button.get_global_rect().position.y])
+	# Since the cards grow to their content (rc16 F1) the seven cards scroll: the scroll area clips them above the Close button, and its range
+	# must reach the last row (CORRECTION_LOG 149).
+	var scroll := grid.get_parent() as ScrollContainer
+	var view_end := scroll.get_global_rect().end.y if scroll != null else INF
+	var bar := scroll.get_v_scroll_bar() if scroll != null else null
+	var reach := bar.max_value - bar.page if bar != null else 0.0
+	_ok(view_end <= close_button.get_global_rect().position.y, "SH1 the rows scroll in an area that ends above the Close button (%.0f <= %.0f)" % [view_end, close_button.get_global_rect().position.y])
+	_ok(reach + 0.5 >= lowest - view_end, "SH1 the scroll reaches the last row (range %.0f px, rows end %.0f px below the area)" % [reach, lowest - view_end])
 	var biggest := 0.0
 	for icon in grid.find_children("IconTex_*", "TextureRect", true, false):
 		biggest = maxf(biggest, (icon as Control).size.x)

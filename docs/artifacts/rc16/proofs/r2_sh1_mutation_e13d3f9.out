@@ -1,0 +1,11 @@
+# proof r2_sh1_mutation_e13d3f9
+# utc 20261010T224258Z
+# head e13d3f9 (uncommitted paths: 11)
+# env none
+# cmd bash tools/qa_sim/closeout_check 300
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL SH1 the rows scroll in an area that ends above the Close button (1167 <= 1165)
+[closeout] DONE checks=379 fails=1
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+# EXIT=1

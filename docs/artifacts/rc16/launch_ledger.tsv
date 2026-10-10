@@ -47,3 +47,8 @@ n	utc	head	id	exit	command
 46	20261010T220822Z	b82bfef	r0_rtl_screens_b82bfef	0	bash tools/qa_sim/closeout_check 300
 47	20261010T221707Z	c76442b	export_rc17_c76442b	0	bash -c set -a; . .signing/release.env; set +a; /c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/Godot_v4.7-stable_win64_console.exe --headless --path . --export-release "Android" build/tls.aab
 48	20261010T222328Z	af5225d	r2_check_all_af5225d	2	bash tools/check.sh --all
+49	20261010T223612Z	e13d3f9	r2_uilay_e13d3f9	0	bash tools/qa_sim/guarded_headless res://scenes/tools/ui_layout_check_scene.tscn 120
+50	20261010T223627Z	e13d3f9	r2_closeout_e13d3f9	1	bash tools/qa_sim/closeout_check 300
+51	20261010T223828Z	e13d3f9	r2_sh1_pre_r0_e13d3f9	1	bash tools/qa_sim/closeout_check 300
+52	20261010T224123Z	e13d3f9	r2_closeout_sh1_e13d3f9	0	bash tools/qa_sim/closeout_check 300
+53	20261010T224258Z	e13d3f9	r2_sh1_mutation_e13d3f9	1	bash tools/qa_sim/closeout_check 300
