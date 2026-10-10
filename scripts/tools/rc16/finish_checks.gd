@@ -115,6 +115,7 @@ static func shop_in_panel(r: Node) -> void:
 	var size0: int = int(SettingsManager.get_setting("text_size", 1))
 	var screens: Node = r._main.get_node_or_null("Screens")
 	var outside: Array[String] = []
+	var first_outside: String = ""
 	var cases: int = 0
 	if screens != null:
 		for lang: String in LocalizationManager.SUPPORTED:
@@ -124,14 +125,24 @@ static func shop_in_panel(r: Node) -> void:
 				screens.call("show_screen", "Shop")
 				await r.get_tree().create_timer(SETTLE_SEC).timeout
 				cases += 1
-				var scroll: Control = screens.find_child("ShopScroll", true, false) as Control
-				var panel: Control = scroll.get_parent() as Control if scroll != null else null
-				var header: Control = panel.get_node_or_null("ShopCoinHeader") as Control if panel != null else null
-				var panel_rect: Rect2 = panel.get_global_rect().grow(EDGE_PX) if panel != null else Rect2()
-				if header == null or not (panel_rect.encloses(scroll.get_global_rect()) and panel_rect.encloses(header.get_global_rect())):
+				# The panel is the visible card: <name>_Card/Content/{header Label, ScrollContainer/ShopGrid}. A rebuilt header or scroll
+				# area meets its queued-for-deletion namesake and is renamed, so they are found from the grid and by type.
+				var grid: Control = screens.find_child("ShopGrid", true, false) as Control
+				var scroll: Control = grid.get_parent() as Control if grid != null else null
+				var content: Control = scroll.get_parent() as Control if scroll != null else null
+				var card: Control = content.get_parent() as Control if content != null else null
+				var labels: Array[Node] = []
+				if content != null:
+					labels = content.find_children("*", "Label", false, false)
+				var header: Control = labels[0] as Control if not labels.is_empty() else null
+				var card_rect: Rect2 = card.get_global_rect().grow(EDGE_PX) if card != null else Rect2()
+				if header == null or card == null or not (card_rect.encloses(scroll.get_global_rect()) and card_rect.encloses(header.get_global_rect())):
 					outside.append("%s/%d" % [lang, size_idx])
+					if first_outside == "" and header != null and card != null:
+						first_outside = "%s/%d: card %s, content %s, header %s, scroll %s" % [lang, size_idx, card_rect, content.get_global_rect(),
+							header.get_global_rect(), scroll.get_global_rect()]
 		screens.call("hide_all")
 	LocalizationManager.set_language(lang0)
 	SettingsManager.set_text_size(size0)
-	r._ok(cases > 0 and outside.is_empty(), "SHOP2 the coin header and the scroll area lie inside the shop panel, %d languages x %d text sizes (%d cases; outside: %s)"
-		% [LocalizationManager.SUPPORTED.size(), TEXT_SIZES.size(), cases, outside.slice(0, MAX_LISTED)])
+	r._ok(cases > 0 and outside.is_empty(), "SHOP2 the coin header and the scroll area lie inside the shop panel, %d languages x %d text sizes (%d cases; outside: %s; first outside: %s)"
+		% [LocalizationManager.SUPPORTED.size(), TEXT_SIZES.size(), cases, outside.slice(0, MAX_LISTED), first_outside])
