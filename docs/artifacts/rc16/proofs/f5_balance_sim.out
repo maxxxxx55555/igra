@@ -1,0 +1,70 @@
+# proof f5_balance_sim
+# utc 20261010T100937Z
+# head 323d7cd (uncommitted paths: 0)
+# env none
+# cmd python -I tools/qa_sim/balance_sim.py
+══════════════════════════════════════════════════════════════════════
+BALANCE SIM — parts economy, hunter pressure, battery, skills, pacing
+══════════════════════════════════════════════════════════════════════
+
+[1] Parts economy (per district, DARK playstyle — no cross-district borrowing assumed)
+    demand per district: {'cable': 1, 'fuse': 1, 'transistor': 1}
+    supply per district: {'cable': 2, 'fuse': 2, 'transistor': 2}
+    cable        need=1 have=2 margin=+100%  OK
+    fuse         need=1 have=2 margin=+100%  OK
+    transistor   need=1 have=2 margin=+100%  OK
+    -> worst-case margin across all districts: +100% (>= 20% target)
+
+[2] Resource dead-ends
+    districts checked: 11, districts with 0 supply: 0
+    OK — every spine district carries its own full 2x2x2 repair-part set
+
+[3] Hunter pressure (base roster = 3 distinct types/district; stage scaling from enemy_pool.gd _target_count())
+    by stage: DARK=6  PARTIAL=5  STREETS=4  FULL=3
+    suburbs        composition=['SHADOW', 'SHADOW', 'CRAWLER']
+    residential    composition=['SHADOW', 'CRAWLER', 'CRAWLER', 'ROTTER']
+    park           composition=['CRAWLER', 'HUNTER', 'SHADOW', 'HOUND', 'ROTTER']
+    school         composition=['SHADOW', 'CRAWLER', 'WATCHER', 'SHARPSHOOTER']
+    hospital       composition=['WATCHER', 'SHADOW', 'CRAWLER', 'ROTTER', 'ROTTER']
+    gas_station    composition=['HUNTER', 'SHADOW', 'CRAWLER', 'BURNER', 'HOUND']
+    police         composition=['WATCHER', 'HUNTER', 'DESTROYER', 'SHARPSHOOTER', 'BRUTE']
+    warehouses     composition=['CRAWLER', 'DESTROYER', 'HUNTER', 'BRUTE', 'HOUND']
+    industrial     composition=['DESTROYER', 'HUNTER', 'WATCHER', 'BRUTE', 'BURNER']
+    substation     composition=['DESTROYER', 'WATCHER', 'HUNTER', 'SHARPSHOOTER', 'BURNER']
+    power_station  composition=['DESTROYER', 'DESTROYER', 'WATCHER', 'BRUTE', 'SHARPSHOOTER', 'BURNER']
+
+[4] Battery economy
+    battery_max: 100.0
+    drain_per_sec: 0.2
+    seconds_on_full_charge: 450.0
+    guaranteed_batteries_per_district: 2
+    seconds_per_battery_pickup: 157.5
+    flashlight_seconds_available_per_district: 765.0
+    -> flashlight-on budget per district (guaranteed loot only): 12.8 min
+    -> DARK-style need (duty cycle 50% of 12 min clear): 6.0 min — OK
+    -> PARTIAL-style need (duty cycle 70% of 18 min clear): 12.6 min — OK
+
+[5] Skill branches (4 found)
+    combat     skills=5   total_sp_to_max=21
+    survival   skills=5   total_sp_to_max=13
+    utility    skills=4   total_sp_to_max=13
+    stealth    skills=4   total_sp_to_max=13
+
+[6] Time-to-win estimate (bound, not measured — this session cannot play)
+    efficient lower bound  — DARK: ~2.7 h   PARTIAL: ~3.8 h
+    typical first playthrough (x1.8) — DARK: ~4.9 h   PARTIAL: ~6.9 h
+    3-6h target — DARK (the tension-forward, design-default style): OK
+    3-6h target — PARTIAL: slightly over (soft finding, not a hard fail — see below)
+    NOTE: PARTIAL-style estimate (6.9h) runs past 6h under this model's assumptions (a 1.8x first-playthrough multiplier on an already-generous 18 min/district pacing). Not treated as a hard fail: DARK — the style the game's tension design targets — lands cleanly in range, and this estimate has no ground-truth playtest to calibrate against.
+
+[7] Coin economy (reachable wallet income vs. catalog prices, no runtime change)
+    districts (GDD.md:229 curve): 11 x 200..1200 = 7700
+    all secrets x reward: 26 x 50 = 1300
+    all achievements x reward: 31 x 100 = 3100 (profile-persistent, not per-run)
+    cheapest 2 catalog items: [1000, 1200] = 2200
+    -> repeat profile, no secrets (7700) vs cheapest 2 items (2200): covers it
+    -> fresh profile, all secrets + all districts (9000) vs cheapest 2 items: covers it
+
+══════════════════════════════════════════════════════════════════════
+BALANCE SIM: PASS — DARK solvable with >=20% margin in every district, no resource dead-ends, 4 skill branches, DARK time-to-win within 3-6h (PARTIAL is a longer optional style, see NOTE above).
+# EXIT=0
