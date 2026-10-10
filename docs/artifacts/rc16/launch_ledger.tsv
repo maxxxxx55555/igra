@@ -36,3 +36,4 @@ n	utc	head	id	exit	command
 35	20261008T091531Z	74f710b	l24_f1_f3_74f710b	0	bash -c bash tools/qa_sim/guarded_windowed res://scenes/tools/closeout_check_scene.tscn 300; rc1=$?; grep -aE "^\[closeout\] (FAIL|DONE)" .qa_logs/closeout_check_scene.log; echo "--- F3 audio A/B"; bash tools/qa_sim/audio_ab 3; rc2=$?; echo "rc finish=$rc1 audio_ab=$rc2"; exit $rc1
 36	20261010T190256Z	5bacfbe	export_rc16_5bacfbe	0	bash -c set -a; . .signing/release.env; set +a; /c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/Godot_v4.7-stable_win64_console.exe --headless --path . --export-release "Android" build/tls.aab
 37	20261010T212159Z	a5bfe70	d3_frames_a5bfe70	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 900
+38	20261010T213021Z	d390826	d4_bot_d390826	0	bash tools/qa_sim/autoplay_bot
