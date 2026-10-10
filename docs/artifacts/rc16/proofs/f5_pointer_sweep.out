@@ -1,0 +1,94 @@
+# proof f5_pointer_sweep
+# utc 20261010T101358Z
+# head 47eb2a2 (uncommitted paths: 0)
+# env none
+# cmd bash /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/f5_pointer_sweep.sh
+== script f5_pointer_sweep.py
+"""F5 round 8 / CORRECTION_LOG 141: pointers in the documents that name a file and say what it holds, and stray carriage returns.
+
+A. a backticked path followed by lists / holds / has / contains / names / prints / states / defines / shows / records / keeps / says / documents,
+   in the document lines added since e4bb4df: every hit is printed to be read against the named file.
+B. a backticked docs path followed by a row id (E11, U4, X45 ...): the id has to occur in that file.
+C. text files of the repository with a carriage return that is not followed by a line feed.
+usage: python f5_pointer_sweep.py <repo-root>
+"""
+import pathlib
+import re
+import subprocess
+import sys
+
+root = pathlib.Path(sys.argv[1])
+
+
+def git(*args):
+    return subprocess.run(["git", *args], cwd=root, capture_output=True, text=True, encoding="utf-8", errors="replace").stdout
+
+
+docs = [d for d in git("diff", "--name-only", "e4bb4df", "HEAD", "--", "docs", "opencode-memory.md", "CLAUDE.md").split("\n")
+        if d.endswith(".md") and not d.startswith(("docs/artifacts/", "docs/stills/"))]
+
+VERB = re.compile(r"`([A-Za-z0-9_./\-]+\.[A-Za-z0-9]{1,5}|tools/[A-Za-z0-9_./\-]+|scripts/[A-Za-z0-9_./\-]+)`\)?\s*(?:\(|:)?\s*(?:also\s)?"
+                  r"(lists?|holds?|has|contains?|names?|prints?|states?|defines?|shows?|records?|keeps?|says?|documents?)\b")
+print("== A: path + verb")
+n = 0
+for d in docs:
+    for line in git("diff", "-U0", "e4bb4df", "HEAD", "--", d).splitlines():
+        if not line.startswith("+") or line.startswith("+++"):
+            continue
+        for m in VERB.finditer(line):
+            n += 1
+            print("%s | %s" % (d.replace("docs/", ""), line[max(0, m.start() - 60):min(len(line), m.end() + 110)]))
+print("hits", n)
+
+print("== B: docs path + row id, the id has to occur in the file")
+ROWID = re.compile(r"`((?:docs/)?[A-Za-z0-9_./\-]+\.md)`\s*(?:\(|,|:)?\s*(?:rows?\s+)?"
+                   r"([A-Z]{1,4}[0-9]{1,3}(?:\.[0-9]+)?(?:-[A-Za-z0-9]+)?|U[0-9]|X[0-9]+)\b")
+n = 0
+missing = []
+cache = {}
+for d in docs:
+    for line in git("diff", "-U0", "e4bb4df", "HEAD", "--", d).splitlines():
+        if not line.startswith("+") or line.startswith("+++"):
+            continue
+        for m in ROWID.finditer(line):
+            n += 1
+            path, ident = m.group(1), m.group(2)
+            if path not in cache:
+                cache[path] = None
+                for cand in (path, "docs/" + path):
+                    if (root / cand).exists():
+                        cache[path] = (root / cand).read_text(encoding="utf-8", errors="replace")
+                        break
+            text = cache[path]
+            if text is None or not re.search(r"(?<![A-Za-z0-9])" + re.escape(ident) + r"(?![A-Za-z0-9])", text):
+                missing.append("%s | %s %s" % (d, path, ident))
+print("pointers checked", n, "id not in file", len(missing))
+for x in missing:
+    print(" ", x)
+
+print("== C: a carriage return not followed by a line feed, in the tracked text files")
+exts = (".md", ".py", ".sh", ".gd", ".json", ".txt", ".tsv", ".cfg", ".yml", ".yaml", ".tscn", ".tres")
+files = [f for f in git("ls-files").split("\n") if f.endswith(exts) and not f.startswith(("docs/stills/", "addons/", ".claude/"))]
+lone = []
+for f in files:
+    p = root / f
+    if p.is_file() and re.search(rb"\r(?!\n)", p.read_bytes()):
+        lone.append(f)
+print("files scanned", len(files), "with a lone CR", len(lone))
+for f in lone:
+    print(" ", f)
+== output
+== A: path + verb
+CORRECTION_LOG.md | he proof's `.out`, which holds only the FAIL and DONE lines `tools/qa_sim/closeout_check` prints, so a clean run had no id in it. After reading the attached full log (`af2_post.attach.closeout_check.log`) i
+CORRECTION_LOG.md | 1 (`docs/artifacts/rc16/proofs/f5_verifier_round1.md`). L1: `s1_compile_c407e60.out` holds `compile_gate_scene.tscn rc=0` and `# EXIT=0` only; the `COMPILE_GATE bad=0` line came from the gate's own ou
+ORDER_PASS_REPORT.md | g, and look at the eight probe states (the `_snap` calls of `scripts/tools/_rc16_probe_runner.gd` name them: dark street, lit street, flashlight shadow, combat hit, damage taken, sprint ultra, steam street, inven
+ORDER_PASS_REPORT.md |  and the audio A/B. Owner: take the fix into the next pass (`docs/KNOWN_ISSUES.md` has it: add the header and the scroll area to `content` before placing them, and require the grid inside the pane
+RUN_STATE.md | no stored node references; `finish_checks.gd` is 107 lines; `scripts/ui/screens.gd` has 1,062 lines, over the 300-line rule, an old file not split here; gap: CORRECTION_LOG 117)
+UNVERIFIABLE_HERE.md | at the same eight states on the phone (the `_snap` calls of `scripts/tools/_rc16_probe_runner.gd` name them: dark street, lit street, flashlight shadow, combat hit, damage taken, sprint ultra, steam street, inven
+UTILITIES_REPORT.md |  68 agents, 94 commands; 0 files mention godot or gdscript; `hooks/hooks.json` holds 24 hook commands, all run `node`, on PreToolUse 9, Stop 7, SessionStart 2, PostToolUse 2, PostToolUseFailure 
+hits 7
+== B: docs path + row id, the id has to occur in the file
+pointers checked 26 id not in file 0
+== C: a carriage return not followed by a line feed, in the tracked text files
+files scanned 1162 with a lone CR 0
+# EXIT=0

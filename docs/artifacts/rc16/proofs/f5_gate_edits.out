@@ -1,0 +1,78 @@
+# proof f5_gate_edits
+# utc 20261010T101437Z
+# head 47eb2a2 (uncommitted paths: 1)
+# env none
+# cmd bash /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/f5_gate_edits.sh
+== script f5_gate_edits.sh
+#!/usr/bin/env bash
+# F5 round 8 / CORRECTION_LOG 142: the edits of three gates that the pass created and changed after their first use, before and after, from git.
+S="C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad"
+cd C:/Users/Maxsim/Desktop/TLS_Build/THE_LAST_STREETLIGHT || exit 2
+echo "== script f5_gate_edits.sh"
+cat "$S/f5_gate_edits.sh"
+echo "== (1) timing inventory, created in a5a40c3, edited in 401ca41"
+git log --format='%h %ad %s' --date=short -- tools/qa_sim/timing_inventory.py tools/qa_sim/timing_whitelist.json
+echo "-- whitelist rows before and after"
+git show 401ca41^:tools/qa_sim/timing_whitelist.json | python -I -c "import json, sys; print(len(json.load(sys.stdin)), 'rows before')"
+git show 401ca41:tools/qa_sim/timing_whitelist.json | python -I -c "import json, sys; print(len(json.load(sys.stdin)), 'rows after')"
+echo "-- the changed lines of timing_inventory.py"
+git diff 401ca41^ 401ca41 -- tools/qa_sim/timing_inventory.py | grep '^[-+][^-+]'
+echo "-- the gate at HEAD, then the gate of 401ca41^ against the same scripts and the same whitelist"
+python -I tools/qa_sim/timing_inventory.py | tail -2
+mkdir -p "$S/ti_old"
+git show 401ca41^:tools/qa_sim/timing_inventory.py | sed 's#^ROOT = pathlib.Path(__file__).resolve().parents\[2\]#ROOT = pathlib.Path("C:/Users/Maxsim/Desktop/TLS_Build/THE_LAST_STREETLIGHT")#' > "$S/ti_old/timing_inventory_old.py"
+grep -n '^ROOT' "$S/ti_old/timing_inventory_old.py"
+python -I "$S/ti_old/timing_inventory_old.py" | tail -6
+echo "-- the weights of those four sites"
+sed -n '464p;469p' scripts/systems/music_manager.gd
+sed -n '83,86p' scripts/world/district_atmosphere.gd
+echo "== (2) AUD3, e32fa77: the node the check moves"
+git diff e32fa77^ e32fa77 -- scripts/tools/rc16/audio_checks.gd | grep '^[-+][^-+]' | head -12
+echo "== (3) timing_compare.py tolerances, 1ac9dd3"
+git diff 1ac9dd3^ 1ac9dd3 -- tools/qa_sim/timing_compare.py | grep '^[-+][^-+]'
+echo "-- the two quantities in docs/TIMING_AUDIT.md (30, 60, 120 FPS, spread, tolerance)"
+grep -n 'monster_damage_per_s\|player_damage_per_s' docs/TIMING_AUDIT.md
+== (1) timing inventory, created in a5a40c3, edited in 401ca41
+401ca41 2026-10-07 Add the rc16 block to check.sh, the timing whitelist and the utilities report
+a5a40c3 2026-10-02 Add the timing inventory gate for the frame-independence audit
+-- whitelist rows before and after
+0 rows before
+16 rows after
+-- the changed lines of timing_inventory.py
+-        return re.search(r"\b" + re.escape(weight) + r"\b\s*(:=|=)[^\n]*delta", body_text) is not None
++        return re.search(r"\b" + re.escape(weight) + r"\b\s*(?::\s*[\w\[\]]+\s*)?(?::=|=)[^\n]*delta", body_text) is not None
++        "\tvar k2: float = clamp(delta * 4.0, 0.0, 1.0)",
++        "\tx = lerpf(x, 1.0, k2)",
+-- the gate at HEAD, then the gate of 401ca41^ against the same scripts and the same whitelist
+scripts with timing sites: 93 | _process 51 | _physics_process 12 | Tween 64 | Timer 22 | suspects 16 | open 0 | stale whitelist rows 0
+23:ROOT = pathlib.Path("C:/Users/Maxsim/Desktop/TLS_Build/THE_LAST_STREETLIGHT")
+scripts with timing sites: 93 | _process 51 | _physics_process 12 | Tween 64 | Timer 22 | suspects 20 | open 4 | stale whitelist rows 0
+scripts/systems/music_manager.gd:469 LERP_NO_DELTA pl.volume_db = lerpf(pl.volume_db, want_db, w)
+scripts/world/district_atmosphere.gd:84 LERP_NO_DELTA _env.fog_light_color = _env.fog_light_color.lerp(_target_fog, k)
+scripts/world/district_atmosphere.gd:85 LERP_NO_DELTA _env.background_color = _env.background_color.lerp(_target_sky, k)
+scripts/world/district_atmosphere.gd:86 LERP_NO_DELTA _env.ambient_light_color = _env.ambient_light_color.lerp(_target_ambient, k)
+-- the weights of those four sites
+	var w: float = clampf(delta * LAYER_LERP, 0.0, 1.0)
+		pl.volume_db = lerpf(pl.volume_db, want_db, w)
+	var k: float = clamp(delta * _lerp_speed, 0.0, 1.0)
+	_env.fog_light_color = _env.fog_light_color.lerp(_target_fog, k)
+	_env.background_color = _env.background_color.lerp(_target_sky, k)
+	_env.ambient_light_color = _env.ambient_light_color.lerp(_target_ambient, k)
+== (2) AUD3, e32fa77: the node the check moves
+-	var player: Node3D = r._player
++	var player := r.get_tree().get_first_node_in_group("player") as Node3D
+-## the bed of the district itself stays. A marker stream stands for a bed that was loaded. The old code does neither.
++## the bed of the district itself stays. A marker stream stands for a bed that was loaded. The old code does neither. The neighbours
++## are those of the order of the dark table, which has to be the order of the districts.
++	var order: Array = MusicManager.AMBIENCE_DARK_BY_DISTRICT.keys()
++	var same: bool = order.size() == DistrictSceneFactory.DISTRICTS.size()
++	for i in mini(order.size(), DistrictSceneFactory.DISTRICTS.size()):
++		same = same and order[i] == DistrictSceneFactory.DISTRICTS[i]
++	r._ok(same, "AUD5 the dark bed table lists the districts in the order of DistrictSceneFactory.DISTRICTS (%s)" % [order])
+== (3) timing_compare.py tolerances, 1ac9dd3
+-    "monster_hits_per_s": ("abs", 0.1), "monster_damage_per_s": ("rel", 0.15),
++    "monster_hits_per_s": ("abs", 0.1), "monster_damage_per_s": ("rel", 0.1), "player_damage_per_s": ("rel", 0.15),
+-- the two quantities in docs/TIMING_AUDIT.md (30, 60, 120 FPS, spread, tolerance)
+41:| monster_damage_per_s | 6.6482 | 6.6574 | 6.6620 | 0.0014 | rel 0.100 |
+42:| player_damage_per_s | 2.2022 | 2.2053 | 2.2068 | 0.0014 | rel 0.150 |
+# EXIT=0
