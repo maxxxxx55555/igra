@@ -21,7 +21,7 @@ Codex tab, **S_hud_*** the HUD buttons, **S_workbench**, **S_credits**.
 | OV1 | One fixed map of 11 districts, not procedural | 1 | closeout_check: DistrictLoot.populate on all 11 districts; bot 11/11 FULL | BATTERY |
 | OV2 | 13 languages, every user string translated, no mixed script | 1, CLAUDE.md | i18n_truth_gate 12/12 + hardcoded_text_gate + PT language sweep | PT-A13 |
 | OV3 | Android first, desktop optional, offline | 1 | signed AAB (`jarsigner -verify`); device run is an owner step | OWNER |
-| OV4 | 8-12 h for one ending | 1 | design estimate: the bot clears the whole game in about 10 min; no gate measures a human's time | NOT-VERIFIABLE |
+| OV4 | 8-12 h for one ending | 1 | the bot clears the whole game in 6.0 to 6.3 min at 1x (362.9 to 380.9 s, `f5_bot_duration`); no gate measures a human's time | NOT-VERIFIABLE |
 
 ## 2. Camera and controls (GDD 2)
 
@@ -328,7 +328,7 @@ Result after rc16: 178 of 200 rows are proven (176 at rc15, plus CT7, QS2 and I9
 | Row | Result | What the code has | What is open, and who decides |
 |---|---|---|---|
 | OV3 | OWNER | the signed bundle `build/tls.aab` | the run on a phone (`docs/UNVERIFIABLE_HERE.md` U1): the owner installs it |
-| OV4 | NOT-VERIFIABLE | the bot clears the game in about 10 min | no gate measures a person's time: the owner plays one ending |
+| OV4 | NOT-VERIFIABLE | the bot clears the game in 6.0 to 6.3 min at 1x (`f5_bot_duration`) | no gate measures a person's time: the owner plays one ending |
 | CT4 | DECIDED | `REACH` (`scripts/player/interactor.gd:24`) 3.2 m and `AIM_DOT` (`scripts/player/interactor.gd:27`), the scan of the group `interactable` (`scripts/player/interactor.gd:87`) | the GDD's 3 m camera ray; a shorter reach is on the REJECTED list (`docs/TZ_DECISIONS.md:30`, G04) |
 | CT5 | DECIDED | `JOY_ZONE_RATIO` (`scripts/player/player_3d.gd:422`) 0.35: the left 35% of the screen is the stick, the rest looks | `docs/TZ_DECISIONS.md:31` (G27) |
 | FL5 | DECIDED | `BATTERY_DRAIN_PER_SEC` (`scripts/player/player_3d.gd:125`) is 100/450, 1% per 4.5 s; the battery item gives `effect_value` (`data/items/battery.tres:14`) 35 | the GDD's 1% per 2 s and +25 fail the balance simulation and the Architect fight (`docs/TZ_DECISIONS.md:20` G09, `docs/TZ_DECISIONS.md:21` G10) |
@@ -336,7 +336,7 @@ Result after rc16: 178 of 200 rows are proven (176 at rc15, plus CT7, QS2 and I9
 | SN2 | DECIDED | run noise 8 m and 0.8 (`State.RUN` at `scripts/player/player_3d.gd:602` and `scripts/player/player_3d.gd:618`); a dodge emits `noise_emitted` with radius 3 (`scripts/player/player_3d.gd:1309`) | hit noise 5 m / 1.0 and the 0.4 / 1.0 levels were reverted after the IRON RULE bisect (`docs/TZ_DECISIONS.md:35`, S01: batch with it 0/3, without 2/3); that row reads "dodge noise NOT applied", the 3 m event has existed since the first commit |
 | EC1 | DECIDED | rewards `REWARD_SECRET` (`scripts/economy/rewards_manager.gd:2`) 50, district 200 + 100 per step, achievement 100 | GDD 8 has no vendor (`docs/TZ_DECISIONS.md:59`, EC1-sell); the +100 for an ad has no entry point (`skip_bonus_coins` at `scripts/monetization/ad_service.gd:114`) |
 | SV1 | DECIDED | `MAX_SLOTS` (`scripts/core/save_system.gd:6`) 4: the slot API exists and no screen opens it | owner decision G22 (`docs/TZ_DECISIONS.md:42`): re-enable the slot picker with a Continue per slot, or amend GDD 10 to one save |
-| SC7 | DECIDED | `SCREEN_LIST` (`scripts/ui/screens.gd:18`) holds the seven cards; the pause menu opens the shop and the flashlight upgrade only (`scripts/ui/pause_menu.gd:61`) | the cards are mock-ups with sample data (`docs/TZ_DECISIONS.md:60`) |
+| SC7 | DECIDED | `SCREEN_LIST` (`scripts/ui/screens.gd:18`) lists the seven cards among its 14 names; the pause menu opens the shop and the flashlight upgrade only (`scripts/ui/pause_menu.gd:61`) | the cards are mock-ups with sample data (`docs/TZ_DECISIONS.md:60`) |
 | SC8 | DECIDED | the radio line reaches the player as a lore note; no voiced content | `docs/TZ_DECISIONS.md:61`; voice lines are an asset task (`docs/ASSET_SHOPPING_LIST.md` row 19) |
 | AU3 | OWNER | none | music is excluded (`docs/OWNER_HANDOFF.md`) |
 | AU4 | DECIDED | walk, jog and sprint files for six surfaces (`SPEED_SURFACES` at `scripts/systems/footstep_system.gd:32`) | asphalt, puddle and glass have one recording each and carry speed in volume and pitch (`docs/TZ_DECISIONS.md:48`, A03); per-speed samples are an asset task (`docs/ASSET_SHOPPING_LIST.md` row 18) |
