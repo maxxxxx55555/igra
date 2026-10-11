@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """AF2 both-ways run (rc16): the checks of the pass must FAIL on the code before the fixes and PASS on the code after them.
 
-usage: python tools/qa_sim/af2_both_ways.py --base <rev> [--only rc16] [--demo]
-       python tools/qa_sim/af2_both_ways.py --analyze [--write]   (re-judges the two saved runs, from .qa_logs/proofs or the committed docs/artifacts/rc16/proofs;
+usage: python tools/qa_sim/af2_both_ways.py --base <rev> [--only rc16] [--tag s21] [--demo]
+       python tools/qa_sim/af2_both_ways.py --analyze [--write] [--tag s21]   (re-judges the two saved runs, from .qa_logs/proofs or the committed docs/artifacts/rc16/proofs;
                                                                     read-only unless --write rewrites docs/artifacts/rc16/af2_both_ways.txt)
 Runs `CLOSEOUT_ONLY=<only> tools/qa_sim/closeout_check 300` twice, each through tools/qa_sim/proof_run:
   pre   every runtime file that differs between <rev> and HEAD is put back to its <rev> content (a file added since <rev> is moved aside, a
@@ -10,7 +10,8 @@ Runs `CLOSEOUT_ONLY=<only> tools/qa_sim/closeout_check 300` twice, each through 
   post  the tree is put back to HEAD and the same run repeats
 A check id BITES when it is not "ok" before and "ok" after; it is VACUOUS when it is "ok" in both runs; it is BROKEN when it is not "ok"
 after. Raw logs: .qa_logs/proofs/af2_pre.out and af2_post.out (copied to docs/artifacts/rc16/proofs/); the verdict table is printed and
-saved as docs/artifacts/rc16/af2_both_ways.txt. Exit 1 when any id is VACUOUS or BROKEN, or when no id was seen.
+saved as docs/artifacts/rc16/af2_both_ways.txt. --tag <t> puts "<t>_" before all three names, so a later pass does not overwrite the files a
+closed pass cites (Session 21 did, once, and restored them). Exit 1 when any id is VACUOUS or BROKEN, or when no id was seen.
 A runtime file is one the game ships (tools/qa_sim/af3_frame_check.py is_runtime); the tree must have no modified tracked file.
 """
 import os
@@ -77,7 +78,7 @@ def run_closeout(run_id, only):
     return log_text(run_id)
 
 
-def report(base, only, pre_text, post_text, write=True):
+def report(base, only, pre_text, post_text, write=True, prefix=""):
     pre, post = parse(pre_text), parse(post_text)
     ids = sorted(set(pre) | set(post))
     rows, bad = judge(pre, post, ids)
@@ -88,7 +89,7 @@ def report(base, only, pre_text, post_text, write=True):
     text = "\n".join(out)
     print(text)
     if write:
-        (ROOT / "docs" / "artifacts" / "rc16" / "af2_both_ways.txt").write_text(text + "\n", encoding="utf-8", newline="\n")
+        (ROOT / "docs" / "artifacts" / "rc16" / (prefix + "af2_both_ways.txt")).write_text(text + "\n", encoding="utf-8", newline="\n")
     return 0 if bad == 0 and ids else 1
 
 
@@ -123,8 +124,9 @@ def main():
         return 0
     base = args[args.index("--base") + 1] if "--base" in args else "e4bb4df"
     only = args[args.index("--only") + 1] if "--only" in args else "rc16"
+    prefix = args[args.index("--tag") + 1] + "_" if "--tag" in args else ""
     if "--analyze" in args:
-        return report(base, only, log_text("af2_pre"), log_text("af2_post"), write="--write" in args)
+        return report(base, only, log_text(prefix + "af2_pre"), log_text(prefix + "af2_post"), write="--write" in args, prefix=prefix)
     dirty = [x for x in git("status", "--porcelain").splitlines() if not x.startswith("??")]
     if dirty:
         raise SystemExit("the tree has modified tracked files, commit or stash first: %s" % dirty[:3])
@@ -142,14 +144,14 @@ def main():
             if src.exists():
                 src.rename(str(src) + ASIDE)
                 moved.append(src)
-        pre_text = run_closeout("af2_pre", only)
+        pre_text = run_closeout(prefix + "af2_pre", only)
     finally:
         for p in modified:
             git("checkout", "HEAD", "--", p, check=False)
         for src in moved:
             pathlib.Path(str(src) + ASIDE).rename(src)
-    post_text = run_closeout("af2_post", only)
-    return report(base, only, pre_text, post_text)
+    post_text = run_closeout(prefix + "af2_post", only)
+    return report(base, only, pre_text, post_text, prefix=prefix)
 
 
 if __name__ == "__main__":
