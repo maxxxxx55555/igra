@@ -29,6 +29,7 @@ var _won: bool = false
 var _spawn_pos: Vector3 = Vector3.ZERO
 var _last_line_ms: int = 0
 var _finished: bool = false
+var _out: String = OUT
 ## A step that raises an engine error ends its coroutine silently; the watchdog turns that into a failed run.
 const STALL_SEC := 150.0
 const STALL_SEC_BOT := 420.0
@@ -49,7 +50,7 @@ func _ready() -> void:
 	mute.autostart = true
 	mute.timeout.connect(func() -> void:
 		AudioServer.set_bus_mute(0, true)
-		var limit := STALL_SEC_BOT if _mode == "V" else STALL_SEC
+		var limit := STALL_SEC_BOT if _mode == "V" or _mode.begins_with("L") else STALL_SEC
 		if float(Time.get_ticks_msec() - _last_line_ms) / 1000.0 > limit:
 			_step("STALL", false, "no step for %.0f s: a step raised an engine error and stopped (see the log)" % limit)
 			_finish())
@@ -103,7 +104,7 @@ const FRAME_QUALITY := 0.86
 ## Saves the frame the player sees. A frame identical to the previous saved one is retried (a windowed run can return a
 ## stale image when nothing animates) and, if it stays identical, flagged in the returned name.
 func _shot(name: String) -> String:
-	var abs_dir := ProjectSettings.globalize_path(OUT)
+	var abs_dir := ProjectSettings.globalize_path(_out)
 	DirAccess.make_dir_recursive_absolute(abs_dir)
 	var same := false
 	for attempt in 3:
@@ -650,9 +651,11 @@ func _a06_inventory() -> void:
 	await get_tree().create_timer(0.4).timeout
 	_step("A06c", not _ui_open(&"inventory") and GameManager.is_playing(), "Tab closes it and the game runs on")
 
-func _a06_shop() -> void:
-	CoinWallet.add(3000)
-	_say("[pt] note A06 setup: 3000 coins added (the cheapest shop item costs 1000)")
+## grant 0: buy with the coins the run earned.
+func _a06_shop(grant: int = 3000) -> void:
+	if grant > 0:
+		CoinWallet.add(grant)
+		_say("[pt] note A06 setup: %d coins added (the cheapest shop item costs 1000)" % grant)
 	var opened := await _pause_open()
 	_step("A06d", opened, "Esc opens the pause menu", await _shot("A06_pause"))
 	var pause := _ui(&"pause")
@@ -923,6 +926,7 @@ func _mode_v() -> void:
 	var victory_open := GameManager.is_win()
 	_step("V10", finished and victory_open, "the victory screen follows the win (state win: %s)" % victory_open, await _shot("V10_victory"))
 	await _v11_new_game_plus()
+	await _v14_save_quit()
 
 func _milestone(id: String, what: String, frame: String, delay: float) -> void:
 	await get_tree().create_timer(delay).timeout
@@ -950,7 +954,7 @@ func _v11_new_game_plus() -> void:
 			await _click(b)
 			break
 	await get_tree().create_timer(0.5).timeout
-	_step("V11c", picked != "" and NewGamePlus.get_active_modifiers().size() == 1, "one modifier can be taken for the new level ('%s')" % picked.left(40), await _shot("V11_ngp_modifier"))
+	_step("V11c", picked != "" and NewGamePlus.get_active_modifiers().size() == NewGamePlus.get_current_ng_plus(), "one modifier can be taken for the new level ('%s')" % picked.left(40), await _shot("V11_ngp_modifier"))
 	await _click(ngp.back_button)
 	var in_menu := await _wait_until(func() -> bool: return _menu_vbox() != null, 20.0)
 	await get_tree().create_timer(1.0).timeout
@@ -981,7 +985,6 @@ func _v11_new_game_plus() -> void:
 			else:
 				weak += 1
 	_step("V11f", strong > 0 and weak == 0, "New Game+ monsters carry the scaled health (%d scaled, %d not)" % [strong, weak], await _shot("V11_ng_run"))
-	await _v14_save_quit()
 
 ## A ConfirmationDialog is an embedded window: the viewport's hit test cannot see into it, so its button is pressed by
 ## its signal and the dialog's presence and text are read from the frame.
@@ -1008,12 +1011,11 @@ func _v14_save_quit() -> void:
 		f.store_string(JSON.stringify(state))
 		f.close()
 	_say("[pt] note V14 state before quitting: %s" % JSON.stringify(state))
-	var path := ProjectSettings.globalize_path("res://.qa_logs/playthrough_V.txt")
-	var out := FileAccess.open(path, FileAccess.WRITE)
+	_say("[pt] DONE mode=%s steps=%d fails=%d time=%.0fs (Save and quit pressed next)" % [_mode, _steps.size(), _fails, float(Time.get_ticks_msec() - _t0) / 1000.0])
+	var out := FileAccess.open(ProjectSettings.globalize_path("res://.qa_logs/playthrough_%s.txt" % _mode), FileAccess.WRITE)
 	if out != null:
 		for line in _steps:
 			out.store_line(line)
-		out.store_line("[pt] DONE mode=V steps=%d fails=%d (Save and quit pressed next)" % [_steps.size(), _fails])
 		out.close()
 	await _click(quit)
 	await get_tree().create_timer(3.0).timeout
@@ -1116,9 +1118,21 @@ func _b05_achievements() -> void:
 	GameManager.resume_game()
 
 func _b03_hardcore() -> void:
+	if not await _b03_hardcore_start():
+		return
+	_player.set("hp", 5.0)
+	_player.set("_damage_grace_timer", 0.0)
+	_player.set("_iframes", 0.0)
+	_player.call("take_damage", 12.0)
+	await get_tree().create_timer(3.0).timeout
+	_step("B03c", not SaveSystem.has_save(), "dying on hardcore deletes the save (has_save: %s)" % SaveSystem.has_save(), await _shot("B03_hardcore_death"))
+	SettingsManager.set_setting("hardcore", false)
+
+## Menu > Settings > Hardcore on > Back > Play: true when a hardcore run is playing.
+func _b03_hardcore_start() -> bool:
 	if not await _go_menu():
 		_step("B03", false, "the menu did not come back")
-		return
+		return false
 	var opened := await _click(_menu_vbox().get_node("Settings") as Button)
 	await _wait_scene(Routes.SETTINGS, WAIT_SCENE)
 	await get_tree().create_timer(0.8).timeout
@@ -1145,15 +1159,7 @@ func _b03_hardcore() -> void:
 		_press_dialog_ok(dialog)
 	var started := await _wait_playing()
 	_step("B03b", started and GameManager.run_hardcore, "Play starts a run with Hardcore on (started %s, the run's hardcore %s, state %s)" % [started, GameManager.run_hardcore, GameManager.current_state])
-	if not started:
-		return
-	_player.set("hp", 5.0)
-	_player.set("_damage_grace_timer", 0.0)
-	_player.set("_iframes", 0.0)
-	_player.call("take_damage", 12.0)
-	await get_tree().create_timer(3.0).timeout
-	_step("B03c", not SaveSystem.has_save(), "dying on hardcore deletes the save (has_save: %s)" % SaveSystem.has_save(), await _shot("B03_hardcore_death"))
-	SettingsManager.set_setting("hardcore", false)
+	return started and GameManager.run_hardcore
 
 ## From the pause menu back to the main menu: one menu on screen, and Continue offered because a save exists.
 # ── mode S: the screens the other modes do not open ──────────────────────────

@@ -147,20 +147,22 @@ func _fail(m: String) -> void:
 
 # ── start / new game ──────────────────────────────────────────────────
 func _start() -> void:
-	# Same bring-up as the PERMANENT gate _boot_check_runner.gd: give the
-	# bootstrap its 1s to win the first scene swap, reach the menu, then
-	# one New Game.
-	await get_tree().create_timer(1.0).timeout
-	if get_tree().current_scene == null or get_tree().current_scene.name != "MainMenu":
-		Routes.goto(Routes.MENU)
-	if not await _wait(func() -> bool:
-			var s := get_tree().current_scene
-			return s != null and s.name == "MainMenu", 14.0):
-		_fail("menu not reached in 14s (state=%d)" % GameManager.current_state); return _finish()
-	# The bot plays the game as tuned, whatever difficulty the profile holds (monsters scale with it).
-	SettingsManager.set_difficulty(1)
-	SaveSystem.mark_onboard_done()
-	Routes.start_game()
+	# QA_ATTACH=1 (tools/qa_sim/playthrough L): the caller started the run through the menu, the bot plays that run.
+	if OS.get_environment("QA_ATTACH") != "1":
+		# Same bring-up as the PERMANENT gate _boot_check_runner.gd: give the
+		# bootstrap its 1s to win the first scene swap, reach the menu, then
+		# one New Game.
+		await get_tree().create_timer(1.0).timeout
+		if get_tree().current_scene == null or get_tree().current_scene.name != "MainMenu":
+			Routes.goto(Routes.MENU)
+		if not await _wait(func() -> bool:
+				var s := get_tree().current_scene
+				return s != null and s.name == "MainMenu", 14.0):
+			_fail("menu not reached in 14s (state=%d)" % GameManager.current_state); return _finish()
+		# The bot plays the game as tuned, whatever difficulty the profile holds (monsters scale with it).
+		SettingsManager.set_difficulty(1)
+		SaveSystem.mark_onboard_done()
+		Routes.start_game()
 	if not await _wait(func() -> bool: return GameManager.is_playing(), 15.0):
 		_fail("New Game never reached PLAYING"); return _finish()
 	if not await _wait(func() -> bool:

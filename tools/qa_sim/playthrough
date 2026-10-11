@@ -8,9 +8,11 @@
 #   tools/qa_sim/playthrough            # A V B S in that order, the profile wiped before A and before S
 #   tools/qa_sim/playthrough A          # one mode (the profile is wiped only when A or S runs first)
 #   tools/qa_sim/playthrough S          # the screens the others do not open: the Codex tabs, HUD buttons, workbench, credits
+#   tools/qa_sim/playthrough L          # the full loop (scripts/tools/_loop_runner.gd): L0 L1 L2 L3 per seed of QA_SEEDS (1 2 3),
+#                                       # a fresh profile per seed, a seed stops at its first failed process; frames -> .qa_logs/loop_frames/
 #   frames -> docs/stills/playthrough/, steps -> .qa_logs/playthrough_<mode>.txt, engine log -> .qa_logs/playthrough_<mode>.log
 set -uo pipefail
-cd "$(dirname "$0")/../.."
+cd "$(dirname "$0")/../.." || exit 2
 MODES=("$@")
 [[ ${#MODES[@]} -gt 0 ]] || MODES=(A V B S)
 
@@ -33,18 +35,39 @@ fresh_profile() {
 	echo "  fresh profile: $(wc -l < "$UDG_SNAP/list") game file(s) set aside (restored at the end)"
 }
 [[ "${MODES[0]}" == "A" || "${MODES[0]}" == "S" ]] && fresh_profile
+if [[ "${MODES[0]}" == "L" ]]; then
+	MODES=()
+	for s in ${QA_SEEDS:-1 2 3}; do MODES+=("L0:$s" "L1:$s" "L2:$s" "L3:$s"); done
+	rm -rf .qa_logs/loop_frames
+fi
 
 rc_all=0
+stopped=""
 for MODE in "${MODES[@]}"; do
 	[[ "$MODE" == "S" && "${MODES[0]}" != "S" ]] && fresh_profile
-	LOG=".qa_logs/playthrough_$MODE.log"
+	SEED=""
+	if [[ "$MODE" == L?:* ]]; then
+		SEED="${MODE#*:}"; MODE="${MODE%%:*}"
+		[[ " $stopped " == *" $SEED "* ]] && continue
+		[[ "$MODE" == "L0" ]] && fresh_profile
+	fi
+	LOG=".qa_logs/playthrough_$MODE${SEED:+_s$SEED}.log"
 	rm -f "$LOG" ".qa_logs/playthrough_$MODE.txt"
-	PT_MODE="$MODE" timeout 1500 "$GODOT" --windowed --path . res://scenes/tools/playthrough_scene.tscn > "$LOG" 2>&1
+	QA_SEED="${SEED:-1}" PT_MODE="$MODE" timeout 1500 "$GODOT" --windowed --path . res://scenes/tools/playthrough_scene.tscn > "$LOG" 2>&1
 	rc=$?
+	if [[ -n "$SEED" ]]; then
+		[[ -f ".qa_logs/playthrough_$MODE.txt" ]] && mv -f ".qa_logs/playthrough_$MODE.txt" ".qa_logs/playthrough_${MODE}_s$SEED.txt"
+		last=$(grep -aE "^\[pt\] DONE " "$LOG" | tail -1)
+		if [[ $rc -ne 0 || "$last" != *" fails=0 "* ]]; then
+			stopped="$stopped $SEED"
+			rc_all=1
+			echo "  seed $SEED stops at $MODE (rc=$rc, ${last:-no DONE line: a crash or a hang})"
+		fi
+	fi
 	BAD='SCRIPT ERROR|Parse Error|Compile Error|Nonexistent function|freed instance|Failed to load script|Invalid call|Invalid get index|Invalid set index|Cannot infer the type'
 	errs=$(grep -aE "$BAD" "$LOG" | head -8)
-	echo "  mode $MODE rc=$rc (log: $LOG)"
-	grep -aE "^\[pt\] (FAIL|DONE)" "$LOG" | tail -30
+	echo "  mode $MODE${SEED:+ seed $SEED} rc=$rc (log: $LOG)"
+	grep -aE "^\[pt\] (FAIL|DONE)|^\[pt\] PASS C[0-9]|^\[pt\] note HITCH" "$LOG" | tail -30
 	if [[ -n "$errs" ]]; then
 		echo "engine errors in the log:"
 		echo "$errs"
