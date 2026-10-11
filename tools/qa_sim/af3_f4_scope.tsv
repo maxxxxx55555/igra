@@ -4,3 +4,4 @@
 scripts/ui/skill_tree_ui.gd	81ea9f50ec18	0ad48a3c1599	A09_skill_tree*
 scripts/ui/screens.gd	42f9c73ab6e4	c97b3dc41876	A06_shop*
 scripts/ui/screens.gd	c97b3dc41876	9b24eec51e30	*shop_ar*
+export_presets.cfg	49f8a4e0bf4c	79f400a94071	*app_label*
