@@ -1,0 +1,16 @@
+# proof s19_pushes_final
+# utc 20261011T173522Z
+# head 6b9055a (uncommitted paths: 0)
+# env none
+# cmd bash -c echo "origin main (git ls-remote): $(git ls-remote origin refs/heads/main | cut -f1)"; echo "local HEAD (git rev-parse):  $(git rev-parse HEAD)"; git ls-remote origin refs/tags/v8.0.0 "refs/tags/v8.0.0^{}" refs/tags/v8.0.0-final "refs/tags/v8.0.0-final^{}"; echo "local v8.0.0-final peels to:   $(git rev-parse "v8.0.0-final^{}")"; echo "local v8.0.0 peels to:         $(git rev-parse "v8.0.0^{}")"; echo "Session 19 commits on origin main: $(git rev-list v8.0.0..HEAD | wc -l)"; git log -1 --format="closing commit: %h %s" v8.0.0-final
+origin main (git ls-remote): 6b9055a0daaae1dd86055a743e66f664213e5a80
+local HEAD (git rev-parse):  6b9055a0daaae1dd86055a743e66f664213e5a80
+a3717067b13355830b7b1b126f516c21d4811a57	refs/tags/v8.0.0
+66bc678e4253cb90c7a6d5f2992eb6d3d03ff2a0	refs/tags/v8.0.0^{}
+7b0e4fdfac0deb5206a0224b616235ec853ce438	refs/tags/v8.0.0-final
+6b9055a0daaae1dd86055a743e66f664213e5a80	refs/tags/v8.0.0-final^{}
+local v8.0.0-final peels to:   6b9055a0daaae1dd86055a743e66f664213e5a80
+local v8.0.0 peels to:         66bc678e4253cb90c7a6d5f2992eb6d3d03ff2a0
+Session 19 commits on origin main: 17
+closing commit: 6b9055a chore: v8.0.0 release validation
+# EXIT=0

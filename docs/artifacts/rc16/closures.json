@@ -1064,5 +1064,17 @@
   ],
   "frames": [],
   "commit": "e166719"
+ },
+ {
+  "id": "S19-PUSHES-FINAL",
+  "claim": "The closing commit and the tag v8.0.0-final are on origin: main equals HEAD at 6b9055a, the tag peels to it, v8.0.0 still peels to 66bc678.",
+  "cmd": "git ls-remote origin ...; git rev-parse HEAD",
+  "proof": "s19_pushes_final",
+  "quotes": [
+   "origin main (git ls-remote): 6b9055a0daaae1dd86055a743e66f664213e5a80",
+   "refs/tags/v8.0.0-final^{}"
+  ],
+  "frames": [],
+  "commit": "6b9055a"
  }
 ]
