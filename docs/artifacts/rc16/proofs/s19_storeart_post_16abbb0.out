@@ -1,0 +1,55 @@
+# proof s19_storeart_post_16abbb0
+# utc 20261011T130736Z
+# head 16abbb0 (uncommitted paths: 6)
+# env none
+# cmd python -I C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s19_aab_storeart.py build/tls.aab
+"""Session 19 bundle check that release_export_check.py does not make: the imported textures of the store art. Godot packs an image as
+.godot/imported/<name>-<md5>.ctex next to its <name>.import, so a filter that drops the .import must drop the .ctex too. Lists, for each
+tracked image under store/ (store/icon-adaptive/ is the launcher icon and stays), the bundle entries of its imported copy. Prints itself first."""
+import pathlib
+import subprocess
+import sys
+import zipfile
+
+ROOT = pathlib.Path(r"C:\Users\Maxsim\Desktop\TLS_Build\THE_LAST_STREETLIGHT")
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+tracked = subprocess.run(["git", "ls-files", "store"], cwd=ROOT, capture_output=True, text=True, check=True).stdout.split()
+art = [p for p in tracked if p.lower().endswith((".png", ".jpg", ".webp")) and not p.startswith("store/icon-adaptive/")]
+aab = pathlib.Path(sys.argv[1])
+with zipfile.ZipFile(aab) as z:
+    infos = z.infolist()
+found, size = 0, 0
+for p in art:
+    name = p.rsplit("/", 1)[1]
+    hits = [i for i in infos if "/.godot/imported/" + name + "-" in i.filename or i.filename.endswith("/" + p + ".import")]
+    found += len(hits)
+    size += sum(i.compress_size for i in hits)
+    print("%-70s %d entries %d bytes compressed" % (p, len(hits), sum(i.compress_size for i in hits)))
+print("%s: %d bytes, %d store images tracked, %d bundle entries of them, %d bytes compressed" % (aab.name, aab.stat().st_size, len(art), found, size))
+sys.exit(1 if found else 0)
+
+--- run
+store/feature-graphic.png                                              0 entries 0 bytes compressed
+store/icon-512.png                                                     0 entries 0 bytes compressed
+store/press/icon_mono_512.png                                          0 entries 0 bytes compressed
+store/press/icon_round_512.png                                         0 entries 0 bytes compressed
+store/screenshots/shot01_light_vs_dark_1920x1080_en.png                0 entries 0 bytes compressed
+store/screenshots/shot02_district_boundary_1920x1080_en.png            0 entries 0 bytes compressed
+store/screenshots/shot05_restored_forecourt_1920x1080_en.png           0 entries 0 bytes compressed
+store/screenshots/shot07_last_streetlight_1920x1080_en.png             0 entries 0 bytes compressed
+store/screenshots/shot08_city_map_1920x1080_en.png                     0 entries 0 bytes compressed
+store/screenshots/shot_p1_touch_first_light_1920x1080_en.png           0 entries 0 bytes compressed
+store/screenshots/shot_p2_touch_crouch_1920x1080_en.png                0 entries 0 bytes compressed
+store/screenshots/shot_p3_touch_interact_1920x1080_en.png              0 entries 0 bytes compressed
+store/trailer/hero_first_restore_1920x1080.png                         0 entries 0 bytes compressed
+store/trailer/hero_grid_cascade_1920x1080.png                          0 entries 0 bytes compressed
+store/trailer/hero_reactor_room_1920x1080.png                          0 entries 0 bytes compressed
+store/trailer/hero_shorts_cut_1080x1920.png                            0 entries 0 bytes compressed
+store/trailer/presskit_1600x900.png                                    0 entries 0 bytes compressed
+store/trailer/shorts_silhouette_1080x1920.png                          0 entries 0 bytes compressed
+store/trailer/still_first_ending_1920x1080.png                         0 entries 0 bytes compressed
+store/trailer/still_first_light_1920x1080.png                          0 entries 0 bytes compressed
+store/trailer/still_grid_cascade_1920x1080.png                         0 entries 0 bytes compressed
+tls.aab: 155586711 bytes, 21 store images tracked, 0 bundle entries of them, 0 bytes compressed
+# EXIT=0

@@ -63,3 +63,4 @@ n	utc	head	id	exit	command
 62	20261011T122855Z	0e05ea1	s19_all1_0e05ea1	0	bash tools/check.sh --all
 63	20261011T123737Z	9aae9a6	s19_all2_9aae9a6	0	bash tools/check.sh --all
 64	20261011T124611Z	8d283c2	s19_all3_8d283c2	0	bash tools/check.sh --all
+65	20261011T125523Z	16abbb0	s19_export_16abbb0	0	bash -c set -a; . .signing/release.env; set +a; /c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/Godot_v4.7-stable_win64_console.exe --headless --path . --export-release "Android" build/tls.aab
