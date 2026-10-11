@@ -1,0 +1,84 @@
+# proof v800_gates_8663aec
+# utc 20261011T001323Z
+# head 8663aec (uncommitted paths: 1)
+# env none
+# cmd bash /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/v800_gates.sh
+#!/usr/bin/env bash
+# The static gates of the v8.0.0 release, each with its own exit code, and a compare of the store titles and taglines with the shipped strings. Prints itself first.
+cat "$0"
+echo "--- run"
+gate() { echo "=== $*"; "$@" 2>&1 | tail -3; echo "exit=${PIPESTATUS[0]}"; }
+gate python tools/qa_sim/i18n_truth_gate.py
+gate python tools/i18n_audit.py
+gate python tools/qa_sim/hardcoded_text_gate.py
+gate python tools/gen_store_listing_locales.py --check
+gate python tools/flow_check.py
+gate python tools/scene_node_check.py
+gate python tools/lint_changed.py
+gate python tools/af5_check.py
+gate python tools/qa_sim/af3_frame_check.py
+echo "=== store titles and taglines against menu_title and menu_subtitle"
+python -I - <<'PY'
+import json
+import pathlib
+import re
+
+text = pathlib.Path("store/listing.md").read_text(encoding="utf-8")
+blocks = re.split(r"^### ", text, flags=re.M)[1:]
+same = diff = 0
+for block in blocks:
+    head = block.split("\n", 1)[0]
+    loc = head.split(" ", 1)[0]
+    path = pathlib.Path("data/i18n") / (loc + ".json")
+    if not path.exists():
+        continue
+    strings = json.loads(path.read_text(encoding="utf-8"))
+    for field, key in (("Title", "menu_title"), ("Tagline", "menu_subtitle")):
+        m = re.search(r"^- \*\*" + field + r":\*\* (.+)$", block, flags=re.M)
+        if m is None:
+            continue
+        if m.group(1).strip() == strings.get(key, ""):
+            same += 1
+        else:
+            diff += 1
+            print("differs", loc, field, repr(m.group(1).strip()), "vs", repr(strings.get(key, "")))
+print("store fields equal to the game strings:", same, "differing:", diff)
+PY
+--- run
+=== python tools/qa_sim/i18n_truth_gate.py
+PASS zh_TW -- missing=0 mixed=0 overflow=0
+PASS ar -- missing=0 mixed=0 overflow=0
+12/12 locales PASS
+exit=0
+=== python tools/i18n_audit.py
+tr() keys used: 405 | en.json: 1526 | MISSING: 0
+exit=0
+=== python tools/qa_sim/hardcoded_text_gate.py
+hardcoded_text_gate: 0 hit(s)
+exit=0
+=== python tools/gen_store_listing_locales.py --check
+store/listing.md 13-locale check: GREEN
+exit=0
+=== python tools/flow_check.py
+
+────────────────────────────────────────────────────────────
+Игровой цикл собран целиком: 56 проверок пройдено.
+exit=0
+=== python tools/scene_node_check.py
+
+──────────────────────────────────────────────────
+Всё чисто.
+exit=0
+=== python tools/lint_changed.py
+
+lint_changed: 54 gd, 18 py, 13 sh, 1 workflow, skipped tools for: none, 0 finding(s)
+exit=0
+=== python tools/af5_check.py
+af5_check: 150 citation(s) in 816 doc line(s), 0 finding(s)
+exit=0
+=== python tools/qa_sim/af3_frame_check.py
+af3 frames=21 fail=0
+exit=0
+=== store titles and taglines against menu_title and menu_subtitle
+store fields equal to the game strings: 26 differing: 0
+# EXIT=0
