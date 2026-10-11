@@ -64,6 +64,10 @@ func _install_background() -> void:
 	move_child(bg, (bg_flat.get_index() + 1) if bg_flat else 0)
 	_install_hero_bg_v2(bg)
 
+## The hero art's lamp glow and ground pool are near-white (233, 231, 227): the style guide's brightest tone is bone #d8d2c4
+## (docs/STYLE_GUIDE.md section 2), so the art is multiplied down to it. The brass cone keeps its hue.
+const HERO_TINT := Color(0.93, 0.91, 0.86)
+
 ## V2 SKIN WIRING P4: real hero art (streetlight + silhouette) over the
 ## procedural skyline above - inserted between them so both keep working,
 ## just visually replaced (no code removed, matches "additive only").
@@ -76,6 +80,7 @@ func _install_hero_bg_v2(after: Node) -> void:
 	hero.texture = load(path)
 	hero.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	hero.stretch_mode = TextureRect.STRETCH_SCALE
+	hero.modulate = HERO_TINT
 	add_child(hero)
 	hero.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	move_child(hero, (after.get_index() + 1) if after else 0)
