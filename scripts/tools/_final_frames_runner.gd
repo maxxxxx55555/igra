@@ -137,6 +137,8 @@ func _halo_random_probe() -> void:
 		n += 1
 	out_dir = normal_out
 
+const DEBUG_SHADER := "shader_type spatial; render_mode unshaded, blend_add, depth_draw_never, cull_disabled, fog_disabled; varying float dist; void vertex() { MODELVIEW_MATRIX = VIEW_MATRIX * mat4(INV_VIEW_MATRIX[0], INV_VIEW_MATRIX[1], INV_VIEW_MATRIX[2], MODEL_MATRIX[3]); dist = length(MODELVIEW_MATRIX[3].xyz); } void fragment() { ALBEDO = %s; ALPHA = 1.0; }"
+
 ## =3: the pose of the first square seen (camera (-22.75, 2.56, -6.78), yaw 72.9): normal, glow hidden, a smaller peak, a longer near fade.
 func _halo_pose_probe() -> void:
 	var halos := _halo_mmi()
@@ -168,6 +170,15 @@ func _halo_pose_probe() -> void:
 	await get_tree().create_timer(0.3).timeout
 	await _shot("halo_pose_d_near20")
 	mat.set_shader_parameter("near_fade", 6.0)
+	var debug := ShaderMaterial.new()
+	debug.shader = Shader.new()
+	var kept := halos.material_override
+	halos.material_override = debug
+	for variant: Array in [["e_distance", "vec3(dist / 10.0)"], ["f_uv", "vec3(UV, 0.0)"], ["g_smooth", "vec3(smoothstep(2.4, 6.0, dist))"]]:
+		debug.shader.code = DEBUG_SHADER % variant[1]
+		await get_tree().create_timer(0.4).timeout
+		await _shot("halo_pose_%s" % variant[0])
+	halos.material_override = kept
 	out_dir = normal_out
 
 func _halo_hidden_shown() -> void:
