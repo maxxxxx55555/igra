@@ -123,7 +123,9 @@ func _halo_random_probe() -> void:
 	rng.seed = 21
 	var canopies := _canopies()
 	var n := 0
-	while n < 24:
+	var tries := 0
+	while n < 24 and tries < 400:
+		tries += 1
 		var spot := _ring_spot(heads[rng.randi() % heads.size()], rng.randf_range(3.0, 28.0), canopies, rng.randi() % 24)
 		if spot == Vector3.INF:
 			continue
