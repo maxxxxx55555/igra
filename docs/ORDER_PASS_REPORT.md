@@ -187,7 +187,7 @@ rows: `docs/ACCEPTANCE_CHECKLIST.md` (200 rows); decisions: `docs/TZ_DECISIONS.m
 
 ## v8.0.0 release validation (Session 19, 2026-10-11)
 
-**Status: three P0 found and fixed (CORRECTION_LOG 165 to 167), and the store art the first rebuild still packed (182, found by the verifier); `v8.0.0-final` goes on the commit that records the verifier's re-measure, which must report 0 GAME-AFFECTING fails.** Records: `docs/RUN_STATE.md` Session 19, `docs/CORRECTION_LOG.md` 165 to 190, `docs/PROOFS.md` (the S19 rows), `docs/RELEASE_ARTIFACTS.md`. Launches: 7 of 8 (ledger rows 59 to 64 and 66), exports 2 of 2 (rows 65 and 67).
+**Status: three P0 found and fixed (CORRECTION_LOG 165 to 167), and the store art the first rebuild still packed (182, found by the verifier); `v8.0.0-final` = `6b9055a`, the commit that records the verifier's re-measure (0 GAME-AFFECTING fails).** Records: `docs/RUN_STATE.md` Session 19, `docs/CORRECTION_LOG.md` 165 to 190, `docs/PROOFS.md` (the S19 rows), `docs/RELEASE_ARTIFACTS.md`. Launches: 7 of 8 (ledger rows 59 to 64 and 66), exports 2 of 2 (rows 65 and 67).
 
 | Item | Result | Evidence |
 |---|---|---|
