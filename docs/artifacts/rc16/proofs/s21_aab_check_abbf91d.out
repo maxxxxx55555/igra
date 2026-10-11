@@ -1,0 +1,28 @@
+# proof s21_aab_check_abbf91d
+# utc 20261011T200855Z
+# head abbf91d (uncommitted paths: 8)
+# env none
+# cmd bash -c set -a; . .signing/release.env; set +a; python tools/qa_sim/aab_check.py build/tls.aab --secrets --against "../_BACKUPS/2026-10-11_23-03/build/tls.aab"
+size    136501580 bytes
+sha256  f8f62d2cc0897e1f9c659005d790c69368219a729128a8cec31a6dae3edbbee7
+entries 2684
+label   19 entries name Last Streetlight: ok
+adsdk   0 dex entries name Lcom/applovin/: ok
+secrets 2 value(s) of the environment searched in 2681 entries: 0 hits (path, password)
+jar     jar verified.
+signer  4f6be6415c260b34...: signer_match=yes
+against tls.aab: 0 entries gone, 0 new, 15 with other bytes
+  changed META-INF/MANIFEST.MF
+  changed META-INF/TLS_RELE.RSA
+  changed META-INF/TLS_RELE.SF
+  changed assetPackInstallTime/assets/.godot/global_script_class_cache.cfg
+  changed assetPackInstallTime/assets/.godot/uid_cache.bin
+  changed assetPackInstallTime/assets/assets.sparsepck
+  changed assetPackInstallTime/assets/scripts/core/game_manager.gdc
+  changed assetPackInstallTime/assets/scripts/core/quest_manager.gdc
+  changed assetPackInstallTime/assets/scripts/core/save_system.gdc
+  changed assetPackInstallTime/assets/scripts/crafting/workbench_logic.gdc
+  changed assetPackInstallTime/assets/scripts/inventory/inventory_manager.gdc
+  changed assetPackInstallTime/assets/scripts/ui/main_menu.gdc
+aab_check: PASS
+# EXIT=0

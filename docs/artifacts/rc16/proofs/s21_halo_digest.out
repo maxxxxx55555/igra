@@ -1,0 +1,59 @@
+# proof s21_halo_digest
+# utc 20261011T200632Z
+# head abbf91d (uncommitted paths: 1)
+# env none
+# cmd bash -c for f in docs/artifacts/rc16/proofs/s21_halo*.attach.final_frames_scene.log docs/artifacts/rc16/proofs/s21_final_36632b4.attach.final_frames_scene.log; do echo "== $f"; grep -a "\[final\] \(halo\|04 camera\)" "$f" | cut -c1-210; done
+== docs/artifacts/rc16/proofs/s21_halodebug_5e59837.attach.final_frames_scene.log
+[final] halo pose camera (-22.74979, 2.56, -6.780282) aabb [P: (-27.84, 2.71, -27.5), S: (58.0, 3.0, 55.00001)]
+[final] halo near /root/Main3D/MultiplayerManager/1/ModelPivot/Backpack MeshInstance3D mat=<Object#null> at (-23.08432, 1.21, -6.883196)
+[final] halo near /root/Main3D/MultiplayerManager/1/ModelPivot/FlashlightPivot/HandLight MeshInstance3D mat=<Object#null> at (-22.67628, 2.31, -7.019228)
+[final] halo near /root/Main3D/MultiplayerManager/1/ModelPivot/FlashlightPivot/Dust GPUParticles3D mat=<Object#null> at (-22.67628, 2.31, -7.019228)
+[final] halo near /root/Main3D/MultiplayerManager/1/Marker MeshInstance3D mat=<Object#null> at (-22.74979, 2.16, -6.780282)
+[final] halo near /root/Main3D/MultiplayerManager/1/FootstepDust GPUParticles3D mat=<Object#null> at (-22.74979, 0.91, -6.780282)
+[final] 04 camera /root/Main3D/Camera3D at (-6.88511, 2.559976, 10.87121), player at (-6.884727, 0.859975, 10.87163) hp=100.0, paused=false
+== docs/artifacts/rc16/proofs/s21_halopose_6b0d1e7.attach.final_frames_scene.log
+[final] halo pose camera (-22.74979, 2.56, -6.780282) aabb [P: (-27.84, 2.71, -27.5), S: (58.0, 3.0, 55.00001)]
+[final] halo near /root/Main3D/MultiplayerManager/1/ModelPivot/Backpack MeshInstance3D mat=<Object#null> at (-23.08432, 1.21, -6.883196)
+[final] halo near /root/Main3D/MultiplayerManager/1/ModelPivot/FlashlightPivot/HandLight MeshInstance3D mat=<Object#null> at (-22.67628, 2.31, -7.019228)
+[final] halo near /root/Main3D/MultiplayerManager/1/ModelPivot/FlashlightPivot/Dust GPUParticles3D mat=<Object#null> at (-22.67628, 2.31, -7.019228)
+[final] halo near /root/Main3D/MultiplayerManager/1/Marker MeshInstance3D mat=<Object#null> at (-22.74979, 2.16, -6.780282)
+[final] halo near /root/Main3D/MultiplayerManager/1/FootstepDust GPUParticles3D mat=<Object#null> at (-22.74979, 0.91, -6.780282)
+[final] 04 camera /root/Main3D/Camera3D at (-2.071485, 2.56021, 11.18438), player at (-2.071485, 0.86021, 11.18438) hp=100.0, paused=false
+== docs/artifacts/rc16/proofs/s21_haloprobe_6ef8a9c.attach.final_frames_scene.log
+[final] halo ring d=5 visible=true strength=1.0 lamps=48 distances=26.3,21.6,19.6,12.7,24.4,19.2,17.9,17.9,4.1,4.1,15.0,15.0,21.6,26.3,12.7,19.6,19.2,24.4,33.5,39.6,28.6,35.6,32.0,38.4,26.5,21.3,21.1,14.1,26.5,
+[final] halo ring d=8 visible=true strength=1.0 lamps=48 distances=28.3,24.1,20.1,13.4,22.7,17.1,20.9,20.9,5.9,5.9,12.1,12.1,24.1,28.3,13.4,20.1,17.1,22.7,35.1,41.0,28.9,35.8,30.8,37.4,28.9,23.4,24.1,17.1,28.9,
+[final] halo ring d=11 visible=true strength=1.0 lamps=48 distances=30.6,26.7,21.0,14.7,21.3,15.2,23.8,23.8,8.4,8.4,9.3,9.3,26.7,30.6,14.7,21.0,15.2,21.3,37.0,42.6,29.5,36.3,29.8,36.5,31.4,25.7,27.1,20.1,31.4,2
+[final] halo ring d=14 visible=true strength=1.0 lamps=48 distances=32.9,29.3,22.2,16.4,20.3,13.8,26.8,26.8,11.2,11.2,6.7,6.7,29.3,32.9,16.4,22.2,13.8,20.3,39.0,44.3,30.4,37.1,29.1,36.0,34.0,28.1,30.0,23.1,34.0
+[final] halo ring d=20 visible=true strength=1.0 lamps=48 distances=37.9,34.9,25.6,20.8,19.6,12.6,32.7,32.7,16.9,16.9,3.9,3.9,34.9,37.9,20.8,25.6,12.6,19.6,43.3,48.2,33.0,39.2,28.6,35.5,39.4,33.2,36.0,29.0,39.4
+[final] halo ring d=30 visible=true strength=1.0 lamps=48 distances=46.8,44.3,32.9,29.3,22.2,16.4,42.7,42.7,26.8,26.8,11.2,11.2,44.3,46.8,29.3,32.9,16.4,22.2,51.2,55.4,39.0,44.3,30.4,37.1,48.7,42.2,46.0,39.0,48
+[final] 04 camera /root/Main3D/Camera3D at (5.581648, 2.560076, -10.11622), player at (5.581402, 0.860076, -10.11626) hp=100.0, paused=false
+[final] halo combat staged visible=true strength=1.0 lamps=48 distances=33.4,30.3,21.4,16.3,17.8,11.1,28.5,29.0,12.6,13.7,4.2,6.9,32.0,35.7,19.3,25.0,15.1,22.0,41.8,47.2,33.1,39.6,30.9,37.8,34.8,28.6,32.0,25.1,
+== docs/artifacts/rc16/proofs/s21_halorandom_fd379fa.attach.final_frames_scene.log
+[final] halo rnd00 camera (-22.74979, 2.56007, -6.780282) yaw 72.9
+[final] halo rnd01 camera (28.44433, 2.559779, -9.366184) yaw 87.6
+[final] halo rnd02 camera (13.96157, 2.550109, -30.27219) yaw 120.0
+[final] halo rnd03 camera (11.96004, 2.550109, -39.30004) yaw -168.4
+[final] halo rnd04 camera (16.27937, 2.548963, -17.8689) yaw 134.4
+[final] halo rnd05 camera (9.887884, 2.550109, -35.67857) yaw 133.6
+[final] halo rnd06 camera (-8.968374, 2.559956, 20.48715) yaw -60.0
+[final] halo rnd07 camera (17.68848, 2.559204, -25.2148) yaw 132.2
+[final] halo rnd08 camera (2.559978, 2.559892, -8.0) yaw -90.0
+[final] halo rnd09 camera (-16.28552, 2.550109, -29.80496) yaw -152.7
+[final] halo rnd10 camera (-7.224607, 2.550109, 36.88461) yaw -0.5
+[final] halo rnd11 camera (33.27737, 2.550109, 8.0) yaw 77.4
+[final] halo rnd12 camera (-23.52003, 2.560015, 8.0) yaw -15.1
+[final] halo rnd13 camera (-27.13239, 2.550109, -37.49681) yaw -176.2
+[final] halo rnd14 camera (-12.0487, 2.559204, -10.10433) yaw -63.9
+[final] halo rnd15 camera (14.03894, 2.550109, -0.378945) yaw 46.1
+[final] halo rnd16 camera (-18.26782, 2.559674, 12.03257) yaw -34.8
+[final] halo rnd17 camera (-4.445418, 2.560009, -12.02937) yaw 143.3
+[final] halo rnd18 camera (14.4932, 2.559204, -25.8332) yaw 98.1
+[final] halo rnd19 camera (7.012183, 2.550109, -28.00556) yaw -177.5
+[final] halo rnd20 camera (5.66, 2.559987, -20.31046) yaw 77.0
+[final] halo rnd21 camera (-8.693563, 2.550109, -31.29053) yaw -143.7
+[final] halo rnd22 camera (-17.70387, 2.550093, 3.013927) yaw -148.1
+[final] halo rnd23 camera (-22.84, 2.559204, 26.5598) yaw -45.9
+[final] 04 camera /root/Main3D/Camera3D at (-0.334734, 2.550378, 18.90514), player at (-0.334734, 0.850378, 18.90514) hp=100.0, paused=false
+== docs/artifacts/rc16/proofs/s21_final_36632b4.attach.final_frames_scene.log
+[final] 04 camera /root/Main3D/Camera3D at (5.843463, 2.560069, -15.8285), player at (5.843756, 0.860068, -15.82867) hp=100.0, paused=false
+# EXIT=0

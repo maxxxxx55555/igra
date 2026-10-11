@@ -1,0 +1,24 @@
+# proof s21_all_digest
+# utc 20261011T200634Z
+# head abbf91d (uncommitted paths: 2)
+# env none
+# cmd bash -c A=docs/artifacts/rc16/proofs/s21_all_d4fa997.attach; echo "closeout:"; grep -a "DONE checks" $A.gate_closeout_check_scene.log; grep -a "^\[closeout\] ok   \(RMV1\|guard QST2\|QST1\|SLV1\|RST1\)" $A.gate_closeout_check_scene.log | cut -c1-170; echo "suite:"; grep -a "DONE fails" $A.gate_qa_headless_suite_scene.log; echo "compile:"; grep -a "COMPILE_GATE" $A.gate_compile_gate_scene.log | tail -1; echo "timing:"; grep -a "TIMING_EQUIV verdict" $A.timing_check.txt; echo "perf and audio gates (headless runs of --all):"; grep -a "SKIP" $A.gate_perf_check_scene.log | head -1; sed "s/\x1b\[[0-9;]*m//g" docs/artifacts/rc16/proofs/s21_all_d4fa997.out | grep "пропуск"
+closeout:
+[closeout] DONE checks=396 fails=0
+[closeout] ok   RMV1 remove(5) of 3 metal takes nothing and answers false (answered false, 3 metal left at 1.5 of 1.5 kg); remove(3) takes them (true)
+[closeout] ok   guard QST2 a pending quest does not pay while the game is not playing (done false)
+[closeout] ok   QST1 a quest that did not fit pays when the pack has room (waited true; then done true, coins 150 of 150, blueprint 1)
+[closeout] ok   SLV1 salvaging in a full pack keeps the item and gives nothing (enhanced battery 1 of 1, parts 0 of 0)
+[closeout] ok   RST1 Restart goes back to the last save and leaves the game playing (answered true, state 2, tree paused false, coins 700 of 700, 1200 before)
+[closeout] ok   RST1b the pause menu's Restart button goes through GameManager.restart_from_save (source of scripts/ui/pause_menu.gd)
+suite:
+[qa] DONE fails=0
+compile:
+COMPILE_GATE bad=0
+timing:
+TIMING_EQUIV verdict=PASS keys=15 failures=0
+perf and audio gates (headless runs of --all):
+[perf] SKIP: draw_calls=0 means headless dummy renderer - re-run with --windowed to actually measure
+  пропуск перф-бюджет (draw calls, только --windowed) (нужен --windowed, не OK/FAIL)
+  пропуск аудио: Music bus не в тишине (только --windowed) (нужен --windowed, не OK/FAIL)
+# EXIT=0

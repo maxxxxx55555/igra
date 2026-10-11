@@ -1,7 +1,7 @@
 # Store submission pack: Last Streetlight 1.0 (Google Play)
 
-Drafted 2026-10-11 (Session 20, the final window pass) from the tree at `6f6d643` and from the bundle `build/tls.aab`, which was built
-from `e241597`. **Nothing here has been submitted**: the Play Console, a phone and a contact address are the owner's. Items marked
+Drafted 2026-10-11 (Session 20, the final window pass) from the tree at `6f6d643`; the bundle facts were refreshed in Session 21 from the bundle `build/tls.aab`, which was built
+from `abbf91d`. **Nothing here has been submitted**: the Play Console, a phone and a contact address are the owner's. Items marked
 **(check in Console)** are Google's current rules as remembered at drafting time; read them on the form before you answer.
 
 Order of use: §1 what you upload, §2 the images, §3 the privacy policy, §4 the content rating, §5 the data safety form, §6 the other
@@ -12,8 +12,8 @@ declarations, §7 the steps. It consolidates and, where they had drifted, correc
 
 | Fact | Value | Where it was read |
 |---|---|---|
-| File | `build/tls.aab` (gitignored, on the build machine only), **136,500,858 bytes** | `docs/RELEASE_ARTIFACTS.md`, v8.0.0-final section |
-| sha256 | `eadfc1d8f4e364d98def48b548252592c379267a73264d0e8aee662fb3a579fb` | same; check it with `sha256sum build/tls.aab` before the upload |
+| File | `build/tls.aab` (gitignored, on the build machine only), **136,501,580 bytes** | `docs/RELEASE_ARTIFACTS.md`, v8.0.0-shipping section |
+| sha256 | `f8f62d2cc0897e1f9c659005d790c69368219a729128a8cec31a6dae3edbbee7` | same; check it with `sha256sum build/tls.aab` before the upload |
 | Built from | `e241597`, no uncommitted path; **the four fixes of `6f6d643` are not in it** (§9) | ledger row 67 |
 | Package name | `com.maxsimkasky.laststreetlight`: **permanent once uploaded** (the `com.tls.game` of `docs/store/play_store.md` is stale) | manifest, `docs/artifacts/rc16/proofs/s20_aab_manifest.out` |
 | Version | code 1, name "1.0" | manifest |
@@ -39,19 +39,19 @@ channel that is fully opaque (minimum 255, `s20_alpha_extrema.out`), so dropping
 |---|---|---|---|---|
 | App icon | 512 x 512 px, PNG (32-bit, alpha allowed), at most 1 MB | `store/icon-512.png` | 512 x 512, RGB 8-bit, 300,965 bytes | upload as it is; if the form refuses it, re-save it as RGBA |
 | Feature graphic | 1024 x 500 px, JPEG or 24-bit PNG, **no alpha** | `store/feature-graphic.png` (title and tagline, the lamp street) | 1024 x 500, RGBA 8-bit, 684,630 bytes | drop the alpha (command below). **Do not use** `assets/store/feature_graphic_1024x500.png`: it is blurred art with no title (what `docs/RELEASE_RUNBOOK.md` §3.3 named) |
-| Phone screenshots | 2 to 8; JPEG or 24-bit PNG, **no alpha**; each side 320 to 3840 px, the long side at most twice the short side; 1080 px or more on the short side to be eligible for featuring | the six frames of `docs/stills/release/` | 960 x 527, RGBA 8-bit, 421 KB to 851 KB each | drop the alpha. 960 px is inside the accepted range and under the featuring size (re-shoot at 1920 x 1080 with `tools/qa_sim/` if wanted) |
+| Phone screenshots | 2 to 8; JPEG or 24-bit PNG, **no alpha**; each side 320 to 3840 px, the long side at most twice the short side; 1080 px or more on the short side to be eligible for featuring | the six frames of `docs/stills/shipping/` | 960 x 527 (the boss frame 960 x 540), RGBA 8-bit with every alpha 255, 397 KB to 833 KB each | drop the alpha. 960 px is inside the accepted range and under the featuring size (re-shoot at 1920 x 1080 with `tools/qa_sim/` if wanted) |
 | Adaptive icon | in the bundle, not uploaded: two 1080 x 1080 layers | `store/icon-adaptive/foreground_1080x1080.png`, `background_1080x1080.png` | RGBA 8-bit | nothing |
 | Launcher icon source (legacy phones) | 192 px from a 512 px source | `assets/store/play_icon_512.png` | 512 x 512, RGB 8-bit, scene art (not the lamp) | nothing; only phones below Android 8 (API 24 and 25) show it, a design call, not a blocker |
 | Tablet screenshots, promo video | optional | none prepared | | skip |
 
-The six screenshot frames (each carries its code hash `18a2a2a` and its capture time in its name, AF3):
+The six screenshot frames (each carries its code hash `2e018d3`, the tree of the shipping pass, and its capture time in its name, AF3):
 
-1. `docs/stills/release/01_main_menu_after_18a2a2a_20261010T224919Z.png`: the main menu.
-2. `docs/stills/release/02_district_day_full_after_18a2a2a_20261010T224930Z.png`: a restored district by day.
-3. `docs/stills/release/03_district_night_dark_after_18a2a2a_20261010T224929Z.png`: a dark district by night.
-4. `docs/stills/release/04_combat_after_18a2a2a_20261010T224934Z.png`: combat.
-5. `docs/stills/release/05_boss_after_18a2a2a_20261010T224936Z.png`: the boss.
-6. `docs/stills/release/08_shop_after_18a2a2a_20261010T224932Z.png`: the shop.
+1. `docs/stills/shipping/01_main_menu_after_2e018d3_20261011T195308Z.png`: the main menu.
+2. `docs/stills/shipping/02_district_day_full_after_2e018d3_20261011T195319Z.png`: a restored district by day.
+3. `docs/stills/shipping/03_district_night_dark_after_2e018d3_20261011T195318Z.png`: a dark district by night.
+4. `docs/stills/shipping/04_combat_after_2e018d3_20261011T195323Z.png`: combat.
+5. `docs/stills/shipping/05_boss_after_2e018d3_20261011T195325Z.png`: the boss.
+6. `docs/stills/shipping/08_shop_after_2e018d3_20261011T195321Z.png`: the shop.
 
 Not used, on purpose: `assets/store/screenshot_0*.png` (1280 x 720, RGBA, made before rc16, no code hash, not checked against the build) and
 `store/screenshots/*_1920x1080_en.png` (RGB, older waves, no code hash). Use them only after you compare each with the running game.
@@ -59,7 +59,7 @@ Not used, on purpose: `assets/store/screenshot_0*.png` (1280 x 720, RGBA, made b
 One command from the repository root writes the upload set to `build/store_upload/` (Pillow is installed on this machine):
 
 ```bash
-python -c "import pathlib; from PIL import Image; o=pathlib.Path('build/store_upload'); o.mkdir(parents=True, exist_ok=True); [Image.open(p).convert('RGB').save(o/pathlib.Path(p).name) for p in ['store/feature-graphic.png', *map(str, sorted(pathlib.Path('docs/stills/release').glob('*.png')))]]"
+python -c "import pathlib; from PIL import Image; o=pathlib.Path('build/store_upload'); o.mkdir(parents=True, exist_ok=True); [Image.open(p).convert('RGB').save(o/pathlib.Path(p).name) for p in ['store/feature-graphic.png', *map(str, sorted(pathlib.Path('docs/stills/shipping').glob('*.png')))]]"
 ```
 
 The listing text: `store/listing.md` (English and Russian, the source of truth), `docs/STORE_KIT.md` (the other 11 locales; flagged there for a native
@@ -240,14 +240,10 @@ Each step names where the detail lives; it does not repeat it.
 
 ## 9. What this pass could not do
 
-- **The four fixes of `6f6d643` are not in the bundle.** The bundle of §1 was built from `e241597`; this pass had no export in its budget.
-  What the bundle still does: the tutorial hint stays in the old language after a language switch (CORRECTION_LOG 180), the daily streak
-  reads 0 after a New Game (179), a Hardcore death screen shows 0 of 11 districts (178), and a save written during a transition holds the
-  origin as the position (168). None blocks a store review. To carry them, export from `main` with the one command of
-  `docs/RELEASE_RUNBOOK.md` §2 and raise `version/code`; a new bundle needs its own scan (`tools/qa_sim/release_export_check.py --aab`).
+- **The fixes are in the bundle now.** Session 21 exported from `main` (`abbf91d`): the four fixes of `6f6d643` (CORRECTION_LOG 168, 178, 179, 180) and the three of Session 21 (169, 172, 174) are in it (`docs/RELEASE_ARTIFACTS.md`, v8.0.0-shipping section). The manifest was not re-read from this bundle.
 - **LAN co-op code is in the build and unreachable.** `scenes/main_3d.tscn` holds a `LANMenu` node (hidden) that nothing opens, and the
   lobby screen is archived; three autoloads of the multiplayer code exist and open no socket until a screen asks
-  (`docs/artifacts/rc16/proofs/s20_net_reach.out`). CORRECTION_LOG 173 and 174 are latent for that reason.
+  (`docs/artifacts/rc16/proofs/s20_net_reach.out`). CORRECTION_LOG 173 is latent for that reason (174 is fixed).
 - **Nothing on a phone was run.** The frame rate, the heat, the feel of the touch controls and Export Save through Downloads
   (U1, U5, U6, U10) are the smoke test's questions.
 - **No legal review.** The policy is a plain-language draft of what the build does, not legal advice; several jurisdictions ask for a

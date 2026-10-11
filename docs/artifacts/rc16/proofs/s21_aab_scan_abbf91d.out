@@ -1,0 +1,12 @@
+# proof s21_aab_scan_abbf91d
+# utc 20261011T200911Z
+# head abbf91d (uncommitted paths: 9)
+# env none
+# cmd python tools/qa_sim/release_export_check.py --aab build/tls.aab
+NOTE: keystore/release is empty - expected pre-release state (no signed release build cut yet), not a failure
+NOTE: keystore/release_user is empty - expected pre-release state (no signed release build cut yet), not a failure
+NOTE: keystore/release_password is empty - expected pre-release state (no signed release build cut yet), not a failure
+build\tls.aab: 0 packed file(s) that are not the game
+
+PASS
+# EXIT=0
