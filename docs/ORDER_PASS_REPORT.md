@@ -187,7 +187,7 @@ rows: `docs/ACCEPTANCE_CHECKLIST.md` (200 rows); decisions: `docs/TZ_DECISIONS.m
 
 ## v8.0.0 release (rc17, Session 18, 2026-10-11)
 
-**Status: `v8.0.0-rc17` = `03fd367` is tagged and pushed. `v8.0.0` goes on the commit that records the R5 verifier round when that round reports no GAME-AFFECTING fail (owner pre-authorization of 2026-10-11); META fails become DEFERRED-HONEST rows.** Records: `docs/RUN_STATE.md` Session 18 and `docs/CORRECTION_LOG.md` 145 to 150; owner steps: `docs/release_checklist.md`.
+**Status: `v8.0.0-rc17` = `03fd367` is tagged and pushed; `v8.0.0` goes on the commit that records R5 round 2, which reported no GAME-AFFECTING fail (owner pre-authorization of 2026-10-11); its META fails are DEFERRED-HONEST rows.** Records: `docs/RUN_STATE.md` Session 18 and `docs/CORRECTION_LOG.md` 145 to 164; owner steps: `docs/release_checklist.md`.
 
 | Item | Result | Evidence |
 |---|---|---|
@@ -204,7 +204,7 @@ rows: `docs/ACCEPTANCE_CHECKLIST.md` (200 rows); decisions: `docs/TZ_DECISIONS.m
 | i18n | 12 of 12 locales PASS; the i18n audit reads MISSING 0 | RUN_STATE S18, D2 |
 | Frames | `af3 frames=21 fail=0` (`docs/stills/rc17/` 15, `docs/stills/release/` 6), each read once | RUN_STATE S18-L1 and L17 |
 | Function matrix | 146 rows, no BUG | `docs/artifacts/rc16/proofs/r4_matrix_status.out` |
-| Verifier (R5) | round 1 at `d4fa2da`: `PASS=37 FAIL=9 GAME-AFFECTING=1 META=8 UNVERIFIED=4`; the GAME-AFFECTING fail (the Android label) is fixed (CORRECTION_LOG 151), the META fails are rows 152 to 159; one re-run follows, as the owner's rule allows after a GAME-AFFECTING fix | `docs/artifacts/rc16/proofs/r5_verifier.md` |
+| Verifier (R5) | round 1 at `d4fa2da`: `PASS=37 FAIL=9 GAME-AFFECTING=1 META=8 UNVERIFIED=4`; the GAME-AFFECTING fail (the Android label) is fixed (CORRECTION_LOG 151), the META fails are rows 152 to 159; round 2 at `ff6ffe6`: `PASS=55 FAIL=4 GAME-AFFECTING=0 META=4 UNVERIFIED=4`, its META fails rows 160 to 163 | `docs/artifacts/rc16/proofs/r5_verifier.md`, `docs/artifacts/rc16/proofs/r5_verifier_round2.md` |
 | Unverifiable here | U1 to U8 | `docs/UNVERIFIABLE_HERE.md` |
 | Store | the title and the 13 locales of `store/listing.md` are ready; gaps: the screenshots are 960 x 527 with an alpha channel (featuring asks for 1080 px, and Play takes screenshots without alpha), the icon has no alpha and the feature graphic has one (check at upload), the privacy policy is not hosted yet | `docs/release_checklist.md`, steps 2, 3 and 5 |
 | Owner | phone smoke test, Play Console, privacy URL, IARC and data safety, the Arabic decision, music, assets | `docs/release_checklist.md` |
