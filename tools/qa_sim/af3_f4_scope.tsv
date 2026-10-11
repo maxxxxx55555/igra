@@ -8,3 +8,5 @@ export_presets.cfg	49f8a4e0bf4c	79f400a94071	*app_label*
 scripts/ui/hud_3d.gd	76a019ce347b	0eef5f57885b	*hud_pause*
 scripts/ui/pause_menu.gd	14be39cbd1cf	3839d0bd6fd3	*pause_after_languages*
 export_presets.cfg	49f8a4e0bf4c	c3b9cfa3d5dc	*app_label*
+export_presets.cfg	49f8a4e0bf4c	722135529dd4	*app_label*
+export_presets.cfg	c3b9cfa3d5dc	722135529dd4	*app_label*

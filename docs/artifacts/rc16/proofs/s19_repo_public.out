@@ -1,0 +1,8 @@
+# proof s19_repo_public
+# utc 20261011T141249Z
+# head 024c7b7 (uncommitted paths: 6)
+# env none
+# cmd bash -c for u in https://github.com/maxxxxx55555/igra https://raw.githubusercontent.com/maxxxxx55555/igra/main/opencode.json; do printf "%s anonymous HEAD -> HTTP %s\n" "$u" "$(curl -s -I -o /dev/null -w "%{http_code}" --max-time 30 "$u")"; done
+https://github.com/maxxxxx55555/igra anonymous HEAD -> HTTP 200
+https://raw.githubusercontent.com/maxxxxx55555/igra/main/opencode.json anonymous HEAD -> HTTP 200
+# EXIT=0

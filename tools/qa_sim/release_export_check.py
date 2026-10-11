@@ -10,8 +10,9 @@ cut a signed release build yet, so a hard-fail here would misrepresent
 "not done yet" as "broken".
 
 With --aab <file> it also reads an exported bundle (Session 19): every packed file must be the game's. A file of the tools,
-tests, docs or store art, a text file of the project root (opencode.json carried an API key into the v8.0.0 bundle), or an
-API key pattern in a packed text file is a FAIL.
+tests, docs or store art (`store/`, and `assets/store/` but for its launcher icon source and `assets/store/endings/`, which
+docs/SIZE_BUDGET.md keeps as planned in-game art), a text file of the project root (opencode.json carried an API key into the
+v8.0.0 bundle), or an API key pattern in a packed text file is a FAIL.
 
 Run: python tools/qa_sim/release_export_check.py [--aab build/tls.aab] [--demo]
 """
@@ -27,13 +28,15 @@ NOT_GAME_DIRS = ("tools/", "scripts/tools/", "scenes/tools/", "scripts/security/
                  ".qa_logs/", "build/", "store/press/", "store/screens_spec/", "store/screenshots/", "store/trailer/")
 NOT_GAME_FILES = ("opencode.json", "missing_keys.json", "scripts/stress_test.gd", "scenes/world/test_zone.tscn", "store/feature-graphic.png",
                   "store/icon-512.png")
+STORE_KEPT = ("assets/store/play_icon_512.png", "assets/store/endings/")  # the launcher icon source; planned in-game art (SIZE_BUDGET)
 NOT_GAME_SUFFIXES = (".md", ".py", ".sh", ".ps1", ".env", ".jks", ".keystore")
 TEXT_SUFFIXES = (".json", ".cfg", ".txt", ".csv", ".tres", ".tscn", ".gd")
 API_KEY = re.compile(rb"sk-[A-Za-z0-9_-]{16,}|\"apiKey\"")
 
 
 def not_game(src):
-    return src.startswith(NOT_GAME_DIRS) or src in NOT_GAME_FILES or src.endswith(NOT_GAME_SUFFIXES)
+    store_art = src.startswith("assets/store/") and not src.startswith(STORE_KEPT)
+    return src.startswith(NOT_GAME_DIRS) or src in NOT_GAME_FILES or src.endswith(NOT_GAME_SUFFIXES) or store_art
 
 
 def aab_findings(path):
@@ -59,11 +62,14 @@ def demo():
         aab = pathlib.Path(tmp) / "t.aab"
         with zipfile.ZipFile(aab, "w") as z:
             for rel, body in (("opencode.json", b"{}"), ("tests/x.gdc", b""), ("scripts/ok.gdc", b""), ("store/trailer/a.png.import", b""),
+                              ("assets/store/v2/a.png.import", b""), ("assets/store/capsule_main_616x353.png.import", b""),
+                              ("assets/store/play_icon_512.png.import", b""), ("assets/store/endings/e.png.import", b""),
                               ("data/i18n/en.json", b'{"k": "sk-abcdefghijklmnopqrstu"}'), ("data/items.json", b'{"name": "battery"}')):
                 z.writestr(PACKS[0] + rel, body)
         got = aab_findings(aab)
-    assert got == ["opencode.json", "tests/x.gdc", "store/trailer/a.png.import", "data/i18n/en.json (an API key pattern)"], got
-    print("release_export_check demo OK (a root text file, test code, a store image and a key pattern are found; game files pass)")
+    assert got == ["opencode.json", "tests/x.gdc", "store/trailer/a.png.import", "assets/store/v2/a.png.import",
+                   "assets/store/capsule_main_616x353.png.import", "data/i18n/en.json (an API key pattern)"], got
+    print("release_export_check demo OK (a root text file, test code, store images and a key pattern are found; game files, the launcher icon and the endings art pass)")
 
 
 def main() -> int:

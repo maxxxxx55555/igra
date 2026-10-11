@@ -1,0 +1,89 @@
+# proof s19_aab_assetstore_pre_024c7b7
+# utc 20261011T140657Z
+# head 024c7b7 (uncommitted paths: 1)
+# env none
+# cmd python tools/qa_sim/release_export_check.py --aab build/tls.aab
+NOTE: keystore/release is empty - expected pre-release state (no signed release build cut yet), not a failure
+NOTE: keystore/release_user is empty - expected pre-release state (no signed release build cut yet), not a failure
+NOTE: keystore/release_password is empty - expected pre-release state (no signed release build cut yet), not a failure
+FAIL: tls.aab packs a file that is not the game: assets/store/background_1920x1080.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/capsule_header_460x215.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/capsule_main_616x353.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/capsule_small_231x87.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/feature_graphic_1024x500.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/icon_round_192.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/library_hero_1920x620.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/loading_screen_1920x1080.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/main_menu_keyart_1920x1080.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/screenshot_01.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/screenshot_02.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/screenshot_03.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/screenshot_04.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/screenshot_05.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/tv_banner_1280x720.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/ab/ab_icon_A_hero.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/ab/ab_icon_B_map.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/ab/ab_icon_C_monster.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/ab/ab_icon_D_hand.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/background_1920x1080_v2.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/capsule_header_460x215_v2.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/capsule_main_616x353_v2.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/capsule_small_231x87_v2.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/coming_soon/dlc_teaser_1920x1080.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/coming_soon/wishlist_hero_1920x1080.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/devices/phone/phone_combat.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/devices/phone/phone_map.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/devices/phone/phone_menu.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/devices/phone/phone_street.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/devices/steam_desktop/steam_desktop_combat.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/devices/steam_desktop/steam_desktop_hero.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/devices/steam_desktop/steam_desktop_map.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/devices/steam_tv/steam_tv_hero_4k.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/devices/tablet_10/tablet_10_menu.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/devices/tablet_10/tablet_10_street.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/devices/tablet_7/tablet_7_encounter.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/devices/tablet_7/tablet_7_map.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/endings/ending_dark.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/endings/ending_hope.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/endings/ending_light.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/endings/ending_survivor.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/endings/ending_truth.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/feature_1024x500_v2.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/icon_512_v2.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/itch/itch_cover_630x500.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/itch/itch_screenshot_wide_1_1280x720.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/itch/itch_screenshot_wide_2_1280x720.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/itch/itch_screenshot_wide_3_1280x720.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/itch/itch_thumbnail_315x250.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/library_hero_1920x620_v2.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/shots/shot_combat.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/shots/shot_encyclopedia.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/shots/shot_map.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/shots/shot_restored.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/shots/shot_street.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/social/discord_1280x640.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/social/poster_vertical_1080x1350.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/social/press_cover_1920x1080.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/social/twitter_1500x500.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/storyboard/frame_01.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/storyboard/frame_02.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/storyboard/frame_03.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/storyboard/frame_04.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/storyboard/frame_05.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/storyboard/frame_06.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/storyboard/frame_07.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/storyboard/frame_08.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/storyboard/frame_09.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/storyboard/frame_10.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/vertical/vertical_cta.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/vertical/vertical_hook.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/vertical/vertical_reveal.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/yandex/yandex_banner_1920x600.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/yandex/yandex_cover_1080x1080.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/yandex/yandex_icon_512.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/youtube/banner_2560x1440.png.import
+FAIL: tls.aab packs a file that is not the game: assets/store/v2/youtube/channel_icon_800.png.import
+build\tls.aab: 77 packed file(s) that are not the game
+
+FAIL
+# EXIT=1
