@@ -134,7 +134,10 @@ func try_add(item_id: StringName, amount: int = 1, announce: bool = true) -> boo
 	elif _is_networked():
 		_request_add.rpc_id(1, item_id, amount)
 	return true
+## All or nothing, like try_add: asked for more than the pack holds it takes nothing (it used to take what there was and answer false).
 func remove(item_id: StringName, amount: int = 1) -> bool:
+	if not has(item_id, amount):
+		return false
 	var remaining := amount
 	for i in slots.size():
 		if remaining <= 0:
@@ -146,8 +149,6 @@ func remove(item_id: StringName, amount: int = 1) -> bool:
 			remaining -= take
 			if s["count"] <= 0:
 				slots[i] = null
-	if remaining > 0:
-		return false
 	_recompute_weight()
 	EventBus.inventory_changed.emit()
 	if _is_networked() and is_multiplayer_authority():
