@@ -137,6 +137,39 @@ func _halo_random_probe() -> void:
 		n += 1
 	out_dir = normal_out
 
+## =3: the pose of the first square seen (camera (-22.75, 2.56, -6.78), yaw 72.9): normal, glow hidden, a smaller peak, a longer near fade.
+func _halo_pose_probe() -> void:
+	var halos := _halo_mmi()
+	var player := get_tree().get_first_node_in_group("player") as Node3D
+	if halos == null or player == null or OS.get_environment("TLS_HALO_PROBE") != "3":
+		return
+	var normal_out := out_dir
+	out_dir = _sweep_out
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(out_dir))
+	player.global_position = Vector3(-22.74979, 0.86, -6.780282)
+	player.rotation_degrees.y = 72.9
+	await get_tree().create_timer(0.6).timeout
+	var mat := halos.material_override as ShaderMaterial
+	print("[final] halo pose camera %s aabb %s" % [get_viewport().get_camera_3d().global_position, halos.get_aabb()])
+	for node in get_tree().root.find_children("*", "GeometryInstance3D", true, false):
+		var g := node as GeometryInstance3D
+		if g != null and g.is_visible_in_tree() and not (g is MultiMeshInstance3D) and g.global_position.distance_to(get_viewport().get_camera_3d().global_position) < 8.0:
+			print("[final] halo near %s %s mat=%s at %s" % [g.get_path(), g.get_class(), g.material_override, g.global_position])
+	await _shot("halo_pose_a_normal")
+	halos.visible = false
+	await get_tree().create_timer(0.3).timeout
+	await _shot("halo_pose_b_hidden")
+	halos.visible = true
+	mat.set_shader_parameter("peak", 0.1)
+	await get_tree().create_timer(0.3).timeout
+	await _shot("halo_pose_c_peak01")
+	mat.set_shader_parameter("peak", 0.45)
+	mat.set_shader_parameter("near_fade", 20.0)
+	await get_tree().create_timer(0.3).timeout
+	await _shot("halo_pose_d_near20")
+	mat.set_shader_parameter("near_fade", 6.0)
+	out_dir = normal_out
+
 func _halo_hidden_shown() -> void:
 	var halos := _halo_mmi()
 	if halos == null or OS.get_environment("TLS_HALO_PROBE") != "1":
@@ -314,6 +347,7 @@ func _run() -> void:
 	await _swept("02_district_day_full")
 	await _halo_ring_probe()
 	await _halo_random_probe()
+	await _halo_pose_probe()
 
 	UIManager.open(&"skill_tree")
 	await get_tree().create_timer(0.6).timeout
