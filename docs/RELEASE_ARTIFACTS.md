@@ -1,6 +1,6 @@
 # Release artifacts (C9 owner-prep)
 
-Status at 2026-10-11 (rc17, the candidate for `v8.0.0`): the signed release AAB was rebuilt from `c76442b` and is verified below; the rc16 and rc15 records after it are history.
+Status at 2026-10-11 (`v8.0.0`): the signed release AAB was rebuilt from `63fda65` and is verified below; the rc17, rc16 and rc15 records after it are history.
 
 ## Done
 - **Release keystore generated** with `keytool` (PKCS12, RSA 4096, alias `tls_release`, 10000-day
@@ -17,6 +17,14 @@ Status at 2026-10-11 (rc17, the candidate for `v8.0.0`): the signed release AAB 
 
 **Back up `.signing/` outside this machine.** A lost upload key means no updates to the same listing
 unless Play App Signing is enabled (recommended: upload this as the *upload* key only).
+
+## Signed AAB (v8.0.0, rebuilt 2026-10-11)
+
+- **Built:** `build/tls.aab`, **183,290,613 bytes (183.3 MB)**, sha256 `58a0242ac1f4a496d898f1a998bfc0588675ae854c8c75e36187b4be1fd1750f`, built from commit `63fda65` with no uncommitted path (launch ledger row 58, `export_v800_63fda65`, EXPORT run 2 of 2), the same command as below, `# EXIT=0` (`docs/artifacts/rc16/proofs/export_v800_63fda65.out`). As before, the run ended after `gradlew --stop`, and the export's resave of `default_bus_layout.tres` was reverted.
+- **App label:** "Last Streetlight" in all 42 entries of its label resource (`docs/artifacts/rc16/proofs/r5_label_after_63fda65.out`); the rc17 bundle read "TLS" (`docs/artifacts/rc16/proofs/r5_label_before_c76442b.out`, CORRECTION_LOG 151).
+- **Contents:** 2,891 entries; the base module 26,974,685 bytes compressed (78,462,232 raw), the install-time asset pack 155,283,834 bytes compressed (213,749,515 raw); no entry under `docs/`, `tools/`, `scenes/tools/` or `scripts/tools/`; no ad SDK code (0 dex references to `Lcom/applovin/`, `docs/artifacts/rc16/proofs/r5_aab_adsdk_63fda65.out`).
+- **Signature:** `jar verified.` (exit 0), the signer's SHA-256 equals the upload key (`signer_match=yes`, `docs/artifacts/rc16/proofs/aab_verify_v800.out`).
+- **The rc17 bundle** (183,290,597 bytes) is kept outside the repository at `..\_BACKUPS\2026-10-11_03-05\build\tls.aab`.
 
 ## Signed AAB (rc17, rebuilt 2026-10-11)
 

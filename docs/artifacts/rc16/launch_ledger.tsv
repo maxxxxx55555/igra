@@ -56,3 +56,4 @@ n	utc	head	id	exit	command
 55	20261010T224903Z	18a2a2a	r2_frames_18a2a2a	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 900
 56	20261010T224941Z	18a2a2a	r2_audio_18a2a2a	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120
 57	20261010T225012Z	18a2a2a	r2_bot_18a2a2a	0	bash tools/qa_sim/autoplay_bot
+58	20261011T000530Z	63fda65	export_v800_63fda65	0	bash -c set -a; . .signing/release.env; set +a; /c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/Godot_v4.7-stable_win64_console.exe --headless --path . --export-release "Android" build/tls.aab

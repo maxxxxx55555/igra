@@ -197,16 +197,16 @@ rows: `docs/ACCEPTANCE_CHECKLIST.md` (200 rows); decisions: `docs/TZ_DECISIONS.m
 | Arabic shop | fixed: the header and the scroll area are attached before they are placed; SHOP2 fails on the old shop in Arabic at three text sizes and passes on the fix | CORRECTION_LOG 147; `docs/stills/rc17/08_shop_ar_*` |
 | Arabic, other cards | eight Screens cards keep their content outside the card in Arabic: OPEN, the owner decides | `docs/KNOWN_ISSUES.md`; `docs/artifacts/rc16/proofs/r0_rtl_screens_b82bfef.out` |
 | Desktop `user://` | moved with the title to `app_userdata/Last Streetlight`; the phone build is not affected | `docs/KNOWN_ISSUES.md`, CORRECTION_LOG 150 |
-| Signed AAB | 183,290,597 bytes from `c76442b` (EXPORT 1 of 2), `jar verified.`, the signer is the upload key, no ad SDK code | `docs/RELEASE_ARTIFACTS.md` (rc17) |
-| Battery | `check.sh --all` at `af5225d`: 64 green, 2 red, both gate edits (the English pin, and SH1 asking for the scroll the shop has had since rc16 F1), CORRECTION_LOG 149; at `18a2a2a`: closeout `checks=379 fails=0`, audio truth PASS (Music -10.6 dB), static battery 40 green | `docs/artifacts/rc16/proofs/r2_check_all_af5225d.out`, `docs/artifacts/rc16/proofs/r2_closeout_18a2a2a.out`, `docs/artifacts/rc16/proofs/r2_audio_18a2a2a.out` |
+| Signed AAB | 183,290,613 bytes from `63fda65` (EXPORT 2 of 2), `jar verified.`, the signer is the upload key, no ad SDK code, the app label "Last Streetlight" (it read "TLS" before, CORRECTION_LOG 151) | `docs/RELEASE_ARTIFACTS.md` (v8.0.0) |
+| Battery | `check.sh --all` at `af5225d`: 64 green, 2 red, both gate edits (the English pin, and SH1 asking for the scroll the shop has had since rc16 F1), CORRECTION_LOG 149; at `18a2a2a`: closeout `checks=379 fails=0`, audio truth PASS (Music -10.6 dB); the static gates at the commit that records R5 round 1 (`v800_static_*.out`, `v800_gates_*.out`, CORRECTION_LOG 152) | `docs/artifacts/rc16/proofs/r2_check_all_af5225d.out`, `docs/artifacts/rc16/proofs/r2_closeout_18a2a2a.out`, `docs/artifacts/rc16/proofs/r2_audio_18a2a2a.out` |
 | Bot | 3 of 3 seeds won, 0 softlocks, at `d390826` and at `18a2a2a` | `docs/artifacts/rc16/proofs/d4_bot_d390826.out`, `docs/artifacts/rc16/proofs/r2_bot_18a2a2a.out` |
 | Balance sim | PASS | `docs/artifacts/rc16/proofs/r2_balance_sim_af5225d.out` |
 | i18n | 12 of 12 locales PASS; the i18n audit reads MISSING 0 | RUN_STATE S18, D2 |
 | Frames | `af3 frames=21 fail=0` (`docs/stills/rc17/` 15, `docs/stills/release/` 6), each read once | RUN_STATE S18-L1 and L17 |
 | Function matrix | 146 rows, no BUG | `docs/artifacts/rc16/proofs/r4_matrix_status.out` |
-| Verifier (R5) | pending | `docs/artifacts/rc16/proofs/r5_verifier_note.md` |
+| Verifier (R5) | round 1 at `d4fa2da`: `PASS=37 FAIL=9 GAME-AFFECTING=1 META=8 UNVERIFIED=4`; the GAME-AFFECTING fail (the Android label) is fixed (CORRECTION_LOG 151), the META fails are rows 152 to 159; one re-run follows, as the owner's rule allows after a GAME-AFFECTING fix | `docs/artifacts/rc16/proofs/r5_verifier.md` |
 | Unverifiable here | U1 to U8 | `docs/UNVERIFIABLE_HERE.md` |
-| Store | the title and the 13 locales of `store/listing.md` are ready; gaps: the screenshots are 960 x 540 (featuring asks for 1080 px), the icon has no alpha and the feature graphic has one (check at upload), the privacy policy is not hosted yet | `docs/release_checklist.md`, steps 2, 3 and 5 |
+| Store | the title and the 13 locales of `store/listing.md` are ready; gaps: the screenshots are 960 x 527 with an alpha channel (featuring asks for 1080 px, and Play takes screenshots without alpha), the icon has no alpha and the feature graphic has one (check at upload), the privacy policy is not hosted yet | `docs/release_checklist.md`, steps 2, 3 and 5 |
 | Owner | phone smoke test, Play Console, privacy URL, IARC and data safety, the Arabic decision, music, assets | `docs/release_checklist.md` |
 
 ## rc16 final (sign-off, 2026-10-08)

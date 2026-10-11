@@ -290,7 +290,7 @@ Touch: virtueller Joystick und Aktionstasten, Ausweichen per Doppeltipp. PC: WAS
 
 ### fr — Français
 
-- **Title:** LE DERNIER REVERBERE
+- **Title:** LE DERNIER RÉVERBÈRE
 - **Tagline:** Un survivant dans une nuit éternelle. Rendez sa lumière à la ville.
 - **Short (71/80):** Rends la lumière. FPS d'horreur furtif : chaque lampadaire est une vie.
 - **Full description:**
