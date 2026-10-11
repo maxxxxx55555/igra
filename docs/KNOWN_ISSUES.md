@@ -1,5 +1,22 @@
 # Known issues
 
+## OPEN (2026-10-11, Session 19): findings of the v8.0.0 release validation that stay open, for the owner to rate
+
+The pass fixed three P0 (CORRECTION_LOG 165 to 167) and left these. None is a softlock or a crash: the full loop (`docs/artifacts/rc16/proofs/s19_loop_14fc1b3.out`, 3 seeds, 12 processes, 427 steps, 0 failed) did not meet them as failures, and the exploit run (`docs/artifacts/rc16/proofs/s19_exploit_post_afb76e9.out`, `DONE checks=8 fails=0`) holds the guards. Each row has its mechanism, its file and line and its owner action in `docs/CORRECTION_LOG.md`.
+
+- 168, a save written during a transition has the position (0, 0, 0) (the app must die in that window; Continue then spawns at the origin).
+- 169, a quest reward that does not fit a full pack stays unpaid until the quest's next event, and salvage on a full pack loses its components.
+- 170, the daily challenge can be claimed twice by deleting `user://tls_daily.json` (needs file access on the device).
+- 171, Export Save during a Hardcore run lets Import bring the dead run back.
+- 172, Pause > Restart reloads the scene without a load or a reset (a free heal, and the state stays PAUSED until Resume).
+- 173 and 174, the LAN calls take any peer and `InventoryManager.remove` takes before it counts (co-op only, latent).
+- 177, the rewarded-ad revive button lives on a death screen nothing loads; ads are off in this build, so no player sees it.
+- 178, the Hardcore death screen reads 0 districts and 0 documents (it reads the run after the wipe).
+- 179, a new run (New Game, New Game+, a Retry with no save) zeroes the daily streak while the day's claim stays.
+- 180, the tutorial hint keeps its old language after a language switch until the next step.
+
+Owner: rate 168 to 180 for 1.0 or the next pass; 177 before an ad SDK key is set.
+
 ## OPEN (2026-10-11, rc17): on the desktop the title change moved the `user://` folder
 
 `config/name` is "Last Streetlight" since the merge `0cabe8b` (`project.godot:13`), and a desktop build keeps `user://` in `%APPDATA%\Godot\app_userdata\[project_name]`, so it now reads `...\Last Streetlight` instead of `...\The Last Streetlight` (CORRECTION_LOG 150). On a phone `user://` is the app's own storage, so the Android build is not affected, and 1.0 has no earlier players. The QA runs of this pass wrote files into the new folder (the guard restores only the files it snapshotted, and it found none). Owner: before a desktop play test, rename the new folder or copy the old one over it; if a desktop build ships later, `application/config/use_custom_user_dir` with `custom_user_dir_name` would fix the folder name.
