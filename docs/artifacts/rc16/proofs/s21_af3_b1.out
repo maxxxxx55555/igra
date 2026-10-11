@@ -1,0 +1,7 @@
+# proof s21_af3_b1
+# utc 20261011T192514Z
+# head 2d502ee (uncommitted paths: 7)
+# env none
+# cmd python tools/qa_sim/af3_frame_check.py --dir docs/stills/shipping/batch1
+af3 frames=4 fail=0
+# EXIT=0
