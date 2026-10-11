@@ -154,14 +154,16 @@ func _hold_bot(hold: bool) -> void:
 		_bot.set("_score_t", _bot.call("_now"))
 		_bot.set("_stuck_sec", 0.0)
 
-## Every 5 s: a progress line every 30 s, and the shop and skill errands when the run is quiet (no monster near, in the spine).
+## Every 5 s: a progress line every 30 s, and the shop and skill errands when the run is quiet (in the spine, no screen open, such as
+## the bot's city map, and no monster near).
 func _errands() -> void:
 	if Time.get_ticks_msec() >= _note_ms:
 		_note_ms = Time.get_ticks_msec() + 30000
 		_say("[pt] note C%d the bot is in %s, phase %s, coins %d, skill points %d, %.0f fps" % [NewGamePlus.get_current_ng_plus(), DistrictManager.current_district,
 			_bot.get("_phase"), CoinWallet.get_coins(), SkillTreeManager.get_skill_points(), Engine.get_frames_per_second()])
 	var scene := _scene()
-	if _busy or bool(_bot.get("_done")) or String(_bot.get("_phase")) != "spine" or not GameManager.is_playing() or scene == null or not scene.has_node("Screens") or _monster_near():
+	if _busy or bool(_bot.get("_done")) or String(_bot.get("_phase")) != "spine" or UIManager.is_hud_blocked() or scene == null or not scene.has_node("Screens") \
+			or _monster_near():
 		return
 	if not _shopped and CoinWallet.get_coins() >= SHOP_AT_COINS:
 		_busy = true
@@ -251,12 +253,12 @@ func _settings_tabs() -> void:
 		return
 	var tabs := settings.find_children("*", "TabContainer", true, false)[0] as TabContainer
 	for i: int in tabs.get_tab_count():
-		var res := await _click_tab(tabs, i)
+		var clicked := await _click_tab(tabs, i)
 		await get_tree().create_timer(0.4).timeout
 		var page := tabs.get_current_tab_control()
 		var raw := _raw_placeholders(page)
 		var off := _off_window(page)
-		_step("SET.%d" % i, res == "ok" and off == 0 and raw.is_empty(), "settings tab %d (%s) opens by a click: %d text control(s) off the window, raw specifiers: %s" % [
+		_step("SET.%d" % i, clicked == "ok" and off == 0 and raw.is_empty(), "settings tab %d (%s) opens by a click: %d text control(s) off the window, raw specifiers: %s" % [
 			i, tabs.get_tab_title(i), off, ", ".join(raw) if not raw.is_empty() else "none"], await _shot("settings_tab_%d" % i))
 	await _close_settings()
 

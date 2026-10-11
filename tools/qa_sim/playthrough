@@ -29,10 +29,12 @@ export TLS_UDG_GUARDED=1
 mkdir -p .qa_logs docs/stills/playthrough
 
 # a fresh install: no settings, no save, no achievements, no daily state (A and S start from one)
+# every game file there now goes, the earlier modes' too: the guard's snapshot holds the owner's, restored at the end
 fresh_profile() {
-	while IFS= read -r f; do rm -f -- "$UDG_DIR/$f"; done < "$UDG_SNAP/list"
+	local n=0 f
+	while IFS= read -r f; do rm -f -- "$UDG_DIR/$f"; n=$((n+1)); done < <(_udg_list "$UDG_DIR")
 	rm -f .qa_logs/pt_state.json
-	echo "  fresh profile: $(wc -l < "$UDG_SNAP/list") game file(s) set aside (restored at the end)"
+	echo "  fresh profile: $n game file(s) removed ($(wc -l < "$UDG_SNAP/list") of the owner's are restored at the end)"
 }
 [[ "${MODES[0]}" == "A" || "${MODES[0]}" == "S" ]] && fresh_profile
 if [[ "${MODES[0]}" == "L" ]]; then
@@ -58,7 +60,9 @@ for MODE in "${MODES[@]}"; do
 	if [[ -n "$SEED" ]]; then
 		[[ -f ".qa_logs/playthrough_$MODE.txt" ]] && mv -f ".qa_logs/playthrough_$MODE.txt" ".qa_logs/playthrough_${MODE}_s$SEED.txt"
 		last=$(grep -aE "^\[pt\] DONE " "$LOG" | tail -1)
-		if [[ $rc -ne 0 || "$last" != *" fails=0 "* ]]; then
+		# a seed goes on while each process reaches its end (L0 to L2 end in Save and quit); a failed step only marks the run red
+		[[ "$last" == *" fails=0 "* ]] || rc_all=1
+		if [[ $rc -ne 0 || ( "$MODE" != "L3" && "$last" != *"Save and quit pressed next"* ) ]]; then
 			stopped="$stopped $SEED"
 			rc_all=1
 			echo "  seed $SEED stops at $MODE (rc=$rc, ${last:-no DONE line: a crash or a hang})"
