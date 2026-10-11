@@ -1,5 +1,6 @@
 extends RefCounted
-## Session 21 (the shipping pass): the P1 rows that were a few lines of code, docs/CORRECTION_LOG.md rows 169, 172 and 174.
+## Session 21 (the shipping pass): the P1 rows that were a few lines of code, docs/CORRECTION_LOG.md rows 169, 172 and 174, and the lamp glow of
+## the visual batch (HALO1).
 ## Wired into _closeout_check_runner.gd as `await Rc21Ship.run(self)`; CLOSEOUT_ONLY=s21 runs only these. Each id fails on the
 ## v8.0.0-final runtime and passes at HEAD (tools/qa_sim/af2_both_ways.py reads the pair). A "guard" line holds a rule in both runs.
 ## Every state a check touches is put back; the restart check goes last because it reloads the district.
@@ -10,11 +11,32 @@ const PENDING_QUEST: String = "q_restore_district2"
 static func run(r: Node) -> void:
 	r._playing()
 	UIManager.close_all_blocking()
+	_lamp_halos_follow_the_stage(r)
 	_remove_takes_all_or_nothing(r)
 	_quest_pays_when_there_is_room(r)
 	await _salvage_keeps_the_item(r)
 	await _restart_goes_back_to_the_save(r)
 	r._playing()
+
+## HALO1 (B2, the lamp glow): a district's batched lamps get a glow (Medium tier and up) whose strength follows the power stage: none in the
+## DARK stage (hidden), full at FULL. The live strength is put back.
+static func _lamp_halos_follow_the_stage(r: Node) -> void:
+	var helper := load("res://scripts/world/lamp_halos.gd") as GDScript
+	var halos := r.get_tree().root.find_child("StreetlightHalosBatched", true, false) as MultiMeshInstance3D
+	if helper == null or halos == null:
+		r._ok(false, "HALO1 the spawn district has a lamp glow (scripts/world/lamp_halos.gd loads %s, StreetlightHalosBatched found %s)" % [helper != null, halos != null])
+		return
+	var mat := halos.material_override as ShaderMaterial
+	var live: bool = halos.visible
+	var strength: Variant = mat.get_shader_parameter("strength")
+	helper.call("apply_stage", halos, DistrictData.Stage.DARK)
+	var dark_hidden: bool = not halos.visible
+	helper.call("apply_stage", halos, DistrictData.Stage.FULL)
+	var full: bool = halos.visible and is_equal_approx(float(mat.get_shader_parameter("strength")), 1.0)
+	r._ok(dark_hidden and full and halos.multimesh.instance_count > 0,
+		"HALO1 the lamp glow is hidden in the DARK stage and full at FULL (%d lamps; dark hidden %s, full %s)" % [halos.multimesh.instance_count, dark_hidden, full])
+	halos.visible = live
+	mat.set_shader_parameter("strength", strength)
 
 static func _full_pack(keep: Dictionary = {}) -> Dictionary:
 	var slots: Array = []
