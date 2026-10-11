@@ -1,0 +1,10 @@
+# proof s19_backups
+# utc 20261011T142759Z
+# head e241597 (uncommitted paths: 11)
+# env none
+# cmd bash -c B=/c/Users/Maxsim/Desktop/TLS_Build/_BACKUPS; for f in "$B/2026-10-11_15-38/build/tls.aab" "$B/2026-10-11_17-15/build/tls.aab" "$B/2026-10-11_15-38/docs/PROOFS.md" "$B/2026-10-11_15-38/docs/artifacts/rc16/closures.json"; do printf "%s bytes=%s sha256=%s\n" "${f#$B/}" "$(stat -c %s "$f")" "$(sha256sum "$f" | cut -c1-64)"; done
+2026-10-11_15-38/build/tls.aab bytes=183290613 sha256=58a0242ac1f4a496d898f1a998bfc0588675ae854c8c75e36187b4be1fd1750f
+2026-10-11_17-15/build/tls.aab bytes=155586711 sha256=256c946f129091c6b7f79c38c961f935dd2d9cd31b7e06ec5d18b99273488441
+2026-10-11_15-38/docs/PROOFS.md bytes=65561 sha256=96ad50798a63c8546a0ad82798364028c05f637b46b0a136349aa0e741027000
+2026-10-11_15-38/docs/artifacts/rc16/closures.json bytes=29775 sha256=0503996c40ee3c659d29a709369018ac5649cb81115a57b20cff5e9b5de0ec05
+# EXIT=0

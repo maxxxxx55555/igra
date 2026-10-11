@@ -1,0 +1,36 @@
+# proof s19_label_e241597
+# utc 20261011T142614Z
+# head e241597 (uncommitted paths: 3)
+# env none
+# cmd python -I C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/aab_label.py build/tls.aab
+"""The Android app label of an AAB: the values of the string resource godot_project_name_string in base/resources.pb. Prints itself first."""
+import pathlib
+import re
+import sys
+import zipfile
+
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+with zipfile.ZipFile(sys.argv[1]) as z:
+    pb = z.read("base/resources.pb")
+    manifest = z.read("base/manifest/AndroidManifest.xml")
+start = pb.find(b"godot_project_name_string")
+if start < 0:
+    sys.exit("no godot_project_name_string")
+# The resource's entries follow its name, one value per locale, until the next resource name (12 or more lower-case letters and _).
+nxt = re.search(rb"[a-z_]{12,}", pb[start + 25:])
+segment = pb[start:start + 25 + (nxt.start() if nxt else 4000)]
+# A protobuf string field: byte 0x0A, a length byte, then the bytes; locale codes use another tag, so a 3+ letter printable value is a label.
+values = []
+for k in range(len(segment) - 2):
+    size = segment[k + 1]
+    word = segment[k + 2:k + 2 + size]
+    if segment[k] == 0x0A and size >= 3 and len(word) == size and all(0x20 <= c < 0x7F for c in word):
+        values.append(word.decode())
+print("label values:", sorted(set(values)), "entries:", len(values))
+print("manifest names the resource:", b"godot_project_name_string" in manifest)
+
+--- run
+label values: ['Last Streetlight'] entries: 42
+manifest names the resource: True
+# EXIT=0

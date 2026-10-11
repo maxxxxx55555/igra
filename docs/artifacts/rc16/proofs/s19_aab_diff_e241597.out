@@ -1,0 +1,88 @@
+# proof s19_aab_diff_e241597
+# utc 20261011T142619Z
+# head e241597 (uncommitted paths: 7)
+# env none
+# cmd python -I C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s19_aab_diff.py C:/Users/Maxsim/Desktop/TLS_Build/_BACKUPS/2026-10-11_17-15/build/tls.aab build/tls.aab
+"""Session 19, P5: what the rebuilt bundle changes against the v8.0.0 bundle (63fda65, kept in _BACKUPS). Arguments: old.aab new.aab.
+Lists the entries only in the old one, only in the new one, and those with the same name and other bytes (size or CRC); then counts the
+removed ones by what they are. Every removed entry must be a file that is not the game (test, store art or its import, the key file, the
+dead test scene, the stress script) and nothing may be added. Prints itself first."""
+import collections
+import pathlib
+import re
+import sys
+import zipfile
+
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+
+
+def entries(path):
+    with zipfile.ZipFile(path) as z:
+        return {i.filename: (i.file_size, i.CRC) for i in z.infolist()}
+
+
+def short(name):
+    return re.sub(r"^assetPackInstallTime/assets/", "", name)
+
+
+STORE_NAMES = set()  # file names of the store images whose .import left the bundle; their imported textures may go with them
+
+
+def kind(name):
+    s = short(name)
+    m = re.match(r"\.godot/imported/(.+)-[0-9a-f]{32}\.ctex$", s)
+    if m and m.group(1) in STORE_NAMES:
+        return "imported texture of a store image"
+    if s.startswith(".godot/exported/") and "test_zone" in s:
+        return "exported test scene"
+    if s.startswith("store/"):
+        return "store file (image import or shot list)"
+    if s.startswith("assets/store/") and s.endswith(".import"):
+        return "store art of assets/store (image import)"
+    if s.startswith("tests/"):
+        return "tests/"
+    if s in ("opencode.json", "missing_keys.json"):
+        return "tool file in the project root"
+    if s.startswith("scripts/stress_test.gd") or s.startswith("scenes/world/test_zone"):
+        return "stress script or test scene"
+    return "OTHER"
+
+
+old, new = entries(sys.argv[1]), entries(sys.argv[2])
+removed = sorted(set(old) - set(new))
+added = sorted(set(new) - set(old))
+changed = sorted(n for n in set(old) & set(new) if old[n] != new[n])
+print("old %s: %d entries; new %s: %d entries" % (pathlib.Path(sys.argv[1]).name, len(old), pathlib.Path(sys.argv[2]).name, len(new)))
+print("removed %d, added %d, same name with other bytes %d" % (len(removed), len(added), len(changed)))
+STORE_NAMES.update(short(n).rsplit("/", 1)[-1][:-len(".import")] for n in removed
+                   if short(n).endswith(".import") and short(n).startswith(("store/", "assets/store/")))
+by = collections.Counter(kind(n) for n in removed)
+for k, v in sorted(by.items()):
+    print("  removed %-40s %d" % (k, v))
+for n in removed:
+    if kind(n) == "OTHER":
+        print("  OTHER removed: " + short(n))
+for n in added:
+    print("  ADDED: " + short(n))
+for n in changed:
+    print("  changed: %-72s %d -> %d bytes" % (short(n)[:72], old[n][0], new[n][0]))
+bad = by.get("OTHER", 0) + len(added)
+print("bundle diff: removed=%d (all not the game: %s) added=%d changed=%d" % (len(removed), "yes" if not by.get("OTHER") else "NO", len(added), len(changed)))
+sys.exit(1 if bad else 0)
+
+--- run
+old tls.aab: 2838 entries; new tls.aab: 2684 entries
+removed 154, added 0, same name with other bytes 8
+  removed imported texture of a store image        77
+  removed store art of assets/store (image import) 77
+  changed: META-INF/MANIFEST.MF                                                     444483 -> 419099 bytes
+  changed: META-INF/TLS_RELE.RSA                                                    2001 -> 2001 bytes
+  changed: META-INF/TLS_RELE.SF                                                     444532 -> 419148 bytes
+  changed: assetPackInstallTime/assets.pb                                           4860 -> 4248 bytes
+  changed: .godot/global_script_class_cache.cfg                                     13186 -> 13186 bytes
+  changed: .godot/uid_cache.bin                                                     64337 -> 59674 bytes
+  changed: assets.sparsepck                                                         264664 -> 248736 bytes
+  changed: project.binary                                                           21759 -> 21825 bytes
+bundle diff: removed=154 (all not the game: yes) added=0 changed=8
+# EXIT=0

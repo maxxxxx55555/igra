@@ -1,0 +1,51 @@
+# proof s19_storeart_refs
+# utc 20261011T142955Z
+# head e241597 (uncommitted paths: 13)
+# env none
+# cmd python -I C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s19_storeart_refs.py
+"""Session 19, CORRECTION_LOG 182: does anything the game ships name an image of assets/store/, by path or by uid? Reads the uid of every
+image there from its .import file, then every tracked text file outside docs/, tools/, store/, assets/store/, .claude/, _QUARANTINE/, tests/,
+.specify/ and .github/, and the .import files of the other asset folders. Prints itself first, then every hit."""
+import pathlib
+import re
+import subprocess
+
+ROOT = pathlib.Path(r"C:\Users\Maxsim\Desktop\TLS_Build\THE_LAST_STREETLIGHT")
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+uids = {}
+for p in sorted((ROOT / "assets" / "store").rglob("*.import")):
+    m = re.search(r'^uid="(uid://[a-z0-9]+)"', p.read_text(encoding="utf-8", errors="replace"), re.M)
+    if m:
+        uids[m.group(1)] = p.relative_to(ROOT).as_posix()[:-len(".import")]
+print("images of assets/store with an .import and a uid: %d" % len(uids))
+skip = ("docs/", "tools/", "store/", "assets/store/", ".claude/", "_QUARANTINE/", "tests/", ".specify/", ".github/")
+binary = (".png", ".jpg", ".jpeg", ".webp", ".ogg", ".wav", ".mp3", ".ttf", ".otf", ".glb", ".gltf", ".bin", ".keystore", ".jar", ".aar", ".so",
+          ".dll", ".svg", ".mp4", ".ico", ".icns", ".import")
+tracked = [f for f in subprocess.run(["git", "ls-files"], cwd=ROOT, capture_output=True, text=True).stdout.split("\n") if f]
+scanned, hits = 0, []
+for f in tracked:
+    if f.startswith(skip) or f.endswith(binary):
+        continue
+    try:
+        text = (ROOT / f).read_text(encoding="utf-8")
+    except (UnicodeDecodeError, OSError):
+        continue
+    scanned += 1
+    hits += ["%s names %s (uid)" % (f, src) for u, src in uids.items() if u in text]
+    hits += ["%s names %s (path)" % (f, src) for src in uids.values() if src in text]
+others = [p for p in (ROOT / "assets").rglob("*.import") if "/assets/store/" not in p.as_posix()]
+for p in others:
+    text = p.read_text(encoding="utf-8", errors="replace")
+    hits += ["%s names %s (uid)" % (p.relative_to(ROOT).as_posix(), src) for u, src in uids.items() if u in text]
+print("shipped text files read: %d, import files of other folders read: %d" % (scanned, len(others)))
+for h in hits:
+    print("HIT " + h)
+print("store art references: %d (%s)" % (len(hits), "the launcher icon only" if hits == ["export_presets.cfg names assets/store/play_icon_512.png (path)"] else "see the hits"))
+
+--- run
+images of assets/store with an .import and a uid: 103
+shipped text files read: 743, import files of other folders read: 1248
+HIT export_presets.cfg names assets/store/play_icon_512.png (path)
+store art references: 1 (the launcher icon only)
+# EXIT=0

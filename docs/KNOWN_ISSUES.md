@@ -14,8 +14,9 @@ The pass fixed three P0 (CORRECTION_LOG 165 to 167) and left these. None is a so
 - 178, the Hardcore death screen reads 0 districts and 0 documents (it reads the run after the wipe).
 - 179, a new run (New Game, New Game+, a Retry with no save) zeroes the daily streak while the day's claim stays.
 - 180, the tutorial hint keeps its old language after a language switch until the next step.
+- 182 (fixed) leaves one decision: the 5 images of `assets/store/endings/` stay in the bundle, planned art of the ending screens that no script loads yet.
 
-Owner: rate 168 to 180 for 1.0 or the next pass; 177 before an ad SDK key is set.
+Owner: rate 168 to 180 for 1.0 or the next pass; 177 before an ad SDK key is set; for 182, wire the endings art or exclude it.
 
 ## OPEN (2026-10-11, rc17): on the desktop the title change moved the `user://` folder
 

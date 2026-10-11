@@ -828,94 +828,95 @@
  },
  {
   "id": "S19-BUNDLE-POST",
-  "claim": "The rebuilt bundle packs 0 files that are not the game.",
+  "claim": "The final bundle packs 0 files in the scan's classes of what is not the game, which know assets/store/ since CORRECTION_LOG 182.",
   "cmd": "python tools/qa_sim/release_export_check.py --aab build/tls.aab",
-  "proof": "s19_aab_post_16abbb0",
+  "proof": "s19_aab_post_e241597",
   "quotes": [
    "0 packed file(s) that are not the game",
    "PASS"
   ],
   "frames": [],
-  "commit": "16abbb0"
+  "commit": "e241597"
  },
  {
   "id": "S19-EXPORT",
-  "claim": "The signed release export on the final tree ends with its run done and exit 0.",
+  "claim": "The second signed release export (EXPORT 2 of 2), on the tree of the store-art fix, ends with its run done and exit 0.",
   "cmd": "bash -c 'set -a; . .signing/release.env; set +a; godot --headless --path . --export-release \"Android\" build/tls.aab'",
-  "proof": "s19_export_16abbb0",
+  "proof": "s19_export2_e241597",
   "quotes": [
    "[ DONE ] export"
   ],
   "frames": [],
-  "commit": "16abbb0"
+  "commit": "e241597"
  },
  {
   "id": "S19-SIGNED",
-  "claim": "The rebuilt bundle is signed and the signer is the documented upload key.",
+  "claim": "The final bundle is signed, and the signer's SHA-256 fingerprint equals the documented upload key.",
   "cmd": "bash aab_verify.sh",
-  "proof": "s19_aab_verify_16abbb0",
+  "proof": "s19_aab_verify_e241597",
   "quotes": [
    "jar verified.",
-   "signer_match=yes",
-   "bytes=155586711"
+   "documented=4F:6B:E6:41:5C:26:0B:34:1F:A0:CF:88:46:60:3B:82:64:0F:8B:6B:0D:5F:97:FD:FD:3A:FF:93:DD:89:59:09",
+   "in_bundle=4F:6B:E6:41:5C:26:0B:34:1F:A0:CF:88:46:60:3B:82:64:0F:8B:6B:0D:5F:97:FD:FD:3A:FF:93:DD:89:59:09",
+   "bytes=136500858"
   ],
   "frames": [],
-  "commit": "16abbb0"
+  "commit": "e241597"
  },
  {
   "id": "S19-LABEL",
-  "claim": "The Android app label of the rebuilt bundle is \"Last Streetlight\" in all 42 entries.",
+  "claim": "The Android app label of the final bundle is \"Last Streetlight\" in all 42 entries.",
   "cmd": "python aab_label.py build/tls.aab",
-  "proof": "s19_label_16abbb0",
+  "proof": "s19_label_e241597",
   "quotes": [
    "label values: ['Last Streetlight'] entries: 42"
   ],
   "frames": [],
-  "commit": "16abbb0"
+  "commit": "e241597"
  },
  {
   "id": "S19-ADSDK",
-  "claim": "The rebuilt bundle holds no ad SDK code.",
+  "claim": "The final bundle holds no ad SDK code.",
   "cmd": "python adsdk_scan.py build/tls.aab",
-  "proof": "s19_adsdk_16abbb0",
+  "proof": "s19_adsdk_e241597",
   "quotes": [
    "dex files: 1 references to Lcom/applovin/: 0"
   ],
   "frames": [],
-  "commit": "16abbb0"
+  "commit": "e241597"
  },
  {
   "id": "S19-STOREART",
-  "claim": "None of the 21 store images is in the rebuilt bundle in any form (42 entries before).",
+  "claim": "None of the 21 images of store/ is in the final bundle in any form (42 entries in the v8.0.0 bundle).",
   "cmd": "python s19_aab_storeart.py build/tls.aab",
-  "proof": "s19_storeart_post_16abbb0",
+  "proof": "s19_storeart_post_e241597",
   "quotes": [
    "0 bundle entries of them"
   ],
   "frames": [],
-  "commit": "16abbb0"
+  "commit": "e241597"
  },
  {
   "id": "S19-DIFF",
-  "claim": "Against the v8.0.0 bundle: 53 entries removed (all not the game), 0 added, 10 changed.",
+  "claim": "Against the v8.0.0 bundle: 207 entries removed, all of them not the game, 0 added, 9 changed.",
   "cmd": "python s19_aab_diff.py old.aab new.aab",
-  "proof": "s19_aab_diff_16abbb0",
+  "proof": "s19_aab_diff_v800_e241597",
   "quotes": [
-   "bundle diff: removed=53 (all not the game: yes) added=0 changed=10"
+   "bundle diff: removed=207 (all not the game: yes) added=0 changed=9"
   ],
   "frames": [],
-  "commit": "16abbb0"
+  "commit": "e241597"
  },
  {
   "id": "S19-SECRET",
-  "claim": "The keystore path and password occur in no log and in no bundle entry outside META-INF.",
+  "claim": "The keystore path and password occur neither in the export log nor in the verification log of the final bundle nor in a bundle entry outside META-INF.",
   "cmd": "python s19_secret_scan.py (counts only)",
-  "proof": "s19_secretscan_16abbb0",
+  "proof": "s19_secretscan_e241597",
   "quotes": [
    "secret occurrences=0"
   ],
   "frames": [],
-  "commit": "16abbb0"
+  "commit": "e241597"
  },
  {
   "id": "S19-STATIC",
@@ -927,5 +928,85 @@
   ],
   "frames": [],
   "commit": "0807041"
+ },
+ {
+  "id": "S19-BUNDLE-ASSETSTORE-PRE",
+  "claim": "The first rebuild (16abbb0) still packed 77 store images of assets/store/ (GAME-AFFECTING in the verifier's round 1, CORRECTION_LOG 182).",
+  "cmd": "python tools/qa_sim/release_export_check.py --aab build/tls.aab (the classes of e241597, on the bundle of 16abbb0)",
+  "proof": "s19_aab_assetstore_pre_024c7b7",
+  "quotes": [
+   "77 packed file(s) that are not the game"
+  ],
+  "frames": [],
+  "commit": "024c7b7"
+ },
+ {
+  "id": "S19-STORE-REFS",
+  "claim": "Nothing the game ships names an image of assets/store/ by path or uid but the launcher icon in export_presets.cfg.",
+  "cmd": "python s19_storeart_refs.py",
+  "proof": "s19_storeart_refs",
+  "quotes": [
+   "store art references: 1 (the launcher icon only)"
+  ],
+  "frames": [],
+  "commit": "e241597"
+ },
+ {
+  "id": "S19-DIFF-REBUILD",
+  "claim": "Against the first rebuild (16abbb0): 154 entries removed, the store art and its textures, 0 added, 8 changed.",
+  "cmd": "python s19_aab_diff.py 16abbb0.aab e241597.aab",
+  "proof": "s19_aab_diff_e241597",
+  "quotes": [
+   "bundle diff: removed=154 (all not the game: yes) added=0 changed=8"
+  ],
+  "frames": [],
+  "commit": "e241597"
+ },
+ {
+  "id": "S19-STATIC-FIX",
+  "claim": "The static gates at the tree of the store-art fix: 40 passed.",
+  "cmd": "bash tools/check.sh --static",
+  "proof": "s19_static_assetstore",
+  "quotes": [
+   "Всё зелёное. Проверок пройдено: 40"
+  ],
+  "frames": [],
+  "commit": "e241597"
+ },
+ {
+  "id": "S19-REPO-PUBLIC",
+  "claim": "The repository page and the raw opencode.json of main answer an anonymous request with HTTP 200 (CORRECTION_LOG 184).",
+  "cmd": "curl -s -I -o /dev/null -w %{http_code} (two URLs, no credentials)",
+  "proof": "s19_repo_public",
+  "quotes": [
+   "igra anonymous HEAD -> HTTP 200",
+   "opencode.json anonymous HEAD -> HTTP 200"
+  ],
+  "frames": [],
+  "commit": "e241597"
+ },
+ {
+  "id": "S19-PUSHES",
+  "claim": "Origin main equals HEAD at e241597 and holds each of the 15 Session 19 commits; v8.0.0 still peels to 66bc678 (CORRECTION_LOG 190).",
+  "cmd": "git ls-remote origin ...; git merge-base --is-ancestor <commit> <origin main>",
+  "proof": "s19_pushes_e241597",
+  "quotes": [
+   "origin main (git ls-remote): e241597903f4184310eafde6bfd9f8f0a2a49b5b",
+   "66bc678e4253cb90c7a6d5f2992eb6d3d03ff2a0"
+  ],
+  "frames": [],
+  "commit": "e241597"
+ },
+ {
+  "id": "S19-BACKUPS",
+  "claim": "The two earlier bundles and the documents copied before the first regeneration sit outside the repository with the sizes and hashes the documents name.",
+  "cmd": "stat and sha256sum of the backups",
+  "proof": "s19_backups",
+  "quotes": [
+   "2026-10-11_15-38/build/tls.aab bytes=183290613 sha256=58a0242a",
+   "2026-10-11_17-15/build/tls.aab bytes=155586711 sha256=256c946f"
+  ],
+  "frames": [],
+  "commit": "e241597"
  }
 ]

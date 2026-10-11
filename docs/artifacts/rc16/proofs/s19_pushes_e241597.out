@@ -1,0 +1,25 @@
+# proof s19_pushes_e241597
+# utc 20261011T142816Z
+# head e241597 (uncommitted paths: 12)
+# env none
+# cmd bash -c R=$(git ls-remote origin refs/heads/main | cut -f1); echo "origin main (git ls-remote): $R"; echo "local HEAD (git rev-parse):  $(git rev-parse HEAD)"; git ls-remote origin refs/tags/v8.0.0 "refs/tags/v8.0.0^{}" refs/tags/v8.0.0-final; n=0; for c in $(git rev-list --reverse v8.0.0..HEAD); do n=$((n+1)); printf "%2d %s  on origin main: %s\n" $n "$(git log -1 --format="%h %ad %s" --date=format:%H:%M "$c" | cut -c1-90)" "$(git merge-base --is-ancestor "$c" "$R" && echo yes || echo no)"; done
+origin main (git ls-remote): e241597903f4184310eafde6bfd9f8f0a2a49b5b
+local HEAD (git rev-parse):  e241597903f4184310eafde6bfd9f8f0a2a49b5b
+a3717067b13355830b7b1b126f516c21d4811a57	refs/tags/v8.0.0
+66bc678e4253cb90c7a6d5f2992eb6d3d03ff2a0	refs/tags/v8.0.0^{}
+ 1 717e132 11:15 Add the full-loop playthrough, the exploit checks and a bundle scan  on origin main: yes
+ 2 1aea9cd 11:18 Pause from the HUD button, keep the pause menu after a language switch, keep  on origin main: yes
+ 3 0807041 11:26 Declare the reach of the three P0 fixes in the frame gate's scope  on origin main: yes
+ 4 afb76e9 11:31 Fix the full-loop runner's compile error and its fresh profile  on origin main: yes
+ 5 14fc1b3 11:32 Record the AF2 pair of the exploit checks (both fixes bite)  on origin main: yes
+ 6 f4caf50 11:56 Record the anti-tamper re-read and the store art in the v8.0.0 bundle  on origin main: yes
+ 7 a1f2d7b 12:11 Back the store art bytes of correction 167 with the scan that measured them  on origin main: yes
+ 8 0e05ea1 15:28 Record the full loop of three seeds and the four findings of its frames  on origin main: yes
+ 9 9aae9a6 15:37 Record battery 1 of 3 and the Session 19 open findings  on origin main: yes
+10 8d283c2 15:46 Record battery 2 of 3 and the loop's exercise tallies  on origin main: yes
+11 16abbb0 15:55 Record battery 3 of 3, the flaky comparison and the regression rows  on origin main: yes
+12 bb8fdcd 16:08 Record the rebuilt bundle: 155,586,711 bytes, 53 entries that are not the ga  on origin main: yes
+13 916ae0b 16:19 Record the shop re-run, the batteries and the bundle in the release document  on origin main: yes
+14 024c7b7 16:26 Add the Session 19 closures, the report section and the verifier note  on origin main: yes
+15 e241597 17:13 Keep the store art of assets/store out of the bundle  on origin main: yes
+# EXIT=0
