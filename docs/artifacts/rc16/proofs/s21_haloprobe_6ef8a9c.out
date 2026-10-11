@@ -1,0 +1,9 @@
+# proof s21_haloprobe_6ef8a9c
+# utc 20261011T194033Z
+# head 6ef8a9c (uncommitted paths: 14)
+# env TLS_FRAMES_OUT=res://.qa_logs/frames_s21d/ TLS_HALO_PROBE=1 TLS_SWEEP_OUT=res://.qa_logs/sweep2/ 
+# cmd bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 900
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/final_frames_scene.tscn rc=0 (log: .qa_logs/final_frames_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+# EXIT=0

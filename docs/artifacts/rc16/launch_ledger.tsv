@@ -72,3 +72,9 @@ n	utc	head	id	exit	command
 71	20261011T192315Z	2d502ee	s21_b1_2d502ee	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 900
 72	20261011T192617Z	586f904	s21_af2_pre	1	bash tools/qa_sim/closeout_check 300
 73	20261011T192629Z	586f904	s21_af2_post	0	bash tools/qa_sim/closeout_check 300
+74	20261011T193038Z	40096f7	s21_bot_40096f7	0	bash tools/qa_sim/autoplay_bot
+75	20261011T193627Z	36632b4	s21_final_36632b4	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 900
+76	20261011T194033Z	6ef8a9c	s21_haloprobe_6ef8a9c	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 900
+77	20261011T194307Z	fd379fa	s21_halorandom_fd379fa	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 900
+78	20261011T194518Z	6b0d1e7	s21_halopose_6b0d1e7	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 900
+79	20261011T194758Z	5e59837	s21_halodebug_5e59837	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 900

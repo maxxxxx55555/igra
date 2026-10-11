@@ -1,0 +1,50 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[final] frame 00_boot_title.png
+[final] frame 01_main_menu.png
+[final] frame 01_menu_en_s2.png
+[final] frame 01_menu_ru_s1.png
+[final] frame 01_menu_ru_s2.png
+[final] frame 01_menu_ar_s1.png
+[final] frame 01_menu_ar_s2.png
+[final] facing 37 of 116 street lights
+[final] 03 camera /root/Main3D/Camera3D at (-8.0, 2.560233, -8.0), player at (-8.0, 0.860233, -8.0) hp=100.0, paused=false
+[final] frame 03_district_night_dark.png
+[final] frame 02_district_day_full.png
+[final] halo pose camera (-22.74979, 2.56, -6.780282) aabb [P: (-27.84, 2.71, -27.5), S: (58.0, 3.0, 55.00001)]
+[final] halo near /root/Main3D/MultiplayerManager/1/ModelPivot/Backpack MeshInstance3D mat=<Object#null> at (-23.08432, 1.21, -6.883196)
+[final] halo near /root/Main3D/MultiplayerManager/1/ModelPivot/FlashlightPivot/HandLight MeshInstance3D mat=<Object#null> at (-22.67628, 2.31, -7.019228)
+[final] halo near /root/Main3D/MultiplayerManager/1/ModelPivot/FlashlightPivot/Dust GPUParticles3D mat=<Object#null> at (-22.67628, 2.31, -7.019228)
+[final] halo near /root/Main3D/MultiplayerManager/1/Marker MeshInstance3D mat=<Object#null> at (-22.74979, 2.16, -6.780282)
+[final] halo near /root/Main3D/MultiplayerManager/1/FootstepDust GPUParticles3D mat=<Object#null> at (-22.74979, 0.91, -6.780282)
+[final] frame halo_pose_a_normal.png
+[final] frame halo_pose_b_hidden.png
+[final] frame halo_pose_c_peak01.png
+[final] frame halo_pose_d_near20.png
+[final] frame halo_pose_e_distance.png
+[final] frame halo_pose_f_uv.png
+[final] frame halo_pose_g_smooth.png
+[final] frame 07_skill_tree.png
+[final] frame 08_shop.png
+[final] frame 08_shop_ar.png
+[final] 04 camera /root/Main3D/Camera3D at (-6.88511, 2.559976, 10.87121), player at (-6.884727, 0.859975, 10.87163) hp=100.0, paused=false
+[final] frame 04_combat.png
+[final] 05 camera /root/Main3D/Camera3D at (-4.349302, 2.560386, -8.703671), player at (-4.349301, 0.860386, -8.703671) hp=100.0, paused=false
+[final] 05 boss at (0.560328, 1.2, -9.650002)
+[final] frame 05_boss.png
+[final] frame 06_victory_ngplus.png
+[final] DONE frames=15
+ERROR: 2 RID allocations of type 'N5GLES37TextureE' were leaked at exit.
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+ERROR: Texture with GL ID of 112: leaked 131072 bytes.
+   at: ~Utilities (drivers/gles3/storage/utilities.cpp:82)
+ERROR: Texture with GL ID of 133: leaked 131072 bytes.
+   at: ~Utilities (drivers/gles3/storage/utilities.cpp:82)
+WARNING: 42 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

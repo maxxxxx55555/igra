@@ -1,0 +1,89 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[final] frame 00_boot_title.png
+[final] frame 01_main_menu.png
+[final] frame 01_menu_en_s2.png
+[final] frame 01_menu_ru_s1.png
+[final] frame 01_menu_ru_s2.png
+[final] frame 01_menu_ar_s1.png
+[final] frame 01_menu_ar_s2.png
+[final] facing 37 of 116 street lights
+[final] 03 camera /root/Main3D/Camera3D at (-8.0, 2.560233, -8.0), player at (-8.0, 0.860233, -8.0) hp=100.0, paused=false
+[final] frame 03_district_night_dark.png
+[final] frame 02_district_day_full.png
+[final] halo rnd00 camera (-22.74979, 2.56007, -6.780282) yaw 72.9
+[final] frame halo_rnd00.png
+[final] halo rnd01 camera (28.44433, 2.559779, -9.366184) yaw 87.6
+[final] frame halo_rnd01.png
+[final] halo rnd02 camera (13.96157, 2.550109, -30.27219) yaw 120.0
+[final] frame halo_rnd02.png
+[final] halo rnd03 camera (11.96004, 2.550109, -39.30004) yaw -168.4
+[final] frame halo_rnd03.png
+[final] halo rnd04 camera (16.27937, 2.548963, -17.8689) yaw 134.4
+[final] frame halo_rnd04.png
+[final] halo rnd05 camera (9.887884, 2.550109, -35.67857) yaw 133.6
+[final] frame halo_rnd05.png
+[final] halo rnd06 camera (-8.968374, 2.559956, 20.48715) yaw -60.0
+[final] frame halo_rnd06.png
+[final] halo rnd07 camera (17.68848, 2.559204, -25.2148) yaw 132.2
+[final] frame halo_rnd07.png
+[final] halo rnd08 camera (2.559978, 2.559892, -8.0) yaw -90.0
+[final] frame halo_rnd08.png
+[final] halo rnd09 camera (-16.28552, 2.550109, -29.80496) yaw -152.7
+[final] frame halo_rnd09.png
+[final] halo rnd10 camera (-7.224607, 2.550109, 36.88461) yaw -0.5
+[final] frame halo_rnd10.png
+[final] halo rnd11 camera (33.27737, 2.550109, 8.0) yaw 77.4
+[final] frame halo_rnd11.png
+[final] halo rnd12 camera (-23.52003, 2.560015, 8.0) yaw -15.1
+[final] frame halo_rnd12.png
+[final] halo rnd13 camera (-27.13239, 2.550109, -37.49681) yaw -176.2
+[final] frame halo_rnd13.png
+[final] halo rnd14 camera (-12.0487, 2.559204, -10.10433) yaw -63.9
+[final] frame halo_rnd14.png
+[final] halo rnd15 camera (14.03894, 2.550109, -0.378945) yaw 46.1
+[final] frame halo_rnd15.png
+[final] halo rnd16 camera (-18.26782, 2.559674, 12.03257) yaw -34.8
+[final] frame halo_rnd16.png
+[final] halo rnd17 camera (-4.445418, 2.560009, -12.02937) yaw 143.3
+[final] frame halo_rnd17.png
+[final] halo rnd18 camera (14.4932, 2.559204, -25.8332) yaw 98.1
+[final] frame halo_rnd18.png
+[final] halo rnd19 camera (7.012183, 2.550109, -28.00556) yaw -177.5
+[final] frame halo_rnd19.png
+[final] halo rnd20 camera (5.66, 2.559987, -20.31046) yaw 77.0
+[final] frame halo_rnd20.png
+[final] halo rnd21 camera (-8.693563, 2.550109, -31.29053) yaw -143.7
+[final] frame halo_rnd21.png
+[final] halo rnd22 camera (-17.70387, 2.550093, 3.013927) yaw -148.1
+[final] frame halo_rnd22.png
+[final] halo rnd23 camera (-22.84, 2.559204, 26.5598) yaw -45.9
+[final] frame halo_rnd23.png
+[final] frame 07_skill_tree.png
+[final] frame 08_shop.png
+[final] frame 08_shop_ar.png
+[final] 04 camera /root/Main3D/Camera3D at (-0.334734, 2.550378, 18.90514), player at (-0.334734, 0.850378, 18.90514) hp=100.0, paused=false
+[final] frame 04_combat.png
+[final] 05 camera /root/Main3D/Camera3D at (-9.214153, 2.559923, -10.09777), player at (-9.214153, 0.859923, -10.09777) hp=100.0, paused=false
+[final] 05 boss at (-11.7188, 1.2, -14.42522)
+[final] frame 05_boss.png
+[final] frame 06_victory_ngplus.png
+[final] DONE frames=15
+ERROR: 4 RID allocations of type 'N5GLES37TextureE' were leaked at exit.
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+ERROR: Texture with GL ID of 88: leaked 131072 bytes.
+   at: ~Utilities (drivers/gles3/storage/utilities.cpp:82)
+ERROR: Texture with GL ID of 133: leaked 131072 bytes.
+   at: ~Utilities (drivers/gles3/storage/utilities.cpp:82)
+ERROR: Texture with GL ID of 140: leaked 131072 bytes.
+   at: ~Utilities (drivers/gles3/storage/utilities.cpp:82)
+ERROR: Texture with GL ID of 219: leaked 131072 bytes.
+   at: ~Utilities (drivers/gles3/storage/utilities.cpp:82)
+WARNING: 44 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

@@ -1,0 +1,14 @@
+# proof s21_af2_pair
+# utc 20261011T193152Z
+# head 40096f7 (uncommitted paths: 1)
+# env none
+# cmd python tools/qa_sim/af2_both_ways.py --analyze --base a83d99b --only s21 --tag s21
+AF2 both ways: base a83d99b, HEAD 40096f7, group s21
+HALO1        pre=FAIL     post=ok       BITES
+QST1         pre=FAIL     post=ok       BITES
+RMV1         pre=FAIL     post=ok       BITES
+RST1         pre=FAIL     post=ok       BITES
+SLV1         pre=FAIL     post=ok       BITES
+post run: [closeout] DONE checks=8 fails=0
+AF2 verdict=PASS ids=5 bad=0
+# EXIT=0
