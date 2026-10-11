@@ -1,0 +1,7 @@
+# proof s20_af5_212e4cb
+# utc 20261011T183635Z
+# head 212e4cb (uncommitted paths: 1)
+# env none
+# cmd python tools/af5_check.py
+af5_check: 207 citation(s) in 1270 doc line(s), 0 finding(s)
+# EXIT=0

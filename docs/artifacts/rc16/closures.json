@@ -1076,5 +1076,209 @@
   ],
   "frames": [],
   "commit": "6b9055a"
+ },
+ {
+  "id": "S20-PRE",
+  "claim": "The four checks of the fixes fail on the v8.0.0-final runtime (the three runtime files put back, the full default closeout): EX1 (no position), STRK1 (streak 0 of 4), HCD1 (0 / 11 districts on a Hardcore death screen), TUTL1 (the hint stays in English); no other check fails.",
+  "cmd": "bash tools/qa_sim/closeout_check 300 (3 runtime files checked out from v8.0.0-final)",
+  "proof": "s20_pre_6f6d643",
+  "attach": "closeout_check.log",
+  "quotes": [
+   "[closeout] FAIL EX1 a save with no player in the tree holds no position: written [0.0, 0.0, 0.0], a load takes (0.0, 0.0, 0.0) (INF is the spawn)",
+   "[closeout] FAIL STRK1 a New Game keeps the daily streak (0 of 4, day mark kept false) and Reset progress clears it (0)",
+   "[closeout] FAIL HCD1 the death screen of a Hardcore run shows the run it ends (3 districts, 1 documents; shows 'Time survived: 1:23 | Districts restored: 0 / 11 (0%) | Documents found: 0 / 101'; the save is wiped true)",
+   "[closeout] FAIL TUTL1 after a language switch the tutorial hint shows in the new language (en 'Sneak. Slow steps carry less sound.', now 'Sneak. Slow steps carry less sound.', de 'Schleich. Langsame Schritte sind leiser.')",
+   "[closeout] DONE checks=390 fails=4"
+  ],
+  "frames": [],
+  "commit": "6f6d643"
+ },
+ {
+  "id": "S20-POST",
+  "claim": "The same four checks pass at HEAD inside the closeout gate of check.sh --all (the gate's own log attached): 390 checks, 0 fails.",
+  "cmd": "bash tools/check.sh --all (the closeout gate's log attached)",
+  "proof": "s20_all_6f6d643",
+  "attach": "gate_closeout_check_scene.log",
+  "quotes": [
+   "[closeout] ok   EX1 a save with no player in the tree holds no position: written [], a load takes (inf, inf, inf) (INF is the spawn)",
+   "[closeout] ok   STRK1 a New Game keeps the daily streak (4 of 4, day mark kept true) and Reset progress clears it (0)",
+   "[closeout] ok   HCD1 the death screen of a Hardcore run shows the run it ends (3 districts, 1 documents; shows 'Time survived: 1:23 | Districts restored: 3 / 11 (27%) | Documents found: 1 / 101'; the save is wiped true)",
+   "[closeout] ok   TUTL1 after a language switch the tutorial hint shows in the new language (en 'Sneak. Slow steps carry less sound.', now 'Schleich. Langsame Schritte sind leiser.', de 'Schleich. Langsame Schritte sind leiser.')",
+   "[closeout] DONE checks=390 fails=0"
+  ],
+  "frames": [],
+  "commit": "6f6d643"
+ },
+ {
+  "id": "S20-AF2",
+  "claim": "The AF2 verdict of the pair: each of the four ids FAILS before and is ok after (BITES), and no other check id that was ok before is not ok after.",
+  "cmd": "python s20_af2_pair.py (parse and judge of tools/qa_sim/af2_both_ways.py on the two attached logs)",
+  "proof": "s20_af2_pair",
+  "quotes": [
+   "EX1          pre=FAIL     post=ok       BITES",
+   "STRK1        pre=FAIL     post=ok       BITES",
+   "HCD1         pre=FAIL     post=ok       BITES",
+   "TUTL1        pre=FAIL     post=ok       BITES",
+   "check ids seen before: 113, after: 113; ok before and not ok after: none",
+   "AF2 verdict=PASS ids=4 bad=0 regressions=0"
+  ],
+  "frames": [],
+  "commit": "6f6d643"
+ },
+ {
+  "id": "S20-BATTERY",
+  "claim": "The battery holds on the tree that carries the fixes: check.sh --all, 66 of 66, exit 0.",
+  "cmd": "bash tools/check.sh --all",
+  "proof": "s20_all_6f6d643",
+  "quotes": [
+   "Всё зелёное. Проверок пройдено: 66"
+  ],
+  "frames": [],
+  "commit": "6f6d643"
+ },
+ {
+  "id": "S20-AF3-DEFAULT",
+  "claim": "The frame gate on the default sets (rc17, release) with the three scope rows: every frame passes.",
+  "cmd": "python tools/qa_sim/af3_frame_check.py",
+  "proof": "s20_af3_default",
+  "quotes": [
+   "af3 frames=21 fail=0"
+  ],
+  "frames": [],
+  "commit": "6f6d643"
+ },
+ {
+  "id": "S20-AF3-LOOP",
+  "claim": "The loop set at HEAD: 37 of 112 frames fail F4 by design (the L3 frames and the language frames of L2 that the scope rows' globs name), the record of the behaviour at 14fc1b3.",
+  "cmd": "python tools/qa_sim/af3_frame_check.py --dir docs/stills/v800_loop (exit 1 by design)",
+  "proof": "s20_af3_loop",
+  "quotes": [
+   "af3 frames=112 fail=37"
+  ],
+  "frames": [],
+  "commit": "6f6d643"
+ },
+ {
+  "id": "S20-MANIFEST",
+  "claim": "The shipped bundle's manifest: package com.maxsimkasky.laststreetlight, version 1 / 1.0, min SDK 24, target SDK 36, permissions INTERNET and VIBRATE only, allowBackup false.",
+  "cmd": "python s20_aab_manifest.py build/tls.aab",
+  "proof": "s20_aab_manifest",
+  "quotes": [
+   "manifest {'package': 'com.maxsimkasky.laststreetlight', 'versionCode': 1, 'versionName': '1.0'}",
+   "uses-sdk {'minSdkVersion': 24, 'targetSdkVersion': 36}",
+   "uses-permission {'name': 'android.permission.INTERNET'}",
+   "uses-permission {'name': 'android.permission.VIBRATE'}",
+   "application {'allowBackup': False, 'extractNativeLibs': False, 'isGame': True, 'label': '@string/godot_project_name_string'}"
+  ],
+  "frames": [],
+  "commit": "212e4cb"
+ },
+ {
+  "id": "S20-ASSETS",
+  "claim": "The store images measured: the store icon is 512 x 512 RGB, the feature graphic 1024 x 500 RGBA, a release frame 960 x 527 RGBA.",
+  "cmd": "python s20_store_assets.py .",
+  "proof": "s20_store_assets",
+  "quotes": [
+   "store/icon-512.png                                                         512 x 512   PNG RGB/8             300965 bytes",
+   "store/feature-graphic.png                                                 1024 x 500   PNG RGBA/8            684630 bytes",
+   "docs/stills/release/01_main_menu_after_18a2a2a_20261010T224919Z.png        960 x 527   PNG RGBA/8            421519 bytes"
+  ],
+  "frames": [],
+  "commit": "212e4cb"
+ },
+ {
+  "id": "S20-ALPHA",
+  "claim": "The alpha channel of every RGBA store image is fully opaque (minimum 255): dropping it loses nothing.",
+  "cmd": "python s20_alpha_extrema.py .",
+  "proof": "s20_alpha_extrema",
+  "quotes": [
+   "images with a transparent pixel: 0"
+  ],
+  "frames": [],
+  "commit": "212e4cb"
+ },
+ {
+  "id": "S20-NET",
+  "claim": "No screen reaches the network code of the shipped game: primitives only in scripts/multiplayer and scripts/net, entry points called only by the archived lobby (and a read of the peer), nothing calls LANMenu.toggle().",
+  "cmd": "python s20_net_reach.py .",
+  "proof": "s20_net_reach",
+  "quotes": [
+   "(1) network primitives: 3 files; outside scripts/multiplayer and scripts/net: none",
+   "(3) callers of LANMenu.toggle(): none",
+   "references to the archived lobby scene or script outside themselves: none"
+  ],
+  "frames": [],
+  "commit": "212e4cb"
+ },
+ {
+  "id": "S20-OPENCODE",
+  "claim": "The shape of opencode.json: one provider, a local router at localhost:20128, one 35-character sk- key (masked).",
+  "cmd": "python s20_opencode_shape.py opencode.json",
+  "proof": "s20_opencode_shape",
+  "quotes": [
+   "/provider/omniroute/options/baseURL = http://localhost:20128/v1",
+   "/provider/omniroute/options/apiKey = <masked len=35 prefix=sk->"
+  ],
+  "frames": [],
+  "commit": "212e4cb"
+ },
+ {
+  "id": "S20-SECRETS",
+  "claim": "The secret sweep: the key of opencode.json is the only secret of the repository and of its history (one commit, one file); no cloud token, JWT or private-key block; no signing file or keystore ever added; .signing/ untracked and ignored.",
+  "cmd": "python s20_secret_scan.py . (exit 1: the fixture of release_export_check.py's demo is outside the declared list)",
+  "proof": "s20_secret_scan",
+  "quotes": [
+   "the opencode.json key (len=35 prefix=sk-): commits that add or remove it: 1 5553c2e; tracked files that hold it: ['opencode.json']",
+   "history private_key_block  commits=0",
+   "sensitive file names ever added to history: none",
+   "tracked under .signing/: 0",
+   "check-ignore .signing/release.env: .gitignore:89:.signing/\t.signing/release.env"
+  ],
+  "frames": [],
+  "commit": "212e4cb"
+ },
+ {
+  "id": "S20-KEYSTORE",
+  "claim": "The release keystore's path and password occur in no file this pass changed or added.",
+  "cmd": "bash s20_secretscan_files.sh",
+  "proof": "s20_secretscan_files",
+  "quotes": [
+   "secret occurrences=0"
+  ],
+  "frames": [],
+  "commit": "212e4cb"
+ },
+ {
+  "id": "S20-CTRL",
+  "claim": "No control character in any text file of the pass (the colour codes of the raw gate logs excepted).",
+  "cmd": "python s20_ctrl_scan.py .",
+  "proof": "s20_ctrl_scan",
+  "quotes": [
+   "text files checked: 40, control characters: 0"
+  ],
+  "frames": [],
+  "commit": "212e4cb"
+ },
+ {
+  "id": "S20-STATIC",
+  "claim": "The static gates on the committed tree of the documents: 40 passed.",
+  "cmd": "bash tools/check.sh --static",
+  "proof": "s20_static_212e4cb",
+  "quotes": [
+   "Всё зелёное. Проверок пройдено: 40"
+  ],
+  "frames": [],
+  "commit": "212e4cb"
+ },
+ {
+  "id": "S20-AF5",
+  "claim": "The citation check on the same tree: every file:line citation added since e4bb4df resolves, 0 findings.",
+  "cmd": "python tools/af5_check.py",
+  "proof": "s20_af5_212e4cb",
+  "quotes": [
+   "af5_check: 207 citation(s) in 1270 doc line(s), 0 finding(s)"
+  ],
+  "frames": [],
+  "commit": "212e4cb"
  }
 ]
