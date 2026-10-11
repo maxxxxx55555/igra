@@ -14,18 +14,18 @@ declarations, §7 the steps. It consolidates and, where they had drifted, correc
 |---|---|---|
 | File | `build/tls.aab` (gitignored, on the build machine only), **136,501,580 bytes** | `docs/RELEASE_ARTIFACTS.md`, v8.0.0-shipping section |
 | sha256 | `f8f62d2cc0897e1f9c659005d790c69368219a729128a8cec31a6dae3edbbee7` | same; check it with `sha256sum build/tls.aab` before the upload |
-| Built from | `e241597`, no uncommitted path; **the four fixes of `6f6d643` are not in it** (§9) | ledger row 67 |
-| Package name | `com.maxsimkasky.laststreetlight`: **permanent once uploaded** (the `com.tls.game` of `docs/store/play_store.md` is stale) | manifest, `docs/artifacts/rc16/proofs/s20_aab_manifest.out` |
+| Built from | `abbf91d`, no uncommitted path; the seven fixes of Sessions 20 and 21 are in it (§9) | ledger row 82 |
+| Package name | `com.maxsimkasky.laststreetlight`: **permanent once uploaded** (the `com.tls.game` of `docs/store/play_store.md` is stale) | manifest of the bundle of `e241597`, `docs/artifacts/rc16/proofs/s20_aab_manifest.out`; not re-read from this bundle, but `export_presets.cfg`, `android/` and `project.godot` are unchanged since `e241597` (`git diff --name-only e241597 HEAD -- export_presets.cfg android project.godot` prints nothing) |
 | Version | code 1, name "1.0" | manifest |
-| App label | "Last Streetlight" (42 entries of its label resource) | `s19_label_e241597.out` |
+| App label | "Last Streetlight" (19 entries of the manifest and resources below 5 MB, counted by `tools/qa_sim/aab_check.py`; Session 19 counted 42 entries of the label resource by another method) | `s21_aab_check_abbf91d.out` |
 | SDK levels | min 24, **target 36**; the preset's `min_sdk=29` and `target_sdk=34` (`export_presets.cfg:29-30`) are not read by this export | manifest (Play's minimum target API: **check in Console**) |
 | ABI | arm64-v8a only (`architectures/armeabi-v7a=false`): 32-bit-only phones are not offered the game | `export_presets.cfg:14-15` |
 | Permissions | `INTERNET` and `VIBRATE` only; no `AD_ID`, no storage, no location, no camera, no microphone | manifest |
 | Application flags | `allowBackup=false` (no Android cloud backup of the saves), `isGame=true`, OpenGL ES 3.0 required | manifest |
-| Ads | no ad SDK code: 0 dex references to `Lcom/applovin/` (the GDScript provider file is in the pack and, with no key, resolves to no provider) | `docs/artifacts/rc16/proofs/s19_adsdk_e241597.out` |
-| Signature | `jar verified.`; the signer's SHA-256 equals the upload key; keep Play App Signing | `s19_aab_verify_e241597.out`, `docs/RELEASE_RUNBOOK.md` §1 |
-| Size | base module 26,974,685 bytes compressed; install-time asset pack 108,572,798 bytes compressed (Play caps the base module at 200 MB: **check in the App bundle explorer**) | `docs/RELEASE_ARTIFACTS.md` |
-| Contents scan | 0 packed files that are not the game, in the scan's classes | `s19_aab_post_e241597.out` |
+| Ads | no ad SDK code: 0 dex references to `Lcom/applovin/` (the GDScript provider file is in the pack and, with no key, resolves to no provider) | `docs/artifacts/rc16/proofs/s21_aab_check_abbf91d.out` |
+| Signature | `jar verified.`; the signer's SHA-256 equals the upload key; keep Play App Signing | `s21_aab_check_abbf91d.out`, `docs/RELEASE_RUNBOOK.md` §1 |
+| Size | base module 26,974,685 bytes compressed; install-time asset pack 108,573,521 bytes compressed (Play caps the base module at 200 MB: **check in the App bundle explorer**) | `docs/RELEASE_ARTIFACTS.md` |
+| Contents scan | 0 packed files that are not the game, in the scan's classes | `s21_aab_scan_abbf91d.out` |
 
 Upload no other bundle: the bundle of `63fda65` packs an API key and the one of `16abbb0` packs 77 store images
 (`docs/RELEASE_ARTIFACTS.md`). Both are kept under `..\_BACKUPS\`; the file at `build/tls.aab` is the right one.
@@ -220,7 +220,7 @@ Each step names where the detail lives; it does not repeat it.
 
 1. **Rotate the key first** (`docs/release_checklist.md` step 0, with the exact places): it takes minutes and nothing else depends on it, but a key that sat in a public repository is worth rotating before a policy page and a store account point at that repository.
 2. **Check the file.** `sha256sum build/tls.aab` must print the value of §1; `jarsigner -verify build/tls.aab` must print `jar verified.`.
-3. **Phone smoke test** (U1, U5, U6 of `docs/UNVERIFIABLE_HERE.md`, and U10 for Export Save): install the bundle through an internal-test link and run `docs/RELEASE_RUNBOOK.md` §4. If you want the four fixes of `6f6d643` on the phone, rebuild first (§9).
+3. **Phone smoke test** (U1, U5, U6 of `docs/UNVERIFIABLE_HERE.md`, and U10 for Export Save): install the bundle through an internal-test link and run `docs/RELEASE_RUNBOOK.md` §4. The bundle holds the seven fixes of Sessions 20 and 21 (§9).
 4. **Make the images** with the command of §2, and read each of the seven files once.
 5. **Host the policy** of §3 and note its URL.
 6. **Play Console:** create the app and fill the dashboard with §6, the rating with §4 and the data safety form with §5 (`docs/RELEASE_RUNBOOK.md` §3 is the click path); main listing from §2 and `store/listing.md`; translations from `docs/STORE_KIT.md`.
