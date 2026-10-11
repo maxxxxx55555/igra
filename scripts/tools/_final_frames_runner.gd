@@ -7,6 +7,11 @@ extends Node
 ## DARK stage of the spawn district. A saved PNG proves nothing until read.
 
 var out_dir := "res://docs/stills/final/"
+## TLS_SWEEP="white:exposure,..." (a decision aid of the shipping pass): after the staged night, day and combat frames the same scene is shot again
+## under each tonemap pair, into TLS_SWEEP_OUT, as <frame>_v<n>.png; the pairs are put back. TLS_FRAMES_OUT moves the staged frames away from
+## docs/stills/final. Unset, the run is the six-frame run.
+var _sweep: Array[Vector2] = []
+var _sweep_out: String = "res://.qa_logs/sweep/"
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -18,6 +23,59 @@ func _shot(frame: String) -> void:
 	img.resize(img.get_width() / 2, img.get_height() / 2, Image.INTERPOLATE_LANCZOS)
 	img.save_png(ProjectSettings.globalize_path(out_dir + frame + ".png"))
 	print("[final] frame %s.png" % frame)
+
+func _parse_sweep() -> void:
+	for pair: String in OS.get_environment("TLS_SWEEP").split(",", false):
+		var wv := pair.split(":")
+		if wv.size() == 2:
+			_sweep.append(Vector2(float(wv[0]), float(wv[1])))
+	if OS.get_environment("TLS_SWEEP_OUT") != "":
+		_sweep_out = OS.get_environment("TLS_SWEEP_OUT")
+	if OS.get_environment("TLS_FRAMES_OUT") != "":
+		out_dir = OS.get_environment("TLS_FRAMES_OUT")
+
+## TLS_MENU_SWEEP="r:g:b,...": the menu's hero art under each modulate colour, as 01_main_menu_v<n>.png (decision aid, like _swept).
+func _menu_swept() -> void:
+	var hero := get_tree().current_scene.get_node_or_null("MenuHeroV2") as TextureRect
+	if hero == null or OS.get_environment("TLS_MENU_SWEEP") == "":
+		return
+	var kept := hero.modulate
+	var normal_out := out_dir
+	out_dir = _sweep_out
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(out_dir))
+	var n := 0
+	for tint: String in OS.get_environment("TLS_MENU_SWEEP").split(",", false):
+		var rgb := tint.split(":")
+		if rgb.size() != 3:
+			continue
+		n += 1
+		hero.modulate = Color(float(rgb[0]), float(rgb[1]), float(rgb[2]))
+		await get_tree().create_timer(0.3).timeout
+		print("[final] sweep 01_main_menu_v%d modulate=%s" % [n, tint])
+		await _shot("01_main_menu_v%d" % n)
+	out_dir = normal_out
+	hero.modulate = kept
+
+func _swept(frame: String, hit: Node3D = null) -> void:
+	var worlds := get_tree().root.find_children("*", "WorldEnvironment", true, false)
+	if _sweep.is_empty() or worlds.is_empty():
+		return
+	var env: Environment = (worlds[0] as WorldEnvironment).environment
+	var kept := Vector2(env.tonemap_white, env.tonemap_exposure)
+	var normal_out := out_dir
+	out_dir = _sweep_out
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(out_dir))
+	for i: int in _sweep.size():
+		env.tonemap_white = _sweep[i].x
+		env.tonemap_exposure = _sweep[i].y
+		if hit != null and is_instance_valid(hit):
+			hit.take_damage(1.0)
+		await get_tree().create_timer(0.3 if hit == null else 0.02).timeout
+		print("[final] sweep %s_v%d white=%s exposure=%s" % [frame, i + 1, _sweep[i].x, _sweep[i].y])
+		await _shot("%s_v%d" % [frame, i + 1])
+	out_dir = normal_out
+	env.tonemap_white = kept.x
+	env.tonemap_exposure = kept.y
 
 ## Where the rendering camera and the player are: a staged frame is only
 ## evidence if the camera actually looks at what was staged.
@@ -100,6 +158,7 @@ func _run() -> void:
 		print("[final] SKIP headless - frames need a real display")
 		get_tree().quit(3)
 		return
+	_parse_sweep()
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(out_dir))
 	var ads := get_node_or_null("/root/AdService")
 	if ads:
@@ -123,6 +182,7 @@ func _run() -> void:
 			return
 	await get_tree().create_timer(1.5).timeout
 	await _shot("01_main_menu")
+	await _menu_swept()
 	# en at text size 1 is 01_main_menu itself (a byte-identical twin fails AF3 rule F6).
 	for lang: String in ["en", "ru", "ar"]:
 		for size_idx: int in [1, 2]:
@@ -147,10 +207,12 @@ func _run() -> void:
 	await get_tree().create_timer(0.3).timeout
 	_where("03")
 	await _shot("03_district_night_dark")
+	await _swept("03_district_night_dark")
 
 	PowerGrid.advance_district(StringName(DistrictManager.current_district), DistrictData.Stage.FULL)
 	await get_tree().create_timer(1.5).timeout
 	await _shot("02_district_day_full")
+	await _swept("02_district_day_full")
 
 	UIManager.open(&"skill_tree")
 	await get_tree().create_timer(0.6).timeout
@@ -195,6 +257,7 @@ func _run() -> void:
 	await get_tree().process_frame
 	_where("04")
 	await _shot("04_combat")
+	await _swept("04_combat", monster)
 
 	# Boss by the game's own finale flow (finale_director.gd): every district
 	# restored starts the final night, entering the power station spawns the
