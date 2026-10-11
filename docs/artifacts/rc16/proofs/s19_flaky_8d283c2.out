@@ -1,0 +1,62 @@
+# proof s19_flaky_8d283c2
+# utc 20261011T125444Z
+# head 8d283c2 (uncommitted paths: 3)
+# env none
+# cmd python -I C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s19_flaky.py docs/artifacts/rc16/proofs/s19_all1_0e05ea1.out docs/artifacts/rc16/proofs/s19_all2_9aae9a6.out docs/artifacts/rc16/proofs/s19_all3_8d283c2.out
+"""P3 of Session 19: the flaky-test hunt. Reads the raw logs of the check.sh --all batteries given on the command line (proof_run files), strips
+the colours, and compares gate by gate: a gate is deterministic when every run gives it the same status, flaky when the runs differ.
+A gate is the text of its OK or FAIL line up to the first "(" or digit (counts in a name move with the tree). Prints its source first."""
+import pathlib
+import re
+import sys
+
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+ANSI = re.compile("\x1b\\[[0-9;]*m")
+LINE = re.compile(r"^\s+(OK|FAIL)\s+(.*)$")
+SKIP = re.compile(r"^\s+пропуск\s+(.*)$")
+
+
+def key(name):
+    return re.split(r"\s*[(\d]", name, maxsplit=1)[0].strip()[:60] or name[:60]
+
+
+runs = []
+for p in sys.argv[1:]:
+    text = ANSI.sub("", pathlib.Path(p).read_text(encoding="utf-8", errors="replace"))
+    status = {}
+    for ln in text.splitlines():
+        m = LINE.match(ln)
+        if m:
+            status.setdefault(key(m.group(2)), []).append(m.group(1))
+            continue
+        m = SKIP.match(ln)
+        if m:
+            status.setdefault(key(m.group(1)), []).append("SKIP")
+    summary = [ln for ln in text.splitlines() if "Провалено" in ln or "Всё зелёное" in ln]
+    exit_line = next((ln for ln in reversed(text.splitlines()) if ln.startswith("# EXIT=")), "# EXIT=?")
+    runs.append((pathlib.Path(p).name, status, summary[-1].strip() if summary else "no summary line", exit_line))
+    print("%s: %d gates read, %s, %s" % (runs[-1][0], len(status), runs[-1][2], exit_line))
+names = sorted(set().union(*[set(r[1]) for r in runs]))
+flaky, red_everywhere = [], []
+for n in names:
+    cells = ["+".join(r[1].get(n, ["-"])) for r in runs]
+    if len(set(cells)) > 1:
+        flaky.append((n, cells))
+    elif any("FAIL" in c for c in cells):
+        red_everywhere.append((n, cells))
+print("gates compared: %d over %d runs" % (len(names), len(runs)))
+for n, cells in flaky:
+    print("FLAKY  %-60s %s" % (n, " | ".join(cells)))
+for n, cells in red_everywhere:
+    print("RED    %-60s %s" % (n, " | ".join(cells)))
+print("flaky=%d red_in_every_run=%d" % (len(flaky), len(red_everywhere)))
+sys.exit(1 if flaky or red_everywhere else 0)
+
+--- run
+s19_all1_0e05ea1.out: 123 gates read, Всё зелёное. Проверок пройдено: 66, # EXIT=0
+s19_all2_9aae9a6.out: 123 gates read, Всё зелёное. Проверок пройдено: 66, # EXIT=0
+s19_all3_8d283c2.out: 123 gates read, Всё зелёное. Проверок пройдено: 66, # EXIT=0
+gates compared: 123 over 3 runs
+flaky=0 red_in_every_run=0
+# EXIT=0

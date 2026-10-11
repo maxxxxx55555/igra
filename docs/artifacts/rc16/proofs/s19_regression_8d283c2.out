@@ -1,0 +1,99 @@
+# proof s19_regression_8d283c2
+# utc 20261011T125445Z
+# head 8d283c2 (uncommitted paths: 4)
+# env none
+# cmd python -I C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s19_fixed_rows.py docs/artifacts/rc16/proofs/s19_all1_0e05ea1.out docs/artifacts/rc16/proofs/s19_all2_9aae9a6.out docs/artifacts/rc16/proofs/s19_all3_8d283c2.out
+"""P3 regression of Session 19: every FIXED row of docs/FUNCTION_MATRIX.md (and the fixes of CORRECTION_LOG 147, 149, 151, 165 and 166)
+against the gate that guards it, in each battery log given on the command line. Prints its source first.
+A gate holds a row in a run when its "OK" line is there and no "FAIL" line names it; a gate passes only with every assert inside it.
+Rows fixed by look (the frames) are listed with the frames of the full loop at HEAD that show the same scenes."""
+import pathlib
+import re
+import sys
+
+ROOT = pathlib.Path(r"C:\Users\Maxsim\Desktop\TLS_Build\THE_LAST_STREETLIGHT")
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+ANSI = re.compile("\x1b\\[[0-9;]*m")
+GATE = {
+    "suite": "GOLD MASTER suite", "input": "project_input_check", "refs": "ссылки на ресурсы", "compile": "компиляция всех скриптов",
+    "hum": "аудио: тишина до первого ввода", "3d": "прогон 3D-сцены", "loot": "лут: под каждым предметом есть пол (X21)",
+    "layout": "вёрстка: все экраны UIManager в кадре", "yaw": "no mirrored yaw formula", "visual": "visual_truth_gate (gate self-consistency",
+    "text": "hardcoded_text_gate", "closeout": "rc15 closeout", "theme": "единая тема", "timing": "timing_equiv: gameplay quantities agree",
+}
+ROWS = [
+    ("IN67", ["suite", "input"]), ("IN84", ["suite", "input"]), ("IN86", ["suite", "input"]), ("X08", ["refs", "compile"]), ("X17", ["hum"]),
+    ("X19", ["3d"]), ("X21", ["loot"]), ("X22", ["3d"]), ("X25", ["3d"]), ("X26", ["visual", "frames"]), ("X27", ["layout"]), ("X28", ["yaw", "3d"]),
+    ("X29", ["compile", "grep force_lit"]), ("X30", ["3d"]), ("X31", ["visual", "frames"]), ("X32", ["visual", "frames"]), ("X33", ["visual", "frames"]),
+    ("X34", ["visual", "frames"]), ("X35", ["visual", "frames"]), ("X36", ["layout"]), ("X37", ["loot"]), ("X38", ["suite", "text"]),
+    ("X39", ["suite", "text"]), ("X40", ["layout"]), ("X41", ["visual", "frames"]), ("X42", ["layout"]), ("X43", ["closeout", "theme"]),
+    ("X51", ["closeout"]), ("X53", ["closeout"]), ("X54", ["closeout"]), ("X55", ["timing"]),
+    ("CL147 SHOP2", ["closeout"]), ("CL149 SH1", ["closeout"]), ("CL165 PAUSE1", ["closeout"]), ("CL166 LANG1", ["closeout"]),
+]
+matrix = (ROOT / "docs" / "FUNCTION_MATRIX.md").read_text(encoding="utf-8")
+fixed = [ln.split("|")[1].strip() for ln in matrix.splitlines() if re.match(r"^\| [A-Z]+[0-9]+ \|", ln) and "FIXED" in ln.split("|")[5]]
+mapped = [r for r, _ in ROWS if not r.startswith("CL")]
+print("FIXED rows in the matrix: %d, mapped: %d, unmapped: %s" % (len(fixed), len(mapped), sorted(set(fixed) - set(mapped)) or "none"))
+logs = [(pathlib.Path(p).name, ANSI.sub("", pathlib.Path(p).read_text(encoding="utf-8", errors="replace"))) for p in sys.argv[1:]]
+frames = sorted(p.name for p in (ROOT / "docs" / "stills" / "v800_loop").glob("*.jpg")) if (ROOT / "docs" / "stills" / "v800_loop").is_dir() else []
+force_lit = sum(1 for p in (ROOT / "scripts").rglob("*.gd") if "force_lit" in p.read_text(encoding="utf-8", errors="replace"))
+bad = 0
+for row, guards in ROWS:
+    cells = []
+    for g in guards:
+        if g == "frames":
+            n = len([f for f in frames if re.search(r"(boss|cycle_end|A02_game_start|B02_continued|V11_ng_run)", f)])
+            cells.append("frames %d" % n)
+            bad += n == 0
+        elif g == "grep force_lit":
+            cells.append("force_lit in scripts/: %d files" % force_lit)
+            bad += force_lit != 0
+        else:
+            for name, text in logs:
+                ok = any(ln.lstrip().startswith("OK") and GATE[g] in ln for ln in text.splitlines())
+                failed = any(ln.lstrip().startswith("FAIL") and GATE[g] in ln for ln in text.splitlines())
+                cells.append("%s:%s" % (g, "ok" if ok and not failed else "FAIL"))
+                bad += not ok or failed
+    print("%-14s %s" % (row, "  ".join(cells)))
+print("regression rows=%d bad=%d" % (len(ROWS), bad))
+sys.exit(1 if bad else 0)
+
+--- run
+FIXED rows in the matrix: 31, mapped: 31, unmapped: none
+IN67           suite:ok  suite:ok  suite:ok  input:ok  input:ok  input:ok
+IN84           suite:ok  suite:ok  suite:ok  input:ok  input:ok  input:ok
+IN86           suite:ok  suite:ok  suite:ok  input:ok  input:ok  input:ok
+X08            refs:ok  refs:ok  refs:ok  compile:ok  compile:ok  compile:ok
+X17            hum:ok  hum:ok  hum:ok
+X19            3d:ok  3d:ok  3d:ok
+X21            loot:ok  loot:ok  loot:ok
+X22            3d:ok  3d:ok  3d:ok
+X25            3d:ok  3d:ok  3d:ok
+X26            visual:ok  visual:ok  visual:ok  frames 34
+X27            layout:ok  layout:ok  layout:ok
+X28            yaw:ok  yaw:ok  yaw:ok  3d:ok  3d:ok  3d:ok
+X29            compile:ok  compile:ok  compile:ok  force_lit in scripts/: 0 files
+X30            3d:ok  3d:ok  3d:ok
+X31            visual:ok  visual:ok  visual:ok  frames 34
+X32            visual:ok  visual:ok  visual:ok  frames 34
+X33            visual:ok  visual:ok  visual:ok  frames 34
+X34            visual:ok  visual:ok  visual:ok  frames 34
+X35            visual:ok  visual:ok  visual:ok  frames 34
+X36            layout:ok  layout:ok  layout:ok
+X37            loot:ok  loot:ok  loot:ok
+X38            suite:ok  suite:ok  suite:ok  text:ok  text:ok  text:ok
+X39            suite:ok  suite:ok  suite:ok  text:ok  text:ok  text:ok
+X40            layout:ok  layout:ok  layout:ok
+X41            visual:ok  visual:ok  visual:ok  frames 34
+X42            layout:ok  layout:ok  layout:ok
+X43            closeout:ok  closeout:ok  closeout:ok  theme:ok  theme:ok  theme:ok
+X51            closeout:ok  closeout:ok  closeout:ok
+X53            closeout:ok  closeout:ok  closeout:ok
+X54            closeout:ok  closeout:ok  closeout:ok
+X55            timing:ok  timing:ok  timing:ok
+CL147 SHOP2    closeout:ok  closeout:ok  closeout:ok
+CL149 SH1      closeout:ok  closeout:ok  closeout:ok
+CL165 PAUSE1   closeout:ok  closeout:ok  closeout:ok
+CL166 LANG1    closeout:ok  closeout:ok  closeout:ok
+regression rows=35 bad=0
+# EXIT=0
