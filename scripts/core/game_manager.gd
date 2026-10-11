@@ -150,6 +150,17 @@ func continue_game() -> void:
 	run_hardcore = bool(SettingsManager.get_setting("hardcore", false))
 	_enter_play_and_reload()
 
+## Pause > Restart: back to the last save the way the menu's Continue goes (its pack, quests and vitals), a new game while no save
+## exists yet. True when the game is playing again; the caller reloads the scene that holds the world, as after a death.
+func restart_from_save() -> bool:
+	if SaveSystem.has_save():
+		continue_game()
+	else:
+		start_new_game()
+	if is_playing():
+		get_tree().paused = false
+	return is_playing()
+
 ## Переводит автолоады в боевое состояние, но НЕ трогает дерево сцен.
 ## Раньше здесь стоял reload_current_scene(): при старте из меню он
 ## перезагружал само меню, а игровой мир так и не появлялся.

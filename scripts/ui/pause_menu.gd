@@ -65,12 +65,18 @@ func _build() -> void:
 	_btn(vb, LocalizationManager.t("SHOP_COINS"), func() -> void: _open_card("Shop"))
 	_btn(vb, LocalizationManager.t("CRAFT_UPGRADE"), func() -> void: _open_card("FlashlightUpgrade"))
 	_btn(vb, LocalizationManager.t("settings"), func() -> void: UIManager.open(&"settings"))
-	_btn(vb, LocalizationManager.t("restart"),  func() -> void: FadeTransition.fade_to(func() -> void: Routes.restart_game()))
+	_btn(vb, LocalizationManager.t("restart"),  func() -> void: FadeTransition.fade_to(_restart))
 	_btn(vb, LocalizationManager.t("back_menu"),func() -> void: FadeTransition.fade_to(func() -> void: GameManager.return_to_menu()))
 	# GDD 24.7: the exit offers to keep the progress.
 	_btn(vb, LocalizationManager.t("PAUSE_SAVE_QUIT"), func() -> void:
 		SaveSystem.save_all()
 		get_tree().quit())
+
+## Restart reloads the last save (GameManager.restart_from_save), then the scene, as a Retry does: a bare reload left the state
+## PAUSED and gave the new player full health and charge.
+func _restart() -> void:
+	if GameManager.restart_from_save():
+		Routes.restart_game()
 
 func _open_card(card: String) -> void:
 	var screens := get_tree().current_scene.get_node_or_null("Screens")
