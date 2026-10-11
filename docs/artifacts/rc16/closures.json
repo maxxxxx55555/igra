@@ -628,5 +628,304 @@
   ],
   "frames": [],
   "commit": "cdf90cf"
+ },
+ {
+  "id": "S19-PAUSE1",
+  "claim": "The HUD's Pause button pauses the world like Escape (P0, CORRECTION_LOG 165): PAUSE1 fails on the v8.0.0 runtime and passes at HEAD.",
+  "cmd": "python s19_af2_judge.py (af2_both_ways.parse and judge on the two saved closeout runs)",
+  "proof": "s19_af2_exploit",
+  "quotes": [
+   "PAUSE1       pre=FAIL     post=ok       BITES"
+  ],
+  "frames": [
+   "docs/stills/v800_loop/s1_L2_hud_pause_after_14fc1b3_20261011T085409Z.jpg"
+  ],
+  "commit": "1aea9cd"
+ },
+ {
+  "id": "S19-LANG1",
+  "claim": "The pause menu shows after a language switch (P0, CORRECTION_LOG 166): LANG1 fails on the v8.0.0 runtime and passes at HEAD.",
+  "cmd": "python s19_af2_judge.py",
+  "proof": "s19_af2_exploit",
+  "quotes": [
+   "LANG1        pre=FAIL     post=ok       BITES",
+   "AF2 verdict=PASS ids=2 bad=0"
+  ],
+  "frames": [
+   "docs/stills/v800_loop/s1_L2_pause_after_languages_after_14fc1b3_20261011T085434Z.jpg"
+  ],
+  "commit": "1aea9cd"
+ },
+ {
+  "id": "S19-EXPLOIT-PRE",
+  "claim": "The exploit checks on the v8.0.0 runtime: PAUSE1 and LANG1 fail (menu open with the tree not paused; panel and shade at alpha 0).",
+  "cmd": "bash tools/qa_sim/closeout_check 300 (CLOSEOUT_ONLY=exploit, the three runtime files of 717e132 checked out over HEAD)",
+  "proof": "s19_exploit_pre_717e132",
+  "attach": "closeout_check.log",
+  "quotes": [
+   "FAIL PAUSE1",
+   "FAIL LANG1"
+  ],
+  "frames": [],
+  "commit": "afb76e9"
+ },
+ {
+  "id": "S19-EXPLOIT-POST",
+  "claim": "The exploit checks at HEAD: 8 checks, 0 fails (PAUSE1, LANG1, the pack edge, the dead battery, a truncated New Game+ file, the ad stub).",
+  "cmd": "bash tools/qa_sim/closeout_check 300 (CLOSEOUT_ONLY=exploit)",
+  "proof": "s19_exploit_post_afb76e9",
+  "attach": "closeout_check.log",
+  "quotes": [
+   "DONE checks=8 fails=0"
+  ],
+  "frames": [],
+  "commit": "afb76e9"
+ },
+ {
+  "id": "S19-LOOP",
+  "claim": "The full loop, three seeds of four windowed processes: every process reaches its last step, no failed step, softlock or crash.",
+  "cmd": "bash tools/qa_sim/playthrough L",
+  "proof": "s19_loop_14fc1b3",
+  "quotes": [
+   "PASS C0 New Game+ 0: WIN after 357 s",
+   "DONE mode=L3 steps=30 fails=0 time=467s"
+  ],
+  "frames": [
+   "docs/stills/v800_loop/s1_L2_hud_pause_after_14fc1b3_20261011T085409Z.jpg",
+   "docs/stills/v800_loop/s1_L2_pause_after_languages_after_14fc1b3_20261011T085434Z.jpg",
+   "docs/stills/v800_loop/s1_L3_hardcore_death_after_14fc1b3_20261011T090222Z.jpg"
+  ],
+  "commit": "14fc1b3"
+ },
+ {
+  "id": "S19-LOOP-NUMBERS",
+  "claim": "The numbers of the loop: 3 of 3 seeds complete, 0 failed steps, 0 softlocks, 0 crashes; 757 of 154,912 frames over 100 ms; 120 map travels, 28 batteries used.",
+  "cmd": "python s19_loop_metrics.py (reads the 12 engine logs)",
+  "proof": "s19_loop_metrics_14fc1b3",
+  "quotes": [
+   "loop seeds=3 complete=3 softlocks=0 crashes=0 failed_steps=0",
+   "exercised: map travels=120"
+  ],
+  "frames": [],
+  "commit": "14fc1b3"
+ },
+ {
+  "id": "S19-LOOP-FRAMES",
+  "claim": "The 112 stamped frames of the loop name the code tree and the capture time they came from.",
+  "cmd": "python tools/qa_sim/af3_frame_check.py --dir docs/stills/v800_loop",
+  "proof": "s19_af3_loop_916ae0b",
+  "quotes": [
+   "af3 frames=112 fail=0"
+  ],
+  "frames": [],
+  "commit": "916ae0b"
+ },
+ {
+  "id": "S19-FRAMES-RELEASE",
+  "claim": "The 21 stamped release frames of rc17 and v8.0.0 still pass the frame gate at the final tree (the three F4 scope rows, CORRECTION_LOG 176).",
+  "cmd": "python tools/qa_sim/af3_frame_check.py",
+  "proof": "s19_af3_all_916ae0b",
+  "quotes": [
+   "af3 frames=21 fail=0"
+  ],
+  "frames": [],
+  "commit": "916ae0b"
+ },
+ {
+  "id": "S19-SHOP",
+  "claim": "The shop errand inside a run: Pause > Shop buys an item, Pause > Upgrades a level, Resume returns to the game (CORRECTION_LOG 181).",
+  "cmd": "bash tools/qa_sim/playthrough L0:1",
+  "proof": "s19_shop_bb8fdcd",
+  "quotes": [
+   "PASS C0 New Game+ 0: WIN after 383 s",
+   "DONE mode=L0 steps=42 fails=0"
+  ],
+  "frames": [
+   "docs/stills/v800_loop/s1_L0_A06_shop_bought_after_bb8fdcd_20261011T131133Z.jpg"
+  ],
+  "commit": "bb8fdcd"
+ },
+ {
+  "id": "S19-BATTERY-1",
+  "claim": "check.sh --all, run 1 of 3 at 0e05ea1: 66 checks passed, none failed.",
+  "cmd": "bash tools/check.sh --all",
+  "proof": "s19_all1_0e05ea1",
+  "quotes": [
+   "Всё зелёное. Проверок пройдено: 66",
+   "adversarial: achievement/NG+/economy/district-id forgery"
+  ],
+  "frames": [],
+  "commit": "0e05ea1"
+ },
+ {
+  "id": "S19-BATTERY-2",
+  "claim": "check.sh --all, run 2 of 3 at 9aae9a6: 66 checks passed, none failed.",
+  "cmd": "bash tools/check.sh --all",
+  "proof": "s19_all2_9aae9a6",
+  "quotes": [
+   "Всё зелёное. Проверок пройдено: 66",
+   "adversarial: achievement/NG+/economy/district-id forgery"
+  ],
+  "frames": [],
+  "commit": "9aae9a6"
+ },
+ {
+  "id": "S19-BATTERY-3",
+  "claim": "check.sh --all, run 3 of 3 at 8d283c2: 66 checks passed, none failed; attack_sim OK (0 fails) in all three runs.",
+  "cmd": "bash tools/check.sh --all",
+  "proof": "s19_all3_8d283c2",
+  "quotes": [
+   "Всё зелёное. Проверок пройдено: 66",
+   "adversarial: achievement/NG+/economy/district-id forgery"
+  ],
+  "frames": [],
+  "commit": "8d283c2"
+ },
+ {
+  "id": "S19-FLAKY",
+  "claim": "The flaky hunt: 123 gates give the same status in the three runs.",
+  "cmd": "python s19_flaky.py s19_all1 s19_all2 s19_all3",
+  "proof": "s19_flaky_8d283c2",
+  "quotes": [
+   "flaky=0 red_in_every_run=0"
+  ],
+  "frames": [],
+  "commit": "8d283c2"
+ },
+ {
+  "id": "S19-REGRESSION",
+  "claim": "Every FIXED row of FUNCTION_MATRIX and CORRECTION_LOG 147, 149, 165, 166 still holds in each of the three runs.",
+  "cmd": "python s19_fixed_rows.py s19_all1 s19_all2 s19_all3",
+  "proof": "s19_regression_8d283c2",
+  "quotes": [
+   "regression rows=35 bad=0"
+  ],
+  "frames": [],
+  "commit": "8d283c2"
+ },
+ {
+  "id": "S19-TAMPER",
+  "claim": "The anti-tamper re-read at HEAD: IntegrityGuard and PlayIntegrityService are autoloads; the progress files go through the signed envelope.",
+  "cmd": "bash s19_tamper.sh",
+  "proof": "s19_tamper_grep",
+  "quotes": [
+   "PlayIntegrityService=",
+   "IntegrityGuard="
+  ],
+  "frames": [],
+  "commit": "14fc1b3"
+ },
+ {
+  "id": "S19-BUNDLE-PRE",
+  "claim": "The v8.0.0 bundle (63fda65) packed 31 files that are not the game, an API key among them (P0, CORRECTION_LOG 167).",
+  "cmd": "python tools/qa_sim/release_export_check.py --aab build/tls.aab",
+  "proof": "s19_aab_pre_63fda65",
+  "quotes": [
+   "31 packed file(s) that are not the game"
+  ],
+  "frames": [],
+  "commit": "717e132"
+ },
+ {
+  "id": "S19-BUNDLE-POST",
+  "claim": "The rebuilt bundle packs 0 files that are not the game.",
+  "cmd": "python tools/qa_sim/release_export_check.py --aab build/tls.aab",
+  "proof": "s19_aab_post_16abbb0",
+  "quotes": [
+   "0 packed file(s) that are not the game",
+   "PASS"
+  ],
+  "frames": [],
+  "commit": "16abbb0"
+ },
+ {
+  "id": "S19-EXPORT",
+  "claim": "The signed release export on the final tree ends with its run done and exit 0.",
+  "cmd": "bash -c 'set -a; . .signing/release.env; set +a; godot --headless --path . --export-release \"Android\" build/tls.aab'",
+  "proof": "s19_export_16abbb0",
+  "quotes": [
+   "[ DONE ] export"
+  ],
+  "frames": [],
+  "commit": "16abbb0"
+ },
+ {
+  "id": "S19-SIGNED",
+  "claim": "The rebuilt bundle is signed and the signer is the documented upload key.",
+  "cmd": "bash aab_verify.sh",
+  "proof": "s19_aab_verify_16abbb0",
+  "quotes": [
+   "jar verified.",
+   "signer_match=yes",
+   "bytes=155586711"
+  ],
+  "frames": [],
+  "commit": "16abbb0"
+ },
+ {
+  "id": "S19-LABEL",
+  "claim": "The Android app label of the rebuilt bundle is \"Last Streetlight\" in all 42 entries.",
+  "cmd": "python aab_label.py build/tls.aab",
+  "proof": "s19_label_16abbb0",
+  "quotes": [
+   "label values: ['Last Streetlight'] entries: 42"
+  ],
+  "frames": [],
+  "commit": "16abbb0"
+ },
+ {
+  "id": "S19-ADSDK",
+  "claim": "The rebuilt bundle holds no ad SDK code.",
+  "cmd": "python adsdk_scan.py build/tls.aab",
+  "proof": "s19_adsdk_16abbb0",
+  "quotes": [
+   "dex files: 1 references to Lcom/applovin/: 0"
+  ],
+  "frames": [],
+  "commit": "16abbb0"
+ },
+ {
+  "id": "S19-STOREART",
+  "claim": "None of the 21 store images is in the rebuilt bundle in any form (42 entries before).",
+  "cmd": "python s19_aab_storeart.py build/tls.aab",
+  "proof": "s19_storeart_post_16abbb0",
+  "quotes": [
+   "0 bundle entries of them"
+  ],
+  "frames": [],
+  "commit": "16abbb0"
+ },
+ {
+  "id": "S19-DIFF",
+  "claim": "Against the v8.0.0 bundle: 53 entries removed (all not the game), 0 added, 10 changed.",
+  "cmd": "python s19_aab_diff.py old.aab new.aab",
+  "proof": "s19_aab_diff_16abbb0",
+  "quotes": [
+   "bundle diff: removed=53 (all not the game: yes) added=0 changed=10"
+  ],
+  "frames": [],
+  "commit": "16abbb0"
+ },
+ {
+  "id": "S19-SECRET",
+  "claim": "The keystore path and password occur in no log and in no bundle entry outside META-INF.",
+  "cmd": "python s19_secret_scan.py (counts only)",
+  "proof": "s19_secretscan_16abbb0",
+  "quotes": [
+   "secret occurrences=0"
+  ],
+  "frames": [],
+  "commit": "16abbb0"
+ },
+ {
+  "id": "S19-STATIC",
+  "claim": "The static gates at the tree of the P0 fixes with the three F4 scope rows: 40 passed.",
+  "cmd": "bash tools/check.sh --static",
+  "proof": "s19_static_scope",
+  "quotes": [
+   "Всё зелёное. Проверок пройдено: 40"
+  ],
+  "frames": [],
+  "commit": "0807041"
  }
 ]
