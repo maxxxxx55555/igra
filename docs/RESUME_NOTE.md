@@ -1,5 +1,14 @@
 # Resume note (2026-10-08, rc16 sign-off)
 
+## NEXT-ROW (Session 21, 2026-10-11, in progress): the shipping pass. Read this block first; the Session 20 block under it still lists the owner's steps.
+
+Baseline `a83d99b` (on origin, v8.0.0-final + 6); target `v8.0.0-shipping`. B1 triage is `docs/CORRECTION_LOG.md` row 198: rows 169, 172 and 174 are fixed in code (`107db81`, `85fece8`, `adf0f6b`, checks in `154e372`); the rest of the seven P1 rows are not code work. One sentence each for the owner:
+- 170 (the daily claim file deleted): nothing to do for 1.0; accept it as the limit of an offline game, or move the claim into a profile-level signed file that survives New Game in 1.1.
+- 171 (Export Save, then a Hardcore death, then Import): nothing to do for 1.0; the closing fix is a hardcore flag inside the signed save plus a ledger of dead runs, a save-format change for 1.1.
+- 173 (LAN calls take any peer): decide whether LAN co-op ships; if it does, add the sender checks and test them with two phones on one network before the screen goes live.
+- 177 (the revive offer is in a script nothing loads): before an AppLovin key is set, decide whether a rewarded revive exists, and if it does, move the offer to `scripts/ui/death_screen.gd`.
+- The steps of the Session 20 block (key rotation, phone smoke test, Console upload, privacy contact and date, the endings art) stay open; this pass cannot do them.
+
 ## NEXT-ROW (Session 20, 2026-10-11): for a fresh account. Read this first; the text below it is the history of Session 19 and rc16.
 
 **Where everything is.** Repository `C:\Users\Maxsim\Desktop\TLS_Build\THE_LAST_STREETLIGHT`; `main` equals `origin/main` at the head named at the end of the Session 20 block of `docs/RUN_STATE.md`; tags `v8.0.0` = `66bc678`, `v8.0.0-final` = `6b9055a`, `v8.0.0-rc17` = `03fd367` (push a tag with its explicit ref, never `--tags`). The signed bundle is `build/tls.aab` (136,500,858 bytes, built from `e241597`, sha256 `eadfc1d8…`; gitignored, on this machine only). The signing material is `.signing/` (gitignored, never in a log). Older bundles and the documents each pass rewrote are under `C:\Users\Maxsim\Desktop\TLS_Build\_BACKUPS\`. Nothing is in flight and no process runs.
