@@ -1,15 +1,15 @@
 # Known issues
 
-## OPEN (2026-10-11, Session 19; rated in Session 20: 168, 178, 179 and 180 are closed): findings of the v8.0.0 release validation that stay open, for the owner to rate
+## OPEN (2026-10-11, Session 19; rated in Session 20: 168, 178, 179 and 180 are closed; triaged in Session 21: 169, 172 and 174 are closed, 170, 171, 173 and 177 are the owner's, CORRECTION_LOG 198): findings of the v8.0.0 release validation that stay open, for the owner to rate
 
 The pass fixed three P0 (CORRECTION_LOG 165 to 167) and left these. None is a softlock or a crash: the full loop (`docs/artifacts/rc16/proofs/s19_loop_14fc1b3.out`, 3 seeds, 12 processes, 427 steps, 0 failed) did not meet them as failures, and the exploit run (`docs/artifacts/rc16/proofs/s19_exploit_post_afb76e9.out`, `DONE checks=8 fails=0`) holds the guards. Each row has its mechanism, its file and line and its owner action in `docs/CORRECTION_LOG.md`. Session 20 (the final window pass) closed 168, 178, 179 and 180 with a fix and its AF2 pair and rated the other seven (CORRECTION_LOG 194 and 195); none of the four fixes is in `build/tls.aab`, which was built from `e241597`.
 
 - 168 (CLOSED in Session 20, `6f6d643`): a save written while no player is in the tree holds no position, so a load takes the district's spawn.
-- 169, a quest reward that does not fit a full pack stays unpaid until the quest's next event, and salvage on a full pack loses its components.
-- 170, the daily challenge can be claimed twice by deleting `user://tls_daily.json` (needs file access on the device).
-- 171, Export Save during a Hardcore run lets Import bring the dead run back.
-- 172, Pause > Restart reloads the scene without a load or a reset (a free heal, and the state stays PAUSED until Resume).
-- 173 and 174, the LAN calls take any peer and `InventoryManager.remove` takes before it counts (co-op only, latent).
+- 169 (CLOSED in Session 21, `85fece8`): a quest reward that does not fit a full pack is paid when the pack has room, and salvage on a full pack keeps the item.
+- 170 (ACCEPTED, CORRECTION_LOG 198), the daily challenge can be claimed twice by deleting `user://tls_daily.json` (needs file access on the device; a cross-check would close only the Continue path).
+- 171 (ACCEPTED, CORRECTION_LOG 198), Export Save, then a Hardcore death, then Import brings the dead run back (the closing fix is a hardcore flag in the signed save: a save-format change for 1.1).
+- 172 (CLOSED in Session 21, `adf0f6b`): Pause > Restart goes back to the last save, as Continue does, and leaves the game playing.
+- 173, the LAN calls take any peer (co-op only, latent, the owner's: two peers are needed to verify a sender check); 174 (CLOSED in Session 21, `107db81`): `InventoryManager.remove` counts before it takes.
 - 177, the rewarded-ad revive button lives on a death screen nothing loads; ads are off in this build, so no player sees it.
 - 178 (CLOSED in Session 20, `6f6d643`): the Hardcore death screen shows the run it ends: the state changes before the wipe.
 - 179 (CLOSED in Session 20, `6f6d643`): the daily streak belongs to the profile: a New Game keeps it, Reset progress clears it.
