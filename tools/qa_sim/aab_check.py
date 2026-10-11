@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """AAB facts (Session 21): what docs/RELEASE_ARTIFACTS.md states about a built bundle, read from the file itself.
 
-usage: python tools/qa_sim/aab_check.py <bundle.aab> [--secrets] [--demo]
+usage: python tools/qa_sim/aab_check.py <bundle.aab> [--secrets] [--against <older.aab>] [--demo]
 One line per fact, exit 1 when one is wrong:
   size, sha256, entries   the file
   jar      `jarsigner -verify` prints "jar verified."
@@ -10,6 +10,7 @@ One line per fact, exit 1 when one is wrong:
   adsdk    no dex entry names Lcom/applovin/ (the ad SDK is not in a build without a key)
   secrets  (with --secrets, the keystore variables set in the environment by `. .signing/release.env`) the keystore path and password occur in
            no entry outside META-INF; only counts are printed, never the values
+  --against  the entries of another bundle that are gone, new or changed (name and CRC; the signature files and the pack index change on every export)
 A packed file that is not the game is the other check: tools/qa_sim/release_export_check.py --aab.
 """
 import hashlib
@@ -58,6 +59,19 @@ def tool(*cmd):
         return -1, cmd[0] + " not found"
     r = subprocess.run([exe, *cmd[1:]], capture_output=True, text=True, encoding="utf-8", errors="replace")
     return r.returncode, r.stdout + r.stderr
+
+
+def compare(path, older):
+    with zipfile.ZipFile(path) as a, zipfile.ZipFile(older) as b:
+        new = {i.filename: i.CRC for i in a.infolist()}
+        old = {i.filename: i.CRC for i in b.infolist()}
+    gone = sorted(set(old) - set(new))
+    added = sorted(set(new) - set(old))
+    changed = sorted(n for n in set(new) & set(old) if new[n] != old[n])
+    print("against %s: %d entries gone, %d new, %d with other bytes" % (older.name, len(gone), len(added), len(changed)))
+    for label, names in (("gone", gone), ("new", added), ("changed", changed)):
+        for n in names[:12]:
+            print("  %-7s %s" % (label, n))
 
 
 def facts(path, secrets):
@@ -112,10 +126,12 @@ def main():
     if "--demo" in args:
         demo()
         return 0
-    paths = [a for a in args if not a.startswith("--")]
+    paths = [a for i, a in enumerate(args) if not a.startswith("--") and not (i and args[i - 1] == "--against")]
     if not paths:
         raise SystemExit(__doc__)
     bad = facts(pathlib.Path(paths[0]), "--secrets" in args)
+    if "--against" in args:
+        compare(pathlib.Path(paths[0]), pathlib.Path(args[args.index("--against") + 1]))
     print("aab_check: %s" % ("PASS" if bad == 0 else "FAIL (%d)" % bad))
     return 1 if bad else 0
 
