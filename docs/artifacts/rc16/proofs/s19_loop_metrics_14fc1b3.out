@@ -1,0 +1,138 @@
+# proof s19_loop_metrics_14fc1b3
+# utc 20261011T122438Z
+# head a1f2d7b (uncommitted paths: 16)
+# env none
+# cmd python -I C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s19_loop_metrics.py
+"""P1 of Session 19: the numbers of the full loop (tools/qa_sim/playthrough L) per seed, read from its engine logs
+(.qa_logs/playthrough_L<mode>_s<seed>.log). Prints its source first. Per seed: the four processes (L0 new game and New Game+ 1,
+L1 continue and New Game+ 2, L2 continue, New Game+ 3, settings and the 12 languages, L3 daily, achievements and a hardcore run),
+the time, the steps, the failed steps, the cycles, the frames over 100 ms; softlock = a STALL step or a cycle that is NO WIN without
+a hardcore death; crash = a process log without its DONE line, or an engine script error."""
+import pathlib
+import re
+import sys
+
+ROOT = pathlib.Path(r"C:\Users\Maxsim\Desktop\TLS_Build\THE_LAST_STREETLIGHT")
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+DONE = re.compile(r"^\[pt\] DONE mode=(\S+) steps=(\d+) fails=(\d+) time=(\d+)s")
+CYCLE = re.compile(r"^\[pt\] (PASS|FAIL) (C\d+(?:\.hc)?) (.*?)(?:  frame=.*)?$")
+HITCH = re.compile(r"^\[pt\] note HITCH frames=(\d+) over_100ms=(\d+) in_play=(\d+) longest: ([^|]*)")
+SCRIPT = re.compile(r"SCRIPT ERROR|Invalid call|Invalid get|Invalid set|Invalid access|Parse Error")
+LEAK = re.compile(r"^ERROR: .*(leaked|still in use at exit)")
+totals = {"seeds": 0, "complete": 0, "softlocks": 0, "crashes": 0, "frames": 0, "over": 0, "in_play": 0, "fails": 0}
+logs = sorted((ROOT / ".qa_logs").glob("playthrough_L*_s*.log"))
+seeds = sorted({int(re.search(r"_s(\d+)\.log$", p.name).group(1)) for p in logs})
+for seed in seeds:
+    totals["seeds"] += 1
+    secs, steps, fails, complete = 0, 0, 0, True
+    print("=== seed %d" % seed)
+    for mode in ("L0", "L1", "L2", "L3"):
+        p = ROOT / ".qa_logs" / ("playthrough_%s_s%d.log" % (mode, seed))
+        if not p.exists():
+            print("  %s: no log (the seed stopped before it)" % mode)
+            complete = False
+            continue
+        lines = p.read_text(encoding="utf-8", errors="replace").splitlines()
+        done = [m for m in (DONE.match(x) for x in lines) if m]
+        failed = [x for x in lines if x.startswith("[pt] FAIL ")]
+        script = [x for x in lines if SCRIPT.search(x)]
+        leaks = sum(1 for x in lines if LEAK.match(x))
+        other = [x for x in lines if x.startswith("ERROR:") and not LEAK.match(x)]
+        stalls = [x for x in failed if x.startswith("[pt] FAIL STALL")]
+        if done:
+            d = done[-1]
+            secs += int(d.group(4))
+            steps += int(d.group(2))
+            print("  %s: DONE steps=%s fails=%s time=%ss" % (mode, d.group(2), d.group(3), d.group(4)))
+        else:
+            print("  %s: NO DONE line (crash or stop): last line %r" % (mode, lines[-1][:120] if lines else ""))
+            totals["crashes"] += 1
+            complete = False
+        for x in lines:
+            c = CYCLE.match(x)
+            if c:
+                print("    %s %s %s" % (c.group(1), c.group(2), c.group(3)[:200]))
+                if c.group(1) == "FAIL" and "NO WIN" in c.group(3):
+                    totals["softlocks"] += 1
+            h = HITCH.match(x)
+            if h:
+                totals["frames"] += int(h.group(1))
+                totals["over"] += int(h.group(2))
+                totals["in_play"] += int(h.group(3))
+                print("    hitches: frames %s, over 100 ms %s, in play %s; longest %s" % (h.group(1), h.group(2), h.group(3), h.group(4).strip()))
+        for x in failed:
+            print("    failed step: %s" % x[:220])
+        totals["fails"] += len(failed)
+        totals["softlocks"] += len(stalls)
+        totals["crashes"] += len(script)
+        for x in script[:5]:
+            print("    script error: %s" % x[:200])
+        print("    engine errors: %d at exit (leaks), %d other%s" % (leaks, len(other), (": " + " | ".join(o[:90] for o in other[:3])) if other else ""))
+        fails += len(failed)
+        complete = complete and not failed
+    totals["complete"] += complete
+    print("  seed %d: %s, %d steps, %d failed, %.1f min" % (seed, "COMPLETE" if complete else "PARTIAL", steps, fails, secs / 60.0))
+print("loop seeds=%(seeds)d complete=%(complete)d softlocks=%(softlocks)d crashes=%(crashes)d failed_steps=%(fails)d frames=%(frames)d over_100ms=%(over)d in_play=%(in_play)d" % totals)
+sys.exit(0 if totals["seeds"] and totals["complete"] == totals["seeds"] else 1)
+
+--- run
+=== seed 1
+  L0: DONE steps=35 fails=0 time=392s
+    PASS C0 New Game+ 0: WIN after 357 s; 11 of 11 districts FULL, deaths 2 (revived in place by the bot), nudges 8, coins earned 11146, shop false, skill true; bot fails: none
+    hitches: frames 13510, over 100 ms 85, in play 58; longest 1382 ms at 14 s (state 2, no scene, suburbs)
+    engine errors: 6 at exit (leaks), 0 other
+  L1: DONE steps=27 fails=0 time=402s
+    PASS C1 New Game+ 1: WIN after 371 s; 11 of 11 districts FULL, deaths 2 (revived in place by the bot), nudges 17, coins earned 8667, shop false, skill false; bot fails: none
+    hitches: frames 11014, over 100 ms 69, in play 47; longest 1446 ms at 10 s (state 2, no scene, suburbs)
+    engine errors: 5 at exit (leaks), 0 other
+  L2: DONE steps=50 fails=0 time=475s
+    PASS C2 New Game+ 2: WIN after 417 s; 11 of 11 districts FULL, deaths 4 (revived in place by the bot), nudges 17, coins earned 8750, shop false, skill true; bot fails: none
+    hitches: frames 12484, over 100 ms 91, in play 58; longest 1647 ms at 11 s (state 2, no scene, suburbs)
+    engine errors: 6 at exit (leaks), 0 other
+  L3: DONE steps=29 fails=0 time=463s
+    PASS C3.hc the hardcore run's one death ends it after 424 s in suburbs: has_save false, the death screen offers ["Retry", "Main Menu", "Skip"]
+    PASS C3 New Game+ 3 hardcore: its one death after 424 s; 0 of 11 districts FULL, deaths 1 (revived in place by the bot), nudges 26, coins earned 9021, shop false, skill false; bot fails: none
+    hitches: frames 12932, over 100 ms 74, in play 51; longest 1398 ms at 10 s (state 2, no scene, suburbs)
+    engine errors: 6 at exit (leaks), 0 other
+  seed 1: COMPLETE, 141 steps, 0 failed, 28.9 min
+=== seed 2
+  L0: DONE steps=35 fails=0 time=401s
+    PASS C0 New Game+ 0: WIN after 363 s; 11 of 11 districts FULL, deaths 2 (revived in place by the bot), nudges 14, coins earned 11141, shop false, skill true; bot fails: none
+    hitches: frames 11761, over 100 ms 71, in play 50; longest 2229 ms at 15 s (state 2, no scene, suburbs)
+    engine errors: 6 at exit (leaks), 0 other
+  L1: DONE steps=29 fails=0 time=428s
+    PASS C1 New Game+ 1: WIN after 394 s; 11 of 11 districts FULL, deaths 3 (revived in place by the bot), nudges 18, coins earned 8650, shop false, skill true; bot fails: none
+    hitches: frames 11726, over 100 ms 73, in play 54; longest 2228 ms at 11 s (state 2, no scene, suburbs)
+    engine errors: 5 at exit (leaks), 0 other
+  L2: DONE steps=50 fails=0 time=466s
+    PASS C2 New Game+ 2: WIN after 407 s; 11 of 11 districts FULL, deaths 3 (revived in place by the bot), nudges 23, coins earned 8820, shop false, skill true; bot fails: none
+    hitches: frames 12571, over 100 ms 78, in play 55; longest 1985 ms at 11 s (state 2, no scene, suburbs)
+    engine errors: 6 at exit (leaks), 0 other
+  L3: DONE steps=28 fails=0 time=429s
+    PASS C3.hc the hardcore run's one death ends it after 392 s in suburbs: has_save false, the death screen offers ["Retry", "Main Menu", "Skip"]
+    PASS C3 New Game+ 3 hardcore: its one death after 392 s; 0 of 11 districts FULL, deaths 1 (revived in place by the bot), nudges 16, coins earned 8615, shop false, skill false; bot fails: none
+    hitches: frames 12494, over 100 ms 32, in play 11; longest 1005 ms at 10 s (state 2, no scene, suburbs)
+    engine errors: 6 at exit (leaks), 0 other
+  seed 2: COMPLETE, 142 steps, 0 failed, 28.7 min
+=== seed 3
+  L0: DONE steps=36 fails=0 time=431s
+    PASS C0 New Game+ 0: WIN after 398 s; 11 of 11 districts FULL, deaths 2 (revived in place by the bot), nudges 20, coins earned 11212, shop false, skill true; bot fails: none
+    hitches: frames 17098, over 100 ms 78, in play 61; longest 865 ms at 13 s (state 2, no scene, suburbs)
+    engine errors: 6 at exit (leaks), 0 other
+  L1: DONE steps=29 fails=0 time=430s
+    PASS C1 New Game+ 1: WIN after 401 s; 11 of 11 districts FULL, deaths 3 (revived in place by the bot), nudges 20, coins earned 8671, shop false, skill true; bot fails: none
+    hitches: frames 12543, over 100 ms 34, in play 18; longest 938 ms at 10 s (state 2, no scene, suburbs)
+    engine errors: 5 at exit (leaks), 0 other
+  L2: DONE steps=49 fails=0 time=461s
+    PASS C2 New Game+ 2: WIN after 409 s; 11 of 11 districts FULL, deaths 4 (revived in place by the bot), nudges 22, coins earned 8884, shop false, skill false; bot fails: none
+    hitches: frames 13181, over 100 ms 33, in play 16; longest 999 ms at 10 s (state 2, no scene, suburbs)
+    engine errors: 6 at exit (leaks), 0 other
+  L3: DONE steps=30 fails=0 time=467s
+    PASS C3.hc the hardcore run's one death ends it after 430 s in suburbs: has_save false, the death screen offers ["Retry", "Main Menu", "Skip"]
+    PASS C3 New Game+ 3 hardcore: its one death after 430 s; 0 of 11 districts FULL, deaths 1 (revived in place by the bot), nudges 24, coins earned 8907, shop false, skill true; bot fails: none
+    hitches: frames 13598, over 100 ms 39, in play 17; longest 937 ms at 10 s (state 2, no scene, suburbs)
+    engine errors: 6 at exit (leaks), 0 other
+  seed 3: COMPLETE, 144 steps, 0 failed, 29.8 min
+loop seeds=3 complete=3 softlocks=0 crashes=0 failed_steps=0 frames=154912 over_100ms=757 in_play=496
+# EXIT=0

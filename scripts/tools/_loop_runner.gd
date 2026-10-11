@@ -11,7 +11,9 @@ extends "res://scripts/tools/_playthrough_runner.gd"
 
 const HITCH_MS := 100.0
 const SHOP_AT_COINS := 3000
-const MONSTER_CLEAR_M := 20.0
+## The pause freezes the world, so only a monster at the player's elbow matters (the full loop of 14fc1b3 asked 20 m and never got
+## a quiet moment in 12 cycles: its shop errand stayed idle).
+const MONSTER_CLEAR_M := 6.0
 const CYCLE_WAIT_SEC := 960.0
 
 var _seed: int = 1

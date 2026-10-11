@@ -1,0 +1,62 @@
+# proof s19_loop_14fc1b3
+# utc 20261011T083303Z
+# head 14fc1b3 (uncommitted paths: 0)
+# env none
+# cmd bash tools/qa_sim/playthrough L
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  fresh profile: 0 game file(s) removed (0 of the owner's are restored at the end)
+  mode L0 seed 1 rc=0 (log: .qa_logs/playthrough_L0_s1.log)
+[pt] PASS C0 New Game+ 0: WIN after 357 s; 11 of 11 districts FULL, deaths 2 (revived in place by the bot), nudges 8, coins earned 11146, shop false, skill true; bot fails: none  frame=s1_L0_cycle_end.jpg
+[pt] note HITCH frames=13510 over_100ms=85 in_play=58 longest: 1382 ms at 14 s (state 2, no scene, suburbs) | 1267 ms at 15 s (state 2, Main3D, suburbs, district change) | 1115 ms at 47 s (state 2, Main3D, residential, district change) | 1059 ms at 42 s (state 2, Main3D, suburbs) | 588 ms at 387 s (state 2, Main3D, suburbs, district change) | 458 ms at 386 s (state 2, no scene, suburbs) | 448 ms at 24 s (state 2, Main3D, suburbs, district change) | 443 ms at 74 s (state 2, Main3D, park, district change)
+[pt] DONE mode=L0 steps=35 fails=0 time=392s (Save and quit pressed next)
+  mode L1 seed 1 rc=0 (log: .qa_logs/playthrough_L1_s1.log)
+[pt] PASS C1 New Game+ 1: WIN after 371 s; 11 of 11 districts FULL, deaths 2 (revived in place by the bot), nudges 17, coins earned 8667, shop false, skill false; bot fails: none  frame=s1_L1_cycle_end.jpg
+[pt] note HITCH frames=11014 over_100ms=69 in_play=47 longest: 1446 ms at 10 s (state 2, no scene, suburbs) | 1103 ms at 12 s (state 2, Main3D, suburbs, district change) | 578 ms at 398 s (state 2, Main3D, suburbs, district change) | 527 ms at 396 s (state 2, no scene, suburbs) | 406 ms at 40 s (state 2, Main3D, residential, district change) | 385 ms at 114 s (state 2, Main3D, hospital, district change) | 377 ms at 142 s (state 2, Main3D, gas_station, district change) | 370 ms at 67 s (state 2, Main3D, park, district change)
+[pt] DONE mode=L1 steps=27 fails=0 time=402s (Save and quit pressed next)
+  mode L2 seed 1 rc=0 (log: .qa_logs/playthrough_L2_s1.log)
+[pt] PASS C2 New Game+ 2: WIN after 417 s; 11 of 11 districts FULL, deaths 4 (revived in place by the bot), nudges 17, coins earned 8750, shop false, skill true; bot fails: none  frame=s1_L2_cycle_end.jpg
+[pt] note HITCH frames=12484 over_100ms=91 in_play=58 longest: 1647 ms at 11 s (state 2, no scene, suburbs) | 1259 ms at 12 s (state 2, Main3D, suburbs, district change) | 676 ms at 471 s (state 3, Main3D, suburbs) | 675 ms at 467 s (state 3, Main3D, suburbs) | 608 ms at 468 s (state 3, Main3D, suburbs) | 589 ms at 469 s (state 3, Main3D, suburbs) | 543 ms at 465 s (state 3, Main3D, suburbs) | 538 ms at 472 s (state 3, Main3D, suburbs)
+[pt] DONE mode=L2 steps=50 fails=0 time=475s (Save and quit pressed next)
+  mode L3 seed 1 rc=0 (log: .qa_logs/playthrough_L3_s1.log)
+[pt] PASS C3.hc the hardcore run's one death ends it after 424 s in suburbs: has_save false, the death screen offers ["Retry", "Main Menu", "Skip"]  frame=s1_L3_hardcore_death.jpg
+[pt] PASS C3 New Game+ 3 hardcore: its one death after 424 s; 0 of 11 districts FULL, deaths 1 (revived in place by the bot), nudges 26, coins earned 9021, shop false, skill false; bot fails: none  frame=s1_L3_cycle_end.jpg (identical to the previous frame)
+[pt] note HITCH frames=12932 over_100ms=74 in_play=51 longest: 1398 ms at 10 s (state 2, no scene, suburbs) | 1018 ms at 11 s (state 2, Main3D, suburbs, district change) | 600 ms at 20 s (state 2, Main3D, suburbs, district change) | 474 ms at 199 s (state 2, Main3D, warehouses, district change) | 447 ms at 178 s (state 2, Main3D, police, district change) | 436 ms at 128 s (state 2, Main3D, hospital, district change) | 420 ms at 33 s (state 2, Main3D, suburbs, district change) | 415 ms at 229 s (state 2, Main3D, industrial, district change)
+[pt] DONE mode=L3 steps=29 fails=0 time=463s
+  fresh profile: 7 game file(s) removed (0 of the owner's are restored at the end)
+  mode L0 seed 2 rc=0 (log: .qa_logs/playthrough_L0_s2.log)
+[pt] PASS C0 New Game+ 0: WIN after 363 s; 11 of 11 districts FULL, deaths 2 (revived in place by the bot), nudges 14, coins earned 11141, shop false, skill true; bot fails: none  frame=s2_L0_cycle_end.jpg
+[pt] note HITCH frames=11761 over_100ms=71 in_play=50 longest: 2229 ms at 15 s (state 2, no scene, suburbs) | 1613 ms at 17 s (state 2, Main3D, suburbs, district change) | 822 ms at 396 s (state 2, Main3D, suburbs, district change) | 618 ms at 395 s (state 2, no scene, suburbs) | 552 ms at 23 s (state 2, Main3D, suburbs, district change) | 508 ms at 222 s (state 2, Main3D, industrial, district change) | 495 ms at 120 s (state 2, Main3D, hospital, district change) | 468 ms at 94 s (state 2, Main3D, park)
+[pt] DONE mode=L0 steps=35 fails=0 time=401s (Save and quit pressed next)
+  mode L1 seed 2 rc=0 (log: .qa_logs/playthrough_L1_s2.log)
+[pt] PASS C1 New Game+ 1: WIN after 394 s; 11 of 11 districts FULL, deaths 3 (revived in place by the bot), nudges 18, coins earned 8650, shop false, skill true; bot fails: none  frame=s2_L1_cycle_end.jpg
+[pt] note HITCH frames=11726 over_100ms=73 in_play=54 longest: 2228 ms at 11 s (state 2, no scene, suburbs) | 1510 ms at 13 s (state 2, Main3D, suburbs, district change) | 981 ms at 116 s (state 2, Main3D, hospital, district change) | 728 ms at 423 s (state 2, Main3D, suburbs, district change) | 678 ms at 421 s (state 2, no scene, suburbs) | 542 ms at 18 s (state 2, Main3D, suburbs) | 475 ms at 69 s (state 2, Main3D, park, district change) | 457 ms at 100 s (state 2, Main3D, school, district change)
+[pt] DONE mode=L1 steps=29 fails=0 time=428s (Save and quit pressed next)
+  mode L2 seed 2 rc=0 (log: .qa_logs/playthrough_L2_s2.log)
+[pt] PASS C2 New Game+ 2: WIN after 407 s; 11 of 11 districts FULL, deaths 3 (revived in place by the bot), nudges 23, coins earned 8820, shop false, skill true; bot fails: none  frame=s2_L2_cycle_end.jpg
+[pt] note HITCH frames=12571 over_100ms=78 in_play=55 longest: 1985 ms at 11 s (state 2, no scene, suburbs) | 1435 ms at 12 s (state 2, Main3D, suburbs, district change) | 716 ms at 434 s (state 2, no scene, suburbs) | 687 ms at 436 s (state 2, Main3D, suburbs, district change) | 681 ms at 441 s (state 3, Main3D, suburbs) | 648 ms at 451 s (state 3, Main3D, suburbs) | 601 ms at 458 s (state 3, Main3D, suburbs) | 531 ms at 457 s (state 3, Main3D, suburbs)
+[pt] DONE mode=L2 steps=50 fails=0 time=466s (Save and quit pressed next)
+  mode L3 seed 2 rc=0 (log: .qa_logs/playthrough_L3_s2.log)
+[pt] PASS C3.hc the hardcore run's one death ends it after 392 s in suburbs: has_save false, the death screen offers ["Retry", "Main Menu", "Skip"]  frame=s2_L3_hardcore_death.jpg
+[pt] PASS C3 New Game+ 3 hardcore: its one death after 392 s; 0 of 11 districts FULL, deaths 1 (revived in place by the bot), nudges 16, coins earned 8615, shop false, skill false; bot fails: none  frame=s2_L3_cycle_end.jpg (identical to the previous frame)
+[pt] note HITCH frames=12494 over_100ms=32 in_play=11 longest: 1005 ms at 10 s (state 2, no scene, suburbs) | 740 ms at 11 s (state 2, Main3D, suburbs, district change) | 483 ms at 31 s (state 2, Main3D, suburbs, district change) | 331 ms at 19 s (state 2, Main3D, suburbs, district change) | 302 ms at 33 s (state 2, Main3D, suburbs, district change) | 298 ms at 22 s (state 3, Main3D, suburbs) | 282 ms at 26 s (state 1, no scene, suburbs) | 236 ms at 196 s (state 2, Main3D, warehouses, district change)
+[pt] DONE mode=L3 steps=28 fails=0 time=429s
+  fresh profile: 7 game file(s) removed (0 of the owner's are restored at the end)
+  mode L0 seed 3 rc=0 (log: .qa_logs/playthrough_L0_s3.log)
+[pt] PASS C0 New Game+ 0: WIN after 398 s; 11 of 11 districts FULL, deaths 2 (revived in place by the bot), nudges 20, coins earned 11212, shop false, skill true; bot fails: none  frame=s3_L0_cycle_end.jpg
+[pt] note HITCH frames=17098 over_100ms=78 in_play=61 longest: 865 ms at 13 s (state 2, no scene, suburbs) | 738 ms at 14 s (state 2, Main3D, suburbs, district change) | 376 ms at 426 s (state 2, Main3D, suburbs, district change) | 320 ms at 214 s (state 2, Main3D, industrial, district change) | 281 ms at 199 s (state 2, Main3D, warehouses) | 236 ms at 163 s (state 2, Main3D, police, district change) | 226 ms at 268 s (state 2, Main3D, power_station, district change) | 226 ms at 98 s (state 2, Main3D, school, district change)
+[pt] DONE mode=L0 steps=36 fails=0 time=431s (Save and quit pressed next)
+  mode L1 seed 3 rc=0 (log: .qa_logs/playthrough_L1_s3.log)
+[pt] PASS C1 New Game+ 1: WIN after 401 s; 11 of 11 districts FULL, deaths 3 (revived in place by the bot), nudges 20, coins earned 8671, shop false, skill true; bot fails: none  frame=s3_L1_cycle_end.jpg
+[pt] note HITCH frames=12543 over_100ms=34 in_play=18 longest: 938 ms at 10 s (state 2, no scene, suburbs) | 709 ms at 11 s (state 2, Main3D, suburbs, district change) | 382 ms at 426 s (state 2, Main3D, suburbs, district change) | 254 ms at 160 s (state 2, Main3D, police, district change) | 246 ms at 180 s (state 2, Main3D, warehouses, district change) | 229 ms at 225 s (state 2, Main3D, substation, district change) | 222 ms at 39 s (state 2, Main3D, residential, district change) | 220 ms at 65 s (state 2, Main3D, park, district change)
+[pt] DONE mode=L1 steps=29 fails=0 time=430s (Save and quit pressed next)
+  mode L2 seed 3 rc=0 (log: .qa_logs/playthrough_L2_s3.log)
+[pt] PASS C2 New Game+ 2: WIN after 409 s; 11 of 11 districts FULL, deaths 4 (revived in place by the bot), nudges 22, coins earned 8884, shop false, skill false; bot fails: none  frame=s3_L2_cycle_end.jpg
+[pt] note HITCH frames=13181 over_100ms=33 in_play=16 longest: 999 ms at 10 s (state 2, no scene, suburbs) | 837 ms at 11 s (state 2, Main3D, suburbs, district change) | 368 ms at 434 s (state 2, Main3D, suburbs, district change) | 295 ms at 439 s (state 3, Main3D, suburbs) | 237 ms at 65 s (state 2, Main3D, park, district change) | 223 ms at 108 s (state 2, Main3D, hospital, district change) | 223 ms at 93 s (state 2, Main3D, school, district change) | 219 ms at 136 s (state 2, Main3D, gas_station, district change)
+[pt] DONE mode=L2 steps=49 fails=0 time=461s (Save and quit pressed next)
+  mode L3 seed 3 rc=0 (log: .qa_logs/playthrough_L3_s3.log)
+[pt] PASS C3.hc the hardcore run's one death ends it after 430 s in suburbs: has_save false, the death screen offers ["Retry", "Main Menu", "Skip"]  frame=s3_L3_hardcore_death.jpg
+[pt] PASS C3 New Game+ 3 hardcore: its one death after 430 s; 0 of 11 districts FULL, deaths 1 (revived in place by the bot), nudges 24, coins earned 8907, shop false, skill true; bot fails: none  frame=s3_L3_cycle_end.jpg (identical to the previous frame)
+[pt] note HITCH frames=13598 over_100ms=39 in_play=17 longest: 937 ms at 10 s (state 2, no scene, suburbs) | 733 ms at 11 s (state 2, Main3D, suburbs, district change) | 321 ms at 30 s (state 2, Main3D, suburbs, district change) | 308 ms at 18 s (state 2, Main3D, suburbs, district change) | 228 ms at 112 s (state 2, Main3D, school, district change) | 215 ms at 127 s (state 2, Main3D, hospital, district change) | 213 ms at 227 s (state 2, Main3D, industrial, district change) | 211 ms at 267 s (state 2, Main3D, power_station, district change)
+[pt] DONE mode=L3 steps=30 fails=0 time=467s
+  user-data guard: 0 file(s) restored byte-identical
+# EXIT=0
