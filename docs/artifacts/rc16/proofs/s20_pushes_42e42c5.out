@@ -1,0 +1,17 @@
+# proof s20_pushes_42e42c5
+# utc 20261011T183841Z
+# head 42e42c5 (uncommitted paths: 0)
+# env none
+# cmd bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s20_pushes.sh
+local HEAD:            42e42c53fa0129692f1503da190ad7acab2662fb
+origin main:           42e42c53fa0129692f1503da190ad7acab2662fb
+origin v8.0.0-final^{}: 6b9055a0daaae1dd86055a743e66f664213e5a80
+origin v8.0.0^{}:       66bc678e4253cb90c7a6d5f2992eb6d3d03ff2a0
+commits after v8.0.0-final: 5
+42e42c5 Add the Session 20 closures and regenerate the proofs table
+212e4cb docs: final window pass, the store pack, the sweep and the handoff
+6f6d643 Fix four small P1 rows of the final window pass
+37b7383 State the tag v8.0.0-final in the resume note and the report
+5bbd1a2 Record the push of the closing commit and of the tag v8.0.0-final
+main equals HEAD on origin
+# EXIT=0

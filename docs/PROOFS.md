@@ -194,6 +194,7 @@ Every closure is one row: ID | claim | command | exit code | raw log (untrimmed,
 | S20-CTRL | No control character in any text file of the pass (the colour codes of the raw gate logs excepted). | `python s20_ctrl_scan.py .` | 0 | `docs/artifacts/rc16/proofs/s20_ctrl_scan.out` sha256 `bd1f9e06e67cae59` | `text files checked: 40, control characters: 0` | 212e4cb |
 | S20-STATIC | The static gates on the committed tree of the documents: 40 passed. | `bash tools/check.sh --static` | 0 | `docs/artifacts/rc16/proofs/s20_static_212e4cb.out` sha256 `95d34f6848fd3e84` | `Всё зелёное. Проверок пройдено: 40` | 212e4cb |
 | S20-AF5 | The citation check on the same tree: every file:line citation added since e4bb4df resolves, 0 findings. | `python tools/af5_check.py` | 0 | `docs/artifacts/rc16/proofs/s20_af5_212e4cb.out` sha256 `253ee107486f6bec` | `af5_check: 207 citation(s) in 1270 doc line(s), 0 finding(s)` | 212e4cb |
+| S20-PUSH | The commits of the pass are on origin: main equals HEAD at 42e42c5, the tags peel to 6b9055a and 66bc678. | `bash s20_pushes.sh (git ls-remote origin ...; git rev-parse HEAD)` | 0 | `docs/artifacts/rc16/proofs/s20_pushes_42e42c5.out` sha256 `0cf672f57750a8f7` | `origin main:           42e42c53fa0129692f1503da190ad7acab2662fb` ; `origin v8.0.0-final^{}: 6b9055a0daaae1dd86055a743e66f664213e5a80` ; `main equals HEAD on origin` | 42e42c5 |
 
 ## Launch ledger (rc16)
 
