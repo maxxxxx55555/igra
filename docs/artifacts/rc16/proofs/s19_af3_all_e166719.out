@@ -1,0 +1,7 @@
+# proof s19_af3_all_e166719
+# utc 20261011T172901Z
+# head e166719 (uncommitted paths: 1)
+# env none
+# cmd python tools/qa_sim/af3_frame_check.py
+af3 frames=21 fail=0
+# EXIT=0

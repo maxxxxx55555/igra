@@ -1,0 +1,7 @@
+# proof s19_af3_loop_e166719
+# utc 20261011T172811Z
+# head e166719 (uncommitted paths: 0)
+# env none
+# cmd python tools/qa_sim/af3_frame_check.py --dir docs/stills/v800_loop
+af3 frames=112 fail=0
+# EXIT=0

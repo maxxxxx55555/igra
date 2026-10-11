@@ -1,0 +1,7 @@
+# proof s19_af5_final2
+# utc 20261011T173345Z
+# head e166719 (uncommitted paths: 11)
+# env none
+# cmd python tools/af5_check.py
+af5_check: 199 citation(s) in 980 doc line(s), 0 finding(s)
+# EXIT=0
