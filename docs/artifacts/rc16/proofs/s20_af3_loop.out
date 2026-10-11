@@ -1,0 +1,44 @@
+# proof s20_af3_loop
+# utc 20261011T182512Z
+# head 6f6d643 (uncommitted paths: 14)
+# env none
+# cmd python tools/qa_sim/af3_frame_check.py --dir docs/stills/v800_loop
+FAIL s1_L2_A13_lang_ar_after_14fc1b3_20261011T085431Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/ui/tutorial_system.gd
+FAIL s1_L2_A13_lang_de_after_14fc1b3_20261011T085421Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/ui/tutorial_system.gd
+FAIL s1_L2_A13_lang_en_after_14fc1b3_20261011T085419Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/ui/tutorial_system.gd
+FAIL s1_L2_A13_lang_es_after_14fc1b3_20261011T085420Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/ui/tutorial_system.gd
+FAIL s1_L2_A13_lang_fr_after_14fc1b3_20261011T085422Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/ui/tutorial_system.gd
+FAIL s1_L2_A13_lang_it_after_14fc1b3_20261011T085423Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/ui/tutorial_system.gd
+FAIL s1_L2_A13_lang_ja_after_14fc1b3_20261011T085426Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/ui/tutorial_system.gd
+FAIL s1_L2_A13_lang_ko_after_14fc1b3_20261011T085427Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/ui/tutorial_system.gd
+FAIL s1_L2_A13_lang_pt_BR_after_14fc1b3_20261011T085424Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/ui/tutorial_system.gd
+FAIL s1_L2_A13_lang_ru_after_14fc1b3_20261011T085418Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/ui/tutorial_system.gd
+FAIL s1_L2_A13_lang_tr_after_14fc1b3_20261011T085425Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/ui/tutorial_system.gd
+FAIL s1_L2_A13_lang_zh_after_14fc1b3_20261011T085429Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/ui/tutorial_system.gd
+FAIL s1_L2_A13_lang_zh_TW_after_14fc1b3_20261011T085430Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/ui/tutorial_system.gd
+FAIL s1_L2_pause_after_languages_after_14fc1b3_20261011T085434Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/ui/tutorial_system.gd
+FAIL s1_L3_B01_menu_after_14fc1b3_20261011T085450Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/core/save_system.gd
+FAIL s1_L3_B02_continued_after_14fc1b3_20261011T085458Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/core/save_system.gd
+FAIL s1_L3_B03_hardcore_on_after_14fc1b3_20261011T085510Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/core/save_system.gd
+FAIL s1_L3_B03_play_click_after_14fc1b3_20261011T085512Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/core/save_system.gd
+FAIL s1_L3_B04_daily_card_after_14fc1b3_20261011T085459Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/core/save_system.gd
+FAIL s1_L3_B04_daily_done_after_14fc1b3_20261011T085500Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/core/save_system.gd
+FAIL s1_L3_B05_achievements_after_14fc1b3_20261011T085506Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/core/save_system.gd
+FAIL s1_L3_B05_stats_after_14fc1b3_20261011T085507Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/core/save_system.gd
+FAIL s1_L3_boss_spawn_after_14fc1b3_20261011T085955Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/core/save_system.gd
+FAIL s1_L3_hardcore_death_after_14fc1b3_20261011T090222Z.jpg: F4 2 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/core/game_manager.gd
+FAIL s2_L2_pause_after_languages_after_14fc1b3_20261011T092430Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/ui/tutorial_system.gd
+FAIL s2_L3_B02_continued_after_14fc1b3_20261011T092453Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/core/save_system.gd
+FAIL s2_L3_B04_daily_card_after_14fc1b3_20261011T092454Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/core/save_system.gd
+FAIL s2_L3_B05_achievements_after_14fc1b3_20261011T092501Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/core/save_system.gd
+FAIL s2_L3_boss_spawn_after_14fc1b3_20261011T092941Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/core/save_system.gd
+FAIL s2_L3_hardcore_death_after_14fc1b3_20261011T093145Z.jpg: F4 2 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/core/game_manager.gd
+FAIL s3_L2_pause_after_languages_after_14fc1b3_20261011T095404Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/ui/tutorial_system.gd
+FAIL s3_L3_B02_continued_after_14fc1b3_20261011T095426Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/core/save_system.gd
+FAIL s3_L3_B04_daily_card_after_14fc1b3_20261011T095427Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/core/save_system.gd
+FAIL s3_L3_B05_achievements_after_14fc1b3_20261011T095433Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/core/save_system.gd
+FAIL s3_L3_boss_spawn_after_14fc1b3_20261011T095913Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/core/save_system.gd
+FAIL s3_L3_hardcore_death_after_14fc1b3_20261011T100156Z.jpg: F4 2 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/core/game_manager.gd
+FAIL s3_L3_skill_unlocked_after_14fc1b3_20261011T095600Z.jpg: F4 1 runtime path(s) differ between 14fc1b3 and HEAD, first: scripts/core/save_system.gd
+af3 frames=112 fail=37
+# EXIT=1

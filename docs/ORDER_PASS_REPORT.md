@@ -185,6 +185,21 @@ rows: `docs/ACCEPTANCE_CHECKLIST.md` (200 rows); decisions: `docs/TZ_DECISIONS.m
 | Music | Excluded by owner (`OWNER_HANDOFF.md`) |
 | Play Console upload | Owner (credentials); `version/code` stays 1 until the first upload |
 
+## Final window pass (Session 20, 2026-10-11)
+
+**Status: four of the eleven open P1 rows fixed with an AF2 pair (CORRECTION_LOG 168, 178, 179, 180), the other seven rated with an owner action (195), the store pack and the secret sweep written; no tag moves (`v8.0.0-final` = `6b9055a`, the bundle from `e241597`, which does not hold the four fixes).** Records: `docs/RUN_STATE.md` Session 20, `docs/CORRECTION_LOG.md` 168, 178 to 180 and 194 to 197, `docs/PROOFS.md` (the S20 rows), `docs/STORE_SUBMISSION.md`. Launches: 2 of 2 (ledger rows 68 and 69); exports 0 of 0.
+
+| Item | Result | Evidence |
+|---|---|---|
+| Fixes | 20 insertions and 10 deletions in `save_system.gd`, `game_manager.gd` and `tutorial_system.gd`: a save with no player holds no position; the daily streak survives a New Game and Reset progress clears it; a Hardcore death changes the state before it wipes (the screen shows the run it ends); the tutorial hint follows a language switch | CORRECTION_LOG 168, 178, 179, 180; commit `6f6d643` |
+| AF2 (fails before, passes after) | EX1, STRK1, HCD1 and TUTL1 FAIL on the `v8.0.0-final` runtime (`DONE checks=390 fails=4`) and pass at HEAD (`DONE checks=390 fails=0`); 4 BITES, no id that was ok is not ok | `docs/artifacts/rc16/proofs/s20_pre_6f6d643.out`, `docs/artifacts/rc16/proofs/s20_all_6f6d643.out`, `docs/artifacts/rc16/proofs/s20_af2_pair.out` |
+| Regression | `check.sh --all` at HEAD: 66 of 66, `# EXIT=0`; the closeout's 113 check ids hold | `docs/artifacts/rc16/proofs/s20_all_6f6d643.out` |
+| Gate inputs that changed | three F4 scope rows (37 frames of the loop set fail F4 by design), `tools/check.sh` keeps each gate's log, the exploit group lost its EX1 note, six lines lost trailing whitespace; no threshold or count changed | CORRECTION_LOG 194; `docs/artifacts/rc16/proofs/s20_af3_default.out`, `docs/artifacts/rc16/proofs/s20_af3_loop.out` |
+| Rating of 168 to 180 | 4 closed; 169, 172, 177 P1 owner; 170, 171 P2 owner; 173, 174 latent (no screen reaches the LAN code); 175 limitation | CORRECTION_LOG 195, `docs/artifacts/rc16/proofs/s20_net_reach.out` |
+| Store pack | bundle facts read from its manifest (min 24, target 36, INTERNET and VIBRATE, `allowBackup=false`); image specs with the file to use; the policy in English and Russian; IARC and data-safety answers; four stale lines of older documents corrected | `docs/STORE_SUBMISSION.md`, `docs/artifacts/rc16/proofs/s20_aab_manifest.out`, `docs/artifacts/rc16/proofs/s20_store_assets.out` |
+| Secret sweep | one secret in the repository and its history (the router key of `opencode.json`, one commit); no cloud token, JWT, private key or signing file | CORRECTION_LOG 197, `docs/artifacts/rc16/proofs/s20_secret_scan.out` |
+| Not done | an export (the four fixes are not in the bundle), a phone run (U1, U5, U6, U10), the Console's wording | `docs/STORE_SUBMISSION.md` §9 |
+
 ## v8.0.0 release validation (Session 19, 2026-10-11)
 
 **Status: three P0 found and fixed (CORRECTION_LOG 165 to 167), and the store art the first rebuild still packed (182, found by the verifier); `v8.0.0-final` = `6b9055a`, the commit that records the verifier's re-measure (0 GAME-AFFECTING fails).** Records: `docs/RUN_STATE.md` Session 19, `docs/CORRECTION_LOG.md` 165 to 190, `docs/PROOFS.md` (the S19 rows), `docs/RELEASE_ARTIFACTS.md`. Launches: 7 of 8 (ledger rows 59 to 64 and 66), exports 2 of 2 (rows 65 and 67).

@@ -1,0 +1,80 @@
+# proof s20_net_reach
+# utc 20261011T182656Z
+# head 6f6d643 (uncommitted paths: 15)
+# env none
+# cmd python -I C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s20_net_reach.py .
+"""Session 20 (W2): can a player reach any network code of the shipped game? Read from the tracked scripts and scenes (not scripts/tools,
+scenes/tools): (1) every use of a network primitive; (2) every caller of an entry point that opens a socket, outside the multiplayer and
+net folders; (3) every caller of LANMenu.toggle and every reference to the archived lobby scene. Static reading, not a run. Prints itself first.
+usage: python -I s20_net_reach.py <repo>"""
+import pathlib
+import re
+import subprocess
+import sys
+
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+ROOT = pathlib.Path(sys.argv[1]).resolve()
+files = subprocess.run(["git", "ls-files"], cwd=ROOT, capture_output=True, text=True, encoding="utf-8").stdout.split("\n")
+shipped = [f for f in files if f.endswith((".gd", ".tscn")) and not f.startswith(("scripts/tools/", "scenes/tools/", "tests/", "tools/"))]
+HOME = ("scripts/multiplayer/", "scripts/net/")
+PRIMITIVES = re.compile(r"\b(HTTPRequest|HTTPClient|WebSocketPeer|StreamPeerTLS|OS\.shell_open|PacketPeerUDP|ENetMultiplayerPeer|TCPServer|UDPServer|UPNP|JavaScriptBridge)\b")
+ENTRY = re.compile(r"(LANNetwork|NetworkManager|LANDiscovery|MultiplayerManager)\.(host|join|start_host|start_client|create_server|create_client|join_server)\("
+                   r"|/root/(LANNetwork|NetworkManager|LANDiscovery)")
+text = {}
+for f in shipped:
+    try:
+        text[f] = (ROOT / f).read_text(encoding="utf-8", errors="replace").split("\n")
+    except OSError:
+        pass
+print("shipped scripts and scenes read: %d" % len(text))
+
+uses = {}
+for f, lines in text.items():
+    for n, ln in enumerate(lines, 1):
+        if PRIMITIVES.search(ln) and not ln.strip().startswith("#"):
+            uses.setdefault(f, []).append(n)
+outside = {f: v for f, v in uses.items() if not f.startswith(HOME)}
+print("(1) network primitives: %d files; outside scripts/multiplayer and scripts/net: %s" % (len(uses), outside or "none"))
+for f in sorted(uses):
+    print("    %s lines %s" % (f, uses[f][:8]))
+
+callers = []
+for f, lines in text.items():
+    if f.startswith(HOME):
+        continue
+    for n, ln in enumerate(lines, 1):
+        if ENTRY.search(ln) and not ln.strip().startswith("#") and f.endswith(".gd"):
+            callers.append("%s:%d %s" % (f, n, ln.strip()[:90]))
+print("(2) callers of a socket-opening entry point (or lookups of those autoloads by path) outside the two folders: %d" % len(callers))
+for c in callers:
+    print("    " + c)
+
+toggles = ["%s:%d" % (f, n) for f, lines in text.items() for n, ln in enumerate(lines, 1)
+           if re.search(r"LANMenu|lan_menu", ln) and ".toggle(" in ln]
+lobby = ["%s:%d" % (f, n) for f, lines in text.items() for n, ln in enumerate(lines, 1)
+         if re.search(r"lobby\.tscn|lobby_menu\.gd|&\"lobby\"|\"Lobby\"", ln) and f not in ("scenes/ui/lobby.tscn", "scripts/ui/lobby_menu.gd")]
+menu_refs = ["%s:%d" % (f, n) for f, lines in text.items() for n, ln in enumerate(lines, 1)
+             if re.search(r"lan_menu\.gd|name=\"LANMenu\"", ln)]
+print("(3) callers of LANMenu.toggle(): %s" % (toggles or "none"))
+print("    references to the archived lobby scene or script outside themselves: %s" % (lobby or "none"))
+print("    the LANMenu node and script references: %s" % menu_refs)
+
+--- run
+shipped scripts and scenes read: 412
+(1) network primitives: 3 files; outside scripts/multiplayer and scripts/net: none
+    scripts/multiplayer/lan_discovery.gd lines [13, 27, 35]
+    scripts/multiplayer/network_manager.gd lines [17, 19, 38, 52, 66, 67, 69]
+    scripts/net/lan_network.gd lines [10, 14, 28]
+(2) callers of a socket-opening entry point (or lookups of those autoloads by path) outside the two folders: 7
+    scripts/main_3d.gd:60 var nm := get_node_or_null("/root/NetworkManager")
+    scripts/ui/lobby_menu.gd:34 LANDiscovery.start_client()
+    scripts/ui/lobby_menu.gd:41 NetworkManager.create_server()
+    scripts/ui/lobby_menu.gd:42 LANDiscovery.start_host(player_name)
+    scripts/ui/lobby_menu.gd:58 NetworkManager.join_server(host_data.ip)
+    scripts/ui/lobby_menu.gd:77 LANDiscovery.start_client()
+    scripts/ui/lobby_menu.gd:115 LANDiscovery.start_client()
+(3) callers of LANMenu.toggle(): none
+    references to the archived lobby scene or script outside themselves: none
+    the LANMenu node and script references: ['scenes/main_3d.tscn:16', 'scenes/main_3d.tscn:105']
+# EXIT=0

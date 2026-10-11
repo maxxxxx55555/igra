@@ -1,19 +1,19 @@
 # Known issues
 
-## OPEN (2026-10-11, Session 19): findings of the v8.0.0 release validation that stay open, for the owner to rate
+## OPEN (2026-10-11, Session 19; rated in Session 20: 168, 178, 179 and 180 are closed): findings of the v8.0.0 release validation that stay open, for the owner to rate
 
-The pass fixed three P0 (CORRECTION_LOG 165 to 167) and left these. None is a softlock or a crash: the full loop (`docs/artifacts/rc16/proofs/s19_loop_14fc1b3.out`, 3 seeds, 12 processes, 427 steps, 0 failed) did not meet them as failures, and the exploit run (`docs/artifacts/rc16/proofs/s19_exploit_post_afb76e9.out`, `DONE checks=8 fails=0`) holds the guards. Each row has its mechanism, its file and line and its owner action in `docs/CORRECTION_LOG.md`.
+The pass fixed three P0 (CORRECTION_LOG 165 to 167) and left these. None is a softlock or a crash: the full loop (`docs/artifacts/rc16/proofs/s19_loop_14fc1b3.out`, 3 seeds, 12 processes, 427 steps, 0 failed) did not meet them as failures, and the exploit run (`docs/artifacts/rc16/proofs/s19_exploit_post_afb76e9.out`, `DONE checks=8 fails=0`) holds the guards. Each row has its mechanism, its file and line and its owner action in `docs/CORRECTION_LOG.md`. Session 20 (the final window pass) closed 168, 178, 179 and 180 with a fix and its AF2 pair and rated the other seven (CORRECTION_LOG 194 and 195); none of the four fixes is in `build/tls.aab`, which was built from `e241597`.
 
-- 168, a save written during a transition has the position (0, 0, 0) (the app must die in that window; Continue then spawns at the origin).
+- 168 (CLOSED in Session 20, `6f6d643`): a save written while no player is in the tree holds no position, so a load takes the district's spawn.
 - 169, a quest reward that does not fit a full pack stays unpaid until the quest's next event, and salvage on a full pack loses its components.
 - 170, the daily challenge can be claimed twice by deleting `user://tls_daily.json` (needs file access on the device).
 - 171, Export Save during a Hardcore run lets Import bring the dead run back.
 - 172, Pause > Restart reloads the scene without a load or a reset (a free heal, and the state stays PAUSED until Resume).
 - 173 and 174, the LAN calls take any peer and `InventoryManager.remove` takes before it counts (co-op only, latent).
 - 177, the rewarded-ad revive button lives on a death screen nothing loads; ads are off in this build, so no player sees it.
-- 178, the Hardcore death screen reads 0 districts and 0 documents (it reads the run after the wipe).
-- 179, a new run (New Game, New Game+, a Retry with no save) zeroes the daily streak while the day's claim stays.
-- 180, the tutorial hint keeps its old language after a language switch until the next step.
+- 178 (CLOSED in Session 20, `6f6d643`): the Hardcore death screen shows the run it ends: the state changes before the wipe.
+- 179 (CLOSED in Session 20, `6f6d643`): the daily streak belongs to the profile: a New Game keeps it, Reset progress clears it.
+- 180 (CLOSED in Session 20, `6f6d643`): the tutorial hint follows a language switch.
 - 182 (fixed) leaves one decision: the 5 images of `assets/store/endings/` stay in the bundle, planned art of the ending screens that no script loads yet.
 
 Owner: rate 168 to 180 for 1.0 or the next pass; 177 before an ad SDK key is set; for 182, wire the endings art or exclude it.

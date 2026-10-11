@@ -1,5 +1,7 @@
 # Privacy Policy — template (to host at a stable URL)
 
+> **Superseded (Session 20): host the text of `docs/STORE_SUBMISSION.md` §3 (English and Russian), which says what the build does screen by screen. This template stays as history.**
+
 Owner: CONTENT/store agent. This is a **plain fill-in template** for the human owner to host on
 a stable page and link from the store listing (Play/Steam require a live URL, not inline text).
 Facts below match the current build; keep them honest. Everything in `[square brackets]` must be

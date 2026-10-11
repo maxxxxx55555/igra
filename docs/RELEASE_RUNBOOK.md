@@ -63,9 +63,9 @@ human-readable ("1.0", then "1.0.1", …).
      Advertising or marketing" (the AppLovin plugin adds AD_ID).
 3. **Main store listing:**
    - Title, short description (≤ 80) and full description (≤ 4000) from §9.
-   - App icon: `assets/store/play_icon_512.png` (512²).
-   - Feature graphic: `assets/store/feature_graphic_1024x500.png`.
-   - Phone screenshots: `assets/store/screenshot_01.png` … `_05.png` (1280×720).
+   - App icon: `store/icon-512.png` (512²).
+   - Feature graphic: `store/feature-graphic.png`, alpha dropped (`docs/STORE_SUBMISSION.md` §2).
+   - Phone screenshots: the six frames of `docs/stills/release/`, alpha dropped (`docs/STORE_SUBMISSION.md` §2).
    - Category: **Game → Action**. Tags per `docs/store/play_store.md`. A contact email is required.
 4. **Store listing → Manage translations:** add ru, es, de, fr, it, pt-BR, tr, ja, ko, zh-CN, zh-TW
    and ar with the §9 texts.

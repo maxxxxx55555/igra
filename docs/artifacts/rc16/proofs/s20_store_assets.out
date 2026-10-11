@@ -1,0 +1,60 @@
+# proof s20_store_assets
+# utc 20261011T182337Z
+# head 6f6d643 (uncommitted paths: 8)
+# env none
+# cmd python -I /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s20_store_assets.py .
+"""Session 20 (W2): size, colour type (alpha or not) and file size of every candidate store image of the repository. Read-only; prints itself first.
+PNG colour type from the IHDR: 0 grey, 2 RGB, 3 palette, 4 grey + alpha, 6 RGBA. A palette PNG can carry transparency in a tRNS chunk."""
+import pathlib
+import struct
+import sys
+
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+ROOT = pathlib.Path(sys.argv[1])
+KIND = {0: "grey", 2: "RGB", 3: "palette", 4: "grey+alpha", 6: "RGBA"}
+globs = ["assets/store/play_icon_512.png", "store/icon-512.png", "assets/store/v2/icon_512_v2.png",
+         "store/feature-graphic.png", "assets/store/feature_graphic_1024x500.png", "assets/store/v2/feature_1024x500_v2.png",
+         "assets/store/screenshot_0*.png", "store/screenshots/*.png", "store/screenshots/*.jpg", "docs/stills/release/*.png",
+         "store/icon-adaptive/*.png"]
+for pattern in globs:
+    for p in sorted(ROOT.glob(pattern)):
+        data = p.read_bytes()
+        if data[:8] == b"\x89PNG\r\n\x1a\n":
+            w, h = struct.unpack(">II", data[16:24])
+            depth, ctype = data[24], data[25]
+            trns = b"tRNS" in data[:4096]
+            kind = "PNG %s/%d%s" % (KIND.get(ctype, ctype), depth, "+tRNS" if trns else "")
+        else:
+            kind, w, h = "other", 0, 0
+        print("%-72s %5d x %-5d %-18s %9d bytes" % (p.relative_to(ROOT).as_posix(), w, h, kind, len(data)))
+
+--- run
+assets/store/play_icon_512.png                                             512 x 512   PNG RGB/8              54101 bytes
+store/icon-512.png                                                         512 x 512   PNG RGB/8             300965 bytes
+assets/store/v2/icon_512_v2.png                                            512 x 512   PNG RGBA/8             36774 bytes
+store/feature-graphic.png                                                 1024 x 500   PNG RGBA/8            684630 bytes
+assets/store/feature_graphic_1024x500.png                                 1024 x 500   PNG RGB/8              81557 bytes
+assets/store/v2/feature_1024x500_v2.png                                   1024 x 500   PNG RGB/8             210708 bytes
+assets/store/screenshot_01.png                                            1280 x 720   PNG RGBA/8            159761 bytes
+assets/store/screenshot_02.png                                            1280 x 720   PNG RGBA/8            122392 bytes
+assets/store/screenshot_03.png                                            1280 x 720   PNG RGBA/8            104189 bytes
+assets/store/screenshot_04.png                                            1280 x 720   PNG RGBA/8            124545 bytes
+assets/store/screenshot_05.png                                            1280 x 720   PNG RGBA/8            318466 bytes
+store/screenshots/shot01_light_vs_dark_1920x1080_en.png                   1920 x 1080  PNG RGB/8            1223195 bytes
+store/screenshots/shot02_district_boundary_1920x1080_en.png               1920 x 1080  PNG RGB/8            1969585 bytes
+store/screenshots/shot05_restored_forecourt_1920x1080_en.png              1920 x 1080  PNG RGB/8            1482217 bytes
+store/screenshots/shot07_last_streetlight_1920x1080_en.png                1920 x 1080  PNG RGB/8            1767144 bytes
+store/screenshots/shot08_city_map_1920x1080_en.png                        1920 x 1080  PNG RGB/8             140549 bytes
+store/screenshots/shot_p1_touch_first_light_1920x1080_en.png              1920 x 1080  PNG RGB/8            1398039 bytes
+store/screenshots/shot_p2_touch_crouch_1920x1080_en.png                   1920 x 1080  PNG RGB/8            1302212 bytes
+store/screenshots/shot_p3_touch_interact_1920x1080_en.png                 1920 x 1080  PNG RGB/8            1218487 bytes
+docs/stills/release/01_main_menu_after_18a2a2a_20261010T224919Z.png        960 x 527   PNG RGBA/8            421519 bytes
+docs/stills/release/02_district_day_full_after_18a2a2a_20261010T224930Z.png   960 x 527   PNG RGBA/8            831720 bytes
+docs/stills/release/03_district_night_dark_after_18a2a2a_20261010T224929Z.png   960 x 527   PNG RGBA/8            806174 bytes
+docs/stills/release/04_combat_after_18a2a2a_20261010T224934Z.png           960 x 527   PNG RGBA/8            816895 bytes
+docs/stills/release/05_boss_after_18a2a2a_20261010T224936Z.png             960 x 527   PNG RGBA/8            850742 bytes
+docs/stills/release/08_shop_after_18a2a2a_20261010T224932Z.png             960 x 527   PNG RGBA/8            645609 bytes
+store/icon-adaptive/background_1080x1080.png                              1080 x 1080  PNG RGBA/8              7113 bytes
+store/icon-adaptive/foreground_1080x1080.png                              1080 x 1080  PNG RGBA/8            584297 bytes
+# EXIT=0

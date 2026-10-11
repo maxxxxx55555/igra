@@ -73,13 +73,13 @@ Ultra, target 30-60 FPS, degrading shadows/particles/LOD below 30):
   (fog/particles/shadows reduced, dynamic lights capped)
 - Recommended: a device capable of 1080p @ 60fps on the High preset
 
-## Data Safety (placeholder — confirm before submission)
+## Data Safety (placeholder — confirm before submission; the answers are in `docs/STORE_SUBMISSION.md` §5)
 - **No personal data collected.** The game is offline-first; no account
   system, no analytics SDK in the current build.
 - **No data shared with third parties.**
-- Local-network multiplayer (`scripts/net/lan_network.gd`) only talks to
-  devices on the same LAN the player explicitly connects to — no
-  telemetry leaves the device.
+- The local-network multiplayer code (`scripts/net/lan_network.gd`) is in the
+  build and no screen reaches it (`docs/STORE_SUBMISSION.md` §9); nothing
+  is sent anywhere.
 - AppLovin MAX ad SDK is integrated behind `AdService` (see
   `docs/store/HUMAN_CHECKLIST.md`) — once a real SDK key is in place,
   this section needs the AppLovin data-collection disclosure added
@@ -105,10 +105,10 @@ Full walkthrough: `docs/ANDROID_BUILD.md`. Summary for this listing:
    headless: `godot --headless --export-release "Android" build/TLS.aab`.
    Play Store requires **AAB**, not APK (`docs/release_checklist.md`
    "Build Format").
-3. Confirm `export_presets.cfg`: `min_sdk=29`, `target_sdk=34`,
-   `package/unique_name="com.tls.game"`, launcher icons and
-   `permissions/internet=true` (LAN co-op) are all present — already
-   committed in this repo.
+3. Confirm `export_presets.cfg`: `package/unique_name="com.maxsimkasky.laststreetlight"`,
+   the launcher icons and `permissions/internet=true` are present. The SDK
+   levels are Godot's defaults (min 24, target 36): the preset's `min_sdk` and
+   `target_sdk` lines are not read (`docs/STORE_SUBMISSION.md` §1).
 4. Run `bash tools/check.sh` clean before every submission build.
 5. Work through `docs/release_checklist.md` top to bottom (Data Safety
    form, IARC questionnaire, ASO assets, versionCode bump) before

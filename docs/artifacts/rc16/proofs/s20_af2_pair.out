@@ -1,0 +1,45 @@
+# proof s20_af2_pair
+# utc 20261011T182335Z
+# head 6f6d643 (uncommitted paths: 6)
+# env none
+# cmd python -I /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s20_af2_pair.py . docs/artifacts/rc16/proofs/s20_pre_6f6d643.attach.closeout_check.log docs/artifacts/rc16/proofs/s20_all_6f6d643.attach.gate_closeout_check_scene.log
+"""Session 20: the AF2 verdict of the four checks of 6f6d643, read with the parse and judge functions of tools/qa_sim/af2_both_ways.py from the
+two attached engine logs: the full default closeout with the three runtime files at v8.0.0-final (pre) and the closeout gate inside
+`check.sh --all` at HEAD (post). Also: every other check id of the closeout that was ok before and is not ok after. Prints itself first.
+usage: python -I s20_af2_pair.py <repo> <pre log> <post log>"""
+import pathlib
+import sys
+
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+root = pathlib.Path(sys.argv[1]).resolve()
+sys.path.insert(0, str(root / "tools" / "qa_sim"))
+import af2_both_ways as af2  # noqa: E402
+
+pre_text = pathlib.Path(sys.argv[2]).read_text(encoding="utf-8", errors="replace")
+post_text = pathlib.Path(sys.argv[3]).read_text(encoding="utf-8", errors="replace")
+pre, post = af2.parse(pre_text), af2.parse(post_text)
+ids = ["EX1", "STRK1", "HCD1", "TUTL1"]
+rows, bad = af2.judge(pre, post, ids)
+print("AF2 pair of the four checks (pre: runtime files of v8.0.0-final; post: HEAD 6f6d643)")
+for r in rows:
+    print("  " + r)
+for label, text in (("pre ", pre_text), ("post", post_text)):
+    done = [ln for ln in text.splitlines() if ln.startswith("[closeout] DONE")]
+    print("%s run: %s" % (label, done[-1] if done else "no DONE line"))
+regress = sorted(i for i in pre if pre[i] == "ok" and post.get(i, "missing") != "ok")
+print("check ids seen before: %d, after: %d; ok before and not ok after: %s" % (len(pre), len(post), regress or "none"))
+print("AF2 verdict=%s ids=%d bad=%d regressions=%d" % ("PASS" if bad == 0 and not regress else "FAIL", len(ids), bad, len(regress)))
+sys.exit(0 if bad == 0 and not regress else 1)
+
+--- run
+AF2 pair of the four checks (pre: runtime files of v8.0.0-final; post: HEAD 6f6d643)
+  EX1          pre=FAIL     post=ok       BITES
+  STRK1        pre=FAIL     post=ok       BITES
+  HCD1         pre=FAIL     post=ok       BITES
+  TUTL1        pre=FAIL     post=ok       BITES
+pre  run: [closeout] DONE checks=390 fails=4
+post run: [closeout] DONE checks=390 fails=0
+check ids seen before: 113, after: 113; ok before and not ok after: none
+AF2 verdict=PASS ids=4 bad=0 regressions=0
+# EXIT=0

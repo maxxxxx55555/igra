@@ -92,3 +92,12 @@ tools/autopilot_report/
 *.p12
 release.env
 docs/stills/playthrough/V_t*.jpg
+
+# Secret-shaped names (Session 20 sweep): none is tracked today, in any commit; these lines keep it so.
+*.env
+.env.*
+*.pem
+*.pfx
+*.key
+google-services.json
+local.properties

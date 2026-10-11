@@ -1,0 +1,37 @@
+# proof s20_alpha_extrema
+# utc 20261011T182338Z
+# head 6f6d643 (uncommitted paths: 9)
+# env none
+# cmd python /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s20_alpha_extrema.py .
+"""Session 20 (W2): is the alpha channel of each RGBA store image fully opaque (minimum 255)? Then dropping it (convert("RGB")) loses nothing.
+Read-only; prints itself first. usage: python -I s20_alpha_extrema.py <repo>"""
+import pathlib
+import sys
+
+from PIL import Image
+
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+root = pathlib.Path(sys.argv[1])
+paths = [root / "store/feature-graphic.png", root / "store/icon-512.png", *sorted((root / "docs/stills/release").glob("*.png"))]
+bad = 0
+for p in paths:
+    with Image.open(p) as im:
+        mode = im.mode
+        low = im.getchannel("A").getextrema()[0] if "A" in mode else None
+    print("%-70s mode=%-5s alpha_min=%s" % (p.relative_to(root).as_posix(), mode, low))
+    bad += low is not None and low < 255
+print("images with a transparent pixel: %d" % bad)
+sys.exit(1 if bad else 0)
+
+--- run
+store/feature-graphic.png                                              mode=RGBA  alpha_min=255
+store/icon-512.png                                                     mode=RGB   alpha_min=None
+docs/stills/release/01_main_menu_after_18a2a2a_20261010T224919Z.png    mode=RGBA  alpha_min=255
+docs/stills/release/02_district_day_full_after_18a2a2a_20261010T224930Z.png mode=RGBA  alpha_min=255
+docs/stills/release/03_district_night_dark_after_18a2a2a_20261010T224929Z.png mode=RGBA  alpha_min=255
+docs/stills/release/04_combat_after_18a2a2a_20261010T224934Z.png       mode=RGBA  alpha_min=255
+docs/stills/release/05_boss_after_18a2a2a_20261010T224936Z.png         mode=RGBA  alpha_min=255
+docs/stills/release/08_shop_after_18a2a2a_20261010T224932Z.png         mode=RGBA  alpha_min=255
+images with a transparent pixel: 0
+# EXIT=0

@@ -1,0 +1,7 @@
+# proof s20_af3_default
+# utc 20261011T182448Z
+# head 6f6d643 (uncommitted paths: 13)
+# env none
+# cmd python tools/qa_sim/af3_frame_check.py
+af3 frames=21 fail=0
+# EXIT=0

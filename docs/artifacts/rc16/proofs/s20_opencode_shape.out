@@ -1,0 +1,49 @@
+# proof s20_opencode_shape
+# utc 20261011T182340Z
+# head 6f6d643 (uncommitted paths: 11)
+# env none
+# cmd python -I /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s20_opencode_shape.py opencode.json
+"""Session 20 (W3): the shape of opencode.json with every credential-like value masked (length and 3-character prefix only), so the rotate
+action can name the provider and the place of the key. Never prints a secret value. Prints itself first."""
+import json
+import pathlib
+import re
+import sys
+
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+SECRET_KEY = re.compile(r"(?i)(key|token|secret|password|auth)")
+SECRET_VAL = re.compile(r"^(sk-|ghp_|AKIA|AIza|xox)[A-Za-z0-9_\-]{8,}$")
+
+
+def mask(v):
+    return "<masked len=%d prefix=%s>" % (len(v), v[:3])
+
+
+def walk(node, path="", depth=0):
+    if isinstance(node, dict):
+        for k, v in node.items():
+            walk(v, path + "/" + str(k), depth + 1)
+    elif isinstance(node, list):
+        for i, v in enumerate(node[:6]):
+            walk(v, path + "[%d]" % i, depth + 1)
+        if len(node) > 6:
+            print("%s ... %d more" % (path, len(node) - 6))
+    else:
+        text = node if isinstance(node, str) else json.dumps(node)
+        secret = isinstance(node, str) and (SECRET_VAL.match(node) or (SECRET_KEY.search(path.split("/")[-1]) and len(node) >= 16))
+        print("%s = %s" % (path, mask(node) if secret else text[:90]))
+
+
+p = pathlib.Path(sys.argv[1])
+walk(json.loads(p.read_text(encoding="utf-8")))
+
+--- run
+/$schema = https://opencode.ai/config.json
+/provider/omniroute/npm = @ai-sdk/openai-compatible
+/provider/omniroute/name = OmniRoute (local)
+/provider/omniroute/options/baseURL = http://localhost:20128/v1
+/provider/omniroute/options/apiKey = <masked len=35 prefix=sk->
+/provider/omniroute/models/auto/name = OmniRoute Auto-Routing
+/model = omniroute/auto
+# EXIT=0
