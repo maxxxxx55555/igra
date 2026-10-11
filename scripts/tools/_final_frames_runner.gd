@@ -56,149 +56,6 @@ func _menu_swept() -> void:
 	out_dir = normal_out
 	hero.modulate = kept
 
-## TLS_HALO_PROBE=1 (decision aid): the nearest lit lamp shot from six distances on the street, and the combat frame again with the lamp glow
-## hidden and shown, into TLS_SWEEP_OUT; the log lists every glow's distance from the camera. =2: 24 frames from random street spots.
-func _halo_mmi() -> MultiMeshInstance3D:
-	return get_tree().root.find_child("StreetlightHalosBatched", true, false) as MultiMeshInstance3D
-
-func _halo_distances(tag: String) -> void:
-	var halos := _halo_mmi()
-	var cam := get_viewport().get_camera_3d()
-	if halos == null or cam == null:
-		return
-	var ds: Array[String] = []
-	for i: int in halos.multimesh.instance_count:
-		var head := halos.global_transform * halos.multimesh.get_instance_transform(i).origin
-		ds.append("%.1f" % cam.global_position.distance_to(head))
-	print("[final] halo %s visible=%s strength=%s lamps=%d distances=%s" % [tag, halos.visible, (halos.material_override as ShaderMaterial).get_shader_parameter("strength"), ds.size(), ",".join(ds)])
-
-func _ring_spot(head: Vector3, d: float, canopies: Array[Vector2], k0: int = 0) -> Vector3:
-	var space := get_viewport().world_3d.direct_space_state
-	for k: int in 24:
-		var kk := (k + k0) % 24
-		var cand := head + Vector3(cos(TAU * kk / 24.0), 0.0, sin(TAU * kk / 24.0)) * d
-		var hit := space.intersect_ray(PhysicsRayQueryParameters3D.create(Vector3(cand.x, 4.0, cand.z), Vector3(cand.x, -2.0, cand.z)))
-		if not hit.is_empty() and not _sight_blocked(canopies, cand, head):
-			return hit["position"]
-	return Vector3.INF
-
-func _halo_ring_probe() -> void:
-	var halos := _halo_mmi()
-	var player := get_tree().get_first_node_in_group("player") as Node3D
-	if halos == null or player == null or OS.get_environment("TLS_HALO_PROBE") != "1":
-		return
-	var normal_out := out_dir
-	out_dir = _sweep_out
-	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(out_dir))
-	var head := Vector3.INF
-	for i: int in halos.multimesh.instance_count:
-		var h := halos.global_transform * halos.multimesh.get_instance_transform(i).origin
-		if head == Vector3.INF or h.distance_to(player.global_position) < head.distance_to(player.global_position):
-			head = h
-	var canopies := _canopies()
-	for d: float in [5.0, 8.0, 11.0, 14.0, 20.0, 30.0]:
-		var spot := _ring_spot(head, d, canopies)
-		if spot == Vector3.INF:
-			print("[final] halo ring d=%.0f no floor" % d)
-			continue
-		player.global_position = spot + Vector3(0.0, 0.5, 0.0)
-		_face(player, head)
-		await get_tree().create_timer(0.5).timeout
-		_halo_distances("ring d=%.0f" % d)
-		await _shot("halo_ring_d%02d" % int(d))
-	out_dir = normal_out
-
-func _halo_random_probe() -> void:
-	var halos := _halo_mmi()
-	var player := get_tree().get_first_node_in_group("player") as Node3D
-	if halos == null or player == null or OS.get_environment("TLS_HALO_PROBE") != "2":
-		return
-	var normal_out := out_dir
-	out_dir = _sweep_out
-	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(out_dir))
-	var heads: Array[Vector3] = []
-	for i: int in halos.multimesh.instance_count:
-		heads.append(halos.global_transform * halos.multimesh.get_instance_transform(i).origin)
-	var rng := RandomNumberGenerator.new()
-	rng.seed = 21
-	var canopies := _canopies()
-	var n := 0
-	var tries := 0
-	while n < 24 and tries < 400:
-		tries += 1
-		var spot := _ring_spot(heads[rng.randi() % heads.size()], rng.randf_range(3.0, 28.0), canopies, rng.randi() % 24)
-		if spot == Vector3.INF:
-			continue
-		player.global_position = spot + Vector3(0.0, 0.5, 0.0)
-		_face(player, heads[rng.randi() % heads.size()])
-		await get_tree().create_timer(0.35).timeout
-		print("[final] halo rnd%02d camera %s yaw %.1f" % [n, get_viewport().get_camera_3d().global_position, player.rotation_degrees.y])
-		await _shot("halo_rnd%02d" % n)
-		n += 1
-	out_dir = normal_out
-
-const DEBUG_SHADER := "shader_type spatial; render_mode unshaded, blend_add, depth_draw_never, cull_disabled, fog_disabled; varying float dist; void vertex() { MODELVIEW_MATRIX = VIEW_MATRIX * mat4(INV_VIEW_MATRIX[0], INV_VIEW_MATRIX[1], INV_VIEW_MATRIX[2], MODEL_MATRIX[3]); dist = length(MODELVIEW_MATRIX[3].xyz); } void fragment() { ALBEDO = %s; ALPHA = 1.0; }"
-
-## =3: the pose of the first square seen (camera (-22.75, 2.56, -6.78), yaw 72.9): normal, glow hidden, a smaller peak, a longer near fade.
-func _halo_pose_probe() -> void:
-	var halos := _halo_mmi()
-	var player := get_tree().get_first_node_in_group("player") as Node3D
-	if halos == null or player == null or OS.get_environment("TLS_HALO_PROBE") != "3":
-		return
-	var normal_out := out_dir
-	out_dir = _sweep_out
-	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(out_dir))
-	player.global_position = Vector3(-22.74979, 0.86, -6.780282)
-	player.rotation_degrees.y = 72.9
-	await get_tree().create_timer(0.6).timeout
-	var mat := halos.material_override as ShaderMaterial
-	print("[final] halo pose camera %s aabb %s" % [get_viewport().get_camera_3d().global_position, halos.get_aabb()])
-	for node in get_tree().root.find_children("*", "GeometryInstance3D", true, false):
-		var g := node as GeometryInstance3D
-		if g != null and g.is_visible_in_tree() and not (g is MultiMeshInstance3D) and g.global_position.distance_to(get_viewport().get_camera_3d().global_position) < 8.0:
-			print("[final] halo near %s %s mat=%s at %s" % [g.get_path(), g.get_class(), g.material_override, g.global_position])
-	await _shot("halo_pose_a_normal")
-	halos.visible = false
-	await get_tree().create_timer(0.3).timeout
-	await _shot("halo_pose_b_hidden")
-	halos.visible = true
-	mat.set_shader_parameter("peak", 0.1)
-	await get_tree().create_timer(0.3).timeout
-	await _shot("halo_pose_c_peak01")
-	mat.set_shader_parameter("peak", 0.45)
-	mat.set_shader_parameter("near_fade", 20.0)
-	await get_tree().create_timer(0.3).timeout
-	await _shot("halo_pose_d_near20")
-	mat.set_shader_parameter("near_fade", 6.0)
-	var debug := ShaderMaterial.new()
-	debug.shader = Shader.new()
-	var kept := halos.material_override
-	halos.material_override = debug
-	for variant: Array in [["e_distance", "vec3(dist / 10.0)"], ["f_uv", "vec3(UV, 0.0)"], ["g_smooth", "vec3(smoothstep(2.4, 6.0, dist))"]]:
-		debug.shader.code = DEBUG_SHADER % variant[1]
-		await get_tree().create_timer(0.4).timeout
-		await _shot("halo_pose_%s" % variant[0])
-	halos.material_override = kept
-	out_dir = normal_out
-
-func _halo_hidden_shown() -> void:
-	var halos := _halo_mmi()
-	if halos == null or OS.get_environment("TLS_HALO_PROBE") != "1":
-		return
-	var normal_out := out_dir
-	out_dir = _sweep_out
-	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(out_dir))
-	_halo_distances("combat staged")
-	halos.visible = false
-	await get_tree().create_timer(0.2).timeout
-	await _shot("04_combat_nohalo")
-	halos.visible = true
-	await get_tree().create_timer(0.2).timeout
-	await _shot("04_combat_halo_a")
-	await get_tree().create_timer(1.0).timeout
-	await _shot("04_combat_halo_b")
-	out_dir = normal_out
-
 func _swept(frame: String, hit: Node3D = null) -> void:
 	var worlds := get_tree().root.find_children("*", "WorldEnvironment", true, false)
 	if _sweep.is_empty() or worlds.is_empty():
@@ -356,9 +213,6 @@ func _run() -> void:
 	await get_tree().create_timer(1.5).timeout
 	await _shot("02_district_day_full")
 	await _swept("02_district_day_full")
-	await _halo_ring_probe()
-	await _halo_random_probe()
-	await _halo_pose_probe()
 
 	UIManager.open(&"skill_tree")
 	await get_tree().create_timer(0.6).timeout
@@ -404,7 +258,6 @@ func _run() -> void:
 	_where("04")
 	await _shot("04_combat")
 	await _swept("04_combat", monster)
-	await _halo_hidden_shown()
 
 	# Boss by the game's own finale flow (finale_director.gd): every district
 	# restored starts the final night, entering the power station spawns the

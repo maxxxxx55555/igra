@@ -36,8 +36,6 @@ var _lamp_local_positions: Array[Vector3] = []
 const _LAMP_HEAD_ENERGY: Array[float] = [0.0, 0.7, 1.6, 2.0]
 var _lamp_mat: StandardMaterial3D
 var _district_id: StringName = &""
-const LampHalos := preload("res://scripts/world/lamp_halos.gd")
-var _halos: MultiMeshInstance3D
 
 const _TEX_BRICK       := "res://assets/textures/environment/brick.png"
 const _TEX_RUSTY_METAL := "res://assets/textures/environment/rusty_metal.png"
@@ -232,8 +230,6 @@ func _build_streetlight_multimesh() -> void:
 	lamp_mmi.multimesh = lamp_mm
 	lamp_mmi.material_override = _lamp_mat
 	add_child(lamp_mmi)
-	if LampHalos.wanted():
-		_halos = LampHalos.build(self, _lamp_local_positions, _LAMP_HEAD_OFFSET, PowerGrid.get_stage(_district_id))
 
 func _on_stage_changed(id: StringName, stage: int) -> void:
 	if id == _district_id:
@@ -241,7 +237,6 @@ func _on_stage_changed(id: StringName, stage: int) -> void:
 
 func _apply_lamp_stage(stage: int) -> void:
 	_lamp_mat.emission_energy_multiplier = _LAMP_HEAD_ENERGY[clampi(stage, 0, _LAMP_HEAD_ENERGY.size() - 1)]
-	LampHalos.apply_stage(_halos, stage)
 
 func _spawn_pole_pair_legacy(center: Vector3, road: Dictionary) -> void:
 	var perp: Vector3 = _side_offset(road, 3.5)
