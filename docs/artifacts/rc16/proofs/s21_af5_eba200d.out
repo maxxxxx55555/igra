@@ -1,0 +1,7 @@
+# proof s21_af5_eba200d
+# utc 20261011T201621Z
+# head eba200d (uncommitted paths: 1)
+# env none
+# cmd python tools/af5_check.py
+af5_check: 217 citation(s) in 1366 doc line(s), 0 finding(s)
+# EXIT=0
