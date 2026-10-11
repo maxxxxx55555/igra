@@ -1,6 +1,6 @@
 # Release artifacts (C9 owner-prep)
 
-Status at 2026-10-11 (`v8.0.0`): the signed release AAB was rebuilt from `63fda65` and is verified below; the rc17, rc16 and rc15 records after it are history.
+Status at 2026-10-11 (`v8.0.0-final`): the signed release AAB was rebuilt from `16abbb0` in Session 19 and is verified below (the bundle of `63fda65` packs 31 files that are not the game, an API key among them, CORRECTION_LOG 167: do not upload it); the v8.0.0, rc17, rc16 and rc15 records after it are history.
 
 ## Done
 - **Release keystore generated** with `keytool` (PKCS12, RSA 4096, alias `tls_release`, 10000-day
@@ -18,7 +18,16 @@ Status at 2026-10-11 (`v8.0.0`): the signed release AAB was rebuilt from `63fda6
 **Back up `.signing/` outside this machine.** A lost upload key means no updates to the same listing
 unless Play App Signing is enabled (recommended: upload this as the *upload* key only).
 
-## Signed AAB (v8.0.0, rebuilt 2026-10-11)
+## Signed AAB (v8.0.0-final, rebuilt 2026-10-11, Session 19)
+
+- **Built:** `build/tls.aab`, **155,586,711 bytes (155.6 MB)**, sha256 `256c946f129091c6b7f79c38c961f935dd2d9cd31b7e06ec5d18b99273488441`, built from commit `16abbb0` with no uncommitted path (launch ledger row 65, `s19_export_16abbb0`, EXPORT run 1 of 2 of this pass), `godot --headless --path . --export-release "Android" build/tls.aab` with the `GODOT_ANDROID_KEYSTORE_RELEASE_*` variables of `.signing/release.env`, `# EXIT=0` (`docs/artifacts/rc16/proofs/s19_export_16abbb0.out`). As before, the run ended after `android\build\gradlew.bat --stop`, and the export's resave of `default_bus_layout.tres` was reverted.
+- **Against the v8.0.0 bundle** (`docs/artifacts/rc16/proofs/s19_aab_diff_16abbb0.out`): 53 entries fewer, 0 added, 10 with other bytes. The removed ones are the 31 files of CORRECTION_LOG 167 and 22 imported or exported copies (21 imported textures of the store images, the exported test scene). The changed ones are the signature files, the pack index, `project.binary`, the uid cache, the class cache (the same 75 classes in another order) and the two compiled scripts of the P0 fixes (`scripts/ui/hud_3d.gdc`, `scripts/ui/pause_menu.gdc`). `project.binary` lost one setting: the v8.0.0 bundle carried `audio/buses/default_bus_layout` as `uid://udiobuses00` (the editor's rewrite during that export), this one has the default path; the packed bus layout resource is byte-identical in both (same size and CRC).
+- **App label:** "Last Streetlight" in all 42 entries of its label resource (`docs/artifacts/rc16/proofs/s19_label_16abbb0.out`).
+- **Contents:** 2,838 entries; the base module 26,974,685 bytes compressed (78,462,232 raw, as before), the install-time asset pack 127,600,119 bytes compressed (185,997,414 raw; it was 155,283,834 and 213,749,515); no entry under `docs/`, `tools/`, `scenes/tools/` or `scripts/tools/` (`docs/artifacts/rc16/proofs/s19_aab_verify_16abbb0.out`); `release_export_check.py --aab`: 0 packed files that are not the game, PASS (`docs/artifacts/rc16/proofs/s19_aab_post_16abbb0.out`; the bundle of `63fda65` read 31, `s19_aab_pre_63fda65.out`); 0 of the 21 store images in any form (`docs/artifacts/rc16/proofs/s19_storeart_post_16abbb0.out`; 42 entries before); no ad SDK code: 1 dex file, 0 references to `Lcom/applovin/` (`docs/artifacts/rc16/proofs/s19_adsdk_16abbb0.out`); the keystore path and password occur in no log and in no entry outside `META-INF` (`docs/artifacts/rc16/proofs/s19_secretscan_16abbb0.out`, counts only).
+- **Signature:** `jar verified.` (exit 0), the signer's SHA-256 equals the upload key (`signer_match=yes`, `docs/artifacts/rc16/proofs/s19_aab_verify_16abbb0.out`).
+- **The v8.0.0 bundle of `63fda65`** (183,290,613 bytes, sha256 `58a0242a`) is kept outside the repository at `..\_BACKUPS\2026-10-11_15-38\build\tls.aab`. Do not upload it: it packs `opencode.json` with an API key (CORRECTION_LOG 167).
+
+## Signed AAB (v8.0.0, rebuilt 2026-10-11, superseded: packs 31 files that are not the game)
 
 - **Built:** `build/tls.aab`, **183,290,613 bytes (183.3 MB)**, sha256 `58a0242ac1f4a496d898f1a998bfc0588675ae854c8c75e36187b4be1fd1750f`, built from commit `63fda65` with no uncommitted path (launch ledger row 58, `export_v800_63fda65`, EXPORT run 2 of 2), the same command as below, `# EXIT=0` (`docs/artifacts/rc16/proofs/export_v800_63fda65.out`). As before, the run ended after `gradlew --stop`, and the export's resave of `default_bus_layout.tres` was reverted.
 - **App label:** "Last Streetlight" in all 42 entries of its label resource (`docs/artifacts/rc16/proofs/r5_label_after_63fda65.out`); the rc17 bundle read "TLS" (`docs/artifacts/rc16/proofs/r5_label_before_c76442b.out`, CORRECTION_LOG 151).

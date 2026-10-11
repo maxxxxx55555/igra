@@ -1,0 +1,13 @@
+# proof s19_shop_bb8fdcd
+# utc 20261011T130858Z
+# head bb8fdcd (uncommitted paths: 0)
+# env none
+# cmd bash tools/qa_sim/playthrough L0:1
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  fresh profile: 0 game file(s) removed (0 of the owner's are restored at the end)
+  mode L0 seed 1 rc=0 (log: .qa_logs/playthrough_L0_s1.log)
+[pt] PASS C0 New Game+ 0: WIN after 383 s; 11 of 11 districts FULL, deaths 2 (revived in place by the bot), nudges 17, coins earned 11049, shop true, skill true; bot fails: none  frame=s1_L0_cycle_end.jpg
+[pt] note HITCH frames=14787 over_100ms=63 in_play=39 longest: 1104 ms at 14 s (state 2, Main3D, suburbs, district change) | 983 ms at 13 s (state 2, no scene, suburbs) | 433 ms at 100 s (state 2, Main3D, school, district change) | 356 ms at 412 s (state 2, Main3D, suburbs, district change) | 334 ms at 70 s (state 2, Main3D, residential) | 289 ms at 72 s (state 2, Main3D, park, district change) | 274 ms at 221 s (state 2, Main3D, industrial, district change) | 266 ms at 115 s (state 2, Main3D, hospital, district change)
+[pt] DONE mode=L0 steps=42 fails=0 time=416s (Save and quit pressed next)
+  user-data guard: 0 file(s) restored byte-identical
+# EXIT=0
