@@ -1,13 +1,15 @@
 # proof s19_loop_metrics_14fc1b3
-# utc 20261011T122438Z
-# head a1f2d7b (uncommitted paths: 16)
+# utc 20261011T123848Z
+# head 9aae9a6 (uncommitted paths: 2)
 # env none
 # cmd python -I C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s19_loop_metrics.py
 """P1 of Session 19: the numbers of the full loop (tools/qa_sim/playthrough L) per seed, read from its engine logs
 (.qa_logs/playthrough_L<mode>_s<seed>.log). Prints its source first. Per seed: the four processes (L0 new game and New Game+ 1,
 L1 continue and New Game+ 2, L2 continue, New Game+ 3, settings and the 12 languages, L3 daily, achievements and a hardcore run),
 the time, the steps, the failed steps, the cycles, the frames over 100 ms; softlock = a STALL step or a cycle that is NO WIN without
-a hardcore death; crash = a process log without its DONE line, or an engine script error."""
+a hardcore death; crash = a process log without its DONE line, or an engine script error.
+The bot's own tallies per process (what the loop exercised): map travels, districts restored to FULL, inventory notices, flashlight batteries
+used (drops of the heartbeat's batteries= count), revives, skill clicks (SKILL steps), shop purchases (A06e steps of the process)."""
 import pathlib
 import re
 import sys
@@ -69,11 +71,27 @@ for seed in seeds:
         for x in script[:5]:
             print("    script error: %s" % x[:200])
         print("    engine errors: %d at exit (leaks), %d other%s" % (leaks, len(other), (": " + " | ".join(o[:90] for o in other[:3])) if other else ""))
+        bot = [x for x in lines if x.startswith("[bot s")]
+        travels = sum(1 for x in bot if " Travel -> " in x)
+        fulls = sum(1 for x in bot if re.search(r" \w+ FULL \(", x))
+        notices = sum(1 for x in bot if " inventory notice: " in x)
+        revives = sum(1 for x in bot if "revived after death" in x)
+        batts = [int(m.group(1)) for m in (re.search(r"batteries=(\d+) charge=", x) for x in bot) if m]
+        uses = sum(1 for a, b in zip(batts, batts[1:]) if b < a)
+        skill_steps = sum(1 for x in lines if x.startswith("[pt] PASS SKILL "))
+        shop_steps = sum(1 for x in lines if x.startswith("[pt] PASS A06e "))
+        print("    bot: %d map travels, %d districts FULL, %d inventory notices, %d batteries used, %d revives, %d skill clicks, %d shop purchases" % (
+            travels, fulls, notices, uses, revives, skill_steps, shop_steps))
+        totals["travels"] = totals.get("travels", 0) + travels
+        totals["batts"] = totals.get("batts", 0) + uses
+        totals["skills"] = totals.get("skills", 0) + skill_steps
+        totals["shops"] = totals.get("shops", 0) + shop_steps
         fails += len(failed)
         complete = complete and not failed
     totals["complete"] += complete
     print("  seed %d: %s, %d steps, %d failed, %.1f min" % (seed, "COMPLETE" if complete else "PARTIAL", steps, fails, secs / 60.0))
 print("loop seeds=%(seeds)d complete=%(complete)d softlocks=%(softlocks)d crashes=%(crashes)d failed_steps=%(fails)d frames=%(frames)d over_100ms=%(over)d in_play=%(in_play)d" % totals)
+print("exercised: map travels=%(travels)d batteries_used=%(batts)d skill_clicks=%(skills)d shop_purchases_in_run=%(shops)d" % totals)
 sys.exit(0 if totals["seeds"] and totals["complete"] == totals["seeds"] else 1)
 
 --- run
@@ -82,57 +100,70 @@ sys.exit(0 if totals["seeds"] and totals["complete"] == totals["seeds"] else 1)
     PASS C0 New Game+ 0: WIN after 357 s; 11 of 11 districts FULL, deaths 2 (revived in place by the bot), nudges 8, coins earned 11146, shop false, skill true; bot fails: none
     hitches: frames 13510, over 100 ms 85, in play 58; longest 1382 ms at 14 s (state 2, no scene, suburbs)
     engine errors: 6 at exit (leaks), 0 other
+    bot: 10 map travels, 10 districts FULL, 146 inventory notices, 1 batteries used, 2 revives, 1 skill clicks, 0 shop purchases
   L1: DONE steps=27 fails=0 time=402s
     PASS C1 New Game+ 1: WIN after 371 s; 11 of 11 districts FULL, deaths 2 (revived in place by the bot), nudges 17, coins earned 8667, shop false, skill false; bot fails: none
     hitches: frames 11014, over 100 ms 69, in play 47; longest 1446 ms at 10 s (state 2, no scene, suburbs)
     engine errors: 5 at exit (leaks), 0 other
+    bot: 10 map travels, 10 districts FULL, 121 inventory notices, 2 batteries used, 2 revives, 0 skill clicks, 0 shop purchases
   L2: DONE steps=50 fails=0 time=475s
     PASS C2 New Game+ 2: WIN after 417 s; 11 of 11 districts FULL, deaths 4 (revived in place by the bot), nudges 17, coins earned 8750, shop false, skill true; bot fails: none
     hitches: frames 12484, over 100 ms 91, in play 58; longest 1647 ms at 11 s (state 2, no scene, suburbs)
     engine errors: 6 at exit (leaks), 0 other
+    bot: 10 map travels, 10 districts FULL, 125 inventory notices, 3 batteries used, 4 revives, 1 skill clicks, 0 shop purchases
   L3: DONE steps=29 fails=0 time=463s
     PASS C3.hc the hardcore run's one death ends it after 424 s in suburbs: has_save false, the death screen offers ["Retry", "Main Menu", "Skip"]
     PASS C3 New Game+ 3 hardcore: its one death after 424 s; 0 of 11 districts FULL, deaths 1 (revived in place by the bot), nudges 26, coins earned 9021, shop false, skill false; bot fails: none
     hitches: frames 12932, over 100 ms 74, in play 51; longest 1398 ms at 10 s (state 2, no scene, suburbs)
     engine errors: 6 at exit (leaks), 0 other
+    bot: 10 map travels, 10 districts FULL, 125 inventory notices, 3 batteries used, 0 revives, 0 skill clicks, 0 shop purchases
   seed 1: COMPLETE, 141 steps, 0 failed, 28.9 min
 === seed 2
   L0: DONE steps=35 fails=0 time=401s
     PASS C0 New Game+ 0: WIN after 363 s; 11 of 11 districts FULL, deaths 2 (revived in place by the bot), nudges 14, coins earned 11141, shop false, skill true; bot fails: none
     hitches: frames 11761, over 100 ms 71, in play 50; longest 2229 ms at 15 s (state 2, no scene, suburbs)
     engine errors: 6 at exit (leaks), 0 other
+    bot: 10 map travels, 10 districts FULL, 143 inventory notices, 1 batteries used, 2 revives, 1 skill clicks, 0 shop purchases
   L1: DONE steps=29 fails=0 time=428s
     PASS C1 New Game+ 1: WIN after 394 s; 11 of 11 districts FULL, deaths 3 (revived in place by the bot), nudges 18, coins earned 8650, shop false, skill true; bot fails: none
     hitches: frames 11726, over 100 ms 73, in play 54; longest 2228 ms at 11 s (state 2, no scene, suburbs)
     engine errors: 5 at exit (leaks), 0 other
+    bot: 10 map travels, 10 districts FULL, 122 inventory notices, 2 batteries used, 3 revives, 1 skill clicks, 0 shop purchases
   L2: DONE steps=50 fails=0 time=466s
     PASS C2 New Game+ 2: WIN after 407 s; 11 of 11 districts FULL, deaths 3 (revived in place by the bot), nudges 23, coins earned 8820, shop false, skill true; bot fails: none
     hitches: frames 12571, over 100 ms 78, in play 55; longest 1985 ms at 11 s (state 2, no scene, suburbs)
     engine errors: 6 at exit (leaks), 0 other
+    bot: 10 map travels, 10 districts FULL, 123 inventory notices, 3 batteries used, 3 revives, 1 skill clicks, 0 shop purchases
   L3: DONE steps=28 fails=0 time=429s
     PASS C3.hc the hardcore run's one death ends it after 392 s in suburbs: has_save false, the death screen offers ["Retry", "Main Menu", "Skip"]
     PASS C3 New Game+ 3 hardcore: its one death after 392 s; 0 of 11 districts FULL, deaths 1 (revived in place by the bot), nudges 16, coins earned 8615, shop false, skill false; bot fails: none
     hitches: frames 12494, over 100 ms 32, in play 11; longest 1005 ms at 10 s (state 2, no scene, suburbs)
     engine errors: 6 at exit (leaks), 0 other
+    bot: 10 map travels, 10 districts FULL, 121 inventory notices, 2 batteries used, 0 revives, 0 skill clicks, 0 shop purchases
   seed 2: COMPLETE, 142 steps, 0 failed, 28.7 min
 === seed 3
   L0: DONE steps=36 fails=0 time=431s
     PASS C0 New Game+ 0: WIN after 398 s; 11 of 11 districts FULL, deaths 2 (revived in place by the bot), nudges 20, coins earned 11212, shop false, skill true; bot fails: none
     hitches: frames 17098, over 100 ms 78, in play 61; longest 865 ms at 13 s (state 2, no scene, suburbs)
     engine errors: 6 at exit (leaks), 0 other
+    bot: 10 map travels, 10 districts FULL, 148 inventory notices, 2 batteries used, 2 revives, 1 skill clicks, 0 shop purchases
   L1: DONE steps=29 fails=0 time=430s
     PASS C1 New Game+ 1: WIN after 401 s; 11 of 11 districts FULL, deaths 3 (revived in place by the bot), nudges 20, coins earned 8671, shop false, skill true; bot fails: none
     hitches: frames 12543, over 100 ms 34, in play 18; longest 938 ms at 10 s (state 2, no scene, suburbs)
     engine errors: 5 at exit (leaks), 0 other
+    bot: 10 map travels, 10 districts FULL, 123 inventory notices, 3 batteries used, 3 revives, 1 skill clicks, 0 shop purchases
   L2: DONE steps=49 fails=0 time=461s
     PASS C2 New Game+ 2: WIN after 409 s; 11 of 11 districts FULL, deaths 4 (revived in place by the bot), nudges 22, coins earned 8884, shop false, skill false; bot fails: none
     hitches: frames 13181, over 100 ms 33, in play 16; longest 999 ms at 10 s (state 2, no scene, suburbs)
     engine errors: 6 at exit (leaks), 0 other
+    bot: 10 map travels, 10 districts FULL, 127 inventory notices, 3 batteries used, 4 revives, 0 skill clicks, 0 shop purchases
   L3: DONE steps=30 fails=0 time=467s
     PASS C3.hc the hardcore run's one death ends it after 430 s in suburbs: has_save false, the death screen offers ["Retry", "Main Menu", "Skip"]
     PASS C3 New Game+ 3 hardcore: its one death after 430 s; 0 of 11 districts FULL, deaths 1 (revived in place by the bot), nudges 24, coins earned 8907, shop false, skill true; bot fails: none
     hitches: frames 13598, over 100 ms 39, in play 17; longest 937 ms at 10 s (state 2, no scene, suburbs)
     engine errors: 6 at exit (leaks), 0 other
+    bot: 10 map travels, 10 districts FULL, 126 inventory notices, 3 batteries used, 0 revives, 1 skill clicks, 0 shop purchases
   seed 3: COMPLETE, 144 steps, 0 failed, 29.8 min
 loop seeds=3 complete=3 softlocks=0 crashes=0 failed_steps=0 frames=154912 over_100ms=757 in_play=496
+exercised: map travels=120 batteries_used=28 skill_clicks=8 shop_purchases_in_run=0
 # EXIT=0
