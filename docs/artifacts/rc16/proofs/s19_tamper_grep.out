@@ -1,0 +1,91 @@
+# proof s19_tamper_grep
+# utc 20261011T083704Z
+# head 14fc1b3 (uncommitted paths: 0)
+# env none
+# cmd bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s19_tamper.sh
+#!/usr/bin/env bash
+# Session 19 anti-tamper re-read at HEAD (no engine): every profile file the shipped scripts write and whether it goes through
+# SaveSystem's signed envelope, the slot binding, the schema loaders, IntegrityGuard, the debug prints. Prints itself first.
+cat "$0"
+echo "--- run"
+shipped=$(git ls-files 'scripts/*.gd' 'components/*.gd' 'addons/*.gd' | grep -v -E '^scripts/(tools|security)/|^scripts/stress_test.gd$')
+echo "=== profile files named by the shipped scripts"
+echo "$shipped" | xargs grep -n -o -E '"user://[A-Za-z0-9_./%-]+"' | sort -t: -k3 -u
+echo "=== signed reads and writes (SaveSystem.read_signed / write_signed)"
+echo "$shipped" | xargs grep -n -E 'SaveSystem\.(read_signed|write_signed)\(' | cut -c1-160
+echo "=== the main save and its slots: the envelope and the slot id"
+grep -n -E '^func (_write_atomic|_read_validated|save_slot|load_slot)|slot_id' scripts/core/save_system.gd | cut -c1-160
+echo "=== IntegrityGuard and PlayIntegrityService autoloads"
+grep -n -E '^(IntegrityGuard|PlayIntegrityService)=' project.godot
+echo "=== print( in the shipped scripts (a line that starts with a print call)"
+echo "$shipped" | xargs grep -n -E '^\s*(print|prints|printt|print_debug|printerr)\(' | cut -c1-160
+echo "=== the export filters of the Android preset (the Session 19 additions)"
+sed -n 3p export_presets.cfg | tr ',' '\n' | grep -n -E 'opencode|missing_keys|tests|stress_test|test_zone|store/'
+--- run
+=== profile files named by the shipped scripts
+scripts/systems/achievements_manager.gd:167:"user://achievements.cfg"
+scripts/systems/flashlight_upgrade_manager.gd:55:"user://flashlight_upgrades.cfg"
+scripts/i18n/localization_manager.gd:188:"user://lang.cfg"
+scripts/core/save_system.gd:712:"user://ng_plus_data.json"
+scripts/systems/progress_tracker.gd:34:"user://photos/"
+scripts/systems/save_slot_manager.gd:4:"user://saves/"
+scripts/systems/photo_mode.gd:54:"user://screenshots"
+scripts/systems/photo_mode.gd:53:"user://screenshots/photo_%d.png"
+scripts/systems/settings_manager.gd:8:"user://settings.cfg"
+scripts/systems/captions_manager.gd:17:"user://tls_captions.json"
+scripts/systems/daily_challenge_manager.gd:23:"user://tls_daily.json"
+scripts/systems/local_leaderboard.gd:9:"user://tls_leaderboard.json"
+scripts/core/save_system.gd:3:"user://tls_savegame.save"
+scripts/core/save_system.gd:569:"user://tls_savegame_slot%d.save"
+scripts/ui/tutorial_system.gd:183:"user://tutorial.cfg"
+=== signed reads and writes (SaveSystem.read_signed / write_signed)
+scripts/systems/achievements_manager.gd:204:		var data: Variant = SaveSystem.read_signed(_pref_path)
+scripts/systems/achievements_manager.gd:217:	SaveSystem.write_signed(_pref_path, {"unlocked": _unlocked, "progress": _progress})
+scripts/systems/daily_challenge_manager.gd:190:	SaveSystem.write_signed(SAVE_PATH, {
+scripts/systems/daily_challenge_manager.gd:196:	var parsed: Variant = SaveSystem.read_signed(SAVE_PATH)
+scripts/systems/flashlight_upgrade_manager.gd:136:	SaveSystem.write_signed(_pref_path, data)
+scripts/systems/flashlight_upgrade_manager.gd:146:	var signed: Variant = SaveSystem.read_signed(_pref_path)
+scripts/systems/local_leaderboard.gd:46:	SaveSystem.write_signed(PATH, _runs)
+scripts/systems/local_leaderboard.gd:56:	var parsed: Variant = SaveSystem.read_signed(PATH)
+scripts/systems/new_game_plus.gd:212:	var signed: Variant = SaveSystem.read_signed("user://ng_plus_data.json")
+scripts/systems/new_game_plus.gd:255:	SaveSystem.write_signed(path, data)
+=== the main save and its slots: the envelope and the slot id
+185:func _write_atomic(path: String, payload: Dictionary) -> bool:
+301:func _read_validated(path: String) -> Dictionary:
+592:func save_slot(slot: int) -> bool:
+617:		"slot_id": slot,
+625:## slot_id is now part of the signed payload; a file whose slot_id doesn't
+627:func load_slot(slot: int) -> bool:
+631:	if int(data.get("slot_id", -1)) != slot:
+=== IntegrityGuard and PlayIntegrityService autoloads
+75:PlayIntegrityService="*res://scripts/systems/play_integrity_service.gd"
+76:IntegrityGuard="*res://scripts/systems/integrity_guard.gd"
+=== print( in the shipped scripts (a line that starts with a print call)
+addons/applovin_max/AppLovinMAX.gd:799:		printerr(plugin_name + " not found, make sure you marked all 'AppLovinMAX' plugins on export tab")
+scripts/core/qa_launch_guard.gd:66:				print("[qa-guard] restored the profile left by an interrupted QA run")
+scripts/core/qa_launch_guard.gd:81:		print("[qa-guard] profile restored byte-identical")
+scripts/core/qa_launch_guard.gd:87:	printerr("[qa-guard] ABORT: " + why + " - no launch runs until the profile is restored")
+=== the export filters of the Android preset (the Session 19 additions)
+9:assets/store/storyboard/*
+10:assets/store/storyboard/**
+11:assets/store/play_final/*
+12:assets/store/play_final/**
+13:assets/store/press/*
+14:assets/store/press/**
+28:opencode.json
+29:missing_keys.json
+30:tests/*
+31:tests/**
+32:scripts/stress_test.gd
+33:scenes/world/test_zone.tscn
+34:store/feature-graphic.png
+35:store/icon-512.png
+36:store/press/*
+37:store/press/**
+38:store/screens_spec/*
+39:store/screens_spec/**
+40:store/screenshots/*
+41:store/screenshots/**
+42:store/trailer/*
+43:store/trailer/**"
+# EXIT=0
