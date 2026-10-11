@@ -1438,9 +1438,12 @@ func _tween_fill(cr: ColorRect, ratio: float) -> void:
 	tween.tween_property(cr, "offset_right", target, 0.15)
 	tween.play()
 
+## The touch Pause button pauses the way Escape does (ui_manager.gd _unhandled_input); it used to open the menu over a
+## world that kept running while the player could not act.
 func _on_pause() -> void:
-	if UIManager and UIManager.has_method("toggle"):
-		UIManager.toggle(&"pause")
+	if GameManager.is_playing():
+		UIManager.open(&"pause")
+		GameManager.pause_game()
 
 func _setup_button_feedback() -> void:
 	for b in [$BottomRight/BtnAttack, $BottomRight/BtnSprint, $BottomRight/BtnStealth, $BottomRight/BtnInteract]:

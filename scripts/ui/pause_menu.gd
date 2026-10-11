@@ -7,10 +7,14 @@ func _ready() -> void:
 	if not LocalizationManager.language_changed.is_connected(_on_lang_changed):
 		LocalizationManager.language_changed.connect(_on_lang_changed)
 
+## The rebuilt menu starts transparent like the first build, so it animates in again (it stayed invisible over the paused
+## game). The old children leave the tree at once: a dying BG or Panel would rename the new ones and _animate_in would miss them.
 func _on_lang_changed(_lang: String) -> void:
-	for c in get_children():
+	for c: Node in get_children():
+		remove_child(c)
 		c.queue_free()
 	_build()
+	_animate_in()
 
 func _build() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP

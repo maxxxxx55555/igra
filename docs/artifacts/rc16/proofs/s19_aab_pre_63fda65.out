@@ -1,0 +1,43 @@
+# proof s19_aab_pre_63fda65
+# utc 20261011T081540Z
+# head 717e132 (uncommitted paths: 0)
+# env none
+# cmd python tools/qa_sim/release_export_check.py --aab build/tls.aab
+NOTE: keystore/release is empty - expected pre-release state (no signed release build cut yet), not a failure
+NOTE: keystore/release_user is empty - expected pre-release state (no signed release build cut yet), not a failure
+NOTE: keystore/release_password is empty - expected pre-release state (no signed release build cut yet), not a failure
+FAIL: tls.aab packs a file that is not the game: missing_keys.json
+FAIL: tls.aab packs a file that is not the game: opencode.json
+FAIL: tls.aab packs a file that is not the game: scenes/world/test_zone.tscn.remap
+FAIL: tls.aab packs a file that is not the game: scripts/stress_test.gd.remap
+FAIL: tls.aab packs a file that is not the game: scripts/stress_test.gdc
+FAIL: tls.aab packs a file that is not the game: store/feature-graphic.png.import
+FAIL: tls.aab packs a file that is not the game: store/icon-512.png.import
+FAIL: tls.aab packs a file that is not the game: store/press/icon_mono_512.png.import
+FAIL: tls.aab packs a file that is not the game: store/press/icon_round_512.png.import
+FAIL: tls.aab packs a file that is not the game: store/screens_spec/shotlist.json
+FAIL: tls.aab packs a file that is not the game: store/screenshots/shot01_light_vs_dark_1920x1080_en.png.import
+FAIL: tls.aab packs a file that is not the game: store/screenshots/shot02_district_boundary_1920x1080_en.png.import
+FAIL: tls.aab packs a file that is not the game: store/screenshots/shot05_restored_forecourt_1920x1080_en.png.import
+FAIL: tls.aab packs a file that is not the game: store/screenshots/shot07_last_streetlight_1920x1080_en.png.import
+FAIL: tls.aab packs a file that is not the game: store/screenshots/shot08_city_map_1920x1080_en.png.import
+FAIL: tls.aab packs a file that is not the game: store/screenshots/shot_p1_touch_first_light_1920x1080_en.png.import
+FAIL: tls.aab packs a file that is not the game: store/screenshots/shot_p2_touch_crouch_1920x1080_en.png.import
+FAIL: tls.aab packs a file that is not the game: store/screenshots/shot_p3_touch_interact_1920x1080_en.png.import
+FAIL: tls.aab packs a file that is not the game: store/trailer/hero_first_restore_1920x1080.png.import
+FAIL: tls.aab packs a file that is not the game: store/trailer/hero_grid_cascade_1920x1080.png.import
+FAIL: tls.aab packs a file that is not the game: store/trailer/hero_reactor_room_1920x1080.png.import
+FAIL: tls.aab packs a file that is not the game: store/trailer/hero_shorts_cut_1080x1920.png.import
+FAIL: tls.aab packs a file that is not the game: store/trailer/presskit_1600x900.png.import
+FAIL: tls.aab packs a file that is not the game: store/trailer/shorts_silhouette_1080x1920.png.import
+FAIL: tls.aab packs a file that is not the game: store/trailer/still_first_ending_1920x1080.png.import
+FAIL: tls.aab packs a file that is not the game: store/trailer/still_first_light_1920x1080.png.import
+FAIL: tls.aab packs a file that is not the game: store/trailer/still_grid_cascade_1920x1080.png.import
+FAIL: tls.aab packs a file that is not the game: tests/probe_all_scripts.gd.remap
+FAIL: tls.aab packs a file that is not the game: tests/probe_all_scripts.gdc
+FAIL: tls.aab packs a file that is not the game: tests/validate_i18n.gd.remap
+FAIL: tls.aab packs a file that is not the game: tests/validate_i18n.gdc
+build\tls.aab: 31 packed file(s) that are not the game
+
+FAIL
+# EXIT=1
