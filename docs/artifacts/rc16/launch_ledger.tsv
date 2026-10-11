@@ -78,3 +78,4 @@ n	utc	head	id	exit	command
 77	20261011T194307Z	fd379fa	s21_halorandom_fd379fa	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 900
 78	20261011T194518Z	6b0d1e7	s21_halopose_6b0d1e7	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 900
 79	20261011T194758Z	5e59837	s21_halodebug_5e59837	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 900
+80	20261011T195253Z	2e018d3	s21_final_2e018d3	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 900
