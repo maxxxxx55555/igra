@@ -384,6 +384,7 @@ else
       local out
       out=$(timeout "$t" "$GODOT" --headless --path . "$scene" 2>&1)
       local rc=$?
+      mkdir -p .qa_logs; printf '%s\n' "$out" > ".qa_logs/gate_$(basename "${scene%.tscn}").log"
       if [[ $rc -eq 0 ]]; then ok "$name"
       elif [[ $rc -eq 3 ]]; then echo "  ${DIM}пропуск${OFF} $name (нужен --windowed, не OK/FAIL)"
       elif [[ $rc -eq 124 ]]; then bad "$name (таймаут ${t}s)"; echo "$out" | tail -15 | sed 's/^/         /'

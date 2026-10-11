@@ -98,6 +98,8 @@ var _pending_player_pos: Vector3 = Vector3.INF
 var _autosave_timer: float = AUTOSAVE_INTERVAL
 var _quest_data: Dictionary = {}
 var _photos: Array = []
+## The streak belongs to the profile like the day's claim in tls_daily.json: reset_all() (New Game, New Game+, a Retry with no
+## save) keeps it, wipe_all_saves() (Reset progress, a Hardcore death) clears it. It read "Streak: 0" over "Completed!".
 var _daily_streak: int = 0
 var _last_daily_time: int = 0
 ## P1 (FINAL INTEGRATION wave): "seen the onboarding overlay" - deliberately
@@ -422,8 +424,6 @@ func reset_all() -> void:
 	_quest_data = {}
 	QuestManager.reset()
 	_photos = []
-	_daily_streak = 0
-	_last_daily_time = 0
 	Endings.reset()
 	# TRUTH WAVE P0.2: эти двое сохранялись через SaveSystem (см. _save()/
 	# load_all()), но reset_all() их не трогал — "новая игра" стартовала
@@ -563,7 +563,8 @@ func _read_player_pos() -> Array:
 	var p := get_tree().get_first_node_in_group("player")
 	if is_instance_valid(p):
 		return [p.global_position.x, p.global_position.y, p.global_position.z]
-	return [0.0, 0.0, 0.0]
+	# No player in the tree (New Game and Continue set PLAYING before the world is built): no position, a load takes the spawn.
+	return []
 
 func _get_slot_path(slot: int) -> String:
 	return "user://tls_savegame_slot%d.save" % slot
@@ -701,6 +702,8 @@ func wipe_all_saves() -> void:
 	for i in range(1, MAX_SLOTS + 1):
 		delete_slot(i)
 	reset_all()
+	_daily_streak = 0
+	_last_daily_time = 0
 	# BREAK_REPORT B5: NewGamePlus owns its own save file entirely outside
 	# SaveSystem's scope (unlike reset_all() above, which deliberately does
 	# NOT touch it - see that function's own comment, activate-then-Play is

@@ -110,8 +110,9 @@ func _ready() -> void:
 	# Static audit 2026-09-08: "Skip" text on this permanent overlay was
 	# set once and never retranslated.
 	LocalizationManager.language_changed.connect(func(_l: String) -> void:
-		_skip_btn.text = LocalizationManager.t("UI_SKIP"))
-	
+		_skip_btn.text = LocalizationManager.t("UI_SKIP")
+		_set_hint_text())
+
 	EventBus.game_started.connect(_on_game_started)
 	EventBus.district_stage_changed.connect(_on_district_stage_changed)
 	InputService.attack_requested.connect(_on_attack)
@@ -162,7 +163,7 @@ func _build_ui() -> void:
 	_skip_btn.size_flags_horizontal = Control.SIZE_SHRINK_END
 	_skip_btn.pressed.connect(_skip_tutorial)
 	box.add_child(_skip_btn)
-	
+
 	add_child(_hint_panel)
 
 func _make_stylebox() -> StyleBoxFlat:
@@ -200,17 +201,23 @@ func _on_game_started() -> void:
 	_current_step = 0
 	_show_step()
 
+## Set when a step shows and again on a language switch: the hint kept the old language until the next step.
+func _set_hint_text() -> void:
+	var lbl := _hint_panel.find_child("HintText", true, false) as Label
+	if lbl and _current_step < STEPS.size():
+		lbl.text = tr(STEPS[_current_step]["text_key"])
+
 func _show_step() -> void:
 	if _current_step >= STEPS.size():
 		_complete_tutorial()
 		return
-	
+
 	var step = STEPS[_current_step]
 	if step["id"] in _completed_steps:
 		_current_step += 1
 		_show_step()
 		return
-	
+
 	# the light starts on ("Turn on your flashlight" would contradict the screen): this step is only for a light that is off
 	var player := get_tree().get_first_node_in_group("player")
 	if step["id"] == "flashlight" and player != null and bool(player.get("flashlight_enabled")):
@@ -218,13 +225,11 @@ func _show_step() -> void:
 		_current_step += 1
 		_show_step()
 		return
-	var lbl = _hint_panel.find_child("HintText", true, false) as Label
-	if lbl:
-		lbl.text = tr(step["text_key"])
-	
+	_set_hint_text()
+
 	_hint_panel.visible = true
 	_waiting_for_action = step["trigger"] != "auto"
-	
+
 	if step["trigger"] == "auto":
 		_step_timer = step["duration"]
 	elif step["trigger"] == "area":

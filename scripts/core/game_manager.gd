@@ -176,13 +176,15 @@ func trigger_death() -> void:
 	# GDD §12.4: death resolves the Dark / Survivor ending (was never
 	# evaluated on death before — only game_won reached EndingsManager).
 	EndingsManager.evaluate_death_ending()
-	# GDD.md:148 (G17): Hardcore - 1 life, death deletes the save. Evaluated
-	# after the ending above so a Hardcore death still resolves an ending
-	# on this run before the profile is wiped for the next one.
-	if run_hardcore:
-		SaveSystem.wipe_all_saves()
 	_change_state(GameState.DEAD)
 	get_tree().paused = false
+	# GDD.md:148 (G17): Hardcore - 1 life, death deletes the save. Evaluated
+	# after the ending above so a Hardcore death still resolves an ending
+	# on this run before the profile is wiped for the next one, and after
+	# the state change: the death screen reads the run's districts and
+	# documents as it opens, and the wipe resets them (0 of 11 after a boss run).
+	if run_hardcore:
+		SaveSystem.wipe_all_saves()
 	# game_over здесь НЕ переизлучаем: этот сигнал шлёт сам игрок, когда у него
 	# кончилось здоровье, и именно он нас сюда и привёл. Повторный emit гонял бы
 	# сигнал по кругу через _on_player_game_over.

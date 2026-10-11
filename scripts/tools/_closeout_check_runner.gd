@@ -14,6 +14,7 @@ const Rc16Audio := preload("res://scripts/tools/rc16/audio_checks.gd")
 const Rc16Beauty := preload("res://scripts/tools/rc16/beauty_checks.gd")
 const Rc16Finish := preload("res://scripts/tools/rc16/finish_checks.gd")
 const Rc19Exploit := preload("res://scripts/tools/rc16/exploit_checks.gd")
+const Rc20Window := preload("res://scripts/tools/rc16/window_checks.gd")
 
 var _checked: int = 0
 var _fails: int = 0
@@ -59,6 +60,10 @@ func _run() -> void:
 		return
 	if OS.get_environment("CLOSEOUT_ONLY") == "exploit":
 		await Rc19Exploit.run(self)
+		_finish()
+		return
+	if OS.get_environment("CLOSEOUT_ONLY") == "s20":
+		await Rc20Window.run(self)
 		_finish()
 		return
 	if OS.get_environment("CLOSEOUT_ONLY") == "rtl":
@@ -150,6 +155,7 @@ func _rc16_checks() -> void:
 	await Rc16Beauty.run(self)
 	await Rc16Finish.run(self)
 	await Rc19Exploit.run(self)
+	await Rc20Window.run(self)
 
 ## A monster standing still in the far corner of the world: its collider answers rays, its AI never runs
 ## (a disabled process mode would also take the collider out of the physics space).
