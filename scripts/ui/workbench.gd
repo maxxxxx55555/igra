@@ -396,10 +396,8 @@ func _do_salvage() -> void:
 			var item_id = slot["item_id"]
 			for r in RECIPES:
 				if r["result"] == String(item_id):
-					for comp in r["components"]:
-						var half := maxi(1, comp[1] / 2)
-						InventoryManager.try_add(comp[0], half, false)
-					InventoryManager.remove(item_id, 1)
+					if not Logic.salvage(r):
+						return
 					if EventBus and EventBus.has_signal("inventory_notice"):
 						var key := "ITEM_" + String(item_id).to_upper()
 						EventBus.inventory_notice.emit(tr("WORKBENCH_SALVAGED") % tr(key))

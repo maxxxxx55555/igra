@@ -25,6 +25,7 @@ func _ready() -> void:
 	EventBus.interaction_done.connect(_on_interaction_done)
 	EventBus.zone_reached.connect(_on_zone_reached)
 	EventBus.secret_found.connect(_on_secret_found)
+	EventBus.inventory_changed.connect(_on_inventory_changed)
 
 func _init_quests() -> void:
 	var quest_data := [
@@ -122,12 +123,10 @@ func _tick(q: Dictionary, n: int) -> void:
 ## atomicity fix as B9) before touching any state; if any won't fit, leave
 ## the quest open and tell the player why, instead of completing it short.
 func _complete(q: Dictionary) -> void:
+	if not _reward_fits(q):
+		EventBus.inventory_notice.emit(LocalizationManager.t("INV_NO_SLOTS"))
+		return
 	var inv := get_tree().root.get_node_or_null("/root/InventoryManager")
-	if inv and inv.has_method("can_add"):
-		for ri in q.reward_items:
-			if not inv.can_add(StringName(ri[0]), int(ri[1])):
-				EventBus.inventory_notice.emit(LocalizationManager.t("INV_NO_SLOTS"))
-				return
 	q.done = true
 	_completed_count += 1
 	# Раньше награда уходила в /root/CoinManager — такого автолоада нет,
@@ -143,6 +142,25 @@ func _complete(q: Dictionary) -> void:
 	var gm := get_tree().root.get_node_or_null("/root/GameManager")
 	if gm and gm.has_method("auto_save"):
 		gm.auto_save()
+
+func _reward_fits(q: Dictionary) -> bool:
+	var inv := get_tree().root.get_node_or_null("/root/InventoryManager")
+	if inv == null or not inv.has_method("can_add"):
+		return true
+	for ri in q.reward_items:
+		if not inv.can_add(StringName(ri[0]), int(ri[1])):
+			return false
+	return true
+
+## A quest whose reward did not fit waits open at its target. Its event may never come again (a REPAIR quest's fires once per
+## district), so it pays when the pack has room, not when the event repeats. Only in play: a load fills the pack first.
+func _on_inventory_changed() -> void:
+	if not GameManager.is_playing():
+		return
+	for qid in quests:
+		var q = quests[qid]
+		if not q.done and q.progress >= q.target_count and _reward_fits(q):
+			_complete(q)
 
 func serialize() -> Dictionary:
 	var out := {}

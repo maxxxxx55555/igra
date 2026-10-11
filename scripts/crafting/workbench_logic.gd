@@ -52,6 +52,23 @@ static func craft(recipe: Dictionary, qty: int = 1) -> bool:
 		InventoryManager.try_add(StringName(comp[0]), int(comp[1]) * qty, false)
 	return false
 
+## Salvage spends one item for half of each component (at least one). The parts go in first and the item leaves last: a pack with
+## no room for a part keeps the item and the parts already given go back, so nothing is lost (it used to ignore the refusals).
+static func salvage(recipe: Dictionary) -> bool:
+	var item := StringName(recipe["result"])
+	if not InventoryManager.has(item, 1):
+		return false
+	var given: Array = []
+	for comp in recipe["components"]:
+		var part := StringName(comp[0])
+		var n: int = maxi(1, int(comp[1]) / 2)
+		if not InventoryManager.try_add(part, n, false):
+			for g in given:
+				InventoryManager.remove(g[0], g[1])
+			return false
+		given.append([part, n])
+	return InventoryManager.remove(item, 1)
+
 static func find(id: String) -> Dictionary:
 	for recipe in RECIPES:
 		if recipe["id"] == id:
