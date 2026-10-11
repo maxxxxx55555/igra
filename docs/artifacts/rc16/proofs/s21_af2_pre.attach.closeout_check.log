@@ -1,0 +1,32 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+[closeout] ok   the player spawned
+ERROR: Attempt to open script 'res://scripts/world/lamp_halos.gd' resulted in error 'File not found'.
+   at: load_source_code (modules/gdscript/gdscript.cpp:1139)
+   GDScript backtrace (most recent call first):
+       [0] _lamp_halos_follow_the_stage (res://scripts/tools/rc16/ship_checks.gd:24)
+       [1] run (res://scripts/tools/rc16/ship_checks.gd:14)
+       [2] _run (res://scripts/tools/_closeout_check_runner.gd:71)
+ERROR: Failed loading resource: res://scripts/world/lamp_halos.gd.
+   at: _load (core/io/resource_loader.cpp:317)
+   GDScript backtrace (most recent call first):
+       [0] _lamp_halos_follow_the_stage (res://scripts/tools/rc16/ship_checks.gd:24)
+       [1] run (res://scripts/tools/rc16/ship_checks.gd:14)
+       [2] _run (res://scripts/tools/_closeout_check_runner.gd:71)
+[closeout] FAIL HALO1 the spawn district has a lamp glow (scripts/world/lamp_halos.gd loads false, StreetlightHalosBatched found false)
+[closeout] FAIL RMV1 remove(5) of 3 metal takes nothing and answers false (answered false, 0 metal left at 1.5 of 1.5 kg); remove(3) takes them (false)
+[closeout] ok   guard QST2 a pending quest does not pay while the game is not playing (done false)
+[closeout] FAIL QST1 a quest that did not fit pays when the pack has room (waited true; then done false, coins 0 of 150, blueprint 0)
+[closeout] FAIL SLV1 salvaging in a full pack keeps the item and gives nothing (enhanced battery 0 of 1, parts 0 of 0)
+[closeout] FAIL RST1 Restart goes back to the last save and leaves the game playing (answered false, state 3, tree paused true, coins 1200 of 700, 1200 before)
+[closeout] FAIL RST1b the pause menu's Restart button goes through GameManager.restart_from_save (source of scripts/ui/pause_menu.gd)
+[closeout] DONE checks=8 fails=6
+ERROR: 4 RID allocations of type 'PN13RendererDummy14TextureStorage12DummyTextureE' were leaked at exit.
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 58 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 10 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

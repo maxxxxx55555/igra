@@ -1,0 +1,16 @@
+# proof af2_pre
+# utc 20261011T192617Z
+# head 586f904 (uncommitted paths: 12)
+# env CLOSEOUT_ONLY=s21 
+# cmd bash tools/qa_sim/closeout_check 300
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL HALO1 the spawn district has a lamp glow (scripts/world/lamp_halos.gd loads false, StreetlightHalosBatched found false)
+[closeout] FAIL RMV1 remove(5) of 3 metal takes nothing and answers false (answered false, 0 metal left at 1.5 of 1.5 kg); remove(3) takes them (false)
+[closeout] FAIL QST1 a quest that did not fit pays when the pack has room (waited true; then done false, coins 0 of 150, blueprint 0)
+[closeout] FAIL SLV1 salvaging in a full pack keeps the item and gives nothing (enhanced battery 0 of 1, parts 0 of 0)
+[closeout] FAIL RST1 Restart goes back to the last save and leaves the game playing (answered false, state 3, tree paused true, coins 1200 of 700, 1200 before)
+[closeout] FAIL RST1b the pause menu's Restart button goes through GameManager.restart_from_save (source of scripts/ui/pause_menu.gd)
+[closeout] DONE checks=8 fails=6
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+# EXIT=1

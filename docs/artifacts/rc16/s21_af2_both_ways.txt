@@ -1,0 +1,8 @@
+AF2 both ways: base a83d99b, HEAD 586f904, group s21
+HALO1        pre=FAIL     post=ok       BITES
+QST1         pre=FAIL     post=ok       BITES
+RMV1         pre=FAIL     post=ok       BITES
+RST1         pre=FAIL     post=ok       BITES
+SLV1         pre=FAIL     post=ok       BITES
+post run: [closeout] DONE checks=8 fails=0
+AF2 verdict=PASS ids=5 bad=0

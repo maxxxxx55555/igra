@@ -70,3 +70,5 @@ n	utc	head	id	exit	command
 69	20261011T181213Z	6f6d643	s20_all_6f6d643	0	bash tools/check.sh --all
 70	20261011T191605Z	cdf2035	s21_sweep_cdf2035	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 900
 71	20261011T192315Z	2d502ee	s21_b1_2d502ee	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 900
+72	20261011T192617Z	586f904	s21_af2_pre	1	bash tools/qa_sim/closeout_check 300
+73	20261011T192629Z	586f904	s21_af2_post	0	bash tools/qa_sim/closeout_check 300
