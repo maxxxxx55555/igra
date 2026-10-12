@@ -1,4 +1,4 @@
-# Play Store screenshots — THE LAST STREETLIGHT (8 EN, 1920×1080)
+# Play Store screenshots — LAST STREETLIGHT (8 EN, 1920×1080)
 
 Owner: CONTENT+ASSETS agent (visual pass). Eight upload-ready Play Console screenshots,
 1920×1080, 24-bit PNG (each ≤ 2.1 MB), composed per `store/screenshot-plan-detailed.md`.

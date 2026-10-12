@@ -1,4 +1,4 @@
-# Trailer / viral-shorts kit — THE LAST STREETLIGHT
+# Trailer / viral-shorts kit — LAST STREETLIGHT
 
 Owner: CONTENT+ASSETS+STORE agent. All art generated in-session 2026-09-10
 (Arena image generation, text-to-image, palette-locked per `docs/STYLE_GUIDE.md`

@@ -1,4 +1,4 @@
-# Review-response playbook — THE LAST STREETLIGHT
+# Review-response playbook — LAST STREETLIGHT
 
 Ready-to-paste replies for Google Play / App Store reviews. Two languages
 (EN + RU — the store-listing languages). Keep replies short, name the

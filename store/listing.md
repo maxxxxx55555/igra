@@ -1,4 +1,4 @@
-# Play Store listing kit — THE LAST STREETLIGHT
+# Play Store listing kit — LAST STREETLIGHT
 
 Play-Store-ready listing text. English and Russian (the game's two store-listing languages;
 in-game RU title is **ПОСЛЕДНИЙ ФОНАРЬ** per `data/i18n/ru.json` `menu_title`). Source of truth

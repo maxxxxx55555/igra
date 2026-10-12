@@ -357,6 +357,11 @@ if "$PY" tools/qa_sim/doc_ctrl_check.py --demo >/dev/null 2>&1 && "$PY" tools/qa
 else
   bad "doc_ctrl_check (см. 'python tools/qa_sim/doc_ctrl_check.py')"
 fi
+if "$PY" tools/qa_sim/title_check.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/title_check.py >/dev/null 2>&1; then
+  ok "title_check (the game is Last Streetlight: no capital 'The' before the name in the locales, scenes, scripts, presets or store kit)"
+else
+  bad "title_check (см. 'python tools/qa_sim/title_check.py')"
+fi
 
 # ─────────────────────────── проверки в движке ───────────────────────────
 if [[ $STATIC_ONLY -eq 1 ]]; then

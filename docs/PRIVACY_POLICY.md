@@ -1,4 +1,4 @@
-# THE LAST STREETLIGHT — Privacy Policy (draft)
+# LAST STREETLIGHT — Privacy Policy (draft)
 
 This is the policy text for the CURRENT build, drafted from
 `docs/RELEASE_FINAL.md` §7. It is not yet hosted anywhere — Play Console

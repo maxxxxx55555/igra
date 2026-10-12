@@ -1,4 +1,4 @@
-# Press kit — THE LAST STREETLIGHT
+# Press kit — LAST STREETLIGHT
 
 Owner: CONTENT+ASSETS+STORE agent. Send this file (or its sections) with every
 review code. Spoiler ceiling: **Act I only** (districts 1–3 topic guidance);
@@ -6,7 +6,7 @@ the half-lit-city ending still is cleared, ending text/Architect identity never 
 
 ## Fact sheet
 
-- **Title:** The Last Streetlight / Последний фонарь
+- **Title:** Last Streetlight / Последний фонарь
 - **Tagline:** "Restore the light. Every streetlight is life." / «Верни свет. Каждый фонарь — жизнь.»
 - **Genre:** Stealth-horror FPS, single-player, offline-first
 - **Hook:** 11 connected districts, one continuous blackout city — every street
@@ -79,13 +79,13 @@ reviewers don't self-impose a delay that doesn't exist.
 ## Contact template (fill before sending)
 
 ```
-Subject: Review copy — THE LAST STREETLIGHT (stealth-horror FPS)
+Subject: Review copy — LAST STREETLIGHT (stealth-horror FPS)
 
 Hi <name>,
 
 <One line on why them: e.g. "loved your <outlet> piece on <game>.">
 
-THE LAST STREETLIGHT is a stealth-horror FPS about bringing the light back
+LAST STREETLIGHT is a stealth-horror FPS about bringing the light back
 to a dead city: 11 connected districts, zero loading screens, and every
 street you save stays lit. Tagline: "Restore the light. Every streetlight
 is life."

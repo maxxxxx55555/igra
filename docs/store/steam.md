@@ -1,4 +1,4 @@
-# Steam store listing — THE LAST STREETLIGHT
+# Steam store listing — LAST STREETLIGHT
 
 Desktop is the **optional** platform per `docs/GDD.md` §1 (Android is primary,
 canon FPS camera). This page assumes a Windows/Linux desktop export of the

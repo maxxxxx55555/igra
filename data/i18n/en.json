@@ -1098,7 +1098,7 @@
   "DAILY_COMPLETED_LABEL": "Completed!",
   "ACH_DISTRICT_FULL_DESC": "Fully restore this district.",
   "BTN_SHARE": "Share",
-  "SHARE_TEXT": "THE LAST STREETLIGHT — %s ending, %d/%d districts restored. Restore the light. Every streetlight is life.",
+  "SHARE_TEXT": "LAST STREETLIGHT — %s ending, %d/%d districts restored. Restore the light. Every streetlight is life.",
   "SHARE_COPIED": "Copied to clipboard!",
   "Share Progress": "Share Progress",
   "Export Save": "Export Save",

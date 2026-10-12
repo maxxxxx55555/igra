@@ -49,7 +49,7 @@ human-readable ("1.0", then "1.0.1", …).
 
 ## 3. Play Console, in order
 
-1. **Create app:** name *The Last Streetlight*, default language English (United States), **Game**,
+1. **Create app:** name *Last Streetlight*, default language English (United States), **Game**,
    **Free**. Accept the declarations.
 2. **Dashboard → Set up your app:**
    - **Privacy policy:** the URL from §6.
@@ -162,7 +162,7 @@ advertising ID.
 
 **Titles (≤ 30).** Use the game's own localized title (`menu_title`), or the English brand
 everywhere if you prefer one global name:
-- en: The Last Streetlight
+- en: Last Streetlight
 - ru: Последний фонарь
 - es: La última farola
 - de: Die letzte Laterne

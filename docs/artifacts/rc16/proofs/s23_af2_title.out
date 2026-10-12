@@ -1,0 +1,15 @@
+# proof s23_af2_title
+# utc 20261012T155221Z
+# head fba6b90 (uncommitted paths: 28)
+# env none
+# cmd bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/5fa8d500-393b-43b7-95de-04d09fcc9e42/scratchpad/af2_title.sh C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/5fa8d500-393b-43b7-95de-04d09fcc9e42/scratchpad
+== pre-fix tree (fba6b90 files, the new gate)
+store/review-responses.md:1
+store/screenshots/README.md:1
+store/trailer/README.md:1
+title_check: 18 hit(s) in 671 file(s)
+pre exit=1
+== fixed tree (HEAD working tree)
+title_check: 0 hit(s) in 671 file(s)
+post exit=0
+# EXIT=0

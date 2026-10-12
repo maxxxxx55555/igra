@@ -1098,7 +1098,7 @@
   "DAILY_COMPLETED_LABEL": "تم الإنجاز!",
   "ACH_DISTRICT_FULL_DESC": "استعد هذا الحي بالكامل.",
   "BTN_SHARE": "مشاركة",
-  "SHARE_TEXT": "آخر مصباح شارع — نهاية «%s»، تم استعادة %d/%d أحياء. أعد النور. كل مصباح شارع حياة.",
+  "SHARE_TEXT": "LAST STREETLIGHT — نهاية «%s»، تم استعادة %d/%d أحياء. أعد النور. كل مصباح شارع حياة.",
   "SHARE_COPIED": "تم النسخ إلى الحافظة!",
   "Share Progress": "مشاركة التقدم",
   "Export Save": "تصدير الحفظ",
