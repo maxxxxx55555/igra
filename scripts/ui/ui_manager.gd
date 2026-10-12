@@ -298,7 +298,7 @@ func _in_menu_scene() -> bool:
 
 func _set_hud(visible: bool) -> void:
 	EventBus.hud_visibility_changed.emit(visible)
-## One map in play: the radar of the HUD. The city minimap is a setting, off by default (docs/HUD_PLAN.md row 7); the full map is on the M key.
+## One map in play: the radar of the HUD. The city minimap is a setting, off by default (docs/HUD_PLAN.md row 7); the full map has its own key (city_map_toggle).
 func _sync_minimap() -> void:
 	if is_instance_valid(_minimap):
 		var settings := get_node_or_null("/root/SettingsManager")  # loaded after this autoload: absent on the first call, from _ready

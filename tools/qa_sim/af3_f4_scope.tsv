@@ -14,3 +14,6 @@ scripts/core/save_system.gd	b62af0a8bb73	caa9cfeca4f6	*_L3_*
 scripts/core/game_manager.gd	9132b79b4a8f	2099c50f3503	*hardcore_death*
 scripts/ui/tutorial_system.gd	91c6a30f4f57	8f415eed70c2	*lang*
 scripts/core/quest_manager.gd	7c0a52899fc3	5a899fd0629f	*quest_payout*
+scripts/ui/virtual_joystick.gd	3cc8509a5ca8	853f061606bb	*calibration_dialog*
+scripts/ui/hud_3d.gd	9f0c1cd2729a	5c7cb4ef3df0	*button_size*
+scripts/ui/ui_manager.gd	a563dc283ace	3d052da8712b	*comment_only*

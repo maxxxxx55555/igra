@@ -8,7 +8,7 @@ const BAR_ROW_TOP: float = 24.0
 const _PIPS: int = 8
 const _ROWS: int = 5
 ## The crosshair and the ammo counter fade this long after the last shot, hit or aim; the touch controls rest at this alpha (the joystick
-## ring in virtual_joystick.gd rests at the same one) and are full while pressed.
+## ring in virtual_joystick.gd rests at the same one) and wake to full on a press.
 const _COMBAT_HOLD_SEC: float = 5.0
 const _TOUCH_REST: float = 0.55
 const _FADE := preload("res://scripts/ui/hud_fade.gd")
@@ -1606,7 +1606,7 @@ func _add_side_buttons(isv: Node) -> void:
 		b.focus_mode = Control.FOCUS_NONE
 		b.add_theme_font_size_override("font_size", 22)
 		b.button_down.connect(cb)
-		add_child(b)
+		$BottomRight.add_child(b)  # in the cluster, so Button Size grows them with it
 		return b
 	var jump := mk.call("BtnJump", "↑", func() -> void: isv.request_jump()) as Button
 	anchored.call(jump, 48.0, 232.0)
@@ -1622,12 +1622,12 @@ func _add_side_buttons(isv: Node) -> void:
 	wheel.button_up.connect(func() -> void: if _quick_wheel: _quick_wheel.close(true))
 	_rest_touch_controls()
 
-## The touch controls rest see-through and are full while pressed; the joystick ring does the same from virtual_joystick.gd (docs/HUD_PLAN.md
-## rows 18 and 23).
+## The touch controls rest see-through and wake to full for 0.4 s on a press; the joystick ring wakes from virtual_joystick.gd and stays full
+## under the thumb (docs/HUD_PLAN.md rows 18 and 23).
 func _rest_touch_controls() -> void:
 	var buttons: Array = []
-	for path: String in ["BottomRight/BtnAttack", "BottomRight/BtnSprint", "BottomRight/BtnStealth", "BottomRight/BtnInteract", "BtnJump", "BtnFlash", "BtnStrobe", "BtnWheel"]:
-		var button := get_node_or_null(path) as Button
+	for button_name: String in ["BtnAttack", "BtnSprint", "BtnStealth", "BtnInteract", "BtnJump", "BtnFlash", "BtnStrobe", "BtnWheel"]:
+		var button := get_node_or_null("BottomRight/" + button_name) as Button
 		if button == null:
 			continue
 		buttons.append(button)
@@ -1831,7 +1831,7 @@ func _add_map_button() -> void:
 	btn.add_theme_color_override("font_color", Color(0.788, 0.635, 0.290))
 	btn.add_theme_font_size_override("font_size", 16)
 	btn.text = LocalizationManager.t("MAP_TITLE")
-	btn.visible = has_touch_ui()  # the M key opens the map on a keyboard
+	btn.visible = has_touch_ui()  # a keyboard has the city_map_toggle key
 	btn.pressed.connect(_on_map_btn)
 	add_child(btn)
 

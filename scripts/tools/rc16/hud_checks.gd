@@ -5,6 +5,7 @@ extends RefCounted
 
 const FADE_WAIT_SEC: float = 4.0
 const CAPTION_W: float = 120.0  # the width hud_3d.gd gives a caption
+const HUD_SCENE := preload("res://scenes/ui/hud_3d.tscn")
 
 static func run(r: Node) -> void:
 	r._playing()
@@ -20,6 +21,8 @@ static func run(r: Node) -> void:
 	await _rows_are_contextual(r, hud)
 	await _prompt_fades(r, hud)
 	await _touch_cluster_is_clear(r)
+	_joystick_fades_only_its_ring(r)
+	await _touch_buttons_scale_clear(r)
 	await _combat_hud_rests(r, hud)
 	await _layout_holds(r, hud)
 	r._playing()
@@ -119,7 +122,7 @@ static func _prompt_fades(r: Node, hud: Node) -> void:
 ## HUDP9: the four touch action buttons sit inside the screen and do not overlap (the cluster's offsets were laid out from a corner it was not anchored
 ## at: Attack and Stealth overlapped and the side buttons sat on them). A HUD built for the check shows the touch clusters the desktop HUD hides.
 static func _touch_cluster_is_clear(r: Node) -> void:
-	var hud := (load("res://scenes/ui/hud_3d.tscn") as PackedScene).instantiate()
+	var hud := HUD_SCENE.instantiate()
 	r.get_tree().root.add_child(hud)
 	(hud.get_node("BottomRight") as Control).visible = true
 	await r.get_tree().process_frame
@@ -135,6 +138,80 @@ static func _touch_cluster_is_clear(r: Node) -> void:
 			clear = clear and not rects[i].intersects(rects[j])
 	hud.queue_free()
 	r._ok(clear, "HUDP9 the touch action buttons are on screen and clear of each other (%s)" % [rects])
+
+## HUDP10: the joystick fades only the ring it sits in. The first-run calibration dialog hosts one in a container, which must keep its alpha while
+## the thumb goes down and after it lifts (the dialog was left at the ring's rest alpha, 0.55).
+static func _joystick_fades_only_its_ring(r: Node) -> void:
+	var container := VBoxContainer.new()
+	var ring := Panel.new()
+	r.add_child(container)
+	r.add_child(ring)
+	ring.modulate.a = 0.55  # the alpha the HUD rests its ring at
+	var joysticks: Array[Control] = []
+	for host: Control in [container, ring]:
+		var joystick := Control.new()
+		joystick.set_script(load("res://scripts/ui/virtual_joystick.gd"))
+		joystick.size = Vector2(160.0, 160.0)
+		host.add_child(joystick)
+		joysticks.append(joystick)
+	var touch := InputEventScreenTouch.new()
+	touch.position = Vector2(80.0, 80.0)
+	touch.pressed = true
+	for joystick: Control in joysticks:
+		joystick.call("_gui_input", touch)
+		joystick.call("_process", 0.016)
+	var going_down: float = container.modulate.a
+	for joystick: Control in joysticks:
+		joystick.call("_process", 0.2)
+	var ring_down: float = ring.modulate.a
+	touch.pressed = false
+	for joystick: Control in joysticks:
+		joystick.call("_gui_input", touch)
+		joystick.call("_process", 0.2)
+	var kept: bool = is_equal_approx(going_down, 1.0) and is_equal_approx(container.modulate.a, 1.0)
+	var ring_wakes: bool = ring_down > 0.99 and is_equal_approx(ring.modulate.a, 0.55)
+	container.queue_free()
+	ring.queue_free()
+	r._ok(kept and ring_wakes, "HUDP10 the joystick fades only its ring: a container keeps alpha 1 as the thumb goes down (%.2f) and lifts (%.2f), the ring goes full (%.2f) and rests (%.2f)" % [going_down, container.modulate.a, ring_down, ring.modulate.a])
+
+## HUDP11: Button Size grows the side buttons with the action buttons, so the eight touch buttons stay on screen and clear of each other from 0.8 to 1.5
+## (the side buttons stayed put while Interact grew over Jump and Flash from 1.10). A HUD built under touch emulation carries all eight.
+static func _touch_buttons_scale_clear(r: Node) -> void:
+	var emulate0: Variant = ProjectSettings.get_setting("input_devices/pointing/emulate_touch_from_mouse", false)
+	var calibrated0: Variant = SettingsManager.get_setting("touch_calibration_done", false)
+	var size0: float = float(SettingsManager.get_setting("button_size", 1.0))
+	SettingsManager.set_setting("touch_calibration_done", true)
+	SettingsManager.set_button_size(1.0)
+	ProjectSettings.set_setting("input_devices/pointing/emulate_touch_from_mouse", true)
+	var hud := HUD_SCENE.instantiate()
+	r.get_tree().root.add_child(hud)
+	await r.get_tree().process_frame
+	var view := Rect2(Vector2.ZERO, r.get_viewport().get_visible_rect().size)
+	var bad: Array[String] = []
+	var found: int = 0
+	for factor: float in [0.8, 1.0, 1.5]:
+		SettingsManager.set_button_size(factor)  # what the slider calls
+		await r.get_tree().process_frame
+		await r.get_tree().process_frame
+		var rects: Dictionary = {}
+		for button_name: String in ["BtnAttack", "BtnSprint", "BtnStealth", "BtnInteract", "BtnJump", "BtnFlash", "BtnStrobe", "BtnWheel"]:
+			var button := hud.find_child(button_name, true, false) as Control
+			if button != null:
+				var drawn: Transform2D = button.get_global_transform()  # a Control's global rect ignores the scale of its parent
+				rects[button_name] = Rect2(drawn * Vector2.ZERO, drawn.basis_xform(button.size))
+		found = rects.size()
+		var names: Array = rects.keys()
+		for i: int in names.size():
+			if not view.encloses(rects[names[i]]):
+				bad.append("%s outside at %.1f" % [names[i], factor])
+			for j: int in range(i + 1, names.size()):
+				if (rects[names[i]] as Rect2).intersects(rects[names[j]]):
+					bad.append("%s over %s at %.1f" % [names[i], names[j], factor])
+	hud.queue_free()
+	ProjectSettings.set_setting("input_devices/pointing/emulate_touch_from_mouse", emulate0)
+	SettingsManager.set_button_size(size0)
+	SettingsManager.set_setting("touch_calibration_done", calibrated0)
+	r._ok(found == 8 and bad.is_empty(), "HUDP11 the eight touch buttons stay on screen and clear of each other at Button Size 0.8, 1.0 and 1.5 (found %d, problems %s)" % [found, bad.slice(0, 4)])
 
 ## HUDP7: the crosshair rests faded, wakes on a shot and fades five seconds after it.
 static func _combat_hud_rests(r: Node, hud: Node) -> void:
