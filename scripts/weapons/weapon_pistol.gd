@@ -10,6 +10,7 @@ func _ready() -> void:
 	max_ammo = 12
 	reload_time = 1.2
 	spread = 0.015
+	recoil = 0.45
 	fire_sound = SHOOT
 	reload_sound = RELOAD
 	super._ready()

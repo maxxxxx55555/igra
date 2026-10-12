@@ -1557,5 +1557,6 @@
   "SND_WHISPER": "[Un murmure que personne n'a dit]",
   "SND_FLICKER": "[La lumière vacille]",
   "SND_BATTERY_DEAD": "[La lampe s'éteint]",
-  "SND_GRID_ON": "[Le réseau reprend vie]"
+  "SND_GRID_ON": "[Le réseau reprend vie]",
+  "Dynamic Resolution": "Résolution dynamique"
 }

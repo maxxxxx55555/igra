@@ -117,6 +117,9 @@ func _muzzle_flash(pos: Vector3) -> void:
 	tw.tween_property(flash, "light_energy", 0.0, 0.05)
 	tw.tween_callback(flash.queue_free.bind())
 
+## A reload with rounds still in the magazine (the round in the chamber stays) takes this share of the time of a reload from empty.
+const TACTICAL_RELOAD: float = 0.8
+
 func try_reload() -> bool:
 	if _reloading or current_ammo >= max_ammo:
 		return false
@@ -124,7 +127,7 @@ func try_reload() -> bool:
 		return false
 
 	_reloading = true
-	_reload_duration = reload_time * _reload_time_multiplier()
+	_reload_duration = reload_time * _reload_time_multiplier() * (TACTICAL_RELOAD if current_ammo > 0 else 1.0)
 	_reload_timer = _reload_duration
 
 	if reload_sound:

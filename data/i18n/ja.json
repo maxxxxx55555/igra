@@ -1557,5 +1557,6 @@
   "SND_WHISPER": "[誰も発していない囁き]",
   "SND_FLICKER": "[光がちらつく]",
   "SND_BATTERY_DEAD": "[懐中電灯が消える]",
-  "SND_GRID_ON": "[送電網が息を吹き返す]"
+  "SND_GRID_ON": "[送電網が息を吹き返す]",
+  "Dynamic Resolution": "ダイナミック解像度"
 }

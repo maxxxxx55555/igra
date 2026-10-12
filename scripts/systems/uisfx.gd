@@ -3,8 +3,7 @@ extends Node
 ## from the art pass; falls back to a procedural beep if a file is missing
 ## (keeps this autoload usable even on a fresh/partial asset checkout).
 ##
-## click()/hover() are wired explicitly from a couple of existing button
-## helpers (main_menu.gd, pause_menu.gd). error()/save()/achievement() need
+## Every button gets click(), hover() and press_pulse() from _wire below. error()/save()/achievement() need
 ## no per-caller wiring at all — they listen on EventBus signals that
 ## already fire at the right moments project-wide.
 
@@ -45,6 +44,7 @@ func _ready() -> void:
 	# Его глушит guard "_has_ui_sting", поэтому настоящий клик надо повесить
 	# сюда — иначе переходы между экранами стали бы беззвучными.
 	EventBus.ui_screen_opened.connect(func(_id: String) -> void: play_ui("menu_click"))
+	get_tree().node_added.connect(_on_node_added)
 	call_deferred("_wire_late_autoloads")
 
 ## UISFX объявлен в project.godot раньше (строка 68), чем EndingsManager (107)
@@ -79,6 +79,36 @@ func play_ui(sound: String) -> void:
 	p.play()
 	p.finished.connect(p.queue_free)
 
+## Every button of the UI answers a press (the click and a pulse) and a hover (a tick; the swell is ThemeSetup's), and a tab change clicks (docs/POLISH.md).
+## A node is looked at one frame after it enters the tree, when its own screen has wired what it wants: a button that already has the click is left
+## alone, and so is every control of the HUD (the touch buttons have their own press).
+func _on_node_added(node: Node) -> void:
+	if node is BaseButton or node is TabContainer:
+		_wire.call_deferred(node)
+
+func _wire(node: Node) -> void:
+	if not is_instance_valid(node) or node.has_meta(&"ui_feel") or _in_hud(node):
+		return
+	node.set_meta(&"ui_feel", true)
+	var tabs := node as TabContainer
+	if tabs != null:
+		tabs.tab_changed.connect(func(_tab: int) -> void: click())
+		return
+	var button := node as BaseButton
+	if button.pressed.is_connected(click):
+		return
+	button.pressed.connect(click)
+	button.pressed.connect(press_pulse.bind(button))
+	button.mouse_entered.connect(hover)
+
+func _in_hud(node: Node) -> bool:
+	var up: Node = node
+	while up != null:
+		if up.is_in_group("hud"):
+			return true
+		up = up.get_parent()
+	return false
+
 func click() -> void:
 	if ResourceLoader.exists(_UI_DIR + "ui_menu_click.ogg"):
 		play_ui("menu_click")
@@ -88,18 +118,19 @@ func click() -> void:
 func hover() -> void:
 	_play("ui_hover", 1000.0, 0.03)
 
-## docs/GAMEFEEL_SPEC.md UI press micro-scale. Opt-in per control (call
-## alongside click()) rather than a scene-tree-wide button retrofit — this
-## pass wires the one real click() call site, not every Button in the UI.
+## docs/GAMEFEEL_SPEC.md UI press micro-scale; _wire gives it to every button.
+const PRESS_SCALE: float = 0.95
+const PRESS_SEC: float = 0.1
+
 func press_pulse(control: Control) -> void:
 	if not is_instance_valid(control):
 		return
 	if bool(SettingsManager.get_setting("reduce_ui_motion", false)):
 		return
 	control.pivot_offset = control.size / 2.0
-	control.scale = Vector2(0.92, 0.92)
+	control.scale = Vector2(PRESS_SCALE, PRESS_SCALE)
 	var tw := create_tween()
-	tw.tween_property(control, "scale", Vector2.ONE, 0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tw.tween_property(control, "scale", Vector2.ONE, PRESS_SEC).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 func error() -> void:
 	_play("ui_error", 260.0, 0.12)

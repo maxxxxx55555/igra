@@ -11,6 +11,12 @@ extends Node
 ## deliberately not done here (they need a Godot pass to frame); the preset
 ## table below is where they would slot in.
 
+## A find and a finished daily throw a burst in front of the player (one burst of each, played again; Effects Low draws none).
+const SPARKLE := preload("res://scenes/vfx/vfx_sparkle.tscn")
+const CONFETTI := preload("res://scenes/vfx/vfx_confetti.tscn")
+const BURST_AHEAD_M: float = 0.9
+const BURST_HEIGHT_M: float = 1.1
+
 const _PRESETS: Dictionary = {
 	"first_light": {"trauma": 0.30, "flash": Color(1.00, 0.82, 0.45), "flash_a": 0.20, "flash_t": 0.5, "slowmo": 1.0, "fov": 0.0},
 	"cascade":     {"trauma": 0.55, "flash": Color(1.00, 0.95, 0.80), "flash_a": 0.28, "flash_t": 0.8, "slowmo": 0.5, "fov": 4.0},
@@ -25,6 +31,7 @@ var _first_light_done: bool = false
 var _flash_layer: CanvasLayer = null
 var _flash: ColorRect = null
 var _hitstop_active: bool = false
+var _bursts: Dictionary = {}
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -32,6 +39,34 @@ func _ready() -> void:
 	EventBus.district_restored.connect(_on_district_restored)
 	EventBus.game_won.connect(func() -> void: wow("ending"))
 	EventBus.game_started.connect(func() -> void: _first_light_done = false)
+	EventBus.secret_found.connect(func(_id: String) -> void: burst(SPARKLE))
+	EventBus.quest_completed.connect(func(_id: String) -> void: burst(CONFETTI))
+	call_deferred("_wire_late")
+
+## The daily challenge is a later autoload than this one.
+func _wire_late() -> void:
+	var daily := get_node_or_null("/root/DailyChallengeManager")
+	if daily != null:
+		daily.completed.connect(func(_reward: int) -> void: burst(CONFETTI))
+
+## Plays `scene` in front of the player: the first time it is made, after that it is played again.
+func burst(scene: PackedScene) -> void:
+	var player := get_tree().get_first_node_in_group("player") as Node3D
+	if player == null or int(SettingsManager.get_setting("effects", 2)) < 1:
+		return
+	var camera := get_viewport().get_camera_3d()
+	var ahead: Vector3 = -camera.global_transform.basis.z if camera != null else -player.global_transform.basis.z
+	var at: Vector3 = player.global_position + Vector3.UP * BURST_HEIGHT_M + ahead * BURST_AHEAD_M
+	var fx := _bursts.get(scene) as VFXBurst
+	if is_instance_valid(fx):
+		fx.global_position = at
+		fx.replay()
+		return
+	fx = scene.instantiate() as VFXBurst
+	fx.pooled = true
+	fx.position = at
+	get_tree().root.add_child(fx)
+	_bursts[scene] = fx
 
 func _on_streetlight(_id: Variant) -> void:
 	if _first_light_done:
@@ -71,9 +106,10 @@ func hit_stop(ms: float = 80.0, scale: float = 0.25) -> void:
 	if _hitstop_active or _setting("reduce_time_fx", false):
 		return
 	_hitstop_active = true
-	Engine.time_scale = scale
+	var before: float = Engine.time_scale
+	Engine.time_scale = before * scale
 	await get_tree().create_timer(minf(ms, 80.0) / 1000.0, true, false, true).timeout
-	Engine.time_scale = 1.0
+	Engine.time_scale = before
 	_hitstop_active = false
 
 func _cinematic(p: Dictionary) -> void:

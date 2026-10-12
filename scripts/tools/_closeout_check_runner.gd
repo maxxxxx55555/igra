@@ -19,6 +19,10 @@ const Rc21Ship := preload("res://scripts/tools/rc16/ship_checks.gd")
 const Rc22Hud := preload("res://scripts/tools/rc16/hud_checks.gd")
 const Rc23A11y := preload("res://scripts/tools/rc16/a11y_checks.gd")
 const Rc23Fx := preload("res://scripts/tools/rc16/fx_checks.gd")
+const Rc23Ai := preload("res://scripts/tools/rc16/ai_checks.gd")
+const Rc23Feel := preload("res://scripts/tools/rc16/feel_checks.gd")
+const Rc23Sec := preload("res://scripts/tools/rc16/sec23_checks.gd")
+const Rc23Perf := preload("res://scripts/tools/rc16/perf23_checks.gd")
 
 var _checked: int = 0
 var _fails: int = 0
@@ -81,6 +85,10 @@ func _run() -> void:
 	if OS.get_environment("CLOSEOUT_ONLY") == "s23":
 		await Rc23A11y.run(self)
 		await Rc23Fx.run(self)
+		await Rc23Ai.run(self)
+		await Rc23Feel.run(self)
+		Rc23Sec.run(self)
+		await Rc23Perf.run(self)
 		_finish()
 		return
 	if OS.get_environment("CLOSEOUT_ONLY") == "rtl":
@@ -177,6 +185,10 @@ func _rc16_checks() -> void:
 	await Rc22Hud.run(self)
 	await Rc23A11y.run(self)
 	await Rc23Fx.run(self)
+	await Rc23Ai.run(self)
+	await Rc23Feel.run(self)
+	Rc23Sec.run(self)
+	await Rc23Perf.run(self)
 
 ## A monster standing still in the far corner of the world: its collider answers rays, its AI never runs
 ## (a disabled process mode would also take the collider out of the physics space).

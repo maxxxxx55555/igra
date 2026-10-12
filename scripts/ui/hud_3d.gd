@@ -435,11 +435,13 @@ func _poll_noise_visibility() -> void:
 		noise = float(player.get_noise_level())
 	elif "noise_level" in player:
 		noise = float(player.noise_level)
-	noise = clampf(noise, 0.0, 1.0)
+	_noise_shown = move_toward(_noise_shown, clampf(noise, 0.0, 1.0), GLIDE_PER_TICK)
+	noise = _noise_shown
 	var vis: float = 1.0
 	if "visibility" in player:
 		vis = float(player.visibility)
-	vis = clampf(vis, 0.0, 1.0)
+	_vis_shown = move_toward(_vis_shown, clampf(vis, 0.0, 1.0), GLIDE_PER_TICK)
+	vis = _vis_shown
 	if noise_fill:
 		noise_fill.offset_right = noise * BAR_W
 		noise_fill.color = _pick_noise_color(noise)
@@ -455,16 +457,24 @@ func _poll_noise_visibility() -> void:
 		_vis_seen = seen
 		_FADE.show_for([vis_caption, get_node_or_null("TopLeft/VisibilityT"), vis_fill], 1.5, 0.0, seen)
 
+## The bars glide to the player's noise and visibility (the state of the player steps them) and their colour shades from green through brass to
+## ember with the value: no step in the colour, no jump in the width.
+const GLIDE_PER_TICK: float = 0.15  # of a full bar, per 0.1 s poll
+const _CALM := Color(0.373, 0.541, 0.306)  # stamina
+const _WARN := Color(0.788, 0.635, 0.290)  # brass
+const _LOUD := Color(0.706, 0.271, 0.184)  # ember
+var _noise_shown: float = 0.0
+var _vis_shown: float = 0.0
+
+func _shade(v: float, warn_at: float) -> Color:
+	return _CALM.lerp(_WARN, v / warn_at) if v < warn_at else _WARN.lerp(_LOUD, (v - warn_at) / (1.0 - warn_at))
+
 func _pick_noise_color(v: float) -> Color:
-	if v < 0.34: return Color(0.373, 0.541, 0.306)  # stamina
-	elif v < 0.67: return Color(0.788, 0.635, 0.290)  # brass
-	else: return Color(0.706, 0.271, 0.184)  # ember
+	return _shade(v, 0.5)
 
 func _pick_vis_color(v: float) -> Color:
-	# Видимость «наоборот» от шума: тихий+тёмный = зелёный.
-	if v < 0.15: return Color(0.373, 0.541, 0.306)
-	elif v < 0.5: return Color(0.788, 0.635, 0.290)
-	else: return Color(0.706, 0.271, 0.184)
+	# Visibility the other way round from noise: quiet and dark is green.
+	return _shade(v, 0.3)
 
 ## 3.6 Спека: прицел меняет цвет по наведению на врага
 ## YAGNI: не делаем RayCast-tick, а слушаем EventBus.

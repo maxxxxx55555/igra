@@ -1557,5 +1557,6 @@
   "SND_WHISPER": "[Un susurro que nadie dijo]",
   "SND_FLICKER": "[La luz parpadea]",
   "SND_BATTERY_DEAD": "[La linterna se apaga]",
-  "SND_GRID_ON": "[La red vuelve a la vida]"
+  "SND_GRID_ON": "[La red vuelve a la vida]",
+  "Dynamic Resolution": "Resolución dinámica"
 }

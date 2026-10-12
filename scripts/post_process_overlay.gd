@@ -42,12 +42,26 @@ func _ready() -> void:
 	_build_vignette()
 	_build_visibility_overlay()
 	visible = true
+	call_deferred("_warm_shaders")
 	_tier = int(SettingsManager.get_setting("graphics_tier", 2))
 	_apply_tier()
 	EventBus.settings_changed.connect(_on_settings_changed)
 	EventBus.player_detected.connect(_on_player_detected)
 	EventBus.player_damaged.connect(_on_player_damaged)
 	EventBus.game_state_changed.connect(_on_game_state)
+
+## The first draw of a screen shader compiles it, which shows as a hitch at the first sprint, hit or shower. Each is drawn for two frames at the start, at
+## strength 0 (an identity: the frame is copied as it is), and put back as it was.
+func _warm_shaders() -> void:
+	var layers: Array[CanvasItem] = [_blur, _chroma, get_node("RainLens") as CanvasItem]
+	var was: Array[bool] = []
+	for layer: CanvasItem in layers:
+		was.append(layer.visible)
+		layer.visible = true
+	await get_tree().process_frame
+	await get_tree().process_frame
+	for i in layers.size():
+		layers[i].visible = was[i]
 
 ## A paused tree stops _process, which would leave a half-faded blur over the menu: any state but PLAYING clears it now.
 func _on_game_state(state: int) -> void:

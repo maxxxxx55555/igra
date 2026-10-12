@@ -1557,5 +1557,6 @@
   "SND_WHISPER": "[아무도 말하지 않은 속삭임]",
   "SND_FLICKER": "[불빛이 깜빡인다]",
   "SND_BATTERY_DEAD": "[손전등이 꺼진다]",
-  "SND_GRID_ON": "[전력망이 되살아난다]"
+  "SND_GRID_ON": "[전력망이 되살아난다]",
+  "Dynamic Resolution": "동적 해상도"
 }

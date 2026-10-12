@@ -5,6 +5,8 @@ extends Node
 
 const BUDGET_D1: int = 200   ## GDD/Production Bible asset budget, district 1
 const BUDGET_D11: int = 350  ## same, district 11 (busiest)
+const BUDGET_P95_MS: float = 33.0  ## frame time, 95th percentile, 30 FPS (the dev iGPU, windowed)
+const BUDGET_VRAM_MIB: float = 512.0  ## the mobile video memory budget (PRODUCTION_BIBLE: 400 MiB; the directive's 512)
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -46,10 +48,8 @@ func _run() -> void:
 	# dummy renderer that always reports draw_calls=0 - that's not "under
 	# budget", it's "not measured" - hard-failing on 0 would be a false
 	# negative, so this specific case is a skip (exit 0, DUMMY-RENDERER
-	# note), not a pass. Gates on the universal D11<350 budget (met by every
-	# district); D1<200 is stricter and not met yet (see docs/KNOWN_ISSUES.md)
-	# - not hard-failed here, only D11 is, to avoid a permanently-red gate
-	# for a known, tracked, unresolved gap.
+	# note), not a pass. Session 23: D1<200 fails the gate too (142 draw calls measured in
+	# Session 22), and so do a p95 frame time over 33 ms and a video memory over 512 MiB.
 	if draw_calls == 0:
 		print("[perf] SKIP: draw_calls=0 means headless dummy renderer - re-run with --windowed to actually measure")
 		# check.sh's run_gate() maps exit 3 to a printed SKIP, distinct from
@@ -57,10 +57,10 @@ func _run() -> void:
 		get_tree().quit(3)
 		return
 	await _print_breakdown(district)
-	var d1_p95 := await _frame_p95_ms(300)
+	var d1_p95 := await _median_p95()
+	var d1_vram: float = Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) / 1048576.0
 	print("[perf] %s frame_p95_ms=%0.2f texture_mem_mib=%0.1f video_mem_mib=%0.1f" % [district, d1_p95,
-		Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED) / 1048576.0,
-		Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) / 1048576.0])
+		Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED) / 1048576.0, d1_vram])
 	var particles := 0
 	for node in get_tree().root.find_children("*", "GPUParticles3D", true, false):
 		var emitter := node as GPUParticles3D
@@ -83,15 +83,27 @@ func _run() -> void:
 	var d11_calls := int(Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME))
 	var d11_prims := int(Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME))
 	var d11_objects := int(Performance.get_monitor(Performance.RENDER_TOTAL_OBJECTS_IN_FRAME))
-	var d11_p95 := await _frame_p95_ms(300)
+	var d11_p95 := await _median_p95()
 	print("[perf] district=power_station draw_calls=%d primitives=%d objects_in_frame=%d frame_p95_ms=%0.2f" % [
 		d11_calls, d11_prims, d11_objects, d11_p95])
-	var over_d11 := d11_calls >= BUDGET_D11
-	print("[perf] budget D1<%d: %d %s; D11<%d: %d %s" % [BUDGET_D1, draw_calls,
-		"OK" if draw_calls < BUDGET_D1 else "OVER (known gap, TZ P01)", BUDGET_D11, d11_calls,
-		"OK" if not over_d11 else "OVER D11 BUDGET"])
-	print("[perf] DONE fails=", 1 if over_d11 else 0)
-	get_tree().quit(1 if over_d11 else 0)
+	var broke: Array[String] = failures(draw_calls, d11_calls, d1_p95, d11_p95, d1_vram)
+	print("[perf] budget D1<%d: %d; D11<%d: %d; p95<=%.0f ms: %.2f and %.2f; video memory<=%.0f MiB: %.1f; over budget: %s" % [BUDGET_D1, draw_calls,
+		BUDGET_D11, d11_calls, BUDGET_P95_MS, d1_p95, d11_p95, BUDGET_VRAM_MIB, d1_vram, broke])
+	print("[perf] DONE fails=", broke.size())
+	get_tree().quit(1 if not broke.is_empty() else 0)
+
+## The budgets a run broke, by name (empty when all are met). Static, so a check can try the edges of each.
+static func failures(d1_calls: int, d11_calls: int, d1_p95: float, d11_p95: float, vram_mib: float) -> Array[String]:
+	var broke: Array[String] = []
+	if d1_calls >= BUDGET_D1:
+		broke.append("D1 draw calls")
+	if d11_calls >= BUDGET_D11:
+		broke.append("D11 draw calls")
+	if d1_p95 > BUDGET_P95_MS or d11_p95 > BUDGET_P95_MS:
+		broke.append("p95 frame time")
+	if vram_mib > BUDGET_VRAM_MIB:
+		broke.append("video memory")
+	return broke
 
 ## What the draw calls of the first district are made of: every direct child of the main scene and of the district root is
 ## hidden in turn and the frame's draw calls are counted again (the biggest savers first). A 3D node and a UI layer hide
@@ -127,6 +139,14 @@ func _print_breakdown(district: String) -> void:
 
 func _calls() -> int:
 	return int(Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME))
+
+## The median of three 300-frame p95 reads: one read moves by up to 16 ms with the load of the machine (docs/PERF_PASS.md, rc16 before and after).
+func _median_p95() -> float:
+	var reads: Array[float] = []
+	for i in 3:
+		reads.append(await _frame_p95_ms(300))
+	reads.sort()
+	return reads[1]
 
 ## 95th-percentile frame time over the next n frames, in ms. Also prints the
 ## mean GPU and CPU render time and script/physics time over the same frames,

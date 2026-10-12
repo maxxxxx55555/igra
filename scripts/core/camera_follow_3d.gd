@@ -22,6 +22,18 @@ extends Node3D
 const SPRINT_BOB_AMP: float = 0.1
 const SPRINT_BOB_FREQ: float = 8.0   ## matches player_3d.gd's own walk-sway rate
 const SPRINT_FOV_BONUS: float = 5.0
+## A landing after LAND_MIN_AIR_SEC in the air dips the eye by LAND_DIP_M and opens the view LAND_FOV_PUNCH degrees, both gone in LAND_SEC.
+const LAND_MIN_AIR_SEC: float = 0.25
+const LAND_DIP_M: float = 0.08
+const LAND_FOV_PUNCH: float = 2.0
+const LAND_SEC: float = 0.2
+## At rest the eye breathes: BREATH_M up and down, one breath in about 4 s (none with Motion Comfort).
+const BREATH_M: float = 0.004
+const BREATH_RAD_PER_SEC: float = 1.6
+## A shot kicks the view up RECOIL_PITCH_RAD per unit of the weapon's recoil and a little to a side, and it settles back (none with Motion Comfort).
+const RECOIL_PITCH_RAD: float = 0.04
+const RECOIL_YAW_RAD: float = 0.012
+const RECOIL_SETTLE_PER_SEC: float = 9.0
 
 ## GDD 2.2 (CT7): a pinch zooms the camera. The factor only scales the target the camera eases toward (the FOV in
 ## first person, the boom offset in third person), so the interior blend and the sprint punch keep working on top
@@ -42,8 +54,13 @@ var _current_fov: float
 var _pitch: float = 0.0
 var _running: bool = false
 var _bob_t: float = 0.0
+var _breath_t: float = 0.0
 var _zoom: float = 1.0
 var _zoom_target: float = 1.0
+var _air_sec: float = 0.0
+var _was_grounded: bool = true
+var _land_kick: float = 0.0
+var _recoil: Vector2 = Vector2.ZERO  # x: pitch up, y: yaw
 
 func _ready() -> void:
 	_cam = _find_cam(self)
@@ -95,19 +112,43 @@ func _process(delta: float) -> void:
 func _tick_fps(delta: float) -> void:
 	var tp: Vector3 = _target.global_position
 	var eye_y := fps_eye_height
-	var reduce_motion := bool(SettingsManager.get_setting("reduce_ui_motion", false))
+	var reduce_motion: bool = _calm()
+	_track_landing(delta)
 	if _running and not reduce_motion:
 		_bob_t += delta * SPRINT_BOB_FREQ
 		eye_y += sin(_bob_t) * SPRINT_BOB_AMP
 	else:
 		_bob_t = 0.0
+	if not reduce_motion:
+		_breath_t += delta * BREATH_RAD_PER_SEC
+		eye_y += sin(_breath_t) * BREATH_M - LAND_DIP_M * _land_kick
 	var desired: Vector3 = tp + Vector3(0.0, eye_y, 0.0)
 	_cam.global_position = _cam.global_position.lerp(desired, clampf(delta * fps_follow_speed, 0.0, 1.0))
 	var yaw: float = _target.rotation.y
-	_cam.rotation = Vector3(_pitch, yaw, 0.0)
-	var target_fov := _current_fov / _zoom + (SPRINT_FOV_BONUS if _running else 0.0)
-	_cam.fov = lerpf(_cam.fov, target_fov, clampf(delta * interior_lerp_speed, 0.0, 1.0))
+	_cam.rotation = Vector3(_pitch + _recoil.x, yaw + _recoil.y, 0.0)
+	_recoil = _recoil.lerp(Vector2.ZERO, clampf(delta * RECOIL_SETTLE_PER_SEC, 0.0, 1.0))
+	_cam.fov = lerpf(_cam.fov, fov_target(), clampf(delta * interior_lerp_speed, 0.0, 1.0))
 	_tick_interior_target(delta)
+
+## The view the first-person camera eases toward: the zoom, the sprint punch and the landing punch (none with Reduce UI Motion or Motion Comfort).
+func fov_target() -> float:
+	var punch: float = 0.0 if _calm() else (SPRINT_FOV_BONUS if _running else 0.0) + LAND_FOV_PUNCH * _land_kick
+	return _current_fov / _zoom + punch
+
+func kick(amount: float) -> void:
+	if not _calm():
+		_recoil += Vector2(RECOIL_PITCH_RAD * amount, randf_range(-1.0, 1.0) * RECOIL_YAW_RAD * amount)
+
+func _calm() -> bool:
+	return bool(SettingsManager.get_setting("reduce_ui_motion", false)) or bool(SettingsManager.get_setting("reduce_camera_motion", false))
+
+func _track_landing(delta: float) -> void:
+	var grounded: bool = _target.is_on_floor()
+	if grounded and not _was_grounded and _air_sec >= LAND_MIN_AIR_SEC:
+		_land_kick = 1.0
+	_air_sec = 0.0 if grounded else _air_sec + delta
+	_was_grounded = grounded
+	_land_kick = move_toward(_land_kick, 0.0, delta / LAND_SEC)
 
 func _tick_third(delta: float) -> void:
 	_tick_interior(delta)

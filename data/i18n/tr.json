@@ -1557,5 +1557,6 @@
   "SND_WHISPER": "[Kimsenin söylemediği bir fısıltı]",
   "SND_FLICKER": "[Işık titriyor]",
   "SND_BATTERY_DEAD": "[Fener sönüyor]",
-  "SND_GRID_ON": "[Şebeke yeniden canlanıyor]"
+  "SND_GRID_ON": "[Şebeke yeniden canlanıyor]",
+  "Dynamic Resolution": "Dinamik Çözünürlük"
 }

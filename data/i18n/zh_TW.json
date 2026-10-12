@@ -1557,5 +1557,6 @@
   "SND_WHISPER": "[無人開口的低語]",
   "SND_FLICKER": "[燈光閃爍]",
   "SND_BATTERY_DEAD": "[手電筒熄滅了]",
-  "SND_GRID_ON": "[電網重新甦醒]"
+  "SND_GRID_ON": "[電網重新甦醒]",
+  "Dynamic Resolution": "動態解析度"
 }

@@ -224,6 +224,9 @@ func _build_graphics_tab(parent: VBoxContainer) -> void:
 		func(v: float) -> void: SettingsManager.set_render_scale(v))
 
 	_toggle(parent, LocalizationManager.t("VSync"), "vsync")
+
+	# Under 30 FPS for 2 s the 3D scale drops to 70 %; over 45 FPS for 4 s it comes back (scripts/systems/dynamic_resolution.gd)
+	_toggle(parent, LocalizationManager.t("Dynamic Resolution"), "dynamic_resolution")
 	_dropdown(parent, LocalizationManager.t("FPS Cap"), "fps_cap", ["30", "60", "120"],
 		func(idx: int) -> void: SettingsManager.set_fps_cap(idx))
 

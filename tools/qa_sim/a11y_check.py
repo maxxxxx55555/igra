@@ -47,9 +47,10 @@ FEATURES = {
          ("scripts/player/player_3d.gd", 'difficulty_scale("player_hp")'), ("scripts/world/district_loot.gd", '"difficulty_scale", "extra_parts"'),
          ("scripts/monetization/ad_service.gd", 'difficulty_scale("revive")'), ("scripts/systems/settings_manager.gd", "const DIFFICULTY_PRESETS")],
         ["Difficulty", "diff_easy", "diff_normal", "diff_hard", "DIFF_EASY_DESC", "DIFF_NORMAL_DESC", "DIFF_HARD_DESC"], ["difficulty"]),
-    "A4 motion comfort (no shake, no FOV punch, no sprint blur)": (
+    "A4 motion comfort (no shake, no FOV punch, no sprint blur, no landing dip, no rain on the lens)": (
         ["reduce_camera_motion"],
-        [("scripts/effects/screen_shake.gd", 'get_setting("reduce_camera_motion"'), ("scripts/systems/wow_director.gd", '_setting("reduce_camera_motion"'), ("scripts/post_process_overlay.gd", 'get_setting("reduce_camera_motion"')],
+        [("scripts/effects/screen_shake.gd", 'get_setting("reduce_camera_motion"'), ("scripts/systems/wow_director.gd", '_setting("reduce_camera_motion"'), ("scripts/post_process_overlay.gd", 'get_setting("reduce_camera_motion"'),
+         ("scripts/core/camera_follow_3d.gd", 'get_setting("reduce_camera_motion"'), ("scripts/effects/rain_lens.gd", 'get_setting("reduce_camera_motion"')],
         ["Motion Comfort", "Reduce Screen Shake"], ["reduce_camera_motion"]),
     "A5 high contrast (the dyslexia font stays an owner row: no font file ships)": (
         ["high_contrast"],

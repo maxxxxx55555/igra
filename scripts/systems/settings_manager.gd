@@ -7,6 +7,7 @@ const BUSES := ["Master", "SFX", "Music", "Voice", "Ambient"]
 const LANGUAGES := ["ru", "en", "es", "de", "fr", "it", "pt_BR", "tr", "ja", "ko", "zh", "zh_TW", "ar"]
 const CFG_PATH := "user://settings.cfg"
 const _InputRemap := preload("res://scripts/systems/input_remap.gd")
+const _DynamicResolution := preload("res://scripts/systems/dynamic_resolution.gd")
 
 ## Подписи из UI → канонические имена шин.
 const BUS_ALIASES := {
@@ -54,6 +55,7 @@ func _ready() -> void:
 		_ensure_bus(b)
 		_apply(b)
 	EventBus.settings_changed.connect(_on_any_setting_changed)
+	add_child(_DynamicResolution.new())
 	_load_defaults()
 	# Настройки сохранялись в user://settings.cfg, но никто их не читал —
 	# каждый запуск игра стартовала с дефолтов.
@@ -116,6 +118,7 @@ func _load_defaults() -> void:
 	_settings["edge_highlight"] = false
 	_settings["clear_objectives"] = false
 	_settings["keybinds"] = {}
+	_settings["dynamic_resolution"] = OS.has_feature("mobile")  # a phone drops the 3D scale under load; a desktop keeps what was set
 
 func set_volume(bus: String, v: float) -> void:
 	var b := _canon_bus(bus)
@@ -312,13 +315,16 @@ func set_difficulty(idx: int) -> void:
 	EventBus.settings_changed.emit("difficulty", _settings["difficulty"])
 
 ## What each difficulty (Easy, Normal, Hard) scales; Normal is the game as tuned. Readers: base_monster.gd (monster_hp, monster_damage),
-## player_3d.gd (player_hp), district_loot.gd (extra_parts: spare repair parts per district), ad_service.gd (revive offer, 0 = none).
+## player_3d.gd (player_hp), district_loot.gd (extra_parts: spare repair parts per district), ad_service.gd (revive offer, 0 = none),
+## base_monster.gd (search: the share of the search time; reaction_sec: seconds a monster stands noticing before it chases).
 const DIFFICULTY_PRESETS: Dictionary = {
 	"monster_hp": [0.7, 1.0, 1.3],
 	"monster_damage": [0.75, 1.0, 1.25],
 	"player_hp": [1.5, 1.0, 1.0],
 	"extra_parts": [1.0, 0.0, 0.0],
 	"revive": [1.0, 1.0, 0.0],
+	"search": [0.7, 1.0, 1.3],
+	"reaction_sec": [0.5, 0.0, 0.0],
 }
 
 func difficulty_scale(kind: String) -> float:

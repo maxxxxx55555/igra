@@ -68,6 +68,7 @@ CONSUMERS = {
     "one_handed": ("scripts/ui/hud_3d.gd", 'get_setting("one_handed"'),
     "edge_highlight": ("scripts/effects/edge_highlight.gd", 'get_setting("edge_highlight"'),
     "clear_objectives": ("scripts/ui/hud_fade.gd", 'get_setting("clear_objectives"'),
+    "dynamic_resolution": ("scripts/systems/dynamic_resolution.gd", 'get_setting("dynamic_resolution"'),
 }
 KEY = re.compile(r'\b_(?:toggle|slider|dropdown)\(parent,[^\n]*?\),\s*"([a-z_]+)"')
 

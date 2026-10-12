@@ -103,6 +103,9 @@ const EYE_LERP_SPEED: float = 12.0
 var _crouching: bool = false
 ## Settings > Crouch Input: how long the stealth key is held before the crouch, and the other two choices.
 const CROUCH_HOLD_SEC: float = 0.5
+## Walking feel: the speed is reached in ACCEL_SEC and given up in DECEL_SEC (docs/MOVEMENT_FEEL.md).
+const ACCEL_SEC: float = 0.12
+const DECEL_SEC: float = 0.08
 const CROUCH_INPUT_BUTTON: int = 1
 const CROUCH_INPUT_DISABLED: int = 2
 ## GDD 2.2, touch: a quick swipe down in the look zone toggles the crouch.
@@ -554,9 +557,6 @@ func _physics_process(delta: float) -> void:
 	_track_dodge_tap(dir_2d, delta)
 	var dir: Vector3 = _view_dir(dir_2d)
 	var moving: bool = dir.length_squared() > 0.0001
-	if not moving:
-		velocity.x = 0.0
-		velocity.z = 0.0
 	var desired: State = State.IDLE
 
 	# Handle crouch input (long press on stealth key)
@@ -627,7 +627,12 @@ func _physics_process(delta: float) -> void:
 	if _dash_timer > 0.0:
 		_dash_timer -= delta
 		planar = _dash_dir * DODGE_DASH_SPEED
-	velocity = Vector3(planar.x, velocity.y, planar.z)
+	if _dash_timer <= 0.0 and is_on_floor():
+		var rate: float = maxf(final_speed, stats.walk_speed) / (ACCEL_SEC if moving else DECEL_SEC)
+		var eased := Vector2(velocity.x, velocity.z).move_toward(Vector2(planar.x, planar.z), rate * delta)
+		velocity = Vector3(eased.x, velocity.y, eased.y)
+	else:
+		velocity = Vector3(planar.x, velocity.y, planar.z)
 	if is_on_floor():
 		_coyote_timer = coyote_time
 		_was_on_floor = true
@@ -978,7 +983,9 @@ func add_battery(amount: float) -> void:
 ## effects (ItemData.Effect only defines HEAL/RECHARGE today; anything
 ## else already emits &"NONE" from inventory_manager.gd's _effect_name()
 ## and is intentionally a no-op here, not a missing case).
-func _on_item_consumed(_id: StringName, effect: StringName, value: float) -> void:
+func _on_item_consumed(id: StringName, effect: StringName, value: float) -> void:
+	if id == &"noise_bomb":
+		_throw_noise_bomb()
 	match effect:
 		&"HEAL": heal(value)
 		&"RECHARGE": add_battery(value)
@@ -986,6 +993,16 @@ func _on_item_consumed(_id: StringName, effect: StringName, value: float) -> voi
 			ProgressTracker.raise_battery_bonus(value / 100.0)
 			refresh_battery_max()
 			EventBus.inventory_notice.emit(LocalizationManager.tf("CAPACITY_UP", [int(value)]))
+
+## The noise bomb (a consumable) leaves the hand along the aim and pops where it lands (scripts/gameplay/noise_bomb.gd).
+const NOISE_BOMB := preload("res://scripts/gameplay/noise_bomb.gd")
+
+func _throw_noise_bomb() -> void:
+	var camera := get_viewport().get_camera_3d()
+	var aim: Vector3 = -camera.global_transform.basis.z if camera != null else -global_transform.basis.z
+	var bomb: RigidBody3D = NOISE_BOMB.new()
+	get_tree().current_scene.add_child(bomb)
+	bomb.call("launch", global_position + Vector3.UP * 1.5 + aim * 0.6, aim)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if _net_active and not is_multiplayer_authority():
@@ -1228,6 +1245,10 @@ func _swing_hits() -> void:
 	if nearest != null:
 		_on_attack_hit(nearest)
 
+## The freeze of a landed melee hit, and of the last hit of a combo (WowDirector caps it at 80 ms).
+const MELEE_HIT_STOP_MS: float = 50.0
+const MELEE_FINISHER_STOP_MS: float = 80.0
+
 func _on_attack_hit(body: Node) -> void:
 	if _attack_phase != "active":
 		return
@@ -1250,12 +1271,18 @@ func _on_attack_hit(body: Node) -> void:
 			from_behind = 1.5
 	var final_dmg: float = cd3["dmg"] * (1.0 + bonus) * from_behind
 	body.take_damage(final_dmg, global_position, EnemyRosterData.DamageType.BLUNT)
+	WowDirector.hit_stop(MELEE_FINISHER_STOP_MS if _chain_landed else MELEE_HIT_STOP_MS)
 	if cd3["knockback"] > 0.0 and body is Node3D:
 		var kb_dir: Vector3 = (body.global_position - global_position).normalized()
 		kb_dir.y = 0.0
 		if body.has_method("apply_knockback"):
 			body.apply_knockback(kb_dir * cd3["knockback"])
 
+
+## The weapon's recoil (WeaponBase.fire) kicks the first-person view; the shot itself has gone along the aim already (camera_follow_3d.gd).
+func apply_recoil(amount: float) -> void:
+	if _fps_cam and is_instance_valid(_fps_cam) and _fps_cam.has_method("kick"):
+		_fps_cam.kick(amount)
 
 func grant_iframes(duration: float) -> void:
 	_iframes = maxf(_iframes, duration)

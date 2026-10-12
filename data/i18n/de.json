@@ -1557,5 +1557,6 @@
   "SND_WHISPER": "[Ein Flüstern, das niemand sprach]",
   "SND_FLICKER": "[Das Licht flackert]",
   "SND_BATTERY_DEAD": "[Die Taschenlampe erlischt]",
-  "SND_GRID_ON": "[Das Netz erwacht wieder]"
+  "SND_GRID_ON": "[Das Netz erwacht wieder]",
+  "Dynamic Resolution": "Dynamische Auflösung"
 }

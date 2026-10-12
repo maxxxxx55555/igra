@@ -46,6 +46,7 @@ const CODEX_TABS: Dictionary = {
 ## instant show: its own layout centres it and the layout checks measure it as soon as it opens.
 const _SLIDE_PX: float = 24.0
 const _SLIDE_SEC: float = 0.3
+const _FADE_OUT_SEC: float = 0.15
 var _layer: CanvasLayer
 var _cache: Dictionary = {}
 var _open_blocking: Array = []
@@ -173,6 +174,7 @@ func open(id: StringName) -> void:
 	var scr: Control = _get_screen(id)
 	if scr == null:
 		return
+	_cancel_fade_out(scr)
 	var was_open: bool = scr.visible
 	scr.visible = true
 	if not was_open:
@@ -186,7 +188,10 @@ func close(id: StringName) -> void:
 	var scr: Control = _cache.get(id, null)
 	if scr != null:
 		_settle(scr)
-		scr.visible = false
+		if scr.visible and id != &"main_menu" and _animates(id):
+			_fade_out(scr)
+		else:
+			scr.visible = false
 		# The menu is built again on each open: its Continue button and daily card describe the profile at that moment.
 		if id == &"main_menu":
 			_cache.erase(id)
@@ -218,6 +223,7 @@ func open_codex(tab: StringName) -> void:
 	var codex: Control = _get_screen(&"codex")
 	if codex == null:
 		return
+	_cancel_fade_out(codex)
 	var was_open: bool = codex.visible
 	codex.visible = true
 	if not was_open:
@@ -229,8 +235,12 @@ func open_codex(tab: StringName) -> void:
 		codex.call("open_tab", tab)
 	EventBus.ui_screen_opened.emit(&"codex")
 
+## A screen built from a script slides in and fades out; one built from a scene shows and hides at once, and Reduce UI Motion does both at once.
+func _animates(id: StringName) -> bool:
+	return not String(SCREENS.get(id, "")).ends_with(".tscn") and not bool(SettingsManager.get_setting("reduce_ui_motion", false))
+
 func _slide_in(id: StringName, scr: Control) -> void:
-	if String(SCREENS.get(id, "")).ends_with(".tscn") or bool(SettingsManager.get_setting("reduce_ui_motion", false)):
+	if not _animates(id):
 		return
 	_settle(scr)
 	var rest: Vector2 = scr.position
@@ -243,6 +253,27 @@ func _slide_in(id: StringName, scr: Control) -> void:
 	tween.tween_property(scr, "position", rest, _SLIDE_SEC).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	tween.tween_property(scr, "modulate:a", alpha, _SLIDE_SEC)
 	scr.set_meta(&"slide", [tween, rest, alpha])
+
+## The screen stays visible while it fades (is_open already says it is closed) and is hidden with its alpha put back when the fade ends.
+func _fade_out(scr: Control) -> void:
+	var alpha: float = scr.modulate.a
+	var tween := scr.create_tween()
+	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tween.tween_property(scr, "modulate:a", 0.0, _FADE_OUT_SEC)
+	tween.tween_callback(func() -> void:
+		scr.visible = false
+		scr.modulate.a = alpha
+		scr.remove_meta(&"fade_out"))
+	scr.set_meta(&"fade_out", [tween, alpha])
+
+## A screen opened again while it fades is shown as it was before the fade.
+func _cancel_fade_out(scr: Control) -> void:
+	var fade: Array = scr.get_meta(&"fade_out", [])
+	if fade.is_empty():
+		return
+	scr.remove_meta(&"fade_out")
+	(fade[0] as Tween).kill()
+	scr.modulate.a = fade[1]
 
 ## Stops a slide that is still running and puts the screen exactly where it rests.
 func _settle(scr: Control) -> void:
@@ -261,7 +292,7 @@ func close_all_blocking() -> void:
 		close(id)
 func _is_open(id: StringName) -> bool:
 	var scr: Control = _cache.get(id, null)
-	return scr != null and scr.visible
+	return scr != null and scr.visible and not scr.has_meta(&"fade_out")
 func _get_screen(id: StringName) -> Control:
 	if _cache.has(id):
 		return _cache[id]

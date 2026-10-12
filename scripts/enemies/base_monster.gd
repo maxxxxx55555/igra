@@ -44,6 +44,10 @@ var _investigate_point: Vector3 = Vector3.ZERO
 ## 10 s within 5 m of the last known point (was 5 s standing on the point).
 const SEARCH_TIME: float = 10.0
 const SEARCH_RADIUS: float = 5.0
+
+## The difficulty (SettingsManager.DIFFICULTY_PRESETS) shortens the search of Easy and lengthens it on Hard.
+func _search_time() -> float:
+	return SEARCH_TIME * SettingsManager.difficulty_scale("search")
 var _search_center: Vector3 = Vector3.INF
 var _player_hiding: bool = false
 var _death_timer: float = 0.0
@@ -102,6 +106,9 @@ func _inflict_statuses(target: Node) -> void:
 ## come to the spot, each from wherever it stands (no scripted pincer).
 const PACK_CALLERS: Array[StringName] = [&"hound", &"hunter"]
 const PACK_CALL_RANGE: float = 15.0
+## Every other monster (the boss excepted) calls its neighbours too, from a shorter distance: they come to the spot as they would to a noise.
+const ALERT_RANGE: float = 8.0
+var _react_timer: float = 0.0
 
 ## GDD 7: a noise (a shot, a shout, a run) inside its radius sends a monster that has not seen the player to the spot.
 func _on_noise_emitted(pos: Vector2, radius: float) -> void:
@@ -358,7 +365,7 @@ func _update_timers(delta: float) -> void:
 			_flee_timer = 0.0
 			if player_ref and is_instance_valid(player_ref):
 				_investigate_point = player_ref.global_position
-				_investigate_timer = SEARCH_TIME
+				_investigate_timer = _search_time()
 				_search_center = _investigate_point
 				_change_state(State.INVESTIGATE)
 			else:
@@ -448,6 +455,10 @@ func _state_chase(delta: float) -> void:
 	if _player_hiding:
 		_enter_investigate_at(player_ref.global_position)
 		return
+	if _react_timer > 0.0:
+		_react_timer -= delta
+		velocity = Vector3.ZERO
+		return
 	_set_nav_target(player_ref.global_position)
 	var dist := global_position.distance_to(player_ref.global_position)
 	if dist <= attack_range and attack_timer <= 0.0:
@@ -508,7 +519,7 @@ func _enter_investigate_at(pos: Vector3) -> void:
 	# PLAN.md Stage 3: Stealth skill "cold_trail" (0.2/level, max 2) -
 	# shortens how long enemies keep searching after losing the player.
 	var cold_trail_lvl: int = SkillTreeManager.get_skill_level(&"cold_trail") if SkillTreeManager else 0
-	_investigate_timer = SEARCH_TIME * (1.0 - 0.2 * cold_trail_lvl)
+	_investigate_timer = _search_time() * (1.0 - 0.2 * cold_trail_lvl)
 	_search_center = pos
 	_change_state(State.INVESTIGATE)
 
@@ -659,7 +670,7 @@ func _on_detect_body_entered(body: Node) -> void:
 				_change_state(State.CHASE)
 			else:
 				_investigate_point = body.global_position
-				_investigate_timer = SEARCH_TIME
+				_investigate_timer = _search_time()
 				_search_center = _investigate_point
 				_change_state(State.INVESTIGATE)
 
@@ -667,7 +678,7 @@ func _on_detect_body_exited(body: Node) -> void:
 	if body == player_ref:
 		player_ref = null
 		if ai_state == State.CHASE or ai_state == State.ATTACK:
-			_change_state(State.PATROL)
+			_enter_investigate_at(body.global_position)
 
 func take_damage(amount: float, src_pos: Vector3 = Vector3.ZERO, type: EnemyRosterData.DamageType = EnemyRosterData.DamageType.BULLET) -> void:
 	if _net_active and not is_multiplayer_authority():
@@ -827,8 +838,10 @@ func _change_state(new_state: State) -> void:
 		if new_state == State.CHASE:
 			EventBus.player_detected.emit(monster_id)
 			play_cue(&"chase")
-			if monster_id in PACK_CALLERS:
-				EventBus.noise_emitted.emit(Vector2(global_position.x, global_position.z), PACK_CALL_RANGE)
+			if not is_in_group("boss"):
+				EventBus.noise_emitted.emit(Vector2(global_position.x, global_position.z), PACK_CALL_RANGE if monster_id in PACK_CALLERS else ALERT_RANGE)
+				if prev in [State.IDLE, State.PATROL, State.INVESTIGATE]:
+					_react_timer = SettingsManager.difficulty_scale("reaction_sec")  # Easy: it stands noticing first
 		elif new_state == State.INVESTIGATE:
 			play_cue(&"investigate")
 		elif new_state == State.ATTACK:

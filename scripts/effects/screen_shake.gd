@@ -1,8 +1,8 @@
 extends Node
-## ScreenShake — подключается к камере. Слушает EventBus.
-## Использование: screen_shake.setup(camera); screen_shake.add_trauma(0.5)
+## ScreenShake: set up with the camera, it listens to EventBus. Use: screen_shake.setup(camera); screen_shake.add_trauma(0.5)
 
-@export var shake_intensity: float = 0.5
+## Metres the camera moves at full trauma, in proportion to the trauma below it: 0.016 m is 3.9 px of a 1080p frame at 5 m with the 48 degree view of an interior, the narrowest the camera uses.
+@export var shake_intensity: float = 0.016
 @export var shake_decay: float = 5.0
 
 var _trauma: float = 0.0
@@ -27,9 +27,8 @@ func add_trauma(amount: float) -> void:
 func _process(delta: float) -> void:
 	if _camera == null:
 		return
-	var t2: float = _trauma * _trauma  # квадратичная кривая — мягче
-	_camera.h_offset = randf_range(-1.0, 1.0) * t2 * shake_intensity
-	_camera.v_offset = randf_range(-1.0, 1.0) * t2 * shake_intensity
+	_camera.h_offset = randf_range(-1.0, 1.0) * _trauma * shake_intensity
+	_camera.v_offset = randf_range(-1.0, 1.0) * _trauma * shake_intensity
 	_trauma = maxf(0.0, _trauma - shake_decay * delta)
 
 func _on_player_damaged(_amount: int) -> void:

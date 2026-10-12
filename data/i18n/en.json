@@ -1557,5 +1557,6 @@
   "SND_WHISPER": "[A whisper nobody spoke]",
   "SND_FLICKER": "[The light stutters]",
   "SND_BATTERY_DEAD": "[The flashlight dies]",
-  "SND_GRID_ON": "[The grid comes back to life]"
+  "SND_GRID_ON": "[The grid comes back to life]",
+  "Dynamic Resolution": "Dynamic Resolution"
 }
