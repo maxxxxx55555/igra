@@ -95,3 +95,4 @@ n	utc	head	id	exit	command
 94	20261012T170305Z	e0c627c	s23_g_check2	1	bash -c bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; CLOSEOUT_ONLY=s23 bash tools/qa_sim/closeout_check 400
 95	20261012T200231Z	e0c627c	s23_g_check3	0	bash -c bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; CLOSEOUT_ONLY=s23 bash tools/qa_sim/closeout_check 400
 96	20261012T202450Z	685ce2d	s23_all_685ce2d	3	bash tools/check.sh --all
+97	20261012T204220Z	a42b42f	s23_fix_a42b42f	0	bash -c bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; bash tools/qa_sim/guarded_headless res://scenes/tools/audio_bus_check_scene.tscn 120; bash tools/qa_sim/closeout_check 400
