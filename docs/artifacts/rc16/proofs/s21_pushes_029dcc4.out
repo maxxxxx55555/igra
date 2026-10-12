@@ -1,0 +1,12 @@
+# proof s21_pushes_029dcc4
+# utc 20261012T002839Z
+# head 029dcc4 (uncommitted paths: 0)
+# env none
+# cmd bash -c echo "origin main:  $(git ls-remote origin refs/heads/main | cut -f1)"; echo "HEAD:         $(git rev-parse HEAD)"; if [ "$(git ls-remote origin refs/heads/main | cut -f1)" = "$(git rev-parse HEAD)" ]; then echo "main equals HEAD on origin"; else echo "main differs from HEAD"; fi; echo "tags on origin matching shipping: $(git ls-remote --tags origin | grep -c shipping)"; echo "local tags matching shipping: $(git tag -l | grep -c shipping)"; echo "v8.0.0-final^{} on origin: $(git ls-remote origin refs/tags/v8.0.0-final^{} | cut -f1)"
+origin main:  029dcc420cba0810eeec8a94650986bcbef15ec7
+HEAD:         029dcc420cba0810eeec8a94650986bcbef15ec7
+main equals HEAD on origin
+tags on origin matching shipping: 0
+local tags matching shipping: 0
+v8.0.0-final^{} on origin: 6b9055a0daaae1dd86055a743e66f664213e5a80
+# EXIT=0

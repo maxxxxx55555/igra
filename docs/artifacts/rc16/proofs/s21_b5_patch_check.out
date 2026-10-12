@@ -1,0 +1,6 @@
+# proof s21_b5_patch_check
+# utc 20261012T002845Z
+# head 029dcc4 (uncommitted paths: 1)
+# env none
+# cmd git apply --check --ignore-whitespace docs/artifacts/rc16/s21_b5_fix.patch
+# EXIT=0

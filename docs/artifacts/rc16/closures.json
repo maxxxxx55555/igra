@@ -1495,5 +1495,42 @@
   ],
   "frames": [],
   "commit": "abbf91d"
+ },
+ {
+  "id": "S21-STATIC-FINAL",
+  "claim": "The static gates on the tree after the verifier's document fixes, with the new control-character gate: 41 passed.",
+  "cmd": "bash tools/check.sh --static",
+  "proof": "s21_static_final_1ba50c1",
+  "quotes": [
+   "doc_ctrl_check (no control character in docs/",
+   "Проверок пройдено: 41",
+   "# EXIT=0"
+  ],
+  "frames": [],
+  "commit": "1ba50c1"
+ },
+ {
+  "id": "S21-B5-PATCH",
+  "claim": "The patch for the verifier's finding B5 (a deferred quest payout and the check CRF1) is written and applies to HEAD; it was never run (no launch was left).",
+  "cmd": "git apply --check --ignore-whitespace docs/artifacts/rc16/s21_b5_fix.patch",
+  "proof": "s21_b5_patch_check",
+  "quotes": [
+   "# EXIT=0"
+  ],
+  "frames": [],
+  "commit": "029dcc4"
+ },
+ {
+  "id": "S21-PUSH",
+  "claim": "main equals HEAD on origin at 029dcc4; no tag matching shipping exists on origin or locally (the tag is not created, CORRECTION_LOG 204); v8.0.0-final still peels to 6b9055a.",
+  "cmd": "git ls-remote origin refs/heads/main; git rev-parse HEAD; git ls-remote --tags origin",
+  "proof": "s21_pushes_029dcc4",
+  "quotes": [
+   "main equals HEAD on origin",
+   "tags on origin matching shipping: 0",
+   "v8.0.0-final^{} on origin: 6b9055a0daaae1dd86055a743e66f664213e5a80"
+  ],
+  "frames": [],
+  "commit": "029dcc4"
  }
 ]
