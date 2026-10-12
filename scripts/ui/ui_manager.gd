@@ -66,6 +66,9 @@ func _ready() -> void:
 	_quest_hud = _mk_overlay("res://scripts/ui/quest_tracker_hud.gd", "QuestHUD")
 	_quest_hud.visible = false
 	EventBus.game_state_changed.connect(_on_game_state)
+	EventBus.settings_changed.connect(func(key: String, _value: Variant) -> void:
+		if key == "show_minimap":
+			_sync_minimap())
 	EventBus.game_started.connect(func() -> void: close(&"main_menu"))
 	Routes.route_changed.connect(func(_path: String) -> void: close(&"main_menu"))
 	_on_game_state(GameManager.current_state)
@@ -295,13 +298,20 @@ func _in_menu_scene() -> bool:
 
 func _set_hud(visible: bool) -> void:
 	EventBus.hud_visibility_changed.emit(visible)
+## One map in play: the radar of the HUD. The city minimap is a setting, off by default (docs/HUD_PLAN.md row 7); the full map is on the M key.
+func _sync_minimap() -> void:
+	if is_instance_valid(_minimap):
+		var settings := get_node_or_null("/root/SettingsManager")  # loaded after this autoload: absent on the first call, from _ready
+		_minimap.visible = GameManager.current_state == GameManager.GameState.PLAYING and settings != null and bool(settings.get_setting("show_minimap", false))
+
 func _on_game_state(state: int) -> void:
 	# Игровые накладки (трекер квестов, миникарта, погода) видны только в игре:
 	# в меню и на экранах смерти/победы они висели поверх кнопок.
 	var in_game := state == GameManager.GameState.PLAYING
-	for n in [_quest_hud, _minimap, _weather_overlay]:
+	for n in [_quest_hud, _weather_overlay]:
 		if is_instance_valid(n):
 			n.visible = in_game
+	_sync_minimap()
 	match state:
 		GameManager.GameState.MENU:
 			# Если игрок уже НА сцене меню, второй экран поверх неё не нужен —

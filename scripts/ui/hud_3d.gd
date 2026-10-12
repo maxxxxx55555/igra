@@ -1,9 +1,19 @@
 extends CanvasLayer
 
 const BAR_W: float = 220.0
-const BAR_H: float = 16.0
-const BAR_ROW_PITCH: float = 34.0
-const BAR_ROW_TOP: float = 30.0
+const BAR_H: float = 10.0
+const BAR_ROW_PITCH: float = 32.0
+const BAR_ROW_TOP: float = 24.0
+## The flashlight charge is eight segments (ART_UI_STYLE: "segmented scale"); the other rows are slim bars that show while they matter.
+const _PIPS: int = 8
+const _FADE := preload("res://scripts/ui/hud_fade.gd")
+const _NOISE_SHOWN: float = 0.34
+const _VIS_SHOWN: float = 0.15
+const _BAT_LOW: float = 0.3
+var _hp_hurt: bool = false
+var _stam_low: bool = false
+var _noise_loud: bool = false
+var _vis_seen: bool = false
 ## GDD §24.1: weapon x2, battery, medkit, grenade, special item (the flashlight).
 const _SLOT_ITEMS: Array = [&"pistol", &"rifle", &"battery", &"medkit", &"molotov", &"flashlight"]
 ## The two weapon slots and the guns each one cycles through (GDD §18: pistol, rifle, shotgun).
@@ -84,7 +94,7 @@ func _ready() -> void:
 	_bat = bat_ratio
 	hp_fill.offset_right = hp_ratio * BAR_W
 	stam_fill.offset_right = stam_ratio * BAR_W
-	bat_fill.offset_right = bat_ratio * BAR_W
+	bat_fill.offset_right = _pip_fill(bat_ratio) * BAR_W
 	hp_val.text = str(int(hp_ratio * 100))
 	stam_val.text = str(int(stam_ratio * 100))
 	bat_val.text = str(int(bat_ratio * 100))
@@ -102,6 +112,7 @@ func _ready() -> void:
 	_setup_radar()
 	_setup_button_feedback()
 	_apply_text_outlines()
+	_finish_rows(hp_ratio, bat_ratio)
 	EventBus.player_health_changed.connect(_on_hp)
 	EventBus.player_damaged.connect(_on_player_damaged)
 	if EventBus.has_signal(&"crosshair_state_changed"):
@@ -408,9 +419,6 @@ func _setup_weight_bar() -> void:
 @onready var vis_fill: ColorRect = get_node_or_null("TopLeft/VisibilityF") as ColorRect
 @onready var vis_caption: Label = get_node_or_null("TopLeft/VisibilityLabel") as Label
 
-const _BAR_L: float = 88.0
-const _BAR_W: float = 222.0  # 88 -> 310 px
-
 func _poll_noise_visibility() -> void:
 	var player := get_tree().get_first_node_in_group("player")
 	if player == null:
@@ -428,11 +436,19 @@ func _poll_noise_visibility() -> void:
 		vis = float(player.visibility)
 	vis = clampf(vis, 0.0, 1.0)
 	if noise_fill:
-		noise_fill.offset_right = _BAR_L + noise * _BAR_W
+		noise_fill.offset_right = noise * BAR_W
 		noise_fill.color = _pick_noise_color(noise)
 	if vis_fill:
-		vis_fill.offset_right = _BAR_L + vis * _BAR_W
+		vis_fill.offset_right = vis * BAR_W
 		vis_fill.color = _pick_vis_color(vis)
+	var loud := noise >= _NOISE_SHOWN
+	if loud != _noise_loud:
+		_noise_loud = loud
+		_FADE.show_for([noise_caption, get_node_or_null("TopLeft/NoiseT"), noise_fill], 1.5, 0.0, loud)
+	var seen := vis >= _VIS_SHOWN
+	if seen != _vis_seen:
+		_vis_seen = seen
+		_FADE.show_for([vis_caption, get_node_or_null("TopLeft/VisibilityT"), vis_fill], 1.5, 0.0, seen)
 
 func _pick_noise_color(v: float) -> Color:
 	if v < 0.34: return Color(0.373, 0.541, 0.306)  # stamina
@@ -656,6 +672,7 @@ func _apply_touch_visibility() -> void:
 			var n := get_node_or_null(path) as CanvasItem
 			if n != null:
 				n.visible = false
+		($BtnPause as Button).self_modulate.a = 0.5  # Esc pauses on a keyboard, the button only rests there
 		return
 	_apply_button_size()
 	EventBus.settings_changed.connect(func(key: String, _value: Variant) -> void:
@@ -732,6 +749,9 @@ func _localize_static_labels() -> void:
 	var radar_label := get_node_or_null("TopRight/RadarLabel") as Label
 	if radar_label != null:
 		radar_label.text = LocalizationManager.t("HUD_RADAR")
+	var map_button := get_node_or_null("MapButton") as Button
+	if map_button != null:
+		map_button.text = LocalizationManager.t("MAP_TITLE")
 	var btn_sprint := get_node_or_null("BottomRight/BtnSprint") as Button
 	if btn_sprint != null:
 		btn_sprint.text = LocalizationManager.t("HUD_SPRINT")
@@ -741,9 +761,9 @@ func _localize_static_labels() -> void:
 
 func _add_captions() -> void:
 	var data := [
+		[LocalizationManager.t("HUD_BATTERY"), $TopLeft/Bat],
 		[LocalizationManager.t("HUD_HP"), $TopLeft/HP],
-		[LocalizationManager.t("HUD_STAMINA"), $TopLeft/Stam],
-		[LocalizationManager.t("HUD_BATTERY"), $TopLeft/Bat]
+		[LocalizationManager.t("HUD_STAMINA"), $TopLeft/Stam]
 	]
 	var outline_col := Color(0.047, 0.063, 0.086, 1.0)
 	var shadow_col := Color(0.0, 0.0, 0.0, 0.5)
@@ -767,11 +787,22 @@ func _add_captions() -> void:
 		bar.position.y = float(row) * (BAR_ROW_PITCH)
 		bar.offset_top = float(row) * BAR_ROW_PITCH + BAR_ROW_TOP
 		bar.offset_bottom = bar.offset_top + BAR_H
+		bar.offset_right = bar.offset_left + BAR_W
+		var icon := bar.get_node_or_null("Icon") as Control
+		if icon != null:
+			icon.offset_top = (BAR_H - 16.0) * 0.5
+			icon.offset_bottom = icon.offset_top + 16.0
 		match row:
-			0: _hp_caption = lbl
-			1: _stam_caption = lbl
-			2: _bat_caption = lbl
+			0: _bat_caption = lbl
+			1: _hp_caption = lbl
+			2: _stam_caption = lbl
 		row += 1
+	for val: Label in [hp_val, stam_val, bat_val]:
+		val.offset_left = BAR_W + 8.0
+		val.offset_right = BAR_W + 48.0
+		val.offset_top = (BAR_H - 19.0) * 0.5
+		val.offset_bottom = val.offset_top + 19.0
+		val.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	row = _layout_extra_rows(row)
 	var tl: Control = $TopLeft
 	tl.offset_bottom = tl.offset_top + BAR_ROW_TOP + float(row) * BAR_ROW_PITCH
@@ -791,17 +822,51 @@ func _layout_extra_rows(start_row: int) -> int:
 		if caption == null:
 			continue
 		var top := float(row) * BAR_ROW_PITCH + BAR_ROW_TOP
-		caption.offset_top = top
-		caption.offset_bottom = top + BAR_H
-		# Полоса и её подложка чуть тоньше подписи и выровнены по её центру.
+		# The grid of the rows above: a 12 px caption over a bar of the same width and height.
+		caption.add_theme_font_size_override("font_size", 12)
+		caption.add_theme_color_override("font_color", Color(0.682, 0.714, 0.749))
+		var cap_h: float = maxf(caption.get_combined_minimum_size().y, 12.0)
+		caption.offset_left = 0.0
+		caption.offset_right = 120.0
+		caption.offset_top = top - cap_h - 2.0
+		caption.offset_bottom = top - 2.0
 		for bar in [r[2], r[1]]:
 			var c: Control = bar
 			if c == null:
 				continue
-			c.offset_top = top + 2.0
-			c.offset_bottom = top + BAR_H - 2.0
+			c.offset_left = 0.0
+			c.offset_top = top
+			c.offset_bottom = top + BAR_H
+		var track: Control = r[2]
+		if track != null:
+			track.offset_right = BAR_W
 		row += 1
 	return row
+
+## Whole segments: a charge of 0.31 lights three of eight.
+func _pip_fill(ratio: float) -> float:
+	return ceilf(clampf(ratio, 0.0, 1.0) * _PIPS) / float(_PIPS)
+
+func _add_battery_pips() -> void:
+	var row := $TopLeft/Bat as Control
+	for i in range(1, _PIPS):
+		var gap := ColorRect.new()
+		gap.color = ThemeProvider.COLOR_BG_DARK
+		gap.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		gap.position = Vector2(BAR_W * float(i) / float(_PIPS) - 1.0, 0.0)
+		gap.size = Vector2(2.0, BAR_H)
+		row.add_child(gap)
+
+## The calm start (docs/HUD_PLAN.md rows 1 to 5): the battery's value shows only when low, the stamina value never, and the rows that
+## carry no news begin faded.
+func _finish_rows(hp_ratio: float, bat_ratio: float) -> void:
+	_add_battery_pips()
+	bat_val.visible = bat_ratio <= _BAT_LOW
+	stam_val.visible = false
+	_hp_hurt = hp_ratio < 0.999
+	_FADE.settle([$TopLeft/Stam, noise_caption, get_node_or_null("TopLeft/NoiseT"), noise_fill, vis_caption, get_node_or_null("TopLeft/VisibilityT"), vis_fill])
+	if not _hp_hurt:
+		_FADE.settle([$TopLeft/HP])
 
 func _setup_number_fonts() -> void:
 	for lbl in [hp_val, stam_val, bat_val]:
@@ -1271,6 +1336,10 @@ func _on_hp(ratio: float) -> void:
 	_hp = ratio
 	_tween_fill(hp_fill, ratio)
 	hp_val.text = str(int(ratio * 100))
+	var hurt := ratio < 0.999
+	if hurt != _hp_hurt:
+		_hp_hurt = hurt
+		_FADE.show_for([$TopLeft/HP], 3.0, 0.0, hurt)
 	# This is a full-screen beat (VignetteOverlay is a full-rect ColorRect), so it
 	# honours reduce_flash - the same toggle that already silences the noise
 	# vignette pulse below, and the one GAMEFEEL_SPEC.md §2 lists for full-screen
@@ -1311,14 +1380,19 @@ func _on_stam(ratio: float) -> void:
 	_stam = ratio
 	_tween_fill(stam_fill, ratio)
 	stam_val.text = str(int(ratio * 100))
+	var low := ratio < 0.999
+	if low != _stam_low:
+		_stam_low = low
+		_FADE.show_for([$TopLeft/Stam], 1.5, 0.0, low)
 	var attack := get_node_or_null("BottomRight/BtnAttack") as CanvasItem
 	if attack != null:
 		attack.modulate = ATTACK_GREY if ratio < ATTACK_MIN_STAMINA else Color.WHITE
 
 func _on_bat(ratio: float) -> void:
 	_bat = ratio
-	_tween_fill(bat_fill, ratio)
+	_tween_fill(bat_fill, _pip_fill(ratio))
 	bat_val.text = str(int(ratio * 100))
+	bat_val.visible = ratio <= _BAT_LOW
 	if _battery_ad_button != null and is_instance_valid(_battery_ad_button) and not _battery_ad_button.disabled:
 		_battery_ad_button.visible = ratio < 0.3
 
@@ -1351,7 +1425,7 @@ func _add_battery_ad_button() -> void:
 	# wrap to a second line instead of spilling past the edge.
 	btn.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	btn.custom_minimum_size = Vector2(150, 40)
-	btn.position = Vector2(0, 22)
+	btn.position = Vector2(BAR_W + 52.0, -12.0)  # beside the segments: below them it sat on the health row
 	btn.pressed.connect(func() -> void:
 		btn.disabled = true
 		btn.visible = false
@@ -1723,10 +1797,11 @@ func _add_map_button() -> void:
 	var btn := Button.new()
 	btn.name = "MapButton"
 	btn.position = _MAP_BUTTON_POS
-	btn.size = Vector2(48, 48)
+	btn.size = Vector2(56, 40)
 	btn.add_theme_color_override("font_color", Color(0.788, 0.635, 0.290))
-	btn.add_theme_font_size_override("font_size", 20)
-	btn.text = "🗺"
+	btn.add_theme_font_size_override("font_size", 16)
+	btn.text = LocalizationManager.t("MAP_TITLE")
+	btn.visible = has_touch_ui()  # the M key opens the map on a keyboard
 	btn.pressed.connect(_on_map_btn)
 	add_child(btn)
 
@@ -1747,7 +1822,7 @@ func _setup_radar() -> void:
 	radar.set_script(radar_script)
 	radar.name = "Radar"
 	frame.add_child(radar)
-	radar.set_anchors_preset(Control.PRESET_FULL_RECT)
+	radar.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)  # radar.gd's own offsets sat it 16 px off its frame
 
 func _show_notice(msg: String) -> void:
 	notice.text = msg

@@ -31,6 +31,7 @@ CONSUMERS = {
     "crouch_input": ("scripts/player/player_3d.gd", 'get_setting("crouch_input"'),
     "hud_opacity": ("scripts/ui/hud_3d.gd", 'get_setting("hud_opacity"'),
     "button_size": ("scripts/ui/hud_3d.gd", 'get_setting("button_size"'),
+    "show_minimap": ("scripts/ui/ui_manager.gd", 'get_setting("show_minimap"'),
     "touch_tuning_preset": (MANAGER, "TOUCH_TUNING_PRESETS"),
     "touch_sensitivity": ("scripts/player/player_3d.gd", "get_touch_sensitivity()"),
     "haptics": ("scripts/ui/virtual_joystick.gd", "haptics_enabled()"),

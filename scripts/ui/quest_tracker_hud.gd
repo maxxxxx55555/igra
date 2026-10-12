@@ -28,15 +28,21 @@ var _markers: Array[Dictionary] = []
 ## district, and a direction arrow does not need per-frame precision.
 const _RESOLVE_INTERVAL := 0.4
 var _resolve_timer := 0.0
+## The list shows for this long when an objective changes and when play starts, then fades (docs/HUD_PLAN.md row 22).
+const _SHOW_SEC: float = 8.0
+const _FADE := preload("res://scripts/ui/hud_fade.gd")
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_build_ui()
-	
+	EventBus.game_state_changed.connect(func(state: int) -> void:
+		if state == GameManager.GameState.PLAYING and _container.visible:
+			_FADE.show_for([_container], _SHOW_SEC))
+
 	QuestManager.quest_started.connect(_refresh)
 	QuestManager.quest_completed.connect(_refresh)
 	QuestManager.quest_progress.connect(_refresh)
-	
+
 	EventBus.settings_changed.connect(_on_settings_changed)
 	# Static audit 2026-09-08: title on this always-on gameplay HUD was set
 	# once and never retranslated. The objective rows themselves are built from
@@ -46,6 +52,10 @@ func _ready() -> void:
 	_refresh()
 
 func _build_ui() -> void:
+	# UIManager builds this overlay as a Control with no size, and a panel anchored to it drew at x = -320, off screen. The overlay
+	# fills the screen and lets every click through, so the panel is on screen and a faded one does not take the camera's touches.
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_ignore_input(self)
 	# Панель справа сверху, под миникартой.
 	# size у заякоренного Control игнорируется, а из четырёх отступов задавались
 	# только два — панель схлопывалась в ~70 px, и текст переносился по одной
@@ -68,7 +78,7 @@ func _build_ui() -> void:
 	var inner_vb := VBoxContainer.new()
 	inner_vb.add_theme_constant_override("separation", 6)
 	bg.add_child(inner_vb)
-	
+
 	# Title
 	_title_lbl = Label.new()
 	_title_lbl.text = LocalizationManager.t("QUEST_OBJECTIVES")
@@ -76,12 +86,12 @@ func _build_ui() -> void:
 	_title_lbl.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
 	_title_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	inner_vb.add_child(_title_lbl)
-	
+
 	# Objectives list
 	_objectives_vbox = VBoxContainer.new()
 	_objectives_vbox.add_theme_constant_override("separation", 6)
 	inner_vb.add_child(_objectives_vbox)
-	
+
 	_container.visible = false
 
 func _make_stylebox() -> StyleBoxFlat:
@@ -113,16 +123,16 @@ func _refresh(_a: Variant = null, _b: Variant = null, _c: Variant = null) -> voi
 	for c in _objectives_vbox.get_children():
 		c.queue_free()
 	_markers.clear()
-	
+
 	var active_quests: Array = QuestManager.get_active_quests()
 	if active_quests.is_empty():
 		_container.visible = false
 		return
-	
+
 	_container.visible = true
-	
+
 	var show_markers := bool(SettingsManager.get_setting("objective_markers", true))
-	
+
 	_title_lbl.text = LocalizationManager.t("QUEST_OBJECTIVES")
 	_title_lbl.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
 
@@ -179,6 +189,14 @@ func _refresh(_a: Variant = null, _b: Variant = null, _c: Variant = null) -> voi
 		more.add_theme_font_size_override("font_size", 12)
 		more.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
 		_objectives_vbox.add_child(more)
+	_ignore_input(_container)
+	_FADE.show_for([_container], _SHOW_SEC)
+
+func _ignore_input(node: Node) -> void:
+	if node is Control:
+		(node as Control).mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for child in node.get_children():
+		_ignore_input(child)
 
 func _process(delta: float) -> void:
 	if _markers.is_empty() or not _container.visible:

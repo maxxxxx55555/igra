@@ -1524,5 +1524,6 @@
   "CREDITS_ART": "アートとUI: TLS Team",
   "CREDITS_THANKS": "プレイヤーの皆さまに感謝を込めて",
   "INV_QUICKSLOT_HINT": "アイテムをクイックアクセスのスロットにドラッグします。スロットを右クリックすると初期状態に戻せます。",
-  "NGP_RUN_ALREADY_COUNTED": "この夜はすでにカウントされています。"
+  "NGP_RUN_ALREADY_COUNTED": "この夜はすでにカウントされています。",
+  "Minimap": "ミニマップ"
 }

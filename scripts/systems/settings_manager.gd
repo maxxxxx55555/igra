@@ -77,6 +77,7 @@ func _load_defaults() -> void:
 	_settings["crouch_input"] = 0
 	_settings["hud_opacity"] = 1.0
 	_settings["button_size"] = 1.0
+	_settings["show_minimap"] = false
 	_settings["graphics_tier"] = 2  # High
 	_settings["resolution"] = 1     # 1080p
 	_settings["vsync"] = true

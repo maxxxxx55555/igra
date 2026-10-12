@@ -1524,5 +1524,6 @@
   "CREDITS_ART": "Grafik ve arayüz: TLS Team",
   "CREDITS_THANKS": "Oyunculara özel teşekkürler",
   "INV_QUICKSLOT_HINT": "Bir eşyayı hızlı erişim yuvasına sürükleyin. Yuvayı sıfırlamak için sağ tıklayın.",
-  "NGP_RUN_ALREADY_COUNTED": "Bu gece zaten sayıldı."
+  "NGP_RUN_ALREADY_COUNTED": "Bu gece zaten sayıldı.",
+  "Minimap": "Mini harita"
 }
