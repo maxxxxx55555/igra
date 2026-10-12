@@ -1,0 +1,30 @@
+# proof s22_aab_check_1b1a3f6
+# utc 20261012T064721Z
+# head 1b1a3f6 (uncommitted paths: 2)
+# env none
+# cmd bash -c set -a; . .signing/release.env; set +a; python tools/qa_sim/aab_check.py build/tls.aab --secrets --against "../_BACKUPS/2026-10-12_09-44/build/tls.aab"
+size    136508275 bytes
+sha256  7121d2f9745a763c38763902fe7472c166ab9055c85b5101c11bd3470c70600a
+entries 2686
+label   base/resources.pb names Last Streetlight: ok
+adsdk   0 dex entries name Lcom/applovin/: ok
+secrets 2 value(s) of the environment searched in 2683 entries: 0 hits (path, password)
+jar     jar verified.
+signer  4f6be6415c260b34...: signer_match=yes
+against tls.aab: 0 entries gone, 2 new, 28 with other bytes
+  new     assetPackInstallTime/assets/scripts/ui/hud_fade.gd.remap
+  new     assetPackInstallTime/assets/scripts/ui/hud_fade.gdc
+  changed META-INF/MANIFEST.MF
+  changed META-INF/TLS_RELE.RSA
+  changed META-INF/TLS_RELE.SF
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-de254b77e2e14394365fde8021eef8bf-hud_3d.scn
+  changed assetPackInstallTime/assets/.godot/global_script_class_cache.cfg
+  changed assetPackInstallTime/assets/.godot/uid_cache.bin
+  changed assetPackInstallTime/assets/assets.sparsepck
+  changed assetPackInstallTime/assets/data/i18n/ar.json
+  changed assetPackInstallTime/assets/data/i18n/de.json
+  changed assetPackInstallTime/assets/data/i18n/en.json
+  changed assetPackInstallTime/assets/data/i18n/es.json
+  changed assetPackInstallTime/assets/data/i18n/fr.json
+aab_check: PASS
+# EXIT=0
