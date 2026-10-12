@@ -183,9 +183,11 @@ static func _touch_buttons_scale_clear(r: Node) -> void:
 	SettingsManager.set_setting("touch_calibration_done", true)
 	SettingsManager.set_button_size(1.0)
 	ProjectSettings.set_setting("input_devices/pointing/emulate_touch_from_mouse", true)
+	Input.emulate_touch_from_mouse = true
 	var hud := HUD_SCENE.instantiate()
 	r.get_tree().root.add_child(hud)
 	await r.get_tree().process_frame
+	var touch: bool = bool(hud.call("has_touch_ui"))
 	var view := Rect2(Vector2.ZERO, r.get_viewport().get_visible_rect().size)
 	var bad: Array[String] = []
 	var found: int = 0
@@ -208,10 +210,11 @@ static func _touch_buttons_scale_clear(r: Node) -> void:
 				if (rects[names[i]] as Rect2).intersects(rects[names[j]]):
 					bad.append("%s over %s at %.1f" % [names[i], names[j], factor])
 	hud.queue_free()
+	Input.emulate_touch_from_mouse = false
 	ProjectSettings.set_setting("input_devices/pointing/emulate_touch_from_mouse", emulate0)
 	SettingsManager.set_button_size(size0)
 	SettingsManager.set_setting("touch_calibration_done", calibrated0)
-	r._ok(found == 8 and bad.is_empty(), "HUDP11 the eight touch buttons stay on screen and clear of each other at Button Size 0.8, 1.0 and 1.5 (found %d, problems %s)" % [found, bad.slice(0, 4)])
+	r._ok(touch and found == 8 and bad.is_empty(), "HUDP11 the eight touch buttons stay on screen and clear of each other at Button Size 0.8, 1.0 and 1.5 (touch HUD %s, found %d, problems %s)" % [touch, found, bad.slice(0, 4)])
 
 ## HUDP7: the crosshair rests faded, wakes on a shot and fades five seconds after it.
 static func _combat_hud_rests(r: Node, hud: Node) -> void:
