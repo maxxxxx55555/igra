@@ -1,0 +1,104 @@
+# -*- coding: utf-8 -*-
+"""Store answers gate (Session 23): the answers of the content-rating questionnaire (IARC) and of the Data safety form, each with the grep that backs it.
+
+A row holds a regular expression, the paths it is run over and a rule on the count of hits: "none" (the answer is a No and holds while nothing matches) or "some"
+(the answer is a Yes and holds while something matches). `--check` runs every grep and fails on a row whose rule no longer holds; `--write store/IARC_ANSWERS.md` writes the document.
+
+usage: python tools/qa_sim/store_answers.py [--check] [--write store/IARC_ANSWERS.md] [--demo]
+"""
+import pathlib
+import re
+import sys
+
+ROOT = pathlib.Path(__file__).resolve().parents[2]
+SKIP = ("scripts/tools/", "scenes/tools/")
+SUFFIXES = {".gd", ".tscn", ".json", ".cfg", ".godot", ".xml", ".gradle", ".tres"}
+CODE = ["scripts", "scenes", "addons"]
+EN = ["data/i18n/en.json"]
+# (form, question, answer, pattern, flags, paths, rule, basis)
+ROWS = [
+    ("IARC", "Violence", "Yes: stylized violence against creatures (shooting, melee, thrown fire), blood on a hit", r"vfx_blood", re.I, CODE, "some", "the blood scene is played by the monsters' hits"),
+    ("IARC", "Fear and horror", "Yes: sustained horror tension, monsters in the dark", r"heartbeat", re.I, ["scripts"], "some", "the heartbeat and breath layers play as the monsters close in"),
+    ("IARC", "Sexual content or nudity", "No", r"\b(nude|naked|sex\w*|erotic\w*|porn\w*|breast\w*)\b", re.I, EN, "none", "none of the English strings"),
+    ("IARC", "Profanity", "No", r"\b(fuck\w*|shit\w*|bitch\w*|asshole|cunt|dick|bastard|whore)\b", re.I, EN, "none", "none of the English strings"),
+    ("IARC", "Reference to alcohol, tobacco or drugs", "Yes, a reference: an item named Alcohol, an ingredient of the medkit and of the thrown fire bottle; nobody drinks it", r"\balcohol\b", re.I, EN, "some", "ITEM_ALCOHOL; the recipes are in scripts/crafting/workbench_logic.gd"),
+    ("IARC", "Gambling, real or simulated; loot boxes", "No", r"gambl|slot machine|roulette|loot.?box|\bgacha\b", re.I, CODE + ["data/i18n/en.json"], "none", "daily rewards are fixed amounts"),
+    ("IARC", "Users can communicate or share content with each other", "No", r"\bchat\b|voip|VoiceChat|text_chat", re.I, CODE, "none", "no chat, no voice, no user content; Share copies text to the clipboard"),
+    ("IARC", "Shares the user's location", "No", r"Geolocation|get_location|ACCESS_FINE_LOCATION|ACCESS_COARSE_LOCATION", 0, CODE + ["export_presets.cfg"], "none", "no location API or permission"),
+    ("IARC", "Digital purchases", "No", r"BillingClient|GodotGooglePlayBilling|InAppPurchase|IAPStore|real.money", re.I, CODE + ["export_presets.cfg", "project.godot"], "none", "no billing API; the shop spends coins earned in play"),
+    ("IARC", "Unrestricted internet access", "No", r"WebView|OS\.shell_open|HTTPRequest|HTTPClient", 0, CODE, "none", "no web view, no browser call, no HTTP client (docs/PRIVACY_AUDIT.md)"),
+    ("Data safety", "Collects or shares any required user data type", "No", r"Firebase|Crashlytics|Analytics|Sentry|AppsFlyer", 0, CODE, "none", "no analytics or crash-reporting SDK"),
+    ("Data safety", "Advertising ID", "No", r"AD_ID|advertising_id|AdvertisingId", 0, ["export_presets.cfg", "android/build/AndroidManifest.xml", "android/build/src", "scripts"], "none", "no AD_ID permission, no script that reads an advertising identifier"),
+    ("Data safety", "Camera, microphone, contacts or storage permissions", "No (only INTERNET and VIBRATE are true)", r"^permissions/(?!internet|vibrate)\w+=true", re.M, ["export_presets.cfg"], "none", "export_presets.cfg"),
+    ("Data safety", "Ads", "No (the plugin is not in the build)", r"^gradle_build/plugins_enabled=PackedStringArray\(\)", re.M, ["export_presets.cfg"], "some", "plugins_enabled is empty in every preset line that sets it"),
+]
+
+
+def run(pattern, flags, paths):
+    rx = re.compile(pattern, flags)
+    hits = []
+    for entry in paths:
+        path = ROOT / entry
+        files = [path] if path.is_file() else [f for f in path.rglob("*") if f.is_file() and f.suffix in SUFFIXES]
+        for f in files:
+            rel = f.relative_to(ROOT).as_posix()
+            if rel.startswith(SKIP) or "/.godot/" in rel or rel.startswith("android/build/build/"):
+                continue
+            for m in rx.finditer(f.read_text(encoding="utf-8", errors="replace")):
+                hits.append((rel, m.group(0)))
+    return hits
+
+
+def verdicts(rows=ROWS):
+    out = []
+    for form, question, answer, pattern, flags, paths, rule, basis in rows:
+        hits = run(pattern, flags, paths)
+        ok = (len(hits) == 0) if rule == "none" else (len(hits) > 0)
+        out.append((form, question, answer, pattern, paths, rule, basis, len(hits), ok))
+    return out
+
+
+def write(path, results):
+    lines = [
+        "# Content-rating and Data safety answers (Session 23)",
+        "",
+        "Generated by `python tools/qa_sim/store_answers.py --write store/IARC_ANSWERS.md`; `--check` is a static gate of `tools/check.sh`. Each answer below has the regular expression that backs it, the paths it was run over",
+        "and the number of hits at the commit that wrote this file. A \"No\" holds while its pattern matches nothing; a \"Yes\" holds while its pattern matches something. The form pages and the other declarations are in `docs/STORE_SUBMISSION.md` sections 4 to 6.",
+        "",
+        "| Form | Question | Answer | Pattern | Paths | Rule | Hits | Basis |",
+        "|---|---|---|---|---|---|---|---|",
+    ]
+    for form, question, answer, pattern, paths, rule, basis, count, _ in results:
+        lines.append("| %s | %s | %s | `%s` | %s | %s | %d | %s |" % (form, question, answer, pattern.replace("|", "\\|"), ", ".join("`%s`" % p for p in paths), rule, count, basis))
+    lines += [
+        "",
+        "## Age rating: an estimate, not a rating",
+        "",
+        "The questionnaire above is likely to raise: violence (against fictional creatures, with blood), fear (sustained horror tension) and a reference to alcohol (an ingredient item). It raises no sexual content, language, gambling,",
+        "user interaction, location or purchase descriptor. The expected results are PEGI 16 (`docs/PRODUCTION_BIBLE.md` section 6) and ESRB Teen; IARC computes the real rating from the answers when the owner submits the form.",
+        "UNVERIFIABLE-HERE: the rating itself and the regional ratings; owner action: answer the questionnaire in the Play Console with the table above and keep the certificate it issues.",
+        "",
+        "Target audience (Console): 16 and over; not directed to children, so the Families program is skipped (`docs/PRIVACY_POLICY_FINAL.md`, Children).",
+    ]
+    pathlib.Path(path).write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def main(argv):
+    if "--demo" in argv:
+        yes = [("x", "q", "a", r"zq9x7w", 0, ["scripts"], "some", "b")]
+        no = [("x", "q", "a", r"zq9x7w", 0, ["scripts"], "none", "b")]
+        assert not verdicts(yes)[0][-1] and verdicts(no)[0][-1]
+        print("store_answers demo: a Yes with no hit fails and a No with no hit holds")
+        return 0
+    results = verdicts()
+    bad = [r for r in results if not r[-1]]
+    for form, question, _, pattern, _, rule, _, count, _ in bad:
+        print("FAIL %s / %s: rule %s but %d hit(s) for %s" % (form, question, rule, count, pattern))
+    if "--write" in argv:
+        write(argv[argv.index("--write") + 1], results)
+    print("store_answers: %d row(s), %d finding(s)" % (len(results), len(bad)))
+    return 1 if bad else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

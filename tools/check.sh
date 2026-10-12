@@ -367,6 +367,46 @@ if "$PY" tools/qa_sim/title_check.py --demo >/dev/null 2>&1 && "$PY" tools/qa_si
 else
   bad "title_check (см. 'python tools/qa_sim/title_check.py')"
 fi
+if "$PY" tools/qa_sim/privacy_audit.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/privacy_audit.py --check >/dev/null 2>&1; then
+  ok "privacy_audit (every network, analytics and ad hit is classified in docs/PRIVACY_AUDIT.md; no way into the unreachable lobby)"
+else
+  bad "privacy_audit (см. 'python tools/qa_sim/privacy_audit.py --check')"
+fi
+if "$PY" tools/qa_sim/store_answers.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/store_answers.py --check >/dev/null 2>&1; then
+  ok "store_answers (every content-rating and Data safety answer of store/IARC_ANSWERS.md still holds against the code)"
+else
+  bad "store_answers (см. 'python tools/qa_sim/store_answers.py --check')"
+fi
+if "$PY" tools/qa_sim/i18n_placeholder_fuzz.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/i18n_placeholder_fuzz.py --check >/dev/null 2>&1; then
+  ok "i18n_placeholder_fuzz (specifiers, call arity, literal keys, Latin stubs, cognates and the glossary agree in all 13 locales)"
+else
+  bad "i18n_placeholder_fuzz (см. 'python tools/qa_sim/i18n_placeholder_fuzz.py --check')"
+fi
+if "$PY" tools/qa_sim/daily_sim.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/daily_sim.py >/dev/null 2>&1; then
+  ok "daily_sim (every daily template is ticked by a wired signal and reachable; the streak tiers 7, 30 and 100 pay)"
+else
+  bad "daily_sim (см. 'python tools/qa_sim/daily_sim.py')"
+fi
+if "$PY" tools/qa_sim/achievements_sim.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/achievements_sim.py >/dev/null 2>&1; then
+  ok "achievements_sim (all 31 achievements have a trigger that a real EventBus path reaches: docs/ACHIEVEMENT_TRIGGER_SPEC.md)"
+else
+  bad "achievements_sim (см. 'python tools/qa_sim/achievements_sim.py')"
+fi
+if "$PY" tools/qa_sim/save_migration_sim.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/save_migration_sim.py --static >/dev/null 2>&1; then
+  ok "save_migration_sim (SAVE_VERSION 3 and BACKUP_DEPTH 3 are what the matrix and the SAVEMIG check are written for)"
+else
+  bad "save_migration_sim (см. 'python tools/qa_sim/save_migration_sim.py --static')"
+fi
+if "$PY" tools/qa_sim/ngplus_table.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/ngplus_table.py >/dev/null 2>&1; then
+  ok "ngplus_table (every New Game+ number the game shows or stores is read by a script: docs/NGPLUS_TABLE.md)"
+else
+  bad "ngplus_table (см. 'python tools/qa_sim/ngplus_table.py')"
+fi
+if "$PY" tools/qa_sim/s23_mutations.py --demo >/dev/null 2>&1; then
+  ok "s23_mutations --demo (the AF2 mutation judge tells a vacuous check from a biting one and finds a stray failure)"
+else
+  bad "s23_mutations --demo (см. 'python tools/qa_sim/s23_mutations.py --demo')"
+fi
 
 # ─────────────────────────── проверки в движке ───────────────────────────
 if [[ $STATIC_ONLY -eq 1 ]]; then
