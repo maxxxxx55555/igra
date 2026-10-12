@@ -149,9 +149,9 @@ func _detect_material() -> String:
 	var collider := _raycast.get_collider()
 	if collider == null:
 		return "default"
-	var tagged = collider.get("surface_material")
-	if tagged != null and String(tagged) != "":
-		return String(tagged)
+	var surface := _surface_tag(collider, _raycast.get_collider_shape())
+	if surface != "":
+		return _wetted(surface)
 	var n: String = String(collider.name).to_lower()
 	if "asphalt" in n or "road" in n or "street" in n:
 		return "asphalt_dry"
@@ -173,5 +173,31 @@ func _detect_material() -> String:
 		return "tile"
 	return "default"
 
-func register_surface(node: Node3D, material: String) -> void:
-	node.set("surface_material", material)
+## The surface a ray met: the metadata "surface" of the shape it hit (a street strip is one body of many shapes), then of the body, then the
+## property surface_material. Empty when nothing is tagged; the names of the body are the last guess.
+func _surface_tag(collider: Object, shape_index: int) -> String:
+	var body := collider as CollisionObject3D
+	if body != null:
+		var shape_node: Object = body.shape_owner_get_owner(body.shape_find_owner(shape_index))
+		if shape_node != null and shape_node.has_meta(&"surface"):
+			return String(shape_node.get_meta(&"surface"))
+	if collider.has_meta(&"surface"):
+		return String(collider.get_meta(&"surface"))
+	var legacy: Variant = collider.get("surface_material")
+	return String(legacy) if legacy != null else ""
+
+## Rain wets the road: a shower leaves it wet, a storm leaves standing water.
+const WET_RAIN: float = 0.5
+const PUDDLE_RAIN: float = 0.9
+
+func _wetted(surface: String) -> String:
+	var weather := get_node_or_null("/root/WeatherSystem")
+	var rain: float = float(weather.call("rain_strength")) if weather != null else 0.0
+	if surface == "asphalt_dry" and rain >= PUDDLE_RAIN:
+		return "puddle"
+	if surface == "asphalt_dry" and rain >= WET_RAIN:
+		return "asphalt_wet"
+	return surface
+
+func register_surface(node: Node, material: String) -> void:
+	node.set_meta(&"surface", material)

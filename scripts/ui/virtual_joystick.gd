@@ -65,9 +65,13 @@ func _gui_input(event: InputEvent) -> void:
 func _haptic(ms: int) -> void:
 	if OS.has_feature("mobile") and SettingsManager.haptics_enabled():
 		Input.vibrate_handheld(ms)
+## One-Handed Mode doubles the window: two taps of one thumb are slower.
+func double_tap_window() -> float:
+	return DOUBLE_TAP_WINDOW * (2.0 if bool(SettingsManager.get_setting("one_handed", false)) else 1.0)
+
 func _check_double_tap() -> void:
 	var now := Time.get_ticks_msec() / 1000.0
-	if _last_tap_time >= 0.0 and now - _last_tap_time <= DOUBLE_TAP_WINDOW:
+	if _last_tap_time >= 0.0 and now - _last_tap_time <= double_tap_window():
 		_last_tap_time = -1.0
 		var radius := _radius()
 		var dir: Vector2 = (_knob_offset / radius) if (radius > 0.0 and _knob_offset.length() > 0.1) else Vector2.UP

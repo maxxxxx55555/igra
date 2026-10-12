@@ -16,7 +16,7 @@ func setup(camera: Camera3D) -> void:
 	_camera = camera
 
 func add_trauma(amount: float) -> void:
-	if SettingsManager.get_setting("reduce_screen_shake", false):
+	if SettingsManager.get_setting("reduce_screen_shake", false) or SettingsManager.get_setting("reduce_camera_motion", false):
 		return
 	_trauma = minf(1.0, _trauma + amount)
 

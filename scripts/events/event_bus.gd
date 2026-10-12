@@ -46,6 +46,7 @@ signal document_unlocked(document_id: String)
 signal encyclopedia_unlocked(entry_id: String)
 signal enemy_hp_updated(monster_id: StringName, hp: float)
 signal examine_text(text: String)
+signal voice_line(text: String)  # a line the Keeper says aloud (a broadcast): the subtitles draw it
 signal final_night_started
 signal flashlight_changed()
 signal flashlight_depleted

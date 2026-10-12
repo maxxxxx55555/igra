@@ -29,6 +29,7 @@ var _light_energy_mult: float = 1.0
 var _reduce_flash: bool = false
 
 func _ready() -> void:
+	add_to_group("streetlights")
 	_reduce_flash = SettingsManager != null and bool(SettingsManager.get_setting("reduce_flash", false))
 	if not mesh_visible:
 		var pole := get_node_or_null("Pole")

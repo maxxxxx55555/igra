@@ -29,6 +29,8 @@ const AIM_DOT: float = 0.35
 ## на мобильном GPU, а на глаз разницы нет.
 const SCAN_INTERVAL: float = 0.1
 
+const EdgeHighlight := preload("res://scripts/effects/edge_highlight.gd")
+
 var _player: Node3D = null
 var _aim: Node3D = null
 var _target: Node = null
@@ -45,6 +47,9 @@ func _ready() -> void:
 		_player = get_parent() as Node3D
 	if _aim == null:
 		_aim = _player
+	var edge := EdgeHighlight.new()
+	edge.player = _player
+	add_child(edge)
 	var isv := get_node_or_null("/root/InputService")
 	if isv != null and isv.has_signal("interact_requested"):
 		isv.interact_requested.connect(_on_interact_requested)

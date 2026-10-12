@@ -148,7 +148,7 @@ func _fill_roads() -> void:
 					t.basis = t.basis.rotated(Vector3.UP, PI * 0.5)
 				_road_mm.multimesh.set_instance_transform(idx, t)
 				if s == 0:
-					_create_collision(t.origin, r, steps)
+					_create_collision(t.origin, r, steps, &"asphalt_dry")
 				idx += 1
 
 func _fill_sidewalks() -> void:
@@ -174,7 +174,7 @@ func _fill_sidewalks() -> void:
 						t.basis = t.basis.rotated(Vector3.UP, PI * 0.5)
 					_sidewalk_mm.multimesh.set_instance_transform(idx, t)
 					if s == 0:
-						_create_collision(t.origin, r, steps)
+						_create_collision(t.origin, r, steps, &"concrete")
 					idx += 1
 
 ## Разметка идёт со своим шагом, а не с шагом плитки дороги, и лежит над дорогой на MARKING_LIFT.
@@ -214,7 +214,7 @@ func _ensure_mm() -> void:
 ## One long box per lane strip instead of one body per tile (about 384 bodies per district): `first` is the origin of the
 ## strip's first tile and the box runs from it along the road over `steps` tiles. The strips share one StreetCollision body
 ## and are made from build(), deferred exactly as the tile bodies were.
-func _create_collision(first: Vector3, road: Dictionary, steps: int) -> void:
+func _create_collision(first: Vector3, road: Dictionary, steps: int, surface: StringName) -> void:
 	if _collision == null:
 		_collision = StaticBody3D.new()
 		_collision.name = "StreetCollision"
@@ -225,5 +225,6 @@ func _create_collision(first: Vector3, road: Dictionary, steps: int) -> void:
 	box.size = Vector3(length, TILE_THICKNESS, tile_size) if horizontal else Vector3(tile_size, TILE_THICKNESS, length)
 	var shape := CollisionShape3D.new()
 	shape.shape = box
+	shape.set_meta(&"surface", surface)  # what the footsteps sound like (footstep_system.gd)
 	shape.position = first + (Vector3.RIGHT if horizontal else Vector3.BACK) * (length - tile_size) * 0.5
 	_collision.add_child(shape)

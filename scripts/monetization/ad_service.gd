@@ -81,6 +81,8 @@ func is_rewarded_ready() -> bool:
 func can_show_reward(reward_id: StringName) -> bool:
 	if reward_id in SESSION_LIMITED and _used_this_session.get(reward_id, false):
 		return false
+	if reward_id == &"revive" and SettingsManager.difficulty_scale("revive") <= 0.0:
+		return false  # Hard makes no revive offer
 	return is_rewarded_ready()
 
 ## Сколько секунд осталось до следующего доступного ролика.

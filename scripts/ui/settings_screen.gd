@@ -1,5 +1,7 @@
 extends Control
 
+const _RemapPanel := preload("res://scripts/ui/remap_panel.gd")
+
 func _ready() -> void:
 	_build()
 	if not LocalizationManager.language_changed.is_connected(_on_lang_changed):
@@ -50,10 +52,7 @@ func _build() -> void:
 	_build_game_tab(game_tab)
 
 	# --- CONTROLS TAB ---
-	var controls_tab := VBoxContainer.new()
-	controls_tab.name = LocalizationManager.t("SETTINGS_CONTROLS")
-	tab_container.add_child(controls_tab)
-	_build_controls_tab(controls_tab)
+	_build_controls_tab(_scroll_tab(tab_container, LocalizationManager.t("SETTINGS_CONTROLS")))
 
 	# --- GRAPHICS TAB ---
 	var graphics_tab := VBoxContainer.new()
@@ -68,10 +67,7 @@ func _build() -> void:
 	_build_audio_tab(audio_tab)
 
 	# --- ACCESSIBILITY TAB ---
-	var access_tab := VBoxContainer.new()
-	access_tab.name = LocalizationManager.t("SETTINGS_ACCESSIBILITY")
-	tab_container.add_child(access_tab)
-	_build_accessibility_tab(access_tab)
+	_build_accessibility_tab(_scroll_tab(tab_container, LocalizationManager.t("SETTINGS_ACCESSIBILITY")))
 
 	# Back button
 	var b := Button.new()
@@ -84,6 +80,17 @@ func _build() -> void:
 		else:
 			UIManager.close(&"settings"))
 	vb.add_child(b)
+
+## A tab whose rows scroll: the Controls and Accessibility tabs outgrow the panel with their rows, and sooner in a long language.
+func _scroll_tab(tabs: TabContainer, tab_name: String) -> VBoxContainer:
+	var scroll := ScrollContainer.new()
+	scroll.name = tab_name
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	tabs.add_child(scroll)
+	var rows := VBoxContainer.new()
+	rows.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.add_child(rows)
+	return rows
 
 func _build_game_tab(parent: VBoxContainer) -> void:
 	parent.add_theme_constant_override("separation", 14)
@@ -191,6 +198,12 @@ func _build_controls_tab(parent: VBoxContainer) -> void:
 
 	_toggle(parent, LocalizationManager.t("Invert Look"), "invert_look")
 
+	# Session 23: the keyboard keys of the actions (scripts/systems/input_remap.gd), in a dialog of their own.
+	var keys_button := Button.new()
+	keys_button.text = LocalizationManager.t("Key Bindings")
+	keys_button.pressed.connect(func() -> void: add_child(_RemapPanel.new()))
+	parent.add_child(keys_button)
+
 func _build_graphics_tab(parent: VBoxContainer) -> void:
 	parent.add_theme_constant_override("separation", 14)
 
@@ -262,6 +275,9 @@ func _build_accessibility_tab(parent: VBoxContainer) -> void:
 	# High contrast
 	_toggle(parent, LocalizationManager.t("High Contrast"), "high_contrast")
 
+	# Interactable things get a bright rim in range (scripts/effects/edge_highlight.gd)
+	_toggle(parent, LocalizationManager.t("Edge Highlight"), "edge_highlight")
+
 	# Arachnophobia mode
 	_toggle(parent, LocalizationManager.t("Arachnophobia Mode"), "arachnophobia")
 
@@ -271,11 +287,27 @@ func _build_accessibility_tab(parent: VBoxContainer) -> void:
 	# Reduce screen shake (vestibular) — consumed in screen_shake.gd::add_trauma
 	_toggle(parent, LocalizationManager.t("Reduce Screen Shake"), "reduce_screen_shake")
 
+	# No camera kicks: no shake, no FOV punch, no sprint blur (docs/A11Y_PLAN.md)
+	_toggle(parent, LocalizationManager.t("Motion Comfort"), "reduce_camera_motion")
+
 	# docs/GAMEFEEL_SPEC.md accessibility toggles — consumed in wow_director.gd
 	# (flash/hit-stop) and toast_manager.gd/ui_button micro-motion.
 	_toggle(parent, LocalizationManager.t("Reduce Flash"), "reduce_flash")
 	_toggle(parent, LocalizationManager.t("Reduce Time Effects"), "reduce_time_fx")
 	_toggle(parent, LocalizationManager.t("Reduce UI Motion"), "reduce_ui_motion")
+
+	# Hearing: captions for what the Keeper says and for the sounds the game makes (scripts/ui/subtitle_manager.gd)
+	_toggle(parent, LocalizationManager.t("Subtitles"), "subtitles")
+	_dropdown(parent, LocalizationManager.t("Subtitle Size"), "subtitle_size",
+		[LocalizationManager.t("ts_small"), LocalizationManager.t("ts_medium"), LocalizationManager.t("ts_large")])
+	_dropdown(parent, LocalizationManager.t("Subtitle Background"), "subtitle_bg", ["0%", "50%", "100%"])
+	_dropdown(parent, LocalizationManager.t("Subtitle Color"), "subtitle_color",
+		[LocalizationManager.t("sc_white"), LocalizationManager.t("sc_yellow"), LocalizationManager.t("sc_cyan")])
+	_toggle(parent, LocalizationManager.t("Sound Cues"), "sound_cues")
+
+	# Hands and attention: the touch buttons within one thumb's reach and no hold gestures; HUD information that does not fade
+	_toggle(parent, LocalizationManager.t("One-Handed Mode"), "one_handed")
+	_toggle(parent, LocalizationManager.t("Clear Objectives"), "clear_objectives")
 
 # Helper functions
 func _slider(parent: Node, label: String, key: String, min_v: float, max_v: float, step: float, callback) -> void:
@@ -366,7 +398,7 @@ func _confirm_reset_progress() -> void:
 	no.pressed.connect(func() -> void: layer.queue_free())
 	box.add_child(no)
 
-func _dropdown(parent: Node, label: String, key: String, options: Array, callback) -> void:
+func _dropdown(parent: Node, label: String, key: String, options: Array, callback: Callable = Callable()) -> void:
 	var row := HBoxContainer.new()
 	parent.add_child(row)
 	var l := Label.new()
@@ -382,6 +414,7 @@ func _dropdown(parent: Node, label: String, key: String, options: Array, callbac
 	ob.selected = clamp(current, 0, options.size() - 1)
 	ob.item_selected.connect(func(idx: int) -> void:
 		SettingsManager.set_setting(key, idx)
-		callback.call(idx)
+		if callback.is_valid():
+			callback.call(idx)
 	)
 	row.add_child(ob)

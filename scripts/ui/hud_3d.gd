@@ -684,7 +684,7 @@ func _apply_touch_visibility() -> void:
 		return
 	_apply_button_size()
 	EventBus.settings_changed.connect(func(key: String, _value: Variant) -> void:
-		if key == "button_size":
+		if key == "button_size" or key == "one_handed":
 			_apply_button_size())
 	_install_joystick()
 
@@ -696,6 +696,25 @@ func _apply_button_size() -> void:
 		if cluster != null:
 			cluster.pivot_offset = Vector2(0.0 if path == "BottomLeft" else cluster.size.x, cluster.size.y)
 			cluster.scale = Vector2(factor, factor)
+	_place_action_cluster(factor)
+
+## Settings > One-Handed Mode: the action buttons stand beside the joystick on the left, so the one thumb that walks reaches all of them.
+const _JOYSTICK_W: float = 200.0  # the BottomLeft control of hud_3d.tscn
+const _ACTION_W: float = 308.0  # from the corner to the far side of the Stealth button (offset_left in hud_3d.tscn)
+const _ONE_HAND_GAP: float = 24.0
+
+func _place_action_cluster(factor: float) -> void:
+	var cluster := get_node_or_null("BottomRight") as Control
+	if cluster == null:
+		return
+	var left: bool = _one_handed()
+	cluster.anchor_left = 0.0 if left else 1.0
+	cluster.anchor_right = cluster.anchor_left
+	cluster.offset_left = (_JOYSTICK_W + _ACTION_W) * factor + _ONE_HAND_GAP if left else 0.0
+	cluster.offset_right = cluster.offset_left
+
+func _one_handed() -> bool:
+	return bool(SettingsManager.get_setting("one_handed", false))
 
 ## JoystickRing в сцене был просто нарисованным кольцом — двигать им игрока было
 ## нельзя. Вешаем на него virtual_joystick.gd, который пишет в InputService;
@@ -1551,8 +1570,11 @@ func _wire_action_buttons() -> void:
 	if attack:
 		attack.button_down.connect(func() -> void: isv.request_attack())
 	if sprint:
-		sprint.button_down.connect(func() -> void: isv.set_joy_run_held(true))
-		sprint.button_up.connect(func() -> void: isv.set_joy_run_held(false))
+		# One-Handed Mode: Sprint latches on a press (the thumb that sprints is the one that walks), and a second press lets go
+		sprint.button_down.connect(func() -> void: isv.set_joy_run_held(not isv.is_joy_run_held() if _one_handed() else true))
+		sprint.button_up.connect(func() -> void:
+			if not _one_handed():
+				isv.set_joy_run_held(false))
 	if stealth:
 		stealth.button_down.connect(func() -> void:
 			isv.set_joy_stealth_toggled(not isv.is_stealth_toggled()))

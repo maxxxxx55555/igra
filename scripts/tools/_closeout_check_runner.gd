@@ -17,6 +17,8 @@ const Rc19Exploit := preload("res://scripts/tools/rc16/exploit_checks.gd")
 const Rc20Window := preload("res://scripts/tools/rc16/window_checks.gd")
 const Rc21Ship := preload("res://scripts/tools/rc16/ship_checks.gd")
 const Rc22Hud := preload("res://scripts/tools/rc16/hud_checks.gd")
+const Rc23A11y := preload("res://scripts/tools/rc16/a11y_checks.gd")
+const Rc23Fx := preload("res://scripts/tools/rc16/fx_checks.gd")
 
 var _checked: int = 0
 var _fails: int = 0
@@ -74,6 +76,11 @@ func _run() -> void:
 		return
 	if OS.get_environment("CLOSEOUT_ONLY") == "s22":
 		await Rc22Hud.run(self)
+		_finish()
+		return
+	if OS.get_environment("CLOSEOUT_ONLY") == "s23":
+		await Rc23A11y.run(self)
+		await Rc23Fx.run(self)
 		_finish()
 		return
 	if OS.get_environment("CLOSEOUT_ONLY") == "rtl":
@@ -168,6 +175,8 @@ func _rc16_checks() -> void:
 	await Rc20Window.run(self)
 	await Rc21Ship.run(self)
 	await Rc22Hud.run(self)
+	await Rc23A11y.run(self)
+	await Rc23Fx.run(self)
 
 ## A monster standing still in the far corner of the world: its collider answers rays, its AI never runs
 ## (a disabled process mode would also take the collider out of the physics space).
@@ -651,8 +660,8 @@ func _check_difficulty() -> void:
 	SettingsManager.set_difficulty(2)
 	var hard := _monster("crawler_3d")
 	SettingsManager.set_difficulty(1)
-	_ok(is_equal_approx(easy.max_hp, hp_normal * 0.8) and is_equal_approx(easy.attack_damage, damage_normal * 0.75), "difficulty Easy: monsters at 80%% health, 75%% damage (%.1f / %.1f)" % [easy.max_hp, easy.attack_damage])
-	_ok(is_equal_approx(hard.max_hp, hp_normal * 1.2) and is_equal_approx(hard.attack_damage, damage_normal * 1.25), "difficulty Hard: monsters at 120%% health, 125%% damage (%.1f / %.1f)" % [hard.max_hp, hard.attack_damage])
+	_ok(is_equal_approx(easy.max_hp, hp_normal * 0.7) and is_equal_approx(easy.attack_damage, damage_normal * 0.75), "difficulty Easy: monsters at 70%% health, 75%% damage (%.1f / %.1f)" % [easy.max_hp, easy.attack_damage])
+	_ok(is_equal_approx(hard.max_hp, hp_normal * 1.3) and is_equal_approx(hard.attack_damage, damage_normal * 1.25), "difficulty Hard: monsters at 130%% health, 125%% damage (%.1f / %.1f)" % [hard.max_hp, hard.attack_damage])
 	normal.queue_free()
 	easy.queue_free()
 	hard.queue_free()

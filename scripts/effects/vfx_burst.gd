@@ -53,6 +53,12 @@ func _on_finished() -> void:
 	else:
 		queue_free()
 
+## Points the burst along `direction` (blood leaves a hit away from where it came from); the zero vector puts the scene's own direction back.
+func aim(direction: Vector3 = Vector3.ZERO) -> void:
+	var mat := process_material as ParticleProcessMaterial
+	if mat != null:
+		mat.direction = (direction if direction != Vector3.ZERO else emit_direction).normalized()
+
 ## Plays a pooled burst again from where the pool put it. The material and mesh built in _ready stay: nothing is rebuilt.
 func replay() -> void:
 	parked = false

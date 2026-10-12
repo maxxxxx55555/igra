@@ -6,6 +6,7 @@ const BUSES := ["Master", "SFX", "Music", "Voice", "Ambient"]
 ## порядке сохранённый индекс указывал на чужой язык.
 const LANGUAGES := ["ru", "en", "es", "de", "fr", "it", "pt_BR", "tr", "ja", "ko", "zh", "zh_TW", "ar"]
 const CFG_PATH := "user://settings.cfg"
+const _InputRemap := preload("res://scripts/systems/input_remap.gd")
 
 ## Подписи из UI → канонические имена шин.
 const BUS_ALIASES := {
@@ -104,6 +105,17 @@ func _load_defaults() -> void:
 	_settings["invert_look"] = false
 	_settings["render_scale"] = 1.0
 	_settings["share_enabled"] = true
+	# Session 23 accessibility (docs/A11Y_PLAN.md): each has a row on the Accessibility or Controls tab and readers named there.
+	_settings["subtitles"] = false
+	_settings["subtitle_size"] = 1
+	_settings["subtitle_bg"] = 1
+	_settings["subtitle_color"] = 0
+	_settings["sound_cues"] = false
+	_settings["reduce_camera_motion"] = false
+	_settings["one_handed"] = false
+	_settings["edge_highlight"] = false
+	_settings["clear_objectives"] = false
+	_settings["keybinds"] = {}
 
 func set_volume(bus: String, v: float) -> void:
 	var b := _canon_bus(bus)
@@ -298,6 +310,20 @@ const GRAPHICS_TIERS := [
 func set_difficulty(idx: int) -> void:
 	_settings["difficulty"] = clampi(idx, 0, 2)
 	EventBus.settings_changed.emit("difficulty", _settings["difficulty"])
+
+## What each difficulty (Easy, Normal, Hard) scales; Normal is the game as tuned. Readers: base_monster.gd (monster_hp, monster_damage),
+## player_3d.gd (player_hp), district_loot.gd (extra_parts: spare repair parts per district), ad_service.gd (revive offer, 0 = none).
+const DIFFICULTY_PRESETS: Dictionary = {
+	"monster_hp": [0.7, 1.0, 1.3],
+	"monster_damage": [0.75, 1.0, 1.25],
+	"player_hp": [1.5, 1.0, 1.0],
+	"extra_parts": [1.0, 0.0, 0.0],
+	"revive": [1.0, 1.0, 0.0],
+}
+
+func difficulty_scale(kind: String) -> float:
+	var level: int = clampi(int(_settings.get("difficulty", 1)), 0, 2)
+	return float((DIFFICULTY_PRESETS[kind] as Array)[level])
 
 func set_sensitivity(v: float) -> void:
 	_settings["sensitivity"] = clampf(v, 0.05, 4.0)
@@ -654,6 +680,7 @@ func from_dict(d: Dictionary) -> void:
 	var s: Dictionary = d.get("settings", {}) as Dictionary
 	for key in s:
 		_settings[key] = s[key]
+	_InputRemap.apply(_settings.get("keybinds", {}) as Dictionary)
 	# Re-apply accessibility effects from the loaded config (deferred: the
 	# root theme / enemy nodes may not exist yet at load time).
 	call_deferred("apply_all_accessibility")

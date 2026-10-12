@@ -221,19 +221,15 @@ func _ensure_hp() -> void:
 	_hp_initialized = true
 	hp = max_hp
 
-## The Difficulty screen's pick (Easy, Normal, Hard) scales what a monster has and deals; Normal is the game as tuned.
-const DIFFICULTY_HP: Array[float] = [0.8, 1.0, 1.2]
-const DIFFICULTY_DAMAGE: Array[float] = [0.75, 1.0, 1.25]
-
 ## Вызывается до _ensure_hp(), чтобы hp сразу считался от отмасштабированного
 ## max_hp. Раньше шёл через call_deferred и накручивал множители повторно.
 func _apply_ng_scaling() -> void:
 	if _ng_scaled:
 		return
 	_ng_scaled = true
-	var level: int = clampi(int(SettingsManager.get_setting("difficulty", 1)), 0, 2)
-	max_hp *= DIFFICULTY_HP[level]
-	attack_damage *= DIFFICULTY_DAMAGE[level]
+	# The difficulty pick (SettingsManager.DIFFICULTY_PRESETS) scales what a monster has and deals; Normal is the game as tuned.
+	max_hp *= SettingsManager.difficulty_scale("monster_hp")
+	attack_damage *= SettingsManager.difficulty_scale("monster_damage")
 	var ngp := get_node_or_null("/root/NewGamePlus")
 	if ngp == null or not ngp.is_ng_plus_active():
 		return
@@ -673,7 +669,7 @@ func _on_detect_body_exited(body: Node) -> void:
 		if ai_state == State.CHASE or ai_state == State.ATTACK:
 			_change_state(State.PATROL)
 
-func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, type: EnemyRosterData.DamageType = EnemyRosterData.DamageType.BULLET) -> void:
+func take_damage(amount: float, src_pos: Vector3 = Vector3.ZERO, type: EnemyRosterData.DamageType = EnemyRosterData.DamageType.BULLET) -> void:
 	if _net_active and not is_multiplayer_authority():
 		_request_damage.rpc_id(1, amount, int(type))
 		return
@@ -692,6 +688,7 @@ func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, type: EnemyRos
 	if is_in_group("boss"):
 		WowDirector.hit_stop()
 	_spawn_vfx(_VFX_HIT, global_position + Vector3(0, 1.0, 0))
+	_spawn_vfx(_VFX_BLOOD_HIT, global_position + Vector3(0, 1.0, 0), (global_position - src_pos).normalized() if src_pos != Vector3.ZERO else Vector3.ZERO)
 	# WAVE 6 P4: crosshair_state_changed was never emitted anywhere -
 	# the HUD crosshair never actually reacted to landing a hit.
 	EventBus.crosshair_state_changed.emit(&"hit")
@@ -777,6 +774,7 @@ const LOOT_CHANCE: float = 0.3
 const LOOT_TABLE: Array[StringName] = [&"battery", &"medkit", &"scrap", &"scrap"]
 const _VFX_HIT := preload("res://scenes/vfx/vfx_hit_spark.tscn")
 const _VFX_DEATH := preload("res://scenes/vfx/vfx_blood.tscn")
+const _VFX_BLOOD_HIT := preload("res://scenes/vfx/vfx_blood_hit.tscn")
 
 func _maybe_drop_loot() -> void:
 	if randf() > LOOT_CHANCE * NewGamePlus.get_loot_chance_multiplier():
@@ -797,8 +795,8 @@ func _maybe_drop_loot() -> void:
 func _death_effect() -> void:
 	_spawn_vfx(_VFX_DEATH, global_position + Vector3(0, 1.0, 0))
 
-func _spawn_vfx(scene: PackedScene, pos: Vector3) -> void:
-	preload("res://scripts/effects/vfx_pool.gd").spawn(scene, pos, get_tree())
+func _spawn_vfx(scene: PackedScene, pos: Vector3, direction: Vector3 = Vector3.ZERO) -> void:
+	preload("res://scripts/effects/vfx_pool.gd").spawn(scene, pos, get_tree(), direction)
 
 func _trigger_death() -> void:
 	_die()

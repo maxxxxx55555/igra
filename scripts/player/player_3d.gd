@@ -920,7 +920,7 @@ func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, _type: EnemyRo
 	# Winnability: кап одиночного удара. В бою с Архитектором связка
 	# «милли 40 + сферы по 20» без уклонений уходила в спираль смертей;
 	# 12 урона за хит оставляет давление, но даёт шанс выстоять вплотную.
-	amount = minf(amount, 12.0)
+	amount = minf(amount, 12.0) / SettingsManager.difficulty_scale("player_hp")  # Easy: 50% more health, as damage taken
 	hp = clampf(hp - amount, 0.0, stats.max_hp)
 	AudioManager.play_sound_3d(preload("res://assets/audio/sfx/sfx_hurt.wav"), global_position, -4.0)
 	EventBus.player_health_changed.emit(hp / stats.max_hp)

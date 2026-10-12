@@ -174,6 +174,7 @@ func _select_channel(idx: int) -> void:
 	_is_playing = true
 	_time_label.text = "00:00 / " + _format_time(_duration)
 	_transcript_label.text = tr(ch.transcript_tr)
+	EventBus.voice_line.emit(_transcript_label.text)
 	if ch.coords != null:
 		_coords_label.text = tr("RADIO_COORDINATES") + " X:" + str(ch.coords.x) + " Y:" + str(ch.coords.y)
 		EventBus.radar_marker_added.emit(ch.coords)

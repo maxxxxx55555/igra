@@ -60,6 +60,9 @@ func fire(from_pos: Vector3, direction: Vector3) -> bool:
 	else:
 		_muzzle_flash(from_pos)
 
+	if pellets == 1:
+		preload("res://scripts/effects/shell_eject.gd").eject(get_tree(), from_pos + direction * 0.4, direction)  # a pump gun keeps its case until the pump
+
 	# Sound
 	if fire_sound:
 		AudioManager.play_sound_3d(fire_sound, from_pos)

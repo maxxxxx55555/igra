@@ -139,6 +139,7 @@ func build() -> void:
 				_spawn_cone(pos, road)
 	_build_streetlight_multimesh()
 	_build_prop_multimesh()
+	add_child(preload("res://scripts/effects/dust_motes.gd").new())
 	_build_skyline(sb, district_id)
 	build_ms = float(Time.get_ticks_usec() - started) / 1000.0
 

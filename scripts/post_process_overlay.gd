@@ -3,6 +3,7 @@ extends CanvasLayer
 ## The graphics tier (0 Low .. 3 Ultra) picks the layers: Low keeps the vignette alone, Medium adds the grain, High the
 ## chromatic aberration, Ultra the sprint motion blur. A layer with nothing to show is hidden: a screen-texture shader
 ## copies the whole frame every frame, even at amount 0, and a phone pays for that.
+const _RAIN_LENS := preload("res://scripts/effects/rain_lens.gd")
 const TIER_GRAIN: int = 1
 const TIER_CHROMA: int = 2
 const TIER_BLUR: int = 3
@@ -35,6 +36,7 @@ func _ready() -> void:
 	# grain/vignette overlays (plain color layers, no screen sampling) or they
 	# would pick up their tint on the offset taps.
 	_build_blur()
+	add_child(_RAIN_LENS.new())
 	_build_chroma()
 	_build_grain()
 	_build_vignette()
@@ -112,7 +114,7 @@ func _process_blur(delta: float) -> void:
 	(_blur.material as ShaderMaterial).set_shader_parameter("strength", _blur_strength)
 
 func _wants_blur() -> bool:
-	if _tier < TIER_BLUR or UIManager.is_hud_blocked() or bool(SettingsManager.get_setting("reduce_time_fx", false)):
+	if _tier < TIER_BLUR or UIManager.is_hud_blocked() or bool(SettingsManager.get_setting("reduce_time_fx", false)) or bool(SettingsManager.get_setting("reduce_camera_motion", false)):
 		return false
 	if not is_instance_valid(_player):
 		_player = get_tree().get_first_node_in_group("player")

@@ -225,6 +225,26 @@ static func populate(district_root: Node3D, district_id: StringName) -> int:
 	placed += _spawn_secrets(district_root, district_id)
 	_spawn_hiding_spots(district_root, district_id)
 	_spawn_extras(district_root, district_id)
+	placed += _spawn_spare_parts(district_root, district_id)
+	return placed
+
+## Easy puts one more of each repair part on the street (SettingsManager.DIFFICULTY_PRESETS, "extra_parts"). Its own rng stream and its own
+## keys, so the positions of the rest do not move with the difficulty and a part taken stays taken.
+const SPARE_PARTS: Array[StringName] = [&"cable", &"fuse", &"transistor"]
+
+static func _spawn_spare_parts(root: Node3D, district_id: StringName) -> int:
+	var tree := Engine.get_main_loop() as SceneTree
+	var settings := tree.root.get_node_or_null("/root/SettingsManager")
+	var rounds: int = int(settings.call("difficulty_scale", "extra_parts")) if settings != null else 0
+	var pt := tree.root.get_node_or_null("/root/ProgressTracker")
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash(String(district_id) + "_spare")
+	var placed := 0
+	for n in rounds * SPARE_PARTS.size():
+		var pos := _scatter(root, rng)
+		var key := "%s:spare%d" % [district_id, n]
+		if (pt == null or not pt.is_loot_taken(key)) and _spawn_item(root, SPARE_PARTS[n % SPARE_PARTS.size()], pos, 1, key):
+			placed += 1
 	return placed
 
 ## S04 (GDD §7): lockers, car trunks, bushes and dark corners to hide in. Three per district on the outer

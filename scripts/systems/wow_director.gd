@@ -80,7 +80,7 @@ func _cinematic(p: Dictionary) -> void:
 	var slow: float = float(p.get("slowmo", 1.0))
 	var cam := get_viewport().get_camera_3d()
 	var fov_add: float = float(p.get("fov", 0.0))
-	if cam != null and fov_add > 0.0:
+	if cam != null and fov_add > 0.0 and not _setting("reduce_camera_motion", false):
 		var base: float = cam.fov
 		var tw := create_tween()
 		tw.tween_property(cam, "fov", base - fov_add, 0.25)

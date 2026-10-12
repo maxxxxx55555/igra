@@ -25,6 +25,13 @@ const REVERB_WET_CLOSED: float = 0.30
 const REVERB_ROOM_OPEN: float = 0.35
 const REVERB_ROOM_CLOSED: float = 0.70
 const REVERB_FADE_SEC: float = 0.6
+## Reverb zones (reverb_zone.gd): inside one, its preset replaces what the rays sense.
+const ZONE_PRESETS: Dictionary = {
+	&"room": {"wet": 0.28, "room_size": 0.45, "damping": 0.6},
+	&"tunnel": {"wet": 0.45, "room_size": 0.95, "damping": 0.3},
+	&"outdoors": {"wet": 0.04, "room_size": 0.35, "damping": 0.5},
+}
+const _DUCKER := preload("res://scripts/systems/audio_ducker.gd")
 
 var _wind: AudioStreamPlayer
 var _rain: AudioStreamPlayer
@@ -37,6 +44,7 @@ var _next_3d: int = 0
 var _reverbs: Array[AudioEffectReverb] = []
 var _reverb_tween: Tween
 var _enclosure: float = 0.0
+var _zone: StringName = &""
 var _last_state: int = 0
 var _step_timer: float = 0.0
 var _thunder_timer: float = 0.0
@@ -50,6 +58,9 @@ func _ready() -> void:
 	for i in POOL:
 		_pool.append(_make_player())
 	_setup_reverb()
+	var ducker := _DUCKER.new()
+	ducker.name = "Ducker"
+	add_child(ducker)
 	_wind = _make_player(&"Environment")
 	_wind.name = "WindLayer"
 	_wind.stream = WIND_SFX
@@ -201,6 +212,8 @@ func _apply_reverb_tier(tier: int) -> void:
 ## The share of the five rays (sky and four sides, REVERB_RAY_M long) that meet the world from the player's head. The query needs the
 ## physics step, hence the physics timer.
 func _sense_reverb() -> void:
+	if _zone != &"":
+		return
 	var player := get_tree().get_first_node_in_group("player") as CollisionObject3D
 	if player == null:
 		return
@@ -227,6 +240,25 @@ func set_enclosure(amount: float) -> void:
 	for reverb in _reverbs:
 		_reverb_tween.tween_property(reverb, "wet", lerpf(REVERB_WET_OPEN, REVERB_WET_CLOSED, closed), REVERB_FADE_SEC)
 		_reverb_tween.tween_property(reverb, "room_size", lerpf(REVERB_ROOM_OPEN, REVERB_ROOM_CLOSED, closed), REVERB_FADE_SEC)
+
+## A reverb zone took the player in: its preset fades in and the rays stop deciding. Leaving gives the reverb back to them (the next sensing
+## tick sees an enclosure it has not applied and fades to it).
+func enter_reverb_zone(preset: StringName) -> void:
+	if not ZONE_PRESETS.has(preset):
+		return
+	_zone = preset
+	if _reverb_tween != null and _reverb_tween.is_valid():
+		_reverb_tween.kill()
+	_reverb_tween = create_tween().set_parallel(true)
+	var values: Dictionary = ZONE_PRESETS[preset]
+	for reverb in _reverbs:
+		for property: String in values:
+			_reverb_tween.tween_property(reverb, property, float(values[property]), REVERB_FADE_SEC)
+
+func exit_reverb_zone(preset: StringName) -> void:
+	if _zone == preset:
+		_zone = &""
+		_enclosure = -1.0
 
 func play_music(stream: AudioStream) -> void:
 	if not stream:

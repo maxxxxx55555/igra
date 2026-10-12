@@ -53,6 +53,7 @@ var _minimap: Control
 var _weather_overlay: Control
 var _photo: Control
 var _quest_hud: Control
+var _subtitles: Control
 var _toast: Label
 
 func _ready() -> void:
@@ -65,6 +66,7 @@ func _ready() -> void:
 	_photo = _mk_overlay("res://scripts/ui/photo_mode.gd", "PhotoMode")
 	_quest_hud = _mk_overlay("res://scripts/ui/quest_tracker_hud.gd", "QuestHUD")
 	_quest_hud.visible = false
+	_subtitles = _mk_overlay("res://scripts/ui/subtitle_manager.gd", "Subtitles")
 	EventBus.game_state_changed.connect(_on_game_state)
 	EventBus.settings_changed.connect(func(key: String, _value: Variant) -> void:
 		if key == "show_minimap":
