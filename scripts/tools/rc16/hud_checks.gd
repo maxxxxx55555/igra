@@ -4,6 +4,7 @@ extends RefCounted
 ## three Text Sizes (the game's UI scales) and holds the corner clusters inside the screen.
 
 const FADE_WAIT_SEC: float = 4.0
+const CAPTION_W: float = 120.0  # the width hud_3d.gd gives a caption
 
 static func run(r: Node) -> void:
 	r._playing()
@@ -160,7 +161,7 @@ static func _layout_holds(r: Node, hud: Node) -> void:
 			var view := Rect2(Vector2.ZERO, r.get_viewport().get_visible_rect().size)
 			for name_: String in ["_bat_caption", "_hp_caption", "_stam_caption", "noise_caption", "vis_caption"]:
 				var label := hud.get(name_) as Label
-				if label == null or label.get_minimum_size().x > label.size.x + 0.5:
+				if label == null or label.get_minimum_size().x > CAPTION_W:  # a Label grows to its text, so the designed width is the bound
 					bad.append("%s/%d %s %s" % [lang, size_idx, name_, label.get_minimum_size().x if label != null else -1.0])
 			for path: String in ["TopLeft", "TopRight/RadarFrame", "BottomCenter"]:
 				var cluster := hud.get_node_or_null(path) as Control

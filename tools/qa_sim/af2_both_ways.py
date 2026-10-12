@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """AF2 both-ways run (rc16): the checks of the pass must FAIL on the code before the fixes and PASS on the code after them.
 
-usage: python tools/qa_sim/af2_both_ways.py --base <rev> [--only rc16] [--tag s21] [--demo]
+usage: python tools/qa_sim/af2_both_ways.py --base <rev> [--only rc16] [--tag s21] [--ids ID,ID] [--demo]
        python tools/qa_sim/af2_both_ways.py --analyze [--write] [--tag s21]   (re-judges the two saved runs, from .qa_logs/proofs or the committed docs/artifacts/rc16/proofs;
                                                                     read-only unless --write rewrites docs/artifacts/rc16/af2_both_ways.txt)
 Runs `CLOSEOUT_ONLY=<only> tools/qa_sim/closeout_check 300` twice, each through tools/qa_sim/proof_run:
@@ -11,7 +11,9 @@ Runs `CLOSEOUT_ONLY=<only> tools/qa_sim/closeout_check 300` twice, each through 
 A check id BITES when it is not "ok" before and "ok" after; it is VACUOUS when it is "ok" in both runs; it is BROKEN when it is not "ok"
 after. Raw logs: .qa_logs/proofs/af2_pre.out and af2_post.out (copied to docs/artifacts/rc16/proofs/); the verdict table is printed and
 saved as docs/artifacts/rc16/af2_both_ways.txt. --tag <t> puts "<t>_" before all three names, so a later pass does not overwrite the files a
-closed pass cites (Session 21 did, once, and restored them). Exit 1 when any id is VACUOUS or BROKEN, or when no id was seen.
+closed pass cites (Session 21 did, once, and restored them). --ids judges only the named checks (a pass that adds one check to a group whose
+older checks were bitten by an earlier pass); the saved post run may be the closeout log of a `check.sh --all` run (attached as
+.attach.gate_closeout_check_scene.log). Exit 1 when any id is VACUOUS or BROKEN, or when no id was seen.
 A runtime file is one the game ships (tools/qa_sim/af3_frame_check.py is_runtime); the tree must have no modified tracked file.
 """
 import os
@@ -27,6 +29,7 @@ import af3_frame_check  # noqa: E402
 LINE = re.compile(r"^\[closeout\] (ok  |FAIL) +(\S+)")
 CHECK_ID = re.compile(r"[A-Z][A-Z0-9.]*")  # a closeout line starts with its check id; "the player spawned" is the set-up line, not the check of a fix
 ASIDE = ".af2aside"
+ATTACHED = ("closeout_check.log", "gate_closeout_check_scene.log")  # the closeout wrapper's log, or the one `check.sh --all` keeps
 
 
 def git(*args, check=True):
@@ -65,9 +68,9 @@ def judge(pre, post, ids):
 def log_text(run_id):
     """The full engine log a run attached (every ok and FAIL line). The proof's own .out holds only the FAIL and DONE lines the wrapper prints."""
     for proofs in (ROOT / ".qa_logs" / "proofs", ROOT / "docs" / "artifacts" / "rc16" / "proofs"):
-        attach = proofs / (run_id + ".attach.closeout_check.log")
-        if attach.exists() or (proofs / (run_id + ".out")).exists():
-            return (attach if attach.exists() else proofs / (run_id + ".out")).read_text(encoding="utf-8", errors="replace")
+        attach = next((proofs / (run_id + ".attach." + n) for n in ATTACHED if (proofs / (run_id + ".attach." + n)).exists()), None)
+        if attach is not None or (proofs / (run_id + ".out")).exists():
+            return (attach or proofs / (run_id + ".out")).read_text(encoding="utf-8", errors="replace")
     raise SystemExit("no saved run %s in .qa_logs/proofs or docs/artifacts/rc16/proofs" % run_id)
 
 
@@ -78,12 +81,13 @@ def run_closeout(run_id, only):
     return log_text(run_id)
 
 
-def report(base, only, pre_text, post_text, write=True, prefix=""):
+def report(base, only, pre_text, post_text, write=True, prefix="", only_ids=None):
     pre, post = parse(pre_text), parse(post_text)
-    ids = sorted(set(pre) | set(post))
+    ids = only_ids or sorted(set(pre) | set(post))
     rows, bad = judge(pre, post, ids)
     done = [ln for ln in post_text.splitlines() if ln.startswith("[closeout] DONE")]
     out = ["AF2 both ways: base %s, HEAD %s, group %s" % (base, git("rev-parse", "--short", "HEAD").strip(), only)] + rows
+    out.append("pre run failed: %s" % (", ".join(sorted(i for i, s in pre.items() if s == "FAIL")) or "nothing"))
     out.append("post run: %s" % (done[-1] if done else "no DONE line"))
     out.append("AF2 verdict=%s ids=%d bad=%d" % ("PASS" if bad == 0 and ids else "FAIL", len(ids), bad))
     text = "\n".join(out)
@@ -109,6 +113,12 @@ def demo():
     assert parse(log_text(stem)) == {"PERF1": "ok"}, "the attached full log is the one that is read"
     for f in proofs.glob(stem + "*"):
         f.unlink()
+    (proofs / (stem + ".attach.gate_closeout_check_scene.log")).write_text("[closeout] ok   PERF3 e\n[closeout] DONE checks=1 fails=0\n", encoding="utf-8")
+    assert parse(log_text(stem)) == {"PERF3": "ok"}, "the closeout log a check.sh --all run keeps is read as well"
+    rows, bad = judge({"A": "FAIL", "B": "ok"}, {"A": "ok", "B": "ok"}, ["A"])
+    assert [r.split()[-1] for r in rows] == ["BITES"] and bad == 0, "--ids judges only the named checks"
+    for f in proofs.glob(stem + "*"):
+        f.unlink()
     committed = ROOT / "docs" / "artifacts" / "rc16" / "proofs" / (stem + ".attach.closeout_check.log")
     committed.write_text("[closeout] ok   PERF2 c\n[closeout] DONE checks=1 fails=0\n", encoding="utf-8")
     assert parse(log_text(stem)) == {"PERF2": "ok"}, "a fresh clone has no .qa_logs: the committed copy is read"
@@ -125,8 +135,9 @@ def main():
     base = args[args.index("--base") + 1] if "--base" in args else "e4bb4df"
     only = args[args.index("--only") + 1] if "--only" in args else "rc16"
     prefix = args[args.index("--tag") + 1] + "_" if "--tag" in args else ""
+    only_ids = args[args.index("--ids") + 1].split(",") if "--ids" in args else None
     if "--analyze" in args:
-        return report(base, only, log_text(prefix + "af2_pre"), log_text(prefix + "af2_post"), write="--write" in args, prefix=prefix)
+        return report(base, only, log_text(prefix + "af2_pre"), log_text(prefix + "af2_post"), write="--write" in args, prefix=prefix, only_ids=only_ids)
     dirty = [x for x in git("status", "--porcelain").splitlines() if not x.startswith("??")]
     if dirty:
         raise SystemExit("the tree has modified tracked files, commit or stash first: %s" % dirty[:3])
@@ -151,7 +162,7 @@ def main():
         for src in moved:
             pathlib.Path(str(src) + ASIDE).rename(src)
     post_text = run_closeout(prefix + "af2_post", only)
-    return report(base, only, pre_text, post_text, prefix=prefix)
+    return report(base, only, pre_text, post_text, prefix=prefix, only_ids=only_ids)
 
 
 if __name__ == "__main__":
