@@ -1,0 +1,94 @@
+diff --git a/scripts/core/quest_manager.gd b/scripts/core/quest_manager.gd
+index 7c0a528..444a8d3 100644
+--- a/scripts/core/quest_manager.gd
++++ b/scripts/core/quest_manager.gd
+@@ -4,6 +4,7 @@ extends Node
+ var quests: Dictionary = {}
+ var _completed_count: int = 0
+ var _started: bool = false
++var _payout_queued: bool = false
+ 
+ signal quest_updated
+ signal quest_started(quest_id: String)
+@@ -153,8 +154,17 @@ func _reward_fits(q: Dictionary) -> bool:
+ 	return true
+ 
+ ## A quest whose reward did not fit waits open at its target. Its event may never come again (a REPAIR quest's fires once per
+-## district), so it pays when the pack has room, not when the event repeats. Only in play: a load fills the pack first.
++## district), so it pays when the pack has room, not when the event repeats. Only in play: a load fills the pack first. The payout
++## waits one idle frame: a craft takes its components out and puts its result in within one call, and a payout in between would take
++## the slot the result is about to use (CORRECTION_LOG 204, B5).
+ func _on_inventory_changed() -> void:
++	if _payout_queued:
++		return
++	_payout_queued = true
++	_pay_waiting.call_deferred()
++
++func _pay_waiting() -> void:
++	_payout_queued = false
+ 	if not GameManager.is_playing():
+ 		return
+ 	for qid in quests:
+diff --git a/scripts/tools/rc16/ship_checks.gd b/scripts/tools/rc16/ship_checks.gd
+index 0469a61..20ee899 100644
+--- a/scripts/tools/rc16/ship_checks.gd
++++ b/scripts/tools/rc16/ship_checks.gd
+@@ -11,7 +11,8 @@ static func run(r: Node) -> void:
+ 	r._playing()
+ 	UIManager.close_all_blocking()
+ 	_remove_takes_all_or_nothing(r)
+-	_quest_pays_when_there_is_room(r)
++	await _quest_pays_when_there_is_room(r)
++	await _craft_keeps_its_materials(r)
+ 	await _salvage_keeps_the_item(r)
+ 	await _restart_goes_back_to_the_save(r)
+ 	r._playing()
+@@ -56,10 +57,12 @@ static func _quest_pays_when_there_is_room(r: Node) -> void:
+ 	var waits: bool = not quest.done
+ 	GameManager._change_state(GameManager.GameState.PAUSED)
+ 	InventoryManager.remove(StringName(FILLER), 1)
++	await r.get_tree().process_frame
+ 	var waits_out_a_load: bool = not quest.done
+ 	r._ok(waits_out_a_load, "guard QST2 a pending quest does not pay while the game is not playing (done %s)" % quest.done)
+ 	r._playing()
+ 	InventoryManager.remove(StringName(FILLER), 1)
++	await r.get_tree().process_frame
+ 	var paid: bool = quest.done and CoinWallet.get_coins() == coins + int(quest.reward_coins) and InventoryManager.has(&"blueprint_flashlight_battery", 1)
+ 	r._ok(waits and paid, "QST1 a quest that did not fit pays when the pack has room (waited %s; then done %s, coins %d of %d, blueprint %d)" % [
+ 		waits, quest.done, CoinWallet.get_coins(), coins + int(quest.reward_coins), InventoryManager.count_of(&"blueprint_flashlight_battery")])
+@@ -68,6 +71,35 @@ static func _quest_pays_when_there_is_room(r: Node) -> void:
+ 	CoinWallet.from_dict(wallet)
+ 	InventoryManager.from_dict(pack)
+ 
++## CRF1 (verifier finding B5): a craft takes its components out one by one and then puts its result in. A pending quest's payout
++## between the two took the slot the result needed, and the refund of the components found none: the craft lost its materials. The
++## payout waits one idle frame, so the craft keeps its slot and the quest keeps waiting.
++static func _craft_keeps_its_materials(r: Node) -> void:
++	r._playing()
++	var logic := load("res://scripts/crafting/workbench_logic.gd") as GDScript
++	var pack: Dictionary = InventoryManager.to_dict()
++	var quests: Dictionary = QuestManager.serialize()
++	var wallet: Dictionary = CoinWallet.to_dict()
++	var completed: int = QuestManager._completed_count
++	var crafted0: int = ProgressTracker.crafted
++	var full: Dictionary = _full_pack()
++	full["slots"][0] = {"item_id": "metal", "count": 2}
++	InventoryManager.from_dict(full)
++	var quest: Dictionary = QuestManager.quests[PENDING_QUEST]
++	quest.progress = quest.target_count
++	QuestManager._complete(quest)
++	var made: bool = logic != null and bool(logic.call("craft", logic.call("find", "lockpick"), 1))
++	await r.get_tree().process_frame
++	var lockpicks: int = InventoryManager.count_of(&"lockpick")
++	var metal: int = InventoryManager.count_of(&"metal")
++	r._ok(made and lockpicks == 1 and metal == 0 and not quest.done,
++		"CRF1 a craft in a full pack with a quest waiting keeps its slot (crafted %s, lockpick %d of 1, metal %d of 0, quest still waiting %s)" % [made, lockpicks, metal, not quest.done])
++	QuestManager.from_dict(quests)
++	QuestManager._completed_count = completed
++	CoinWallet.from_dict(wallet)
++	InventoryManager.from_dict(pack)
++	ProgressTracker.crafted = crafted0
++
+ ## SLV1 (row 169): the Salvage tab put the parts in, ignored the refusals and took the item out, so a full pack lost the parts. It keeps
+ ## the item and takes nothing; a pack with room still gets the parts (I9.4).
+ static func _salvage_keeps_the_item(r: Node) -> void:
