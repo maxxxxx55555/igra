@@ -3,7 +3,8 @@
 Scope: what is on screen while the player plays, what stays, what shows only while it matters, what goes. Visual and layout only: no
 gameplay rule changes. Canon: `docs/ART_UI_STYLE.md` (tokens, "HUD - layout", flashlight panel, icons), `docs/STYLE_GUIDE.md` (palette),
 `docs/UI_SPEC.md` (HUD_BATTLE). Evidence: the shipped frames `docs/stills/shipping/03_*` and `04_*` (hash 2e018d3), a runtime dump of every
-visible HUD node taken in the BEFORE launch (`docs/artifacts/rc16/proofs/s22_hud_dump_before.txt`), and the AF3 frames of each batch.
+visible HUD control taken in the BEFORE launch (ledger row 84, `docs/artifacts/rc16/proofs/s22_hud_before.attach.hud_dump.txt`: calm, combat and touch states,
+294 lines), the BEFORE frames (`docs/stills/shipping/hud/before/`, hash 8874bb9: calm, hurt, prompt, combat, touch layout) and the AF3 frames of each batch.
 
 ## What the frames show (defects, read off the frame, not taste)
 
@@ -16,6 +17,12 @@ visible HUD node taken in the BEFORE launch (`docs/artifacts/rc16/proofs/s22_hud
 5. A "MELEE" caption bottom-right in a build whose default is no gun; an emoji glyph (map) and a plain "LOG" box under the stats, both
    persistent; a hexagon pause button on desktop, where Esc pauses.
 6. Touch clusters are opaque panels (canon: the joystick is invisible at rest and shows a brass ring on touch).
+7. Found by the dump, not by eye: the quest tracker is drawn at x = -320 (`QuestHUDContainer|VBoxContainer|-320,252,300,200`). UIManager builds the
+   overlay as a Control with no size and the panel anchors to that, so the objectives list has been off screen in every frame.
+8. Found by the dump and the touch frame: the right action cluster is a 280 x 260 box whose children are laid out from its bottom-right corner (offsets
+   -100, -180, ...), so the buttons sit about 300 px in from the screen edge on a wide phone and the four side buttons (jump, flash, strobe, wheel) overlap
+   Attack and Stealth (`12_hud_touch_before_*`: Attack at x 1955, wheel at 2011, Stealth at 1975 to 2045, on a 2336 px wide canvas).
+9. The staged "hurt" frame is a 12 HP hit (`take_damage` caps one hit at 12), not 45: it shows the state of a scratch, which is what the pairs compare.
 
 ## Principles and what this pass does with each
 
@@ -59,12 +66,15 @@ Class: KEEP (always, quiet), CONTEXTUAL (shows while it matters, fades at rest),
 | 18 | Joystick ring, four action buttons, four side buttons | BottomLeft, BottomRight, `_add_side_buttons` | TOUCH | rest alpha 0.55, full while pressed | 2 |
 | 19 | Weight bar | hud_3d.tscn WeightBar | KEEP | no textures, draws nothing: no action | - |
 | 20 | Status icons, quest tracker, district banner, toasts, tutorial card, vignettes, grain, flashes | various | KEEP | already contextual or transient: no action | - |
-| 21 | HUD scale | new setting | - | `hud_scale` slider in Settings, applied to the stat block and the radar | 2 |
+| 21 | HUD scale | new setting | - | `hud_scale` slider in Settings, applied to the stat block and the radar | 3 |
+| 22 | Quest tracker | scripts/ui/quest_tracker_hud.gd, UIManager overlay | CONTEXTUAL | anchored to the screen (it was off screen); shown 8 s after an objective changes, faded at rest | 1 |
+| 23 | Touch action cluster (Attack, Interact, Sprint, Stealth) | hud_3d.tscn BottomRight | TOUCH | anchored at the corner so the offsets mean what they say; no overlap with the side buttons | 2 |
 
 ## Batches (each at most 3 items, one windowed launch, BEFORE and AFTER read)
 
-- Batch 1, "quiet corner": rows 1 to 5 (one grid, contextual, battery pips); rows 6 and 7 (one map); rows 9 and 10 (touch-only buttons).
-- Batch 2, "in play": rows 11 to 13 (combat hold), 14 and 15 (fades), 17 and 18 (rest alpha), 21 (scale).
+- Batch 1, "quiet corner": rows 1 to 5 (one grid, contextual, battery pips); rows 6, 7, 9 and 10 (one map, touch-only buttons); row 22 (the tracker).
+- Batch 2, "in play": rows 11 to 13 (combat hold), 14 and 15 (fades), rows 17, 18 and 23 (touch cluster re-anchored, rest alpha).
+- Batch 3, only if launches are left: row 21 (scale slider, one new label in 13 locales), numerals in the mono face.
 - Kept or reverted by the frames, per batch, whole batch; the revert list is published in `docs/BEAUTY_RC16.md`.
 
 ## Frames (AF3, hash and UTC in the name)
