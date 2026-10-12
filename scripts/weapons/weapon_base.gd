@@ -207,7 +207,7 @@ func _effective_damage() -> float:
 	var mult := 1.0
 	mult += 0.1 * SkillTreeManager.get_skill_level(&"damage_boost_1")
 	mult += 0.1 * SkillTreeManager.get_skill_level(&"damage_boost_2")
-	var dmg := damage * mult
+	var dmg := damage * mult * NewGamePlus.get_player_damage_multiplier()  # GDD 12.5: +10% per New Game+ level
 	# Design decision (not in GDD): crit multiplier x2, since SKILL_TREES
 	# only defines the per-level chance (5%/level, up to 15% at max).
 	if randf() < 0.05 * SkillTreeManager.get_skill_level(&"crit_chance"):

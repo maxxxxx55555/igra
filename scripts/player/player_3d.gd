@@ -1269,7 +1269,7 @@ func _on_attack_hit(body: Node) -> void:
 		var facing: Vector3 = body.get_facing_dir()
 		if to_attacker.dot(facing) < -0.7:
 			from_behind = 1.5
-	var final_dmg: float = cd3["dmg"] * (1.0 + bonus) * from_behind
+	var final_dmg: float = cd3["dmg"] * (1.0 + bonus) * from_behind * NewGamePlus.get_player_damage_multiplier()
 	body.take_damage(final_dmg, global_position, EnemyRosterData.DamageType.BLUNT)
 	WowDirector.hit_stop(MELEE_FINISHER_STOP_MS if _chain_landed else MELEE_HIT_STOP_MS)
 	if cd3["knockback"] > 0.0 and body is Node3D:
