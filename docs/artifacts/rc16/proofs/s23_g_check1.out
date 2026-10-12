@@ -1,0 +1,23 @@
+# proof s23_g_check1
+# utc 20261012T163015Z
+# head 38cd223 (uncommitted paths: 55)
+# env none
+# cmd bash -c bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; CLOSEOUT_ONLY=s23 bash tools/qa_sim/closeout_check 300
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=2 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL VFX1 shell ejection: a case is thrown (true), falls to the street (lowest 0.046 m) and bounces (false), goes back to the pool after its life (true), none at Effects Low (true)
+[closeout] DONE checks=16 fails=1
+engine errors in the log:
+SCRIPT ERROR: Parse Error: No constructor of "AABB" matches the signature "AABB(float, float, float, float, float, float)".
+SCRIPT ERROR: Parse Error: No constructor of "AABB" matches the signature "AABB(float, float, float, float, float, float)".
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+ERROR: Failed to load script "res://scripts/tools/_closeout_check_runner.gd" with error "Compilation failed".
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+# EXIT=1

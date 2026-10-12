@@ -281,8 +281,8 @@ if "$PY" tools/qa_sim/tscn_header_check.py >/dev/null 2>&1 && "$PY" tools/qa_sim
 else
   bad "tscn_header_check (см. 'python tools/qa_sim/tscn_header_check.py')"
 fi
-if "$PY" tools/qa_sim/a11y_check.py >/dev/null 2>&1; then
-  ok "a11y_check (every a11y toggle traces UI -> real effect)"
+if "$PY" tools/qa_sim/a11y_check.py --mutations >/dev/null 2>&1; then
+  ok "a11y_check (every a11y toggle traces UI -> real effect; 9 of 9 features; every single removal of a reader, row, key or default is caught)"
 else
   bad "a11y_check"
 fi

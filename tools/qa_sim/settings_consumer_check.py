@@ -18,7 +18,7 @@ MANAGER = "scripts/systems/settings_manager.gd"
 
 # key -> (file, text that proves the value is read or applied)
 CONSUMERS = {
-    "difficulty": ("scripts/enemies/base_monster.gd", 'get_setting("difficulty"'),
+    "difficulty": ("scripts/enemies/base_monster.gd", 'difficulty_scale("monster_hp")'),
     "autosave": ("scripts/core/save_system.gd", 'get_setting("autosave"'),
     "hints": ("scripts/ui/hud_3d.gd", 'get_setting("hints"'),
     "hardcore": ("scripts/core/game_manager.gd", 'get_setting("hardcore"'),
@@ -59,6 +59,15 @@ CONSUMERS = {
     "reduce_flash": ("scripts/effects/damage_indicator.gd", 'get_setting("reduce_flash"'),
     "reduce_time_fx": ("scripts/systems/wow_director.gd", '_setting("reduce_time_fx"'),
     "reduce_ui_motion": ("scripts/ui/toast_manager.gd", 'get_setting("reduce_ui_motion"'),
+    "subtitles": ("scripts/ui/subtitle_manager.gd", 'get_setting("subtitles"'),
+    "subtitle_size": ("scripts/ui/subtitle_manager.gd", 'get_setting("subtitle_size"'),
+    "subtitle_bg": ("scripts/ui/subtitle_manager.gd", 'get_setting("subtitle_bg"'),
+    "subtitle_color": ("scripts/ui/subtitle_manager.gd", 'get_setting("subtitle_color"'),
+    "sound_cues": ("scripts/ui/subtitle_manager.gd", 'get_setting("sound_cues"'),
+    "reduce_camera_motion": ("scripts/effects/screen_shake.gd", 'get_setting("reduce_camera_motion"'),
+    "one_handed": ("scripts/ui/hud_3d.gd", 'get_setting("one_handed"'),
+    "edge_highlight": ("scripts/effects/edge_highlight.gd", 'get_setting("edge_highlight"'),
+    "clear_objectives": ("scripts/ui/hud_fade.gd", 'get_setting("clear_objectives"'),
 }
 KEY = re.compile(r'\b_(?:toggle|slider|dropdown)\(parent,[^\n]*?\),\s*"([a-z_]+)"')
 

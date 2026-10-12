@@ -1660,3 +1660,6 @@ invokes each callback, so both effects did happen, but the double
 subscription was a latent concurrent-signal footgun (a future listener
 added to one of those lambdas would fire twice per event). Consolidated
 into two `_on_game_started` / `_on_game_won` methods that do both.
+
+## Session 23: key letters in hint strings (OPEN, small)
+After a remap (Settings > Controls > Key Bindings) a few strings keep the default letter: `tutorial_move` ("WASD - move"), `TUT_FIND_FLASHLIGHT` ("Press F ..."), `HINT_INVENTORY` ("Tab ..."), `WORKBENCH_CLOSE` ("Close (E)"), `INV_HINTS`. The interact prompt reads the real binding (`scripts/ui/hud_3d.gd`, `_interact_key_hint`); these do not. The fix is a `%s` in the 13 strings and `LocalizationManager.tf` with `InputRemap.key_text(InputRemap.key_of(action))` at the five call sites.

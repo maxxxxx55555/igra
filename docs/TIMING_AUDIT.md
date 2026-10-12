@@ -16,7 +16,7 @@ Raw: `docs/artifacts/rc16/proofs/timing_before.out` (exit 1) and the three logs 
 
 ## Fixes
 
-- `0dd072a` the weapon cooldown and the reload tick in `_physics_process` (`scripts/weapons/weapon_base.gd:135`), the step that polls the trigger, instead of `_process`.
+- `0dd072a` the weapon cooldown and the reload tick in `_physics_process` (`scripts/weapons/weapon_base.gd:138`), the step that polls the trigger, instead of `_process`.
 - `6196c1f` the camera interior blend follows seconds (`CAM1` in the closeout: the same share of the way in 0.1 s at 30 and at 120 FPS, 0.953 and 0.953).
 - `a5a40c3` the inventory gate, wired into `tools/check.sh --static`.
 
