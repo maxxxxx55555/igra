@@ -1,0 +1,9 @@
+# proof s22c_fix_gates
+# utc 20261012T105914Z
+# head 5516146 (uncommitted paths: 0)
+# env none
+# cmd bash -c keep="scripts/ui/hud_3d.gd scripts/ui/ui_manager.gd scripts/ui/virtual_joystick.gd"; git checkout 18e831b -- $keep; CLOSEOUT_ONLY=s22 bash tools/qa_sim/proof_run --attach .qa_logs/closeout_check.log s22c_af2_pre -- bash tools/qa_sim/closeout_check 300; r1=$?; git checkout HEAD -- $keep; bash tools/qa_sim/proof_run --attach .qa_logs/gate_closeout_check_scene.log --attach .qa_logs/gate_compile_gate_scene.log --attach .qa_logs/gate_touch_probe_scene.log --attach .qa_logs/gate_qa_headless_suite_scene.log --attach .qa_logs/timing_check.txt s22c_af2_post -- bash tools/check.sh --all; r2=$?; echo "pre rc=$r1 post rc=$r2"; exit $r2
+proof_run s22c_af2_pre: exit=1 -> .qa_logs/proofs/s22c_af2_pre.out (12 lines)
+proof_run s22c_af2_post: exit=0 -> .qa_logs/proofs/s22c_af2_post.out (167 lines)
+pre rc=1 post rc=0
+# EXIT=0

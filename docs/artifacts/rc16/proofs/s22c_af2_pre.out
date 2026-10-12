@@ -1,0 +1,12 @@
+# proof s22c_af2_pre
+# utc 20261012T105915Z
+# head 5516146 (uncommitted paths: 3)
+# env CLOSEOUT_ONLY=s22 
+# cmd bash tools/qa_sim/closeout_check 300
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL HUDP10 the joystick fades only its ring: a container keeps alpha 1 as the thumb goes down (0.62) and lifts (0.55), the ring goes full (1.00) and rests (0.55)
+[closeout] FAIL HUDP11 the eight touch buttons stay on screen and clear of each other at Button Size 0.8, 1.0 and 1.5 (touch HUD true, found 8, problems ["BtnInteract over BtnJump at 1.5", "BtnInteract over BtnFlash at 1.5"])
+[closeout] DONE checks=12 fails=2
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+# EXIT=1

@@ -1,0 +1,6 @@
+AF2 both ways: base 18e831b, HEAD 5516146, group s22
+HUDP10       pre=FAIL     post=ok       BITES
+HUDP11       pre=FAIL     post=ok       BITES
+pre run failed: HUDP10, HUDP11
+post run: [closeout] DONE checks=408 fails=0
+AF2 verdict=PASS ids=2 bad=0
