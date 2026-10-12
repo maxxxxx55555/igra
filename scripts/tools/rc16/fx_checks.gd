@@ -158,6 +158,10 @@ static func _shells(r: Node) -> void:
 
 ## VFX2: blood leaves a hit along the direction it is given; a burst reused without one gets its own direction back.
 static func _blood_direction(r: Node) -> void:
+	for old: Node in _Pool._bursts.get(BLOOD_HIT, []):  # earlier checks leave parked bursts: the second spawn must find this one
+		if is_instance_valid(old):
+			old.queue_free()
+	_Pool._bursts.erase(BLOOD_HIT)
 	var first: VFXBurst = _Pool.spawn(BLOOD_HIT, FAR, r.get_tree(), Vector3.RIGHT) as VFXBurst
 	var aimed: bool = (first.process_material as ParticleProcessMaterial).direction.is_equal_approx(Vector3.RIGHT)
 	first.parked = true

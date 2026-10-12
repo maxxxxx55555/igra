@@ -42,7 +42,7 @@ static func _hit_stop(r: Node) -> void:
 	var gated: bool = is_equal_approx(Engine.time_scale, 2.0)
 	SettingsManager.set_setting("reduce_time_fx", false)
 	Engine.time_scale = scale0
-	r._ok(is_equal_approx(dipped, 0.5) and elapsed >= 30 and elapsed <= 140 and is_equal_approx(back, 2.0) and gated, "JUICE1 hit-stop: a run at 2x dips to %.2fx, is back at %.1fx after %d ms of real time (80 ms asked), and does nothing with Reduce Time Effects (%s)" % [dipped, back, elapsed, gated])
+	r._ok(is_equal_approx(dipped, 0.5) and elapsed >= 75 and elapsed <= 140 and is_equal_approx(back, 2.0) and gated, "JUICE1 hit-stop: a run at 2x dips to %.2fx, is back at %.1fx after %d ms of real time (80 ms asked), and does nothing with Reduce Time Effects (%s)" % [dipped, back, elapsed, gated])
 
 ## JUICE2: a melee hit that lands stops time for 50 ms (80 ms for the last hit of a combo).
 static func _melee_stops_time(r: Node) -> void:

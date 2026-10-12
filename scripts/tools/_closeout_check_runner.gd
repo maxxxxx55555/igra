@@ -632,6 +632,7 @@ func _check_inventory_and_pause() -> void:
 	ui._on_drop()
 	_ok(InventoryManager.count_of(&"medkit") == 0, "V.5 the second press throws the stack away")
 	UIManager.close(&"inventory")
+	await get_tree().create_timer(0.25).timeout  # the screen fades out for 0.15 s
 	_ok(not ui.visible, "V.5 the inventory screen closes")
 	UIManager.open(&"pause")
 	await get_tree().process_frame
@@ -1212,7 +1213,7 @@ func _check_map() -> void:
 		paths.append(str(m.get_path()))
 	_ok(paths.size() == 1, "MAP1 one city map exists once K opens it (%d: %s)" % [paths.size(), ", ".join(paths)])
 	UIManager.close(&"city_map")
-	await get_tree().process_frame
+	await get_tree().create_timer(0.25).timeout  # the screen fades out for 0.15 s
 	var shown := 0
 	for m in _city_maps():
 		shown += int(m.is_visible_in_tree())

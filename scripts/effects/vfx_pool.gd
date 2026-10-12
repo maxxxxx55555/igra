@@ -3,7 +3,7 @@ extends RefCounted
 ## and quad mesh. spawn() replays a finished burst of the same scene instead. At most MAX_PER_SCENE bursts of one scene exist;
 ## when every one of them is still playing, the oldest is replayed (stolen) rather than a new one made.
 
-const MAX_PER_SCENE: int = 6  # 6 x (28 + 12 + 10 + 8) = 348 particles at most; the world's own emitters add about 140 (budget 500)
+const MAX_PER_SCENE: int = 5  # 5 x (28 + 12 + 10 + 8) = 290 particles at most; the world's own emitters add 140 to 152 (budget 500)
 
 ## PackedScene -> its bursts, oldest spawn first. Entries freed with the tree are dropped on the next spawn.
 static var _bursts: Dictionary = {}

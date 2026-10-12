@@ -99,7 +99,8 @@ func _setting(key: String, default: bool) -> bool:
 	return bool(SettingsManager.get_setting(key, default))
 
 ## docs/GAMEFEEL_SPEC.md hit-stop: brief real-time Engine.time_scale dip,
-## capped at 80ms wall-clock (ignore_time_scale timer) so it can't be
+## capped at 80ms wall-clock (checked each frame against Time.get_ticks_msec:
+## a timer that ignores the time scale ran short, CORRECTION_LOG 218) so it can't be
 ## stretched by its own dip. Guarded against re-entry — two boss hits in
 ## the same beat must not stack multiplicatively (GAMEFEEL_SPEC's own rule).
 func hit_stop(ms: float = 80.0, scale: float = 0.25) -> void:
@@ -108,7 +109,9 @@ func hit_stop(ms: float = 80.0, scale: float = 0.25) -> void:
 	_hitstop_active = true
 	var before: float = Engine.time_scale
 	Engine.time_scale = before * scale
-	await get_tree().create_timer(minf(ms, 80.0) / 1000.0, true, false, true).timeout
+	var until: int = Time.get_ticks_msec() + int(minf(ms, 80.0))
+	while Time.get_ticks_msec() < until:
+		await get_tree().process_frame
 	Engine.time_scale = before
 	_hitstop_active = false
 

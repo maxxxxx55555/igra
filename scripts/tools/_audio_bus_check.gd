@@ -6,7 +6,7 @@ extends Node
 ## owns land on the bus their sound belongs to.
 ## Scene: scenes/tools/audio_bus_check_scene.tscn (headless). Ends "[audio-bus] DONE fails=N".
 
-## bus -> [index, send, effect count]; the three world buses carry one reverb each (A2). Godot routes a send that points at the same or a
+## bus -> [index, send, effect count of the layout]; the three world buses carry one reverb each (A2). Godot routes a send that points at the same or a
 ## later index straight to Master, so every send must sit at a lower index than its bus.
 const GRAPH := {
 	"Master": [0, "", 0],
@@ -19,6 +19,9 @@ const GRAPH := {
 	"Combat": [7, "SFX", 1],
 	"Environment": [8, "SFX", 1],
 }
+
+## Buses that get one more effect at boot, the last on the bus: the ducker's AudioEffectAmplify (scripts/systems/audio_ducker.gd).
+const DUCKED: Array[String] = ["Music", "Ambient"]
 
 ## Players the autoloads build at boot: node path -> the bus they must use.
 const ROUTES := {
@@ -63,8 +66,11 @@ func _check_graph() -> int:
 		if idx != int(want[0]):
 			fails += _fail("%s sits at index %d, want %d" % [bus_name, idx, want[0]])
 			continue
-		if AudioServer.get_bus_effect_count(idx) != int(want[2]):
-			fails += _fail("%s has %d effects, want %d" % [bus_name, AudioServer.get_bus_effect_count(idx), want[2]])
+		var effects: int = int(want[2]) + (1 if DUCKED.has(bus_name) else 0)
+		if AudioServer.get_bus_effect_count(idx) != effects:
+			fails += _fail("%s has %d effects, want %d" % [bus_name, AudioServer.get_bus_effect_count(idx), effects])
+		elif DUCKED.has(bus_name) and not AudioServer.get_bus_effect(idx, effects - 1) is AudioEffectAmplify:
+			fails += _fail("%s does not end in the ducker's AudioEffectAmplify" % bus_name)
 		if idx == 0:
 			continue
 		var send := String(AudioServer.get_bus_send(idx))

@@ -207,7 +207,7 @@ func toggle(id: StringName) -> void:
 		# клавиши другого раздела переключает вкладку, не закрывая экран.
 		var want: StringName = CODEX_TABS[id]
 		var codex: Control = _cache.get(&"codex", null)
-		if codex != null and codex.visible and codex.has_method("current_tab"):
+		if codex != null and codex.visible and not codex.has_meta(&"fade_out") and codex.has_method("current_tab"):
 			if StringName(codex.call("current_tab")) == want:
 				close(&"codex")
 				return
@@ -256,6 +256,8 @@ func _slide_in(id: StringName, scr: Control) -> void:
 
 ## The screen stays visible while it fades (is_open already says it is closed) and is hidden with its alpha put back when the fade ends.
 func _fade_out(scr: Control) -> void:
+	if scr.has_meta(&"fade_out"):
+		return
 	var alpha: float = scr.modulate.a
 	var tween := scr.create_tween()
 	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)

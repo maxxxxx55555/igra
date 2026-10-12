@@ -13,7 +13,7 @@ What the player's body and the first-person camera do. Checks MOVE1, JUICE1 to J
 | Idle breath | the eye moves 4 mm up and down, one breath in about 4 s; none with Motion Comfort | `camera_follow_3d.gd` `BREATH_M` |
 | Landing after 0.25 s or more in the air | the eye dips 0.08 m and the view opens 2 degrees, both gone in 0.2 s | `camera_follow_3d.gd` `LAND_*` |
 | Shot | kick 0.04 rad per unit of recoil, settles at 9 per second | `camera_follow_3d.gd` `RECOIL_*` |
-| Hit-stop | melee hit 50 ms, the last hit of a combo 80 ms, the boss's hits 80 ms; time at a quarter speed; gives back the scale it found | `wow_director.gd`, `player_3d.gd` |
+| Hit-stop | melee hit 50 ms, the last hit of a combo 80 ms, the boss's hits 80 ms; time at a quarter speed; ends on a wall-clock read; gives back the scale it found | `wow_director.gd`, `player_3d.gd` |
 | Screen shake | 0.016 m at full trauma, in proportion to the trauma: 3.9 px of a 1080p frame at 5 m with the interior's 48 degree view (3.3 px at the 55 degrees of the street, 2.1 px at the 80 degrees of the check's camera); a damage hit (0.3) 1.2 px at 48 degrees | `screen_shake.gd` |
 
 Motion Comfort, Reduce Screen Shake, Reduce UI Motion and Reduce Time Effects switch the head bob, the view punches, the landing dip, the recoil kick, the shake

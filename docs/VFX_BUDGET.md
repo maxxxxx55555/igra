@@ -15,8 +15,8 @@ the running game (amount times the tier's ratio) with every pooled burst in flig
 | Manhole steam | `scripts/world/manhole.gd`: a loop of 14 particles above the cover | 14 per manhole | |
 | Rain on the lens | `scripts/effects/rain_lens.gd` (a screen shader, a copy of the frame) | 0 particles | Ultra tier only, rain 0.5 or more, never with Motion Comfort |
 
-The pool keeps at most 6 bursts of one scene (`MAX_PER_SCENE`): 6 x (28 + 12 + 10 + 8) = 348 particles, and the world's own emitters add about 140 in the
-closeout world. The first cap was 24 per scene (24 x 58 = 1,392 at the worst), over both bounds.
+The pool keeps at most 5 bursts of one scene (`MAX_PER_SCENE`): 5 x (28 + 12 + 10 + 8) = 290 particles, and the world's own emitters add 140 to 152 in the
+closeout world (6 per scene gave 348 + 152 = 500, which is not under the 500 of the canon: CORRECTION_LOG 219). The first cap was 24 per scene (24 x 58 = 1,392 at the worst), over both bounds.
 
 Not built (and why): god-rays through windows and volumetric fog need the Forward+ renderer; the game runs `gl_compatibility` (project.godot), and a fake
 shaft of additive quads in front of every lit window would be a garish draw-call cost for a phone (`docs/DISTRICT_SIGNATURES.md` lists it as an owner decision).
