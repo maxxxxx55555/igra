@@ -12,17 +12,106 @@ var out_dir := "res://docs/stills/final/"
 ## docs/stills/final. Unset, the run is the six-frame run.
 var _sweep: Array[Vector2] = []
 var _sweep_out: String = "res://.qa_logs/sweep/"
+## TLS_HUD_DUMP=<file> (the HUD pass): one line per visible control on a canvas layer, path | class | x,y,w,h | alpha | text or texture, under a
+## "## <state>" header per staged state; unset, nothing is written. 10_hud_hurt, 11_hud_prompt and 12_hud_touch are the HUD's states.
+var _dump: Array[String] = []
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	call_deferred("_run")
 
-func _shot(frame: String) -> void:
+func _shot(frame: String, half: bool = true) -> void:
 	await RenderingServer.frame_post_draw
 	var img := get_tree().root.get_texture().get_image()
-	img.resize(img.get_width() / 2, img.get_height() / 2, Image.INTERPOLATE_LANCZOS)
+	if half:
+		img.resize(img.get_width() / 2, img.get_height() / 2, Image.INTERPOLATE_LANCZOS)
 	img.save_png(ProjectSettings.globalize_path(out_dir + frame + ".png"))
 	print("[final] frame %s.png" % frame)
+
+func _hud_dump(state: String) -> void:
+	if OS.get_environment("TLS_HUD_DUMP") == "":
+		return
+	_dump.append("## " + state)
+	var seen: Dictionary = {}
+	for layer: Node in get_tree().root.find_children("*", "CanvasLayer", true, false):
+		for found: Node in layer.find_children("*", "Control", true, false):
+			var ctl := found as Control
+			if seen.has(ctl) or not ctl.is_visible_in_tree() or ctl.size.x <= 0.0 or ctl.size.y <= 0.0:
+				continue
+			seen[ctl] = true
+			var alpha: float = 1.0
+			var up: Node = ctl
+			while up != null and up != layer:
+				if up is CanvasItem:
+					alpha *= (up as CanvasItem).modulate.a * (up as CanvasItem).self_modulate.a
+				up = up.get_parent()
+			var rect := ctl.get_global_rect()
+			var what: String = ""
+			if "text" in ctl:
+				what = String(ctl.get("text")).left(30)
+			elif ctl is TextureRect and (ctl as TextureRect).texture != null:
+				what = (ctl as TextureRect).texture.resource_path.get_file()
+			_dump.append("%s|%s|%d,%d,%d,%d|%.2f|%s" % [ctl.get_path(), ctl.get_class(), rect.position.x, rect.position.y, rect.size.x, rect.size.y, alpha, what])
+
+func _write_dump() -> void:
+	var path: String = OS.get_environment("TLS_HUD_DUMP")
+	if path == "" or _dump.is_empty():
+		return
+	var file := FileAccess.open(ProjectSettings.globalize_path(path), FileAccess.WRITE)
+	if file == null:
+		return
+	for line: String in _dump:
+		file.store_line(line)
+	print("[final] hud dump %d lines" % _dump.size())
+
+## The HUD hurt, with an interact prompt, and in the touch layout: states the six release frames do not show.
+func _hud_states() -> void:
+	var player := get_tree().get_first_node_in_group("player") as Node3D
+	player.call("take_damage", 45.0)
+	await get_tree().create_timer(0.4).timeout
+	await _shot("10_hud_hurt")
+	player.call("heal", 1000.0)
+	EventBus.interact_prompt_changed.emit("Open")
+	EventBus.player_interact_available.emit(true)
+	await get_tree().create_timer(0.5).timeout
+	await _shot("11_hud_prompt")
+	EventBus.player_interact_available.emit(false)
+	await _touch_frame()
+
+## DisplayServer.is_touchscreen_available() is true while input_devices/pointing/emulate_touch_from_mouse is set, so a HUD built under it
+## carries the joystick, the action buttons and the touch-only buttons. The window takes a phone aspect for the shot; every setting comes back.
+func _touch_frame() -> void:
+	var scene := get_tree().current_scene
+	var win := get_window()
+	var mode0 := win.mode
+	var size0 := win.size
+	var calibrated0: Variant = SettingsManager.get_setting("touch_calibration_done", false)
+	SettingsManager.set_setting("touch_calibration_done", true)
+	ProjectSettings.set_setting("input_devices/pointing/emulate_touch_from_mouse", true)
+	Input.emulate_touch_from_mouse = true
+	win.mode = Window.MODE_WINDOWED
+	win.size = Vector2i(1600, 740)
+	await _swap_hud(scene)
+	await get_tree().create_timer(1.0).timeout
+	await _shot("12_hud_touch", false)
+	_hud_dump("touch")
+	ProjectSettings.set_setting("input_devices/pointing/emulate_touch_from_mouse", false)
+	Input.emulate_touch_from_mouse = false
+	win.size = size0
+	win.mode = mode0
+	SettingsManager.set_setting("touch_calibration_done", calibrated0)
+	await _swap_hud(scene)
+	await get_tree().create_timer(0.5).timeout
+
+func _swap_hud(scene: Node) -> void:
+	var old := scene.get_node_or_null("HUD")
+	if old != null:
+		scene.remove_child(old)
+		old.free()
+	var hud := (load("res://scenes/ui/hud_3d.tscn") as PackedScene).instantiate()
+	hud.name = "HUD"
+	scene.add_child(hud)
+	await get_tree().process_frame
 
 func _parse_sweep() -> void:
 	for pair: String in OS.get_environment("TLS_SWEEP").split(",", false):
@@ -207,7 +296,9 @@ func _run() -> void:
 	await get_tree().create_timer(0.3).timeout
 	_where("03")
 	await _shot("03_district_night_dark")
+	_hud_dump("calm")
 	await _swept("03_district_night_dark")
+	await _hud_states()
 
 	PowerGrid.advance_district(StringName(DistrictManager.current_district), DistrictData.Stage.FULL)
 	await get_tree().create_timer(1.5).timeout
@@ -257,6 +348,7 @@ func _run() -> void:
 	await get_tree().process_frame
 	_where("04")
 	await _shot("04_combat")
+	_hud_dump("combat")
 	await _swept("04_combat", monster)
 
 	# Boss by the game's own finale flow (finale_director.gd): every district
@@ -313,5 +405,6 @@ func _run() -> void:
 	await _shot("06_victory_ngplus")
 	LocalizationManager.set_language(lang0)
 	SettingsManager.set_text_size(size0)
-	print("[final] DONE frames=15")
+	_write_dump()
+	print("[final] DONE frames=18")
 	get_tree().quit(0)
