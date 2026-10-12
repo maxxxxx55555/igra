@@ -1389,12 +1389,12 @@
    "# EXIT=0"
   ],
   "frames": [
-   "docs/stills/shipping/01_main_menu_after_2e018d3_20261011T195308Z.png",
-   "docs/stills/shipping/02_district_day_full_after_2e018d3_20261011T195319Z.png",
-   "docs/stills/shipping/03_district_night_dark_after_2e018d3_20261011T195318Z.png",
-   "docs/stills/shipping/04_combat_after_2e018d3_20261011T195323Z.png",
-   "docs/stills/shipping/05_boss_after_2e018d3_20261011T195325Z.png",
-   "docs/stills/shipping/08_shop_after_2e018d3_20261011T195321Z.png"
+   "docs/stills/shipping/s21/01_main_menu_after_2e018d3_20261011T195308Z.png",
+   "docs/stills/shipping/s21/02_district_day_full_after_2e018d3_20261011T195319Z.png",
+   "docs/stills/shipping/s21/03_district_night_dark_after_2e018d3_20261011T195318Z.png",
+   "docs/stills/shipping/s21/04_combat_after_2e018d3_20261011T195323Z.png",
+   "docs/stills/shipping/s21/05_boss_after_2e018d3_20261011T195325Z.png",
+   "docs/stills/shipping/s21/08_shop_after_2e018d3_20261011T195321Z.png"
   ],
   "commit": "2e018d3"
  },
@@ -1532,5 +1532,317 @@
   ],
   "frames": [],
   "commit": "029dcc4"
+ },
+ {
+  "id": "S22-B5-PRE",
+  "claim": "On the runtime of d073218 (the payout hook of fix 169 connected synchronously) the new check CRF1 fails: the waiting quest is paid inside the craft and the materials are lost. It is the only failure of the 8 checks of the group.",
+  "cmd": "git checkout d073218 -- scripts/core/quest_manager.gd; CLOSEOUT_ONLY=s21 bash tools/qa_sim/closeout_check 300; git checkout HEAD -- scripts/core/quest_manager.gd",
+  "proof": "s22b_af2_pre",
+  "quotes": [
+   "FAIL CRF1 a craft in a full pack with a quest waiting keeps its slot (staged true; crafted false, lockpick 0 of 1, metal 0 of 0, quest still waiting false)",
+   "DONE checks=8 fails=1",
+   "# EXIT=1"
+  ],
+  "frames": [],
+  "commit": "df9d0f8"
+ },
+ {
+  "id": "S22-B5-POST",
+  "claim": "At HEAD the same check passes: the craft keeps its result and the quest still waits (the fix of B5, a deferred connect; AF2 verdict PASS in docs/artifacts/rc16/s22b_af2_both_ways.txt).",
+  "cmd": "bash tools/check.sh --all",
+  "proof": "s22b_af2_post",
+  "attach": "gate_closeout_check_scene.log",
+  "quotes": [
+   "ok   CRF1 a craft in a full pack with a quest waiting keeps its slot (staged true; crafted true, lockpick 1 of 1, metal 0 of 0, quest still waiting true)",
+   "DONE checks=406 fails=0"
+  ],
+  "frames": [],
+  "commit": "bddcd41"
+ },
+ {
+  "id": "S22-BATTERY",
+  "claim": "The battery on the HUD tree read 66 passed and 1 failed: the compile gate, on res://scripts/tools/_rc16_probe_runner.gd (the frames runner's _shot signature, CORRECTION_LOG 207); fixed in c44062e and green in S22-COMPILE.",
+  "cmd": "bash tools/check.sh --all",
+  "proof": "s22b_af2_post",
+  "quotes": [
+   "GATE FAIL SCRIPT res://scripts/tools/_rc16_probe_runner.gd",
+   "Провалено: 1, пройдено: 66",
+   "# EXIT=1"
+  ],
+  "frames": [],
+  "commit": "bddcd41"
+ },
+ {
+  "id": "S22-CLOSEOUT",
+  "claim": "The closeout of the battery: 406 checks and 0 fails, with the nine HUD checks of the pass (their ids were HUD1 to HUD9 then, HUDP1 to HUDP9 since c44062e) among them.",
+  "cmd": "bash tools/check.sh --all",
+  "proof": "s22b_af2_post",
+  "attach": "gate_closeout_check_scene.log",
+  "quotes": [
+   "ok   HUD2 the battery is eight whole segments behind seven gaps",
+   "ok   HUD9 the touch action buttons are on screen and clear of each other",
+   "ok   HUD6 the HUD holds in 39 language and Text Size pairs",
+   "DONE checks=406 fails=0"
+  ],
+  "frames": [],
+  "commit": "bddcd41"
+ },
+ {
+  "id": "S22-BOT",
+  "claim": "IRON RULE on the HUD tree: the 3-seed autoplay bot wins 3 of 3 with no softlock.",
+  "cmd": "bash tools/qa_sim/autoplay_bot",
+  "proof": "s22_bot",
+  "quotes": [
+   "autoplay bot: 3/3 seeds won, 0 softlock(s)",
+   "# EXIT=0"
+  ],
+  "frames": [],
+  "commit": "c44062e"
+ },
+ {
+  "id": "S22-WINDOWED",
+  "claim": "One command, four sequential processes: the windowed perf gate, the windowed audio gate (a second run only on red: not needed), the HUD closeout group, the compile gate; all four exit 0.",
+  "cmd": "bash -c (perf_check_scene, audio_truth_gate_scene, CLOSEOUT_ONLY=s22 closeout_check, compile_gate_scene)",
+  "proof": "s22_windowed_gates",
+  "quotes": [
+   "perf rc=0, audio rc=0 (second run rc=0), s22 closeout rc=0, compile gate rc=0",
+   "# EXIT=0"
+  ],
+  "frames": [],
+  "commit": "700e1ed"
+ },
+ {
+  "id": "S22-PERF",
+  "claim": "Perf, windowed: suburbs 142 draw calls (budget 200), frame p95 28.79 ms; power station 129 (budget 350), p95 23.61 ms.",
+  "cmd": "bash tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn 300",
+  "proof": "s22_windowed_gates",
+  "attach": "perf_check_scene.log",
+  "quotes": [
+   "[perf] budget D1<200: 142 OK; D11<350: 129 OK",
+   "suburbs frame_p95_ms=28.79",
+   "district=power_station draw_calls=129"
+  ],
+  "frames": [],
+  "commit": "700e1ed"
+ },
+ {
+  "id": "S22-AUDIO",
+  "claim": "Audio, windowed: the Music bus peaks at -10.1 dB (ceiling -1.5 dB) on the first run.",
+  "cmd": "bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120",
+  "proof": "s22_windowed_gates",
+  "attach": "audio_truth_gate_scene.log",
+  "quotes": [
+   "Music bus peak=-10.1dB (ceiling <=-1.5dB) ok",
+   "PASS overall"
+  ],
+  "frames": [],
+  "commit": "700e1ed"
+ },
+ {
+  "id": "S22-HUD-CHECKS",
+  "claim": "The HUD closeout group alone: ten checks (nine HUDP and the set-up line), 0 fails.",
+  "cmd": "CLOSEOUT_ONLY=s22 bash tools/qa_sim/closeout_check 300",
+  "proof": "s22_windowed_gates",
+  "attach": "closeout_check.log",
+  "quotes": [
+   "ok   HUDP1 the health and stamina rows rest faded",
+   "ok   HUDP4 the objective list is on screen",
+   "ok   HUDP9 the touch action buttons are on screen and clear of each other",
+   "DONE checks=10 fails=0"
+  ],
+  "frames": [],
+  "commit": "700e1ed"
+ },
+ {
+  "id": "S22-COMPILE",
+  "claim": "The compile gate reads bad=0 after the fix of the probe runner.",
+  "cmd": "bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120",
+  "proof": "s22_windowed_gates",
+  "attach": "compile_gate_scene.log",
+  "quotes": [
+   "COMPILE_GATE bad=0"
+  ],
+  "frames": [],
+  "commit": "700e1ed"
+ },
+ {
+  "id": "S22-HUD-BEFORE",
+  "claim": "The BEFORE frames and the dump of every visible control of the HUD at 8874bb9 (calm, hurt, prompt, combat, touch layout), read; the dump found the objective list at x = -320 and a touch cluster that overlapped.",
+  "cmd": "bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 900",
+  "proof": "s22_hud_before",
+  "quotes": [
+   "final_frames_scene.tscn rc=0",
+   "# EXIT=0"
+  ],
+  "frames": [
+   "docs/stills/shipping/hud/before/03_district_night_dark_before_8874bb9_20261012T053409Z.png",
+   "docs/stills/shipping/hud/before/04_combat_before_8874bb9_20261012T053418Z.png",
+   "docs/stills/shipping/hud/before/10_hud_hurt_before_8874bb9_20261012T053410Z.png",
+   "docs/stills/shipping/hud/before/11_hud_prompt_before_8874bb9_20261012T053410Z.png",
+   "docs/stills/shipping/hud/before/12_hud_touch_before_8874bb9_20261012T053412Z.png"
+  ],
+  "commit": "8874bb9"
+ },
+ {
+  "id": "S22-HUD-B1",
+  "claim": "Batch 1 of the HUD pass at 51e2265 (contextual rows, battery segments, one map, touch-only buttons, the objective list on screen), five frames read: kept.",
+  "cmd": "bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 900",
+  "proof": "s22_hud_b1",
+  "quotes": [
+   "final_frames_scene.tscn rc=0",
+   "# EXIT=0"
+  ],
+  "frames": [
+   "docs/stills/shipping/hud/after1/03_district_night_dark_after_51e2265_20261012T055341Z.png",
+   "docs/stills/shipping/hud/after1/04_combat_after_51e2265_20261012T055350Z.png",
+   "docs/stills/shipping/hud/after1/10_hud_hurt_after_51e2265_20261012T055342Z.png",
+   "docs/stills/shipping/hud/after1/11_hud_prompt_after_51e2265_20261012T055342Z.png",
+   "docs/stills/shipping/hud/after1/12_hud_touch_after_51e2265_20261012T055344Z.png"
+  ],
+  "commit": "51e2265"
+ },
+ {
+  "id": "S22-HUD-B2",
+  "claim": "Batch 2 of the HUD pass at ccf61ee (the combat HUD, the prompt and notice fades, the touch cluster, the rows regrouped), the three HUD frames and the six release frames of the tree that ships, each read once: kept; no artefact seen.",
+  "cmd": "bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 900",
+  "proof": "s22_hud_b2",
+  "quotes": [
+   "final_frames_scene.tscn rc=0",
+   "# EXIT=0"
+  ],
+  "frames": [
+   "docs/stills/shipping/01_main_menu_after_ccf61ee_20261012T060401Z.png",
+   "docs/stills/shipping/02_district_day_full_after_ccf61ee_20261012T060415Z.png",
+   "docs/stills/shipping/03_district_night_dark_after_ccf61ee_20261012T060410Z.png",
+   "docs/stills/shipping/04_combat_after_ccf61ee_20261012T060420Z.png",
+   "docs/stills/shipping/05_boss_after_ccf61ee_20261012T060422Z.png",
+   "docs/stills/shipping/08_shop_after_ccf61ee_20261012T060417Z.png",
+   "docs/stills/shipping/hud/after2/10_hud_hurt_after_ccf61ee_20261012T060411Z.png",
+   "docs/stills/shipping/hud/after2/11_hud_prompt_after_ccf61ee_20261012T060412Z.png",
+   "docs/stills/shipping/hud/after2/12_hud_touch_after_ccf61ee_20261012T060413Z.png"
+  ],
+  "commit": "ccf61ee"
+ },
+ {
+  "id": "S22-EXPORT",
+  "claim": "EXPORT 1 of 2 of the pass: the release export builds the signed bundle from the final tree (the Gradle daemon was stopped after the build, as in Session 21).",
+  "cmd": "bash -c set -a; . .signing/release.env; set +a; godot --headless --path . --export-release \"Android\" build/tls.aab",
+  "proof": "s22_export_1b1a3f6",
+  "quotes": [
+   "[ DONE ] export",
+   "# EXIT=0"
+  ],
+  "frames": [],
+  "commit": "1b1a3f6"
+ },
+ {
+  "id": "S22-AAB",
+  "claim": "The bundle: 136,508,275 bytes, sha256 7121d2f9..., label \"Last Streetlight\", no ad SDK, none of the two secret values in any entry, jar verified, the signer is the upload key.",
+  "cmd": "python tools/qa_sim/aab_check.py build/tls.aab --secrets --against ../_BACKUPS/2026-10-12_09-44/build/tls.aab",
+  "proof": "s22_aab_check_1b1a3f6",
+  "quotes": [
+   "size    136508275 bytes",
+   "sha256  7121d2f9745a763c38763902fe7472c166ab9055c85b5101c11bd3470c70600a",
+   "names Last Streetlight: ok",
+   "name Lcom/applovin/: ok",
+   "0 hits",
+   "jar verified.",
+   "signer_match=yes",
+   "aab_check: PASS"
+  ],
+  "frames": [],
+  "commit": "1b1a3f6"
+ },
+ {
+  "id": "S22-AAB-DIFF",
+  "claim": "Against the bundle of abbf91d: 0 entries gone, 2 new (hud_fade.gdc and its remap), 28 with other bytes (the signature files, the HUD scene, the caches, the pack index, 13 locale files, 8 compiled scripts); no base/ entry.",
+  "cmd": "python tools/qa_sim/aab_check.py build/tls.aab --against ../_BACKUPS/2026-10-12_09-44/build/tls.aab",
+  "proof": "s22_aab_diff_1b1a3f6",
+  "quotes": [
+   "0 entries gone, 2 new, 28 with other bytes",
+   "new     assetPackInstallTime/assets/scripts/ui/hud_fade.gdc",
+   "changed assetPackInstallTime/assets/scripts/core/quest_manager.gdc"
+  ],
+  "frames": [],
+  "commit": "1b1a3f6"
+ },
+ {
+  "id": "S22-AAB-SCAN",
+  "claim": "The package scan finds 0 packed files that are not the game.",
+  "cmd": "python tools/qa_sim/release_export_check.py --aab build/tls.aab",
+  "proof": "s22_aab_scan_1b1a3f6",
+  "quotes": [
+   "0 packed file(s) that are not the game",
+   "# EXIT=0"
+  ],
+  "frames": [],
+  "commit": "1b1a3f6"
+ },
+ {
+  "id": "S22-STATIC-FINAL",
+  "claim": "The static gates on the tree that goes to the verifier (the documents of the Session 22 commit uncommitted): 41 passed, with AF3 green on the six frames of ccf61ee.",
+  "cmd": "bash tools/check.sh --static",
+  "proof": "s22_static_final",
+  "quotes": [
+   "Проверок пройдено: 41",
+   "# EXIT=0"
+  ],
+  "frames": [],
+  "commit": "dbe9006"
+ },
+ {
+  "id": "S22-AF5",
+  "claim": "Every file:line citation of the documents added since rc15 still names what it claims.",
+  "cmd": "python tools/af5_check.py",
+  "proof": "s22_af5_final",
+  "quotes": [
+   "0 finding(s)"
+  ],
+  "frames": [],
+  "commit": "dbe9006"
+ },
+ {
+  "id": "S22-AF3",
+  "claim": "The frame gate's default set is the six release frames of ccf61ee, and they pass.",
+  "cmd": "python tools/qa_sim/af3_frame_check.py",
+  "proof": "s22_af3_default",
+  "quotes": [
+   "af3 frames=6 fail=0"
+  ],
+  "frames": [],
+  "commit": "dbe9006"
+ },
+ {
+  "id": "S22-FLOW",
+  "claim": "The game loop is wired end to end: 56 checks.",
+  "cmd": "python tools/flow_check.py",
+  "proof": "s22_flow_final",
+  "quotes": [
+   "56 проверок пройдено"
+  ],
+  "frames": [],
+  "commit": "dbe9006"
+ },
+ {
+  "id": "S22-SCENE",
+  "claim": "The scene-node check is clean.",
+  "cmd": "python tools/scene_node_check.py",
+  "proof": "s22_scene_final",
+  "quotes": [
+   "Всё чисто."
+  ],
+  "frames": [],
+  "commit": "dbe9006"
+ },
+ {
+  "id": "S22-LINT",
+  "claim": "gdparse, gdlint, ruff, shellcheck and actionlint on the files changed since the last tag: 0 findings.",
+  "cmd": "python tools/lint_changed.py",
+  "proof": "s22_lint_final",
+  "quotes": [
+   "0 finding(s)"
+  ],
+  "frames": [],
+  "commit": "dbe9006"
  }
 ]

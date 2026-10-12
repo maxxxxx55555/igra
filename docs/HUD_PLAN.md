@@ -93,3 +93,36 @@ hardcoded-text gate for the one new setting label. Perf is read windowed at the 
 
 Diegetic redesign; redrawing the icon set; a font swap for numerals (unless a launch is left); a floating (touch-placed) joystick, which
 would change input behaviour.
+
+## Outcome (Session 22)
+
+Three launches of frames (BEFORE `8874bb9`, batch 1 `51e2265`, batch 2 `ccf61ee`), each read; both batches kept, nothing reverted. The frames:
+`docs/stills/shipping/hud/before/`, `.../hud/after1/`, `.../hud/after2/` (calm, hurt, prompt, combat, touch layout), and the six release frames of batch 2 in
+`docs/stills/shipping/`. The plan's own claims about the old HUD were checked against the BEFORE dump (two more defects than the plan had when it was written: the
+objective list off screen, the touch cluster mis-anchored). Batch 3 was not run: no launch was left to read it.
+
+| Row | Result | Evidence |
+|---|---|---|
+| 1 Health | contextual: faded at full health (alpha 0.00), up at once when hurt, 3 s after full; value shown with the row | HUDP1; frames 03 and 10 |
+| 2 Stamina | contextual, 1.5 s; value never shown | HUDP1 |
+| 3 Battery | first row, eight segments behind seven gaps, value only at 30 % or less | HUDP2; frame 03 |
+| 4, 5 Noise, visibility | one grid with the others (a 12 px caption over a bar of the same size), contextual (0.34 and 0.15), placed under the battery | frames 03, 10, 04 |
+| 6 RADAR caption | removed (hidden in the scene) | HUDP3 |
+| 7 City minimap | the setting `show_minimap`, off by default; its "?" chip goes with it; Settings > Controls > Minimap, 13 languages | HUDP3 |
+| 8 Radar | kept; it now fills its frame (it sat 16 px off) | HUDP3 |
+| 9 Pause button | kept (the loop runner clicks it); rests at alpha 0.5 on a keyboard | HUDP5 |
+| 10 Map button | touch only, text from `MAP_TITLE` (the emoji glyph is gone) | HUDP5; frame 12 |
+| 11 Ammo counter | caption hidden without a gun; 5 s hold | frame 03 against 04 |
+| 12 Crosshair | rests faded, wakes on a shot, a hit, an ammo change or an enemy in the aim, 5 s | HUDP7; frames 03 and 04 |
+| 13 Enemy bar | hold 2 s becomes 5 s | code |
+| 14 Prompt | fades in 0.12 s, out 0.2 s, then hidden | HUDP8; frame 11 |
+| 15 Notice | fades out before its 3 s timer clears it | code |
+| 17 LOG toggle | rests at 0.45, full for 4 s after a new entry | frames |
+| 18 Touch controls | rest at 0.55, full while pressed; the joystick ring rests at 0.55 and is full under the thumb | frame 12 |
+| 22 Objective list | on the screen (it was at x = -320), lets every click through, shown for 8 s when an objective changes or play starts | HUDP4; frame 03 |
+| 23 Touch action cluster | anchored at its corner; Attack, Sprint, Stealth, Interact and the four side buttons clear of each other | HUDP9; frame 12 |
+| 16, 19, 20 | no action (quick slots, the weight bar that draws nothing, the status icons and the other transient elements) | |
+| 21 HUD scale | not built: the Text Size setting is the UI scale (0.85, 1.0, 1.2 of the window) and the layout holds at the three sizes in 13 languages (HUDP6) | CORRECTION_LOG 206 |
+
+Not done, named: diegetic health, a redrawn icon set, numerals in the mono face, a floating joystick, a separate HUD scale slider. Counts: the visible
+controls of the calm frame, 36 before and 25 after (CORRECTION_LOG 206 gives the method).

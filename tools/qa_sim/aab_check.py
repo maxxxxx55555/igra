@@ -60,6 +60,9 @@ def tool(*cmd):
     return r.returncode, r.stdout + r.stderr
 
 
+LIST_MAX = 40  # entries named per class by --against
+
+
 def compare(path, older):
     with zipfile.ZipFile(path) as a, zipfile.ZipFile(older) as b:
         new = {i.filename: i.CRC for i in a.infolist()}
@@ -69,8 +72,10 @@ def compare(path, older):
     changed = sorted(n for n in set(new) & set(old) if new[n] != old[n])
     print("against %s: %d entries gone, %d new, %d with other bytes" % (older.name, len(gone), len(added), len(changed)))
     for label, names in (("gone", gone), ("new", added), ("changed", changed)):
-        for n in names[:12]:
+        for n in names[:LIST_MAX]:
             print("  %-7s %s" % (label, n))
+        if len(names) > LIST_MAX:
+            print("  %-7s ... and %d more" % (label, len(names) - LIST_MAX))
 
 
 def facts(path, secrets):

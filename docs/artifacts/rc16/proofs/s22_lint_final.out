@@ -1,0 +1,8 @@
+# proof s22_lint_final
+# utc 20261012T070041Z
+# head dbe9006 (uncommitted paths: 24)
+# env none
+# cmd python tools/lint_changed.py
+
+lint_changed: 70 gd, 22 py, 14 sh, 1 workflow, skipped tools for: none, 0 finding(s)
+# EXIT=0

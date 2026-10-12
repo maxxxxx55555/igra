@@ -60,3 +60,22 @@ Method: one windowed launch with a sweep (ledger row 70, `s21_sweep_cdf2035`: fi
 V2, what is known: the squares are the glow's own quads (hidden with the glow, `halo_pose_b_hidden`), in the ring probe (launch 76) the frame with lamps at 2.6, 4.1 and 5.3 m shows them and the frames with the nearest lamp at 5.9 m or more show none (`halo_ring_d05`, `halo_ring_d08`), and the fixed pose gave the same square in all three runs that used it (launches 77, 78 and 79); they do not change with the shader's `peak` or `near_fade` (launch 78), so the fragment behaves as if the shader's formula were not in effect for those quads. Not known: why. A debug shader set at run time (launch 79) was answered by the engine's fallback, not by its output, and the diagnosis stopped there (the launch budget). A retry would start from `git show 2d502ee` and one question: does the glow draw the same square as a `StandardMaterial3D` (unshaded, billboard, additive, distance fade)? The look of the street in the frames where it worked (`docs/stills/shipping/batch1/lamp-halo-crop_after_2d502ee_20261011T192342Z.png`) is the reason to retry.
 
 Left as it is: the white capsule of the staged combat frame is the 0.1 s hit flash of a brass-albedo monster 3 m in front of the flashlight (a flash, not a defect; the frames after repeated hits show the brass egg); the skill tree's small cards and empty screen, the inventory's empty field and the settings rows are layout work with 13-locale overflow risk, outside a closing pass. UNVERIFIABLE-HERE: V1 on a phone GPU (`docs/UNVERIFIABLE_HERE.md` U12).
+
+## HUD pass (Session 22): two batches tried, two kept, none reverted
+
+Plan and outcome row by row: `docs/HUD_PLAN.md`. Method: one windowed launch per batch with the frames runner (`TLS_FRAMES_OUT`, plus `TLS_HUD_DUMP`, a list of every
+visible control with its rectangle and alpha), the same five states each time (calm, hurt, interact prompt, combat, touch layout at 1600 x 740 with touch emulated),
+BEFORE and AFTER read side by side, the AF3 name on every frame.
+
+| Batch | Head | Launch row | Items | Read in the frames | Verdict |
+|---|---|---|---|---|---|
+| BEFORE | `8874bb9` | 84 | none | five rows always on, two maps one inside the other, RADAR over the ring, a MELEE caption, an emoji map button, the objective list off screen, the touch cluster overlapping | the baseline |
+| 1, the quiet corner | `51e2265` | 85 | contextual rows on one grid with the battery as segments; one map and touch-only buttons; the objective list on screen | the corner shows the battery and, in the dark, the visibility bar; one radar ring; the objectives are readable; a gap between the two rows (the order was changed in batch 2) | kept |
+| 2, in play | `ccf61ee` | 86 | the combat HUD holds 5 s; prompt and notice fade; the touch cluster re-anchored and see-through, the LOG toggle dim; the rows regrouped | no crosshair and no MELEE at rest, the crosshair back on an enemy in the aim; the health row under the visibility bar when hurt; the right cluster clear of itself, dim at rest | kept |
+
+Reverted: nothing. One defect of my own was found in the log of batch 1 and fixed in batch 2: `hud_fade.gd` asked for a meta key that did not exist (35 engine errors, no
+effect on the frames). The boss frame's red vignette is in the BEFORE frame and in the frames of `2e018d3` too: it is not the HUD pass.
+
+Decisions (mine, recorded so they can be undone): the city minimap is off by default (the radar is the one map; Settings turns the minimap on); the objective list shows for
+8 s on a change and at the start of play instead of staying (it was never on screen before); the touch controls rest at 0.55 (`_TOUCH_REST`), which is the figure to raise if
+they read too dim on a phone (`docs/UNVERIFIABLE_HERE.md` U13).

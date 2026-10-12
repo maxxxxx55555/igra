@@ -1,7 +1,7 @@
 # Store submission pack: Last Streetlight 1.0 (Google Play)
 
-Drafted 2026-10-11 (Session 20, the final window pass) from the tree at `6f6d643`; the bundle facts were refreshed in Session 21 from the bundle `build/tls.aab`, which was built
-from `abbf91d`. **Nothing here has been submitted**: the Play Console, a phone and a contact address are the owner's. Items marked
+Drafted 2026-10-11 (Session 20, the final window pass) from the tree at `6f6d643`; the bundle facts were refreshed in Session 22 from the bundle `build/tls.aab`, which was built
+from `1b1a3f6`. **Nothing here has been submitted**: the Play Console, a phone and a contact address are the owner's. Items marked
 **(check in Console)** are Google's current rules as remembered at drafting time; read them on the form before you answer.
 
 Order of use: §1 what you upload, §2 the images, §3 the privacy policy, §4 the content rating, §5 the data safety form, §6 the other
@@ -12,20 +12,20 @@ declarations, §7 the steps. It consolidates and, where they had drifted, correc
 
 | Fact | Value | Where it was read |
 |---|---|---|
-| File | `build/tls.aab` (gitignored, on the build machine only), **136,501,580 bytes** | `docs/RELEASE_ARTIFACTS.md`, v8.0.0-shipping section |
-| sha256 | `f8f62d2cc0897e1f9c659005d790c69368219a729128a8cec31a6dae3edbbee7` | same; check it with `sha256sum build/tls.aab` before the upload |
-| Built from | `abbf91d`, no uncommitted path; the seven fixes of Sessions 20 and 21 are in it (§9) | ledger row 82 |
+| File | `build/tls.aab` (gitignored, on the build machine only), **136,508,275 bytes** | `docs/RELEASE_ARTIFACTS.md`, v8.0.0-shipping section |
+| sha256 | `7121d2f9745a763c38763902fe7472c166ab9055c85b5101c11bd3470c70600a` | same; check it with `sha256sum build/tls.aab` before the upload |
+| Built from | `1b1a3f6` (its runtime is that of `ccf61ee`), no uncommitted path; the seven fixes of Sessions 20 and 21, the B5 fix and the HUD pass of Session 22 are in it (§9) | ledger row 90 |
 | Package name | `com.maxsimkasky.laststreetlight`: **permanent once uploaded** (the `com.tls.game` of `docs/store/play_store.md` is stale) | manifest of the bundle of `e241597`, `docs/artifacts/rc16/proofs/s20_aab_manifest.out`; not re-read from this bundle, but `export_presets.cfg`, `android/` and `project.godot` are unchanged since `e241597` (`git diff --name-only e241597 HEAD -- export_presets.cfg android project.godot` prints nothing) |
 | Version | code 1, name "1.0" | manifest |
-| App label | "Last Streetlight" in `base/resources.pb`, the resource table that holds the app name (CRC-identical to the entry of the bundle whose label Session 19 verified: 42 entries of the label resource) | `s21_aab_check2_e5a2fd5.out` |
+| App label | "Last Streetlight" in `base/resources.pb`, the resource table that holds the app name (CRC-identical to the entry of the bundle whose label Session 19 verified: 42 entries of the label resource) | `s22_aab_check_1b1a3f6.out` (no `base/` entry differs from the bundle of `abbf91d`, `s22_aab_diff_1b1a3f6.out`) |
 | SDK levels | min 24, **target 36**; the preset's `min_sdk=29` and `target_sdk=34` (`export_presets.cfg:29-30`) are not read by this export | manifest (Play's minimum target API: **check in Console**) |
 | ABI | arm64-v8a only (`architectures/armeabi-v7a=false`): 32-bit-only phones are not offered the game | `export_presets.cfg:14-15` |
 | Permissions | `INTERNET` and `VIBRATE` only; no `AD_ID`, no storage, no location, no camera, no microphone | manifest |
 | Application flags | `allowBackup=false` (no Android cloud backup of the saves), `isGame=true`, OpenGL ES 3.0 required | manifest |
-| Ads | no ad SDK code: 0 dex references to `Lcom/applovin/` (the GDScript provider file is in the pack and, with no key, resolves to no provider) | `docs/artifacts/rc16/proofs/s21_aab_check_abbf91d.out` |
-| Signature | `jar verified.`; the signer's SHA-256 equals the upload key; keep Play App Signing | `s21_aab_check_abbf91d.out`, `docs/RELEASE_RUNBOOK.md` §1 |
-| Size | base module 26,974,685 bytes compressed; install-time asset pack 108,573,521 bytes compressed (Play caps the base module at 200 MB: **check in the App bundle explorer**) | `docs/RELEASE_ARTIFACTS.md` |
-| Contents scan | 0 packed files that are not the game, in the scan's classes | `s21_aab_scan_abbf91d.out` |
+| Ads | no ad SDK code: 0 dex references to `Lcom/applovin/` (the GDScript provider file is in the pack and, with no key, resolves to no provider) | `docs/artifacts/rc16/proofs/s22_aab_check_1b1a3f6.out` |
+| Signature | `jar verified.`; the signer's SHA-256 equals the upload key; keep Play App Signing | `s22_aab_check_1b1a3f6.out`, `docs/RELEASE_RUNBOOK.md` §1 |
+| Size | base module 26,974,685 bytes compressed; install-time asset pack 108,579,656 bytes compressed (Play caps the base module at 200 MB: **check in the App bundle explorer**) | `docs/RELEASE_ARTIFACTS.md` |
+| Contents scan | 0 packed files that are not the game, in the scan's classes | `s22_aab_scan_1b1a3f6.out` |
 
 Upload no other bundle: the bundle of `63fda65` packs an API key and the one of `16abbb0` packs 77 store images
 (`docs/RELEASE_ARTIFACTS.md`). Both are kept under `..\_BACKUPS\`; the file at `build/tls.aab` is the right one.
@@ -52,6 +52,8 @@ The six screenshot frames (each carries its code hash `ccf61ee`, the tree of the
 4. `docs/stills/shipping/04_combat_after_ccf61ee_20261012T060420Z.png`: combat.
 5. `docs/stills/shipping/05_boss_after_ccf61ee_20261012T060422Z.png`: the boss.
 6. `docs/stills/shipping/08_shop_after_ccf61ee_20261012T060417Z.png`: the shop.
+
+The frames of the HUD pass (hurt, interact prompt, and the touch layout at 1600 x 740 with touch emulated) are in `docs/stills/shipping/hud/after2/`; the touch frame is not a store screenshot (its long side is more than twice the short side), and none of them was read on a phone (`docs/UNVERIFIABLE_HERE.md` U13).
 
 Not used, on purpose: `assets/store/screenshot_0*.png` (1280 x 720, RGBA, made before rc16, no code hash, not checked against the build) and
 `store/screenshots/*_1920x1080_en.png` (RGB, older waves, no code hash). Use them only after you compare each with the running game.
@@ -240,7 +242,7 @@ Each step names where the detail lives; it does not repeat it.
 
 ## 9. What this pass could not do
 
-- **The fixes are in the bundle now.** Session 21 exported from `main` (`abbf91d`): the four fixes of `6f6d643` (CORRECTION_LOG 168, 178, 179, 180) and the three of Session 21 (169, 172, 174) are in it (`docs/RELEASE_ARTIFACTS.md`, v8.0.0-shipping section). The manifest was not re-read from this bundle.
+- **The fixes are in the bundle now.** Session 22 exported from `main` (`1b1a3f6`): the four fixes of `6f6d643` (CORRECTION_LOG 168, 178, 179, 180), the three of Session 21 (169, 172, 174), the B5 fix (205) and the HUD pass (206) are in it (`docs/RELEASE_ARTIFACTS.md`, v8.0.0-shipping section). The manifest was not re-read from this bundle.
 - **LAN co-op code is in the build and unreachable.** `scenes/main_3d.tscn` holds a `LANMenu` node (hidden) that nothing opens, and the
   lobby screen is archived; three autoloads of the multiplayer code exist and open no socket until a screen asks
   (`docs/artifacts/rc16/proofs/s20_net_reach.out`). CORRECTION_LOG 173 is latent for that reason (174 is fixed).

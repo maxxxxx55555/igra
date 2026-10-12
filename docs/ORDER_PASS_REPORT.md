@@ -185,6 +185,22 @@ rows: `docs/ACCEPTANCE_CHECKLIST.md` (200 rows); decisions: `docs/TZ_DECISIONS.m
 | Music | Excluded by owner (`OWNER_HANDOFF.md`) |
 | Play Console upload | Owner (credentials); `version/code` stays 1 until the first upload |
 
+## B5 and the HUD pass (Session 22, 2026-10-12)
+
+**Status: B5 fixed with an AF2 pair, the HUD cleaned in two frame-read batches (nothing reverted), the bundle rebuilt and verified; the verifier's round and the tag are recorded in `docs/RUN_STATE.md` (Session 22).**
+
+| Item | Result | Evidence |
+|---|---|---|
+| B5 (R1) | The payout hook of fix 169 is connected deferred (`scripts/core/quest_manager.gd:28`); a craft keeps its materials. A smaller change than the written patch | CORRECTION_LOG 205; ledger rows 83 and 87; `docs/artifacts/rc16/s22b_af2_both_ways.txt` |
+| AF2 (fails before, passes after) | CRF1 FAILS on the runtime of `d073218` (`crafted false, lockpick 0 of 1, metal 0 of 0, quest still waiting false`) and passes at HEAD (`crafted true, lockpick 1 of 1, metal 0 of 0, quest still waiting true`); the pre run failed that one check of 8 | `s22b_af2_pre`, `s22b_af2_post` |
+| IRON RULE | the 3-seed bot won 3 of 3, 0 softlocks, on the HUD tree | row 88, `s22_bot` |
+| HUD (H1, H2) | `docs/HUD_PLAN.md`: 23 rows classified; the BEFORE dump found two defects the plan had not (the objective list at x = -320, a touch cluster that overlapped); batch 1 and batch 2 read in frames and kept; the calm frame's visible controls 36 to 25 | rows 84 to 86; `docs/stills/shipping/hud/`; CORRECTION_LOG 206 |
+| Gates (H3) | static 41 of 41, flow 56, scene-node clean, lint 0 findings; `check.sh --all` 66 passed and 1 failed (the compile gate, my signature change, CORRECTION_LOG 207), closeout 406 checks and 0 fails; the compile gate `bad=0` and the HUD group 10 checks, 0 fails in launch 7; i18n 12 of 12 through the static gate (one new label, 13 locales) | rows 87 and 89 |
+| Perf and audio (H3) | suburbs 142 draw calls (200), p95 28.79 ms; power station 129 (350), p95 23.61 ms; Music bus peak -10.1 dB (ceiling -1.5), first run | row 89; `docs/PERF_PASS.md` section 0a |
+| Frames | the six release frames re-shot at `ccf61ee` (the S21 frames moved to `docs/stills/shipping/s21/`), each read once; AF3 default set 6 of 6 | `docs/stills/shipping/`; row 86 |
+| Bundle (F1) | `build/tls.aab` 136,508,275 bytes, sha256 `7121d2f9745a763c...`, from `1b1a3f6`, `jar verified.`, `signer_match=yes`, 0 ad SDK references, 0 secret hits, 0 packed files that are not the game; against the bundle of `abbf91d`: 2 new, 28 changed, no `base/` entry | row 90; `docs/RELEASE_ARTIFACTS.md` |
+| Not done | the HUD principles listed in CORRECTION_LOG 206 (diegetic health, an icon redraw, the mono face for numerals, a floating joystick, a second scale slider); a phone run (U1, U5, U6, U10, U12, U13) | `docs/UNVERIFIABLE_HERE.md` |
+
 ## Shipping pass (Session 21, 2026-10-11)
 
 **Status: three of the seven open P1 rows fixed with an AF2 pair (CORRECTION_LOG 169, 172, 174), the other four rated (170 and 171 accepted limits of an offline game, 173 and 177 the owner's, CORRECTION_LOG 198); one visual item kept (the menu tint), one reverted for a defect the final frames showed (the lamp glow, CORRECTION_LOG 201), one not kept (the tonemap pairs); the battery 66 of 66; a fresh signed bundle (`build/tls.aab`, 136,501,580 bytes, built from `abbf91d`). The windowed perf and audio gates were not run (CORRECTION_LOG 203). The tag `v8.0.0-shipping` is not created: the verifier's round found B5, a craft can lose its materials to a pending quest's payout, and the launches are spent (CORRECTION_LOG 204).** Records: `docs/RUN_STATE.md` Session 21, `docs/CORRECTION_LOG.md` 198 to 203, `docs/PROOFS.md` (the S21 rows), `docs/BEAUTY_RC16.md` (Session 21 section), `docs/RELEASE_ARTIFACTS.md` (v8.0.0-shipping section). Launches: 12 of 12 (ledger rows 70 to 81), exports 1 of 2 (row 82).

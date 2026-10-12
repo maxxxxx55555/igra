@@ -1,0 +1,7 @@
+# proof s22_af3_default
+# utc 20261012T070034Z
+# head dbe9006 (uncommitted paths: 21)
+# env none
+# cmd python tools/qa_sim/af3_frame_check.py
+af3 frames=6 fail=0
+# EXIT=0
