@@ -1,0 +1,11 @@
+# proof s22b_af2_pre
+# utc 20261012T052458Z
+# head df9d0f8 (uncommitted paths: 1)
+# env CLOSEOUT_ONLY=s21 
+# cmd bash tools/qa_sim/closeout_check 300
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL CRF1 a craft in a full pack with a quest waiting keeps its slot (staged true; crafted false, lockpick 0 of 1, metal 0 of 0, quest still waiting false)
+[closeout] DONE checks=8 fails=1
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+# EXIT=1
