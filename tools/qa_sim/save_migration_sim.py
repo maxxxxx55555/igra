@@ -79,7 +79,7 @@ def write(path, rows, facts):
     ]
     for case in EXPECT:
         title, loaded, source, kept, version, quarantined = rows[case]
-        lines.append("| %s | %s | %s | %s | %s | %s | %s |" % (case, title, "yes" if loaded else "no", WORDS[source], "kept" if kept else ("reset to empty" if loaded else "-"), version if loaded else "-", "yes" if quarantined else "no"))
+        lines.append("| %s | %s | %s | %s | %s | %s | %s |" % (case, title, "yes" if loaded else "no", WORDS[source], "kept" if kept else ("reset to empty" if loaded else "-"), re.sub(r"\.0$", "", version) if loaded else "-", "yes" if quarantined else "no"))
     lines += [
         "",
         "Reading: a save of any older version loads and becomes the current version (no key was ever removed or renamed, so there is nothing to transform); a save newer than the build is refused, and the backups are tried, so a player who",
