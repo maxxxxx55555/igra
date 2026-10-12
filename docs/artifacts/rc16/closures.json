@@ -1308,8 +1308,8 @@
  },
  {
   "id": "S21-AF2-PRE",
-  "claim": "On the runtime of a83d99b the new checks fail: the metal is taken at a stale weight (RMV1), a quest stays at 0 of 150 coins after the pack has room (QST1), a full-pack salvage loses the item (SLV1), Restart leaves the state PAUSED and the coins at 1200 of 700 (RST1).",
-  "cmd": "python tools/qa_sim/af2_both_ways.py --base a83d99b --only s21 (the pre run)",
+  "claim": "On the runtime of a83d99b the new checks fail: the metal is taken at a stale weight (RMV1), a quest stays at 0 of 150 coins after the pack has room (QST1), a full-pack salvage loses the item (SLV1), RST1 answers false because `restart_from_save` does not exist (the old bare reload was never run: a scene change ends the run).",
+  "cmd": "python tools/qa_sim/af2_both_ways.py --base a83d99b --only s21 (the pre run; run before the tool had --tag: repeat it only with --tag s21)",
   "proof": "s21_af2_pre",
   "quotes": [
    "FAIL RMV1",
@@ -1324,7 +1324,7 @@
  {
   "id": "S21-AF2-POST",
   "claim": "At HEAD the same group passes.",
-  "cmd": "python tools/qa_sim/af2_both_ways.py --base a83d99b --only s21 (the post run)",
+  "cmd": "python tools/qa_sim/af2_both_ways.py --base a83d99b --only s21 (the post run; run before the tool had --tag: repeat it only with --tag s21)",
   "proof": "s21_af2_post",
   "quotes": [
    "DONE checks=8 fails=0"
@@ -1466,14 +1466,14 @@
  },
  {
   "id": "S21-AAB",
-  "claim": "The new bundle's facts read from the file: size, sha256, entries, the label, no ad SDK, the signature and its signer, no keystore value outside META-INF, and what changed against the bundle of e241597.",
+  "claim": "The new bundle's facts read from the file: size, sha256, entries, the app label in base/resources.pb, no ad SDK, the signature and its signer, no keystore value outside META-INF, and what changed against the bundle of e241597 (second run of the tool after its label check was narrowed to base/resources.pb; the first run, s21_aab_check_abbf91d, counted 19 entries and is kept).",
   "cmd": "bash -c 'set -a; . .signing/release.env; set +a; python tools/qa_sim/aab_check.py build/tls.aab --secrets --against <the bundle of e241597>'",
-  "proof": "s21_aab_check_abbf91d",
+  "proof": "s21_aab_check2_e5a2fd5",
   "quotes": [
    "size    136501580 bytes",
    "sha256  f8f62d2cc0897e1f9c659005d790c69368219a729128a8cec31a6dae3edbbee7",
    "entries 2684",
-   "label   19 entries",
+   "label   base/resources.pb names Last Streetlight: ok",
    "adsdk   0 dex entries",
    "secrets 2 value(s) of the environment searched in 2681 entries: 0 hits",
    "jar     jar verified.",
@@ -1482,7 +1482,7 @@
    "aab_check: PASS"
   ],
   "frames": [],
-  "commit": "abbf91d"
+  "commit": "e5a2fd5"
  },
  {
   "id": "S21-AAB-SCAN",

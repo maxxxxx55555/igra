@@ -6,7 +6,7 @@ One line per fact, exit 1 when one is wrong:
   size, sha256, entries   the file
   jar      `jarsigner -verify` prints "jar verified."
   signer   the signing certificate's SHA-256 (`keytool -printcert -jarfile`, no password needed) is the one docs/RELEASE_ARTIFACTS.md records
-  label    the app label "Last Streetlight" occurs in an entry of the manifest and resources
+  label    the app label "Last Streetlight" occurs in base/resources.pb, the resource table that holds the app_name string (the manifest only points at it)
   adsdk    no dex entry names Lcom/applovin/ (the ad SDK is not in a build without a key)
   secrets  (with --secrets, the keystore variables set in the environment by `. .signing/release.env`) the keystore path and password occur in
            no entry outside META-INF; only counts are printed, never the values
@@ -28,7 +28,6 @@ ARTIFACTS = ROOT / "docs" / "RELEASE_ARTIFACTS.md"
 LABEL = b"Last Streetlight"
 APPLOVIN = b"Lcom/applovin/"
 CHUNK = 1 << 22
-SMALL = 5 << 20
 
 
 def occurs(z, name, needle):
@@ -82,10 +81,9 @@ def facts(path, secrets):
     with zipfile.ZipFile(path) as z:
         names = z.namelist()
         print("entries %d" % len(names))
-        small = [n for n in names if z.getinfo(n).file_size < SMALL and not n.startswith("META-INF/")]
-        label = count_entries(z, small, LABEL)
+        label = count_entries(z, [n for n in ("base/resources.pb",) if n in names], LABEL)
         adsdk = count_entries(z, [n for n in names if n.endswith(".dex")], APPLOVIN)
-        print("label   %d entries name %s: %s" % (label, LABEL.decode(), "ok" if label else "MISSING"))
+        print("label   base/resources.pb %s %s: %s" % ("names" if label else "does not name", LABEL.decode(), "ok" if label else "MISSING"))
         print("adsdk   %d dex entries name %s: %s" % (adsdk, APPLOVIN.decode(), "ok" if adsdk == 0 else "FOUND"))
         bad += (label == 0) + (adsdk > 0)
         if secrets:
@@ -111,11 +109,11 @@ def demo():
         p = pathlib.Path(tmp) / "t.aab"
         with zipfile.ZipFile(p, "w") as z:
             z.writestr("base/dex/classes.dex", b"x" * 10 + APPLOVIN + b"y")
-            z.writestr("base/res/values.pb", b"..." + LABEL + b"...")
+            z.writestr("base/resources.pb", b"..." + LABEL + b"...")
             z.writestr("base/other.bin", b"a" * (CHUNK - 3) + b"SECRET" + b"b" * 9)
         with zipfile.ZipFile(p) as z:
             assert count_entries(z, ["base/dex/classes.dex"], APPLOVIN) == 1
-            assert count_entries(z, ["base/res/values.pb"], LABEL) == 1 and count_entries(z, ["base/res/values.pb"], b"nothing") == 0
+            assert count_entries(z, ["base/resources.pb"], LABEL) == 1 and count_entries(z, ["base/resources.pb"], b"nothing") == 0
             assert occurs(z, "base/other.bin", b"SECRET"), "a needle across a chunk boundary is found"
     assert fingerprint("Certificate fingerprints:\n\t SHA256: " + ":".join(["AB"] * 32)) == "ab" * 32
     print("aab_check demo OK (dex scan, label, a needle across a chunk boundary, fingerprint parse)")

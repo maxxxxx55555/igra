@@ -17,7 +17,7 @@ declarations, §7 the steps. It consolidates and, where they had drifted, correc
 | Built from | `abbf91d`, no uncommitted path; the seven fixes of Sessions 20 and 21 are in it (§9) | ledger row 82 |
 | Package name | `com.maxsimkasky.laststreetlight`: **permanent once uploaded** (the `com.tls.game` of `docs/store/play_store.md` is stale) | manifest of the bundle of `e241597`, `docs/artifacts/rc16/proofs/s20_aab_manifest.out`; not re-read from this bundle, but `export_presets.cfg`, `android/` and `project.godot` are unchanged since `e241597` (`git diff --name-only e241597 HEAD -- export_presets.cfg android project.godot` prints nothing) |
 | Version | code 1, name "1.0" | manifest |
-| App label | "Last Streetlight" (19 entries of the manifest and resources below 5 MB, counted by `tools/qa_sim/aab_check.py`; Session 19 counted 42 entries of the label resource by another method) | `s21_aab_check_abbf91d.out` |
+| App label | "Last Streetlight" in `base/resources.pb`, the resource table that holds the app name (CRC-identical to the entry of the bundle whose label Session 19 verified: 42 entries of the label resource) | `s21_aab_check2_e5a2fd5.out` |
 | SDK levels | min 24, **target 36**; the preset's `min_sdk=29` and `target_sdk=34` (`export_presets.cfg:29-30`) are not read by this export | manifest (Play's minimum target API: **check in Console**) |
 | ABI | arm64-v8a only (`architectures/armeabi-v7a=false`): 32-bit-only phones are not offered the game | `export_presets.cfg:14-15` |
 | Permissions | `INTERNET` and `VIBRATE` only; no `AD_ID`, no storage, no location, no camera, no microphone | manifest |
@@ -47,8 +47,8 @@ channel that is fully opaque (minimum 255, `s20_alpha_extrema.out`), so dropping
 The six screenshot frames (each carries its code hash `2e018d3`, the tree of the shipping pass, and its capture time in its name, AF3):
 
 1. `docs/stills/shipping/01_main_menu_after_2e018d3_20261011T195308Z.png`: the main menu.
-2. `docs/stills/shipping/02_district_day_full_after_2e018d3_20261011T195319Z.png`: a restored district by day.
-3. `docs/stills/shipping/03_district_night_dark_after_2e018d3_20261011T195318Z.png`: a dark district by night.
+2. `docs/stills/shipping/02_district_day_full_after_2e018d3_20261011T195319Z.png`: a restored district with its lamps on (the game has no day).
+3. `docs/stills/shipping/03_district_night_dark_after_2e018d3_20261011T195318Z.png`: the same district dark, its lamps off.
 4. `docs/stills/shipping/04_combat_after_2e018d3_20261011T195323Z.png`: combat.
 5. `docs/stills/shipping/05_boss_after_2e018d3_20261011T195325Z.png`: the boss.
 6. `docs/stills/shipping/08_shop_after_2e018d3_20261011T195321Z.png`: the shop.

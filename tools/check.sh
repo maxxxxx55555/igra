@@ -352,6 +352,11 @@ if [[ -f tools/af5_check.py ]]; then
     bad "af5_check (см. 'python tools/af5_check.py')"
   fi
 fi
+if "$PY" tools/qa_sim/doc_ctrl_check.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/doc_ctrl_check.py >/dev/null 2>&1; then
+  ok "doc_ctrl_check (no control character in docs/: a heredoc once ate the backslashes of two paths)"
+else
+  bad "doc_ctrl_check (см. 'python tools/qa_sim/doc_ctrl_check.py')"
+fi
 
 # ─────────────────────────── проверки в движке ───────────────────────────
 if [[ $STATIC_ONLY -eq 1 ]]; then
