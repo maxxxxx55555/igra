@@ -1,0 +1,22 @@
+# proof s22c_aab_check_5749aa8
+# utc 20261012T111541Z
+# head 5749aa8 (uncommitted paths: 3)
+# env none
+# cmd bash -c set -a; . .signing/release.env; set +a; python tools/qa_sim/aab_check.py build/tls.aab --secrets --against "../_BACKUPS/2026-10-12_14-08/build/tls.aab"
+size    136508347 bytes
+sha256  5c063a527b2802ae59ef69425a6f9ac900e1927ac1edc12278bb92a573243a68
+entries 2686
+label   base/resources.pb names Last Streetlight: ok
+adsdk   0 dex entries name Lcom/applovin/: ok
+secrets 2 value(s) of the environment searched in 2683 entries: 0 hits (path, password)
+jar     jar verified.
+signer  4f6be6415c260b34...: signer_match=yes
+against tls.aab: 0 entries gone, 0 new, 6 with other bytes
+  changed META-INF/MANIFEST.MF
+  changed META-INF/TLS_RELE.RSA
+  changed META-INF/TLS_RELE.SF
+  changed assetPackInstallTime/assets/assets.sparsepck
+  changed assetPackInstallTime/assets/scripts/ui/hud_3d.gdc
+  changed assetPackInstallTime/assets/scripts/ui/virtual_joystick.gdc
+aab_check: PASS
+# EXIT=0
