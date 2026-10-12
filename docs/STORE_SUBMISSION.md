@@ -44,14 +44,14 @@ channel that is fully opaque (minimum 255, `s20_alpha_extrema.out`), so dropping
 | Launcher icon source (legacy phones) | 192 px from a 512 px source | `assets/store/play_icon_512.png` | 512 x 512, RGB 8-bit, scene art (not the lamp) | nothing; only phones below Android 8 (API 24 and 25) show it, a design call, not a blocker |
 | Tablet screenshots, promo video | optional | none prepared | | skip |
 
-The six screenshot frames (each carries its code hash `2e018d3`, the tree of the shipping pass, and its capture time in its name, AF3):
+The six screenshot frames (each carries its code hash `ccf61ee`, the tree of the HUD pass, and its capture time in its name, AF3; the frames of the shipping pass are kept in `docs/stills/shipping/s21/`):
 
-1. `docs/stills/shipping/01_main_menu_after_2e018d3_20261011T195308Z.png`: the main menu.
-2. `docs/stills/shipping/02_district_day_full_after_2e018d3_20261011T195319Z.png`: a restored district with its lamps on (the game has no day).
-3. `docs/stills/shipping/03_district_night_dark_after_2e018d3_20261011T195318Z.png`: the same district dark, its lamps off.
-4. `docs/stills/shipping/04_combat_after_2e018d3_20261011T195323Z.png`: combat.
-5. `docs/stills/shipping/05_boss_after_2e018d3_20261011T195325Z.png`: the boss.
-6. `docs/stills/shipping/08_shop_after_2e018d3_20261011T195321Z.png`: the shop.
+1. `docs/stills/shipping/01_main_menu_after_ccf61ee_20261012T060401Z.png`: the main menu.
+2. `docs/stills/shipping/02_district_day_full_after_ccf61ee_20261012T060415Z.png`: a restored district with its lamps on (the game has no day).
+3. `docs/stills/shipping/03_district_night_dark_after_ccf61ee_20261012T060410Z.png`: the same district dark, its lamps off.
+4. `docs/stills/shipping/04_combat_after_ccf61ee_20261012T060420Z.png`: combat.
+5. `docs/stills/shipping/05_boss_after_ccf61ee_20261012T060422Z.png`: the boss.
+6. `docs/stills/shipping/08_shop_after_ccf61ee_20261012T060417Z.png`: the shop.
 
 Not used, on purpose: `assets/store/screenshot_0*.png` (1280 x 720, RGBA, made before rc16, no code hash, not checked against the build) and
 `store/screenshots/*_1920x1080_en.png` (RGB, older waves, no code hash). Use them only after you compare each with the running game.
