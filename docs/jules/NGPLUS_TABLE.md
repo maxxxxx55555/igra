@@ -10,7 +10,7 @@ This document details what state carries over versus resets across New Game+ cyc
 |---|---|---|
 | **NG+ Level & Active Modifiers** | **Carried Over** | Stored in `user://ng_plus_data.json` signed envelope (`NewGamePlus._save_save()`). |
 | **Banked Runs Ledger** | **Carried Over** | Up to 64 `run_id` hashes banked in `NewGamePlus._banked_runs` to prevent double-dipping NG+ level grants from pre-boss saves. |
-| **Player Coins & Shop Purchases** | **Carried Over** | `CoinWallet` and `ShopService` data preserved across NG+ transition (`NewGamePlusUI.gd:129` calls `activate_ng_plus()` without wiping wallet). |
+| **Player Coins & Shop Purchases** | **Carried Over** | `CoinWallet` and `ShopService` data preserved across NG+ transition (`scripts/ui/new_game_plus_ui.gd:129` calls `activate_ng_plus()` without wiping wallet). |
 | **Unlocked Weapons & Blueprints** | **Carried Over** | `ProgressTracker._weapons` and `_blueprints` preserved across cycles. |
 | **Player Stats, Skills & XP** | **Carried Over** | `XpManager` and `SkillTreeManager` preserve purchased upgrades and player level. |
 | **Lore Documents & Secrets** | **Carried Over** | `ProgressTracker._docs` and `_secrets` preserved across cycles. |

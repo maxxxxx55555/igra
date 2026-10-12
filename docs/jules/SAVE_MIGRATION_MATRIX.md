@@ -18,7 +18,7 @@ This document details the save version migration, HMAC signing architecture, 3-g
 ## 2. Integrity & HMAC Anti-Tamper Security Layers
 
 ### Layer 1: Outer Envelope HMAC-SHA256 (`_sign` / `write_signed` / `_read_envelope`)
-- **Key**: Static hardcoded key `TLS-savegame-v1-4f1c9e6b2a8d5f03` (`scripts/core/save_system.gd:22`).
+- **Key**: Static hardcoded key `TLS-savegame-v1-4f1c9e6b2a8d5f03` (`scripts/core/save_system.gd:21`).
 - **Mechanism**: `Crypto.hmac_digest(HASH_SHA256, key, body)`.
 - **Envelope Format**: `{"hmac": "<hex>", "data_json": "<raw_json_str>"}`.
 - **Behavior on Tampering**: Any text edit to `data_json` invalidates `hmac`. `_read_envelope` rejects the save immediately and attempts backup recovery.
@@ -32,7 +32,7 @@ This document details the save version migration, HMAC signing architecture, 3-g
 
 ## 3. Backup Rotation Architecture (3 Generations)
 
-`SaveSystem._rotate_backups()` (`scripts/core/save_system.gd:166`) keeps 3 historical generations prior to an atomic write:
+`SaveSystem._rotate_backups()` (`scripts/core/save_system.gd:217`) keeps 3 historical generations prior to an atomic write:
 1. `.save.bak` (Newest backup - immediately preceding current `.save`)
 2. `.save.bak2` (Intermediate backup)
 3. `.save.bak3` (Oldest backup)
@@ -50,7 +50,7 @@ This document details the save version migration, HMAC signing architecture, 3-g
 
 | Finding ID | Description | File:Line Citation | Classification |
 |---|---|---|---|
-| `FIND_SAVE_01` | HMAC key embedded in client binary (offline single-player limitation) | `scripts/core/save_system.gd:22` | FIXED-BY-SPEC (Documented speedbump) |
+| `FIND_SAVE_01` | HMAC key embedded in client binary (offline single-player limitation) | `scripts/core/save_system.gd:21` | FIXED-BY-SPEC (Documented speedbump) |
 | `FIND_SAVE_02` | Downgrade attack on unkeyed legacy checksums removed; legacy saves without HMAC rejected | `scripts/core/save_system.gd:187` | FIXED-BY-SPEC (P-01 security patch) |
 | `FIND_SAVE_03` | Slot save files lacked slot ID verification | `scripts/core/save_system.gd:426` | FIXED-BY-SPEC (P-06 slot_id check) |
 | `FIND_SAVE_04` | Exported save in Downloads folder could be overwritten or unverified on import | `scripts/core/save_system.gd:64` | OWNER-ONLY (Requires device file system test) |

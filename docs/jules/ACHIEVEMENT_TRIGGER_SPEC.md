@@ -14,21 +14,21 @@ No GDScript code edits are made in this spec pass. All proposals cite file:line 
 | `ach_22` | `ACH_22_NAME` | `ACH_22_DESC` | `EventBus.battery_used` | `scripts/player/player_3d.gd:910` | Recharge flashlight 30 times | False |
 | `ach_23` | `ACH_23_NAME` | `ACH_23_DESC` | `EventBus.medkit_used` | `scripts/player/player_3d.gd:905` | Use 15 medkits | False |
 | `ach_24` | `ACH_24_NAME` | `ACH_24_DESC` | `EventBus.stealth_moved` | `scripts/player/player_3d.gd:420` | Move 500m in stealth crouch | False |
-| `ach_25` | `ACH_25_NAME` | `ACH_25_DESC` | `EventBus.enemy_killed_by_weapon` | `scripts/weapons/weapon_pistol.gd:50` | Kill 30 enemies with Pistol | False |
-| `ach_26` | `ACH_26_NAME` | `ACH_26_DESC` | `EventBus.enemy_killed_by_weapon` | `scripts/weapons/weapon_shotgun.gd:62` | Kill 25 enemies with Shotgun | False |
-| `ach_27` | `ACH_27_NAME` | `ACH_27_DESC` | `EventBus.enemy_killed_by_weapon` | `scripts/weapons/weapon_rifle.gd:58` | Kill 20 enemies with Rifle | False |
+| `ach_25` | `ACH_25_NAME` | `ACH_25_DESC` | `EventBus.enemy_killed_by_weapon` | `scripts/weapons/weapon_pistol.gd:6` | Kill 30 enemies with Pistol | False |
+| `ach_26` | `ACH_26_NAME` | `ACH_26_DESC` | `EventBus.enemy_killed_by_weapon` | `scripts/weapons/weapon_shotgun.gd:7` | Kill 25 enemies with Shotgun | False |
+| `ach_27` | `ACH_27_NAME` | `ACH_27_DESC` | `EventBus.enemy_killed_by_weapon` | `scripts/weapons/weapon_rifle.gd:7` | Kill 20 enemies with Rifle | False |
 | `ach_28` | `ACH_28_NAME` | `ACH_28_DESC` | `EventBus.attack_dodged` | `scripts/player/player_3d.gd:580` | Perfect dodge 25 enemy attacks | False |
-| `ach_29` | `ACH_29_NAME` | `ACH_29_DESC` | `EventBus.secret_found` | `scripts/world/district_loot.gd:180` | Find 10 district secrets | False |
-| `ach_30` | `ACH_30_NAME` | `ACH_30_DESC` | `EventBus.secret_found` | `scripts/world/district_loot.gd:180` | Find all 26 district secrets | True |
+| `ach_29` | `ACH_29_NAME` | `ACH_29_DESC` | `EventBus.secret_found` | `scripts/world/district_loot.gd:177` | Find 10 district secrets | False |
+| `ach_30` | `ACH_30_NAME` | `ACH_30_DESC` | `EventBus.secret_found` | `scripts/world/district_loot.gd:177` | Find all 26 district secrets | True |
 | `ach_31` | `ACH_31_NAME` | `ACH_31_DESC` | `EventBus.daily_completed` | `scripts/systems/daily_challenge_manager.gd:75` | Complete 7 daily challenges | False |
 | `ach_32` | `ACH_32_NAME` | `ACH_32_DESC` | `EventBus.daily_completed` | `scripts/systems/daily_challenge_manager.gd:80` | Reach 30-day challenge streak | True |
-| `ach_33` | `ACH_33_NAME` | `ACH_33_DESC` | `EventBus.puzzle_solved` | `scripts/systems/puzzle_system.gd:45` | Solve 5 district power puzzles | False |
-| `ach_34` | `ACH_34_NAME` | `ACH_34_DESC` | `EventBus.radio_channel_tuned` | `scripts/props/radio.gd:65` | Listen to 5 radio broadcasts | False |
+| `ach_33` | `ACH_33_NAME` | `ACH_33_DESC` | `EventBus.puzzle_solved` | `scripts/world/puzzle_system.gd:105` | Solve 5 district power puzzles | False |
+| `ach_34` | `ACH_34_NAME` | `ACH_34_DESC` | `EventBus.radio_channel_tuned` | `scripts/ui/radio.gd:167` | Listen to 5 radio broadcasts | False |
 | `ach_35` | `ACH_35_NAME` | `ACH_35_DESC` | `EventBus.skill_unlocked` | `scripts/systems/skill_tree_manager.gd:110` | Max out 1 skill tree branch | False |
-| `ach_36` | `ACH_36_NAME` | `ACH_36_DESC` | `EventBus.coin_balance_changed` | `scripts/monetization/coin_wallet.gd:35` | Accumulate 10,000 coins | False |
+| `ach_36` | `ACH_36_NAME` | `ACH_36_DESC` | `EventBus.coin_balance_changed` | `scripts/economy/coin_wallet.gd:35` | Accumulate 10,000 coins | False |
 | `ach_37` | `ACH_37_NAME` | `ACH_37_DESC` | `EventBus.streetlight_activated` | `scripts/world/power_grid.gd:66` | Activate 50 streetlights | False |
-| `ach_38` | `ACH_38_NAME` | `ACH_38_DESC` | `EventBus.weather_changed` | `scripts/systems/weather_system.gd:90` | Experience 10 severe weather events | False |
-| `ach_39` | `ACH_39_NAME` | `ACH_39_DESC` | `EventBus.district_blackout` | `scripts/systems/random_events.gd:70` | Restore power during a blackout | True |
+| `ach_38` | `ACH_38_NAME` | `ACH_38_DESC` | `EventBus.weather_changed` | `scripts/systems/weather_system.gd:48` | Experience 10 severe weather events | False |
+| `ach_39` | `ACH_39_NAME` | `ACH_39_DESC` | `EventBus.district_blackout` | `scripts/systems/random_events.gd:42` | Restore power during a blackout | True |
 
 ---
 
