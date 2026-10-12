@@ -1,6 +1,15 @@
 extends Node
 
+const _Log := preload("res://scripts/security/security_log.gd")
+const _Scan := preload("res://scripts/security/integrity_scan.gd")
 const MAX_COINS: int = 9999999
+## Two clocks that run in real time, the engine's monotonic ticks and the system's wall clock, keep step; a hooked timer (a speed hack) moves one of
+## them. A window of CLOCK_WINDOW_SEC is off when they differ by more than CLOCK_TOLERANCE of it; CLOCK_OFF_WINDOWS in a row are a speed hack (a wall
+## clock set once, or a phone that slept, is one window).
+const CLOCK_WINDOW_SEC: float = 10.0
+const CLOCK_TOLERANCE: float = 0.25
+const CLOCK_OFF_WINDOWS: int = 2
+const EMULATOR_MARKS: Array[String] = ["sdk_gphone", "emulator", "android sdk built for", "genymotion", "ranchu", "vbox"]
 const ECONOMY_INTERVAL: float = 5.0
 const WATCHDOG_INTERVAL: float = 1.0
 
@@ -11,6 +20,12 @@ var _last_position: Vector3 = Vector3.ZERO
 var _last_hp: float = 100.0
 var _last_battery: float = 100.0
 var _last_stamina: float = 100.0
+## Set by a violation that says the build or the clock was tampered with (a changed data file, a speed hack, a debugger on a release build): the
+## leaderboard stops recording runs. An emulator is logged and does not set it: many players run the game on one.
+var tampered: bool = false
+var _window_ticks: int = 0
+var _window_wall: float = 0.0
+var _off_windows: int = 0
 ## TRUTH WAVE P1: один пропущенный тик ватчдога (1с) достаточно наивно
 ## считался "игрок пропал навсегда" и бросал в меню — а игрок на деле мог
 ## быть просто посреди обычной смерти/перехода (переродждение узла,
@@ -27,6 +42,10 @@ func _ready() -> void:
 		if EventBus.has_signal("game_started"):
 			EventBus.game_started.connect(_capture_snapshot)
 	_capture_snapshot()
+	_window_ticks = Time.get_ticks_usec()
+	_window_wall = Time.get_unix_time_from_system()
+	call_deferred("_scan_resources")
+	call_deferred("_android_checks")
 
 func _process(delta: float) -> void:
 	_economy_timer -= delta
@@ -37,6 +56,55 @@ func _process(delta: float) -> void:
 	if _watchdog_timer <= 0.0:
 		_watchdog_timer = WATCHDOG_INTERVAL
 		_watchdog()
+	_watch_clocks()
+
+## One violation: a line in the encrypted log (scripts/security/security_log.gd) and, unless `taints` is false, the tampered flag.
+func flag(kind: String, detail: String, taints: bool = true) -> void:
+	_Log.record(kind, detail)
+	push_warning("IntegrityGuard: %s (%s)" % [kind, detail])
+	if taints:
+		tampered = true
+
+static func window_is_off(ticks_sec: float, wall_sec: float) -> bool:
+	return absf(ticks_sec - wall_sec) > CLOCK_TOLERANCE * ticks_sec
+
+func _watch_clocks() -> void:
+	var ticks_sec: float = float(Time.get_ticks_usec() - _window_ticks) / 1000000.0
+	if ticks_sec < CLOCK_WINDOW_SEC:
+		return
+	var wall_sec: float = Time.get_unix_time_from_system() - _window_wall
+	_off_windows = _off_windows + 1 if window_is_off(ticks_sec, wall_sec) else 0
+	_window_ticks = Time.get_ticks_usec()
+	_window_wall = Time.get_unix_time_from_system()
+	if _off_windows >= CLOCK_OFF_WINDOWS:
+		_off_windows = 0
+		flag("speed", "monotonic %.1f s against wall %.1f s" % [ticks_sec, wall_sec])
+
+func _scan_resources() -> void:
+	var bad: Array[String] = _Scan.mismatches()
+	if not bad.is_empty():
+		flag("resources", ", ".join(PackedStringArray(bad.slice(0, 5))))
+
+static func looks_like_emulator(model: String) -> bool:
+	var lower := model.to_lower()
+	for mark: String in EMULATOR_MARKS:
+		if lower.contains(mark):
+			return true
+	return false
+
+## Android only (the Java wrapper is not in other builds): an emulator is logged; a debugger attached to a release build is a tamper and ends the run.
+func _android_checks() -> void:
+	if OS.get_name() != "Android":
+		return
+	if looks_like_emulator(OS.get_model_name()):
+		flag("emulator", OS.get_model_name(), false)
+	if not Engine.has_singleton("JavaClassWrapper"):
+		return
+	var debug: Object = (Engine.get_singleton("JavaClassWrapper") as Object).call("wrap", "android.os.Debug")
+	if debug != null and bool(debug.call("isDebuggerConnected")):
+		flag("debugger", "a debugger is attached")
+		if not OS.is_debug_build():
+			get_tree().quit()
 
 func _capture_snapshot() -> void:
 	if is_instance_valid(CoinWallet):

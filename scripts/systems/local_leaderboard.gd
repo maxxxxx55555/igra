@@ -27,6 +27,8 @@ func _on_game_won() -> void:
 ## Public so a future headless probe (or the autoplay bot) can exercise
 ## this without waiting on the real game_won signal chain.
 func record_run(time_played: float, kills: int, districts: int, ending: String) -> void:
+	if IntegrityGuard.tampered:
+		return
 	_runs.append({
 		"time": time_played, "kills": kills, "districts": districts,
 		"ending": ending, "unix": Time.get_unix_time_from_system(),
