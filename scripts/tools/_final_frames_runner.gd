@@ -20,7 +20,11 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	call_deferred("_run")
 
-func _shot(frame: String, half: bool = true) -> void:
+func _shot(frame: String) -> void:
+	await _capture(frame, true)
+
+## `half` false keeps the window's own size (the touch-layout frame is read at its pixels). _rc16_probe_runner.gd overrides _shot(frame) alone.
+func _capture(frame: String, half: bool) -> void:
 	await RenderingServer.frame_post_draw
 	var img := get_tree().root.get_texture().get_image()
 	if half:
@@ -93,7 +97,7 @@ func _touch_frame() -> void:
 	win.size = Vector2i(1600, 740)
 	await _swap_hud(scene)
 	await get_tree().create_timer(1.0).timeout
-	await _shot("12_hud_touch", false)
+	await _capture("12_hud_touch", false)
 	_hud_dump("touch")
 	ProjectSettings.set_setting("input_devices/pointing/emulate_touch_from_mouse", false)
 	Input.emulate_touch_from_mouse = false

@@ -11,7 +11,7 @@ static func run(r: Node) -> void:
 	UIManager.close_all_blocking()
 	var hud: Node = r._main.get_node_or_null("HUD")
 	if hud == null:
-		r._ok(false, "HUD0 the main scene has a HUD")
+		r._ok(false, "HUDP0 the main scene has a HUD")
 		return
 	_battery_is_segments(r, hud)
 	_one_map_in_play(r, hud)
@@ -24,7 +24,7 @@ static func run(r: Node) -> void:
 	await _layout_holds(r, hud)
 	r._playing()
 
-## HUD2: the flashlight charge is eight whole segments (a charge of 0.31 lights three) behind seven gaps.
+## HUDP2: the flashlight charge is eight whole segments (a charge of 0.31 lights three) behind seven gaps.
 static func _battery_is_segments(r: Node, hud: Node) -> void:
 	var whole: bool = is_equal_approx(float(hud.call("_pip_fill", 0.31)), 0.375) and is_equal_approx(float(hud.call("_pip_fill", 0.0)), 0.0) \
 		and is_equal_approx(float(hud.call("_pip_fill", 1.0)), 1.0)
@@ -32,9 +32,9 @@ static func _battery_is_segments(r: Node, hud: Node) -> void:
 	for child: Node in hud.get_node("TopLeft/Bat").get_children():
 		if child is ColorRect and (child as ColorRect).size.x == 2.0:
 			gaps += 1
-	r._ok(whole and gaps == 7, "HUD2 the battery is eight whole segments behind seven gaps (0.31 lights 3 of 8: %s, gaps %d)" % [whole, gaps])
+	r._ok(whole and gaps == 7, "HUDP2 the battery is eight whole segments behind seven gaps (0.31 lights 3 of 8: %s, gaps %d)" % [whole, gaps])
 
-## HUD3: one map in play. The radar fills its frame and has no caption; the city minimap is off until its setting is on.
+## HUDP3: one map in play. The radar fills its frame and has no caption; the city minimap is off until its setting is on.
 static func _one_map_in_play(r: Node, hud: Node) -> void:
 	r._playing()
 	UIManager.call("_sync_minimap")
@@ -47,9 +47,9 @@ static func _one_map_in_play(r: Node, hud: Node) -> void:
 	var seated: bool = radar != null and frame != null and radar.get_global_rect().is_equal_approx(frame.get_global_rect())
 	var caption := hud.get_node_or_null("TopRight/RadarLabel") as Control
 	r._ok(off and on and seated and caption != null and not caption.visible,
-		"HUD3 one map in play: the minimap is off by default (%s) and on by its setting (%s), the radar fills its frame (%s), no RADAR caption" % [off, on, seated])
+		"HUDP3 one map in play: the minimap is off by default (%s) and on by its setting (%s), the radar fills its frame (%s), no RADAR caption" % [off, on, seated])
 
-## HUD5: the Map and Pause buttons are touch controls; on a keyboard the map has its key and the pause button only rests dim.
+## HUDP5: the Map and Pause buttons are touch controls; on a keyboard the map has its key and the pause button only rests dim.
 static func _touch_only_buttons(r: Node, hud: Node) -> void:
 	var map_button := hud.get_node_or_null("MapButton") as Button
 	var pause_button := hud.get_node_or_null("BtnPause") as Button
@@ -57,14 +57,14 @@ static func _touch_only_buttons(r: Node, hud: Node) -> void:
 	var ok: bool = map_button != null and pause_button != null and map_button.visible == touch
 	if not touch:
 		ok = ok and is_equal_approx(pause_button.self_modulate.a, 0.5) and pause_button.visible
-	r._ok(ok, "HUD5 the Map button shows only with a touch screen (touch %s, shown %s) and the Pause button rests dim on a keyboard" % [touch, map_button.visible if map_button != null else "none"])
+	r._ok(ok, "HUDP5 the Map button shows only with a touch screen (touch %s, shown %s) and the Pause button rests dim on a keyboard" % [touch, map_button.visible if map_button != null else "none"])
 
-## HUD4: the objective list is on the screen (it was drawn at x = -320), lets every click through, and shows when an objective changes.
+## HUDP4: the objective list is on the screen (it was drawn at x = -320), lets every click through, and shows when an objective changes.
 static func _tracker_is_on_screen(r: Node) -> void:
 	var overlay := UIManager.get("_quest_hud") as Control
 	var container := overlay.get_node_or_null("QuestHUDContainer") as Control if overlay != null else null
 	if container == null or not container.is_visible_in_tree():
-		r._ok(false, "HUD4 the quest tracker shows its list (container %s)" % [container])
+		r._ok(false, "HUDP4 the quest tracker shows its list (container %s)" % [container])
 		return
 	overlay.call("_refresh")
 	await r.get_tree().create_timer(0.3).timeout
@@ -72,7 +72,7 @@ static func _tracker_is_on_screen(r: Node) -> void:
 	var inside: bool = view.encloses(container.get_global_rect())
 	var through: bool = _lets_clicks_through(container) and overlay.mouse_filter == Control.MOUSE_FILTER_IGNORE
 	r._ok(inside and through and container.modulate.a > 0.99,
-		"HUD4 the objective list is on screen (%s, at x %d), lets every click through (%s) and shows when an objective changes (alpha %.2f)" % [inside, container.get_global_rect().position.x, through, container.modulate.a])
+		"HUDP4 the objective list is on screen (%s, at x %d), lets every click through (%s) and shows when an objective changes (alpha %.2f)" % [inside, container.get_global_rect().position.x, through, container.modulate.a])
 
 static func _lets_clicks_through(node: Node) -> bool:
 	if node is Control and (node as Control).mouse_filter != Control.MOUSE_FILTER_IGNORE:
@@ -82,7 +82,7 @@ static func _lets_clicks_through(node: Node) -> bool:
 			return false
 	return true
 
-## HUD1: health and stamina show while they matter and are gone at rest: they fade after full health and full stamina, wake on a hit, and hold a
+## HUDP1: health and stamina show while they matter and are gone at rest: they fade after full health and full stamina, wake on a hit, and hold a
 ## moment once whole. (The noise and visibility rows follow the player's own state and are read in the frames, not here.)
 static func _rows_are_contextual(r: Node, hud: Node) -> void:
 	var hp_row := hud.get_node("TopLeft/HP") as Control
@@ -101,9 +101,9 @@ static func _rows_are_contextual(r: Node, hud: Node) -> void:
 	EventBus.player_stamina_changed.emit(1.0)
 	await r.get_tree().create_timer(0.2).timeout
 	var holds: bool = hp_row.modulate.a > 0.99
-	r._ok(rest and woke and holds, "HUD1 the health and stamina rows rest faded (alpha %s), wake on a hit (%s) and hold a moment after the value is whole (%s)" % [rest_alphas, woke_alphas, holds])
+	r._ok(rest and woke and holds, "HUDP1 the health and stamina rows rest faded (alpha %s), wake on a hit (%s) and hold a moment after the value is whole (%s)" % [rest_alphas, woke_alphas, holds])
 
-## HUD8: the interact prompt fades in when something is in reach, and out (still there, part way, then hidden) when it is not.
+## HUDP8: the interact prompt fades in when something is in reach, and out (still there, part way, then hidden) when it is not.
 static func _prompt_fades(r: Node, hud: Node) -> void:
 	var prompt := hud.get("prompt") as Label
 	EventBus.interact_prompt_changed.emit("Open")
@@ -114,9 +114,9 @@ static func _prompt_fades(r: Node, hud: Node) -> void:
 	await r.get_tree().create_timer(0.1).timeout
 	var leaving: bool = prompt.visible and prompt.self_modulate.a < 0.99
 	await r.get_tree().create_timer(0.4).timeout
-	r._ok(shown and leaving and not prompt.visible, "HUD8 the interact prompt fades in (%s), is part way out after 0.1 s (%s, alpha %.2f) and hidden after 0.5 s (%s)" % [shown, leaving, prompt.self_modulate.a, not prompt.visible])
+	r._ok(shown and leaving and not prompt.visible, "HUDP8 the interact prompt fades in (%s), is part way out after 0.1 s (%s, alpha %.2f) and hidden after 0.5 s (%s)" % [shown, leaving, prompt.self_modulate.a, not prompt.visible])
 
-## HUD9: the four touch action buttons sit inside the screen and do not overlap (the cluster's offsets were laid out from a corner it was not anchored
+## HUDP9: the four touch action buttons sit inside the screen and do not overlap (the cluster's offsets were laid out from a corner it was not anchored
 ## at: Attack and Stealth overlapped and the side buttons sat on them). A HUD built for the check shows the touch clusters the desktop HUD hides.
 static func _touch_cluster_is_clear(r: Node) -> void:
 	var hud := (load("res://scenes/ui/hud_3d.tscn") as PackedScene).instantiate()
@@ -134,9 +134,9 @@ static func _touch_cluster_is_clear(r: Node) -> void:
 		for j: int in range(i + 1, rects.size()):
 			clear = clear and not rects[i].intersects(rects[j])
 	hud.queue_free()
-	r._ok(clear, "HUD9 the touch action buttons are on screen and clear of each other (%s)" % [rects])
+	r._ok(clear, "HUDP9 the touch action buttons are on screen and clear of each other (%s)" % [rects])
 
-## HUD7: the crosshair rests faded, wakes on a shot and fades five seconds after it.
+## HUDP7: the crosshair rests faded, wakes on a shot and fades five seconds after it.
 static func _combat_hud_rests(r: Node, hud: Node) -> void:
 	var crosshair := hud.get("_crosshair") as Control
 	EventBus.crosshair_state_changed.emit(&"default")
@@ -144,9 +144,9 @@ static func _combat_hud_rests(r: Node, hud: Node) -> void:
 	var woke: bool = crosshair.self_modulate.a > 0.99
 	await r.get_tree().create_timer(5.8).timeout
 	var rest: bool = crosshair.self_modulate.a < 0.01
-	r._ok(woke and rest, "HUD7 the crosshair wakes on a shot (%s) and is faded 6 s later (%s, alpha %.2f)" % [woke, rest, crosshair.self_modulate.a])
+	r._ok(woke and rest, "HUDP7 the crosshair wakes on a shot (%s) and is faded 6 s later (%s, alpha %.2f)" % [woke, rest, crosshair.self_modulate.a])
 
-## HUD6: every HUD caption fits its label in 13 languages at the three Text Sizes, and the corner clusters stay on the screen.
+## HUDP6: every HUD caption fits its label in 13 languages at the three Text Sizes, and the corner clusters stay on the screen.
 static func _layout_holds(r: Node, hud: Node) -> void:
 	var lang0: String = LocalizationManager.current_lang
 	var size0: int = int(SettingsManager.get_setting("text_size", 1))
@@ -170,4 +170,4 @@ static func _layout_holds(r: Node, hud: Node) -> void:
 			checked += 1
 	LocalizationManager.set_language(lang0)
 	SettingsManager.set_text_size(size0)
-	r._ok(bad.is_empty() and checked == 39, "HUD6 the HUD holds in %d language and Text Size pairs: every caption fits its label, the corners stay on screen (%s)" % [checked, bad.slice(0, 4)])
+	r._ok(bad.is_empty() and checked == 39, "HUDP6 the HUD holds in %d language and Text Size pairs: every caption fits its label, the corners stay on screen (%s)" % [checked, bad.slice(0, 4)])

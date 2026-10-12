@@ -85,3 +85,4 @@ n	utc	head	id	exit	command
 84	20261012T053344Z	8874bb9	s22_hud_before	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 900
 85	20261012T055315Z	51e2265	s22_hud_b1	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 900
 86	20261012T060346Z	ccf61ee	s22_hud_b2	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 900
+87	20261012T060953Z	bddcd41	s22b_af2_post	1	bash tools/check.sh --all

@@ -1,0 +1,5 @@
+AF2 both ways: base d073218, HEAD bddcd41, group s21
+CRF1         pre=FAIL     post=ok       BITES
+pre run failed: CRF1
+post run: [closeout] DONE checks=406 fails=0
+AF2 verdict=PASS ids=1 bad=0

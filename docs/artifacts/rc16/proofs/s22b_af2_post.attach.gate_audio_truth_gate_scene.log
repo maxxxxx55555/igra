@@ -1,0 +1,3 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+[audio-truth] SKIP DUMMY_AUDIO -- headless has no real audio device, would always read silence
