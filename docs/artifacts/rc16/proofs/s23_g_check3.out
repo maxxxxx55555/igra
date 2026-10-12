@@ -1,0 +1,13 @@
+# proof s23_g_check3
+# utc 20261012T200231Z
+# head e0c627c (uncommitted paths: 51)
+# env none
+# cmd bash -c bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; CLOSEOUT_ONLY=s23 bash tools/qa_sim/closeout_check 400
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] DONE checks=40 fails=0
+  closeout_check rc=0 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+# EXIT=0

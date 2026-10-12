@@ -1,0 +1,18 @@
+# proof s23_g_check2
+# utc 20261012T170305Z
+# head e0c627c (uncommitted paths: 43)
+# env none
+# cmd bash -c bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; CLOSEOUT_ONLY=s23 bash tools/qa_sim/closeout_check 400
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL JUICE1 hit-stop: a run at 2x dips to 0.50x, is back at 2.0x after 53 ms of real time (80 ms asked), and does nothing with Reduce Time Effects (true)
+[closeout] FAIL MOVE1 the walk eases: 0.42 m/s after one step, 2.94 after twelve, 2.93 at full speed; after letting go 0.00 after one step and 0.00 after ten
+[closeout] FAIL POL1 ui feedback: button, check box and tabs wired (true), the HUD's button and a screen's own click left alone (true), press 0.95 then back (true), hover 1.050 then back (true), still with Reduce UI Motion (true)
+[closeout] DONE checks=38 fails=3
+engine errors in the log:
+SCRIPT ERROR: Cannot call method 'get' on a null value.
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+# EXIT=1

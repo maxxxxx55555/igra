@@ -1663,3 +1663,17 @@ into two `_on_game_started` / `_on_game_won` methods that do both.
 
 ## Session 23: key letters in hint strings (OPEN, small)
 After a remap (Settings > Controls > Key Bindings) a few strings keep the default letter: `tutorial_move` ("WASD - move"), `TUT_FIND_FLASHLIGHT` ("Press F ..."), `HINT_INVENTORY` ("Tab ..."), `WORKBENCH_CLOSE` ("Close (E)"), `INV_HINTS`. The interact prompt reads the real binding (`scripts/ui/hud_3d.gd`, `_interact_key_hint`); these do not. The fix is a `%s` in the 13 strings and `LocalizationManager.tf` with `InputRemap.key_text(InputRemap.key_of(action))` at the five call sites.
+
+## Session 23: deferred by design and owner rows (OPEN)
+
+| What | Why it is not built | What would build it |
+|---|---|---|
+| LOD swap at 20, 50 and 100 m | Every mesh of the districts is a primitive or a MultiMesh of blocks; there is no lower detail to swap to. | New meshes with LODs (an art task), then `visibility_range_*` on the instances. |
+| Occlusion culling | The player walks inside the skyline ring of blocks, so a baked occluder set would hide nothing the camera sees, and the culling is on the CPU. | A district with real buildings the player passes behind. |
+| Texture streaming | The Compatibility renderer has none; the textures are mipmapped and VRAM-compressed, and a district holds 70 MiB of them (`docs/PERF_PASS.md`). | A move to the Mobile renderer. |
+| God-rays through windows | The Compatibility renderer has no volumetric fog. The dust motes in the lamp beams (`scripts/effects/dust_motes.gd`) are the cheap form. | The Mobile renderer, or a billboard shaft scene as an art task. |
+| Dyslexia-friendly font | No such font is in the repository and a download is not allowed here. | The owner adds a licensed font file and the Settings row. |
+| Aim down sights; spread that grows with movement; a reload animation | No weapon is drawn in the view (a weapon scene is a node with a muzzle marker and a script). The first two change the accuracy of the bot. | A design decision, a weapon model, and the IRON RULE run of the 3-seed bot. |
+| A monster that loses the player behind a wall inside its detect area | It still paths to the real position of the player; a memory of the last seen point inside the area changes every encounter (`docs/AI_STEALTH.md`). | A second memory in the chase state, with the bot after it. |
+| AES-256-GCM saves; PCK encryption; the app-signature check; R8 | `docs/SECURITY_HARDENING.md` gives each reason (no GCM in `AESContext`; custom export templates; a Java plugin; nothing secret to hide). | The owner's decisions listed there. |
+| The two keys of the game (`SaveSystem._HMAC_KEY`, `SecurityLog.KEY`) are in the scripts | An offline game has nowhere else to keep them; anyone who unpacks the bundle reads them. | A server that signs, which the game does not have. |
