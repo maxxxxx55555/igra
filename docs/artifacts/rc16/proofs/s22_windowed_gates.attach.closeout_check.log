@@ -1,0 +1,22 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+[closeout] ok   the player spawned
+[closeout] ok   HUDP2 the battery is eight whole segments behind seven gaps (0.31 lights 3 of 8: true, gaps 7)
+[closeout] ok   HUDP3 one map in play: the minimap is off by default (true) and on by its setting (true), the radar fills its frame (true), no RADAR caption
+[closeout] ok   HUDP5 the Map button shows only with a touch screen (touch false, shown false) and the Pause button rests dim on a keyboard
+[closeout] ok   HUDP4 the objective list is on screen (true, at x 1600), lets every click through (true) and shows when an objective changes (alpha 1.00)
+[closeout] ok   HUDP1 the health and stamina rows rest faded (alpha 0.00, 0.00), wake on a hit (1.00, 1.00) and hold a moment after the value is whole (true)
+[closeout] ok   HUDP8 the interact prompt fades in (true), is part way out after 0.1 s (true, alpha 0.00) and hidden after 0.5 s (true)
+[closeout] ok   HUDP9 the touch action buttons are on screen and clear of each other ([[P: (1784.0, 1784.0), S: (88.0, 88.0)], [P: (1696.0, 1808.0), S: (72.0, 64.0)], [P: (1612.0, 1808.0), S: (72.0, 64.0)], [P: (1796.0, 1704.0), S: (64.0, 64.0)]])
+[closeout] ok   HUDP7 the crosshair wakes on a shot (true) and is faded 6 s later (true, alpha 0.00)
+[closeout] ok   HUDP6 the HUD holds in 39 language and Text Size pairs: every caption fits its label, the corners stay on screen ([])
+[closeout] DONE checks=10 fails=0
+ERROR: 2 RID allocations of type 'PN13RendererDummy14TextureStorage12DummyTextureE' were leaked at exit.
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 41 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
