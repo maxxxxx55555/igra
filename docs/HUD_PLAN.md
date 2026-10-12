@@ -33,16 +33,18 @@ visible HUD control taken in the BEFORE launch (ledger row 84, `docs/artifacts/r
 | Combat HUD hides about 5 s out of combat | Batch 2: ammo counter, crosshair and enemy bar fade 5 s after the last shot, hit or aim. |
 | Health: arc or vignette, not big bars | The vignette exists (`_LOW_HP` 0.3). The bar becomes a slim contextual row: shown below full health or after a change, faded at rest. |
 | Charges as compact pips | Battery becomes 8 segments (canon: "segmented scale", full brass, mid brass-dim, empty panel), value shown only when low. |
-| Minimap toggleable | One map in play: the radar. The city minimap becomes a setting (`show_minimap`, off by default); the full map stays on the Map button / M. |
-| Touch controls semi-transparent, edge-anchored, device-scaled | Batch 2: rest alpha 0.55 (full while pressed); anchoring stays; `button_size` already scales them. |
-| One UI typeface, one hierarchy | The theme already is Bebas Neue (headings, buttons) / Roboto Condensed (text) / Share Tech Mono (numbers). The HUD's own labels fall to Roboto Condensed at two sizes (12 and 16); this pass sets caption 12 / value 13 / prompt 18 for every row. Numerals stay Roboto Condensed (a font swap is batch 3 if a launch is left). |
+| Minimap toggleable | One map in play: the radar. The city minimap becomes a setting (`show_minimap`, off by default); the full map stays on the Map button (touch) and its key (`city_map_toggle`, K). |
+| Touch controls semi-transparent, edge-anchored, device-scaled | Batch 2: rest alpha 0.55 (a press wakes a button to full for 0.4 s, the joystick ring stays full under the thumb); the cluster is re-anchored at its corner (row 23); `button_size` scales the action buttons, and the four side buttons with them since the verifier's round (CORRECTION_LOG 208). |
+| One UI typeface, one hierarchy | The theme already is Bebas Neue (headings, buttons) / Roboto Condensed (text) / Share Tech Mono (numbers). The HUD's own labels fall to Roboto Condensed at two sizes (12 and 16); this pass sets every row's caption to 12 and its value to 13 (the prompt keeps the theme's size). Numerals stay Roboto Condensed (a font swap was batch 3, not built). |
 | Unified icon stroke | Only for the buttons this pass touches (map, pause): outline icons in brass, as the canon says. The others are not redrawn. |
 | Zero debug text in release | Checked: no FPS, no coordinates, no developer strings in the HUD (grep of `scripts/ui`). |
-| Settings: HUD opacity and scale | Opacity exists (0.5 to 1.0, `hud_opacity`). Batch 2 adds scale (`hud_scale`, 0.8 to 1.3). |
+| Settings: HUD opacity and scale | Opacity exists (0.5 to 1.0, `hud_opacity`). A separate scale slider (`hud_scale`) was planned and not built: the Text Size setting is the UI scale (row 21). |
 
 ## Inventory: every persistent element
 
 Class: KEEP (always, quiet), CONTEXTUAL (shows while it matters, fades at rest), REMOVE (gone), TOUCH (only where there is a touch screen).
+
+This table is the plan as it was written before the work; the Outcome section below is what stands (row 9, the Pause button, is dimmed on a keyboard, not hidden; row 21 was not built).
 
 | # | Element | Source | Class | Action | Batch |
 |---|---|---|---|---|---|
@@ -55,7 +57,7 @@ Class: KEEP (always, quiet), CONTEXTUAL (shows while it matters, fades at rest),
 | 7 | City minimap, its "?" chip and legend | scripts/ui/minimap.gd, UIManager overlay | CONTEXTUAL | a setting, off by default; the radar is the one map | 1 |
 | 8 | Radar | TopRight/RadarFrame, scripts/ui/radar.gd | KEEP | none | - |
 | 9 | Pause button | hud_3d.tscn BtnPause | TOUCH | hidden without a touch screen (Esc pauses) | 1 |
-| 10 | Map button (emoji glyph) | hud_3d.gd `_add_map_button` | TOUCH | outline icon, touch only; M and the pause menu open the map | 1 |
+| 10 | Map button (emoji glyph) | hud_3d.gd `_add_map_button` | TOUCH | outline icon, touch only; a keyboard has the map key (`city_map_toggle`, K) | 1 |
 | 11 | Ammo counter and "MELEE" caption | hud_3d.tscn AmmoCounter | CONTEXTUAL | hidden without a gun; with one, 5 s after the last shot | 2 |
 | 12 | Crosshair | hud_3d.tscn Crosshair | CONTEXTUAL | shown with a gun or on an enemy in the aim cone, 5 s hold | 2 |
 | 13 | Enemy name and bar, resist label | hud_3d.tscn EnemyName, EnemyHPBar | CONTEXTUAL | hold 2 s becomes 5 s | 2 |
@@ -63,7 +65,7 @@ Class: KEEP (always, quiet), CONTEXTUAL (shows while it matters, fades at rest),
 | 15 | Notice line | hud_3d.tscn NoticeLabel | CONTEXTUAL | fades out with the 3 s timer | 2 |
 | 16 | Quick slots (6) | BottomCenter | KEEP | none | - |
 | 17 | Log toggle | scripts/ui/toast_manager.gd LogToggle | CONTEXTUAL | rest alpha 0.4, full on a new entry | 2 |
-| 18 | Joystick ring, four action buttons, four side buttons | BottomLeft, BottomRight, `_add_side_buttons` | TOUCH | rest alpha 0.55, full while pressed | 2 |
+| 18 | Joystick ring, four action buttons, four side buttons | BottomLeft, BottomRight, `_add_side_buttons` | TOUCH | rest alpha 0.55; a press wakes a button to full for 0.4 s (the joystick ring stays full under the thumb) | 2 |
 | 19 | Weight bar | hud_3d.tscn WeightBar | KEEP | no textures, draws nothing: no action | - |
 | 20 | Status icons, quest tracker, district banner, toasts, tutorial card, vignettes, grain, flashes | various | KEEP | already contextual or transient: no action | - |
 | 21 | HUD scale | new setting | - | `hud_scale` slider in Settings, applied to the stat block and the radar | 3 |
@@ -99,7 +101,7 @@ would change input behaviour.
 Three launches of frames (BEFORE `8874bb9`, batch 1 `51e2265`, batch 2 `ccf61ee`), each read; both batches kept, nothing reverted. The frames:
 `docs/stills/shipping/hud/before/`, `.../hud/after1/`, `.../hud/after2/` (calm, hurt, prompt, combat, touch layout), and the six release frames of batch 2 in
 `docs/stills/shipping/`. The plan's own claims about the old HUD were checked against the BEFORE dump (two more defects than the plan had when it was written: the
-objective list off screen, the touch cluster mis-anchored). Batch 3 was not run: no launch was left to read it.
+objective list off screen, the touch cluster mis-anchored). Batch 3 was not run: no launch was left to read it. The frames of `.../hud/after1/` were shot at `51e2265` and are the record of batch 1: batch 2 changed the runtime, so `af3_frame_check.py --dir docs/stills/shipping/hud/after1` reports F4 by design (the gated sets are the default set and `.../hud/after2/`; CORRECTION_LOG 209).
 
 | Row | Result | Evidence |
 |---|---|---|
@@ -118,11 +120,11 @@ objective list off screen, the touch cluster mis-anchored). Batch 3 was not run:
 | 14 Prompt | fades in 0.12 s, out 0.2 s, then hidden | HUDP8; frame 11 |
 | 15 Notice | fades out before its 3 s timer clears it | code |
 | 17 LOG toggle | rests at 0.45, full for 4 s after a new entry | frames |
-| 18 Touch controls | rest at 0.55, full while pressed; the joystick ring rests at 0.55 and is full under the thumb | frame 12 |
-| 22 Objective list | on the screen (it was at x = -320), lets every click through, shown for 8 s when an objective changes or play starts | HUDP4; frame 03 |
-| 23 Touch action cluster | anchored at its corner; Attack, Sprint, Stealth, Interact and the four side buttons clear of each other | HUDP9; frame 12 |
+| 18 Touch controls | rest at 0.55 and wake to full for 0.4 s on a press; the joystick ring rests at 0.55 and is full under the thumb, and fades only the HUD's ring (the first-run calibration dialog hosts a joystick in a container that keeps its alpha) | HUDP10; frame 12 |
+| 22 Objective list | on the screen (it was at x = -320), lets every click through, shown for 8 s when an objective changes (by code it does not show at the very start of a first run: the start hook needs a list that a refresh has already made visible; CORRECTION_LOG 209, KNOWN_ISSUES) | HUDP4; frame 03 |
+| 23 Touch action cluster | anchored at its corner; Attack, Sprint, Stealth, Interact and the four side buttons clear of each other at Button Size 1.0 (HUDP9) and from 0.8 to 1.5 (HUDP11: the side buttons are children of the right cluster, so the size slider scales all eight) | HUDP9, HUDP11; frame 12 |
 | 16, 19, 20 | no action (quick slots, the weight bar that draws nothing, the status icons and the other transient elements) | |
 | 21 HUD scale | not built: the Text Size setting is the UI scale (0.85, 1.0, 1.2 of the window) and the layout holds at the three sizes in 13 languages (HUDP6) | CORRECTION_LOG 206 |
 
 Not done, named: diegetic health, a redrawn icon set, numerals in the mono face, a floating joystick, a separate HUD scale slider. Counts: the visible
-controls of the calm frame, 36 before and 25 after (CORRECTION_LOG 206 gives the method).
+controls of the calm frame, 39 before and 25 after (alpha above 0; the quick slots, the full-screen overlays and the whole objective list left out; counted by script over the three dumps, CORRECTION_LOG 209).

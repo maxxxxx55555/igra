@@ -1725,7 +1725,7 @@
  },
  {
   "id": "S22-EXPORT",
-  "claim": "EXPORT 1 of 2 of the pass: the release export builds the signed bundle from the final tree (the Gradle daemon was stopped after the build, as in Session 21).",
+  "claim": "EXPORT 1 of 2 of the pass: the release export builds the signed bundle from the tree before the verifier's round (the Gradle daemon was stopped after the build, as in Session 21); the second export is S22C-EXPORT.",
   "cmd": "bash -c set -a; . .signing/release.env; set +a; godot --headless --path . --export-release \"Android\" build/tls.aab",
   "proof": "s22_export_1b1a3f6",
   "quotes": [
@@ -1737,7 +1737,7 @@
  },
  {
   "id": "S22-AAB",
-  "claim": "The bundle: 136,508,275 bytes, sha256 7121d2f9..., label \"Last Streetlight\", no ad SDK, none of the two secret values in any entry, jar verified, the signer is the upload key.",
+  "claim": "The first bundle of the pass (superseded by S22C-AAB): 136,508,275 bytes, sha256 7121d2f9..., label \"Last Streetlight\", no ad SDK, none of the two secret values in any entry, jar verified, the signer is the upload key.",
   "cmd": "python tools/qa_sim/aab_check.py build/tls.aab --secrets --against ../_BACKUPS/2026-10-12_09-44/build/tls.aab",
   "proof": "s22_aab_check_1b1a3f6",
   "quotes": [
@@ -1755,7 +1755,7 @@
  },
  {
   "id": "S22-AAB-DIFF",
-  "claim": "Against the bundle of abbf91d: 0 entries gone, 2 new (hud_fade.gdc and its remap), 28 with other bytes (the signature files, the HUD scene, the caches, the pack index, 13 locale files, 8 compiled scripts); no base/ entry.",
+  "claim": "The first bundle of the pass against the bundle of abbf91d: 0 entries gone, 2 new (hud_fade.gdc and its remap), 28 with other bytes (the signature files, the HUD scene, the caches, the pack index, 13 locale files, 8 compiled scripts); no base/ entry.",
   "cmd": "python tools/qa_sim/aab_check.py build/tls.aab --against ../_BACKUPS/2026-10-12_09-44/build/tls.aab",
   "proof": "s22_aab_diff_1b1a3f6",
   "quotes": [
@@ -1768,7 +1768,7 @@
  },
  {
   "id": "S22-AAB-SCAN",
-  "claim": "The package scan finds 0 packed files that are not the game.",
+  "claim": "The package scan of the first bundle of the pass finds 0 packed files that are not the game.",
   "cmd": "python tools/qa_sim/release_export_check.py --aab build/tls.aab",
   "proof": "s22_aab_scan_1b1a3f6",
   "quotes": [
@@ -1844,5 +1844,205 @@
   ],
   "frames": [],
   "commit": "dbe9006"
+ },
+ {
+  "id": "S22C-AF2-PRE",
+  "claim": "On the runtime of 18e831b the two checks of the verifier's fixes fail: HUDP10 (the first-run calibration dialog's container is dimmed to 0.62 as the thumb goes down and left at 0.55) and HUDP11 (Interact overlaps Jump and Flash at Button Size 1.5, with the touch HUD built and all 8 buttons found).",
+  "cmd": "git checkout 18e831b -- scripts/ui/hud_3d.gd scripts/ui/ui_manager.gd scripts/ui/virtual_joystick.gd; CLOSEOUT_ONLY=s22 bash tools/qa_sim/closeout_check 300; git checkout HEAD -- (the same three files)",
+  "proof": "s22c_af2_pre",
+  "quotes": [
+   "FAIL HUDP10 the joystick fades only its ring: a container keeps alpha 1 as the thumb goes down (0.62) and lifts (0.55), the ring goes full (1.00) and rests (0.55)",
+   "FAIL HUDP11 the eight touch buttons stay on screen and clear of each other at Button Size 0.8, 1.0 and 1.5 (touch HUD true, found 8, problems [\"BtnInteract over BtnJump at 1.5\", \"BtnInteract over BtnFlash at 1.5\"])",
+   "DONE checks=12 fails=2",
+   "# EXIT=1"
+  ],
+  "frames": [],
+  "commit": "5516146"
+ },
+ {
+  "id": "S22C-AF2-POST",
+  "claim": "On the fixed tree the same two checks pass inside the battery's closeout (the container keeps alpha 1, the ring goes full and rests at 0.55; the 8 buttons are clear at 0.8, 1.0 and 1.5); the AF2 verdict is PASS in docs/artifacts/rc16/s22c_af2_both_ways.txt.",
+  "cmd": "bash tools/check.sh --all",
+  "proof": "s22c_af2_post",
+  "attach": "gate_closeout_check_scene.log",
+  "quotes": [
+   "ok   HUDP10 the joystick fades only its ring: a container keeps alpha 1 as the thumb goes down (1.00) and lifts (1.00), the ring goes full (1.00) and rests (0.55)",
+   "ok   HUDP11 the eight touch buttons stay on screen and clear of each other at Button Size 0.8, 1.0 and 1.5 (touch HUD true, found 8, problems [])",
+   "DONE checks=408 fails=0"
+  ],
+  "frames": [],
+  "commit": "5516146"
+ },
+ {
+  "id": "S22C-BATTERY",
+  "claim": "The battery on the fixed tree: every gate passes, 67 of 67.",
+  "cmd": "bash tools/check.sh --all",
+  "proof": "s22c_af2_post",
+  "quotes": [
+   "Проверок пройдено: 67",
+   "# EXIT=0"
+  ],
+  "frames": [],
+  "commit": "5516146"
+ },
+ {
+  "id": "S22C-COMPILE",
+  "claim": "The compile gate loads every script of the fixed tree: no bad script.",
+  "cmd": "bash tools/check.sh --all",
+  "proof": "s22c_af2_post",
+  "attach": "gate_compile_gate_scene.log",
+  "quotes": [
+   "COMPILE_GATE bad=0"
+  ],
+  "frames": [],
+  "commit": "5516146"
+ },
+ {
+  "id": "S22C-TOUCH",
+  "claim": "The touch probe (joystick, dead zone, response, HUD buttons, the calibration steps) passes with the changed joystick.",
+  "cmd": "bash tools/check.sh --all",
+  "proof": "s22c_af2_post",
+  "attach": "gate_touch_probe_scene.log",
+  "quotes": [
+   "[touch-probe] DONE fails=0"
+  ],
+  "frames": [],
+  "commit": "5516146"
+ },
+ {
+  "id": "S22C-EXPORT",
+  "claim": "EXPORT 2 of 2 of the pass: the release export builds the signed bundle from the final runtime (the Gradle daemon was stopped after the build, as before).",
+  "cmd": "bash -c set -a; . .signing/release.env; set +a; godot --headless --path . --export-release \"Android\" build/tls.aab",
+  "proof": "s22c_export_5749aa8",
+  "quotes": [
+   "[ DONE ] export",
+   "# EXIT=0"
+  ],
+  "frames": [],
+  "commit": "5749aa8"
+ },
+ {
+  "id": "S22C-AAB",
+  "claim": "The bundle: 136,508,347 bytes, sha256 5c063a52..., label \"Last Streetlight\", no ad SDK, none of the two secret values in any entry, jar verified, the signer is the upload key.",
+  "cmd": "python tools/qa_sim/aab_check.py build/tls.aab --secrets --against ../_BACKUPS/2026-10-12_14-08/build/tls.aab",
+  "proof": "s22c_aab_check_5749aa8",
+  "quotes": [
+   "size    136508347 bytes",
+   "sha256  5c063a527b2802ae59ef69425a6f9ac900e1927ac1edc12278bb92a573243a68",
+   "names Last Streetlight: ok",
+   "name Lcom/applovin/: ok",
+   "0 hits",
+   "jar verified.",
+   "signer_match=yes",
+   "aab_check: PASS"
+  ],
+  "frames": [],
+  "commit": "5749aa8"
+ },
+ {
+  "id": "S22C-AAB-DIFF",
+  "claim": "Against the first bundle of the pass: 0 entries gone, 0 new, 6 with other bytes (the three signature files, the pack index, the compiled hud_3d and virtual_joystick); no other script and no base/ entry.",
+  "cmd": "python tools/qa_sim/aab_check.py build/tls.aab --secrets --against ../_BACKUPS/2026-10-12_14-08/build/tls.aab",
+  "proof": "s22c_aab_check_5749aa8",
+  "quotes": [
+   "0 entries gone, 0 new, 6 with other bytes",
+   "changed assetPackInstallTime/assets/scripts/ui/hud_3d.gdc",
+   "changed assetPackInstallTime/assets/scripts/ui/virtual_joystick.gdc"
+  ],
+  "frames": [],
+  "commit": "5749aa8"
+ },
+ {
+  "id": "S22C-AAB-SCAN",
+  "claim": "The package scan finds 0 packed files that are not the game.",
+  "cmd": "python tools/qa_sim/release_export_check.py --aab build/tls.aab",
+  "proof": "s22c_aab_scan_5749aa8",
+  "quotes": [
+   "0 packed file(s) that are not the game",
+   "# EXIT=0"
+  ],
+  "frames": [],
+  "commit": "5749aa8"
+ },
+ {
+  "id": "S22C-AAB-SIZES",
+  "claim": "The bundle holds 2,686 entries: the base module 26,974,685 bytes compressed (unchanged), the install-time asset pack 108,579,735.",
+  "cmd": "python -I -B -c (zipfile: entries and compressed bytes per top-level name of build/tls.aab)",
+  "proof": "s22c_aab_sizes_5749aa8",
+  "quotes": [
+   "2686 entries",
+   "assetPackInstallTime 2564 entries 108579735 compressed bytes",
+   "base 114 entries 26974685 compressed bytes",
+   "# EXIT=0"
+  ],
+  "frames": [],
+  "commit": "5749aa8"
+ },
+ {
+  "id": "S22C-STATIC-FINAL",
+  "claim": "The static gates on the final tree (the documents of the verifier's round uncommitted): 41 passed.",
+  "cmd": "bash tools/check.sh --static",
+  "proof": "s22c_static_final",
+  "quotes": [
+   "Проверок пройдено: 41",
+   "# EXIT=0"
+  ],
+  "frames": [],
+  "commit": "4a5f5cf"
+ },
+ {
+  "id": "S22C-AF5",
+  "claim": "Every file:line citation of the documents added since rc15 still names what it claims.",
+  "cmd": "python tools/af5_check.py",
+  "proof": "s22c_af5_final",
+  "quotes": [
+   "0 finding(s)"
+  ],
+  "frames": [],
+  "commit": "4a5f5cf"
+ },
+ {
+  "id": "S22C-AF3",
+  "claim": "The frame gate's default set is still the six release frames of ccf61ee and passes after the verifier's fixes (three F4 scope rows: tools/qa_sim/af3_f4_scope.tsv).",
+  "cmd": "python tools/qa_sim/af3_frame_check.py",
+  "proof": "s22c_af3_default",
+  "quotes": [
+   "af3 frames=6 fail=0"
+  ],
+  "frames": [],
+  "commit": "4a5f5cf"
+ },
+ {
+  "id": "S22C-FLOW",
+  "claim": "The game loop is wired end to end: 56 checks.",
+  "cmd": "python tools/flow_check.py",
+  "proof": "s22c_flow_final",
+  "quotes": [
+   "56 проверок пройдено"
+  ],
+  "frames": [],
+  "commit": "4a5f5cf"
+ },
+ {
+  "id": "S22C-SCENE",
+  "claim": "The scene-node check is clean.",
+  "cmd": "python tools/scene_node_check.py",
+  "proof": "s22c_scene_final",
+  "quotes": [
+   "Всё чисто."
+  ],
+  "frames": [],
+  "commit": "4a5f5cf"
+ },
+ {
+  "id": "S22C-LINT",
+  "claim": "gdparse, gdlint, ruff, shellcheck and actionlint on the files changed since the last tag: 0 findings.",
+  "cmd": "python tools/lint_changed.py",
+  "proof": "s22c_lint_final",
+  "quotes": [
+   "0 finding(s)"
+  ],
+  "frames": [],
+  "commit": "4a5f5cf"
  }
 ]

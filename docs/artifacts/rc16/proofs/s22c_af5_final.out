@@ -1,0 +1,7 @@
+# proof s22c_af5_final
+# utc 20261012T112931Z
+# head 4a5f5cf (uncommitted paths: 15)
+# env none
+# cmd python tools/af5_check.py
+af5_check: 226 citation(s) in 1653 doc line(s), 0 finding(s)
+# EXIT=0

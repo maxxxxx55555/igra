@@ -77,5 +77,5 @@ Reverted: nothing. One defect of my own was found in the log of batch 1 and fixe
 effect on the frames). The boss frame's red vignette is in the BEFORE frame and in the frames of `2e018d3` too: it is not the HUD pass.
 
 Decisions (mine, recorded so they can be undone): the city minimap is off by default (the radar is the one map; Settings turns the minimap on); the objective list shows for
-8 s on a change and at the start of play instead of staying (it was never on screen before); the touch controls rest at 0.55 (`_TOUCH_REST`), which is the figure to raise if
+8 s on a change instead of staying (it was never on screen before; by code it does not show at the very start of a first run, KNOWN_ISSUES); the touch controls rest at 0.55 (`_TOUCH_REST`), which is the figure to raise if
 they read too dim on a phone (`docs/UNVERIFIABLE_HERE.md` U13).

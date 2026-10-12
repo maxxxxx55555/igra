@@ -12,7 +12,7 @@ Tags:
 ## 0a. Session 22 windowed re-measure (Local, 2026-10-12)
 
 `tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn 300` and the audio scene, one ledger row (89, `s22_windowed_gates`, head `700e1ed`, runtime of `ccf61ee`),
-window 1965x1080, the same iGPU as below, Master muted. Raw: `docs/artifacts/rc16/proofs/s22_windowed_gates.attach.perf_check_scene.log`.
+windowed (`--windowed`; the perf log does not record the window size, and the frame dumps of the same day show a 1965x1080 canvas), the same iGPU as below, Master muted. Raw: `docs/artifacts/rc16/proofs/s22_windowed_gates.attach.perf_check_scene.log`.
 
 | District | Draw calls | Primitives | Objects | Frame p95 | GPU mean | Process mean |
 |---|---|---|---|---|---|---|
@@ -20,7 +20,7 @@ window 1965x1080, the same iGPU as below, Master muted. Raw: `docs/artifacts/rc1
 | D11 power_station | 129 (< 350 OK) | 48,833 | 275 | 23.61 ms | 16.42 ms | 25.26 ms |
 
 Texture memory 128.3 MiB, video memory 155.8 MiB. The probe's own breakdown of the 142 suburbs calls: `Main3D/HUD` 82, `Main3D/WorldRuntime` 27, `Main3D/MultiplayerManager` 13 (the
-calls saved by hiding each node): the HUD is more than half of the draw calls, under the budget and not changed by the pass. These numbers are not comparable one to one with
+calls saved by hiding each node): the HUD is more than half of the draw calls and the total is under the budget; whether the pass changed the HUD's share is not known, because no windowed reading of the tree before it exists (Session 21 did not run the windowed gates, CORRECTION_LOG 203). These numbers are not comparable one to one with
 section 0 (the primitive count there is 1.34 M against 47 K here; what changed it is not traced in this pass); the budget lines are the claim. The audio gate in the same
 row: Music bus peak -10.1 dB, ceiling -1.5 dB, `PASS overall` on the first run (no second run was needed; CORRECTION_LOG 114).
 
