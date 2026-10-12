@@ -17,6 +17,9 @@ static func run(r: Node) -> void:
 	_touch_only_buttons(r, hud)
 	await _tracker_is_on_screen(r)
 	await _rows_are_contextual(r, hud)
+	await _prompt_fades(r, hud)
+	await _touch_cluster_is_clear(r)
+	await _combat_hud_rests(r, hud)
 	await _layout_holds(r, hud)
 	r._playing()
 
@@ -98,6 +101,49 @@ static func _rows_are_contextual(r: Node, hud: Node) -> void:
 	await r.get_tree().create_timer(0.2).timeout
 	var holds: bool = hp_row.modulate.a > 0.99
 	r._ok(rest and woke and holds, "HUD1 the health and stamina rows rest faded (alpha %s), wake on a hit (%s) and hold a moment after the value is whole (%s)" % [rest_alphas, woke_alphas, holds])
+
+## HUD8: the interact prompt fades in when something is in reach, and out (still there, part way, then hidden) when it is not.
+static func _prompt_fades(r: Node, hud: Node) -> void:
+	var prompt := hud.get("prompt") as Label
+	EventBus.interact_prompt_changed.emit("Open")
+	EventBus.player_interact_available.emit(true)
+	await r.get_tree().create_timer(0.35).timeout
+	var shown: bool = prompt.visible and prompt.self_modulate.a > 0.99
+	EventBus.player_interact_available.emit(false)
+	await r.get_tree().create_timer(0.1).timeout
+	var leaving: bool = prompt.visible and prompt.self_modulate.a < 0.99
+	await r.get_tree().create_timer(0.4).timeout
+	r._ok(shown and leaving and not prompt.visible, "HUD8 the interact prompt fades in (%s), is part way out after 0.1 s (%s, alpha %.2f) and hidden after 0.5 s (%s)" % [shown, leaving, prompt.self_modulate.a, not prompt.visible])
+
+## HUD9: the four touch action buttons sit inside the screen and do not overlap (the cluster's offsets were laid out from a corner it was not anchored
+## at: Attack and Stealth overlapped and the side buttons sat on them). A HUD built for the check shows the touch clusters the desktop HUD hides.
+static func _touch_cluster_is_clear(r: Node) -> void:
+	var hud := (load("res://scenes/ui/hud_3d.tscn") as PackedScene).instantiate()
+	r.get_tree().root.add_child(hud)
+	(hud.get_node("BottomRight") as Control).visible = true
+	await r.get_tree().process_frame
+	await r.get_tree().process_frame
+	var view := Rect2(Vector2.ZERO, r.get_viewport().get_visible_rect().size)
+	var rects: Array[Rect2] = []
+	for path: String in ["BottomRight/BtnAttack", "BottomRight/BtnSprint", "BottomRight/BtnStealth", "BottomRight/BtnInteract"]:
+		rects.append((hud.get_node(path) as Control).get_global_rect())
+	var clear: bool = true
+	for i: int in rects.size():
+		clear = clear and view.encloses(rects[i])
+		for j: int in range(i + 1, rects.size()):
+			clear = clear and not rects[i].intersects(rects[j])
+	hud.queue_free()
+	r._ok(clear, "HUD9 the touch action buttons are on screen and clear of each other (%s)" % [rects])
+
+## HUD7: the crosshair rests faded, wakes on a shot and fades five seconds after it.
+static func _combat_hud_rests(r: Node, hud: Node) -> void:
+	var crosshair := hud.get("_crosshair") as Control
+	EventBus.crosshair_state_changed.emit(&"default")
+	await r.get_tree().create_timer(0.4).timeout
+	var woke: bool = crosshair.self_modulate.a > 0.99
+	await r.get_tree().create_timer(5.8).timeout
+	var rest: bool = crosshair.self_modulate.a < 0.01
+	r._ok(woke and rest, "HUD7 the crosshair wakes on a shot (%s) and is faded 6 s later (%s, alpha %.2f)" % [woke, rest, crosshair.self_modulate.a])
 
 ## HUD6: every HUD caption fits its label in 13 languages at the three Text Sizes, and the corner clusters stay on the screen.
 static func _layout_holds(r: Node, hud: Node) -> void:

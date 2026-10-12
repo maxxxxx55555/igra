@@ -372,43 +372,43 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -280.0
-offset_top = -260.0
+offset_left = 0.0
+offset_top = 0.0
 offset_right = 0.0
 offset_bottom = 0.0
 grow_horizontal = 0
 grow_vertical = 0
 
 [node name="BtnAttack" type="Button" parent="BottomRight"]
-custom_minimum_size = Vector2(80, 80)
-offset_left = -100.0
-offset_top = -80.0
-offset_right = -20.0
-offset_bottom = 0.0
+custom_minimum_size = Vector2(88, 88)
+offset_left = -136.0
+offset_top = -136.0
+offset_right = -48.0
+offset_bottom = -48.0
 text = "⚔"
 
 [node name="BtnSprint" type="Button" parent="BottomRight"]
-custom_minimum_size = Vector2(64, 64)
-offset_left = -180.0
-offset_top = -20.0
-offset_right = -116.0
-offset_bottom = 44.0
+custom_minimum_size = Vector2(72, 64)
+offset_left = -224.0
+offset_top = -112.0
+offset_right = -152.0
+offset_bottom = -48.0
 text = "БЕГ"
 
 [node name="BtnStealth" type="Button" parent="BottomRight"]
-custom_minimum_size = Vector2(64, 64)
-offset_left = -80.0
-offset_top = -20.0
-offset_right = -16.0
-offset_bottom = 44.0
+custom_minimum_size = Vector2(72, 64)
+offset_left = -308.0
+offset_top = -112.0
+offset_right = -236.0
+offset_bottom = -48.0
 text = "СТЕЛС"
 
 [node name="BtnInteract" type="Button" parent="BottomRight"]
 custom_minimum_size = Vector2(64, 64)
-offset_left = -130.0
-offset_top = -160.0
-offset_right = -66.0
-offset_bottom = -96.0
+offset_left = -124.0
+offset_top = -216.0
+offset_right = -60.0
+offset_bottom = -152.0
 icon = ExtResource("4_interact")
 expand_icon = true
 text = ""

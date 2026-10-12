@@ -10,6 +10,8 @@ const BASE_RIM := Color("3a3f47")
 const KNOB_COLOR := Color("e8a13a")
 const KNOB_RADIUS: float = 26.0
 const PRESS_SCALE: float = 1.18
+## The ring rests see-through and is full while the thumb is on it (the HUD's other touch controls rest at the same alpha: hud_3d.gd _TOUCH_REST).
+const REST_ALPHA: float = 0.55
 const BASE_TEX_PATH := "res://assets/textures/touch/touch_joy_base_256.png"
 const KNOB_TEX_PATH := "res://assets/textures/touch/touch_joy_knob_256.png"
 var _base_tex: Texture2D = null
@@ -41,6 +43,9 @@ func _process(delta: float) -> void:
 	var target: float = 1.0 if _touch_index != -1 else 0.0
 	if not is_equal_approx(_press_anim, target):
 		_press_anim = move_toward(_press_anim, target, delta * PRESS_ANIM_RATE)
+		var ring := get_parent() as CanvasItem
+		if ring != null:
+			ring.modulate.a = lerpf(REST_ALPHA, 1.0, _press_anim)
 		queue_redraw()
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventScreenTouch:

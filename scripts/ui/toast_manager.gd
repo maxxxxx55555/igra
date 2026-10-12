@@ -29,6 +29,10 @@ const FADE_OUT: float = 0.3
 
 ## 3.14: how many read-back entries the log keeps.
 const HISTORY_MAX: int = 50
+## The LOG toggle rests see-through and is full for a few seconds after a new entry (docs/HUD_PLAN.md row 17).
+const _LOG_REST: float = 0.45
+const _LOG_WAKE_SEC: float = 4.0
+const _FADE := preload("res://scripts/ui/hud_fade.gd")
 ## Share Tech Mono - the canon font for numbers/stats (GDD 11.3).
 const _MONO_FONT_PATH: String = "res://assets/fonts/ShareTechMono-Regular.ttf"
 var _mono_font: Font = null
@@ -121,6 +125,7 @@ func _make_stamp_label(stamp_text: String) -> Label:
 ## Records every requested message, whether or not it still fits on screen.
 func _record(text: String, type: String) -> Dictionary:
 	var entry := {"text": text, "type": type, "stamp": _stamp()}
+	_FADE.show_for([_log_toggle], _LOG_WAKE_SEC, _LOG_REST, false, "self_modulate:a")  # a new entry brings the toggle up for a moment
 	_history.append(entry)
 	if _history.size() > HISTORY_MAX:
 		_history.remove_at(0)
@@ -142,6 +147,7 @@ func _build_log_header() -> void:
 	_log_toggle.focus_mode = Control.FOCUS_NONE
 	_log_toggle.add_theme_font_size_override("font_size", 12)
 	_log_toggle.pressed.connect(_toggle_log)
+	_log_toggle.self_modulate.a = _LOG_REST
 	_header.add_child(_log_toggle)
 
 func _build_log_panel() -> void:

@@ -6,6 +6,11 @@ const BAR_ROW_PITCH: float = 32.0
 const BAR_ROW_TOP: float = 24.0
 ## The flashlight charge is eight segments (ART_UI_STYLE: "segmented scale"); the other rows are slim bars that show while they matter.
 const _PIPS: int = 8
+const _ROWS: int = 5
+## The crosshair and the ammo counter fade this long after the last shot, hit or aim; the touch controls rest at this alpha (the joystick
+## ring in virtual_joystick.gd rests at the same one) and are full while pressed.
+const _COMBAT_HOLD_SEC: float = 5.0
+const _TOUCH_REST: float = 0.55
 const _FADE := preload("res://scripts/ui/hud_fade.gd")
 const _NOISE_SHOWN: float = 0.34
 const _VIS_SHOWN: float = 0.15
@@ -123,7 +128,7 @@ func _ready() -> void:
 	_maybe_show_touch_calibration()
 	EventBus.ammo_changed.connect(_on_ammo_changed)
 	EventBus.player_hiding_changed.connect(_on_player_hiding_changed)
-	EventBus.player_interact_available.connect(func(avail: bool): prompt.visible = avail)
+	EventBus.player_interact_available.connect(_on_interact_available)
 	EventBus.player_interact_available.connect(_pulse_interact_button)
 	# Подсказка была вечно пустой строкой: текст в неё никто не писал.
 	EventBus.interact_prompt_changed.connect(func(text: String) -> void: prompt.text = _interact_key_hint() + text)
@@ -506,6 +511,7 @@ var _ammo_current: int = -1
 ## Triggered по сигналу EventBus.crosshair_state_changed.
 ## Caller: игрок или система взаимодействия.
 func _on_crosshair_state(state: StringName) -> void:
+	_wake_combat()
 	# "hit" is a one-shot marker flash, not a persistent colour state - it must
 	# keep working even with an empty magazine.
 	if state == &"hit":
@@ -591,6 +597,8 @@ func _set_aiming_at_enemy(on: bool) -> void:
 	if on == _aiming_at_enemy:
 		return
 	_aiming_at_enemy = on
+	if on:
+		_wake_combat()
 	_apply_crosshair_state()
 
 
@@ -761,14 +769,14 @@ func _localize_static_labels() -> void:
 
 func _add_captions() -> void:
 	var data := [
-		[LocalizationManager.t("HUD_BATTERY"), $TopLeft/Bat],
-		[LocalizationManager.t("HUD_HP"), $TopLeft/HP],
-		[LocalizationManager.t("HUD_STAMINA"), $TopLeft/Stam]
+		[LocalizationManager.t("HUD_BATTERY"), $TopLeft/Bat, 0],
+		[LocalizationManager.t("HUD_HP"), $TopLeft/HP, 3],
+		[LocalizationManager.t("HUD_STAMINA"), $TopLeft/Stam, 4]
 	]
 	var outline_col := Color(0.047, 0.063, 0.086, 1.0)
 	var shadow_col := Color(0.0, 0.0, 0.0, 0.5)
-	var row: int = 0
 	for d in data:
+		var row: int = d[2]
 		var lbl := Label.new()
 		lbl.text = d[0]
 		lbl.mouse_filter = 2
@@ -794,27 +802,24 @@ func _add_captions() -> void:
 			icon.offset_bottom = icon.offset_top + 16.0
 		match row:
 			0: _bat_caption = lbl
-			1: _hp_caption = lbl
-			2: _stam_caption = lbl
-		row += 1
+			3: _hp_caption = lbl
+			4: _stam_caption = lbl
 	for val: Label in [hp_val, stam_val, bat_val]:
 		val.offset_left = BAR_W + 8.0
 		val.offset_right = BAR_W + 48.0
 		val.offset_top = (BAR_H - 19.0) * 0.5
 		val.offset_bottom = val.offset_top + 19.0
 		val.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	row = _layout_extra_rows(row)
+	_layout_extra_rows(1)
 	var tl: Control = $TopLeft
-	tl.offset_bottom = tl.offset_top + BAR_ROW_TOP + float(row) * BAR_ROW_PITCH
+	tl.offset_bottom = tl.offset_top + BAR_ROW_TOP + float(_ROWS) * BAR_ROW_PITCH
 
-## Бары шума и заметности лежат в сцене с фиксированными y (66 и 86), а ряды
-## HP/Stam/Bat выше раскладываются по BAR_ROW_PITCH и уезжают на 30/64/98.
-## В итоге «ШУМ» рисовался ровно поверх выносливости, а «ЗАМЕТ.» — поверх
-## батареи. Ставим их следующими рядами той же сетки.
-func _layout_extra_rows(start_row: int) -> int:
+## Visibility and noise take the rows after the battery, on the grid of the rows around them: the two that show most often sit together, and
+## the health and stamina rows, which show only when hurt or spent, come last (docs/HUD_PLAN.md rows 1 to 5).
+func _layout_extra_rows(start_row: int) -> void:
 	var rows := [
-		[noise_caption, noise_fill, get_node_or_null("TopLeft/NoiseT")],
 		[vis_caption, vis_fill, get_node_or_null("TopLeft/VisibilityT")],
+		[noise_caption, noise_fill, get_node_or_null("TopLeft/NoiseT")],
 	]
 	var row := start_row
 	for r in rows:
@@ -841,7 +846,6 @@ func _layout_extra_rows(start_row: int) -> int:
 		if track != null:
 			track.offset_right = BAR_W
 		row += 1
-	return row
 
 ## Whole segments: a charge of 0.31 lights three of eight.
 func _pip_fill(ratio: float) -> float:
@@ -867,6 +871,14 @@ func _finish_rows(hp_ratio: float, bat_ratio: float) -> void:
 	_FADE.settle([$TopLeft/Stam, noise_caption, get_node_or_null("TopLeft/NoiseT"), noise_fill, vis_caption, get_node_or_null("TopLeft/VisibilityT"), vis_fill])
 	if not _hp_hurt:
 		_FADE.settle([$TopLeft/HP])
+	_FADE.settle(_combat_items(), 0.0, "self_modulate:a")
+
+func _combat_items() -> Array:
+	return [_crosshair, get_node_or_null("AmmoCounter/AmmoCaption"), ammo_val]
+
+## The combat HUD shows on a shot, a hit, a change of ammunition or an enemy in the aim, and fades five seconds after the last of them.
+func _wake_combat() -> void:
+	_FADE.show_for(_combat_items(), _COMBAT_HOLD_SEC, 0.0, false, "self_modulate:a")
 
 func _setup_number_fonts() -> void:
 	for lbl in [hp_val, stam_val, bat_val]:
@@ -1048,7 +1060,7 @@ func _on_enemy_hp_updated(monster_id: StringName, ratio: float) -> void:
 ## own 2 s fade, so two producers could fight over the same nodes; the hold
 ## timer below is now the single owner of the fade-out and aiming at a living
 ## enemy simply keeps refreshing it.
-const _ENEMY_BAR_HOLD: float = 2.0
+const _ENEMY_BAR_HOLD: float = 5.0
 var _enemy_bar_hold: float = 0.0
 var _enemy_bar_id: String = ""
 
@@ -1456,6 +1468,8 @@ func _on_player_hiding_changed(hiding: bool) -> void:
 
 func _on_ammo_changed(current: int, reserve: int) -> void:
 	ammo_val.text = "%d / %d" % [current, reserve]
+	if current != _ammo_current:
+		_wake_combat()
 	_ammo_current = current
 	_apply_crosshair_state()
 	_refresh_slot_badges()
@@ -1503,6 +1517,7 @@ func _apply_ammo_caption() -> void:
 	var caption := get_node_or_null("AmmoCounter/AmmoCaption") as Label
 	if caption != null:
 		caption.text = LocalizationManager.t("HUD_AMMO" if _weapon_present else "HUD_MELEE")
+		caption.visible = _weapon_present  # "MELEE" says nothing the hands do not
 	if ammo_val != null:
 		ammo_val.visible = _weapon_present
 
@@ -1561,6 +1576,7 @@ func _pulse_interact_button(on: bool) -> void:
 		return
 	if _interact_pulse != null and _interact_pulse.is_valid():
 		_interact_pulse.kill()
+	_FADE.show_for([btn], 0.0, _TOUCH_REST, on, "self_modulate:a")
 	if not on:
 		btn.modulate = Color.WHITE
 		return
@@ -1593,17 +1609,31 @@ func _add_side_buttons(isv: Node) -> void:
 		add_child(b)
 		return b
 	var jump := mk.call("BtnJump", "↑", func() -> void: isv.request_jump()) as Button
-	anchored.call(jump, 20.0, 250.0)
+	anchored.call(jump, 48.0, 232.0)
 	var flash := mk.call("BtnFlash", "☀", func() -> void: isv.request_flashlight()) as Button
-	anchored.call(flash, 100.0, 250.0)
+	anchored.call(flash, 124.0, 232.0)
 	# Стробоскоп (GDD §3.1) — отдельная кнопка, на ПК это клавиша C.
 	# Приседание уже висит на BtnStealth в сцене — второй кнопки не нужно.
 	var strobe := mk.call("BtnStrobe", "⚡", func() -> void: _request_strobe()) as Button
-	anchored.call(strobe, 180.0, 250.0)
+	anchored.call(strobe, 200.0, 232.0)
 	# T15: колесо быстрых слотов — держать, вести пальцем, отпустить.
 	var wheel := mk.call("BtnWheel", "◎", func() -> void: if _quick_wheel: _quick_wheel.open()) as Button
-	anchored.call(wheel, 260.0, 250.0)
+	anchored.call(wheel, 276.0, 232.0)
 	wheel.button_up.connect(func() -> void: if _quick_wheel: _quick_wheel.close(true))
+	_rest_touch_controls()
+
+## The touch controls rest see-through and are full while pressed; the joystick ring does the same from virtual_joystick.gd (docs/HUD_PLAN.md
+## rows 18 and 23).
+func _rest_touch_controls() -> void:
+	var buttons: Array = []
+	for path: String in ["BottomRight/BtnAttack", "BottomRight/BtnSprint", "BottomRight/BtnStealth", "BottomRight/BtnInteract", "BtnJump", "BtnFlash", "BtnStrobe", "BtnWheel"]:
+		var button := get_node_or_null(path) as Button
+		if button == null:
+			continue
+		buttons.append(button)
+		button.button_down.connect(func() -> void: _FADE.show_for([button], 0.4, _TOUCH_REST, false, "self_modulate:a"))
+	_FADE.settle(buttons, _TOUCH_REST, "self_modulate:a")
+	_FADE.settle([get_node_or_null("BottomLeft/JoystickRing")], _TOUCH_REST)
 
 func _request_strobe() -> void:
 	var p := get_tree().get_first_node_in_group("player")
@@ -1824,8 +1854,19 @@ func _setup_radar() -> void:
 	frame.add_child(radar)
 	radar.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)  # radar.gd's own offsets sat it 16 px off its frame
 
+## The prompt fades in when something is in reach and out when it is not (docs/HUD_PLAN.md row 14); it is hidden once it is gone.
+func _on_interact_available(avail: bool) -> void:
+	if avail:
+		prompt.visible = true
+		prompt.self_modulate.a = 0.0
+		_FADE.fade_to(prompt, 1.0, 0.12, "self_modulate:a")
+	else:
+		_FADE.fade_to(prompt, 0.0, 0.2, "self_modulate:a", true)
+
 func _show_notice(msg: String) -> void:
 	notice.text = msg
+	notice.self_modulate.a = 1.0
+	_FADE.show_for([notice], 2.2, 0.0, false, "self_modulate:a")  # gone before the 3 s timer clears the text
 	await get_tree().create_timer(3.0).timeout
 	# The HUD can be torn down (death -> scene reload) during the 3s wait —
 	# don't touch `notice` on a freed instance.
