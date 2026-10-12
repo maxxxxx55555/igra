@@ -31,9 +31,10 @@ def main():
 
     print(f"Loaded {len(templates)} daily challenge templates and {len(streak_rewards)} streak reward tiers.")
 
-    # Read DailyChallengeManager code to verify event connections
-    with open(mgr_path, "r", encoding="utf-8") as f:
-        mgr_code = f.read()
+    # Read DailyChallengeManager code to verify event connections exist
+    if not os.path.exists(mgr_path):
+        print(f"FAIL: {mgr_path} not found")
+        sys.exit(1)
 
     # Mapping of challenge types to EventBus signals in DailyChallengeManager
     type_signal_map = {
@@ -69,7 +70,6 @@ def main():
         tid = tmpl.get("id")
         ttype = tmpl.get("type")
         target = tmpl.get("target")
-        reward = tmpl.get("reward")
 
         sig = type_signal_map.get(ttype)
         if not sig:

@@ -9,7 +9,6 @@ Asserts:
 4. Cognate whitelist consistency.
 """
 
-import glob
 import json
 import os
 import re
