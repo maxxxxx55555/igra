@@ -1,9 +1,11 @@
 extends RefCounted
-## Session 21 (the shipping pass): the P1 rows that were a few lines of code, docs/CORRECTION_LOG.md rows 169, 172 and 174.
-## Wired into _closeout_check_runner.gd as `await Rc21Ship.run(self)`; CLOSEOUT_ONLY=s21 runs only these. Each id fails on the
-## v8.0.0-final runtime and passes at HEAD (tools/qa_sim/af2_both_ways.py reads the pair). A "guard" line holds a rule in both runs.
+## Session 21 (the shipping pass): the P1 rows that were a few lines of code, docs/CORRECTION_LOG.md rows 169, 172 and 174, and the
+## verifier's finding B5 (CRF1, row 204). Wired into _closeout_check_runner.gd as `await Rc21Ship.run(self)`; CLOSEOUT_ONLY=s21 runs
+## only these. Each id fails on the v8.0.0-final runtime and passes at HEAD, except CRF1: it guards the fix of row 169 and fails on the
+## runtime of d073218 (tools/qa_sim/af2_both_ways.py reads the pair). A "guard" line holds a rule in both runs.
 ## Every state a check touches is put back; the restart check goes last because it reloads the district.
 
+const WORKBENCH := preload("res://scripts/crafting/workbench_logic.gd")
 const FILLER: String = "ancient_key"
 const PENDING_QUEST: String = "q_restore_district2"
 
@@ -11,7 +13,8 @@ static func run(r: Node) -> void:
 	r._playing()
 	UIManager.close_all_blocking()
 	_remove_takes_all_or_nothing(r)
-	_quest_pays_when_there_is_room(r)
+	await _quest_pays_when_there_is_room(r)
+	await _craft_keeps_its_materials(r)
 	await _salvage_keeps_the_item(r)
 	await _restart_goes_back_to_the_save(r)
 	r._playing()
@@ -56,17 +59,50 @@ static func _quest_pays_when_there_is_room(r: Node) -> void:
 	var waits: bool = not quest.done
 	GameManager._change_state(GameManager.GameState.PAUSED)
 	InventoryManager.remove(StringName(FILLER), 1)
+	await r.get_tree().process_frame
 	var waits_out_a_load: bool = not quest.done
 	r._ok(waits_out_a_load, "guard QST2 a pending quest does not pay while the game is not playing (done %s)" % quest.done)
 	r._playing()
 	InventoryManager.remove(StringName(FILLER), 1)
-	var paid: bool = quest.done and CoinWallet.get_coins() == coins + int(quest.reward_coins) and InventoryManager.has(&"blueprint_flashlight_battery", 1)
+	await r.get_tree().process_frame
+	var paid: bool =quest.done and CoinWallet.get_coins() == coins + int(quest.reward_coins) and InventoryManager.has(&"blueprint_flashlight_battery", 1)
 	r._ok(waits and paid, "QST1 a quest that did not fit pays when the pack has room (waited %s; then done %s, coins %d of %d, blueprint %d)" % [
 		waits, quest.done, CoinWallet.get_coins(), coins + int(quest.reward_coins), InventoryManager.count_of(&"blueprint_flashlight_battery")])
 	QuestManager.from_dict(quests)
 	QuestManager._completed_count = completed
 	CoinWallet.from_dict(wallet)
 	InventoryManager.from_dict(pack)
+
+## CRF1 (verifier finding B5): a craft takes its components out one by one and then puts its result in. The payout of a waiting quest,
+## between the two, took the slot the result needed, and the refund of the components found none: the craft lost its materials. The
+## payout waits for the idle frame, so the craft keeps its slot and the quest keeps waiting. `staged` holds the set-up: the quest
+## waits and the pack has no room for the result, so the check cannot pass for want of a conflict.
+static func _craft_keeps_its_materials(r: Node) -> void:
+	r._playing()
+	var pack: Dictionary = InventoryManager.to_dict()
+	var quests: Dictionary = QuestManager.serialize()
+	var wallet: Dictionary = CoinWallet.to_dict()
+	var completed: int = QuestManager._completed_count
+	var crafted: int = ProgressTracker.crafted
+	var full: Dictionary = _full_pack()
+	full["slots"][0] = {"item_id": "metal", "count": 2}
+	InventoryManager.from_dict(full)
+	var quest: Dictionary = QuestManager.quests[PENDING_QUEST]
+	quest.progress = quest.target_count
+	QuestManager._complete(quest)
+	var staged: bool = not quest.done and not InventoryManager.can_add(&"lockpick", 1)
+	var made: bool = WORKBENCH.craft(WORKBENCH.find("lockpick"), 1)
+	await r.get_tree().process_frame
+	var lockpicks: int = InventoryManager.count_of(&"lockpick")
+	var metal: int = InventoryManager.count_of(&"metal")
+	r._ok(staged and made and lockpicks == 1 and metal == 0 and not quest.done,
+		"CRF1 a craft in a full pack with a quest waiting keeps its slot (staged %s; crafted %s, lockpick %d of 1, metal %d of 0, quest still waiting %s)" % [
+			staged, made, lockpicks, metal, not quest.done])
+	QuestManager.from_dict(quests)
+	QuestManager._completed_count = completed
+	CoinWallet.from_dict(wallet)
+	InventoryManager.from_dict(pack)
+	ProgressTracker.crafted = crafted
 
 ## SLV1 (row 169): the Salvage tab put the parts in, ignored the refusals and took the item out, so a full pack lost the parts. It keeps
 ## the item and takes nothing; a pack with room still gets the parts (I9.4).

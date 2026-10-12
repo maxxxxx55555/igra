@@ -13,3 +13,4 @@ export_presets.cfg	c3b9cfa3d5dc	722135529dd4	*app_label*
 scripts/core/save_system.gd	b62af0a8bb73	caa9cfeca4f6	*_L3_*
 scripts/core/game_manager.gd	9132b79b4a8f	2099c50f3503	*hardcore_death*
 scripts/ui/tutorial_system.gd	91c6a30f4f57	8f415eed70c2	*lang*
+scripts/core/quest_manager.gd	7c0a52899fc3	5a899fd0629f	*quest_payout*

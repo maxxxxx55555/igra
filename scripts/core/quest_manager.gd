@@ -25,7 +25,7 @@ func _ready() -> void:
 	EventBus.interaction_done.connect(_on_interaction_done)
 	EventBus.zone_reached.connect(_on_zone_reached)
 	EventBus.secret_found.connect(_on_secret_found)
-	EventBus.inventory_changed.connect(_on_inventory_changed)
+	EventBus.inventory_changed.connect(_on_inventory_changed, CONNECT_DEFERRED)
 
 func _init_quests() -> void:
 	var quest_data := [
@@ -153,7 +153,8 @@ func _reward_fits(q: Dictionary) -> bool:
 	return true
 
 ## A quest whose reward did not fit waits open at its target. Its event may never come again (a REPAIR quest's fires once per
-## district), so it pays when the pack has room, not when the event repeats. Only in play: a load fills the pack first.
+## district), so it pays when the pack has room, not when the event repeats. Only in play: a load fills the pack first. Connected
+## deferred, so a craft's remove and add finish before a payout can take the slot (CORRECTION_LOG 204, B5).
 func _on_inventory_changed() -> void:
 	if not GameManager.is_playing():
 		return
