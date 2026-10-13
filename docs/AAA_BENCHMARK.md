@@ -76,7 +76,7 @@ brightness, and `docs/DENSITY_MEASURED.md` has the same pairs frame by frame (th
 
 **Mobile fallback, declared.** A phone starts on **High** (`_settings["graphics_tier"] = 2`, `scripts/systems/settings_manager.gd:84`) with dynamic resolution on (`scripts/systems/settings_manager.gd:121`: the 3D scale drops to 0.7
 under load and recovers, `scripts/systems/dynamic_resolution.gd`), and `QualityManager` lowers the tier by itself when the frame rate stays under 30 for 5 s and raises it again, never above what the player chose, after 10 s over 45
-(`scripts/systems/quality_manager.gd:10-13`). So the fallback of a weak phone is: the 3D scale first, then the tier down one step at a time, each step removing the most expensive effects (the lens and the blur at
+(`scripts/systems/quality_manager.gd:14-18`; both limits are no higher than 90 % of the frame cap, which is 30 at Low and Medium, and each drop doubles the wait before the next raise: until Session 23 a tier it had lowered could not be raised, CORRECTION_LOG 241). So the fallback of a weak phone is: the 3D scale first, then the tier down one step at a time, each step removing the most expensive effects (the lens and the blur at
 Ultra, the chroma and the fog cards below). The metadata of the preset file names a profile for each platform (`profile_desktop` high, `profile_mobile` medium), and **nothing reads it**: the real default is High on both,
 and the choice of Medium for a phone is an owner row (Q-1: set the first-run tier to Medium on a handheld after reading the frame rate of the first device).
 
