@@ -15,16 +15,14 @@ import sys
 import numpy as np
 from PIL import Image
 
+from density_measure import metrics
+
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 
 
 def measure(path):
     a = np.asarray(Image.open(path).convert("RGB"), dtype=float) / 255.0
-    luma = a @ np.array([0.2126, 0.7152, 0.0722])
-    v = a.max(2)
-    s = np.where(v > 0, (v - a.min(2)) / np.maximum(v, 1e-9), 0.0)
-    lit = v > 0.05
-    return float(luma.mean()), float(s[lit].mean()) if lit.any() else 0.0, float(luma.std())
+    return metrics(a, np.ones(a.shape[:2], dtype=bool))
 
 
 def frames(directory, pattern="*"):

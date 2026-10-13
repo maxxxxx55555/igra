@@ -268,8 +268,7 @@ func _add_manholes() -> void:
 		var at: Vector3 = _solid_spot(_road_spot(_rng.randi_range(0, 3), _grid * 0.5, _rng.randf_range(-5.0, 5.0), _rng.randf_range(-1.6, 1.6)))
 		if at == Vector3.INF:
 			continue
-		var cover := Node3D.new()
-		cover.set_script(_MANHOLE)
+		var cover: Node3D = _MANHOLE.new()
 		cover.name = "Manhole%d" % i
 		cover.position = at
 		add_child(cover)

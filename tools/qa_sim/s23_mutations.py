@@ -43,7 +43,7 @@ MUTATIONS = [
     ("scripts/world/street_props.gd", "const SWAY_M: float = 0.08", "const SWAY_M: float = 0.0", "FOLIAGE1"),
     ("scripts/world/district_dressing.gd", 'const FOG_DISTRICTS: Array[StringName] = [&"warehouses", &"industrial"', 'const FOG_DISTRICTS: Array[StringName] = [&"industrial"', "FOG1"),
     ("scripts/world/district_dressing.gd", "const MANHOLES: int = 2", "const MANHOLES: int = 0", "MANH1"),
-    ("scripts/ui/quest_tracker_hud.gd", "visible = shown and not bool(SettingsManager.get_setting(\"trailer_mode\", false)))", "visible = shown)", "TRLR1"),
+    ("scripts/ui/quest_tracker_hud.gd", "hud_visibility_changed.connect(func(shown: bool) -> void: visible = shown)", "hud_visibility_changed.connect(func(shown: bool) -> void: visible = true)", "TRLR1"),
 ]
 LINE = re.compile(r"^\[closeout\] (ok  |FAIL) +(\S+)")
 

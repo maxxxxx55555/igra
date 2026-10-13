@@ -15,6 +15,8 @@ import pathlib
 import re
 import sys
 
+import balance_sim
+
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 STEP_LIMIT = 2.2
 WATCH_STEP = 1.8
@@ -35,11 +37,8 @@ def monsters():
 
 
 def rosters():
-    text = read("scripts/enemies/enemy_pool.gd")
-    body = re.search(r"ROSTER_BY_DISTRICT: Dictionary = \{(.*?)\n\}", text, re.S).group(1)
-    base = int(re.search(r"MIN_ENEMIES_PER_DISTRICT: int = (\d+)", text).group(1))
-    bonuses = [int(b) for b in re.findall(r"base \+ (\d+)", re.search(r"func _target_count.*?(?=\nfunc )", text, re.S).group(0))] + [0]
-    return {d: re.findall(r"\w+", types) for d, types in re.findall(r'&"(\w+)":\s*\[(.*?)\]', body)}, [base + b for b in bonuses]
+    roster, _, counts = balance_sim.hunter_pressure()
+    return roster, [counts[s] for s in STAGES]
 
 
 def spine():

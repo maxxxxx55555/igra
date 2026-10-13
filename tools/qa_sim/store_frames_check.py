@@ -13,6 +13,8 @@ import sys
 import numpy as np
 from PIL import Image
 
+from density_measure import lum
+
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 SIZE = (960, 540)
 MIN_STD = 0.04
@@ -33,7 +35,7 @@ def faults(path):
     if im.size != SIZE:
         out.append("size %dx%d, not %dx%d" % (*im.size, *SIZE))
     a = np.asarray(im.convert("RGB"), dtype=float) / 255.0
-    luma = a @ np.array([0.2126, 0.7152, 0.0722])
+    luma = lum(a)
     if luma.std() < MIN_STD:
         out.append("blank: luminance deviation %.3f under %.2f" % (luma.std(), MIN_STD))
     if not MEAN_BAND[0] <= luma.mean() <= MEAN_BAND[1]:

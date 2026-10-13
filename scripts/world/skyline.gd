@@ -16,7 +16,7 @@ const GROUND_COLOR := Color(0.055, 0.066, 0.082)
 const FACADES: Array[Color] = [Color("#0f151d"), Color("#141b24"), Color("#182029")]
 const WIN_DARK := Color(0.02, 0.025, 0.04)
 const FACADE_GLOW := Color(0.06, 0.08, 0.12)
-## Per district: the three facade colours and the faint self-glow of the blocks (docs/DISTRICT_SIGNATURES.md). One family of hue each, dark, never over 25 % chroma (the spread of the largest and the smallest channel on 0..1, tools/qa_sim/consistency_check.py; STYLE_GUIDE section 2);
+## Per district: the three facade colours and the faint self-glow of the blocks (docs/DISTRICT_SIGNATURES.md). One family of hue each, dark, never over 25 % chroma (tools/qa_sim/consistency_check.py);
 ## a district that is not listed keeps FACADES and FACADE_GLOW.
 const PALETTES := {
 	&"suburbs": [[Color("#141917"), Color("#181e1c"), Color("#1c2321")], Color(0.07, 0.09, 0.09)],
