@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Session 23 density frames (scripts/tools/_density_frames_runner.gd), windowed and muted, under the user-data guard.
+#   tools/qa_sim/density_frames <label> <hash> [district ids, comma separated] [timeout-sec]
+#     label: before | after      hash: the short hash of the code tree that is measured (it is part of every frame name)
+#   log -> .qa_logs/density_frames_<label>.log      frames -> docs/stills/density/<id>_<view>_<label>_<hash>_<UTC>.jpg
+set -uo pipefail
+cd "$(dirname "$0")/../.." || exit 2
+LABEL="${1:?usage: tools/qa_sim/density_frames <label> <hash> [ids] [timeout-sec]}"
+HASH="${2:?usage: tools/qa_sim/density_frames <label> <hash> [ids] [timeout-sec]}"
+IDS="${3:-}"
+T="${4:-900}"
+mkdir -p .qa_logs
+LOG=".qa_logs/density_frames_${LABEL}.log"
+rm -f "$LOG"
+
+GODOT="$(bash tools/qa_sim/_resolve_godot.sh 2>/dev/null)"
+if [[ -z "$GODOT" ]] || [[ ! -x "$GODOT" ]]; then
+	bash tools/qa_sim/_resolve_godot.sh >&2
+	exit 99
+fi
+source tools/qa_sim/user_data_guard.sh
+udg_snapshot || exit 99
+trap 'udg_restore || exit 97' EXIT
+trap 'exit 130' INT TERM
+export TLS_UDG_GUARDED=1
+timeout "$T" "$GODOT" --windowed --path . res://scenes/tools/density_frames_scene.tscn -- --tlabel="$LABEL" --thash="$HASH" ${IDS:+--tids="$IDS"} > "$LOG" 2>&1
+rc=$?
+echo "  density_frames rc=$rc (log: $LOG, $(grep -ac '^\[density\] frame' "$LOG") frames)"
+exit $rc
