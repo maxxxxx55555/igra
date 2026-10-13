@@ -39,6 +39,7 @@ MUTATIONS = [
     ("scripts/weapons/weapon_base.gd", "* NewGamePlus.get_player_damage_multiplier()  # GDD 12.5: +10% per New Game+ level", "", "NGP1"),
     ("scripts/core/save_system.gd", "const BACKUP_DEPTH: int = 3", "const BACKUP_DEPTH: int = 2", "SAVEMIG"),
     ("scripts/systems/integrity_guard.gd", "const CLOCK_TOLERANCE: float = 0.25", "const CLOCK_TOLERANCE: float = 5.0", "SEC1"),
+    ("scripts/world/street_props.gd", 'dressing.call("build", district_id, sb)', "pass", "DENS1"),
 ]
 LINE = re.compile(r"^\[closeout\] (ok  |FAIL) +(\S+)")
 

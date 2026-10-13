@@ -3,7 +3,7 @@ extends "res://scripts/tools/_rc16_probe_runner.gd"
 ## shot from fixed places. With the label `pair` every view is shot twice in the same run: first with the district's dressing node hidden (the file label is "before"), then shown
 ## ("after"), so the two frames differ by the dressing and by nothing else. The power stage only goes up, so the dark views come first:
 ##   01_dark     the west street at the eye height of the player, power DARK, the flashlight on
-##   02_rest     the corner of the power switch toward the middle block, power DARK, the flashlight off (the lit bench, where there is one)
+##   02_rest     the road beside the power switch toward the bench and its lantern in the next block, power DARK, the flashlight off
 ##   03_street   the west street again, power FULL
 ##   04_block    from the middle block across the street to its neighbour, power FULL
 ##   05_skyline  up the south street toward the landmark of the district, power FULL
@@ -13,7 +13,7 @@ extends "res://scripts/tools/_rc16_probe_runner.gd"
 
 const VIEWS: Array[Dictionary] = [
 	{"name": "01_dark", "at": Vector3(-8.0, 0.1, 21.0), "look": Vector3(-8.0, 1.7, -30.0), "pitch": 0.0, "stage": -1, "light": true},
-	{"name": "02_rest", "at": Vector3(9.8, 0.1, 9.8), "look": Vector3(14.0, 1.2, 13.0), "pitch": 0.0, "stage": -1, "light": false},
+	{"name": "02_rest", "at": Vector3(6.0, 0.1, 15.5), "look": Vector3(13.5, 1.5, 13.5), "pitch": 0.0, "stage": -1, "light": false},
 	{"name": "03_street", "at": Vector3(-8.0, 0.1, 21.0), "look": Vector3(-8.0, 1.7, -30.0), "pitch": 0.0, "stage": 3, "light": false},
 	{"name": "04_block", "at": Vector3(0.0, 0.1, 0.0), "look": Vector3(16.0, 1.5, -16.0), "pitch": -0.05, "stage": 3, "light": false},
 	{"name": "05_skyline", "at": Vector3(0.0, 0.1, 18.0), "look": Vector3(0.0, 1.7, -60.0), "pitch": 0.22, "stage": 3, "light": false},

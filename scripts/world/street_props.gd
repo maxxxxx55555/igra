@@ -142,6 +142,7 @@ func build() -> void:
 	add_child(preload("res://scripts/effects/dust_motes.gd").new())
 	_build_skyline(sb, district_id)
 	var dressing: Node3D = preload("res://scripts/world/district_dressing.gd").new()
+	dressing.name = "DistrictDressing"
 	add_child(dressing)
 	dressing.call("build", district_id, sb)
 	build_ms = float(Time.get_ticks_usec() - started) / 1000.0
