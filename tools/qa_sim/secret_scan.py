@@ -53,7 +53,7 @@ def demo():
     fake = "sk-" + "a" * 24
     assert scan_text('{"apiKey": "%s"}' % fake) == [(1, "openai style key")] or (1, "openai style key") in scan_text('{"apiKey": "%s"}' % fake)
     assert scan_text('x = "{env:OMNIROUTE_API_KEY}"') == []
-    assert (1, "private key block") in scan_text("-----BEGIN RSA PRIVATE KEY-----")
+    assert (1, "private key block") in scan_text("-----BEGIN " + "RSA PRIVATE KEY-----")  # split, so this file does not hold the shape it looks for
     assert scan_text("the key to the city") == []
     print("secret_scan demo: a key literal and a private key block are found, an environment reference and a plain sentence are not")
     return 0
