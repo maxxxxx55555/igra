@@ -427,6 +427,11 @@ if "$PY" tools/qa_sim/difficulty_curve.py --demo >/dev/null 2>&1 && "$PY" tools/
 else
   bad "difficulty_curve (см. 'python tools/qa_sim/difficulty_curve.py --check')"
 fi
+if "$PY" tools/qa_sim/store_frames_check.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/benchmark_frames.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/density_measure.py --demo >/dev/null 2>&1; then
+  ok "frame tools (store_frames_check, benchmark_frames and density_measure each tell a good frame from a bad one on a fixture: store/SCREENSHOT_RECIPES.md)"
+else
+  bad "frame tools (см. 'python tools/qa_sim/store_frames_check.py --demo')"
+fi
 
 # ─────────────────────────── проверки в движке ───────────────────────────
 if [[ $STATIC_ONLY -eq 1 ]]; then
