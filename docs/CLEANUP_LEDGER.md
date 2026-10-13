@@ -11,7 +11,7 @@ Written before anything was deleted (K1.0), completed as each step landed. Every
 | Tracked before | 4,305 files, 671,512,348 bytes (640.4 MB) |
 | `.git` before | 885 MB on disk (the pack 774 MiB, 3,094 loose objects of 99.6 MiB) |
 | Local worktrees before | 5, 2.1 GB (`.claude/worktrees/` three, and two beside the repository) |
-| Remote branches before | 31 (17 merged into `main`, 14 not) |
+| Remote branches before | 32 (`main`, 17 merged into `main`, 14 not) |
 
 ## 1. The test of "dead" (K1.1)
 
@@ -26,12 +26,12 @@ When in doubt a path stays, and is listed in section 3.
 
 | # | Path | Files | Bytes | Proof | Commit |
 |---|---|---|---|---|---|
-| 1 | `assets/audio/_pre_norm/` | 280 | 168,585,261 | pattern A hits only in 12 documents, `AGENTS.md` and the export exclusion of `export_presets.cfg`, pattern B in 7 documents, no `uid` hit; the shipped bundle never contained it (the exclusion filter); every blob stays in the history and in the backup tag, so the originals of the loudness pass are one `git show` away; `docs/KNOWN_ISSUES.md` (section "Owner-only cleanup", with the command) names it for deletion | pending |
-| 2 | `assets/_orphaned/` | 141 | 3,167,515 | the same two greps: documents and the export exclusion only; verified dead twice before (`docs/KNOWN_ISSUES.md`, `docs/SIZE_BUDGET.md`) | pending |
-| 3 | `assets/textures/items_legacy/` | 52 | 145,878 | documents and the export exclusion only (`docs/REPORT_ASSETS.md`, `docs/REPORT_BUG_HUNT.md`); the live icons are `assets/textures/items/`, and 13 of the 26 images (the other 26 files are their sidecars) are byte-identical to them | pending |
-| 4 | `assets/grading/` (and its `.gitignore` line) | 2 | 1,427 | a stray top-level duplicate of `assets/textures/grading/night_grade.png` (`docs/SESSION_REPORT_SHIP.md`); the only code mention is the texture-import tool's list of folders to walk | pending |
-| 5 | ten files of `_QUARANTINE/`: six fonts (`ChakraPetch-Bold`, `Rajdhani-SemiBold`, `SairaCondensed-Bold` and `-Regular`, `bebas_neue_bold`, `roboto_condensed`) and four effect scenes (`blood_particles`, `footstep_dust`, `hit_spark`, `muzzle_flash`) | 10 | 996,797 | `tools/quarantine_audit.py`: no A or B hit, no dynamic loader, the review documents record each as a duplicate or unlinked (`docs/ERROR_LOG_FINAL.md:53`, `:56`, `:74`); AUTO-DELETABLE in the committed audit and in a run at HEAD | pending |
-| 6 | scratch: `_topsort.py`, `docs/runtime_log3.txt` (a copy of `runtime_log.txt`), the three empty `docs/runtime_log*.txt.err`, the empty `docs/_final_violations.txt`, `docs/p2_consistency_probe.txt`, `docs/regress_hud_probe.txt`, `docs/regress_map_probe.txt`, `docs/folder_screenshot.png` | 10 | 198,288 | no mention in any tracked text file, nor in the raw evidence folders | pending |
+| 1 | `assets/audio/_pre_norm/` | 280 | 168,585,261 | pattern A hits only in 12 documents, `AGENTS.md` and the export exclusion of `export_presets.cfg`, pattern B in 7 documents, no `uid` hit; the shipped bundle never contained it (the exclusion filter); every blob stays in the history and in the backup tag, so the originals of the loudness pass are one `git show` away; `docs/KNOWN_ISSUES.md` (section "Owner-only cleanup", with the command) names it for deletion | `7d00f6a` |
+| 2 | `assets/_orphaned/` | 141 | 3,167,515 | the same two greps: documents and the export exclusion only; verified dead twice before (`docs/KNOWN_ISSUES.md`, `docs/SIZE_BUDGET.md`) | `040d6fb` |
+| 3 | `assets/textures/items_legacy/` | 52 | 145,878 | documents and the export exclusion only (`docs/REPORT_ASSETS.md`, `docs/REPORT_BUG_HUNT.md`); the live icons are `assets/textures/items/`, and 13 of the 26 images (the other 26 files are their sidecars) are byte-identical to them | `f25ad69` |
+| 4 | `assets/grading/` (and its `.gitignore` line) | 2 | 1,427 | a stray top-level duplicate of `assets/textures/grading/night_grade.png` (`docs/SESSION_REPORT_SHIP.md`); the only code mention is the texture-import tool's list of folders to walk | `6a905e2` |
+| 5 | ten files of `_QUARANTINE/`: six fonts (`ChakraPetch-Bold`, `Rajdhani-SemiBold`, `SairaCondensed-Bold` and `-Regular`, `bebas_neue_bold`, `roboto_condensed`) and four effect scenes (`blood_particles`, `footstep_dust`, `hit_spark`, `muzzle_flash`) | 10 | 996,797 | `tools/quarantine_audit.py`: no A or B hit, no dynamic loader, the review documents record each as a duplicate or unlinked (`docs/ERROR_LOG_FINAL.md:53`, `:56`, `:74`); AUTO-DELETABLE in the committed audit and in a run at HEAD | `2224d32` |
+| 6 | scratch: `_topsort.py`, `docs/runtime_log3.txt` (a copy of `runtime_log.txt`), the three empty `docs/runtime_log*.txt.err`, the empty `docs/_final_violations.txt`, `docs/p2_consistency_probe.txt`, `docs/regress_hud_probe.txt`, `docs/regress_map_probe.txt`, `docs/folder_screenshot.png` | 10 | 198,288 | no mention in any tracked text file, nor in the raw evidence folders | `1984577` |
 
 ## 3. Kept, with the reason
 
@@ -56,8 +56,108 @@ lowercase file, which is the one every later commit and 17 citations use. Resolu
 
 ## 5. Branches and worktrees (K1.5)
 
-Pending: see the commit that fills this section.
+**Worktrees (5, removed with `git worktree remove`, each clean, 0 commits ahead of `main`, an ancestor of `main` by `git merge-base --is-ancestor`):**
+`.claude/worktrees/agent-a2d98b0eb4e6daa56` (`worktree-agent-a2d98b0eb4e6daa56`, `60dac76`), `.claude/worktrees/agent-a9d93688011f12bdb` (`9f8b032`),
+`.claude/worktrees/agent-ac5abdf50f70def2b` (`a82814d`) and, beside the repository, `opencode-assets` (`opencode/mesh-opt`, `6994411`) and `qwen-i18n` (`qwen/i18n-content`, `987faf6`): 2.1 GB freed
+(`.claude/` went from 1.7 GB to 0.9 MB).
+
+**Local branches deleted (7, `git branch -d`, which refuses an unmerged branch):** `cl/a11y-i18n` (`86228c6`), `oc/visual-w10` (`86228c6`), `opencode/mesh-opt` (`6994411`), `qwen/i18n-content`
+(`987faf6`), `worktree-agent-a2d98b0eb4e6daa56` (`60dac76`), `worktree-agent-a9d93688011f12bdb` (`9f8b032`), `worktree-agent-ac5abdf50f70def2b` (`a82814d`). Way back: `git branch <name> <hash>`.
+
+**Remote branches deleted (17, `git push origin --delete`, each re-proved an ancestor of `origin/main` in the same command):**
+
+| Branch | Tip |
+|---|---|
+| `arena/01a08c53-igra`, `arena/01a0902d-igra`, `arena/01a09030-igra`, `arena/01a09aec-igra` | `540c57a`, `f724e93`, `b3c1651`, `1870389` |
+| `arena/01a0a4c3-igra`, `arena/01a0ab23-igra`, `arena/01a0b08a-igra`, `arena/01a0bdfa-igra` | `9c2263f`, `77d11ac`, `75d64c1`, `a365088` |
+| `arena/01a0bfe8-igra`, `arena/01a0c324-igra`, `arena/01a0e817-igra`, `arena/9ff86ab5-igra` | `2f48bf1`, `6ae3af7`, `596bb03`, `f6ceafa` |
+| `arena/texture-optimization`, `backup-3d`, `cloud/audit-ce782f8`, `opencode/mesh-opt`, `qwen/i18n-content` | `b563f11`, `5f0c803`, `c27d270`, `6994411`, `987faf6` |
+
+Way back for any of them: `git push origin <tip>:refs/heads/<name>` (every tip is reachable from `main`, so the object is there).
+
+**Kept (14 remote branches not merged into `main`), reviewable:**
+
+| Branch | Commits ahead | What it holds | Why it stays |
+|---|---|---|---|
+| `arena/019ffbd0-igra` | 56 | the first arena's autopilot tests and fixes (August) | unmerged work; owner review |
+| `arena/01a07b1c-igra` | 9 | the UI wave notes | unmerged |
+| `arena/01a09af1-igra` | 2 | the district card textures merge | unmerged |
+| `arena/01a0ab24-igra`, `arena/01a0c589-igra`, `arena/01a0c619-igra`, `arena/01a0c61a-igra`, `arena/01a0c87e-igra` | 1, 2, 3, 1, 1 | QA, rendering, compliance, slop and design documents | unmerged |
+| `arena/01a0f956-igra` | 14 | the art plates of Tier 1 (73 plates) | unmerged; large binaries |
+| `arena/card-unique-rescue` | 1 | the district card uniqueness pass | named in the directive: kept |
+| `claude/keen-cori-0sc9uo`, `claude/serene-sagan-wynb3r` | 2, 8 | a music prompt pack and agent notes | unmerged |
+| `gh-pages` (also the local branch) | 1 | the hosted privacy policy page | it is the page the store links to |
+| `jules/parallel-audit-1403790779115270347` | 3 | the parallel audit of 2026-10-12: two workflows, a glossary, four documents, four simulations | compared file by file with this pass's own (S2): the pass's are the engine-driven or longer ones (the save sim re-implements the signature in Python and repeats the client's key literal; this pass runs the real `SaveSystem._read_validated`), the workflows are the 34 and 43 line first drafts of `pr-sims` and `weekly-full`, and the 19-achievement expansion proposal is a spec nobody has verified at HEAD; **nothing was absorbed, so the branch is not deleted** (the rule: delete only after the artifacts are provably in `main`); it is the owner's to read or drop |
+
+A fetch with `--prune` before the deletion showed the Jules branch, which the remote-tracking list of the start of the pass did not have: it was pushed on 2026-10-12.
 
 ## 6. The rest of K1
 
-K1.6 `.gitignore`, K1.7 the secret sweep, K1.8 the history rewrite (owner approval needed) and K1.9 the totals are filled in by the commits that do them.
+## 7. `.gitignore` (K1.6)
+
+`tools/qa_sim/gitignore_check.py` (a static gate of `tools/check.sh`, with a demo) asks `git check-ignore` about 27 generated, exported or secret paths that must never be tracked (the import cache, the QA logs,
+`.signing/`, the keystore and key suffixes, `build/`, `exports/`, the editor and patch scratch) and 8 that must be (the committed texture sidecars, the attached proof logs, the evidence), and fails on a tracked file that a rule
+ignores. Its first run found five paths with no rule (`*.patch`, `*.orig`, `*.rej`, `*.tmp`, `*.swp`) and three tracked files behind a rule: `scripts/enemies/status_effects.gd.uid` (an engine sidecar committed by accident in `193f637`,
+referenced by no scene; untracked with `git rm --cached`, the file stays on disk) and two pieces of cited evidence (`docs/artifacts/ui-audio/verify.log`, `docs/artifacts/rc16/s21_b5_fix.patch`, which `docs/LEDGER_UIAUDIO.md` and
+`docs/CORRECTION_LOG.md` cite; kept, with a negation rule each). The rules added: `*.patch *.orig *.rej *.tmp *.swp build/ exports/ _tmp_*`. 0 faults after.
+
+## 8. The secret sweep (K1.7)
+
+`tools/qa_sim/secret_scan.py` (a static gate, with a demo) reads every tracked text file (1,808) for the shapes of a Google, OpenAI-style, Anthropic, GitHub, Slack and AWS key, a private key block, a JWT and an assigned secret, and prints
+the file and line, never the value. At HEAD before this pass it found **two real credentials and two false positives**:
+
+| File:line | Kind | Verdict |
+|---|---|---|
+| `opencode.json:9` | an OpenAI-style key (`sk-`, 35 characters) in `apiKey` of the provider `omniroute`, whose `baseURL` is `http://localhost:20128/v1` | a key of the owner's **local** OmniRoute router, committed in `5553c2e` (2026-08-07). Replaced in the tree by `{env:OMNIROUTE_API_KEY}` (OmniRoute is disabled by the owner's rescue directive). It stays in the history. **ROTATE** (below) |
+| `tools/make_keystore.ps1:10` | a PowerShell assignment `$pass = "..."` of 8 characters (the first scan did not know the shape; the scan does now) | the password of a **debug** keystore (alias `tlsdebug`, a local test key, never the release key), a literal since `7066810` (2026-08-08). Replaced by `$env:TLS_DEBUG_KEYSTORE_PASS`, else a fresh value that the script prints. It stays in the history. **ROTATE** (below) |
+| `data/integrity_manifest.json:30` | a 64-hex literal near the word "secrets" | false positive: the SHA-256 of `content/secrets.json` |
+| `tools/qa_sim/release_export_check.py:67` | `sk-` and 24 characters | false positive: the fake key of the scanner's own fixture, introduced in `717e132` |
+
+Both ways: `scan_text` on `git show HEAD:opencode.json` returns the two hits of line 9, on the file of this tree none. History, by `git log --all -G` over every pattern: Google, GitHub, Slack, AWS, Anthropic keys and private key blocks
+0 commits each; `sk-` shapes 2 commits (the two above); the words storepass/keypass 3 commits: `5553c2e` and `6e06710` carry the **public default** `android` of a debug keystore script (not a secret), `7066810` the 8-character literal of the table above. The signing key is not
+in the repository: `export_presets.cfg` has all six keystore and password fields empty (the Gradle build reads `.signing/release.env`, which is untracked and ignored; its contents were never opened by this pass), and `*.keystore *.jks *.p12
+release.env .signing/` are ignored. The save HMAC key of `scripts/core/save_system.gd:21` is a client-side constant by design (`docs/SECURITY_THREAT_MODEL.md`): it ships in every bundle and rotating it would orphan every save.
+
+**Rotate list (the owner's, none can be done from here):**
+1. The OmniRoute local API key that was in `opencode.json` (`sk-` + 31 characters): generate a new one in the OmniRoute dashboard (`http://localhost:20128`), set it as `OMNIROUTE_API_KEY` where OpenCode runs, revoke the old one.
+2. The debug keystore password that `tools/make_keystore.ps1` held in git (8 characters, alias `tlsdebug`): if the debug keystore made with it is on a machine, generate a new one with the script (it now draws a fresh password) and set it in the Godot export dialog; no release is signed with it.
+3. The AppLovin MAX SDK key is still not set (`docs/store/HUMAN_CHECKLIST.md`): when it is, it goes in the owner's environment, never in a tracked file; `secret_scan` will fail the commit that does.
+4. The release keystore and its passwords stay in `.signing/` outside git; keep an offline copy: a lost keystore cannot be recovered from this repository.
+
+## 9. The history rewrite (K1.8): not done, an owner row
+
+The directive allows a rewrite with a force-push **only with the owner's approval logged in `docs/CORRECTION_LOG.md`**; none is logged, and a force-push cannot be undone for a clone that pulled, so it is not done.
+Measured by `git rev-list --objects --all` and `git cat-file --batch-check` (868 MB of blobs, compressed): 193 blobs are over 1 MB (505 MB), **114 of them are in no commit of the tip** (254 MB): the loudness originals
+(`assets/audio/_pre_norm`, 74.8 MB), two old music `.wav` files (`school.wav`, `hospital.wav`, 77 MB), old screen and loading art (29.5 MB), earlier endings art (9.2 MB), raw frames (17 MB) and trailer stills. Removing exactly
+those would take the history from 868 MB to about 614 MB; **the directive's 500 MB needs 114 MB more**, and the rest is the tip's own large files (110.7 MB of evidence frames in `docs/stills`, 58 MB of audio, 26 MB of
+trailer, 23 MB of card art, 19 MB of shots) that a rewrite may not take. **Owner row K-1, executable** (after saying yes in `docs/CORRECTION_LOG.md`, with every other clone and the GitHub forks told to re-clone):
+
+```bash
+git clone --mirror . ../tls-history-backup.git                     # a full copy first
+git rev-list --objects --all | git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' | awk '$1=="blob" && $3>1048576 {print $2}' | sort -u > big.txt
+git ls-tree -r HEAD | awk '{print $3}' | sort -u > keep.txt
+comm -23 big.txt keep.txt > strip.txt                                # large and not in the tip: 114 blobs
+git filter-repo --strip-blobs-with-ids strip.txt                     # NOT --strip-blobs-bigger-than: that would take the tip's own files too
+git remote add origin https://github.com/maxxxxx55555/igra.git && git push --force-with-lease origin main && git push --force --tags origin
+```
+
+The same rewrite takes the `opencode.json` key out of the history if `git filter-repo --replace-text` is added with the old value (not written here).
+
+## 10. Totals (K1.9)
+
+| | Before | After |
+|---|---|---|
+| Tracked files | 4,305 | 3,810 (495 deleted, 1 added: the ledger; `status_effects.gd.uid` untracked) |
+| Tracked bytes | 671,512,348 (640.4 MB) | 498,423,643 (475.3 MB): **173,088,705 bytes (165.1 MB) removed** |
+| Directories removed | 0 | 4 (`assets/audio/_pre_norm`, `assets/_orphaned`, `assets/textures/items_legacy`, `assets/grading`) |
+| Files removed | 0 | 495 (the four directories 475, ten quarantined, ten scratch) |
+| Local worktrees | 5 (2.1 GB) | 0 |
+| Local branches | 9 | 2 (`main`, `gh-pages`) |
+| Remote branches | 32 (`main`, 17 merged, 14 not) | 15 (`main` and 14 unmerged, section 5) |
+| `.git` on disk | 885 MB | 883 MB (the history is untouched, section 9) |
+| The shipped `pck` and bundle | - | unchanged by this cleanup: every removed path was on the export exclusion list; the bundle is rebuilt at the ship step and its size recorded in `docs/RELEASE_ARTIFACTS.md` |
+
+## 11. After the cleanup (K1.10)
+
+The static battery, `flow_check` and `scene_node_check` read the same after as before (the run is in `docs/RUN_STATE.md`, S23-K1); the engine side (the compile gate, the closeout and the boot check) is in the battery of the
+verification step, run on the tree that ships. A red check there is a path to restore from the backup tag the same turn, and a row here.

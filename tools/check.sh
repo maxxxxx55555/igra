@@ -432,6 +432,16 @@ if "$PY" tools/qa_sim/store_frames_check.py --demo >/dev/null 2>&1 && "$PY" tool
 else
   bad "frame tools (см. 'python tools/qa_sim/store_frames_check.py --demo')"
 fi
+if "$PY" tools/qa_sim/gitignore_check.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/gitignore_check.py >/dev/null 2>&1; then
+  ok "gitignore_check (every generated, exported and secret path is ignored, the evidence is not, no tracked file hides behind a rule: docs/CLEANUP_LEDGER.md)"
+else
+  bad "gitignore_check (см. 'python tools/qa_sim/gitignore_check.py')"
+fi
+if "$PY" tools/qa_sim/secret_scan.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/secret_scan.py >/dev/null 2>&1; then
+  ok "secret_scan (no key, token, private key or assigned secret in any tracked text file: docs/CLEANUP_LEDGER.md section 7)"
+else
+  bad "secret_scan (см. 'python tools/qa_sim/secret_scan.py')"
+fi
 
 # ─────────────────────────── проверки в движке ───────────────────────────
 if [[ $STATIC_ONLY -eq 1 ]]; then

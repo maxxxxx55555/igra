@@ -7,7 +7,7 @@ $ErrorActionPreference = "Stop"
 $root = Split-Path -Parent $PSScriptRoot
 $dname = "CN=TLS Android Debug,O=TLSCorp,C=RU"
 $out = Join-Path $root "tls_debug.keystore"
-$pass = "tlsdebug"
+$pass = if ($env:TLS_DEBUG_KEYSTORE_PASS) { $env:TLS_DEBUG_KEYSTORE_PASS } else { [guid]::NewGuid().ToString("N") }  # a debug key: from the environment, else a fresh one that is printed below; never a literal in git
 
 $keytool = Get-Command keytool -ErrorAction SilentlyContinue
 if (-not $keytool) {

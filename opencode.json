@@ -6,7 +6,7 @@
       "name": "OmniRoute (local)",
       "options": {
         "baseURL": "http://localhost:20128/v1",
-        "apiKey": "sk-cf20f4e654cbd4db-d41698-c2536ca1"
+        "apiKey": "{env:OMNIROUTE_API_KEY}"
       },
       "models": {
         "auto": {
