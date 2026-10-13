@@ -1,0 +1,14 @@
+# proof s23_actionlint
+# utc 20261013T062950Z
+# head f978a38 (uncommitted paths: 113)
+# env none
+# cmd python C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/5fa8d500-393b-43b7-95de-04d09fcc9e42/scratchpad/run_actionlint.py
+actionlint binary: C:\Users\Maxsim\AppData\Roaming\Python\Python311\Scripts\actionlint.exe
+1.7.12
+installed by downloading from release page
+built with go1.26.1 compiler for windows/amd64
+pr-sims.yml exit=0 findings=0
+static.yml exit=0 findings=0
+weekly-full.yml exit=0 findings=0
+actionlint total exit = 0
+# EXIT=0

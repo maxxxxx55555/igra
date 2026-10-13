@@ -1,0 +1,27 @@
+# proof s23_actionlint_bites
+# utc 20261013T063004Z
+# head f978a38 (uncommitted paths: 113)
+# env none
+# cmd bash -c "C:/Users/Maxsim/AppData/Roaming/Python/Python311/Scripts/actionlint.exe" -no-color "C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/5fa8d500-393b-43b7-95de-04d09fcc9e42/scratchpad/bad_pr_sims.yml"; echo actionlint_on_the_broken_copy_exit=$?
+..\..\..\AppData\Local\Temp\claude\C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT\5fa8d500-393b-43b7-95de-04d09fcc9e42\scratchpad\bad_pr_sims.yml:14:3: "runs-on" section is missing in job "static" [syntax-check]
+   |
+14 |   static:
+   |   ^~~~~~~
+..\..\..\AppData\Local\Temp\claude\C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT\5fa8d500-393b-43b7-95de-04d09fcc9e42\scratchpad\bad_pr_sims.yml:15:5: unexpected key "runs-onn" for "job" section. expected one of "concurrency", "container", "continue-on-error", "defaults", "env", "environment", "if", "name", "needs", "outputs", "permissions", "runs-on", "secrets", "services", "snapshot", "steps", "strategy", "timeout-minutes", "uses", "with" [syntax-check]
+   |
+15 |     runs-onn: ubuntu-latest
+   |     ^~~~~~~~~
+..\..\..\AppData\Local\Temp\claude\C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT\5fa8d500-393b-43b7-95de-04d09fcc9e42\scratchpad\bad_pr_sims.yml:29:3: "runs-on" section is missing in job "sims" [syntax-check]
+   |
+29 |   sims:
+   |   ^~~~~
+..\..\..\AppData\Local\Temp\claude\C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT\5fa8d500-393b-43b7-95de-04d09fcc9e42\scratchpad\bad_pr_sims.yml:30:5: unexpected key "runs-onn" for "job" section. expected one of "concurrency", "container", "continue-on-error", "defaults", "env", "environment", "if", "name", "needs", "outputs", "permissions", "runs-on", "secrets", "services", "snapshot", "steps", "strategy", "timeout-minutes", "uses", "with" [syntax-check]
+   |
+30 |     runs-onn: ubuntu-latest
+   |     ^~~~~~~~~
+..\..\..\AppData\Local\Temp\claude\C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT\5fa8d500-393b-43b7-95de-04d09fcc9e42\scratchpad\bad_pr_sims.yml:62:38: property "simm" is not defined in object type {sim: string} [expression]
+   |
+62 |       - run: python tools/qa_sim/${{ matrix.simm }}
+   |                                      ^~~~~~~~~~~
+actionlint_on_the_broken_copy_exit=1
+# EXIT=0

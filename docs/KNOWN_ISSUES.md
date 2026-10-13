@@ -138,7 +138,7 @@ scattered magenta/purple particle-like dots, and at least one object rendering a
 magenta/purple rings. The HUD (health/stamina/battery bars, radar, all text) renders perfectly
 clean and readable on top of it — this is a 3D-world-rendering-only problem, not a whole-engine
 or UI-layer problem. GPU: `ATI Technologies Inc. — AMD Radeon(TM) Graphics` (integrated),
-renderer: `gl_compatibility` (`project.godot:304`, used for both desktop and mobile presets).
+renderer: `gl_compatibility` (`project.godot:272-273`, used for both desktop and mobile presets).
 
 **Ruled out already**: not an import-cache issue (ran a full `--headless --import` immediately
 before capturing, zero texture-load errors in the capture log); not shader compile failures

@@ -1,0 +1,47 @@
+# Once a week, the whole static battery and every simulation of tools/qa_sim on the head of main, and an issue when one regresses (a drift that no pull request
+# caused: a document that cites a line that has moved, a store text that no longer matches the code, a tool that a newer runner breaks). The engine gates are not
+# here: they need Godot and a window (docs/RELEASE_RUNBOOK.md). Run it by hand with the button of the Actions tab.
+name: weekly-full
+on:
+  schedule:
+    - cron: "17 3 * * 1"
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+jobs:
+  full:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install gdtoolkit==4.5.0 ruff==0.16.9 shellcheck-py==0.11.0.1 actionlint-py==1.7.12.25 pillow numpy
+      - name: Static battery
+        id: static
+        run: bash tools/check.sh --static
+      - name: Simulations
+        id: sims
+        if: always()
+        run: |
+          failed=""
+          for sim in balance_sim achievements_sim daily_sim ngplus_table endings_sim puzzle_economy_sim lighting_stage_sim i18n_placeholder_fuzz privacy_audit store_answers listing_audit project_input_check settings_consumer_check title_check hardcoded_text_gate i18n_truth_gate drawcall_estimate; do
+            python "tools/qa_sim/$sim.py" > "/tmp/$sim.out" 2>&1 || failed="$failed $sim"
+          done
+          python tools/qa_sim/difficulty_curve.py --check > /tmp/difficulty_curve.out 2>&1 || failed="$failed difficulty_curve"
+          python tools/qa_sim/consistency_check.py --check > /tmp/consistency_check.out 2>&1 || failed="$failed consistency_check"
+          python tools/qa_sim/save_migration_sim.py --static > /tmp/save_migration_sim.out 2>&1 || failed="$failed save_migration_sim"
+          python tools/af5_check.py > /tmp/af5_check.out 2>&1 || failed="$failed af5_check"
+          echo "failed=${failed# }" >> "$GITHUB_OUTPUT"
+          test -z "$failed"
+      - name: Issue on a regression
+        if: failure()
+        run: |
+          gh issue create --title "weekly-full: a gate regressed on main (run $GITHUB_RUN_ID)" \
+            --body "The weekly run failed. Static battery: ${{ steps.static.outcome }}. Simulations: ${{ steps.sims.outcome }}, failed: ${{ steps.sims.outputs.failed }}. Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
