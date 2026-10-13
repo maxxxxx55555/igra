@@ -40,3 +40,27 @@ when something walkable carries it; no shipped geometry does yet (`docs/DISTRICT
 | Events | the UI stings (achievement, secret, boss, power restored) | -6 to -16 dB on the UI bus | EventBus |
 
 No constant hum bed exists (owner, rc14). The lit twins of eight districts are still missing: owner rows with their briefs in `docs/MUSIC_BRIEF.md`.
+
+## Loudness: measured, and a decision
+
+Measured by `python tools/qa_sim/audio_loudness.py --write docs/AUDIO_LOUDNESS_TABLE.md` (ffmpeg ebur128, the whole shipped audio, 219 files). The consistency of a mix is
+how little a category moves around its own level, then how far that level is from the target:
+
+| Category | Files | Median LUFS | Spread (SD, LU) | Over 3 LU from the median | Canon (`docs/PRODUCTION_BIBLE.md` section 3) | Directive |
+|---|---|---|---|---|---|---|
+| music | 22 | -18.0 | 1.08 | 1 (`music_combat.ogg`, 3.9 LU quieter) | none | -14 |
+| ambient beds | 22 | -18.1 | 0.98 | 0 | -18 | -20 |
+| ambient details | 40 | -18.9 | 0.95 | 0 | -18, played 20 dB under the bed | -20 |
+| sfx | 122 (69 under 0.4 s: no integrated value) | -15.0 | 1.69 | 6 (three reloads, 3.2 to 5.9 LU quieter, the generator loop 3.2 quieter; `ui_achievement.wav` 3.6 and the crawler scrape 3.9 louder) | -14 | -10 |
+
+Every category sits within about 1 LU of its own median (the SFX within 1.7), so the **mix is consistent**; the absolute level of each is the canon's, which was applied by
+`ffmpeg loudnorm` in the audio wave (`docs/AUDIO_LOUDNESS.md`) and has not moved. **Decision (TZ row AUD-23): the canon stays, the directive's -14 / -10 / -20 are not applied.**
+Reasons: (a) -14 LUFS is the loudness of finished music on a streaming service; in this game the music is a bed under the footsteps and the cues of the monsters that the
+stealth loop is played by, and at -14 it would sit 4 LU above the ambience beds and 1 LU above the median SFX; (b) +5 LU on the SFX (-15 to -10) puts their true peaks (the
+highest is -1.4 dBFS) over 0 dBFS, which is clipping, so no bus gain can reach it without a limiter or a re-master of 122 files; (c) the canon is the project's own,
+written in `docs/PRODUCTION_BIBLE.md` and `docs/STYLE_GUIDE.md`. The distance to the directive, for the owner who wants it: music +4.0 LU, SFX +5.0 LU, beds and details about -2 LU. **Owner row A-1:** re-master to the directive's
+targets with a limiter, if the owner decides the music should be louder.
+
+True peak: the canon limit is -1.5 dBFS. Over the 219 files none is over -1.0 dBFS (the directive's limit and what `--check` fails on), and 24 are between -1.5 and -1.0: 4 of
+the music, 15 of the ambient details, 5 of the SFX; the 22 beds all stand at -2.7 or lower. Not re-encoded: a second lossy generation for half a decibel of margin costs more in
+quality than it gives. **Owner row A-2:** if the canon is to be held to the letter, re-encode those 24 from their sources.

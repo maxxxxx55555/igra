@@ -24,6 +24,7 @@ CATEGORIES = {
 # The directive's targets (-14 music, -10 sfx, -20 ambient) and the canon of docs/PRODUCTION_BIBLE.md and docs/STYLE_GUIDE.md section 5 as measured in docs/AUDIO_CONSISTENCY.md.
 DIRECTIVE_LUFS = {"music": -14.0, "sfx": -10.0, "ambient beds": -20.0, "ambient details": -20.0}
 PEAK_LIMIT_DB = -1.0
+CANON_PEAK_DB = -1.5  # docs/STYLE_GUIDE.md section 5: true peak at most -1.5 dBFS
 SPREAD_LU = 3.0
 SUFFIXES = {".ogg", ".wav", ".mp3"}
 GATED = -69.0
@@ -75,16 +76,16 @@ def summary(rows):
 
 
 def table(rows):
-    lines = ["| Category | Files | Integrated LUFS: min / median / max | Mean | Spread (SD, LU) | Files over %.0f LU from the median | True peak max (dBFS) | Files over %.0f dBFS | Gated (under 0.4 s) | Directive target |" % (SPREAD_LU, PEAK_LIMIT_DB),
-             "|---|---|---|---|---|---|---|---|---|---|"]
+    lines = ["| Category | Files | Integrated LUFS: min / median / max | Mean | Spread (SD, LU) | Files over %.0f LU from the median | True peak max (dBFS) | Files over %.0f dBFS | Files over %.1f dBFS (canon) | Gated (under 0.4 s) | Directive target |" % (SPREAD_LU, PEAK_LIMIT_DB, CANON_PEAK_DB),
+             "|---|---|---|---|---|---|---|---|---|---|---|"]
     for category, n, lufs, peaks, short, loud, far in summary(rows):
         target = DIRECTIVE_LUFS.get(category)
-        lines.append("| %s | %d | %s | %s | %s | %d | %s | %d | %d | %s |" % (
+        lines.append("| %s | %d | %s | %s | %s | %d | %s | %d | %d | %d | %s |" % (
             category, n,
             "%.1f / %.1f / %.1f" % (min(lufs), statistics.median(lufs), max(lufs)) if lufs else "-",
             "%.1f" % statistics.mean(lufs) if lufs else "-",
             "%.2f" % statistics.pstdev(lufs) if lufs else "-", len(far),
-            "%.1f" % max(peaks) if peaks else "-", len(loud), short,
+            "%.1f" % max(peaks) if peaks else "-", len(loud), sum(1 for p in peaks if p > CANON_PEAK_DB), short,
             "%.0f LUFS" % target if target is not None else "none"))
     return "\n".join(lines)
 

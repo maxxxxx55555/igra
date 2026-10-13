@@ -1,7 +1,7 @@
 extends Area3D
 
 @export var debug_color: Color = Color(0.2, 0.6, 1.0, 0.15)
-@export var debug_visible: bool = true
+@export var debug_visible: bool = false
 
 var _camera: Node3D = null
 
