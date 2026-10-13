@@ -422,6 +422,11 @@ if "$PY" tools/qa_sim/consistency_check.py --demo >/dev/null 2>&1 && "$PY" tools
 else
   bad "consistency_check (см. 'python tools/qa_sim/consistency_check.py --check')"
 fi
+if "$PY" tools/qa_sim/difficulty_curve.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/difficulty_curve.py --check >/dev/null 2>&1; then
+  ok "difficulty_curve (no district is harder when restored, no step of the enemy strength over x2.2: docs/DIFFICULTY_CURVE.md)"
+else
+  bad "difficulty_curve (см. 'python tools/qa_sim/difficulty_curve.py --check')"
+fi
 
 # ─────────────────────────── проверки в движке ───────────────────────────
 if [[ $STATIC_ONLY -eq 1 ]]; then
