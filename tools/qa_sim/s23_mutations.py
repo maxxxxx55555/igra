@@ -3,6 +3,7 @@
 
 usage: python tools/qa_sim/s23_mutations.py run [--tag s23]    applies every mutation, runs the s23 closeout group through proof_run --launch, restores the files byte for byte, and judges
        python tools/qa_sim/s23_mutations.py judge LOG           re-judges a saved run (no engine)
+       python tools/qa_sim/s23_mutations.py apply | restore     only the two halves, for a chain that runs the group itself inside one launch row (the tree must be clean before `apply`)
        python tools/qa_sim/s23_mutations.py --demo
 A mutation is a one-line change that puts back what a fix of the pass changed (a constant, a clause). The run is judged against two sets: every check named by a mutation must FAIL, and every other
 check must be ok. Together with a green run of the same group on the unmutated tree (the "post" run) that is the both-ways proof of AF2: the check fails on the old behaviour and passes on the new.
@@ -138,6 +139,10 @@ if __name__ == "__main__":
         rows, bad = judge(pathlib.Path(args[1]).read_text(encoding="utf-8", errors="replace"))
         print("\n".join(rows))
         sys.exit(1 if bad else 0)
+    if args and args[0] in ("apply", "restore"):
+        (apply if args[0] == "apply" else restore)()
+        print("s23_mutations: %s done (%d mutations)" % (args[0], len(MUTATIONS)))
+        sys.exit(0)
     if args and args[0] == "run":
         sys.exit(run(args[args.index("--tag") + 1] if "--tag" in args else "s23"))
-    sys.exit("usage: s23_mutations.py run [--tag s23] | judge LOG | --demo")
+    sys.exit("usage: s23_mutations.py run [--tag s23] | apply | restore | judge LOG | --demo")
