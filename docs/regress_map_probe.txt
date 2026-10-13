@@ -1,3 +1,0 @@
-alive
-map added, children=1
-frame done, map children=2
