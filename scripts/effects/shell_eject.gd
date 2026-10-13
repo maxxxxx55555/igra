@@ -56,6 +56,7 @@ static func _take(tree: SceneTree) -> RigidBody3D:
 	fresh.mass = CASE_MASS
 	fresh.collision_layer = 0
 	fresh.collision_mask = 1
+	fresh.continuous_cd = true
 	var bounce := PhysicsMaterial.new()
 	bounce.bounce = BOUNCE
 	bounce.friction = 0.6
