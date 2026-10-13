@@ -62,10 +62,11 @@ func _dressing() -> Node3D:
 
 ## The weather rolls a new state every 45 s and its overlay darkens the screen by up to half, and the random events flash and flicker the light: a frame must depend on neither.
 func _pin_world() -> void:
-	WeatherSystem.set_process(false)
+	WeatherSystem.set("process_mode", Node.PROCESS_MODE_DISABLED)
 	WeatherSystem.current = WeatherSystem.Weather.CLEAR
 	WeatherSystem.call("_emit")
-	RandomEvents.set_process(false)
+	RandomEvents.set("process_mode", Node.PROCESS_MODE_DISABLED)
+	QualityManager.enabled = false  # a measurement reads one tier: the quality manager steps it under 30 FPS (CORRECTION_LOG 241)
 
 func _flashlight(player: Node3D, want: bool) -> void:
 	if player.has_method("toggle_flashlight") and bool(player.get("flashlight_enabled")) != want:

@@ -1,5 +1,5 @@
 extends RefCounted
-## Session 23 (docs/PERF_PASS.md): dynamic resolution, the shader warm-up, the edges of the perf gate's budgets, the loot a killed monster leaves and the samples of the 3D by tier. Wired into _closeout_check_runner.gd as
+## Session 23 (docs/PERF_PASS.md): dynamic resolution, the quality manager, the shader warm-up, the edges of the perf gate's budgets, the loot a killed monster leaves and the samples of the 3D by tier. Wired into _closeout_check_runner.gd as
 ## `await Rc23Perf.run(self)`; CLOSEOUT_ONLY=s23 runs it with the others. The viewport's scale and the settings a check touches are put back.
 
 const _Dynamic := preload("res://scripts/systems/dynamic_resolution.gd")
@@ -8,6 +8,7 @@ const _Gate := preload("res://scripts/tools/_perf_check_runner.gd")
 static func run(r: Node) -> void:
 	r._playing()
 	_dynamic_resolution(r)
+	_quality_manager(r)
 	await _warm_up(r)
 	_gate_edges(r)
 	_loot_stays_with_district(r)
@@ -110,3 +111,55 @@ static func _msaa_follows_tier(r: Node) -> void:
 		modes.append(viewport.msaa_3d)
 	SettingsManager.set_graphics_tier(tier0)
 	r._ok(modes == [0, 1, 1, 2], "MSAA1 the 3D samples follow the tier: Low, Medium, High, Ultra read %s (off, 2x, 2x, 4x)" % [modes])
+
+static func _tier() -> int:
+	return int(SettingsManager.get_setting("graphics_tier", 2))
+
+static func _feed(qm: Node, fps: float, seconds: float) -> void:
+	for i in int(seconds * 2.0):
+		qm.call("step", fps, 0.5)
+
+## The seconds the readings need to bring the tier to `target`, or -1.0 when it is not there after `limit` seconds.
+static func _until(qm: Node, fps: float, limit: float, target: int) -> float:
+	var t: float = 0.0
+	while _tier() != target and t < limit:
+		qm.call("step", fps, 0.5)
+		t += 0.5
+	return t if _tier() == target else -1.0
+
+## QM1 to QM4 (CORRECTION_LOG 241): the quality manager of T17, stepped with fake readings (the real one's own frames are paused for the check). QM1: 5 s under 30 FPS drops the tier, and under the 30 FPS cap of Low and Medium
+## a reading of 29.5, the most that cap gives, neither drops it again nor keeps it down: the tier is raised after the wait, and never above the player's own. QM2: the wait grows with each drop. QM3: the tier the player chose is kept
+## apart from the one the manager applied. QM4: and follows the player's own change.
+static func _quality_manager(r: Node) -> void:
+	var qm: Node = r.get_node("/root/QualityManager")
+	var tier0: int = _tier()
+	qm.set_process(false)
+	SettingsManager.set_graphics_tier(2)
+	_feed(qm, 24.0, 4.5)
+	var early: bool = _tier() == 2
+	_feed(qm, 24.0, 0.5)
+	var dropped: bool = _tier() == 1 and Engine.max_fps == 30
+	_feed(qm, 29.5, 15.0)
+	var held: bool = _tier() == 1
+	var first: float = _until(qm, 29.5, 60.0, 2)
+	var raised: bool = first > 0.0 and Engine.max_fps == 60
+	_feed(qm, 60.0, 60.0)
+	var capped: bool = _tier() == 2
+	r._ok(early and dropped and held and raised and capped, "QM1 quality manager: 4.5 s at 24 FPS keeps the tier (%s), 5 s drops it to 1 with the 30 FPS cap (%s), 15 s at 29.5 FPS neither drop it again nor raise it (%s), the raise comes (%s) with the 60 FPS cap, and a minute at 60 FPS goes no higher than the player's tier (%s)" % [early, dropped, held, raised, capped])
+	SettingsManager.set_graphics_tier(2)
+	_feed(qm, 24.0, 5.0)
+	var one: float = _until(qm, 29.5, 700.0, 2)
+	_feed(qm, 24.0, 5.0)
+	var two: float = _until(qm, 29.5, 700.0, 2)
+	r._ok(one > 0.0 and two > one, "QM2 quality manager: the wait before a raise is %s s after the first drop and %s s after the second" % [one, two])
+	SettingsManager.set_graphics_tier(2)
+	SettingsManager.set_setting("graphics_ceiling", -1)
+	_feed(qm, 24.0, 5.0)
+	var kept: int = int(SettingsManager.get_setting("graphics_ceiling", -1))
+	r._ok(kept == 2 and _tier() == 1, "QM3 quality manager: after a drop to tier %d the saved ceiling is %d (the player's 2)" % [_tier(), kept])
+	SettingsManager.set_setting("graphics_ceiling", -1)
+	SettingsManager.set_graphics_tier(1)
+	var chosen: int = int(SettingsManager.get_setting("graphics_ceiling", -1))
+	r._ok(chosen == 1, "QM4 quality manager: the player's own change to tier 1 is saved as the ceiling (%d)" % chosen)
+	SettingsManager.set_graphics_tier(tier0)
+	qm.set_process(true)

@@ -256,6 +256,7 @@ func _run() -> void:
 	var ads := get_node_or_null("/root/AdService")
 	if ads:
 		ads.enabled = false
+	QualityManager.enabled = false  # a measurement reads one tier: the quality manager steps it under 30 FPS (CORRECTION_LOG 241)
 	# The run shows English at text size 1 whatever the profile says; the profile's own values come back at the end.
 	var lang0: String = LocalizationManager.current_lang
 	var size0: int = int(SettingsManager.get_setting("text_size", 1))

@@ -82,6 +82,7 @@ func _boot() -> bool:
 		get_tree().quit(1)
 		return false
 	SaveSystem.mark_onboard_done()
+	QualityManager.enabled = false  # a measurement reads one tier: the quality manager steps it under 30 FPS (CORRECTION_LOG 241)
 	Routes.start_game()
 	if not await _wait_until(func() -> bool: return GameManager.is_playing() and get_tree().get_first_node_in_group("player") != null, 20.0):
 		printerr("[ablate] never reached gameplay")

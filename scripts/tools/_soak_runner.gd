@@ -49,9 +49,10 @@ func _run() -> void:
 	var ads := get_node_or_null("/root/AdService")
 	if ads:
 		ads.enabled = false
+	QualityManager.enabled = false  # a measurement reads one tier: the quality manager steps it under 30 FPS (CORRECTION_LOG 241)
 	if not await _boot():
 		return
-	print("[soak] start mode=%s minutes=%d hash=%s %s" % [_mode, _minutes, _hash, _mem()])
+	print("[soak] start mode=%s minutes=%d hash=%s tier=%d cap=%d %s" % [_mode, _minutes, _hash, int(SettingsManager.get_setting("graphics_tier", -1)), Engine.max_fps, _mem()])
 	if _mode == "stress":
 		await _stress()
 	else:

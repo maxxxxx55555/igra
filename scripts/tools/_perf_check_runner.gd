@@ -22,6 +22,7 @@ func _run() -> void:
 		return
 	# a fresh profile opens the onboarding cards on game_started: they pause the tree and dim the frame, and these runs measure the game
 	SaveSystem.mark_onboard_done()
+	QualityManager.enabled = false  # a measurement reads one tier: the quality manager steps it under 30 FPS (CORRECTION_LOG 241)
 	Routes.start_game()
 	if not await _wait_until(func() -> bool: return GameManager.is_playing(), 10.0):
 		printerr("[perf] never entered PLAYING")
