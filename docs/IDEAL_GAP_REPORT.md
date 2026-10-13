@@ -81,7 +81,7 @@ this pass closed two real items.
 - **`docs/OWNER_HANDOFF.md` (new)** consolidates all owner-blocked work into one document:
   19 music prompts inline (was previously only in `docs/MUSIC_RECIPE.md`), the exact windowed
   screenshot command, release-ops steps (and flags a real keystore-command inconsistency
-  between `docs/RELEASE_CHECKLIST.md` and `docs/store/HUMAN_CHECKLIST.md` rather than silently
+  between `docs/release_checklist.md` and `docs/store/HUMAN_CHECKLIST.md` rather than silently
   picking one), and the 3 economy options as neutral decision cards. Also corrects a stale
   gap-report line: "8 before/after, 8 store shots" conflated two different deliverables — the
   5 `assets/store/screenshot_0X.png` files are already shipped (confirmed on disk), only

@@ -150,7 +150,7 @@ edit reverted, never committed).
 
 **Not established, genuinely unknown**: whether this is the game actually rendering wrong on
 this hardware/driver/renderer combination (which would mean real players on similar low-end/
-integrated GPUs — exactly the target Android min-spec per `docs/RELEASE_CHECKLIST.md` — could
+integrated GPUs — exactly the target Android min-spec per `docs/release_checklist.md` — could
 see the same thing), or an artifact specific to the `get_tree().root.get_texture().get_image()`
 viewport-readback capture method used by `capture_stills.gd` (a driver-level framebuffer-readback
 bug is a known class of issue on some integrated-GPU OpenGL drivers, and would explain corrupted

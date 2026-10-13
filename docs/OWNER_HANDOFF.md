@@ -85,7 +85,7 @@ one (verified separately, still clean).
 
 ## 3. Release ops (Android / Play Store)
 
-Condensed from `docs/RELEASE_CHECKLIST.md` + `docs/store/HUMAN_CHECKLIST.md` — see those for
+Condensed from `docs/release_checklist.md` + `docs/store/HUMAN_CHECKLIST.md` — see those for
 the full detail.
 
 1. **AppLovin MAX ads**: create an account + app entries at https://dash.applovin.com, get an
@@ -97,7 +97,7 @@ the full detail.
    `use_gradle_build=true`) will work at all.
 3. **Verify the AppLovin MAX plugin is checked** in Export dialog → Android preset → Plugins
    tab (it's set by hand in `export_presets.cfg`; the editor GUI is the source of truth).
-4. **Release keystore** — ⚠️ `docs/RELEASE_CHECKLIST.md` and `docs/store/HUMAN_CHECKLIST.md`
+4. **Release keystore** — ⚠️ `docs/release_checklist.md` and `docs/store/HUMAN_CHECKLIST.md`
    give two DIFFERENT commands (different filename/alias each) — pick ONE, don't run both:
    ```bash
    # RELEASE_CHECKLIST.md's version:
