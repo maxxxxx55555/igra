@@ -28,7 +28,7 @@ const FOG_DISTRICTS: Array[StringName] = [&"warehouses", &"industrial", &"substa
 const FOG_SHADER := preload("res://assets/shaders/height_fog_card.gdshader")
 const FOG_CARD_M: float = 46.0
 const FOG_Y: float = 0.35
-const FOG_ALPHA: float = 0.45
+const FOG_BY_STAGE: Array[float] = [0.12, 0.25, 0.35, 0.45]
 const FOG_AT: Array[Vector3] = [Vector3(-14.0, 0.0, -10.0), Vector3(12.0, 0.0, 2.0), Vector3(-4.0, 0.0, 16.0)]
 ## Where the bench stands from the power switch (the switch is at the corner of the middle block and the next).
 const REST_FROM_SWITCH := Vector3(6.0, 0.0, 5.0)
@@ -57,6 +57,7 @@ var _landmark: Node3D = null
 var _district_id: StringName = &""
 var _clear: Array[Vector2] = []
 var _pool_mat: StandardMaterial3D = null
+var _fog_mat: ShaderMaterial = null
 var _inner: float = 3.5
 var _grid: float = 16.0
 var _walk: float = 4.25
@@ -259,16 +260,15 @@ func _batch(node_name: String, mesh: Mesh, xforms: Array[Transform3D], colors: A
 func _add_fog() -> void:
 	if not FOG_DISTRICTS.has(_district_id) or int(SettingsManager.get_setting("graphics_tier", 2)) < 1:
 		return
-	var mat := ShaderMaterial.new()
-	mat.shader = FOG_SHADER
-	mat.set_shader_parameter("alpha", FOG_ALPHA)
+	_fog_mat = ShaderMaterial.new()
+	_fog_mat.shader = FOG_SHADER
 	var card := PlaneMesh.new()
 	card.size = Vector2(FOG_CARD_M, FOG_CARD_M)
 	for i in FOG_AT.size():
 		var fog := MeshInstance3D.new()
 		fog.name = "FogCard%d" % i
 		fog.mesh = card
-		fog.material_override = mat
+		fog.material_override = _fog_mat
 		fog.position = FOG_AT[i] + Vector3(0.0, FOG_Y, 0.0)
 		fog.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		add_child(fog)
@@ -281,10 +281,12 @@ func _on_stage_changed(id: StringName, stage: int) -> void:
 	if id == _district_id:
 		_apply_stage(stage)
 
-## The landmark and the pools of the lamps follow the power of the district.
+## The landmark, the pools of the lamps and the ground fog follow the power of the district.
 func _apply_stage(stage: int) -> void:
 	if is_instance_valid(_landmark):
 		_LANDMARK.apply_stage(_landmark, stage)
+	if _fog_mat != null:
+		_fog_mat.set_shader_parameter("alpha", FOG_BY_STAGE[clampi(stage, 0, FOG_BY_STAGE.size() - 1)])
 	_pool_mat.albedo_color = Color(BRASS, POOL_BY_STAGE[clampi(stage, 0, POOL_BY_STAGE.size() - 1)])
 
 ## A bench under a lantern near the power switch, lit in every stage: the place where the Keeper stops to restore a district.

@@ -45,7 +45,8 @@ static func _least_per_block(props: Node, dressing: Node, skip_dressing: bool) -
 			var mmi := child as MultiMeshInstance3D
 			if mmi == null or mmi.multimesh == null:
 				continue
-			var key: String = "solid" if SOLID.has(mmi.name) else ("scatter" if SCATTER.has(mmi.name) else ("lamps" if LAMPS.has(mmi.name) else ""))
+			var node_name: String = String(mmi.name)
+			var key: String = "solid" if SOLID.has(node_name) else ("scatter" if SCATTER.has(node_name) else ("lamps" if LAMPS.has(node_name) else ""))
 			if key.is_empty():
 				continue
 			for i in mmi.multimesh.instance_count:
