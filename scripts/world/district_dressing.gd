@@ -1,7 +1,8 @@
 extends Node3D
-## What a district holds between its streets (docs/DENSITY_PLAN.md): litter, leaves, puddles, bins, hydrants, crates and barrels in every block, the landmark behind
-## the skyline ring and a lit bench by the power switch. Visual only like the trees and benches of street_props.gd: no collision and no navigation, a seeded stream
-## of its own so no other placement moves. Everything of one kind is one MultiMesh, so the whole is about ten draw calls.
+## What a district holds between its streets (docs/DENSITY_PLAN.md): litter, leaves, soft wet patches, bins, hydrants, crates and barrels in every block, a pool of
+## light under each streetlamp that reaches into the block beside it, the landmark behind the skyline ring and a lit bench by the power switch. Visual only like
+## the trees and benches of street_props.gd: no collision and no navigation, a seeded stream of its own so no other placement moves. Everything of one kind is one
+## MultiMesh, so the whole is about thirteen draw calls.
 
 const _BIN := preload("res://assets/mesh/mesh_trash_can.res")
 const _HYDRANT := preload("res://assets/mesh/mesh_hydrant.res")
@@ -14,12 +15,18 @@ const MARKING_TOP_Y: float = 0.08
 ## Solid props keep this far from anything the player can use or hide in.
 const KEEP_CLEAR_M: float = 1.8
 const HYDRANTS: int = 5
-const LAMP_RANGE_M: float = 7.0
-const LAMP_ENERGY: float = 0.9
+const LAMP_RANGE_M: float = 9.0
+const LAMP_ENERGY: float = 1.4
+## The pool of light under a streetlamp: its diameter, how far toward the block it is moved from the pole, its opacity per power stage (DARK, PARTIAL, STREETS, FULL).
+const POOL_M: float = 9.0
+const POOL_TOWARD_BLOCK_M: float = 2.2
+const POOL_Y: float = 0.095
+const POOL_BY_STAGE: Array[float] = [0.0, 0.05, 0.11, 0.16]
+const REST_POOL_ALPHA: float = 0.22
 ## Where the bench stands from the power switch (the switch is at the corner of the middle block and the next).
 const REST_FROM_SWITCH := Vector3(6.0, 0.0, 5.0)
 const BRASS := Color("#c9a24a")
-const LITTER_COLORS: Array[Color] = [Color(0.34, 0.36, 0.40), Color(0.46, 0.44, 0.40), Color(0.30, 0.25, 0.14), Color(0.12, 0.12, 0.14)]
+const LITTER_COLORS: Array[Color] = [Color(0.22, 0.23, 0.26), Color(0.30, 0.29, 0.26), Color(0.20, 0.16, 0.09), Color(0.09, 0.09, 0.10)]
 const LEAF_COLORS: Array[Color] = [Color(0.17, 0.15, 0.08), Color(0.12, 0.14, 0.08), Color(0.20, 0.13, 0.07)]
 const CRATE_COLOR := Color(0.22, 0.17, 0.11)
 const BARREL_COLORS: Array[Color] = [Color(0.16, 0.17, 0.19), Color(0.27, 0.15, 0.10)]
@@ -42,6 +49,7 @@ var _rng := RandomNumberGenerator.new()
 var _landmark: Node3D = null
 var _district_id: StringName = &""
 var _clear: Array[Vector2] = []
+var _pool_mat: StandardMaterial3D = null
 var _inner: float = 3.5
 var _grid: float = 16.0
 var _walk: float = 4.25
@@ -73,8 +81,8 @@ func build(district_id: StringName, sb: Node) -> void:
 				litter_colors.append(_pick(LEAF_COLORS if i >= int(kit["litter"]) else LITTER_COLORS))
 			for i in int(kit["puddles"]):
 				var on_road: Vector3 = centre + _road_spot(_rng.randi_range(0, 3), _grid * 0.5, _rng.randf_range(-6.0, 6.0), _rng.randf_range(-2.2, 2.2))
-				var size: float = _rng.randf_range(0.7, 1.7)
-				var spread := Basis(Vector3.UP, _rng.randf() * TAU).scaled(Vector3(size * _rng.randf_range(1.0, 1.8), 1.0, size))
+				var size: float = _rng.randf_range(1.0, 2.2)
+				var spread := Basis(Vector3.UP, _rng.randf() * TAU).scaled(Vector3(size * _rng.randf_range(1.0, 1.6), 1.0, size))
 				puddles.append(Transform3D(spread, Vector3(on_road.x, MARKING_TOP_Y + 0.01, on_road.z)))
 			for i in int(kit["crates"]):
 				var at: Vector3 = _solid_spot(centre + _edge_spot())
@@ -95,13 +103,37 @@ func build(district_id: StringName, sb: Node) -> void:
 					bins.append(Transform3D(Basis(Vector3.UP, _rng.randf() * TAU), Vector3(at.x, GROUND_Y, at.z)))
 	var none: Array[Color] = []
 	_batch("Litter", _flat(), litter, litter_colors, _plain(Color.WHITE, 0.95, 0.0, true), false)
-	_batch("Puddles", _disc(), puddles, none, _wet(), false)
+	_batch("Puddles", _patch(), puddles, none, _soft(Color(0.015, 0.02, 0.03, 0.55), false), false)
 	_batch("Crates", _box(), crates, none, _plain(CRATE_COLOR, 0.9, 0.0), true)
 	_batch("Barrels", _drum(), barrels, barrel_colors, _plain(Color.WHITE, 0.95, 0.0, true), true)
 	_batch("Bins", _BIN, bins, none, _plain(Color(0.20, 0.22, 0.25), 0.6, 0.5), true)
 	_batch("Hydrants", _HYDRANT, _hydrant_spots(sb), none, _plain(Color(0.34, 0.27, 0.13), 0.55, 0.4), true)
+	_pool_mat = _soft(Color(BRASS, 0.0), true)
+	_batch("LampPools", _patch(), _lamp_pools(), none, _pool_mat, false)
 	_add_landmark()
 	_add_rest_spot()
+	_apply_stage(PowerGrid.get_stage(_district_id))
+	EventBus.district_stage_changed.connect(_on_stage_changed)
+
+## One pool of light for each streetlamp (its pole is a transform of the batched poles of the sibling node), moved toward the block the pole stands beside.
+func _lamp_pools() -> Array[Transform3D]:
+	var out: Array[Transform3D] = []
+	var poles := get_parent().get_node_or_null("StreetlightPolesBatched") as MultiMeshInstance3D
+	if poles == null:
+		return out
+	for i in poles.multimesh.instance_count:
+		var pole: Vector3 = poles.multimesh.get_instance_transform(i).origin
+		var best := Vector3.ZERO
+		var nearest: float = INF
+		for cx in [-1, 0, 1]:
+			for cz in [-1, 0, 1]:
+				var centre := Vector3(cx * _grid, 0.0, cz * _grid)
+				if centre.distance_to(pole) < nearest:
+					nearest = centre.distance_to(pole)
+					best = centre
+		var at: Vector3 = pole + (best - pole).normalized() * POOL_TOWARD_BLOCK_M
+		out.append(Transform3D(Basis().scaled(Vector3(POOL_M, 1.0, POOL_M)), Vector3(at.x, POOL_Y, at.z)))
+	return out
 
 ## Hydrants stand on the corners of a few crossings.
 func _hydrant_spots(sb: Node) -> Array[Transform3D]:
@@ -163,13 +195,10 @@ func _box() -> BoxMesh:
 	mesh.size = Vector3(0.7, 0.7, 0.7)
 	return mesh
 
-func _disc() -> CylinderMesh:
-	var mesh := CylinderMesh.new()
-	mesh.top_radius = 1.0
-	mesh.bottom_radius = 1.0
-	mesh.height = 0.008
-	mesh.radial_segments = 14
-	mesh.rings = 1
+## A flat one-metre square that lies on the ground and carries a soft round texture.
+func _patch() -> PlaneMesh:
+	var mesh := PlaneMesh.new()
+	mesh.size = Vector2.ONE
 	return mesh
 
 func _drum() -> CylinderMesh:
@@ -189,10 +218,15 @@ func _plain(color: Color, roughness: float, metallic: float, tinted: bool = fals
 	mat.vertex_color_use_as_albedo = tinted
 	return mat
 
-## Wet ground: dark and glossy, so the lamps and the flashlight leave a streak on it.
-func _wet() -> StandardMaterial3D:
-	var mat := _plain(Color(0.03, 0.04, 0.05), 0.08, 0.0)
-	mat.metallic_specular = 1.0
+## A soft round patch that is not lit by anything: a wet stain (`add` false: darkens what is under it) or a pool of light (`add` true: brightens it).
+func _soft(color: Color, add: bool) -> StandardMaterial3D:
+	var mat := StandardMaterial3D.new()
+	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	if add:
+		mat.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+	mat.albedo_texture = _LANDMARK.glow_texture()
+	mat.albedo_color = color
 	return mat
 
 func _batch(node_name: String, mesh: Mesh, xforms: Array[Transform3D], colors: Array[Color], material: Material, shadows: bool) -> void:
@@ -217,12 +251,16 @@ func _batch(node_name: String, mesh: Mesh, xforms: Array[Transform3D], colors: A
 func _add_landmark() -> void:
 	_landmark = _LANDMARK.build(_district_id, Vector3(0.0, 0.0, -_LANDMARK.NORTH_M))
 	add_child(_landmark)
-	_LANDMARK.apply_stage(_landmark, PowerGrid.get_stage(_district_id))
-	EventBus.district_stage_changed.connect(_on_stage_changed)
 
 func _on_stage_changed(id: StringName, stage: int) -> void:
-	if id == _district_id and is_instance_valid(_landmark):
+	if id == _district_id:
+		_apply_stage(stage)
+
+## The landmark and the pools of the lamps follow the power of the district.
+func _apply_stage(stage: int) -> void:
+	if is_instance_valid(_landmark):
 		_LANDMARK.apply_stage(_landmark, stage)
+	_pool_mat.albedo_color = Color(BRASS, POOL_BY_STAGE[clampi(stage, 0, POOL_BY_STAGE.size() - 1)])
 
 ## A bench under a lantern near the power switch, lit in every stage: the place where the Keeper stops to restore a district.
 func _add_rest_spot() -> void:
@@ -252,8 +290,8 @@ func _add_rest_spot() -> void:
 	lantern.add_child(pole)
 	var bulb := MeshInstance3D.new()
 	var globe := SphereMesh.new()
-	globe.radius = 0.14
-	globe.height = 0.28
+	globe.radius = 0.2
+	globe.height = 0.4
 	globe.radial_segments = 8
 	globe.rings = 4
 	bulb.mesh = globe
@@ -261,10 +299,17 @@ func _add_rest_spot() -> void:
 	glow.albedo_color = BRASS
 	glow.emission_enabled = true
 	glow.emission = BRASS
-	glow.emission_energy_multiplier = 1.6
+	glow.emission_energy_multiplier = 2.5
 	bulb.material_override = glow
 	bulb.position = Vector3(0.0, 2.35, 0.0)
 	lantern.add_child(bulb)
+	var rest_pool := MeshInstance3D.new()
+	rest_pool.name = "RestPool"
+	rest_pool.mesh = _patch()
+	rest_pool.material_override = _soft(Color(BRASS, REST_POOL_ALPHA), true)
+	rest_pool.scale = Vector3(POOL_M, 1.0, POOL_M)
+	rest_pool.position = Vector3(0.0, POOL_Y - GROUND_Y, 0.0)
+	lantern.add_child(rest_pool)
 	var lamp := OmniLight3D.new()
 	lamp.name = "RestLight"
 	lamp.light_color = BRASS

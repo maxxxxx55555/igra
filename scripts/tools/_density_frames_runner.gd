@@ -1,6 +1,7 @@
 extends "res://scripts/tools/_rc16_probe_runner.gd"
 ## Density frames (tools/qa_sim/density_frames <label> <hash> [district ids], docs/DENSITY_PLAN.md): five stills of what the player sees in each district named (all eleven by default),
-## shot from fixed places so a before and an after frame of one view can be laid side by side. The power stage only goes up, so the dark views come first:
+## shot from fixed places. With the label `pair` every view is shot twice in the same run: first with the district's dressing node hidden (the file label is "before"), then shown
+## ("after"), so the two frames differ by the dressing and by nothing else. The power stage only goes up, so the dark views come first:
 ##   01_dark     the west street at the eye height of the player, power DARK, the flashlight on
 ##   02_rest     the corner of the power switch toward the middle block, power DARK, the flashlight off (the lit bench, where there is one)
 ##   03_street   the west street again, power FULL
@@ -12,7 +13,7 @@ extends "res://scripts/tools/_rc16_probe_runner.gd"
 
 const VIEWS: Array[Dictionary] = [
 	{"name": "01_dark", "at": Vector3(-8.0, 0.1, 21.0), "look": Vector3(-8.0, 1.7, -30.0), "pitch": 0.0, "stage": -1, "light": true},
-	{"name": "02_rest", "at": Vector3(5.0, 0.1, 5.0), "look": Vector3(14.0, 0.6, 13.0), "pitch": -0.04, "stage": -1, "light": false},
+	{"name": "02_rest", "at": Vector3(9.8, 0.1, 9.8), "look": Vector3(14.0, 1.2, 13.0), "pitch": 0.0, "stage": -1, "light": false},
 	{"name": "03_street", "at": Vector3(-8.0, 0.1, 21.0), "look": Vector3(-8.0, 1.7, -30.0), "pitch": 0.0, "stage": 3, "light": false},
 	{"name": "04_block", "at": Vector3(0.0, 0.1, 0.0), "look": Vector3(16.0, 1.5, -16.0), "pitch": -0.05, "stage": 3, "light": false},
 	{"name": "05_skyline", "at": Vector3(0.0, 0.1, 18.0), "look": Vector3(0.0, 1.7, -60.0), "pitch": 0.22, "stage": 3, "light": false},
@@ -30,16 +31,24 @@ func _shot(frame: String) -> void:
 	img.resize(CAPTURE_SIZE.x, CAPTURE_SIZE.y, Image.INTERPOLATE_LANCZOS)
 	img.save_jpg(ProjectSettings.globalize_path(out_dir + frame + ".jpg"), JPG_QUALITY)
 
-func _snap(state: String) -> void:
+func _snap(state: String, label: String = "") -> void:
 	out_dir = "res://docs/stills/density/"
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(out_dir))
-	var file_name := "%s_%s_%s_%s" % [state, _label, _hash, _utc()]
+	var file_name := "%s_%s_%s_%s" % [state, label if not label.is_empty() else _label, _hash, _utc()]
 	await _shot(file_name)
 	print("[density] frame %s.jpg" % file_name)
 
 func _freeze_monsters() -> void:
 	for m in get_tree().get_nodes_in_group("monsters"):
 		(m as Node).process_mode = Node.PROCESS_MODE_DISABLED
+
+## The dressing node of the district that is loaded (district_dressing.gd), or null.
+func _dressing() -> Node3D:
+	for node in get_tree().root.find_children("*", "Node3D", true, false):
+		var script := node.get_script() as Script
+		if script != null and script.resource_path.ends_with("district_dressing.gd"):
+			return node as Node3D
+	return null
 
 func _flashlight(player: Node3D, want: bool) -> void:
 	if player.has_method("toggle_flashlight") and bool(player.get("flashlight_enabled")) != want:
@@ -64,7 +73,16 @@ func _view(id: StringName, view: Dictionary) -> void:
 		PowerGrid.advance_district(id, stage as DistrictData.Stage)
 	_flashlight(player, bool(view["light"]))
 	await get_tree().create_timer(SETTLE_SEC).timeout
-	await _snap("%s_%s" % [id, view["name"]])
+	var dressing := _dressing()
+	if _label == "pair" and dressing != null:
+		dressing.visible = false
+		await get_tree().process_frame
+		await _snap("%s_%s" % [id, view["name"]], "before")
+		dressing.visible = true
+		await get_tree().process_frame
+		await _snap("%s_%s" % [id, view["name"]], "after")
+	else:
+		await _snap("%s_%s" % [id, view["name"]])
 
 func _run() -> void:
 	if DisplayServer.get_name() == "headless":
@@ -113,14 +131,19 @@ func _run() -> void:
 		_freeze_monsters()
 		for view: Dictionary in VIEWS:
 			await _view(id, view)
-		await _perf_line(id)
+		var dressing := _dressing()
+		if _label == "pair" and dressing != null:
+			dressing.visible = false
+			await _perf_line(id, "without")
+			dressing.visible = true
+		await _perf_line(id, "with")
 	print("[density] DONE label=%s hash=%s" % [_label, _hash])
 	get_tree().quit(0)
 
-func _perf_line(id: StringName) -> void:
+func _perf_line(id: StringName, dressing: String) -> void:
 	for i in PERF_SETTLE_FRAMES:
 		await get_tree().process_frame
-	print("[density] perf district=%s draw_calls=%d primitives=%d objects_in_frame=%d" % [String(id),
+	print("[density] perf district=%s dressing=%s draw_calls=%d primitives=%d objects_in_frame=%d" % [String(id), dressing,
 		int(Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME)),
 		int(Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME)),
 		int(Performance.get_monitor(Performance.RENDER_TOTAL_OBJECTS_IN_FRAME))])

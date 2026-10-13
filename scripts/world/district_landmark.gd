@@ -1,15 +1,22 @@
 extends RefCounted
 ## The landmark of each district (docs/DISTRICT_SIGNATURES.md): a tall silhouette of primitive meshes behind the skyline ring, north of the street grid, so the
 ## horizon of every district has a shape of its own. Visual only: no collision, no navigation. All its geometry is merged into two meshes, the body and the
-## glowing parts, so a landmark costs two draw calls. The glow follows the power stage of the district like the windows of the skyline do.
+## glowing parts, and a soft halo of light stands behind it, so a landmark costs three draw calls. The glow, the halo and the body follow the power stage of
+## the district like the windows of the skyline do: dark at DARK, a silhouette against the halo at FULL.
 ## A part is [kind, size, position, tilt in degrees, glows]; kind "box": size is the extent; "cyl": size is (top radius, bottom radius, height);
 ## "ball": size.x is the radius; "ring": size is (inner radius, outer radius, 0) of a ring that stands in the XY plane.
 
 const BODY_COLOR := Color("#2a3340")
 const GLOW_COLOR := Color("#c9a24a")
-const BODY_SELF_GLOW := Color(0.06, 0.08, 0.12)
-## Emission energy of the glowing parts per power stage: DARK, PARTIAL, STREETS, FULL.
+const BODY_SELF_GLOW := Color(0.08, 0.10, 0.14)
+## Per power stage (DARK, PARTIAL, STREETS, FULL): the emission energy of the glowing parts, the share of the body's self-glow, the opacity of the halo.
 const GLOW_BY_STAGE: Array[float] = [0.0, 0.5, 1.0, 1.6]
+const BODY_BY_STAGE: Array[float] = [0.15, 0.5, 0.8, 1.1]
+const HALO_BY_STAGE: Array[float] = [0.0, 0.05, 0.10, 0.17]
+const HALO_SIZE := Vector2(90.0, 80.0)
+const HALO_BEHIND_M: float = 16.0
+
+static var _glow_texture: GradientTexture2D = null
 ## Metres north of the street grid's centre; the skyline ring ends 44 m out.
 const NORTH_M: float = 58.0
 
@@ -170,25 +177,55 @@ static func build(district_id: StringName, at: Vector3) -> Node3D:
 	glow_mat.albedo_color = GLOW_COLOR
 	glow_mat.emission_enabled = true
 	glow_mat.emission = GLOW_COLOR
+	var halo_mat := StandardMaterial3D.new()
+	halo_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	halo_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	halo_mat.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+	halo_mat.albedo_texture = glow_texture()
+	halo_mat.albedo_color = Color(GLOW_COLOR, 0.0)
 	root.set_meta(&"glow", glow_mat)
+	root.set_meta(&"body", body_mat)
+	root.set_meta(&"halo", halo_mat)
 	_add(root, "Body", body.commit(), body_mat)
 	_add(root, "Glow", glow.commit(), glow_mat)
+	var halo := QuadMesh.new()
+	halo.size = HALO_SIZE
+	_add(root, "Halo", halo, halo_mat).position = Vector3(0.0, HALO_SIZE.y * 0.38, -HALO_BEHIND_M)
 	return root
 
-## The emission of the glowing parts for a power stage (DARK, PARTIAL, STREETS, FULL).
-static func apply_stage(root: Node3D, stage: int) -> void:
-	var glow_mat := root.get_meta(&"glow") as StandardMaterial3D
-	glow_mat.emission_energy_multiplier = GLOW_BY_STAGE[clampi(stage, 0, GLOW_BY_STAGE.size() - 1)]
+## A soft round gradient, white at the middle and clear at the edge: the pool of light under a lamp and the halo behind a landmark are quads that carry it.
+static func glow_texture() -> GradientTexture2D:
+	if _glow_texture == null:
+		var gradient := Gradient.new()
+		gradient.offsets = PackedFloat32Array([0.0, 0.55, 1.0])
+		gradient.colors = PackedColorArray([Color(1.0, 1.0, 1.0, 1.0), Color(1.0, 1.0, 1.0, 0.3), Color(1.0, 1.0, 1.0, 0.0)])
+		_glow_texture = GradientTexture2D.new()
+		_glow_texture.gradient = gradient
+		_glow_texture.fill = GradientTexture2D.FILL_RADIAL
+		_glow_texture.fill_from = Vector2(0.5, 0.5)
+		_glow_texture.fill_to = Vector2(1.0, 0.5)
+		_glow_texture.width = 64
+		_glow_texture.height = 64
+	return _glow_texture
 
-static func _add(root: Node3D, node_name: String, mesh: Mesh, material: Material) -> void:
+## The glow, the body and the halo for a power stage (DARK, PARTIAL, STREETS, FULL).
+static func apply_stage(root: Node3D, stage: int) -> void:
+	var i: int = clampi(stage, 0, GLOW_BY_STAGE.size() - 1)
+	(root.get_meta(&"glow") as StandardMaterial3D).emission_energy_multiplier = GLOW_BY_STAGE[i]
+	(root.get_meta(&"body") as StandardMaterial3D).emission_energy_multiplier = BODY_BY_STAGE[i]
+	var halo_mat := root.get_meta(&"halo") as StandardMaterial3D
+	halo_mat.albedo_color = Color(GLOW_COLOR, HALO_BY_STAGE[i])
+
+static func _add(root: Node3D, node_name: String, mesh: Mesh, material: Material) -> MeshInstance3D:
 	if mesh == null or mesh.get_surface_count() == 0:
-		return
+		return null
 	var instance := MeshInstance3D.new()
 	instance.name = node_name
 	instance.mesh = mesh
 	instance.material_override = material
 	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	root.add_child(instance)
+	return instance
 
 static func _mesh(kind: String, size: Vector3) -> Mesh:
 	match kind:

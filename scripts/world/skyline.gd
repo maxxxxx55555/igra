@@ -19,16 +19,16 @@ const FACADE_GLOW := Color(0.06, 0.08, 0.12)
 ## Per district: the three facade colours and the faint self-glow of the blocks (docs/DISTRICT_SIGNATURES.md). One family of hue each, dark, never over 25 % saturation (STYLE_GUIDE section 2);
 ## a district that is not listed keeps FACADES and FACADE_GLOW.
 const PALETTES := {
-	&"suburbs": [[Color("#141815"), Color("#181d19"), Color("#1c211d")], Color(0.07, 0.09, 0.08)],
-	&"residential": [[Color("#17171c"), Color("#1c1c22"), Color("#212128")], Color(0.08, 0.08, 0.11)],
-	&"park": [[Color("#101a14"), Color("#14201a"), Color("#18261f")], Color(0.05, 0.10, 0.08)],
-	&"hospital": [[Color("#121c20"), Color("#162227"), Color("#1a282e")], Color(0.06, 0.11, 0.13)],
-	&"gas_station": [[Color("#1d1812"), Color("#231d16"), Color("#29221a")], Color(0.11, 0.09, 0.06)],
-	&"police": [[Color("#10141f"), Color("#151a28"), Color("#1a2032")], Color(0.05, 0.07, 0.14)],
-	&"warehouses": [[Color("#1f1713"), Color("#261c17"), Color("#2d211b")], Color(0.12, 0.08, 0.06)],
-	&"industrial": [[Color("#201915"), Color("#281f1a"), Color("#30251f")], Color(0.12, 0.09, 0.06)],
-	&"substation": [[Color("#15181b"), Color("#1a1e22"), Color("#1f2328")], Color(0.09, 0.10, 0.11)],
-	&"power_station": [[Color("#17191c"), Color("#1d2024"), Color("#23262b")], Color(0.10, 0.11, 0.13)],
+	&"suburbs": [[Color("#141917"), Color("#181e1c"), Color("#1c2321")], Color(0.07, 0.09, 0.09)],
+	&"residential": [[Color("#17171e"), Color("#1c1c25"), Color("#21212c")], Color(0.085, 0.085, 0.115)],
+	&"park": [[Color("#101a15"), Color("#14201b"), Color("#182621")], Color(0.05, 0.11, 0.09)],
+	&"hospital": [[Color("#101a20"), Color("#142129"), Color("#18282f")], Color(0.05, 0.10, 0.14)],
+	&"gas_station": [[Color("#1b1613"), Color("#211b17"), Color("#27201b")], Color(0.115, 0.09, 0.085)],
+	&"police": [[Color("#0e1320"), Color("#131a2a"), Color("#182034")], Color(0.05, 0.07, 0.15)],
+	&"warehouses": [[Color("#1d1514"), Color("#241b19"), Color("#2b211f")], Color(0.12, 0.085, 0.085)],
+	&"industrial": [[Color("#1c1715"), Color("#241e1b"), Color("#2b2421")], Color(0.115, 0.09, 0.09)],
+	&"substation": [[Color("#14181c"), Color("#191e23"), Color("#1e242a")], Color(0.09, 0.10, 0.115)],
+	&"power_station": [[Color("#15191e"), Color("#1b2026"), Color("#21262d")], Color(0.10, 0.11, 0.13)],
 }
 const WIN_BRASS := Color(0.79, 0.635, 0.29)
 const WIN_BONE := Color(0.85, 0.82, 0.77)
