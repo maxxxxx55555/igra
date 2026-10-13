@@ -1,4 +1,4 @@
-﻿# Multiplayer decision (A10)
+# Multiplayer decision (A10)
 Выбор: довести LAN/код-комнату ИЛИ выпилить NetworkManager.
 
 ## Если выпиливать:

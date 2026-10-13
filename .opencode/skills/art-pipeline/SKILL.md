@@ -1,4 +1,4 @@
-﻿---
+---
 name: art-pipeline
 description: External art generation pipeline
 ---

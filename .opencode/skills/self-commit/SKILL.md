@@ -1,4 +1,4 @@
-﻿---
+---
 name: self-commit
 description: Commit after each logical block
 ---

@@ -1,4 +1,4 @@
-﻿---
+---
 name: yagni
 description: Minimal-code discipline (Ponytail style)
 ---

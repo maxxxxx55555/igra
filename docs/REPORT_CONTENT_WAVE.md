@@ -1,4 +1,4 @@
-﻿# REPORT_CONTENT_WAVE — OX ALPHA content mega-wave 2
+# REPORT_CONTENT_WAVE — OX ALPHA content mega-wave 2
 
 Session: weapons + skills + maps + endings + loading + weather. All names grep-locked from
 code/data before generation (no invented ids). Zero-error protocol applied; every row below

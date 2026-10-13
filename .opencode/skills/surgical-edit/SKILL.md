@@ -1,4 +1,4 @@
-﻿---
+---
 name: surgical-edit
 description: Point fixes only
 ---

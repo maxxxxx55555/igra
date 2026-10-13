@@ -1,4 +1,4 @@
-﻿---
+---
 name: council
 description: Multi-perspective review for ambiguous decisions
 ---

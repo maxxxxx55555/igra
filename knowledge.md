@@ -1,4 +1,4 @@
-﻿# Knowledge Base — THE_LAST_STREETLIGHT
+# Knowledge Base — THE_LAST_STREETLIGHT
 
 # Сгенерировано автоматически из Claude Code skills
 

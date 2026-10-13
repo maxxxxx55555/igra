@@ -1,4 +1,4 @@
-﻿---
+---
 name: godot-gates
 description: Run mandatory Godot gates after changes
 ---
