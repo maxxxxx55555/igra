@@ -1,0 +1,17 @@
+# proof s23_d1_final_f49dd9d
+# utc 20261013T015725Z
+# head f49dd9d (uncommitted paths: 12)
+# env none
+# cmd bash -c bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120 && CLOSEOUT_ONLY=s23 bash tools/qa_sim/closeout_check 400; bash tools/qa_sim/density_frames pair f49dd9d
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL DENS1 density: every block of every district holds 2 solid props, 4 scattered pieces and 2 lamps at least (under the floor: suburbs, residential, park, school, hospital, gas_station, police, warehouses, industrial, substation, power_station), 11 of 11 districts have a landmark and 11 a lit rest spot
+[closeout] DONE checks=48 fails=1
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_pair.log, 110 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# EXIT=0

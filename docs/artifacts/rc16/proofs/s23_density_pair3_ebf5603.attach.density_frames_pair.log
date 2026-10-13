@@ -1,0 +1,167 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[density] start label=pair hash=ebf5603 ids=[&"suburbs", &"residential", &"park", &"school", &"hospital", &"gas_station", &"police", &"warehouses", &"industrial", &"substation", &"power_station"] nodes=1100 objects=3943 orphans=6 tex_mib=68.8 vid_mib=96.3 static_mib=98.8
+[probe] stream pass=density district=suburbs ok=true load_ms=0.2 settled_ms=47.3 hitches=0 max_frame_ms=16.7 over_budget_ms=0.0 nodes=1100 objects=3941 orphans=6 tex_mib=68.8 vid_mib=96.3 static_mib=98.8 stats={"district":"suburbs","enemies_ms":5.994,"loot_ms":18.94,"props_ms":103.049,"scene_ms":50.597,"streets_ms":1.289,"total_ms":129.555}
+[density] frame suburbs_01_dark_before_ebf5603_20261013T013351Z.jpg
+[density] frame suburbs_01_dark_after_ebf5603_20261013T013351Z.jpg
+[density] rest district=suburbs bloom_world=(12.7, 2.41, 13.2) on_screen=(1099.537, 561.6862) behind=false visible=true camera=(9.8, 2.557168, 9.8)
+[density] frame suburbs_02_rest_before_ebf5603_20261013T013352Z.jpg
+[density] frame suburbs_02_rest_after_ebf5603_20261013T013352Z.jpg
+[density] frame suburbs_03_street_before_ebf5603_20261013T013353Z.jpg
+[density] frame suburbs_03_street_after_ebf5603_20261013T013353Z.jpg
+[density] frame suburbs_04_block_before_ebf5603_20261013T013354Z.jpg
+[density] frame suburbs_04_block_after_ebf5603_20261013T013354Z.jpg
+[density] frame suburbs_05_skyline_before_ebf5603_20261013T013355Z.jpg
+[density] frame suburbs_05_skyline_after_ebf5603_20261013T013355Z.jpg
+[density] perf district=suburbs dressing=without draw_calls=99 primitives=63156 objects_in_frame=191
+[density] perf district=suburbs dressing=with draw_calls=112 primitives=72704 objects_in_frame=204
+[probe] stream pass=density district=residential ok=true load_ms=289.2 settled_ms=356.8 hitches=2 max_frame_ms=142.7 over_budget_ms=126.4 nodes=1114 objects=3999 orphans=6 tex_mib=68.7 vid_mib=98.3 static_mib=101.7 stats={"district":"residential","enemies_ms":6.475,"loot_ms":22.533,"props_ms":120.137,"scene_ms":1.008,"streets_ms":1.51,"total_ms":54.492}
+[density] frame residential_01_dark_before_ebf5603_20261013T013359Z.jpg
+[density] frame residential_01_dark_after_ebf5603_20261013T013359Z.jpg
+[density] rest district=residential bloom_world=(12.7, 2.41, 13.2) on_screen=(1099.537, 561.7653) behind=false visible=true camera=(9.8, 2.557705, 9.8)
+[density] frame residential_02_rest_before_ebf5603_20261013T013400Z.jpg
+[density] frame residential_02_rest_after_ebf5603_20261013T013400Z.jpg
+[density] frame residential_03_street_before_ebf5603_20261013T013401Z.jpg
+[density] frame residential_03_street_after_ebf5603_20261013T013401Z.jpg
+[density] frame residential_04_block_before_ebf5603_20261013T013402Z.jpg
+[density] frame residential_04_block_after_ebf5603_20261013T013402Z.jpg
+[density] frame residential_05_skyline_before_ebf5603_20261013T013403Z.jpg
+[density] frame residential_05_skyline_after_ebf5603_20261013T013403Z.jpg
+[density] perf district=residential dressing=without draw_calls=111 primitives=84330 objects_in_frame=203
+[density] perf district=residential dressing=with draw_calls=124 primitives=93882 objects_in_frame=216
+[probe] stream pass=density district=park ok=true load_ms=269.0 settled_ms=325.7 hitches=1 max_frame_ms=138.1 over_budget_ms=111.6 nodes=1110 objects=3997 orphans=6 tex_mib=69.0 vid_mib=98.6 static_mib=102.5 stats={"district":"park","enemies_ms":5.941,"loot_ms":22.576,"props_ms":123.694,"scene_ms":0.998,"streets_ms":1.744,"total_ms":56.473}
+[density] frame park_01_dark_before_ebf5603_20261013T013407Z.jpg
+[density] frame park_01_dark_after_ebf5603_20261013T013407Z.jpg
+[density] rest district=park bloom_world=(12.7, 2.41, 13.2) on_screen=(1099.537, 561.8257) behind=false visible=true camera=(9.8, 2.558115, 9.8)
+[density] frame park_02_rest_before_ebf5603_20261013T013408Z.jpg
+[density] frame park_02_rest_after_ebf5603_20261013T013408Z.jpg
+[density] frame park_03_street_before_ebf5603_20261013T013409Z.jpg
+[density] frame park_03_street_after_ebf5603_20261013T013409Z.jpg
+[density] frame park_04_block_before_ebf5603_20261013T013410Z.jpg
+[density] frame park_04_block_after_ebf5603_20261013T013410Z.jpg
+[density] frame park_05_skyline_before_ebf5603_20261013T013411Z.jpg
+[density] frame park_05_skyline_after_ebf5603_20261013T013411Z.jpg
+[density] perf district=park dressing=without draw_calls=96 primitives=72636 objects_in_frame=96
+[density] perf district=park dressing=with draw_calls=108 primitives=80332 objects_in_frame=108
+[probe] stream pass=density district=school ok=true load_ms=250.8 settled_ms=327.0 hitches=2 max_frame_ms=134.9 over_budget_ms=143.3 nodes=1114 objects=4020 orphans=6 tex_mib=68.7 vid_mib=98.2 static_mib=103.2 stats={"district":"school","enemies_ms":5.565,"loot_ms":19.068,"props_ms":100.983,"scene_ms":0.808,"streets_ms":1.664,"total_ms":47.819}
+[density] frame school_01_dark_before_ebf5603_20261013T013415Z.jpg
+[density] frame school_01_dark_after_ebf5603_20261013T013415Z.jpg
+[density] rest district=school bloom_world=(12.7, 2.41, 13.2) on_screen=(1099.537, 561.8789) behind=false visible=true camera=(9.8, 2.558476, 9.8)
+[density] frame school_02_rest_before_ebf5603_20261013T013416Z.jpg
+[density] frame school_02_rest_after_ebf5603_20261013T013416Z.jpg
+[density] frame school_03_street_before_ebf5603_20261013T013417Z.jpg
+[density] frame school_03_street_after_ebf5603_20261013T013417Z.jpg
+[density] frame school_04_block_before_ebf5603_20261013T013418Z.jpg
+[density] frame school_04_block_after_ebf5603_20261013T013418Z.jpg
+[density] frame school_05_skyline_before_ebf5603_20261013T013419Z.jpg
+[density] frame school_05_skyline_after_ebf5603_20261013T013419Z.jpg
+[density] perf district=school dressing=without draw_calls=118 primitives=83310 objects_in_frame=289
+[density] perf district=school dressing=with draw_calls=131 primitives=93054 objects_in_frame=302
+[probe] stream pass=density district=hospital ok=true load_ms=239.2 settled_ms=306.9 hitches=1 max_frame_ms=136.3 over_budget_ms=119.7 nodes=1113 objects=4027 orphans=6 tex_mib=69.0 vid_mib=98.6 static_mib=104.0 stats={"district":"hospital","enemies_ms":6.189,"loot_ms":20.042,"props_ms":97.391,"scene_ms":0.893,"streets_ms":1.887,"total_ms":49.477}
+[density] frame hospital_01_dark_before_ebf5603_20261013T013423Z.jpg
+[density] frame hospital_01_dark_after_ebf5603_20261013T013423Z.jpg
+[density] rest district=hospital bloom_world=(12.7, 2.41, 13.2) on_screen=(1099.537, 561.8002) behind=false visible=true camera=(9.8, 2.557943, 9.8)
+[density] frame hospital_02_rest_before_ebf5603_20261013T013424Z.jpg
+[density] frame hospital_02_rest_after_ebf5603_20261013T013424Z.jpg
+[density] frame hospital_03_street_before_ebf5603_20261013T013425Z.jpg
+[density] frame hospital_03_street_after_ebf5603_20261013T013425Z.jpg
+[density] frame hospital_04_block_before_ebf5603_20261013T013426Z.jpg
+[density] frame hospital_04_block_after_ebf5603_20261013T013426Z.jpg
+[density] frame hospital_05_skyline_before_ebf5603_20261013T013427Z.jpg
+[density] frame hospital_05_skyline_after_ebf5603_20261013T013427Z.jpg
+[density] perf district=hospital dressing=without draw_calls=109 primitives=74238 objects_in_frame=280
+[density] perf district=hospital dressing=with draw_calls=122 primitives=85774 objects_in_frame=293
+[probe] stream pass=density district=gas_station ok=true load_ms=255.9 settled_ms=337.3 hitches=2 max_frame_ms=147.9 over_budget_ms=135.1 nodes=1116 objects=4059 orphans=6 tex_mib=68.7 vid_mib=98.2 static_mib=104.9 stats={"district":"gas_station","enemies_ms":7.45,"loot_ms":18.299,"props_ms":120.764,"scene_ms":1.479,"streets_ms":1.466,"total_ms":48.453}
+[density] frame gas_station_01_dark_before_ebf5603_20261013T013431Z.jpg
+[density] frame gas_station_01_dark_after_ebf5603_20261013T013431Z.jpg
+[density] rest district=gas_station bloom_world=(12.7, 2.41, 13.2) on_screen=(1099.537, 561.7117) behind=false visible=true camera=(9.8, 2.557342, 9.8)
+[density] frame gas_station_02_rest_before_ebf5603_20261013T013432Z.jpg
+[density] frame gas_station_02_rest_after_ebf5603_20261013T013432Z.jpg
+[density] frame gas_station_03_street_before_ebf5603_20261013T013433Z.jpg
+[density] frame gas_station_03_street_after_ebf5603_20261013T013433Z.jpg
+[density] frame gas_station_04_block_before_ebf5603_20261013T013434Z.jpg
+[density] frame gas_station_04_block_after_ebf5603_20261013T013434Z.jpg
+[density] frame gas_station_05_skyline_before_ebf5603_20261013T013435Z.jpg
+[density] frame gas_station_05_skyline_after_ebf5603_20261013T013435Z.jpg
+[density] perf district=gas_station dressing=without draw_calls=96 primitives=77700 objects_in_frame=175
+[density] perf district=gas_station dressing=with draw_calls=111 primitives=89206 objects_in_frame=190
+[probe] stream pass=density district=police ok=true load_ms=266.2 settled_ms=359.5 hitches=3 max_frame_ms=135.4 over_budget_ms=207.6 nodes=1145 objects=4096 orphans=6 tex_mib=69.0 vid_mib=98.6 static_mib=106.0 stats={"district":"police","enemies_ms":6.498,"loot_ms":24.237,"props_ms":121.335,"scene_ms":0.811,"streets_ms":1.686,"total_ms":54.952}
+[density] frame police_01_dark_before_ebf5603_20261013T013439Z.jpg
+[density] frame police_01_dark_after_ebf5603_20261013T013439Z.jpg
+[density] rest district=police bloom_world=(12.7, 2.41, 13.2) on_screen=(1099.537, 561.5964) behind=false visible=true camera=(9.8, 2.556559, 9.8)
+[density] frame police_02_rest_before_ebf5603_20261013T013440Z.jpg
+[density] frame police_02_rest_after_ebf5603_20261013T013440Z.jpg
+[density] frame police_03_street_before_ebf5603_20261013T013441Z.jpg
+[density] frame police_03_street_after_ebf5603_20261013T013441Z.jpg
+[density] frame police_04_block_before_ebf5603_20261013T013442Z.jpg
+[density] frame police_04_block_after_ebf5603_20261013T013442Z.jpg
+[density] frame police_05_skyline_before_ebf5603_20261013T013443Z.jpg
+[density] frame police_05_skyline_after_ebf5603_20261013T013443Z.jpg
+[density] perf district=police dressing=without draw_calls=108 primitives=63584 objects_in_frame=187
+[density] perf district=police dressing=with draw_calls=123 primitives=73796 objects_in_frame=202
+[probe] stream pass=density district=warehouses ok=true load_ms=268.1 settled_ms=338.9 hitches=2 max_frame_ms=131.8 over_budget_ms=118.8 nodes=1133 objects=4103 orphans=6 tex_mib=68.7 vid_mib=98.2 static_mib=106.5 stats={"district":"warehouses","enemies_ms":8.066,"loot_ms":22.635,"props_ms":123.05,"scene_ms":1.457,"streets_ms":1.529,"total_ms":57.453}
+[density] frame warehouses_01_dark_before_ebf5603_20261013T013447Z.jpg
+[density] frame warehouses_01_dark_after_ebf5603_20261013T013447Z.jpg
+[density] rest district=warehouses bloom_world=(12.7, 2.41, 13.2) on_screen=(1099.537, 561.5249) behind=false visible=true camera=(9.8, 2.556074, 9.8)
+[density] frame warehouses_02_rest_before_ebf5603_20261013T013448Z.jpg
+[density] frame warehouses_02_rest_after_ebf5603_20261013T013448Z.jpg
+[density] frame warehouses_03_street_before_ebf5603_20261013T013449Z.jpg
+[density] frame warehouses_03_street_after_ebf5603_20261013T013449Z.jpg
+[density] frame warehouses_04_block_before_ebf5603_20261013T013450Z.jpg
+[density] frame warehouses_04_block_after_ebf5603_20261013T013450Z.jpg
+[density] frame warehouses_05_skyline_before_ebf5603_20261013T013451Z.jpg
+[density] frame warehouses_05_skyline_after_ebf5603_20261013T013451Z.jpg
+[density] perf district=warehouses dressing=without draw_calls=106 primitives=73194 objects_in_frame=185
+[density] perf district=warehouses dressing=with draw_calls=121 primitives=81880 objects_in_frame=200
+[probe] stream pass=density district=industrial ok=true load_ms=315.1 settled_ms=398.0 hitches=2 max_frame_ms=136.1 over_budget_ms=156.4 nodes=1141 objects=4117 orphans=6 tex_mib=69.0 vid_mib=98.6 static_mib=107.8 stats={"district":"industrial","enemies_ms":8.252,"loot_ms":24.864,"props_ms":132.257,"scene_ms":0.872,"streets_ms":1.694,"total_ms":63.782}
+[density] frame industrial_01_dark_before_ebf5603_20261013T013455Z.jpg
+[density] frame industrial_01_dark_after_ebf5603_20261013T013456Z.jpg
+[density] rest district=industrial bloom_world=(12.7, 2.41, 13.2) on_screen=(1099.537, 561.5799) behind=false visible=true camera=(9.8, 2.556447, 9.8)
+[density] frame industrial_02_rest_before_ebf5603_20261013T013456Z.jpg
+[density] frame industrial_02_rest_after_ebf5603_20261013T013457Z.jpg
+[density] frame industrial_03_street_before_ebf5603_20261013T013457Z.jpg
+[density] frame industrial_03_street_after_ebf5603_20261013T013458Z.jpg
+[density] frame industrial_04_block_before_ebf5603_20261013T013458Z.jpg
+[density] frame industrial_04_block_after_ebf5603_20261013T013459Z.jpg
+[density] frame industrial_05_skyline_before_ebf5603_20261013T013500Z.jpg
+[density] frame industrial_05_skyline_after_ebf5603_20261013T013500Z.jpg
+[density] perf district=industrial dressing=without draw_calls=112 primitives=64006 objects_in_frame=250
+[density] perf district=industrial dressing=with draw_calls=127 primitives=75556 objects_in_frame=265
+[probe] stream pass=density district=substation ok=true load_ms=275.3 settled_ms=332.0 hitches=1 max_frame_ms=144.5 over_budget_ms=111.2 nodes=1122 objects=4095 orphans=6 tex_mib=68.7 vid_mib=98.2 static_mib=108.5 stats={"district":"substation","enemies_ms":10.213,"loot_ms":22.566,"props_ms":131.439,"scene_ms":0.866,"streets_ms":1.54,"total_ms":64.584}
+[density] frame substation_01_dark_before_ebf5603_20261013T013503Z.jpg
+[density] frame substation_01_dark_after_ebf5603_20261013T013504Z.jpg
+[density] rest district=substation bloom_world=(12.7, 2.41, 13.2) on_screen=(1099.537, 561.5635) behind=false visible=true camera=(9.8, 2.556336, 9.8)
+[density] frame substation_02_rest_before_ebf5603_20261013T013504Z.jpg
+[density] frame substation_02_rest_after_ebf5603_20261013T013505Z.jpg
+[density] frame substation_03_street_before_ebf5603_20261013T013505Z.jpg
+[density] frame substation_03_street_after_ebf5603_20261013T013506Z.jpg
+[density] frame substation_04_block_before_ebf5603_20261013T013506Z.jpg
+[density] frame substation_04_block_after_ebf5603_20261013T013507Z.jpg
+[density] frame substation_05_skyline_before_ebf5603_20261013T013507Z.jpg
+[density] frame substation_05_skyline_after_ebf5603_20261013T013508Z.jpg
+[density] perf district=substation dressing=without draw_calls=106 primitives=63136 objects_in_frame=244
+[density] perf district=substation dressing=with draw_calls=119 primitives=69064 objects_in_frame=257
+[probe] stream pass=density district=power_station ok=true load_ms=261.3 settled_ms=316.4 hitches=1 max_frame_ms=133.5 over_budget_ms=120.6 nodes=1120 objects=4097 orphans=6 tex_mib=69.0 vid_mib=98.6 static_mib=109.0 stats={"district":"power_station","enemies_ms":7.499,"loot_ms":24.577,"props_ms":114.024,"scene_ms":0.83,"streets_ms":1.568,"total_ms":56.708}
+[density] frame power_station_01_dark_before_ebf5603_20261013T013511Z.jpg
+[density] frame power_station_01_dark_after_ebf5603_20261013T013511Z.jpg
+[density] rest district=power_station bloom_world=(12.7, 2.41, 13.2) on_screen=(1099.537, 561.5568) behind=false visible=true camera=(9.8, 2.55629, 9.8)
+[density] frame power_station_02_rest_before_ebf5603_20261013T013512Z.jpg
+[density] frame power_station_02_rest_after_ebf5603_20261013T013512Z.jpg
+[density] frame power_station_03_street_before_ebf5603_20261013T013514Z.jpg
+[density] frame power_station_03_street_after_ebf5603_20261013T013514Z.jpg
+[density] frame power_station_04_block_before_ebf5603_20261013T013515Z.jpg
+[density] frame power_station_04_block_after_ebf5603_20261013T013515Z.jpg
+[density] frame power_station_05_skyline_before_ebf5603_20261013T013516Z.jpg
+[density] frame power_station_05_skyline_after_ebf5603_20261013T013516Z.jpg
+[density] perf district=power_station dressing=without draw_calls=105 primitives=100874 objects_in_frame=160
+[density] perf district=power_station dressing=with draw_calls=114 primitives=98300 objects_in_frame=169
+[density] DONE label=pair hash=ebf5603
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 64 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

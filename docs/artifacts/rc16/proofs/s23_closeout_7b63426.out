@@ -1,0 +1,14 @@
+# proof s23_closeout_7b63426
+# utc 20261013T020228Z
+# head 7b63426 (uncommitted paths: 16)
+# env none
+# cmd bash -c bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120 && bash tools/qa_sim/closeout_check 800
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL VFX1 shell ejection: a case is thrown (true), falls to the street (lowest -0.055 m) and bounces (true), goes back to the pool after its life (true), none at Effects Low (true)
+[closeout] DONE checks=455 fails=1
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+# EXIT=1

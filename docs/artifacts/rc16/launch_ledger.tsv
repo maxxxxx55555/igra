@@ -104,3 +104,7 @@ n	utc	head	id	exit	command
 103	20261013T011544Z	87e3af2	s23_density_after1_87e3af2	0	bash tools/qa_sim/density_frames after 87e3af2
 104	20261013T011804Z	ed7f2c9	s23_density_after1_ed7f2c9	0	bash -c bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120 && bash tools/qa_sim/density_frames after ed7f2c9
 105	20261013T012628Z	113003c	s23_density_pair2_113003c	0	bash -c bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120 && bash tools/qa_sim/density_frames pair 113003c
+106	20261013T013303Z	ebf5603	s23_density_pair3_ebf5603	0	bash -c bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120 && bash tools/qa_sim/density_frames pair ebf5603
+107	20261013T014132Z	9d69e6d	s23_d1_final_9d69e6d	0	bash -c bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120 && CLOSEOUT_ONLY=s23 bash tools/qa_sim/closeout_check 400; bash tools/qa_sim/density_frames pair 9d69e6d
+108	20261013T015725Z	f49dd9d	s23_d1_final_f49dd9d	0	bash -c bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120 && CLOSEOUT_ONLY=s23 bash tools/qa_sim/closeout_check 400; bash tools/qa_sim/density_frames pair f49dd9d
+109	20261013T020228Z	7b63426	s23_closeout_7b63426	1	bash -c bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120 && bash tools/qa_sim/closeout_check 800
