@@ -407,6 +407,16 @@ if "$PY" tools/qa_sim/s23_mutations.py --demo >/dev/null 2>&1; then
 else
   bad "s23_mutations --demo (см. 'python tools/qa_sim/s23_mutations.py --demo')"
 fi
+if "$PY" tools/qa_sim/listing_audit.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/listing_audit.py >/dev/null 2>&1; then
+  ok "listing_audit (13 locales: title, short and full limits, the same numbers in every language, the English numbers are what the code holds)"
+else
+  bad "listing_audit (см. 'python tools/qa_sim/listing_audit.py')"
+fi
+if "$PY" tools/qa_sim/press_kit.py --check >/dev/null 2>&1 && "$PY" tools/qa_sim/music_brief.py --check >/dev/null 2>&1; then
+  ok "press kit and music brief (store/PRESS_KIT.md is what the code says; every lit bed of music_manager.gd has a brief)"
+else
+  bad "press kit and music brief (см. 'python tools/qa_sim/press_kit.py --check' and 'music_brief.py --check')"
+fi
 
 # ─────────────────────────── проверки в движке ───────────────────────────
 if [[ $STATIC_ONLY -eq 1 ]]; then

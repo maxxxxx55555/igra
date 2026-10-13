@@ -5,6 +5,8 @@ launch trailer (60–90 s) and the viral Shorts — in one index. Tagline for al
 cuts: **EN** "Restore the light. Every streetlight is life." / **RU** «Верни
 свет. Каждый фонарь — жизнь.» (see `store/listing.md`).
 
+> The script to record the trailer from is `store/TRAILER_SCRIPT.md` (Session 23).
+
 ## Masters (ship-ready art, `store/trailer/`)
 
 | File | Size | Cut role |

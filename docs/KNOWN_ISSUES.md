@@ -1677,3 +1677,12 @@ After a remap (Settings > Controls > Key Bindings) a few strings keep the defaul
 | A monster that loses the player behind a wall inside its detect area | It still paths to the real position of the player; a memory of the last seen point inside the area changes every encounter (`docs/AI_STEALTH.md`). | A second memory in the chase state, with the bot after it. |
 | AES-256-GCM saves; PCK encryption; the app-signature check; R8 | `docs/SECURITY_HARDENING.md` gives each reason (no GCM in `AESContext`; custom export templates; a Java plugin; nothing secret to hide). | The owner's decisions listed there. |
 | The two keys of the game (`SaveSystem._HMAC_KEY`, `SecurityLog.KEY`) are in the scripts | An offline game has nowhere else to keep them; anyone who unpacks the bundle reads them. | A server that signs, which the game does not have. |
+
+## Session 23: store copy and data that the audits listed (OPEN, owner)
+
+| What | Where | What would close it |
+|---|---|---|
+| The store copy says "zero loading screens" (all 13 locales): there is none between districts, and a loading scene plays once when a new game starts (`scripts/core/routes.gd`, `LOADING`) | `store/listing.md` | The owner keeps it (it is true of the city) or asks a translator for "no loading screens between districts" in 13 languages; a digit was the only thing this session changed in the translations. |
+| `data/ng_plus_config.json` is read by no script (its numbers live as constants in `new_game_plus.gd`); it ships and is in the integrity manifest | `docs/NGPLUS_TABLE.md` | Delete it in a cleanup with the manifest regenerated, or wire it; listed, not deleted (it is data a planned audit named). |
+| The 11 lit beds are synthesized loops (`docs/CERT_AUDIO.md`); a composed bed is better | `docs/MUSIC_BRIEF.md` | The owner generates or licenses beds from the briefs and replaces the files of the same name. |
+| The loudness of the shipped audio is under the directive's targets for music (median -18.0 against -14) and SFX (-15.0 against -10), and at the canon for ambience (-18.2 against -18); every true peak is at or under -1.0 dBFS | `docs/AUDIO_LOUDNESS_TABLE.md` | Re-mastering the files, not a bus gain (a gain would clip the peaks); the canon numbers (`docs/PRODUCTION_BIBLE.md` section 3) were kept, see `docs/AUDIO_CONSISTENCY.md`. |

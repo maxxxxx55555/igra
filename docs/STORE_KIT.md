@@ -108,7 +108,7 @@ ko, zh, zh_TW, ar**. EN and RU keep the master full description in
 [store/listing.md](../store/listing.md) — byte-untouched, still the source of truth. Aims:
 
 - **Same claims, same numbers as the master** — 11 districts, 12 enemy types, 5 endings,
-  13 languages, 5 adaptive music layers, 30 daily challenges, 31 achievements, New Game+,
+  13 languages, 5 adaptive music layers, 60 daily challenges, 31 achievements, New Game+,
   crafting/workbench, noise-and-visibility stealth, offline, no paid content, touch + PC share
   one save file. Nothing invented; nothing unbacked added.
 - **Keeper voice** — terse, second person, archaic lean, ellipses, no exclamation marks.
@@ -219,7 +219,7 @@ LO QUE HAY DENTRO
 - Sigilo de ruido y visibilidad, no de medidor
 - Banco de trabajo y fabricación para mejorar la linterna
 - Música adaptativa de 5 capas
-- 30 desafíos diarios, 31 logros y New Game+ después de los créditos
+- 60 desafíos diarios, 31 logros y New Game+ después de los créditos
 - 13 idiomas
 
 TÁCTIL: joystick virtual y botones. PC: WASD y ratón — la misma partida.
@@ -282,7 +282,7 @@ CE QU'IL Y A DEDANS
 - Furtivité par le bruit et la visibilité, non par une jauge
 - Établi et artisanat pour améliorer votre lampe torche
 - Musique adaptative en 5 couches
-- 30 défis quotidiens, 31 succès et un New Game+ après le générique
+- 60 défis quotidiens, 31 succès et un New Game+ après le générique
 - 13 langues
 
 TACTILE : joystick virtuel et boutons. PC : WASD et souris — la même
@@ -314,7 +314,7 @@ COSA C'È DENTRO
 - Furtività fatta di rumore e visibilità, non di una barra
 - Banco da lavoro e creazione per migliorare la torcia
 - Musica adattiva su 5 livelli
-- 30 sfide giornaliere, 31 obiettivi e New Game+ dopo i titoli
+- 60 sfide giornaliere, 31 obiettivi e New Game+ dopo i titoli
 - 13 lingue
 
 TOUCH: joystick virtuale e pulsanti. PC: WASD e mouse — la stessa partita.
@@ -345,7 +345,7 @@ O QUE VEM DENTRO
 - Furtividade por ruído e visibilidade, não por medidor
 - Bancada e fabricação para melhorar sua lanterna
 - Música adaptativa em 5 camadas
-- 30 desafios diários, 31 conquistas e New Game+ após os créditos
+- 60 desafios diários, 31 conquistas e New Game+ após os créditos
 - 13 idiomas
 
 TOQUE: joystick virtual e botões. PC: WASD e mouse — o mesmo save. Sem
@@ -375,7 +375,7 @@ El feneri: silahın, gözün, hükmün. Her huzme seni ele verir.
 - Gizlilik ses ve görünürlükle işler, bir ölçekle değil
 - El fenerini geliştirmek için Tezgâh ve üretim
 - 5 katmanlı uyarlanabilir müzik
-- 30 günlük görev, 31 başarım ve jenerikten sonra New Game+
+- 60 günlük görev, 31 başarım ve jenerikten sonra New Game+
 - 13 dil
 
 DOKUNMATİK: sanal joystick ve düğmeler. PC: WASD ve fare — aynı kayıt.
@@ -404,7 +404,7 @@ senindir.
 - 隠密は物音と視認性で決まる。検知メーターではない
 - 作業台と製作で懐中電灯を強化
 - 5層の適応型音楽
-- 30のデイリーチャレンジ、31の実績、エンディング後のNew Game+
+- 60のデイリーチャレンジ、31の実績、エンディング後のNew Game+
 - 13言語
 
 タッチ：バーチャルスティックとボタン。PC：WASDとマウス、同じセーブで。
@@ -433,7 +433,7 @@ senindir.
 - 은신은 소음과 노출로 결정된다. 탐지 게이지가 아니다
 - 작업대와 제작으로 손전등 강화
 - 5겹 적응형 음악
-- 30개의 일일 도전, 31개의 업적, 엔딩 후 New Game+
+- 60개의 일일 도전, 31개의 업적, 엔딩 후 New Game+
 - 13개 언어
 
 터치: 가상 조이스틱과 버튼. PC: WASD와 마우스, 같은 세이브.
@@ -462,7 +462,7 @@ senindir.
 - 潜行靠声响与可见度，不靠侦测条
 - 工作台与制作，强化你的手电筒
 - 5 层自适应音乐
-- 30 个每日挑战、31 项成就，以及通关后的 New Game+
+- 60 个每日挑战、31 项成就，以及通关后的 New Game+
 - 13 种语言
 
 触屏：虚拟摇杆与按键。PC：WASD 与鼠标，同一份存档。
@@ -490,7 +490,7 @@ senindir.
 - 潛行靠聲響與可見度，不靠偵測條
 - 工作臺與製作，強化你的手電筒
 - 5 層自適應音樂
-- 30 個每日挑戰、31 項成就，以及通關後的 New Game+
+- 60 個每日挑戰、31 項成就，以及通關後的 New Game+
 - 13 種語言
 
 觸控：虛擬搖桿與按鍵。PC：WASD 與滑鼠，同一份存檔。
@@ -518,7 +518,7 @@ senindir.
 - التخفي بالصوت والظهور، لا بمقياس
 - طاولة العمل والتصنيع لتطوير مصباحك
 - موسيقى تكيّفية من 5 طبقات
-- 30 تحديًا يوميًا و31 إنجازًا وNew Game+ بعد النهاية
+- 60 تحديًا يوميًا و31 إنجازًا وNew Game+ بعد النهاية
 - 13 لغة
 
 باللمس: عصا افتراضية وأزرار. على الحاسب: WASD والفأرة، والحفظة نفسها.

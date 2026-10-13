@@ -1,5 +1,7 @@
 # Press kit — LAST STREETLIGHT
 
+> **Superseded (Session 23): `store/PRESS_KIT.md`, written from the code, is the press kit. The numbers below were counted by hand in September (the daily challenges are 60, not 30).**
+
 Owner: CONTENT+ASSETS+STORE agent. Send this file (or its sections) with every
 review code. Spoiler ceiling: **Act I only** (districts 1–3 topic guidance);
 the half-lit-city ending still is cleared, ending text/Architect identity never is.
@@ -64,7 +66,7 @@ the half-lit-city ending still is cleared, ending text/Architect identity never 
    identity is the game's one ungoogleable — keep it that way.
 4. Known-launch-facts reviewers may cite (numbers from the fact sheet above):
    11 districts, 88 lore notes, 12 enemy types, 5 endings, 31 achievements,
-   30 daily challenges, 13 languages, workbench crafting, HMAC-signed
+   60 daily challenges, 13 languages, workbench crafting, HMAC-signed
    checksum-verified saves with automatic backup recovery, offline-first with
    no account. See also the release-state block above for gate numbers.
 
@@ -93,7 +95,7 @@ is life."
 Review build: <APK/AAB link + expiry>
 Press kit (art, fact sheet, trailer stills): <this repo's store/ link or zip>
 Play time: 3–6 h to win (balance-sim verified) · 5 endings + New Game+ ·
-31 achievements · 30 daily challenges · 13 languages · Android + PC (same save file)
+31 achievements · 60 daily challenges · 13 languages · Android + PC (same save file)
 
 Only ask: please keep coverage to the first districts for 2 weeks and keep
 the endings unspoiled. Happy to do a <written/video> interview any time.
