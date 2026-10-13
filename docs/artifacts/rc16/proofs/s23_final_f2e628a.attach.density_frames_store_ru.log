@@ -1,0 +1,29 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[density] start label=store hash=f2e628a ids=[&"suburbs", &"residential"] nodes=1105 objects=3981 orphans=6 tex_mib=56.0 vid_mib=83.6 static_mib=100.5
+[probe] stream pass=density district=suburbs ok=true load_ms=0.4 settled_ms=47.0 hitches=0 max_frame_ms=42.3 over_budget_ms=9.0 nodes=1105 objects=3979 orphans=6 tex_mib=56.0 vid_mib=83.6 static_mib=100.5 stats={"district":"suburbs","enemies_ms":8.012,"loot_ms":25.914,"props_ms":156.296,"scene_ms":73.471,"streets_ms":1.813,"total_ms":149.367}
+[density] frame suburbs_01_dark_ru_f2e628a_20261013T170008Z.png
+[density] rest district=suburbs bloom_world=(12.7, 2.41, 13.2) on_screen=(914.8286, 553.4257) behind=false visible=true camera=(6.0, 2.557419, 15.5)
+[density] frame suburbs_02_rest_ru_f2e628a_20261013T170009Z.png
+[density] frame suburbs_03_street_ru_f2e628a_20261013T170010Z.png
+[density] frame suburbs_04_block_ru_f2e628a_20261013T170011Z.png
+[density] frame suburbs_05_skyline_ru_f2e628a_20261013T170012Z.png
+[density] perf district=suburbs dressing=with draw_calls=192 primitives=74255 objects_in_frame=352
+[probe] stream pass=density district=residential ok=true load_ms=301.7 settled_ms=358.2 hitches=1 max_frame_ms=128.0 over_budget_ms=101.4 nodes=1124 objects=4051 orphans=6 tex_mib=56.0 vid_mib=85.7 static_mib=103.6 stats={"district":"residential","enemies_ms":8.669,"loot_ms":27.579,"props_ms":151.581,"scene_ms":1.635,"streets_ms":3.099,"total_ms":71.646}
+[density] frame residential_01_dark_ru_f2e628a_20261013T170016Z.png
+[density] rest district=residential bloom_world=(12.7, 2.41, 13.2) on_screen=(914.8286, 553.8907) behind=false visible=true camera=(6.0, 2.562526, 15.5)
+[density] frame residential_02_rest_ru_f2e628a_20261013T170017Z.png
+[density] frame residential_03_street_ru_f2e628a_20261013T170018Z.png
+[density] frame residential_04_block_ru_f2e628a_20261013T170019Z.png
+[density] frame residential_05_skyline_ru_f2e628a_20261013T170020Z.png
+[density] perf district=residential dressing=with draw_calls=204 primitives=95437 objects_in_frame=364
+[density] DONE label=store hash=f2e628a
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 38 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

@@ -1,0 +1,320 @@
+# proof s23_final_f2e628a
+# utc 20261013T161300Z
+# head f2e628a (uncommitted paths: 0)
+# env none
+# cmd bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/5fa8d500-393b-43b7-95de-04d09fcc9e42/scratchpad/l23_chain.sh f2e628a
+reimport_rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+# Godot binary: /c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/godot
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  [32mWIN [0m seed 1  ([bot s1]   result       : WIN)
+deaths counted 2, revive lines 2
+  [32mWIN [0m seed 2  ([bot s2]   result       : WIN)
+deaths counted 0, revive lines 0
+  [32mWIN [0m seed 3  ([bot s3]   result       : WIN)
+deaths counted 0, revive lines 0
+
+──────────────────────────────────────
+autoplay bot: 3/3 seeds won, 0 softlock(s)
+bot death counters below their revive lines: 0
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  soak soak rc=0 (log: .qa_logs/soak_soak.log, 12 minute lines, 0 stress lines)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  fresh profile: 0 game file(s) removed (0 of the owner's are restored at the end)
+  mode A rc=1 (log: .qa_logs/playthrough_A.log)
+[pt] FAIL A04h no pale square comes and goes in the lower-right corner (7 of 8 frames brighter than the clearest by more than 3.5; corner 21.7 to 42.8; hurt in the window 0 by )  frame=A04_corner.jpg
+[pt] DONE mode=A steps=67 fails=1 time=112s
+  fresh profile: 10 game file(s) removed (0 of the owner's are restored at the end)
+  mode S rc=0 (log: .qa_logs/playthrough_S.log)
+[pt] DONE mode=S steps=23 fails=0 time=40s
+  user-data guard: 0 file(s) restored byte-identical
+s23_mutations: apply done (31 mutations)
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL A11Y7 motion comfort: shake and sprint blur work with it off (trauma 1.00, blur true) and stop with it on (trauma 1.00, blur false)
+[closeout] FAIL AUD1 ducking: a voice line dips the Music and Ambient buses by -3.0 dB (their Amplify effects false), the volume slider is not touched (true), 3.5 s later the dip is 0.00 dB
+[closeout] FAIL VFX6 particle budget: the world's own emitters draw 140, with every pooled burst in flight (9 of each scene) 662 (budget 500), 290 in a storm (limit 1000), the pool's worst case 522 plus the world 662
+[closeout] FAIL AI1 noise bomb: it popped on landing (true), the monster 14 m away goes to look at the spot (false), the one 36 m away, beyond the radius of 4 m, stays (true)
+[closeout] FAIL AI2 group alert: the neighbour 6 m away goes to look (false), the one 30 m away stays (true), one already chasing keeps chasing (true), a hound's call reaches 12 m (true)
+[closeout] FAIL AI4 difficulty hooks: the search lasts [10.0, 10.0, 10.0] s (7, 10, 13), the reaction time is [0.5, 0.0, 0.0] s (0.5, 0, 0), an Easy monster stands still while it notices (true)
+[closeout] FAIL AI5 detection gradient: after a jump of the player's noise to 0.8 the bar is at [0.8, 0.8, 0.8, 0.8, 0.8, 0.8] of its width on the first six polls (it glides by 0.15), a value of 0.25 has a colour of its own (0.5805, 0.588, 0.298, 1.0) between green and brass (true)
+[closeout] FAIL BOSS1 boss jump: 17 of 40 jumps landed beyond a wall 1 m from the player (0 wanted), 40 of 40 moved the boss (30 at least)
+[closeout] FAIL JUICE1 hit-stop: a run at 2x dips to 0.50x, is back at 2.0x after 25 ms of real time (80 ms asked), and does nothing with Reduce Time Effects (true)
+[closeout] FAIL JUICE3 screen shake: the camera moves 0.0490 m at most (limit 0.050 m), 11.88 px of 1080p at 5 m with a 48 degree view (limit 4 px), a damage hit 3.55 px (least 0.5)
+[closeout] FAIL JUICE4 camera: sprint punch 5.0 degrees, landing punch 0.0, with Motion Comfort 0.0; a landing after 0.5 s in the air kicks 0.92, after 0.1 s 0.00
+[closeout] FAIL POL3 idle breath: the eye moves 0.0000 m over a breath (0.006 to 0.01) and 0.0000 m with Motion Comfort
+[closeout] FAIL WEAPON1 weapon feel: recoil shotgun 0.50, pistol 0.45, rifle 0.35; a shotgun shot kicks the view 0.020 rad and half a second later it is at 0.000; none with Motion Comfort (true); a tactical reload takes 0.80 of an empty one
+[closeout] FAIL MOVE1 the walk eases: 2.94 m/s after one step, 2.94 after twelve, 2.93 at full speed; after letting go 1.68 after one step and 0.00 after ten
+[closeout] FAIL POL1 ui feedback: button, check box and tabs wired (true), the HUD's button and a screen's own click left alone (true), press 1.00 then back (true), hover 1.050 (ThemeSetup's swell) with the tick wired, then back (true), still with Reduce UI Motion (true)
+[closeout] FAIL POL2 screens ease: the codex slides in (true) and rests (true), a close is closed for the logic at once (true) while it is still drawn (false), hidden after the fade with its alpha back (true), an open during the fade stays (true), Reduce UI Motion hides at once (true)
+[closeout] FAIL SEC1 speed clocks: in step true, parted false; one off window is not a verdict (false), a normal window after it clears it (true), two in a row flag a speed hack (false)
+[closeout] FAIL PERF1 dynamic resolution: 1.5 s under 30 FPS keeps 1.0 (true), 2 s drops to 0.7 (false), the band holds it (false), 3.5 s over 45 FPS holds (true) and 4 s restores 1.0 (true); a dip into the band restarts the count (true, then true)
+[closeout] FAIL PERF3 perf gate edges: all met at the limits (true), D1 200 fails (false), D11 350 fails (true), p95 33.1 ms fails (true), 512.1 MiB fails (true), Session 22's numbers pass (true)
+[closeout] FAIL LEAK1 loot: 0 drops of 60 rolls lie beside the monster, 17 are left once its parent is freed
+[closeout] FAIL MSAA1 the 3D samples follow the tier: Low, Medium, High, Ultra read [0, 1, 2, 2] (off, 2x, 2x, 4x)
+[closeout] FAIL SAVEMIG the loader against 18 save generations and faults: differs in b3
+[closeout] FAIL NGP1 New Game+ player damage: a bullet 25.0 at level 0 and 25.0 at level 2 (x1.00), a melee hit 9.7 then 11.6 (x1.20)
+[closeout] FAIL DENS1 density: every block of every district holds 2 solid props, 4 scattered pieces and 2 lamps at least (under the floor: suburbs, residential, park, school, hospital, gas_station, police, warehouses, industrial, substation, power_station), 0 of 11 districts have a landmark and 0 a lit rest spot
+[closeout] FAIL MANH1 manholes: 0 of 11 districts hold an iron cover in the road with a thread of steam
+[closeout] FAIL UISFX1 a button freed in its first frame raises no engine error (["message_queue.cpp:220 Error calling deferred method: \'Node(uisfx.gd)::_wire\': Cannot convert argument 1 from Object to Object."])
+[closeout] FAIL SHADER1 the 13 shader files compile with no engine error ([":17 Range hint is for \'float\' and \'int\' only.", "material_storage.cpp:192 Shader compilation failed."])
+[closeout] FAIL TRLR1 Trailer Mode hides the objective list (false), the notice (true) and the toast stack (true), and they are back with it off (true)
+[closeout] DONE checks=53 fails=28
+engine errors in the log:
+ERROR: Error calling deferred method: 'Node(uisfx.gd)::_wire': Cannot convert argument 1 from Object to Object.
+ERROR: Error calling deferred method: 'Node(uisfx.gd)::_wire': Cannot convert argument 1 from Object to Object.
+ERROR: Error calling deferred method: 'Node(uisfx.gd)::_wire': Cannot convert argument 1 from Object to Object.
+ERROR: Error calling deferred method: 'Node(uisfx.gd)::_wire': Cannot convert argument 1 from Object to Object.
+ERROR: Error calling deferred method: 'Node(uisfx.gd)::_wire': Cannot convert argument 1 from Object to Object.
+ERROR: Error calling deferred method: 'Node(uisfx.gd)::_wire': Cannot convert argument 1 from Object to Object.
+ERROR: Error calling deferred method: 'Node(uisfx.gd)::_wire': Cannot convert argument 1 from Object to Object.
+ERROR: Error calling deferred method: 'Node(uisfx.gd)::_wire': Cannot convert argument 1 from Object to Object.
+ERROR: Error calling deferred method: 'Node(uisfx.gd)::_wire': Cannot convert argument 1 from Object to Object.
+ERROR: Error calling deferred method: 'Node(uisfx.gd)::_wire': Cannot convert argument 1 from Object to Object.
+ERROR: Error calling deferred method: 'Node(uisfx.gd)::_wire': Cannot convert argument 1 from Object to Object.
+ERROR: Error calling deferred method: 'Node(uisfx.gd)::_wire': Cannot convert argument 1 from Object to Object.
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+s23_mutations: restore done (31 mutations)
+A11Y7    mutated: FAIL -> BITES
+AI1      mutated: FAIL -> BITES
+AI2      mutated: FAIL -> BITES
+AI4      mutated: FAIL -> BITES
+AI5      mutated: FAIL -> BITES
+AUD1     mutated: FAIL -> BITES
+BOSS1    mutated: FAIL -> BITES
+DENS1    mutated: FAIL -> BITES
+FOG1     mutated: missing -> NOT RUN
+FOLIAGE1 mutated: missing -> NOT RUN
+JUICE1   mutated: FAIL -> BITES
+JUICE3   mutated: FAIL -> BITES
+JUICE4   mutated: FAIL -> BITES
+LEAK1    mutated: FAIL -> BITES
+MANH1    mutated: FAIL -> BITES
+MOVE1    mutated: FAIL -> BITES
+MSAA1    mutated: FAIL -> BITES
+NGP1     mutated: FAIL -> BITES
+PERF1    mutated: FAIL -> BITES
+PERF3    mutated: FAIL -> BITES
+POL1     mutated: FAIL -> BITES
+POL2     mutated: FAIL -> BITES
+POL3     mutated: FAIL -> BITES
+POOL1    mutated: missing -> NOT RUN
+SAVEMIG  mutated: FAIL -> BITES
+SEC1     mutated: FAIL -> BITES
+SHADER1  mutated: FAIL -> BITES
+TRLR1    mutated: FAIL -> BITES
+UISFX1   mutated: FAIL -> BITES
+VFX6     mutated: FAIL -> BITES
+WEAPON1  mutated: FAIL -> BITES
+failed without a mutation: nothing
+run: [closeout] DONE checks=53 fails=28
+S23 MUTATIONS verdict=FAIL mutations=31 bad=3
+tracked files changed after the restore: 61
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  rc16_probe rc=0 (log: .qa_logs/rc16_probe_after.log, 40 probe lines)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/final_frames_scene.tscn rc=0 (log: .qa_logs/final_frames_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+01_main_menu_after_f2e628a_20261013T165517Z.png
+02_district_day_full_after_f2e628a_20261013T165533Z.png
+03_district_night_dark_after_f2e628a_20261013T165528Z.png
+04_combat_after_f2e628a_20261013T165538Z.png
+05_boss_after_f2e628a_20261013T165541Z.png
+06_victory_ngplus_after_f2e628a_20261013T165544Z.png
+07_skill_tree_after_f2e628a_20261013T165535Z.png
+08_shop_after_f2e628a_20261013T165535Z.png
+stamp_frames: 8 frame(s) copied to docs\stills\ultimate
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_pair.log, 110 frames)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_store.log, 40 frames)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_store.log, 10 frames)
+  user-data guard: 0 file(s) restored byte-identical
+
+── Статические проверки (Godot не нужен)
+  OK   ссылки на ресурсы (0 битых)
+  OK   автозагрузки (56 шт., 0 битых)
+  OK   вызовы к автозагрузкам (0 несуществующих)
+  OK   локализация: 13 языков x 1560 ключей, паритет=True
+  OK   ключи из кода найдены в словаре (0 потеряно)
+  OK   плейсхолдеры ru/en (0 расхождений)
+  OK   validate_list (216 записей, 0 отсутствуют)
+  OK   критический путь игры (8/8)
+  OK   музыкальные треки на диске (0 нет)
+
+── Сцены и ссылки на ноды
+── Комментарии в файлах ресурсов (Godot их не поддерживает)
+  OK   проверено 267 файлов
+
+── Ресурсы, ошибочно объявленные как [node]
+  OK   проверено 174 сцен
+
+── Ссылки $NodePath на несуществующие ноды сцены
+  OK   проверено 119 пар скрипт/сцена
+
+──────────────────────────────────────────────────
+Всё чисто.
+  [32mOK[0m   scene_node_check
+
+── Игровой цикл
+  OK    главная сцена — boot_loading                    
+  OK    boot уводит в меню                              
+  OK    кнопка «Играть» стартует игру                   
+  OK    start_game ведёт в игровую сцену                
+  OK    игровая сцена существует                        
+  OK    экран загрузки уходит в игру                    
+  OK    подбор не шлёт RPC самому себе                  
+  OK    подбор кладёт вещь в инвентарь                  
+  OK    высота лута фиксируется после спавна            
+  OK    инвентарь шлёт item_picked_up                   
+  OK    инвентарь не шлёт RPC вне сети                  
+  OK    сигнал подбора кто-то слушает                   
+  OK    лут раскладывается по районам                   
+  OK    HUD: нода NoiseLabel есть в сцене               
+  OK    HUD: нода NoiseF есть в сцене                   
+  OK    HUD: нода VisibilityLabel есть в сцене          
+  OK    HUD: нода VisibilityF есть в сцене              
+  OK    HUD показывает здоровье                         
+  OK    HUD показывает батарею                          
+  OK    HUD показывает шум                              
+  OK    HUD прячется под блокирующими экранами          
+  OK    игрок отдаёт уровень шума                       
+  OK    игрок шлёт изменение батареи                    
+  OK    Escape ставит паузу                             
+  OK    Escape сперва закрывает справочники             
+  OK    пауза морозит дерево                            
+  OK    снятие паузы размораживает                      
+  OK    в паузе есть выход в меню                       
+  OK    затемнение работает на паузе                    
+  OK    UIManager работает на паузе                     
+  OK    смерть игрока кем-то обрабатывается             
+  OK    смерть переводит в состояние DEAD               
+  OK    экран смерти открывается по состоянию           
+  OK    экран победы открывается по состоянию           
+  OK    с экрана смерти можно выйти в меню              
+  OK    «Заново» перезагружает сцену                    
+  OK    кодекс открывается                              
+  OK    кодекс закрывается                              
+  OK    карта переключается клавишей                    
+  OK    журнал переключается клавишей                   
+  OK    действие ui_pause объявлено в проекте           
+  OK    действие city_map_toggle объявлено в проекте    
+  OK    действие journal_toggle объявлено в проекте     
+  OK    действие encyclopedia_toggle объявлено в проекте
+  OK    аудио-шина Master существует                    
+  OK    аудио-шина Music существует                     
+  OK    аудио-шина SFX существует                       
+  OK    аудио-шина Ambient существует                   
+  OK    аудио-шина UI существует                        
+  OK    аудио-шина Footsteps существует                 
+  OK    аудио-шина Combat существует                    
+  OK    аудио-шина Environment существует               
+  OK    Master не заглушен на старте                    
+  OK    все аудиофайлы из кода на диске                 
+  OK    все preload/load ведут в существующие файлы     
+  OK    арность подписок на сигналы совпадает           
+
+────────────────────────────────────────────────────────────
+Игровой цикл собран целиком: 56 проверок пройдено.
+  [32mOK[0m   flow_check
+
+── Контент: глубина и удержание
+  [32mOK[0m   audit_content_depth
+  [32mOK[0m   validate_retention
+
+── Truth gates: visual/i18n (данные уже в репозитории)
+  [32mOK[0m   visual_truth_gate (gate self-consistency on committed frames; R0 lock = LUT pin below)
+  [32mOK[0m   visual_truth_gate --demo (defect patterns fail, canon patterns pass)
+  [32mOK[0m   visual_truth_gate fails all four committed corruption frames
+  [31mFAIL[0m visual_truth_gate fails a sign-off or beauty frame (python tools/qa_sim/visual_truth_gate.py docs/stills/final/*.png)
+  [32mOK[0m   R0 root cause pinned (11 district LUTs import as Texture3D)
+  [32mOK[0m   i18n_truth_gate
+  [32mOK[0m   user_data_guard --demo (snapshot/restore профиля)
+  [32mOK[0m   hardcoded_text_gate (no untranslated words assigned to .text)
+  [32mOK[0m   puzzle_economy_sim (STATIC_AUDIT #31 reachability)
+  [32mOK[0m   endings_sim (all 5 GDD endings reachable)
+  [32mOK[0m   balance_sim (economy/battery/skill-branch/time-to-win)
+  [32mOK[0m   lighting_stage_sim (DARK/PARTIAL/STREETS/FULL pairwise-distinct)
+  [32mOK[0m   project_input_check (action blocks only in [input], every action the scripts read is defined)
+  [32mOK[0m   settings_consumer_check (every Settings control has a named reader or applier)
+  [32mOK[0m   tscn_header_check (a scene's layout properties are lines under the node, not attributes of its header)
+  [32mOK[0m   a11y_check (every a11y toggle traces UI -> real effect; 9 of 9 features; every single removal of a reader, row, key or default is caught)
+  [32mOK[0m   drawcall_estimate (structural draw-call/light estimate, D1)
+  [32mOK[0m   no mirrored yaw formula (atan2(-v.x, -v.z) faces v)
+  [32mOK[0m   release_export_check (SECURITY_PATCH_SPEC C-08/D-04: no committed encryption key or debug keystore creds)
+
+── rc16: lint, frame-independence inventory, AF2/AF3/AF5 tools (Godot не нужен)
+  [32mOK[0m   ruff E9,F on tools/ and scripts/ (syntax and pyflakes correctness)
+  [32mOK[0m   bash -n on every shell script, hook and wrapper
+  [32mOK[0m   timing_inventory (no per-frame constant step outside the whitelist: frame-independent timing)
+  [32mOK[0m   timing_compare --demo (the tool's self-check)
+  [32mOK[0m   af2_both_ways --demo (the tool's self-check)
+  [32mOK[0m   af3_frame_check --demo (the tool's self-check)
+  [32mOK[0m   af3_frame_check (every polish frame names the code tree and the capture time it came from)
+  [32mOK[0m   lint_changed (gdparse, gdlint, ruff E9,F, shellcheck, actionlint on every file changed since e4bb4df)
+  [32mOK[0m   af5_check (file:line citations added to docs/ since e4bb4df resolve; a backticked claim before one occurs in the cited lines)
+  [32mOK[0m   doc_ctrl_check (no control character in docs/: a heredoc once ate the backslashes of two paths)
+  [32mOK[0m   integrity manifest (data/integrity_manifest.json holds the SHA-256 of every content and data JSON; the game scans it at start)
+  [32mOK[0m   title_check (the game is Last Streetlight: no capital 'The' before the name in the locales, scenes, scripts, presets or store kit)
+  [32mOK[0m   privacy_audit (every network, analytics and ad hit is classified in docs/PRIVACY_AUDIT.md; no way into the unreachable lobby)
+  [32mOK[0m   store_answers (every content-rating and Data safety answer of store/IARC_ANSWERS.md still holds against the code)
+  [32mOK[0m   i18n_placeholder_fuzz (specifiers, call arity, literal keys, Latin stubs, cognates and the glossary agree in all 13 locales)
+  [32mOK[0m   daily_sim (every daily template is ticked by a wired signal and reachable; the streak tiers 7, 30 and 100 pay)
+  [32mOK[0m   achievements_sim (all 31 achievements have a trigger that a real EventBus path reaches: docs/ACHIEVEMENT_TRIGGER_SPEC.md)
+  [32mOK[0m   save_migration_sim (SAVE_VERSION 3 and BACKUP_DEPTH 3 are what the matrix and the SAVEMIG check are written for)
+  [32mOK[0m   ngplus_table (every New Game+ number the game shows or stores is read by a script: docs/NGPLUS_TABLE.md)
+  [32mOK[0m   s23_mutations --demo (the AF2 mutation judge tells a vacuous check from a biting one and finds a stray failure)
+  [32mOK[0m   listing_audit (13 locales: title, short and full limits, the same numbers in every language, the English numbers are what the code holds)
+  [32mOK[0m   press kit and music brief (store/PRESS_KIT.md is what the code says; every lit bed of music_manager.gd has a brief)
+  [32mOK[0m   consistency_check (the fonts are the canon set, the UI icons one brass family, no new font size, even spacing, facade chroma under 25 %: docs/UI_CONSISTENCY.md)
+  [32mOK[0m   difficulty_curve (no district is harder when restored, no step of the enemy strength over x2.2: docs/DIFFICULTY_CURVE.md)
+  [32mOK[0m   frame tools (store_frames_check, benchmark_frames and density_measure each tell a good frame from a bad one on a fixture: store/SCREENSHOT_RECIPES.md)
+  [32mOK[0m   gitignore_check (every generated, exported and secret path is ignored, the evidence is not, no tracked file hides behind a rule: docs/CLEANUP_LEDGER.md)
+  [32mOK[0m   secret_scan (no key, token, private key or assigned secret in any tracked text file: docs/CLEANUP_LEDGER.md section 7)
+
+── Проверки в движке (нужен Godot 4.x)
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  [32mOK[0m   реимпорт ассетов (оконный, GPU-сжатие)
+  [32mOK[0m   компиляция всех скриптов
+  [32mOK[0m   арность сигналов
+  [32mOK[0m   API автозагрузок
+  [32mOK[0m   локализация
+  [32mOK[0m   ассеты
+  [32mOK[0m   прогон 3D-сцены
+  [32mOK[0m   целостность сейва
+  [32mOK[0m   крафт-флоу + концовки
+  [32mOK[0m   adversarial: achievement/NG+/economy/district-id forgery
+  [32mOK[0m   boot-flow (меню/новая игра/сейв)
+  [32mOK[0m   footstep-маппер (surface x speed)
+  [32mOK[0m   QaLaunchGuard: snapshot/restore профиля (синтетический каталог)
+tools/check.sh: line 521:  3622 Illegal instruction     env -u TLS_UDG_GUARDED timeout 60 "$GODOT" --headless --path . res://scenes/tools/qa_guard_e2e_scene.tscn -- "$1" > /dev/null 2>&1
+tools/check.sh: line 522:  3624 Illegal instruction     env -u TLS_UDG_GUARDED timeout 60 "$GODOT" --headless --path . --quit-after 2 > /dev/null 2>&1
+  [32mOK[0m   QaLaunchGuard: жизненный цикл (выход, крах, восстановление) на реальном профиле
+  [32mOK[0m   аудио: тишина до первого ввода
+  [32mOK[0m   аудио: граф шин A01
+  [32mOK[0m   лут: под каждым предметом есть пол (X21)
+  [32mOK[0m   единая тема: chrome виден на всех экранах
+  [32mOK[0m   настройки: тир графики и accessibility переживают рестарт
+  [32mOK[0m   accessibility: reduce_flash/time_fx/ui_motion гейтят juice-сайты
+  [32mOK[0m   вёрстка: все экраны UIManager в кадре
+  [32mOK[0m   rc15 closeout: оружие/чертежи/фото/укрытия/инвентарь/достижения/сложность/Back
+  [32mOK[0m   GOLD MASTER suite (autoloads/input/districts/save-load/endings/i18n/soak)
+  [2mпропуск[0m перф-бюджет (draw calls, только --windowed) (нужен --windowed, не OK/FAIL)
+  [2mпропуск[0m аудио: Music bus не в тишине (только --windowed) (нужен --windowed, не OK/FAIL)
+  [32mOK[0m   тач-инпут (joystick/deadzone/HUD-кнопки)
+  [32mOK[0m   timing_equiv: gameplay quantities agree at 30, 60 and 120 FPS of simulated time
+  user-data guard: 0 file(s) restored byte-identical
+  [32mOK[0m   user-data guard: профиль игрока восстановлен байт-в-байт
+
+──────────────────────────────────────
+[31mПровалено: 1[0m, пройдено: 83
+l23 chain done
+# EXIT=0

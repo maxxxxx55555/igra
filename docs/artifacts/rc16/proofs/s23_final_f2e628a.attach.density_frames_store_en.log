@@ -1,0 +1,77 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[density] start label=store hash=f2e628a ids=[&"residential", &"industrial", &"warehouses", &"hospital", &"gas_station", &"police", &"park", &"power_station"] nodes=1105 objects=3964 orphans=6 tex_mib=54.4 vid_mib=81.9 static_mib=98.9
+[probe] stream pass=density district=residential ok=true load_ms=325.5 settled_ms=463.1 hitches=4 max_frame_ms=139.6 over_budget_ms=363.5 nodes=1119 objects=3995 orphans=6 tex_mib=54.0 vid_mib=81.5 static_mib=100.1 stats={"district":"residential","enemies_ms":10.435,"loot_ms":25.553,"props_ms":171.488,"scene_ms":1.154,"streets_ms":2.817,"total_ms":70.173}
+[density] frame residential_01_dark_en_f2e628a_20261013T165830Z.png
+[density] rest district=residential bloom_world=(12.7, 2.41, 13.2) on_screen=(914.8286, 553.3289) behind=false visible=true camera=(6.0, 2.556356, 15.5)
+[density] frame residential_02_rest_en_f2e628a_20261013T165831Z.png
+[density] frame residential_03_street_en_f2e628a_20261013T165833Z.png
+[density] frame residential_04_block_en_f2e628a_20261013T165834Z.png
+[density] frame residential_05_skyline_en_f2e628a_20261013T165835Z.png
+[density] perf district=residential dressing=with draw_calls=65 primitives=49904 objects_in_frame=65
+[probe] stream pass=density district=industrial ok=true load_ms=444.7 settled_ms=641.8 hitches=6 max_frame_ms=138.4 over_budget_ms=597.7 nodes=1151 objects=4057 orphans=6 tex_mib=85.1 vid_mib=112.7 static_mib=100.7 stats={"district":"industrial","enemies_ms":14.918,"loot_ms":37.585,"props_ms":150.812,"scene_ms":18.053,"streets_ms":2.251,"total_ms":106.18}
+[density] frame industrial_01_dark_en_f2e628a_20261013T165840Z.png
+[density] rest district=industrial bloom_world=(12.7, 2.41, 13.2) on_screen=(914.8286, 553.361) behind=false visible=true camera=(6.0, 2.556709, 15.5)
+[density] frame industrial_02_rest_en_f2e628a_20261013T165841Z.png
+[density] frame industrial_03_street_en_f2e628a_20261013T165842Z.png
+[density] frame industrial_04_block_en_f2e628a_20261013T165843Z.png
+[density] frame industrial_05_skyline_en_f2e628a_20261013T165844Z.png
+[density] perf district=industrial dressing=with draw_calls=65 primitives=40420 objects_in_frame=65
+[probe] stream pass=density district=warehouses ok=true load_ms=469.8 settled_ms=704.6 hitches=2 max_frame_ms=133.0 over_budget_ms=203.8 nodes=1138 objects=4038 orphans=6 tex_mib=34.1 vid_mib=61.7 static_mib=101.5 stats={"district":"warehouses","enemies_ms":15.33,"loot_ms":37.6,"props_ms":168.366,"scene_ms":1.798,"streets_ms":2.657,"total_ms":90.14}
+[density] frame warehouses_01_dark_en_f2e628a_20261013T165848Z.png
+[density] rest district=warehouses bloom_world=(12.7, 2.41, 13.2) on_screen=(914.8286, 553.486) behind=false visible=true camera=(6.0, 2.558081, 15.5)
+[density] frame warehouses_02_rest_en_f2e628a_20261013T165849Z.png
+[density] frame warehouses_03_street_en_f2e628a_20261013T165850Z.png
+[density] frame warehouses_04_block_en_f2e628a_20261013T165851Z.png
+[density] frame warehouses_05_skyline_en_f2e628a_20261013T165852Z.png
+[density] perf district=warehouses dressing=with draw_calls=66 primitives=42166 objects_in_frame=66
+[probe] stream pass=density district=hospital ok=true load_ms=294.5 settled_ms=343.6 hitches=1 max_frame_ms=134.9 over_budget_ms=107.8 nodes=1119 objects=4033 orphans=6 tex_mib=34.5 vid_mib=62.0 static_mib=102.1 stats={"district":"hospital","enemies_ms":11.749,"loot_ms":31.246,"props_ms":144.404,"scene_ms":3.228,"streets_ms":2.492,"total_ms":78.022}
+[density] frame hospital_01_dark_en_f2e628a_20261013T165856Z.png
+[density] rest district=hospital bloom_world=(12.7, 2.41, 13.2) on_screen=(914.8286, 553.7662) behind=false visible=true camera=(6.0, 2.561158, 15.5)
+[density] frame hospital_02_rest_en_f2e628a_20261013T165857Z.png
+[density] frame hospital_03_street_en_f2e628a_20261013T165858Z.png
+[density] frame hospital_04_block_en_f2e628a_20261013T165859Z.png
+[density] frame hospital_05_skyline_en_f2e628a_20261013T165900Z.png
+[density] perf district=hospital dressing=with draw_calls=61 primitives=43498 objects_in_frame=116
+[probe] stream pass=density district=gas_station ok=true load_ms=331.8 settled_ms=386.4 hitches=1 max_frame_ms=126.4 over_budget_ms=94.4 nodes=1122 objects=4058 orphans=6 tex_mib=34.1 vid_mib=61.6 static_mib=102.3 stats={"district":"gas_station","enemies_ms":10.222,"loot_ms":29.487,"props_ms":188.41,"scene_ms":1.841,"streets_ms":2.288,"total_ms":78.04}
+[density] frame gas_station_01_dark_en_f2e628a_20261013T165904Z.png
+[density] rest district=gas_station bloom_world=(12.7, 2.41, 13.2) on_screen=(914.8286, 553.995) behind=false visible=true camera=(6.0, 2.56367, 15.5)
+[density] frame gas_station_02_rest_en_f2e628a_20261013T165905Z.png
+[density] frame gas_station_03_street_en_f2e628a_20261013T165905Z.png
+[density] frame gas_station_04_block_en_f2e628a_20261013T165906Z.png
+[density] frame gas_station_05_skyline_en_f2e628a_20261013T165907Z.png
+[density] perf district=gas_station dressing=with draw_calls=60 primitives=43476 objects_in_frame=115
+[probe] stream pass=density district=police ok=true load_ms=347.4 settled_ms=398.6 hitches=1 max_frame_ms=147.0 over_budget_ms=119.1 nodes=1151 objects=4089 orphans=6 tex_mib=34.5 vid_mib=62.0 static_mib=102.4 stats={"district":"police","enemies_ms":11.12,"loot_ms":37.153,"props_ms":197.443,"scene_ms":1.077,"streets_ms":2.656,"total_ms":83.078}
+[density] frame police_01_dark_en_f2e628a_20261013T165911Z.png
+[density] rest district=police bloom_world=(12.7, 2.41, 13.2) on_screen=(914.8286, 553.9982) behind=false visible=true camera=(6.0, 2.563706, 15.5)
+[density] frame police_02_rest_en_f2e628a_20261013T165912Z.png
+[density] frame police_03_street_en_f2e628a_20261013T165913Z.png
+[density] frame police_04_block_en_f2e628a_20261013T165914Z.png
+[density] frame police_05_skyline_en_f2e628a_20261013T165915Z.png
+[density] perf district=police dressing=with draw_calls=68 primitives=38078 objects_in_frame=123
+[probe] stream pass=density district=park ok=true load_ms=270.8 settled_ms=325.5 hitches=1 max_frame_ms=144.6 over_budget_ms=112.7 nodes=1116 objects=4043 orphans=6 tex_mib=34.5 vid_mib=62.0 static_mib=102.4 stats={"district":"park","enemies_ms":7.832,"loot_ms":26.149,"props_ms":149.132,"scene_ms":0.964,"streets_ms":1.872,"total_ms":67.339}
+[density] frame park_01_dark_en_f2e628a_20261013T165919Z.png
+[density] rest district=park bloom_world=(12.7, 2.41, 13.2) on_screen=(914.8286, 553.7874) behind=false visible=true camera=(6.0, 2.56139, 15.5)
+[density] frame park_02_rest_en_f2e628a_20261013T165920Z.png
+[density] frame park_03_street_en_f2e628a_20261013T165921Z.png
+[density] frame park_04_block_en_f2e628a_20261013T165922Z.png
+[density] frame park_05_skyline_en_f2e628a_20261013T165923Z.png
+[density] perf district=park dressing=with draw_calls=59 primitives=42246 objects_in_frame=114
+[probe] stream pass=density district=power_station ok=true load_ms=287.1 settled_ms=340.7 hitches=1 max_frame_ms=146.4 over_budget_ms=114.7 nodes=1125 objects=4050 orphans=6 tex_mib=34.5 vid_mib=62.0 static_mib=102.8 stats={"district":"power_station","enemies_ms":9.07,"loot_ms":27.221,"props_ms":150.012,"scene_ms":2.948,"streets_ms":1.987,"total_ms":71.57}
+[density] frame power_station_01_dark_en_f2e628a_20261013T165926Z.png
+[density] rest district=power_station bloom_world=(12.7, 2.41, 13.2) on_screen=(914.8286, 553.5014) behind=false visible=true camera=(6.0, 2.558251, 15.5)
+[density] frame power_station_02_rest_en_f2e628a_20261013T165927Z.png
+[density] frame power_station_03_street_en_f2e628a_20261013T165928Z.png
+[density] frame power_station_04_block_en_f2e628a_20261013T165929Z.png
+[density] frame power_station_05_skyline_en_f2e628a_20261013T165930Z.png
+[density] perf district=power_station dressing=with draw_calls=61 primitives=42292 objects_in_frame=116
+[density] DONE label=store hash=f2e628a
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 53 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
