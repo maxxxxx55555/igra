@@ -16,7 +16,6 @@ bin/
 # Recursive globs (**) cover subdirectories like icons/skills/, icons_v2/craft/,
 # renders_v2/weapons/ etc.
 !assets/art/*.import
-!assets/grading/*.import
 !assets/photos/*.import
 !assets/textures/**/*.import
 assets/textures/cards/*.import
