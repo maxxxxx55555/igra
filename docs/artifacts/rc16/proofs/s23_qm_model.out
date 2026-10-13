@@ -1,0 +1,12 @@
+# proof s23_qm_model
+# utc 20261013T212900Z
+# head 41d2012 (uncommitted paths: 2)
+# env none
+# cmd python docs/artifacts/rc16/proofs/s23_qm_model.py
+clean: {'QM1': True, 'QM2': True, 'QM3': True, 'QM4': True} waits before a raise (20.0, 40.0)
+mutation QM1 fails ['QM1', 'QM2']
+mutation QM2 fails ['QM2']
+mutation QM3 fails ['QM3']
+mutation QM4 fails ['QM4']
+qm_model: the clean manager passes QM1 to QM4; each mutation fails its own check (QM1's also fails QM2, which has a row of its own)
+# EXIT=0
