@@ -74,6 +74,11 @@ func _view(id: StringName, view: Dictionary) -> void:
 	_flashlight(player, bool(view["light"]))
 	await get_tree().create_timer(SETTLE_SEC).timeout
 	var dressing := _dressing()
+	if view["name"] == "02_rest" and dressing != null and camera != null:
+		var bulb := dressing.get_node_or_null("RestLantern/RestBloom") as Node3D
+		if bulb != null:
+			print("[density] rest district=%s bloom_world=%s on_screen=%s behind=%s visible=%s camera=%s" % [String(id), bulb.global_position,
+				camera.unproject_position(bulb.global_position), camera.is_position_behind(bulb.global_position), bulb.is_visible_in_tree(), camera.global_position])
 	if _label == "pair" and dressing != null:
 		dressing.visible = false
 		await get_tree().process_frame

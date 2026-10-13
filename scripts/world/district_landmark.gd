@@ -10,10 +10,10 @@ const BODY_COLOR := Color("#2a3340")
 const GLOW_COLOR := Color("#c9a24a")
 const BODY_SELF_GLOW := Color(0.08, 0.10, 0.14)
 ## Per power stage (DARK, PARTIAL, STREETS, FULL): the emission energy of the glowing parts, the share of the body's self-glow, the opacity of the halo.
-const GLOW_BY_STAGE: Array[float] = [0.0, 0.5, 1.0, 1.6]
+const GLOW_BY_STAGE: Array[float] = [0.0, 0.6, 1.3, 2.4]
 const BODY_BY_STAGE: Array[float] = [0.15, 0.5, 0.8, 1.1]
-const HALO_BY_STAGE: Array[float] = [0.0, 0.05, 0.10, 0.17]
-const HALO_SIZE := Vector2(90.0, 80.0)
+const HALO_BY_STAGE: Array[float] = [0.0, 0.08, 0.16, 0.28]
+const HALO_SIZE := Vector2(110.0, 100.0)
 const HALO_BEHIND_M: float = 16.0
 
 static var _glow_texture: GradientTexture2D = null
@@ -22,16 +22,16 @@ const NORTH_M: float = 58.0
 
 const PARTS := {
 	&"suburbs": [  # a water tower
-		["box", Vector3(0.5, 11.0, 0.5), Vector3(-2.2, 5.5, -2.2), Vector3.ZERO, false],
-		["box", Vector3(0.5, 11.0, 0.5), Vector3(2.2, 5.5, -2.2), Vector3.ZERO, false],
-		["box", Vector3(0.5, 11.0, 0.5), Vector3(-2.2, 5.5, 2.2), Vector3.ZERO, false],
-		["box", Vector3(0.5, 11.0, 0.5), Vector3(2.2, 5.5, 2.2), Vector3.ZERO, false],
+		["box", Vector3(0.5, 14.0, 0.5), Vector3(-2.2, 7.0, -2.2), Vector3.ZERO, false],
+		["box", Vector3(0.5, 14.0, 0.5), Vector3(2.2, 7.0, -2.2), Vector3.ZERO, false],
+		["box", Vector3(0.5, 14.0, 0.5), Vector3(-2.2, 7.0, 2.2), Vector3.ZERO, false],
+		["box", Vector3(0.5, 14.0, 0.5), Vector3(2.2, 7.0, 2.2), Vector3.ZERO, false],
 		["box", Vector3(6.2, 0.25, 0.25), Vector3(0.0, 4.0, 2.2), Vector3.ZERO, false],
 		["box", Vector3(0.25, 0.25, 6.2), Vector3(2.2, 7.0, 0.0), Vector3.ZERO, false],
-		["cyl", Vector3(3.3, 3.3, 4.2), Vector3(0.0, 13.1, 0.0), Vector3.ZERO, false],
-		["cyl", Vector3(0.0, 3.5, 1.6), Vector3(0.0, 16.0, 0.0), Vector3.ZERO, false],
-		["cyl", Vector3(3.36, 3.36, 0.3), Vector3(0.0, 13.0, 0.0), Vector3.ZERO, true],
-		["ball", Vector3(0.35, 0.0, 0.0), Vector3(0.0, 17.1, 0.0), Vector3.ZERO, true],
+		["cyl", Vector3(3.3, 3.3, 4.2), Vector3(0.0, 16.1, 0.0), Vector3.ZERO, false],
+		["cyl", Vector3(0.0, 3.5, 1.6), Vector3(0.0, 19.0, 0.0), Vector3.ZERO, false],
+		["cyl", Vector3(3.38, 3.38, 0.9), Vector3(0.0, 16.0, 0.0), Vector3.ZERO, true],
+		["ball", Vector3(0.6, 0.0, 0.0), Vector3(0.0, 20.4, 0.0), Vector3.ZERO, true],
 	],
 	&"residential": [  # an apartment tower with lit floors and a mast
 		["box", Vector3(12.0, 34.0, 10.0), Vector3(0.0, 17.0, 0.0), Vector3.ZERO, false],
@@ -43,7 +43,7 @@ const PARTS := {
 		["box", Vector3(10.0, 0.35, 0.2), Vector3(0.0, 28.0, 5.05), Vector3.ZERO, true],
 	],
 	&"park": [  # a ferris wheel
-		["ring", Vector3(8.8, 9.2, 0.0), Vector3(0.0, 11.0, 0.0), Vector3.ZERO, false],
+		["ring", Vector3(8.7, 9.3, 0.0), Vector3(0.0, 11.0, 0.0), Vector3.ZERO, true],
 		["ring", Vector3(4.4, 4.6, 0.0), Vector3(0.0, 11.0, 0.0), Vector3.ZERO, false],
 		["box", Vector3(18.2, 0.2, 0.2), Vector3(0.0, 11.0, 0.0), Vector3(0.0, 0.0, 0.0), false],
 		["box", Vector3(18.2, 0.2, 0.2), Vector3(0.0, 11.0, 0.0), Vector3(0.0, 0.0, 60.0), false],

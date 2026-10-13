@@ -303,6 +303,16 @@ func _add_rest_spot() -> void:
 	bulb.material_override = glow
 	bulb.position = Vector3(0.0, 2.35, 0.0)
 	lantern.add_child(bulb)
+	var bloom := MeshInstance3D.new()
+	bloom.name = "RestBloom"
+	var flare := QuadMesh.new()
+	flare.size = Vector2(2.6, 2.6)
+	bloom.mesh = flare
+	var flare_mat := _soft(Color(BRASS, 0.7), true)
+	flare_mat.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
+	bloom.material_override = flare_mat
+	bloom.position = bulb.position
+	lantern.add_child(bloom)
 	var rest_pool := MeshInstance3D.new()
 	rest_pool.name = "RestPool"
 	rest_pool.mesh = _patch()

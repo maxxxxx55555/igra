@@ -102,3 +102,5 @@ n	utc	head	id	exit	command
 101	20261013T010533Z	59668fa	s23_density_before_59668fa	0	bash tools/qa_sim/density_frames before 59668fa
 102	20261013T011245Z	5d30659	s23_density_before_5d30659	0	bash tools/qa_sim/density_frames before 5d30659
 103	20261013T011544Z	87e3af2	s23_density_after1_87e3af2	0	bash tools/qa_sim/density_frames after 87e3af2
+104	20261013T011804Z	ed7f2c9	s23_density_after1_ed7f2c9	0	bash -c bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120 && bash tools/qa_sim/density_frames after ed7f2c9
+105	20261013T012628Z	113003c	s23_density_pair2_113003c	0	bash -c bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120 && bash tools/qa_sim/density_frames pair 113003c
