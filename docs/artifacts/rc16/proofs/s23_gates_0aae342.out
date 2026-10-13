@@ -1,0 +1,23 @@
+# proof s23_gates_0aae342
+# utc 20261013T103129Z
+# head 0aae342 (uncommitted paths: 0)
+# env none
+# cmd bash -c GODOT="$(bash tools/qa_sim/_resolve_godot.sh)"; timeout 240 "$GODOT" --editor --quit --path . > .qa_logs/reimport_s23.log 2>&1; echo reimport_rc=$?; git checkout -- default_bus_layout.tres; bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; bash tools/qa_sim/closeout_check 800; bash tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn 300; bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120; bash tools/qa_sim/rc16_probe after 0aae342 900
+reimport_rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] DONE checks=457 fails=0
+  closeout_check rc=0 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/perf_check_scene.tscn rc=1 (log: .qa_logs/perf_check_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/audio_truth_gate_scene.tscn rc=0 (log: .qa_logs/audio_truth_gate_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  rc16_probe rc=0 (log: .qa_logs/rc16_probe_after.log, 40 probe lines)
+  user-data guard: 0 file(s) restored byte-identical
+# EXIT=0
