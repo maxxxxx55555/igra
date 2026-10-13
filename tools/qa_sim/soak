@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Session 23 soak and stress runs (scripts/tools/_soak_runner.gd), windowed and muted, under the user-data guard.
+#   tools/qa_sim/soak <mode> <hash> [minutes] [timeout-sec]
+#     mode: soak (varied play for <minutes> in one process, one reading a minute) | stress (120 monsters for 45 s)
+#   log -> .qa_logs/soak_<mode>.log      working set of the game's process, once a minute -> .qa_logs/soak_<mode>_rss.csv (seconds since the start, KiB)
+set -uo pipefail
+cd "$(dirname "$0")/../.." || exit 2
+MODE="${1:?usage: tools/qa_sim/soak <mode> <hash> [minutes] [timeout-sec]}"
+HASH="${2:?usage: tools/qa_sim/soak <mode> <hash> [minutes] [timeout-sec]}"
+MINUTES="${3:-120}"
+T="${4:-7500}"
+mkdir -p .qa_logs
+LOG=".qa_logs/soak_${MODE}.log"
+RSS=".qa_logs/soak_${MODE}_rss.csv"
+rm -f "$LOG" "$RSS"
+
+GODOT="$(bash tools/qa_sim/_resolve_godot.sh 2>/dev/null)"
+if [[ -z "$GODOT" ]] || [[ ! -x "$GODOT" ]]; then
+	bash tools/qa_sim/_resolve_godot.sh >&2
+	exit 99
+fi
+source tools/qa_sim/user_data_guard.sh
+udg_snapshot || exit 99
+trap 'udg_restore || exit 97' EXIT
+trap 'exit 130' INT TERM
+export TLS_UDG_GUARDED=1
+start="$(date +%s)"
+(
+	while sleep 60; do
+		kib="$(tasklist //FI "IMAGENAME eq godot.exe" //FO CSV //NH 2>/dev/null | awk -F'","' '{gsub(/[^0-9]/, "", $5); s += $5} END {print s + 0}')"
+		echo "$(( $(date +%s) - start )),${kib}" >> "$RSS"
+	done
+) &
+sampler=$!
+timeout "$T" "$GODOT" --windowed --path . res://scenes/tools/soak_scene.tscn -- --tmode="$MODE" --thash="$HASH" --tminutes="$MINUTES" > "$LOG" 2>&1
+rc=$?
+kill "$sampler" 2>/dev/null
+echo "  soak $MODE rc=$rc (log: $LOG, $(grep -ac '^\[soak\] minute' "$LOG") minute lines, $(grep -ac '^\[stress\]' "$LOG") stress lines)"
+exit $rc
