@@ -7,6 +7,7 @@ extends "res://scripts/tools/_rc16_probe_runner.gd"
 ##   04_block    from the middle block across the street to its neighbour, power FULL
 ##   05_skyline  up the south street toward the landmark of the district, power FULL
 ## Frames -> docs/stills/density/<id>_<view>_<label>_<hash>_<UTC>.jpg (the AF3 name: the code tree and the capture time). A saved frame proves nothing until it is read.
+## The runs are in English with the HUD and the tutorial hidden (Trailer Mode), so a frame holds the world and nothing else.
 ## Each district also prints one `[density] perf` line: the draw calls, primitives and objects of the district as it stands.
 
 const VIEWS: Array[Dictionary] = [
@@ -100,6 +101,9 @@ func _run() -> void:
 	if not await _wait_until(playing, 20.0):
 		_fail("never reached gameplay")
 		return
+	LocalizationManager.set_language("en")
+	SettingsManager.set_setting("trailer_mode", true)
+	TutorialSystem.call("_skip_tutorial")
 	await get_tree().create_timer(3.0).timeout
 	print("[density] start label=%s hash=%s ids=%s %s" % [_label, _hash, _ids, _mem()])
 	for id in _ids:

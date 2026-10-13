@@ -99,3 +99,4 @@ n	utc	head	id	exit	command
 98	20261012T204608Z	f43d446	s23_bot_f43d446	0	bash tools/qa_sim/autoplay_bot
 99	20261012T211919Z	0651585	s23_post_0651585	0	bash -c bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; CLOSEOUT_ONLY=s23 bash tools/qa_sim/closeout_check 400
 100	20261012T212052Z	6bb525c	s23_mutations	1	bash -c bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; CLOSEOUT_ONLY=s23 bash tools/qa_sim/closeout_check 400
+101	20261013T010533Z	59668fa	s23_density_before_59668fa	0	bash tools/qa_sim/density_frames before 59668fa

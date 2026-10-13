@@ -1,0 +1,9 @@
+# proof s23_density_before_59668fa
+# utc 20261013T010533Z
+# head 59668fa (uncommitted paths: 0)
+# env none
+# cmd bash tools/qa_sim/density_frames before 59668fa
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_before.log, 55 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# EXIT=0
