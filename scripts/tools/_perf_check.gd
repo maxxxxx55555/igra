@@ -1,10 +1,7 @@
 extends Node
-## RESCUE WAVE P3: perf-guard diagnostic. Prints draw calls / primitives /
-## object counts once real gameplay is running. docs/PRODUCTION_BIBLE.md's
-## checklist calls this "printed/verified headless, not yet an automated
-## gate" - this prints and reports, it doesn't fail the build, since no
-## district-by-district draw-call budget is wired to know which of the
-## GDD's two budgets (<200 D1 / <350 D11) applies to the spawn district.
+## Perf gate: draw calls, primitives and objects once real gameplay is running, then the frame time and the video memory of the first
+## and the last district, against the budgets of _perf_check_runner.gd (D1 < 200 and D11 < 350 draw calls, p95 <= 33 ms, 512 MiB).
+## It fails the build when one is over; a headless run only skips (the dummy renderer counts no draw calls).
 ##
 ##   tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn
 
