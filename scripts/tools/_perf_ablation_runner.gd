@@ -1,23 +1,29 @@
 extends "res://scripts/tools/_perf_check_runner.gd"
-## Where the frame time goes (docs/PERF_PASS.md, Session 23). One windowed run, tools/qa_sim/guarded_windowed res://scenes/tools/perf_ablation_scene.tscn: a view is measured as it stands, then with one
-## part of the frame switched off at a time, the baseline between each pair so the drift of a shared machine shows. The suburbs (the spawn view) take every part in PARTS; the power station (the D11
-## of the perf gate, a district with ground fog) takes the three in HEAVY. Every line is `[ablate] <district> <part> frame_p95_ms=<p95> gpu_ms=<mean> draw_calls=<n>`; the saving of a part is its
-## line against the baselines around it. A reading, never a verdict.
+## Where the frame time goes (docs/PERF_PASS.md, Session 23). One windowed run, tools/qa_sim/guarded_windowed res://scenes/tools/perf_ablation_scene.tscn: a view is measured as it stands, then with one part of the frame switched off at a time, the baseline between each pair so the drift of a shared
+## machine shows. The vertical sync and the frame cap are off, so a frame time is the work and not a multiple of the display's interval. The suburbs (the spawn view) take the parts of PARTS, then every visible child of the HUD and of the post-process
+## overlay in turn, then the 4x MSAA (last: switched back on it does not return until the window changes size); the power station (the D11 of the perf gate, a district with ground fog) takes the two in HEAVY.
+## Every line is `[ablate] <district> <part> frame_p95_ms=<p95> gpu_ms=<mean> draw_calls=<n>`; the saving of a part is its line against the baselines around it. A reading, never a verdict.
 
-const FRAMES: int = 300
+const FRAMES: int = 200
 const SETTLE_FRAMES: int = 20
-const PARTS: Array[String] = ["dressing hidden", "lamp pools hidden", "post-process layers hidden", "HUD hidden", "glow off", "moon shadows off", "flashlight shadows off", "msaa off", "ash hidden", "3d scale 0.7", "window 1280x720"]
-const HEAVY: Array[String] = ["fog cards hidden", "dressing hidden", "post-process layers hidden"]
+const PARTS: Array[String] = ["lamp pools hidden", "post-process layers hidden", "HUD hidden"]
+const HEAVY: Array[String] = ["fog cards hidden", "lamp pools hidden"]
+const LAYERS: Array[String] = ["HUD", "PostProcessOverlay"]
 
 var _baselines: Array[float] = []
-var _window: Vector2i = Vector2i.ZERO
 
 func _run() -> void:
 	if not await _boot():
 		return
-	_window = get_window().size
-	print("[ablate] window=%s msaa=%d tier=%d" % [_window, get_viewport().msaa_3d, int(SettingsManager.get_setting("graphics_tier", 2))])
+	var vsync: int = DisplayServer.window_get_vsync_mode()
+	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+	Engine.max_fps = 0
+	print("[ablate] window=%s msaa=%d tier=%d vsync_was=%d" % [get_window().size, get_viewport().msaa_3d, int(SettingsManager.get_setting("graphics_tier", 2)), vsync])
 	await _sweep("suburbs", PARTS)
+	for layer in LAYERS:
+		await _children_sweep("suburbs", layer)
+	_apply("msaa off", true)
+	await _measure("suburbs", "msaa off")
 	if not await _travel(&"power_station"):
 		return
 	await _sweep("power_station", HEAVY)
@@ -34,6 +40,17 @@ func _sweep(district: String, parts: Array[String]) -> void:
 		_apply(part, false)
 		await _measure(district, "baseline")
 
+## Every child of a main-scene layer that is visible is switched off alone, the baseline after each.
+func _children_sweep(district: String, layer: String) -> void:
+	for child: Node in get_tree().root.get_node("Main3D").get_node(layer).get_children():
+		var item := child as CanvasItem
+		if item == null or not item.visible:
+			continue
+		item.visible = false
+		await _measure(district, "%s/%s" % [layer, child.name])
+		item.visible = true
+		await _measure(district, "baseline")
+
 ## One frame for the eye, in .qa_logs (not evidence: the stills of the pass are taken by the frame tools).
 func _shot(district: String, part: String) -> void:
 	await RenderingServer.frame_post_draw
@@ -46,29 +63,14 @@ func _apply(part: String, off: bool) -> void:
 		"fog cards hidden":
 			for card in get_tree().root.find_children("FogCard*", "MeshInstance3D", true, false):
 				(card as MeshInstance3D).visible = not off
-		"dressing hidden":
-			(get_tree().root.find_child("DistrictDressing", true, false) as Node3D).visible = not off
 		"lamp pools hidden":
 			(get_tree().root.find_child("LampPools", true, false) as Node3D).visible = not off
 		"post-process layers hidden":
 			(main.get_node("PostProcessOverlay") as CanvasLayer).visible = not off
 		"HUD hidden":
 			(main.get_node("HUD") as CanvasLayer).visible = not off
-		"glow off":
-			((main.get_node("WorldEnvironment") as WorldEnvironment).environment).glow_enabled = not off
-		"moon shadows off":
-			(main.get_node("Moon") as DirectionalLight3D).shadow_enabled = not off
-		"flashlight shadows off":
-			for node in get_tree().root.find_children("*", "SpotLight3D", true, false):
-				(node as SpotLight3D).shadow_enabled = not off
 		"msaa off":
 			get_viewport().msaa_3d = Viewport.MSAA_DISABLED if off else Viewport.MSAA_4X
-		"ash hidden":
-			(main.get_node("Ash") as GPUParticles3D).visible = not off
-		"3d scale 0.7":
-			get_viewport().scaling_3d_scale = 0.7 if off else 1.0
-		"window 1280x720":
-			get_window().size = Vector2i(1280, 720) if off else _window
 
 ## To the first frame of play, as the perf gate does.
 func _boot() -> bool:
