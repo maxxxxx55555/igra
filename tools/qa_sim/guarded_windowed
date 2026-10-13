@@ -8,7 +8,7 @@
 #   tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn [timeout-sec]
 #   log -> .qa_logs/<scene>.log
 set -uo pipefail
-cd "$(dirname "$0")/../.."
+cd "$(dirname "$0")/../.." || exit 2
 SCENE="${1:?usage: tools/qa_sim/guarded_windowed <res://scenes/tools/NAME.tscn> [timeout-sec]}"
 T="${2:-300}"
 mkdir -p .qa_logs
@@ -27,5 +27,12 @@ trap 'exit 130' INT TERM
 export TLS_UDG_GUARDED=1  # tells QaLaunchGuard this shell guard covers the run
 timeout "$T" "$GODOT" --windowed --path . "$SCENE" > "$LOG" 2>&1
 rc=$?
+source tools/qa_sim/engine_errors.sh
+errs=$(grep -aE "$BAD" "$LOG" | head -5)
+if [[ -n "$errs" ]]; then
+	echo "engine errors in the log:"
+	echo "$errs"
+	[[ $rc -eq 0 ]] && rc=1
+fi
 echo "  $SCENE rc=$rc (log: $LOG)"
 exit $rc

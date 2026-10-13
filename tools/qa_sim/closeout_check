@@ -5,7 +5,7 @@
 #
 #   tools/qa_sim/closeout_check          # log -> .qa_logs/closeout_check.log
 set -uo pipefail
-cd "$(dirname "$0")/../.."
+cd "$(dirname "$0")/../.." || exit 2
 
 GODOT="$(bash tools/qa_sim/_resolve_godot.sh 2>/dev/null)"
 if [[ -z "$GODOT" ]] || [[ ! -x "$GODOT" ]]; then
@@ -22,7 +22,7 @@ LOG=.qa_logs/closeout_check.log
 rm -f "$LOG"
 timeout "${1:-240}" "$GODOT" --headless --path . res://scenes/tools/closeout_check_scene.tscn >"$LOG" 2>&1
 rc=$?
-BAD='SCRIPT ERROR|Parse Error|Compile Error|Nonexistent function|freed instance|Failed to load script|Invalid call|Invalid get index|Invalid set index|Cannot infer the type'
+source tools/qa_sim/engine_errors.sh
 errs=$(grep -aE "$BAD" "$LOG" | head -12)
 grep -aE "^\[closeout\] (FAIL|DONE)" "$LOG" | tail -40
 if [[ -n "$errs" ]]; then

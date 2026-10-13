@@ -68,7 +68,7 @@ for MODE in "${MODES[@]}"; do
 			echo "  seed $SEED stops at $MODE (rc=$rc, ${last:-no DONE line: a crash or a hang})"
 		fi
 	fi
-	BAD='SCRIPT ERROR|Parse Error|Compile Error|Nonexistent function|freed instance|Failed to load script|Invalid call|Invalid get index|Invalid set index|Cannot infer the type'
+	source tools/qa_sim/engine_errors.sh
 	errs=$(grep -aE "$BAD" "$LOG" | head -8)
 	echo "  mode $MODE${SEED:+ seed $SEED} rc=$rc (log: $LOG)"
 	grep -aE "^\[pt\] (FAIL|DONE)|^\[pt\] PASS C[0-9]|^\[pt\] note HITCH" "$LOG" | tail -30

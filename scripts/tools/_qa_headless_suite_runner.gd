@@ -31,6 +31,7 @@ extends Node
 ## Prints "[qa] DONE fails=N" and quits with N (capped 250). The shell
 ## wrapper additionally greps the log for engine-level SCRIPT/parse errors.
 
+const SUBURBS_SCENE: String = "res://scenes/districts/suburbs.tscn"
 const DISTRICTS: Array[StringName] = [
 	&"suburbs", &"residential", &"park", &"school", &"hospital",
 	&"gas_station", &"police", &"warehouses", &"industrial",
@@ -272,7 +273,7 @@ func _p2b_combat() -> void:
 	var holder := Node3D.new()
 	holder.name = "QACombatHolder"
 	add_child(holder)
-	var inst := (load("res://scenes/districts/suburbs.tscn") as PackedScene).instantiate()
+	var inst := (load(SUBURBS_SCENE) as PackedScene).instantiate()
 	holder.add_child(inst)
 	await get_tree().process_frame
 	await get_tree().process_frame
@@ -318,7 +319,7 @@ func _p2h_kill_pays_wallet() -> void:
 	var holder := Node3D.new()
 	holder.name = "QAKillHolder"
 	add_child(holder)
-	var inst := (load("res://scenes/districts/suburbs.tscn") as PackedScene).instantiate()
+	var inst := (load(SUBURBS_SCENE) as PackedScene).instantiate()
 	holder.add_child(inst)
 	await get_tree().process_frame
 	await get_tree().process_frame
@@ -833,11 +834,12 @@ func _p2r_respawn_keeps_progress() -> void:
 	if not await _wait_until(func() -> bool: return GameManager.is_dead(), 5.0):
 		_fail("P2r player did not die")
 		return
+	var old_id := p.get_instance_id()
 	GameManager.respawn_after_death()
 	Routes.restart_game()
 	var back := func() -> bool:
 		var q := get_tree().get_first_node_in_group("player")
-		return GameManager.is_playing() and q != null and q != p and is_instance_valid(q) and q.is_inside_tree()
+		return GameManager.is_playing() and q != null and q.get_instance_id() != old_id and q.is_inside_tree()
 	if not await _wait_until(back, 15.0):
 		_fail("P2r never came back to PLAYING with a fresh player")
 		return

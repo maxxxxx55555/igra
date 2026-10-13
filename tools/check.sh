@@ -455,6 +455,7 @@ else
     # Engine gates run the real game on the owner's user:// profile (New
     # Game, autosave, forged upgrade cfgs): snapshot it, restore on any exit.
     source tools/qa_sim/user_data_guard.sh
+    source tools/qa_sim/engine_errors.sh
     udg_snapshot || { echo "  ${RED}FAIL${OFF} user-data guard: снимок профиля не удался - движковые проверки не запускаются"; exit 1; }
     trap 'udg_restore || exit 97' EXIT
     trap 'exit 130' INT TERM
@@ -475,7 +476,9 @@ else
       out=$(timeout "$t" "$GODOT" --headless --path . "$scene" 2>&1)
       local rc=$?
       mkdir -p .qa_logs; printf '%s\n' "$out" > ".qa_logs/gate_$(basename "${scene%.tscn}").log"
-      if [[ $rc -eq 0 ]]; then ok "$name"
+      local hits; hits=$(printf '%s\n' "$out" | grep -aE "$BAD" | head -5)
+      if [[ $rc -eq 0 && -n "$hits" ]]; then bad "$name (engine errors in the log)"; echo "$hits" | sed 's/^/         /'
+      elif [[ $rc -eq 0 ]]; then ok "$name"
       elif [[ $rc -eq 3 ]]; then echo "  ${DIM}пропуск${OFF} $name (нужен --windowed, не OK/FAIL)"
       elif [[ $rc -eq 124 ]]; then bad "$name (таймаут ${t}s)"; echo "$out" | tail -15 | sed 's/^/         /'
       else bad "$name (код $rc)"; echo "$out" | grep -aE "FAIL|fails=[1-9]" | head -12 | sed 's/^/         /'; echo "$out" | tail -15 | sed 's/^/         /'; fi

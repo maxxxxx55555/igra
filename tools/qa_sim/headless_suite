@@ -12,7 +12,7 @@
 # window: --headless only. perf_check self-skips headless (draw_calls=0);
 # its real budget number still needs one owner --windowed run.
 set -uo pipefail
-cd "$(dirname "$0")/../.."
+cd "$(dirname "$0")/../.." || exit 2
 
 GODOT="$(bash tools/qa_sim/_resolve_godot.sh 2>/dev/null)"
 if [[ -z "$GODOT" ]] || [[ ! -x "$GODOT" ]]; then
@@ -36,7 +36,7 @@ FAILS=0
 # Benign --headless teardown noise — not real failures.
 BENIGN='leaked at exit|RID allocations|ObjectDB instances were leaked|resources still in use at exit|Thread object is being destroyed|Unreferenced static string|RIDs of type|Pages in use exist at exit|WARNING: A Thread'
 # Real engine-level problems.
-BAD='SCRIPT ERROR|Parse Error|Compile Error|Nonexistent function|freed instance|Failed to load script|Failed to instantiate an autoload|Invalid call|Invalid get index|Invalid set index|Cannot infer the type'
+source tools/qa_sim/engine_errors.sh
 
 scan_log() { # file, label
 	local f="$1" label="$2"

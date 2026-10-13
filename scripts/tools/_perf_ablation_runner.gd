@@ -6,7 +6,7 @@ extends "res://scripts/tools/_perf_check_runner.gd"
 
 const FRAMES: int = 300
 const SETTLE_FRAMES: int = 20
-const PARTS: Array[String] = ["dressing hidden", "post-process layers hidden", "HUD hidden", "glow off", "moon shadows off", "flashlight shadows off", "msaa off", "ash hidden", "3d scale 0.7", "window 1280x720"]
+const PARTS: Array[String] = ["dressing hidden", "lamp pools hidden", "post-process layers hidden", "HUD hidden", "glow off", "moon shadows off", "flashlight shadows off", "msaa off", "ash hidden", "3d scale 0.7", "window 1280x720"]
 const HEAVY: Array[String] = ["fog cards hidden", "dressing hidden", "post-process layers hidden"]
 
 var _baselines: Array[float] = []
@@ -48,6 +48,8 @@ func _apply(part: String, off: bool) -> void:
 				(card as MeshInstance3D).visible = not off
 		"dressing hidden":
 			(get_tree().root.find_child("DistrictDressing", true, false) as Node3D).visible = not off
+		"lamp pools hidden":
+			(get_tree().root.find_child("LampPools", true, false) as Node3D).visible = not off
 		"post-process layers hidden":
 			(main.get_node("PostProcessOverlay") as CanvasLayer).visible = not off
 		"HUD hidden":

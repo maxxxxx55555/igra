@@ -23,5 +23,12 @@ trap 'exit 130' INT TERM
 export TLS_UDG_GUARDED=1
 timeout "$T" "$GODOT" --headless --path . "$SCENE" > "$LOG" 2>&1
 rc=$?
+source tools/qa_sim/engine_errors.sh
+errs=$(grep -aE "$BAD" "$LOG" | head -5)
+if [[ -n "$errs" ]]; then
+	echo "engine errors in the log:"
+	echo "$errs"
+	[[ $rc -eq 0 ]] && rc=1
+fi
 echo "  $SCENE rc=$rc (log: $LOG)"
 exit $rc
