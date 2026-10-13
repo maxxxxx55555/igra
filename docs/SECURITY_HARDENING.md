@@ -20,6 +20,10 @@ one raises the bar and leaves a trace; none of them is secrecy against the owner
 shipped files match their manifest, a changed hash, a missing file and a missing manifest are named, line ends do not matter) and SEC4 (emulator models). The
 manifest is checked by the static gate `integrity manifest` of `tools/check.sh`.
 
+## In the bundle
+
+The export filter leaves out `scripts/security/attack_sim.gd` and nothing else of that folder: `integrity_guard.gd` preloads `integrity_scan.gd` and `security_log.gd`, and until Session 23 closed it (CORRECTION_LOG 242) the filter left out the whole folder, so the first bundle of the pass carried a guard that could not load. `tools/qa_sim/export_refs_check.py` holds it in the static gates, and `tools/qa_sim/aab_check.py <bundle>` reads the manifest's files out of an exported bundle and hashes them as the scan does (the fact `integrity`), and asks the pack for every file the shipped files name (the fact `refs`).
+
 ## Known limits
 
 The two keys of the game (`SaveSystem._HMAC_KEY`, `SecurityLog.KEY`) are in the scripts: anyone who unpacks the bundle reads them. A repackager who changes a data

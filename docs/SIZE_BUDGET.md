@@ -118,7 +118,7 @@ the same session, documented honestly below rather than left standing.
 references): `textures/items_legacy/` (26 — `docs/REPORT_ASSETS.md`: "intentional... kept as
 backups", live replacements in `textures/items/`), `audio/ambience/wav_src/` (5 — `docs/
 AUDIO_CONVERT.md`/`docs/MISSING_IMPORTS.md`: "ARCHIVED", "never import", live `.ogg` replacements
-exist), `textures/icons/*.png` root (12 achievement icons — `docs/REPORT_BUG_HUNT.md`: "legacy...
+exist), `textures/icons/ach_*` root (12 achievement icons; the filter said `icons/*.png` until Session 23 and, its `*` matching `/`, left out `icons/skills/*.png` too: CORRECTION_LOG 243 — `docs/REPORT_BUG_HUNT.md`: "legacy...
 superseded unwired", replacement `icons_v2/ach_medal_v2_*` confirmed live), `textures/icons/
 weapons/*` (9 — `weapon_compare_ui.gd`'s own comment confirms it switched from this exact path to
 `renders_v2/weapons/*_render_256.png` mid-session).
