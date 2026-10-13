@@ -1,0 +1,20 @@
+# proof s23_aab_security_1414899
+# utc 20261013T210724Z
+# head 1414899 (uncommitted paths: 15)
+# env none
+# cmd python -I -B -c 
+import zipfile
+z = zipfile.ZipFile('build/tls.aab')
+hits = sorted(i.filename for i in z.infolist() if 'security' in i.filename or 'integrity' in i.filename)
+print(len(z.infolist()), 'entries;', len(hits), 'with security or integrity in the name:')
+[print(' ', h) for h in hits]
+print('entries under scripts/security:', sum(1 for i in z.infolist() if 'scripts/security' in i.filename))
+
+2718 entries; 5 with security or integrity in the name:
+  assetPackInstallTime/assets/data/integrity_manifest.json
+  assetPackInstallTime/assets/scripts/systems/integrity_guard.gd.remap
+  assetPackInstallTime/assets/scripts/systems/integrity_guard.gdc
+  assetPackInstallTime/assets/scripts/systems/play_integrity_service.gd.remap
+  assetPackInstallTime/assets/scripts/systems/play_integrity_service.gdc
+entries under scripts/security: 0
+# EXIT=0

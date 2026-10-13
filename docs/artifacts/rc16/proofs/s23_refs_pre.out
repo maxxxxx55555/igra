@@ -1,0 +1,10 @@
+# proof s23_refs_pre
+# utc 20261013T210317Z
+# head 1414899 (uncommitted paths: 7)
+# env none
+# cmd python tools/qa_sim/export_refs_check.py
+NOTE scripts/core/qa_launch_guard.gd:34: scripts/tools/shot_tool.gd is excluded by scripts/tools/*
+FAIL scripts/systems/integrity_guard.gd:3: scripts/security/security_log.gd is excluded by scripts/security/*
+FAIL scripts/systems/integrity_guard.gd:4: scripts/security/integrity_scan.gd is excluded by scripts/security/*
+export_refs_check: 484 shipped file(s) read for the Android preset, 2 violation(s), 1 note(s)
+# EXIT=1

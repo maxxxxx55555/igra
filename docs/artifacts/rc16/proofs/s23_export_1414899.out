@@ -1,0 +1,69 @@
+# proof s23_export_1414899
+# utc 20261013T181657Z
+# head 1414899 (uncommitted paths: 0)
+# env none
+# cmd bash -c set -a; . .signing/release.env; set +a; /c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/Godot_v4.7-stable_win64_console.exe --headless --path . --export-release "Android" build/tls.aab
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Started Инициализация проекта (5 steps)[39m[0m
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Сканирование структуры файлов…[39m[0m
+[  16% ] [90m[1mfirst_scan_filesystem[22m | Загрузка глобальных имен классов…[39m[0m
+[  33% ] [90m[1mfirst_scan_filesystem[22m | Проверка GDExtensions…[39m[0m
+[  50% ] [90m[1mfirst_scan_filesystem[22m | Создание скриптов автозагрузки…[39m[0m
+[  66% ] [90m[1mfirst_scan_filesystem[22m | Инициализация плагинов…[39m[0m
+[  83% ] [90m[1mfirst_scan_filesystem[22m | Начало сканирование файлов…[39m[0m
+[92m[ DONE ][39m [1mfirst_scan_filesystem[22m
+[0m
+[   0% ] [90m[1mupdate_scripts_classes[22m | Started Регистрация глобальных классов… (10 steps)[39m[0m
+[   0% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[   9% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  18% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  27% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  36% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  45% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  54% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  63% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  72% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  81% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[92m[ DONE ][39m [1mupdate_scripts_classes[22m
+[0m
+[   0% ] [90m[1m_update_scan_actions[22m | Started Сканирование действий… (6 steps)[39m[0m
+[   0% ] [90m[1m_update_scan_actions[22m | gas_station_02_rest_en_f2e628a_20261013T165905Z.png[39m[0m
+[  14% ] [90m[1m_update_scan_actions[22m | hospital_02_rest_en_f2e628a_20261013T165857Z.png[39m[0m
+[  28% ] [90m[1m_update_scan_actions[22m | power_station_03_street_en_f2e628a_20261013T165928Z.png[39m[0m
+[  42% ] [90m[1m_update_scan_actions[22m | residential_04_block_ru_f2e628a_20261013T170019Z.png[39m[0m
+[  57% ] [90m[1m_update_scan_actions[22m | suburbs_03_street_ru_f2e628a_20261013T170010Z.png[39m[0m
+[  71% ] [90m[1m_update_scan_actions[22m | warehouses_02_rest_en_f2e628a_20261013T165849Z.png[39m[0m
+[92m[ DONE ][39m [1m_update_scan_actions[22m
+[0m
+[   0% ] [90m[1mreimport[22m | Started Импорт или повторный импорт ассетов (6 steps)[39m[0m
+[   0% ] [90m[1mreimport[22m | Подготовка файлов к повторному импорту…[39m[0m
+[  14% ] [90m[1mreimport[22m | Подготовка файлов к повторному импорту…[39m[0m
+[  28% ] [90m[1mreimport[22m | Подготовка файлов к повторному импорту…[39m[0m
+[  42% ] [90m[1mreimport[22m | Подготовка файлов к повторному импорту…[39m[0m
+[  57% ] [90m[1mreimport[22m | Подготовка файлов к повторному импорту…[39m[0m
+[  71% ] [90m[1mreimport[22m | Подготовка файлов к повторному импорту…[39m[0m
+[   0% ] [90m[1mreimport[22m | Выполнение предимпортных операций…[39m[0m
+[   0% ] [90m[1mreimport[22m | gas_station_02_rest_en_f2e628a_20261013T165905Z.png[39m[0m
+[  14% ] [90m[1mreimport[22m | hospital_02_rest_en_f2e628a_20261013T165857Z.png[39m[0m
+[  28% ] [90m[1mreimport[22m | power_station_03_street_en_f2e628a_20261013T165928Z.png[39m[0m
+[  42% ] [90m[1mreimport[22m | residential_04_block_ru_f2e628a_20261013T170019Z.png[39m[0m
+[  57% ] [90m[1mreimport[22m | suburbs_03_street_ru_f2e628a_20261013T170010Z.png[39m[0m
+[  71% ] [90m[1mreimport[22m | warehouses_02_rest_en_f2e628a_20261013T165849Z.png[39m[0m
+[  85% ] [90m[1mreimport[22m | Завершение импорта активов…[39m[0m
+[92m[ DONE ][39m [1mreimport[22m
+[0m
+[   0% ] [90m[1mreimport[22m | Started Импорт или повторный импорт ассетов (6 steps)[39m[0m
+[   0% ] [90m[1mreimport[22m | Выполнение операций после реимпорта…[39m[0m
+[92m[ DONE ][39m [1mreimport[22m
+[0m
+[   0% ] [90m[1mexport[22m | Started Экспорт для Android (105 steps)[39m[0m
+0 param: --xr_mode_regular
+1 param: --xr-mode
+2 param: off
+3 param: --fullscreen
+4 param: --background_color
+5 param: #000000
+[92m[ DONE ][39m [1mexport[22m
+[0m
+# EXIT=0

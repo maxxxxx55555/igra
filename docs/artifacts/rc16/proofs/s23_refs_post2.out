@@ -1,0 +1,8 @@
+# proof s23_refs_post2
+# utc 20261013T211153Z
+# head 1414899 (uncommitted paths: 18)
+# env none
+# cmd python tools/qa_sim/export_refs_check.py
+NOTE scripts/core/qa_launch_guard.gd:34: scripts/tools/shot_tool.gd is excluded by scripts/tools/*
+export_refs_check: 486 shipped file(s) read for the Android preset, 0 violation(s), 1 note(s)
+# EXIT=0

@@ -1,0 +1,9 @@
+# proof s23_refs_pre2
+# utc 20261013T211147Z
+# head 1414899 (uncommitted paths: 17)
+# env none
+# cmd python tools/qa_sim/export_refs_check.py
+NOTE scripts/core/qa_launch_guard.gd:34: scripts/tools/shot_tool.gd is excluded by scripts/tools/*
+FAIL scripts/ui/skill_button.gd:22: 15 of the 15 file(s) of assets/textures/icons/skills/%s_96.png are excluded by assets/textures/icons/*.png
+export_refs_check: 486 shipped file(s) read for the Android preset, 1 violation(s), 1 note(s)
+# EXIT=1

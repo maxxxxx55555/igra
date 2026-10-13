@@ -1,0 +1,98 @@
+# proof s23_aab_check2_1414899
+# utc 20261013T211826Z
+# head 1414899 (uncommitted paths: 19)
+# env none
+# cmd bash -c set -a; . .signing/release.env; set +a; python tools/qa_sim/aab_check.py build/tls.aab --secrets --against "../_BACKUPS/2026-10-13_20-48/build/tls.aab"
+size    136607113 bytes
+sha256  5eab5cea32c7a0a16adf1e16604df352a87725b407f950a78e3f47078a682b59
+entries 2718
+label   base/resources.pb names Last Streetlight: ok
+adsdk   0 dex entries name Lcom/applovin/: ok
+integrity 54 file(s) of the manifest, 0 missing or with other bytes: ok
+refs    3 file(s) or patterns named by the shipped files are not in the bundle: MISSING
+  FAIL scripts/systems/integrity_guard.gd:3: scripts/security/security_log.gd is not in the bundle
+  FAIL scripts/systems/integrity_guard.gd:4: scripts/security/integrity_scan.gd is not in the bundle
+  FAIL scripts/ui/skill_button.gd:22: 15 of the 15 file(s) of assets/textures/icons/skills/%s_96.png are not in the bundle
+secrets 2 value(s) of the environment searched in 2715 entries: 0 hits (path, password)
+jar     jar verified.
+signer  4f6be6415c260b34...: signer_match=yes
+against tls.aab: 2 entries gone, 34 new, 72 with other bytes
+  gone    assetPackInstallTime/assets/.godot/imported/night_grade.png-5ee70c8b6bbe2e3e649dbbc5b4aa7811.astc.ctex
+  gone    assetPackInstallTime/assets/assets/grading/night_grade.png.import
+  new     assetPackInstallTime/assets/.godot/exported/133200997/export-4e44215952f3f2a243b779afd0b1bebd-vfx_blood_hit.scn
+  new     assetPackInstallTime/assets/.godot/exported/133200997/export-7f81ce4db6630dfe7dd0d76b2ae88577-vfx_confetti.scn
+  new     assetPackInstallTime/assets/.godot/exported/133200997/export-7fe8447841294fc8d9c102091c5c1707-vfx_sparkle.scn
+  new     assetPackInstallTime/assets/data/i18n_glossary.json
+  new     assetPackInstallTime/assets/data/integrity_manifest.json
+  new     assetPackInstallTime/assets/scenes/vfx/vfx_blood_hit.tscn.remap
+  new     assetPackInstallTime/assets/scenes/vfx/vfx_confetti.tscn.remap
+  new     assetPackInstallTime/assets/scenes/vfx/vfx_sparkle.tscn.remap
+  new     assetPackInstallTime/assets/scripts/effects/dust_motes.gd.remap
+  new     assetPackInstallTime/assets/scripts/effects/dust_motes.gdc
+  new     assetPackInstallTime/assets/scripts/effects/edge_highlight.gd.remap
+  new     assetPackInstallTime/assets/scripts/effects/edge_highlight.gdc
+  new     assetPackInstallTime/assets/scripts/effects/rain_lens.gd.remap
+  new     assetPackInstallTime/assets/scripts/effects/rain_lens.gdc
+  new     assetPackInstallTime/assets/scripts/effects/shell_eject.gd.remap
+  new     assetPackInstallTime/assets/scripts/effects/shell_eject.gdc
+  new     assetPackInstallTime/assets/scripts/gameplay/noise_bomb.gd.remap
+  new     assetPackInstallTime/assets/scripts/gameplay/noise_bomb.gdc
+  new     assetPackInstallTime/assets/scripts/systems/audio_ducker.gd.remap
+  new     assetPackInstallTime/assets/scripts/systems/audio_ducker.gdc
+  new     assetPackInstallTime/assets/scripts/systems/dynamic_resolution.gd.remap
+  new     assetPackInstallTime/assets/scripts/systems/dynamic_resolution.gdc
+  new     assetPackInstallTime/assets/scripts/systems/input_remap.gd.remap
+  new     assetPackInstallTime/assets/scripts/systems/input_remap.gdc
+  new     assetPackInstallTime/assets/scripts/ui/remap_panel.gd.remap
+  new     assetPackInstallTime/assets/scripts/ui/remap_panel.gdc
+  new     assetPackInstallTime/assets/scripts/world/district_dressing.gd.remap
+  new     assetPackInstallTime/assets/scripts/world/district_dressing.gdc
+  new     assetPackInstallTime/assets/scripts/world/district_landmark.gd.remap
+  new     assetPackInstallTime/assets/scripts/world/district_landmark.gdc
+  new     assetPackInstallTime/assets/scripts/world/manhole.gd.remap
+  new     assetPackInstallTime/assets/scripts/world/manhole.gdc
+  new     assetPackInstallTime/assets/scripts/world/reverb_zone.gd.remap
+  new     assetPackInstallTime/assets/scripts/world/reverb_zone.gdc
+  changed META-INF/MANIFEST.MF
+  changed META-INF/TLS_RELE.RSA
+  changed META-INF/TLS_RELE.SF
+  changed assetPackInstallTime/assets.pb
+  changed assetPackInstallTime/assets/.godot/global_script_class_cache.cfg
+  changed assetPackInstallTime/assets/.godot/imported/ui_ammo.svg-eb1b69d73edb97856451d428879a03bb.ctex
+  changed assetPackInstallTime/assets/.godot/imported/ui_backpack.svg-0e0b87917a626aab975c5f2126004fe6.ctex
+  changed assetPackInstallTime/assets/.godot/imported/ui_battery.svg-dc768b0daa79778733e0d9a3bd27c788.ctex
+  changed assetPackInstallTime/assets/.godot/imported/ui_flashlight.svg-ae64e6dd6b5dbbec661f9a8ca15543c4.ctex
+  changed assetPackInstallTime/assets/.godot/imported/ui_health.svg-eec8788d3990112245c96832cba5c3e1.ctex
+  changed assetPackInstallTime/assets/.godot/imported/ui_heart.svg-ad0af7a74c4cdb12e9219739cf4b9903.ctex
+  changed assetPackInstallTime/assets/.godot/imported/ui_interact.svg-d2bacd17f72e0750dc32d85c4bdd641f.ctex
+  changed assetPackInstallTime/assets/.godot/imported/ui_key.svg-4a52dc68c8cf3b2db07ac8394fafa209.ctex
+  changed assetPackInstallTime/assets/.godot/imported/ui_pause.svg-0e0c0dd2d5495c27de22c009d3b5ea01.ctex
+  changed assetPackInstallTime/assets/.godot/imported/ui_settings.svg-864f26925b6235d50bb832143b4b035d.ctex
+  changed assetPackInstallTime/assets/.godot/uid_cache.bin
+  changed assetPackInstallTime/assets/assets.sparsepck
+  changed assetPackInstallTime/assets/assets/shaders/height_fog_card.gdshader
+  changed assetPackInstallTime/assets/data/i18n/ar.json
+  changed assetPackInstallTime/assets/data/i18n/de.json
+  changed assetPackInstallTime/assets/data/i18n/en.json
+  changed assetPackInstallTime/assets/data/i18n/es.json
+  changed assetPackInstallTime/assets/data/i18n/fr.json
+  changed assetPackInstallTime/assets/data/i18n/it.json
+  changed assetPackInstallTime/assets/data/i18n/ja.json
+  changed assetPackInstallTime/assets/data/i18n/ko.json
+  changed assetPackInstallTime/assets/data/i18n/pt_BR.json
+  changed assetPackInstallTime/assets/data/i18n/ru.json
+  changed assetPackInstallTime/assets/data/i18n/tr.json
+  changed assetPackInstallTime/assets/data/i18n/zh.json
+  changed assetPackInstallTime/assets/data/i18n/zh_TW.json
+  changed assetPackInstallTime/assets/project.binary
+  changed assetPackInstallTime/assets/scripts/core/camera_follow_3d.gdc
+  changed assetPackInstallTime/assets/scripts/core/input_service.gdc
+  changed assetPackInstallTime/assets/scripts/effects/screen_shake.gdc
+  changed assetPackInstallTime/assets/scripts/effects/vfx_burst.gdc
+  changed assetPackInstallTime/assets/scripts/effects/vfx_pool.gdc
+  changed assetPackInstallTime/assets/scripts/enemies/base_monster.gdc
+  changed assetPackInstallTime/assets/scripts/enemies/boss_3d.gdc
+  changed assetPackInstallTime/assets/scripts/events/event_bus.gdc
+  changed ... and 32 more
+aab_check: FAIL (1)
+# EXIT=1
