@@ -49,6 +49,7 @@ MUTATIONS = [
     ("scripts/enemies/base_monster.gd", "\tget_parent().add_child(pickup)\n", "\tget_tree().current_scene.add_child(pickup)\n", "LEAK1"),
     ("scripts/world/district_dressing.gd", "pools.visible = pool > 0.0", "pools.visible = true", "POOL1"),
     ("scripts/world_env_setup.gd", "Viewport.MSAA_2X, Viewport.MSAA_2X, Viewport.MSAA_4X]", "Viewport.MSAA_2X, Viewport.MSAA_4X, Viewport.MSAA_4X]", "MSAA1"),
+    ("scripts/enemies/boss_3d.gd", "if space.intersect_ray(query).is_empty():", "if true:", "BOSS1"),
     ("scripts/ui/quest_tracker_hud.gd", "hud_visibility_changed.connect(func(shown: bool) -> void: visible = shown)", "hud_visibility_changed.connect(func(shown: bool) -> void: visible = true)", "TRLR1"),
 ]
 LINE = re.compile(r"^\[closeout\] (ok  |FAIL) +(\S+)")

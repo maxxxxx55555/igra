@@ -145,9 +145,21 @@ func _throw_energy_ball() -> void:
 func _teleport_near_player() -> void:
 	if not player_ref or not is_instance_valid(player_ref):
 		return
-	var ang := randf() * TAU
-	var dist := randf_range(6.0, 12.0)
-	var target := player_ref.global_position + Vector3(cos(ang), 0.0, sin(ang)) * dist
+	var from: Vector3 = player_ref.global_position
+	var exclude: Array[RID] = [get_rid()]
+	if player_ref is CollisionObject3D:
+		exclude.append((player_ref as CollisionObject3D).get_rid())
+	var space := get_world_3d().direct_space_state
+	var target := Vector3.INF
+	for attempt in 8:  # a wall between the player and the spot (the wall of the district) rules the spot out: a boss that landed outside it could not come back (CORRECTION_LOG 237)
+		var ang := randf() * TAU
+		var spot := from + Vector3(cos(ang), 0.0, sin(ang)) * randf_range(6.0, 12.0)
+		var query := PhysicsRayQueryParameters3D.create(from + Vector3.UP, spot + Vector3.UP, collision_mask, exclude)
+		if space.intersect_ray(query).is_empty():
+			target = spot
+			break
+	if target == Vector3.INF:
+		return
 	global_position = target
 	velocity = Vector3.ZERO
 	AudioManager.play_sound_3d(_HIT_SFX, global_position, -6.0)

@@ -113,7 +113,7 @@ func _activity() -> void:
 	for i in MONSTERS_PER_CYCLE:
 		var scene := load("res://scenes/enemies/%s.tscn" % MONSTER_SCENES[i % MONSTER_SCENES.size()]) as PackedScene
 		var m := scene.instantiate() as Node3D
-		get_tree().current_scene.add_child(m)
+		(_runtime().get("_district_root") as Node).add_child(m)  # where the game keeps its monsters: the district frees them and their drops
 		m.set("player_ref", player)
 		m.global_position = player.global_position + Vector3(6.0 + 2.0 * float(i), 0.0, 4.0)
 		bodies.append(m)

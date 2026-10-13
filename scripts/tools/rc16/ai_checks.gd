@@ -16,6 +16,7 @@ static func run(r: Node) -> void:
 	_last_seen(r)
 	_difficulty_hooks(r)
 	await _bars_glide(r)
+	await _boss_stays_inside(r)
 	SettingsManager.set_difficulty(1)
 	r._playing()
 
@@ -130,3 +131,34 @@ static func _bars_glide(r: Node) -> void:
 	var shaded: bool = not middle.is_equal_approx(calm) and not middle.is_equal_approx(warn) and middle.g > calm.g - 0.001
 	hud.set("_noise_shown", 0.0)
 	r._ok(glides and shaded, "AI5 detection gradient: after a jump of the player's noise to 0.8 the bar is at %s of its width on the first six polls (it glides by 0.15), a value of 0.25 has a colour of its own %s between green and brass (%s)" % [steps, middle, shaded])
+
+## BOSS1: the boss's jump to a spot near the player never lands beyond a wall (CORRECTION_LOG 237: with the player at the wall of the district half the spots lay outside it, and the boss could not come back).
+static func _boss_stays_inside(r: Node) -> void:
+	var origin: Vector3 = Vector3(-500.0, 0.0, 500.0)
+	var wall := StaticBody3D.new()
+	var wall_shape := CollisionShape3D.new()
+	var box := BoxShape3D.new()
+	box.size = Vector3(FLOOR_SIZE, 12.0, 0.4)
+	wall_shape.shape = box
+	wall.add_child(wall_shape)
+	r.add_child(wall)
+	wall.global_position = origin + Vector3(0.0, 6.0, 10.0)
+	var standin := Node3D.new()
+	r.add_child(standin)
+	standin.global_position = origin + Vector3(0.0, 0.05, 9.0)
+	var boss: Node3D = r._monster("boss_architect_3d", origin)
+	boss.set("player_ref", standin)
+	for i in 4:
+		await r.get_tree().physics_frame
+	var outside: int = 0
+	var moved: int = 0
+	for i in 40:
+		var before: Vector3 = boss.global_position
+		boss.call("_teleport_near_player")
+		outside += 1 if boss.global_position.z > origin.z + 10.0 else 0
+		moved += 1 if boss.global_position != before else 0
+	boss.queue_free()
+	standin.queue_free()
+	wall.queue_free()
+	await r.get_tree().process_frame
+	r._ok(outside == 0 and moved >= 30, "BOSS1 boss jump: %d of 40 jumps landed beyond a wall 1 m from the player (0 wanted), %d of 40 moved the boss (30 at least)" % [outside, moved])

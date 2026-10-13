@@ -1,0 +1,51 @@
+# proof s23_play_97d745a
+# utc 20261013T141456Z
+# head 97d745a (uncommitted paths: 0)
+# env none
+# cmd bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/5fa8d500-393b-43b7-95de-04d09fcc9e42/scratchpad/l22_chain.sh 97d745a
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] DONE checks=55 fails=0
+  closeout_check rc=0 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+# Godot binary: /c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/godot
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  [32mWIN [0m seed 1  ([bot s1]   result       : WIN)
+deaths counted 2, revive lines 2
+  [31mSOFTLOCK[0m seed 2
+       [bot s2] t=274.6 all 11 districts FULL — final night; bot is standing in power_station
+       [bot s2] FAIL SOFTLOCK: no progress for 45s — phase=boss district=power_station spine_i=10 have_target=true pos=(26.0, 1.0, 31.0) score=1091
+       [bot s2] ── RUN SUMMARY ──────────────────────────────
+       [bot s2]   districts FULL: 11/11
+       [bot s2]   stage timeline: suburbs:0@5.7, suburbs:1@23.8, suburbs:2@24.8, suburbs:3@25.8, residential:0@27.1, residential:1@41.1, residential:2@47.7, residential:3@53.0, park:0@54.1, park:1@61.8, park:2@66.0, park:3@81.0, school:0@82.1, school:1@91.8, school:2@93.2, school:3@96.6, hospital:0@97.7, hospital:1@106.6, hospital:2@107.6, hospital:3@124.6, gas_station:0@125.7, gas_station:1@137.2, gas_station:2@143.3, gas_station:3@146.8, police:0@147.9, police:1@157.3, police:2@166.6, police:3@167.7, warehouses:0@168.8, warehouses:1@179.7, warehouses:2@183.4, warehouses:3@197.6, industrial:0@198.7, industrial:1@209.5, industrial:2@210.5, industrial:3@212.5, substation:0@213.6, substation:1@228.1, substation:2@236.1, substation:3@238.2, power_station:0@239.4, power_station:1@258.8, power_station:2@273.6
+       [bot s2]   FAIL: SOFTLOCK: no progress for 45s — phase=boss district=power_station spine_i=10 have_target=true pos=(26.0, 1.0, 31.0) score=1091
+deaths counted 0, revive lines 0
+  [32mWIN [0m seed 3  ([bot s3]   result       : WIN)
+deaths counted 2, revive lines 2
+
+──────────────────────────────────────
+autoplay bot: 2/3 seeds won, 1 softlock(s)
+bot death counters below their revive lines: 0
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  soak soak rc=0 (log: .qa_logs/soak_soak.log, 12 minute lines, 0 stress lines)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  fresh profile: 0 game file(s) removed (0 of the owner's are restored at the end)
+  mode A rc=0 (log: .qa_logs/playthrough_A.log)
+[pt] DONE mode=A steps=67 fails=0 time=112s
+engine errors in the log:
+ERROR: Lambda capture at index 0 was freed. Passed "null" instead.
+  mode V rc=0 (log: .qa_logs/playthrough_V.log)
+[pt] DONE mode=V steps=28 fails=0 time=421s (Save and quit pressed next)
+  mode B rc=0 (log: .qa_logs/playthrough_B.log)
+[pt] DONE mode=B steps=12 fails=0 time=37s
+  fresh profile: 7 game file(s) removed (0 of the owner's are restored at the end)
+  mode S rc=1 (log: .qa_logs/playthrough_S.log)
+[pt] FAIL S_hud_help the HUD button '?' answers a click (missing)  frame=S_hud_help.jpg
+[pt] DONE mode=S steps=23 fails=1 time=37s
+  user-data guard: 0 file(s) restored byte-identical
+l22 chain done
+# EXIT=0

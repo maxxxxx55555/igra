@@ -112,3 +112,4 @@ n	utc	head	id	exit	command
 111	20261013T110337Z	e562ec9	s23_soak_e562ec9	0	bash -c bash tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn 300; bash tools/qa_sim/soak soak e562ec9 120 7500; bash tools/qa_sim/soak stress e562ec9 1 300
 112	20261013T132557Z	3cef1de	s23_fix_3cef1de	0	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/5fa8d500-393b-43b7-95de-04d09fcc9e42/scratchpad/l20_chain.sh 3cef1de
 113	20261013T135041Z	5ad1387	s23_fix2_5ad1387	0	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/5fa8d500-393b-43b7-95de-04d09fcc9e42/scratchpad/l21_chain.sh
+114	20261013T141456Z	97d745a	s23_play_97d745a	0	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/5fa8d500-393b-43b7-95de-04d09fcc9e42/scratchpad/l22_chain.sh 97d745a

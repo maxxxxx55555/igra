@@ -604,16 +604,16 @@ func _a05_death() -> void:
 		retry = _button_with(death, LocalizationManager.t("retry"))
 		for b in _buttons(death):
 			names.append("%s(%s)" % [b.text, b.is_visible_in_tree()])
-	var old_player := get_tree().get_first_node_in_group("player")
+	var old_id: int = get_tree().get_first_node_in_group("player").get_instance_id()  # the id, not the node: a lambda that captures a freed node makes the engine report it
 	var battery_at_death := float(_player.get("battery"))
 	var res := await _click(retry)
-	var back := await _wait_until(func() -> bool: return GameManager.is_playing() and get_tree().get_first_node_in_group("player") != null and get_tree().get_first_node_in_group("player") != old_player, 40.0)
+	var back := await _wait_until(func() -> bool: return GameManager.is_playing() and get_tree().get_first_node_in_group("player") != null and get_tree().get_first_node_in_group("player").get_instance_id() != old_id, 40.0)
 	_player = get_tree().get_first_node_in_group("player") as Node3D
 	var samples: PackedStringArray = []
 	for n in 8:
 		samples.append("%.0f/%.0f" % [float(_player.get("hp")), float(_player.get("battery"))])
 		await get_tree().create_timer(0.25).timeout
-	_say("[pt] note A05c new player: a different node from the dead one: %s; hp/battery each 0.25 s: %s; battery at death %.0f; pending respawn %s" % [_player != old_player, " ".join(samples), battery_at_death, GameManager.get("_respawn_battery")])
+	_say("[pt] note A05c new player: a different node from the dead one: %s; hp/battery each 0.25 s: %s; battery at death %.0f; pending respawn %s" % [_player.get_instance_id() != old_id, " ".join(samples), battery_at_death, GameManager.get("_respawn_battery")])
 	var hp_ratio: float = float(samples[0].split("/")[0]) / float(_player.stats.max_hp)
 	_step("A05c", res == "ok" and back and hp_ratio >= 0.45 and hp_ratio <= 0.55, "Retry respawns the player at HP %.0f%% (click: %s; buttons %s)" % [hp_ratio * 100.0, res, ", ".join(names)], await _shot("A05_respawn"))
 
@@ -1247,6 +1247,9 @@ func _s_codex() -> void:
 	await get_tree().create_timer(0.5).timeout
 
 func _s_hud_buttons() -> void:
+	var minimap0: Variant = SettingsManager.get_setting("show_minimap", false)
+	SettingsManager.set_setting("show_minimap", true)  # off by default since the HUD pass; the '?' chip is a child of the minimap
+	await get_tree().process_frame
 	for text in [LocalizationManager.t("HUD_LOG_TOGGLE"), "?"]:
 		var button: Button = null
 		for b in _buttons(get_tree().root):
@@ -1261,6 +1264,7 @@ func _s_hud_buttons() -> void:
 		else:
 			await _click(button)
 		await get_tree().create_timer(0.4).timeout
+	SettingsManager.set_setting("show_minimap", minimap0)
 
 func _s_workbench() -> void:
 	UIManager.open(&"workbench")
