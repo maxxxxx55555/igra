@@ -417,6 +417,11 @@ if "$PY" tools/qa_sim/press_kit.py --check >/dev/null 2>&1 && "$PY" tools/qa_sim
 else
   bad "press kit and music brief (см. 'python tools/qa_sim/press_kit.py --check' and 'music_brief.py --check')"
 fi
+if "$PY" tools/qa_sim/consistency_check.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/consistency_check.py --check >/dev/null 2>&1; then
+  ok "consistency_check (the fonts are the canon set, the UI icons one brass family, no new font size, even spacing, facade chroma under 25 %: docs/UI_CONSISTENCY.md)"
+else
+  bad "consistency_check (см. 'python tools/qa_sim/consistency_check.py --check')"
+fi
 
 # ─────────────────────────── проверки в движке ───────────────────────────
 if [[ $STATIC_ONLY -eq 1 ]]; then
