@@ -437,9 +437,7 @@ func _a04_ghosts() -> void:
 			levels.append(await _corner_level())
 			await get_tree().create_timer(0.2).timeout
 		hurt = ProgressTracker.damage_taken - damage0
-		ghosts = 0
-		for level in levels:
-			ghosts += 1 if level - levels.min() > GHOST_LEVEL else 0
+		ghosts = levels.filter(func(level: float) -> bool: return level - levels.min() > GHOST_LEVEL).size()
 		if hurt == 0.0 and ghosts == 0:
 			break
 		await get_tree().create_timer(3.0).timeout

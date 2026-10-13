@@ -8,7 +8,8 @@ extends "res://scripts/tools/_rc16_probe_runner.gd"
 ##   04_block    from the middle block across the street to its neighbour, power FULL
 ##   05_skyline  up the south street toward the landmark of the district, power FULL
 ## Frames -> docs/stills/density/<id>_<view>_<label>_<hash>_<UTC>.jpg (the AF3 name: the code tree and the capture time). A saved frame proves nothing until it is read.
-## The runs are in English with the HUD and the tutorial hidden (Trailer Mode), so a frame holds the world and nothing else.
+## The runs are in English with the HUD and the tutorial hidden (Trailer Mode), so a frame holds the world and nothing else. The weather is pinned to clear and the random events
+## are off (`_pin_world`), and each view prints one `[density] state` line (weather, stage, tier, the environment's ambient, glow and exposure), so a frame can be traced to its state.
 ## Each district also prints one `[density] perf` line: the draw calls, primitives and objects of the district as it stands.
 ## Store frames (store/SCREENSHOT_RECIPES.md): the user args `--tlang=<locale>` (default en), `--thud=1` (the HUD stays: Trailer Mode off) and `--tpng=1` (a PNG without alpha in
 ## store/screenshots/recipes/<id>_<view>_<locale>_<hash>_<UTC>.png instead of the JPG of docs/stills/density).
@@ -59,6 +60,13 @@ func _dressing() -> Node3D:
 			return node as Node3D
 	return null
 
+## The weather rolls a new state every 45 s and its overlay darkens the screen by up to half, and the random events flash and flicker the light: a frame must depend on neither.
+func _pin_world() -> void:
+	WeatherSystem.set_process(false)
+	WeatherSystem.current = WeatherSystem.Weather.CLEAR
+	WeatherSystem.call("_emit")
+	RandomEvents.set_process(false)
+
 func _flashlight(player: Node3D, want: bool) -> void:
 	if player.has_method("toggle_flashlight") and bool(player.get("flashlight_enabled")) != want:
 		player.toggle_flashlight()
@@ -82,6 +90,9 @@ func _view(id: StringName, view: Dictionary) -> void:
 		PowerGrid.advance_district(id, stage as DistrictData.Stage)
 	_flashlight(player, bool(view["light"]))
 	await get_tree().create_timer(SETTLE_SEC).timeout
+	var env := get_viewport().world_3d.environment
+	print("[density] state district=%s view=%s weather=%d stage=%d tier=%d ambient=%.3f glow=%.3f exposure=%.3f" % [String(id), view["name"], WeatherSystem.current,
+		PowerGrid.get_stage(id), int(SettingsManager.get_setting("graphics_tier", -1)), env.ambient_light_energy, env.glow_intensity, env.tonemap_exposure])
 	var dressing := _dressing()
 	if view["name"] == "02_rest" and dressing != null and camera != null:
 		var bulb := dressing.get_node_or_null("RestLantern/RestBloom") as Node3D
@@ -141,6 +152,7 @@ func _run() -> void:
 		return
 	LocalizationManager.set_language(_lang)
 	SettingsManager.set_setting("trailer_mode", not _hud)
+	_pin_world()
 	TutorialSystem.call("_skip_tutorial")
 	await get_tree().create_timer(3.0).timeout
 	print("[density] start label=%s hash=%s ids=%s %s" % [_label, _hash, _ids, _mem()])
