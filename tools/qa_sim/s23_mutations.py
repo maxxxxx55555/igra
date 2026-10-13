@@ -42,6 +42,7 @@ MUTATIONS = [
     ("scripts/world/street_props.gd", 'dressing.call("build", district_id, sb)', "pass", "DENS1"),
     ("scripts/world/street_props.gd", "const SWAY_M: float = 0.08", "const SWAY_M: float = 0.0", "FOLIAGE1"),
     ("scripts/world/district_dressing.gd", 'const FOG_DISTRICTS: Array[StringName] = [&"warehouses", &"industrial"', 'const FOG_DISTRICTS: Array[StringName] = [&"industrial"', "FOG1"),
+    ("scripts/world/district_dressing.gd", "const MANHOLES: int = 2", "const MANHOLES: int = 0", "MANH1"),
 ]
 LINE = re.compile(r"^\[closeout\] (ok  |FAIL) +(\S+)")
 

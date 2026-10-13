@@ -8,6 +8,7 @@ const _BIN := preload("res://assets/mesh/mesh_trash_can.res")
 const _HYDRANT := preload("res://assets/mesh/mesh_hydrant.res")
 const _BENCH := preload("res://assets/mesh/mesh_bench.res")
 const _LANDMARK := preload("res://scripts/world/district_landmark.gd")
+const _MANHOLE := preload("res://scripts/world/manhole.gd")
 
 ## Tops of the ground in the district (street_builder.gd tiles and skyline.gd ground) and of the road markings.
 const GROUND_Y: float = 0.06
@@ -15,6 +16,8 @@ const MARKING_TOP_Y: float = 0.08
 ## Solid props keep this far from anything the player can use or hide in.
 const KEEP_CLEAR_M: float = 1.8
 const HYDRANTS: int = 5
+## Iron covers in the roads round the middle block: the footsteps ring on them and a thread of steam rises from each.
+const MANHOLES: int = 2
 const LAMP_RANGE_M: float = 9.0
 const LAMP_ENERGY: float = 1.4
 ## The pool of light under a streetlamp: its diameter, how far toward the block it is moved from the pole, its opacity per power stage (DARK, PARTIAL, STREETS, FULL).
@@ -121,6 +124,7 @@ func build(district_id: StringName, sb: Node) -> void:
 	_add_landmark()
 	_add_rest_spot()
 	_add_fog()
+	_add_manholes()
 	_apply_stage(PowerGrid.get_stage(_district_id))
 	EventBus.district_stage_changed.connect(_on_stage_changed)
 
@@ -257,6 +261,18 @@ func _batch(node_name: String, mesh: Mesh, xforms: Array[Transform3D], colors: A
 	mmi.material_override = material
 	mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON if shadows else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(mmi)
+
+## Last of the placements, so none that the seeded stream made before it moves; a cover is left out where a pickup or a hiding place is near.
+func _add_manholes() -> void:
+	for i in MANHOLES:
+		var at: Vector3 = _solid_spot(_road_spot(_rng.randi_range(0, 3), _grid * 0.5, _rng.randf_range(-5.0, 5.0), _rng.randf_range(-1.6, 1.6)))
+		if at == Vector3.INF:
+			continue
+		var cover := Node3D.new()
+		cover.set_script(_MANHOLE)
+		cover.name = "Manhole%d" % i
+		cover.position = at
+		add_child(cover)
 
 func _add_fog() -> void:
 	if not FOG_DISTRICTS.has(_district_id) or int(SettingsManager.get_setting("graphics_tier", 2)) < 1:

@@ -17,6 +17,7 @@ static func run(r: Node) -> void:
 	var bad: Array[String] = []
 	var landmarks: int = 0
 	var rests: int = 0
+	var manholes: int = 0
 	var districts: Array = DistrictSceneFactory.DISTRICTS
 	for id: StringName in districts:
 		var root: Node3D = await _build(r, id)
@@ -26,6 +27,7 @@ static func run(r: Node) -> void:
 		var base: Dictionary = _least_per_block(props, dressing, true)
 		landmarks += 1 if dressing != null and dressing.get_node_or_null("Landmark") != null else 0
 		rests += 1 if dressing != null and dressing.get_node_or_null("RestLantern/RestLight") != null else 0
+		manholes += 1 if dressing != null and (dressing.get_node_or_null("Manhole0/Steam") != null or dressing.get_node_or_null("Manhole1/Steam") != null) else 0
 		print("[dens] district=%s blocks=9 min_solid=%d (without the dressing %d) min_scatter=%d (%d) min_lamps=%d" % [id, with_all["solid"], base["solid"], with_all["scatter"], base["scatter"], with_all["lamps"]])
 		if int(with_all["solid"]) < FLOOR_SOLID or int(with_all["scatter"]) < FLOOR_SCATTER or int(with_all["lamps"]) < FLOOR_LAMPS:
 			bad.append(String(id))
@@ -33,6 +35,7 @@ static func run(r: Node) -> void:
 		await r.get_tree().process_frame
 	await _atmosphere(r)
 	r._ok(bad.is_empty() and landmarks == districts.size() and rests == districts.size(), "DENS1 density: every block of every district holds %d solid props, %d scattered pieces and %d lamps at least (under the floor: %s), %d of %d districts have a landmark and %d a lit rest spot" % [FLOOR_SOLID, FLOOR_SCATTER, FLOOR_LAMPS, ", ".join(bad) if not bad.is_empty() else "none", landmarks, districts.size(), rests])
+	r._ok(manholes == districts.size(), "MANH1 manholes: %d of %d districts hold an iron cover in the road with a thread of steam" % [manholes, districts.size()])
 
 ## The least of each count over the nine blocks; `skip_dressing` leaves out what the dressing node adds.
 static func _least_per_block(props: Node, dressing: Node, skip_dressing: bool) -> Dictionary:
