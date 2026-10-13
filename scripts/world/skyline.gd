@@ -16,6 +16,20 @@ const GROUND_COLOR := Color(0.055, 0.066, 0.082)
 const FACADES: Array[Color] = [Color("#0f151d"), Color("#141b24"), Color("#182029")]
 const WIN_DARK := Color(0.02, 0.025, 0.04)
 const FACADE_GLOW := Color(0.06, 0.08, 0.12)
+## Per district: the three facade colours and the faint self-glow of the blocks (docs/DISTRICT_SIGNATURES.md). One family of hue each, dark, never over 25 % saturation (STYLE_GUIDE section 2);
+## a district that is not listed keeps FACADES and FACADE_GLOW.
+const PALETTES := {
+	&"suburbs": [[Color("#141815"), Color("#181d19"), Color("#1c211d")], Color(0.07, 0.09, 0.08)],
+	&"residential": [[Color("#17171c"), Color("#1c1c22"), Color("#212128")], Color(0.08, 0.08, 0.11)],
+	&"park": [[Color("#101a14"), Color("#14201a"), Color("#18261f")], Color(0.05, 0.10, 0.08)],
+	&"hospital": [[Color("#121c20"), Color("#162227"), Color("#1a282e")], Color(0.06, 0.11, 0.13)],
+	&"gas_station": [[Color("#1d1812"), Color("#231d16"), Color("#29221a")], Color(0.11, 0.09, 0.06)],
+	&"police": [[Color("#10141f"), Color("#151a28"), Color("#1a2032")], Color(0.05, 0.07, 0.14)],
+	&"warehouses": [[Color("#1f1713"), Color("#261c17"), Color("#2d211b")], Color(0.12, 0.08, 0.06)],
+	&"industrial": [[Color("#201915"), Color("#281f1a"), Color("#30251f")], Color(0.12, 0.09, 0.06)],
+	&"substation": [[Color("#15181b"), Color("#1a1e22"), Color("#1f2328")], Color(0.09, 0.10, 0.11)],
+	&"power_station": [[Color("#17191c"), Color("#1d2024"), Color("#23262b")], Color(0.10, 0.11, 0.13)],
+}
 const WIN_BRASS := Color(0.79, 0.635, 0.29)
 const WIN_BONE := Color(0.85, 0.82, 0.77)
 ## Share of windows lit per power stage: DARK, PARTIAL, STREETS, FULL.
@@ -44,6 +58,8 @@ var _tones := PackedFloat32Array()
 func build(district_id: StringName, half_extent: float, with_windows: bool) -> void:
 	_district_id = district_id
 	var style: Array = STYLE.get(district_id, STYLE[&"suburbs"])
+	var palette: Array = PALETTES.get(district_id, [FACADES, FACADE_GLOW])
+	var facades: Array = palette[0]
 	var rng := RandomNumberGenerator.new()
 	rng.seed = hash("skyline_" + String(district_id))
 	var edge := half_extent + RING_GAP
@@ -66,7 +82,7 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 			if skip:
 				continue
 			blocks.append(Transform3D(turn * Basis.from_scale(Vector3(w, h, d)), turn * Vector3(cx, h * 0.5, -edge - d * 0.5)))
-			tints.append(FACADES[rng.randi() % FACADES.size()])
+			tints.append(facades[rng.randi() % facades.size()])
 			if with_windows:
 				var y := 2.6
 				while y < h - 1.4:
@@ -75,7 +91,7 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 						panes.append(Transform3D(turn, turn * Vector3(x, y, -edge + 0.04)))
 						x += 2.2
 					y += 2.6
-	_add_multimesh("Blocks", BoxMesh.new(), blocks, tints, false)
+	_add_multimesh("Blocks", BoxMesh.new(), blocks, tints, false, palette[1])
 	if not panes.is_empty():
 		var quad := QuadMesh.new()
 		quad.size = WIN_SIZE
@@ -89,7 +105,7 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 	_add_ground()
 	_add_solid_ground(edge)
 
-func _add_multimesh(node_name: String, mesh: Mesh, xforms: Array[Transform3D], tints: Array[Color], unshaded: bool) -> void:
+func _add_multimesh(node_name: String, mesh: Mesh, xforms: Array[Transform3D], tints: Array[Color], unshaded: bool, glow: Color = FACADE_GLOW) -> void:
 	var mm := MultiMesh.new()
 	mm.transform_format = MultiMesh.TRANSFORM_3D
 	mm.use_colors = true
@@ -106,7 +122,7 @@ func _add_multimesh(node_name: String, mesh: Mesh, xforms: Array[Transform3D], t
 	else:
 		# A faint cold self-glow so the blocks read as silhouettes against the sky.
 		mat.emission_enabled = true
-		mat.emission = FACADE_GLOW
+		mat.emission = glow
 	var mmi := MultiMeshInstance3D.new()
 	mmi.name = node_name
 	mmi.multimesh = mm
