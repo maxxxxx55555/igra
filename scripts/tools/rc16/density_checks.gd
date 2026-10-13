@@ -2,7 +2,7 @@ extends RefCounted
 ## Session 23 (docs/DENSITY_PLAN.md): the density audit. Each of the eleven districts is built from its scene (street grid, props, dressing) at the origin where the game builds it, and the
 ## nine blocks of its grid (16 m cells between the road axes) are counted: solid props (benches, trees, cones, crates, barrels, bins, hydrants), scatter on the ground (litter and leaves,
 ## wet patches) and streetlamps. A block under the floor of any of them is empty; the same count without the dressing node is printed beside it, so the gain is on the log. Wired into
-## _closeout_check_runner.gd as `await Rc23Density.run(self)`; CLOSEOUT_ONLY=s23 runs it with the others.
+## _closeout_check_runner.gd as `await Rc23Density.run(self)`; CLOSEOUT_ONLY=s23 runs it with the others. FOLIAGE1 and FOG1 hold the atmosphere of the same build: the swaying canopies and the fog cards.
 
 const FLOOR_SOLID: int = 2
 const FLOOR_SCATTER: int = 4
@@ -18,13 +18,7 @@ static func run(r: Node) -> void:
 	var rests: int = 0
 	var districts: Array = DistrictSceneFactory.DISTRICTS
 	for id: StringName in districts:
-		var root := (load(DistrictSceneFactory.district_scene_path(id)) as PackedScene).instantiate() as Node3D
-		var trigger: Node = root.get_node("DistrictTrigger")
-		root.remove_child(trigger)  # a trigger box on the player would announce a district that was not entered
-		trigger.free()
-		r.add_child(root)
-		for i in 6:
-			await r.get_tree().process_frame
+		var root: Node3D = await _build(r, id)
 		var props: Node = root.get_node("Props")
 		var dressing: Node = props.get_node_or_null("DistrictDressing")
 		var with_all: Dictionary = _least_per_block(props, dressing, false)
@@ -36,6 +30,7 @@ static func run(r: Node) -> void:
 			bad.append(String(id))
 		root.queue_free()
 		await r.get_tree().process_frame
+	await _atmosphere(r)
 	r._ok(bad.is_empty() and landmarks == districts.size() and rests == districts.size(), "DENS1 density: every block of every district holds %d solid props, %d scattered pieces and %d lamps at least (under the floor: %s), %d of %d districts have a landmark and %d a lit rest spot" % [FLOOR_SOLID, FLOOR_SCATTER, FLOOR_LAMPS, ", ".join(bad) if not bad.is_empty() else "none", landmarks, districts.size(), rests])
 
 ## The least of each count over the nine blocks; `skip_dressing` leaves out what the dressing node adds.
@@ -58,3 +53,48 @@ static func _least_per_block(props: Node, dressing: Node, skip_dressing: bool) -
 				var cell: int = clampi(int(floorf((at.x + 1.5 * GRID_M) / GRID_M)), 0, 2) * 3 + clampi(int(floorf((at.z + 1.5 * GRID_M) / GRID_M)), 0, 2)
 				(counts[key] as Array)[cell] = int((counts[key] as Array)[cell]) + 1
 	return {"solid": (counts["solid"] as Array).min(), "scatter": (counts["scatter"] as Array).min(), "lamps": (counts["lamps"] as Array).min()}
+
+## A district from its scene at the origin where the game builds it, with the props and the dressing made.
+static func _build(r: Node, id: StringName) -> Node3D:
+	var root := (load(DistrictSceneFactory.district_scene_path(id)) as PackedScene).instantiate() as Node3D
+	var trigger: Node = root.get_node("DistrictTrigger")
+	root.remove_child(trigger)  # a trigger box on the player would announce a district that was not entered
+	trigger.free()
+	r.add_child(root)
+	for i in 6:
+		await r.get_tree().process_frame
+	return root
+
+static func _cards(root: Node3D) -> int:
+	var count: int = 0
+	for child in root.get_node("Props/DistrictDressing").get_children():
+		count += 1 if String(child.name).begins_with("FogCard") else 0
+	return count
+
+## FOLIAGE1: the canopies of the street trees carry the sway shader in the dark teal of the old flat material, and Motion Comfort stops the sway at once.
+## FOG1: the four fog districts hold three fog cards, the others none, and no district holds one at the Low tier.
+static func _atmosphere(r: Node) -> void:
+	var tier0: Variant = SettingsManager.get_setting("graphics_tier", 2)
+	SettingsManager.set_setting("graphics_tier", 2)
+	var street: Node3D = await _build(r, &"suburbs")
+	var leaves := street.get_node("Props").get_node_or_null("TreeLeavesBatched") as MultiMeshInstance3D
+	var mat: ShaderMaterial = leaves.material_override as ShaderMaterial if leaves != null else null
+	var swaying: float = float(mat.get_shader_parameter("sway_strength")) if mat != null else -1.0
+	var colour: Color = mat.get_shader_parameter("leaf_color") if mat != null else Color.WHITE
+	SettingsManager.set_setting("reduce_camera_motion", true)
+	var still: float = float(mat.get_shader_parameter("sway_strength")) if mat != null else -1.0
+	SettingsManager.set_setting("reduce_camera_motion", false)
+	var restored: float = float(mat.get_shader_parameter("sway_strength")) if mat != null else -1.0
+	var plain: int = _cards(street)
+	street.queue_free()
+	var foggy: Node3D = await _build(r, &"warehouses")
+	var fogged: int = _cards(foggy)
+	foggy.queue_free()
+	SettingsManager.set_setting("graphics_tier", 0)
+	var low: Node3D = await _build(r, &"warehouses")
+	var at_low: int = _cards(low)
+	low.queue_free()
+	SettingsManager.set_setting("graphics_tier", tier0)
+	await r.get_tree().process_frame
+	r._ok(mat != null and swaying > 0.0 and still == 0.0 and restored == swaying and colour.is_equal_approx(Color(0.09, 0.16, 0.15)), "FOLIAGE1 canopies: a sway shader (%s) of %.2f m, %.2f m with Motion Comfort and %.2f m after, in the old dark teal (%s)" % [mat != null, swaying, still, restored, colour.is_equal_approx(Color(0.09, 0.16, 0.15))])
+	r._ok(fogged == 3 and plain == 0 and at_low == 0, "FOG1 ground fog: %d cards in a fog district, %d in the suburbs, %d at the Low tier" % [fogged, plain, at_low])

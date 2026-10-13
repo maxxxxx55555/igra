@@ -23,6 +23,13 @@ const POOL_TOWARD_BLOCK_M: float = 2.2
 const POOL_Y: float = 0.095
 const POOL_BY_STAGE: Array[float] = [0.0, 0.05, 0.11, 0.16]
 const REST_POOL_ALPHA: float = 0.22
+## Ground fog in the four fog districts (the weather of DistrictThemes): three drifting cards over the blocks, off at the Low tier (the depth fog of the environment is enough there).
+const FOG_DISTRICTS: Array[StringName] = [&"warehouses", &"industrial", &"substation", &"power_station"]
+const FOG_SHADER := preload("res://assets/shaders/height_fog_card.gdshader")
+const FOG_CARD_M: float = 46.0
+const FOG_Y: float = 0.35
+const FOG_ALPHA: float = 0.45
+const FOG_AT: Array[Vector3] = [Vector3(-14.0, 0.0, -10.0), Vector3(12.0, 0.0, 2.0), Vector3(-4.0, 0.0, 16.0)]
 ## Where the bench stands from the power switch (the switch is at the corner of the middle block and the next).
 const REST_FROM_SWITCH := Vector3(6.0, 0.0, 5.0)
 const BRASS := Color("#c9a24a")
@@ -112,6 +119,7 @@ func build(district_id: StringName, sb: Node) -> void:
 	_batch("LampPools", _patch(), _lamp_pools(), none, _pool_mat, false)
 	_add_landmark()
 	_add_rest_spot()
+	_add_fog()
 	_apply_stage(PowerGrid.get_stage(_district_id))
 	EventBus.district_stage_changed.connect(_on_stage_changed)
 
@@ -247,6 +255,23 @@ func _batch(node_name: String, mesh: Mesh, xforms: Array[Transform3D], colors: A
 	mmi.material_override = material
 	mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON if shadows else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(mmi)
+
+func _add_fog() -> void:
+	if not FOG_DISTRICTS.has(_district_id) or int(SettingsManager.get_setting("graphics_tier", 2)) < 1:
+		return
+	var mat := ShaderMaterial.new()
+	mat.shader = FOG_SHADER
+	mat.set_shader_parameter("alpha", FOG_ALPHA)
+	var card := PlaneMesh.new()
+	card.size = Vector2(FOG_CARD_M, FOG_CARD_M)
+	for i in FOG_AT.size():
+		var fog := MeshInstance3D.new()
+		fog.name = "FogCard%d" % i
+		fog.mesh = card
+		fog.material_override = mat
+		fog.position = FOG_AT[i] + Vector3(0.0, FOG_Y, 0.0)
+		fog.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		add_child(fog)
 
 func _add_landmark() -> void:
 	_landmark = _LANDMARK.build(_district_id, Vector3(0.0, 0.0, -_LANDMARK.NORTH_M))

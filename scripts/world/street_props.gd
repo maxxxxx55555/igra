@@ -273,14 +273,36 @@ func _spawn_tree(center: Vector3, road: Dictionary) -> void:
 func _spawn_cone(center: Vector3, road: Dictionary) -> void:
 	_cone_positions.append(center + _side_offset(road, 2.4))
 
+## The canopies sway (assets/shaders/foliage_sway.gdshader); with Motion Comfort or Reduce UI Motion they stand still, also when it is switched while the district is up.
+const _LEAVES := preload("res://assets/env/mat_foliage_sway.tres")
+const LEAF_COLOR := Color(0.09, 0.16, 0.15)
+const SWAY_M: float = 0.08
+const GUST_M: float = 0.05
+var _leaf_mat: ShaderMaterial = null
+
+func _leaf_material() -> ShaderMaterial:
+	_leaf_mat = _LEAVES.duplicate() as ShaderMaterial
+	_leaf_mat.set_shader_parameter("leaf_color", LEAF_COLOR)
+	EventBus.settings_changed.connect(_on_setting_changed)
+	_apply_sway()
+	return _leaf_mat
+
+func _apply_sway() -> void:
+	var calm: bool = bool(SettingsManager.get_setting("reduce_camera_motion", false)) or bool(SettingsManager.get_setting("reduce_ui_motion", false))
+	_leaf_mat.set_shader_parameter("sway_strength", 0.0 if calm else SWAY_M)
+	_leaf_mat.set_shader_parameter("gust_strength", 0.0 if calm else GUST_M)
+
+func _on_setting_changed(key: String, _value: Variant) -> void:
+	if key == "reduce_camera_motion" or key == "reduce_ui_motion":
+		_apply_sway()
+
 func _build_prop_multimesh() -> void:
 	_build_one_multimesh(_raised(_bench_positions, 0.2), _bench,
 		_prop_material(_TEX_BENCH, Color(0.30, 0.26, 0.22), 0.85, 0.0), "BenchesBatched")
 	if not _tree_positions.is_empty():
 		_build_one_multimesh(_raised(_tree_positions, 1.25), _trunk,
 			_prop_material("", Color(0.17, 0.15, 0.125), 0.95, 0.0), "TreeTrunksBatched")
-		_build_one_multimesh(_raised(_tree_positions, 3.4), _leaf,
-			_prop_material("", Color(0.09, 0.16, 0.15), 1.0, 0.0), "TreeLeavesBatched")
+		_build_one_multimesh(_raised(_tree_positions, 3.4), _leaf, _leaf_material(), "TreeLeavesBatched")
 	if not _cone_positions.is_empty():
 		var cone_mat := _prop_material("", Color(0.706, 0.271, 0.184), 0.6, 0.0)
 		cone_mat.emission_enabled = true
