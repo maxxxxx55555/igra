@@ -215,6 +215,9 @@ static func apply_stage(root: Node3D, stage: int) -> void:
 	(root.get_meta(&"body") as StandardMaterial3D).emission_energy_multiplier = BODY_BY_STAGE[i]
 	var halo_mat := root.get_meta(&"halo") as StandardMaterial3D
 	halo_mat.albedo_color = Color(GLOW_COLOR, HALO_BY_STAGE[i])
+	var halo := root.get_node_or_null("Halo") as Node3D
+	if halo != null:
+		halo.visible = HALO_BY_STAGE[i] > 0.0
 
 static func _add(root: Node3D, node_name: String, mesh: Mesh, material: Material) -> MeshInstance3D:
 	if mesh == null or mesh.get_surface_count() == 0:

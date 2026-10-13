@@ -16,6 +16,8 @@ extends Node
 # Стадия района: DARK — только фонарик и луна, FULL — восстановленный свет.
 # Энергии ambient/луны — канон GDD.md:108-111 (DARK 0.03/0.12, STREETS 0.11/0.25,
 # FULL 0.16/0.40); PARTIAL в GDD чисел не имеет и берёт DARK.
+## The samples of the 3D by tier (Low, Medium, High, Ultra): off, 2x, 2x, 4x. The 4x cost 5.5 to 9 ms of the 19 ms GPU frame of the High tier on the dev iGPU (docs/PERF_PASS.md, Session 23).
+const MSAA_BY_TIER: Array[Viewport.MSAA] = [Viewport.MSAA_DISABLED, Viewport.MSAA_2X, Viewport.MSAA_2X, Viewport.MSAA_4X]
 const AMBIENT_DARK: float = 0.03
 const AMBIENT_LIT: float = 0.11
 const AMBIENT_FULL: float = 0.16
@@ -167,6 +169,7 @@ func _on_district_stage_changed(_id: StringName, stage: int) -> void:
 ## before the district stage/LUT/postfx application below, which refine
 ## rather than replace this base — matches the wiring spec's stated order.
 func _apply_graphics_tier(tier: int) -> void:
+	get_viewport().msaa_3d = MSAA_BY_TIER[clampi(tier, 0, MSAA_BY_TIER.size() - 1)]
 	if _env == null:
 		return
 	var vq := load("res://assets/config/visual_quality.tres")

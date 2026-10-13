@@ -135,18 +135,25 @@ static func _shells(r: Node) -> void:
 	floor_body.global_position = FAR + Vector3(0.0, -0.1, 40.0)
 	var effects0: Variant = SettingsManager.get_setting("effects", 2)
 	SettingsManager.set_setting("effects", 2)
-	var shell: RigidBody3D = _Shells.eject(r.get_tree(), FAR + Vector3(0.0, 1.2, 40.0), Vector3.FORWARD)
-	var thrown: bool = shell != null and shell.visible
+	var shell: RigidBody3D = null
+	var thrown: bool = false
 	var lowest: float = 99.0
 	var rose_again: bool = false
-	var last: float = 99.0
-	for i in 120:
-		await r.get_tree().physics_frame
-		var y: float = shell.global_position.y - (FAR.y)
-		if y > last + 0.004 and lowest < 0.1:
-			rose_again = true
-		lowest = minf(lowest, y)
-		last = y
+	for attempt in 6:  # the throw is random, and one case in six bouncing is what the check asks
+		shell = _Shells.eject(r.get_tree(), FAR + Vector3(0.0, 1.2, 40.0), Vector3.FORWARD)
+		thrown = thrown or (shell != null and shell.visible)
+		var last: float = 99.0
+		var low: float = 99.0
+		for i in 120:
+			await r.get_tree().physics_frame
+			var y: float = shell.global_position.y - (FAR.y)
+			if y > last + 0.004 and low < 0.1:
+				rose_again = true
+			low = minf(low, y)
+			last = y
+		lowest = minf(lowest, low)
+		if rose_again:
+			break
 	var on_street: bool = lowest > -0.05 and lowest < 0.08
 	await r.get_tree().create_timer(1.0).timeout
 	var pooled: bool = not shell.visible

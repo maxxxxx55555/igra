@@ -1,5 +1,5 @@
 extends RefCounted
-## Session 23 (docs/PERF_PASS.md): dynamic resolution, the shader warm-up, the edges of the perf gate's budgets and the loot a killed monster leaves. Wired into _closeout_check_runner.gd as
+## Session 23 (docs/PERF_PASS.md): dynamic resolution, the shader warm-up, the edges of the perf gate's budgets, the loot a killed monster leaves and the samples of the 3D by tier. Wired into _closeout_check_runner.gd as
 ## `await Rc23Perf.run(self)`; CLOSEOUT_ONLY=s23 runs it with the others. The viewport's scale and the settings a check touches are put back.
 
 const _Dynamic := preload("res://scripts/systems/dynamic_resolution.gd")
@@ -11,6 +11,7 @@ static func run(r: Node) -> void:
 	await _warm_up(r)
 	_gate_edges(r)
 	_loot_stays_with_district(r)
+	_msaa_follows_tier(r)
 
 ## PERF1: under 30 FPS for 2 s the 3D scale drops to 70 % of Render Scale; in the band between 30 and 45 nothing moves; over 45 FPS for 4 s it comes back.
 static func _dynamic_resolution(r: Node) -> void:
@@ -98,3 +99,14 @@ static func _loot_stays_with_district(r: Node) -> void:
 	holder.free()
 	var left: int = tree.get_nodes_in_group("pickups").size() - before
 	r._ok(beside > 0 and left == 0, "LEAK1 loot: %d drops of 60 rolls lie beside the monster, %d are left once its parent is freed" % [beside, left])
+
+## MSAA1: the samples of the 3D follow the tier, off at Low, 2x at Medium and High, 4x at Ultra (the ablation of Session 23 read the 4x at 5.5 to 9 ms of a 19 ms GPU frame of the High tier on the dev iGPU).
+static func _msaa_follows_tier(r: Node) -> void:
+	var viewport: Viewport = r.get_viewport()
+	var tier0: int = int(SettingsManager.get_setting("graphics_tier", 2))
+	var modes: Array[int] = []
+	for tier in 4:
+		SettingsManager.set_graphics_tier(tier)
+		modes.append(viewport.msaa_3d)
+	SettingsManager.set_graphics_tier(tier0)
+	r._ok(modes == [0, 1, 1, 2], "MSAA1 the 3D samples follow the tier: Low, Medium, High, Ultra read %s (off, 2x, 2x, 4x)" % [modes])

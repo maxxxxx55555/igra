@@ -44,10 +44,10 @@ brightness, and `docs/DENSITY_MEASURED.md` has the same pairs frame by frame (th
 | Wet-asphalt reflective mask shader | **not wired**, on purpose | `assets/shaders/wet_asphalt.gdshader` reads the screen texture, which makes the Compatibility renderer copy the frame every frame, a cost on a phone's tiler; the wet look is carried by the soft wet patches of the dressing and the surface-aware footsteps (`docs/DENSITY_PLAN.md`) |
 | Foliage wind-sway vertex shader | **in** | the canopies of the street trees (`scripts/world/street_props.gd:280`), 0.08 m, off with Motion Comfort; check FOLIAGE1 |
 | Prop VisibilityRange LOD plan | **not built**, a decision | DEFER-23 in `docs/TZ_DECISIONS.md`: every mesh of the districts is a primitive or a MultiMesh of blocks, there is no lower detail to swap to |
-| ACES tonemap | **in** | `tonemap_mode` 3 in every preset of `assets/config/visual_quality.tres`, applied by `_apply_graphics_tier` (`scripts/world_env_setup.gd:169`) |
+| ACES tonemap | **in** | `tonemap_mode` 3 in every preset of `assets/config/visual_quality.tres`, applied by `_apply_graphics_tier` (`scripts/world_env_setup.gd:171`) |
 | Tuned glow and bloom | **in** | the bloom, the intensity, the strength and the HDR threshold of each tier in the same file |
 | Volumetric fog on desktop, a height-fog shader on mobile | **the fallback only** | the volumetric fog of the engine is not available in the Compatibility renderer the game ships with; the depth fog of each tier (`fog_density` 0.012 to 0.015) and the ground fog cards of the four fog districts (`assets/shaders/height_fog_card.gdshader`, `scripts/world/district_dressing.gd:277`) are the height-fog fallback |
-| SSAO, SSIL, SSR, desktop only | **not applicable** | they are Forward+ features; the preset asks for SSAO only when the rendering method is `forward_plus` (`scripts/world_env_setup.gd:189`) and the game runs Compatibility, so none runs; the wet-asphalt shader carries its own substitute for SSR |
+| SSAO, SSIL, SSR, desktop only | **not applicable** | they are Forward+ features; the preset asks for SSAO only when the rendering method is `forward_plus` (`scripts/world_env_setup.gd:192`) and the game runs Compatibility, so none runs; the wet-asphalt shader carries its own substitute for SSR |
 | Auto-exposure with night-safe limits | **not applicable** | no `CameraAttributes` is used; auto-exposure is not in the Compatibility renderer |
 | Visual quality presets | **in** | section 4 |
 | Shader and material warm-up | **partly** | the post-process shaders (blur, chroma, rain lens) are each drawn for two frames at strength 0 at the start (`_warm_shaders`, `scripts/post_process_overlay.gd:55`); the world's own shaders compile when the first district is built, behind the loading screen |
@@ -72,7 +72,7 @@ brightness, and `docs/DENSITY_MEASURED.md` has the same pairs frame by frame (th
 | rain on the lens | off | off | off | on | `TIER_LENS`, `scripts/effects/rain_lens.gd:6` |
 | ground fog cards (fog districts) | off | on | on | on | `scripts/world/district_dressing.gd:278` |
 | the windows of the skyline (and the old floating window wall hidden) | none: the blocks only | on | on | on | `_low_tier`, `scripts/world/street_props.gd:123`; `with_windows`, `scripts/world/skyline.gd:58` |
-| SSAO | off | off | only on Forward+ | only on Forward+ | `ssao_enabled` in the preset and `scripts/world_env_setup.gd:189` |
+| SSAO | off | off | only on Forward+ | only on Forward+ | `ssao_enabled` in the preset and `scripts/world_env_setup.gd:192` |
 
 **Mobile fallback, declared.** A phone starts on **High** (`_settings["graphics_tier"] = 2`, `scripts/systems/settings_manager.gd:84`) with dynamic resolution on (`scripts/systems/settings_manager.gd:121`: the 3D scale drops to 0.7
 under load and recovers, `scripts/systems/dynamic_resolution.gd`), and `QualityManager` lowers the tier by itself when the frame rate stays under 30 for 5 s and raises it again, never above what the player chose, after 10 s over 45

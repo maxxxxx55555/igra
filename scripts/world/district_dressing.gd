@@ -303,7 +303,11 @@ func _apply_stage(stage: int) -> void:
 		_LANDMARK.apply_stage(_landmark, stage)
 	if _fog_mat != null:
 		_fog_mat.set_shader_parameter("alpha", FOG_BY_STAGE[clampi(stage, 0, FOG_BY_STAGE.size() - 1)])
-	_pool_mat.albedo_color = Color(BRASS, POOL_BY_STAGE[clampi(stage, 0, POOL_BY_STAGE.size() - 1)])
+	var pool: float = POOL_BY_STAGE[clampi(stage, 0, POOL_BY_STAGE.size() - 1)]
+	_pool_mat.albedo_color = Color(BRASS, pool)
+	var pools := get_node_or_null("LampPools") as Node3D
+	if pools != null:
+		pools.visible = pool > 0.0  # a blended quad of opacity 0 still costs its fill
 
 ## A bench under a lantern near the power switch, lit in every stage: the place where the Keeper stops to restore a district.
 func _add_rest_spot() -> void:

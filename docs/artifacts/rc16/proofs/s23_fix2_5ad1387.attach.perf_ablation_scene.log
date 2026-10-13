@@ -1,0 +1,54 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[ablate] window=(1920, 1055) msaa=2 tier=2 vsync_was=1
+[ablate] suburbs baseline frame_p95_ms=34.18 gpu_ms=22.54 draw_calls=137
+[ablate] suburbs lamp pools hidden frame_p95_ms=35.37 gpu_ms=25.14 draw_calls=119
+[ablate] suburbs baseline frame_p95_ms=34.30 gpu_ms=26.18 draw_calls=118
+[ablate] suburbs post-process layers hidden frame_p95_ms=23.67 gpu_ms=18.77 draw_calls=115
+[ablate] suburbs baseline frame_p95_ms=33.76 gpu_ms=25.02 draw_calls=118
+[ablate] suburbs HUD hidden frame_p95_ms=30.49 gpu_ms=21.78 draw_calls=46
+[ablate] suburbs baseline frame_p95_ms=27.08 gpu_ms=23.08 draw_calls=122
+[ablate] suburbs HUD/TopLeft frame_p95_ms=32.73 gpu_ms=23.57 draw_calls=108
+[ablate] suburbs baseline frame_p95_ms=25.91 gpu_ms=22.42 draw_calls=124
+[ablate] suburbs HUD/AmmoCounter frame_p95_ms=25.00 gpu_ms=22.36 draw_calls=124
+[ablate] suburbs baseline frame_p95_ms=26.29 gpu_ms=22.96 draw_calls=124
+[ablate] suburbs HUD/TopRight frame_p95_ms=41.39 gpu_ms=27.30 draw_calls=103
+[ablate] suburbs baseline frame_p95_ms=34.72 gpu_ms=25.46 draw_calls=124
+[ablate] suburbs HUD/BtnPause frame_p95_ms=35.71 gpu_ms=23.66 draw_calls=138
+[ablate] suburbs baseline frame_p95_ms=28.44 gpu_ms=22.44 draw_calls=124
+[ablate] suburbs HUD/BottomCenter frame_p95_ms=31.95 gpu_ms=21.42 draw_calls=91
+[ablate] suburbs baseline frame_p95_ms=38.57 gpu_ms=24.66 draw_calls=124
+[ablate] suburbs HUD/NoticeLabel frame_p95_ms=25.06 gpu_ms=21.10 draw_calls=124
+[ablate] suburbs baseline frame_p95_ms=25.00 gpu_ms=20.27 draw_calls=124
+[ablate] suburbs HUD/WeightBar frame_p95_ms=23.70 gpu_ms=20.71 draw_calls=124
+[ablate] suburbs baseline frame_p95_ms=23.33 gpu_ms=19.69 draw_calls=124
+[ablate] suburbs HUD/Crosshair frame_p95_ms=25.00 gpu_ms=20.13 draw_calls=123
+[ablate] suburbs baseline frame_p95_ms=25.00 gpu_ms=20.37 draw_calls=124
+[ablate] suburbs HUD/HitMarker frame_p95_ms=25.89 gpu_ms=21.44 draw_calls=124
+[ablate] suburbs baseline frame_p95_ms=27.78 gpu_ms=21.87 draw_calls=124
+[ablate] suburbs HUD/StatusRow frame_p95_ms=23.33 gpu_ms=20.14 draw_calls=124
+[ablate] suburbs baseline frame_p95_ms=23.62 gpu_ms=19.75 draw_calls=124
+[ablate] suburbs HUD/GrainOverlay frame_p95_ms=24.07 gpu_ms=19.19 draw_calls=123
+[ablate] suburbs baseline frame_p95_ms=25.10 gpu_ms=20.29 draw_calls=124
+[ablate] suburbs PostProcessOverlay/ChromaOverlay frame_p95_ms=20.15 gpu_ms=18.01 draw_calls=123
+[ablate] suburbs baseline frame_p95_ms=21.21 gpu_ms=19.36 draw_calls=124
+[ablate] suburbs PostProcessOverlay/GrainOverlay frame_p95_ms=20.83 gpu_ms=18.82 draw_calls=123
+[ablate] suburbs baseline frame_p95_ms=21.67 gpu_ms=19.31 draw_calls=124
+[ablate] suburbs PostProcessOverlay/VignetteOverlay frame_p95_ms=20.83 gpu_ms=18.86 draw_calls=123
+[ablate] suburbs baseline frame_p95_ms=22.22 gpu_ms=19.54 draw_calls=124
+[ablate] suburbs msaa off frame_p95_ms=17.27 gpu_ms=14.07 draw_calls=124
+[ablate] power_station baseline frame_p95_ms=18.89 gpu_ms=16.30 draw_calls=128
+[ablate] power_station fog cards hidden frame_p95_ms=18.06 gpu_ms=15.42 draw_calls=128
+[ablate] power_station baseline frame_p95_ms=18.06 gpu_ms=15.82 draw_calls=128
+[ablate] power_station lamp pools hidden frame_p95_ms=18.06 gpu_ms=15.67 draw_calls=127
+[ablate] power_station baseline frame_p95_ms=18.06 gpu_ms=15.78 draw_calls=128
+[ablate] DONE baselines [34.1783333333328, 34.304, 33.756, 27.0833333333333, 25.9066666666667, 26.2914814814815, 34.7222222222222, 28.436, 38.574, 25.0, 23.3333333333333, 25.0, 27.7777777777778, 23.624, 25.099, 21.2121212121212, 21.6666666666667, 22.2222222222222, 18.8894444444426, 18.0555555555556, 18.0555555555556] least 18.06 ms
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 37 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
