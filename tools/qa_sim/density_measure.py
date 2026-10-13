@@ -2,7 +2,8 @@
 """Measured deltas of the density frames (Session 23, AF8): for each pair of frames of one view (the dressing hidden "before", shown "after", one run, one code hash) the mean luminance,
 the mean saturation and the contrast, with the parts of the screen that the HUD still draws left out, and the share of the picture that the dressing changed.
 
-usage: python tools/qa_sim/density_measure.py <hash> [--write docs/DENSITY_MEASURED.md] [--dir docs/stills/density] [--demo]
+usage: python tools/qa_sim/density_measure.py <hash> [--base <hash>] [--write docs/DENSITY_MEASURED.md] [--dir docs/stills/density] [--demo]
+--base names the code of the baseline `before` frames (the pass's first shot); it adds the district spread table: how far apart the eleven districts look in one view.
 Luminance is Rec. 709 on 0..1; saturation is the HSV S of the pixels brighter than 0.05; contrast is the standard deviation of the luminance; changed share is the part of the pixels
 whose luminance differs by 0.05 or more. The mask is in MASKS (pixels of the 960 x 540 frame): the objectives panel, the caption, the toast, the bars at the top left.
 """
@@ -81,6 +82,34 @@ def table(found):
     return "\n".join(lines), rows
 
 
+def thumb(path):
+    a, keep = load(path)
+    a[~keep] = 0.0
+    return np.asarray(Image.fromarray((a * 255).astype(np.uint8)).resize((48, 27), Image.BOX), dtype=float) / 255.0
+
+
+def spread(shots):
+    """(mean, least) of the root-mean-square distance between the 48 x 27 thumbnails of every two districts' frames, with the pair that is least apart."""
+    names = sorted(shots)
+    small = {n: thumb(shots[n]) for n in names}
+    dists = [(float(np.sqrt(((small[a] - small[b]) ** 2).mean())), a, b) for i, a in enumerate(names) for b in names[i + 1:]]
+    return float(np.mean([d[0] for d in dists])), min(dists)
+
+
+def spread_table(directory, code, base):
+    lines = ["| View | Baseline (%s) mean | least apart | Dressing hidden mean | least apart | Dressing shown mean | least apart |" % base, "|---|---|---|---|---|---|---|"]
+    for view in VIEWS:
+        cells = []
+        for label, hash_ in [("before", base), ("before", code), ("after", code)]:
+            shots = {}
+            for path in sorted(glob.glob(str(directory / ("*_%s_%s_%s_*.jpg" % (view, label, hash_))))):
+                shots[pathlib.Path(path).name.split("_%s_" % view)[0]] = path
+            mean, (least, a, b) = spread(shots)
+            cells += ["%.4f" % mean, "%.4f (%s, %s)" % (least, a, b)]
+        lines.append("| %s | %s |" % (view, " | ".join(cells)))
+    return "\n".join(lines)
+
+
 def main(argv):
     if "--demo" in argv:
         a = np.zeros((540, 960, 3))
@@ -95,6 +124,8 @@ def main(argv):
     directory = ROOT / (argv[argv.index("--dir") + 1] if "--dir" in argv else "docs/stills/density")
     found = pairs(directory, code)
     text, rows = table(found)
+    if "--base" in argv:
+        text += "\n\nDistrict spread: the root-mean-square distance (0..1) between the 48 x 27 thumbnails of two districts' frames of one view, the mean over the 55 pairs of districts and the pair that is least apart.\n\n" + spread_table(directory, code, argv[argv.index("--base") + 1])
     print(text)
     if "--write" in argv:
         body = ["# Measured deltas of the density frames (Session 23)", "",

@@ -24,6 +24,7 @@ CATEGORIES = {
 # The directive's targets (-14 music, -10 sfx, -20 ambient) and the canon of docs/PRODUCTION_BIBLE.md and docs/STYLE_GUIDE.md section 5 as measured in docs/AUDIO_CONSISTENCY.md.
 DIRECTIVE_LUFS = {"music": -14.0, "sfx": -10.0, "ambient beds": -20.0, "ambient details": -20.0}
 PEAK_LIMIT_DB = -1.0
+SPREAD_LU = 3.0
 SUFFIXES = {".ogg", ".wav", ".mp3"}
 GATED = -69.0
 
@@ -67,19 +68,22 @@ def summary(rows):
         peaks = [i[2] for i in items if i[2] is not None]
         short = [i for i in items if i[1] is None]
         loud = [i[0] for i in items if i[2] is not None and i[2] > PEAK_LIMIT_DB]
-        out.append((category, len(items), lufs, peaks, len(short), loud))
+        median = statistics.median(lufs) if lufs else 0.0
+        far = [i[0] for i in items if i[1] is not None and abs(i[1] - median) > SPREAD_LU]
+        out.append((category, len(items), lufs, peaks, len(short), loud, far))
     return out
 
 
 def table(rows):
-    lines = ["| Category | Files | Integrated LUFS: min / median / max | Mean | True peak max (dBFS) | Files over %.0f dBFS | Gated (under 0.4 s) | Directive target |" % PEAK_LIMIT_DB,
-             "|---|---|---|---|---|---|---|---|"]
-    for category, n, lufs, peaks, short, loud in summary(rows):
+    lines = ["| Category | Files | Integrated LUFS: min / median / max | Mean | Spread (SD, LU) | Files over %.0f LU from the median | True peak max (dBFS) | Files over %.0f dBFS | Gated (under 0.4 s) | Directive target |" % (SPREAD_LU, PEAK_LIMIT_DB),
+             "|---|---|---|---|---|---|---|---|---|---|"]
+    for category, n, lufs, peaks, short, loud, far in summary(rows):
         target = DIRECTIVE_LUFS.get(category)
-        lines.append("| %s | %d | %s | %s | %s | %d | %d | %s |" % (
+        lines.append("| %s | %d | %s | %s | %s | %d | %s | %d | %d | %s |" % (
             category, n,
             "%.1f / %.1f / %.1f" % (min(lufs), statistics.median(lufs), max(lufs)) if lufs else "-",
             "%.1f" % statistics.mean(lufs) if lufs else "-",
+            "%.2f" % statistics.pstdev(lufs) if lufs else "-", len(far),
             "%.1f" % max(peaks) if peaks else "-", len(loud), short,
             "%.0f LUFS" % target if target is not None else "none"))
     return "\n".join(lines)
@@ -87,15 +91,15 @@ def table(rows):
 
 def main(argv):
     if "--demo" in argv:
-        rows = {"x": [("a.ogg", -14.0, -3.0, None), ("b.ogg", -20.0, -0.5, None), ("c.ogg", None, None, -30.0)]}
+        rows = {"x": [("a.ogg", -14.0, -3.0, None), ("b.ogg", -21.0, -0.5, None), ("c.ogg", None, None, -30.0), ("d.ogg", -14.5, -3.0, None)]}
         s = summary(rows)[0]
-        assert s[1] == 3 and s[4] == 1 and s[5] == ["b.ogg"]
-        print("audio_loudness demo: a file over the peak limit and a gated file are both counted")
+        assert s[1] == 4 and s[4] == 1 and s[5] == ["b.ogg"] and s[6] == ["b.ogg"]
+        print("audio_loudness demo: a file over the peak limit, a file far from the median and a gated file are all counted")
         return 0
     rows = collect(ffmpeg())
     text = table(rows)
     print(text)
-    over = [f for _, _, _, _, _, loud in summary(rows) for f in loud]
+    over = [f for _, _, _, _, _, loud, _ in summary(rows) for f in loud]
     if "--write" in argv:
         pathlib.Path(argv[argv.index("--write") + 1]).write_text("# Loudness of the shipped audio (Session 23)\n\nMeasured by `python tools/qa_sim/audio_loudness.py --write docs/AUDIO_LOUDNESS_TABLE.md` (ffmpeg ebur128, integrated loudness and true peak of each file).\n\n" + text + "\n\nFiles over the peak limit:\n\n" + ("\n".join("- `%s`" % f for f in over) if over else "none") + "\n", encoding="utf-8")
     return 1 if ("--check" in argv and over) else 0
