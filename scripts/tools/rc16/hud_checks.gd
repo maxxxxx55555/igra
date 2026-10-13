@@ -28,6 +28,13 @@ static func run(r: Node) -> void:
 	await _layout_holds(r, hud)
 	r._playing()
 
+## TRLR1 alone, for the s23 group of the closeout (the mutation run of tools/qa_sim/s23_mutations.py reads it there).
+static func trailer(r: Node) -> void:
+	r._playing()
+	UIManager.close_all_blocking()
+	await _trailer_mode_is_clean(r)
+	r._playing()
+
 ## HUDP2: the flashlight charge is eight whole segments (a charge of 0.31 lights three) behind seven gaps.
 static func _battery_is_segments(r: Node, hud: Node) -> void:
 	var whole: bool = is_equal_approx(float(hud.call("_pip_fill", 0.31)), 0.375) and is_equal_approx(float(hud.call("_pip_fill", 0.0)), 0.0) \

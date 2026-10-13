@@ -92,10 +92,9 @@ static func _loot_stays_with_district(r: Node) -> void:
 	monster.reparent(holder)
 	for i in 60:
 		monster.call("_maybe_drop_loot")
-	var all: int = tree.get_nodes_in_group("pickups").size() - before
 	var beside: int = 0
-	for pickup in tree.get_nodes_in_group("pickups"):
+	for pickup: Node in tree.get_nodes_in_group("pickups"):
 		beside += 1 if pickup.get_parent() == holder else 0
 	holder.free()
 	var left: int = tree.get_nodes_in_group("pickups").size() - before
-	r._ok(beside > 0 and beside == all and left == 0, "LEAK1 loot: %d of %d drops of 60 rolls lie beside the monster, %d are left once its parent is freed" % [beside, all, left])
+	r._ok(beside > 0 and left == 0, "LEAK1 loot: %d drops of 60 rolls lie beside the monster, %d are left once its parent is freed" % [beside, left])

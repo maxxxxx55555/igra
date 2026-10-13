@@ -95,6 +95,7 @@ func _run() -> void:
 		await Rc23S2.run(self)
 		await Rc23Density.run(self)
 		await Rc23Engine.run(self)
+		await Rc22Hud.trailer(self)
 		_finish()
 		return
 	if OS.get_environment("CLOSEOUT_ONLY") == "rtl":
@@ -829,8 +830,8 @@ func _check_crouch() -> void:
 
 # ── MN4: a corpse drops loot 30% of the time (a part, a supply, or ammunition for the Sharpshooter) ──
 func _check_loot() -> void:
-	var scene := get_tree().current_scene
 	var crawler := _monster("crawler_3d")
+	var scene: Node = crawler.get_parent()  # a drop lies beside its monster (CORRECTION_LOG 235)
 	var before := scene.get_child_count()
 	for n in LOOT_ROLLS:
 		crawler._maybe_drop_loot()

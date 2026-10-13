@@ -28,11 +28,6 @@ export TLS_UDG_GUARDED=1  # tells QaLaunchGuard this shell guard covers the run
 timeout "$T" "$GODOT" --windowed --path . "$SCENE" > "$LOG" 2>&1
 rc=$?
 source tools/qa_sim/engine_errors.sh
-errs=$(grep -aE "$BAD" "$LOG" | head -5)
-if [[ -n "$errs" ]]; then
-	echo "engine errors in the log:"
-	echo "$errs"
-	[[ $rc -eq 0 ]] && rc=1
-fi
+scan_engine_log "$LOG" 5 || [[ $rc -ne 0 ]] || rc=1
 echo "  $SCENE rc=$rc (log: $LOG)"
 exit $rc

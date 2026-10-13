@@ -1,0 +1,104 @@
+# proof s23_fix_3cef1de
+# utc 20261013T132557Z
+# head 3cef1de (uncommitted paths: 0)
+# env none
+# cmd bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/5fa8d500-393b-43b7-95de-04d09fcc9e42/scratchpad/l20_chain.sh 3cef1de
+reimport_rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL MN4 a corpse drops loot 30% of the time (0 of 600)
+[closeout] FAIL MN4 the Sharpshooter drops a box of rounds
+[closeout] DONE checks=460 fails=2
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+s23_mutations: apply done (28 mutations)
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL A11Y7 motion comfort: shake and sprint blur work with it off (trauma 1.00, blur true) and stop with it on (trauma 1.00, blur false)
+[closeout] FAIL AUD1 ducking: a voice line dips the Music and Ambient buses by -3.0 dB (their Amplify effects false), the volume slider is not touched (true), 3.5 s later the dip is 0.00 dB
+[closeout] FAIL VFX6 particle budget: the world's own emitters draw 140, with every pooled burst in flight (9 of each scene) 662 (budget 500), 290 in a storm (limit 1000), the pool's worst case 522 plus the world 662
+[closeout] FAIL AI1 noise bomb: it popped on landing (true), the monster 14 m away goes to look at the spot (false), the one 36 m away, beyond the radius of 4 m, stays (true)
+[closeout] FAIL AI2 group alert: the neighbour 6 m away goes to look (false), the one 30 m away stays (true), one already chasing keeps chasing (true), a hound's call reaches 12 m (true)
+[closeout] FAIL AI4 difficulty hooks: the search lasts [10.0, 10.0, 10.0] s (7, 10, 13), the reaction time is [0.5, 0.0, 0.0] s (0.5, 0, 0), an Easy monster stands still while it notices (true)
+[closeout] FAIL AI5 detection gradient: after a jump of the player's noise to 0.8 the bar is at [0.8, 0.8, 0.8, 0.8, 0.8, 0.8] of its width on the first six polls (it glides by 0.15), a value of 0.25 has a colour of its own (0.5805, 0.588, 0.298, 1.0) between green and brass (true)
+[closeout] FAIL JUICE1 hit-stop: a run at 2x dips to 0.50x, is back at 2.0x after 28 ms of real time (80 ms asked), and does nothing with Reduce Time Effects (true)
+[closeout] FAIL JUICE3 screen shake: the camera moves 0.0461 m at most (limit 0.050 m), 11.18 px of 1080p at 5 m with a 48 degree view (limit 4 px), a damage hit 3.18 px (least 0.5)
+[closeout] FAIL JUICE4 camera: sprint punch 5.0 degrees, landing punch 0.0, with Motion Comfort 0.0; a landing after 0.5 s in the air kicks 0.92, after 0.1 s 0.00
+[closeout] FAIL POL3 idle breath: the eye moves 0.0000 m over a breath (0.006 to 0.01) and 0.0000 m with Motion Comfort
+[closeout] FAIL WEAPON1 weapon feel: recoil shotgun 0.50, pistol 0.45, rifle 0.35; a shotgun shot kicks the view 0.020 rad and half a second later it is at 0.000; none with Motion Comfort (true); a tactical reload takes 0.80 of an empty one
+[closeout] FAIL MOVE1 the walk eases: 2.94 m/s after one step, 2.94 after twelve, 2.93 at full speed; after letting go 1.68 after one step and 0.00 after ten
+[closeout] FAIL POL1 ui feedback: button, check box and tabs wired (true), the HUD's button and a screen's own click left alone (true), press 1.00 then back (true), hover 1.050 (ThemeSetup's swell) with the tick wired, then back (true), still with Reduce UI Motion (true)
+[closeout] FAIL POL2 screens ease: the codex slides in (true) and rests (true), a close is closed for the logic at once (true) while it is still drawn (false), hidden after the fade with its alpha back (true), an open during the fade stays (true), Reduce UI Motion hides at once (true)
+[closeout] FAIL SEC1 speed clocks: in step true, parted false; one off window is not a verdict (false), a normal window after it clears it (true), two in a row flag a speed hack (false)
+[closeout] FAIL PERF1 dynamic resolution: 1.5 s under 30 FPS keeps 1.0 (true), 2 s drops to 0.7 (false), the band holds it (false), 3.5 s over 45 FPS holds (true) and 4 s restores 1.0 (true); a dip into the band restarts the count (true, then true)
+[closeout] FAIL PERF3 perf gate edges: all met at the limits (true), D1 200 fails (false), D11 350 fails (true), p95 33.1 ms fails (true), 512.1 MiB fails (true), Session 22's numbers pass (true)
+[closeout] FAIL LEAK1 loot: 0 of 14 drops of 60 rolls lie beside the monster, 14 are left once its parent is freed
+[closeout] FAIL SAVEMIG the loader against 18 save generations and faults: differs in b3
+[closeout] FAIL NGP1 New Game+ player damage: a bullet 25.0 at level 0 and 25.0 at level 2 (x1.00), a melee hit 9.7 then 11.6 (x1.20)
+[closeout] FAIL FOLIAGE1 canopies: a sway shader (true) of 0.00 m, 0.00 m with Motion Comfort and 0.00 m after, in the old dark teal (true)
+[closeout] FAIL FOG1 ground fog: 0 cards in a fog district, 0 in the suburbs, 0 at the Low tier
+[closeout] FAIL DENS1 density: every block of every district holds 2 solid props, 4 scattered pieces and 2 lamps at least (under the floor: suburbs, residential, park, school, hospital, gas_station, police, warehouses, industrial, substation, power_station), 0 of 11 districts have a landmark and 0 a lit rest spot
+[closeout] FAIL MANH1 manholes: 0 of 11 districts hold an iron cover in the road with a thread of steam
+[closeout] FAIL UISFX1 a button freed in its first frame raises no engine error (["message_queue.cpp:220 Error calling deferred method: \'Node(uisfx.gd)::_wire\': Cannot convert argument 1 from Object to Object."])
+[closeout] FAIL SHADER1 the 13 shader files compile with no engine error ([":17 Range hint is for \'float\' and \'int\' only.", "material_storage.cpp:192 Shader compilation failed."])
+[closeout] DONE checks=52 fails=27
+engine errors in the log:
+ERROR: Error calling deferred method: 'Node(uisfx.gd)::_wire': Cannot convert argument 1 from Object to Object.
+ERROR: Error calling deferred method: 'Node(uisfx.gd)::_wire': Cannot convert argument 1 from Object to Object.
+ERROR: Error calling deferred method: 'Node(uisfx.gd)::_wire': Cannot convert argument 1 from Object to Object.
+ERROR: Error calling deferred method: 'Node(uisfx.gd)::_wire': Cannot convert argument 1 from Object to Object.
+ERROR: Error calling deferred method: 'Node(uisfx.gd)::_wire': Cannot convert argument 1 from Object to Object.
+ERROR: Error calling deferred method: 'Node(uisfx.gd)::_wire': Cannot convert argument 1 from Object to Object.
+ERROR: Error calling deferred method: 'Node(uisfx.gd)::_wire': Cannot convert argument 1 from Object to Object.
+ERROR: Error calling deferred method: 'Node(uisfx.gd)::_wire': Cannot convert argument 1 from Object to Object.
+ERROR: Error calling deferred method: 'Node(uisfx.gd)::_wire': Cannot convert argument 1 from Object to Object.
+ERROR: Error calling deferred method: 'Node(uisfx.gd)::_wire': Cannot convert argument 1 from Object to Object.
+ERROR: Error calling deferred method: 'Node(uisfx.gd)::_wire': Cannot convert argument 1 from Object to Object.
+ERROR: Error calling deferred method: 'Node(uisfx.gd)::_wire': Cannot convert argument 1 from Object to Object.
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+s23_mutations: restore done (28 mutations)
+A11Y7    mutated: FAIL -> BITES
+AI1      mutated: FAIL -> BITES
+AI2      mutated: FAIL -> BITES
+AI4      mutated: FAIL -> BITES
+AI5      mutated: FAIL -> BITES
+AUD1     mutated: FAIL -> BITES
+DENS1    mutated: FAIL -> BITES
+FOG1     mutated: FAIL -> BITES
+FOLIAGE1 mutated: FAIL -> BITES
+JUICE1   mutated: FAIL -> BITES
+JUICE3   mutated: FAIL -> BITES
+JUICE4   mutated: FAIL -> BITES
+LEAK1    mutated: FAIL -> BITES
+MANH1    mutated: FAIL -> BITES
+MOVE1    mutated: FAIL -> BITES
+NGP1     mutated: FAIL -> BITES
+PERF1    mutated: FAIL -> BITES
+PERF3    mutated: FAIL -> BITES
+POL1     mutated: FAIL -> BITES
+POL2     mutated: FAIL -> BITES
+POL3     mutated: FAIL -> BITES
+SAVEMIG  mutated: FAIL -> BITES
+SEC1     mutated: FAIL -> BITES
+SHADER1  mutated: FAIL -> BITES
+TRLR1    mutated: missing -> BITES
+UISFX1   mutated: FAIL -> BITES
+VFX6     mutated: FAIL -> BITES
+WEAPON1  mutated: FAIL -> BITES
+failed without a mutation: nothing
+run: [closeout] DONE checks=52 fails=27
+S23 MUTATIONS verdict=PASS mutations=28 bad=0
+tracked files changed after the restore: 0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/perf_ablation_scene.tscn rc=0 (log: .qa_logs/perf_ablation_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  soak stress rc=0 (log: .qa_logs/soak_stress.log, 0 minute lines, 2 stress lines)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  soak stress rc=0 (log: .qa_logs/soak_stress.log, 0 minute lines, 2 stress lines)
+  user-data guard: 0 file(s) restored byte-identical
+l20 chain done
+# EXIT=0

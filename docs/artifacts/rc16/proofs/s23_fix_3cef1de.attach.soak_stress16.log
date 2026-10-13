@@ -1,0 +1,17 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[soak] start mode=stress minutes=1 hash=3cef1de nodes=1105 objects=3975 orphans=6 tex_mib=69.6 vid_mib=97.1 static_mib=100.0
+[stress] monsters=16 alive=16 moved=15 frames=2692 mean_ms=16.72 p95_ms=16.67 p99_ms=16.67 max_ms=52.9 fps_mean=59.8 over50=1 nodes=1266 objects=4261 orphans=6 tex_mib=69.7 vid_mib=98.9 static_mib=102.9
+[stress] DONE clean exit follows nodes=1106 objects=3977 orphans=6 tex_mib=69.7 vid_mib=97.2 static_mib=101.5
+ERROR: 1 RID allocations of type 'N5GLES37TextureE' were leaked at exit.
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+ERROR: Texture with GL ID of 137: leaked 131072 bytes.
+   at: ~Utilities (drivers/gles3/storage/utilities.cpp:82)
+WARNING: 37 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

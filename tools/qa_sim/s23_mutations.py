@@ -91,7 +91,7 @@ def judge(text):
     rows, bad = [], 0
     for check in sorted(expected):
         state = seen.get(check, "missing")
-        verdict = "BITES" if state != "ok" else "VACUOUS"
+        verdict = "BITES" if state == "FAIL" else ("NOT RUN" if state == "missing" else "VACUOUS")
         bad += verdict != "BITES"
         rows.append("%-8s mutated: %s -> %s" % (check, state, verdict))
     stray = sorted(c for c, s in seen.items() if s == "FAIL" and c not in expected)
@@ -128,6 +128,8 @@ def demo():
     broken = sample.replace("[closeout] ok   AI1 x", "[closeout] FAIL AI1 x").replace("[closeout] ok   AUD1 x", "[closeout] ok   AUD1 x\n[closeout] FAIL STRAY y")
     rows, bad = judge(broken)
     assert bad == len(MUTATIONS) - 1 + 1 and any("STRAY" in r for r in rows)
+    rows, bad = judge(sample.replace("[closeout] ok   AI1 x", ""))
+    assert bad == len(MUTATIONS) and any("NOT RUN" in r for r in rows), "a check that never ran is not a check that bites"
     ids = [m[3] for m in MUTATIONS]
     assert len(set(ids)) == len(ids), "one mutation per check"
     print("s23_mutations demo: a vacuous check, a biting check and a stray failure are told apart")

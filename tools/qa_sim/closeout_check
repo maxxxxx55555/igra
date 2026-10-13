@@ -23,12 +23,7 @@ rm -f "$LOG"
 timeout "${1:-240}" "$GODOT" --headless --path . res://scenes/tools/closeout_check_scene.tscn >"$LOG" 2>&1
 rc=$?
 source tools/qa_sim/engine_errors.sh
-errs=$(grep -aE "$BAD" "$LOG" | head -12)
 grep -aE "^\[closeout\] (FAIL|DONE)" "$LOG" | tail -40
-if [[ -n "$errs" ]]; then
-	echo "engine errors in the log:"
-	echo "$errs"
-	rc=1
-fi
+scan_engine_log "$LOG" 12 || rc=1
 echo "  closeout_check rc=$rc (log: $LOG)"
 exit $rc
