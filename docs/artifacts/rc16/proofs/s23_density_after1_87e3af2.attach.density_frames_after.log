@@ -1,0 +1,159 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+SCRIPT ERROR: Parse Error: Cannot infer the type of "around" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/world/district_dressing.gd:111)
+   GDScript backtrace (most recent call first):
+       [0] _setup_world_runtime (res://scripts/main_3d.gd:55)
+       [1] _ready (res://scripts/main_3d.gd:6)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/world/street_props.gd:0)
+   GDScript backtrace (most recent call first):
+       [0] _setup_world_runtime (res://scripts/main_3d.gd:55)
+       [1] _ready (res://scripts/main_3d.gd:6)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/world/district_preloader.gd:0)
+   GDScript backtrace (most recent call first):
+       [0] _setup_world_runtime (res://scripts/main_3d.gd:55)
+       [1] _ready (res://scripts/main_3d.gd:6)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/world/world_runtime.gd:0)
+   GDScript backtrace (most recent call first):
+       [0] _setup_world_runtime (res://scripts/main_3d.gd:55)
+       [1] _ready (res://scripts/main_3d.gd:6)
+ERROR: Failed to load script "res://scripts/world/world_runtime.gd" with error "Compilation failed".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+   GDScript backtrace (most recent call first):
+       [0] _setup_world_runtime (res://scripts/main_3d.gd:55)
+       [1] _ready (res://scripts/main_3d.gd:6)
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: CityStreetProps.build (res://scripts/world/street_props.gd:144)
+   GDScript backtrace (most recent call first):
+       [0] build (res://scripts/world/street_props.gd:144)
+[density] start label=after hash=87e3af2 ids=[&"suburbs", &"residential", &"park", &"school", &"hospital", &"gas_station", &"police", &"warehouses", &"industrial", &"substation", &"power_station"] nodes=1082 objects=3890 orphans=6 tex_mib=68.8 vid_mib=96.2 static_mib=98.2
+[probe] stream pass=density district=suburbs ok=true load_ms=0.3 settled_ms=38.6 hitches=0 max_frame_ms=16.7 over_budget_ms=0.0 nodes=1082 objects=3888 orphans=6 tex_mib=68.8 vid_mib=96.2 static_mib=98.2 stats={"district":"suburbs","enemies_ms":5.948,"loot_ms":19.822,"props_ms":0.0,"scene_ms":55.649,"streets_ms":1.544,"total_ms":132.43}
+[density] frame suburbs_01_dark_after_87e3af2_20261013T011616Z.jpg
+[density] frame suburbs_02_rest_after_87e3af2_20261013T011617Z.jpg
+[density] frame suburbs_03_street_after_87e3af2_20261013T011618Z.jpg
+[density] frame suburbs_04_block_after_87e3af2_20261013T011619Z.jpg
+[density] frame suburbs_05_skyline_after_87e3af2_20261013T011619Z.jpg
+[density] perf district=suburbs draw_calls=97 primitives=63132 objects_in_frame=189
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: CityStreetProps.build (res://scripts/world/street_props.gd:144)
+   GDScript backtrace (most recent call first):
+       [0] build (res://scripts/world/street_props.gd:144)
+[probe] stream pass=density district=residential ok=true load_ms=186.9 settled_ms=216.7 hitches=1 max_frame_ms=141.7 over_budget_ms=108.4 nodes=1096 objects=3945 orphans=6 tex_mib=68.7 vid_mib=98.2 static_mib=101.1 stats={"district":"residential","enemies_ms":5.273,"loot_ms":15.65,"props_ms":0.0,"scene_ms":0.843,"streets_ms":1.288,"total_ms":42.558}
+[density] frame residential_01_dark_after_87e3af2_20261013T011623Z.jpg
+[density] frame residential_02_rest_after_87e3af2_20261013T011624Z.jpg
+[density] frame residential_03_street_after_87e3af2_20261013T011625Z.jpg
+[density] frame residential_04_block_after_87e3af2_20261013T011625Z.jpg
+[density] frame residential_05_skyline_after_87e3af2_20261013T011626Z.jpg
+[density] perf district=residential draw_calls=111 primitives=84330 objects_in_frame=203
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: CityStreetProps.build (res://scripts/world/street_props.gd:144)
+   GDScript backtrace (most recent call first):
+       [0] build (res://scripts/world/street_props.gd:144)
+[probe] stream pass=density district=park ok=true load_ms=232.0 settled_ms=324.4 hitches=1 max_frame_ms=142.6 over_budget_ms=119.6 nodes=1093 objects=3950 orphans=6 tex_mib=69.0 vid_mib=98.5 static_mib=101.9 stats={"district":"park","enemies_ms":5.949,"loot_ms":19.5,"props_ms":0.0,"scene_ms":1.035,"streets_ms":1.39,"total_ms":49.146}
+[density] frame park_01_dark_after_87e3af2_20261013T011630Z.jpg
+[density] frame park_02_rest_after_87e3af2_20261013T011631Z.jpg
+[density] frame park_03_street_after_87e3af2_20261013T011631Z.jpg
+[density] frame park_04_block_after_87e3af2_20261013T011632Z.jpg
+[density] frame park_05_skyline_after_87e3af2_20261013T011633Z.jpg
+[density] perf district=park draw_calls=97 primitives=72648 objects_in_frame=97
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: CityStreetProps.build (res://scripts/world/street_props.gd:144)
+   GDScript backtrace (most recent call first):
+       [0] build (res://scripts/world/street_props.gd:144)
+[probe] stream pass=density district=school ok=true load_ms=229.6 settled_ms=316.3 hitches=2 max_frame_ms=128.2 over_budget_ms=122.1 nodes=1096 objects=3965 orphans=6 tex_mib=68.7 vid_mib=98.2 static_mib=102.6 stats={"district":"school","enemies_ms":4.975,"loot_ms":14.843,"props_ms":0.0,"scene_ms":0.803,"streets_ms":1.302,"total_ms":40.091}
+[density] frame school_01_dark_after_87e3af2_20261013T011637Z.jpg
+[density] frame school_02_rest_after_87e3af2_20261013T011637Z.jpg
+[density] frame school_03_street_after_87e3af2_20261013T011638Z.jpg
+[density] frame school_04_block_after_87e3af2_20261013T011639Z.jpg
+[density] frame school_05_skyline_after_87e3af2_20261013T011640Z.jpg
+[density] perf district=school draw_calls=116 primitives=83228 objects_in_frame=208
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: CityStreetProps.build (res://scripts/world/street_props.gd:144)
+   GDScript backtrace (most recent call first):
+       [0] build (res://scripts/world/street_props.gd:144)
+[probe] stream pass=density district=hospital ok=true load_ms=236.5 settled_ms=297.7 hitches=1 max_frame_ms=136.4 over_budget_ms=111.2 nodes=1095 objects=3972 orphans=6 tex_mib=69.0 vid_mib=98.5 static_mib=103.5 stats={"district":"hospital","enemies_ms":5.624,"loot_ms":19.274,"props_ms":0.0,"scene_ms":0.773,"streets_ms":1.47,"total_ms":48.552}
+[density] frame hospital_01_dark_after_87e3af2_20261013T011644Z.jpg
+[density] frame hospital_02_rest_after_87e3af2_20261013T011644Z.jpg
+[density] frame hospital_03_street_after_87e3af2_20261013T011645Z.jpg
+[density] frame hospital_04_block_after_87e3af2_20261013T011646Z.jpg
+[density] frame hospital_05_skyline_after_87e3af2_20261013T011647Z.jpg
+[density] perf district=hospital draw_calls=107 primitives=74156 objects_in_frame=199
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: CityStreetProps.build (res://scripts/world/street_props.gd:144)
+   GDScript backtrace (most recent call first):
+       [0] build (res://scripts/world/street_props.gd:144)
+[probe] stream pass=density district=gas_station ok=true load_ms=207.5 settled_ms=247.0 hitches=1 max_frame_ms=134.3 over_budget_ms=101.0 nodes=1097 objects=3989 orphans=6 tex_mib=68.7 vid_mib=98.2 static_mib=104.3 stats={"district":"gas_station","enemies_ms":5.323,"loot_ms":15.924,"props_ms":0.0,"scene_ms":0.787,"streets_ms":1.238,"total_ms":42.317}
+[density] frame gas_station_01_dark_after_87e3af2_20261013T011650Z.jpg
+[density] frame gas_station_02_rest_after_87e3af2_20261013T011651Z.jpg
+[density] frame gas_station_03_street_after_87e3af2_20261013T011652Z.jpg
+[density] frame gas_station_04_block_after_87e3af2_20261013T011653Z.jpg
+[density] frame gas_station_05_skyline_after_87e3af2_20261013T011654Z.jpg
+[density] perf district=gas_station draw_calls=92 primitives=72626 objects_in_frame=92
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: CityStreetProps.build (res://scripts/world/street_props.gd:144)
+   GDScript backtrace (most recent call first):
+       [0] build (res://scripts/world/street_props.gd:144)
+[probe] stream pass=density district=police ok=true load_ms=237.7 settled_ms=310.1 hitches=1 max_frame_ms=133.6 over_budget_ms=108.4 nodes=1126 objects=4035 orphans=6 tex_mib=69.0 vid_mib=98.5 static_mib=105.4 stats={"district":"police","enemies_ms":6.604,"loot_ms":21.583,"props_ms":0.0,"scene_ms":0.711,"streets_ms":1.388,"total_ms":52.737}
+[density] frame police_01_dark_after_87e3af2_20261013T011657Z.jpg
+[density] frame police_02_rest_after_87e3af2_20261013T011658Z.jpg
+[density] frame police_03_street_after_87e3af2_20261013T011659Z.jpg
+[density] frame police_04_block_after_87e3af2_20261013T011700Z.jpg
+[density] frame police_05_skyline_after_87e3af2_20261013T011701Z.jpg
+[density] perf district=police draw_calls=106 primitives=63502 objects_in_frame=106
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: CityStreetProps.build (res://scripts/world/street_props.gd:144)
+   GDScript backtrace (most recent call first):
+       [0] build (res://scripts/world/street_props.gd:144)
+[probe] stream pass=density district=warehouses ok=true load_ms=301.0 settled_ms=382.5 hitches=1 max_frame_ms=149.6 over_budget_ms=134.0 nodes=1113 objects=4040 orphans=6 tex_mib=68.7 vid_mib=98.2 static_mib=105.8 stats={"district":"warehouses","enemies_ms":10.229,"loot_ms":22.828,"props_ms":0.0,"scene_ms":0.942,"streets_ms":2.187,"total_ms":62.136}
+[density] frame warehouses_01_dark_after_87e3af2_20261013T011704Z.jpg
+[density] frame warehouses_02_rest_after_87e3af2_20261013T011705Z.jpg
+[density] frame warehouses_03_street_after_87e3af2_20261013T011706Z.jpg
+[density] frame warehouses_04_block_after_87e3af2_20261013T011707Z.jpg
+[density] frame warehouses_05_skyline_after_87e3af2_20261013T011708Z.jpg
+[density] perf district=warehouses draw_calls=106 primitives=73136 objects_in_frame=106
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: CityStreetProps.build (res://scripts/world/street_props.gd:144)
+   GDScript backtrace (most recent call first):
+       [0] build (res://scripts/world/street_props.gd:144)
+[probe] stream pass=density district=industrial ok=true load_ms=235.3 settled_ms=292.2 hitches=2 max_frame_ms=150.0 over_budget_ms=150.1 nodes=1122 objects=4060 orphans=6 tex_mib=69.0 vid_mib=98.5 static_mib=107.1 stats={"district":"industrial","enemies_ms":4.88,"loot_ms":18.373,"props_ms":0.0,"scene_ms":0.714,"streets_ms":1.222,"total_ms":44.645}
+[density] frame industrial_01_dark_after_87e3af2_20261013T011711Z.jpg
+[density] frame industrial_02_rest_after_87e3af2_20261013T011712Z.jpg
+[density] frame industrial_03_street_after_87e3af2_20261013T011713Z.jpg
+[density] frame industrial_04_block_after_87e3af2_20261013T011714Z.jpg
+[density] frame industrial_05_skyline_after_87e3af2_20261013T011715Z.jpg
+[density] perf district=industrial draw_calls=110 primitives=63948 objects_in_frame=193
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: CityStreetProps.build (res://scripts/world/street_props.gd:144)
+   GDScript backtrace (most recent call first):
+       [0] build (res://scripts/world/street_props.gd:144)
+[probe] stream pass=density district=substation ok=true load_ms=213.0 settled_ms=303.5 hitches=1 max_frame_ms=141.9 over_budget_ms=112.5 nodes=1104 objects=4046 orphans=6 tex_mib=68.7 vid_mib=98.2 static_mib=107.9 stats={"district":"substation","enemies_ms":8.165,"loot_ms":18.498,"props_ms":0.0,"scene_ms":1.133,"streets_ms":1.464,"total_ms":49.77}
+[density] frame substation_01_dark_after_87e3af2_20261013T011718Z.jpg
+[density] frame substation_02_rest_after_87e3af2_20261013T011719Z.jpg
+[density] frame substation_03_street_after_87e3af2_20261013T011720Z.jpg
+[density] frame substation_04_block_after_87e3af2_20261013T011721Z.jpg
+[density] frame substation_05_skyline_after_87e3af2_20261013T011722Z.jpg
+[density] perf district=substation draw_calls=104 primitives=63078 objects_in_frame=187
+SCRIPT ERROR: Invalid call. Nonexistent function 'new' in base 'GDScript'.
+   at: CityStreetProps.build (res://scripts/world/street_props.gd:144)
+   GDScript backtrace (most recent call first):
+       [0] build (res://scripts/world/street_props.gd:144)
+[probe] stream pass=density district=power_station ok=true load_ms=211.7 settled_ms=248.7 hitches=1 max_frame_ms=148.3 over_budget_ms=115.8 nodes=1101 objects=4040 orphans=6 tex_mib=69.0 vid_mib=98.5 static_mib=108.4 stats={"district":"power_station","enemies_ms":5.678,"loot_ms":17.388,"props_ms":0.0,"scene_ms":0.873,"streets_ms":1.226,"total_ms":42.599}
+[density] frame power_station_01_dark_after_87e3af2_20261013T011725Z.jpg
+[density] frame power_station_02_rest_after_87e3af2_20261013T011726Z.jpg
+[density] frame power_station_03_street_after_87e3af2_20261013T011727Z.jpg
+[density] frame power_station_04_block_after_87e3af2_20261013T011728Z.jpg
+[density] frame power_station_05_skyline_after_87e3af2_20261013T011729Z.jpg
+[density] perf district=power_station draw_calls=93 primitives=72400 objects_in_frame=93
+[density] DONE label=after hash=87e3af2
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 64 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

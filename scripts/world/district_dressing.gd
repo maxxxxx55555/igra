@@ -108,7 +108,8 @@ func _hydrant_spots(sb: Node) -> Array[Transform3D]:
 	var out: Array[Transform3D] = []
 	for i in HYDRANTS:
 		var corner := Vector3((_rng.randi_range(0, 3) - 1.5) * _grid, 0.0, (_rng.randi_range(0, 3) - 1.5) * _grid)
-		var around := Vector3(1.0 if _rng.randf() < 0.5 else -1.0, 0.0, 1.0 if _rng.randf() < 0.5 else -1.0) * (sb.road_width * 0.5 + 0.4)
+		var reach: float = sb.road_width * 0.5 + 0.4
+		var around := Vector3(1.0 if _rng.randf() < 0.5 else -1.0, 0.0, 1.0 if _rng.randf() < 0.5 else -1.0) * reach
 		var at: Vector3 = _solid_spot(corner + around)
 		if at != Vector3.INF:
 			out.append(Transform3D(Basis(), Vector3(at.x, GROUND_Y, at.z)))
