@@ -430,19 +430,19 @@ func _a04_ghosts() -> void:
 	var levels: Array[float] = []
 	var hurt := 0.0
 	for attempt in 4:
-		# a hit makes the screen edges flash ember, which is no ghost: that window is measured again
+		# a hit makes the screen edges flash ember, and a monster that walks through the corner changes it: neither is a ghost, and a ghost is in every window, so a window with either is measured again
 		var damage0 := ProgressTracker.damage_taken
 		levels.clear()
 		for i in GHOST_FRAMES:
 			levels.append(await _corner_level())
 			await get_tree().create_timer(0.2).timeout
 		hurt = ProgressTracker.damage_taken - damage0
-		if hurt == 0.0:
+		ghosts = 0
+		for level in levels:
+			ghosts += 1 if level - levels.min() > GHOST_LEVEL else 0
+		if hurt == 0.0 and ghosts == 0:
 			break
 		await get_tree().create_timer(3.0).timeout
-	ghosts = 0
-	for level in levels:
-		ghosts += 1 if level - levels.min() > GHOST_LEVEL else 0
 	_step("A04h", ghosts == 0 and hurt == 0.0, "no pale square comes and goes in the lower-right corner (%d of %d frames brighter than the clearest by more than %.1f; corner %.1f to %.1f; hurt in the window %.0f by %s)" % [ghosts, GHOST_FRAMES, GHOST_LEVEL, levels.min(), levels.max(), hurt, ProgressTracker.last_hit_by], await _shot("A04_corner"))
 
 func _a04_controls() -> void:

@@ -92,13 +92,16 @@ static func _atmosphere(r: Node) -> void:
 	SettingsManager.set_setting("reduce_camera_motion", false)
 	var restored: float = float(mat.get_shader_parameter("sway_strength")) if mat != null else -1.0
 	var plain: int = _cards(street)
-	var dressing: Node = street.get_node("Props").get_node("DistrictDressing")
-	var pools := dressing.get_node("LampPools") as Node3D
-	var halo := dressing.get_node("Landmark").get_node("Halo") as Node3D
-	dressing.call("_apply_stage", 0)
-	var rests: bool = not pools.visible and not halo.visible
-	dressing.call("_apply_stage", 1)
-	var wakes: bool = pools.visible and halo.visible
+	var dressing: Node = street.get_node("Props").get_node_or_null("DistrictDressing")
+	var pools := dressing.get_node_or_null("LampPools") as Node3D if dressing != null else null
+	var halo := dressing.get_node_or_null("Landmark/Halo") as Node3D if dressing != null else null
+	var rests: bool = false
+	var wakes: bool = false
+	if pools != null and halo != null:
+		dressing.call("_apply_stage", 0)
+		rests = not pools.visible and not halo.visible
+		dressing.call("_apply_stage", 1)
+		wakes = pools.visible and halo.visible
 	street.queue_free()
 	var foggy: Node3D = await _build(r, &"warehouses")
 	var fogged: int = _cards(foggy)

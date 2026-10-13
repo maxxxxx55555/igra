@@ -40,7 +40,7 @@ MUTATIONS = [
     ("scripts/weapons/weapon_base.gd", "* NewGamePlus.get_player_damage_multiplier()  # GDD 12.5: +10% per New Game+ level", "", "NGP1"),
     ("scripts/core/save_system.gd", "const BACKUP_DEPTH: int = 3", "const BACKUP_DEPTH: int = 2", "SAVEMIG"),
     ("scripts/systems/integrity_guard.gd", "const CLOCK_TOLERANCE: float = 0.25", "const CLOCK_TOLERANCE: float = 5.0", "SEC1"),
-    ("scripts/world/street_props.gd", 'dressing.call("build", district_id, sb)', "pass", "DENS1"),
+    ("scripts/world/district_dressing.gd", 'var pieces: int = int(kit["litter"]) + int(kit["leaves"])', "var pieces: int = 0", "DENS1"),
     ("scripts/world/street_props.gd", "const SWAY_M: float = 0.08", "const SWAY_M: float = 0.0", "FOLIAGE1"),
     ("scripts/world/district_dressing.gd", 'const FOG_DISTRICTS: Array[StringName] = [&"warehouses", &"industrial"', 'const FOG_DISTRICTS: Array[StringName] = [&"industrial"', "FOG1"),
     ("scripts/world/district_dressing.gd", "const MANHOLES: int = 2", "const MANHOLES: int = 0", "MANH1"),
