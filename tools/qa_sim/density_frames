@@ -3,6 +3,8 @@
 #   tools/qa_sim/density_frames <label> <hash> [district ids, comma separated] [timeout-sec]
 #     label: before | after      hash: the short hash of the code tree that is measured (it is part of every frame name)
 #   log -> .qa_logs/density_frames_<label>.log      frames -> docs/stills/density/<id>_<view>_<label>_<hash>_<UTC>.jpg
+#   store frames (store/SCREENSHOT_RECIPES.md): TLS_FRAMES_LANG=ru TLS_FRAMES_HUD=1 TLS_FRAMES_PNG=1 tools/qa_sim/density_frames store <hash> <ids>
+#     -> store/screenshots/recipes/<id>_<view>_<lang>_<hash>_<UTC>.png (RGB, no alpha); the HUD is hidden unless TLS_FRAMES_HUD=1
 set -uo pipefail
 cd "$(dirname "$0")/../.." || exit 2
 LABEL="${1:?usage: tools/qa_sim/density_frames <label> <hash> [ids] [timeout-sec]}"
@@ -23,7 +25,7 @@ udg_snapshot || exit 99
 trap 'udg_restore || exit 97' EXIT
 trap 'exit 130' INT TERM
 export TLS_UDG_GUARDED=1
-timeout "$T" "$GODOT" --windowed --path . res://scenes/tools/density_frames_scene.tscn -- --tlabel="$LABEL" --thash="$HASH" ${IDS:+--tids="$IDS"} > "$LOG" 2>&1
+timeout "$T" "$GODOT" --windowed --path . res://scenes/tools/density_frames_scene.tscn -- --tlabel="$LABEL" --thash="$HASH" ${IDS:+--tids="$IDS"} ${TLS_FRAMES_LANG:+--tlang="$TLS_FRAMES_LANG"} ${TLS_FRAMES_HUD:+--thud=1} ${TLS_FRAMES_PNG:+--tpng=1} > "$LOG" 2>&1
 rc=$?
 echo "  density_frames rc=$rc (log: $LOG, $(grep -ac '^\[density\] frame' "$LOG") frames)"
 exit $rc

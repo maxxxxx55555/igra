@@ -10,6 +10,8 @@ extends "res://scripts/tools/_rc16_probe_runner.gd"
 ## Frames -> docs/stills/density/<id>_<view>_<label>_<hash>_<UTC>.jpg (the AF3 name: the code tree and the capture time). A saved frame proves nothing until it is read.
 ## The runs are in English with the HUD and the tutorial hidden (Trailer Mode), so a frame holds the world and nothing else.
 ## Each district also prints one `[density] perf` line: the draw calls, primitives and objects of the district as it stands.
+## Store frames (store/SCREENSHOT_RECIPES.md): the user args `--tlang=<locale>` (default en), `--thud=1` (the HUD stays: Trailer Mode off) and `--tpng=1` (a PNG without alpha in
+## store/screenshots/recipes/<id>_<view>_<locale>_<hash>_<UTC>.png instead of the JPG of docs/stills/density).
 
 const VIEWS: Array[Dictionary] = [
 	{"name": "01_dark", "at": Vector3(-8.0, 0.1, 21.0), "look": Vector3(-8.0, 1.7, -30.0), "pitch": 0.0, "stage": -1, "light": true},
@@ -23,20 +25,27 @@ const SETTLE_SEC: float = 0.9
 const PERF_SETTLE_FRAMES: int = 30
 
 var _ids: Array[StringName] = []
+var _lang: String = "en"
+var _hud: bool = false
+var _png: bool = false
 
 ## A JPG keeps a set of eleven districts at about one megabyte; the frames are read and measured, not diffed pixel by pixel.
 func _shot(frame: String) -> void:
 	await RenderingServer.frame_post_draw
 	var img := get_tree().root.get_texture().get_image()
 	img.resize(CAPTURE_SIZE.x, CAPTURE_SIZE.y, Image.INTERPOLATE_LANCZOS)
-	img.save_jpg(ProjectSettings.globalize_path(out_dir + frame + ".jpg"), JPG_QUALITY)
+	if _png:
+		img.convert(Image.FORMAT_RGB8)
+		img.save_png(ProjectSettings.globalize_path(out_dir + frame + ".png"))
+	else:
+		img.save_jpg(ProjectSettings.globalize_path(out_dir + frame + ".jpg"), JPG_QUALITY)
 
 func _snap(state: String, label: String = "") -> void:
-	out_dir = "res://docs/stills/density/"
+	out_dir = "res://store/screenshots/recipes/" if _png else "res://docs/stills/density/"
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(out_dir))
-	var file_name := "%s_%s_%s_%s" % [state, label if not label.is_empty() else _label, _hash, _utc()]
+	var file_name := "%s_%s_%s_%s" % [state, _lang if _png else (label if not label.is_empty() else _label), _hash, _utc()]
 	await _shot(file_name)
-	print("[density] frame %s.jpg" % file_name)
+	print("[density] frame %s.%s" % [file_name, "png" if _png else "jpg"])
 
 func _freeze_monsters() -> void:
 	for m in get_tree().get_nodes_in_group("monsters"):
@@ -103,6 +112,12 @@ func _run() -> void:
 		elif s.begins_with("--tids="):
 			for id in s.substr(7).split(",", false):
 				_ids.append(StringName(id))
+		elif s.begins_with("--tlang="):
+			_lang = s.substr(8)
+		elif s == "--thud=1":
+			_hud = true
+		elif s == "--tpng=1":
+			_png = true
 	if _ids.is_empty():
 		_ids.assign(ORDER)
 	var ads := get_node_or_null("/root/AdService")
@@ -124,8 +139,8 @@ func _run() -> void:
 	if not await _wait_until(playing, 20.0):
 		_fail("never reached gameplay")
 		return
-	LocalizationManager.set_language("en")
-	SettingsManager.set_setting("trailer_mode", true)
+	LocalizationManager.set_language(_lang)
+	SettingsManager.set_setting("trailer_mode", not _hud)
 	TutorialSystem.call("_skip_tutorial")
 	await get_tree().create_timer(3.0).timeout
 	print("[density] start label=%s hash=%s ids=%s %s" % [_label, _hash, _ids, _mem()])
