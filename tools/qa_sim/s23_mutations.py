@@ -46,6 +46,7 @@ MUTATIONS = [
     ("scripts/world/district_dressing.gd", "const MANHOLES: int = 2", "const MANHOLES: int = 0", "MANH1"),
     ("assets/shaders/height_fog_card.gdshader", "uniform vec2 drift = vec2(0.02, 0.01);", "uniform vec2 drift : hint_range(-0.2, 0.2) = vec2(0.02, 0.01);", "SHADER1"),
     ("scripts/systems/uisfx.gd", '\t\t_wire.call_deferred(node.get_instance_id())\n\n## By id: a node freed in its first frame cannot be passed as a typed argument (the engine refuses the call), and instance_from_id gives null for it.\nfunc _wire(id: int) -> void:\n\tvar node := instance_from_id(id) as Node\n\tif node == null or node.has_meta(&"ui_feel") or _in_hud(node):\n', '\t\t_wire.call_deferred(node)\n\nfunc _wire(node: Node) -> void:\n\tif not is_instance_valid(node) or node.has_meta(&"ui_feel") or _in_hud(node):\n', "UISFX1"),
+    ("scripts/enemies/base_monster.gd", "\tget_parent().add_child(pickup)\n", "\tget_tree().current_scene.add_child(pickup)\n", "LEAK1"),
     ("scripts/ui/quest_tracker_hud.gd", "hud_visibility_changed.connect(func(shown: bool) -> void: visible = shown)", "hud_visibility_changed.connect(func(shown: bool) -> void: visible = true)", "TRLR1"),
 ]
 LINE = re.compile(r"^\[closeout\] (ok  |FAIL) +(\S+)")

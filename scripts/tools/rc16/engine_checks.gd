@@ -10,6 +10,9 @@ class Spy extends Logger:
 	var seen: Array[String] = []
 	var _lock := Mutex.new()
 
+	func _log_message(_message: String, _error: bool) -> void:
+		pass
+
 	func _log_error(_function: String, file: String, line: int, code: String, rationale: String, _editor_notify: bool, error_type: int, _script_backtraces: Array[ScriptBacktrace]) -> void:
 		if error_type == Logger.ERROR_TYPE_WARNING:
 			return
@@ -43,6 +46,8 @@ static func _shaders(r: Node) -> void:
 			if file.get_extension() == "gdshader":
 				var shader := Shader.new()
 				shader.code = FileAccess.get_file_as_string(dir.path_join(file))
+				var material := ShaderMaterial.new()
+				material.shader = shader  # the engine compiles a shader when a material first uses it, which is where the fog card shader reported its error
 				count += 1
 	OS.remove_logger(spy)
 	r._ok(count > 0 and spy.seen.is_empty(), "SHADER1 the %d shader files compile with no engine error (%s)" % [count, spy.seen.slice(0, 2)])

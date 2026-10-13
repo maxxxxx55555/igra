@@ -1,0 +1,15 @@
+# proof s23_soak_e562ec9
+# utc 20261013T110337Z
+# head e562ec9 (uncommitted paths: 0)
+# env none
+# cmd bash -c bash tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn 300; bash tools/qa_sim/soak soak e562ec9 120 7500; bash tools/qa_sim/soak stress e562ec9 1 300
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/perf_check_scene.tscn rc=1 (log: .qa_logs/perf_check_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  soak soak rc=0 (log: .qa_logs/soak_soak.log, 120 minute lines, 0 stress lines)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  soak stress rc=0 (log: .qa_logs/soak_stress.log, 0 minute lines, 2 stress lines)
+  user-data guard: 0 file(s) restored byte-identical
+# EXIT=0

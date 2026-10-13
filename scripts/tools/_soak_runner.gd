@@ -4,13 +4,12 @@ extends "res://scripts/tools/_rc16_probe_runner.gd"
 ##           opened and closed, the flashlight on and off, a walk; once a minute one `[soak] minute` line (frame time mean, p95, p99, max and the frames over 50 ms of that minute, the engine's
 ##           static memory, the object, node and orphan counts, the video and texture memory), once every ten minutes a save and a load. The end prints `[soak] SUMMARY` with the growth of each
 ##           number from its first five minutes to its last five.
-##   stress  120 monsters in a ring of 10 to 40 m round the player for 45 s, their AI running: the frame time, how many of them moved, and a clean exit.
+##   stress  120 monsters (--tmonsters=N) in a ring of 10 to 40 m round the player for 45 s, their AI running: the frame time, how many of them moved, and a clean exit.
 ## The mode and the length are user args (--tmode=, --tminutes=); the hash goes into the log only. A number printed here is a reading, never a verdict: the documents judge.
 
 const CYCLE_SEC: float = 60.0
 const MONSTERS_PER_CYCLE: int = 4
 const SAVE_EVERY_MIN: int = 10
-const STRESS_MONSTERS: int = 120
 const STRESS_SEC: float = 45.0
 const FIRST_LAST_MIN: int = 5
 const MONSTER_SCENES: Array[String] = ["crawler_3d", "shadow_3d", "hound_3d", "rotter_3d"]
@@ -18,6 +17,7 @@ const SCREENS: Array[StringName] = [&"inventory", &"city_map", &"pause"]
 
 var _mode: String = "soak"
 var _minutes: int = 120
+var _monsters: int = 120
 var _deltas: Array[float] = []
 var _rows: Array[Dictionary] = []
 var _sampling: bool = false
@@ -42,6 +42,8 @@ func _run() -> void:
 			_mode = s.substr(8)
 		elif s.begins_with("--tminutes="):
 			_minutes = int(s.substr(11))
+		elif s.begins_with("--tmonsters="):
+			_monsters = int(s.substr(12))
 		elif s.begins_with("--thash="):
 			_hash = s.substr(8)
 	var ads := get_node_or_null("/root/AdService")
@@ -195,12 +197,12 @@ func _stress() -> void:
 	player.heal(100000.0)
 	var made: Array[Node3D] = []
 	var start: Array[Vector3] = []
-	for i in STRESS_MONSTERS:
+	for i in _monsters:
 		var scene := load("res://scenes/enemies/%s.tscn" % MONSTER_SCENES[i % MONSTER_SCENES.size()]) as PackedScene
 		var m := scene.instantiate() as Node3D
 		get_tree().current_scene.add_child(m)
 		m.set("player_ref", player)
-		var angle: float = TAU * float(i) / float(STRESS_MONSTERS)
+		var angle: float = TAU * float(i) / float(_monsters)
 		m.global_position = player.global_position + Vector3(cos(angle), 0.0, sin(angle)) * (10.0 + 30.0 * float(i % 7) / 6.0)
 		made.append(m)
 		start.append(m.global_position)

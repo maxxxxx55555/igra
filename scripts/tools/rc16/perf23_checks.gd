@@ -1,5 +1,5 @@
 extends RefCounted
-## Session 23 (docs/PERF_PASS.md): dynamic resolution, the shader warm-up and the edges of the perf gate's budgets. Wired into _closeout_check_runner.gd as
+## Session 23 (docs/PERF_PASS.md): dynamic resolution, the shader warm-up, the edges of the perf gate's budgets and the loot a killed monster leaves. Wired into _closeout_check_runner.gd as
 ## `await Rc23Perf.run(self)`; CLOSEOUT_ONLY=s23 runs it with the others. The viewport's scale and the settings a check touches are put back.
 
 const _Dynamic := preload("res://scripts/systems/dynamic_resolution.gd")
@@ -10,6 +10,7 @@ static func run(r: Node) -> void:
 	_dynamic_resolution(r)
 	await _warm_up(r)
 	_gate_edges(r)
+	_loot_stays_with_district(r)
 
 ## PERF1: under 30 FPS for 2 s the 3D scale drops to 70 % of Render Scale; in the band between 30 and 45 nothing moves; over 45 FPS for 4 s it comes back.
 static func _dynamic_resolution(r: Node) -> void:
@@ -80,3 +81,21 @@ static func _gate_edges(r: Node) -> void:
 	var vram: bool = _Gate.failures(142, 129, 20.0, 20.0, 512.1) == ["video memory"]
 	var measured: bool = _Gate.failures(142, 129, 28.79, 23.61, 155.8).is_empty()  # the numbers of Session 22
 	r._ok(ok and d1 and d11 and p95 and vram and measured, "PERF3 perf gate edges: all met at the limits (%s), D1 200 fails (%s), D11 350 fails (%s), p95 33.1 ms fails (%s), 512.1 MiB fails (%s), Session 22's numbers pass (%s)" % [ok, d1, d11, p95, vram, measured])
+
+## LEAK1: what a monster drops lies beside it, so the district that held the monster frees the drop with itself (under the scene root the soak's node count grew by a stale drop per kill, 533 nodes in two hours).
+static func _loot_stays_with_district(r: Node) -> void:
+	var tree: SceneTree = r.get_tree()
+	var before: int = tree.get_nodes_in_group("pickups").size()
+	var holder := Node3D.new()
+	r.add_child(holder)
+	var monster: Node3D = r._monster("crawler_3d")
+	monster.reparent(holder)
+	for i in 60:
+		monster.call("_maybe_drop_loot")
+	var all: int = tree.get_nodes_in_group("pickups").size() - before
+	var beside: int = 0
+	for pickup in tree.get_nodes_in_group("pickups"):
+		beside += 1 if pickup.get_parent() == holder else 0
+	holder.free()
+	var left: int = tree.get_nodes_in_group("pickups").size() - before
+	r._ok(beside > 0 and beside == all and left == 0, "LEAK1 loot: %d of %d drops of 60 rolls lie beside the monster, %d are left once its parent is freed" % [beside, all, left])

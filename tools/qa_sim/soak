@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Session 23 soak and stress runs (scripts/tools/_soak_runner.gd), windowed and muted, under the user-data guard.
-#   tools/qa_sim/soak <mode> <hash> [minutes] [timeout-sec]
-#     mode: soak (varied play for <minutes> in one process, one reading a minute) | stress (120 monsters for 45 s)
+#   tools/qa_sim/soak <mode> <hash> [minutes] [timeout-sec] [monsters]
+#     mode: soak (varied play for <minutes> in one process, one reading a minute) | stress ([monsters], 120 by default, for 45 s)
 #   log -> .qa_logs/soak_<mode>.log      once a minute -> .qa_logs/soak_<mode>_rss.csv: seconds since the start, working set of the game's process in KiB, the processor's performance and its utility in per cent
 #     (Windows performance counters: a performance under 100 is a clock below the base one, the first sign of a throttle; no temperature is readable without administrator rights)
 set -uo pipefail
@@ -10,6 +10,7 @@ MODE="${1:?usage: tools/qa_sim/soak <mode> <hash> [minutes] [timeout-sec]}"
 HASH="${2:?usage: tools/qa_sim/soak <mode> <hash> [minutes] [timeout-sec]}"
 MINUTES="${3:-120}"
 T="${4:-7500}"
+MONSTERS="${5:-120}"
 mkdir -p .qa_logs
 LOG=".qa_logs/soak_${MODE}.log"
 RSS=".qa_logs/soak_${MODE}_rss.csv"
@@ -34,7 +35,7 @@ start="$(date +%s)"
 	done
 ) &
 sampler=$!
-timeout "$T" "$GODOT" --windowed --path . res://scenes/tools/soak_scene.tscn -- --tmode="$MODE" --thash="$HASH" --tminutes="$MINUTES" > "$LOG" 2>&1
+timeout "$T" "$GODOT" --windowed --path . res://scenes/tools/soak_scene.tscn -- --tmode="$MODE" --thash="$HASH" --tminutes="$MINUTES" --tmonsters="$MONSTERS" > "$LOG" 2>&1
 rc=$?
 kill "$sampler" 2>/dev/null
 echo "  soak $MODE rc=$rc (log: $LOG, $(grep -ac '^\[soak\] minute' "$LOG") minute lines, $(grep -ac '^\[stress\]' "$LOG") stress lines)"

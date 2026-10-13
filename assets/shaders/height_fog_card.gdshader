@@ -14,7 +14,7 @@ render_mode blend_mix, depth_draw_never, cull_disabled, unshaded, fog_disabled;
 uniform vec4 fog_color : source_color = vec4(0.102, 0.129, 0.2, 1.0);
 uniform float alpha : hint_range(0.0, 1.0) = 0.55;
 uniform float noise_scale : hint_range(0.5, 12.0) = 3.0;
-uniform vec2 drift : hint_range(-0.2, 0.2) = vec2(0.02, 0.01);
+uniform vec2 drift = vec2(0.02, 0.01);
 uniform float fade_near : hint_range(0.5, 20.0) = 3.0;
 uniform float fade_far : hint_range(10.0, 150.0) = 60.0;
 uniform float edge_soft : hint_range(0.01, 0.5) = 0.15;

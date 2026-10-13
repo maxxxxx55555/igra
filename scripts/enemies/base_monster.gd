@@ -794,11 +794,11 @@ func _maybe_drop_loot() -> void:
 	# Ammunition carriers (Sharpshooter) drop rounds, everything else a part or a supply.
 	if bool(roster_entry.get("loot_ammo", false)):
 		var box := _AMMO_BOX.instantiate() as Node3D
-		get_tree().current_scene.add_child(box)
+		get_parent().add_child(box)  # beside the monster, so the district that holds it frees the drop (CORRECTION_LOG 235)
 		box.global_position = at
 		return
 	var pickup := _ITEM_PICKUP.instantiate()
-	get_tree().current_scene.add_child(pickup)
+	get_parent().add_child(pickup)
 	pickup.global_position = at
 	if pickup.has_method("set_item"):
 		pickup.set_item(LOOT_TABLE[randi() % LOOT_TABLE.size()], 1)

@@ -84,10 +84,12 @@ func play_ui(sound: String) -> void:
 ## alone, and so is every control of the HUD (the touch buttons have their own press).
 func _on_node_added(node: Node) -> void:
 	if node is BaseButton or node is TabContainer:
-		_wire.call_deferred(node)
+		_wire.call_deferred(node.get_instance_id())
 
-func _wire(node: Node) -> void:
-	if not is_instance_valid(node) or node.has_meta(&"ui_feel") or _in_hud(node):
+## By id: a node freed in its first frame cannot be passed as a typed argument (the engine refuses the call), and instance_from_id gives null for it.
+func _wire(id: int) -> void:
+	var node := instance_from_id(id) as Node
+	if node == null or node.has_meta(&"ui_feel") or _in_hud(node):
 		return
 	node.set_meta(&"ui_feel", true)
 	var tabs := node as TabContainer

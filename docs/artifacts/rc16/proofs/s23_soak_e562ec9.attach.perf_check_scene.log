@@ -1,0 +1,42 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[perf] district=suburbs draw_calls=154 primitives=56803 objects_in_frame=419
+[perf] breakdown of 154 draw calls in suburbs, calls saved by hiding each node: 83 Main3D/HUD (CanvasLayer) 1649 primitives | 39 Main3D/WorldRuntime (Node3D) 53584 primitives | 25 district_suburbs/Props (Node3D) 34696 primitives | 17 Main3D/MultiplayerManager (Node3D) 25160 primitives | 13 district_suburbs/@Node3D@213 (Node3D) 10104 primitives | 13 district_suburbs/@Node3D@211 (Node3D) 10104 primitives | 13 district_suburbs/@Node3D@209 (Node3D) 10104 primitives | 13 district_suburbs/Secret (Node3D) 10104 primitives | 13 district_suburbs/@Area3D@207 (Area3D) 10104 primitives | 13 district_suburbs/@Area3D@206 (Area3D) 10104 primitives | 13 district_suburbs/@Area3D@205 (Area3D) 10104 primitives | 13 district_suburbs/@Area3D@204 (Area3D) 10104 primitives | 11 district_suburbs/CraftStation (Node3D) 10124 primitives | 11 district_suburbs/@Node3D@219 (Node3D) 10124 primitives
+[perf] mean over 300 frames: gpu_ms=21.05 render_cpu_ms=1.05 process_ms=56.95 physics_ms=2.14
+[perf] mean over 300 frames: gpu_ms=17.48 render_cpu_ms=0.90 process_ms=31.20 physics_ms=1.89
+[perf] mean over 300 frames: gpu_ms=27.28 render_cpu_ms=1.22 process_ms=66.81 physics_ms=2.06
+[perf] suburbs frame_p95_ms=47.69 texture_mem_mib=128.4 video_mem_mib=155.9
+[perf] suburbs static_memory_mib=103.4 particles_emitting=154 (GDD PF2: RAM < 800 MiB, VRAM < 400 MiB, particles < 500)
+--res://assets/shaders/height_fog_card.gdshader--
+   15 | uniform float alpha : hint_range(0.0, 1.0) = 0.55;
+   16 | uniform float noise_scale : hint_range(0.5, 12.0) = 3.0;
+E  17-> uniform vec2 drift : hint_range(-0.2, 0.2) = vec2(0.02, 0.01);
+   18 | uniform float fade_near : hint_range(0.5, 20.0) = 3.0;
+   19 | uniform float fade_far : hint_range(10.0, 150.0) = 60.0;
+SHADER ERROR: Range hint is for 'float' and 'int' only.
+   at: (null) (res://assets/shaders/height_fog_card.gdshader:17)
+   GDScript backtrace (most recent call first):
+       [0] _add_fog (res://scripts/world/district_dressing.gd:280)
+       [1] build (res://scripts/world/district_dressing.gd:126)
+       [2] build (res://scripts/world/street_props.gd:147)
+ERROR: Shader compilation failed.
+   at: set_code (drivers/gles3/storage/material_storage.cpp:3116)
+   GDScript backtrace (most recent call first):
+       [0] _add_fog (res://scripts/world/district_dressing.gd:280)
+       [1] build (res://scripts/world/district_dressing.gd:126)
+       [2] build (res://scripts/world/street_props.gd:147)
+[perf] mean over 300 frames: gpu_ms=28.13 render_cpu_ms=1.39 process_ms=72.75 physics_ms=2.13
+[perf] mean over 300 frames: gpu_ms=19.44 render_cpu_ms=1.28 process_ms=45.17 physics_ms=1.90
+[perf] mean over 300 frames: gpu_ms=7.39 render_cpu_ms=0.80 process_ms=17.69 physics_ms=1.58
+[perf] district=power_station draw_calls=145 primitives=57827 objects_in_frame=275 frame_p95_ms=48.61
+[perf] budget D1<200: 154; D11<350: 145; p95<=33 ms: 47.69 and 48.61; video memory<=512 MiB: 155.9; over budget: ["p95 frame time"]
+[perf] DONE fails=1
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 37 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
