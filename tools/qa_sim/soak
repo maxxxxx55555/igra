@@ -2,7 +2,8 @@
 # Session 23 soak and stress runs (scripts/tools/_soak_runner.gd), windowed and muted, under the user-data guard.
 #   tools/qa_sim/soak <mode> <hash> [minutes] [timeout-sec]
 #     mode: soak (varied play for <minutes> in one process, one reading a minute) | stress (120 monsters for 45 s)
-#   log -> .qa_logs/soak_<mode>.log      working set of the game's process, once a minute -> .qa_logs/soak_<mode>_rss.csv (seconds since the start, KiB)
+#   log -> .qa_logs/soak_<mode>.log      once a minute -> .qa_logs/soak_<mode>_rss.csv: seconds since the start, working set of the game's process in KiB, the processor's performance and its utility in per cent
+#     (Windows performance counters: a performance under 100 is a clock below the base one, the first sign of a throttle; no temperature is readable without administrator rights)
 set -uo pipefail
 cd "$(dirname "$0")/../.." || exit 2
 MODE="${1:?usage: tools/qa_sim/soak <mode> <hash> [minutes] [timeout-sec]}"
@@ -28,7 +29,8 @@ start="$(date +%s)"
 (
 	while sleep 60; do
 		kib="$(tasklist //FI "IMAGENAME eq godot.exe" //FO CSV //NH 2>/dev/null | awk -F'","' '{gsub(/[^0-9]/, "", $5); s += $5} END {print s + 0}')"
-		echo "$(( $(date +%s) - start )),${kib}" >> "$RSS"
+		cpu="$(typeperf "\Processor Information(_Total)\% Processor Performance" "\Processor Information(_Total)\% Processor Utility" -sc 1 2>/dev/null | grep -a '^"[0-9]' | tr -d '"' | awk -F, '{printf "%.0f,%.0f", $2, $3}')"
+		echo "$(( $(date +%s) - start )),${kib},${cpu:-0,0}" >> "$RSS"
 	done
 ) &
 sampler=$!
