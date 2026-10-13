@@ -3,6 +3,7 @@ extends RefCounted
 ## nine blocks of its grid (16 m cells between the road axes) are counted: solid props (benches, trees, cones, crates, barrels, bins, hydrants), scatter on the ground (litter and leaves,
 ## wet patches) and streetlamps. A block under the floor of any of them is empty; the same count without the dressing node is printed beside it, so the gain is on the log. Wired into
 ## _closeout_check_runner.gd as `await Rc23Density.run(self)`; CLOSEOUT_ONLY=s23 runs it with the others. FOLIAGE1 and FOG1 hold the atmosphere of the same build: the swaying canopies and the fog cards.
+## A headless run keeps no instance data on the rendering server (every transform reads back as the origin), so each batched node carries its spots as the metadata `spots`.
 
 const FLOOR_SOLID: int = 2
 const FLOOR_SCATTER: int = 4
@@ -43,14 +44,14 @@ static func _least_per_block(props: Node, dressing: Node, skip_dressing: bool) -
 			continue
 		for child in holder.get_children():
 			var mmi := child as MultiMeshInstance3D
-			if mmi == null or mmi.multimesh == null:
+			if mmi == null:
 				continue
 			var node_name: String = String(mmi.name)
 			var key: String = "solid" if SOLID.has(node_name) else ("scatter" if SCATTER.has(node_name) else ("lamps" if LAMPS.has(node_name) else ""))
 			if key.is_empty():
 				continue
-			for i in mmi.multimesh.instance_count:
-				var at: Vector3 = mmi.multimesh.get_instance_transform(i).origin
+			for spot: Variant in mmi.get_meta("spots", []):
+				var at: Vector3 = (spot as Transform3D).origin if spot is Transform3D else spot as Vector3
 				var cell: int = clampi(int(floorf((at.x + 1.5 * GRID_M) / GRID_M)), 0, 2) * 3 + clampi(int(floorf((at.z + 1.5 * GRID_M) / GRID_M)), 0, 2)
 				(counts[key] as Array)[cell] = int((counts[key] as Array)[cell]) + 1
 	return {"solid": (counts["solid"] as Array).min(), "scatter": (counts["scatter"] as Array).min(), "lamps": (counts["lamps"] as Array).min()}

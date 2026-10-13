@@ -252,6 +252,7 @@ func _batch(node_name: String, mesh: Mesh, xforms: Array[Transform3D], colors: A
 			mm.set_instance_color(i, colors[i])
 	var mmi := MultiMeshInstance3D.new()
 	mmi.name = node_name
+	mmi.set_meta("spots", xforms)
 	mmi.multimesh = mm
 	mmi.material_override = material
 	mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON if shadows else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF

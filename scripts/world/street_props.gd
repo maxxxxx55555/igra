@@ -227,6 +227,7 @@ func _build_streetlight_multimesh() -> void:
 		lamp_mm.set_instance_transform(i, Transform3D(Basis(), pos + _LAMP_HEAD_OFFSET))
 	var pole_mmi := MultiMeshInstance3D.new()
 	pole_mmi.name = "StreetlightPolesBatched"
+	pole_mmi.set_meta("spots", _lamp_local_positions)
 	pole_mmi.multimesh = pole_mm
 	pole_mmi.material_override = pole_mat
 	add_child(pole_mmi)
@@ -328,6 +329,7 @@ func _build_one_multimesh(positions: Array[Vector3], mesh: Mesh, material: Mater
 		mm.set_instance_transform(i, Transform3D(Basis(), positions[i]))
 	var mmi := MultiMeshInstance3D.new()
 	mmi.name = node_name
+	mmi.set_meta("spots", positions)
 	mmi.multimesh = mm
 	mmi.material_override = material
 	mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF if node_name == "TreeLeavesBatched" else GeometryInstance3D.SHADOW_CASTING_SETTING_ON
