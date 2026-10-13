@@ -241,6 +241,7 @@ func _apply_log_scroll() -> void:
 ## instead of drawing a 360 px panel over the open menu.
 func _on_hud_visibility(v: bool) -> void:
 	_header.visible = v
+	_stack.visible = not bool(SettingsManager.get_setting("trailer_mode", false))
 	if not v:
 		_log_panel.visible = false
 

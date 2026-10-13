@@ -39,6 +39,8 @@ func _ready() -> void:
 		if state == GameManager.GameState.PLAYING and _container.visible:
 			_FADE.show_for([_container], _SHOW_SEC))
 
+	EventBus.hud_visibility_changed.connect(func(shown: bool) -> void:
+		visible = shown and not bool(SettingsManager.get_setting("trailer_mode", false)))
 	QuestManager.quest_started.connect(_refresh)
 	QuestManager.quest_completed.connect(_refresh)
 	QuestManager.quest_progress.connect(_refresh)

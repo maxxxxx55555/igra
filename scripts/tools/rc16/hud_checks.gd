@@ -18,6 +18,7 @@ static func run(r: Node) -> void:
 	_one_map_in_play(r, hud)
 	_touch_only_buttons(r, hud)
 	await _tracker_is_on_screen(r)
+	await _trailer_mode_is_clean(r)
 	await _rows_are_contextual(r, hud)
 	await _prompt_fades(r, hud)
 	await _touch_cluster_is_clear(r)
@@ -76,6 +77,22 @@ static func _tracker_is_on_screen(r: Node) -> void:
 	var through: bool = _lets_clicks_through(container) and overlay.mouse_filter == Control.MOUSE_FILTER_IGNORE
 	r._ok(inside and through and container.modulate.a > 0.99,
 		"HUDP4 the objective list is on screen (%s, at x %d), lets every click through (%s) and shows when an objective changes (alpha %.2f)" % [inside, container.get_global_rect().position.x, through, container.modulate.a])
+
+## TRLR1: Trailer Mode clears the screen of the objective list, the notice and the toast stack (a store frame holds the world and nothing else), and they are back when it is off.
+static func _trailer_mode_is_clean(r: Node) -> void:
+	var overlay := UIManager.get("_quest_hud") as Control
+	var stack := r.get_tree().root.find_child("ToastStack", true, false) as Control
+	SettingsManager.set_setting("trailer_mode", true)
+	UIManager.show_notification("TRLR1")
+	await r.get_tree().process_frame
+	var toast := UIManager.get("_toast") as Control
+	var list_hidden: bool = overlay != null and not overlay.is_visible_in_tree()
+	var notice_hidden: bool = toast == null or not toast.is_visible_in_tree()
+	var stack_hidden: bool = stack != null and not stack.is_visible_in_tree()
+	SettingsManager.set_setting("trailer_mode", false)
+	await r.get_tree().process_frame
+	var back: bool = overlay != null and overlay.visible and stack != null and stack.visible
+	r._ok(list_hidden and notice_hidden and stack_hidden and back, "TRLR1 Trailer Mode hides the objective list (%s), the notice (%s) and the toast stack (%s), and they are back with it off (%s)" % [list_hidden, notice_hidden, stack_hidden, back])
 
 static func _lets_clicks_through(node: Node) -> bool:
 	if node is Control and (node as Control).mouse_filter != Control.MOUSE_FILTER_IGNORE:

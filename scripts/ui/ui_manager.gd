@@ -86,6 +86,9 @@ func _mk_overlay(path: String, node_name: String) -> Control:
 	return c
 
 func show_notification(msg: String) -> void:
+	var settings := get_node_or_null("/root/SettingsManager")
+	if settings != null and bool(settings.get_setting("trailer_mode", false)):
+		return
 	if _toast == null:
 		_toast = Label.new()
 		_toast.name = "Toast"
