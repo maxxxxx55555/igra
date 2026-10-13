@@ -59,7 +59,20 @@ Nothing here is a developer's trick: every state is one a player can reach. A di
 spot (the poses are ground-level points of the street grid that every district shares). Trailer Mode hides the HUD, the objective list, the notices and the toast stack (check TRLR1,
 `scripts/tools/rc16/hud_checks.gd`).
 
-## 6. Status
+## 6. Status and the swap log
 
-The frames are shot by the two commands at the final hash of the pass, READ one by one and checked by `store_frames_check.py`; the result of that reading is in `docs/RUN_STATE.md`
-(the S23 store frames row). Until a frame is read it is a candidate. The upload itself (Play Console) is the owner's (`docs/store/HUMAN_CHECKLIST.md`).
+The frames were shot by the two commands at `f2e628a` (launch 23, ledger row 115, `docs/artifacts/rc16/proofs/s23_final_f2e628a.attach.density_frames_store_en.log` and `.attach.density_frames_store_ru.log`): 50 frames, five views of each of the ten recipes' districts, all READ on contact
+sheets and checked by `store_frames_check.py`. **Nine of the 50 fail the rules** (a luminance deviation under 0.04: `hospital_03_street`, `hospital_05_skyline`, `park_05_skyline`, `power_station_05_skyline`; a mean luminance under 0.06: `industrial_02_rest`, `industrial_03_street`, `industrial_04_block`,
+`industrial_05_skyline`, `residential_05_skyline`), among them two of the eight recipe frames (#2, #4). The frames kept in `store/screenshots/recipes` are six, and the other 44 were taken out of the tree (they are the same frames at the same hash, reproducible by the commands of section 1):
+
+| Kept | Replaces | Why |
+|---|---|---|
+| `gas_station_02_rest_en` | recipe #5, as written | a bench under a lit lantern in the dark: the one recipe frame that read as a place |
+| `warehouses_02_rest_en` | recipe #3 (`warehouses_05_skyline`, dark with nothing to look at) | the same rest spot with a bench, in the warm light of its lantern |
+| `hospital_02_rest_en` | recipe #4 (`hospital_03_street`, a fault) | the rest spot with the cold light of the hospital's lantern |
+| `power_station_03_street_en` | recipe #8 (`power_station_04_block`, the towers' halo does not show in it) | a lit street with the lamp pool leading the eye |
+| `residential_04_block_ru` | R2, as written | the lit windows of a restored block with the HUD, the brightest frame of the set |
+| `suburbs_03_street_ru` | R1, as written | the first street with the objective list and a pickup caption in Russian |
+
+Left out without a replacement: recipes #1 (`residential_04_block` in English: the view of R2 without the HUD, with a fifth of its lit pixels), #2 (`industrial_04_block`, a fault), #6 (`police_04_block`) and #7 (`park_03_street`), whose subjects (the blue windows, the ferris wheel)
+are lost in the dark of the frame. **The English frames are dim, dimmer than the game**: each is 18 to 75 % as bright as the pair frame of the same district and view at the same head (`docs/stills/density`, shot in the same Trailer Mode), and the Russian frames, with the HUD on, 87 to 95 % of them. The cause was not traced (`docs/KNOWN_ISSUES.md`, Session 23): the weather rolls a new state every 45 s and was not pinned. The runner pins it now (`_pin_world`) and prints a state line per view, and the last launch shoots the set again. A page that needs brighter art is better served by the eight composed frames of `store/screenshots` (`shot01` to `shot08`, `shot_p1` to `shot_p3`), which stay; these six are the in-engine captures of the build, and which of them go to the store is the owner's choice (`docs/store/HUMAN_CHECKLIST.md`). The upload itself (Play Console) is the owner's.
