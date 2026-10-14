@@ -8,7 +8,7 @@ Status at 2026-10-12 (`v8.0.0-shipping`, tagged in Session 22 on the commit that
   `4F:6B:E6:41:5C:26:0B:34:1F:A0:CF:88:46:60:3B:82:64:0F:8B:6B:0D:5F:97:FD:FD:3A:FF:93:DD:89:59:09`.
 - Its random password is in `.signing/release.env` (three `GODOT_ANDROID_KEYSTORE_RELEASE_*`
   variables). `.signing/`, `*.keystore` and `*.jks` are gitignored (`git check-ignore` verified).
-- `tools/make_keystore.ps1` is the generator of a **debug** keystore (alias `tlsdebug`; its store password is `$env:TLS_DEBUG_KEYSTORE_PASS` or a fresh GUID, never a literal since `6ac7ac7`; the literal it held before is in the history: owner row, `docs/CLEANUP_LEDGER.md` section 7). It holds no
+- `tools/make_keystore.ps1` is the generator of a **debug** keystore (alias `tlsdebug`; its store password is `$env:TLS_DEBUG_KEYSTORE_PASS` or a fresh GUID, never a literal since `6ac7ac7`; the literal it held before is in the history: owner row, `docs/CLEANUP_LEDGER.md` section 8). It holds no
   release key material, the keystore it writes (`tls_debug.keystore`) is gitignored, and it is the only tracked file whose name contains "keystore".
   `release.env` and `*.p12` are gitignored by name as well as through `.signing/` (R8 round 13, `705b2be`).
 - `export_presets.cfg` deliberately keeps the release keystore fields EMPTY: the file is committed, so
