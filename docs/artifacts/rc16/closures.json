@@ -2044,5 +2044,206 @@
   ],
   "frames": [],
   "commit": "4a5f5cf"
+ },
+ {
+  "id": "S23-L24-COMPILE",
+  "claim": "The compile gate of the last launch on the final tree: no script, shader or resource fails to load.",
+  "cmd": "bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120",
+  "proof": "s23_last_a4acbb5",
+  "attach": "compile_gate_scene.log",
+  "quotes": [
+   "COMPILE_GATE bad=0"
+  ],
+  "frames": [],
+  "commit": "a4acbb5"
+ },
+ {
+  "id": "S23-L24-PERF",
+  "claim": "The windowed perf gate at the final head reads RED: D1 150 draw calls and a p95 of 35.00 ms, D11 140 and 38.63 ms against a budget of 33 ms (CORRECTION_LOG 248, docs/PERF_PASS.md section 0b); the verdict is its exit 1 and nothing was changed to turn it green.",
+  "cmd": "bash tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn 300",
+  "proof": "s23_last_a4acbb5",
+  "attach": "gate_perf_l24.log",
+  "quotes": [
+   "[perf] suburbs frame_p95_ms=35.00",
+   "district=power_station draw_calls=140",
+   "over budget:",
+   "[perf] DONE fails=1"
+  ],
+  "frames": [],
+  "commit": "a4acbb5"
+ },
+ {
+  "id": "S23-L24-AUDIO",
+  "claim": "The windowed audio truth gate at the final head passes on its first run: the Music bus peaks at -11.1 dB (ceiling -1.5 dB).",
+  "cmd": "bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120",
+  "proof": "s23_last_a4acbb5",
+  "attach": "gate_audio_l24.log",
+  "quotes": [
+   "Music bus peak=-11.1dB",
+   "[audio-truth] PASS overall"
+  ],
+  "frames": [],
+  "commit": "a4acbb5"
+ },
+ {
+  "id": "S23-L24-CLOSEOUT",
+  "claim": "The s23 closeout on the final tree ran in an engine: 65 checks and 0 fails, the quality manager's QM1 to QM4, PERF4 to PERF7 and both JUICE5 among them.",
+  "cmd": "CLOSEOUT_ONLY=s23 bash tools/qa_sim/closeout_check 400",
+  "proof": "s23_last_a4acbb5",
+  "attach": "closeout_s23_l24.log",
+  "quotes": [
+   "[closeout] DONE checks=65 fails=0",
+   "QM1 quality manager: 4.5 s at 24 FPS keeps the tier (true)",
+   "QM4 quality manager: the player's own change",
+   "PERF7 dynamic resolution: a drop 40 s after the last return",
+   "JUICE5 hit-stop at the end of a slow-motion"
+  ],
+  "frames": [],
+  "commit": "a4acbb5"
+ },
+ {
+  "id": "S23-L24-MUTATIONS",
+  "claim": "The AF2 mutation run on the final tree: 40 mutations, each makes its own check fail (QM1 to QM4, PERF4 to PERF7 and JUICE5 among them), nothing fails without a mutation and no tracked file is left changed.",
+  "cmd": "python tools/qa_sim/s23_mutations.py apply; CLOSEOUT_ONLY=s23 bash tools/qa_sim/closeout_check 400; python tools/qa_sim/s23_mutations.py restore; python tools/qa_sim/s23_mutations.py judge .qa_logs/closeout_mutated.log",
+  "proof": "s23_last_a4acbb5",
+  "quotes": [
+   "S23 MUTATIONS verdict=PASS mutations=40 bad=0",
+   "QM4      mutated: FAIL -> BITES",
+   "PERF7    mutated: FAIL -> BITES",
+   "JUICE5   mutated: FAIL -> BITES",
+   "failed without a mutation: nothing",
+   "tracked files changed after the restore: 0"
+  ],
+  "frames": [],
+  "commit": "a4acbb5"
+ },
+ {
+  "id": "S23-L24-BOT",
+  "claim": "The 3-seed bot on the final tree won all three seeds (the IRON RULE asks for one).",
+  "cmd": "bash tools/qa_sim/autoplay_bot",
+  "proof": "s23_last_a4acbb5",
+  "quotes": [
+   "([bot s1]   result       : WIN)",
+   "([bot s2]   result       : WIN)",
+   "([bot s3]   result       : WIN)"
+  ],
+  "frames": [],
+  "commit": "a4acbb5"
+ },
+ {
+  "id": "S23-L24-PLAYTHROUGH",
+  "claim": "The play-throughs A and S on the final tree: A 54 steps and S 19 steps, none failed; the A04h step (the pale square) passed.",
+  "cmd": "bash tools/qa_sim/playthrough A S",
+  "proof": "s23_last_a4acbb5",
+  "quotes": [
+   "mode A rc=0",
+   "mode S rc=0"
+  ],
+  "frames": [],
+  "commit": "a4acbb5"
+ },
+ {
+  "id": "S23-L24-PT-A04H",
+  "claim": "The pale-square step of the play-through A (A04h), which a monster had failed at launch 23, passes with its windows.",
+  "cmd": "bash tools/qa_sim/playthrough A S",
+  "proof": "s23_last_a4acbb5",
+  "attach": "playthrough_A.txt",
+  "quotes": [
+   "PASS A04h no pale square comes and goes in the lower-right corner"
+  ],
+  "frames": [],
+  "commit": "a4acbb5"
+ },
+ {
+  "id": "S23-L24-PROBE",
+  "claim": "The stream probe at the final head: every district switch ends in the district asked for, and the cold power station has 1 hitch (11 at launch 23).",
+  "cmd": "bash tools/qa_sim/rc16_probe after a4acbb5 900",
+  "proof": "s23_last_a4acbb5",
+  "attach": "rc16_probe_after.log",
+  "quotes": [
+   "stream pass=cold district=power_station ok=true load_ms=218.1",
+   "[probe] DONE label=after hash=a4acbb5"
+  ],
+  "frames": [],
+  "commit": "a4acbb5"
+ },
+ {
+  "id": "S23-L24-STORE-EN-DARK",
+  "claim": "The English store frames of the last chain were all at the DARK stage (stage=0 in the views the recipe calls FULL): the state line that launch 24 added shows it, and CORRECTION_LOG 249 has the cause and the fix.",
+  "cmd": "TLS_FRAMES_PNG=1 bash tools/qa_sim/density_frames store a4acbb5 residential,industrial,warehouses,hospital,gas_station,police,park,power_station",
+  "proof": "s23_last_a4acbb5",
+  "attach": "density_frames_store_en.log",
+  "quotes": [
+   "[density] state district=residential view=04_block weather=0 stage=0 tier=2",
+   "[density] DONE label=store hash=a4acbb5"
+  ],
+  "frames": [],
+  "commit": "a4acbb5"
+ },
+ {
+  "id": "S23-L24-CHECKALL",
+  "claim": "check.sh --all on the final tree: 84 passed and 1 failed, the visual truth gate on the untracked boot-title frame that the same chain's final-frames run left in docs/stills/final (CORRECTION_LOG 250); the gate scope is fixed since.",
+  "cmd": "bash tools/check.sh --all",
+  "proof": "s23_last_a4acbb5",
+  "quotes": [
+   "FAIL visual_truth_gate fails a sign-off or beauty frame",
+   "Провалено: 1, пройдено: 84",
+   "GOLD MASTER suite"
+  ],
+  "frames": [],
+  "commit": "a4acbb5"
+ },
+ {
+  "id": "S23-L24-SOAK",
+  "claim": "The 120-minute soak at the final head, High tier with the 60 FPS cap and the quality manager off: 120 minutes, no engine error while it ran, 58.0 frames a second at the median minute, static memory a plateau, and no 30 Hz state (docs/LONG_SESSION_TEST.md section 5).",
+  "cmd": "bash tools/qa_sim/soak soak a4acbb5 120 7500",
+  "proof": "s23_last_a4acbb5",
+  "attach": "soak_final.log",
+  "quotes": [
+   "[soak] start mode=soak minutes=120 hash=a4acbb5 tier=2 cap=60",
+   "[soak] SUMMARY minutes=120"
+  ],
+  "frames": [],
+  "commit": "a4acbb5"
+ },
+ {
+  "id": "S23-L24-CHAIN",
+  "claim": "Launch 24, the last launch of the pass, ran its 14 steps on the final tree and ended with exit code 0 (ledger row 117; one step's red result is a finding, not an exit code: the perf gate).",
+  "cmd": "bash tools/qa_sim/proof_run --launch --attach <18 logs> s23_last_a4acbb5 -- bash l24_chain.sh a4acbb5",
+  "proof": "s23_last_a4acbb5",
+  "quotes": [
+   "reimport_rc=0",
+   "compile_gate_rc=0",
+   "l24 chain done"
+  ],
+  "frames": [],
+  "commit": "a4acbb5"
+ },
+ {
+  "id": "S23-L24B-STORE-EN",
+  "claim": "The English store frames shot again with the fixed runner (the sub-check run of launch 24, ledger row 119): 40 frames, clear weather and tier 2 in all, and stage 3 in the lit views.",
+  "cmd": "TLS_FRAMES_PNG=1 bash tools/qa_sim/density_frames store 85b55ed residential,industrial,warehouses,hospital,gas_station,police,park,power_station",
+  "proof": "s23_last_store_en2_85b55ed",
+  "attach": "density_frames_store.log",
+  "quotes": [
+   "[density] state district=residential view=04_block weather=0 stage=3 tier=2",
+   "[density] state district=power_station view=05_skyline weather=0 stage=3 tier=2",
+   "[density] DONE label=store hash=85b55ed"
+  ],
+  "frames": [],
+  "commit": "85b55ed"
+ },
+ {
+  "id": "S23-F3-VISUALGATE",
+  "claim": "AF2 for the visual truth gate's input (CORRECTION_LOG 250): the old line on the folder as launch 24 left it exits 1 on the boot-title frame, the new line (git ls-files) exits 0, and the new line fed the committed corruption frames still exits 1.",
+  "cmd": "bash tools/qa_sim/proof_run s23_visual_gate_both_ways -- bash visual_gate_both_ways.sh",
+  "proof": "s23_visual_gate_both_ways",
+  "quotes": [
+   "FAIL magenta(world)=0.00% dim=0.00% vivid=0.000% black=0.12% clear-flood(world)=98.25% hud=False",
+   "exit=0 (16 frames pass, 0 fail)",
+   "4 of 4 corruption frames fail"
+  ],
+  "frames": [],
+  "commit": "8ad185a"
  }
 ]

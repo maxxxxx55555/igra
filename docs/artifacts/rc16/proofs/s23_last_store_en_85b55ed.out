@@ -1,0 +1,7 @@
+# proof s23_last_store_en_85b55ed
+# utc 20261014T184443Z
+# head 85b55ed (uncommitted paths: 10)
+# env TLS_FRAMES_PNG=1 
+# cmd --attach .qa_logs/density_frames_store.log -- bash tools/qa_sim/density_frames store 85b55ed residential,industrial,warehouses,hospital,gas_station,police,park,power_station
+tools/qa_sim/proof_run: line 36: --attach: command not found
+# EXIT=127

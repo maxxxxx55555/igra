@@ -1,0 +1,14 @@
+# proof s23_visual_gate_both_ways
+# utc 20261014T184943Z
+# head 85b55ed (uncommitted paths: 11)
+# env none
+# cmd bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/5fa8d500-393b-43b7-95de-04d09fcc9e42/scratchpad/visual_gate_both_ways.sh
+committed sign-off frames: 8; untracked ones of the run of launch 24: 10
+== the old line on the folder as launch 24 left it
+exit=1
+FAIL magenta(world)=0.00% dim=0.00% vivid=0.000% black=0.12% clear-flood(world)=98.25% hud=False REBACK_UNVERIFIED .qa_logs/l24_final_extras/00_boot_title.png
+== the new line (git ls-files)
+exit=0 (16 frames pass, 0 fail)
+== the new line fed the committed corruption frames
+exit=1 (4 of 4 corruption frames fail)
+# EXIT=0

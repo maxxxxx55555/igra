@@ -17,7 +17,7 @@ python tools/qa_sim/store_frames_check.py
 
 `<hash>` is the short hash of the build that is shot (it is part of every file name). The run is windowed and muted, under the user-data guard (`tools/qa_sim/density_frames`), the game starts a
 new profile in the language asked (English unless `TLS_FRAMES_LANG` says otherwise), skips the onboarding and the tutorial, moves to each district, raises its power as the view asks (`PowerGrid.advance_district`,
-`scripts/world/power_grid.gd:49`; the runner calls it at `scripts/tools/_density_frames_runner.gd:91`) and shoots five views of each. Frames land in `store/screenshots/recipes/<district>_<view>_<lang>_<hash>_<UTC>.png`
+`scripts/world/power_grid.gd:49`; the runner calls it at `scripts/tools/_density_frames_runner.gd:94`, after it has marked the districts that power the one it shoots FULL) and shoots five views of each. Frames land in `store/screenshots/recipes/<district>_<view>_<lang>_<hash>_<UTC>.png`
 at **960 x 540 (exactly 16:9), RGB, no alpha**. A recipe names one of the five views; the other four are there to pick from when a frame reads badly.
 
 ## 2. Composition rules
@@ -40,7 +40,7 @@ at **960 x 540 (exactly 16:9), RGB, no alpha**. A recipe names one of the five v
 | 5 | Somewhere safe: a bench under a lantern | gas_station, DARK | `gas_station_02_rest` | (6, 0.1, 15.5) to (13.5, 1.5, 13.5), pitch 0 | off |
 | 6 | The blue district: the station's windows and the lamp pools | police, FULL | `police_04_block` | (0, 0.1, 0) to (16, 1.5, -16), pitch -0.05 | off |
 | 7 | The ferris wheel above a lit street | park, FULL | `park_03_street` | (-8, 0.1, 21) to (-8, 1.7, -30), pitch 0 | off |
-| 8 | The last streetlight: the cooling towers' halo over a lit grid | power_station, FULL | `power_station_04_block` | (0, 0.1, 0) to (16, 1.5, -16), pitch -0.05 | off |
+| 8 | The last streetlight: the cooling towers' halo over a lit grid | power_station, FULL | `power_station_05_skyline` | (0, 0.1, 18) to (0, 1.7, -60), pitch 0.22 | off |
 
 The poses are `VIEWS` of `scripts/tools/_density_frames_runner.gd`; a dark frame with the flashlight on is the view `01_dark` of any district, if a store page wants the beam.
 
@@ -61,18 +61,28 @@ spot (the poses are ground-level points of the street grid that every district s
 
 ## 6. Status and the swap log
 
-The frames were shot by the two commands at `f2e628a` (launch 23, ledger row 115, `docs/artifacts/rc16/proofs/s23_final_f2e628a.attach.density_frames_store_en.log` and `.attach.density_frames_store_ru.log`): 50 frames, five views of each of the ten recipes' districts, all READ on contact
-sheets and checked by `store_frames_check.py`. **Nine of the 50 fail the rules** (a luminance deviation under 0.04: `hospital_03_street`, `hospital_05_skyline`, `park_05_skyline`, `power_station_05_skyline`; a mean luminance under 0.06: `industrial_02_rest`, `industrial_03_street`, `industrial_04_block`,
-`industrial_05_skyline`, `residential_05_skyline`), among them two of the eight recipe frames (#2, #4). The frames kept in `store/screenshots/recipes` are six, and the other 44 were taken out of the tree (they are the same frames at the same hash, reproducible by the commands of section 1):
+The English frames were shot again in a sub-check run of launch 24 (ledger row 119, `s23_last_store_en2_85b55ed`, `docs/artifacts/rc16/proofs/s23_last_store_en2_85b55ed.out` and its `.attach.density_frames_store.log`, head `85b55ed`) after the recipe was found to shoot
+frames of the DARK stage (CORRECTION_LOG 249): `PowerGrid.advance_district` refuses a district whose parents are not FULL, and the command's eight districts start at residential. The runner marks the parents FULL first now and fails when a
+view's stage does not rise. The state lines of the new run read weather 0 and tier 2 in all 40 views and stage 3 in the 24 lit views (03 to 05 of the eight districts); views 01 and 02 of warehouses, police and park read stage 3 as well (each is the
+parent of an earlier district in the list) and those of the other five stage 0. The 40 English frames pass `store_frames_check.py` (0 faults; the nine that failed its rules in launch 23 were frames of the DARK stage), and the lit views come to
+49 to 103 % (median 100 %) of the mean luminance of the pair frame of the same district and view, against 33 to 82 % (median 69 %) before the fix. The Russian run of the last launch (`docs/artifacts/rc16/proofs/s23_last_a4acbb5.attach.density_frames_store_ru.log`, head
+`a4acbb5`, the suburbs and then residential, stages 0 and 3 as the views ask) was right all along.
 
-| Kept | Replaces | Why |
+All 40 English and 10 Russian frames were READ on contact sheets. The frames kept in `store/screenshots/recipes` are eight (six English at `85b55ed`, two Russian at `a4acbb5`); the other 42 were taken out of the tree (they are the same
+frames, reproducible by the commands of section 1):
+
+| Kept | Recipe | Reading |
 |---|---|---|
-| `gas_station_02_rest_en` | recipe #5, as written | a bench under a lit lantern in the dark: the one recipe frame that read as a place |
-| `warehouses_02_rest_en` | recipe #3 (`warehouses_05_skyline`, dark with nothing to look at) | the same rest spot with a bench, in the warm light of its lantern |
-| `hospital_02_rest_en` | recipe #4 (`hospital_03_street`, a fault) | the rest spot with the cold light of the hospital's lantern |
-| `power_station_03_street_en` | recipe #8 (`power_station_04_block`, the towers' halo does not show in it) | a lit street with the lamp pool leading the eye |
-| `residential_04_block_ru` | R2, as written | the lit windows of a restored block with the HUD, the brightest frame of the set |
-| `suburbs_03_street_ru` | R1, as written | the first street with the objective list and a pickup caption in Russian |
+| `residential_04_block_en` | #1 as written | two lit blocks across a crossing, warm and white windows, the lamp pools on the street: the strongest frame |
+| `industrial_04_block_en` | #2 as written | lit blocks, the rims of the smokestacks at the left, crates in the lamp light |
+| `hospital_03_street_en` | #4 as written | the street runs to the lit cross of the hospital; a lamp post fills the right fifth of the frame |
+| `gas_station_02_rest_en` | #5 as written (DARK) | a bench under a lit lantern in the dark: the one dark frame, and the one that reads as a place |
+| `police_04_block_en` | #6 as written | the blue district: blue-black blocks with lit windows and blue lamp pools |
+| `power_station_05_skyline_en` | #8, swapped from `power_station_04_block` | the cooling towers' halo shows above a lit grid; the 04 view does not show it and has the edge of a large white arc in its top-left corner |
+| `suburbs_03_street_ru` | R1 as written | the first street with the objective list and the notice in Russian |
+| `residential_04_block_ru` | R2 as written | the lit block of #1 with the HUD |
 
-Left out without a replacement: recipes #1 (`residential_04_block` in English: the view of R2 without the HUD, with a fifth of its lit pixels), #2 (`industrial_04_block`, a fault), #6 (`police_04_block`) and #7 (`park_03_street`), whose subjects (the blue windows, the ferris wheel)
-are lost in the dark of the frame. **The English frames are dim, dimmer than the game**: each is 18 to 75 % as bright as the pair frame of the same district and view at the same head (`docs/stills/density`, shot in the same Trailer Mode), and the Russian frames, with the HUD on, 87 to 95 % of them. The leading candidate for the cause is the quality manager (CORRECTION_LOG 241): a tier lowered under 30 FPS draws no skyline windows (`docs/AAA_BENCHMARK.md`) and caps the frame rate at 30; the weather, which rolls a new state every 45 s and was not pinned, is the other (`docs/KNOWN_ISSUES.md`, Session 23). The runner pins the weather and switches the manager off now (`_pin_world`) and prints a state line per view, and the last launch shoots the set again. A page that needs brighter art is better served by the eight composed frames of `store/screenshots` (`shot01` to `shot08`, `shot_p1` to `shot_p3`), which stay; these six are the in-engine captures of the build, and which of them go to the store is the owner's choice (`docs/store/HUMAN_CHECKLIST.md`). The upload itself (Play Console) is the owner's.
+Left out: #3 (`warehouses_05_skyline`: a wide dark lot with a row of lit windows far off and nothing to look at; `warehouses_04_block` is no better) and #7 (`park_03_street`: the ferris wheel is a thin ring at the top centre of a dark frame).
+The English frames are as bright as the game now, and they show no film grain, because Trailer Mode hides the HUD's own grain pass (`docs/KNOWN_ISSUES.md`, the row on Trailer Mode). A page that needs brighter art is better served by the eight
+composed frames of `store/screenshots` (`shot01` to `shot08`, `shot_p1` to `shot_p3`), which stay; these are the in-engine captures of the build, and which of them go to the store is the owner's choice (`docs/store/HUMAN_CHECKLIST.md`). The
+upload itself (Play Console) is the owner's.

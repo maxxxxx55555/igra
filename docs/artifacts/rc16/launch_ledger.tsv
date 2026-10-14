@@ -116,3 +116,5 @@ n	utc	head	id	exit	command
 115	20261013T161300Z	f2e628a	s23_final_f2e628a	0	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/5fa8d500-393b-43b7-95de-04d09fcc9e42/scratchpad/l23_chain.sh f2e628a
 116	20261013T181657Z	1414899	s23_export_1414899	0	bash -c set -a; . .signing/release.env; set +a; /c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/Godot_v4.7-stable_win64_console.exe --headless --path . --export-release "Android" build/tls.aab
 117	20261014T154626Z	a4acbb5	s23_last_a4acbb5	0	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/5fa8d500-393b-43b7-95de-04d09fcc9e42/scratchpad/l24_chain.sh a4acbb5
+118	20261014T184443Z	85b55ed	s23_last_store_en_85b55ed	127	--attach .qa_logs/density_frames_store.log -- bash tools/qa_sim/density_frames store 85b55ed residential,industrial,warehouses,hospital,gas_station,police,park,power_station
+119	20261014T184502Z	85b55ed	s23_last_store_en2_85b55ed	0	bash tools/qa_sim/density_frames store 85b55ed residential,industrial,warehouses,hospital,gas_station,police,park,power_station
