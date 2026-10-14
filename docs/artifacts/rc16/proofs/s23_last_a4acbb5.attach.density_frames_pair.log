@@ -1,0 +1,222 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[density] start label=pair hash=a4acbb5 ids=[&"suburbs", &"residential", &"park", &"school", &"hospital", &"gas_station", &"police", &"warehouses", &"industrial", &"substation", &"power_station"] nodes=1105 objects=3955 orphans=6 tex_mib=54.4 vid_mib=81.9 static_mib=98.8
+[probe] stream pass=density district=suburbs ok=true load_ms=0.3 settled_ms=49.7 hitches=0 max_frame_ms=21.1 over_budget_ms=0.0 nodes=1105 objects=3953 orphans=6 tex_mib=54.4 vid_mib=81.9 static_mib=98.8 stats={"district":"suburbs","enemies_ms":8.001,"loot_ms":24.501,"props_ms":157.394,"scene_ms":65.189,"streets_ms":1.566,"total_ms":133.248}
+[density] state district=suburbs view=01_dark weather=0 stage=0 tier=2 ambient=0.030 glow=0.600 exposure=1.000
+[density] frame suburbs_01_dark_before_a4acbb5_20261014T162005Z.jpg
+[density] frame suburbs_01_dark_after_a4acbb5_20261014T162005Z.jpg
+[density] state district=suburbs view=02_rest weather=0 stage=0 tier=2 ambient=0.030 glow=0.600 exposure=1.000
+[density] rest district=suburbs bloom_world=(12.7, 2.41, 13.2) on_screen=(914.8286, 553.4025) behind=false visible=true camera=(6.0, 2.557165, 15.5)
+[density] frame suburbs_02_rest_before_a4acbb5_20261014T162006Z.jpg
+[density] frame suburbs_02_rest_after_a4acbb5_20261014T162006Z.jpg
+[density] state district=suburbs view=03_street weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame suburbs_03_street_before_a4acbb5_20261014T162007Z.jpg
+[density] frame suburbs_03_street_after_a4acbb5_20261014T162007Z.jpg
+[density] state district=suburbs view=04_block weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame suburbs_04_block_before_a4acbb5_20261014T162008Z.jpg
+[density] frame suburbs_04_block_after_a4acbb5_20261014T162008Z.jpg
+[density] state district=suburbs view=05_skyline weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame suburbs_05_skyline_before_a4acbb5_20261014T162009Z.jpg
+[density] frame suburbs_05_skyline_after_a4acbb5_20261014T162009Z.jpg
+[density] perf district=suburbs dressing=without draw_calls=85 primitives=57854 objects_in_frame=85
+[density] perf district=suburbs dressing=with draw_calls=100 primitives=67554 objects_in_frame=100
+[probe] stream pass=density district=residential ok=true load_ms=265.8 settled_ms=326.3 hitches=2 max_frame_ms=146.7 over_budget_ms=135.0 nodes=1123 objects=4015 orphans=6 tex_mib=54.0 vid_mib=83.6 static_mib=101.1 stats={"district":"residential","enemies_ms":7.359,"loot_ms":20.79,"props_ms":118.252,"scene_ms":1.007,"streets_ms":1.575,"total_ms":52.202}
+[density] state district=residential view=01_dark weather=0 stage=0 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame residential_01_dark_before_a4acbb5_20261014T162013Z.jpg
+[density] frame residential_01_dark_after_a4acbb5_20261014T162013Z.jpg
+[density] state district=residential view=02_rest weather=0 stage=0 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] rest district=residential bloom_world=(12.7, 2.41, 13.2) on_screen=(914.8286, 553.4105) behind=false visible=true camera=(6.0, 2.557252, 15.5)
+[density] frame residential_02_rest_before_a4acbb5_20261014T162014Z.jpg
+[density] frame residential_02_rest_after_a4acbb5_20261014T162014Z.jpg
+[density] state district=residential view=03_street weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame residential_03_street_before_a4acbb5_20261014T162015Z.jpg
+[density] frame residential_03_street_after_a4acbb5_20261014T162015Z.jpg
+[density] state district=residential view=04_block weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame residential_04_block_before_a4acbb5_20261014T162016Z.jpg
+[density] frame residential_04_block_after_a4acbb5_20261014T162016Z.jpg
+[density] state district=residential view=05_skyline weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame residential_05_skyline_before_a4acbb5_20261014T162017Z.jpg
+[density] frame residential_05_skyline_after_a4acbb5_20261014T162017Z.jpg
+[density] perf district=residential dressing=without draw_calls=99 primitives=84020 objects_in_frame=99
+[density] perf district=residential dressing=with draw_calls=116 primitives=93876 objects_in_frame=116
+[probe] stream pass=density district=park ok=true load_ms=255.1 settled_ms=317.4 hitches=2 max_frame_ms=138.2 over_budget_ms=122.1 nodes=1119 objects=4019 orphans=6 tex_mib=54.3 vid_mib=83.9 static_mib=101.9 stats={"district":"park","enemies_ms":5.612,"loot_ms":20.786,"props_ms":122.179,"scene_ms":0.76,"streets_ms":1.482,"total_ms":53.142}
+[density] state district=park view=01_dark weather=0 stage=0 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame park_01_dark_before_a4acbb5_20261014T162021Z.jpg
+[density] frame park_01_dark_after_a4acbb5_20261014T162021Z.jpg
+[density] state district=park view=02_rest weather=0 stage=0 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] rest district=park bloom_world=(12.7, 2.41, 13.2) on_screen=(914.8286, 553.4402) behind=false visible=true camera=(6.0, 2.557578, 15.5)
+[density] frame park_02_rest_before_a4acbb5_20261014T162022Z.jpg
+[density] frame park_02_rest_after_a4acbb5_20261014T162022Z.jpg
+[density] state district=park view=03_street weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame park_03_street_before_a4acbb5_20261014T162023Z.jpg
+[density] frame park_03_street_after_a4acbb5_20261014T162023Z.jpg
+[density] state district=park view=04_block weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame park_04_block_before_a4acbb5_20261014T162024Z.jpg
+[density] frame park_04_block_after_a4acbb5_20261014T162024Z.jpg
+[density] state district=park view=05_skyline weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame park_05_skyline_before_a4acbb5_20261014T162025Z.jpg
+[density] frame park_05_skyline_after_a4acbb5_20261014T162025Z.jpg
+[density] perf district=park dressing=without draw_calls=96 primitives=72636 objects_in_frame=96
+[density] perf district=park dressing=with draw_calls=112 primitives=80636 objects_in_frame=112
+[probe] stream pass=density district=school ok=true load_ms=256.1 settled_ms=318.6 hitches=2 max_frame_ms=145.6 over_budget_ms=150.4 nodes=1123 objects=4040 orphans=6 tex_mib=54.0 vid_mib=83.6 static_mib=102.6 stats={"district":"school","enemies_ms":5.197,"loot_ms":16.912,"props_ms":110.856,"scene_ms":0.743,"streets_ms":1.327,"total_ms":45.253}
+[density] state district=school view=01_dark weather=0 stage=0 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame school_01_dark_before_a4acbb5_20261014T162028Z.jpg
+[density] frame school_01_dark_after_a4acbb5_20261014T162028Z.jpg
+[density] state district=school view=02_rest weather=0 stage=0 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] rest district=school bloom_world=(12.7, 2.41, 13.2) on_screen=(914.8286, 553.4637) behind=false visible=true camera=(6.0, 2.557837, 15.5)
+[density] frame school_02_rest_before_a4acbb5_20261014T162029Z.jpg
+[density] frame school_02_rest_after_a4acbb5_20261014T162029Z.jpg
+[density] state district=school view=03_street weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame school_03_street_before_a4acbb5_20261014T162030Z.jpg
+[density] frame school_03_street_after_a4acbb5_20261014T162030Z.jpg
+[density] state district=school view=04_block weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame school_04_block_before_a4acbb5_20261014T162031Z.jpg
+[density] frame school_04_block_after_a4acbb5_20261014T162031Z.jpg
+[density] state district=school view=05_skyline weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame school_05_skyline_before_a4acbb5_20261014T162032Z.jpg
+[density] frame school_05_skyline_after_a4acbb5_20261014T162033Z.jpg
+[density] perf district=school dressing=without draw_calls=104 primitives=82918 objects_in_frame=104
+[density] perf district=school dressing=with draw_calls=121 primitives=92966 objects_in_frame=121
+[probe] stream pass=density district=hospital ok=true load_ms=261.6 settled_ms=305.6 hitches=1 max_frame_ms=145.7 over_budget_ms=129.1 nodes=1122 objects=4043 orphans=6 tex_mib=54.3 vid_mib=83.9 static_mib=103.4 stats={"district":"hospital","enemies_ms":5.735,"loot_ms":21.012,"props_ms":105.026,"scene_ms":0.904,"streets_ms":1.891,"total_ms":53.955}
+[density] state district=hospital view=01_dark weather=0 stage=0 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame hospital_01_dark_before_a4acbb5_20261014T162036Z.jpg
+[density] frame hospital_01_dark_after_a4acbb5_20261014T162037Z.jpg
+[density] state district=hospital view=02_rest weather=0 stage=0 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] rest district=hospital bloom_world=(12.7, 2.41, 13.2) on_screen=(914.8286, 553.4453) behind=false visible=true camera=(6.0, 2.557635, 15.5)
+[density] frame hospital_02_rest_before_a4acbb5_20261014T162037Z.jpg
+[density] frame hospital_02_rest_after_a4acbb5_20261014T162038Z.jpg
+[density] state district=hospital view=03_street weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame hospital_03_street_before_a4acbb5_20261014T162038Z.jpg
+[density] frame hospital_03_street_after_a4acbb5_20261014T162039Z.jpg
+[density] state district=hospital view=04_block weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame hospital_04_block_before_a4acbb5_20261014T162039Z.jpg
+[density] frame hospital_04_block_after_a4acbb5_20261014T162040Z.jpg
+[density] state district=hospital view=05_skyline weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame hospital_05_skyline_before_a4acbb5_20261014T162040Z.jpg
+[density] frame hospital_05_skyline_after_a4acbb5_20261014T162041Z.jpg
+[density] perf district=hospital dressing=without draw_calls=95 primitives=73846 objects_in_frame=95
+[density] perf district=hospital dressing=with draw_calls=112 primitives=85686 objects_in_frame=112
+[probe] stream pass=density district=gas_station ok=true load_ms=229.5 settled_ms=294.0 hitches=2 max_frame_ms=139.7 over_budget_ms=125.5 nodes=1125 objects=4076 orphans=6 tex_mib=54.0 vid_mib=83.6 static_mib=104.3 stats={"district":"gas_station","enemies_ms":6.507,"loot_ms":21.376,"props_ms":102.087,"scene_ms":1.282,"streets_ms":1.644,"total_ms":51.092}
+[density] state district=gas_station view=01_dark weather=0 stage=0 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame gas_station_01_dark_before_a4acbb5_20261014T162045Z.jpg
+[density] frame gas_station_01_dark_after_a4acbb5_20261014T162045Z.jpg
+[density] state district=gas_station view=02_rest weather=0 stage=0 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] rest district=gas_station bloom_world=(12.7, 2.41, 13.2) on_screen=(914.8286, 553.3483) behind=false visible=true camera=(6.0, 2.556569, 15.5)
+[density] frame gas_station_02_rest_before_a4acbb5_20261014T162046Z.jpg
+[density] frame gas_station_02_rest_after_a4acbb5_20261014T162046Z.jpg
+[density] state district=gas_station view=03_street weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame gas_station_03_street_before_a4acbb5_20261014T162047Z.jpg
+[density] frame gas_station_03_street_after_a4acbb5_20261014T162047Z.jpg
+[density] state district=gas_station view=04_block weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame gas_station_04_block_before_a4acbb5_20261014T162048Z.jpg
+[density] frame gas_station_04_block_after_a4acbb5_20261014T162048Z.jpg
+[density] state district=gas_station view=05_skyline weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame gas_station_05_skyline_before_a4acbb5_20261014T162049Z.jpg
+[density] frame gas_station_05_skyline_after_a4acbb5_20261014T162049Z.jpg
+[density] perf district=gas_station dressing=without draw_calls=92 primitives=72626 objects_in_frame=92
+[density] perf district=gas_station dressing=with draw_calls=111 primitives=84436 objects_in_frame=111
+[probe] stream pass=density district=police ok=true load_ms=243.4 settled_ms=291.3 hitches=1 max_frame_ms=144.9 over_budget_ms=128.3 nodes=1154 objects=4118 orphans=6 tex_mib=54.3 vid_mib=83.9 static_mib=105.4 stats={"district":"police","enemies_ms":6.142,"loot_ms":22.55,"props_ms":108.765,"scene_ms":1.108,"streets_ms":1.496,"total_ms":57.393}
+[density] state district=police view=01_dark weather=0 stage=0 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame police_01_dark_before_a4acbb5_20261014T162053Z.jpg
+[density] frame police_01_dark_after_a4acbb5_20261014T162053Z.jpg
+[density] state district=police view=02_rest weather=0 stage=0 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] rest district=police bloom_world=(12.7, 2.41, 13.2) on_screen=(914.8286, 553.3632) behind=false visible=true camera=(6.0, 2.556733, 15.5)
+[density] frame police_02_rest_before_a4acbb5_20261014T162054Z.jpg
+[density] frame police_02_rest_after_a4acbb5_20261014T162054Z.jpg
+[density] state district=police view=03_street weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame police_03_street_before_a4acbb5_20261014T162055Z.jpg
+[density] frame police_03_street_after_a4acbb5_20261014T162055Z.jpg
+[density] state district=police view=04_block weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame police_04_block_before_a4acbb5_20261014T162056Z.jpg
+[density] frame police_04_block_after_a4acbb5_20261014T162056Z.jpg
+[density] state district=police view=05_skyline weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame police_05_skyline_before_a4acbb5_20261014T162057Z.jpg
+[density] frame police_05_skyline_after_a4acbb5_20261014T162057Z.jpg
+[density] perf district=police dressing=without draw_calls=106 primitives=63502 objects_in_frame=106
+[density] perf district=police dressing=with draw_calls=125 primitives=74018 objects_in_frame=125
+[probe] stream pass=density district=warehouses ok=true load_ms=293.1 settled_ms=366.2 hitches=3 max_frame_ms=142.4 over_budget_ms=156.6 nodes=1144 objects=4121 orphans=6 tex_mib=54.0 vid_mib=83.6 static_mib=105.9 stats={"district":"warehouses","enemies_ms":6.249,"loot_ms":18.014,"props_ms":110.087,"scene_ms":0.831,"streets_ms":1.626,"total_ms":50.064}
+[density] state district=warehouses view=01_dark weather=0 stage=0 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame warehouses_01_dark_before_a4acbb5_20261014T162101Z.jpg
+[density] frame warehouses_01_dark_after_a4acbb5_20261014T162101Z.jpg
+[density] state district=warehouses view=02_rest weather=0 stage=0 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] rest district=warehouses bloom_world=(12.7, 2.41, 13.2) on_screen=(914.8286, 553.365) behind=false visible=true camera=(6.0, 2.556753, 15.5)
+[density] frame warehouses_02_rest_before_a4acbb5_20261014T162102Z.jpg
+[density] frame warehouses_02_rest_after_a4acbb5_20261014T162102Z.jpg
+[density] state district=warehouses view=03_street weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame warehouses_03_street_before_a4acbb5_20261014T162103Z.jpg
+[density] frame warehouses_03_street_after_a4acbb5_20261014T162103Z.jpg
+[density] state district=warehouses view=04_block weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame warehouses_04_block_before_a4acbb5_20261014T162104Z.jpg
+[density] frame warehouses_04_block_after_a4acbb5_20261014T162104Z.jpg
+[density] state district=warehouses view=05_skyline weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame warehouses_05_skyline_before_a4acbb5_20261014T162105Z.jpg
+[density] frame warehouses_05_skyline_after_a4acbb5_20261014T162105Z.jpg
+[density] perf district=warehouses dressing=without draw_calls=106 primitives=73136 objects_in_frame=106
+[density] perf district=warehouses dressing=with draw_calls=128 primitives=82132 objects_in_frame=128
+[probe] stream pass=density district=industrial ok=true load_ms=301.9 settled_ms=375.8 hitches=2 max_frame_ms=137.9 over_budget_ms=154.6 nodes=1153 objects=4141 orphans=6 tex_mib=54.3 vid_mib=83.9 static_mib=107.2 stats={"district":"industrial","enemies_ms":7.925,"loot_ms":24.977,"props_ms":129.093,"scene_ms":0.869,"streets_ms":1.456,"total_ms":59.059}
+[density] state district=industrial view=01_dark weather=0 stage=0 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame industrial_01_dark_before_a4acbb5_20261014T162109Z.jpg
+[density] frame industrial_01_dark_after_a4acbb5_20261014T162109Z.jpg
+[density] state district=industrial view=02_rest weather=0 stage=0 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] rest district=industrial bloom_world=(12.7, 2.41, 13.2) on_screen=(914.8286, 553.3537) behind=false visible=true camera=(6.0, 2.556629, 15.5)
+[density] frame industrial_02_rest_before_a4acbb5_20261014T162110Z.jpg
+[density] frame industrial_02_rest_after_a4acbb5_20261014T162110Z.jpg
+[density] state district=industrial view=03_street weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame industrial_03_street_before_a4acbb5_20261014T162111Z.jpg
+[density] frame industrial_03_street_after_a4acbb5_20261014T162111Z.jpg
+[density] state district=industrial view=04_block weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame industrial_04_block_before_a4acbb5_20261014T162112Z.jpg
+[density] frame industrial_04_block_after_a4acbb5_20261014T162112Z.jpg
+[density] state district=industrial view=05_skyline weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame industrial_05_skyline_before_a4acbb5_20261014T162113Z.jpg
+[density] frame industrial_05_skyline_after_a4acbb5_20261014T162113Z.jpg
+[density] perf district=industrial dressing=without draw_calls=97 primitives=63654 objects_in_frame=97
+[density] perf district=industrial dressing=with draw_calls=119 primitives=75514 objects_in_frame=119
+[probe] stream pass=density district=substation ok=true load_ms=233.6 settled_ms=287.7 hitches=1 max_frame_ms=141.3 over_budget_ms=117.8 nodes=1134 objects=4121 orphans=6 tex_mib=54.0 vid_mib=83.6 static_mib=107.9 stats={"district":"substation","enemies_ms":6.139,"loot_ms":17.582,"props_ms":107.693,"scene_ms":0.87,"streets_ms":1.357,"total_ms":46.816}
+[density] state district=substation view=01_dark weather=0 stage=0 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame substation_01_dark_before_a4acbb5_20261014T162117Z.jpg
+[density] frame substation_01_dark_after_a4acbb5_20261014T162117Z.jpg
+[density] state district=substation view=02_rest weather=0 stage=0 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] rest district=substation bloom_world=(12.7, 2.41, 13.2) on_screen=(914.8286, 553.3549) behind=false visible=true camera=(6.0, 2.556642, 15.5)
+[density] frame substation_02_rest_before_a4acbb5_20261014T162118Z.jpg
+[density] frame substation_02_rest_after_a4acbb5_20261014T162118Z.jpg
+[density] state district=substation view=03_street weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame substation_03_street_before_a4acbb5_20261014T162119Z.jpg
+[density] frame substation_03_street_after_a4acbb5_20261014T162119Z.jpg
+[density] state district=substation view=04_block weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame substation_04_block_before_a4acbb5_20261014T162120Z.jpg
+[density] frame substation_04_block_after_a4acbb5_20261014T162120Z.jpg
+[density] state district=substation view=05_skyline weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame substation_05_skyline_before_a4acbb5_20261014T162121Z.jpg
+[density] frame substation_05_skyline_after_a4acbb5_20261014T162121Z.jpg
+[density] perf district=substation dressing=without draw_calls=91 primitives=62784 objects_in_frame=91
+[density] perf district=substation dressing=with draw_calls=111 primitives=69022 objects_in_frame=111
+[probe] stream pass=density district=power_station ok=true load_ms=239.8 settled_ms=275.1 hitches=2 max_frame_ms=149.0 over_budget_ms=157.5 nodes=1132 objects=4120 orphans=6 tex_mib=54.3 vid_mib=83.9 static_mib=108.6 stats={"district":"power_station","enemies_ms":6.457,"loot_ms":22.434,"props_ms":101.934,"scene_ms":0.932,"streets_ms":1.391,"total_ms":54.728}
+[density] state district=power_station view=01_dark weather=0 stage=0 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame power_station_01_dark_before_a4acbb5_20261014T162125Z.jpg
+[density] frame power_station_01_dark_after_a4acbb5_20261014T162125Z.jpg
+[density] state district=power_station view=02_rest weather=0 stage=0 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] rest district=power_station bloom_world=(12.7, 2.41, 13.2) on_screen=(914.8286, 553.3052) behind=false visible=true camera=(6.0, 2.556097, 15.5)
+[density] frame power_station_02_rest_before_a4acbb5_20261014T162126Z.jpg
+[density] frame power_station_02_rest_after_a4acbb5_20261014T162126Z.jpg
+[density] state district=power_station view=03_street weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame power_station_03_street_before_a4acbb5_20261014T162127Z.jpg
+[density] frame power_station_03_street_after_a4acbb5_20261014T162127Z.jpg
+[density] state district=power_station view=04_block weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame power_station_04_block_before_a4acbb5_20261014T162128Z.jpg
+[density] frame power_station_04_block_after_a4acbb5_20261014T162128Z.jpg
+[density] state district=power_station view=05_skyline weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame power_station_05_skyline_before_a4acbb5_20261014T162129Z.jpg
+[density] frame power_station_05_skyline_after_a4acbb5_20261014T162130Z.jpg
+[density] perf district=power_station dressing=without draw_calls=91 primitives=63952 objects_in_frame=91
+[density] perf district=power_station dressing=with draw_calls=113 primitives=73208 objects_in_frame=113
+[density] DONE label=pair hash=a4acbb5
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 64 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
