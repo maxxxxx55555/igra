@@ -212,10 +212,12 @@ if [[ $gate_missed -eq 0 ]]; then
 else
   bad "visual_truth_gate lets $gate_missed committed corruption frame(s) through"
 fi
-if "$PY" tools/qa_sim/visual_truth_gate.py docs/stills/final/*.png docs/stills/beauty/after/*.png >/dev/null 2>&1; then
+# The sign-off frames are the committed ones: a run of final_frames_scene leaves more frames in that folder (the boot screen, menu variants, HUD states) and a loading screen is no world frame (CORRECTION_LOG 250).
+mapfile -t sign_off < <(git ls-files 'docs/stills/final/*.png')
+if "$PY" tools/qa_sim/visual_truth_gate.py "${sign_off[@]}" docs/stills/beauty/after/*.png >/dev/null 2>&1; then
   ok "visual_truth_gate passes the sign-off and beauty frames"
 else
-  bad "visual_truth_gate fails a sign-off or beauty frame (python tools/qa_sim/visual_truth_gate.py docs/stills/final/*.png)"
+  bad "visual_truth_gate fails a sign-off or beauty frame (python tools/qa_sim/visual_truth_gate.py \$(git ls-files 'docs/stills/final/*.png'))"
 fi
 # The PNG lock above only re-measures OLD committed frames. The real R0
 # cause (2026-09-25, windowed A/B): the 11 district LUTs were imported as
