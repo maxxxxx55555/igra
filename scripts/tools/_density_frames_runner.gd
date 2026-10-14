@@ -88,7 +88,12 @@ func _view(id: StringName, view: Dictionary) -> void:
 		camera.set("_pitch", float(view["pitch"]))
 	var stage: int = int(view["stage"])
 	if stage >= 0 and PowerGrid.get_stage(id) < stage:
-		PowerGrid.advance_district(id, stage as DistrictData.Stage)
+		# a district can only be raised once the ones that power it are FULL (PowerGrid.is_unlocked): a subset of districts, the store recipe's, stayed DARK (CORRECTION_LOG 249)
+		for parent in PowerGrid.get_district(id).powered_by:
+			PowerGrid.get_district(parent).stage = DistrictData.Stage.FULL
+		if not PowerGrid.advance_district(id, stage as DistrictData.Stage):
+			_fail("%s %s: the power stage is %d and the view wants %d" % [String(id), view["name"], PowerGrid.get_stage(id), stage])
+			return
 	_flashlight(player, bool(view["light"]))
 	await get_tree().create_timer(SETTLE_SEC).timeout
 	var env := get_viewport().world_3d.environment
