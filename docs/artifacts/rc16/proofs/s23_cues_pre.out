@@ -1,0 +1,10 @@
+# proof s23_cues_pre
+# utc 20261014T115558Z
+# head 1b17b4d (uncommitted paths: 31)
+# env none
+# cmd python tools/qa_sim/export_refs_check.py
+NOTE scripts/core/qa_launch_guard.gd:34: scripts/tools/shot_tool.gd is excluded by scripts/tools/*
+FAIL scripts/systems/uisfx.gd:62: play_ui("ending_sting") has no assets/audio/ui/ui_ending_sting.ogg
+FAIL scripts/systems/uisfx.gd:66: play_ui("streak_milestone_sting") has no assets/audio/ui/ui_streak_milestone_sting.ogg
+export_refs_check: 486 shipped file(s) read for the Android preset, 2 violation(s), 1 note(s)
+# EXIT=1

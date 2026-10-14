@@ -24,7 +24,7 @@ What stood in the tree before, at the peak and after the monsters were freed (tw
 
 ## 2. Reading
 
-- **It survives.** In the three runs every monster was alive at the end, 97 % or more of them had moved, the log holds no script error, the orphan nodes stayed at 6 and the process left cleanly. The nodes came back to within 1 to 21 of their start.
+- **It survives.** In the three runs every monster was alive at the end, 94 % or more of them had moved (15 of 16, 32 of 32, 116 of 120), the log holds no script error, the orphan nodes stayed at 6 and the process left cleanly. The nodes came back to within 1 to 21 of their start.
 - **Up to four times the cap the game holds 60 frames a second** (16.7 ms is the vertical sync of a 60 Hz display; the worst frames, 52.9 ms at 16 monsters and 49.9 ms at 32, are single frames). **At 15 times the cap it does not: 7.8 frames a second, every frame over 50 ms.** The cost does not grow in a line: it is nothing visible at 32
   and 111 ms more at 120. A knee lies between, and where was not measured (a run at 64 or 80 is one more launch). The cause was not traced. The group alert is a noise event that reaches every monster (`scripts/enemies/base_monster.gd:842`), and 120 monsters in a ring about 1.3 m apart, all chasing, make a
   crowd the game never builds: that is the first place to look, not a finding.

@@ -13,7 +13,7 @@ cost of the switch, and that is what the probe reads.
 `tools/qa_sim/rc16_probe after <hash>` (windowed, muted, `scripts/tools/_rc16_probe_runner.gd:43`, `_transition`) switches the real `WorldRuntime` to each of the eleven districts, once cold and once warm,
 records every frame from the switch until 1.5 s after it, and prints per district: the time to the new district (`load_ms`), the time until three more frames have drawn (`settled_ms`), the frames over 50 ms
 (`hitches`, `HITCH_MS` in line 9), the worst frame, the milliseconds spent over the 33.3 ms budget, and the memory. Launch 23 (row 115, `s23_final_f2e628a`, `docs/artifacts/rc16/proofs/s23_final_f2e628a.attach.rc16_probe_after.log`),
-head `f2e628a`, High tier, the dev iGPU, the machine not checked for other load (launch 18, row 110 at `0aae342`, read the same on an idle machine: 235 to 332 ms cold):
+head `f2e628a`, High tier, the dev iGPU, the machine not checked for other load (launch 18, row 110 at `0aae342`, read 235 to 332 ms cold):
 
 | Pass | Switches | Load to the new district | Until settled | Hitches (frames over 50 ms) | Worst frame | Over the 33.3 ms budget, summed |
 |---|---|---|---|---|---|---|

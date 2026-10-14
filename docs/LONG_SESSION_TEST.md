@@ -26,9 +26,9 @@ The mean frame rate of a minute never reached 55: 0 of 120 minutes, the median 2
 
 | Minutes | State | Frames a second (median) | p95 of a minute (median) |
 |---|---|---|---|
-| 1 to 12 | the machine quiet | 50.7 (mean 19.7 ms) | 33.3 to 49.2 ms (the district change is in every minute) |
-| 13 to 53 | the machine shared: a sample taken at 11:23 UTC read Chrome at 220 % of a core, the system process at 128 % and AutoClaw at 45 %, the game at 56 % | 28.8 | 47.1 ms |
-| 54 to 120 | every minute on one 30 Hz interval: 29.0 to 30.0 frames a second and a p95 and p99 of 33.3 ms; the processor performance fell from a median 152 % to 98 % of the base clock and its utility from 56 % to 18 % | 29.9 | 33.3 ms |
+| 1 to 12 | the machine quiet | 50.7 (mean 19.7 ms) | 30.9 to 49.2 ms, 36.8 at the median (the district change is in every minute) |
+| 13 to 53 | the machine shared (a one-off sample of the process list, kept in no file, read Chrome at 220 % of a core, the system process at 128 % and AutoClaw at 45 %, the game at 56 %) | 28.3 | 49.5 ms |
+| 54 to 120 | every minute on one 30 Hz interval: 29.0 to 30.0 frames a second; the p95 of 13 of the 67 minutes above 33.4 ms (47.3 at most) and the p99 of 31 of them (63.0 at most); the processor at a median 104 % of its base clock (93 % at the least) and a utility of 25 %, and 98.5 % and 18.5 % in the last 30 minutes against 152 % and 56 % in minutes 31 to 60 (`docs/THERMAL_TEST.md`) | 29.9 | 33.3 ms |
 
 Frames over 50 ms: 4,244 of 225,837 (1.9 %), 3,488 of them in the first 53 minutes. **The last state has a probable cause that was found after the run (CORRECTION_LOG 241), and no proof.** The game's quality manager (T17, on by default, and the soak runner left it on) steps the graphics tier down after 5 s under 30 FPS, and Low and Medium cap the frame rate at 30
 (`SettingsManager.GRAPHICS_TIERS`): in the shared minutes 13 to 53 the mean was 28.8 frames a second, so the manager stepped down, and from then on the 45 FPS it needed to step up could not come under a cap of 30 (and 29.x at the cap counted as "under 30", so it went on down). A frame time on one 30 Hz

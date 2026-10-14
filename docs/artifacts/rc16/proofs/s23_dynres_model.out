@@ -1,0 +1,12 @@
+# proof s23_dynres_model
+# utc 20261014T115226Z
+# head 1b17b4d (uncommitted paths: 11)
+# env none
+# cmd python docs/artifacts/rc16/proofs/s23_dynres_model.py
+clean: {'PERF1': True, 'PERF4': True, 'PERF5': True, 'PERF6': True} waits before a return at the 30 cap (4.0, 8.0)
+mutation DROP_SCALE fails ['PERF1', 'PERF4']
+mutation PERF4 fails ['PERF4', 'PERF5', 'PERF6']
+mutation PERF5 fails ['PERF5', 'PERF6']
+mutation PERF6 fails ['PERF1', 'PERF6']
+dynres_model: the clean governor passes PERF1 and PERF4 to PERF6; each mutation fails its own check (and the ones that depend on it, which have rows of their own)
+# EXIT=0

@@ -2,7 +2,7 @@
 
 Nine features, each a Settings row (or a dialog) with a named reader. `python tools/qa_sim/a11y_check.py --mutations` holds the wiring: it reads the
 Settings screen, the readers, the 13 locale files and the defaults, and then removes each one of them, in memory, one at a time, and demands that the
-feature fails (116 removals of the 9 features, all caught). `CLOSEOUT_ONLY=s23` (scripts/tools/rc16/a11y_checks.gd, checks A11Y1 to A11Y8) shows each
+feature fails (118 removals of the 9 features, all caught). `CLOSEOUT_ONLY=s23` (scripts/tools/rc16/a11y_checks.gd, checks A11Y1 to A11Y8) shows each
 feature working in the running game.
 
 | # | Feature | Settings (Accessibility tab unless said) | What it does | Readers |
