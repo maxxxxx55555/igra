@@ -60,6 +60,7 @@ MUTATIONS = [
     ("scripts/world_env_setup.gd", "Viewport.MSAA_2X, Viewport.MSAA_2X, Viewport.MSAA_4X]", "Viewport.MSAA_2X, Viewport.MSAA_4X, Viewport.MSAA_4X]", "MSAA1"),
     ("scripts/enemies/boss_3d.gd", "if space.intersect_ray(query).is_empty():", "if true:", "BOSS1"),
     ("scripts/ui/quest_tracker_hud.gd", "hud_visibility_changed.connect(func(shown: bool) -> void: visible = shown)", "hud_visibility_changed.connect(func(shown: bool) -> void: visible = true)", "TRLR1"),
+    ("scripts/world_env_setup.gd", "EventBus.district_entered.connect(_apply_stage_of)", "EventBus.district_entered.connect(func(_id: StringName) -> void: pass)", "ENV1"),
 ]
 LINE = re.compile(r"^\[closeout\] (ok  |FAIL) +(\S+)")
 

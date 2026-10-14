@@ -14,6 +14,7 @@ static func run(r: Node) -> void:
 	_gate_edges(r)
 	_loot_stays_with_district(r)
 	_msaa_follows_tier(r)
+	_lighting_follows_the_district_entered(r)
 
 ## PERF1: under 30 FPS for 2 s the 3D scale drops to 70 % of Render Scale; in the band between 30 and 45 nothing moves; over 45 FPS for 4 s it comes back.
 static func _dynamic_resolution(r: Node) -> void:
@@ -162,6 +163,23 @@ static func _msaa_follows_tier(r: Node) -> void:
 		modes.append(viewport.msaa_3d)
 	SettingsManager.set_graphics_tier(tier0)
 	r._ok(modes == [0, 1, 1, 2], "MSAA1 the 3D samples follow the tier: Low, Medium, High, Ultra read %s (off, 2x, 2x, 4x)" % [modes])
+
+## ENV1: a district entered is lit by its own stage at once (CORRECTION_LOG 252). The check puts on the lighting of the other end of the scale, sends district_entered for the district the world already holds (the world ignores
+## it) and reads the ambient: before the fix only a stage change, a setting and the weather's tick of 45 s applied it, so the lighting of the district left stayed on a travel.
+static func _lighting_follows_the_district_entered(r: Node) -> void:
+	var setup: Node = r._main.get_node("WorldEnvSetup")
+	var env := setup.get("_env") as Environment
+	var here: String = DistrictManager.current_district
+	var stage: int = DistrictManager.get_stage(here)
+	setup.call("apply_for_stage", stage)
+	var want: float = env.ambient_light_energy
+	var other: int = 0 if stage >= 2 else 3
+	setup.call("apply_for_stage", other)
+	var shown: float = env.ambient_light_energy
+	EventBus.district_entered.emit(StringName(here))
+	var after: float = env.ambient_light_energy
+	setup.call("apply_for_stage", stage)
+	r._ok(not is_equal_approx(shown, want) and is_equal_approx(after, want), "ENV1 entering a district lights it by its own stage: stage %d reads ambient %.3f, the lighting of stage %d %.3f, and district_entered brings %.3f back" % [stage, want, other, shown, after])
 
 static func _tier() -> int:
 	return int(SettingsManager.get_setting("graphics_tier", 2))

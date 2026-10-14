@@ -95,6 +95,7 @@ func _ready() -> void:
 	EventBus.weather_changed.connect(_on_weather_changed)
 	EventBus.district_entered.connect(_apply_lut)
 	EventBus.district_entered.connect(_apply_postfx)
+	EventBus.district_entered.connect(_apply_stage_of)
 	_postfx = _load_postfx_presets()
 
 	_player_glow = _find_player_glow()
@@ -162,6 +163,15 @@ func _on_district_stage_changed(_id: StringName, stage: int) -> void:
 	if dm != null and _id != dm.current_district:
 		return
 	apply_for_stage(stage)
+
+## A district entered is lit by its own stage at once. Only a stage change of the current district, the shadows setting and the weather's tick (every 45 s) applied the stage's ambient, moon and glow, so a
+## travel or a step over a boundary kept the lighting of the district left for up to 45 s (CORRECTION_LOG 252). The id comes with the signal: the manager's current district may not be set yet.
+func _apply_stage_of(district_id: StringName) -> void:
+	if not is_inside_tree():
+		return
+	var dm := get_node_or_null("/root/DistrictManager")
+	if dm != null:
+		apply_for_stage(dm.get_stage(String(district_id)))
 
 ## VISUAL_PASS W1: graphics_tier (SettingsManager, 0..3) selects a preset
 ## dict from visual_quality.tres (each tier, Ultra included, has its own
