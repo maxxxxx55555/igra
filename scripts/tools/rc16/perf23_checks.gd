@@ -8,6 +8,7 @@ const _Gate := preload("res://scripts/tools/_perf_check_runner.gd")
 static func run(r: Node) -> void:
 	r._playing()
 	_dynamic_resolution(r)
+	_dynamic_resolution_capped(r)
 	_quality_manager(r)
 	await _warm_up(r)
 	_gate_edges(r)
@@ -23,6 +24,8 @@ static func _dynamic_resolution(r: Node) -> void:
 	SettingsManager.set_setting("dynamic_resolution", true)
 	SettingsManager.set_setting("render_scale", 1.0)
 	viewport.scaling_3d_scale = 1.0
+	var cap0: int = Engine.max_fps
+	Engine.max_fps = 60
 	var node: Node = _Dynamic.new()
 	r.add_child(node)
 	for i in 3:
@@ -42,17 +45,59 @@ static func _dynamic_resolution(r: Node) -> void:
 		node.call("step", 25.0, 0.5)
 	for i in 6:
 		node.call("step", 50.0, 0.5)
-	node.call("step", 35.0, 0.5)  # the band: the count towards a recovery starts again
-	for i in 7:
+	node.call("step", 35.0, 0.5)  # the band: the count towards a recovery starts again, and the second one is 8 s (the wait doubles with each return)
+	for i in 15:
 		node.call("step", 50.0, 0.5)
 	var restarted: bool = bool(node.get("dropped"))
 	node.call("step", 50.0, 0.5)
 	var again: bool = not bool(node.get("dropped"))
 	node.queue_free()
+	Engine.max_fps = cap0
 	viewport.scaling_3d_scale = scale0
 	SettingsManager.set_setting("dynamic_resolution", on0)
 	SettingsManager.set_setting("render_scale", render0)
-	r._ok(early and dropped and band and slow and recovered and restarted and again, "PERF1 dynamic resolution: 1.5 s under 30 FPS keeps 1.0 (%s), 2 s drops to 0.7 (%s), the band holds it (%s), 3.5 s over 45 FPS holds (%s) and 4 s restores 1.0 (%s); a dip into the band restarts the count (%s, then %s)" % [early, dropped, band, slow, recovered, restarted, again])
+	r._ok(early and dropped and band and slow and recovered and restarted and again, "PERF1 dynamic resolution at the 60 FPS cap: 1.5 s under 30 FPS keeps 1.0 (%s), 2 s drops to 0.7 (%s), the band holds it (%s), 3.5 s over 45 FPS holds (%s) and 4 s restores 1.0 (%s); a dip into the band restarts the count, and the second return takes 8 s (%s, then %s)" % [early, dropped, band, slow, recovered, restarted, again])
+
+## The seconds of readings at `fps` until the governor has gone back to the full scale, or -1.0 when it has not within `limit`.
+static func _until_restored(node: Node, fps: float, limit: float) -> float:
+	var t: float = 0.0
+	while bool(node.get("dropped")) and t < limit:
+		node.call("step", fps, 0.5)
+		t += 0.5
+	return t if not bool(node.get("dropped")) else -1.0
+
+## PERF4 to PERF6 (CORRECTION_LOG 244): dynamic resolution under the 30 FPS cap of Low and Medium, which reads 29.x at best. PERF4: a reading of 29.5 is not a dip and 24 is. PERF5: the scale comes back on 29.5, where 45 FPS never comes.
+## PERF6: the wait for the second return is longer than for the first, so a phone that holds 27 FPS only at 0.7 does not flip every 6 s.
+static func _dynamic_resolution_capped(r: Node) -> void:
+	var viewport: Viewport = r.get_viewport()
+	var scale0: float = viewport.scaling_3d_scale
+	var on0: Variant = SettingsManager.get_setting("dynamic_resolution", false)
+	var render0: Variant = SettingsManager.get_setting("render_scale", 1.0)
+	var cap0: int = Engine.max_fps
+	SettingsManager.set_setting("dynamic_resolution", true)
+	SettingsManager.set_setting("render_scale", 1.0)
+	viewport.scaling_3d_scale = 1.0
+	Engine.max_fps = 30
+	var node: Node = _Dynamic.new()
+	r.add_child(node)
+	for i in 12:
+		node.call("step", 29.5, 0.5)
+	var steady: bool = not bool(node.get("dropped")) and is_equal_approx(viewport.scaling_3d_scale, 1.0)
+	for i in 4:
+		node.call("step", 24.0, 0.5)
+	var dropped: bool = bool(node.get("dropped")) and is_equal_approx(viewport.scaling_3d_scale, 0.7)
+	var first: float = _until_restored(node, 29.5, 60.0)
+	for i in 4:
+		node.call("step", 24.0, 0.5)
+	var second: float = _until_restored(node, 29.5, 120.0)
+	node.queue_free()
+	Engine.max_fps = cap0
+	viewport.scaling_3d_scale = scale0
+	SettingsManager.set_setting("dynamic_resolution", on0)
+	SettingsManager.set_setting("render_scale", render0)
+	r._ok(steady and dropped, "PERF4 dynamic resolution at the 30 FPS cap: 6 s at 29.5 FPS keep the full scale (%s), 2 s at 24 drop it to 0.7 (%s)" % [steady, dropped])
+	r._ok(first > 0.0, "PERF5 dynamic resolution at the 30 FPS cap: 29.5 FPS brings the full scale back after %s s" % first)
+	r._ok(first > 0.0 and second > first, "PERF6 dynamic resolution: the wait before the second return is %s s, before the first %s s" % [second, first])
 
 ## PERF2: the screen shaders are drawn once as an identity at the start and put back as they were.
 static func _warm_up(r: Node) -> void:

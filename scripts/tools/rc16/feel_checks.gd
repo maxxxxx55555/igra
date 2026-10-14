@@ -12,6 +12,7 @@ static func run(r: Node) -> void:
 	r._playing()
 	UIManager.close_all_blocking()
 	await _hit_stop(r)
+	await _hit_stop_at_the_end_of_a_slow_motion(r)
 	await _melee_stops_time(r)
 	await _shake_px(r)
 	_camera(r)
@@ -43,6 +44,20 @@ static func _hit_stop(r: Node) -> void:
 	SettingsManager.set_setting("reduce_time_fx", false)
 	Engine.time_scale = scale0
 	r._ok(is_equal_approx(dipped, 0.5) and elapsed >= 75 and elapsed <= 140 and is_equal_approx(back, 2.0) and gated, "JUICE1 hit-stop: a run at 2x dips to %.2fx, is back at %.1fx after %d ms of real time (80 ms asked), and does nothing with Reduce Time Effects (%s)" % [dipped, back, elapsed, gated])
+
+## JUICE5 (CORRECTION_LOG 246): a hit-stop that starts inside a cinematic's slow-motion (a run at 0.5x) while the cinematic ends (it writes 1.0) leaves the 1.0: it gives back the scale it found only if the scale is still its own dip.
+static func _hit_stop_at_the_end_of_a_slow_motion(r: Node) -> void:
+	var scale0: float = Engine.time_scale
+	SettingsManager.set_setting("reduce_time_fx", false)
+	Engine.time_scale = 0.5
+	var started: int = Time.get_ticks_msec()
+	WowDirector.hit_stop(60.0)
+	Engine.time_scale = 1.0
+	while Time.get_ticks_msec() - started < 200:
+		await r.get_tree().create_timer(0.02, true, false, true).timeout
+	var after: float = Engine.time_scale
+	Engine.time_scale = scale0
+	r._ok(is_equal_approx(after, 1.0), "JUICE5 hit-stop at the end of a slow-motion: the cinematic wrote 1.0 during the dip of a run at 0.5x and the time scale reads %.2fx 200 ms later (0.50x is the scale the dip found)" % after)
 
 ## JUICE2: a melee hit that lands stops time for 50 ms (80 ms for the last hit of a combo).
 static func _melee_stops_time(r: Node) -> void:

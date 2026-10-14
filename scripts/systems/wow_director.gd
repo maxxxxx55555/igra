@@ -103,16 +103,20 @@ func _setting(key: String, default: bool) -> bool:
 ## a timer that ignores the time scale ran short, CORRECTION_LOG 218) so it can't be
 ## stretched by its own dip. Guarded against re-entry — two boss hits in
 ## the same beat must not stack multiplicatively (GAMEFEEL_SPEC's own rule).
+## It gives back the scale it found only if the scale is still its own dip: the end of a cinematic's slow-motion writes 1.0 meanwhile, and the old
+## scale put back over it left the game at half speed (CORRECTION_LOG 246).
 func hit_stop(ms: float = 80.0, scale: float = 0.25) -> void:
 	if _hitstop_active or _setting("reduce_time_fx", false):
 		return
 	_hitstop_active = true
 	var before: float = Engine.time_scale
-	Engine.time_scale = before * scale
+	var dip: float = before * scale
+	Engine.time_scale = dip
 	var until: int = Time.get_ticks_msec() + int(minf(ms, 80.0))
 	while Time.get_ticks_msec() < until:
 		await get_tree().process_frame
-	Engine.time_scale = before
+	if is_equal_approx(Engine.time_scale, dip):
+		Engine.time_scale = before
 	_hitstop_active = false
 
 func _cinematic(p: Dictionary) -> void:
