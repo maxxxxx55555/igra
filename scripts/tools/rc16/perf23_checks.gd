@@ -66,8 +66,8 @@ static func _until_restored(node: Node, fps: float, limit: float) -> float:
 		t += 0.5
 	return t if not bool(node.get("dropped")) else -1.0
 
-## PERF4 to PERF6 (CORRECTION_LOG 244): dynamic resolution under the 30 FPS cap of Low and Medium, which reads 29.x at best. PERF4: a reading of 29.5 is not a dip and 24 is. PERF5: the scale comes back on 29.5, where 45 FPS never comes.
-## PERF6: the wait for the second return is longer than for the first, so a phone that holds 27 FPS only at 0.7 does not flip every 6 s.
+## PERF4 to PERF7 (CORRECTION_LOG 244): dynamic resolution under the 30 FPS cap of Low and Medium, which reads 29.x at best. PERF4: a reading of 29.5 is not a dip and 24 is. PERF5: the scale comes back on 29.5, where 45 FPS never comes.
+## PERF6: a drop soon after a return waits twice as long for the next one, so a phone that holds 27 FPS only at 0.7 does not flip every 6 s. PERF7: a drop 40 s after the last return starts the wait over.
 static func _dynamic_resolution_capped(r: Node) -> void:
 	var viewport: Viewport = r.get_viewport()
 	var scale0: float = viewport.scaling_3d_scale
@@ -90,6 +90,11 @@ static func _dynamic_resolution_capped(r: Node) -> void:
 	for i in 4:
 		node.call("step", 24.0, 0.5)
 	var second: float = _until_restored(node, 29.5, 120.0)
+	for i in 80:
+		node.call("step", 29.5, 0.5)
+	for i in 4:
+		node.call("step", 24.0, 0.5)
+	var third: float = _until_restored(node, 29.5, 120.0)
 	node.queue_free()
 	Engine.max_fps = cap0
 	viewport.scaling_3d_scale = scale0
@@ -97,7 +102,8 @@ static func _dynamic_resolution_capped(r: Node) -> void:
 	SettingsManager.set_setting("render_scale", render0)
 	r._ok(steady and dropped, "PERF4 dynamic resolution at the 30 FPS cap: 6 s at 29.5 FPS keep the full scale (%s), 2 s at 24 drop it to 0.7 (%s)" % [steady, dropped])
 	r._ok(first > 0.0, "PERF5 dynamic resolution at the 30 FPS cap: 29.5 FPS brings the full scale back after %s s" % first)
-	r._ok(first > 0.0 and second > first, "PERF6 dynamic resolution: the wait before the second return is %s s, before the first %s s" % [second, first])
+	r._ok(first > 0.0 and second > first, "PERF6 dynamic resolution: the wait before the second return, after a drop 2 s after the first, is %s s, before the first %s s" % [second, first])
+	r._ok(first > 0.0 and is_equal_approx(third, first), "PERF7 dynamic resolution: a drop 40 s after the last return waits %s s again, as the first did (%s s)" % [third, first])
 
 ## PERF2: the screen shaders are drawn once as an identity at the start and put back as they were.
 static func _warm_up(r: Node) -> void:
