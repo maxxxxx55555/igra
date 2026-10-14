@@ -9,6 +9,7 @@ A path in a `preload(...)`, an `extends "..."`, a scene's `ext_resource` or an a
 Any other literal path (a `load(...)`, a constant) is only read when that line runs, which a guard such as `OS.is_debug_build()` can keep from a release build: it prints "NOTE" and is read by a person.
 A path built from a format string (`"res://assets/textures/icons/skills/%s_96.png" % id`) names every project file its pattern matches: all of them left out by the filter is a FAIL (the game asks for files the bundle does
 not have; the `*` of a filter also matches `/`, so `icons/*.png` leaves out `icons/skills/*.png`), some of them left out a NOTE.
+A sound that `play_ui("<name>")` asks for is the file `assets/audio/ui/ui_<name>.ogg` (the path is never one string in the code, so no other reading sees it, and a missing file is silent: CORRECTION_LOG 245): it must exist, and be packed.
 With --bundle the same references are read against an exported bundle instead of the filter: every file they name that the filter does not leave out must be in the asset pack, as the export makes it
 (a script or scene as `<path>.remap`, an imported file as the imported file its `.import` names, anything else as itself); a file that is not is a FAIL.
 Dot folders (`.godot`, `.qa_logs`) and folders with a `.gdignore` are not the project's files. --demo proves the gate on a fixture.
@@ -23,6 +24,7 @@ import zipfile
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 SHIPPED = (".gd", ".tscn", ".tres", ".gdshader")
 PATH = re.compile(r"res://[^\"'\s)\]},]+")
+CUE = re.compile(r'play_ui\("([A-Za-z0-9_]+)"\)')
 PACK = "assetPackInstallTime/assets/"
 IMPORTED = re.compile(r'(?m)^path[.\w]*="res://([^"]+)"')
 
@@ -103,6 +105,12 @@ def violations(root, pats, names=None):
                     before = code[:m.start()].rstrip("\"' ").rstrip("(").rstrip()
                     when_loaded = path.suffix != ".gd" or before.endswith(("preload", "extends")) or names is not None
                     out.append("%s %s:%d: %s is %s" % ("FAIL" if when_loaded else "NOTE", rel, number, target, why(target)))
+            for m in CUE.finditer(code if path.suffix == ".gd" else ""):
+                target = "assets/audio/ui/ui_%s.ogg" % m.group(1)
+                if not (root / target).is_file():
+                    out.append('FAIL %s:%d: play_ui("%s") has no %s' % (rel, number, m.group(1), target))
+                elif lacking(target):
+                    out.append('FAIL %s:%d: play_ui("%s") names %s, which is %s' % (rel, number, m.group(1), target, why(target)))
     in_autoload = False
     for number, line in enumerate((root / "project.godot").read_text(encoding="utf-8", errors="replace").splitlines(), 1):
         if line.startswith("["):
@@ -122,7 +130,7 @@ def demo():
         (root / "scripts" / "tools").mkdir(parents=True)
         (root / "scripts" / "security" / "log.gd").write_text("extends RefCounted\n", encoding="utf-8")
         (root / "scripts" / "systems" / "guard.gd").write_text('const _Log := preload("res://scripts/security/log.gd")\n# preload("res://scripts/security/log.gd") in a comment\n', encoding="utf-8")
-        (root / "scripts" / "systems" / "fine.gd").write_text('const _T := preload("res://scripts/systems/guard.gd")\nvar f := "res://scripts/systems/%s.gd"\nfunc on_demand() -> Object:\n\treturn load("res://scripts/security/log.gd")\n', encoding="utf-8")
+        (root / "scripts" / "systems" / "fine.gd").write_text('const _T := preload("res://scripts/systems/guard.gd")\nvar f := "res://scripts/systems/%s.gd"\nfunc on_demand() -> Object:\n\treturn load("res://scripts/security/log.gd")\nfunc ring() -> void:\n\tplay_ui("ending_sting")\n', encoding="utf-8")
         (root / "scripts" / "tools" / "probe.gd").write_text('const _G := preload("res://scripts/security/log.gd")\n', encoding="utf-8")
         (root / "assets" / "icons" / "skills").mkdir(parents=True)
         (root / "assets" / "icons" / "skills" / "a_96.png").write_bytes(b"x")
@@ -133,15 +141,18 @@ def demo():
         (root / "export_presets.cfg").write_text('[preset.0]\nname="Android"\nexclude_filter="scripts/tools/*,scripts/security/*,assets/icons/*.png"\n', encoding="utf-8")
         found, count = violations(root, patterns("Android", root))
         fails = [v for v in found if v.startswith("FAIL")]
-        assert len(fails) == 3, found
+        assert len(fails) == 4, found
         assert any("guard.gd:1" in v and "log.gd" in v for v in fails), found
         assert any("project.godot" in v for v in fails), found
         assert any("icon.gd:1" in v and "2 of the 2" in v for v in fails), found
+        assert any("fine.gd:6" in v and "ending_sting" in v and "has no" in v for v in fails), found
         assert any(v.startswith("NOTE") and "fine.gd:4" in v for v in found), found
+        (root / "assets" / "audio" / "ui").mkdir(parents=True)
+        (root / "assets" / "audio" / "ui" / "ui_ending_sting.ogg").write_bytes(b"x")
         (root / "export_presets.cfg").write_text('[preset.0]\nname="Android"\nexclude_filter="scripts/tools/*"\n', encoding="utf-8")
         found, count = violations(root, patterns("Android", root))
         assert found == [], found
-        whole = {PACK + n for n in ("scripts/systems/guard.gd.remap", "scripts/systems/fine.gd.remap", "scripts/systems/icon.gd.remap", "scripts/security/log.gd.remap", ".godot/imported/a.etc2.ctex", "assets/icons/skills/b_96.png")}
+        whole = {PACK + n for n in ("scripts/systems/guard.gd.remap", "scripts/systems/fine.gd.remap", "scripts/systems/icon.gd.remap", "scripts/security/log.gd.remap", ".godot/imported/a.etc2.ctex", "assets/icons/skills/b_96.png", "assets/audio/ui/ui_ending_sting.ogg")}
         found, count = violations(root, patterns("Android", root), whole)
         assert found == [], found
         found, count = violations(root, patterns("Android", root), whole - {PACK + "scripts/security/log.gd.remap", PACK + ".godot/imported/a.etc2.ctex"})

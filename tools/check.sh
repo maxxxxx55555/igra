@@ -443,7 +443,7 @@ else
   bad "secret_scan (см. 'python tools/qa_sim/secret_scan.py')"
 fi
 if "$PY" tools/qa_sim/export_refs_check.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/export_refs_check.py >/dev/null 2>&1; then
-  ok "export_refs_check (no file that ships preloads, extends or lists as an autoload a file the export filter leaves out: CORRECTION_LOG 242)"
+  ok "export_refs_check (no file that ships preloads, extends or lists as an autoload a file the export filter leaves out, and every sound play_ui asks for exists: CORRECTION_LOG 242, 245)"
 else
   bad "export_refs_check (см. 'python tools/qa_sim/export_refs_check.py')"
 fi
