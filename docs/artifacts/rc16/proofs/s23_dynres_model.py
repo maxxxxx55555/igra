@@ -1,10 +1,10 @@
-# A model of scripts/systems/dynamic_resolution.gd (the Session 23 version after CORRECTION_LOG 244) and of the sequences of checks PERF1, PERF4, PERF5 and PERF6 (scripts/tools/rc16/perf23_checks.gd), run before any engine run:
-# the clean governor passes the four, and each mutation row of tools/qa_sim/s23_mutations.py (PERF4 to PERF6, and PERF1's own DROP_SCALE row) makes its checks fail. The model is the governor's logic written again in Python, not the script:
+# A model of scripts/systems/dynamic_resolution.gd (the Session 23 version after CORRECTION_LOG 244) and of the sequences of checks PERF1 and PERF4 to PERF7 (scripts/tools/rc16/perf23_checks.gd), run before any engine run:
+# the clean governor passes the five, and each mutation row of tools/qa_sim/s23_mutations.py (PERF4 to PERF7, and PERF1's own DROP_SCALE row) makes its checks fail. The model is the governor's logic written again in Python, not the script:
 # whether it is faithful is read from the two files side by side, and the engine run of the last launch is the proof.
 
 
 class Gov:
-    LOW_FPS, HIGH_FPS, LOW_SEC, HIGH_SEC, DROP_SCALE, CAP_SHARE = 30.0, 45.0, 2.0, 4.0, 0.7, 0.9
+    LOW_FPS, HIGH_FPS, LOW_SEC, HIGH_SEC, DROP_SCALE, CAP_SHARE, FLIP_SEC = 30.0, 45.0, 2.0, 4.0, 0.7, 0.9, 30.0
 
     def __init__(self, cap, mutate=()):
         self.cap = cap
@@ -14,8 +14,10 @@ class Gov:
         self.low = 0.0
         self.high = 0.0
         self.high_after = self.HIGH_SEC
+        self.since_return = self.FLIP_SEC
 
     def step(self, fps, seconds):
+        self.since_return += seconds
         limit = self.cap * self.CAP_SHARE
         low = self.LOW_FPS if "perf4" in self.mutate else min(self.LOW_FPS, limit)
         high = self.HIGH_FPS if "perf5" in self.mutate else min(self.HIGH_FPS, limit)
@@ -29,9 +31,12 @@ class Gov:
             self.low = 0.0
             self.high = 0.0
         if not self.dropped and self.low >= self.LOW_SEC:
+            doubled = self.HIGH_SEC if "perf6" in self.mutate else self.high_after * 2.0
+            reset = self.high_after if "perf7" in self.mutate else self.HIGH_SEC
+            self.high_after = doubled if self.since_return < self.FLIP_SEC else reset
             self.apply(True)
         elif self.dropped and self.high >= self.high_after:
-            self.high_after *= 1.0 if "perf6" in self.mutate else 2.0
+            self.since_return = 0.0
             self.apply(False)
 
     def apply(self, drop):
@@ -85,23 +90,25 @@ def capped(mutate=()):
     first = until_restored(g, 29.5, 60.0)
     feed(g, 24.0, 2.0)
     second = until_restored(g, 29.5, 120.0)
-    return {"PERF4": steady and dropped, "PERF5": first > 0.0, "PERF6": first > 0.0 and second > first, "waits": (first, second)}
+    feed(g, 29.5, 40.0)
+    feed(g, 24.0, 2.0)
+    third = until_restored(g, 29.5, 120.0)
+    return {"PERF4": steady and dropped, "PERF5": first > 0.0, "PERF6": first > 0.0 and second > first, "PERF7": first > 0.0 and third == first, "waits": (first, second, third)}
 
 
 def verdict(mutate=()):
     c = capped(mutate)
-    return {"PERF1": perf1(mutate), "PERF4": c["PERF4"], "PERF5": c["PERF5"], "PERF6": c["PERF6"]}, c["waits"]
+    return {"PERF1": perf1(mutate), "PERF4": c["PERF4"], "PERF5": c["PERF5"], "PERF6": c["PERF6"], "PERF7": c["PERF7"]}, c["waits"]
 
 
 if __name__ == "__main__":
     clean, waits = verdict()
-    print("clean:", clean, "waits before a return at the 30 cap", waits)
-    assert all(clean.values()), "the clean governor passes the four checks"
-    expected = {"perf4": {"PERF4", "PERF5", "PERF6"}, "perf5": {"PERF5", "PERF6"}, "perf6": {"PERF1", "PERF6"}, "drop_scale": {"PERF1", "PERF4"}}
-    rows = {"perf4", "perf5", "perf6", "drop_scale"}
-    for name in sorted(rows):
+    print("clean:", clean, "waits before a return at the 30 cap (first, second, third)", waits)
+    assert all(clean.values()), "the clean governor passes the five checks"
+    expected = {"perf4": {"PERF4", "PERF5", "PERF6", "PERF7"}, "perf5": {"PERF5", "PERF6", "PERF7"}, "perf6": {"PERF1", "PERF6"}, "perf7": {"PERF7"}, "drop_scale": {"PERF1", "PERF4"}}
+    for name in sorted(expected):
         v, _ = verdict((name,))
         got = {k for k, ok in v.items() if not ok}
         print("mutation %s fails %s" % (name.upper(), sorted(got)))
         assert got == expected[name], (name, got)
-    print("dynres_model: the clean governor passes PERF1 and PERF4 to PERF6; each mutation fails its own check (and the ones that depend on it, which have rows of their own)")
+    print("dynres_model: the clean governor passes PERF1 and PERF4 to PERF7; each mutation fails its own check (and the ones that depend on it, which have rows of their own)")
