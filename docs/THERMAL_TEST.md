@@ -1,7 +1,7 @@
 # Thermal test (Session 23, P1)
 
 The directive: simulate thermal throttling and hold 60 frames a second for 30 minutes. What this environment can and cannot do: it has no phone, and the dev machine gives the game neither a CPU or GPU temperature nor a battery (U19 of `docs/UNVERIFIABLE_HERE.md`). So the test reads what a throttle shows first, the frame time and the clock of the
-processor, over a load longer than the 30 minutes asked for (the 120-minute soak of `docs/LONG_SESSION_TEST.md`, launch 19, proof `s23_soak_e562ec9`), and checks the game's own answer to a slow frame by a logic check. **The 60 frames a second were not reached on this machine in any state of that run, so the criterion is not met and is not claimed.**
+processor, over a load longer than the 30 minutes asked for (the 120-minute soak of `docs/LONG_SESSION_TEST.md`, launch 19, proof `s23_soak_e562ec9`), and checks the game's own answer to a slow frame by a logic check. **The 60 frames a second were not reached on this machine in any state of that run, nor in the run at the final head (section 4), so the criterion is not met and is not claimed.**
 
 ## 1. The frame rate and the clock, in windows of 30 minutes
 
@@ -33,3 +33,23 @@ Over the whole run the processor performance was 139 % at the median (93 % at th
 
 **TH-1.** On a mid-range phone, play the power station for 20 minutes from a full charge and write down the frame time at the start and at the end, the heat of the back of the phone and the battery used. If the frame time rises over the 20 minutes, set Render Scale to 0.7 for the rest of the test and note whether the heat falls: that tells whether the governor
 or a lower tier is the answer (`docs/RELEASE_RUNBOOK.md` section 4 has the smoke test this belongs to).
+
+## 4. The 120 minutes at the final head (launch 24)
+
+The same windows for the soak of `docs/LONG_SESSION_TEST.md` section 5 (launch 24, ledger row 117, proof `s23_last_a4acbb5`, `docs/artifacts/rc16/proofs/s23_last_a4acbb5.attach.soak_final.log` and `.attach.soak_final_rss.csv`; the tier 2, the 60 FPS cap, the quality
+manager off, 1280 x 720; the machine shared, the session idle after about minute 26):
+
+| Minutes | Frames a second (median, least) | p95 of a minute (median) | Frames over 50 ms | Processor performance (median, least) | Processor utility (median) |
+|---|---|---|---|---|---|
+| 1 to 30 | 57.3, 54.3 | 19.8 ms | 150 | 149 %, 139 % | 45 % |
+| 31 to 60 | 58.2, 49.4 | 18.1 ms | 294 | 140 %, 124 % | 48 % |
+| 61 to 90 | 58.5, 53.6 | 18.1 ms | 170 | 139 %, 125 % | 38 % |
+| 91 to 120 | 57.7, 45.4 | 20.0 ms | 256 | 140 %, 131 % | 48 % |
+
+Over the whole run the processor performance was 141 % at the median (124 % at the least, 158 % at most), under 100 % in none of 116 samples, and 150 % in the first ten samples against 138 % in the last ten.
+
+- **No slowing over time, and no throttle that this machine can show:** the frame rate of the first window and of the last are 57.3 and 57.7 at the median, the clock never fell under the base clock, and the load did not fall away in
+  the last windows (a utility of 48 %, against 18 % in launch 19's last window).
+- **The 30 Hz state of launch 19 did not recur** (no window reads under 49.4 frames a second at its least minute, and the median minutes are 57.3 to 58.5): see `docs/LONG_SESSION_TEST.md` section 5 for what that does and does
+  not say about the quality manager.
+- **The 60 frames a second for 30 minutes of the directive are not reached** either: the best window is 58.5 at the median, and the criterion stays unmet and unclaimed; the 30-minute thermal question on a phone is TH-1.

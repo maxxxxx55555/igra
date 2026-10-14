@@ -83,16 +83,34 @@ human-readable ("1.0", then "1.0.1", …).
    (promote the tested AAB). Use a staged rollout: 10 % → 50 % → 100 %, watching Android vitals
    (crashes, ANRs) between steps.
 
-## 4. Device smoke test before every promotion
+## 4. First launch on a phone: the one checklist (single source)
 
-1. Install from the internal-test link. First boot: no crash, and the language picker works.
+Every other document points here (`docs/release_checklist.md` step 4, `docs/RESUME_NOTE.md`, `docs/STORE_SUBMISSION.md`, `docs/UNVERIFIABLE_HERE.md` U1). Run it on a mid-range phone with the bundle of the pass
+(`build/tls.aab`, `version/code` 2, bytes and sha256 in `docs/RELEASE_ARTIFACTS.md`) installed from the internal-test link, before every promotion. Write what you see in the U-row named at the step: a number or a
+sentence is an answer, "fine" is not. A step that fails goes to `docs/KNOWN_ISSUES.md` with the phone's model and Android version.
+
+**A. Does it run**
+
+1. First boot: no crash, the loading screen reads "Last Streetlight", and the language picker works.
 2. New Game → tutorial → first generator runs; the district lights up.
 3. Save, force-close, relaunch, **Continue**: same district, same inventory.
-4. Ads. A: no ad offers anywhere (death screen, HUD battery). B: the rewarded ad plays and then
-   grants its reward.
-5. Switch language through all 13 locales; titles and HUD fit.
-6. 20 minutes of play: FPS stays ≥ 30 and the device doesn't overheat (feeds `docs/PERF_PASS.md` §2).
-7. Suspend and resume mid-district; the daily challenge card still shows.
+4. Ads. A: no ad offers anywhere (death screen, HUD battery); this is the case of the bundle of the pass. B: the rewarded ad plays and then grants its reward.
+5. Switch language through all 13 locales; titles and HUD fit, and the Sprint and Stealth buttons hold their longest label (pt_BR "FURTIVIDADE": U13).
+6. Suspend and resume mid-district; the daily challenge card still shows.
+
+**B. The numbers**
+
+7. The frame time at the D1 spawn and in the power station (any frame-time overlay) and the tier the first start picked (Settings): does it hold 30 FPS or more? (U1) Does the quality manager step the tier down and
+   back up in the 20 minutes of step 8? (U23)
+8. 20 minutes of play: FPS stays ≥ 30 and the device doesn't overheat (feeds `docs/PERF_PASS.md` §2); the battery drop and the heat over 30 minutes, and the frame rate of the last minutes against the first (U19).
+
+**C. The feel and the look** (one sentence each)
+
+9. Touch: the two-finger pinch zoom (0.8 to 1.35) and the drag to a quick slot (U5); the touch cluster, the Button Size slider at 1.5 and the first-run calibration dialog under a thumb (U13).
+10. Look: the eight states of U6 (the warm lamps, the grain, the ember vignette on a hit, the Ultra sprint blur); the near-black facades on an OLED at the lowest and the highest brightness (U18); the menu art in a dark
+    room and in a bright one (U12); the edges at Medium (2x MSAA) and at Ultra (4x) (U21); the 16 px body text of the HUD, the inventory and the settings (U15).
+11. Export Save and Import Save through the phone's Downloads folder: start a Hardcore run, Export Save, die, Import Save from the menu (U10).
+12. Sound, with headphones: the reverb of a street, an alley and an interior (U3), and a fight (U8: does the music distort?).
 
 ## 5. After release
 

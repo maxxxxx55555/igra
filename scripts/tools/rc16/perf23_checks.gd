@@ -196,7 +196,7 @@ static func _quality_manager(r: Node) -> void:
 	var raised: bool = first > 0.0 and Engine.max_fps == 60
 	_feed(qm, 60.0, 60.0)
 	var capped: bool = _tier() == 2
-	r._ok(early and dropped and held and raised and capped, "QM1 quality manager: 4.5 s at 24 FPS keeps the tier (%s), 5 s drops it to 1 with the 30 FPS cap (%s), 15 s at 29.5 FPS neither drop it again nor raise it (%s), the raise comes (%s) with the 60 FPS cap, and a minute at 60 FPS goes no higher than the player's tier (%s)" % [early, dropped, held, raised, capped])
+	r._ok(early and dropped and held and raised and capped, "QM1 quality manager: 4.5 s at 24 FPS keeps the tier (%s), 5 s drops it to 1 with the 30 FPS cap (%s), 15 s at 29.5 FPS neither drops it again nor raises it (%s), the raise comes (%s) with the 60 FPS cap, and a minute at 60 FPS goes no higher than the player's tier (%s)" % [early, dropped, held, raised, capped])
 	SettingsManager.set_graphics_tier(2)
 	_feed(qm, 24.0, 5.0)
 	var one: float = _until(qm, 29.5, 700.0, 2)

@@ -222,13 +222,13 @@ Each step names where the detail lives; it does not repeat it.
 
 1. **Rotate the key first** (`docs/release_checklist.md` step 0, with the exact places): it takes minutes and nothing else depends on it, but a key that sat in a public repository is worth rotating before a policy page and a store account point at that repository.
 2. **Check the file.** `sha256sum build/tls.aab` must print the value of §1; `jarsigner -verify build/tls.aab` must print `jar verified.`.
-3. **Phone smoke test** (U1, U5, U6, U12 and U13 of `docs/UNVERIFIABLE_HERE.md`, and U10 for Export Save): install the bundle through an internal-test link and run `docs/RELEASE_RUNBOOK.md` §4. The bundle holds the seven fixes of Sessions 20 and 21 (§9).
+3. **Phone smoke test:** the one checklist is `docs/RELEASE_RUNBOOK.md` §4 (its answers go to the U-rows it names in `docs/UNVERIFIABLE_HERE.md`): install the bundle through an internal-test link and run it. The bundle holds the fixes of Sessions 20 to 23 (§9).
 4. **Make the images** with the command of §2, and read each of the seven files once.
 5. **Host the policy** of §3 and note its URL.
 6. **Play Console:** create the app and fill the dashboard with §6, the rating with §4 and the data safety form with §5 (`docs/RELEASE_RUNBOOK.md` §3 is the click path); main listing from §2 and `store/listing.md`; translations from `docs/STORE_KIT.md`.
-7. **Internal testing:** upload `build/tls.aab` as "1.0 (1)", add testers, start the rollout (`docs/RELEASE_RUNBOOK.md` §3.6).
+7. **Internal testing:** upload `build/tls.aab` as "1.0 (2)" over the v8 release if one is in the track, add testers, start the rollout (`docs/RELEASE_RUNBOOK.md` §3.6).
 8. **Closed testing** if the dashboard demands it for a new personal account (12 testers for 14 days at the time of writing; **check in Console**), then production with a staged rollout (§3.7 and §3.8 of the runbook).
-9. **Every upload after the first** needs `version/code` raised (`export_presets.cfg:16`).
+9. **Every upload after the first** needs `version/code` raised (`export_presets.cfg:16`; the bundle of Session 23 carries 2).
 
 ## 8. What was corrected while drafting (stale lines in the older documents)
 
@@ -247,6 +247,6 @@ Each step names where the detail lives; it does not repeat it.
   lobby screen is archived; three autoloads of the multiplayer code exist and open no socket until a screen asks
   (`docs/artifacts/rc16/proofs/s20_net_reach.out`). CORRECTION_LOG 173 is latent for that reason (174 is fixed).
 - **Nothing on a phone was run.** The frame rate, the heat, the feel of the touch controls and Export Save through Downloads
-  (U1, U5, U6, U10, and for the HUD of Session 22 U12 and U13) are the smoke test's questions.
+  (the rows of the phone checklist, `docs/RELEASE_RUNBOOK.md` §4: U1, U3, U5, U6, U8, U10, U12, U13, U15, U18, U19, U21 and U23) are the smoke test's questions.
 - **No legal review.** The policy is a plain-language draft of what the build does, not legal advice; several jurisdictions ask for a
   named controller and an address, which are yours to add.

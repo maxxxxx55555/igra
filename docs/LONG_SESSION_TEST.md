@@ -17,8 +17,7 @@ and `.attach.soak_stress.log`.
 | saves | a save and a load every ten minutes (eleven or twelve pairs: the log prints none of them) and no `SaveSystem` warning |
 | the worst frame | 141.8 ms at the median of the minutes (150.0 ms at most): the one freeze of a district change (`docs/STREAMING_TEST.md`), not a stall in between |
 
-**Verdict against the criterion "two hours without a crash": met on `e562ec9`.** The run found three defects that the short runs had not (CORRECTION_LOG 233 to 235); they were fixed after it, in the commit that records them, and each has a check (SHADER1, UISFX1, LEAK1). The soak itself was not repeated for two more hours
-at the final head (the launch budget is 24); the effect of the fixes on a long run is read in section 4, on a run of 12 minutes.
+**Verdict against the criterion "two hours without a crash": met on `e562ec9`.** The run found three defects that the short runs had not (CORRECTION_LOG 233 to 235); they were fixed after it, in the commit that records them, and each has a check (SHADER1, UISFX1, LEAK1). The soak was repeated for two hours at the final head, `a4acbb5`, in the last launch (section 5); the effect of the fixes on a short run is read in section 4, on a run of 12 minutes.
 
 ## 2. The frame rate over the run, and why it is not a verdict
 
@@ -32,7 +31,7 @@ The mean frame rate of a minute never reached 55: 0 of 120 minutes, the median 2
 
 Frames over 50 ms: 4,244 of 225,837 (1.9 %), 3,488 of them in the first 53 minutes. **The last state has a probable cause that was found after the run (CORRECTION_LOG 241), and no proof.** The game's quality manager (T17, on by default, and the soak runner left it on) steps the graphics tier down after 5 s under 30 FPS, and Low and Medium cap the frame rate at 30
 (`SettingsManager.GRAPHICS_TIERS`): in the shared minutes 13 to 53 the mean was 28.8 frames a second, so the manager stepped down, and from then on the 45 FPS it needed to step up could not come under a cap of 30 (and 29.x at the cap counted as "under 30", so it went on down). A frame time on one 30 Hz
-interval with the processor nearly idle is what that cap looks like. The log of this run carries neither the tier nor the cap, so it is a reading of the code against the log and not a repeat; the soak of the last launch prints both. The other candidates stay (the system lowering the priority of a window in the
+interval with the processor nearly idle is what that cap looks like. The log of this run carries neither the tier nor the cap, so it is a reading of the code against the log and not a repeat; the soak of launch 24 printed both (section 5). The other candidates stay (the system lowering the priority of a window in the
 background, the power plan, the refresh rate of the display, a thermal or power limit; the dev machine exposes no temperature and the sampler runs without administrator rights). So the table says what the machine did, not what the game costs: the cost of the game is read from the quiet minutes and from the ablation of `docs/PERF_PASS.md`. **The target of 60 frames a second sustained is not met on this machine in any state of this run** and is not claimed;
 on a phone it is U1 and U19 of `docs/UNVERIFIABLE_HERE.md`.
 
@@ -64,3 +63,26 @@ ledger row 115, proof `s23_final_f2e628a`, `.attach.soak_final.log` and `.attach
 
 The machine behaved as in the first twelve minutes of the long run (50.7 frames a second there at the median, 58.2 here), so the frame rate is the game's cost on a quiet machine, and it is near 60. A run of 12 minutes does not reach the states of section 2. It shows that the one leak measured
 is gone (the nodes); it cannot show a growth of the size of the long run's static memory slope (6.8 MiB an hour), which is read in `docs/MEMORY_TEST.md`.
+
+## 5. The 120 minutes again, at the final head (launch 24)
+
+Launch 24 (ledger row 117, proof `s23_last_a4acbb5`, head `a4acbb5`) ended with `tools/qa_sim/soak soak a4acbb5 120 7500`: the same cycle, windowed at 1280 x 720, muted, **the High tier with the 60 FPS cap** (the start
+line prints `tier=2 cap=60`, `docs/artifacts/rc16/proofs/s23_last_a4acbb5.attach.soak_final.log:4`) and **the quality manager switched off** (the runner does it since CORRECTION_LOG 241). Evidence: `docs/artifacts/rc16/proofs/s23_last_a4acbb5.attach.soak_final.log` and `.attach.soak_final_rss.csv`; the tables are
+`python tools/qa_sim/soak_report.py --soak <log> --rss <csv>`. The machine was shared as in launch 19 (the owner's other programs; no process list was kept), and the session itself ran a few short scripts in the first 25 minutes
+(a citation gate at about minute 13, a visual gate at 15, two commits at 16, the reading of images at 19 to 22): minutes 13 to 15 and 17 to 19 read a p95 of 20.8 to 30.6 ms against 18.1 for most, but so did minutes 6, 7 and 11 (22.0 to 26.5 ms)
+when the session was only reading documents, so the scripts are not shown to be the cause. From about minute 26 to the end the session was idle, and the five weakest minutes of the run (41, 53, 65, 109 and 120) fall in that time, so they are the machine's own.
+
+| | Reading |
+|---|---|
+| the process | ran 120 minutes (120 `[soak] minute` lines and `[soak] SUMMARY minutes=120` at line 246), quit on its own, and the row ends `# EXIT=0` (`soak soak rc=0`) |
+| script and engine errors | none while it ran: the list of `tools/qa_sim/engine_errors.sh` matches no line of the log (1,245 in the first long run); the `ERROR: ... leaked at exit` lines after the summary (lines 247 to 258) are the leaks the engine prints at every exit |
+| district changes | 120, all `ok=true`: the new district stood in 253.2 ms at the median (388.8 ms at most) and was settled in 333.3 ms (471.4 ms at most), 2 frames over 50 ms at the median (4 at most), every one far under the 2 s of the directive |
+| the frame rate | the mean frame rate of a minute 45.4 at the least, **58.0 at the median**, 59.7 at the most; 114 of 120 minutes at 55 or more; the p95 of a minute 18.38 ms at the median (16.67 to 41.67 ms), within 33 ms in 115 of 120 minutes; the p99 above 33.4 ms in 31 minutes (63.6 ms at most) |
+| frames over 50 ms | 870 of 414,148 (0.2 %); the worst frame of a minute 141.7 ms at the median (150.0 ms at most): the freeze of a district change |
+
+**Verdict against the criterion "two hours without a crash": met on `a4acbb5`, the head that ships, with no script error and no engine error.** The three states of launch 19 did not recur: the median minute is 57.9 frames a second
+in minutes 1 to 12, 57.4 in minutes 13 to 53 and 58.3 in minutes 54 to 120, and no stretch of the run sat on a 30 Hz interval (the weakest, minute 120, read 45.4 frames a second and a p95 of 39.4 ms). That is one test of the
+explanation of section 2 and not its proof: launch 19 ran the head before the fixes with the manager on and no tier in its log, and this run changed the head and the manager together (it was off, so it could not step the tier
+down); it says that the game and this machine hold about 58 frames a second at 1280 x 720 for two hours when nothing lowers the tier, and not that the manager caused the state of launch 19. **The target of 60 frames a second
+sustained is still not met** (58.0 at the median minute, the best minute 59.7, and at full HD the windowed gate reads RED: `docs/PERF_PASS.md` section 0b); on a phone it is U1 and U19 of `docs/UNVERIFIABLE_HERE.md`. The
+numbers over the run are read in `docs/MEMORY_TEST.md` section 6 and the clock in `docs/THERMAL_TEST.md` section 4.

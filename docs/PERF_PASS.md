@@ -9,6 +9,36 @@ Tags:
 - **NEEDS-GODOT-RECONFIRM:** only a windowed or on-device run can settle it. The last measured value
   is given if one exists.
 
+## 0b. Session 23, the final head (launch 24, 2026-10-14): the windowed gate reads RED
+
+`tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn 300`, step 3 of the last launch (ledger row 117, `s23_last_a4acbb5`, head `a4acbb5`), the High tier (the tier a first start has), 2x MSAA, vsync on (the
+settings default), the quality manager off (the runner switches it off), the same dev iGPU, Master muted. The window size is not recorded in this log (the two ablations of the same week read 1920 x 1055). Raw: `docs/artifacts/rc16/proofs/s23_last_a4acbb5.attach.gate_perf_l24.log`.
+
+| District | Draw calls | Primitives | Objects | Frame p95 (median of 3 reads) | GPU mean, 3 reads | Frame mean, 3 reads |
+|---|---|---|---|---|---|---|
+| D1 suburbs spawn | 150 (< 200 OK, `gate_perf_l24.log:4`) | 51,733 | 415 | **35.00 ms** (budget 33, `:9`) | 19.95, 20.36, 19.07 ms (`:6-8`) | 37.28, 42.50, 38.72 ms |
+| D11 power_station | 140 (< 350 OK, `:14`) | 48,463 | 286 | **38.63 ms** (`:14`) | 22.63, 23.19, 22.72 ms (`:11-13`) | 36.70, 42.97, 43.40 ms |
+
+Video memory 125.0 MiB (< 512 OK), texture memory 97.5 MiB (`:9`), static memory 101.3 MiB and 154 particles emitting (`:10`). The verdict is `over budget: ["p95 frame time"]` and `DONE fails=1` (`:15-16`), exit code 1:
+**the windowed gate is RED at the final head, and nothing was changed to turn it green** (AF4; CORRECTION_LOG 248).
+
+What is read from the code and the other logs of the same launch (not tested by a run of its own):
+- Session 22 read p95 28.79 ms (D1) and 23.61 ms (D11) with GPU means of 15.37 and 16.42 ms (section 0a): at the same tier the GPU mean is about 4.4 ms (D1) and 6.4 ms (D11) higher (the means of the three reads),
+  the draw calls 8 and 11 higher (142 to 150, 129 to 140), the frame mean 9.5 and 15.8 ms higher.
+- The same machine half an hour later at 1280 x 720 (the window of the probe and the soak, `scripts/tools/_rc16_probe_runner.gd:15`) reads, in the probe's three p95 reads of the suburbs and the power station, 33.33, 16.67 and
+  16.67 ms with GPU means of 13.59, 6.83 and 8.45 ms (`docs/artifacts/rc16/proofs/s23_last_a4acbb5.attach.rc16_probe_after.log:5-6, 27-28, 30-31`). 1920 x 1055 has 2.2 times the pixels and this iGPU is fill-bound: the gate reads the cost of a full-HD frame, not of the game at any size.
+- The gate keeps vsync on, and on a 60 Hz display (the refresh rate was not written down: U22) a frame of 16.7 to 33.3 ms is shown at the second vblank, so a GPU frame of 19 to 23 ms reads about 33 ms or more and the budget of 33.0 ms
+  sits below the 33.33 ms of a steady 30 FPS. The ablation of launch 21 (vsync off, 4x MSAA, the same window) read a p95 of 34 ms in its first three baselines at the suburbs, 21 to 28 ms in its last six and 18 to 19 ms
+  in the power station (`s23_fix2_5ad1387.attach.perf_ablation_scene.log`): the reading of one machine moves with the state of the GPU and the load.
+- The tier-following MSAA of this session (4x to 2x at High, MSAA-23) did not bring the gate under its budget. The cost of the 2x was not measured: both ablations ran at 4x (`msaa=2` in their header is the engine's enum for 4x,
+  `msaa=1` is 2x), and they read the 4x at 5.5 to 8.9 ms (section "Session 23" below).
+- What a phone does: a first start is High (`graphics_tier` 2, a 60 FPS cap, 2x MSAA: `scripts/systems/settings_manager.gd:84`), and the quality manager (5 s under 30 FPS) and dynamic resolution (2 s under 30 FPS, on by
+  default on a phone) step it down; the gate runs with the manager off and without dynamic resolution. Whether a phone holds 30 FPS at its own resolution is U1 and U21 of `docs/UNVERIFIABLE_HERE.md`.
+
+**Decision, owner row O-1 (`docs/release_checklist.md`): the red stands.** A change that turns it green is a visible one (the 4x MSAA 5.5 to 8.9 ms, the overlay's chromatic aberration 1.8 ms, the HUD 2.3 to 4.1 ms of the
+ablations): it changes the shipped look, and a runtime change after the frames of launch 24 would stale them (AF3, F4) with no launch left to shoot them again. The budget of 33.0 ms (under the period of a 30 FPS frame) and the vsync
+of the gate are rows of `docs/KNOWN_ISSUES.md` for the next pass.
+
 ## 0a. Session 22 windowed re-measure (Local, 2026-10-12)
 
 `tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn 300` and the audio scene, one ledger row (89, `s22_windowed_gates`, head `700e1ed`, runtime of `ccf61ee`),
@@ -144,4 +174,4 @@ The package size was measured by the one release export at the end of the pass (
   The fog cards, which had never drawn (CORRECTION_LOG 233), cost nothing measurable now that they do. The 4x MSAA is the largest single part by far.
 - **What was changed for it.** The samples of the 3D follow the tier: off at Low, 2x at Medium and High, 4x at Ultra (check MSAA1); the project default is 2x so the menu and a phone start there. A pool of light or a halo whose opacity is 0 (the DARK stage, the first hours of the game) is hidden instead of drawn blind (check POOL1). The HUD and the overlay were not touched: the HUD's cost is spread over its parts and the overlay's layers each cost 0.5 to 1.8 ms.
 - **Not built, with the reason:** the LOD swap, occlusion culling and texture streaming (`docs/KNOWN_ISSUES.md`, Session 23).
-- **The quality manager was in the way, and broken (CORRECTION_LOG 241).** `scripts/systems/quality_manager.gd` (T17) steps the tier down after 5 s under 30 FPS and up after 10 s over 45, and the tiers Low and Medium set the frame cap to 30: a manager that had stepped down could not step up again, a machine that held the cap read 29.x and was stepped down again, and the tier it applied was saved as the player's own. Every windowed run of the pass left it on, so a loaded machine changed tier under a measurement: the gate readings of launches 18 and 19 (p95 42 to 52 ms, under 30 FPS in places) and the soak of launch 19 (the 30 Hz state) are exposed to it, and the two ablations (GPU frames of 19 to 25 ms, over 30 FPS) were not likely to be. The limits follow the cap now, each drop doubles the wait before a raise, the player's tier is saved apart (`graphics_ceiling`), QM1 to QM4 are written to hold it (they have not run in an engine yet), and the runners switch it off (`QualityManager.enabled = false`) and print the tier; the perf gate of the last launch is the first read with it off.
+- **The quality manager was in the way, and broken (CORRECTION_LOG 241).** `scripts/systems/quality_manager.gd` (T17) steps the tier down after 5 s under 30 FPS and up after 10 s over 45, and the tiers Low and Medium set the frame cap to 30: a manager that had stepped down could not step up again, a machine that held the cap read 29.x and was stepped down again, and the tier it applied was saved as the player's own. Every windowed run of the pass left it on, so a loaded machine changed tier under a measurement: the gate readings of launches 18 and 19 (p95 42 to 52 ms, under 30 FPS in places) and the soak of launch 19 (the 30 Hz state) are exposed to it, and the two ablations (GPU frames of 19 to 25 ms, over 30 FPS) were not likely to be. The limits follow the cap now, each drop doubles the wait before a raise, the player's tier is saved apart (`graphics_ceiling`), QM1 to QM4 hold it (they ran in an engine in launch 24, all `ok`: `docs/artifacts/rc16/proofs/s23_last_a4acbb5.attach.closeout_s23_l24.log`), and the runners switch it off (`QualityManager.enabled = false`) and print the tier; the perf gate of launch 24 is the first read with it off, and it reads a p95 of 35.00 and 38.63 ms (section 0b): with the manager off the gate is still over its budget, so the manager was not the whole of the failures of launches 18 and 19.

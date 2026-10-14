@@ -47,6 +47,6 @@ findings at the end of this pass; the full scan is informational and is the numb
 | 4 graphics tiers | the Settings screen | `GRAPHICS_TIERS` in `scripts/systems/settings_manager.gd:306` | 4 rows: holds |
 | 7 onboarding cards | `docs/FIRST_5_MINUTES.md` | `PANELS` in `scripts/ui/onboarding_overlay.gd:9` | 7: holds |
 | the signed bundle is 136,508,347 bytes | `docs/RELEASE_ARTIFACTS.md` | `stat build/tls.aab` | 136,508,347: holds **for the bundle of `v8.0.0-shipping`**; the code has changed since, so it is rebuilt at the ship step and the number replaced |
-| D1 142 draw calls, p95 28.79 ms | `docs/PERF_PASS.md:19` | the windowed perf gate | measured at `v8.0.0-shipping`; **not read at the final hash yet**: the readings of Session 23 (launches 18 and 19) failed the gate's p95 on a shared machine with the quality manager on (`docs/PERF_PASS.md`, Session 23), and the last launch reads it again |
+| D1 142 draw calls, p95 28.79 ms | `docs/PERF_PASS.md:19` | the windowed perf gate | measured at `v8.0.0-shipping`; **false at the final head**: launch 24 (`a4acbb5`, the quality manager off) reads D1 150 draw calls with a p95 of 35.00 ms and D11 140 with 38.63 ms against the budget of 33 ms: the windowed gate is RED (`docs/PERF_PASS.md` section 0b) |
 
 No claim of the sample was false at HEAD. The two that are true of an older tree are the bundle and the D1 numbers, and both are re-measured by the last steps of the pass.

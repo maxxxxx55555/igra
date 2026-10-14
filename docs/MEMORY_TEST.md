@@ -52,3 +52,25 @@ apart: minutes 1 and 12 both stand in the first district.
 **The nodes, which the long run grew by 4.7 a minute, are flat** (and the orphans, the video memory and the texture memory with them). The objects and the static memory rose while the eleven districts were visited the first time (the static memory from 105.5 MiB at the first to 111.2 MiB at the eleventh) and stood at 111.2 and 111.1 MiB on the second visit
 of the first district: that is what the first visit of a district costs in cached resources, and the second does not, which is the pattern of the probe of `docs/STREAMING_TEST.md` (101.3 to 105.0 MiB over ten cold visits, 104.8 to 105.2 MiB through ten warm ones). **What a run of 12 minutes cannot show** is a growth of the size of the long run's static memory slope (6.8 MiB an hour, 0.1 MiB a minute): the claim of
 this document for the final head is the nodes and the flat video and texture memory, and the 15.40 MiB of section 1 stays the reading of a long run, taken on the head before the fixes. The log holds no engine error (the list of `tools/qa_sim/engine_errors.sh` matches nothing).
+
+## 6. The 120 minutes at the final head (launch 24)
+
+The soak of `docs/LONG_SESSION_TEST.md` section 5 (launch 24, ledger row 117, proof `s23_last_a4acbb5`, head `a4acbb5`, `docs/artifacts/rc16/proofs/s23_last_a4acbb5.attach.soak_final.log` and `.attach.soak_final_rss.csv`; the same cycle, four monsters shot dead a minute, the
+tier 2 and the quality manager off) reads the counters again, after the fix of section 3.
+
+| Reading | First 5 minutes | Last 5 minutes | Growth | Slope over the run |
+|---|---|---|---|---|
+| engine static memory | 107.50 MiB | 117.30 MiB | +9.80 MiB | +3.7 MiB an hour (+0.5 MiB an hour from minute 60) |
+| objects | 4,552 | 4,697 | +145 | |
+| nodes | 1,321 | 1,340 | +19 | (+533 in the first long run) |
+| orphan nodes | 6 | 6 | +0 | none |
+| video memory | 89.10 MiB | 89.40 MiB | +0.30 MiB | none |
+| texture memory | 61.50 MiB | 61.70 MiB | +0.20 MiB | none |
+
+**Against the criterion: the static memory grew by 9.80 MiB in two hours (the summary line, `soak_final.log:246`, reads +9.75), under the 50 MB limit, and it is a plateau, not a slope**: it rose from 105.4 MiB at the first minute to
+117.1 MiB at the 40th, while the eleven districts were visited for the first time, and stood between 116.9 and 117.4 MiB in each of the last 81 minutes. The nodes, which the first long run grew by 4.7 a minute, grew by 19 in two hours;
+the same district stood at 1,299 to 1,301 nodes at its second to eleventh visit (the suburbs, whose first visit is the start of the run, 1,105 nodes), and each of the ten others held within 12 nodes across its eleven visits
+(the ranges, per district, are in the lines of `[probe] stream pass=soak`). The orphans, the video memory and the texture memory are flat, as in section 1.
+
+The working set of the process, from the Windows counters, was 569.8 MiB in the first five minutes and 249.7 MiB in the last five (-320.0 MiB, a slope of -203.7 MiB an hour), with 574.5 MiB at most: it fell, as in section 2, which is the
+system trimming the working set of a process and not the game freeing memory; it shows no growth. The log holds no engine error (the list of `tools/qa_sim/engine_errors.sh` matches nothing).
