@@ -236,3 +236,4 @@ commit, and revert the batch the same turn on red.
 | The shipped bundle | `build/tls.aab`, 136,653,029 bytes | unchanged by construction: every removed path was on the export exclusion list or outside the project's scan roots; the runtime paths differ from the bundle's commit by none |
 | Backups | - | tag `pre-purge-68e6c9d` (local, never pushed); the 74 files of the batches in `..\_BACKUPS\2026-10-15_18-58\`; the thin bundle of the rejected branch; the log archive |
 
+Session 25 (2026-10-16): the cleanup of ten branches, eight tags and 246 ignored files is logged in `docs/CLEANUP_LOG.md`; the branch counts of 12.6 are the state at the end of Session 24.

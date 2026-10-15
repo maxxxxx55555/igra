@@ -1,0 +1,7 @@
+# proof s25_equiv_i18n_fuzz
+# utc 20261015T214359Z
+# head 53a5f83 (uncommitted paths: 4)
+# env none
+# cmd python tools/qa_sim/i18n_placeholder_fuzz.py
+i18n_placeholder_fuzz: 1560 key(s), 497 call(s), 0 finding(s)
+# EXIT=0

@@ -1,0 +1,96 @@
+# proof s25_gemini_check
+# utc 20261015T214316Z
+# head 53a5f83 (uncommitted paths: 0)
+# env none
+# cmd python -I /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s25_gemini_check.py .
+"""Session 25 (G1): do the Gemini artifacts the directive names exist? Checks the nine paths in the working tree, then searches every ref (branches, pull-request
+heads, tags) and the whole commit history for their names, then lists the in-repo files that serve the same five purposes. Read-only. Prints itself first.
+usage: python -I s25_gemini_check.py <repo>"""
+import pathlib
+import subprocess
+import sys
+
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+repo = pathlib.Path(sys.argv[1]).resolve()
+NAMED = [
+    "tools/qa_sim/proofs_tolerance_audit.py",
+    "tools/qa_sim/achievement_reachability_sim.py",
+    "tools/qa_sim/save_migration_sim.py",
+    "tools/qa_sim/i18n_parity_audit.py",
+    "tools/qa_sim/security_hmac_audit.py",
+    "data/i18n_glossary.json",
+    "docs/gemini/ACHIEVEMENT_50_SPEC.md",
+    "docs/gemini/CI_PIPELINE_SPEC.md",
+    "docs/gemini/WORLD_CLASS_AUDIT_REPORT.md",
+]
+GEMINI_ONLY = ["proofs_tolerance_audit", "achievement_reachability_sim", "i18n_parity_audit", "security_hmac_audit", "ACHIEVEMENT_50_SPEC",
+               "CI_PIPELINE_SPEC", "WORLD_CLASS_AUDIT_REPORT", "docs/gemini/", "world_class_audit"]
+
+
+def git(*args):
+    return subprocess.run(["git", *args], cwd=repo, capture_output=True, text=True, encoding="utf-8", errors="replace").stdout
+
+
+present = 0
+for p in NAMED:
+    f = repo / p
+    if f.is_file() and f.stat().st_size:
+        present += 1
+        print("present %7d bytes %5d lines  %s" % (f.stat().st_size, len(f.read_text(encoding="utf-8", errors="replace").splitlines()), p))
+    else:
+        print("ABSENT  %s" % p)
+print("named paths present in the working tree: %d of %d" % (present, len(NAMED)))
+
+refs = [r for r in git("for-each-ref", "--format=%(refname)", "refs/remotes", "refs/heads", "refs/tags").split("\n") if r]
+hit_refs = []
+for r in refs:
+    names = git("ls-tree", "-r", "--name-only", r).split("\n")
+    if any(any(g in n for g in GEMINI_ONLY) for n in names):
+        hit_refs.append(r)
+print("refs searched (remote branches, pull-request heads, local branches, tags): %d; refs holding a Gemini-only name: %d %s" % (len(refs), len(hit_refs), hit_refs[:5]))
+hist = sorted({n for n in git("log", "--all", "--name-only", "--format=").split("\n") if any(g in n for g in GEMINI_ONLY)})
+print("paths with a Gemini-only name anywhere in the history of any ref: %d %s" % (len(hist), hist[:5]))
+
+print("in-repo equivalents of the five purposes (name: exists, lines):")
+for purpose, files in (
+    ("proofs audit", ["tools/qa_sim/proofs_audit_sim.py"]),
+    ("achievement reachability", ["tools/qa_sim/achievements_sim.py", "docs/ACHIEVEMENT_TRIGGER_SPEC.md"]),
+    ("save migration", ["tools/qa_sim/save_migration_sim.py", "docs/SAVE_MIGRATION_MATRIX.md"]),
+    ("i18n parity", ["tools/qa_sim/i18n_placeholder_fuzz.py", "tools/qa_sim/i18n_truth_gate.py", "data/i18n_glossary.json"]),
+    ("security and HMAC", ["tools/qa_sim/secret_scan.py", "scripts/core/save_system.gd", "scripts/security/attack_sim.gd", "scripts/tools/_save_integrity_check.gd",
+                           "docs/SECURITY_HARDENING.md"]),
+):
+    for rel in files:
+        f = repo / rel
+        print("  %-26s %-48s %s" % (purpose, rel, ("yes, %d lines" % len(f.read_text(encoding='utf-8', errors='replace').splitlines())) if f.is_file() else "NO"))
+sys.exit(0 if present == len(NAMED) else 1)
+
+--- run
+ABSENT  tools/qa_sim/proofs_tolerance_audit.py
+ABSENT  tools/qa_sim/achievement_reachability_sim.py
+present    7635 bytes   116 lines  tools/qa_sim/save_migration_sim.py
+ABSENT  tools/qa_sim/i18n_parity_audit.py
+ABSENT  tools/qa_sim/security_hmac_audit.py
+present   19647 bytes  1029 lines  data/i18n_glossary.json
+ABSENT  docs/gemini/ACHIEVEMENT_50_SPEC.md
+ABSENT  docs/gemini/CI_PIPELINE_SPEC.md
+ABSENT  docs/gemini/WORLD_CLASS_AUDIT_REPORT.md
+named paths present in the working tree: 2 of 9
+refs searched (remote branches, pull-request heads, local branches, tags): 75; refs holding a Gemini-only name: 0 []
+paths with a Gemini-only name anywhere in the history of any ref: 0 []
+in-repo equivalents of the five purposes (name: exists, lines):
+  proofs audit               tools/qa_sim/proofs_audit_sim.py                 yes, 89 lines
+  achievement reachability   tools/qa_sim/achievements_sim.py                 yes, 176 lines
+  achievement reachability   docs/ACHIEVEMENT_TRIGGER_SPEC.md                 yes, 39 lines
+  save migration             tools/qa_sim/save_migration_sim.py               yes, 116 lines
+  save migration             docs/SAVE_MIGRATION_MATRIX.md                    yes, 31 lines
+  i18n parity                tools/qa_sim/i18n_placeholder_fuzz.py            yes, 149 lines
+  i18n parity                tools/qa_sim/i18n_truth_gate.py                  yes, 158 lines
+  i18n parity                data/i18n_glossary.json                          yes, 1029 lines
+  security and HMAC          tools/qa_sim/secret_scan.py                      yes, 85 lines
+  security and HMAC          scripts/core/save_system.gd                      yes, 717 lines
+  security and HMAC          scripts/security/attack_sim.gd                   yes, 597 lines
+  security and HMAC          scripts/tools/_save_integrity_check.gd           yes, 324 lines
+  security and HMAC          docs/SECURITY_HARDENING.md                       yes, 30 lines
+# EXIT=1

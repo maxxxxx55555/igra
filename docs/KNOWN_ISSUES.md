@@ -1,8 +1,14 @@
 # Known issues
 
+## OPEN (2026-10-16, Session 25): what the Gemini-integration pass left
+
+- **The Gemini artifacts are not in the repository** (`docs/GEMINI_INTEGRATION_REPORT.md`): 7 of the 9 files the directive names are on no ref and in no commit. The owner's action: push them to a `gemini/<name>` branch or a pull request of `maxxxxx55555/igra`, or say that the Jules proposal is the intended specification.
+- **19 more achievements (31 shipped; GDD section 21 asks 15+)** are not implemented: the only proposal (`docs/jules/ACHIEVEMENT_TRIGGER_SPEC.md`, now in the bundle above and on `refs/pull/20/head`) fails its own hook check (13 of 19 signals do not exist, `ach_37` cannot be reached as written). A feature-sized wave: spec-kit, per `CLAUDE.md`.
+- **Tags below 8.0.0 are gone from origin** (`v1.0-final`, `v7.*`; the table of commits is in `docs/CLEANUP_LOG.md`); `.clinerules/zone.md` and three documents still name `v7.0.0-rc1` (`c5292c8`).
+
 ## OPEN (2026-10-15, Session 24): what the v8.1.0-premium pass left
 
-- **Parallel branches** (`docs/ABSORB_PLAN.md`): 13 remain on origin, none merged into `main`, none rejected for fabrication; the owner drops any with `git push origin --delete <name>`. Two of them hold nothing `main` lacks: `arena/01a0c61a-igra` (its one file is blob-identical) and `arena/01a0c619-igra` (three of four files are; the fourth, `docs/SECURITY_PATCH_SPEC.md`, has later edits in `main`).
+- **Parallel branches** (`docs/ABSORB_PLAN.md`, `docs/CLEANUP_LOG.md`): 3 remain on origin: `claude/keen-cori-0sc9uo` and `claude/serene-sagan-wynb3r` (two documents of them are in `main`) and `gh-pages` (the privacy page). The ten `arena/*` and `jules/*` branches were deleted on 2026-10-16 under the owner's directive of Session 25, with a bundle that restores them in `..\_BACKUPS\2026-10-16_00-45\`; the heads of pull requests 18 and 20 also stay on origin as `refs/pull/N/head`.
 - **Quarantine** (`docs/CLEANUP_LEDGER.md` 12.3): three scripts that a planning document still names (`death_sequence.gd`, `onboarding.gd`, `city_decorator.gd`) and two wav masters whose bed the trailer plan names stay in `_QUARANTINE/` and `assets/audio/ambience/wav_src/`; the 17 UNCERTAIN files of the quarantine root (16 at `HEAD`) are the owner's, and the audit now lists `ftue_generator.gd` as AUTO-DELETABLE too, a candidate of the next batch. The 25 sha256 duplicate groups (18.7 MB) were not examined file by file.
 - **Generator run** (`docs/GEMINI_HANDOFF.md`): 16 of the 19 recipe tracks are not on disk (one replaces the menu's `abandoned_hallways.mp3`), and the 11 lit beds are synthesized loops; the seven cards have licence rows (`docs/ASSET_LICENSES.md` 482 to 485), only their raws were not kept. The game runs without any of them.
 - **LOD, occlusion culling, texture streaming**: unchanged, with the reasons of Session 23 (the table of the section "Session 23: deferred by design and owner rows" below).

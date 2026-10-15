@@ -1,12 +1,22 @@
 # Resume note (2026-10-08, rc16 sign-off)
 
+## NEXT-ROW (Session 25, 2026-10-16; the tag `v8.1.0-premium.1` goes on the commit `chore: v8.1.0-premium.1 closeout`, the runtime of `v9.0.0-ultimate`): read this block first; the Session 24 and 23 blocks under it still stand.
+
+**Where everything is.** `main` equals `origin/main` at the head named at the end of the Session 25 block of `docs/RUN_STATE.md`; tags: `v9.0.0-ultimate` = `68e6c9d` (the release), `v8.1.0-premium` = `53a5f83` (Session 24, an alias), `v8.1.0-premium.1` (this pass, an alias on a documents commit above it). The bundle is unchanged: `build/tls.aab` of `ebc1acc`, version code 2. Origin now holds `main`, `gh-pages` and two `claude/*` branches; 22 tags.
+
+**What this pass settled.** The Gemini files the directive names are not in the repository (`docs/GEMINI_INTEGRATION_REPORT.md`); what serves their purposes was run and passes; the 19-achievement proposal was checked against `HEAD` and is not buildable as written; ten stale branches and eight tags below 8.0.0 are gone, with a bundle (`docs/CLEANUP_LOG.md`).
+
+**What the owner does, in order** (the steps of the Session 23 block still stand: rotate the credentials, upload `build/tls.aab`, the phone test, the privacy URL, the decisions): **new in this pass** (a) if Gemini produced files, push them to a `gemini/<name>` branch or a pull request, or say that the Jules proposal is the specification; (b) decide whether the achievements grow from 31 to 50: it is a spec-kit wave with art and 494 locale strings, and the table of `docs/GEMINI_INTEGRATION_REPORT.md` section 3 is its starting point; (c) nothing else changed for the store.
+
+**Budgets used.** Session 25: 0 of 15 launches, 0 of 3 exports. Session 24: 1 of 12 launches (row 122), 0 of 2 exports.
+
 ## NEXT-ROW (Session 24, 2026-10-15; the tag `v8.1.0-premium` goes on the commit `chore: v8.1.0-premium pass`, the runtime of `v9.0.0-ultimate`): read this block first; the Session 23 block under it is still true and is not repeated.
 
 **Where everything is.** `main` equals `origin/main` at the head named at the end of the Session 24 block of `docs/RUN_STATE.md`; tags: `v9.0.0-ultimate` = `68e6c9d` (the release), `v8.1.0-premium` (an alias on a documents-and-tools commit above it), `v8.0.0-shipping` = `fba6b90`. The bundle is unchanged: `build/tls.aab` of `ebc1acc`, version code 2. Local only, never pushed: the tags `pre-purge-68e6c9d`, `cleanup-backup-dfce976`, `backup-rc16-*` and `backup-rc17-*`; `..\_BACKUPS\2026-10-15_*` holds the 74 purged files, the thin bundle of the rejected branch and the archive of the old QA logs.
 
 **What this pass settled.** The list of the v8.1.0-premium directive is shipped (CORRECTION_LOG 259: the closeout lines are cited in S24-T0); the parallel branches are classified one by one (`docs/ABSORB_PLAN.md`, held by a static gate); the purge is done and logged (`docs/CLEANUP_LEDGER.md` section 12); the handoff to a generator is written (`docs/GEMINI_HANDOFF.md`); `docs/PROOFS.md` is held to its closures by `tools/qa_sim/proofs_audit_sim.py`.
 
-**What the owner does, in order** (the steps of the Session 23 block still stand: rotate the credentials, upload the bundle, the phone test, the privacy URL, the decisions): **new in this pass** (a) the 13 branches left on origin: drop what you do not want (`docs/ABSORB_PLAN.md` section 3 is the list, with what each holds); (b) a generator run if you want composed music or new cards: `docs/GEMINI_HANDOFF.md` has the targets, the prompts, the checks and the integration checklist, and the licence rows are yours to log; (c) the rows of its section 5 (crash reporting, cosmetics, the Survivor and Dark endings, touch feel) are decisions, not tasks.
+**What the owner does, in order** (the steps of the Session 23 block still stand: rotate the credentials, upload the bundle, the phone test, the privacy URL, the decisions): **new in this pass** (a) [done in Session 25: the ten `arena/*` and `jules/*` branches were deleted, `docs/CLEANUP_LOG.md`] the 13 branches left on origin: drop what you do not want (`docs/ABSORB_PLAN.md` section 3 is the list, with what each holds); (b) a generator run if you want composed music or new cards: `docs/GEMINI_HANDOFF.md` has the targets, the prompts, the checks and the integration checklist, and the licence rows are yours to log; (c) the rows of its section 5 (crash reporting, cosmetics, the Survivor and Dark endings, touch feel) are decisions, not tasks.
 
 **Budgets used.** Session 24: 1 of 12 launches (ledger row 122), 0 of 2 exports. Session 23: 24 of 24 launches, 2 of 2 exports.
 

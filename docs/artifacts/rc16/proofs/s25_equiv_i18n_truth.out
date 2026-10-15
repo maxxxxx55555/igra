@@ -1,0 +1,19 @@
+# proof s25_equiv_i18n_truth
+# utc 20261015T214400Z
+# head 53a5f83 (uncommitted paths: 5)
+# env none
+# cmd python tools/qa_sim/i18n_truth_gate.py
+PASS ru -- missing=0 mixed=0 overflow=0
+PASS es -- missing=0 mixed=0 overflow=0
+PASS de -- missing=0 mixed=0 overflow=0
+PASS fr -- missing=0 mixed=0 overflow=0
+PASS it -- missing=0 mixed=0 overflow=0
+PASS pt_BR -- missing=0 mixed=0 overflow=0
+PASS tr -- missing=0 mixed=0 overflow=0
+PASS ja -- missing=0 mixed=0 overflow=0
+PASS ko -- missing=0 mixed=0 overflow=0
+PASS zh -- missing=0 mixed=0 overflow=0
+PASS zh_TW -- missing=0 mixed=0 overflow=0
+PASS ar -- missing=0 mixed=0 overflow=0
+12/12 locales PASS
+# EXIT=0

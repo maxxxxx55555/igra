@@ -185,6 +185,22 @@ rows: `docs/ACCEPTANCE_CHECKLIST.md` (200 rows); decisions: `docs/TZ_DECISIONS.m
 | Music | Excluded by owner (`OWNER_HANDOFF.md`) |
 | Play Console upload | Owner (credentials); `version/code` stays 1 until the first upload |
 
+## Gemini-integration pass (Session 25, 2026-10-16)
+
+**Status: the Gemini files the directive names are not in the repository; nothing could be integrated, so the achievements and the CI workflow were not built; the five purposes were run through the files that serve them and pass; ten branches, eight tags and 246 ignored files were deleted after their backups; no runtime path changed.** Records: `docs/RUN_STATE.md` Session 25, `docs/GEMINI_INTEGRATION_REPORT.md`, `docs/CLEANUP_LOG.md`. Launches: 0 of 15; exports 0 of 3.
+
+| Item | Result | Evidence |
+|---|---|---|
+| G1 artifacts | 2 of 9 named paths present (the repository's own); 75 refs and the whole history hold no Gemini-only name | `docs/artifacts/rc16/proofs/s25_gemini_check.out` |
+| G1 simulators | 6 of 6 equivalent checks pass (proofs audit 220, achievements 31, save migration static, i18n fuzz 1,560 keys, i18n truth 12 of 12, secret scan 1,987 files) | `docs/artifacts/rc16/proofs/s25_equiv_*.out` |
+| G2 achievements | 0 of 19: 13 of 19 proposed signals do not exist, 1 threshold unreachable | `docs/artifacts/rc16/proofs/s25_ach_hooks.out` |
+| G3 CI | skipped: no specification; 3 workflows exist | `docs/GEMINI_INTEGRATION_REPORT.md` section 4 |
+| G4 cleanup | 10 branches, 8 tags, 246 files (5,305,635 bytes); remote heads 14 to 4 | `docs/CLEANUP_LOG.md`; `docs/artifacts/rc16/proofs/s25_branch_sim.out` |
+| Gates | static 62 of 62 | `docs/artifacts/rc16/proofs/s25_static.out` |
+| Bundle | unchanged: `build/tls.aab`, 136,653,029 bytes, version code 2; no runtime path differs from its commit | `docs/artifacts/rc16/proofs/s25_runtime_diff.out` |
+| Verifier | pending | `docs/artifacts/rc16/proofs/s25_verifier_round1.md` |
+| Not done | G2 and G3 (no input), the engine battery and the export (no runtime change), the phone run, the history rewrite (K-1) | `docs/UNVERIFIABLE_HERE.md` |
+
 ## v8.1.0-premium pass (Session 24, 2026-10-15)
 
 **Status: the directive's list was found shipped as `v9.0.0-ultimate` (CORRECTION_LOG 259); this pass absorbed the parallel work, purged what was left, wrote the generator handoff and two gates, ran one battery and one verifier round; the tag `v8.1.0-premium` is an alias of the shipped runtime.** Records: `docs/RUN_STATE.md` Session 24, `docs/ABSORB_PLAN.md`, `docs/CLEANUP_LEDGER.md` section 12, `docs/GEMINI_HANDOFF.md`. Launches: 1 of 12; exports 0 of 2.

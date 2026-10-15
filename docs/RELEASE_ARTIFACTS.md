@@ -4,6 +4,8 @@ Status at 2026-10-15 (`v9.0.0-ultimate`, tagged in Session 23 on the sign-off co
 
 - **v8.1.0-premium (Session 24):** no new bundle. `build/tls.aab` is the bundle of `ebc1acc` (136,653,029 bytes, version code 2, `v9.0.0-ultimate`); `HEAD` differs from `ebc1acc` in documents, proofs, tools and the files the purge removed (45 assets and 13 quarantined scripts, none of which ships), and the audit of `tools/qa_sim/af3_frame_check.is_runtime` lists no runtime path that differs (`docs/artifacts/rc16/proofs/s24_runtime_diff_2.out`). The bundle itself reads: 136,653,029 bytes, 2,756 entries, label `Last Streetlight`, no ad-SDK dex entry, 54 manifest files intact, no unresolved reference, jar verified, signer equal to the release certificate (`aab_check: PASS`, `docs/artifacts/rc16/proofs/s24_aab_check.out`). The tag `v8.1.0-premium` is the directive's name for this tree.
 
+- **v8.1.0-premium.1 (Session 25):** no new bundle. `build/tls.aab` is still the bundle of `ebc1acc` (136,653,029 bytes, version code 2, `v9.0.0-ultimate`); `HEAD` differs from it in documents, proofs, tools and files that do not ship, and `tools/qa_sim/af3_frame_check` lists no runtime path that differs (`docs/artifacts/rc16/proofs/s25_runtime_diff.out`). The tag `v8.1.0-premium` (Session 24) is not moved; `v8.1.0-premium.1` marks the cleaned tree.
+
 ## Done
 - **Release keystore generated** with `keytool` (PKCS12, RSA 4096, alias `tls_release`, 10000-day
   validity) at `.signing/tls-release.keystore`. SHA-256 fingerprint:

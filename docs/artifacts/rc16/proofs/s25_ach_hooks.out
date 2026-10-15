@@ -1,0 +1,68 @@
+# proof s25_ach_hooks
+# utc 20261015T214532Z
+# head 53a5f83 (uncommitted paths: 7)
+# env none
+# cmd python -I /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s25_ach_hooks.py . origin/jules/parallel-audit-1403790779115270347
+"""Session 25 (G2 step 1): the 19 achievements of the only expansion proposal in the repository (docs/jules/ACHIEVEMENT_TRIGGER_SPEC.md on
+origin/jules/parallel-audit-1403790779115270347, the stand-in for the missing docs/gemini/ACHIEVEMENT_50_SPEC.md), each row checked at HEAD: is the cited signal
+declared in scripts/events/event_bus.gd, is it emitted anywhere in scripts/ (outside tools), does the cited file exist and have the cited line, and what that
+line holds. Read-only. Prints itself first.
+usage: python -I s25_ach_hooks.py <repo> <jules-ref>"""
+import pathlib
+import re
+import subprocess
+import sys
+
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+repo = pathlib.Path(sys.argv[1]).resolve()
+ref = sys.argv[2]
+spec = subprocess.run(["git", "show", ref + ":docs/jules/ACHIEVEMENT_TRIGGER_SPEC.md"], cwd=repo, capture_output=True, text=True, encoding="utf-8").stdout
+rows = re.findall(r"^\| `(ach_\d+)` \| `[A-Z_0-9]+` \| `[A-Z_0-9]+` \| `EventBus\.(\w+)` \| `([^`:]+):(\d+)` \| ([^|]+)\|", spec, re.M)
+bus = (repo / "scripts/events/event_bus.gd").read_text(encoding="utf-8")
+declared = set(re.findall(r"^signal (\w+)", bus, re.M))
+emitters = {}
+for f in (repo / "scripts").rglob("*.gd"):
+    if "/tools/" in f.as_posix():
+        continue
+    for m in re.finditer(r"EventBus\.(\w+)\.emit\(", f.read_text(encoding="utf-8", errors="replace")):
+        emitters.setdefault(m.group(1), set()).add(f.relative_to(repo).as_posix())
+print("proposals read: %d; signals declared in event_bus.gd: %d" % (len(rows), len(declared)))
+ok = 0
+for aid, sig, path, line, cond in rows:
+    f = repo / path
+    text = ""
+    if f.is_file():
+        lines = f.read_text(encoding="utf-8", errors="replace").splitlines()
+        text = lines[int(line) - 1].strip()[:70] if int(line) <= len(lines) else "(line beyond the file)"
+    else:
+        text = "(file absent)"
+    decl = sig in declared
+    em = sorted(emitters.get(sig, ()))
+    ok += decl and bool(em)
+    print("%s %-26s declared=%-5s emitted_in=%-2d %-40s cited %s:%s -> %s | %s" % (aid, sig, decl, len(em), (em[0] if em else "-"), path, line, text, cond.strip()))
+print("rows whose signal is declared and emitted at HEAD: %d of %d" % (ok, len(rows)))
+
+--- run
+proposals read: 19; signals declared in event_bus.gd: 93
+ach_21 item_crafted               declared=False emitted_in=0  -                                        cited scripts/ui/workbench.gd:95 -> func _build_craft_panel() -> void: | Craft 20 items at workbench
+ach_22 battery_used               declared=False emitted_in=0  -                                        cited scripts/player/player_3d.gd:910 -> ## in front of the Architect at half HP with no grace window, so the | Recharge flashlight 30 times
+ach_23 medkit_used                declared=False emitted_in=0  -                                        cited scripts/player/player_3d.gd:905 -> _request_player_damage.rpc_id(get_multiplayer_authority(), clampf(amou | Use 15 medkits
+ach_24 stealth_moved              declared=False emitted_in=0  -                                        cited scripts/player/player_3d.gd:420 ->  | Move 500m in stealth crouch
+ach_25 enemy_killed_by_weapon     declared=False emitted_in=0  -                                        cited scripts/weapons/weapon_pistol.gd:6 -> func _ready() -> void: | Kill 30 enemies with Pistol
+ach_26 enemy_killed_by_weapon     declared=False emitted_in=0  -                                        cited scripts/weapons/weapon_shotgun.gd:7 -> func _ready() -> void: | Kill 25 enemies with Shotgun
+ach_27 enemy_killed_by_weapon     declared=False emitted_in=0  -                                        cited scripts/weapons/weapon_rifle.gd:7 -> func _ready() -> void: | Kill 20 enemies with Rifle
+ach_28 attack_dodged              declared=False emitted_in=0  -                                        cited scripts/player/player_3d.gd:580 -> elif InputService.is_run_held() and stamina > 0.0: | Perfect dodge 25 enemy attacks
+ach_29 secret_found               declared=True  emitted_in=1  scripts/world/secret.gd                  cited scripts/world/district_loot.gd:177 -> rng.seed = hash(String(district_id)) | Find 10 district secrets
+ach_30 secret_found               declared=True  emitted_in=1  scripts/world/secret.gd                  cited scripts/world/district_loot.gd:177 -> rng.seed = hash(String(district_id)) | Find all 26 district secrets
+ach_31 daily_completed            declared=False emitted_in=0  -                                        cited scripts/systems/daily_challenge_manager.gd:75 -> return | Complete 7 daily challenges
+ach_32 daily_completed            declared=False emitted_in=0  -                                        cited scripts/systems/daily_challenge_manager.gd:80 -> _tick("play_minutes", 1) | Reach 30-day challenge streak
+ach_33 puzzle_solved              declared=True  emitted_in=4  scripts/security/attack_sim.gd           cited scripts/world/puzzle_system.gd:105 -> return float(_solved.size()) / float(_puzzle_data.size()) | Solve 5 district power puzzles
+ach_34 radio_channel_tuned        declared=False emitted_in=0  -                                        cited scripts/ui/radio.gd:167 -> func _select_channel(idx: int) -> void: | Listen to 5 radio broadcasts
+ach_35 skill_unlocked             declared=False emitted_in=0  -                                        cited scripts/systems/skill_tree_manager.gd:110 -> "description": "SKILL_MOVE_SPEED_DESC", | Max out 1 skill tree branch
+ach_36 coin_balance_changed       declared=False emitted_in=0  -                                        cited scripts/economy/coin_wallet.gd:35 -> func to_dict() -> Dictionary: | Accumulate 10,000 coins
+ach_37 streetlight_activated      declared=True  emitted_in=1  scripts/world/power_grid.gd              cited scripts/world/power_grid.gd:66 -> EventBus.streetlight_activated.emit(id) | Activate 50 streetlights
+ach_38 weather_changed            declared=True  emitted_in=1  scripts/systems/weather_system.gd        cited scripts/systems/weather_system.gd:48 -> EventBus.weather_changed.emit(current, LocalizationManager.t(NAME_KEYS | Experience 10 severe weather events
+ach_39 district_blackout          declared=True  emitted_in=1  scripts/systems/random_events.gd         cited scripts/systems/random_events.gd:42 -> EventBus.district_blackout.emit(d) | Restore power during a blackout
+rows whose signal is declared and emitted at HEAD: 6 of 19
+# EXIT=0

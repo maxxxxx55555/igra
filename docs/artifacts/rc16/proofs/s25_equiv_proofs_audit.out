@@ -1,0 +1,7 @@
+# proof s25_equiv_proofs_audit
+# utc 20261015T214341Z
+# head 53a5f83 (uncommitted paths: 1)
+# env none
+# cmd python tools/qa_sim/proofs_audit_sim.py
+proofs_audit_sim: 220 closure(s), PASS 220, FAIL 0
+# EXIT=0

@@ -1,0 +1,7 @@
+# proof s25_equiv_savemig
+# utc 20261015T214358Z
+# head 53a5f83 (uncommitted paths: 3)
+# env none
+# cmd python tools/qa_sim/save_migration_sim.py --static
+save_migration_sim: SAVE_VERSION 3, BACKUP_DEPTH 3, static only, 0 finding(s)
+# EXIT=0
