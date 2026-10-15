@@ -1,0 +1,15 @@
+# proof s24_pushes
+# utc 20261015T211344Z
+# head decfc94 (uncommitted paths: 0)
+# env none
+# cmd bash /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s24_pushes.sh
+HEAD:                          decfc9447447a85a13c15ee56f004aa371521422
+origin main:                   decfc9447447a85a13c15ee56f004aa371521422
+main equals HEAD on origin
+tag v8.1.0-premium on origin:  0 refs (the tag goes up with the closing commit)
+v9.0.0-ultimate^{} on origin:  68e6c9da00e03cb455c8124b3f4ce07c08b04004
+v8.0.0-shipping^{} on origin:  fba6b90cd2d928dc843ce73824ca70856d05dde1
+local-only tags found on origin: 0
+remote heads: 14 (main and 13 branches)
+commits of the pass on origin main: 11
+# EXIT=0

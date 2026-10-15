@@ -2824,5 +2824,29 @@
   ],
   "frames": [],
   "commit": "49f8731"
+ },
+ {
+  "id": "S24-PUSHES",
+  "claim": "origin main equals HEAD after the push of the commit before the closing one; the tag is not yet on origin, the local-only tags are not on origin, the release tags are where they were, and origin holds main and the 13 branches the plan names.",
+  "cmd": "git ls-remote origin ...; git rev-parse HEAD (bash s24_pushes.sh)",
+  "proof": "s24_pushes",
+  "quotes": [
+   "main equals HEAD on origin",
+   "local-only tags found on origin: 0",
+   "remote heads: 14 (main and 13 branches)"
+  ],
+  "frames": [],
+  "commit": "decfc94"
+ },
+ {
+  "id": "S24-STATIC-FINAL",
+  "claim": "The static gates on the commit before the closing one (the closures and the proofs of the fix commit are in it): 62 of 62.",
+  "cmd": "bash tools/check.sh --static",
+  "proof": "s24_static_final",
+  "quotes": [
+   "Всё зелёное. Проверок пройдено: 62"
+  ],
+  "frames": [],
+  "commit": "decfc94"
  }
 ]
