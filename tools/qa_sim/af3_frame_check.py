@@ -43,8 +43,20 @@ def git(*args):
     return subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True, encoding="utf-8", errors="replace")
 
 
+def export_excludes():
+    """The exclude_filter of the first export preset (Android): a path it matches is not in the bundle, so no frame can show it."""
+    try:
+        m = re.search(r'^exclude_filter="([^"]*)"', (ROOT / "export_presets.cfg").read_text(encoding="utf-8", errors="replace"), re.M)
+    except OSError:
+        m = None
+    return [p.strip() for p in m.group(1).split(",") if p.strip()] if m else []
+
+
+EXCLUDED = export_excludes()
+
+
 def is_runtime(path):
-    if path.startswith(NOT_RUNTIME):
+    if path.startswith(NOT_RUNTIME) or any(fnmatch.fnmatchcase(path, pat) for pat in EXCLUDED):
         return False
     return path.startswith(RUNTIME_PREFIXES) or path in RUNTIME_FILES
 
@@ -148,6 +160,7 @@ def demo():
     assert not NAME.match("04_combat_hit_after_a1b2c3d_2026-10-03.png")
     assert is_runtime("scripts/player/player_3d.gd") and is_runtime("project.godot") and is_runtime("assets/shaders/a.gdshader")
     assert not is_runtime("scripts/tools/_x.gd") and not is_runtime("docs/PROOFS.md") and not is_runtime("tools/check.sh")
+    assert not is_runtime("assets/audio/ambience/wav_src/a.wav") and is_runtime("assets/audio/ambience/a.ogg"), "an excluded path is not runtime"
     assert utc_to_epoch("19700101T000010Z") == 10
     declared = {("p.gd", "aaa", "bbb"): "A06_shop*"}
     assert reaches("p.gd", "aaa111", "bbb222", "A06_shop_after_x.jpg", declared)
