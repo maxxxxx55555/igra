@@ -1,0 +1,91 @@
+# Absorb plan (Session 24, U0): the parallel work on origin
+
+Written at `68e6c9d` (`main` = `origin/main`, the tag `v9.0.0-ultimate`) after `git fetch --prune`. `python tools/qa_sim/branch_absorb_sim.py --check docs/ABSORB_PLAN.md` holds it (a static gate of `tools/check.sh`):
+every branch on origin has a row in section 3 with a disposition word, and a row for a branch that is gone says "deleted".
+
+## 1. How it was read
+
+- **Inventory.** `git branch -r`: 13 branches besides `main` (14 before this pass deleted one, section 3). Each is compared with its merge base with `main`; every file it changes is **SAME** (same path, same blob in `main`), **MOVED** (the blob is at another
+  path), **DIVERGED** (the path exists with other bytes), **MISSING** (absent from `main`) or **GONE** (the branch deletes it). The table of section 2 is the tool's own output.
+- **Decision per artifact.** An artifact is *done* (in `main`, SAME or MOVED, or `main` holds a later or fuller version), *partial* or *missing*; the decision is *absorb* (a new file under `docs/**`, `store/**`,
+  `tools/qa_sim/*_sim.py` or `.github/workflows/*`, with its source commit), *finish* (write the missing part as a new file of the pass) or *skip* with the reason. No binary is absorbed (the directive: zero new binaries).
+  A file whose text is not English is not absorbed (`docs/TZ_DECISIONS.md` LANG-23: every line a pass writes is English). A document whose citations cite lines that no longer exist is not absorbed (it would fail
+  `tools/af5_check.py`).
+- **AutoClaw.** No branch, no ref and no commit of the repository names it (`git for-each-ref`; `git log --all -i --grep autoclaw` and `--author autoclaw` find nothing). Its only trace is a process on the build machine
+  (`docs/LONG_SESSION_TEST.md`, the machine-shared note). 0 branches, 0 files.
+- **Jules.** One branch (`jules/parallel-audit-...`, 2026-10-12). Session 23 compared it file by file with its own (`docs/CLEANUP_LEDGER.md` section 5); this pass re-measured it (section 5 below).
+
+## 2. Inventory (the tool's output at `68e6c9d`)
+
+| Branch | Commits ahead | SAME | MOVED | DIVERGED | MISSING | GONE |
+|---|---|---|---|---|---|---|
+| `origin/arena/019ffbd0-igra` | 56 | 2 | 1 | 50 | 11 | 13 |
+| `origin/arena/01a07b1c-igra` | 9 | 0 | 0 | 39 | 2 | 4 |
+| `origin/arena/01a09af1-igra` | 4 | 3 | 1 | 520 | 28 | 0 |
+| `origin/arena/01a0ab24-igra` | 1 | 0 | 0 | 2 | 1 | 0 |
+| `origin/arena/01a0c589-igra` | 2 | 0 | 0 | 10 | 3 | 0 |
+| `origin/arena/01a0c619-igra` | 3 | 3 | 0 | 1 | 0 | 0 |
+| `origin/arena/01a0c61a-igra` | 1 | 1 | 0 | 0 | 0 | 0 |
+| `origin/arena/01a0c87e-igra` | 1 | 0 | 0 | 0 | 2 | 0 |
+| `origin/arena/01a0f956-igra` | 14 | 4 | 1 | 101 | 5 | 0 |
+| `origin/claude/keen-cori-0sc9uo` | 2 | 0 | 0 | 0 | 2 | 0 |
+| `origin/claude/serene-sagan-wynb3r` | 8 | 4 | 1 | 25 | 1 | 0 |
+| `origin/gh-pages` | 1 | 0 | 0 | 0 | 0 | 0 |
+| `origin/jules/parallel-audit-1403790779115270347` | 3 | 0 | 0 | 7 | 4 | 0 |
+
+## 3. Dispositions
+
+Disposition words: **absorbed** (a file of it is in `main` now, section 4), **kept** (the branch stays; nothing of it is needed), **skipped** (its artifacts are not absorbed, with the reason), **deleted** (this pass
+removed the branch, with the reason and the way back in `docs/CLEANUP_LEDGER.md` section 12).
+
+| Branch | What it holds | State of its artifacts | Disposition |
+|---|---|---|---|
+| `origin/arena/019ffbd0-igra` | the first arena's autopilot tests and fixes, 56 commits of 2026-08-13 | 50 DIVERGED where `main` moved on, 13 GONE, 11 MISSING: three Russian setup and checklist documents (one says the game "never ran"), the old `tools/autopilot*` files and `tools/orphan_check.py`, which `tools/qa_sim/` and `tools/quarantine_audit.py` replaced, and two scripts `main` does not use | skipped: a real merge conflict (`docs/RUN_STATE.md`, the arena table of 2026-09-20), nothing in an allowed destination that is English and current |
+| `origin/arena/01a07b1c-igra` | the UI wave: weapon HUD, no physical bullets, tutorial steps; 9 commits of 2026-09-08 | 39 DIVERGED (the weapon system in `main` is a later one), 2 MISSING: `docs/IDEA_CONFORMANCE.md` (a Russian audit of `IDEA.md`, baseline 2026-09-07) and `data/items/ammo.tres` (`main` keeps ammo in `ProgressTracker`) | skipped: conflicts on the 13 locale files and the weapon scripts; the audit is Russian and its baseline is gone |
+| `origin/arena/01a09af1-igra` | the district-card texture merge; 4 commits, 552 files | 520 DIVERGED, 28 MISSING (`.import` sidecars of folders Session 23 removed, one script); its own history is a merge of two branches already in `main` | skipped: stale, several merge bases (`docs/IDEAL_GAP_REPORT.md`, `docs/RUN_STATE.md`) |
+| `origin/arena/01a0ab24-igra` | game-feel spec, QA matrix and balance matrix; 1 commit of 2026-09-16 | `docs/BALANCE_MATRIX.md` MISSING; the other two DIVERGED (`main`'s `docs/QA_MATRIX.md` is a later, extended version) | skipped: the matrix is a snapshot of 2026-09-16 values; `docs/NGPLUS_TABLE.md` and `docs/DIFFICULTY_CURVE.md` are read from the code |
+| `origin/arena/01a0c589-igra` | rendering diagnosis, red-team of the truth gates, i18n native-quality pass; 2 commits of 2026-09-21 | three documents MISSING (baseline `c1ebeec`), 10 locale and doc files DIVERGED | skipped: the magenta defect it diagnoses was closed (`docs/CORRECTION_LOG.md` row 1: the district LUTs imported as `Texture3D`, `bafb740`), the gates it asks for exist as tools, the i18n parity is held by `tools/qa_sim/i18n_placeholder_fuzz.py` |
+| `origin/arena/01a0c619-igra` | TZ audit, break report, security patch spec; 3 commits | SAME 3, DIVERGED 1 (`docs/SECURITY_PATCH_SPEC.md`: 779 lines on both sides, `main` has later edits) | absorbed before this pass: three of its four files are blob-identical in `main`; not an ancestor, so it stays |
+| `origin/arena/01a0c61a-igra` | the slop report; 1 commit | SAME 1 | absorbed before this pass: its one file is blob-identical in `main`; not an ancestor, so it stays |
+| `origin/arena/01a0c87e-igra` | design decisions and voice fixes; 1 commit of 2026-09-22 | 2 MISSING: `docs/DESIGN_DECISIONS.md`, `docs/I18N_VOICE_FIXES.md` ("exact new strings, the locale owner applies") | skipped: written against baseline `6f4c841`, whose audit files it says are absent; `docs/TZ_DECISIONS.md` and the later i18n passes supersede it |
+| `origin/arena/01a0f956-igra` | the art plates of Tier 1 (73 plates and 7 derived squares); 14 commits of 2026-10-01 and 02 | 101 DIVERGED images, 5 MISSING: three `menu_hero_*` images, `tools/art_finish.py`, `docs/ASSET_PROMPT_PACK.md` | skipped: binaries (zero new binaries) and a grade script outside the allowed destinations; the prompt pack is absorbed from the other branch that carries it (section 4); kept for the owner's art review |
+| `origin/claude/keen-cori-0sc9uo` | the music prompt packs; 2 commits of 2026-10-07 and 08 | 2 MISSING: `docs/MUSIC_PROMPTS_FULL.md` (English, 69 prompts, a superset of `docs/MUSIC_RECIPE.md`) and `docs/GEMINI_MUSIC_PROMPTS.txt` (the same 69 prompts as Russian phone text) | absorbed: the English list (section 4); the Russian copy is skipped by LANG-23 and stays on the branch |
+| `origin/claude/serene-sagan-wynb3r` | the ZCode handoff branch: the rename to Last Streetlight, the image prompt pack, agent documents; 8 commits | 25 DIVERGED (the rename and the agent documents, where `main` has the later versions), 4 SAME, 1 MOVED, 1 MISSING: `docs/ASSET_PROMPT_PACK.md` | absorbed: the prompt pack (section 4); the rest skipped: `main` holds the later versions |
+| `origin/gh-pages` | the hosted privacy policy page (`index.html`); 1 commit, no relation to `main` | not code; the page the store listing links to (`docs/PRIVACY_POLICY_FINAL.md`) | kept: it is the page the privacy-policy URL of the listing points at |
+| `origin/jules/parallel-audit-1403790779115270347` | a parallel audit of 2026-10-12: 2 workflows, a glossary, 4 simulations, 4 documents | 7 DIVERGED at paths `main` has (section 5), 4 MISSING under `docs/jules/` | skipped: every artifact has a counterpart in `main` that is fuller, or that runs the real code (section 5); kept for the owner's reading |
+| `origin/arena/card-unique-rescue` | a district-card uniqueness pass; 1 commit of 2026-09-13 | its certificate says "Scene match: 22/22" while its 22 card blobs are byte-identical to `main`'s (`docs/KNOWN_ISSUES.md`: "arena/card-unique-rescue delivered no card art") | deleted: rejected for a fabricated certificate, logged in `docs/CLEANUP_LEDGER.md` section 12.1, a thin bundle of its commit kept |
+
+## 4. Absorbed (provenance)
+
+| File | Source branch | Source commit | Kept or dropped | Note |
+|---|---|---|---|---|
+| `docs/MUSIC_PROMPTS_FULL.md` | `origin/claude/keen-cori-0sc9uo` | `22f3b8c` (2026-10-07) | kept, whole | the game's name in the title corrected (the owner's line, Session 23); the prompts feed `docs/GEMINI_HANDOFF.md` |
+| `docs/ASSET_PROMPT_PACK.md` | `origin/claude/serene-sagan-wynb3r` | `7f5a6a1` (2026-10-01) | kept, whole | its counts are of 2026-10-01 and say so; the copy on `origin/arena/01a0f956-igra` adds a status section about that branch's own plates and is dropped |
+| `docs/GEMINI_MUSIC_PROMPTS.txt` | `origin/claude/keen-cori-0sc9uo` | `fc34836` (2026-10-08) | dropped | Russian text (LANG-23); the same prompts are in the English list |
+| `docs/ASSET_PROMPT_PACK.md` (arena copy) | `origin/arena/01a0f956-igra` | `832ac86` (2026-10-02) | dropped | a status section about plates `main` does not hold |
+
+Both absorbed files pass `tools/af5_check.py` (0 findings) and `tools/qa_sim/doc_ctrl_check.py`; neither is audio or an image.
+
+## 5. The Jules branch, file by file (re-measured at `68e6c9d`)
+
+| Jules file (lines) | `main` counterpart (lines) | What decided it |
+|---|---|---|
+| `.github/workflows/pr-sims.yml` (34) | same path (62) | `main`'s is the fuller workflow (static gates, `actionlint`, the sims) |
+| `.github/workflows/weekly-full.yml` (43) | same path (47) | the same shape; `main`'s adds the gates of Session 23 |
+| `data/i18n_glossary.json` (416) | same path (1,029) | `main`'s holds the terms of all 13 locales read by the fuzz |
+| `tools/qa_sim/achievements_sim.py` (115) | same path (176) | `main`'s reads the trigger table and the bridge (`docs/ACHIEVEMENT_TRIGGER_SPEC.md`) |
+| `tools/qa_sim/daily_sim.py` (112) | same path (137) | `main`'s covers the day edge and the streak (`docs/DAILY_SIM.md`) |
+| `tools/qa_sim/i18n_placeholder_fuzz.py` (135) | same path (149) | the same job, `main`'s is a gate |
+| `tools/qa_sim/save_migration_sim.py` (184) | same path (116) | the Jules one re-implements the signature in Python and repeats the client's key literal; `main`'s runs the real `SaveSystem._read_validated` through a closeout check |
+| `docs/jules/ACHIEVEMENT_TRIGGER_SPEC.md` (80) | `docs/ACHIEVEMENT_TRIGGER_SPEC.md` (39) | the longer one proposes 19 more achievements; nobody has verified them at HEAD (a design change, not an absorb) |
+| `docs/jules/CROSS_AUDIT.md` (26) | `docs/CROSS_AUDIT.md` (52) | `main`'s is the fuller audit |
+| `docs/jules/NGPLUS_TABLE.md` (46) | `docs/NGPLUS_TABLE.md` (59) | `main`'s is generated from the code (`tools/qa_sim/ngplus_table.py`) |
+| `docs/jules/SAVE_MIGRATION_MATRIX.md` (56) | `docs/SAVE_MIGRATION_MATRIX.md` (31) | the longer one prints the client's HMAC key literal and cites lines of a file that moved; `main`'s is written by the sim from the closeout log |
+
+Nothing of the Jules branch is absorbed; the branch is kept, which is Session 23's disposition and the same reasons, now with the counts.
+
+## 6. What this plan did not do
+
+- No file of an `arena/*` branch was absorbed: the useful ones are old snapshots that cite a past baseline (`c1ebeec`, `6f4c841`, 2026-09-07), and the allowed destinations exclude the images and the grade script.
+- No branch was deleted for being "probably merged": the rule is an ancestor proof, and only the one branch documented as rejected for fabrication was taken (`docs/CLEANUP_LEDGER.md` section 12.1).
+- The owner can drop any `kept` or `skipped` branch with `git push origin --delete <name>`; the table above is the list of what each holds.

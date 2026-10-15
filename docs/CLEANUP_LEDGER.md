@@ -161,3 +161,21 @@ The same rewrite takes the `opencode.json` key out of the history if `git filter
 
 The static battery, `flow_check` and `scene_node_check` read the same after as before (the run is in `docs/RUN_STATE.md`, S23-K1); the engine side (the compile gate, the closeout and the boot check) is in the battery of the
 verification step, run on the tree that ships. A red check there is a path to restore from the backup tag the same turn, and a row here.
+
+## 12. Session 24 (the v8.1.0-premium pass, C1): what was left after Session 23
+
+Baseline `68e6c9d` (`main` = `origin/main`, the tag `v9.0.0-ultimate`). The pass found the directive's purge already done by Session 23 in all but five places; this section is those five. The rules of section 1 held
+(two independent greps, the planning documents read, the uid of every sidecar, batches of at most 50, the static gates after each); the proofs are in `docs/artifacts/rc16/proofs/s24_*.out`.
+
+### 12.1 Branches
+
+`git branch -r --merged origin/main` lists nothing: no remote branch is an ancestor of `main`, so the rule "delete what is merged" deletes nothing. `autoclaw/*`: no such branch was ever pushed (`git for-each-ref`, and `git log --all`
+finds no commit that names it); `docs/ABSORB_PLAN.md` has every branch that is on origin, with its disposition, and `tools/qa_sim/branch_absorb_sim.py --check` holds it.
+
+| Branch | Tip | Why it goes | The way back |
+|---|---|---|---|
+| `arena/card-unique-rescue` | `b1d7830` | **rejected for a fabricated certificate**: its `docs/CERT_ARTFINAL.md` claims four regenerated cards and "Scene match: 22/22" while its 22 card blobs are byte-identical to `main`'s, its contact sheet replaces the real 1024 x 1536 one with a thumbnail sheet, and its `scripts/regen_cards.py` hardcodes `/home/user/igra` (`docs/KNOWN_ISSUES.md`, "arena/card-unique-rescue delivered no card art"; `docs/HANDOFF.md`; `PLAN.md`; `docs/CARD_ART_BRIEF.md` section 1: "rejected for shipping zero card changes"). Not an ancestor of `main` (`git merge-base --is-ancestor` exits 1). The card art it was meant to fix was produced by the pipeline of `docs/CARD_ART_BRIEF.md`; 11 of 11 districts have a unique card there. | a thin bundle of the one commit, `..\_BACKUPS\2026-10-15_18-55\arena-card-unique-rescue-thin.bundle` (499,340 bytes, sha256 `45ced23bf3542d25826316c68d1f01863247b2747f06f14516137b80c24182b4`, requires `631e3a5`, `git bundle verify` okay); `git fetch <bundle> refs/remotes/origin/arena/card-unique-rescue:refs/heads/arena/card-unique-rescue` restores it |
+
+The other 13 branches stay (section 5 of this ledger and `docs/ABSORB_PLAN.md`): not merged, and none is documented as rejected for fabrication. Two of them are as good as in `main` by content (`arena/01a0c61a-igra`: its one file is blob-identical; `arena/01a0c619-igra`: three of its four files are, the
+fourth differs); they are not ancestors, so the rule does not take them, and `git push origin --delete` is the owner's if the list should be shorter.
+

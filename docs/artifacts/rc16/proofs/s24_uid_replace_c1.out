@@ -1,0 +1,93 @@
+# proof s24_uid_replace_c1
+# utc 20261015T155916Z
+# head 68e6c9d (uncommitted paths: 6)
+# env none
+# cmd python -I C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s24_uid_replace_check.py . .qa_logs/s24_cands_final.txt
+"""Session 24 (C1): the two last checks before the three asset folders go. 1 the uid of each .import sidecar appears in no other tracked text
+file; 2 the live replacement the documents name exists on disk and is read by code: the .ogg of each wav_src file, icons_v2/ach_medal_v2_*
+for the legacy achievement icons, renders_v2/weapons/*_render_256.png for the weapon icons. Prints itself first.
+usage: python -I s24_uid_replace_check.py <repo> <list-file>"""
+import pathlib
+import re
+import subprocess
+import sys
+
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+ROOT = pathlib.Path(sys.argv[1]).resolve()
+cands = [ln.strip() for ln in pathlib.Path(sys.argv[2]).read_text(encoding="utf-8").splitlines() if ln.strip() and not ln.startswith("_QUARANTINE")]
+files = [f for f in subprocess.run(["git", "ls-files"], cwd=ROOT, capture_output=True, text=True, encoding="utf-8").stdout.split("\n") if f]
+TEXT = (".gd", ".tscn", ".tres", ".cfg", ".godot", ".json", ".import", ".md", ".py", ".txt", ".uid", ".gdshader")
+corpus = {}
+for f in files:
+    if f.endswith(TEXT) and not f.startswith(("docs/artifacts/", "docs/stills/")):
+        p = ROOT / f
+        if p.is_file() and p.stat().st_size < 3_000_000:
+            corpus[f] = p.read_text(encoding="utf-8", errors="replace")
+bad = 0
+for c in cands:
+    side = c + ".import"
+    uid = ""
+    if (ROOT / side).is_file():
+        m = re.search(r'uid="(uid://[a-z0-9]+)"', (ROOT / side).read_text(encoding="utf-8", errors="replace"))
+        uid = m.group(1) if m else ""
+    users = [f for f, t in corpus.items() if uid and uid in t and f != side]
+    flag = "ok" if not users else "USED"
+    bad += bool(users)
+    print("%-4s %-70s uid=%s users=%s" % (flag, c, uid or "-", users[:3] or "none"))
+print("sidecar uid used elsewhere: %d" % bad)
+print("--- replacements on disk")
+for c in cands:
+    p = pathlib.PurePosixPath(c)
+    if c.startswith("assets/audio/ambience/wav_src/"):
+        rep = "assets/audio/ambience/%s.ogg" % p.stem
+    elif p.name.startswith("ach_"):
+        rep = None
+    else:
+        rep = None
+    if rep:
+        print("%s -> %s %s" % (c, rep, "present" if (ROOT / rep).is_file() else "ABSENT"))
+v2 = sorted(f for f in files if f.startswith("assets/textures/icons_v2/ach_medal_v2_"))
+print("icons_v2/ach_medal_v2_*: %d files, first %s" % (len(v2), v2[:1]))
+w = sorted(f for f in files if f.startswith("assets/textures/renders_v2/weapons/") and f.endswith("_render_256.png"))
+print("renders_v2/weapons/*_render_256.png: %d files %s" % (len(w), [pathlib.PurePosixPath(x).name for x in w]))
+ach = [f for f, t in corpus.items() if f.endswith(".gd") and "ach_medal_v2" in t]
+print("code that reads ach_medal_v2: %s" % ach[:3])
+wp = [f for f, t in corpus.items() if f.endswith(".gd") and "_render_256" in t]
+print("code that reads *_render_256: %s" % wp[:3])
+
+--- run
+ok   assets/audio/ambience/wav_src/action_sting_loop.wav                    uid=uid://df4p7xg12twe0 users=none
+ok   assets/audio/ambience/wav_src/threat_high_loop.wav                     uid=uid://d3lc4seffqm88 users=none
+ok   assets/audio/ambience/wav_src/threat_low_loop.wav                      uid=uid://pcal1nspxl25 users=none
+ok   assets/textures/icons/ach_all_documents_96.png                         uid=uid://23ec3f0ee7c users=none
+ok   assets/textures/icons/ach_combo_master_96.png                          uid=uid://ef2dcfac7a25 users=none
+ok   assets/textures/icons/ach_explorer_96.png                              uid=uid://e02ga5d1dccf users=none
+ok   assets/textures/icons/ach_first_light_96.png                           uid=uid://85406a215daf users=none
+ok   assets/textures/icons/ach_full_district_96.png                         uid=uid://50fd77ed5c25 users=none
+ok   assets/textures/icons/ach_no_damage_boss_96.png                        uid=uid://f1fa7a252fea users=none
+ok   assets/textures/icons/ach_saver_96.png                                 uid=uid://1af67474646a users=none
+ok   assets/textures/icons/ach_slayer_96.png                                uid=uid://7515d1c5bc78 users=none
+ok   assets/textures/icons/ach_speedrunner_96.png                           uid=uid://fc7d3eb1dabd users=none
+ok   assets/textures/icons/ach_stealth_ghost_96.png                         uid=uid://6cbb3a28a1b0 users=none
+ok   assets/textures/icons/ach_survivor_96.png                              uid=uid://ba03017b65cd5 users=none
+ok   assets/textures/icons/ach_truth_seeker_96.png                          uid=uid://1c3bebddeb67 users=none
+ok   assets/textures/icons/weapons/pistol_128.png                           uid=uid://gaa58dcf154c users=none
+ok   assets/textures/icons/weapons/pistol_holster_128.png                   uid=uid://df5ba40421b3 users=none
+ok   assets/textures/icons/weapons/pistol_pressed_128.png                   uid=uid://d72bd8ea52b0 users=none
+ok   assets/textures/icons/weapons/rifle_128.png                            uid=uid://2cc405dac6a5 users=none
+ok   assets/textures/icons/weapons/rifle_holster_128.png                    uid=uid://7f8de3a3faf2 users=none
+ok   assets/textures/icons/weapons/rifle_pressed_128.png                    uid=uid://3b43202da66c users=none
+ok   assets/textures/icons/weapons/shotgun_128.png                          uid=uid://ba5548f02a5f7 users=none
+ok   assets/textures/icons/weapons/shotgun_holster_128.png                  uid=uid://dca0166d7b8b users=none
+ok   assets/textures/icons/weapons/shotgun_pressed_128.png                  uid=uid://f33aaf3cbe14 users=none
+sidecar uid used elsewhere: 0
+--- replacements on disk
+assets/audio/ambience/wav_src/action_sting_loop.wav -> assets/audio/ambience/action_sting_loop.ogg present
+assets/audio/ambience/wav_src/threat_high_loop.wav -> assets/audio/ambience/threat_high_loop.ogg present
+assets/audio/ambience/wav_src/threat_low_loop.wav -> assets/audio/ambience/threat_low_loop.ogg present
+icons_v2/ach_medal_v2_*: 40 files, first ['assets/textures/icons_v2/ach_medal_v2_01_96.png']
+renders_v2/weapons/*_render_256.png: 3 files ['pistol_render_256.png', 'rifle_render_256.png', 'shotgun_render_256.png']
+code that reads ach_medal_v2: ['scripts/ui/achievements_ui.gd']
+code that reads *_render_256: ['scripts/ui/weapon_compare_ui.gd']
+# EXIT=0

@@ -1,0 +1,153 @@
+# proof s24_dead_proof_c1
+# utc 20261015T155853Z
+# head 68e6c9d (uncommitted paths: 4)
+# env none
+# cmd python -I C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s24_dead_proof.py . .qa_logs/s24_cands_final.txt
+"""Session 24 (C1): the two-grep dead proof for a list of candidate paths, over every tracked text file.
+Pattern A: the repository path, with and without res://. Pattern B: the bare file name. A hit inside the candidate's own folder or its own
+sidecar is ignored; raw evidence (docs/artifacts, docs/stills) is not scanned, as in the Session 23 ledger. Hits are classed:
+CODE (.gd .tscn .tres .cfg .godot .json .gdshader outside docs and tools), TOOL (.py .sh .ps1 .yml .toml), EXPORT (export_presets.cfg),
+DOC (.md .txt .tsv .csv). A candidate is DEAD-BY-GREP only when it has no CODE and no TOOL hit. DOC hits are printed for reading
+(a document that cites the file as evidence or as planned art keeps it). Prints itself first.
+usage: python -I s24_dead_proof.py <repo> <list-file>   (one repository path per line)"""
+import collections
+import pathlib
+import re
+import subprocess
+import sys
+
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+ROOT = pathlib.Path(sys.argv[1]).resolve()
+cands = [ln.strip() for ln in pathlib.Path(sys.argv[2]).read_text(encoding="utf-8").splitlines() if ln.strip()]
+files = [f for f in subprocess.run(["git", "ls-files"], cwd=ROOT, capture_output=True, text=True, encoding="utf-8").stdout.split("\n") if f]
+TEXT = {".gd", ".tscn", ".tres", ".cfg", ".godot", ".json", ".gdshader", ".import", ".md", ".txt", ".tsv", ".csv", ".py", ".sh", ".ps1", ".yml", ".yaml", ".toml", ".uid", ".xml", ".svg"}
+SKIP_PREFIX = ("docs/artifacts/", "docs/stills/")
+corpus = {}
+for f in files:
+    if f.startswith(SKIP_PREFIX) or pathlib.PurePosixPath(f).suffix.lower() not in TEXT:
+        continue
+    p = ROOT / f
+    try:
+        if p.is_file() and p.stat().st_size < 3_000_000:
+            corpus[f] = p.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        pass
+print("candidates: %d, tracked text files read: %d" % (len(cands), len(corpus)))
+
+
+def klass(f):
+    if f == "export_presets.cfg":
+        return "EXPORT"
+    suf = pathlib.PurePosixPath(f).suffix.lower()
+    if suf in (".md", ".txt", ".tsv", ".csv"):
+        return "DOC"
+    if suf in (".py", ".sh", ".ps1", ".yml", ".yaml", ".toml") or f.startswith("tools/") or f.startswith("scripts/tools/") or f.startswith("scenes/tools/"):
+        return "TOOL"
+    return "CODE"
+
+
+dead = 0
+for c in cands:
+    base = pathlib.PurePosixPath(c).name
+    parent = str(pathlib.PurePosixPath(c).parent) + "/"
+    stem_side = {c, c + ".import", c + ".uid"}
+    hits = collections.defaultdict(list)
+    for f, text in corpus.items():
+        if f in stem_side or f.startswith(parent) and f.endswith((".import", ".uid")) and pathlib.PurePosixPath(f).stem == base:
+            continue
+        a = c in text or ("res://" + c) in text
+        b = re.search(r"(?<![A-Za-z0-9_])" + re.escape(base) + r"(?![A-Za-z0-9_])", text) is not None  # a whole name: local_leaderboard.gd is not leaderboard.gd
+        if a or b:
+            hits[klass(f)].append((f, "A" if a else "B"))
+    blocking = len(hits["CODE"]) + len(hits["TOOL"])
+    verdict = "DEAD-BY-GREP" if blocking == 0 else "BLOCKED"
+    dead += blocking == 0
+    print("%-12s %-72s code=%d tool=%d export=%d doc=%d" % (verdict, c, len(hits["CODE"]), len(hits["TOOL"]), len(hits["EXPORT"]), len(hits["DOC"])))
+    for k in ("CODE", "TOOL"):
+        for f, how in hits[k][:3]:
+            print("      %s %s (%s)" % (k, f, how))
+    for f, how in hits["DOC"][:4]:
+        print("      DOC  %s (%s)" % (f, how))
+print("dead by grep: %d of %d" % (dead, len(cands)))
+
+--- run
+candidates: 37, tracked text files read: 1798
+DEAD-BY-GREP _QUARANTINE/scripts/audio/proc_audio.gd                                  code=0 tool=0 export=0 doc=13
+      DOC  docs/ARENA_CLOSURE.md (B)
+      DOC  docs/CLOUD_AUDIT.md (B)
+      DOC  docs/CORRECTION_LOG.md (B)
+      DOC  docs/DESIGN_AUDIT_ARENA.md (B)
+DEAD-BY-GREP _QUARANTINE/scripts/audio_atmosphere.gd                                  code=0 tool=0 export=0 doc=4
+      DOC  docs/KNOWN_ISSUES.md (B)
+      DOC  docs/PLANS.md (B)
+      DOC  docs/SESSION_REPORT_FINAL_PERFECTION.md (B)
+      DOC  docs/SLOP_REPORT_V2.md (B)
+DEAD-BY-GREP _QUARANTINE/scripts/components/attack_component_3d.gd                    code=0 tool=0 export=0 doc=1
+      DOC  docs/SLOP_REPORT_V2.md (B)
+DEAD-BY-GREP _QUARANTINE/scripts/core/progression_system.gd                           code=0 tool=0 export=0 doc=1
+      DOC  docs/SLOP_REPORT_V2.md (B)
+DEAD-BY-GREP _QUARANTINE/scripts/effects/footstep_dust.gd                             code=0 tool=0 export=0 doc=1
+      DOC  docs/SLOP_REPORT_V2.md (B)
+DEAD-BY-GREP _QUARANTINE/scripts/effects/hit_spark.gd                                 code=0 tool=0 export=0 doc=1
+      DOC  docs/SLOP_REPORT_V2.md (B)
+DEAD-BY-GREP _QUARANTINE/scripts/environment/world_env.gd                             code=0 tool=0 export=0 doc=1
+      DOC  docs/SLOP_REPORT_V2.md (B)
+DEAD-BY-GREP _QUARANTINE/scripts/system/particle_manager.gd                           code=0 tool=0 export=0 doc=1
+      DOC  docs/SLOP_REPORT_V2.md (B)
+DEAD-BY-GREP _QUARANTINE/scripts/systems/leaderboard.gd                               code=0 tool=0 export=0 doc=3
+      DOC  docs/SECURITY_PATCH_SPEC.md (B)
+      DOC  docs/SLOP_REPORT_V2.md (B)
+      DOC  docs/STATIC_AUDIT.md (B)
+DEAD-BY-GREP _QUARANTINE/scripts/ui/controls.gd                                       code=0 tool=0 export=0 doc=2
+      DOC  docs/ERROR_LOG_FINAL.md (B)
+      DOC  docs/SLOP_REPORT_V2.md (B)
+DEAD-BY-GREP _QUARANTINE/scripts/ui/ui_theme.gd                                       code=0 tool=0 export=0 doc=1
+      DOC  docs/SLOP_REPORT_V2.md (B)
+DEAD-BY-GREP _QUARANTINE/scripts/visual/moon_disc.gd                                  code=0 tool=0 export=0 doc=1
+      DOC  docs/SLOP_REPORT_V2.md (B)
+DEAD-BY-GREP _QUARANTINE/scripts/world/ftue_generator_3d.gd                           code=0 tool=0 export=0 doc=3
+      DOC  docs/SESSION_REPORT_UX.md (B)
+      DOC  docs/SLOP_REPORT_V2.md (B)
+      DOC  docs/STATIC_AUDIT.md (B)
+DEAD-BY-GREP assets/audio/ambience/wav_src/action_sting_loop.wav                      code=0 tool=0 export=0 doc=2
+      DOC  docs/AUDIO_CONVERT.md (B)
+      DOC  docs/REPORT_ASSETS.md (A)
+DEAD-BY-GREP assets/audio/ambience/wav_src/threat_high_loop.wav                       code=0 tool=0 export=0 doc=2
+      DOC  docs/AUDIO_CONVERT.md (B)
+      DOC  docs/REPORT_ASSETS.md (A)
+DEAD-BY-GREP assets/audio/ambience/wav_src/threat_low_loop.wav                        code=0 tool=0 export=0 doc=2
+      DOC  docs/AUDIO_CONVERT.md (B)
+      DOC  docs/REPORT_ASSETS.md (A)
+DEAD-BY-GREP assets/textures/icons/ach_all_documents_96.png                           code=0 tool=0 export=0 doc=0
+DEAD-BY-GREP assets/textures/icons/ach_combo_master_96.png                            code=0 tool=0 export=0 doc=0
+DEAD-BY-GREP assets/textures/icons/ach_explorer_96.png                                code=0 tool=0 export=0 doc=0
+DEAD-BY-GREP assets/textures/icons/ach_first_light_96.png                             code=0 tool=0 export=0 doc=0
+DEAD-BY-GREP assets/textures/icons/ach_full_district_96.png                           code=0 tool=0 export=0 doc=0
+DEAD-BY-GREP assets/textures/icons/ach_no_damage_boss_96.png                          code=0 tool=0 export=0 doc=0
+DEAD-BY-GREP assets/textures/icons/ach_saver_96.png                                   code=0 tool=0 export=0 doc=0
+DEAD-BY-GREP assets/textures/icons/ach_slayer_96.png                                  code=0 tool=0 export=0 doc=0
+DEAD-BY-GREP assets/textures/icons/ach_speedrunner_96.png                             code=0 tool=0 export=0 doc=0
+DEAD-BY-GREP assets/textures/icons/ach_stealth_ghost_96.png                           code=0 tool=0 export=0 doc=0
+DEAD-BY-GREP assets/textures/icons/ach_survivor_96.png                                code=0 tool=0 export=0 doc=0
+DEAD-BY-GREP assets/textures/icons/ach_truth_seeker_96.png                            code=0 tool=0 export=0 doc=0
+DEAD-BY-GREP assets/textures/icons/weapons/pistol_128.png                             code=0 tool=0 export=0 doc=1
+      DOC  docs/REPORT_CONTENT_WAVE.md (A)
+DEAD-BY-GREP assets/textures/icons/weapons/pistol_holster_128.png                     code=0 tool=0 export=0 doc=1
+      DOC  docs/REPORT_CONTENT_WAVE.md (A)
+DEAD-BY-GREP assets/textures/icons/weapons/pistol_pressed_128.png                     code=0 tool=0 export=0 doc=1
+      DOC  docs/REPORT_CONTENT_WAVE.md (A)
+DEAD-BY-GREP assets/textures/icons/weapons/rifle_128.png                              code=0 tool=0 export=0 doc=1
+      DOC  docs/REPORT_CONTENT_WAVE.md (A)
+DEAD-BY-GREP assets/textures/icons/weapons/rifle_holster_128.png                      code=0 tool=0 export=0 doc=1
+      DOC  docs/REPORT_CONTENT_WAVE.md (A)
+DEAD-BY-GREP assets/textures/icons/weapons/rifle_pressed_128.png                      code=0 tool=0 export=0 doc=1
+      DOC  docs/REPORT_CONTENT_WAVE.md (A)
+DEAD-BY-GREP assets/textures/icons/weapons/shotgun_128.png                            code=0 tool=0 export=0 doc=1
+      DOC  docs/REPORT_CONTENT_WAVE.md (A)
+DEAD-BY-GREP assets/textures/icons/weapons/shotgun_holster_128.png                    code=0 tool=0 export=0 doc=1
+      DOC  docs/REPORT_CONTENT_WAVE.md (A)
+DEAD-BY-GREP assets/textures/icons/weapons/shotgun_pressed_128.png                    code=0 tool=0 export=0 doc=1
+      DOC  docs/REPORT_CONTENT_WAVE.md (A)
+dead by grep: 37 of 37
+# EXIT=0

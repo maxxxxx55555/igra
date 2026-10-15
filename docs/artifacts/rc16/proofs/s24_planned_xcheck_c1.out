@@ -1,0 +1,88 @@
+# proof s24_planned_xcheck_c1
+# utc 20261015T155913Z
+# head 68e6c9d (uncommitted paths: 5)
+# env none
+# cmd python -I C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s24_planned_xcheck.py . .qa_logs/s24_cands_final.txt
+"""Session 24 (C1): the planned-feature cross-check of the directive. For each candidate (file name and, for scripts, the stem), the lines
+of the canon and planning documents that name it: VISUAL_PASS, STORE_KIT, CARD_ART_BRIEF, MUSIC_BRIEF, MUSIC_SPEC, GDD (all GDD*.md),
+GAMEFEEL_SPEC, PRODUCTION_BIBLE and PLAN.md. A candidate named there as something to build or keep is KEEP-PLANNED; a candidate named as
+dead, archived or superseded, or only listed, is not. Prints the lines for reading. Prints itself first.
+usage: python -I s24_planned_xcheck.py <repo> <list-file>"""
+import pathlib
+import re
+import sys
+
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+ROOT = pathlib.Path(sys.argv[1]).resolve()
+cands = [ln.strip() for ln in pathlib.Path(sys.argv[2]).read_text(encoding="utf-8").splitlines() if ln.strip()]
+docs = ["docs/VISUAL_PASS.md", "docs/STORE_KIT.md", "docs/CARD_ART_BRIEF.md", "docs/MUSIC_BRIEF.md", "docs/MUSIC_SPEC.md", "docs/GAMEFEEL_SPEC.md",
+        "docs/PRODUCTION_BIBLE.md", "PLAN.md"] + sorted(str(p.relative_to(ROOT)).replace("\\", "/") for p in (ROOT / "docs").glob("GDD*.md"))
+text = {d: (ROOT / d).read_text(encoding="utf-8", errors="replace").splitlines() for d in docs if (ROOT / d).is_file()}
+print("canon documents read: %d" % len(text))
+flagged = 0
+for c in cands:
+    name = pathlib.PurePosixPath(c).name
+    stem = name.rsplit(".", 1)[0]
+    needles = {name}
+    needles.add(stem)  # the stem of an asset too: a plan names "ambient_dark_loop", not the .wav
+    rows = []
+    for d, lines in text.items():
+        for n, ln in enumerate(lines, 1):
+            if any(re.search(r"(?<![A-Za-z0-9_])" + re.escape(k) + r"(?![A-Za-z0-9_])", ln) for k in needles):
+                rows.append((d, n, ln.strip()[:170]))
+    if rows:
+        flagged += 1
+        print("NAMED %s" % c)
+        for d, n, ln in rows[:5]:
+            print("      %s:%d %s" % (d, n, ln))
+    else:
+        print("clear %s" % c)
+print("named in a canon or planning document: %d of %d" % (flagged, len(cands)))
+
+--- run
+canon documents read: 11
+clear _QUARANTINE/scripts/audio/proc_audio.gd
+clear _QUARANTINE/scripts/audio_atmosphere.gd
+clear _QUARANTINE/scripts/components/attack_component_3d.gd
+clear _QUARANTINE/scripts/core/progression_system.gd
+clear _QUARANTINE/scripts/effects/footstep_dust.gd
+clear _QUARANTINE/scripts/effects/hit_spark.gd
+NAMED _QUARANTINE/scripts/environment/world_env.gd
+      docs/VISUAL_PASS.md:37 (`world_env_setup.gd` overrides `world_env.tscn` at runtime).
+clear _QUARANTINE/scripts/system/particle_manager.gd
+NAMED _QUARANTINE/scripts/systems/leaderboard.gd
+      PLAN.md:281 bars over existing document-unlock data), a local leaderboard in Stats
+NAMED _QUARANTINE/scripts/ui/controls.gd
+      docs/PRODUCTION_BIBLE.md:76 everywhere except genuinely circular controls (e.g. the mobile joystick
+      docs/PRODUCTION_BIBLE.md:144 controls → requirements → free-updates line → keywords → rating).
+      docs/GDD_CONFORMANCE.md:35 | §14 | Low/Medium/High/Ultra graphics plus colorblind 3 types, text size, contrast, auto-aim, arachnophobia, hints | PARTIAL | `C:\Users\Maxsim\Desktop\TLS_Build\THE_LAS
+clear _QUARANTINE/scripts/ui/ui_theme.gd
+clear _QUARANTINE/scripts/visual/moon_disc.gd
+clear _QUARANTINE/scripts/world/ftue_generator_3d.gd
+clear assets/audio/ambience/wav_src/action_sting_loop.wav
+clear assets/audio/ambience/wav_src/threat_high_loop.wav
+clear assets/audio/ambience/wav_src/threat_low_loop.wav
+clear assets/textures/icons/ach_all_documents_96.png
+clear assets/textures/icons/ach_combo_master_96.png
+clear assets/textures/icons/ach_explorer_96.png
+clear assets/textures/icons/ach_first_light_96.png
+clear assets/textures/icons/ach_full_district_96.png
+clear assets/textures/icons/ach_no_damage_boss_96.png
+clear assets/textures/icons/ach_saver_96.png
+clear assets/textures/icons/ach_slayer_96.png
+clear assets/textures/icons/ach_speedrunner_96.png
+clear assets/textures/icons/ach_stealth_ghost_96.png
+clear assets/textures/icons/ach_survivor_96.png
+clear assets/textures/icons/ach_truth_seeker_96.png
+clear assets/textures/icons/weapons/pistol_128.png
+clear assets/textures/icons/weapons/pistol_holster_128.png
+clear assets/textures/icons/weapons/pistol_pressed_128.png
+clear assets/textures/icons/weapons/rifle_128.png
+clear assets/textures/icons/weapons/rifle_holster_128.png
+clear assets/textures/icons/weapons/rifle_pressed_128.png
+clear assets/textures/icons/weapons/shotgun_128.png
+clear assets/textures/icons/weapons/shotgun_holster_128.png
+clear assets/textures/icons/weapons/shotgun_pressed_128.png
+named in a canon or planning document: 3 of 37
+# EXIT=0

@@ -439,6 +439,11 @@ if "$PY" tools/qa_sim/gitignore_check.py --demo >/dev/null 2>&1 && "$PY" tools/q
 else
   bad "gitignore_check (см. 'python tools/qa_sim/gitignore_check.py')"
 fi
+if "$PY" tools/qa_sim/branch_absorb_sim.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/branch_absorb_sim.py --check docs/ABSORB_PLAN.md >/dev/null 2>&1; then
+  ok "branch_absorb_sim (every branch on origin has a disposition in docs/ABSORB_PLAN.md, a deleted one says so)"
+else
+  bad "branch_absorb_sim (см. 'python tools/qa_sim/branch_absorb_sim.py --check docs/ABSORB_PLAN.md')"
+fi
 if "$PY" tools/qa_sim/secret_scan.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/secret_scan.py >/dev/null 2>&1; then
   ok "secret_scan (no key, token, private key or assigned secret in any tracked text file: docs/CLEANUP_LEDGER.md section 7)"
 else
