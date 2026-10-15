@@ -1,5 +1,13 @@
 # Known issues
 
+## OPEN (2026-10-15, Session 24): what the v8.1.0-premium pass left
+
+- **Parallel branches** (`docs/ABSORB_PLAN.md`): 13 remain on origin, none merged into `main`, none rejected for fabrication; the owner drops any with `git push origin --delete <name>`. Two of them hold nothing `main` lacks: `arena/01a0c61a-igra` (its one file is blob-identical) and `arena/01a0c619-igra` (three of four files are; the fourth, `docs/SECURITY_PATCH_SPEC.md`, has later edits in `main`).
+- **Quarantine** (`docs/CLEANUP_LEDGER.md` 12.3): three scripts that a planning document still names (`death_sequence.gd`, `onboarding.gd`, `city_decorator.gd`) and two wav masters whose bed the trailer plan names stay in `_QUARANTINE/` and `assets/audio/ambience/wav_src/`; 42 UNCERTAIN rows of the audit are the owner's. The 25 sha256 duplicate groups (18.7 MB) were not examined file by file.
+- **Generator run** (`docs/GEMINI_HANDOFF.md`): 15 of the 19 recipe tracks are not on disk, and the 11 lit beds are synthesized loops; the seven cards have no licence row (`docs/CARD_ART_BRIEF.md` section 9, item 1). The game runs without any of them.
+- **LOD, occlusion culling, texture streaming**: unchanged, with the reasons of Session 23 (the table of the section "Session 23: deferred by design and owner rows" below).
+- **History rewrite (K-1)** and the rotation of the two credentials of `docs/CLEANUP_LEDGER.md` section 8: the owner's, as before.
+
 ## OPEN (2026-10-11, Session 19; rated in Session 20: 168, 178, 179 and 180 are closed; triaged in Session 21: 169, 172 and 174 are closed, 170, 171, 173 and 177 are the owner's, CORRECTION_LOG 198): findings of the v8.0.0 release validation that stay open, for the owner to rate
 
 The pass fixed three P0 (CORRECTION_LOG 165 to 167) and left these. None is a softlock or a crash: the full loop (`docs/artifacts/rc16/proofs/s19_loop_14fc1b3.out`, 3 seeds, 12 processes, 427 steps, 0 failed) did not meet them as failures, and the exploit run (`docs/artifacts/rc16/proofs/s19_exploit_post_afb76e9.out`, `DONE checks=8 fails=0`) holds the guards. Each row has its mechanism, its file and line and its owner action in `docs/CORRECTION_LOG.md`. Session 20 (the final window pass) closed 168, 178, 179 and 180 with a fix and its AF2 pair and rated the other seven (CORRECTION_LOG 194 and 195); none of the four fixes is in `build/tls.aab`, which was built from `e241597`.
