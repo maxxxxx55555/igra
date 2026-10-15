@@ -12,7 +12,7 @@ Debug-keystore уже есть в `res://tls_debug.keystore` (сгенериро
 powershell -ExecutionPolicy Bypass -File tools/make_keystore.ps1
 ```
 
-- alias: `tlsdebug`, пароль: `tlsdebug` (только для DEBUG-сборок).
+- alias: `tlsdebug`, пароль: тот, что печатает `tools/make_keystore.ps1` (или `$env:TLS_DEBUG_KEYSTORE_PASS`); только для DEBUG-сборок, в документах не хранится.
 - Для публикации в Google Play сгенерируй отдельный **release-keystore** и храни в секрете:
   `keytool -genkey -v -keystore release.keystore -alias tlsrelease -keyalg RSA -keysize 2048 -validity 10000`.
 - В `export_presets.cfg` прописан debug-keystore. Release-пути — `keystore/release` — заполняются вручную перед финальной подписью.

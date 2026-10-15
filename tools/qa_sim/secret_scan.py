@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-"""K1.7 (Session 23): secret-shaped strings in the tracked text files (docs/CLEANUP_LEDGER.md, section 7).
+"""K1.7 (Session 23): secret-shaped strings in the tracked text files (docs/CLEANUP_LEDGER.md, section 8).
 
 usage: python tools/qa_sim/secret_scan.py [--demo]
 Every tracked text file is read (the art, the audio and the evidence frames are not text and are left out) and tested against the shapes of the usual keys and tokens (a Google, an OpenAI-style,
-an Anthropic, a GitHub, a Slack, an AWS key; a private key block; a JWT; a key, secret, token or password assigned a long literal, also a PowerShell $pass = "..."). A hit prints "FAIL <file>:<line>: <kind>" with
+an Anthropic, a GitHub, a Slack, an AWS key; a private key block; a JWT; a key, secret, token or password assigned a long literal, also a PowerShell $pass = "..."; a document that prints a password in backticks, in English or
+Russian). A hit prints "FAIL <file>:<line>: <kind>" with
 the file and the line and NEVER the value, and the exit code is 1. The two known false positives are listed in ALLOWED, each with its reason: a SHA-256 digest in the integrity manifest
 and the fake key of the scanner's own test fixture in tools/qa_sim/release_export_check.py. The history is swept by hand when a pass asks for it (`git log --all -G`), not here.
 """
@@ -24,6 +25,7 @@ PATTERNS = {
     "jwt": re.compile(r"\beyJ[A-Za-z0-9_\-]{10,}\.[A-Za-z0-9_\-]{10,}\.[A-Za-z0-9_\-]{10,}"),
     "assigned secret": re.compile(r"(?i)\b(api[_-]?key|secret|token|passwd|password|storepass|keypass|private[_-]?key)\b[\"']?\s*[:=]\s*[\"']([A-Za-z0-9_\-/+=]{16,})[\"']"),
     "assigned password variable": re.compile(r"(?i)\$(pass|password|pwd|secret|token|apikey)\s*=\s*[\"'][^\"'$]{6,}[\"']"),
+    "password printed in a document": re.compile(r"(?i)\b(пароль|password|passwd)\s*[:=]?\s*`([A-Za-z0-9_\-]{6,})`"),
     "long literal near a key word": re.compile(r"(?i)(key|secret|token)[^\n]{0,30}[\"']([A-Fa-f0-9]{32,}|[A-Za-z0-9+/]{40,}={0,2})[\"']"),
 }
 ALLOWED = {
@@ -55,6 +57,7 @@ def demo():
     assert scan_text('x = "{env:OMNIROUTE_API_KEY}"') == []
     assert (1, "private key block") in scan_text("-----BEGIN " + "RSA PRIVATE KEY-----")  # split, so this file does not hold the shape it looks for
     assert scan_text("the key to the city") == []
+    assert scan_text("пароль: `abc" + "def123` (только для DEBUG)") == [(1, "password printed in a document")] and scan_text("its store password is `$env:TLS_DEBUG_KEYSTORE_PASS`") == []  # split, so this file does not print the shape
     print("secret_scan demo: a key literal and a private key block are found, an environment reference and a plain sentence are not")
     return 0
 

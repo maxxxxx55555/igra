@@ -71,7 +71,7 @@ human-readable ("1.0", then "1.0.1", …).
    and ar with the §9 texts.
 5. **Test and release → Setup → App signing:** keep Google-generated app signing (§1).
 6. **Internal testing:**
-   - Create a new release, upload `build/tls.aab`, name it "1.0 (1)".
+   - Create a new release, upload `build/tls.aab`, name it "1.0 (2)" (the bundle of Session 23 carries `version/code` 2).
    - Release notes: en-US *"First test build."* and ru-RU *"Первая тестовая сборка."*
    - Save → Review → **Start rollout**.
    - Testers tab: add an email list and copy the opt-in link.

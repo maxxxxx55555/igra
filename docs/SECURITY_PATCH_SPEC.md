@@ -422,7 +422,7 @@ not unsigned on the new format; their legacy acceptance remains a compatibility 
 #### D-04 — Debug signing material is present in tracked export configuration (P2)
 
 - **Evidence:** Android preset contains `keystore/debug="res://tls_debug.keystore"`, user
-  `tlsdebug`, and password `tlsdebug` at `export_presets.cfg:23-27`; release fields are empty at
+  `tlsdebug`, and a password (not repeated here: `docs/release_checklist.md` step 0 rotates it) at `export_presets.cfg:23-27`; release fields are empty at
   `26-28`. The keystore is ignored and not present in this checkout (`.gitignore:43-45`), so this
   is credential/config leakage, not proof that the binary is currently repackable with that file.
 - **Attack steps:** Obtain the debug keystore from a build machine or old artifact; use the leaked

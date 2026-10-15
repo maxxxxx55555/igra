@@ -84,7 +84,7 @@ spec for the first reachable roof (the school: the clock tower stair), with a na
 ## 5. What is not filled (D1.6): honest rows
 
 - **Void blocks outside the fog districts.** The blocks hold props, litter, pools of light and a landmark behind them, but their interiors are dark ground where no
-  lamp reaches; a ground haze there would cost fill rate that the dev iGPU does not have (the last windowed reading was a p95 of 28.79 ms against the budget of 33 ms: `docs/PERF_PASS.md:19`). Owner row D1-a: a baked light
+  lamp reaches; a ground haze there would cost fill rate that the dev iGPU does not have (the windowed reading at the final head is a p95 of 35.00 ms against the budget of 33 ms, red: `docs/PERF_PASS.md:19`; 28.79 ms at `v8.0.0-shipping`, `docs/PERF_PASS.md:49`). Owner row D1-a: a baked light
   pass or an art pass of interiors (a shop front, a fence, a hedge as a navigation-safe collision) per district.
 - **No collision buildings in the blocks**, so nothing hides a monster's route: collision in a block changes where the monsters can walk, and the three-seed bot
   (the IRON RULE) is the only proof of that; the dressing is visual so the bot's wins hold. Owner row D1-b.

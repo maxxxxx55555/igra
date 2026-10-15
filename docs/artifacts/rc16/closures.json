@@ -2132,12 +2132,14 @@
  },
  {
   "id": "S23-L24-PLAYTHROUGH",
-  "claim": "The play-throughs A and S on the final tree: A 54 steps and S 19 steps, none failed; the A04h step (the pale square) passed.",
+  "claim": "The play-throughs A and S on the final tree: A 67 steps and S 23 steps, none failed (54 and 19 PASS lines, 13 and 4 notes); the A04h step (the pale square) passed.",
   "cmd": "bash tools/qa_sim/playthrough A S",
   "proof": "s23_last_a4acbb5",
   "quotes": [
    "mode A rc=0",
-   "mode S rc=0"
+   "[pt] DONE mode=A steps=67 fails=0",
+   "mode S rc=0",
+   "[pt] DONE mode=S steps=23 fails=0"
   ],
   "frames": [],
   "commit": "a4acbb5"
@@ -2182,7 +2184,7 @@
  },
  {
   "id": "S23-L24-CHECKALL",
-  "claim": "check.sh --all on the final tree: 84 passed and 1 failed, the visual truth gate on the untracked boot-title frame that the same chain's final-frames run left in docs/stills/final (CORRECTION_LOG 250); the gate scope is fixed since.",
+  "claim": "check.sh --all on the final tree: 472 closeout checks and 0 fails; 84 passed and 1 failed, the visual truth gate on the untracked boot-title frame that the same chain's final-frames run left in docs/stills/final (CORRECTION_LOG 250); the gate scope is fixed since.",
   "cmd": "bash tools/check.sh --all",
   "proof": "s23_last_a4acbb5",
   "quotes": [
@@ -2245,5 +2247,17 @@
   ],
   "frames": [],
   "commit": "8ad185a"
+ },
+ {
+  "id": "S23-L24-CLOSEOUT-ALL",
+  "claim": "The whole closeout inside check.sh --all on the final tree: 472 checks and 0 fails (the s23 group alone is S23-L24-CLOSEOUT).",
+  "cmd": "bash tools/check.sh --all (the closeout step)",
+  "proof": "s23_last_a4acbb5",
+  "attach": "gate_closeout_check_scene.log",
+  "quotes": [
+   "[closeout] DONE checks=472 fails=0"
+  ],
+  "frames": [],
+  "commit": "a4acbb5"
  }
 ]

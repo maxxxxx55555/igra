@@ -82,7 +82,7 @@ keystore/release_password=<the password you set above>
 ```
 
 - [ ] CHK013 Confirm the debug keystore is NOT what ships in the RC
-      (`keystore/debug=res://tls_debug.keystore`, user/password `tlsdebug`; the repo
+      (`keystore/debug=res://tls_debug.keystore`, its alias and password as the rc15 preset held them (not repeated here: rotated by `docs/release_checklist.md` step 0); the repo
       rule: "Debug-подпись не используется в релиз-кандидате").
 
 **Evidence**: root `RELEASE_CHECKLIST.md` §1 (command, alias `tlsrelease`, the three
@@ -289,7 +289,7 @@ cannot be changed afterward for the same listing.
       Mode hides the HUD) is the doc-recommended capture aid.
 - [ ] CHK056 **Release → Testing → Open testing → Create new release** → **App
       bundles** → upload the signed `.aab` from STEP 3 → **Release name** e.g.
-      `1.0 (1)` → **Release notes** paste `store/changelog.md`'s v1.0 block (EN inside
+      `1.0 (2)` (the bundle of Session 23 carries `version/code` 2) → **Release notes** paste `store/changelog.md`'s v1.0 block (EN inside
       `<en-US>…</en-US>`, RU inside `<ru-RU>…</ru-RU>`) → **Countries / regions** →
       **Review release** → resolve warnings → **Start rollout to Open testing**.
 - [ ] CHK057 Optional, non-blocking, doc-listed: real AppLovin SDK key (root
