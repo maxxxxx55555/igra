@@ -2848,5 +2848,131 @@
   ],
   "frames": [],
   "commit": "decfc94"
+ },
+ {
+  "id": "S25-GEMINI-CHECK",
+  "claim": "Of the nine paths the directive names, 2 are in the tree (the repository's own) and 7 are on no ref and in no commit of 75 refs.",
+  "cmd": "python -I s25_gemini_check.py . (exit 1 by design: named files missing)",
+  "proof": "s25_gemini_check",
+  "quotes": [
+   "named paths present in the working tree: 2 of 9",
+   "refs searched (remote branches, pull-request heads, local branches, tags): 75; refs holding a Gemini-only name: 0 []",
+   "paths with a Gemini-only name anywhere in the history of any ref: 0 []"
+  ],
+  "frames": [],
+  "commit": "53a5f83"
+ },
+ {
+  "id": "S25-EQUIV-PROOFS",
+  "claim": "The proofs audit holds every closure of PROOFS.md.",
+  "cmd": "python tools/qa_sim/proofs_audit_sim.py",
+  "proof": "s25_equiv_proofs_audit",
+  "quotes": [
+   "proofs_audit_sim: 220 closure(s), PASS 220, FAIL 0"
+  ],
+  "frames": [],
+  "commit": "53a5f83"
+ },
+ {
+  "id": "S25-EQUIV-ACH",
+  "claim": "The achievement reachability sim reads the 31 shipped achievements with no finding.",
+  "cmd": "python tools/qa_sim/achievements_sim.py",
+  "proof": "s25_equiv_achievements",
+  "quotes": [
+   "achievements_sim: 31 achievement(s), 0 finding(s)"
+  ],
+  "frames": [],
+  "commit": "53a5f83"
+ },
+ {
+  "id": "S25-EQUIV-SAVEMIG",
+  "claim": "The save-migration sim's static part reads no finding.",
+  "cmd": "python tools/qa_sim/save_migration_sim.py --static",
+  "proof": "s25_equiv_savemig",
+  "quotes": [
+   "save_migration_sim: SAVE_VERSION 3, BACKUP_DEPTH 3, static only, 0 finding(s)"
+  ],
+  "frames": [],
+  "commit": "53a5f83"
+ },
+ {
+  "id": "S25-EQUIV-FUZZ",
+  "claim": "The i18n placeholder fuzz reads 1,560 keys with no finding.",
+  "cmd": "python tools/qa_sim/i18n_placeholder_fuzz.py",
+  "proof": "s25_equiv_i18n_fuzz",
+  "quotes": [
+   "i18n_placeholder_fuzz: 1560 key(s), 497 call(s), 0 finding(s)"
+  ],
+  "frames": [],
+  "commit": "53a5f83"
+ },
+ {
+  "id": "S25-EQUIV-TRUTH",
+  "claim": "The i18n truth gate passes 12 of 12 locales.",
+  "cmd": "python tools/qa_sim/i18n_truth_gate.py",
+  "proof": "s25_equiv_i18n_truth",
+  "quotes": [
+   "12/12 locales PASS"
+  ],
+  "frames": [],
+  "commit": "53a5f83"
+ },
+ {
+  "id": "S25-EQUIV-SECRETS",
+  "claim": "No secret-shaped string in the tracked text files.",
+  "cmd": "python tools/qa_sim/secret_scan.py",
+  "proof": "s25_equiv_secret_scan",
+  "quotes": [
+   "secret_scan: 1987 tracked text file(s), 2 allowed false positive(s), 0 finding(s)"
+  ],
+  "frames": [],
+  "commit": "53a5f83"
+ },
+ {
+  "id": "S25-ACH-HOOKS",
+  "claim": "The 19 proposed achievements checked at HEAD: 6 cite a signal that is declared and emitted, 13 cite one that does not exist.",
+  "cmd": "python -I s25_ach_hooks.py . origin/jules/parallel-audit-1403790779115270347",
+  "proof": "s25_ach_hooks",
+  "quotes": [
+   "proposals read: 19; signals declared in event_bus.gd: 93",
+   "rows whose signal is declared and emitted at HEAD: 6 of 19"
+  ],
+  "frames": [],
+  "commit": "53a5f83"
+ },
+ {
+  "id": "S25-BRANCH-SIM",
+  "claim": "After the deletions, origin holds 3 branches besides main and each has its row; the ten gone ones say deleted.",
+  "cmd": "python tools/qa_sim/branch_absorb_sim.py --check docs/ABSORB_PLAN.md",
+  "proof": "s25_branch_sim",
+  "quotes": [
+   "branch_absorb_sim: 3 branch(es) on origin, FAIL 0, PASS 3"
+  ],
+  "frames": [],
+  "commit": "4cc659b"
+ },
+ {
+  "id": "S25-RUNTIME",
+  "claim": "No runtime path differs between the commit the bundle was exported from and HEAD, and every tracked file with a bundle entry is runtime.",
+  "cmd": "python -I s24_runtime_diff_2.py .",
+  "proof": "s25_runtime_diff",
+  "quotes": [
+   "bundle: 1626 resource entries outside .godot; 1857 tracked files have one; of those not runtime by the definition: 0 []",
+   "ebc1acc (the commit the bundle was exported from): 154 paths differ from HEAD (renames read as delete and add), 0 of them runtime []",
+   "runtime paths that differ, or that the bundle holds and the definition misses: 0"
+  ],
+  "frames": [],
+  "commit": "4cc659b"
+ },
+ {
+  "id": "S25-STATIC",
+  "claim": "The static gates on the commit that holds the Session 25 documents: 62 of 62.",
+  "cmd": "bash tools/check.sh --static",
+  "proof": "s25_static",
+  "quotes": [
+   "Всё зелёное. Проверок пройдено: 62"
+  ],
+  "frames": [],
+  "commit": "4cc659b"
  }
 ]

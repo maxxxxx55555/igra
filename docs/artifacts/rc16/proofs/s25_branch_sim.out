@@ -1,0 +1,11 @@
+# proof s25_branch_sim
+# utc 20261015T215325Z
+# head 4cc659b (uncommitted paths: 0)
+# env none
+# cmd python tools/qa_sim/branch_absorb_sim.py --check docs/ABSORB_PLAN.md
+branch                                             commits  SAME MOVED DIVERGED MISSING GONE
+origin/claude/keen-cori-0sc9uo                           2     0     0        1       1    0
+origin/claude/serene-sagan-wynb3r                        8     4     1       26       0    0
+origin/gh-pages                                          1     0     0        0       0    0
+branch_absorb_sim: 3 branch(es) on origin, FAIL 0, PASS 3
+# EXIT=0
