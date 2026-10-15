@@ -1,0 +1,66 @@
+# proof s23_ambient_states_l25
+# utc 20261015T023207Z
+# head 0752c9b (uncommitted paths: 292)
+# env none
+# cmd python -I .qa_logs/proofs/s23_ambient_states_l25.py pair run, a4acbb5 (launch 24, before the fix)=docs/artifacts/rc16/proofs/s23_last_a4acbb5.attach.density_frames_pair.log English store run, 85b55ed (row 119, before the fix)=docs/artifacts/rc16/proofs/s23_last_store_en2_85b55ed.attach.density_frames_store.log Russian store run, a4acbb5 (launch 24, before the fix)=docs/artifacts/rc16/proofs/s23_last_a4acbb5.attach.density_frames_store_ru.log pair run, 0752c9b (fix chain)=docs/artifacts/rc16/proofs/s23_fixenv_0752c9b.attach.density_frames_pair.log English store run, 0752c9b (fix chain)=docs/artifacts/rc16/proofs/s23_fixenv_0752c9b.attach.density_frames_store_en.log Russian store run, 0752c9b (fix chain)=docs/artifacts/rc16/proofs/s23_fixenv_0752c9b.attach.density_frames_store_ru.log
+== pair run, a4acbb5 (launch 24, before the fix) (docs/artifacts/rc16/proofs/s23_last_a4acbb5.attach.density_frames_pair.log)
+  state lines: 55 (11 districts)
+  by (stage, ambient): stage 0 ambient 0.030: 2, stage 0 ambient 0.160: 20, stage 3 ambient 0.160: 33
+  stage 0 views: 22; read ambient 0.030: 2; read another ambient: 20
+    residential 01_dark ambient 0.160
+    residential 02_rest ambient 0.160
+    park 01_dark ambient 0.160
+    park 02_rest ambient 0.160
+    school 01_dark ambient 0.160
+    school 02_rest ambient 0.160
+    hospital 01_dark ambient 0.160
+    hospital 02_rest ambient 0.160
+    gas_station 01_dark ambient 0.160
+    gas_station 02_rest ambient 0.160
+    police 01_dark ambient 0.160
+    police 02_rest ambient 0.160
+    warehouses 01_dark ambient 0.160
+    warehouses 02_rest ambient 0.160
+    industrial 01_dark ambient 0.160
+    industrial 02_rest ambient 0.160
+    substation 01_dark ambient 0.160
+    substation 02_rest ambient 0.160
+    power_station 01_dark ambient 0.160
+    power_station 02_rest ambient 0.160
+  the first district of the run: suburbs
+== English store run, 85b55ed (row 119, before the fix) (docs/artifacts/rc16/proofs/s23_last_store_en2_85b55ed.attach.density_frames_store.log)
+  state lines: 40 (8 districts)
+  by (stage, ambient): stage 0 ambient 0.030: 2, stage 0 ambient 0.160: 8, stage 3 ambient 0.160: 30
+  stage 0 views: 10; read ambient 0.030: 2; read another ambient: 8
+    industrial 01_dark ambient 0.160
+    industrial 02_rest ambient 0.160
+    hospital 01_dark ambient 0.160
+    hospital 02_rest ambient 0.160
+    gas_station 01_dark ambient 0.160
+    gas_station 02_rest ambient 0.160
+    power_station 01_dark ambient 0.160
+    power_station 02_rest ambient 0.160
+  the first district of the run: residential
+== Russian store run, a4acbb5 (launch 24, before the fix) (docs/artifacts/rc16/proofs/s23_last_a4acbb5.attach.density_frames_store_ru.log)
+  state lines: 10 (2 districts)
+  by (stage, ambient): stage 0 ambient 0.030: 2, stage 0 ambient 0.160: 2, stage 3 ambient 0.160: 6
+  stage 0 views: 4; read ambient 0.030: 2; read another ambient: 2
+    residential 01_dark ambient 0.160
+    residential 02_rest ambient 0.160
+  the first district of the run: suburbs
+== pair run, 0752c9b (fix chain) (docs/artifacts/rc16/proofs/s23_fixenv_0752c9b.attach.density_frames_pair.log)
+  state lines: 55 (11 districts)
+  by (stage, ambient): stage 0 ambient 0.030: 22, stage 3 ambient 0.160: 33
+  stage 0 views: 22; read ambient 0.030: 22; read another ambient: 0
+  the first district of the run: suburbs
+== English store run, 0752c9b (fix chain) (docs/artifacts/rc16/proofs/s23_fixenv_0752c9b.attach.density_frames_store_en.log)
+  state lines: 40 (8 districts)
+  by (stage, ambient): stage 0 ambient 0.030: 10, stage 3 ambient 0.160: 30
+  stage 0 views: 10; read ambient 0.030: 10; read another ambient: 0
+  the first district of the run: residential
+== Russian store run, 0752c9b (fix chain) (docs/artifacts/rc16/proofs/s23_fixenv_0752c9b.attach.density_frames_store_ru.log)
+  state lines: 10 (2 districts)
+  by (stage, ambient): stage 0 ambient 0.030: 4, stage 3 ambient 0.160: 6
+  stage 0 views: 4; read ambient 0.030: 4; read another ambient: 0
+  the first district of the run: suburbs
+# EXIT=0

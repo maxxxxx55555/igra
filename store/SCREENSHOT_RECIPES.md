@@ -61,22 +61,16 @@ spot (the poses are ground-level points of the street grid that every district s
 
 ## 6. Status and the swap log
 
-The English frames were shot again in a sub-check run of launch 24 (ledger row 119, `s23_last_store_en2_85b55ed`, `docs/artifacts/rc16/proofs/s23_last_store_en2_85b55ed.out` and its `.attach.density_frames_store.log`, head `85b55ed`) after the recipe was found to shoot
-frames of the DARK stage (CORRECTION_LOG 249): `PowerGrid.advance_district` refuses a district whose parents are not FULL, and the command's eight districts start at residential. The runner marks the parents FULL first now and fails when a
-view's stage does not rise. The state lines of the new run read weather 0 and tier 2 in all 40 views and stage 3 in the 24 lit views (03 to 05 of the eight districts); views 01 and 02 of warehouses, police and park read stage 3 as well (each is the
-parent of an earlier district in the list) and those of the other five stage 0. The 40 English frames pass `store_frames_check.py` (0 faults; the nine that failed its rules in launch 23 were frames of the DARK stage), and the lit views come to
-49 to 103 % (median 100 %) of the mean luminance of the pair frame of the same district and view, against 33 to 82 % (median 69 %) before the fix. The Russian run of the last launch (`docs/artifacts/rc16/proofs/s23_last_a4acbb5.attach.density_frames_store_ru.log`, head
-`a4acbb5`, the suburbs and then residential, stages 0 and 3 as the views ask) was right all along.
+The English frames were shot again at `0752c9b` in the fix chain (ledger row 120, `s23_fixenv_0752c9b`, `docs/artifacts/rc16/proofs/s23_fixenv_0752c9b.attach.density_frames_store_en.log` and `..._ru.log`). Two defects had made the earlier ones dark: the recipe shot frames of the DARK stage, because `PowerGrid.advance_district` refuses a district whose parents are not FULL and the command's eight districts start at residential (CORRECTION_LOG 249: the runner marks the parents FULL first now and fails when a view's stage does not rise), and a district entered kept the lighting of the one left (CORRECTION_LOG 252). The state lines of the new run read weather 0 and tier 2 in all 40 views, the ambient 0.030 in the 10 stage 0 views and 0.160 in the 30 stage 3 views (`docs/artifacts/rc16/proofs/s23_ambient_states_l25.out`; at `85b55ed` 8 of those 10 read 0.160); views 01 and 02 of warehouses, police and park read stage 3 (each is the parent of an earlier district in the list), those of the other five stage 0. The 50 frames (40 English, 10 Russian) pass `store_frames_check.py` with 0 faults (`s23_store_frames_check_l25.out`), and against the pair frame of the same district and view of the same chain the English ones come to 70 to 110 % (median 100 %) of its mean luminance where both runs shot the view at stage 3 (24 frames), 100 to 101 % at stage 0 (10 frames) and 106 to 163 % in the six views that the store run shot at stage 3 and the pair run at stage 0 (`s23_store_luminance_l25.out`). The Russian run (the suburbs, then residential) read the ambient right in 4 of 4 stage 0 views; at `a4acbb5` its two dark views of residential were under the light of the suburbs, like the English ones (2 of 4), and the two Russian frames kept are lit views that this did not touch.
 
-All 40 English and 10 Russian frames were READ on contact sheets. The frames kept in `store/screenshots/recipes` are eight (six English at `85b55ed`, two Russian at `a4acbb5`); the other 42 were taken out of the tree (they are the same
-frames, reproducible by the commands of section 1):
+All 40 English and 10 Russian frames were READ on contact sheets. The frames kept in `store/screenshots/recipes` are eight (six English and two Russian, all at `0752c9b`); the other 42 were taken out of the tree (they are the same frames, reproducible by the commands of section 1):
 
 | Kept | Recipe | Reading |
 |---|---|---|
 | `residential_04_block_en` | #1 as written | two lit blocks across a crossing, warm and white windows, the lamp pools on the street: the strongest frame |
 | `industrial_04_block_en` | #2 as written | lit blocks, the rims of the smokestacks at the left, crates in the lamp light |
-| `hospital_03_street_en` | #4 as written | the street runs to the lit cross of the hospital; a lamp post fills the right fifth of the frame |
-| `gas_station_02_rest_en` | #5 as written (DARK) | a bench under a lit lantern in the dark: the one dark frame, and the one that reads as a place |
+| `hospital_03_street_en` | #4 as written | the street runs to the lit cross of the hospital between two lit blocks |
+| `gas_station_02_rest_en` | #5 as written (DARK) | a bench and a sign in the pool of a lit lantern in the dark: the one dark frame, and the one that reads as a place; it is a stage 0 frame under the dark light of its own stage now (mean luminance 0.144), which it was not at `85b55ed` |
 | `police_04_block_en` | #6 as written | the blue district: blue-black blocks with lit windows and blue lamp pools |
 | `power_station_05_skyline_en` | #8, swapped from `power_station_04_block` | the cooling towers' halo shows above a lit grid; the 04 view does not show it and has the edge of a large white arc in its top-left corner |
 | `suburbs_03_street_ru` | R1 as written | the first street with the objective list and the notice in Russian |

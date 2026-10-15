@@ -54,9 +54,14 @@ def pair_metrics(before_path, after_path):
     return mb, ma, changed
 
 
+def find(directory, pattern, code):
+    """The frames of one run: the `before` frames (dressing hidden) of the pass's head are kept in `hidden_<code>`, the rest in the folder itself."""
+    return sorted(glob.glob(str(directory / pattern)) + glob.glob(str(directory / ("hidden_%s" % code) / pattern)))
+
+
 def pairs(directory, code):
     out = {}
-    for before in sorted(glob.glob(str(directory / ("*_before_%s_*.jpg" % code)))):
+    for before in find(directory, "*_before_%s_*.jpg" % code, code):
         name = pathlib.Path(before).name
         m = re.match(r"(?P<district>[a-z_]+?)_(?P<view>\d\d_[a-z]+)_before_", name)
         after = glob.glob(str(directory / ("%s_%s_after_%s_*.jpg" % (m.group("district"), m.group("view"), code))))
@@ -102,7 +107,7 @@ def spread_table(directory, code, base):
         cells = []
         for label, hash_ in [("before", base), ("before", code), ("after", code)]:
             shots = {}
-            for path in sorted(glob.glob(str(directory / ("*_%s_%s_%s_*.jpg" % (view, label, hash_))))):
+            for path in find(directory, "*_%s_%s_%s_*.jpg" % (view, label, hash_), hash_):
                 shots[pathlib.Path(path).name.split("_%s_" % view)[0]] = path
             mean, (least, a, b) = spread(shots)
             cells += ["%.4f" % mean, "%.4f (%s, %s)" % (least, a, b)]
@@ -129,7 +134,7 @@ def main(argv):
     print(text)
     if "--write" in argv:
         body = ["# Measured deltas of the density frames (Session 23)", "",
-                "Written by `python tools/qa_sim/density_measure.py %s --write docs/DENSITY_MEASURED.md` from the pairs of `docs/stills/density` (the same run and the same code: `before` has the district's dressing node hidden, `after` shows it)." % code,
+                "Written by `python tools/qa_sim/density_measure.py %s%s --write docs/DENSITY_MEASURED.md` from the pairs of `docs/stills/density` (the same run and the same code: `before` has the district's dressing node hidden, `after` shows it)." % (code, " --base " + argv[argv.index("--base") + 1] if "--base" in argv else ""),
                 "Luminance is Rec. 709 on 0..1, saturation the HSV S of the pixels brighter than 0.05, contrast the standard deviation of the luminance, over the frame without the parts the HUD still draws; changed share is the part of the pixels",
                 "whose luminance differs by %.2f or more. %d pairs." % (CHANGE, len(rows)), "", text]
         pathlib.Path(argv[argv.index("--write") + 1]).write_text("\n".join(body) + "\n", encoding="utf-8")

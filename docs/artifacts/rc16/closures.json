@@ -2259,5 +2259,149 @@
   ],
   "frames": [],
   "commit": "a4acbb5"
+ },
+ {
+  "id": "S23-L25-AF2-ENV1",
+  "claim": "AF2 for the lighting fix (CORRECTION_LOG 252): with the 41 mutations applied (the 41st takes the district_entered connect out) the s23 group fails 41 checks, each mutation makes its own check fail, ENV1 among them, nothing fails without a mutation and no tracked file is left changed; the clean group then reads 66 checks and 0 fails.",
+  "cmd": "python tools/qa_sim/s23_mutations.py apply; CLOSEOUT_ONLY=s23 bash tools/qa_sim/closeout_check 400; python tools/qa_sim/s23_mutations.py restore; python tools/qa_sim/s23_mutations.py judge .qa_logs/closeout_mutated_l25.log; CLOSEOUT_ONLY=s23 bash tools/qa_sim/closeout_check 400",
+  "proof": "s23_fixenv_0752c9b",
+  "quotes": [
+   "S23 MUTATIONS verdict=PASS mutations=41 bad=0",
+   "ENV1     mutated: FAIL -> BITES",
+   "failed without a mutation: nothing",
+   "tracked files changed after the restore: 0",
+   "[closeout] DONE checks=66 fails=0"
+  ],
+  "frames": [],
+  "commit": "294c508"
+ },
+ {
+  "id": "S23-L25-AMBIENT",
+  "claim": "The ambient light that the stage 0 views were shot under, read from the runs' own state lines: 20 of 22 read the full 0.160 at launch 24 (the light of the district left) and 22 of 22 read the dark 0.030 with the fix; the English store run 10 of 10 (8 of 10 before) and the Russian one 4 of 4 (2 of 4 before).",
+  "cmd": "python -I s23_ambient_states_l25.py <label>=<state log> ... (the pair, English store and Russian store logs of launch 24, of row 119 and of the fix chain)",
+  "proof": "s23_ambient_states_l25",
+  "quotes": [
+   "stage 0 views: 22; read ambient 0.030: 2; read another ambient: 20",
+   "stage 0 views: 22; read ambient 0.030: 22; read another ambient: 0",
+   "stage 0 views: 10; read ambient 0.030: 10; read another ambient: 0",
+   "stage 0 views: 4; read ambient 0.030: 4; read another ambient: 0"
+  ],
+  "frames": [],
+  "commit": "0752c9b"
+ },
+ {
+  "id": "S23-L25-BOT",
+  "claim": "The 3-seed bot after the behavior fix (the IRON RULE) won all three seeds with no softlock.",
+  "cmd": "bash tools/qa_sim/autoplay_bot",
+  "proof": "s23_fixenv_0752c9b",
+  "quotes": [
+   "([bot s1]   result       : WIN)",
+   "([bot s2]   result       : WIN)",
+   "([bot s3]   result       : WIN)",
+   "autoplay bot: 3/3 seeds won, 0 softlock(s)"
+  ],
+  "frames": [],
+  "commit": "0752c9b"
+ },
+ {
+  "id": "S23-L25-CHECKALL",
+  "claim": "check.sh --all on the tree of the fix: 84 passed and 1 failed, the secret scan that read the second verifier's quotation of the old debug keystore password (CORRECTION_LOG 254); the one change since is that quoted line, redacted.",
+  "cmd": "bash tools/check.sh --all",
+  "proof": "s23_fixenv_0752c9b",
+  "quotes": [
+   "FAIL secret_scan",
+   "Провалено: 1, пройдено: 84",
+   "GOLD MASTER suite"
+  ],
+  "frames": [],
+  "commit": "0752c9b"
+ },
+ {
+  "id": "S23-L25-CLOSEOUT-ALL",
+  "claim": "The whole closeout inside check.sh --all on the tree of the fix: 473 checks and 0 fails.",
+  "cmd": "bash tools/check.sh --all (the closeout step)",
+  "proof": "s23_fixenv_0752c9b",
+  "attach": "gate_closeout_check_scene.log",
+  "quotes": [
+   "[closeout] DONE checks=473 fails=0"
+  ],
+  "frames": [],
+  "commit": "0752c9b"
+ },
+ {
+  "id": "S23-L25-FRAMES-DELTA",
+  "claim": "What the lighting fix moved, frame by frame against the same frame of a4acbb5: 20 of the 55 density frames (the dark views of the ten districts after the first) and 4 of the 8 polish states, of the lit views only the power station's street (its white arc moves); the day and night release frames by 0.002 and 0.001.",
+  "cmd": "python s23_frames_delta_l25.py 0752c9b 0752c9b",
+  "proof": "s23_frames_delta_l25",
+  "quotes": [
+   "== release frames (docs/stills/ultimate): 8 frames compared",
+   "frames whose mean luminance moved by 0.01 or more: 3 of 8: 01_main_menu, 04_combat, 05_boss",
+   "frames whose mean luminance moved by 0.01 or more: 4 of 8: 03_flashlight_shadow, 04_combat_hit, 05_damage_taken, 06_sprint_ultra",
+   "== density, the dressing shown (docs/stills/density): 55 frames compared",
+   "frames whose mean luminance moved by 0.01 or more: 21 of 55",
+   "luminance 0.362 -> 0.237 (-0.125)"
+  ],
+  "frames": [],
+  "commit": "0752c9b"
+ },
+ {
+  "id": "S23-L25-STORE-LUM",
+  "claim": "The 40 English store frames of the fix chain against the pair frame of the same district and view of the same chain: where both runs shot the view at stage 0 they come to 100 to 101 % of its mean luminance, at stage 3 to 70 to 110 % (median 100 %).",
+  "cmd": "python s23_store_luminance_l25.py 0752c9b <store log> <pair log> docs/stills/density store/screenshots/recipes .qa_logs/store_unkept_l25",
+  "proof": "s23_store_luminance_l25",
+  "quotes": [
+   "stage 3 in both runs: 24 frames",
+   "stage 0 in both runs: 10 frames; store frame as a share of the pair frame: 100 % to 101 % (median 100 %)"
+  ],
+  "frames": [],
+  "commit": "0752c9b"
+ },
+ {
+  "id": "S23-L25-STORE-CHECK",
+  "claim": "The 50 store frames of the fix chain pass the composition rules: the eight kept in store/screenshots/recipes and the 42 taken out of the tree, 0 faults.",
+  "cmd": "python tools/qa_sim/store_frames_check.py; python tools/qa_sim/store_frames_check.py --dir .qa_logs/store_unkept_l25",
+  "proof": "s23_store_frames_check_l25",
+  "quotes": [
+   "store_frames_check: 8 frame(s), 0 fault(s)",
+   "store_frames_check: 42 frame(s), 0 fault(s)"
+  ],
+  "frames": [],
+  "commit": "0752c9b"
+ },
+ {
+  "id": "S23-L25-PROBE",
+  "claim": "The stream probe of the fix chain: every switch ends in the district asked for, and the perf visit of the power station has 10 hitches (1 at launch 24, 11 in the cold visit of launch 23): the effect is intermittent, KNOWN_ISSUES is open again (CORRECTION_LOG 256).",
+  "cmd": "bash tools/qa_sim/rc16_probe after 0752c9b 900",
+  "proof": "s23_fixenv_0752c9b",
+  "attach": "rc16_probe_after.log",
+  "quotes": [
+   "stream pass=cold district=power_station ok=true load_ms=277.9",
+   "stream pass=perf district=power_station ok=true load_ms=229.9 settled_ms=306.6 hitches=10",
+   "[probe] DONE label=after hash=0752c9b"
+  ],
+  "frames": [],
+  "commit": "0752c9b"
+ },
+ {
+  "id": "S23-L25-CHAIN",
+  "claim": "The fix chain ran its nine steps on the clean tree at 0752c9b and ended with exit code 0 (ledger row 120, outside the counted budget: CORRECTION_LOG 253).",
+  "cmd": "bash tools/qa_sim/proof_run --launch --attach <11 logs> s23_fixenv_0752c9b -- bash l25_chain.sh 0752c9b",
+  "proof": "s23_fixenv_0752c9b",
+  "quotes": [
+   "l25 chain done"
+  ],
+  "frames": [],
+  "commit": "0752c9b"
+ },
+ {
+  "id": "S23-L25-SECRET-SCAN",
+  "claim": "The secret scan reads 0 findings on the tracked text files once the second verifier's quotation of the old debug keystore password is redacted (CORRECTION_LOG 254); it read 1 in the whole check.sh --all of the fix chain.",
+  "cmd": "python tools/qa_sim/secret_scan.py",
+  "proof": "s23_secret_scan_l25",
+  "quotes": [
+   "0 finding(s)"
+  ],
+  "frames": [],
+  "commit": "0752c9b"
  }
 ]

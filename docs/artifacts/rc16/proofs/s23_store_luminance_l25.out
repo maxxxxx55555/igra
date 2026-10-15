@@ -1,0 +1,49 @@
+# proof s23_store_luminance_l25
+# utc 20261015T023209Z
+# head 0752c9b (uncommitted paths: 292)
+# env none
+# cmd python .qa_logs/proofs/s23_store_luminance_l25.py 0752c9b docs/artifacts/rc16/proofs/s23_fixenv_0752c9b.attach.density_frames_store_en.log docs/artifacts/rc16/proofs/s23_fixenv_0752c9b.attach.density_frames_pair.log docs/stills/density store/screenshots/recipes .qa_logs/store_unkept_l25
+residential    01_dark    store stage 0, pair stage 0: store 0.164, pair 0.165, 100 %
+residential    02_rest    store stage 0, pair stage 0: store 0.124, pair 0.124, 100 %
+residential    03_street  store stage 3, pair stage 3: store 0.189, pair 0.172, 110 %
+residential    04_block   store stage 3, pair stage 3: store 0.174, pair 0.174, 100 %
+residential    05_skyline store stage 3, pair stage 3: store 0.151, pair 0.159,  95 %
+industrial     01_dark    store stage 0, pair stage 0: store 0.173, pair 0.173, 100 %
+industrial     02_rest    store stage 0, pair stage 0: store 0.134, pair 0.133, 100 %
+industrial     03_street  store stage 3, pair stage 3: store 0.145, pair 0.150,  97 %
+industrial     04_block   store stage 3, pair stage 3: store 0.158, pair 0.158, 100 %
+industrial     05_skyline store stage 3, pair stage 3: store 0.142, pair 0.142, 100 %
+warehouses     01_dark    store stage 3, pair stage 0: store 0.208, pair 0.173, 120 %
+warehouses     02_rest    store stage 3, pair stage 0: store 0.169, pair 0.134, 126 %
+warehouses     03_street  store stage 3, pair stage 3: store 0.149, pair 0.155,  96 %
+warehouses     04_block   store stage 3, pair stage 3: store 0.137, pair 0.139,  98 %
+warehouses     05_skyline store stage 3, pair stage 3: store 0.139, pair 0.140, 100 %
+hospital       01_dark    store stage 0, pair stage 0: store 0.149, pair 0.148, 101 %
+hospital       02_rest    store stage 0, pair stage 0: store 0.120, pair 0.119, 100 %
+hospital       03_street  store stage 3, pair stage 3: store 0.149, pair 0.150, 100 %
+hospital       04_block   store stage 3, pair stage 3: store 0.153, pair 0.153, 100 %
+hospital       05_skyline store stage 3, pair stage 3: store 0.139, pair 0.136, 102 %
+gas_station    01_dark    store stage 0, pair stage 0: store 0.157, pair 0.157, 100 %
+gas_station    02_rest    store stage 0, pair stage 0: store 0.144, pair 0.143, 100 %
+gas_station    03_street  store stage 3, pair stage 3: store 0.155, pair 0.157,  99 %
+gas_station    04_block   store stage 3, pair stage 3: store 0.145, pair 0.144, 101 %
+gas_station    05_skyline store stage 3, pair stage 3: store 0.149, pair 0.147, 101 %
+police         01_dark    store stage 3, pair stage 0: store 0.192, pair 0.146, 131 %
+police         02_rest    store stage 3, pair stage 0: store 0.176, pair 0.123, 143 %
+police         03_street  store stage 3, pair stage 3: store 0.155, pair 0.154, 100 %
+police         04_block   store stage 3, pair stage 3: store 0.145, pair 0.145, 101 %
+police         05_skyline store stage 3, pair stage 3: store 0.139, pair 0.138, 101 %
+park           01_dark    store stage 3, pair stage 0: store 0.174, pair 0.163, 106 %
+park           02_rest    store stage 3, pair stage 0: store 0.198, pair 0.121, 163 %
+park           03_street  store stage 3, pair stage 3: store 0.158, pair 0.157, 101 %
+park           04_block   store stage 3, pair stage 3: store 0.152, pair 0.148, 102 %
+park           05_skyline store stage 3, pair stage 3: store 0.146, pair 0.145, 100 %
+power_station  01_dark    store stage 0, pair stage 0: store 0.182, pair 0.181, 101 %
+power_station  02_rest    store stage 0, pair stage 0: store 0.129, pair 0.129, 100 %
+power_station  03_street  store stage 3, pair stage 3: store 0.166, pair 0.237,  70 %
+power_station  04_block   store stage 3, pair stage 3: store 0.153, pair 0.153, 100 %
+power_station  05_skyline store stage 3, pair stage 3: store 0.148, pair 0.145, 102 %
+stage 3 in both runs: 24 frames; store frame as a share of the pair frame: 70 % to 110 % (median 100 %); mean luminance of the store frames 0.137 to 0.189
+stage 0 in both runs: 10 frames; store frame as a share of the pair frame: 100 % to 101 % (median 100 %); mean luminance of the store frames 0.120 to 0.182
+a different stage in the two runs (the parent of a later district is lit by then): 6 frames; store frame as a share of the pair frame: 106 % to 163 % (median 129 %); mean luminance of the store frames 0.169 to 0.208
+# EXIT=0

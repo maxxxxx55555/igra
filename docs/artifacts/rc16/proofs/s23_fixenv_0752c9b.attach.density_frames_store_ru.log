@@ -1,0 +1,39 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[density] start label=store hash=0752c9b ids=[&"suburbs", &"residential"] nodes=1105 objects=3981 orphans=6 tex_mib=56.0 vid_mib=83.6 static_mib=100.6
+[probe] stream pass=density district=suburbs ok=true load_ms=0.5 settled_ms=87.5 hitches=0 max_frame_ms=36.4 over_budget_ms=3.2 nodes=1105 objects=3981 orphans=6 tex_mib=56.0 vid_mib=83.6 static_mib=100.7 stats={"district":"suburbs","enemies_ms":6.746,"loot_ms":26.931,"props_ms":144.107,"scene_ms":64.97,"streets_ms":1.523,"total_ms":143.691}
+[density] state district=suburbs view=01_dark weather=0 stage=0 tier=2 ambient=0.030 glow=0.600 exposure=1.000
+[density] frame suburbs_01_dark_ru_0752c9b_20261015T015616Z.png
+[density] state district=suburbs view=02_rest weather=0 stage=0 tier=2 ambient=0.030 glow=0.600 exposure=1.000
+[density] rest district=suburbs bloom_world=(12.7, 2.41, 13.2) on_screen=(914.8286, 553.4238) behind=false visible=true camera=(6.0, 2.557398, 15.5)
+[density] frame suburbs_02_rest_ru_0752c9b_20261015T015617Z.png
+[density] state district=suburbs view=03_street weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame suburbs_03_street_ru_0752c9b_20261015T015618Z.png
+[density] state district=suburbs view=04_block weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame suburbs_04_block_ru_0752c9b_20261015T015619Z.png
+[density] state district=suburbs view=05_skyline weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame suburbs_05_skyline_ru_0752c9b_20261015T015620Z.png
+[density] perf district=suburbs dressing=with draw_calls=188 primitives=64271 objects_in_frame=348
+[probe] stream pass=density district=residential ok=true load_ms=230.7 settled_ms=265.6 hitches=1 max_frame_ms=147.0 over_budget_ms=117.2 nodes=1124 objects=4051 orphans=6 tex_mib=56.0 vid_mib=85.7 static_mib=103.6 stats={"district":"residential","enemies_ms":5.566,"loot_ms":18.076,"props_ms":104.381,"scene_ms":1.287,"streets_ms":1.363,"total_ms":45.665}
+[density] state district=residential view=01_dark weather=0 stage=0 tier=2 ambient=0.030 glow=0.600 exposure=1.000
+[density] frame residential_01_dark_ru_0752c9b_20261015T015623Z.png
+[density] state district=residential view=02_rest weather=0 stage=0 tier=2 ambient=0.030 glow=0.600 exposure=1.000
+[density] rest district=residential bloom_world=(12.7, 2.41, 13.2) on_screen=(914.8286, 553.9288) behind=false visible=true camera=(6.0, 2.562943, 15.5)
+[density] frame residential_02_rest_ru_0752c9b_20261015T015624Z.png
+[density] state district=residential view=03_street weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame residential_03_street_ru_0752c9b_20261015T015625Z.png
+[density] state district=residential view=04_block weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame residential_04_block_ru_0752c9b_20261015T015626Z.png
+[density] state district=residential view=05_skyline weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000
+[density] frame residential_05_skyline_ru_0752c9b_20261015T015627Z.png
+[density] perf district=residential dressing=with draw_calls=204 primitives=95437 objects_in_frame=364
+[density] DONE label=store hash=0752c9b
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 38 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

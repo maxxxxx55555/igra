@@ -1,0 +1,9 @@
+# proof s23_store_frames_check_l25
+# utc 20261015T024400Z
+# head 0752c9b (uncommitted paths: 302)
+# env none
+# cmd bash -c python tools/qa_sim/store_frames_check.py --demo; python tools/qa_sim/store_frames_check.py; python tools/qa_sim/store_frames_check.py --dir .qa_logs/store_unkept_l25
+store_frames_check demo: a good frame passes; an alpha channel, a wrong size, a black frame and a white patch are each told apart
+store_frames_check: 8 frame(s), 0 fault(s)
+store_frames_check: 42 frame(s), 0 fault(s)
+# EXIT=0
