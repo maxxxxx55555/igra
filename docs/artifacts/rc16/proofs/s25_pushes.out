@@ -1,0 +1,17 @@
+# proof s25_pushes
+# utc 20261015T225831Z
+# head 60d2a0d (uncommitted paths: 0)
+# env none
+# cmd bash /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s25_pushes.sh
+HEAD:                          60d2a0dd70912d25d6d714f7aae806dace96704f
+origin main:                   60d2a0dd70912d25d6d714f7aae806dace96704f
+main equals HEAD on origin
+remote heads: 4 (claude/keen-cori-0sc9uo claude/serene-sagan-wynb3r gh-pages main )
+tags on origin: 22
+tags below 8.0.0 on origin: 0
+tag v8.1.0-premium.1 on origin: 0 refs (it goes up with the closing commit)
+v8.1.0-premium^{} on origin:   53a5f836d0e125a108f519300f8a64c54a8deeae
+v9.0.0-ultimate^{} on origin:  68e6c9da00e03cb455c8124b3f4ce07c08b04004
+local-only tags found on origin: 0
+commits of the pass on origin main: 3
+# EXIT=0

@@ -2974,5 +2974,30 @@
   ],
   "frames": [],
   "commit": "4cc659b"
+ },
+ {
+  "id": "S25-STATIC-FINAL",
+  "claim": "The static gates on the commit before the closing one (the verifier's corrections are in it): 62 of 62.",
+  "cmd": "bash tools/check.sh --static",
+  "proof": "s25_static_final",
+  "quotes": [
+   "Всё зелёное. Проверок пройдено: 62"
+  ],
+  "frames": [],
+  "commit": "60d2a0d"
+ },
+ {
+  "id": "S25-PUSHES",
+  "claim": "origin main equals HEAD after the push of the commit before the closing one; the tag is not yet on origin; origin holds 4 heads and 22 tags, none below 8.0.0.",
+  "cmd": "bash s25_pushes.sh",
+  "proof": "s25_pushes",
+  "quotes": [
+   "main equals HEAD on origin",
+   "remote heads: 4 (claude/keen-cori-0sc9uo claude/serene-sagan-wynb3r gh-pages main )",
+   "tags on origin: 22",
+   "tags below 8.0.0 on origin: 0"
+  ],
+  "frames": [],
+  "commit": "60d2a0d"
  }
 ]
