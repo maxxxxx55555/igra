@@ -18,7 +18,9 @@ Rules; every violation prints "FAIL <file>: <reason>" and the exit code is 1:
   F6 a valid PNG or JPEG of at least 400 x 200 pixels, not byte-identical to another frame of the set
   F7 with --since: the capture time is not before the start of the pass
 Runtime paths are everything the game ships: scripts/ (not scripts/tools/), scenes/ (not scenes/tools/), assets/, data/, addons/,
-android/, localization/, project.godot, export_presets.cfg, default_bus_layout.tres.
+android/, localization/, components/, content/, store/icon-adaptive/, project.godot, export_presets.cfg, default_bus_layout.tres, less the paths the first
+export preset's exclude_filter matches (the bundle holds none of them). A rename counts as a delete and an add, so a shipped file moved into an excluded
+folder is still seen (git diff --no-renames).
 """
 import calendar
 import fnmatch
@@ -32,7 +34,7 @@ import time
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 NAME = re.compile(r"^(?P<state>[\w-]+?)_(?P<label>before|after)_(?P<hash>[0-9a-f]{7,40})_(?P<utc>\d{8}T\d{6}Z)\.(?:png|jpg)$")
-RUNTIME_PREFIXES = ("scripts/", "scenes/", "assets/", "data/", "addons/", "android/", "localization/")
+RUNTIME_PREFIXES = ("scripts/", "scenes/", "assets/", "data/", "addons/", "android/", "localization/", "components/", "content/", "store/icon-adaptive/")
 RUNTIME_FILES = ("project.godot", "export_presets.cfg", "default_bus_layout.tres")
 NOT_RUNTIME = ("scripts/tools/", "scenes/tools/")
 MTIME_SLACK_S = 15 * 60
@@ -59,6 +61,12 @@ def is_runtime(path):
     if path.startswith(NOT_RUNTIME) or any(fnmatch.fnmatchcase(path, pat) for pat in EXCLUDED):
         return False
     return path.startswith(RUNTIME_PREFIXES) or path in RUNTIME_FILES
+
+
+def changed_paths(a, b, cwd=ROOT):
+    """Paths that differ between two revisions; a rename is a delete plus an add, so moving a shipped file into an excluded folder is still seen."""
+    run = subprocess.run(["git", "diff", "--name-only", "--no-renames", a, b], cwd=cwd, capture_output=True, text=True, encoding="utf-8", errors="replace")
+    return run.stdout.splitlines()
 
 
 def scopes():
@@ -131,7 +139,7 @@ def check(directories, baseline, since):
             if taken < ctime:
                 fails.append("%s: F3 captured %s, %d s before commit %s existed" % (rel, m["utc"], ctime - taken, m["hash"]))
             if m["label"] == "after":
-                changed = [x for x in git("diff", "--name-only", full, "HEAD").stdout.splitlines()
+                changed = [x for x in changed_paths(full, "HEAD")
                            if is_runtime(x) and reaches(x, blob(full, x), blob("HEAD", x), p.name, scoped)]
                 if changed:
                     fails.append("%s: F4 %d runtime path(s) differ between %s and HEAD, first: %s" % (rel, len(changed), m["hash"], changed[0]))
@@ -161,6 +169,7 @@ def demo():
     assert is_runtime("scripts/player/player_3d.gd") and is_runtime("project.godot") and is_runtime("assets/shaders/a.gdshader")
     assert not is_runtime("scripts/tools/_x.gd") and not is_runtime("docs/PROOFS.md") and not is_runtime("tools/check.sh")
     assert not is_runtime("assets/audio/ambience/wav_src/a.wav") and is_runtime("assets/audio/ambience/a.ogg"), "an excluded path is not runtime"
+    assert all(is_runtime(p) for p in ("components/health_component.gd", "content/captions.json", "store/icon-adaptive/a.png")), "the three folders the bundle carries"
     assert utc_to_epoch("19700101T000010Z") == 10
     declared = {("p.gd", "aaa", "bbb"): "A06_shop*"}
     assert reaches("p.gd", "aaa111", "bbb222", "A06_shop_after_x.jpg", declared)
@@ -178,10 +187,16 @@ def demo():
     bad.write_bytes(b"not a png at all, just text")
     assert image_size(bad) is None
     assert check([tmp / "no_frames"], "e4bb4df", "")[1][0].count("F0") == 1
+    repo = tmp / "r"
+    repo.mkdir()
+    (repo / "a.txt").write_text("x" * 200)
+    for args in (("init", "-q"), ("add", "."), ("commit", "-qm", "1"), ("mv", "a.txt", "b.txt"), ("commit", "-qm", "2")):
+        subprocess.run(["git", "-c", "user.name=t", "-c", "user.email=t@t", *args], cwd=repo, capture_output=True, check=True)
+    assert changed_paths("HEAD~1", "HEAD", repo) == ["a.txt", "b.txt"], "a rename is a delete and an add"
     this = pathlib.Path(__file__)
     assert time_fault(this, 4102444800, True) != "" and time_fault(this, 0, True) == ""
     assert time_fault(good, int(good.stat().st_mtime), False) == "" and "differ" in time_fault(good, int(good.stat().st_mtime) - 4000, False)
-    print("af3_frame_check demo OK (name grammar, runtime path classes, F4 scope, PNG and JPEG header, empty directory, F5 for a committed and an uncommitted frame)")
+    print("af3_frame_check demo OK (name grammar, runtime path classes, F4 scope, PNG and JPEG header, empty directory, a rename read as delete and add, F5 for a committed and an uncommitted frame)")
 
 
 def main():

@@ -1,0 +1,99 @@
+# proof s24_audit_pair
+# utc 20261015T204925Z
+# head aaf2e87 (uncommitted paths: 0)
+# env none
+# cmd python -I /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s24_audit_pair.py . 68e6c9d
+"""Session 24 (verifier round, V2.3 and V11.3): the quarantine audit (tools/quarantine_audit.py) before the purge and now, verdict counts and the rows that
+are AUTO-DELETABLE. The tree of the baseline commit is rebuilt in a temp folder from `git archive` (the text files and the names of the candidate files;
+the audit reads no image bytes), so the repository is only read. Prints itself first.
+usage: python -I s24_audit_pair.py <repo> <baseline-commit>"""
+import collections
+import json
+import pathlib
+import subprocess
+import sys
+import tarfile
+import tempfile
+
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+repo = pathlib.Path(sys.argv[1]).resolve()
+base = sys.argv[2]
+SCOPE = ["_QUARANTINE", "assets/textures/surfaces", "assets/textures/ui", "scripts", "scenes", "components", "data", "addons", "docs", "content",
+         "project.godot", "export_presets.cfg", "default_bus_layout.tres"]
+CANDIDATE_ROOTS = ("_QUARANTINE/", "assets/textures/surfaces/", "assets/textures/ui/")
+TEXT = {".gd", ".tscn", ".tres", ".cfg", ".godot", ".json", ".md", ".txt", ".csv", ".toml", ".yaml", ".yml", ".py", ".sh", ".gdshader", ".svg", ".import"}
+
+
+def audit(root):
+    run = subprocess.run([sys.executable, str(repo / "tools" / "quarantine_audit.py"), "--root", str(root), "--json"], capture_output=True, text=True, encoding="utf-8")
+    if run.returncode != 0:
+        sys.exit("quarantine_audit failed: " + run.stderr[:300])
+    return json.loads(run.stdout)
+
+
+def report(label, payload):
+    items = payload["results"]
+    print("%s: %s" % (label, json.dumps(payload["counts"], sort_keys=True)))
+    auto = [i["path"] for i in items if i["verdict"] == "AUTO-DELETABLE"]
+    kinds = collections.Counter(pathlib.PurePosixPath(p).suffix or "(none)" for p in auto)
+    print("  AUTO-DELETABLE rows %d: %s" % (len(auto), dict(sorted(kinds.items()))))
+    for p in auto:
+        print("    " + p)
+    quarantine_rows = collections.Counter(i["verdict"] for i in items if i["kind"] == "quarantine")
+    print("  rows of the quarantine root: %s" % dict(sorted(quarantine_rows.items())))
+
+
+def rebuilt(commit, tmp):
+    proc = subprocess.Popen(["git", "archive", "--format=tar", commit, "--", *SCOPE], cwd=repo, stdout=subprocess.PIPE)
+    n = 0
+    with tarfile.open(fileobj=proc.stdout, mode="r|") as tar:
+        for member in tar:
+            if not member.isfile():
+                continue
+            keep = pathlib.PurePosixPath(member.name).suffix in TEXT or member.name in SCOPE
+            if not keep and not member.name.startswith(CANDIDATE_ROOTS):
+                continue
+            dest = pathlib.Path(tmp) / member.name
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            dest.write_bytes(tar.extractfile(member).read() if keep else b"")
+            n += 1
+    proc.wait()
+    return n
+
+
+for commit, label in ((base, "the baseline, before the purge"), ("HEAD", "HEAD, after it")):
+    with tempfile.TemporaryDirectory() as tmp:
+        print("rebuilt %s from git archive: %d files (tracked files only: the ignored .uid sidecars of a working directory are not in it)" % (commit, rebuilt(commit, tmp)))
+        report("at %s (%s)" % (commit, label), audit(tmp))
+
+--- run
+rebuilt 68e6c9d from git archive: 1299 files (tracked files only: the ignored .uid sidecars of a working directory are not in it)
+at 68e6c9d (the baseline, before the purge): {"AUTO-DELETABLE": 16, "KEEP-LIVE": 26, "KEEP-PLANNED": 25, "UNCERTAIN": 53}
+  AUTO-DELETABLE rows 16: {'.gd': 16}
+    _QUARANTINE/scripts/audio/proc_audio.gd
+    _QUARANTINE/scripts/audio_atmosphere.gd
+    _QUARANTINE/scripts/components/attack_component_3d.gd
+    _QUARANTINE/scripts/core/progression_system.gd
+    _QUARANTINE/scripts/effects/footstep_dust.gd
+    _QUARANTINE/scripts/effects/hit_spark.gd
+    _QUARANTINE/scripts/environment/world_env.gd
+    _QUARANTINE/scripts/player/death_sequence.gd
+    _QUARANTINE/scripts/system/particle_manager.gd
+    _QUARANTINE/scripts/systems/leaderboard.gd
+    _QUARANTINE/scripts/ui/controls.gd
+    _QUARANTINE/scripts/ui/onboarding.gd
+    _QUARANTINE/scripts/ui/ui_theme.gd
+    _QUARANTINE/scripts/visual/moon_disc.gd
+    _QUARANTINE/scripts/world/city_decorator.gd
+    _QUARANTINE/scripts/world/ftue_generator_3d.gd
+  rows of the quarantine root: {'AUTO-DELETABLE': 16, 'KEEP-LIVE': 10, 'KEEP-PLANNED': 1, 'UNCERTAIN': 17}
+rebuilt HEAD from git archive: 1290 files (tracked files only: the ignored .uid sidecars of a working directory are not in it)
+at HEAD (HEAD, after it): {"AUTO-DELETABLE": 4, "KEEP-LIVE": 26, "KEEP-PLANNED": 25, "UNCERTAIN": 52}
+  AUTO-DELETABLE rows 4: {'.gd': 4}
+    _QUARANTINE/scripts/player/death_sequence.gd
+    _QUARANTINE/scripts/ui/onboarding.gd
+    _QUARANTINE/scripts/world/city_decorator.gd
+    _QUARANTINE/scripts/world/ftue_generator.gd
+  rows of the quarantine root: {'AUTO-DELETABLE': 4, 'KEEP-LIVE': 10, 'KEEP-PLANNED': 1, 'UNCERTAIN': 16}
+# EXIT=0

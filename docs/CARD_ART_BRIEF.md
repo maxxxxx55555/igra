@@ -577,8 +577,9 @@ and gates everything else.
 
 1. ✅ Seven accepted raw photographs (1024×1536) generated from the §4
    prompts (log: §6.3) — license ledgering per `docs/ASSET_LICENSES.md`
-   convention is pending with the wiring PR (raws were generated in-session
-   and are not re-derivable without their exact model versions).
+   convention is done with the wiring (`1870389`: rows for the masters, twins,
+   in-game and locked textures); the raws were generated in-session, are not
+   re-derivable without their exact model versions and were not kept.
 2. ✅ `scripts/regen_cards_v2.py --raw-dir <raws> --out content/cards
    --emit-512 content/cards/twins --report report.json` exits 0; all 8
    validation checks pass for all 7 districts (report summarized in the

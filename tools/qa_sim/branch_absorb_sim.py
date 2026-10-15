@@ -6,7 +6,8 @@ For every remote branch but main (origin/*): its commits ahead of main and, for 
 SAME (same path, same blob), MOVED (the blob is at another path), DIVERGED (the path exists with another blob), MISSING (the path is absent), GONE (the
 branch deletes it). Prints the table and the PASS or FAIL count. With --check FILE the plan must have a row `| `origin/<branch>` | ... |` with a
 disposition word (absorbed, kept, skipped, deleted) for every branch on origin, and a row for a branch that is gone must say "deleted". No remote branch
-(a shallow CI clone) is a PASS with 0 branches. Exit 1 on any FAIL.
+(a shallow CI clone) is a PASS with 0 branches. A ref that is not under origin/ (a pull request's own ref) is not a branch, and a branch HEAD already
+contains (a pull request's head, a branch main absorbed) needs no row. Exit 1 on any FAIL.
 """
 import collections
 import pathlib
@@ -40,9 +41,14 @@ def branches():
     out = []
     for line in git("branch", "-r").splitlines():
         name = line.strip()
-        if name and "->" not in name and name != "origin/main":
+        if name.startswith("origin/") and "->" not in name and name != "origin/main":
             out.append(name)
     return out
+
+
+def contained(ref):
+    """True when HEAD already holds every commit of the ref."""
+    return subprocess.run(["git", "merge-base", "--is-ancestor", ref, "HEAD"], cwd=ROOT, capture_output=True).returncode == 0
 
 
 def tree(ref):
@@ -71,11 +77,13 @@ def inventory():
     return rows
 
 
-def judge(names, plan_text):
-    """FAIL lines: a branch on origin with no row or no disposition; a row for a branch that is gone that does not say deleted."""
+def judge(names, plan_text, merged=()):
+    """FAIL lines: a branch on origin with no row or no disposition (a merged one needs none); a row for a branch that is gone that does not say deleted."""
     rows = {m.group(1): m.group(2).lower() for m in ROW.finditer(plan_text)}
     fails = []
     for n in names:
+        if n in merged:
+            continue
         if n not in rows:
             fails.append("%s: the plan has no row for it" % n)
         elif not any(d in rows[n] for d in DISPOSITIONS):
@@ -95,11 +103,11 @@ def demo():
     assert classify(("z.md", "A"), "bY", head, by_blob) == "MISSING"
     assert classify(("a.md", "D"), "", head, by_blob) == "GONE"
     plan = "| `origin/arena/x` | 3 | skipped: superseded |\n| `origin/jules/y` | 3 | no word |\n| `origin/old` | deleted: rejected |\n| `origin/stale` | skipped |\n"
-    got = judge(["origin/arena/x", "origin/jules/y", "origin/z"], plan)
+    got = judge(["origin/arena/x", "origin/jules/y", "origin/z", "origin/pr-head"], plan, merged={"origin/pr-head"})
     want = ["origin/jules/y: its row has no disposition (absorbed/kept/skipped/deleted)", "origin/z: the plan has no row for it",
             "origin/stale: named by the plan, gone from origin, and the row does not say deleted"]
     assert got == want, got
-    print("branch_absorb_sim demo OK (five relations, a missing row, a row with no disposition, a gone branch)")
+    print("branch_absorb_sim demo OK (five relations, a missing row, a row with no disposition, a gone branch, a merged branch with no row)")
 
 
 def main():
@@ -113,7 +121,8 @@ def main():
         print("%-50s %7d  %4d %5d %8d %7d %4d" % (br, ahead, c["SAME"], c["MOVED"], c["DIVERGED"], c["MISSING"], c["GONE"]))
     fails = []
     if "--check" in args and rows:  # a clone with no remote branch but main has nothing to hold the plan against
-        fails = judge([r[0] for r in rows], pathlib.Path(args[args.index("--check") + 1]).read_text(encoding="utf-8"))
+        names = [r[0] for r in rows]
+        fails = judge(names, pathlib.Path(args[args.index("--check") + 1]).read_text(encoding="utf-8"), {n for n in names if contained(n)})
     for f in fails:
         print("FAIL", f)
     print("branch_absorb_sim: %d branch(es) on origin, FAIL %d, PASS %d" % (len(rows), len(fails), max(len(rows) - len(fails), 0)))

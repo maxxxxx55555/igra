@@ -196,12 +196,12 @@ rows: `docs/ACCEPTANCE_CHECKLIST.md` (200 rows); decisions: `docs/TZ_DECISIONS.m
 | G1 accessibility | 9 of 9 (the directive asked 7 of 7): subtitles, remap, presets, motion comfort and the rest, each removed in memory and caught | `tools/qa_sim/a11y_check.py`; A11Y1 to A11Y8 |
 | G2 to G6 | noise bomb, last known place, gradient; ducking, surfaces; five VFX and a particle budget; hearing, group alert, difficulty hooks; tutorial skip and cadence | the closeout lines of S24-T0 |
 | P1 performance | the perf gate fails on D1 200, D11 350, p95 33 ms, 512 MiB; dynamic resolution; LOD, occlusion and streaming not built, with reasons | `scripts/tools/_perf_check_runner.gd:6-9`; `docs/KNOWN_ISSUES.md` |
-| U0 absorb | 14 branches classified (`tools/qa_sim/branch_absorb_sim.py --check`), 2 documents absorbed with their source commits, autoclaw 0, jules 0 (11 of 11 have a fuller counterpart) | `docs/ABSORB_PLAN.md` |
+| U0 absorb | 14 branches classified (`tools/qa_sim/branch_absorb_sim.py --check`), 2 documents absorbed with their source commits, autoclaw 0, jules 0 (ten of 11 files have a counterpart in `main` that is fuller, generated from the code or a gate; one is a design proposal) | `docs/ABSORB_PLAN.md` |
 | C1 purge | 58 tracked files (9.8 MB), 1,194 untracked (224 MB of logs, archived), 1 branch; the red gate of two batches confessed and fixed | `docs/CLEANUP_LEDGER.md` section 12; CORRECTION_LOG 260 |
-| P3 handoff | `docs/GEMINI_HANDOFF.md` generated and gated: 15 of 19 recipe tracks absent, 7 card specs, owner rows | `tools/qa_sim/gemini_handoff.py --check` |
+| P3 handoff | `docs/GEMINI_HANDOFF.md` generated and gated: 16 of 19 recipe tracks absent, 7 card specs, owner rows | `tools/qa_sim/gemini_handoff.py --check` |
 | Gates | static 62 of 62 (three new gates), `check.sh --all`: 88 passed, 0 failed, 2 skipped by their own rule (windowed only); the closeout gate `DONE checks=473 fails=0` | `docs/artifacts/rc16/proofs/s24_all_8978194.out` |
-| Bundle | unchanged: `build/tls.aab`, 136,653,029 bytes, version code 2; no runtime path differs from its commit | `docs/artifacts/rc16/proofs/s24_runtime_diff.out` |
-| Verifier | one read-only round, started on the commit that holds this section; the result is written here when it ends | `docs/artifacts/rc16/proofs/s24_verifier_round1.md` |
+| Bundle | unchanged: `build/tls.aab`, 136,653,029 bytes, version code 2; no runtime path differs from its commit | `docs/artifacts/rc16/proofs/s24_runtime_diff_2.out` |
+| Verifier | one read-only round on `aaf2e87`: `PASS=20 FAIL=15 GAME-AFFECTING=0 META=15 UNVERIFIED=4`; the META findings re-derived and corrected (CORRECTION_LOG 261 and 262) | `docs/artifacts/rc16/proofs/s24_verifier_round1.md` |
 | Not done | an export (nothing shipped changed), the 3-seed bot (no AI code changed; Session 23: 3 of 3), the phone run (U1, U5, U6, U10, U12, U13), the history rewrite (K-1) | `docs/UNVERIFIABLE_HERE.md` |
 
 ## AAA-ultimate closeout (Session 23, 2026-10-13)
