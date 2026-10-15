@@ -89,3 +89,26 @@ Nothing of the Jules branch is absorbed; the branch is kept, which is Session 23
 - No file of an `arena/*` branch was absorbed: the useful ones are old snapshots that cite a past baseline (`c1ebeec`, `6f4c841`, 2026-09-07), and the allowed destinations exclude the images and the grade script.
 - No branch was deleted for being "probably merged": the rule is an ancestor proof, and only the one branch documented as rejected for fabrication was taken (`docs/CLEANUP_LEDGER.md` section 12.1).
 - The owner can drop any `kept` or `skipped` branch with `git push origin --delete <name>`; the table above is the list of what each holds.
+
+## 7. The missing union of the directive (U0.3), file by file
+
+The directive's list of what the parallel work should have left, checked against the tree at `68e6c9d` plus this pass. Every path below was asserted to exist when this section was written; nothing in it is a new file of the
+absorb, because Session 23 had already written each one from the code (the Jules and arena versions are the first drafts of section 5). Only the proofs audit was missing, and it is written.
+
+| Item of the directive | Files | Gate or proof |
+|---|---|---|
+| Privacy policy final, English and Russian, the hosting recipe, the network-call audit | `docs/PRIVACY_POLICY_FINAL.md`, `docs/PRIVACY_AUDIT.md` | `tools/qa_sim/privacy_audit.py` (static gate, CI matrix) |
+| IARC and data-safety answers with the grep justification | `store/IARC_ANSWERS.md`, `tools/qa_sim/store_answers.py` | `store_answers.py` (CI matrix) |
+| Screenshot recipes, 8 and 2, with reachability proofs | `store/SCREENSHOT_RECIPES.md`, `tools/qa_sim/store_frames_check.py` | `store_frames_check.py` over `store/screenshots/recipes/` |
+| Music briefs per lit-bed gap (no binaries) | `docs/MUSIC_BRIEF.md`, `tools/qa_sim/music_brief.py` | `music_brief.py --check` (static gate) |
+| Listing audit, 13 locales, the vaporware check | `store/LISTING_AUDIT.md`, `tools/qa_sim/listing_audit.py` | `listing_audit.py` (static gate, CI matrix) |
+| Proofs audit | `tools/qa_sim/proofs_audit_sim.py` | written in this pass; static gate |
+| Secret sweep | `tools/qa_sim/secret_scan.py`, `docs/CLEANUP_LEDGER.md` | `secret_scan.py` (static gate); the ledger's section 8 is the sweep of the history |
+| Achievements reachability sim and the trigger spec | `tools/qa_sim/achievements_sim.py`, `docs/ACHIEVEMENT_TRIGGER_SPEC.md` | `achievements_sim.py` (CI matrix) |
+| Save-migration sim | `tools/qa_sim/save_migration_sim.py`, `docs/SAVE_MIGRATION_MATRIX.md` | `--static` in the CI matrix; the closeout check SAVEMIG runs the real reader |
+| i18n placeholder fuzz and the glossary | `tools/qa_sim/i18n_placeholder_fuzz.py`, `data/i18n_glossary.json` | `i18n_placeholder_fuzz.py` (CI matrix) |
+| Daily-coverage sim | `tools/qa_sim/daily_sim.py`, `docs/DAILY_SIM.md` | `daily_sim.py` (CI matrix) |
+| New Game+ carry-over table from the code | `tools/qa_sim/ngplus_table.py`, `docs/NGPLUS_TABLE.md` | `ngplus_table.py` (CI matrix) |
+| Cross-audit | `docs/CROSS_AUDIT.md` | a document, read by the verifier rounds of Session 23 |
+| CI workflows | `.github/workflows/pr-sims.yml`, `.github/workflows/weekly-full.yml`, `.github/workflows/static.yml` | `actionlint` through `tools/lint_changed.py` (static gate) |
+

@@ -1,0 +1,7 @@
+# proof s24_gitignore_check
+# utc 20261015T170829Z
+# head 8978194 (uncommitted paths: 6)
+# env none
+# cmd python tools/qa_sim/gitignore_check.py
+gitignore_check: 29 path(s) that must be ignored, 8 that must be tracked, 0 fault(s)
+# EXIT=0

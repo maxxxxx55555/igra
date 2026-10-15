@@ -1,0 +1,27 @@
+# proof s24_a11y_check
+# utc 20261015T170849Z
+# head 8978194 (uncommitted paths: 8)
+# env none
+# cmd python tools/qa_sim/a11y_check.py
+OK    colorblind           ui=yes  effect=yes  dispatched=yes  _apply_colorblind()
+OK    text_size            ui=yes  effect=yes  dispatched=yes  _apply_text_size()
+OK    high_contrast        ui=yes  effect=yes  dispatched=yes  _apply_high_contrast()
+OK    arachnophobia        ui=yes  effect=yes  dispatched=yes  via scripts\i18n\localization_manager.gd (get_setting)
+OK    reduce_screen_shake  ui=yes  effect=yes  dispatched=yes  via scripts\effects\screen_shake.gd (get_setting)
+OK    dyslexia_font        removed from UI (non-functional: missing OpenDyslexic .ttf, an owner row)
+OK    auto_aim             ui=yes  effect=yes  dispatched=yes  via scripts\weapons\weapon_base.gd (get_setting)
+
+OK    A1 subtitles (toggle, size S/M/L, background 0/50/100, color white/yellow/cyan)
+OK    A2 control remapping (rebind, persisted, reset to default)
+OK    A3 difficulty presets (Easy, Normal, Hard in spawn, damage, loot and revive code)
+OK    A4 motion comfort (no shake, no FOV punch, no sprint blur, no landing dip, no rain on the lens)
+OK    A5 high contrast (the dyslexia font stays an owner row: no font file ships)
+OK    A6 clear objectives (cognitive clarity: the objective list and status rows do not fade)
+OK    A7 one-handed mode (buttons beside the joystick, latched sprint, wider double tap)
+OK    A8 edge highlight (a bright rim on interactables and pickups in range)
+OK    A9 sound cues (a caption and an edge flash for the sounds of the game)
+
+a11y features functional: 9/9
+
+PASS
+# EXIT=0

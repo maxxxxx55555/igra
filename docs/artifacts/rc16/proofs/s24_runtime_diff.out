@@ -1,0 +1,41 @@
+# proof s24_runtime_diff
+# utc 20261015T170900Z
+# head 8978194 (uncommitted paths: 10)
+# env none
+# cmd python -I /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s24_runtime_diff.py .
+"""Session 24 (P2): does the signed bundle on disk still carry the runtime of HEAD? The bundle was exported at ebc1acc (Session 23, row 121). A path
+is runtime when tools/qa_sim/af3_frame_check.is_runtime says so (what the game ships: not the tools, not what the Android preset's exclude_filter leaves
+out). Lists the runtime paths that differ between ebc1acc and HEAD, and the same for the commit of the last frames (0752c9b). Prints itself first.
+usage: python -I s24_runtime_diff.py <repo>"""
+import pathlib
+import subprocess
+import sys
+
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+root = pathlib.Path(sys.argv[1]).resolve()
+sys.path.insert(0, str(root / "tools" / "qa_sim"))
+import af3_frame_check as af3  # noqa: E402
+
+
+def names(base):
+    return [n for n in subprocess.run(["git", "diff", "--name-only", base, "HEAD"], cwd=root, capture_output=True, text=True, encoding="utf-8").stdout.split("\n") if n]
+
+
+head = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=root, capture_output=True, text=True).stdout.strip()
+print("HEAD %s; exclude_filter patterns read: %d" % (head, len(af3.EXCLUDED)))
+bad = 0
+for base, what in (("ebc1acc", "the commit the bundle was exported from"), ("0752c9b", "the commit of the release frames")):
+    diff = names(base)
+    rt = [n for n in diff if af3.is_runtime(n)]
+    bad += len(rt)
+    print("%s (%s): %d files differ from HEAD, %d of them runtime %s" % (base, what, len(diff), len(rt), rt[:6]))
+print("runtime paths that differ: %d" % bad)
+sys.exit(1 if bad else 0)
+
+--- run
+HEAD 8978194; exclude_filter patterns read: 53
+ebc1acc (the commit the bundle was exported from): 119 files differ from HEAD, 0 of them runtime []
+0752c9b (the commit of the release frames): 422 files differ from HEAD, 0 of them runtime []
+runtime paths that differ: 0
+# EXIT=0

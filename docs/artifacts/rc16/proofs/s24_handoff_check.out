@@ -1,0 +1,7 @@
+# proof s24_handoff_check
+# utc 20261015T170809Z
+# head 8978194 (uncommitted paths: 4)
+# env none
+# cmd python tools/qa_sim/gemini_handoff.py --check
+gemini_handoff: docs/GEMINI_HANDOFF.md matches its sources
+# EXIT=0

@@ -1,0 +1,16 @@
+# proof s24_aab_check
+# utc 20261015T170903Z
+# head 8978194 (uncommitted paths: 11)
+# env none
+# cmd python tools/qa_sim/aab_check.py build/tls.aab
+size    136653029 bytes
+sha256  0fe3649a2045cb92b7132e02ce21c862c5cea64f8049f0ccb980b4a3e0a98c85
+entries 2756
+label   base/resources.pb names Last Streetlight: ok
+adsdk   0 dex entries name Lcom/applovin/: ok
+integrity 54 file(s) of the manifest, 0 missing or with other bytes: ok
+refs    0 file(s) or patterns named by the shipped files are not in the bundle: ok
+jar     jar verified.
+signer  4f6be6415c260b34...: signer_match=yes
+aab_check: PASS
+# EXIT=0
