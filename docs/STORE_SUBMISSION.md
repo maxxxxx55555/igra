@@ -48,7 +48,7 @@ The six screenshot frames (each carries its code hash `0752c9b`, the tree whose 
 
 1. `docs/stills/ultimate/01_main_menu_after_0752c9b_20261015T014952Z.png`: the main menu.
 2. `docs/stills/ultimate/02_district_day_full_after_0752c9b_20261015T015008Z.png`: a restored district with its lamps on (the game has no day).
-3. `docs/stills/ultimate/03_district_night_dark_after_0752c9b_20261015T015003Z.png`: the same district dark, its lamps off.
+3. `docs/stills/ultimate/03_district_night_dark_after_0752c9b_20261015T015003Z.png`: the same district dark: the street unlit, the lamp head dim.
 4. `docs/stills/ultimate/04_combat_after_0752c9b_20261015T015013Z.png`: combat.
 5. `docs/stills/ultimate/05_boss_after_0752c9b_20261015T015015Z.png`: the boss.
 6. `docs/stills/ultimate/08_shop_after_0752c9b_20261015T015010Z.png`: the shop.

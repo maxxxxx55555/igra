@@ -1,0 +1,23 @@
+# proof s23_signoff_gates
+# utc 20261015T073754Z
+# head abf1f3d (uncommitted paths: 25)
+# env none
+# cmd bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/5fa8d500-393b-43b7-95de-04d09fcc9e42/scratchpad/signoff_gates.sh
+GATE flow_check rc=0: Игровой цикл собран целиком: 56 проверок пройдено.
+GATE scene_node_check rc=0: Всё чисто.
+GATE lint_changed rc=0: lint_changed: 123 gd, 47 py, 20 sh, 3 workflow, skipped tools for: none, 0 finding(s)
+GATE secret_scan rc=0: secret_scan: 1956 tracked text file(s), 2 allowed false positive(s), 0 finding(s)
+GATE af5_check rc=0: af5_check: 498 citation(s) in 3923 doc line(s), 0 finding(s)
+GATE doc_ctrl_check rc=0: doc_ctrl_check: 0 control character(s) in 299 document(s)
+GATE gitignore_check rc=0: gitignore_check: 27 path(s) that must be ignored, 8 that must be tracked, 0 fault(s)
+GATE title_check rc=0: title_check: 0 hit(s) in 716 file(s)
+GATE export_refs_check rc=0: export_refs_check: 486 shipped file(s) read for the Android preset against the bundle, 0 violation(s), 0 note(s)
+GATE release_export_check_aab rc=0: PASS
+GATE af3_release_frames rc=0: af3 frames=8 fail=0
+GATE af3_density rc=0: af3 frames=110 fail=0
+GATE store_frames_check rc=0: store_frames_check: 8 frame(s), 0 fault(s)
+GATE bundle_sha256 rc=0: 0fe3649a2045cb92b7132e02ce21c862c5cea64f8049f0ccb980b4a3e0a98c85 *build/tls.aab
+tracked files with a secret-looking name: tools/make_keystore.ps1 
+runtime paths changed between the export's head and HEAD: 0
+signoff gates done
+# EXIT=0

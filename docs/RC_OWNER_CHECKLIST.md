@@ -1,4 +1,4 @@
-# Release Checklist: THE LAST STREETLIGHT — RC owner-only ship steps
+# Release Checklist: Last Streetlight — RC owner-only ship steps
 
 **Purpose**: ordered, evidence-cited owner steps to take the RC from green gates to a
 live Open Testing rollout on Google Play, each with a 30-second smoke test and a
@@ -160,11 +160,8 @@ example).
 godot --headless --export-release "Android" build/TLS.aab
 ```
 
-- [ ] CHK031 Version is the intended first-upload value at upload time:
-      `export_presets.cfg` currently ships placeholder `version/code=1` /
-      `version/name="1.0"` (verified `d736c37`, lines 15-16); the doc convention is
-      versionCode 1 (increment per build) / versionName "1.0.0" — bump/not-bump per the
-      doc rule "at the time of your actual first upload, not before".
+- [ ] CHK031 Version is the intended value at upload time: `export_presets.cfg` ships `version/code=2` / `version/name="1.0"` since `53ab91a`
+      (Session 23: code 2, so that the bundle uploads over the v8 bundle of code 1; `export_presets.cfg:16-17`); raise the code for every upload after the first.
 - [ ] CHK032 AAB (not APK) is the artifact going to Play; APK stays for
       sideload/testing only.
 - [ ] CHK033 Pre-release statics on this exact commit are green (`docs/QA_MATRIX.md`
@@ -250,7 +247,7 @@ Warning (verbatim, same section): the package name
 cannot be changed afterward for the same listing.
 
 - [ ] CHK050 `https://play.google.com/console` → **Create app** → name
-      `THE LAST STREETLIGHT`, default language **English (United States)**, type
+      `Last Streetlight`, default language **English (United States)**, type
       **Game**, **Free**, accept the declarations.
 - [ ] CHK051 **App content** cards (left nav → Policy → App content), in order:
       a. **Privacy policy** → paste the STEP 4 URL.

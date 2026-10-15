@@ -1,0 +1,11 @@
+# proof s23_repo_size_l25
+# utc 20261015T072843Z
+# head abf1f3d (uncommitted paths: 0)
+# env none
+# cmd python .qa_logs/proofs/s23_repo_size_l25.py
+reachable objects: 1253.2 MiB in 19470 objects (blobs 1238.8 MiB in 12130, trees 13.4 MiB, commits 1.0 MiB)
+reachable objects on disk (compressed, as git stores them): 975.8 MiB (blobs 971.2 MiB)
+lines without a size (missing objects): 0
+count: 4360; size: 204.20 MiB; in-pack: 15380; packs: 7; size-pack: 774.24 MiB; prune-packable: 6; garbage: 0; size-garbage: 0 bytes; 
+.git on disk: 979 MiB
+# EXIT=0

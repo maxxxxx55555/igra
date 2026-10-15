@@ -15,7 +15,7 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 TITLE = re.compile(r"the[ -]?last[ -]?streetlight", re.IGNORECASE)
 SCAN_DIRS = ("data", "content", "scenes", "scripts", "localization", "store", "docs/store")
-SCAN_FILES = ("project.godot", "export_presets.cfg", "docs/PRIVACY_POLICY.md", "docs/RELEASE_RUNBOOK.md", "docs/release_checklist.md")
+SCAN_FILES = ("project.godot", "export_presets.cfg", "docs/PRIVACY_POLICY.md", "docs/RELEASE_RUNBOOK.md", "docs/release_checklist.md", "RELEASE_CHECKLIST.md", "docs/RC_OWNER_CHECKLIST.md")
 SCAN_SUFFIXES = (".json", ".tscn", ".tres", ".gd", ".godot", ".cfg", ".md", ".txt", ".xml")
 ALLOWED_LINES = ("app_userdata",)
 

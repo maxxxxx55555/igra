@@ -125,9 +125,9 @@ as-is, but no ad revenue happens until you do this:
    filling the brackets:
 
 ```
-Subject: Integration review request — THE LAST STREETLIGHT (Android)
+Subject: Integration review request — Last Streetlight (Android)
 
-App name: THE LAST STREETLIGHT
+App name: Last Streetlight
 Package name: com.maxsimkasky.laststreetlight
 Platform: Android (Godot 4.7, AppLovin MAX Godot plugin)
 Ad formats integrated: Rewarded (revive / extra battery), Interstitial
@@ -179,7 +179,7 @@ upload:
   `build/web/index.html` + supporting files; open `index.html` through a
   local web server (not `file://`) to sanity-check it runs.
 - **Project → Export... → Windows Desktop** → Export Project → produces
-  `build/windows/TheLastStreetlight.exe`; run it directly to confirm it
+  `build/windows/LastStreetlight.exe`; run it directly to confirm it
   launches.
 
 ## 5. Google Play Console — first upload (primary platform)
@@ -188,7 +188,7 @@ Do these in order. Play Console won't let you roll out until every
 **Dashboard → "Set up your app"** task has a green check.
 
 1. https://play.google.com/console → **Create app**. Name
-   `THE LAST STREETLIGHT`, default language **English (United States)**,
+   `Last Streetlight`, default language **English (United States)**,
    type **Game**, **Free**, accept the declarations.
 2. **App content** (left nav → Policy → App content). Complete each card:
    a. **Privacy policy** → paste the URL from step 3.
@@ -256,10 +256,7 @@ the export/upload steps in those sections once step 4 above is done.
 
 ## 7. Version bump
 
-`export_presets.cfg` is still at the placeholder `version/code=1` /
-`version/name="1.0"`. Bump both per whatever versioning scheme you want
-to use, at the time of your actual first upload — not before, so the
-version number reflects when it was really shipped.
+`export_presets.cfg` reads `version/code=2` / `version/name="1.0"` since Session 23 (code 2, so that the bundle of the pass uploads over the v8 bundle of code 1: `docs/RELEASE_RUNBOOK.md` §2). Raise `version/code` for every upload after the first; the name stays "1.0" for the first release.
 
 ## 8. Player save transfer ("lost phone") — already live, no owner action
 

@@ -83,5 +83,5 @@ and the choice of Medium for a phone is an owner row (Q-1: set the first-run tie
 ## 5. Owner rows
 
 - **B-1** the benchmark comparison (section 1).
-- **Q-1** the first-run tier on a phone (section 4), after a read of the real frame rate: the dev iGPU of this machine read a p95 of 35.00 ms at D1 at the final head (`docs/PERF_PASS.md:19`; 28.79 ms at `v8.0.0-shipping`, `docs/PERF_PASS.md:49`) and is not a phone.
+- **Q-1** the first-run tier on a phone (section 4), after a read of the real frame rate: the dev iGPU of this machine read a p95 of 35.00 ms at D1 at the final head (`docs/PERF_PASS.md:19`; 28.79 ms at `v8.0.0-shipping`, `docs/PERF_PASS.md:51`) and is not a phone.
 - **W-1** the two shaders that exist and are not wired (flicker, wet asphalt): an owner decision with their costs above.

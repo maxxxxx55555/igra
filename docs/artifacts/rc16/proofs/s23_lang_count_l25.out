@@ -1,0 +1,9 @@
+# proof s23_lang_count_l25
+# utc 20261015T072948Z
+# head abf1f3d (uncommitted paths: 2)
+# env none
+# cmd python .qa_logs/proofs/s23_lang_count_l25.py
+all      1656 lines with Cyrillic, 1469 of them start with #, in 140 files
+shipped  1311 lines with Cyrillic, 1236 of them start with #, in 118 files
+tracked .gd files in the repository: 423, under scripts/: 354
+# EXIT=0
