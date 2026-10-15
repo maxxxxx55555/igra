@@ -29,6 +29,7 @@ NOT_GAME_DIRS = ("tools/", "scripts/tools/", "scenes/tools/", "scripts/security/
 NOT_GAME_FILES = ("opencode.json", "missing_keys.json", "scripts/stress_test.gd", "scenes/world/test_zone.tscn", "store/feature-graphic.png",
                   "store/icon-512.png")
 STORE_KEPT = ("assets/store/play_icon_512.png", "assets/store/endings/")  # the launcher icon source; planned in-game art (SIZE_BUDGET)
+SECURITY_KEPT = ("scripts/security/integrity_scan.gd", "scripts/security/security_log.gd")  # the two scripts the integrity guard preloads (CORRECTION_LOG 242); attack_sim.gd stays out
 NOT_GAME_SUFFIXES = (".md", ".py", ".sh", ".ps1", ".env", ".jks", ".keystore")
 TEXT_SUFFIXES = (".json", ".cfg", ".txt", ".csv", ".tres", ".tscn", ".gd")
 API_KEY = re.compile(rb"sk-[A-Za-z0-9_-]{16,}|\"apiKey\"")
@@ -36,7 +37,7 @@ API_KEY = re.compile(rb"sk-[A-Za-z0-9_-]{16,}|\"apiKey\"")
 
 def not_game(src):
     store_art = src.startswith("assets/store/") and not src.startswith(STORE_KEPT)
-    return src.startswith(NOT_GAME_DIRS) or src in NOT_GAME_FILES or src.endswith(NOT_GAME_SUFFIXES) or store_art
+    return (src.startswith(NOT_GAME_DIRS) and src not in SECURITY_KEPT) or src in NOT_GAME_FILES or src.endswith(NOT_GAME_SUFFIXES) or store_art
 
 
 def aab_findings(path):
@@ -61,15 +62,16 @@ def demo():
     with tempfile.TemporaryDirectory() as tmp:
         aab = pathlib.Path(tmp) / "t.aab"
         with zipfile.ZipFile(aab, "w") as z:
-            for rel, body in (("opencode.json", b"{}"), ("tests/x.gdc", b""), ("scripts/ok.gdc", b""), ("store/trailer/a.png.import", b""),
+            for rel, body in (("opencode.json", b"{}"), ("tests/x.gdc", b""), ("scripts/ok.gdc", b""), ("scripts/security/integrity_scan.gdc", b""),
+                              ("scripts/security/security_log.gd.remap", b""), ("scripts/security/attack_sim.gdc", b""), ("store/trailer/a.png.import", b""),
                               ("assets/store/v2/a.png.import", b""), ("assets/store/capsule_main_616x353.png.import", b""),
                               ("assets/store/play_icon_512.png.import", b""), ("assets/store/endings/e.png.import", b""),
                               ("data/i18n/en.json", b'{"k": "sk-abcdefghijklmnopqrstu"}'), ("data/items.json", b'{"name": "battery"}')):
                 z.writestr(PACKS[0] + rel, body)
         got = aab_findings(aab)
-    assert got == ["opencode.json", "tests/x.gdc", "store/trailer/a.png.import", "assets/store/v2/a.png.import",
+    assert got == ["opencode.json", "tests/x.gdc", "scripts/security/attack_sim.gdc", "store/trailer/a.png.import", "assets/store/v2/a.png.import",
                    "assets/store/capsule_main_616x353.png.import", "data/i18n/en.json (an API key pattern)"], got
-    print("release_export_check demo OK (a root text file, test code, store images and a key pattern are found; game files, the launcher icon and the endings art pass)")
+    print("release_export_check demo OK (a root text file, test code, the attack simulator, store images and a key pattern are found; game files, the guard's two scripts, the launcher icon and the endings art pass)")
 
 
 def main() -> int:

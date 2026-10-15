@@ -1,0 +1,23 @@
+# proof s23_aab_sizes_ebc1acc
+# utc 20261015T030357Z
+# head ebc1acc (uncommitted paths: 4)
+# env none
+# cmd python -I -B -c 
+import zipfile, collections
+z = zipfile.ZipFile('build/tls.aab')
+c = collections.Counter()
+n = collections.Counter()
+for i in z.infolist():
+    k = i.filename.split('/')[0]
+    c[k] += i.compress_size
+    n[k] += 1
+print(len(z.infolist()), 'entries')
+[print(k, n[k], 'entries', c[k], 'compressed bytes') for k in sorted(c)]
+
+2756 entries
+BUNDLE-METADATA 4 entries 3801 compressed bytes
+BundleConfig.pb 1 entries 271 compressed bytes
+META-INF 3 entries 312708 compressed bytes
+assetPackInstallTime 2634 entries 108700693 compressed bytes
+base 114 entries 26974686 compressed bytes
+# EXIT=0

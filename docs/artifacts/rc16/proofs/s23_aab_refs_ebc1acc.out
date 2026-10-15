@@ -1,0 +1,10 @@
+# proof s23_aab_refs_ebc1acc
+# utc 20261015T030601Z
+# head ebc1acc (uncommitted paths: 13)
+# env none
+# cmd bash -c python tools/qa_sim/export_refs_check.py --demo; python tools/qa_sim/export_refs_check.py; python tools/qa_sim/export_refs_check.py --bundle build/tls.aab
+export_refs_check demo: a preload and an autoload that the filter leaves out fail; a format string whose files are all left out fails; a load() is a note; a comment, a shipped format string and a tools script are not read; against a bundle, a file the export did not pack fails and one platform variant of an imported file is enough
+NOTE scripts/core/qa_launch_guard.gd:34: scripts/tools/shot_tool.gd is excluded by scripts/tools/*
+export_refs_check: 486 shipped file(s) read for the Android preset, 0 violation(s), 1 note(s)
+export_refs_check: 486 shipped file(s) read for the Android preset against the bundle, 0 violation(s), 0 note(s)
+# EXIT=0

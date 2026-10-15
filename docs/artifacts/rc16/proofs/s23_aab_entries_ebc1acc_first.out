@@ -1,0 +1,34 @@
+# proof s23_aab_entries_ebc1acc
+# utc 20261015T030358Z
+# head ebc1acc (uncommitted paths: 5)
+# env none
+# cmd python -I -B -c 
+import zipfile
+z = zipfile.ZipFile('build/tls.aab')
+names = [i.filename for i in z.infolist()]
+sec = [x for x in names if 'scripts/security' in x]
+icons = [x for x in names if 'icons/skills/' in x and x.endswith('.png')]
+stings = [x for x in names if 'ui_ending_sting' in x or 'ui_streak_milestone_sting' in x]
+guard = [x for x in names if 'integrity_guard' in x]
+print(len(names), 'entries')
+print('entries under scripts/security:', len(sec)); [print(' ', x) for x in sec]
+print('skill icons (icons/skills/*.png):', len(icons))
+print('ui stings:', len(stings)); [print(' ', x) for x in stings]
+print('integrity_guard entries:', len(guard)); [print(' ', x) for x in guard]
+
+2756 entries
+entries under scripts/security: 4
+  assetPackInstallTime/assets/scripts/security/integrity_scan.gd.remap
+  assetPackInstallTime/assets/scripts/security/integrity_scan.gdc
+  assetPackInstallTime/assets/scripts/security/security_log.gd.remap
+  assetPackInstallTime/assets/scripts/security/security_log.gdc
+skill icons (icons/skills/*.png): 0
+ui stings: 4
+  assetPackInstallTime/assets/.godot/imported/ui_ending_sting.ogg-d6200f57bfd69f66f5a1f735e0d3c668.oggvorbisstr
+  assetPackInstallTime/assets/.godot/imported/ui_streak_milestone_sting.ogg-388c8de92497b5f8949a7f8856e9f6fd.oggvorbisstr
+  assetPackInstallTime/assets/assets/audio/ui/ui_ending_sting.ogg.import
+  assetPackInstallTime/assets/assets/audio/ui/ui_streak_milestone_sting.ogg.import
+integrity_guard entries: 2
+  assetPackInstallTime/assets/scripts/systems/integrity_guard.gd.remap
+  assetPackInstallTime/assets/scripts/systems/integrity_guard.gdc
+# EXIT=0

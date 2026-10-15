@@ -2403,5 +2403,126 @@
   ],
   "frames": [],
   "commit": "0752c9b"
+ },
+ {
+  "id": "S23-X2-EXPORT",
+  "claim": "The second signed export, the bundle of the pass, was built from the clean tree at ebc1acc with the keystore variables in the environment and ended with exit code 0 (ledger row 121, export 2 of 2; the run closes after gradlew --stop).",
+  "cmd": "bash -c 'set -a; . .signing/release.env; set +a; godot --headless --path . --export-release \"Android\" build/tls.aab'",
+  "proof": "s23_export_ebc1acc",
+  "quotes": [
+   "head ebc1acc (uncommitted paths: 0)",
+   "# EXIT=0"
+  ],
+  "frames": [],
+  "commit": "ebc1acc"
+ },
+ {
+  "id": "S23-X2-AABCHECK",
+  "claim": "aab_check on the second bundle prints PASS: 136,653,029 bytes, the label, no ad SDK, integrity and refs ok, 0 secret hits, jar verified, the upload key's signer, and against the first bundle 0 entries gone, 38 new and 14 with other bytes.",
+  "cmd": "bash -c 'set -a; . .signing/release.env; set +a; python tools/qa_sim/aab_check.py build/tls.aab --secrets --against <the first bundle>'",
+  "proof": "s23_aab_check_ebc1acc",
+  "quotes": [
+   "size    136653029 bytes",
+   "sha256  0fe3649a2045cb92b7132e02ce21c862c5cea64f8049f0ccb980b4a3e0a98c85",
+   "label   base/resources.pb names Last Streetlight: ok",
+   "adsdk   0 dex entries name Lcom/applovin/: ok",
+   "integrity 54 file(s) of the manifest, 0 missing or with other bytes: ok",
+   "refs    0 file(s) or patterns named by the shipped files are not in the bundle: ok",
+   "secrets 2 value(s) of the environment searched in 2753 entries: 0 hits",
+   "signer_match=yes",
+   "against tls.aab: 0 entries gone, 38 new, 14 with other bytes",
+   "aab_check: PASS"
+  ],
+  "frames": [],
+  "commit": "ebc1acc"
+ },
+ {
+  "id": "S23-X2-MANIFEST",
+  "claim": "The manifest of the second bundle: package com.maxsimkasky.laststreetlight, version code 2, name 1.0, min SDK 24, target SDK 36, INTERNET and VIBRATE only.",
+  "cmd": "python -I aab_manifest.py build/tls.aab",
+  "proof": "s23_aab_manifest_ebc1acc",
+  "quotes": [
+   "'package': 'com.maxsimkasky.laststreetlight', 'versionCode': 2, 'versionName': '1.0'",
+   "'minSdkVersion': 24, 'targetSdkVersion': 36",
+   "android.permission.VIBRATE"
+  ],
+  "frames": [],
+  "commit": "ebc1acc"
+ },
+ {
+  "id": "S23-X2-ENTRIES",
+  "claim": "What the first bundle lacked is in the second: 4 entries under scripts/security (the guard's two scripts, no attack simulator), the integrity guard, the 15 skill icons and the two UI stings.",
+  "cmd": "python -I s23_aab_entries_ebc1acc.py build/tls.aab",
+  "proof": "s23_aab_entries_ebc1acc",
+  "quotes": [
+   "entries under scripts/security: 4",
+   "entries naming attack_sim: 0",
+   "skill icons as .png.import under icons/skills: 15",
+   "ui sting entries: 4",
+   "integrity_guard entries: 2"
+  ],
+  "frames": [],
+  "commit": "ebc1acc"
+ },
+ {
+  "id": "S23-X2-SCAN-OLD",
+  "claim": "AF2 for the correction of the bundle scan (CORRECTION_LOG 257): the demo extended with the guard's two scripts and the attack simulator fails on the old rule, which called the whole of scripts/security not the game.",
+  "cmd": "python tools/qa_sim/release_export_check.py --demo (the old rule)",
+  "proof": "s23_scan_demo_old",
+  "quotes": [
+   "AssertionError: ['opencode.json', 'tests/x.gdc', 'scripts/security/integrity_scan.gdc'",
+   "# EXIT=1"
+  ],
+  "frames": [],
+  "commit": "ebc1acc"
+ },
+ {
+  "id": "S23-X2-SCAN-NEW",
+  "claim": "With the rule that lets exactly the guard's two scripts through the same demo passes, and the scan of the second bundle reads 0 packed files that are not the game.",
+  "cmd": "python tools/qa_sim/release_export_check.py --demo; python tools/qa_sim/release_export_check.py --aab build/tls.aab",
+  "proof": "s23_scan_demo_new",
+  "quotes": [
+   "release_export_check demo OK",
+   "# EXIT=0"
+  ],
+  "frames": [],
+  "commit": "ebc1acc"
+ },
+ {
+  "id": "S23-X2-SCAN",
+  "claim": "The contents scan of the second bundle: 0 packed files that are not the game.",
+  "cmd": "python tools/qa_sim/release_export_check.py --aab build/tls.aab",
+  "proof": "s23_aab_scan_ebc1acc",
+  "quotes": [
+   "0 packed file(s) that are not the game",
+   "PASS"
+  ],
+  "frames": [],
+  "commit": "ebc1acc"
+ },
+ {
+  "id": "S23-X2-SIZES",
+  "claim": "The sizes of the second bundle: 2,756 entries, the base module 26,974,686 bytes compressed, the install-time asset pack 108,700,693.",
+  "cmd": "python -I -B -c <count the entries and their compressed bytes by top folder> build/tls.aab",
+  "proof": "s23_aab_sizes_ebc1acc",
+  "quotes": [
+   "2756 entries",
+   "base 114 entries 26974686 compressed bytes",
+   "assetPackInstallTime 2634 entries 108700693 compressed bytes"
+  ],
+  "frames": [],
+  "commit": "ebc1acc"
+ },
+ {
+  "id": "S23-X2-REFS",
+  "claim": "The shipped files name nothing that the export leaves out: 486 files read for the Android preset, 0 violations, on the filter and against the second bundle.",
+  "cmd": "python tools/qa_sim/export_refs_check.py --demo; python tools/qa_sim/export_refs_check.py; python tools/qa_sim/export_refs_check.py --bundle build/tls.aab",
+  "proof": "s23_aab_refs_ebc1acc",
+  "quotes": [
+   "486 shipped file(s) read for the Android preset, 0 violation(s), 1 note(s)",
+   "486 shipped file(s) read for the Android preset against the bundle, 0 violation(s), 0 note(s)"
+  ],
+  "frames": [],
+  "commit": "ebc1acc"
  }
 ]

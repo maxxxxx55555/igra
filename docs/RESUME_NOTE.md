@@ -15,7 +15,7 @@
 5. **Production**: a staged rollout of the tested build (`docs/RELEASE_RUNBOOK.md` §3 and §5).
 6. The HUD defaults and the optional lamp glow of the Session 22 block (its items 7 and 9) stand.
 
-**Budgets used.** Session 23: 24 of 24 launches (ledger rows 93 to 117), one sub-check run of the English store frames that the directive's R1 rule allows (row 119; row 118 is a mistyped command that started no process), 2 of 2 exports (rows 116 and the second). Session 22: 8 of 8 launches, 2 of 2 exports.
+**Budgets used.** Session 23: 24 of 24 launches (ledger rows 93 to 117), one sub-check run of the English store frames that the directive's R1 rule allows (row 119; row 118 is a mistyped command that started no process), the fix chain of the second verifier's finding (row 120: CORRECTION_LOG 253), 2 of 2 exports (rows 116 and 121). Session 22: 8 of 8 launches, 2 of 2 exports.
 
 **If a new directive arrives.** Start from `docs/RUN_STATE.md` (the newest block first), then `docs/KNOWN_ISSUES.md`; every fix needs its AF2 pair (`python tools/qa_sim/af2_both_ways.py`, as in the Session 22 block); the frame gate's default set is `docs/stills/ultimate`, and a runtime change after frames are stamped fails AF3 F4 until they are shot again or a scope row declares it (`tools/qa_sim/af3_f4_scope.tsv`); a headless `check.sh --all` skips the perf and audio gates (run them with `tools/qa_sim/guarded_windowed`); the runners switch the quality manager off and print the tier, the cap and a state line per view; `tools/qa_sim/proof_run` takes its options before the id (`--launch`, `--attach FILE`, then `<id> -- <command>`).
 

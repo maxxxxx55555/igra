@@ -1,0 +1,70 @@
+# proof s23_aab_check_ebc1acc
+# utc 20261015T030342Z
+# head ebc1acc (uncommitted paths: 2)
+# env none
+# cmd bash -c set -a; . .signing/release.env; set +a; python tools/qa_sim/aab_check.py build/tls.aab --secrets --against "../_BACKUPS/2026-10-15_05-22/build/tls.aab"
+size    136653029 bytes
+sha256  0fe3649a2045cb92b7132e02ce21c862c5cea64f8049f0ccb980b4a3e0a98c85
+entries 2756
+label   base/resources.pb names Last Streetlight: ok
+adsdk   0 dex entries name Lcom/applovin/: ok
+integrity 54 file(s) of the manifest, 0 missing or with other bytes: ok
+refs    0 file(s) or patterns named by the shipped files are not in the bundle: ok
+secrets 2 value(s) of the environment searched in 2753 entries: 0 hits (path, password)
+jar     jar verified.
+signer  4f6be6415c260b34...: signer_match=yes
+against tls.aab: 0 entries gone, 38 new, 14 with other bytes
+  new     assetPackInstallTime/assets/.godot/imported/battery_capacity_96.png-1634e1cb3c611459e91f0bcacba27adf.astc.ctex
+  new     assetPackInstallTime/assets/.godot/imported/crit_chance_96.png-8a211926935f0b764fcb5f1c61f0d794.astc.ctex
+  new     assetPackInstallTime/assets/.godot/imported/damage_boost_1_96.png-fb6c1ef1b3228e84424ec06173e776cf.astc.ctex
+  new     assetPackInstallTime/assets/.godot/imported/damage_boost_2_96.png-9f13216edd0dfe6188a1b158bdbcc52f.astc.ctex
+  new     assetPackInstallTime/assets/.godot/imported/fire_rate_96.png-428ca73b80cbffe36e71b354a15c586b.astc.ctex
+  new     assetPackInstallTime/assets/.godot/imported/health_regen_96.png-db3db6f9a56da5edcd2945779ce7b652.astc.ctex
+  new     assetPackInstallTime/assets/.godot/imported/inventory_space_96.png-606bf65e91a72d625241649274bd1cbc.astc.ctex
+  new     assetPackInstallTime/assets/.godot/imported/light_radius_96.png-013061d4aaa0d52df2827254b7262f2c.astc.ctex
+  new     assetPackInstallTime/assets/.godot/imported/loot_luck_96.png-4b9d1e3e64ab407ccd5366f881700e53.astc.ctex
+  new     assetPackInstallTime/assets/.godot/imported/max_health_96.png-9a925e897d05eebff155135a28c5013a.astc.ctex
+  new     assetPackInstallTime/assets/.godot/imported/move_speed_96.png-8ca27b0806679d7d8f6c8420be7476da.astc.ctex
+  new     assetPackInstallTime/assets/.godot/imported/reload_speed_96.png-98785f0e9736e401d74a35d29fbd5745.astc.ctex
+  new     assetPackInstallTime/assets/.godot/imported/stamina_boost_96.png-65ee895e5fe03f59e5681b4d97091c0f.astc.ctex
+  new     assetPackInstallTime/assets/.godot/imported/stealth_96.png-caa77c18d9bff4a566bc4bfe0056b0a5.astc.ctex
+  new     assetPackInstallTime/assets/.godot/imported/ui_ending_sting.ogg-d6200f57bfd69f66f5a1f735e0d3c668.oggvorbisstr
+  new     assetPackInstallTime/assets/.godot/imported/ui_streak_milestone_sting.ogg-388c8de92497b5f8949a7f8856e9f6fd.oggvorbisstr
+  new     assetPackInstallTime/assets/.godot/imported/xp_boost_96.png-adc104a2a9ee5d076f2afd47687202ad.astc.ctex
+  new     assetPackInstallTime/assets/assets/audio/ui/ui_ending_sting.ogg.import
+  new     assetPackInstallTime/assets/assets/audio/ui/ui_streak_milestone_sting.ogg.import
+  new     assetPackInstallTime/assets/assets/textures/icons/skills/battery_capacity_96.png.import
+  new     assetPackInstallTime/assets/assets/textures/icons/skills/crit_chance_96.png.import
+  new     assetPackInstallTime/assets/assets/textures/icons/skills/damage_boost_1_96.png.import
+  new     assetPackInstallTime/assets/assets/textures/icons/skills/damage_boost_2_96.png.import
+  new     assetPackInstallTime/assets/assets/textures/icons/skills/fire_rate_96.png.import
+  new     assetPackInstallTime/assets/assets/textures/icons/skills/health_regen_96.png.import
+  new     assetPackInstallTime/assets/assets/textures/icons/skills/inventory_space_96.png.import
+  new     assetPackInstallTime/assets/assets/textures/icons/skills/light_radius_96.png.import
+  new     assetPackInstallTime/assets/assets/textures/icons/skills/loot_luck_96.png.import
+  new     assetPackInstallTime/assets/assets/textures/icons/skills/max_health_96.png.import
+  new     assetPackInstallTime/assets/assets/textures/icons/skills/move_speed_96.png.import
+  new     assetPackInstallTime/assets/assets/textures/icons/skills/reload_speed_96.png.import
+  new     assetPackInstallTime/assets/assets/textures/icons/skills/stamina_boost_96.png.import
+  new     assetPackInstallTime/assets/assets/textures/icons/skills/stealth_96.png.import
+  new     assetPackInstallTime/assets/assets/textures/icons/skills/xp_boost_96.png.import
+  new     assetPackInstallTime/assets/scripts/security/integrity_scan.gd.remap
+  new     assetPackInstallTime/assets/scripts/security/integrity_scan.gdc
+  new     assetPackInstallTime/assets/scripts/security/security_log.gd.remap
+  new     assetPackInstallTime/assets/scripts/security/security_log.gdc
+  changed BUNDLE-METADATA/com.android.tools.build.profiles/baseline.prof
+  changed META-INF/MANIFEST.MF
+  changed META-INF/TLS_RELE.RSA
+  changed META-INF/TLS_RELE.SF
+  changed assetPackInstallTime/assets.pb
+  changed assetPackInstallTime/assets/.godot/global_script_class_cache.cfg
+  changed assetPackInstallTime/assets/.godot/uid_cache.bin
+  changed assetPackInstallTime/assets/assets.sparsepck
+  changed assetPackInstallTime/assets/project.binary
+  changed assetPackInstallTime/assets/scripts/systems/dynamic_resolution.gdc
+  changed assetPackInstallTime/assets/scripts/systems/wow_director.gdc
+  changed assetPackInstallTime/assets/scripts/world_env_setup.gdc
+  changed base/dex/classes.dex
+  changed base/manifest/AndroidManifest.xml
+aab_check: PASS
+# EXIT=0

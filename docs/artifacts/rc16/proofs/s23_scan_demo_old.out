@@ -1,0 +1,16 @@
+# proof s23_scan_demo_old
+# utc 20261015T030508Z
+# head ebc1acc (uncommitted paths: 8)
+# env none
+# cmd python tools/qa_sim/release_export_check.py --demo
+Traceback (most recent call last):
+  File "C:\Users\Maxsim\Desktop\TLS_Build\THE_LAST_STREETLIGHT\tools\qa_sim\release_export_check.py", line 132, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "C:\Users\Maxsim\Desktop\TLS_Build\THE_LAST_STREETLIGHT\tools\qa_sim\release_export_check.py", line 78, in main
+    demo()
+  File "C:\Users\Maxsim\Desktop\TLS_Build\THE_LAST_STREETLIGHT\tools\qa_sim\release_export_check.py", line 71, in demo
+    assert got == ["opencode.json", "tests/x.gdc", "scripts/security/attack_sim.gdc", "store/trailer/a.png.import", "assets/store/v2/a.png.import",
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ['opencode.json', 'tests/x.gdc', 'scripts/security/integrity_scan.gdc', 'scripts/security/security_log.gd.remap', 'scripts/security/attack_sim.gdc', 'store/trailer/a.png.import', 'assets/store/v2/a.png.import', 'assets/store/capsule_main_616x353.png.import', 'data/i18n/en.json (an API key pattern)']
+# EXIT=1

@@ -1,0 +1,7 @@
+# proof s23_scan_demo_new
+# utc 20261015T030519Z
+# head ebc1acc (uncommitted paths: 9)
+# env none
+# cmd python tools/qa_sim/release_export_check.py --demo
+release_export_check demo OK (a root text file, test code, the attack simulator, store images and a key pattern are found; game files, the guard's two scripts, the launcher icon and the endings art pass)
+# EXIT=0

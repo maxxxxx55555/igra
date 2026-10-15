@@ -1,0 +1,16 @@
+# proof s23_aab_scan_ebc1acc
+# utc 20261015T030356Z
+# head ebc1acc (uncommitted paths: 3)
+# env none
+# cmd python tools/qa_sim/release_export_check.py --aab build/tls.aab
+NOTE: keystore/release is empty - expected pre-release state (no signed release build cut yet), not a failure
+NOTE: keystore/release_user is empty - expected pre-release state (no signed release build cut yet), not a failure
+NOTE: keystore/release_password is empty - expected pre-release state (no signed release build cut yet), not a failure
+FAIL: tls.aab packs a file that is not the game: scripts/security/integrity_scan.gd.remap
+FAIL: tls.aab packs a file that is not the game: scripts/security/integrity_scan.gdc
+FAIL: tls.aab packs a file that is not the game: scripts/security/security_log.gd.remap
+FAIL: tls.aab packs a file that is not the game: scripts/security/security_log.gdc
+build\tls.aab: 4 packed file(s) that are not the game
+
+FAIL
+# EXIT=1
