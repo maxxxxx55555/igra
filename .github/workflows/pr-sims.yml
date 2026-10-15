@@ -53,6 +53,8 @@ jobs:
           - difficulty_curve.py --check
           - consistency_check.py --check
           - save_migration_sim.py --static
+          - branch_absorb_sim.py --check docs/ABSORB_PLAN.md
+          - gemini_handoff.py --check
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

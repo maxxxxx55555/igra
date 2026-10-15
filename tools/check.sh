@@ -449,6 +449,11 @@ if "$PY" tools/qa_sim/gemini_handoff.py --demo >/dev/null 2>&1 && "$PY" tools/qa
 else
   bad "gemini_handoff (см. 'python tools/qa_sim/gemini_handoff.py --check', then --write docs/GEMINI_HANDOFF.md)"
 fi
+if "$PY" tools/qa_sim/proofs_audit_sim.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/proofs_audit_sim.py >/dev/null 2>&1; then
+  ok "proofs_audit_sim (every closure has its log with an exit line, a resolvable commit and a row of docs/PROOFS.md that is the row of its log today)"
+else
+  bad "proofs_audit_sim (см. 'python tools/qa_sim/proofs_audit_sim.py')"
+fi
 if "$PY" tools/qa_sim/secret_scan.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/secret_scan.py >/dev/null 2>&1; then
   ok "secret_scan (no key, token, private key or assigned secret in any tracked text file: docs/CLEANUP_LEDGER.md section 7)"
 else
