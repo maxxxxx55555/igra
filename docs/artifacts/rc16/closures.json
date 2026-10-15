@@ -2605,5 +2605,224 @@
   ],
   "frames": [],
   "commit": "abf1f3d"
+ },
+ {
+  "id": "S24-T0-OLD",
+  "claim": "The directive's list was shipped in Session 23: the last battery of that session reads density, accessibility, stealth, audio, VFX, AI, tutorial and performance checks ok, 472 checks and 0 fails.",
+  "cmd": "the closeout gate's log of launch 117 (row 117)",
+  "proof": "s23_last_a4acbb5",
+  "attach": "gate_closeout_check_scene.log",
+  "quotes": [
+   "[closeout] ok   DENS1 density: every block of every district holds 2 solid props, 4 scattered pieces and 2 lamps at least (under the floor: none), 11 of 11 districts have a landmark and 11 a lit rest spot",
+   "[closeout] ok   A11Y1 subtitles: nothing with the toggle off (true), size, color and background follow their settings (problems []), a Keeper caption shows (true), an achievement toast does not (true)",
+   "[closeout] ok   AI1 noise bomb: it popped on landing (true), the monster 14 m away goes to look at the spot (true), the one 36 m away, beyond the radius of 24 m, stays (true)",
+   "[closeout] ok   AI3 last known place: leaving the detect area while chased starts a search (true) at the player's last place (true) for 10 s (true)",
+   "[closeout] ok   AUD3 one physics timer senses the place every 0.25 s (1 found)",
+   "[closeout] ok   VFX6 particle budget: the world's own emitters draw 154, with every pooled burst in flight (5 of each scene) 426 (budget 500), 154 in a storm (limit 1000), the pool's worst case 290 plus the world 444",
+   "[closeout] ok   PERF1 street collision is a few strips on the tile surface (1 StaticBody3D, at most 40; 0 of 24 road and sidewalk points off the street at y 0.05-0.07; 0 of 4 block centres solid)",
+   "[closeout] DONE checks=472 fails=0"
+  ],
+  "frames": [],
+  "commit": "a4acbb5"
+ },
+ {
+  "id": "S24-ALL",
+  "claim": "The same items read ok in this pass's battery, on the tree after the purge: yes. 88 checks passed, 0 failed, 2 skipped by their own rule (the draw-call budget and the Music bus need `--windowed`; that run is owner row O-1); the closeout gate ends `DONE checks=473 fails=0` with no FAIL line (two `note` lines): the 472 checks of Session 23 plus ENV1 (line 524, added by `294c508` after that battery); every item of S24-T0 reads ok at the same line, one line later after line 524 (DENS1 line 828, DONE line 832).",
+  "cmd": "bash tools/check.sh --all (the closeout gate's log attached)",
+  "proof": "s24_all_8978194",
+  "attach": "gate_closeout_check_scene.log",
+  "quotes": [
+   "[closeout] ok   DENS1 density: every block of every district holds 2 solid props, 4 scattered pieces and 2 lamps at least (under the floor: none), 11 of 11 districts have a landmark and 11 a lit rest spot",
+   "[closeout] ok   A11Y1 subtitles: nothing with the toggle off (true), size, color and background follow their settings (problems []), a Keeper caption shows (true), an achievement toast does not (true)",
+   "[closeout] ok   AI1 noise bomb: it popped on landing (true), the monster 14 m away goes to look at the spot (true), the one 36 m away, beyond the radius of 24 m, stays (true)",
+   "[closeout] ok   AUD3 one physics timer senses the place every 0.25 s (1 found)",
+   "[closeout] ok   VFX6 particle budget: the world's own emitters draw 154, with every pooled burst in flight (5 of each scene) 426 (budget 500), 154 in a storm (limit 1000), the pool's worst case 290 plus the world 444",
+   "[closeout] DONE checks=473 fails=0"
+  ],
+  "frames": [],
+  "commit": "8978194"
+ },
+ {
+  "id": "S24-BATTERY",
+  "claim": "The battery on the tree after the purge and the new gates: 88 passed, 0 failed, 2 skipped by their own rule (windowed only); the closeout gate `DONE checks=473 fails=0`",
+  "cmd": "bash tools/check.sh --all",
+  "proof": "s24_all_8978194",
+  "quotes": [
+   "Всё зелёное. Проверок пройдено: 88"
+  ],
+  "frames": [],
+  "commit": "8978194"
+ },
+ {
+  "id": "S24-ABSORB",
+  "claim": "Every branch on origin has its disposition in docs/ABSORB_PLAN.md and the deleted one says so.",
+  "cmd": "python tools/qa_sim/branch_absorb_sim.py --check docs/ABSORB_PLAN.md",
+  "proof": "s24_branch_sim_2",
+  "quotes": [
+   "branch_absorb_sim: 13 branch(es) on origin, FAIL 0, PASS 13"
+  ],
+  "frames": [],
+  "commit": "49f8731"
+ },
+ {
+  "id": "S24-DEAD",
+  "claim": "Every file of the three purge batches is dead by two independent greps over the tracked text files.",
+  "cmd": "python s24_dead_proof.py . list (37 files)",
+  "proof": "s24_dead_proof_c1",
+  "quotes": [
+   "candidates: 37, tracked text files read: 1798",
+   "dead by grep: 37 of 37"
+  ],
+  "frames": [],
+  "commit": "8ec7da4"
+ },
+ {
+  "id": "S24-PLANNED",
+  "claim": "The planning and canon documents name three candidates by a word that is not the file (prose and a neighbouring file's name): none is a planned feature.",
+  "cmd": "python s24_planned_xcheck.py . list",
+  "proof": "s24_planned_xcheck_c1",
+  "quotes": [
+   "named in a canon or planning document: 3 of 37"
+  ],
+  "frames": [],
+  "commit": "8ec7da4"
+ },
+ {
+  "id": "S24-UID",
+  "claim": "No sidecar uid of a purged file is used elsewhere, and the live replacements are on disk.",
+  "cmd": "python s24_uid_replace_check.py . list",
+  "proof": "s24_uid_replace_c1",
+  "quotes": [
+   "sidecar uid used elsewhere: 0",
+   "icons_v2/ach_medal_v2_*: 40 files, first ['assets/textures/icons_v2/ach_medal_v2_01_96.png']",
+   "renders_v2/weapons/*_render_256.png: 3 files ['pistol_render_256.png', 'rifle_render_256.png', 'shotgun_render_256.png']"
+  ],
+  "frames": [],
+  "commit": "8ec7da4"
+ },
+ {
+  "id": "S24-AF3",
+  "claim": "The frame gate's definition of runtime follows the export filter and the three folders the bundle carries, and reads a rename as a delete and an add: the eight release frames still pass F4.",
+  "cmd": "python tools/qa_sim/af3_frame_check.py",
+  "proof": "s24_af3_default_2",
+  "quotes": [
+   "af3 frames=8 fail=0"
+  ],
+  "frames": [],
+  "commit": "49f8731"
+ },
+ {
+  "id": "S24-RUNTIME",
+  "claim": "No runtime path differs between the commit the bundle was exported from and HEAD, and every tracked file that has an entry in the bundle is runtime by the gate's definition.",
+  "cmd": "python -I s24_runtime_diff_2.py .",
+  "proof": "s24_runtime_diff_2",
+  "quotes": [
+   "bundle: 1626 resource entries outside .godot; 1857 tracked files have one; of those not runtime by the definition: 0 []",
+   "ebc1acc (the commit the bundle was exported from): 135 paths differ from HEAD (renames read as delete and add), 0 of them runtime []",
+   "runtime paths that differ, or that the bundle holds and the definition misses: 0"
+  ],
+  "frames": [],
+  "commit": "49f8731"
+ },
+ {
+  "id": "S24-AAB",
+  "claim": "The bundle on disk reads as the record says: 136,653,029 bytes, 2,756 entries, label `Last Streetlight`, no ad-SDK dex entry, 54 manifest files intact, no unresolved reference, jar verified, signer equal to the release certificate (`aab_check: PASS`)",
+  "cmd": "python tools/qa_sim/aab_check.py build/tls.aab",
+  "proof": "s24_aab_check",
+  "quotes": [
+   "sha256  0fe3649a2045cb92b7132e02ce21c862c5cea64f8049f0ccb980b4a3e0a98c85",
+   "jar     jar verified."
+  ],
+  "frames": [],
+  "commit": "8978194"
+ },
+ {
+  "id": "S24-HANDOFF",
+  "claim": "docs/GEMINI_HANDOFF.md is what its sources give now.",
+  "cmd": "python tools/qa_sim/gemini_handoff.py --check",
+  "proof": "s24_handoff_check_2",
+  "quotes": [
+   "gemini_handoff: docs/GEMINI_HANDOFF.md matches its sources"
+  ],
+  "frames": [],
+  "commit": "49f8731"
+ },
+ {
+  "id": "S24-PROOFS-AUDIT",
+  "claim": "Every closure has its log, its exit line as the last line, its attached log, a commit that resolves and a row that is the row of its log.",
+  "cmd": "python tools/qa_sim/proofs_audit_sim.py",
+  "proof": "s24_proofs_audit_2",
+  "quotes": [
+   "proofs_audit_sim: 200 closure(s), PASS 200, FAIL 0"
+  ],
+  "frames": [],
+  "commit": "49f8731"
+ },
+ {
+  "id": "S24-GITIGNORE",
+  "claim": "Every generated, exported and secret path is ignored (autosave paths included), the evidence is not, no tracked file hides behind a rule.",
+  "cmd": "python tools/qa_sim/gitignore_check.py",
+  "proof": "s24_gitignore_check",
+  "quotes": [
+   "gitignore_check: 29 path(s) that must be ignored, 8 that must be tracked, 0 fault(s)"
+  ],
+  "frames": [],
+  "commit": "8978194"
+ },
+ {
+  "id": "S24-A11Y",
+  "claim": "The accessibility wiring check: 9 of 9 features functional.",
+  "cmd": "python tools/qa_sim/a11y_check.py",
+  "proof": "s24_a11y_check",
+  "quotes": [
+   "a11y features functional: 9/9"
+  ],
+  "frames": [],
+  "commit": "8978194"
+ },
+ {
+  "id": "S24-SECRETS",
+  "claim": "No secret-shaped string in the tracked text files after the pass.",
+  "cmd": "python tools/qa_sim/secret_scan.py",
+  "proof": "s24_secret_scan_2",
+  "quotes": [
+   "secret_scan: 1978 tracked text file(s), 2 allowed false positive(s), 0 finding(s)"
+  ],
+  "frames": [],
+  "commit": "49f8731"
+ },
+ {
+  "id": "S24-STATIC",
+  "claim": "The static gates on the tree of the pass: 62 of 62 green on the commit `3a396e8` (the battery's proofs and section 7 of the absorb plan).",
+  "cmd": "bash tools/check.sh --static",
+  "proof": "s24_static_3a396e8",
+  "quotes": [
+   "Всё зелёное. Проверок пройдено: 62"
+  ],
+  "frames": [],
+  "commit": "3a396e8"
+ },
+ {
+  "id": "S24-STATIC-FIX",
+  "claim": "The static gates on the commit that holds the verifier's fixes (three gate definitions, the numbers of the documents): 62 of 62.",
+  "cmd": "bash tools/check.sh --static",
+  "proof": "s24_static_49f8731",
+  "quotes": [
+   "Всё зелёное. Проверок пройдено: 62"
+  ],
+  "frames": [],
+  "commit": "49f8731"
+ },
+ {
+  "id": "S24-AUDIT-PAIR",
+  "claim": "The quarantine audit on the tracked trees rebuilt from git archive: 16 scripts AUTO-DELETABLE at the baseline, 4 at HEAD (the three kept and one the purge exposed).",
+  "cmd": "python -I s24_audit_pair.py . 68e6c9d",
+  "proof": "s24_audit_pair",
+  "quotes": [
+   "at 68e6c9d (the baseline, before the purge): {\"AUTO-DELETABLE\": 16, \"KEEP-LIVE\": 26, \"KEEP-PLANNED\": 25, \"UNCERTAIN\": 53}",
+   "at HEAD (HEAD, after it): {\"AUTO-DELETABLE\": 4, \"KEEP-LIVE\": 26, \"KEEP-PLANNED\": 25, \"UNCERTAIN\": 52}"
+  ],
+  "frames": [],
+  "commit": "49f8731"
  }
 ]

@@ -1,0 +1,48 @@
+# proof s24_runtime_diff_2
+# utc 20261015T210551Z
+# head 49f8731 (uncommitted paths: 0)
+# env none
+# cmd python -I /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s24_runtime_diff_2.py .
+"""Session 24 (P2, after the verifier's V1.4): does the signed bundle on disk still carry the runtime of HEAD? The bundle was exported at ebc1acc (Session 23,
+row 121). A path is runtime when tools/qa_sim/af3_frame_check.is_runtime says so (what the game ships: not the tools, not what the Android preset's
+exclude_filter leaves out), and the changed paths are read as a delete plus an add (af3.changed_paths), so a moved file is seen under both names. Two
+checks: (1) the definition against the bundle itself: every tracked file that has an entry in build/tls.aab (its res path, or with .import or .remap) is
+runtime; (2) the runtime paths that differ between ebc1acc and HEAD, and between 0752c9b (the release frames) and HEAD. Prints itself first.
+usage: python -I s24_runtime_diff_2.py <repo>"""
+import pathlib
+import subprocess
+import sys
+import zipfile
+
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+root = pathlib.Path(sys.argv[1]).resolve()
+sys.path.insert(0, str(root / "tools" / "qa_sim"))
+import af3_frame_check as af3  # noqa: E402
+
+head = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=root, capture_output=True, text=True).stdout.strip()
+print("HEAD %s; exclude_filter patterns read: %d; runtime prefixes: %s" % (head, len(af3.EXCLUDED), ", ".join(af3.RUNTIME_PREFIXES)))
+
+prefix = "assetPackInstallTime/assets/"
+with zipfile.ZipFile(root / "build" / "tls.aab") as z:
+    entries = {n[len(prefix):] for n in z.namelist() if n.startswith(prefix) and not n.startswith(prefix + ".godot/")}
+tracked = [t for t in subprocess.run(["git", "ls-files"], cwd=root, capture_output=True, text=True, encoding="utf-8").stdout.split("\n") if t]
+in_bundle = [t for t in tracked if t in entries or t + ".import" in entries or t + ".remap" in entries]
+hidden = [t for t in in_bundle if not af3.is_runtime(t)]
+print("bundle: %d resource entries outside .godot; %d tracked files have one; of those not runtime by the definition: %d %s" % (len(entries), len(in_bundle), len(hidden), hidden[:5]))
+bad = len(hidden)
+for base, what in (("ebc1acc", "the commit the bundle was exported from"), ("0752c9b", "the commit of the release frames")):
+    diff = af3.changed_paths(base, "HEAD", root)
+    rt = [n for n in diff if af3.is_runtime(n)]
+    bad += len(rt)
+    print("%s (%s): %d paths differ from HEAD (renames read as delete and add), %d of them runtime %s" % (base, what, len(diff), len(rt), rt[:6]))
+print("runtime paths that differ, or that the bundle holds and the definition misses: %d" % bad)
+sys.exit(1 if bad else 0)
+
+--- run
+HEAD 49f8731; exclude_filter patterns read: 53; runtime prefixes: scripts/, scenes/, assets/, data/, addons/, android/, localization/, components/, content/, store/icon-adaptive/
+bundle: 1626 resource entries outside .godot; 1857 tracked files have one; of those not runtime by the definition: 0 []
+ebc1acc (the commit the bundle was exported from): 135 paths differ from HEAD (renames read as delete and add), 0 of them runtime []
+0752c9b (the commit of the release frames): 438 paths differ from HEAD (renames read as delete and add), 0 of them runtime []
+runtime paths that differ, or that the bundle holds and the definition misses: 0
+# EXIT=0

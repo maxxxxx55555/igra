@@ -1,0 +1,21 @@
+# proof s24_branch_sim_2
+# utc 20261015T210916Z
+# head 49f8731 (uncommitted paths: 2)
+# env none
+# cmd python tools/qa_sim/branch_absorb_sim.py --check docs/ABSORB_PLAN.md
+branch                                             commits  SAME MOVED DIVERGED MISSING GONE
+origin/arena/019ffbd0-igra                              56     2     1       50      11   13
+origin/arena/01a07b1c-igra                               9     0     0       39       2    4
+origin/arena/01a09af1-igra                               2     3     0      499      50    0
+origin/arena/01a0ab24-igra                               1     0     0        2       1    0
+origin/arena/01a0c589-igra                               2     0     0       10       3    0
+origin/arena/01a0c619-igra                               3     3     0        1       0    0
+origin/arena/01a0c61a-igra                               1     1     0        0       0    0
+origin/arena/01a0c87e-igra                               1     0     0        0       2    0
+origin/arena/01a0f956-igra                              14     4     1      102       4    0
+origin/claude/keen-cori-0sc9uo                           2     0     0        1       1    0
+origin/claude/serene-sagan-wynb3r                        8     4     1       26       0    0
+origin/gh-pages                                          1     0     0        0       0    0
+origin/jules/parallel-audit-1403790779115270347          3     0     0        7       4    0
+branch_absorb_sim: 13 branch(es) on origin, FAIL 0, PASS 13
+# EXIT=0

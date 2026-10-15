@@ -1,0 +1,7 @@
+# proof s24_af3_default_2
+# utc 20261015T210940Z
+# head 49f8731 (uncommitted paths: 5)
+# env none
+# cmd python tools/qa_sim/af3_frame_check.py
+af3 frames=8 fail=0
+# EXIT=0
