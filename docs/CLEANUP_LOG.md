@@ -17,8 +17,7 @@ directive names and nothing else. Nothing tracked was deleted and no file of `sc
 
 `..\_BACKUPS\2026-10-16_00-45\branches_deleted_2026-10-16.bundle` (58,030,014 bytes, sha256 `43d7271bc5d06bd8c7a08be251f57594dfbe841d9ac32fc25fcf902a3f3c4e8b`,
 the ten tips below with `^origin/main` excluded, requires `fba6b90`; `git bundle verify` okay, 10 heads). A branch comes back with
-`git fetch <bundle> refs/remotes/origin/<name>:refs/heads/<name>`. The tag objects are still in the object database; `tags_deleted_2026-10-16.txt` in the same folder holds
-the eight `git update-ref refs/tags/<name> <object>` lines that restore them.
+`git fetch <bundle> refs/remotes/origin/<name>:refs/heads/<name>`. The eight annotated tag objects are saved as raw files `tag_<name>.txt` in the same folder (`git cat-file tag <object>`; `git hash-object -t tag <file>` returned the object's own id for each of them), and `tags_deleted_2026-10-16.txt` holds the eight `git update-ref refs/tags/<name> <object>` lines that restore them after `git hash-object -t tag -w <file>`.
 
 ## Remote branches deleted (10, `git push origin --delete`, read back with `git ls-remote --heads origin`)
 
@@ -61,6 +60,8 @@ Every tag whose version is below 8.0.0. Each still names a commit that stays in 
 | `*.log` | `.qa_logs/` (scratch logs of the gates; the evidence copies are in `docs/artifacts/rc16/proofs/`) | 236 | 5,302,241 |
 | `*.tmp` | `.godot/imported/` (zero-byte leftovers of an interrupted import, 2026-09-25) | 9 | 0 |
 
+Tracked files cite 53 distinct `.qa_logs/*.log` paths (108 files cite one or more) and none is on disk now. The folder is ignored, so a clone never had them, and the 236 logs deleted here may have included some of them; the evidence of record for the runs of Sessions 23 and 24 is the tracked copies under `docs/artifacts/rc16/proofs/` (`*.out` and `*.attach.*.log`), and which deleted file had a copy there cannot be re-derived.
+
 ## Kept or skipped, with the reason
 
 | What | Why |
@@ -72,5 +73,5 @@ Every tag whose version is below 8.0.0. Each still names a commit that stays in 
 | local-only tags `pre-purge-68e6c9d`, `cleanup-backup-dfce976`, `backup-rc16-*`, `backup-rc17-*` | backups, never pushed |
 | `*.pyc` in `tools/` (37), `scripts/` (8), `docs/` (7), `assets/` (1) | inside the protected folders; regenerated on the next run |
 | `*.log` in `docs/` (228) | tracked evidence logs |
-| 56 empty directories | 25 in `.godot/shader_cache` and 31 in `android/build` (Gradle intermediates): they hold no bytes and belong to the toolchains' caches |
+| 56 empty directories | 25 in `.godot/shader_cache`, 30 in `android/build` (Gradle intermediates) and 1 in `tools/.bin` (a protected folder): they hold no bytes and belong to the toolchains' caches; the deletion of the logs emptied `.qa_logs/pre_l25`, which was removed too |
 | local branches `test-*`, `temp-*`, `debug-*`, `experimental-*`; `assets/_backup_*`, `assets/*.old` | none exist |

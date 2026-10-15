@@ -3,7 +3,7 @@
 ## OPEN (2026-10-16, Session 25): what the Gemini-integration pass left
 
 - **The Gemini artifacts are not in the repository** (`docs/GEMINI_INTEGRATION_REPORT.md`): 7 of the 9 files the directive names are on no ref and in no commit. The owner's action: push them to a `gemini/<name>` branch or a pull request of `maxxxxx55555/igra`, or say that the Jules proposal is the intended specification.
-- **19 more achievements (31 shipped; GDD section 21 asks 15+)** are not implemented: the only proposal (`docs/jules/ACHIEVEMENT_TRIGGER_SPEC.md`, now in the bundle above and on `refs/pull/20/head`) fails its own hook check (13 of 19 signals do not exist, `ach_37` cannot be reached as written). A feature-sized wave: spec-kit, per `CLAUDE.md`.
+- **19 more achievements (31 shipped; GDD section 21 asks 15+)** are not implemented: the only proposal (`docs/jules/ACHIEVEMENT_TRIGGER_SPEC.md`, now in the bundle named under Parallel branches below and on `refs/pull/20/head`) fails its own hook check (13 of 19 EventBus signals do not exist, 5 rows need new emission points, `ach_37` is out of reach within one run). A feature-sized wave: spec-kit, per `CLAUDE.md`.
 - **Tags below 8.0.0 are gone from origin** (`v1.0-final`, `v7.*`; the table of commits is in `docs/CLEANUP_LOG.md`); `.clinerules/zone.md` and three documents still name `v7.0.0-rc1` (`c5292c8`).
 
 ## OPEN (2026-10-15, Session 24): what the v8.1.0-premium pass left

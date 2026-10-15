@@ -187,19 +187,19 @@ rows: `docs/ACCEPTANCE_CHECKLIST.md` (200 rows); decisions: `docs/TZ_DECISIONS.m
 
 ## Gemini-integration pass (Session 25, 2026-10-16)
 
-**Status: the Gemini files the directive names are not in the repository; nothing could be integrated, so the achievements and the CI workflow were not built; the five purposes were run through the files that serve them and pass; ten branches, eight tags and 246 ignored files were deleted after their backups; no runtime path changed.** Records: `docs/RUN_STATE.md` Session 25, `docs/GEMINI_INTEGRATION_REPORT.md`, `docs/CLEANUP_LOG.md`. Launches: 0 of 15; exports 0 of 3.
+**Status: the Gemini files the directive names are not in the repository; nothing could be integrated, so the achievements and the CI workflow were not built; the five purposes were run through the files that serve them and pass; ten branches (a bundle) and eight tags (raw tag objects) were deleted after their backups, and 246 ignored scratch files without one (CORRECTION_LOG 264); no runtime path changed.** Records: `docs/RUN_STATE.md` Session 25, `docs/GEMINI_INTEGRATION_REPORT.md`, `docs/CLEANUP_LOG.md`. Launches: 0 of 15; exports 0 of 3.
 
 | Item | Result | Evidence |
 |---|---|---|
 | G1 artifacts | 2 of 9 named paths present (the repository's own); 75 refs and the whole history hold no Gemini-only name | `docs/artifacts/rc16/proofs/s25_gemini_check.out` |
 | G1 simulators | 6 of 6 equivalent checks pass (proofs audit 220, achievements 31, save migration static, i18n fuzz 1,560 keys, i18n truth 12 of 12, secret scan 1,987 files) | `docs/artifacts/rc16/proofs/s25_equiv_*.out` |
-| G2 achievements | 0 of 19: 13 of 19 proposed signals do not exist, 1 threshold unreachable | `docs/artifacts/rc16/proofs/s25_ach_hooks.out` |
+| G2 achievements | 0 of 19: 13 of 19 proposed signals do not exist (5 rows need new emission points), 1 threshold out of reach within one run | `docs/artifacts/rc16/proofs/s25_ach_hooks.out` |
 | G3 CI | skipped: no specification; 3 workflows exist | `docs/GEMINI_INTEGRATION_REPORT.md` section 4 |
 | G4 cleanup | 10 branches, 8 tags, 246 files (5,305,635 bytes); remote heads 14 to 4 | `docs/CLEANUP_LOG.md`; `docs/artifacts/rc16/proofs/s25_branch_sim.out` |
-| Gates | static 62 of 62 | `docs/artifacts/rc16/proofs/s25_static.out` |
+| Gates | static 62 of 62 on the documents commit and again on the commit before the closing one | `docs/artifacts/rc16/proofs/s25_static.out`, `docs/artifacts/rc16/proofs/s25_static_final.out` |
 | Bundle | unchanged: `build/tls.aab`, 136,653,029 bytes, version code 2; no runtime path differs from its commit | `docs/artifacts/rc16/proofs/s25_runtime_diff.out` |
-| Verifier | pending | `docs/artifacts/rc16/proofs/s25_verifier_round1.md` |
-| Not done | G2 and G3 (no input), the engine battery and the export (no runtime change), the phone run, the history rewrite (K-1) | `docs/UNVERIFIABLE_HERE.md` |
+| Verifier | one read-only round on `207d796`: `PASS=19 FAIL=9 GAME-AFFECTING=0 META=9 UNVERIFIED=3`; the META findings re-derived and corrected (CORRECTION_LOG 265) | `docs/artifacts/rc16/proofs/s25_verifier_round1.md` |
+| Not done | G2 and G3 (no input), the engine battery and the export (no runtime change), the phone run (`docs/UNVERIFIABLE_HERE.md`), the history rewrite (K-1, `docs/CLEANUP_LEDGER.md` section 8) | `docs/UNVERIFIABLE_HERE.md`, `docs/CLEANUP_LEDGER.md` |
 
 ## v8.1.0-premium pass (Session 24, 2026-10-15)
 
@@ -218,7 +218,7 @@ rows: `docs/ACCEPTANCE_CHECKLIST.md` (200 rows); decisions: `docs/TZ_DECISIONS.m
 | Gates | static 62 of 62 (three new gates), `check.sh --all`: 88 passed, 0 failed, 2 skipped by their own rule (windowed only); the closeout gate `DONE checks=473 fails=0` | `docs/artifacts/rc16/proofs/s24_all_8978194.out` |
 | Bundle | unchanged: `build/tls.aab`, 136,653,029 bytes, version code 2; no runtime path differs from its commit | `docs/artifacts/rc16/proofs/s24_runtime_diff_2.out` |
 | Verifier | one read-only round on `aaf2e87`: `PASS=20 FAIL=15 GAME-AFFECTING=0 META=15 UNVERIFIED=4`; the META findings re-derived and corrected (CORRECTION_LOG 261 and 262) | `docs/artifacts/rc16/proofs/s24_verifier_round1.md` |
-| Not done | an export (nothing shipped changed), the 3-seed bot (no AI code changed; Session 23: 3 of 3), the phone run (U1, U5, U6, U10, U12, U13), the history rewrite (K-1) | `docs/UNVERIFIABLE_HERE.md` |
+| Not done | an export (nothing shipped changed), the 3-seed bot (no AI code changed; Session 23: 3 of 3), the phone run (U1, U5, U6, U10, U12, U13: `docs/UNVERIFIABLE_HERE.md`), the history rewrite (K-1, `docs/CLEANUP_LEDGER.md` section 8) | `docs/UNVERIFIABLE_HERE.md`, `docs/CLEANUP_LEDGER.md` |
 
 ## AAA-ultimate closeout (Session 23, 2026-10-13)
 
