@@ -178,4 +178,58 @@ finds no commit that names it); `docs/ABSORB_PLAN.md` has every branch that is o
 
 The other 13 branches stay (section 5 of this ledger and `docs/ABSORB_PLAN.md`): not merged, and none is documented as rejected for fabrication. Two of them are as good as in `main` by content (`arena/01a0c61a-igra`: its one file is blob-identical; `arena/01a0c619-igra`: three of its four files are, the
 fourth differs); they are not ancestors, so the rule does not take them, and `git push origin --delete` is the owner's if the list should be shorter.
+### 12.2 Files: three batches, each its own commit
+
+The candidates were the manifests read strictly: the AUTO-DELETABLE rows of `docs/QUARANTINE_AUDIT.md` (all ten went in Session 23), of `docs/SURFACES_UI_NARROWING.md` (none: its surfaces and ui rows read 0 AUTO-DELETABLE) and the
+"confirmed dead" list of `docs/SIZE_BUDGET.md` E2 to E4 (`items_legacy` went in Session 23; `wav_src`, the legacy achievement icons and the legacy weapon icons were left), plus a fresh run of `tools/quarantine_audit.py`, whose
+inventory now holds the quarantined scripts (34 rows AUTO-DELETABLE: 16 scripts and 18 `.uid` sidecars). Three checks per candidate, run by scripts kept in the proofs: two independent greps over every tracked text file (`docs/artifacts/rc16/proofs/s24_dead_proof_c1.out`: the path
+with and without `res://`, and the whole file name with word boundaries, since `local_leaderboard.gd` is not `leaderboard.gd`), the planning and canon documents read for the name and the stem (`docs/artifacts/rc16/proofs/s24_planned_xcheck_c1.out`:
+VISUAL_PASS, STORE_KIT, CARD_ART_BRIEF, MUSIC_BRIEF, MUSIC_SPEC, GAMEFEEL_SPEC, PRODUCTION_BIBLE, PLAN and every GDD), and the uid of each sidecar and the live replacement (`docs/artifacts/rc16/proofs/s24_uid_replace_c1.out`).
+The static gates, `flow_check` and `scene_node_check` ran after each batch.
+
+| # | Path | Files | Bytes | Proof | Commit |
+|---|---|---|---|---|---|
+| 1 | `_QUARANTINE/scripts/`: `audio/proc_audio.gd`, `audio_atmosphere.gd`, `components/attack_component_3d.gd`, `core/progression_system.gd`, `effects/footstep_dust.gd`, `effects/hit_spark.gd`, `environment/world_env.gd`, `system/particle_manager.gd`, `systems/leaderboard.gd`, `ui/controls.gd`, `ui/ui_theme.gd`, `visual/moon_disc.gd`, `world/ftue_generator_3d.gd`, and the 13 ignored `.uid` sidecars beside them | 13 tracked, 13 untracked | 25,438 | two greps: 0 code and 0 tool hits for each; the planning documents name none of the 13 as a thing to build or keep (the stems `controls`, `leaderboard` and `world_env` match prose or another file: `local_leaderboard.gd`, `world_env.tscn`, `world_env_setup.gd`); no uid is used elsewhere | `8ec7da4` |
+| 2 | `assets/audio/ambience/wav_src/action_sting_loop.wav`, `threat_high_loop.wav`, `threat_low_loop.wav` (and three ignored `.import`) | 3 tracked, 3 untracked | 10,232,939 | `docs/AUDIO_CONVERT.md` and `docs/REPORT_ASSETS.md` call them archived masters ("never import"); the `.ogg` of each is in `assets/audio/ambience/`; on the export exclusion list; no code, scene or uid names them | `8338ad7` |
+| 3 | `assets/textures/icons/ach_*_96.png` (12) and `assets/textures/icons/weapons/*_128.png` (9), with their 21 sidecars | 42 | 39,477 | superseded by `assets/textures/icons_v2/ach_medal_v2_*` (read by `scripts/ui/achievements_ui.gd`) and `assets/textures/renders_v2/weapons/*_render_256.png` (read by `scripts/ui/weapon_compare_ui.gd`); on the export exclusion list; `docs/SIZE_BUDGET.md` E2 to E4 | `663633d` |
+
+### 12.3 Kept, with the reason
+
+| Path | Why it stays |
+|---|---|
+| `_QUARANTINE/scripts/player/death_sequence.gd` | `docs/GAMEFEEL_SPEC.md:14` names `scripts/player/death_sequence.gd` as the implementation of the death beat (the beat itself now lives in `scripts/systems/wow_director.gd`); the planning document still points at it |
+| `_QUARANTINE/scripts/ui/onboarding.gd` | `docs/GDD.md:810` lists it in the conformance table as an existing file; the live screen is `scripts/ui/onboarding_overlay.gd` |
+| `_QUARANTINE/scripts/world/city_decorator.gd` | `docs/VISUAL_PASS.md:199` plans contact shadows for "street_props / city_decorator" |
+| `assets/audio/ambience/wav_src/ambient_dark_loop.wav` and `ambient_lit_loop.wav` (10.6 MB each) | their `.ogg` was retired in `39b2254` (the 22 per-district beds replaced them: `docs/AUDIO_MIX_AUDIT.md`), so these two masters are the only copies in the tree, and `store/trailer.md:32` still plans both beds for the trailer |
+| the 42 UNCERTAIN, 2 KEEP-PLANNED and 10 KEEP-LIVE rows of the fresh audit | the audit's own rule: owner eyes (section 3 above) |
+| the 25 sha256 duplicate groups (18.7 MB: `docs/stills/final` against `docs/stills/ultimate`, `docs/shots`, `content/cards/twins`, `assets/store/v2/itch`, three store covers, two LUTs; `docs/artifacts/rc16/proofs/s24_purge_probe.out`) | not examined file by file: evidence frames and shots are cited by path from reports (Session 23's rule keeps a file a document cites as evidence), the card twins are read by two scripts, the store images by path from store documents and tools, and the two LUTs by name from code; a deletion needs each citation read, which this pass did not do |
+
+### 12.4 QA logs and the ignore rule
+
+`.qa_logs/` (ignored) held 1,769 files, 401 MB at the probe (`docs/artifacts/rc16/proofs/s24_purge_probe.out`). The 1,178 older than the tag date of `v8.0.0-shipping` (2026-10-12), 224,043,661 bytes, were archived with `tarfile` to
+`..\_BACKUPS\2026-10-15_19-36\qa_logs_before_2026-10-12.tar.gz` (154,807,929 bytes, read back and counted: 1,178 members) and then deleted; 17 empty directories went with them; 607 files, 177.6 MB, are newer and stay.
+`.gitignore` had every pattern of the directive's list but `*.autosave.*`; it has it now, with `*.autosave`, and `tools/qa_sim/gitignore_check.py` holds a path of each (29 must-ignore paths, 8 must-track, 0 faults).
+
+### 12.5 The confession (AF7): two batches pushed with a red gate
+
+The batches of 12.2 ran the static gates **before** their commit, and the frame gate (F4) reads the committed `HEAD`, so batch 2 passed its run and batch 3's run was already red (`af3_frame_check`: 45 runtime paths differ between
+`0752c9b` and `HEAD`, first `assets/audio/ambience/wav_src/action_sting_loop.wav`). The batch script committed on a clean tree, not on a green run, and both commits (`8338ad7`, `663633d`) were pushed. The cause was in the gate, not in
+the batches: `tools/qa_sim/af3_frame_check.py` counted every path under `assets/` as runtime, but all 45 files are on the Android preset's `exclude_filter`, so none was ever in the bundle and no frame can show it. The fix is the
+gate's own definition ("everything the game ships"): `is_runtime` now returns False for a path the first preset's `exclude_filter` matches (commit `7c9440f`; the demo asserts an excluded path is not runtime and a shipped one is;
+`af3 frames=8 fail=0`, and no runtime path differs from `0752c9b` at `HEAD`). It is a gate input and is logged as such in `docs/CORRECTION_LOG.md`. The rule that stands for the rest of the pass: commit, then run the gates on the
+commit, and revert the batch the same turn on red.
+
+### 12.6 Totals of this pass
+
+| | Before (`68e6c9d`) | After |
+|---|---|---|
+| Tracked files | 4,105 | 4,055 (58 removed; this pass's documents, tool and proofs added) |
+| Tracked bytes removed | - | 10,295,263 (9.8 MB) |
+| Untracked files removed | - | 1,194: 16 ignored sidecars of the batches and the 1,178 QA logs (224.0 MB, archived) |
+| Working directory freed | - | about 234 MB (9.8 MB tracked, 224.0 MB logs); the archive of the logs, 154.8 MB, sits in `..\_BACKUPS\` |
+| Remote branches | 14 besides `main` | 13 (`arena/card-unique-rescue` deleted, 12.1) |
+| Local branches, worktrees, stashes | 2 (`main`, `gh-pages`), 1, 0 | the same |
+| `.git` on disk | 991 MB | unchanged (the history is not rewritten: owner row K-1) |
+| The shipped bundle | `build/tls.aab`, 136,653,029 bytes | unchanged by construction: every removed path was on the export exclusion list or outside the project's scan roots; the runtime paths differ from the bundle's commit by none |
+| Backups | - | tag `pre-purge-68e6c9d` (local, never pushed); the 74 files of the batches in `..\_BACKUPS\2026-10-15_18-58\`; the thin bundle of the rejected branch; the log archive |
 

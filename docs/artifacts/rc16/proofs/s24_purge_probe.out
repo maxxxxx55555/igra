@@ -1,0 +1,56 @@
+# proof s24_purge_probe
+# utc 20261015T163916Z
+# head 7c9440f (uncommitted paths: 2)
+# env none
+# cmd python -I C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s24_purge_probe.py .
+1 orphan sidecars (tracked, source absent): 0
+2 sha256 duplicate groups (over 2 KB): 25, redundant bytes 18685518
+     4573958 bytes x2: docs/stills/03_district_suburbs.png | docs/stills/evidence/magenta_corruption_suburbs.png
+     3449078 bytes x2: docs/shots/gameplay_shot.png | docs/shots/rescue_gameplay_after_p0_fix.png
+      844434 bytes x2: docs/stills/final/05_boss.png | docs/stills/ultimate/05_boss_after_0752c9b_20261015T015015Z.png
+      833544 bytes x2: docs/stills/final/02_district_day_full.png | docs/stills/ultimate/02_district_day_full_after_0752c9b_20261015T015008Z.png
+      805928 bytes x2: docs/stills/final/03_district_night_dark.png | docs/stills/ultimate/03_district_night_dark_after_0752c9b_20261015T015003Z.png
+      777728 bytes x2: docs/stills/final/04_combat.png | docs/stills/ultimate/04_combat_after_0752c9b_20261015T015013Z.png
+      677336 bytes x2: docs/stills/final/06_victory_ngplus.png | docs/stills/ultimate/06_victory_ngplus_after_0752c9b_20261015T015018Z.png
+      645531 bytes x2: docs/stills/final/08_shop.png | docs/stills/ultimate/08_shop_after_0752c9b_20261015T015010Z.png
+      641726 bytes x2: docs/stills/final/07_skill_tree.png | docs/stills/ultimate/07_skill_tree_after_0752c9b_20261015T015009Z.png
+      515651 bytes x2: assets/textures/cards/card_police_512.png | content/cards/twins/card_police_512.png
+      505110 bytes x2: assets/textures/cards/card_warehouses_512.png | content/cards/twins/card_warehouses_512.png
+      502344 bytes x2: assets/textures/cards/card_substation_512.png | content/cards/twins/card_substation_512.png
+      487450 bytes x2: assets/textures/cards/card_park_512.png | content/cards/twins/card_park_512.png
+      473320 bytes x2: assets/textures/cards/card_school_512.png | content/cards/twins/card_school_512.png
+      472351 bytes x2: assets/textures/cards/card_hospital_512.png | content/cards/twins/card_hospital_512.png
+      468981 bytes x2: assets/textures/cards/card_gas_station_512.png | content/cards/twins/card_gas_station_512.png
+      456942 bytes x2: assets/store/v2/itch/itch_screenshot_wide_3_1280x720.png | assets/store/v2/shots/shot_restored.png
+      406068 bytes x2: docs/stills/final/01_main_menu.png | docs/stills/ultimate/01_main_menu_after_0752c9b_20261015T014952Z.png
+      284528 bytes x2: assets/store/v2/itch/itch_screenshot_wide_1_1280x720.png | assets/store/v2/shots/shot_street.png
+      174208 bytes x2: assets/store/v2/itch/itch_screenshot_wide_2_1280x720.png | assets/store/v2/shots/shot_map.png
+      128297 bytes x4: docs/shots/rescue_burst_0.png | docs/shots/rescue_burst_1.png | docs/shots/rescue_burst_2.png | docs/shots/rescue_burst_3.png
+      123307 bytes x3: assets/store/background_1920x1080.png | assets/store/loading_screen_1920x1080.png | assets/store/press/press_cover_1920x1080.png
+       37219 bytes x2: docs/stills/rc16_playthrough/B03_hardcore_on_after_bca7d33_20261007T235607Z.jpg | docs/stills/v800_loop/s1_L3_B03_hardcore_on_after_14fc1b3_20261011T085510Z.jpg
+       16901 bytes x2: docs/stills/playthrough/A01_boot_loading.jpg | docs/stills/v800_loop/s1_L0_A01_boot_loading_after_14fc1b3_20261011T083314Z.jpg
+        3677 bytes x2: assets/textures/luts/lut_residential.png | assets/textures/luts/lut_suburbs.png
+3 .qa_logs: older than 2026-10-12: 0 files 0 bytes; newer: 608 files 177556501 bytes
+4 empty directories on disk: 26
+    .godot\shader_cache\CanvasOcclusionShaderGLES3\1c6ebb9a37183d33544b8b1051a28111a82945b8d4a7e5c687d89145ccf6d2f9
+    .godot\shader_cache\CanvasSdfShaderGLES3\8c2421fe1f906e60a39b13004dc67a5ac1901902b4a5bd937536165791a70b23
+    .godot\shader_cache\Fsr2AccumulatePassShaderRD\7e3388306b8b814b99d86d08901cb85411ed7874055da2a9ac7169350663fb24
+    .godot\shader_cache\Fsr2AutogenReactivePassShaderRD\15ad4238e088069ce62513ace17fccddc0a031c33651859b6182b345c260417d
+    .godot\shader_cache\Fsr2ComputeLuminancePyramidPassShaderRD\ea30b9cf2586f5efa8adb0623d631dca2e08fcbffc511d15e430309048b62811
+    .godot\shader_cache\Fsr2DepthClipPassShaderRD\636f74877424985a3491c9f4aacd1e6a3bc5e7c47be7f5154bd8dbe63a109a6b
+    .godot\shader_cache\Fsr2LockPassShaderRD\e1f2a67ded37287c61ec8c8e1a93c5ef2f559e6cf8d3ee502740645f0ffb656e
+    .godot\shader_cache\Fsr2RcasPassShaderRD\0a53240e7518f90b514d903b4572aedbe9103d60b7d67bc733918003c5971ca1
+    .godot\shader_cache\Fsr2ReconstructPreviousDepthPassShaderRD\7bb138b53460583c5620036572edf3406f00775acd6cc00d6f13210abf2b576a
+    .godot\shader_cache\Fsr2TcrAutogenPassShaderRD\688ab227efbf4151af5ade3b8ebcdde4ec62216e405d7f11e51afb3fe8ad183f
+    .godot\shader_cache\GiShaderRD\7e279c117959c3fc75fc6bf369f7637e2f2ce5d12eeffb808ab9bc97af873bfc
+    .godot\shader_cache\GlowShaderGLES3\530ac9c9f212aa7f6c45757f436754d0e90bafb30b2438e1a4a2fffcf95abedd
+    .godot\shader_cache\ParticlesCopyShaderGLES3\a476fbf9d343ba5157b3c15b6fce5d72cb070088e2aa3bf3c9a6df2c83990019
+    .godot\shader_cache\ParticlesShaderGLES3\b2e7c95d0aeac673ceb2c737ef7c9462b1fd15a766ab873e6b6281e194b5b1a6
+    .godot\shader_cache\SceneForwardClusteredShaderRD\3b57f606108ded8878ba68c5c59a308a1978b2ad7788fd022d00660d3b950daa
+    .godot\shader_cache\SceneForwardClusteredShaderRD\63029fb9eee2470d331573517cb058629ab991547b2cce9159a56a2524bf6ae4
+    .godot\shader_cache\SceneForwardClusteredShaderRD\f992b32f15c3b360ad9fb2499081c03f580cd3bcd5c852dae5a18e441f4dcc90
+    .godot\shader_cache\SkeletonShaderGLES3\43011ce5ec8cb2d1645ecba254f4b051c43a99889cf180a01f7ff1ffd599b536
+    .godot\shader_cache\TexBlitShaderGLES3\5064cd67e8c356c8f8757063485429c956b9f7528b1e2e8b78ddc4991698ce18
+    .godot\shader_cache\VolumetricFogProcessShaderRD\2a432b0c26391eeeb6b041b1f390a109d3963104cd63635466aa425cb951d2c3
+5 stash entries: 0; worktrees: 1
+# EXIT=0

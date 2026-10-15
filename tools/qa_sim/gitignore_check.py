@@ -14,7 +14,7 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 MUST_IGNORE = [
     ".godot/imported/a.ctex", ".qa_logs/run.log", ".signing/release.env", ".signing/tls-release.keystore", "build/tls.aab", "exports/tls.aab", "android/build/x.gradle",
-    "release.env", "a.keystore", "a.jks", "a.p12", "a.pem", "a.key", "google-services.json", "local.properties", ".env", "x.patch", "x.orig", "x.rej", "x.tmp", "x.swp",
+    "release.env", "a.keystore", "a.jks", "a.p12", "a.pem", "a.key", "google-services.json", "local.properties", ".env", "x.patch", "x.orig", "x.rej", "x.tmp", "x.swp", "scenes/x.autosave.tscn", "scripts/x.gd.autosave",
     "scripts/__pycache__/a.pyc", "_BACKUPS/a/b.gd", ".claude/worktrees/a/b.gd", ".claude/settings.local.json", "docs/stills/playthrough/V_t1.jpg", "tools/debug.keystore",
 ]
 MUST_TRACK = [

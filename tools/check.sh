@@ -444,6 +444,11 @@ if "$PY" tools/qa_sim/branch_absorb_sim.py --demo >/dev/null 2>&1 && "$PY" tools
 else
   bad "branch_absorb_sim (см. 'python tools/qa_sim/branch_absorb_sim.py --check docs/ABSORB_PLAN.md')"
 fi
+if "$PY" tools/qa_sim/gemini_handoff.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/gemini_handoff.py --check >/dev/null 2>&1; then
+  ok "gemini_handoff (docs/GEMINI_HANDOFF.md matches the music brief, the recipe, the prompt list and the card brief it is made from)"
+else
+  bad "gemini_handoff (см. 'python tools/qa_sim/gemini_handoff.py --check', then --write docs/GEMINI_HANDOFF.md)"
+fi
 if "$PY" tools/qa_sim/secret_scan.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/secret_scan.py >/dev/null 2>&1; then
   ok "secret_scan (no key, token, private key or assigned secret in any tracked text file: docs/CLEANUP_LEDGER.md section 7)"
 else

@@ -113,3 +113,5 @@ _tmp_*
 # raw evidence that the *.log and *.patch rules above would swallow: one log, and the patch a correction row cites
 !docs/artifacts/ui-audio/verify.log
 !docs/artifacts/**/*.patch
+*.autosave.*
+*.autosave
