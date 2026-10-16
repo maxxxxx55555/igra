@@ -3369,7 +3369,7 @@
  },
  {
   "id": "S26-FINAL",
-  "claim": "Launch 9 (ledger row 131), the full battery on the tree that ships (`6734f9c`): 89 passed, 0 failed, the audio-bus graph (3 effects on the Music bus) among them.",
+  "claim": "Launch 9 (ledger row 131), the full battery at `6734f9c`: 89 passed, 0 failed, the audio-bus graph (3 effects on the Music bus) among them.",
   "cmd": "bash tools/check.sh --all",
   "proof": "s26_final_all_6734f9c",
   "quotes": [
