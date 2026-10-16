@@ -61,7 +61,7 @@ The live HUD shows the heart (`ui_heart.svg`), the battery and the touch interac
 |---|---|---|
 | a button under the mouse or the focus | grows to 1.05 in 0.12 s, settles back (not on touch, not with Reduce UI Motion) | `HOVER_SCALE` and `HOVER_SEC`, `scripts/theme_setup.gd:14-15` |
 | a press | scales to 0.95 and clicks | `PRESS_SCALE`, `scripts/systems/uisfx.gd:122` |
-| a screen opens or closes | a short slide and fade, hidden at once with Reduce UI Motion | `_animates`, `scripts/ui/ui_manager.gd:239` |
+| a screen opens or closes | a short slide and fade, hidden at once with Reduce UI Motion | `_animates`, `scripts/ui/ui_manager.gd:241` |
 
 Checks POL1 and POL2 hold the press and the screen fade (`docs/POLISH.md`).
 
