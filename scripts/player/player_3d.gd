@@ -189,6 +189,7 @@ func _setup_cone(force_off: bool) -> void:
 	# flashlight_cone.gdshader is the same technique with added rim falloff
 	# and flicker, so it replaces it here instead of living unused on disk.
 	var shader_res: Shader = load("res://assets/shaders/flashlight_cone.gdshader")
+	var code := shader_res.code
 	var sm := ShaderMaterial.new()
 	sm.shader = shader_res
 	cone.set_surface_override_material(0, sm)
