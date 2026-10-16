@@ -1,0 +1,33 @@
+# proof s26_mutations
+# utc 20261016T032337Z
+# head 5c5d6da (uncommitted paths: 0)
+# env none
+# cmd bash -c python tools/qa_sim/s26_mutations.py apply 0; bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; CLOSEOUT_ONLY=s26 bash tools/qa_sim/closeout_check 400; cp .qa_logs/closeout_check.log .qa_logs/s26_mutations_set0.log; python tools/qa_sim/s26_mutations.py restore; python tools/qa_sim/s26_mutations.py apply 1; bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; CLOSEOUT_ONLY=s26 bash tools/qa_sim/closeout_check 400; cp .qa_logs/closeout_check.log .qa_logs/s26_mutations_set1.log; python tools/qa_sim/s26_mutations.py restore
+s26_mutations: apply 0 done (8 mutations)
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL ACHSIG1 the first lit streetlight unlocks First Light
+[closeout] FAIL ACHSIG2 one district FULL unlocks Electrician and its own district achievement, not Beacon
+[closeout] FAIL ACHSIG3 every district FULL unlocks Beacon
+[closeout] FAIL ACHSIG4 the 50th Shadow unlocks Shadow Hunter, the 49th does not
+[closeout] FAIL ACHSIG5 the last document unlocks Librarian
+[closeout] FAIL ACH15 a death with only the power station lit is Survivor and does not unlock Darkness (ending survivor)
+[closeout] FAIL ACHRUN1 a New Game starts the marks of Quiet as a Mouse and Without a Scratch empty (seen_park true, hurt_school true)
+[closeout] FAIL DAILY2 the daily selector walks past a template over the 11 districts (day 0 over, day 3 over) and keeps one with no per-run cap (day 2 kills)
+[closeout] DONE checks=11 fails=8
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+s26_mutations: restore done
+s26_mutations: apply 1 done (1 mutations)
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL ACHRUN2 it keeps the profile's counters and what is unlocked (Shadow Hunter 0, First Light true)
+[closeout] DONE checks=11 fails=1
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+s26_mutations: restore done
+# EXIT=0

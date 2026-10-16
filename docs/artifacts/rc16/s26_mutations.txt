@@ -1,0 +1,14 @@
+set 0 ACH15    mutated: FAIL -> BITES
+set 0 ACHRUN1  mutated: FAIL -> BITES
+set 0 ACHSIG1  mutated: FAIL -> BITES
+set 0 ACHSIG2  mutated: FAIL -> BITES
+set 0 ACHSIG3  mutated: FAIL -> BITES
+set 0 ACHSIG4  mutated: FAIL -> BITES
+set 0 ACHSIG5  mutated: FAIL -> BITES
+set 0 DAILY2   mutated: FAIL -> BITES
+set 0 failed without a mutation: nothing
+set 0 run: [closeout] DONE checks=11 fails=8
+set 1 ACHRUN2  mutated: FAIL -> BITES
+set 1 failed without a mutation: nothing
+set 1 run: [closeout] DONE checks=11 fails=1
+S26 MUTATIONS verdict=PASS mutations=9 bad=0
