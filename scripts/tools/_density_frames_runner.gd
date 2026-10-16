@@ -7,6 +7,9 @@ extends "res://scripts/tools/_rc16_probe_runner.gd"
 ##   03_street   the west street again, power FULL
 ##   04_block    from the middle block across the street to its neighbour, power FULL
 ##   05_skyline  up the south street toward the landmark of the district, power FULL
+##   06_courtyard from inside the middle block across the grid to the south-west corner of the ring, power FULL (Session 27)
+##   07_facade    close to the west facade of the ring, looking up its panels, power FULL (Session 27)
+## --tviews=<names> shoots only those views (the default is all).
 ## Frames -> docs/stills/density/<id>_<view>_<label>_<hash>_<UTC>.jpg (the AF3 name: the code tree and the capture time). A saved frame proves nothing until it is read.
 ## The runs are in English with the HUD and the tutorial hidden (Trailer Mode), so a frame holds the world and nothing else. The weather is pinned to clear and the random events
 ## are off (`_pin_world`), and each view prints one `[density] state` line (weather, stage, tier, the environment's ambient, glow and exposure), so a frame can be traced to its state.
@@ -20,12 +23,15 @@ const VIEWS: Array[Dictionary] = [
 	{"name": "03_street", "at": Vector3(-8.0, 0.1, 21.0), "look": Vector3(-8.0, 1.7, -30.0), "pitch": 0.0, "stage": 3, "light": false},
 	{"name": "04_block", "at": Vector3(0.0, 0.1, 0.0), "look": Vector3(16.0, 1.5, -16.0), "pitch": -0.05, "stage": 3, "light": false},
 	{"name": "05_skyline", "at": Vector3(0.0, 0.1, 18.0), "look": Vector3(0.0, 1.7, -60.0), "pitch": 0.22, "stage": 3, "light": false},
+	{"name": "06_courtyard", "at": Vector3(-2.5, 0.1, 2.5), "look": Vector3(-30.0, 1.7, 30.0), "pitch": 0.04, "stage": 3, "light": false},
+	{"name": "07_facade", "at": Vector3(-23.0, 0.1, 6.0), "look": Vector3(-32.0, 1.7, 8.0), "pitch": 0.32, "stage": 3, "light": false},
 ]
 const JPG_QUALITY: float = 0.88
 const SETTLE_SEC: float = 0.9
 const PERF_SETTLE_FRAMES: int = 30
 
 var _ids: Array[StringName] = []
+var _views: PackedStringArray = []
 var _lang: String = "en"
 var _hud: bool = false
 var _png: bool = false
@@ -129,6 +135,8 @@ func _run() -> void:
 		elif s.begins_with("--tids="):
 			for id in s.substr(7).split(",", false):
 				_ids.append(StringName(id))
+		elif s.begins_with("--tviews="):
+			_views = s.substr(9).split(",", false)
 		elif s.begins_with("--tlang="):
 			_lang = s.substr(8)
 		elif s == "--thud=1":
@@ -168,7 +176,8 @@ func _run() -> void:
 			continue
 		_freeze_monsters()
 		for view: Dictionary in VIEWS:
-			await _view(id, view)
+			if _views.is_empty() or _views.has(String(view["name"])):
+				await _view(id, view)
 		var dressing := _dressing()
 		if _label == "pair" and dressing != null:
 			dressing.visible = false

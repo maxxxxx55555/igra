@@ -12,8 +12,9 @@ const BODY_SELF_GLOW := Color(0.08, 0.10, 0.14)
 ## Per power stage (DARK, PARTIAL, STREETS, FULL): the emission energy of the glowing parts, the share of the body's self-glow, the opacity of the halo.
 const GLOW_BY_STAGE: Array[float] = [0.0, 0.6, 1.3, 2.4]
 const BODY_BY_STAGE: Array[float] = [0.15, 0.5, 0.8, 1.1]
-const HALO_BY_STAGE: Array[float] = [0.0, 0.08, 0.16, 0.28]
-const HALO_SIZE := Vector2(110.0, 100.0)
+const HALO_BY_STAGE: Array[float] = [0.0, 0.05, 0.10, 0.17]
+## A halo that hugs the silhouette: the 110 m quad of the first version filled a third of the sky with flat brass (decision HALO-27).
+const HALO_SIZE := Vector2(64.0, 52.0)
 const HALO_BEHIND_M: float = 16.0
 
 static var _glow_texture: GradientTexture2D = null

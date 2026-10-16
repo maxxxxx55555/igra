@@ -40,7 +40,14 @@ SETS = [
         (ACH, MARKS, "if true:", "ACHRUN2"),
         ("scripts/systems/daily_challenge_manager.gd", "elif _progress_day == day and _today_id == _id_for_day(day):", "elif _today_id == _id_for_day(day):", "DAILY3"),
     ],
+    [  # Session 27, the closeout group s27: three files, nothing one mutation changes is read by another's check
+        ("scripts/world/street_builder.gd", "const MARK_WIDTH: float = 0.16", "const MARK_WIDTH: float = 4.0", "SOV1"),
+        ("scripts/world/skyline.gd", 'float(clampi(int(SettingsManager.get_setting("graphics_tier", 2)), 0, 2))', "2.0", "SOV2"),
+        ("scripts/world/district_landmark.gd", "const HALO_SIZE := Vector2(64.0, 52.0)", "const HALO_SIZE := Vector2(110.0, 100.0)", "SOV3"),
+    ],
 ]
+## The closeout group each set runs (CLOSEOUT_ONLY): the sets of Session 26 run `s26`, those of Session 27 `s27`.
+GROUP = ["s26", "s26", "s27"]
 LINE = re.compile(r"^\[closeout\] (ok  |FAIL) +(\S+)")
 
 
@@ -112,7 +119,7 @@ def run(tag, audio=False):
     steps = []
     for i in range(len(SETS)):
         steps.append("python tools/qa_sim/s26_mutations.py apply %d; bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; "
-                     "CLOSEOUT_ONLY=s26 bash tools/qa_sim/closeout_check 400; cp .qa_logs/closeout_check.log .qa_logs/%s_set%d.log; python tools/qa_sim/s26_mutations.py restore" % (i, run_id, i))
+                     "CLOSEOUT_ONLY=%s bash tools/qa_sim/closeout_check 400; cp .qa_logs/closeout_check.log .qa_logs/%s_set%d.log; python tools/qa_sim/s26_mutations.py restore" % (i, GROUP[i], run_id, i))
     if audio:
         steps.append("bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120")
     attach = []

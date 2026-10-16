@@ -31,6 +31,9 @@ const PALETTES := {
 	&"power_station": [[Color("#15191e"), Color("#1b2026"), Color("#21262d")], Color(0.10, 0.11, 0.13)],
 }
 const WIN_BRASS := Color(0.79, 0.635, 0.29)
+const _FACADE := preload("res://assets/shaders/soviet_facade.gdshader")
+## Share of the windows that carry a balcony slab, by district: the flats of a panel block have them, a warehouse has none.
+const BALCONIES := {&"suburbs": 0.30, &"residential": 0.35, &"hospital": 0.12, &"school": 0.08, &"police": 0.10}
 const WIN_BONE := Color(0.85, 0.82, 0.77)
 ## Share of windows lit per power stage: DARK, PARTIAL, STREETS, FULL.
 const STAGE_LIT: Array[float] = [0.04, 0.30, 0.60, 0.90]
@@ -53,6 +56,7 @@ var _district_id: StringName = &""
 var _windows: MultiMeshInstance3D
 var _rolls := PackedFloat32Array()
 var _tones := PackedFloat32Array()
+var _facade_mat: ShaderMaterial = null
 
 ## half_extent: half the street grid's size in metres (24 for the 3x3 grid of 16 m blocks).
 func build(district_id: StringName, half_extent: float, with_windows: bool) -> void:
@@ -62,6 +66,9 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 	var facades: Array = palette[0]
 	var rng := RandomNumberGenerator.new()
 	rng.seed = hash("skyline_" + String(district_id))
+	var extra := RandomNumberGenerator.new()
+	extra.seed = hash("skyline_extra_" + String(district_id))
+	var balconies: float = float(BALCONIES.get(district_id, 0.0))
 	var edge := half_extent + RING_GAP
 	var blocks: Array[Transform3D] = []
 	var tints: Array[Color] = []
@@ -82,7 +89,9 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 			if skip:
 				continue
 			blocks.append(Transform3D(turn * Basis.from_scale(Vector3(w, h, d)), turn * Vector3(cx, h * 0.5, -edge - d * 0.5)))
-			tints.append(facades[rng.randi() % facades.size()])
+			var tint: Color = facades[rng.randi() % facades.size()]
+			tints.append(tint)
+			_dress_block(extra, Transform3D(turn, turn * Vector3(cx, 0.0, -edge)), Vector3(w, h, d), tint, balconies if with_windows else 0.0, blocks, tints)
 			if with_windows:
 				var y := 2.6
 				while y < h - 1.4:
@@ -105,6 +114,30 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 	_add_ground()
 	_add_solid_ground(edge)
 
+## The roof of a panel block, a stairwell and now and then a water tank and an aerial, and a balcony slab under a share of its windows (`frame` is the front face of the block at the ground, x at its middle, z toward the street).
+func _dress_block(rng: RandomNumberGenerator, frame: Transform3D, size: Vector3, tint: Color, balconies: float, blocks: Array[Transform3D], tints: Array[Color]) -> void:
+	var lighter := tint.lightened(0.18)
+	var stair := Vector3(rng.randf_range(2.2, 3.4), 2.4, rng.randf_range(2.4, minf(4.0, size.z * 0.45)))
+	_put(blocks, tints, frame, Vector3(rng.randf_range(-0.25, 0.25) * size.x, size.y + stair.y * 0.5, -size.z * rng.randf_range(0.3, 0.6)), stair, lighter)
+	if rng.randf() < 0.5:
+		_put(blocks, tints, frame, Vector3(rng.randf_range(-0.4, 0.4) * size.x, size.y + 0.9, -size.z * 0.7), Vector3(1.6, 1.8, 1.6), tint)
+	if rng.randf() < 0.4:
+		_put(blocks, tints, frame, Vector3(rng.randf_range(-0.4, 0.4) * size.x, size.y + 2.2, -size.z * 0.5), Vector3(0.12, 4.4, 0.12), tint)
+	if balconies <= 0.0:
+		return
+	var y := 2.6
+	while y < size.y - 1.4:
+		var x := 1.2 - size.x * 0.5
+		while x < size.x * 0.5 - 1.0:
+			if rng.randf() < balconies:
+				_put(blocks, tints, frame, Vector3(x, y - 0.72, 0.375), Vector3(1.5, 0.14, 0.75), lighter)
+			x += 2.2
+		y += 2.6
+
+func _put(blocks: Array[Transform3D], tints: Array[Color], frame: Transform3D, at: Vector3, size: Vector3, tint: Color) -> void:
+	blocks.append(frame * Transform3D(Basis.from_scale(size), at))
+	tints.append(tint)
+
 func _add_multimesh(node_name: String, mesh: Mesh, xforms: Array[Transform3D], tints: Array[Color], unshaded: bool, glow: Color = FACADE_GLOW) -> void:
 	var mm := MultiMesh.new()
 	mm.transform_format = MultiMesh.TRANSFORM_3D
@@ -114,15 +147,21 @@ func _add_multimesh(node_name: String, mesh: Mesh, xforms: Array[Transform3D], t
 	for i in xforms.size():
 		mm.set_instance_transform(i, xforms[i])
 		mm.set_instance_color(i, tints[i] if i < tints.size() else WIN_DARK)
-	var mat := StandardMaterial3D.new()
-	mat.vertex_color_use_as_albedo = true
-	mat.roughness = 1.0
+	var mat: Material
 	if unshaded:
-		mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		var flat := StandardMaterial3D.new()
+		flat.vertex_color_use_as_albedo = true
+		flat.roughness = 1.0
+		flat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		mat = flat
 	else:
-		# A faint cold self-glow so the blocks read as silhouettes against the sky.
-		mat.emission_enabled = true
-		mat.emission = glow
+		# A faint cold self-glow so the blocks read as silhouettes against the sky; the shader weathers the panels (the tier of the graphics sets how much).
+		_facade_mat = ShaderMaterial.new()
+		_facade_mat.shader = _FACADE
+		_facade_mat.set_shader_parameter("glow", glow)
+		_set_detail()
+		EventBus.settings_changed.connect(_set_detail)
+		mat = _facade_mat
 	var mmi := MultiMeshInstance3D.new()
 	mmi.name = node_name
 	mmi.multimesh = mm
@@ -163,6 +202,10 @@ func _add_box(body: StaticBody3D, size: Vector3, at: Vector3) -> void:
 	shape.shape = box
 	shape.position = at
 	body.add_child(shape)
+
+func _set_detail(key: String = "graphics_tier", _value: Variant = null) -> void:
+	if key == "graphics_tier" and _facade_mat != null:
+		_facade_mat.set_shader_parameter("detail", float(clampi(int(SettingsManager.get_setting("graphics_tier", 2)), 0, 2)))
 
 func _on_stage_changed(id: StringName, stage: int) -> void:
 	if id == _district_id:

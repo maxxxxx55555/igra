@@ -29,6 +29,7 @@ var _road_mm: MultiMeshInstance3D
 var _sidewalk_mm: MultiMeshInstance3D
 var _marking_mm: MultiMeshInstance3D
 var _collision: StaticBody3D
+var _surfaces: Array[ShaderMaterial] = []
 
 ## WAVE 6 P4: registers the item that fuels scripts/generator.gd
 ## (gas_station.tscn's GasGenerator instance) - previously no constant
@@ -37,6 +38,10 @@ const GENERATOR_FUEL: StringName = &"gas_canister"
 
 const _TEX_ASPHALT   := "res://assets/textures/environment/asphalt.png"
 const _TEX_CONCRETE  := "res://assets/textures/environment/concrete.png"
+const _ROAD := preload("res://assets/shaders/soviet_road.gdshader")
+## A lane dash: 1.2 m of paint every 2 m (lane_mark_spacing), 16 cm wide.
+const MARK_LENGTH: float = 1.2
+const MARK_WIDTH: float = 0.16
 
 func _ready() -> void:
 	_ensure_mm()
@@ -44,40 +49,46 @@ func _ready() -> void:
 		prop_seed = hash(str(district_id))
 	_init_mm(_road_mm,     _make_road_mesh())
 	_init_mm(_sidewalk_mm, _make_sidewalk_mesh())
-	_init_mm(_marking_mm,  _make_box_mesh(Color(0.9, 0.9, 0.9)))
+	_init_mm(_marking_mm,  _make_marking_mesh())
+	_set_detail()
+	EventBus.settings_changed.connect(_set_detail)
 	call_deferred("build")
 
 func _make_road_mesh() -> BoxMesh:
 	var m := BoxMesh.new()
 	m.size = Vector3(tile_size, TILE_THICKNESS, tile_size)
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = Color(0.15, 0.15, 0.15)
-	var tex: Texture2D = load(_TEX_ASPHALT)
-	if tex:
-		mat.albedo_texture = tex
-	mat.roughness = 0.9
-	m.material = mat
+	m.material = _surface(_TEX_ASPHALT, Vector3(0.055, 0.057, 0.063), 0.04, 0.0)
 	return m
 
 func _make_sidewalk_mesh() -> BoxMesh:
 	var m := BoxMesh.new()
 	m.size = Vector3(tile_size, TILE_THICKNESS, tile_size)
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = Color(0.4, 0.4, 0.4)
-	var tex: Texture2D = load(_TEX_CONCRETE)
-	if tex:
-		mat.albedo_texture = tex
-	mat.roughness = 0.9
-	m.material = mat
+	m.material = _surface(_TEX_CONCRETE, Vector3(0.105, 0.108, 0.105), 0.113, 0.0)
 	return m
 
-func _make_box_mesh(color: Color) -> BoxMesh:
+func _make_marking_mesh() -> BoxMesh:
 	var m := BoxMesh.new()
-	m.size = Vector3(tile_size, TILE_THICKNESS, tile_size)
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = color
-	m.material = mat
+	m.size = Vector3(MARK_LENGTH, TILE_THICKNESS, MARK_WIDTH)
+	m.material = _surface("", Vector3(0.26, 0.25, 0.21), 1.0, 1.0)
 	return m
+
+## One surface of the street: its texture (none for the paint), its mean albedo in linear light and the texture's mean luminance; `detail` follows the graphics tier.
+func _surface(texture_path: String, tint: Vector3, mean_lum: float, paint: float) -> ShaderMaterial:
+	var mat := ShaderMaterial.new()
+	mat.shader = _ROAD
+	if texture_path != "" and ResourceLoader.exists(texture_path):
+		mat.set_shader_parameter("tex", load(texture_path))
+	mat.set_shader_parameter("tint", tint)
+	mat.set_shader_parameter("mean_lum", mean_lum)
+	mat.set_shader_parameter("paint", paint)
+	_surfaces.append(mat)
+	return mat
+
+func _set_detail(key: String = "graphics_tier", _value: Variant = null) -> void:
+	if key == "graphics_tier":
+		var detail := float(clampi(int(SettingsManager.get_setting("graphics_tier", 2)), 0, 2))
+		for mat: ShaderMaterial in _surfaces:
+			mat.set_shader_parameter("detail", detail)
 
 func _init_mm(mm: MultiMeshInstance3D, mesh: Mesh) -> void:
 	mm.multimesh = MultiMesh.new()
