@@ -33,7 +33,6 @@ const PERF_SETTLE_FRAMES: int = 30
 ## A restored district's wall stands this many levels (of 255) over the floor of the grade: seen, and still a night.
 const WALL_LIFT_MIN: float = 12.0
 const WALL_LIFT_MAX: float = 60.0
-const WALL_SWEEP: Array[float] = [0.0, 0.05, 0.08, 0.12, 0.16, 0.2, 0.26, 0.34, 0.48]
 
 var _ids: Array[StringName] = []
 var _views: PackedStringArray = []
@@ -145,8 +144,8 @@ func _sign_view(id: StringName) -> Dictionary:
 	var spot: Transform3D = signs.global_transform * signs.multimesh.get_instance_transform(0)
 	var atlas: Image = ((signs.material_override as ShaderMaterial).get_shader_parameter("atlas") as Texture2D).get_image()
 	var ink: int = 0
-	for y in range(0, atlas.get_height(), 4):
-		for x in range(0, atlas.get_width(), 4):
+	for y: int in range(0, atlas.get_height(), 4):
+		for x: int in range(0, atlas.get_width(), 4):
 			if atlas.get_pixel(x, y).a > 0.5:
 				ink += 1
 	print("[density] signs district=%s count=%d atlas=%dx%d ink_samples=%d first=%s facing=%s" % [String(id), signs.multimesh.instance_count, atlas.get_width(), atlas.get_height(), ink, spot.origin, spot.basis.z.normalized()])
@@ -227,8 +226,8 @@ func _run() -> void:
 	get_tree().quit(0)
 
 ## What the facade shows (Session 27): in the 07_facade view the median brightness of the band of the frame where the wall is (10 to 70 % of its height, every fourth pixel: windows, gaps and ground are the
-## minority of it), at the gain of the stage and with the glow off, and over a sweep of gains, so that the gain of a stage is read off a curve and not guessed. The first probe read a patch that held half ground and
-## calibrated the walls to 120 of 255; the median of the band does not.
+## minority of it) at the gain of the stage and with the glow off. The first probe read a patch that held half ground and calibrated the walls to 120 of 255, the sweep of gains behind the numbers of
+## `scripts/world/skyline.gd` (0.15 stood the wall at +3 over the floor, 0.26 at +20, 0.34 at +40, 0.48 at +74) is in `s27_v1f_41e1c2d`; the median of the band does not need a sweep to be read.
 func _wall_check(id: StringName) -> void:
 	var blocks := get_tree().root.find_child("Blocks", true, false) as MultiMeshInstance3D
 	var facade: ShaderMaterial = blocks.material_override as ShaderMaterial if blocks != null else null
@@ -236,17 +235,11 @@ func _wall_check(id: StringName) -> void:
 		print("[density] FAIL no facade material to read in %s" % id)
 		return
 	var gain: float = float(facade.get_shader_parameter("gain"))
-	var curve: PackedStringArray = []
-	var dark: float = 0.0
-	for swept: float in WALL_SWEEP:
-		facade.set_shader_parameter("gain", swept)
-		var level: float = await _wall_level()
-		curve.append("%.2f:%.0f" % [swept, level])
-		if swept == 0.0:
-			dark = level
-	facade.set_shader_parameter("gain", gain)
 	var lit: float = await _wall_level()
-	print("[density] wall district=%s gain=%.2f floor=%.1f lit=%.1f lift=%.1f sweep=%s" % [String(id), gain, dark, lit, lit - dark, " ".join(curve)])
+	facade.set_shader_parameter("gain", 0.0)
+	var dark: float = await _wall_level()
+	facade.set_shader_parameter("gain", gain)
+	print("[density] wall district=%s gain=%.2f floor=%.1f lit=%.1f lift=%.1f" % [String(id), gain, dark, lit, lit - dark])
 	if lit - dark < WALL_LIFT_MIN or lit - dark > WALL_LIFT_MAX:
 		print("[density] FAIL the facade of %s shows %.1f levels over the black floor, %.0f to %.0f asked" % [String(id), lit - dark, WALL_LIFT_MIN, WALL_LIFT_MAX])
 
@@ -256,8 +249,8 @@ func _wall_level() -> float:
 	await RenderingServer.frame_post_draw
 	var image := get_tree().root.get_texture().get_image()
 	var levels: Array[float] = []
-	for y in range(int(image.get_height() * 0.1), int(image.get_height() * 0.7), 4):
-		for x in range(0, image.get_width(), 4):
+	for y: int in range(int(image.get_height() * 0.1), int(image.get_height() * 0.7), 4):
+		for x: int in range(0, image.get_width(), 4):
 			var pixel := image.get_pixel(x, y)
 			levels.append((pixel.r + pixel.g + pixel.b) / 3.0 * 255.0)
 	levels.sort()

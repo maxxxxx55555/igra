@@ -36,8 +36,8 @@ const _SIGNS := preload("res://scripts/world/soviet_signs.gd")
 const _GRASS := preload("res://scripts/world/dead_grass.gd")
 ## The emission of the strongest channel of a block's self-glow, by power stage (DARK, PARTIAL, STREETS, FULL): a restored district reads lighter, a dark one stays a faint outline against the sky. The glow of a district
 ## sets the hue and not the brightness. Read off the sweep of the wall line of `tools/qa_sim/density_frames` (the median of the wall band over the black floor of 22 to 25: 0.15 stood it at +3, 0.20 at +8, 0.26 at +20,
-## 0.34 at +40, 0.48 at +74, mint boxes in a night): DARK is an outline, FULL a dark panel.
-const FACADE_GAIN: Array[float] = [0.18, 0.22, 0.26, 0.30]
+## 0.34 at +40, 0.48 at +74, mint boxes in a night; 0.30 left the suburbs at +30 and its far ring a pale teal in launch 7): DARK is an outline, FULL a dark panel (0.27 is +21 in the suburbs, +13 in the warehouses).
+const FACADE_GAIN: Array[float] = [0.17, 0.20, 0.23, 0.27]
 ## The ground between the streets, linear: dark earth, and patches of dead grass.
 const GROUND_EARTH := Vector3(0.050, 0.052, 0.046)
 const GROUND_GRASS := Vector3(0.050, 0.062, 0.040)

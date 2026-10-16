@@ -1,0 +1,26 @@
+# proof s27_v1g_2489d66
+# utc 20261016T164258Z
+# head 2489d66 (uncommitted paths: 21)
+# env none
+# cmd bash -c bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; echo "# STEP compile rc=$?"; CLOSEOUT_ONLY=s27 bash tools/qa_sim/closeout_check 400; cp .qa_logs/closeout_check.log .qa_logs/s27_v1g_closeout.log; TLS_FRAMES_VIEWS=03_street,05_skyline,06_courtyard,07_facade,08_sign bash tools/qa_sim/density_frames soviet6 2489d66 suburbs,residential,warehouses 1200; echo "# STEP frames rc=$?"; TLS_FRAMES_OUT=res://.qa_logs/frames_v4/ bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 900; echo "# STEP final rc=$?"; bash tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn 300; echo "# STEP perf rc=$?"
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP compile rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] DONE checks=8 fails=0
+  closeout_check rc=0 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_soviet6.log, 15 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP frames rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/final_frames_scene.tscn rc=0 (log: .qa_logs/final_frames_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP final rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/perf_check_scene.tscn rc=1 (log: .qa_logs/perf_check_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP perf rc=1
+# EXIT=0

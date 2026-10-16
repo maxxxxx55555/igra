@@ -3,7 +3,7 @@
 audio that would have followed the loop into its head (a one-shot gets 3 ms edge fades instead), downmix to mono 44.1 kHz (the house format of the beds, docs/MUSIC_SPEC.md), gain it to the house
 law (beds and music -18 LUFS integrated, true peak at most -1.5 dBFS) and write OGG q4 or 16-bit WAV by the extension of the target. It measures the file it wrote and exits 1 when the loudness or the true peak is off.
 
-usage: python tools/qa_sim/music_post.py <input> <target.ogg|.wav> --loop <seconds> [--start <seconds>] [--one-shot] [--lufs -18] [--tp -1.5]
+usage: python tools/qa_sim/music_post.py <input> <target.ogg|.wav> --loop <seconds> [--start <seconds>, else the steadiest stretch] [--one-shot] [--lufs -18] [--tp -1.5]
        python tools/qa_sim/music_post.py --demo
 """
 import pathlib
@@ -59,6 +59,25 @@ def cut(audio, start, seconds, one_shot):
     return out
 
 
+def steadiest_start(audio, seconds, one_shot):
+    """The start (s) of the stretch of `seconds` (plus the crossfade of a loop) that sits stillest: the loudness of its seconds varies least and its end is as loud as its beginning, so a loop of it holds no intro,
+    no break and no fade-out. Tried every half second between 4 s in and 4 s from the end."""
+    n = int(round(seconds * SR)) + (0 if one_shot else min(int(CROSSFADE_S * SR), int(round(seconds * SR)) // 8))
+    per_second = [float(np.sqrt(np.mean(audio[i:i + SR] ** 2)) + 1e-9) for i in range(0, len(audio) - SR + 1, SR)]
+    best, best_score = None, None
+    s = 4.0
+    while int((s + 4.0) * SR) + n <= len(audio):
+        window = np.array(per_second[int(s):int(s + n / SR) + 1])
+        mean = float(window.mean())
+        score = float(window.std()) / mean + abs(window[0] - window[-1]) / mean
+        if best_score is None or score < best_score:
+            best, best_score = s, score
+        s += 0.5
+    if best is None:
+        sys.exit("music_post: the file (%.1f s) is too short for a stretch of %.1f s with 4 s of margin" % (len(audio) / SR, n / SR))
+    return best
+
+
 def level(raw):
     """Integrated loudness (LUFS) and true peak (dBFS) of float32 mono samples, EBU R128 by ffmpeg."""
     r = subprocess.run([ffmpeg(), "-nostats", "-hide_banner", "-f", "f32le", "-ar", str(SR), "-ac", "1", "-i", "-", "-af", "ebur128=peak=true", "-f", "null", "-"], input=raw, capture_output=True)
@@ -100,7 +119,11 @@ def seam(audio):
 
 
 def process(source, target, seconds, start, one_shot, lufs, tp):
-    audio = normalise(cut(decode(source), start, seconds, one_shot), lufs, tp)
+    raw = decode(source)
+    if start is None:
+        start = steadiest_start(raw, seconds, one_shot)
+        print("music_post: the steadiest stretch starts at %.1f s" % start)
+    audio = normalise(cut(raw, start, seconds, one_shot), lufs, tp)
     write(audio, target)
     got_lufs, got_tp, got_seconds = measure(target)
     jump = 0.0 if one_shot else seam(decode(target))
@@ -110,8 +133,8 @@ def process(source, target, seconds, start, one_shot, lufs, tp):
 
 
 def demo():
-    """A synthetic pad of 12 s (two tones, a slow swell, a little noise) becomes a loop of 4 s and a one-shot of 0.5 s: both on the law, the seam shut."""
-    t = np.arange(12 * SR) / SR
+    """A synthetic pad of 20 s (two tones, a slow swell, a little noise) becomes a loop of 4 s and a one-shot of 0.5 s: both on the law, the seam shut; and a loud intro of 7 s is not where the steadiest stretch starts."""
+    t = np.arange(20 * SR) / SR
     pad = (np.sin(2 * np.pi * 220 * t) + 0.6 * np.sin(2 * np.pi * 330.5 * t)) * (0.5 + 0.4 * np.sin(2 * np.pi * 0.2 * t))
     pad = (pad + 0.05 * np.random.default_rng(1).standard_normal(len(t))) * 0.3
     with tempfile.TemporaryDirectory() as tmp:
@@ -119,6 +142,10 @@ def demo():
         write(pad.astype("<f4"), source)
         loop_ok = process(source, pathlib.Path(tmp) / "loop.ogg", 4.0, 1.0, False, -18.0, -1.5)
         shot_ok = process(source, pathlib.Path(tmp) / "shot.wav", 0.5, 0.0, True, -14.0, -1.5)
+        intro = pad.copy()
+        intro[: 7 * SR] *= 6.0
+        picked = steadiest_start(intro.astype("<f4"), 4.0, False)
+        assert picked >= 7.0 and picked + 4.0 <= 20.0, picked
         jump = seam(decode(pathlib.Path(tmp) / "loop.ogg"))
     assert loop_ok and shot_ok and jump < 0.5, (loop_ok, shot_ok, jump)
     print("music_post demo: a loop and a one-shot come out on the loudness law, the right length, and the seam of the loop is shut")
@@ -132,7 +159,7 @@ def main(argv):
         print(__doc__)
         return 2
     opts = {}
-    for flag, default in (("--loop", None), ("--start", "0"), ("--lufs", "-18"), ("--tp", "-1.5")):
+    for flag, default in (("--loop", None), ("--start", None), ("--lufs", "-18"), ("--tp", "-1.5")):
         opts[flag] = float(argv[argv.index(flag) + 1]) if flag in argv else (float(default) if default is not None else None)
     ok = process(pathlib.Path(argv[1]), pathlib.Path(argv[2]), opts["--loop"], opts["--start"], "--one-shot" in argv, opts["--lufs"], opts["--tp"])
     return 0 if ok else 1

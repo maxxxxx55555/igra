@@ -46,7 +46,7 @@ SETS = [
         ("scripts/world/district_landmark.gd", "const HALO_SIZE := Vector2(64.0, 52.0)", "const HALO_SIZE := Vector2(110.0, 100.0)", "SOV3"),
         ("scripts/world/soviet_signs.gd", "found.assign(WORDS.get(district_id, WORDS[&\"suburbs\"]))", "found.assign([\"\\u13a0\\u13a1\\u13a2\"])", "SOV4"),
         ("scripts/world/dead_grass.gd", "const PER_COURTYARD: Array[int] = [0, 8, 16]", "const PER_COURTYARD: Array[int] = [16, 16, 16]", "SOV5"),
-        ("scripts/world/skyline.gd", "const FACADE_GAIN: Array[float] = [0.18, 0.22, 0.26, 0.30]", "const FACADE_GAIN: Array[float] = [0.18, 0.22, 0.26, 0.05]", "SOV6"),
+        ("scripts/world/skyline.gd", "const FACADE_GAIN: Array[float] = [0.17, 0.20, 0.23, 0.27]", "const FACADE_GAIN: Array[float] = [0.17, 0.20, 0.23, 0.05]", "SOV6"),
         ("scripts/ui/menu_fog.gd", "visible = int(SettingsManager.get_setting(\"graphics_tier\", 2)) > 0", "visible = true", "SOV7"),
     ],
 ]
