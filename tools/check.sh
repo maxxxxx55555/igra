@@ -409,6 +409,11 @@ if "$PY" tools/qa_sim/s23_mutations.py --demo >/dev/null 2>&1; then
 else
   bad "s23_mutations --demo (см. 'python tools/qa_sim/s23_mutations.py --demo')"
 fi
+if "$PY" tools/qa_sim/s26_mutations.py --demo >/dev/null 2>&1; then
+  ok "s26_mutations --demo (the same judge for the two runs of Session 26: Darkness, the run marks, the daily selector, the achievement handlers)"
+else
+  bad "s26_mutations --demo (см. 'python tools/qa_sim/s26_mutations.py --demo')"
+fi
 if "$PY" tools/qa_sim/listing_audit.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/listing_audit.py >/dev/null 2>&1; then
   ok "listing_audit (13 locales: title, short and full limits, the same numbers in every language, the English numbers are what the code holds)"
 else
