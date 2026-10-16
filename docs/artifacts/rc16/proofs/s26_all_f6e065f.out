@@ -1,0 +1,286 @@
+# proof s26_all_f6e065f
+# utc 20261016T025046Z
+# head f6e065f (uncommitted paths: 0)
+# env none
+# cmd bash tools/check.sh --all
+
+── Статические проверки (Godot не нужен)
+  OK   ссылки на ресурсы (0 битых)
+  OK   автозагрузки (56 шт., 0 битых)
+  OK   вызовы к автозагрузкам (0 несуществующих)
+  OK   локализация: 13 языков x 1560 ключей, паритет=True
+  OK   ключи из кода найдены в словаре (0 потеряно)
+  OK   плейсхолдеры ru/en (0 расхождений)
+  OK   validate_list (214 записей, 0 отсутствуют)
+  OK   критический путь игры (8/8)
+  OK   музыкальные треки на диске (0 нет)
+
+── Сцены и ссылки на ноды
+── Комментарии в файлах ресурсов (Godot их не поддерживает)
+  OK   проверено 267 файлов
+
+── Ресурсы, ошибочно объявленные как [node]
+  OK   проверено 174 сцен
+
+── Ссылки $NodePath на несуществующие ноды сцены
+  OK   проверено 119 пар скрипт/сцена
+
+──────────────────────────────────────────────────
+Всё чисто.
+  [32mOK[0m   scene_node_check
+
+── Игровой цикл
+  OK    главная сцена — boot_loading                    
+  OK    boot уводит в меню                              
+  OK    кнопка «Играть» стартует игру                   
+  OK    start_game ведёт в игровую сцену                
+  OK    игровая сцена существует                        
+  OK    экран загрузки уходит в игру                    
+  OK    подбор не шлёт RPC самому себе                  
+  OK    подбор кладёт вещь в инвентарь                  
+  OK    высота лута фиксируется после спавна            
+  OK    инвентарь шлёт item_picked_up                   
+  OK    инвентарь не шлёт RPC вне сети                  
+  OK    сигнал подбора кто-то слушает                   
+  OK    лут раскладывается по районам                   
+  OK    HUD: нода NoiseLabel есть в сцене               
+  OK    HUD: нода NoiseF есть в сцене                   
+  OK    HUD: нода VisibilityLabel есть в сцене          
+  OK    HUD: нода VisibilityF есть в сцене              
+  OK    HUD показывает здоровье                         
+  OK    HUD показывает батарею                          
+  OK    HUD показывает шум                              
+  OK    HUD прячется под блокирующими экранами          
+  OK    игрок отдаёт уровень шума                       
+  OK    игрок шлёт изменение батареи                    
+  OK    Escape ставит паузу                             
+  OK    Escape сперва закрывает справочники             
+  OK    пауза морозит дерево                            
+  OK    снятие паузы размораживает                      
+  OK    в паузе есть выход в меню                       
+  OK    затемнение работает на паузе                    
+  OK    UIManager работает на паузе                     
+  OK    смерть игрока кем-то обрабатывается             
+  OK    смерть переводит в состояние DEAD               
+  OK    экран смерти открывается по состоянию           
+  OK    экран победы открывается по состоянию           
+  OK    с экрана смерти можно выйти в меню              
+  OK    «Заново» перезагружает сцену                    
+  OK    кодекс открывается                              
+  OK    кодекс закрывается                              
+  OK    карта переключается клавишей                    
+  OK    журнал переключается клавишей                   
+  OK    действие ui_pause объявлено в проекте           
+  OK    действие city_map_toggle объявлено в проекте    
+  OK    действие journal_toggle объявлено в проекте     
+  OK    действие encyclopedia_toggle объявлено в проекте
+  OK    аудио-шина Master существует                    
+  OK    аудио-шина Music существует                     
+  OK    аудио-шина SFX существует                       
+  OK    аудио-шина Ambient существует                   
+  OK    аудио-шина UI существует                        
+  OK    аудио-шина Footsteps существует                 
+  OK    аудио-шина Combat существует                    
+  OK    аудио-шина Environment существует               
+  OK    Master не заглушен на старте                    
+  OK    все аудиофайлы из кода на диске                 
+  OK    все preload/load ведут в существующие файлы     
+  OK    арность подписок на сигналы совпадает           
+
+────────────────────────────────────────────────────────────
+Игровой цикл собран целиком: 56 проверок пройдено.
+  [32mOK[0m   flow_check
+
+── Контент: глубина и удержание
+  [32mOK[0m   audit_content_depth
+  [32mOK[0m   validate_retention
+
+── Truth gates: visual/i18n (данные уже в репозитории)
+  [32mOK[0m   visual_truth_gate (gate self-consistency on committed frames; R0 lock = LUT pin below)
+  [32mOK[0m   visual_truth_gate --demo (defect patterns fail, canon patterns pass)
+  [32mOK[0m   visual_truth_gate fails all four committed corruption frames
+  [32mOK[0m   visual_truth_gate passes the sign-off and beauty frames
+  [32mOK[0m   R0 root cause pinned (11 district LUTs import as Texture3D)
+  [32mOK[0m   i18n_truth_gate
+  [32mOK[0m   user_data_guard --demo (snapshot/restore профиля)
+  [32mOK[0m   hardcoded_text_gate (no untranslated words assigned to .text)
+  [32mOK[0m   puzzle_economy_sim (STATIC_AUDIT #31 reachability)
+  [32mOK[0m   endings_sim (all 5 GDD endings reachable)
+  [32mOK[0m   balance_sim (economy/battery/skill-branch/time-to-win)
+  [32mOK[0m   lighting_stage_sim (DARK/PARTIAL/STREETS/FULL pairwise-distinct)
+  [32mOK[0m   project_input_check (action blocks only in [input], every action the scripts read is defined)
+  [32mOK[0m   settings_consumer_check (every Settings control has a named reader or applier)
+  [32mOK[0m   tscn_header_check (a scene's layout properties are lines under the node, not attributes of its header)
+  [32mOK[0m   a11y_check (every a11y toggle traces UI -> real effect; 9 of 9 features; every single removal of a reader, row, key or default is caught)
+  [32mOK[0m   drawcall_estimate (structural draw-call/light estimate, D1)
+  [32mOK[0m   no mirrored yaw formula (atan2(-v.x, -v.z) faces v)
+  [32mOK[0m   release_export_check (SECURITY_PATCH_SPEC C-08/D-04: no committed encryption key or debug keystore creds)
+
+── rc16: lint, frame-independence inventory, AF2/AF3/AF5 tools (Godot не нужен)
+  [32mOK[0m   ruff E9,F on tools/ and scripts/ (syntax and pyflakes correctness)
+  [32mOK[0m   bash -n on every shell script, hook and wrapper
+  [32mOK[0m   timing_inventory (no per-frame constant step outside the whitelist: frame-independent timing)
+  [32mOK[0m   timing_compare --demo (the tool's self-check)
+  [32mOK[0m   af2_both_ways --demo (the tool's self-check)
+  [32mOK[0m   af3_frame_check --demo (the tool's self-check)
+  [31mFAIL[0m af3_frame_check (см. 'python tools/qa_sim/af3_frame_check.py')
+  [32mOK[0m   lint_changed (gdparse, gdlint, ruff E9,F, shellcheck, actionlint on every file changed since e4bb4df)
+  [32mOK[0m   af5_check (file:line citations added to docs/ since e4bb4df resolve; a backticked claim before one occurs in the cited lines)
+  [32mOK[0m   doc_ctrl_check (no control character in docs/: a heredoc once ate the backslashes of two paths)
+  [32mOK[0m   integrity manifest (data/integrity_manifest.json holds the SHA-256 of every content and data JSON; the game scans it at start)
+  [32mOK[0m   title_check (the game is Last Streetlight: no capital 'The' before the name in the locales, scenes, scripts, presets or store kit)
+  [32mOK[0m   privacy_audit (every network, analytics and ad hit is classified in docs/PRIVACY_AUDIT.md; no way into the unreachable lobby)
+  [32mOK[0m   store_answers (every content-rating and Data safety answer of store/IARC_ANSWERS.md still holds against the code)
+  [32mOK[0m   i18n_placeholder_fuzz (specifiers, call arity, literal keys, Latin stubs, cognates and the glossary agree in all 13 locales)
+  [32mOK[0m   daily_sim (every daily template is ticked by a wired signal and reachable; the streak tiers 7, 30 and 100 pay)
+  [32mOK[0m   achievements_sim (all 31 achievements have a trigger that a real EventBus path reaches: docs/ACHIEVEMENT_TRIGGER_SPEC.md)
+  [32mOK[0m   save_migration_sim (SAVE_VERSION 3 and BACKUP_DEPTH 3 are what the matrix and the SAVEMIG check are written for)
+  [32mOK[0m   ngplus_table (every New Game+ number the game shows or stores is read by a script: docs/NGPLUS_TABLE.md)
+  [32mOK[0m   s23_mutations --demo (the AF2 mutation judge tells a vacuous check from a biting one and finds a stray failure)
+  [32mOK[0m   listing_audit (13 locales: title, short and full limits, the same numbers in every language, the English numbers are what the code holds)
+  [32mOK[0m   press kit and music brief (store/PRESS_KIT.md is what the code says; every lit bed of music_manager.gd has a brief)
+  [32mOK[0m   consistency_check (the fonts are the canon set, the UI icons one brass family, no new font size, even spacing, facade chroma under 25 %: docs/UI_CONSISTENCY.md)
+  [32mOK[0m   difficulty_curve (no district is harder when restored, no step of the enemy strength over x2.2: docs/DIFFICULTY_CURVE.md)
+  [32mOK[0m   frame tools (store_frames_check, benchmark_frames and density_measure each tell a good frame from a bad one on a fixture: store/SCREENSHOT_RECIPES.md)
+  [32mOK[0m   gitignore_check (every generated, exported and secret path is ignored, the evidence is not, no tracked file hides behind a rule: docs/CLEANUP_LEDGER.md)
+  [32mOK[0m   branch_absorb_sim (every branch on origin has a disposition in docs/ABSORB_PLAN.md, a deleted one says so)
+  [32mOK[0m   gemini_handoff (docs/GEMINI_HANDOFF.md matches the music brief, the recipe, the prompt list and the card brief it is made from)
+  [32mOK[0m   proofs_audit_sim (every closure has its log with an exit line, a resolvable commit and a row of docs/PROOFS.md that is the row of its log today)
+  [32mOK[0m   secret_scan (no key, token, private key or assigned secret in any tracked text file: docs/CLEANUP_LEDGER.md section 7)
+  [32mOK[0m   export_refs_check (no file that ships preloads, extends or lists as an autoload a file the export filter leaves out, and every sound play_ui asks for exists: CORRECTION_LOG 242, 245)
+
+── Проверки в движке (нужен Godot 4.x)
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  [32mOK[0m   реимпорт ассетов (оконный, GPU-сжатие)
+  [31mFAIL[0m компиляция всех скриптов (код 1)
+         GATE FAIL SCRIPT res://scripts/player/player_3d.gd
+         GATE inst res://scenes/vfx/vfx_confetti.tscn
+         GATE inst res://scenes/vfx/vfx_dust.tscn
+         GATE inst res://scenes/vfx/vfx_hit_spark.tscn
+         GATE inst res://scenes/vfx/vfx_muzzle_flash.tscn
+         GATE inst res://scenes/vfx/vfx_rain.tscn
+         GATE inst res://scenes/vfx/vfx_sparkle.tscn
+         GATE inst res://scenes/vfx/vfx_strobe.tscn
+         GATE inst res://scenes/weapons/weapon_model.tscn
+         GATE inst res://scenes/weapons/weapon_pistol.tscn
+         GATE inst res://scenes/weapons/weapon_rifle.tscn
+         GATE inst res://scenes/weapons/weapon_shotgun.tscn
+         GATE inst res://scenes/world/test_zone.tscn
+         GATE inst res://tools/autopilot/autopilot.tscn
+         GATE FAIL SCRIPT res://scripts/player/player_3d.gd
+         COMPILE_GATE bad=1
+  [32mOK[0m   арность сигналов
+  [32mOK[0m   API автозагрузок
+  [32mOK[0m   локализация
+  [32mOK[0m   ассеты
+  [2mпропуск[0m прогон 3D-сцены (нужен --windowed, не OK/FAIL)
+  [32mOK[0m   целостность сейва
+  [32mOK[0m   крафт-флоу + концовки
+  [32mOK[0m   adversarial: achievement/NG+/economy/district-id forgery
+  [31mFAIL[0m boot-flow (меню/новая игра/сейв) (код 1)
+         [boot] FAIL игрок не заспавнился за 10с после старта
+         [boot] FAIL игрок не заспавнился за 10с после старта
+         [boot] DONE fails=1
+            at: push_warning (core/variant/variant_utility.cpp:1033)
+            GDScript backtrace (most recent call first):
+                [0] _watchdog (res://scripts/systems/integrity_guard.gd:146)
+                [1] _process (res://scripts/systems/integrity_guard.gd:58)
+         [boot] FAIL игрок не заспавнился за 10с после старта
+         [boot] FAIL игрок не заспавнился за 10с после старта
+         [boot] DONE fails=1
+         ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+         ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+         WARNING: 6 RIDs of type "CanvasItem" were leaked.
+            at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+         WARNING: 38 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+            at: cleanup (core/object/object.cpp:2535)
+         ERROR: 9 resources still in use at exit (run with --verbose for details).
+            at: clear (core/io/resource.cpp:822)
+  [32mOK[0m   footstep-маппер (surface x speed)
+  [32mOK[0m   QaLaunchGuard: snapshot/restore профиля (синтетический каталог)
+tools/check.sh: line 543:  1861 Illegal instruction     env -u TLS_UDG_GUARDED timeout 60 "$GODOT" --headless --path . res://scenes/tools/qa_guard_e2e_scene.tscn -- "$1" > /dev/null 2>&1
+tools/check.sh: line 544:  1863 Illegal instruction     env -u TLS_UDG_GUARDED timeout 60 "$GODOT" --headless --path . --quit-after 2 > /dev/null 2>&1
+  [32mOK[0m   QaLaunchGuard: жизненный цикл (выход, крах, восстановление) на реальном профиле
+  [32mOK[0m   аудио: тишина до первого ввода
+  [32mOK[0m   аудио: граф шин A01
+  [31mFAIL[0m лут: под каждым предметом есть пол (X21) (engine errors in the log)
+         SCRIPT ERROR: Parse Error: Identifier "code" not declared in the current scope.
+         SCRIPT ERROR: Parse Error: Identifier "code" not declared in the current scope.
+         SCRIPT ERROR: Parse Error: Identifier "code" not declared in the current scope.
+         SCRIPT ERROR: Parse Error: Identifier "code" not declared in the current scope.
+         SCRIPT ERROR: Parse Error: Identifier "code" not declared in the current scope.
+  [32mOK[0m   единая тема: chrome виден на всех экранах
+  [32mOK[0m   настройки: тир графики и accessibility переживают рестарт
+  [32mOK[0m   accessibility: reduce_flash/time_fx/ui_motion гейтят juice-сайты
+  [32mOK[0m   вёрстка: все экраны UIManager в кадре
+  [31mFAIL[0m rc15 closeout: оружие/чертежи/фото/укрытия/инвентарь/достижения/сложность/Back (код 1)
+         [closeout] FAIL the player spawned
+         [closeout] DONE checks=1 fails=1
+            at: push_warning (core/variant/variant_utility.cpp:1033)
+            GDScript backtrace (most recent call first):
+                [0] _watchdog (res://scripts/systems/integrity_guard.gd:146)
+                [1] _process (res://scripts/systems/integrity_guard.gd:58)
+         [closeout] FAIL the player spawned
+         [closeout] DONE checks=1 fails=1
+         ERROR: 2 RID allocations of type 'PN13RendererDummy14TextureStorage12DummyTextureE' were leaked at exit.
+         ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+         ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+         WARNING: 6 RIDs of type "CanvasItem" were leaked.
+            at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+         WARNING: 45 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+            at: cleanup (core/object/object.cpp:2535)
+         ERROR: 9 resources still in use at exit (run with --verbose for details).
+            at: clear (core/io/resource.cpp:822)
+  [31mFAIL[0m GOLD MASTER suite (autoloads/input/districts/save-load/endings/i18n/soak) (код 13)
+         [qa] FAIL P1 player did not spawn in 10s
+         [qa] FAIL P1b started outside PLAYING (state=1)
+         [qa] FAIL P2b hit flash did not restore the monster material on BodyMesh
+         [qa] FAIL P2c started outside PLAYING (state=1)
+         [qa] FAIL P2e started outside PLAYING (state=1)
+         [qa] FAIL P2f started outside PLAYING (state=1)
+         [qa] FAIL P2g started outside PLAYING (state=1)
+         [qa] FAIL P2i started outside PLAYING (state=1)
+         [qa] FAIL P2k streetlight_activated fired 0 times for one district's PARTIAL->STREETS->FULL repair (expected exactly 1, at the STREETS crossing)
+         [qa] FAIL P2n no player/DistrictManager to probe with
+         [qa] FAIL P2o no player to check
+         [qa] FAIL P2p no player/DistrictManager to test against
+         [qa] FAIL P2k streetlight_activated fired 0 times for one district's PARTIAL->STREETS->FULL repair (expected exactly 1, at the STREETS crossing)
+         [qa] FAIL P2n no player/DistrictManager to probe with
+         [qa] FAIL P2o no player to check
+         [qa] FAIL P2p no player/DistrictManager to test against
+         [qa] FAIL P2r no player
+         [qa] DONE fails=13
+         ERROR: 2 RID allocations of type 'PN13RendererDummy14TextureStorage12DummyTextureE' were leaked at exit.
+         ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+         ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+         WARNING: 6 RIDs of type "CanvasItem" were leaked.
+            at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+         WARNING: 46 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+            at: cleanup (core/object/object.cpp:2535)
+         ERROR: 9 resources still in use at exit (run with --verbose for details).
+            at: clear (core/io/resource.cpp:822)
+  [31mFAIL[0m перф-бюджет (draw calls, только --windowed) (код 1)
+         WARNING: IntegrityGuard: player missing
+            at: push_warning (core/variant/variant_utility.cpp:1033)
+            GDScript backtrace (most recent call first):
+                [0] _watchdog (res://scripts/systems/integrity_guard.gd:146)
+                [1] _process (res://scripts/systems/integrity_guard.gd:58)
+         [perf] player never spawned
+         ERROR: 2 RID allocations of type 'PN13RendererDummy14TextureStorage12DummyTextureE' were leaked at exit.
+         ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+         ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+         WARNING: 6 RIDs of type "CanvasItem" were leaked.
+            at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+         WARNING: 45 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+            at: cleanup (core/object/object.cpp:2535)
+         ERROR: 9 resources still in use at exit (run with --verbose for details).
+            at: clear (core/io/resource.cpp:822)
+  [2mпропуск[0m аудио: Music bus не в тишине (только --windowed) (нужен --windowed, не OK/FAIL)
+  [32mOK[0m   тач-инпут (joystick/deadzone/HUD-кнопки)
+  [31mFAIL[0m timing_equiv (см. .qa_logs/timing_check.txt)
+  user-data guard: 0 file(s) restored byte-identical
+  [32mOK[0m   user-data guard: профиль игрока восстановлен байт-в-байт
+
+──────────────────────────────────────
+[31mПровалено: 8[0m, пройдено: 80
+# EXIT=8

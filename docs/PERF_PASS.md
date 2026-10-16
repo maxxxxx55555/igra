@@ -100,7 +100,7 @@ is the quiet machine, not the change.
 | 16 | Frame rate | 30–60 FPS | Desktop iGPU, windowed 1080p: p95 **33.3-34.2 ms** D1 and **40.3-40.4 ms** D11 on quiet runs (§0); device FPS never measured. `max_fps=60` | perf probe (§0) | MEASURED rc14 (desktop); device NEEDS-GODOT-RECONFIRM |
 | 17 | Shader warm-up | — | None: no warm-up or precompile code anywhere. Compatibility compiles each material variant on first use | code scan | STATIC; the first-use hitch is NEEDS-GODOT-RECONFIRM |
 | 18 | Polygons per district | < 50K | **1.34 M** primitives per frame in D1 and in D11 (rc14, §0): about 27x the budget | perf probe (§0) | MEASURED rc14, **OVER** |
-| 19 | Shadows | — | Directional 2048², soft filter 1 (`project.godot:275-276`); the flashlight casts shadows on desktop and none on mobile (`player_3d.gd:249-251`) | project.godot, player | CONFIG |
+| 19 | Shadows | — | Directional 2048², soft filter 1 (`project.godot:275-276`); the flashlight casts shadows on desktop and none on mobile (`player_3d.gd:250-252`) | project.godot, player | CONFIG |
 | 20 | LOD | — | `mesh_lod/threshold_pixels=0.75` (`project.godot:280`) | project.godot | CONFIG |
 
 ## 2. Re-measure list for Local, in this order
