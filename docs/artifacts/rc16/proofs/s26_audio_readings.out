@@ -1,9 +1,10 @@
 # proof s26_audio_readings
-# utc 20261016T063513Z
-# head f87504e (uncommitted paths: 9)
+# utc 20261016T074527Z
+# head c515bb0 (uncommitted paths: 0)
 # env none
 # cmd python -I C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s26_audio_readings.py .
-"""Session 26: every windowed reading of the Music bus peak that the committed proofs hold (the `[audio-truth] Music bus peak=` line of each attached gate log), one row per log,
+"""Session 26: every windowed reading of the Music bus peak that the committed logs hold (the `[audio-truth] Music bus peak=` line of each attached gate log of the proofs of rc16 and the
+sign-off log of rc15), one row per log,
 split at the gate's ceiling of -1.5 dB. The readings after the limiter of default_bus_layout.tres are listed apart. Read-only; prints itself first.
 usage: python -I s26_audio_readings.py <repo>"""
 import glob
@@ -15,7 +16,7 @@ print(pathlib.Path(__file__).read_text(encoding="utf-8"))
 print("--- run")
 root = pathlib.Path(sys.argv[1]).resolve()
 rows = []
-for f in sorted(glob.glob(str(root / "docs" / "artifacts" / "rc16" / "proofs" / "*.attach.*"))):
+for f in sorted(glob.glob(str(root / "docs" / "artifacts" / "rc16" / "proofs" / "*.attach.*")) + glob.glob(str(root / "docs" / "artifacts" / "rc15" / "audio_truth_signoff.txt"))):
     p = pathlib.Path(f)
     text = re.sub(r"\x1b\[[0-9;]*m", "", p.read_text(encoding="utf-8", errors="replace"))
     for m in re.finditer(r"\[audio-truth\] Music bus peak=(-?[0-9.]+)dB", text):
@@ -32,6 +33,7 @@ for name, db in after:
     print("after the limiter: %s %+.1f dB" % (name, db))
 
 --- run
+audio_truth_signoff.txt                                                                           -11.8 dB  under
 l24_f1_f3_74f710b.attach.audio_ab_1_A.log                                                          +1.8 dB  OVER
 l24_f1_f3_74f710b.attach.audio_ab_1_B.log                                                         -10.5 dB  under
 l24_f1_f3_74f710b.attach.audio_ab_2_A.log                                                          +0.6 dB  OVER
@@ -55,6 +57,6 @@ s4_truth_bisect_7c49500.attach.audio_truth_audio_manager_and_footsteps_at_b69ed9
 s4_truth_bisect_7c49500.attach.audio_truth_layout_at_b69ed90.log                                  -12.3 dB  under
 s4_truth_bisect_7c49500.attach.audio_truth_music_manager_at_b69ed90.log                            +0.9 dB  OVER
 s8_audio_truth_924e3dd.attach.audio_truth_gate_scene.log                                          -11.7 dB  under
-readings before the limiter: 23, over the ceiling 10 (+0.5 to +1.9 dB), under it 13 (-12.4 to -9.3 dB)
+readings before the limiter: 24, over the ceiling 10 (+0.5 to +1.9 dB), under it 14 (-12.4 to -9.3 dB)
 after the limiter: s26b_mutations.attach.audio_truth_gate_scene.log -2.0 dB
 # EXIT=0

@@ -3002,12 +3002,15 @@
  },
  {
   "id": "S26-C1",
-  "claim": "The asset manifest of the baseline tree (a detached worktree of `041ce03`, outside the project): 918 tracked assets; the tool rates 86 files AUTO-DELETE and 1 UNCERTAIN, and each of the 87 sits in a directory a planning or hand-off document names (`docs/CLEANUP_MANIFEST.md` 2): no asset is deleted.",
+  "claim": "The asset manifest of the baseline tree (a detached worktree of `041ce03`, outside the project): 918 tracked assets, of which the tool rates 515 KEEP-LIVE, 36 KEEP-QA, 280 KEEP-PLANNED, 1 UNCERTAIN and 86 AUTO-DELETE; no asset is deleted. That the 87 files of the last two verdicts sit in directories a planning or hand-off document names is the table of `docs/CLEANUP_MANIFEST.md` 2 (its citations are read by `tools/af5_check.py`), not a line of this proof.",
   "cmd": "python -I s26_manifest.py <worktree of 041ce03>",
   "proof": "s26_c1_assets",
   "quotes": [
+   "tracked assets: 918",
    "KEEP-LIVE       515 files",
+   "KEEP-QA          36 files",
    "KEEP-PLANNED    280 files",
+   "UNCERTAIN         1 files",
    "AUTO-DELETE      86 files"
   ],
   "frames": [],
@@ -3061,7 +3064,7 @@
  },
  {
   "id": "S26-C3C",
-  "claim": "The members of the changed scripts that are declared and never read on the swept tree: the ten `EventBus` signals named in `docs/CLEANUP_MANIFEST.md` 4.3 (two of them, `coin_changed` and `lives_changed`, lost their only emitters to the sweep and are kept as hook points named by `docs/GEMINI_INTEGRATION_REPORT.md`).",
+  "claim": "The members of the changed scripts that are declared and never read on the swept tree: the ten `EventBus` signals named in `docs/CLEANUP_MANIFEST.md` 4.3. Two of them, `coin_changed` and `lives_changed`, were emitted only by `emit_coin` and `emit_lives`, which no script called at `041ce03` and the sweep deleted; `coin_changed` alone is named as a hook point, by `docs/GEMINI_INTEGRATION_REPORT.md:70`.",
   "cmd": "python -I s26_second_order.py . <changed scripts>",
   "proof": "s26_c3_second_order",
   "quotes": [
@@ -3285,14 +3288,14 @@
  },
  {
   "id": "S26-AUDIO3",
-  "claim": "The readings the committed proofs hold before the limiter: 23, of which 10 are over the ceiling (+0.5 to +1.9 dB) and 13 under it: the peak is bimodal on one code tree (CORRECTION_LOG 114).",
+  "claim": "The readings the committed proofs hold before the limiter: 24 (23 in the windowed gate logs attached to `docs/artifacts/rc16/proofs`, one in `docs/artifacts/rc15/audio_truth_signoff.txt`), of which 10 are over the ceiling (+0.5 to +1.9 dB) and 14 under it: the peak is bimodal on one code tree (CORRECTION_LOG 114).",
   "cmd": "python -I s26_audio_readings.py .",
   "proof": "s26_audio_readings",
   "quotes": [
-   "readings before the limiter: 23, over the ceiling 10 (+0.5 to +1.9 dB), under it 13 (-12.4 to -9.3 dB)"
+   "readings before the limiter: 24, over the ceiling 10 (+0.5 to +1.9 dB), under it 14 (-12.4 to -9.3 dB)"
   ],
   "frames": [],
-  "commit": "6734f9c"
+  "commit": "c515bb0"
  },
  {
   "id": "S26-MUT3",

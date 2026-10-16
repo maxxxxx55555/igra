@@ -4,6 +4,9 @@ extends RefCounted
 ## DAILY3, two days that select the same template do not share progress (docs/ACHIEVEMENT_REACHABILITY.md, docs/DAILY_SIM.md); AUD6, the Music bus ends in a limiter.
 ## Wired into _closeout_check_runner.gd as `Rc26.run(self)`; CLOSEOUT_ONLY=s26 runs it alone, which tools/qa_sim/af2_both_ways.py uses on the pre-fix runtime.
 
+## What DAILY2 and DAILY3 roll on the live daily manager and put back, `_progress_day` and `_last_completed_day` included.
+const DAILY_FIELDS: Array[String] = ["_templates", "_day", "_completed_today", "_progress", "_play_seconds", "_today_id", "_today", "_last_completed_day", "_progress_day"]
+
 static func run(r: Node) -> void:
 	_handlers(r)
 	_darkness(r)
@@ -87,9 +90,8 @@ static func _run_marks(r: Node) -> void:
 ## A template over the districts of a once-per-district type is walked past; a type with no per-run cap keeps its target.
 static func _daily_selector(r: Node) -> void:
 	var m: Node = DailyChallengeManager
-	var fields: Array[String] = ["_templates", "_day", "_completed_today", "_progress", "_play_seconds", "_today_id", "_today"]
 	var kept: Dictionary = {}
-	for f in fields:
+	for f in DAILY_FIELDS:
 		kept[f] = m.get(f)
 	var cap: int = DistrictManager.DISTRICTS.size()
 	m._templates = [
@@ -103,7 +105,7 @@ static func _daily_selector(r: Node) -> void:
 	var kills: String = m._today_id
 	m._roll_for_day(3)
 	var again: String = m._today_id
-	for f in fields:
+	for f in DAILY_FIELDS:
 		m.set(f, kept[f])
 	r._ok(first == "fits" and again == "fits" and kills == "kills", "DAILY2 the daily selector walks past a template over the %d districts (day 0 %s, day 3 %s) and keeps one with no per-run cap (day 2 %s)" % [cap, first, again, kills])
 
@@ -111,9 +113,8 @@ static func _daily_selector(r: Node) -> void:
 ## A saved 7 of 7 of the day before opened the next day at 7 of 7, and one event paid it again.
 static func _daily_days(r: Node) -> void:
 	var m: Node = DailyChallengeManager
-	var fields: Array[String] = ["_templates", "_day", "_completed_today", "_progress", "_play_seconds", "_today_id", "_today", "_last_completed_day", "_progress_day"]
 	var kept: Dictionary = {}
-	for f in fields:
+	for f in DAILY_FIELDS:
 		kept[f] = m.get(f)
 	var cap: int = DistrictManager.DISTRICTS.size()
 	m._templates = [
@@ -129,7 +130,7 @@ static func _daily_days(r: Node) -> void:
 	var same_day: int = m._progress
 	m._roll_for_day(1)
 	var next_day: int = m._progress
-	for f in fields:
+	for f in DAILY_FIELDS:
 		m.set(f, kept[f])
 	r._ok(same_day == 2 and next_day == 0, "DAILY3 two days that select the same template do not share progress: the same day keeps it (%d of 2), the next day starts empty (%d)" % [same_day, next_day])
 

@@ -15,7 +15,7 @@ planned feature; a planned feature is one a document that is not a log of what w
 | C5 sidecars of a source that is gone | 118 ignored `.import`/`.uid` files deleted (119,633 bytes, copied first); tracked: none; `android/build/` left alone |
 | C6 `.gitignore` | 5 tool-cache patterns added; `tools/qa_sim/gitignore_check.py` holds 2 more must-ignore paths (31 / 8 / 0 faults); no tracked file is matched by a rule |
 
-Freed: 1 tracked script, 118 ignored sidecars, 234 + 10 lines of code; **0.12 MB**. The size of the bundle does not move: no shipped asset was deleted and the quarantine is outside the export.
+Freed: 1 tracked script, 118 ignored sidecars, 234 + 9 lines of code; **0.12 MB**. The size of the bundle does not move: no shipped asset was deleted and the quarantine is outside the export.
 
 ## 2. Assets
 
@@ -105,12 +105,14 @@ Candidates: a function of a shipped script (outside `scripts/tools`) whose name 
 | `scripts/world/district_themes.gd` | `list_ids`@60, `set_current`@63, `color_of`@67 |
 | `scripts/world/puzzle_system.gd` | `get_total_count`@99 |
 
-### 4.2 Members that only the deleted code read (3 edits, 10 lines)
+One deletion is a judgment, not a fact: `SaveSystem.get_all_slots_info` (`core/save_system.gd`@689, an 8-line loop over `get_slot_info`) went although the slot screen it would serve (`scripts/systems/save_slot_manager.gd`, kept as planned at `docs/SLOP_REPORT_V2.md:111`) stays planned. No document names the function, `get_slot_info` stays, `git show 041ce03:scripts/core/save_system.gd` holds the loop, and nothing read it; whether a helper of a planned screen falls under the rule "not a planned feature" is the owner's to overrule, by `git show` and a paste.
+
+### 4.2 Members that only the deleted code read (3 edits, 9 lines)
 
 | File (lines at `041ce03`) | Member | Why |
 |---|---|---|
 | `scripts/core/input_service.gd`@33,60,145 | `_interact_pressed` | only `is_interact_just_pressed` read it |
-| `scripts/player/player_3d.gd`@38,194,195 | `_cone_shader_code` | only `get_cone_code` read it; `var code` fed nothing else |
+| `scripts/player/player_3d.gd`@38,195 | `_cone_shader_code` | only `get_cone_code` read it; `var code`@194 stays: two later lines read it (CORRECTION_LOG 275) |
 | `scripts/player/player_3d.gd`@39,291,292,293 | `move_selftest_vel, selftest_vel, blocked` | a velocity computed at every spawn and never read; `is_move_blocked()` result unused |
 
 ### 4.3 Kept (26 functions)
@@ -144,7 +146,7 @@ Candidates: a function of a shipped script (outside `scripts/tools`) whose name 
 | `scripts/weapons/weapon_base.gd`@153 | `get_ammo_ratio` | G25 weapons are a planned zone of the agent table | docs/AGENT_ZONES.md:18, docs/SLOP_REPORT_V2.md:114 |
 | `scripts/weapons/weapon_base.gd`@159 | `get_reload_progress` | G25 weapons are a planned zone of the agent table | docs/AGENT_ZONES.md:18, docs/SLOP_REPORT_V2.md:114 |
 
-`behavior_node.gd` (2 functions) and `weight_bar.gd` (1) went whole to `_QUARANTINE/` (section 3). Members whose declaration is the only occurrence of their name and that were already unread before this pass (ten `EventBus` signals, `DayNight.start_hour`, `screens.gd` `panel_ready`) are not touched: a signal is a contract and two of them (`coin_changed`, `lives_changed`) are named by `docs/GEMINI_INTEGRATION_REPORT.md:70` as hook points.
+`behavior_node.gd` (2 functions) and `weight_bar.gd` (1) went whole to `_QUARANTINE/` (section 3). Members whose declaration is the only occurrence of their name and that were already unread before this pass (ten `EventBus` signals, `DayNight.start_hour`, `screens.gd` `panel_ready`) are not touched: a signal is a contract. Two of them, `coin_changed` and `lives_changed`, were emitted only by `emit_coin` and `emit_lives`, which no script called at `041ce03` and the sweep deleted, so neither fired before it either; `coin_changed` alone is named as a hook point, by `docs/GEMINI_INTEGRATION_REPORT.md:70`.
 
 ## 5. Quarantine and sidecars
 
@@ -156,23 +158,23 @@ Candidates: a function of a shipped script (outside `scripts/tools`) whose name 
 
 `docs/` holds 224 top-level documents. 25 are named by no other tracked text file by file name; 24 of those were last committed before the tag of `v8.0.0-shipping`. 11 moved to `docs/_archive/` (none carries a citation, none is named by stem). Left in place: the seven `CONTENT_DISTRICT_*` specs (the family of the three that `content/districts/*/item_spawns.json` and `PLAN.md` name), `CERT_CONTENTDEPTH.md` and `DESIGN_CRITIQUE.md` (named by stem in `docs/KNOWN_ISSUES.md` and `docs/TZ_DECISIONS.md`), `SESSION_REPORT_FINISH.md`, `SESSION_REPORT_UX.md` and `ERROR_LOG_STOREV2.md` (a proof or a report names them), `ROADMAP.md`, and `A2_checkpoints.md` (committed 2026-10-13).
 
-| Archived | Last commit | Bytes |
+| Archived | Last commit | Bytes (committed) |
 |---|---|---|
-| `docs/ERROR_LOG_DEVICESV2.md` | 2026-09-08 | 1544 |
-| `docs/ERROR_LOG_PLAY_FINAL.md` | 2026-09-08 | 2998 |
-| `docs/REPORT_MARKET_V2.md` | 2026-09-08 | 3445 |
-| `docs/REPORT_PLAY_FINAL.md` | 2026-09-08 | 3105 |
-| `docs/STAGES_REPORT.md` | 2026-08-13 | 11027 |
-| `docs/ROLES.md` | 2026-08-07 | 684 |
-| `docs/PACKAGES.md` | 2026-08-07 | 593 |
-| `docs/PHASE_2_DESIGN_SPEC.md` | 2026-08-08 | 1704 |
-| `docs/PHASE_A_DESIGN_SPEC.md` | 2026-08-08 | 816 |
-| `docs/CONTEXT_CACHE.md` | 2026-08-23 | 834 |
-| `docs/BLOCK4_PROJECTGODOT_PATCH.md` | 2026-08-09 | 693 |
+| `docs/ERROR_LOG_DEVICESV2.md` | 2026-09-08 | 1531 |
+| `docs/ERROR_LOG_PLAY_FINAL.md` | 2026-09-08 | 2943 |
+| `docs/REPORT_MARKET_V2.md` | 2026-09-08 | 3392 |
+| `docs/REPORT_PLAY_FINAL.md` | 2026-09-08 | 3056 |
+| `docs/STAGES_REPORT.md` | 2026-08-13 | 10878 |
+| `docs/ROLES.md` | 2026-08-07 | 678 |
+| `docs/PACKAGES.md` | 2026-08-07 | 590 |
+| `docs/PHASE_2_DESIGN_SPEC.md` | 2026-08-08 | 1675 |
+| `docs/PHASE_A_DESIGN_SPEC.md` | 2026-08-08 | 800 |
+| `docs/CONTEXT_CACHE.md` | 2026-08-23 | 818 |
+| `docs/BLOCK4_PROJECTGODOT_PATCH.md` | 2026-08-09 | 671 |
 
 ## 7. The 56 citations that moved
 
-Removing lines moves the lines after them, and `tools/af5_check.py` holds every citation a document added since `e4bb4df` against the code at `HEAD`. 56 citations in 16 documents were moved by the line map of `git diff -U0` (an old line `n` maps to `n` plus the lines the earlier hunks added; a line inside a removed range is reported, not guessed: `docs/BEAUTY_RC16.md:28` cited `player_3d.gd:293`-`:294` at `041ce03`, which were the self-test lines, and now cites the shadow lines `:285`-`:287`). `docs/ACHIEVEMENT_TRIGGER_SPEC.md` was regenerated by `tools/qa_sim/achievements_sim.py --write`.
+Removing lines moves the lines after them, and `tools/af5_check.py` holds every citation a document added since `e4bb4df` against the code at `HEAD`. 56 citations in 16 documents were moved by the line map of `git diff -U0` (an old line `n` maps to `n` plus the lines the earlier hunks added; a line inside a removed range is reported, not guessed: `docs/BEAUTY_RC16.md:28` cited `player_3d.gd:293`-`:294` at `041ce03`, which were the self-test lines, and now cites the shadow lines `scripts/player/player_3d.gd:286-288`). `docs/ACHIEVEMENT_TRIGGER_SPEC.md` was regenerated by `tools/qa_sim/achievements_sim.py --write`.
 
 ## 8. Gates after the sweep (C8)
 
