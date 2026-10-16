@@ -19,3 +19,4 @@ scripts/ui/hud_3d.gd	9f0c1cd2729a	5c7cb4ef3df0	*button_size*
 scripts/ui/ui_manager.gd	a563dc283ace	3d052da8712b	*comment_only*
 export_presets.cfg	af191b8b22a6	7626dcab6eea	*no_frame_shows_the_version_code*
 default_bus_layout.tres	499f51775149	52cc2e5713b4	*no_frame_shows_the_music_bus_limiter*
+export_presets.cfg	7626dcab6eea	b65950ac458c	*no_frame_shows_the_version_code*
