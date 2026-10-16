@@ -1,0 +1,301 @@
+# proof s26_c1_assets
+# utc 20261016T024330Z
+# head c4b8277 (uncommitted paths: 0)
+# env none
+# cmd python -I C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s26_manifest.py C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/wt_base
+"""Session 26 (C1): the fresh dead-asset manifest of the tracked files under assets/, by the two patterns of docs/SIZE_BUDGET.md and what that document learned the hard
+way. A file is
+  KEEP-LIVE      named by a full path (pattern A) or a basename (pattern B) in the runtime corpus (scripts/, scenes/, data/, content/, addons/, project.godot,
+                 export_presets.cfg, default_bus_layout.tres; not scripts/tools, scenes/tools), or matched by a format string the runtime builds a path with (%s, %d),
+                 or inside a directory the runtime lists or prefixes (DirAccess, "res://assets/x/" + id)
+  KEEP-QA        named only by the tools (scripts/tools, scenes/tools, tools/): not shipped data, kept for the checks that load it
+  KEEP-PLANNED   named in a document that is not a log of what was done (the first citation is printed)
+  UNCERTAIN      its stem (the name without extension) occurs in the runtime corpus, or the export filter ships it and only a log of what was done names it
+  AUTO-DELETE    none of the above
+The export filter (first preset) says whether the bundle holds the file. Read-only. Prints itself first; writes the TSV when given a path.
+usage: python -I s26_manifest.py <repo> [<tsv>]"""
+import collections
+import fnmatch
+import pathlib
+import re
+import subprocess
+import sys
+
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+root = pathlib.Path(sys.argv[1]).resolve()
+tsv = pathlib.Path(sys.argv[2]) if len(sys.argv) > 2 else None
+
+
+def git(*a):
+    return subprocess.run(["git", *a], cwd=root, capture_output=True, text=True, encoding="utf-8", errors="replace").stdout
+
+
+tracked = [t for t in git("ls-files").split("\n") if t]
+assets = [t for t in tracked if t.startswith("assets/") and not t.endswith((".import", ".uid"))]
+TEXT = (".gd", ".tscn", ".tres", ".cfg", ".json", ".godot", ".gdshader", ".shader", ".csv", ".txt")
+runtime_files, tool_files, doc_files = [], [], []
+for t in tracked:
+    if t.endswith(".import"):
+        continue
+    if t.startswith(("scripts/tools/", "scenes/tools/", "tools/")) and t.endswith(TEXT + (".py", ".sh")):
+        tool_files.append(t)
+    elif t.startswith(("scripts/", "scenes/", "data/", "content/", "addons/")) and t.endswith(TEXT) or t in ("project.godot", "export_presets.cfg", "default_bus_layout.tres"):
+        runtime_files.append(t)
+    elif t.endswith(".md") and (t.startswith("docs/") or t.startswith("store/") or "/" not in t):
+        doc_files.append(t)
+LOGS = ("docs/RUN_STATE.md", "docs/CORRECTION_LOG.md", "docs/PROOFS.md", "docs/RESUME_NOTE.md", "docs/ORDER_PASS_REPORT.md", "docs/CLEANUP_LEDGER.md", "docs/CLEANUP_LOG.md",
+        "docs/CLEANUP_MANIFEST.md", "docs/ABSORB_PLAN.md", "docs/GEMINI_INTEGRATION_REPORT.md", "docs/SIZE_BUDGET.md", "docs/QUARANTINE_AUDIT.md", "docs/SURFACES_UI_NARROWING.md",
+        "docs/KNOWN_ISSUES.md", "docs/RELEASE_ARTIFACTS.md", "docs/ASSET_LICENSES.md", "docs/SLOP_REPORT.md", "docs/SLOP_REPORT_V2.md")
+docs = [d for d in doc_files if d not in LOGS and not d.startswith("docs/artifacts/")]
+
+
+def read(p):
+    return (root / p).read_text(encoding="utf-8", errors="replace")
+
+
+rt = "\n".join(read(p) for p in runtime_files)
+tl = "\n".join(read(p) for p in tool_files)
+doc_text = {d: read(d) for d in docs}
+excludes = []
+m = re.search(r'^exclude_filter="([^"]*)"', read("export_presets.cfg"), re.M)
+if m:
+    excludes = [x.strip() for x in m.group(1).split(",") if x.strip()]
+
+
+def shipped(path):
+    return not any(fnmatch.fnmatchcase(path, pat) for pat in excludes)
+
+
+full_paths = set(re.findall(r"assets/[A-Za-z0-9_./ -]+\.[A-Za-z0-9]+", rt))
+# format strings and prefixes the runtime builds a path with
+dyn_re, prefixes = [], set()
+for lit in re.findall(r'"(res://assets/[^"]*)"', rt):
+    p = lit[len("res://"):]
+    if "%" in p:
+        dyn_re.append(re.compile("^" + re.sub(r"%\d*[sd]", "[A-Za-z0-9_]+", re.escape(p).replace("\\%", "%")) + "$"))
+for pre in re.findall(r'"res://(assets/[^"]*/)"\s*\+', rt):
+    prefixes.add(pre)
+for pre in re.findall(r'(?:DirAccess\.open|list_dir|get_files_at|dir_contents)\([^)]*"res://(assets/[^"]*)"', rt):
+    prefixes.add(pre if pre.endswith("/") else pre + "/")
+words_rt = set(re.findall(r"[A-Za-z0-9_.\-]+\.[A-Za-z0-9]+", rt))
+words_tl = set(re.findall(r"[A-Za-z0-9_.\-]+\.[A-Za-z0-9]+", tl))
+rows, counts, mb = [], collections.Counter(), collections.Counter()
+for a in sorted(assets):
+    base = a.rsplit("/", 1)[-1]
+    stem = base.rsplit(".", 1)[0]
+    size = (root / a).stat().st_size if (root / a).exists() else 0
+    why = ""
+    if a in full_paths:
+        v, why = "KEEP-LIVE", "pattern A"
+    elif base in words_rt:
+        v, why = "KEEP-LIVE", "pattern B"
+    elif any(r.match(a) for r in dyn_re):
+        v, why = "KEEP-LIVE", "format string"
+    elif any(a.startswith(pre) for pre in prefixes):
+        v, why = "KEEP-LIVE", "directory the runtime lists or prefixes"
+    elif base in words_tl or a in tl:
+        v, why = "KEEP-QA", "named by a tool"
+    else:
+        cite = ""
+        for d, txt in doc_text.items():
+            for n, line in enumerate(txt.splitlines(), 1):
+                if base in line or a in line:
+                    cite = "%s:%d" % (d, n)
+                    break
+            if cite:
+                break
+        if cite:
+            v, why = "KEEP-PLANNED", cite
+        elif re.search(r"(?<![A-Za-z0-9_])" + re.escape(stem) + r"(?![A-Za-z0-9_])", rt):
+            v, why = "UNCERTAIN", "stem in the runtime corpus"
+        else:
+            v, why = "AUTO-DELETE", "none"
+    rows.append((a, v, why, size, "yes" if shipped(a) else "no"))
+    counts[v] += 1
+    mb[v] += size
+print("tracked assets: %d; runtime corpus %d files, tools %d, planning documents %d; dynamic patterns %d, prefixes %d; export exclude patterns %d"
+      % (len(assets), len(runtime_files), len(tool_files), len(docs), len(dyn_re), len(prefixes), len(excludes)))
+for v in ("KEEP-LIVE", "KEEP-QA", "KEEP-PLANNED", "UNCERTAIN", "AUTO-DELETE"):
+    print("%-13s %5d files %9.1f MB (shipped: %d)" % (v, counts[v], mb[v] / 1048576, sum(1 for r in rows if r[1] == v and r[4] == "yes")))
+by_dir = collections.defaultdict(lambda: collections.Counter())
+for a, v, _, _, _ in rows:
+    by_dir["/".join(a.split("/")[:3])][v] += 1
+print("--- by directory (not KEEP-LIVE only)")
+for d, c in sorted(by_dir.items()):
+    rest = {k: n for k, n in c.items() if k != "KEEP-LIVE"}
+    if rest:
+        print("%-44s live %4d  %s" % (d, c["KEEP-LIVE"], ", ".join("%s %d" % kv for kv in sorted(rest.items()))))
+print("--- AUTO-DELETE")
+for a, v, _, size, sh in rows:
+    if v == "AUTO-DELETE":
+        print("%9d  shipped=%-3s %s" % (size, sh, a))
+print("--- UNCERTAIN")
+for a, v, why, size, sh in rows:
+    if v == "UNCERTAIN":
+        print("%9d  shipped=%-3s %s" % (size, sh, a))
+if tsv:
+    tsv.write_text("path\tverdict\twhy\tbytes\tshipped\n" + "\n".join("%s\t%s\t%s\t%d\t%s" % r for r in rows) + "\n", encoding="utf-8", newline="\n")
+    print("wrote", tsv)
+
+--- run
+tracked assets: 918; runtime corpus 529 files, tools 248, planning documents 242; dynamic patterns 18, prefixes 0; export exclude patterns 53
+KEEP-LIVE       515 files      74.6 MB (shipped: 514)
+KEEP-QA          36 files       4.3 MB (shipped: 35)
+KEEP-PLANNED    280 files      47.1 MB (shipped: 205)
+UNCERTAIN         1 files       0.0 MB (shipped: 1)
+AUTO-DELETE      86 files       4.1 MB (shipped: 63)
+--- by directory (not KEEP-LIVE only)
+assets/art/shot_game.png                     live    0  KEEP-QA 1
+assets/art/shot_game_3d.png                  live    0  KEEP-QA 1
+assets/art/shot_menu.png                     live    0  KEEP-QA 1
+assets/art/shot_menu_3d.png                  live    0  KEEP-QA 1
+assets/audio/_build                          live    0  KEEP-PLANNED 2
+assets/audio/ambience                        live   65  KEEP-PLANNED 4
+assets/audio/jingles                         live    5  KEEP-PLANNED 3
+assets/audio/sfx                             live   66  KEEP-PLANNED 56
+assets/audio/ui                              live    4  KEEP-PLANNED 3, KEEP-QA 1
+assets/env/camera_attributes_night.tres      live    0  KEEP-PLANNED 1
+assets/env/mat_lamp_flicker.tres             live    0  KEEP-PLANNED 1
+assets/env/mat_wet_asphalt.tres              live    0  KEEP-PLANNED 1
+assets/env/night_environment_desktop.tres    live    0  AUTO-DELETE 1
+assets/env/night_environment_mobile.tres     live    0  KEEP-PLANNED 1
+assets/mesh/mesh_house_small.res             live    0  KEEP-QA 1
+assets/models/kenney                         live    0  UNCERTAIN 1
+assets/shaders/contact_shadow.gdshader       live    0  KEEP-PLANNED 1
+assets/shaders/menu_parallax.gdshader        live    0  KEEP-PLANNED 1
+assets/shaders/streetlight_flicker.gdshader  live    0  KEEP-PLANNED 1
+assets/shaders/wet_asphalt.gdshader          live    0  KEEP-PLANNED 1
+assets/store/background_1920x1080.png        live    0  KEEP-PLANNED 1
+assets/store/capsule_header_460x215.png      live    0  KEEP-PLANNED 1
+assets/store/capsule_main_616x353.png        live    0  KEEP-QA 1
+assets/store/capsule_small_231x87.png        live    0  KEEP-PLANNED 1
+assets/store/endings                         live    0  KEEP-PLANNED 5
+assets/store/feature_graphic_1024x500.png    live    0  KEEP-PLANNED 1
+assets/store/icon_round_192.png              live    0  KEEP-PLANNED 1
+assets/store/library_hero_1920x620.png       live    0  KEEP-PLANNED 1
+assets/store/loading_screen_1920x1080.png    live    0  KEEP-PLANNED 1
+assets/store/main_menu_keyart_1920x1080.png  live    0  KEEP-PLANNED 1
+assets/store/play_final                      live    0  KEEP-PLANNED 6
+assets/store/press                           live    0  KEEP-PLANNED 4
+assets/store/screenshot_01.png               live    0  KEEP-PLANNED 1
+assets/store/screenshot_02.png               live    0  KEEP-PLANNED 1
+assets/store/screenshot_03.png               live    0  KEEP-PLANNED 1
+assets/store/screenshot_04.png               live    0  KEEP-PLANNED 1
+assets/store/screenshot_05.png               live    0  KEEP-PLANNED 1
+assets/store/storyboard                      live    0  AUTO-DELETE 10
+assets/store/tv_banner_1280x720.png          live    0  KEEP-PLANNED 1
+assets/store/v2                              live    1  AUTO-DELETE 13, KEEP-PLANNED 49
+assets/textures/docs_v2                      live    0  KEEP-PLANNED 6
+assets/textures/fx                           live    8  KEEP-PLANNED 11
+assets/textures/grading                      live    0  KEEP-PLANNED 2
+assets/textures/icons_v2                     live   48  AUTO-DELETE 1, KEEP-PLANNED 15
+assets/textures/items                        live   66  AUTO-DELETE 7
+assets/textures/loading                      live    0  KEEP-PLANNED 11
+assets/textures/maps                         live    0  KEEP-PLANNED 12
+assets/textures/overlays_v2                  live    0  KEEP-PLANNED 4
+assets/textures/picto_v2                     live    0  AUTO-DELETE 13
+assets/textures/renders_v2                   live    4  KEEP-PLANNED 5
+assets/textures/screens_v2                   live    5  KEEP-PLANNED 1
+assets/textures/sky                          live    1  KEEP-PLANNED 1
+assets/textures/stages_v2                    live    0  KEEP-PLANNED 4
+assets/textures/surfaces                     live    3  KEEP-PLANNED 12, KEEP-QA 12
+assets/textures/tiles                        live   11  AUTO-DELETE 6, KEEP-PLANNED 27
+assets/textures/touch                        live    6  KEEP-QA 3
+assets/textures/ui                           live   13  AUTO-DELETE 16, KEEP-PLANNED 8, KEEP-QA 12
+assets/textures/ui_v2                        live   12  AUTO-DELETE 16, KEEP-PLANNED 7
+assets/ui/icon_adaptive_bg.png               live    0  KEEP-QA 1
+assets/ui/icon_adaptive_fg.png               live    0  KEEP-QA 1
+assets/ui/ui_backpack.svg                    live    0  AUTO-DELETE 1
+assets/ui/ui_key.svg                         live    0  AUTO-DELETE 1
+assets/ui/ui_settings.svg                    live    0  AUTO-DELETE 1
+--- AUTO-DELETE
+     1347  shipped=yes assets/env/night_environment_desktop.tres
+    49800  shipped=no  assets/store/storyboard/frame_01.png
+    57683  shipped=no  assets/store/storyboard/frame_02.png
+    71445  shipped=no  assets/store/storyboard/frame_03.png
+    48994  shipped=no  assets/store/storyboard/frame_04.png
+    19926  shipped=no  assets/store/storyboard/frame_05.png
+    18052  shipped=no  assets/store/storyboard/frame_06.png
+    49624  shipped=no  assets/store/storyboard/frame_07.png
+    29800  shipped=no  assets/store/storyboard/frame_08.png
+    44706  shipped=no  assets/store/storyboard/frame_09.png
+    70661  shipped=no  assets/store/storyboard/frame_10.png
+   284528  shipped=no  assets/store/v2/itch/itch_screenshot_wide_1_1280x720.png
+   174208  shipped=no  assets/store/v2/itch/itch_screenshot_wide_2_1280x720.png
+   456942  shipped=no  assets/store/v2/itch/itch_screenshot_wide_3_1280x720.png
+   205695  shipped=no  assets/store/v2/storyboard/frame_01.png
+   242553  shipped=no  assets/store/v2/storyboard/frame_02.png
+   277811  shipped=no  assets/store/v2/storyboard/frame_03.png
+   265915  shipped=no  assets/store/v2/storyboard/frame_04.png
+   185966  shipped=no  assets/store/v2/storyboard/frame_05.png
+   180095  shipped=no  assets/store/v2/storyboard/frame_06.png
+   223262  shipped=no  assets/store/v2/storyboard/frame_07.png
+   249611  shipped=no  assets/store/v2/storyboard/frame_08.png
+   183557  shipped=no  assets/store/v2/storyboard/frame_09.png
+   343514  shipped=no  assets/store/v2/storyboard/frame_10.png
+      856  shipped=yes assets/textures/icons_v2/coin_single_128.png
+      542  shipped=yes assets/textures/items/backpack_icon.tscn
+      535  shipped=yes assets/textures/items/can_icon.tscn
+      381  shipped=yes assets/textures/items/flashlight_icon.tscn
+      528  shipped=yes assets/textures/items/key_icon.tscn
+      539  shipped=yes assets/textures/items/medkit_icon.tscn
+      378  shipped=yes assets/textures/items/tool_icon.tscn
+      538  shipped=yes assets/textures/items/water_icon.tscn
+      346  shipped=yes assets/textures/picto_v2/difficulty_calm_64.png
+      471  shipped=yes assets/textures/picto_v2/difficulty_hard_64.png
+      374  shipped=yes assets/textures/picto_v2/difficulty_normal_64.png
+      542  shipped=yes assets/textures/picto_v2/gesture_doubletap_96.png
+      610  shipped=yes assets/textures/picto_v2/gesture_drag_96.png
+      554  shipped=yes assets/textures/picto_v2/gesture_hold_96.png
+      553  shipped=yes assets/textures/picto_v2/gesture_look_96.png
+      390  shipped=yes assets/textures/picto_v2/gesture_swipe_96.png
+      416  shipped=yes assets/textures/picto_v2/gesture_tap_96.png
+      256  shipped=yes assets/textures/picto_v2/threat_critical_48.png
+      196  shipped=yes assets/textures/picto_v2/threat_high_48.png
+      160  shipped=yes assets/textures/picto_v2/threat_low_48.png
+      184  shipped=yes assets/textures/picto_v2/threat_med_48.png
+   100617  shipped=yes assets/textures/tiles/gas_station_wall_lit.png
+   103387  shipped=yes assets/textures/tiles/park_floor_lit.png
+   104064  shipped=yes assets/textures/tiles/park_wall_lit.png
+    73599  shipped=yes assets/textures/tiles/police_wall_lit.png
+    80160  shipped=yes assets/textures/tiles/residential_floor_lit.png
+    83930  shipped=yes assets/textures/tiles/residential_wall_lit.png
+      254  shipped=yes assets/textures/ui/bar_fill_brass_256x24.png
+      249  shipped=yes assets/textures/ui/bar_fill_ember_256x24.png
+      253  shipped=yes assets/textures/ui/bar_fill_green_256x24.png
+      299  shipped=yes assets/textures/ui/bar_frame_256x24.png
+      732  shipped=yes assets/textures/ui/btn_action_128.png
+      697  shipped=yes assets/textures/ui/btn_action_pressed_128.png
+      699  shipped=yes assets/textures/ui/btn_crouch_128.png
+      674  shipped=yes assets/textures/ui/btn_crouch_pressed_128.png
+      700  shipped=yes assets/textures/ui/btn_dodge_128.png
+      681  shipped=yes assets/textures/ui/btn_dodge_pressed_128.png
+      765  shipped=yes assets/textures/ui/btn_flashlight_128.png
+      739  shipped=yes assets/textures/ui/btn_flashlight_pressed_128.png
+      730  shipped=yes assets/textures/ui/btn_jump_128.png
+      707  shipped=yes assets/textures/ui/btn_jump_pressed_128.png
+     1795  shipped=yes assets/textures/ui/btn_special_hold_128.png
+      418  shipped=yes assets/textures/ui/slot_frame_96.png
+      115  shipped=yes assets/textures/ui_v2/bar_fill_amber_256x8.png
+      116  shipped=yes assets/textures/ui_v2/bar_fill_brass_256x8.png
+      116  shipped=yes assets/textures/ui_v2/bar_fill_green_256x8.png
+      116  shipped=yes assets/textures/ui_v2/bar_fill_red_256x8.png
+      407  shipped=yes assets/textures/ui_v2/btn_primary_disabled_256x64.png
+      402  shipped=yes assets/textures/ui_v2/btn_primary_hover_256x64.png
+      441  shipped=yes assets/textures/ui_v2/btn_primary_normal_256x64.png
+      562  shipped=yes assets/textures/ui_v2/btn_primary_pressed_256x64.png
+      348  shipped=yes assets/textures/ui_v2/btn_secondary_disabled_256x64.png
+      440  shipped=yes assets/textures/ui_v2/btn_secondary_hover_256x64.png
+      376  shipped=yes assets/textures/ui_v2/btn_secondary_normal_256x64.png
+      490  shipped=yes assets/textures/ui_v2/btn_secondary_pressed_256x64.png
+     1159  shipped=yes assets/textures/ui_v2/coin_1200.png
+     1838  shipped=yes assets/textures/ui_v2/coin_2500.png
+      758  shipped=yes assets/textures/ui_v2/coin_500.png
+     2868  shipped=yes assets/textures/ui_v2/coin_6000.png
+      441  shipped=yes assets/ui/ui_backpack.svg
+      414  shipped=yes assets/ui/ui_key.svg
+      994  shipped=yes assets/ui/ui_settings.svg
+--- UNCERTAIN
+      269  shipped=yes assets/models/kenney/README.txt
+# EXIT=0

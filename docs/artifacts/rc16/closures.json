@@ -2999,5 +2999,100 @@
   ],
   "frames": [],
   "commit": "60d2a0d"
+ },
+ {
+  "id": "S26-C1",
+  "claim": "The asset manifest of the baseline tree (a detached worktree of `041ce03`, outside the project): 918 tracked assets; the tool rates 86 files AUTO-DELETE and 1 UNCERTAIN, and each of the 87 sits in a directory a planning or hand-off document names (`docs/CLEANUP_MANIFEST.md` 2): no asset is deleted.",
+  "cmd": "python -I s26_manifest.py <worktree of 041ce03>",
+  "proof": "s26_c1_assets",
+  "quotes": [
+   "KEEP-LIVE       515 files",
+   "KEEP-PLANNED    280 files",
+   "AUTO-DELETE      86 files"
+  ],
+  "frames": [],
+  "commit": "041ce03"
+ },
+ {
+  "id": "S26-C2",
+  "claim": "The scripts of the baseline tree that nothing in the runtime reaches (no scene or resource by path or uid, no script by class name, no runtime file by name): 19 of 255.",
+  "cmd": "python -I s26_orphan_scripts.py <worktree of 041ce03>",
+  "proof": "s26_c2_orphans",
+  "quotes": [
+   "shipped scripts: 255; reached by nothing in the runtime: 19"
+  ],
+  "frames": [],
+  "commit": "041ce03"
+ },
+ {
+  "id": "S26-C2B",
+  "claim": "The same scan on the swept tree: 17 of 253; the two that went to `_QUARANTINE/` (`behavior_node.gd`, `weight_bar.gd`) are no longer shipped scripts.",
+  "cmd": "python -I s26_orphan_scripts.py .",
+  "proof": "s26_c2_orphans_after",
+  "quotes": [
+   "shipped scripts: 253; reached by nothing in the runtime: 17"
+  ],
+  "frames": [],
+  "commit": "07e117d"
+ },
+ {
+  "id": "S26-C3",
+  "claim": "The dead-function scan of the baseline tree: 2,326 functions in the shipped scripts, 94 whose name occurs nowhere else in a script, scene or resource, 86 of those named by no document or tool that is not a log.",
+  "cmd": "python -I s26_dead_funcs.py <worktree of 041ce03>; python -I s26_dead_filter.py <worktree> <candidates> <zero>",
+  "proof": "s26_c3_deadfuncs",
+  "quotes": [
+   "functions defined in shipped scripts: 2326; candidates with no other occurrence: 94",
+   "candidates 94, named by no document or tool: 86"
+  ],
+  "frames": [],
+  "commit": "041ce03"
+ },
+ {
+  "id": "S26-C3B",
+  "claim": "The same scan on the swept tree (the fixpoint): 2,266 functions, 35 candidates, 26 named by no document or tool, the 26 that stay with a citation (`docs/CLEANUP_MANIFEST.md` 4.3).",
+  "cmd": "python -I s26_dead_funcs.py .; python -I s26_dead_filter.py . <candidates> <zero>",
+  "proof": "s26_c3_deadfuncs_after",
+  "quotes": [
+   "functions defined in shipped scripts: 2266; candidates with no other occurrence: 35",
+   "candidates 35, named by no document or tool: 26"
+  ],
+  "frames": [],
+  "commit": "07e117d"
+ },
+ {
+  "id": "S26-C3C",
+  "claim": "The members of the changed scripts that are declared and never read on the swept tree: the ten `EventBus` signals named in `docs/CLEANUP_MANIFEST.md` 4.3 (two of them, `coin_changed` and `lives_changed`, lost their only emitters to the sweep and are kept as hook points named by `docs/GEMINI_INTEGRATION_REPORT.md`).",
+  "cmd": "python -I s26_second_order.py . <changed scripts>",
+  "proof": "s26_c3_second_order",
+  "quotes": [
+   "signal coin_changed               declared, never read (1 occurrence)",
+   "signal lives_changed              declared, never read (1 occurrence)"
+  ],
+  "frames": [],
+  "commit": "07e117d"
+ },
+ {
+  "id": "S26-C4",
+  "claim": "The documents at the top level of `docs/` that no other tracked text file names by file name: 25 of 224, 24 of them last committed before 2026-10-12.",
+  "cmd": "python -I s26_stale_docs.py <worktree of 041ce03>",
+  "proof": "s26_c4_staledocs",
+  "quotes": [
+   "documents at the top level of docs/: 224",
+   "named by no other tracked text file: 25",
+   "of those last touched before 2026-10-12: 24"
+  ],
+  "frames": [],
+  "commit": "041ce03"
+ },
+ {
+  "id": "S26-C6",
+  "claim": "The ignore rules hold 31 paths that must never be tracked and let 8 evidence paths through, and no tracked file is matched by a rule.",
+  "cmd": "python tools/qa_sim/gitignore_check.py",
+  "proof": "s26_c6_gitignore",
+  "quotes": [
+   "gitignore_check: 31 path(s) that must be ignored, 8 that must be tracked, 0 fault(s)"
+  ],
+  "frames": [],
+  "commit": "c4b8277"
  }
 ]

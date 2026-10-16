@@ -1,0 +1,141 @@
+# proof s26_c3_deadfuncs_after
+# utc 20261016T024847Z
+# head 07e117d (uncommitted paths: 8)
+# env none
+# cmd bash -c python -I 'C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s26_dead_funcs.py' . | tee 'C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/proofs_tmp/cand_after.txt'; python -I 'C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s26_dead_filter.py' . 'C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/proofs_tmp/cand_after.txt' 'C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/proofs_tmp/zero_after.txt'; echo '--- named by no document or tool'; cat 'C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/proofs_tmp/zero_after.txt'
+"""Session 26 (C3): functions of the shipped GDScript (scripts/, not scripts/tools) whose name occurs nowhere else in the project: not in any .gd, .tscn, .tres, .cfg,
+.json or .godot file (a call, a connect, a Callable string, a has_method string, a method track and a signal connection of a scene all name the function). The
+engine's virtual methods and the names the engine calls by convention are excluded. A candidate is only a candidate: each is read by hand. Read-only.
+Prints itself first. usage: python -I s26_dead_funcs.py <repo>"""
+import collections
+import pathlib
+import re
+import subprocess
+import sys
+
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+root = pathlib.Path(sys.argv[1]).resolve()
+tracked = [t for t in subprocess.run(["git", "ls-files"], cwd=root, capture_output=True, text=True, encoding="utf-8").stdout.split("\n") if t]
+TEXT = (".gd", ".tscn", ".tres", ".cfg", ".json", ".godot", ".gdshader")
+corpus = {t: (root / t).read_text(encoding="utf-8", errors="replace") for t in tracked if t.endswith(TEXT) and not t.startswith(("docs/", "store/"))}
+VIRTUAL = {"_ready", "_process", "_physics_process", "_input", "_unhandled_input", "_unhandled_key_input", "_shortcut_input", "_gui_input", "_notification", "_draw",
+           "_enter_tree", "_exit_tree", "_init", "_to_string", "_get_configuration_warnings", "_get", "_set", "_get_property_list", "_validate_property", "_property_can_revert",
+           "_property_get_revert", "_integrate_forces", "_can_drop_data", "_drop_data", "_get_drag_data", "_make_custom_tooltip", "_get_minimum_size", "_has_point",
+           "_get_tooltip", "_clips_input", "_structured_text_parser", "_get_allowed_size_flags_horizontal", "_get_allowed_size_flags_vertical", "_parse_property",
+           "_import", "_run", "_build", "_save_state", "_load_state", "_process_state", "_instantiate", "_create_audio_stream", "_get_length", "_get_beat_count"}
+DEF = re.compile(r"^[ \t]*(?:static[ \t]+)?func[ \t]+([A-Za-z_][A-Za-z0-9_]*)[ \t]*\(", re.M)
+word = {}
+for f, text in corpus.items():
+    for w in re.findall(r"[A-Za-z_][A-Za-z0-9_]*", text):
+        word.setdefault(w, collections.Counter())[f] += 1
+defs = collections.Counter(d for text in corpus.values() for d in DEF.findall(text))
+cands = []
+total = 0
+for f, text in corpus.items():
+    if not f.endswith(".gd") or not f.startswith("scripts/") or f.startswith("scripts/tools/"):
+        continue
+    for m in DEF.finditer(text):
+        name = m.group(1)
+        total += 1
+        if name in VIRTUAL:
+            continue
+        occ = sum(word.get(name, {}).values())
+        if occ - defs[name] <= 0:
+            line = text.count("\n", 0, m.start(1)) + 1
+            cands.append((f, line, name))
+print("functions defined in shipped scripts: %d; candidates with no other occurrence: %d" % (total, len(cands)))
+for f, line, name in sorted(set(cands)):
+    print("%s:%d %s" % (f, line, name))
+
+--- run
+functions defined in shipped scripts: 2266; candidates with no other occurrence: 35
+scripts/cutscenes/cutscene_manager.gd:10 play_cutscene
+scripts/electronic_door.gd:24 set_power
+scripts/fuse_box.gd:47 remove_fuse
+scripts/gameplay/hiding_spot.gd:101 is_occupied
+scripts/hiding/hiding_spot.gd:28 is_player_hiding
+scripts/hiding/hiding_spot.gd:31 get_detection_multiplier
+scripts/hiding/hiding_spot.gd:34 get_hide_duration
+scripts/lighting/light_grid.gd:40 unregister_light
+scripts/monetization/ad_service.gd:116 skip_bonus_coins
+scripts/monetization/ad_service.gd:151 interstitial_cooldown_left
+scripts/monetization/stub_crazy_games.gd:31 was_initialized
+scripts/multiplayer/lan_discovery.gd:85 get_found_hosts
+scripts/net/lan_network.gd:51 is_client
+scripts/net/lan_network.gd:52 is_online
+scripts/net/lan_network.gd:94 broadcast_player_state
+scripts/net/lan_network.gd:99 broadcast_power
+scripts/player/player_3d.gd:729 compute_velocity
+scripts/player/player_3d.gd:1261 apply_stun
+scripts/systems/loot_drop.gd:6 drop_loot
+scripts/systems/noise_propagation.gd:40 get_sources_in_range
+scripts/systems/photo_mode.gd:47 take_photo
+scripts/systems/play_integrity_service.gd:27 request_integrity_token
+scripts/systems/save_slot_manager.gd:10 save_to_slot
+scripts/systems/settings_manager.gd:410 set_dyslexia_font
+scripts/systems/settings_manager.gd:451 set_auto_aim
+scripts/systems/vibration.gd:13 explode
+scripts/systems/weapon_mod_manager.gd:14 equip_mod
+scripts/ui/fade_transition.gd:40 fade_in
+scripts/ui/photo_album.gd:48 take_photo
+scripts/ui/transition_manager.gd:16 fade_in
+scripts/ui/visual_style.gd:13 make_tile_texture
+scripts/ui/visual_style.gd:54 draw_monster
+scripts/ui/visual_style.gd:89 draw_vignette
+scripts/weapons/weapon_base.gd:153 get_ammo_ratio
+scripts/weapons/weapon_base.gd:159 get_reload_progress
+"""Session 26 (C3): of the dead-function candidates (s26_dead_funcs.py output) keep those that no document (outside the logs of what was done) and no tool names.
+usage: python -I s26_dead_filter.py <repo> <candidates-out.txt> <zero.txt>"""
+import pathlib
+import re
+import subprocess
+import sys
+
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+root = pathlib.Path(sys.argv[1]).resolve()
+rows = []
+for line in pathlib.Path(sys.argv[2]).read_text(encoding="utf-8").split("\n"):
+    m = re.match(r"^(scripts/\S+\.gd):(\d+) (\S+)$", line)
+    if m:
+        rows.append((m.group(1), int(m.group(2)), m.group(3)))
+tracked = [t for t in subprocess.run(["git", "ls-files"], cwd=root, capture_output=True, text=True, encoding="utf-8").stdout.split("\n") if t]
+LOGS = ("docs/RUN_STATE.md", "docs/CORRECTION_LOG.md", "docs/PROOFS.md", "docs/RESUME_NOTE.md", "docs/ORDER_PASS_REPORT.md", "docs/CLEANUP_LEDGER.md", "docs/CLEANUP_LOG.md",
+        "docs/CLEANUP_MANIFEST.md", "docs/ABSORB_PLAN.md", "docs/GEMINI_INTEGRATION_REPORT.md", "docs/KNOWN_ISSUES.md")
+other = [t for t in tracked if t.endswith((".md", ".py", ".sh", ".yml", ".txt")) and t not in LOGS and not t.startswith(("docs/artifacts/", "docs/stills/"))]
+txt = "\n".join((root / t).read_text(encoding="utf-8", errors="replace") for t in other)
+keep = ["%s:%d %s" % r for r in rows if not re.search(r"(?<![A-Za-z0-9_])" + re.escape(r[2]) + r"(?![A-Za-z0-9_])", txt)]
+pathlib.Path(sys.argv[3]).write_text("\n".join(keep) + "\n", encoding="utf-8")
+print("candidates %d, named by no document or tool: %d" % (len(rows), len(keep)))
+
+--- run
+candidates 35, named by no document or tool: 26
+--- named by no document or tool
+scripts/cutscenes/cutscene_manager.gd:10 play_cutscene
+scripts/electronic_door.gd:24 set_power
+scripts/fuse_box.gd:47 remove_fuse
+scripts/gameplay/hiding_spot.gd:101 is_occupied
+scripts/hiding/hiding_spot.gd:31 get_detection_multiplier
+scripts/hiding/hiding_spot.gd:34 get_hide_duration
+scripts/lighting/light_grid.gd:40 unregister_light
+scripts/monetization/ad_service.gd:151 interstitial_cooldown_left
+scripts/monetization/stub_crazy_games.gd:31 was_initialized
+scripts/multiplayer/lan_discovery.gd:85 get_found_hosts
+scripts/net/lan_network.gd:51 is_client
+scripts/net/lan_network.gd:52 is_online
+scripts/net/lan_network.gd:94 broadcast_player_state
+scripts/net/lan_network.gd:99 broadcast_power
+scripts/systems/loot_drop.gd:6 drop_loot
+scripts/systems/play_integrity_service.gd:27 request_integrity_token
+scripts/systems/save_slot_manager.gd:10 save_to_slot
+scripts/systems/settings_manager.gd:410 set_dyslexia_font
+scripts/systems/settings_manager.gd:451 set_auto_aim
+scripts/systems/vibration.gd:13 explode
+scripts/systems/weapon_mod_manager.gd:14 equip_mod
+scripts/ui/visual_style.gd:13 make_tile_texture
+scripts/ui/visual_style.gd:54 draw_monster
+scripts/ui/visual_style.gd:89 draw_vignette
+scripts/weapons/weapon_base.gd:153 get_ammo_ratio
+scripts/weapons/weapon_base.gd:159 get_reload_progress
+# EXIT=0

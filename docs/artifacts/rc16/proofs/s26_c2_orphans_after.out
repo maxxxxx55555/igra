@@ -1,0 +1,89 @@
+# proof s26_c2_orphans_after
+# utc 20261016T024843Z
+# head 07e117d (uncommitted paths: 8)
+# env none
+# cmd python -I C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s26_orphan_scripts.py .
+"""Session 26 (C2/C3): shipped scripts (scripts/, not scripts/tools) that nothing in the runtime reaches. For each tracked .gd:
+  path refs   = files that hold its res:// path or its repo path (scenes, resources, scripts, project.godot, export presets, data)
+  uid refs    = scene or resource files that hold the uid of its .gd.uid sidecar
+  class refs  = other runtime scripts that name its class_name as a word
+  stem refs   = other runtime files that hold its file name (a name built from a prefix, or a preload/load of a relative name)
+Only a script with none of the four is an orphan. Tools and documents that name it are printed (they do not make it live).
+Read-only. usage: python -I s26_orphan_scripts.py <repo>"""
+import pathlib
+import re
+import subprocess
+import sys
+
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+root = pathlib.Path(sys.argv[1]).resolve()
+tracked = [t for t in subprocess.run(["git", "ls-files"], cwd=root, capture_output=True, text=True, encoding="utf-8").stdout.split("\n") if t]
+TEXT = (".gd", ".tscn", ".tres", ".cfg", ".godot", ".json", ".gdshader", ".csv", ".txt", ".md", ".py", ".sh", ".yml", ".tsv")
+corpus = {}
+for t in tracked:
+    if t.endswith(TEXT):
+        try:
+            corpus[t] = (root / t).read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            pass
+
+
+def is_runtime(t):
+    if t.startswith(("scripts/tools/", "scenes/tools/", "tools/", "docs/", "store/", "_QUARANTINE/", ".github/")) or t.endswith((".md", ".py", ".sh", ".yml", ".tsv")):
+        return False
+    return t.startswith(("scripts/", "scenes/", "data/", "content/", "addons/", "components/")) or t in ("project.godot", "export_presets.cfg", "default_bus_layout.tres")
+
+
+gds = sorted(t for t in tracked if t.endswith(".gd") and t.startswith("scripts/") and not t.startswith("scripts/tools/"))
+orph = []
+for g in gds:
+    base = g.rsplit("/", 1)[1]
+    text = corpus.get(g, "")
+    cm = re.search(r"^class_name\s+([A-Za-z_][A-Za-z0-9_]*)", text, re.M)
+    cls = cm.group(1) if cm else None
+    uid = None
+    u = root / (g + ".uid")
+    if u.exists():
+        uid = u.read_text(encoding="utf-8", errors="replace").strip()
+    refs = {"path": [], "uid": [], "class": [], "stem": []}
+    for t, txt in corpus.items():
+        if t == g or not is_runtime(t):
+            continue
+        if ("res://" + g) in txt or g in txt:
+            refs["path"].append(t)
+        elif uid and uid in txt:
+            refs["uid"].append(t)
+        elif base in txt:
+            refs["stem"].append(t)
+        elif cls and t.endswith(".gd") and re.search(r"(?<![A-Za-z0-9_$%\"'/.])" + re.escape(cls) + r"(?![A-Za-z0-9_\"'])", txt):
+            refs["class"].append(t)
+    if not any(refs.values()):
+        autoload = "res://" + g in corpus.get("project.godot", "")
+        others = [t for t, txt in corpus.items() if t != g and (g in txt or base in txt) and not is_runtime(t)]
+        lines = text.count("\n") + 1
+        orph.append((g, lines, cls, others))
+print("shipped scripts: %d; reached by nothing in the runtime: %d" % (len(gds), len(orph)))
+for g, lines, cls, others in orph:
+    print("%-52s %5d lines  class=%-26s named by: %s" % (g, lines, cls, ", ".join(others[:4]) if others else "-"))
+
+--- run
+shipped scripts: 253; reached by nothing in the runtime: 17
+scripts/core/save_data.gd                               31 lines  class=SaveData                   named by: docs/CLEANUP_MANIFEST.md, docs/CORRECTION_LOG.md, docs/SECURITY_PATCH_SPEC.md, docs/artifacts/rc16/cleanup_manifest_s26.tsv
+scripts/cutscenes/cutscene_manager.gd                   61 lines  class=None                       named by: docs/CLEANUP_MANIFEST.md, docs/SLOP_REPORT_V2.md, docs/artifacts/rc16/cleanup_manifest_s26.tsv, scripts/tools/validate_list.txt
+scripts/effects/muzzle_flash.gd                         43 lines  class=None                       named by: docs/CLEANUP_MANIFEST.md, docs/SLOP_REPORT_V2.md, docs/artifacts/rc16/cleanup_manifest_s26.tsv, scripts/tools/validate_list.txt
+scripts/effects/recoil.gd                               29 lines  class=None                       named by: docs/CLEANUP_MANIFEST.md, docs/SLOP_REPORT_V2.md, docs/artifacts/rc16/cleanup_manifest_s26.tsv, scripts/tools/validate_list.txt
+scripts/electronic_door.gd                              73 lines  class=ElectronicDoor             named by: docs/ASSET_HANDOFF.md, docs/CLEANUP_MANIFEST.md, docs/REPORT_AUDIO_DETAIL.md, docs/SLOP_REPORT_V2.md
+scripts/emergency_lamp.gd                               30 lines  class=EmergencyLamp              named by: docs/CLEANUP_MANIFEST.md, docs/SLOP_REPORT_V2.md, docs/artifacts/rc16/cleanup_manifest_s26.tsv, scripts/tools/validate_list.txt
+scripts/enemies/minion.gd                              134 lines  class=Minion                     named by: docs/CLEANUP_MANIFEST.md, docs/SLOP_REPORT_V2.md, docs/artifacts/rc16/cleanup_manifest_s26.tsv, scripts/tools/validate_list.txt
+scripts/fuse_box.gd                                     62 lines  class=FuseBox                    named by: docs/ASSET_HANDOFF.md, docs/CLEANUP_MANIFEST.md, docs/REPORT_AUDIO_DETAIL.md, docs/SLOP_REPORT_V2.md
+scripts/inspectable.gd                                  39 lines  class=None                       named by: docs/ASSET_HANDOFF.md, docs/CLEANUP_MANIFEST.md, docs/REPORT_AUDIO_DETAIL.md, docs/SLOP_REPORT_V2.md
+scripts/searchlight.gd                                  24 lines  class=Searchlight                named by: docs/CLEANUP_MANIFEST.md, docs/SLOP_REPORT_V2.md, docs/artifacts/rc16/cleanup_manifest_s26.tsv, scripts/tools/validate_list.txt
+scripts/systems/loot_drop.gd                            29 lines  class=None                       named by: docs/CLEANUP_MANIFEST.md, docs/SLOP_REPORT_V2.md, docs/artifacts/rc16/cleanup_manifest_s26.tsv, scripts/tools/validate_list.txt
+scripts/systems/save_slot_manager.gd                    54 lines  class=None                       named by: docs/CLEANUP_MANIFEST.md, docs/RUN_STATE.md, docs/SECURITY_PATCH_SPEC.md, docs/SECURITY_REREAD_RC16.md
+scripts/systems/vibration.gd                            13 lines  class=None                       named by: docs/CLEANUP_MANIFEST.md, docs/SLOP_REPORT_V2.md, docs/artifacts/rc16/cleanup_manifest_s26.tsv, scripts/tools/validate_list.txt
+scripts/systems/weapon_mod_manager.gd                   27 lines  class=None                       named by: docs/CLEANUP_MANIFEST.md, docs/GDD.md, docs/SLOP_REPORT_V2.md, docs/artifacts/rc16/cleanup_manifest_s26.tsv
+scripts/transformer.gd                                  50 lines  class=Transformer                named by: docs/CLEANUP_MANIFEST.md, docs/CORRECTION_LOG.md, docs/artifacts/rc16/cleanup_manifest_s26.tsv, scripts/tools/validate_list.txt
+scripts/ui/panel_card.gd                                23 lines  class=PanelCard                  named by: docs/CLEANUP_MANIFEST.md, docs/CORRECTION_LOG.md, docs/ROAD_TO_POLISH.md, docs/artifacts/rc16/cleanup_manifest_s26.tsv
+scripts/world/interior_zone.gd                          47 lines  class=None                       named by: docs/CLEANUP_MANIFEST.md, docs/CORRECTION_LOG.md, docs/RUN_STATE.md, docs/SLOP_REPORT_V2.md
+# EXIT=0

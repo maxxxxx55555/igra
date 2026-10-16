@@ -1,0 +1,104 @@
+# proof s26_c4_staledocs
+# utc 20261016T024406Z
+# head c4b8277 (uncommitted paths: 6)
+# env none
+# cmd python -I C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s26_stale_docs.py C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/wt_base
+"""Session 26 (C4): which documents of docs/ (top level) does nothing else name? For each docs/*.md: the files that name it (by its file name), the date of its last
+commit, and its size. A document named by no other tracked text file, last touched before the tag v8.0.0-shipping (2026-10-12), is a stale candidate. Read-only.
+Prints itself first. usage: python -I s26_stale_docs.py <repo>"""
+import pathlib
+import re
+import subprocess
+import sys
+
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+root = pathlib.Path(sys.argv[1]).resolve()
+
+
+def git(*a):
+    return subprocess.run(["git", *a], cwd=root, capture_output=True, text=True, encoding="utf-8", errors="replace").stdout
+
+
+tracked = [t for t in git("ls-files").split("\n") if t]
+TEXT = (".md", ".py", ".gd", ".sh", ".yml", ".yaml", ".json", ".tsv", ".cfg", ".tscn", ".tres", ".txt", ".godot", ".ps1")
+corpus = {}
+for t in tracked:
+    if t.endswith(TEXT) and not t.startswith(("docs/stills/", "docs/shots/")):
+        try:
+            corpus[t] = (root / t).read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            pass
+docs = sorted(t for t in tracked if t.startswith("docs/") and t.endswith(".md") and t.count("/") == 1)
+rows = []
+for d in docs:
+    name = d.rsplit("/", 1)[1]
+    pat = re.compile(r"(?<![A-Za-z0-9_])" + re.escape(name))
+    refs = [f for f, txt in corpus.items() if f != d and pat.search(txt)]
+    date = git("log", "-1", "--format=%cs", "--", d).strip()
+    rows.append((d, len(refs), date, (root / d).stat().st_size, refs[:2]))
+print("documents at the top level of docs/: %d" % len(rows))
+stale = [r for r in rows if r[1] == 0]
+print("named by no other tracked text file: %d" % len(stale))
+for d, n, date, size, _ in stale:
+    print("%-48s last commit %s  %7d bytes" % (d, date, size))
+old = [r for r in stale if r[2] < "2026-10-12"]
+print("of those last touched before 2026-10-12: %d" % len(old))
+print("--- named by exactly one file (candidates for a second look)")
+for d, n, date, size, refs in rows:
+    if n == 1 and date < "2026-10-12":
+        print("%-48s %s  %7d bytes  by %s" % (d, date, size, refs[0]))
+
+--- run
+documents at the top level of docs/: 224
+named by no other tracked text file: 25
+docs/A2_checkpoints.md                           last commit 2026-10-13      403 bytes
+docs/BLOCK4_PROJECTGODOT_PATCH.md                last commit 2026-08-09      693 bytes
+docs/CERT_CONTENTDEPTH.md                        last commit 2026-09-13    18168 bytes
+docs/CONTENT_DISTRICT_HOSPITAL.md                last commit 2026-09-08     7807 bytes
+docs/CONTENT_DISTRICT_INDUSTRIAL.md              last commit 2026-09-09    10383 bytes
+docs/CONTENT_DISTRICT_PARK.md                    last commit 2026-09-08     3462 bytes
+docs/CONTENT_DISTRICT_POLICE.md                  last commit 2026-09-08     6866 bytes
+docs/CONTENT_DISTRICT_POWER_STATION.md           last commit 2026-09-09    10547 bytes
+docs/CONTENT_DISTRICT_SUBSTATION.md              last commit 2026-09-09    10236 bytes
+docs/CONTENT_DISTRICT_WAREHOUSES.md              last commit 2026-09-09     8363 bytes
+docs/CONTEXT_CACHE.md                            last commit 2026-08-23      834 bytes
+docs/DESIGN_CRITIQUE.md                          last commit 2026-09-23    22438 bytes
+docs/ERROR_LOG_DEVICESV2.md                      last commit 2026-09-08     1544 bytes
+docs/ERROR_LOG_PLAY_FINAL.md                     last commit 2026-09-08     2998 bytes
+docs/ERROR_LOG_STOREV2.md                        last commit 2026-09-08     3210 bytes
+docs/PACKAGES.md                                 last commit 2026-08-07      593 bytes
+docs/PHASE_2_DESIGN_SPEC.md                      last commit 2026-08-08     1704 bytes
+docs/PHASE_A_DESIGN_SPEC.md                      last commit 2026-08-08      816 bytes
+docs/REPORT_MARKET_V2.md                         last commit 2026-09-08     3445 bytes
+docs/REPORT_PLAY_FINAL.md                        last commit 2026-09-08     3105 bytes
+docs/ROADMAP.md                                  last commit 2026-08-07      593 bytes
+docs/ROLES.md                                    last commit 2026-08-07      684 bytes
+docs/SESSION_REPORT_FINISH.md                    last commit 2026-08-24    18194 bytes
+docs/SESSION_REPORT_UX.md                        last commit 2026-08-25    17137 bytes
+docs/STAGES_REPORT.md                            last commit 2026-08-13    11027 bytes
+of those last touched before 2026-10-12: 24
+--- named by exactly one file (candidates for a second look)
+docs/CONTENT_DISTRICT_GAS_STATION.md             2026-09-08     6388 bytes  by content/districts/gas_station/item_spawns.json
+docs/CONTENT_DISTRICT_SCHOOL.md                  2026-09-08     7597 bytes  by content/districts/school/item_spawns.json
+docs/CONTENT_DISTRICT_SUBURBS.md                 2026-09-08     2641 bytes  by PLAN.md
+docs/DECISIONS.md                                2026-09-27     5599 bytes  by docs/FINAL_REPORT.md
+docs/ERROR_LOG_BUGHUNT.md                        2026-09-08     6419 bytes  by docs/REPORT_BUG_HUNT.md
+docs/ERROR_LOG_GAMEFEELV2.md                     2026-09-08     4773 bytes  by docs/REPORT_GAMEFEEL_V2.md
+docs/ERROR_LOG_MARKETV2.md                       2026-09-08     2740 bytes  by docs/REPORT_MARKET_V2.md
+docs/ERROR_LOG_UIV2.md                           2026-09-08     3072 bytes  by docs/HANDOFF.md
+docs/ERROR_LOG_UNBLOCK.md                        2026-09-08     3215 bytes  by docs/REPORT_UNBLOCK_V2.md
+docs/FINAL_REPORT.md                             2026-08-18     6047 bytes  by docs/CLOSURE_VERIFICATION_INTERNAL.md
+docs/GDD_SUPPLEMENT_v3.md                        2026-08-07    40020 bytes  by docs/GDD.md
+docs/INTERIM_TZ_COMPLIANCE.md                    2026-09-22     3630 bytes  by docs/RUN_STATE.md
+docs/LEDGER_VISUAL.md                            2026-09-11     5884 bytes  by docs/ASSET_LICENSES.md
+docs/MISSING_WIRES.md                            2026-09-08      324 bytes  by docs/SESSION_REPORT_SHIP.md
+docs/QUALITY_SCORECARD.md                        2026-08-18     4459 bytes  by docs/FINAL_REPORT.md
+docs/REPORT_DEVICES_V2.md                        2026-09-08     3118 bytes  by docs/SESSION_REPORT_UX.md
+docs/REPORT_STORE_V2.md                          2026-09-08     4132 bytes  by assets/store/v2/presskit/README.md
+docs/SESSION_REPORT_RELEASE.md                   2026-08-25    14456 bytes  by docs/SESSION_REPORT_SHIP.md
+docs/SESSION_REPORT_RESCUE.md                    2026-08-24    12884 bytes  by docs/HANDOFF.md
+docs/SESSION_REPORT_UNIFY.md                     2026-08-24    15890 bytes  by docs/HANDOFF.md
+docs/TEXTURE_PROMPTS.md                          2026-08-10     2537 bytes  by .opencode/skills/art-pipeline/SKILL.md
+docs/TOOLING_DECISIONS.md                        2026-09-19     1829 bytes  by docs/RUN_STATE.md
+# EXIT=0
