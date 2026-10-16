@@ -1,0 +1,13 @@
+# proof s26_af2_pre
+# utc 20261016T032543Z
+# head dd61d07 (uncommitted paths: 33)
+# env CLOSEOUT_ONLY=s26 
+# cmd bash tools/qa_sim/closeout_check 300
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL ACH15 a death with only the power station lit is Survivor and does not unlock Darkness (ending survivor)
+[closeout] FAIL ACHRUN1 a New Game starts the marks of Quiet as a Mouse and Without a Scratch empty (seen_park true, hurt_school true)
+[closeout] FAIL DAILY2 the daily selector walks past a template over the 11 districts (day 0 over, day 3 over) and keeps one with no per-run cap (day 2 kills)
+[closeout] DONE checks=11 fails=3
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+# EXIT=1

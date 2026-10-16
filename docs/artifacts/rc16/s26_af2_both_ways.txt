@@ -1,0 +1,7 @@
+AF2 both ways: base 041ce03, HEAD dd61d07, group s26
+ACH15        pre=FAIL     post=ok       BITES
+ACHRUN1      pre=FAIL     post=ok       BITES
+DAILY2       pre=FAIL     post=ok       BITES
+pre run failed: ACH15, ACHRUN1, DAILY2
+post run: [closeout] DONE checks=482 fails=0
+AF2 verdict=PASS ids=3 bad=0
