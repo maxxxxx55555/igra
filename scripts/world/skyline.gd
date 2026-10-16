@@ -34,7 +34,7 @@ const _FACADE := preload("res://assets/shaders/soviet_facade.gdshader")
 const _ROAD := preload("res://assets/shaders/soviet_road.gdshader")
 const _SIGNS := preload("res://scripts/world/soviet_signs.gd")
 ## How much of its self-glow a block shows, by power stage (DARK, PARTIAL, STREETS, FULL): a restored district reads lighter, a dark one stays a silhouette.
-const FACADE_GAIN: Array[float] = [0.22, 0.27, 0.32, 0.36]
+const FACADE_GAIN: Array[float] = [0.5, 0.65, 0.85, 1.05]
 ## The ground between the streets, linear: dark earth, and patches of dead grass.
 const GROUND_EARTH := Vector3(0.050, 0.052, 0.046)
 const GROUND_GRASS := Vector3(0.050, 0.062, 0.040)
@@ -222,11 +222,13 @@ func _add_box(body: StaticBody3D, size: Vector3, at: Vector3) -> void:
 	body.add_child(shape)
 
 func _set_detail(key: String = "graphics_tier", _value: Variant = null) -> void:
-	if key == "graphics_tier":
-		var detail := float(clampi(int(SettingsManager.get_setting("graphics_tier", 2)), 0, 2))
-		for mat: ShaderMaterial in [_facade_mat, _ground_mat]:
-			if mat != null:
-				mat.set_shader_parameter("detail", detail)
+	if key != "graphics_tier":
+		return
+	var detail := float(clampi(int(SettingsManager.get_setting("graphics_tier", 2)), 0, 2))
+	if _facade_mat != null:
+		_facade_mat.set_shader_parameter("detail", detail)
+	if _ground_mat != null:
+		_ground_mat.set_shader_parameter("detail", minf(detail, 1.0))  # the earth between the streets has no cracks or damp, and it fills a third of the screen
 
 func _on_stage_changed(id: StringName, stage: int) -> void:
 	if id == _district_id:

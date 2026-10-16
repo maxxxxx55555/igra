@@ -6,12 +6,13 @@
 // MultiMesh of blocks and roof boxes is one draw call. The pattern follows the window grid of scripts/world/skyline.gd
 // (first window 1.2 m from the left edge of the front face, every 2.2 m; first floor of windows 2.6 m up, every 2.6 m).
 // Uniforms:
-//   glow   : the cold tint of the district's self-glow, linear; gain: how much of it a block shows at the power stage of its district (a restored district reads lighter). The glow is what carries the pattern at night.
+//   glow   : the cold tint of the district's self-glow, linear; gain: how much of it a block shows at the power stage of its district (a restored district reads lighter). The glow is what carries the pattern at night,
+//            and the Filmic toe of the scene's tonemapper keeps anything under about 0.05 linear at the black floor, so the gain is about 1.
 //   detail : 0 the plain tinted box (Low tier), 1 seams and stains, 2 adds the flaked patches and the rust.
 shader_type spatial;
 
 uniform vec3 glow = vec3(0.06, 0.08, 0.12);
-uniform float gain : hint_range(0.0, 1.0) = 0.3;
+uniform float gain : hint_range(0.0, 3.0) = 1.0;
 uniform float detail : hint_range(0.0, 2.0) = 2.0;
 uniform vec3 rust = vec3(0.30, 0.17, 0.10);  // linear: what the drip adds is a fraction of it
 
@@ -47,6 +48,7 @@ void fragment() {
 	vec3 base = v_tint;
 	float keep = 1.0;
 	float lift = 1.0;
+	float flake = 0.0;
 	if (detail > 0.5) {
 		float roof = step(0.5, v_normal.y);
 		float side = step(0.5, abs(v_normal.x));
@@ -73,12 +75,11 @@ void fragment() {
 		float drip_col = floor(u * 1.7);
 		float drip = (1.0 - roof) * step(0.58, hash12(vec2(drip_col, v_seed * 53.0))) * (1.0 - smoothstep(0.0, 1.2 + 1.6 * hash12(vec2(drip_col, 7.0)), v_size.y - y));
 		float mottle = 1.0;
-		float flake = 0.0;
 		if (detail > 1.5) {
-			mottle = 0.65 + 0.35 * vnoise(vec2(u * 9.0, y * 1.4) + v_seed * 17.0);
+			float streak = vnoise(vec2(u * 9.0, y * 1.4) + v_seed * 17.0);
+			mottle = 0.65 + 0.35 * streak;
 			float big = vnoise(vec2(u * 0.28, y * 0.22) + v_seed * 37.0);
-			float ragged = vnoise(vec2(u, y) * 2.4);
-			flake = smoothstep(0.64, 0.72, big) * smoothstep(0.22, 0.52, ragged + 0.3) * (1.0 - roof);
+			flake = smoothstep(0.64, 0.72, big + 0.2 * (streak - 0.5)) * (1.0 - roof);
 		}
 		keep = (1.0 - 0.42 * seam) * (1.0 - 0.5 * stain * mottle) * (1.0 - 0.25 * drip);
 		base += vec3(0.05, 0.052, 0.05) * flake;
@@ -87,6 +88,7 @@ void fragment() {
 	}
 	ALBEDO = base * keep;
 	EMISSION = glow * gain * keep * lift;
-	ROUGHNESS = 1.0;
-	SPECULAR = 0.0;
+	// the whitewash keeps a faint sheen that the flaked patches have lost: a lamp shows where the paint is peeling
+	ROUGHNESS = 0.7 + 0.3 * flake;
+	SPECULAR = 0.25 * (1.0 - flake) * step(0.5, detail);
 }

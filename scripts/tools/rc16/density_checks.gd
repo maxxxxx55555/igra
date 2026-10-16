@@ -77,7 +77,7 @@ static func _cards(root: Node3D) -> int:
 	return count
 
 ## FOLIAGE1: the canopies of the street trees carry the sway shader in the dark teal of the old flat material, and Motion Comfort stops the sway at once.
-## FOG1: the four fog districts hold three fog cards, the others a haze of two (Session 27), and no district holds one at the Low tier.
+## FOG1: the four fog districts hold three fog cards, the others none, and no district holds one at the Low tier.
 ## POOL1: a pool of light or a halo of opacity 0 (the DARK stage) is hidden, not drawn blind.
 static func _atmosphere(r: Node) -> void:
 	var tier0: Variant = SettingsManager.get_setting("graphics_tier", 2)
@@ -114,4 +114,4 @@ static func _atmosphere(r: Node) -> void:
 	await r.get_tree().process_frame
 	r._ok(mat != null and swaying > 0.0 and still == 0.0 and restored == swaying and colour.is_equal_approx(Color(0.09, 0.16, 0.15)), "FOLIAGE1 canopies: a sway shader (%s) of %.2f m, %.2f m with Motion Comfort and %.2f m after, in the old dark teal (%s)" % [mat != null, swaying, still, restored, colour.is_equal_approx(Color(0.09, 0.16, 0.15))])
 	r._ok(rests and wakes, "POOL1 lamp pools: the pools of the lamps and the halo of the landmark are not drawn at the DARK stage (%s) and are drawn from the next (%s)" % [rests, wakes])
-	r._ok(fogged == 3 and plain == 2 and at_low == 0, "FOG1 ground fog: %d cards in a fog district, a haze of %d in the suburbs (FOG-27), %d at the Low tier" % [fogged, plain, at_low])
+	r._ok(fogged == 3 and plain == 0 and at_low == 0, "FOG1 ground fog: %d cards in a fog district, %d in the suburbs, %d at the Low tier" % [fogged, plain, at_low])

@@ -9,7 +9,8 @@ extends "res://scripts/tools/_rc16_probe_runner.gd"
 ##   05_skyline  up the south street toward the landmark of the district, power FULL
 ##   06_courtyard from inside the middle block across the grid to the south-west corner of the ring, power FULL (Session 27)
 ##   07_facade    close to the west facade of the ring, looking up its panels, power FULL (Session 27)
-## --tviews=<names> shoots only those views (the default is all).
+##   08_sign      five metres in front of the first stencilled sign of the district, by the flashlight; the place is read from the loaded district, and the baked atlas is counted for ink (Session 27)
+## --tviews=<names> shoots only those views (the default is all). --tabl=1 reads what the weathering shaders cost in the 03_street view (`_ablate`, Session 27).
 ## Frames -> docs/stills/density/<id>_<view>_<label>_<hash>_<UTC>.jpg (the AF3 name: the code tree and the capture time). A saved frame proves nothing until it is read.
 ## The runs are in English with the HUD and the tutorial hidden (Trailer Mode), so a frame holds the world and nothing else. The weather is pinned to clear and the random events
 ## are off (`_pin_world`), and each view prints one `[density] state` line (weather, stage, tier, the environment's ambient, glow and exposure), so a frame can be traced to its state.
@@ -29,12 +30,15 @@ const VIEWS: Array[Dictionary] = [
 const JPG_QUALITY: float = 0.88
 const SETTLE_SEC: float = 0.9
 const PERF_SETTLE_FRAMES: int = 30
+const ABLATE_FRAMES: int = 240
+const ABLATE_SETTLE_FRAMES: int = 20
 
 var _ids: Array[StringName] = []
 var _views: PackedStringArray = []
 var _lang: String = "en"
 var _hud: bool = false
 var _png: bool = false
+var _ablate_on: bool = false
 
 ## A JPG keeps a set of eleven districts at about one megabyte; the frames are read and measured, not diffed pixel by pixel.
 func _shot(frame: String) -> void:
@@ -78,11 +82,11 @@ func _flashlight(player: Node3D, want: bool) -> void:
 	if player.has_method("toggle_flashlight") and bool(player.get("flashlight_enabled")) != want:
 		player.toggle_flashlight()
 
-func _view(id: StringName, view: Dictionary) -> void:
+## Puts the player at the place of a view and turns the camera to it; the player, or null when there is none.
+func _place(view: Dictionary) -> Node3D:
 	var player := _player_node()
 	if player == null:
-		print("[density] FAIL no player in %s" % id)
-		return
+		return null
 	var at: Vector3 = view["at"]
 	var look: Vector3 = view["look"]
 	player.heal(1000.0)
@@ -92,6 +96,14 @@ func _view(id: StringName, view: Dictionary) -> void:
 	var camera := get_viewport().get_camera_3d()
 	if camera != null:
 		camera.set("_pitch", float(view["pitch"]))
+	return player
+
+func _view(id: StringName, view: Dictionary) -> void:
+	var player := _place(view)
+	if player == null:
+		print("[density] FAIL no player in %s" % id)
+		return
+	var camera := get_viewport().get_camera_3d()
 	var stage: int = int(view["stage"])
 	if stage >= 0 and PowerGrid.get_stage(id) < stage:
 		# a district can only be raised once the ones that power it are FULL (PowerGrid.is_unlocked): a subset of districts, the store recipe's, stayed DARK (CORRECTION_LOG 249)
@@ -121,6 +133,26 @@ func _view(id: StringName, view: Dictionary) -> void:
 	else:
 		await _snap("%s_%s" % [id, view["name"]])
 
+## The view of 08_sign, or an empty one (a `[density] FAIL` line, the run goes on) when the district hangs no sign or its atlas holds no letters: the frame must not be the proof that the bake worked.
+func _sign_view(id: StringName) -> Dictionary:
+	var signs := get_tree().root.find_child("Signs", true, false) as MultiMeshInstance3D
+	if signs == null or signs.multimesh.instance_count == 0:
+		print("[density] FAIL no sign hung in %s" % id)
+		return {}
+	var spot: Transform3D = signs.global_transform * signs.multimesh.get_instance_transform(0)
+	var atlas: Image = ((signs.material_override as ShaderMaterial).get_shader_parameter("atlas") as Texture2D).get_image()
+	var ink: int = 0
+	for y in range(0, atlas.get_height(), 4):
+		for x in range(0, atlas.get_width(), 4):
+			if atlas.get_pixel(x, y).a > 0.5:
+				ink += 1
+	print("[density] signs district=%s count=%d atlas=%dx%d ink_samples=%d" % [String(id), signs.multimesh.instance_count, atlas.get_width(), atlas.get_height(), ink])
+	if ink < 200:
+		print("[density] FAIL the sign atlas of %s holds no letters (%d ink samples)" % [id, ink])
+		return {}
+	var normal := spot.basis.z.normalized()
+	return {"name": "08_sign", "at": Vector3(spot.origin.x + normal.x * 5.0, 0.1, spot.origin.z + normal.z * 5.0), "look": spot.origin, "pitch": -0.08, "stage": 3, "light": true}
+
 func _run() -> void:
 	if DisplayServer.get_name() == "headless":
 		print("[density] SKIP headless - frames need a real display")
@@ -143,6 +175,8 @@ func _run() -> void:
 			_hud = true
 		elif s == "--tpng=1":
 			_png = true
+		elif s == "--tabl=1":
+			_ablate_on = true
 	if _ids.is_empty():
 		_ids.assign(ORDER)
 	var ads := get_node_or_null("/root/AdService")
@@ -178,6 +212,12 @@ func _run() -> void:
 		for view: Dictionary in VIEWS:
 			if _views.is_empty() or _views.has(String(view["name"])):
 				await _view(id, view)
+		if _views.is_empty() or _views.has("08_sign"):
+			var sign_view := _sign_view(id)
+			if not sign_view.is_empty():
+				await _view(id, sign_view)
+		if _ablate_on:
+			await _ablate(id)
 		var dressing := _dressing()
 		if _label == "pair" and dressing != null:
 			dressing.visible = false
@@ -186,6 +226,60 @@ func _run() -> void:
 		await _perf_line(id, "with")
 	print("[density] DONE label=%s hash=%s" % [_label, _hash])
 	get_tree().quit(0)
+
+## What the weathering shaders cost (Session 27): the materials of the roads, the ground and the blocks are swapped for a plain one and back, full-plain-full-plain-full, each state read over
+## ABLATE_FRAMES frames in the 03_street view, so the drift of the machine's own load goes through both alike. The mean GPU ms of the frame is the number (a p95 under vsync only says how many frames missed it).
+func _ablate(id: StringName) -> void:
+	var player := _place(VIEWS[2])
+	if player == null:
+		print("[density] FAIL no player to ablate in %s" % id)
+		return
+	_flashlight(player, false)
+	var swaps: Array[Array] = []
+	for node: Node in get_tree().root.find_children("*", "GeometryInstance3D", true, false):
+		var holder: Object = node
+		var mat: Material = (node as GeometryInstance3D).material_override
+		if mat == null and node is MultiMeshInstance3D and (node as MultiMeshInstance3D).multimesh.mesh is PrimitiveMesh:
+			holder = (node as MultiMeshInstance3D).multimesh.mesh
+			mat = (holder as PrimitiveMesh).material
+		var shader_path: String = (mat as ShaderMaterial).shader.resource_path if mat is ShaderMaterial else ""
+		if shader_path.contains("soviet_road") or shader_path.contains("soviet_facade"):
+			swaps.append([holder, mat])
+	var plain := StandardMaterial3D.new()
+	plain.albedo_color = Color(0.1, 0.1, 0.1)
+	var full: Array[float] = []
+	var bare: Array[float] = []
+	for state: String in ["full", "plain", "full", "plain", "full"]:
+		for swap: Array in swaps:
+			var material: Material = swap[1] if state == "full" else plain
+			if swap[0] is GeometryInstance3D:
+				(swap[0] as GeometryInstance3D).material_override = material
+			else:
+				(swap[0] as PrimitiveMesh).material = material
+		var reading: float = await _read_gpu(id, state)
+		(full if state == "full" else bare).append(reading)
+	print("[density] ablate district=%s targets=%d full_gpu_ms=%.2f plain_gpu_ms=%.2f cost_ms=%.2f" % [String(id), swaps.size(), _mean(full), _mean(bare), _mean(full) - _mean(bare)])
+
+static func _mean(reads: Array[float]) -> float:
+	var total: float = 0.0
+	for read: float in reads:
+		total += read
+	return total / reads.size()
+
+func _read_gpu(id: StringName, state: String) -> float:
+	var vp := get_viewport().get_viewport_rid()
+	RenderingServer.viewport_set_measure_render_time(vp, true)
+	for i in ABLATE_SETTLE_FRAMES:
+		await get_tree().process_frame
+	var gpu: float = 0.0
+	var frames: Array[float] = []
+	for i in ABLATE_FRAMES:
+		await get_tree().process_frame
+		gpu += RenderingServer.viewport_get_measured_render_time_gpu(vp)
+		frames.append(get_process_delta_time() * 1000.0)
+	frames.sort()
+	print("[density] ablate read district=%s state=%s gpu_ms=%.2f frame_ms_p95=%.2f" % [String(id), state, gpu / ABLATE_FRAMES, frames[int(frames.size() * 0.95)]])
+	return gpu / ABLATE_FRAMES
 
 func _perf_line(id: StringName, dressing: String) -> void:
 	for i in PERF_SETTLE_FRAMES:

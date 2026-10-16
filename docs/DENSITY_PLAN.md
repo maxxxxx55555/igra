@@ -42,7 +42,7 @@ dressing alone is a tenth of the D1 budget of 200. The windowed perf gate (`scri
 **Backlog of other agents (D1.1):** none exists. The 32 remote branches were read: 19 are merged into `main`, the 13 that are not carry the August test and fix commits of
 the first arena, art plates of October and agent notes (`docs/ARENA_CLOSURE.md`); `git log --remotes --grep` for prop placement, density, dressing, per-zone and empty zone finds only this pass's own commits.
 
-## 2. The kit (D1.2, from `KIT` in `scripts/world/district_dressing.gd:48`)
+## 2. The kit (D1.2, from `KIT` in `scripts/world/district_dressing.gd:44`)
 
 Per block and per district: litter pieces, leaves, wet patches, crates, barrels, bins. The streams are seeded by the district's name, so a district looks the same
 every run and no other placement moves; a solid piece keeps 1.8 m (`KEEP_CLEAR_M`, line 17) from every node of the groups `interactable` and `hiding_spot`

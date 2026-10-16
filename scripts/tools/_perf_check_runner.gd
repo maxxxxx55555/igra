@@ -33,8 +33,10 @@ func _run() -> void:
 		get_tree().quit(1)
 		return
 	# A few frames to let the renderer settle past the first-frame spike.
+	var trace: Array[int] = []
 	for i in 10:
 		await get_tree().process_frame
+		trace.append(_calls())
 	var draw_calls := int(Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME))
 	var primitives := int(Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME))
 	var objects := int(Performance.get_monitor(Performance.RENDER_TOTAL_OBJECTS_IN_FRAME))
@@ -44,6 +46,7 @@ func _run() -> void:
 		district = String(dm.current_district)
 	print("[perf] district=", district, " draw_calls=", draw_calls,
 		" primitives=", primitives, " objects_in_frame=", objects)
+	print("[perf] draw calls frame by frame after the player spawned: ", trace)
 	# PLAN.md Stage 2: PRODUCTION_BIBLE.md's checklist asks for this to be a
 	# real gate, not just a printed number. Godot's headless mode uses a
 	# dummy renderer that always reports draw_calls=0 - that's not "under
@@ -58,6 +61,7 @@ func _run() -> void:
 		get_tree().quit(3)
 		return
 	await _print_breakdown(district)
+	print("[perf] %s steady draw_calls=%d (everything shown again, after the breakdown)" % [district, _calls()])
 	var d1_p95 := await _median_p95()
 	var d1_vram: float = Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) / 1048576.0
 	print("[perf] %s frame_p95_ms=%0.2f texture_mem_mib=%0.1f video_mem_mib=%0.1f" % [district, d1_p95,
