@@ -1,0 +1,55 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[density] start label=final27 hash=ea03e02 ids=[&"suburbs", &"residential", &"warehouses"] nodes=1107 objects=3980 orphans=6 tex_mib=59.0 vid_mib=86.6 static_mib=101.1
+[probe] stream pass=density district=suburbs ok=true load_ms=0.3 settled_ms=47.2 hitches=0 max_frame_ms=33.3 over_budget_ms=0.0 nodes=1107 objects=3978 orphans=6 tex_mib=59.0 vid_mib=86.6 static_mib=101.2 stats={"district":"suburbs","enemies_ms":10.951,"loot_ms":30.929,"props_ms":181.018,"scene_ms":73.308,"streets_ms":1.664,"total_ms":160.682}
+[density] state district=suburbs view=03_street weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame suburbs_03_street_final27_ea03e02_20261016T170413Z.jpg
+[density] state district=suburbs view=05_skyline weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame suburbs_05_skyline_final27_ea03e02_20261016T170414Z.jpg
+[density] state district=suburbs view=06_courtyard weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame suburbs_06_courtyard_final27_ea03e02_20261016T170415Z.jpg
+[density] state district=suburbs view=07_facade weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] wall district=suburbs gain=0.27 floor=22.3 lit=45.3 lift=23.0
+[density] frame suburbs_07_facade_final27_ea03e02_20261016T170416Z.jpg
+[density] signs district=suburbs count=5 atlas=1024x384 ink_samples=1270 first=(-13.32838, 1.2, -31.93) facing=(0.0, 0.0, 1.0)
+[density] state district=suburbs view=08_sign weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=true
+[density] frame suburbs_08_sign_final27_ea03e02_20261016T170417Z.jpg
+[density] perf district=suburbs dressing=with draw_calls=20 primitives=19538 objects_in_frame=20
+[probe] stream pass=density district=residential ok=true load_ms=245.4 settled_ms=335.1 hitches=2 max_frame_ms=144.6 over_budget_ms=144.7 nodes=1124 objects=4033 orphans=6 tex_mib=58.7 vid_mib=90.3 static_mib=103.5 stats={"district":"residential","enemies_ms":6.177,"loot_ms":18.76,"props_ms":98.543,"scene_ms":0.881,"streets_ms":1.94,"total_ms":51.268}
+[density] state district=residential view=03_street weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame residential_03_street_final27_ea03e02_20261016T170420Z.jpg
+[density] state district=residential view=05_skyline weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame residential_05_skyline_final27_ea03e02_20261016T170421Z.jpg
+[density] state district=residential view=06_courtyard weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame residential_06_courtyard_final27_ea03e02_20261016T170422Z.jpg
+[density] state district=residential view=07_facade weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] wall district=residential gain=0.27 floor=23.0 lit=39.3 lift=16.3
+[density] frame residential_07_facade_final27_ea03e02_20261016T170423Z.jpg
+[density] signs district=residential count=5 atlas=1024x512 ink_samples=2732 first=(1.192242, 1.2, 31.93) facing=(-0.0, 0.0, -1.0)
+[density] state district=residential view=08_sign weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=true
+[density] frame residential_08_sign_final27_ea03e02_20261016T170424Z.jpg
+[density] perf district=residential dressing=with draw_calls=20 primitives=23166 objects_in_frame=20
+[probe] stream pass=density district=warehouses ok=true load_ms=506.0 settled_ms=749.0 hitches=29 max_frame_ms=131.9 over_budget_ms=878.0 nodes=1146 objects=4095 orphans=6 tex_mib=60.7 vid_mib=92.3 static_mib=107.0 stats={"district":"warehouses","enemies_ms":12.56,"loot_ms":36.142,"props_ms":236.393,"scene_ms":3.177,"streets_ms":2.863,"total_ms":96.09}
+[density] state district=warehouses view=03_street weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame warehouses_03_street_final27_ea03e02_20261016T170429Z.jpg
+[density] state district=warehouses view=05_skyline weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame warehouses_05_skyline_final27_ea03e02_20261016T170430Z.jpg
+[density] state district=warehouses view=06_courtyard weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame warehouses_06_courtyard_final27_ea03e02_20261016T170431Z.jpg
+[density] state district=warehouses view=07_facade weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] wall district=warehouses gain=0.27 floor=25.0 lit=39.7 lift=14.7
+[density] frame warehouses_07_facade_final27_ea03e02_20261016T170432Z.jpg
+[density] signs district=warehouses count=5 atlas=1024x384 ink_samples=1434 first=(19.36038, 1.2, 31.93) facing=(-0.0, 0.0, -1.0)
+[density] state district=warehouses view=08_sign weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=true
+[density] frame warehouses_08_sign_final27_ea03e02_20261016T170433Z.jpg
+[density] perf district=warehouses dressing=with draw_calls=20 primitives=18776 objects_in_frame=20
+[density] DONE label=final27 hash=ea03e02
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 44 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

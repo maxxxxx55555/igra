@@ -32,7 +32,7 @@ Spoiler ceiling: the first three districts and the lit power station; no ending 
 | Picture | File | Pixels | Bytes |
 |---|---|---|---|
 | Icon | `store/icon-512.png` | 512 x 512 | 300965 |
-| Feature graphic | `store/feature-graphic.png` | 1024 x 500 | 684630 |
+| Feature graphic | `store/feature-graphic.png` | 1024 x 500 | 612245 |
 | Screenshot: light against the dark | `store/screenshots/shot01_light_vs_dark_1920x1080_en.png` | 1920 x 1080 | 1223195 |
 | Screenshot: a district boundary | `store/screenshots/shot02_district_boundary_1920x1080_en.png` | 1920 x 1080 | 1969585 |
 | Screenshot: the restored forecourt | `store/screenshots/shot05_restored_forecourt_1920x1080_en.png` | 1920 x 1080 | 1482217 |

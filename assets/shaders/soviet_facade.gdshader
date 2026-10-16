@@ -6,8 +6,9 @@
 // MultiMesh of blocks and roof boxes is one draw call. The pattern follows the window grid of scripts/world/skyline.gd
 // (first window 1.2 m from the left edge of the front face, every 2.2 m; first floor of windows 2.6 m up, every 2.6 m).
 // Uniforms:
-//   glow   : the hue of the district's self-glow, scaled so that its strongest channel is 1; gain: the emission of that channel at the power stage of the district (a restored district reads lighter). The glow carries the
-//            pattern at night. The scene shows an emission E as 0.12 * E^2.4 above its black floor (measured with --tprobe=1), so a pattern of 40 % in E is one of 80 % in light: seams and stains read, and the gain is under 1.
+//   glow   : the hue of the district's self-glow (half of it: a concrete wall, not coloured glass), scaled so that its mean channel is 1; gain: the emission of that channel at the power stage of the district (a restored district reads lighter). The glow carries the
+//            pattern at night. The wall line of tools/qa_sim/density_frames reads the median wall level over the black floor of the grade: +8 at a gain of 0.20, +20 at 0.26, +40 at 0.34 in the suburbs, a steeply convex response,
+//            so seams and stains of 40 % in emission read as much more in light, and the gain is under 1.
 //   detail : 0 the plain tinted box (Low tier), 1 seams and stains, 2 adds the flaked patches and the rust.
 shader_type spatial;
 

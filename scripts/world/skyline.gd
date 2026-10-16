@@ -34,10 +34,13 @@ const _FACADE := preload("res://assets/shaders/soviet_facade.gdshader")
 const _ROAD := preload("res://assets/shaders/soviet_road.gdshader")
 const _SIGNS := preload("res://scripts/world/soviet_signs.gd")
 const _GRASS := preload("res://scripts/world/dead_grass.gd")
-## The emission of the strongest channel of a block's self-glow, by power stage (DARK, PARTIAL, STREETS, FULL): a restored district reads lighter, a dark one stays a faint outline against the sky. The glow of a district
+## The emission of the mean channel of a block's self-glow, by power stage (DARK, PARTIAL, STREETS, FULL): a restored district reads lighter, a dark one stays a faint outline against the sky. The glow of a district
 ## sets the hue and not the brightness. Read off the sweep of the wall line of `tools/qa_sim/density_frames` (the median of the wall band over the black floor of 22 to 25: 0.15 stood it at +3, 0.20 at +8, 0.26 at +20,
-## 0.34 at +40, 0.48 at +74, mint boxes in a night; 0.30 left the suburbs at +30 and its far ring a pale teal in launch 7): DARK is an outline, FULL a dark panel (0.27 is +21 in the suburbs, +13 in the warehouses).
-const FACADE_GAIN: Array[float] = [0.17, 0.20, 0.23, 0.27]
+## 0.34 at +40, 0.48 at +74, mint boxes in a night; 0.30 left the suburbs at +30 and its far ring a pale teal in launch 7): DARK is an outline, FULL a dark panel.
+const FACADE_GAIN: Array[float] = [0.16, 0.19, 0.22, 0.26]
+## How much of the hue of a district's glow the concrete keeps: 1 is the palette's own, 0 a grey wall. The police and the park stood a saturated blue and green in the store frames of launch 8; the style guide says
+## desaturated.
+const GLOW_HUE: float = 0.5
 ## The ground between the streets, linear: dark earth, and patches of dead grass.
 const GROUND_EARTH := Vector3(0.050, 0.052, 0.046)
 const GROUND_GRASS := Vector3(0.050, 0.062, 0.040)
@@ -177,7 +180,8 @@ func _add_multimesh(node_name: String, mesh: Mesh, xforms: Array[Transform3D], t
 		# A faint cold self-glow so the blocks read as silhouettes against the sky; the shader weathers the panels (the tier of the graphics sets how much).
 		_facade_mat = ShaderMaterial.new()
 		_facade_mat.shader = _FACADE
-		_facade_mat.set_shader_parameter("glow", Vector3(glow.r, glow.g, glow.b) / maxf(glow.r, maxf(glow.g, glow.b)))
+		var hue := Vector3.ONE.lerp(Vector3(glow.r, glow.g, glow.b) / maxf(glow.r, maxf(glow.g, glow.b)), GLOW_HUE)
+		_facade_mat.set_shader_parameter("glow", hue / ((hue.x + hue.y + hue.z) / 3.0))
 		_set_detail()
 		EventBus.settings_changed.connect(_set_detail)
 		mat = _facade_mat
