@@ -3394,7 +3394,7 @@
  },
  {
   "id": "S26-EXPORT",
-  "claim": "Export 1 of 2 (ledger row 132): the Android export of `f8224aa` ran to its end.",
+  "claim": "Export 1 of 2 (ledger row 132): the Android export of `f8224aa` ran to its end (its bundle is superseded by export 2).",
   "cmd": "export-release Android build/tls.aab",
   "proof": "s26_export_f8224aa",
   "quotes": [
@@ -3405,7 +3405,7 @@
  },
  {
   "id": "S26-AAB",
-  "claim": "The bundle `build/tls.aab`: 136,644,920 bytes, signed with the upload key, 4 entries gone against the bundle of `ebc1acc` (the two quarantined scripts), 0 new, 45 with other bytes.",
+  "claim": "The first bundle of the pass (`f8224aa`, superseded by the second export): 136,644,920 bytes, signed with the upload key, 4 entries gone against the bundle of `ebc1acc` (the two quarantined scripts), 0 new, 45 with other bytes.",
   "cmd": "python tools/qa_sim/aab_check.py build/tls.aab --secrets --against <ebc1acc>",
   "proof": "s26_aab_check_f8224aa",
   "quotes": [
@@ -3421,7 +3421,7 @@
  },
  {
   "id": "S26-AAB2",
-  "claim": "The manifest of the bundle reads version code 3.",
+  "claim": "The manifest of the first bundle of the pass (superseded) reads version code 3.",
   "cmd": "python -I aab_manifest.py build/tls.aab",
   "proof": "s26_aab_manifest_f8224aa",
   "quotes": [
@@ -3432,7 +3432,7 @@
  },
  {
   "id": "S26-AAB3",
-  "claim": "The packed bus layout names `AudioEffectHardLimiter` twice: the limiter is in the bundle.",
+  "claim": "The packed bus layout of the first bundle of the pass (superseded) names `AudioEffectHardLimiter` twice: the limiter is in that bundle.",
   "cmd": "python -I -B -c (the entries of build/tls.aab)",
   "proof": "s26_aab_layout_f8224aa",
   "quotes": [
@@ -3443,7 +3443,7 @@
  },
  {
   "id": "S26-AAB4",
-  "claim": "Every file the shipped scripts name is in the bundle, and no packed file is not the game.",
+  "claim": "Every file the shipped scripts name is in the first bundle of the pass (superseded), and no packed file is not the game.",
   "cmd": "python tools/qa_sim/export_refs_check.py --bundle build/tls.aab; python tools/qa_sim/release_export_check.py --aab build/tls.aab",
   "proof": "s26_aab_refs_f8224aa",
   "quotes": [
@@ -3454,7 +3454,7 @@
  },
  {
   "id": "S26-AAB5",
-  "claim": "`project.binary` of the bundle is the one of the previous bundle (21,759 bytes, CRC `e9e6a411`), the setting `default_bus_layout` absent from both: the default path applies (CORRECTION_LOG 193).",
+  "claim": "`project.binary` of the first bundle of the pass (superseded) is the one of the previous bundle (21,759 bytes, CRC `e9e6a411`), the setting `default_bus_layout` absent from both: the default path applies (CORRECTION_LOG 193).",
   "cmd": "python -I s26_projectbinary.py <ebc1acc> build/tls.aab",
   "proof": "s26_aab_projectbinary_f8224aa",
   "quotes": [
@@ -3476,7 +3476,7 @@
  },
  {
   "id": "S26-L10",
-  "claim": "Launch 10 of 10 (ledger row 133, the last of the budget), the full battery at `09dfb04`, the head the second bundle is built from: 89 passed, 0 failed.",
+  "claim": "Launch 10 of 10 (ledger row 133, the last of the budget), the full battery at `09dfb04`, whose runtime is the second bundle's (`s26_runtime_diff`): 89 passed, 0 failed.",
   "cmd": "bash tools/check.sh --all (part 1 of the chain)",
   "proof": "s26_last_09dfb04",
   "quotes": [
@@ -3587,6 +3587,125 @@
    "af3 frames=8 fail=8"
   ],
   "commit": "09dfb04",
+  "frames": []
+ },
+ {
+  "id": "S26-EXPORT2",
+  "claim": "Export 2 of 2 (ledger row 134): the Android export of `4b4fee0` ran to its end.",
+  "cmd": "export-release Android build/tls.aab",
+  "proof": "s26_export2_4b4fee0",
+  "quotes": [
+   "[ DONE ] export"
+  ],
+  "commit": "4b4fee0",
+  "frames": []
+ },
+ {
+  "id": "S26-EXPORT2AFTER",
+  "claim": "After export 2 the editor had rewritten `default_bus_layout.tres` (the diff drops `load_steps` and the properties that equal their defaults); the proof holds the status and the diff as the run left them, before the committed file was restored.",
+  "cmd": "git status --short; git diff --stat; git diff default_bus_layout.tres",
+  "proof": "s26_export2_after_4b4fee0",
+  "quotes": [
+   " M default_bus_layout.tres",
+   "-[gd_resource type=\"AudioBusLayout\" load_steps=7 format=3 uid=\"uid://audiobuses00\"]"
+  ],
+  "commit": "4b4fee0",
+  "frames": []
+ },
+ {
+  "id": "S26-AAB6",
+  "claim": "The bundle of the second export: 136,645,015 bytes, signed with the upload key, 0 entries gone, 0 new and 5 with other bytes against the first bundle of the pass.",
+  "cmd": "python tools/qa_sim/aab_check.py build/tls.aab --secrets --against <the first bundle>",
+  "proof": "s26_aab_check_4b4fee0",
+  "quotes": [
+   "size    136645015 bytes",
+   "sha256  bb61ce937b71336bffb44be98b187f546842fc0d2bf2d225d7b4a91e4415263d",
+   "jar     jar verified.",
+   "signer_match=yes",
+   "against tls_f8224aa_versioncode3.aab: 0 entries gone, 0 new, 5 with other bytes",
+   "aab_check: PASS"
+  ],
+  "commit": "4b4fee0",
+  "frames": []
+ },
+ {
+  "id": "S26-AAB7",
+  "claim": "Against the bundle of `ebc1acc` (version code 2) the second bundle has 4 entries gone (the two quarantined scripts), 0 new and 45 with other bytes: the counts of the first bundle of the pass.",
+  "cmd": "python tools/qa_sim/aab_check.py build/tls.aab --secrets --against <the bundle of ebc1acc>",
+  "proof": "s26_aab_check_vs_ebc1acc_4b4fee0",
+  "quotes": [
+   "against tls_ebc1acc_versioncode2.aab: 4 entries gone, 0 new, 45 with other bytes",
+   "aab_check: PASS"
+  ],
+  "commit": "4b4fee0",
+  "frames": []
+ },
+ {
+  "id": "S26-AAB8",
+  "claim": "The manifest of the second bundle reads version code 3.",
+  "cmd": "python -I aab_manifest.py build/tls.aab",
+  "proof": "s26_aab_manifest_4b4fee0",
+  "quotes": [
+   "'versionCode': 3"
+  ],
+  "commit": "4b4fee0",
+  "frames": []
+ },
+ {
+  "id": "S26-AAB9",
+  "claim": "The second bundle has 2,752 entries and its packed bus layout names `AudioEffectHardLimiter` twice: the limiter is in the bundle.",
+  "cmd": "python -I -B s26_aab_sizes.py build/tls.aab",
+  "proof": "s26_aab_sizes_4b4fee0",
+  "quotes": [
+   "2752 entries",
+   "mentions of AudioEffectHardLimiter: 2"
+  ],
+  "commit": "4b4fee0",
+  "frames": []
+ },
+ {
+  "id": "S26-AAB10",
+  "claim": "Every file the shipped scripts name is in the second bundle, and no packed file is not the game.",
+  "cmd": "python tools/qa_sim/export_refs_check.py --bundle build/tls.aab; python tools/qa_sim/release_export_check.py --aab build/tls.aab",
+  "proof": "s26_aab_refs_4b4fee0",
+  "quotes": [
+   "484 shipped file(s) read for the Android preset against the bundle, 0 violation(s), 0 note(s)"
+  ],
+  "commit": "4b4fee0",
+  "frames": []
+ },
+ {
+  "id": "S26-AAB11",
+  "claim": "`project.binary` of the second bundle is the one of the bundle of `ebc1acc` (21,759 bytes, CRC `e9e6a411`), the setting `default_bus_layout` absent from both: the default path applies (CORRECTION_LOG 193).",
+  "cmd": "python -I s26_projectbinary.py <the bundle of ebc1acc> build/tls.aab",
+  "proof": "s26_aab_projectbinary_4b4fee0",
+  "quotes": [
+   "build/tls.aab: project.binary 21759 bytes CRC e9e6a411; the setting absent"
+  ],
+  "commit": "4b4fee0",
+  "frames": []
+ },
+ {
+  "id": "S26-AABDIFF",
+  "claim": "The second bundle differs from the first in the three signature files, the pack's index and the compiled daily manager only (5,092 to 5,181 bytes).",
+  "cmd": "python -I s26_aab_daily.py <the first bundle> build/tls.aab",
+  "proof": "s26_aab_daily_4b4fee0",
+  "quotes": [
+   "entries only in the first bundle: 0; only in the last: 0",
+   "changed assetPackInstallTime/assets/scripts/systems/daily_challenge_manager.gdc      5092 -> 5181 bytes"
+  ],
+  "commit": "4b4fee0",
+  "frames": []
+ },
+ {
+  "id": "S26-RTDIFF",
+  "claim": "No runtime path differs between the head of the last chain (`09dfb04`) and the head the second bundle is built from (`4b4fee0`).",
+  "cmd": "python -I s26_runtime_diff.py . 09dfb04 HEAD",
+  "proof": "s26_runtime_diff",
+  "quotes": [
+   "runtime paths among them: 0"
+  ],
+  "commit": "4b4fee0",
   "frames": []
  }
 ]

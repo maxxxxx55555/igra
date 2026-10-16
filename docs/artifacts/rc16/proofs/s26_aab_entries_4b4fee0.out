@@ -1,0 +1,22 @@
+# proof s26_aab_entries_4b4fee0
+# utc 20261016T091017Z
+# head 4b4fee0 (uncommitted paths: 5)
+# env none
+# cmd python -I docs/artifacts/rc16/proofs/s23_aab_entries_ebc1acc.py build/tls.aab
+2752 entries
+entries under scripts/security: 4
+  assetPackInstallTime/assets/scripts/security/integrity_scan.gd.remap
+  assetPackInstallTime/assets/scripts/security/integrity_scan.gdc
+  assetPackInstallTime/assets/scripts/security/security_log.gd.remap
+  assetPackInstallTime/assets/scripts/security/security_log.gdc
+entries naming attack_sim: 0
+skill icons as .png.import under icons/skills: 15
+ui sting entries: 4
+  assetPackInstallTime/assets/.godot/imported/ui_ending_sting.ogg-d6200f57bfd69f66f5a1f735e0d3c668.oggvorbisstr
+  assetPackInstallTime/assets/.godot/imported/ui_streak_milestone_sting.ogg-388c8de92497b5f8949a7f8856e9f6fd.oggvorbisstr
+  assetPackInstallTime/assets/assets/audio/ui/ui_ending_sting.ogg.import
+  assetPackInstallTime/assets/assets/audio/ui/ui_streak_milestone_sting.ogg.import
+integrity_guard entries: 2
+  assetPackInstallTime/assets/scripts/systems/integrity_guard.gd.remap
+  assetPackInstallTime/assets/scripts/systems/integrity_guard.gdc
+# EXIT=0

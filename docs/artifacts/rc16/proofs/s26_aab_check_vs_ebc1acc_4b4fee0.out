@@ -1,0 +1,63 @@
+# proof s26_aab_check_vs_ebc1acc_4b4fee0
+# utc 20261016T091005Z
+# head 4b4fee0 (uncommitted paths: 4)
+# env none
+# cmd bash -c set -a; . .signing/release.env; set +a; python tools/qa_sim/aab_check.py build/tls.aab --secrets --against '../_BACKUPS/2026-10-16_07-21_bundles/tls_ebc1acc_versioncode2.aab'
+size    136645015 bytes
+sha256  bb61ce937b71336bffb44be98b187f546842fc0d2bf2d225d7b4a91e4415263d
+entries 2752
+label   base/resources.pb names Last Streetlight: ok
+adsdk   0 dex entries name Lcom/applovin/: ok
+integrity 54 file(s) of the manifest, 0 missing or with other bytes: ok
+refs    0 file(s) or patterns named by the shipped files are not in the bundle: ok
+secrets 2 value(s) of the environment searched in 2749 entries: 0 hits (path, password)
+jar     jar verified.
+signer  4f6be6415c260b34...: signer_match=yes
+against tls_ebc1acc_versioncode2.aab: 4 entries gone, 0 new, 45 with other bytes
+  gone    assetPackInstallTime/assets/scripts/ai/behavior_node.gd.remap
+  gone    assetPackInstallTime/assets/scripts/ai/behavior_node.gdc
+  gone    assetPackInstallTime/assets/scripts/weight_bar.gd.remap
+  gone    assetPackInstallTime/assets/scripts/weight_bar.gdc
+  changed BUNDLE-METADATA/com.android.tools.build.profiles/baseline.prof
+  changed META-INF/MANIFEST.MF
+  changed META-INF/TLS_RELE.RSA
+  changed META-INF/TLS_RELE.SF
+  changed assetPackInstallTime/assets.pb
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-19246414aa9fb561ced4b8dce477acec-default_bus_layout.res
+  changed assetPackInstallTime/assets/.godot/global_script_class_cache.cfg
+  changed assetPackInstallTime/assets/.godot/uid_cache.bin
+  changed assetPackInstallTime/assets/assets.sparsepck
+  changed assetPackInstallTime/assets/scripts/core/game_manager.gdc
+  changed assetPackInstallTime/assets/scripts/core/input_service.gdc
+  changed assetPackInstallTime/assets/scripts/core/quest_manager.gdc
+  changed assetPackInstallTime/assets/scripts/core/save_system.gdc
+  changed assetPackInstallTime/assets/scripts/document_pickup.gdc
+  changed assetPackInstallTime/assets/scripts/enemies/base_monster.gdc
+  changed assetPackInstallTime/assets/scripts/enemies/crawler_3d.gdc
+  changed assetPackInstallTime/assets/scripts/enemies/enemy_roster_data.gdc
+  changed assetPackInstallTime/assets/scripts/events/event_bus.gdc
+  changed assetPackInstallTime/assets/scripts/i18n/localization_manager.gdc
+  changed assetPackInstallTime/assets/scripts/lighting/light_grid.gdc
+  changed assetPackInstallTime/assets/scripts/player/flashlight.gdc
+  changed assetPackInstallTime/assets/scripts/player/player_3d.gdc
+  changed assetPackInstallTime/assets/scripts/systems/achievements_manager.gdc
+  changed assetPackInstallTime/assets/scripts/systems/audio_manager.gdc
+  changed assetPackInstallTime/assets/scripts/systems/captions_manager.gdc
+  changed assetPackInstallTime/assets/scripts/systems/daily_challenge_manager.gdc
+  changed assetPackInstallTime/assets/scripts/systems/day_night.gdc
+  changed assetPackInstallTime/assets/scripts/systems/endings_manager.gdc
+  changed assetPackInstallTime/assets/scripts/systems/footstep_system.gdc
+  changed assetPackInstallTime/assets/scripts/systems/music_manager.gdc
+  changed assetPackInstallTime/assets/scripts/systems/photo_mode.gdc
+  changed assetPackInstallTime/assets/scripts/systems/progress_tracker.gdc
+  changed assetPackInstallTime/assets/scripts/systems/settings_manager.gdc
+  changed assetPackInstallTime/assets/scripts/systems/xp_manager.gdc
+  changed assetPackInstallTime/assets/scripts/ui/photo_album.gdc
+  changed assetPackInstallTime/assets/scripts/ui/screen_flow_manager.gdc
+  changed assetPackInstallTime/assets/scripts/ui/screens.gdc
+  changed assetPackInstallTime/assets/scripts/ui/stats_screen.gdc
+  changed assetPackInstallTime/assets/scripts/ui/theme_provider.gdc
+  changed assetPackInstallTime/assets/scripts/ui/ui_manager.gdc
+  changed ... and 5 more
+aab_check: PASS
+# EXIT=0
