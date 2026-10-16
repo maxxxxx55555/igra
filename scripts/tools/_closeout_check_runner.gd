@@ -26,6 +26,7 @@ const Rc23Perf := preload("res://scripts/tools/rc16/perf23_checks.gd")
 const Rc23S2 := preload("res://scripts/tools/rc16/s2_checks.gd")
 const Rc23Density := preload("res://scripts/tools/rc16/density_checks.gd")
 const Rc23Engine := preload("res://scripts/tools/rc16/engine_checks.gd")
+const Rc26 := preload("res://scripts/tools/rc16/s26_checks.gd")
 
 var _checked: int = 0
 var _fails: int = 0
@@ -96,6 +97,10 @@ func _run() -> void:
 		await Rc23Density.run(self)
 		await Rc23Engine.run(self)
 		await Rc22Hud.trailer(self)
+		_finish()
+		return
+	if OS.get_environment("CLOSEOUT_ONLY") == "s26":
+		Rc26.run(self)
 		_finish()
 		return
 	if OS.get_environment("CLOSEOUT_ONLY") == "rtl":
@@ -199,6 +204,7 @@ func _rc16_checks() -> void:
 	await Rc23S2.run(self)
 	await Rc23Density.run(self)
 	await Rc23Engine.run(self)
+	Rc26.run(self)
 
 ## A monster standing still in the far corner of the world: its collider answers rays, its AI never runs
 ## (a disabled process mode would also take the collider out of the physics space).
@@ -582,8 +588,6 @@ func _check_achievements() -> void:
 	for n in 5:
 		EventBus.hallucination_heard.emit()
 	_ok(AchievementManager.is_unlocked(&"ach_20"), "ach_20 five hallucinations unlock Who's There")
-	AchievementManager._on_player_died()
-	_ok(AchievementManager.is_unlocked(&"ach_15"), "ach_15 dying reaches the Darkness ending")
 	ProgressTracker.time_played = 100.0
 	GameManager.run_hardcore = true
 	AchievementManager._on_game_won()

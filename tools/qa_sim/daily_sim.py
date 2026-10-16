@@ -17,8 +17,9 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 MANAGER = ROOT / "scripts" / "systems" / "daily_challenge_manager.gd"
 BUS = ROOT / "scripts" / "events" / "event_bus.gd"
 SAVE = ROOT / "scripts" / "core" / "save_system.gd"
-# What one day can offer of each countable thing: the districts, the secrets of content/secrets.json, the lamps of a district (48 poles) times the districts, minutes in a day.
-CAP = {"restore_districts": 11, "find_secrets": None, "light_streets": 11 * 48, "play_minutes": 24 * 60, "kill_enemies": None, "photo_subject": None, "no_flashlight_segment": None}
+# What one run can offer of each countable thing: the districts (restore_districts and light_streets tick once per district: EventBus.district_restored and
+# EventBus.streetlight_activated), the secrets of content/secrets.json, minutes in a day.
+CAP = {"restore_districts": 11, "find_secrets": None, "light_streets": 11, "play_minutes": 24 * 60, "kill_enemies": None, "photo_subject": None, "no_flashlight_segment": None}
 DAYS = 120
 
 
@@ -32,6 +33,12 @@ def load():
 def ticked_types():
     text = MANAGER.read_text(encoding="utf-8")
     return set(re.findall(r'_tick\("([a-z_]+)"', text)), re.findall(r"STREAK_MULTIPLIERS: Array = (\[\[.*?\]\])", text)
+
+
+def per_run_types():
+    """The types the manager's selector walks past when the target is over what one run can pay (PER_RUN_TYPES)."""
+    m = re.search(r"const PER_RUN_TYPES: Array\[String\] = \[(.*?)\]", MANAGER.read_text(encoding="utf-8"))
+    return set(re.findall(r'"([a-z_]+)"', m.group(1))) if m else set()
 
 
 def declared_signals():
@@ -63,7 +70,7 @@ def simulate(rewards, multipliers, base):
     return paid, milestones
 
 
-def findings(used, data, ticks, signals, gap):
+def findings(used, data, ticks, signals, gap, skipped_types=()):
     out = []
     cap = dict(CAP)
     cap["find_secrets"] = None
@@ -75,8 +82,8 @@ def findings(used, data, ticks, signals, gap):
         if sig.startswith("EventBus.") and sig.split(".", 1)[1] not in signals:
             out.append("DEAD %s: the bus declares no signal %s" % (t["id"], sig))
         limit = cap.get(t["type"])
-        if limit is not None and t["target"] > limit:
-            out.append("UNREACHABLE %s: target %d is over the %d a day can offer" % (t["id"], t["target"], limit))
+        if limit is not None and t["target"] > limit and t["type"] not in skipped_types:
+            out.append("UNREACHABLE %s: target %d is over the %d a run can offer and the selector does not walk past it" % (t["id"], t["target"], limit))
         if t["target"] < 1:
             out.append("DEAD %s: target %d" % (t["id"], t["target"]))
     ids = [t["id"] for t in data["templates"]]
@@ -115,18 +122,24 @@ def main(argv):
         data = {"templates": [{"id": "x", "type": "ghost", "target": 1, "reward": 1, "requires_signal": "EventBus.nope"}, {"id": "y", "type": "restore_districts", "target": 99, "reward": 1}], "streak_rewards": []}
         bad, _ = findings(None, data, {"kill_enemies"}, {"a"}, 2)
         assert any(b.startswith("DEAD x: nothing ticks") for b in bad) and any("declares no signal" in b for b in bad) and any(b.startswith("UNREACHABLE y") for b in bad)
+        bad, _ = findings(None, data, {"kill_enemies", "restore_districts"}, {"a"}, 2, {"restore_districts"})
+        assert not any(b.startswith("UNREACHABLE") for b in bad), "a type the selector walks past is not a finding"
         _, miles = simulate([{"days": 7, "reward": 1}, {"days": 30, "reward": 1}, {"days": 100, "reward": 1}], [], 1)
         assert miles == [7, 30, 100]
         print("daily_sim demo: a dead type, a missing signal, an unreachable target and the three streak tiers are all found")
         return 0
     used, data, legacy = load()
     ticks, _ = ticked_types()
-    bad, types = findings(used, data, ticks, declared_signals(), streak_rule())
+    skipped = per_run_types()
+    bad, types = findings(used, data, ticks, declared_signals(), streak_rule(), skipped)
     if secrets_count() < 24:
         bad.append("the secrets file holds %d, fewer than the 24 a find_secrets target can ask for" % secrets_count())
     for line in bad:
         print("FAIL", line)
     text = report(used, data, legacy, ticks, declared_signals(), streak_rule(), bad, types)
+    over = [t["id"] for t in data["templates"] if t["type"] in skipped and CAP.get(t["type"]) is not None and t["target"] > CAP[t["type"]]]
+    if over:
+        text = text.replace("Findings: ", "The selector walks past %d template(s) over the %d districts a run can pay (`PER_RUN_TYPES` of the manager): %s.\nFindings: " % (len(over), CAP["restore_districts"], ", ".join(over)))
     if "--write" in argv:
         pathlib.Path(argv[argv.index("--write") + 1]).write_text(text, encoding="utf-8")
     print("daily_sim: %d template(s) of %s, %d type(s), %d finding(s)" % (len(data["templates"]), used.relative_to(ROOT).as_posix(), len(types), len(bad)))

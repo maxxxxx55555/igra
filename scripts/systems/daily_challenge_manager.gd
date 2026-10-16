@@ -99,6 +99,18 @@ func _load_templates() -> void:
 func _today_index() -> int:
 	return int(Time.get_unix_time_from_system() / SECONDS_PER_DAY)
 
+## These types tick once per district, so one run pays at most as many as the city has districts: "Light up 16 districts' streets" cannot be won
+## in a city of 11. The selector walks on to the next template whose target a run can pay (tools/qa_sim/daily_sim.py reads this list).
+const PER_RUN_TYPES: Array[String] = ["light_streets", "restore_districts"]
+
+func _index_for_day(day: int) -> int:
+	for step in _templates.size():
+		var i: int = (day + step) % _templates.size()
+		var t: Dictionary = _templates[i]
+		if not (String(t.get("type", "")) in PER_RUN_TYPES and int(t.get("target", 0)) > DistrictManager.DISTRICTS.size()):
+			return i
+	return day % _templates.size()
+
 func _roll_for_day(day: int) -> void:
 	if _templates.is_empty():
 		return
@@ -111,11 +123,11 @@ func _roll_for_day(day: int) -> void:
 		_completed_today = false
 		_progress = 0
 		_play_seconds = 0.0
-	_today = _templates[day % _templates.size()]
+	_today = _templates[_index_for_day(day)]
 	_today_id = String(_today.get("id", ""))
 
 func _id_for_day(day: int) -> String:
-	return String(_templates[day % _templates.size()].get("id", "")) if not _templates.is_empty() else ""
+	return String(_templates[_index_for_day(day)].get("id", "")) if not _templates.is_empty() else ""
 
 func _tick(type: String, amount: int) -> void:
 	if _completed_today or _today.is_empty():

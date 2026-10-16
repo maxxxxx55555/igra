@@ -329,8 +329,18 @@ func _remember(prefix: StringName, district: StringName) -> void:
 	if DistrictManager.current_district == String(district):
 		_progress[String(prefix) + String(district)] = 1
 
+## "Darkness" is the Dark ending, not any death: a death with only the power station lit resolves to Survivor (GDD 12.4). GameManager listens to
+## the same signal before this node does (autoload order), so the ending is resolved when this runs.
 func _on_player_died() -> void:
-	_check_unlock(&"ach_15", true)
+	_check_unlock(&"ach_15", EndingsManager.get_ending() == &"dark")
+
+## "Quiet as a Mouse" and "Without a Scratch" ask about one run, but their marks (seen_park, hurt_school) sit in the profile-wide achievements file:
+## a New Game (SaveSystem.reset_all) starts them empty, or one noticed minute in a first run would forfeit both for good.
+func reset_run_marks() -> void:
+	for key in _progress.keys():
+		if String(key).begins_with("seen_") or String(key).begins_with("hurt_"):
+			_progress.erase(key)
+	_save()
 
 func _on_combo_chain_landed() -> void:
 	_increment_progress(&"ach_07")

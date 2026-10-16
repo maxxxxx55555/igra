@@ -438,6 +438,8 @@ func reset_all() -> void:
 	# заново вовсе (DistrictLoot теперь пропускает те, что помнит
 	# ProgressTracker).
 	ProgressTracker.from_dict({})
+	# The marks of Quiet as a Mouse and Without a Scratch live in the profile-wide achievements file: same gap, another system.
+	AchievementManager.reset_run_marks()
 	# GAME_AUDIT P1: same reset gap as XP/skills above, for the district
 	# pointer - load_all() sets dm.current_district from the save (line
 	# ~304-307), but reset_all() never set it back to the start district, so
