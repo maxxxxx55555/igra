@@ -31,6 +31,7 @@ SETS = [
         (ACH, '_check_unlock(&"ach_15", EndingsManager.get_ending() == &"dark")', '_check_unlock(&"ach_15", true)', "ACH15"),
         (ACH, MARKS, "if false:", "ACHRUN1"),
         ("scripts/systems/daily_challenge_manager.gd", 'if not (String(t.get("type", "")) in PER_RUN_TYPES and int(t.get("target", 0)) > DistrictManager.DISTRICTS.size()):', "if true:", "DAILY2"),
+        ("default_bus_layout.tres", "bus/1/effect/2/enabled = true", "bus/1/effect/2/enabled = false", "AUD6"),
     ],
     [
         (ACH, MARKS, "if true:", "ACHRUN2"),

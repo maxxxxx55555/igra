@@ -1,4 +1,4 @@
-[gd_resource type="AudioBusLayout" load_steps=6 format=3 uid="uid://audiobuses00"]
+[gd_resource type="AudioBusLayout" load_steps=7 format=3 uid="uid://audiobuses00"]
 
 [sub_resource type="AudioEffectCompressor" id="AudioEffectCompressor_music"]
 threshold = -12.0
@@ -10,6 +10,9 @@ release_ms = 200.0
 predelay_msec = 30.0
 room_size = 0.8
 wet = 0.15
+
+[sub_resource type="AudioEffectHardLimiter" id="AudioEffectHardLimiter_music"]
+ceiling_db = -2.0
 
 [sub_resource type="AudioEffectReverb" id="AudioEffectReverb_footsteps"]
 predelay_msec = 30.0
@@ -45,6 +48,8 @@ bus/1/effect/0/effect = SubResource("AudioEffectCompressor_music")
 bus/1/effect/0/enabled = true
 bus/1/effect/1/effect = SubResource("AudioEffectReverb_music")
 bus/1/effect/1/enabled = true
+bus/1/effect/2/effect = SubResource("AudioEffectHardLimiter_music")
+bus/1/effect/2/enabled = true
 bus/2/name = &"SFX"
 bus/2/solo = false
 bus/2/mute = false

@@ -1,6 +1,6 @@
 extends RefCounted
 ## Session 26 (S1, S4): ACHSIG, the handlers of the achievements that had no check of their own; ACHRUN, the run marks of Quiet as a Mouse and Without a Scratch start empty in a New Game; ACH15, Darkness is the Dark ending and a Survivor
-## death does not pay it; DAILY2, the daily selector does not offer a template one run cannot pay (docs/ACHIEVEMENT_REACHABILITY.md, docs/DAILY_SIM.md).
+## death does not pay it; DAILY2, the daily selector does not offer a template one run cannot pay (docs/ACHIEVEMENT_REACHABILITY.md, docs/DAILY_SIM.md); AUD6, the Music bus ends in a limiter.
 ## Wired into _closeout_check_runner.gd as `Rc26.run(self)`; CLOSEOUT_ONLY=s26 runs it alone, which tools/qa_sim/af2_both_ways.py uses on the pre-fix runtime.
 
 static func run(r: Node) -> void:
@@ -8,6 +8,7 @@ static func run(r: Node) -> void:
 	_darkness(r)
 	_run_marks(r)
 	_daily_selector(r)
+	_music_limiter(r)
 
 ## The achievements that had no check of their own (docs/ACHIEVEMENT_REACHABILITY.md): the handler each signal reaches, called the way the check of ach_06 calls it.
 static func _handlers(r: Node) -> void:
@@ -97,3 +98,20 @@ static func _daily_selector(r: Node) -> void:
 	for f in fields:
 		m.set(f, kept[f])
 	r._ok(first == "fits" and again == "fits" and kills == "kills", "DAILY2 the daily selector walks past a template over the %d districts (day 0 %s, day 3 %s) and keeps one with no per-run cap (day 2 %s)" % [cap, first, again, kills])
+
+## The windowed audio truth gate read the Music bus at +1.3 and +1.9 dB on two runs in a row (docs/CORRECTION_LOG.md 102 and 276): the layers and the action sting of a battle sum past the
+## -1.5 dB ceiling. The layout ends the bus in a hard limiter below that ceiling; only the ducker's Amplify (scripts/systems/audio_ducker.gd) may come after it, a cut and never a boost.
+static func _music_limiter(r: Node) -> void:
+	var bus: int = AudioServer.get_bus_index(&"Music")
+	var limiter: AudioEffectHardLimiter = null
+	var slot: int = -1
+	for i in AudioServer.get_bus_effect_count(bus):
+		var effect: AudioEffect = AudioServer.get_bus_effect(bus, i)
+		if effect is AudioEffectHardLimiter:
+			limiter = effect as AudioEffectHardLimiter
+			slot = i
+	var tail_ok: bool = true
+	for j in range(slot + 1, AudioServer.get_bus_effect_count(bus)):
+		tail_ok = tail_ok and AudioServer.get_bus_effect(bus, j) is AudioEffectAmplify
+	var limited: bool = limiter != null and AudioServer.is_bus_effect_enabled(bus, slot) and limiter.ceiling_db <= -1.5 and tail_ok
+	r._ok(limited, "AUD6 the Music bus ends in an enabled limiter under the -1.5 dB ceiling of the audio truth gate (slot %d of %d, ceiling %s)" % [slot, AudioServer.get_bus_effect_count(bus), "none" if limiter == null else str(limiter.ceiling_db)])
