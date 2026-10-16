@@ -22,25 +22,25 @@ a given product does today is UNVERIFIABLE-HERE and is the owner's to read on th
 Every bed is a seamless loop of 36 s in the lit-bed brief, mono, 44.1 kHz, OGG quality 4; a take is trimmed at a zero crossing with 3 ms edge fades, loudness-normalised to the figure above, and checked against the true-peak
 ceiling of -1.5 dBFS. `python tools/qa_sim/audio_loudness.py --check` reads every shipped file.
 
-### 2.2 The 11 lit beds: all on disk (synthesized loops), a composed replacement is an upgrade
+### 2.2 The 11 lit beds: all on disk (8 generated tracks of Session 27, 3 synthesized loops), a composed replacement is an upgrade
 
 From `docs/MUSIC_BRIEF.md` (generated from `AMBIENCE_LIT_BY_DISTRICT`); the measures are of the files today. The brief and the prompt of each bed are in that document, one row per district.
 
 | District | Target file | On disk | Length (s) | Channels, rate | LUFS | True peak (dBFS) |
 |---|---|---|---|---|---|---|
-| suburbs | `assets/audio/ambience/districts/suburbs_lit.ogg` | yes | 36.0 | 1, 44100 | -18.8 | -9.1 |
+| suburbs | `assets/audio/music/suburbs.ogg` | yes | 37.3 | 1, 44100 | -18.0 | -3.5 |
 | residential | `assets/audio/ambience/districts/residential_lit.ogg` | yes | 36.0 | 1, 44100 | -18.1 | -4.9 |
 | park | `assets/audio/ambience/districts/park_lit.ogg` | yes | 36.0 | 1, 44100 | -18.1 | -4.2 |
-| school | `assets/audio/ambience/districts/school_lit.ogg` | yes | 36.0 | 1, 44100 | -18.1 | -3.9 |
-| hospital | `assets/audio/ambience/districts/hospital_lit.ogg` | yes | 36.0 | 1, 44100 | -19.5 | -10.6 |
-| gas_station | `assets/audio/ambience/districts/gas_station_lit.ogg` | yes | 36.0 | 1, 44100 | -18.1 | -3.5 |
-| police | `assets/audio/ambience/districts/police_lit.ogg` | yes | 36.0 | 1, 44100 | -18.1 | -4.0 |
-| warehouses | `assets/audio/ambience/districts/warehouses_lit.ogg` | yes | 36.0 | 1, 44100 | -18.0 | -2.7 |
+| school | `assets/audio/music/school.ogg` | yes | 33.6 | 1, 44100 | -18.1 | -2.6 |
+| hospital | `assets/audio/music/hospital.ogg` | yes | 40.0 | 1, 44100 | -18.0 | -2.1 |
+| gas_station | `assets/audio/music/gas_station.ogg` | yes | 34.9 | 1, 44100 | -18.0 | -2.0 |
+| police | `assets/audio/music/police.ogg` | yes | 28.0 | 1, 44100 | -18.0 | -2.7 |
+| warehouses | `assets/audio/music/warehouses.ogg` | yes | 38.4 | 1, 44100 | -18.0 | -2.8 |
 | industrial | `assets/audio/ambience/districts/industrial_lit.ogg` | yes | 34.0 | 1, 44100 | -18.0 | -3.3 |
-| substation | `assets/audio/ambience/districts/substation_lit.ogg` | yes | 36.0 | 1, 44100 | -18.0 | -4.3 |
-| power_station | `assets/audio/ambience/districts/power_station_lit.ogg` | yes | 36.0 | 1, 44100 | -19.5 | -12.4 |
+| substation | `assets/audio/music/substation.ogg` | yes | 33.6 | 1, 44100 | -18.0 | -2.1 |
+| power_station | `assets/audio/music/power_station.ogg` | yes | 32.0 | 1, 44100 | -18.0 | -2.5 |
 
-The length of 36 s is the contract; the bed that does not meet it today: `industrial` (34.0 s).
+The length of 36 s is the contract of the synthesized beds; the generated tracks are cut at a whole number of bars of their tempo (`docs/MUSIC_RECIPE.md`, 28.0 to 40.0 s), and the loader loops a file of any length (`_force_loop`).
 The brief's prompts end with the common line: *instrumental only, no vocals, no drums, seamless 36 s loop, mono, about -18 LUFS*.
 
 ### 2.3 The 19 tracks of the music recipe, against the disk
@@ -49,27 +49,27 @@ The brief's prompts end with the common line: *instrumental only, no vocals, no 
 
 | # | Target | State in the recipe | Length | On disk | Prompt section |
 |---|---|---|---|---|---|
-| 1 | `music/music_menu_dark.ogg` | REPLACE — retire `abandoned_hallways.mp3` from MENU once this lands | 120.000 s | **no** | 1.1 |
-| 2 | `music/suburbs.ogg` | NEW | 37.333 s (14 bars @ 90 BPM) | **no** | 2.1 |
-| 3 | `music/school.ogg` | NEW | 33.600 s (14 bars @ 100 BPM) | **no** | 2.4 |
-| 4 | `music/hospital.ogg` | NEW | 40.000 s (10 bars @ 60 BPM) | **no** | 2.5 |
-| 5 | `music/gas_station.ogg` | NEW | 34.909 s (16 bars @ 110 BPM) | **no** | 2.6 |
-| 6 | `music/police.ogg` | NEW | 28.000 s (14 bars @ 120 BPM) | **no** | 2.7 |
-| 7 | `music/warehouses.ogg` | NEW | 38.400 s (12 bars @ 75 BPM) | **no** | 2.8 |
-| 8 | `music/substation.ogg` | NEW | 33.600 s (14 bars @ 100 BPM) | **no** | 2.10 |
-| 9 | `music/power_station.ogg` | NEW | 32.000 s (14 bars @ 105 BPM) | **no** | 2.11 |
+| 1 | `music/music_menu_dark.ogg` | REPLACE — retire `abandoned_hallways.mp3` from MENU once this lands | 120.000 s | yes | 1.1 |
+| 2 | `music/suburbs.ogg` | NEW | 37.333 s (14 bars @ 90 BPM) | yes | 2.1 |
+| 3 | `music/school.ogg` | NEW | 33.600 s (14 bars @ 100 BPM) | yes | 2.4 |
+| 4 | `music/hospital.ogg` | NEW | 40.000 s (10 bars @ 60 BPM) | yes | 2.5 |
+| 5 | `music/gas_station.ogg` | NEW | 34.909 s (16 bars @ 110 BPM) | yes | 2.6 |
+| 6 | `music/police.ogg` | NEW | 28.000 s (14 bars @ 120 BPM) | yes | 2.7 |
+| 7 | `music/warehouses.ogg` | NEW | 38.400 s (12 bars @ 75 BPM) | yes | 2.8 |
+| 8 | `music/substation.ogg` | NEW | 33.600 s (14 bars @ 100 BPM) | yes | 2.10 |
+| 9 | `music/power_station.ogg` | NEW | 32.000 s (14 bars @ 105 BPM) | yes | 2.11 |
 | 10 | `music/layer_threat_low.ogg` | only if forced re-render — currently SHIPPED/certified | 60.000 s | yes | 3.1 |
 | 11 | `music/layer_threat_high.ogg` | only if forced re-render | 60.000 s | yes | 3.2 |
 | 12 | `music/layer_action.ogg` | only if forced re-render | 60.000 s | yes | 3.3 |
-| 13 | `music/music_boss_dark_p1.ogg` | NEW | 45.000 s | **no** | 4.2 |
-| 14 | `music/music_boss_dark_p2.ogg` | NEW | 45.000 s | **no** | 4.3 |
-| 15 | `music/music_boss_dark_p3.ogg` | NEW | 45.000 s | **no** | 4.4 |
+| 13 | `music/music_boss_dark_p1.ogg` | NEW | 45.000 s | yes | 4.2 |
+| 14 | `music/music_boss_dark_p2.ogg` | NEW | 45.000 s | yes | 4.3 |
+| 15 | `music/music_boss_dark_p3.ogg` | NEW | 45.000 s | yes | 4.4 |
 | 16 | `ui/ui_district_restored_sting.ogg` | NEW | 2.000 s, one-shot | **no** | 5.6 |
 | 17 | `music/cue_death.ogg` | NEW | 8.000 s, one-shot, zero-ended | **no** | 5.1 |
 | 18 | `sfx/ui_xp_tick.wav` | NEW | 0.060 s, one-shot | **no** | 8.1 |
 | 19 | `sfx/ui_heal_soft.wav` | NEW | 0.300 s, one-shot | **no** | 8.2 |
 
-**16 of 19 targets are not on disk.** They are the true gaps. An absent file is skipped by the guards of `scripts/systems/music_manager.gd` (`ResourceLoader.exists`), and `docs/MUSIC_SPEC.md` names the fallback of each row (the menu's is `abandoned_hallways.mp3`).
+**4 of 19 targets are not on disk.** They are the true gaps. An absent file is skipped by the guards of `scripts/systems/music_manager.gd` (`ResourceLoader.exists`), and `docs/MUSIC_SPEC.md` names the fallback of each row (the menu's is `abandoned_hallways.mp3`).
 The 11 beds of 2.2 are not in this list: they are upgrades.
 
 ### 2.4 After a take comes back
@@ -374,6 +374,6 @@ The shipped set measures a minimum cross Hamming of **13** and a MAD from **20.5
 | Unlockable cosmetics | two skins and a starter bundle exist and sell for coins in the pause-menu shop (`data/shop/skin_survivor_ashen.tres` and `skin_survivor_rust.tres`, 2,000 coins each; `bundle_starter.tres`, 4,000 coins at 30 % off; `scripts/economy/shop_service.gd:8-9`, `ShopItem.Kind.SKIN`), applied as a rim colour and a darker body tint (`scripts/player/player_visual.gd:6-26`); none unlocks by play, and nothing else is cosmetic | whether more skins ship, whether any unlocks by play (an achievement, a level), and that there is still no purchase with money (the store answers say none) | art, `data/shop/`, the `SHOP_ITEM_SKIN_*` keys of 13 locales, and a save field only for a cosmetic that is not a shop item (`docs/SAVE_MIGRATION_MATRIX.md`) |
 | Survivor and Dark endings | a death resolves to Dark or Survivor (`EndingsManager.evaluate_death_ending`, GDD 12.4), the death screen keeps one picture (`assets/textures/screens_v2/death_loom.png`) and the five ending plates of `assets/store/endings/` ship in the bundle with no script that loads them | whether the death screen shows the earned plate, and whether Survivor and Dark are two endings or one | `scripts/ui/death_screen.gd`, `scripts/ui/win_screen.gd`, a frame re-shoot, the plates' place in the export filter (`docs/CORRECTION_LOG.md` 182) |
 | Touch feel on a device | measured only on a desktop with the touch probe (34 checks, 0 fails: `docs/artifacts/rc16/proofs/s22c_af2_post.attach.gate_touch_probe_scene.log`): the dead zone, the curve, the haptics and the calibration are the phone test's questions (U1, U5, U6, U13 of `docs/UNVERIFIABLE_HERE.md`) | the constants, after the numbers of a phone | `scripts/ui/virtual_joystick.gd`, `docs/RELEASE_RUNBOOK.md` section 4 |
-| Remaining music | the 16 targets of 2.3 and the upgrade of the 11 beds of 2.2 | which of them are worth a take | section 2.4 and the licence ledger |
+| Remaining music | the 4 targets of 2.3 and the upgrade of the 11 beds of 2.2 | which of them are worth a take | section 2.4 and the licence ledger |
 | Seven district card photographs | graded generated cards are in the game (3.1), with licence rows; the open point is a replacement if better art exists | replace or keep | section 3 and 4 |
 

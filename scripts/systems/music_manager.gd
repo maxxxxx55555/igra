@@ -21,13 +21,19 @@ enum Mood { MENU, AMBIENT, TENSION, BATTLE, BOSS, VICTORY }
 
 #region Constants
 const TRACKS: Dictionary = {
-	Mood.MENU: "res://assets/audio/music/abandoned_hallways.mp3",
+	Mood.MENU: "res://assets/audio/music/music_menu_dark.ogg",
 	Mood.AMBIENT: "res://assets/audio/music/music_ambient.wav",
 	Mood.TENSION: "res://assets/audio/music/music_tension.wav",
 	Mood.BATTLE: "res://assets/audio/music/music_battle.wav",
 	Mood.BOSS: "res://assets/audio/music/music_boss_dark.wav",
 	Mood.VICTORY: "res://assets/audio/music/music_victory.wav",
 }
+## The boss theme by phase of the Architect (P1, P2, P3: GDD 6.2); a phase whose file is missing keeps TRACKS[Mood.BOSS].
+const BOSS_PHASES: Array[String] = [
+	"res://assets/audio/music/music_boss_dark_p1.ogg",
+	"res://assets/audio/music/music_boss_dark_p2.ogg",
+	"res://assets/audio/music/music_boss_dark_p3.ogg",
+]
 ## BUGS_FOR_CLAUDE #3: music_combat.ogg had zero consumers. Rather than
 ## delete a complete, normalized track (GDD gives no combat-layer canon
 ## either way), wire it as a second BATTLE variant picked at random each
@@ -43,14 +49,14 @@ const AMBIENT_BY_DISTRICT: Dictionary = {
 	&"suburbs": "res://assets/audio/music/music_ambient.wav",
 	&"residential": "res://assets/audio/music/residential.wav",
 	&"park": "res://assets/audio/music/park.wav",
-	&"school": "res://assets/audio/music/abandoned_hallways_alt.mp3",
-	&"hospital": "res://assets/audio/music/abandoned_hallways_alt.mp3",
+	&"school": "res://assets/audio/music/school.ogg",
+	&"hospital": "res://assets/audio/music/hospital.ogg",
 	&"gas_station": "res://assets/audio/music/downtown.wav",
 	&"police": "res://assets/audio/music/downtown.wav",
 	&"warehouses": "res://assets/audio/music/harbor.wav",
 	&"industrial": "res://assets/audio/music/industrial.wav",
-	&"substation": "res://assets/audio/music/music_ambient_dark.wav",
-	&"power_station": "res://assets/audio/music/music_ambient_dark.wav",
+	&"substation": "res://assets/audio/music/substation.ogg",
+	&"power_station": "res://assets/audio/music/power_station.ogg",
 }
 
 ## RESCUE WAVE P2.2 + 2026-09-12 audio pass: ox alpha's + arena's per-
@@ -72,18 +78,19 @@ const AMBIENCE_DARK_BY_DISTRICT: Dictionary = {
 	&"substation": "res://assets/audio/ambience/districts/substation_dark.ogg",
 	&"power_station": "res://assets/audio/ambience/districts/power_station_dark.ogg",
 }
+## Session 27 (M1): eight of the lit beds are generated tracks of assets/audio/music (docs/MUSIC_BRIEF.md, docs/ASSET_LICENSES.md); residential, park and industrial keep the synthesized loops.
 const AMBIENCE_LIT_BY_DISTRICT: Dictionary = {
-	&"suburbs": "res://assets/audio/ambience/districts/suburbs_lit.ogg",
+	&"suburbs": "res://assets/audio/music/suburbs.ogg",
 	&"residential": "res://assets/audio/ambience/districts/residential_lit.ogg",
 	&"park": "res://assets/audio/ambience/districts/park_lit.ogg",
-	&"school": "res://assets/audio/ambience/districts/school_lit.ogg",
-	&"hospital": "res://assets/audio/ambience/districts/hospital_lit.ogg",
-	&"gas_station": "res://assets/audio/ambience/districts/gas_station_lit.ogg",
-	&"police": "res://assets/audio/ambience/districts/police_lit.ogg",
-	&"warehouses": "res://assets/audio/ambience/districts/warehouses_lit.ogg",
+	&"school": "res://assets/audio/music/school.ogg",
+	&"hospital": "res://assets/audio/music/hospital.ogg",
+	&"gas_station": "res://assets/audio/music/gas_station.ogg",
+	&"police": "res://assets/audio/music/police.ogg",
+	&"warehouses": "res://assets/audio/music/warehouses.ogg",
 	&"industrial": "res://assets/audio/ambience/districts/industrial_lit.ogg",
-	&"substation": "res://assets/audio/ambience/districts/substation_lit.ogg",
-	&"power_station": "res://assets/audio/ambience/districts/power_station_lit.ogg",
+	&"substation": "res://assets/audio/music/substation.ogg",
+	&"power_station": "res://assets/audio/music/power_station.ogg",
 }
 
 ## Слои GDD §25.2. Ambient_Dark/Lit ведутся стадией электросети,
@@ -137,6 +144,7 @@ var _fade: Tween
 var _eval_timer: float = 0.0
 var _combat_hold: float = 0.0
 var _boss_active: bool = false
+var _boss_phase: int = 1
 var _cache: Dictionary = {}
 var _ambient_path: String = TRACKS[Mood.AMBIENT]
 var _current_district: StringName = &""
@@ -168,6 +176,7 @@ func _ready() -> void:
 	EventBus.game_started.connect(_on_game_started)
 	EventBus.game_won.connect(_on_game_won)
 	EventBus.boss_defeated.connect(_on_boss_defeated)
+	EventBus.boss_phase_changed.connect(_on_boss_phase_changed)
 	EventBus.player_detected.connect(func(_id: StringName) -> void:
 		_combat_hold = CALM_DELAY
 		play_sting())
@@ -270,6 +279,7 @@ func set_mood(new_mood: Mood, instant: bool = false, force: bool = false) -> voi
 ## Включить босс-тему и удерживать её.
 func enter_boss() -> void:
 	_boss_active = true
+	_boss_phase = 1
 	set_mood(Mood.BOSS)
 
 #endregion
@@ -293,6 +303,8 @@ static func _force_loop(s: AudioStream) -> void:
 
 func _load(m: Mood) -> AudioStream:
 	var path: String = _ambient_path if m == Mood.AMBIENT else TRACKS.get(m, "")
+	if m == Mood.BOSS and ResourceLoader.exists(BOSS_PHASES[_boss_phase - 1]):
+		path = BOSS_PHASES[_boss_phase - 1]
 	if m == Mood.BATTLE:
 		path = BATTLE_VARIANTS[randi() % BATTLE_VARIANTS.size()]
 	if path == "" or not ResourceLoader.exists(path):
@@ -395,6 +407,12 @@ func _nearest_enemy_distance() -> float:
 func _on_boss_defeated() -> void:
 	_boss_active = false
 	_combat_hold = 0.0
+
+## The Architect enters its second or third phase: the theme of that phase takes over (a crossfade, like any mood change).
+func _on_boss_phase_changed(phase: int) -> void:
+	_boss_phase = clampi(phase, 1, BOSS_PHASES.size())
+	if _boss_active:
+		set_mood(Mood.BOSS, false, true)
 #endregion
 
 ## ── Слои GDD §25.2 ──────────────────────────────────────────────────────────

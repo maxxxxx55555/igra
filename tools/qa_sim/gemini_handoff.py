@@ -108,7 +108,8 @@ def render():
     a("Every bed is a seamless loop of 36 s in the lit-bed brief, mono, 44.1 kHz, OGG quality 4; a take is trimmed at a zero crossing with 3 ms edge fades, loudness-normalised to the figure above, and checked against the true-peak")
     a("ceiling of -1.5 dBFS. `python tools/qa_sim/audio_loudness.py --check` reads every shipped file.")
     a("")
-    a("### 2.2 The 11 lit beds: all on disk (synthesized loops), a composed replacement is an upgrade")
+    generated = sum(1 for b in beds if b[1].startswith("assets/audio/music/"))
+    a("### 2.2 The 11 lit beds: all on disk (%d generated tracks of Session 27, %d synthesized loops), a composed replacement is an upgrade" % (generated, len(beds) - generated))
     a("")
     a("From `docs/MUSIC_BRIEF.md` (generated from `AMBIENCE_LIT_BY_DISTRICT`); the measures are of the files today. The brief and the prompt of each bed are in that document, one row per district.")
     a("")
@@ -117,8 +118,8 @@ def render():
     for d, f, disk, ln, ch, lufs, tp in beds:
         a("| %s | `%s` | %s | %s | %s | %s | %s |" % (d, f, disk, ln, ch.strip(), lufs, tp))
     a("")
-    short = ["`%s` (%s s)" % (b[0], b[3]) for b in beds if float(b[3]) != 36.0]
-    a("The length of 36 s is the contract; %s." % (("the bed%s that do%s not meet it today: %s" % ("s" if len(short) > 1 else "", "" if len(short) > 1 else "es", ", ".join(short))) if short else "every bed meets it today"))
+    spans = [float(b[3]) for b in beds if b[1].startswith("assets/audio/music/")]
+    a("The length of 36 s is the contract of the synthesized beds%s." % ("; the generated tracks are cut at a whole number of bars of their tempo (`docs/MUSIC_RECIPE.md`, %.1f to %.1f s), and the loader loops a file of any length (`_force_loop`)" % (min(spans), max(spans)) if spans else ""))
     a("The brief's prompts end with the common line: *instrumental only, no vocals, no drums, seamless 36 s loop, mono, about -18 LUFS*.")
     a("")
     a("### 2.3 The 19 tracks of the music recipe, against the disk")

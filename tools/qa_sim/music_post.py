@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """M1 of Session 27: the post-production pass of docs/MUSIC_RECIPE.md for one generated track, with ffmpeg: cut `--loop` seconds from `--start`, close the seam of a loop with an equal-power crossfade of the
 audio that would have followed the loop into its head (a one-shot gets 3 ms edge fades instead), downmix to mono 44.1 kHz (the house format of the beds, docs/MUSIC_SPEC.md), gain it to the house
-law (beds and music -18 LUFS integrated, true peak at most -1.5 dBFS) and write OGG q4 or 16-bit WAV by the extension of the target. It measures the file it wrote and exits 1 when the loudness or the true peak is off.
+law (beds and music -18 LUFS integrated, true peak at most -1.5 dBFS; a track whose sharp peaks hold the gain back is limited to the law first) and write OGG q4 or 16-bit WAV by the extension of the target. It measures the file it wrote and exits 1 when the loudness or the true peak is off.
 
 usage: python tools/qa_sim/music_post.py <input> <target.ogg|.wav> --loop <seconds> [--start <seconds>, else the steadiest stretch] [--one-shot] [--lufs -18] [--tp -1.5]
        python tools/qa_sim/music_post.py --demo
@@ -19,8 +19,10 @@ SR = 44100
 FADE_MS = 3.0
 CROSSFADE_S = 2.0
 LUFS_TOLERANCE = 0.7
-# the lossy encode can overshoot the peak it was normalised to by a few tenths of a dB: aim lower, verify at the law
-TP_HEADROOM = 0.5
+# the lossy encode can overshoot the peak it was normalised to by half a dB (the substation take went from -2.0 to -1.5): aim a dB lower, verify at the law
+TP_HEADROOM = 1.0
+# samples that ffmpeg's alimiter at attack=5 ms delays its output at 44.1 kHz (an impulse at 1000 comes out at 1219)
+LIMITER_LAG = 219
 
 
 def ffmpeg():
@@ -86,12 +88,34 @@ def level(raw):
     return float(re.search(r"I:\s+(-?[\d.]+) LUFS", summary).group(1)), float(re.search(r"Peak:\s+(-?[\d.]+) dBFS", summary).group(1))
 
 
+def limit(audio, ceiling):
+    """Peak-limit float32 mono samples to `ceiling` dBFS with ffmpeg's alimiter (5 ms lookahead, 50 ms release, no auto level). The limiter delays its output by LIMITER_LAG samples and cuts the tail, so it is fed
+    that many samples of silence and the delay is dropped: the result lines up with the input (the demo checks it)."""
+    chain = "alimiter=limit=%.5f:attack=5:release=50:level=0" % (10.0 ** (ceiling / 20.0))
+    padded = np.concatenate([audio, np.zeros(LIMITER_LAG, "<f4")]).astype("<f4")
+    r = subprocess.run([ffmpeg(), "-v", "error", "-f", "f32le", "-ar", str(SR), "-ac", "1", "-i", "-", "-af", chain, "-f", "f32le", "-"], input=padded.tobytes(), capture_output=True)
+    if r.returncode != 0:
+        sys.exit("music_post: the limiter failed: %s" % r.stderr.decode("utf-8", "replace"))
+    return np.frombuffer(r.stdout, dtype="<f4")[LIMITER_LAG:LIMITER_LAG + len(audio)].copy()
+
+
 def normalise(audio, lufs, tp):
-    """One linear gain to the target loudness, held back if it would take the true peak over the law (the file then reads a little quieter and the check after the encode says so). loudnorm is not used: it
-    measures over windows of 3 s and a one-shot or a short loop comes out a dB off (the demo found 1.8)."""
+    """One linear gain to the target loudness. If that gain would take the true peak over the law (sharp clanks or hits over a pad: the first warehouses take read -20.6 LUFS), the peaks are limited to the law and
+    the gain is trimmed by what the limiter took, up to six rounds, so the track still lands on the house loudness. loudnorm is not used: it measures over windows of 3 s and a one-shot or a short loop comes out
+    a dB off (the demo found 1.8)."""
     loudness, peak = level(audio.astype("<f4").tobytes())
-    gain = min(lufs - loudness, tp - TP_HEADROOM - peak)
-    return (audio * 10.0 ** (gain / 20.0)).astype("<f4")
+    gain, aim = lufs - loudness, tp - TP_HEADROOM
+    if peak + gain <= aim:
+        return (audio * 10.0 ** (gain / 20.0)).astype("<f4")
+    ceiling = aim
+    for _ in range(6):
+        out = limit(audio * 10.0 ** (gain / 20.0), ceiling)
+        got, got_peak = level(out.tobytes())
+        if abs(got - lufs) <= 0.1 and got_peak <= aim:
+            break
+        gain += lufs - got
+        ceiling -= max(0.0, got_peak - aim)
+    return out
 
 
 def write(audio, target):
@@ -133,7 +157,8 @@ def process(source, target, seconds, start, one_shot, lufs, tp):
 
 
 def demo():
-    """A synthetic pad of 20 s (two tones, a slow swell, a little noise) becomes a loop of 4 s and a one-shot of 0.5 s: both on the law, the seam shut; and a loud intro of 7 s is not where the steadiest stretch starts."""
+    """A synthetic pad of 20 s (two tones, a slow swell, a little noise) becomes a loop of 4 s and a one-shot of 0.5 s: both on the law, the seam shut; the same pad with a 5 ms noise burst every 1.5 s (a chain clank,
+    20 dB over the pad) is limited and still lands on the law; and a loud intro of 7 s is not where the steadiest stretch starts."""
     t = np.arange(20 * SR) / SR
     pad = (np.sin(2 * np.pi * 220 * t) + 0.6 * np.sin(2 * np.pi * 330.5 * t)) * (0.5 + 0.4 * np.sin(2 * np.pi * 0.2 * t))
     pad = (pad + 0.05 * np.random.default_rng(1).standard_normal(len(t))) * 0.3
@@ -142,13 +167,19 @@ def demo():
         write(pad.astype("<f4"), source)
         loop_ok = process(source, pathlib.Path(tmp) / "loop.ogg", 4.0, 1.0, False, -18.0, -1.5)
         shot_ok = process(source, pathlib.Path(tmp) / "shot.wav", 0.5, 0.0, True, -14.0, -1.5)
+        assert np.abs(limit(pad.astype("<f4"), -1.0) - pad).max() < 1e-3, "the limiter's output is not lined up with its input"
+        clank = pad.copy()
+        for at in range(int(1.7 * SR), 19 * SR, int(1.5 * SR)):
+            clank[at:at + 220] += np.random.default_rng(at).standard_normal(220).astype("<f4") * 2.5 * np.linspace(1.0, 0.0, 220, dtype="<f4")
+        write(clank.astype("<f4"), pathlib.Path(tmp) / "clank.wav")
+        clank_ok = process(pathlib.Path(tmp) / "clank.wav", pathlib.Path(tmp) / "clank.ogg", 4.0, 1.0, False, -18.0, -1.5)
         intro = pad.copy()
         intro[: 7 * SR] *= 6.0
         picked = steadiest_start(intro.astype("<f4"), 4.0, False)
         assert picked >= 7.0 and picked + 4.0 <= 20.0, picked
-        jump = seam(decode(pathlib.Path(tmp) / "loop.ogg"))
-    assert loop_ok and shot_ok and jump < 0.5, (loop_ok, shot_ok, jump)
-    print("music_post demo: a loop and a one-shot come out on the loudness law, the right length, and the seam of the loop is shut")
+        jump = max(seam(decode(pathlib.Path(tmp) / "loop.ogg")), seam(decode(pathlib.Path(tmp) / "clank.ogg")))
+    assert loop_ok and shot_ok and clank_ok and jump < 0.5, (loop_ok, shot_ok, clank_ok, jump)
+    print("music_post demo: a loop, a one-shot and a loop with sharp clanks come out on the loudness law, the right length, and the seam of the loop is shut")
 
 
 def main(argv):

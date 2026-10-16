@@ -3,7 +3,8 @@ extends RefCounted
 ## facade shader, carry roof boxes and balconies, and the weathering follows the graphics tier; SOV3, the halo behind a landmark is a pool of light and not a third of the sky (HALO-27); SOV4, every district has
 ## sign words and every letter of them is in the engine's own font (the bundled fonts hold no Cyrillic: a missing glyph is a box on a wall); SOV5, the dead grass of the courtyards shows 0, 72 and 144 tufts at the three
 ## graphics tiers; SOV6, the glow of the blocks and the paint of the signs rises with the power stage and the restored district is not dim (the pixel proof is the wall line of `tools/qa_sim/density_frames`);
-## SOV7 (V2), the main menu draws fog and grain between its hero art and its title, none at the Low tier, and the title is stencilled.
+## SOV7 (V2), the main menu draws fog and grain between its hero art and its title, none at the Low tier, and the title is stencilled; MUS1 (M1), the Architect announces its second and third phase (the signal was
+## declared and listened to and never emitted) and the music takes the theme of the phase it is told.
 ## Wired into _closeout_check_runner.gd as `await Rc27.run(self)`; CLOSEOUT_ONLY=s27 runs it alone, which tools/qa_sim/s26_mutations.py uses (its third set).
 
 const _ROAD := "res://assets/shaders/soviet_road.gdshader"
@@ -20,6 +21,7 @@ static func run(r: Node) -> void:
 	_grass(r)
 	_glow(r)
 	await _menu(r)
+	_boss(r)
 
 ## The placement is asked, not the multimesh: headless the rendering server keeps no instance transforms, but the mesh and its material are resources.
 static func _streets(r: Node) -> void:
@@ -110,3 +112,19 @@ static func _menu(r: Node) -> void:
 	SettingsManager.set_graphics_tier(tier_before)
 	r._ok(between and stencilled and high and not low, "SOV7 the menu draws fog and grain between its hero art and its title (High %s, Low %s) and the title is stencilled (%s)" % [high, low, stencilled])
 	menu.queue_free()
+
+static func _boss(r: Node) -> void:
+	var boss: Node = load("res://scripts/enemies/boss_3d.gd").new()
+	var seen: Array[int] = []
+	var listen := func(phase: int) -> void: seen.append(phase)
+	EventBus.boss_phase_changed.connect(listen)
+	boss.call("_switch_to_p2")
+	boss.call("_switch_to_p3")
+	EventBus.boss_phase_changed.disconnect(listen)
+	boss.free()
+	MusicManager.call("_on_boss_phase_changed", 3)
+	var third: int = int(MusicManager.get("_boss_phase"))
+	MusicManager.call("enter_boss")
+	var first: int = int(MusicManager.get("_boss_phase"))
+	MusicManager.call("_on_boss_defeated")
+	r._ok(seen == [2, 3] and third == 3 and first == 1, "MUS1 the Architect announces its phases %s and the music takes the theme of the phase it is told (3 then %d, a new fight starts at %d)" % [seen, third, first])

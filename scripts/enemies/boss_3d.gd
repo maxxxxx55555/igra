@@ -216,10 +216,12 @@ func _perform_melee() -> void:
 
 func _switch_to_p2() -> void:
 	_teleport_timer = 0.0
+	EventBus.boss_phase_changed.emit(2)
 
 func _switch_to_p3() -> void:
 	_summon_timer = 0.0
 	_beam_timer = 0.0
+	EventBus.boss_phase_changed.emit(3)
 
 func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, type: EnemyRosterData.DamageType = EnemyRosterData.DamageType.BULLET) -> void:
 	if _net_active and not is_multiplayer_authority():
