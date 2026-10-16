@@ -34,9 +34,9 @@ const _FACADE := preload("res://assets/shaders/soviet_facade.gdshader")
 const _ROAD := preload("res://assets/shaders/soviet_road.gdshader")
 const _SIGNS := preload("res://scripts/world/soviet_signs.gd")
 const _GRASS := preload("res://scripts/world/dead_grass.gd")
-## The emission of the strongest channel of a block's self-glow, by power stage (DARK, PARTIAL, STREETS, FULL): a restored district reads lighter, a dark one stays a silhouette. The scene shows an emission E as
-## 0.12 * E^2.4 above the black floor (probe of Session 27, `--tprobe=1`), so 0.28 is a faint outline against the sky and 0.48 a dark panel: the glow of a district sets the hue and not the brightness.
-const FACADE_GAIN: Array[float] = [0.28, 0.34, 0.41, 0.48]
+## The emission of the strongest channel of a block's self-glow, by power stage (DARK, PARTIAL, STREETS, FULL): a restored district reads lighter, a dark one stays a faint outline against the sky. The glow of a district
+## sets the hue and not the brightness. Read off the sweep of the wall line of `tools/qa_sim/density_frames` (0.48 stood the walls at 125 of 255 in launch 5: mint boxes in a night).
+const FACADE_GAIN: Array[float] = [0.06, 0.08, 0.11, 0.15]
 ## The ground between the streets, linear: dark earth, and patches of dead grass.
 const GROUND_EARTH := Vector3(0.050, 0.052, 0.046)
 const GROUND_GRASS := Vector3(0.050, 0.062, 0.040)

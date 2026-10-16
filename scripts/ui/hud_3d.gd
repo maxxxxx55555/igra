@@ -921,7 +921,7 @@ func _apply_text_outlines() -> void:
 	for lbl in [hp_val, stam_val, bat_val, prompt, notice]:
 		if lbl:
 			lbl.add_theme_color_override("font_outline_color", outline_col)
-			lbl.add_theme_constant_override("outline_size", 2)
+			lbl.add_theme_constant_override("outline_size", 4 if lbl == notice or lbl == prompt else 2)  # the two lines that float over a lit road (the toast's outline, S26)
 			lbl.add_theme_color_override("font_shadow_color", shadow_col)
 			lbl.add_theme_constant_override("shadow_offset_x", 1)
 			lbl.add_theme_constant_override("shadow_offset_y", 1)

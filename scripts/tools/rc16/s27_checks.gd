@@ -92,7 +92,7 @@ static func _glow(r: Node) -> void:
 	var rises: bool = true
 	for stage in 3:
 		rises = rises and gain[stage] < gain[stage + 1] and lit[stage] < lit[stage + 1]
-	r._ok(rises and gain[3] >= 0.4 and gain[0] <= 0.3 and lit[0] <= 0.5 and lit[3] == 1.0, "SOV6 the blocks glow at %.2f (DARK) to %.2f (FULL) and the sign paint at %.2f to %.2f: a restored district reads lighter, a dark one an outline" % [gain[0], gain[3], lit[0], lit[3]])
+	r._ok(rises and gain[0] > 0.0 and gain[3] >= 1.5 * gain[0] and lit[0] <= 0.5 and lit[3] == 1.0, "SOV6 the blocks glow at %.2f (DARK) to %.2f (FULL) and the sign paint at %.2f to %.2f: a restored district reads lighter, a dark one an outline" % [gain[0], gain[3], lit[0], lit[3]])
 
 static func _menu(r: Node) -> void:
 	var tier_before: int = int(SettingsManager.get_setting("graphics_tier", 2))

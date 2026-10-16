@@ -8,7 +8,7 @@
 shader_type spatial;
 render_mode cull_disabled, shadows_disabled;
 
-uniform vec3 straw = vec3(0.17, 0.145, 0.07);
+uniform vec3 straw = vec3(0.28, 0.24, 0.11);
 uniform float sway : hint_range(0.0, 0.3) = 0.08;
 uniform float reach : hint_range(5.0, 80.0) = 38.0;
 

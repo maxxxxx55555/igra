@@ -10,7 +10,7 @@ extends "res://scripts/tools/_rc16_probe_runner.gd"
 ##   06_courtyard from inside the middle block across the grid to the south-west corner of the ring, power FULL (Session 27)
 ##   07_facade    close to the west facade of the ring, looking up its panels, power FULL (Session 27)
 ##   08_sign      five metres in front of the first stencilled sign of the district, by the flashlight; the place is read from the loaded district, and the baked atlas is counted for ink (Session 27)
-## --tviews=<names> shoots only those views (the default is all). --tabl=1 reads what the weathering shaders cost in the 03_street view (`_ablate`, Session 27).
+## --tviews=<names> shoots only those views (the default is all).
 ## Frames -> docs/stills/density/<id>_<view>_<label>_<hash>_<UTC>.jpg (the AF3 name: the code tree and the capture time). A saved frame proves nothing until it is read.
 ## The runs are in English with the HUD and the tutorial hidden (Trailer Mode), so a frame holds the world and nothing else. The weather is pinned to clear and the random events
 ## are off (`_pin_world`), and each view prints one `[density] state` line (weather, stage, tier, the environment's ambient, glow and exposure), so a frame can be traced to its state.
@@ -30,17 +30,16 @@ const VIEWS: Array[Dictionary] = [
 const JPG_QUALITY: float = 0.88
 const SETTLE_SEC: float = 0.9
 const PERF_SETTLE_FRAMES: int = 30
-const ABLATE_PAIRS: int = 8
-const ABLATE_FRAMES: int = 60
-const ABLATE_SETTLE_FRAMES: int = 6
-const WALL_LIFT_MIN: float = 8.0
+## A restored district's wall stands this many levels (of 255) over the floor of the grade: seen, and still a night.
+const WALL_LIFT_MIN: float = 12.0
+const WALL_LIFT_MAX: float = 60.0
+const WALL_SWEEP: Array[float] = [0.0, 0.05, 0.08, 0.12, 0.16, 0.2, 0.26, 0.34, 0.48]
 
 var _ids: Array[StringName] = []
 var _views: PackedStringArray = []
 var _lang: String = "en"
 var _hud: bool = false
 var _png: bool = false
-var _ablate_on: bool = false
 
 ## A JPG keeps a set of eleven districts at about one megabyte; the frames are read and measured, not diffed pixel by pixel.
 func _shot(frame: String) -> void:
@@ -179,8 +178,6 @@ func _run() -> void:
 			_hud = true
 		elif s == "--tpng=1":
 			_png = true
-		elif s == "--tabl=1":
-			_ablate_on = true
 	if _ids.is_empty():
 		_ids.assign(ORDER)
 	var ads := get_node_or_null("/root/AdService")
@@ -220,8 +217,6 @@ func _run() -> void:
 			var sign_view := _sign_view(id)
 			if not sign_view.is_empty():
 				await _view(id, sign_view)
-		if _ablate_on:
-			await _ablate(id)
 		var dressing := _dressing()
 		if _label == "pair" and dressing != null:
 			dressing.visible = false
@@ -231,58 +226,9 @@ func _run() -> void:
 	print("[density] DONE label=%s hash=%s" % [_label, _hash])
 	get_tree().quit(0)
 
-## What the weathering shaders cost (Session 27): in the 03_street view the materials of the roads, the ground and the blocks are swapped for a plain one and back, ABLATE_PAIRS times, each state read over
-## ABLATE_FRAMES frames. The load of the machine drifts and spikes (3 to 37 ms of GPU for one scene in an hour), so the number is the median of the differences of the neighbouring reads, not a difference of means.
-func _ablate(id: StringName) -> void:
-	var player := _place(VIEWS[2])
-	if player == null:
-		print("[density] FAIL no player to ablate in %s" % id)
-		return
-	_flashlight(player, false)
-	var swaps: Array[Array] = []
-	for node: Node in get_tree().root.find_children("*", "GeometryInstance3D", true, false):
-		var holder: Object = node
-		var mat: Material = (node as GeometryInstance3D).material_override
-		if mat == null and node is MultiMeshInstance3D and (node as MultiMeshInstance3D).multimesh.mesh is PrimitiveMesh:
-			holder = (node as MultiMeshInstance3D).multimesh.mesh
-			mat = (holder as PrimitiveMesh).material
-		var shader_path: String = (mat as ShaderMaterial).shader.resource_path if mat is ShaderMaterial else ""
-		if shader_path.contains("soviet_road") or shader_path.contains("soviet_facade"):
-			swaps.append([holder, mat])
-	var plain := StandardMaterial3D.new()
-	plain.albedo_color = Color(0.1, 0.1, 0.1)
-	var costs: Array[float] = []
-	for pair in ABLATE_PAIRS:
-		_show(swaps, null)
-		var full_ms: float = await _read_gpu()
-		_show(swaps, plain)
-		costs.append(full_ms - await _read_gpu())
-	_show(swaps, null)
-	costs.sort()
-	print("[density] ablate district=%s targets=%d pairs=%d cost_ms median=%.2f lowest=%.2f highest=%.2f" % [String(id), swaps.size(), ABLATE_PAIRS, costs[costs.size() / 2], costs[0], costs[-1]])
-
-## Every swapped holder shows `material`, or its own shader material when that is null.
-func _show(swaps: Array[Array], material: Material) -> void:
-	for swap: Array in swaps:
-		var shown: Material = swap[1] if material == null else material
-		if swap[0] is GeometryInstance3D:
-			(swap[0] as GeometryInstance3D).material_override = shown
-		else:
-			(swap[0] as PrimitiveMesh).material = shown
-
-func _read_gpu() -> float:
-	var vp := get_viewport().get_viewport_rid()
-	RenderingServer.viewport_set_measure_render_time(vp, true)
-	for i in ABLATE_SETTLE_FRAMES:
-		await get_tree().process_frame
-	var gpu: float = 0.0
-	for i in ABLATE_FRAMES:
-		await get_tree().process_frame
-		gpu += RenderingServer.viewport_get_measured_render_time_gpu(vp)
-	return gpu / ABLATE_FRAMES
-
-## What the facade shows (Session 27): in the 07_facade view the mean colour of a patch of wall (a sixth of the frame) with the glow of its blocks at the gain of the stage and with it off. The scene shows
-## an emission E as 0.12 * E^2.4 above a black floor of 24 levels, so a glow of 0.06 left a restored district's wall 0.1 level above the sky (the probe that found it printed 24.5, 24.6, 29, 61 for gains 0, 1, 3, 10).
+## What the facade shows (Session 27): in the 07_facade view the median brightness of the band of the frame where the wall is (10 to 70 % of its height, every fourth pixel: windows, gaps and ground are the
+## minority of it), at the gain of the stage and with the glow off, and over a sweep of gains, so that the gain of a stage is read off a curve and not guessed. The first probe read a patch that held half ground and
+## calibrated the walls to 120 of 255; the median of the band does not.
 func _wall_check(id: StringName) -> void:
 	var blocks := get_tree().root.find_child("Blocks", true, false) as MultiMeshInstance3D
 	var facade: ShaderMaterial = blocks.material_override as ShaderMaterial if blocks != null else null
@@ -290,26 +236,32 @@ func _wall_check(id: StringName) -> void:
 		print("[density] FAIL no facade material to read in %s" % id)
 		return
 	var gain: float = float(facade.get_shader_parameter("gain"))
-	var lit: float = await _wall_mean()
-	facade.set_shader_parameter("gain", 0.0)
-	var dark: float = await _wall_mean()
+	var curve: PackedStringArray = []
+	var dark: float = 0.0
+	for swept: float in WALL_SWEEP:
+		facade.set_shader_parameter("gain", swept)
+		var level: float = await _wall_level()
+		curve.append("%.2f:%.0f" % [swept, level])
+		if swept == 0.0:
+			dark = level
 	facade.set_shader_parameter("gain", gain)
-	print("[density] wall district=%s gain=%.2f floor=%.1f lit=%.1f lift=%.1f" % [String(id), gain, dark, lit, lit - dark])
-	if lit - dark < WALL_LIFT_MIN:
-		print("[density] FAIL the facade of %s shows %.1f levels over the black floor, %.0f at least" % [String(id), lit - dark, WALL_LIFT_MIN])
+	var lit: float = await _wall_level()
+	print("[density] wall district=%s gain=%.2f floor=%.1f lit=%.1f lift=%.1f sweep=%s" % [String(id), gain, dark, lit, lit - dark, " ".join(curve)])
+	if lit - dark < WALL_LIFT_MIN or lit - dark > WALL_LIFT_MAX:
+		print("[density] FAIL the facade of %s shows %.1f levels over the black floor, %.0f to %.0f asked" % [String(id), lit - dark, WALL_LIFT_MIN, WALL_LIFT_MAX])
 
-func _wall_mean() -> float:
+func _wall_level() -> float:
 	for i in 4:
 		await get_tree().process_frame
 	await RenderingServer.frame_post_draw
 	var image := get_tree().root.get_texture().get_image()
-	var patch := Rect2i(int(image.get_width() * 0.42), int(image.get_height() * 0.60), int(image.get_width() * 0.14), int(image.get_height() * 0.18))
-	var total: float = 0.0
-	for y in range(patch.position.y, patch.end.y):
-		for x in range(patch.position.x, patch.end.x):
+	var levels: Array[float] = []
+	for y in range(int(image.get_height() * 0.1), int(image.get_height() * 0.7), 4):
+		for x in range(0, image.get_width(), 4):
 			var pixel := image.get_pixel(x, y)
-			total += (pixel.r + pixel.g + pixel.b) / 3.0
-	return total / float(patch.get_area()) * 255.0
+			levels.append((pixel.r + pixel.g + pixel.b) / 3.0 * 255.0)
+	levels.sort()
+	return levels[levels.size() / 2]
 
 func _perf_line(id: StringName, dressing: String) -> void:
 	for i in PERF_SETTLE_FRAMES:

@@ -112,10 +112,9 @@ func _style_title(vb: VBoxContainer) -> void:
 	title.text = title.text.replace("\r", "")
 	title.add_theme_color_override("font_outline_color", Color(0.047, 0.062, 0.086))
 	title.add_theme_constant_override("outline_size", 12)
-	# V2 of Session 27: the title card is stencilled, two cuts across the letters and their outline (assets/shaders/stencil_title.gdshader)
+	# V2 of Session 27: the title card is stencilled, one cut across the letters and their outline (assets/shaders/stencil_title.gdshader)
 	var stencil := ShaderMaterial.new()
 	stencil.shader = _STENCIL
-	stencil.set_shader_parameter("font_px", float(title.get_theme_font_size("font_size")))
 	title.material = stencil
 	title.resized.connect(func() -> void: stencil.set_shader_parameter("label_h", title.size.y))
 
