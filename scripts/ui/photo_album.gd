@@ -45,9 +45,6 @@ func _show_fallback_photos() -> void:
 		_grid.add_child(tex_rect)
 	_counter.text = "0/%d" % _get_total()
 
-func _get_collected() -> Array:
-	return SaveSystem.get_photos() if SaveSystem else []
-
 func take_photo(photo_name: String) -> void:
 	if SaveSystem:
 		SaveSystem.add_photo(photo_name)

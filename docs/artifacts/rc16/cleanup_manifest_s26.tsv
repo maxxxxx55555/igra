@@ -1,0 +1,1040 @@
+kind	path	line	name	verdict	evidence	bytes
+asset	assets/art/coin_icon.png			KEEP-LIVE	pattern B	251
+asset	assets/art/menu_bg.png			KEEP-LIVE	pattern B	19318
+asset	assets/art/player_top.png			KEEP-LIVE	pattern B	519
+asset	assets/art/shot_game.png			KEEP-QA	named by a tool	512328
+asset	assets/art/shot_game_3d.png			KEEP-QA	named by a tool	283071
+asset	assets/art/shot_menu.png			KEEP-QA	named by a tool	511513
+asset	assets/art/shot_menu_3d.png			KEEP-QA	named by a tool	211799
+asset	assets/art/tile_floor.png			KEEP-LIVE	pattern B	60282
+asset	assets/art/tile_wall.png			KEEP-LIVE	pattern B	54665
+asset	assets/audio/README.md			KEEP-LIVE	pattern B	3579
+asset	assets/audio/_build/.gdignore			KEEP-PLANNED	docs/LEDGER_AUDIO.md:128	0
+asset	assets/audio/_build/gen_audio_pass.py			KEEP-PLANNED	docs/AUDIO_COVERAGE.md:153	14779
+asset	assets/audio/ambience/action_sting_loop.ogg			KEEP-LIVE	pattern A	120632
+asset	assets/audio/ambience/district_details/gas_station_car_pass.ogg			KEEP-LIVE	format string	244571
+asset	assets/audio/ambience/district_details/gas_station_gravel_crunch.ogg			KEEP-LIVE	pattern B	262221
+asset	assets/audio/ambience/district_details/gas_station_pump_hum.ogg			KEEP-LIVE	format string	235051
+asset	assets/audio/ambience/district_details/gas_station_sign_buzz.ogg			KEEP-LIVE	format string	236566
+asset	assets/audio/ambience/district_details/hospital_elevator_distant.ogg			KEEP-LIVE	format string	226896
+asset	assets/audio/ambience/district_details/hospital_gurney_wheels.ogg			KEEP-LIVE	format string	251701
+asset	assets/audio/ambience/district_details/hospital_monitor_beep.ogg			KEEP-LIVE	format string	246712
+asset	assets/audio/ambience/district_details/hospital_pa_mumble.ogg			KEEP-LIVE	format string	246076
+asset	assets/audio/ambience/district_details/industrial_machinery_drone.ogg			KEEP-LIVE	format string	231027
+asset	assets/audio/ambience/district_details/industrial_pipe_hiss.ogg			KEEP-LIVE	format string	299508
+asset	assets/audio/ambience/district_details/industrial_steam_vent.ogg			KEEP-LIVE	format string	285838
+asset	assets/audio/ambience/district_details/industrial_vent_rattle.ogg			KEEP-LIVE	format string	254976
+asset	assets/audio/ambience/district_details/park_bare_trees_wind.ogg			KEEP-LIVE	format string	263534
+asset	assets/audio/ambience/district_details/park_branch_snap.ogg			KEEP-LIVE	format string	267665
+asset	assets/audio/ambience/district_details/park_distant_city_hum.ogg			KEEP-LIVE	format string	233010
+asset	assets/audio/ambience/district_details/park_leaves_skitter.ogg			KEEP-LIVE	format string	266641
+asset	assets/audio/ambience/district_details/police_boots_concrete.ogg			KEEP-LIVE	format string	238195
+asset	assets/audio/ambience/district_details/police_radio_static.ogg			KEEP-LIVE	format string	254990
+asset	assets/audio/ambience/district_details/police_siren_tail.ogg			KEEP-LIVE	format string	238645
+asset	assets/audio/ambience/district_details/power_station_breaker_clunk.ogg			KEEP-LIVE	format string	298015
+asset	assets/audio/ambience/district_details/power_station_cooling_fan.ogg			KEEP-LIVE	format string	222943
+asset	assets/audio/ambience/district_details/power_station_generator_thrum.ogg			KEEP-LIVE	format string	220543
+asset	assets/audio/ambience/district_details/power_station_hv_whine.ogg			KEEP-LIVE	format string	281442
+asset	assets/audio/ambience/district_details/residential_pipe_creak.ogg			KEEP-LIVE	format string	239370
+asset	assets/audio/ambience/district_details/residential_tv_murmur.ogg			KEEP-LIVE	format string	244242
+asset	assets/audio/ambience/district_details/residential_window_rattle.ogg			KEEP-LIVE	format string	259522
+asset	assets/audio/ambience/district_details/school_bell_echo.ogg			KEEP-LIVE	format string	235543
+asset	assets/audio/ambience/district_details/school_chalk_scratch.ogg			KEEP-LIVE	format string	256031
+asset	assets/audio/ambience/district_details/school_desk_scrape.ogg			KEEP-LIVE	format string	252834
+asset	assets/audio/ambience/district_details/school_locker_slam.ogg			KEEP-LIVE	format string	236735
+asset	assets/audio/ambience/district_details/substation_arc_crackle.ogg			KEEP-LIVE	format string	316363
+asset	assets/audio/ambience/district_details/substation_cable_hum.ogg			KEEP-LIVE	format string	237816
+asset	assets/audio/ambience/district_details/substation_transformer_buzz.ogg			KEEP-LIVE	format string	226836
+asset	assets/audio/ambience/district_details/suburbs_dog_bark.ogg			KEEP-LIVE	format string	244926
+asset	assets/audio/ambience/district_details/suburbs_porch_creak.ogg			KEEP-LIVE	format string	230419
+asset	assets/audio/ambience/district_details/suburbs_wind_leaves.ogg			KEEP-LIVE	format string	263656
+asset	assets/audio/ambience/district_details/warehouses_cargo_impact.ogg			KEEP-LIVE	format string	235569
+asset	assets/audio/ambience/district_details/warehouses_chain_rattle.ogg			KEEP-LIVE	format string	234952
+asset	assets/audio/ambience/district_details/warehouses_forklift_distant.ogg			KEEP-LIVE	format string	286113
+asset	assets/audio/ambience/district_details/warehouses_metal_creak.ogg			KEEP-LIVE	format string	231912
+asset	assets/audio/ambience/districts/gas_station_dark.ogg			KEEP-LIVE	pattern A	82126
+asset	assets/audio/ambience/districts/gas_station_lit.ogg			KEEP-LIVE	pattern A	316145
+asset	assets/audio/ambience/districts/hospital_dark.ogg			KEEP-LIVE	pattern A	62022
+asset	assets/audio/ambience/districts/hospital_lit.ogg			KEEP-LIVE	pattern A	279412
+asset	assets/audio/ambience/districts/industrial_dark.ogg			KEEP-LIVE	pattern A	55718
+asset	assets/audio/ambience/districts/industrial_lit.ogg			KEEP-LIVE	pattern A	292188
+asset	assets/audio/ambience/districts/park_dark.ogg			KEEP-LIVE	pattern A	208594
+asset	assets/audio/ambience/districts/park_lit.ogg			KEEP-LIVE	pattern A	330927
+asset	assets/audio/ambience/districts/police_dark.ogg			KEEP-LIVE	pattern A	343937
+asset	assets/audio/ambience/districts/police_lit.ogg			KEEP-LIVE	pattern A	303712
+asset	assets/audio/ambience/districts/power_station_dark.ogg			KEEP-LIVE	pattern A	316844
+asset	assets/audio/ambience/districts/power_station_lit.ogg			KEEP-LIVE	pattern A	59320
+asset	assets/audio/ambience/districts/residential_dark.ogg			KEEP-LIVE	pattern A	197068
+asset	assets/audio/ambience/districts/residential_lit.ogg			KEEP-LIVE	pattern A	318252
+asset	assets/audio/ambience/districts/school_dark.ogg			KEEP-LIVE	pattern A	198486
+asset	assets/audio/ambience/districts/school_lit.ogg			KEEP-LIVE	pattern A	305943
+asset	assets/audio/ambience/districts/substation_dark.ogg			KEEP-LIVE	pattern A	318861
+asset	assets/audio/ambience/districts/substation_lit.ogg			KEEP-LIVE	pattern A	312749
+asset	assets/audio/ambience/districts/suburbs_dark.ogg			KEEP-LIVE	pattern A	204058
+asset	assets/audio/ambience/districts/suburbs_lit.ogg			KEEP-LIVE	pattern A	90833
+asset	assets/audio/ambience/districts/warehouses_dark.ogg			KEEP-LIVE	pattern A	197976
+asset	assets/audio/ambience/districts/warehouses_lit.ogg			KEEP-LIVE	pattern A	304521
+asset	assets/audio/ambience/threat_high_loop.ogg			KEEP-PLANNED	docs/ASSET_SHOPPING_LIST.md:48	295682
+asset	assets/audio/ambience/threat_low_loop.ogg			KEEP-PLANNED	docs/ASSET_SHOPPING_LIST.md:48	412372
+asset	assets/audio/ambience/wav_src/ambient_dark_loop.wav			KEEP-PLANNED	docs/AUDIO_CONVERT.md:10	10584044
+asset	assets/audio/ambience/wav_src/ambient_lit_loop.wav			KEEP-PLANNED	docs/AUDIO_CONVERT.md:11	10584044
+asset	assets/audio/ambience/weather/rain_loop.ogg			KEEP-LIVE	pattern A	441799
+asset	assets/audio/ambience/weather/wind_loop.ogg			KEEP-LIVE	pattern A	392079
+asset	assets/audio/ending_music/ending_dark_full.ogg			KEEP-LIVE	pattern A	138471
+asset	assets/audio/ending_music/ending_light_full.ogg			KEEP-LIVE	pattern A	204868
+asset	assets/audio/jingles/ach_unlock.ogg			KEEP-PLANNED	docs/AUDIO_MIX_AUDIT.md:40	13795
+asset	assets/audio/jingles/ending_dark_sting.ogg			KEEP-LIVE	pattern A	38861
+asset	assets/audio/jingles/ending_hope_sting.ogg			KEEP-LIVE	pattern A	25757
+asset	assets/audio/jingles/ending_light_sting.ogg			KEEP-LIVE	pattern A	27219
+asset	assets/audio/jingles/ending_survivor_sting.ogg			KEEP-LIVE	pattern A	23423
+asset	assets/audio/jingles/ending_truth_sting.ogg			KEEP-LIVE	pattern A	26646
+asset	assets/audio/jingles/quest_complete.ogg			KEEP-PLANNED	docs/BUGS_FOR_CLAUDE.md:52	38240
+asset	assets/audio/jingles/skill_unlock.ogg			KEEP-PLANNED	docs/BUGS_FOR_CLAUDE.md:52	26681
+asset	assets/audio/music/abandoned_hallways.mp3			KEEP-LIVE	pattern A	5158995
+asset	assets/audio/music/abandoned_hallways_alt.mp3			KEEP-LIVE	pattern A	6222867
+asset	assets/audio/music/cue_first_light.ogg			KEEP-LIVE	pattern A	537158
+asset	assets/audio/music/cue_grid_cascade.ogg			KEEP-LIVE	pattern A	768256
+asset	assets/audio/music/cue_victory.ogg			KEEP-LIVE	pattern A	1021247
+asset	assets/audio/music/downtown.wav			KEEP-LIVE	pattern A	1058478
+asset	assets/audio/music/harbor.wav			KEEP-LIVE	pattern A	1058478
+asset	assets/audio/music/industrial.wav			KEEP-LIVE	pattern A	1058478
+asset	assets/audio/music/layer_action.ogg			KEEP-LIVE	pattern A	582588
+asset	assets/audio/music/layer_dark.ogg			KEEP-LIVE	pattern A	293975
+asset	assets/audio/music/layer_lit.ogg			KEEP-LIVE	pattern A	551390
+asset	assets/audio/music/layer_threat_high.ogg			KEEP-LIVE	pattern A	560819
+asset	assets/audio/music/layer_threat_low.ogg			KEEP-LIVE	pattern A	308074
+asset	assets/audio/music/music_ambient.wav			KEEP-LIVE	pattern A	4233678
+asset	assets/audio/music/music_ambient_dark.wav			KEEP-LIVE	pattern A	2816044
+asset	assets/audio/music/music_battle.wav			KEEP-LIVE	pattern A	2160978
+asset	assets/audio/music/music_boss_dark.wav			KEEP-LIVE	pattern A	2690178
+asset	assets/audio/music/music_combat.ogg			KEEP-LIVE	pattern A	520492
+asset	assets/audio/music/music_tension.wav			KEEP-LIVE	pattern A	2160978
+asset	assets/audio/music/music_victory.wav			KEEP-LIVE	pattern A	1278978
+asset	assets/audio/music/park.wav			KEEP-LIVE	pattern A	1975758
+asset	assets/audio/music/residential.wav			KEEP-LIVE	pattern A	1992358
+asset	assets/audio/one_shots/breath_low_loop.ogg			KEEP-LIVE	pattern A	158476
+asset	assets/audio/one_shots/heartbeat_low_loop.ogg			KEEP-LIVE	pattern A	60371
+asset	assets/audio/one_shots/rain_on_metal_loop.ogg			KEEP-LIVE	pattern A	277544
+asset	assets/audio/one_shots/thunder_far.wav			KEEP-LIVE	pattern A	396978
+asset	assets/audio/one_shots/thunder_near.wav			KEEP-LIVE	pattern A	229398
+asset	assets/audio/sfx/amb_wind.wav			KEEP-LIVE	pattern A	502818
+asset	assets/audio/sfx/architect_sting.ogg			KEEP-LIVE	pattern A	77991
+asset	assets/audio/sfx/footstep_concrete.wav			KEEP-LIVE	format string	13308
+asset	assets/audio/sfx/footstep_metal.wav			KEEP-LIVE	format string	28302
+asset	assets/audio/sfx/footstep_wood.wav			KEEP-LIVE	format string	17718
+asset	assets/audio/sfx/footsteps/concrete_jog.wav			KEEP-PLANNED	docs/REPORT_ASSETS.md:437	17718
+asset	assets/audio/sfx/footsteps/concrete_sprint.wav			KEEP-PLANNED	docs/REPORT_ASSETS.md:438	21246
+asset	assets/audio/sfx/footsteps/concrete_walk.wav			KEEP-PLANNED	docs/REPORT_ASSETS.md:436	14190
+asset	assets/audio/sfx/footsteps/grass_jog.wav			KEEP-PLANNED	docs/REPORT_ASSETS.md:446	17718
+asset	assets/audio/sfx/footsteps/grass_sprint.wav			KEEP-PLANNED	docs/REPORT_ASSETS.md:447	21246
+asset	assets/audio/sfx/footsteps/grass_walk.wav			KEEP-PLANNED	docs/REPORT_ASSETS.md:445	14190
+asset	assets/audio/sfx/footsteps/gravel_jog.wav			KEEP-PLANNED	docs/REPORT_ASSETS.md:449	17718
+asset	assets/audio/sfx/footsteps/gravel_sprint.wav			KEEP-PLANNED	docs/REPORT_ASSETS.md:450	21246
+asset	assets/audio/sfx/footsteps/gravel_walk.wav			KEEP-PLANNED	docs/REPORT_ASSETS.md:448	14190
+asset	assets/audio/sfx/footsteps/metal_jog.wav			KEEP-PLANNED	docs/REPORT_ASSETS.md:440	17718
+asset	assets/audio/sfx/footsteps/metal_sprint.wav			KEEP-PLANNED	docs/REPORT_ASSETS.md:441	21246
+asset	assets/audio/sfx/footsteps/metal_walk.wav			KEEP-PLANNED	docs/REPORT_ASSETS.md:439	14190
+asset	assets/audio/sfx/footsteps/tile_jog.wav			KEEP-PLANNED	docs/REPORT_ASSETS.md:452	17718
+asset	assets/audio/sfx/footsteps/tile_sprint.wav			KEEP-PLANNED	docs/REPORT_ASSETS.md:453	21246
+asset	assets/audio/sfx/footsteps/tile_walk.wav			KEEP-PLANNED	docs/REPORT_ASSETS.md:451	14190
+asset	assets/audio/sfx/footsteps/wood_jog.wav			KEEP-PLANNED	docs/REPORT_ASSETS.md:443	17718
+asset	assets/audio/sfx/footsteps/wood_sprint.wav			KEEP-PLANNED	docs/REPORT_ASSETS.md:444	21246
+asset	assets/audio/sfx/footsteps/wood_walk.wav			KEEP-PLANNED	docs/REPORT_ASSETS.md:442	14190
+asset	assets/audio/sfx/interact/cabinet_close.wav			KEEP-PLANNED	docs/ASSET_HANDOFF.md:91	14190
+asset	assets/audio/sfx/interact/cabinet_open.wav			KEEP-PLANNED	docs/ASSET_HANDOFF.md:91	26538
+asset	assets/audio/sfx/interact/cable_connect.wav			KEEP-PLANNED	docs/ASSET_HANDOFF.md:93	15954
+asset	assets/audio/sfx/interact/door_close_metal.wav			KEEP-PLANNED	docs/REPORT_AUDIO_DETAIL.md:87	17718
+asset	assets/audio/sfx/interact/door_close_wood.wav			KEEP-PLANNED	docs/REPORT_AUDIO_DETAIL.md:85	18600
+asset	assets/audio/sfx/interact/door_open_metal.wav			KEEP-PLANNED	docs/REPORT_AUDIO_DETAIL.md:86	31830
+asset	assets/audio/sfx/interact/door_open_wood.wav			KEEP-PLANNED	docs/REPORT_AUDIO_DETAIL.md:84	37122
+asset	assets/audio/sfx/interact/fuse_box_close.wav			KEEP-PLANNED	docs/ASSET_HANDOFF.md:92	30948
+asset	assets/audio/sfx/interact/fuse_insert.wav			KEEP-PLANNED	docs/ASSET_HANDOFF.md:92	5370
+asset	assets/audio/sfx/interact/generator_run_loop.ogg			KEEP-PLANNED	docs/ASSET_HANDOFF.md:87	221113
+asset	assets/audio/sfx/interact/generator_start.wav			KEEP-PLANNED	docs/ASSET_HANDOFF.md:87	88278
+asset	assets/audio/sfx/interact/generator_stop.wav			KEEP-PLANNED	docs/ASSET_HANDOFF.md:87	92688
+asset	assets/audio/sfx/interact/item_drop.wav			KEEP-PLANNED	docs/ASSET_HANDOFF.md:94	17718
+asset	assets/audio/sfx/interact/loot_pickup_generic.wav			KEEP-PLANNED	docs/ASSET_HANDOFF.md:89	14190
+asset	assets/audio/sfx/interact/loot_pickup_rare.wav			KEEP-PLANNED	docs/ASSET_HANDOFF.md:89	24774
+asset	assets/audio/sfx/interact/save_fail.wav			KEEP-PLANNED	docs/ASSET_HANDOFF.md:90	37122
+asset	assets/audio/sfx/interact/save_success.wav			KEEP-PLANNED	docs/ASSET_HANDOFF.md:90	29184
+asset	assets/audio/sfx/interact/workbench_craft_fail.wav			KEEP-PLANNED	docs/ASSET_HANDOFF.md:88	30948
+asset	assets/audio/sfx/interact/workbench_craft_success.wav			KEEP-PLANNED	docs/ASSET_HANDOFF.md:88	31830
+asset	assets/audio/sfx/interact/workbench_open.wav			KEEP-PLANNED	docs/ASSET_HANDOFF.md:88	22128
+asset	assets/audio/sfx/mon_brute_attack.wav			KEEP-LIVE	format string	66228
+asset	assets/audio/sfx/mon_brute_death.wav			KEEP-LIVE	format string	105918
+asset	assets/audio/sfx/mon_brute_hit.wav			KEEP-LIVE	format string	39768
+asset	assets/audio/sfx/mon_brute_step.wav			KEEP-LIVE	format string	44178
+asset	assets/audio/sfx/mon_burner_attack.wav			KEEP-LIVE	format string	75048
+asset	assets/audio/sfx/mon_burner_death.wav			KEEP-LIVE	format string	123556
+asset	assets/audio/sfx/mon_burner_hit.wav			KEEP-LIVE	format string	35358
+asset	assets/audio/sfx/mon_burner_step.wav			KEEP-LIVE	format string	30066
+asset	assets/audio/sfx/mon_crawler_scratch.wav			KEEP-LIVE	format string	48586
+asset	assets/audio/sfx/mon_destroyer_hum.wav			KEEP-LIVE	format string	176478
+asset	assets/audio/sfx/mon_hound_attack.wav			KEEP-LIVE	format string	48588
+asset	assets/audio/sfx/mon_hound_death.wav			KEEP-LIVE	format string	52998
+asset	assets/audio/sfx/mon_hound_hit.wav			KEEP-LIVE	format string	35358
+asset	assets/audio/sfx/mon_hound_step.wav			KEEP-LIVE	format string	44178
+asset	assets/audio/sfx/mon_hunter_roar.wav			KEEP-LIVE	format string	97098
+asset	assets/audio/sfx/mon_rotter_attack.wav			KEEP-LIVE	format string	79458
+asset	assets/audio/sfx/mon_rotter_death.wav			KEEP-LIVE	format string	141198
+asset	assets/audio/sfx/mon_rotter_hit.wav			KEEP-LIVE	format string	35358
+asset	assets/audio/sfx/mon_rotter_step.wav			KEEP-LIVE	format string	40650
+asset	assets/audio/sfx/mon_shadow_teleport.wav			KEEP-LIVE	pattern A	26538
+asset	assets/audio/sfx/mon_sniper_attack.wav			KEEP-LIVE	format string	48588
+asset	assets/audio/sfx/mon_sniper_death.wav			KEEP-LIVE	format string	79458
+asset	assets/audio/sfx/mon_sniper_hit.wav			KEEP-LIVE	format string	26538
+asset	assets/audio/sfx/mon_sniper_step.wav			KEEP-LIVE	format string	44178
+asset	assets/audio/sfx/mon_tvar_attack.wav			KEEP-LIVE	format string	70638
+asset	assets/audio/sfx/mon_tvar_death.wav			KEEP-LIVE	format string	114738
+asset	assets/audio/sfx/mon_tvar_hit.wav			KEEP-LIVE	format string	35358
+asset	assets/audio/sfx/mon_tvar_step.wav			KEEP-LIVE	format string	48588
+asset	assets/audio/sfx/mon_watcher_breath.wav			KEEP-LIVE	format string	207350
+asset	assets/audio/sfx/mon_watcher_scream.wav			KEEP-LIVE	format string	114738
+asset	assets/audio/sfx/monster_crawler_scrape.wav			KEEP-LIVE	format string	83834
+asset	assets/audio/sfx/monster_destroyer_hum.wav			KEEP-LIVE	format string	229364
+asset	assets/audio/sfx/monster_hunter_step.wav			KEEP-LIVE	format string	37122
+asset	assets/audio/sfx/monster_shadow_click.wav			KEEP-LIVE	format string	75048
+asset	assets/audio/sfx/monster_watcher_breath.wav			KEEP-LIVE	format string	264678
+asset	assets/audio/sfx/sfx_click.wav			KEEP-LIVE	format string	7134
+asset	assets/audio/sfx/sfx_enemy_warn.wav			KEEP-LIVE	pattern A	39766
+asset	assets/audio/sfx/sfx_flashlight_off.wav			KEEP-LIVE	pattern A	8898
+asset	assets/audio/sfx/sfx_flashlight_on.wav			KEEP-LIVE	pattern A	10662
+asset	assets/audio/sfx/sfx_hit.wav			KEEP-LIVE	pattern A	13306
+asset	assets/audio/sfx/sfx_hurt.wav			KEEP-LIVE	pattern A	15954
+asset	assets/audio/sfx/sfx_reload.wav			KEEP-LIVE	pattern A	26538
+asset	assets/audio/sfx/sfx_shoot.wav			KEEP-LIVE	pattern A	17718
+asset	assets/audio/sfx/sfx_step.wav			KEEP-LIVE	pattern A	10662
+asset	assets/audio/sfx/shot_heavy.wav			KEEP-LIVE	pattern A	75048
+asset	assets/audio/sfx/shot_light.wav			KEEP-LIVE	format string	44178
+asset	assets/audio/sfx/step_asphalt_dry.wav			KEEP-LIVE	format string	10662
+asset	assets/audio/sfx/step_asphalt_wet.wav			KEEP-LIVE	format string	12426
+asset	assets/audio/sfx/step_clank.wav			KEEP-LIVE	format string	37122
+asset	assets/audio/sfx/step_concrete.wav			KEEP-LIVE	format string	8898
+asset	assets/audio/sfx/step_glass.wav			KEEP-LIVE	format string	23010
+asset	assets/audio/sfx/step_puddle.wav			KEEP-LIVE	format string	17718
+asset	assets/audio/sfx/tvar_sting.ogg			KEEP-LIVE	pattern A	69160
+asset	assets/audio/sfx/ui_achievement.wav			KEEP-LIVE	format string	68396
+asset	assets/audio/sfx/ui_back.wav			KEEP-LIVE	format string	17714
+asset	assets/audio/sfx/ui_click.wav			KEEP-LIVE	format string	8016
+asset	assets/audio/sfx/ui_error.wav			KEEP-LIVE	format string	26538
+asset	assets/audio/sfx/ui_hover.wav			KEEP-LIVE	pattern A	4488
+asset	assets/audio/sfx/ui_save.wav			KEEP-LIVE	format string	24774
+asset	assets/audio/sfx/ui_tab.wav			KEEP-LIVE	format string	4488
+asset	assets/audio/sfx/weapons/pistol_distant.wav			KEEP-PLANNED	docs/REPORT_AUDIO_DETAIL.md:17	33594
+asset	assets/audio/sfx/weapons/pistol_draw.wav			KEEP-PLANNED	docs/REPORT_AUDIO_DETAIL.md:15	23010
+asset	assets/audio/sfx/weapons/pistol_empty.wav			KEEP-PLANNED	docs/REPORT_AUDIO_DETAIL.md:14	3606
+asset	assets/audio/sfx/weapons/pistol_fire.wav			KEEP-PLANNED	docs/REPORT_AUDIO_DETAIL.md:12	24774
+asset	assets/audio/sfx/weapons/pistol_holster.wav			KEEP-PLANNED	docs/REPORT_AUDIO_DETAIL.md:16	23010
+asset	assets/audio/sfx/weapons/pistol_reload.wav			KEEP-PLANNED	docs/REPORT_AUDIO_DETAIL.md:13	72402
+asset	assets/audio/sfx/weapons/rifle_distant.wav			KEEP-PLANNED	docs/REPORT_AUDIO_DETAIL.md:23	52998
+asset	assets/audio/sfx/weapons/rifle_draw.wav			KEEP-PLANNED	docs/REPORT_AUDIO_DETAIL.md:21	27420
+asset	assets/audio/sfx/weapons/rifle_empty.wav			KEEP-PLANNED	docs/REPORT_AUDIO_DETAIL.md:20	4488
+asset	assets/audio/sfx/weapons/rifle_fire.wav			KEEP-PLANNED	docs/REPORT_AUDIO_DETAIL.md:18	44178
+asset	assets/audio/sfx/weapons/rifle_holster.wav			KEEP-PLANNED	docs/REPORT_AUDIO_DETAIL.md:22	26538
+asset	assets/audio/sfx/weapons/rifle_reload.wav			KEEP-PLANNED	docs/REPORT_AUDIO_DETAIL.md:19	103272
+asset	assets/audio/sfx/weapons/shotgun_distant.wav			KEEP-PLANNED	docs/REPORT_AUDIO_DETAIL.md:29	44178
+asset	assets/audio/sfx/weapons/shotgun_draw.wav			KEEP-PLANNED	docs/REPORT_AUDIO_DETAIL.md:27	24774
+asset	assets/audio/sfx/weapons/shotgun_empty.wav			KEEP-PLANNED	docs/REPORT_AUDIO_DETAIL.md:26	4488
+asset	assets/audio/sfx/weapons/shotgun_fire.wav			KEEP-PLANNED	docs/REPORT_AUDIO_DETAIL.md:24	37122
+asset	assets/audio/sfx/weapons/shotgun_holster.wav			KEEP-PLANNED	docs/REPORT_AUDIO_DETAIL.md:28	26096
+asset	assets/audio/sfx/weapons/shotgun_reload.wav			KEEP-PLANNED	docs/REPORT_AUDIO_DETAIL.md:25	92246
+asset	assets/audio/sfx/wind.wav			KEEP-LIVE	format string	529278
+asset	assets/audio/ui/README.md			KEEP-LIVE	pattern B	3078
+asset	assets/audio/ui/ui_achievement_sting.ogg			KEEP-LIVE	pattern B	7814
+asset	assets/audio/ui/ui_boss_sting.ogg			KEEP-LIVE	pattern A	5862
+asset	assets/audio/ui/ui_daily_complete_sting.ogg			KEEP-PLANNED	docs/CERT_UIAUDIO.md:12	6528
+asset	assets/audio/ui/ui_ending_sting.ogg			KEEP-QA	named by a tool	6244
+asset	assets/audio/ui/ui_menu_click.ogg			KEEP-LIVE	pattern B	4769
+asset	assets/audio/ui/ui_secret_discovery_sting.ogg			KEEP-PLANNED	docs/CERT_UIAUDIO.md:11	5579
+asset	assets/audio/ui/ui_streak_milestone_sting.ogg			KEEP-PLANNED	docs/AUDIO_MIX_AUDIT.md:72	6399
+asset	assets/config/visual_quality.tres			KEEP-LIVE	pattern A	2165
+asset	assets/env/camera_attributes_night.tres			KEEP-PLANNED	docs/VISUAL_PASS.md:30	305
+asset	assets/env/mat_foliage_sway.tres			KEEP-LIVE	pattern A	203
+asset	assets/env/mat_lamp_flicker.tres			KEEP-PLANNED	docs/AAA_BENCHMARK.md:43	308
+asset	assets/env/mat_wet_asphalt.tres			KEEP-PLANNED	docs/VISUAL_PASS.md:58	279
+asset	assets/env/night_environment_desktop.tres			KEEP-PLANNED	docs/ASSET_SHOPPING_LIST.md:50 (directory)	1347
+asset	assets/env/night_environment_mobile.tres			KEEP-PLANNED	docs/QA_SWARM_FINDINGS.md:38	1185
+asset	assets/fonts/BebasNeue-Regular.ttf			KEEP-LIVE	pattern A	35004
+asset	assets/fonts/Rajdhani-Regular.ttf			KEEP-LIVE	pattern A	352088
+asset	assets/fonts/RobotoCondensed-Regular.ttf			KEEP-LIVE	pattern A	42536
+asset	assets/fonts/ShareTechMono-Regular.ttf			KEEP-LIVE	pattern A	42756
+asset	assets/mesh/mesh_bench.res			KEEP-LIVE	pattern A	10339
+asset	assets/mesh/mesh_house_small.res			KEEP-QA	named by a tool	5905
+asset	assets/mesh/mesh_hydrant.res			KEEP-LIVE	pattern A	9829
+asset	assets/mesh/mesh_streetlight_pole.res			KEEP-LIVE	pattern A	5326
+asset	assets/mesh/mesh_trash_can.res			KEEP-LIVE	pattern A	5903
+asset	assets/models/kenney/README.txt			KEEP-PLANNED	the file is the owner's instruction to fetch the Kenney packs (3 steps); no model is present and no document names the path	269
+asset	assets/photos/abandoned_street.png			KEEP-LIVE	format string	99871
+asset	assets/photos/broken_lamp.png			KEEP-LIVE	format string	98759
+asset	assets/photos/dark_alley.png			KEEP-LIVE	format string	95489
+asset	assets/photos/empty_hospital.png			KEEP-LIVE	format string	100349
+asset	assets/photos/foggy_avenue.png			KEEP-LIVE	format string	101542
+asset	assets/photos/last_streetlight.png			KEEP-LIVE	format string	99897
+asset	assets/photos/night_substation.png			KEEP-LIVE	format string	95616
+asset	assets/photos/old_park.png			KEEP-LIVE	format string	100655
+asset	assets/photos/ruined_school.png			KEEP-LIVE	format string	98648
+asset	assets/photos/warehouse_shadow.png			KEEP-LIVE	format string	97701
+asset	assets/shaders/contact_shadow.gdshader			KEEP-PLANNED	docs/INTERIM_SLOP.md:13	1051
+asset	assets/shaders/damage_vignette.gdshader			KEEP-LIVE	pattern A	1365
+asset	assets/shaders/flashlight_cone.gdshader			KEEP-LIVE	pattern A	1598
+asset	assets/shaders/foliage_sway.gdshader			KEEP-LIVE	pattern A	1640
+asset	assets/shaders/grain_overlay.gdshader			KEEP-LIVE	pattern A	1641
+asset	assets/shaders/height_fog_card.gdshader			KEEP-LIVE	pattern A	2038
+asset	assets/shaders/menu_parallax.gdshader			KEEP-PLANNED	docs/INTERIM_SLOP.md:13	1161
+asset	assets/shaders/motion_blur.gdshader			KEEP-LIVE	pattern A	793
+asset	assets/shaders/streetlight_flicker.gdshader			KEEP-PLANNED	docs/AAA_BENCHMARK.md:43	2331
+asset	assets/shaders/ui_panel.gdshader			KEEP-LIVE	pattern A	2129
+asset	assets/shaders/wet_asphalt.gdshader			KEEP-PLANNED	docs/AAA_BENCHMARK.md:44	2561
+asset	assets/store/background_1920x1080.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:306	123307
+asset	assets/store/capsule_header_460x215.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:311	30453
+asset	assets/store/capsule_main_616x353.png			KEEP-QA	named by a tool	49538
+asset	assets/store/capsule_small_231x87.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:312	10938
+asset	assets/store/endings/ending_dark.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:162	14331
+asset	assets/store/endings/ending_hope.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:165	82076
+asset	assets/store/endings/ending_light.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:166	116763
+asset	assets/store/endings/ending_survivor.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:164	18422
+asset	assets/store/endings/ending_truth.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:163	67057
+asset	assets/store/feature_graphic_1024x500.png			KEEP-PLANNED	docs/ERROR_LOG_PLAY_FINAL.md:40	81557
+asset	assets/store/icon_round_192.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:342	19561
+asset	assets/store/library_hero_1920x620.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:309	74486
+asset	assets/store/loading_screen_1920x1080.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:307	123307
+asset	assets/store/main_menu_keyart_1920x1080.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:308	178429
+asset	assets/store/play_final/feature_graphic_1024x500.png			KEEP-PLANNED	docs/ERROR_LOG_PLAY_FINAL.md:40	318834
+asset	assets/store/play_final/icon_v2_512.png			KEEP-PLANNED	docs/ERROR_LOG_PLAY_FINAL.md:43	30139
+asset	assets/store/play_final/icon_v3_512.png			KEEP-PLANNED	docs/ERROR_LOG_PLAY_FINAL.md:44	15711
+asset	assets/store/play_final/short_banner_300x300.png			KEEP-PLANNED	docs/ERROR_LOG_PLAY_FINAL.md:10	12760
+asset	assets/store/play_final/tv_banner_1280x720.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:313	320872
+asset	assets/store/play_final/video_poster_1280x720.png			KEEP-PLANNED	docs/ERROR_LOG_PLAY_FINAL.md:42	336913
+asset	assets/store/play_icon_512.png			KEEP-LIVE	pattern A	54101
+asset	assets/store/press/banner_discord_1280x640.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:315	103186
+asset	assets/store/press/banner_twitter_1500x500.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:316	78269
+asset	assets/store/press/emblem_brass_512.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:343	29473
+asset	assets/store/press/press_cover_1920x1080.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:314	123307
+asset	assets/store/screenshot_01.png			KEEP-PLANNED	docs/OWNER_HANDOFF.md:53	159761
+asset	assets/store/screenshot_02.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:253	122392
+asset	assets/store/screenshot_03.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:254	104189
+asset	assets/store/screenshot_04.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:255	124545
+asset	assets/store/screenshot_05.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:19	318466
+asset	assets/store/storyboard/frame_01.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:406 (directory)	49800
+asset	assets/store/storyboard/frame_02.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:406 (directory)	57683
+asset	assets/store/storyboard/frame_03.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:406 (directory)	71445
+asset	assets/store/storyboard/frame_04.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:406 (directory)	48994
+asset	assets/store/storyboard/frame_05.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:406 (directory)	19926
+asset	assets/store/storyboard/frame_06.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:406 (directory)	18052
+asset	assets/store/storyboard/frame_07.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:406 (directory)	49624
+asset	assets/store/storyboard/frame_08.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:406 (directory)	29800
+asset	assets/store/storyboard/frame_09.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:406 (directory)	44706
+asset	assets/store/storyboard/frame_10.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:406 (directory)	70661
+asset	assets/store/tv_banner_1280x720.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:313	124261
+asset	assets/store/v2/ab/ab_icon_A_hero.png			KEEP-PLANNED	docs/REPORT_MARKET_V2.md:11	172761
+asset	assets/store/v2/ab/ab_icon_B_map.png			KEEP-PLANNED	docs/REPORT_MARKET_V2.md:12	164818
+asset	assets/store/v2/ab/ab_icon_C_monster.png			KEEP-PLANNED	docs/REPORT_MARKET_V2.md:13	201078
+asset	assets/store/v2/ab/ab_icon_D_hand.png			KEEP-PLANNED	docs/REPORT_MARKET_V2.md:14	140427
+asset	assets/store/v2/background_1920x1080_v2.png			KEEP-PLANNED	docs/REPORT_STORE_V2.md:17	555436
+asset	assets/store/v2/capsule_header_460x215_v2.png			KEEP-PLANNED	docs/REPORT_STORE_V2.md:13	61496
+asset	assets/store/v2/capsule_main_616x353_v2.png			KEEP-PLANNED	docs/REPORT_STORE_V2.md:14	113758
+asset	assets/store/v2/capsule_small_231x87_v2.png			KEEP-PLANNED	docs/REPORT_STORE_V2.md:15	15198
+asset	assets/store/v2/coming_soon/dlc_teaser_1920x1080.png			KEEP-PLANNED	docs/REPORT_DEVICES_V2.md:34	439621
+asset	assets/store/v2/coming_soon/wishlist_hero_1920x1080.png			KEEP-PLANNED	docs/REPORT_DEVICES_V2.md:33	413883
+asset	assets/store/v2/devices/phone/phone_combat.png			KEEP-PLANNED	docs/REPORT_DEVICES_V2.md:13	381828
+asset	assets/store/v2/devices/phone/phone_map.png			KEEP-PLANNED	docs/REPORT_DEVICES_V2.md:12	239635
+asset	assets/store/v2/devices/phone/phone_menu.png			KEEP-PLANNED	docs/REPORT_DEVICES_V2.md:14	446303
+asset	assets/store/v2/devices/phone/phone_street.png			KEEP-PLANNED	docs/REPORT_DEVICES_V2.md:11	378976
+asset	assets/store/v2/devices/steam_desktop/steam_desktop_combat.png			KEEP-PLANNED	docs/REPORT_DEVICES_V2.md:26	424000
+asset	assets/store/v2/devices/steam_desktop/steam_desktop_hero.png			KEEP-PLANNED	docs/REPORT_DEVICES_V2.md:24	369894
+asset	assets/store/v2/devices/steam_desktop/steam_desktop_map.png			KEEP-PLANNED	docs/REPORT_DEVICES_V2.md:25	378273
+asset	assets/store/v2/devices/steam_tv/steam_tv_hero_4k.png			KEEP-PLANNED	docs/REPORT_DEVICES_V2.md:27	479010
+asset	assets/store/v2/devices/tablet_10/tablet_10_menu.png			KEEP-PLANNED	docs/REPORT_DEVICES_V2.md:18	481273
+asset	assets/store/v2/devices/tablet_10/tablet_10_street.png			KEEP-PLANNED	docs/REPORT_DEVICES_V2.md:17	463177
+asset	assets/store/v2/devices/tablet_7/tablet_7_encounter.png			KEEP-PLANNED	docs/REPORT_DEVICES_V2.md:16	479295
+asset	assets/store/v2/devices/tablet_7/tablet_7_map.png			KEEP-PLANNED	docs/REPORT_DEVICES_V2.md:15	485248
+asset	assets/store/v2/endings/ending_dark.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:162	297920
+asset	assets/store/v2/endings/ending_hope.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:165	733573
+asset	assets/store/v2/endings/ending_light.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:166	784016
+asset	assets/store/v2/endings/ending_survivor.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:164	611415
+asset	assets/store/v2/endings/ending_truth.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:163	331003
+asset	assets/store/v2/feature_1024x500_v2.png			KEEP-PLANNED	docs/ERROR_LOG_STOREV2.md:10	210708
+asset	assets/store/v2/icon_512_v2.png			KEEP-PLANNED	docs/ERROR_LOG_STOREV2.md:8	36774
+asset	assets/store/v2/itch/itch_cover_630x500.png			KEEP-PLANNED	docs/RELEASE_FINAL.md:150	155084
+asset	assets/store/v2/itch/itch_screenshot_wide_1_1280x720.png			KEEP-PLANNED	docs/RELEASE_FINAL.md:135 (directory)	284528
+asset	assets/store/v2/itch/itch_screenshot_wide_2_1280x720.png			KEEP-PLANNED	docs/RELEASE_FINAL.md:135 (directory)	174208
+asset	assets/store/v2/itch/itch_screenshot_wide_3_1280x720.png			KEEP-PLANNED	docs/RELEASE_FINAL.md:135 (directory)	456942
+asset	assets/store/v2/itch/itch_thumbnail_315x250.png			KEEP-PLANNED	docs/ERROR_LOG_MARKETV2.md:8	55287
+asset	assets/store/v2/library_hero_1920x620_v2.png			KEEP-PLANNED	docs/REPORT_STORE_V2.md:16	549035
+asset	assets/store/v2/presskit/README.md			KEEP-LIVE	pattern B	3709
+asset	assets/store/v2/shots/shot_combat.png			KEEP-PLANNED	docs/REPORT_STORE_V2.md:26	302764
+asset	assets/store/v2/shots/shot_encyclopedia.png			KEEP-PLANNED	docs/REPORT_STORE_V2.md:25	251498
+asset	assets/store/v2/shots/shot_map.png			KEEP-PLANNED	docs/REPORT_STORE_V2.md:24	174208
+asset	assets/store/v2/shots/shot_restored.png			KEEP-PLANNED	docs/REPORT_STORE_V2.md:27	456942
+asset	assets/store/v2/shots/shot_street.png			KEEP-PLANNED	docs/REPORT_STORE_V2.md:23	284528
+asset	assets/store/v2/social/discord_1280x640.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:315	308551
+asset	assets/store/v2/social/poster_vertical_1080x1350.png			KEEP-PLANNED	docs/REPORT_STORE_V2.md:36	498438
+asset	assets/store/v2/social/press_cover_1920x1080.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:314	657609
+asset	assets/store/v2/social/twitter_1500x500.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:316	241142
+asset	assets/store/v2/storyboard/frame_01.png			KEEP-PLANNED	docs/REPORT_STORE_V2.md:53 (directory)	205695
+asset	assets/store/v2/storyboard/frame_02.png			KEEP-PLANNED	docs/REPORT_STORE_V2.md:53 (directory)	242553
+asset	assets/store/v2/storyboard/frame_03.png			KEEP-PLANNED	docs/REPORT_STORE_V2.md:53 (directory)	277811
+asset	assets/store/v2/storyboard/frame_04.png			KEEP-PLANNED	docs/REPORT_STORE_V2.md:53 (directory)	265915
+asset	assets/store/v2/storyboard/frame_05.png			KEEP-PLANNED	docs/REPORT_STORE_V2.md:53 (directory)	185966
+asset	assets/store/v2/storyboard/frame_06.png			KEEP-PLANNED	docs/REPORT_STORE_V2.md:53 (directory)	180095
+asset	assets/store/v2/storyboard/frame_07.png			KEEP-PLANNED	docs/REPORT_STORE_V2.md:53 (directory)	223262
+asset	assets/store/v2/storyboard/frame_08.png			KEEP-PLANNED	docs/REPORT_STORE_V2.md:53 (directory)	249611
+asset	assets/store/v2/storyboard/frame_09.png			KEEP-PLANNED	docs/REPORT_STORE_V2.md:53 (directory)	183557
+asset	assets/store/v2/storyboard/frame_10.png			KEEP-PLANNED	docs/REPORT_STORE_V2.md:53 (directory)	343514
+asset	assets/store/v2/vertical/vertical_cta.png			KEEP-PLANNED	docs/REPORT_MARKET_V2.md:22	461974
+asset	assets/store/v2/vertical/vertical_hook.png			KEEP-PLANNED	docs/REPORT_MARKET_V2.md:20	316770
+asset	assets/store/v2/vertical/vertical_reveal.png			KEEP-PLANNED	docs/REPORT_MARKET_V2.md:21	476415
+asset	assets/store/v2/yandex/yandex_banner_1920x600.png			KEEP-PLANNED	docs/RELEASE_FINAL.md:124	430280
+asset	assets/store/v2/yandex/yandex_cover_1080x1080.png			KEEP-PLANNED	docs/RELEASE_FINAL.md:124	448118
+asset	assets/store/v2/yandex/yandex_icon_512.png			KEEP-PLANNED	docs/RELEASE_FINAL.md:123	35945
+asset	assets/store/v2/youtube/banner_2560x1440.png			KEEP-PLANNED	docs/REPORT_MARKET_V2.md:28	495639
+asset	assets/store/v2/youtube/channel_icon_800.png			KEEP-PLANNED	docs/REPORT_MARKET_V2.md:29	65043
+asset	assets/textures/badges/badge_ach_01_128.png			KEEP-LIVE	format string	28458
+asset	assets/textures/badges/badge_ach_02_128.png			KEEP-LIVE	format string	29086
+asset	assets/textures/badges/badge_ach_03_128.png			KEEP-LIVE	format string	28588
+asset	assets/textures/badges/badge_ach_04_128.png			KEEP-LIVE	format string	26943
+asset	assets/textures/badges/badge_ach_05_128.png			KEEP-LIVE	format string	27344
+asset	assets/textures/badges/badge_ach_06_128.png			KEEP-LIVE	format string	28114
+asset	assets/textures/badges/badge_ach_07_128.png			KEEP-LIVE	format string	27411
+asset	assets/textures/badges/badge_ach_08_128.png			KEEP-LIVE	format string	28795
+asset	assets/textures/badges/badge_ach_09_128.png			KEEP-LIVE	format string	26065
+asset	assets/textures/badges/badge_ach_10_128.png			KEEP-LIVE	format string	25937
+asset	assets/textures/badges/badge_ach_11_128.png			KEEP-LIVE	format string	28693
+asset	assets/textures/badges/badge_ach_12_128.png			KEEP-LIVE	format string	28045
+asset	assets/textures/badges/badge_ach_13_128.png			KEEP-LIVE	format string	24397
+asset	assets/textures/badges/badge_ach_14_128.png			KEEP-LIVE	format string	27968
+asset	assets/textures/badges/badge_ach_15_128.png			KEEP-LIVE	format string	24533
+asset	assets/textures/badges/badge_ach_16_128.png			KEEP-LIVE	format string	28400
+asset	assets/textures/badges/badge_ach_17_128.png			KEEP-LIVE	format string	28684
+asset	assets/textures/badges/badge_ach_18_128.png			KEEP-LIVE	format string	28722
+asset	assets/textures/badges/badge_ach_19_128.png			KEEP-LIVE	format string	27911
+asset	assets/textures/badges/badge_ach_20_128.png			KEEP-LIVE	format string	28130
+asset	assets/textures/badges/badge_ach_district_gas_station_128.png			KEEP-LIVE	format string	28834
+asset	assets/textures/badges/badge_ach_district_hospital_128.png			KEEP-LIVE	format string	27976
+asset	assets/textures/badges/badge_ach_district_industrial_128.png			KEEP-LIVE	format string	33769
+asset	assets/textures/badges/badge_ach_district_park_128.png			KEEP-LIVE	format string	27558
+asset	assets/textures/badges/badge_ach_district_police_128.png			KEEP-LIVE	format string	24232
+asset	assets/textures/badges/badge_ach_district_power_station_128.png			KEEP-LIVE	format string	28541
+asset	assets/textures/badges/badge_ach_district_residential_128.png			KEEP-LIVE	format string	24075
+asset	assets/textures/badges/badge_ach_district_school_128.png			KEEP-LIVE	format string	25010
+asset	assets/textures/badges/badge_ach_district_substation_128.png			KEEP-LIVE	format string	24561
+asset	assets/textures/badges/badge_ach_district_suburbs_128.png			KEEP-LIVE	format string	28086
+asset	assets/textures/badges/badge_ach_district_warehouses_128.png			KEEP-LIVE	format string	24743
+asset	assets/textures/cards/card_gas_station_512.png			KEEP-LIVE	format string	468981
+asset	assets/textures/cards/card_gas_station_locked_512.png			KEEP-LIVE	format string	355039
+asset	assets/textures/cards/card_hospital_512.png			KEEP-LIVE	format string	472351
+asset	assets/textures/cards/card_hospital_locked_512.png			KEEP-LIVE	format string	361029
+asset	assets/textures/cards/card_industrial_512.png			KEEP-LIVE	format string	496765
+asset	assets/textures/cards/card_industrial_locked_512.png			KEEP-LIVE	format string	361868
+asset	assets/textures/cards/card_park_512.png			KEEP-LIVE	format string	487450
+asset	assets/textures/cards/card_park_locked_512.png			KEEP-LIVE	format string	363892
+asset	assets/textures/cards/card_police_512.png			KEEP-LIVE	format string	515651
+asset	assets/textures/cards/card_police_locked_512.png			KEEP-LIVE	format string	381213
+asset	assets/textures/cards/card_power_station_512.png			KEEP-LIVE	format string	507357
+asset	assets/textures/cards/card_power_station_locked_512.png			KEEP-LIVE	format string	370079
+asset	assets/textures/cards/card_residential_512.png			KEEP-LIVE	format string	428603
+asset	assets/textures/cards/card_residential_locked_512.png			KEEP-LIVE	format string	317880
+asset	assets/textures/cards/card_school_512.png			KEEP-LIVE	format string	473320
+asset	assets/textures/cards/card_school_locked_512.png			KEEP-LIVE	format string	351235
+asset	assets/textures/cards/card_substation_512.png			KEEP-LIVE	format string	502344
+asset	assets/textures/cards/card_substation_locked_512.png			KEEP-LIVE	format string	372909
+asset	assets/textures/cards/card_suburbs_512.png			KEEP-LIVE	format string	428939
+asset	assets/textures/cards/card_suburbs_locked_512.png			KEEP-LIVE	format string	318007
+asset	assets/textures/cards/card_warehouses_512.png			KEEP-LIVE	format string	505110
+asset	assets/textures/cards/card_warehouses_locked_512.png			KEEP-LIVE	format string	373858
+asset	assets/textures/crests/crest_gas_station_96.png			KEEP-LIVE	format string	775
+asset	assets/textures/crests/crest_hospital_96.png			KEEP-LIVE	format string	739
+asset	assets/textures/crests/crest_industrial_96.png			KEEP-LIVE	format string	959
+asset	assets/textures/crests/crest_park_96.png			KEEP-LIVE	format string	807
+asset	assets/textures/crests/crest_police_96.png			KEEP-LIVE	format string	892
+asset	assets/textures/crests/crest_power_station_96.png			KEEP-LIVE	format string	808
+asset	assets/textures/crests/crest_residential_96.png			KEEP-LIVE	format string	753
+asset	assets/textures/crests/crest_school_96.png			KEEP-LIVE	format string	790
+asset	assets/textures/crests/crest_substation_96.png			KEEP-LIVE	format string	821
+asset	assets/textures/crests/crest_suburbs_96.png			KEEP-LIVE	format string	841
+asset	assets/textures/crests/crest_warehouses_96.png			KEEP-LIVE	format string	749
+asset	assets/textures/docs_v2/doc_blueprint_256x340.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:250	3067
+asset	assets/textures/docs_v2/doc_circuit_256x340.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:251	3624
+asset	assets/textures/docs_v2/doc_letter_256x340.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:252	4415
+asset	assets/textures/docs_v2/doc_map_sketch_256x340.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:253	3945
+asset	assets/textures/docs_v2/doc_photo_monster_256x340.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:254	3346
+asset	assets/textures/docs_v2/doc_photo_street_256x340.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:255	3338
+asset	assets/textures/enemies/architect_512.png			KEEP-LIVE	pattern A	20810
+asset	assets/textures/enemies/brute_512.png			KEEP-LIVE	pattern A	24077
+asset	assets/textures/enemies/burner_512.png			KEEP-LIVE	pattern A	22723
+asset	assets/textures/enemies/hound_512.png			KEEP-LIVE	pattern A	37500
+asset	assets/textures/enemies/rotter_512.png			KEEP-LIVE	pattern A	17235
+asset	assets/textures/enemies/sniper_512.png			KEEP-LIVE	pattern A	24582
+asset	assets/textures/enemies/tvar_512.png			KEEP-LIVE	pattern A	49645
+asset	assets/textures/environment/asphalt.png			KEEP-LIVE	pattern A	61893
+asset	assets/textures/environment/brick.png			KEEP-LIVE	pattern A	57437
+asset	assets/textures/environment/concrete.png			KEEP-LIVE	pattern A	62751
+asset	assets/textures/environment/rusty_metal.png			KEEP-LIVE	pattern A	75611
+asset	assets/textures/fx/bleed_pulse_64.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:400	3708
+asset	assets/textures/fx/blood_splatter.png			KEEP-LIVE	pattern A	3515
+asset	assets/textures/fx/burn_loop_64.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:396	4089
+asset	assets/textures/fx/dust.png			KEEP-LIVE	pattern A	2215
+asset	assets/textures/fx/ember.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:218	2468
+asset	assets/textures/fx/flashlight_cookie_256.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:334	28521
+asset	assets/textures/fx/loot_glint_64.png			KEEP-LIVE	pattern A	1925
+asset	assets/textures/fx/muzzle_flash.png			KEEP-LIVE	pattern A	5282
+asset	assets/textures/fx/muzzle_flash_alt_64.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:335	5157
+asset	assets/textures/fx/poison_cloud_64.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:337	3614
+asset	assets/textures/fx/poison_drip_64.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:397	3439
+asset	assets/textures/fx/save_sparkle_64.png			KEEP-LIVE	pattern A	1972
+asset	assets/textures/fx/slow_trail_64.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:399	2012
+asset	assets/textures/fx/smoke_puff.png			KEEP-LIVE	pattern A	3264
+asset	assets/textures/fx/spark.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:214	4588
+asset	assets/textures/fx/spark_alt_64.png			KEEP-LIVE	pattern A	4942
+asset	assets/textures/fx/strobe_flash_128.png			KEEP-LIVE	pattern A	15840
+asset	assets/textures/fx/stun_stars_64.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:398	1675
+asset	assets/textures/fx/taser_arc_64.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:403	2827
+asset	assets/textures/grading/lut_night.png			KEEP-PLANNED	docs/ASSET_HANDOFF.md:8	239
+asset	assets/textures/grading/night_grade.png			KEEP-PLANNED	docs/ASSET_HANDOFF.md:8	239
+asset	assets/textures/icons/skills/battery_capacity_96.png			KEEP-LIVE	format string	625
+asset	assets/textures/icons/skills/crit_chance_96.png			KEEP-LIVE	format string	865
+asset	assets/textures/icons/skills/damage_boost_1_96.png			KEEP-LIVE	format string	712
+asset	assets/textures/icons/skills/damage_boost_2_96.png			KEEP-LIVE	format string	674
+asset	assets/textures/icons/skills/fire_rate_96.png			KEEP-LIVE	format string	646
+asset	assets/textures/icons/skills/health_regen_96.png			KEEP-LIVE	format string	656
+asset	assets/textures/icons/skills/inventory_space_96.png			KEEP-LIVE	format string	615
+asset	assets/textures/icons/skills/light_radius_96.png			KEEP-LIVE	format string	940
+asset	assets/textures/icons/skills/loot_luck_96.png			KEEP-LIVE	format string	802
+asset	assets/textures/icons/skills/max_health_96.png			KEEP-LIVE	format string	655
+asset	assets/textures/icons/skills/move_speed_96.png			KEEP-LIVE	format string	733
+asset	assets/textures/icons/skills/reload_speed_96.png			KEEP-LIVE	format string	788
+asset	assets/textures/icons/skills/stamina_boost_96.png			KEEP-LIVE	format string	712
+asset	assets/textures/icons/skills/stealth_96.png			KEEP-LIVE	format string	852
+asset	assets/textures/icons/skills/xp_boost_96.png			KEEP-LIVE	format string	753
+asset	assets/textures/icons_v2/ach_medal_v2_01_96.png			KEEP-LIVE	format string	1181
+asset	assets/textures/icons_v2/ach_medal_v2_02_96.png			KEEP-LIVE	format string	1188
+asset	assets/textures/icons_v2/ach_medal_v2_03_96.png			KEEP-LIVE	format string	1241
+asset	assets/textures/icons_v2/ach_medal_v2_04_96.png			KEEP-LIVE	format string	1236
+asset	assets/textures/icons_v2/ach_medal_v2_05_96.png			KEEP-LIVE	format string	1125
+asset	assets/textures/icons_v2/ach_medal_v2_06_96.png			KEEP-LIVE	format string	1099
+asset	assets/textures/icons_v2/ach_medal_v2_07_96.png			KEEP-LIVE	format string	1127
+asset	assets/textures/icons_v2/ach_medal_v2_08_96.png			KEEP-LIVE	format string	1188
+asset	assets/textures/icons_v2/ach_medal_v2_09_96.png			KEEP-LIVE	format string	1200
+asset	assets/textures/icons_v2/ach_medal_v2_10_96.png			KEEP-LIVE	format string	1092
+asset	assets/textures/icons_v2/ach_medal_v2_11_96.png			KEEP-LIVE	format string	1095
+asset	assets/textures/icons_v2/ach_medal_v2_12_96.png			KEEP-LIVE	format string	1122
+asset	assets/textures/icons_v2/ach_medal_v2_13_96.png			KEEP-LIVE	format string	1115
+asset	assets/textures/icons_v2/ach_medal_v2_14_96.png			KEEP-LIVE	format string	1148
+asset	assets/textures/icons_v2/ach_medal_v2_15_96.png			KEEP-LIVE	format string	998
+asset	assets/textures/icons_v2/ach_medal_v2_16_96.png			KEEP-LIVE	format string	1011
+asset	assets/textures/icons_v2/ach_medal_v2_17_96.png			KEEP-LIVE	format string	1033
+asset	assets/textures/icons_v2/ach_medal_v2_18_96.png			KEEP-LIVE	format string	1046
+asset	assets/textures/icons_v2/ach_medal_v2_19_96.png			KEEP-LIVE	format string	1064
+asset	assets/textures/icons_v2/ach_medal_v2_20_96.png			KEEP-LIVE	format string	1125
+asset	assets/textures/icons_v2/branches/combat_header_256x64.png			KEEP-LIVE	format string	792
+asset	assets/textures/icons_v2/branches/survival_header_256x64.png			KEEP-LIVE	format string	694
+asset	assets/textures/icons_v2/branches/utility_header_256x64.png			KEEP-LIVE	format string	870
+asset	assets/textures/icons_v2/coin_single_128.png			KEEP-PLANNED	docs/REPORT_ICONS_V2.md:7 (directory)	856
+asset	assets/textures/icons_v2/craft/alcohol_64.png			KEEP-LIVE	pattern A	262
+asset	assets/textures/icons_v2/craft/battery_64.png			KEEP-LIVE	pattern A	311
+asset	assets/textures/icons_v2/craft/bottle_64.png			KEEP-LIVE	pattern A	256
+asset	assets/textures/icons_v2/craft/cable_64.png			KEEP-LIVE	pattern A	288
+asset	assets/textures/icons_v2/craft/case_64.png			KEEP-LIVE	pattern A	207
+asset	assets/textures/icons_v2/craft/fabric_64.png			KEEP-LIVE	pattern A	311
+asset	assets/textures/icons_v2/craft/fuse_64.png			KEEP-LIVE	pattern A	218
+asset	assets/textures/icons_v2/craft/gunpowder_64.png			KEEP-LIVE	pattern A	404
+asset	assets/textures/icons_v2/craft/metal_64.png			KEEP-LIVE	pattern A	289
+asset	assets/textures/icons_v2/craft/paper_64.png			KEEP-LIVE	pattern A	262
+asset	assets/textures/icons_v2/cycle/cable_64.png			KEEP-LIVE	pattern B	305
+asset	assets/textures/icons_v2/event_breaker_48.png			KEEP-LIVE	pattern A	294
+asset	assets/textures/icons_v2/event_siren_48.png			KEEP-LIVE	pattern A	292
+asset	assets/textures/icons_v2/monster_boss_64.png			KEEP-LIVE	format string	381
+asset	assets/textures/icons_v2/monster_crawler_64.png			KEEP-LIVE	format string	401
+asset	assets/textures/icons_v2/monster_destroyer_64.png			KEEP-LIVE	format string	258
+asset	assets/textures/icons_v2/monster_hunter_64.png			KEEP-LIVE	format string	439
+asset	assets/textures/icons_v2/monster_shadow_64.png			KEEP-LIVE	format string	297
+asset	assets/textures/icons_v2/monster_watcher_64.png			KEEP-LIVE	format string	502
+asset	assets/textures/icons_v2/skills/battery_capacity_96.png			KEEP-PLANNED	docs/REPORT_CONTENT_WAVE.md:26	797
+asset	assets/textures/icons_v2/skills/crit_chance_96.png			KEEP-PLANNED	docs/REPORT_CONTENT_WAVE.md:27	1014
+asset	assets/textures/icons_v2/skills/damage_boost_1_96.png			KEEP-PLANNED	docs/REPORT_CONTENT_WAVE.md:28	825
+asset	assets/textures/icons_v2/skills/damage_boost_2_96.png			KEEP-PLANNED	docs/ERROR_LOG.md:11	978
+asset	assets/textures/icons_v2/skills/fire_rate_96.png			KEEP-PLANNED	docs/REPORT_CONTENT_WAVE.md:30	958
+asset	assets/textures/icons_v2/skills/health_regen_96.png			KEEP-PLANNED	docs/REPORT_CONTENT_WAVE.md:31	1205
+asset	assets/textures/icons_v2/skills/inventory_space_96.png			KEEP-PLANNED	docs/REPORT_CONTENT_WAVE.md:32	994
+asset	assets/textures/icons_v2/skills/light_radius_96.png			KEEP-PLANNED	docs/REPORT_CONTENT_WAVE.md:33	939
+asset	assets/textures/icons_v2/skills/loot_luck_96.png			KEEP-PLANNED	docs/REPORT_CONTENT_WAVE.md:34	976
+asset	assets/textures/icons_v2/skills/max_health_96.png			KEEP-PLANNED	docs/REPORT_CONTENT_WAVE.md:35	982
+asset	assets/textures/icons_v2/skills/move_speed_96.png			KEEP-PLANNED	docs/REPORT_CONTENT_WAVE.md:36	906
+asset	assets/textures/icons_v2/skills/reload_speed_96.png			KEEP-PLANNED	docs/REPORT_CONTENT_WAVE.md:37	956
+asset	assets/textures/icons_v2/skills/stamina_boost_96.png			KEEP-PLANNED	docs/REPORT_CONTENT_WAVE.md:38	872
+asset	assets/textures/icons_v2/skills/stealth_96.png			KEEP-PLANNED	docs/ASSET_HANDOFF.md:108	1028
+asset	assets/textures/icons_v2/skills/xp_boost_96.png			KEEP-PLANNED	docs/REPORT_CONTENT_WAVE.md:40	1031
+asset	assets/textures/icons_v2/stat_clock_64.png			KEEP-LIVE	format string	416
+asset	assets/textures/icons_v2/stat_district_64.png			KEEP-LIVE	format string	405
+asset	assets/textures/icons_v2/stat_document_64.png			KEEP-LIVE	format string	189
+asset	assets/textures/icons_v2/stat_skull_64.png			KEEP-LIVE	format string	409
+asset	assets/textures/icons_v2/stat_wrench_64.png			KEEP-LIVE	format string	436
+asset	assets/textures/icons_v2/tools_128.png			KEEP-LIVE	pattern A	587
+asset	assets/textures/items/alcohol.png			KEEP-LIVE	format string	2367
+asset	assets/textures/items/ammo.png			KEEP-LIVE	format string	551
+asset	assets/textures/items/ancient_key.png			KEEP-LIVE	format string	5039
+asset	assets/textures/items/audio_log.png			KEEP-LIVE	format string	2576
+asset	assets/textures/items/backpack.png			KEEP-LIVE	pattern A	763
+asset	assets/textures/items/backpack_icon.tscn			KEEP-PLANNED	docs/ASSET_MANIFEST.md:14 (directory)	542
+asset	assets/textures/items/backpack_l1.png			KEEP-LIVE	format string	3552
+asset	assets/textures/items/backpack_l2.png			KEEP-LIVE	format string	4788
+asset	assets/textures/items/bandage.png			KEEP-LIVE	format string	7017
+asset	assets/textures/items/battery.png			KEEP-LIVE	format string	3024
+asset	assets/textures/items/battery_l2.png			KEEP-LIVE	format string	1286
+asset	assets/textures/items/blueprint.png			KEEP-LIVE	format string	441
+asset	assets/textures/items/blueprint_backpack_capacity.png			KEEP-LIVE	format string	3694
+asset	assets/textures/items/blueprint_backpack_slots.png			KEEP-LIVE	format string	2720
+asset	assets/textures/items/blueprint_battery_l2.png			KEEP-LIVE	format string	2236
+asset	assets/textures/items/blueprint_enhanced_battery.png			KEEP-LIVE	format string	2330
+asset	assets/textures/items/blueprint_flashlight_battery.png			KEEP-LIVE	format string	2662
+asset	assets/textures/items/blueprint_flashlight_brightness.png			KEEP-LIVE	format string	4629
+asset	assets/textures/items/blueprint_portable_workbench.png			KEEP-LIVE	format string	2133
+asset	assets/textures/items/blueprint_strobe_flashlight.png			KEEP-LIVE	format string	3707
+asset	assets/textures/items/blueprint_uv_flashlight.png			KEEP-LIVE	format string	4863
+asset	assets/textures/items/bottle.png			KEEP-LIVE	format string	2938
+asset	assets/textures/items/cable.png			KEEP-LIVE	format string	5947
+asset	assets/textures/items/can_food.png			KEEP-LIVE	pattern A	609
+asset	assets/textures/items/can_icon.tscn			KEEP-PLANNED	docs/ASSET_MANIFEST.md:14 (directory)	535
+asset	assets/textures/items/case.png			KEEP-LIVE	format string	3147
+asset	assets/textures/items/circuit.png			KEEP-LIVE	format string	2981
+asset	assets/textures/items/coin.png			KEEP-LIVE	format string	8541
+asset	assets/textures/items/document.png			KEEP-LIVE	format string	3244
+asset	assets/textures/items/enhanced_battery.png			KEEP-LIVE	format string	1365
+asset	assets/textures/items/explosive.png			KEEP-LIVE	format string	5125
+asset	assets/textures/items/fabric.png			KEEP-LIVE	format string	4811
+asset	assets/textures/items/firework.png			KEEP-LIVE	format string	1680
+asset	assets/textures/items/flashlight.png			KEEP-LIVE	pattern A	6277
+asset	assets/textures/items/flashlight_icon.tscn			KEEP-PLANNED	docs/ASSET_MANIFEST.md:14 (directory)	381
+asset	assets/textures/items/fuse.png			KEEP-LIVE	format string	1686
+asset	assets/textures/items/gas_canister.png			KEEP-LIVE	format string	2890
+asset	assets/textures/items/gear.png			KEEP-LIVE	format string	10056
+asset	assets/textures/items/gunpowder.png			KEEP-LIVE	format string	3220
+asset	assets/textures/items/icon_ammo.png			KEEP-LIVE	format string	1177
+asset	assets/textures/items/icon_battery.png			KEEP-LIVE	format string	734
+asset	assets/textures/items/icon_health.png			KEEP-LIVE	format string	1960
+asset	assets/textures/items/icon_stamina.png			KEEP-LIVE	format string	1699
+asset	assets/textures/items/key.png			KEEP-LIVE	pattern A	4582
+asset	assets/textures/items/key_icon.tscn			KEEP-PLANNED	docs/ASSET_MANIFEST.md:14 (directory)	528
+asset	assets/textures/items/lockpick.png			KEEP-LIVE	format string	5104
+asset	assets/textures/items/makeshift_lamp.png			KEEP-LIVE	format string	6477
+asset	assets/textures/items/medkit.png			KEEP-LIVE	pattern A	2481
+asset	assets/textures/items/medkit_icon.tscn			KEEP-PLANNED	docs/ASSET_MANIFEST.md:14 (directory)	539
+asset	assets/textures/items/metal.png			KEEP-LIVE	format string	4038
+asset	assets/textures/items/molotov.png			KEEP-LIVE	format string	4001
+asset	assets/textures/items/motor.png			KEEP-LIVE	format string	4376
+asset	assets/textures/items/noise_bomb.png			KEEP-LIVE	format string	7936
+asset	assets/textures/items/paper.png			KEEP-LIVE	format string	5368
+asset	assets/textures/items/photo.png			KEEP-LIVE	format string	1721
+asset	assets/textures/items/pistol.png			KEEP-LIVE	pattern A	1492
+asset	assets/textures/items/plank.png			KEEP-LIVE	format string	3599
+asset	assets/textures/items/radio_part.png			KEEP-LIVE	format string	4702
+asset	assets/textures/items/repair_kit.png			KEEP-LIVE	format string	4505
+asset	assets/textures/items/rifle.png			KEEP-LIVE	format string	3413
+asset	assets/textures/items/scope_lens.png			KEEP-LIVE	format string	8764
+asset	assets/textures/items/scrap.png			KEEP-LIVE	format string	5897
+asset	assets/textures/items/serum.png			KEEP-LIVE	format string	2612
+asset	assets/textures/items/shotgun.png			KEEP-LIVE	format string	3547
+asset	assets/textures/items/taser.png			KEEP-LIVE	format string	3284
+asset	assets/textures/items/tool.png			KEEP-LIVE	format string	735
+asset	assets/textures/items/tool_icon.tscn			KEEP-PLANNED	docs/ASSET_MANIFEST.md:14 (directory)	378
+asset	assets/textures/items/transformer.png			KEEP-LIVE	format string	533
+asset	assets/textures/items/transistor.png			KEEP-LIVE	format string	3414
+asset	assets/textures/items/water.png			KEEP-LIVE	pattern A	694
+asset	assets/textures/items/water_icon.tscn			KEEP-PLANNED	docs/ASSET_MANIFEST.md:14 (directory)	538
+asset	assets/textures/items/wiring.png			KEEP-LIVE	format string	4469
+asset	assets/textures/items/wrench.png			KEEP-LIVE	pattern A	1540
+asset	assets/textures/loading/gas_station_loading.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:181	10262
+asset	assets/textures/loading/hospital_loading.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:180	9656
+asset	assets/textures/loading/industrial_loading.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:184	6345
+asset	assets/textures/loading/park_loading.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:178	17267
+asset	assets/textures/loading/police_loading.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:182	5224
+asset	assets/textures/loading/power_station_loading.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:186	11192
+asset	assets/textures/loading/residential_loading.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:177	13980
+asset	assets/textures/loading/school_loading.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:179	6717
+asset	assets/textures/loading/substation_loading.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:185	6964
+asset	assets/textures/loading/suburbs_loading.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:176	14544
+asset	assets/textures/loading/warehouses_loading.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:183	6672
+asset	assets/textures/luts/README.md			KEEP-LIVE	pattern A	5179
+asset	assets/textures/luts/lut_gas_station.png			KEEP-LIVE	format string	1545
+asset	assets/textures/luts/lut_hospital.png			KEEP-LIVE	format string	1518
+asset	assets/textures/luts/lut_industrial.png			KEEP-LIVE	format string	1776
+asset	assets/textures/luts/lut_park.png			KEEP-LIVE	format string	1510
+asset	assets/textures/luts/lut_police.png			KEEP-LIVE	format string	1504
+asset	assets/textures/luts/lut_power_station.png			KEEP-LIVE	format string	1613
+asset	assets/textures/luts/lut_residential.png			KEEP-LIVE	format string	3677
+asset	assets/textures/luts/lut_school.png			KEEP-LIVE	format string	1691
+asset	assets/textures/luts/lut_substation.png			KEEP-LIVE	format string	1613
+asset	assets/textures/luts/lut_suburbs.png			KEEP-LIVE	format string	3677
+asset	assets/textures/luts/lut_warehouses.png			KEEP-LIVE	format string	1776
+asset	assets/textures/maps/city_overview_1024.png			KEEP-PLANNED	docs/LEDGER_VISUAL.md:48	17239
+asset	assets/textures/maps/gas_station_map_512.png			KEEP-PLANNED	docs/REPORT_CONTENT_WAVE.md:15	4711
+asset	assets/textures/maps/hospital_map_512.png			KEEP-PLANNED	docs/REPORT_CONTENT_WAVE.md:16	4610
+asset	assets/textures/maps/industrial_map_512.png			KEEP-PLANNED	docs/REPORT_CONTENT_WAVE.md:17	5590
+asset	assets/textures/maps/park_map_512.png			KEEP-PLANNED	docs/REPORT_CONTENT_WAVE.md:18	5672
+asset	assets/textures/maps/police_map_512.png			KEEP-PLANNED	docs/REPORT_CONTENT_WAVE.md:19	5518
+asset	assets/textures/maps/power_station_map_512.png			KEEP-PLANNED	docs/REPORT_CONTENT_WAVE.md:20	6023
+asset	assets/textures/maps/residential_map_512.png			KEEP-PLANNED	docs/REPORT_CONTENT_WAVE.md:21	4840
+asset	assets/textures/maps/school_map_512.png			KEEP-PLANNED	docs/REPORT_CONTENT_WAVE.md:22	4880
+asset	assets/textures/maps/substation_map_512.png			KEEP-PLANNED	docs/REPORT_CONTENT_WAVE.md:23	5782
+asset	assets/textures/maps/suburbs_map_512.png			KEEP-PLANNED	docs/REPORT_CONTENT_WAVE.md:24	5884
+asset	assets/textures/maps/warehouses_map_512.png			KEEP-PLANNED	docs/REPORT_CONTENT_WAVE.md:25	4932
+asset	assets/textures/maps_v2/city_iso_2048.png			KEEP-LIVE	pattern A	126435
+asset	assets/textures/maps_v2/grid_panel_512.png			KEEP-LIVE	pattern A	5008
+asset	assets/textures/onboard_v2/onboard_01_spawn_256x144.png			KEEP-LIVE	pattern A	867
+asset	assets/textures/onboard_v2/onboard_02_light_256x144.png			KEEP-LIVE	pattern A	2379
+asset	assets/textures/onboard_v2/onboard_03_streetlight_256x144.png			KEEP-LIVE	pattern A	4377
+asset	assets/textures/onboard_v2/onboard_04_district_256x144.png			KEEP-LIVE	pattern A	5229
+asset	assets/textures/onboard_v2/onboard_05_light_cone_1024x576.png			KEEP-LIVE	pattern A	3809
+asset	assets/textures/onboard_v2/onboard_06_cable_box_1024x576.png			KEEP-LIVE	pattern A	4201
+asset	assets/textures/onboard_v2/onboard_07_crouch_hunter_1024x576.png			KEEP-LIVE	pattern A	3465
+asset	assets/textures/overlays_v2/fog_patch_512.png			KEEP-PLANNED	docs/REPORT_POLISH_V2.md:14	72291
+asset	assets/textures/overlays_v2/lightning_flash_1080.png			KEEP-PLANNED	docs/REPORT_POLISH_V2.md:15	7927
+asset	assets/textures/overlays_v2/rain_streaks_1080.png			KEEP-PLANNED	docs/REPORT_POLISH_V2.md:13	11734
+asset	assets/textures/overlays_v2/wind_leaf_64.png			KEEP-PLANNED	docs/REPORT_POLISH_V2.md:16	408
+asset	assets/textures/picto_v2/difficulty_calm_64.png			KEEP-PLANNED	docs/BUGS_FOR_CLAUDE.md:19 (directory)	346
+asset	assets/textures/picto_v2/difficulty_hard_64.png			KEEP-PLANNED	docs/BUGS_FOR_CLAUDE.md:19 (directory)	471
+asset	assets/textures/picto_v2/difficulty_normal_64.png			KEEP-PLANNED	docs/BUGS_FOR_CLAUDE.md:19 (directory)	374
+asset	assets/textures/picto_v2/gesture_doubletap_96.png			KEEP-PLANNED	docs/BUGS_FOR_CLAUDE.md:19 (directory)	542
+asset	assets/textures/picto_v2/gesture_drag_96.png			KEEP-PLANNED	docs/BUGS_FOR_CLAUDE.md:19 (directory)	610
+asset	assets/textures/picto_v2/gesture_hold_96.png			KEEP-PLANNED	docs/BUGS_FOR_CLAUDE.md:19 (directory)	554
+asset	assets/textures/picto_v2/gesture_look_96.png			KEEP-PLANNED	docs/BUGS_FOR_CLAUDE.md:19 (directory)	553
+asset	assets/textures/picto_v2/gesture_swipe_96.png			KEEP-PLANNED	docs/BUGS_FOR_CLAUDE.md:19 (directory)	390
+asset	assets/textures/picto_v2/gesture_tap_96.png			KEEP-PLANNED	docs/BUGS_FOR_CLAUDE.md:19 (directory)	416
+asset	assets/textures/picto_v2/threat_critical_48.png			KEEP-PLANNED	docs/BUGS_FOR_CLAUDE.md:19 (directory)	256
+asset	assets/textures/picto_v2/threat_high_48.png			KEEP-PLANNED	docs/BUGS_FOR_CLAUDE.md:19 (directory)	196
+asset	assets/textures/picto_v2/threat_low_48.png			KEEP-PLANNED	docs/BUGS_FOR_CLAUDE.md:19 (directory)	160
+asset	assets/textures/picto_v2/threat_med_48.png			KEEP-PLANNED	docs/BUGS_FOR_CLAUDE.md:19 (directory)	184
+asset	assets/textures/portraits_v2/boss_full_512x768.png			KEEP-LIVE	format string	13734
+asset	assets/textures/portraits_v2/brute_full_512x768.png			KEEP-LIVE	format string	6734
+asset	assets/textures/portraits_v2/burner_full_512x768.png			KEEP-LIVE	format string	5152
+asset	assets/textures/portraits_v2/crawler_full_512x768.png			KEEP-LIVE	format string	7642
+asset	assets/textures/portraits_v2/destroyer_full_512x768.png			KEEP-LIVE	format string	9171
+asset	assets/textures/portraits_v2/hound_full_512x768.png			KEEP-LIVE	format string	6191
+asset	assets/textures/portraits_v2/hunter_full_512x768.png			KEEP-LIVE	format string	8686
+asset	assets/textures/portraits_v2/rotter_full_512x768.png			KEEP-LIVE	format string	7688
+asset	assets/textures/portraits_v2/shadow_full_512x768.png			KEEP-LIVE	format string	10269
+asset	assets/textures/portraits_v2/sharpshooter_full_512x768.png			KEEP-LIVE	format string	6970
+asset	assets/textures/portraits_v2/tvar_full_512x768.png			KEEP-LIVE	format string	9397
+asset	assets/textures/portraits_v2/watcher_full_512x768.png			KEEP-LIVE	format string	12661
+asset	assets/textures/postfx/README.md			KEEP-LIVE	pattern A	4379
+asset	assets/textures/postfx/presets.json			KEEP-LIVE	pattern A	3570
+asset	assets/textures/renders_v2/backpack_256.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:284	1282
+asset	assets/textures/renders_v2/battery_pack_256.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:285	1236
+asset	assets/textures/renders_v2/bundle_survivor_256.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:288	1392
+asset	assets/textures/renders_v2/medkit_256.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:286	1109
+asset	assets/textures/renders_v2/player_512x768.png			KEEP-LIVE	pattern A	10915
+asset	assets/textures/renders_v2/tools_256.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:287	1804
+asset	assets/textures/renders_v2/weapons/pistol_render_256.png			KEEP-LIVE	format string	1149
+asset	assets/textures/renders_v2/weapons/rifle_render_256.png			KEEP-LIVE	format string	1235
+asset	assets/textures/renders_v2/weapons/shotgun_render_256.png			KEEP-LIVE	format string	1227
+asset	assets/textures/screens_v2/character_dim.png			KEEP-LIVE	pattern A	509284
+asset	assets/textures/screens_v2/death_loom.png			KEEP-LIVE	pattern A	448787
+asset	assets/textures/screens_v2/journal_paper.png			KEEP-LIVE	pattern A	432945
+asset	assets/textures/screens_v2/journal_photo.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:75	475281
+asset	assets/textures/screens_v2/loading_street.png			KEEP-LIVE	pattern A	452872
+asset	assets/textures/screens_v2/menu_hero.png			KEEP-LIVE	pattern A	435769
+asset	assets/textures/sky/moon_glow_256.png			KEEP-PLANNED	docs/ASSET_HANDOFF.md:49	27963
+asset	assets/textures/sky/night_sky_panorama_2048x1024.png			KEEP-LIVE	pattern A	46678
+asset	assets/textures/stages_v2/stage_dark_256x144.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:193	549
+asset	assets/textures/stages_v2/stage_full_256x144.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:196	4817
+asset	assets/textures/stages_v2/stage_partial_256x144.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:194	1066
+asset	assets/textures/stages_v2/stage_streets_256x144.png			KEEP-PLANNED	docs/ASSET_PROMPT_PACK.md:195	2571
+asset	assets/textures/surfaces/asphalt_512.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:198	229915
+asset	assets/textures/surfaces/bench_wood_512.png			KEEP-LIVE	pattern A	204770
+asset	assets/textures/surfaces/brick_512.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:196	194061
+asset	assets/textures/surfaces/cabinet_wood_512.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:324	216102
+asset	assets/textures/surfaces/cell_bars_512.png			KEEP-QA	named by a tool	182921
+asset	assets/textures/surfaces/chalkboard_512.png			KEEP-QA	named by a tool	313689
+asset	assets/textures/surfaces/concrete_512.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:195	199102
+asset	assets/textures/surfaces/concrete_wall_512.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:326	204130
+asset	assets/textures/surfaces/door_metal_512.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:322	293534
+asset	assets/textures/surfaces/door_wood_512.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:323	226675
+asset	assets/textures/surfaces/dumpster_metal_512.png			KEEP-LIVE	pattern A	294419
+asset	assets/textures/surfaces/fuel_pump_512.png			KEEP-QA	named by a tool	267351
+asset	assets/textures/surfaces/fusebox_512.png			KEEP-QA	named by a tool	188551
+asset	assets/textures/surfaces/generator_metal_512.png			KEEP-QA	named by a tool	273915
+asset	assets/textures/surfaces/gravel_512.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:327	245583
+asset	assets/textures/surfaces/hospital_curtain_512.png			KEEP-QA	named by a tool	184453
+asset	assets/textures/surfaces/hospital_tile_dirty_512.png			KEEP-QA	named by a tool	194756
+asset	assets/textures/surfaces/metal_rust_512.png			KEEP-QA	named by a tool	267688
+asset	assets/textures/surfaces/morgue_drawers_512.png			KEEP-QA	named by a tool	227646
+asset	assets/textures/surfaces/pond_ice_512.png			KEEP-QA	named by a tool	304866
+asset	assets/textures/surfaces/powerbox_metal_512.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:325	265135
+asset	assets/textures/surfaces/school_floor_512.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:412	197969
+asset	assets/textures/surfaces/school_lockers_512.png			KEEP-QA	named by a tool	203083
+asset	assets/textures/surfaces/streetlight_metal_512.png			KEEP-LIVE	pattern A	292053
+asset	assets/textures/surfaces/tile_white_512.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:200	175323
+asset	assets/textures/surfaces/wood_512.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:199	214111
+asset	assets/textures/surfaces/xray_lightbox_512.png			KEEP-QA	named by a tool	248426
+asset	assets/textures/tiles/gas_station_floor.png			KEEP-LIVE	format string	51091
+asset	assets/textures/tiles/gas_station_floor_lit.png			KEEP-PLANNED	docs/CONTENT_DISTRICT_GAS_STATION.md:79	107047
+asset	assets/textures/tiles/gas_station_wall.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:82	45409
+asset	assets/textures/tiles/gas_station_wall_lit.png			KEEP-PLANNED	docs/ASSET_LICENSES.md:15 (directory)	100617
+asset	assets/textures/tiles/hospital_floor.png			KEEP-LIVE	format string	47537
+asset	assets/textures/tiles/hospital_floor_lit.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:355	76861
+asset	assets/textures/tiles/hospital_wall.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:80	48231
+asset	assets/textures/tiles/hospital_wall_lit.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:356	77908
+asset	assets/textures/tiles/industrial_floor.png			KEEP-LIVE	format string	50278
+asset	assets/textures/tiles/industrial_floor_lit.png			KEEP-PLANNED	docs/CONTENT_DISTRICT_INDUSTRIAL.md:133	65410
+asset	assets/textures/tiles/industrial_wall.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:88	46210
+asset	assets/textures/tiles/industrial_wall_lit.png			KEEP-PLANNED	docs/CONTENT_DISTRICT_INDUSTRIAL.md:133	71254
+asset	assets/textures/tiles/park_floor.png			KEEP-LIVE	format string	61446
+asset	assets/textures/tiles/park_floor_lit.png			KEEP-PLANNED	docs/ASSET_LICENSES.md:15 (directory)	103387
+asset	assets/textures/tiles/park_wall.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:76	47285
+asset	assets/textures/tiles/park_wall_lit.png			KEEP-PLANNED	docs/ASSET_LICENSES.md:15 (directory)	104064
+asset	assets/textures/tiles/police_floor.png			KEEP-LIVE	format string	47545
+asset	assets/textures/tiles/police_floor_lit.png			KEEP-PLANNED	docs/CONTENT_DISTRICT_POLICE.md:93	80067
+asset	assets/textures/tiles/police_wall.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:84	44788
+asset	assets/textures/tiles/police_wall_lit.png			KEEP-PLANNED	docs/ASSET_LICENSES.md:15 (directory)	73599
+asset	assets/textures/tiles/power_station_floor.png			KEEP-LIVE	format string	53058
+asset	assets/textures/tiles/power_station_floor_lit.png			KEEP-PLANNED	docs/CONTENT_DISTRICT_POWER_STATION.md:131	82254
+asset	assets/textures/tiles/power_station_wall.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:92	45375
+asset	assets/textures/tiles/power_station_wall_lit.png			KEEP-PLANNED	docs/CONTENT_DISTRICT_POWER_STATION.md:132	76325
+asset	assets/textures/tiles/residential_floor.png			KEEP-LIVE	format string	54370
+asset	assets/textures/tiles/residential_floor_lit.png			KEEP-PLANNED	docs/ASSET_LICENSES.md:15 (directory)	80160
+asset	assets/textures/tiles/residential_wall.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:74	45156
+asset	assets/textures/tiles/residential_wall_lit.png			KEEP-PLANNED	docs/ASSET_LICENSES.md:15 (directory)	83930
+asset	assets/textures/tiles/school_floor.png			KEEP-LIVE	format string	47713
+asset	assets/textures/tiles/school_floor_lit.png			KEEP-PLANNED	docs/CONTENT_DISTRICT_SCHOOL.md:81	92591
+asset	assets/textures/tiles/school_wall.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:78	46947
+asset	assets/textures/tiles/school_wall_lit.png			KEEP-PLANNED	docs/CONTENT_DISTRICT_SCHOOL.md:81	93566
+asset	assets/textures/tiles/substation_floor.png			KEEP-LIVE	format string	57069
+asset	assets/textures/tiles/substation_floor_lit.png			KEEP-PLANNED	docs/CONTENT_DISTRICT_SUBSTATION.md:130	78931
+asset	assets/textures/tiles/substation_wall.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:90	60663
+asset	assets/textures/tiles/substation_wall_lit.png			KEEP-PLANNED	docs/CONTENT_DISTRICT_SUBSTATION.md:130	86755
+asset	assets/textures/tiles/suburbs_floor.png			KEEP-LIVE	format string	49234
+asset	assets/textures/tiles/suburbs_floor_lit.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:353	82397
+asset	assets/textures/tiles/suburbs_wall.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:72	46348
+asset	assets/textures/tiles/suburbs_wall_lit.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:354	75927
+asset	assets/textures/tiles/warehouses_floor.png			KEEP-LIVE	format string	59201
+asset	assets/textures/tiles/warehouses_floor_lit.png			KEEP-PLANNED	docs/CONTENT_DISTRICT_WAREHOUSES.md:106	69324
+asset	assets/textures/tiles/warehouses_wall.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:86	47919
+asset	assets/textures/tiles/warehouses_wall_lit.png			KEEP-PLANNED	docs/CONTENT_DISTRICT_WAREHOUSES.md:106	69600
+asset	assets/textures/touch/help_battery_96.png			KEEP-LIVE	format string	293
+asset	assets/textures/touch/help_controls_96.png			KEEP-LIVE	format string	325
+asset	assets/textures/touch/help_puzzle_96.png			KEEP-LIVE	format string	294
+asset	assets/textures/touch/help_stealth_96.png			KEEP-LIVE	format string	698
+asset	assets/textures/touch/touch_back_128.png			KEEP-QA	named by a tool	536
+asset	assets/textures/touch/touch_interact_128.png			KEEP-QA	named by a tool	620
+asset	assets/textures/touch/touch_joy_base_256.png			KEEP-LIVE	pattern A	2086
+asset	assets/textures/touch/touch_joy_knob_256.png			KEEP-LIVE	pattern A	1401
+asset	assets/textures/touch/touch_pause_128.png			KEEP-QA	named by a tool	320
+asset	assets/textures/ui/bar_battery.png			KEEP-QA	named by a tool	289
+asset	assets/textures/ui/bar_fill_brass_256x24.png			KEEP-PLANNED	docs/ASSET_HANDOFF.md:10 (directory)	254
+asset	assets/textures/ui/bar_fill_ember_256x24.png			KEEP-PLANNED	docs/ASSET_HANDOFF.md:10 (directory)	249
+asset	assets/textures/ui/bar_fill_green_256x24.png			KEEP-PLANNED	docs/ASSET_HANDOFF.md:10 (directory)	253
+asset	assets/textures/ui/bar_frame_256x24.png			KEEP-PLANNED	docs/ASSET_HANDOFF.md:10 (directory)	299
+asset	assets/textures/ui/bar_health.png			KEEP-QA	named by a tool	216
+asset	assets/textures/ui/bar_stamina.png			KEEP-QA	named by a tool	212
+asset	assets/textures/ui/btn_action_128.png			KEEP-PLANNED	docs/ASSET_HANDOFF.md:10 (directory)	732
+asset	assets/textures/ui/btn_action_pressed_128.png			KEEP-PLANNED	docs/ASSET_HANDOFF.md:10 (directory)	697
+asset	assets/textures/ui/btn_crouch_128.png			KEEP-PLANNED	docs/ASSET_HANDOFF.md:10 (directory)	699
+asset	assets/textures/ui/btn_crouch_pressed_128.png			KEEP-PLANNED	docs/ASSET_HANDOFF.md:10 (directory)	674
+asset	assets/textures/ui/btn_disabled.png			KEEP-QA	named by a tool	246
+asset	assets/textures/ui/btn_dodge_128.png			KEEP-PLANNED	docs/ASSET_HANDOFF.md:10 (directory)	700
+asset	assets/textures/ui/btn_dodge_pressed_128.png			KEEP-PLANNED	docs/ASSET_HANDOFF.md:10 (directory)	681
+asset	assets/textures/ui/btn_flashlight_128.png			KEEP-PLANNED	docs/ASSET_HANDOFF.md:10 (directory)	765
+asset	assets/textures/ui/btn_flashlight_pressed_128.png			KEEP-PLANNED	docs/ASSET_HANDOFF.md:10 (directory)	739
+asset	assets/textures/ui/btn_hover.png			KEEP-QA	named by a tool	246
+asset	assets/textures/ui/btn_jump_128.png			KEEP-PLANNED	docs/ASSET_HANDOFF.md:10 (directory)	730
+asset	assets/textures/ui/btn_jump_pressed_128.png			KEEP-PLANNED	docs/ASSET_HANDOFF.md:10 (directory)	707
+asset	assets/textures/ui/btn_normal.png			KEEP-QA	named by a tool	249
+asset	assets/textures/ui/btn_pressed.png			KEEP-QA	named by a tool	248
+asset	assets/textures/ui/btn_special_hold_128.png			KEEP-PLANNED	docs/ASSET_HANDOFF.md:10 (directory)	1795
+asset	assets/textures/ui/btn_tex_disabled.png			KEEP-LIVE	pattern A	410
+asset	assets/textures/ui/btn_tex_hover.png			KEEP-LIVE	pattern A	411
+asset	assets/textures/ui/btn_tex_normal.png			KEEP-LIVE	pattern A	416
+asset	assets/textures/ui/btn_tex_pressed.png			KEEP-LIVE	pattern A	416
+asset	assets/textures/ui/crosshair_64.png			KEEP-LIVE	pattern A	260
+asset	assets/textures/ui/crosshair_dot.png			KEEP-PLANNED	docs/BURST_REPORT.md:123	174
+asset	assets/textures/ui/hitmarker_64.png			KEEP-LIVE	pattern A	438
+asset	assets/textures/ui/interact_icon_64.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:315	395
+asset	assets/textures/ui/inventory_slot.png			KEEP-QA	named by a tool	338
+asset	assets/textures/ui/minimap_enemy_blip_16.png			KEEP-QA	named by a tool	166
+asset	assets/textures/ui/minimap_frame_256.png			KEEP-LIVE	pattern A	2856
+asset	assets/textures/ui/minimap_player_arrow_32.png			KEEP-LIVE	pattern A	259
+asset	assets/textures/ui/progress_fill.png			KEEP-QA	named by a tool	241
+asset	assets/textures/ui/progress_frame.png			KEEP-QA	named by a tool	198
+asset	assets/textures/ui/rarity_common.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:309	296
+asset	assets/textures/ui/rarity_epic.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:311	300
+asset	assets/textures/ui/rarity_rare.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:310	298
+asset	assets/textures/ui/save_icon_brass_64.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:316	328
+asset	assets/textures/ui/slot_frame_96.png			KEEP-PLANNED	docs/ASSET_HANDOFF.md:10 (directory)	418
+asset	assets/textures/ui/status_bleed.png			KEEP-LIVE	pattern A	331
+asset	assets/textures/ui/status_burn.png			KEEP-LIVE	pattern A	373
+asset	assets/textures/ui/status_poison.png			KEEP-LIVE	pattern A	365
+asset	assets/textures/ui/status_slow.png			KEEP-LIVE	pattern A	370
+asset	assets/textures/ui/status_stun.png			KEEP-LIVE	pattern A	366
+asset	assets/textures/ui/tooltip_panel.png			KEEP-QA	named by a tool	594
+asset	assets/textures/ui/ui_corner_accent.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:308	194
+asset	assets/textures/ui/ui_divider_brass.png			KEEP-PLANNED	docs/REPORT_ASSETS.md:307	133
+asset	assets/textures/ui_v2/bar_fill_amber_256x8.png			KEEP-PLANNED	docs/REPORT_UI_V2.md:3 (directory)	115
+asset	assets/textures/ui_v2/bar_fill_brass_256x8.png			KEEP-PLANNED	docs/REPORT_UI_V2.md:3 (directory)	116
+asset	assets/textures/ui_v2/bar_fill_green_256x8.png			KEEP-PLANNED	docs/REPORT_UI_V2.md:3 (directory)	116
+asset	assets/textures/ui_v2/bar_fill_red_256x8.png			KEEP-PLANNED	docs/REPORT_UI_V2.md:3 (directory)	116
+asset	assets/textures/ui_v2/bar_track_256x8.png			KEEP-LIVE	pattern A	132
+asset	assets/textures/ui_v2/btn_primary_disabled_256x64.png			KEEP-PLANNED	docs/REPORT_UI_V2.md:3 (directory)	407
+asset	assets/textures/ui_v2/btn_primary_hover_256x64.png			KEEP-PLANNED	docs/REPORT_UI_V2.md:3 (directory)	402
+asset	assets/textures/ui_v2/btn_primary_normal_256x64.png			KEEP-PLANNED	docs/REPORT_UI_V2.md:3 (directory)	441
+asset	assets/textures/ui_v2/btn_primary_pressed_256x64.png			KEEP-PLANNED	docs/REPORT_UI_V2.md:3 (directory)	562
+asset	assets/textures/ui_v2/btn_secondary_disabled_256x64.png			KEEP-PLANNED	docs/REPORT_UI_V2.md:3 (directory)	348
+asset	assets/textures/ui_v2/btn_secondary_hover_256x64.png			KEEP-PLANNED	docs/REPORT_UI_V2.md:3 (directory)	440
+asset	assets/textures/ui_v2/btn_secondary_normal_256x64.png			KEEP-PLANNED	docs/REPORT_UI_V2.md:3 (directory)	376
+asset	assets/textures/ui_v2/btn_secondary_pressed_256x64.png			KEEP-PLANNED	docs/REPORT_UI_V2.md:3 (directory)	490
+asset	assets/textures/ui_v2/coin_1200.png			KEEP-PLANNED	docs/REPORT_UI_V2.md:3 (directory)	1159
+asset	assets/textures/ui_v2/coin_2500.png			KEEP-PLANNED	docs/REPORT_UI_V2.md:3 (directory)	1838
+asset	assets/textures/ui_v2/coin_500.png			KEEP-PLANNED	docs/REPORT_UI_V2.md:3 (directory)	758
+asset	assets/textures/ui_v2/coin_6000.png			KEEP-PLANNED	docs/REPORT_UI_V2.md:3 (directory)	2868
+asset	assets/textures/ui_v2/equip_slot_v2_96.png			KEEP-PLANNED	docs/REPORT_UI_V2.md:37	412
+asset	assets/textures/ui_v2/flashlight_render_512.png			KEEP-LIVE	pattern A	9202
+asset	assets/textures/ui_v2/hex_amber_128.png			KEEP-LIVE	pattern A	614
+asset	assets/textures/ui_v2/hex_green_128.png			KEEP-LIVE	pattern A	613
+asset	assets/textures/ui_v2/hex_grey_128.png			KEEP-LIVE	pattern A	614
+asset	assets/textures/ui_v2/hex_locked_128.png			KEEP-LIVE	pattern A	743
+asset	assets/textures/ui_v2/hex_red_128.png			KEEP-PLANNED	docs/SESSION_REPORT_FINISH.md:206	609
+asset	assets/textures/ui_v2/logo_grunge_512.png			KEEP-LIVE	pattern B	20500
+asset	assets/textures/ui_v2/panel_olive_256.png			KEEP-PLANNED	docs/HANDOFF.md:1171	791
+asset	assets/textures/ui_v2/panel_small_128.png			KEEP-PLANNED	docs/HANDOFF.md:1173	389
+asset	assets/textures/ui_v2/quickslot_v2_72.png			KEEP-LIVE	pattern A	427
+asset	assets/textures/ui_v2/slot_v2_72.png			KEEP-PLANNED	docs/REPORT_UI_V2.md:37	318
+asset	assets/textures/ui_v2/tab_active_128x32.png			KEEP-PLANNED	docs/REPORT_UI_V2.md:31	200
+asset	assets/textures/ui_v2/tab_normal_128x32.png			KEEP-PLANNED	docs/REPORT_UI_V2.md:31	202
+asset	assets/textures/ui_v2/weather_fog_256x144.png			KEEP-LIVE	format string	5616
+asset	assets/textures/ui_v2/weather_rain_256x144.png			KEEP-LIVE	format string	1223
+asset	assets/textures/ui_v2/weather_storm_256x144.png			KEEP-LIVE	format string	1508
+asset	assets/textures/ui_v2/weather_wind_256x144.png			KEEP-LIVE	format string	925
+asset	assets/ui/icon.png			KEEP-LIVE	pattern A	264304
+asset	assets/ui/icon_adaptive_bg.png			KEEP-QA	named by a tool	14879
+asset	assets/ui/icon_adaptive_fg.png			KEEP-QA	named by a tool	59327
+asset	assets/ui/theme_tls.tres			KEEP-LIVE	pattern A	7052
+asset	assets/ui/ui_ammo.svg			KEEP-LIVE	pattern A	340
+asset	assets/ui/ui_backpack.svg			KEEP-PLANNED	RELEASE_NOTES.md:48 (directory)	432
+asset	assets/ui/ui_battery.svg			KEEP-LIVE	pattern A	528
+asset	assets/ui/ui_flashlight.svg			KEEP-LIVE	pattern A	375
+asset	assets/ui/ui_health.svg			KEEP-LIVE	pattern A	303
+asset	assets/ui/ui_heart.svg			KEEP-LIVE	pattern A	241
+asset	assets/ui/ui_interact.svg			KEEP-LIVE	pattern A	319
+asset	assets/ui/ui_key.svg			KEEP-PLANNED	RELEASE_NOTES.md:48 (directory)	405
+asset	assets/ui/ui_pause.svg			KEEP-LIVE	pattern A	270
+asset	assets/ui/ui_settings.svg			KEEP-PLANNED	RELEASE_NOTES.md:48 (directory)	977
+script	scripts/ai/behavior_node.gd			QUARANTINE	base class of the behavior-tree framework quarantined at docs/SLOP_REPORT_V2.md:69-73; no scene, script or resource reaches it; git mv to _QUARANTINE/scripts/ai/behavior_node.gd; its line left scripts/tools/validate_list.txt	0
+script	scripts/weight_bar.gd			QUARANTINE	no scene attaches it and no script uses WeightBar as a type (the HUD's `$WeightBar` is a TextureProgressBar node with no script, scenes/ui/hud_3d.tscn:445); docs/HUD_PLAN.md:69 keeps the node; git mv to _QUARANTINE/scripts/weight_bar.gd; its line left scripts/tools/validate_list.txt	0
+script	scripts/core/save_data.gd			KEEP-PLANNED	docs/GDD.md:256 names `SaveData extends Resource` as the save format; docs/GDD_CONFORMANCE.md:27 holds it as PARTIAL; none	786
+script	scripts/cutscenes/cutscene_manager.gd			KEEP-PLANNED	owner row docs/SLOP_REPORT_V2.md:85; none	1906
+script	scripts/effects/muzzle_flash.gd			KEEP-PLANNED	docs/SLOP_REPORT_V2.md:89 (G25 weapons); none	1210
+script	scripts/effects/recoil.gd			KEEP-PLANNED	docs/SLOP_REPORT_V2.md:90 (G25 weapons); none	1095
+script	scripts/electronic_door.gd			KEEP-PLANNED	owner row docs/SLOP_REPORT_V2.md:91; none	1353
+script	scripts/emergency_lamp.gd			KEEP-PLANNED	owner row docs/SLOP_REPORT_V2.md:92; none	644
+script	scripts/enemies/minion.gd			KEEP-PLANNED	owner row docs/SLOP_REPORT_V2.md:93; none	3773
+script	scripts/fuse_box.gd			KEEP-PLANNED	owner row docs/SLOP_REPORT_V2.md:95; none	1515
+script	scripts/inspectable.gd			KEEP-PLANNED	owner row docs/SLOP_REPORT_V2.md:100; none	1023
+script	scripts/searchlight.gd			KEEP-PLANNED	owner row docs/SLOP_REPORT_V2.md:102; none	536
+script	scripts/systems/loot_drop.gd			KEEP-PLANNED	owner row docs/SLOP_REPORT_V2.md:110; none	876
+script	scripts/systems/save_slot_manager.gd			KEEP-PLANNED	docs/SLOP_REPORT_V2.md:111 (G22 save-slot UI); none	1631
+script	scripts/systems/vibration.gd			KEEP-PLANNED	owner row docs/SLOP_REPORT_V2.md:112; none	309
+script	scripts/systems/weapon_mod_manager.gd			KEEP-PLANNED	docs/SLOP_REPORT_V2.md:114 (G25 weapons); none	972
+script	scripts/transformer.gd			KEEP-PLANNED	docs/ART_PROMPTS.md:93 holds the transformer-box prop art; the same family as scripts/fuse_box.gd (docs/SLOP_REPORT_V2.md:95); none	1156
+script	scripts/ui/panel_card.gd			KEEP-PLANNED	docs/ROAD_TO_POLISH.md:68-70 (B3: the eight key screens adopt PanelCard); none	504
+script	scripts/world/interior_zone.gd			KEEP-PLANNED	owner row docs/SLOP_REPORT_V2.md:132; none	1459
+function	scripts/ai/behavior_node.gd	8	add_child_node	QUARANTINE	MOVED: the whole file went to _QUARANTINE/ (section 3), its functions with it; docs/SLOP_REPORT_V2.md:69-73, docs/HUD_PLAN.md:69	0
+function	scripts/ai/behavior_node.gd	14	_get_child	QUARANTINE	MOVED: the whole file went to _QUARANTINE/ (section 3), its functions with it; docs/SLOP_REPORT_V2.md:69-73, docs/HUD_PLAN.md:69	0
+function	scripts/core/game_manager.gd	23	add_kill	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/core/game_manager.gd	87	unlock_level	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/core/game_manager.gd	91	reset_run	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/core/input_service.gd	119	is_interact_just_pressed	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/core/quest_manager.gd	215	is_completed	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/core/quest_manager.gd	219	all_completed	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/core/quest_manager.gd	227	can_progress	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/core/quest_manager.gd	230	get_active_count	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/core/quest_manager.gd	236	get_completed_count	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/core/save_system.gd	518	set_quest_data	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/core/save_system.gd	521	get_quest_data	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/core/save_system.gd	689	get_all_slots_info	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/cutscenes/cutscene_manager.gd	10	play_cutscene	KEEP-PLANNED	owner row: no cutscene path exists, the owner decides whether endings get cutscenes; docs/SLOP_REPORT_V2.md:85	0
+function	scripts/document_pickup.gd	99	set_document	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/electronic_door.gd	24	set_power	KEEP-PLANNED	owner row: the prop was never placed; docs/SLOP_REPORT_V2.md:91 and :95	0
+function	scripts/enemies/base_monster.gd	816	_state_name	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/enemies/crawler_3d.gd	96	_on_light_tick	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/enemies/enemy_roster_data.gd	164	behavior_name	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/enemies/enemy_roster_data.gd	172	status_name	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/events/event_bus.gd	25	emit_coin	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/events/event_bus.gd	28	emit_lives	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/fuse_box.gd	47	remove_fuse	KEEP-PLANNED	owner row: the prop was never placed; docs/SLOP_REPORT_V2.md:91 and :95	0
+function	scripts/gameplay/hiding_spot.gd	101	is_occupied	KEEP-PLANNED	hiding_spot is the file the repository rule was written for; CLAUDE.md:16, README.md:126	0
+function	scripts/hiding/hiding_spot.gd	31	get_detection_multiplier	KEEP-PLANNED	hiding_spot is the file the repository rule was written for; CLAUDE.md:16, README.md:126	0
+function	scripts/hiding/hiding_spot.gd	34	get_hide_duration	KEEP-PLANNED	hiding_spot is the file the repository rule was written for; CLAUDE.md:16, README.md:126	0
+function	scripts/i18n/localization_manager.gd	179	cycle_language	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/lighting/light_grid.gd	40	unregister_light	KEEP-PLANNED	the lifecycle pair of `register_light` (`scripts/lighting/light_grid.gd:28`); docs/GDD.md:423	0
+function	scripts/lighting/light_grid.gd	106	flashlight_dirs	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/lighting/light_grid.gd	114	nearest_flashlight	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/monetization/ad_service.gd	151	interstitial_cooldown_left	KEEP-PLANNED	AdService and its stub are the wired monetization surface (the SDK key is an owner row); PLAN.md:1073, README.md:41, RELEASE_CHECKLIST.md:121	0
+function	scripts/monetization/stub_crazy_games.gd	31	was_initialized	KEEP-PLANNED	AdService and its stub are the wired monetization surface (the SDK key is an owner row); PLAN.md:1073, README.md:41, RELEASE_CHECKLIST.md:121	0
+function	scripts/multiplayer/lan_discovery.gd	85	get_found_hosts	KEEP-PLANNED	LAN co-op is a shipped feature of two autoloads (needs two peers to test); docs/FUNCTION_MATRIX.md:36 and :72, RELEASE_CHECKLIST.md:204	0
+function	scripts/net/lan_network.gd	51	is_client	KEEP-PLANNED	LAN co-op is a shipped feature of two autoloads (needs two peers to test); docs/FUNCTION_MATRIX.md:36 and :72, RELEASE_CHECKLIST.md:204	0
+function	scripts/net/lan_network.gd	52	is_online	KEEP-PLANNED	LAN co-op is a shipped feature of two autoloads (needs two peers to test); docs/FUNCTION_MATRIX.md:36 and :72, RELEASE_CHECKLIST.md:204	0
+function	scripts/net/lan_network.gd	94	broadcast_player_state	KEEP-PLANNED	LAN co-op is a shipped feature of two autoloads (needs two peers to test); docs/FUNCTION_MATRIX.md:36 and :72, RELEASE_CHECKLIST.md:204	0
+function	scripts/net/lan_network.gd	99	broadcast_power	KEEP-PLANNED	LAN co-op is a shipped feature of two autoloads (needs two peers to test); docs/FUNCTION_MATRIX.md:36 and :72, RELEASE_CHECKLIST.md:204	0
+function	scripts/player/flashlight.gd	37	get_flashlight_enabled	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/player/flashlight.gd	39	is_point_lit	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/player/player_3d.gd	237	get_cone_code	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/player/player_3d.gd	418	_is_touch_device	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/player/player_3d.gd	752	_move_selftest	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/player/player_3d.gd	1039	get_strobe_cooldown_ratio	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/player/player_3d.gd	1156	set_battery_params	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/systems/audio_manager.gd	263	play_music	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/systems/audio_manager.gd	273	set_action_active	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/systems/audio_manager.gd	276	set_action_stream	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/systems/captions_manager.gd	64	get_moments	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/systems/captions_manager.gd	67	is_seen	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/systems/day_night.gd	30	get_hour	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/systems/endings_manager.gd	141	get_all_endings	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/systems/footstep_system.gd	202	register_surface	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/systems/loot_drop.gd	6	drop_loot	KEEP-PLANNED	owner row: enemy drops never wired, loot comes from DistrictLoot; docs/SLOP_REPORT_V2.md:110	0
+function	scripts/systems/music_manager.gd	275	stop_music	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/systems/photo_mode.gd	47	cycle_filter	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/systems/play_integrity_service.gd	27	request_integrity_token	KEEP-PLANNED	the integration point of the Play Integrity SDK (a documented stub); docs/PRIVACY_AUDIT.md:25, docs/FUNCTION_MATRIX.md:87	0
+function	scripts/systems/progress_tracker.gd	174	found_secret_ids	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/systems/save_slot_manager.gd	10	save_to_slot	KEEP-PLANNED	KEEP-PLANNED: G22 save-slot UI; docs/SLOP_REPORT_V2.md:111	0
+function	scripts/systems/settings_manager.gd	167	get_languages	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/systems/settings_manager.gd	202	apply_game	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/systems/settings_manager.gd	238	apply_controls	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/systems/settings_manager.gd	436	set_dyslexia_font	KEEP-PLANNED	the font file is an owner row; docs/A11Y_PLAN.md:14, docs/DECISIONS_PENDING.md:44	0
+function	scripts/systems/settings_manager.gd	477	set_auto_aim	KEEP-PLANNED	auto-aim is a plan row of the execution plan; docs/EXEC_PLAN.md:97, docs/GAP_TO_IDEAL.md:107	0
+function	scripts/systems/vibration.gd	13	explode	KEEP-PLANNED	owner row: mobile haptics never wired; docs/SLOP_REPORT_V2.md:112	0
+function	scripts/systems/weapon_mod_manager.gd	14	equip_mod	KEEP-PLANNED	KEEP-PLANNED: G25 weapons; docs/SLOP_REPORT_V2.md:114	0
+function	scripts/systems/xp_manager.gd	89	get_xp_to_next	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/systems/xp_manager.gd	92	get_xp_progress	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/ui/photo_album.gd	48	_get_collected	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/ui/screen_flow_manager.gd	314	get_state_name	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/ui/screen_flow_manager.gd	317	is_overlay	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/ui/screen_flow_manager.gd	320	is_gameplay_state	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/ui/screens.gd	1063	get_screen_names	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/ui/stats_screen.gd	67	_get_persist	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/ui/theme_provider.gd	168	draw_section_frame	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/ui/visual_style.gd	13	make_tile_texture	KEEP-PLANNED	the VisualStyle helper is a documented surface (silhouettes, tiles, vignette); docs/UI_CONSISTENCY.md:46, docs/GDD.md:716	0
+function	scripts/ui/visual_style.gd	54	draw_monster	KEEP-PLANNED	the VisualStyle helper is a documented surface (silhouettes, tiles, vignette); docs/UI_CONSISTENCY.md:46, docs/GDD.md:716	0
+function	scripts/ui/visual_style.gd	89	draw_vignette	KEEP-PLANNED	the VisualStyle helper is a documented surface (silhouettes, tiles, vignette); docs/UI_CONSISTENCY.md:46, docs/GDD.md:716	0
+function	scripts/weapons/weapon_base.gd	153	get_ammo_ratio	KEEP-PLANNED	G25 weapons are a planned zone of the agent table; docs/AGENT_ZONES.md:18, docs/SLOP_REPORT_V2.md:114	0
+function	scripts/weapons/weapon_base.gd	159	get_reload_progress	KEEP-PLANNED	G25 weapons are a planned zone of the agent table; docs/AGENT_ZONES.md:18, docs/SLOP_REPORT_V2.md:114	0
+function	scripts/weight_bar.gd	9	update_weight	QUARANTINE	MOVED: the whole file went to _QUARANTINE/ (section 3), its functions with it; docs/SLOP_REPORT_V2.md:69-73, docs/HUD_PLAN.md:69	0
+function	scripts/world/district_scene_factory.gd	78	district_id_at	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/world/district_themes.gd	60	list_ids	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/world/district_themes.gd	63	set_current	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/world/district_themes.gd	67	color_of	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/world/puzzle_system.gd	99	get_total_count	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+member	scripts/core/input_service.gd	33,60,145	_interact_pressed	DELETE	only `is_interact_just_pressed` read it	0
+member	scripts/player/player_3d.gd	38,194,195	_cone_shader_code	DELETE	only `get_cone_code` read it; `var code` fed nothing else	0
+member	scripts/player/player_3d.gd	39,291,292,293	move_selftest_vel, selftest_vel, blocked	DELETE	a velocity computed at every spawn and never read; `is_move_blocked()` result unused	0
+document	docs/ERROR_LOG_DEVICESV2.md			ARCHIVE	named by no tracked file by name or stem; moved to docs/_archive/ (docs/_archive/PROVENANCE.md)	1544
+document	docs/ERROR_LOG_PLAY_FINAL.md			ARCHIVE	named by no tracked file by name or stem; moved to docs/_archive/ (docs/_archive/PROVENANCE.md)	2998
+document	docs/REPORT_MARKET_V2.md			ARCHIVE	named by no tracked file by name or stem; moved to docs/_archive/ (docs/_archive/PROVENANCE.md)	3445
+document	docs/REPORT_PLAY_FINAL.md			ARCHIVE	named by no tracked file by name or stem; moved to docs/_archive/ (docs/_archive/PROVENANCE.md)	3105
+document	docs/STAGES_REPORT.md			ARCHIVE	named by no tracked file by name or stem; moved to docs/_archive/ (docs/_archive/PROVENANCE.md)	11027
+document	docs/ROLES.md			ARCHIVE	named by no tracked file by name or stem; moved to docs/_archive/ (docs/_archive/PROVENANCE.md)	684
+document	docs/PACKAGES.md			ARCHIVE	named by no tracked file by name or stem; moved to docs/_archive/ (docs/_archive/PROVENANCE.md)	593
+document	docs/PHASE_2_DESIGN_SPEC.md			ARCHIVE	named by no tracked file by name or stem; moved to docs/_archive/ (docs/_archive/PROVENANCE.md)	1704
+document	docs/PHASE_A_DESIGN_SPEC.md			ARCHIVE	named by no tracked file by name or stem; moved to docs/_archive/ (docs/_archive/PROVENANCE.md)	816
+document	docs/CONTEXT_CACHE.md			ARCHIVE	named by no tracked file by name or stem; moved to docs/_archive/ (docs/_archive/PROVENANCE.md)	834
+document	docs/BLOCK4_PROJECTGODOT_PATCH.md			ARCHIVE	named by no tracked file by name or stem; moved to docs/_archive/ (docs/_archive/PROVENANCE.md)	693
+script	_QUARANTINE/scripts/world/ftue_generator.gd			DELETE	quarantined since docs/SLOP_REPORT_V2.md:130 (2D-era Area2D); two greps (path, name) find only logs and historical lists	0
+sidecar	118 ignored .import/.uid files whose source is gone (113 under store/screenshots/recipes, assets, docs, _QUARANTINE/assets/fonts, scripts/ui)			DELETE	ignored by git, regenerated by the editor when a source returns; copied first to ..\_BACKUPS\2026-10-16_05-10_s26_cleanup	119633

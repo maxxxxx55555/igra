@@ -3,7 +3,6 @@ components/health_component.gd
 components/ragdoll_component.gd
 components/trap_component.gd
 scripts/_bootstrap.gd
-scripts/ai/behavior_node.gd
 scripts/boot_loading.gd
 scripts/components/visibility_enabler.gd
 scripts/core/camera_follow_3d.gd
@@ -189,7 +188,6 @@ scripts/weapons/weapon_manager.gd
 scripts/weapons/weapon_pistol.gd
 scripts/weapons/weapon_rifle.gd
 scripts/weapons/weapon_shotgun.gd
-scripts/weight_bar.gd
 scripts/world/district_atmosphere.gd
 scripts/world/district_data.gd
 scripts/world/district_grading.gd

@@ -15,7 +15,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 MUST_IGNORE = [
     ".godot/imported/a.ctex", ".qa_logs/run.log", ".signing/release.env", ".signing/tls-release.keystore", "build/tls.aab", "exports/tls.aab", "android/build/x.gradle",
     "release.env", "a.keystore", "a.jks", "a.p12", "a.pem", "a.key", "google-services.json", "local.properties", ".env", "x.patch", "x.orig", "x.rej", "x.tmp", "x.swp", "scenes/x.autosave.tscn", "scripts/x.gd.autosave",
-    "scripts/__pycache__/a.pyc", "_BACKUPS/a/b.gd", ".claude/worktrees/a/b.gd", ".claude/settings.local.json", "docs/stills/playthrough/V_t1.jpg", "tools/debug.keystore",
+    "scripts/__pycache__/a.pyc", ".ruff_cache/a", ".vscode/settings.json", "_BACKUPS/a/b.gd", ".claude/worktrees/a/b.gd", ".claude/settings.local.json", "docs/stills/playthrough/V_t1.jpg", "tools/debug.keystore",
 ]
 MUST_TRACK = [
     "docs/artifacts/rc16/proofs/s23_x.attach.closeout_check.log", "assets/textures/surfaces/a.png.import", "assets/art/a.png.import", "docs/stills/density/a_before_1234567_20260101T000000Z.jpg",

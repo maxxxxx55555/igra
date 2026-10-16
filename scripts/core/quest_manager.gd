@@ -212,30 +212,6 @@ func complete_objective(quest_id: StringName, _objective_id: StringName, amount:
 		return
 	_tick(q, amount)
 
-func is_completed(quest_id: StringName) -> bool:
-	var q: Dictionary = quests.get(String(quest_id), {})
-	return not q.is_empty() and bool(q.get("done", false))
-
-func all_completed() -> bool:
-	if quests.is_empty():
-		return false
-	for q in quests.values():
-		if not bool(q.get("done", false)):
-			return false
-	return true
-
-func can_progress() -> bool:
-	return true
-
-func get_active_count() -> int:
-	var n := 0
-	for q in quests.values():
-		if not q.done: n += 1
-	return n
-
-func get_completed_count() -> int:
-	return _completed_count
-
 ## Заголовок/описание хранятся как ключи локализации — UI обязан звать эти
 ## геттеры, а не читать поля напрямую.
 func get_title(q: Dictionary) -> String:

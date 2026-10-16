@@ -163,9 +163,3 @@ static func build_theme() -> Theme:
 	theme.set_stylebox("scroll", "VScrollBar", sb_bg)
 	theme.set_stylebox("scroll", "HScrollBar", sb_bg)
 	return theme
-
-# Рамка секции с латунным уголком-акцентом (как блоки на инфографике референса).
-static func draw_section_frame(c: CanvasItem, r: Rect2) -> void:
-	c.draw_rect(r, COLOR_BORDER, false, 1.0)
-	c.draw_line(r.position, r.position + Vector2(18, 0), COLOR_AMBER, 2.0)
-	c.draw_line(r.position, r.position + Vector2(0, 18), COLOR_AMBER, 2.0)

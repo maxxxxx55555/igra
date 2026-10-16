@@ -198,6 +198,3 @@ func _wetted(surface: String) -> String:
 	if surface == "asphalt_dry" and rain >= WET_RAIN:
 		return "asphalt_wet"
 	return surface
-
-func register_surface(node: Node, material: String) -> void:
-	node.set_meta(&"surface", material)

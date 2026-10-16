@@ -30,7 +30,6 @@ func _mark_player_acted() -> void:
 	_player_acted = true
 	player_acted.emit()
 
-var _interact_pressed: bool = false
 var _interact_held: bool = false
 var _interact_released: bool = false
 
@@ -57,7 +56,6 @@ func _ready() -> void:
 
 func request_interact() -> void:
 	interact_requested.emit()
-	_interact_pressed = true
 	_interact_held = true
 
 func request_attack() -> void:
@@ -116,11 +114,6 @@ func is_stealth_just_released() -> bool:
 	_stealth_released = false
 	return r
 
-func is_interact_just_pressed() -> bool:
-	var p := _interact_pressed
-	_interact_pressed = false
-	return p
-
 func _unhandled_input(event: InputEvent) -> void:
 	# Раньше ветка отпускания вызывала is_action_pressed() на released-событии —
 	# оно всегда false, поэтому _stealth_held/_interact_held залипали навсегда.
@@ -142,7 +135,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		_stealth_released = true
 	elif event.is_action_pressed("interact"):
 		interact_requested.emit()
-		_interact_pressed = true
 		_interact_held = true
 	elif event.is_action_released("interact"):
 		_interact_held = false

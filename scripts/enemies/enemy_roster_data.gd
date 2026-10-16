@@ -160,21 +160,3 @@ func get_entry(roster_id: StringName) -> Dictionary:
 func get_entry_for_ai(ai_id: StringName) -> Dictionary:
 	var roster_id: StringName = AI_TO_ROSTER.get(ai_id, ai_id)
 	return get_entry(roster_id)
-
-static func behavior_name(b: int) -> String:
-	match b:
-		Behavior.CHASE: return "chase"
-		Behavior.COVER: return "cover"
-		Behavior.SWARM: return "swarm"
-		Behavior.FLEE: return "flee"
-	return "?"
-
-static func status_name(s: int) -> String:
-	match s:
-		Status.BLEED: return "bleed"
-		Status.BURN: return "burn"
-		Status.POISON: return "poison"
-		Status.SLOW: return "slow"
-		Status.STUN: return "stun"
-		Status.FEAR: return "fear"
-	return "?"

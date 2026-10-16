@@ -15,7 +15,7 @@ var _total_skill_points: int = 0
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_xp_to_next = base_xp_per_level
-	
+
 	# Listen for XP events
 	EventBus.enemy_killed.connect(_on_enemy_killed)
 	EventBus.puzzle_solved.connect(_on_puzzle_solved)
@@ -53,28 +53,28 @@ func _add_xp(amount: int) -> void:
 	if SkillTreeManager.is_unlocked("xp_boost"):
 		var level = SkillTreeManager.get_skill_level("xp_boost")
 		boost += 0.15 * level
-	
+
 	amount = int(amount * boost * NewGamePlus.get_xp_multiplier())
-	
+
 	_current_xp += amount
 	xp_gained.emit(amount)
-	
+
 	while _current_xp >= _xp_to_next:
 		_level_up()
-	
+
 	EventBus.settings_changed.emit("xp", _current_xp)
 
 func _level_up() -> void:
 	_current_xp -= _xp_to_next
 	_level += 1
 	_xp_to_next = int(base_xp_per_level * pow(xp_growth_factor, _level - 1))
-	
+
 	_total_skill_points += 1
 	SkillTreeManager.add_skill_points(1)
-	
+
 	level_up.emit(_level)
 	skill_point_earned.emit()
-	
+
 	# tr() читает движковый .po/.csv перевод, которого в проекте нет — ключ
 	# всегда возвращался как есть, английским текстом, в любой локали.
 	# Проект локализует через LocalizationManager (data/i18n/*.json).
@@ -85,12 +85,6 @@ func get_level() -> int:
 
 func get_current_xp() -> int:
 	return _current_xp
-
-func get_xp_to_next() -> int:
-	return _xp_to_next
-
-func get_xp_progress() -> float:
-	return float(_current_xp) / _xp_to_next
 
 func get_total_skill_points() -> int:
 	return _total_skill_points

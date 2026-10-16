@@ -1059,6 +1059,3 @@ func _on_loading_done() -> void:
 	if player:
 		player.process_mode = Node.PROCESS_MODE_INHERIT
 	var p_mode = player.process_mode if player else -1
-
-func get_screen_names() -> Array[String]:
-	return SCREEN_LIST

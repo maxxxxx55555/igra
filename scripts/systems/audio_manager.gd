@@ -260,24 +260,6 @@ func exit_reverb_zone(preset: StringName) -> void:
 		_zone = &""
 		_enclosure = -1.0
 
-func play_music(stream: AudioStream) -> void:
-	if not stream:
-		return
-	var player := AudioStreamPlayer.new()
-	player.stream = stream
-	player.bus = "Music" if AudioServer.get_bus_index("Music") >= 0 else "Master"
-	player.finished.connect(player.queue_free)
-	add_child(player)
-	player.play()
-
-func set_action_active(active: bool) -> void:
-	_action.volume_db = -10.0 if active else -80.0
-
-func set_action_stream(stream: AudioStream) -> void:
-	_action.stream = stream
-	if stream and not _action.playing:
-		_action.play()
-
 func _make_player(bus: StringName = &"SFX") -> AudioStreamPlayer:
 	var p := AudioStreamPlayer.new()
 	p.bus = bus

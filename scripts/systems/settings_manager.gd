@@ -164,9 +164,6 @@ func get_language() -> String:
 	var lm := get_node_or_null("/root/LocalizationManager")
 	return String(lm.get("current_lang")) if lm != null else _language
 
-func get_languages() -> Array:
-	return LANGUAGES.duplicate()
-
 func get_setting(key: String, default: Variant = null) -> Variant:
 	if _settings.has(key):
 		return _settings[key]
@@ -199,17 +196,6 @@ func apply_all_accessibility() -> void:
 ## но в классе их не было — кнопка «ПРИМЕНИТЬ» падала с "Nonexistent function".
 ## Каждый метод принимает подписи как их отдаёт UI и приводит их к индексам.
 
-func apply_game(d: Dictionary) -> void:
-	if d.has("language"):
-		set_language(String(d["language"]))
-	if d.has("difficulty"):
-		set_difficulty(_difficulty_index(d["difficulty"]))
-	if d.has("autosave"):
-		_settings["autosave"] = bool(d["autosave"])
-	if d.has("hints"):
-		_settings["hints"] = bool(d["hints"])
-	EventBus.settings_changed.emit("game", d)
-
 func apply_graphics(d: Dictionary) -> void:
 	# Порядок важен: сначала общий пресет качества, потом точечные переопределения,
 	# иначе пресет затрёт то, что игрок выставил вручную в том же диалоге.
@@ -234,18 +220,6 @@ func apply_graphics(d: Dictionary) -> void:
 		var step: int = FPS_STEPS.find(fps)
 		set_fps_cap(step if step >= 0 else 1)
 	EventBus.settings_changed.emit("graphics", d)
-
-func apply_controls(d: Dictionary) -> void:
-	if d.has("sensitivity"):
-		# Ползунок отдаёт 0..100, а игроку нужен множитель около 1.0.
-		set_sensitivity(float(d["sensitivity"]) / 50.0)
-	if d.has("deadzone"):
-		set_deadzone(float(d["deadzone"]))
-	if d.has("invert_y"):
-		_settings["invert_y"] = bool(d["invert_y"])
-	if d.has("camera_angle"):
-		_settings["camera_angle"] = float(str(d["camera_angle"]).replace("°", ""))
-	EventBus.settings_changed.emit("controls", d)
 
 func _tier(value: Variant) -> int:
 	return clampi(_index_from(value, TIER_LABELS, 2), 0, 2)

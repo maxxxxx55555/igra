@@ -115,3 +115,10 @@ _tmp_*
 !docs/artifacts/**/*.patch
 *.autosave.*
 *.autosave
+
+# Session 26 (C6): caches of the lint and editor tools the gates and the owner run; none of them is shipped or evidence
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+.vscode/
+.idea/

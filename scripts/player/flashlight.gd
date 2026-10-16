@@ -34,18 +34,6 @@ func set_is_enabled(value: bool) -> void:
 	flashlight_enabled = value
 	_apply_enabled()
 	_emit_state()
-func get_flashlight_enabled() -> bool:
-	return flashlight_enabled
-func is_point_lit(global_pos: Vector2) -> bool:
-	if not flashlight_enabled or stats == null or _in_blackout:
-		return false
-	var rel: Vector2 = global_pos - global_position
-	var dist: float = rel.length()
-	if dist > stats.cone_length_px:
-		return false
-	var forward := Vector2(cos(rotation), sin(rotation))
-	var ang: float = absf(wrapf(rel.angle_to(forward), -PI, PI))
-	return ang <= deg_to_rad(stats.cone_angle_deg * 0.5)
 func _battery() -> float:
 	var p := get_parent()
 	if p and p.has_method("get_battery"):

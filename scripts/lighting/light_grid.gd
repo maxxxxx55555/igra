@@ -102,27 +102,3 @@ func cell_brightness(world_pos: Vector3) -> float:
 
 func is_lit(world_pos: Vector3, threshold: float = 0.3) -> bool:
 	return cell_brightness(world_pos) >= threshold
-
-func flashlight_dirs() -> Array[Vector3]:
-	var out: Array[Vector3] = []
-	for f in _flashlights:
-		if not is_instance_valid(f):
-			continue
-		out.append(-(f.global_transform.basis.z))
-	return out
-
-func nearest_flashlight(from: Vector3) -> Variant:
-	var best_d: float = 1e9
-	var best_pos: Vector3 = Vector3.ZERO
-	var found: bool = false
-	for f in _flashlights:
-		if not is_instance_valid(f):
-			continue
-		var d: float = from.distance_to(f.global_position)
-		if d < best_d:
-			best_d = d
-			best_pos = f.global_position
-			found = true
-	if found:
-		return [best_pos, best_d]
-	return null

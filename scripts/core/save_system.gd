@@ -515,12 +515,6 @@ func apply_pending_vitals(player: Node) -> void:
 	EventBus.player_stamina_changed.emit(float(player.get("stamina")) / max_stamina)
 	EventBus.player_battery_changed.emit(float(player.get("battery")) / maxf(max_battery, 0.001))
 
-func set_quest_data(data: Dictionary) -> void:
-	_quest_data = data
-
-func get_quest_data() -> Dictionary:
-	return _quest_data.duplicate()
-
 func add_photo(photo_id: String) -> bool:
 	if photo_id in _photos or not PHOTO_ID_PATTERN.search(photo_id) or _photos.size() >= MAX_PHOTOS:
 		return false
@@ -685,15 +679,6 @@ func _remove_with_backups(path: String) -> bool:
 		if FileAccess.file_exists(path + suffix):
 			DirAccess.remove_absolute(path + suffix)
 	return FileAccess.file_exists(path) and DirAccess.remove_absolute(path) == OK
-
-func get_all_slots_info() -> Array:
-	var result: Array = []
-	for i in range(1, MAX_SLOTS + 1):
-		var info = get_slot_info(i)
-		info["slot"] = i
-		info["is_autosave"] = (i == MAX_SLOTS)
-		result.append(info)
-	return result
 
 ## TRUTH WAVE P0: "Reset progress" (settings_screen.gd) and boot-time
 ## quarantine of an unreadable/mismatched save both need this — reset_all()

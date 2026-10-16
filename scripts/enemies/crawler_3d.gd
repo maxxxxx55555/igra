@@ -93,14 +93,6 @@ func _perform_leap() -> void:
 	dir.y = 0.3
 	velocity = dir * LEAP_SPEED
 
-func _on_light_tick(_delta: float) -> void:
-	if not _is_in_light():
-		_vision_lost_timer = maxf(0.0, _vision_lost_timer - _delta)
-		return
-	if ai_state == State.CHASE:
-		_vision_lost_timer = 1.0
-		pass
-
 func _can_see_player() -> bool:
 	if _vision_lost_timer > 0.0:
 		return false

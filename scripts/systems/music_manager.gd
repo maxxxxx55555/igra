@@ -272,11 +272,6 @@ func enter_boss() -> void:
 	_boss_active = true
 	set_mood(Mood.BOSS)
 
-func stop_music() -> void:
-	if _fade != null and _fade.is_valid():
-		_fade.kill()
-	_a.stop()
-	_b.stop()
 #endregion
 
 #region Private Methods

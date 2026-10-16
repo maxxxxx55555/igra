@@ -81,7 +81,7 @@ func _evaluate_ending(is_death: bool = false) -> void:
 	var has_all_docs: bool = false
 	var has_all_audio: bool = false
 	var has_all_photos: bool = false
-	
+
 	if dm:
 		dm_districts = dm.get_district_count() if dm.has_method("get_district_count") else 11
 		dm_full = 0
@@ -90,7 +90,7 @@ func _evaluate_ending(is_death: bool = false) -> void:
 			if dm.get_stage(did) >= 3:
 				dm_full += 1
 		power_station_full = dm.get_stage(&"power_station") >= 3
-	
+
 	if pt:
 		docs_total = pt.get_total_documents() if pt.has_method("get_total_documents") else 0
 		docs_found = pt.get_found_documents() if pt.has_method("get_found_documents") else 0
@@ -98,7 +98,7 @@ func _evaluate_ending(is_death: bool = false) -> void:
 		has_all_audio = pt.has_all_audio_logs() if pt.has_method("has_all_audio_logs") else false
 		has_all_photos = pt.has_all_photos() if pt.has_method("has_all_photos") else false
 		has_bunker = pt.is_bunker_accessed() if pt.has_method("is_bunker_accessed") else false
-	
+
 	var ending: StringName = _determine_ending(dm_full, dm_districts, has_all_docs, has_bunker, has_all_audio, has_all_photos, is_death, power_station_full)
 	_achieved_ending = ending
 	_ending_data = ENDING_DATA.get(String(ending), {})
@@ -137,12 +137,6 @@ func get_ending() -> StringName:
 func get_ending_data(ending_id: StringName = "") -> Dictionary:
 	var id: StringName = ending_id if ending_id else _achieved_ending
 	return _localized(ENDING_DATA.get(String(id), {}))
-
-func get_all_endings() -> Dictionary:
-	var out: Dictionary = {}
-	for id in ENDING_DATA:
-		out[id] = _localized(ENDING_DATA[id])
-	return out
 
 func _localized(entry: Dictionary) -> Dictionary:
 	if entry.is_empty():

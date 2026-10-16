@@ -44,10 +44,6 @@ func _apply_filter() -> void:
 func _remove_filter() -> void:
 	pass
 
-func cycle_filter() -> void:
-	_filter_index = (_filter_index + 1) % _filters.size()
-	_apply_filter()
-
 func take_photo() -> void:
 	var img = get_viewport().get_texture().get_image()
 	var path = "user://screenshots/photo_%d.png" % Time.get_unix_time_from_system()

@@ -96,9 +96,6 @@ func _check_all_solved() -> void:
 func get_solved_count() -> int:
 	return _solved.size()
 
-func get_total_count() -> int:
-	return _puzzle_data.size()
-
 func get_progress() -> float:
 	if _puzzle_data.is_empty():
 		return 0.0

@@ -56,13 +56,3 @@ func apply_to_environment(env: Environment, district_id: StringName) -> void:
 
 func has(district_id: StringName) -> bool:
 	return THEMES.has(district_id)
-
-func list_ids() -> Array[StringName]:
-	return THEMES.keys()
-
-func set_current(district_id: StringName) -> void:
-	current_id = district_id
-	theme_changed.emit(district_id)
-
-func color_of(district_id: StringName, key: String) -> Color:
-	return get_theme(district_id).get(key, Color.WHITE)

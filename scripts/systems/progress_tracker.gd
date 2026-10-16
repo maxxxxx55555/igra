@@ -171,9 +171,6 @@ func is_loot_taken(key: String) -> bool:
 func mark_loot_taken(key: String) -> void:
 	_loot_taken[key] = true
 
-func found_secret_ids() -> Array:
-	return _secrets_found.keys()
-
 func _on_kill(id: StringName) -> void:
 	kills += 1
 	kills_by[String(id)] = int(kills_by.get(String(id), 0)) + 1

@@ -22,11 +22,6 @@ func emit_district_entered(d: StringName) -> void:
 func emit_district_powered(d: StringName) -> void:
 	district_powered.emit(d)
 
-func emit_coin(c: int) -> void:
-	coin_changed.emit(c)
-
-func emit_lives(l: int) -> void:
-	lives_changed.emit(l)
 signal ammo_changed(current: int, max: int)
 signal enemy_attack(damage: int)
 signal enemy_died(position: Vector3)

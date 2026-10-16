@@ -19,10 +19,6 @@ var player: Node:
 		_player_cache = tree.get_first_node_in_group("player") if tree != null else null
 		return _player_cache
 
-## Волновой режим засчитывает убийства напрямую, минуя EventBus.enemy_killed.
-func add_kill() -> void:
-	enemies_killed += 1
-
 func is_menu() -> bool: return current_state == GameState.MENU
 func is_playing() -> bool: return current_state == GameState.PLAYING
 func is_paused() -> bool: return current_state == GameState.PAUSED
@@ -83,15 +79,6 @@ func _on_player_game_over() -> void:
 func _process(delta: float) -> void:
 	if is_playing():
 		play_time += delta
-
-func unlock_level(level: int) -> void:
-	if level > current_level:
-		current_level = level
-
-func reset_run() -> void:
-	current_level = 1
-	play_time = 0.0
-	enemies_killed = 0
 
 func _change_state(new_state: GameState) -> void:
 	if new_state == current_state:

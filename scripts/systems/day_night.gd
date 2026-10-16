@@ -26,6 +26,3 @@ func _apply_cycle_multiplier() -> void:
 
 func _process(delta: float) -> void:
 	_t += delta
-
-func get_hour() -> float:
-	return fmod(start_hour + _t / day_duration_sec * 24.0, 24.0)

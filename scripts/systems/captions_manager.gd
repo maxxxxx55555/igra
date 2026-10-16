@@ -61,12 +61,6 @@ func _fire(kind: String, code_id: String) -> void:
 		EventBus.toast_requested.emit(LocalizationManager.t(String(row.get("i18n_key", ""))), "caption")
 		return
 
-func get_moments() -> Array:
-	return _moments
-
-func is_seen(caption_id: String) -> bool:
-	return _seen.has(caption_id)
-
 ## Подпись к району для экрана коллекции (ref.kind == "district").
 func gallery_caption_for(kind: String, ref_id: String) -> String:
 	for row in _gallery:

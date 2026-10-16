@@ -64,9 +64,6 @@ func _battery_ratio() -> float:
 		return clampf(float(p.battery) / maxf(0.001, float(p.battery_max)), 0.0, 1.0)
 	return 0.0
 
-func _get_persist(key: String, default_val: Variant) -> Variant:
-	return default_val
-
 func _format_time(seconds: int) -> String:
 	var h := seconds / 3600
 	var m := (seconds % 3600) / 60

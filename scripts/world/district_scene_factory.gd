@@ -74,8 +74,3 @@ static func district_scene_path(district_id: StringName) -> String:
 
 static func district_count() -> int:
 	return DISTRICTS.size()
-
-static func district_id_at(index: int) -> StringName:
-	if index < 0 or index >= DISTRICTS.size():
-		return &"suburbs"
-	return DISTRICTS[index]

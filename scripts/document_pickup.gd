@@ -96,11 +96,6 @@ func _load_from_catalog() -> void:
 				document_content = String(entry.get("content", ""))
 			return
 
-func set_document(id: String, title: String, content: String) -> void:
-	document_id = id
-	document_title = title
-	document_content = content
-
 ## Тёплое свечение документа создаётся в рантайме, если его нет в сцене.
 func _ensure_glow() -> void:
 	glow_light = get_node_or_null("GlowOmniLight3D") as OmniLight3D

@@ -35,8 +35,6 @@ var _footstep_dust_node: GPUParticles3D = null
 var _step_timer: float = 0.0
 var cone_add_ok: bool = false
 var cone_amber_ok: bool = false
-var _cone_shader_code: String = ""
-var move_selftest_vel: float = 0.0
 var visibility: float = 1.0
 var _combo_timer: float = 0.0
 var _combo_count: int = 0
@@ -191,8 +189,6 @@ func _setup_cone(force_off: bool) -> void:
 	# flashlight_cone.gdshader is the same technique with added rim falloff
 	# and flicker, so it replaces it here instead of living unused on disk.
 	var shader_res: Shader = load("res://assets/shaders/flashlight_cone.gdshader")
-	var code := shader_res.code
-	_cone_shader_code = code
 	var sm := ShaderMaterial.new()
 	sm.shader = shader_res
 	cone.set_surface_override_material(0, sm)
@@ -233,9 +229,6 @@ func _setup_cone(force_off: bool) -> void:
 
 
 
-
-func get_cone_code() -> String:
-	return _cone_shader_code
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_INHERIT
@@ -288,9 +281,6 @@ func _ready() -> void:
 	hp = float(mh)
 	stamina = stats.stamina_max
 	battery = float(battery_max)
-	var selftest_vel := compute_velocity(Vector2(0, -1))
-	move_selftest_vel = selftest_vel.length()
-	var blocked := is_move_blocked()
 
 	if OS.has_feature("mobile"):
 		enable_shadows = false
@@ -414,9 +404,6 @@ func _on_game_started() -> void:
 	_resolve_camera()
 	# Режимом курсора владеет InputService (он же вернёт захват после паузы).
 	InputService.refresh_mouse_mode()
-
-func _is_touch_device() -> bool:
-	return InputService.is_touch_device()
 
 ## Обзор. Мышь — на десктопе (при захваченном курсоре), палец — на Android.
 ## Тач-зона обзора: правее JOY_ZONE_RATIO, чтобы не спорить с виртуальным
@@ -749,11 +736,6 @@ func compute_velocity(dir_2d: Vector2, state: State = State.WALK) -> Vector3:
 func is_move_blocked() -> bool:
 	return not (process_mode == Node.PROCESS_MODE_INHERIT and not get_tree().paused)
 
-func _move_selftest() -> void:
-	var fake_dir := Vector2(0, -1)
-	var v := compute_velocity(fake_dir, State.WALK)
-	move_selftest_vel = v.length()
-
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_PREDELETE:
 		if _footstep_dust_node and is_instance_valid(_footstep_dust_node):
@@ -1036,9 +1018,6 @@ const STROBE_BATTERY_COST: float = 5.0
 
 var _strobe_cooldown: float = 0.0
 
-func get_strobe_cooldown_ratio() -> float:
-	return clampf(_strobe_cooldown / STROBE_COOLDOWN, 0.0, 1.0)
-
 func trigger_strobe() -> bool:
 	if _strobe_cooldown > 0.0 or not gameplay_active:
 		return false
@@ -1151,11 +1130,6 @@ func _try_inspect() -> void:
 			if player_pos.distance_to(obj_pos) < 3.0:
 				if obj.try_inspect():
 					return
-
-
-func set_battery_params(max_val: float) -> void:
-	battery_max = max_val
-	battery = minf(battery, battery_max)
 
 
 ## The attack button fires the drawn weapon; with none drawn it is the melee combo (the "melee" key always is).

@@ -101,11 +101,11 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_screens = get_node_or_null("/root/Screens")
 	_fade = get_node_or_null("FadeTransition")
-	
+
 	# Initial state - sync transition for _ready
 	current_state = GameFlowState.BOOT
 	_enter_state(GameFlowState.BOOT)
-	
+
 	# Connect events
 	EventBus.game_state_changed.connect(_on_game_state_changed)
 	EventBus.ui_screen_opened.connect(_on_ui_screen_opened)
@@ -173,28 +173,28 @@ func _any_overlay_open() -> bool:
 func transition_to(target: GameFlowState) -> void:
 	if _transitioning or target == current_state:
 		return
-	
+
 	_prev_state = current_state
 	_transitioning = true
-	
+
 	# Handle exit logic
 	_exit_state(current_state)
-	
+
 	# Fade transition
 	var fade_done: Array = [false]
 	if _fade and _fade.has_method("fade_out"):
 		_fade.fade_out(0.3).finished.connect(func(): fade_done[0] = true)
 	else:
 		fade_done[0] = true
-	
+
 	await _wait_for_fade()
-	
+
 	current_state = target
 	state_changed.emit(STATE_NAMES.get(target, "UNKNOWN"), STATE_NAMES.get(_prev_state, "UNKNOWN"))
-	
+
 	# Handle enter logic
 	_enter_state(current_state)
-	
+
 	_transitioning = false
 
 func _wait_for_fade() -> void:
@@ -310,12 +310,3 @@ func _show_credits() -> void:
 	if _screens and _screens.has_method("show_screen"):
 		_screens.show_screen("Credits")
 		EventBus.ui_screen_opened.emit(&"credits")
-
-func get_state_name(state: GameFlowState = current_state) -> String:
-	return STATE_NAMES.get(state, "UNKNOWN")
-
-func is_overlay(state: GameFlowState) -> bool:
-	return state in OVERLAY_SCREENS
-
-func is_gameplay_state(state: GameFlowState) -> bool:
-	return state == GameFlowState.PLAYING

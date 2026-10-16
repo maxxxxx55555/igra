@@ -813,18 +813,6 @@ func _trigger_death() -> void:
 	_die()
 
 
-func _state_name(s: State) -> String:
-	match s:
-		State.IDLE: return "IDLE"
-		State.PATROL: return "PATROL"
-		State.INVESTIGATE: return "INVESTIGATE"
-		State.CHASE: return "CHASE"
-		State.ATTACK: return "ATTACK"
-		State.FLEE: return "FLEE"
-		State.STUN: return "STUN"
-		State.DEAD: return "DEAD"
-	return "UNKNOWN"
-
 func _change_state(new_state: State) -> void:
 	var prev := ai_state
 	ai_state = new_state

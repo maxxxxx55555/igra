@@ -176,11 +176,6 @@ func name_for(prefix: String, id: StringName, fallback_name: String = "") -> Str
 		return t(key)
 	return fallback_name if not fallback_name.is_empty() else String(id)
 
-func cycle_language() -> void:
-	var idx = SUPPORTED.find(current_lang)
-	var next = SUPPORTED[(idx + 1) % SUPPORTED.size()]
-	set_language(next)
-
 func is_rtl(lang: String = current_lang) -> bool:
 	return lang in RTL_LANGS
 
