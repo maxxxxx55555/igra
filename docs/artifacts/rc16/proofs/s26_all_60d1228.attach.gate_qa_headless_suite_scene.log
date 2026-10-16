@@ -1,0 +1,42 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+[qa] t=0.0s P0 autoloads: 12 checked, 0 missing
+[qa] t=3.3s P1 New Game OK, player spawned
+[qa] t=4.7s P1b input coverage: 29/29 actions exercised, 0 crash
+[qa] t=7.6s P2 districts: 11 checked
+[qa] t=8.0s P2b combat: hp 30.0 -> 5.0 — OK
+[qa] t=8.1s P3 save/load round-trip with language switch OK
+[qa] t=8.2s P4 endings: 5 checked
+[qa] t=8.7s P5 i18n: 13 locales x (1560 en keys + 10 surface keys), 0 MISSING
+[qa] t=9.4s P2c finale boss race: boss spawned and alive in power_station after Travel - OK
+[qa] t=9.4s P2d document id race: real _spawn_document -> _ready sees id -> collect unlocks it - OK
+[qa] t=10.1s P2e skill stack race: one rank of move_speed survives 2 real restarts at 3.3, no compounding - OK
+[qa] t=10.1s P2f secret full-backpack: secret preserved, not recorded as found - OK
+[qa] t=10.2s P2g quest reward full-backpack: stays open when full, completes once there's room - OK
+[qa] t=10.5s P2h kill pays wallet: 9520 -> 9629 - OK
+[qa] t=10.7s P2i district save position race: no stale marker write, saved position matches post-transition spawn - OK
+[qa] t=10.7s P2j locked district travel blocked: transition_to() correctly refused - OK
+[qa] t=10.7s P2k streetlight_activated fires exactly once per district - OK
+[qa] t=10.8s P2l import survives the next event-driven autosave - OK
+[qa] t=11.7s P2m periodic autosave writes the real save Continue reads - OK
+[qa] t=11.7s P2n Q1 answer: after travel to 'park', first-tick player state: valid=true in_tree=true finite=true pos=(-8.0, 0.860233, -8.0)
+[qa] t=11.7s P2n Q1 answered: player is valid, in-tree and finite after travel to park - the report's ppos=(inf,inf,inf) heartbeat entries are the _player_ok()==false fallback sentinel, not evidence of a broken transform
+[qa] t=11.7s P2o offline player correctly does not treat OfflineMultiplayerPeer as a live network - OK
+[qa] t=11.9s P2p fall recovery armed on spawn (mark_spawn_as_grounded wired into WorldRuntime._place_player) - OK
+[qa] t=11.9s P2q autoload behavioural asserts run - OK
+[qa] t=12.3s P2r respawn keeps district/stage, HP 50%, battery not refilled - OK
+[qa] t=12.3s P2r flashlight upgrades survive respawn (energy 28.8, stability L5) - OK
+[qa] t=12.3s P6 soak: 20s sustained gameplay target
+[qa] t=22.3s P6 heartbeat 10/20s — playing, player alive, no freed-instance/state errors
+[qa] t=32.3s P6 heartbeat 20/20s — playing, player alive, no freed-instance/state errors
+[qa] t=32.3s P6 soak: 20s sustained, clean
+[qa] DONE fails=0
+ERROR: 3 RID allocations of type 'PN13RendererDummy14TextureStorage12DummyTextureE' were leaked at exit.
+ERROR: 48 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 24 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 165 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 27 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
