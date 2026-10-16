@@ -1,6 +1,6 @@
 # proof s26_runtime_diff
-# utc 20261016T091153Z
-# head 4b4fee0 (uncommitted paths: 12)
+# utc 20261016T091958Z
+# head 1d7cea2 (uncommitted paths: 4)
 # env none
 # cmd python -I /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s26_runtime_diff.py . 09dfb04 HEAD
 """Session 26: the paths that differ between two revisions, and which of them are runtime paths by tools/qa_sim/af3_frame_check.is_runtime (what ships or is read by a shipped file). The chain of
@@ -26,5 +26,5 @@ for p in runtime:
 sys.exit(1 if runtime else 0)
 
 --- run
-paths that differ between 09dfb04 and 4b4fee0: 26; runtime paths among them: 0
+paths that differ between 09dfb04 and 1d7cea2: 43; runtime paths among them: 0
 # EXIT=0

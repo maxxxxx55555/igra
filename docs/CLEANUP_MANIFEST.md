@@ -181,11 +181,11 @@ Removing lines moves the lines after them, and `tools/af5_check.py` holds every 
 | Gate | Result | Evidence |
 |---|---|---|
 | `python tools/lint_changed.py` | 0 findings in 144 `.gd`, 51 `.py`, 20 `.sh`, 3 workflows (20 trailing-whitespace findings of three untouched scripts cleaned first, CORRECTION_LOG 272) | run at every commit |
-| `bash tools/check.sh --static` | 63 of 63 | `docs/artifacts/rc16/proofs/s26_static.out` (the last run of the pass) |
+| `bash tools/check.sh --static` | 63 of 63 | `docs/artifacts/rc16/proofs/s26_static_final.out` (S26-STATIC2, the last run of the pass) |
 | `python tools/af5_check.py` | 0 findings in the citations of the documents added since `e4bb4df` | the same run |
-| the engine's compile gate, boot flow, the closeout (483 checks, 0 fails), the GOLD MASTER suite, timing equivalence | green at `6734f9c` (before the verifier's fix) | `s26_final_all_6734f9c` (`docs/PROOFS.md`, S26-FINAL and S26-FINAL2) |
-| the 3-seed bot | 3 of 3 won, 0 softlocks | `s26_bot_387cbd9` (S26-BOT) |
-| the windowed perf gate | D1 152 draw calls, D11 142, no budget exceeded | `s26_windowed_ccc7669` (S26-PERF) |
+| the engine's compile gate, boot flow, the closeout (483 checks, 0 fails), the GOLD MASTER suite, timing equivalence | green at `6734f9c` and again at `09dfb04` after the verifier's fix (closeout 485 checks, 0 fails) | `s26_final_all_6734f9c` and `s26_last_09dfb04` (`docs/PROOFS.md`, S26-FINAL, S26-FINAL2, S26-L10, S26-L10B) |
+| the 3-seed bot | 3 of 3 won, 0 softlocks, at `387cbd9` and again at `09dfb04` | `s26_bot_387cbd9` and `s26_last_09dfb04` (S26-BOT, S26-BOT2) |
+| the windowed perf gate | D1 152 draw calls, D11 142, no budget exceeded, at `ccc7669` (no rendering path differs since: `s26_af3_rows`) | `s26_windowed_ccc7669` (S26-PERF) |
 
 **What the rule asked and what was done.** C8 says to revert the whole sweep on any gate failure. The first full battery after the sweep failed (8 gates, launch 1, `s26_all_f6e065f`) on one parse error that
 the engine's compile gate named to the line: `var code` in `Player._setup_cone`, one of the three second-order edits of section 4.2. The other 57 deletions and the two other members were not named by any

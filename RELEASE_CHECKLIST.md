@@ -279,7 +279,7 @@ only if you want players to know it exists ahead of time.
 
 The bundle is `build/tls.aab`: **136,645,015 bytes, version code 3, sha256 `bb61ce937b71336bffb44be98b187f546842fc0d2bf2d225d7b4a91e4415263d`**, built from `4b4fee0`
 and read by `tools/qa_sim/aab_check.py` (`jar verified.`, the upload key's certificate, 0 hits of the keystore values). The bundle of version code 2 and the first bundle of code 3 (`f8224aa`, without the fix of the daily progress) are
-superseded (copies are in `..\_BACKUPS\2026-10-16_07-21_bundles` and `..\_BACKUPS\2026-10-16_11-58_bundles2`). What an agent session cannot do, in order:
+superseded (copies are in `..\_BACKUPS\2026-10-16_07-21_bundles` and `..\_BACKUPS\2026-10-16_11-58_bundles2`). If the first bundle of this pass (code 3, `f8224aa`) was uploaded anywhere before you read this, Play refuses the second: raise `version/code` in `export_presets.cfg` to 4 and export again. What an agent session cannot do, in order:
 
 1. **Rotate the credentials** the earlier blocks name (the API key of `opencode.json`, the keystore passwords if they were ever pasted anywhere): unchanged by this pass.
 2. **Upload `build/tls.aab`** to the Play Console (section 5) and publish the privacy policy at a stable URL (section 3).

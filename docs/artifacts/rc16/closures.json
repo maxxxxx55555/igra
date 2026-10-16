@@ -3707,5 +3707,17 @@
   ],
   "commit": "4b4fee0",
   "frames": []
+ },
+ {
+  "id": "S26-STATIC2",
+  "claim": "The static gates on the closing documents of Session 26 (head `1d7cea2` with the documents of the closing commit uncommitted): 63 of 63. A first run of the same command, taken before PROOFS.md was regenerated for two refreshed proofs, failed the proofs audit alone (62 of 63); this is the rerun.",
+  "cmd": "bash tools/check.sh --static",
+  "proof": "s26_static_final",
+  "quotes": [
+   "Проверок пройдено: 63",
+   "# EXIT=0"
+  ],
+  "commit": "1d7cea2",
+  "frames": []
  }
 ]
