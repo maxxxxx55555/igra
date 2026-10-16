@@ -228,7 +228,7 @@ Each step names where the detail lives; it does not repeat it.
 6. **Play Console:** create the app and fill the dashboard with §6, the rating with §4 and the data safety form with §5 (`docs/RELEASE_RUNBOOK.md` §3 is the click path); main listing from §2 and `store/listing.md`; translations from `docs/STORE_KIT.md`.
 7. **Internal testing:** upload `build/tls.aab` as "1.0 (2)" over the v8 release if one is in the track, add testers, start the rollout (`docs/RELEASE_RUNBOOK.md` §3.6).
 8. **Closed testing** if the dashboard demands it for a new personal account (12 testers for 14 days at the time of writing; **check in Console**), then production with a staged rollout (§3.7 and §3.8 of the runbook).
-9. **Every upload after the first** needs `version/code` raised (`export_presets.cfg:16`; the bundle of Session 23 carries 2).
+9. **Every upload after the first** needs `version/code` raised (`export_presets.cfg:16`; the bundle of Session 26 carries 3).
 
 ## 8. What was corrected while drafting (stale lines in the older documents)
 

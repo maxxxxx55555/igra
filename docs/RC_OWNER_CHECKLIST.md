@@ -160,7 +160,7 @@ example).
 godot --headless --export-release "Android" build/TLS.aab
 ```
 
-- [ ] CHK031 Version is the intended value at upload time: `export_presets.cfg` ships `version/code=2` / `version/name="1.0"` since `53ab91a`
+- [ ] CHK031 Version is the intended value at upload time: `export_presets.cfg` ships `version/code=3` / `version/name="1.0"` (code 3 since `6292da3`, code 2 since `53ab91a`)
       (Session 23: code 2, so that the bundle uploads over the v8 bundle of code 1; `export_presets.cfg:16-17`); raise the code for every upload after the first.
 - [ ] CHK032 AAB (not APK) is the artifact going to Play; APK stays for
       sideload/testing only.
@@ -286,7 +286,7 @@ cannot be changed afterward for the same listing.
       Mode hides the HUD) is the doc-recommended capture aid.
 - [ ] CHK056 **Release → Testing → Open testing → Create new release** → **App
       bundles** → upload the signed `.aab` from STEP 3 → **Release name** e.g.
-      `1.0 (2)` (the bundle of Session 23 carries `version/code` 2) → **Release notes** paste `store/changelog.md`'s v1.0 block (EN inside
+      `1.0 (3)` (the bundle of Session 26 carries `version/code` 3) → **Release notes** paste `store/changelog.md`'s v1.0 block (EN inside
       `<en-US>…</en-US>`, RU inside `<ru-RU>…</ru-RU>`) → **Countries / regions** →
       **Review release** → resolve warnings → **Start rollout to Open testing**.
 - [ ] CHK057 Optional, non-blocking, doc-listed: real AppLovin SDK key (root

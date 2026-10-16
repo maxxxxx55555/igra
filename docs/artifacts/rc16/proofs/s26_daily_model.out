@@ -1,0 +1,134 @@
+# proof s26_daily_model
+# utc 20261016T085218Z
+# head 09dfb04 (uncommitted paths: 12)
+# env none
+# cmd python -I /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s26_daily_model.py .
+"""Session 26, after the verifier's V1.8 and the vacuous DAILY3 of the last chain: a python model of the day line of scripts/systems/daily_challenge_manager.gd (`_index_for_day`,
+`_roll_for_day`, `_tick`, `_complete`, the saved state), run in the variants that matter. It answers two questions without an engine, and says plainly that it is a model:
+  1. What did the selector fix of 8fe1893 do on the real calendar (days 43, 44, 45 of the 60-day cycle), and what does c515bb0 do? (the verifier's V1.8)
+  2. What do the check DAILY3 and its mutation see in each combination? The engine's run of the last chain (launch 10, row 133) is the calibration: with the mutations of DAILY2 and
+     DAILY3 applied together the engine read "(2 of 2) ... (0)", an ok that bites nothing.
+The model mirrors the GDScript line for line; it is not the GDScript. Read-only; prints itself first. usage: python -I s26_daily_model.py <repo>"""
+import json
+import pathlib
+import sys
+
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+root = pathlib.Path(sys.argv[1]).resolve()
+PER_RUN = ["light_streets", "restore_districts"]
+CAP = 11
+
+
+class Mgr:
+    """variant: 'new' (c515bb0), 'mutation' (the old comparison of the DAILY3 mutation), 'old8fe1893' (the comparison with the empty-id guard), 'base' (041ce03: no walk-past).
+    walk: False models the DAILY2 mutation (`if true:` in the selector)."""
+
+    def __init__(self, templates, variant, walk=True):
+        self.t, self.variant, self.walk = templates, variant, walk
+        self.today_id, self.progress, self.progress_day, self.last_done, self.completed, self.today, self.day = "", 0, -1, -1, False, {}, 0
+        self.completions = 0
+
+    def index_for_day(self, day):
+        n = len(self.t)
+        if self.variant == "base":
+            return day % n
+        for step in range(n):
+            i = (day + step) % n
+            t = self.t[i]
+            if not self.walk or not (t["type"] in PER_RUN and t["target"] > CAP):
+                return i
+        return day % n
+
+    def id_for_day(self, day):
+        return self.t[self.index_for_day(day)]["id"]
+
+    def carries(self, day):
+        if self.variant == "new":
+            return self.progress_day == day and self.today_id == self.id_for_day(day)
+        if self.variant == "old8fe1893":
+            return self.today_id != "" and self.today_id == self.id_for_day(day)
+        return self.today_id == self.id_for_day(day)
+
+    def roll(self, day):
+        self.day = day
+        if day <= self.last_done:
+            self.completed = True
+        elif self.carries(day):
+            pass
+        else:
+            self.completed, self.progress = False, 0
+        self.progress_day = day
+        self.today = self.t[self.index_for_day(day)]
+        self.today_id = self.today["id"]
+
+    def tick(self, kind, n=1):
+        if self.completed or not self.today or self.today["type"] != kind:
+            return
+        self.progress = min(self.progress + n, self.today["target"])
+        if self.progress >= self.today["target"]:
+            self.completed, self.last_done = True, self.day
+            self.completions += 1
+
+    def saved(self):
+        return {"today_id": self.today_id, "progress": self.progress, "last_done": self.last_done, "progress_day": self.progress_day}
+
+    def relaunch(self, state):
+        """A new process: the fields default, the saved state loads (`_load_state`), the roll of the day follows (`_ready`)."""
+        self.today_id, self.progress, self.last_done = state["today_id"], state["progress"], state["last_done"]
+        self.progress_day = state["progress_day"] if self.variant == "new" else -1
+        self.completed, self.today = False, {}
+
+
+templates = json.loads((root / "content" / "daily_challenges.json").read_text(encoding="utf-8"))["templates"]
+print("the real file: %d templates; day 43, 44, 45 of the cycle select:" % len(templates))
+for v in ("base", "old8fe1893", "new"):
+    m = Mgr(templates, v)
+    print("  %-10s %s" % (v, [m.id_for_day(d) for d in (42, 43, 44, 45, 46)]))
+
+print("\n1. the verifier's V1.8 on the real calendar: finish day 43 (7 restores), relaunch on day 44 (a day later), one more restore")
+for v in ("old8fe1893", "new"):
+    m = Mgr(templates, v)
+    m.roll(43)
+    for _ in range(7):
+        m.tick("restore_districts")
+    done43 = m.completions
+    state = m.saved()
+    m.relaunch(state)
+    m.roll(44)
+    opened = (m.progress, m.completed)
+    m.tick("restore_districts")
+    print("  %-10s day 43 completions %d; day 44 opens at progress %d, completed %s; after one restore: %d more completion(s)" % (v, done43, opened[0], opened[1], m.completions - done43))
+
+print("\n2. the check DAILY3 (templates over/fits, cap %d: roll 0, progress 2, roll 0, roll 1) in each combination" % CAP)
+two = [{"id": "over", "type": "light_streets", "target": CAP + 1}, {"id": "fits", "type": "restore_districts", "target": 3}]
+rows = [("fixed code (c515bb0)", "new", True), ("DAILY3 mutation alone (the old comparison)", "mutation", True),
+        ("DAILY2 and DAILY3 mutations together (set 0 of row 133)", "mutation", False), ("the code of 8fe1893 (the defect)", "old8fe1893", True), ("the baseline 041ce03", "base", True)]
+for name, v, walk in rows:
+    m = Mgr(two, v, walk)
+    m.last_done, m.today_id, m.progress_day = -1, "", -1
+    m.roll(0)
+    m.progress = 2
+    m.roll(0)
+    same = m.progress
+    m.roll(1)
+    nxt = m.progress
+    print("  %-58s same day %d, next day %d -> DAILY3 %s" % (name, same, nxt, "ok" if same == 2 and nxt == 0 else "FAIL"))
+
+--- run
+the real file: 60 templates; day 43, 44, 45 of the cycle select:
+  base       ['streets_09', 'streets_12', 'streets_16', 'restore_07', 'restore_08']
+  old8fe1893 ['streets_09', 'restore_07', 'restore_07', 'restore_07', 'restore_08']
+  new        ['streets_09', 'restore_07', 'restore_07', 'restore_07', 'restore_08']
+
+1. the verifier's V1.8 on the real calendar: finish day 43 (7 restores), relaunch on day 44 (a day later), one more restore
+  old8fe1893 day 43 completions 1; day 44 opens at progress 7, completed False; after one restore: 1 more completion(s)
+  new        day 43 completions 1; day 44 opens at progress 0, completed False; after one restore: 0 more completion(s)
+
+2. the check DAILY3 (templates over/fits, cap 11: roll 0, progress 2, roll 0, roll 1) in each combination
+  fixed code (c515bb0)                                       same day 2, next day 0 -> DAILY3 ok
+  DAILY3 mutation alone (the old comparison)                 same day 2, next day 2 -> DAILY3 FAIL
+  DAILY2 and DAILY3 mutations together (set 0 of row 133)    same day 2, next day 0 -> DAILY3 ok
+  the code of 8fe1893 (the defect)                           same day 2, next day 2 -> DAILY3 FAIL
+  the baseline 041ce03                                       same day 2, next day 0 -> DAILY3 ok
+# EXIT=0

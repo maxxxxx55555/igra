@@ -1,0 +1,36 @@
+# proof s26_af3_rows
+# utc 20261016T085218Z
+# head 09dfb04 (uncommitted paths: 13)
+# env none
+# cmd python -I /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s26_af3_rows.py .
+"""Session 26: the runtime paths that differ between the commit of the release frames (`ccc7669`) and HEAD, each with its git blob before and after and the scope row of
+tools/qa_sim/af3_f4_scope.tsv that declares it (or none), then the frame gate itself. Read-only; prints itself first. usage: python -I s26_af3_rows.py <repo> [<frame commit>]"""
+import pathlib
+import subprocess
+import sys
+
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+root = pathlib.Path(sys.argv[1]).resolve()
+frame = sys.argv[2] if len(sys.argv) > 2 else "ccc7669"
+sys.path.insert(0, str(root / "tools" / "qa_sim"))
+import af3_frame_check as gate  # noqa: E402
+
+head = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=root, capture_output=True, text=True).stdout.strip()
+scoped = gate.scopes()
+paths = [p for p in gate.changed_paths(frame, "HEAD") if gate.is_runtime(p)]
+print("runtime paths that differ between %s and %s: %d" % (frame, head, len(paths)))
+for p in paths:
+    before, after = gate.blob(frame, p), gate.blob("HEAD", p)
+    rows = [g for (path, a, b), g in scoped.items() if path == p and before.startswith(a[:12]) and after.startswith(b[:12])]
+    print("  %-48s %s -> %s  scope row: %s" % (p, before[:12], after[:12], rows[0] if rows else "NONE"))
+sys.stdout.flush()
+sys.exit(subprocess.run([sys.executable, str(root / "tools" / "qa_sim" / "af3_frame_check.py")], cwd=root).returncode)
+
+--- run
+runtime paths that differ between ccc7669 and 09dfb04: 3
+  default_bus_layout.tres                          499f51775149 -> 52cc2e5713b4  scope row: *no_frame_shows_the_music_bus_limiter*
+  export_presets.cfg                               7626dcab6eea -> b65950ac458c  scope row: *no_frame_shows_the_version_code*
+  scripts/systems/daily_challenge_manager.gd       b41ce099b29d -> 7a291ffa5bfc  scope row: *no_frame_shows_the_daily_roll*
+af3 frames=8 fail=0
+# EXIT=0

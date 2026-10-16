@@ -8,7 +8,8 @@ usage: python tools/qa_sim/s26_mutations.py run [--tag s26] [--audio]   applies 
        python tools/qa_sim/s26_mutations.py --demo
 A mutation is a one-line change that puts back what a fix changed or switches off what a handler does. The run is judged against two sets: every check named by a mutation of the set
 must FAIL, and every other check must be ok. Two sets, because two mutations of the same function hide each other: ACHRUN1 (the marks stay) and ACHRUN2 (the counters go) both live in
-reset_run_marks and need their own run. Together with the green run of the same group on the unmutated tree (check.sh --all) that is the both-ways proof of AF2.
+reset_run_marks and need their own run. DAILY2 and DAILY3 hide each other the same way in the daily manager: with the selector's walk-past
+switched off no two days share a template, so DAILY3's mutation only shows with the selector intact (launch 10 read it ok in one set with DAILY2's, CORRECTION_LOG 280); it runs with ACHRUN2. Together with the green run of the same group on the unmutated tree (check.sh --all) that is the both-ways proof of AF2.
 """
 import pathlib
 import re
@@ -33,11 +34,11 @@ SETS = [
         (ACH, MARKS, "if false:", "ACHRUN1"),
         ("scripts/systems/daily_challenge_manager.gd", 'if not (String(t.get("type", "")) in PER_RUN_TYPES and int(t.get("target", 0)) > DistrictManager.DISTRICTS.size()):', "if true:", "DAILY2"),
         ("default_bus_layout.tres", "bus/1/effect/2/enabled = true", "bus/1/effect/2/enabled = false", "AUD6"),
-        ("scripts/systems/daily_challenge_manager.gd", "elif _progress_day == day and _today_id == _id_for_day(day):", "elif _today_id == _id_for_day(day):", "DAILY3"),
         ("scripts/core/game_manager.gd", "EventBus.game_over.connect(_on_player_game_over)", "EventBus.player_died.connect(_on_player_game_over)", "ACH15M"),
     ],
     [
         (ACH, MARKS, "if true:", "ACHRUN2"),
+        ("scripts/systems/daily_challenge_manager.gd", "elif _progress_day == day and _today_id == _id_for_day(day):", "elif _today_id == _id_for_day(day):", "DAILY3"),
     ],
 ]
 LINE = re.compile(r"^\[closeout\] (ok  |FAIL) +(\S+)")

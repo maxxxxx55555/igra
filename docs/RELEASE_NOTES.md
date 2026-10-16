@@ -1,6 +1,6 @@
 # Release notes: Last Streetlight 1.0
 
-Player-facing notes for the first release (store version `1.0`, version code 2, repository tag `v9.0.0-ultimate`, created in Session 23 on the sign-off commit). The feature list repeats the claim-checked copy of `store/listing.md`; the store's per-language "What's new" text is `store/changelog.md`.
+Player-facing notes for the first release (store version `1.0`, version code 3, repository tag `v9.0.0-universe`, created in Session 26 on the closing commit). The feature list repeats the claim-checked copy of `store/listing.md`; the store's per-language "What's new" text is `store/changelog.md`.
 
 ## English
 

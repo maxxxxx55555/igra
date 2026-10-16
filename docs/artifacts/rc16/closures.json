@@ -3473,5 +3473,120 @@
   ],
   "frames": [],
   "commit": "90793d3"
+ },
+ {
+  "id": "S26-L10",
+  "claim": "Launch 10 of 10 (ledger row 133, the last of the budget), the full battery at `09dfb04`, the head the second bundle is built from: 89 passed, 0 failed.",
+  "cmd": "bash tools/check.sh --all (part 1 of the chain)",
+  "proof": "s26_last_09dfb04",
+  "quotes": [
+   "Проверок пройдено: 89",
+   "# STEP battery exit=0"
+  ],
+  "commit": "09dfb04",
+  "frames": []
+ },
+ {
+  "id": "S26-L10B",
+  "claim": "The closeout of launch 10: 485 checks, 0 fails; ACH15M reads `GameManager` at slot 0 and `AchievementManager` at slot 2 of the listeners of `game_over`; DAILY3 reads 2 of 2 on the same day and 0 on the next.",
+  "cmd": "bash tools/check.sh --all (the closeout's log)",
+  "proof": "s26_last_09dfb04",
+  "attach": "gate_closeout_check_scene.log",
+  "quotes": [
+   "[closeout] DONE checks=485 fails=0",
+   "[closeout] ok   ACH15M GameManager hears game_over before AchievementManager, so the ending is resolved when Darkness is asked (slots 0 and 2)",
+   "[closeout] ok   DAILY3 two days that select the same template do not share progress: the same day keeps it (2 of 2), the next day starts empty (0)"
+  ],
+  "commit": "09dfb04",
+  "frames": []
+ },
+ {
+  "id": "S26-MUT5",
+  "claim": "Launch 10, run 1 of the mutations (set 0, ten of them): ten checks fail on their own mutation, ACH15M among them, and no other fails. DAILY3 stays ok in this set because DAILY2's mutation turns the selector's walk-past off (the same log reads DAILY2 \"day 0 over, day 3 over\"): CORRECTION_LOG 280.",
+  "cmd": "python tools/qa_sim/s26_mutations.py apply 0; CLOSEOUT_ONLY=s26 bash tools/qa_sim/closeout_check 400 (part 2 of the chain)",
+  "proof": "s26_last_09dfb04",
+  "attach": "s26_last_set0.log",
+  "quotes": [
+   "[closeout] FAIL ACH15M",
+   "[closeout] ok   DAILY3",
+   "[closeout] DONE checks=14 fails=10"
+  ],
+  "commit": "09dfb04",
+  "frames": []
+ },
+ {
+  "id": "S26-MUT6",
+  "claim": "Launch 10, run 2 of the mutations (set 1 as it was run, ACHRUN2 alone): ACHRUN2 fails alone and no other check fails.",
+  "cmd": "python tools/qa_sim/s26_mutations.py apply 1; CLOSEOUT_ONLY=s26 bash tools/qa_sim/closeout_check 400 (part 2 of the chain)",
+  "proof": "s26_last_09dfb04",
+  "attach": "s26_last_set1.log",
+  "quotes": [
+   "[closeout] FAIL ACHRUN2",
+   "[closeout] DONE checks=14 fails=1"
+  ],
+  "commit": "09dfb04",
+  "frames": []
+ },
+ {
+  "id": "S26-MUT7",
+  "claim": "The judge of launch 10 reads 11 of 12 mutations as BITES and DAILY3 as VACUOUS (`S26 MUTATIONS verdict=FAIL mutations=12 bad=1`): an arrangement of the sets, CORRECTION_LOG 280.",
+  "cmd": "python tools/qa_sim/s26_mutations.py judge LOG0 LOG1 (part 2 of the chain)",
+  "proof": "s26_last_09dfb04",
+  "quotes": [
+   "set 0 DAILY3   mutated: ok -> VACUOUS",
+   "S26 MUTATIONS verdict=FAIL mutations=12 bad=1"
+  ],
+  "commit": "09dfb04",
+  "frames": []
+ },
+ {
+  "id": "S26-BOT2",
+  "claim": "Launch 10, the IRON RULE on the tree of the second bundle: the 3-seed autoplay bot wins 3 of 3 with no softlock, 2 deaths in each seed and every death with its revive lines.",
+  "cmd": "bash tools/qa_sim/autoplay_bot (part 3 of the chain)",
+  "proof": "s26_last_09dfb04",
+  "quotes": [
+   "autoplay bot: 3/3 seeds won, 0 softlock(s)",
+   "bot death counters below their revive lines: 0"
+  ],
+  "commit": "09dfb04",
+  "frames": []
+ },
+ {
+  "id": "S26-DAILYMODEL",
+  "claim": "A python model of the day line of the daily manager (not the engine): the code of `8fe1893` opens day 44 at 7 of 7 after a finished day 43 and completes again after one more restore, `c515bb0` opens it at 0; DAILY3's mutation alone reads 2 and 2 (the check fails), the mutations of DAILY2 and DAILY3 together read 2 and 0 as the engine did in launch 10.",
+  "cmd": "python -I s26_daily_model.py .",
+  "proof": "s26_daily_model",
+  "quotes": [
+   "old8fe1893 day 43 completions 1; day 44 opens at progress 7, completed False; after one restore: 1 more completion(s)",
+   "new        day 43 completions 1; day 44 opens at progress 0, completed False; after one restore: 0 more completion(s)",
+   "DAILY3 mutation alone (the old comparison)                 same day 2, next day 2 -> DAILY3 FAIL",
+   "DAILY2 and DAILY3 mutations together (set 0 of row 133)    same day 2, next day 0 -> DAILY3 ok"
+  ],
+  "commit": "09dfb04",
+  "frames": []
+ },
+ {
+  "id": "S26-AF3ROWS",
+  "claim": "The runtime paths that differ between the commit of the release frames (`ccc7669`) and HEAD are three, `default_bus_layout.tres`, `export_presets.cfg` and `scripts/systems/daily_challenge_manager.gd`, each declared in `tools/qa_sim/af3_f4_scope.tsv` as reaching no frame, and the eight frames pass the gate.",
+  "cmd": "python -I s26_af3_rows.py .",
+  "proof": "s26_af3_rows",
+  "quotes": [
+   "default_bus_layout.tres                          499f51775149 -> 52cc2e5713b4  scope row: *no_frame_shows_the_music_bus_limiter*",
+   "af3 frames=8 fail=0"
+  ],
+  "commit": "09dfb04",
+  "frames": []
+ },
+ {
+  "id": "S26-AF3ULT",
+  "claim": "The frames of the previous pass (`docs/stills/ultimate`, the code of `0752c9b`) fail the frame gate's F4 now: 36 runtime paths differ; the gate's default set is `docs/stills/universe` (CORRECTION_LOG 279).",
+  "cmd": "python tools/qa_sim/af3_frame_check.py --dir docs/stills/ultimate",
+  "proof": "s26_af3_ultimate",
+  "quotes": [
+   "F4 36 runtime path(s) differ between 0752c9b and HEAD, first: scripts/ai/behavior_node.gd",
+   "af3 frames=8 fail=8"
+  ],
+  "commit": "09dfb04",
+  "frames": []
  }
 ]

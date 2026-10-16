@@ -71,7 +71,7 @@ human-readable ("1.0", then "1.0.1", …).
    and ar with the §9 texts.
 5. **Test and release → Setup → App signing:** keep Google-generated app signing (§1).
 6. **Internal testing:**
-   - Create a new release, upload `build/tls.aab`, name it "1.0 (2)" (the bundle of Session 23 carries `version/code` 2).
+   - Create a new release, upload `build/tls.aab`, name it "1.0 (3)" (the bundle of Session 26 carries `version/code` 3).
    - Release notes: en-US *"First test build."* and ru-RU *"Первая тестовая сборка."*
    - Save → Review → **Start rollout**.
    - Testers tab: add an email list and copy the opt-in link.
@@ -86,7 +86,7 @@ human-readable ("1.0", then "1.0.1", …).
 ## 4. First launch on a phone: the one checklist (single source)
 
 Every other document points here (`docs/release_checklist.md` step 4, `docs/RESUME_NOTE.md`, `docs/STORE_SUBMISSION.md`, `docs/UNVERIFIABLE_HERE.md` U1). Run it on a mid-range phone with the bundle of the pass
-(`build/tls.aab`, `version/code` 2, bytes and sha256 in `docs/RELEASE_ARTIFACTS.md`) installed from the internal-test link, before every promotion. Write what you see in the U-row named at the step: a number or a
+(`build/tls.aab`, `version/code` 3, bytes and sha256 in `docs/RELEASE_ARTIFACTS.md`) installed from the internal-test link, before every promotion. Write what you see in the U-row named at the step: a number or a
 sentence is an answer, "fine" is not. A step that fails goes to `docs/KNOWN_ISSUES.md` with the phone's model and Android version.
 
 **A. Does it run**

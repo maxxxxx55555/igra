@@ -1,0 +1,15 @@
+# proof s26_af3_ultimate
+# utc 20261016T085227Z
+# head 09dfb04 (uncommitted paths: 14)
+# env none
+# cmd python tools/qa_sim/af3_frame_check.py --dir docs/stills/ultimate
+FAIL 01_main_menu_after_0752c9b_20261015T014952Z.png: F4 36 runtime path(s) differ between 0752c9b and HEAD, first: scripts/ai/behavior_node.gd
+FAIL 02_district_day_full_after_0752c9b_20261015T015008Z.png: F4 36 runtime path(s) differ between 0752c9b and HEAD, first: scripts/ai/behavior_node.gd
+FAIL 03_district_night_dark_after_0752c9b_20261015T015003Z.png: F4 36 runtime path(s) differ between 0752c9b and HEAD, first: scripts/ai/behavior_node.gd
+FAIL 04_combat_after_0752c9b_20261015T015013Z.png: F4 36 runtime path(s) differ between 0752c9b and HEAD, first: scripts/ai/behavior_node.gd
+FAIL 05_boss_after_0752c9b_20261015T015015Z.png: F4 36 runtime path(s) differ between 0752c9b and HEAD, first: scripts/ai/behavior_node.gd
+FAIL 06_victory_ngplus_after_0752c9b_20261015T015018Z.png: F4 36 runtime path(s) differ between 0752c9b and HEAD, first: scripts/ai/behavior_node.gd
+FAIL 07_skill_tree_after_0752c9b_20261015T015009Z.png: F4 36 runtime path(s) differ between 0752c9b and HEAD, first: scripts/ai/behavior_node.gd
+FAIL 08_shop_after_0752c9b_20261015T015010Z.png: F4 36 runtime path(s) differ between 0752c9b and HEAD, first: scripts/ai/behavior_node.gd
+af3 frames=8 fail=8
+# EXIT=1
