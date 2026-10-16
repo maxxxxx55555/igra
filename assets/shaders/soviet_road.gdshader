@@ -9,6 +9,7 @@
 //   detail   : 0 the plain tile (Low tier), 1 patches, 2 adds hairline cracks, damp patches and chipped paint.
 //   paint    : 1 for the lane dashes (chips, no cracks, never damp).
 //   damp     : how much of the road reads wet (a lower roughness, a little darker).
+//   tint_b, mix_b : a second tint in large patches (the dead grass and bare earth of a courtyard, the ground plane of the skyline); 0 for the street.
 shader_type spatial;
 
 uniform sampler2D tex : source_color, filter_linear_mipmap, repeat_enable;
@@ -17,6 +18,8 @@ uniform float mean_lum = 0.04;
 uniform float detail : hint_range(0.0, 2.0) = 2.0;
 uniform float paint : hint_range(0.0, 1.0) = 0.0;
 uniform float damp : hint_range(0.0, 1.0) = 0.5;
+uniform vec3 tint_b = vec3(0.0);
+uniform float mix_b : hint_range(0.0, 1.0) = 0.0;
 
 varying vec2 v_xz;
 
@@ -40,14 +43,16 @@ void vertex() {
 
 void fragment() {
 	float grain = dot(texture(tex, UV).rgb, vec3(0.3333)) / mean_lum;
-	vec3 c = tint * clamp(grain, 0.3, 2.2);
+	float g = clamp(grain, 0.3, 2.2);
+	vec3 c = tint * g;
 	float wet = 0.0;
 	if (detail > 0.5) {
 		c *= 0.78 + 0.5 * vnoise(v_xz * 0.35);
+		c = mix(c, tint_b * g, smoothstep(0.45, 0.62, vnoise(v_xz * 0.09 + vec2(21.0, 8.0))) * mix_b);
 		if (detail > 1.5) {
-			float crack = 1.0 - smoothstep(0.0, 0.022, abs(vnoise(v_xz * 1.7 + vec2(3.0, 9.0)) - 0.5));
+			float crack = 1.0 - smoothstep(0.0, 0.009, abs(vnoise(v_xz * 2.6 + vec2(3.0, 9.0)) - 0.5));
 			float chips = smoothstep(0.52, 0.62, vnoise(v_xz * 6.0 + vec2(2.0, 5.0)));
-			c *= (1.0 - 0.45 * crack * (1.0 - paint)) * (1.0 - 0.5 * chips * paint);
+			c *= (1.0 - 0.35 * crack * (1.0 - paint)) * (1.0 - 0.5 * chips * paint);
 			wet = smoothstep(0.58, 0.76, vnoise(v_xz * 0.21 + vec2(11.0, 4.0))) * damp * (1.0 - paint);
 		}
 	}

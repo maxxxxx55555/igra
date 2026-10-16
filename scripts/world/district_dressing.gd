@@ -32,6 +32,10 @@ const FOG_SHADER := preload("res://assets/shaders/height_fog_card.gdshader")
 const FOG_CARD_M: float = 46.0
 const FOG_Y: float = 0.35
 const FOG_BY_STAGE: Array[float] = [0.12, 0.25, 0.35, 0.45]
+## The other districts get a haze of two cards at this share of the alpha, in a faint sickly green-grey (the Soviet canon of Session 27, decision FOG-27); the canon blue-grey stays with the four fog districts.
+const HAZE_SHARE: float = 0.4
+const HAZE_CARDS: int = 2
+const HAZE_TINT := Color(0.105, 0.14, 0.125)
 const FOG_AT: Array[Vector3] = [Vector3(-14.0, 0.0, -10.0), Vector3(12.0, 0.0, 2.0), Vector3(-4.0, 0.0, 16.0)]
 ## Where the bench stands from the power switch (the switch is at the corner of the middle block and the next).
 const REST_FROM_SWITCH := Vector3(6.0, 0.0, 5.0)
@@ -61,6 +65,7 @@ var _district_id: StringName = &""
 var _clear: Array[Vector2] = []
 var _pool_mat: StandardMaterial3D = null
 var _fog_mat: ShaderMaterial = null
+var _fog_share: float = 1.0
 var _inner: float = 3.5
 var _grid: float = 16.0
 var _walk: float = 4.25
@@ -274,13 +279,17 @@ func _add_manholes() -> void:
 		add_child(cover)
 
 func _add_fog() -> void:
-	if not FOG_DISTRICTS.has(_district_id) or int(SettingsManager.get_setting("graphics_tier", 2)) < 1:
+	if int(SettingsManager.get_setting("graphics_tier", 2)) < 1:
 		return
+	var heavy: bool = FOG_DISTRICTS.has(_district_id)
+	_fog_share = 1.0 if heavy else HAZE_SHARE
 	_fog_mat = ShaderMaterial.new()
 	_fog_mat.shader = FOG_SHADER
+	if not heavy:
+		_fog_mat.set_shader_parameter("fog_color", HAZE_TINT)
 	var card := PlaneMesh.new()
 	card.size = Vector2(FOG_CARD_M, FOG_CARD_M)
-	for i in FOG_AT.size():
+	for i in (FOG_AT.size() if heavy else HAZE_CARDS):
 		var fog := MeshInstance3D.new()
 		fog.name = "FogCard%d" % i
 		fog.mesh = card
@@ -302,7 +311,7 @@ func _apply_stage(stage: int) -> void:
 	if is_instance_valid(_landmark):
 		_LANDMARK.apply_stage(_landmark, stage)
 	if _fog_mat != null:
-		_fog_mat.set_shader_parameter("alpha", FOG_BY_STAGE[clampi(stage, 0, FOG_BY_STAGE.size() - 1)])
+		_fog_mat.set_shader_parameter("alpha", FOG_BY_STAGE[clampi(stage, 0, FOG_BY_STAGE.size() - 1)] * _fog_share)
 	var pool: float = POOL_BY_STAGE[clampi(stage, 0, POOL_BY_STAGE.size() - 1)]
 	_pool_mat.albedo_color = Color(BRASS, pool)
 	var pools := get_node_or_null("LampPools") as Node3D

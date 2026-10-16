@@ -46,7 +46,7 @@ brightness, and `docs/DENSITY_MEASURED.md` has the same pairs frame by frame (th
 | Prop VisibilityRange LOD plan | **not built**, a decision | DEFER-23 in `docs/TZ_DECISIONS.md`: every mesh of the districts is a primitive or a MultiMesh of blocks, there is no lower detail to swap to |
 | ACES tonemap | **in** | `tonemap_mode` 3 in every preset of `assets/config/visual_quality.tres`, applied by `_apply_graphics_tier` (`scripts/world_env_setup.gd:181`) |
 | Tuned glow and bloom | **in** | the bloom, the intensity, the strength and the HDR threshold of each tier in the same file |
-| Volumetric fog on desktop, a height-fog shader on mobile | **the fallback only** | the volumetric fog of the engine is not available in the Compatibility renderer the game ships with; the depth fog of each tier (`fog_density` 0.012 to 0.015) and the ground fog cards of the four fog districts (`assets/shaders/height_fog_card.gdshader`, `scripts/world/district_dressing.gd:277`) are the height-fog fallback |
+| Volumetric fog on desktop, a height-fog shader on mobile | **the fallback only** | the volumetric fog of the engine is not available in the Compatibility renderer the game ships with; the depth fog of each tier (`fog_density` 0.012 to 0.015) and the ground fog cards of the four fog districts and the haze of two cards in the others (`assets/shaders/height_fog_card.gdshader`, `scripts/world/district_dressing.gd:281`) are the height-fog fallback |
 | SSAO, SSIL, SSR, desktop only | **not applicable** | they are Forward+ features; the preset asks for SSAO only when the rendering method is `forward_plus` (`scripts/world_env_setup.gd:202`) and the game runs Compatibility, so none runs; the wet-asphalt shader carries its own substitute for SSR |
 | Auto-exposure with night-safe limits | **not applicable** | no `CameraAttributes` is used; auto-exposure is not in the Compatibility renderer |
 | Visual quality presets | **in** | section 4 |
@@ -70,8 +70,8 @@ brightness, and `docs/DENSITY_MEASURED.md` has the same pairs frame by frame (th
 | chromatic aberration on a hit | off | off | on | on | `TIER_CHROMA`, `scripts/post_process_overlay.gd:8` |
 | motion blur on sprint | off | off | off | on | `TIER_BLUR`, `scripts/post_process_overlay.gd:9` |
 | rain on the lens | off | off | off | on | `TIER_LENS`, `scripts/effects/rain_lens.gd:6` |
-| ground fog cards (fog districts) | off | on | on | on | `scripts/world/district_dressing.gd:278` |
-| the windows of the skyline (and the old floating window wall hidden) | none: the blocks only | on | on | on | `_low_tier`, `scripts/world/street_props.gd:123`; `with_windows`, `scripts/world/skyline.gd:62` |
+| ground fog cards (fog districts) | off | on | on | on | `scripts/world/district_dressing.gd:283` |
+| the windows of the skyline (and the old floating window wall hidden) | none: the blocks only | on | on | on | `_low_tier`, `scripts/world/street_props.gd:123`; `with_windows`, `scripts/world/skyline.gd:71` |
 | SSAO | off | off | only on Forward+ | only on Forward+ | `ssao_enabled` in the preset and `scripts/world_env_setup.gd:202` |
 
 **Mobile fallback, declared.** A phone starts on **High** (`_settings["graphics_tier"] = 2`, `scripts/systems/settings_manager.gd:84`) with dynamic resolution on (`scripts/systems/settings_manager.gd:121`: the 3D scale drops to 0.7

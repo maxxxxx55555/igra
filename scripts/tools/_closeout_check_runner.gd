@@ -104,6 +104,10 @@ func _run() -> void:
 		Rc26.run(self)
 		_finish()
 		return
+	if OS.get_environment("CLOSEOUT_ONLY") == "density":
+		await Rc23Density.run(self)
+		_finish()
+		return
 	if OS.get_environment("CLOSEOUT_ONLY") == "s27":
 		await Rc27.run(self)
 		_finish()

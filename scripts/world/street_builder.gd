@@ -57,19 +57,19 @@ func _ready() -> void:
 func _make_road_mesh() -> BoxMesh:
 	var m := BoxMesh.new()
 	m.size = Vector3(tile_size, TILE_THICKNESS, tile_size)
-	m.material = _surface(_TEX_ASPHALT, Vector3(0.055, 0.057, 0.063), 0.04, 0.0)
+	m.material = _surface(_TEX_ASPHALT, Vector3(0.110, 0.115, 0.125), 0.04, 0.0)
 	return m
 
 func _make_sidewalk_mesh() -> BoxMesh:
 	var m := BoxMesh.new()
 	m.size = Vector3(tile_size, TILE_THICKNESS, tile_size)
-	m.material = _surface(_TEX_CONCRETE, Vector3(0.105, 0.108, 0.105), 0.113, 0.0)
+	m.material = _surface(_TEX_CONCRETE, Vector3(0.220, 0.225, 0.220), 0.113, 0.0)
 	return m
 
 func _make_marking_mesh() -> BoxMesh:
 	var m := BoxMesh.new()
 	m.size = Vector3(MARK_LENGTH, TILE_THICKNESS, MARK_WIDTH)
-	m.material = _surface("", Vector3(0.26, 0.25, 0.21), 1.0, 1.0)
+	m.material = _surface("", Vector3(0.45, 0.43, 0.36), 1.0, 1.0)
 	return m
 
 ## One surface of the street: its texture (none for the paint), its mean albedo in linear light and the texture's mean luminance; `detail` follows the graphics tier.

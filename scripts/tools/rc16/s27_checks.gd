@@ -1,16 +1,19 @@
 extends RefCounted
 ## Session 27 (V1, the Soviet visual pass): SOV1, the lane marking is a dash of paint and not a whole tile, and the street tiles use the road shader (the cream slab, decision SLAB-27); SOV2, the skyline's blocks use the
-## facade shader, carry roof boxes and balconies, and the weathering follows the graphics tier; SOV3, the halo behind a landmark is a pool of light and not a third of the sky (HALO-27).
+## facade shader, carry roof boxes and balconies, and the weathering follows the graphics tier; SOV3, the halo behind a landmark is a pool of light and not a third of the sky (HALO-27); SOV4, every district has
+## sign words and every letter of them is in the engine's own font (the bundled fonts hold no Cyrillic: a missing glyph is a box on a wall).
 ## Wired into _closeout_check_runner.gd as `await Rc27.run(self)`; CLOSEOUT_ONLY=s27 runs it alone, which tools/qa_sim/s26_mutations.py uses (its third set).
 
 const _ROAD := "res://assets/shaders/soviet_road.gdshader"
 const _FACADE := "res://assets/shaders/soviet_facade.gdshader"
 const _LANDMARK := preload("res://scripts/world/district_landmark.gd")
+const _SIGNS := preload("res://scripts/world/soviet_signs.gd")
 
 static func run(r: Node) -> void:
 	await _streets(r)
 	_skyline(r)
 	_halo(r)
+	_signs(r)
 
 ## The placement is asked, not the multimesh: headless the rendering server keeps no instance transforms, but the mesh and its material are resources.
 static func _streets(r: Node) -> void:
@@ -51,3 +54,15 @@ static func _halo(r: Node) -> void:
 	var size: Vector2 = _LANDMARK.HALO_SIZE
 	var full: float = _LANDMARK.HALO_BY_STAGE[3]
 	r._ok(size.x <= 70.0 and size.y <= 60.0 and full <= 0.2, "SOV3 the halo of a landmark is %.0f m by %.0f m at an opacity of %.2f when the district is FULL" % [size.x, size.y, full])
+
+static func _signs(r: Node) -> void:
+	var font: Font = ThemeDB.fallback_font
+	var words: int = 0
+	var missing: Array[String] = []
+	for id: StringName in DistrictSceneFactory.DISTRICTS:
+		for word: String in _SIGNS.words_of(id):
+			words += 1
+			for letter: String in word:
+				if letter != " " and not font.has_char(letter.unicode_at(0)):
+					missing.append("%s in %s" % [letter, id])
+	r._ok(words >= 22 and missing.is_empty(), "SOV4 the districts have %d sign words and every letter is in the engine's font (missing: %s)" % [words, ", ".join(missing) if not missing.is_empty() else "none"])

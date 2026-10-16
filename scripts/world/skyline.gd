@@ -12,7 +12,6 @@ const GROUND_THICKNESS := 0.2
 const WALL_HEIGHT := 12.0
 const WALL_THICKNESS := 0.4
 const WIN_SIZE := Vector2(0.9, 1.3)
-const GROUND_COLOR := Color(0.055, 0.066, 0.082)
 const FACADES: Array[Color] = [Color("#0f151d"), Color("#141b24"), Color("#182029")]
 const WIN_DARK := Color(0.02, 0.025, 0.04)
 const FACADE_GLOW := Color(0.06, 0.08, 0.12)
@@ -32,6 +31,13 @@ const PALETTES := {
 }
 const WIN_BRASS := Color(0.79, 0.635, 0.29)
 const _FACADE := preload("res://assets/shaders/soviet_facade.gdshader")
+const _ROAD := preload("res://assets/shaders/soviet_road.gdshader")
+const _SIGNS := preload("res://scripts/world/soviet_signs.gd")
+## How much of its self-glow a block shows, by power stage (DARK, PARTIAL, STREETS, FULL): a restored district reads lighter, a dark one stays a silhouette.
+const FACADE_GAIN: Array[float] = [0.22, 0.27, 0.32, 0.36]
+## The ground between the streets, linear: dark earth, and patches of dead grass.
+const GROUND_EARTH := Vector3(0.050, 0.052, 0.046)
+const GROUND_GRASS := Vector3(0.050, 0.062, 0.040)
 ## Share of the windows that carry a balcony slab, by district: the flats of a panel block have them, a warehouse has none.
 const BALCONIES := {&"suburbs": 0.30, &"residential": 0.35, &"hospital": 0.12, &"school": 0.08, &"police": 0.10}
 const WIN_BONE := Color(0.85, 0.82, 0.77)
@@ -57,6 +63,9 @@ var _windows: MultiMeshInstance3D
 var _rolls := PackedFloat32Array()
 var _tones := PackedFloat32Array()
 var _facade_mat: ShaderMaterial = null
+var _ground_mat: ShaderMaterial = null
+var _fronts: Array[Transform3D] = []
+var _widths: Array[float] = []
 
 ## half_extent: half the street grid's size in metres (24 for the 3x3 grid of 16 m blocks).
 func build(district_id: StringName, half_extent: float, with_windows: bool) -> void:
@@ -91,6 +100,8 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 			blocks.append(Transform3D(turn * Basis.from_scale(Vector3(w, h, d)), turn * Vector3(cx, h * 0.5, -edge - d * 0.5)))
 			var tint: Color = facades[rng.randi() % facades.size()]
 			tints.append(tint)
+			_fronts.append(Transform3D(turn, turn * Vector3(cx, 0.0, -edge)))
+			_widths.append(w)
 			_dress_block(extra, Transform3D(turn, turn * Vector3(cx, 0.0, -edge)), Vector3(w, h, d), tint, balconies if with_windows else 0.0, blocks, tints)
 			if with_windows:
 				var y := 2.6
@@ -101,6 +112,8 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 						x += 2.2
 					y += 2.6
 	_add_multimesh("Blocks", BoxMesh.new(), blocks, tints, false, palette[1])
+	_apply_gain(PowerGrid.get_stage(district_id))
+	EventBus.district_stage_changed.connect(_on_stage_changed)
 	if not panes.is_empty():
 		var quad := QuadMesh.new()
 		quad.size = WIN_SIZE
@@ -109,8 +122,8 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 		for i in panes.size():
 			_rolls.append(rng.randf())
 			_tones.append(rng.randf())
-		EventBus.district_stage_changed.connect(_on_stage_changed)
 		_light_windows(PowerGrid.get_stage(district_id))
+		_SIGNS.build(self, district_id, _fronts, _widths)
 	_add_ground()
 	_add_solid_ground(edge)
 
@@ -158,7 +171,7 @@ func _add_multimesh(node_name: String, mesh: Mesh, xforms: Array[Transform3D], t
 		# A faint cold self-glow so the blocks read as silhouettes against the sky; the shader weathers the panels (the tier of the graphics sets how much).
 		_facade_mat = ShaderMaterial.new()
 		_facade_mat.shader = _FACADE
-		_facade_mat.set_shader_parameter("glow", glow)
+		_facade_mat.set_shader_parameter("glow", Vector3(glow.r, glow.g, glow.b))
 		_set_detail()
 		EventBus.settings_changed.connect(_set_detail)
 		mat = _facade_mat
@@ -172,13 +185,18 @@ func _add_multimesh(node_name: String, mesh: Mesh, xforms: Array[Transform3D], t
 func _add_ground() -> void:
 	var plane := PlaneMesh.new()
 	plane.size = Vector2(260.0, 260.0)
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = GROUND_COLOR
-	mat.roughness = 1.0
+	_ground_mat = ShaderMaterial.new()
+	_ground_mat.shader = _ROAD
+	_ground_mat.set_shader_parameter("tint", GROUND_EARTH)
+	_ground_mat.set_shader_parameter("mean_lum", 1.0)
+	_ground_mat.set_shader_parameter("tint_b", GROUND_GRASS)
+	_ground_mat.set_shader_parameter("mix_b", 1.0)
+	_ground_mat.set_shader_parameter("damp", 0.0)
+	_set_detail()
 	var ground := MeshInstance3D.new()
 	ground.name = "DarkGround"
 	ground.mesh = plane
-	ground.material_override = mat
+	ground.material_override = _ground_mat
 	ground.position.y = -0.05
 	ground.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(ground)
@@ -204,12 +222,20 @@ func _add_box(body: StaticBody3D, size: Vector3, at: Vector3) -> void:
 	body.add_child(shape)
 
 func _set_detail(key: String = "graphics_tier", _value: Variant = null) -> void:
-	if key == "graphics_tier" and _facade_mat != null:
-		_facade_mat.set_shader_parameter("detail", float(clampi(int(SettingsManager.get_setting("graphics_tier", 2)), 0, 2)))
+	if key == "graphics_tier":
+		var detail := float(clampi(int(SettingsManager.get_setting("graphics_tier", 2)), 0, 2))
+		for mat: ShaderMaterial in [_facade_mat, _ground_mat]:
+			if mat != null:
+				mat.set_shader_parameter("detail", detail)
 
 func _on_stage_changed(id: StringName, stage: int) -> void:
 	if id == _district_id:
-		_light_windows(stage)
+		_apply_gain(stage)
+		if _windows != null:
+			_light_windows(stage)
+
+func _apply_gain(stage: int) -> void:
+	_facade_mat.set_shader_parameter("gain", FACADE_GAIN[clampi(stage, 0, FACADE_GAIN.size() - 1)])
 
 func _light_windows(stage: int) -> void:
 	var lit_share: float = STAGE_LIT[clampi(stage, 0, STAGE_LIT.size() - 1)]

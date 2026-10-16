@@ -44,6 +44,7 @@ SETS = [
         ("scripts/world/street_builder.gd", "const MARK_WIDTH: float = 0.16", "const MARK_WIDTH: float = 4.0", "SOV1"),
         ("scripts/world/skyline.gd", 'float(clampi(int(SettingsManager.get_setting("graphics_tier", 2)), 0, 2))', "2.0", "SOV2"),
         ("scripts/world/district_landmark.gd", "const HALO_SIZE := Vector2(64.0, 52.0)", "const HALO_SIZE := Vector2(110.0, 100.0)", "SOV3"),
+        ("scripts/world/soviet_signs.gd", "found.assign(WORDS.get(district_id, WORDS[&\"suburbs\"]))", "found.assign([\"\\u13a0\\u13a1\\u13a2\"])", "SOV4"),
     ],
 ]
 ## The closeout group each set runs (CLOSEOUT_ONLY): the sets of Session 26 run `s26`, those of Session 27 `s27`.
