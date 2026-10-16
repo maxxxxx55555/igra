@@ -65,7 +65,7 @@ every run and no other placement moves; a solid piece keeps 1.8 m (`KEEP_CLEAR_M
 On top of the kit, in every district: five hydrants (`HYDRANTS`, line 18), a pool of light under each streetlamp that reaches into the block beside it and rises
 with the power stage (`POOL_BY_STAGE`, line 27), up to two iron manhole covers in the roads round the middle block with a thread of steam rising from each
 (`MANHOLES`, line 20; `_add_manholes`, line 266; they ring "metal" under the footsteps), the landmark behind the skyline ring (`PARTS` in
-`scripts/world/district_landmark.gd:23`), a lit rest spot, and in the four fog districts three drifting fog cards (`FOG_DISTRICTS`, line 30) that thicken with the
+`scripts/world/district_landmark.gd:24`), a lit rest spot, and in the four fog districts three drifting fog cards (`FOG_DISTRICTS`, line 30) that thicken with the
 power stage (`FOG_BY_STAGE`, line 34). The street trees' canopies sway (`SWAY_M`, `scripts/world/street_props.gd:280`), and stop with Motion Comfort.
 
 ## 3. Rest spots (D1.4)

@@ -42,8 +42,8 @@ Every solid is a lit `StandardMaterial3D` with roughness 0.55 to 1.0 and metalli
 
 | Surface | Roughness | Metallic | Where |
 |---|---|---|---|
-| street, sidewalk | 0.9 | 0 | `scripts/world/street_builder.gd:58`, `:70` |
-| skyline blocks, landmark body | 1.0 | 0 | `scripts/world/skyline.gd:119`, `scripts/world/district_landmark.gd:173` |
+| street, sidewalk | 0.92 dry, 0.2 where damp (Session 27) | 0 | `assets/shaders/soviet_road.gdshader:55` |
+| skyline blocks, landmark body | 1.0 | 0 | `assets/shaders/soviet_facade.gdshader:89`, `scripts/world/district_landmark.gd:174` |
 | crates, litter, barrels | 0.9, 0.95, 0.95 | 0 | `scripts/world/district_dressing.gd:116-119` |
 | benches (street, rest spot) | 0.85 | 0 | `scripts/world/street_props.gd:302`, `scripts/world/district_dressing.gd:316` |
 | street tree trunk | 0.95 | 0 | `scripts/world/street_props.gd:305` |
@@ -61,9 +61,9 @@ read flat, and none is. The light of the world follows the power of the district
 | Element | DARK | PARTIAL | STREETS | FULL | Where |
 |---|---|---|---|---|---|
 | ambient energy | 0.03 | 0.06 | 0.11 | 0.16 | `_STAGE_AMBIENT`, `scripts/world/district_grading.gd:19` |
-| lit share of the skyline's windows | 0.04 | 0.30 | 0.60 | 0.90 | `STAGE_LIT`, `scripts/world/skyline.gd:36` |
+| lit share of the skyline's windows | 0.04 | 0.30 | 0.60 | 0.90 | `STAGE_LIT`, `scripts/world/skyline.gd:39` |
 | landmark glow energy | 0 | 0.6 | 1.3 | 2.4 | `GLOW_BY_STAGE`, `scripts/world/district_landmark.gd:13` |
-| landmark halo opacity | 0 | 0.08 | 0.16 | 0.28 | `HALO_BY_STAGE`, `scripts/world/district_landmark.gd:15` |
+| landmark halo opacity | 0 | 0.05 | 0.10 | 0.17 (Session 27) | `HALO_BY_STAGE`, `scripts/world/district_landmark.gd:15` |
 | lamp pool opacity | 0 | 0.05 | 0.11 | 0.16 | `POOL_BY_STAGE`, `scripts/world/district_dressing.gd:27` |
 | ground fog opacity (fog districts) | 0.12 | 0.25 | 0.35 | 0.45 | `FOG_BY_STAGE`, `scripts/world/district_dressing.gd:34` |
 
