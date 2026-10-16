@@ -64,7 +64,7 @@ short top-level punch list; those cover the details.
 
 ## Version Naming
 - [ ] versionName: "1.0.0"
-- [ ] versionCode: 1 (increment per build)
+- [ ] versionCode: 3 in `export_presets.cfg` for the bundle of `v9.0.0-universe` (increment per upload; the bundles of version codes 1 and 2 are superseded)
 
 ## Testing Tracks
 - [ ] Internal testing (up to 100 testers)

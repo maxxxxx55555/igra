@@ -1,0 +1,23 @@
+# proof s26_aab_sizes_f8224aa
+# utc 20261016T044751Z
+# head f8224aa (uncommitted paths: 11)
+# env none
+# cmd python -I -B -c 
+import zipfile, collections
+z = zipfile.ZipFile('build/tls.aab')
+c = collections.Counter()
+n = collections.Counter()
+for i in z.infolist():
+    k = i.filename.split('/')[0]
+    c[k] += i.compress_size
+    n[k] += 1
+print(len(z.infolist()), 'entries')
+[print(k, n[k], 'entries', c[k], 'compressed bytes') for k in sorted(c)]
+
+2752 entries
+BUNDLE-METADATA 4 entries 3800 compressed bytes
+BundleConfig.pb 1 entries 271 compressed bytes
+META-INF 3 entries 312341 compressed bytes
+assetPackInstallTime 2630 entries 108693700 compressed bytes
+base 114 entries 26974686 compressed bytes
+# EXIT=0
