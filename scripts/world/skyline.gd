@@ -33,8 +33,10 @@ const WIN_BRASS := Color(0.79, 0.635, 0.29)
 const _FACADE := preload("res://assets/shaders/soviet_facade.gdshader")
 const _ROAD := preload("res://assets/shaders/soviet_road.gdshader")
 const _SIGNS := preload("res://scripts/world/soviet_signs.gd")
-## How much of its self-glow a block shows, by power stage (DARK, PARTIAL, STREETS, FULL): a restored district reads lighter, a dark one stays a silhouette.
-const FACADE_GAIN: Array[float] = [0.5, 0.65, 0.85, 1.05]
+const _GRASS := preload("res://scripts/world/dead_grass.gd")
+## The emission of the strongest channel of a block's self-glow, by power stage (DARK, PARTIAL, STREETS, FULL): a restored district reads lighter, a dark one stays a silhouette. The scene shows an emission E as
+## 0.12 * E^2.4 above the black floor (probe of Session 27, `--tprobe=1`), so 0.28 is a faint outline against the sky and 0.48 a dark panel: the glow of a district sets the hue and not the brightness.
+const FACADE_GAIN: Array[float] = [0.28, 0.34, 0.41, 0.48]
 ## The ground between the streets, linear: dark earth, and patches of dead grass.
 const GROUND_EARTH := Vector3(0.050, 0.052, 0.046)
 const GROUND_GRASS := Vector3(0.050, 0.062, 0.040)
@@ -124,6 +126,9 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 			_tones.append(rng.randf())
 		_light_windows(PowerGrid.get_stage(district_id))
 		_SIGNS.build(self, district_id, _fronts, _widths)
+	var grass := _GRASS.new()
+	grass.district_id = district_id
+	add_child(grass)
 	_add_ground()
 	_add_solid_ground(edge)
 
@@ -171,7 +176,7 @@ func _add_multimesh(node_name: String, mesh: Mesh, xforms: Array[Transform3D], t
 		# A faint cold self-glow so the blocks read as silhouettes against the sky; the shader weathers the panels (the tier of the graphics sets how much).
 		_facade_mat = ShaderMaterial.new()
 		_facade_mat.shader = _FACADE
-		_facade_mat.set_shader_parameter("glow", Vector3(glow.r, glow.g, glow.b))
+		_facade_mat.set_shader_parameter("glow", Vector3(glow.r, glow.g, glow.b) / maxf(glow.r, maxf(glow.g, glow.b)))
 		_set_detail()
 		EventBus.settings_changed.connect(_set_detail)
 		mat = _facade_mat
@@ -238,6 +243,9 @@ func _on_stage_changed(id: StringName, stage: int) -> void:
 
 func _apply_gain(stage: int) -> void:
 	_facade_mat.set_shader_parameter("gain", FACADE_GAIN[clampi(stage, 0, FACADE_GAIN.size() - 1)])
+	var signs := get_node_or_null("Signs") as MultiMeshInstance3D
+	if signs != null:
+		_SIGNS.set_stage(signs, stage)
 
 func _light_windows(stage: int) -> void:
 	var lit_share: float = STAGE_LIT[clampi(stage, 0, STAGE_LIT.size() - 1)]

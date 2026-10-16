@@ -5,6 +5,9 @@ extends Control
 ## вообще) — игрок видел пять пустых прямоугольников. Тексты берутся из
 ## LocalizationManager и обновляются при смене языка.
 
+const _FOG := preload("res://scripts/ui/menu_fog.gd")
+const _STENCIL := preload("res://assets/shaders/stencil_title.gdshader")
+
 ## Кнопка -> ключ перевода.
 const LABELS: Dictionary = {
 	"Continue": "continue",
@@ -27,6 +30,7 @@ func _ready() -> void:
 	if vb == null:
 		return
 	_install_background()
+	_install_fog()
 	_style_title(vb as VBoxContainer)
 	_start_flicker()
 	_ensure_continue(vb as VBoxContainer)
@@ -64,6 +68,15 @@ func _install_background() -> void:
 	move_child(bg, (bg_flat.get_index() + 1) if bg_flat else 0)
 	_install_hero_bg_v2(bg)
 
+## V2 of Session 27: fog and film grain over the backdrop, between the hero art and the lamp's flicker (scripts/ui/menu_fog.gd).
+func _install_fog() -> void:
+	if get_node_or_null("MenuFog") != null:
+		return
+	var fog := _FOG.new()
+	add_child(fog)
+	var hero := get_node_or_null("MenuHeroV2")
+	move_child(fog, (hero.get_index() + 1) if hero != null else 1)
+
 ## The hero art's lamp glow and ground pool are near-white (233, 231, 227): the style guide's brightest tone is bone #d8d2c4
 ## (docs/STYLE_GUIDE.md section 2), so the art is multiplied down to it. The brass cone keeps its hue.
 const HERO_TINT := Color(0.93, 0.91, 0.86)
@@ -99,6 +112,12 @@ func _style_title(vb: VBoxContainer) -> void:
 	title.text = title.text.replace("\r", "")
 	title.add_theme_color_override("font_outline_color", Color(0.047, 0.062, 0.086))
 	title.add_theme_constant_override("outline_size", 12)
+	# V2 of Session 27: the title card is stencilled, two cuts across the letters and their outline (assets/shaders/stencil_title.gdshader)
+	var stencil := ShaderMaterial.new()
+	stencil.shader = _STENCIL
+	stencil.set_shader_parameter("font_px", float(title.get_theme_font_size("font_size")))
+	title.material = stencil
+	title.resized.connect(func() -> void: stencil.set_shader_parameter("label_h", title.size.y))
 
 ## Flicker стоял в сцене с color.a = 0.15 и без единой строчки кода, которая
 ## бы его двигала — ровный тёплый засвет поверх всего меню 24/7 вместо

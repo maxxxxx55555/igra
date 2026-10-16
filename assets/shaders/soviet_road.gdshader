@@ -63,7 +63,7 @@ void fragment() {
 				float row = floor(v_xz.y / 1.5);
 				vec2 seam = abs(fract(vec2((v_xz.x + 1.25 * hash12(vec2(row, 1.0))) / 1.25, v_xz.y / 1.5) + 0.5) - 0.5) * vec2(1.25, 1.5);
 				float aa = fwidth(v_xz.x) + fwidth(v_xz.y);
-				c *= 1.0 - 0.5 * (1.0 - smoothstep(0.012 + aa, 0.04 + aa * 1.5, min(seam.x, seam.y))) / (1.0 + aa * 10.0);
+				c *= 1.0 - 0.42 * (1.0 - smoothstep(0.008 + aa, 0.03 + aa * 1.5, min(seam.x, seam.y))) / (1.0 + aa * 10.0);
 			}
 			c *= 1.0 - 0.5 * paint * smoothstep(0.52, 0.62, vnoise(v_xz * 6.0 + vec2(2.0, 5.0)));
 			wet = smoothstep(0.58, 0.76, vnoise(v_xz * 0.21 + vec2(11.0, 4.0))) * damp * (1.0 - paint);

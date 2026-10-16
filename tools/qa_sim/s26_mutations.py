@@ -40,11 +40,14 @@ SETS = [
         (ACH, MARKS, "if true:", "ACHRUN2"),
         ("scripts/systems/daily_challenge_manager.gd", "elif _progress_day == day and _today_id == _id_for_day(day):", "elif _today_id == _id_for_day(day):", "DAILY3"),
     ],
-    [  # Session 27, the closeout group s27: three files, nothing one mutation changes is read by another's check
+    [  # Session 27, the closeout group s27: six files, nothing one mutation changes is read by another's check
         ("scripts/world/street_builder.gd", "const MARK_WIDTH: float = 0.16", "const MARK_WIDTH: float = 4.0", "SOV1"),
         ("scripts/world/skyline.gd", 'float(clampi(int(SettingsManager.get_setting("graphics_tier", 2)), 0, 2))', "2.0", "SOV2"),
         ("scripts/world/district_landmark.gd", "const HALO_SIZE := Vector2(64.0, 52.0)", "const HALO_SIZE := Vector2(110.0, 100.0)", "SOV3"),
         ("scripts/world/soviet_signs.gd", "found.assign(WORDS.get(district_id, WORDS[&\"suburbs\"]))", "found.assign([\"\\u13a0\\u13a1\\u13a2\"])", "SOV4"),
+        ("scripts/world/dead_grass.gd", "const PER_COURTYARD: Array[int] = [0, 8, 16]", "const PER_COURTYARD: Array[int] = [16, 16, 16]", "SOV5"),
+        ("scripts/world/skyline.gd", "const FACADE_GAIN: Array[float] = [0.28, 0.34, 0.41, 0.48]", "const FACADE_GAIN: Array[float] = [0.28, 0.34, 0.41, 0.05]", "SOV6"),
+        ("scripts/ui/menu_fog.gd", "visible = int(SettingsManager.get_setting(\"graphics_tier\", 2)) > 0", "visible = true", "SOV7"),
     ],
 ]
 ## The closeout group each set runs (CLOSEOUT_ONLY): the sets of Session 26 run `s26`, those of Session 27 `s27`.

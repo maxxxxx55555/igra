@@ -53,7 +53,7 @@ Method: one windowed launch with a sweep (ledger row 70, `s21_sweep_cdf2035`: fi
 
 | id | change | measured | frames read | verdict |
 |---|---|---|---|---|
-| V1 | the menu hero art multiplied by bone over near-white, `HERO_TINT` (`scripts/ui/main_menu.gd:69`) | the share of the menu frame at 225 or more of any channel 8.80 % to 0.06 % | the lamp glow and ground pool read bone-cream, the brass cone and the title keep their weight; the stronger tint (0.88, 0.85, 0.78) greys the cone | kept |
+| V1 | the menu hero art multiplied by bone over near-white, `HERO_TINT` (`scripts/ui/main_menu.gd:82`) | the share of the menu frame at 225 or more of any channel 8.80 % to 0.06 % | the lamp glow and ground pool read bone-cream, the brass cone and the title keep their weight; the stronger tint (0.88, 0.85, 0.78) greys the cone | kept |
 | V2 | a brass glow around lit streetlights, one additive camera-facing quad per lamp in a MultiMesh, Medium tier and up (`2d502ee`) | 48 lamps in the spawn district, one more draw per district | the lit street's lamps read as lamps (white specks before) in launch 71; **in launch 75 (frame 04) about seven flat pale squares, up to 250 px wide in the pose probe, centred on lamp heads that were a few metres from the camera** | **reverted** (`7734ade`, CORRECTION_LOG 201) |
 | V3 | `tonemap_white` and `tonemap_exposure` pairs (2:1.0, 3:1.1, 4:1.25, 6:1.4) against 1:1.0 | pixels with a channel at 240 or more: night 1.12 % to 0.08-0.11 %, day 2.11 % to 1.14-1.55 %, mean luma within 3 % | the frames look the same: the flashlight's energy 24 (`scenes/player/player_3d.tscn:180`) saturates all three channels, so the lit road stays a cream slab at any white point up to 6 | not kept, not applied |
 

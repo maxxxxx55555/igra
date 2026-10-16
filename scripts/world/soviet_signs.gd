@@ -11,6 +11,8 @@ const FONT_PX: int = 96
 const SIGN_H: float = 1.0
 const SIGN_Y: float = 1.2
 const SIGNS: int = 5
+## How much of its own glow the paint shows, by power stage (DARK, PARTIAL, STREETS, FULL); at DARK the signs are all but gone.
+const LIT_BY_STAGE: Array[float] = [0.45, 0.6, 0.8, 1.0]
 const HAZARD: Array[String] = ["ОПАСНО", "ВЫСОКОЕ НАПРЯЖЕНИЕ", "ВХОД ВОСПРЕЩЁН", "ПРОХОД ЗАПРЕЩЁН", "НЕ ВХОДИТЬ"]
 const YELLOW: Array[String] = ["АЗС", "БЕНЗИН", "ХЛЕБ"]
 const WORDS := {
@@ -94,7 +96,11 @@ static func build(parent: Node3D, district_id: StringName, fronts: Array[Transfo
 	signs.multimesh = mm
 	signs.material_override = mat
 	signs.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	set_stage(signs, PowerGrid.get_stage(district_id))
 	parent.add_child(signs)
+
+static func set_stage(signs: MultiMeshInstance3D, stage: int) -> void:
+	(signs.material_override as ShaderMaterial).set_shader_parameter("lit", LIT_BY_STAGE[clampi(stage, 0, LIT_BY_STAGE.size() - 1)])
 
 ## The paint of a word: 2 faded red for a warning, 1 faded yellow for the road and the bread, 0 bone for the rest.
 static func _paint(word: String) -> float:

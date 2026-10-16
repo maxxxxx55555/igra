@@ -5,9 +5,9 @@ here (F-1); everything else below is a fact of the sources or of the logs.
 
 ## 1. The path, step by step
 
-1. **Menu to game, two taps.** "Play" with no save goes straight in, no confirmation: the dialog of `_on_play_pressed` (`scripts/ui/main_menu.gd:211`) appears only when a save would be lost.
+1. **Menu to game, two taps.** "Play" with no save goes straight in, no confirmation: the dialog of `_on_play_pressed` (`scripts/ui/main_menu.gd:230`) appears only when a save would be lost.
    It calls `Routes.start_game` (`scripts/core/routes.gd:39`), which resets the profile (`GameManager.start_new_game`, `scripts/core/game_manager.gd:93`) and opens the loading screen.
-   The difficulty presets (Easy, Normal, Hard) are one button of the same menu (`LABELS`, `scripts/ui/main_menu.gd:13`); a new player is on Normal (`scripts/systems/settings_manager.gd:73`) and does not have to choose.
+   The difficulty presets (Easy, Normal, Hard) are one button of the same menu (`LABELS`, `scripts/ui/main_menu.gd:16`); a new player is on Normal (`scripts/systems/settings_manager.gd:73`) and does not have to choose.
 2. **The onboarding, once per profile, skip-able.** Seven cards with art (`PANELS`, `scripts/ui/onboarding_overlay.gd:9`), each with NEXT and SKIP (`skip.pressed.connect(_finish)`, line 97), shown
    once per save profile (`is_onboard_done`, line 41), never blocking after the dismissal, and closing by itself when the first district reaches the lit streets (`AUTO_HIDE_STAGE`, line 23).
 3. **The tutorial: one hint at a time, a Skip button on every hint.** Eleven steps (`STEPS`, `scripts/ui/tutorial_system.gd:6`): "wake up" is timed (5 s, line 12), then the light, a move,

@@ -7,12 +7,14 @@
 //   atlas  : the baked words, rows of equal height from the top.
 //   rows   : how many words the atlas holds.
 //   detail : 0 clean paint (Low tier draws no signs at all), 1 and 2 add the flaking.
+//   lit    : how much of the paint's own glow shows (the power stage of the district): the paint holds the light of the street the way the facade does, so a sign reads where no lamp reaches.
 // INSTANCE_CUSTOM: x the row, y the share of the row the word fills (the quad shows just that, centred), z a seed, w the paint (0 bone, 1 faded yellow, 2 faded red).
 shader_type spatial;
 
 uniform sampler2D atlas : source_color, filter_linear_mipmap;
 uniform float rows = 3.0;
 uniform float detail : hint_range(0.0, 2.0) = 2.0;
+uniform float lit : hint_range(0.0, 1.0) = 1.0;
 
 varying vec4 v_cell;
 
@@ -48,7 +50,9 @@ void fragment() {
 	} else if (v_cell.w > 0.5) {
 		paint = vec3(0.50, 0.40, 0.14);
 	}
-	ALBEDO = paint * (0.75 + 0.25 * vnoise(vec2(UV.x * 9.0, UV.y * 3.0) + v_cell.z * 7.0));
+	vec3 ink = paint * (0.75 + 0.25 * vnoise(vec2(UV.x * 9.0, UV.y * 3.0) + v_cell.z * 7.0));
+	ALBEDO = ink;
+	EMISSION = ink * 0.65 * lit;
 	ALPHA = glyph * slit * (1.0 - 0.85 * flaked);
 	ALPHA_SCISSOR_THRESHOLD = 0.5;
 	ROUGHNESS = 0.85;
