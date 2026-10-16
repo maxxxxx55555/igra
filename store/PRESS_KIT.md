@@ -23,7 +23,7 @@ Spoiler ceiling: the first three districts and the lit power station; no ending 
 | 12 | enemy types, the final boss among them | `data/monsters/` |
 | 5 | endings | `EndingsManager.ENDING_DATA` |
 | 31 | achievements | `AchievementManager.ACHIEVEMENTS` |
-| 60 | daily challenges, with 7, 30 and 100 day streak bonuses | `content/daily_challenges.json` |
+| 58 | daily challenges, with 7, 30 and 100 day streak bonuses | `content/daily_challenges.json` |
 | 5 | adaptive music layers (dark, lit, two threat levels, action) | `MusicManager.LAYERS` |
 | 13 | languages | `data/i18n/` |
 

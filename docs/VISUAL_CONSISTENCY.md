@@ -55,7 +55,7 @@ Every solid is a lit `StandardMaterial3D` with roughness 0.55 to 1.0 and metalli
 
 Nine places in the shipped scripts switch a material to unshaded (`SHADING_MODE_UNSHADED`): the dust motes, the burst particles, the player's dust, the windows of the
 skyline and the emissive windows, the soft quads of the dressing (the lamp pools, the rest bloom, the fog), the landmark's halo, the manhole steam, and a debug box of the
-interior zone that draws only when its `debug_visible` is set (it was on by default, no scene places a zone, and it is off by default now: `scripts/world/interior_zone.gd:4`). Every one is light or atmosphere (a glow, a haze, a particle), none is a solid; a solid that was unlit would
+interior zone that draws only when its `debug_visible` is set (it was on by default, no scene places a zone, and it is off by default now: `_QUARANTINE/scripts/world/interior_zone.gd:4`). Every one is light or atmosphere (a glow, a haze, a particle), none is a solid; a solid that was unlit would
 read flat, and none is. The light of the world follows the power of the district, stage by stage (DARK, PARTIAL, STREETS, FULL):
 
 | Element | DARK | PARTIAL | STREETS | FULL | Where |

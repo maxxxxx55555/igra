@@ -40,6 +40,8 @@ Why no deletion: a delivered image that no scene loads yet is the art half of a 
 
 ## 3. Scripts reached by nothing in the runtime
 
+**Session 27:** the 17 rows below that read KEEP-PLANNED failed the two-grep test (`docs/artifacts/rc16/proofs/s27_two_grep.out`) and moved to `_QUARANTINE/scripts/` (TZ_DECISIONS KEPT-27); the rows are the record of why they were kept in Session 26.
+
 The scan (`docs/artifacts/rc16/proofs/s26_c2_orphans.out` prints its own source): a script no scene or resource attaches by path or uid, no script names by its `class_name` as a type, and no runtime file names by file name. 19 of 255 shipped scripts.
 
 | Script | Verdict | Evidence | Action |

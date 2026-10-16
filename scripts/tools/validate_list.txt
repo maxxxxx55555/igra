@@ -12,10 +12,8 @@ scripts/core/game_manager.gd
 scripts/core/input_service.gd
 scripts/core/quest_manager.gd
 scripts/core/routes.gd
-scripts/core/save_data.gd
 scripts/core/save_system.gd
 scripts/credits.gd
-scripts/cutscenes/cutscene_manager.gd
 scripts/death_screen.gd
 scripts/district_manager.gd
 scripts/document_pickup.gd
@@ -25,12 +23,8 @@ scripts/economy/shop_item.gd
 scripts/economy/shop_service.gd
 scripts/economy/upgrade_system.gd
 scripts/effects/damage_indicator.gd
-scripts/effects/muzzle_flash.gd
-scripts/effects/recoil.gd
 scripts/effects/screen_shake.gd
 scripts/effects/weather_vfx.gd
-scripts/electronic_door.gd
-scripts/emergency_lamp.gd
 scripts/enemies/base_monster.gd
 scripts/enemies/boss_3d.gd
 scripts/enemies/crawler_3d.gd
@@ -39,7 +33,6 @@ scripts/enemies/encyclopedia_manager.gd
 scripts/enemies/enemy_pool.gd
 scripts/enemies/enemy_roster_data.gd
 scripts/enemies/hunter_3d.gd
-scripts/enemies/minion.gd
 scripts/enemies/monster_data.gd
 scripts/enemies/monster_telegraph.gd
 scripts/enemies/shadow_3d.gd
@@ -47,7 +40,6 @@ scripts/enemies/status_effects.gd
 scripts/enemies/watcher_3d.gd
 scripts/events/event_bus.gd
 scripts/fog_setup.gd
-scripts/fuse_box.gd
 scripts/gameplay/ammo_pickup.gd
 scripts/gameplay/checkpoint.gd
 scripts/gameplay/craft_station.gd
@@ -61,7 +53,6 @@ scripts/gameplay/zone_trigger.gd
 scripts/generator.gd
 scripts/hiding/hiding_spot.gd
 scripts/i18n/localization_manager.gd
-scripts/inspectable.gd
 scripts/inventory/inventory_manager.gd
 scripts/inventory/inventory_stats.gd
 scripts/inventory/item_data.gd
@@ -84,7 +75,6 @@ scripts/player/player_3d.gd
 scripts/player/player_stats.gd
 scripts/player/player_visual.gd
 scripts/post_process_overlay.gd
-scripts/searchlight.gd
 scripts/splash.gd
 scripts/stress_test.gd
 scripts/systems/achievements_manager.gd
@@ -95,7 +85,6 @@ scripts/systems/flashlight_upgrade_manager.gd
 scripts/systems/footstep_system.gd
 scripts/systems/integrity_guard.gd
 scripts/systems/light_limiter.gd
-scripts/systems/loot_drop.gd
 scripts/systems/loot_table.gd
 scripts/systems/music_manager.gd
 scripts/systems/new_game_plus.gd
@@ -104,12 +93,9 @@ scripts/systems/object_pool.gd
 scripts/systems/photo_mode.gd
 scripts/systems/progress_tracker.gd
 scripts/systems/random_events.gd
-scripts/systems/save_slot_manager.gd
 scripts/systems/settings_manager.gd
 scripts/systems/skill_tree_manager.gd
 scripts/systems/uisfx.gd
-scripts/systems/vibration.gd
-scripts/systems/weapon_mod_manager.gd
 scripts/systems/weather_system.gd
 scripts/systems/xp_manager.gd
 scripts/theme_setup.gd
@@ -123,7 +109,6 @@ scripts/tools/_screen_test.gd
 scripts/tools/_shot.gd
 scripts/tools/_shot_3d.gd
 scripts/tools/validate_all.gd
-scripts/transformer.gd
 scripts/ui/achievement_screen.gd
 scripts/ui/achievements_ui.gd
 scripts/ui/asset_registry.gd
@@ -151,7 +136,6 @@ scripts/ui/main_menu.gd
 scripts/ui/menu.gd
 scripts/ui/minimap.gd
 scripts/ui/new_game_plus_ui.gd
-scripts/ui/panel_card.gd
 scripts/ui/pause_menu.gd
 scripts/ui/photo_album.gd
 scripts/ui/photo_mode.gd
@@ -197,7 +181,6 @@ scripts/world/district_themes.gd
 scripts/world/district_trigger.gd
 scripts/world/examine_object.gd
 scripts/world/finale_director.gd
-scripts/world/interior_zone.gd
 scripts/world/power_grid.gd
 scripts/world/power_switch.gd
 scripts/world/puzzle_3d.gd

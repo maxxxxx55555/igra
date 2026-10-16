@@ -1,0 +1,114 @@
+# proof s27_two_grep
+# utc 20261016T142105Z
+# head ac45b1c (uncommitted paths: 25)
+# env none
+# cmd python -I /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s27_two_grep.py .
+"""Session 27, the owner row "17 scripts and 26 functions kept on a citation": the two-grep test. A kept script is LIVE if (grep 1) a runtime file other than itself names it by res:// path, uid or class_name, and
+(grep 2) a runtime file other than itself uses a member of it. A kept function is LIVE if a runtime file other than its own script calls it by name. Runtime = scripts/ (not scripts/tools), scenes/ (not scenes/tools),
+data/, content/, addons/, project.godot, export_presets.cfg. Tool references are listed apart: a gate that loads a script by path breaks if the script moves. Read-only; prints itself first.
+usage: python -I s27_two_grep.py <repo>"""
+import pathlib
+import re
+import subprocess
+import sys
+
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+root = pathlib.Path(sys.argv[1]).resolve()
+tracked = subprocess.run(["git", "ls-files"], cwd=root, capture_output=True, text=True).stdout.split("\n")
+text_ext = (".gd", ".tscn", ".tres", ".cfg", ".json", ".godot", ".gdshader", ".csv", ".txt")
+files = [t for t in tracked if t.endswith(text_ext) and not t.startswith(("docs/", "refs/", "store/", ".claude/", ".specify/", "android/"))]
+body = {t: (root / t).read_text(encoding="utf-8", errors="replace") for t in files if (root / t).is_file()}
+runtime = {t: s for t, s in body.items() if not t.startswith(("scripts/tools/", "scenes/tools/", "tools/", "_QUARANTINE/"))}
+CODE = (".gd", ".tscn", ".tres", ".godot", ".cfg")  # a class name in a JSON or a locale file is a word, not a use
+tools = {t: s for t, s in body.items() if t.startswith(("scripts/tools/", "scenes/tools/"))}
+
+SCRIPTS = """scripts/core/save_data.gd scripts/cutscenes/cutscene_manager.gd scripts/effects/muzzle_flash.gd scripts/effects/recoil.gd scripts/electronic_door.gd scripts/emergency_lamp.gd
+scripts/enemies/minion.gd scripts/fuse_box.gd scripts/inspectable.gd scripts/searchlight.gd scripts/systems/loot_drop.gd scripts/systems/save_slot_manager.gd scripts/systems/vibration.gd
+scripts/systems/weapon_mod_manager.gd scripts/transformer.gd scripts/ui/panel_card.gd scripts/world/interior_zone.gd""".split()
+FUNCS = [("scripts/cutscenes/cutscene_manager.gd", "play_cutscene"), ("scripts/electronic_door.gd", "set_power"), ("scripts/fuse_box.gd", "remove_fuse"),
+         ("scripts/gameplay/hiding_spot.gd", "is_occupied"), ("scripts/hiding/hiding_spot.gd", "get_detection_multiplier"), ("scripts/hiding/hiding_spot.gd", "get_hide_duration"),
+         ("scripts/lighting/light_grid.gd", "unregister_light"), ("scripts/monetization/ad_service.gd", "interstitial_cooldown_left"), ("scripts/monetization/stub_crazy_games.gd", "was_initialized"),
+         ("scripts/multiplayer/lan_discovery.gd", "get_found_hosts"), ("scripts/net/lan_network.gd", "is_client"), ("scripts/net/lan_network.gd", "is_online"),
+         ("scripts/net/lan_network.gd", "broadcast_player_state"), ("scripts/net/lan_network.gd", "broadcast_power"), ("scripts/systems/loot_drop.gd", "drop_loot"),
+         ("scripts/systems/play_integrity_service.gd", "request_integrity_token"), ("scripts/systems/save_slot_manager.gd", "save_to_slot"), ("scripts/systems/settings_manager.gd", "set_dyslexia_font"),
+         ("scripts/systems/settings_manager.gd", "set_auto_aim"), ("scripts/systems/vibration.gd", "explode"), ("scripts/systems/weapon_mod_manager.gd", "equip_mod"),
+         ("scripts/ui/visual_style.gd", "make_tile_texture"), ("scripts/ui/visual_style.gd", "draw_monster"), ("scripts/ui/visual_style.gd", "draw_vignette"),
+         ("scripts/weapons/weapon_base.gd", "get_ammo_ratio"), ("scripts/weapons/weapon_base.gd", "get_reload_progress")]
+
+
+def members(src):
+    return sorted(set(re.findall(r"^\s*(?:static\s+)?func\s+([A-Za-z_]\w*)", src, re.M)) - {"_ready", "_process", "_physics_process", "_init", "_input", "_unhandled_input", "_enter_tree", "_exit_tree", "_draw"})
+
+
+print("== scripts: %d kept on a citation" % len(SCRIPTS))
+quarantine, keep = [], []
+for s in SCRIPTS:
+    src = body.get(s, body.get("_QUARANTINE/" + s, ""))
+    cls = re.search(r"^class_name\s+(\w+)", src, re.M)
+    names = [s, "res://" + s]
+    g1 = [t for t, b in runtime.items() if t != s and t.endswith(CODE) and (any(n in b for n in names) or (cls and re.search(r"%s" % cls.group(1), b)))]
+    g1_tool = [t for t, b in tools.items() if any(n in b for n in names)]
+    mem = members(src)
+    g2 = sorted({t for t, b in runtime.items() if t != s for m in mem if re.search(r"[.\s(]%s\(" % re.escape(m), b)}) if g1 else []  # members only matter if the script is named at all
+    live = bool(g1) and bool(g2)
+    (keep if live else quarantine).append(s)
+    print("  %-48s grep1 %-3s (%s) grep2 %-3s (%s) tools %s -> %s" % (s, "yes" if g1 else "no", ",".join(g1[:2]) or "-", "yes" if g2 else "no", ",".join(g2[:2]) or "-", ",".join(g1_tool[:2]) or "-", "LIVE keep" if live else "NOT LIVE quarantine"))
+print("== functions: %d kept on a citation" % len(FUNCS))
+dead = 0
+for s, f in FUNCS:
+    hit = [t for t, b in runtime.items() if t != s and re.search(r"[.\s(]%s\(" % re.escape(f), b)]
+    inside = len(re.findall(r"[.\s(]%s\(" % re.escape(f), body.get(s, body.get("_QUARANTINE/" + s, ""))))
+    tool_hit = [t for t, b in tools.items() if re.search(r"[.\s(]%s\(" % re.escape(f), b)]
+    dead += not hit
+    print("  %-46s %-28s called from another runtime file: %-3s %s; inside its own script %d; tools %s" % (s, f, "yes" if hit else "no", ",".join(hit[:2]) or "-", inside, ",".join(tool_hit[:2]) or "-"))
+print("scripts live %d, not live %d; functions with no caller in another runtime file %d of %d" % (len(keep), len(quarantine), dead, len(FUNCS)))
+
+--- run
+== scripts: 17 kept on a citation
+  scripts/core/save_data.gd                        grep1 no  (-) grep2 no  (-) tools - -> NOT LIVE quarantine
+  scripts/cutscenes/cutscene_manager.gd            grep1 no  (-) grep2 no  (-) tools - -> NOT LIVE quarantine
+  scripts/effects/muzzle_flash.gd                  grep1 no  (-) grep2 no  (-) tools - -> NOT LIVE quarantine
+  scripts/effects/recoil.gd                        grep1 no  (-) grep2 no  (-) tools - -> NOT LIVE quarantine
+  scripts/electronic_door.gd                       grep1 no  (-) grep2 no  (-) tools - -> NOT LIVE quarantine
+  scripts/emergency_lamp.gd                        grep1 no  (-) grep2 no  (-) tools - -> NOT LIVE quarantine
+  scripts/enemies/minion.gd                        grep1 no  (-) grep2 no  (-) tools - -> NOT LIVE quarantine
+  scripts/fuse_box.gd                              grep1 no  (-) grep2 no  (-) tools - -> NOT LIVE quarantine
+  scripts/inspectable.gd                           grep1 no  (-) grep2 no  (-) tools - -> NOT LIVE quarantine
+  scripts/searchlight.gd                           grep1 no  (-) grep2 no  (-) tools - -> NOT LIVE quarantine
+  scripts/systems/loot_drop.gd                     grep1 no  (-) grep2 no  (-) tools - -> NOT LIVE quarantine
+  scripts/systems/save_slot_manager.gd             grep1 no  (-) grep2 no  (-) tools - -> NOT LIVE quarantine
+  scripts/systems/vibration.gd                     grep1 no  (-) grep2 no  (-) tools - -> NOT LIVE quarantine
+  scripts/systems/weapon_mod_manager.gd            grep1 no  (-) grep2 no  (-) tools - -> NOT LIVE quarantine
+  scripts/transformer.gd                           grep1 no  (-) grep2 no  (-) tools - -> NOT LIVE quarantine
+  scripts/ui/panel_card.gd                         grep1 no  (-) grep2 no  (-) tools - -> NOT LIVE quarantine
+  scripts/world/interior_zone.gd                   grep1 no  (-) grep2 no  (-) tools - -> NOT LIVE quarantine
+== functions: 26 kept on a citation
+  scripts/cutscenes/cutscene_manager.gd          play_cutscene                called from another runtime file: no  -; inside its own script 1; tools -
+  scripts/electronic_door.gd                     set_power                    called from another runtime file: no  -; inside its own script 1; tools -
+  scripts/fuse_box.gd                            remove_fuse                  called from another runtime file: no  -; inside its own script 1; tools -
+  scripts/gameplay/hiding_spot.gd                is_occupied                  called from another runtime file: no  -; inside its own script 1; tools -
+  scripts/hiding/hiding_spot.gd                  get_detection_multiplier     called from another runtime file: no  -; inside its own script 1; tools -
+  scripts/hiding/hiding_spot.gd                  get_hide_duration            called from another runtime file: no  -; inside its own script 1; tools -
+  scripts/lighting/light_grid.gd                 unregister_light             called from another runtime file: no  -; inside its own script 1; tools -
+  scripts/monetization/ad_service.gd             interstitial_cooldown_left   called from another runtime file: no  -; inside its own script 1; tools -
+  scripts/monetization/stub_crazy_games.gd       was_initialized              called from another runtime file: no  -; inside its own script 1; tools -
+  scripts/multiplayer/lan_discovery.gd           get_found_hosts              called from another runtime file: no  -; inside its own script 1; tools -
+  scripts/net/lan_network.gd                     is_client                    called from another runtime file: no  -; inside its own script 1; tools -
+  scripts/net/lan_network.gd                     is_online                    called from another runtime file: no  -; inside its own script 1; tools -
+  scripts/net/lan_network.gd                     broadcast_player_state       called from another runtime file: no  -; inside its own script 1; tools -
+  scripts/net/lan_network.gd                     broadcast_power              called from another runtime file: no  -; inside its own script 1; tools -
+  scripts/systems/loot_drop.gd                   drop_loot                    called from another runtime file: no  -; inside its own script 1; tools -
+  scripts/systems/play_integrity_service.gd      request_integrity_token      called from another runtime file: no  -; inside its own script 1; tools -
+  scripts/systems/save_slot_manager.gd           save_to_slot                 called from another runtime file: no  -; inside its own script 1; tools -
+  scripts/systems/settings_manager.gd            set_dyslexia_font            called from another runtime file: no  -; inside its own script 1; tools -
+  scripts/systems/settings_manager.gd            set_auto_aim                 called from another runtime file: no  -; inside its own script 1; tools -
+  scripts/systems/vibration.gd                   explode                      called from another runtime file: no  -; inside its own script 1; tools -
+  scripts/systems/weapon_mod_manager.gd          equip_mod                    called from another runtime file: no  -; inside its own script 1; tools -
+  scripts/ui/visual_style.gd                     make_tile_texture            called from another runtime file: no  -; inside its own script 1; tools -
+  scripts/ui/visual_style.gd                     draw_monster                 called from another runtime file: no  -; inside its own script 1; tools -
+  scripts/ui/visual_style.gd                     draw_vignette                called from another runtime file: no  -; inside its own script 1; tools -
+  scripts/weapons/weapon_base.gd                 get_ammo_ratio               called from another runtime file: no  -; inside its own script 1; tools -
+  scripts/weapons/weapon_base.gd                 get_reload_progress          called from another runtime file: no  -; inside its own script 1; tools -
+scripts live 0, not live 17; functions with no caller in another runtime file 26 of 26
+# EXIT=0

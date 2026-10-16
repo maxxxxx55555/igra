@@ -59,7 +59,7 @@ WHAT'S INSIDE
 - Stealth built on noise and visibility, not a detection meter
 - Crafting and a workbench for upgrading your one real tool: the flashlight
 - Checksum-verified saves with automatic backup recovery
-- 60 daily challenges, 31 achievements, and a New Game+ after the credits
+- 58 daily challenges, 31 achievements, and a New Game+ after the credits
 
 The flashlight is simultaneously your only weapon against some of what
 hunts you, your only way to see, and the thing that gives you away every
@@ -99,7 +99,7 @@ blackout is a survival puzzle box, and the story is yours to drive.
 - Стелс на шуме и видимости, а не на индикаторе обнаружения
 - Крафт и верстак для прокачки твоего единственного настоящего оружия — фонаря
 - Сохранения с проверкой целостности и автовосстановлением
-- 60 ежедневных испытаний, 31 достижение и New Game+ после финала
+- 58 ежедневных испытаний, 31 достижение и New Game+ после финала
 
 Фонарь одновременно — твоё единственное оружие против тех, кто охотится
 во тьме, твой единственный способ видеть и то, что выдаёт тебя каждый
@@ -234,7 +234,7 @@ Tu linterna es a la vez tu única arma contra parte de lo que te caza, tu única
 - Sigilo basado en ruido y visibilidad, no en un medidor
 - Fabricación y banco de trabajo para mejorar tu linterna
 - Guardado con verificación de integridad y copia de seguridad
-- 60 desafíos diarios, 31 logros y New Game+ tras los créditos
+- 58 desafíos diarios, 31 logros y New Game+ tras los créditos
 
 Táctil: joystick virtual y botones, esquiva con doble toque. PC: WASD y ratón, la misma partida. El juego llega completo el día uno —historia, puzles y finales incluidos— y se juega sin conexión: un survival-puzzle narrativo. Sin contenido de pago ni pase de temporada.
 ```
@@ -273,7 +273,7 @@ Deine Taschenlampe ist zugleich deine einzige Waffe gegen einen Teil dessen, was
 - Schleichen über Geräusch und Sichtbarkeit, nicht über eine Anzeige
 - Herstellung und Werkbank zum Verbessern deiner Taschenlampe
 - Speicherstände mit Integritätsprüfung und Backup
-- 60 tägliche Herausforderungen, 31 Erfolge und New Game+ nach den Credits
+- 58 tägliche Herausforderungen, 31 Erfolge und New Game+ nach den Credits
 
 Touch: virtueller Joystick und Aktionstasten, Ausweichen per Doppeltipp. PC: WASD und Maus, dasselbe Spiel. Die ganze Stadt ist ab Tag eins fertig — Geschichte, Rätsel und Enden inklusive. Komplett offline: ein story-getriebenes Survival-Puzzle. Keine kostenpflichtigen Inhalte, kein Season Pass.
 ```
@@ -312,7 +312,7 @@ Ta lampe torche est à la fois ta seule arme contre une partie de ce qui te traq
 - Infiltration basée sur le bruit et la visibilité, pas sur une jauge
 - Fabrication et établi pour améliorer ta lampe torche
 - Sauvegardes vérifiées avec récupération de secours
-- 60 défis quotidiens, 31 succès et New Game+ après le générique
+- 58 défis quotidiens, 31 succès et New Game+ après le générique
 
 Tactile : joystick virtuel et boutons, esquive en double-tap. PC : WASD et souris, la même partie. La ville entière dès le jour un — intrigue, énigmes et fins incluses. Entièrement hors ligne : un survival-puzzle narratif. Aucun contenu payant, aucun pass saisonnier.
 ```
@@ -351,7 +351,7 @@ La tua torcia è insieme la tua unica arma contro parte di ciò che ti dà la ca
 - Furtività basata su rumore e visibilità, non su un indicatore
 - Crafting e banco da lavoro per migliorare la torcia
 - Salvataggi verificati con recupero di backup
-- 60 sfide giornaliere, 31 achievement e New Game+ dopo i titoli di coda
+- 58 sfide giornaliere, 31 achievement e New Game+ dopo i titoli di coda
 
 Touch: joystick virtuale e pulsanti, schivata con doppio tocco. PC: WASD e mouse, la stessa partita. La città intera dal giorno uno — storia, enigmi e finali inclusi. Completamente offline: un survival-puzzle narrativo. Nessun contenuto a pagamento, nessun season pass.
 ```
@@ -390,7 +390,7 @@ Sua lanterna é ao mesmo tempo sua única arma contra parte do que te caça, seu
 - Furtividade baseada em ruído e visibilidade, não num medidor
 - Criação e bancada para melhorar sua lanterna
 - Saves verificados com recuperação de backup
-- 60 desafios diários, 31 conquistas e New Game+ após os créditos
+- 58 desafios diários, 31 conquistas e New Game+ após os créditos
 
 Toque: joystick virtual e botões, esquiva com toque duplo. PC: WASD e mouse, o mesmo jogo. A cidade inteira desde o primeiro dia — história, quebra-cabeças e finais inclusos. Totalmente offline: um survival-puzzle narrativo. Sem conteúdo pago, sem passe de temporada.
 ```
@@ -429,7 +429,7 @@ El fenerin aynı anda seni avlayanların bir kısmına karşı tek silahın, gö
 - Bir göstergeye değil, sese ve görünürlüğe dayalı gizlilik
 - El fenerini geliştirmek için üretim ve tezgâh
 - Bütünlük doğrulamalı, yedekten kurtarmalı kayıtlar
-- Krediler sonrası 60 günlük görev, 31 başarı ve New Game+
+- Krediler sonrası 58 günlük görev, 31 başarı ve New Game+
 
 Dokunmatik: sanal çubuk ve düğmeler, çift dokunuşla yan geçiş. PC: WASD ve fare, aynı oyun. Şehrin tamamı ilk günden hazır — hikâye, bulmacalar ve sonlar dâhil. Baştan sona çevrimdışı: hikâye odaklı bir hayatta kalma bulmacası. Ücretli içerik yok, sezon pası yok.
 ```
@@ -468,7 +468,7 @@ Dokunmatik: sanal çubuk ve düğmeler, çift dokunuşla yan geçiş. PC: WASD v
 - ゲージではなく、音と視認性で成立するステルス
 - 唯一の道具、懐中電灯を強化するクラフトと作業台
 - 整合性チェックとバックアップ復旧付きのセーブ
-- デイリーチャレンジ60種、実績31個、クリア後にはNew Game+
+- デイリーチャレンジ58種、実績31個、クリア後にはNew Game+
 
 タッチ：仮想スティックとアクションボタン、ダブルタップで回避。PC：WASDとマウス、同じセーブデータ。街はローンチ時点で完全体——物語も謎解きも全エンディングも収録。オフラインで遊ぶ、ストーリー主導のサバイバルパズル。有料コンテンツもシーズンパスもありません。
 ```
@@ -507,7 +507,7 @@ Dokunmatik: sanal çubuk ve düğmeler, çift dokunuşla yan geçiş. PC: WASD v
 - 게이지가 아닌 소음과 시야로 이루어지는 잠입
 - 유일한 도구인 손전등을 강화하는 제작과 작업대
 - 무결성 검증과 백업 복구가 있는 세이브
-- 데일리 챌린지 60종, 업적 31개, 그리고 크레딧 이후의 뉴 게임+
+- 데일리 챌린지 58종, 업적 31개, 그리고 크레딧 이후의 뉴 게임+
 
 터치: 가상 스틱과 액션 버튼, 더블 탭 회피. PC: WASD와 마우스, 같은 세이브. 출시 당일 도시 전체가 완성본입니다 — 이야기, 퍼즐, 모든 엔딩 포함. 완전 오프라인, 스토리 중심의 생존 퍼즐. 유료 콘텐츠도 시즌 패도 없습니다.
 ```
@@ -546,7 +546,7 @@ Dokunmatik: sanal çubuk ve düğmeler, çift dokunuşla yan geçiş. PC: WASD v
 - 基于噪音与可见度、而非探测条的潜行
 - 用于强化手电筒的制作与工作台
 - 带完整性校验与备份恢复的存档
-- 60 项每日挑战、31 个成就，通关后还有 New Game+
+- 58 项每日挑战、31 个成就，通关后还有 New Game+
 
 触屏：虚拟摇杆与操作按钮，双击闪避。PC：WASD 与鼠标，同一份存档。整座城市在首日即为完全体——剧情、谜题与全部结局都已收录。完全离线、剧情驱动的生存解谜。无付费内容，无赛季通行证。
 ```
@@ -585,7 +585,7 @@ Dokunmatik: sanal çubuk ve düğmeler, çift dokunuşla yan geçiş. PC: WASD v
 - 基於噪音與可見度、而非偵測條的潛行
 - 用於強化手電筒的製作與工作臺
 - 帶完整性校驗與備份還原的存檔
-- 60 項每日挑戰、31 個成就，破關後還有 New Game+
+- 58 項每日挑戰、31 個成就，破關後還有 New Game+
 
 觸控：虛擬搖桿與操作按鈕，雙擊閃避。PC：WASD 與滑鼠，同一份存檔。整座城市在首日起即為完全體——劇情、謎題與全部結局都已收錄。完全離線、劇情驅動的生存解謎。無付費內容，無賽季通行證。
 ```
@@ -624,7 +624,7 @@ Dokunmatik: sanal çubuk ve düğmeler, çift dokunuşla yan geçiş. PC: WASD v
 - تخفٍّ قائم على الصوت والرؤية، لا على مؤشر
 - تصنيع وطاولة عمل لتطوير مصباحك
 - حفظ بتحقق من السلامة واستعادة احتياطية
-- 60 تحديًا يوميًا و31 إنجازًا وNew Game+ بعد النهاية
+- 58 تحديًا يوميًا و31 إنجازًا وNew Game+ بعد النهاية
 
 باللمس: عصا افتراضية وأزرار، ومراوغة بنقرة مزدوجة. الحاسب: WASD والفأرة، الحفظة نفسها. المدينة كاملة من اليوم الأول — القصة والألغاز وكل النهايات مشمولة. لعبة نجاة وألغاز سردية تعمل دون اتصال بالكامل. بلا محتوى مدفوع وبلا جواز موسم.
 ```

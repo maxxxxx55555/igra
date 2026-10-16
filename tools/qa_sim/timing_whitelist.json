@@ -1,5 +1,4 @@
 [
-  {"file": "scripts/cutscenes/cutscene_manager.gd", "text": "await get_tree().process_frame", "why": "the shake loop ends on accumulated get_process_delta_time() seconds; the awaited frame is only the redraw step, the duration is seconds at any frame rate"},
   {"file": "scripts/enemies/status_effects.gd", "text": "_tick_timer -= TICK", "why": "wraps a timer that is accumulated by delta: it subtracts the one-second period, so a damage tick lands once per accumulated second at any frame rate"},
   {"file": "scripts/player/flashlight.gd", "text": "var radial: float = lerpf(1.0, stats.radial_falloff, len_norm)", "why": "a blend over the cone's distance (len_norm) inside a texture bake loop, not a time step; the legacy 2D flashlight script"},
   {"file": "scripts/player/player_3d.gd", "text": "ProgressTracker.jumps += 1", "why": "an event counter (one per jump), not a per-frame value"},

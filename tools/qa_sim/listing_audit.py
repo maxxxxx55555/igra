@@ -3,7 +3,7 @@
 
   L1 title of at most 30 characters; L2 short description of at most 80 and the length the listing declares; L3 full description of at most 4000.
   L4 the set of whole numbers of a locale's texts is the English set (the same claims in every language; 1 is left out: it is "first person" in Korean); L5 the English numbers are what the code holds
-     (districts, monsters, endings, languages, achievements, daily templates, music layers); L6 the features the English text names exist in the scripts.
+     (districts, monsters, endings, languages, achievements, daily templates the selector offers, music layers); L6 the features the English text names exist in the scripts.
   L7 the store title of a locale is the in-game menu_title (case aside). ASO: how many of the locale's own tags occur in its texts.
 
 usage: python tools/qa_sim/listing_audit.py [--write store/LISTING_AUDIT.md] [--demo]
@@ -83,7 +83,10 @@ def truth():
     districts = len(re.findall(r"&\"\w+\"", re.search(r"const DISTRICTS: Array\[StringName\] = \[(.*?)\]", read("scripts/world/district_scene_factory.gd"), re.S).group(1)))
     ach = len(re.findall(r'^\t"(ach_\w+)": \{', read("scripts/systems/achievements_manager.gd"), re.M))
     endings = len(re.findall(r'^\t"(\w+)":\s+\{"title"', read("scripts/systems/endings_manager.gd"), re.M))
-    daily = json.loads(read("content/daily_challenges.json"))["templates"]
+    templates = json.loads(read("content/daily_challenges.json"))["templates"]
+    per_run = re.findall(r'"(\w+)"', re.search(r"const PER_RUN_TYPES: Array\[String\] = \[(.*?)\]", read("scripts/systems/daily_challenge_manager.gd")).group(1))
+    # the manager's selector walks past a once-per-district template whose target is over the districts a run can light: those are authored and never offered
+    daily = [t for t in templates if not (t["type"] in per_run and int(t["target"]) > districts)]
     music = read("scripts/systems/music_manager.gd")
     layers = re.findall(r'^\t"(\w+)":', music[music.index("const LAYERS"):music.index("}", music.index("const LAYERS"))], re.M)
     return {"districts": districts, "monsters": len(list((ROOT / "data" / "monsters").glob("monster_*.tres"))), "endings": endings, "languages": len(list((ROOT / "data" / "i18n").glob("*.json"))),
