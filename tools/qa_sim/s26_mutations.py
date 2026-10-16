@@ -33,6 +33,8 @@ SETS = [
         (ACH, MARKS, "if false:", "ACHRUN1"),
         ("scripts/systems/daily_challenge_manager.gd", 'if not (String(t.get("type", "")) in PER_RUN_TYPES and int(t.get("target", 0)) > DistrictManager.DISTRICTS.size()):', "if true:", "DAILY2"),
         ("default_bus_layout.tres", "bus/1/effect/2/enabled = true", "bus/1/effect/2/enabled = false", "AUD6"),
+        ("scripts/systems/daily_challenge_manager.gd", "elif _progress_day == day and _today_id == _id_for_day(day):", "elif _today_id == _id_for_day(day):", "DAILY3"),
+        ("scripts/core/game_manager.gd", "EventBus.game_over.connect(_on_player_game_over)", "EventBus.player_died.connect(_on_player_game_over)", "ACH15M"),
     ],
     [
         (ACH, MARKS, "if true:", "ACHRUN2"),

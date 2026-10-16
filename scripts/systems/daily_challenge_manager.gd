@@ -39,6 +39,8 @@ var _today: Dictionary = {}
 var _progress: int = 0
 var _completed_today: bool = false
 var _last_completed_day: int = -1
+## The calendar day the saved progress belongs to: two days can select the same template (the selector below walks past an unwinnable one), so the id says nothing about the day.
+var _progress_day: int = -1
 var _play_seconds: float = 0.0
 ## no_flashlight_segment: отрезок — SEGMENT_SECONDS подряд с выключенным
 ## фонарём. Любое включение обнуляет накопленное, иначе «отрезок» набирался бы
@@ -99,8 +101,9 @@ func _load_templates() -> void:
 func _today_index() -> int:
 	return int(Time.get_unix_time_from_system() / SECONDS_PER_DAY)
 
-## These types tick once per district, so one run pays at most as many as the city has districts: "Light up 16 districts' streets" cannot be won
-## in a city of 11. The selector walks on to the next template whose target a run can pay (tools/qa_sim/daily_sim.py reads this list).
+## These types tick once per district, so one run pays at most as many as the city has districts: "Light up 16 districts' streets" cannot be won in one run of a
+## city of 11 (the day's progress is profile-wide, two runs of one day would add up). The selector walks on to the next template whose target one run can pay
+## (tools/qa_sim/daily_sim.py reads this list).
 const PER_RUN_TYPES: Array[String] = ["light_streets", "restore_districts"]
 
 func _index_for_day(day: int) -> int:
@@ -117,12 +120,13 @@ func _roll_for_day(day: int) -> void:
 	_day = day
 	if day <= _last_completed_day:
 		_completed_today = true
-	elif _today_id != "" and _today_id == _id_for_day(day):
-		pass  # already rolled, progress carries within the same day
+	elif _progress_day == day and _today_id == _id_for_day(day):
+		pass  # already rolled today, progress carries within the same day
 	else:
 		_completed_today = false
 		_progress = 0
 		_play_seconds = 0.0
+	_progress_day = day
 	_today = _templates[_index_for_day(day)]
 	_today_id = String(_today.get("id", ""))
 
@@ -201,7 +205,7 @@ func is_completed_today() -> bool:
 func _save_state() -> void:
 	SaveSystem.write_signed(SAVE_PATH, {
 		"today_id": _today_id, "progress": _progress,
-		"last_completed_day": _last_completed_day,
+		"last_completed_day": _last_completed_day, "progress_day": _progress_day,
 	})
 
 func _load_state() -> void:
@@ -210,3 +214,4 @@ func _load_state() -> void:
 		_today_id = String(parsed.get("today_id", ""))
 		_progress = int(parsed.get("progress", 0))
 		_last_completed_day = int(parsed.get("last_completed_day", -1))
+		_progress_day = int(parsed.get("progress_day", -1))

@@ -1,6 +1,7 @@
 extends RefCounted
 ## Session 26 (S1, S4): ACHSIG, the handlers of the achievements that had no check of their own; ACHRUN, the run marks of Quiet as a Mouse and Without a Scratch start empty in a New Game; ACH15, Darkness is the Dark ending and a Survivor
-## death does not pay it; DAILY2, the daily selector does not offer a template one run cannot pay (docs/ACHIEVEMENT_REACHABILITY.md, docs/DAILY_SIM.md); AUD6, the Music bus ends in a limiter.
+## death does not pay it, and GameManager hears game_over before AchievementManager (ACH15M, the mechanism); DAILY2, the daily selector does not offer a template one run cannot pay;
+## DAILY3, two days that select the same template do not share progress (docs/ACHIEVEMENT_REACHABILITY.md, docs/DAILY_SIM.md); AUD6, the Music bus ends in a limiter.
 ## Wired into _closeout_check_runner.gd as `Rc26.run(self)`; CLOSEOUT_ONLY=s26 runs it alone, which tools/qa_sim/af2_both_ways.py uses on the pre-fix runtime.
 
 static func run(r: Node) -> void:
@@ -8,6 +9,7 @@ static func run(r: Node) -> void:
 	_darkness(r)
 	_run_marks(r)
 	_daily_selector(r)
+	_daily_days(r)
 	_music_limiter(r)
 
 ## The achievements that had no check of their own (docs/ACHIEVEMENT_REACHABILITY.md): the handler each signal reaches, called the way the check of ach_06 calls it.
@@ -58,6 +60,12 @@ static func _darkness(r: Node) -> void:
 	EndingsManager.evaluate_death_ending()
 	var survivor: StringName = EndingsManager.get_ending()
 	AchievementManager._on_player_died()
+	var heard: Array[Object] = []
+	for c: Dictionary in EventBus.game_over.get_connections():
+		heard.append((c["callable"] as Callable).get_object())
+	var slot_gm: int = heard.find(GameManager)
+	var slot_ach: int = heard.find(AchievementManager)
+	r._ok(slot_gm != -1 and slot_ach != -1 and slot_gm < slot_ach, "ACH15M GameManager hears game_over before AchievementManager, so the ending is resolved when Darkness is asked (slots %d and %d)" % [slot_gm, slot_ach])
 	r._ok(survivor == &"survivor" and not AchievementManager.is_unlocked(&"ach_15"), "ACH15 a death with only the power station lit is Survivor and does not unlock Darkness (ending %s)" % survivor)
 	PowerGrid.from_dict(grid_before)
 
@@ -98,6 +106,32 @@ static func _daily_selector(r: Node) -> void:
 	for f in fields:
 		m.set(f, kept[f])
 	r._ok(first == "fits" and again == "fits" and kills == "kills", "DAILY2 the daily selector walks past a template over the %d districts (day 0 %s, day 3 %s) and keeps one with no per-run cap (day 2 %s)" % [cap, first, again, kills])
+
+## Two days can select the same template (the selector walks past an unwinnable one into the next day's own): progress carries within one day and not across the day line.
+## A saved 7 of 7 of the day before opened the next day at 7 of 7, and one event paid it again.
+static func _daily_days(r: Node) -> void:
+	var m: Node = DailyChallengeManager
+	var fields: Array[String] = ["_templates", "_day", "_completed_today", "_progress", "_play_seconds", "_today_id", "_today", "_last_completed_day", "_progress_day"]
+	var kept: Dictionary = {}
+	for f in fields:
+		kept[f] = m.get(f)
+	var cap: int = DistrictManager.DISTRICTS.size()
+	m._templates = [
+		{"id": "over", "type": "light_streets", "target": cap + 1, "reward": 1},
+		{"id": "fits", "type": "restore_districts", "target": 3, "reward": 1},
+	]
+	m._last_completed_day = -1
+	m._today_id = ""
+	m.set("_progress_day", -1)
+	m._roll_for_day(0)
+	m._progress = 2
+	m._roll_for_day(0)
+	var same_day: int = m._progress
+	m._roll_for_day(1)
+	var next_day: int = m._progress
+	for f in fields:
+		m.set(f, kept[f])
+	r._ok(same_day == 2 and next_day == 0, "DAILY3 two days that select the same template do not share progress: the same day keeps it (%d of 2), the next day starts empty (%d)" % [same_day, next_day])
 
 ## The windowed audio truth gate read the Music bus at +1.3 and +1.9 dB on two runs in a row, in a peak that is bimodal on one code tree (docs/CORRECTION_LOG.md 114 and 276): the layers and the action sting of a battle can sum past the
 ## -1.5 dB ceiling. The layout ends the bus in a hard limiter below that ceiling; only the ducker's Amplify (scripts/systems/audio_ducker.gd) may come after it, a cut and never a boost.
