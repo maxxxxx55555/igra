@@ -1,0 +1,18 @@
+# proof s27_v1d_67718d1
+# utc 20261016T154621Z
+# head 67718d1 (uncommitted paths: 23)
+# env none
+# cmd bash -c bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; echo "# STEP compile rc=$?"; CLOSEOUT_ONLY=s27 bash tools/qa_sim/closeout_check 400; cp .qa_logs/closeout_check.log .qa_logs/s27_v1d_closeout.log; TLS_FRAMES_PROBE=1 TLS_FRAMES_VIEWS=03_street,06_courtyard,07_facade,08_sign bash tools/qa_sim/density_frames probe1 67718d1 suburbs,residential 600; echo "# STEP frames rc=$?"
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP compile rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] DONE checks=5 fails=0
+  closeout_check rc=0 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_probe1.log, 8 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP frames rc=0
+# EXIT=0

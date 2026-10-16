@@ -1,0 +1,30 @@
+# proof s27_v1c_182a86b
+# utc 20261016T153303Z
+# head 182a86b (uncommitted paths: 0)
+# env none
+# cmd bash -c bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; echo "# STEP compile rc=$?"; CLOSEOUT_ONLY=s27 bash tools/qa_sim/closeout_check 400; cp .qa_logs/closeout_check.log .qa_logs/s27_v1c_closeout.log; CLOSEOUT_ONLY=density bash tools/qa_sim/closeout_check 600; cp .qa_logs/closeout_check.log .qa_logs/s27_v1c_density.log; bash tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn 300; echo "# STEP perf1 rc=$?"; cp .qa_logs/perf_check_scene.log .qa_logs/s27_v1c_perf1.log; TLS_FRAMES_ABLATE=1 TLS_FRAMES_VIEWS=03_street,05_skyline,06_courtyard,07_facade,08_sign bash tools/qa_sim/density_frames soviet3 182a86b suburbs,residential,warehouses 1500; echo "# STEP frames rc=$?"; bash tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn 300; echo "# STEP perf2 rc=$?"
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP compile rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] DONE checks=5 fails=0
+  closeout_check rc=0 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] DONE checks=6 fails=0
+  closeout_check rc=0 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/perf_check_scene.tscn rc=0 (log: .qa_logs/perf_check_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP perf1 rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_soviet3.log, 15 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP frames rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/perf_check_scene.tscn rc=1 (log: .qa_logs/perf_check_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP perf2 rc=1
+# EXIT=0

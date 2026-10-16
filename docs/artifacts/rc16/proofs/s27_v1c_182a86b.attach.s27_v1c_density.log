@@ -1,0 +1,29 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+[closeout] ok   the player spawned
+[dens] district=suburbs blocks=9 min_solid=4 (without the dressing 0) min_scatter=12 (0) min_lamps=4
+[dens] district=residential blocks=9 min_solid=3 (without the dressing 0) min_scatter=12 (0) min_lamps=4
+[dens] district=park blocks=9 min_solid=2 (without the dressing 0) min_scatter=16 (0) min_lamps=4
+[dens] district=school blocks=9 min_solid=5 (without the dressing 0) min_scatter=12 (0) min_lamps=4
+[dens] district=hospital blocks=9 min_solid=4 (without the dressing 0) min_scatter=5 (0) min_lamps=4
+[dens] district=gas_station blocks=9 min_solid=6 (without the dressing 0) min_scatter=10 (0) min_lamps=4
+[dens] district=police blocks=9 min_solid=6 (without the dressing 0) min_scatter=6 (0) min_lamps=4
+[dens] district=warehouses blocks=9 min_solid=7 (without the dressing 0) min_scatter=8 (0) min_lamps=4
+[dens] district=industrial blocks=9 min_solid=7 (without the dressing 0) min_scatter=8 (0) min_lamps=4
+[dens] district=substation blocks=9 min_solid=3 (without the dressing 0) min_scatter=5 (0) min_lamps=4
+[dens] district=power_station blocks=9 min_solid=6 (without the dressing 0) min_scatter=6 (0) min_lamps=4
+[closeout] ok   FOLIAGE1 canopies: a sway shader (true) of 0.08 m, 0.00 m with Motion Comfort and 0.08 m after, in the old dark teal (true)
+[closeout] ok   POOL1 lamp pools: the pools of the lamps and the halo of the landmark are not drawn at the DARK stage (true) and are drawn from the next (true)
+[closeout] ok   FOG1 ground fog: 3 cards in a fog district, 0 in the suburbs, 0 at the Low tier
+[closeout] ok   DENS1 density: every block of every district holds 2 solid props, 4 scattered pieces and 2 lamps at least (under the floor: none), 11 of 11 districts have a landmark and 11 a lit rest spot
+[closeout] ok   MANH1 manholes: 11 of 11 districts hold an iron cover in the road with a thread of steam
+[closeout] DONE checks=6 fails=0
+ERROR: 1 RID allocations of type 'PN13RendererDummy14TextureStorage12DummyTextureE' were leaked at exit.
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 38 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

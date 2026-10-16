@@ -1,0 +1,53 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[density] start label=probe1 hash=67718d1 ids=[&"suburbs", &"residential"] nodes=1106 objects=3969 orphans=6 tex_mib=59.0 vid_mib=86.6 static_mib=101.0
+[probe] stream pass=density district=suburbs ok=true load_ms=0.5 settled_ms=68.5 hitches=1 max_frame_ms=52.2 over_budget_ms=18.9 nodes=1106 objects=3969 orphans=6 tex_mib=59.0 vid_mib=86.6 static_mib=101.1 stats={"district":"suburbs","enemies_ms":15.674,"loot_ms":37.685,"props_ms":154.352,"scene_ms":137.087,"streets_ms":1.734,"total_ms":242.761}
+[density] state district=suburbs view=03_street weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame suburbs_03_street_probe1_67718d1_20261016T154725Z.jpg
+[density] state district=suburbs view=06_courtyard weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame suburbs_06_courtyard_probe1_67718d1_20261016T154726Z.jpg
+[density] state district=suburbs view=07_facade weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame suburbs_07_facade_probe1_67718d1_20261016T154727Z.jpg
+[density] signs district=suburbs count=5 atlas=1024x384 ink_samples=1270 first=(-13.32838, 1.2, -31.93) facing=(0.0, 0.0, 1.0)
+[density] state district=suburbs view=08_sign weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=true
+[density] frame suburbs_08_sign_probe1_67718d1_20261016T154728Z.jpg
+[density] probe suburbs facade glow=(0.07, 0.09, 0.09) gain=1.05 detail=2.0 instances=114 colours=true
+[density] probe wall facade gain 0.0: mean rgb 24.5 24.5 24.5
+[density] probe wall facade gain 1.0: mean rgb 24.6 24.6 24.6
+[density] probe wall facade gain 3.0: mean rgb 29.4 33.7 32.7
+[density] probe wall facade gain 10.0: mean rgb 60.9 63.9 60.6
+[density] probe wall constant emission (0.2, 0.1, 0): mean rgb 27.4 24.6 24.6
+[density] probe wall instance colour x4: mean rgb 38.7 45.1 41.0
+[density] probe wall standard emission (0.07, 0.09, 0.09): mean rgb 24.5 24.5 24.5
+[density] probe wall standard emission x4: mean rgb 35.3 42.0 40.0
+[density] perf district=suburbs dressing=with draw_calls=30 primitives=39392 objects_in_frame=30
+[probe] stream pass=density district=residential ok=true load_ms=711.9 settled_ms=851.7 hitches=3 max_frame_ms=129.1 over_budget_ms=152.3 nodes=1123 objects=4030 orphans=6 tex_mib=58.7 vid_mib=88.3 static_mib=103.4 stats={"district":"residential","enemies_ms":6.083,"loot_ms":19.221,"props_ms":248.983,"scene_ms":1.005,"streets_ms":1.674,"total_ms":54.077}
+[density] state district=residential view=03_street weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame residential_03_street_probe1_67718d1_20261016T154734Z.jpg
+[density] state district=residential view=06_courtyard weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame residential_06_courtyard_probe1_67718d1_20261016T154734Z.jpg
+[density] state district=residential view=07_facade weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame residential_07_facade_probe1_67718d1_20261016T154735Z.jpg
+[density] signs district=residential count=5 atlas=1024x512 ink_samples=2732 first=(1.192242, 1.2, 31.93) facing=(-0.0, 0.0, -1.0)
+[density] state district=residential view=08_sign weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=true
+[density] frame residential_08_sign_probe1_67718d1_20261016T154736Z.jpg
+[density] probe residential facade glow=(0.085, 0.085, 0.115) gain=1.05 detail=2.0 instances=325 colours=true
+[density] probe wall facade gain 0.0: mean rgb 24.6 24.6 24.6
+[density] probe wall facade gain 1.0: mean rgb 24.6 24.6 24.7
+[density] probe wall facade gain 3.0: mean rgb 31.2 32.1 35.9
+[density] probe wall facade gain 10.0: mean rgb 67.5 65.6 65.5
+[density] probe wall constant emission (0.2, 0.1, 0): mean rgb 27.7 24.6 24.6
+[density] probe wall instance colour x4: mean rgb 43.6 44.1 49.6
+[density] probe wall standard emission (0.07, 0.09, 0.09): mean rgb 24.5 24.5 24.5
+[density] probe wall standard emission x4: mean rgb 36.5 43.6 41.5
+[density] perf district=residential dressing=with draw_calls=31 primitives=43114 objects_in_frame=31
+[density] DONE label=probe1 hash=67718d1
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 39 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

@@ -1,0 +1,59 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[density] start label=soviet4 hash=1446ab1 ids=[&"suburbs", &"residential", &"warehouses"] nodes=1108 objects=3984 orphans=6 tex_mib=59.0 vid_mib=86.6 static_mib=101.2
+[probe] stream pass=density district=suburbs ok=true load_ms=0.3 settled_ms=47.2 hitches=0 max_frame_ms=50.0 over_budget_ms=16.8 nodes=1108 objects=3984 orphans=6 tex_mib=59.0 vid_mib=86.6 static_mib=101.3 stats={"district":"suburbs","enemies_ms":6.535,"loot_ms":22.944,"props_ms":133.238,"scene_ms":62.41,"streets_ms":1.401,"total_ms":148.466}
+[density] state district=suburbs view=03_street weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame suburbs_03_street_soviet4_1446ab1_20261016T160601Z.jpg
+[density] state district=suburbs view=05_skyline weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame suburbs_05_skyline_soviet4_1446ab1_20261016T160602Z.jpg
+[density] state district=suburbs view=06_courtyard weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame suburbs_06_courtyard_soviet4_1446ab1_20261016T160603Z.jpg
+[density] state district=suburbs view=07_facade weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] wall district=suburbs gain=0.48 floor=24.6 lit=45.8 lift=21.2
+[density] frame suburbs_07_facade_soviet4_1446ab1_20261016T160604Z.jpg
+[density] signs district=suburbs count=5 atlas=1024x384 ink_samples=1270 first=(-13.32838, 1.2, -31.93) facing=(0.0, 0.0, 1.0)
+[density] state district=suburbs view=08_sign weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=true
+[density] frame suburbs_08_sign_soviet4_1446ab1_20261016T160605Z.jpg
+[density] ablate district=suburbs targets=5 pairs=8 cost_ms median=-0.02 lowest=-4.05 highest=1.47
+[density] perf district=suburbs dressing=with draw_calls=102 primitives=74198 objects_in_frame=102
+[probe] stream pass=density district=residential ok=true load_ms=494.0 settled_ms=1147.8 hitches=5 max_frame_ms=143.2 over_budget_ms=433.5 nodes=1125 objects=4039 orphans=6 tex_mib=58.7 vid_mib=88.3 static_mib=103.7 stats={"district":"residential","enemies_ms":5.173,"loot_ms":17.442,"props_ms":102.384,"scene_ms":1.124,"streets_ms":1.444,"total_ms":47.234}
+[density] state district=residential view=03_street weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame residential_03_street_soviet4_1446ab1_20261016T160628Z.jpg
+[density] state district=residential view=05_skyline weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame residential_05_skyline_soviet4_1446ab1_20261016T160629Z.jpg
+[density] state district=residential view=06_courtyard weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame residential_06_courtyard_soviet4_1446ab1_20261016T160630Z.jpg
+[density] state district=residential view=07_facade weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] wall district=residential gain=0.48 floor=24.5 lit=41.0 lift=16.5
+[density] frame residential_07_facade_soviet4_1446ab1_20261016T160631Z.jpg
+[density] signs district=residential count=5 atlas=1024x512 ink_samples=2732 first=(1.192242, 1.2, 31.93) facing=(-0.0, 0.0, -1.0)
+[density] state district=residential view=08_sign weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=true
+[density] frame residential_08_sign_soviet4_1446ab1_20261016T160632Z.jpg
+[density] ablate district=residential targets=5 pairs=8 cost_ms median=0.85 lowest=-2.80 highest=4.37
+[density] perf district=residential dressing=with draw_calls=122 primitives=108020 objects_in_frame=122
+[probe] stream pass=density district=warehouses ok=true load_ms=308.6 settled_ms=427.3 hitches=2 max_frame_ms=148.6 over_budget_ms=152.1 nodes=1146 objects=4094 orphans=6 tex_mib=60.7 vid_mib=90.3 static_mib=106.8 stats={"district":"warehouses","enemies_ms":8.463,"loot_ms":21.11,"props_ms":119.538,"scene_ms":3.105,"streets_ms":1.512,"total_ms":57.23}
+[density] state district=warehouses view=03_street weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame warehouses_03_street_soviet4_1446ab1_20261016T160654Z.jpg
+[density] state district=warehouses view=05_skyline weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame warehouses_05_skyline_soviet4_1446ab1_20261016T160655Z.jpg
+[density] state district=warehouses view=06_courtyard weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame warehouses_06_courtyard_soviet4_1446ab1_20261016T160656Z.jpg
+[density] state district=warehouses view=07_facade weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] wall district=warehouses gain=0.48 floor=28.1 lit=28.0 lift=-0.1
+[density] FAIL the facade of warehouses shows -0.1 levels over the black floor, 8 at least
+[density] frame warehouses_07_facade_soviet4_1446ab1_20261016T160657Z.jpg
+[density] signs district=warehouses count=5 atlas=1024x384 ink_samples=1434 first=(19.36038, 1.2, 31.93) facing=(-0.0, 0.0, -1.0)
+[density] state district=warehouses view=08_sign weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=true
+[density] frame warehouses_08_sign_soviet4_1446ab1_20261016T160658Z.jpg
+[density] ablate district=warehouses targets=5 pairs=8 cost_ms median=-0.57 lowest=-6.29 highest=1.48
+[density] perf district=warehouses dressing=with draw_calls=129 primitives=83028 objects_in_frame=129
+[density] DONE label=soviet4 hash=1446ab1
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 44 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
