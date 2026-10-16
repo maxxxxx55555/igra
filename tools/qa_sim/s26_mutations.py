@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """AF2 for Session 26, one launch row: undo one fix or one handler of the pass per check and see that exactly that check fails.
 
-usage: python tools/qa_sim/s26_mutations.py run [--tag s26]   applies each set, runs the s26 closeout group through proof_run --launch (one chain), restores the files byte for byte, judges
+usage: python tools/qa_sim/s26_mutations.py run [--tag s26] [--audio]   applies each set, runs the s26 closeout group through proof_run --launch (one chain), restores the files byte for byte, judges;
+                                                                          --audio adds the windowed audio truth gate on the unmutated tree as the last step of the same chain
        python tools/qa_sim/s26_mutations.py judge LOG0 LOG1    re-judges the two saved runs (no engine)
        python tools/qa_sim/s26_mutations.py apply N | restore  only the two halves, for a chain that runs the group itself (the tree must be clean before `apply`)
        python tools/qa_sim/s26_mutations.py --demo
@@ -100,7 +101,7 @@ def verdict(texts):
     return rows, bad
 
 
-def run(tag):
+def run(tag, audio=False):
     dirty = [x for x in subprocess.run(["git", "status", "--porcelain"], cwd=ROOT, capture_output=True, text=True).stdout.splitlines() if not x.startswith("??")]
     if dirty:
         raise SystemExit("the tree has modified tracked files, commit first: %s" % dirty[:3])
@@ -109,9 +110,13 @@ def run(tag):
     for i in range(len(SETS)):
         steps.append("python tools/qa_sim/s26_mutations.py apply %d; bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; "
                      "CLOSEOUT_ONLY=s26 bash tools/qa_sim/closeout_check 400; cp .qa_logs/closeout_check.log .qa_logs/%s_set%d.log; python tools/qa_sim/s26_mutations.py restore" % (i, run_id, i))
+    if audio:
+        steps.append("bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120")
     attach = []
     for i in range(len(SETS)):
         attach += ["--attach", ".qa_logs/%s_set%d.log" % (run_id, i)]
+    if audio:
+        attach += ["--attach", ".qa_logs/audio_truth_gate_scene.log"]
     try:
         subprocess.run(["bash", "tools/qa_sim/proof_run", "--launch"] + attach + [run_id, "--", "bash", "-c", "; ".join(steps)], cwd=ROOT)
     finally:
@@ -157,5 +162,5 @@ if __name__ == "__main__":
         print("s26_mutations: restore done")
         sys.exit(0)
     if args and args[0] == "run":
-        sys.exit(run(args[args.index("--tag") + 1] if "--tag" in args else "s26"))
-    sys.exit("usage: s26_mutations.py run [--tag s26] | apply N | restore | judge LOG0 LOG1 | --demo")
+        sys.exit(run(args[args.index("--tag") + 1] if "--tag" in args else "s26", "--audio" in args))
+    sys.exit("usage: s26_mutations.py run [--tag s26] [--audio] | apply N | restore | judge LOG0 LOG1 | --demo")
