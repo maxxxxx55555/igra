@@ -3459,5 +3459,16 @@
   ],
   "frames": [],
   "commit": "f8224aa"
+ },
+ {
+  "id": "S26-STATIC",
+  "claim": "The static gates on the commit that holds the documents of Session 26 (`90793d3`): 63 of 63, the frame gate, the citation gate and the proofs audit among them.",
+  "cmd": "bash tools/check.sh --static",
+  "proof": "s26_static",
+  "quotes": [
+   "Всё зелёное. Проверок пройдено: 63"
+  ],
+  "frames": [],
+  "commit": "90793d3"
  }
 ]
