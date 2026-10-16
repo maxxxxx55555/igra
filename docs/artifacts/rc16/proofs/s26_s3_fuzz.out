@@ -1,0 +1,7 @@
+# proof s26_s3_fuzz
+# utc 20261016T033839Z
+# head 387cbd9 (uncommitted paths: 2)
+# env none
+# cmd python tools/qa_sim/i18n_placeholder_fuzz.py --check
+i18n_placeholder_fuzz: 1560 key(s), 497 call(s), 0 finding(s)
+# EXIT=0

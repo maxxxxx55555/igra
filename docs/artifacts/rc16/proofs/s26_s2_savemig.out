@@ -1,0 +1,7 @@
+# proof s26_s2_savemig
+# utc 20261016T033838Z
+# head 387cbd9 (uncommitted paths: 1)
+# env none
+# cmd python tools/qa_sim/save_migration_sim.py --log docs/artifacts/rc16/proofs/s26_all_60d1228.attach.gate_closeout_check_scene.log
+save_migration_sim: SAVE_VERSION 3, BACKUP_DEPTH 3, 18 case(s) read, 0 finding(s)
+# EXIT=0

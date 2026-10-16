@@ -1,0 +1,7 @@
+# proof s26_s5_ngplus
+# utc 20261016T033841Z
+# head 387cbd9 (uncommitted paths: 4)
+# env none
+# cmd python tools/qa_sim/ngplus_table.py
+ngplus_table: 6 modifier(s), 11 knob(s), 9 accessor(s), 0 finding(s)
+# EXIT=0

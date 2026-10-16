@@ -125,3 +125,4 @@ n	utc	head	id	exit	command
 124	20261016T030636Z	60d1228	s26_all_60d1228	1	bash tools/check.sh --all
 125	20261016T032337Z	5c5d6da	s26_mutations	0	bash -c python tools/qa_sim/s26_mutations.py apply 0; bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; CLOSEOUT_ONLY=s26 bash tools/qa_sim/closeout_check 400; cp .qa_logs/closeout_check.log .qa_logs/s26_mutations_set0.log; python tools/qa_sim/s26_mutations.py restore; python tools/qa_sim/s26_mutations.py apply 1; bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; CLOSEOUT_ONLY=s26 bash tools/qa_sim/closeout_check 400; cp .qa_logs/closeout_check.log .qa_logs/s26_mutations_set1.log; python tools/qa_sim/s26_mutations.py restore
 126	20261016T032543Z	dd61d07	s26_af2_pre	1	bash tools/qa_sim/closeout_check 300
+127	20261016T032640Z	387cbd9	s26_bot_387cbd9	0	bash tools/qa_sim/autoplay_bot
