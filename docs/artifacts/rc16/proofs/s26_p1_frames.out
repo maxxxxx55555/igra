@@ -1,0 +1,90 @@
+# proof s26_p1_frames
+# utc 20261016T045021Z
+# head f87504e (uncommitted paths: 0)
+# env none
+# cmd python C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s26_p1_frames.py .
+"""Session 26 (P1): what the release frames show, measured. For each state of docs/stills/ultimate (the frames of `0752c9b`, the set before this pass) and of docs/stills/universe
+(the frames of `ccc7669`, the set after it): the mean luma, the share of pixels whose three channels are all 240 or more ("near white": the cream slab of the lit road and the hit
+flash) and the share whose three channels are all 8 or less ("near black"). Then the two measures the polish plan cites: the contrast of the level-up toast of state 02 (the brightest
+against the darkest three pixels of its box, WCAG 2 relative luminance) and the brass patch of state 04 across its vertical edge. Read-only; prints itself first.
+usage: python -I s26_p1_frames.py <repo>"""
+import pathlib
+import re
+import sys
+
+import numpy as np
+from PIL import Image
+
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+root = pathlib.Path(sys.argv[1]).resolve()
+NAME = re.compile(r"^(?P<state>\d\d_[a-z_]+?)_after_(?P<hash>[0-9a-f]+)_(?P<utc>\d{8}T\d{6}Z)\.png$")
+
+
+def frames(d):
+    out = {}
+    for f in sorted((root / "docs" / "stills" / d).glob("*.png")):
+        m = NAME.match(f.name)
+        if m:
+            out[m.group("state")] = f
+    return out
+
+
+def lin(c):
+    c = np.array(c, float) / 255.0
+    return np.where(c <= 0.04045, c / 12.92, ((c + 0.055) / 1.055) ** 2.4)
+
+
+def lum(rgb):
+    return 0.2126 * lin(rgb[0]) + 0.7152 * lin(rgb[1]) + 0.0722 * lin(rgb[2])
+
+
+def contrast(a, b):
+    la, lb = lum(a), lum(b)
+    return (max(la, lb) + 0.05) / (min(la, lb) + 0.05)
+
+
+def stats(path):
+    a = np.asarray(Image.open(path).convert("RGB")).astype(float)
+    luma = a @ np.array([0.2126, 0.7152, 0.0722])
+    return luma.mean(), (a.min(axis=2) >= 240).mean() * 100, (a.max(axis=2) <= 8).mean() * 100
+
+
+before, after = frames("ultimate"), frames("universe")
+print("%-24s %-8s %7s %11s %11s   %s" % ("state", "set", "luma", "near white%", "near black%", "file"))
+for state in sorted(set(before) | set(after)):
+    for label, d in (("before", before), ("after", after)):
+        if state in d:
+            l, w, k = stats(d[state])
+            print("%-24s %-8s %7.1f %11.2f %11.2f   %s" % (state, label, l, w, k, d[state].name))
+box = (478, 398, 565, 416)
+for label, d in (("before", before), ("after", after)):
+    a = np.asarray(Image.open(d["02_district_day_full"]).convert("RGB").crop(box)).astype(float).reshape(-1, 3)
+    order = (a @ np.array([0.2126, 0.7152, 0.0722])).argsort()
+    hi, lo = a[order[-3:]].mean(axis=0), a[order[:3]].mean(axis=0)
+    print("toast of 02_district_day_full (%s): brightest %s, darkest %s, contrast %.2f:1" % (label, hi.astype(int).tolist(), lo.astype(int).tolist(), contrast(hi, lo)))
+im = Image.open(before["04_combat"]).convert("RGB")
+print("brass patch of 04_combat (before) along y=60: x=330 %s, x=348 %s, x=350 %s, x=352 %s, x=360 %s" % tuple(list(im.getpixel((x, 60))) for x in (330, 348, 350, 352, 360)))
+
+--- run
+state                    set         luma near white% near black%   file
+01_main_menu             before      61.4        0.00        0.00   01_main_menu_after_0752c9b_20261015T014952Z.png
+01_main_menu             after       60.3        0.00        0.00   01_main_menu_after_ccc7669_20261016T035444Z.png
+02_district_day_full     before      39.0        0.70        4.02   02_district_day_full_after_0752c9b_20261015T015008Z.png
+02_district_day_full     after       39.9        0.60        3.89   02_district_day_full_after_ccc7669_20261016T035459Z.png
+03_district_night_dark   before      29.4        0.00        5.05   03_district_night_dark_after_0752c9b_20261015T015003Z.png
+03_district_night_dark   after       29.5        0.00        5.05   03_district_night_dark_after_ccc7669_20261016T035454Z.png
+04_combat                before      86.2        6.17        2.39   04_combat_after_0752c9b_20261015T015013Z.png
+04_combat                after       76.0        4.09        2.80   04_combat_after_ccc7669_20261016T035503Z.png
+05_boss                  before      52.8        0.00        0.00   05_boss_after_0752c9b_20261015T015015Z.png
+05_boss                  after       48.2        0.01        0.00   05_boss_after_ccc7669_20261016T035505Z.png
+06_victory_ngplus        before      31.1        0.00        0.00   06_victory_ngplus_after_0752c9b_20261015T015018Z.png
+06_victory_ngplus        after       30.6        0.00        0.00   06_victory_ngplus_after_ccc7669_20261016T035508Z.png
+07_skill_tree            before      27.2        0.00        0.00   07_skill_tree_after_0752c9b_20261015T015009Z.png
+07_skill_tree            after       27.2        0.00        0.00   07_skill_tree_after_ccc7669_20261016T035500Z.png
+08_shop                  before      24.4        0.00        0.00   08_shop_after_0752c9b_20261015T015010Z.png
+08_shop                  after       24.5        0.00        0.00   08_shop_after_ccc7669_20261016T035501Z.png
+toast of 02_district_day_full (before): brightest [254, 255, 252], darkest [214, 207, 195], contrast 1.53:1
+toast of 02_district_day_full (after): brightest [255, 255, 255], darkest [110, 102, 104], contrast 5.53:1
+brass patch of 04_combat (before) along y=60: x=330 [134, 112, 68], x=348 [131, 109, 69], x=350 [77, 55, 31], x=352 [15, 14, 13], x=360 [7, 7, 7]
+# EXIT=0

@@ -3094,5 +3094,370 @@
   ],
   "frames": [],
   "commit": "c4b8277"
+ },
+ {
+  "id": "S26-S1",
+  "claim": "The achievements simulator on the tree of Session 26: 31 achievements, each with a trigger, 0 findings (the table of `docs/ACHIEVEMENT_REACHABILITY.md` is the read of each one against the code).",
+  "cmd": "python tools/qa_sim/achievements_sim.py",
+  "proof": "s26_s1_achievements",
+  "quotes": [
+   "achievements_sim: 31 achievement(s), 0 finding(s)"
+  ],
+  "frames": [],
+  "commit": "3cad0d5"
+ },
+ {
+  "id": "S26-S2",
+  "claim": "The save migration matrix read against the engine's closeout log of launch 2: save version 3, three backup generations, 18 cases, 0 findings.",
+  "cmd": "python tools/qa_sim/save_migration_sim.py --log docs/artifacts/rc16/proofs/s26_all_60d1228.attach.gate_closeout_check_scene.log",
+  "proof": "s26_s2_savemig",
+  "quotes": [
+   "save_migration_sim: SAVE_VERSION 3, BACKUP_DEPTH 3, 18 case(s) read, 0 finding(s)"
+  ],
+  "frames": [],
+  "commit": "3cad0d5"
+ },
+ {
+  "id": "S26-S3",
+  "claim": "The i18n placeholder fuzz: 1,560 keys and 497 calls over the 13 locales, 0 findings.",
+  "cmd": "python tools/qa_sim/i18n_placeholder_fuzz.py --check",
+  "proof": "s26_s3_fuzz",
+  "quotes": [
+   "i18n_placeholder_fuzz: 1560 key(s), 497 call(s), 0 finding(s)"
+  ],
+  "frames": [],
+  "commit": "3cad0d5"
+ },
+ {
+  "id": "S26-S4",
+  "claim": "The daily challenge simulator with the corrected cap and the selector's walk-past: 60 templates, 7 types, 0 findings.",
+  "cmd": "python tools/qa_sim/daily_sim.py",
+  "proof": "s26_s4_daily",
+  "quotes": [
+   "daily_sim: 60 template(s) of content/daily_challenges.json, 7 type(s), 0 finding(s)"
+  ],
+  "frames": [],
+  "commit": "3cad0d5"
+ },
+ {
+  "id": "S26-S5",
+  "claim": "The New Game+ table from code: 6 modifiers, 11 knobs, 9 accessors, 0 findings.",
+  "cmd": "python tools/qa_sim/ngplus_table.py",
+  "proof": "s26_s5_ngplus",
+  "quotes": [
+   "ngplus_table: 6 modifier(s), 11 knob(s), 9 accessor(s), 0 finding(s)"
+  ],
+  "frames": [],
+  "commit": "3cad0d5"
+ },
+ {
+  "id": "S26-L1",
+  "claim": "Launch 1 (ledger row 123): the full battery on `f6e065f` is red, 8 gates failed.",
+  "cmd": "bash tools/check.sh --all",
+  "proof": "s26_all_f6e065f",
+  "quotes": [
+   "Провалено: 8, пройдено: 80"
+  ],
+  "frames": [],
+  "commit": "f6e065f"
+ },
+ {
+  "id": "S26-L1B",
+  "claim": "The cause of launch 1, in the engine's compile gate: one parse error in `scripts/player/player_3d.gd` (the removed `var code`); the other gates that failed load the player (CORRECTION_LOG 275).",
+  "cmd": "bash tools/check.sh --all (the compile gate's log)",
+  "proof": "s26_all_f6e065f",
+  "attach": "gate_compile_gate_scene.log",
+  "quotes": [
+   "Identifier \"code\" not declared in the current scope."
+  ],
+  "frames": [],
+  "commit": "f6e065f"
+ },
+ {
+  "id": "S26-L2",
+  "claim": "Launch 2 (ledger row 124): the same battery on the fixed tree: 87 passed, 1 failed (the frame gate F4, by design until the frames were shot again).",
+  "cmd": "bash tools/check.sh --all",
+  "proof": "s26_all_60d1228",
+  "quotes": [
+   "Провалено: 1, пройдено: 87"
+  ],
+  "frames": [],
+  "commit": "60d1228"
+ },
+ {
+  "id": "S26-L2B",
+  "claim": "The closeout of launch 2: 482 checks, 0 fails, the ten checks of the group `s26` among them.",
+  "cmd": "bash tools/check.sh --all (the closeout's log)",
+  "proof": "s26_all_60d1228",
+  "attach": "gate_closeout_check_scene.log",
+  "quotes": [
+   "[closeout] DONE checks=482 fails=0",
+   "[closeout] ok   ACH15 a death with only the power station lit is Survivor and does not unlock Darkness (ending survivor)"
+  ],
+  "frames": [],
+  "commit": "60d1228"
+ },
+ {
+  "id": "S26-MUT1",
+  "claim": "Launch 3 (ledger row 125), run 1 of the nine mutations: the eight checks named by the eight mutations of the set fail and no other (`docs/artifacts/rc16/s26_mutations.txt`: 9 of 9 BITES).",
+  "cmd": "python tools/qa_sim/s26_mutations.py run --tag s26",
+  "proof": "s26_mutations",
+  "attach": "s26_mutations_set0.log",
+  "quotes": [
+   "[closeout] DONE checks=11 fails=8"
+  ],
+  "frames": [],
+  "commit": "dd61d07"
+ },
+ {
+  "id": "S26-MUT2",
+  "claim": "Launch 3, run 2 (the mutation that hides in the same function as another): ACHRUN2 fails alone.",
+  "cmd": "python tools/qa_sim/s26_mutations.py run --tag s26",
+  "proof": "s26_mutations",
+  "attach": "s26_mutations_set1.log",
+  "quotes": [
+   "[closeout] DONE checks=11 fails=1"
+  ],
+  "frames": [],
+  "commit": "dd61d07"
+ },
+ {
+  "id": "S26-AF2",
+  "claim": "Launch 4 (ledger row 126): on the runtime of `041ce03` the checks ACH15, ACHRUN1 and DAILY2 fail (the survivor death pays Darkness, the marks are kept, day 0 offers the unwinnable template); the post run is the closeout log of launch 2 (`docs/artifacts/rc16/s26_af2_both_ways.txt`: AF2 PASS ids=3 bad=0).",
+  "cmd": "python tools/qa_sim/af2_both_ways.py --base 041ce03 --only s26 --tag s26 --pre-only",
+  "proof": "s26_af2_pre",
+  "attach": "closeout_check.log",
+  "quotes": [
+   "[closeout] FAIL ACHRUN1",
+   "[closeout] FAIL DAILY2",
+   "[closeout] DONE checks=11 fails=3"
+  ],
+  "frames": [],
+  "commit": "387cbd9"
+ },
+ {
+  "id": "S26-BOT",
+  "claim": "Launch 5 (ledger row 127), the IRON RULE after a behaviour change: the 3-seed autoplay bot wins 3 of 3 with no softlock.",
+  "cmd": "bash tools/qa_sim/autoplay_bot",
+  "proof": "s26_bot_387cbd9",
+  "quotes": [
+   "autoplay bot: 3/3 seeds won, 0 softlock(s)"
+  ],
+  "frames": [],
+  "commit": "387cbd9"
+ },
+ {
+  "id": "S26-PERF",
+  "claim": "Launch 6 (ledger row 128), the windowed perf gate at `ccc7669`: D1 152 draw calls and D11 142, p95 17.48 and 19.05 ms, no budget exceeded.",
+  "cmd": "bash tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn 300",
+  "proof": "s26_windowed_ccc7669",
+  "attach": "perf_check_scene.log",
+  "quotes": [
+   "[perf] budget D1<200: 152; D11<350: 142; p95<=33 ms: 17.48 and 19.05; video memory<=512 MiB: 125.0; over budget: []",
+   "[perf] DONE fails=0"
+  ],
+  "frames": [],
+  "commit": "ccc7669"
+ },
+ {
+  "id": "S26-AUDIO1",
+  "claim": "Launch 6, the windowed audio truth gate: the Music bus reads +1.3 dB against the -1.5 dB ceiling (CLIP-FAIL).",
+  "cmd": "bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120",
+  "proof": "s26_windowed_ccc7669",
+  "attach": "audio_truth_gate_scene.log",
+  "quotes": [
+   "[audio-truth] Music bus peak=1.3dB (ceiling <=-1.5dB) CLIP-FAIL"
+  ],
+  "frames": [],
+  "commit": "ccc7669"
+ },
+ {
+  "id": "S26-AUDIO2",
+  "claim": "Launch 7 (ledger row 129), the gate again on red: +1.9 dB.",
+  "cmd": "bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120",
+  "proof": "s26_audio2_3d8fba7",
+  "attach": "audio_truth_gate_scene.log",
+  "quotes": [
+   "[audio-truth] Music bus peak=1.9dB (ceiling <=-1.5dB) CLIP-FAIL"
+  ],
+  "frames": [],
+  "commit": "3d8fba7"
+ },
+ {
+  "id": "S26-AUDIO3",
+  "claim": "The readings the committed proofs hold before the limiter: 23, of which 10 are over the ceiling (+0.5 to +1.9 dB) and 13 under it: the peak is bimodal on one code tree (CORRECTION_LOG 114).",
+  "cmd": "python -I s26_audio_readings.py .",
+  "proof": "s26_audio_readings",
+  "quotes": [
+   "readings before the limiter: 23, over the ceiling 10 (+0.5 to +1.9 dB), under it 13 (-12.4 to -9.3 dB)"
+  ],
+  "frames": [],
+  "commit": "6734f9c"
+ },
+ {
+  "id": "S26-MUT3",
+  "claim": "Launch 8 (ledger row 130), run 1 of the ten mutations (AUD6, the limiter, joins the nine): nine checks fail on their own mutation and no other.",
+  "cmd": "python tools/qa_sim/s26_mutations.py run --tag s26b --audio",
+  "proof": "s26b_mutations",
+  "attach": "s26b_mutations_set0.log",
+  "quotes": [
+   "[closeout] DONE checks=12 fails=9"
+  ],
+  "frames": [],
+  "commit": "b8eaeef"
+ },
+ {
+  "id": "S26-MUT4",
+  "claim": "Launch 8, run 2: ACHRUN2 fails alone (`docs/artifacts/rc16/s26b_mutations.txt`: 10 of 10 BITES).",
+  "cmd": "python tools/qa_sim/s26_mutations.py run --tag s26b --audio",
+  "proof": "s26b_mutations",
+  "attach": "s26b_mutations_set1.log",
+  "quotes": [
+   "[closeout] DONE checks=12 fails=1"
+  ],
+  "frames": [],
+  "commit": "b8eaeef"
+ },
+ {
+  "id": "S26-AUDIO4",
+  "claim": "Launch 8, the windowed audio gate on the unmutated tree with the limiter: the Music bus reads -2.0 dB, the limiter's ceiling, in the context that read +1.3 and +1.9 dB without it.",
+  "cmd": "bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120",
+  "proof": "s26b_mutations",
+  "attach": "audio_truth_gate_scene.log",
+  "quotes": [
+   "[audio-truth] Music bus peak=-2.0dB (ceiling <=-1.5dB) ok",
+   "[audio-truth] PASS overall"
+  ],
+  "frames": [],
+  "commit": "b8eaeef"
+ },
+ {
+  "id": "S26-FRAMES",
+  "claim": "Launch 6, the eight release frames at `ccc7669` (18 frames written by the runner, the eight of the default set stamped into `docs/stills/universe`), read; the frame gate F4 holds them against `HEAD` through three scope rows.",
+  "cmd": "TLS_FRAMES_OUT=res://.qa_logs/frames_s26/ bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 900",
+  "proof": "s26_windowed_ccc7669",
+  "attach": "final_frames_scene.log",
+  "quotes": [
+   "[final] DONE frames=18"
+  ],
+  "frames": [
+   "docs/stills/universe/01_main_menu_after_ccc7669_20261016T035444Z.png",
+   "docs/stills/universe/02_district_day_full_after_ccc7669_20261016T035459Z.png",
+   "docs/stills/universe/03_district_night_dark_after_ccc7669_20261016T035454Z.png",
+   "docs/stills/universe/04_combat_after_ccc7669_20261016T035503Z.png",
+   "docs/stills/universe/05_boss_after_ccc7669_20261016T035505Z.png",
+   "docs/stills/universe/06_victory_ngplus_after_ccc7669_20261016T035508Z.png",
+   "docs/stills/universe/07_skill_tree_after_ccc7669_20261016T035500Z.png",
+   "docs/stills/universe/08_shop_after_ccc7669_20261016T035501Z.png"
+  ],
+  "commit": "ccc7669"
+ },
+ {
+  "id": "S26-P1",
+  "claim": "The toast of the district frame, measured the same way before and after the outline: 1.53:1 to 5.53:1 (`docs/FINAL_POLISH_PLAN.md`).",
+  "cmd": "python -I s26_p1_frames.py .",
+  "proof": "s26_p1_frames",
+  "quotes": [
+   "toast of 02_district_day_full (before): brightest [254, 255, 252], darkest [214, 207, 195], contrast 1.53:1",
+   "toast of 02_district_day_full (after): brightest [255, 255, 255], darkest [110, 102, 104], contrast 5.53:1"
+  ],
+  "frames": [],
+  "commit": "ccc7669"
+ },
+ {
+  "id": "S26-FINAL",
+  "claim": "Launch 9 (ledger row 131), the full battery on the tree that ships (`6734f9c`): 89 passed, 0 failed, the audio-bus graph (3 effects on the Music bus) among them.",
+  "cmd": "bash tools/check.sh --all",
+  "proof": "s26_final_all_6734f9c",
+  "quotes": [
+   "Проверок пройдено: 89",
+   "аудио: граф шин A01"
+  ],
+  "frames": [],
+  "commit": "6734f9c"
+ },
+ {
+  "id": "S26-FINAL2",
+  "claim": "The closeout of launch 9: 483 checks, 0 fails; AUD6 reads the limiter in slot 2 of 4 with a ceiling of -2.0.",
+  "cmd": "bash tools/check.sh --all (the closeout's log)",
+  "proof": "s26_final_all_6734f9c",
+  "attach": "gate_closeout_check_scene.log",
+  "quotes": [
+   "[closeout] DONE checks=483 fails=0",
+   "AUD6 the Music bus ends in an enabled limiter under the -1.5 dB ceiling of the audio truth gate (slot 2 of 4, ceiling -2.0)"
+  ],
+  "frames": [],
+  "commit": "6734f9c"
+ },
+ {
+  "id": "S26-EXPORT",
+  "claim": "Export 1 of 2 (ledger row 132): the Android export of `f8224aa` ran to its end.",
+  "cmd": "export-release Android build/tls.aab",
+  "proof": "s26_export_f8224aa",
+  "quotes": [
+   "[ DONE ] export"
+  ],
+  "frames": [],
+  "commit": "f8224aa"
+ },
+ {
+  "id": "S26-AAB",
+  "claim": "The bundle `build/tls.aab`: 136,644,920 bytes, signed with the upload key, 4 entries gone against the bundle of `ebc1acc` (the two quarantined scripts), 0 new, 45 with other bytes.",
+  "cmd": "python tools/qa_sim/aab_check.py build/tls.aab --secrets --against <ebc1acc>",
+  "proof": "s26_aab_check_f8224aa",
+  "quotes": [
+   "size    136644920 bytes",
+   "sha256  a51ec3da7f8063f05fd844f54c3f0bff6823c39fb13b6aa35e035c4e3b2836db",
+   "jar     jar verified.",
+   "signer_match=yes",
+   "4 entries gone, 0 new, 45 with other bytes",
+   "aab_check: PASS"
+  ],
+  "frames": [],
+  "commit": "f8224aa"
+ },
+ {
+  "id": "S26-AAB2",
+  "claim": "The manifest of the bundle reads version code 3.",
+  "cmd": "python -I aab_manifest.py build/tls.aab",
+  "proof": "s26_aab_manifest_f8224aa",
+  "quotes": [
+   "'versionCode': 3"
+  ],
+  "frames": [],
+  "commit": "f8224aa"
+ },
+ {
+  "id": "S26-AAB3",
+  "claim": "The packed bus layout names `AudioEffectHardLimiter` twice: the limiter is in the bundle.",
+  "cmd": "python -I -B -c (the entries of build/tls.aab)",
+  "proof": "s26_aab_layout_f8224aa",
+  "quotes": [
+   "mentions of AudioEffectHardLimiter: 2"
+  ],
+  "frames": [],
+  "commit": "f8224aa"
+ },
+ {
+  "id": "S26-AAB4",
+  "claim": "Every file the shipped scripts name is in the bundle, and no packed file is not the game.",
+  "cmd": "python tools/qa_sim/export_refs_check.py --bundle build/tls.aab; python tools/qa_sim/release_export_check.py --aab build/tls.aab",
+  "proof": "s26_aab_refs_f8224aa",
+  "quotes": [
+   "484 shipped file(s) read for the Android preset against the bundle, 0 violation(s), 0 note(s)"
+  ],
+  "frames": [],
+  "commit": "f8224aa"
+ },
+ {
+  "id": "S26-AAB5",
+  "claim": "`project.binary` of the bundle is the one of the previous bundle (21,759 bytes, CRC `e9e6a411`), the setting `default_bus_layout` absent from both: the default path applies (CORRECTION_LOG 193).",
+  "cmd": "python -I s26_projectbinary.py <ebc1acc> build/tls.aab",
+  "proof": "s26_aab_projectbinary_f8224aa",
+  "quotes": [
+   "build/tls.aab: project.binary 21759 bytes CRC e9e6a411; the setting absent"
+  ],
+  "frames": [],
+  "commit": "f8224aa"
  }
 ]

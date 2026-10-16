@@ -50,3 +50,21 @@ findings at the end of this pass; the full scan is informational and is the numb
 | D1 142 draw calls, p95 28.79 ms | `docs/PERF_PASS.md:51` | the windowed perf gate | measured at `v8.0.0-shipping`; **false at the final head**: launch 24 (`a4acbb5`, the quality manager off) reads D1 150 draw calls with a p95 of 35.00 ms and D11 140 with 38.63 ms against the budget of 33 ms: the windowed gate is RED (`docs/PERF_PASS.md:19`, section 0b) |
 
 One claim of the sample is false at the final head: the D1 numbers (read again in launch 24, red: the row above). The other that is true of an older tree is the bundle's size, which the second export replaces.
+
+
+## 3. Re-read at the head of Session 26 (`v9.0.0-universe`)
+
+The claims of the sample that depend on code the pass touched, and the ones the pass's directive named, re-derived at `HEAD`. A claim that is false is a row, never a silent edit.
+
+| Claim | Where it is made | Derivation at HEAD | Result |
+|---|---|---|---|
+| saves are HMAC-signed and recover from a backup | `store/press-kit.md:39`, `store/listing.md:61` | `_HMAC_KEY` and `hmac_digest` in `scripts/core/save_system.gd`; `python tools/qa_sim/save_migration_sim.py` (`s26_s2_savemig`): "SAVE_VERSION 3, BACKUP_DEPTH 3, 18 case(s) read, 0 finding(s)" | holds |
+| 31 achievements, each with a trigger | `store/listing.md:62` | `python tools/qa_sim/achievements_sim.py`: 31 and 0 findings; `docs/ACHIEVEMENT_REACHABILITY.md` reads each one against the code and the supply | holds as a count; **two were not as described**: Darkness paid on every death and Quiet as a Mouse and Without a Scratch could be lost for good (CORRECTION_LOG 267 to 269), fixed |
+| 60 daily challenges | `store/listing.md:62` | `content/daily_challenges.json` (60 templates); the selector of `scripts/systems/daily_challenge_manager.gd` | 60 as authored, **58 offered**: `streets_12` and `streets_16` need more lit districts than a run has (11) and the selector walks past them (CORRECTION_LOG 266); the listing's number is the authored one, an owner row |
+| 13 languages, 12 of 12 translated locales | `store/listing.md:132` | `python tools/qa_sim/i18n_truth_gate.py`: "12/12 locales PASS"; `python tools/qa_sim/i18n_placeholder_fuzz.py --check` (`s26_s3_fuzz`): 1,560 keys, 497 calls, 0 findings | holds |
+| the touch layer is checked | `docs/GEMINI_HANDOFF.md` ("34 checks, 0 fails") | `.qa_logs/gate_touch_probe_scene.log` of the final battery: 34 lines `[touch-probe] OK`, `[touch-probe] DONE fails=0` | 34 of 34 holds (an earlier brief's 23 of 23 is the count of an older probe) |
+| the perf budgets D1 < 200 and D11 < 350 draw calls | `docs/PRODUCTION_BIBLE.md:114` | the windowed gate (`s26_windowed_ccc7669`): D1 152, D11 142, p95 17.48 and 19.05 ms, `DONE fails=0` | holds at this head; the Session 23 reading (RED) is not reproduced and stays in `docs/PERF_PASS.md` |
+| the audio never clips (ceiling -1.5 dB on every bus) | `tools/qa_sim/audio_truth_gate.gd` | two windowed runs read the Music bus at +1.3 and +1.9 dB (23 readings on record, 10 over the ceiling and 13 under it, `s26_audio_readings`; CORRECTION_LOG 114); with the limiter of `default_bus_layout.tres` the run reads -2.0 dB (`s26b_mutations`) | **false before, true after** (CORRECTION_LOG 276) |
+| the frames show the code that ships | `tools/qa_sim/af3_frame_check.py` | 8 frames at `ccc7669`, F4 holds against `HEAD` through three scope rows | holds |
+| the signed bundle is 136,644,920 bytes, version code 3 | `docs/RELEASE_ARTIFACTS.md` | `stat build/tls.aab`, `sha256`, `aab_check` (`s26_aab_check_f8224aa`) | 136,644,920 and `a51ec3da7f80`: holds for the bundle of `f8224aa` |
+| the dead code is gone | `docs/CLEANUP_LEDGER.md` section 12 | `s26_c3_deadfuncs_after`: 26 candidates named by no document, each with a citation | 58 functions were left by Sessions 24 and 25 and are deleted (CORRECTION_LOG 270) |

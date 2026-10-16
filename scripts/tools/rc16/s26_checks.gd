@@ -99,7 +99,7 @@ static func _daily_selector(r: Node) -> void:
 		m.set(f, kept[f])
 	r._ok(first == "fits" and again == "fits" and kills == "kills", "DAILY2 the daily selector walks past a template over the %d districts (day 0 %s, day 3 %s) and keeps one with no per-run cap (day 2 %s)" % [cap, first, again, kills])
 
-## The windowed audio truth gate read the Music bus at +1.3 and +1.9 dB on two runs in a row (docs/CORRECTION_LOG.md 102 and 276): the layers and the action sting of a battle sum past the
+## The windowed audio truth gate read the Music bus at +1.3 and +1.9 dB on two runs in a row, in a peak that is bimodal on one code tree (docs/CORRECTION_LOG.md 114 and 276): the layers and the action sting of a battle can sum past the
 ## -1.5 dB ceiling. The layout ends the bus in a hard limiter below that ceiling; only the ducker's Amplify (scripts/systems/audio_ducker.gd) may come after it, a cut and never a boost.
 static func _music_limiter(r: Node) -> void:
 	var bus: int = AudioServer.get_bus_index(&"Music")

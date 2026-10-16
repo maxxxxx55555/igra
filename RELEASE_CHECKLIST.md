@@ -256,7 +256,7 @@ the export/upload steps in those sections once step 4 above is done.
 
 ## 7. Version bump
 
-`export_presets.cfg` reads `version/code=2` / `version/name="1.0"` since Session 23 (code 2, so that the bundle of the pass uploads over the v8 bundle of code 1: `docs/RELEASE_RUNBOOK.md` §2). Raise `version/code` for every upload after the first; the name stays "1.0" for the first release.
+`export_presets.cfg` reads `version/code=3` / `version/name="1.0"` since Session 26 (code 3 for the bundle of `v9.0.0-universe`; the bundles of codes 1 and 2 are superseded: `docs/RELEASE_RUNBOOK.md` §2). Raise `version/code` for every upload after the first; the name stays "1.0" for the first release.
 
 ## 8. Player save transfer ("lost phone") — already live, no owner action
 
@@ -274,3 +274,24 @@ always backed up to `.bak` before an import overwrites it, so an accidental
 import is recoverable the same way a corrupt autosave already is. Nothing
 for you to configure — mention it in the store listing's FAQ/description
 only if you want players to know it exists ahead of time.
+
+## 9. Session 26 owner rows (`v9.0.0-universe`)
+
+The bundle is `build/tls.aab`: **136,644,920 bytes, version code 3, sha256 `a51ec3da7f8063f05fd844f54c3f0bff6823c39fb13b6aa35e035c4e3b2836db`**, built from `f8224aa`
+and read by `tools/qa_sim/aab_check.py` (`jar verified.`, the upload key's certificate, 0 hits of the keystore values). The bundle of version code 2 is superseded (a copy is in
+`..\_BACKUPS\2026-10-16_07-21_bundles`). What an agent session cannot do, in order:
+
+1. **Rotate the credentials** the earlier blocks name (the API key of `opencode.json`, the keystore passwords if they were ever pasted anywhere): unchanged by this pass.
+2. **Upload `build/tls.aab`** to the Play Console (section 5) and publish the privacy policy at a stable URL (section 3).
+3. **Run it on a phone.** Two things changed that only a phone can judge: the Music bus now ends in a limiter at -2 dB (listen to a fight: does the music distort at its
+   loudest beat?), and the level-up and reward toast has a dark outline (read it over a lit street).
+4. **Decide** (each is a row, not a fault): (a) the three unlocks `district_one`, `shadow_slayer` and `secret_hunter` that the catalog does not list (`docs/ACHIEVEMENT_REACHABILITY.md`):
+   make them real achievements (3 names, 3 descriptions, 13 locales, 3 medals) or remove them (300 coins less in the economy); (b) the daily challenge `streets_12` and
+   `streets_16` (the selector never offers them: no run lights 12 districts): write 11-district versions in `content/daily_challenges.json` (the file is hashed in
+   `data/integrity_manifest.json`) or leave them, and whether the listing's "60 daily challenges" should say 58; (c) `data/ng_plus_config.json` (read by no script:
+   `docs/NGPLUS_TABLE.md`): delete it or wire it; (d) the endings art (`assets/store/endings`, planned and unwired); (e) the cream slab of the lit road and the brass halo
+   of the landmarks (`docs/FINAL_POLISH_PLAN.md`: D2 and D3); (f) the 17 scripts nothing reaches and the 26 functions nothing calls that stay on a citation
+   (`docs/CLEANUP_MANIFEST.md` sections 3 and 4.3): build the prop, or let a cleanup take them.
+5. **Read the perf gate on your own device** (section 0's windowed run): this machine read D1 152 draw calls at 17.48 ms p95 and D11 142 at 19.05 ms (green), after a red reading in
+   Session 23 on a loaded machine; the phone is the number that matters.
+6. **Keep the old tags**: `v9.0.0-ultimate` (`68e6c9d`) and `v8.1.0-premium.1` are the releases before this one; `v9.0.0-universe` is the tag of this pass.
