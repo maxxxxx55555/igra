@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 """AF2 both-ways run (rc16): the checks of the pass must FAIL on the code before the fixes and PASS on the code after them.
 
-usage: python tools/qa_sim/af2_both_ways.py --base <rev> [--only rc16] [--tag s21] [--ids ID,ID] [--demo]
+usage: python tools/qa_sim/af2_both_ways.py --base <rev> [--only rc16] [--tag s21] [--ids ID,ID] [--pre-only] [--demo]
        python tools/qa_sim/af2_both_ways.py --analyze [--write] [--tag s21]   (re-judges the two saved runs, from .qa_logs/proofs or the committed docs/artifacts/rc16/proofs;
                                                                     read-only unless --write rewrites docs/artifacts/rc16/af2_both_ways.txt)
 Runs `CLOSEOUT_ONLY=<only> tools/qa_sim/closeout_check 300` twice, each through tools/qa_sim/proof_run:
   pre   every runtime file that differs between <rev> and HEAD is put back to its <rev> content (a file added since <rev> is moved aside, a
         file deleted since is restored); the checks files and the runner stay, so the new checks meet the old game
   post  the tree is put back to HEAD and the same run repeats
+  --pre-only stops after the pre run: the post run is then the closeout log of a `check.sh --all` run, copied to <tag>_af2_post.attach.gate_closeout_check_scene.log and judged by --analyze
 A check id BITES when it is not "ok" before and "ok" after; it is VACUOUS when it is "ok" in both runs; it is BROKEN when it is not "ok"
 after. Raw logs: .qa_logs/proofs/af2_pre.out and af2_post.out (copied to docs/artifacts/rc16/proofs/); the verdict table is printed and
 saved as docs/artifacts/rc16/af2_both_ways.txt. --tag <t> puts "<t>_" before all three names, so a later pass does not overwrite the files a
@@ -161,6 +162,9 @@ def main():
             git("checkout", "HEAD", "--", p, check=False)
         for src in moved:
             pathlib.Path(str(src) + ASIDE).rename(src)
+    if "--pre-only" in args:
+        print("pre run saved as %saf2_pre; judge it with --analyze once %saf2_post exists" % (prefix, prefix))
+        return 0
     post_text = run_closeout(prefix + "af2_post", only)
     return report(base, only, pre_text, post_text, prefix=prefix, only_ids=only_ids)
 
