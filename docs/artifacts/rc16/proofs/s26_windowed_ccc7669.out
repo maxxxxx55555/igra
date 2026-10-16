@@ -1,0 +1,15 @@
+# proof s26_windowed_ccc7669
+# utc 20261016T035310Z
+# head ccc7669 (uncommitted paths: 0)
+# env none
+# cmd bash -c bash tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn 300; bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120; TLS_FRAMES_OUT=res://.qa_logs/frames_s26/ bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 900
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/perf_check_scene.tscn rc=0 (log: .qa_logs/perf_check_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/audio_truth_gate_scene.tscn rc=1 (log: .qa_logs/audio_truth_gate_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/final_frames_scene.tscn rc=0 (log: .qa_logs/final_frames_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+# EXIT=0
