@@ -733,9 +733,6 @@ func compute_velocity(dir_2d: Vector2, state: State = State.WALK) -> Vector3:
 	var spd: float = _speed_for(state)
 	return dir.normalized() * spd
 
-func is_move_blocked() -> bool:
-	return not (process_mode == Node.PROCESS_MODE_INHERIT and not get_tree().paused)
-
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_PREDELETE:
 		if _footstep_dust_node and is_instance_valid(_footstep_dust_node):

@@ -978,6 +978,7 @@ function	scripts/player/flashlight.gd	37	get_flashlight_enabled	DELETE	no occurr
 function	scripts/player/flashlight.gd	39	is_point_lit	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
 function	scripts/player/player_3d.gd	237	get_cone_code	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
 function	scripts/player/player_3d.gd	418	_is_touch_device	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
+function	scripts/player/player_3d.gd	749	is_move_blocked	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
 function	scripts/player/player_3d.gd	752	_move_selftest	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
 function	scripts/player/player_3d.gd	1039	get_strobe_cooldown_ratio	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0
 function	scripts/player/player_3d.gd	1156	set_battery_params	DELETE	no occurrence of the name in any tracked script, scene, resource, tool or document that is not a log	0

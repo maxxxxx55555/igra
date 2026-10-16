@@ -1,6 +1,6 @@
 # Cleanup manifest: Session 26 (`v9.0.0-universe`)
 
-The manifest comes first and the sweep follows it: every file or function the pass touched has a row in `docs/artifacts/rc16/cleanup_manifest_s26.tsv` (1039 rows) with a
+The manifest comes first and the sweep follows it: every file or function the pass touched has a row in `docs/artifacts/rc16/cleanup_manifest_s26.tsv` (1040 rows) with a
 verdict and the evidence for it. Baseline `041ce03` (`v8.1.0-premium.1`). The rule of `CLAUDE.md` holds throughout: a file or function goes only when it is dead *and* not a
 planned feature; a planned feature is one a document that is not a log of what was done names, or an owner row.
 
@@ -10,12 +10,12 @@ planned feature; a planned feature is one a document that is not a log of what w
 |---|---|
 | C1 assets (918 tracked under `assets/`) | 515 KEEP-LIVE, 36 KEEP-QA, 367 KEEP-PLANNED, **0 deleted**: the tool's 86 AUTO-DELETE rows each sit in a directory a planning or hand-off document names (section 2) |
 | C2 scripts reached by nothing (19 of 255) | 2 quarantined (`behavior_node.gd`, `weight_bar.gd`), 17 kept with a citation (section 3); `_QUARANTINE/scripts/world/ftue_generator.gd` deleted |
-| C3 functions never named anywhere (86 candidates) | **57 deleted** (232 function lines), 26 kept with a citation, 3 moved whole with their file; 3 members that only the deleted functions read went too (section 4) |
+| C3 functions never named anywhere (86 candidates, one more after the first round) | **58 deleted** (234 function lines), 26 kept with a citation, 3 moved whole with their file; 3 members that only the deleted functions read went too (section 4) |
 | C4 documents named by no other file (25) | 11 moved to `docs/_archive/` with `docs/_archive/PROVENANCE.md`, 14 stay with the reason below (section 6) |
 | C5 sidecars of a source that is gone | 118 ignored `.import`/`.uid` files deleted (119,633 bytes, copied first); tracked: none; `android/build/` left alone |
 | C6 `.gitignore` | 5 tool-cache patterns added; `tools/qa_sim/gitignore_check.py` holds 2 more must-ignore paths (31 / 8 / 0 faults); no tracked file is matched by a rule |
 
-Freed: 1 tracked script, 118 ignored sidecars, 232 + 10 lines of code; **0.12 MB**. The size of the bundle does not move: no shipped asset was deleted and the quarantine is outside the export.
+Freed: 1 tracked script, 118 ignored sidecars, 234 + 10 lines of code; **0.12 MB**. The size of the bundle does not move: no shipped asset was deleted and the quarantine is outside the export.
 
 ## 2. Assets
 
@@ -69,7 +69,7 @@ The scan (`docs/artifacts/rc16/proofs/s26_c2_orphans.out` prints its own source)
 
 Candidates: a function of a shipped script (outside `scripts/tools`) whose name occurs nowhere else in a `.gd`, `.tscn`, `.tres`, `.cfg`, `.json`, `.godot` or `.gdshader` file (86, engine virtuals excluded), and in no document or tool that is not a log of what was done. Each body was read. No runtime call builds a method name from a string (the `.call(` sites hold `Callable` variables). A function stays when its file is an owner or planned row, its subsystem is a documented surface, or it is the lifecycle pair of a live function.
 
-### 4.1 Deleted (57 functions, 232 lines; lines are of `041ce03`)
+### 4.1 Deleted (58 functions, 234 lines; lines are of `041ce03`; `is_move_blocked` is the second round: its one caller was the removed self-test line)
 
 | File | Functions (line at `041ce03`) |
 |---|---|
@@ -85,7 +85,7 @@ Candidates: a function of a shipped script (outside `scripts/tools`) whose name 
 | `scripts/i18n/localization_manager.gd` | `cycle_language`@179 |
 | `scripts/lighting/light_grid.gd` | `flashlight_dirs`@106, `nearest_flashlight`@114 |
 | `scripts/player/flashlight.gd` | `get_flashlight_enabled`@37, `is_point_lit`@39 |
-| `scripts/player/player_3d.gd` | `get_cone_code`@237, `_is_touch_device`@418, `_move_selftest`@752, `get_strobe_cooldown_ratio`@1039, `set_battery_params`@1156 |
+| `scripts/player/player_3d.gd` | `get_cone_code`@237, `_is_touch_device`@418, `is_move_blocked`@749, `_move_selftest`@752, `get_strobe_cooldown_ratio`@1039, `set_battery_params`@1156 |
 | `scripts/systems/audio_manager.gd` | `play_music`@263, `set_action_active`@273, `set_action_stream`@276 |
 | `scripts/systems/captions_manager.gd` | `get_moments`@64, `is_seen`@67 |
 | `scripts/systems/day_night.gd` | `get_hour`@30 |
