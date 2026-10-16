@@ -9,7 +9,7 @@
 shader_type canvas_item;
 
 uniform vec4 fog_color : source_color = vec4(0.102, 0.129, 0.2, 1.0);
-uniform float fog_amount : hint_range(0.0, 1.0) = 0.3;
+uniform float fog_amount : hint_range(0.0, 1.0) = 0.16;
 uniform float grain_amount : hint_range(0.0, 0.2) = 0.05;
 uniform float motion : hint_range(0.0, 1.0) = 1.0;
 

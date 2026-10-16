@@ -52,7 +52,7 @@ void fragment() {
 	}
 	vec3 ink = paint * (0.75 + 0.25 * vnoise(vec2(UV.x * 9.0, UV.y * 3.0) + v_cell.z * 7.0));
 	ALBEDO = ink;
-	EMISSION = ink * 0.65 * lit;
+	EMISSION = ink * 0.9 * lit;
 	ALPHA = glyph * slit * (1.0 - 0.85 * flaked);
 	ALPHA_SCISSOR_THRESHOLD = 0.5;
 	ROUGHNESS = 0.85;

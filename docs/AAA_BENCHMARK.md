@@ -71,7 +71,7 @@ brightness, and `docs/DENSITY_MEASURED.md` has the same pairs frame by frame (th
 | motion blur on sprint | off | off | off | on | `TIER_BLUR`, `scripts/post_process_overlay.gd:9` |
 | rain on the lens | off | off | off | on | `TIER_LENS`, `scripts/effects/rain_lens.gd:6` |
 | ground fog cards (fog districts) | off | on | on | on | `scripts/world/district_dressing.gd:278` |
-| the windows of the skyline (and the old floating window wall hidden) | none: the blocks only | on | on | on | `_low_tier`, `scripts/world/street_props.gd:123`; `with_windows`, `scripts/world/skyline.gd:64` |
+| the windows of the skyline (and the old floating window wall hidden) | none: the blocks only | on | on | on | `_low_tier`, `scripts/world/street_props.gd:123`; `with_windows`, `scripts/world/skyline.gd:65` |
 | SSAO | off | off | only on Forward+ | only on Forward+ | `ssao_enabled` in the preset and `scripts/world_env_setup.gd:202` |
 
 **Mobile fallback, declared.** A phone starts on **High** (`_settings["graphics_tier"] = 2`, `scripts/systems/settings_manager.gd:84`) with dynamic resolution on (`scripts/systems/settings_manager.gd:121`: the 3D scale drops to 0.7

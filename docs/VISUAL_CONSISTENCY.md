@@ -62,7 +62,7 @@ read flat, and none is. The light of the world follows the power of the district
 | Element | DARK | PARTIAL | STREETS | FULL | Where |
 |---|---|---|---|---|---|
 | ambient energy | 0.03 | 0.06 | 0.11 | 0.16 | `_STAGE_AMBIENT`, `scripts/world/district_grading.gd:19` |
-| lit share of the skyline's windows | 0.04 | 0.30 | 0.60 | 0.90 | `STAGE_LIT`, `scripts/world/skyline.gd:47` |
+| lit share of the skyline's windows | 0.04 | 0.30 | 0.60 | 0.90 | `STAGE_LIT`, `scripts/world/skyline.gd:48` |
 | landmark glow energy | 0 | 0.6 | 1.3 | 2.4 | `GLOW_BY_STAGE`, `scripts/world/district_landmark.gd:13` |
 | landmark halo opacity | 0 | 0.05 | 0.10 | 0.17 (Session 27) | `HALO_BY_STAGE`, `scripts/world/district_landmark.gd:15` |
 | lamp pool opacity | 0 | 0.05 | 0.11 | 0.16 | `POOL_BY_STAGE`, `scripts/world/district_dressing.gd:27` |

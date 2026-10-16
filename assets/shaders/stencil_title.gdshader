@@ -7,7 +7,7 @@
 shader_type canvas_item;
 
 uniform float label_h = 120.0;
-uniform float cut_px = 1.6;
+uniform float cut_px = 2.4;
 
 varying vec2 v_local;
 
