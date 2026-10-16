@@ -42,7 +42,7 @@ Every solid is a lit `StandardMaterial3D` with roughness 0.55 to 1.0 and metalli
 
 | Surface | Roughness | Metallic | Where |
 |---|---|---|---|
-| street, sidewalk | 0.92 dry, 0.6 where damp (Session 27) | 0 | `assets/shaders/soviet_road.gdshader:61` |
+| street, sidewalk | 0.92 dry, 0.6 where damp (Session 27) | 0 | `assets/shaders/soviet_road.gdshader:73` |
 | skyline blocks | 0.7 whitewash, 1.0 where it flaked (Session 27) | 0 | `assets/shaders/soviet_facade.gdshader:92` |
 | landmark body | 1.0 | 0 | `scripts/world/district_landmark.gd:174` |
 | crates, litter, barrels | 0.9, 0.95, 0.95 | 0 | `scripts/world/district_dressing.gd:116-119` |

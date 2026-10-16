@@ -57,23 +57,23 @@ func _ready() -> void:
 func _make_road_mesh() -> BoxMesh:
 	var m := BoxMesh.new()
 	m.size = Vector3(tile_size, TILE_THICKNESS, tile_size)
-	m.material = _surface(_TEX_ASPHALT, Vector3(0.110, 0.115, 0.125), 0.04, 0.0)
+	m.material = _surface(_TEX_ASPHALT, Vector3(0.110, 0.115, 0.125), 0.04, 0.0, 2.0)
 	return m
 
 func _make_sidewalk_mesh() -> BoxMesh:
 	var m := BoxMesh.new()
 	m.size = Vector3(tile_size, TILE_THICKNESS, tile_size)
-	m.material = _surface(_TEX_CONCRETE, Vector3(0.220, 0.225, 0.220), 0.113, 0.0)
+	m.material = _surface(_TEX_CONCRETE, Vector3(0.220, 0.225, 0.220), 0.113, 0.0, 1.0)
 	return m
 
 func _make_marking_mesh() -> BoxMesh:
 	var m := BoxMesh.new()
 	m.size = Vector3(MARK_LENGTH, TILE_THICKNESS, MARK_WIDTH)
-	m.material = _surface("", Vector3(0.45, 0.43, 0.36), 1.0, 1.0)
+	m.material = _surface("", Vector3(0.45, 0.43, 0.36), 1.0, 1.0, 0.0)
 	return m
 
-## One surface of the street: its texture (none for the paint), its mean albedo in linear light and the texture's mean luminance; `detail` follows the graphics tier.
-func _surface(texture_path: String, tint: Vector3, mean_lum: float, paint: float) -> ShaderMaterial:
+## One surface of the street: its texture (none for the paint), its mean albedo in linear light, the texture's mean luminance and the kind of wear it carries (`surface` of the road shader: 1 slabs, 2 asphalt); `detail` follows the graphics tier.
+func _surface(texture_path: String, tint: Vector3, mean_lum: float, paint: float, surface: float) -> ShaderMaterial:
 	var mat := ShaderMaterial.new()
 	mat.shader = _ROAD
 	if texture_path != "" and ResourceLoader.exists(texture_path):
@@ -81,6 +81,7 @@ func _surface(texture_path: String, tint: Vector3, mean_lum: float, paint: float
 	mat.set_shader_parameter("tint", tint)
 	mat.set_shader_parameter("mean_lum", mean_lum)
 	mat.set_shader_parameter("paint", paint)
+	mat.set_shader_parameter("surface", surface)
 	_surfaces.append(mat)
 	return mat
 
