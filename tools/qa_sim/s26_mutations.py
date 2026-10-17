@@ -40,7 +40,7 @@ SETS = [
         (ACH, MARKS, "if true:", "ACHRUN2"),
         ("scripts/systems/daily_challenge_manager.gd", "elif _progress_day == day and _today_id == _id_for_day(day):", "elif _today_id == _id_for_day(day):", "DAILY3"),
     ],
-    [  # Session 27, the closeout group s27: seven files, nothing one mutation changes is read by another's check
+    [  # Session 27, the closeout group s27: nine files, nothing one mutation changes is read by another's check
         ("scripts/world/street_builder.gd", "const MARK_WIDTH: float = 0.16", "const MARK_WIDTH: float = 4.0", "SOV1"),
         ("scripts/world/skyline.gd", 'float(clampi(int(SettingsManager.get_setting("graphics_tier", 2)), 0, 2))', "2.0", "SOV2"),
         ("scripts/world/district_landmark.gd", "const HALO_SIZE := Vector2(64.0, 52.0)", "const HALO_SIZE := Vector2(110.0, 100.0)", "SOV3"),
@@ -49,6 +49,8 @@ SETS = [
         ("scripts/world/skyline.gd", "const FACADE_GAIN: Array[float] = [0.16, 0.19, 0.22, 0.26]", "const FACADE_GAIN: Array[float] = [0.16, 0.19, 0.22, 0.05]", "SOV6"),
         ("scripts/ui/menu_fog.gd", "visible = int(SettingsManager.get_setting(\"graphics_tier\", 2)) > 0", "visible = true", "SOV7"),
         ("scripts/enemies/boss_3d.gd", "EventBus.boss_phase_changed.emit(3)", "pass", "MUS1"),
+        ("scripts/systems/music_manager.gd", '&"police": "res://assets/audio/music/police.ogg",', '&"police": "res://assets/audio/music/police_x.ogg",', "MUS2"),
+        ("data/i18n/en.json", '"CREDITS_MUSIC": "Music (AI-generated, Google Lyria) and SFX: TLS Team"', '"CREDITS_MUSIC": "Music and SFX: TLS Team"', "CRED1"),
     ],
 ]
 ## The closeout group each set runs (CLOSEOUT_ONLY): the sets of Session 26 run `s26`, those of Session 27 `s27`.

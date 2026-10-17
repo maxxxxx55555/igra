@@ -4,7 +4,9 @@ extends RefCounted
 ## sign words and every letter of them is in the engine's own font (the bundled fonts hold no Cyrillic: a missing glyph is a box on a wall); SOV5, the dead grass of the courtyards shows 0, 72 and 144 tufts at the three
 ## graphics tiers; SOV6, the glow of the blocks and the paint of the signs rises with the power stage and the restored district is not dim (the pixel proof is the wall line of `tools/qa_sim/density_frames`);
 ## SOV7 (V2), the main menu draws fog and grain between its hero art and its title, none at the Low tier, and the title is stencilled; MUS1 (M1), the Architect announces its second and third phase (the signal was
-## declared and listened to and never emitted) and the music takes the theme of the phase it is told.
+## declared and listened to and never emitted) and the music takes the theme of the phase it is told; MUS2 (M1), the twelve generated tracks the music manager names load as Ogg streams (the guards skip a missing file
+## without a word, so only a load tells a file that was never imported); CRED1 (M1), the credits line of the music says it is AI-generated (Google Lyria) in all 13 locales and fits the
+## column of the credits scene.
 ## Wired into _closeout_check_runner.gd as `await Rc27.run(self)`; CLOSEOUT_ONLY=s27 runs it alone, which tools/qa_sim/s26_mutations.py uses (its third set).
 
 const _ROAD := "res://assets/shaders/soviet_road.gdshader"
@@ -22,6 +24,8 @@ static func run(r: Node) -> void:
 	_glow(r)
 	await _menu(r)
 	_boss(r)
+	_tracks(r)
+	_credits(r)
 
 ## The placement is asked, not the multimesh: headless the rendering server keeps no instance transforms, but the mesh and its material are resources.
 static func _streets(r: Node) -> void:
@@ -128,3 +132,38 @@ static func _boss(r: Node) -> void:
 	var first: int = int(MusicManager.get("_boss_phase"))
 	MusicManager.call("_on_boss_defeated")
 	r._ok(seen == [2, 3] and third == 3 and first == 1, "MUS1 the Architect announces its phases %s and the music takes the theme of the phase it is told (3 then %d, a new fight starts at %d)" % [seen, third, first])
+
+static func _tracks(r: Node) -> void:
+	var paths: Array[String] = [MusicManager.TRACKS[MusicManager.Mood.MENU]]
+	paths.append_array(MusicManager.BOSS_PHASES)
+	for path: String in MusicManager.AMBIENCE_LIT_BY_DISTRICT.values():
+		if path.begins_with("res://assets/audio/music/"):
+			paths.append(path)
+	var bad: Array[String] = []
+	for path: String in paths:
+		var stream := load(path) as AudioStreamOggVorbis
+		if stream == null or stream.get_length() < 25.0:
+			bad.append(path.get_file())
+	r._ok(paths.size() == 12 and bad.is_empty(), "MUS2 the %d generated tracks the music manager names load as Ogg streams of 25 s or more (bad: %s)" % [paths.size(), bad])
+
+static func _credits(r: Node) -> void:
+	var lang: String = LocalizationManager.current_lang
+	var scene: Control = (load("res://scenes/ui/credits.tscn") as PackedScene).instantiate()
+	r.add_child(scene)
+	var box: Control = scene.get_node("VBox")
+	var line: Label = scene.get_node("VBox/L3")
+	var column: float = box.offset_right - box.offset_left
+	var tagged: bool = true
+	var widest: float = 0.0
+	var worst: String = ""
+	for code: String in LocalizationManager.SUPPORTED:
+		LocalizationManager.set_language(code)
+		line.text = LocalizationManager.t("CREDITS_MUSIC")
+		tagged = tagged and line.text.contains("Lyria")
+		var width: float = line.get_minimum_size().x
+		if width > widest:
+			widest = width
+			worst = code
+	LocalizationManager.set_language(lang)
+	scene.queue_free()
+	r._ok(tagged and widest <= column, "CRED1 the music credit says Google Lyria in all %d locales and the widest line (%s, %.0f px) fits the %.0f px column of the credits scene" % [LocalizationManager.SUPPORTED.size(), worst, widest, column])
