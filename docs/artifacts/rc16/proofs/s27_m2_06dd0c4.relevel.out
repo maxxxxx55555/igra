@@ -1,0 +1,39 @@
+# S27 M2: the battle variant music_combat.ogg put on the house law, head 06dd0c4 plus the uncommitted --relevel mode of tools/qa_sim/music_post.py, 2026-10-17T06:25:10Z
+# before: the committed original (ffmpeg ebur128 summary of the file at HEAD)
+[Parsed_ebur128_0 @ 0000028293ff0980] Summary:
+
+  Integrated loudness:
+    I:         -21.9 LUFS
+    Threshold: -31.9 LUFS
+
+  Loudness range:
+    LRA:         0.7 LU
+    Threshold: -41.8 LUFS
+    LRA low:   -22.1 LUFS
+    LRA high:  -21.5 LUFS
+
+  True peak:
+    Peak:       -2.4 dBFS
+[out#0/null @ 0000028293f43cc0] video:0KiB audio:3876KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
+size=N/A time=00:00:45.00 bitrate=N/A speed= 153x elapsed=0:00:00.29    
+# cmd: python tools/qa_sim/music_post.py <copy of the original> --relevel
+music_post: C:\Users\Maxsim\AppData\Local\Temp\tmp.NYmkSE3EMK\music_combat.ogg relevelled 45.000 s lufs=-18.20 tp=-3.00 (law -18 LUFS, tp <= -1.5)
+# after: the relevelled copy (ffmpeg ebur128 summary)
+[Parsed_ebur128_0 @ 000002334abfef00] Summary:
+
+  Integrated loudness:
+    I:         -18.2 LUFS
+    Threshold: -28.2 LUFS
+
+  Loudness range:
+    LRA:         0.9 LU
+    Threshold: -38.2 LUFS
+    LRA low:   -18.4 LUFS
+    LRA high:  -17.6 LUFS
+
+  True peak:
+    Peak:       -3.0 dBFS
+[out#0/null @ 000002334ab56940] video:0KiB audio:3876KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
+size=N/A time=00:00:45.00 bitrate=N/A speed= 153x elapsed=0:00:00.29    
+# decoded PCM md5 of the copy MD5=f25c60ffa51241a852145696b99c6b46 and of the file in the tree MD5=f25c60ffa51241a852145696b99c6b46: SAME_PCM
+# end

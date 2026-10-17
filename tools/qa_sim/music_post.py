@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """M1 of Session 27: the post-production pass of docs/MUSIC_RECIPE.md for one generated track, with ffmpeg: cut `--loop` seconds from `--start`, close the seam of a loop with an equal-power crossfade of the
 audio that would have followed the loop into its head (a one-shot gets 3 ms edge fades instead), downmix to mono 44.1 kHz (the house format of the beds, docs/MUSIC_SPEC.md), gain it to the house
-law (beds and music -18 LUFS integrated, true peak at most -1.5 dBFS; a track whose sharp peaks hold the gain back is limited to the law first) and write OGG q4 or 16-bit WAV by the extension of the target. It measures the file it wrote and exits 1 when the loudness or the true peak is off.
+law (beds and music -18 LUFS integrated, true peak at most -1.5 dBFS; a track whose sharp peaks hold the gain back is limited to the law first) and write OGG q4 or 16-bit WAV by the extension of the target. It measures the file it wrote and exits 1 when the loudness or the true peak is off. `--relevel` puts a shipped file on the same law in place, its length kept (no cut, no new seam).
 
 usage: python tools/qa_sim/music_post.py <input> <target.ogg|.wav> --loop <seconds> [--start <seconds>, else the steadiest stretch] [--one-shot] [--lufs -18] [--tp -1.5]
+       python tools/qa_sim/music_post.py <file.ogg|.wav> --relevel [--lufs -18] [--tp -1.5]
        python tools/qa_sim/music_post.py --demo
 """
 import pathlib
@@ -101,14 +102,14 @@ def limit(audio, ceiling):
 
 def normalise(audio, lufs, tp):
     """One linear gain to the target loudness. If that gain would take the true peak over the law (sharp clanks or hits over a pad: the first warehouses take read -20.6 LUFS), the peaks are limited to the law and
-    the gain is trimmed by what the limiter took, up to six rounds, so the track still lands on the house loudness. loudnorm is not used: it measures over windows of 3 s and a one-shot or a short loop comes out
+    the gain is trimmed by what the limiter took, up to ten rounds, so the track still lands on the house loudness. loudnorm is not used: it measures over windows of 3 s and a one-shot or a short loop comes out
     a dB off (the demo found 1.8)."""
     loudness, peak = level(audio.astype("<f4").tobytes())
     gain, aim = lufs - loudness, tp - TP_HEADROOM
     if peak + gain <= aim:
         return (audio * 10.0 ** (gain / 20.0)).astype("<f4")
     ceiling = aim
-    for _ in range(6):
+    for _ in range(10):
         out = limit(audio * 10.0 ** (gain / 20.0), ceiling)
         got, got_peak = level(out.tobytes())
         if abs(got - lufs) <= 0.1 and got_peak <= aim:
@@ -156,6 +157,15 @@ def process(source, target, seconds, start, one_shot, lufs, tp):
     return ok
 
 
+def relevel(path, lufs, tp):
+    """Put a shipped file on the law in place: decode, normalise, write, measure. The length is the file's own, so nothing is cut and no seam is made."""
+    seconds = measure(path)[2]
+    write(normalise(decode(path), lufs, tp), path)
+    got_lufs, got_tp, got_seconds = measure(path)
+    print("music_post: %s relevelled %.3f s lufs=%.2f tp=%.2f (law %g LUFS, tp <= %g)" % (path, got_seconds, got_lufs, got_tp, lufs, tp))
+    return abs(got_lufs - lufs) <= LUFS_TOLERANCE and got_tp <= tp and abs(got_seconds - seconds) <= 0.01
+
+
 def demo():
     """A synthetic pad of 20 s (two tones, a slow swell, a little noise) becomes a loop of 4 s and a one-shot of 0.5 s: both on the law, the seam shut; the same pad with a 5 ms noise burst every 1.5 s (a chain clank,
     20 dB over the pad) is limited and still lands on the law; and a loud intro of 7 s is not where the steadiest stretch starts."""
@@ -173,25 +183,30 @@ def demo():
             clank[at:at + 220] += np.random.default_rng(at).standard_normal(220).astype("<f4") * 2.5 * np.linspace(1.0, 0.0, 220, dtype="<f4")
         write(clank.astype("<f4"), pathlib.Path(tmp) / "clank.wav")
         clank_ok = process(pathlib.Path(tmp) / "clank.wav", pathlib.Path(tmp) / "clank.ogg", 4.0, 1.0, False, -18.0, -1.5)
+        quiet = pathlib.Path(tmp) / "quiet.ogg"
+        write((clank * 0.1).astype("<f4"), quiet)
+        relevel_ok = relevel(quiet, -18.0, -1.5)
         intro = pad.copy()
         intro[: 7 * SR] *= 6.0
         picked = steadiest_start(intro.astype("<f4"), 4.0, False)
         assert picked >= 7.0 and picked + 4.0 <= 20.0, picked
         jump = max(seam(decode(pathlib.Path(tmp) / "loop.ogg")), seam(decode(pathlib.Path(tmp) / "clank.ogg")))
-    assert loop_ok and shot_ok and clank_ok and jump < 0.5, (loop_ok, shot_ok, clank_ok, jump)
-    print("music_post demo: a loop, a one-shot and a loop with sharp clanks come out on the loudness law, the right length, and the seam of the loop is shut")
+    assert loop_ok and shot_ok and clank_ok and relevel_ok and jump < 0.5, (loop_ok, shot_ok, clank_ok, relevel_ok, jump)
+    print("music_post demo: a loop, a one-shot, a loop with sharp clanks and a quiet file relevelled in place come out on the loudness law, the right length, and the seam of the loop is shut")
 
 
 def main(argv):
     if "--demo" in argv:
         demo()
         return 0
-    if len(argv) < 3 or "--loop" not in argv:
-        print(__doc__)
-        return 2
     opts = {}
     for flag, default in (("--loop", None), ("--start", None), ("--lufs", "-18"), ("--tp", "-1.5")):
         opts[flag] = float(argv[argv.index(flag) + 1]) if flag in argv else (float(default) if default is not None else None)
+    if "--relevel" in argv and len(argv) >= 2:
+        return 0 if relevel(pathlib.Path(argv[1]), opts["--lufs"], opts["--tp"]) else 1
+    if len(argv) < 3 or "--loop" not in argv:
+        print(__doc__)
+        return 2
     ok = process(pathlib.Path(argv[1]), pathlib.Path(argv[2]), opts["--loop"], opts["--start"], "--one-shot" in argv, opts["--lufs"], opts["--tp"])
     return 0 if ok else 1
 

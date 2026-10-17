@@ -43,12 +43,12 @@ No constant hum bed exists (owner, rc14). The lit twins of eight districts are s
 
 ## Loudness: measured, and a decision
 
-Measured by `python tools/qa_sim/audio_loudness.py --write docs/AUDIO_LOUDNESS_TABLE.md` (ffmpeg ebur128, the whole shipped audio, 219 files). The consistency of a mix is
+Measured by `python tools/qa_sim/audio_loudness.py --write docs/AUDIO_LOUDNESS_TABLE.md` (ffmpeg ebur128, the whole shipped audio, 230 files since Session 27: twelve generated tracks added, three files retired, the battle variant put on the law). The consistency of a mix is
 how little a category moves around its own level, then how far that level is from the target:
 
 | Category | Files | Median LUFS | Spread (SD, LU) | Over 3 LU from the median | Canon (`docs/PRODUCTION_BIBLE.md` section 3) | Directive |
 |---|---|---|---|---|---|---|
-| music | 22 | -18.0 | 1.08 | 1 (`music_combat.ogg`, 3.9 LU quieter) | none | -14 |
+| music | 31 | -18.0 | 0.50 | 0 | none | -14 |
 | ambient beds | 22 | -18.1 | 0.98 | 0 | -18 | -20 |
 | ambient details | 40 | -18.9 | 0.95 | 0 | -18, played 20 dB under the bed | -20 |
 | sfx | 122 (69 under 0.4 s: no integrated value) | -15.0 | 1.69 | 6 (three reloads, 3.2 to 5.9 LU quieter, the generator loop 3.2 quieter; `ui_achievement.wav` 3.6 and the crawler scrape 3.9 louder) | -14 | -10 |
