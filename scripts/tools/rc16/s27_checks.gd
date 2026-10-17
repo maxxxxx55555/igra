@@ -3,7 +3,8 @@ extends RefCounted
 ## facade shader, carry roof boxes and balconies, and the weathering follows the graphics tier; SOV3, the halo behind a landmark is a pool of light and not a third of the sky (HALO-27); SOV4, every district has
 ## sign words and every letter of them is in the engine's own font (the bundled fonts hold no Cyrillic: a missing glyph is a box on a wall); SOV5, the dead grass of the courtyards shows 0, 72 and 144 tufts at the three
 ## graphics tiers; SOV6, the glow of the blocks and the paint of the signs rises with the power stage and the restored district is not dim (the pixel proof is the wall line of `tools/qa_sim/density_frames`);
-## SOV7 (V2), the main menu draws fog and grain between its hero art and its title, none at the Low tier, and the title is stencilled; MUS1 (M1), the Architect announces its second and third phase (the signal was
+## SOV7 (V2), the main menu draws fog and grain between its hero art and its title, none at the Low tier, and the title is stencilled; MENU2 (V2), the daily card of the menu follows a language change (it did not: the
+## final frames showed it in English under a Russian and an Arabic menu); MUS1 (M1), the Architect announces its second and third phase (the signal was
 ## declared and listened to and never emitted) and the music takes the theme of the phase it is told; MUS2 (M1), the twelve generated tracks the music manager names load as Ogg streams (the guards skip a missing file
 ## without a word, so only a load tells a file that was never imported); CRED1 (M1), the credits line of the music says it is AI-generated (Google Lyria) in all 13 locales and fits the
 ## column of the credits scene.
@@ -115,6 +116,15 @@ static func _menu(r: Node) -> void:
 	var low: bool = fog != null and fog.visible
 	SettingsManager.set_graphics_tier(tier_before)
 	r._ok(between and stencilled and high and not low, "SOV7 the menu draws fog and grain between its hero art and its title (High %s, Low %s) and the title is stencilled (%s)" % [high, low, stencilled])
+	var lang_before: String = LocalizationManager.current_lang
+	var lang_after: String = "en" if lang_before != "en" else "ru"
+	var title_before: String = LocalizationManager.t("DAILY_CHALLENGE_TITLE")
+	LocalizationManager.set_language(lang_after)
+	var title_after: String = LocalizationManager.t("DAILY_CHALLENGE_TITLE")
+	var daily := menu.get_node_or_null("VBox/DailyCard/Title") as Label
+	var followed: bool = daily != null and title_after != title_before and daily.text == title_after
+	LocalizationManager.set_language(lang_before)
+	r._ok(followed, "MENU2 the daily card of the menu follows a language change (%s to %s: the title reads %s)" % [lang_before, lang_after, daily.text if daily != null else "missing"])
 	menu.queue_free()
 
 static func _boss(r: Node) -> void:

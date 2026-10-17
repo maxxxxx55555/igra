@@ -254,6 +254,7 @@ func _apply_localization(_lang: Variant = null) -> void:
 		if b != null:
 			b.text = LocalizationManager.t(String(LABELS[node_name]))
 	_apply_ngp_status(vb)
+	_refresh_daily_card(vb as VBoxContainer)
 
 ## arena design audit P3: neither button told the player NG+ was active or
 ## which one actually starts a run - "Continue" resumes the exact save,
