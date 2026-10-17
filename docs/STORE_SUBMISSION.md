@@ -39,19 +39,19 @@ channel that is fully opaque (minimum 255, `s20_alpha_extrema.out`), so dropping
 |---|---|---|---|---|
 | App icon | 512 x 512 px, PNG (32-bit, alpha allowed), at most 1 MB | `store/icon-512.png` | 512 x 512, RGB 8-bit, 300,965 bytes | upload as it is; if the form refuses it, re-save it as RGBA |
 | Feature graphic | 1024 x 500 px, JPEG or 24-bit PNG, **no alpha** | `store/feature-graphic.png` (title and tagline, the lamp street) | 1024 x 500, RGB 8-bit, 612,245 bytes (the alpha, 255 everywhere, was dropped in Session 27) | upload as it is. **Do not use** `assets/store/feature_graphic_1024x500.png`: it is blurred art with no title (what `docs/RELEASE_RUNBOOK.md` §3.3 named) |
-| Phone screenshots | 2 to 8; JPEG or 24-bit PNG, **no alpha**; each side 320 to 3840 px, the long side at most twice the short side; 1080 px or more on the short side to be eligible for featuring | the six frames of `docs/stills/ultimate/` listed below | 960 x 527 (all six), RGBA 8-bit with every alpha 255, 397 KiB to 825 KiB each (406,068 to 844,434 bytes) | drop the alpha. 960 px is inside the accepted range and under the featuring size (re-shoot at 1920 x 1080 with `tools/qa_sim/` if wanted) |
+| Phone screenshots | 2 to 8; JPEG or 24-bit PNG, **no alpha**; each side 320 to 3840 px, the long side at most twice the short side; 1080 px or more on the short side to be eligible for featuring | the six frames of `docs/stills/store/` listed below, or the ten in-engine frames of `store/screenshots/recipes/` (960 x 540, RGB, no alpha: `store/SCREENSHOT_RECIPES.md`) | 960 x 527 (all six), RGBA 8-bit with every alpha 255, 598 KiB to 832 KiB each (612,393 to 851,557 bytes) | drop the alpha. 960 px is inside the accepted range and under the featuring size (re-shoot at 1920 x 1080 with `tools/qa_sim/` if wanted) |
 | Adaptive icon | in the bundle, not uploaded: two 1080 x 1080 layers | `store/icon-adaptive/foreground_1080x1080.png`, `background_1080x1080.png` | RGBA 8-bit | nothing |
 | Launcher icon source (legacy phones) | 192 px from a 512 px source | `assets/store/play_icon_512.png` | 512 x 512, RGB 8-bit, scene art (not the lamp) | nothing; only phones below Android 8 (API 24 and 25) show it, a design call, not a blocker |
 | Tablet screenshots, promo video | optional | none prepared | | skip |
 
-The six screenshot frames (each carries its code hash `0752c9b`, the tree whose runtime the bundle of the pass is built from, and its capture time in its name, AF3; the frames of the version 8 pass (`ccf61ee`) stay in `docs/stills/shipping/`; `docs/stills/ultimate/` holds two more, `06_victory_ngplus` (an ending: left out on purpose) and `07_skill_tree`, which the owner may add up to the limit of eight):
+The six screenshot frames (each carries its code hash `f8c0de0`, the runtime of the final pass of Session 27, and its capture time in its name, AF3; the runtime changes after it are declared one by one in `tools/qa_sim/af3_f4_scope.tsv`; the frames of the earlier passes stay in `docs/stills/ultimate/` and `docs/stills/shipping/`; `docs/stills/store/` holds two more, `06_victory_ngplus` (an ending: left out on purpose) and `07_skill_tree`, which the owner may add up to the limit of eight):
 
-1. `docs/stills/ultimate/01_main_menu_after_0752c9b_20261015T014952Z.png`: the main menu.
-2. `docs/stills/ultimate/02_district_day_full_after_0752c9b_20261015T015008Z.png`: a restored district with its lamps on (the game has no day).
-3. `docs/stills/ultimate/03_district_night_dark_after_0752c9b_20261015T015003Z.png`: the same district dark: the street unlit, the lamp head dim.
-4. `docs/stills/ultimate/04_combat_after_0752c9b_20261015T015013Z.png`: combat.
-5. `docs/stills/ultimate/05_boss_after_0752c9b_20261015T015015Z.png`: the boss.
-6. `docs/stills/ultimate/08_shop_after_0752c9b_20261015T015010Z.png`: the shop.
+1. `docs/stills/store/01_main_menu_after_f8c0de0_20261017T063627Z.png`: the main menu.
+2. `docs/stills/store/02_district_day_full_after_f8c0de0_20261017T063645Z.png`: a restored district with its lamps on (the game has no day).
+3. `docs/stills/store/03_district_night_dark_after_f8c0de0_20261017T063639Z.png`: the same district dark: the street unlit, the lamp head dim.
+4. `docs/stills/store/04_combat_after_f8c0de0_20261017T063650Z.png`: combat.
+5. `docs/stills/store/05_boss_after_f8c0de0_20261017T063652Z.png`: the boss.
+6. `docs/stills/store/08_shop_after_f8c0de0_20261017T063647Z.png`: the shop.
 
 The frames of the HUD pass (hurt, interact prompt, and the touch layout at 1600 x 740 with touch emulated) are in `docs/stills/shipping/hud/after2/`; the touch frame is not a store screenshot (its long side is more than twice the short side), and none of them was read on a phone (`docs/UNVERIFIABLE_HERE.md` U13).
 
@@ -61,7 +61,7 @@ Not used, on purpose: `assets/store/screenshot_0*.png` (1280 x 720, RGBA, made b
 One command from the repository root writes the upload set to `build/store_upload/` (Pillow is installed on this machine):
 
 ```bash
-python -c "import pathlib; from PIL import Image; o=pathlib.Path('build/store_upload'); o.mkdir(parents=True, exist_ok=True); [Image.open(p).convert('RGB').save(o/pathlib.Path(p).name) for p in ['store/feature-graphic.png', *map(str, sorted(pathlib.Path('docs/stills/ultimate').glob('0[1-58]_*.png')))]]"
+python -c "import pathlib; from PIL import Image; o=pathlib.Path('build/store_upload'); o.mkdir(parents=True, exist_ok=True); [Image.open(p).convert('RGB').save(o/pathlib.Path(p).name) for p in ['store/feature-graphic.png', *map(str, sorted(pathlib.Path('docs/stills/store').glob('0[1-58]_*.png')))]]"
 ```
 
 The listing text: `store/listing.md` (English and Russian, the source of truth), `docs/STORE_KIT.md` (the other 11 locales; flagged there for a native
@@ -215,6 +215,7 @@ the user's own "Export Save" to the Downloads folder. If the Console's wording m
 | App category and tags | Game, Action; tags per `docs/store/play_store.md` |
 | Price | Free |
 | Contact | an email address is required; the same one as in the policy |
+| AI-generated content | The game generates nothing with AI at run time (no network, no model). Its pre-made assets include AI-generated art (the rows of `docs/ASSET_LICENSES.md`) and, since Session 27, 12 AI-generated music tracks (Google Lyria through the Gemini app); the credits screen says so in 13 locales (`CREDITS_MUSIC`). The commercial rights of the music are UNVERIFIABLE-HERE: owner step 1 of `docs/store/HUMAN_CHECKLIST.md` |
 
 ## 7. The steps, in order
 

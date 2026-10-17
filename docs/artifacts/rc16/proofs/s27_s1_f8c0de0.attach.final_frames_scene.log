@@ -1,0 +1,40 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[final] frame 00_boot_title.png
+[final] frame 01_main_menu.png
+[final] frame 01_menu_en_s2.png
+[final] frame 01_menu_ru_s1.png
+[final] frame 01_menu_ru_s2.png
+[final] frame 01_menu_ar_s1.png
+[final] frame 01_menu_ar_s2.png
+[final] facing 38 of 117 street lights
+[final] 03 camera /root/Main3D/Camera3D at (-8.0, 2.556854, -8.0), player at (-8.0, 0.860233, -8.0) hp=100.0, paused=false
+[final] frame 03_district_night_dark.png
+[final] frame 10_hud_hurt.png
+[final] frame 11_hud_prompt.png
+[final] frame 12_hud_touch.png
+[final] frame 02_district_day_full.png
+[final] frame 07_skill_tree.png
+[final] frame 08_shop.png
+[final] frame 08_shop_ar.png
+[final] 04 camera /root/Main3D/Camera3D at (-6.052763, 2.557039, 9.159952), player at (-6.05276, 0.86017, 9.15998) hp=100.0, paused=false
+[final] frame 04_combat.png
+[final] 05 camera /root/Main3D/Camera3D at (-7.422278, 2.560245, -11.1278), player at (-7.422278, 0.860386, -11.1278) hp=100.0, paused=false
+[final] 05 boss at (-6.514112, 1.2, -16.04463)
+[final] frame 05_boss.png
+[final] frame 06_victory_ngplus.png
+[final] DONE frames=18
+ERROR: 2 RID allocations of type 'N5GLES37TextureE' were leaked at exit.
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+ERROR: Texture with GL ID of 117: leaked 131072 bytes.
+   at: ~Utilities (drivers/gles3/storage/utilities.cpp:82)
+ERROR: Texture with GL ID of 118: leaked 131072 bytes.
+   at: ~Utilities (drivers/gles3/storage/utilities.cpp:82)
+WARNING: 42 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

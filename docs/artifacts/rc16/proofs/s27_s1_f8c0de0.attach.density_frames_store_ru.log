@@ -1,0 +1,25 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[density] start label=store hash=f8c0de0 ids=[&"suburbs", &"residential"] nodes=1107 objects=4008 orphans=6 tex_mib=60.7 vid_mib=88.3 static_mib=102.9
+[probe] stream pass=density district=suburbs ok=true load_ms=0.6 settled_ms=56.5 hitches=0 max_frame_ms=50.0 over_budget_ms=16.7 nodes=1107 objects=4006 orphans=6 tex_mib=60.7 vid_mib=88.3 static_mib=103.0 stats={"district":"suburbs","enemies_ms":8.323,"loot_ms":26.785,"props_ms":173.474,"scene_ms":78.411,"streets_ms":2.165,"total_ms":157.616}
+[density] state district=suburbs view=03_street weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame suburbs_03_street_ru_f8c0de0_20261017T064011Z.png
+[density] state district=suburbs view=04_block weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame suburbs_04_block_ru_f8c0de0_20261017T064012Z.png
+[density] perf district=suburbs dressing=with draw_calls=182 primitives=66033 objects_in_frame=442
+[probe] stream pass=density district=residential ok=true load_ms=331.4 settled_ms=396.3 hitches=1 max_frame_ms=135.8 over_budget_ms=108.1 nodes=1125 objects=4078 orphans=6 tex_mib=61.0 vid_mib=90.6 static_mib=106.6 stats={"district":"residential","enemies_ms":10.848,"loot_ms":24.718,"props_ms":159.601,"scene_ms":1.169,"streets_ms":1.996,"total_ms":66.188}
+[density] state district=residential view=03_street weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame residential_03_street_ru_f8c0de0_20261017T064016Z.png
+[density] state district=residential view=04_block weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame residential_04_block_ru_f8c0de0_20261017T064017Z.png
+[density] perf district=residential dressing=with draw_calls=177 primitives=69749 objects_in_frame=393
+[density] DONE label=store hash=f8c0de0
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 38 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
