@@ -223,6 +223,7 @@ func _unlock_audio() -> void:
 ## during combat"). Reuses the same detection/decay MusicManager already
 ## uses to hold combat music — no second combat tracker needed.
 func _on_game_started() -> void:
+	_leave_boss()
 	set_mood(Mood.AMBIENT)
 	_first_light_cue_done = false
 
@@ -322,6 +323,7 @@ func _load(m: Mood) -> AudioStream:
 
 ## Смена района: подменяем эмбиент-слой и перезапускаем, если он играет.
 func _on_district_entered(district_id: StringName) -> void:
+	_leave_boss()
 	_current_district = district_id
 	_refresh_district_ambience()
 	_preload_around(district_id)
@@ -405,8 +407,14 @@ func _nearest_enemy_distance() -> float:
 	return best
 
 func _on_boss_defeated() -> void:
-	_boss_active = false
+	_leave_boss()
 	_combat_hold = 0.0
+
+## The boss theme is held while the Architect is alive and near: his defeat, a new run (Retry, New Game, Continue) and a change of district end it. The flag used to outlive a death and follow the player into the next run,
+## and with the phase themes it carried the theme of the last phase of the old fight.
+func _leave_boss() -> void:
+	_boss_active = false
+	_boss_phase = 1
 
 ## The Architect enters its second or third phase: the theme of that phase takes over (a crossfade, like any mood change).
 func _on_boss_phase_changed(phase: int) -> void:

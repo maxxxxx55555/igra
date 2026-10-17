@@ -1,0 +1,24 @@
+# proof s27_f2_seams_fix
+# utc 20261017T112048Z
+# head 111abca (uncommitted paths: 4)
+# env none
+# cmd bash -c for f in assets/audio/music/layer_dark.ogg assets/audio/music/music_combat.ogg assets/audio/music/music_battle.wav assets/audio/music/music_tension.wav assets/audio/music/music_ambient.wav assets/audio/music/music_boss_dark.wav assets/audio/music/layer_threat_low.ogg assets/audio/ambience/districts/police_dark.ogg assets/audio/ambience/districts/industrial_dark.ogg; do python tools/qa_sim/music_post.py "$f" --relevel --fade-ms 10; echo "exit=$?"; done
+music_post: assets\audio\music\layer_dark.ogg relevelled 118.004 s lufs=-17.90 tp=-2.60 seam=0.011 (law -18 LUFS, tp <= -1.5)
+exit=0
+music_post: assets\audio\music\music_combat.ogg relevelled 45.000 s lufs=-18.00 tp=-3.00 seam=0.009 (law -18 LUFS, tp <= -1.5)
+exit=0
+music_post: assets\audio\music\music_battle.wav relevelled 24.500 s lufs=-18.00 tp=-2.50 seam=0.000 (law -18 LUFS, tp <= -1.5)
+exit=0
+music_post: assets\audio\music\music_tension.wav relevelled 24.500 s lufs=-18.00 tp=-2.50 seam=0.000 (law -18 LUFS, tp <= -1.5)
+exit=0
+music_post: assets\audio\music\music_ambient.wav relevelled 48.000 s lufs=-18.00 tp=-4.60 seam=0.000 (law -18 LUFS, tp <= -1.5)
+exit=0
+music_post: assets\audio\music\music_boss_dark.wav relevelled 30.500 s lufs=-18.00 tp=-2.80 seam=0.000 (law -18 LUFS, tp <= -1.5)
+exit=0
+music_post: assets\audio\music\layer_threat_low.ogg relevelled 60.000 s lufs=-18.00 tp=-2.20 seam=0.004 (law -18 LUFS, tp <= -1.5)
+exit=0
+music_post: assets\audio\ambience\districts\police_dark.ogg relevelled 36.000 s lufs=-17.90 tp=-5.80 seam=0.042 (law -18 LUFS, tp <= -1.5)
+exit=0
+music_post: assets\audio\ambience\districts\industrial_dark.ogg relevelled 33.994 s lufs=-18.00 tp=-6.20 seam=0.006 (law -18 LUFS, tp <= -1.5)
+exit=0
+# EXIT=0

@@ -1,0 +1,59 @@
+# proof s27_f2_seams_after
+# utc 20261017T112621Z
+# head 111abca (uncommitted paths: 34)
+# env none
+# cmd bash -c python tools/qa_sim/music_post.py --seams assets/audio/music/*.ogg assets/audio/music/*.wav assets/audio/ambience/districts/*.ogg
+0.000 step, 0.07 of the last 50 ms, 60.00 s, assets\audio\music\cue_first_light.ogg
+0.000 step, 0.01 of the last 50 ms, 90.00 s, assets\audio\music\cue_grid_cascade.ogg
+0.000 step, 0.05 of the last 50 ms, 120.00 s, assets\audio\music\cue_victory.ogg
+0.037 step, 0.22 of the last 50 ms, 34.91 s, assets\audio\music\gas_station.ogg
+0.003 step, 0.02 of the last 50 ms, 40.00 s, assets\audio\music\hospital.ogg
+0.001 step, 0.04 of the last 50 ms, 60.00 s, assets\audio\music\layer_action.ogg
+0.003 step, 0.01 of the last 50 ms, 118.00 s, assets\audio\music\layer_dark.ogg
+0.000 step, 0.00 of the last 50 ms, 118.49 s, assets\audio\music\layer_lit.ogg
+0.000 step, 0.01 of the last 50 ms, 60.00 s, assets\audio\music\layer_threat_high.ogg
+0.000 step, 0.00 of the last 50 ms, 60.00 s, assets\audio\music\layer_threat_low.ogg
+0.008 step, 0.04 of the last 50 ms, 45.00 s, assets\audio\music\music_boss_dark_p1.ogg
+0.002 step, 0.01 of the last 50 ms, 45.00 s, assets\audio\music\music_boss_dark_p2.ogg
+0.007 step, 0.05 of the last 50 ms, 45.00 s, assets\audio\music\music_boss_dark_p3.ogg
+0.003 step, 0.01 of the last 50 ms, 45.00 s, assets\audio\music\music_combat.ogg
+0.001 step, 0.01 of the last 50 ms, 120.00 s, assets\audio\music\music_menu_dark.ogg
+0.008 step, 0.06 of the last 50 ms, 28.00 s, assets\audio\music\police.ogg
+0.010 step, 0.07 of the last 50 ms, 32.00 s, assets\audio\music\power_station.ogg
+0.010 step, 0.06 of the last 50 ms, 33.60 s, assets\audio\music\school.ogg
+0.010 step, 0.26 of the last 50 ms, 33.60 s, assets\audio\music\substation.ogg
+0.000 step, 0.00 of the last 50 ms, 37.33 s, assets\audio\music\suburbs.ogg
+0.006 step, 0.03 of the last 50 ms, 38.40 s, assets\audio\music\warehouses.ogg
+0.003 step, 0.18 of the last 50 ms, 24.00 s, assets\audio\music\downtown.wav
+0.000 step, 0.01 of the last 50 ms, 24.00 s, assets\audio\music\harbor.wav
+0.001 step, 0.03 of the last 50 ms, 24.00 s, assets\audio\music\industrial.wav
+0.000 step, 0.00 of the last 50 ms, 48.00 s, assets\audio\music\music_ambient.wav
+0.000 step, 0.00 of the last 50 ms, 24.50 s, assets\audio\music\music_battle.wav
+0.000 step, 0.00 of the last 50 ms, 30.50 s, assets\audio\music\music_boss_dark.wav
+0.000 step, 0.00 of the last 50 ms, 24.50 s, assets\audio\music\music_tension.wav
+0.017 step, 0.17 of the last 50 ms, 14.50 s, assets\audio\music\music_victory.wav
+0.002 step, 0.13 of the last 50 ms, 22.40 s, assets\audio\music\park.wav
+0.003 step, 0.15 of the last 50 ms, 22.59 s, assets\audio\music\residential.wav
+0.008 step, 0.07 of the last 50 ms, 36.00 s, assets\audio\ambience\districts\gas_station_dark.ogg
+0.005 step, 0.04 of the last 50 ms, 36.00 s, assets\audio\ambience\districts\gas_station_lit.ogg
+0.005 step, 0.04 of the last 50 ms, 36.00 s, assets\audio\ambience\districts\hospital_dark.ogg
+0.015 step, 0.12 of the last 50 ms, 36.00 s, assets\audio\ambience\districts\hospital_lit.ogg
+0.001 step, 0.01 of the last 50 ms, 33.99 s, assets\audio\ambience\districts\industrial_dark.ogg
+0.003 step, 0.02 of the last 50 ms, 33.99 s, assets\audio\ambience\districts\industrial_lit.ogg
+0.000 step, 0.41 of the last 50 ms, 36.00 s, assets\audio\ambience\districts\park_dark.ogg
+0.005 step, 0.05 of the last 50 ms, 36.00 s, assets\audio\ambience\districts\park_lit.ogg
+0.004 step, 0.04 of the last 50 ms, 36.00 s, assets\audio\ambience\districts\police_dark.ogg
+0.009 step, 0.06 of the last 50 ms, 36.00 s, assets\audio\ambience\districts\police_lit.ogg
+0.008 step, 0.08 of the last 50 ms, 36.00 s, assets\audio\ambience\districts\power_station_dark.ogg
+0.005 step, 0.04 of the last 50 ms, 36.00 s, assets\audio\ambience\districts\power_station_lit.ogg
+0.000 step, 1.53 of the last 50 ms, 36.00 s, assets\audio\ambience\districts\residential_dark.ogg
+0.002 step, 0.01 of the last 50 ms, 36.00 s, assets\audio\ambience\districts\residential_lit.ogg
+0.006 step, 1.04 of the last 50 ms, 36.00 s, assets\audio\ambience\districts\school_dark.ogg
+0.000 step, 0.00 of the last 50 ms, 36.00 s, assets\audio\ambience\districts\school_lit.ogg
+0.008 step, 0.07 of the last 50 ms, 36.00 s, assets\audio\ambience\districts\substation_dark.ogg
+0.005 step, 0.04 of the last 50 ms, 36.00 s, assets\audio\ambience\districts\substation_lit.ogg
+0.000 step, 0.20 of the last 50 ms, 36.00 s, assets\audio\ambience\districts\suburbs_dark.ogg
+0.008 step, 0.06 of the last 50 ms, 36.00 s, assets\audio\ambience\districts\suburbs_lit.ogg
+0.001 step, 1.62 of the last 50 ms, 36.00 s, assets\audio\ambience\districts\warehouses_dark.ogg
+0.002 step, 0.02 of the last 50 ms, 36.00 s, assets\audio\ambience\districts\warehouses_lit.ogg
+# EXIT=0

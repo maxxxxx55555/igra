@@ -5,7 +5,8 @@ extends RefCounted
 ## graphics tiers; SOV6, the glow of the blocks and the paint of the signs rises with the power stage and the restored district is not dim (the pixel proof is the wall line of `tools/qa_sim/density_frames`);
 ## SOV7 (V2), the main menu draws fog and grain between its hero art and its title, none at the Low tier, and the title is stencilled; MENU2 (V2), the daily card of the menu follows a language change (it did not: the
 ## final frames showed it in English under a Russian and an Arabic menu); MUS1 (M1), the Architect announces its second and third phase (the signal was
-## declared and listened to and never emitted) and the music takes the theme of the phase it is told; MUS2 (M1), the twelve generated tracks the music manager names load as Ogg streams (the guards skip a missing file
+## declared and listened to and never emitted) and the music takes the theme of the phase it is told; MUS3 and MUS4, the boss theme ends with a new run and with a change of district (it outlived a death and followed the player
+## into the next run, the theme of the last phase with it); SOV8, every sign word fits the row of the sign atlas (two long words were cut off); MUS2 (M1), the twelve generated tracks the music manager names load as Ogg streams (the guards skip a missing file
 ## without a word, so only a load tells a file that was never imported); CRED1 (M1), the credits line of the music says it is AI-generated (Google Lyria) in all 13 locales and fits the
 ## column of the credits scene.
 ## Wired into _closeout_check_runner.gd as `await Rc27.run(self)`; CLOSEOUT_ONLY=s27 runs it alone, which tools/qa_sim/s26_mutations.py uses (its third set).
@@ -25,6 +26,7 @@ static func run(r: Node) -> void:
 	_glow(r)
 	await _menu(r)
 	_boss(r)
+	_boss_leaves(r)
 	_tracks(r)
 	_credits(r)
 
@@ -71,14 +73,20 @@ static func _halo(r: Node) -> void:
 static func _signs(r: Node) -> void:
 	var font: Font = ThemeDB.fallback_font
 	var words: int = 0
+	var shrunk: int = 0
+	var widest: float = 0.0
 	var missing: Array[String] = []
 	for id: StringName in DistrictSceneFactory.DISTRICTS:
 		for word: String in _SIGNS.words_of(id):
 			words += 1
+			var px: int = _SIGNS.font_px(word, font)
+			shrunk += 1 if px < _SIGNS.FONT_PX else 0
+			widest = maxf(widest, font.get_string_size(word, HORIZONTAL_ALIGNMENT_LEFT, -1, px).x)
 			for letter: String in word:
 				if letter != " " and not font.has_char(letter.unicode_at(0)):
 					missing.append("%s in %s" % [letter, id])
 	r._ok(words >= 22 and missing.is_empty(), "SOV4 the districts have %d sign words and every letter is in the engine's font (missing: %s)" % [words, ", ".join(missing) if not missing.is_empty() else "none"])
+	r._ok(widest <= _SIGNS.ATLAS_W and shrunk >= 1, "SOV8 every sign word fits the %d px row of the atlas (the widest is %.0f px; %d long words are drawn smaller)" % [_SIGNS.ATLAS_W, widest, shrunk])
 
 static func _grass(r: Node) -> void:
 	var tier_before: int = int(SettingsManager.get_setting("graphics_tier", 2))
@@ -142,6 +150,22 @@ static func _boss(r: Node) -> void:
 	var first: int = int(MusicManager.get("_boss_phase"))
 	MusicManager.call("_on_boss_defeated")
 	r._ok(seen == [2, 3] and third == 3 and first == 1, "MUS1 the Architect announces its phases %s and the music takes the theme of the phase it is told (3 then %d, a new fight starts at %d)" % [seen, third, first])
+
+static func _boss_leaves(r: Node) -> void:
+	MusicManager.call("enter_boss")
+	MusicManager.call("_on_boss_phase_changed", 3)
+	var held: bool = bool(MusicManager.get("_boss_active"))
+	MusicManager.call("_on_game_started")
+	var run_flag: bool = bool(MusicManager.get("_boss_active"))
+	var run_phase: int = int(MusicManager.get("_boss_phase"))
+	var run_mood: int = int(MusicManager.mood)
+	r._ok(held and not run_flag and run_phase == 1 and run_mood != int(MusicManager.Mood.BOSS), "MUS3 a new run ends the boss theme (held in a fight: %s; after the run starts: flag %s, phase %d, mood %d)" % [held, run_flag, run_phase, run_mood])
+	MusicManager.call("enter_boss")
+	MusicManager.call("_on_district_entered", &"suburbs")
+	var moved_flag: bool = bool(MusicManager.get("_boss_active"))
+	var moved_phase: int = int(MusicManager.get("_boss_phase"))
+	r._ok(not moved_flag and moved_phase == 1, "MUS4 a change of district ends the boss theme (flag %s, phase %d)" % [moved_flag, moved_phase])
+	MusicManager.call("_on_boss_defeated")
 
 static func _tracks(r: Node) -> void:
 	var paths: Array[String] = [MusicManager.TRACKS[MusicManager.Mood.MENU]]

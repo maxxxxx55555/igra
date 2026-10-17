@@ -275,7 +275,7 @@ import is recoverable the same way a corrupt autosave already is. Nothing
 for you to configure — mention it in the store listing's FAQ/description
 only if you want players to know it exists ahead of time.
 
-## 9. Session 26 owner rows (`v9.0.0-universe`)
+## 9. Session 26 owner rows (`v9.0.0-universe`; the bundle named here is superseded by section 10)
 
 The bundle is `build/tls.aab`: **136,645,015 bytes, version code 3, sha256 `bb61ce937b71336bffb44be98b187f546842fc0d2bf2d225d7b4a91e4415263d`**, built from `4b4fee0`
 and read by `tools/qa_sim/aab_check.py` (`jar verified.`, the upload key's certificate, 0 hits of the keystore values). The bundle of version code 2 and the first bundle of code 3 (`f8224aa`, without the fix of the daily progress) are

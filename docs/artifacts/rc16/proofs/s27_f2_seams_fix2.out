@@ -1,0 +1,10 @@
+# proof s27_f2_seams_fix2
+# utc 20261017T112525Z
+# head 111abca (uncommitted paths: 31)
+# env none
+# cmd bash -c for f in assets/audio/music/layer_threat_high.ogg assets/audio/music/layer_action.ogg; do python tools/qa_sim/music_post.py "$f" --relevel --fade-ms 10; echo "exit=$?"; done
+music_post: assets\audio\music\layer_threat_high.ogg relevelled 60.000 s lufs=-18.00 tp=-2.10 seam=0.010 (law -18 LUFS, tp <= -1.5)
+exit=0
+music_post: assets\audio\music\layer_action.ogg relevelled 60.000 s lufs=-18.10 tp=-2.20 seam=0.036 (law -18 LUFS, tp <= -1.5)
+exit=0
+# EXIT=0

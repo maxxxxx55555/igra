@@ -53,6 +53,8 @@ The six screenshot frames (each carries its code hash `f8c0de0`, the runtime of 
 5. `docs/stills/store/05_boss_after_f8c0de0_20261017T063652Z.png`: the boss.
 6. `docs/stills/store/08_shop_after_f8c0de0_20261017T063647Z.png`: the shop.
 
+What those six frames are, read by the verifier's round: they are game states, not composed art. 02 carries three large sparkle crosses (the burst of the first pickup), the tutorial box and the level-up toasts; 04 is a white hit flash over the middle of the frame (4.3 % of its pixels at 0.95 luminance or more, against the 0.3 % that the recipe frames obey); 05 shows the health bar of a Crawler (the staged fight's) and a brown cylinder under the red vignette, so the Architect does not read; 07 has the log line of the HUD over it. **The ten in-engine frames of `store/screenshots/recipes` are the primary set for the store page** (`store/SCREENSHOT_RECIPES.md` section 6: they pass `store_frames_check.py`); take from the six only the menu (01), the dark and the lit district (03, and 02 if the sparkles do not bother you) and the shop (08).
+
 The frames of the HUD pass (hurt, interact prompt, and the touch layout at 1600 x 740 with touch emulated) are in `docs/stills/shipping/hud/after2/`; the touch frame is not a store screenshot (its long side is more than twice the short side), and none of them was read on a phone (`docs/UNVERIFIABLE_HERE.md` U13).
 
 Not used, on purpose: `assets/store/screenshot_0*.png` (1280 x 720, RGBA, made before rc16, no code hash, not checked against the build) and
@@ -223,7 +225,7 @@ Each step names where the detail lives; it does not repeat it.
 
 1. **Rotate the key first** (`docs/release_checklist.md` step 0, with the exact places): it takes minutes and nothing else depends on it, but a key that sat in a public repository is worth rotating before a policy page and a store account point at that repository.
 2. **Check the file.** `sha256sum build/tls.aab` must print the value of §1; `jarsigner -verify build/tls.aab` must print `jar verified.`.
-3. **Phone smoke test:** the one checklist is `docs/RELEASE_RUNBOOK.md` §4 (its answers go to the U-rows it names in `docs/UNVERIFIABLE_HERE.md`): install the bundle through an internal-test link and run it. The bundle holds the fixes of Sessions 20 to 23 (§9).
+3. **Phone smoke test:** the one checklist is `docs/RELEASE_RUNBOOK.md` §4 (its answers go to the U-rows it names in `docs/UNVERIFIABLE_HERE.md`): install the bundle through an internal-test link and run it. The bundle holds the fixes of Sessions 20 to 27 (§9).
 4. **Make the images** with the command of §2, and read each of the seven files once.
 5. **Host the policy** of §3 and note its URL.
 6. **Play Console:** create the app and fill the dashboard with §6, the rating with §4 and the data safety form with §5 (`docs/RELEASE_RUNBOOK.md` §3 is the click path); main listing from §2 and `store/listing.md`; translations from `docs/STORE_KIT.md`.

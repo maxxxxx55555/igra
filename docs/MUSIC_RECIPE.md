@@ -54,8 +54,7 @@ Made in the Gemini app (Music skill, 3.5 Flash-Lite), post-produced by `tools/qa
 - **`music/residential.wav`, `music/park.wav`, `music/industrial.wav`,
   `music/music_boss_dark.wav`** are already shipped and just need
   ratification (no new render).
-- **`music/music_combat.ogg` / `music/music_battle.wav`** stay as-is (a
-  documented variant pool, not a gap).
+- **`music/music_combat.ogg` / `music/music_battle.wav`** stay a variant pool (not a gap); Session 27 put both on the house law and faded their wraps (SEAM-27).
 
 ## After all 19 land
 

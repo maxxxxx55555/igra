@@ -34,6 +34,11 @@ static func words_of(district_id: StringName) -> Array[String]:
 	found.assign(WORDS.get(district_id, WORDS[&"suburbs"]))
 	return found
 
+## The size a word is drawn at: FONT_PX, smaller for a word that would not fit the row of the atlas (the end of "ВЫСОКОЕ НАПРЯЖЕНИЕ" and of "ПРИЁМНОЕ ОТДЕЛЕНИЕ" was cut off at 96 px).
+static func font_px(word: String, font: Font) -> int:
+	var wide: float = font.get_string_size(word, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_PX).x
+	return mini(FONT_PX, int(FONT_PX * ATLAS_W / (wide * 1.06)))
+
 ## `fronts` are the front faces of the skyline's blocks at the ground (z toward the street) and `widths` their widths; the signs are laid on them from a stream of the district's own.
 static func build(parent: Node3D, district_id: StringName, fronts: Array[Transform3D], widths: Array[float]) -> void:
 	if DisplayServer.get_name() == "headless" or fronts.is_empty():
@@ -47,6 +52,7 @@ static func build(parent: Node3D, district_id: StringName, fronts: Array[Transfo
 	viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 	var fills: Array[float] = []
 	for i in words.size():
+		var px: int = font_px(words[i], font)
 		var label := Label.new()
 		label.text = words[i]
 		label.position = Vector2(0.0, i * ROW_PX)
@@ -54,10 +60,10 @@ static func build(parent: Node3D, district_id: StringName, fronts: Array[Transfo
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		label.add_theme_font_override("font", font)
-		label.add_theme_font_size_override("font_size", FONT_PX)
+		label.add_theme_font_size_override("font_size", px)
 		label.add_theme_color_override("font_color", Color.WHITE)
 		viewport.add_child(label)
-		fills.append(clampf(font.get_string_size(words[i], HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_PX).x / ATLAS_W * 1.06, 0.05, 1.0))
+		fills.append(clampf(font.get_string_size(words[i], HORIZONTAL_ALIGNMENT_LEFT, -1, px).x / ATLAS_W * 1.06, 0.05, 1.0))
 	parent.add_child(viewport)
 	await parent.get_tree().process_frame
 	await RenderingServer.frame_post_draw

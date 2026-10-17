@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 """M1 of Session 27: the post-production pass of docs/MUSIC_RECIPE.md for one generated track, with ffmpeg: cut `--loop` seconds from `--start`, close the seam of a loop with an equal-power crossfade of the
 audio that would have followed the loop into its head (a one-shot gets 3 ms edge fades instead), downmix to mono 44.1 kHz (the house format of the beds, docs/MUSIC_SPEC.md), gain it to the house
-law (beds and music -18 LUFS integrated, true peak at most -1.5 dBFS; a track whose sharp peaks hold the gain back is limited to the law first) and write OGG q4 or 16-bit WAV by the extension of the target. It measures the file it wrote and exits 1 when the loudness or the true peak is off. `--relevel` puts a shipped file on the same law in place, its length kept (no cut, no new seam).
+law (beds and music -18 LUFS integrated, true peak at most -1.5 dBFS; a track whose sharp peaks hold the gain back is limited to the law first) and write OGG q4 or 16-bit WAV by the extension of the target. It measures the file it wrote and exits 1 when the loudness or the true peak is off. `--relevel` puts a shipped file on the same law in place, its length kept (no cut, no new seam); `--fade-ms` fades its two edges to zero first, for a loop that was cut hard (a click at its wrap becomes a dip of a few ms); `--seams` prints the step at the wrap of each file.
 
 usage: python tools/qa_sim/music_post.py <input> <target.ogg|.wav> --loop <seconds> [--start <seconds>, else the steadiest stretch] [--one-shot] [--lufs -18] [--tp -1.5]
-       python tools/qa_sim/music_post.py <file.ogg|.wav> --relevel [--lufs -18] [--tp -1.5]
+       python tools/qa_sim/music_post.py <file.ogg|.wav> --relevel [--fade-ms 10] [--lufs -18] [--tp -1.5]
+       python tools/qa_sim/music_post.py --seams <file.ogg|.wav>...
        python tools/qa_sim/music_post.py --demo
 """
 import pathlib
@@ -40,18 +41,23 @@ def decode(path):
     return np.frombuffer(r.stdout, dtype="<f4").copy()
 
 
+def edge_fade(audio, ms):
+    """The samples with their first and last `ms` faded to zero (a sine ramp): a loop cut hard has no step at its wrap, a one-shot no click at its ends. The length is kept."""
+    k = int(ms / 1000.0 * SR)
+    ramp = np.sin(np.linspace(0.0, np.pi / 2.0, k)).astype("<f4")
+    out = audio.copy()
+    out[:k] *= ramp
+    out[-k:] *= ramp[::-1]
+    return out
+
+
 def cut(audio, start, seconds, one_shot):
     """The loop (its seam closed) or the one-shot (3 ms fades) of `seconds` from `start`."""
     s, n = int(round(start * SR)), int(round(seconds * SR))
     if one_shot:
         if len(audio) < s + n:
             sys.exit("music_post: %.2f s asked from %.2f s, the file holds %.2f s" % (seconds, start, len(audio) / SR))
-        out = audio[s:s + n].copy()
-        k = int(FADE_MS / 1000.0 * SR)
-        ramp = np.sin(np.linspace(0.0, np.pi / 2.0, k)).astype("<f4")
-        out[:k] *= ramp
-        out[-k:] *= ramp[::-1]
-        return out
+        return edge_fade(audio[s:s + n], FADE_MS)
     x = min(int(CROSSFADE_S * SR), n // 8)
     if len(audio) < s + n + x:
         sys.exit("music_post: a loop of %.2f s from %.2f s needs %.2f s of audio, the file holds %.2f s" % (seconds, start, (s + n + x) / SR, len(audio) / SR))
@@ -143,27 +149,52 @@ def seam(audio):
     return float(abs(audio[0] - audio[-1]) / (np.sqrt(np.mean(audio[-k:] ** 2)) + 1e-9))
 
 
+def encode(audio, target, lufs, tp):
+    """Normalise, write and measure the file; a lossy encode can move the loudness (it moved the police bed by +0.6 LU), so when the file reads more than 0.15 LU off the aim is moved by the error and the file is
+    written again, up to three times. Returns what the last write measured."""
+    aim = lufs
+    for _ in range(3):
+        write(normalise(audio, aim, tp), target)
+        got = measure(target)
+        if abs(got[0] - lufs) <= 0.15:
+            break
+        aim += lufs - got[0]
+    return got
+
+
 def process(source, target, seconds, start, one_shot, lufs, tp):
     raw = decode(source)
     if start is None:
         start = steadiest_start(raw, seconds, one_shot)
         print("music_post: the steadiest stretch starts at %.1f s" % start)
-    audio = normalise(cut(raw, start, seconds, one_shot), lufs, tp)
-    write(audio, target)
-    got_lufs, got_tp, got_seconds = measure(target)
+    got_lufs, got_tp, got_seconds = encode(cut(raw, start, seconds, one_shot), target, lufs, tp)
     jump = 0.0 if one_shot else seam(decode(target))
     print("music_post: %s %s %.3f s lufs=%.2f tp=%.2f seam=%.3f (law %g LUFS, tp <= %g)" % (target, "one-shot" if one_shot else "loop", got_seconds, got_lufs, got_tp, jump, lufs, tp))
     ok = abs(got_lufs - lufs) <= LUFS_TOLERANCE and got_tp <= tp and abs(got_seconds - seconds) <= 0.01
     return ok
 
 
-def relevel(path, lufs, tp):
-    """Put a shipped file on the law in place: decode, normalise, write, measure. The length is the file's own, so nothing is cut and no seam is made."""
+def relevel(path, lufs, tp, fade_ms=0.0):
+    """Put a shipped file on the law in place: decode, fade the two edges when `fade_ms` is asked, normalise, write next to the file, measure, and replace the file only when the result is on the law (a failed run
+    leaves the source as it was). The length is the file's own, so nothing is cut and no seam is made."""
     seconds = measure(path)[2]
-    write(normalise(decode(path), lufs, tp), path)
-    got_lufs, got_tp, got_seconds = measure(path)
-    print("music_post: %s relevelled %.3f s lufs=%.2f tp=%.2f (law %g LUFS, tp <= %g)" % (path, got_seconds, got_lufs, got_tp, lufs, tp))
-    return abs(got_lufs - lufs) <= LUFS_TOLERANCE and got_tp <= tp and abs(got_seconds - seconds) <= 0.01
+    audio = decode(path)
+    tmp = path.with_name(path.stem + ".relevel" + path.suffix)
+    got_lufs, got_tp, got_seconds = encode(edge_fade(audio, fade_ms) if fade_ms else audio, tmp, lufs, tp)
+    ok = abs(got_lufs - lufs) <= LUFS_TOLERANCE and got_tp <= tp and abs(got_seconds - seconds) <= 0.01
+    print("music_post: %s relevelled %.3f s lufs=%.2f tp=%.2f seam=%.3f (law %g LUFS, tp <= %g)%s" % (path, got_seconds, got_lufs, got_tp, seam(decode(tmp)), lufs, tp, "" if ok else " OFF THE LAW, the file is kept as it was"))
+    if ok:
+        tmp.replace(path)
+    else:
+        tmp.unlink()
+    return ok
+
+
+def seams(paths):
+    """One line per file: the step at its wrap (|first sample - last sample|, 1.0 is full scale), the same as a share of the loudness of its last 50 ms, and the length; a step over 0.05 is a click when the file loops."""
+    for path in paths:
+        audio = decode(path)
+        print("%.3f step, %.2f of the last 50 ms, %.2f s, %s" % (abs(float(audio[0]) - float(audio[-1])), seam(audio), len(audio) / SR, path))
 
 
 def demo():
@@ -186,24 +217,33 @@ def demo():
         quiet = pathlib.Path(tmp) / "quiet.ogg"
         write((clank * 0.1).astype("<f4"), quiet)
         relevel_ok = relevel(quiet, -18.0, -1.5)
+        hard = pathlib.Path(tmp) / "hard.ogg"
+        write((pad[:int(3.3 * SR)] * 2.0).astype("<f4"), hard)
+        step_before = seam(decode(hard))
+        faded_ok = relevel(hard, -18.0, -1.5, 10.0)
+        step_after = seam(decode(hard))
+        assert step_before > 0.5 and step_after < 0.1, (step_before, step_after)
         intro = pad.copy()
         intro[: 7 * SR] *= 6.0
         picked = steadiest_start(intro.astype("<f4"), 4.0, False)
         assert picked >= 7.0 and picked + 4.0 <= 20.0, picked
         jump = max(seam(decode(pathlib.Path(tmp) / "loop.ogg")), seam(decode(pathlib.Path(tmp) / "clank.ogg")))
-    assert loop_ok and shot_ok and clank_ok and relevel_ok and jump < 0.5, (loop_ok, shot_ok, clank_ok, relevel_ok, jump)
-    print("music_post demo: a loop, a one-shot, a loop with sharp clanks and a quiet file relevelled in place come out on the loudness law, the right length, and the seam of the loop is shut")
+    assert loop_ok and shot_ok and clank_ok and relevel_ok and faded_ok and jump < 0.5, (loop_ok, shot_ok, clank_ok, relevel_ok, faded_ok, jump)
+    print("music_post demo: a loop, a one-shot, a loop with sharp clanks and a quiet file relevelled in place come out on the loudness law, the right length, and the seam of the loop is shut; a loop cut hard has its step at the wrap faded away")
 
 
 def main(argv):
     if "--demo" in argv:
         demo()
         return 0
+    if "--seams" in argv:
+        seams([pathlib.Path(a) for a in argv[1:] if a != "--seams"])
+        return 0
     opts = {}
-    for flag, default in (("--loop", None), ("--start", None), ("--lufs", "-18"), ("--tp", "-1.5")):
+    for flag, default in (("--loop", None), ("--start", None), ("--lufs", "-18"), ("--tp", "-1.5"), ("--fade-ms", "0")):
         opts[flag] = float(argv[argv.index(flag) + 1]) if flag in argv else (float(default) if default is not None else None)
     if "--relevel" in argv and len(argv) >= 2:
-        return 0 if relevel(pathlib.Path(argv[1]), opts["--lufs"], opts["--tp"]) else 1
+        return 0 if relevel(pathlib.Path(argv[1]), opts["--lufs"], opts["--tp"], opts["--fade-ms"]) else 1
     if len(argv) < 3 or "--loop" not in argv:
         print(__doc__)
         return 2

@@ -50,12 +50,17 @@ SETS = [
         ("scripts/ui/menu_fog.gd", "visible = int(SettingsManager.get_setting(\"graphics_tier\", 2)) > 0", "visible = true", "SOV7"),
         ("scripts/enemies/boss_3d.gd", "EventBus.boss_phase_changed.emit(3)", "pass", "MUS1"),
         ("scripts/systems/music_manager.gd", '&"police": "res://assets/audio/music/police.ogg",', '&"police": "res://assets/audio/music/police_x.ogg",', "MUS2"),
-        ("data/i18n/en.json", '"CREDITS_MUSIC": "Music (AI-generated, Google Lyria) and SFX: TLS Team"', '"CREDITS_MUSIC": "Music and SFX: TLS Team"', "CRED1"),
-        ("scripts/ui/main_menu.gd", "	_refresh_daily_card(vb as VBoxContainer)", "	pass", "MENU2"),
+        ("data/i18n/en.json", '"CREDITS_MUSIC": "Music (partly AI, Google Lyria) and SFX: TLS Team"', '"CREDITS_MUSIC": "Music and SFX: TLS Team"', "CRED1"),
+        ("scripts/systems/music_manager.gd", "func _on_game_started() -> void:\n\t_leave_boss()\n", "func _on_game_started() -> void:\n\tpass\n", "MUS3"),
+        ("scripts/systems/music_manager.gd", "func _on_district_entered(district_id: StringName) -> void:\n\t_leave_boss()\n", "func _on_district_entered(district_id: StringName) -> void:\n\tpass\n", "MUS4"),
+        ("scripts/ui/main_menu.gd", "\t_refresh_daily_card(vb as VBoxContainer)", "\tpass", "MENU2"),
+    ],
+    [  # Session 27, the closeout group s27 again: the verifier's round found two sign words cut off; the second mutation of the file of SOV4 cannot share its set (SOV8 would fail under SOV4's mutation too)
+        ("scripts/world/soviet_signs.gd", "return mini(FONT_PX, int(FONT_PX * ATLAS_W / (wide * 1.06)))", "return FONT_PX", "SOV8"),
     ],
 ]
 ## The closeout group each set runs (CLOSEOUT_ONLY): the sets of Session 26 run `s26`, those of Session 27 `s27`.
-GROUP = ["s26", "s26", "s27"]
+GROUP = ["s26", "s26", "s27", "s27"]
 LINE = re.compile(r"^\[closeout\] (ok  |FAIL) +(\S+)")
 
 
