@@ -71,7 +71,7 @@ func _state_attack(delta: float) -> void:
 		_change_state(State.CHASE)
 		return
 	if attack_timer <= 0.0:
-		_shadow_attack()
+		_perform_attack()
 		attack_timer = attack_cooldown
 
 func _state_flee(delta: float) -> void:
@@ -99,13 +99,6 @@ func _teleport_behind_player() -> void:
 	global_position = behind
 	velocity = Vector3.ZERO
 	play_cue(&"teleport", 0.5)
-
-func _shadow_attack() -> void:
-	if not player_ref or not is_instance_valid(player_ref):
-		return
-	player_ref.take_damage(attack_damage, global_position)
-	_inflict_statuses(player_ref)
-	EventBus.enemy_attack.emit(attack_damage)
 
 func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, type: EnemyRosterData.DamageType = EnemyRosterData.DamageType.BULLET) -> void:
 	super.take_damage(amount, _src_pos, type)

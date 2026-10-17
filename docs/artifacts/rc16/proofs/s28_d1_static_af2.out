@@ -1,0 +1,30 @@
+# proof s28_d1_static_af2
+# utc 20261017T150751Z
+# head e3536dd (uncommitted paths: 43)
+# env none
+# cmd python tools/qa_sim/s28_static_mutations.py
+BITES: the park opens with the Crawler again (x1.65 over the residential district) | tools/qa_sim/difficulty_curve.py --check | gate rc 1 mutated, 0 restored
+    mutated: | substation | DEST WATC HUNT SHAR BURN | 19.5 | 14.5 | 13.2 | 10.2 | x0.72 | - | 24 |
+    mutated: | power_station | DEST DEST WATC BRUT SHAR BURN | 25.8 | 24.5 | 21.5 | 11.0 | x1.32 | - | 24 |
+    mutated: FAIL park: x1.65 over residential with no weapon found and no more ammo (a step over x1.6 needs a new tool)
+    restored: | power_station | DEST DEST WATC BRUT SHAR BURN | 25.8 | 24.5 | 21.5 | 11.0 | x1.32 | - | 24 |
+BITES: the ammo doubles from the police again (the gas station rises x1.93 with nothing new) | tools/qa_sim/difficulty_curve.py --check | gate rc 1 mutated, 0 restored
+    mutated: | substation | DEST WATC HUNT SHAR BURN | 19.5 | 14.5 | 13.2 | 10.2 | x0.72 | - | 24 |
+    mutated: | power_station | DEST DEST WATC BRUT SHAR BURN | 25.8 | 24.5 | 21.5 | 11.0 | x1.32 | - | 24 |
+    mutated: FAIL gas_station: x1.93 over hospital with no weapon found and no more ammo (a step over x1.6 needs a new tool)
+    restored: | power_station | DEST DEST WATC BRUT SHAR BURN | 25.8 | 24.5 | 21.5 | 11.0 | x1.32 | - | 24 |
+BITES: Hard has no hit cap of its own again (a hit costs 12 at Normal and at Hard) | tools/qa_sim/balance_sim.py | gate rc 1 mutated, 0 restored
+    mutated:   - TVAR: the hits that kill a player run 12.5, 8.3 and 8.3 at Easy, Normal and Hard (each must be fewer than the one before)
+    mutated:   - WATCHER: the hits that kill a player run 16.7, 8.3 and 8.3 at Easy, Normal and Hard (each must be fewer than the one before)
+    mutated:   - per_second runs 10.00, 15.00 and 15.00 at Easy, Normal and Hard (each must be more than the one before)
+    restored: BALANCE SIM: PASS — DARK solvable with >=20% margin in every district, no resource dead-ends, 4 skill branches, DARK time-to-win within 3-6h (PARTIAL is a longer optional style, see NOTE above).
+BITES: a monster's hit lands at once again (the telegraph is skipped) | tools/qa_sim/telegraph_audit.py | gate rc 1 mutated, 0 restored
+    mutated: FAIL base_monster.gd:542: _deal_damage hurts the player and nothing announces it (no _telegraph.warn(_deal_damage), not a landing of a cued windup)
+    mutated: telegraph_audit: 19 script(s) read, 1 finding(s)
+    restored: telegraph_audit: 19 script(s) read, 0 finding(s)
+BITES: the Crawler's leap winds up in 0.2 s | tools/qa_sim/telegraph_audit.py | gate rc 1 mutated, 0 restored
+    mutated: FAIL crawler_3d.gd: LEAP_WINDUP is 0.2 s, under 0.4 s
+    mutated: telegraph_audit: 19 script(s) read, 1 finding(s)
+    restored: telegraph_audit: 19 script(s) read, 0 finding(s)
+S28 STATIC MUTATIONS verdict=PASS mutations=5 bad=0
+# EXIT=0

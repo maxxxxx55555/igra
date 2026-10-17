@@ -24,6 +24,7 @@ func _ready() -> void:
 	vision_range = 25.0
 	vision_angle = 30.0
 	add_to_group("sharpshooters")
+	_telegraph.set("cue_range", vision_range + 5.0)  # the shot is announced from where it is fired
 	# Delivered audio uses the GDD's "Sniper" name (mon_sniper_*), not the
 	# script's monster_id "sharpshooter" — wiring to the files that exist
 	# rather than renaming them.

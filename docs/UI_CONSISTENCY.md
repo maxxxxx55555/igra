@@ -11,7 +11,7 @@ The directive asks for one UI typeface. The canon of the project is three faces 
 Mono (`font_mono`, line 68). Every screen takes its theme from `ThemeProvider.build_theme()`, which the autoload `ThemeSetup` sets window-wide
 (`scripts/theme_setup.gd`), so no screen picks a face of its own. The consistency gate finds exactly five font files named by shipped sources: the three above,
 Rajdhani (the base of the engine's fallback font, with the system font behind it for the glyphs the shipped faces lack, CJK and Arabic: `UI_FONT_PATH` in
-`scripts/i18n/localization_manager.gd:26`) and OpenDyslexic (the Dyslexia Font option; the file is not shipped, the owner supplies it: `scripts/systems/settings_manager.gd:415`). Decision (TZ row CON-23): keep the canon of
+`scripts/i18n/localization_manager.gd:26`) and OpenDyslexic (the Dyslexia Font option; the file is not shipped, the owner supplies it: `scripts/systems/settings_manager.gd:416`). Decision (TZ row CON-23): keep the canon of
 three roles, not a second pass that would redraw every screen in one face; the roles are the hierarchy.
 
 ## 2. The size ladder
@@ -26,7 +26,7 @@ The sizes in px of the 1920 x 1080 canvas that the UI scenes and scripts pin (`w
 17 distinct sizes, 4 of them under 12 px (19 files). A modular scale would hold six or seven. It is **not collapsed in this pass**: every size sits in a layout
 that was fitted in 13 locales and 3 text scales (the shop at 39 of 39 cases, the close buttons in 13 locales: `docs/RUN_STATE.md`, row L24), and a collapse
 changes widths in all of them without a frame to prove none overflows. The gate is a ratchet: a new size is a decision, then a value of `SIZE_LADDER` in the tool.
-The text-scale option moves every size together (`TEXT_SCALE`, `scripts/systems/settings_manager.gd:393`: 0.9, 1.0, 1.15).
+The text-scale option moves every size together (`TEXT_SCALE`, `scripts/systems/settings_manager.gd:394`: 0.9, 1.0, 1.15).
 
 **Owner row U-1 (phone legibility, also U13 of `docs/UNVERIFIABLE_HERE.md`).** On a phone in landscape (2400 x 1080) the canvas scales by 1.0, so the 16 px body is 16
 device pixels: about 5 dp at 400 dpi, 1.5 % of the screen height. A PC game at 1080p reads at that size; a phone may not. Executable action: install the signed AAB on a

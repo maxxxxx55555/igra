@@ -57,6 +57,8 @@ var _stun_timer: float = 0.0
 ## Winnability: mercy i-frames после любого попадания (см. take_damage).
 var _damage_grace_timer: float = 0.0
 const _DAMAGE_GRACE_SEC: float = 0.8
+## The most one hit takes at Normal (GDD 5.3); Hard and the New Game+ level raise it (DIFFICULTY_PRESETS, NewGamePlus).
+const HIT_CAP: float = 12.0
 var _combo_break: bool = false
 var _chain_landed: bool = false
 var _light_died: bool = false
@@ -905,7 +907,7 @@ func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, _type: EnemyRo
 	# Winnability: кап одиночного удара. В бою с Архитектором связка
 	# «милли 40 + сферы по 20» без уклонений уходила в спираль смертей;
 	# 12 урона за хит оставляет давление, но даёт шанс выстоять вплотную.
-	amount = minf(amount, 12.0) / SettingsManager.difficulty_scale("player_hp")  # Easy: 50% more health, as damage taken
+	amount = minf(amount, HIT_CAP * SettingsManager.difficulty_scale("damage_cap") * NewGamePlus.get_enemy_damage_multiplier()) / SettingsManager.difficulty_scale("player_hp")  # Easy: 50% more health, as damage taken
 	hp = clampf(hp - amount, 0.0, stats.max_hp)
 	AudioManager.play_sound_3d(preload("res://assets/audio/sfx/sfx_hurt.wav"), global_position, -4.0)
 	EventBus.player_health_changed.emit(hp / stats.max_hp)

@@ -66,6 +66,10 @@ var _nudge_count := 0  # R2 hardening (docs/REDTEAM_CHALLENGE.md TG-PLAY): a "cl
 var _score := -1.0
 var _score_t := 0.0
 var _deaths := 0
+var _hits_taken := 0
+var _items_used := 0
+var _health_lost := 0.0
+var _t_first_death := -1.0
 ## GDD E05 coin curve (0-200 at D1 -> 8000+ by D11): sum of every wallet
 ## increase from New Game on (spending does not count against it).
 var _coins_earned := 0
@@ -122,7 +126,13 @@ func _ready() -> void:
 		Engine.time_scale = clampf(float(OS.get_environment("QA_TIME_SCALE")), 1.0, 8.0)
 	get_tree().create_timer(HARD_TIMEOUT_SEC).timeout.connect(_on_hard_timeout)
 	EventBus.game_won.connect(func() -> void: _win_seen = true)
-	EventBus.game_over.connect(func() -> void: _deaths += 1)  # player_3d.gd emits game_over at hp <= 0; nothing shipped emits player_died
+	EventBus.game_over.connect(func() -> void:
+		_deaths += 1  # player_3d.gd emits game_over at hp <= 0; nothing shipped emits player_died
+		if _t_first_death < 0.0:
+			_t_first_death = _now())
+	EventBus.player_damaged.connect(func(amount: float) -> void:
+		_hits_taken += 1
+		_health_lost += amount)
 	EventBus.inventory_notice.connect(func(text: String) -> void:
 		_log("inventory notice: %s" % text)
 		if text == LocalizationManager.t("INV_NO_SLOTS") or text == LocalizationManager.t("INV_OVERWEIGHT"):
@@ -159,8 +169,8 @@ func _start() -> void:
 				var s := get_tree().current_scene
 				return s != null and s.name == "MainMenu", 14.0):
 			_fail("menu not reached in 14s (state=%d)" % GameManager.current_state); return _finish()
-		# The bot plays the game as tuned, whatever difficulty the profile holds (monsters scale with it).
-		SettingsManager.set_difficulty(1)
+		# The bot plays the game as tuned (Normal), whatever difficulty the profile holds (monsters scale with it); QA_DIFFICULTY 0, 1 or 2 asks for Easy, Normal or Hard.
+		SettingsManager.set_difficulty(int(OS.get_environment("QA_DIFFICULTY")) if OS.get_environment("QA_DIFFICULTY") != "" else 1)
 		SaveSystem.mark_onboard_done()
 		Routes.start_game()
 	if not await _wait(func() -> bool: return GameManager.is_playing(), 15.0):
@@ -647,6 +657,7 @@ func _use_item(item_id: StringName) -> void:
 		var s = inv.slots[i]
 		if s != null and s.get("item_id") == item_id:
 			inv.use_item(i)
+			_items_used += 1
 			return
 
 func _try_revive() -> void:
@@ -766,6 +777,7 @@ func _finish() -> void:
 	print("[bot s%d]   wall time    : %.1fs" % [_seed, _now()])
 	print("[bot s%d]   districts FULL: %d/11" % [_seed, full])
 	print("[bot s%d]   deaths       : %d" % [_seed, _deaths])
+	print("[bot s%d]   cost         : difficulty %d, %d hits taken, %.0f health lost, %d items used, first death at %.1f s" % [_seed, SettingsManager.get_setting("difficulty", 1), _hits_taken, _health_lost, _items_used, _t_first_death])
 	print("[bot s%d]   coins earned : %d (wallet %d)" % [_seed, _coins_earned, CoinWallet.get_coins()])
 	print("[bot s%d]   nudges       : %d (>1 means the win leaned on nudge rescues, not clean nav — docs/REDTEAM_CHALLENGE.md TG-PLAY)" % [_seed, _nudge_count])
 	print("[bot s%d]   onboarding   : first_interactable=%.1f first_secret_hint=%.1f first_secret_found=%.1f first_district_full=%.1f" % [

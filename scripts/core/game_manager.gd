@@ -101,6 +101,8 @@ func start_new_game() -> void:
 ## save wipe meaningless). No save (Hardcore just wiped it, or none yet) ->
 ## a genuinely new game, which is what Hardcore's one life means.
 const RESPAWN_HP_RATIO: float = 0.5
+## The battery is not refilled by a death (GDD 5.4), but it never comes back below one battery's worth (GDD 3.2): a flashlight that is dead at the district entry is a death spiral, not a retry.
+const RESPAWN_BATTERY_FLOOR: float = 25.0
 var _respawn_battery: float = -1.0
 
 func respawn_after_death() -> void:
@@ -126,7 +128,7 @@ func apply_pending_respawn(player: Node) -> void:
 		return
 	var max_hp: float = player.stats.max_hp if ("stats" in player and player.stats) else 100.0
 	player.set("hp", max_hp * RESPAWN_HP_RATIO)
-	player.set("battery", minf(_respawn_battery, float(player.get("battery_max"))))
+	player.set("battery", minf(maxf(_respawn_battery, RESPAWN_BATTERY_FLOOR), float(player.get("battery_max"))))
 	EventBus.player_health_changed.emit(RESPAWN_HP_RATIO)
 	_respawn_battery = -1.0
 

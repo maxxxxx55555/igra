@@ -22,7 +22,7 @@ here (F-1); everything else below is a fact of the sources or of the logs.
 ## 2. The time (the bot's, then a person's)
 
 The bot, three seeds (`docs/PACING_AUDIT.md`): first secret hint at 11.2 to 11.7 s, the first interactable at 24.4 to 24.9 s, the first district lit at 26.5 to 27.0 s of game time
-(`onboarding` line, `scripts/tools/_qa_autoplay_runner.gd:771`). That is a floor: the bot reads nothing. A person adds the cards (seven taps, or one on SKIP), the hints (each waits for its
+(`onboarding` line, `scripts/tools/_qa_autoplay_runner.gd:783`). That is a floor: the bot reads nothing. A person adds the cards (seven taps, or one on SKIP), the hints (each waits for its
 action) and the walking; the model of `tools/qa_sim/balance_sim.py` puts a first play at 12 to 18 minutes a district before its multiplier, so a first district is a stretch of minutes
 and the first five minutes end inside it, with the first power restored or about to be.
 

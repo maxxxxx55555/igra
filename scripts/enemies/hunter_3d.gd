@@ -50,6 +50,7 @@ func _state_chase(delta: float) -> void:
 		_charge_windup = CHARGE_WINDUP
 		_charging = true
 		play_cue(&"roar", 3.0)
+		_telegraph.cue()
 		return
 	var spd: float = chase_speed
 	if _slow_active:

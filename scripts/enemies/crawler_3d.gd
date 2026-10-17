@@ -51,6 +51,7 @@ func _tick_ai(delta: float) -> void:
 			if dist <= attack_range and attack_timer <= 0.0:
 				_leap_windup = LEAP_WINDUP
 				_leaping = true
+				_telegraph.cue()
 			_move_to(chase_speed)
 
 		State.FLEE:

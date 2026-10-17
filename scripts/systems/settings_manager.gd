@@ -289,12 +289,13 @@ func set_difficulty(idx: int) -> void:
 	EventBus.settings_changed.emit("difficulty", _settings["difficulty"])
 
 ## What each difficulty (Easy, Normal, Hard) scales; Normal is the game as tuned. Readers: base_monster.gd (monster_hp, monster_damage),
-## player_3d.gd (player_hp), district_loot.gd (extra_parts: spare repair parts per district), ad_service.gd (revive offer, 0 = none),
+## player_3d.gd (player_hp, damage_cap: the most one hit takes, 12 HP at Normal, scaled again by the New Game+ level), district_loot.gd (extra_parts: spare repair parts per district), ad_service.gd (revive offer, 0 = none),
 ## base_monster.gd (search: the share of the search time; reaction_sec: seconds a monster stands noticing before it chases).
 const DIFFICULTY_PRESETS: Dictionary = {
 	"monster_hp": [0.7, 1.0, 1.3],
 	"monster_damage": [0.75, 1.0, 1.25],
 	"player_hp": [1.5, 1.0, 1.0],
+	"damage_cap": [1.0, 1.0, 1.25],
 	"extra_parts": [1.0, 0.0, 0.0],
 	"revive": [1.0, 1.0, 0.0],
 	"search": [0.7, 1.0, 1.3],

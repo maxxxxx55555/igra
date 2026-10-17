@@ -50,11 +50,11 @@ func _state_attack(delta: float) -> void:
 		_change_state(State.CHASE)
 		return
 	if attack_timer <= 0.0:
-		_perform_combo_attack()
+		_telegraph.warn(_perform_combo_attack)
 		attack_timer = attack_cooldown
 
 func _perform_combo_attack() -> void:
-	if not player_ref or not is_instance_valid(player_ref):
+	if not player_ref or not is_instance_valid(player_ref) or _player_hiding or global_position.distance_to(player_ref.global_position) > attack_range + 0.5:
 		return
 	_combo_step = mini(_combo_step + 1, 3)
 	_combo_timer = 2.0

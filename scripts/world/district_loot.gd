@@ -394,8 +394,8 @@ const EXTRA_PARTS: Dictionary = {
 }
 const PICKUP_AMOUNT: Dictionary = {&"plank": 5}
 const AMMO_PER_PICKUP: int = 12
-## Ammo lies in every district but the first, twice from the sixth on (police): the guns come late.
-const AMMO_DOUBLE_FROM: int = 6
+## Ammo lies in every district but the first, twice from the sixth on (the gas station, where the first two Hunters stand: a rise of x1.9 in the enemy strength is paid with it): the guns come late.
+const AMMO_DOUBLE_FROM: int = 5
 const WORKBENCH_DISTRICTS: Array[StringName] = [&"suburbs", &"police", &"industrial"]
 ## The bed of the "Midsummer Night's Dream" achievement stands in the first district.
 const BED_DISTRICT: StringName = &"suburbs"

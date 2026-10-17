@@ -8,8 +8,7 @@ Lanchester), the strength of a district the sum over its monsters, in thousands.
 --check fails (exit 1) when
   - a district is not calmer as it is restored (the strength at a later stage is above an earlier one),
   - a step from one district to the next (the DARK strength) is over STEP_LIMIT: a spike,
-and prints WATCH for a step over WATCH_STEP in a district where the player gains nothing (no weapon found, no more ammo than before): it is the sharpest rise the player
-meets without a new tool, and a playtest question, not a failure.
+  - a step over NO_TOOL_LIMIT in a district where the player gains nothing (no weapon found, no more ammo than before): a rise without a new tool (docs/DIFFICULTY_INTENT.md, rule R5).
 """
 import pathlib
 import re
@@ -19,21 +18,12 @@ import balance_sim
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 STEP_LIMIT = 2.2
-WATCH_STEP = 1.8
+NO_TOOL_LIMIT = 1.6
 STAGES = ["DARK", "PARTIAL", "STREETS", "FULL"]
 
 
 def read(rel):
     return (ROOT / rel).read_text(encoding="utf-8", errors="replace")
-
-
-def monsters():
-    out = {}
-    for p in sorted((ROOT / "data/monsters").glob("monster_*.tres")):
-        text = p.read_text(encoding="utf-8", errors="replace")
-        hp, dmg = (float(re.search(r"^%s = ([\d.]+)" % k, text, re.M).group(1)) for k in ("max_hp", "melee_damage"))
-        out[p.stem.replace("monster_", "").upper()] = (hp, dmg)
-    return out
 
 
 def rosters():
@@ -61,8 +51,8 @@ def strengths(order, roster, counts, stats):
 
 
 def judge(order, st, gain):
-    """(failures, watches) over the strengths of every district and the player's gains."""
-    bad, watch = [], []
+    """The failures over the strengths of every district and the player's gains."""
+    bad = []
     for d in order:
         if any(st[d][i + 1] > st[d][i] for i in range(3)):
             bad.append("%s is not calmer as it is restored: %s" % (d, st[d]))
@@ -70,13 +60,13 @@ def judge(order, st, gain):
         step = st[d][0] / st[prev][0]
         if step > STEP_LIMIT:
             bad.append("%s is a spike: DARK strength x%.2f over %s" % (d, step, prev))
-        elif step > WATCH_STEP and not gain[d][0] and gain[d][1] <= gain[prev][1]:
-            watch.append("%s: x%.2f over %s with no weapon found and no more ammo" % (d, step, prev))
-    return bad, watch
+        elif step > NO_TOOL_LIMIT and not gain[d][0] and gain[d][1] <= gain[prev][1]:
+            bad.append("%s: x%.2f over %s with no weapon found and no more ammo (a step over x%.1f needs a new tool)" % (d, step, prev, NO_TOOL_LIMIT))
+    return bad
 
 
 def report():
-    stats, (roster, counts), order = monsters(), rosters(), spine()
+    stats, (roster, counts), order = balance_sim.monster_stats(), rosters(), spine()
     st, gain = strengths(order, roster, counts, stats), gains(order)
     lines = ["Monsters per stage (%s): %s" % (", ".join(STAGES), ", ".join(str(n) for n in counts)), "",
              "| District | Roster | Strength DARK | PARTIAL | STREETS | FULL | DARK step | Weapon found | Ammo pickups |", "|---|---|---|---|---|---|---|---|---|"]
@@ -84,33 +74,31 @@ def report():
     for d in order:
         lines.append("| %s | %s | %.1f | %.1f | %.1f | %.1f | %s | %s | %d |" % (d, " ".join(r[:4] for r in roster[d]), *st[d], "-" if prev is None else "x%.2f" % (st[d][0] / st[prev][0]), gain[d][0] or "-", gain[d][1] * 12))
         prev = d
-    bad, watch = judge(order, st, gain)
-    return "\n".join(lines), bad, watch
+    return "\n".join(lines), judge(order, st, gain)
 
 
 def demo():
     order = ["a", "b", "c"]
     flat = {"a": [4.0, 3.0, 2.0, 1.0], "b": [5.0, 4.0, 3.0, 2.0], "c": [6.0, 5.0, 4.0, 3.0]}
     none = {"a": ("", 0), "b": ("", 1), "c": ("", 1)}
-    assert judge(order, flat, none) == ([], [])
+    assert judge(order, flat, none) == []
     spike = dict(flat, c=[20.0, 5.0, 4.0, 3.0])
-    assert judge(order, spike, none)[0] and "spike" in judge(order, spike, none)[0][0]
-    watched = dict(flat, c=[10.0, 5.0, 4.0, 3.0])
-    assert judge(order, watched, none) == ([], ["c: x2.00 over b with no weapon found and no more ammo"])
-    assert judge(order, watched, dict(none, c=("rifle", 1)))[1] == []
+    assert judge(order, spike, none) and "spike" in judge(order, spike, none)[0]
+    toolless = dict(flat, c=[10.0, 5.0, 4.0, 3.0])
+    assert judge(order, toolless, none) == ["c: x2.00 over b with no weapon found and no more ammo (a step over x1.6 needs a new tool)"]
+    assert judge(order, toolless, dict(none, c=("rifle", 1))) == []
+    assert judge(order, dict(flat, c=[7.5, 5.0, 4.0, 3.0]), none) == []
     wrong = dict(flat, b=[5.0, 6.0, 3.0, 2.0])
-    assert "calmer" in judge(order, wrong, none)[0][0]
-    print("difficulty_curve demo: a smooth curve passes, a spike and a district that does not calm fail, a rise without a gain is watched")
+    assert "calmer" in judge(order, wrong, none)[0]
+    print("difficulty_curve demo: a smooth curve passes, a spike, a district that does not calm and a rise over x1.6 without a new tool fail, x1.5 passes")
     return 0
 
 
 def main(argv):
     if "--demo" in argv:
         return demo()
-    text, bad, watch = report()
+    text, bad = report()
     print(text)
-    for line in watch:
-        print("WATCH", line)
     for line in bad:
         print("FAIL", line)
     return 1 if ("--check" in argv and bad) else 0

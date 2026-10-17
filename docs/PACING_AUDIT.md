@@ -23,7 +23,7 @@ second on every district (the route is deterministic; the seeds change only the 
 
 The eleven districts take 273 s (all lit at 280.8, 278.1 and 280.0 s on the three seeds); the finale takes 187, 149 and 213 s and ends in a win after two deaths on each seed (the
 revive lines at 457.3 and 465.8, 420.5 and 427.1, 480.9 and 489.8 s). Time to the first interactable 24.4 to 24.9 s, to the first district lit 26.5 to 27.0 s
-(`onboarding` line of the bot's summary, `scripts/tools/_qa_autoplay_runner.gd:771`).
+(`onboarding` line of the bot's summary, `scripts/tools/_qa_autoplay_runner.gd:783`).
 
 ## 2. What it shows
 

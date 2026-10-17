@@ -55,9 +55,7 @@ func _state_attack(delta: float) -> void:
 		return
 	if attack_timer <= 0.0:
 		_scream()
-		player_ref.take_damage(attack_damage, global_position)
-		_inflict_statuses(player_ref)
-		EventBus.enemy_attack.emit(attack_damage)
+		_perform_attack()
 		attack_timer = attack_cooldown
 
 func _scream() -> void:

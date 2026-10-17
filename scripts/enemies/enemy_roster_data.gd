@@ -76,12 +76,13 @@ const AI_TO_ROSTER := {
 		# ranged sniper - GDD §6.2 Watcher = hp 80 / damage 12 / hearing 8m,
 		# a stationary sentinel with STUN->rage on light, no ranged attack.
 		# Was 160/25/25 with attack_range 18 - Watcher effectively sniped
-		# the player from 18m with no telegraph.
+		# the player from 18m with no telegraph. The reach stayed 18 after that
+		# fix: Session 28 (D1) brings it to 6 m, inside the 12 m it can see.
 		"name": "ENEMY_SNIPER", "hp": 80, "damage": 12, "armor": 10,
 		"weak_spot": "head", "behaviors": [Behavior.COVER],
 		"inflicts": [Status.BLEED],
 		"resistances": {DamageType.BULLET: 0.8, DamageType.SLASH: 1.1, DamageType.BLUNT: 1.0, DamageType.FIRE: 1.0, DamageType.ELECTRIC: 1.0, DamageType.POISON: 1.0},
-		"speed": 2.8, "attack_range": 18.0, "detect_range": 8.0, "ranged": true,
+		"speed": 2.8, "attack_range": 6.0, "detect_range": 8.0,
 	},
 	&"armored": {
 		# WAVE 6 P1: GDD §6.2 Destroyer = hp 200 / damage 25 / hearing 15m

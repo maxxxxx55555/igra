@@ -161,6 +161,67 @@ def coin_economy():
     }
 
 
+# ── difficulty presets (source of truth: settings_manager.gd, player_3d.gd, player_stats.tres, base_monster.gd) ──
+def monster_stats():
+    """{KIND: (hit points, melee damage)} from data/monsters/monster_*.tres."""
+    out = {}
+    for p in sorted((ROOT / "data/monsters").glob("monster_*.tres")):
+        text = p.read_text(encoding="utf-8", errors="replace")
+        out[p.stem.replace("monster_", "").upper()] = tuple(float(re.search(r"^%s = ([\d.]+)" % k, text, re.M).group(1)) for k in ("max_hp", "melee_damage"))
+    return out
+
+
+def difficulty_presets():
+    body = re.search(r"const DIFFICULTY_PRESETS: Dictionary = \{(.*?)\n\}", read("scripts/systems/settings_manager.gd"), re.S).group(1)
+    return {k: [float(x) for x in v.split(",")] for k, v in re.findall(r'"(\w+)": \[([^\]]*)\]', body)}
+
+
+def difficulty_table(presets, stats, cap, player_hp, mercy, search):
+    """One row per level (Easy, Normal, Hard): the most one hit takes, the hits that kill a player by monster kind, the HP a second of the mercy time allows, the hit points to chew through, the search seconds."""
+    rows = []
+    for level in range(3):
+        def scale(key):
+            return presets.get(key, [1.0, 1.0, 1.0])[level]
+        hit_cap = cap * scale("damage_cap")
+        hits = {kind: player_hp / (min(dmg * scale("monster_damage"), hit_cap) / scale("player_hp")) for kind, (hp, dmg) in stats.items()}
+        rows.append({"cap": hit_cap, "hits": hits, "per_second": hit_cap / scale("player_hp") / mercy, "monster_hp": scale("monster_hp"), "search": search * scale("search"),
+                     "parts": scale("extra_parts"), "revive": scale("revive")})
+    return rows
+
+
+def judge_difficulty(rows):
+    """Hard must ask more than Normal and Easy less: fewer hits to die (every kind), more hit points to chew, a longer search, a higher sustained rate, no revive."""
+    easy, normal, hard = rows
+    bad = ["%s: the hits that kill a player run %.1f, %.1f and %.1f at Easy, Normal and Hard (each must be fewer than the one before)" % (kind, easy["hits"][kind], normal["hits"][kind], hard["hits"][kind])
+           for kind in normal["hits"] if not easy["hits"][kind] > normal["hits"][kind] > hard["hits"][kind]]
+    for key in ("monster_hp", "search", "per_second"):
+        if not easy[key] < normal[key] < hard[key]:
+            bad.append("%s runs %.2f, %.2f and %.2f at Easy, Normal and Hard (each must be more than the one before)" % (key, easy[key], normal[key], hard[key]))
+    if hard["revive"] != 0.0 or hard["parts"] > normal["parts"]:
+        bad.append("Hard offers a revive or more spare parts than Normal")
+    return bad
+
+
+def difficulty_inputs():
+    cap = float(re.search(r"const HIT_CAP: float = ([\d.]+)", read("scripts/player/player_3d.gd")).group(1))
+    mercy = float(re.search(r"const _DAMAGE_GRACE_SEC: float = ([\d.]+)", read("scripts/player/player_3d.gd")).group(1))
+    player_hp = float(re.search(r"^max_hp = ([\d.]+)", read("data/balance/player_stats.tres"), re.M).group(1))
+    search = float(re.search(r"const SEARCH_TIME: float = ([\d.]+)", read("scripts/enemies/base_monster.gd")).group(1))
+    return cap, player_hp, mercy, search
+
+
+def demo():
+    presets = difficulty_presets()
+    cap, player_hp, mercy, search = difficulty_inputs()
+    stats = monster_stats()
+    assert judge_difficulty(difficulty_table(presets, stats, cap, player_hp, mercy, search)) == []
+    old = {k: v for k, v in presets.items() if k != "damage_cap"}  # before Session 28: the cap of 12 hid the +25 % of Hard behind it
+    bad = judge_difficulty(difficulty_table(old, stats, cap, player_hp, mercy, search))
+    assert bad and any("HUNTER" in line for line in bad), bad
+    print("balance_sim demo: the presets as shipped pass; without the hit cap of Hard the hits that kill a player are the same at Normal and Hard (%d kinds fail)" % len(bad))
+    return 0
+
+
 def main():
     fails = []
     print("═" * 70)
@@ -298,6 +359,17 @@ def main():
     # new bot-win gate — repeatable-grind income and secret discovery stay
     # optional, per P6's acceptance criteria.
 
+    # 8. difficulty presets (D1, docs/DIFFICULTY_INTENT.md rules R2 and R3): a model of what each level asks, read from the sources
+    rows = difficulty_table(difficulty_presets(), monster_stats(), *difficulty_inputs())
+    heaviest, lightest = max(rows[1]["hits"], key=lambda k: -rows[1]["hits"][k]), min(rows[1]["hits"], key=lambda k: -rows[1]["hits"][k])
+    print("\n[8] Difficulty presets (a model from settings_manager.gd, player_3d.gd, player_stats.tres; the bot's Hard run is the measurement)")
+    print("    %-34s %8s %8s %8s" % ("", "Easy", "Normal", "Hard"))
+    for label, fmt, get in (("most one hit takes (HP)", "%8.1f", lambda r: r["cap"]), ("sustained damage (HP a second, mercy time)", "%8.1f", lambda r: r["per_second"]),
+                            ("hits to kill a player: %s" % heaviest, "%8.1f", lambda r: r["hits"][heaviest]), ("hits to kill a player: %s" % lightest, "%8.1f", lambda r: r["hits"][lightest]),
+                            ("monster hit points (x)", "%8.2f", lambda r: r["monster_hp"]), ("search (s)", "%8.1f", lambda r: r["search"]), ("spare repair parts per district", "%8.0f", lambda r: r["parts"]), ("ad revive (1 = offered)", "%8.0f", lambda r: r["revive"])):
+        print("    %-34s %s %s %s" % (label, fmt % get(rows[0]), fmt % get(rows[1]), fmt % get(rows[2])))
+    fails.extend(judge_difficulty(rows))
+
     print("\n" + "═" * 70)
     if fails:
         print(f"BALANCE SIM: {len(fails)} FAIL(S)")
@@ -311,4 +383,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(demo() if "--demo" in sys.argv else main())

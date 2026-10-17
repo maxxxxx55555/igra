@@ -9,7 +9,6 @@ class_name EnemyPool
 ## а количество зависит от стадии энергосети — в темноте тварей больше.
 
 const MIN_ENEMIES_PER_DISTRICT: int = 3
-const DEFAULT_ENEMY_SCENE: PackedScene = preload("res://scenes/enemies/shadow_3d.tscn")
 
 const SHADOW: PackedScene = preload("res://scenes/enemies/shadow_3d.tscn")
 const CRAWLER: PackedScene = preload("res://scenes/enemies/crawler_3d.tscn")
@@ -21,13 +20,14 @@ const BRUTE: PackedScene = preload("res://scenes/enemies/brute_3d.tscn")
 const BURNER: PackedScene = preload("res://scenes/enemies/burner_3d.tscn")
 const ROTTER: PackedScene = preload("res://scenes/enemies/rotter_3d.tscn")
 const HOUND: PackedScene = preload("res://scenes/enemies/hound_3d.tscn")
+const DEFAULT_ENEMY_SCENE: PackedScene = SHADOW
 
 ## Состав по районам. Порядок = порядок появления на точках спавна, поэтому
 ## первым идёт «фоновый» тип района, дальше — редкие и опасные.
 const ROSTER_BY_DISTRICT: Dictionary = {
 	&"suburbs":       [SHADOW, SHADOW, CRAWLER],
 	&"residential":   [SHADOW, CRAWLER, CRAWLER, ROTTER],
-	&"park":          [CRAWLER, HUNTER, SHADOW, HOUND, ROTTER],
+	&"park":          [SHADOW, CRAWLER, HUNTER, HOUND, ROTTER],
 	&"school":        [SHADOW, CRAWLER, WATCHER, SHARPSHOOTER],
 	&"hospital":      [WATCHER, SHADOW, CRAWLER, ROTTER, ROTTER],
 	&"gas_station":   [HUNTER, SHADOW, CRAWLER, BURNER, HOUND],
@@ -42,7 +42,7 @@ const ROSTER_BY_DISTRICT: Dictionary = {
 ## района нет узла EnemySpawnPoints. Шесть позиций: до трёх «базовых» и до
 ## трёх дополнительных для тёмных стадий.
 const DEFAULT_SPAWN_OFFSETS: Array[Vector3] = [
-	Vector3(-12.0, 0.0, -10.0),
+	Vector3(8.0, 0.0, 8.0),
 	Vector3(12.0, 0.0, -8.0),
 	Vector3(0.0, 0.0, 14.0),
 	Vector3(-16.0, 0.0, 6.0),

@@ -1,12 +1,17 @@
 extends Node
-## MonsterTelegraph — добавляется как дочерний узел к любому врагу.
-## Вызов: telegraph.warn(callback) — вспышка + звук за 0.4 с до удара.
-## Подключи в base_monster.gd: _telegraph.warn(func() -> void: _deal_damage())
+## MonsterTelegraph - a child node of any enemy.
+## Call telegraph.warn(callback): a flash and a sound 0.4 s before the hit.
+## base_monster.gd wires it as _telegraph.warn(_deal_damage); tools/qa_sim/telegraph_audit.py holds every hit to it.
 
 const WARN_DURATION: float = 0.4
 
-@export var flash_color: Color = Color(1.0, 0.2, 0.1, 0.8)
+## The ember of the style guide (danger only), not a neon red.
+@export var flash_color: Color = Color("#b4452f")
 @export var warn_sfx_path: String = "res://assets/audio/sfx/sfx_enemy_warn.wav"
+## How far the warning sound carries: a sniper's shot is announced from its own range, not from 12 m.
+@export var cue_range: float = 12.0
+## When the last cue began (Time.get_ticks_msec), so a check can tell the cue from the hit that follows it.
+var last_cue_msec: int = -1
 
 ## GAME_AUDIT/arena design audit P8: _mesh_owner used to be resolved once in
 ## _ready() by scanning only direct children - too early (base_monster.gd
@@ -17,13 +22,18 @@ const WARN_DURATION: float = 0.4
 var _mesh_owner: MeshInstance3D = null
 
 func warn(attack_callback: Callable) -> void:
+	cue()
+	var tw := create_tween()
+	tw.tween_interval(WARN_DURATION)
+	tw.tween_callback(attack_callback)
+
+## The sight and the sound of an attack that is about to land, without the attack: the windups of the Crawler, the Hunter and the Brute call it, and warn() is a cue and a callback.
+func cue() -> void:
+	last_cue_msec = Time.get_ticks_msec()
 	if _mesh_owner == null or not is_instance_valid(_mesh_owner):
 		_mesh_owner = _find_mesh(get_parent())
 	_flash()
 	_play_warn_sfx()
-	var tw := create_tween()
-	tw.tween_interval(WARN_DURATION)
-	tw.tween_callback(attack_callback)
 
 func _find_mesh(n: Node) -> MeshInstance3D:
 	for child in n.get_children():
@@ -47,10 +57,17 @@ func _flash() -> void:
 		return
 	var sm := mat as StandardMaterial3D
 	var base_color: Color = sm.albedo_color
+	var base_glow: Color = sm.emission
+	var base_lit: bool = sm.emission_enabled
 	sm.albedo_color = flash_color
+	sm.emission_enabled = true
+	sm.emission = flash_color
 	var tw := create_tween()
 	tw.tween_interval(WARN_DURATION)
-	tw.tween_callback(func() -> void: sm.albedo_color = base_color)
+	tw.tween_callback(func() -> void:
+		sm.albedo_color = base_color
+		sm.emission = base_glow
+		sm.emission_enabled = base_lit)
 
 func _play_warn_sfx() -> void:
 	var sfx: AudioStream = load(warn_sfx_path)
@@ -59,7 +76,7 @@ func _play_warn_sfx() -> void:
 	var player := AudioStreamPlayer3D.new()
 	player.stream = sfx
 	player.bus = &"Combat"
-	player.max_distance = 12.0
+	player.max_distance = cue_range
 	player.attenuation_model = AudioStreamPlayer3D.ATTENUATION_INVERSE_SQUARE_DISTANCE
 	get_parent().add_child(player)
 	player.play()

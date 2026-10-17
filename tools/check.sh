@@ -258,8 +258,8 @@ if "$PY" tools/qa_sim/endings_sim.py >/dev/null 2>&1; then
 else
   bad "endings_sim"
 fi
-if "$PY" tools/qa_sim/balance_sim.py >/dev/null 2>&1; then
-  ok "balance_sim (economy/battery/skill-branch/time-to-win)"
+if "$PY" tools/qa_sim/balance_sim.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/balance_sim.py >/dev/null 2>&1; then
+  ok "balance_sim (economy/battery/skill-branch/time-to-win, Easy/Normal/Hard by the numbers)"
 else
   bad "balance_sim"
 fi
@@ -433,6 +433,11 @@ if "$PY" tools/qa_sim/difficulty_curve.py --demo >/dev/null 2>&1 && "$PY" tools/
   ok "difficulty_curve (no district is harder when restored, no step of the enemy strength over x2.2: docs/DIFFICULTY_CURVE.md)"
 else
   bad "difficulty_curve (см. 'python tools/qa_sim/difficulty_curve.py --check')"
+fi
+if "$PY" tools/qa_sim/telegraph_audit.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/telegraph_audit.py >/dev/null 2>&1; then
+  ok "telegraph_audit (every hit a monster lands is announced by a flash and a sound of 0.4 s or a cued windup: docs/DIFFICULTY_INTENT.md R1)"
+else
+  bad "telegraph_audit (см. 'python tools/qa_sim/telegraph_audit.py')"
 fi
 if "$PY" tools/qa_sim/store_frames_check.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/benchmark_frames.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/density_measure.py --demo >/dev/null 2>&1; then
   ok "frame tools (store_frames_check, benchmark_frames and density_measure each tell a good frame from a bad one on a fixture: store/SCREENSHOT_RECIPES.md)"

@@ -49,6 +49,7 @@ func _state_chase(delta: float) -> void:
 	if dist <= attack_range and attack_timer <= 0.0:
 		_windup_timer = WINDUP_TIME
 		_winding_up = true
+		_telegraph.cue()
 		return
 	_move_to(chase_speed)
 

@@ -28,6 +28,7 @@ const Rc23Density := preload("res://scripts/tools/rc16/density_checks.gd")
 const Rc23Engine := preload("res://scripts/tools/rc16/engine_checks.gd")
 const Rc26 := preload("res://scripts/tools/rc16/s26_checks.gd")
 const Rc27 := preload("res://scripts/tools/rc16/s27_checks.gd")
+const Rc28 := preload("res://scripts/tools/rc16/s28_checks.gd")
 
 var _checked: int = 0
 var _fails: int = 0
@@ -110,6 +111,10 @@ func _run() -> void:
 		return
 	if OS.get_environment("CLOSEOUT_ONLY") == "s27":
 		await Rc27.run(self)
+		_finish()
+		return
+	if OS.get_environment("CLOSEOUT_ONLY") == "s28":
+		await Rc28.run(self)
 		_finish()
 		return
 	if OS.get_environment("CLOSEOUT_ONLY") == "rtl":
@@ -215,6 +220,7 @@ func _rc16_checks() -> void:
 	await Rc23Engine.run(self)
 	Rc26.run(self)
 	await Rc27.run(self)
+	await Rc28.run(self)
 
 ## A monster standing still in the far corner of the world: its collider answers rays, its AI never runs
 ## (a disabled process mode would also take the collider out of the physics space).

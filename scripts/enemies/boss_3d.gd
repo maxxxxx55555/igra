@@ -10,6 +10,8 @@ const BEAM_DAMAGE: float = 40.0  ## GDD.md:192 "балки 40 dmg" (the player-s
 const MAX_MINIONS: int = 3
 const TELEPORT_INTERVAL: float = 6.0
 const BEAM_INTERVAL: float = 4.0
+## A beam falls the 11 m in 0.8 s, and a ring of ember marks the place it lands for all of that time.
+const BEAM_FALL_SPEED: float = 14.0
 
 var phase: Phase = Phase.P1
 var _summon_timer: float = 0.0
@@ -127,8 +129,9 @@ func _tick_p3(delta: float) -> void:
 		if dist > attack_range:
 			set_nav_target(player_ref.global_position)
 			_move_to(chase_speed * 1.3)
-		else:
-			_perform_melee()
+		elif attack_timer <= 0.0:
+			attack_timer = attack_cooldown * 0.6
+			_telegraph.warn(_perform_melee)
 
 func _throw_energy_ball() -> void:
 	if not player_ref or not is_instance_valid(player_ref):
@@ -202,17 +205,32 @@ func _spawn_minion_node(mname: String, pos: Vector3) -> Node:
 func _spawn_falling_beam() -> void:
 	if not player_ref or not is_instance_valid(player_ref):
 		return
+	_telegraph.cue()
 	var beam := FallingBeam.new(BEAM_DAMAGE)
 	beam.add_to_group("boss_hazard")
 	get_tree().current_scene.add_child(beam)
 	beam.global_position = player_ref.global_position + Vector3(randf_range(-2.0, 2.0), 0.0, randf_range(-2.0, 2.0))
+	var ring := MeshInstance3D.new()
+	var disc := CylinderMesh.new()
+	disc.top_radius = 1.0
+	disc.bottom_radius = 1.0
+	disc.height = 0.02
+	var glow := StandardMaterial3D.new()
+	glow.albedo_color = Color("#b4452f")
+	glow.emission_enabled = true
+	glow.emission = glow.albedo_color
+	glow.emission_energy_multiplier = 1.5
+	disc.material = glow
+	ring.mesh = disc
+	get_tree().current_scene.add_child(ring)
+	ring.global_position = Vector3(beam.global_position.x, 0.05, beam.global_position.z)
+	beam.tree_exited.connect(ring.queue_free)
 
 func _perform_melee() -> void:
-	if not player_ref or not is_instance_valid(player_ref):
+	if not player_ref or not is_instance_valid(player_ref) or global_position.distance_to(player_ref.global_position) > attack_range + 0.5:
 		return
 	player_ref.take_damage(attack_damage, global_position)
 	EventBus.enemy_attack.emit(attack_damage)
-	attack_timer = attack_cooldown * 0.5
 
 func _switch_to_p2() -> void:
 	_teleport_timer = 0.0
@@ -365,7 +383,7 @@ class FallingBeam:
 
 	func _physics_process(delta: float) -> void:
 		if not _hit:
-			_fall_y -= 20.0 * delta
+			_fall_y -= BossMonster.BEAM_FALL_SPEED * delta
 			position.y = _fall_y
 			if _fall_y <= 0.8:
 				_hit = true

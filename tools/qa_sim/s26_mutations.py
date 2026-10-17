@@ -58,9 +58,23 @@ SETS = [
     [  # Session 27, the closeout group s27 again: the verifier's round found two sign words cut off; the second mutation of the file of SOV4 cannot share its set (SOV8 would fail under SOV4's mutation too)
         ("scripts/world/soviet_signs.gd", "return mini(FONT_PX, int(FONT_PX * ATLAS_W / (wide * 1.06)))", "return FONT_PX", "SOV8"),
     ],
+    [  # Session 28, the closeout group s28 (D1): each fix of the difficulty pass undone in its own function or table row, so no mutation can hide another
+        ("scripts/enemies/base_monster.gd", "\t\t_telegraph.warn(_deal_damage)\n", "\t\t_deal_damage()\n", "TEL1"),
+        ("scripts/enemies/crawler_3d.gd", "\t\t\t\t_telegraph.cue()\n", "\t\t\t\tpass\n", "TEL2"),
+        ("scripts/enemies/boss_3d.gd", "\t\t\t_telegraph.warn(_perform_melee)\n", "\t\t\t_perform_melee()\n", "TEL3"),
+        ("scripts/enemies/boss_3d.gd", "\tbeam.tree_exited.connect(ring.queue_free)\n", "\tring.queue_free()\n", "TEL4"),
+        ("scripts/enemies/boss_3d.gd", "\t_telegraph.cue()\n\tvar beam := FallingBeam.new(BEAM_DAMAGE)\n", "\tvar beam := FallingBeam.new(BEAM_DAMAGE)\n", "TEL5"),
+        ("scripts/enemies/boss_3d.gd", "const BEAM_FALL_SPEED: float = 14.0", "const BEAM_FALL_SPEED: float = 20.0", "TEL6"),
+        ("scripts/enemies/enemy_roster_data.gd", '"speed": 2.8, "attack_range": 6.0, "detect_range": 8.0,', '"speed": 2.8, "attack_range": 18.0, "detect_range": 8.0,', "TEL7"),
+        ("scripts/systems/settings_manager.gd", '"damage_cap": [1.0, 1.0, 1.25],', '"damage_cap": [1.0, 1.0, 1.0],', "DIF1"),
+        ("scripts/systems/settings_manager.gd", '"monster_hp": [0.7, 1.0, 1.3],', '"monster_hp": [0.7, 1.0, 1.0],', "DIF2"),
+        ("scripts/player/player_3d.gd", " * NewGamePlus.get_enemy_damage_multiplier()) / SettingsManager.difficulty_scale(\"player_hp\")", ") / SettingsManager.difficulty_scale(\"player_hp\")", "DIF3"),
+        ("scripts/enemies/enemy_pool.gd", "\tVector3(8.0, 0.0, 8.0),\n", "\tVector3(-12.0, 0.0, -10.0),\n", "ESC1"),
+        ("scripts/core/game_manager.gd", "const RESPAWN_BATTERY_FLOOR: float = 25.0", "const RESPAWN_BATTERY_FLOOR: float = 0.0", "RET1"),
+    ],
 ]
-## The closeout group each set runs (CLOSEOUT_ONLY): the sets of Session 26 run `s26`, those of Session 27 `s27`.
-GROUP = ["s26", "s26", "s27", "s27"]
+## The closeout group each set runs (CLOSEOUT_ONLY): the sets of Session 26 run `s26`, those of Session 27 `s27`, those of Session 28 `s28`.
+GROUP = ["s26", "s26", "s27", "s27", "s28"]
 LINE = re.compile(r"^\[closeout\] (ok  |FAIL) +(\S+)")
 
 
