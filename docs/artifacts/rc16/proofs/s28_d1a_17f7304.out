@@ -1,0 +1,92 @@
+# proof s28_d1a_17f7304
+# utc 20261017T151857Z
+# head 17f7304 (uncommitted paths: 0)
+# env none
+# cmd bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/5fa8d500-393b-43b7-95de-04d09fcc9e42/scratchpad/s28_l1.sh
+# STEP import rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP compile rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL TEL1 telegraphs: 5 of 7 attacks wait 350 ms or more after the cue (gaps [414, -1, -1, 359, 362, 367, 370] ms)
+[closeout] FAIL TEL3 architect melee: the swing waits 290 ms after its cue (350 ms at least) and starts a cooldown (true)
+[closeout] FAIL TEL7 reach: no monster attacks from further than it sees; out of bounds: ["shadow 2 of 0 m"]
+[closeout] DONE checks=13 fails=3
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP closeout_s28 rc=1
+# Godot binary: /c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/godot
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  [32mWIN [0m seed 1  ([bot s1]   result       : WIN)
+deaths counted 0, revive lines 0
+  [32mWIN [0m seed 2  ([bot s2]   result       : WIN)
+deaths counted 0, revive lines 0
+  [32mWIN [0m seed 3  ([bot s3]   result       : WIN)
+deaths counted 0, revive lines 0
+
+──────────────────────────────────────
+autoplay bot: 3/3 seeds won, 0 softlock(s)
+bot death counters below their revive lines: 0
+  user-data guard: 0 file(s) restored byte-identical
+# STEP bot_normal exit=0
+# Godot binary: /c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/godot
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  [32mWIN [0m seed 1  ([bot s1]   result       : WIN)
+deaths counted 1, revive lines 1
+  [32mWIN [0m seed 2  ([bot s2]   result       : WIN)
+deaths counted 1, revive lines 1
+  [31mNO-WIN[0m seed 3 (rc=1)
+       [bot s3] t=287.2 all 11 districts FULL — final night; bot is standing in power_station
+       [bot s3] FAIL boss not defeated within 240s — spine proven, boss is a skill gate
+       [bot s3] ── RUN SUMMARY ──────────────────────────────
+       [bot s3]   result       : NOT WON
+       [bot s3]   districts FULL: 11/11
+       [bot s3]   deaths       : 0
+       [bot s3]   stage timeline: suburbs:0@7.4, suburbs:1@25.6, suburbs:2@26.6, suburbs:3@28.7, residential:0@30.2, residential:1@44.3, residential:2@50.9, residential:3@56.4, park:0@57.7, park:1@65.6, park:2@69.8, park:3@84.8, school:0@86.1, school:1@95.9, school:2@97.3, school:3@100.7, hospital:0@102.1, hospital:1@111.2, hospital:2@112.2, hospital:3@129.4, gas_station:0@130.7, gas_station:1@142.2, gas_station:2@148.4, gas_station:3@152.0, police:0@153.3, police:1@162.7, police:2@172.2, police:3@173.3, warehouses:0@174.6, warehouses:1@185.6, warehouses:2@189.6, warehouses:3@203.9, industrial:0@205.3, industrial:1@216.2, industrial:2@217.2, industrial:3@219.4, substation:0@220.7, substation:1@235.3, substation:2@247.9, substation:3@250.2, power_station:0@251.4, power_station:1@271.0, power_station:2@286.1
+       [bot s3]   part economy : suburbs stage 0->1 @t=25.5 | suburbs stage 1->2 @t=26.5 | suburbs stage 2->3 @t=28.6 | residential stage 0->1 @t=44.3 | residential stage 1->2 @t=50.9 | residential stage 2->3 @t=56.3 | park stage 0->1 @t=65.6 | park stage 1->2 @t=69.8 | park stage 2->3 @t=84.7 | school stage 0->1 @t=95.9 | school stage 1->2 @t=97.3 | school stage 2->3 @t=100.7 | hospital stage 0->1 @t=111.2 | hospital stage 1->2 @t=112.2 | hospital stage 2->3 @t=129.4 | gas_station stage 0->1 @t=142.2 | gas_station stage 1->2 @t=148.4 | gas_station stage 2->3 @t=151.9 | police stage 0->1 @t=162.7 | police stage 1->2 @t=172.2 | police stage 2->3 @t=173.3 | warehouses stage 0->1 @t=185.6 | warehouses stage 1->2 @t=189.5 | warehouses stage 2->3 @t=203.9 | industrial stage 0->1 @t=216.2 | industrial stage 1->2 @t=217.2 | industrial stage 2->3 @t=219.4 | substation stage 0->1 @t=235.3 | substation stage 1->2 @t=247.9 | substation stage 2->3 @t=250.1 | power_station stage 0->1 @t=271.0 | power_station stage 1->2 @t=286.1
+       [bot s3]   FAIL: boss not defeated within 240s — spine proven, boss is a skill gate
+       ERROR: 1 RID allocations of type 'PN13RendererDummy14TextureStorage12DummyTextureE' were leaked at exit.
+       ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+       ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+       ERROR: 9 resources still in use at exit (run with --verbose for details).
+deaths counted 0, revive lines 0
+
+──────────────────────────────────────
+autoplay bot: 2/3 seeds won, 0 softlock(s)
+bot death counters below their revive lines: 0
+  user-data guard: 0 file(s) restored byte-identical
+# STEP bot_hard exit=1
+# normal seed 1
+[bot s1]   result       : WIN
+[bot s1]   wall time    : 464.1s
+[bot s1]   deaths       : 0
+[bot s1]   cost         : difficulty 1, 15 hits taken, 180 health lost, 6 items used, first death at -1.0 s
+# normal seed 2
+[bot s2]   result       : WIN
+[bot s2]   wall time    : 459.0s
+[bot s2]   deaths       : 0
+[bot s2]   cost         : difficulty 1, 16 hits taken, 192 health lost, 6 items used, first death at -1.0 s
+# normal seed 3
+[bot s3]   result       : WIN
+[bot s3]   wall time    : 390.2s
+[bot s3]   deaths       : 0
+[bot s3]   cost         : difficulty 1, 16 hits taken, 192 health lost, 5 items used, first death at -1.0 s
+# hard seed 1
+[bot s1]   result       : WIN
+[bot s1]   wall time    : 494.3s
+[bot s1]   deaths       : 1
+[bot s1]   cost         : difficulty 2, 21 hits taken, 315 health lost, 7 items used, first death at 485.5 s
+# hard seed 2
+[bot s2]   result       : WIN
+[bot s2]   wall time    : 495.6s
+[bot s2]   deaths       : 1
+[bot s2]   cost         : difficulty 2, 19 hits taken, 285 health lost, 7 items used, first death at 491.0 s
+# hard seed 3
+[bot s3]   result       : NOT WON
+[bot s3]   wall time    : 527.2s
+[bot s3]   deaths       : 0
+[bot s3]   cost         : difficulty 2, 9 hits taken, 135 health lost, 5 items used, first death at -1.0 s
+ M scripts/tools/rc16/s28_checks.gd
+# STEP tree-after done
+# EXIT=0
