@@ -9,7 +9,7 @@ extends "res://scripts/tools/_rc16_probe_runner.gd"
 ##   05_skyline  up the south street toward the landmark of the district, power FULL
 ##   06_courtyard from inside the middle block across the grid to the south-west corner of the ring, power FULL (Session 27)
 ##   07_facade    close to the west facade of the ring, looking up its panels, power FULL (Session 27)
-##   08_sign      five metres in front of the first stencilled sign of the district, by the flashlight; the place is read from the loaded district, and the baked atlas is counted for ink (Session 27)
+##   08_sign      five metres in front of the widest stencilled sign of the district (a long word shows whether its end is cut off), by the flashlight; the place is read from the loaded district, and the baked atlas is counted for ink (Session 27)
 ## --tviews=<names> shoots only those views (the default is all).
 ## Frames -> docs/stills/density/<id>_<view>_<label>_<hash>_<UTC>.jpg (the AF3 name: the code tree and the capture time). A saved frame proves nothing until it is read.
 ## The runs are in English with the HUD and the tutorial hidden (Trailer Mode), so a frame holds the world and nothing else. The weather is pinned to clear and the random events
@@ -141,7 +141,11 @@ func _sign_view(id: StringName) -> Dictionary:
 	if signs == null or signs.multimesh.instance_count == 0:
 		print("[density] FAIL no sign hung in %s" % id)
 		return {}
-	var spot: Transform3D = signs.global_transform * signs.multimesh.get_instance_transform(0)
+	var widest: int = 0
+	for i: int in signs.multimesh.instance_count:
+		if signs.multimesh.get_instance_custom_data(i).g > signs.multimesh.get_instance_custom_data(widest).g:
+			widest = i
+	var spot: Transform3D = signs.global_transform * signs.multimesh.get_instance_transform(widest)
 	var atlas: Image = ((signs.material_override as ShaderMaterial).get_shader_parameter("atlas") as Texture2D).get_image()
 	var ink: int = 0
 	for y: int in range(0, atlas.get_height(), 4):
