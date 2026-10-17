@@ -3719,5 +3719,231 @@
   ],
   "commit": "1d7cea2",
   "frames": []
+ },
+ {
+  "id": "S27-M2-CLOSEOUT",
+  "claim": "The s27 closeout at 49101e1 after the music was wired: 11 checks and 0 fails, among them MUS1 (the Architect announces its phases and the music follows), MUS2 (the 12 generated tracks load as Ogg streams) and CRED1 (the music credit says Google Lyria in all 13 locales and fits).",
+  "cmd": "CLOSEOUT_ONLY=s27 bash tools/qa_sim/closeout_check 400 (launch 9, row 143)",
+  "proof": "s27_m2_49101e1",
+  "attach": "s27_m2_closeout.log",
+  "quotes": [
+   "MUS1 the Architect announces",
+   "MUS2 the 12 generated tracks",
+   "CRED1 the music credit says Google Lyria",
+   "[closeout] DONE checks=11 fails=0"
+  ],
+  "commit": "49101e1",
+  "frames": []
+ },
+ {
+  "id": "S27-M2-AUDIO",
+  "claim": "The windowed audio gate passed with the generated music in the game: the Music bus peaked at -13.3 dB (ceiling -1.5), the SFX bus and the ambient bus under it.",
+  "cmd": "bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 300 (launch 9, row 143)",
+  "proof": "s27_m2_49101e1",
+  "attach": "audio_truth_gate_scene.log",
+  "quotes": [
+   "Music bus peak=-13.3dB (ceiling <=-1.5dB) ok",
+   "PASS overall"
+  ],
+  "commit": "49101e1",
+  "frames": []
+ },
+ {
+  "id": "S27-S1",
+  "claim": "The final frames were shot at f8c0de0: the compile gate rc 0, the release set (the eight frames cited), the density frames and the English and Russian store frames; each frame carries its hash and UTC time (AF3).",
+  "cmd": "compile gate; final_frames_scene; density_frames final27, store (English) and store (Russian) (launch 10, row 144)",
+  "proof": "s27_s1_f8c0de0",
+  "attach": "density_frames_store_en.log",
+  "quotes": [
+   "[density] start label=store hash=f8c0de0",
+   "[density] state district=residential view=04_block weather=0 stage=3 tier=2 ambient=0.160"
+  ],
+  "frames": [
+   "docs/stills/store/01_main_menu_after_f8c0de0_20261017T063627Z.png",
+   "docs/stills/store/02_district_day_full_after_f8c0de0_20261017T063645Z.png",
+   "docs/stills/store/03_district_night_dark_after_f8c0de0_20261017T063639Z.png",
+   "docs/stills/store/04_combat_after_f8c0de0_20261017T063650Z.png",
+   "docs/stills/store/05_boss_after_f8c0de0_20261017T063652Z.png",
+   "docs/stills/store/06_victory_ngplus_after_f8c0de0_20261017T063655Z.png",
+   "docs/stills/store/07_skill_tree_after_f8c0de0_20261017T063646Z.png",
+   "docs/stills/store/08_shop_after_f8c0de0_20261017T063647Z.png"
+  ],
+  "commit": "f8c0de0"
+ },
+ {
+  "id": "S27-F1-PERF",
+  "claim": "The perf gate, run first and cold in the last chain, is inside its budget: D1 150 draw calls, D11 155, p95 25.96 and 25.37 ms against 33, video memory 129.7 MiB, nothing over budget.",
+  "cmd": "bash tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn 300 (launch 11, row 145)",
+  "proof": "s27_f1_9a60359",
+  "attach": "s27_f1_perf.log",
+  "quotes": [
+   "[perf] budget D1<200: 150; D11<350: 155; p95<=33 ms: 25.96 and 25.37; video memory<=512 MiB: 129.7; over budget: []"
+  ],
+  "commit": "9a60359",
+  "frames": []
+ },
+ {
+  "id": "S27-F1-CLOSEOUT",
+  "claim": "The whole closeout inside `bash tools/check.sh --all` at 9a60359: 496 checks and 0 fails, the checks of the pass among them.",
+  "cmd": "bash tools/check.sh --all (launch 11, row 145)",
+  "proof": "s27_f1_9a60359",
+  "attach": "gate_closeout_check_scene.log",
+  "quotes": [
+   "MENU2 the daily card of the menu follows a language change",
+   "SOV6 the blocks glow at 0.16 (DARK) to 0.26 (FULL)",
+   "[closeout] DONE checks=496 fails=0"
+  ],
+  "commit": "9a60359",
+  "frames": []
+ },
+ {
+  "id": "S27-F1-BATTERY",
+  "claim": "The whole battery passed at 9a60359 (89 checks, exit 0), and the windowed audio gate after it.",
+  "cmd": "bash tools/check.sh --all; guarded_windowed audio_truth_gate_scene (launch 11, row 145)",
+  "proof": "s27_f1_9a60359",
+  "quotes": [
+   "Проверок пройдено: 89",
+   "# STEP battery exit=0",
+   "# STEP audio rc=0"
+  ],
+  "commit": "9a60359",
+  "frames": []
+ },
+ {
+  "id": "S27-F1-BOT",
+  "claim": "The 3-seed bot won 2 of 3 with 0 softlocks (seed 1 ran out of the Architect's 240 s at 31 % of its health: BOT-27).",
+  "cmd": "bash tools/qa_sim/autoplay_bot (launch 11, row 145)",
+  "proof": "s27_f1_9a60359",
+  "quotes": [
+   "NO-WIN",
+   "autoplay bot: 2/3 seeds won, 0 softlock(s)"
+  ],
+  "commit": "9a60359",
+  "frames": []
+ },
+ {
+  "id": "S27-MUT0",
+  "claim": "Set 0 of the mutation run (the achievements and the daily selector of Session 26): 10 mutations, and the run fails 10 checks.",
+  "cmd": "python tools/qa_sim/s26_mutations.py run --tag s27 (launch 12, row 146)",
+  "proof": "s27_mutations",
+  "attach": "s27_mutations_set0.log",
+  "quotes": [
+   "[closeout] FAIL DAILY2",
+   "[closeout] DONE checks=14 fails=10"
+  ],
+  "commit": "60cf12a",
+  "frames": []
+ },
+ {
+  "id": "S27-MUT1",
+  "claim": "Set 1 of the mutation run: DAILY3, which had not bitten in Session 26, fails with its mutation.",
+  "cmd": "python tools/qa_sim/s26_mutations.py run --tag s27 (launch 12, row 146)",
+  "proof": "s27_mutations",
+  "attach": "s27_mutations_set1.log",
+  "quotes": [
+   "[closeout] FAIL DAILY3",
+   "[closeout] DONE checks=14 fails=2"
+  ],
+  "commit": "60cf12a",
+  "frames": []
+ },
+ {
+  "id": "S27-MUT2",
+  "claim": "Set 2 of the mutation run (the checks of Session 27): each of the 11 mutations fails its own check.",
+  "cmd": "python tools/qa_sim/s26_mutations.py run --tag s27 (launch 12, row 146)",
+  "proof": "s27_mutations",
+  "attach": "s27_mutations_set2.log",
+  "quotes": [
+   "[closeout] FAIL MUS2",
+   "[closeout] FAIL CRED1",
+   "[closeout] FAIL MENU2",
+   "[closeout] DONE checks=12 fails=11"
+  ],
+  "commit": "60cf12a",
+  "frames": []
+ },
+ {
+  "id": "S27-EXPORT",
+  "claim": "The signed release bundle was exported from c353736 (export 1 of 2).",
+  "cmd": "set -a; . .signing/release.env; set +a; godot --headless --path . --export-release \"Android\" build/tls.aab (row 147)",
+  "proof": "s27_export_c353736",
+  "quotes": [
+   "[ DONE ] export",
+   "# EXIT=0"
+  ],
+  "commit": "c353736",
+  "frames": []
+ },
+ {
+  "id": "S27-AAB",
+  "claim": "The bundle: 127,147,642 bytes, jar verified, the signer is the release certificate, the label, the ad SDK, the integrity manifest and the references are right, and the keystore values occur in no entry.",
+  "cmd": "python tools/qa_sim/aab_check.py build/tls.aab --secrets",
+  "proof": "s27_aab_check_c353736",
+  "quotes": [
+   "size    127147642 bytes",
+   "sha256  3677759869c5b01b195fd2664e8126143f4cefdc9b8c644538503231429f987e",
+   "jar     jar verified.",
+   "signer_match=yes",
+   "0 hits (path, password)",
+   "aab_check: PASS"
+  ],
+  "commit": "c353736",
+  "frames": []
+ },
+ {
+  "id": "S27-AABMANIFEST",
+  "claim": "The manifest of the bundle reads version code 4.",
+  "cmd": "python -I aab_manifest.py build/tls.aab",
+  "proof": "s27_aab_manifest_c353736",
+  "quotes": [
+   "'versionCode': 4"
+  ],
+  "commit": "c353736",
+  "frames": []
+ },
+ {
+  "id": "S27-AABLAYOUT",
+  "claim": "The packed bus layout of the bundle names the Music bus limiter.",
+  "cmd": "python -I -B -c (reads the default_bus_layout.res of build/tls.aab)",
+  "proof": "s27_aab_layout_c353736",
+  "quotes": [
+   "mentions of AudioEffectHardLimiter: 2"
+  ],
+  "commit": "c353736",
+  "frames": []
+ },
+ {
+  "id": "S27-AABSCAN",
+  "claim": "The bundle packs no file that is not the game.",
+  "cmd": "python tools/qa_sim/release_export_check.py --aab build/tls.aab",
+  "proof": "s27_release_export_check_c353736",
+  "quotes": [
+   "0 packed file(s) that are not the game",
+   "PASS"
+  ],
+  "commit": "c353736",
+  "frames": []
+ },
+ {
+  "id": "S27-EXPORTAFTER",
+  "claim": "The export left default_bus_layout.tres modified in the working tree (the editor rewrites it); the committed file was restored afterwards.",
+  "cmd": "git status --short; git diff --stat -- default_bus_layout.tres",
+  "proof": "s27_export_after_c353736",
+  "quotes": [
+   " M default_bus_layout.tres"
+  ],
+  "commit": "c353736",
+  "frames": []
+ },
+ {
+  "id": "S27-RTDIFF",
+  "claim": "No runtime path differs between the head of the last chain (9a60359) and the commit the bundle is built from (c353736).",
+  "cmd": "python -I s26_runtime_diff.py . 9a60359 HEAD",
+  "proof": "s27_runtime_diff",
+  "quotes": [
+   "runtime paths among them: 0"
+  ],
+  "commit": "c353736",
+  "frames": []
  }
 ]

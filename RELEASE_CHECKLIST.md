@@ -256,7 +256,7 @@ the export/upload steps in those sections once step 4 above is done.
 
 ## 7. Version bump
 
-`export_presets.cfg` reads `version/code=3` / `version/name="1.0"` since Session 26 (code 3 for the bundle of `v9.0.0-universe`; the bundles of codes 1 and 2 are superseded: `docs/RELEASE_RUNBOOK.md` §2). Raise `version/code` for every upload after the first; the name stays "1.0" for the first release.
+`export_presets.cfg` reads `version/code=4` / `version/name="1.0"` since Session 27 (code 4 for the bundle of `v9.1.0-store`; the bundles of codes 1 to 3 are superseded: `docs/RELEASE_RUNBOOK.md` §2). Raise `version/code` for every upload after the first; the name stays "1.0" for the first release.
 
 ## 8. Player save transfer ("lost phone") — already live, no owner action
 
@@ -295,3 +295,16 @@ superseded (copies are in `..\_BACKUPS\2026-10-16_07-21_bundles` and `..\_BACKUP
 5. **Read the perf gate on your own device** (section 0's windowed run): this machine read D1 152 draw calls at 17.48 ms p95 and D11 142 at 19.05 ms (green), after a red reading in
    Session 23 on a loaded machine; the phone is the number that matters.
 6. **Keep the old tags**: `v9.0.0-ultimate` (`68e6c9d`) and `v8.1.0-premium.1` are the releases before this one; `v9.0.0-universe` is the tag of this pass.
+
+## 10. Session 27 owner rows (`v9.1.0-store`)
+
+The bundle is `build/tls.aab`: **127,147,642 bytes, version code 4, sha256 `3677759869c5b01b195fd2664e8126143f4cefdc9b8c644538503231429f987e`**, built from `c353736` and read by `tools/qa_sim/aab_check.py` (`jar verified.`, the upload key's certificate, 0 hits of the keystore values). The bundles of version codes 2 and 3 are superseded (copies are in `..\_BACKUPS\2026-10-16_07-21_bundles`, `..\_BACKUPS\2026-10-16_11-58_bundles2` and `..\_BACKUPS\2026-10-17_bundles`). What an agent session cannot do, in order:
+
+1. **The music licence first.** The 12 music tracks were made in the Gemini app (Google Lyria). Google's Terms say Google claims no ownership of what a user creates with its services and say nothing on commercial use of Gemini-app music (`docs/ASSET_LICENSES.md`, "Session 27 M1"): read the Gemini Apps terms of your account and accept them, or replace the files; the way back is written in `docs/store/HUMAN_CHECKLIST.md`. The credits screen and the store text already say the music is AI-generated.
+2. **Rotate the credentials** the earlier blocks name (the API key of `opencode.json`, the keystore passwords if they were ever pasted anywhere): unchanged by this pass.
+3. **Upload `build/tls.aab`** to the Play Console (section 5) and publish the privacy policy at a stable URL (section 3); `docs/STORE_SUBMISSION.md` has the answers of every form (the content rating, the data safety form, the AI-generated content row).
+4. **Run it on a phone.** What changed that only a phone can judge: the music (fight the Architect: the theme changes at 70 % and at 30 % of its health and the mix dips for a moment; listen to a restored district), the weathered streets and facades and the stencil signs (the new shaders on a phone GPU: any black or magenta surface, the frame rate), the menu fog and grain, and the credits line in your language.
+5. **Decide** the rows left open: the endings art (ENDART-27: five pieces of art you commission or generate) and the three unlocks the catalog does not list (UNLOCK-27: `docs/ACHIEVEMENT_REACHABILITY.md`). Decided in the pass, for you to veto in `docs/TZ_DECISIONS.md`: the 17 scripts (KEPT-27: in `_QUARANTINE/`), the two daily templates and the listing's 58 (DAILY-27), `data/ng_plus_config.json` (NGCFG-27), the cream slab and the halo (SLAB-27, HALO-27).
+6. **Optional music top-ups** (`docs/GEMINI_HANDOFF.md` 2.3): the district-restored sting, the death cue and two UI ticks, one-shots of 0.06 to 8 s that need a cut around an event; the three stems stay as shipped.
+7. **Read the perf gate on your own device** (section 0's windowed run): this machine read D1 150 draw calls at 25.96 ms p95 and D11 155 at 25.37 ms (green, run first and cold; red when the machine is loaded, PERF-27); the phone is the number that matters.
+8. **Keep the old tags**: `v9.0.0-universe` (`ac45b1c`) and `v9.0.0-ultimate` (`68e6c9d`) are the releases before this one; `v9.1.0-store` is the tag of this pass.

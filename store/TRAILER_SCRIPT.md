@@ -34,4 +34,4 @@ Shots 2, 3, 6 and 8, each cropped to the middle 9:16 of the 16:9 frame (the stre
 
 - Shot 5 uses the noise bomb: it exists in the build (`docs/AI_STEALTH.md`) and is crafted at a workbench from gunpowder and a case; for the take, add it to the pack on a test profile.
 - Shot 6 shows the landmark of the district (a cooling tower); the landmarks are in `docs/DISTRICT_SIGNATURES.md`.
-- UNVERIFIABLE-HERE: how the take looks and sounds on a phone, and the licence of any music added in the edit. The music named above is the game's own (`docs/ASSET_LICENSES.md`).
+- UNVERIFIABLE-HERE: how the take looks and sounds on a phone, and the licence of any music added in the edit. The music named above is the game's own (AI-generated, Google Lyria: `docs/ASSET_LICENSES.md`); its commercial rights are UNVERIFIABLE-HERE (owner step 1 of `RELEASE_CHECKLIST.md` section 10).

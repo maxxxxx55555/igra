@@ -1,5 +1,17 @@
 # Known issues
 
+## OPEN (2026-10-17, Session 27): what the v9.1.0-store pass left
+
+Closed by this pass (the block of Session 26 below still lists them): the cream slab and the halo (SLAB-27, HALO-27), the mutation of DAILY3 (it bites: `docs/artifacts/rc16/s27_mutations.txt`), the 17 scripts kept on a citation (KEPT-27), the two daily templates and `data/ng_plus_config.json` (DAILY-27, NGCFG-27), the notice and prompt labels (HUD-27), the perf gate's red reads (PERF-27).
+
+- **The commercial rights of the 12 generated music tracks are not verified** (MUSIC-27, `docs/ASSET_LICENSES.md` "Session 27 M1"): Google's Terms say Google claims no ownership of what a user creates with its services and say nothing on commercial use of Gemini-app music. Owner step 1 of `RELEASE_CHECKLIST.md` section 10; the synthesized beds, the old menu theme and the single boss theme are the way back (`docs/store/HUMAN_CHECKLIST.md`).
+- **The music and the new shaders were not heard or run on a phone.** The bundle was read in the zip and the game on the desktop (launches 9 to 11); the weathering, signs, grass, fog and stencil shaders are plain spatial and canvas shaders of the GL Compatibility renderer, and nobody has seen them on a mobile GPU (UNVERIFIABLE-HERE, owner step 4).
+- **Seed 1 of the autoplay bot can run out of the Architect's 240 s** (BOT-27): launch 11 won 2 of 3. The fight is the slowest part of the run (27 to 240 s over 31 won runs); the deadline is the bot's, not the game's.
+- **Four older music stems stand over the canon's -1.5 dBFS true peak by 0.1 to 0.4 dB** (`layer_threat_low`, `layer_threat_high`, `layer_action`, `music_tension`: MIX-27, `docs/AUDIO_LOUDNESS_TABLE.md`): certified, not touched.
+- **The police and the hospital are the most saturated districts** (the facade band's saturation 0.46 and 0.45 against 0.27 to 0.34 elsewhere, `store/SCREENSHOT_RECIPES.md` section 6): the hue of the district (GLOW-27); a flatter palette is one constant, `GLOW_HUE` in `scripts/world/skyline.gd`.
+- **The first view of a district shows the burst of the pickup's sparkles over the subject** in the density and store runs: the frames are picked around it (`store/SCREENSHOT_RECIPES.md` section 6); no game code changed for it.
+- **Four music targets of the recipe are not made** (the district-restored sting, the death cue and two UI ticks: `docs/GEMINI_HANDOFF.md` 2.3): one-shots of 0.06 to 8 s that the Music skill cannot place; the game skips an absent file without a word.
+
 ## OPEN (2026-10-16, Session 26): what the v9.0.0-universe pass left
 
 - **The windowed audio gate's Music peak is bimodal and its cause is not isolated** (CORRECTION_LOG 114 and 276, `docs/UNVERIFIABLE_HERE.md` U8). Of 24 windowed readings on record (`docs/artifacts/rc16/proofs/s26_audio_readings.out`) 10 are over the -1.5 dB ceiling (+0.5 to +1.9 dB) and 14 under it (-9.3 to -12.4 dB), all in the same context (BATTLE, a monster 4.6 m away), two of the high ones at this head. The layout now ends the Music bus in a hard limiter at -2 dB (`default_bus_layout.tres`; check `AUD6`; the gate read -2.0 dB afterwards), so the Music bus is held (no other bus carries a limiter); why the level jumps 12 dB between runs of one code tree is unknown (a trace needs a gate that prints each Music player and its volume at the peak sample). Whether the unlimited music was audible as clipping stays the owner's listening row (`RELEASE_CHECKLIST.md` section 9, item 3).

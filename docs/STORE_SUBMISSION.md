@@ -1,7 +1,7 @@
 # Store submission pack: Last Streetlight 1.0 (Google Play)
 
-Drafted 2026-10-11 (Session 20, the final window pass) from the tree at `6f6d643`; the bundle facts were refreshed in Session 23 from the bundle `build/tls.aab`, which was built
-from `ebc1acc`. **Nothing here has been submitted**: the Play Console, a phone and a contact address are the owner's. Items marked
+Drafted 2026-10-11 (Session 20, the final window pass) from the tree at `6f6d643`; the bundle facts were refreshed in Session 27 from the bundle `build/tls.aab`, which was built
+from `c353736`. **Nothing here has been submitted**: the Play Console, a phone and a contact address are the owner's. Items marked
 **(check in Console)** are Google's current rules as remembered at drafting time; read them on the form before you answer.
 
 Order of use: §1 what you upload, §2 the images, §3 the privacy policy, §4 the content rating, §5 the data safety form, §6 the other
@@ -12,22 +12,22 @@ declarations, §7 the steps. It consolidates and, where they had drifted, correc
 
 | Fact | Value | Where it was read |
 |---|---|---|
-| File | `build/tls.aab` (gitignored, on the build machine only), **136,653,029 bytes** | `docs/RELEASE_ARTIFACTS.md`, the v9.0.0-ultimate section for export 2 |
-| sha256 | `0fe3649a2045cb92b7132e02ce21c862c5cea64f8049f0ccb980b4a3e0a98c85` | same; check it with `sha256sum build/tls.aab` before the upload |
-| Built from | `ebc1acc` (its runtime is that of `0752c9b`, the head of the fix chain), no uncommitted path; the fixes of Sessions 20 to 23 are in it (§9), among them the lighting of a district entered (CORRECTION_LOG 252), the two files the integrity guard preloads (242), the 15 skill icons (243) and the two UI stings (245) | ledger row 121, `s23_export_ebc1acc` |
-| Package name | `com.maxsimkasky.laststreetlight`: **permanent once uploaded** (the `com.tls.game` of `docs/store/play_store.md` is stale) | the manifest of this bundle, `docs/artifacts/rc16/proofs/s23_aab_manifest_ebc1acc.out` |
-| Version | code **2**, name "1.0" | the manifest of this bundle (`s23_aab_manifest_ebc1acc.out`) |
-| App label | "Last Streetlight" in `base/resources.pb`, the resource table that holds the app name (CRC-identical to the entry of the bundle whose label Session 19 verified: 42 entries of the label resource) | `docs/artifacts/rc16/proofs/s23_aab_check_ebc1acc.out` (`label ... ok`) |
-| SDK levels | min 24, **target 36**; the preset's `min_sdk=29` and `target_sdk=34` (`export_presets.cfg:29-30`) are not read by this export | the manifest of this bundle (`s23_aab_manifest_ebc1acc.out`); Play's minimum target API: **check in Console** |
+| File | `build/tls.aab` (gitignored, on the build machine only), **127,147,642 bytes** | `docs/RELEASE_ARTIFACTS.md`, the v9.1.0-store section for export 1 |
+| sha256 | `3677759869c5b01b195fd2664e8126143f4cefdc9b8c644538503231429f987e` | same; check it with `sha256sum build/tls.aab` before the upload |
+| Built from | `c353736` (its runtime is that of `9a60359`, the head of the last chain), no uncommitted path; the fixes of Sessions 20 to 26 are in it (§9) and the work of Session 27: the Soviet visual pass, 12 generated music tracks, the Architect's phase themes and the credits line | ledger row 147, `s27_export_c353736` |
+| Package name | `com.maxsimkasky.laststreetlight`: **permanent once uploaded** (the `com.tls.game` of `docs/store/play_store.md` is stale) | the manifest of this bundle, `docs/artifacts/rc16/proofs/s27_aab_manifest_c353736.out` |
+| Version | code **4**, name "1.0" | the manifest of this bundle (`s27_aab_manifest_c353736.out`) |
+| App label | "Last Streetlight" in `base/resources.pb`, the resource table that holds the app name (CRC-identical to the entry of the bundle whose label Session 19 verified: 42 entries of the label resource) | `docs/artifacts/rc16/proofs/s27_aab_check_c353736.out` (`label ... ok`) |
+| SDK levels | min 24, **target 36**; the preset's `min_sdk=29` and `target_sdk=34` (`export_presets.cfg:29-30`) are not read by this export | the manifest of this bundle (`s27_aab_manifest_c353736.out`); Play's minimum target API: **check in Console** |
 | ABI | arm64-v8a only (`architectures/armeabi-v7a=false`): 32-bit-only phones are not offered the game | `export_presets.cfg:14-15` |
 | Permissions | `INTERNET` and `VIBRATE` only; no `AD_ID`, no storage, no location, no camera, no microphone | the manifest of this bundle |
 | Application flags | `allowBackup=false` (no Android cloud backup of the saves), `isGame=true`, OpenGL ES 3.0 required | the manifest of this bundle |
-| Ads | no ad SDK code: 0 dex references to `Lcom/applovin/` (the GDScript provider file is in the pack and, with no key, resolves to no provider) | `docs/artifacts/rc16/proofs/s23_aab_check_ebc1acc.out` |
-| Signature | `jar verified.`; the signer's SHA-256 equals the upload key; keep Play App Signing | `s23_aab_check_ebc1acc.out`, `docs/RELEASE_RUNBOOK.md` §1 |
-| Size | base module 26,974,686 bytes compressed; install-time asset pack 108,700,693 bytes compressed (Play caps the base module at 200 MB: **check in the App bundle explorer**) | `docs/RELEASE_ARTIFACTS.md` (`s23_aab_sizes_ebc1acc.out`) |
-| Contents scan | 0 packed files that are not the game, in the scan's classes | `docs/artifacts/rc16/proofs/s23_aab_scan_ebc1acc.out` |
+| Ads | no ad SDK code: 0 dex references to `Lcom/applovin/` (the GDScript provider file is in the pack and, with no key, resolves to no provider) | `docs/artifacts/rc16/proofs/s27_aab_check_c353736.out` |
+| Signature | `jar verified.`; the signer's SHA-256 equals the upload key; keep Play App Signing | `s27_aab_check_c353736.out`, `docs/RELEASE_RUNBOOK.md` §1 |
+| Size | base module 26,974,686 bytes compressed; install-time asset pack 99,196,001 bytes compressed (Play caps the base module at 200 MB: **check in the App bundle explorer**) | `docs/RELEASE_ARTIFACTS.md` (`s27_aab_verify_c353736.out`) |
+| Contents scan | 0 packed files that are not the game, in the scan's classes | `docs/artifacts/rc16/proofs/s27_release_export_check_c353736.out` |
 
-Upload no other bundle: the first bundle of Session 23 (`1414899`) lacks the guard's two scripts and the 15 skill icons, the bundle of `63fda65` packs an API key and the one of `16abbb0` packs 77 store images
+Upload no other bundle: the bundles of Session 26 (version codes 3, `f8224aa` and `4b4fee0`) and of Session 23 (`ebc1acc`, version code 2) are superseded; the first bundle of Session 23 (`1414899`) lacks the guard's two scripts and the 15 skill icons, the bundle of `63fda65` packs an API key and the one of `16abbb0` packs 77 store images
 (`docs/RELEASE_ARTIFACTS.md`). Both are kept under `..\_BACKUPS\`; the file at `build/tls.aab` is the right one.
 
 ## 2. Store images: exact specs, the file to use, what to do to it
@@ -227,9 +227,9 @@ Each step names where the detail lives; it does not repeat it.
 4. **Make the images** with the command of §2, and read each of the seven files once.
 5. **Host the policy** of §3 and note its URL.
 6. **Play Console:** create the app and fill the dashboard with §6, the rating with §4 and the data safety form with §5 (`docs/RELEASE_RUNBOOK.md` §3 is the click path); main listing from §2 and `store/listing.md`; translations from `docs/STORE_KIT.md`.
-7. **Internal testing:** upload `build/tls.aab` as "1.0 (2)" over the v8 release if one is in the track, add testers, start the rollout (`docs/RELEASE_RUNBOOK.md` §3.6).
+7. **Internal testing:** upload `build/tls.aab` as "1.0 (4)" over the v8 release if one is in the track, add testers, start the rollout (`docs/RELEASE_RUNBOOK.md` §3.6).
 8. **Closed testing** if the dashboard demands it for a new personal account (12 testers for 14 days at the time of writing; **check in Console**), then production with a staged rollout (§3.7 and §3.8 of the runbook).
-9. **Every upload after the first** needs `version/code` raised (`export_presets.cfg:16`; the bundle of Session 26 carries 3).
+9. **Every upload after the first** needs `version/code` raised (`export_presets.cfg:16`; the bundle of Session 27 carries 4).
 
 ## 8. What was corrected while drafting (stale lines in the older documents)
 
