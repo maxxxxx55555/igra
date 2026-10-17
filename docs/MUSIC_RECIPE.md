@@ -39,6 +39,10 @@ don't ship a take that needs the loop seam forced.
 | 18 | `sfx/ui_xp_tick.wav` (NEW) | 0.060 s, one-shot | `Instrumental 60-millisecond UI tick: one soft muted felt-piano note, low-middle register, dry, barely there. No reverb, no vocals.` |
 | 19 | `sfx/ui_heal_soft.wav` (NEW) | 0.300 s, one-shot | `Instrumental 300-millisecond heal sound: two warm soft synth notes a third apart, rising, like a candle relit in a dark room. Gentle, relieved, dark-warm, quiet. Not cheerful. No vocals.` |
 
+## Session 27 status (2026-10-17)
+
+Made in the Gemini app (Music skill, 3.5 Flash-Lite), post-produced by `tools/qa_sim/music_post.py` and recorded in `docs/ASSET_LICENSES.md`: tracks 1 to 9 and 13 to 15. Not made: 10 to 12 (the stems are "only if forced") and 16 to 19 (one-shots of 0.06 to 8 s; a take of the Music skill runs 90 to 180 s, so each needs a cut around an event that the prompt cannot place: owner top-ups, `docs/GEMINI_HANDOFF.md` 2.3). Track 15's wording was refused ("out of my range") and shipped from a milder one. Items 1 and 2 of "After all 19 land" are done (the three files are in `_QUARANTINE/assets/audio/music`, the fallback table names the new files); item 3 is M2 (`docs/AUDIO_LOUDNESS_TABLE.md`).
+
 ## Not on this list, and why
 
 - **The 22 district ambience beds** (`ambience/districts/*_dark.ogg` /
