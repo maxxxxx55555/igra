@@ -1,0 +1,26 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+[closeout] ok   the player spawned
+[closeout] ok   ACHSIG1 the first lit streetlight unlocks First Light
+[closeout] ok   ACHSIG2 one district FULL unlocks Electrician and its own district achievement, not Beacon
+[closeout] ok   ACHSIG3 every district FULL unlocks Beacon
+[closeout] ok   ACHSIG4 the 50th Shadow unlocks Shadow Hunter, the 49th does not
+[closeout] ok   ACHSIG5 the last document unlocks Librarian
+[closeout] ok   ACH15 a death with the grid unfinished is the Dark ending and unlocks Darkness (ending dark)
+[closeout] ok   ACH15M GameManager hears game_over before AchievementManager, so the ending is resolved when Darkness is asked (slots 0 and 2)
+[closeout] ok   ACH15 a death with only the power station lit is Survivor and does not unlock Darkness (ending survivor)
+[closeout] ok   ACHRUN1 a New Game starts the marks of Quiet as a Mouse and Without a Scratch empty (seen_park false, hurt_school false)
+[closeout] FAIL ACHRUN2 it keeps the profile's counters and what is unlocked (Shadow Hunter 0, First Light true)
+[closeout] ok   DAILY2 the daily selector walks past a template over the 11 districts (day 0 fits, day 3 fits) and keeps one with no per-run cap (day 2 kills)
+[closeout] FAIL DAILY3 two days that select the same template do not share progress: the same day keeps it (2 of 2), the next day starts empty (2)
+[closeout] ok   AUD6 the Music bus ends in an enabled limiter under the -1.5 dB ceiling of the audio truth gate (slot 2 of 4, ceiling -2.0)
+[closeout] DONE checks=14 fails=2
+ERROR: 1 RID allocations of type 'PN13RendererDummy14TextureStorage12DummyTextureE' were leaked at exit.
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 60 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 14 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

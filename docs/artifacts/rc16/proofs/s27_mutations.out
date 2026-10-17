@@ -1,0 +1,56 @@
+# proof s27_mutations
+# utc 20261017T072853Z
+# head 60cf12a (uncommitted paths: 0)
+# env none
+# cmd bash -c python tools/qa_sim/s26_mutations.py apply 0; bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; CLOSEOUT_ONLY=s26 bash tools/qa_sim/closeout_check 400; cp .qa_logs/closeout_check.log .qa_logs/s27_mutations_set0.log; python tools/qa_sim/s26_mutations.py restore; python tools/qa_sim/s26_mutations.py apply 1; bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; CLOSEOUT_ONLY=s26 bash tools/qa_sim/closeout_check 400; cp .qa_logs/closeout_check.log .qa_logs/s27_mutations_set1.log; python tools/qa_sim/s26_mutations.py restore; python tools/qa_sim/s26_mutations.py apply 2; bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; CLOSEOUT_ONLY=s27 bash tools/qa_sim/closeout_check 400; cp .qa_logs/closeout_check.log .qa_logs/s27_mutations_set2.log; python tools/qa_sim/s26_mutations.py restore
+s26_mutations: apply 0 done (10 mutations)
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL ACHSIG1 the first lit streetlight unlocks First Light
+[closeout] FAIL ACHSIG2 one district FULL unlocks Electrician and its own district achievement, not Beacon
+[closeout] FAIL ACHSIG3 every district FULL unlocks Beacon
+[closeout] FAIL ACHSIG4 the 50th Shadow unlocks Shadow Hunter, the 49th does not
+[closeout] FAIL ACHSIG5 the last document unlocks Librarian
+[closeout] FAIL ACH15M GameManager hears game_over before AchievementManager, so the ending is resolved when Darkness is asked (slots -1 and 1)
+[closeout] FAIL ACH15 a death with only the power station lit is Survivor and does not unlock Darkness (ending survivor)
+[closeout] FAIL ACHRUN1 a New Game starts the marks of Quiet as a Mouse and Without a Scratch empty (seen_park true, hurt_school true)
+[closeout] FAIL DAILY2 the daily selector walks past a template over the 11 districts (day 0 over, day 3 over) and keeps one with no per-run cap (day 2 kills)
+[closeout] FAIL AUD6 the Music bus ends in an enabled limiter under the -1.5 dB ceiling of the audio truth gate (slot 2 of 4, ceiling -2.0)
+[closeout] DONE checks=14 fails=10
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+s26_mutations: restore done
+s26_mutations: apply 1 done (2 mutations)
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL ACHRUN2 it keeps the profile's counters and what is unlocked (Shadow Hunter 0, First Light true)
+[closeout] FAIL DAILY3 two days that select the same template do not share progress: the same day keeps it (2 of 2), the next day starts empty (2)
+[closeout] DONE checks=14 fails=2
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+s26_mutations: restore done
+s26_mutations: apply 2 done (11 mutations)
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL SOV1 the lane marking is a dash of 1.20 m by 4.00 m and the road, the sidewalk and the paint use the road shader (shaded true)
+[closeout] FAIL SOV2 the blocks use the facade shader, a block gets 22 roof boxes and balconies, and the detail follows the graphics tier (Low 2, High 2)
+[closeout] FAIL SOV3 the halo of a landmark is 110 m by 100 m at an opacity of 0.17 when the district is FULL
+[closeout] FAIL SOV4 the districts have 11 sign words and every letter is in the engine's font (missing: Ꭰ in suburbs, Ꭱ in suburbs, Ꭲ in suburbs, Ꭰ in residential, Ꭱ in residential, Ꭲ in residential, Ꭰ in park, Ꭱ in park, Ꭲ in park, Ꭰ in school, Ꭱ in school, Ꭲ in school, Ꭰ in hospital, Ꭱ in hospital, Ꭲ in hospital, Ꭰ in gas_station, Ꭱ in gas_station, Ꭲ in gas_station, Ꭰ in police, Ꭱ in police, Ꭲ in police, Ꭰ in warehouses, Ꭱ in warehouses, Ꭲ in warehouses, Ꭰ in industrial, Ꭱ in industrial, Ꭲ in industrial, Ꭰ in substation, Ꭱ in substation, Ꭲ in substation, Ꭰ in power_station, Ꭱ in power_station, Ꭲ in power_station)
+[closeout] FAIL SOV5 the dead grass holds 144 tufts and shows [144, 144, 144] of them at Low, Medium and High
+[closeout] FAIL SOV6 the blocks glow at 0.16 (DARK) to 0.05 (FULL) and the sign paint at 0.45 to 1.00: a restored district reads lighter, a dark one an outline
+[closeout] FAIL SOV7 the menu draws fog and grain between its hero art and its title (High true, Low true) and the title is stencilled (true)
+[closeout] FAIL MENU2 the daily card of the menu follows a language change (en to ru: the title reads Daily Challenge)
+[closeout] FAIL MUS1 the Architect announces its phases [2] and the music takes the theme of the phase it is told (3 then 3, a new fight starts at 1)
+[closeout] FAIL MUS2 the 12 generated tracks the music manager names load as Ogg streams of 25 s or more (bad: ["police_x.ogg"])
+[closeout] FAIL CRED1 the music credit says Google Lyria in all 13 locales and the widest line (ar, 530 px) fits the 600 px column of the credits scene
+[closeout] DONE checks=12 fails=11
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+s26_mutations: restore done
+# EXIT=0
