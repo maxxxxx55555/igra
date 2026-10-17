@@ -1,0 +1,30 @@
+# proof s27_runtime_diff
+# utc 20261017T073812Z
+# head c353736 (uncommitted paths: 10)
+# env none
+# cmd python -I /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s26_runtime_diff.py . 9a60359 HEAD
+"""Session 26: the paths that differ between two revisions, and which of them are runtime paths by tools/qa_sim/af3_frame_check.is_runtime (what ships or is read by a shipped file). The chain of
+launch 10 ran at the first revision, the second bundle is built from the second: no runtime path may differ. Read-only; prints itself first.
+usage: python -I s26_runtime_diff.py <repo> <rev A> [<rev B>]"""
+import pathlib
+import subprocess
+import sys
+
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+root = pathlib.Path(sys.argv[1]).resolve()
+a, b = sys.argv[2], (sys.argv[3] if len(sys.argv) > 3 else "HEAD")
+sys.path.insert(0, str(root / "tools" / "qa_sim"))
+import af3_frame_check as gate  # noqa: E402
+
+full = [subprocess.run(["git", "rev-parse", "--short", r], cwd=root, capture_output=True, text=True).stdout.strip() for r in (a, b)]
+paths = gate.changed_paths(a, b, cwd=root)
+runtime = [p for p in paths if gate.is_runtime(p)]
+print("paths that differ between %s and %s: %d; runtime paths among them: %d" % (full[0], full[1], len(paths), len(runtime)))
+for p in runtime:
+    print("  RUNTIME", p)
+sys.exit(1 if runtime else 0)
+
+--- run
+paths that differ between 9a60359 and c353736: 18; runtime paths among them: 0
+# EXIT=0

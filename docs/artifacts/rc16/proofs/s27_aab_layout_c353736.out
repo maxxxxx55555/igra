@@ -1,0 +1,14 @@
+# proof s27_aab_layout_c353736
+# utc 20261017T073725Z
+# head c353736 (uncommitted paths: 7)
+# env none
+# cmd python -I -B -c 
+import zipfile
+z = zipfile.ZipFile('build/tls.aab')
+for i in z.infolist():
+    if 'default_bus_layout' in i.filename and i.filename.endswith('.res'):
+        d = z.read(i.filename)
+        print(i.filename.rsplit('/', 1)[-1], i.file_size, 'bytes; mentions of AudioEffectHardLimiter:', d.count(b'AudioEffectHardLimiter'), '; of AudioEffectCompressor:', d.count(b'AudioEffectCompressor'), '; of AudioEffectReverb:', d.count(b'AudioEffectReverb'))
+
+export-19246414aa9fb561ced4b8dce477acec-default_bus_layout.res 3271 bytes; mentions of AudioEffectHardLimiter: 2 ; of AudioEffectCompressor: 2 ; of AudioEffectReverb: 8
+# EXIT=0

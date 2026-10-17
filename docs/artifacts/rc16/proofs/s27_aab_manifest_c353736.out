@@ -1,0 +1,126 @@
+# proof s27_aab_manifest_c353736
+# utc 20261017T073653Z
+# head c353736 (uncommitted paths: 5)
+# env none
+# cmd python -I /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/aab_manifest.py build/tls.aab
+"""Session 20 (W2): the facts of the shipped bundle that the store forms depend on, read from base/manifest/AndroidManifest.xml of the AAB
+(aapt2's protobuf XML): package, version, SDK levels, permissions, features, the application's flags. Read-only; prints itself first."""
+import pathlib
+import sys
+import zipfile
+
+print(pathlib.Path(__file__).read_text(encoding="utf-8"))
+print("--- run")
+
+
+def varint(b, i):
+    n = shift = 0
+    while True:
+        c = b[i]
+        i += 1
+        n |= (c & 0x7F) << shift
+        if not c & 0x80:
+            return n, i
+        shift += 7
+
+
+def fields(b):
+    i, out = 0, []
+    while i < len(b):
+        key, i = varint(b, i)
+        no, wt = key >> 3, key & 7
+        if wt == 0:
+            v, i = varint(b, i)
+        elif wt == 2:
+            n, i = varint(b, i)
+            v = b[i:i + n]
+            i += n
+        elif wt == 1:
+            v = b[i:i + 8]
+            i += 8
+        elif wt == 5:
+            v = b[i:i + 4]
+            i += 4
+        else:
+            raise ValueError("wire type %d" % wt)
+        out.append((no, v))
+    return out
+
+
+def attr(a):
+    name = value = None
+    for no, v in fields(a):
+        if no == 2:
+            name = v.decode("utf-8", "replace")
+        elif no == 3:
+            value = v.decode("utf-8", "replace")
+        elif no == 6:
+            for ino, iv in fields(v):
+                if ino == 7:
+                    for pno, pv in fields(iv):
+                        if pno == 6:
+                            value = pv if pv < 2 ** 31 else pv - 2 ** 32
+                        elif pno == 8:
+                            value = bool(pv)
+                elif ino == 2:
+                    value = iv.decode("utf-8", "replace") if value is None else value
+    return name, value
+
+
+def element(node):
+    for no, v in fields(node):
+        if no == 1:
+            name, attrs, kids = "", {}, []
+            for eno, ev in fields(v):
+                if eno == 3:
+                    name = ev.decode("utf-8", "replace")
+                elif eno == 4:
+                    k, val = attr(ev)
+                    attrs[k] = val
+                elif eno == 5:
+                    kid = element(ev)
+                    if kid:
+                        kids.append(kid)
+            return name, attrs, kids
+    return None
+
+
+def walk(el, depth=0):
+    name, attrs, kids = el
+    if name in ("manifest", "uses-sdk", "uses-permission", "uses-feature", "application", "uses-permission-sdk-23", "supports-screens", "queries"):
+        print("  " * depth + name, {k: v for k, v in attrs.items() if k in (
+            "package", "versionCode", "versionName", "minSdkVersion", "targetSdkVersion", "name", "required", "label", "allowBackup",
+            "usesCleartextTraffic", "isGame", "hasCode", "glEsVersion", "extractNativeLibs")})
+    for kid in kids:
+        walk(kid, depth + 1 if name in ("manifest", "application") else depth)
+
+
+with zipfile.ZipFile(sys.argv[1]) as z:
+    root = element(z.read("base/manifest/AndroidManifest.xml"))
+walk(root)
+names = []
+
+
+def collect(el):
+    name, attrs, kids = el
+    if name in ("activity", "service", "receiver", "provider", "uses-permission"):
+        names.append((name, attrs.get("name")))
+    for kid in kids:
+        collect(kid)
+
+
+collect(root)
+print("components and permissions:", names)
+
+
+
+--- run
+manifest {'package': 'com.maxsimkasky.laststreetlight', 'versionCode': 4, 'versionName': '1.0'}
+  uses-sdk {'minSdkVersion': 24, 'targetSdkVersion': 36}
+  supports-screens {}
+  uses-feature {'glEsVersion': '0x00030000', 'required': True}
+  uses-permission {'name': 'android.permission.INTERNET'}
+  uses-permission {'name': 'android.permission.VIBRATE'}
+  application {'allowBackup': False, 'extractNativeLibs': False, 'isGame': True, 'label': '@string/godot_project_name_string'}
+components and permissions: [('uses-permission', 'android.permission.INTERNET'), ('uses-permission', 'android.permission.VIBRATE'), ('activity', 'com.godot.game.GodotApp'), ('activity', 'org.godotengine.godot.utils.ProcessPhoenix'), ('provider', 'androidx.core.content.FileProvider'), ('provider', 'androidx.startup.InitializationProvider'), ('receiver', 'androidx.profileinstaller.ProfileInstallReceiver')]
+# EXIT=0

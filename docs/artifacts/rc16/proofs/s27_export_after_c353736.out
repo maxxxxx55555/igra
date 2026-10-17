@@ -1,0 +1,46 @@
+# proof s27_export_after_c353736
+# utc 20261017T073604Z
+# head c353736 (uncommitted paths: 4)
+# env none
+# cmd bash -c git status --short; echo "--- git diff --stat"; git diff --stat -- default_bus_layout.tres; echo "--- git diff default_bus_layout.tres (head)"; git diff -- default_bus_layout.tres | head -40
+ M default_bus_layout.tres
+ M docs/artifacts/rc16/launch_ledger.tsv
+?? docs/artifacts/rc16/proofs/s27_export_c353736.attach.s27_export.log
+?? docs/artifacts/rc16/proofs/s27_export_c353736.out
+--- git diff --stat
+warning: in the working copy of 'default_bus_layout.tres', LF will be replaced by CRLF the next time Git touches it
+ default_bus_layout.tres | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
+--- git diff default_bus_layout.tres (head)
+warning: in the working copy of 'default_bus_layout.tres', LF will be replaced by CRLF the next time Git touches it
+diff --git a/default_bus_layout.tres b/default_bus_layout.tres
+index 52cc2e5..046f473 100644
+--- a/default_bus_layout.tres
++++ b/default_bus_layout.tres
+@@ -1,4 +1,4 @@
+-[gd_resource type="AudioBusLayout" load_steps=7 format=3 uid="uid://audiobuses00"]
++[gd_resource type="AudioBusLayout" format=3 uid="uid://udiobuses00"]
+ 
+ [sub_resource type="AudioEffectCompressor" id="AudioEffectCompressor_music"]
+ threshold = -12.0
+@@ -8,7 +8,6 @@ release_ms = 200.0
+ 
+ [sub_resource type="AudioEffectReverb" id="AudioEffectReverb_music"]
+ predelay_msec = 30.0
+-room_size = 0.8
+ wet = 0.15
+ 
+ [sub_resource type="AudioEffectHardLimiter" id="AudioEffectHardLimiter_music"]
+@@ -33,11 +32,6 @@ damping = 0.6
+ wet = 0.04
+ 
+ [resource]
+-bus/0/name = &"Master"
+-bus/0/solo = false
+-bus/0/mute = false
+-bus/0/bypass_fx = false
+-bus/0/volume_db = 0.0
+ bus/1/name = &"Music"
+ bus/1/solo = false
+ bus/1/mute = false
+# EXIT=0

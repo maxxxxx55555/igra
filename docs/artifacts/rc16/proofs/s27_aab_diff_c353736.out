@@ -1,0 +1,126 @@
+# proof s27_aab_diff_c353736
+# utc 20261017T073727Z
+# head c353736 (uncommitted paths: 8)
+# env none
+# cmd python tools/qa_sim/aab_check.py build/tls.aab --against /c/Users/Maxsim/Desktop/TLS_Build/_BACKUPS/2026-10-17_bundles/tls_4b4fee0_versioncode3.aab
+size    127147642 bytes
+sha256  3677759869c5b01b195fd2664e8126143f4cefdc9b8c644538503231429f987e
+entries 2748
+label   base/resources.pb names Last Streetlight: ok
+adsdk   0 dex entries name Lcom/applovin/: ok
+integrity 54 file(s) of the manifest, 0 missing or with other bytes: ok
+refs    0 file(s) or patterns named by the shipped files are not in the bundle: ok
+jar     jar verified.
+signer  4f6be6415c260b34...: signer_match=yes
+against tls_4b4fee0_versioncode3.aab: 40 entries gone, 36 new, 33 with other bytes
+  gone    assetPackInstallTime/assets/.godot/imported/abandoned_hallways.mp3-8e760fce4952e2a60345efe6925cf10f.mp3str
+  gone    assetPackInstallTime/assets/.godot/imported/abandoned_hallways_alt.mp3-9dc9c95bafe90e97bb6e68f84cb0cc79.mp3str
+  gone    assetPackInstallTime/assets/.godot/imported/music_ambient_dark.wav-77a29e178e2539960881574e24e87d6d.sample
+  gone    assetPackInstallTime/assets/assets/audio/music/abandoned_hallways.mp3.import
+  gone    assetPackInstallTime/assets/assets/audio/music/abandoned_hallways_alt.mp3.import
+  gone    assetPackInstallTime/assets/assets/audio/music/music_ambient_dark.wav.import
+  gone    assetPackInstallTime/assets/scripts/core/save_data.gd.remap
+  gone    assetPackInstallTime/assets/scripts/core/save_data.gdc
+  gone    assetPackInstallTime/assets/scripts/cutscenes/cutscene_manager.gd.remap
+  gone    assetPackInstallTime/assets/scripts/cutscenes/cutscene_manager.gdc
+  gone    assetPackInstallTime/assets/scripts/effects/muzzle_flash.gd.remap
+  gone    assetPackInstallTime/assets/scripts/effects/muzzle_flash.gdc
+  gone    assetPackInstallTime/assets/scripts/effects/recoil.gd.remap
+  gone    assetPackInstallTime/assets/scripts/effects/recoil.gdc
+  gone    assetPackInstallTime/assets/scripts/electronic_door.gd.remap
+  gone    assetPackInstallTime/assets/scripts/electronic_door.gdc
+  gone    assetPackInstallTime/assets/scripts/emergency_lamp.gd.remap
+  gone    assetPackInstallTime/assets/scripts/emergency_lamp.gdc
+  gone    assetPackInstallTime/assets/scripts/enemies/minion.gd.remap
+  gone    assetPackInstallTime/assets/scripts/enemies/minion.gdc
+  gone    assetPackInstallTime/assets/scripts/fuse_box.gd.remap
+  gone    assetPackInstallTime/assets/scripts/fuse_box.gdc
+  gone    assetPackInstallTime/assets/scripts/inspectable.gd.remap
+  gone    assetPackInstallTime/assets/scripts/inspectable.gdc
+  gone    assetPackInstallTime/assets/scripts/searchlight.gd.remap
+  gone    assetPackInstallTime/assets/scripts/searchlight.gdc
+  gone    assetPackInstallTime/assets/scripts/systems/loot_drop.gd.remap
+  gone    assetPackInstallTime/assets/scripts/systems/loot_drop.gdc
+  gone    assetPackInstallTime/assets/scripts/systems/save_slot_manager.gd.remap
+  gone    assetPackInstallTime/assets/scripts/systems/save_slot_manager.gdc
+  gone    assetPackInstallTime/assets/scripts/systems/vibration.gd.remap
+  gone    assetPackInstallTime/assets/scripts/systems/vibration.gdc
+  gone    assetPackInstallTime/assets/scripts/systems/weapon_mod_manager.gd.remap
+  gone    assetPackInstallTime/assets/scripts/systems/weapon_mod_manager.gdc
+  gone    assetPackInstallTime/assets/scripts/transformer.gd.remap
+  gone    assetPackInstallTime/assets/scripts/transformer.gdc
+  gone    assetPackInstallTime/assets/scripts/ui/panel_card.gd.remap
+  gone    assetPackInstallTime/assets/scripts/ui/panel_card.gdc
+  gone    assetPackInstallTime/assets/scripts/world/interior_zone.gd.remap
+  gone    assetPackInstallTime/assets/scripts/world/interior_zone.gdc
+  new     assetPackInstallTime/assets/.godot/imported/gas_station.ogg-d9a2eedecaadcee8ba964d383ff0c931.oggvorbisstr
+  new     assetPackInstallTime/assets/.godot/imported/hospital.ogg-721debdbe2e82874b54e2eb1eb21cac0.oggvorbisstr
+  new     assetPackInstallTime/assets/.godot/imported/music_boss_dark_p1.ogg-dec12bd33f15e126184174d40ac9c25d.oggvorbisstr
+  new     assetPackInstallTime/assets/.godot/imported/music_boss_dark_p2.ogg-201e51771383e43e9a940f3e3554a4d6.oggvorbisstr
+  new     assetPackInstallTime/assets/.godot/imported/music_boss_dark_p3.ogg-3a72c387bf498b0d94132a3572fa7151.oggvorbisstr
+  new     assetPackInstallTime/assets/.godot/imported/music_menu_dark.ogg-bcf3452326df3b56dc7ad229589f2366.oggvorbisstr
+  new     assetPackInstallTime/assets/.godot/imported/police.ogg-11921335a55f402b283dff12dd838769.oggvorbisstr
+  new     assetPackInstallTime/assets/.godot/imported/power_station.ogg-3c27ac5d70cd7d0b0fde20080db399f2.oggvorbisstr
+  new     assetPackInstallTime/assets/.godot/imported/school.ogg-8458c4fc92abb808aed3bcbdad51156d.oggvorbisstr
+  new     assetPackInstallTime/assets/.godot/imported/substation.ogg-bff2afe1fba0e66afd14f41ce79f7015.oggvorbisstr
+  new     assetPackInstallTime/assets/.godot/imported/suburbs.ogg-2c4c776ca8e401c0524a551b70c18868.oggvorbisstr
+  new     assetPackInstallTime/assets/.godot/imported/warehouses.ogg-08c493f4da79492aeb871948995ebad5.oggvorbisstr
+  new     assetPackInstallTime/assets/assets/audio/music/gas_station.ogg.import
+  new     assetPackInstallTime/assets/assets/audio/music/hospital.ogg.import
+  new     assetPackInstallTime/assets/assets/audio/music/music_boss_dark_p1.ogg.import
+  new     assetPackInstallTime/assets/assets/audio/music/music_boss_dark_p2.ogg.import
+  new     assetPackInstallTime/assets/assets/audio/music/music_boss_dark_p3.ogg.import
+  new     assetPackInstallTime/assets/assets/audio/music/music_menu_dark.ogg.import
+  new     assetPackInstallTime/assets/assets/audio/music/police.ogg.import
+  new     assetPackInstallTime/assets/assets/audio/music/power_station.ogg.import
+  new     assetPackInstallTime/assets/assets/audio/music/school.ogg.import
+  new     assetPackInstallTime/assets/assets/audio/music/substation.ogg.import
+  new     assetPackInstallTime/assets/assets/audio/music/suburbs.ogg.import
+  new     assetPackInstallTime/assets/assets/audio/music/warehouses.ogg.import
+  new     assetPackInstallTime/assets/assets/shaders/dead_grass.gdshader
+  new     assetPackInstallTime/assets/assets/shaders/menu_fog.gdshader
+  new     assetPackInstallTime/assets/assets/shaders/soviet_facade.gdshader
+  new     assetPackInstallTime/assets/assets/shaders/soviet_road.gdshader
+  new     assetPackInstallTime/assets/assets/shaders/soviet_sign.gdshader
+  new     assetPackInstallTime/assets/assets/shaders/stencil_title.gdshader
+  new     assetPackInstallTime/assets/scripts/ui/menu_fog.gd.remap
+  new     assetPackInstallTime/assets/scripts/ui/menu_fog.gdc
+  new     assetPackInstallTime/assets/scripts/world/dead_grass.gd.remap
+  new     assetPackInstallTime/assets/scripts/world/dead_grass.gdc
+  new     assetPackInstallTime/assets/scripts/world/soviet_signs.gd.remap
+  new     assetPackInstallTime/assets/scripts/world/soviet_signs.gdc
+  changed BUNDLE-METADATA/com.android.tools.build.profiles/baseline.prof
+  changed META-INF/MANIFEST.MF
+  changed META-INF/TLS_RELE.RSA
+  changed META-INF/TLS_RELE.SF
+  changed assetPackInstallTime/assets.pb
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-d7c875a59bf15fa8731aaedbea4d4a1f-skill_tree_tab.scn
+  changed assetPackInstallTime/assets/.godot/global_script_class_cache.cfg
+  changed assetPackInstallTime/assets/.godot/imported/music_combat.ogg-894ac56b87b64fabf64b317336b488ea.oggvorbisstr
+  changed assetPackInstallTime/assets/.godot/uid_cache.bin
+  changed assetPackInstallTime/assets/assets.sparsepck
+  changed assetPackInstallTime/assets/data/i18n/ar.json
+  changed assetPackInstallTime/assets/data/i18n/de.json
+  changed assetPackInstallTime/assets/data/i18n/en.json
+  changed assetPackInstallTime/assets/data/i18n/es.json
+  changed assetPackInstallTime/assets/data/i18n/fr.json
+  changed assetPackInstallTime/assets/data/i18n/it.json
+  changed assetPackInstallTime/assets/data/i18n/ja.json
+  changed assetPackInstallTime/assets/data/i18n/ko.json
+  changed assetPackInstallTime/assets/data/i18n/pt_BR.json
+  changed assetPackInstallTime/assets/data/i18n/ru.json
+  changed assetPackInstallTime/assets/data/i18n/tr.json
+  changed assetPackInstallTime/assets/data/i18n/zh.json
+  changed assetPackInstallTime/assets/data/i18n/zh_TW.json
+  changed assetPackInstallTime/assets/project.binary
+  changed assetPackInstallTime/assets/scripts/enemies/boss_3d.gdc
+  changed assetPackInstallTime/assets/scripts/systems/music_manager.gdc
+  changed assetPackInstallTime/assets/scripts/ui/hud_3d.gdc
+  changed assetPackInstallTime/assets/scripts/ui/main_menu.gdc
+  changed assetPackInstallTime/assets/scripts/world/district_landmark.gdc
+  changed assetPackInstallTime/assets/scripts/world/skyline.gdc
+  changed assetPackInstallTime/assets/scripts/world/street_builder.gdc
+  changed base/dex/classes.dex
+  changed base/manifest/AndroidManifest.xml
+aab_check: PASS
+# EXIT=0
