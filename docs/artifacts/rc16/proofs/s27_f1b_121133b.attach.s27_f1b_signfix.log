@@ -1,0 +1,33 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[density] start label=signfix hash=121133b ids=[&"hospital", &"substation", &"police", &"power_station"] nodes=1107 objects=3983 orphans=6 tex_mib=59.0 vid_mib=86.6 static_mib=101.0
+[probe] stream pass=density district=hospital ok=true load_ms=203.6 settled_ms=239.7 hitches=1 max_frame_ms=141.7 over_budget_ms=116.3 nodes=1120 objects=4024 orphans=6 tex_mib=60.3 vid_mib=87.9 static_mib=104.6 stats={"district":"hospital","enemies_ms":4.968,"loot_ms":15.664,"props_ms":91.166,"scene_ms":1.91,"streets_ms":1.344,"total_ms":42.167}
+[density] signs district=hospital count=5 atlas=1024x256 ink_samples=1683 first=(-18.47276, 1.2, 31.93) facing=(-0.0, 0.0, -1.0)
+[density] state district=hospital view=08_sign weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=true
+[density] frame hospital_08_sign_signfix_121133b_20261017T113826Z.jpg
+[density] perf district=hospital dressing=with draw_calls=25 primitives=20936 objects_in_frame=19
+[probe] stream pass=density district=substation ok=true load_ms=217.8 settled_ms=462.0 hitches=3 max_frame_ms=148.9 over_budget_ms=265.7 nodes=1135 objects=4084 orphans=6 tex_mib=63.3 vid_mib=92.9 static_mib=109.1 stats={"district":"substation","enemies_ms":5.152,"loot_ms":14.622,"props_ms":92.697,"scene_ms":10.011,"streets_ms":1.307,"total_ms":48.115}
+[density] signs district=substation count=5 atlas=1024x384 ink_samples=2576 first=(31.93, 1.2, -15.52118) facing=(-1.0, 0.0, 0.0)
+[density] state district=substation view=08_sign weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=true
+[density] frame substation_08_sign_signfix_121133b_20261017T113829Z.jpg
+[density] perf district=substation dressing=with draw_calls=28 primitives=22564 objects_in_frame=22
+[probe] stream pass=density district=police ok=true load_ms=196.7 settled_ms=243.1 hitches=1 max_frame_ms=142.1 over_budget_ms=108.8 nodes=1156 objects=4125 orphans=6 tex_mib=63.0 vid_mib=94.6 static_mib=110.3 stats={"district":"police","enemies_ms":4.966,"loot_ms":18.107,"props_ms":89.563,"scene_ms":1.964,"streets_ms":1.278,"total_ms":43.776}
+[density] signs district=police count=5 atlas=1024x256 ink_samples=1575 first=(2.658933, 1.2, 31.93) facing=(-0.0, 0.0, -1.0)
+[density] state district=police view=08_sign weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=true
+[density] frame police_08_sign_signfix_121133b_20261017T113832Z.jpg
+[density] perf district=police dressing=with draw_calls=26 primitives=19748 objects_in_frame=20
+[probe] stream pass=density district=power_station ok=true load_ms=165.2 settled_ms=208.0 hitches=1 max_frame_ms=133.3 over_budget_ms=100.0 nodes=1133 objects=4099 orphans=6 tex_mib=63.7 vid_mib=95.3 static_mib=110.8 stats={"district":"power_station","enemies_ms":5.181,"loot_ms":15.219,"props_ms":85.532,"scene_ms":0.875,"streets_ms":1.21,"total_ms":39.536}
+[density] signs district=power_station count=5 atlas=1024x384 ink_samples=2560 first=(-31.93, 1.2, 8.055129) facing=(1.0, 0.0, -0.0)
+[density] state district=power_station view=08_sign weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=true
+[density] frame power_station_08_sign_signfix_121133b_20261017T113836Z.jpg
+[density] perf district=power_station dressing=with draw_calls=20 primitives=15456 objects_in_frame=16
+[density] DONE label=signfix hash=121133b
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 50 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
