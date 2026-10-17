@@ -1,0 +1,467 @@
+# S27 M2: raw ffmpeg ebur128 summaries (ffmpeg -nostats -hide_banner -i <file> -af ebur128=peak=true -f null -) of every file of assets/audio/music at head 49101e1, 2026-10-17T06:34:04Z
+## assets/audio/music/cue_first_light.ogg
+[Parsed_ebur128_0 @ 000001fea7b11280] Summary:
+
+  Integrated loudness:
+    I:         -18.1 LUFS
+    Threshold: -28.2 LUFS
+
+  Loudness range:
+    LRA:         2.8 LU
+    Threshold: -38.0 LUFS
+    LRA low:   -19.0 LUFS
+    LRA high:  -16.2 LUFS
+
+  True peak:
+    Peak:       -3.0 dBFS
+## assets/audio/music/cue_grid_cascade.ogg
+[Parsed_ebur128_0 @ 00000204fa673640] Summary:
+
+  Integrated loudness:
+    I:         -18.0 LUFS
+    Threshold: -28.2 LUFS
+
+  Loudness range:
+    LRA:         8.1 LU
+    Threshold: -38.0 LUFS
+    LRA low:   -22.4 LUFS
+    LRA high:  -14.3 LUFS
+
+  True peak:
+    Peak:       -2.0 dBFS
+## assets/audio/music/cue_victory.ogg
+[Parsed_ebur128_0 @ 000001db30c1d780] Summary:
+
+  Integrated loudness:
+    I:         -18.1 LUFS
+    Threshold: -28.2 LUFS
+
+  Loudness range:
+    LRA:         3.0 LU
+    Threshold: -38.1 LUFS
+    LRA low:   -19.4 LUFS
+    LRA high:  -16.4 LUFS
+
+  True peak:
+    Peak:       -3.3 dBFS
+## assets/audio/music/gas_station.ogg
+[Parsed_ebur128_0 @ 00000252c9572900] Summary:
+
+  Integrated loudness:
+    I:         -18.0 LUFS
+    Threshold: -28.0 LUFS
+
+  Loudness range:
+    LRA:         2.0 LU
+    Threshold: -38.1 LUFS
+    LRA low:   -19.2 LUFS
+    LRA high:  -17.1 LUFS
+
+  True peak:
+    Peak:       -2.0 dBFS
+## assets/audio/music/hospital.ogg
+[Parsed_ebur128_0 @ 000001b34d247f80] Summary:
+
+  Integrated loudness:
+    I:         -18.0 LUFS
+    Threshold: -28.1 LUFS
+
+  Loudness range:
+    LRA:         5.5 LU
+    Threshold: -38.1 LUFS
+    LRA low:   -21.4 LUFS
+    LRA high:  -15.9 LUFS
+
+  True peak:
+    Peak:       -2.1 dBFS
+## assets/audio/music/layer_action.ogg
+[Parsed_ebur128_0 @ 000001e3ddf2e180] Summary:
+
+  Integrated loudness:
+    I:         -18.0 LUFS
+    Threshold: -28.0 LUFS
+
+  Loudness range:
+    LRA:         0.2 LU
+    Threshold: -38.0 LUFS
+    LRA low:   -18.2 LUFS
+    LRA high:  -18.0 LUFS
+
+  True peak:
+    Peak:       -1.3 dBFS
+## assets/audio/music/layer_dark.ogg
+[Parsed_ebur128_0 @ 0000020c7089c200] Summary:
+
+  Integrated loudness:
+    I:         -18.0 LUFS
+    Threshold: -28.0 LUFS
+
+  Loudness range:
+    LRA:        10.9 LU
+    Threshold: -38.1 LUFS
+    LRA low:   -25.7 LUFS
+    LRA high:  -14.8 LUFS
+
+  True peak:
+    Peak:       -2.6 dBFS
+## assets/audio/music/layer_lit.ogg
+[Parsed_ebur128_0 @ 00000206fcd9f780] Summary:
+
+  Integrated loudness:
+    I:         -18.0 LUFS
+    Threshold: -28.0 LUFS
+
+  Loudness range:
+    LRA:         3.9 LU
+    Threshold: -38.0 LUFS
+    LRA low:   -20.0 LUFS
+    LRA high:  -16.1 LUFS
+
+  True peak:
+    Peak:       -7.7 dBFS
+## assets/audio/music/layer_threat_high.ogg
+[Parsed_ebur128_0 @ 0000023d2bb69000] Summary:
+
+  Integrated loudness:
+    I:         -18.1 LUFS
+    Threshold: -28.1 LUFS
+
+  Loudness range:
+    LRA:         2.0 LU
+    Threshold: -38.1 LUFS
+    LRA low:   -19.0 LUFS
+    LRA high:  -17.0 LUFS
+
+  True peak:
+    Peak:       -1.2 dBFS
+## assets/audio/music/layer_threat_low.ogg
+[Parsed_ebur128_0 @ 000002acda96fe80] Summary:
+
+  Integrated loudness:
+    I:         -18.1 LUFS
+    Threshold: -28.2 LUFS
+
+  Loudness range:
+    LRA:         0.4 LU
+    Threshold: -38.2 LUFS
+    LRA low:   -18.4 LUFS
+    LRA high:  -18.0 LUFS
+
+  True peak:
+    Peak:       -1.1 dBFS
+## assets/audio/music/music_boss_dark_p1.ogg
+[Parsed_ebur128_0 @ 000001c88d289c00] Summary:
+
+  Integrated loudness:
+    I:         -18.0 LUFS
+    Threshold: -28.0 LUFS
+
+  Loudness range:
+    LRA:         2.3 LU
+    Threshold: -38.1 LUFS
+    LRA low:   -19.2 LUFS
+    LRA high:  -16.9 LUFS
+
+  True peak:
+    Peak:       -2.1 dBFS
+## assets/audio/music/music_boss_dark_p2.ogg
+[Parsed_ebur128_0 @ 000001fa8da6f980] Summary:
+
+  Integrated loudness:
+    I:         -18.1 LUFS
+    Threshold: -28.1 LUFS
+
+  Loudness range:
+    LRA:         1.3 LU
+    Threshold: -38.0 LUFS
+    LRA low:   -18.5 LUFS
+    LRA high:  -17.2 LUFS
+
+  True peak:
+    Peak:       -2.3 dBFS
+## assets/audio/music/music_boss_dark_p3.ogg
+[Parsed_ebur128_0 @ 00000271df9bf380] Summary:
+
+  Integrated loudness:
+    I:         -18.1 LUFS
+    Threshold: -28.1 LUFS
+
+  Loudness range:
+    LRA:         0.8 LU
+    Threshold: -38.1 LUFS
+    LRA low:   -18.5 LUFS
+    LRA high:  -17.7 LUFS
+
+  True peak:
+    Peak:       -2.5 dBFS
+## assets/audio/music/music_combat.ogg
+[Parsed_ebur128_0 @ 0000027176faacc0] Summary:
+
+  Integrated loudness:
+    I:         -18.2 LUFS
+    Threshold: -28.2 LUFS
+
+  Loudness range:
+    LRA:         0.9 LU
+    Threshold: -38.2 LUFS
+    LRA low:   -18.4 LUFS
+    LRA high:  -17.6 LUFS
+
+  True peak:
+    Peak:       -3.0 dBFS
+## assets/audio/music/music_menu_dark.ogg
+[Parsed_ebur128_0 @ 000001834501cac0] Summary:
+
+  Integrated loudness:
+    I:         -18.1 LUFS
+    Threshold: -28.1 LUFS
+
+  Loudness range:
+    LRA:         2.6 LU
+    Threshold: -38.1 LUFS
+    LRA low:   -19.3 LUFS
+    LRA high:  -16.7 LUFS
+
+  True peak:
+    Peak:       -1.9 dBFS
+## assets/audio/music/police.ogg
+[Parsed_ebur128_0 @ 000001659c34d940] Summary:
+
+  Integrated loudness:
+    I:         -18.0 LUFS
+    Threshold: -28.0 LUFS
+
+  Loudness range:
+    LRA:         2.8 LU
+    Threshold: -38.0 LUFS
+    LRA low:   -19.4 LUFS
+    LRA high:  -16.6 LUFS
+
+  True peak:
+    Peak:       -2.7 dBFS
+## assets/audio/music/power_station.ogg
+[Parsed_ebur128_0 @ 000001db659da3c0] Summary:
+
+  Integrated loudness:
+    I:         -18.0 LUFS
+    Threshold: -28.0 LUFS
+
+  Loudness range:
+    LRA:         1.2 LU
+    Threshold: -38.0 LUFS
+    LRA low:   -18.6 LUFS
+    LRA high:  -17.4 LUFS
+
+  True peak:
+    Peak:       -2.5 dBFS
+## assets/audio/music/school.ogg
+[Parsed_ebur128_0 @ 000002b2863ea040] Summary:
+
+  Integrated loudness:
+    I:         -18.1 LUFS
+    Threshold: -28.1 LUFS
+
+  Loudness range:
+    LRA:         1.1 LU
+    Threshold: -38.1 LUFS
+    LRA low:   -18.5 LUFS
+    LRA high:  -17.4 LUFS
+
+  True peak:
+    Peak:       -2.6 dBFS
+## assets/audio/music/substation.ogg
+[Parsed_ebur128_0 @ 000001ed55258240] Summary:
+
+  Integrated loudness:
+    I:         -18.0 LUFS
+    Threshold: -28.0 LUFS
+
+  Loudness range:
+    LRA:         4.2 LU
+    Threshold: -37.9 LUFS
+    LRA low:   -20.4 LUFS
+    LRA high:  -16.1 LUFS
+
+  True peak:
+    Peak:       -2.1 dBFS
+## assets/audio/music/suburbs.ogg
+[Parsed_ebur128_0 @ 00000186c8c6a1c0] Summary:
+
+  Integrated loudness:
+    I:         -18.0 LUFS
+    Threshold: -28.0 LUFS
+
+  Loudness range:
+    LRA:         1.5 LU
+    Threshold: -38.1 LUFS
+    LRA low:   -18.8 LUFS
+    LRA high:  -17.3 LUFS
+
+  True peak:
+    Peak:       -3.5 dBFS
+## assets/audio/music/warehouses.ogg
+[Parsed_ebur128_0 @ 0000028316003380] Summary:
+
+  Integrated loudness:
+    I:         -18.0 LUFS
+    Threshold: -28.1 LUFS
+
+  Loudness range:
+    LRA:         3.5 LU
+    Threshold: -38.1 LUFS
+    LRA low:   -20.0 LUFS
+    LRA high:  -16.5 LUFS
+
+  True peak:
+    Peak:       -2.8 dBFS
+## assets/audio/music/downtown.wav
+[Parsed_ebur128_0 @ 000001fce6ee87c0] Summary:
+
+  Integrated loudness:
+    I:         -16.5 LUFS
+    Threshold: -26.5 LUFS
+
+  Loudness range:
+    LRA:         2.1 LU
+    Threshold: -36.4 LUFS
+    LRA low:   -16.9 LUFS
+    LRA high:  -14.8 LUFS
+
+  True peak:
+    Peak:       -8.4 dBFS
+## assets/audio/music/harbor.wav
+[Parsed_ebur128_0 @ 0000024715437900] Summary:
+
+  Integrated loudness:
+    I:         -16.5 LUFS
+    Threshold: -26.4 LUFS
+
+  Loudness range:
+    LRA:         0.7 LU
+    Threshold: -36.4 LUFS
+    LRA low:   -16.6 LUFS
+    LRA high:  -15.9 LUFS
+
+  True peak:
+    Peak:       -5.5 dBFS
+## assets/audio/music/industrial.wav
+[Parsed_ebur128_0 @ 00000215dda238c0] Summary:
+
+  Integrated loudness:
+    I:         -16.5 LUFS
+    Threshold: -26.5 LUFS
+
+  Loudness range:
+    LRA:         1.5 LU
+    Threshold: -36.5 LUFS
+    LRA low:   -17.0 LUFS
+    LRA high:  -15.5 LUFS
+
+  True peak:
+    Peak:       -6.2 dBFS
+## assets/audio/music/music_ambient.wav
+[Parsed_ebur128_0 @ 00000246410da740] Summary:
+
+  Integrated loudness:
+    I:         -18.1 LUFS
+    Threshold: -28.1 LUFS
+
+  Loudness range:
+    LRA:         4.7 LU
+    Threshold: -38.1 LUFS
+    LRA low:   -20.3 LUFS
+    LRA high:  -15.6 LUFS
+
+  True peak:
+    Peak:       -4.7 dBFS
+## assets/audio/music/music_battle.wav
+[Parsed_ebur128_0 @ 00000259ec67b5c0] Summary:
+
+  Integrated loudness:
+    I:         -17.8 LUFS
+    Threshold: -27.9 LUFS
+
+  Loudness range:
+    LRA:         1.1 LU
+    Threshold: -37.7 LUFS
+    LRA low:   -18.3 LUFS
+    LRA high:  -17.2 LUFS
+
+  True peak:
+    Peak:       -2.0 dBFS
+## assets/audio/music/music_boss_dark.wav
+[Parsed_ebur128_0 @ 0000028c3bc5b080] Summary:
+
+  Integrated loudness:
+    I:         -16.7 LUFS
+    Threshold: -26.7 LUFS
+
+  Loudness range:
+    LRA:         1.4 LU
+    Threshold: -36.6 LUFS
+    LRA low:   -17.1 LUFS
+    LRA high:  -15.8 LUFS
+
+  True peak:
+    Peak:       -1.5 dBFS
+## assets/audio/music/music_tension.wav
+[Parsed_ebur128_0 @ 00000113f5a6ae40] Summary:
+
+  Integrated loudness:
+    I:         -17.9 LUFS
+    Threshold: -27.9 LUFS
+
+  Loudness range:
+    LRA:         2.4 LU
+    Threshold: -37.7 LUFS
+    LRA low:   -18.9 LUFS
+    LRA high:  -16.5 LUFS
+
+  True peak:
+    Peak:       -1.4 dBFS
+## assets/audio/music/music_victory.wav
+[Parsed_ebur128_0 @ 00000178dedeb4c0] Summary:
+
+  Integrated loudness:
+    I:         -17.9 LUFS
+    Threshold: -27.9 LUFS
+
+  Loudness range:
+    LRA:         4.5 LU
+    Threshold: -37.7 LUFS
+    LRA low:   -20.0 LUFS
+    LRA high:  -15.5 LUFS
+
+  True peak:
+    Peak:       -5.1 dBFS
+## assets/audio/music/park.wav
+[Parsed_ebur128_0 @ 00000200acffd600] Summary:
+
+  Integrated loudness:
+    I:         -18.2 LUFS
+    Threshold: -28.2 LUFS
+
+  Loudness range:
+    LRA:         2.6 LU
+    Threshold: -38.3 LUFS
+    LRA low:   -19.7 LUFS
+    LRA high:  -17.0 LUFS
+
+  True peak:
+    Peak:       -5.9 dBFS
+## assets/audio/music/residential.wav
+[Parsed_ebur128_0 @ 000002007282b300] Summary:
+
+  Integrated loudness:
+    I:         -18.0 LUFS
+    Threshold: -28.0 LUFS
+
+  Loudness range:
+    LRA:         1.4 LU
+    Threshold: -38.0 LUFS
+    LRA low:   -18.8 LUFS
+    LRA high:  -17.4 LUFS
+
+  True peak:
+    Peak:       -6.5 dBFS
+# end
