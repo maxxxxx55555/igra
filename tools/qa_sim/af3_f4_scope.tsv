@@ -21,3 +21,6 @@ export_presets.cfg	af191b8b22a6	7626dcab6eea	*no_frame_shows_the_version_code*
 default_bus_layout.tres	499f51775149	52cc2e5713b4	*no_frame_shows_the_music_bus_limiter*
 export_presets.cfg	7626dcab6eea	b65950ac458c	*no_frame_shows_the_version_code*
 scripts/systems/daily_challenge_manager.gd	b41ce099b29d	7a291ffa5bfc	*no_frame_shows_the_daily_roll*
+# Session 27, after the frames of f8c0de0 (docs/stills/store): the menu's daily card follows a language change (it is drawn in the frames named 01_menu_<language>_s<size>, none of which is in a kept set; the English menu frame is shot before any switch), and the Android version code went from 3 to 4 (no frame shows it).
+scripts/ui/main_menu.gd	4612ea094e7f	4c196830b6cf	01_menu_*
+export_presets.cfg	b65950ac458c	12601bde53bc	*no_frame_shows_the_version_code*
