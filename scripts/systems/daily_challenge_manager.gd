@@ -156,6 +156,9 @@ static func streak_multiplier(days: int) -> float:
 func _complete() -> void:
 	_completed_today = true
 	_last_completed_day = _day
+	if SaveSystem.daily_counted_today():
+		_save_state()
+		return  # the profile counted today's claim already: this is a restored file, and it pays nothing twice
 	var streak := 0
 	if SaveSystem != null and SaveSystem.has_method("increment_daily_streak"):
 		SaveSystem.increment_daily_streak()
@@ -185,7 +188,7 @@ func get_today() -> Dictionary:
 func get_progress() -> int:
 	return _progress
 func is_completed_today() -> bool:
-	return _completed_today
+	return _completed_today or SaveSystem.daily_counted_today()
 
 ## BREAK_REPORT B6: this was plain JSON. Deleting the file reset
 ## _last_completed_day to its default -1 (never assigned when the file is

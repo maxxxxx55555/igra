@@ -40,6 +40,20 @@ static func _stand_in(r: Node, source: String, at: Vector3) -> Node3D:
 	node.global_position = at
 	return node
 
+## A monster of a kind and a stand-in victim a step from it. The monster is kept awake: the Hunter, the Watcher and the Destroyer switch themselves off out of the camera's view and beyond
+## wake_m of the player (scripts/components/visibility_enabler.gd, TZ_DECISIONS VIS-enabler), and these sit in the far corner of the world, so their enabler is taken off (WAKE1 holds it).
+static func _pair(r: Node, kind: String, at: Vector3, step: float) -> Array[Node3D]:
+	var monster: Node3D = r._monster(kind, at)
+	var victim: Node3D = _stand_in(r, _VICTIM_SRC, at + Vector3(step, 0.0, 0.0))
+	var enabler: Node = monster.get_node_or_null("VisibilityEnabler")
+	if enabler != null:
+		enabler.free()
+	monster.process_mode = Node.PROCESS_MODE_INHERIT
+	monster.set("player_ref", victim)
+	monster.set("attack_timer", 0.0)
+	var pair: Array[Node3D] = [monster, victim]
+	return pair
+
 ## TEL1: the attacks that go through the telegraph (the Shadow, the Watcher and the Destroyer used to hit at once) wait 0.35 s or more between the cue and the hit. TEL2: the windups of the Crawler, the Hunter and
 ## the Brute carry the cue at their start and last 0.4 s or more. TEL3 to TEL6: the third phase of the Architect swings after a cue and then cools down, sends a cue with every beam, marks the place a beam lands with a
 ## ring of ember, and lets the beam fall for 0.7 s or more. TEL7: the attack range of every monster is inside its sight (the Watcher struck from 18 m and saw 12).
@@ -47,33 +61,26 @@ static func _telegraphs(r: Node) -> void:
 	var monsters: Array[Node3D] = []
 	var victims: Array[Node3D] = []
 	for i in WARNED.size():
-		var at: Vector3 = _FAR + Vector3(float(i) * 40.0, 0.0, 0.0)
-		var monster: Node3D = r._monster(WARNED[i], at)
-		var victim: Node3D = _stand_in(r, _VICTIM_SRC, at + Vector3(8.0 if WARNED[i] == "sharpshooter_3d" else 0.8, 0.0, 0.0))
-		monster.set("player_ref", victim)
-		monster.set("attack_timer", 0.0)
-		monster.call("_state_attack", 0.0)
-		monsters.append(monster)
-		victims.append(victim)
+		var pair: Array[Node3D] = _pair(r, WARNED[i], _FAR + Vector3(float(i) * 40.0, 0.0, 0.0), 8.0 if WARNED[i] == "sharpshooter_3d" else 0.8)
+		monsters.append(pair[0])
+		victims.append(pair[1])
 	var windups: Array[Node3D] = []
 	for kind: String in ["crawler_3d", "hunter_3d", "brute_3d"]:
-		var at: Vector3 = _FAR + Vector3(float(windups.size()) * 40.0, 0.0, 80.0)
-		var monster: Node3D = r._monster(kind, at)
-		monster.set("player_ref", _stand_in(r, _VICTIM_SRC, at + Vector3(0.8, 0.0, 0.0)))
-		monster.set("attack_timer", 0.0)
-		monster.call("_change_state", State.CHASE)
-		if kind == "crawler_3d":
-			monster.call("_tick_ai", 0.016)
-		else:
-			monster.call("_state_chase", 0.016)
-		windups.append(monster)
-	var boss: Node3D = r._monster("boss_architect_3d", _FAR + Vector3(0.0, 0.0, 160.0))
-	var boss_victim: Node3D = _stand_in(r, _VICTIM_SRC, boss.global_position + Vector3(0.8, 0.0, 0.0))
+		windups.append(_pair(r, kind, _FAR + Vector3(float(windups.size()) * 40.0, 0.0, 80.0), 0.8)[0])
+	var boss_pair: Array[Node3D] = _pair(r, "boss_architect_3d", _FAR + Vector3(0.0, 0.0, 160.0), 0.8)
+	var boss: Node3D = boss_pair[0]
+	var boss_victim: Node3D = boss_pair[1]
 	var boss_telegraph: Node = boss.get("_telegraph")
-	boss.set("player_ref", boss_victim)
 	boss.set("_music_started", true)
 	boss.set("phase", 2)
-	boss.set("attack_timer", 0.0)
+	# The tween of a cue is credited the whole frame it starts in: the attacks begin after the frames that built the scenes are over.
+	for _settle in 3:
+		await r.get_tree().process_frame
+	for monster: Node3D in monsters:
+		monster.call("_state_attack", 0.0)
+	for monster: Node3D in windups:
+		monster.call("_change_state", State.CHASE)
+		monster.call("_tick_ai" if monster.get("monster_id") == &"crawler" else "_state_chase", 0.016)
 	boss.call("_tick_p3", 0.016)
 	var cooling: bool = float(boss.get("attack_timer")) > 0.0
 	var melee_cue: int = int(boss_telegraph.get("last_cue_msec"))
@@ -103,8 +110,9 @@ static func _telegraphs(r: Node) -> void:
 	var fall_sec: float = 11.2 / BossMonster.BEAM_FALL_SPEED
 	var blind: Array[String] = []
 	for monster: Node3D in monsters + windups:
-		if float(monster.get("attack_range")) > float(monster.get("vision_range")):
-			blind.append("%s %.0f of %.0f m" % [monster.get("monster_id"), float(monster.get("attack_range")), float(monster.get("vision_range"))])
+		var sight: float = maxf(float(monster.get("vision_range")), float(monster.get("detect_range")))
+		if float(monster.get("attack_range")) > sight:
+			blind.append("%s %.0f of %.0f m" % [monster.get("monster_id"), float(monster.get("attack_range")), sight])
 	for node: Node in r.get_tree().get_nodes_in_group("boss_hazard"):
 		node.queue_free()
 	for group: Array[Node3D] in [monsters, windups]:

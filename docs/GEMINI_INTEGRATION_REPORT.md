@@ -66,14 +66,14 @@ this pass:
   `attack_dodged`, `daily_completed` for two, `radio_channel_tuned`, `skill_unlocked`, `coin_balance_changed`), and the cited lines do not hold the cited events (for example
   `scripts/ui/workbench.gd:95` is `_build_craft_panel()`, and `scripts/player/player_3d.gd:887` and `:910` are damage code, not medkit or battery use). Eight of the 13 have the
   capability under another name: `ach_22` and `ach_23` in `EventBus.item_consumed` (`scripts/inventory/inventory_manager.gd:169`), `ach_21` in the counter `ProgressTracker.crafted`
-  (`scripts/crafting/workbench_logic.gd:46`), `ach_31` and `ach_32` in `DailyChallengeManager.completed` (`scripts/systems/daily_challenge_manager.gd:168`) and `streak_milestone`
+  (`scripts/crafting/workbench_logic.gd:46`), `ach_31` and `ach_32` in `DailyChallengeManager.completed` (`scripts/systems/daily_challenge_manager.gd:171`) and `streak_milestone`
   (`:163`), `ach_35` in `SkillTreeManager.skill_unlocked` (`scripts/systems/skill_tree_manager.gd:227`), `ach_36` in `EventBus.coin_changed` (`scripts/events/event_bus.gd:6`) and
   the poll that serves `ach_11` (`scripts/systems/achievements_manager.gd:362`), and `ach_34` only in `EventBus.voice_line` (`scripts/ui/radio.gd:177`). Five need a new
   emission point: `ach_24` (stealth distance) and `ach_25` to `ach_28` (kills by weapon, a perfect dodge): the kill signal carries no weapon
   (`scripts/enemies/base_monster.gd:768`) and `_handle_dodge` (`scripts/player/player_3d.gd:1297`) emits nothing.
 - `ach_37` ("activate 50 streetlights") cannot be reached within one run: the signal fires once per district when it crosses into STREETS (`scripts/world/power_grid.gd:65`,
   `scripts/systems/achievements_manager.gd:380`) and there are 11 districts. A counter on it would persist across New Game runs (`PowerGrid.reset()`, called at
-  `scripts/core/save_system.gd:415`, re-arms the signal, and nothing resets the achievements' progress), so it would take five playthroughs.
+  `scripts/core/save_system.gd:426`, re-arms the signal, and nothing resets the achievements' progress), so it would take five playthroughs.
 - No row is already satisfied by a shipped achievement (the nearest: `ach_36`, "10,000 coins", against `ach_11`, "5,000 coins", on the same poll; `ach_37` against `ach_01`, on
   the same signal).
 

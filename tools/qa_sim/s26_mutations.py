@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-"""AF2 for Session 26, one launch row: undo one fix or one handler of the pass per check and see that exactly that check fails.
+"""AF2 for Sessions 26 to 28, one launch row: undo one fix or one handler of the pass per check and see that exactly that check fails. A set runs the closeout group of its session
+(s26, s27, s28) or, for the group "attack", the attack simulation; the tool name keeps the number of the pass that wrote it.
 
 usage: python tools/qa_sim/s26_mutations.py run [--tag s26] [--audio]   applies each set, runs the s26 closeout group through proof_run --launch (one chain), restores the files byte for byte, judges;
                                                                           --audio adds the windowed audio truth gate on the unmutated tree as the last step of the same chain
@@ -61,7 +62,11 @@ SETS = [
     [  # Session 28, the closeout group s28 (D1): each fix of the difficulty pass undone in its own function or table row, so no mutation can hide another
         ("scripts/enemies/base_monster.gd", "\t\t_telegraph.warn(_deal_damage)\n", "\t\t_deal_damage()\n", "TEL1"),
         ("scripts/enemies/crawler_3d.gd", "\t\t\t\t_telegraph.cue()\n", "\t\t\t\tpass\n", "TEL2"),
-        ("scripts/enemies/boss_3d.gd", "\t\t\t_telegraph.warn(_perform_melee)\n", "\t\t\t_perform_melee()\n", "TEL3"),
+        ("scripts/enemies/boss_3d.gd", "this phase never read\n\t\t\t_telegraph.warn(_perform_melee)\n", "this phase never read\n\t\t\t_perform_melee()\n", "TEL3"),
+        ("scripts/components/visibility_enabler.gd", "@export var wake_m: float = 10.0", "@export var wake_m: float = 0.0", "WAKE1"),
+        ("scripts/enemies/boss_3d.gd", "\t\t\t\tattack_timer = attack_cooldown * 0.5\n\t\t\t\t_telegraph.warn(_perform_melee)\n", "\t\t\t\tattack_timer = attack_cooldown * 0.5\n\t\t\t\t_perform_melee()\n", "BAT0"),
+        ("scripts/pickups/item_pickup_3d.gd", "\tif not inventory.try_add(item_id, amount):\n", "\tif false:\n", "PICK1"),
+        ("scripts/core/save_system.gd", "no position, a load takes the spawn.\n\treturn []\n", "no position, a load takes the spawn.\n\treturn [0.0, 0.0, 0.0]\n", "SAVE1"),
         ("scripts/enemies/boss_3d.gd", "\tbeam.tree_exited.connect(ring.queue_free)\n", "\tring.queue_free()\n", "TEL4"),
         ("scripts/enemies/boss_3d.gd", "\t_telegraph.cue()\n\tvar beam := FallingBeam.new(BEAM_DAMAGE)\n", "\tvar beam := FallingBeam.new(BEAM_DAMAGE)\n", "TEL5"),
         ("scripts/enemies/boss_3d.gd", "const BEAM_FALL_SPEED: float = 14.0", "const BEAM_FALL_SPEED: float = 20.0", "TEL6"),
@@ -72,10 +77,26 @@ SETS = [
         ("scripts/enemies/enemy_pool.gd", "\tVector3(8.0, 0.0, 8.0),\n", "\tVector3(-12.0, 0.0, -10.0),\n", "ESC1"),
         ("scripts/core/game_manager.gd", "const RESPAWN_BATTERY_FLOOR: float = 25.0", "const RESPAWN_BATTERY_FLOOR: float = 0.0", "RET1"),
     ],
+    [  # Session 28, the attack simulation (S1): the game code of each fix put back, the case of scripts/tools/rc16/s28_attack_cases.gd must fail
+        ("scripts/systems/integrity_guard.gd", "\t\tflag(\"speed\", \"time scale %.2f\" % Engine.time_scale)\n\t\tEngine.time_scale = 1.0\n", "\t\tflag(\"speed\", \"time scale %.2f\" % Engine.time_scale)\n\t\tpass\n", "SPD1"),
+        ("scripts/systems/integrity_guard.gd", "\t\tflag(\"vitals\", \"%s %.0f over its maximum %.0f\" % [property_name, number, maximum])\n", "\t\tpass\n", "VIT1"),
+        ("scripts/systems/integrity_guard.gd", "\t\tflag(\"economy\", \"wallet %d outside 0..%d\" % [CoinWallet.get_coins(), MAX_COINS])\n", "\t\tpass\n", "ECO1"),
+        ("scripts/systems/xp_manager.gd", "\t_level = clampi(int(data.get(\"level\", 1)), 1, MAX_LEVEL)\n", "\t_level = clampi(int(data.get(\"level\", 1)), 1, 9999)\n", "SAV2"),
+        ("scripts/systems/daily_challenge_manager.gd", "\tif SaveSystem.daily_counted_today():\n\t\t_save_state()\n", "\tif false:\n\t\t_save_state()\n", "DLY4"),
+        ("scripts/economy/rewards_manager.gd", "\tif not CoinWallet.add_once(\"ach_\" + String(achievement_id), amount):\n\t\treturn\n", "\tCoinWallet.add(amount)\n", "ACH2"),
+        ("scripts/systems/settings_manager.gd", "\t_settings[\"difficulty\"] = _difficulty_index(_settings.get(\"difficulty\", 1))\n", "\tpass\n", "CFG1"),
+        ("scripts/security/integrity_scan.gd", "if not FileAccess.file_exists(path) or hash_of(path) != String(files[path]):", "if not FileAccess.file_exists(path) or hash_of(path) == String(files[path]):", "OVL1"),
+    ],
+    [  # Session 28, the attack simulation again: NGB1 shares a function with ECO1 and DLY5 a file with DLY4, so each goes into a run of its own
+        ("scripts/systems/integrity_guard.gd", "\tif is_instance_valid(NewGamePlus) and NewGamePlus.enforce_bounds():\n", "\tif false:\n", "NGB1"),
+        ("scripts/systems/daily_challenge_manager.gd", "\treturn _completed_today or SaveSystem.daily_counted_today()\n", "\treturn _completed_today\n", "DLY5"),
+    ],
 ]
 ## The closeout group each set runs (CLOSEOUT_ONLY): the sets of Session 26 run `s26`, those of Session 27 `s27`, those of Session 28 `s28`.
-GROUP = ["s26", "s26", "s27", "s27", "s28"]
-LINE = re.compile(r"^\[closeout\] (ok  |FAIL) +(\S+)")
+GROUP = ["s26", "s26", "s27", "s27", "s28", "attack", "attack"]
+LINE = re.compile(r"^\[(?:closeout|attack-sim)\] (ok  |OK  |FAIL) +(\S+)")
+## What a group of sets runs and the log it leaves: the closeout groups run `closeout_check`, the group "attack" the attack simulation (Session 28).
+RUN = {"attack": ("bash tools/qa_sim/guarded_headless res://scenes/tools/attack_sim_scene.tscn 120", ".qa_logs/attack_sim_scene.log")}
 
 
 def apply(index):
@@ -122,7 +143,7 @@ def judge(index, text):
         rows.append("set %d %-8s mutated: %s -> %s" % (index, check, state, verdict))
     stray = sorted(c for c, s in seen.items() if s == "FAIL" and c not in expected)
     bad += len(stray)
-    done = [ln for ln in text.splitlines() if ln.startswith("[closeout] DONE")]
+    done = [ln for ln in text.splitlines() if ln.startswith(("[closeout] DONE", "[attack-sim] DONE"))]
     rows.append("set %d failed without a mutation: %s" % (index, ", ".join(stray) or "nothing"))
     rows.append("set %d run: %s" % (index, done[-1] if done else "no DONE line"))
     return rows, bad
@@ -145,8 +166,9 @@ def run(tag, audio=False):
     run_id = "%s_mutations" % tag
     steps = []
     for i in range(len(SETS)):
+        cmd, log = RUN.get(GROUP[i], ("CLOSEOUT_ONLY=%s bash tools/qa_sim/closeout_check 400" % GROUP[i], ".qa_logs/closeout_check.log"))
         steps.append("python tools/qa_sim/s26_mutations.py apply %d; bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; "
-                     "CLOSEOUT_ONLY=%s bash tools/qa_sim/closeout_check 400; cp .qa_logs/closeout_check.log .qa_logs/%s_set%d.log; python tools/qa_sim/s26_mutations.py restore" % (i, GROUP[i], run_id, i))
+                     "%s; cp %s .qa_logs/%s_set%d.log; python tools/qa_sim/s26_mutations.py restore" % (i, cmd, log, run_id, i))
     if audio:
         steps.append("bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120")
     attach = []

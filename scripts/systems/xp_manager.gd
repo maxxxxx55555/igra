@@ -4,6 +4,8 @@ signal xp_gained(amount: int)
 signal level_up(new_level: int)
 signal skill_point_earned()
 
+## The most a save may claim: a level costs 1.5 times the one before, so 60 is out of reach of any run (level 15 takes 58,000 XP in all, level 30 about 25 million).
+const MAX_LEVEL: int = 60
 @export var base_xp_per_level: int = 100
 @export var xp_growth_factor: float = 1.5
 
@@ -110,10 +112,10 @@ func save_data() -> Dictionary:
 ## Anti-tamper sanity clamp (RELEASE CONVERGENCE, STEP 5): a hand-edited save
 ## used to load these ints straight through, no bound — negative XP/level
 ## breaks UI math, an absurd value is a free win with none of the design's
-## own level-up pacing. Bounds are generous ceilings (nothing enforces a real
-## level cap elsewhere in the game), not a claimed design max.
+## own level-up pacing. The level is capped at MAX_LEVEL and the skill points at
+## one per level-up (level_up gives one); the other bounds are generous ceilings.
 func load_data(data: Dictionary) -> void:
-	_level = clampi(int(data.get("level", 1)), 1, 9999)
+	_level = clampi(int(data.get("level", 1)), 1, MAX_LEVEL)
 	_current_xp = clampi(int(data.get("current_xp", 0)), 0, 999999999)
 	_xp_to_next = clampi(int(data.get("xp_to_next", base_xp_per_level)), 1, 999999999)
-	_total_skill_points = clampi(int(data.get("total_skill_points", 0)), 0, 9999)
+	_total_skill_points = clampi(int(data.get("total_skill_points", 0)), 0, _level - 1)

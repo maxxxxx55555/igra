@@ -10,6 +10,7 @@ extends Node
 ## achievement-file forgery, NG+ level forgery, absurd economy values, and
 ## district-id injection into the scene loader.
 
+const _S28 := preload("res://scripts/tools/rc16/s28_attack_cases.gd")  # Session 28: the cases of the S1 pass
 const _SLOT: int = 95  # scratch pair 95/96 (the swap check below uses _SLOT+1=96 too), different from _save_integrity_check.gd's 97
 
 var _fails: int = 0
@@ -48,6 +49,7 @@ func _ready() -> void:
 	_check_cross_save_swap_rejected()
 	_check_release_has_no_ad_stub()
 	_check_leaderboard_signed_and_validated()
+	_S28.run(self)
 	_cleanup()
 	_done = true
 	print("[attack-sim] DONE fails=", _fails)

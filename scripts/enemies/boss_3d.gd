@@ -109,6 +109,9 @@ func _tick_p2(delta: float) -> void:
 		if player_ref and is_instance_valid(player_ref):
 			set_nav_target(player_ref.global_position)
 			_move_to(chase_speed)
+			if attack_timer <= 0.0 and global_position.distance_to(player_ref.global_position) <= attack_range:
+				attack_timer = attack_cooldown * 0.5
+				_telegraph.warn(_perform_melee)
 	else:
 		visible = true
 		_change_state(State.ATTACK)
@@ -130,7 +133,7 @@ func _tick_p3(delta: float) -> void:
 			set_nav_target(player_ref.global_position)
 			_move_to(chase_speed * 1.3)
 		elif attack_timer <= 0.0:
-			attack_timer = attack_cooldown * 0.6
+			attack_timer = attack_cooldown * 0.5  # a swing a second: the rate the old melee set for itself and this phase never read
 			_telegraph.warn(_perform_melee)
 
 func _throw_energy_ball() -> void:

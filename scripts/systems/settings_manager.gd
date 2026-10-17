@@ -661,6 +661,9 @@ func from_dict(d: Dictionary) -> void:
 	var s: Dictionary = d.get("settings", {}) as Dictionary
 	for key in s:
 		_settings[key] = s[key]
+	# A settings file is the player's to edit: the two keys the game reads as a rule are put back into their range (a dictionary in `difficulty` raised an error on every hit).
+	_settings["difficulty"] = _difficulty_index(_settings.get("difficulty", 1))
+	_settings["hardcore"] = _settings.get("hardcore", false) == true
 	_InputRemap.apply(_settings.get("keybinds", {}) as Dictionary)
 	# Re-apply accessibility effects from the loaded config (deferred: the
 	# root theme / enemy nodes may not exist yet at load time).

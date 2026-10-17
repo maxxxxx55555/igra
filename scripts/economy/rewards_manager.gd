@@ -22,7 +22,8 @@ func _on_district(district_id: StringName, _stage: int) -> void:
 	var amount := _reward(REWARD_DISTRICT_RESTORED + REWARD_DISTRICT_STEP * index)
 	CoinWallet.add(amount)
 	EventBus.inventory_notice.emit(LocalizationManager.tf("REWARD_DISTRICT", [amount]))
-func _on_achievement(_achievement_id: StringName) -> void:
+func _on_achievement(achievement_id: StringName) -> void:
 	var amount := _reward(REWARD_ACHIEVEMENT)
-	CoinWallet.add(amount)
+	if not CoinWallet.add_once("ach_" + String(achievement_id), amount):
+		return
 	EventBus.inventory_notice.emit(LocalizationManager.tf("REWARD_ACHIEVEMENT", [amount]))

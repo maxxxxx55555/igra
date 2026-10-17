@@ -2,7 +2,8 @@ extends Node
 
 const _Log := preload("res://scripts/security/security_log.gd")
 const _Scan := preload("res://scripts/security/integrity_scan.gd")
-const MAX_COINS: int = 9999999
+## The wallet's own cap (coin_wallet.gd): about 80 times what a winning run earns (the bot's wins earn 11,000).
+const MAX_COINS: int = 999999
 ## Two clocks that run in real time, the engine's monotonic ticks and the system's wall clock, keep step; a hooked timer (a speed hack) moves one of
 ## them. A window of CLOCK_WINDOW_SEC is off when they differ by more than CLOCK_TOLERANCE of it; CLOCK_OFF_WINDOWS in a row are a speed hack (a wall
 ## clock set once, or a phone that slept, is one window).
@@ -12,6 +13,10 @@ const CLOCK_OFF_WINDOWS: int = 2
 const EMULATOR_MARKS: Array[String] = ["sdk_gphone", "emulator", "android sdk built for", "genymotion", "ranchu", "vbox"]
 const ECONOMY_INTERVAL: float = 5.0
 const WATCHDOG_INTERVAL: float = 1.0
+## The game never runs faster than real time (the hit-stop and the slow motion of wow_director.gd only go below 1.0): a release build puts the speed back and says so.
+const MAX_TIME_SCALE: float = 1.05
+## A vital over its own maximum by more than this share is a memory edit and not a rounding.
+const VITALS_SLACK: float = 1.05
 
 var _economy_timer: float = ECONOMY_INTERVAL
 var _watchdog_timer: float = WATCHDOG_INTERVAL
@@ -122,12 +127,15 @@ func _check_economy() -> void:
 		return
 	var current: int = clampi(CoinWallet.get_coins(), 0, MAX_COINS)
 	if current != CoinWallet.get_coins():
+		flag("economy", "wallet %d outside 0..%d" % [CoinWallet.get_coins(), MAX_COINS])
 		CoinWallet.from_dict({"coins": current})
-		push_warning("IntegrityGuard: economy value clamped")
+	if is_instance_valid(NewGamePlus) and NewGamePlus.enforce_bounds():
+		flag("ngplus", "the level or the modifiers were over what a run earns")
 	if current != _last_coins:
 		_last_coins = current
 
 func _watchdog() -> void:
+	_watch_time_scale()
 	if not is_instance_valid(GameManager):
 		return
 	if not GameManager.is_playing():
@@ -153,10 +161,16 @@ func _watchdog() -> void:
 		push_warning("IntegrityGuard: player position restored")
 	else:
 		_last_position = player.global_position
-	_validate_float(player, "hp", 0.0, 1000.0, _last_hp)
-	_validate_float(player, "battery", 0.0, 1000.0, _last_battery)
-	_validate_float(player, "stamina", 0.0, 1000.0, _last_stamina)
+	var stats: Object = player.get("stats")
+	_validate_float(player, "hp", 0.0, _read_float(stats, "max_hp", 1000.0) if stats != null else 1000.0, _last_hp)
+	_validate_float(player, "battery", 0.0, _read_float(player, "battery_max", 1000.0), _last_battery)
+	_validate_float(player, "stamina", 0.0, _read_float(stats, "stamina_max", 1000.0) if stats != null else 1000.0, _last_stamina)
 	_capture_snapshot()
+
+func _watch_time_scale(enforce: bool = not OS.is_debug_build()) -> void:
+	if enforce and Engine.time_scale > MAX_TIME_SCALE:
+		flag("speed", "time scale %.2f" % Engine.time_scale)
+		Engine.time_scale = 1.0
 
 func _read_float(target: Object, property_name: String, fallback: float) -> float:
 	var value: Variant = target.get(property_name)
@@ -172,4 +186,6 @@ func _validate_float(target: Object, property_name: String, minimum: float, maxi
 	if not is_finite(number):
 		target.set(property_name, fallback)
 		return
+	if number > maximum * VITALS_SLACK:
+		flag("vitals", "%s %.0f over its maximum %.0f" % [property_name, number, maximum])
 	target.set(property_name, clampf(number, minimum, maximum))

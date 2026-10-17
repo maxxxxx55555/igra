@@ -106,6 +106,14 @@ func get_modifier_toggle(knob: String, default_value: bool = false) -> bool:
 func get_current_ng_plus() -> int:
 	return _current_ng_plus
 
+## The level and the chosen modifiers never exceed what a run can earn (a memory edit or a forged file puts them over): corrected here, true when it had to be.
+func enforce_bounds() -> bool:
+	var fixed: bool = _current_ng_plus < 0 or _current_ng_plus > MAX_NG_PLUS or _active_modifiers.size() > maxi(_current_ng_plus, 0)
+	_current_ng_plus = clampi(_current_ng_plus, 0, MAX_NG_PLUS)
+	if _active_modifiers.size() > _current_ng_plus:
+		_active_modifiers = _active_modifiers.slice(0, _current_ng_plus)
+	return fixed
+
 func get_max_ng_plus() -> int:
 	return MAX_NG_PLUS
 

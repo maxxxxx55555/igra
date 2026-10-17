@@ -135,6 +135,7 @@ func _adopt_run_id(raw: Variant) -> void:
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	call_deferred("_adopt_profile")
 	EventBus.district_restored.connect(func(_a, _b): autosave())
 	EventBus.puzzle_solved.connect(func(_a, _b): autosave())
 	EventBus.purchase_success.connect(func(_a): autosave())
@@ -153,6 +154,16 @@ func _process(delta: float) -> void:
 		# secret, puzzle, purchase), not to within 30 seconds. Writing the
 		# real save here is what "protects a crash" actually requires.
 		autosave()
+
+## The profile fields of the main save (the daily streak, the day of the last claim, the onboarding flag) are read at launch: a New Game after a relaunch used to start them at zero
+## and the next save wrote the zeros over the file. A file that does not read is left alone here; Continue still goes through _read_validated.
+func _adopt_profile() -> void:
+	var data := _read_envelope(SAVE_PATH)
+	if data.is_empty():
+		return
+	_daily_streak = int(data.get("daily_streak", 0))
+	_last_daily_time = int(data.get("last_daily_time", 0))
+	_onboard_done = bool(data.get("onboard_done", false))
 
 func has_save() -> bool:
 	return FileAccess.file_exists(SAVE_PATH)
@@ -542,7 +553,13 @@ func get_photo_count() -> int:
 func get_daily_streak() -> int:
 	return _daily_streak
 
+## True when a daily reward was counted today: the profile's own record of the claim, which a restored or deleted tls_daily.json cannot reopen.
+func daily_counted_today() -> bool:
+	return _last_daily_time > 0 and floori(Time.get_unix_time_from_system() / 86400.0) == floori(float(_last_daily_time) / 86400.0)
+
 func increment_daily_streak() -> void:
+	if daily_counted_today():
+		return
 	var now := Time.get_unix_time_from_system()
 	var last := _last_daily_time
 	if now - last > 86400 * 2:

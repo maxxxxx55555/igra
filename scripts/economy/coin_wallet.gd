@@ -32,8 +32,19 @@ func spend_clamped(amount: int) -> void:
 
 func get_coins() -> int:
 	return coins
+## One payment per key for the life of the profile: a replayed achievements file unlocks again, but the coins were paid. The keys are the achievement ids (25 at most); the cap bounds a file.
+const MAX_PAID: int = 64
+var _paid: Array[String] = []
+
+func add_once(key: String, amount: int) -> bool:
+	if amount <= 0 or _paid.has(key):
+		return false
+	_paid.append(key)
+	add(amount)
+	return true
+
 func to_dict() -> Dictionary:
-	return {"coins": coins}
+	return {"coins": coins, "paid": _paid.duplicate()}
 ## Anti-tamper sanity clamp (RELEASE CONVERGENCE, STEP 5): a hand-edited save
 ## used to set `coins` to any int with no bound — not a security hole per se
 ## (single-player, no leaderboard payout), but an easy path to display/economy
@@ -44,4 +55,10 @@ const MAX_COINS: int = 999999
 
 func from_dict(d: Dictionary) -> void:
 	coins = clampi(int(d.get("coins", start_coins)), 0, MAX_COINS)
+	_paid.clear()
+	var raw: Variant = d.get("paid", [])
+	if raw is Array:
+		for key: Variant in (raw as Array).slice(0, MAX_PAID):
+			if key is String and (key as String).length() <= 40:
+				_paid.append(key)
 	coins_changed.emit(coins)
