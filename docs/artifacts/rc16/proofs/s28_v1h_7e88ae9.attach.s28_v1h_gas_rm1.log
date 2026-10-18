@@ -1,0 +1,19 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[density] start label=v1d hash=7e88ae9 ids=[&"gas_station"] nodes=1118 objects=4009 orphans=6 tex_mib=59.0 vid_mib=86.6 static_mib=101.7
+[probe] stream pass=density district=gas_station ok=true load_ms=298.0 settled_ms=357.0 hitches=2 max_frame_ms=145.8 over_budget_ms=129.5 nodes=1138 objects=4061 orphans=6 tex_mib=58.0 vid_mib=85.5 static_mib=103.3 stats={"district":"gas_station","enemies_ms":6.425,"loot_ms":24.066,"props_ms":129.945,"scene_ms":30.662,"streets_ms":2.265,"total_ms":85.628}
+[density] state district=gas_station view=10_story weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=true
+[density] frame gas_station_10_story_rm1_before_7e88ae9_20261018T091119Z.jpg
+[density] frame gas_station_10_story_rm1_after_7e88ae9_20261018T091119Z.jpg
+[density] perf district=gas_station dressing=without draw_calls=67 primitives=66186 objects_in_frame=51
+[density] perf district=gas_station dressing=with draw_calls=69 primitives=69038 objects_in_frame=53
+[density] DONE label=v1d hash=7e88ae9
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 40 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
