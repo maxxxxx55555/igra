@@ -1,0 +1,52 @@
+# proof s28_v1f_d67160d
+# utc 20261018T083811Z
+# head d67160d (uncommitted paths: 0)
+# env none
+# cmd bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/5fa8d500-393b-43b7-95de-04d09fcc9e42/scratchpad/s28_l9.sh
+# STEP import rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP compile rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] DONE checks=24 fails=0
+  closeout_check rc=0 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP closeout_s28 rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  retention_frames rc=0 (log: .qa_logs/retention_frames_s28_v1f.log, 9 hooks held, 0 failed, 10 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP retention rc=0
+[retention] HOOK daily_claim PASS rewards [420] base 420 wallet +420 streak 1 notice [DAILY CHALLENGE DONE: +420 coins] heard ["DAILY CHALLENGE DONE: +420 coins"] replay +0
+[retention] HOOK streak_reward PASS rewards [1410] milestones [7] streak 7 wallet +1410 notice [DAILY CHALLENGE DONE: +1410 coins] heard ["DAILY CHALLENGE DONE: +1410 coins"]
+[retention] HOOK achievement PASS ach_01 paid +100 replay +0 notice [+100 coins for an achievement] heard ["+100 coins for an achievement"] ticked rows 1
+[retention] HOOK collection PASS doc_blackout_news found: album 0 -> 1, journal entries 9 -> 10
+[retention] HOOK journal_stats PASS coins 1930 on the first look (true), 2707 after +777 (true)
+[retention] HOOK ng_plus_pick PASS level 1, told in the screen true, a modifier button true, picked ["long_night"]
+[retention] HOOK secret PASS secret_suburbs_01: node gone true, coins +80 (the secret pays 50, notice true; the document it unlocks and the achievements pay more), xp [93], found 0 -> 1, photos 2 -> 5, toast true, placed 2 then 1
+[retention] HOOK ending PASS ending dark, title [Darkness] shown true, the Russian page differs true, One More Run opens the New Game+ screen true
+[retention] HOOK daily_card PASS open card ok true, after the claim { "shown": true, "title": "Daily Challenge", "body": "Fully restore 7 districts  (7/7)  Completed!", "streak": "Streak: 7 days (x3.0)" }
+[retention] DONE hooks=9/9 failed=[] hash=d67160d
+script errors in the retention run: 0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_v1x.log, 2 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP exp_s0 rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_v1d.log, 2 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP exp_green rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_v1d.log, 2 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP exp_nolight rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_v1d.log, 2 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP exp_noglow rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_v1d.log, 2 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP exp_nofog rc=0
+# STEP tree-after done
+# EXIT=0
