@@ -1,0 +1,40 @@
+# proof s28_v1i_fd58c5e
+# utc 20261018T092535Z
+# head fd58c5e (uncommitted paths: 0)
+# env none
+# cmd bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/5fa8d500-393b-43b7-95de-04d09fcc9e42/scratchpad/s28_l12.sh
+# STEP import rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP compile rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_v1d.log, 2 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP block_withlight rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_v1d.log, 2 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP gas_nocone rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_v1d.log, 2 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP block_nocone rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_v1d.log, 2 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP gas_prio rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_v1d.log, 2 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP block_prio rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_v1d.log, 2 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP gas_premul rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_v1d.log, 2 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP block_premul rc=0
+# STEP tree-after done
+# EXIT=0

@@ -1,0 +1,19 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[density] start label=v1d hash=fd58c5e ids=[&"suburbs"] nodes=1118 objects=4009 orphans=6 tex_mib=59.0 vid_mib=86.6 static_mib=101.7
+[probe] stream pass=density district=suburbs ok=true load_ms=0.3 settled_ms=35.8 hitches=0 max_frame_ms=16.7 over_budget_ms=0.0 nodes=1118 objects=4007 orphans=6 tex_mib=59.0 vid_mib=86.6 static_mib=101.8 stats={"district":"suburbs","enemies_ms":6.117,"loot_ms":19.428,"props_ms":122.165,"scene_ms":55.365,"streets_ms":1.25,"total_ms":122.532}
+[density] state district=suburbs view=04_block weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=true
+[density] frame suburbs_04_block_withlight_before_fd58c5e_20261018T092642Z.jpg
+[density] frame suburbs_04_block_withlight_after_fd58c5e_20261018T092642Z.jpg
+[density] perf district=suburbs dressing=without draw_calls=116 primitives=89848 objects_in_frame=89
+[density] perf district=suburbs dressing=with draw_calls=118 primitives=92856 objects_in_frame=91
+[density] DONE label=v1d hash=fd58c5e
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 35 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
