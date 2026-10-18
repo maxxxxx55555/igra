@@ -1,0 +1,67 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[density] start label=v1 hash=7d14cc0 ids=[&"suburbs", &"police", &"power_station"] nodes=1119 objects=4014 orphans=6 tex_mib=59.0 vid_mib=86.6 static_mib=101.7
+[probe] stream pass=density district=suburbs ok=true load_ms=0.3 settled_ms=51.4 hitches=1 max_frame_ms=66.7 over_budget_ms=33.4 nodes=1119 objects=4014 orphans=6 tex_mib=59.0 vid_mib=86.6 static_mib=101.7 stats={"district":"suburbs","enemies_ms":9.082,"loot_ms":37.878,"props_ms":197.471,"scene_ms":100.734,"streets_ms":2.88,"total_ms":196.868}
+[density] state district=suburbs view=03_street weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame suburbs_03_street_before_7d14cc0_20261018T070440Z.jpg
+[density] frame suburbs_03_street_after_7d14cc0_20261018T070440Z.jpg
+[density] state district=suburbs view=04_block weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame suburbs_04_block_before_7d14cc0_20261018T070443Z.jpg
+[density] frame suburbs_04_block_after_7d14cc0_20261018T070443Z.jpg
+[density] state district=suburbs view=05_skyline weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame suburbs_05_skyline_before_7d14cc0_20261018T070446Z.jpg
+[density] frame suburbs_05_skyline_after_7d14cc0_20261018T070446Z.jpg
+[density] state district=suburbs view=07_facade weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame suburbs_07_facade_before_7d14cc0_20261018T070450Z.jpg
+[density] frame suburbs_07_facade_after_7d14cc0_20261018T070450Z.jpg
+[density] state district=suburbs view=09_lamp weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame suburbs_09_lamp_before_7d14cc0_20261018T070453Z.jpg
+[density] frame suburbs_09_lamp_after_7d14cc0_20261018T070453Z.jpg
+[density] perf district=suburbs dressing=without draw_calls=33 primitives=46024 objects_in_frame=33
+[density] perf district=suburbs dressing=with draw_calls=36 primitives=49128 objects_in_frame=36
+[probe] stream pass=density district=police ok=true load_ms=349.2 settled_ms=443.9 hitches=2 max_frame_ms=147.7 over_budget_ms=147.7 nodes=1169 objects=4106 orphans=6 tex_mib=57.7 vid_mib=89.3 static_mib=104.3 stats={"district":"police","enemies_ms":9.282,"loot_ms":26.112,"props_ms":168.216,"scene_ms":2.89,"streets_ms":2.111,"total_ms":72.6}
+[density] state district=police view=03_street weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame police_03_street_before_7d14cc0_20261018T070459Z.jpg
+[density] frame police_03_street_after_7d14cc0_20261018T070459Z.jpg
+[density] state district=police view=04_block weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame police_04_block_before_7d14cc0_20261018T070502Z.jpg
+[density] frame police_04_block_after_7d14cc0_20261018T070502Z.jpg
+[density] state district=police view=05_skyline weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame police_05_skyline_before_7d14cc0_20261018T070505Z.jpg
+[density] frame police_05_skyline_after_7d14cc0_20261018T070505Z.jpg
+[density] state district=police view=07_facade weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame police_07_facade_before_7d14cc0_20261018T070508Z.jpg
+[density] frame police_07_facade_after_7d14cc0_20261018T070509Z.jpg
+[density] state district=police view=09_lamp weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame police_09_lamp_before_7d14cc0_20261018T070512Z.jpg
+[density] frame police_09_lamp_after_7d14cc0_20261018T070512Z.jpg
+[density] perf district=police dressing=without draw_calls=36 primitives=54712 objects_in_frame=36
+[density] perf district=police dressing=with draw_calls=39 primitives=58220 objects_in_frame=39
+[probe] stream pass=density district=power_station ok=true load_ms=322.0 settled_ms=372.1 hitches=1 max_frame_ms=140.6 over_budget_ms=107.3 nodes=1146 objects=4089 orphans=6 tex_mib=58.3 vid_mib=90.0 static_mib=106.1 stats={"district":"power_station","enemies_ms":8.357,"loot_ms":24.723,"props_ms":159.806,"scene_ms":4.167,"streets_ms":1.96,"total_ms":65.231}
+[density] state district=power_station view=03_street weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame power_station_03_street_before_7d14cc0_20261018T070518Z.jpg
+[density] frame power_station_03_street_after_7d14cc0_20261018T070518Z.jpg
+[density] state district=power_station view=04_block weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame power_station_04_block_before_7d14cc0_20261018T070521Z.jpg
+[density] frame power_station_04_block_after_7d14cc0_20261018T070521Z.jpg
+[density] state district=power_station view=05_skyline weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame power_station_05_skyline_before_7d14cc0_20261018T070524Z.jpg
+[density] frame power_station_05_skyline_after_7d14cc0_20261018T070524Z.jpg
+[density] state district=power_station view=07_facade weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame power_station_07_facade_before_7d14cc0_20261018T070527Z.jpg
+[density] frame power_station_07_facade_after_7d14cc0_20261018T070528Z.jpg
+[density] state district=power_station view=09_lamp weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame power_station_09_lamp_before_7d14cc0_20261018T070531Z.jpg
+[density] frame power_station_09_lamp_after_7d14cc0_20261018T070531Z.jpg
+[density] perf district=power_station dressing=without draw_calls=35 primitives=43464 objects_in_frame=35
+[density] perf district=power_station dressing=with draw_calls=38 primitives=47654 objects_in_frame=38
+[density] DONE label=v1 hash=7d14cc0
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 43 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

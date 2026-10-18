@@ -1,0 +1,25 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[density] start label=v1n hash=7d14cc0 ids=[&"suburbs"] nodes=1119 objects=4016 orphans=6 tex_mib=59.0 vid_mib=86.6 static_mib=101.6
+[probe] stream pass=density district=suburbs ok=true load_ms=0.4 settled_ms=44.3 hitches=0 max_frame_ms=22.1 over_budget_ms=0.0 nodes=1119 objects=4012 orphans=6 tex_mib=59.0 vid_mib=86.6 static_mib=101.7 stats={"district":"suburbs","enemies_ms":11.288,"loot_ms":33.22,"props_ms":294.28,"scene_ms":122.971,"streets_ms":1.968,"total_ms":243.925}
+[density] state district=suburbs view=03_street weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame suburbs_03_street_v1n_before_7d14cc0_20261018T070352Z.jpg
+[density] frame suburbs_03_street_v1n_after_7d14cc0_20261018T070352Z.jpg
+[density] state district=suburbs view=05_skyline weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame suburbs_05_skyline_v1n_before_7d14cc0_20261018T070356Z.jpg
+[density] frame suburbs_05_skyline_v1n_after_7d14cc0_20261018T070356Z.jpg
+[density] state district=suburbs view=09_lamp weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame suburbs_09_lamp_v1n_before_7d14cc0_20261018T070359Z.jpg
+[density] frame suburbs_09_lamp_v1n_after_7d14cc0_20261018T070359Z.jpg
+[density] perf district=suburbs dressing=without draw_calls=36 primitives=49128 objects_in_frame=36
+[density] perf district=suburbs dressing=with draw_calls=36 primitives=49128 objects_in_frame=36
+[density] DONE label=v1n hash=7d14cc0
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 35 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

@@ -1,0 +1,85 @@
+# proof s28_v1c_7d14cc0
+# utc 20261018T070053Z
+# head 7d14cc0 (uncommitted paths: 1)
+# env none
+# cmd bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/5fa8d500-393b-43b7-95de-04d09fcc9e42/scratchpad/s28_l6.sh
+# STEP import rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP compile rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/perf_check_scene.tscn rc=0 (log: .qa_logs/perf_check_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP perf rc=0
+[perf] district=suburbs draw_calls=156 primitives=55159 objects_in_frame=421
+[perf] suburbs steady draw_calls=152 (everything shown again, after the breakdown)
+[perf] district=power_station draw_calls=146 primitives=60679 objects_in_frame=292 frame_p95_ms=29.17
+[perf] budget D1<200: 156; D11<350: 146; p95<=33 ms: 27.78 and 29.17; video memory<=512 MiB: 129.7; over budget: []
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] DONE checks=22 fails=0
+  closeout_check rc=0 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP closeout_s28 rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_v1n.log, 6 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP frames_v1n rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_v1.log, 30 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP frames_v1 rc=0
+[density] perf district=suburbs dressing=without draw_calls=33 primitives=46024 objects_in_frame=33
+[density] perf district=suburbs dressing=with draw_calls=36 primitives=49128 objects_in_frame=36
+[density] perf district=police dressing=without draw_calls=36 primitives=54712 objects_in_frame=36
+[density] perf district=police dressing=with draw_calls=39 primitives=58220 objects_in_frame=39
+[density] perf district=power_station dressing=without draw_calls=35 primitives=43464 objects_in_frame=35
+[density] perf district=power_station dressing=with draw_calls=38 primitives=47654 objects_in_frame=38
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_v1d.log, 12 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP frames_v1d rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_v1x.log, 4 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP frames_v1x rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_story.log, 22 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP frames_story rc=0
+[density] perf district=suburbs dressing=without draw_calls=119 primitives=95774 objects_in_frame=104
+[density] perf district=suburbs dressing=with draw_calls=123 primitives=97514 objects_in_frame=104
+[density] perf district=residential dressing=without draw_calls=156 primitives=121118 objects_in_frame=130
+[density] perf district=residential dressing=with draw_calls=160 primitives=122858 objects_in_frame=130
+[density] perf district=park dressing=without draw_calls=53 primitives=56132 objects_in_frame=46
+[density] perf district=park dressing=with draw_calls=65 primitives=61724 objects_in_frame=49
+[density] perf district=school dressing=without draw_calls=79 primitives=69106 objects_in_frame=64
+[density] perf district=school dressing=with draw_calls=83 primitives=70846 objects_in_frame=64
+[density] perf district=hospital dressing=without draw_calls=69 primitives=74312 objects_in_frame=52
+[density] perf district=hospital dressing=with draw_calls=69 primitives=75692 objects_in_frame=52
+[density] perf district=gas_station dressing=without draw_calls=67 primitives=63278 objects_in_frame=51
+[density] perf district=gas_station dressing=with draw_calls=70 primitives=69134 objects_in_frame=54
+[density] perf district=police dressing=without draw_calls=119 primitives=92344 objects_in_frame=92
+[density] perf district=police dressing=with draw_calls=119 primitives=94264 objects_in_frame=92
+[density] perf district=warehouses dressing=without draw_calls=162 primitives=119602 objects_in_frame=136
+[density] perf district=warehouses dressing=with draw_calls=163 primitives=121534 objects_in_frame=137
+[density] perf district=industrial dressing=without draw_calls=70 primitives=68268 objects_in_frame=53
+[density] perf district=industrial dressing=with draw_calls=72 primitives=72348 objects_in_frame=55
+[density] perf district=substation dressing=without draw_calls=86 primitives=74632 objects_in_frame=70
+[density] perf district=substation dressing=with draw_calls=88 primitives=76888 objects_in_frame=72
+[density] perf district=power_station dressing=without draw_calls=78 primitives=78112 objects_in_frame=61
+[density] perf district=power_station dressing=with draw_calls=77 primitives=75808 objects_in_frame=60
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  retention_frames rc=0 (log: .qa_logs/retention_frames_s28_v1c.log, 7 hooks held, 0 failed, 8 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP retention rc=0
+[retention] HOOK daily_claim PASS rewards [420] base 420 wallet +420 streak 1 notice [DAILY CHALLENGE DONE: +420 coins] heard ["DAILY CHALLENGE DONE: +420 coins"] replay +0
+[retention] HOOK streak_reward PASS rewards [1410] milestones [7] streak 7 wallet +1410 notice [DAILY CHALLENGE DONE: +1410 coins] heard ["DAILY CHALLENGE DONE: +1410 coins"]
+[retention] HOOK achievement PASS ach_01 paid +100 replay +0 notice [+100 coins for an achievement] heard ["+100 coins for an achievement"] ticked rows 1
+[retention] HOOK collection PASS doc_blackout_news found: album 0 -> 1, journal entries 9 -> 10
+[retention] HOOK journal_stats PASS coins 1930 on the first look (true), 2707 after +777 (true)
+[retention] HOOK ng_plus_pick PASS level 1, a modifier button true, picked ["long_night"]
+[retention] HOOK daily_card PASS open card ok true, after the claim { "shown": true, "title": "Daily Challenge", "body": "Fully restore 7 districts  (7/7)  Completed!", "streak": "Streak: 7 days (x3.0)" }
+[retention] DONE hooks=7/7 failed=[] hash=7d14cc0
+# STEP tree-after done
+# EXIT=0

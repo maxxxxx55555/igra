@@ -1,0 +1,22 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[density] start label=v1x hash=7d14cc0 ids=[&"suburbs"] nodes=1119 objects=4014 orphans=6 tex_mib=59.0 vid_mib=86.6 static_mib=101.7
+[probe] stream pass=density district=suburbs ok=true load_ms=0.4 settled_ms=42.9 hitches=0 max_frame_ms=22.8 over_budget_ms=0.0 nodes=1119 objects=4012 orphans=6 tex_mib=59.0 vid_mib=86.6 static_mib=101.7 stats={"district":"suburbs","enemies_ms":7.837,"loot_ms":30.452,"props_ms":193.686,"scene_ms":92.573,"streets_ms":2.017,"total_ms":176.277}
+[density] state district=suburbs view=12_cone weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame suburbs_12_cone_v1x_before_7d14cc0_20261018T070712Z.jpg
+[density] frame suburbs_12_cone_v1x_after_7d14cc0_20261018T070712Z.jpg
+[density] state district=suburbs view=13_base weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame suburbs_13_base_v1x_before_7d14cc0_20261018T070715Z.jpg
+[density] frame suburbs_13_base_v1x_after_7d14cc0_20261018T070715Z.jpg
+[density] perf district=suburbs dressing=without draw_calls=39 primitives=47588 objects_in_frame=39
+[density] perf district=suburbs dressing=with draw_calls=42 primitives=50692 objects_in_frame=42
+[density] DONE label=v1x hash=7d14cc0
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 35 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
