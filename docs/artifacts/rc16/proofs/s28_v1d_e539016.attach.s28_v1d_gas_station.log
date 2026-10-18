@@ -1,0 +1,27 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[density] start label=v1d hash=e539016 ids=[&"gas_station"] nodes=1118 objects=4010 orphans=6 tex_mib=59.0 vid_mib=86.6 static_mib=101.6
+[probe] stream pass=density district=gas_station ok=true load_ms=352.9 settled_ms=410.8 hitches=1 max_frame_ms=133.3 over_budget_ms=101.3 nodes=1138 objects=4061 orphans=6 tex_mib=58.0 vid_mib=85.5 static_mib=103.2 stats={"district":"gas_station","enemies_ms":8.863,"loot_ms":28.983,"props_ms":167.998,"scene_ms":31.578,"streets_ms":1.995,"total_ms":96.457}
+[density] state district=gas_station view=03_street weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame gas_station_03_street_before_e539016_20261018T074313Z.jpg
+[density] frame gas_station_03_street_after_e539016_20261018T074314Z.jpg
+[density] state district=gas_station view=09_lamp weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame gas_station_09_lamp_before_e539016_20261018T074317Z.jpg
+[density] frame gas_station_09_lamp_after_e539016_20261018T074317Z.jpg
+[density] state district=gas_station view=12_cone weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame gas_station_12_cone_before_e539016_20261018T074320Z.jpg
+[density] frame gas_station_12_cone_after_e539016_20261018T074320Z.jpg
+[density] probe district=gas_station WindowHalos: count=82 coloured=78 shown=true strength=3.0 first=(-42.8, 2.6, -31.97) box=[P: (-44.35196, 1.17, -31.97), S: (76.32195, 5.46, 69.80623)]
+[density] probe district=gas_station LampCones: count=48 coloured=0 shown=true strength=1.2 first=(-22.84, 2.145, -27.5) box=[P: (-28.48484, 0.08, -29.7), S: (59.28968, 4.13, 59.4)]
+[density] perf district=gas_station dressing=without draw_calls=33 primitives=45194 objects_in_frame=33
+[density] perf district=gas_station dressing=with draw_calls=35 primitives=48046 objects_in_frame=35
+[density] DONE label=v1d hash=e539016
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 40 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

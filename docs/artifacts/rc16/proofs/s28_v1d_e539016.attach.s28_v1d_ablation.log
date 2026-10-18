@@ -1,0 +1,64 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[ablate] window=(1920, 1055) msaa=1 tier=2 vsync_was=1
+[ablate] suburbs power stage 3
+[ablate] suburbs baseline frame_p95_ms=24.07 gpu_ms=19.99 draw_calls=167
+[ablate] suburbs lamp pools hidden frame_p95_ms=25.00 gpu_ms=20.81 draw_calls=174
+[ablate] suburbs baseline frame_p95_ms=23.33 gpu_ms=21.01 draw_calls=171
+[ablate] suburbs lamp cones hidden frame_p95_ms=29.17 gpu_ms=20.40 draw_calls=168
+[ablate] suburbs baseline frame_p95_ms=25.43 gpu_ms=21.40 draw_calls=169
+[ablate] suburbs window halos hidden frame_p95_ms=22.24 gpu_ms=20.11 draw_calls=168
+[ablate] suburbs baseline frame_p95_ms=25.76 gpu_ms=20.77 draw_calls=174
+[ablate] suburbs post-process layers hidden frame_p95_ms=19.70 gpu_ms=18.01 draw_calls=174
+[ablate] suburbs baseline frame_p95_ms=23.33 gpu_ms=20.68 draw_calls=177
+[ablate] suburbs HUD hidden frame_p95_ms=20.37 gpu_ms=18.48 draw_calls=99
+[ablate] suburbs baseline frame_p95_ms=22.43 gpu_ms=20.62 draw_calls=177
+[ablate] suburbs HUD/TopLeft frame_p95_ms=23.33 gpu_ms=20.40 draw_calls=157
+[ablate] suburbs baseline frame_p95_ms=25.00 gpu_ms=22.14 draw_calls=175
+[ablate] suburbs HUD/AmmoCounter frame_p95_ms=25.83 gpu_ms=22.50 draw_calls=173
+[ablate] suburbs baseline frame_p95_ms=23.61 gpu_ms=20.99 draw_calls=173
+[ablate] suburbs HUD/TopRight frame_p95_ms=23.43 gpu_ms=20.53 draw_calls=150
+[ablate] suburbs baseline frame_p95_ms=22.22 gpu_ms=20.40 draw_calls=172
+[ablate] suburbs HUD/BtnPause frame_p95_ms=23.61 gpu_ms=20.78 draw_calls=170
+[ablate] suburbs baseline frame_p95_ms=22.92 gpu_ms=20.71 draw_calls=174
+[ablate] suburbs HUD/BottomCenter frame_p95_ms=27.61 gpu_ms=20.77 draw_calls=141
+[ablate] suburbs baseline frame_p95_ms=22.67 gpu_ms=20.18 draw_calls=175
+[ablate] suburbs HUD/NoticeLabel frame_p95_ms=22.73 gpu_ms=20.65 draw_calls=173
+[ablate] suburbs baseline frame_p95_ms=27.15 gpu_ms=20.94 draw_calls=172
+[ablate] suburbs HUD/WeightBar frame_p95_ms=22.80 gpu_ms=20.93 draw_calls=168
+[ablate] suburbs baseline frame_p95_ms=25.75 gpu_ms=21.15 draw_calls=168
+[ablate] suburbs HUD/Crosshair frame_p95_ms=26.67 gpu_ms=21.26 draw_calls=169
+[ablate] suburbs baseline frame_p95_ms=22.73 gpu_ms=20.48 draw_calls=177
+[ablate] suburbs HUD/HitMarker frame_p95_ms=27.68 gpu_ms=21.23 draw_calls=177
+[ablate] suburbs baseline frame_p95_ms=23.01 gpu_ms=20.19 draw_calls=177
+[ablate] suburbs HUD/StatusRow frame_p95_ms=25.32 gpu_ms=21.02 draw_calls=177
+[ablate] suburbs baseline frame_p95_ms=25.00 gpu_ms=21.22 draw_calls=185
+[ablate] suburbs HUD/GrainOverlay frame_p95_ms=22.06 gpu_ms=19.69 draw_calls=176
+[ablate] suburbs baseline frame_p95_ms=22.40 gpu_ms=20.61 draw_calls=177
+[ablate] suburbs PostProcessOverlay/ChromaOverlay frame_p95_ms=21.21 gpu_ms=19.36 draw_calls=176
+[ablate] suburbs baseline frame_p95_ms=22.73 gpu_ms=20.34 draw_calls=177
+[ablate] suburbs PostProcessOverlay/GrainOverlay frame_p95_ms=26.23 gpu_ms=20.24 draw_calls=174
+[ablate] suburbs baseline frame_p95_ms=24.07 gpu_ms=20.83 draw_calls=175
+[ablate] suburbs PostProcessOverlay/VignetteOverlay frame_p95_ms=22.48 gpu_ms=20.19 draw_calls=174
+[ablate] suburbs baseline frame_p95_ms=24.07 gpu_ms=20.80 draw_calls=175
+[ablate] suburbs msaa off frame_p95_ms=29.63 gpu_ms=19.74 draw_calls=175
+[ablate] power_station power stage 3
+[ablate] power_station baseline frame_p95_ms=23.40 gpu_ms=21.40 draw_calls=179
+[ablate] power_station fog cards hidden frame_p95_ms=27.78 gpu_ms=21.87 draw_calls=173
+[ablate] power_station baseline frame_p95_ms=26.67 gpu_ms=22.40 draw_calls=177
+[ablate] power_station lamp pools hidden frame_p95_ms=23.61 gpu_ms=21.43 draw_calls=177
+[ablate] power_station baseline frame_p95_ms=24.24 gpu_ms=21.77 draw_calls=176
+[ablate] power_station lamp cones hidden frame_p95_ms=21.67 gpu_ms=20.49 draw_calls=185
+[ablate] power_station baseline frame_p95_ms=24.99 gpu_ms=21.92 draw_calls=178
+[ablate] power_station window halos hidden frame_p95_ms=25.56 gpu_ms=22.10 draw_calls=176
+[ablate] power_station baseline frame_p95_ms=25.76 gpu_ms=22.10 draw_calls=176
+[ablate] DONE baselines [24.0740740740741, 23.3333333333333, 25.425, 25.7575757575758, 23.3333333333333, 22.434, 25.0, 23.6111111111111, 22.2222222222222, 22.9166666666667, 22.674, 27.155, 25.753, 22.7272727272727, 23.0103333333353, 25.0, 22.3961111111088, 22.7272727272727, 24.0740740740741, 24.0740740740741, 23.401, 26.6666666666667, 24.2424242424242, 24.9928484848452, 25.7575757575758] least 22.22 ms
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 37 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

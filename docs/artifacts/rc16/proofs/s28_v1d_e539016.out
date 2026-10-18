@@ -1,0 +1,149 @@
+# proof s28_v1d_e539016
+# utc 20261018T073231Z
+# head e539016 (uncommitted paths: 0)
+# env none
+# cmd bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/5fa8d500-393b-43b7-95de-04d09fcc9e42/scratchpad/s28_l7.sh
+# STEP import rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP compile rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/perf_check_scene.tscn rc=0 (log: .qa_logs/perf_check_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP perf rc=0
+[perf] mean over 300 frames: gpu_ms=15.53 render_cpu_ms=1.30 process_ms=24.64 physics_ms=2.49
+[perf] mean over 300 frames: gpu_ms=14.36 render_cpu_ms=1.28 process_ms=27.91 physics_ms=2.58
+[perf] mean over 300 frames: gpu_ms=14.91 render_cpu_ms=1.36 process_ms=27.60 physics_ms=2.63
+[perf] mean over 300 frames: gpu_ms=17.50 render_cpu_ms=1.44 process_ms=35.33 physics_ms=2.21
+[perf] mean over 300 frames: gpu_ms=17.85 render_cpu_ms=1.54 process_ms=32.96 physics_ms=2.20
+[perf] mean over 300 frames: gpu_ms=18.19 render_cpu_ms=1.54 process_ms=35.05 physics_ms=2.27
+[perf] budget D1<200: 157; D11<350: 143; p95<=33 ms: 22.73 and 26.01; video memory<=512 MiB: 129.7; over budget: []
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] DONE checks=23 fails=0
+  closeout_check rc=0 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP closeout_s28 rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/perf_ablation_scene.tscn rc=0 (log: .qa_logs/perf_ablation_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP ablation rc=0
+[ablate] window=(1920, 1055) msaa=1 tier=2 vsync_was=1
+[ablate] suburbs power stage 3
+[ablate] suburbs baseline frame_p95_ms=24.07 gpu_ms=19.99 draw_calls=167
+[ablate] suburbs lamp pools hidden frame_p95_ms=25.00 gpu_ms=20.81 draw_calls=174
+[ablate] suburbs baseline frame_p95_ms=23.33 gpu_ms=21.01 draw_calls=171
+[ablate] suburbs lamp cones hidden frame_p95_ms=29.17 gpu_ms=20.40 draw_calls=168
+[ablate] suburbs baseline frame_p95_ms=25.43 gpu_ms=21.40 draw_calls=169
+[ablate] suburbs window halos hidden frame_p95_ms=22.24 gpu_ms=20.11 draw_calls=168
+[ablate] suburbs baseline frame_p95_ms=25.76 gpu_ms=20.77 draw_calls=174
+[ablate] suburbs post-process layers hidden frame_p95_ms=19.70 gpu_ms=18.01 draw_calls=174
+[ablate] suburbs baseline frame_p95_ms=23.33 gpu_ms=20.68 draw_calls=177
+[ablate] suburbs HUD hidden frame_p95_ms=20.37 gpu_ms=18.48 draw_calls=99
+[ablate] suburbs baseline frame_p95_ms=22.43 gpu_ms=20.62 draw_calls=177
+[ablate] suburbs HUD/TopLeft frame_p95_ms=23.33 gpu_ms=20.40 draw_calls=157
+[ablate] suburbs baseline frame_p95_ms=25.00 gpu_ms=22.14 draw_calls=175
+[ablate] suburbs HUD/AmmoCounter frame_p95_ms=25.83 gpu_ms=22.50 draw_calls=173
+[ablate] suburbs baseline frame_p95_ms=23.61 gpu_ms=20.99 draw_calls=173
+[ablate] suburbs HUD/TopRight frame_p95_ms=23.43 gpu_ms=20.53 draw_calls=150
+[ablate] suburbs baseline frame_p95_ms=22.22 gpu_ms=20.40 draw_calls=172
+[ablate] suburbs HUD/BtnPause frame_p95_ms=23.61 gpu_ms=20.78 draw_calls=170
+[ablate] suburbs baseline frame_p95_ms=22.92 gpu_ms=20.71 draw_calls=174
+[ablate] suburbs HUD/BottomCenter frame_p95_ms=27.61 gpu_ms=20.77 draw_calls=141
+[ablate] suburbs baseline frame_p95_ms=22.67 gpu_ms=20.18 draw_calls=175
+[ablate] suburbs HUD/NoticeLabel frame_p95_ms=22.73 gpu_ms=20.65 draw_calls=173
+[ablate] suburbs baseline frame_p95_ms=27.15 gpu_ms=20.94 draw_calls=172
+[ablate] suburbs HUD/WeightBar frame_p95_ms=22.80 gpu_ms=20.93 draw_calls=168
+[ablate] suburbs baseline frame_p95_ms=25.75 gpu_ms=21.15 draw_calls=168
+[ablate] suburbs HUD/Crosshair frame_p95_ms=26.67 gpu_ms=21.26 draw_calls=169
+[ablate] suburbs baseline frame_p95_ms=22.73 gpu_ms=20.48 draw_calls=177
+[ablate] suburbs HUD/HitMarker frame_p95_ms=27.68 gpu_ms=21.23 draw_calls=177
+[ablate] suburbs baseline frame_p95_ms=23.01 gpu_ms=20.19 draw_calls=177
+[ablate] suburbs HUD/StatusRow frame_p95_ms=25.32 gpu_ms=21.02 draw_calls=177
+[ablate] suburbs baseline frame_p95_ms=25.00 gpu_ms=21.22 draw_calls=185
+[ablate] suburbs HUD/GrainOverlay frame_p95_ms=22.06 gpu_ms=19.69 draw_calls=176
+[ablate] suburbs baseline frame_p95_ms=22.40 gpu_ms=20.61 draw_calls=177
+[ablate] suburbs PostProcessOverlay/ChromaOverlay frame_p95_ms=21.21 gpu_ms=19.36 draw_calls=176
+[ablate] suburbs baseline frame_p95_ms=22.73 gpu_ms=20.34 draw_calls=177
+[ablate] suburbs PostProcessOverlay/GrainOverlay frame_p95_ms=26.23 gpu_ms=20.24 draw_calls=174
+[ablate] suburbs baseline frame_p95_ms=24.07 gpu_ms=20.83 draw_calls=175
+[ablate] suburbs PostProcessOverlay/VignetteOverlay frame_p95_ms=22.48 gpu_ms=20.19 draw_calls=174
+[ablate] suburbs baseline frame_p95_ms=24.07 gpu_ms=20.80 draw_calls=175
+[ablate] suburbs msaa off frame_p95_ms=29.63 gpu_ms=19.74 draw_calls=175
+[ablate] power_station power stage 3
+[ablate] power_station baseline frame_p95_ms=23.40 gpu_ms=21.40 draw_calls=179
+[ablate] power_station fog cards hidden frame_p95_ms=27.78 gpu_ms=21.87 draw_calls=173
+[ablate] power_station baseline frame_p95_ms=26.67 gpu_ms=22.40 draw_calls=177
+[ablate] power_station lamp pools hidden frame_p95_ms=23.61 gpu_ms=21.43 draw_calls=177
+[ablate] power_station baseline frame_p95_ms=24.24 gpu_ms=21.77 draw_calls=176
+[ablate] power_station lamp cones hidden frame_p95_ms=21.67 gpu_ms=20.49 draw_calls=185
+[ablate] power_station baseline frame_p95_ms=24.99 gpu_ms=21.92 draw_calls=178
+[ablate] power_station window halos hidden frame_p95_ms=25.56 gpu_ms=22.10 draw_calls=176
+[ablate] power_station baseline frame_p95_ms=25.76 gpu_ms=22.10 draw_calls=176
+[ablate] DONE baselines [24.0740740740741, 23.3333333333333, 25.425, 25.7575757575758, 23.3333333333333, 22.434, 25.0, 23.6111111111111, 22.2222222222222, 22.9166666666667, 22.674, 27.155, 25.753, 22.
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_v1t.log, 0 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP series rc=0
+[density] series district=suburbs view=03_street frame=0 lower=0.1378 spot=1.700 glow=0.850 moon=0.400
+[density] series district=suburbs view=03_street frame=1 lower=0.1409 spot=1.700 glow=0.850 moon=0.400
+[density] series district=suburbs view=03_street frame=2 lower=0.1389 spot=1.700 glow=0.850 moon=0.400
+[density] series district=suburbs view=03_street frame=3 lower=0.1396 spot=1.700 glow=0.850 moon=0.400
+[density] series district=suburbs view=03_street frame=4 lower=0.1391 spot=1.700 glow=0.850 moon=0.400
+[density] series district=suburbs view=03_street frame=5 lower=0.1359 spot=1.700 glow=0.850 moon=0.400
+[density] series district=suburbs view=03_street frame=6 lower=0.1416 spot=1.700 glow=0.850 moon=0.400
+[density] series district=suburbs view=03_street frame=7 lower=0.1365 spot=1.700 glow=0.850 moon=0.400
+[density] series district=suburbs view=05_skyline frame=0 lower=0.1459 spot=1.700 glow=0.850 moon=0.400
+[density] series district=suburbs view=05_skyline frame=1 lower=0.1519 spot=1.700 glow=0.850 moon=0.400
+[density] series district=suburbs view=05_skyline frame=2 lower=0.1518 spot=1.700 glow=0.850 moon=0.400
+[density] series district=suburbs view=05_skyline frame=3 lower=0.1503 spot=1.700 glow=0.850 moon=0.400
+[density] series district=suburbs view=05_skyline frame=4 lower=0.1382 spot=1.700 glow=0.850 moon=0.400
+[density] series district=suburbs view=05_skyline frame=5 lower=0.1321 spot=1.700 glow=0.850 moon=0.400
+[density] series district=suburbs view=05_skyline frame=6 lower=0.1270 spot=1.700 glow=0.850 moon=0.400
+[density] series district=suburbs view=05_skyline frame=7 lower=0.1454 spot=1.700 glow=0.850 moon=0.400
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_v1x.log, 8 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP sweep_0.6 rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_v1x.log, 8 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP sweep_1.2 rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_v1x.log, 8 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP sweep_2.4 rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_v1d.log, 6 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP gas_station rc=0
+[density] probe district=gas_station WindowHalos: count=82 coloured=78 shown=true strength=3.0 first=(-42.8, 2.6, -31.97) box=[P: (-44.35196, 1.17, -31.97), S: (76.32195, 5.46, 69.80623)]
+[density] probe district=gas_station LampCones: count=48 coloured=0 shown=true strength=1.2 first=(-22.84, 2.145, -27.5) box=[P: (-28.48484, 0.08, -29.7), S: (59.28968, 4.13, 59.4)]
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_v1.log, 24 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP frames_v1 rc=0
+[density] perf district=suburbs dressing=without draw_calls=33 primitives=46024 objects_in_frame=33
+[density] perf district=suburbs dressing=with draw_calls=35 primitives=49032 objects_in_frame=35
+[density] perf district=police dressing=without draw_calls=41 primitives=57252 objects_in_frame=41
+[density] perf district=police dressing=with draw_calls=43 primitives=60664 objects_in_frame=43
+[density] perf district=power_station dressing=without draw_calls=38 primitives=43490 objects_in_frame=38
+[density] perf district=power_station dressing=with draw_calls=40 primitives=47584 objects_in_frame=40
+[density] perf district=gas_station dressing=without draw_calls=39 primitives=45266 objects_in_frame=39
+[density] perf district=gas_station dressing=with draw_calls=41 primitives=48118 objects_in_frame=41
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  retention_frames rc=1 (log: .qa_logs/retention_frames_s28_v1d.log, 7 hooks held, 2 failed, 10 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP retention rc=1
+[retention] HOOK daily_claim PASS rewards [420] base 420 wallet +420 streak 1 notice [DAILY CHALLENGE DONE: +420 coins] heard ["DAILY CHALLENGE DONE: +420 coins"] replay +0
+[retention] HOOK streak_reward PASS rewards [1410] milestones [7] streak 7 wallet +1410 notice [DAILY CHALLENGE DONE: +1410 coins] heard ["DAILY CHALLENGE DONE: +1410 coins"]
+[retention] HOOK achievement PASS ach_01 paid +100 replay +0 notice [+100 coins for an achievement] heard ["+100 coins for an achievement"] ticked rows 1
+[retention] HOOK collection PASS doc_blackout_news found: album 0 -> 1, journal entries 9 -> 10
+[retention] HOOK journal_stats PASS coins 1930 on the first look (true), 2707 after +777 (true)
+[retention] HOOK ng_plus_pick PASS level 1, told in the screen true, a modifier button true, picked ["long_night"]
+[retention] HOOK secret FAIL secret_suburbs_01: node gone true, coins +80 (pay 50, notice true), xp [93], found 0 -> 1, photos 2 -> 5, toast true, placed 2 then 1
+[retention] HOOK ending FAIL ending dark, title [Darkness] shown true, the Russian page differs false, One More Run opens the New Game+ screen true
+[retention] HOOK daily_card PASS open card ok true, after the claim { "shown": true, "title": "Daily Challenge", "body": "Fully restore 7 districts  (7/7)  Completed!", "streak": "Streak: 7 days (x3.0)" }
+[retention] DONE hooks=7/9 failed=["secret", "ending"] hash=e539016
+# STEP tree-after done
+# EXIT=0
