@@ -27,6 +27,10 @@ func _ready() -> void:
 	_build()
 	if not LocalizationManager.language_changed.is_connected(_on_lang_changed):
 		LocalizationManager.language_changed.connect(_on_lang_changed)
+	# The Codex keeps its pages and this one read the game when it was built: shown again, it reads the game again.
+	visibility_changed.connect(func() -> void:
+		if is_visible_in_tree():
+			_on_lang_changed(LocalizationManager.current_lang))
 
 func _on_lang_changed(_lang: String) -> void:
 	_detail = null

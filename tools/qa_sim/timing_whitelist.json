@@ -14,5 +14,6 @@
   {"file": "scripts/ui/touch_calibration_overlay.gd", "text": "_step += 1", "why": "the calibration step advances on events (stick moved, button pressed), not per frame"},
   {"file": "scripts/ui/tutorial_system.gd", "text": "_current_step += 1", "why": "the tutorial advances on events (an action, a stage change), not per frame"},
   {"file": "scripts/world_env_setup.gd", "text": "_override_frames -= 1", "why": "a deferral of five frames that re-applies the stage after an override so late nodes catch up; a frame count by design, not a duration"},
-  {"file": "scripts/systems/wow_director.gd", "text": "await get_tree().process_frame", "why": "the hit-stop ends on Time.get_ticks_msec() against a millisecond deadline; the awaited frame is only the polling step, the duration is milliseconds at any frame rate (CORRECTION_LOG 218)"}
+  {"file": "scripts/systems/wow_director.gd", "text": "await get_tree().process_frame", "why": "the hit-stop ends on Time.get_ticks_msec() against a millisecond deadline; the awaited frame is only the polling step, the duration is milliseconds at any frame rate (CORRECTION_LOG 218)"},
+  {"file": "scripts/systems/music_manager.gd", "text": "_bed_turn += 1  # the bed comes back after a fight or a boss: a turn further, so it does not start where it started before", "why": "a turn counter advanced by an event (the mood coming back to the district bed), not by a frame: nothing in it depends on the frame rate"}
 ]

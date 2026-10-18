@@ -168,6 +168,7 @@ func _complete() -> void:
 	if wallet != null and wallet.has_method("add"):
 		wallet.add(reward)
 	reward += _streak_bonus(streak)
+	EventBus.inventory_notice.emit(LocalizationManager.tf("DAILY_DONE_NOTICE", [reward]))
 	completed.emit(reward)
 	_save_state()
 

@@ -10,10 +10,15 @@ func _ready() -> void:
 	# Static audit 2026-09-08: title/close-button text was built once, never
 	# retranslated on a live language switch. Same rebuild pattern as
 	# settings_screen.gd/quest_journal.gd.
-	LocalizationManager.language_changed.connect(func(_l: String) -> void:
-		for c in get_children():
-			c.queue_free()
-		_build())
+	LocalizationManager.language_changed.connect(func(_l: String) -> void: _rebuild())
+	# The Codex keeps its pages and this one read the game when it was built: shown again, it reads the game again.
+	visibility_changed.connect(func() -> void:
+		if is_visible_in_tree():
+			_rebuild())
+func _rebuild() -> void:
+	for c in get_children():
+		c.queue_free()
+	_build()
 func _build() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	set_anchors_preset(Control.PRESET_FULL_RECT)

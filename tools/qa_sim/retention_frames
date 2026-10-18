@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Session 28 retention frames (scripts/tools/_retention_runner.gd), windowed and muted, under the user-data guard.
+#   tools/qa_sim/retention_frames <label> <hash> [timeout-sec]
+#     label: names the log;  hash: the short hash of the code tree that is measured (it is part of every frame name)
+#   log -> .qa_logs/retention_frames_<label>.log      frames -> docs/stills/retention/<state>_after_<hash>_<UTC>.jpg
+#   exit code: 0 every hook held, 1 a hook failed, 3 headless (no display)
+set -uo pipefail
+cd "$(dirname "$0")/../.." || exit 2
+LABEL="${1:?usage: tools/qa_sim/retention_frames <label> <hash> [timeout-sec]}"
+HASH="${2:?usage: tools/qa_sim/retention_frames <label> <hash> [timeout-sec]}"
+T="${3:-420}"
+mkdir -p .qa_logs
+LOG=".qa_logs/retention_frames_${LABEL}.log"
+rm -f "$LOG"
+
+GODOT="$(bash tools/qa_sim/_resolve_godot.sh 2>/dev/null)"
+if [[ -z "$GODOT" ]] || [[ ! -x "$GODOT" ]]; then
+	bash tools/qa_sim/_resolve_godot.sh >&2
+	exit 99
+fi
+source tools/qa_sim/user_data_guard.sh
+udg_snapshot || exit 99
+trap 'udg_restore || exit 97' EXIT
+trap 'exit 130' INT TERM
+export TLS_UDG_GUARDED=1
+timeout "$T" "$GODOT" --windowed --path . res://scenes/tools/retention_frames_scene.tscn -- --tlabel="$LABEL" --thash="$HASH" > "$LOG" 2>&1
+rc=$?
+echo "  retention_frames rc=$rc (log: $LOG, $(grep -ac '^\[retention\] HOOK .* PASS' "$LOG") hooks held, $(grep -ac '^\[retention\] HOOK .* FAIL' "$LOG") failed, $(grep -ac '^\[retention\] frame' "$LOG") frames)"
+exit $rc

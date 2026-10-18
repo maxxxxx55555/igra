@@ -114,6 +114,8 @@ func _view(id: StringName, view: Dictionary) -> void:
 			_fail("%s %s: the power stage is %d and the view wants %d" % [String(id), view["name"], PowerGrid.get_stage(id), stage])
 			return
 	_flashlight(player, bool(view["light"]))
+	if _Views.SWITCHED.has(_label):
+		_Views.pin_lamps(get_tree())
 	await get_tree().create_timer(SETTLE_SEC).timeout
 	var env := get_viewport().world_3d.environment
 	print("[density] state district=%s view=%s weather=%d stage=%d tier=%d ambient=%.3f glow=%.3f exposure=%.3f flashlight=%s" % [String(id), view["name"], WeatherSystem.current,
@@ -133,11 +135,11 @@ func _view(id: StringName, view: Dictionary) -> void:
 		dressing.visible = true
 		await get_tree().process_frame
 		await _snap("%s_%s" % [id, view["name"]], "after")
-	elif _label == "v1":
-		_Views.v1(get_tree(), false)
+	elif _Views.SWITCHED.has(_label):
+		_Views.switch(_label, get_tree(), false)
 		await get_tree().process_frame
 		await _snap("%s_%s" % [id, view["name"]], "before")
-		_Views.v1(get_tree(), true)
+		_Views.switch(_label, get_tree(), true)
 		await get_tree().process_frame
 		await _snap("%s_%s" % [id, view["name"]], "after")
 	else:
@@ -232,15 +234,26 @@ func _run() -> void:
 			var lamp_view := _Views.lamp_view(get_tree(), id)
 			if not lamp_view.is_empty():
 				await _view(id, lamp_view)
+		if _views.is_empty() or _views.has("10_story"):
+			var story_view := _Views.story_view(get_tree(), id)
+			if not story_view.is_empty():
+				await _view(id, story_view)
+		for diag: String in ["11_pane", "12_dust", "13_base"]:
+			if _views.has(diag):
+				var diag_view := _Views.diag_view(get_tree(), id, diag)
+				if not diag_view.is_empty():
+					await _view(id, diag_view)
+		if _views.has("probe"):
+			_Views.probe(get_tree(), id)
 		var dressing := _dressing()
 		if _label == "pair" and dressing != null:
 			dressing.visible = false
 			await _perf_line(id, "without")
 			dressing.visible = true
-		elif _label == "v1":
-			_Views.v1(get_tree(), false)
+		elif _Views.SWITCHED.has(_label):
+			_Views.switch(_label, get_tree(), false)
 			await _perf_line(id, "without")
-			_Views.v1(get_tree(), true)
+			_Views.switch(_label, get_tree(), true)
 		await _perf_line(id, "with")
 	print("[density] DONE label=%s hash=%s" % [_label, _hash])
 	get_tree().quit(0)
