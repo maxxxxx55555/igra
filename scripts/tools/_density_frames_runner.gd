@@ -143,12 +143,13 @@ func _view(id: StringName, view: Dictionary) -> void:
 		await get_tree().process_frame
 		await _snap("%s_%s" % [id, view["name"]], "after")
 	elif _Views.SWITCHED.has(_label):
+		var state := "%s_%s%s" % [id, view["name"], "_" + _label if ["v1n", "v1x"].has(_label) else ""]  # the control and the boosted diagnostic do not take the names of the pairs they stand beside
 		_Views.switch(_label, get_tree(), false)
 		await get_tree().process_frame
-		await _snap("%s_%s" % [id, view["name"]], "before")
+		await _snap(state, "before")
 		_Views.switch(_label, get_tree(), true)
 		await get_tree().process_frame
-		await _snap("%s_%s" % [id, view["name"]], "after")
+		await _snap(state, "after")
 	else:
 		await _snap("%s_%s" % [id, view["name"]])
 
