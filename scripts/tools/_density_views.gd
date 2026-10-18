@@ -162,24 +162,31 @@ static func lamp_view(tree: SceneTree, id: StringName) -> Dictionary:
 	var toward := Vector3(-head.x, 0.0, -head.z).normalized()
 	return {"name": "09_lamp", "at": Vector3(head.x + toward.x * 6.0, 0.1, head.z + toward.z * 6.0), "look": Vector3(head.x, head.y * 0.5, head.z), "pitch": atan2(head.y * 0.5 - 1.7, 6.0), "stage": 3, "light": false}
 
-## A short-lived diagnostic (TLS_FRAMES_EXPERIMENT): one thing of the view is changed, so that a frame tells what the cream pyramids of the gas station are made of: `noglow` and `nofog` switch the environment's glow
-## and fog off, `green` tints the cones green (a pyramid that stays cream is not drawn by the cone shader), `cull` and `cullall` take the cones out of the reach of the flashlight and of every light; `nolight` is the
-## flashlight's, in the runner.
-static func experiment(tree: SceneTree, env: Environment, player: Node3D, name: String) -> void:
-	match name:
-		"noglow":
-			env.glow_enabled = false
-		"nofog":
-			env.fog_enabled = false
-		"cull", "cullall":  # the cones on a layer of their own that the flashlight (`cullall`: every light) leaves out
-			for node: Node in tree.root.find_children("LampCones", "MultiMeshInstance3D", true, false):
-				(node as MultiMeshInstance3D).layers = 1 << 19
-			var lights: Array = tree.root.find_children("*", "Light3D", true, false) if name == "cullall" else [player.get("flashlight")]
-			for light: Variant in lights:
-				(light as Light3D).light_cull_mask = 0xFFFFF & ~(1 << 19)
-		"green":
-			for node: Node in tree.root.find_children("LampCones", "MultiMeshInstance3D", true, false):
-				((node as MultiMeshInstance3D).material_override as ShaderMaterial).set_shader_parameter("tint", Color(0.0, 1.0, 0.0))
+## A short-lived diagnostic (TLS_FRAMES_EXPERIMENT, a list): `rm1` to `rm6` give the two additive shaders of V1, the lamp cones and the window halos, another set of render modes, so that a frame tells which of them keeps
+## the flashlight from turning a cone into a cream pyramid and a lit pane's halo into a pale block; `nolight` and `withlight` are the flashlight's, in the runner.
+const RENDER_MODES: Array[String] = [
+	"unshaded, blend_add, depth_draw_never, cull_disabled, shadows_disabled",
+	"unshaded, blend_add, depth_draw_never, cull_disabled, fog_disabled",
+	"unshaded, blend_add, depth_draw_never, cull_disabled, shadows_disabled, fog_disabled",
+	"unshaded, blend_add, cull_disabled",
+	"unshaded, blend_add, depth_draw_never",
+	"blend_add, unshaded, shadows_disabled",
+]
+
+static func experiment(tree: SceneTree, name: String) -> void:
+	if not name.begins_with("rm"):
+		return
+	var mode: String = RENDER_MODES[int(name.substr(2)) - 1]
+	for node_name: String in ["LampCones", "WindowHalos"]:
+		var node := tree.root.find_child(node_name, true, false) as MultiMeshInstance3D
+		var old := node.material_override as ShaderMaterial
+		var fresh := ShaderMaterial.new()
+		fresh.shader = Shader.new()
+		fresh.shader.code = old.shader.code.replace("render_mode unshaded, blend_add, depth_draw_never, cull_disabled;", "render_mode %s;" % mode)
+		for param: String in ["strength", "scale"]:
+			if old.get_shader_parameter(param) != null:
+				fresh.set_shader_parameter(param, old.get_shader_parameter(param))
+		node.material_override = fresh
 
 ## The time series of a view (label `v1t`, nothing switched): eight consecutive frames of it, each with the mean brightness of the lower half of the picture and the energy of the lamp nearest to the camera and of the
 ## moon, so a ground that lights and darkens between two frames can be told from a lamp or a moon that does: `[density] series district=<id> view=<name> frame=<i> lower=<mean> spot=<e> glow=<e> moon=<e>`.

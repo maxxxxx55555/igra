@@ -106,7 +106,7 @@ func _place(view: Dictionary) -> Node3D:
 ## The label of the control and of the boosted diagnostic is part of the name of their frames, and so is the strength of a sweep (TLS_FRAMES_STRENGTH=1.2 is `_v1xs12`) and the name of an experiment.
 func _tag() -> String:
 	if OS.has_environment("TLS_FRAMES_EXPERIMENT"):
-		return "_" + OS.get_environment("TLS_FRAMES_EXPERIMENT")
+		return "_" + OS.get_environment("TLS_FRAMES_EXPERIMENT").replace(",", "_")
 	if not ["v1n", "v1x"].has(_label):
 		return ""
 	return "_" + _label + ("s" + OS.get_environment("TLS_FRAMES_STRENGTH").replace(".", "") if OS.has_environment("TLS_FRAMES_STRENGTH") else "")
@@ -125,9 +125,10 @@ func _view(id: StringName, view: Dictionary) -> void:
 		if not PowerGrid.advance_district(id, stage as DistrictData.Stage):
 			_fail("%s %s: the power stage is %d and the view wants %d" % [String(id), view["name"], PowerGrid.get_stage(id), stage])
 			return
-	var experiment: String = OS.get_environment("TLS_FRAMES_EXPERIMENT")
-	_flashlight(player, (bool(view["light"]) and experiment != "nolight") or experiment == "withlight")
-	_Views.experiment(get_tree(), get_viewport().world_3d.environment, player, experiment)
+	var experiments: PackedStringArray = OS.get_environment("TLS_FRAMES_EXPERIMENT").split(",", false)
+	_flashlight(player, (bool(view["light"]) and not experiments.has("nolight")) or experiments.has("withlight"))
+	for experiment: String in experiments:
+		_Views.experiment(get_tree(), experiment)
 	var switched: bool = _Views.SWITCHED.has(_label)
 	if switched:
 		_Views.pin_lamps(get_tree())
