@@ -24,22 +24,24 @@ static func story(tree: SceneTree, on: bool) -> void:
 		if batch != null and batch.has_meta("story_from"):
 			batch.multimesh.visible_instance_count = -1 if on else int(batch.get_meta("story_from"))
 
-## The halos, the dust and the cracks of batch A alone (the window interiors stay on). `boosted` raises each strength to where a detail that is drawn at all cannot be missed.
+## The halos, the dust and the cracks of batch A alone (the window interiors stay on); `boosted` raises each strength to where a detail that is drawn at all cannot be missed.
 static func details(tree: SceneTree, on: bool, boosted: bool) -> void:
 	for node_name: String in ["WindowHalos", "LampMotes", "Cracks"]:
 		var node := tree.root.find_child(node_name, true, false) as MultiMeshInstance3D
 		if node == null:
 			continue
 		node.visible = on
-		var material := node.material_override as ShaderMaterial
-		match node_name:
-			"WindowHalos":
-				material.set_shader_parameter("strength", 8.0 if boosted else 1.0)
-			"LampMotes":
-				material.set_shader_parameter("strength", 8.0 if boosted else 1.0)
-				material.set_shader_parameter("size_m", 0.3 if boosted else 0.045)
-			_:
-				material.set_shader_parameter("strength", 3.0 if boosted else 0.6)
+		if on and boosted:
+			var material := node.material_override as ShaderMaterial
+			material.set_shader_parameter("strength", 8.0)
+			if node_name == "LampMotes":
+				material.set_shader_parameter("size_m", 0.3)
+
+## A find throws a burst of sparkles in front of the player (wow_director.gd) and these runs put the player on pickups: the bursts that are playing are put out, so they neither hide the subject nor differ between the two frames of a pair.
+static func clear_bursts(tree: SceneTree) -> void:
+	for node: Node in tree.root.get_children():
+		if node is VFXBurst:
+			node.queue_free()
 
 ## The lamps flicker (a sine and a dip to a fifth of their light about six times a second, streetlight_3d.gd), so two frames of one view differed on the ground by where the dip fell, and the shadows with it: for these
 ## labels the flicker is off and each lamp stands at the mean of its light.
@@ -54,7 +56,7 @@ static func pin_lamps(tree: SceneTree) -> void:
 		if glow != null:
 			glow.light_energy = 0.85 * mult
 
-## The view of 10_story: six metres from the first story scene of the district, toward the street, power FULL, the flashlight off.
+## The view of 10_story: four and a half metres from the first story scene of the district, toward the street, power FULL, by the flashlight (the scenes stand in the block, out of the lamps' pools).
 static func story_view(tree: SceneTree, id: StringName) -> Dictionary:
 	var dressing: Node = tree.root.find_child("DistrictDressing", true, false)
 	var spots: Array = dressing.get_meta("story_spots", []) if dressing != null else []
@@ -63,7 +65,7 @@ static func story_view(tree: SceneTree, id: StringName) -> Dictionary:
 		return {}
 	var spot: Vector3 = spots[0]
 	var away := Vector3(spot.x, 0.0, spot.z).normalized()
-	return {"name": "10_story", "at": Vector3(spot.x + away.x * 6.0, 0.1, spot.z + away.z * 6.0), "look": spot, "pitch": -0.05, "stage": 3, "light": false}
+	return {"name": "10_story", "at": Vector3(spot.x + away.x * 4.5, 0.1, spot.z + away.z * 4.5), "look": spot, "pitch": -0.12, "stage": 3, "light": true}
 
 ## The views of the diagnostics: 11_pane (2.6 m in front of a pane that is lit from PARTIAL up, looking at it), 12_dust (2.4 m from the pole nearest to the eye of the west street, looking up at the head of its
 ## lamp) and 13_base (1.4 m from the same pole, looking down at its foot), power FULL, the flashlight off.
@@ -160,3 +162,27 @@ static func _lamp_at_eye(tree: SceneTree, id: StringName) -> Array[Vector3]:
 	out.append(poles.multimesh.get_instance_transform(nearest).origin)
 	out.append(lamps.multimesh.get_instance_transform(nearest).origin)
 	return out
+
+## The view of 08_sign, or an empty one (a `[density] FAIL` line, the run goes on) when the district hangs no sign or its atlas holds no letters: the frame must not be the proof that the bake worked.
+static func sign_view(tree: SceneTree, id: StringName) -> Dictionary:
+	var signs := tree.root.find_child("Signs", true, false) as MultiMeshInstance3D
+	if signs == null or signs.multimesh.instance_count == 0:
+		print("[density] FAIL no sign hung in %s" % id)
+		return {}
+	var widest: int = 0
+	for i: int in signs.multimesh.instance_count:
+		if signs.multimesh.get_instance_custom_data(i).g > signs.multimesh.get_instance_custom_data(widest).g:
+			widest = i
+	var spot: Transform3D = signs.global_transform * signs.multimesh.get_instance_transform(widest)
+	var atlas: Image = ((signs.material_override as ShaderMaterial).get_shader_parameter("atlas") as Texture2D).get_image()
+	var ink: int = 0
+	for y: int in range(0, atlas.get_height(), 4):
+		for x: int in range(0, atlas.get_width(), 4):
+			if atlas.get_pixel(x, y).a > 0.5:
+				ink += 1
+	print("[density] signs district=%s count=%d atlas=%dx%d ink_samples=%d first=%s facing=%s" % [String(id), signs.multimesh.instance_count, atlas.get_width(), atlas.get_height(), ink, spot.origin, spot.basis.z.normalized()])
+	if ink < 200:
+		print("[density] FAIL the sign atlas of %s holds no letters (%d ink samples)" % [id, ink])
+		return {}
+	var normal := spot.basis.z.normalized()
+	return {"name": "08_sign", "at": Vector3(spot.origin.x + normal.x * 5.0, 0.1, spot.origin.z + normal.z * 5.0), "look": spot.origin, "pitch": -0.08, "stage": 3, "light": true}

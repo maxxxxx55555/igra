@@ -67,7 +67,7 @@ SETS = [
         ("scripts/enemies/boss_3d.gd", "\t\t\t\tattack_timer = attack_cooldown * 0.5\n\t\t\t\t_telegraph.warn(_perform_melee)\n", "\t\t\t\tattack_timer = attack_cooldown * 0.5\n\t\t\t\t_perform_melee()\n", "BAT0"),
         ("scripts/pickups/item_pickup_3d.gd", "\tif not inventory.try_add(item_id, amount):\n", "\tif false:\n", "PICK1"),
         ("scripts/core/save_system.gd", "no position, a load takes the spawn.\n\treturn []\n", "no position, a load takes the spawn.\n\treturn [0.0, 0.0, 0.0]\n", "SAVE1"),
-        ("scripts/world/lamp_dust.gd", "const MOTES_PER_LAMP: Array[int] = [0, 3, 6]", "const MOTES_PER_LAMP: Array[int] = [0, 3, 3]", "V1A"),
+        ("scripts/world/lamp_dust.gd", "const MOTES_PER_LAMP: Array[int] = [0, 6, 12]", "const MOTES_PER_LAMP: Array[int] = [0, 6, 6]", "V1A"),
         ("scripts/world/story_props.gd", "const MAX_SCENES: int = 3", "const MAX_SCENES: int = 0", "STORY1"),
         ("scripts/systems/music_manager.gd", "turn * 0.618034", "turn * 0.0", "MUS5"),
         ("scripts/systems/music_manager.gd", "\t_layer_target[\"threat_high\"] = smoothstep(0.45, 0.85, _threat)\n", "\t_layer_target[\"threat_high\"] = 0.0\n", "MUS6"),

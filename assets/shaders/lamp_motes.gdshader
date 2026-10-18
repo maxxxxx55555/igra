@@ -8,8 +8,8 @@ shader_type spatial;
 render_mode unshaded, blend_add, depth_draw_never, cull_disabled;
 
 uniform vec4 tint : source_color = vec4(0.541, 0.451, 0.22, 1.0);
-uniform float strength : hint_range(0.0, 1.0) = 1.0;
-uniform float size_m : hint_range(0.01, 0.2) = 0.045;
+uniform float strength : hint_range(0.0, 8.0) = 1.0;
+uniform float size_m : hint_range(0.01, 0.4) = 0.09;
 uniform float fade_near : hint_range(1.0, 60.0) = 14.0;
 uniform float fade_far : hint_range(2.0, 80.0) = 34.0;
 

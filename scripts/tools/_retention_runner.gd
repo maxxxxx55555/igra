@@ -196,12 +196,12 @@ func _collection() -> void:
 	await _close_codex()
 	_hook("collection", album1 == album0 + 1 and entries1 == entries0 + 1, "%s found: album %d -> %d, journal entries %d -> %d" % [doc, album0, album1, entries0, entries1])
 
-## The visible buttons with a text on the open page of the Codex (the entries of the journal).
+## The enabled buttons on the open page of the Codex: the journal lists the whole catalog and a document that is not found is a disabled "???", so a found one adds an enabled entry.
 func _buttons() -> int:
 	var count: int = 0
 	for node: Node in _codex().find_children("*", "Button", true, false):
 		var button := node as Button
-		count += 1 if button != null and button.is_visible_in_tree() and button.text != "" else 0
+		count += 1 if button != null and button.is_visible_in_tree() and not button.disabled else 0
 	return count
 
 func _journal_stats() -> void:
@@ -235,13 +235,14 @@ func _ng_plus_pick() -> void:
 		if button != null and button.is_visible_in_tree() and not button.disabled and button != activate and button.text.contains(" — "):
 			pick = button
 			break
-	if pick != null:
+	var found_pick: bool = pick != null  # the screen builds its list again when a modifier is picked and frees this button
+	if found_pick:
 		pick.pressed.emit()
 		await get_tree().create_timer(0.5).timeout
 	var active: Array = NewGamePlus.get_active_modifiers()
 	await _snap("07_ng_plus_pick")
 	UIManager.close(&"new_game_plus")
-	_hook("ng_plus_pick", level == 1 and pick != null and active.size() == 1, "level %d, a modifier button %s, picked %s" % [level, pick != null, active])
+	_hook("ng_plus_pick", level == 1 and found_pick and active.size() == 1, "level %d, a modifier button %s, picked %s" % [level, found_pick, active])
 
 func _run() -> void:
 	if DisplayServer.get_name() == "headless":

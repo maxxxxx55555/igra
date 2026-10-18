@@ -1,7 +1,7 @@
 // window_halo.gdshader — GL Compatibility / mobile-safe, single pass, additive, no textures.
 // The faint glow that a lit pane throws on the wall round it (scripts/world/skyline.gd, the "WindowHalos" MultiMesh: one quad of `scale` times the pane at the place of every pane, lit with it).
 // The instance colour is the colour of the lamp behind the glass (black for a dark pane, which adds nothing); the pane itself is left out of the glow, so the glass keeps its own value and
-// the light falls only on the concrete round it. Only the palette's own warm light, and no brighter than a quarter of it.
+// the light falls only on the concrete round it. Only the palette's own warm light; at the strength of FULL a fifth of its colour at the edge of the pane.
 // Uniforms:
 //   scale    : the size of the quad over the size of the pane (the pane fills the middle 1 / scale of it).
 //   strength : the glow at the power stage of the district.
@@ -9,7 +9,7 @@ shader_type spatial;
 render_mode unshaded, blend_add, depth_draw_never, cull_disabled;
 
 uniform float scale : hint_range(1.2, 4.0) = 2.2;
-uniform float strength : hint_range(0.0, 1.0) = 1.0;
+uniform float strength : hint_range(0.0, 8.0) = 1.0;
 
 varying vec3 v_color;
 

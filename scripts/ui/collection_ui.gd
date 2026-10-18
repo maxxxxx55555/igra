@@ -51,7 +51,7 @@ func _build() -> void:
 	var overall_found := 0
 	var overall_total := 0
 	var grid := GridContainer.new()
-	grid.columns = 2
+	grid.columns = 4
 	grid.add_theme_constant_override("h_separation", 10)
 	grid.add_theme_constant_override("v_separation", 10)
 	col.add_child(grid)

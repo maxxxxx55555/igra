@@ -6,8 +6,8 @@ extends Node3D
 const _MOTES := preload("res://assets/shaders/lamp_motes.gdshader")
 const _WEAR := preload("res://assets/shaders/ground_wear.gdshader")
 ## Motes per lamp by graphics tier (Low, Medium, High), the strength of the dust by power stage (DARK, PARTIAL, STREETS, FULL), and a crack quad at the foot of every n-th pole by tier (0: none).
-const MOTES_PER_LAMP: Array[int] = [0, 3, 6]
-const STRENGTH_BY_STAGE: Array[float] = [0.0, 0.5, 0.8, 1.0]
+const MOTES_PER_LAMP: Array[int] = [0, 6, 12]
+const STRENGTH_BY_STAGE: Array[float] = [0.0, 0.8, 1.2, 1.5]
 const CRACK_EVERY: Array[int] = [0, 2, 1]
 ## The cone under a lamp head: the dust fills from 0.3 m below it to this depth, a quarter of a metre wide at the head and widening by this much per metre.
 const CONE_DEPTH_M: float = 3.6

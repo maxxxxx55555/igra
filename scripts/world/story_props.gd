@@ -73,11 +73,11 @@ static func _scene(out: Dictionary, kind: String, at: Vector3, rng: RandomNumber
 			for n in 3:
 				_litter(out, at + turn * Vector3(rng.randf_range(-1.6, 1.6), GROUND_Y + 0.02, rng.randf_range(-1.6, 1.6)), turn, Vector3(0.6, 1.0, 0.6), CASES[rng.randi() % CASES.size()])
 		"barricade":
-			for x: float in [-1.5, -0.5, 0.5, 1.5]:
-				_crate(out, at, turn, Vector3(x, 0.0, 0.0), 1.0, rng)
-			for x: float in [-0.5, 0.5]:
-				_crate(out, at, turn, Vector3(x, 0.7, 0.0), 0.9, rng)
-			for x: float in [-2.4, 2.4]:
+			for x: float in [-1.2, -0.4, 0.4, 1.2]:
+				_crate(out, at, turn, Vector3(x, 0.0, 0.0), 1.0, rng, true)
+			for x: float in [-0.8, 0.0, 0.8]:
+				_crate(out, at, turn, Vector3(x, 0.7, 0.0), 0.9, rng, true)
+			for x: float in [-2.1, 2.1]:
 				(out["barrels"] as Array[Transform3D]).append(Transform3D(Basis(Vector3.UP, rng.randf() * TAU), at + turn * Vector3(x, GROUND_Y + 0.45, 0.1)))
 				(out["barrel_colors"] as Array[Color]).append(Color(0.27, 0.15, 0.10) if x < 0.0 else Color(0.16, 0.17, 0.19))
 			for x: float in [-0.9, 0.9]:
@@ -88,9 +88,11 @@ static func _scene(out: Dictionary, kind: String, at: Vector3, rng: RandomNumber
 				_litter(out, at + turn * Vector3(rng.randf_range(-1.5, 1.5), GROUND_Y + 0.07, rng.randf_range(-1.5, 1.5)), Basis(Vector3.UP, rng.randf() * TAU), size, CASES[rng.randi() % CASES.size()])
 			_crate(out, at, turn, Vector3(1.6, 0.0, -0.8), 0.9, rng)
 
-static func _crate(out: Dictionary, at: Vector3, turn: Basis, offset: Vector3, size: float, rng: RandomNumberGenerator) -> void:
+## `tidy` squares a crate to the scene's own direction (a wall of crates turned every way is a heap, not a barricade).
+static func _crate(out: Dictionary, at: Vector3, turn: Basis, offset: Vector3, size: float, rng: RandomNumberGenerator, tidy: bool = false) -> void:
 	var spot: Vector3 = at + turn * Vector3(offset.x, offset.y + GROUND_Y + 0.35 * size, offset.z)
-	(out["crates"] as Array[Transform3D]).append(Transform3D(Basis(Vector3.UP, rng.randf() * TAU).scaled(Vector3.ONE * size), spot))
+	var spin: Basis = turn * Basis(Vector3.UP, rng.randf_range(-0.12, 0.12)) if tidy else Basis(Vector3.UP, rng.randf() * TAU)
+	(out["crates"] as Array[Transform3D]).append(Transform3D(spin.scaled(Vector3.ONE * size), spot))
 
 static func _litter(out: Dictionary, at: Vector3, turn: Basis, scale_by: Vector3, color: Color) -> void:
 	(out["litter"] as Array[Transform3D]).append(Transform3D(turn * Basis.from_scale(scale_by), at))

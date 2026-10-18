@@ -14,8 +14,8 @@ extends Node
 ## A find and a finished daily throw a burst in front of the player (one burst of each, played again; Effects Low draws none).
 const SPARKLE := preload("res://scenes/vfx/vfx_sparkle.tscn")
 const CONFETTI := preload("res://scenes/vfx/vfx_confetti.tscn")
-const BURST_AHEAD_M: float = 0.9
-const BURST_HEIGHT_M: float = 1.1
+const BURST_AHEAD_M: float = 2.2  # at 0.9 m the particles that flew toward the camera filled the screen
+const BURST_HEIGHT_M: float = 1.3
 
 const _PRESETS: Dictionary = {
 	"first_light": {"trauma": 0.30, "flash": Color(1.00, 0.82, 0.45), "flash_a": 0.20, "flash_t": 0.5, "slowmo": 1.0, "fov": 0.0},

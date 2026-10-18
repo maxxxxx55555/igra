@@ -3,9 +3,9 @@ extends RefCounted
 ## their power stage. The skyline owns the panes and sets each halo's colour to its pane's lamp (black for a dark pane, which adds nothing); it builds none at the Low tier, which has no panes.
 
 const _SHADER := preload("res://assets/shaders/window_halo.gdshader")
-## The quad is this many times the pane; its strength by power stage (DARK, PARTIAL, STREETS, FULL).
+## The quad is this many times the pane; its strength by power stage (DARK, PARTIAL, STREETS, FULL): a strength of 1 was a haze nobody could see from the street, a boosted 8 a bold ring, and 3 at FULL a soft warm one.
 const SCALE: float = 2.2
-const BY_STAGE: Array[float] = [0.6, 0.8, 0.9, 1.0]
+const BY_STAGE: Array[float] = [0.8, 1.6, 2.4, 3.0]
 
 static func build(parent: Node3D, panes: Array[Transform3D], pane_size: Vector2) -> MultiMeshInstance3D:
 	var mm := MultiMesh.new()

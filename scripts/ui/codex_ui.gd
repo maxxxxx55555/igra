@@ -28,6 +28,9 @@ const TABS: Array[Dictionary] = [
 	{"id": &"photos", "label": "PHOTO_ALBUM_TITLE", "script": "res://scripts/ui/photo_album_ui.gd"},
 ]
 
+## The pages stand in a column of at most this width, centred: on a wide window a statistics page had its labels at one edge and its values at the other.
+const MAX_PAGE_W: float = 960.0
+
 var _content: Control = null
 var _tab_row: HBoxContainer = null
 var _buttons: Array[Button] = []
@@ -92,6 +95,7 @@ func _build() -> void:
 	_content.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_content.clip_contents = true
+	_content.resized.connect(_fit_pages)
 	root.add_child(_content)
 
 	# Ряд вкладок внизу — большие кнопки, рассчитанные на палец.
@@ -126,8 +130,16 @@ func _show_tab(index: int) -> void:
 			return
 		_pages[id] = page
 		_content.add_child(page)
+		_fit_pages()
 	page.visible = true
 	_highlight(index)
+
+func _fit_pages() -> void:
+	var margin: float = maxf((_content.size.x - MAX_PAGE_W) * 0.5, 0.0)
+	for page: Control in _pages.values():
+		if is_instance_valid(page):
+			page.offset_left = margin
+			page.offset_right = -margin
 
 ## Инстанцирует раздел в встроенном режиме: свой фон и кнопку закрытия он
 ## рисовать не должен — рамка общая.

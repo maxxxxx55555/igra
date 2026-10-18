@@ -30,6 +30,8 @@ const VIEWS: Array[Dictionary] = [
 ]
 const JPG_QUALITY: float = 0.88
 const SETTLE_SEC: float = 0.9
+## A pair waits for the light of the power stage to finish rising and for the burst of a pickup on arrival to end, so the two frames differ by the detail and by nothing else.
+const PAIR_SETTLE_SEC: float = 3.0
 const PERF_SETTLE_FRAMES: int = 30
 ## A restored district's wall stands this many levels (of 255) over the floor of the grade: seen, and still a night.
 const WALL_LIFT_MIN: float = 12.0
@@ -94,6 +96,8 @@ func _place(view: Dictionary) -> Node3D:
 	player.global_position = at
 	player.velocity = Vector3.ZERO
 	player.look_at(Vector3(look.x, player.global_position.y, look.z), Vector3.UP)
+	if _Views.SWITCHED.has(_label):
+		player.set("_pitch", float(view["pitch"]))  # the player puts its own pitch on the camera every frame: a view that looks down stayed level
 	var camera := get_viewport().get_camera_3d()
 	if camera != null:
 		camera.set("_pitch", float(view["pitch"]))
@@ -114,9 +118,12 @@ func _view(id: StringName, view: Dictionary) -> void:
 			_fail("%s %s: the power stage is %d and the view wants %d" % [String(id), view["name"], PowerGrid.get_stage(id), stage])
 			return
 	_flashlight(player, bool(view["light"]))
-	if _Views.SWITCHED.has(_label):
+	var switched: bool = _Views.SWITCHED.has(_label)
+	if switched:
 		_Views.pin_lamps(get_tree())
-	await get_tree().create_timer(SETTLE_SEC).timeout
+	await get_tree().create_timer(PAIR_SETTLE_SEC if switched else SETTLE_SEC).timeout
+	if switched:
+		_Views.clear_bursts(get_tree())
 	var env := get_viewport().world_3d.environment
 	print("[density] state district=%s view=%s weather=%d stage=%d tier=%d ambient=%.3f glow=%.3f exposure=%.3f flashlight=%s" % [String(id), view["name"], WeatherSystem.current,
 		PowerGrid.get_stage(id), int(SettingsManager.get_setting("graphics_tier", -1)), env.ambient_light_energy, env.glow_intensity, env.tonemap_exposure, player.get("flashlight_enabled")])
@@ -144,30 +151,6 @@ func _view(id: StringName, view: Dictionary) -> void:
 		await _snap("%s_%s" % [id, view["name"]], "after")
 	else:
 		await _snap("%s_%s" % [id, view["name"]])
-
-## The view of 08_sign, or an empty one (a `[density] FAIL` line, the run goes on) when the district hangs no sign or its atlas holds no letters: the frame must not be the proof that the bake worked.
-func _sign_view(id: StringName) -> Dictionary:
-	var signs := get_tree().root.find_child("Signs", true, false) as MultiMeshInstance3D
-	if signs == null or signs.multimesh.instance_count == 0:
-		print("[density] FAIL no sign hung in %s" % id)
-		return {}
-	var widest: int = 0
-	for i: int in signs.multimesh.instance_count:
-		if signs.multimesh.get_instance_custom_data(i).g > signs.multimesh.get_instance_custom_data(widest).g:
-			widest = i
-	var spot: Transform3D = signs.global_transform * signs.multimesh.get_instance_transform(widest)
-	var atlas: Image = ((signs.material_override as ShaderMaterial).get_shader_parameter("atlas") as Texture2D).get_image()
-	var ink: int = 0
-	for y: int in range(0, atlas.get_height(), 4):
-		for x: int in range(0, atlas.get_width(), 4):
-			if atlas.get_pixel(x, y).a > 0.5:
-				ink += 1
-	print("[density] signs district=%s count=%d atlas=%dx%d ink_samples=%d first=%s facing=%s" % [String(id), signs.multimesh.instance_count, atlas.get_width(), atlas.get_height(), ink, spot.origin, spot.basis.z.normalized()])
-	if ink < 200:
-		print("[density] FAIL the sign atlas of %s holds no letters (%d ink samples)" % [id, ink])
-		return {}
-	var normal := spot.basis.z.normalized()
-	return {"name": "08_sign", "at": Vector3(spot.origin.x + normal.x * 5.0, 0.1, spot.origin.z + normal.z * 5.0), "look": spot.origin, "pitch": -0.08, "stage": 3, "light": true}
 
 func _run() -> void:
 	if DisplayServer.get_name() == "headless":
@@ -227,7 +210,7 @@ func _run() -> void:
 			if _views.is_empty() or _views.has(String(view["name"])):
 				await _view(id, view)
 		if _views.is_empty() or _views.has("08_sign"):
-			var sign_view := _sign_view(id)
+			var sign_view := _Views.sign_view(get_tree(), id)
 			if not sign_view.is_empty():
 				await _view(id, sign_view)
 		if _views.is_empty() or _views.has("09_lamp"):
