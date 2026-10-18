@@ -5,6 +5,9 @@ extends RefCounted
 const _SHADER := preload("res://assets/shaders/window_halo.gdshader")
 ## The quad is this many times the pane; its strength by power stage (DARK, PARTIAL, STREETS, FULL): a strength of 1 was a haze nobody could see from the street, a boosted 8 a bold ring, and 3 at FULL a soft warm one.
 const SCALE: float = 2.2
+## The render priority of both additive shaders of V1 (the halos and the lamp cones: scripts/world/lamp_details.gd): at the default they were sorted before something that the flashlight draws, and with it on a cone was a cream pyramid that
+## hid what stood behind it and a halo a pale block (launches 9 to 12 of Session 28, V1B); sorted after every other transparent object they are what they were with it off.
+const RENDER_PRIORITY: int = 5
 const BY_STAGE: Array[float] = [0.8, 1.6, 2.4, 3.0]
 
 static func build(parent: Node3D, panes: Array[Transform3D], pane_size: Vector2) -> MultiMeshInstance3D:
@@ -20,6 +23,7 @@ static func build(parent: Node3D, panes: Array[Transform3D], pane_size: Vector2)
 		mm.set_instance_color(i, Color.BLACK)
 	var material := ShaderMaterial.new()
 	material.shader = _SHADER
+	material.render_priority = RENDER_PRIORITY
 	material.set_shader_parameter("scale", SCALE)
 	var halos := MultiMeshInstance3D.new()
 	halos.name = "WindowHalos"

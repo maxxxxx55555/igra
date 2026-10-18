@@ -46,6 +46,7 @@ func _ready() -> void:
 		quad_mat.vertex_color_use_as_albedo = true
 		quad_mat.albedo_texture = MOTE_TEXTURE
 		quad_mat.billboard_mode = BaseMaterial3D.BILLBOARD_PARTICLES
+		quad_mat.billboard_keep_scale = true  # a billboard drops the scale of a particle unless it keeps it: the motes were the 1 m of their quad, smudges about a lamp
 		quad.material = quad_mat
 		emitter.draw_pass_1 = quad
 		add_child(emitter)

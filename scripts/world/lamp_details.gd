@@ -4,6 +4,7 @@ extends Node3D
 ## tier (the Low tier has none) and nothing here runs per frame. Cracks in the pavement at the foot of a pole were tried and went: at a strength the style allows they cannot be seen (docs/TZ_DECISIONS.md, V1-28).
 
 const _CONE := preload("res://assets/shaders/lamp_cone.gdshader")
+const _HALOS := preload("res://scripts/world/window_halos.gd")
 ## The strength of the cone by power stage (DARK, PARTIAL, STREETS, FULL).
 const STRENGTH_BY_STAGE: Array[float] = [0.0, 0.5, 0.9, 1.3]
 ## The cone is a cylinder this wide at the ground and this wide at the lamp head.
@@ -39,6 +40,7 @@ func build(district_id: StringName, props: Node) -> void:
 		mm.set_instance_transform(i, Transform3D(Basis.from_scale(Vector3(1.0, length, 1.0)), Vector3(head.x, head.y - length * 0.5, head.z)))
 	_cone_mat = ShaderMaterial.new()
 	_cone_mat.shader = _CONE
+	_cone_mat.render_priority = _HALOS.RENDER_PRIORITY  # sorted after the other transparent objects, as the halos are
 	_cones = MultiMeshInstance3D.new()
 	_cones.name = "LampCones"
 	_cones.multimesh = mm

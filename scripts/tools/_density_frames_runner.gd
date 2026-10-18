@@ -103,13 +103,13 @@ func _place(view: Dictionary) -> Node3D:
 		camera.set("_pitch", float(view["pitch"]))
 	return player
 
-## The label of the control and of the boosted diagnostic is part of the name of their frames, and so is the strength of a sweep (TLS_FRAMES_STRENGTH=1.2 is `_v1xs12`) and the name of an experiment.
+## The label of the control and of the boosted diagnostic is part of the name of their frames, and so are the strength of a sweep (TLS_FRAMES_STRENGTH=1.2 is `_v1xs12`) and a flashlight that is put so (TLS_FRAMES_FLASHLIGHT=on is `_lit`,
+## off is `_dark`).
 func _tag() -> String:
-	if OS.has_environment("TLS_FRAMES_EXPERIMENT"):
-		return "_" + OS.get_environment("TLS_FRAMES_EXPERIMENT").replace(",", "_")
-	if not ["v1n", "v1x"].has(_label):
-		return ""
-	return "_" + _label + ("s" + OS.get_environment("TLS_FRAMES_STRENGTH").replace(".", "") if OS.has_environment("TLS_FRAMES_STRENGTH") else "")
+	var tag: String = ""
+	if ["v1n", "v1x"].has(_label):
+		tag = "_" + _label + ("s" + OS.get_environment("TLS_FRAMES_STRENGTH").replace(".", "") if OS.has_environment("TLS_FRAMES_STRENGTH") else "")
+	return tag + {"on": "_lit", "off": "_dark"}.get(OS.get_environment("TLS_FRAMES_FLASHLIGHT"), "")
 
 func _view(id: StringName, view: Dictionary) -> void:
 	var player := _place(view)
@@ -125,10 +125,8 @@ func _view(id: StringName, view: Dictionary) -> void:
 		if not PowerGrid.advance_district(id, stage as DistrictData.Stage):
 			_fail("%s %s: the power stage is %d and the view wants %d" % [String(id), view["name"], PowerGrid.get_stage(id), stage])
 			return
-	var experiments: PackedStringArray = OS.get_environment("TLS_FRAMES_EXPERIMENT").split(",", false)
-	_flashlight(player, (bool(view["light"]) and not experiments.has("nolight")) or experiments.has("withlight"))
-	for experiment: String in experiments:
-		_Views.experiment(get_tree(), player, experiment)
+	var forced: String = OS.get_environment("TLS_FRAMES_FLASHLIGHT")  # "on" or "off" puts the flashlight so whatever the view says
+	_flashlight(player, forced == "on" or (forced != "off" and bool(view["light"])))
 	var switched: bool = _Views.SWITCHED.has(_label)
 	if switched:
 		_Views.pin_lamps(get_tree())
@@ -138,9 +136,6 @@ func _view(id: StringName, view: Dictionary) -> void:
 	var env := get_viewport().world_3d.environment
 	print("[density] state district=%s view=%s weather=%d stage=%d tier=%d ambient=%.3f glow=%.3f exposure=%.3f flashlight=%s" % [String(id), view["name"], WeatherSystem.current,
 		PowerGrid.get_stage(id), int(SettingsManager.get_setting("graphics_tier", -1)), env.ambient_light_energy, env.glow_intensity, env.tonemap_exposure, player.get("flashlight_enabled")])
-	if _label == "v1t":
-		await _Views.series(get_tree(), id, view["name"])
-		return
 	if view["name"] == "07_facade" and not switched:  # the band that the lift is read in was set for the framing the pitch had before it was set on the player
 		await _wall_check(id)
 	var dressing := _dressing()
@@ -165,7 +160,7 @@ func _view(id: StringName, view: Dictionary) -> void:
 		await get_tree().process_frame
 		await _snap(state, "after")
 	else:
-		await _snap("%s_%s" % [id, view["name"]])
+		await _snap("%s_%s%s" % [id, view["name"], _tag()])
 
 func _run() -> void:
 	if DisplayServer.get_name() == "headless":

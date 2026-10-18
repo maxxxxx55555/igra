@@ -7,7 +7,9 @@ extends RefCounted
 ##   SAVE1  a save written while the player is out of the world (the scene swap of a transition) reads back whole and loads, and a fade that a load interrupts still ends
 ##   V1A    the details of V1 batch A stand where they should (a check of the mechanism; the frames judge whether they are a gain): at the High tier the panes carry the window shader with their interiors on, every pane has
 ##          a halo and every lamp a cone of light; the cone is hidden at DARK and shown with the power
+##   V1B    the cones and the halos sort after the other transparent objects (the render priority of WindowHalos.RENDER_PRIORITY, above 0): at the default the flashlight turned the cones into cream pyramids and the halos into pale blocks
 ##   BURST1 every burst scene (scenes/vfx) keeps the scale of its particles: a billboard drops it unless the material keeps it, so each particle was the 1 m of its quad and the confetti of a find hid the screen
+##   MOTE1  the dust motes in the beams of the lamps (scripts/effects/dust_motes.gd) keep the scale of their particles for the same reason: 2.5 to 6 cm, and not smudges of 1 m
 ##   ENDC1  the title of every ending is read against the panel of the win screen at 3 to 1 or better (the dark ending's was 1.1 to 1: the one line that says which ending it is could not be read)
 ##   STORY1 every district holds two or three story scenes (story_props.gd), each 2.6 m from a hiding place and 2.2 m or more from anything the player can use or hide in, inside the ring, and each has its line;
 ##          the three kinds all stand somewhere. The district is built the way the game builds it (the loot, hence the hiding places, before the dressing): a bare scene has no hiding place to anchor a scene to
@@ -20,6 +22,8 @@ const _Density := preload("res://scripts/tools/rc16/density_checks.gd")
 const _StoryProps := preload("res://scripts/world/story_props.gd")
 const _LampDetails := preload("res://scripts/world/lamp_details.gd")
 const _Win := preload("res://scripts/ui/win_screen.gd")
+const _Halos := preload("res://scripts/world/window_halos.gd")
+const _Motes := preload("res://scripts/effects/dust_motes.gd")
 const _FAR := Vector3(-600.0, 0.0, 600.0)
 
 static func run(r: Node) -> void:
@@ -125,9 +129,12 @@ static func _v1_nodes(r: Node) -> void:
 		var shown: bool = cones.visible and is_equal_approx(float((cones.material_override as ShaderMaterial).get_shader_parameter("strength")), _LampDetails.STRENGTH_BY_STAGE[3])
 		details.call("_apply_stage", 0)
 		stage_ok = shown and not cones.visible
+	var priority_ok: bool = _Halos.RENDER_PRIORITY > 0 and cones != null and halos != null and (cones.material_override as ShaderMaterial).render_priority == _Halos.RENDER_PRIORITY \
+		and (halos.material_override as ShaderMaterial).render_priority == _Halos.RENDER_PRIORITY
 	SettingsManager.set_setting("graphics_tier", tier0)
 	root.queue_free()
 	r._ok(panes_ok and halos_ok and cones_ok and stage_ok, "V1A the details of batch A stand: window shader %s, halos %s, light cones %s, the cone follows the power %s" % [panes_ok, halos_ok, cones_ok, stage_ok])
+	r._ok(priority_ok, "V1B the cones and the halos sort after the other transparent objects (render priority %d): the flashlight turned them into cream pyramids and pale blocks at the default" % _Halos.RENDER_PRIORITY)
 
 ## WCAG contrast of two colours (the relative luminance of each from its linear channels).
 static func _contrast(a: Color, b: Color) -> float:
@@ -158,6 +165,11 @@ static func _burst_scale(r: Node) -> void:
 				bad.append(file)
 		node.free()
 	r._ok(bursts >= 7 and bad.is_empty(), "BURST1 every burst keeps the scale of its particles (%d bursts): %s" % [bursts, bad])
+	var motes: Node = _Motes.new()
+	r.add_child(motes)
+	var mote_quad := (motes.get_child(0) as GPUParticles3D).draw_pass_1 as QuadMesh
+	r._ok((mote_quad.material as StandardMaterial3D).billboard_keep_scale, "MOTE1 the dust motes in the beams keep the scale of their particles (2.5 to 6 cm, not the 1 m of their quad)")
+	motes.free()
 
 ## A district the way the game builds it: the scene, then the loot with its three hiding places, and the dressing a frame later (street_props.gd builds deferred), which anchors the story scenes to the hiding places.
 static func _district_with_loot(r: Node, id: StringName) -> Node3D:

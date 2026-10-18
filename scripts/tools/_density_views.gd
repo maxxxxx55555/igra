@@ -4,8 +4,8 @@ extends RefCounted
 
 ## The labels whose frames are shot twice in the same run, a detail off ("before") and on ("after"): `v1` (batch A), `story` (the story scenes of W1), `v1d` (the halos and the lamp cones of batch A alone, at their
 ## own strength), `v1x` (the same at a strength raised to where a rendering fault would show: a diagnostic, never a state of the game) and `v1n` (the control: nothing is switched, so the pair shows how much
-## two frames of one view differ by themselves) and `v1t` (the same, as a time series of eight frames with the lamps pinned: `series`).
-const SWITCHED: Array[String] = ["v1", "story", "v1d", "v1x", "v1n", "v1t"]
+## two frames of one view differ by themselves).
+const SWITCHED: Array[String] = ["v1", "story", "v1d", "v1x", "v1n"]
 
 static func switch(label: String, tree: SceneTree, on: bool) -> void:
 	match label:
@@ -15,7 +15,7 @@ static func switch(label: String, tree: SceneTree, on: bool) -> void:
 			details(tree, on, false)
 		"v1x":
 			details(tree, on, true)
-		"v1n", "v1t":
+		"v1n":
 			pass
 		_:
 			v1(tree, on)
@@ -161,50 +161,6 @@ static func lamp_view(tree: SceneTree, id: StringName) -> Dictionary:
 	var head: Vector3 = lamp[1]
 	var toward := Vector3(-head.x, 0.0, -head.z).normalized()
 	return {"name": "09_lamp", "at": Vector3(head.x + toward.x * 6.0, 0.1, head.z + toward.z * 6.0), "look": Vector3(head.x, head.y * 0.5, head.z), "pitch": atan2(head.y * 0.5 - 1.7, 6.0), "stage": 3, "light": false}
-
-## A short-lived diagnostic (TLS_FRAMES_EXPERIMENT, a list). Under the flashlight the two additive shaders of V1, the lamp cones and the window halos, are cream pyramids and pale blocks whatever their render modes: `nocone` hides the
-## beam cone of the player (a shader of the same kind that is drawn only when the flashlight is on), `prio` gives the two materials a render priority of their own, `premul` draws them with premultiplied alpha and an alpha of 0 (the same
-## sum in another blend state; the cones without their back faces); `nolight` and `withlight` are the flashlight's, in the runner.
-static func experiment(tree: SceneTree, player: Node3D, name: String) -> void:
-	if name == "nocone":
-		player.set("cone_amber_ok", false)
-	for node_name: String in ["LampCones", "WindowHalos"]:
-		var node := tree.root.find_child(node_name, true, false) as MultiMeshInstance3D
-		var old := node.material_override as ShaderMaterial
-		if name == "prio":
-			old.render_priority = 5
-		elif name == "premul":
-			var fresh := ShaderMaterial.new()
-			fresh.shader = Shader.new()
-			fresh.shader.code = old.shader.code.replace("blend_add", "blend_premul_alpha").replace("\tALPHA = ", "\tALPHA = 0.0;\n\tALBEDO *= ")
-			if node_name == "LampCones":
-				fresh.shader.code = fresh.shader.code.replace("cull_disabled", "cull_back")
-			for param: String in ["strength", "scale"]:
-				if old.get_shader_parameter(param) != null:
-					fresh.set_shader_parameter(param, old.get_shader_parameter(param))
-			node.material_override = fresh
-
-## The time series of a view (label `v1t`, nothing switched): eight consecutive frames of it, each with the mean brightness of the lower half of the picture and the energy of the lamp nearest to the camera and of the
-## moon, so a ground that lights and darkens between two frames can be told from a lamp or a moon that does: `[density] series district=<id> view=<name> frame=<i> lower=<mean> spot=<e> glow=<e> moon=<e>`.
-static func series(tree: SceneTree, id: StringName, view_name: String) -> void:
-	var eye: Vector3 = tree.root.get_camera_3d().global_position
-	var nearest: Node3D = null
-	for lamp: Node in tree.get_nodes_in_group("streetlights"):
-		if nearest == null or (lamp as Node3D).global_position.distance_to(eye) < nearest.global_position.distance_to(eye):
-			nearest = lamp as Node3D
-	var spot := nearest.get_node_or_null("SpotLight") as SpotLight3D if nearest != null else null
-	var glow := nearest.get_node_or_null("Glow") as OmniLight3D if nearest != null else null
-	var moons: Array[Node] = tree.root.find_children("*", "DirectionalLight3D", true, false)
-	for i in 8:
-		await RenderingServer.frame_post_draw
-		var img := tree.root.get_texture().get_image()
-		img.resize(64, 36)
-		var sum: float = 0.0
-		for y in range(18, 36):
-			for x in 64:
-				sum += img.get_pixel(x, y).get_luminance()
-		print("[density] series district=%s view=%s frame=%d lower=%.4f spot=%.3f glow=%.3f moon=%.3f" % [id, view_name, i, sum / 1152.0, spot.light_energy if spot != null else -1.0,
-			glow.light_energy if glow != null else -1.0, (moons[0] as DirectionalLight3D).light_energy if not moons.is_empty() else -1.0])
 
 ## The streetlamp nearest to the eye of the west street as [its foot, its head] (the pole and the lamp of one index are one lamp), or [] with a `[density] FAIL` line.
 static func _lamp_at_eye(tree: SceneTree, id: StringName) -> Array[Vector3]:

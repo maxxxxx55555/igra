@@ -70,3 +70,15 @@ after the heavy kinds stopped sleeping behind the player and the Architect's sec
 bot has: lives (3 lost in launch 2 and 2 in launch 1, all of them in the finale, the first at 442 to 494 s, against none at Normal), health per winning run (300 and 315 against 188 and 236), and time. The seed that did not
 win never died: it ran out of the 240 s the bot gives itself against the Architect's 1040 hit points at Hard (seed 3 in launch 1, seed 1 in launch 2); the deadline is the bot's and not the game's. What a person feels at
 Hard, and how long a retreat to a lamp takes at a real pace, is owner row D-1 and no number here answers it.
+
+## 5. Pacing: the beats of the curve
+
+The pressure of the game is a sequence of beats that the curve and the checks hold. The count is a script's (`python tools/qa_sim/difficulty_curve.py --check`, the line "Pacing beats" at the end of its report): **42 beats, 33 reliefs, 6 escalations and 3 boss phases.**
+
+| Beat | What it is | Count | Held by |
+|---|---|---|---|
+| relief | a stage of a district that is stronger restored than the one before it (6, 5, 4 and 3 monsters at DARK, PARTIAL, STREETS and FULL), so the work of the player is paid back by fewer things that hunt them | 33: three steps in each of the eleven districts | `tools/qa_sim/difficulty_curve.py` (a stage that does not lower the strength fails the gate), ESC1, RET1 |
+| escalation | a district that opens harder than the one before it (its DARK strength is higher), never above x2.2 and never above x1.6 without a new tool (R5) | 6 of the 10 steps; the other four open no harder | `tools/qa_sim/difficulty_curve.py` |
+| boss phase | the three phases of the Architect, 100 to 70, 70 to 30 and 30 to 0 percent of his hit points, the second with a swing out of the beam and the third with a beam that falls and a swing a second | 3 | BAT0 and the TEL checks of section 2 |
+
+Between the beats stand the cues (R1), the mercy time (R2) and the refuge within 20 m of every spawn (R4). The count says that the curve rises and falls as designed; it is not a playtest (section 3).
