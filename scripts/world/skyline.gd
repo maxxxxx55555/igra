@@ -30,6 +30,8 @@ const PALETTES := {
 	&"power_station": [[Color("#15191e"), Color("#1b2026"), Color("#21262d")], Color(0.10, 0.11, 0.13)],
 }
 const WIN_BRASS := Color(0.79, 0.635, 0.29)
+const _WINDOW := preload("res://assets/shaders/soviet_window.gdshader")
+const _HALOS := preload("res://scripts/world/window_halos.gd")
 const _FACADE := preload("res://assets/shaders/soviet_facade.gdshader")
 const _ROAD := preload("res://assets/shaders/soviet_road.gdshader")
 const _SIGNS := preload("res://scripts/world/soviet_signs.gd")
@@ -69,6 +71,8 @@ var _windows: MultiMeshInstance3D
 var _rolls := PackedFloat32Array()
 var _tones := PackedFloat32Array()
 var _facade_mat: ShaderMaterial = null
+var _window_mat: ShaderMaterial = null
+var _halos: MultiMeshInstance3D = null
 var _ground_mat: ShaderMaterial = null
 var _fronts: Array[Transform3D] = []
 var _widths: Array[float] = []
@@ -125,6 +129,9 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 		quad.size = WIN_SIZE
 		_add_multimesh("Windows", quad, panes, no_tints, true)
 		_windows = get_node("Windows") as MultiMeshInstance3D
+		_halos = _HALOS.build(self, panes, WIN_SIZE)
+		_set_detail()
+		_HALOS.set_stage(_halos, PowerGrid.get_stage(district_id))
 		for i in panes.size():
 			_rolls.append(rng.randf())
 			_tones.append(rng.randf())
@@ -171,11 +178,11 @@ func _add_multimesh(node_name: String, mesh: Mesh, xforms: Array[Transform3D], t
 		mm.set_instance_color(i, tints[i] if i < tints.size() else WIN_DARK)
 	var mat: Material
 	if unshaded:
-		var flat := StandardMaterial3D.new()
-		flat.vertex_color_use_as_albedo = true
-		flat.roughness = 1.0
-		flat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-		mat = flat
+		# The panes: the instance colour is the lamp behind the glass and the shader gives each pane its inside (soviet_window.gdshader); the Low tier keeps the flat pane.
+		_window_mat = ShaderMaterial.new()
+		_window_mat.shader = _WINDOW
+		_set_detail()
+		mat = _window_mat
 	else:
 		# A faint cold self-glow so the blocks read as silhouettes against the sky; the shader weathers the panels (the tier of the graphics sets how much).
 		_facade_mat = ShaderMaterial.new()
@@ -239,6 +246,10 @@ func _set_detail(key: String = "graphics_tier", _value: Variant = null) -> void:
 		_facade_mat.set_shader_parameter("detail", detail)
 	if _ground_mat != null:
 		_ground_mat.set_shader_parameter("detail", minf(detail, 1.0))  # the earth between the streets has no cracks or damp, and it fills a third of the screen
+	if _window_mat != null:
+		_window_mat.set_shader_parameter("interior", minf(detail, 1.0))
+	if _halos != null:
+		_halos.visible = detail > 0.5
 
 func _on_stage_changed(id: StringName, stage: int) -> void:
 	if id == _district_id:
@@ -248,6 +259,8 @@ func _on_stage_changed(id: StringName, stage: int) -> void:
 
 func _apply_gain(stage: int) -> void:
 	_facade_mat.set_shader_parameter("gain", FACADE_GAIN[clampi(stage, 0, FACADE_GAIN.size() - 1)])
+	if _halos != null:
+		_HALOS.set_stage(_halos, stage)
 	var signs := get_node_or_null("Signs") as MultiMeshInstance3D
 	if signs != null:
 		_SIGNS.set_stage(signs, stage)
@@ -257,6 +270,10 @@ func _light_windows(stage: int) -> void:
 	var mm := _windows.multimesh
 	for i in mm.instance_count:
 		var color := WIN_DARK
+		var glow := Color.BLACK
 		if _rolls[i] < lit_share:
 			color = (WIN_BRASS if _tones[i] < 0.8 else WIN_BONE) * (0.7 + 0.3 * _tones[i])
+			glow = color
 		mm.set_instance_color(i, color)
+		if _halos != null:
+			_halos.multimesh.set_instance_color(i, glow)
