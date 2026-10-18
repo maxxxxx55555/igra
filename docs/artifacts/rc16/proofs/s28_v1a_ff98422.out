@@ -1,0 +1,59 @@
+# proof s28_v1a_ff98422
+# utc 20261018T002556Z
+# head ff98422 (uncommitted paths: 0)
+# env none
+# cmd bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/5fa8d500-393b-43b7-95de-04d09fcc9e42/scratchpad/s28_l3.sh
+# STEP import rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP compile rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/perf_check_scene.tscn rc=0 (log: .qa_logs/perf_check_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP perf rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/audio_truth_gate_scene.tscn rc=0 (log: .qa_logs/audio_truth_gate_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP audio rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] DONE checks=20 fails=0
+  closeout_check rc=0 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP closeout_s28 rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/attack_sim_scene.tscn rc=0 (log: .qa_logs/attack_sim_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP attack_sim rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_v1.log, 30 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP frames rc=0
+[density] perf district=suburbs dressing=without draw_calls=34 primitives=45184 objects_in_frame=34
+[density] perf district=suburbs dressing=with draw_calls=37 primitives=46176 objects_in_frame=37
+[density] perf district=police dressing=without draw_calls=37 primitives=46008 objects_in_frame=37
+[density] perf district=police dressing=with draw_calls=42 primitives=48940 objects_in_frame=42
+[density] perf district=power_station dressing=without draw_calls=38 primitives=42230 objects_in_frame=38
+[density] perf district=power_station dressing=with draw_calls=41 primitives=44308 objects_in_frame=41
+?? docs/stills/density/police_03_street_after_ff98422_20261018T002912Z.jpg
+?? docs/stills/density/police_03_street_before_ff98422_20261018T002912Z.jpg
+?? docs/stills/density/police_04_block_after_ff98422_20261018T002913Z.jpg
+?? docs/stills/density/police_04_block_before_ff98422_20261018T002913Z.jpg
+?? docs/stills/density/police_05_skyline_after_ff98422_20261018T002914Z.jpg
+?? docs/stills/density/police_05_skyline_before_ff98422_20261018T002914Z.jpg
+?? docs/stills/density/police_07_facade_after_ff98422_20261018T002915Z.jpg
+?? docs/stills/density/police_07_facade_before_ff98422_20261018T002915Z.jpg
+?? docs/stills/density/police_09_lamp_after_ff98422_20261018T002916Z.jpg
+?? docs/stills/density/police_09_lamp_before_ff98422_20261018T002916Z.jpg
+?? docs/stills/density/power_station_03_street_after_ff98422_20261018T002920Z.jpg
+?? docs/stills/density/power_station_03_street_before_ff98422_20261018T002920Z.jpg
+?? docs/stills/density/power_station_04_block_after_ff98422_20261018T002921Z.jpg
+?? docs/stills/density/power_station_04_block_before_ff98422_20261018T002921Z.jpg
+?? docs/stills/density/power_station_05_skyline_after_ff98422_20261018T002922Z.jpg
+?? docs/stills/density/power_station_05_skyline_before_ff98422_20261018T002922Z.jpg
+?? docs/stills/density/power_station_07_facade_after_ff98422_20261018T002924Z.jpg
+?? docs/stills/density/power_station_07_facade_before_ff98422_20261018T002923Z.jpg
+?? docs/stills/density/power_station_09_lamp_after_ff98422_20261018T002925Z.jpg
+?? docs/stills/density/power_station_09_lamp_before_ff98422_20261018T002924Z.jpg
+# STEP tree-after done
+# EXIT=0
