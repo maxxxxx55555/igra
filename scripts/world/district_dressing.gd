@@ -29,7 +29,7 @@ const REST_POOL_ALPHA: float = 0.22
 ## Ground fog in the four fog districts (the weather of DistrictThemes): three drifting cards over the blocks, off at the Low tier (the depth fog of the environment is enough there).
 const FOG_DISTRICTS: Array[StringName] = [&"warehouses", &"industrial", &"substation", &"power_station"]
 const FOG_SHADER := preload("res://assets/shaders/height_fog_card.gdshader")
-const _LAMP_DUST := preload("res://scripts/world/lamp_dust.gd")
+const _LAMP_DETAILS := preload("res://scripts/world/lamp_details.gd")
 const _STORY := preload("res://scripts/world/story_props.gd")
 const FOG_CARD_M: float = 46.0
 const FOG_Y: float = 0.35
@@ -131,10 +131,10 @@ func build(district_id: StringName, sb: Node) -> void:
 	_batch("Hydrants", _HYDRANT, _hydrant_spots(sb), none, _plain(Color(0.34, 0.27, 0.13), 0.55, 0.4), true)
 	_pool_mat = _soft(Color(BRASS, 0.0), true)
 	_batch("LampPools", _patch(), _lamp_pools(), none, _pool_mat, false)
-	var dust: Node3D = _LAMP_DUST.new()
-	dust.name = "LampDust"
-	add_child(dust)
-	dust.call("build", district_id, get_parent())
+	var details: Node3D = _LAMP_DETAILS.new()
+	details.name = "LampDetails"
+	add_child(details)
+	details.call("build", district_id, get_parent())
 	for node_name: String in story_from:
 		var batch := get_node_or_null(node_name)
 		if batch != null:

@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=2 format=3]
 
 [ext_resource type="Script" path="res://scripts/effects/vfx_burst.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://assets/textures/fx/loot_glint_64.png" id="2_tex"]
 
 [node name="VFXConfetti" type="GPUParticles3D"]
 script = ExtResource("1_script")
@@ -11,7 +10,6 @@ one_shot = true
 explosiveness = 0.85
 lifetime = 1.4
 burst_color = Color(0.847, 0.824, 0.769, 1.0)
-burst_texture = ExtResource("2_tex")
 spread_deg = 60.0
 velocity_min = 2.0
 velocity_max = 4.0

@@ -127,7 +127,7 @@ func _view(id: StringName, view: Dictionary) -> void:
 	var env := get_viewport().world_3d.environment
 	print("[density] state district=%s view=%s weather=%d stage=%d tier=%d ambient=%.3f glow=%.3f exposure=%.3f flashlight=%s" % [String(id), view["name"], WeatherSystem.current,
 		PowerGrid.get_stage(id), int(SettingsManager.get_setting("graphics_tier", -1)), env.ambient_light_energy, env.glow_intensity, env.tonemap_exposure, player.get("flashlight_enabled")])
-	if view["name"] == "07_facade":
+	if view["name"] == "07_facade" and not switched:  # the band that the lift is read in was set for the framing the pitch had before it was set on the player
 		await _wall_check(id)
 	var dressing := _dressing()
 	if view["name"] == "02_rest" and dressing != null and camera != null:
@@ -221,7 +221,7 @@ func _run() -> void:
 			var story_view := _Views.story_view(get_tree(), id)
 			if not story_view.is_empty():
 				await _view(id, story_view)
-		for diag: String in ["11_pane", "12_dust", "13_base"]:
+		for diag: String in ["11_pane", "12_cone", "13_base"]:
 			if _views.has(diag):
 				var diag_view := _Views.diag_view(get_tree(), id, diag)
 				if not diag_view.is_empty():

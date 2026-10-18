@@ -16,7 +16,7 @@ const MAX_SCENES: int = 3
 ## A scene's line is read on coming within this many metres of it.
 const HOOK_M: float = 3.4
 const GROUND_Y: float = 0.06
-const BLANKET := Color(0.13, 0.16, 0.20)
+const BLANKET := Color(0.22, 0.27, 0.30)
 const BLACKENED := Color(0.09, 0.09, 0.10)
 const CASES: Array[Color] = [Color(0.22, 0.17, 0.11), Color(0.20, 0.21, 0.19), Color(0.28, 0.24, 0.17), Color(0.15, 0.17, 0.21)]
 
@@ -83,9 +83,9 @@ static func _scene(out: Dictionary, kind: String, at: Vector3, rng: RandomNumber
 			for x: float in [-0.9, 0.9]:
 				(out["bins"] as Array[Transform3D]).append(Transform3D(turn, at + turn * Vector3(x, GROUND_Y, 1.3)))
 		_:
-			for n in 6:
-				var size := Vector3(rng.randf_range(2.2, 3.4), rng.randf_range(9.0, 14.0), rng.randf_range(2.2, 3.0))
-				_litter(out, at + turn * Vector3(rng.randf_range(-1.5, 1.5), GROUND_Y + 0.07, rng.randf_range(-1.5, 1.5)), Basis(Vector3.UP, rng.randf() * TAU), size, CASES[rng.randi() % CASES.size()])
+			for n in 6:  # the dressing's litter box is 0.38 m by 0.012 m by 0.26 m: this scales it to a suitcase of 0.7 to 1 m, 0.2 to 0.3 m thick, standing on the ground
+				var size := Vector3(rng.randf_range(1.8, 2.6), rng.randf_range(16.0, 24.0), rng.randf_range(1.6, 2.2))
+				_litter(out, at + turn * Vector3(rng.randf_range(-1.5, 1.5), GROUND_Y + size.y * 0.006, rng.randf_range(-1.5, 1.5)), Basis(Vector3.UP, rng.randf() * TAU), size, CASES[rng.randi() % CASES.size()])
 			_crate(out, at, turn, Vector3(1.6, 0.0, -0.8), 0.9, rng)
 
 ## `tidy` squares a crate to the scene's own direction (a wall of crates turned every way is a heap, not a barricade).

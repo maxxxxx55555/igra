@@ -34,14 +34,13 @@ func _ready() -> void:
 	process_material = mat
 	var mesh := QuadMesh.new()
 	mesh.size = Vector2(1.0, 1.0)
-	if burst_texture != null:
-		var m := StandardMaterial3D.new()
-		m.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-		m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-		m.albedo_texture = burst_texture
-		m.vertex_color_use_as_albedo = true
-		m.billboard_mode = BaseMaterial3D.BILLBOARD_PARTICLES
-		mesh.material = m
+	var m := StandardMaterial3D.new()  # a burst without a texture is plain squares of its colour (the confetti)
+	m.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	m.albedo_texture = burst_texture
+	m.vertex_color_use_as_albedo = true
+	m.billboard_mode = BaseMaterial3D.BILLBOARD_PARTICLES
+	mesh.material = m
 	draw_pass_1 = mesh
 	if one_shot:
 		finished.connect(_on_finished)
