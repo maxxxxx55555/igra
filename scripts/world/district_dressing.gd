@@ -29,6 +29,7 @@ const REST_POOL_ALPHA: float = 0.22
 ## Ground fog in the four fog districts (the weather of DistrictThemes): three drifting cards over the blocks, off at the Low tier (the depth fog of the environment is enough there).
 const FOG_DISTRICTS: Array[StringName] = [&"warehouses", &"industrial", &"substation", &"power_station"]
 const FOG_SHADER := preload("res://assets/shaders/height_fog_card.gdshader")
+const _LAMP_DUST := preload("res://scripts/world/lamp_dust.gd")
 const FOG_CARD_M: float = 46.0
 const FOG_Y: float = 0.35
 const FOG_BY_STAGE: Array[float] = [0.12, 0.25, 0.35, 0.45]
@@ -121,6 +122,10 @@ func build(district_id: StringName, sb: Node) -> void:
 	_batch("Hydrants", _HYDRANT, _hydrant_spots(sb), none, _plain(Color(0.34, 0.27, 0.13), 0.55, 0.4), true)
 	_pool_mat = _soft(Color(BRASS, 0.0), true)
 	_batch("LampPools", _patch(), _lamp_pools(), none, _pool_mat, false)
+	var dust: Node3D = _LAMP_DUST.new()
+	dust.name = "LampDust"
+	add_child(dust)
+	dust.call("build", district_id, get_parent())
 	_add_landmark()
 	_add_rest_spot()
 	_add_fog()
