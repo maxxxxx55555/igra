@@ -1,0 +1,31 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[density] start label=v1d hash=9c42930 ids=[&"suburbs", &"power_station"] nodes=1118 objects=4011 orphans=6 tex_mib=59.0 vid_mib=86.6 static_mib=101.7
+[probe] stream pass=density district=suburbs ok=true load_ms=0.4 settled_ms=48.2 hitches=0 max_frame_ms=41.7 over_budget_ms=8.4 nodes=1118 objects=4007 orphans=6 tex_mib=59.0 vid_mib=86.6 static_mib=101.7 stats={"district":"suburbs","enemies_ms":12.077,"loot_ms":38.411,"props_ms":265.473,"scene_ms":120.269,"streets_ms":2.651,"total_ms":226.679}
+[density] state district=suburbs view=09_lamp weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame suburbs_09_lamp_before_9c42930_20261018T080327Z.jpg
+[density] frame suburbs_09_lamp_after_9c42930_20261018T080327Z.jpg
+[density] state district=suburbs view=12_cone weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame suburbs_12_cone_before_9c42930_20261018T080330Z.jpg
+[density] frame suburbs_12_cone_after_9c42930_20261018T080330Z.jpg
+[density] perf district=suburbs dressing=without draw_calls=33 primitives=46024 objects_in_frame=33
+[density] perf district=suburbs dressing=with draw_calls=35 primitives=49032 objects_in_frame=35
+[probe] stream pass=density district=power_station ok=true load_ms=367.9 settled_ms=416.6 hitches=1 max_frame_ms=149.3 over_budget_ms=116.7 nodes=1140 objects=4059 orphans=6 tex_mib=58.3 vid_mib=88.0 static_mib=104.3 stats={"district":"power_station","enemies_ms":10.503,"loot_ms":31.111,"props_ms":190.77,"scene_ms":3.691,"streets_ms":2.944,"total_ms":80.276}
+[density] state district=power_station view=09_lamp weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame power_station_09_lamp_before_9c42930_20261018T080336Z.jpg
+[density] frame power_station_09_lamp_after_9c42930_20261018T080336Z.jpg
+[density] state district=power_station view=12_cone weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame power_station_12_cone_before_9c42930_20261018T080340Z.jpg
+[density] frame power_station_12_cone_after_9c42930_20261018T080340Z.jpg
+[density] perf district=power_station dressing=without draw_calls=34 primitives=43454 objects_in_frame=34
+[density] perf district=power_station dressing=with draw_calls=36 primitives=47548 objects_in_frame=36
+[density] DONE label=v1d hash=9c42930
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 38 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

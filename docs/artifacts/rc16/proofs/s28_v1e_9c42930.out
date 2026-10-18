@@ -1,0 +1,61 @@
+# proof s28_v1e_9c42930
+# utc 20261018T075906Z
+# head 9c42930 (uncommitted paths: 0)
+# env none
+# cmd bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/5fa8d500-393b-43b7-95de-04d09fcc9e42/scratchpad/s28_l8.sh
+# STEP import rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP compile rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] DONE checks=24 fails=0
+  closeout_check rc=0 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP closeout_s28 rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  retention_frames rc=1 (log: .qa_logs/retention_frames_s28_v1e.log, 8 hooks held, 1 failed, 10 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP retention rc=1
+[retention] HOOK daily_claim PASS rewards [420] base 420 wallet +420 streak 1 notice [DAILY CHALLENGE DONE: +420 coins] heard ["DAILY CHALLENGE DONE: +420 coins"] replay +0
+[retention] HOOK streak_reward PASS rewards [1410] milestones [7] streak 7 wallet +1410 notice [DAILY CHALLENGE DONE: +1410 coins] heard ["DAILY CHALLENGE DONE: +1410 coins"]
+[retention] HOOK achievement PASS ach_01 paid +100 replay +0 notice [+100 coins for an achievement] heard ["+100 coins for an achievement"] ticked rows 1
+[retention] HOOK collection PASS doc_blackout_news found: album 0 -> 1, journal entries 9 -> 10
+[retention] HOOK journal_stats PASS coins 1930 on the first look (true), 2707 after +777 (true)
+[retention] HOOK ng_plus_pick PASS level 1, told in the screen true, a modifier button true, picked ["long_night"]
+[retention] HOOK secret PASS secret_suburbs_01: node gone true, coins +80 (the secret pays 50, notice true; the document it unlocks and the achievements pay more), xp [93], found 0 -> 1, photos 2 -> 5, toast true, placed 2 then 1
+[retention] HOOK ending FAIL ending dark, title [Darkness] shown true, the Russian page differs false, One More Run opens the New Game+ screen true
+[retention] HOOK daily_card PASS open card ok true, after the claim { "shown": true, "title": "Daily Challenge", "body": "Fully restore 7 districts  (7/7)  Completed!", "streak": "Streak: 7 days (x3.0)" }
+[retention] DONE hooks=8/9 failed=["ending"] hash=9c42930
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_v1d.log, 22 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP story_v1d rc=0
+[density] probe district=suburbs LampCones nodes=1
+[density] probe district=suburbs LampCones: count=48 coloured=0 shown=true strength=1.3 first=(-22.84, 2.145, -27.5) box=[P: (-28.48484, 0.08, -29.7), S: (59.28968, 4.13, 59.4)]
+[density] probe district=residential LampCones nodes=1
+[density] probe district=residential LampCones: count=48 coloured=0 shown=true strength=1.3 first=(-22.84, 2.145, -27.5) box=[P: (-28.48484, 0.08, -29.7), S: (59.28968, 4.13, 59.4)]
+[density] probe district=park LampCones nodes=1
+[density] probe district=park LampCones: count=48 coloured=0 shown=true strength=1.3 first=(-22.84, 2.145, -27.5) box=[P: (-28.48484, 0.08, -29.7), S: (59.28968, 4.13, 59.4)]
+[density] probe district=school LampCones nodes=1
+[density] probe district=school LampCones: count=48 coloured=0 shown=true strength=1.3 first=(-22.84, 2.145, -27.5) box=[P: (-28.48484, 0.08, -29.7), S: (59.28968, 4.13, 59.4)]
+[density] probe district=hospital LampCones nodes=1
+[density] probe district=hospital LampCones: count=48 coloured=0 shown=true strength=1.3 first=(-22.84, 2.145, -27.5) box=[P: (-28.48484, 0.08, -29.7), S: (59.28968, 4.13, 59.4)]
+[density] probe district=gas_station LampCones nodes=1
+[density] probe district=gas_station LampCones: count=48 coloured=0 shown=true strength=1.3 first=(-22.84, 2.145, -27.5) box=[P: (-28.48484, 0.08, -29.7), S: (59.28968, 4.13, 59.4)]
+[density] probe district=police LampCones nodes=1
+[density] probe district=police LampCones: count=48 coloured=0 shown=true strength=1.3 first=(-22.84, 2.145, -27.5) box=[P: (-28.48484, 0.08, -29.7), S: (59.28968, 4.13, 59.4)]
+[density] probe district=warehouses LampCones nodes=1
+[density] probe district=warehouses LampCones: count=48 coloured=0 shown=true strength=1.3 first=(-22.84, 2.145, -27.5) box=[P: (-28.48484, 0.08, -29.7), S: (59.28968, 4.13, 59.4)]
+[density] probe district=industrial LampCones nodes=1
+[density] probe district=industrial LampCones: count=48 coloured=0 shown=true strength=1.3 first=(-22.84, 2.145, -27.5) box=[P: (-28.48484, 0.08, -29.7), S: (59.28968, 4.13, 59.4)]
+[density] probe district=substation LampCones nodes=1
+[density] probe district=substation LampCones: count=48 coloured=0 shown=true strength=1.3 first=(-22.84, 2.145, -27.5) box=[P: (-28.48484, 0.08, -29.7), S: (59.28968, 4.13, 59.4)]
+[density] probe district=power_station LampCones nodes=1
+[density] probe district=power_station LampCones: count=48 coloured=0 shown=true strength=1.3 first=(-22.84, 2.145, -27.5) box=[P: (-28.48484, 0.08, -29.7), S: (59.28968, 4.13, 59.4)]
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  density_frames rc=0 (log: .qa_logs/density_frames_v1d.log, 8 frames)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP cone_v1d rc=0
+# STEP tree-after done
+# EXIT=0
