@@ -1,0 +1,121 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[density] start label=story hash=4d67c0d ids=[&"suburbs", &"residential", &"park", &"school", &"hospital", &"gas_station", &"police", &"warehouses", &"industrial", &"substation", &"power_station"] nodes=1119 objects=4017 orphans=6 tex_mib=59.0 vid_mib=86.6 static_mib=101.7
+[probe] stream pass=density district=suburbs ok=true load_ms=0.2 settled_ms=38.2 hitches=0 max_frame_ms=16.7 over_budget_ms=0.0 nodes=1119 objects=4015 orphans=6 tex_mib=59.0 vid_mib=86.6 static_mib=101.8 stats={"district":"suburbs","enemies_ms":5.029,"loot_ms":18.331,"props_ms":113.611,"scene_ms":51.712,"streets_ms":1.26,"total_ms":115.814}
+[density] state district=suburbs view=10_story weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=true
+[density] frame suburbs_10_story_before_4d67c0d_20261018T011156Z.jpg
+[density] frame suburbs_10_story_after_4d67c0d_20261018T011156Z.jpg
+[density] perf district=suburbs dressing=without draw_calls=165 primitives=101456 objects_in_frame=142
+[density] perf district=suburbs dressing=with draw_calls=169 primitives=103196 objects_in_frame=142
+[probe] stream pass=density district=residential ok=true load_ms=222.1 settled_ms=562.7 hitches=3 max_frame_ms=143.5 over_budget_ms=228.4 nodes=1135 objects=4063 orphans=6 tex_mib=58.7 vid_mib=90.4 static_mib=104.7 stats={"district":"residential","enemies_ms":5.132,"loot_ms":14.138,"props_ms":91.473,"scene_ms":0.729,"streets_ms":1.25,"total_ms":39.769}
+SCRIPT ERROR: Trying to cast a freed object.
+   at: burst (res://scripts/systems/wow_director.gd:60)
+   GDScript backtrace (most recent call first):
+       [0] burst (res://scripts/systems/wow_director.gd:60)
+       [1] <anonymous lambda> (res://scripts/systems/wow_director.gd:43)
+       [2] _complete (res://scripts/core/quest_manager.gd:139)
+       [3] _tick (res://scripts/core/quest_manager.gd:116)
+       [4] _on_district_restored (res://scripts/core/quest_manager.gd:91)
+       [5] advance_district (res://scripts/world/power_grid.gd:68)
+       [6] _view (res://scripts/tools/_density_frames_runner.gd:117)
+       [7] _run (res://scripts/tools/_density_frames_runner.gd:223)
+       [8] _transition (res://scripts/tools/_rc16_probe_runner.gd:76)
+[density] state district=residential view=10_story weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=true
+[density] frame residential_10_story_before_4d67c0d_20261018T011202Z.jpg
+[density] frame residential_10_story_after_4d67c0d_20261018T011203Z.jpg
+[density] perf district=residential dressing=without draw_calls=175 primitives=115558 objects_in_frame=150
+[density] perf district=residential dressing=with draw_calls=179 primitives=117298 objects_in_frame=150
+[probe] stream pass=density district=park ok=true load_ms=213.5 settled_ms=258.3 hitches=1 max_frame_ms=145.8 over_budget_ms=113.6 nodes=1134 objects=4080 orphans=6 tex_mib=58.3 vid_mib=90.0 static_mib=105.3 stats={"district":"park","enemies_ms":5.039,"loot_ms":16.021,"props_ms":95.154,"scene_ms":0.686,"streets_ms":1.206,"total_ms":39.632}
+[density] state district=park view=10_story weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=true
+[density] frame park_10_story_before_4d67c0d_20261018T011209Z.jpg
+[density] frame park_10_story_after_4d67c0d_20261018T011209Z.jpg
+[density] perf district=park dressing=without draw_calls=169 primitives=121372 objects_in_frame=149
+[density] perf district=park dressing=with draw_calls=177 primitives=123076 objects_in_frame=149
+SCRIPT ERROR: Trying to cast a freed object.
+   at: burst (res://scripts/systems/wow_director.gd:60)
+   GDScript backtrace (most recent call first):
+       [0] burst (res://scripts/systems/wow_director.gd:60)
+       [1] <anonymous lambda> (res://scripts/systems/wow_director.gd:43)
+       [2] _complete (res://scripts/core/quest_manager.gd:139)
+       [3] _tick (res://scripts/core/quest_manager.gd:116)
+       [4] _on_zone_reached (res://scripts/core/quest_manager.gd:103)
+       [5] _on_body_entered (res://scripts/world/quest_zone_trigger.gd:25)
+[probe] stream pass=density district=school ok=true load_ms=218.5 settled_ms=258.1 hitches=1 max_frame_ms=144.0 over_budget_ms=127.5 nodes=1137 objects=4107 orphans=6 tex_mib=60.0 vid_mib=91.6 static_mib=108.0 stats={"district":"school","enemies_ms":5.323,"loot_ms":15.079,"props_ms":95.648,"scene_ms":0.728,"streets_ms":1.412,"total_ms":39.215}
+[density] state district=school view=10_story weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=true
+[density] frame school_10_story_before_4d67c0d_20261018T011215Z.jpg
+[density] frame school_10_story_after_4d67c0d_20261018T011215Z.jpg
+[density] perf district=school dressing=without draw_calls=188 primitives=145904 objects_in_frame=165
+[density] perf district=school dressing=with draw_calls=192 primitives=147644 objects_in_frame=165
+[probe] stream pass=density district=hospital ok=true load_ms=251.3 settled_ms=322.1 hitches=2 max_frame_ms=148.6 over_budget_ms=136.2 nodes=1137 objects=4127 orphans=6 tex_mib=63.0 vid_mib=94.7 static_mib=110.9 stats={"district":"hospital","enemies_ms":5.042,"loot_ms":18.749,"props_ms":106.345,"scene_ms":0.752,"streets_ms":1.423,"total_ms":46.468}
+[density] state district=hospital view=10_story weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=true
+[density] frame hospital_10_story_before_4d67c0d_20261018T011220Z.jpg
+[density] frame hospital_10_story_after_4d67c0d_20261018T011221Z.jpg
+[density] perf district=hospital dressing=without draw_calls=178 primitives=122822 objects_in_frame=156
+[density] perf district=hospital dressing=with draw_calls=181 primitives=124442 objects_in_frame=156
+[probe] stream pass=density district=gas_station ok=true load_ms=192.6 settled_ms=227.2 hitches=1 max_frame_ms=136.6 over_budget_ms=103.3 nodes=1142 objects=4138 orphans=6 tex_mib=63.3 vid_mib=95.0 static_mib=111.8 stats={"district":"gas_station","enemies_ms":4.805,"loot_ms":14.964,"props_ms":87.917,"scene_ms":0.801,"streets_ms":1.2,"total_ms":38.775}
+[density] state district=gas_station view=10_story weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=true
+[density] frame gas_station_10_story_before_4d67c0d_20261018T011226Z.jpg
+[density] frame gas_station_10_story_after_4d67c0d_20261018T011227Z.jpg
+[density] perf district=gas_station dressing=without draw_calls=167 primitives=117716 objects_in_frame=146
+[density] perf district=gas_station dressing=with draw_calls=167 primitives=119636 objects_in_frame=146
+[probe] stream pass=density district=police ok=true load_ms=172.0 settled_ms=208.2 hitches=1 max_frame_ms=147.5 over_budget_ms=114.2 nodes=1170 objects=4183 orphans=6 tex_mib=63.0 vid_mib=94.7 static_mib=112.8 stats={"district":"police","enemies_ms":4.772,"loot_ms":17.485,"props_ms":84.016,"scene_ms":0.738,"streets_ms":1.196,"total_ms":40.664}
+SCRIPT ERROR: Trying to cast a freed object.
+   at: burst (res://scripts/systems/wow_director.gd:60)
+   GDScript backtrace (most recent call first):
+       [0] burst (res://scripts/systems/wow_director.gd:60)
+       [1] <anonymous lambda> (res://scripts/systems/wow_director.gd:50)
+       [2] _complete (res://scripts/systems/daily_challenge_manager.gd:172)
+       [3] _tick (res://scripts/systems/daily_challenge_manager.gd:145)
+       [4] <anonymous lambda> (res://scripts/systems/daily_challenge_manager.gd:67)
+       [5] advance_district (res://scripts/world/power_grid.gd:68)
+       [6] _view (res://scripts/tools/_density_frames_runner.gd:117)
+       [7] _run (res://scripts/tools/_density_frames_runner.gd:223)
+       [8] _transition (res://scripts/tools/_rc16_probe_runner.gd:76)
+[density] state district=police view=10_story weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=true
+[density] frame police_10_story_before_4d67c0d_20261018T011232Z.jpg
+[density] frame police_10_story_after_4d67c0d_20261018T011232Z.jpg
+[density] perf district=police dressing=without draw_calls=170 primitives=107268 objects_in_frame=136
+[density] perf district=police dressing=with draw_calls=170 primitives=109188 objects_in_frame=136
+[probe] stream pass=density district=warehouses ok=true load_ms=226.4 settled_ms=270.7 hitches=1 max_frame_ms=139.0 over_budget_ms=107.8 nodes=1158 objects=4182 orphans=6 tex_mib=62.7 vid_mib=94.3 static_mib=113.5 stats={"district":"warehouses","enemies_ms":4.812,"loot_ms":15.678,"props_ms":88.009,"scene_ms":0.716,"streets_ms":1.312,"total_ms":40.641}
+[density] state district=warehouses view=10_story weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=true
+[density] frame warehouses_10_story_before_4d67c0d_20261018T011238Z.jpg
+[density] frame warehouses_10_story_after_4d67c0d_20261018T011238Z.jpg
+[density] perf district=warehouses dressing=without draw_calls=172 primitives=98332 objects_in_frame=136
+[density] perf district=warehouses dressing=with draw_calls=172 primitives=100252 objects_in_frame=136
+SCRIPT ERROR: Trying to cast a freed object.
+   at: burst (res://scripts/systems/wow_director.gd:60)
+   GDScript backtrace (most recent call first):
+       [0] burst (res://scripts/systems/wow_director.gd:60)
+       [1] <anonymous lambda> (res://scripts/systems/wow_director.gd:43)
+       [2] _complete (res://scripts/core/quest_manager.gd:139)
+       [3] _tick (res://scripts/core/quest_manager.gd:116)
+       [4] _on_zone_reached (res://scripts/core/quest_manager.gd:103)
+       [5] _on_body_entered (res://scripts/world/quest_zone_trigger.gd:25)
+[probe] stream pass=density district=industrial ok=true load_ms=219.6 settled_ms=258.9 hitches=2 max_frame_ms=140.5 over_budget_ms=123.9 nodes=1169 objects=4213 orphans=6 tex_mib=63.0 vid_mib=94.7 static_mib=114.8 stats={"district":"industrial","enemies_ms":5.288,"loot_ms":17.418,"props_ms":88.215,"scene_ms":0.768,"streets_ms":1.224,"total_ms":43.381}
+[density] state district=industrial view=10_story weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=true
+[density] frame industrial_10_story_before_4d67c0d_20261018T011244Z.jpg
+[density] frame industrial_10_story_after_4d67c0d_20261018T011244Z.jpg
+[density] perf district=industrial dressing=without draw_calls=187 primitives=116090 objects_in_frame=161
+[density] perf district=industrial dressing=with draw_calls=187 primitives=118010 objects_in_frame=161
+[probe] stream pass=density district=substation ok=true load_ms=220.1 settled_ms=259.6 hitches=1 max_frame_ms=148.3 over_budget_ms=115.3 nodes=1151 objects=4213 orphans=6 tex_mib=65.3 vid_mib=97.0 static_mib=117.3 stats={"district":"substation","enemies_ms":4.886,"loot_ms":14.446,"props_ms":90.647,"scene_ms":0.797,"streets_ms":1.232,"total_ms":38.911}
+[density] state district=substation view=10_story weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=true
+[density] frame substation_10_story_before_4d67c0d_20261018T011250Z.jpg
+[density] frame substation_10_story_after_4d67c0d_20261018T011250Z.jpg
+[density] perf district=substation dressing=without draw_calls=163 primitives=101242 objects_in_frame=142
+[density] perf district=substation dressing=with draw_calls=165 primitives=102586 objects_in_frame=142
+[probe] stream pass=density district=power_station ok=true load_ms=203.2 settled_ms=288.0 hitches=2 max_frame_ms=146.4 over_budget_ms=146.5 nodes=1147 objects=4196 orphans=6 tex_mib=65.7 vid_mib=97.4 static_mib=118.0 stats={"district":"power_station","enemies_ms":5.142,"loot_ms":16.994,"props_ms":87.986,"scene_ms":0.738,"streets_ms":1.225,"total_ms":41.995}
+[density] state district=power_station view=10_story weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=true
+[density] frame power_station_10_story_before_4d67c0d_20261018T011256Z.jpg
+[density] frame power_station_10_story_after_4d67c0d_20261018T011257Z.jpg
+[density] perf district=power_station dressing=without draw_calls=180 primitives=116814 objects_in_frame=155
+[density] perf district=power_station dressing=with draw_calls=180 primitives=118734 objects_in_frame=155
+[density] DONE label=story hash=4d67c0d
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 64 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
