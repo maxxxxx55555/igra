@@ -50,6 +50,18 @@ def strengths(order, roster, counts, stats):
     return out
 
 
+def boss_phases():
+    """The phases of the Architect (the enum of boss_3d.gd): each one after the first is a change of pace in the last fight."""
+    return len(re.findall(r"\bP\d\b", re.search(r"enum Phase \{(.*?)\}", read("scripts/enemies/boss_3d.gd"), re.S).group(1)))
+
+
+def curve_beats(order, st):
+    """(reliefs, escalations) of the curve (docs/DIFFICULTY_INTENT.md section 5): a relief is a stage of a district that is stronger restored than the one before it (the work of the player is paid back by fewer
+    monsters), an escalation a district that opens harder than the one before it."""
+    reliefs = sum(1 for d in order for i in range(3) if st[d][i + 1] < st[d][i])
+    return reliefs, sum(1 for prev, d in zip(order, order[1:]) if st[d][0] > st[prev][0])
+
+
 def judge(order, st, gain):
     """The failures over the strengths of every district and the player's gains."""
     bad = []
@@ -74,7 +86,13 @@ def report():
     for d in order:
         lines.append("| %s | %s | %.1f | %.1f | %.1f | %.1f | %s | %s | %d |" % (d, " ".join(r[:4] for r in roster[d]), *st[d], "-" if prev is None else "x%.2f" % (st[d][0] / st[prev][0]), gain[d][0] or "-", gain[d][1] * 12))
         prev = d
-    return "\n".join(lines), judge(order, st, gain)
+    reliefs, escalations = curve_beats(order, st)
+    phases = boss_phases()
+    lines += ["", "Pacing beats: %d reliefs + %d escalations + %d boss phases = %d" % (reliefs, escalations, phases, reliefs + escalations + phases)]
+    bad = judge(order, st, gain)
+    if reliefs != 3 * len(order):
+        bad.append("%d of %d stage steps are a relief: a stage that does not lower the strength is not a beat" % (reliefs, 3 * len(order)))
+    return "\n".join(lines), bad
 
 
 def demo():
@@ -90,7 +108,9 @@ def demo():
     assert judge(order, dict(flat, c=[7.5, 5.0, 4.0, 3.0]), none) == []
     wrong = dict(flat, b=[5.0, 6.0, 3.0, 2.0])
     assert "calmer" in judge(order, wrong, none)[0]
-    print("difficulty_curve demo: a smooth curve passes, a spike, a district that does not calm and a rise over x1.6 without a new tool fail, x1.5 passes")
+    assert curve_beats(order, flat) == (9, 2)
+    assert curve_beats(order, dict(flat, b=[5.0, 5.0, 3.0, 2.0])) == (8, 2)
+    print("difficulty_curve demo: a smooth curve passes, a spike, a district that does not calm and a rise over x1.6 without a new tool fail, x1.5 passes; three districts make 9 reliefs and 2 escalations")
     return 0
 
 

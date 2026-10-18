@@ -70,7 +70,7 @@ func _refresh() -> void:
 		_help_label.modulate.a = 0.75
 		ng_label.get_parent().add_child(_help_label)
 		ng_label.get_parent().move_child(_help_label, ng_label.get_index() + 1)
-	_help_label.text = LocalizationManager.t("NGP_ACTIVATE_HELP")
+	_help_label.text = LocalizationManager.tf("NGP_ACTIVATE_FEEDBACK", [ng]) if _activated_this_visit else LocalizationManager.t("NGP_ACTIVATE_HELP")  # a toast of it stood on the last button
 	_refresh_modifiers()
 
 ## Один выбор модификатора на каждый уровень NG+. Список строится кодом, а не
@@ -129,7 +129,6 @@ func _on_activate() -> void:
 	if NewGamePlus.activate_ng_plus():
 		_activated_this_visit = true
 		_refresh()
-		UIManager.show_notification(LocalizationManager.tf("NGP_ACTIVATE_FEEDBACK", [NewGamePlus.get_current_ng_plus()]))
 	elif NewGamePlus.get_banked_runs().has(SaveSystem.get_run_id()):
 		UIManager.show_notification(LocalizationManager.t("NGP_RUN_ALREADY_COUNTED"))
 

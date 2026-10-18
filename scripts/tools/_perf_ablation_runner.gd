@@ -6,8 +6,8 @@ extends "res://scripts/tools/_perf_check_runner.gd"
 
 const FRAMES: int = 200
 const SETTLE_FRAMES: int = 20
-const PARTS: Array[String] = ["lamp pools hidden", "post-process layers hidden", "HUD hidden"]
-const HEAVY: Array[String] = ["fog cards hidden", "lamp pools hidden"]
+const PARTS: Array[String] = ["lamp pools hidden", "lamp cones hidden", "window halos hidden", "post-process layers hidden", "HUD hidden"]
+const HEAVY: Array[String] = ["fog cards hidden", "lamp pools hidden", "lamp cones hidden", "window halos hidden"]
 const LAYERS: Array[String] = ["HUD", "PostProcessOverlay"]
 
 var _baselines: Array[float] = []
@@ -19,6 +19,7 @@ func _run() -> void:
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 	Engine.max_fps = 0
 	print("[ablate] window=%s msaa=%d tier=%d vsync_was=%d" % [get_window().size, get_viewport().msaa_3d, int(SettingsManager.get_setting("graphics_tier", 2)), vsync])
+	await _full(&"suburbs")
 	await _sweep("suburbs", PARTS)
 	for layer in LAYERS:
 		await _children_sweep("suburbs", layer)
@@ -26,6 +27,7 @@ func _run() -> void:
 	await _measure("suburbs", "msaa off")
 	if not await _travel(&"power_station"):
 		return
+	await _full(&"power_station")
 	await _sweep("power_station", HEAVY)
 	print("[ablate] DONE baselines %s least %.2f ms" % [_baselines, _baselines.min()])
 	get_tree().quit(0)
@@ -65,12 +67,25 @@ func _apply(part: String, off: bool) -> void:
 				(card as MeshInstance3D).visible = not off
 		"lamp pools hidden":
 			(get_tree().root.find_child("LampPools", true, false) as Node3D).visible = not off
+		"lamp cones hidden":
+			(get_tree().root.find_child("LampCones", true, false) as Node3D).visible = not off
+		"window halos hidden":
+			(get_tree().root.find_child("WindowHalos", true, false) as Node3D).visible = not off
 		"post-process layers hidden":
 			(main.get_node("PostProcessOverlay") as CanvasLayer).visible = not off
 		"HUD hidden":
 			(main.get_node("HUD") as CanvasLayer).visible = not off
 		"msaa off":
 			get_viewport().msaa_3d = Viewport.MSAA_DISABLED if off else Viewport.MSAA_4X
+
+## The district at FULL power, where its lamps, their cones and its lit panes are all drawn (the perf gate measures the stage that a new game spawns in, and a part that a lower stage hides costs nothing there).
+func _full(id: StringName) -> void:
+	for parent in PowerGrid.get_district(id).powered_by:
+		PowerGrid.get_district(parent).stage = DistrictData.Stage.FULL
+	PowerGrid.advance_district(id, DistrictData.Stage.FULL)
+	for i in 120:
+		await get_tree().process_frame
+	print("[ablate] %s power stage %d" % [id, PowerGrid.get_stage(id)])
 
 ## To the first frame of play, as the perf gate does.
 func _boot() -> bool:

@@ -7,10 +7,12 @@ extends "res://scripts/tools/_density_frames_runner.gd"
 ##   achievement    an unlock pays its coins once, shows its notice, and its row in the Codex is ticked
 ##   collection     a found document fills the card of its district in the Codex at once, and its entry stands in the journal
 ##   journal_stats  the statistics tab shows the coins of now and not the coins of its first look
-##   ng_plus_pick   the pick screen: Activate raises the level and a modifier button picks one, both through the buttons
+##   ng_plus_pick   the pick screen: Activate raises the level, the screen says so in its own column and a modifier button picks one, all through the buttons
+##   secret, ending (rc16/s28_retention_more.gd)   a secret taken through interact() and a win with its ending screen
 ## Frames -> docs/stills/retention/<state>_after_<hash>_<UTC>.jpg (the label "after": they show the code that ships). The profile is the owner's: the shell wrapper snapshots it and puts it back.
 
-const HOOKS: int = 7
+const _More := preload("res://scripts/tools/rc16/s28_retention_more.gd")
+const HOOKS: int = 9
 const COINS_PROBE: int = 777
 var _passed: int = 0
 var _failed: Array[String] = []
@@ -229,6 +231,7 @@ func _ng_plus_pick() -> void:
 	activate.pressed.emit()
 	await get_tree().create_timer(0.5).timeout
 	var level: int = NewGamePlus.get_current_ng_plus()
+	var told: bool = _labels(screen).has(LocalizationManager.tf("NGP_ACTIVATE_FEEDBACK", [level]))
 	var pick: Button = null
 	for node: Node in screen.find_children("*", "Button", true, false):
 		var button := node as Button
@@ -242,7 +245,7 @@ func _ng_plus_pick() -> void:
 	var active: Array = NewGamePlus.get_active_modifiers()
 	await _snap("07_ng_plus_pick")
 	UIManager.close(&"new_game_plus")
-	_hook("ng_plus_pick", level == 1 and found_pick and active.size() == 1, "level %d, a modifier button %s, picked %s" % [level, found_pick, active])
+	_hook("ng_plus_pick", level == 1 and told and found_pick and active.size() == 1, "level %d, told in the screen %s, a modifier button %s, picked %s" % [level, told, found_pick, active])
 
 func _run() -> void:
 	if DisplayServer.get_name() == "headless":
@@ -253,12 +256,9 @@ func _run() -> void:
 		var s := String(a)
 		if s.begins_with("--thash="):
 			_hash = s.substr(8)
-	var ads := get_node_or_null("/root/AdService")
-	if ads:
-		ads.enabled = false
-	var menu_up := func() -> bool:
-		var cs := get_tree().current_scene
-		return cs != null and cs.scene_file_path == Routes.MENU
+	if has_node("/root/AdService"):
+		get_node("/root/AdService").enabled = false
+	var menu_up := func() -> bool: return get_tree().current_scene != null and get_tree().current_scene.scene_file_path == Routes.MENU
 	if not await _wait_until(menu_up, 15.0):
 		Routes.goto(Routes.MENU)
 		if not await _wait_until(menu_up, 10.0):
@@ -285,6 +285,7 @@ func _run() -> void:
 	await _collection()
 	await _journal_stats()
 	await _ng_plus_pick()
+	await _More.run(self)
 	GameManager.return_to_menu()
 	Routes.goto(Routes.MENU)
 	if not await _wait_until(menu_up, 15.0):

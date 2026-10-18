@@ -103,6 +103,12 @@ func _place(view: Dictionary) -> Node3D:
 		camera.set("_pitch", float(view["pitch"]))
 	return player
 
+## The label of the control and of the boosted diagnostic is part of the name of their frames, and so is the strength of a sweep (TLS_FRAMES_STRENGTH=1.2 is `_v1xs12`).
+func _tag() -> String:
+	if not ["v1n", "v1x"].has(_label):
+		return ""
+	return "_" + _label + ("s" + OS.get_environment("TLS_FRAMES_STRENGTH").replace(".", "") if OS.has_environment("TLS_FRAMES_STRENGTH") else "")
+
 func _view(id: StringName, view: Dictionary) -> void:
 	var player := _place(view)
 	if player == null:
@@ -127,6 +133,9 @@ func _view(id: StringName, view: Dictionary) -> void:
 	var env := get_viewport().world_3d.environment
 	print("[density] state district=%s view=%s weather=%d stage=%d tier=%d ambient=%.3f glow=%.3f exposure=%.3f flashlight=%s" % [String(id), view["name"], WeatherSystem.current,
 		PowerGrid.get_stage(id), int(SettingsManager.get_setting("graphics_tier", -1)), env.ambient_light_energy, env.glow_intensity, env.tonemap_exposure, player.get("flashlight_enabled")])
+	if _label == "v1t":
+		await _Views.series(get_tree(), id, view["name"])
+		return
 	if view["name"] == "07_facade" and not switched:  # the band that the lift is read in was set for the framing the pitch had before it was set on the player
 		await _wall_check(id)
 	var dressing := _dressing()
@@ -143,7 +152,7 @@ func _view(id: StringName, view: Dictionary) -> void:
 		await get_tree().process_frame
 		await _snap("%s_%s" % [id, view["name"]], "after")
 	elif _Views.SWITCHED.has(_label):
-		var state := "%s_%s%s" % [id, view["name"], "_" + _label if ["v1n", "v1x"].has(_label) else ""]  # the control and the boosted diagnostic do not take the names of the pairs they stand beside
+		var state := "%s_%s%s" % [id, view["name"], _tag()]  # the control and the boosted diagnostic do not take the names of the pairs they stand beside
 		_Views.switch(_label, get_tree(), false)
 		await get_tree().process_frame
 		await _snap(state, "before")
@@ -222,7 +231,7 @@ func _run() -> void:
 			var story_view := _Views.story_view(get_tree(), id)
 			if not story_view.is_empty():
 				await _view(id, story_view)
-		for diag: String in ["11_pane", "12_cone", "13_base"]:
+		for diag: String in ["11_pane", "12_cone"]:
 			if _views.has(diag):
 				var diag_view := _Views.diag_view(get_tree(), id, diag)
 				if not diag_view.is_empty():

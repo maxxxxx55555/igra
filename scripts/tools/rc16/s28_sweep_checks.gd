@@ -6,7 +6,8 @@ extends RefCounted
 ##   PICK1  a pickup on a full pack stays in the world and the pack is as it was
 ##   SAVE1  a save written while the player is out of the world (the scene swap of a transition) reads back whole and loads, and a fade that a load interrupts still ends
 ##   V1A    the details of V1 batch A stand where they should (a check of the mechanism; the frames judge whether they are a gain): at the High tier the panes carry the window shader with their interiors on, every pane has
-##          a halo, every lamp a cone of light and every pole a crack quad; the cone is hidden at DARK and shown with the power
+##          a halo and every lamp a cone of light; the cone is hidden at DARK and shown with the power
+##   BURST1 every burst scene (scenes/vfx) keeps the scale of its particles: a billboard drops it unless the material keeps it, so each particle was the 1 m of its quad and the confetti of a find hid the screen
 ##   STORY1 every district holds two or three story scenes (story_props.gd), each 2.6 m from a hiding place and 2.2 m or more from anything the player can use or hide in, inside the ring, and each has its line;
 ##          the three kinds all stand somewhere. The district is built the way the game builds it (the loot, hence the hiding places, before the dressing): a bare scene has no hiding place to anchor a scene to
 ##   STORY2 a player who walks into the trigger of a scene (made where the world is empty, so the check does not depend on the placement that STORY1 holds) hears its line once and the trigger ends with the visit: the physics
@@ -26,6 +27,7 @@ static func run(r: Node) -> void:
 	_pack_full_pickup(r)
 	await _save_between_scenes(r)
 	await _v1_nodes(r)
+	_burst_scale(r)
 	await _story_scenes(r)
 	var walk: String = await _walk_into(r)
 	r._ok(walk == "ok", "STORY2 a walk into a story trigger is heard once and ends it: %s" % walk)
@@ -109,13 +111,10 @@ static func _v1_nodes(r: Node) -> void:
 	var windows := props.find_child("Windows", true, false) as MultiMeshInstance3D
 	var halos := props.find_child("WindowHalos", true, false) as MultiMeshInstance3D
 	var cones := props.find_child("LampCones", true, false) as MultiMeshInstance3D
-	var cracks := props.find_child("Cracks", true, false) as MultiMeshInstance3D
 	var lamps := props.get_node("StreetlightLampsBatched") as MultiMeshInstance3D
-	var poles := props.get_node("StreetlightPolesBatched") as MultiMeshInstance3D
 	var panes_ok: bool = windows != null and windows.material_override is ShaderMaterial and is_equal_approx(float((windows.material_override as ShaderMaterial).get_shader_parameter("interior")), 1.0)
 	var halos_ok: bool = halos != null and windows != null and halos.multimesh.instance_count == windows.multimesh.instance_count and halos.visible
 	var cones_ok: bool = cones != null and cones.multimesh.instance_count == lamps.multimesh.instance_count
-	var cracks_ok: bool = cracks != null and cracks.multimesh.instance_count == poles.multimesh.instance_count
 	var details: Node = props.find_child("LampDetails", true, false)
 	var stage_ok: bool = false
 	if details != null and cones != null:
@@ -125,7 +124,21 @@ static func _v1_nodes(r: Node) -> void:
 		stage_ok = shown and not cones.visible
 	SettingsManager.set_setting("graphics_tier", tier0)
 	root.queue_free()
-	r._ok(panes_ok and halos_ok and cones_ok and cracks_ok and stage_ok, "V1A the details of batch A stand: window shader %s, halos %s, light cones %s, cracks %s, the cone follows the power %s" % [panes_ok, halos_ok, cones_ok, cracks_ok, stage_ok])
+	r._ok(panes_ok and halos_ok and cones_ok and stage_ok, "V1A the details of batch A stand: window shader %s, halos %s, light cones %s, the cone follows the power %s" % [panes_ok, halos_ok, cones_ok, stage_ok])
+
+static func _burst_scale(r: Node) -> void:
+	var bad: Array[String] = []
+	var bursts: int = 0
+	for file: String in DirAccess.get_files_at("res://scenes/vfx"):
+		var node: Node = (load("res://scenes/vfx/" + file) as PackedScene).instantiate()
+		if node is VFXBurst:
+			r.add_child(node)
+			bursts += 1
+			var material := ((node as VFXBurst).draw_pass_1 as QuadMesh).material as StandardMaterial3D
+			if material == null or not material.billboard_keep_scale:
+				bad.append(file)
+		node.free()
+	r._ok(bursts >= 7 and bad.is_empty(), "BURST1 every burst keeps the scale of its particles (%d bursts): %s" % [bursts, bad])
 
 ## A district the way the game builds it: the scene, then the loot with its three hiding places, and the dressing a frame later (street_props.gd builds deferred), which anchors the story scenes to the hiding places.
 static func _district_with_loot(r: Node, id: StringName) -> Node3D:

@@ -2,10 +2,10 @@ extends RefCounted
 ## The extra views and switches of the density frames (scripts/tools/_density_frames_runner.gd), kept apart so the runner stays under 300 lines. Each takes the scene tree, reads the district that is loaded
 ## and returns the view as the runner's dictionary (name, at, look, pitch, stage, light), or {} with a `[density] FAIL` line when the district has nothing to show there.
 
-## The labels whose frames are shot twice in the same run, a detail off ("before") and on ("after"): `v1` (batch A), `story` (the story scenes of W1), `v1d` (the halos, the lamp cones and the cracks of batch A alone, at their
+## The labels whose frames are shot twice in the same run, a detail off ("before") and on ("after"): `v1` (batch A), `story` (the story scenes of W1), `v1d` (the halos and the lamp cones of batch A alone, at their
 ## own strength), `v1x` (the same at a strength raised to where a rendering fault would show: a diagnostic, never a state of the game) and `v1n` (the control: nothing is switched, so the pair shows how much
-## two frames of one view differ by themselves).
-const SWITCHED: Array[String] = ["v1", "story", "v1d", "v1x", "v1n"]
+## two frames of one view differ by themselves) and `v1t` (the same, as a time series of eight frames with the lamps pinned: `series`).
+const SWITCHED: Array[String] = ["v1", "story", "v1d", "v1x", "v1n", "v1t"]
 
 static func switch(label: String, tree: SceneTree, on: bool) -> void:
 	match label:
@@ -15,7 +15,7 @@ static func switch(label: String, tree: SceneTree, on: bool) -> void:
 			details(tree, on, false)
 		"v1x":
 			details(tree, on, true)
-		"v1n":
+		"v1n", "v1t":
 			pass
 		_:
 			v1(tree, on)
@@ -27,15 +27,16 @@ static func story(tree: SceneTree, on: bool) -> void:
 		if batch != null and batch.has_meta("story_from"):
 			batch.multimesh.visible_instance_count = -1 if on else int(batch.get_meta("story_from"))
 
-## The halos, the lamp cones and the cracks of batch A alone (the window interiors stay on); `boosted` raises each strength to where a detail that is drawn at all cannot be missed.
+## The halos and the lamp cones of batch A alone (the window interiors stay on); `boosted` raises each strength to 8, or to TLS_FRAMES_STRENGTH when that is set (a sweep of the strength), where a detail that is drawn at all cannot be missed.
 static func details(tree: SceneTree, on: bool, boosted: bool) -> void:
-	for node_name: String in ["WindowHalos", "LampCones", "Cracks"]:
+	var boost: float = float(OS.get_environment("TLS_FRAMES_STRENGTH")) if OS.has_environment("TLS_FRAMES_STRENGTH") else 8.0
+	for node_name: String in ["WindowHalos", "LampCones"]:
 		var node := tree.root.find_child(node_name, true, false) as MultiMeshInstance3D
 		if node == null:
 			continue
 		node.visible = on
 		if on and boosted:
-			(node.material_override as ShaderMaterial).set_shader_parameter("strength", 8.0)
+			(node.material_override as ShaderMaterial).set_shader_parameter("strength", boost)
 
 ## A find throws a burst of sparkles in front of the player (wow_director.gd) and these runs put the player on pickups: the bursts that are playing are put out, so they neither hide the subject nor differ between the two frames of a pair.
 static func clear_bursts(tree: SceneTree) -> void:
@@ -85,8 +86,8 @@ static func story_view(tree: SceneTree, id: StringName) -> Dictionary:
 			best = eye
 	return {"name": "10_story", "at": Vector3(best.x, 0.1, best.z), "look": spot, "pitch": -0.12, "stage": 3, "light": true}
 
-## The views of the diagnostics: 11_pane (2.6 m in front of a pane that is lit from PARTIAL up, looking at it), 12_cone (2.4 m from the pole nearest to the eye of the west street, looking up at the head of its
-## lamp) and 13_base (1.4 m from the same pole, looking down at its foot), power FULL, the flashlight off.
+## The views of the diagnostics: 11_pane (2.6 m in front of a pane that is lit from PARTIAL up, looking at it), and 12_cone (2.4 m from the pole nearest to the eye of the west street, looking up at the head of its
+## lamp), power FULL, the flashlight off.
 static func diag_view(tree: SceneTree, id: StringName, view_name: String) -> Dictionary:
 	if view_name == "11_pane":
 		return _pane_view(tree, id)
@@ -96,11 +97,8 @@ static func diag_view(tree: SceneTree, id: StringName, view_name: String) -> Dic
 	var foot: Vector3 = lamp[0]
 	var head: Vector3 = lamp[1]
 	var toward := Vector3(-foot.x, 0.0, -foot.z).normalized()
-	if view_name == "12_cone":
-		var far := foot + toward * 2.4
-		return {"name": view_name, "at": Vector3(far.x, 0.1, far.z), "look": head, "pitch": atan2(head.y - 1.7, 2.4), "stage": 3, "light": false}
-	var near := foot + toward * 1.4
-	return {"name": view_name, "at": Vector3(near.x, 0.1, near.z), "look": Vector3(foot.x, 0.0, foot.z), "pitch": -atan2(1.7, 1.4), "stage": 3, "light": false}
+	var far := foot + toward * 2.4
+	return {"name": view_name, "at": Vector3(far.x, 0.1, far.z), "look": head, "pitch": atan2(head.y - 1.7, 2.4), "stage": 3, "light": false}
 
 static func _pane_view(tree: SceneTree, id: StringName) -> Dictionary:
 	var skyline: Node = tree.root.find_child("Skyline", true, false)
@@ -127,7 +125,7 @@ static func _pane_view(tree: SceneTree, id: StringName) -> Dictionary:
 ## What each small detail of batch A holds when the frames are taken (a line a district): how many instances, how many carry a colour, whether it is shown in the tree, its strength, where the first one stands and its box,
 ## so a detail that is not seen can be told from one that is not there.
 static func probe(tree: SceneTree, id: StringName) -> void:
-	for node_name: String in ["WindowHalos", "LampCones", "Cracks"]:
+	for node_name: String in ["WindowHalos", "LampCones"]:
 		var node := tree.root.find_child(node_name, true, false) as MultiMeshInstance3D
 		if node == null:
 			print("[density] probe district=%s %s: not built" % [id, node_name])
@@ -141,7 +139,7 @@ static func probe(tree: SceneTree, id: StringName) -> void:
 		print("[density] probe district=%s %s: count=%d coloured=%d shown=%s strength=%s first=%s box=%s" % [id, node_name, node.multimesh.instance_count, coloured, node.is_visible_in_tree(),
 			(node.material_override as ShaderMaterial).get_shader_parameter("strength"), first, node.get_aabb()])
 
-## The V1 details of Session 28 (docs/RUN_STATE.md): the window interiors and halos of the skyline, the cone of light and the cracks of the lamps. `on` false is the district as it stood before them. With the label `v1` every
+## The V1 details of Session 28 (docs/RUN_STATE.md): the window interiors and halos of the skyline and the cone of light of the lamps. `on` false is the district as it stood before them. With the label `v1` every
 ## view is shot twice in the same run, first with them off ("before") and then on ("after"), so the two frames differ by these details and by nothing else.
 static func v1(tree: SceneTree, on: bool) -> void:
 	var windows := tree.root.find_child("Windows", true, false) as MultiMeshInstance3D
@@ -152,15 +150,37 @@ static func v1(tree: SceneTree, on: bool) -> void:
 		if node != null:
 			node.visible = on
 
-## 09_lamp: five metres from the streetlamp nearest to the eye of the west street, toward the middle of the district, the camera tilted up at its head, power FULL, the flashlight off: the cone of light
-## under the lamp and the cracks at the foot of its pole.
+## 09_lamp: six metres from the streetlamp nearest to the eye of the west street, toward the middle of the district, the camera level on the middle of its cone, power FULL, the flashlight off: the whole cone of
+## light under the lamp, as it is seen from the street.
 static func lamp_view(tree: SceneTree, id: StringName) -> Dictionary:
 	var lamp := _lamp_at_eye(tree, id)
 	if lamp.is_empty():
 		return {}
 	var head: Vector3 = lamp[1]
 	var toward := Vector3(-head.x, 0.0, -head.z).normalized()
-	return {"name": "09_lamp", "at": Vector3(head.x + toward.x * 5.0, 0.1, head.z + toward.z * 5.0), "look": head, "pitch": 0.42, "stage": 3, "light": false}
+	return {"name": "09_lamp", "at": Vector3(head.x + toward.x * 6.0, 0.1, head.z + toward.z * 6.0), "look": Vector3(head.x, head.y * 0.5, head.z), "pitch": atan2(head.y * 0.5 - 1.7, 6.0), "stage": 3, "light": false}
+
+## The time series of a view (label `v1t`, nothing switched): eight consecutive frames of it, each with the mean brightness of the lower half of the picture and the energy of the lamp nearest to the camera and of the
+## moon, so a ground that lights and darkens between two frames can be told from a lamp or a moon that does: `[density] series district=<id> view=<name> frame=<i> lower=<mean> spot=<e> glow=<e> moon=<e>`.
+static func series(tree: SceneTree, id: StringName, view_name: String) -> void:
+	var eye: Vector3 = tree.root.get_camera_3d().global_position
+	var nearest: Node3D = null
+	for lamp: Node in tree.get_nodes_in_group("streetlights"):
+		if nearest == null or (lamp as Node3D).global_position.distance_to(eye) < nearest.global_position.distance_to(eye):
+			nearest = lamp as Node3D
+	var spot := nearest.get_node_or_null("SpotLight") as SpotLight3D if nearest != null else null
+	var glow := nearest.get_node_or_null("Glow") as OmniLight3D if nearest != null else null
+	var moons: Array[Node] = tree.root.find_children("*", "DirectionalLight3D", true, false)
+	for i in 8:
+		await RenderingServer.frame_post_draw
+		var img := tree.root.get_texture().get_image()
+		img.resize(64, 36)
+		var sum: float = 0.0
+		for y in range(18, 36):
+			for x in 64:
+				sum += img.get_pixel(x, y).get_luminance()
+		print("[density] series district=%s view=%s frame=%d lower=%.4f spot=%.3f glow=%.3f moon=%.3f" % [id, view_name, i, sum / 1152.0, spot.light_energy if spot != null else -1.0,
+			glow.light_energy if glow != null else -1.0, (moons[0] as DirectionalLight3D).light_energy if not moons.is_empty() else -1.0])
 
 ## The streetlamp nearest to the eye of the west street as [its foot, its head] (the pole and the lamp of one index are one lamp), or [] with a `[density] FAIL` line.
 static func _lamp_at_eye(tree: SceneTree, id: StringName) -> Array[Vector3]:

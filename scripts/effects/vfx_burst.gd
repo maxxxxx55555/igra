@@ -40,6 +40,7 @@ func _ready() -> void:
 	m.albedo_texture = burst_texture
 	m.vertex_color_use_as_albedo = true
 	m.billboard_mode = BaseMaterial3D.BILLBOARD_PARTICLES
+	m.billboard_keep_scale = true  # a billboard drops the scale of a particle unless it keeps it: every particle was the 1 m of its quad and a burst filled the screen
 	mesh.material = m
 	draw_pass_1 = mesh
 	if one_shot:
