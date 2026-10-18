@@ -1,0 +1,43 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[density] start label=v1x hash=e2180f4 ids=[&"suburbs", &"power_station"] nodes=1119 objects=4015 orphans=6 tex_mib=59.0 vid_mib=86.6 static_mib=101.7
+[probe] stream pass=density district=suburbs ok=true load_ms=0.4 settled_ms=52.6 hitches=1 max_frame_ms=59.1 over_budget_ms=25.8 nodes=1119 objects=4015 orphans=6 tex_mib=59.0 vid_mib=86.6 static_mib=101.8 stats={"district":"suburbs","enemies_ms":7.918,"loot_ms":29.973,"props_ms":180.783,"scene_ms":83.37,"streets_ms":1.898,"total_ms":165.263}
+[density] state district=suburbs view=11_pane weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame suburbs_11_pane_before_e2180f4_20261018T005332Z.jpg
+[density] frame suburbs_11_pane_after_e2180f4_20261018T005332Z.jpg
+[density] state district=suburbs view=12_dust weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame suburbs_12_dust_before_e2180f4_20261018T005333Z.jpg
+[density] frame suburbs_12_dust_after_e2180f4_20261018T005333Z.jpg
+[density] state district=suburbs view=13_base weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame suburbs_13_base_before_e2180f4_20261018T005334Z.jpg
+[density] frame suburbs_13_base_after_e2180f4_20261018T005334Z.jpg
+[density] probe district=suburbs WindowHalos: count=160 coloured=142 shown=true strength=8.0 first=(-42.8, 2.6, -31.97) box=[P: (-43.79, 1.17, -35.22913), S: (90.02217, 5.46, 68.15495)]
+[density] probe district=suburbs LampMotes: count=288 coloured=288 shown=true strength=8.0 first=(-23.34987, 3.489768, -27.44999) box=[P: (-27.88041, 0.123302, -28.20275), S: (58.54538, 4.276048, 56.89363)]
+[density] probe district=suburbs Cracks: count=48 coloured=0 shown=true strength=3.0 first=(-23.92155, 0.07, -28.30233) box=[P: (-28.70056, 0.07, -30.02617), S: (58.09797, 0.00001, 59.06219)]
+[density] perf district=suburbs dressing=without draw_calls=33 primitives=46060 objects_in_frame=33
+[density] perf district=suburbs dressing=with draw_calls=36 primitives=47052 objects_in_frame=36
+[probe] stream pass=density district=power_station ok=true load_ms=314.0 settled_ms=370.3 hitches=1 max_frame_ms=137.7 over_budget_ms=109.7 nodes=1142 objects=4068 orphans=6 tex_mib=58.3 vid_mib=88.0 static_mib=104.4 stats={"district":"power_station","enemies_ms":9.022,"loot_ms":23.022,"props_ms":144.084,"scene_ms":2.721,"streets_ms":2.756,"total_ms":64.631}
+[density] state district=power_station view=11_pane weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame power_station_11_pane_before_e2180f4_20261018T005338Z.jpg
+[density] frame power_station_11_pane_after_e2180f4_20261018T005338Z.jpg
+[density] state district=power_station view=12_dust weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame power_station_12_dust_before_e2180f4_20261018T005339Z.jpg
+[density] frame power_station_12_dust_after_e2180f4_20261018T005339Z.jpg
+[density] state district=power_station view=13_base weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame power_station_13_base_before_e2180f4_20261018T005340Z.jpg
+[density] frame power_station_13_base_after_e2180f4_20261018T005340Z.jpg
+[density] probe district=power_station WindowHalos: count=703 coloured=636 shown=true strength=8.0 first=(-42.8, 2.6, -31.97) box=[P: (-48.68163, 1.17, -41.35513), S: (80.65163, 26.26, 75.8522)]
+[density] probe district=power_station LampMotes: count=288 coloured=288 shown=true strength=8.0 first=(-23.13867, 3.879158, -27.67958) box=[P: (-27.73398, 0.112583, -28.09753), S: (58.26168, 4.296513, 56.5634)]
+[density] probe district=power_station Cracks: count=48 coloured=0 shown=true strength=3.0 first=(-24.52686, 0.07, -27.52095) box=[P: (-29.43111, 0.07, -29.70974), S: (58.54276, 0.00001, 59.50085)]
+[density] perf district=power_station dressing=without draw_calls=35 primitives=43500 objects_in_frame=35
+[density] perf district=power_station dressing=with draw_calls=38 primitives=45578 objects_in_frame=38
+[density] DONE label=v1x hash=e2180f4
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 38 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

@@ -1,0 +1,79 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[density] start label=story hash=e2180f4 ids=[&"suburbs", &"residential", &"park", &"school", &"hospital", &"gas_station", &"police", &"warehouses", &"industrial", &"substation", &"power_station"] nodes=1119 objects=4017 orphans=6 tex_mib=59.0 vid_mib=86.6 static_mib=101.8
+[probe] stream pass=density district=suburbs ok=true load_ms=0.4 settled_ms=52.4 hitches=0 max_frame_ms=41.7 over_budget_ms=8.4 nodes=1119 objects=4013 orphans=6 tex_mib=59.0 vid_mib=86.6 static_mib=101.9 stats={"district":"suburbs","enemies_ms":8.021,"loot_ms":31.668,"props_ms":242.328,"scene_ms":84.535,"streets_ms":1.989,"total_ms":216.321}
+[density] state district=suburbs view=10_story weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame suburbs_10_story_before_e2180f4_20261018T005122Z.jpg
+[density] frame suburbs_10_story_after_e2180f4_20261018T005123Z.jpg
+[density] perf district=suburbs dressing=without draw_calls=126 primitives=75792 objects_in_frame=128
+[density] perf district=suburbs dressing=with draw_calls=127 primitives=76848 objects_in_frame=127
+[probe] stream pass=density district=residential ok=true load_ms=360.0 settled_ms=426.5 hitches=1 max_frame_ms=129.7 over_budget_ms=103.0 nodes=1136 objects=4075 orphans=6 tex_mib=58.7 vid_mib=88.4 static_mib=104.8 stats={"district":"residential","enemies_ms":7.742,"loot_ms":25.041,"props_ms":149.004,"scene_ms":1.002,"streets_ms":2.021,"total_ms":62.225}
+[density] state district=residential view=10_story weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame residential_10_story_before_e2180f4_20261018T005127Z.jpg
+[density] frame residential_10_story_after_e2180f4_20261018T005127Z.jpg
+[density] perf district=residential dressing=without draw_calls=135 primitives=100696 objects_in_frame=137
+[density] perf district=residential dressing=with draw_calls=137 primitives=101872 objects_in_frame=137
+[probe] stream pass=density district=park ok=true load_ms=347.6 settled_ms=908.4 hitches=2 max_frame_ms=145.8 over_budget_ms=198.6 nodes=1135 objects=4086 orphans=6 tex_mib=58.3 vid_mib=88.0 static_mib=105.4 stats={"district":"park","enemies_ms":9.334,"loot_ms":28.94,"props_ms":167.514,"scene_ms":1.104,"streets_ms":2.691,"total_ms":71.436}
+[density] state district=park view=10_story weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame park_10_story_before_e2180f4_20261018T005132Z.jpg
+[density] frame park_10_story_after_e2180f4_20261018T005132Z.jpg
+[density] perf district=park dressing=without draw_calls=130 primitives=106832 objects_in_frame=134
+[density] perf district=park dressing=with draw_calls=134 primitives=107984 objects_in_frame=134
+[probe] stream pass=density district=school ok=true load_ms=360.8 settled_ms=432.9 hitches=2 max_frame_ms=146.1 over_budget_ms=150.1 nodes=1138 objects=4107 orphans=6 tex_mib=60.0 vid_mib=89.6 static_mib=108.2 stats={"district":"school","enemies_ms":8.157,"loot_ms":27.385,"props_ms":155.626,"scene_ms":0.976,"streets_ms":2.192,"total_ms":66.552}
+[density] state district=school view=10_story weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame school_10_story_before_e2180f4_20261018T005136Z.jpg
+[density] frame school_10_story_after_e2180f4_20261018T005136Z.jpg
+[density] perf district=school dressing=without draw_calls=144 primitives=115588 objects_in_frame=146
+[density] perf district=school dressing=with draw_calls=146 primitives=116764 objects_in_frame=146
+[probe] stream pass=density district=hospital ok=true load_ms=330.0 settled_ms=401.0 hitches=2 max_frame_ms=143.5 over_budget_ms=126.9 nodes=1138 objects=4131 orphans=6 tex_mib=63.0 vid_mib=94.7 static_mib=111.1 stats={"district":"hospital","enemies_ms":8.441,"loot_ms":25.762,"props_ms":149.367,"scene_ms":0.956,"streets_ms":2.012,"total_ms":66.227}
+[density] state district=hospital view=10_story weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame hospital_10_story_before_e2180f4_20261018T005140Z.jpg
+[density] frame hospital_10_story_after_e2180f4_20261018T005140Z.jpg
+[density] perf district=hospital dressing=without draw_calls=135 primitives=95618 objects_in_frame=137
+[density] perf district=hospital dressing=with draw_calls=137 primitives=96794 objects_in_frame=137
+[probe] stream pass=density district=gas_station ok=true load_ms=408.8 settled_ms=485.4 hitches=1 max_frame_ms=133.7 over_budget_ms=110.8 nodes=1143 objects=4143 orphans=6 tex_mib=63.3 vid_mib=95.0 static_mib=111.8 stats={"district":"gas_station","enemies_ms":12.244,"loot_ms":32.988,"props_ms":211.507,"scene_ms":1.513,"streets_ms":2.411,"total_ms":82.477}
+[density] state district=gas_station view=10_story weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame gas_station_10_story_before_e2180f4_20261018T005144Z.jpg
+[density] frame gas_station_10_story_after_e2180f4_20261018T005144Z.jpg
+[density] perf district=gas_station dressing=without draw_calls=136 primitives=106808 objects_in_frame=136
+[density] perf district=gas_station dressing=with draw_calls=136 primitives=108104 objects_in_frame=136
+[probe] stream pass=density district=police ok=true load_ms=319.8 settled_ms=374.3 hitches=1 max_frame_ms=141.8 over_budget_ms=125.2 nodes=1171 objects=4188 orphans=6 tex_mib=63.0 vid_mib=94.7 static_mib=112.8 stats={"district":"police","enemies_ms":8.283,"loot_ms":28.297,"props_ms":152.983,"scene_ms":0.945,"streets_ms":1.959,"total_ms":67.177}
+[density] state district=police view=10_story weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame police_10_story_before_e2180f4_20261018T005148Z.jpg
+[density] frame police_10_story_after_e2180f4_20261018T005149Z.jpg
+[density] perf district=police dressing=without draw_calls=120 primitives=77152 objects_in_frame=120
+[density] perf district=police dressing=with draw_calls=116 primitives=68464 objects_in_frame=116
+[probe] stream pass=density district=warehouses ok=true load_ms=355.7 settled_ms=410.9 hitches=1 max_frame_ms=142.3 over_budget_ms=112.0 nodes=1159 objects=4187 orphans=6 tex_mib=62.7 vid_mib=94.3 static_mib=113.5 stats={"district":"warehouses","enemies_ms":14.377,"loot_ms":32.574,"props_ms":142.971,"scene_ms":1.37,"streets_ms":1.875,"total_ms":82.825}
+[density] state district=warehouses view=10_story weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame warehouses_10_story_before_e2180f4_20261018T005153Z.jpg
+[density] frame warehouses_10_story_after_e2180f4_20261018T005153Z.jpg
+[density] perf district=warehouses dressing=without draw_calls=122 primitives=83780 objects_in_frame=122
+[density] perf district=warehouses dressing=with draw_calls=122 primitives=85076 objects_in_frame=122
+[probe] stream pass=density district=industrial ok=true load_ms=381.4 settled_ms=444.4 hitches=2 max_frame_ms=145.8 over_budget_ms=195.8 nodes=1170 objects=4220 orphans=6 tex_mib=63.0 vid_mib=94.7 static_mib=114.7 stats={"district":"industrial","enemies_ms":8.32,"loot_ms":26.579,"props_ms":145.017,"scene_ms":1.274,"streets_ms":1.895,"total_ms":63.089}
+[density] state district=industrial view=10_story weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame industrial_10_story_before_e2180f4_20261018T005157Z.jpg
+[density] frame industrial_10_story_after_e2180f4_20261018T005157Z.jpg
+[density] perf district=industrial dressing=without draw_calls=149 primitives=113814 objects_in_frame=149
+[density] perf district=industrial dressing=with draw_calls=145 primitives=105126 objects_in_frame=145
+[probe] stream pass=density district=substation ok=true load_ms=321.4 settled_ms=372.8 hitches=1 max_frame_ms=128.4 over_budget_ms=100.1 nodes=1152 objects=4222 orphans=6 tex_mib=65.3 vid_mib=97.0 static_mib=117.4 stats={"district":"substation","enemies_ms":9.25,"loot_ms":23.866,"props_ms":154.295,"scene_ms":1.064,"streets_ms":1.942,"total_ms":64.321}
+[density] state district=substation view=10_story weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame substation_10_story_before_e2180f4_20261018T005202Z.jpg
+[density] frame substation_10_story_after_e2180f4_20261018T005202Z.jpg
+[density] perf district=substation dressing=without draw_calls=130 primitives=91668 objects_in_frame=132
+[density] perf district=substation dressing=with draw_calls=132 primitives=92676 objects_in_frame=132
+[probe] stream pass=density district=power_station ok=true load_ms=309.4 settled_ms=364.8 hitches=1 max_frame_ms=132.9 over_budget_ms=108.1 nodes=1148 objects=4207 orphans=6 tex_mib=65.7 vid_mib=97.4 static_mib=118.0 stats={"district":"power_station","enemies_ms":10.432,"loot_ms":26.069,"props_ms":142.98,"scene_ms":0.96,"streets_ms":1.896,"total_ms":67.602}
+[density] state district=power_station view=10_story weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=false
+[density] frame power_station_10_story_before_e2180f4_20261018T005206Z.jpg
+[density] frame power_station_10_story_after_e2180f4_20261018T005206Z.jpg
+[density] perf district=power_station dressing=without draw_calls=144 primitives=119432 objects_in_frame=144
+[density] perf district=power_station dressing=with draw_calls=140 primitives=110744 objects_in_frame=140
+[density] DONE label=story hash=e2180f4
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 64 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
