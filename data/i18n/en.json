@@ -1558,5 +1558,9 @@
   "SND_FLICKER": "[The light stutters]",
   "SND_BATTERY_DEAD": "[The flashlight dies]",
   "SND_GRID_ON": "[The grid comes back to life]",
-  "Dynamic Resolution": "Dynamic Resolution"
+  "Dynamic Resolution": "Dynamic Resolution",
+  "STORY_CAMP": "Cold ash in a barrel. Whoever lived here left.",
+  "STORY_BARRICADE": "Crates across the street. It held, they didn't.",
+  "STORY_EVACUATION": "Cases left where they fell. Nobody came back.",
+  "DAILY_DONE_NOTICE": "DAILY CHALLENGE DONE: +%d coins"
 }

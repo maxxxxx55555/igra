@@ -1558,5 +1558,9 @@
   "SND_FLICKER": "[La luce vacilla]",
   "SND_BATTERY_DEAD": "[La torcia si spegne]",
   "SND_GRID_ON": "[La rete torna in vita]",
-  "Dynamic Resolution": "Risoluzione dinamica"
+  "Dynamic Resolution": "Risoluzione dinamica",
+  "STORY_CAMP": "Cenere fredda in un barile. Chi viveva qui se n'è andato.",
+  "STORY_BARRICADE": "Casse di traverso alla strada. Ha retto, loro no.",
+  "STORY_EVACUATION": "Valigie dove sono cadute. Nessuno è tornato.",
+  "DAILY_DONE_NOTICE": "SFIDA DEL GIORNO COMPLETATA: +%d monete"
 }

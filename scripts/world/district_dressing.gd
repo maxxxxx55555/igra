@@ -30,6 +30,7 @@ const REST_POOL_ALPHA: float = 0.22
 const FOG_DISTRICTS: Array[StringName] = [&"warehouses", &"industrial", &"substation", &"power_station"]
 const FOG_SHADER := preload("res://assets/shaders/height_fog_card.gdshader")
 const _LAMP_DUST := preload("res://scripts/world/lamp_dust.gd")
+const _STORY := preload("res://scripts/world/story_props.gd")
 const FOG_CARD_M: float = 46.0
 const FOG_Y: float = 0.35
 const FOG_BY_STAGE: Array[float] = [0.12, 0.25, 0.35, 0.45]
@@ -113,6 +114,14 @@ func build(district_id: StringName, sb: Node) -> void:
 				var at: Vector3 = _solid_spot(centre + _road_spot(_rng.randi_range(0, 3), _grid * 0.5 - _walk, _rng.randf_range(-6.0, 6.0), 0.0))
 				if at != Vector3.INF:
 					bins.append(Transform3D(Basis(Vector3.UP, _rng.randf() * TAU), Vector3(at.x, GROUND_Y, at.z)))
+	var story: Dictionary = _STORY.place(district_id, _STORY.hiding_spots(get_tree()), _clear, _grid)
+	var story_from: Dictionary = {"Crates": crates.size(), "Barrels": barrels.size(), "Bins": bins.size(), "Litter": litter.size()}
+	crates.append_array(story["crates"] as Array[Transform3D])
+	barrels.append_array(story["barrels"] as Array[Transform3D])
+	barrel_colors.append_array(story["barrel_colors"] as Array[Color])
+	bins.append_array(story["bins"] as Array[Transform3D])
+	litter.append_array(story["litter"] as Array[Transform3D])
+	litter_colors.append_array(story["litter_colors"] as Array[Color])
 	var none: Array[Color] = []
 	_batch("Litter", _flat(), litter, litter_colors, _plain(Color.WHITE, 0.95, 0.0, true), false)
 	_batch("Puddles", _patch(), puddles, none, _soft(Color(0.015, 0.02, 0.03, 0.55), false), false)
@@ -126,6 +135,15 @@ func build(district_id: StringName, sb: Node) -> void:
 	dust.name = "LampDust"
 	add_child(dust)
 	dust.call("build", district_id, get_parent())
+	for node_name: String in story_from:
+		var batch := get_node_or_null(node_name)
+		if batch != null:
+			batch.set_meta("story_from", story_from[node_name])
+	var spots: Array[Vector3] = story["spots"]
+	var kinds: Array[String] = story["kinds"]
+	set_meta("story_spots", spots)
+	for i in spots.size():
+		_STORY.hook(self, spots[i], kinds[i])
 	_add_landmark()
 	_add_rest_spot()
 	_add_fog()

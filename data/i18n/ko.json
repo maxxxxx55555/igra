@@ -1558,5 +1558,9 @@
   "SND_FLICKER": "[불빛이 깜빡인다]",
   "SND_BATTERY_DEAD": "[손전등이 꺼진다]",
   "SND_GRID_ON": "[전력망이 되살아난다]",
-  "Dynamic Resolution": "동적 해상도"
+  "Dynamic Resolution": "동적 해상도",
+  "STORY_CAMP": "통 안의 식은 재. 여기 살던 사람은 떠났다.",
+  "STORY_BARRICADE": "길을 가로막은 상자들. 버틴 건 상자뿐이었다.",
+  "STORY_EVACUATION": "떨어진 자리에 남은 가방. 아무도 돌아오지 않았다.",
+  "DAILY_DONE_NOTICE": "일일 도전 완료: +%d 코인"
 }

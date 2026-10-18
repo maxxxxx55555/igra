@@ -1558,5 +1558,9 @@
   "SND_FLICKER": "[La lumière vacille]",
   "SND_BATTERY_DEAD": "[La lampe s'éteint]",
   "SND_GRID_ON": "[Le réseau reprend vie]",
-  "Dynamic Resolution": "Résolution dynamique"
+  "Dynamic Resolution": "Résolution dynamique",
+  "STORY_CAMP": "De la cendre froide dans un bidon. Celui qui vivait ici est parti.",
+  "STORY_BARRICADE": "Des caisses en travers de la rue. Elle a tenu, pas eux.",
+  "STORY_EVACUATION": "Des valises là où elles sont tombées. Personne n'est revenu.",
+  "DAILY_DONE_NOTICE": "DÉFI DU JOUR ACCOMPLI : +%d pièces"
 }

@@ -1558,5 +1558,9 @@
   "SND_FLICKER": "[Das Licht flackert]",
   "SND_BATTERY_DEAD": "[Die Taschenlampe erlischt]",
   "SND_GRID_ON": "[Das Netz erwacht wieder]",
-  "Dynamic Resolution": "Dynamische Auflösung"
+  "Dynamic Resolution": "Dynamische Auflösung",
+  "STORY_CAMP": "Kalte Asche in einer Tonne. Wer hier lebte, ging.",
+  "STORY_BARRICADE": "Kisten quer über die Straße. Sie hielt, die Menschen nicht.",
+  "STORY_EVACUATION": "Koffer liegen, wo sie fielen. Niemand kam zurück.",
+  "DAILY_DONE_NOTICE": "TAGESAUFGABE ERLEDIGT: +%d Münzen"
 }

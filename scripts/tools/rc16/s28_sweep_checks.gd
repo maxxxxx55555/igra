@@ -7,10 +7,14 @@ extends RefCounted
 ##   SAVE1  a save written while the player is out of the world (the scene swap of a transition) reads back whole and loads, and a fade that a load interrupts still ends
 ##   V1A    the details of V1 batch A stand where they should (a check of the mechanism; the frames judge whether they are a gain): at the High tier the panes carry the window shader with their interiors on, every pane has
 ##          a halo, every lamp six motes and every pole a crack quad; the dust is hidden at DARK and shown with the power
+##   STORY1 every district holds two or three story scenes (story_props.gd), each 2.6 m from a hiding place and 2.2 m or more from anything the player can use or hide in, inside the ring, and each has its line;
+##          the three kinds all stand somewhere. The district is built the way the game builds it (the loot, hence the hiding places, before the dressing): a bare scene has no hiding place to anchor a scene to
+##   STORY2 a player who walks into a scene hears its line once (the notice of its kind) and the trigger ends with the visit: the physics wiring (the layer of the trigger, the group of the body), not the handler
 ## The other four edge sweeps of the pass are held by older checks that run in every battery: LANG1 (a language switch under an open menu), EX3 (a full pack), EX4 (a dead battery), EX10 (no ad SDK) and HC1 (Hardcore ticked in the middle of a run).
 
 const _S28 := preload("res://scripts/tools/rc16/s28_checks.gd")
 const _Density := preload("res://scripts/tools/rc16/density_checks.gd")
+const _StoryProps := preload("res://scripts/world/story_props.gd")
 const _FAR := Vector3(-600.0, 0.0, 600.0)
 
 static func run(r: Node) -> void:
@@ -20,6 +24,7 @@ static func run(r: Node) -> void:
 	_pack_full_pickup(r)
 	await _save_between_scenes(r)
 	await _v1_nodes(r)
+	await _story_scenes(r)
 	r._playing()
 
 static func _wake(r: Node) -> void:
@@ -117,3 +122,69 @@ static func _v1_nodes(r: Node) -> void:
 	SettingsManager.set_setting("graphics_tier", tier0)
 	root.queue_free()
 	r._ok(panes_ok and halos_ok and motes_ok and cracks_ok and stage_ok, "V1A the details of batch A stand: window shader %s, halos %s, motes %s, cracks %s, dust follows the power %s" % [panes_ok, halos_ok, motes_ok, cracks_ok, stage_ok])
+
+## A district the way the game builds it: the scene, then the loot with its three hiding places, and the dressing a frame later (street_props.gd builds deferred), which anchors the story scenes to the hiding places.
+static func _district_with_loot(r: Node, id: StringName) -> Node3D:
+	var root := (load(DistrictSceneFactory.district_scene_path(id)) as PackedScene).instantiate() as Node3D
+	var trigger: Node = root.get_node("DistrictTrigger")
+	root.remove_child(trigger)  # a trigger box on the player would announce a district that was not entered
+	trigger.free()
+	r.add_child(root)
+	DistrictLoot.populate(root, id)
+	for i in 6:
+		await r.get_tree().process_frame
+	return root
+
+static func _story_scenes(r: Node) -> void:
+	var tier0: Variant = SettingsManager.get_setting("graphics_tier", 2)
+	SettingsManager.set_setting("graphics_tier", 2)
+	var counts: Array[int] = []
+	var bad: Array[String] = []
+	var kinds: Dictionary = {}
+	var walk: String = "no scene to walk into"
+	for id: StringName in DistrictSceneFactory.DISTRICTS:
+		var root: Node3D = await _district_with_loot(r, id)
+		var dressing: Node = root.get_node("Props/DistrictDressing")
+		var spots: Array = dressing.get_meta("story_spots", [])
+		var clear: Array = dressing.get("_clear")
+		var hooks: Array[Area3D] = []
+		for child: Node in dressing.get_children():
+			if child is Area3D and String(child.name).begins_with("StoryHook_"):
+				hooks.append(child as Area3D)
+				kinds[String(child.name)] = true
+		var fine: bool = hooks.size() == spots.size() and spots.size() >= 2 and spots.size() <= 3
+		for spot: Vector3 in spots:
+			var nearest: float = INF
+			for other: Vector2 in clear:
+				nearest = minf(nearest, other.distance_to(Vector2(spot.x, spot.z)))
+			fine = fine and nearest > 2.19 and nearest < 2.61 and absf(spot.x) < 24.0 and absf(spot.z) < 24.0
+		counts.append(spots.size())
+		if not fine:
+			bad.append("%s %d" % [id, spots.size()])
+		if id == &"suburbs" and not hooks.is_empty():
+			walk = await _walk_into(r, hooks[0])
+		root.queue_free()
+		await r.get_tree().process_frame
+	SettingsManager.set_setting("graphics_tier", tier0)
+	r._ok(bad.is_empty() and kinds.size() == 3, "STORY1 the story scenes: %s a district (two or three each, off by: %s), the three kinds stand: %s" % [counts, bad, kinds.keys()])
+	r._ok(walk == "ok", "STORY2 a walk into a story scene is heard once and ends the trigger: %s" % walk)
+
+## The first scene of a district: the player is put on it, the physics runs, and the notice of its kind must come exactly once and the trigger must be gone. "ok", or what was wrong.
+static func _walk_into(r: Node, hook: Area3D) -> String:
+	var heard: Array[String] = []
+	var listen := func(message: String) -> void: heard.append(message)
+	EventBus.inventory_notice.connect(listen)
+	var player: Node3D = r._player
+	var from: Vector3 = player.global_position
+	player.global_position = hook.global_position - Vector3(0.0, 1.0, 0.0)
+	for i in 5:
+		await r.get_tree().physics_frame
+	player.global_position = from
+	for i in 3:
+		await r.get_tree().physics_frame
+	EventBus.inventory_notice.disconnect(listen)
+	var line: String = LocalizationManager.t(_StoryProps.LINE_KEYS[String(hook.name).trim_prefix("StoryHook_")])
+	var gone: bool = not is_instance_valid(hook) or hook.is_queued_for_deletion()
+	if heard.count(line) != 1 or line.begins_with("STORY_"):
+		return "heard %s, wanted exactly one [%s]" % [heard, line]
+	return "ok" if gone else "the trigger stays after the visit"

@@ -1558,5 +1558,9 @@
   "SND_FLICKER": "[灯光闪烁]",
   "SND_BATTERY_DEAD": "[手电筒熄灭了]",
   "SND_GRID_ON": "[电网重新苏醒]",
-  "Dynamic Resolution": "动态分辨率"
+  "Dynamic Resolution": "动态分辨率",
+  "STORY_CAMP": "桶里是冷灰。住在这里的人已经离开。",
+  "STORY_BARRICADE": "横在街上的箱子。撑住的只有箱子。",
+  "STORY_EVACUATION": "箱子掉在哪就留在哪。没有人回来。",
+  "DAILY_DONE_NOTICE": "每日挑战完成 +%d 硬币"
 }

@@ -1558,5 +1558,9 @@
   "SND_FLICKER": "[A luz falha]",
   "SND_BATTERY_DEAD": "[A lanterna apaga]",
   "SND_GRID_ON": "[A rede volta à vida]",
-  "Dynamic Resolution": "Resolução dinâmica"
+  "Dynamic Resolution": "Resolução dinâmica",
+  "STORY_CAMP": "Cinza fria num barril. Quem morava aqui foi embora.",
+  "STORY_BARRICADE": "Caixas atravessando a rua. Ela resistiu, eles não.",
+  "STORY_EVACUATION": "Malas onde caíram. Ninguém voltou.",
+  "DAILY_DONE_NOTICE": "DESAFIO DIÁRIO CONCLUÍDO: +%d moedas"
 }

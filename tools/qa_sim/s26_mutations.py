@@ -68,6 +68,7 @@ SETS = [
         ("scripts/pickups/item_pickup_3d.gd", "\tif not inventory.try_add(item_id, amount):\n", "\tif false:\n", "PICK1"),
         ("scripts/core/save_system.gd", "no position, a load takes the spawn.\n\treturn []\n", "no position, a load takes the spawn.\n\treturn [0.0, 0.0, 0.0]\n", "SAVE1"),
         ("scripts/world/lamp_dust.gd", "const MOTES_PER_LAMP: Array[int] = [0, 3, 6]", "const MOTES_PER_LAMP: Array[int] = [0, 3, 3]", "V1A"),
+        ("scripts/world/story_props.gd", "const MAX_SCENES: int = 3", "const MAX_SCENES: int = 0", "STORY1"),
         ("scripts/systems/music_manager.gd", "turn * 0.618034", "turn * 0.0", "MUS5"),
         ("scripts/systems/music_manager.gd", "\t_layer_target[\"threat_high\"] = smoothstep(0.45, 0.85, _threat)\n", "\t_layer_target[\"threat_high\"] = 0.0\n", "MUS6"),
         ("scripts/enemies/boss_3d.gd", "\tbeam.tree_exited.connect(ring.queue_free)\n", "\tring.queue_free()\n", "TEL4"),
@@ -94,9 +95,12 @@ SETS = [
         ("scripts/systems/integrity_guard.gd", "\tif is_instance_valid(NewGamePlus) and NewGamePlus.enforce_bounds():\n", "\tif false:\n", "NGB1"),
         ("scripts/systems/daily_challenge_manager.gd", "\treturn _completed_today or SaveSystem.daily_counted_today()\n", "\treturn _completed_today\n", "DLY5"),
     ],
+    [  # Session 28, the closeout group s28 again (W1): the trigger of a story scene shares a file with STORY1, which would make STORY2 fail under its mutation too
+        ("scripts/world/story_props.gd", "\tarea.collision_mask = 1\n", "\tarea.collision_mask = 0\n", "STORY2"),
+    ],
 ]
 ## The closeout group each set runs (CLOSEOUT_ONLY): the sets of Session 26 run `s26`, those of Session 27 `s27`, those of Session 28 `s28`.
-GROUP = ["s26", "s26", "s27", "s27", "s28", "attack", "attack"]
+GROUP = ["s26", "s26", "s27", "s27", "s28", "attack", "attack", "s28"]
 LINE = re.compile(r"^\[(?:closeout|attack-sim)\] (ok  |OK  |FAIL) +(\S+)")
 ## What a group of sets runs and the log it leaves: the closeout groups run `closeout_check`, the group "attack" the attack simulation (Session 28).
 RUN = {"attack": ("bash tools/qa_sim/guarded_headless res://scenes/tools/attack_sim_scene.tscn 120", ".qa_logs/attack_sim_scene.log")}

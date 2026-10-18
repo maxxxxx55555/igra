@@ -1558,5 +1558,9 @@
   "SND_FLICKER": "[Işık titriyor]",
   "SND_BATTERY_DEAD": "[Fener sönüyor]",
   "SND_GRID_ON": "[Şebeke yeniden canlanıyor]",
-  "Dynamic Resolution": "Dinamik Çözünürlük"
+  "Dynamic Resolution": "Dinamik Çözünürlük",
+  "STORY_CAMP": "Varilde soğuk kül. Burada yaşayan gitmiş.",
+  "STORY_BARRICADE": "Sokağı kesen sandıklar. O dayandı, onlar dayanmadı.",
+  "STORY_EVACUATION": "Valizler düştükleri yerde. Kimse dönmedi.",
+  "DAILY_DONE_NOTICE": "GÜNLÜK GÖREV TAMAMLANDI: +%d jeton"
 }

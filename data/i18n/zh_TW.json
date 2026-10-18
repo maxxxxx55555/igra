@@ -1558,5 +1558,9 @@
   "SND_FLICKER": "[燈光閃爍]",
   "SND_BATTERY_DEAD": "[手電筒熄滅了]",
   "SND_GRID_ON": "[電網重新甦醒]",
-  "Dynamic Resolution": "動態解析度"
+  "Dynamic Resolution": "動態解析度",
+  "STORY_CAMP": "桶裡是冷灰。住在這裡的人已經離開。",
+  "STORY_BARRICADE": "橫在街上的箱子。撐住的只有箱子。",
+  "STORY_EVACUATION": "箱子掉在哪就留在哪。沒有人回來。",
+  "DAILY_DONE_NOTICE": "每日挑戰完成 +%d 硬幣"
 }

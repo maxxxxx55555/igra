@@ -1558,5 +1558,9 @@
   "SND_FLICKER": "[الضوء يرتجف]",
   "SND_BATTERY_DEAD": "[ينطفئ المصباح]",
   "SND_GRID_ON": "[تعود الشبكة إلى الحياة]",
-  "Dynamic Resolution": "دقة ديناميكية"
+  "Dynamic Resolution": "دقة ديناميكية",
+  "STORY_CAMP": "رماد بارد في برميل. من عاش هنا رحل.",
+  "STORY_BARRICADE": "صناديق تسدّ الشارع. صمدت هي ولم يصمدوا.",
+  "STORY_EVACUATION": "حقائب تُركت حيث سقطت. لم يعد أحد.",
+  "DAILY_DONE_NOTICE": "‏تم إنجاز تحدي اليوم: ‏+%d عملة"
 }
