@@ -57,8 +57,9 @@ func burst(scene: PackedScene) -> void:
 	var camera := get_viewport().get_camera_3d()
 	var ahead: Vector3 = -camera.global_transform.basis.z if camera != null else -player.global_transform.basis.z
 	var at: Vector3 = player.global_position + Vector3.UP * BURST_HEIGHT_M + ahead * BURST_AHEAD_M
-	var fx := _bursts.get(scene) as VFXBurst
-	if is_instance_valid(fx):
+	var cached: Variant = _bursts.get(scene)  # the cast of a freed burst is an error: ask first
+	var fx: VFXBurst = cached as VFXBurst if is_instance_valid(cached) else null
+	if fx != null:
 		fx.global_position = at
 		fx.replay()
 		return

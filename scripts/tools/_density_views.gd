@@ -41,8 +41,9 @@ static func details(tree: SceneTree, on: bool, boosted: bool) -> void:
 ## A find throws a burst of sparkles in front of the player (wow_director.gd) and these runs put the player on pickups: the bursts that are playing are put out, so they neither hide the subject nor differ between the two frames of a pair.
 static func clear_bursts(tree: SceneTree) -> void:
 	for node: Node in tree.root.get_children():
-		if node is VFXBurst:
-			node.queue_free()
+		if node is VFXBurst:  # the director keeps its bursts and plays them again: a freed one made its cast fail
+			(node as VFXBurst).restart()
+			(node as VFXBurst).emitting = false
 
 ## The lamps flicker (a sine and a dip to a fifth of their light about six times a second, streetlight_3d.gd), so two frames of one view differed on the ground by where the dip fell, and the shadows with it: for these
 ## labels the flicker is off and each lamp stands at the mean of its light.
@@ -160,6 +161,18 @@ static func lamp_view(tree: SceneTree, id: StringName) -> Dictionary:
 	var head: Vector3 = lamp[1]
 	var toward := Vector3(-head.x, 0.0, -head.z).normalized()
 	return {"name": "09_lamp", "at": Vector3(head.x + toward.x * 6.0, 0.1, head.z + toward.z * 6.0), "look": Vector3(head.x, head.y * 0.5, head.z), "pitch": atan2(head.y * 0.5 - 1.7, 6.0), "stage": 3, "light": false}
+
+## A short-lived diagnostic (TLS_FRAMES_EXPERIMENT): one thing of the view is changed, so that a frame tells what the cream pyramids of the gas station are made of: `noglow` and `nofog` switch the environment's glow
+## and fog off, `green` tints the cones green (a pyramid that stays cream is not drawn by the cone shader); `nolight` is the flashlight's, in the runner.
+static func experiment(tree: SceneTree, env: Environment, name: String) -> void:
+	match name:
+		"noglow":
+			env.glow_enabled = false
+		"nofog":
+			env.fog_enabled = false
+		"green":
+			for node: Node in tree.root.find_children("LampCones", "MultiMeshInstance3D", true, false):
+				((node as MultiMeshInstance3D).material_override as ShaderMaterial).set_shader_parameter("tint", Color(0.0, 1.0, 0.0))
 
 ## The time series of a view (label `v1t`, nothing switched): eight consecutive frames of it, each with the mean brightness of the lower half of the picture and the energy of the lamp nearest to the camera and of the
 ## moon, so a ground that lights and darkens between two frames can be told from a lamp or a moon that does: `[density] series district=<id> view=<name> frame=<i> lower=<mean> spot=<e> glow=<e> moon=<e>`.

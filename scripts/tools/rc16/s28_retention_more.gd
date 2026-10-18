@@ -52,9 +52,10 @@ static func _secret(r: Node) -> void:
 	var ok: bool = gone and ProgressTracker.is_secret_found(id) and ProgressTracker.secrets == found0 + 1 and coins >= pay and xp.size() >= 1 and xp.max() >= 75 and photos > photos0 and placed_again == placed - 1 and toasted and paid
 	r._hook("secret", ok, "%s: node gone %s, coins +%d (the secret pays %d, notice %s; the document it unlocks and the achievements pay more), xp %s, found %d -> %d, photos %d -> %d, toast %s, placed %d then %d" % [id, gone, coins, pay, paid, xp, found0, ProgressTracker.secrets, photos0, photos, toasted, placed, placed_again])
 
-## The win screen is set again when it is shown again, not when the language changes under it (the player cannot change it there).
+## The win screen is set again when it is shown again, not when the language changes under it (the player cannot change it there); closing fades it out, and an open during the fade keeps it as it was.
 static func _reopen(r: Node) -> void:
 	UIManager.close(&"win")
+	await r.get_tree().create_timer(0.6).timeout
 	UIManager.open(&"win")
 	await r.get_tree().create_timer(0.6).timeout
 
