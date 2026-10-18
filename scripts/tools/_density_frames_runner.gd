@@ -126,8 +126,8 @@ func _view(id: StringName, view: Dictionary) -> void:
 			_fail("%s %s: the power stage is %d and the view wants %d" % [String(id), view["name"], PowerGrid.get_stage(id), stage])
 			return
 	var experiment: String = OS.get_environment("TLS_FRAMES_EXPERIMENT")
-	_flashlight(player, bool(view["light"]) and experiment != "nolight")
-	_Views.experiment(get_tree(), get_viewport().world_3d.environment, experiment)
+	_flashlight(player, (bool(view["light"]) and experiment != "nolight") or experiment == "withlight")
+	_Views.experiment(get_tree(), get_viewport().world_3d.environment, player, experiment)
 	var switched: bool = _Views.SWITCHED.has(_label)
 	if switched:
 		_Views.pin_lamps(get_tree())

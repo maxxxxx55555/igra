@@ -163,13 +163,20 @@ static func lamp_view(tree: SceneTree, id: StringName) -> Dictionary:
 	return {"name": "09_lamp", "at": Vector3(head.x + toward.x * 6.0, 0.1, head.z + toward.z * 6.0), "look": Vector3(head.x, head.y * 0.5, head.z), "pitch": atan2(head.y * 0.5 - 1.7, 6.0), "stage": 3, "light": false}
 
 ## A short-lived diagnostic (TLS_FRAMES_EXPERIMENT): one thing of the view is changed, so that a frame tells what the cream pyramids of the gas station are made of: `noglow` and `nofog` switch the environment's glow
-## and fog off, `green` tints the cones green (a pyramid that stays cream is not drawn by the cone shader); `nolight` is the flashlight's, in the runner.
-static func experiment(tree: SceneTree, env: Environment, name: String) -> void:
+## and fog off, `green` tints the cones green (a pyramid that stays cream is not drawn by the cone shader), `cull` and `cullall` take the cones out of the reach of the flashlight and of every light; `nolight` is the
+## flashlight's, in the runner.
+static func experiment(tree: SceneTree, env: Environment, player: Node3D, name: String) -> void:
 	match name:
 		"noglow":
 			env.glow_enabled = false
 		"nofog":
 			env.fog_enabled = false
+		"cull", "cullall":  # the cones on a layer of their own that the flashlight (`cullall`: every light) leaves out
+			for node: Node in tree.root.find_children("LampCones", "MultiMeshInstance3D", true, false):
+				(node as MultiMeshInstance3D).layers = 1 << 19
+			var lights: Array = tree.root.find_children("*", "Light3D", true, false) if name == "cullall" else [player.get("flashlight")]
+			for light: Variant in lights:
+				(light as Light3D).light_cull_mask = 0xFFFFF & ~(1 << 19)
 		"green":
 			for node: Node in tree.root.find_children("LampCones", "MultiMeshInstance3D", true, false):
 				((node as MultiMeshInstance3D).material_override as ShaderMaterial).set_shader_parameter("tint", Color(0.0, 1.0, 0.0))
