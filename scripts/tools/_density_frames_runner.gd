@@ -128,7 +128,7 @@ func _view(id: StringName, view: Dictionary) -> void:
 	var experiments: PackedStringArray = OS.get_environment("TLS_FRAMES_EXPERIMENT").split(",", false)
 	_flashlight(player, (bool(view["light"]) and not experiments.has("nolight")) or experiments.has("withlight"))
 	for experiment: String in experiments:
-		_Views.experiment(get_tree(), experiment)
+		_Views.experiment(get_tree(), player, experiment)
 	var switched: bool = _Views.SWITCHED.has(_label)
 	if switched:
 		_Views.pin_lamps(get_tree())
