@@ -126,6 +126,11 @@ const LAYER_LERP: float = 1.5
 const FADE_TIME: float = 2.0          ## Длительность кроссфейда, с (GDD.md:359-362, A02)
 const FULL_DB: float = -8.0           ## Рабочая громкость трека
 const MUTE_DB: float = -60.0
+## How hunted the player is, 0 to 1: it rises 0 to 1 in under a second when a monster closes in or notices the player and falls back in four, and the stems of the three states (calm, tense, combat) follow it.
+const THREAT_RISE: float = 1.2
+const THREAT_FALL: float = 0.25
+## A district bed plays this many loops and then turns over: the next of its variants (`<name>_b.ogg`, `<name>_c.ogg` beside it, docs/MUSIC_RECIPE.md), else the same file from another point.
+const BED_LOOPS: int = 2
 const EVAL_INTERVAL: float = 0.5      ## Как часто пересчитываем настроение, с
 const TENSION_RANGE: float = 22.0     ## Дистанция появления напряжения, м
 const BATTLE_RANGE: float = 9.0       ## Дистанция перехода в бой, м
@@ -159,6 +164,11 @@ var _first_light_cue_done: bool = false
 ## "rain", Weather.WIND raises "wind" (STORM implies heavy rain, not gusts,
 ## per weather_system.gd's own RAIN_STRENGTH table).
 var _weather_id: int = 0
+var _threat: float = 0.0
+## The turn of the district bed (0 on entering a district, one more at every restart of it) and the seed of the run that sets which variant and where it starts.
+var _bed_turn: int = 0
+var _run_seed: int = 0
+var _bed_timer: Timer = null
 ## FINAL PERFECTION P0: раньше _ready() автозагрузки включал музыку и все
 ## 4 слоя сразу при старте процесса — до показа меню, до любого ввода
 ## (слышимый "гул" на загрузке). Теперь ни один плеер не .play() до первого
@@ -173,6 +183,10 @@ func _ready() -> void:
 	_b = _make_player("MusicB")
 	_active = _a
 	_build_layers()
+	_bed_timer = Timer.new()
+	_bed_timer.one_shot = true
+	_bed_timer.timeout.connect(_turn_over_bed)
+	add_child(_bed_timer)
 	EventBus.game_started.connect(_on_game_started)
 	EventBus.game_won.connect(_on_game_won)
 	EventBus.boss_defeated.connect(_on_boss_defeated)
@@ -224,6 +238,8 @@ func _unlock_audio() -> void:
 ## uses to hold combat music — no second combat tracker needed.
 func _on_game_started() -> void:
 	_leave_boss()
+	_run_seed = randi()
+	_bed_turn = 0
 	set_mood(Mood.AMBIENT)
 	_first_light_cue_done = false
 
@@ -250,6 +266,8 @@ func _process(delta: float) -> void:
 func set_mood(new_mood: Mood, instant: bool = false, force: bool = false) -> void:
 	if new_mood == mood and _active.playing and not force:
 		return
+	if new_mood == Mood.AMBIENT and mood != Mood.AMBIENT:
+		_bed_turn += 1  # the bed comes back after a fight or a boss: a turn further, so it does not start where it started before
 	mood = new_mood
 	if not _audio_unlocked:
 		return
@@ -262,7 +280,7 @@ func set_mood(new_mood: Mood, instant: bool = false, force: bool = false) -> voi
 	# FINAL PERFECTION P1.3: старые Mood-треки не beat-matched друг к другу,
 	# так что кроссфейд на чужой downbeat звучит как ритмический стык —
 	# случайный сдвиг старта размывает совпадение.
-	next.play(randf_range(0.0, 0.5))
+	next.play(_bed_start(stream) if new_mood == Mood.AMBIENT else randf_range(0.0, 0.5))
 	if _fade != null and _fade.is_valid():
 		_fade.kill()
 	if instant:
@@ -275,6 +293,10 @@ func set_mood(new_mood: Mood, instant: bool = false, force: bool = false) -> voi
 		_fade.tween_property(prev, "volume_db", MUTE_DB, FADE_TIME)
 		_fade.chain().tween_callback(prev.stop)
 		_active = next
+	if new_mood == Mood.AMBIENT:
+		_bed_timer.start(maxf(stream.get_length(), 1.0) * BED_LOOPS)
+	else:
+		_bed_timer.stop()
 	track_changed.emit(int(new_mood))
 
 ## Включить босс-тему и удерживать её.
@@ -303,7 +325,7 @@ static func _force_loop(s: AudioStream) -> void:
 		s.set("loop", true)
 
 func _load(m: Mood) -> AudioStream:
-	var path: String = _ambient_path if m == Mood.AMBIENT else TRACKS.get(m, "")
+	var path: String = _bed_variant(_ambient_path, _bed_turn) if m == Mood.AMBIENT else TRACKS.get(m, "")
 	if m == Mood.BOSS and ResourceLoader.exists(BOSS_PHASES[_boss_phase - 1]):
 		path = BOSS_PHASES[_boss_phase - 1]
 	if m == Mood.BATTLE:
@@ -369,8 +391,34 @@ func _refresh_district_ambience() -> void:
 	if path == "" or path == _ambient_path:
 		return
 	_ambient_path = path
+	_bed_turn = 0
 	if mood == Mood.AMBIENT:
 		set_mood(Mood.AMBIENT, false, true)
+
+## The bed has played BED_LOOPS loops: the next turn of it.
+func _turn_over_bed() -> void:
+	if mood != Mood.AMBIENT:
+		return
+	_bed_turn += 1
+	set_mood(Mood.AMBIENT, false, true)
+
+## The bed of a district for its n-th turn: the next of the variants that sit beside it (`<name>_b.ogg`, `<name>_c.ogg`), else the file itself.
+func _bed_variant(base: String, turn: int) -> String:
+	var variants: Array[String] = [base]
+	for suffix: String in ["_b", "_c"]:
+		var alt: String = base.get_basename() + suffix + "." + base.get_extension()
+		if ResourceLoader.exists(alt):
+			variants.append(alt)
+	return variants[int(bed_slot(turn, variants.size(), _run_seed + hash(base))["variant"])]
+
+## Where in the stream the bed of this turn starts, in seconds.
+func _bed_start(stream: AudioStream) -> float:
+	return float(bed_slot(_bed_turn, 1, _run_seed + hash(_ambient_path))["offset"]) * maxf(stream.get_length(), 0.1)
+
+## Which variant of a bed a turn plays and where in it (a share of its length) it starts: the variants take turns, and the point moves by the golden ratio of the length at every turn, so no turn
+## starts within a third of the length of the turn before it and no two turns of a run start in the same place. `seed_value` is the run's, plus the bed's hash.
+static func bed_slot(turn: int, variants: int, seed_value: int) -> Dictionary:
+	return {"variant": (turn + absi(seed_value)) % maxi(variants, 1), "offset": fposmod(float(absi(seed_value) % 100) / 100.0 + turn * 0.618034, 1.0)}
 
 ## Выбор настроения по обстановке: босс > бой > тревога > спокойствие.
 func _evaluate() -> void:
@@ -481,18 +529,19 @@ func _play_wow_cue(kind: String) -> void:
 func _tick_layers(delta: float) -> void:
 	if _layers.is_empty():
 		return
-	_update_layer_targets()
+	_update_layer_targets(delta)
 	var w: float = clampf(delta * LAYER_LERP, 0.0, 1.0)
 	for key in _layers:
 		var pl: AudioStreamPlayer = _layers[key]
 		var want: float = _layer_target.get(key, 0.0)
-		var want_db: float = LAYER_DB if want > 0.01 else MUTE_DB
+		var want_db: float = clampf(LAYER_DB + linear_to_db(want), MUTE_DB, LAYER_DB) if want > 0.01 else MUTE_DB
 		pl.volume_db = lerpf(pl.volume_db, want_db, w)
 
 ## Тёмный слой — когда район обесточен, светлый — когда свет вернулся;
 ## слои угрозы поднимаются по мере приближения монстров.
-func _update_layer_targets() -> void:
+func _update_layer_targets(delta: float) -> void:
 	if not GameManager.is_playing():
+		_threat = 0.0
 		for key in _layer_target:
 			_layer_target[key] = 0.0
 		return
@@ -500,13 +549,16 @@ func _update_layer_targets() -> void:
 	var dm := get_node_or_null("/root/DistrictManager")
 	if dm != null:
 		stage = PowerGrid.get_stage(StringName(dm.current_district))
-	_layer_target["ambient_dark"] = 1.0 if stage <= 1 else 0.0
-	_layer_target["ambient_lit"] = 1.0 if stage >= 2 else 0.0
-	var d: float = _nearest_enemy_distance()
-	_layer_target["threat_high"] = 1.0 if (d <= BATTLE_RANGE or _combat_hold > 0.0) else 0.0
-	_layer_target["threat_low"] = 1.0 if (d <= TENSION_RANGE and d > BATTLE_RANGE) else 0.0
-	## P1: 5-й слой ("action") — тот же реальный бой, что двигает Mood.BATTLE,
-	## а не просто "враг рядом" (threat_high шире и включает удержание после боя).
-	_layer_target["action"] = 1.0 if mood == Mood.BATTLE else 0.0
+	# How hunted the player is: the nearest monster (0 at TENSION_RANGE, 1 at BATTLE_RANGE) or the detection meter (the combat hold over CALM_DELAY: 1 the moment a monster notices, 0 six seconds later).
+	var hunted: float = maxf(clampf((TENSION_RANGE - _nearest_enemy_distance()) / (TENSION_RANGE - BATTLE_RANGE), 0.0, 1.0), _combat_hold / CALM_DELAY)
+	_threat = move_toward(_threat, hunted, (THREAT_RISE if hunted > _threat else THREAT_FALL) * delta)
+	# Calm (the bed of the district) gives way a little to the combat stems, tense (threat_low) peaks in the middle, combat (threat_high and the action stem) comes up at the top.
+	var calm: float = 1.0 - 0.5 * smoothstep(0.6, 1.0, _threat)
+	_layer_target["ambient_dark"] = (1.0 if stage <= 1 else 0.0) * calm
+	_layer_target["ambient_lit"] = (1.0 if stage >= 2 else 0.0) * calm
+	_layer_target["threat_low"] = clampf(1.0 - absf(_threat - 0.4) / 0.4, 0.0, 1.0)
+	_layer_target["threat_high"] = smoothstep(0.45, 0.85, _threat)
+	## P1: 5-й слой ("action") — тот же реальный бой, что двигает Mood.BATTLE, а не просто "враг рядом".
+	_layer_target["action"] = smoothstep(0.75, 1.0, _threat) if mood == Mood.BATTLE else 0.0
 	_layer_target["rain"] = 1.0 if _weather_id in [WeatherSystem.Weather.RAIN, WeatherSystem.Weather.STORM] else 0.0
 	_layer_target["wind"] = 1.0 if _weather_id == WeatherSystem.Weather.WIND else 0.0

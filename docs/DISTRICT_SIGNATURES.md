@@ -22,7 +22,7 @@ document lists each, and says which are unique to a district and which are share
 | power_station | two cooling towers and a stack | `#15191e`, 0.04 (steel blue) | `#161616`, `#f4f45d`, **fog** | crates 2, barrels 2, **ground fog** | `power_station_dark/lit.ogg`; generator thrum, HV whine, cooling fan, breaker clunk |
 
 Sources: `PARTS` (`scripts/world/district_landmark.gd:24`), `PALETTES` (`scripts/world/skyline.gd:20`), `THEMES` (`scripts/world/district_themes.gd`), `KIT`
-(`scripts/world/district_dressing.gd:44`), `AMBIENCE_DARK_BY_DISTRICT` (`scripts/systems/music_manager.gd:68`), `AMBIENCE_LIT_BY_DISTRICT` (`scripts/systems/music_manager.gd:82`) and `DETAIL_BEDS`
+(`scripts/world/district_dressing.gd:45`), `AMBIENCE_DARK_BY_DISTRICT` (`scripts/systems/music_manager.gd:68`), `AMBIENCE_LIT_BY_DISTRICT` (`scripts/systems/music_manager.gd:82`) and `DETAIL_BEDS`
 (`scripts/world/district_atmosphere.gd:17`). The chroma is the spread of the largest and the smallest channel of the colour on 0..1; no colour of any palette is over 0.11
 (`python tools/qa_sim/consistency_check.py`, held by `tools/check.sh --static`).
 
@@ -56,4 +56,4 @@ Sources: `PARTS` (`scripts/world/district_landmark.gd:24`), `PALETTES` (`scripts
 
 Every district holds up to two iron covers in the roads round the middle block, with a thread of steam (`MANHOLES`, `scripts/world/district_dressing.gd:20`); the check
 MANH1 counts them in the eleven districts. The four fog districts (the weather `fog` of the theme) get three drifting cards of ground fog at the Medium tier and above, thin
-in the dark and thick at full power (`FOG_BY_STAGE`, `scripts/world/district_dressing.gd:34`); the check FOG1 holds the districts, the tier and the cards.
+in the dark and thick at full power (`FOG_BY_STAGE`, `scripts/world/district_dressing.gd:35`); the check FOG1 holds the districts, the tier and the cards.

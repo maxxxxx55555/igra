@@ -5,9 +5,12 @@ extends RefCounted
 ##          and in the beam he does not
 ##   PICK1  a pickup on a full pack stays in the world and the pack is as it was
 ##   SAVE1  a save written while the player is out of the world (the scene swap of a transition) reads back whole and loads, and a fade that a load interrupts still ends
+##   V1A    the details of V1 batch A stand where they should (a check of the mechanism; the frames judge whether they are a gain): at the High tier the panes carry the window shader with their interiors on, every pane has
+##          a halo, every lamp six motes and every pole a crack quad; the dust is hidden at DARK and shown with the power
 ## The other four edge sweeps of the pass are held by older checks that run in every battery: LANG1 (a language switch under an open menu), EX3 (a full pack), EX4 (a dead battery), EX10 (no ad SDK) and HC1 (Hardcore ticked in the middle of a run).
 
 const _S28 := preload("res://scripts/tools/rc16/s28_checks.gd")
+const _Density := preload("res://scripts/tools/rc16/density_checks.gd")
 const _FAR := Vector3(-600.0, 0.0, 600.0)
 
 static func run(r: Node) -> void:
@@ -16,6 +19,7 @@ static func run(r: Node) -> void:
 	await _battery_in_the_dark(r)
 	_pack_full_pickup(r)
 	await _save_between_scenes(r)
+	await _v1_nodes(r)
 	r._playing()
 
 static func _wake(r: Node) -> void:
@@ -87,3 +91,29 @@ static func _save_between_scenes(r: Node) -> void:
 	await r.get_tree().create_timer(0.6).timeout
 	var fade_ended: bool = not bool(FadeTransition.get("_busy"))
 	r._ok(whole and loaded and fade_ended and GameManager.is_playing(), "SAVE1 a save written with the player out of the world reads back whole (%s: no vitals, no position) and loads (%s); a load inside a fade leaves the fade ended (%s)" % [whole, loaded, fade_ended])
+
+static func _v1_nodes(r: Node) -> void:
+	var tier0: Variant = SettingsManager.get_setting("graphics_tier", 2)
+	SettingsManager.set_setting("graphics_tier", 2)
+	var root: Node3D = await _Density._build(r, &"suburbs")
+	var props: Node = root.get_node("Props")
+	var windows := props.find_child("Windows", true, false) as MultiMeshInstance3D
+	var halos := props.find_child("WindowHalos", true, false) as MultiMeshInstance3D
+	var motes := props.find_child("LampMotes", true, false) as MultiMeshInstance3D
+	var cracks := props.find_child("Cracks", true, false) as MultiMeshInstance3D
+	var lamps := props.get_node("StreetlightLampsBatched") as MultiMeshInstance3D
+	var poles := props.get_node("StreetlightPolesBatched") as MultiMeshInstance3D
+	var panes_ok: bool = windows != null and windows.material_override is ShaderMaterial and is_equal_approx(float((windows.material_override as ShaderMaterial).get_shader_parameter("interior")), 1.0)
+	var halos_ok: bool = halos != null and windows != null and halos.multimesh.instance_count == windows.multimesh.instance_count and halos.visible
+	var motes_ok: bool = motes != null and motes.multimesh.instance_count == lamps.multimesh.instance_count * 6
+	var cracks_ok: bool = cracks != null and cracks.multimesh.instance_count == poles.multimesh.instance_count
+	var dust: Node = props.find_child("LampDust", true, false)
+	var stage_ok: bool = false
+	if dust != null and motes != null:
+		dust.call("_apply_stage", 3)
+		var shown: bool = motes.visible and is_equal_approx(float((motes.material_override as ShaderMaterial).get_shader_parameter("strength")), 1.0)
+		dust.call("_apply_stage", 0)
+		stage_ok = shown and not motes.visible
+	SettingsManager.set_setting("graphics_tier", tier0)
+	root.queue_free()
+	r._ok(panes_ok and halos_ok and motes_ok and cracks_ok and stage_ok, "V1A the details of batch A stand: window shader %s, halos %s, motes %s, cracks %s, dust follows the power %s" % [panes_ok, halos_ok, motes_ok, cracks_ok, stage_ok])

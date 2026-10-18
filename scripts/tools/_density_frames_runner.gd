@@ -18,6 +18,7 @@ extends "res://scripts/tools/_rc16_probe_runner.gd"
 ## Store frames (store/SCREENSHOT_RECIPES.md): the user args `--tlang=<locale>` (default en), `--thud=1` (the HUD stays: Trailer Mode off) and `--tpng=1` (a PNG without alpha in
 ## store/screenshots/recipes/<id>_<view>_<locale>_<hash>_<UTC>.png instead of the JPG of docs/stills/density).
 
+const _Views := preload("res://scripts/tools/_density_views.gd")
 const VIEWS: Array[Dictionary] = [
 	{"name": "01_dark", "at": Vector3(-8.0, 0.1, 21.0), "look": Vector3(-8.0, 1.7, -30.0), "pitch": 0.0, "stage": -1, "light": true},
 	{"name": "02_rest", "at": Vector3(6.0, 0.1, 15.5), "look": Vector3(13.5, 1.5, 13.5), "pitch": 0.0, "stage": -1, "light": false},
@@ -132,6 +133,13 @@ func _view(id: StringName, view: Dictionary) -> void:
 		dressing.visible = true
 		await get_tree().process_frame
 		await _snap("%s_%s" % [id, view["name"]], "after")
+	elif _label == "v1":
+		_Views.v1(get_tree(), false)
+		await get_tree().process_frame
+		await _snap("%s_%s" % [id, view["name"]], "before")
+		_Views.v1(get_tree(), true)
+		await get_tree().process_frame
+		await _snap("%s_%s" % [id, view["name"]], "after")
 	else:
 		await _snap("%s_%s" % [id, view["name"]])
 
@@ -220,11 +228,19 @@ func _run() -> void:
 			var sign_view := _sign_view(id)
 			if not sign_view.is_empty():
 				await _view(id, sign_view)
+		if _views.is_empty() or _views.has("09_lamp"):
+			var lamp_view := _Views.lamp_view(get_tree(), id)
+			if not lamp_view.is_empty():
+				await _view(id, lamp_view)
 		var dressing := _dressing()
 		if _label == "pair" and dressing != null:
 			dressing.visible = false
 			await _perf_line(id, "without")
 			dressing.visible = true
+		elif _label == "v1":
+			_Views.v1(get_tree(), false)
+			await _perf_line(id, "without")
+			_Views.v1(get_tree(), true)
 		await _perf_line(id, "with")
 	print("[density] DONE label=%s hash=%s" % [_label, _hash])
 	get_tree().quit(0)

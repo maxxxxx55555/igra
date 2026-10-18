@@ -51,6 +51,40 @@ func _peak_over(bus_idx: int, seconds: float) -> float:
 		await get_tree().create_timer(0.05).timeout
 	return peak_db
 
+## Session 28 (A1): the stems of the three states under a hunted level of 0, 0.4 and 1 (the detection meter set by hand, the monsters out of the count): the peak of the music bus at each level stays under the
+## ceiling, and the stems cross over (the tense stem is up at 0.4 and the combat stems at 1, the bed gives way).
+func _threat_sweep() -> bool:
+	var ok := true
+	var music_bus := AudioServer.get_bus_index("Music")
+	var layers: Dictionary = MusicManager.get("_layers")
+	var hunters: Array[Node] = []
+	for monster: Node in get_tree().get_nodes_in_group("enemies"):
+		hunters.append(monster)
+		monster.remove_from_group("enemies")
+	var levels: Dictionary = {}
+	for meter: float in [0.0, 0.4, 1.0]:
+		var until: int = Time.get_ticks_msec() + 5000
+		while Time.get_ticks_msec() < until:
+			MusicManager.set("_combat_hold", MusicManager.CALM_DELAY * meter)
+			await get_tree().create_timer(0.1).timeout
+		var peak: float = await _peak_over(music_bus, 1.0)
+		var stems: Dictionary = {}
+		for key: String in ["ambient_dark", "ambient_lit", "threat_low", "threat_high", "action"]:
+			stems[key] = snappedf((layers[key] as AudioStreamPlayer).volume_db, 0.1)
+		levels[meter] = stems
+		print("[audio-truth] threat meter=%.1f music_peak=%.1fdB stems=%s" % [meter, peak, stems])
+		ok = ok and peak <= TRUE_PEAK_CEILING_DB
+	MusicManager.set("_combat_hold", 0.0)
+	for monster: Node in hunters:
+		if is_instance_valid(monster):
+			monster.add_to_group("enemies")
+	var calm: Dictionary = levels[0.0]
+	var tense: Dictionary = levels[0.4]
+	var combat: Dictionary = levels[1.0]
+	var crossed: bool = float(tense["threat_low"]) > float(tense["threat_high"]) + 20.0 and float(combat["threat_high"]) > float(combat["threat_low"]) + 20.0 and float(calm["threat_high"]) < -45.0
+	print("[audio-truth] %s -- the stems cross over with the hunted level (calm %s, tense %s, combat %s)" % ["PASS" if crossed else "FAIL", calm, tense, combat])
+	return ok and crossed
+
 func _run() -> void:
 	print("[audio-truth] driver=%s output_device=%s devices=%s" % [
 		AudioServer.get_driver_name(), AudioServer.get_output_device(),
@@ -121,5 +155,7 @@ func _run() -> void:
 	print("[audio-truth] SFX peak=%.1fdB Ambient peak=%.1fdB (reported, not blocking -- best-effort footstep/hum trigger, see class comment)" % [
 		results.get("SFX", -80.0), results.get("Ambient", -80.0)])
 
+	var sweep_ok: bool = await _threat_sweep()
+	all_ok = all_ok and sweep_ok
 	print("[audio-truth] %s overall" % ("PASS" if all_ok else "FAIL"))
 	get_tree().quit(0 if all_ok else 1)

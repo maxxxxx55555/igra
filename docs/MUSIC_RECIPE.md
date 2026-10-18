@@ -43,6 +43,32 @@ don't ship a take that needs the loop seam forced.
 
 Made in the Gemini app (Music skill, 3.5 Flash-Lite), post-produced by `tools/qa_sim/music_post.py` and recorded in `docs/ASSET_LICENSES.md`: tracks 1 to 9 and 13 to 15. Not made: 10 to 12 (the stems are "only if forced") and 16 to 19 (one-shots of 0.06 to 8 s; a take of the Music skill runs 90 to 180 s, so each needs a cut around an event that the prompt cannot place: owner top-ups, `docs/GEMINI_HANDOFF.md` 2.3). Track 15's wording was refused ("out of my range") and shipped from a milder one. Items 1 and 2 of "After all 19 land" are done (the three files are in `_QUARANTINE/assets/audio/music`, the fallback table names the new files); item 3 is M2 (`docs/AUDIO_LOUDNESS_TABLE.md`).
 
+## Session 28: variants of the district beds (A1)
+
+A district bed is a loop of 28 to 40 s, and a player who stays in a district hears it over and over. The game now turns a bed over after two loops (`BED_LOOPS` in `scripts/systems/music_manager.gd`): with one file it
+plays the same file from another point (the point moves by the golden ratio of the length, so no turn starts where the one before it started); **with variants it takes the next one**. A variant is a file that sits
+beside the bed and carries the suffix `_b` or `_c` (`assets/audio/music/suburbs_b.ogg`, `assets/audio/ambience/districts/police_dark_b.ogg`): nothing else has to change, the loader looks for them by name when a district is entered,
+and the turn of a run picks the variant (the run's seed decides which one comes first). A variant that does not exist is simply not there: the game plays as it does today. **No variant is shipped by this pass;** the eight prompts below are the owner step
+(UNVERIFIABLE-HERE: a human ear decides whether a take is a variation of the bed and not a different piece).
+
+Make each take the way the original was made: Custom mode, Instrumental ON, trim to the length of the original at a zero crossing, 3 ms edge fades, loudnorm to the house law (-18 LUFS, TP -1.5 dBFS), OGG q4 mono 44.1 kHz, record the row in
+`docs/ASSET_LICENSES.md`. A variant keeps the **tempo, the key and the instruments** of its bed and the **length** (a bar count that fits the loop) and changes **the motif** (the four-note hook inverted for `_b`, played backwards over a drone a fifth lower
+for `_c`) and **the shape**: an A section of the first 60 % of the bars, then a B section where the pad thins and the motif drops an octave, and an alternate ending that comes back to the chord of the first bar, so that the loop stays seamless.
+Generate until a take trims clean; a take that needs its seam forced is not shipped.
+
+| # | Target file | Loop length | Prompt |
+|---|---|---|---|
+| B1 | `music/suburbs_b.ogg` | 37.333 s | `Instrumental ambient theme, 90 BPM, C pentatonic, 4/4. The music-box arpeggio of a night suburb, a different four-note motif (the first hook inverted) over the same warm tone and cold low drone. 8 bars of A, then 6 bars of B where the arpeggio thins to two notes and the drone sinks an octave; the last bar returns to the chord of the first. Wistful, homespun, muted, open. No vocals, no drums, seamless loop.` |
+| B2 | `music/school_b.ogg` | 33.600 s | `Instrumental ambient theme, 100 BPM, E minor-major ambiguity, 4/4, long hall reverb. The glassy classroom ostinato with another motif (the first one inverted), cold institutional air. 8 bars of A, 6 of B where the ostinato drops an octave and a single hall tone rings; the last bar returns to the chord of the first. Fluorescent, austere, echoey. No vocals, no percussion, seamless loop.` |
+| B3 | `music/hospital_b.ogg` | 40.000 s | `Instrumental ambient theme, 60 BPM, whole-tone scale on F#, 4/4. Floating pads that never resolve, clinical hum, a different faint monitor pattern (two blips and a rest). 6 bars of A, 4 of B where the pads thin to one voice; the last bar returns to the first bar's cluster. Adrift, antiseptic, hollow, wrong. No vocals, no percussion, seamless loop.` |
+| B4 | `music/gas_station_b.ogg` | 34.909 s | `Instrumental ambient theme, 110 BPM, E blues, 4/4. Muted bluesy pad licks over an electrical hum, a different lick (the first one played backwards). 10 bars of A, 6 of B where the licks stop and only the hum and a low pedal remain; the last bar returns to the chord of the first. Roadside, restless, oily, lonely. No vocals, no drums, seamless loop.` |
+| B5 | `music/police_b.ogg` | 28.000 s | `Instrumental ambient theme, 120 BPM, F minor, 4/4. Terse staccato pads and a quiet ticking pulse, a different staccato figure (the first one inverted). 8 bars of A, 6 of B where the ticking drops out and one low pad holds; the last bar returns to the chord of the first. Indigo-cold, restrained, grim, airless. No vocals, no drums, seamless loop.` |
+| B6 | `music/warehouses_b.ogg` | 38.400 s | `Instrumental ambient theme, 75 BPM, C dorian, 4/4. Low drifting dorian pads, the chain-clank ghosts in other places of the bar. 7 bars of A, 5 of B where the pads sink an octave and the clanks fall silent; the last bar returns to the chord of the first. Cavernous, patient, foggy, metallic. No vocals, no drums, seamless loop.` |
+| B7 | `music/substation_b.ogg` | 33.600 s | `Instrumental ambient theme, 100 BPM, D phrygian dominant, 4/4. A nervous ostinato under a high voltage whine, a different ostinato (the first one played backwards). 8 bars of A, 6 of B where the whine alone remains with a low pulse; the last bar returns to the chord of the first. Energized, alien, cold, watchful. No vocals, no drums, seamless loop.` |
+| B8 | `music/power_station_b.ogg` | 32.000 s | `Instrumental ambient theme, 105 BPM, G mixolydian, 4/4. Broad resolute pads over the generator thrum, a different four-note motif (the first one inverted). 8 bars of A, 6 of B where the pads thin and the thrum drops an octave; the last bar returns to the chord of the first. Charged, humming, monumental. No vocals, no drums, seamless loop.` |
+
+The dark beds (`ambience/districts/<district>_dark.ogg`, synthesized and certified) take variants the same way (`<district>_dark_b.ogg`); the template of MUSIC_SPEC.md section b, with the clause of this section added, is their prompt.
+
 ## Not on this list, and why
 
 - **The 22 district ambience beds** (`ambience/districts/*_dark.ogg` /
