@@ -1,0 +1,19 @@
+# proof s28_s1_export_regrep
+# utc 20261017T200120Z
+# head 87f2e09 (uncommitted paths: 6)
+# env none
+# cmd bash -c python tools/qa_sim/release_export_check.py; echo "rc=$?"; python tools/qa_sim/secret_scan.py; echo "rc=$?"; python tools/qa_sim/export_refs_check.py; echo "rc=$?"
+NOTE: keystore/release is empty - expected pre-release state (no signed release build cut yet), not a failure
+NOTE: keystore/release_user is empty - expected pre-release state (no signed release build cut yet), not a failure
+NOTE: keystore/release_password is empty - expected pre-release state (no signed release build cut yet), not a failure
+
+No bundle read (--aab <file> checks the packed files of an exported bundle).
+
+PASS
+rc=0
+secret_scan: 2224 tracked text file(s), 2 allowed false positive(s), 0 finding(s)
+rc=0
+NOTE scripts/core/qa_launch_guard.gd:34: scripts/tools/shot_tool.gd is excluded by scripts/tools/*
+export_refs_check: 476 shipped file(s) read for the Android preset, 0 violation(s), 1 note(s)
+rc=0
+# EXIT=0

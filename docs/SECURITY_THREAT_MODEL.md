@@ -72,6 +72,14 @@ not just the main save:
 | Signed-but-semantically-invalid body (stage 99, absurd item count, fabricated quest completion, out-of-roster district, non-finite position) | bounds/allowlist checks on every `from_dict()` before the value is applied | none for a body signed with the shipped key; a player who extracts the key can still forge a body that passes both checks |
 | Runtime memory/save editor (Cheat Engine style) while the game is running | `integrity_guard.gd` watchdog (now live) re-validates economy/position/vitals periodically | detection/correction only, not prevention — see below; no speed/displacement bound yet (R-02) |
 | Malicious LAN peer sending forged state | sender-id binding + finite/allowlist checks on both RPCs | none for the covered payload fields; no consumer exists yet for the events these RPCs feed, so there is no live gameplay effect either way today |
+| Game speed injected (`Engine.time_scale` set above 1 by a memory edit or an injected script) | `IntegrityGuard._watch_time_scale` puts a speed over 1.05 back to 1.0 in a release build, logs `speed` and sets `tampered`; the hit-stop and the slow motion of `wow_director.gd` only go below 1.0 and are left alone (SPD1) | the watchdog ticks once a second: a speed can be used for up to a second between two ticks, and an attacker who also patches the guard is not stopped; a debug build does not enforce it (the QA runs speed the clock up) |
+| Vitals edited in memory (health, battery, stamina over their own maximum) | the watchdog clamps each to the maximum of the player's own stats and logs `vitals` when the value is over it by more than 5 % (a few percent over is a rounding and is only clamped) (VIT1) | a second of the edited value between two ticks; a value inside the bounds is not seen, and a lowered one is the player's own business |
+| Wallet or New Game+ state edited in memory | a wallet outside 0..999,999 is clamped and logged `economy`, a New Game+ level over 3 or more modifiers than levels are corrected and logged `ngplus` (ECO1, NGB1) | no check of a jump inside the bounds: a run's rewards come in bursts of 50 to 1,200 and a bound on the step would reject honest play |
+| Restoring an older `tls_daily.json` (a replay) or deleting it | the claim is counted in the profile (the main save: the day of the last claim and the streak), read at launch: the day stays completed, the reward and the streak step are paid once (DLY4, DLY5; EX7 of Session 19 closed) | an attacker who restores the whole profile restores the wallet and the streak with it and gains nothing; one who edits the signed main save needs the key |
+| Restoring an older `achievements.cfg` | the coins of an achievement are paid once per profile, by a ledger kept in the wallet's part of the main save (ACH2) | the trophy list and the toast come back (cosmetic); the ledger goes back only with the whole main save, wallet included |
+| Absurd numbers in a validly signed save | the experience level is capped at 60 and the earned skill points at one per level-up (the spendable count keeps its old ceiling of 9999), vitals at 1000 and then at the player's real maxima, the wallet at 999,999, a skill level at its own maximum, unknown skill ids dropped (SAV2) | the player who holds the key can still write a plausible save (level 60, every skill): the checks stop absurd values and overflows, not a forger who read this file |
+| A hostile `settings.cfg` (the difficulty as a word, a list or a dictionary, Hardcore as a list, volumes of 9 and -3, an ads flag) | `SettingsManager.from_dict` puts the difficulty into 0..2 and Hardcore into true or false, the volumes into 0..1; no ad flag exists in the settings (the rewarded ads go through `AdService`, whose switch is not persisted) (CFG1) | the file is the player's own: an easier difficulty or a muted game is a preference and not a cheat |
+| A resource pack, a script or a process dropped next to the game (an overlay of the export) | no shipped script loads a resource pack, runs a process, compiles a string or loads from `user://` (a source scan, OVL1); a repackaged data file is named by the integrity scan against the manifest and logged | a repackager who rewrites the manifest too: the scan raises the bar and leaves a log line, it proves nothing against a determined one |
 
 ## NOT protectable client-side (honest scope)
 
@@ -101,3 +109,25 @@ Bottom line: this system defends against casual tampering (a curious player edit
 and against accidental corruption, and is honest that it does not defend against a player
 determined to reverse-engineer their own local binary — which is true of every offline
 single-player game's local save file, not a gap specific to this one.
+
+## Session 28 (S1): the watchdog, the attack cases and the six edge sweeps
+
+**The watchdog now holds four things to what a run can reach** (`scripts/systems/integrity_guard.gd`): the game speed, the three vitals (each to its own maximum from the player's stats), the wallet and the New Game+ state.
+Each correction is written to the encrypted log (`scripts/security/security_log.gd`) with a kind (`speed`, `vitals`, `economy`, `ngplus`) and sets `tampered`, which stops the leaderboard from recording the run.
+The cases of `scripts/tools/rc16/s28_attack_cases.gd` (run by `attack_sim.gd`) drive each of them, and the mutation tool puts the game code of each fix back and sees the case fail
+(the sets of the group "attack" of `tools/qa_sim/s26_mutations.py`).
+
+**The six edge sweeps** (each is a check that runs in a battery; none is closed by a sentence):
+
+| Sweep | Check | What it holds | Honest limit |
+|---|---|---|---|
+| save or load in the middle of a transition | SAVE1 | a save written while the player is out of the world reads back whole (no vitals, no position) and loads; a load inside a fade leaves the fade ended | a process killed in the middle of a write is the atomic write's business (the backups of the earlier passes), not this sweep's |
+| a language switch in the middle of a dialog | LANG1 | the pause menu comes back visible after a switch; the game has no conversation system (the files `data/dialogs*.json` are read by no code, `docs/KNOWN_ISSUES.md`), so the dialogs a player meets are the menus and the notices | a conversation system, when one is built, needs its own case |
+| a pickup on a full pack | EX3, PICK1 | the pack takes exactly its weight limit and refuses one more; a pickup on a full pack stays in the world and the pack gains nothing | none known |
+| the battery at 0 in the Architect's fight | EX4, BAT0, RET1 | at 0 charge the light cannot be switched on and cannot strobe; out of the beam in phase two the Architect swings after a cue, so a dead light with no spare is a fight that can be lost; a death gives back at least 25 battery | the fight is still hard without light: that is the intent |
+| an ad claim with no SDK | EX10 | with no provider (the release build) and with the web stub no reward is paid | the real SDK has not been run on a device: owner row |
+| Hardcore ticked in the middle of a fight | HC1 | the Hardcore box cannot be changed in a running game; ticking it by file does not make the run's death wipe the save, unticking it does not cancel the wipe of a Hardcore run | none known |
+
+**What a client cannot do, said again for this pass.** The signing key is in the binary: every check above holds against an edited file and a restored file and none holds against a player who forges a signed one or who edits memory between two ticks of
+the watchdog (one second). The profile anchors (the day of the last claim, the paid ledger) defeat a restored single file; a restored whole profile is a rollback of the player's own progress. The speed check is not enforced in a debug build.
+No server holds a second copy of anything, so none of this is a guarantee, and none of it is claimed as one.

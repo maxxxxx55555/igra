@@ -1,0 +1,110 @@
+# proof s28_d1b_87f2e09
+# utc 20261017T193410Z
+# head 87f2e09 (uncommitted paths: 0)
+# env none
+# cmd bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/5fa8d500-393b-43b7-95de-04d09fcc9e42/scratchpad/s28_l2.sh
+# STEP import rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP compile rc=0
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL TEL3 architect melee: the swing waits 348 ms after its cue (350 ms at least) and starts a cooldown (true)
+[closeout] DONE checks=17 fails=1
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP closeout_s28 rc=1
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL G25 ammo lies in D2-D11, twice from the police on (16 boxes)
+[closeout] FAIL DL2 the fifth day pays double (840 + 0)
+[closeout] DONE checks=516 fails=2
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP closeout_all rc=1
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+engine errors in the log:
+SCRIPT ERROR: Invalid operands 'int' and 'bool' in operator '=='.
+SCRIPT ERROR: Invalid operands 'int' and 'bool' in operator '=='.
+  res://scenes/tools/attack_sim_scene.tscn rc=1 (log: .qa_logs/attack_sim_scene.log)
+  user-data guard: 0 file(s) restored byte-identical
+# STEP attack_sim rc=1
+# Godot binary: /c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/godot
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  [32mWIN [0m seed 1  ([bot s1]   result       : WIN)
+deaths counted 0, revive lines 0
+  [32mWIN [0m seed 2  ([bot s2]   result       : WIN)
+deaths counted 0, revive lines 0
+  [32mWIN [0m seed 3  ([bot s3]   result       : WIN)
+deaths counted 0, revive lines 0
+
+──────────────────────────────────────
+autoplay bot: 3/3 seeds won, 0 softlock(s)
+bot death counters below their revive lines: 0
+  user-data guard: 0 file(s) restored byte-identical
+# STEP bot_normal exit=0
+# Godot binary: /c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/godot
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  [31mNO-WIN[0m seed 1 (rc=1)
+       [bot s1] t=276.2 all 11 districts FULL — final night; bot is standing in power_station
+       [bot s1] FAIL boss not defeated within 240s — spine proven, boss is a skill gate
+       [bot s1] ── RUN SUMMARY ──────────────────────────────
+       [bot s1]   result       : NOT WON
+       [bot s1]   districts FULL: 11/11
+       [bot s1]   deaths       : 0
+       [bot s1]   stage timeline: suburbs:0@5.4, suburbs:1@23.5, suburbs:2@24.5, suburbs:3@25.5, residential:0@26.8, residential:1@40.9, residential:2@47.4, residential:3@52.6, park:0@53.8, park:1@61.5, park:2@65.7, park:3@80.6, school:0@81.7, school:1@91.3, school:2@92.7, school:3@96.0, hospital:0@97.2, hospital:1@106.1, hospital:2@107.1, hospital:3@124.0, gas_station:0@125.1, gas_station:1@136.6, gas_station:2@142.7, gas_station:3@146.1, police:0@147.3, police:1@156.7, police:2@166.0, police:3@167.1, warehouses:0@168.2, warehouses:1@179.1, warehouses:2@182.8, warehouses:3@197.0, industrial:0@198.1, industrial:1@208.8, industrial:2@209.9, industrial:3@211.8, substation:0@212.9, substation:1@227.4, substation:2@237.6, substation:3@239.8, power_station:0@240.9, power_station:1@260.3, power_station:2@275.1
+       [bot s1]   part economy : suburbs stage 0->1 @t=23.5 | suburbs stage 1->2 @t=24.5 | suburbs stage 2->3 @t=25.5 | residential stage 0->1 @t=40.8 | residential stage 1->2 @t=47.4 | residential stage 2->3 @t=52.6 | park stage 0->1 @t=61.5 | park stage 1->2 @t=65.6 | park stage 2->3 @t=80.6 | school stage 0->1 @t=91.3 | school stage 1->2 @t=92.7 | school stage 2->3 @t=96.0 | hospital stage 0->1 @t=106.0 | hospital stage 1->2 @t=107.1 | hospital stage 2->3 @t=124.0 | gas_station stage 0->1 @t=136.6 | gas_station stage 1->2 @t=142.6 | gas_station stage 2->3 @t=146.1 | police stage 0->1 @t=156.7 | police stage 1->2 @t=166.0 | police stage 2->3 @t=167.1 | warehouses stage 0->1 @t=179.1 | warehouses stage 1->2 @t=182.8 | warehouses stage 2->3 @t=197.0 | industrial stage 0->1 @t=208.8 | industrial stage 1->2 @t=209.8 | industrial stage 2->3 @t=211.8 | substation stage 0->1 @t=227.4 | substation stage 1->2 @t=237.6 | substation stage 2->3 @t=239.8 | power_station stage 0->1 @t=260.3 | power_station stage 1->2 @t=275.1
+       [bot s1]   FAIL: boss not defeated within 240s — spine proven, boss is a skill gate
+       ERROR: 1 RID allocations of type 'PN13RendererDummy14TextureStorage12DummyTextureE' were leaked at exit.
+       ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+       ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+       ERROR: 10 resources still in use at exit (run with --verbose for details).
+deaths counted 0, revive lines 0
+  [32mWIN [0m seed 2  ([bot s2]   result       : WIN)
+deaths counted 2, revive lines 2
+  [32mWIN [0m seed 3  ([bot s3]   result       : WIN)
+deaths counted 1, revive lines 1
+
+──────────────────────────────────────
+autoplay bot: 2/3 seeds won, 0 softlock(s)
+bot death counters below their revive lines: 0
+  user-data guard: 0 file(s) restored byte-identical
+# STEP bot_hard exit=1
+# normal seed 1
+[bot s1]   result       : WIN
+[bot s1]   wall time    : 511.7s
+[bot s1]   deaths       : 0
+[bot s1]   cost         : difficulty 1, 19 hits taken, 228 health lost, 7 items used, first death at -1.0 s
+# normal seed 2
+[bot s2]   result       : WIN
+[bot s2]   wall time    : 427.8s
+[bot s2]   deaths       : 0
+[bot s2]   cost         : difficulty 1, 21 hits taken, 252 health lost, 6 items used, first death at -1.0 s
+# normal seed 3
+[bot s3]   result       : WIN
+[bot s3]   wall time    : 443.9s
+[bot s3]   deaths       : 0
+[bot s3]   cost         : difficulty 1, 19 hits taken, 228 health lost, 6 items used, first death at -1.0 s
+# hard seed 1
+[bot s1]   result       : NOT WON
+[bot s1]   wall time    : 516.2s
+[bot s1]   deaths       : 0
+[bot s1]   cost         : difficulty 2, 9 hits taken, 135 health lost, 5 items used, first death at -1.0 s
+# hard seed 2
+[bot s2]   result       : WIN
+[bot s2]   wall time    : 454.4s
+[bot s2]   deaths       : 2
+[bot s2]   cost         : difficulty 2, 23 hits taken, 345 health lost, 6 items used, first death at 442.5 s
+# hard seed 3
+[bot s3]   result       : WIN
+[bot s3]   wall time    : 497.9s
+[bot s3]   deaths       : 1
+[bot s3]   cost         : difficulty 2, 19 hits taken, 285 health lost, 7 items used, first death at 493.5 s
+ M docs/MUSIC_RECIPE.md
+ M docs/SECURITY_THREAT_MODEL.md
+ M scripts/tools/_closeout_check_runner.gd
+ M scripts/tools/rc16/s28_attack_cases.gd
+ M scripts/tools/rc16/s28_checks.gd
+ M scripts/tools/rc16/s28_sweep_checks.gd
+?? docs/artifacts/rc16/proofs/s28_s1_export_regrep.out
+# STEP tree-after done
+# EXIT=0

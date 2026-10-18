@@ -225,7 +225,8 @@ static func _config_tamper(sim: Node) -> void:
 		var level: Variant = SettingsManager.get_setting("difficulty", -1)
 		var scale: float = SettingsManager.difficulty_scale("monster_hp")
 		var in_range: bool = level is int and int(level) >= 0 and int(level) <= 2 and is_finite(scale)
-		var rules_ok: bool = SettingsManager.get_setting("hardcore", null) == false and SettingsManager.get_volume("Master") <= 1.0 and SettingsManager.get_volume("Music") >= 0.0 and AdService.enabled == ads0
+		var hardcore: Variant = SettingsManager.get_setting("hardcore", null)
+		var rules_ok: bool = hardcore is bool and not hardcore and SettingsManager.get_volume("Master") <= 1.0 and SettingsManager.get_volume("Music") >= 0.0 and AdService.enabled == ads0
 		if not (in_range and rules_ok):
 			bad.append("%s -> %s" % [str(hostile), str(level)])
 	sim._ok(bad.is_empty(), "CFG1 a hostile settings file (a number out of range, a word, a list, a dictionary in the difficulty and in Hardcore, volumes of 9 and -3, an ads flag) leaves the rules in range; wrong: %s" % [bad])

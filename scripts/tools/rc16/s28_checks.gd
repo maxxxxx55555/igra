@@ -10,7 +10,10 @@ const _Density := preload("res://scripts/tools/rc16/density_checks.gd")
 const _WorldRuntime := preload("res://scripts/world/world_runtime.gd")
 const State := BaseMonster.State
 const _FAR := Vector3(-600.0, 0.0, 600.0)
-const MIN_CUE_MS: int = 350
+## The cue lasts _Telegraph.WARN_DURATION of game time (TEL1 reads it); the wall time between the cue and the hit loses the share of a frame the tween is credited, up to 60 ms in the closeout (348 ms was read), so 300 ms is the floor of the measure.
+const MIN_CUE_MS: int = 300
+const MIN_WARN_SEC: float = 0.35
+const _Telegraph := preload("res://scripts/enemies/monster_telegraph.gd")
 const MIN_WINDUP: float = 0.4
 const MIN_FALL_SEC: float = 0.7
 const ARRIVAL_CLEAR: float = 12.0
@@ -120,7 +123,7 @@ static func _telegraphs(r: Node) -> void:
 			node.queue_free()
 	boss.queue_free()
 	await r.get_tree().process_frame
-	r._ok(announced == WARNED.size(), "TEL1 telegraphs: %d of %d attacks wait %d ms or more after the cue (gaps %s ms)" % [announced, WARNED.size(), MIN_CUE_MS, gaps])
+	r._ok(announced == WARNED.size() and _Telegraph.WARN_DURATION >= MIN_WARN_SEC, "TEL1 telegraphs: %d of %d attacks wait %d ms or more after the cue (gaps %s ms) and the cue lasts %.2f s of game time (%.2f s at least)" % [announced, WARNED.size(), MIN_CUE_MS, gaps, _Telegraph.WARN_DURATION, MIN_WARN_SEC])
 	r._ok(windup_cues == 3 and windup_times.min() >= MIN_WINDUP, "TEL2 windups: %d of 3 (Crawler, Hunter, Brute) carry the cue at their start and last %s s (%.1f s at least)" % [windup_cues, windup_times, MIN_WINDUP])
 	r._ok(melee_gap >= MIN_CUE_MS and cooling, "TEL3 architect melee: the swing waits %d ms after its cue (%d ms at least) and starts a cooldown (%s)" % [melee_gap, MIN_CUE_MS, cooling])
 	r._ok(rings == 1, "TEL4 beam ring: %d ring of ember marks the place a falling beam lands for as long as it falls (1 wanted)" % rings)

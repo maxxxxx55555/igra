@@ -148,3 +148,4 @@ n	utc	head	id	exit	command
 147	20261017T073218Z	c353736	s27_export_c353736	0	bash -c set -a; . .signing/release.env; set +a; /c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/Godot_v4.7-stable_win64_console.exe --headless --path . --export-release "Android" build/tls.aab 2>&1 | tee .qa_logs/s27_export.log
 148	20261017T113615Z	121133b	s27_f1b_121133b	0	bash /c/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/f1b_chain.sh
 149	20261017T151857Z	17f7304	s28_d1a_17f7304	0	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/5fa8d500-393b-43b7-95de-04d09fcc9e42/scratchpad/s28_l1.sh
+150	20261017T193410Z	87f2e09	s28_d1b_87f2e09	0	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/5fa8d500-393b-43b7-95de-04d09fcc9e42/scratchpad/s28_l2.sh

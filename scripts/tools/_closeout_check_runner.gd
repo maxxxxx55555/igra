@@ -296,7 +296,7 @@ func _check_placement() -> void:
 	var ammo_total := 0
 	for id in ammo_at:
 		ammo_total += int(ammo_at[id])
-	_ok(not ammo_at.has(&"suburbs") and ammo_total == 15, "G25 ammo lies in D2-D11, twice from the police on (%d boxes)" % ammo_total)
+	_ok(not ammo_at.has(&"suburbs") and ammo_total == 16, "G25 ammo lies in D2-D11, twice from the gas station on (%d boxes: 4 single and 6 double)" % ammo_total)
 	ProgressTracker.from_dict({})
 
 # ── G25 / C03: firearms ────────────────────────────────────────────────────
@@ -1057,7 +1057,7 @@ func _check_daily() -> void:
 	var done_before: bool = m._completed_today
 	var day_before: int = m._last_completed_day
 	SaveSystem._daily_streak = 4
-	SaveSystem._last_daily_time = int(Time.get_unix_time_from_system())
+	SaveSystem._last_daily_time = int(Time.get_unix_time_from_system()) - 86400  # yesterday's claim: a claim of today would block this one (DLY4)
 	var base: int = int(m.get_today().get("reward", 0))
 	var coins: int = CoinWallet.get_coins()
 	m._complete()
