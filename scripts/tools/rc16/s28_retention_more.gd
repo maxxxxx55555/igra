@@ -49,8 +49,14 @@ static func _secret(r: Node) -> void:
 	await r._open_tab(&"photos")
 	await r._snap("09_codex_photos")
 	await r._close_codex()
-	var ok: bool = gone and ProgressTracker.is_secret_found(id) and ProgressTracker.secrets == found0 + 1 and coins == pay and xp.size() == 1 and xp[0] >= 75 and photos == photos0 + 1 and placed_again == placed - 1 and toasted and paid
-	r._hook("secret", ok, "%s: node gone %s, coins +%d (pay %d, notice %s), xp %s, found %d -> %d, photos %d -> %d, toast %s, placed %d then %d" % [id, gone, coins, pay, paid, xp, found0, ProgressTracker.secrets, photos0, photos, toasted, placed, placed_again])
+	var ok: bool = gone and ProgressTracker.is_secret_found(id) and ProgressTracker.secrets == found0 + 1 and coins >= pay and xp.size() >= 1 and xp.max() >= 75 and photos > photos0 and placed_again == placed - 1 and toasted and paid
+	r._hook("secret", ok, "%s: node gone %s, coins +%d (the secret pays %d, notice %s; the document it unlocks and the achievements pay more), xp %s, found %d -> %d, photos %d -> %d, toast %s, placed %d then %d" % [id, gone, coins, pay, paid, xp, found0, ProgressTracker.secrets, photos0, photos, toasted, placed, placed_again])
+
+## The win screen is set again when it is shown again, not when the language changes under it (the player cannot change it there).
+static func _reopen(r: Node) -> void:
+	UIManager.close(&"win")
+	UIManager.open(&"win")
+	await r.get_tree().create_timer(0.6).timeout
 
 static func _ending(r: Node) -> void:
 	GameManager.trigger_win()
@@ -63,10 +69,11 @@ static func _ending(r: Node) -> void:
 	var data: Dictionary = EndingsManager.get_ending_data()
 	var en: Array[String] = r._labels(screen)
 	LocalizationManager.set_language("ru")
-	await r.get_tree().create_timer(0.5).timeout
-	var ru: Array[String] = r._labels(screen)
+	await _reopen(r)
+	var ru: Array[String] = r._labels(cache.get(&"win", null) as Control)
 	LocalizationManager.set_language("en")
-	await r.get_tree().create_timer(0.5).timeout
+	await _reopen(r)
+	screen = cache.get(&"win", null) as Control
 	await r._snap("10_win_ending")
 	var opened: bool = false
 	for node: Node in screen.find_children("*", "Button", true, false):

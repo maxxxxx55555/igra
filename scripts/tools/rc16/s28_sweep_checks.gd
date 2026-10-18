@@ -8,6 +8,7 @@ extends RefCounted
 ##   V1A    the details of V1 batch A stand where they should (a check of the mechanism; the frames judge whether they are a gain): at the High tier the panes carry the window shader with their interiors on, every pane has
 ##          a halo and every lamp a cone of light; the cone is hidden at DARK and shown with the power
 ##   BURST1 every burst scene (scenes/vfx) keeps the scale of its particles: a billboard drops it unless the material keeps it, so each particle was the 1 m of its quad and the confetti of a find hid the screen
+##   ENDC1  the title of every ending is read against the panel of the win screen at 3 to 1 or better (the dark ending's was 1.1 to 1: the one line that says which ending it is could not be read)
 ##   STORY1 every district holds two or three story scenes (story_props.gd), each 2.6 m from a hiding place and 2.2 m or more from anything the player can use or hide in, inside the ring, and each has its line;
 ##          the three kinds all stand somewhere. The district is built the way the game builds it (the loot, hence the hiding places, before the dressing): a bare scene has no hiding place to anchor a scene to
 ##   STORY2 a player who walks into the trigger of a scene (made where the world is empty, so the check does not depend on the placement that STORY1 holds) hears its line once and the trigger ends with the visit: the physics
@@ -18,6 +19,7 @@ const _S28 := preload("res://scripts/tools/rc16/s28_checks.gd")
 const _Density := preload("res://scripts/tools/rc16/density_checks.gd")
 const _StoryProps := preload("res://scripts/world/story_props.gd")
 const _LampDetails := preload("res://scripts/world/lamp_details.gd")
+const _Win := preload("res://scripts/ui/win_screen.gd")
 const _FAR := Vector3(-600.0, 0.0, 600.0)
 
 static func run(r: Node) -> void:
@@ -28,6 +30,7 @@ static func run(r: Node) -> void:
 	await _save_between_scenes(r)
 	await _v1_nodes(r)
 	_burst_scale(r)
+	_ending_titles(r)
 	await _story_scenes(r)
 	var walk: String = await _walk_into(r)
 	r._ok(walk == "ok", "STORY2 a walk into a story trigger is heard once and ends it: %s" % walk)
@@ -125,6 +128,22 @@ static func _v1_nodes(r: Node) -> void:
 	SettingsManager.set_setting("graphics_tier", tier0)
 	root.queue_free()
 	r._ok(panes_ok and halos_ok and cones_ok and stage_ok, "V1A the details of batch A stand: window shader %s, halos %s, light cones %s, the cone follows the power %s" % [panes_ok, halos_ok, cones_ok, stage_ok])
+
+## WCAG contrast of two colours (the relative luminance of each from its linear channels).
+static func _contrast(a: Color, b: Color) -> float:
+	var la: float = a.srgb_to_linear().get_luminance()
+	var lb: float = b.srgb_to_linear().get_luminance()
+	return (maxf(la, lb) + 0.05) / (minf(la, lb) + 0.05)
+
+static func _ending_titles(r: Node) -> void:
+	var worst: float = INF
+	var which: String = ""
+	for id: String in EndingsManager.ENDING_DATA:
+		var ratio: float = _contrast(EndingsManager.ENDING_DATA[id]["color"], _Win.BG)
+		if ratio < worst:
+			worst = ratio
+			which = id
+	r._ok(worst >= 3.0, "ENDC1 every ending title is read against the win screen at 3 to 1 or better: the worst is %s at %.2f to 1" % [which, worst])
 
 static func _burst_scale(r: Node) -> void:
 	var bad: Array[String] = []

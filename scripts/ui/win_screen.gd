@@ -8,6 +8,9 @@ extends Control
 ## вернулся в город». Теперь берём выбранную концовку и её описание,
 ## а заодно показываем итоговую статистику забега.
 
+## The panel behind the ending: the colour of an ending's title is read against it (ENDC1).
+const BG := Color(0.12, 0.09, 0.02, 0.92)
+
 var _title: Label = null
 var _subtitle: Label = null
 var _stats: Label = null
@@ -31,7 +34,7 @@ func _build() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = ThemeProvider.build_theme()
 	var bg := ColorRect.new()
-	bg.color = Color(0.12, 0.09, 0.02, 0.92)
+	bg.color = BG
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
 	var vb := VBoxContainer.new()

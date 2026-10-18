@@ -125,6 +125,7 @@ static func _pane_view(tree: SceneTree, id: StringName) -> Dictionary:
 ## What each small detail of batch A holds when the frames are taken (a line a district): how many instances, how many carry a colour, whether it is shown in the tree, its strength, where the first one stands and its box,
 ## so a detail that is not seen can be told from one that is not there.
 static func probe(tree: SceneTree, id: StringName) -> void:
+	print("[density] probe district=%s LampCones nodes=%d" % [id, tree.root.find_children("LampCones", "MultiMeshInstance3D", true, false).size()])
 	for node_name: String in ["WindowHalos", "LampCones"]:
 		var node := tree.root.find_child(node_name, true, false) as MultiMeshInstance3D
 		if node == null:

@@ -24,5 +24,5 @@ void fragment() {
 	float dist = length(VERTEX);
 	float distance_fade = smoothstep(fade_near * 0.4, fade_near, dist) * (1.0 - smoothstep(fade_far * 0.5, fade_far, dist));
 	ALBEDO = tint.rgb;
-	ALPHA = strength * pow(1.0 - clamp(v_along, 0.0, 1.0), 1.5) * edge * distance_fade;
+	ALPHA = strength * (1.0 - clamp(v_along, 0.0, 1.0)) * edge * distance_fade;
 }
