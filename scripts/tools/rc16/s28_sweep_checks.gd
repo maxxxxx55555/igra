@@ -15,7 +15,7 @@ extends RefCounted
 ##          the three kinds all stand somewhere. The district is built the way the game builds it (the loot, hence the hiding places, before the dressing): a bare scene has no hiding place to anchor a scene to
 ##   STORY2 a player who walks into the trigger of a scene (made where the world is empty, so the check does not depend on the placement that STORY1 holds) hears its line once and the trigger ends with the visit: the physics
 ##          wiring (the layer of the trigger, the group of the body), not the handler
-## The other four edge sweeps of the pass are held by older checks that run in every battery: LANG1 (a language switch under an open menu), EX3 (a full pack), EX4 (a dead battery), EX10 (no ad SDK) and HC1 (Hardcore ticked in the middle of a run).
+## The other five edge sweeps of the pass are held by older checks that run in every battery: LANG1 (a language switch under an open menu), EX3 (a full pack), EX4 (a dead battery), EX10 (no ad SDK) and HC1 (Hardcore ticked in the middle of a run).
 
 const _S28 := preload("res://scripts/tools/rc16/s28_checks.gd")
 const _Density := preload("res://scripts/tools/rc16/density_checks.gd")

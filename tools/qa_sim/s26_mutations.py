@@ -45,7 +45,7 @@ SETS = [
         ("scripts/world/street_builder.gd", "const MARK_WIDTH: float = 0.16", "const MARK_WIDTH: float = 4.0", "SOV1"),
         ("scripts/world/skyline.gd", 'float(clampi(int(SettingsManager.get_setting("graphics_tier", 2)), 0, 2))', "2.0", "SOV2"),
         ("scripts/world/district_landmark.gd", "const HALO_SIZE := Vector2(64.0, 52.0)", "const HALO_SIZE := Vector2(110.0, 100.0)", "SOV3"),
-        ("scripts/world/soviet_signs.gd", "found.assign(WORDS.get(district_id, WORDS[&\"suburbs\"]))", "found.assign([\"\\u13a0\\u13a1\\u13a2\"])", "SOV4"),
+        ("scripts/world/soviet_signs.gd", "found.assign(WORDS.get(district_id, WORDS[&\"suburbs\"]))", "found.assign(WORDS.get(district_id, WORDS[&\"suburbs\"]) + [\"\\u13a0\"])", "SOV4"),
         ("scripts/world/dead_grass.gd", "const PER_COURTYARD: Array[int] = [0, 8, 16]", "const PER_COURTYARD: Array[int] = [16, 16, 16]", "SOV5"),
         ("scripts/world/skyline.gd", "const FACADE_GAIN: Array[float] = [0.16, 0.19, 0.22, 0.26]", "const FACADE_GAIN: Array[float] = [0.16, 0.19, 0.22, 0.05]", "SOV6"),
         ("scripts/ui/menu_fog.gd", "visible = int(SettingsManager.get_setting(\"graphics_tier\", 2)) > 0", "visible = true", "SOV7"),
@@ -56,7 +56,7 @@ SETS = [
         ("scripts/systems/music_manager.gd", "func _on_district_entered(district_id: StringName) -> void:\n\t_leave_boss()\n", "func _on_district_entered(district_id: StringName) -> void:\n\tpass\n", "MUS4"),
         ("scripts/ui/main_menu.gd", "\t_refresh_daily_card(vb as VBoxContainer)", "\tpass", "MENU2"),
     ],
-    [  # Session 27, the closeout group s27 again: the verifier's round found two sign words cut off; the second mutation of the file of SOV4 cannot share its set (SOV8 would fail under SOV4's mutation too)
+    [  # Session 27, the closeout group s27 again: the verifier's round found two sign words cut off; the mutation of SOV8 keeps a set of its own beside the one of SOV4 (two mutations of one file are never read together)
         ("scripts/world/soviet_signs.gd", "return mini(FONT_PX, int(FONT_PX * ATLAS_W / (wide * 1.06)))", "return FONT_PX", "SOV8"),
     ],
     [  # Session 28, the closeout group s28 (D1): each fix of the difficulty pass undone in its own function or table row, so no mutation can hide another

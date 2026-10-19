@@ -79,6 +79,8 @@ Order (THINK-FIRST): D1 first, because every later frame and run reads the diffi
 - skill|godot-style|the `.gd` edits of wave 10 (the frames views and runner)|V1|ok (Skill tool: typed; `_density_views.gd` is 250 lines and `_density_frames_runner.gd` 296)
 - skill|ponytail-review|before the wave-11 and wave-12 commit|V1|ok (Skill tool: lean already; the frames tools lost 61 lines and gained 25, the two checks are a few lines each and the shared priority is one constant)
 - skill|godot-style|the `.gd` edits of waves 11 and 12 (window_halos, lamp_details, dust_motes, the sweep checks, the frames views and runner)|V1|ok (Skill tool: typed, the constant before the functions; `_density_views.gd` is 206 lines, `_density_frames_runner.gd` 291 and `s28_sweep_checks.gd` 239)
+- skill|ponytail-review|before the post-F1 commit (the cone shader's near fade and cap, the closeout timeout of `check.sh`, the SOV4 mutation, a citation)|V1, F1|ok (Skill tool: lean already; two cuts weighed and not applied: `max_alpha` as a constant, because its four siblings are uniforms the same way and the frames tool may vary it, and SOV8's set merged into SOV4's, because the owner's lesson is that two mutations of one file are not read together)
+- skill|godot-style|the `.gd` edit of the post-F1 commit (`scripts/tools/rc16/s28_sweep_checks.gd`, one word of the header)|F1|ok (Skill tool: a comment only; the file is 239 lines)
 
 ## Session 27 (2026-10-16 and 2026-10-17): EXTINCTION-STAKES FINAL PASS, SOVIET CANON VISUAL + REAL MUSIC + STORE-READY (decisions, V1, V2, M1, M2, S1, R1, F1); baseline `v9.0.0-universe` = `ac45b1c`; target tag `v9.1.0-store`
 
