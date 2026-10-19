@@ -1,0 +1,26 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[perf] district=suburbs draw_calls=155 primitives=55063 objects_in_frame=420
+[perf] draw calls frame by frame after the player spawned: [114, 159, 157, 157, 157, 157, 157, 156, 155, 155]
+[perf] breakdown of 155 draw calls in suburbs, calls saved by hiding each node: 82 Main3D/HUD (CanvasLayer) 1657 primitives | 40 Main3D/WorldRuntime (Node3D) 51844 primitives | 24 district_suburbs/Props (Node3D) 32176 primitives | 15 Main3D/MultiplayerManager (Node3D) 20776 primitives | 10 district_suburbs/@Area3D@193 (Area3D) 152 primitives | 10 district_suburbs/@Area3D@194 (Area3D) 152 primitives | 9 district_suburbs/@Area3D@197 (Area3D) -616 primitives | 8 district_suburbs/@Area3D@191 (Area3D) 128 primitives | 8 district_suburbs/@Area3D@192 (Area3D) 128 primitives | 7 district_suburbs/@Area3D@196 (Area3D) -640 primitives | 7 district_suburbs/@Area3D@195 (Area3D) -640 primitives | 6 district_suburbs/@Area3D@198 (Area3D) -4864 primitives | 6 district_suburbs/@Area3D@199 (Area3D) -4864 primitives | 5 district_suburbs/@Area3D@203 (Area3D) -4832 primitives
+[perf] suburbs steady draw_calls=151 (everything shown again, after the breakdown)
+[perf] mean over 300 frames: gpu_ms=16.39 render_cpu_ms=1.25 process_ms=32.48 physics_ms=2.75
+[perf] mean over 300 frames: gpu_ms=15.51 render_cpu_ms=1.34 process_ms=30.72 physics_ms=2.35
+[perf] mean over 300 frames: gpu_ms=16.72 render_cpu_ms=1.43 process_ms=43.60 physics_ms=2.24
+[perf] suburbs frame_p95_ms=29.11 texture_mem_mib=102.1 video_mem_mib=129.7
+[perf] suburbs static_memory_mib=103.9 particles_emitting=154 (GDD PF2: RAM < 800 MiB, VRAM < 400 MiB, particles < 500)
+[perf] mean over 300 frames: gpu_ms=21.05 render_cpu_ms=1.37 process_ms=35.03 physics_ms=2.00
+[perf] mean over 300 frames: gpu_ms=21.92 render_cpu_ms=1.39 process_ms=37.83 physics_ms=2.16
+[perf] mean over 300 frames: gpu_ms=19.54 render_cpu_ms=1.47 process_ms=33.94 physics_ms=2.07
+[perf] district=power_station draw_calls=143 primitives=55591 objects_in_frame=289 frame_p95_ms=34.72
+[perf] budget D1<200: 155; D11<350: 143; p95<=33 ms: 29.11 and 34.72; video memory<=512 MiB: 129.7; over budget: ["p95 frame time"]
+[perf] DONE fails=1
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 37 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

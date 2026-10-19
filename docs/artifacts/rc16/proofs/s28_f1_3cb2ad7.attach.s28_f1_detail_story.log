@@ -1,0 +1,25 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[density] start label=detail hash=3cb2ad7 ids=[&"residential", &"hospital", &"gas_station"] nodes=1118 objects=4010 orphans=6 tex_mib=59.0 vid_mib=86.6 static_mib=101.6
+[probe] stream pass=density district=residential ok=true load_ms=189.1 settled_ms=230.5 hitches=1 max_frame_ms=142.6 over_budget_ms=116.7 nodes=1132 objects=4046 orphans=6 tex_mib=58.7 vid_mib=86.3 static_mib=103.1 stats={"district":"residential","enemies_ms":4.915,"loot_ms":16.875,"props_ms":97.315,"scene_ms":0.688,"streets_ms":1.237,"total_ms":40.573}
+[density] state district=residential view=10_story weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=true
+[density] frame residential_10_story_detail_3cb2ad7_20261018T111316Z.jpg
+[density] perf district=residential dressing=with draw_calls=154 primitives=122106 objects_in_frame=127
+[probe] stream pass=density district=hospital ok=true load_ms=199.7 settled_ms=248.1 hitches=1 max_frame_ms=133.8 over_budget_ms=102.6 nodes=1136 objects=4083 orphans=6 tex_mib=60.3 vid_mib=92.0 static_mib=106.8 stats={"district":"hospital","enemies_ms":5.27,"loot_ms":17.415,"props_ms":99.02,"scene_ms":1.942,"streets_ms":1.545,"total_ms":45.704}
+[density] state district=hospital view=10_story weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=true
+[density] frame hospital_10_story_detail_3cb2ad7_20261018T111319Z.jpg
+[density] perf district=hospital dressing=with draw_calls=68 primitives=75596 objects_in_frame=51
+[probe] stream pass=density district=gas_station ok=true load_ms=191.2 settled_ms=224.7 hitches=1 max_frame_ms=136.9 over_budget_ms=103.6 nodes=1141 objects=4107 orphans=6 tex_mib=60.7 vid_mib=92.3 static_mib=107.5 stats={"district":"gas_station","enemies_ms":5.382,"loot_ms":16.593,"props_ms":101.349,"scene_ms":0.859,"streets_ms":1.315,"total_ms":44.452}
+[density] state district=gas_station view=10_story weather=0 stage=3 tier=2 ambient=0.160 glow=0.600 exposure=1.000 flashlight=true
+[density] frame gas_station_10_story_detail_3cb2ad7_20261018T111323Z.jpg
+[density] perf district=gas_station dressing=with draw_calls=68 primitives=69026 objects_in_frame=52
+[density] DONE label=detail hash=3cb2ad7
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 47 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 7 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

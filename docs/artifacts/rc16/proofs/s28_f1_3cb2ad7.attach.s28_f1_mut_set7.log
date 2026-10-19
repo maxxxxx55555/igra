@@ -1,0 +1,38 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+[closeout] ok   the player spawned
+[closeout] ok   TEL1 telegraphs: 7 of 7 attacks wait 300 ms or more after the cue (gaps [409, 408, 412, 415, 419, 422, 425] ms) and the cue lasts 0.40 s of game time (0.35 s at least)
+[closeout] ok   TEL2 windups: 3 of 3 (Crawler, Hunter, Brute) carry the cue at their start and last [0.5, 1.0, 1.0] s (0.4 s at least)
+[closeout] ok   TEL3 architect melee: the swing waits 411 ms after its cue (300 ms at least) and starts a cooldown (true)
+[closeout] ok   TEL4 beam ring: 1 ring of ember marks the place a falling beam lands for as long as it falls (1 wanted)
+[closeout] ok   TEL5 beam cue: the Architect's flash and sound go off when a beam is sent (true)
+[closeout] ok   TEL6 beam fall: a beam takes 0.80 s to land (0.7 s at least)
+[closeout] ok   TEL7 reach: no monster attacks from further than it sees; out of bounds: []
+[closeout] ok   DIF1 hit cap: a hit of 100 takes [8.0, 12.0, 15.0] HP at Easy, Normal and Hard (8, 12 and 15 wanted)
+[closeout] ok   DIF3 hit cap at New Game+: a hit of 100 takes 15.60 HP at Normal and level 2 (15.6 wanted: the enemy damage bonus of the level scales the cap)
+[closeout] ok   DIF2 monster scale: a Crawler has [35.0, 50.0, 65.0] hit points and hits for [15.0, 20.0, 25.0] at Easy, Normal and Hard (0.7 and 1.3 times the hit points, 0.75 and 1.25 times the damage wanted)
+[closeout] ok   ESC1 escape: the spawn points of all 11 districts are 15.0 m or more from the arrival crossroads (12 m wanted) and 7.5 m or less from a streetlight pole (20 m wanted); out of bounds: []
+[closeout] ok   RET1 respawn: the battery comes back as [25.0, 25.0, 70.0] after a death with 0, 10 and 70 (25, 25 and 70 wanted), health true, a player that was not respawned is untouched (true)
+[closeout] ok   WAKE1 a Hunter 6 m behind the player is awake (true) and one in the far corner sleeps (true): the heavy kinds switch off out of the view and stay on within the wake radius
+[closeout] ok   BAT0 the Architect in his second phase takes nothing out of the beam (true) and swings there after a cue (cue true, hit true); inside the beam he does not swing (false)
+[closeout] ok   PICK1 a pickup on a full pack stays in the world (true) and the pack gains nothing (true)
+[closeout] ok   SAVE1 a save written with the player out of the world reads back whole (true: no vitals, no position) and loads (true); a load inside a fade leaves the fade ended (true)
+[closeout] ok   V1A the details of batch A stand: window shader true, halos true, light cones true, the cone follows the power true
+[closeout] ok   V1B the cones and the halos sort after the other transparent objects (render priority 5): the flashlight turned them into cream pyramids and pale blocks at the default
+[closeout] ok   BURST1 every burst keeps the scale of its particles (7 bursts): []
+[closeout] ok   MOTE1 the dust motes in the beams keep the scale of their particles (2.5 to 6 cm, not the 1 m of their quad)
+[closeout] ok   ENDC1 every ending title is read against the win screen at 3 to 1 or better: the worst is dark at 4.69 to 1
+[closeout] ok   STORY1 the story scenes: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3] a district (two or three each, off by: []), the three kinds stand: ["StoryHook_barricade", "StoryHook_evacuation", "StoryHook_camp"]
+[closeout] FAIL STORY2 a walk into a story trigger is heard once and ends it: heard [], wanted exactly one [Cold ash in a barrel. Whoever lived here left.]
+[closeout] ok   MUS5 a bed turns over: the start moves by at least 0.38 of its length between two turns, 8 turns start in 8 places, three variants take turns (true)
+[closeout] ok   MUS6 the stems crossfade on the hunted level: calm { "bed": -12.0000057220459, "low": -59.9999771118164, "high": -59.9999771118164 }, tense { "bed": -12.0000057220459, "low": -12.0000057220459, "high": -59.9999771118164 }, combat { "bed": -18.0205879211426, "low": -59.9999771118164, "high": -12.0000057220459 } (dB: the bed, the tense stem, the combat stem)
+[closeout] DONE checks=26 fails=1
+ERROR: 1 RID allocations of type 'PN13RendererDummy14TextureStorage12DummyTextureE' were leaked at exit.
+ERROR: 12 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+WARNING: 6 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 46 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 11 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
