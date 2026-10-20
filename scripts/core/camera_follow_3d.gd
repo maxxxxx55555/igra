@@ -16,12 +16,16 @@ extends Node3D
 @export var fps_eye_height: float = 1.7
 @export var fps_follow_speed: float = 15.0
 
-## GDD.md:45-46 (G02/G03): sprint headbob amplitude (capped low - "не выше,
-## укачивание") and the short sprint FOV punch. Gated by reduce_ui_motion,
-## same accessibility API uisfx.gd already reads (SettingsManager.get_setting).
-const SPRINT_BOB_AMP: float = 0.1
-const SPRINT_BOB_FREQ: float = 8.0   ## matches player_3d.gd's own walk-sway rate
+## GDD.md:45-46 (G02/G03): the headbob is capped low ("не выше, укачивание") and a sprint opens the view SPRINT_FOV_BONUS degrees. A step bobs the eye on y at twice the rate of the walk
+## sway of player_3d.gd (STEP_BOB_RAD_PER_M, 4 rad/s per m/s there), STEP_BOB_M at a sprint's speed and less below it; a sprint also leans the eye SPRINT_LEAN_M down and SPRINT_LEAN_FWD_M ahead.
+## None of it with Motion Comfort or Reduce UI Motion (_calm).
+const STEP_BOB_M: float = 0.035
+const STEP_BOB_RAD_PER_M: float = 8.0
+const STEP_BOB_FULL_SPEED: float = 4.8
 const SPRINT_FOV_BONUS: float = 5.0
+const SPRINT_LEAN_M: float = 0.03
+const SPRINT_LEAN_FWD_M: float = 0.04
+const SPRINT_LEAN_PER_SEC: float = 6.0
 ## A landing after LAND_MIN_AIR_SEC in the air dips the eye by LAND_DIP_M and opens the view LAND_FOV_PUNCH degrees, both gone in LAND_SEC.
 const LAND_MIN_AIR_SEC: float = 0.25
 const LAND_DIP_M: float = 0.08
@@ -53,7 +57,8 @@ var _current_distance: float
 var _current_fov: float
 var _pitch: float = 0.0
 var _running: bool = false
-var _bob_t: float = 0.0
+var _step_t: float = 0.0
+var _lean: float = 0.0
 var _breath_t: float = 0.0
 var _zoom: float = 1.0
 var _zoom_target: float = 1.0
@@ -113,18 +118,16 @@ func _tick_fps(delta: float) -> void:
 	var tp: Vector3 = _target.global_position
 	var eye_y := fps_eye_height
 	var reduce_motion: bool = _calm()
-	_track_landing(delta)
-	if _running and not reduce_motion:
-		_bob_t += delta * SPRINT_BOB_FREQ
-		eye_y += sin(_bob_t) * SPRINT_BOB_AMP
-	else:
-		_bob_t = 0.0
-	if not reduce_motion:
-		_breath_t += delta * BREATH_RAD_PER_SEC
-		eye_y += sin(_breath_t) * BREATH_M - LAND_DIP_M * _land_kick
-	var desired: Vector3 = tp + Vector3(0.0, eye_y, 0.0)
-	_cam.global_position = _cam.global_position.lerp(desired, clampf(delta * fps_follow_speed, 0.0, 1.0))
 	var yaw: float = _target.rotation.y
+	_track_landing(delta)
+	var ground_speed: float = Vector2(_target.velocity.x, _target.velocity.z).length() if _was_grounded else 0.0
+	_lean = move_toward(_lean, 0.0 if reduce_motion or not _running else 1.0, delta * SPRINT_LEAN_PER_SEC)
+	if not reduce_motion:
+		_step_t += delta * ground_speed * STEP_BOB_RAD_PER_M
+		_breath_t += delta * BREATH_RAD_PER_SEC
+		eye_y += sin(_step_t) * STEP_BOB_M * minf(ground_speed / STEP_BOB_FULL_SPEED, 1.0) + sin(_breath_t) * BREATH_M - LAND_DIP_M * _land_kick - SPRINT_LEAN_M * _lean
+	var desired: Vector3 = tp + Vector3(0.0, eye_y, 0.0) + Basis(Vector3.UP, yaw) * Vector3(0.0, 0.0, -SPRINT_LEAN_FWD_M * _lean)
+	_cam.global_position = _cam.global_position.lerp(desired, clampf(delta * fps_follow_speed, 0.0, 1.0))
 	_cam.rotation = Vector3(_pitch + _recoil.x, yaw + _recoil.y, 0.0)
 	_recoil = _recoil.lerp(Vector2.ZERO, clampf(delta * RECOIL_SETTLE_PER_SEC, 0.0, 1.0))
 	_cam.fov = lerpf(_cam.fov, fov_target(), clampf(delta * interior_lerp_speed, 0.0, 1.0))

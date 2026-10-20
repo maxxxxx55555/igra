@@ -17,10 +17,12 @@ const MODEL: PackedScene = preload("res://scenes/weapons/weapon_model.tscn")
 const MODEL_LENGTH: Dictionary = {&"pistol": 1.0, &"rifle": 2.4, &"shotgun": 2.1}
 ## Where the drawn weapon sits in the camera's frame: right hand, a little below the view.
 const HOLD_OFFSET := Vector3(0.22, -0.2, -0.45)
+const _Motion := preload("res://scripts/weapons/viewmodel_motion.gd")
 
 var equipped: StringName = &""
 var _weapons: Dictionary = {}
 var _model_material := StandardMaterial3D.new()
+var _motion := _Motion.new()
 
 func _ready() -> void:
 	_model_material.albedo_color = Color(0.15, 0.16, 0.18)
@@ -29,18 +31,20 @@ func _ready() -> void:
 	for id in ProgressTracker.get_weapons():
 		_spawn(StringName(id))
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	var weapon := get_current_weapon()
 	var cam := get_viewport().get_camera_3d()
 	if weapon != null and cam != null:
-		weapon.global_transform = cam.global_transform * Transform3D(Basis(), HOLD_OFFSET)
+		weapon.global_transform = cam.global_transform * Transform3D(Basis(), HOLD_OFFSET) * _motion.offset(delta, cam.global_transform.basis, weapon.is_reloading())
 
 func _spawn(id: StringName) -> void:
 	var weapon := (SCENES[id] as PackedScene).instantiate() as WeaponBase
 	weapon.visible = false
 	weapon.manager = self
 	weapon.set_shooter(get_parent() as Node3D)
-	weapon.fired.connect(func() -> void: ProgressTracker.shots += 1)
+	weapon.fired.connect(func() -> void:
+		ProgressTracker.shots += 1
+		_motion.kick(weapon.recoil))
 	weapon.ammo_changed.connect(func(_current: int, _mag: int) -> void:
 		if weapon == get_current_weapon():
 			_emit_ammo())

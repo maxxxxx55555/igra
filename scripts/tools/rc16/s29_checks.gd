@@ -4,10 +4,13 @@ extends RefCounted
 ## ANIM2 the legs swing with the speed, the two sides in opposite phase, and stand still at rest (A2); ANIM3 twenty kills count twenty, a second hit on a falling body counts nothing and every body
 ## lies down (A6); ANIM4 the windup of an attack draws the arm back for 0.4 s, strikes and recovers (A4); ANIM5 the head follows an aware monster's player within 0.7 rad at 6 rad/s or less and
 ## faces forward in a chase (A7); ANIM6 a hit pushes the body back by 0.08 m or less and it returns, a heavy hit delays the next attack (A5); ANIM7 the feet of every monster stand on the floor
-## of its capsule (A2); ANIM8 the arachnophobia mode swaps the crawler for its blob (C7). Wired into _closeout_check_runner.gd as `await Rc29.run(self)`; CLOSEOUT_ONLY=s29 runs it alone.
+## of its capsule (A2); ANIM8 the arachnophobia mode swaps the crawler for its blob (C7); ANIM9 the eye bobs on a step by 0.035 m at most, leans in a sprint and holds still with Motion Comfort, and the weapon kicks
+## for 4 frames, dips and tilts in a reload, trails the view by 0.12 rad at most and holds still with Motion Comfort and with Reduce UI Motion (A8). Wired into _closeout_check_runner.gd as `await Rc29.run(self)`; CLOSEOUT_ONLY=s29 runs it alone.
 
-const _Looks := preload("res://scripts/enemies/monster_looks.gd")
-const _Rig := preload("res://scripts/enemies/monster_rig.gd")
+## The files the checks test are loaded when the checks run, not preloaded: on the code before the fixes they do not exist, and the checks then fail instead of the runner failing to compile.
+const _LOOKS: String = "res://scripts/enemies/monster_looks.gd"
+const _RIG: String = "res://scripts/enemies/monster_rig.gd"
+const _MOTION: String = "res://scripts/weapons/viewmodel_motion.gd"
 const State := BaseMonster.State
 const _FAR := Vector3(-600.0, 0.0, 600.0)
 const _SCENES: Array[String] = ["rotter_3d", "crawler_3d", "hound_3d", "hunter_3d", "brute_3d", "shadow_3d", "watcher_3d", "burner_3d", "sharpshooter_3d", "tvar_3d", "destroyer_3d", "boss_architect_3d"]
@@ -26,6 +29,8 @@ static func run(r: Node) -> void:
 	else:
 		for id: String in ["ANIM2", "ANIM3", "ANIM4", "ANIM5", "ANIM6", "ANIM7", "ANIM8"]:
 			r._ok(false, "%s there is no rig to test (ANIM1 failed)" % id)
+	_step_bob(r)
+	_viewmodel(r)
 	r._playing()
 
 static func _spot(i: int, z: float = 0.0) -> Vector3:
@@ -36,12 +41,16 @@ static func _step(m: Node3D, frames: int, dt: float) -> void:
 		m.call("_update_anim", dt)
 
 static func _built(r: Node) -> bool:
+	if not (ResourceLoader.exists(_LOOKS) and ResourceLoader.exists(_RIG)):
+		r._ok(false, "ANIM1 monster_looks.gd and monster_rig.gd exist")
+		return false
+	var looks: GDScript = load(_LOOKS)
 	var missing: Array[String] = []
 	for i in _SCENES.size():
 		var m: Node3D = r._monster(_SCENES[i], _spot(i))
 		var id: StringName = m.get("monster_id")
 		var parts: bool = m.get_node_or_null("VisualRoot/Torso/BodyMesh") != null and m.get_node_or_null("VisualRoot/Torso/HeadMesh") != null
-		if not (m.has_method("_update_anim") and parts and _Looks.LOOKS.has(id)):
+		if not (m.has_method("_update_anim") and parts and looks.LOOKS.has(id)):
 			missing.append(String(id))
 		m.queue_free()
 	r._ok(missing.is_empty(), "ANIM1 the 12 monster scenes build the rig and have a look (missing: %s)" % [missing])
@@ -51,7 +60,7 @@ static func _built(r: Node) -> bool:
 		if file.ends_with(".tres"):
 			rows += 1
 			var data: Resource = load("res://data/monsters/" + file)
-			if not _Looks.LOOKS.has(data.get("id")):
+			if not looks.LOOKS.has(data.get("id")):
 				no_row.append(file)
 	r._ok(rows == 12 and no_row.is_empty(), "ANIM1 every id of data/monsters (%d) has a gait row (without: %s)" % [rows, no_row])
 	return missing.is_empty() and no_row.is_empty()
@@ -91,6 +100,7 @@ static func _kills(r: Node) -> void:
 	r._ok(lying == 20, "ANIM3 every one of the twenty bodies lies down (%d of 20)" % lying)
 
 static func _windup(r: Node) -> void:
+	var rig: GDScript = load(_RIG)
 	var m: Node3D = r._monster("rotter_3d", _spot(0, 120.0))
 	var arm: Node3D = m.get_node("VisualRoot/Torso/Arm0")
 	(m.get("_telegraph") as Node).call("cue")
@@ -99,12 +109,12 @@ static func _windup(r: Node) -> void:
 	for i in 50:
 		m.call("_update_anim", 0.02)
 		var t: float = float(i + 1) * 0.02
-		if t <= _Rig.WINDUP:
+		if t <= rig.WINDUP:
 			drawn = minf(drawn, arm.rotation.x)
-		elif t <= _Rig.WINDUP + _Rig.STRIKE + 0.02:
+		elif t <= rig.WINDUP + rig.STRIKE + 0.02:
 			thrown = maxf(thrown, arm.rotation.x)
 	_step(m, 40, 0.02)
-	r._ok(_Rig.WINDUP >= 0.25 and drawn < -1.0 and thrown > 0.5 and absf(arm.rotation.x) < 0.15, "ANIM4 windup %.2f s draws the arm back (%.2f rad), the strike %.2f s throws it forward (%.2f), recover %.2f s" % [_Rig.WINDUP, drawn, _Rig.STRIKE, thrown, _Rig.RECOVER])
+	r._ok(rig.WINDUP >= 0.25 and drawn < -1.0 and thrown > 0.5 and absf(arm.rotation.x) < 0.15, "ANIM4 windup %.2f s draws the arm back (%.2f rad), the strike %.2f s throws it forward (%.2f), recover %.2f s" % [rig.WINDUP, drawn, rig.STRIKE, thrown, rig.RECOVER])
 	m.queue_free()
 
 static func _head(r: Node) -> void:
@@ -144,7 +154,7 @@ static func _feet(r: Node) -> void:
 	for i in _SCENES.size():
 		var m: Node3D = r._monster(_SCENES[i], _spot(i, 240.0))
 		var id: StringName = m.get("monster_id")
-		var legs: Array = _Looks.look(id)["legs"]
+		var legs: Array = (load(_LOOKS) as GDScript).look(id)["legs"]
 		var leg: Node3D = m.get_node_or_null("VisualRoot/Leg0") as Node3D
 		if leg != null:
 			var capsule: CapsuleShape3D = (m.get_node("CollisionShape3D") as CollisionShape3D).shape
@@ -165,3 +175,84 @@ static func _arachnophobia(r: Node) -> void:
 	var back: bool = alt != null and not alt.visible and body.visible
 	r._ok(swapped and back, "ANIM8 the arachnophobia mode swaps the crawler for its blob and back (swapped %s, back %s)" % [swapped, back])
 	m.queue_free()
+
+## ANIM9, the eye: a step bobs it on y by 0.035 m at most at a sprint's speed (the breath adds 0.004) and not at all with Motion Comfort; a sprint leans it 0.03 m down; with Motion Comfort no lean.
+static func _step_bob(r: Node) -> void:
+	var follow: Camera3D = r._main.get_node("Camera3D") as Camera3D
+	var player: CharacterBody3D = r._player as CharacterBody3D
+	var v0: Vector3 = player.velocity
+	var running0: Variant = follow.get("_running")
+	var kick0: Variant = follow.get("_land_kick")
+	follow.set("_land_kick", 0.0)
+	follow.set("_running", false)
+	var spans: Array[float] = []
+	for calm: bool in [false, true]:
+		SettingsManager.set_setting("reduce_camera_motion", calm)
+		player.velocity = Vector3(0.0, 0.0, -4.8)
+		var low: float = INF
+		var high: float = -INF
+		for _i in 60:
+			follow.call("_tick_fps", 0.1)
+			low = minf(low, follow.global_position.y)
+			high = maxf(high, follow.global_position.y)
+		spans.append(high - low)
+	player.velocity = Vector3.ZERO
+	var eye: Array[float] = []
+	for lean: bool in [false, true, true]:
+		SettingsManager.set_setting("reduce_camera_motion", eye.size() == 2)
+		follow.set("_running", lean)
+		follow.set("_lean", 0.0)
+		follow.set("_breath_t", 0.0)
+		for _i in 20:
+			follow.call("_tick_fps", 0.1)
+		eye.append(follow.global_position.y)
+	SettingsManager.set_setting("reduce_camera_motion", false)
+	player.velocity = v0
+	follow.set("_running", running0)
+	follow.set("_land_kick", kick0)
+	r._ok(spans[0] >= 0.04 and spans[0] <= 0.0781 and spans[1] < 0.0005, "ANIM9 the eye bobs %.4f m over a run of steps (0.078 m at most, 0.035 m a side plus the breath) and %.4f m with Motion Comfort" % [spans[0], spans[1]])
+	var drop: float = eye[0] - eye[1]
+	r._ok(drop >= 0.025 and drop <= 0.035 and absf(eye[0] - eye[2]) < 0.0005, "ANIM9 a sprint leans the eye %.4f m down (0.03 m) and Motion Comfort holds it level (%.4f m)" % [drop, eye[0] - eye[2]])
+
+## ANIM9, the weapon (scripts/weapons/viewmodel_motion.gd): a shot kicks it back 0.04 m at most and it is still within 4 frames; a reload dips it by 0.1 m or more and tilts it; a turn of the view
+## leaves it 0.12 rad behind at most and it catches up; Motion Comfort and Reduce UI Motion each hold it still.
+static func _viewmodel(r: Node) -> void:
+	if not ResourceLoader.exists(_MOTION):
+		r._ok(false, "ANIM9 viewmodel_motion.gd exists")
+		return
+	var script: GDScript = load(_MOTION)
+	SettingsManager.set_setting("reduce_camera_motion", false)
+	SettingsManager.set_setting("reduce_ui_motion", false)
+	var m: RefCounted = script.new()
+	var still := Basis()
+	m.call("offset", 0.016, still, false)
+	m.call("kick", 0.5)
+	var back: float = (m.call("offset", 0.016, still, false) as Transform3D).origin.z
+	var frames: int = 1
+	var z: float = back
+	while z > 0.0005 and frames < 30:
+		z = (m.call("offset", 0.016, still, false) as Transform3D).origin.z
+		frames += 1
+	r._ok(back > 0.02 and back <= 0.04001 and frames <= 4, "ANIM9 a shot kicks the weapon back %.3f m (0.04 m at most) and it is still after %d frames (4 at most)" % [back, frames])
+	var dipped: Transform3D = Transform3D.IDENTITY
+	for _i in 30:
+		dipped = m.call("offset", 0.016, still, true)
+	var tilt: float = Quaternion(dipped.basis).get_angle()
+	for _i in 30:
+		m.call("offset", 0.016, still, false)
+	var up: float = (m.call("offset", 0.016, still, false) as Transform3D).origin.y
+	r._ok(dipped.origin.y <= -0.1 and tilt > 0.3 and absf(up) < 0.005, "ANIM9 a reload dips the weapon %.3f m and tilts it %.2f rad, and it comes back (%.4f m)" % [dipped.origin.y, tilt, up])
+	var turned := Basis(Vector3.UP, 0.5)
+	var behind: float = Quaternion((m.call("offset", 0.016, turned, false) as Transform3D).basis).get_angle()
+	for _i in 15:
+		m.call("offset", 0.016, turned, false)
+	var late: float = Quaternion((m.call("offset", 0.016, turned, false) as Transform3D).basis).get_angle()
+	r._ok(behind > 0.05 and behind <= 0.1201 and late < 0.03, "ANIM9 a turn of the view leaves the weapon %.3f rad behind (0.12 at most) and it catches up (%.3f rad after 0.25 s)" % [behind, late])
+	var held: Array[bool] = []
+	for key: String in ["reduce_camera_motion", "reduce_ui_motion"]:
+		SettingsManager.set_setting(key, true)
+		m.call("kick", 1.0)
+		var off: Transform3D = m.call("offset", 0.016, turned, true)
+		held.append(off.origin == Vector3.ZERO and off.basis.is_equal_approx(Basis()))
+		SettingsManager.set_setting(key, false)
+	r._ok(held[0] and held[1], "ANIM9 Motion Comfort (%s) and Reduce UI Motion (%s) hold the weapon still" % [held[0], held[1]])
