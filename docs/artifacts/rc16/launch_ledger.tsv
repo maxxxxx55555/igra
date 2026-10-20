@@ -162,3 +162,4 @@ n	utc	head	id	exit	command
 161	20261018T095724Z	3cb2ad7	s28_f1_3cb2ad7	0	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/5fa8d500-393b-43b7-95de-04d09fcc9e42/scratchpad/s28_f1.sh
 162	20261020T172408Z	3ca44bb	s29_base_compile_3ca44bb	0	bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 300
 163	20261020T173319Z	3ca44bb	s29_base_botN_3ca44bb	0	bash tools/qa_sim/autoplay_bot
+164	20261020T175617Z	ca08f2f	s29_base_botH_3ca44bb	2	bash tools/qa_sim/autoplay_bot
