@@ -94,7 +94,7 @@ func _install_hero_bg_v2(after: Node) -> void:
 	hero.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	hero.stretch_mode = TextureRect.STRETCH_SCALE
 	hero.modulate = HERO_TINT
-	add_child(hero)
+	preload("res://scripts/ui/menu_parallax.gd").attach(self, hero)  # B9: the backdrop drifts with the pointer
 	hero.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	move_child(hero, (after.get_index() + 1) if after else 0)
 

@@ -23,6 +23,8 @@ func _run() -> void:
 	# a fresh profile opens the onboarding cards on game_started: they pause the tree and dim the frame, and these runs measure the game
 	SaveSystem.mark_onboard_done()
 	QualityManager.enabled = false  # a measurement reads one tier: the quality manager steps it under 30 FPS (CORRECTION_LOG 241)
+	if OS.get_environment("TLS_PERF_TIER") != "":
+		SettingsManager.set_graphics_tier(int(OS.get_environment("TLS_PERF_TIER")))  # 0 Low, 1 Medium, 2 High, 3 Ultra: the default is the profile's
 	Routes.start_game()
 	if not await _wait_until(func() -> bool: return GameManager.is_playing(), 10.0):
 		printerr("[perf] never entered PLAYING")

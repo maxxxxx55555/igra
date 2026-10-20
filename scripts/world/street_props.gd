@@ -319,6 +319,7 @@ func _raised(positions: Array[Vector3], lift: float) -> Array[Vector3]:
 	return out
 
 func _build_one_multimesh(positions: Array[Vector3], mesh: Mesh, material: Material, node_name: String) -> void:
+	_stamp_shadows(positions, node_name)
 	if positions.is_empty():
 		return
 	var mm := MultiMesh.new()
@@ -345,3 +346,19 @@ static func make_wall_mesh(use_brick: bool) -> MeshInstance3D:
 		Color(0.45, 0.32, 0.25) if use_brick else Color(0.35, 0.22, 0.18)
 	)
 	return mi
+
+const _Contact := preload("res://scripts/world/contact_shadows.gd")
+## The radius of the blob under each batch of props (W6, contact_shadows.gd).
+const _SHADOW_RADIUS: Dictionary = {"BenchesBatched": 0.9, "TreeTrunksBatched": 0.6, "ConesBatched": 0.4}
+
+## The blobs under the props, one MultiMesh for the district: made with the first batch, which also stamps the poles.
+func _stamp_shadows(positions: Array[Vector3], node_name: String) -> void:
+	if not _Contact.enabled():
+		return
+	var shadows := get_node_or_null("ContactShadows") as MultiMeshInstance3D
+	if shadows == null:
+		shadows = _Contact.new()
+		add_child(shadows)
+		shadows.stamp_all(_lamp_local_positions, 0.45)
+	if _SHADOW_RADIUS.has(node_name):
+		shadows.stamp_all(positions, float(_SHADOW_RADIUS[node_name]))

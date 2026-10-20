@@ -1034,7 +1034,7 @@ func trigger_strobe() -> bool:
 		if m.has_method("stun"):
 			m.call("stun", STROBE_STUN)
 			hits += 1
-	_strobe_flash()
+	_strobe_effects()
 	EventBus.noise_emitted.emit(Vector2(global_position.x, global_position.z), 4.0)
 	if hits > 0:
 		EventBus.inventory_notice.emit(LocalizationManager.t("STROBE_HIT"))
@@ -1454,4 +1454,8 @@ func refresh_flashlight_range() -> void:
 	var skill_lvl: int = SkillTreeManager.get_skill_level(&"light_radius") if SkillTreeManager else 0
 	flashlight.spot_range = _scene_flashlight_range * (1.0 + 0.2 * skill_lvl) + _upgrade_range_bonus
 
-
+## The flash of the strobe flashlight and its sparks in front of the lens (scenes/vfx/vfx_strobe.tscn, W7); the sparks are not made with Reduce Flash.
+func _strobe_effects() -> void:
+	_strobe_flash()
+	if not bool(SettingsManager.get_setting("reduce_flash", false)):
+		preload("res://scripts/effects/vfx_pool.gd").spawn(preload("res://scenes/vfx/vfx_strobe.tscn"), flashlight.global_position - flashlight.global_transform.basis.z * 0.6, get_tree())

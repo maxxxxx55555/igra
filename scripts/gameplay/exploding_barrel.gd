@@ -1,22 +1,25 @@
 
 extends RigidBody3D
 
-@export 
+@export
 var explosion_damage: int = 50
 
-@export 
+@export
 var explosion_radius: float = 5.0
 
-@onready 
+@onready
 var mesh: MeshInstance3D = $MeshInstance3D
 
-@onready 
+@onready
 var explosion_particles: GPUParticles3D = $ExplosionParticles
 
-@onready 
+@onready
 var explosion_light: OmniLight3D = $ExplosionLight
 
 var _exploded: bool = false
+
+func _ready() -> void:
+	add_to_group("barrels")
 
 func take_damage(amount: int) -> void:
 	if _exploded:
@@ -46,7 +49,7 @@ func _explode() -> void:
 	WowDirector.wow("explosion")
 	if explosion_light:
 		explosion_light.visible = true
-		
+
 		var tween := create_tween()
 		tween.tween_property(explosion_light, "light_energy", 0.0, 0.5)
 

@@ -125,10 +125,10 @@ func build(district_id: StringName, sb: Node) -> void:
 	var none: Array[Color] = []
 	_batch("Litter", _flat(), litter, litter_colors, _plain(Color.WHITE, 0.95, 0.0, true), false)
 	_batch("Puddles", _patch(), puddles, none, _soft(Color(0.015, 0.02, 0.03, 0.55), false), false)
-	_batch("Crates", _box(), crates, none, _plain(CRATE_COLOR, 0.9, 0.0), true)
-	_batch("Barrels", _drum(), barrels, barrel_colors, _plain(Color.WHITE, 0.95, 0.0, true), true)
-	_batch("Bins", _BIN, bins, none, _plain(Color(0.20, 0.22, 0.25), 0.6, 0.5), true)
-	_batch("Hydrants", _HYDRANT, _hydrant_spots(sb), none, _plain(Color(0.34, 0.27, 0.13), 0.55, 0.4), true)
+	_batch("Crates", _box(), crates, none, _plain(CRATE_COLOR, 0.9, 0.0, false, "plywood"), true)
+	_batch("Barrels", _drum(), barrels, barrel_colors, _plain(Color.WHITE, 0.95, 0.0, true, "rusted_metal"), true)
+	_batch("Bins", _BIN, bins, none, _plain(Color(0.20, 0.22, 0.25), 0.6, 0.5, false, "rusted_metal"), true)
+	_batch("Hydrants", _HYDRANT, _hydrant_spots(sb), none, _plain(Color(0.34, 0.27, 0.13), 0.55, 0.4, false, "rusted_metal"), true)
 	_pool_mat = _soft(Color(BRASS, 0.0), true)
 	_batch("LampPools", _patch(), _lamp_pools(), none, _pool_mat, false)
 	var details: Node3D = _LAMP_DETAILS.new()
@@ -246,13 +246,13 @@ func _drum() -> CylinderMesh:
 	mesh.rings = 1
 	return mesh
 
-func _plain(color: Color, roughness: float, metallic: float, tinted: bool = false) -> StandardMaterial3D:
+func _plain(color: Color, roughness: float, metallic: float, tinted: bool = false, tex: String = "") -> StandardMaterial3D:
 	var mat := StandardMaterial3D.new()
 	mat.albedo_color = color
 	mat.roughness = roughness
 	mat.metallic = metallic
 	mat.vertex_color_use_as_albedo = tinted
-	return mat
+	return preload("res://scripts/world/pbr_sets.gd").apply(mat, tex)  # B6: the set `tex` names, if its files exist
 
 ## A soft round patch that is not lit by anything: a wet stain (`add` false: darkens what is under it) or a pool of light (`add` true: brightens it).
 func _soft(color: Color, add: bool) -> StandardMaterial3D:
@@ -339,7 +339,7 @@ func _add_rest_spot() -> void:
 	var bench := MeshInstance3D.new()
 	bench.name = "RestBench"
 	bench.mesh = _BENCH
-	bench.material_override = _plain(Color(0.30, 0.26, 0.22), 0.85, 0.0)
+	bench.material_override = _plain(Color(0.30, 0.26, 0.22), 0.85, 0.0, false, "plywood")
 	add_child(bench)
 	bench.position = Vector3(at.x, GROUND_Y, at.z)
 	bench.rotation.y = atan2(8.0 - at.x, 8.0 - at.z)  # the seat of the bench faces +Z: toward the power switch
@@ -355,7 +355,7 @@ func _add_rest_spot() -> void:
 	shaft.radial_segments = 6
 	shaft.rings = 1
 	pole.mesh = shaft
-	pole.material_override = _plain(Color(0.165, 0.200, 0.251), 0.55, 0.6)
+	pole.material_override = _plain(Color(0.165, 0.200, 0.251), 0.55, 0.6, false, "rusted_metal")
 	pole.position = Vector3(0.0, 1.1, 0.0)
 	lantern.add_child(pole)
 	var bulb := MeshInstance3D.new()

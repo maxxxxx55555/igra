@@ -36,7 +36,12 @@ const GLOW_LIT: float = 0.35
 const GLOW_FULL: float = 0.7
 
 const _EnvPreset := preload("res://scripts/world/env_preset.gd")
+const _Weather := preload("res://scripts/effects/weather_particles.gd")
+## W10 of docs/VISUAL_PASS.md section 8: the moon's shadow bias (the engine's 0.1 and 2.0 acned or floated blind), scaled by the moon_bias_mult of the district.
+const MOON_BIAS: float = 0.06
+const MOON_NORMAL_BIAS: float = 1.2
 const CAMERA_ATTRIBUTES: String = "res://assets/env/camera_attributes_night.tres"
+const VISUAL_QUALITY: String = "res://assets/config/visual_quality.tres"
 
 var _we: WorldEnvironment = null
 var _env: Environment = null
@@ -93,8 +98,8 @@ func _ready() -> void:
 	_boot_look()
 
 ## The order the look boots in (docs/VISUAL_PASS.md section 8, W1 to W7), in one place so that it cannot be scrambled: the preset of the profile, the camera attributes, the numbers of the
-## graphics tier, the colours of the stage, then the LUT and the post-fx LAST, because they refine the preset and do not replace it. The materials of the lamps and the roads (W4, W5) and the
-## weather particles (W7) follow with each district (district_entered).
+## graphics tier, the colours of the stage, then the LUT and the post-fx LAST, because they refine the preset and do not replace it. The materials of the lamps and the roads (W4, W5) follow with each
+## district (district_entered); the weather particles (W7) are made once, last of all.
 func _boot_look() -> void:
 	_EnvPreset.apply(_env)
 	_we.camera_attributes = load(CAMERA_ATTRIBUTES)
@@ -105,6 +110,9 @@ func _boot_look() -> void:
 		apply_for_stage(dm.get_stage(dm.current_district))
 		_apply_lut(dm.current_district)
 		_apply_postfx(dm.current_district)
+		_apply_moon_bias(dm.current_district)
+	if get_node_or_null("WeatherParticles") == null:
+		add_child(_Weather.new())
 
 func _process(delta: float) -> void:
 	if _override_frames > 0:
@@ -172,6 +180,7 @@ func _apply_stage_of(district_id: StringName) -> void:
 	if not is_inside_tree():
 		return
 	var dm := get_node_or_null("/root/DistrictManager")
+	_apply_moon_bias(district_id)
 	if dm != null:
 		apply_for_stage(dm.get_stage(String(district_id)))
 
@@ -184,7 +193,7 @@ func _apply_graphics_tier(tier: int) -> void:
 	get_viewport().msaa_3d = MSAA_BY_TIER[clampi(tier, 0, MSAA_BY_TIER.size() - 1)]
 	if _env == null:
 		return
-	var vq := load("res://assets/config/visual_quality.tres")
+	var vq := load(VISUAL_QUALITY)
 	if vq == null:
 		return
 	var names := ["low", "medium", "high", "ultra"]  # C06: ultra is its own preset (fog 0.015, particles 150%)
@@ -317,3 +326,13 @@ func _find_moon_r(n: Node, fallback: DirectionalLight3D) -> DirectionalLight3D:
 		if r != null and "moon" in r.name.to_lower(): return r
 		if r != null: fallback = r
 	return fallback
+
+## W10: the shadow bias of the moon of the district (visual_quality.tres district_lights, key moon_bias_mult): a district whose shadows acne gets a larger one, a district whose shadows float a smaller.
+func _apply_moon_bias(district_id: StringName) -> void:
+	if _moon == null:
+		return
+	var table := load(VISUAL_QUALITY)
+	var lights: Dictionary = table.get_meta("district_lights", {}) if table else {}
+	var mult: float = float(lights.get(String(district_id), {}).get("moon_bias_mult", 1.0))
+	_moon.shadow_bias = MOON_BIAS * mult
+	_moon.shadow_normal_bias = MOON_NORMAL_BIAS * mult
