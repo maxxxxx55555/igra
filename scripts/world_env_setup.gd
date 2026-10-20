@@ -35,6 +35,10 @@ const GLOW_DARK: float = 0.0
 const GLOW_LIT: float = 0.35
 const GLOW_FULL: float = 0.7
 
+const _EnvPreset := preload("res://scripts/world/env_preset.gd")
+const CAMERA_ATTRIBUTES: String = "res://assets/env/camera_attributes_night.tres"
+
+var _we: WorldEnvironment = null
 var _env: Environment = null
 var _moon: DirectionalLight3D = null
 var _player_glow: OmniLight3D = null
@@ -55,24 +59,14 @@ func _ready() -> void:
 		we.owner = root
 	if we.environment == null:
 		we.environment = Environment.new()
+	_we = we
 	_env = we.environment
 
+	# The preset and the tier (_boot_look) own the rest of the environment; the ambient light stands dark until a stage is applied.
 	_env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	_env.ambient_light_color = AMBIENT_COLOR_DARK
 	_env.ambient_light_energy = ambient_energy_default
-	_env.glow_enabled = true
-	_env.glow_intensity = glow_intensity
-	_env.glow_strength = 1.0
-	_env.glow_bloom = 0.1
-	_env.ssao_enabled = false
-	_env.ssil_enabled = false
-	_env.volumetric_fog_enabled = false
 	_env.fog_enabled = true
-	_env.fog_density = fog_density
-	_env.fog_light_color = Color(0.102, 0.129, 0.2)  # #1a2133
-	# fog_light_energy = 0 гасил цвет тумана полностью — туман переставал быть
-	# видимым как дымка и работал только на затемнение дали.
-	_env.fog_light_energy = 0.6
 
 	var moon: DirectionalLight3D = _find_moon(root)
 	if moon == null:
@@ -89,18 +83,26 @@ func _ready() -> void:
 	# Flashlight defaults (set on player scene)
 	# - spot_range = 8.0, spot_angle = 45, light_energy = 1.0, color = #c9a24a
 
-	_apply_graphics_tier(int(SettingsManager.get_setting("graphics_tier", 2)))
 	EventBus.settings_changed.connect(_on_settings_changed)
 	EventBus.district_stage_changed.connect(_on_district_stage_changed)
 	EventBus.weather_changed.connect(_on_weather_changed)
 	EventBus.district_entered.connect(_apply_lut)
 	EventBus.district_entered.connect(_apply_postfx)
 	EventBus.district_entered.connect(_apply_stage_of)
-	_postfx = _load_postfx_presets()
-
 	_player_glow = _find_player_glow()
+	_boot_look()
+
+## The order the look boots in (docs/VISUAL_PASS.md section 8, W1 to W7), in one place so that it cannot be scrambled: the preset of the profile, the camera attributes, the numbers of the
+## graphics tier, the colours of the stage, then the LUT and the post-fx LAST, because they refine the preset and do not replace it. The materials of the lamps and the roads (W4, W5) and the
+## weather particles (W7) follow with each district (district_entered).
+func _boot_look() -> void:
+	_EnvPreset.apply(_env)
+	_we.camera_attributes = load(CAMERA_ATTRIBUTES)
+	_apply_graphics_tier(int(SettingsManager.get_setting("graphics_tier", 2)))
+	_postfx = _load_postfx_presets()
 	var dm := get_node_or_null("/root/DistrictManager")
 	if dm != null:
+		apply_for_stage(dm.get_stage(dm.current_district))
 		_apply_lut(dm.current_district)
 		_apply_postfx(dm.current_district)
 

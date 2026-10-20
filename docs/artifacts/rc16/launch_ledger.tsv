@@ -172,3 +172,8 @@ n	utc	head	id	exit	command
 171	20261020T192429Z	83b3b5b	s29_a9_frames_83b3b5b	0	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s29_a9.sh
 172	20261020T192644Z	584e04f	s29_a10_botN_584e04f	0	bash tools/qa_sim/autoplay_bot
 173	20261020T194815Z	584e04f	s29_a10_botH_584e04f	1	bash tools/qa_sim/autoplay_bot
+174	20261020T204527Z	5fc66d6	s29_b1_look_wip	1	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s29_a1.sh
+175	20261020T204724Z	5fc66d6	s29_b1_look_wip2	1	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s29_a1.sh
+176	20261020T204817Z	5fc66d6	s29_b1_look_wip3	0	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s29_a1.sh
+177	20261020T204903Z	5fc66d6	s29_b1_full_wip	1	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s29_full.sh
+178	20261020T205343Z	5fc66d6	s29_b1_full2_wip	0	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s29_full.sh

@@ -30,14 +30,6 @@ static func build(parent: Node, district_id: StringName, stats: Dictionary = {})
 	root.name = StringName("District_" + String(resolved_id))
 	parent.add_child(root)
 	var theme: Dictionary = DistrictThemes.get_theme(resolved_id)
-	var world_env: WorldEnvironment = WorldEnvironment.new()
-	var env: Environment = Environment.new()
-	env.background_mode = Environment.BG_COLOR
-	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	DistrictThemes.apply_to_environment(env, resolved_id)
-	world_env.environment = env
-	world_env.name = "WorldEnvironment"
-	root.add_child(world_env)
 	var sb_script: Script = load("res://scripts/world/street_builder.gd") as Script
 	if sb_script != null:
 		var sb: Node3D = Node3D.new()
