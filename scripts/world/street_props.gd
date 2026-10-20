@@ -33,8 +33,8 @@ var _lamp_local_positions: Array[Vector3] = []
 ## FULL): a district's lamps must read dead in the dark, that is the game's
 ## namesake beat. Before rc15 the heads glowed at 1.6 in every stage and, from a
 ## distance, read as a starfield.
-const _LAMP_HEAD_ENERGY: Array[float] = [0.0, 0.7, 1.6, 2.0]
-var _lamp_mat: StandardMaterial3D
+const _LampHead := preload("res://scripts/world/lamp_head.gd")
+var _lamp_mat: ShaderMaterial
 var _district_id: StringName = &""
 
 const _TEX_BRICK       := "res://assets/textures/environment/brick.png"
@@ -211,10 +211,10 @@ func _build_streetlight_multimesh() -> void:
 	lamp_mesh.height = 0.12
 	lamp_mesh.radial_segments = BULB_SEGMENTS
 	lamp_mesh.rings = BULB_RINGS
-	_lamp_mat = StandardMaterial3D.new()
-	_lamp_mat.albedo_color = Color(0.788, 0.635, 0.290, 1.0)
-	_lamp_mat.emission_enabled = true
-	_lamp_mat.emission = Color(1.0, 0.82, 0.48, 1.0)
+	# W4 (docs/VISUAL_PASS.md section 8): the head is mat_lamp_flicker.tres, one copy per district because `lit` is
+	# the power stage of that district; the flicker of the mesh follows the one of the lights (streetlight_3d.gd)
+	# and Reduce Flash stills it.
+	_lamp_mat = _LampHead.make()
 	_apply_lamp_stage(PowerGrid.get_stage(_district_id))
 	EventBus.district_stage_changed.connect(_on_stage_changed)
 	var lamp_mm := MultiMesh.new()
@@ -242,7 +242,7 @@ func _on_stage_changed(id: StringName, stage: int) -> void:
 		_apply_lamp_stage(stage)
 
 func _apply_lamp_stage(stage: int) -> void:
-	_lamp_mat.emission_energy_multiplier = _LAMP_HEAD_ENERGY[clampi(stage, 0, _LAMP_HEAD_ENERGY.size() - 1)]
+	_LampHead.apply_stage(_lamp_mat, stage, self)
 
 func _spawn_pole_pair_legacy(center: Vector3, road: Dictionary) -> void:
 	var perp: Vector3 = _side_offset(road, 3.5)

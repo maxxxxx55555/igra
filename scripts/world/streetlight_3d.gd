@@ -31,11 +31,11 @@ var _reduce_flash: bool = false
 func _ready() -> void:
 	add_to_group("streetlights")
 	_reduce_flash = SettingsManager != null and bool(SettingsManager.get_setting("reduce_flash", false))
-	if not mesh_visible:
-		var pole := get_node_or_null("Pole")
-		var lamp := get_node_or_null("Lamp")
-		if pole: pole.visible = false
-		if lamp: lamp.visible = false
+	var pole := get_node_or_null("Pole")
+	var lamp := get_node_or_null("Lamp")
+	if pole: pole.visible = mesh_visible
+	if lamp: lamp.visible = mesh_visible
+	if lamp is MeshInstance3D and mesh_visible: lamp.material_override = preload("res://scripts/world/lamp_head.gd").shared()  # W4: a head that stands alone flickers like the batched ones
 	if ResourceLoader.exists("res://assets/config/visual_quality.tres"):
 		var vq := load("res://assets/config/visual_quality.tres")
 		var district_lights: Dictionary = vq.get_meta("district_lights", {}) if vq else {}

@@ -214,6 +214,7 @@ func _ensure_mm() -> void:
 		_road_mm = MultiMeshInstance3D.new()
 		_road_mm.name = "RoadMM"
 		add_child(_road_mm)
+		_road_mm.add_child(preload("res://scripts/world/street_wetness.gd").new())  # W5: the road reads wet in rain
 	if _sidewalk_mm == null:
 		_sidewalk_mm = MultiMeshInstance3D.new()
 		_sidewalk_mm.name = "SidewalkMM"
