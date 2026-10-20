@@ -25,6 +25,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if _charging:
+		_update_anim(delta)
 		_tick_charge(delta)
 		return
 	super._physics_process(delta)

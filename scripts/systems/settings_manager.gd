@@ -464,9 +464,9 @@ func _apply_arachnophobia() -> void:
 		# `enemy.is_instance_valid()` was a runtime error — Node has no such
 		# method; it's the global `is_instance_valid(obj)`.
 		if is_instance_valid(enemy):
-			var mesh := enemy.find_child("BodyMesh", true, false) as MeshInstance3D
-			if mesh:
-				mesh.visible = not enabled
+			var body := enemy.find_child("VisualRoot", true, false) as Node3D
+			if body:
+				body.visible = not enabled
 				var alt := enemy.find_child("AltMesh", true, false) as MeshInstance3D
 				if alt:
 					alt.visible = enabled

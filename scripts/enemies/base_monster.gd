@@ -3,6 +3,12 @@ extends CharacterBody3D
 
 const _HIT_SFX := preload("res://assets/audio/sfx/sfx_hit.wav")
 const _ROSTER := preload("res://data/balance/enemy_stats.tres")
+const _Rig := preload("res://scripts/enemies/monster_rig.gd")
+## A hit of this share of the hit points staggers a monster: its next attack waits STAGGER_SEC (A5).
+const HEAVY_HIT: float = 0.3
+const STAGGER_SEC: float = 0.25
+## What a dead body keeps lying there after it has fallen; the low tier frees it as soon as it is down.
+const CORPSE_LINGER: float = 1.5
 
 enum State { IDLE, PATROL, INVESTIGATE, CHASE, ATTACK, FLEE, STUN, DEAD }
 
@@ -74,6 +80,7 @@ var _remote_pos: Vector3 = Vector3.ZERO
 var _remote_rot: float = 0.0
 var _net_sync_timer: float = 0.0
 var _telegraph: Node = null
+var _rig: Node = null
 
 # --- status effects (P7-data2) ---
 var _status_node: Node = null
@@ -169,33 +176,8 @@ func _ready() -> void:
 func _build_visual() -> void:
 	if get_node_or_null("VisualRoot"):
 		return
-	var root := Node3D.new()
-	root.name = "VisualRoot"
-	add_child(root)
-	if owner and owner != root:
-		root.owner = owner
-	var body_mat := StandardMaterial3D.new()
-	body_mat.albedo_color = Color(0.08, 0.06, 0.05)
-	body_mat.roughness = 0.9
-	body_mat.metallic = 0.0
-	var body := MeshInstance3D.new()
-	body.name = "BodyMesh"
-	body.mesh = CylinderMesh.new()
-	(body.mesh as CylinderMesh).top_radius = 0.35
-	(body.mesh as CylinderMesh).bottom_radius = 0.45
-	(body.mesh as CylinderMesh).height = 1.6
-	body.material_override = body_mat
-	body.position = Vector3(0, 0.8, 0)
-	root.add_child(body)
-	body.owner = root.owner
-	var head := MeshInstance3D.new()
-	head.name = "HeadMesh"
-	head.mesh = SphereMesh.new()
-	(head.mesh as SphereMesh).radius = 0.25
-	head.material_override = body_mat
-	head.position = Vector3(0, 1.65, 0)
-	root.add_child(head)
-	head.owner = root.owner
+	_rig = _Rig.new()
+	_rig.build(self, monster_id)
 
 ## Применяет канон-статы из data/balance/enemy_stats.tres по monster_id.
 ## Наследники задают monster_id (либо ai_id который мапится через
@@ -287,6 +269,7 @@ func _boss_keep_near_player(delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	_boss_keep_near_player(delta)
+	_update_anim(delta)
 	if _net_active:
 		if not is_multiplayer_authority():
 			_sync_remote(delta)
@@ -304,6 +287,17 @@ func _physics_process(delta: float) -> void:
 	_tick_ai(delta)
 	_apply_knockback(delta)
 	move_and_slide()
+
+## The hook ANIMATION_GUIDE.md section 4 names. The body is procedural (monster_rig.gd): it needs the speed, the vector to the player while the monster is aware of
+## it and not chasing, and the start of the last telegraph cue; no skeleton and no clip.
+func _update_anim(delta: float) -> void:
+	if _rig == null:
+		return
+	var heading := Vector3.ZERO
+	var unaware: bool = ai_state == State.IDLE or ai_state == State.PATROL or ai_state == State.INVESTIGATE
+	if unaware and player_ref and is_instance_valid(player_ref):
+		heading = player_ref.global_position - global_position
+	_rig.update(delta, ai_state == State.DEAD, Vector2(velocity.x, velocity.z).length(), heading, _telegraph.last_cue_msec if _telegraph else -1)
 
 ## GDD §5.1: Slam (3rd melee combo hit) carries 1.5m knockback, and a
 ## backstab checks the target's facing — player_3d.gd's _on_attack_hit()
@@ -696,6 +690,10 @@ func take_damage(amount: float, src_pos: Vector3 = Vector3.ZERO, type: EnemyRost
 	EventBus.enemy_damaged.emit(self, reduced)
 	AudioManager.play_sound_3d(_HIT_SFX, global_position, -6.0)
 	_hit_flash()
+	if _rig:
+		_rig.flinch(src_pos, reduced / maxf(max_hp, 1.0))
+	if reduced >= max_hp * HEAVY_HIT:
+		attack_timer = maxf(attack_timer, STAGGER_SEC)
 	if is_in_group("boss"):
 		WowDirector.hit_stop()
 	_spawn_vfx(_VFX_HIT, global_position + Vector3(0, 1.0, 0))
@@ -764,7 +762,9 @@ func _die() -> void:
 	if ai_state == State.DEAD:
 		return
 	_change_state(State.DEAD)
-	_death_timer = 3.0
+	if _rig:
+		_rig.collapse()
+	_death_timer = _Rig.COLLAPSE_SEC + (0.0 if int(SettingsManager.get_setting("graphics_tier", 2)) == 0 else CORPSE_LINGER)
 	EventBus.enemy_killed.emit(monster_id)
 	EventBus.enemy_died.emit(global_position)
 	# BREAK_REPORT B8: this emitted EventBus's own (now-removed) coins_changed

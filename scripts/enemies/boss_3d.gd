@@ -33,7 +33,6 @@ func _ready() -> void:
 	vision_range = 20.0
 	vision_angle = 360.0
 	add_to_group("boss")
-	_add_silhouette()
 
 func _tick_ai(delta: float) -> void:
 	if ai_state == State.DEAD:
@@ -279,26 +278,6 @@ func _trigger_death() -> void:
 	_clear_hazards()
 	EventBus.boss_defeated.emit()
 	super._trigger_death()
-
-func _add_silhouette() -> void:
-	if get_node_or_null("BodyMesh"):
-		return
-	var body := MeshInstance3D.new()
-	body.name = "BodyMesh"
-	var mesh := CylinderMesh.new()
-	mesh.top_radius = 0.4
-	mesh.bottom_radius = 0.55
-	mesh.height = 3.2
-	body.mesh = mesh
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = Color(0.03, 0.03, 0.05)
-	mat.roughness = 1.0
-	mat.emission_enabled = true
-	mat.emission = Color(0.03, 0.0, 0.07)
-	mat.emission_energy_multiplier = 0.6
-	body.material_override = mat
-	body.position = Vector3(0, 1.6, 0)
-	add_child(body)
 
 class EnergyBall:
 	extends Area3D

@@ -163,3 +163,6 @@ n	utc	head	id	exit	command
 162	20261020T172408Z	3ca44bb	s29_base_compile_3ca44bb	0	bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 300
 163	20261020T173319Z	3ca44bb	s29_base_botN_3ca44bb	0	bash tools/qa_sim/autoplay_bot
 164	20261020T175617Z	ca08f2f	s29_base_botH_3ca44bb	2	bash tools/qa_sim/autoplay_bot
+165	20261020T184404Z	2f20128	s29_a_rig1_2f20128	1	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s29_a1.sh
+166	20261020T184826Z	2f20128	s29_a_rig2_wip	0	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s29_a2.sh
+167	20261020T185103Z	2f20128	s29_a_frames2_wip2	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/anim_frames_scene.tscn 240

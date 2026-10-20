@@ -36,6 +36,7 @@ func _handle_light_reaction(_delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	if _winding_up and ai_state != State.DEAD:
+		_update_anim(delta)
 		_tick_windup(delta)
 		return
 	super._physics_process(delta)

@@ -31,6 +31,7 @@ const Rc27 := preload("res://scripts/tools/rc16/s27_checks.gd")
 const Rc28 := preload("res://scripts/tools/rc16/s28_checks.gd")
 const Rc28Sweep := preload("res://scripts/tools/rc16/s28_sweep_checks.gd")
 const Rc28Audio := preload("res://scripts/tools/rc16/s28_audio_checks.gd")
+const Rc29 := preload("res://scripts/tools/rc16/s29_checks.gd")
 
 var _checked: int = 0
 var _fails: int = 0
@@ -119,6 +120,10 @@ func _run() -> void:
 		await Rc28.run(self)
 		await Rc28Sweep.run(self)
 		Rc28Audio.run(self)
+		_finish()
+		return
+	if OS.get_environment("CLOSEOUT_ONLY") == "s29":
+		await Rc29.run(self)
 		_finish()
 		return
 	if OS.get_environment("CLOSEOUT_ONLY") == "rtl":
@@ -227,6 +232,7 @@ func _rc16_checks() -> void:
 	await Rc28.run(self)
 	await Rc28Sweep.run(self)
 	Rc28Audio.run(self)
+	await Rc29.run(self)
 
 ## A monster standing still in the far corner of the world: its collider answers rays, its AI never runs
 ## (a disabled process mode would also take the collider out of the physics space).
