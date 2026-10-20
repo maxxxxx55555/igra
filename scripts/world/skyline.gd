@@ -280,7 +280,7 @@ func _light_windows(stage: int) -> void:
 
 ## B13: the share of the glow's hue a facade keeps is GLOW_HUE, and no more than what holds the saturation of the facade band inside 0.30 to 0.36 in every district: the police and the hospital, whose glows are the most
 ## chromatic, stood at 0.46 and 0.45 against 0.27 to 0.34 elsewhere (KNOWN_ISSUES, Session 27). The product of the share and the chroma of the glow is held at GLOW_CHROMA_CAP.
-const GLOW_CHROMA_CAP: float = 0.17
+const GLOW_CHROMA_CAP: float = 0.12
 
 static func _glow_hue(glow: Color) -> float:
 	var top: float = maxf(glow.r, maxf(glow.g, glow.b))

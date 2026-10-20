@@ -130,14 +130,15 @@ static func _shadows(r: Node) -> void:
 	var tier0: int = int(SettingsManager.get_setting("graphics_tier", 2))
 	SettingsManager.set_graphics_tier(2)
 	var root: Node3D = await _Density._build(r, &"suburbs")
+	var monsters: Array[Node] = [r._monster("crawler_3d", Vector3(0.0, 1.0, 0.0))]  # a district holds none of its own in the closeout scene; the group scan finds it within SCAN_SEC
 	await r.get_tree().create_timer(0.8).timeout
 	var boards: Array[Node] = root.find_children("ContactShadows", "MultiMeshInstance3D", true, false)
 	var board := boards[0] as MultiMeshInstance3D if boards.size() == 1 else null
+	var has_board: bool = board != null
 	var props: int = 0
 	for batch in ["StreetlightPolesBatched", "BenchesBatched", "TreeTrunksBatched", "ConesBatched"]:
 		var node := root.find_child(batch, true, false) as MultiMeshInstance3D
 		props += node.multimesh.instance_count if node != null else 0
-	var monsters: Array[Node] = root.find_children("*", "CharacterBody3D", true, false).filter(func(n: Node) -> bool: return n.is_in_group("monsters"))
 	var blobs: int = board.multimesh.visible_instance_count if board != null else 0
 	var under: bool = false
 	if board != null and not monsters.is_empty():
@@ -152,12 +153,13 @@ static func _shadows(r: Node) -> void:
 		var mat := (mesh as MeshInstance3D).material_override as ShaderMaterial
 		flat += 1 if mat != null and mat.shader != null and mat.shader.resource_path.ends_with("contact_shadow.gdshader") else 0
 	root.queue_free()
+	monsters[0].queue_free()
 	SettingsManager.set_graphics_tier(0)
 	var low: Node3D = await _Density._build(r, &"suburbs")
 	var none_low: bool = low.find_children("ContactShadows", "MultiMeshInstance3D", true, false).is_empty()
 	low.queue_free()
 	SettingsManager.set_graphics_tier(tier0)
-	r._ok(board != null and blobs >= props + monsters.size() and props > 0 and under and flat == 0 and none_low, "SHADOW1 one ContactShadows MultiMesh (%s) with %d blobs for %d poles and props and %d monsters, a blob under a monster's feet (%s), %d separate blob meshes, none on the Low tier (%s)" % [board != null, blobs, props, monsters.size(), under, flat, none_low])
+	r._ok(has_board and blobs >= props + monsters.size() and props > 0 and under and flat == 0 and none_low, "SHADOW1 one ContactShadows MultiMesh (%s) with %d blobs for %d poles and props and %d monsters, a blob under a monster's feet (%s), %d separate blob meshes, none on the Low tier (%s)" % [has_board, blobs, props, monsters.size(), under, flat, none_low])
 
 ## WX1 (B8): WeatherParticles (a child of the world setup) holds the rain emitter, which emits in rain (the share 0.7) and in a storm (1.0) and not in the clear, and the fog drops, which emit only in fog; the rain stands 12 m over
 ## the camera; the sparks of the strobe appear (a vfx_strobe burst) and do not with Reduce Flash.
@@ -182,16 +184,19 @@ static func _weather(r: Node) -> void:
 	var camera: Camera3D = r.get_viewport().get_camera_3d()
 	var height: float = rain.global_position.y - camera.global_position.y if rain != null and camera != null else 0.0
 	var player: Node = r._player
-	var bursts0: int = r.get_tree().root.find_children("VFXStrobe*", "GPUParticles3D", true, false).size()
+	var bursts: Array[Node] = r.get_tree().root.find_children("*VFXStrobe*", "GPUParticles3D", true, false)  # a pooled burst is replayed, and a second one is renamed: it is the playing ones that count
+	for burst in bursts:
+		(burst as GPUParticles3D).emitting = false
 	var flash0: Variant = SettingsManager.get_setting("reduce_flash", false)
 	SettingsManager.set_setting("reduce_flash", true)
 	player.call("_strobe_effects")
-	var calm: int = r.get_tree().root.find_children("VFXStrobe*", "GPUParticles3D", true, false).size()
+	var playing := func() -> int: return r.get_tree().root.find_children("*VFXStrobe*", "GPUParticles3D", true, false).filter(func(n: Node) -> bool: return (n as GPUParticles3D).emitting).size()
+	var calm: int = playing.call()
 	SettingsManager.set_setting("reduce_flash", false)
 	player.call("_strobe_effects")
-	var sparks: int = r.get_tree().root.find_children("VFXStrobe*", "GPUParticles3D", true, false).size()
+	var sparks: int = playing.call()
 	SettingsManager.set_setting("reduce_flash", flash0)
-	r._ok(ok and absf(height - 12.0) < 0.5 and calm == bursts0 and sparks == bursts0 + 1, "WX1 the rain emits in rain (share 0.7) and in a storm (1.0) and not in the clear, the drops only in fog (%s), the rain stands %.1f m over the camera, the strobe throws sparks (%d bursts, none with Reduce Flash: %d)" % [seen, height, sparks, calm])
+	r._ok(ok and absf(height - 12.0) < 0.5 and calm == 0 and sparks == 1, "WX1 the rain emits in rain (share 0.7) and in a storm (1.0) and not in the clear, the drops only in fog (%s), the rain stands %.1f m over the camera, the strobe throws sparks (%d burst playing, with Reduce Flash: %d)" % [seen, height, sparks, calm])
 
 ## PAR1 (B9): the menu hero wears the parallax shader and a driver: a drag of 0.4 moves the uniform, the Low tier counts 0.4 of it, Motion Comfort holds it and the drift still.
 static func _menu_parallax(r: Node) -> void:
@@ -244,19 +249,19 @@ static func _theme(r: Node) -> void:
 static func _moon(r: Node) -> void:
 	var main: Node = r.get_node_or_null("Main3D")
 	var setup: Node = main.get_node_or_null("WorldEnvSetup") if main != null else null
-	var moon: Variant = setup.get("_moon") if setup != null else null
-	if not is_instance_valid(moon) or not setup.has_method("_apply_moon_bias"):
-		r._ok(false, "MOON1 the setup holds a moon and applies the bias of the district")
+	if setup == null or not setup.has_method("_apply_moon_bias"):
+		r._ok(false, "MOON1 the setup applies the bias of the district")
 		return
-	var light := moon as DirectionalLight3D
-	var bias0: float = light.shadow_bias
-	var normal0: float = light.shadow_normal_bias
+	var light := DirectionalLight3D.new()  # the closeout scene's setup holds no moon of its own: it is handed one, as PERF2 does
+	r.add_child(light)
+	var moon0: Variant = setup.get("_moon")
+	setup.set("_moon", light)
 	var got: Array[Vector2] = []
 	for id: StringName in [&"park", &"suburbs", &"nowhere"]:
 		setup.call("_apply_moon_bias", id)
 		got.append(Vector2(light.shadow_bias, light.shadow_normal_bias))
-	light.shadow_bias = bias0
-	light.shadow_normal_bias = normal0
+	setup.set("_moon", moon0)
+	light.queue_free()
 	r._ok(got[0].is_equal_approx(Vector2(0.054, 1.08)) and got[1].is_equal_approx(Vector2(0.06, 1.2)) and got[2].is_equal_approx(Vector2(0.06, 1.2)), "MOON1 the moon's shadow bias follows the district: park %s, suburbs %s, unknown %s" % [got[0], got[1], got[2]])
 
 ## PBR1 (B6): the material factory takes a texture set by name (the set's files are not there yet: the material stays as it was); SAT1 (B13): the facade glow of the chromatic districts is capped, the others keep GLOW_HUE.

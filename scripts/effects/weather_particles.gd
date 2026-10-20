@@ -19,16 +19,15 @@ func _ready() -> void:
 	add_child(_rain)
 	add_child(_drops)
 	EventBus.weather_changed.connect(_on_weather_changed)
-	_apply()
+	_apply(WeatherSystem.current, WeatherSystem.rain_strength())
 
-func _on_weather_changed(_weather: int, _name: String, _fog: float, _rain_strength: float) -> void:
-	_apply()
+func _on_weather_changed(weather: int, _name: String, _fog: float, rain: float) -> void:
+	_apply(weather, rain)
 
-func _apply() -> void:
-	var rain: float = WeatherSystem.rain_strength()
+func _apply(weather: int, rain: float) -> void:
 	_rain.emitting = rain > MIN_RAIN
 	_rain.amount_ratio = clampf(rain, MIN_SHARE, 1.0)
-	_drops.emitting = WeatherSystem.current == WeatherSystem.Weather.FOG
+	_drops.emitting = weather == WeatherSystem.Weather.FOG
 
 func _process(_delta: float) -> void:
 	var camera := get_viewport().get_camera_3d()
