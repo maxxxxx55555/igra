@@ -101,3 +101,6 @@ func _update_light(stage: int = -1) -> void:
 		spot.spot_attenuation = 2.0
 		glow.light_energy = 0.5 * _light_energy_mult
 		glow.omni_range = 4.0
+	else:
+		spot.light_energy = 0.0  # a lamp that is out gives no light: the LightLimiter leaves such a light off, whatever slot it would hold
+		glow.light_energy = 0.0

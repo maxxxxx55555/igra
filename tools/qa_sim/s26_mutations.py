@@ -106,9 +106,16 @@ SETS = [
         ("scripts/ui/screens.gd", '"close_btn": close_btn, "title_lbl": title_lbl,', '"close_btn": close_btn if close_btn else Button.new(), "title_lbl": title_lbl,', "LEAK1"),
         ("scripts/world/streetlight_3d.gd", "var _t: float = -1.0\n", "var _t: float = 0.0\n", "LAMP2"),
     ],
+    [  # Session 29 (v10 R2), the closeout group s29, the LightLimiter: the cap of eight put up by one, and the hiding of a light of no energy left out (they live in different rows of one function, nothing one changes is read by the other's check)
+        ("scripts/systems/light_limiter.gd", "\t\tif i < MAX_VISIBLE:\n", "\t\tif i < MAX_VISIBLE + 1:\n", "LIMIT1"),
+        ("scripts/systems/light_limiter.gd", "\t\t\tlit.append(light)\n\t\telse:\n\t\t\t_hide(light)\n", "\t\t\tlit.append(light)\n\t\telse:\n\t\t\tpass\n", "LIMIT2"),
+    ],
+    [  # Session 29 (v10 R2), the closeout group s29 again: the return of a light that was hidden for want of energy left out, which would hide the second mutation of the set above (the light of no energy would never be hidden, so it would never need to return)
+        ("scripts/systems/light_limiter.gd", "\t\t\tif _hidden.erase(light.get_instance_id()):\n\t\t\t\tlight.visible = true\n", "\t\t\tif false:\n\t\t\t\tlight.visible = true\n", "LIMIT3"),
+    ],
 ]
 ## The closeout group each set runs (CLOSEOUT_ONLY): the sets of Session 26 run `s26`, those of Session 27 `s27`, those of Session 28 `s28`, those of Session 29 `s29`.
-GROUP = ["s26", "s26", "s27", "s27", "s28", "attack", "attack", "s28", "s29"]
+GROUP = ["s26", "s26", "s27", "s27", "s28", "attack", "attack", "s28", "s29", "s29", "s29"]
 LINE = re.compile(r"^\[(?:closeout|attack-sim)\] (ok  |OK  |FAIL) +(\S+)")
 ## What a group of sets runs and the log it leaves: the closeout groups run `closeout_check`, the group "attack" the attack simulation (Session 28).
 RUN = {"attack": ("bash tools/qa_sim/guarded_headless res://scenes/tools/attack_sim_scene.tscn 120", ".qa_logs/attack_sim_scene.log")}
