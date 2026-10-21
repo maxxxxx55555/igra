@@ -45,6 +45,16 @@ func _lay(ids: Array, spots: Array[Vector3]) -> Array[Node]:
 		laid.append(item)
 	return laid
 
+## The contact shadows of the district on or off, for the control frame of the close-up.
+func _show_shadows(on: bool) -> void:
+	for board in get_tree().root.find_children("ContactShadows", "MultiMeshInstance3D", true, false):
+		(board as Node3D).visible = on
+
+## The fog cards of the dressing on or off, for the control frame of the foggy street.
+func _show_cards(on: bool) -> void:
+	for card in get_tree().root.find_children("FogCard*", "MeshInstance3D", true, false):
+		(card as Node3D).visible = on
+
 func _weather(kind: int) -> void:
 	WeatherSystem.current = kind
 	WeatherSystem.call("_emit")
@@ -99,6 +109,10 @@ func _run() -> void:
 		_place({"at": bench + Vector3(1.6, 0.0, 1.6) - Vector3(0.0, bench.y, 0.0) + Vector3(0.0, 0.1, 0.0), "look": Vector3(bench.x, 0.3, bench.z), "pitch": -0.35, "stage": 3, "light": false})
 		await get_tree().create_timer(1.0).timeout
 		await _frame("prop_closeup")
+		_show_shadows(false)
+		await get_tree().create_timer(0.5).timeout
+		await _frame("prop_noshadow")
+		_show_shadows(true)
 	# the pickup library on the street of the suburbs: four sheets of 12, each seen from 2.3 to 4 m, a little above
 	for sheet in SHEETS.size():
 		var spots: Array[Vector3] = []
@@ -153,6 +167,10 @@ func _run() -> void:
 	_raise(&"industrial", 3)
 	await get_tree().create_timer(3.0).timeout
 	await _frame("industrial_fog")
+	_show_cards(false)
+	await get_tree().create_timer(0.5).timeout
+	await _frame("industrial_nofog")
+	_show_cards(true)
 	# the 04_block view of five districts: the saturation of the facade band
 	for id in FACADE_IDS:
 		_raise(id, 3)
