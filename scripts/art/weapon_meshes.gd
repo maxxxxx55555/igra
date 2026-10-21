@@ -6,6 +6,8 @@ extends RefCounted
 const _Parts := preload("res://scripts/art/part_mesh.gd")
 const _STEEL := Color(0.15, 0.16, 0.18)
 const _ACCENT := {&"pistol": Color(0.10, 0.10, 0.11), &"rifle": Color(0.30, 0.20, 0.12), &"shotgun": Color(0.34, 0.22, 0.12)}
+## The model sits this far ahead of the hand: the stock of a rifle would stand a hand from the camera and fill a quarter of the screen.
+const HELD_FORWARD_M: float = 0.1
 const MOVING: Dictionary = {&"pistol": "Slide", &"rifle": "Bolt", &"shotgun": "Pump"}
 
 static var _materials: Dictionary = {}
@@ -19,13 +21,13 @@ static func _parts(id: StringName) -> Array:
 		&"rifle":
 			return [[_p(&"box", Vector3(0.044, 0.06, 0.28), Vector3(0, 0.01, -0.14)), _p(&"cyl", Vector3(0.011, 0.4, 0.011), Vector3(0, 0.025, -0.48), Vector3(90, 0, 0)),
 				_p(&"box", Vector3(0.046, 0.045, 0.22), Vector3(0, 0, -0.34), Vector3.ZERO, true), _p(&"box", Vector3(0.028, 0.12, 0.05), Vector3(0, -0.085, -0.16), Vector3(14, 0, 0)),
-				_p(&"box", Vector3(0.034, 0.09, 0.04), Vector3(0, -0.075, -0.01), Vector3(-18, 0, 0), true), _p(&"box", Vector3(0.04, 0.085, 0.24), Vector3(0, -0.01, 0.16), Vector3(-6, 0, 0), true),
+				_p(&"box", Vector3(0.034, 0.09, 0.04), Vector3(0, -0.075, -0.01), Vector3(-18, 0, 0), true), _p(&"box", Vector3(0.04, 0.085, 0.12), Vector3(0, -0.01, 0.1), Vector3(-6, 0, 0), true),
 				_p(&"box", Vector3(0.004, 0.03, 0.004), Vector3(0, 0.058, -0.67)), _p(&"box", Vector3(0.02, 0.015, 0.01), Vector3(0, 0.047, -0.05)), _p(&"tor", Vector3(0.01, 0.022, 0), Vector3(0, -0.04, -0.06), Vector3(0, 0, 90))],
 				[_p(&"box", Vector3(0.026, 0.02, 0.09), Vector3(0.012, 0.03, -0.17)), _p(&"cyl", Vector3(0.006, 0.04, 0.006), Vector3(0.04, 0.03, -0.14), Vector3(0, 0, 90)), _p(&"sph", Vector3(0.02, 0.02, 0.02), Vector3(0.062, 0.03, -0.14))]]
 		&"shotgun":
 			return [[_p(&"box", Vector3(0.046, 0.065, 0.17), Vector3(0, 0.005, -0.085)), _p(&"cyl", Vector3(0.014, 0.5, 0.014), Vector3(-0.0155, 0.035, -0.43), Vector3(90, 0, 0)),
 				_p(&"cyl", Vector3(0.014, 0.5, 0.014), Vector3(0.0155, 0.035, -0.43), Vector3(90, 0, 0)), _p(&"box", Vector3(0.012, 0.006, 0.5), Vector3(0, 0.052, -0.43)),
-				_p(&"box", Vector3(0.042, 0.09, 0.26), Vector3(0, -0.02, 0.17), Vector3(-8, 0, 0), true), _p(&"box", Vector3(0.036, 0.08, 0.04), Vector3(0, -0.065, 0), Vector3(-16, 0, 0), true),
+				_p(&"box", Vector3(0.042, 0.09, 0.13), Vector3(0, -0.02, 0.105), Vector3(-8, 0, 0), true), _p(&"box", Vector3(0.036, 0.08, 0.04), Vector3(0, -0.065, 0), Vector3(-16, 0, 0), true),
 				_p(&"sph", Vector3(0.01, 0.01, 0.01), Vector3(0, 0.058, -0.67)), _p(&"tor", Vector3(0.01, 0.022, 0), Vector3(0, -0.045, -0.07), Vector3(0, 0, 90))],
 				[_p(&"cyl", Vector3(0.02, 0.2, 0.02), Vector3(0, -0.005, -0.36), Vector3(90, 0, 0)), _p(&"box", Vector3(0.056, 0.05, 0.2), Vector3(0, -0.015, -0.36), Vector3.ZERO, true)]]
 	return [[_p(&"box", Vector3(0.034, 0.028, 0.15), Vector3(0, 0, -0.075)), _p(&"tor", Vector3(0.012, 0.026, 0), Vector3(0, -0.035, -0.07), Vector3(0, 0, 90)), _p(&"box", Vector3(0.008, 0.026, 0.01), Vector3(0, -0.026, -0.065)),
@@ -38,6 +40,7 @@ static func model(id: StringName) -> Node3D:
 	var parts: Array = _parts(id)
 	var root := Node3D.new()
 	root.name = "WeaponModel"
+	root.position.z = -HELD_FORWARD_M
 	for i in 2:
 		var piece := MeshInstance3D.new()
 		piece.name = "Body" if i == 0 else String(MOVING[id])

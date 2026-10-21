@@ -74,6 +74,7 @@ static func _districts(r: Node) -> void:
 	var gates: bool = true
 	var notes: int = 0
 	var mounted: int = 0
+	var notes_wanted: int = 0
 	for id: StringName in DistrictSceneFactory.DISTRICTS:
 		var root: Node3D = await _Density._build(r, id)
 		DistrictLoot.populate(root, id)
@@ -95,6 +96,7 @@ static func _districts(r: Node) -> void:
 				loose += 1
 				stacks[node.get("item_id")] = node.get("amount")
 		worst = maxi(worst, loose)
+		notes_wanted += 1 + (DistrictLoot.LORE_DOCS[id] as Array).size()
 		for a in all:
 			for b in all:
 				var gap: float = Vector2(a.global_position.x - b.global_position.x, a.global_position.z - b.global_position.z).length() if a != b else INF
@@ -112,7 +114,7 @@ static func _districts(r: Node) -> void:
 	InventoryManager.from_dict(pack0)
 	r._ok(lights == 0, "CUBE1 no pickup of the 11 districts holds a light (%d lights)" % lights)
 	r._ok(worst <= 12 and closest >= 5.0 and gates, "CUBE2 at most %d pickups a district (12 allowed) and the nearest two are %.1f m apart (5 allowed; %s), every district holds its repair parts in stacks of two and its blueprint (%s)" % [worst, closest, nearest, counts])
-	r._ok(boxes == 0 and notes == 55 and mounted > 0, "CUBE3 no pickup mesh is a bare box (%d), the 11 districts hold %d notes (55: one on the ground and four to pin), %d of them pinned on poles" % [boxes, notes, mounted])
+	r._ok(boxes == 0 and notes == notes_wanted and mounted > 0, "CUBE3 no pickup mesh is a bare box (%d), the 11 districts hold %d notes (%d: one on the ground and the lore notes to pin), %d of them pinned on poles" % [boxes, notes, notes_wanted, mounted])
 
 ## GROUND1: an item lies on the ground (its mesh rests on the origin of the pickup), drops in once over 0.35 s and does not bob; a medkit does not turn, a key and a gun turn at 0.25 rad/s; Reduce UI Motion keeps all of it still.
 static func _ground(r: Node) -> void:

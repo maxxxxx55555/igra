@@ -83,21 +83,21 @@ const DOCUMENTS: Dictionary = {
 	&"power_station": "doc_core_station",
 }
 
-## Content-authored lore packs (content/districts/<id>/lore_notes.json), four notes a district (C4: eight
-## were eight floating cubes a district): pinned on the streetlight poles by _spawn_mounted_doc, the total of
-## documents (Endings.get_total_documents) follows this table.
+## Content-authored lore packs (content/districts/<id>/lore_notes.json), eight notes a district. C4: they were eight floating
+## cubes a district; they are pinned flat on the streetlight poles now (_spawn_mounted_doc), with no light and no motion. The total
+## of documents (Endings.get_total_documents) follows this table, and the album of 200 photos (G26) counts them.
 const LORE_DOCS: Dictionary = {
-	&"suburbs": ["suburbs_note_01", "suburbs_note_02", "suburbs_note_03", "suburbs_note_04"],
-	&"residential": ["residential_note_01", "residential_note_02", "residential_note_03", "residential_note_04"],
-	&"park": ["park_note_01", "park_note_02", "park_note_03", "park_note_04"],
-	&"school": ["school_note_01", "school_note_02", "school_note_03", "school_note_04"],
-	&"hospital": ["hospital_note_01", "hospital_note_02", "hospital_note_03", "hospital_note_04"],
-	&"gas_station": ["gas_station_note_01", "gas_station_note_02", "gas_station_note_03", "gas_station_note_04"],
-	&"police": ["police_note_01", "police_note_02", "police_note_03", "police_note_04"],
-	&"warehouses": ["warehouses_note_01", "warehouses_note_02", "warehouses_note_03", "warehouses_note_04"],
-	&"industrial": ["industrial_note_01", "industrial_note_02", "industrial_note_03", "industrial_note_04"],
-	&"substation": ["substation_note_01", "substation_note_02", "substation_note_03", "substation_note_04"],
-	&"power_station": ["power_station_note_01", "power_station_note_02", "power_station_note_03", "power_station_note_04"],
+	&"suburbs": ["suburbs_note_01", "suburbs_note_02", "suburbs_note_03", "suburbs_note_04", "suburbs_note_05", "suburbs_note_06", "suburbs_note_07", "suburbs_note_08"],
+	&"residential": ["residential_note_01", "residential_note_02", "residential_note_03", "residential_note_04", "residential_note_05", "residential_note_06", "residential_note_07", "residential_note_08"],
+	&"park": ["park_note_01", "park_note_02", "park_note_03", "park_note_04", "park_note_05", "park_note_06", "park_note_07", "park_note_08"],
+	&"school": ["school_note_01", "school_note_02", "school_note_03", "school_note_04", "school_note_05", "school_note_06", "school_note_07", "school_note_08"],
+	&"hospital": ["hospital_note_01", "hospital_note_02", "hospital_note_03", "hospital_note_04", "hospital_note_05", "hospital_note_06", "hospital_note_07", "hospital_note_08"],
+	&"gas_station": ["gas_station_note_01", "gas_station_note_02", "gas_station_note_03", "gas_station_note_04", "gas_station_note_05", "gas_station_note_06", "gas_station_note_07", "gas_station_note_08"],
+	&"police": ["police_note_01", "police_note_02", "police_note_03", "police_note_04", "police_note_05", "police_note_06", "police_note_07", "police_note_08"],
+	&"warehouses": ["warehouses_note_01", "warehouses_note_02", "warehouses_note_03", "warehouses_note_04", "warehouses_note_05", "warehouses_note_06", "warehouses_note_07", "warehouses_note_08"],
+	&"industrial": ["industrial_note_01", "industrial_note_02", "industrial_note_03", "industrial_note_04", "industrial_note_05", "industrial_note_06", "industrial_note_07", "industrial_note_08"],
+	&"substation": ["substation_note_01", "substation_note_02", "substation_note_03", "substation_note_04", "substation_note_05", "substation_note_06", "substation_note_07", "substation_note_08"],
+	&"power_station": ["power_station_note_01", "power_station_note_02", "power_station_note_03", "power_station_note_04", "power_station_note_05", "power_station_note_06", "power_station_note_07", "power_station_note_08"],
 }
 
 const RADIUS_MIN: float = 6.0
@@ -109,7 +109,7 @@ const PICKUP_Y: float = 0.05
 const MAX_PICKUPS: int = 12
 ## No two pickups lie closer than this (metres, on the ground plane), and the notes on the poles keep it too.
 const MIN_SPACING_M: float = 5.5
-const SCATTER_TRIES: int = 24
+const SCATTER_TRIES: int = 40
 ## A note on a pole: its height over the street and how far it stands from the pole's axis, toward the road.
 const MOUNT_Y: float = 1.2
 const MOUNT_OFFSET_M: float = 0.14

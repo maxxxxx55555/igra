@@ -106,11 +106,23 @@ func _run() -> void:
 			spots.append(Vector3(-8.0 + (i % 4 - 1.5) * 0.95, 0.05, 18.1 - (i / 4) * 0.85))
 		var laid: Array[Node] = _lay(SHEETS[sheet], spots)
 		_place({"at": Vector3(-8.0, 0.1, 20.4), "look": Vector3(-8.0, 0.05, 17.25), "pitch": -0.5, "stage": 3, "light": false})
+		player.set("_pitch", -0.5)  # the player puts its own pitch on the camera every frame
 		_flashlight(player, true)
 		await get_tree().create_timer(2.2).timeout
 		await _frame("pickups_sheet%d" % (sheet + 1))
 		for item in laid:
 			item.queue_free()
+	# C4: a lore note pinned on a pole, from 2.5 m, the flashlight on
+	for note in get_tree().get_nodes_in_group("document"):
+		if note.get("mounted") == true:
+			var out := Vector3(sin(note.rotation.y), 0.0, cos(note.rotation.y))
+			var note_at: Vector3 = (note as Node3D).global_position
+			_place({"at": Vector3(note_at.x, 0.1, note_at.z) + out * 2.5, "look": note_at, "pitch": 0.0, "stage": 3, "light": false})
+			player.set("_pitch", 0.0)
+			_flashlight(player, true)
+			await get_tree().create_timer(1.5).timeout
+			await _frame("note_on_pole")
+			break
 	# C6: the three guns in the hand, from the street of the suburbs
 	var manager := player.get_node_or_null("WeaponManager")
 	_place(STREET)

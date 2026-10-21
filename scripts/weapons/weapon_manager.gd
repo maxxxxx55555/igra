@@ -18,6 +18,8 @@ const RACK_M: float = 0.035
 const RACK_SEC: float = 0.12
 ## Where the drawn weapon sits in the camera's frame: right hand, a little below the view.
 const HOLD_OFFSET := Vector3(0.22, -0.2, -0.45)
+## The muzzle turns a little toward the middle of the view, which shows the side of the gun and not only its back.
+const HOLD_YAW: float = 0.14
 const _Motion := preload("res://scripts/weapons/viewmodel_motion.gd")
 
 var equipped: StringName = &""
@@ -32,7 +34,7 @@ func _process(delta: float) -> void:
 	var weapon := get_current_weapon()
 	var cam := get_viewport().get_camera_3d()
 	if weapon != null and cam != null:
-		weapon.global_transform = cam.global_transform * Transform3D(Basis(), HOLD_OFFSET) * _motion.offset(delta, cam.global_transform.basis, weapon.is_reloading())
+		weapon.global_transform = cam.global_transform * Transform3D(Basis(Vector3.UP, HOLD_YAW), HOLD_OFFSET) * _motion.offset(delta, cam.global_transform.basis, weapon.is_reloading())
 
 ## The moving part of a gun (Slide, Bolt or Pump, the second child of its model) works back and forward; still with Motion Comfort and Reduce UI Motion.
 func _rack(model: Node3D) -> void:
