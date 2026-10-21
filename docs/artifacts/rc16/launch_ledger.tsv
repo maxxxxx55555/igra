@@ -188,3 +188,4 @@ n	utc	head	id	exit	command
 187	20261021T002300Z	f51a735	s29_bc_botN_f51a735	0	bash tools/qa_sim/autoplay_bot
 188	20261021T004708Z	f51a735	s29_bc_botH_f51a735	1	bash tools/qa_sim/autoplay_bot
 189	20261021T094154Z	08d3a60	v10_r1_08d3a60	0	bash .qa_logs/v10_r1.sh
+190	20261021T095827Z	27c3cfd	v10_r2_27c3cfd	0	bash .qa_logs/v10_r2.sh
