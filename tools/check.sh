@@ -380,7 +380,7 @@ else
   bad "store_answers (см. 'python tools/qa_sim/store_answers.py --check')"
 fi
 if "$PY" tools/qa_sim/i18n_placeholder_fuzz.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/i18n_placeholder_fuzz.py --check >/dev/null 2>&1; then
-  ok "i18n_placeholder_fuzz (specifiers, call arity, literal keys, Latin stubs, cognates and the glossary agree in all 13 locales)"
+  ok "i18n_placeholder_fuzz (specifiers, call arity, literal keys, Latin stubs, cognates and the glossary agree in all 6 locales)"
 else
   bad "i18n_placeholder_fuzz (см. 'python tools/qa_sim/i18n_placeholder_fuzz.py --check')"
 fi
@@ -415,7 +415,7 @@ else
   bad "s26_mutations --demo (см. 'python tools/qa_sim/s26_mutations.py --demo')"
 fi
 if "$PY" tools/qa_sim/listing_audit.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/listing_audit.py >/dev/null 2>&1; then
-  ok "listing_audit (13 locales: title, short and full limits, the same numbers in every language, the English numbers are what the code holds)"
+  ok "listing_audit (6 locales: title, short and full limits, the same numbers in every language, the English numbers are what the code holds)"
 else
   bad "listing_audit (см. 'python tools/qa_sim/listing_audit.py')"
 fi

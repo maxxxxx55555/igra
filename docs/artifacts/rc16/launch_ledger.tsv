@@ -207,3 +207,5 @@ n	utc	head	id	exit	command
 206	20261021T152027Z	14484f3	v10_m6_music_probe	0	bash .qa_logs/v10_m6.sh
 207	20261021T152320Z	14484f3	v10_m4b_probe	0	bash .qa_logs/v10_m4b.sh
 208	20261021T152635Z	418a044	v10_mut_subset3_music	0	bash .qa_logs/v10_mut_subset.sh
+209	20261021T154458Z	e78a8dc	v10_ac5_e78a8dc	0	bash .qa_logs/v10_ac5.sh
+210	20261021T155538Z	e78a8dc	v10_hudp6_e78a8dc	0	bash tools/qa_sim/closeout_check 300

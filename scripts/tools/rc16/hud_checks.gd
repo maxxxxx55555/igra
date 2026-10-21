@@ -250,7 +250,7 @@ static func _combat_hud_rests(r: Node, hud: Node) -> void:
 	var rest: bool = crosshair.self_modulate.a < 0.01
 	r._ok(woke and rest, "HUDP7 the crosshair wakes on a shot (%s) and is faded 6 s later (%s, alpha %.2f)" % [woke, rest, crosshair.self_modulate.a])
 
-## HUDP6: every HUD caption fits its label in 13 languages at the three Text Sizes, and the corner clusters stay on the screen.
+## HUDP6: every HUD caption fits its label in every supported language at the three Text Sizes, and the corner clusters stay on the screen.
 static func _layout_holds(r: Node, hud: Node) -> void:
 	var lang0: String = LocalizationManager.current_lang
 	var size0: int = int(SettingsManager.get_setting("text_size", 1))
@@ -274,4 +274,4 @@ static func _layout_holds(r: Node, hud: Node) -> void:
 			checked += 1
 	LocalizationManager.set_language(lang0)
 	SettingsManager.set_text_size(size0)
-	r._ok(bad.is_empty() and checked == 39, "HUDP6 the HUD holds in %d language and Text Size pairs: every caption fits its label, the corners stay on screen (%s)" % [checked, bad.slice(0, 4)])
+	r._ok(bad.is_empty() and checked == LocalizationManager.SUPPORTED.size() * 3, "HUDP6 the HUD holds in %d language and Text Size pairs: every caption fits its label, the corners stay on screen (%s)" % [checked, bad.slice(0, 4)])
