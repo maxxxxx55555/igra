@@ -80,9 +80,8 @@ func on_weapon_switched(weapon: WeaponBase) -> void:
 func _show_compare(from_w: WeaponBase, to_w: WeaponBase) -> void:
 	for c in _rows_box.get_children():
 		c.queue_free()
-	# P2 (FINAL INTEGRATION wave): real weapon render icons either side of
-	# the arrow, keyed off weapon_name.to_lower() (matches the delivered
-	# icons/weapons/{pistol,rifle,shotgun}_128.png filenames exactly).
+	# Weapon renders either side of the arrow, keyed off weapon_name.to_lower()
+	# (renders_v2/weapons/{pistol,rifle,shotgun}_render_256.png, see _add_weapon_icon).
 	var title_row := HBoxContainer.new()
 	title_row.alignment = BoxContainer.ALIGNMENT_CENTER
 	title_row.add_theme_constant_override("separation", 6)
@@ -128,9 +127,7 @@ func _add_weapon_icon(parent: Node, weapon: WeaponBase) -> void:
 	var id := String(weapon.weapon_name).to_lower()
 	if id == "":
 		return
-	# REPORT_UNBLOCK_V2 delivered a render specifically tagged for this
-	# screen (mid-session, after the icons/weapons/*_128 set already
-	# wired here) - switched to the one built for this exact consumer.
+	# The render built for this screen.
 	var path := "res://assets/textures/renders_v2/weapons/%s_render_256.png" % id
 	if not ResourceLoader.exists(path):
 		return

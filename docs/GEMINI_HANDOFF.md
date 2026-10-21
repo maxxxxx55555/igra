@@ -64,12 +64,12 @@ The brief's prompts end with the common line: *instrumental only, no vocals, no 
 | 13 | `music/music_boss_dark_p1.ogg` | NEW | 45.000 s | yes | 4.2 |
 | 14 | `music/music_boss_dark_p2.ogg` | NEW | 45.000 s | yes | 4.3 |
 | 15 | `music/music_boss_dark_p3.ogg` | NEW | 45.000 s | yes | 4.4 |
-| 16 | `ui/ui_district_restored_sting.ogg` | NEW | 2.000 s, one-shot | **no** | 5.6 |
-| 17 | `music/cue_death.ogg` | NEW | 8.000 s, one-shot, zero-ended | **no** | 5.1 |
-| 18 | `sfx/ui_xp_tick.wav` | NEW | 0.060 s, one-shot | **no** | 8.1 |
-| 19 | `sfx/ui_heal_soft.wav` | NEW | 0.300 s, one-shot | **no** | 8.2 |
+| 16 | `ui/ui_district_restored_sting.ogg` | NEW | 2.000 s, one-shot | yes | 5.6 |
+| 17 | `music/cue_death.ogg` | NEW | 8.000 s, one-shot, zero-ended | yes | 5.1 |
+| 18 | `sfx/ui_xp_tick.wav` | NEW | 0.060 s, one-shot | yes | 8.1 |
+| 19 | `sfx/ui_heal_soft.wav` | NEW | 0.300 s, one-shot | yes | 8.2 |
 
-**4 of 19 targets are not on disk.** They are the true gaps. An absent file is skipped by the guards of `scripts/systems/music_manager.gd` (`ResourceLoader.exists`), and `docs/MUSIC_SPEC.md` names the fallback of each row (the menu's is `abandoned_hallways.mp3`).
+**0 of 19 targets are not on disk.** They are the true gaps. An absent file is skipped by the guards of `scripts/systems/music_manager.gd` (`ResourceLoader.exists`), and `docs/MUSIC_SPEC.md` names the fallback of each row (the menu's is `abandoned_hallways.mp3`).
 The 11 beds of 2.2 are not in this list: they are upgrades.
 
 ### 2.4 After a take comes back
@@ -89,13 +89,13 @@ replacement of art that works, so it is the owner's choice and not a gap.
 
 | District | Master (1024 x 1536) | 512 twin | In game |
 |---|---|---|---|
-| `park` | 1024 x 1536 | 512 x 512 | 512 x 512 |
-| `school` | 1024 x 1536 | 512 x 512 | 512 x 512 |
-| `hospital` | 1024 x 1536 | 512 x 512 | 512 x 512 |
-| `gas_station` | 1024 x 1536 | 512 x 512 | 512 x 512 |
-| `police` | 1024 x 1536 | 512 x 512 | 512 x 512 |
-| `warehouses` | 1024 x 1536 | 512 x 512 | 512 x 512 |
-| `substation` | 1024 x 1536 | 512 x 512 | 512 x 512 |
+| `park` | **absent** | **absent** | 512 x 512 |
+| `school` | **absent** | **absent** | 512 x 512 |
+| `hospital` | **absent** | **absent** | 512 x 512 |
+| `gas_station` | **absent** | **absent** | 512 x 512 |
+| `police` | **absent** | **absent** | 512 x 512 |
+| `warehouses` | **absent** | **absent** | 512 x 512 |
+| `substation` | **absent** | **absent** | 512 x 512 |
 
 ### 3.2 Settings, seeds and what to ask for
 
@@ -374,6 +374,6 @@ The shipped set measures a minimum cross Hamming of **13** and a MAD from **20.5
 | Unlockable cosmetics | two skins and a starter bundle exist and sell for coins in the pause-menu shop (`data/shop/skin_survivor_ashen.tres` and `skin_survivor_rust.tres`, 2,000 coins each; `bundle_starter.tres`, 4,000 coins at 30 % off; `scripts/economy/shop_service.gd:8-9`, `ShopItem.Kind.SKIN`), applied as a rim colour and a darker body tint (`scripts/player/player_visual.gd:6-26`); none unlocks by play, and nothing else is cosmetic | whether more skins ship, whether any unlocks by play (an achievement, a level), and that there is still no purchase with money (the store answers say none) | art, `data/shop/`, the `SHOP_ITEM_SKIN_*` keys of 13 locales, and a save field only for a cosmetic that is not a shop item (`docs/SAVE_MIGRATION_MATRIX.md`) |
 | Survivor and Dark endings | a death resolves to Dark or Survivor (`EndingsManager.evaluate_death_ending`, GDD 12.4), the death screen keeps one picture (`assets/textures/screens_v2/death_loom.png`) and the five ending plates of `assets/store/endings/` ship in the bundle with no script that loads them | whether the death screen shows the earned plate, and whether Survivor and Dark are two endings or one | `scripts/ui/death_screen.gd`, `scripts/ui/win_screen.gd`, a frame re-shoot, the plates' place in the export filter (`docs/CORRECTION_LOG.md` 182) |
 | Touch feel on a device | measured only on a desktop with the touch probe (34 checks, 0 fails: `docs/artifacts/rc16/proofs/s22c_af2_post.attach.gate_touch_probe_scene.log`): the dead zone, the curve, the haptics and the calibration are the phone test's questions (U1, U5, U6, U13 of `docs/UNVERIFIABLE_HERE.md`) | the constants, after the numbers of a phone | `scripts/ui/virtual_joystick.gd`, `docs/RELEASE_RUNBOOK.md` section 4 |
-| Remaining music | the 4 targets of 2.3 and the upgrade of the 11 beds of 2.2 | which of them are worth a take | section 2.4 and the licence ledger |
+| Remaining music | the 0 targets of 2.3 and the upgrade of the 11 beds of 2.2 | which of them are worth a take | section 2.4 and the licence ledger |
 | Seven district card photographs | graded generated cards are in the game (3.1), with licence rows; the open point is a replacement if better art exists | replace or keep | section 3 and 4 |
 

@@ -13,7 +13,7 @@ Spoiler ceiling: the first three districts and the lit power station; no ending 
 - **Price:** free; no ads and no purchases in this build (`store/IARC_ANSWERS.md`, `docs/PRIVACY_AUDIT.md`)
 - **Engine:** Godot (MIT licence), the `gl_compatibility` renderer
 - **Age rating:** an estimate of PEGI 16 / ESRB Teen; the rating is issued by IARC after the owner answers the questionnaire (`store/IARC_ANSWERS.md`)
-- **Languages:** 13
+- **Languages:** 6
 
 ## What the game holds (read from the code)
 
@@ -25,7 +25,7 @@ Spoiler ceiling: the first three districts and the lit power station; no ending 
 | 31 | achievements | `AchievementManager.ACHIEVEMENTS` |
 | 58 | daily challenges, with 7, 30 and 100 day streak bonuses | `content/daily_challenges.json` |
 | 5 | adaptive music layers (dark, lit, two threat levels, action) | `MusicManager.LAYERS` |
-| 13 | languages | `data/i18n/` |
+| 6 | languages | `data/i18n/` |
 
 ## Pictures on disk
 
