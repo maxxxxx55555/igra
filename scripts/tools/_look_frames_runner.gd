@@ -25,6 +25,17 @@ func _frame(state: String) -> void:
 	img.save_png(ProjectSettings.globalize_path("res://.qa_logs/frames/" + file))
 	print("[lframes] frame %s" % file)
 
+## A view with the flashlight off and then on (a lit surface under a light of energy 24 is the case that broke V1, and the frames of launches 3 to 9 of Session 28 were judged with the light off): the second frame has the suffix _lit.
+func _both(state: String) -> void:
+	var player := _player_node()
+	_flashlight(player, false)
+	await get_tree().create_timer(0.3).timeout
+	await _frame(state)
+	_flashlight(player, true)
+	await get_tree().create_timer(0.6).timeout
+	await _frame(state + "_lit")
+	_flashlight(player, false)
+
 ## The district raised to a power stage as the game does it: the districts that power it first.
 func _raise(id: StringName, stage: int) -> void:
 	if PowerGrid.get_stage(id) >= stage:
@@ -97,10 +108,10 @@ func _run() -> void:
 	_place(STREET)
 	_flashlight(player, false)
 	await get_tree().create_timer(3.0).timeout
-	await _frame("suburbs_dry")
+	await _both("suburbs_dry")
 	_weather(WeatherSystem.Weather.RAIN)
 	await get_tree().create_timer(3.5).timeout
-	await _frame("suburbs_rain")
+	await _both("suburbs_rain")
 	_weather(WeatherSystem.Weather.CLEAR)
 	# a prop close-up in the same district: a bench, from 2.5 m, a little above
 	var props := get_tree().root.find_child("BenchesBatched", true, false) as MultiMeshInstance3D
@@ -108,7 +119,7 @@ func _run() -> void:
 		var bench: Vector3 = props.multimesh.get_instance_transform(0).origin
 		_place({"at": bench + Vector3(1.6, 0.0, 1.6) - Vector3(0.0, bench.y, 0.0) + Vector3(0.0, 0.1, 0.0), "look": Vector3(bench.x, 0.3, bench.z), "pitch": -0.35, "stage": 3, "light": false})
 		await get_tree().create_timer(1.0).timeout
-		await _frame("prop_closeup")
+		await _both("prop_closeup")
 		_show_shadows(false)
 		await get_tree().create_timer(0.5).timeout
 		await _frame("prop_noshadow")
@@ -163,10 +174,10 @@ func _run() -> void:
 	await get_tree().create_timer(0.35).timeout
 	await _frame("lamp_ramp_a")
 	await get_tree().create_timer(1.65).timeout
-	await _frame("lamp_ramp_b")
+	await _both("lamp_ramp_b")
 	_raise(&"industrial", 3)
 	await get_tree().create_timer(3.0).timeout
-	await _frame("industrial_fog")
+	await _both("industrial_fog")
 	_show_cards(false)
 	await get_tree().create_timer(0.5).timeout
 	await _frame("industrial_nofog")

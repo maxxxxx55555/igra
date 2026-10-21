@@ -75,9 +75,10 @@ static func dress(holder: Node3D, piece: MeshInstance3D, item_id: StringName, se
 	var rest: float = -mesh.get_aabb().position.y
 	piece.position.y = rest
 	holder.set_meta(&"glow", glow_of(item_id))
-	var old: Variant = piece.get_meta(&"settle", null)
-	if old is Tween:
-		(old as Tween).kill()
+	if piece.has_meta(&"settle"):  # get_meta with a null default prints an engine error when the key is absent
+		var old: Variant = piece.get_meta(&"settle")
+		if old is Tween:
+			(old as Tween).kill()
 	if not piece.is_inside_tree() or bool(SettingsManager.get_setting("reduce_ui_motion", false)):
 		return
 	if settle:

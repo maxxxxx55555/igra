@@ -41,9 +41,10 @@ func _rack(model: Node3D) -> void:
 	var part := model.get_child(1) as Node3D
 	if _Motion.calm() or part == null:
 		return
-	var old: Variant = part.get_meta(&"rack", null)
-	if old is Tween:
-		(old as Tween).kill()
+	if part.has_meta(&"rack"):
+		var old: Variant = part.get_meta(&"rack")
+		if old is Tween:
+			(old as Tween).kill()
 	var tween := part.create_tween()
 	tween.tween_property(part, "position:z", RACK_M, RACK_SEC * 0.3)
 	tween.tween_property(part, "position:z", 0.0, RACK_SEC * 0.7)
