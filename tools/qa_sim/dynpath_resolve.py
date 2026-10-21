@@ -89,8 +89,9 @@ def resolve():
             for tpl, rx in regexes:
                 m = rx.match(rel)
                 if m:
-                    inner = "".join(m.groups())  # the fill: one hole, or the holes side by side ("card_%s%s_512" -> suburbs_locked)
-                    if inner in words or all(part in words or re.sub(r"\d+$", "", part) in words for part in inner.split("_") if part):
+                    # the fill is a word (or words) the code or the data writes out: the holes side by side ("card_%s%s_512" -> suburbs_locked), or each hole alone ("sfx/weapons/%s_%s.wav" -> rifle and reload)
+                    fills = ["".join(m.groups())] + list(m.groups())
+                    if all(f in words or all(part in words or re.sub(r"\d+$", "", part) in words for part in f.split("_") if part) for f in fills[:1]) or all(f in words or all(part in words or re.sub(r"\d+$", "", part) in words for part in f.split("_") if part) for f in fills[1:]):
                         reason = "template " + tpl
                         break
         if not reason:

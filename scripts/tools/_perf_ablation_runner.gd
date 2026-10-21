@@ -33,14 +33,21 @@ func _run() -> void:
 	_flat_lit.albedo_color = Color(0.4, 0.4, 0.4)
 	_flat_lit.roughness = 1.0
 	var only: bool = OS.get_environment("TLS_ABLATE_ONLY") == "1"  # the EXTRA parts alone: no HUD or overlay child sweeps
+	var census: bool = OS.get_environment("TLS_ABLATE_ONLY") == "census"  # the light census alone: a minute of a launch
 	await _full(&"suburbs")
-	await _sweep("suburbs", NONE if only else PARTS)
-	if not only:
-		for layer in LAYERS:
-			await _children_sweep("suburbs", layer)
+	_light_census("suburbs")
+	if not census:
+		await _sweep("suburbs", NONE if only else PARTS)
+		if not only:
+			for layer in LAYERS:
+				await _children_sweep("suburbs", layer)
 	if not await _travel(&"power_station"):
 		return
 	await _full(&"power_station")
+	_light_census("power_station")
+	if census:
+		get_tree().quit(0)
+		return
 	await _sweep("power_station", NONE if only else HEAVY)
 	print("[ablate] DONE baselines %s least %.2f ms" % [_baselines, _baselines.min()])
 	get_tree().quit(0)
@@ -134,6 +141,22 @@ func _lamp_lights(child: String) -> Array:
 ## The limiter shows the nearest eight omni lights again every 0.25 s: a part that hides them stops it.
 func _stop_limiter(off: bool) -> void:
 	get_tree().root.get_node("LightLimiter").set_process(not off)
+
+## Which omni lights the frame carries and who owns them: the LightLimiter shows the nearest eight whatever their owner meant, so a light of energy 0 can hold a slot of the lighting loop.
+func _light_census(district: String) -> void:
+	var owners: Dictionary = {}
+	var shown: int = 0
+	var idle: int = 0
+	var all: Array[Node] = get_tree().root.find_children("*", "OmniLight3D", true, false)
+	for node in all:
+		var light := node as OmniLight3D
+		if not light.is_visible_in_tree():
+			continue
+		shown += 1
+		idle += 1 if light.light_energy <= 0.001 else 0
+		var key: String = "%s (energy %.2f, range %.1f)" % [String(light.get_parent().name).rstrip("0123456789@"), light.light_energy, light.omni_range]
+		owners[key] = int(owners.get(key, 0)) + 1
+	print("[ablate] %s omni lights: %d in the tree, %d shown, %d of them with energy 0; shown by owner: %s" % [district, all.size(), shown, idle, owners])
 
 func _environment() -> Environment:
 	return (get_tree().root.find_child("WorldEnvironment", true, false) as WorldEnvironment).environment

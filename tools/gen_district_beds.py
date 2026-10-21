@@ -6,12 +6,14 @@
   - a slow swell over the whole loop.
 Every frequency is an exact number of cycles in the loop and every LFO an exact number of cycles too, so the bed wraps without a step. Everything is seeded: the same arguments give the same samples.
 The house law (mono 44.1 kHz, -18 LUFS, true peak -1.5 dBFS, OGG q4, the seam proven) is applied by tools/qa_sim/music_post.py; tools/qa_sim/audio_cluster.py judges whether the bed belongs
-with the generated tracks (the spectrum is low and dark: most of the energy under 250 Hz).
+with the generated tracks (a low body with a shimmer above it: 62 to 90 % of the energy under 250 Hz, a centroid between 600 and 1100 Hz, as the eight generated tracks).
 
 usage: python tools/gen_district_beds.py <district>... [--out <dir>] [--master]      (--master runs music_post.py and writes assets/audio/ambience/districts/<district>_lit.ogg)
 """
 import argparse
 import pathlib
+import re
+import shutil
 import subprocess
 import sys
 import wave
@@ -25,9 +27,9 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 
 # district -> root note in Hz, the chords as semitone sets over the root, the number of partials, the cutoff of the noise bed (low, high) in Hz and its level, the swell depth
 DISTRICTS = {
-    "residential": {"root": 55.0, "chords": [(0, 7, 12, 15), (-4, 3, 8, 12), (-2, 5, 10, 14), (0, 7, 12, 17)], "partials": 4, "noise": (180.0, 520.0), "noise_level": 0.10, "swell": 0.22, "seed": 11},
-    "park": {"root": 73.42, "chords": [(0, 7, 12, 19), (-5, 2, 7, 14), (-3, 4, 9, 16), (0, 7, 14, 19)], "partials": 3, "noise": (140.0, 420.0), "noise_level": 0.12, "swell": 0.30, "seed": 23},
-    "industrial": {"root": 41.2, "chords": [(0, 7, 12, 13), (-2, 5, 10, 11), (0, 6, 12, 18), (-5, 2, 7, 8)], "partials": 5, "noise": (200.0, 700.0), "noise_level": 0.13, "swell": 0.18, "seed": 37},
+    "residential": {"root": 55.0, "chords": [(0, 7, 12, 15), (-4, 3, 8, 12), (-2, 5, 10, 14), (0, 7, 12, 17)], "partials": 9, "tilt": 0.9, "noise": (550.0, 3200.0), "noise_level": 0.25, "swell": 0.22, "seed": 11},
+    "park": {"root": 73.42, "chords": [(0, 7, 12, 19), (-5, 2, 7, 14), (-3, 4, 9, 16), (0, 7, 14, 19)], "partials": 8, "tilt": 1.0, "noise": (500.0, 3000.0), "noise_level": 0.20, "swell": 0.30, "seed": 23},
+    "industrial": {"root": 41.2, "chords": [(0, 7, 12, 13), (-2, 5, 10, 11), (0, 6, 12, 18), (-5, 2, 7, 8)], "partials": 9, "tilt": 0.9, "noise": (500.0, 3000.0), "noise_level": 0.25, "swell": 0.18, "seed": 37},
 }
 
 
@@ -76,7 +78,7 @@ def bed(name):
                 f = snap(f0 * 2.0 ** (detune_cents / 1200.0))
                 for k in range(1, p["partials"] + 1):
                     phase = rng.random()
-                    amp = 1.0 / (k ** 1.7)
+                    amp = 1.0 / (k ** p.get("tilt", 1.7))  # the steeper, the darker the chord
                     voice += amp * np.sin(2.0 * np.pi * (snap(f * k) * t + phase)) * (1.0 + 0.15 * lfo(t, int(rng.integers(2, 7)), rng.random()))
         out += win * voice
     out /= np.abs(out).max()
@@ -86,6 +88,21 @@ def bed(name):
     out += p["noise_level"] * noise * (0.45 + 0.55 * cutoff_mod)
     out *= 1.0 - p["swell"] + p["swell"] * (0.5 + 0.5 * lfo(t, 2, 0.25))
     return (out / np.abs(out).max() * 0.6).astype(np.float32)
+
+
+def master(wav, target):
+    """music_post.py at each start from 0 to 2 s in steps of a quarter second (it wants 2 s of audio past the end of the loop for its crossfade); the master with the lowest seam is kept: the loop is periodic, so every start
+    is a valid cut, and the seam of the cut differs (0.001 to 0.12 across the starts of the first residential bed)."""
+    best = None
+    for start in (0.0, 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0):
+        trial = target.with_name(target.stem + "_try.ogg")
+        r = subprocess.run([sys.executable, str(ROOT / "tools/qa_sim/music_post.py"), str(wav), str(trial), "--loop", str(LOOP_S), "--start", "%.2f" % start], capture_output=True, text=True)
+        m = re.search(r"seam=([0-9.]+)", r.stdout)
+        if r.returncode == 0 and m and (best is None or float(m.group(1)) < best[0]):
+            best = (float(m.group(1)), start, r.stdout.strip()[-300:])
+            shutil.copy(trial, target)
+    trial.unlink(missing_ok=True)
+    return best
 
 
 def write_wav(path, audio):
@@ -110,11 +127,10 @@ def main():
         write_wav(wav, bed(name))
         print("%s: %s (%d s loop + %d s tail)" % (name, wav, LOOP_S, EXTRA_S))
         if args.master:
-            target = ROOT / "assets/audio/ambience/districts" / ("%s_lit.ogg" % name)
-            r = subprocess.run([sys.executable, str(ROOT / "tools/qa_sim/music_post.py"), str(wav), str(target), "--loop", str(LOOP_S), "--start", "0"], capture_output=True, text=True)
-            print(r.stdout.strip()[-400:] or r.stderr.strip()[-400:])
-            if r.returncode != 0:
-                return r.returncode
+            best = master(wav, ROOT / "assets/audio/ambience/districts" / ("%s_lit.ogg" % name))
+            if best is None:
+                return 1
+            print("%s: start %.2f s, seam %.3f: %s" % (name, best[1], best[0], best[2]))
     return 0
 
 
