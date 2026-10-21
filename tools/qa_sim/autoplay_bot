@@ -7,6 +7,7 @@
 #   tools/qa_sim/autoplay_bot                 # seeds 1 2 3
 #   QA_SEEDS="7 11 42" tools/qa_sim/autoplay_bot
 #   QA_TIME_SCALE=4 tools/qa_sim/autoplay_bot     # headless clock x4, as the rc15 sign-off ran
+#   TLS_GODOT_ARGS=--verbose tools/qa_sim/autoplay_bot   # extra engine arguments (--verbose names the objects leaked at exit)
 #   GODOT=/path/to/godot tools/qa_sim/autoplay_bot
 set -uo pipefail
 cd "$(dirname "$0")/../.." || exit 2
@@ -32,7 +33,7 @@ WINS=0; TOTAL=0; SOFTLOCK=0; COUNTER_BAD=0
 for s in $SEEDS; do
 	TOTAL=$((TOTAL+1))
 	log=".qa_logs/autoplay_seed${s}.log"
-	QA_SEED="$s" timeout 1200 "$GODOT" --headless --path . res://scenes/tools/qa_autoplay_scene.tscn >"$log" 2>&1
+	QA_SEED="$s" timeout 1200 "$GODOT" --headless --path . ${TLS_GODOT_ARGS:-} res://scenes/tools/qa_autoplay_scene.tscn >"$log" 2>&1
 	rc=$?
 	line=$(grep -E "^\[bot s${s}\]   result" "$log" | tail -1)
 	if [[ $rc -eq 0 ]]; then
