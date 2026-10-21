@@ -10,11 +10,13 @@ const PARTS: Array[String] = ["lamp pools hidden", "lamp cones hidden", "window 
 const HEAVY: Array[String] = ["fog cards hidden", "lamp pools hidden", "lamp cones hidden", "window halos hidden"]
 const LAYERS: Array[String] = ["HUD", "PostProcessOverlay"]
 ## Measured in both districts after their own parts (R2 of the v10 pass: the GPU time of the shadows, the glow, the fog, the lights, the shading and the particles; TLS_PERF_TIER picks the tier).
-const EXTRA: Array[String] = ["moon shadow off", "flashlight shadow off", "glow off", "env fog off", "lights hidden", "unshaded materials", "particles hidden", "msaa off"]
+const EXTRA: Array[String] = ["moon shadow off", "flashlight shadow off", "glow off", "env fog off", "spot lights hidden", "omni lights hidden", "all lights hidden", "moon hidden", "lit flat materials", "unshaded materials", "particles hidden", "msaa off", "post-process layers hidden", "HUD hidden"]
+const NONE: Array[String] = []
 
 var _baselines: Array[float] = []
 var _msaa0: int = 0
 var _flat: StandardMaterial3D = null
+var _flat_lit: StandardMaterial3D = null
 
 func _run() -> void:
 	if not await _boot():
@@ -27,14 +29,19 @@ func _run() -> void:
 	_flat = StandardMaterial3D.new()
 	_flat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	_flat.albedo_color = Color(0.4, 0.4, 0.4)
+	_flat_lit = StandardMaterial3D.new()
+	_flat_lit.albedo_color = Color(0.4, 0.4, 0.4)
+	_flat_lit.roughness = 1.0
+	var only: bool = OS.get_environment("TLS_ABLATE_ONLY") == "1"  # the EXTRA parts alone: no HUD or overlay child sweeps
 	await _full(&"suburbs")
-	await _sweep("suburbs", PARTS)
-	for layer in LAYERS:
-		await _children_sweep("suburbs", layer)
+	await _sweep("suburbs", NONE if only else PARTS)
+	if not only:
+		for layer in LAYERS:
+			await _children_sweep("suburbs", layer)
 	if not await _travel(&"power_station"):
 		return
 	await _full(&"power_station")
-	await _sweep("power_station", HEAVY)
+	await _sweep("power_station", NONE if only else HEAVY)
 	print("[ablate] DONE baselines %s least %.2f ms" % [_baselines, _baselines.min()])
 	get_tree().quit(0)
 
@@ -96,14 +103,37 @@ func _apply(part: String, off: bool) -> void:
 			_toggle([_environment()], "glow_enabled", off, false)
 		"env fog off":
 			_toggle([_environment()], "fog_enabled", off, false)
-		"lights hidden":
+		"spot lights hidden":
+			_toggle(_lamp_lights("SpotLight"), "visible", off, false)
+		"omni lights hidden":
+			_stop_limiter(off)
 			_toggle(get_tree().root.find_children("*", "OmniLight3D", true, false), "visible", off, false)
+		"all lights hidden":
+			_stop_limiter(off)
+			_toggle(get_tree().root.find_children("*", "OmniLight3D", true, false) + _lamp_lights("SpotLight"), "visible", off, false)
+		"moon hidden":
+			_toggle(get_tree().root.find_children("*", "DirectionalLight3D", true, false), "visible", off, false)
+		"lit flat materials":
+			for kind in ["MeshInstance3D", "MultiMeshInstance3D"]:
+				_toggle(get_tree().root.find_children("*", kind, true, false), "material_override", off, _flat_lit)
 		"unshaded materials":
 			for kind in ["MeshInstance3D", "MultiMeshInstance3D"]:
 				_toggle(get_tree().root.find_children("*", kind, true, false), "material_override", off, _flat)
 		"particles hidden":
 			for kind in ["GPUParticles3D", "CPUParticles3D"]:
 				_toggle(get_tree().root.find_children("*", kind, true, false), "visible", off, false)
+
+func _lamp_lights(child: String) -> Array:
+	var found: Array = []
+	for lamp: Node in get_tree().get_nodes_in_group("streetlights"):
+		var light: Node = lamp.get_node_or_null(child)
+		if light != null:
+			found.append(light)
+	return found
+
+## The limiter shows the nearest eight omni lights again every 0.25 s: a part that hides them stops it.
+func _stop_limiter(off: bool) -> void:
+	get_tree().root.get_node("LightLimiter").set_process(not off)
 
 func _environment() -> Environment:
 	return (get_tree().root.find_child("WorldEnvironment", true, false) as WorldEnvironment).environment
