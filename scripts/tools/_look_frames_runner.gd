@@ -25,6 +25,18 @@ func _frame(state: String) -> void:
 	img.save_png(ProjectSettings.globalize_path("res://.qa_logs/frames/" + file))
 	print("[lframes] frame %s" % file)
 
+## The control frame of an A/B pair: the same view with the flashlight on (as the _lit frame before it), `feature` switched off for the shot and back on after it.
+func _control(state: String, feature: Callable) -> void:
+	var player := _player_node()
+	_flashlight(player, true)
+	await get_tree().create_timer(1.0).timeout
+	feature.call(false)
+	await get_tree().create_timer(0.4).timeout
+	await _frame(state)
+	feature.call(true)
+	_flashlight(player, false)
+	await get_tree().create_timer(1.6).timeout
+
 ## A view with the flashlight off and then on (a lit surface under a light of energy 24 is the case that broke V1, and the frames of launches 3 to 9 of Session 28 were judged with the light off): the second frame has the suffix _lit.
 func _both(state: String) -> void:
 	var player := _player_node()
@@ -35,6 +47,7 @@ func _both(state: String) -> void:
 	await get_tree().create_timer(0.6).timeout
 	await _frame(state + "_lit")
 	_flashlight(player, false)
+	await get_tree().create_timer(1.6).timeout  # the beam fades out: a frame shot at once would still be lit
 
 ## The district raised to a power stage as the game does it: the districts that power it first.
 func _raise(id: StringName, stage: int) -> void:
@@ -120,10 +133,7 @@ func _run() -> void:
 		_place({"at": bench + Vector3(1.6, 0.0, 1.6) - Vector3(0.0, bench.y, 0.0) + Vector3(0.0, 0.1, 0.0), "look": Vector3(bench.x, 0.3, bench.z), "pitch": -0.35, "stage": 3, "light": false})
 		await get_tree().create_timer(1.0).timeout
 		await _both("prop_closeup")
-		_show_shadows(false)
-		await get_tree().create_timer(0.5).timeout
-		await _frame("prop_noshadow")
-		_show_shadows(true)
+		await _control("prop_noshadow_lit", _show_shadows)
 	# the pickup library on the street of the suburbs: four sheets of 12, each seen from 2.3 to 4 m, a little above
 	for sheet in SHEETS.size():
 		var spots: Array[Vector3] = []
@@ -178,10 +188,7 @@ func _run() -> void:
 	_raise(&"industrial", 3)
 	await get_tree().create_timer(3.0).timeout
 	await _both("industrial_fog")
-	_show_cards(false)
-	await get_tree().create_timer(0.5).timeout
-	await _frame("industrial_nofog")
-	_show_cards(true)
+	await _control("industrial_nofog_lit", _show_cards)
 	# the 04_block view of five districts: the saturation of the facade band
 	for id in FACADE_IDS:
 		_raise(id, 3)
