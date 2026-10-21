@@ -1,5 +1,11 @@
 # Resume note (2026-10-08, rc16 sign-off)
 
+## NEXT-ROW (Session 28, 2026-10-18, stopped on a red battery; closed out by Session 29): read this block before the Session 27 one
+
+**Where everything is.** Session 28 ended at `3ca44bb` on `main` with 28 commits of work, no tag and no bundle (version code 4, 127,147,642 bytes). Session 29 resumed on `pass/v10.0.0-ship` from that head and records the outcome in `docs/RUN_STATE.md`.
+
+**What it settled.** The telegraphs, the difficulty and tension tables, the security extension, the hunted-level mixing, the story props, the window and lamp detail and the contrast of the endings (`docs/KNOWN_ISSUES.md`, the Session 28 block, lists the gates). **What it did not settle:** the perf gate (red at 34.72 ms), the release frames (red by design), the exit leaks, the unexplained brightness drift, and the unwired art pipeline (nine authored shaders, scenes and materials at zero references, which Session 29's workstream B wires). **Budgets used:** 13 of 14 launches, 0 of 2 exports, 0 verifier rounds. **The owner does** what the Session 27 block says; nothing new came from this pass.
+
 ## NEXT-ROW (Session 27, 2026-10-17; the tag `v9.1.0-store` goes on the commit `chore: v9.1.0-store closeout`): read this block first; the Session 26, 25, 24 and 23 blocks under it still stand.
 
 **Where everything is.** `main` equals `origin/main` at the head named at the end of the Session 27 block of `docs/RUN_STATE.md`; tags: `v9.1.0-store` (this pass), `v9.0.0-universe` = `ac45b1c` (Session 26), `v8.1.0-premium.1` = `041ce03`, `v8.1.0-premium` = `53a5f83`, `v9.0.0-ultimate` = `68e6c9d`. The bundle is new: `build/tls.aab` of `c353736`, **version code 4**, 127,147,642 bytes, sha256 `3677759869c5b01b195fd2664e8126143f4cefdc9b8c644538503231429f987e`; the bundles of Session 26 (version code 3, `f8224aa` and `4b4fee0`) and of the passes before are superseded, do not upload them (a copy of the bundle of `4b4fee0` is in `..\_BACKUPS\2026-10-17_bundles`). The release frames are the eight of `docs/stills/store` (the code of `f8c0de0`), the default set of the frame gate; `docs/stills/universe` and the older sets are history.
