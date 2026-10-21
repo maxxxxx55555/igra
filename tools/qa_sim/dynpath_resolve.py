@@ -81,7 +81,7 @@ def resolve():
     result = {}
     for rel, size in asset_files():
         stem = pathlib.PurePosixPath(rel).stem
-        base = re.sub(r"_?\d+$", "", stem)
+        base = re.sub(r"_(albedo|normal|rough)$", "", re.sub(r"_?\d+$", "", stem))  # a PBR map is named by its set: pbr_sets.gd builds DIR + set + "_albedo.png"
         reason = ""
         if rel in literals or any(r == rel or r.endswith("/" + rel) or rel.endswith("/" + r) for r in relatives):
             reason = "literal"

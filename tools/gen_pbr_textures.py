@@ -138,6 +138,18 @@ def to_png(array, mode):
     return Image.fromarray(np.round(np.clip(array, 0.0, 1.0) * 255.0).astype(np.uint8), mode)
 
 
+def write_import(png, normal=False):
+    """The sidecar of a map, with the import options a material wants (docs: Godot 4 compress/mode 2 = VRAM compressed, mipmaps on for the 3D view); Godot adds the uid and the paths at the next import.
+    A normal map is flagged as one and channel-packed; an albedo is sampled as sRGB and a roughness as linear by the material that uses it, not by the file."""
+    png.with_name(png.name + ".import").write_text(
+        '[remap]\n\nimporter="texture"\ntype="CompressedTexture2D"\n\n[params]\n\n'
+        "compress/mode=2\ncompress/high_quality=true\ncompress/lossy_quality=0.7\ncompress/uastc_level=0\ncompress/rdo_quality_loss=0.0\ncompress/hdr_compression=1\n"
+        f"compress/normal_map={1 if normal else 0}\ncompress/channel_pack={1 if normal else 0}\nmipmaps/generate=true\nmipmaps/limit=-1\nroughness/mode=0\nroughness/src_normal=\"\"\n"
+        "process/channel_remap/red=0\nprocess/channel_remap/green=1\nprocess/channel_remap/blue=2\nprocess/channel_remap/alpha=3\nprocess/fix_alpha_border=true\nprocess/premult_alpha=false\n"
+        "process/normal_map_invert_y=false\nprocess/hdr_as_srgb=false\nprocess/hdr_clamp_exposure=false\nprocess/size_limit=0\ndetect_3d/compress_to=1\n",
+        encoding="utf-8", newline="\n")
+
+
 def seam_ratio(img):
     """The mean step across the edge of the image over the mean step between two neighbours inside it: about 1 for a texture that tiles, a lot more for one that does not."""
     a = np.asarray(img.convert("L"), dtype=float)
@@ -163,6 +175,8 @@ def main():
         img.save(out / f"{name}_albedo.png", compress_level=9)
         to_png(normal_map(height), "RGB").save(out / f"{name}_normal.png", compress_level=9)
         to_png(rough, "L").save(out / f"{name}_rough.png", compress_level=9)
+        for kind in ("albedo", "normal", "rough"):
+            write_import(out / f"{name}_{kind}.png", kind == "normal")
         tiles.append(img)
         lo = np.asarray(img).min()
         hi = np.asarray(img).max()
