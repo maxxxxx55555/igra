@@ -9,7 +9,7 @@ const THROW_LIFT: float = 3.0
 const FUSE_SEC: float = 2.5
 const BOMB_RADIUS: float = 0.08
 const CASING := Color("#2a3340")
-const POP_SOUND := preload("res://assets/audio/sfx/shot_heavy.wav")
+const POP_SOUND := preload("res://assets/audio/sfx/shot_heavy.ogg")
 const SPARK := preload("res://scenes/vfx/vfx_hit_spark.tscn")
 const _Pool := preload("res://scripts/effects/vfx_pool.gd")
 

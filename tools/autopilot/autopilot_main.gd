@@ -95,7 +95,7 @@ func _check_music() -> String:
 
 func _check_sfx() -> String:
 	var bad: Array[String] = []
-	for f in _files_in("res://assets/audio/sfx", ".wav"):
+	for f in _files_in("res://assets/audio/sfx", ".wav") + _files_in("res://assets/audio/sfx", ".ogg"):
 		var s := load(f) as AudioStream
 		if s == null or s.get_length() <= 0.0:
 			bad.append(f.get_file())

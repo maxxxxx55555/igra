@@ -126,9 +126,13 @@ SETS = [
         ("scripts/systems/music_manager.gd", "EventBus.game_over.connect(func() -> void: _play_wow_cue(\"death\"))", "EventBus.game_over.connect(func() -> void: pass)", "ONE3"),
         ("scripts/systems/uisfx.gd", "_play(\"ui_xp_tick\", 1800.0, 0.03))", "_play(\"ui_xp_tickx\", 1800.0, 0.03))", "ONE4"),
     ],
+    [  # Session 29 (v10 E1), the closeout group s29: the file of a monster cue and the loop of the wind layer (two files, nothing one changes is read by the other's check)
+        ("scripts/enemies/base_monster.gd", "for ext: String in [\".ogg\", \".wav\"]:", "for ext: String in [\".wav\"]:", "SFX1"),
+        ("scripts/systems/audio_manager.gd", "\t_wind.stream = _force_loop(WIND_SFX)\n", "\t_wind.stream = WIND_SFX\n", "WIND1"),
+    ],
 ]
 ## The closeout group each set runs (CLOSEOUT_ONLY): the sets of Session 26 run `s26`, those of Session 27 `s27`, those of Session 28 `s28`, those of Session 29 `s29`.
-GROUP = ["s26", "s26", "s27", "s27", "s28", "attack", "attack", "s28", "s29", "s29", "s29", "s29", "s29"]
+GROUP = ["s26", "s26", "s27", "s27", "s28", "attack", "attack", "s28", "s29", "s29", "s29", "s29", "s29", "s29"]
 LINE = re.compile(r"^\[(?:closeout|attack-sim)\] (ok  |OK  |FAIL) +(\S+)")
 ## What a group of sets runs and the log it leaves: the closeout groups run `closeout_check`, the group "attack" the attack simulation (Session 28).
 RUN = {"attack": ("bash tools/qa_sim/guarded_headless res://scenes/tools/attack_sim_scene.tscn 120", ".qa_logs/attack_sim_scene.log")}

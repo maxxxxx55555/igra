@@ -843,6 +843,14 @@ var _cue_cooldown: Dictionary = {}
 func _set_cues(cues: Dictionary) -> void:
 	_cues = cues
 
+## The file of a cue: the OGG when the conversion shipped it, the WAV of a clip under half a second otherwise, "" when neither is there (the monster stays silent, as before).
+static func cue_path(file: String) -> String:
+	for ext: String in [".ogg", ".wav"]:
+		var path: String = "res://assets/audio/sfx/%s%s" % [file, ext]
+		if ResourceLoader.exists(path):
+			return path
+	return ""
+
 ## Plays a positional cue if defined; throttled so chase re-entry cannot spam.
 func play_cue(cue: StringName, min_interval: float = 2.0) -> void:
 	if ai_state == State.DEAD or not _cues.has(cue):
@@ -852,8 +860,8 @@ func play_cue(cue: StringName, min_interval: float = 2.0) -> void:
 		return
 	_cue_cooldown[cue] = now
 	var data: Dictionary = _cues[cue]
-	var path: String = "res://assets/audio/sfx/%s.wav" % String(data.get("file", ""))
-	if not ResourceLoader.exists(path):
+	var path: String = cue_path(String(data.get("file", "")))
+	if path.is_empty():
 		return
 	var am := get_node_or_null("/root/AudioManager")
 	if am == null or not am.has_method("play_sound_3d"):

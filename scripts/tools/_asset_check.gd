@@ -26,7 +26,7 @@ func _check_sfx_bank() -> void:
 	for s in surfaces:
 		var sample: String = String(fs.MATERIALS.get(s, {}).get("sample", "step_" + s))
 		sample_names.append(sample)
-		if not ResourceLoader.exists("res://assets/audio/sfx/%s.wav" % sample):
+		if BaseMonster.cue_path(sample).is_empty():
 			missing.append(sample)
 	_ok(missing.is_empty(), "S9.2 шаги по поверхностям (%d/%d)%s" % [
 		surfaces.size() - missing.size(), surfaces.size(),
@@ -38,7 +38,7 @@ func _check_sfx_bank() -> void:
 		"mon_watcher_scream", "mon_hunter_roar", "monster_destroyer_hum"]
 	var cue_missing: Array = []
 	for c in cues:
-		if not ResourceLoader.exists("res://assets/audio/sfx/%s.wav" % c):
+		if BaseMonster.cue_path(c).is_empty():
 			cue_missing.append(c)
 	_ok(cue_missing.is_empty(), "S9.3 звуки монстров (%d/%d)%s" % [
 		cues.size() - cue_missing.size(), cues.size(),
@@ -47,10 +47,10 @@ func _check_sfx_bank() -> void:
 	# Sample data must be non-empty, else playback is silent.
 	var empty: Array = []
 	for n in (sample_names + cues):
-		var p := "res://assets/audio/sfx/%s.wav" % n
-		if ResourceLoader.exists(p):
-			var w: AudioStreamWAV = load(p)
-			if w == null or w.data.size() < 512:
+		var p: String = BaseMonster.cue_path(n)
+		if not p.is_empty():
+			var w := load(p) as AudioStream
+			if w == null or w.get_length() < 0.005:
 				empty.append(n)
 	_ok(empty.is_empty(), "все новые WAV непустые%s" % ("" if empty.is_empty() else " пустые: " + ", ".join(empty)))
 

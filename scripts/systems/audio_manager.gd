@@ -63,7 +63,7 @@ func _ready() -> void:
 	add_child(ducker)
 	_wind = _make_player(&"Environment")
 	_wind.name = "WindLayer"
-	_wind.stream = WIND_SFX
+	_wind.stream = _force_loop(WIND_SFX)
 	_wind.volume_db = -26.0
 	# CONTENT UX / FINAL INTEGRATION wave: real mastered rain over metal
 	# roofs/cars replaces the procedural white-noise placeholder.
@@ -119,12 +119,12 @@ static func _has_ui_sting(name: String) -> bool:
 	return ResourceLoader.exists("res://assets/audio/ui/ui_" + name + ".ogg")
 
 const HURT_SFX := preload("res://assets/audio/sfx/sfx_hurt.wav")
-const WIND_SFX := preload("res://assets/audio/sfx/amb_wind.wav")
+const WIND_SFX := preload("res://assets/audio/sfx/amb_wind.ogg")
 const FLASHLIGHT_ON_SFX := preload("res://assets/audio/sfx/sfx_flashlight_on.wav")
 const FLASHLIGHT_OFF_SFX := preload("res://assets/audio/sfx/sfx_flashlight_off.wav")
 const RAIN_SFX := preload("res://assets/audio/one_shots/rain_on_metal_loop.ogg")
-const THUNDER_NEAR_SFX := preload("res://assets/audio/one_shots/thunder_near.wav")
-const THUNDER_FAR_SFX := preload("res://assets/audio/one_shots/thunder_far.wav")
+const THUNDER_NEAR_SFX := preload("res://assets/audio/one_shots/thunder_near.ogg")
+const THUNDER_FAR_SFX := preload("res://assets/audio/one_shots/thunder_far.ogg")
 const HEARTBEAT_SFX := preload("res://assets/audio/one_shots/heartbeat_low_loop.ogg")
 const BREATH_SFX := preload("res://assets/audio/one_shots/breath_low_loop.ogg")
 const LOW_HP_THRESHOLD: float = 0.30

@@ -46,9 +46,8 @@ const BATTLE_VARIANTS: Array[String] = [
 ## RESCUE WAVE P2.2 + 2026-09-12 audio pass: ox alpha's + arena's per-
 ## district ambience beds (docs/PRODUCTION_BIBLE.md audio canon) —
 ## dedicated 36s loops per district, replacing the generic tracks above
-## as the Mood.AMBIENT track. All 11 districts now have a _lit variant
-## (suburbs/hospital/power_station shipped earlier; the remaining 8
-## delivered in the 2026-09-12 arena audio pass, docs/CERT_AUDIO.md).
+## as the Mood.AMBIENT track. Every district has a dark bed here and a lit
+## bed in AMBIENCE_LIT_BY_DISTRICT below.
 const AMBIENCE_DARK_BY_DISTRICT: Dictionary = {
 	&"suburbs": "res://assets/audio/ambience/districts/suburbs_dark.ogg",
 	&"residential": "res://assets/audio/ambience/districts/residential_dark.ogg",
