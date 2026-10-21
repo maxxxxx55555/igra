@@ -26,32 +26,34 @@ static var _secrets_by_district: Dictionary = {}
 static var _secrets_loaded: bool = false
 
 ## Базовый набор: встречается почти везде, поддерживает фонарь и здоровье.
-const COMMON: Array[StringName] = [&"battery", &"battery", &"scrap", &"medkit"]
+## C4: a battery crate holds two (PICKUP_AMOUNT) and the scrap three: the old list of four, in three pickups.
+const COMMON: Array[StringName] = [&"battery", &"scrap", &"medkit"]
 
 ## Три детали, за которые щит района поднимает стадию (см. power_switch.gd:
 ## кабель -> PARTIAL, предохранитель -> STREETS, транзистор -> FULL).
 ## Лежат в каждом районе, и это обязательное условие проходимости: район
 ## открывается только после того, как предыдущий доведён до FULL, поэтому
 ## недостающую деталь физически неоткуда принести — игрок запирался бы
-## в пригороде навсегда. Здесь их по две штуки: запас на случай, если
-## игрок потратит деталь на соседний район.
-const REPAIR_PARTS: Array[StringName] = [
-	&"cable", &"cable", &"fuse", &"fuse", &"transistor", &"transistor",
-]
+## в пригороде навсегда. C4: по ящику каждой детали, и в ящике две штуки
+## (PICKUP_AMOUNT): запас на случай, если игрок потратит деталь на соседний
+## район или на крафт, лежит в нём же, а на улице три предмета вместо шести.
+const REPAIR_PARTS: Array[StringName] = [&"cable", &"fuse", &"transistor"]
 
-## Тематический набор района — то, ради чего в него имеет смысл заходить.
+## Тематический набор района — то, ради чего в него имеет смысл заходить. C4: только то,
+## чего нет в COMMON и REPAIR_PARTS (батарея, аптечка, кабель, предохранитель и транзистор
+## и так лежат везде); ключ идёт сразу после деталей, остальное — пока есть место под MAX_PICKUPS.
 const BY_DISTRICT: Dictionary = {
-	&"suburbs":       [&"battery", &"scrap", &"cable"],
-	&"residential":   [&"medkit", &"battery", &"scrap"],
-	&"park":          [&"scrap", &"battery", &"cable"],
-	&"school":        [&"key", &"scrap", &"battery", &"paper"],
-	&"hospital":      [&"medkit", &"medkit", &"serum", &"fabric", &"alcohol"],
-	&"gas_station":   [&"gas_canister", &"battery", &"scrap", &"bottle"],
-	&"police":        [&"key", &"medkit", &"tool", &"gunpowder", &"case"],
-	&"warehouses":    [&"cable", &"fuse", &"scrap"],
-	&"industrial":    [&"fuse", &"transistor", &"gear", &"metal"],
-	&"substation":    [&"fuse", &"cable", &"transistor"],
-	&"power_station": [&"fuse", &"transistor", &"medkit"],
+	&"suburbs":       [],
+	&"residential":   [],
+	&"park":          [],
+	&"school":        [&"key", &"paper"],
+	&"hospital":      [&"serum", &"fabric", &"alcohol"],
+	&"gas_station":   [&"gas_canister", &"bottle"],
+	&"police":        [&"key", &"tool", &"gunpowder", &"case"],
+	&"warehouses":    [],
+	&"industrial":    [&"gear", &"metal"],
+	&"substation":    [],
+	&"power_station": [],
 }
 
 ## Чертежи — по одному в четырёх районах, как и задумано в старой раскладке
@@ -81,59 +83,38 @@ const DOCUMENTS: Dictionary = {
 	&"power_station": "doc_core_station",
 }
 
-## Content-authored lore packs (content/districts/<id>/lore_notes.json),
-## one district at a time as ARENA's district passes land. Spawned the same
-## way as DOCUMENTS above, just several per district instead of one.
+## Content-authored lore packs (content/districts/<id>/lore_notes.json), four notes a district (C4: eight
+## were eight floating cubes a district): pinned on the streetlight poles by _spawn_mounted_doc, the total of
+## documents (Endings.get_total_documents) follows this table.
 const LORE_DOCS: Dictionary = {
-	&"suburbs": [
-		"suburbs_note_01", "suburbs_note_02", "suburbs_note_03", "suburbs_note_04",
-		"suburbs_note_05", "suburbs_note_06", "suburbs_note_07", "suburbs_note_08",
-	],
-	&"residential": [
-		"residential_note_01", "residential_note_02", "residential_note_03", "residential_note_04",
-		"residential_note_05", "residential_note_06", "residential_note_07", "residential_note_08",
-	],
-	&"park": [
-		"park_note_01", "park_note_02", "park_note_03", "park_note_04",
-		"park_note_05", "park_note_06", "park_note_07", "park_note_08",
-	],
-	&"school": [
-		"school_note_01", "school_note_02", "school_note_03", "school_note_04",
-		"school_note_05", "school_note_06", "school_note_07", "school_note_08",
-	],
-	&"hospital": [
-		"hospital_note_01", "hospital_note_02", "hospital_note_03", "hospital_note_04",
-		"hospital_note_05", "hospital_note_06", "hospital_note_07", "hospital_note_08",
-	],
-	&"gas_station": [
-		"gas_station_note_01", "gas_station_note_02", "gas_station_note_03", "gas_station_note_04",
-		"gas_station_note_05", "gas_station_note_06", "gas_station_note_07", "gas_station_note_08",
-	],
-	&"police": [
-		"police_note_01", "police_note_02", "police_note_03", "police_note_04",
-		"police_note_05", "police_note_06", "police_note_07", "police_note_08",
-	],
-	&"warehouses": [
-		"warehouses_note_01", "warehouses_note_02", "warehouses_note_03", "warehouses_note_04",
-		"warehouses_note_05", "warehouses_note_06", "warehouses_note_07", "warehouses_note_08",
-	],
-	&"industrial": [
-		"industrial_note_01", "industrial_note_02", "industrial_note_03", "industrial_note_04",
-		"industrial_note_05", "industrial_note_06", "industrial_note_07", "industrial_note_08",
-	],
-	&"substation": [
-		"substation_note_01", "substation_note_02", "substation_note_03", "substation_note_04",
-		"substation_note_05", "substation_note_06", "substation_note_07", "substation_note_08",
-	],
-	&"power_station": [
-		"power_station_note_01", "power_station_note_02", "power_station_note_03", "power_station_note_04",
-		"power_station_note_05", "power_station_note_06", "power_station_note_07", "power_station_note_08",
-	],
+	&"suburbs": ["suburbs_note_01", "suburbs_note_02", "suburbs_note_03", "suburbs_note_04"],
+	&"residential": ["residential_note_01", "residential_note_02", "residential_note_03", "residential_note_04"],
+	&"park": ["park_note_01", "park_note_02", "park_note_03", "park_note_04"],
+	&"school": ["school_note_01", "school_note_02", "school_note_03", "school_note_04"],
+	&"hospital": ["hospital_note_01", "hospital_note_02", "hospital_note_03", "hospital_note_04"],
+	&"gas_station": ["gas_station_note_01", "gas_station_note_02", "gas_station_note_03", "gas_station_note_04"],
+	&"police": ["police_note_01", "police_note_02", "police_note_03", "police_note_04"],
+	&"warehouses": ["warehouses_note_01", "warehouses_note_02", "warehouses_note_03", "warehouses_note_04"],
+	&"industrial": ["industrial_note_01", "industrial_note_02", "industrial_note_03", "industrial_note_04"],
+	&"substation": ["substation_note_01", "substation_note_02", "substation_note_03", "substation_note_04"],
+	&"power_station": ["power_station_note_01", "power_station_note_02", "power_station_note_03", "power_station_note_04"],
 }
 
 const RADIUS_MIN: float = 6.0
 const RADIUS_MAX: float = 22.0
 const DROP_Y: float = 0.6
+## C4: where a pickup lies: on the street (the top of the street tiles); DROP_Y is the height of a secret.
+const PICKUP_Y: float = 0.05
+## At most this many items, guns and boxes of rounds lie in one district (documents are not counted: they are notes on poles).
+const MAX_PICKUPS: int = 12
+## No two pickups lie closer than this (metres, on the ground plane), and the notes on the poles keep it too.
+const MIN_SPACING_M: float = 5.5
+const SCATTER_TRIES: int = 24
+## A note on a pole: its height over the street and how far it stands from the pole's axis, toward the road.
+const MOUNT_Y: float = 1.2
+const MOUNT_OFFSET_M: float = 0.14
+## The pickups and notes of the district being laid out, for MIN_SPACING_M.
+static var _placed: Array[Vector3] = []
 
 ## street_builder.gd lays a 3x3 grid of 16 m blocks centred on the district; floor exists only on its
 ## streets, each a band from axis - 3.75 to axis + 5 (road and sidewalk tiles). Loot scattered into the
@@ -176,8 +157,23 @@ static func populate(district_root: Node3D, district_id: StringName) -> int:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = hash(String(district_id))
 
+	_placed.clear()
+	var themed: Array = BY_DISTRICT.get(district_id, [])
+	# C4, in the order of what matters: the repair parts (they open the next district), the blueprint, the key, the common items, the rest of the district's own,
+	# cut to the room MAX_PICKUPS leaves after the guns, boxes of rounds and workbench parts of _spawn_extras.
+	var wanted: Array[StringName] = []
+	wanted.append_array(REPAIR_PARTS)
+	if BLUEPRINTS.has(district_id):
+		wanted.append(StringName(BLUEPRINTS[district_id]))
+	if themed.has(&"key"):
+		wanted.append(&"key")
+	wanted.append_array(COMMON)
+	for it in themed:
+		if it != &"key":
+			wanted.append(StringName(it))
 	var items: Array[StringName] = []
-	items.append_array(COMMON)
+	for i in mini(wanted.size(), MAX_PICKUPS - _extras_max(district_id)):
+		items.append(wanted[i])
 	# Static audit 2026-09-08: "loot_luck" skill was purchasable but never
 	# read anywhere - buying it did nothing. Extra common-item rolls per
 	# level; still fully deterministic (same seeded rng as everything else
@@ -185,12 +181,6 @@ static func populate(district_root: Node3D, district_id: StringName) -> int:
 	var luck_lvl := _skill_level(&"loot_luck")
 	for i in luck_lvl:
 		items.append(COMMON[rng.randi() % COMMON.size()])
-	items.append_array(REPAIR_PARTS)
-	var themed: Array = BY_DISTRICT.get(district_id, [])
-	for it in themed:
-		items.append(StringName(it))
-	if BLUEPRINTS.has(district_id):
-		items.append(StringName(BLUEPRINTS[district_id]))
 
 	var placed := 0
 	## QA_SWARM_FINDINGS.md P1 (cheater): the item loop below used to run
@@ -210,7 +200,7 @@ static func populate(district_root: Node3D, district_id: StringName) -> int:
 		var key := "%s:%d" % [district_id, n]
 		n += 1
 		if pt == null or not pt.is_loot_taken(key):
-			if _spawn_item(district_root, item_id, pos, 1, key):
+			if _spawn_item(district_root, item_id, pos, int(PICKUP_AMOUNT.get(item_id, 1)), key):
 				placed += 1
 
 	if DOCUMENTS.has(district_id):
@@ -219,8 +209,7 @@ static func populate(district_root: Node3D, district_id: StringName) -> int:
 			placed += 1
 	if LORE_DOCS.has(district_id):
 		for doc_id in (LORE_DOCS[district_id] as Array):
-			var lpos := _scatter(district_root, rng)
-			if _spawn_document(district_root, String(doc_id), lpos):
+			if _spawn_mounted_doc(district_root, String(doc_id), rng):
 				placed += 1
 	placed += _spawn_secrets(district_root, district_id)
 	_spawn_hiding_spots(district_root, district_id)
@@ -345,10 +334,56 @@ static func _load_secrets() -> void:
 			_secrets_by_district[d] = []
 		_secrets_by_district[d].append(row)
 
+## A point on the street for a pickup, at least MIN_SPACING_M from every one laid out before it (the same seeded draws, so a layout does not move between visits).
 static func _scatter(root: Node3D, rng: RandomNumberGenerator) -> Vector3:
-	var ang := rng.randf_range(0.0, TAU)
-	var rad := rng.randf_range(RADIUS_MIN, RADIUS_MAX)
-	return root.global_position + _snap_to_street(Vector3(cos(ang) * rad, DROP_Y, sin(ang) * rad))
+	var pos := Vector3.ZERO
+	for attempt in SCATTER_TRIES:
+		var ang := rng.randf_range(0.0, TAU)
+		var rad := rng.randf_range(RADIUS_MIN, RADIUS_MAX)
+		pos = root.global_position + _snap_to_street(Vector3(cos(ang) * rad, PICKUP_Y, sin(ang) * rad))
+		if _spaced(pos):
+			break
+	_placed.append(pos)
+	return pos
+
+static func _spaced(at: Vector3) -> bool:
+	for other in _placed:
+		if Vector2(at.x - other.x, at.z - other.z).length() < MIN_SPACING_M:
+			return false
+	return true
+
+## What _spawn_extras lays out at most (the workbench blueprint, the gun, the workbench parts and the boxes of rounds), whatever the player has already found: the room the rest of the loot is cut to.
+static func _extras_max(district_id: StringName) -> int:
+	var index: int = DistrictSceneFactory.DISTRICTS.find(district_id)
+	var ammo: int = 0 if index <= 0 else (1 if index < AMMO_DOUBLE_FROM else 2)
+	return int(WORKBENCH_BLUEPRINTS.has(district_id)) + int(WEAPON_FINDS.has(district_id)) + (EXTRA_PARTS.get(district_id, []) as Array).size() + ammo
+
+## C4: a lore note pinned upright on a streetlight pole at head height, facing the road: found with the flashlight, not by walking over it. A district without poles gets it on the ground.
+static func _spawn_mounted_doc(root: Node3D, doc_id: String, rng: RandomNumberGenerator) -> bool:
+	var poles := root.find_child("StreetlightPolesBatched", true, false) as MultiMeshInstance3D
+	var spots: Array = poles.get_meta("spots", []) if poles != null else []
+	if spots.is_empty():
+		return _spawn_document(root, doc_id, _scatter(root, rng))
+	var pole := Vector3.ZERO
+	for attempt in SCATTER_TRIES:
+		var spot: Vector3 = spots[rng.randi() % spots.size()]
+		pole = poles.global_transform * spot
+		if _spaced(pole):
+			break
+	var local: Vector3 = pole - root.global_position
+	var to_axis := Vector2(_nearest_axis(local.x) + STREET_BAND_MID - local.x, _nearest_axis(local.z) + STREET_BAND_MID - local.z)
+	var face := Vector3(signf(to_axis.x), 0.0, 0.0) if absf(to_axis.x) < absf(to_axis.y) else Vector3(0.0, 0.0, signf(to_axis.y))
+	var at: Vector3 = Vector3(pole.x, root.global_position.y + MOUNT_Y, pole.z) + face * MOUNT_OFFSET_M
+	_placed.append(at)
+	var node := DOC_SCENE.instantiate() as Node3D
+	if node == null:
+		return false
+	node.set("document_id", doc_id)
+	node.set("mounted", true)
+	root.add_child(node)
+	node.global_position = at
+	node.rotation.y = atan2(face.x, face.z)
+	return true
 
 static func _spawn_item(root: Node3D, item_id: StringName, pos: Vector3, count: int = 1, key: String = "") -> bool:
 	var node := PICKUP_SCENE.instantiate() as Node3D
@@ -392,7 +427,8 @@ const WEAPON_FINDS: Dictionary = {&"residential": &"pistol", &"police": &"rifle"
 const EXTRA_PARTS: Dictionary = {
 	&"police": [&"transformer"], &"warehouses": [&"plank", &"metal"], &"industrial": [&"transformer"],
 }
-const PICKUP_AMOUNT: Dictionary = {&"plank": 5}
+## A pickup holds this many (the default is one): the spare repair parts and the second battery are inside the crate, not beside it.
+const PICKUP_AMOUNT: Dictionary = {&"plank": 5, &"cable": 2, &"fuse": 2, &"transistor": 2, &"battery": 2, &"scrap": 3}
 const AMMO_PER_PICKUP: int = 12
 ## Ammo lies in every district but the first, twice from the sixth on (the gas station, where the first two Hunters stand: a rise of x1.9 in the enemy strength is paid with it): the guns come late.
 const AMMO_DOUBLE_FROM: int = 5

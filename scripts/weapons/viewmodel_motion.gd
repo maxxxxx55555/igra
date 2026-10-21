@@ -22,8 +22,12 @@ func kick(strength: float) -> void:
 	_kick = clampf(strength * 2.0, 0.3, 1.0)
 
 ## The extra transform of the weapon, in its own frame, for this frame.
+## Motion Comfort and Reduce UI Motion, the two settings that stop the camera's own motion, hold the model still.
+static func calm() -> bool:
+	return bool(SettingsManager.get_setting("reduce_ui_motion", false)) or bool(SettingsManager.get_setting("reduce_camera_motion", false))
+
 func offset(delta: float, cam_basis: Basis, reloading: bool) -> Transform3D:
-	if bool(SettingsManager.get_setting("reduce_ui_motion", false)) or bool(SettingsManager.get_setting("reduce_camera_motion", false)):
+	if calm():
 		_lag_ready = false
 		_kick = 0.0
 		_reload = 0.0

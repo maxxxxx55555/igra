@@ -56,7 +56,7 @@ def main():
     # ---- per-instance contributors (rough D1 representative counts) ----
     per_instance = {
         "monster meshes (individual, skeletal — not batchable)": 6,
-        "pickups in view (item_pickup_3d BoxMesh, ~10 spawned, ~4 on screen)": 4,
+        "pickups in view (item_pickup_3d, a mesh of its own, ~10 spawned, ~4 on screen)": 4,
         "document pickups in view": 2,
         "power switch + cable box + generator interactables": 3,
         "HUD / 2D CanvasLayer draw items (bars, minimap, crosshair, toasts)": 10,
@@ -70,14 +70,15 @@ def main():
     PICKUP_LIGHTS_D1 = 10  # one OmniLight per item_pickup_3d, ~10 spawned
     lamp_fade = tcn if (tcn := tscn_flag(ROOT / "scenes/props/streetlight_3d.tscn",
                                          "distance_fade_enabled")) else False
-    pick_fade = tscn_flag(ROOT / "scenes/pickups/item_pickup_3d.tscn", "distance_fade_enabled")
+    pick_lights = scene_static(ROOT / "scenes/pickups/item_pickup_3d.tscn")["lights"]  # C2 of the v1.0.0-ship pass: a pickup holds no light
+    pick_fade = pick_lights == 0 or tscn_flag(ROOT / "scenes/pickups/item_pickup_3d.tscn", "distance_fade_enabled")
 
     lights_before = LAMPS_D1 * 2 + PICKUP_LIGHTS_D1            # everything sent to shader
     # after: only lights whose fade range overlaps the view frustum.
     # lamp fade cull at 30 m, camera sees ~1/3 of a district's lamps -> 8 lamps
     # pickup fade cull at 16 m -> ~2 pickups near camera
     lamps_active = 8 if lamp_fade else LAMPS_D1
-    picks_active = 2 if pick_fade else PICKUP_LIGHTS_D1
+    picks_active = 0 if pick_lights == 0 else (2 if pick_fade else PICKUP_LIGHTS_D1)
     lights_after = lamps_active * 2 + picks_active
 
     print("=== batched draw calls (fixed, per district) ===")
@@ -97,7 +98,7 @@ def main():
 
     print("=== real-time lights sent to the shader (D1 frame) ===")
     print(f"  streetlight distance_fade_enabled : {lamp_fade}")
-    print(f"  pickup    distance_fade_enabled  : {pick_fade}")
+    print(f"  pickup    lights in the scene    : {pick_lights} (fade {pick_fade})")
     print(f"  BEFORE : {lights_before:3d}  ({LAMPS_D1} lamps x2 + {PICKUP_LIGHTS_D1} pickup lights, all active)")
     print(f"  AFTER  : {lights_after:3d}  ({lamps_active} lamps x2 + {picks_active} pickup lights within fade range)")
     print(f"  -> {lights_before - lights_after} fewer active lights per frame "

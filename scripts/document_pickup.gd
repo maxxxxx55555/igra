@@ -4,19 +4,19 @@ extends Node3D
 @export var document_id: String = ""
 @export var document_title: String = "Untitled"
 @export var document_content: String = ""
+## C4 (v1.0.0-ship): a lore note pinned upright on a streetlight pole (DistrictLoot), found with the flashlight; the other kind lies flat on the ground. Neither bobs, turns or glows.
+@export var mounted: bool = false
 
 const CATALOG_PATH: String = "res://data/documents/documents_catalog.json"
+const _Meshes := preload("res://scripts/art/pickup_meshes.gd")
 
-## Скрипт делят две разные сцены: в scenes/pickups меш зовётся MeshInstance3D
-## и есть GlowOmniLight3D, а в scenes/gameplay меш зовётся PickupMesh и света
-## нет. Жёсткий $-путь падал на одной из них, поэтому ищем оба имени.
+## Скрипт делят две разные сцены: в scenes/pickups меш зовётся MeshInstance3D,
+## а в scenes/gameplay меш зовётся PickupMesh. Жёсткий $-путь падал на одной
+## из них, поэтому ищем оба имени.
 var pickup_mesh: MeshInstance3D = null
 @onready var collect_area: Area3D = $CollectArea
-var glow_light: OmniLight3D = null
 
 var is_collected: bool = false
-var _bob_timer: float = 0.0
-var _rot_timer: float = 0.0
 
 signal document_collected(title: String, doc_id: String)
 
@@ -24,7 +24,11 @@ func _ready() -> void:
 	pickup_mesh = (get_node_or_null("PickupMesh") as MeshInstance3D)
 	if pickup_mesh == null:
 		pickup_mesh = get_node_or_null("MeshInstance3D") as MeshInstance3D
-	_ensure_glow()
+	if pickup_mesh != null:
+		_Meshes.dress(self, pickup_mesh, &"document", not mounted)
+		if mounted:
+			pickup_mesh.position = Vector3.ZERO
+			pickup_mesh.rotation_degrees.x = 90.0
 	_load_from_catalog()
 	if document_id != "":
 		# /root/JournalManager не существует; учёт документов ведёт ProgressTracker.
@@ -32,16 +36,6 @@ func _ready() -> void:
 			queue_free()
 			return
 	collect_area.body_entered.connect(_on_body_entered)
-
-func _process(delta: float) -> void:
-	if is_collected:
-		return
-	if pickup_mesh == null:
-		return
-	_bob_timer += delta
-	pickup_mesh.position.y = 0.5 + sin(_bob_timer * 2.0) * 0.2
-	_rot_timer += delta
-	pickup_mesh.rotation.y = _rot_timer * 1.5
 
 func _on_body_entered(body: Node) -> void:
 	if is_collected:
@@ -54,8 +48,6 @@ func _collect() -> void:
 	visible = false
 	if pickup_mesh != null:
 		pickup_mesh.visible = false
-	if glow_light != null:
-		glow_light.visible = false
 	# У Area3D нет свойства disabled — отключается монитор столкновений.
 	# _collect() бежит из _on_body_entered (сигнал физики), где прямое
 	# присваивание monitoring блокируется движком ("Function blocked
@@ -95,15 +87,3 @@ func _load_from_catalog() -> void:
 			else:
 				document_content = String(entry.get("content", ""))
 			return
-
-## Тёплое свечение документа создаётся в рантайме, если его нет в сцене.
-func _ensure_glow() -> void:
-	glow_light = get_node_or_null("GlowOmniLight3D") as OmniLight3D
-	if glow_light != null:
-		return
-	glow_light = OmniLight3D.new()
-	glow_light.name = "GlowOmniLight3D"
-	glow_light.light_color = Color(0.886, 0.639, 0.235)
-	glow_light.light_energy = 0.8
-	glow_light.omni_range = 3.0
-	add_child(glow_light)

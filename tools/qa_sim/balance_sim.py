@@ -35,12 +35,19 @@ def read(p):
 
 
 # ── parts economy (source of truth: district_loot.gd) ──────────────────
+def pickup_amounts():
+    # PICKUP_AMOUNT: what one pickup holds (the spare repair part and the second battery are in the crate of the first)
+    m = re.search(r"PICKUP_AMOUNT:.*?=\s*\{(.*?)\}", read("scripts/world/district_loot.gd"), re.S)
+    return {k: int(v) for k, v in re.findall(r'&"(\w+)":\s*(\d+)', m.group(1))} if m else {}
+
+
 def parts_economy():
     txt = read("scripts/world/district_loot.gd")
-    # REPAIR_PARTS: [&"cable", &"cable", &"fuse", &"fuse", &"transistor", &"transistor"]
+    # REPAIR_PARTS: [&"cable", &"fuse", &"transistor"], each one pickup of PICKUP_AMOUNT parts
     m = re.search(r"REPAIR_PARTS:.*?=\s*\[(.*?)\]", txt, re.S)
     parts = re.findall(r'&"(\w+)"', m.group(1))
-    supply = {p: parts.count(p) for p in set(parts)}
+    amounts = pickup_amounts()
+    supply = {p: parts.count(p) * amounts.get(p, 1) for p in set(parts)}
     # REPAIR_COST in power_switch.gd: {PARTIAL: cable, STREETS: fuse, FULL: transistor}
     sw = read("scripts/world/power_switch.gd")
     demand_ids = re.findall(r'&"(\w+)"', re.search(r"REPAIR_COST:.*?=\s*\{(.*?)\}", sw, re.S).group(1))
@@ -88,7 +95,7 @@ def battery_economy():
     refill = float(re.search(r"effect_value\s*=\s*([\d.]+)", bat_item).group(1))
     loot = read("scripts/world/district_loot.gd")
     common = re.findall(r'&"(\w+)"', re.search(r"COMMON:.*?=\s*\[(.*?)\]", loot).group(1))
-    guaranteed_batteries = common.count("battery")
+    guaranteed_batteries = common.count("battery") * pickup_amounts().get("battery", 1)
     seconds_full = battery_max / drain
     seconds_per_battery = refill / drain
     per_district_budget = seconds_full + guaranteed_batteries * seconds_per_battery

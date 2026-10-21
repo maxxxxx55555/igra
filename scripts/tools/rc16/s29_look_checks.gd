@@ -124,13 +124,13 @@ static func _lamps(r: Node) -> void:
 	var staged: bool = shader_ok and stages.size() == 2 and is_equal_approx(stages[0], 0.0) and is_equal_approx(stages[1], 0.45)
 	r._ok(shader_ok and staged and ramp_start < 0.5 and is_equal_approx(ramp_end, 1.0) and is_equal_approx(full_energy, 2.0) and calm, "LAMP1 the lamp heads wear the flicker material (%s), lit %s by stage (0, and 0.45 once the ramp of the partial stage is over), a restore ramps it (%.2f at once, %.2f after 1.5 s), 2.0 at full (%.1f), Reduce Flash stills it (%s)" % [shader_ok, stages, ramp_start, ramp_end, full_energy, calm])
 
-## SHADOW1 (B5): at the High tier a district holds ONE ContactShadows MultiMesh (one draw call, no MeshInstance3D with the blob shader) with a blob for every pole, every batched prop and every monster, and the blob of a monster lies
-## 2 cm above the street under its feet; at the Low tier it holds none.
+## SHADOW1 (B5): at the High tier a district holds ONE ContactShadows MultiMesh (one draw call, no MeshInstance3D with the blob shader) with a blob for every pole and every batched prop, a monster is found by its group by one of
+## the ContactShadows of the world (the run has one for its own district) and its blob lies 2 cm above the street under its feet (read from the entry the node keeps: a headless run keeps no instance transforms); at the Low tier a district holds none.
 static func _shadows(r: Node) -> void:
 	var tier0: int = int(SettingsManager.get_setting("graphics_tier", 2))
 	SettingsManager.set_graphics_tier(2)
 	var root: Node3D = await _Density._build(r, &"suburbs")
-	var monsters: Array[Node] = [r._monster("crawler_3d", Vector3(0.0, 1.0, 0.0))]  # a district holds none of its own in the closeout scene; the group scan finds it within SCAN_SEC
+	var monster: Node3D = r._monster("crawler_3d", Vector3(0.0, 1.0, 0.0))  # a district holds none of its own in the closeout scene; the group scan finds it within SCAN_SEC
 	await r.get_tree().create_timer(0.8).timeout
 	var boards: Array[Node] = root.find_children("ContactShadows", "MultiMeshInstance3D", true, false)
 	var board := boards[0] as MultiMeshInstance3D if boards.size() == 1 else null
@@ -140,26 +140,24 @@ static func _shadows(r: Node) -> void:
 		var node := root.find_child(batch, true, false) as MultiMeshInstance3D
 		props += node.multimesh.instance_count if node != null else 0
 	var blobs: int = board.multimesh.visible_instance_count if board != null else 0
-	var under: bool = false
-	if board != null and not monsters.is_empty():
-		var m := monsters[0] as Node3D
-		var feet: float = m.global_position.y - ((m.get_node("CollisionShape3D") as CollisionShape3D).shape as CapsuleShape3D).height * 0.5
-		for i in blobs:
-			if board.multimesh.get_instance_transform(i).origin.distance_to(Vector3(m.global_position.x, feet + 0.02, m.global_position.z)) < 0.06:
-				under = true
-				break
+	var lift: float = INF
+	for found in r.get_tree().root.find_children("ContactShadows", "MultiMeshInstance3D", true, false):
+		for entry: Dictionary in found.get("_tracked"):
+			if entry["node"] == monster:
+				lift = float(entry["lift"])
+	var under: bool = absf(lift + ((monster.get_node("CollisionShape3D") as CollisionShape3D).shape as CapsuleShape3D).height * 0.5 - 0.02) < 0.06
 	var flat: int = 0
 	for mesh in root.find_children("*", "MeshInstance3D", true, false):
 		var mat := (mesh as MeshInstance3D).material_override as ShaderMaterial
 		flat += 1 if mat != null and mat.shader != null and mat.shader.resource_path.ends_with("contact_shadow.gdshader") else 0
 	root.queue_free()
-	monsters[0].queue_free()
+	monster.queue_free()
 	SettingsManager.set_graphics_tier(0)
 	var low: Node3D = await _Density._build(r, &"suburbs")
 	var none_low: bool = low.find_children("ContactShadows", "MultiMeshInstance3D", true, false).is_empty()
 	low.queue_free()
 	SettingsManager.set_graphics_tier(tier0)
-	r._ok(has_board and blobs >= props + monsters.size() and props > 0 and under and flat == 0 and none_low, "SHADOW1 one ContactShadows MultiMesh (%s) with %d blobs for %d poles and props and %d monsters, a blob under a monster's feet (%s), %d separate blob meshes, none on the Low tier (%s)" % [has_board, blobs, props, monsters.size(), under, flat, none_low])
+	r._ok(has_board and blobs >= props and props > 0 and under and flat == 0 and none_low, "SHADOW1 one ContactShadows MultiMesh (%s) with %d blobs for %d poles and props, the blob of a monster 2 cm over the street under its feet (%s, lift %.3f), %d separate blob meshes, none on the Low tier (%s)" % [has_board, blobs, props, under, lift, flat, none_low])
 
 ## WX1 (B8): WeatherParticles (a child of the world setup) holds the rain emitter, which emits in rain (the share 0.7) and in a storm (1.0) and not in the clear, and the fog drops, which emit only in fog; the rain stands 12 m over
 ## the camera; the sparks of the strobe appear (a vfx_strobe burst) and do not with Reduce Flash.
