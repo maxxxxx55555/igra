@@ -23,6 +23,7 @@ func _run() -> void:
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 	Engine.max_fps = 0
 	print("[ablate] window=%s msaa=%d tier=%d vsync_was=%d" % [get_window().size, get_viewport().msaa_3d, int(SettingsManager.get_setting("graphics_tier", 2)), vsync])
+	_print_power()
 	_msaa0 = get_viewport().msaa_3d
 	_flat = StandardMaterial3D.new()
 	_flat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED

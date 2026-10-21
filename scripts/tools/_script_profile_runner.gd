@@ -18,6 +18,7 @@ func _run() -> void:
 	SettingsManager.set_graphics_tier(int(OS.get_environment("TLS_PERF_TIER")) if OS.has_environment("TLS_PERF_TIER") else 0)
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 	Engine.max_fps = 0
+	_print_power()
 	await _full(&"suburbs")
 	await _profile("suburbs")
 	if not await _travel(&"power_station"):
