@@ -131,7 +131,7 @@ func _run() -> void:
 		await Rc29Look.run(self)
 		await Rc29Pick.run(self)
 		await Rc29Bar.run(self)
-		Rc29Leak.run(self)
+		await Rc29Leak.run(self)
 		_finish()
 		return
 	if OS.get_environment("CLOSEOUT_ONLY") == "rtl":
@@ -244,7 +244,7 @@ func _rc16_checks() -> void:
 	await Rc29Look.run(self)
 	await Rc29Pick.run(self)
 	await Rc29Bar.run(self)
-	Rc29Leak.run(self)
+	await Rc29Leak.run(self)
 
 ## A monster standing still in the far corner of the world: its collider answers rays, its AI never runs
 ## (a disabled process mode would also take the collider out of the physics space).

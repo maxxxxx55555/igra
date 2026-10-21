@@ -12,7 +12,9 @@ extends Node3D
 @export var mesh_visible: bool = true
 
 var _on: bool = false
-var _t: float = 0.0
+## The flicker clock, negative until the first lit frame: it then starts at a phase of the lamp's own place, so the lamps of a street do not dip together (they all started at 0: the whole street pulsed by
+## 15 % and fell to a fifth of its light six times a second, and two frames of one view differed by up to 20 %, the "drift" of Session 28).
+var _t: float = -1.0
 ## PARTIAL (stage 1) lamps run weaker; _process multiplies this into the
 ## flicker so a stage-1 lamp reads dimmer than a STREETS lamp, not just
 ## on/off. 1.0 at STREETS/FULL.
@@ -49,6 +51,8 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if not _on or not lamp_flicker:
 		return
+	if _t < 0.0:
+		_t = float(absi(hash(Vector2i(roundi(global_position.x), roundi(global_position.z)))) % 628) / 100.0
 	_t += delta
 	var spot: SpotLight3D = $SpotLight
 	var glow: OmniLight3D = $Glow

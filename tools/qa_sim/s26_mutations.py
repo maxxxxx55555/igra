@@ -102,9 +102,13 @@ SETS = [
     [  # Session 28, the closeout group s28 again (W1): the trigger of a story scene shares a file with STORY1, which would make STORY2 fail under its mutation too
         ("scripts/world/story_props.gd", "\tarea.collision_mask = 1\n", "\tarea.collision_mask = 0\n", "STORY2"),
     ],
+    [  # Session 29 (v10 R6 and F19), the closeout group s29: the placeholder close button of the screens put back, and the flicker clock back at 0 (two files, nothing one mutation changes is read by the other's check)
+        ("scripts/ui/screens.gd", '"close_btn": close_btn, "title_lbl": title_lbl,', '"close_btn": close_btn if close_btn else Button.new(), "title_lbl": title_lbl,', "LEAK1"),
+        ("scripts/world/streetlight_3d.gd", "var _t: float = -1.0\n", "var _t: float = 0.0\n", "LAMP2"),
+    ],
 ]
-## The closeout group each set runs (CLOSEOUT_ONLY): the sets of Session 26 run `s26`, those of Session 27 `s27`, those of Session 28 `s28`.
-GROUP = ["s26", "s26", "s27", "s27", "s28", "attack", "attack", "s28"]
+## The closeout group each set runs (CLOSEOUT_ONLY): the sets of Session 26 run `s26`, those of Session 27 `s27`, those of Session 28 `s28`, those of Session 29 `s29`.
+GROUP = ["s26", "s26", "s27", "s27", "s28", "attack", "attack", "s28", "s29"]
 LINE = re.compile(r"^\[(?:closeout|attack-sim)\] (ok  |OK  |FAIL) +(\S+)")
 ## What a group of sets runs and the log it leaves: the closeout groups run `closeout_check`, the group "attack" the attack simulation (Session 28).
 RUN = {"attack": ("bash tools/qa_sim/guarded_headless res://scenes/tools/attack_sim_scene.tscn 120", ".qa_logs/attack_sim_scene.log")}
