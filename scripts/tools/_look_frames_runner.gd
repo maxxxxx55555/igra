@@ -28,6 +28,7 @@ func _frame(state: String) -> void:
 ## The control frame of an A/B pair: the same view with the flashlight on (as the _lit frame before it), `feature` switched off for the shot and back on after it.
 func _control(state: String, feature: Callable) -> void:
 	var player := _player_node()
+	_Views.pin_lamps(get_tree())
 	_flashlight(player, true)
 	await get_tree().create_timer(1.0).timeout
 	feature.call(false)
@@ -40,6 +41,7 @@ func _control(state: String, feature: Callable) -> void:
 ## A view with the flashlight off and then on (a lit surface under a light of energy 24 is the case that broke V1, and the frames of launches 3 to 9 of Session 28 were judged with the light off): the second frame has the suffix _lit.
 func _both(state: String) -> void:
 	var player := _player_node()
+	_Views.pin_lamps(get_tree())  # the lamps dip to a fifth of their light six times a second, all in step: two frames of one view differed by 20 % on the ground (the "drift" of Session 28, F19)
 	_flashlight(player, false)
 	await get_tree().create_timer(0.3).timeout
 	await _frame(state)
