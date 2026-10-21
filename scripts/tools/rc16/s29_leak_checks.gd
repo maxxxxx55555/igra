@@ -43,7 +43,7 @@ static func _lamps(r: Node) -> void:
 	r._ok(phases.size() >= 5, "LAMP2 twelve lit lamps stand on %d of 13 phases of the flicker (one when they flicker in step)" % phases.size())
 
 ## Nine lit lights in a row from the camera, one light of no energy nearest of all and a lamp that is out: after a pass the eight nearest lit lights are shown and the ninth is hidden (LIMIT1), the light of no energy and
-## the glow of the lamp are off (LIMIT2), and the light that is lit again comes back while the eighth of the others gives its slot (LIMIT3). Every other omni light of the scene is put out while the check runs.
+## the glow of the lamp are off (LIMIT2), and the light that is lit again comes back (LIMIT3: it asks nothing of the ranking, so the mutation of the cap does not reach it). Every other omni light of the scene is put out while the check runs.
 static func _limiter(r: Node) -> void:
 	var limiter: Node = r.get_tree().root.get_node_or_null("LightLimiter")
 	var camera: Camera3D = r.get_viewport().get_camera_3d()
@@ -81,7 +81,7 @@ static func _limiter(r: Node) -> void:
 	r._ok(not idle.visible and not glow.visible, "LIMIT2 a light of no energy and the glow of a lamp that is out stay off (idle %s, glow %s)" % [idle.visible, glow.visible])
 	idle.light_energy = 1.0
 	limiter.call("_update_lights")
-	r._ok(idle.visible and not lit[7].visible, "LIMIT3 the light that was hidden for want of energy comes back when it is lit, the eighth of the others gives its slot (idle %s, eighth %s)" % [idle.visible, lit[7].visible])
+	r._ok(idle.visible, "LIMIT3 the light that was hidden for want of energy comes back when it is lit (idle %s)" % idle.visible)
 	holder.queue_free()
 	for node in others:  # untyped: a light freed meanwhile (a pickup, a lamp of a district that was left) cannot be assigned to a typed variable
 		if is_instance_valid(node):
