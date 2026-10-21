@@ -64,8 +64,9 @@ func _check_music() -> String:
 	var paths: Array[String] = []
 	for p in (c["TRACKS"] as Dictionary).values():
 		paths.append(p)
-	for p in (c["AMBIENT_BY_DISTRICT"] as Dictionary).values():
-		paths.append(p)
+	for table in ["AMBIENCE_DARK_BY_DISTRICT", "AMBIENCE_LIT_BY_DISTRICT"]:
+		for p in (c[table] as Dictionary).values():
+			paths.append(p)
 	for p in (c["LAYERS"] as Dictionary).values():
 		paths.append(p)
 	var sting: String = c["STING_PATH"]

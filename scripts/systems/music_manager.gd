@@ -22,11 +22,11 @@ enum Mood { MENU, AMBIENT, TENSION, BATTLE, BOSS, VICTORY }
 #region Constants
 const TRACKS: Dictionary = {
 	Mood.MENU: "res://assets/audio/music/music_menu_dark.ogg",
-	Mood.AMBIENT: "res://assets/audio/music/music_ambient.wav",
-	Mood.TENSION: "res://assets/audio/music/music_tension.wav",
-	Mood.BATTLE: "res://assets/audio/music/music_battle.wav",
-	Mood.BOSS: "res://assets/audio/music/music_boss_dark.wav",
-	Mood.VICTORY: "res://assets/audio/music/music_victory.wav",
+	Mood.AMBIENT: "res://assets/audio/ambience/districts/suburbs_dark.ogg",  # until a district is entered
+	Mood.TENSION: "res://assets/audio/music/music_tension.ogg",
+	Mood.BATTLE: "res://assets/audio/music/music_battle.ogg",
+	Mood.BOSS: "res://assets/audio/music/music_boss_dark_p1.ogg",
+	Mood.VICTORY: "res://assets/audio/music/music_victory.ogg",
 }
 ## The boss theme by phase of the Architect (P1, P2, P3: GDD 6.2); a phase whose file is missing keeps TRACKS[Mood.BOSS].
 const BOSS_PHASES: Array[String] = [
@@ -39,25 +39,9 @@ const BOSS_PHASES: Array[String] = [
 ## either way), wire it as a second BATTLE variant picked at random each
 ## fresh transition into combat, so encounters don't always hear the same cue.
 const BATTLE_VARIANTS: Array[String] = [
-	"res://assets/audio/music/music_battle.wav",
+	"res://assets/audio/music/music_battle.ogg",
 	"res://assets/audio/music/music_combat.ogg",
 ]
-## Эмбиент по районам: у каждого своя атмосферная подложка. Запасной
-## вариант, если для района нет своей подложки ниже (не должно случаться —
-## AMBIENCE_DARK_BY_DISTRICT покрывает все 11).
-const AMBIENT_BY_DISTRICT: Dictionary = {
-	&"suburbs": "res://assets/audio/music/music_ambient.wav",
-	&"residential": "res://assets/audio/music/residential.wav",
-	&"park": "res://assets/audio/music/park.wav",
-	&"school": "res://assets/audio/music/school.ogg",
-	&"hospital": "res://assets/audio/music/hospital.ogg",
-	&"gas_station": "res://assets/audio/music/downtown.wav",
-	&"police": "res://assets/audio/music/downtown.wav",
-	&"warehouses": "res://assets/audio/music/harbor.wav",
-	&"industrial": "res://assets/audio/music/industrial.wav",
-	&"substation": "res://assets/audio/music/substation.ogg",
-	&"power_station": "res://assets/audio/music/power_station.ogg",
-}
 
 ## RESCUE WAVE P2.2 + 2026-09-12 audio pass: ox alpha's + arena's per-
 ## district ambience beds (docs/PRODUCTION_BIBLE.md audio canon) —
@@ -78,7 +62,7 @@ const AMBIENCE_DARK_BY_DISTRICT: Dictionary = {
 	&"substation": "res://assets/audio/ambience/districts/substation_dark.ogg",
 	&"power_station": "res://assets/audio/ambience/districts/power_station_dark.ogg",
 }
-## Session 27 (M1): eight of the lit beds are generated tracks of assets/audio/music (docs/MUSIC_BRIEF.md, docs/ASSET_LICENSES.md); residential, park and industrial keep the synthesized loops.
+## Session 27 (M1): eight of the lit beds are generated tracks of assets/audio/music (docs/MUSIC_BRIEF.md, docs/ASSET_LICENSES.md); residential, park and industrial are improved SYNTHESIZED beds (tools/gen_district_beds.py, v10 M1), not composed music.
 const AMBIENCE_LIT_BY_DISTRICT: Dictionary = {
 	&"suburbs": "res://assets/audio/music/suburbs.ogg",
 	&"residential": "res://assets/audio/ambience/districts/residential_lit.ogg",
@@ -366,7 +350,7 @@ func _preload_around(district_id: StringName) -> void:
 	for path in keep:
 		if path != "" and not _cache.has(path) and ResourceLoader.exists(path):
 			ResourceLoader.load_threaded_request(path)
-	for table in [AMBIENT_BY_DISTRICT, AMBIENCE_DARK_BY_DISTRICT, AMBIENCE_LIT_BY_DISTRICT]:
+	for table in [AMBIENCE_DARK_BY_DISTRICT, AMBIENCE_LIT_BY_DISTRICT]:
 		for path in table.values():
 			if not keep.has(path) and path != _ambient_path:
 				_cache.erase(path)
@@ -384,7 +368,7 @@ func _ambience_path_for(district_id: StringName) -> String:
 	var dark: String = AMBIENCE_DARK_BY_DISTRICT.get(district_id, "")
 	if dark != "":
 		return dark
-	return AMBIENT_BY_DISTRICT.get(district_id, "")
+	return ""
 
 func _refresh_district_ambience() -> void:
 	var path: String = _ambience_path_for(_current_district)

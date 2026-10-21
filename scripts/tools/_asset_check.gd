@@ -146,9 +146,10 @@ func _check_music() -> void:
 		var p: String = moods[m]
 		if not FileAccess.file_exists(p + ".import"):
 			no_import.append(p.get_file())
-	for d in MusicDirector.AMBIENT_BY_DISTRICT.values():
-		if not FileAccess.file_exists(String(d) + ".import"):
-			no_import.append(String(d).get_file())
+	for table in [MusicDirector.AMBIENCE_DARK_BY_DISTRICT, MusicDirector.AMBIENCE_LIT_BY_DISTRICT]:
+		for d in table.values():
+			if not FileAccess.file_exists(String(d) + ".import"):
+				no_import.append(String(d).get_file())
 	_ok(no_import.is_empty(), "треки импортированы (попадут в APK)%s" % ("" if no_import.is_empty() else " нет: " + ", ".join(no_import)))
 
 	## .import не в репозитории (см. .gitignore) - на свежем клоне loop_mode/
@@ -184,7 +185,7 @@ func _check_music() -> void:
 			not_looped.append(String(moods[m]).get_file() + "(не загрузился)")
 	_ok(not_looped.is_empty(), "треки непустые и зациклены%s" % ("" if not_looped.is_empty() else ": " + ", ".join(not_looped)))
 
-	var districts: Dictionary = MusicDirector.AMBIENT_BY_DISTRICT
+	var districts: Dictionary = MusicDirector.AMBIENCE_LIT_BY_DISTRICT
 	_ok(districts.size() >= 2, "эмбиент задан для %d районов" % districts.size())
 	var uniq: Dictionary = {}
 	for k in districts:
