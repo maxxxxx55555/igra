@@ -151,6 +151,11 @@ func _toggle(objects: Array, prop: String, off: bool, value: Variant) -> void:
 
 ## The district at FULL power, where its lamps, their cones and its lit panes are all drawn (the perf gate measures the stage that a new game spawns in, and a part that a lower stage hides costs nothing there).
 func _full(id: StringName) -> void:
+	if OS.get_environment("TLS_ABLATE_AS_GATE") == "1":  # the stage a new game spawns in, which is what the perf gate measures
+		for i in 120:
+			await get_tree().process_frame
+		print("[ablate] %s power stage %d (as the gate has it)" % [id, PowerGrid.get_stage(id)])
+		return
 	for parent in PowerGrid.get_district(id).powered_by:
 		PowerGrid.get_district(parent).stage = DistrictData.Stage.FULL
 	PowerGrid.advance_district(id, DistrictData.Stage.FULL)
