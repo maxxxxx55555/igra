@@ -17,8 +17,8 @@ import re
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-LOCALES = ["en", "ar", "de", "es", "fr", "it", "ja", "ko", "pt_BR", "ru", "tr", "zh", "zh_TW"]
-SCRIPT = {"ru": r"[Ѐ-ӿ]", "ja": r"[぀-ヿ一-鿿]", "ko": r"[가-힯ᄀ-ᇿ]", "zh": r"[一-鿿]", "zh_TW": r"[一-鿿]", "ar": r"[؀-ۿ]"}
+LOCALES = ["en", "de", "es", "fr", "pt_BR", "ru"]
+SCRIPT = {"ru": r"[Ѐ-ӿ]"}
 SPEC = re.compile(r"%[-+0#]*\d*(?:\.\d+)?[sdifxXc]|\{\w+\}")
 SPACE_FLAG = re.compile(r"%[ ]\w")
 LATIN_OK = ["boot_title", "VSync", "INV_ITEM_WEIGHT", "NG_PLUS_LABEL", "STATS_METERS"]

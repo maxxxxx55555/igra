@@ -4,7 +4,7 @@ const BUSES := ["Master", "SFX", "Music", "Voice", "Ambient"]
 ## строит список по SUPPORTED, а индекс выбранного пункта хранит в
 ## _settings["language"], который здесь ищется через LANGUAGES.find(). При разном
 ## порядке сохранённый индекс указывал на чужой язык.
-const LANGUAGES := ["ru", "en", "es", "de", "fr", "it", "pt_BR", "tr", "ja", "ko", "zh", "zh_TW", "ar"]
+const LANGUAGES := ["ru", "en", "es", "de", "fr", "pt_BR"]
 const CFG_PATH := "user://settings.cfg"
 const _InputRemap := preload("res://scripts/systems/input_remap.gd")
 const _DynamicResolution := preload("res://scripts/systems/dynamic_resolution.gd")

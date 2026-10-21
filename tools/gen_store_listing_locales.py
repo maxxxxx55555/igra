@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Generate the 13-locale block for store/listing.md.
+"""Generate the 6-locale block for store/listing.md (v10 E6: en ru de es fr pt_BR; the entries of the other locales below are not read).
 
 Path B of the store-release-pass recreate. Title + tagline are lifted
 verbatim from the shipped, professionally-translated in-game strings
@@ -11,15 +11,15 @@ machine translation. EN and RU master sections above the generated block
 are left byte-untouched.
 
 Run:  python tools/gen_store_listing_locales.py            # rewrite the block in place
-      python tools/gen_store_listing_locales.py --check    # verify only (short<=80, 13 sections)
+      python tools/gen_store_listing_locales.py --check    # verify only (short<=80, 6 sections)
 """
 import json, re, sys, pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 LISTING = ROOT / "store" / "listing.md"
-BEGIN = "<!-- BEGIN GENERATED 13-LOCALE BLOCK -->"
-END = "<!-- END GENERATED 13-LOCALE BLOCK -->"
-LOCALES = ["en", "ru", "es", "de", "fr", "it", "pt_BR", "tr", "ja", "ko", "zh", "zh_TW", "ar"]
+BEGIN = "<!-- BEGIN GENERATED 6-LOCALE BLOCK -->"
+END = "<!-- END GENERATED 6-LOCALE BLOCK -->"
+LOCALES = ["en", "ru", "es", "de", "fr", "pt_BR"]
 NAMES = {
     "en": "English", "ru": "Русский", "es": "Español", "de": "Deutsch",
     "fr": "Français", "it": "Italiano", "pt_BR": "Português (BR)", "tr": "Türkçe",
@@ -58,7 +58,7 @@ Tu linterna es a la vez tu única arma contra parte de lo que te caza, tu única
 - 11 distritos conectados, un mapa continuo
 - 12 tipos de enemigos, cada uno con sus sentidos y debilidades
 - 5 finales según cuánta ciudad — y cuánta verdad — recuperes
-- 13 idiomas totalmente localizados
+- 6 idiomas totalmente localizados
 - Música adaptativa de 5 capas que cambia con el peligro
 - Sigilo basado en ruido y visibilidad, no en un medidor
 - Fabricación y banco de trabajo para mejorar tu linterna
@@ -76,7 +76,7 @@ Deine Taschenlampe ist zugleich deine einzige Waffe gegen einen Teil dessen, was
 - 11 verbundene Bezirke, eine durchgehende Karte
 - 12 Gegnertypen, jeder mit eigenen Sinnen und Schwächen
 - 5 Enden, je nachdem wie viel Stadt — und Wahrheit — du zurückholst
-- 13 vollständig lokalisierte Sprachen
+- 6 vollständig lokalisierte Sprachen
 - Adaptive 5-Schichten-Musik, die sich mit der Gefahr verändert
 - Schleichen über Geräusch und Sichtbarkeit, nicht über eine Anzeige
 - Herstellung und Werkbank zum Verbessern deiner Taschenlampe
@@ -94,7 +94,7 @@ Ta lampe torche est à la fois ta seule arme contre une partie de ce qui te traq
 - 11 districts connectés, une carte continue
 - 12 types d'ennemis, chacun avec ses sens et ses faiblesses
 - 5 fins selon la part de ville — et de vérité — que tu ramènes
-- 13 langues entièrement localisées
+- 6 langues entièrement localisées
 - Musique adaptative à 5 couches qui évolue avec le danger
 - Infiltration basée sur le bruit et la visibilité, pas sur une jauge
 - Fabrication et établi pour améliorer ta lampe torche
@@ -130,7 +130,7 @@ Sua lanterna é ao mesmo tempo sua única arma contra parte do que te caça, seu
 - 11 distritos conectados, um mapa contínuo
 - 12 tipos de inimigos, cada um com sentidos e fraquezas próprios
 - 5 finais conforme quanto da cidade — e da verdade — você recupera
-- 13 idiomas totalmente localizados
+- 6 idiomas totalmente localizados
 - Música adaptativa de 5 camadas que muda com o perigo
 - Furtividade baseada em ruído e visibilidade, não num medidor
 - Criação e bancada para melhorar sua lanterna
@@ -256,7 +256,7 @@ BULLETS = {
            "5 finales. ¿Cuánta ciudad — y cuánta verdad — vas a devolver?",
            "Recoge, fabrica, mejora: un banco de trabajo, una linterna, noche sin fin.",
            "Música que oye el peligro antes que tú: 5 capas adaptativas al ritmo de la caza.",
-           "13 idiomas. Una noche eterna."],
+           "6 idiomas. Una noche eterna."],
     "de": ["Eine einzige Stadt im Blackout: 11 Bezirke, null Ladebildschirme. Was du siehst, erreichst du.",
            "Licht ist die Belohnung: jede gerettete Straße bleibt erleuchtet. Deine Karte ist dein Trophäe.",
            "Deine Taschenlampe ist Waffe, Augen und Todesurteil: jeder Strahl verrät dich.",
@@ -264,7 +264,7 @@ BULLETS = {
            "5 Enden. Wie viel Stadt — und wie viel Wahrheit — bringst du zurück?",
            "Sammeln, herstellen, verbessern: eine Werkbank, eine Taschenlampe, endlose Nacht.",
            "Musik, die Gefahr vor dir hört: 5 adaptive Schichten im Takt der Jagd.",
-           "13 Sprachen. Eine ewige Nacht."],
+           "6 Sprachen. Eine ewige Nacht."],
     "fr": ["Une seule ville dans le noir : 11 districts, zéro écran de chargement. Si tu le vois, tu y vas.",
            "La lumière est la récompense : chaque rue sauvée reste allumée. Ta carte est ton trophée.",
            "Ta lampe torche est ton arme, tes yeux et ta condamnation : chaque faisceau te trahit.",
@@ -272,7 +272,7 @@ BULLETS = {
            "5 fins. Quelle part de ville — et de vérité — vas-tu ramener ?",
            "Fouille, fabrique, améliore : un établi, une lampe torche, une nuit sans fin.",
            "Une musique qui entend le danger avant toi : 5 couches adaptatives au rythme de la traque.",
-           "13 langues. Une nuit éternelle."],
+           "6 langues. Une nuit éternelle."],
     "it": ["Un'unica città al buio: 11 distretti, zero schermate di caricamento. Se lo vedi, ci arrivi.",
            "La luce è la ricompensa: ogni strada salvata resta accesa. La tua mappa è il tuo trofeo.",
            "La tua torcia è arma, occhi e condanna: ogni fascio ti tradisce.",
@@ -288,7 +288,7 @@ BULLETS = {
               "5 finais. Quanto da cidade — e quanto da verdade — você vai trazer de volta?",
               "Vasculhe, fabrique, melhore: uma bancada, uma lanterna, noite sem fim.",
               "Música que ouve o perigo antes de você: 5 camadas adaptativas no ritmo da caçada.",
-              "13 idiomas. Uma noite eterna."],
+              "6 idiomas. Uma noite eterna."],
     "tr": ["Karanlıkta tek bir şehir: 11 bölge, sıfır yükleme ekranı. Görüyorsan, yürüyebilirsin.",
            "Ödül ışıktır: kurtardığın her sokak yanık kalır. Haritan senin kupandır.",
            "El fenerin silahın, gözlerin ve idam fermanın: her huzme seni ele verir.",
@@ -390,10 +390,10 @@ def section(loc):
 
 def build_block():
     parts = [BEGIN, "",
-             "## 13-locale listing sections",
+             "## 6-locale listing sections",
              "",
              "Title + tagline are the shipped in-game `menu_title` / `menu_subtitle` "
-             "(professionally translated, 13 locales, `i18n_audit.py` MISSING: 0). "
+             "(professionally translated, 6 locales, `i18n_audit.py` MISSING: 0). "
              "Short/full/bullets/tags for the 11 non-master locales are transcreated "
              "from the same vetted in-game vocabulary — recommend one native pass "
              "before submission, but every claim is GDD-true and the wording reuses "
@@ -409,8 +409,8 @@ def check():
     text = LISTING.read_text(encoding="utf-8")
     fails = []
     secs = re.findall(r"^### ([\w_]+) — ", text, re.M)
-    if len(secs) != 13:
-        fails.append(f"expected 13 locale sections, found {len(secs)}: {secs}")
+    if len(secs) != len(LOCALES):
+        fails.append(f"expected {len(LOCALES)} locale sections, found {len(secs)}: {secs}")
     for loc in LOCALES:
         if loc not in secs:
             fails.append(f"missing section: {loc}")
@@ -423,7 +423,7 @@ def check():
             fails.append(f"short > 80 ({real}): {m.group(2)[:50]}")
     for f in fails:
         print("  FAIL", f)
-    print("store/listing.md 13-locale check:", "GREEN" if not fails else f"{len(fails)} FAIL")
+    print("store/listing.md 6-locale check:", "GREEN" if not fails else f"{len(fails)} FAIL")
     return 0 if not fails else 1
 
 

@@ -278,7 +278,7 @@ func _run() -> void:
 	await _shot("01_main_menu")
 	await _menu_swept()
 	# en at text size 1 is 01_main_menu itself (a byte-identical twin fails AF3 rule F6).
-	for lang: String in ["en", "ru", "ar"]:
+	for lang: String in ["en", "ru", "de"]:
 		for size_idx: int in [1, 2]:
 			if lang == "en" and size_idx == 1:
 				continue
@@ -321,10 +321,10 @@ func _run() -> void:
 	screens.call("show_screen", "Shop")
 	await get_tree().create_timer(0.6).timeout
 	await _shot("08_shop")
-	LocalizationManager.set_language("ar")
+	LocalizationManager.set_language("de")
 	screens.call("show_screen", "Shop")
 	await get_tree().create_timer(0.6).timeout
-	await _shot("08_shop_ar")
+	await _shot("08_shop_de")
 	LocalizationManager.set_language("en")
 	screens.call("hide_all")
 	await get_tree().create_timer(0.6).timeout

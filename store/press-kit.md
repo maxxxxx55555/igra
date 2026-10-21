@@ -54,7 +54,7 @@ the half-lit-city ending still is cleared, ending text/Architect identity never 
   these carry the exact shipped cinematic stack: district LUT + bloom + vignette + chroma + grain),
   `store/feature-graphic.png` (1024×500), `store/icon-512.png`, `store/icon-adaptive/`,
   `store/screenshots/` (8 upload-ready 1920×1080 EN shots),
-  `store/listing.md` (store copy, 13 locales), `store/changelog.md` (v1.0 notes).
+  `store/listing.md` (store copy, 6 locales), `store/changelog.md` (v1.0 notes).
 
 ## Review-copy instructions (for the owner)
 
@@ -66,7 +66,7 @@ the half-lit-city ending still is cleared, ending text/Architect identity never 
    identity is the game's one ungoogleable — keep it that way.
 4. Known-launch-facts reviewers may cite (numbers from the fact sheet above):
    11 districts, 88 lore notes, 12 enemy types, 5 endings, 31 achievements,
-   60 daily challenges, 13 languages, workbench crafting, HMAC-signed
+   60 daily challenges, 6 languages, workbench crafting, HMAC-signed
    checksum-verified saves with automatic backup recovery, offline-first with
    no account. See also the release-state block above for gate numbers.
 
@@ -95,7 +95,7 @@ is life."
 Review build: <APK/AAB link + expiry>
 Press kit (art, fact sheet, trailer stills): <this repo's store/ link or zip>
 Play time: 3–6 h to win (balance-sim verified) · 5 endings + New Game+ ·
-31 achievements · 60 daily challenges · 13 languages · Android + PC (same save file)
+31 achievements · 60 daily challenges · 6 languages · Android + PC (same save file)
 
 Only ask: please keep coverage to the first districts for 2 weeks and keep
 the endings unspoiled. Happy to do a <written/video> interview any time.

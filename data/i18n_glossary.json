@@ -5,10 +5,7 @@
    "de",
    "es",
    "fr",
-   "it",
-   "ko",
-   "pt_BR",
-   "tr"
+   "pt_BR"
   ],
   "%d / %d photos": [
    "fr"
@@ -19,8 +16,7 @@
   "AUDIO": [
    "de",
    "es",
-   "fr",
-   "it"
+   "fr"
   ],
   "Action": [
    "fr"
@@ -31,20 +27,16 @@
   "Audio": [
    "de",
    "es",
-   "fr",
-   "it"
+   "fr"
   ],
   "Auto": [
    "de",
    "es",
    "fr",
-   "it",
    "pt_BR"
   ],
   "Bonus: x%.1f": [
-   "de",
-   "it",
-   "tr"
+   "de"
   ],
   "Brute": [
    "fr"
@@ -64,9 +56,6 @@
   "Combat": [
    "fr"
   ],
-  "Comfort": [
-   "it"
-  ],
   "Cyan": [
    "de",
    "fr"
@@ -81,7 +70,6 @@
    "fr"
   ],
   "Deuteranopia": [
-   "it",
    "pt_BR"
   ],
   "District": [
@@ -120,18 +108,11 @@
    "fr"
   ],
   "Last Streetlight": [
-   "ar",
    "de",
    "es",
    "fr",
-   "it",
-   "ja",
-   "ko",
    "pt_BR",
-   "ru",
-   "tr",
-   "zh",
-   "zh_TW"
+   "ru"
   ],
   "Level: %d/%d": [
    "de"
@@ -140,41 +121,33 @@
    "de",
    "es",
    "fr",
-   "it",
-   "pt_BR",
-   "tr"
+   "pt_BR"
   ],
   "Metal": [
    "es",
-   "pt_BR",
-   "tr"
+   "pt_BR"
   ],
   "Normal": [
    "de",
    "es",
    "fr",
-   "pt_BR",
-   "tr"
+   "pt_BR"
   ],
   "Notes": [
    "fr"
   ],
   "Park": [
-   "de",
-   "tr"
+   "de"
   ],
   "Petrov": [
    "es",
    "fr",
-   "it",
-   "pt_BR",
-   "tr"
+   "pt_BR"
   ],
   "Photos": [
    "fr"
   ],
   "Protanopia": [
-   "it",
    "pt_BR"
   ],
   "Quests": [
@@ -184,15 +157,12 @@
    "de",
    "es",
    "fr",
-   "it",
-   "pt_BR",
-   "tr"
+   "pt_BR"
   ],
   "Radio": [
    "de",
    "es",
-   "fr",
-   "it"
+   "fr"
   ],
   "Rare": [
    "fr"
@@ -209,7 +179,6 @@
   ],
   "SLOT ": [
    "de",
-   "it",
    "pt_BR"
   ],
   "SPRINT": [
@@ -217,23 +186,19 @@
    "fr"
   ],
   "Server: %s : %d": [
-   "de",
-   "it"
+   "de"
   ],
   "Slot %d": [
    "de",
-   "it",
    "pt_BR"
   ],
   "Speedrunner": [
    "de",
    "fr",
-   "it",
    "pt_BR"
   ],
   "Sprinter": [
-   "de",
-   "tr"
+   "de"
   ],
   "Status": [
    "de",
@@ -246,11 +211,9 @@
    "de",
    "es",
    "fr",
-   "it",
    "pt_BR"
   ],
   "Tritanopia": [
-   "it",
    "pt_BR"
   ],
   "Type": [
@@ -263,15 +226,11 @@
    "de",
    "es",
    "fr",
-   "it",
-   "pt_BR",
-   "tr"
+   "pt_BR"
   ],
   "VSync": [
-   "ar",
    "es",
    "fr",
-   "it",
    "pt_BR",
    "ru"
   ],
@@ -284,10 +243,7 @@
   "XP: x%.2f": [
    "de",
    "es",
-   "it",
-   "ko",
-   "pt_BR",
-   "tr"
+   "pt_BR"
   ],
   "cable": [
    "es"
@@ -307,721 +263,441 @@
   "achievements": {
    "key": "ACHIEVEMENTS_TITLE",
    "locales": {
-    "ar": "الإنجازات",
     "de": "Errungenschaften",
     "en": "Achievements",
     "es": "Logros",
     "fr": "Succès",
-    "it": "Obiettivi",
-    "ja": "実績",
-    "ko": "업적",
     "pt_BR": "Conquistas",
-    "ru": "Достижения",
-    "tr": "Başarımlar",
-    "zh": "成就",
-    "zh_TW": "成就"
+    "ru": "Достижения"
    }
   },
   "battery": {
    "key": "ITEM_BATTERY",
    "locales": {
-    "ar": "بطارية",
     "de": "Batterie",
     "en": "Battery",
     "es": "Batería",
     "fr": "Pile",
-    "it": "Batteria",
-    "ja": "電池",
-    "ko": "배터리",
     "pt_BR": "Bateria",
-    "ru": "Батарейка",
-    "tr": "Pil",
-    "zh": "电池",
-    "zh_TW": "電池"
+    "ru": "Батарейка"
    }
   },
   "codex": {
    "key": "CODEX_TITLE",
    "locales": {
-    "ar": "الموسوعة",
     "de": "Kompendium",
     "en": "Codex",
     "es": "Compendio",
     "fr": "Codex",
-    "it": "Codice",
-    "ja": "図鑑",
-    "ko": "도감",
     "pt_BR": "Compêndio",
-    "ru": "Кодекс",
-    "tr": "Kodeks",
-    "zh": "图鉴",
-    "zh_TW": "圖鑑"
+    "ru": "Кодекс"
    }
   },
   "coins": {
    "key": "hud_coins",
    "locales": {
-    "ar": "العملات",
     "de": "Münzen",
     "en": "Coins",
     "es": "Monedas",
     "fr": "Pièces",
-    "it": "Monete",
-    "ja": "コイン",
-    "ko": "코인",
     "pt_BR": "Moedas",
-    "ru": "Монеты",
-    "tr": "Jeton",
-    "zh": "硬币",
-    "zh_TW": "硬幣"
+    "ru": "Монеты"
    }
   },
   "colorblind mode": {
    "key": "Colorblind Mode",
    "locales": {
-    "ar": "وضع عمى الألوان",
     "de": "Farbenblind-Modus",
     "en": "Colorblind Mode",
     "es": "Modo daltónico",
     "fr": "Mode daltonien",
-    "it": "Modalità daltonici",
-    "ja": "色覚サポート",
-    "ko": "색맹 모드",
     "pt_BR": "Modo daltônico",
-    "ru": "Режим для дальтоников",
-    "tr": "Renk Körlüğü Modu",
-    "zh": "色盲模式",
-    "zh_TW": "色盲模式"
+    "ru": "Режим для дальтоников"
    }
   },
   "continue": {
    "key": "continue",
    "locales": {
-    "ar": "متابعة",
     "de": "Fortsetzen",
     "en": "Continue",
     "es": "Continuar",
     "fr": "Continuer",
-    "it": "Continua",
-    "ja": "コンティニュー",
-    "ko": "이어하기",
     "pt_BR": "Continuar",
-    "ru": "Продолжить",
-    "tr": "Devam Et",
-    "zh": "继续",
-    "zh_TW": "繼續"
+    "ru": "Продолжить"
    }
   },
   "daily challenge": {
    "key": "DAILY_CHALLENGE_TITLE",
    "locales": {
-    "ar": "التحدي اليومي",
     "de": "Tägliche Herausforderung",
     "en": "Daily Challenge",
     "es": "Desafío diario",
     "fr": "Défi quotidien",
-    "it": "Sfida giornaliera",
-    "ja": "デイリーチャレンジ",
-    "ko": "일일 도전 과제",
     "pt_BR": "Desafio diário",
-    "ru": "Ежедневное задание",
-    "tr": "Günlük Görev",
-    "zh": "每日挑战",
-    "zh_TW": "每日挑戰"
+    "ru": "Ежедневное задание"
    }
   },
   "difficulty": {
    "key": "SCR_SLOZHNOST",
    "locales": {
-    "ar": "الصعوبة",
     "de": "Schwierigkeit",
     "en": "Difficulty",
     "es": "Dificultad",
     "fr": "Difficulté",
-    "it": "Difficoltà",
-    "ja": "難易度",
-    "ko": "난이도",
     "pt_BR": "Dificuldade",
-    "ru": "Сложность",
-    "tr": "Zorluk",
-    "zh": "难度",
-    "zh_TW": "難度"
+    "ru": "Сложность"
    }
   },
   "easy": {
    "key": "diff_easy",
    "locales": {
-    "ar": "سهل",
     "de": "Leicht",
     "en": "Easy",
     "es": "Fácil",
     "fr": "Facile",
-    "it": "Facile",
-    "ja": "簡単",
-    "ko": "쉬움",
     "pt_BR": "Fácil",
-    "ru": "Легко",
-    "tr": "Kolay",
-    "zh": "简单",
-    "zh_TW": "簡單"
+    "ru": "Легко"
    }
   },
   "flashlight": {
    "key": "SCR_FONARIK",
    "locales": {
-    "ar": "المصباح",
     "de": "Taschenlampe",
     "en": "Flashlight",
     "es": "Linterna",
     "fr": "Lampe torche",
-    "it": "Torcia",
-    "ja": "懐中電灯",
-    "ko": "손전등",
     "pt_BR": "Lanterna",
-    "ru": "Фонарик",
-    "tr": "El feneri",
-    "zh": "手电筒",
-    "zh_TW": "手電筒"
+    "ru": "Фонарик"
    }
   },
   "hard": {
    "key": "diff_hard",
    "locales": {
-    "ar": "صعب",
     "de": "Schwer",
     "en": "Hard",
     "es": "Difícil",
     "fr": "Difficile",
-    "it": "Difficile",
-    "ja": "難しい",
-    "ko": "어려움",
     "pt_BR": "Difícil",
-    "ru": "Тяжело",
-    "tr": "Zor",
-    "zh": "困难",
-    "zh_TW": "困難"
+    "ru": "Тяжело"
    }
   },
   "hardcore mode": {
    "key": "Hardcore Mode",
    "locales": {
-    "ar": "وضع هاردكور",
     "de": "Hardcore-Modus",
     "en": "Hardcore Mode",
     "es": "Modo hardcore",
     "fr": "Mode hardcore",
-    "it": "Modalità hardcore",
-    "ja": "ハードコアモード",
-    "ko": "하드코어 모드",
     "pt_BR": "Modo hardcore",
-    "ru": "Хардкорный режим",
-    "tr": "Hardcore Modu",
-    "zh": "硬核模式",
-    "zh_TW": "硬核模式"
+    "ru": "Хардкорный режим"
    }
   },
   "health": {
    "key": "CHAR_HEALTH",
    "locales": {
-    "ar": "الصحة",
     "de": "Gesundheit",
     "en": "Health",
     "es": "Salud",
     "fr": "Santé",
-    "it": "Salute",
-    "ja": "体力",
-    "ko": "체력",
     "pt_BR": "Saúde",
-    "ru": "Здоровье",
-    "tr": "Sağlık",
-    "zh": "生命值",
-    "zh_TW": "生命值"
+    "ru": "Здоровье"
    }
   },
   "inventory": {
    "key": "KEY_INVENTORY",
    "locales": {
-    "ar": "المخزون",
     "de": "Inventar",
     "en": "Inventory",
     "es": "Inventario",
     "fr": "Inventaire",
-    "it": "Inventario",
-    "ja": "インベントリ",
-    "ko": "인벤토리",
     "pt_BR": "Inventário",
-    "ru": "Инвентарь",
-    "tr": "Envanter",
-    "zh": "背包",
-    "zh_TW": "背包"
+    "ru": "Инвентарь"
    }
   },
   "language": {
    "key": "Language",
    "locales": {
-    "ar": "اللغة",
     "de": "Sprache",
     "en": "Language",
     "es": "Idioma",
     "fr": "Langue",
-    "it": "Lingua",
-    "ja": "言語",
-    "ko": "언어",
     "pt_BR": "Idioma",
-    "ru": "Язык",
-    "tr": "Dil",
-    "zh": "语言",
-    "zh_TW": "語言"
+    "ru": "Язык"
    }
   },
   "level": {
    "key": "STATS_LEVEL",
    "locales": {
-    "ar": "المستوى",
     "de": "Stufe",
     "en": "Level",
     "es": "Nivel",
     "fr": "Niveau",
-    "it": "Livello",
-    "ja": "レベル",
-    "ko": "레벨",
     "pt_BR": "Nível",
-    "ru": "Уровень",
-    "tr": "Seviye",
-    "zh": "等级",
-    "zh_TW": "等級"
+    "ru": "Уровень"
    }
   },
   "load": {
    "key": "BTN_LOAD",
    "locales": {
-    "ar": "تحميل",
     "de": "Laden",
     "en": "Load",
     "es": "Cargar",
     "fr": "Charger",
-    "it": "Carica",
-    "ja": "ロード",
-    "ko": "불러오기",
     "pt_BR": "Carregar",
-    "ru": "Загрузить",
-    "tr": "Yükle",
-    "zh": "读取",
-    "zh_TW": "讀取"
+    "ru": "Загрузить"
    }
   },
   "map": {
    "key": "MAP_TITLE",
    "locales": {
-    "ar": "الخريطة",
     "de": "Karte",
     "en": "Map",
     "es": "Mapa",
     "fr": "Carte",
-    "it": "Mappa",
-    "ja": "地図",
-    "ko": "지도",
     "pt_BR": "Mapa",
-    "ru": "Карта",
-    "tr": "Harita",
-    "zh": "地图",
-    "zh_TW": "地圖"
+    "ru": "Карта"
    }
   },
   "medkit": {
    "key": "ITEM_MEDKIT",
    "locales": {
-    "ar": "حقيبة إسعاف",
     "de": "Verbandskasten",
     "en": "Medkit",
     "es": "Botiquín",
     "fr": "Trousse de soins",
-    "it": "Kit medico",
-    "ja": "救急キット",
-    "ko": "구급상자",
     "pt_BR": "Kit médico",
-    "ru": "Аптечка",
-    "tr": "İlk yardım çantası",
-    "zh": "医疗包",
-    "zh_TW": "醫療包"
+    "ru": "Аптечка"
    }
   },
   "music": {
    "key": "SCR_MUZYKA",
    "locales": {
-    "ar": "الموسيقى",
     "de": "Musik",
     "en": "Music",
     "es": "Música",
     "fr": "Musique",
-    "it": "Musica",
-    "ja": "音楽",
-    "ko": "음악",
     "pt_BR": "Música",
-    "ru": "Музыка",
-    "tr": "Müzik",
-    "zh": "音乐",
-    "zh_TW": "音樂"
+    "ru": "Музыка"
    }
   },
   "new game": {
    "key": "new_game",
    "locales": {
-    "ar": "لعبة جديدة",
     "de": "Neues Spiel",
     "en": "New Game",
     "es": "Nueva partida",
     "fr": "Nouvelle partie",
-    "it": "Nuova partita",
-    "ja": "ニューゲーム",
-    "ko": "새 게임",
     "pt_BR": "Novo jogo",
-    "ru": "Новая игра",
-    "tr": "Yeni Oyun",
-    "zh": "新游戏",
-    "zh_TW": "新遊戲"
+    "ru": "Новая игра"
    }
   },
   "new game plus": {
    "key": "NEW_GAME_PLUS",
    "locales": {
-    "ar": "لعبة جديدة+",
     "de": "Neues Spiel+",
     "en": "New Game+",
     "es": "Nueva Partida+",
     "fr": "Nouvelle Partie+",
-    "it": "Nuova Partita+",
-    "ja": "ニューゲーム+",
-    "ko": "새 게임+",
     "pt_BR": "Novo Jogo+",
-    "ru": "Новая игра+",
-    "tr": "Yeni Oyun+",
-    "zh": "新游戏+",
-    "zh_TW": "新遊戲+"
+    "ru": "Новая игра+"
    }
   },
   "noise": {
    "key": "CHAR_NOISE",
    "locales": {
-    "ar": "الضوضاء",
     "de": "Lärm",
     "en": "Noise",
     "es": "Ruido",
     "fr": "Bruit",
-    "it": "Rumore",
-    "ja": "騒音",
-    "ko": "소음",
     "pt_BR": "Ruído",
-    "ru": "Шум",
-    "tr": "Gürültü",
-    "zh": "噪音",
-    "zh_TW": "噪音"
+    "ru": "Шум"
    }
   },
   "noise bomb": {
    "key": "ITEM_NOISE_BOMB",
    "locales": {
-    "ar": "قنبلة ضوضاء",
     "de": "Lärmbombe",
     "en": "Noise Bomb",
     "es": "Bomba de ruido",
     "fr": "Bombe sonore",
-    "it": "Bomba acustica",
-    "ja": "騒音爆弾",
-    "ko": "소음 폭탄",
     "pt_BR": "Bomba de ruído",
-    "ru": "Шумовая бомба",
-    "tr": "Gürültü bombası",
-    "zh": "噪音弹",
-    "zh_TW": "噪音彈"
+    "ru": "Шумовая бомба"
    }
   },
   "normal": {
    "key": "diff_normal",
    "locales": {
-    "ar": "عادي",
     "de": "Normal",
     "en": "Normal",
     "es": "Normal",
     "fr": "Normal",
-    "it": "Normale",
-    "ja": "通常",
-    "ko": "보통",
     "pt_BR": "Normal",
-    "ru": "Нормально",
-    "tr": "Normal",
-    "zh": "普通",
-    "zh_TW": "普通"
+    "ru": "Нормально"
    }
   },
   "photo mode": {
    "key": "PHOTO_MODE",
    "locales": {
-    "ar": "وضع التصوير",
     "de": "Fotomodus",
     "en": "Photo Mode",
     "es": "Modo foto",
     "fr": "Mode photo",
-    "it": "Modalità foto",
-    "ja": "フォトモード",
-    "ko": "사진 모드",
     "pt_BR": "Modo foto",
-    "ru": "Фоторежим",
-    "tr": "Fotoğraf modu",
-    "zh": "拍照模式",
-    "zh_TW": "拍照模式"
+    "ru": "Фоторежим"
    }
   },
   "pistol": {
    "key": "ITEM_PISTOL",
    "locales": {
-    "ar": "مسدس",
     "de": "Pistole",
     "en": "Pistol",
     "es": "Pistola",
     "fr": "Pistolet",
-    "it": "Pistola",
-    "ja": "拳銃",
-    "ko": "권총",
     "pt_BR": "Pistola",
-    "ru": "Пистолет",
-    "tr": "Tabanca",
-    "zh": "手枪",
-    "zh_TW": "手槍"
+    "ru": "Пистолет"
    }
   },
   "quests": {
    "key": "CODEX_TAB_QUESTS",
    "locales": {
-    "ar": "المهام",
     "de": "Quests",
     "en": "Quests",
     "es": "Misiones",
     "fr": "Quêtes",
-    "it": "Missioni",
-    "ja": "クエスト",
-    "ko": "퀘스트",
     "pt_BR": "Missões",
-    "ru": "Задания",
-    "tr": "Görevler",
-    "zh": "任务",
-    "zh_TW": "任務"
+    "ru": "Задания"
    }
   },
   "quit": {
    "key": "menu_quit",
    "locales": {
-    "ar": "خروج",
     "de": "Beenden",
     "en": "Quit",
     "es": "Salir",
     "fr": "Quitter",
-    "it": "Esci",
-    "ja": "終了",
-    "ko": "종료",
     "pt_BR": "Sair",
-    "ru": "Выход",
-    "tr": "Çıkış",
-    "zh": "退出",
-    "zh_TW": "離開"
+    "ru": "Выход"
    }
   },
   "reload": {
    "key": "KEY_RELOAD",
    "locales": {
-    "ar": "إعادة التعبئة",
     "de": "Nachladen",
     "en": "Reload",
     "es": "Recargar",
     "fr": "Recharger",
-    "it": "Ricarica",
-    "ja": "リロード",
-    "ko": "재장전",
     "pt_BR": "Recarregar",
-    "ru": "Перезарядка",
-    "tr": "Şarjör Değiştir",
-    "zh": "换弹",
-    "zh_TW": "換彈"
+    "ru": "Перезарядка"
    }
   },
   "resume": {
    "key": "BTN_RESUME",
    "locales": {
-    "ar": "متابعة",
     "de": "Fortsetzen",
     "en": "Resume",
     "es": "Continuar",
     "fr": "Reprendre",
-    "it": "Riprendi",
-    "ja": "再開",
-    "ko": "계속하기",
     "pt_BR": "Continuar",
-    "ru": "Продолжить",
-    "tr": "Devam Et",
-    "zh": "继续",
-    "zh_TW": "繼續"
+    "ru": "Продолжить"
    }
   },
   "rifle": {
    "key": "ITEM_RIFLE",
    "locales": {
-    "ar": "بندقية",
     "de": "Gewehr",
     "en": "Rifle",
     "es": "Rifle",
     "fr": "Fusil",
-    "it": "Fucile",
-    "ja": "ライフル",
-    "ko": "소총",
     "pt_BR": "Rifle",
-    "ru": "Винтовка",
-    "tr": "Tüfek",
-    "zh": "步枪",
-    "zh_TW": "步槍"
+    "ru": "Винтовка"
    }
   },
   "save": {
    "key": "BTN_SAVE",
    "locales": {
-    "ar": "حفظ",
     "de": "Speichern",
     "en": "Save",
     "es": "Guardar",
     "fr": "Sauvegarder",
-    "it": "Salva",
-    "ja": "セーブ",
-    "ko": "저장",
     "pt_BR": "Salvar",
-    "ru": "Сохранить",
-    "tr": "Kaydet",
-    "zh": "保存",
-    "zh_TW": "儲存"
+    "ru": "Сохранить"
    }
   },
   "settings": {
    "key": "MAIN_SETTINGS",
    "locales": {
-    "ar": "الإعدادات",
     "de": "Einstellungen",
     "en": "Settings",
     "es": "Ajustes",
     "fr": "Paramètres",
-    "it": "Impostazioni",
-    "ja": "設定",
-    "ko": "설정",
     "pt_BR": "Configurações",
-    "ru": "Настройки",
-    "tr": "Ayarlar",
-    "zh": "设置",
-    "zh_TW": "設定"
+    "ru": "Настройки"
    }
   },
   "shop": {
    "key": "shop",
    "locales": {
-    "ar": "المتجر",
     "de": "Laden",
     "en": "Shop",
     "es": "Tienda",
     "fr": "Boutique",
-    "it": "Negozio",
-    "ja": "ショップ",
-    "ko": "상점",
     "pt_BR": "Loja",
-    "ru": "Магазин",
-    "tr": "Mağaza",
-    "zh": "商店",
-    "zh_TW": "商店"
+    "ru": "Магазин"
    }
   },
   "shotgun": {
    "key": "ITEM_SHOTGUN",
    "locales": {
-    "ar": "بندقية صيد",
     "de": "Schrotflinte",
     "en": "Shotgun",
     "es": "Escopeta",
     "fr": "Fusil à pompe",
-    "it": "Fucile a pompa",
-    "ja": "ショットガン",
-    "ko": "샷건",
     "pt_BR": "Espingarda",
-    "ru": "Дробовик",
-    "tr": "Av tüfeği",
-    "zh": "霰弹枪",
-    "zh_TW": "霰彈槍"
+    "ru": "Дробовик"
    }
   },
   "stamina": {
    "key": "CHAR_STAMINA",
    "locales": {
-    "ar": "التحمل",
     "de": "Ausdauer",
     "en": "Stamina",
     "es": "Resistencia",
     "fr": "Endurance",
-    "it": "Resistenza",
-    "ja": "スタミナ",
-    "ko": "스태미나",
     "pt_BR": "Vigor",
-    "ru": "Выносливость",
-    "tr": "Dayanıklılık",
-    "zh": "体力",
-    "zh_TW": "體力"
+    "ru": "Выносливость"
    }
   },
   "stealth": {
    "key": "KEY_STEALTH",
    "locales": {
-    "ar": "تخفي",
     "de": "Schleichen",
     "en": "Stealth",
     "es": "Sigilo",
     "fr": "Furtivité",
-    "it": "Furtività",
-    "ja": "忍び足",
-    "ko": "은신",
     "pt_BR": "Furtividade",
-    "ru": "Скрытность",
-    "tr": "Gizlen",
-    "zh": "潜行",
-    "zh_TW": "潛行"
+    "ru": "Скрытность"
    }
   },
   "subtitles": {
    "key": "Subtitles",
    "locales": {
-    "ar": "الترجمة",
     "de": "Untertitel",
     "en": "Subtitles",
     "es": "Subtítulos",
     "fr": "Sous-titres",
-    "it": "Sottotitoli",
-    "ja": "字幕",
-    "ko": "자막",
     "pt_BR": "Legendas",
-    "ru": "Субтитры",
-    "tr": "Altyazılar",
-    "zh": "字幕",
-    "zh_TW": "字幕"
+    "ru": "Субтитры"
    }
   },
   "workbench": {
    "key": "WORKBENCH_TITLE",
    "locales": {
-    "ar": "طاولة العمل",
     "de": "Werkbank",
     "en": "Workbench",
     "es": "Banco de trabajo",
     "fr": "Établi",
-    "it": "Banco da lavoro",
-    "ja": "作業台",
-    "ko": "작업대",
     "pt_BR": "Bancada",
-    "ru": "Верстак",
-    "tr": "Tezgâh",
-    "zh": "工作台",
-    "zh_TW": "工作臺"
+    "ru": "Верстак"
    }
   }
  },
