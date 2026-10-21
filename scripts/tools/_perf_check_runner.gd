@@ -12,10 +12,6 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	call_deferred("_run")
 
-## The power state of the machine, printed by every run: a laptop on battery runs its iGPU power-limited (one build read 20 ms and 31 ms of GPU an hour apart, plugged in against not), so a red p95 there is read with that in mind.
-func _print_power() -> void:
-	print("[perf] power=%s percent=%d" % [OS.PowerState.find_key(OS.get_power_state()), OS.get_power_percent_left()])
-
 func _run() -> void:
 	await get_tree().create_timer(1.0).timeout
 	if not _menu_reachable():
@@ -38,7 +34,6 @@ func _run() -> void:
 		printerr("[perf] player never spawned")
 		get_tree().quit(1)
 		return
-	_print_power()
 	# A few frames to let the renderer settle past the first-frame spike.
 	var trace: Array[int] = []
 	for i in 10:
