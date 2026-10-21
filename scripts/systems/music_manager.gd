@@ -104,6 +104,7 @@ const WOW_CUE_BY_KIND: Dictionary = {
 	"first_light": "res://assets/audio/music/cue_first_light.ogg",
 	"cascade": "res://assets/audio/music/cue_grid_cascade.ogg",
 	"ending": "res://assets/audio/music/cue_victory.ogg",
+	"death": "res://assets/audio/music/cue_death.ogg",
 }
 const LAYER_DB: float = -12.0
 const LAYER_LERP: float = 1.5
@@ -183,6 +184,7 @@ func _ready() -> void:
 	EventBus.district_stage_changed.connect(_on_district_stage_changed)
 	EventBus.weather_changed.connect(func(w: int, _n: String, _fog: float, _rain: float) -> void: _weather_id = w)
 	EventBus.streetlight_activated.connect(func(_id: String) -> void: _play_wow_cue_first_light())
+	EventBus.game_over.connect(func() -> void: _play_wow_cue("death"))
 	EventBus.district_restored.connect(_on_district_restored_wow)
 	mood = Mood.MENU
 

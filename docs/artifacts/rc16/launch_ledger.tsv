@@ -204,3 +204,5 @@ n	utc	head	id	exit	command
 203	20261021T150421Z	c1827cd	v10_mut_subset_0383414	0	bash .qa_logs/v10_mut_subset.sh
 204	20261021T150719Z	141bc4d	v10_mut_subset2_limit	0	bash .qa_logs/v10_mut_subset.sh
 205	20261021T151007Z	141bc4d	v10_m2_music	0	bash .qa_logs/v10_m2.sh
+206	20261021T152027Z	14484f3	v10_m6_music_probe	0	bash .qa_logs/v10_m6.sh
+207	20261021T152320Z	14484f3	v10_m4b_probe	0	bash .qa_logs/v10_m4b.sh

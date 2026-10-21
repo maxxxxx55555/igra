@@ -113,9 +113,22 @@ SETS = [
     [  # Session 29 (v10 R2), the closeout group s29 again: the return of a light that was hidden for want of energy left out, which would hide the second mutation of the set above (the light of no energy would never be hidden, so it would never need to return)
         ("scripts/systems/light_limiter.gd", "\t\t\tif _hidden.erase(light.get_instance_id()):\n\t\t\t\tlight.visible = true\n", "\t\t\tif false:\n\t\t\t\tlight.visible = true\n", "LIMIT3"),
     ],
+    [  # Session 29 (v10 M4, M6), the closeout group s29: the music probe, first half: the tense stem's curve, the phase of the boss, the wind stem and the name of the sting of a restored district (four rows of three functions and a file: nothing one changes is read by another's check)
+        ("scripts/systems/music_manager.gd", "\t_layer_target[\"threat_low\"] = clampf(1.0 - absf(_threat - 0.4) / 0.4, 0.0, 1.0)\n", "\t_layer_target[\"threat_low\"] = clampf(1.0 - absf(_threat - 0.4) / 0.8, 0.0, 1.0)\n", "LAY1"),
+        ("scripts/systems/music_manager.gd", "\t_boss_phase = clampi(phase, 1, BOSS_PHASES.size())\n", "\t_boss_phase = 1\n", "LAY3"),
+        ("scripts/systems/music_manager.gd", "\t_layer_target[\"wind\"] = 1.0 if _weather_id == WeatherSystem.Weather.WIND else 0.0\n", "\t_layer_target[\"wind\"] = 1.0 if _weather_id == WeatherSystem.Weather.FOG else 0.0\n", "LAY6"),
+        ("scripts/systems/uisfx.gd", "play_ui(\"district_restored_sting\"))", "play_ui(\"district_restored_stingx\"))", "ONE2"),
+    ],
+    [  # Session 29 (v10 M4, M6), the closeout group s29 again, second half: the fall of the hunted level, the calm delay, the swap of the two players, the death cue and the tick of the XP
+        ("scripts/systems/music_manager.gd", "const THREAT_FALL: float = 0.25", "const THREAT_FALL: float = 0.1", "LAY2"),
+        ("scripts/systems/music_manager.gd", "const CALM_DELAY: float = 6.0", "const CALM_DELAY: float = 3.0", "LAY4"),
+        ("scripts/systems/music_manager.gd", "\tvar next: AudioStreamPlayer = _b if _active == _a else _a\n", "\tvar next: AudioStreamPlayer = _a\n", "LAY5"),
+        ("scripts/systems/music_manager.gd", "EventBus.game_over.connect(func() -> void: _play_wow_cue(\"death\"))", "EventBus.game_over.connect(func() -> void: pass)", "ONE3"),
+        ("scripts/systems/uisfx.gd", "_play(\"ui_xp_tick\", 1800.0, 0.03))", "_play(\"ui_xp_tickx\", 1800.0, 0.03))", "ONE4"),
+    ],
 ]
 ## The closeout group each set runs (CLOSEOUT_ONLY): the sets of Session 26 run `s26`, those of Session 27 `s27`, those of Session 28 `s28`, those of Session 29 `s29`.
-GROUP = ["s26", "s26", "s27", "s27", "s28", "attack", "attack", "s28", "s29", "s29", "s29"]
+GROUP = ["s26", "s26", "s27", "s27", "s28", "attack", "attack", "s28", "s29", "s29", "s29", "s29", "s29"]
 LINE = re.compile(r"^\[(?:closeout|attack-sim)\] (ok  |OK  |FAIL) +(\S+)")
 ## What a group of sets runs and the log it leaves: the closeout groups run `closeout_check`, the group "attack" the attack simulation (Session 28).
 RUN = {"attack": ("bash tools/qa_sim/guarded_headless res://scenes/tools/attack_sim_scene.tscn 120", ".qa_logs/attack_sim_scene.log")}

@@ -41,13 +41,27 @@ func _ready() -> void:
 func _music_context() -> String:
 	return "mood=%s in_combat=%s nearest_monster_m=%.1f" % [MusicManager.Mood.keys()[MusicManager.mood], MusicManager.is_in_combat(), MusicManager.call("_nearest_enemy_distance")]
 
-func _peak_over(bus_idx: int, seconds: float) -> float:
+## Every player alive on a bus with its stream and volume at this moment: what a peak is made of. The Music peak read +0.5 to +1.9 dB in 10 of 24 runs and -9.3 to -12.4 in 14 of the same code (CORRECTION_LOG 114 and 276)
+## and nothing said which players were alive at the peak sample; this line does (v10 M7).
+func _live_players(bus_name: String) -> String:
+	var rows: PackedStringArray = []
+	for node: Node in get_tree().root.find_children("*", "AudioStreamPlayer", true, false):
+		var player := node as AudioStreamPlayer
+		if player.bus == bus_name and player.playing:
+			rows.append("%s %s %.1f dB" % [player.name, player.stream.resource_path.get_file() if player.stream != null else "none", player.volume_db])
+	return "; ".join(rows) if not rows.is_empty() else "none"
+
+## The peak of a bus over `seconds`; `trace` (when given) holds the players alive at the sample that set the peak.
+func _peak_over(bus_idx: int, seconds: float, trace: Array = []) -> float:
 	var peak_db := -80.0
 	var samples := maxi(1, int(seconds / 0.05))
 	for i in samples:
 		var l := AudioServer.get_bus_peak_volume_left_db(bus_idx, 0)
 		var r := AudioServer.get_bus_peak_volume_right_db(bus_idx, 0)
-		peak_db = maxf(peak_db, maxf(l, r))
+		if maxf(l, r) > peak_db:
+			peak_db = maxf(l, r)
+			trace.clear()
+			trace.append(_live_players(AudioServer.get_bus_name(bus_idx)))
 		await get_tree().create_timer(0.05).timeout
 	return peak_db
 
@@ -134,9 +148,11 @@ func _run() -> void:
 			all_ok = false
 			continue
 		var before := _music_context() if bus_name == "Music" else ""
-		var peak := await _peak_over(idx, 1.0)
+		var trace: Array = []
+		var peak := await _peak_over(idx, 1.0, trace)
 		if bus_name == "Music":
 			print("[audio-truth] music context before: %s, after: %s" % [before, _music_context()])
+			print("[audio-truth] music peak %.1f dB at the sample of: %s" % [peak, trace[0] if not trace.is_empty() else "none"])
 		results[bus_name] = peak
 		var over_ceiling := peak > TRUE_PEAK_CEILING_DB
 		if over_ceiling:

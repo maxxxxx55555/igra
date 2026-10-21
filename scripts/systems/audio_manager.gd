@@ -97,7 +97,8 @@ func _ready() -> void:
 	EventBus.purchase_success.connect(func(_id: StringName) -> void: _one_shot(_gen_coin(), -8.0, &"UI"))
 	EventBus.purchase_failed.connect(func(_id: String, _r: String) -> void: _one_shot(_gen_error(), -12.0, &"UI"))
 	EventBus.puzzle_solved.connect(func(_p: StringName, _d: StringName) -> void: _one_shot(_gen_success(), -6.0, &"UI"))
-	EventBus.district_restored.connect(func(_a: StringName, _b: int) -> void: _one_shot(_gen_powerup(), -4.0, &"UI"))
+	EventBus.district_restored.connect(func(_a: StringName, _b: int) -> void:
+		if not _has_ui_sting("district_restored_sting"): _one_shot(_gen_powerup(), -4.0, &"UI"))
 	# Пять событий теперь озвучивает UISFX настоящими стингерами на шине UI
 	# (docs/CERT_UIAUDIO.md §4). Процедурный вариант остаётся запасным и молчит,
 	# пока файл стингера на месте, иначе на событие звучали бы оба сразу.
