@@ -28,7 +28,8 @@ const REACH := 2.7          # interactor REACH is 3.2; stop a little inside
 const PICKUP_TOUCH := 1.4
 const SOFTLOCK_SEC := 45.0
 const HARD_TIMEOUT_SEC := 900.0
-const BOSS_FIGHT_SEC := 240.0
+## The bot's deadline for the Architect, not the game's: v10 F15 read the fights of the last runs after the animation and pickup passes: Normal 140 to 167 s, Hard 203 and 215 s (wins), and one Hard run that had the boss at 26 % of its health when 240 s ran out (14 deaths; ~325 s at its rate). The fight itself is untouched.
+const BOSS_FIGHT_SEC := 420.0
 const STUCK_NUDGE_SEC := 2.0
 ## player_3d.gd:544 normalizes the move direction before applying speed
 ## (`dir.normalized() * final_speed`) — a shorter joystick vector moves the
