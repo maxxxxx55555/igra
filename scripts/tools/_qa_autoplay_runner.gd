@@ -792,4 +792,10 @@ func _finish() -> void:
 	if not won:
 		code = 2 if _fails.size() > 0 and String(_fails[0]).begins_with("SOFTLOCK") else 1
 	if OS.get_environment("QA_NO_QUIT") != "1":
+		# A player still sounding at quit keeps its playback alive in the AudioServer when the engine counts the objects left (46 of the 81 of a run with deaths, v10 R6).
+		for p: Node in get_tree().root.find_children("*", "AudioStreamPlayer", true, false):
+			(p as AudioStreamPlayer).stop()
+		for p3: Node in get_tree().root.find_children("*", "AudioStreamPlayer3D", true, false):
+			(p3 as AudioStreamPlayer3D).stop()
+		await get_tree().create_timer(0.3).timeout
 		get_tree().quit(code)
