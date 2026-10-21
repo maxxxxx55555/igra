@@ -193,3 +193,4 @@ n	utc	head	id	exit	command
 192	20261021T103114Z	a1ddacb	v10_r2c_a1ddacb	0	bash .qa_logs/v10_r2c.sh
 193	20261021T103412Z	09f5ddd	v10_r2c2_09f5ddd	0	bash .qa_logs/v10_r2c.sh
 194	20261021T104051Z	09f5ddd	v10_f19_uncommitted	0	bash .qa_logs/v10_f19.sh
+195	20261021T105346Z	4cbd0d3	v10_import_4cbd0d3	0	bash .qa_logs/v10_import.sh
