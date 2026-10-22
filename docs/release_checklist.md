@@ -78,3 +78,7 @@ keytool -genkey -v -keystore tls_keystore.jks -keyalg RSA -keysize 2048 -validit
 - [ ] Keystore generated and backed up
 - [ ] Keystore password stored securely
 - [ ] Key alias and password stored securely
+
+## Session 30 (v10.0.0-LAND): the fresh bundle of the pass
+
+- `build/tls.aab` of `a7713ef`: **69,938,779 bytes (66.7 MiB), version code 5, versionName "1.0"**, sha256 `8fa22d0108833b7d1448e7e2426990c4a00628675fc4a05ccec9cfb37676b6d4`, signed with `.signing/tls-release.keystore`, `aab_check: PASS` (`signer_match=yes`), `release_export_check --aab: PASS` (0 packed file that is not the game). Proofs: `docs/artifacts/rc16/proofs/v10_land_export2_6563e91.out`, `v10_land_aab_check_6563e91.out`, `v10_land_aab_release_6563e91.out`. The 66.7 MiB against the 80 MB ceiling leaves 13.3 MiB for the owner's optional texture pilot and the ads SDK.
