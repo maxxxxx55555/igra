@@ -252,7 +252,7 @@ static func _export_overlay(sim: Node) -> void:
 		for needle: String in needles:
 			if text.contains(needle):
 				offenders.append("%s (%s)" % [path, needle])
-	var changed: Array[String] = _Scan.mismatches({"files": {"res://data/districts.json": "0".repeat(64)}})
+	var changed: Array[String] = _Scan.mismatches({"files": {"res://data/daily_challenges.json": "0".repeat(64)}})
 	var gone: Array[String] = _Scan.mismatches({"files": {"res://data/no_such_file.json": "0".repeat(64)}})
-	sim._ok(offenders.is_empty() and changed == ["res://data/districts.json"] and gone == ["res://data/no_such_file.json"],
+	sim._ok(offenders.is_empty() and changed == ["res://data/daily_challenges.json"] and gone == ["res://data/no_such_file.json"],
 		"OVL1 no shipped script loads a resource pack, runs a process or compiles a string (%s) and the scan names a repackaged data file (%s) and a missing one (%s)" % [offenders, changed, gone])
