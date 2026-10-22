@@ -111,6 +111,7 @@ func _build_screen(name: String) -> void:
 	title_lbl.position = Vector2(20, 8)
 	title_lbl.add_theme_color_override("font_color", BONE_TEXT)
 	title_lbl.add_theme_font_size_override("font_size", 20)
+	title_lbl.add_theme_font_override("font", ThemeProvider.heading_font())
 	_apply_outline(title_lbl)
 	card.add_child(title_lbl)
 	var content := ColorRect.new()

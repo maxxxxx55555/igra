@@ -1,13 +1,18 @@
-# Play Store screenshots — LAST STREETLIGHT (8 EN, 1920×1080)
+# Store art — LAST STREETLIGHT (8 painted or composed pictures, 1920×1080: NOT screenshots)
 
-Owner: CONTENT+ASSETS agent (visual pass). Eight upload-ready Play Console screenshots,
+**Do not upload these as the screenshots of a store page.** Five are AI paintings of a street with a post pass (`docs/ASSET_LICENSES.md`), shot08 is a programmatic redraw of a city list
+and three put the touch sprites over an AI background: none is a frame the engine drew, and shot02 shows a crossing between two districts that the game does not have (the
+city map travels between districts). The store asks for screenshots that show the app as it is. **The screenshots to upload are the engine frames of `docs/stills/store/`**
+(each named with the commit and the UTC time it was shot at; `store/PRESS_KIT.md` lists them). The pictures below are marketing art, for a place where a painting is fine.
+
+Owner: CONTENT+ASSETS agent (visual pass). Eight pictures (art, not screenshots),
 1920×1080, 24-bit PNG (each ≤ 2.1 MB), composed per `store/screenshot-plan-detailed.md`.
 Every frame is palette-pure (0 pure `#000000` / `#ffffff` texels, channels clamped to
 [16,240] for the environment shots) and graded with the district LUT from
 `assets/textures/luts/` (luma-mix strength 0.6: district tint in the shadows, warm
 practicals preserved), then bloom + vignette. No overlay text/arrows.
 
-Upload order (Play phone gallery): 01, 02, 05, 07, 08, p1, p2, p3.
+Upload order: none; the screenshot slots take the engine frames of `docs/stills/store/`.
 
 | File | Plan shot | District · stage | HUD / Trailer Mode | LUT |
 |---|---|---|---|---|

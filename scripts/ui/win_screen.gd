@@ -48,6 +48,7 @@ func _build() -> void:
 
 	_title = Label.new()
 	_title.add_theme_font_size_override("font_size", 28)
+	_title.add_theme_font_override("font", ThemeProvider.heading_font())
 	_title.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
 	_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vb.add_child(_title)

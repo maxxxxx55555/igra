@@ -8,6 +8,7 @@ class_name SkillTreeUI
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	theme = ThemeProvider.build_theme()
+	skill_points_label.add_theme_font_override("font", ThemeProvider.heading_font())
 	SkillTreeManager.skill_unlocked.connect(_refresh)
 	EventBus.settings_changed.connect(_on_settings_changed)
 	LocalizationManager.language_changed.connect(_on_language_changed)

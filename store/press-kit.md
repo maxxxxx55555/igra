@@ -11,7 +11,7 @@ the half-lit-city ending still is cleared, ending text/Architect identity never 
 - **Title:** Last Streetlight / Последний фонарь
 - **Tagline:** "Restore the light. Every streetlight is life." / «Верни свет. Каждый фонарь — жизнь.»
 - **Genre:** Stealth-horror FPS, single-player, offline-first
-- **Hook:** 11 connected districts, one continuous blackout city — every street
+- **Hook:** 11 districts, one blackout city relit one district at a time — every street
   you restore stays lit. The flashlight is your gun, your eyes, and your giveaway.
 - **Platforms/controls:** Android (touch + double-tap dodge) and PC (WASD+mouse),
   same game, same save file — export/import it between devices, no account, no server.
@@ -21,7 +21,7 @@ the half-lit-city ending still is cleared, ending text/Architect identity never 
 
 | # | What | Source of truth |
 |---|---|---|
-| 11 | Connected districts, one continuous city, zero loading screens | `data/districts/*.tres` (11 files), `docs/CONTENT_PIPELINE_AUDIT.md` §9 |
+| 11 | Districts, relit one at a time and reached from the city map | `data/districts/*.tres` (11 files), `docs/CONTENT_PIPELINE_AUDIT.md` §9 |
 | 88 | Lore notes (8 per district × 11) | `content/districts/*/lore_notes.json` (recounted 2026-09-13: 8 × 11 = 88) |
 | 13 | Fully localized languages at launch | `data/i18n/*.json` (ar, de, en, es, fr, it, ja, ko, pt_BR, ru, tr, zh, zh_TW); `tools/i18n_audit.py` → MISSING: 0 (`docs/artifacts/final_gate_report.md`) |
 | 31 | Achievements (20 core, incl. secret ones, + 11 district-full) | `scripts/systems/achievements_manager.gd` ach_01–ach_20 + `ach_district_*` (Batch 13, `docs/PLAYER_VISIBLE_CHANGES.md`) |
@@ -65,7 +65,7 @@ the half-lit-city ending still is cleared, ending text/Architect identity never 
    districts for the first 2 weeks; no ending footage; the Keeper/Architect
    identity is the game's one ungoogleable — keep it that way.
 4. Known-launch-facts reviewers may cite (numbers from the fact sheet above):
-   11 districts, 88 lore notes, 12 enemy types, 5 endings, 31 achievements,
+   11 districts, 88 lore notes, 11 enemy types, 5 endings, 31 achievements,
    60 daily challenges, 6 languages, workbench crafting, HMAC-signed
    checksum-verified saves with automatic backup recovery, offline-first with
    no account. See also the release-state block above for gate numbers.
@@ -88,7 +88,7 @@ Hi <name>,
 <One line on why them: e.g. "loved your <outlet> piece on <game>.">
 
 LAST STREETLIGHT is a stealth-horror FPS about bringing the light back
-to a dead city: 11 connected districts, zero loading screens, and every
+to a dead city: 11 districts, relit one at a time, and every
 street you save stays lit. Tagline: "Restore the light. Every streetlight
 is life."
 

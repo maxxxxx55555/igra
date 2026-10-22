@@ -23,7 +23,9 @@ signal fuel_low()
 signal fuel_empty()
 
 var _light: OmniLight3D
+const _Props := preload("res://scripts/art/prop_meshes.gd")
 var _mesh: MeshInstance3D
+var _glow: StandardMaterial3D
 
 func _ready() -> void:
 	add_to_group("interactable")
@@ -32,16 +34,7 @@ func _ready() -> void:
 
 func _build_visual() -> void:
 	_mesh = MeshInstance3D.new()
-	var bm := BoxMesh.new()
-	bm.size = Vector3(1.0, 1.2, 0.8)
-	_mesh.mesh = bm
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = Color(0.18, 0.17, 0.15)
-	mat.emission_enabled = true
-	mat.emission = Color(0.706, 0.271, 0.184)
-	mat.emission_energy_multiplier = 0.0
-	_mesh.material_override = mat
-	_mesh.position = Vector3(0, 0.6, 0)
+	_glow = _Props.dress(_mesh, "generator")
 	add_child(_mesh)
 	var body := StaticBody3D.new()
 	var cs := CollisionShape3D.new()
@@ -96,15 +89,13 @@ func refuel(amount: float) -> void:
 func _activate() -> void:
 	is_active = true
 	if _light: _light.light_energy = 2.0
-	var mat := _mesh.material_override as StandardMaterial3D
-	if mat: mat.emission_energy_multiplier = 1.2
+	if _glow: _glow.emission_energy_multiplier = 1.2
 	generator_activated.emit()
 
 func _deactivate() -> void:
 	is_active = false
 	if _light: _light.light_energy = 0.0
-	var mat := _mesh.material_override as StandardMaterial3D
-	if mat: mat.emission_energy_multiplier = 0.0
+	if _glow: _glow.emission_energy_multiplier = 0.0
 	generator_deactivated.emit()
 
 func _on_fuel_empty() -> void:

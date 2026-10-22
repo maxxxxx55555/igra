@@ -220,9 +220,9 @@ Do these in order. Play Console won't let you roll out until every
    - **App icon** → `store/icon-512.png` (512×512 PNG, ≤1 MB).
    - **Feature graphic** → `store/feature-graphic.png` (1024×500 PNG).
    - **Phone screenshots** → at least 2, 16:9 or 9:16, each 1080–3840 px
-     on the long edge. Capture the 8 shots in `store/screenshots-plan.md`
-     (it names the exact district + camera + power stage for each). A
-     couple can come straight from **Trailer Mode** (Settings → Game →
+     on the long edge. Upload the engine frames of `docs/stills/store/` (the pictures of
+     `store/screenshots/` are art, not screenshots: `store/screenshots/README.md`).
+     A couple can come straight from **Trailer Mode** (Settings → Game →
      Trailer Mode hides the HUD).
    - **Tablet screenshots** — optional; reuse the phone set if short on
      time.

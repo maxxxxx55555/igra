@@ -45,14 +45,15 @@ one else is left to do: get the power grid running again, district by
 district, street by street.
 
 EVERY DISTRICT YOU RESTORE STAYS LIT
-Eleven connected districts form one continuous city. The contrast
+Eleven districts make up one city, and you light it one district at a
+time: pick the next one on the city map and travel there. The contrast
 between the black streets you have not reached and the ones you have
 already saved is the whole shape of the game. Light is the reward, not
 just a tool.
 
 WHAT'S INSIDE
-- 11 connected districts — one continuous map, no level-select screen
-- 12 enemy types, each with its own senses, weaknesses, and behaviour
+- 11 districts, relit one at a time and reached from the city map
+- 11 enemy types — ten hunters and the Architect — each with its own senses, weaknesses, and behaviour
 - 5 endings, decided by how much of the city — and of the truth — you recover
 - 6 fully localized languages
 - A 5-layer adaptive music system that shifts with the danger around you
@@ -71,9 +72,9 @@ PC: WASD and mouse — same game, same save file; export or import it
 between devices, no account, no server.
 
 THE WHOLE CITY ON DAY ONE
-All 11 districts ship complete — story, puzzles, lore and endings
-included. No paywalled content, no season pass. Fully offline: this
-blackout is a survival puzzle box, and the story is yours to drive.
+All 11 districts ship complete — story, lore and endings included. No
+paywalled content, no season pass. Fully offline: this blackout is a
+survival game, and the story is yours to drive.
 ```
 
 ### RU
@@ -86,13 +87,14 @@ blackout is a survival puzzle box, and the story is yours to drive.
 некому сделать: вернуть городу свет, район за районом, улица за улицей.
 
 КАЖДЫЙ ВОССТАНОВЛЕННЫЙ РАЙОН ОСТАЁТСЯ ОСВЕЩЁННЫМ
-Одиннадцать соединённых районов образуют единый город. Контраст между
-чёрными улицами, куда ты ещё не дошёл, и уже спасёнными — это вся форма
-игры. Свет здесь не просто инструмент, а награда.
+Одиннадцать районов образуют один город, и ты зажигаешь его по одному
+району: выбери следующий на карте города и отправляйся туда. Контраст
+между чёрными улицами, куда ты ещё не дошёл, и уже спасёнными — это вся
+форма игры. Свет здесь не просто инструмент, а награда.
 
 ЧТО ВНУТРИ
-- 11 соединённых районов — одна непрерывная карта без загрузочных меню
-- 12 типов врагов, у каждого свои чувства, слабости и поведение
+- 11 районов, которые зажигаются по одному: переходы — через карту города
+- 11 типов врагов — десять охотников и Архитектор, у каждого свои чувства, слабости и поведение
 - 5 концовок — они зависят от того, сколько города и сколько правды ты вернёшь
 - 6 полностью локализованных языков
 - 5-слойная адаптивная музыка, меняющаяся вместе с опасностью вокруг тебя
@@ -112,9 +114,9 @@ blackout is a survival puzzle box, and the story is yours to drive.
 сервера.
 
 ВЕСЬ ГОРОД В ДЕНЬ ЗАПУСКА
-Все 11 районов готовы целиком — сюжет, головоломки, архивы и концовки.
-Никакого платного контента и сезонных пропусков. Полностью офлайн:
-этот блэкаут — survival-пазл, где историю ведёшь ты.
+Все 11 районов готовы целиком — сюжет, архивы и концовки. Никакого
+платного контента и сезонных пропусков. Полностью офлайн: этот
+блэкаут — игра на выживание, где историю ведёшь ты.
 ```
 
 ---
@@ -122,20 +124,20 @@ blackout is a survival puzzle box, and the story is yours to drive.
 ## Feature bullets
 
 ### EN
-- One continuous blackout city — 11 districts, zero loading screens. If you can see it, you can walk to it.
+- One blackout city — 11 districts to relight one at a time, and every one you save stays lit.
 - Light is the reward: every street you save stays lit. Your map is your trophy.
 - Your flashlight is your gun, your eyes, and your death sentence — every beam gives you away.
-- 12 hunters, each with its own senses and weaknesses. Learn them or feed them.
+- Ten kinds of hunter and the Architect, each with its own senses and weaknesses. Learn them or feed them.
 - 5 endings. How much of the city — and how much of the truth — will you bring back?
 - Scavenge, craft, upgrade: one workbench, one flashlight, endless night.
 - Music that hears danger before you do — 5 adaptive layers that shift with the hunt.
 - 6 languages. One eternal night.
 
 ### RU
-- Единый город во тьме — 11 районов, ноль загрузочных экранов. Видишь — дойдёшь.
+- Город во тьме — 11 районов: выбираешь следующий на карте и зажигаешь его.
 - Свет — награда: каждая спасённая улица остаётся освещённой. Твоя карта — твой трофей.
 - Твой фонарь — оружие, глаза и смертный приговор: каждый луч тебя выдаёт.
-- 12 охотников, у каждого свои чувства и слабости. Изучи их — или стань добычей.
+- Десять видов охотников и Архитектор, у каждого свои чувства и слабости. Изучи их — или стань добычей.
 - 5 концовок. Сколько города — и сколько правды — ты вернёшь?
 - Собирай, крафти, прокачивай: один верстак, один фонарь, бесконечная ночь.
 - Музыка, которая слышит опасность раньше тебя: 5 адаптивных слоёв в тон охоте.
@@ -150,14 +152,14 @@ blackout is a survival puzzle box, and the story is yours to drive.
 `Offline`, `Crafting`, `Exploration`, `Story Rich`, `Indie`
 Keywords: blackout, survival horror, stealth, power grid, night city,
 flashlight horror, stealth FPS, atmospheric horror, restoring the light,
-story-driven, survival puzzle, offline horror game, flashlight game.
+story-driven, survival game, offline horror game, flashlight game.
 
 ### RU
 `Выживание`, `Хоррор`, `Шутер от первого лица`, `Атмосферный`, `Стелс`,
 `Одиночная игра`, `Офлайн`, `Крафт`, `Исследование`, `Сюжетный`, `Инди`
 Ключевые слова: блэкаут, хоррор выживания, стелс, электросеть, ночной
 город, хоррор с фонарём, атмосферный хоррор, вернуть свет, сюжетная
-игра, survival-пазл, офлайн-хоррор.
+игра, игра на выживание, офлайн-хоррор.
 
 ---
 
@@ -222,12 +224,12 @@ LA CIUDAD A OSCURAS. TÚ ERES EL INGENIERO DE LA RED.
 
 El desastre del "Proyecto Arquitecto" hundió la ciudad en una noche eterna. Eres un superviviente con una linterna, una batería que se agota y un trabajo que ya nadie más puede hacer: devolver la luz, distrito a distrito, calle a calle.
 
-Once distritos conectados forman una sola ciudad continua, sin pantallas de carga. Cada distrito que restauras se queda encendido: el contraste entre las calles negras y las que ya has salvado es la forma entera del juego.
+Once distritos forman una sola ciudad y la enciendes de uno en uno: elige el siguiente en el mapa de la ciudad y viaja hasta allí. Cada distrito que restauras se queda encendido: el contraste entre las calles negras y las que ya has salvado es la forma entera del juego.
 
 Tu linterna es a la vez tu única arma contra parte de lo que te caza, tu única forma de ver y lo que te delata cada vez que la enciendes.
 
-- 11 distritos conectados, un mapa continuo
-- 12 tipos de enemigos, cada uno con sus sentidos y debilidades
+- 11 distritos que se encienden uno a uno, con viaje desde el mapa de la ciudad
+- 11 tipos de enemigos —diez cazadores y el Arquitecto—, cada uno con sus sentidos y debilidades
 - 5 finales según cuánta ciudad — y cuánta verdad — recuperes
 - 6 idiomas totalmente localizados
 - Música adaptativa de 5 capas que cambia con el peligro
@@ -236,13 +238,13 @@ Tu linterna es a la vez tu única arma contra parte de lo que te caza, tu única
 - Guardado con verificación de integridad y copia de seguridad
 - 58 desafíos diarios, 31 logros y New Game+ tras los créditos
 
-Táctil: joystick virtual y botones, esquiva con doble toque. PC: WASD y ratón, la misma partida. El juego llega completo el día uno —historia, puzles y finales incluidos— y se juega sin conexión: un survival-puzzle narrativo. Sin contenido de pago ni pase de temporada.
+Táctil: joystick virtual y botones, esquiva con doble toque. PC: WASD y ratón, la misma partida. El juego llega completo el día uno —historia, archivos y finales incluidos— y se juega sin conexión: un survival narrativo. Sin contenido de pago ni pase de temporada.
 ```
 - **Feature bullets:**
-  - Camina hasta cualquier calle que veas: una sola ciudad a oscuras, 11 distritos, cero pantallas de carga.
+  - Una sola ciudad a oscuras: 11 distritos que eliges en el mapa y enciendes de uno en uno.
   - La luz es la recompensa: cada calle que salvas se queda encendida. Tu mapa es tu trofeo.
   - Tu linterna es tu arma, tus ojos y tu sentencia: cada haz te delata.
-  - Sobrevive a 12 cazadores aprendiendo sus sentidos y debilidades — cada uno caza a su manera.
+  - Sobrevive a diez tipos de cazadores y al Arquitecto aprendiendo sus sentidos y debilidades — cada uno caza a su manera.
   - Elige cuánto recuperas: 5 finales según cuánta ciudad — y cuánta verdad — devuelvas.
   - Recoge, fabrica, mejora: un banco de trabajo, una linterna, noche sin fin.
   - Música que oye el peligro antes que tú: 5 capas adaptativas al ritmo de la caza.
@@ -261,12 +263,12 @@ DIE STADT IM BLACKOUT. DU BIST DER NETZINGENIEUR.
 
 Die Katastrophe des „Architekt-Projekts" stürzte die Stadt in ewige Nacht. Du bist ein Überlebender mit einer Taschenlampe, einer schwächer werdenden Batterie und einer Aufgabe, die sonst niemand mehr erledigen kann: das Licht zurückbringen, Bezirk für Bezirk, Straße für Straße.
 
-Elf verbundene Bezirke bilden eine einzige durchgehende Stadt, ohne Ladebildschirme. Jeder Bezirk, den du wiederherstellst, bleibt erleuchtet: der Kontrast zwischen den schwarzen Straßen und den bereits geretteten ist die ganze Form des Spiels.
+Elf Bezirke bilden eine einzige Stadt, und du bringst sie Bezirk für Bezirk zum Leuchten: Wähle den nächsten auf der Stadtkarte und reise dorthin. Jeder Bezirk, den du wiederherstellst, bleibt erleuchtet: der Kontrast zwischen den schwarzen Straßen und den bereits geretteten ist die ganze Form des Spiels.
 
 Deine Taschenlampe ist zugleich deine einzige Waffe gegen einen Teil dessen, was dich jagt, dein einziger Weg zu sehen und das, was dich jedes Mal verrät, wenn du sie einschaltest.
 
-- 11 verbundene Bezirke, eine durchgehende Karte
-- 12 Gegnertypen, jeder mit eigenen Sinnen und Schwächen
+- 11 Bezirke, die du einzeln erleuchtest, Reise über die Stadtkarte
+- 11 Gegnertypen — zehn Jäger und der Architekt, jeder mit eigenen Sinnen und Schwächen
 - 5 Enden, je nachdem wie viel Stadt — und Wahrheit — du zurückholst
 - 6 vollständig lokalisierte Sprachen
 - Adaptive 5-Schichten-Musik, die sich mit der Gefahr verändert
@@ -275,13 +277,13 @@ Deine Taschenlampe ist zugleich deine einzige Waffe gegen einen Teil dessen, was
 - Speicherstände mit Integritätsprüfung und Backup
 - 58 tägliche Herausforderungen, 31 Erfolge und New Game+ nach den Credits
 
-Touch: virtueller Joystick und Aktionstasten, Ausweichen per Doppeltipp. PC: WASD und Maus, dasselbe Spiel. Die ganze Stadt ist ab Tag eins fertig — Geschichte, Rätsel und Enden inklusive. Komplett offline: ein story-getriebenes Survival-Puzzle. Keine kostenpflichtigen Inhalte, kein Season Pass.
+Touch: virtueller Joystick und Aktionstasten, Ausweichen per Doppeltipp. PC: WASD und Maus, dasselbe Spiel. Die ganze Stadt ist ab Tag eins fertig — Geschichte, Archive und Enden inklusive. Komplett offline: ein story-getriebenes Survival-Spiel. Keine kostenpflichtigen Inhalte, kein Season Pass.
 ```
 - **Feature bullets:**
-  - Geh jede Straße, die du siehst: eine einzige Stadt im Blackout, 11 Bezirke, null Ladebildschirme.
+  - Eine einzige Stadt im Blackout: 11 Bezirke, die du auf der Stadtkarte wählst und einzeln erleuchtest.
   - Licht ist die Belohnung: jede gerettete Straße bleibt erleuchtet. Deine Karte ist deine Trophäe.
   - Deine Taschenlampe ist Waffe, Augen und Todesurteil: jeder Strahl verrät dich.
-  - Überlebe 12 Jäger, indem du ihre Sinne und Schwächen lernst — jeder jagt anders.
+  - Überlebe zehn Arten von Jägern und den Architekten, indem du ihre Sinne und Schwächen lernst — jeder jagt anders.
   - Entscheide, was du zurückbringst: 5 Enden, je nachdem wie viel Stadt — und Wahrheit — du holst.
   - Sammeln, herstellen, verbessern: eine Werkbank, eine Taschenlampe, endlose Nacht.
   - Musik, die Gefahr vor dir hört: 5 adaptive Schichten im Takt der Jagd.
@@ -300,12 +302,12 @@ LA VILLE DANS LE NOIR. TU ES L'INGÉNIEUR DU RÉSEAU.
 
 La catastrophe du « Projet Architecte » a plongé la ville dans une nuit éternelle. Tu es un survivant avec une lampe torche, une batterie qui faiblit et un travail que plus personne d'autre ne peut faire : rendre la lumière, district par district, rue par rue.
 
-Onze districts connectés forment une seule ville continue, sans écrans de chargement. Chaque district que tu restaures reste allumé : le contraste entre les rues noires et celles déjà sauvées est toute la forme du jeu.
+Onze districts forment une seule ville, et tu la rallumes un district à la fois : choisis le suivant sur la carte de la ville et rends-t'y. Chaque district que tu restaures reste allumé : le contraste entre les rues noires et celles déjà sauvées est toute la forme du jeu.
 
 Ta lampe torche est à la fois ta seule arme contre une partie de ce qui te traque, ton seul moyen de voir et ce qui te trahit chaque fois que tu l'allumes.
 
-- 11 districts connectés, une carte continue
-- 12 types d'ennemis, chacun avec ses sens et ses faiblesses
+- 11 districts à rallumer un par un, voyage depuis la carte de la ville
+- 11 types d'ennemis — dix chasseurs et l'Architecte, chacun avec ses sens et ses faiblesses
 - 5 fins selon la part de ville — et de vérité — que tu ramènes
 - 6 langues entièrement localisées
 - Musique adaptative à 5 couches qui évolue avec le danger
@@ -314,13 +316,13 @@ Ta lampe torche est à la fois ta seule arme contre une partie de ce qui te traq
 - Sauvegardes vérifiées avec récupération de secours
 - 58 défis quotidiens, 31 succès et New Game+ après le générique
 
-Tactile : joystick virtuel et boutons, esquive en double-tap. PC : WASD et souris, la même partie. La ville entière dès le jour un — intrigue, énigmes et fins incluses. Entièrement hors ligne : un survival-puzzle narratif. Aucun contenu payant, aucun pass saisonnier.
+Tactile : joystick virtuel et boutons, esquive en double-tap. PC : WASD et souris, la même partie. La ville entière dès le jour un — intrigue, archives et fins incluses. Entièrement hors ligne : un survival narratif. Aucun contenu payant, aucun pass saisonnier.
 ```
 - **Feature bullets:**
-  - Marche jusqu'à toute rue que tu vois : une seule ville dans le noir, 11 districts, zéro écran de chargement.
+  - Une seule ville dans le noir : 11 districts que tu choisis sur la carte et rallumes un par un.
   - La lumière est la récompense : chaque rue sauvée reste allumée. Ta carte est ton trophée.
   - Ta lampe torche est ton arme, tes yeux et ta condamnation : chaque faisceau te trahit.
-  - Survis à 12 chasseurs en apprenant leurs sens et leurs faiblesses — chacun traque à sa façon.
+  - Survis à dix sortes de chasseurs et à l'Architecte en apprenant leurs sens et leurs faiblesses — chacun traque à sa façon.
   - Choisis ce que tu ramènes : 5 fins selon la part de ville — et de vérité — que tu récupères.
   - Fouille, fabrique, améliore : un établi, une lampe torche, une nuit sans fin.
   - Une musique qui entend le danger avant toi : 5 couches adaptatives au rythme de la traque.
@@ -339,12 +341,12 @@ A CIDADE NO APAGÃO. VOCÊ É O ENGENHEIRO DA REDE.
 
 O desastre do "Projeto Arquiteto" mergulhou a cidade numa noite eterna. Você é um sobrevivente com uma lanterna, uma bateria que se esgota e um trabalho que mais ninguém pode fazer: trazer a luz de volta, distrito por distrito, rua por rua.
 
-Onze distritos conectados formam uma única cidade contínua, sem telas de carregamento. Cada distrito que você restaura continua aceso: o contraste entre as ruas negras e as já salvas é toda a forma do jogo.
+Onze distritos formam uma única cidade, e você a acende um distrito por vez: escolha o próximo no mapa da cidade e viaje até lá. Cada distrito que você restaura continua aceso: o contraste entre as ruas negras e as já salvas é toda a forma do jogo.
 
 Sua lanterna é ao mesmo tempo sua única arma contra parte do que te caça, seu único jeito de enxergar e o que te denuncia toda vez que você a liga.
 
-- 11 distritos conectados, um mapa contínuo
-- 12 tipos de inimigos, cada um com sentidos e fraquezas próprios
+- 11 distritos que se acendem um a um, com viagem pelo mapa da cidade
+- 11 tipos de inimigos — dez caçadores e o Arquiteto, cada um com sentidos e fraquezas próprios
 - 5 finais conforme quanto da cidade — e da verdade — você recupera
 - 6 idiomas totalmente localizados
 - Música adaptativa de 5 camadas que muda com o perigo
@@ -353,13 +355,13 @@ Sua lanterna é ao mesmo tempo sua única arma contra parte do que te caça, seu
 - Saves verificados com recuperação de backup
 - 58 desafios diários, 31 conquistas e New Game+ após os créditos
 
-Toque: joystick virtual e botões, esquiva com toque duplo. PC: WASD e mouse, o mesmo jogo. A cidade inteira desde o primeiro dia — história, quebra-cabeças e finais inclusos. Totalmente offline: um survival-puzzle narrativo. Sem conteúdo pago, sem passe de temporada.
+Toque: joystick virtual e botões, esquiva com toque duplo. PC: WASD e mouse, o mesmo jogo. A cidade inteira desde o primeiro dia — história, documentos e finais inclusos. Totalmente offline: um survival narrativo. Sem conteúdo pago, sem passe de temporada.
 ```
 - **Feature bullets:**
-  - Vá a pé até onde a vista alcança: uma única cidade no apagão, 11 distritos, zero telas de carregamento.
+  - Uma única cidade no apagão: 11 distritos que você escolhe no mapa e acende um a um.
   - A luz é a recompensa: cada rua salva continua acesa. Seu mapa é seu troféu.
   - Sua lanterna é sua arma, seus olhos e sua sentença: cada facho te denuncia.
-  - Sobreviva a 12 caçadores aprendendo seus sentidos e fraquezas — cada um caça de um jeito.
+  - Sobreviva a dez tipos de caçadores e ao Arquiteto aprendendo seus sentidos e fraquezas — cada um caça de um jeito.
   - Escolha o que trazer de volta: 5 finais conforme quanto da cidade — e da verdade — você recupera.
   - Vasculhe, fabrique, melhore: uma bancada, uma lanterna, noite sem fim.
   - Música que ouve o perigo antes de você: 5 camadas adaptativas no ritmo da caçada.

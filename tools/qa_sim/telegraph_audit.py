@@ -11,7 +11,7 @@ import re
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-CUE = r"_telegraph\.cue\(\)"
+CUE = r"_telegraph\.cue\((?:\w+)?\)"  # the Hunter and the Brute pass the length of their windup (v10 N033): cue(CHARGE_WINDUP)
 LANDINGS = {
     ("crawler_3d.gd", "_tick_leap"): CUE,
     ("hunter_3d.gd", "_tick_charge"): CUE,
@@ -48,6 +48,7 @@ def demo():
     assert audit({"x_3d.gd": "const LEAP_WINDUP: float = 0.2\n"}) == ["x_3d.gd: LEAP_WINDUP is 0.2 s, under 0.4 s"]
     assert audit({"crawler_3d.gd": "func _tick_leap(d: float) -> void:\n\tplayer_ref.take_damage(1.0)\n"})
     assert audit({"crawler_3d.gd": "func _tick_leap(d: float) -> void:\n\t_telegraph.cue()\n\tplayer_ref.take_damage(1.0)\n"}) == []
+    assert audit({"hunter_3d.gd": "func _tick_charge(d: float) -> void:\n\t_telegraph.cue(CHARGE_WINDUP)\n\tplayer_ref.take_damage(1.0)\n"}) == []
     print("telegraph_audit demo: a hit at once fails, a warned hit and a cued landing pass, a windup under 0.4 s fails")
     return 0
 

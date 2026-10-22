@@ -37,5 +37,5 @@ texels, no HUD, project-owned (ledger: `docs/ASSET_LICENSES.md`).
 
 1. 0:00–0:03 — `shorts_silhouette` frame + lamp-buzz SFX + text: the tagline.
 2. 0:03–0:20 — cascade B-roll (storyboard #10) + flashlight-ON POV (#5).
-3. 0:20–0:27 — ember-eyes freeze (#6) + "12 hunters. Learn them or feed them."
+3. 0:20–0:27 — ember-eyes freeze (#6) + "Ten kinds of hunter. Learn them or feed them."
 4. 0:27–0:30 — logo + "5 endings" + store link. No ending footage, ever.

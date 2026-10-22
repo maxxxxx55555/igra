@@ -7,6 +7,7 @@ the files on disk (size and pixels). `--check` fails when the file is not what `
 usage: python tools/qa_sim/press_kit.py [--write store/PRESS_KIT.md] [--check]
 """
 import pathlib
+import re
 import struct
 import sys
 
@@ -16,11 +17,7 @@ import listing_audit  # noqa: E402
 
 PICTURES = [
     ("Icon", "store/icon-512.png"), ("Feature graphic", "store/feature-graphic.png"),
-    ("Screenshot: light against the dark", "store/screenshots/shot01_light_vs_dark_1920x1080_en.png"), ("Screenshot: a district boundary", "store/screenshots/shot02_district_boundary_1920x1080_en.png"),
-    ("Screenshot: the restored forecourt", "store/screenshots/shot05_restored_forecourt_1920x1080_en.png"), ("Screenshot: the last streetlight", "store/screenshots/shot07_last_streetlight_1920x1080_en.png"),
-    ("Screenshot: the city map", "store/screenshots/shot08_city_map_1920x1080_en.png"), ("Phone: first light", "store/screenshots/shot_p1_touch_first_light_1920x1080_en.png"),
-    ("Phone: crouch", "store/screenshots/shot_p2_touch_crouch_1920x1080_en.png"), ("Phone: interact", "store/screenshots/shot_p3_touch_interact_1920x1080_en.png"),
-    ("Press header", "store/trailer/presskit_1600x900.png"), ("Still: first light", "store/trailer/still_first_light_1920x1080.png"),
+    ("Press header (art)", "store/trailer/presskit_1600x900.png"), ("Still: first light (art)", "store/trailer/still_first_light_1920x1080.png"),
 ]
 
 
@@ -48,8 +45,8 @@ def build():
         "- **Languages:** %d" % facts["languages"], "",
         "## What the game holds (read from the code)", "",
         "| Number | What | Read from |", "|---|---|---|",
-        "| %d | connected districts, one continuous city | `DistrictSceneFactory.DISTRICTS` |" % facts["districts"],
-        "| %d | enemy types, the final boss among them | `data/monsters/` |" % facts["monsters"],
+        "| %d | districts, relit one at a time and reached from the city map | `DistrictSceneFactory.DISTRICTS` |" % facts["districts"],
+        "| %d | enemy types the game spawns, the final boss among them | `EnemyPool.ROSTER_BY_DISTRICT`, `FinaleDirector` |" % facts["monsters"],
         "| %d | endings | `EndingsManager.ENDING_DATA` |" % facts["endings"],
         "| %d | achievements | `AchievementManager.ACHIEVEMENTS` |" % facts["achievements"],
         "| %d | daily challenges, with 7, 30 and 100 day streak bonuses | `content/daily_challenges.json` |" % facts["daily"],
@@ -57,14 +54,15 @@ def build():
         "| %d | languages | `data/i18n/` |" % facts["languages"], "",
         "## Pictures on disk", "", "| Picture | File | Pixels | Bytes |", "|---|---|---|---|",
     ]
-    for name, rel in PICTURES:
+    frames = sorted((ROOT / "docs" / "stills" / "store").glob("*.png"))
+    for name, rel in PICTURES + [("Screenshot: " + re.sub(r"^\d+_|(_after)?_[0-9a-f]{7,}_\d{8}T\d{6}Z$", "", f.stem).replace("_", " "), f.relative_to(ROOT).as_posix()) for f in frames]:
         path = ROOT / rel
         if path.exists():
             w, h = png_size(path)
             lines.append("| %s | `%s` | %d x %d | %d |" % (name, rel, w, h, path.stat().st_size))
         else:
             lines.append("| %s | `%s` | missing | - |" % (name, rel))
-    lines += ["", "The screenshots were shot before the HUD pass and the density pass of Session 23; the recipes to shoot them again from the final build are in `store/SCREENSHOT_RECIPES.md`.", "",
+    lines += ["", "The `Screenshot` rows are frames the engine drew, in `docs/stills/store/`, each named with the commit and the UTC time it was shot at. The art of `store/screenshots/` and the two rows marked `(art)` are painted or composed pictures (AI images, a programmatic composite): marketing art, not screenshots, and not for the screenshot slots of a store page. The recipes to shoot frames again are in `store/SCREENSHOT_RECIPES.md`.", "",
               "## For a reviewer", "",
               "1. A review copy is the signed bundle of `docs/RELEASE_ARTIFACTS.md`, installed from a closed test track.",
               "2. Contact: **[contact email / support URL]** (the owner fills it; it is the same address as in `docs/PRIVACY_POLICY_FINAL.md`).",

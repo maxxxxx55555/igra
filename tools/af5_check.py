@@ -2,8 +2,8 @@
 """AF5 citation gate (rc16): a doc line that cites `path:line` is only evidence while the code at HEAD still says what it claims.
 
 usage: python tools/af5_check.py [--base REV] [--file DOC]... [--all] [--demo]
-Scope: the doc lines added since REV (default e4bb4df, the rc15 tag; committed, uncommitted and untracked docs). docs/artifacts/ and
-docs/stills/ are raw evidence and skipped; RUN_STATE.md counts from its newest "## Session" block only (older blocks are the history of
+Scope: the doc lines added since REV (default e4bb4df, the rc15 tag; committed, uncommitted and untracked docs). docs/artifacts/,
+docs/stills/ and docs/NITPICK_v1.0.md (its rows cite the code as it stood when they were written) are raw evidence and skipped; RUN_STATE.md counts from its newest "## Session" block only (older blocks are the history of
 code that has moved on). --file checks every line of the named docs, --all every citation of every doc (informational: old docs hold stale lines).
 A citation is `path:N`, `path:N-M` or `path:N,M-K` with a source extension; `res://` and a bare file name that is unique among tracked files resolve.
   C1 the file resolves to one tracked or existing file
@@ -25,7 +25,7 @@ SPAN = re.compile(r"`([^`]+)`")
 WORD = re.compile(r"[A-Za-z_][A-Za-z0-9_]{2,}")
 HASH = re.compile(r"[0-9a-f]{7,40}")
 LINK = re.compile(r"^[\s`]*(?:\(|at|in|see|from|:|-|—|–)?[\s(`]*$")
-SKIP = ("docs/artifacts/", "docs/stills/")
+SKIP = ("docs/artifacts/", "docs/stills/", "docs/NITPICK_v1.0.md")
 TRACKED = None
 
 

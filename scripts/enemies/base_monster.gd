@@ -297,7 +297,7 @@ func _update_anim(delta: float) -> void:
 	var unaware: bool = ai_state == State.IDLE or ai_state == State.PATROL or ai_state == State.INVESTIGATE
 	if unaware and player_ref and is_instance_valid(player_ref):
 		heading = player_ref.global_position - global_position
-	_rig.update(delta, ai_state == State.DEAD, Vector2(velocity.x, velocity.z).length(), heading, _telegraph.last_cue_msec if _telegraph else -1)
+	_rig.update(delta, ai_state == State.DEAD, Vector2(velocity.x, velocity.z).length(), heading, _telegraph.last_cue_msec if _telegraph else -1, _telegraph.last_cue_windup if _telegraph else _Rig.WINDUP)
 
 ## GDD §5.1: Slam (3rd melee combo hit) carries 1.5m knockback, and a
 ## backstab checks the target's facing — player_3d.gd's _on_attack_hit()
@@ -790,7 +790,7 @@ const _VFX_BLOOD_HIT := preload("res://scenes/vfx/vfx_blood_hit.tscn")
 func _maybe_drop_loot() -> void:
 	if randf() > LOOT_CHANCE * NewGamePlus.get_loot_chance_multiplier():
 		return
-	var at := global_position + Vector3(0, 0.5, 0)
+	var at := floor_point()
 	# Ammunition carriers (Sharpshooter) drop rounds, everything else a part or a supply.
 	if bool(roster_entry.get("loot_ammo", false)):
 		var box := _AMMO_BOX.instantiate() as Node3D
@@ -802,6 +802,12 @@ func _maybe_drop_loot() -> void:
 	pickup.global_position = at
 	if pickup.has_method("set_item"):
 		pickup.set_item(LOOT_TABLE[randi() % LOOT_TABLE.size()], 1)
+
+## Where the monster stands: its capsule is centred on the origin, so a drop lies on the floor there and not at knee height (v10 N017).
+func floor_point() -> Vector3:
+	var col := get_node_or_null("CollisionShape3D") as CollisionShape3D
+	var capsule: CapsuleShape3D = col.shape as CapsuleShape3D if col != null else null
+	return global_position - Vector3(0.0, capsule.height * 0.5 if capsule != null else 0.0, 0.0)
 
 func _death_effect() -> void:
 	_spawn_vfx(_VFX_DEATH, global_position + Vector3(0, 1.0, 0))

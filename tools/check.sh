@@ -419,6 +419,18 @@ if "$PY" tools/qa_sim/coverage_matrix.py --demo >/dev/null 2>&1 && "$PY" tools/q
 else
   bad "coverage_matrix / audio_loudness --demo (см. 'python tools/qa_sim/coverage_matrix.py --demo')"
 fi
+if "$PY" tools/qa_sim/hum_scan.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/bed_synth.py --demo >/dev/null 2>&1; then
+  ok "hum_scan and bed_synth --demo (a sine and mains hum are hums, noise and a ringing note in silence are not; a synthesized bed is periodic and not a hum)"
+else
+  bad "hum_scan / bed_synth --demo (см. 'python tools/qa_sim/hum_scan.py --demo')"
+fi
+if command -v ffmpeg >/dev/null 2>&1; then
+  if "$PY" tools/qa_sim/hum_scan.py --check >/dev/null 2>&1; then
+    ok "hum_scan (no dark bed and no district detail loop is a steady low tone: the owner's no-hum rule)"
+  else
+    bad "hum_scan (см. 'python tools/qa_sim/hum_scan.py --check')"
+  fi
+fi
 if "$PY" tools/qa_sim/listing_audit.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/listing_audit.py >/dev/null 2>&1; then
   ok "listing_audit (6 locales: title, short and full limits, the same numbers in every language, the English numbers are what the code holds)"
 else

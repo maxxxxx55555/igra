@@ -87,9 +87,12 @@ def truth():
     per_run = re.findall(r'"(\w+)"', re.search(r"const PER_RUN_TYPES: Array\[String\] = \[(.*?)\]", read("scripts/systems/daily_challenge_manager.gd")).group(1))
     # the manager's selector walks past a once-per-district template whose target is over the districts a run can light: those are authored and never offered
     daily = [t for t in templates if not (t["type"] in per_run and int(t["target"]) > districts)]
+    # the enemy kinds a player can meet: those of the districts' rosters and the final boss (data/monsters holds twelve; the Tvar mini-boss is defined and never spawned: N048 of docs/NITPICK_v1.0.md)
+    roster = re.search(r"const ROSTER_BY_DISTRICT: Dictionary = \{(.*?)\n\}", read("scripts/enemies/enemy_pool.gd"), re.S).group(1)
+    kinds = set(re.findall(r"\b[A-Z][A-Z_]+\b", roster)) | ({"BOSS"} if "boss_architect_3d.tscn" in read("scripts/world/finale_director.gd") else set())
     music = read("scripts/systems/music_manager.gd")
     layers = re.findall(r'^\t"(\w+)":', music[music.index("const LAYERS"):music.index("}", music.index("const LAYERS"))], re.M)
-    return {"districts": districts, "monsters": len(list((ROOT / "data" / "monsters").glob("monster_*.tres"))), "endings": endings, "languages": len(list((ROOT / "data" / "i18n").glob("*.json"))),
+    return {"districts": districts, "monsters": len(kinds), "endings": endings, "languages": len(list((ROOT / "data" / "i18n").glob("*.json"))),
             "achievements": ach, "daily": len(daily), "music layers": len([x for x in layers if x not in ("rain", "wind")])}
 
 
@@ -107,7 +110,7 @@ def findings(data, facts):
             out.append("L3 %s: the full description is %d characters (limit %d)" % (loc, len(d["full"]), FULL_MAX))
         if loc != "en" and numbers(d["short"] + "\n" + d["full"]) != en_numbers:
             out.append("L4 %s: the numbers %s differ from the English %s" % (loc, numbers(d["short"] + "\n" + d["full"]), en_numbers))
-    claims = {"districts": r"(\d+) connected districts", "monsters": r"(\d+) enemy types", "endings": r"(\d+) endings", "languages": r"(\d+) fully localized languages",
+    claims = {"districts": r"(\d+) districts", "monsters": r"(\d+) enemy types", "endings": r"(\d+) endings", "languages": r"(\d+) fully localized languages",
               "achievements": r"(\d+) achievements", "daily": r"(\d+) daily challenges", "music layers": r"(\d+)-layer adaptive"}
     en_text = data["en"]["short"] + "\n" + data["en"]["full"]
     for key, rx in claims.items():
@@ -152,7 +155,7 @@ def main(argv):
     if "--demo" in argv:
         assert numbers("11 districts, 30 daily (70/80 chars) 5-layer 30日") == [5, 11, 30]
         d = {"en": {"title": "x" * 31, "short": "s" * 81, "short_declared": 80, "full": "11 a", "tags": []}, "ru": {"title": "x", "short": "s", "short_declared": 1, "full": "12 a", "tags": []}}
-        bad = findings(d, {"districts": 11, "monsters": 12, "endings": 5, "languages": 13, "achievements": 31, "daily": 60, "music layers": 5})
+        bad = findings(d, {"districts": 11, "monsters": 11, "endings": 5, "languages": 13, "achievements": 31, "daily": 60, "music layers": 5})
         assert any(b.startswith("L1") for b in bad) and any(b.startswith("L2") for b in bad) and any(b.startswith("L4") for b in bad)
         print("listing_audit demo: a long title, a long short text and a number that differs are all found")
         return 0

@@ -143,9 +143,23 @@ SETS = [
         ("scripts/systems/endings_manager.gd", "\t\treturn &\"light\"\n", "\t\treturn &\"hope\"\n", "END5"),
         ("scripts/enemies/base_monster.gd", "if global_position.distance_to(player_ref.global_position) <= attack_range + 0.5:", "if true:", "DODGE1"),
     ],
+    [  # Session 29 (v10 G-FIX2), the closeout group s29: the fixes of the nitpick rows, each put back in its own function or row (twelve files, no mutation changes what another check reads)
+        ("scripts/enemies/base_monster.gd", "\tvar at := floor_point()\n", "\tvar at := global_position + Vector3(0, 0.5, 0)\n", "DROP1"),
+        ("scenes/vfx/vfx_confetti.tscn", "burst_texture = ExtResource(\"2_tex\")\n", "", "CONF1"),
+        ("scripts/ui/screens.gd", "\ttitle_lbl.add_theme_font_override(\"font\", ThemeProvider.heading_font())\n", "", "FONT1"),
+        ("scripts/world/soviet_signs.gd", "if widths[k] >= sign_w[i] + 1.4 and _clear(spots, sign_w, spot, sign_w[i]):", "if widths[k] >= sign_w[i] + 1.4:", "SIGN2"),
+        ("scripts/gameplay/hiding_spot.gd", "\tmi.mesh = mesh\n", "\tmi.mesh = BoxMesh.new()\n", "HIDE1"),
+        ("scenes/ui/hud_3d.tscn", "size_flags_horizontal = 4\nalignment = 1\n\n[node name=\"Slot0\"", "size_flags_horizontal = 4\n\n[node name=\"Slot0\"", "QBAR1"),
+        ("scripts/player/player_3d.gd", "\tif stamina <= 0.0:\n\t\t_winded = true\n", "\tif stamina <= 0.0:\n\t\t_winded = false\n", "STAM1"),
+        ("scripts/player/player_3d.gd", "\t\tif now >= _flicker_next_msec:\n", "\t\tif true:\n", "FLICK1"),
+        ("scripts/ui/quest_tracker_hud.gd", "visible = shown and GameManager.is_playing())", "visible = shown)", "QUEST1"),
+        ("scripts/world/district_atmosphere.gd", "&\"gas_station\": {\"gas_station_gravel_crunch\": 0.0,", "&\"gas_station\": {\"gas_station_sign_buzz\": 0.0, \"gas_station_gravel_crunch\": 0.0,", "HUM1"),
+        ("scripts/enemies/monster_rig.gd", "\t\t_windup = maxf(WINDUP, windup - STRIKE)\n", "\t\t_windup = WINDUP\n", "SYNC1"),
+        ("scripts/gameplay/bed.gd", "\t_Props.dress(mattress, \"bed\")\n", "\tmattress.mesh = BoxMesh.new()\n", "CUBE4"),
+    ],
 ]
 ## The closeout group each set runs (CLOSEOUT_ONLY): the sets of Session 26 run `s26`, those of Session 27 `s27`, those of Session 28 `s28`, those of Session 29 `s29`.
-GROUP = ["s26", "s26", "s27", "s27", "s28", "attack", "attack", "s28", "s29", "s29", "s29", "s29", "s29", "s29", "s29", "s29"]
+GROUP = ["s26", "s26", "s27", "s27", "s28", "attack", "attack", "s28", "s29", "s29", "s29", "s29", "s29", "s29", "s29", "s29", "s29"]
 LINE = re.compile(r"^\[(?:closeout|attack-sim)\] (ok  |OK  |FAIL) +(\S+)")
 ## What a group of sets runs and the log it leaves: the closeout groups run `closeout_check`, the group "attack" the attack simulation (Session 28).
 RUN = {"attack": ("bash tools/qa_sim/guarded_headless res://scenes/tools/attack_sim_scene.tscn 120", ".qa_logs/attack_sim_scene.log")}

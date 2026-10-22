@@ -32,7 +32,9 @@ const STAGE_MSG_KEYS: Array[String] = [
 	"DISTRICT_STAGE_1", "DISTRICT_STAGE_1", "DISTRICT_STAGE_2", "DISTRICT_STAGE_3",
 ]
 
+const _Props := preload("res://scripts/art/prop_meshes.gd")
 var _panel: MeshInstance3D
+var _glow: StandardMaterial3D
 var _light: OmniLight3D
 var _label: Label3D
 var _stage_label: Label3D
@@ -56,16 +58,7 @@ func _ready() -> void:
 
 func _build_visual() -> void:
 	_panel = MeshInstance3D.new()
-	var bm := BoxMesh.new()
-	bm.size = Vector3(0.8, 1.6, 0.2)
-	_panel.mesh = bm
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = Color(0.15, 0.15, 0.18)
-	mat.emission_enabled = true
-	mat.emission = Color(1.0, 0.7, 0.3)
-	mat.emission_energy_multiplier = 0.4
-	_panel.material_override = mat
-	_panel.position = Vector3(0, 0.8, 0)
+	_glow = _Props.dress(_panel, "switch")
 	add_child(_panel)
 
 	# Щит нужно ещё и не проходить насквозь: голый Node3D был бесплотным.
@@ -126,9 +119,8 @@ func _refresh_visual() -> void:
 	# Свет щита растёт вместе со стадией — видимая награда за ремонт.
 	var energy: float = [0.0, 0.6, 1.5, 2.6][clampi(stage, 0, 3)]
 	_light.light_energy = energy
-	var mat := _panel.material_override as StandardMaterial3D
-	if mat != null:
-		mat.emission_energy_multiplier = maxf(0.2, energy)
+	if _glow != null:
+		_glow.emission_energy_multiplier = maxf(0.2, energy)
 	if _stage_label != null:
 		_stage_label.text = "%d/3" % stage
 

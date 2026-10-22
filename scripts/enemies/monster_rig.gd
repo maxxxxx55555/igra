@@ -36,6 +36,8 @@ var _seed: float = -1.0
 var _head_yaw: float = 0.0
 var _cue_seen: int = -1
 var _atk: float = -1.0
+## The windup of the attack being played (s): WINDUP, or the length of the telegraph's windup less the strike when the monster winds up for longer, so the arm comes down when the hit lands.
+var _windup: float = WINDUP
 var _flinch_t: float = -1.0
 var _flinch_dir: Vector3 = Vector3.BACK
 var _flinch_k: float = 0.0
@@ -165,8 +167,8 @@ func _alt(monster: Node3D) -> void:
 	monster.add_child(blob)
 
 ## One call per physics frame. speed is the horizontal speed in m/s, heading the vector to the player while the monster is aware of it and not chasing (else zero), cue_msec the
-## start of the last telegraph cue (MonsterTelegraph.last_cue_msec).
-func update(delta: float, dead: bool, speed: float, heading: Vector3, cue_msec: int) -> void:
+## start of the last telegraph cue (MonsterTelegraph.last_cue_msec) and windup the time from that cue to the hit (MonsterTelegraph.last_cue_windup).
+func update(delta: float, dead: bool, speed: float, heading: Vector3, cue_msec: int, windup: float = WINDUP) -> void:
 	if _root == null:
 		return
 	if _seed < 0.0:
@@ -181,6 +183,7 @@ func update(delta: float, dead: bool, speed: float, heading: Vector3, cue_msec: 
 	if cue_msec >= 0 and cue_msec != _cue_seen:
 		_cue_seen = cue_msec
 		_atk = 0.0
+		_windup = maxf(WINDUP, windup - STRIKE)
 	var strike: Vector2 = _attack(delta)
 	_moving = move_toward(_moving, smoothstep(0.12, 0.6, speed), 6.0 * delta)
 	var moving: float = _moving
@@ -221,15 +224,15 @@ func _attack(delta: float) -> Vector2:
 	if _atk < 0.0:
 		return Vector2.ZERO
 	_atk += delta
-	if _atk >= WINDUP + STRIKE + RECOVER:
+	if _atk >= _windup + STRIKE + RECOVER:
 		_atk = -1.0
 		return Vector2.ZERO
-	if _atk < WINDUP:
-		var k: float = _atk / WINDUP
+	if _atk < _windup:
+		var k: float = _atk / _windup
 		return Vector2(-1.5, -0.18) * k * k
-	if _atk < WINDUP + STRIKE:
-		return Vector2(-1.5, -0.18).lerp(Vector2(1.2, 0.25), (_atk - WINDUP) / STRIKE)
-	return Vector2(1.2, 0.25).lerp(Vector2.ZERO, smoothstep(0.0, 1.0, (_atk - WINDUP - STRIKE) / RECOVER))
+	if _atk < _windup + STRIKE:
+		return Vector2(-1.5, -0.18).lerp(Vector2(1.2, 0.25), (_atk - _windup) / STRIKE)
+	return Vector2(1.2, 0.25).lerp(Vector2.ZERO, smoothstep(0.0, 1.0, (_atk - _windup - STRIKE) / RECOVER))
 
 ## A directional flinch: the body is knocked back along the hit by up to FLINCH_M and returns, with a small yaw kick. x is the push along the torso's z (rad-free metres), y the yaw.
 func flinch(from: Vector3, strength: float) -> void:

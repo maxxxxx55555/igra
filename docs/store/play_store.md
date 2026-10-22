@@ -22,13 +22,13 @@ one else is left to do: get the power grid running again, district by
 district, street by street.
 
 WHAT'S ACTUALLY IN THE BOX
-- 11 connected districts, one continuous city map — no procedural
-  filler, no level-select screen (GDD §4.1)
-- 12 enemy types, including a mini-boss and a final boss, each with
+- 11 districts, relit one at a time and reached from the city map — no
+  procedural filler (GDD §4.1)
+- 11 enemy types, ten hunters and a final boss, each with
   distinct senses, weaknesses, and behavior (GDD §6.2)
 - 5 different endings, decided by how much of the city — and how much
   of the truth — you actually recover (GDD §12.4)
-- 13 languages, fully localized (GDD, i18n)
+- 6 languages, fully localized (GDD, i18n)
 - A 5-layer adaptive music system that shifts with the danger around
   you — dark ambient, restored-district warmth, rising threat, and a
   combat layer, crossfading as you go (GDD §13)

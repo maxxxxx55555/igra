@@ -13,6 +13,8 @@ extends Node3D
 ## же контракт can_interact()/interact_prompt()/interact(player), что у щита
 ## района и пазлов.
 
+const _Props := preload("res://scripts/art/prop_meshes.gd")
+
 @export var secret_id: StringName = &""
 @export var item_id: StringName = &"battery"
 @export var amount: int = 1
@@ -31,6 +33,9 @@ var _taken: bool = false
 
 func _ready() -> void:
 	add_to_group("interactable")
+	var piece := get_node_or_null("MeshInstance3D") as MeshInstance3D
+	if piece != null:
+		_Props.dress(piece, "secret")
 	_refresh_gate()
 	EventBus.district_stage_changed.connect(func(id: StringName, _stage: int) -> void:
 		if id == home_district:

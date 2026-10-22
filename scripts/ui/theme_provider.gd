@@ -58,6 +58,14 @@ static func _btn_stylebox(tex: Texture2D) -> StyleBoxTexture:
 	sb.content_margin_bottom = 8.0
 	return sb
 
+static var _heading: Font
+
+## The face of the buttons, for a Label that heads a screen (v10 N016): a plain Label takes the body face of its theme.
+static func heading_font() -> Font:
+	if _heading == null:
+		_heading = build_theme().get_font(&"font", &"Button")
+	return _heading
+
 static func build_theme() -> Theme:
 	var theme := Theme.new()
 	var font_body: Font = _load_font("res://assets/fonts/RobotoCondensed-Regular.ttf", ThemeDB.fallback_font)

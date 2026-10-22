@@ -19,8 +19,8 @@ Spoiler ceiling: the first three districts and the lit power station; no ending 
 
 | Number | What | Read from |
 |---|---|---|
-| 11 | connected districts, one continuous city | `DistrictSceneFactory.DISTRICTS` |
-| 12 | enemy types, the final boss among them | `data/monsters/` |
+| 11 | districts, relit one at a time and reached from the city map | `DistrictSceneFactory.DISTRICTS` |
+| 11 | enemy types the game spawns, the final boss among them | `EnemyPool.ROSTER_BY_DISTRICT`, `FinaleDirector` |
 | 5 | endings | `EndingsManager.ENDING_DATA` |
 | 31 | achievements | `AchievementManager.ACHIEVEMENTS` |
 | 58 | daily challenges, with 7, 30 and 100 day streak bonuses | `content/daily_challenges.json` |
@@ -33,18 +33,18 @@ Spoiler ceiling: the first three districts and the lit power station; no ending 
 |---|---|---|---|
 | Icon | `store/icon-512.png` | 512 x 512 | 300965 |
 | Feature graphic | `store/feature-graphic.png` | 1024 x 500 | 612245 |
-| Screenshot: light against the dark | `store/screenshots/shot01_light_vs_dark_1920x1080_en.png` | 1920 x 1080 | 1223195 |
-| Screenshot: a district boundary | `store/screenshots/shot02_district_boundary_1920x1080_en.png` | 1920 x 1080 | 1969585 |
-| Screenshot: the restored forecourt | `store/screenshots/shot05_restored_forecourt_1920x1080_en.png` | 1920 x 1080 | 1482217 |
-| Screenshot: the last streetlight | `store/screenshots/shot07_last_streetlight_1920x1080_en.png` | 1920 x 1080 | 1767144 |
-| Screenshot: the city map | `store/screenshots/shot08_city_map_1920x1080_en.png` | 1920 x 1080 | 140549 |
-| Phone: first light | `store/screenshots/shot_p1_touch_first_light_1920x1080_en.png` | 1920 x 1080 | 1398039 |
-| Phone: crouch | `store/screenshots/shot_p2_touch_crouch_1920x1080_en.png` | 1920 x 1080 | 1302212 |
-| Phone: interact | `store/screenshots/shot_p3_touch_interact_1920x1080_en.png` | 1920 x 1080 | 1218487 |
-| Press header | `store/trailer/presskit_1600x900.png` | 1600 x 900 | 1171636 |
-| Still: first light | `store/trailer/still_first_light_1920x1080.png` | 1920 x 1080 | 2417858 |
+| Press header (art) | `store/trailer/presskit_1600x900.png` | 1600 x 900 | 1171636 |
+| Still: first light (art) | `store/trailer/still_first_light_1920x1080.png` | 1920 x 1080 | 2417858 |
+| Screenshot: main menu | `docs/stills/store/01_main_menu_after_f8c0de0_20261017T063627Z.png` | 960 x 527 | 612393 |
+| Screenshot: district day full | `docs/stills/store/02_district_day_full_after_f8c0de0_20261017T063645Z.png` | 960 x 527 | 848178 |
+| Screenshot: district night dark | `docs/stills/store/03_district_night_dark_after_f8c0de0_20261017T063639Z.png` | 960 x 527 | 812793 |
+| Screenshot: combat | `docs/stills/store/04_combat_after_f8c0de0_20261017T063650Z.png` | 960 x 527 | 820202 |
+| Screenshot: boss | `docs/stills/store/05_boss_after_f8c0de0_20261017T063652Z.png` | 960 x 527 | 851557 |
+| Screenshot: victory ngplus | `docs/stills/store/06_victory_ngplus_after_f8c0de0_20261017T063655Z.png` | 960 x 527 | 678549 |
+| Screenshot: skill tree | `docs/stills/store/07_skill_tree_after_f8c0de0_20261017T063646Z.png` | 960 x 527 | 644956 |
+| Screenshot: shop | `docs/stills/store/08_shop_after_f8c0de0_20261017T063647Z.png` | 960 x 527 | 644537 |
 
-The screenshots were shot before the HUD pass and the density pass of Session 23; the recipes to shoot them again from the final build are in `store/SCREENSHOT_RECIPES.md`.
+The `Screenshot` rows are frames the engine drew, in `docs/stills/store/`, each named with the commit and the UTC time it was shot at. The art of `store/screenshots/` and the two rows marked `(art)` are painted or composed pictures (AI images, a programmatic composite): marketing art, not screenshots, and not for the screenshot slots of a store page. The recipes to shoot frames again are in `store/SCREENSHOT_RECIPES.md`.
 
 ## For a reviewer
 

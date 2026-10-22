@@ -70,7 +70,7 @@ this pass:
   (`:163`), `ach_35` in `SkillTreeManager.skill_unlocked` (`scripts/systems/skill_tree_manager.gd:227`), `ach_36` in `EventBus.coin_changed` (`scripts/events/event_bus.gd:6`) and
   the poll that serves `ach_11` (`scripts/systems/achievements_manager.gd:362`), and `ach_34` only in `EventBus.voice_line` (`scripts/ui/radio.gd:177`). Five need a new
   emission point: `ach_24` (stealth distance) and `ach_25` to `ach_28` (kills by weapon, a perfect dodge): the kill signal carries no weapon
-  (`scripts/enemies/base_monster.gd:768`) and `_handle_dodge` (`scripts/player/player_3d.gd:1297`) emits nothing.
+  (`scripts/enemies/base_monster.gd:768`) and `_handle_dodge` (`scripts/player/player_3d.gd:1308`) emits nothing.
 - `ach_37` ("activate 50 streetlights") cannot be reached within one run: the signal fires once per district when it crosses into STREETS (`scripts/world/power_grid.gd:65`,
   `scripts/systems/achievements_manager.gd:380`) and there are 11 districts. A counter on it would persist across New Game runs (`PowerGrid.reset()`, called at
   `scripts/core/save_system.gd:426`, re-arms the signal, and nothing resets the achievements' progress), so it would take five playthroughs.

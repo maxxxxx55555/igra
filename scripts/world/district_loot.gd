@@ -102,8 +102,7 @@ const LORE_DOCS: Dictionary = {
 
 const RADIUS_MIN: float = 6.0
 const RADIUS_MAX: float = 22.0
-const DROP_Y: float = 0.6
-## C4: where a pickup lies: on the street (the top of the street tiles); DROP_Y is the height of a secret.
+## C4: where a pickup and a secret lie: on the street (the top of the street tiles).
 const PICKUP_Y: float = 0.05
 ## At most this many items, guns and boxes of rounds lie in one district (documents are not counted: they are notes on poles).
 const MAX_PICKUPS: int = 12
@@ -312,7 +311,7 @@ static func _spawn_secrets(root: Node3D, district_id: StringName) -> int:
 		var keys: Dictionary = row.get("i18n_keys", {})
 		node.set("title_key", String(keys.get("title", "")))
 		root.add_child(node)
-		node.global_position = root.global_position + _snap_to_street(Vector3(cos(ang) * rad, DROP_Y, sin(ang) * rad))
+		node.global_position = root.global_position + _snap_to_street(Vector3(cos(ang) * rad, PICKUP_Y, sin(ang) * rad))
 		placed += 1
 	return placed
 

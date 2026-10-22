@@ -8,8 +8,8 @@ Player-facing notes for the first release (store version `1.0`, version code 3, 
 
 The "Architect Project" disaster plunged the city into permanent night. You are a survivor with one flashlight and a fading battery, and you bring the power grid back, district by district.
 
-- 11 connected districts on one continuous map; every district you restore stays lit
-- 12 enemy types, each with its own senses, weaknesses and behaviour
+- 11 districts, relit one at a time and reached from the city map; every district you restore stays lit
+- 11 enemy types, each with its own senses, weaknesses and behaviour
 - 5 endings, decided by how much of the city, and of the truth, you recover
 - stealth built on noise and visibility, crafting, a skill tree and a workbench for the flashlight
 - 6 languages: English, Russian, German, Spanish, French and Brazilian Portuguese
@@ -22,8 +22,8 @@ The "Architect Project" disaster plunged the city into permanent night. You are 
 
 Катастрофа «Проекта Архитектор» погрузила город в вечную ночь. Вы выживший с одним фонарём и садящейся батареей, и вы возвращаете городу электричество, район за районом.
 
-- 11 связанных районов на одной сплошной карте; каждый восстановленный район остаётся освещённым
-- 12 типов врагов, у каждого свои органы чувств, слабости и поведение
+- 11 районов, которые зажигаются по одному и открываются с карты города; каждый восстановленный район остаётся освещённым
+- 11 типов врагов, у каждого свои органы чувств, слабости и поведение
 - 5 концовок: они зависят от того, сколько города и правды вы вернёте
 - стелс на шуме и видимости, крафт, дерево навыков и верстак для фонаря
 - 6 языков: английский, русский, немецкий, испанский, французский и бразильский португальский

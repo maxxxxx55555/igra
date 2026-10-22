@@ -27,7 +27,7 @@ This is a model with one stated assumption (equal attack rates); it ranks distri
 | substation | destroyer, watcher, hunter, sharpshooter, burner | 19.5 | 14.5 | 13.2 | 10.2 | x0.72 | - | 24 |
 | power_station | destroyer, destroyer, watcher, brute, sharpshooter, burner | 25.8 | 24.5 | 21.5 | 11.0 | x1.32 | - | 24 |
 
-The weapons are `WEAPON_FINDS` (`scripts/world/district_loot.gd:424`) and the ammo is `AMMO_PER_PICKUP` rounds (line 432) a pickup, none in the first district, one from the second,
+The weapons are `WEAPON_FINDS` (`scripts/world/district_loot.gd:423`) and the ammo is `AMMO_PER_PICKUP` rounds (line 431) a pickup, none in the first district, one from the second,
 two from the sixth, the gas station (`AMMO_DOUBLE_FROM`, line 398, counts from 0: "the guns come late"; it was the seventh until Session 28).
 
 ## 3. Reading it

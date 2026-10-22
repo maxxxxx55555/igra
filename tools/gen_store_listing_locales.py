@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 """Generate the 6-locale block for store/listing.md (v10 E6: en ru de es fr pt_BR; the entries of the other locales below are not read).
 
+STALE: since the store sync of Session 23 store/listing.md is edited by hand and no longer equals what this file writes (the bullets differ, and the claims below are the old ones: "continuous
+city", "12 enemy types", "puzzles"; v10 N047 to N049 corrected them in the listing). Running it rewrites the block with the old text: edit store/listing.md instead.
+
 Path B of the store-release-pass recreate. Title + tagline are lifted
 verbatim from the shipped, professionally-translated in-game strings
 (`data/i18n/<loc>.json` menu_title / menu_subtitle). Short descriptions,
