@@ -1,0 +1,9 @@
+# proof v10_land_powerline2_c4d6bd8
+# utc 20261022T192010Z
+# head c4d6bd80 (uncommitted paths: 3)
+# env none
+# cmd powershell.exe -NoProfile -ExecutionPolicy Bypass -File .qa_logs/powerline.ps1
+PowerLineStatus=Online
+BatteryChargeStatus=Low, Charging
+BatteryLifePercent=26
+# EXIT=0
