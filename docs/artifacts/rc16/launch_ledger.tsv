@@ -220,3 +220,4 @@ n	utc	head	id	exit	command
 219	20261022T105622Z	f957123	v10_quick3_f957123	0	bash .qa_logs/v10_quick3.sh
 220	20261022T125737Z	413703d	v10_quick4_413703d	0	bash .qa_logs/v10_quick4.sh
 221	20261022T130554Z	e0836dc	v10_quick5_e0836dc	3	bash .qa_logs/v10_quick5.sh
+222	20261022T131426Z	55296a4	v10_win_55296a4	0	bash .qa_logs/v10_win.sh
