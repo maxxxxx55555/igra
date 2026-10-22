@@ -74,11 +74,11 @@ func _grant_reward(id: String) -> void:
 			EventBus.toast_requested.emit(
 				LocalizationManager.tf("TOAST_COINS_GAINED", [data["amount"]]), "finding")
 		"battery":
-			EventBus.item_picked_up.emit(&"battery")
+			EventBus.item_picked_up.emit(&"battery", int(data["amount"]))
 			EventBus.toast_requested.emit(
 				LocalizationManager.tf("TOAST_ITEM_FOUND", [LocalizationManager.t("ITEM_BATTERY")]), "finding")
 		"medkit":
-			EventBus.item_picked_up.emit(&"medkit")
+			EventBus.item_picked_up.emit(&"medkit", int(data["amount"]))
 			EventBus.toast_requested.emit(
 				LocalizationManager.tf("TOAST_ITEM_FOUND", [LocalizationManager.t("ITEM_MEDKIT")]), "finding")
 		"ending":

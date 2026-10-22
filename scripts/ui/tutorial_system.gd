@@ -120,7 +120,7 @@ func _ready() -> void:
 	InputService.flashlight_requested.connect(_on_flashlight)
 	InputService.interact_requested.connect(_on_interact)
 	# v10 N066: an item is picked up by walking over it, which sends no interact: the hint "Pick up what you find" waited for a key
-	EventBus.item_picked_up.connect(func(_id: StringName) -> void: _check_action("interact"))
+	EventBus.item_picked_up.connect(func(_id: StringName, _n: int) -> void: _check_action("interact"))
 
 func _build_ui() -> void:
 	_hint_panel = Control.new()

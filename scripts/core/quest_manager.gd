@@ -29,7 +29,7 @@ func _ready() -> void:
 
 func _init_quests() -> void:
 	var quest_data := [
-		# v10 N043: the objective list shows the first three, and the third was the cable box of the tenth district. The first seven are what a first district can finish (its power switch, its fuses, scrap, cells, a supply, the Shadows of the suburbs, a secret); the rest wait for a later district.
+		# v10 N043: the objective list shows the first three, and the third was the cable box of the tenth district. The first seven are what the first district works on (its power switch, its fuses, scrap, cells, a supply, the Shadows of the suburbs, a secret: a street holds two or three of an item, so most are finished over the next districts); the rest wait for a later district.
 		["q_repair_district1", "Q_REPAIR_DISTRICT1_TITLE", "Q_REPAIR_DISTRICT1_DESC", "REPAIR", "suburbs", 1, 100, []],
 		["q_find_fuses", "Q_FIND_FUSES_TITLE", "Q_FIND_FUSES_DESC", "COLLECT", "fuse", 3, 50, []],
 		["q_collect_scrap", "Q_COLLECT_SCRAP_TITLE", "Q_COLLECT_SCRAP_DESC", "COLLECT", "scrap", 10, 40, []],
@@ -67,13 +67,13 @@ func _on_enemy_killed(monster_id: StringName) -> void:
 		if q.type == "KILL" and not q.done and sid.contains(q.target):
 			_tick(q, 1)
 
-func _on_item_picked(item_id: StringName) -> void:
+func _on_item_picked(item_id: StringName, amount: int) -> void:
 	var sid := String(item_id)
 	for qid in quests:
 		var q = quests[qid]
 		if q.type == "COLLECT" and not q.done:
 			if sid == q.target or sid.begins_with(q.target):
-				_tick(q, 1)
+				_tick(q, amount)
 
 func _on_district_restored(district_id: StringName, _stage: int) -> void:
 	# Was "or stage >= 2", which fired for ANY district since this handler
@@ -107,7 +107,7 @@ func _on_secret_found(secret_id: StringName) -> void:
 			_tick(q, 1)
 
 func _tick(q: Dictionary, n: int) -> void:
-	q.progress += n
+	q.progress = mini(int(q.progress) + n, int(q.target_count))  # a crate of three on the ninth of ten scrap
 	quest_updated.emit()
 	quest_progress.emit(String(q.id), int(q.progress), int(q.target_count))
 	if q.progress >= q.target_count:

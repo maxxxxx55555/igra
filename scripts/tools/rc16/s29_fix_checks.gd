@@ -3,7 +3,7 @@ extends RefCounted
 ## DROP1 (N017): what a killed monster drops lies on the floor under it, not at knee height (the owner's first complaint was cubes hanging in the air); CONF1 (N003): the burst of a finished quest is soft sparks (a
 ## texture, 24 at most), not thirty white squares; FONT1 (N016): the headings of the screens are set in the face of the buttons; SIGN2 (N013): no two signs of a facade overlap; HIDE1 (N004): a hiding spot is a mesh of parts that
 ## fills the box of its collider, not a bare box; QBAR1 (N025): the one slot of the quick bar at the first frame is a slot, not a plank as long as the bar; STAM1 (N032): at 0 stamina the sprint is off until a quarter
-## of the bar is back; QORD1 and TXT1 (N043, N041, N042, N076): the first quests are the ones a first district can finish and the quests and the tutorial name the districts, the monsters and the power switch of the game; TUT3 (N066): a pickup completes its hint; BOB1 (N058): the eye bobs at a human cadence; LAMP3 (N065): a lamp dips three times a second at most; BOSSHIT1 and BOSSHIT2 (N059, N060): a hit on the Architect has its feedback and a blow outside the beam says so; MASTER1 (N084): the Master bus ends in a limiter; CUBE4 (N051, N010, the owner's first complaint): the secret, the workbench, the bed, the power switch, the cable box and the generator are meshes of parts resting on the floor, and the secret and the workbench hold no light of their own; SYNC1 (N033): the arm of a Hunter or a Brute comes down when its hit lands, a second after the cue and not at 0.4 s; HUM1 (N027): none of the nine detail loops that were a steady low tone is played, and every loop that is listed exists; FLICK1 (N034): the light of a low battery changes at most three times a second; QUEST1 (N044): the objective list does not come back over a menu when a screen closes. Wired into
+## of the bar is back; QORD1 and TXT1 (N043, N041, N042, N076): the first quests are the ones the first district makes progress on and the quests and the tutorial name the districts, the monsters and the power switch of the game; TUT3 (N066): a pickup completes its hint; BOB1 (N058): the eye bobs at a human cadence; LAMP3 (N065): a lamp dips three times a second at most; BOSSHIT1 and BOSSHIT2 (N059, N060): a hit on the Architect has its feedback and a blow outside the beam says so; MASTER1 (N084): the Master bus ends in a limiter; CUBE4 (N051, N010, the owner's first complaint): the secret, the workbench, the bed, the power switch, the cable box and the generator are meshes of parts resting on the floor, and the secret and the workbench hold no light of their own; SYNC1 (N033): the arm of a Hunter or a Brute comes down when its hit lands, a second after the cue and not at 0.4 s; HUM1 (N027): none of the nine detail loops that were a steady low tone is played, and every loop that is listed exists; FLICK1 (N034): the light of a low battery changes at most three times a second; QUEST1 (N044): the objective list does not come back over a menu when a screen closes. Wired into
 ## _closeout_check_runner.gd.
 
 const _CONFETTI := "res://scenes/vfx/vfx_confetti.tscn"
@@ -116,11 +116,17 @@ static func _heading_face(r: Node) -> void:
 	tree.queue_free()
 	r._ok(want != null and shop and win and skills, "FONT1 the headings of the shop card (%s), of the ending (%s) and of the skill tree (%s) are set in the face of the buttons" % [shop, win, skills])
 
+## The colliders of the six hiding spots as the game shipped them, written out: the check reads them here and not from the table the collider is built from.
+const _HIDE_SIZES := {
+	"locker": Vector3(0.9, 2.0, 0.7), "dumpster": Vector3(1.8, 1.2, 1.0), "car": Vector3(4.2, 1.4, 2.0),
+	"crate": Vector3(1.2, 1.2, 1.2), "bush": Vector3(1.6, 1.1, 1.0), "dark_corner": Vector3(1.6, 2.2, 0.5),
+}
+
 ## HIDE1: the six kinds of hiding spot are meshes of two surfaces (body and accent), at most 400 triangles, resting on the floor and filling the box of their collider (it keeps its size: the player collides with what is seen).
 static func _hiding_meshes(r: Node) -> void:
 	var off: Array[String] = []
-	for kind: String in HidingSpot.TYPE_SIZES:
-		var size: Vector3 = HidingSpot.TYPE_SIZES[kind]
+	for kind: String in _HIDE_SIZES:
+		var size: Vector3 = _HIDE_SIZES[kind]
 		var spot := HidingSpot.new()
 		spot.spot_type = kind
 		r.add_child(spot)
@@ -128,7 +134,7 @@ static func _hiding_meshes(r: Node) -> void:
 		var shape := ((spot.get_node("Body") as Node).get_child(0) as CollisionShape3D).shape as BoxShape3D
 		var mesh := piece.mesh as ArrayMesh
 		var box: AABB = mesh.get_aabb() if mesh != null else AABB()
-		var fine: bool = mesh != null and mesh.get_surface_count() == 2 and shape.size == size and box.position.y > -0.01 and box.end.y < size.y + 0.01
+		var fine: bool = mesh != null and mesh.get_surface_count() == 2 and shape.size == size and HidingSpot.TYPE_SIZES[kind] == size and box.position.y > -0.01 and box.end.y < size.y + 0.01
 		fine = fine and absf(box.position.x) < size.x * 0.5 + 0.01 and box.end.x < size.x * 0.5 + 0.01 and absf(box.position.z) < size.z * 0.5 + 0.01 and box.end.z < size.z * 0.5 + 0.01
 		fine = fine and box.size.x >= size.x * 0.85 and box.size.y >= size.y * 0.85 and _PARTS.triangles(mesh) <= 400
 		fine = fine and (piece.get_surface_override_material(0) as StandardMaterial3D).albedo_color != (piece.get_surface_override_material(1) as StandardMaterial3D).albedo_color
@@ -136,7 +142,7 @@ static func _hiding_meshes(r: Node) -> void:
 		if not fine:
 			off.append(kind)
 		spot.queue_free()
-	r._ok(off.is_empty(), "HIDE1 the %d hiding spots are meshes of two surfaces inside the box of their collider and fill it (off: %s)" % [HidingSpot.TYPE_SIZES.size(), off])
+	r._ok(off.is_empty() and HidingSpot.TYPE_SIZES.size() == _HIDE_SIZES.size(), "HIDE1 the %d hiding spots are meshes of two surfaces inside the box of their collider (the sizes of the baseline) and fill it (off: %s)" % [HidingSpot.TYPE_SIZES.size(), off])
 
 ## QBAR1: the six slots of the quick bar do not expand (the one slot of an empty run took the 384 px of the whole bar) and the bar centres what is on it.
 static func _quick_bar(r: Node) -> void:
@@ -276,15 +282,25 @@ static func _props(r: Node) -> void:
 		prop.queue_free()
 	r._ok(off.is_empty() and lights == 0, "CUBE4 the secret, the workbench, the bed, the switch, the cable box and the generator are meshes of parts on the floor (off: %s), the secret and the workbench hold %d lights" % [off, lights])
 
-## QORD1: the first five quests of the table are what a first district can finish (a place of a later district, the cable box of the tenth or a monster of the third, was the third objective of the first frame).
+## QORD1: each of the first five quests of the table is one the first district makes progress on: its own repair, or a collect of an item its streets hold (a place of a later district, the cable box of the tenth or a monster of the
+## third was the third objective of the first frame). The streets hold two or three of an item (DistrictLoot.PICKUP_AMOUNT), so most of the targets are finished over the next districts and the row says how far the first one goes.
 static func _quest_order(r: Node) -> void:
-	var first: Array = QuestManager.quests.keys().slice(0, 5)
-	var later: Array[String] = []
-	for id in first:
+	var home: StringName = DistrictSceneFactory.DISTRICTS[0]
+	var crates: Array = []
+	crates.append_array(DistrictLoot.REPAIR_PARTS)
+	crates.append_array(DistrictLoot.COMMON)
+	crates.append_array(DistrictLoot.BY_DISTRICT.get(home, []))
+	var rows: Array[String] = []
+	var off: Array[String] = []
+	for id: String in QuestManager.quests.keys().slice(0, 5):
 		var q: Dictionary = QuestManager.quests[id]
-		if q.type == "EXPLORE" or q.type == "INTERACT" or ["residential", "destroyer", "sharpshooter", "hunter", "hound"].has(String(q.target)):
-			later.append(String(id))
-	r._ok(first.size() == 5 and later.is_empty(), "QORD1 the first five quests are %s, none of them waits for a later district (%s)" % [first, later])
+		var item := StringName(q.target)
+		var here: bool = (q.type == "REPAIR" and item == home) or (q.type == "COLLECT" and crates.has(item))
+		var items: int = crates.count(item) * int(DistrictLoot.PICKUP_AMOUNT.get(item, 1))
+		rows.append("%s %d of %d" % [q.target, items, q.target_count] if q.type == "COLLECT" else "%s %s" % [q.type, q.target])
+		if not here:
+			off.append(id)
+	r._ok(rows.size() == 5 and off.is_empty(), "QORD1 the first five quests are %s; the first district makes progress on each (off: %s)" % [rows, off])
 
 ## TXT1: in every language the quests and the tutorial name what the game holds: the first quest the first district, the second the residential one, the kill quests the monsters they count (Hunter, Destroyer, Sharpshooter) and the
 ## tutorial and the prompt of the central object its own name. A word is read by its stem (the first word of the name less two letters), so a plural and a case still match.
@@ -322,7 +338,7 @@ static func _pickup_hint(r: Node) -> void:
 	tutorial.set("_tutorial_active", true)
 	tutorial.set("_current_step", at)
 	tutorial.set("_waiting_for_action", true)
-	EventBus.item_picked_up.emit(&"battery")
+	EventBus.item_picked_up.emit(&"battery", 1)
 	var moved: bool = int(tutorial.get("_current_step")) == at + 1
 	tutorial.set("_completed_steps", done0)
 	tutorial.set("_current_step", step0)

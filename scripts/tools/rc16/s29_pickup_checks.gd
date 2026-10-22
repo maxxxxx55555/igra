@@ -2,7 +2,7 @@ extends RefCounted
 ## Session 29 (the v1.0.0-ship pass), C block, the pickups and the quick bar: MESH1 every item of data/items has a mesh of its own of 400 triangles at most (C1), MAT1 scrap, paper and the rest of the junk give no light, a key's
 ## accent gives at most 0.6 (C1); CUBE1 no pickup of a district holds a light, CUBE2 a district holds 12 pickups at most, 5 m apart, with the repair parts in stacks of two and the notes on poles, CUBE3 no pickup is a bare box
 ## (C2, C4); GROUND1 an item lies on the ground, drops in once and turns only when it is a key, a blueprint or a gun (C3); GLOW1 the pools of light under the pickups are 6 at most and fade between 10 and 16 m (C2); WEAPON1 each
-## gun has a viewmodel of its own with a part that works on a shot (C6). The tested files are loaded when the checks run, so a tree without them fails the check and does not stop the run. Wired into
+## gun has a viewmodel of its own with a part that works on a shot (C6); QTICK1 a collect quest counts the items of a pickup, a crate holds two or three (C4), and a refund counts for nothing. The tested files are loaded when the checks run, so a tree without them fails the check and does not stop the run. Wired into
 ## _closeout_check_runner.gd next to s29_look_checks.gd; CLOSEOUT_ONLY=s29 runs it. The quick bar (QSLOT1, QSLOT2, WCMP1) is in s29_bar_checks.gd.
 
 const _Density := preload("res://scripts/tools/rc16/density_checks.gd")
@@ -18,6 +18,7 @@ static func run(r: Node) -> void:
 	r._playing()
 	_library(r)
 	await _districts(r)
+	_quest_items(r)
 	await _ground(r)
 	await _glow(r)
 	await _viewmodels(r)
@@ -115,6 +116,25 @@ static func _districts(r: Node) -> void:
 	r._ok(lights == 0, "CUBE1 no pickup of the 11 districts holds a light (%d lights)" % lights)
 	r._ok(worst <= 12 and closest >= 5.0 and gates, "CUBE2 at most %d pickups a district (12 allowed) and the nearest two are %.1f m apart (5 allowed; %s), every district holds its repair parts in stacks of two and its blueprint (%s)" % [worst, closest, nearest, counts])
 	r._ok(boxes == 0 and notes == notes_wanted and mounted > 0, "CUBE3 no pickup mesh is a bare box (%d), the 11 districts hold %d notes (%d: one on the ground and the lore notes to pin), %d of them pinned on poles" % [boxes, notes, notes_wanted, mounted])
+
+## QTICK1: a collect quest counts the items of a pickup and not the pickups (a crate of the street holds two or three: PICKUP_AMOUNT): a crate of fuses is its two fuses of three, and a refund, which is not found, adds none (E11). The
+## target is lifted for the run so that no reward is paid, and the quest, its target and the pack are put back.
+static func _quest_items(r: Node) -> void:
+	var fuses: Dictionary = QuestManager.quests["q_find_fuses"]
+	var pack0: Dictionary = InventoryManager.to_dict()
+	var progress0: int = fuses.progress
+	var target0: int = fuses.target_count
+	fuses.progress = 0
+	fuses.target_count = 99
+	var crate: int = int(DistrictLoot.PICKUP_AMOUNT[&"fuse"])
+	var added: bool = InventoryManager.try_add(&"fuse", crate)
+	var counted: int = fuses.progress
+	var refunded: bool = InventoryManager.try_add(&"fuse", 1, false)
+	var after: int = fuses.progress
+	fuses.progress = progress0
+	fuses.target_count = target0
+	InventoryManager.from_dict(pack0)
+	r._ok(added and refunded and crate >= 2 and counted == crate and after == crate, "QTICK1 a crate of %d fuses counts %d on the quest (it went in: %s) and a refund of one counts none (%d, in: %s)" % [crate, counted, added, after, refunded])
 
 ## GROUND1: an item lies on the ground (its mesh rests on the origin of the pickup), drops in once over 0.35 s and does not bob; a medkit does not turn, a key and a gun turn at 0.25 rad/s; Reduce UI Motion keeps all of it still.
 static func _ground(r: Node) -> void:

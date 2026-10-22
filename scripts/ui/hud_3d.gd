@@ -1854,7 +1854,7 @@ const _SLOT_FLASH_SEC: float = 0.12
 const _SLOT_FLASH_ALPHA: float = 0.45
 const _SLOT_FLASH_NAME: String = "PickupFlash"
 
-func _on_item_picked_up(item_id: StringName) -> void:
+func _on_item_picked_up(item_id: StringName, _amount: int = 1) -> void:
 	var index := _slot_items.find(item_id)
 	if index < 0:
 		return

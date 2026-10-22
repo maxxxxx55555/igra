@@ -157,15 +157,16 @@ SETS = [
         ("scripts/enemies/monster_rig.gd", "\t\t_windup = maxf(WINDUP, windup - STRIKE)\n", "\t\t_windup = WINDUP\n", "SYNC1"),
         ("scripts/gameplay/bed.gd", "\t_Props.dress(mattress, \"bed\")\n", "\tmattress.mesh = BoxMesh.new()\n", "CUBE4"),
     ],
-    [  # Session 29 (v10 G-FIX2), the closeout group s29, wave B: the quest table, a string, the tutorial, the camera, a lamp, the boss and the bus (eight rows of seven files, no mutation changes what another check reads)
+    [  # Session 29 (v10 G-FIX2), the closeout group s29, wave B: the quest table, a string, the tutorial, the camera, a lamp, the boss, the bus and the quest tick (nine rows of seven files, no mutation changes what another check reads)
         ("scripts/core/quest_manager.gd", "[\"q_collect_scrap\", \"Q_COLLECT_SCRAP_TITLE\", \"Q_COLLECT_SCRAP_DESC\", \"COLLECT\", \"scrap\"", "[\"q_collect_scrap\", \"Q_COLLECT_SCRAP_TITLE\", \"Q_COLLECT_SCRAP_DESC\", \"EXPLORE\", \"scrap\"", "QORD1"),
         ("data/i18n/en.json", "\"Q_KILL_TANK_TITLE\": \"Bring down the destroyers\"", "\"Q_KILL_TANK_TITLE\": \"Bring down the tanks\"", "TXT1"),
-        ("scripts/ui/tutorial_system.gd", "\tEventBus.item_picked_up.connect(func(_id: StringName) -> void: _check_action(\"interact\"))\n", "", "TUT3"),
+        ("scripts/ui/tutorial_system.gd", "\tEventBus.item_picked_up.connect(func(_id: StringName, _n: int) -> void: _check_action(\"interact\"))\n", "", "TUT3"),
         ("scripts/core/camera_follow_3d.gd", "const STEP_BOB_RAD_PER_M: float = 4.0\n", "const STEP_BOB_RAD_PER_M: float = 8.0\n", "BOB1"),
         ("scripts/world/streetlight_3d.gd", "sin(_t * 15.0) > 0.95", "sin(_t * 37.0) > 0.95", "LAMP3"),
         ("scripts/enemies/boss_3d.gd", "\t_hit_feedback(final_dmg, src_pos)\n", "\tAudioManager.play_sound_3d(_HIT_SFX, global_position, -6.0)\n", "BOSSHIT1"),
         ("scripts/enemies/boss_3d.gd", "\t\t_hint_beam()\n\t\treturn\n", "\t\treturn\n", "BOSSHIT2"),
         ("default_bus_layout.tres", "bus/0/effect/0/enabled = true\n", "bus/0/effect/0/enabled = false\n", "MASTER1"),
+        ("scripts/core/quest_manager.gd", "\t\t\t\t_tick(q, amount)\n", "\t\t\t\t_tick(q, 1)\n", "QTICK1"),
     ],
 ]
 ## The closeout group each set runs (CLOSEOUT_ONLY): the sets of Session 26 run `s26`, those of Session 27 `s27`, those of Session 28 `s28`, those of Session 29 `s29`.

@@ -128,7 +128,7 @@ func try_add(item_id: StringName, amount: int = 1, announce: bool = true) -> boo
 	_recompute_weight()
 	EventBus.inventory_changed.emit()
 	if announce:
-		EventBus.item_picked_up.emit(item_id)
+		EventBus.item_picked_up.emit(item_id, amount)
 	if _is_networked() and is_multiplayer_authority():
 		_sync_inventory.rpc(to_dict())
 	elif _is_networked():
