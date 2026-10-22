@@ -20,7 +20,7 @@ static func run(r: Node) -> void:
 	_pbr_and_saturation(r)
 	r._playing()
 
-## LOOK1 (B1, B2, B12): ONE WorldEnvironment in the main scene (the factory's per-district one is gone with DistrictThemes.apply_to_environment); world_env_setup.gd boots the look in ONE function, and that
+## LOOK1 (B1, B2, B12): ONE WorldEnvironment in the main scene (the factory's per-district one is gone with DistrictThemes' old apply_to_environment); world_env_setup.gd boots the look in ONE function, and that
 ## function, run on a fresh environment, copies the keys of the preset of the profile (fog_height 2.0, fog_sun_scatter 0.1 on both), assigns the night camera attributes and leaves the ACES tone mapper; a
 ## change of the graphics tier applies its table again. (The closeout scene has a harness environment of its own, which the setup finds first there, and the earlier groups may free nodes: the check does not
 ## rely on the environment the setup manages, it hands it a new one.)
