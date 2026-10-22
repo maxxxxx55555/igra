@@ -296,6 +296,11 @@ func _run() -> void:
 	if not await _wait_until(playing, 20.0):
 		_fail("never reached gameplay")
 		return
+	# v10 N002: the weather and the random events change a frame by themselves (a flash of lightning put 5 to 6 % of one combat frame over luma 235 in two of four runs of the energy sweep, 24 and 10, and in none of the other two): pinned as the density runner pins them
+	WeatherSystem.set("process_mode", Node.PROCESS_MODE_DISABLED)
+	WeatherSystem.current = WeatherSystem.Weather.CLEAR
+	WeatherSystem.call("_emit")
+	RandomEvents.set("process_mode", Node.PROCESS_MODE_DISABLED)
 	await get_tree().create_timer(3.0).timeout
 	_face_lamps(get_tree().get_first_node_in_group("player") as Node3D)
 	await get_tree().create_timer(0.3).timeout
