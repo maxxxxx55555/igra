@@ -1,0 +1,21 @@
+# proof v10_land_perf3_70731387
+# utc 20261022T185550Z
+# head 70731387 (uncommitted paths: 3)
+# env none
+# cmd bash .qa_logs/perf3.sh
+== perf 3 tiers start 20261022T185551Z head=70731387
+   battery_percent=46
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/perf_check_scene.tscn rc=0 (log: .qa_logs/perf_check_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+   tier=0 rc=0 log=.qa_logs/perf_tier0.log
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/perf_check_scene.tscn rc=1 (log: .qa_logs/perf_check_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+   tier=1 rc=1 log=.qa_logs/perf_tier1.log
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/perf_check_scene.tscn rc=0 (log: .qa_logs/perf_check_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+   tier=2 rc=0 log=.qa_logs/perf_tier2.log
+== perf summary rc=1
+# EXIT=1
