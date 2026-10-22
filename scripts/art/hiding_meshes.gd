@@ -63,7 +63,8 @@ static func _parts(kind: String) -> Array:
 				for z in [-0.54, 0.54]:
 					out.append(_p(&"box", Vector3(0.12, 1.2, 0.12), Vector3(x, 0.6, z), Vector3.ZERO, true))
 		"bush":
-			out = [_p(&"sph", Vector3(1.0, 0.9, 0.9), Vector3(0, 0.45, 0)), _p(&"sph", Vector3(0.8, 0.66, 0.8), Vector3(-0.4, 0.33, 0.05)), _p(&"sph", Vector3(0.76, 0.66, 0.76), Vector3(0.42, 0.33, -0.05)),
+			# a sphere is 120 triangles and HIDE1 allows 400: two bulbs of the body and the leaves on top
+			out = [_p(&"sph", Vector3(0.88, 0.8, 0.9), Vector3(-0.35, 0.4, 0)), _p(&"sph", Vector3(0.88, 0.7, 0.86), Vector3(0.36, 0.35, -0.02)),
 				_p(&"sph", Vector3(0.7, 0.64, 0.7), Vector3(0, 0.78, 0), Vector3.ZERO, true)]
 		"dark_corner":
 			out = [_p(&"box", Vector3(1.4, 2.1, 0.3), Vector3(0, 1.05, -0.1)), _p(&"box", Vector3(0.1, 2.2, 0.5), Vector3(-0.75, 1.1, 0), Vector3.ZERO, true), _p(&"box", Vector3(0.1, 2.2, 0.5), Vector3(0.75, 1.1, 0), Vector3.ZERO, true),
