@@ -57,7 +57,8 @@ func _process(delta: float) -> void:
 	var spot: SpotLight3D = $SpotLight
 	var glow: OmniLight3D = $Glow
 	var base: float = (0.85 + sin(_t * 12.0) * 0.15) * _energy_scale
-	if not _reduce_flash and sin(_t * 37.0) > 0.95:
+	# v10 N065: a dip 2.4 times a second (it was 5.9: a strobe, and GAMEFEEL_SPEC bans more than three a second)
+	if not _reduce_flash and sin(_t * 15.0) > 0.95:
 		base = 0.2 * _energy_scale
 	spot.light_energy = base * 2.0 * _light_energy_mult
 	glow.light_energy = base * 1.0 * _light_energy_mult

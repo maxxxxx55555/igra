@@ -3,7 +3,7 @@ extends RefCounted
 ## DROP1 (N017): what a killed monster drops lies on the floor under it, not at knee height (the owner's first complaint was cubes hanging in the air); CONF1 (N003): the burst of a finished quest is soft sparks (a
 ## texture, 24 at most), not thirty white squares; FONT1 (N016): the headings of the screens are set in the face of the buttons; SIGN2 (N013): no two signs of a facade overlap; HIDE1 (N004): a hiding spot is a mesh of parts that
 ## fills the box of its collider, not a bare box; QBAR1 (N025): the one slot of the quick bar at the first frame is a slot, not a plank as long as the bar; STAM1 (N032): at 0 stamina the sprint is off until a quarter
-## of the bar is back; CUBE4 (N051, N010, the owner's first complaint): the secret, the workbench, the bed, the power switch, the cable box and the generator are meshes of parts resting on the floor, and the secret and the workbench hold no light of their own; SYNC1 (N033): the arm of a Hunter or a Brute comes down when its hit lands, a second after the cue and not at 0.4 s; HUM1 (N027): none of the nine detail loops that were a steady low tone is played, and every loop that is listed exists; FLICK1 (N034): the light of a low battery changes at most three times a second; QUEST1 (N044): the objective list does not come back over a menu when a screen closes. Wired into
+## of the bar is back; QORD1 and TXT1 (N043, N041, N042, N076): the first quests are the ones a first district can finish and the quests and the tutorial name the districts, the monsters and the power switch of the game; TUT3 (N066): a pickup completes its hint; BOB1 (N058): the eye bobs at a human cadence; LAMP3 (N065): a lamp dips three times a second at most; BOSSHIT1 and BOSSHIT2 (N059, N060): a hit on the Architect has its feedback and a blow outside the beam says so; MASTER1 (N084): the Master bus ends in a limiter; CUBE4 (N051, N010, the owner's first complaint): the secret, the workbench, the bed, the power switch, the cable box and the generator are meshes of parts resting on the floor, and the secret and the workbench hold no light of their own; SYNC1 (N033): the arm of a Hunter or a Brute comes down when its hit lands, a second after the cue and not at 0.4 s; HUM1 (N027): none of the nine detail loops that were a steady low tone is played, and every loop that is listed exists; FLICK1 (N034): the light of a low battery changes at most three times a second; QUEST1 (N044): the objective list does not come back over a menu when a screen closes. Wired into
 ## _closeout_check_runner.gd.
 
 const _CONFETTI := "res://scenes/vfx/vfx_confetti.tscn"
@@ -28,6 +28,13 @@ static func run(r: Node) -> void:
 	_strike_with_hit(r)
 	_flicker_rate(r)
 	_quest_overlay(r)
+	_quest_order(r)
+	_quest_words(r)
+	await _pickup_hint(r)
+	_bob_rate(r)
+	_lamp_dips(r)
+	_boss_hits(r)
+	_master_limit(r)
 	await _heading_face(r)
 
 static func _confetti(r: Node) -> void:
@@ -118,7 +125,7 @@ static func _hiding_meshes(r: Node) -> void:
 		spot.spot_type = kind
 		r.add_child(spot)
 		var piece := spot.get_node("Mesh") as MeshInstance3D
-		var shape := (spot.get_node("Body/CollisionShape3D") as CollisionShape3D).shape as BoxShape3D
+		var shape := ((spot.get_node("Body") as Node).get_child(0) as CollisionShape3D).shape as BoxShape3D
 		var mesh := piece.mesh as ArrayMesh
 		var box: AABB = mesh.get_aabb() if mesh != null else AABB()
 		var fine: bool = mesh != null and mesh.get_surface_count() == 2 and shape.size == size and box.position.y > -0.01 and box.end.y < size.y + 0.01
@@ -133,7 +140,7 @@ static func _hiding_meshes(r: Node) -> void:
 
 ## QBAR1: the six slots of the quick bar do not expand (the one slot of an empty run took the 384 px of the whole bar) and the bar centres what is on it.
 static func _quick_bar(r: Node) -> void:
-	var hud := (load("res://scenes/ui/hud_3d.tscn") as PackedScene).instantiate() as Control
+	var hud := (load("res://scenes/ui/hud_3d.tscn") as PackedScene).instantiate()
 	var bar := hud.get_node("BottomCenter") as HBoxContainer
 	var stretched: Array[String] = []
 	for i in 6:
@@ -268,3 +275,124 @@ static func _props(r: Node) -> void:
 			lights += prop.find_children("*", "OmniLight3D", true, false).size()
 		prop.queue_free()
 	r._ok(off.is_empty() and lights == 0, "CUBE4 the secret, the workbench, the bed, the switch, the cable box and the generator are meshes of parts on the floor (off: %s), the secret and the workbench hold %d lights" % [off, lights])
+
+## QORD1: the first five quests of the table are what a first district can finish (a place of a later district, the cable box of the tenth or a monster of the third, was the third objective of the first frame).
+static func _quest_order(r: Node) -> void:
+	var first: Array = QuestManager.quests.keys().slice(0, 5)
+	var later: Array[String] = []
+	for id in first:
+		var q: Dictionary = QuestManager.quests[id]
+		if q.type == "EXPLORE" or q.type == "INTERACT" or ["residential", "destroyer", "sharpshooter", "hunter", "hound"].has(String(q.target)):
+			later.append(String(id))
+	r._ok(first.size() == 5 and later.is_empty(), "QORD1 the first five quests are %s, none of them waits for a later district (%s)" % [first, later])
+
+## TXT1: in every language the quests and the tutorial name what the game holds: the first quest the first district, the second the residential one, the kill quests the monsters they count (Hunter, Destroyer, Sharpshooter) and the
+## tutorial and the prompt of the central object its own name. A word is read by its stem (the first word of the name less two letters), so a plural and a case still match.
+static func _quest_words(r: Node) -> void:
+	var lang0: String = LocalizationManager.current_lang
+	var off: Array[String] = []
+	var kills: Dictionary = {"Q_KILL_RUNNER_TITLE": "MONSTER_HUNTER", "Q_KILL_TANK_TITLE": "MONSTER_DESTROYER", "Q_KILL_SNIPER_TITLE": "MONSTER_SHARPSHOOTER", "Q_REPAIR_DISTRICT1_TITLE": "DISTRICT_NAME_SUBURBS", "Q_RESTORE_DISTRICT2_TITLE": "DISTRICT_NAME_RESIDENTIAL"}
+	for lang: String in LocalizationManager.SUPPORTED:
+		LocalizationManager.set_language(lang)
+		for key: String in kills:
+			if LocalizationManager.t(key).to_lower().find(_stem(LocalizationManager.t(String(kills[key])))) < 0:
+				off.append("%s %s" % [lang, key])
+		for key: String in ["TUT_GENERATOR", "PROMPT_REPAIR"]:
+			if LocalizationManager.t(key).to_lower().find(_stem(LocalizationManager.t("interact_switch"))) < 0:
+				off.append("%s %s" % [lang, key])
+	LocalizationManager.set_language(lang0)
+	r._ok(off.is_empty(), "TXT1 the quests and the tutorial name the districts, the monsters and the power switch of the game in the %d languages (off: %s)" % [LocalizationManager.SUPPORTED.size(), off])
+
+static func _stem(name: String) -> String:
+	var word: String = name.get_slice(" ", 0).to_lower()
+	return word.substr(0, maxi(word.length() - 2, 4))
+
+## TUT3: an item is picked up by walking over it, which sends no interact: the hint "Pick up what you find" is done by the pickup itself.
+static func _pickup_hint(r: Node) -> void:
+	var tutorial: Node = r.get_node("/root/TutorialSystem")
+	var steps: Array = (tutorial.get_script() as GDScript).get_script_constant_map()["STEPS"]
+	var at: int = 0
+	for i in steps.size():
+		if String((steps[i] as Dictionary)["id"]) == "pickup":
+			at = i
+	var done0: Array = (tutorial.get("_completed_steps") as Array).duplicate()
+	var step0: Variant = tutorial.get("_current_step")
+	var active0: Variant = tutorial.get("_tutorial_active")
+	var waiting0: Variant = tutorial.get("_waiting_for_action")
+	tutorial.set("_tutorial_active", true)
+	tutorial.set("_current_step", at)
+	tutorial.set("_waiting_for_action", true)
+	EventBus.item_picked_up.emit(&"battery")
+	var moved: bool = int(tutorial.get("_current_step")) == at + 1
+	tutorial.set("_completed_steps", done0)
+	tutorial.set("_current_step", step0)
+	tutorial.set("_tutorial_active", active0)
+	tutorial.set("_waiting_for_action", waiting0)
+	await r.get_tree().process_frame
+	(tutorial.get("_hint_panel") as Control).visible = false
+	r._ok(moved, "TUT3 picking an item up completes the pickup hint (step %d of %d moved on: %s)" % [at, steps.size(), moved])
+
+## BOB1: the eye bobs once a step, at a human cadence: 1.5 to 2.5 Hz walking and 3.5 Hz at most sprinting (it bobbed 3.8 and 6.1 Hz).
+static func _bob_rate(r: Node) -> void:
+	var consts: Dictionary = (load("res://scripts/core/camera_follow_3d.gd") as GDScript).get_script_constant_map()
+	var stats: Resource = load("res://data/balance/player_stats.tres")
+	var per_m: float = float(consts["STEP_BOB_RAD_PER_M"])
+	var walk: float = per_m * float(stats.get("walk_speed")) / TAU
+	var run: float = per_m * float(stats.get("run_speed")) / TAU
+	r._ok(walk >= 1.5 and walk <= 2.5 and run <= 3.5, "BOB1 the eye bobs %.1f Hz walking and %.1f Hz sprinting (1.5 to 2.5 and 3.5 at most)" % [walk, run])
+
+## LAMP3: a lit lamp dips at most three times a second (it dipped 5.9 times, a strobe): one lamp run for 4 s in steps of 1/240 s, the dips counted.
+static func _lamp_dips(r: Node) -> void:
+	var lamp := (load("res://scenes/props/streetlight_3d.tscn") as PackedScene).instantiate() as Node3D
+	r.add_child(lamp)
+	var spot := lamp.get_node("SpotLight") as SpotLight3D
+	lamp.set("_on", true)
+	lamp.set("_reduce_flash", false)
+	lamp.set("lamp_flicker", true)
+	lamp.set("_energy_scale", 1.0)
+	lamp.set("_light_energy_mult", 1.0)
+	lamp.set("_t", 0.0)
+	var dips: int = 0
+	var dipping: bool = false
+	for _step in 960:
+		lamp.call("_process", 1.0 / 240.0)
+		var low: bool = spot.light_energy < 0.6
+		dips += 1 if low and not dipping else 0
+		dipping = low
+	lamp.queue_free()
+	r._ok(dips >= 1 and dips <= 12, "LAMP3 a lit lamp dipped %d times in 4 s (12 at most: three a second)" % dips)
+
+## BOSSHIT1: a hit on the Architect shows and plays what a hit on any monster does: the damage number and the hit marker of the crosshair (he answered his own take_damage and called none of it).
+## BOSSHIT2: in the second phase a blow outside the flashlight beam takes nothing off and says so, once in eight seconds.
+static func _boss_hits(r: Node) -> void:
+	var boss: Node3D = r._monster("boss_architect_3d")
+	var numbers: Array[int] = [0]
+	var markers: Array[int] = [0]
+	var toasts: Array[int] = [0]
+	var on_number := func(_who: Variant, _amount: float) -> void: numbers[0] += 1
+	var on_marker := func(state: StringName) -> void: markers[0] += 1 if state == &"hit" else 0
+	var on_toast := func(_text: String, _kind: String) -> void: toasts[0] += 1
+	EventBus.enemy_damaged.connect(on_number)
+	EventBus.crosshair_state_changed.connect(on_marker)
+	EventBus.toast_requested.connect(on_toast)
+	boss.call("take_damage", 5.0, Vector3(0.0, 0.0, 5.0))
+	var hp_first: float = float(boss.get("hp"))
+	r._ok(numbers[0] == 1 and markers[0] == 1, "BOSSHIT1 a hit on the Architect gives a damage number (%d) and the hit marker (%d)" % [numbers[0], markers[0]])
+	boss.set("phase", 1)
+	boss.set("_is_in_flashlight", false)
+	boss.call("take_damage", 5.0, Vector3(0.0, 0.0, 5.0))
+	boss.call("take_damage", 5.0, Vector3(0.0, 0.0, 5.0))
+	r._ok(float(boss.get("hp")) == hp_first and toasts[0] == 1, "BOSSHIT2 two blows outside the beam in the second phase take nothing off (hp %.0f of %.0f) and give one hint (%d)" % [float(boss.get("hp")), hp_first, toasts[0]])
+	EventBus.enemy_damaged.disconnect(on_number)
+	EventBus.crosshair_state_changed.disconnect(on_marker)
+	EventBus.toast_requested.disconnect(on_toast)
+	boss.queue_free()
+
+## MASTER1: the Master bus ends in a hard limiter at -1 dB or lower, so what the music, the ambience and a shot add up to cannot pass the full scale at the output (only the Music bus had a limiter).
+static func _master_limit(r: Node) -> void:
+	var found: float = 99.0
+	for i in AudioServer.get_bus_effect_count(0):
+		var effect := AudioServer.get_bus_effect(0, i)
+		if effect is AudioEffectHardLimiter and AudioServer.is_bus_effect_enabled(0, i):
+			found = minf(found, (effect as AudioEffectHardLimiter).ceiling_db)
+	r._ok(found <= -1.0, "MASTER1 the Master bus has a hard limiter at %.1f dB (-1 dB or lower)" % found)

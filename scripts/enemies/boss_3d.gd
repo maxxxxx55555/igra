@@ -234,6 +234,16 @@ func _perform_melee() -> void:
 	player_ref.take_damage(attack_damage, global_position)
 	EventBus.enemy_attack.emit(attack_damage)
 
+## v10 N060: in the second phase a blow outside the beam did nothing and said nothing (the damage path returned before the sound); it says so now, at most once in BEAM_HINT_SEC.
+const BEAM_HINT_SEC: float = 8.0
+var _beam_hint_msec: int = -100000
+
+func _hint_beam() -> void:
+	var now: int = Time.get_ticks_msec()
+	if now - _beam_hint_msec >= int(BEAM_HINT_SEC * 1000.0):
+		_beam_hint_msec = now
+		EventBus.toast_requested.emit(LocalizationManager.t("BOSS_HINT_BEAM"), "objective")
+
 func _switch_to_p2() -> void:
 	_teleport_timer = 0.0
 	EventBus.boss_phase_changed.emit(2)
@@ -243,7 +253,7 @@ func _switch_to_p3() -> void:
 	_beam_timer = 0.0
 	EventBus.boss_phase_changed.emit(3)
 
-func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, type: EnemyRosterData.DamageType = EnemyRosterData.DamageType.BULLET) -> void:
+func take_damage(amount: float, src_pos: Vector3 = Vector3.ZERO, type: EnemyRosterData.DamageType = EnemyRosterData.DamageType.BULLET) -> void:
 	if _net_active and not is_multiplayer_authority():
 		_request_damage.rpc_id(1, amount, int(type))
 		return
@@ -251,6 +261,7 @@ func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, type: EnemyRos
 	if ai_state == State.DEAD:
 		return
 	if phase == Phase.P2 and not _is_in_light():
+		_hint_beam()
 		return
 	var mult: float = 1.0
 	if roster_entry.has("resistances"):
@@ -258,7 +269,7 @@ func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, type: EnemyRos
 		mult = float(res.get(int(type), 1.0))
 	var final_dmg: float = amount * mult * (1.0 - armor)
 	hp -= final_dmg
-	AudioManager.play_sound_3d(_HIT_SFX, global_position, -6.0)
+	_hit_feedback(final_dmg, src_pos)
 	if hp <= 0.0:
 		_trigger_death()
 

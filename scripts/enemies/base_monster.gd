@@ -687,6 +687,17 @@ func take_damage(amount: float, src_pos: Vector3 = Vector3.ZERO, type: EnemyRost
 		mult = float(res.get(int(type), 1.0))
 	var reduced: float = amount * mult * (1.0 - armor)
 	hp -= reduced
+	_hit_feedback(reduced, src_pos)
+
+	if player_ref and is_instance_valid(player_ref):
+		if ai_state in [State.IDLE, State.PATROL, State.INVESTIGATE]:
+			_change_state(State.CHASE)
+	if hp <= 0.0:
+		_die()
+
+## What a landed hit shows and plays: the damage number, the sound, the flash, the flinch, the stagger of a heavy hit, the hit-stop of a boss, the sparks and the blood, the hit marker of the crosshair. The Architect
+## answers his own take_damage and called none of it (v10 N059: a bullet on the final boss gave one sound and took hit points off).
+func _hit_feedback(reduced: float, src_pos: Vector3) -> void:
 	EventBus.enemy_damaged.emit(self, reduced)
 	AudioManager.play_sound_3d(_HIT_SFX, global_position, -6.0)
 	_hit_flash()
@@ -701,12 +712,6 @@ func take_damage(amount: float, src_pos: Vector3 = Vector3.ZERO, type: EnemyRost
 	# WAVE 6 P4: crosshair_state_changed was never emitted anywhere -
 	# the HUD crosshair never actually reacted to landing a hit.
 	EventBus.crosshair_state_changed.emit(&"hit")
-
-	if player_ref and is_instance_valid(player_ref):
-		if ai_state in [State.IDLE, State.PATROL, State.INVESTIGATE]:
-			_change_state(State.CHASE)
-	if hp <= 0.0:
-		_die()
 
 const _HIT_FLASH_COLOR := Color("#c9a24a")
 const _HIT_FLASH_ENERGY: float = 2.0

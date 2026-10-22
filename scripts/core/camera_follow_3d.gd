@@ -20,7 +20,8 @@ extends Node3D
 ## sway of player_3d.gd (STEP_BOB_RAD_PER_M, 4 rad/s per m/s there), STEP_BOB_M at a sprint's speed and less below it; a sprint also leans the eye SPRINT_LEAN_M down and SPRINT_LEAN_FWD_M ahead.
 ## None of it with Motion Comfort or Reduce UI Motion (_calm).
 const STEP_BOB_M: float = 0.035
-const STEP_BOB_RAD_PER_M: float = 8.0
+## v10 N058: 4 rad per metre is one bob per step, 1.9 Hz walking at 3 m/s and 3.1 Hz sprinting at 4.8 m/s (it was 8: 3.8 and 6.1 Hz, twice a human cadence).
+const STEP_BOB_RAD_PER_M: float = 4.0
 const STEP_BOB_FULL_SPEED: float = 4.8
 const SPRINT_FOV_BONUS: float = 5.0
 const SPRINT_LEAN_M: float = 0.03

@@ -75,6 +75,8 @@ THE WHOLE CITY ON DAY ONE
 All 11 districts ship complete — story, lore and endings included. No
 paywalled content, no season pass. Fully offline: this blackout is a
 survival game, and the story is yours to drive.
+
+Made with AI help: part of the music (Google Lyria) and the key art of this store page are AI-generated.
 ```
 
 ### RU
@@ -117,6 +119,8 @@ survival game, and the story is yours to drive.
 Все 11 районов готовы целиком — сюжет, архивы и концовки. Никакого
 платного контента и сезонных пропусков. Полностью офлайн: этот
 блэкаут — игра на выживание, где историю ведёшь ты.
+
+Сделано с помощью ИИ: часть музыки (Google Lyria) и ключевая графика этой страницы созданы ИИ.
 ```
 
 ---
@@ -239,6 +243,8 @@ Tu linterna es a la vez tu única arma contra parte de lo que te caza, tu única
 - 58 desafíos diarios, 31 logros y New Game+ tras los créditos
 
 Táctil: joystick virtual y botones, esquiva con doble toque. PC: WASD y ratón, la misma partida. El juego llega completo el día uno —historia, archivos y finales incluidos— y se juega sin conexión: un survival narrativo. Sin contenido de pago ni pase de temporada.
+
+Hecho con ayuda de IA: parte de la música (Google Lyria) y la imagen principal de esta página son generadas por IA.
 ```
 - **Feature bullets:**
   - Una sola ciudad a oscuras: 11 distritos que eliges en el mapa y enciendes de uno en uno.
@@ -278,6 +284,8 @@ Deine Taschenlampe ist zugleich deine einzige Waffe gegen einen Teil dessen, was
 - 58 tägliche Herausforderungen, 31 Erfolge und New Game+ nach den Credits
 
 Touch: virtueller Joystick und Aktionstasten, Ausweichen per Doppeltipp. PC: WASD und Maus, dasselbe Spiel. Die ganze Stadt ist ab Tag eins fertig — Geschichte, Archive und Enden inklusive. Komplett offline: ein story-getriebenes Survival-Spiel. Keine kostenpflichtigen Inhalte, kein Season Pass.
+
+Mit KI-Hilfe gemacht: ein Teil der Musik (Google Lyria) und die Titelgrafik dieser Seite sind KI-generiert.
 ```
 - **Feature bullets:**
   - Eine einzige Stadt im Blackout: 11 Bezirke, die du auf der Stadtkarte wählst und einzeln erleuchtest.
@@ -317,6 +325,8 @@ Ta lampe torche est à la fois ta seule arme contre une partie de ce qui te traq
 - 58 défis quotidiens, 31 succès et New Game+ après le générique
 
 Tactile : joystick virtuel et boutons, esquive en double-tap. PC : WASD et souris, la même partie. La ville entière dès le jour un — intrigue, archives et fins incluses. Entièrement hors ligne : un survival narratif. Aucun contenu payant, aucun pass saisonnier.
+
+Réalisé avec l'aide de l'IA : une partie de la musique (Google Lyria) et l'image principale de cette page sont générées par IA.
 ```
 - **Feature bullets:**
   - Une seule ville dans le noir : 11 districts que tu choisis sur la carte et rallumes un par un.
@@ -356,6 +366,8 @@ Sua lanterna é ao mesmo tempo sua única arma contra parte do que te caça, seu
 - 58 desafios diários, 31 conquistas e New Game+ após os créditos
 
 Toque: joystick virtual e botões, esquiva com toque duplo. PC: WASD e mouse, o mesmo jogo. A cidade inteira desde o primeiro dia — história, documentos e finais inclusos. Totalmente offline: um survival narrativo. Sem conteúdo pago, sem passe de temporada.
+
+Feito com ajuda de IA: parte da música (Google Lyria) e a imagem principal desta página são geradas por IA.
 ```
 - **Feature bullets:**
   - Uma única cidade no apagão: 11 distritos que você escolhe no mapa e acende um a um.
