@@ -248,7 +248,7 @@ func _apply_localization(_lang: Variant = null) -> void:
 		return
 	var title := vb.get_node_or_null("Title") as Label
 	if title != null:
-		title.text = LocalizationManager.t("menu_title")
+		title.text = LocalizationManager.t("menu_title").to_upper()  # v10 N083: Bebas has no lower case; the other five titles are in capitals
 	for node_name in LABELS:
 		var b := vb.get_node_or_null(String(node_name)) as Button
 		if b != null:

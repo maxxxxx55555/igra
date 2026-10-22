@@ -3,7 +3,7 @@
 
 usage: python tools/qa_sim/audio_loudness.py [--write docs/AUDIO_LOUDNESS_TABLE.md] [--check] [--demo]
 Categories are directories of assets/audio. A file shorter than 0.4 s has no integrated loudness (R128 gates it); it is reported by its mean volume (volumedetect) in a column of its own.
---check fails when a file's true peak is above PEAK_LIMIT_DB (the directive's -1 dBFS), when a loop of music_manager.gd jumps where its end meets its start (F13: a click on every turn), or when ffmpeg is missing.
+--check fails when a file's true peak is above PEAK_LIMIT_DB (the canon of -1.5 dBFS since v10 N030, the directive said -1), when a loop of music_manager.gd jumps where its end meets its start (F13: a click on every turn), or when ffmpeg is missing.
 """
 import pathlib
 import re
@@ -23,7 +23,7 @@ CATEGORIES = {
 }
 # The directive's targets (-14 music, -10 sfx, -20 ambient) and the canon of docs/PRODUCTION_BIBLE.md and docs/STYLE_GUIDE.md section 5 as measured in docs/AUDIO_CONSISTENCY.md.
 DIRECTIVE_LUFS = {"music": -14.0, "sfx": -10.0, "ambient beds": -20.0, "ambient details": -20.0}
-PEAK_LIMIT_DB = -1.0
+PEAK_LIMIT_DB = -1.5  # v10 N030: the canon of docs/STYLE_GUIDE.md section 5 (the gate stood at the directive's -1.0 and 17 files sat between the two; they are under -1.5 now)
 CANON_PEAK_DB = -1.5  # docs/STYLE_GUIDE.md section 5: true peak at most -1.5 dBFS
 SPREAD_LU = 3.0
 SUFFIXES = {".ogg", ".wav", ".mp3"}
