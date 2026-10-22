@@ -1,0 +1,19 @@
+# proof v10_land_timing_unit
+# utc 20261022T212953Z
+# head d9932fe3 (uncommitted paths: 2)
+# env none
+# cmd python .qa_logs/timing_unit_check.py
+good     rc=0 expected=0 OK
+    TIMING_EQUIV verdict=PASS keys=15 failures=0
+scaling  rc=1 expected=1 OK
+    FAIL: run at 30 fps: simulated step per frame 0.03 is not 1/30 (--fixed-fps not honoured)
+    FAIL: run at 60 fps: simulated step per frame 0.06 is not 1/60 (--fixed-fps not honoured)
+    FAIL: run at 120 fps: simulated step per frame 0.12 is not 1/120 (--fixed-fps not honoured)
+    TIMING_EQUIV verdict=FAIL keys=15 failures=3
+ignored  rc=1 expected=1 OK
+    FAIL: run at 30 fps: simulated step per frame 0.023 is not 1/30 (--fixed-fps not honoured)
+    FAIL: run at 60 fps: simulated step per frame 0.023 is not 1/60 (--fixed-fps not honoured)
+    FAIL: run at 120 fps: simulated step per frame 0.023 is not 1/120 (--fixed-fps not honoured)
+    TIMING_EQUIV verdict=FAIL keys=15 failures=3
+TIMING_UNIT verdict=PASS
+# EXIT=0
