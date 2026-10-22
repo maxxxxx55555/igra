@@ -12,7 +12,9 @@ extends Node3D
 @export var mesh_visible: bool = true
 
 var _on: bool = false
-var _t: float = 0.0
+## The flicker clock, negative until the first lit frame: it then starts at a phase of the lamp's own place, so the lamps of a street do not dip together (they all started at 0: the whole street pulsed by
+## 15 % and fell to a fifth of its light six times a second, and two frames of one view differed by up to 20 %, the "drift" of Session 28).
+var _t: float = -1.0
 ## PARTIAL (stage 1) lamps run weaker; _process multiplies this into the
 ## flicker so a stage-1 lamp reads dimmer than a STREETS lamp, not just
 ## on/off. 1.0 at STREETS/FULL.
@@ -31,11 +33,11 @@ var _reduce_flash: bool = false
 func _ready() -> void:
 	add_to_group("streetlights")
 	_reduce_flash = SettingsManager != null and bool(SettingsManager.get_setting("reduce_flash", false))
-	if not mesh_visible:
-		var pole := get_node_or_null("Pole")
-		var lamp := get_node_or_null("Lamp")
-		if pole: pole.visible = false
-		if lamp: lamp.visible = false
+	var pole := get_node_or_null("Pole")
+	var lamp := get_node_or_null("Lamp")
+	if pole: pole.visible = mesh_visible
+	if lamp: lamp.visible = mesh_visible
+	if lamp is MeshInstance3D and mesh_visible: lamp.material_override = preload("res://scripts/world/lamp_head.gd").shared()  # W4: a head that stands alone flickers like the batched ones
 	if ResourceLoader.exists("res://assets/config/visual_quality.tres"):
 		var vq := load("res://assets/config/visual_quality.tres")
 		var district_lights: Dictionary = vq.get_meta("district_lights", {}) if vq else {}
@@ -49,11 +51,14 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if not _on or not lamp_flicker:
 		return
+	if _t < 0.0:
+		_t = float(absi(hash(Vector2i(roundi(global_position.x), roundi(global_position.z)))) % 628) / 100.0
 	_t += delta
 	var spot: SpotLight3D = $SpotLight
 	var glow: OmniLight3D = $Glow
 	var base: float = (0.85 + sin(_t * 12.0) * 0.15) * _energy_scale
-	if not _reduce_flash and sin(_t * 37.0) > 0.95:
+	# v10 N065: a dip 2.4 times a second (it was 5.9: a strobe, and GAMEFEEL_SPEC bans more than three a second)
+	if not _reduce_flash and sin(_t * 15.0) > 0.95:
 		base = 0.2 * _energy_scale
 	spot.light_energy = base * 2.0 * _light_energy_mult
 	glow.light_energy = base * 1.0 * _light_energy_mult
@@ -97,3 +102,6 @@ func _update_light(stage: int = -1) -> void:
 		spot.spot_attenuation = 2.0
 		glow.light_energy = 0.5 * _light_energy_mult
 		glow.omni_range = 4.0
+	else:
+		spot.light_energy = 0.0  # a lamp that is out gives no light: the LightLimiter leaves such a light off, whatever slot it would hold
+		glow.light_energy = 0.0

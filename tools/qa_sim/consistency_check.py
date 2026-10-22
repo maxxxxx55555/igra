@@ -16,7 +16,7 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 CANON_FONTS = {"RobotoCondensed-Regular.ttf", "BebasNeue-Regular.ttf", "ShareTechMono-Regular.ttf", "Rajdhani-Regular.ttf", "OpenDyslexic-Regular.ttf"}
 BRASS = "#c9a24a"
-SIZE_LADDER = {8, 9, 10, 11, 12, 13, 14, 16, 18, 20, 22, 24, 28, 32, 36, 44, 64}
+SIZE_LADDER = {8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 20, 22, 24, 28, 30, 32, 36, 44, 64}  # 15 and 30: the Mono and Huge steps of the type scale of docs/VISUAL_PASS.md W9 (theme_provider.gd)
 MAX_FACADE_CHROMA = 0.25
 PALETTE = {"0c1016", "141b24", "2a3340", "c9a24a", "8a7338", "b4452f", "aeb6bf", "d8d2c4", "5f8a4e", "4a9ab5"}
 

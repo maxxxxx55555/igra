@@ -11,7 +11,7 @@ extends Node
 const REPORT_DIR := "res://tools/autopilot_report"
 const REPORT := REPORT_DIR + "/report.txt"
 const LOCALES: PackedStringArray = [
-	"ar", "de", "en", "es", "fr", "it", "ja", "ko", "pt_BR", "ru", "tr", "zh", "zh_TW",
+	"de", "en", "es", "fr", "pt_BR", "ru",
 ]
 
 var _lines: Array[String] = []
@@ -64,8 +64,9 @@ func _check_music() -> String:
 	var paths: Array[String] = []
 	for p in (c["TRACKS"] as Dictionary).values():
 		paths.append(p)
-	for p in (c["AMBIENT_BY_DISTRICT"] as Dictionary).values():
-		paths.append(p)
+	for table in ["AMBIENCE_DARK_BY_DISTRICT", "AMBIENCE_LIT_BY_DISTRICT"]:
+		for p in (c[table] as Dictionary).values():
+			paths.append(p)
 	for p in (c["LAYERS"] as Dictionary).values():
 		paths.append(p)
 	var sting: String = c["STING_PATH"]
@@ -94,7 +95,7 @@ func _check_music() -> String:
 
 func _check_sfx() -> String:
 	var bad: Array[String] = []
-	for f in _files_in("res://assets/audio/sfx", ".wav"):
+	for f in _files_in("res://assets/audio/sfx", ".wav") + _files_in("res://assets/audio/sfx", ".ogg"):
 		var s := load(f) as AudioStream
 		if s == null or s.get_length() <= 0.0:
 			bad.append(f.get_file())

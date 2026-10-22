@@ -380,7 +380,7 @@ else
   bad "store_answers (см. 'python tools/qa_sim/store_answers.py --check')"
 fi
 if "$PY" tools/qa_sim/i18n_placeholder_fuzz.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/i18n_placeholder_fuzz.py --check >/dev/null 2>&1; then
-  ok "i18n_placeholder_fuzz (specifiers, call arity, literal keys, Latin stubs, cognates and the glossary agree in all 13 locales)"
+  ok "i18n_placeholder_fuzz (specifiers, call arity, literal keys, Latin stubs, cognates and the glossary agree in all 6 locales)"
 else
   bad "i18n_placeholder_fuzz (см. 'python tools/qa_sim/i18n_placeholder_fuzz.py --check')"
 fi
@@ -414,8 +414,25 @@ if "$PY" tools/qa_sim/s26_mutations.py --demo >/dev/null 2>&1; then
 else
   bad "s26_mutations --demo (см. 'python tools/qa_sim/s26_mutations.py --demo')"
 fi
+if "$PY" tools/qa_sim/coverage_matrix.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/audio_loudness.py --demo >/dev/null 2>&1; then
+  ok "coverage_matrix and audio_loudness --demo (a mechanic with a passing log line is hit and one without is a miss; a hard-cut loop is over the seam limit and a closed one is not)"
+else
+  bad "coverage_matrix / audio_loudness --demo (см. 'python tools/qa_sim/coverage_matrix.py --demo')"
+fi
+if "$PY" tools/qa_sim/hum_scan.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/bed_synth.py --demo >/dev/null 2>&1; then
+  ok "hum_scan and bed_synth --demo (a sine and mains hum are hums, noise and a ringing note in silence are not; a synthesized bed is periodic and not a hum)"
+else
+  bad "hum_scan / bed_synth --demo (см. 'python tools/qa_sim/hum_scan.py --demo')"
+fi
+if command -v ffmpeg >/dev/null 2>&1; then
+  if "$PY" tools/qa_sim/hum_scan.py --check >/dev/null 2>&1; then
+    ok "hum_scan (no dark bed and no district detail loop is a steady low tone: the owner's no-hum rule)"
+  else
+    bad "hum_scan (см. 'python tools/qa_sim/hum_scan.py --check')"
+  fi
+fi
 if "$PY" tools/qa_sim/listing_audit.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/listing_audit.py >/dev/null 2>&1; then
-  ok "listing_audit (13 locales: title, short and full limits, the same numbers in every language, the English numbers are what the code holds)"
+  ok "listing_audit (6 locales: title, short and full limits, the same numbers in every language, the English numbers are what the code holds)"
 else
   bad "listing_audit (см. 'python tools/qa_sim/listing_audit.py')"
 fi

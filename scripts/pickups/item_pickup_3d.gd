@@ -9,15 +9,15 @@ class_name ItemPickup3D
 ##    приводила к ошибке вместо эффекта;
 ## 3) сама сцена состояла из одного Area3D без коллайдера и меша: предмет был
 ##    невидим и физически не существовал.
+##
+## C1-C3 (v1.0.0-ship): the item lies on the ground and looks like what it is (scripts/art/pickup_meshes.gd dresses the
+## mesh; the scene holds none, and no light: a district holds a dozen of these, and a real light each was a dozen lights).
 
 @export var item_id: StringName = &""
 @export var amount: int = 1
-@export var bob_height: float = 0.2
-@export var bob_speed: float = 2.0
-@export var rotation_speed: float = 1.0
 
-var _base_y: float = 0.0
-var _time: float = 0.0
+const _Meshes := preload("res://scripts/art/pickup_meshes.gd")
+
 var _picked_up: bool = false
 ## Where this pickup sits in its district's loot list (DistrictLoot): taken keys are not spawned again, the rest are.
 var loot_key: String = ""
@@ -29,50 +29,16 @@ func _ready() -> void:
 	# minimap pickup blips (a live gameplay feature) and _game_test_3d.gd's
 	# own check were both silently reading an always-empty group.
 	add_to_group("pickups")
-	_base_y = global_position.y
 	body_entered.connect(_on_body_entered)
 	monitorable = true
 	monitoring = true
-	_apply_tint()
-	# DistrictLoot сначала делает add_child() (тут срабатывает _ready), и только
-	# потом задаёт global_position. Высоту для покачивания поэтому фиксируем
-	# кадром позже, иначе _process утаскивал предмет к чужому _base_y = 0.
-	call_deferred("_capture_base_y")
+	if item_id != &"":
+		_dress()
 
-func _capture_base_y() -> void:
-	_base_y = global_position.y
-
-## Цвет предмета подсказывает тип: батарея янтарная, аптечка красная,
-## ключ стальной. Иначе всё выглядит одинаковыми ящиками.
-func _apply_tint() -> void:
-	var col := Color(0.788, 0.635, 0.290)
-	match item_id:
-		&"medkit", &"bandage", &"serum":
-			col = Color(0.706, 0.271, 0.184)
-		&"key", &"ancient_key", &"lockpick":
-			col = Color(0.682, 0.714, 0.749)
-		&"cable", &"wiring", &"transistor", &"circuit":
-			col = Color(0.373, 0.541, 0.306)
-		&"document", &"audio_log", &"photo":
-			col = Color(0.847, 0.824, 0.769)
-	var mesh := get_node_or_null("MeshInstance3D") as MeshInstance3D
-	if mesh != null:
-		var mat := StandardMaterial3D.new()
-		mat.albedo_color = col
-		mat.emission_enabled = true
-		mat.emission = col
-		mat.emission_energy_multiplier = 1.6
-		mesh.material_override = mat
-	var light := get_node_or_null("GlowOmniLight3D") as OmniLight3D
-	if light != null:
-		light.light_color = col
-
-func _process(delta: float) -> void:
-	if _picked_up:
-		return
-	_time += delta
-	global_position.y = _base_y + sin(_time * bob_speed) * bob_height
-	rotate_y(rotation_speed * delta)
+func _dress() -> void:
+	var piece := get_node_or_null("MeshInstance3D") as MeshInstance3D
+	if piece != null:
+		_Meshes.dress(self, piece, item_id)
 
 func _on_body_entered(body: Node) -> void:
 	if _picked_up:
@@ -103,17 +69,14 @@ func _on_body_entered(body: Node) -> void:
 	# Ветка else дублировала сигнал, из-за чего звук подбора и счётчики
 	# квестов срабатывали дважды.
 
-	# Всплываем и гаснем: масштаб и свет вместо несуществующего modulate.
+	# Всплываем и гаснем: масштаб вместо несуществующего modulate.
 	var tween := create_tween()
 	tween.set_parallel(true)
 	tween.tween_property(self, "global_position:y", global_position.y + 0.6, 0.28)
 	tween.tween_property(self, "scale", Vector3(0.05, 0.05, 0.05), 0.28)
-	var light := get_node_or_null("GlowOmniLight3D") as OmniLight3D
-	if light != null:
-		tween.tween_property(light, "light_energy", 0.0, 0.28)
 	tween.chain().tween_callback(queue_free)
 
 func set_item(item: StringName, qty: int) -> void:
 	item_id = item
 	amount = qty
-	_apply_tint()
+	_dress()

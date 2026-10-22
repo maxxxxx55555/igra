@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      { "matcher": "Write|Edit|MultiEdit|Bash|PowerShell",
+        "hooks": [{ "type": "command", "command": "python .claude/hooks/guard.py" }] }
+    ],
+    "PostToolUse": [
+      { "matcher": "Write|Edit|MultiEdit",
+        "hooks": [{ "type": "command", "command": "python tools/lint_changed.py --base HEAD 1>&2 || exit 2" }] }
+    ],
+    "Stop": [
+      { "hooks": [{ "type": "command", "command": "python .claude/hooks/no_orphan.py" }] }
+    ]
+  }
+}

@@ -157,7 +157,7 @@ CODE decides whether to adopt each into a content file or wire it.
 | `ITEM_BLUEPRINT_ENHANCED_BATTERY` | Blueprint: enhanced battery |
 | `ITEM_BLUEPRINT_PORTABLE_WORKBENCH` | Blueprint: portable bench |
 | `Level: %d\nPlaytime: %s\n%s` | Level: %d\nPlaytime: %s\n%s |
-| `MONSTER_DESC_BOSS` | The source of the power plant disaster. Light does not harm it. |
+| `MONSTER_DESC_BOSS` | The source of the power plant disaster. In its second phase only the beam of your flashlight can hurt it. |
 | `MONSTER_DESC_BRUTE` | A heavy charger that winds up a slam and follows through with a lunge, then needs to recover. |
 | `MONSTER_DESC_BURNER` | Spits a burning payload from range and flees in panic when caught in the light. |
 | `MONSTER_DESC_CRAWLER` | A darting creature. It lunges at any noise, so do not run near it. |

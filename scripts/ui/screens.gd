@@ -43,8 +43,8 @@ func _ready() -> void:
 	# built once in _build_screen() and never retranslated (screens
 	# themselves are cached, never rebuilt, so a language change while a
 	# screen was closed left its close button stale next time it opened).
-	# Screens without a real close button got a placeholder Button.new()
-	# never added to the tree - harmless to retranslate too.
+	# Screens without a close button hold null (a placeholder Button.new()
+	# never entered the tree and leaked at exit with its theme styles).
 	LocalizationManager.language_changed.connect(func(_l: String) -> void:
 		for d in _screen_data.values():
 			var btn: Button = d.get("close_btn")
@@ -111,6 +111,7 @@ func _build_screen(name: String) -> void:
 	title_lbl.position = Vector2(20, 8)
 	title_lbl.add_theme_color_override("font_color", BONE_TEXT)
 	title_lbl.add_theme_font_size_override("font_size", 20)
+	title_lbl.add_theme_font_override("font", ThemeProvider.heading_font())
 	_apply_outline(title_lbl)
 	card.add_child(title_lbl)
 	var content := ColorRect.new()
@@ -128,7 +129,7 @@ func _build_screen(name: String) -> void:
 		card.add_child(close_btn)
 	_screen_data[name] = {
 		"underlay": underlay, "card": card, "content": content,
-		"close_btn": close_btn if close_btn else Button.new(), "title_lbl": title_lbl,
+		"close_btn": close_btn, "title_lbl": title_lbl,
 	}
 
 ## V2 SKIN WIRING P4: card background art for the screens.gd-routed

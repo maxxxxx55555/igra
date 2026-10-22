@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """New Game+ table from code truth (Session 23, S2): what each level does, which modifier does what, and whether anything reads each number.
 
-Reads scripts/systems/new_game_plus.gd (the per-level constants and the accessors), content/ngp_modifiers.json (the modifiers and their knobs), data/ng_plus_config.json, and greps the
+Reads scripts/systems/new_game_plus.gd (the per-level constants and the accessors), content/ngp_modifiers.json (the modifiers and their knobs), and greps the
 other scripts for the call sites of every accessor and knob. A number that is stored (shown, or kept in data) and read by nothing is a finding: the game would promise an effect it does not have.
 
 usage: python tools/qa_sim/ngplus_table.py [--write docs/NGPLUS_TABLE.md] [--demo]
@@ -20,7 +20,7 @@ ACCESSORS = {
     "get_player_damage_multiplier": "PLAYER_DAMAGE_MULTIPLIER_PER_NG", "get_loot_chance_multiplier": "LOOT_CHANCE_MULTIPLIER_PER_NG",
     "are_hints_enabled": None, "get_night_cycle_multiplier": None, "is_time_pressure_enabled": None, "get_extra_dark_districts": None,
 }
-# data/ng_plus_config.json keys that nothing reads (an old file kept by the audits of the rc15 pass: docs/DESIGN_AUDIT_ARENA.md)
+# the keys of data/ng_plus_config.json, which nothing read; the file was deleted in v10 F6 (the integrity manifest regenerated)
 STALE_CONFIG = {"ng_plus_enemy_mult", "ng_plus_xp_mult", "unique_achievements"}
 
 
@@ -107,7 +107,7 @@ def write(path, mods, knobs, acc, ks, bad):
         site = ks[k][0] if ks[k] else None
         lines.append("| %s | %s | %s |" % (k, ", ".join(ids), "`%s` at `%s:%d`" % (re.sub(r"\s+", " ", site[2])[:48].replace("`", "'"), site[0], site[1]) if site else "nothing"))
     lines += ["", "## Stored and read by nothing", "",
-              "`data/ng_plus_config.json` keeps `%s` and a list of achievement names; no script opens that file (the rule above is in the constants of the script, `docs/DESIGN_AUDIT_ARENA.md` calls the JSON stale). It is listed, not deleted." % "`, `".join(sorted(STALE_CONFIG)),
+              "Nothing is stored and read by nothing: `data/ng_plus_config.json` (it kept `%s` and a list of achievement names, and no script opened it; the rule above is in the constants of the script) was deleted in v10 F6." % "`, `".join(sorted(STALE_CONFIG)),
               "", "Findings: %s." % ("none: every number the game shows or stores for New Game+ is read by a script" if not bad else "; ".join(bad))]
     pathlib.Path(path).write_text("\n".join(lines) + "\n", encoding="utf-8")
 

@@ -25,7 +25,7 @@ udg_snapshot || exit 99
 trap 'udg_restore || exit 97' EXIT
 trap 'exit 130' INT TERM
 export TLS_UDG_GUARDED=1  # tells QaLaunchGuard this shell guard covers the run
-timeout "$T" "$GODOT" --windowed --path . "$SCENE" > "$LOG" 2>&1
+timeout "$T" "$GODOT" --windowed --path . ${TLS_GODOT_ARGS:-} "$SCENE" > "$LOG" 2>&1
 rc=$?
 source tools/qa_sim/engine_errors.sh
 scan_engine_log "$LOG" 5 || [[ $rc -ne 0 ]] || rc=1

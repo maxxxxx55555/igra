@@ -20,6 +20,9 @@ const RECIPES: Array[Dictionary] = [
 	{"id":"battery_l2","name_key":"ITEM_BATTERY_L2","result":"battery_l2","count":1,"components":[["enhanced_battery",1],["cable",2],["transformer",1]],"blueprint":"battery_l2"},
 ]
 
+## The most the workbench screen lets a player craft at once (workbench.gd _change_qty): a larger ask is refused, so qty x count cannot wrap around to a negative (v10 G-RED2).
+const MAX_QTY: int = 99
+
 static func is_available(recipe: Dictionary) -> bool:
 	return not recipe.has("blueprint") or ProgressTracker.knows_blueprint(String(recipe["blueprint"]))
 
@@ -28,7 +31,7 @@ static func is_done(recipe: Dictionary) -> bool:
 	return recipe.has("flag") and ProgressTracker.has_crafted(String(recipe["flag"]))
 
 static func can_craft(recipe: Dictionary, qty: int = 1) -> bool:
-	if qty <= 0 or not is_available(recipe) or is_done(recipe) or (recipe.has("flag") and qty > 1):
+	if qty <= 0 or qty > MAX_QTY or not is_available(recipe) or is_done(recipe) or (recipe.has("flag") and qty > 1):
 		return false
 	for comp in recipe["components"]:
 		if InventoryManager.count_of(StringName(comp[0])) < int(comp[1]) * qty:

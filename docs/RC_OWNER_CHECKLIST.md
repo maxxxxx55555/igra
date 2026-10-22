@@ -134,7 +134,7 @@ folder must end in `...\cmdline-tools\latest\`.)
 **Evidence**: root `RELEASE_CHECKLIST.md` §4 (template install items + menu labels +
 `4.7-stable` match); `docs/HUMAN_CHECKLIST.md` steps 3–4 (build-template requirement;
 verify the AppLovin plugin checkbox in the Export dialog if ads are ever enabled);
-`docs/OWNER_RELEASE_PACKET.md` §(a) (SDK path, `sdkmanager` block, target SDK 34
+`docs/OWNER_RELEASE_PACKET.md` §(a) (SDK path, `sdkmanager` block, target SDK 36
 context).
 
 **30-second smoke test**: **Project → Export...** → select the **Android** preset →

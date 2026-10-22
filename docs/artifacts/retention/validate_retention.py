@@ -51,7 +51,8 @@ def main() -> int:
     orig = load("data/daily_challenges.json")
     ngp = load("content/ngp_modifiers.json")
     caps = load("content/captions.json")
-    docs = load("data/documents.json")
+    # the ids of the documents the game holds (data/documents.json was read by nothing and went out with the unread data files, v10 F6)
+    docs = {d["doc_id"] for d in load("data/documents/documents_catalog.json")}
     en = load("data/i18n/en.json")
 
     # ---- 1. counts ----

@@ -278,7 +278,7 @@ func _run() -> void:
 	await _shot("01_main_menu")
 	await _menu_swept()
 	# en at text size 1 is 01_main_menu itself (a byte-identical twin fails AF3 rule F6).
-	for lang: String in ["en", "ru", "ar"]:
+	for lang: String in ["en", "ru", "de"]:
 		for size_idx: int in [1, 2]:
 			if lang == "en" and size_idx == 1:
 				continue
@@ -296,6 +296,11 @@ func _run() -> void:
 	if not await _wait_until(playing, 20.0):
 		_fail("never reached gameplay")
 		return
+	# v10 N002: the weather and the random events change a frame by themselves (a flash of lightning put 5 to 6 % of one combat frame over luma 235 in two of four runs of the energy sweep, 24 and 10, and in none of the other two): pinned as the density runner pins them
+	WeatherSystem.set("process_mode", Node.PROCESS_MODE_DISABLED)
+	WeatherSystem.current = WeatherSystem.Weather.CLEAR
+	WeatherSystem.call("_emit")
+	RandomEvents.set("process_mode", Node.PROCESS_MODE_DISABLED)
 	await get_tree().create_timer(3.0).timeout
 	_face_lamps(get_tree().get_first_node_in_group("player") as Node3D)
 	await get_tree().create_timer(0.3).timeout
@@ -321,10 +326,10 @@ func _run() -> void:
 	screens.call("show_screen", "Shop")
 	await get_tree().create_timer(0.6).timeout
 	await _shot("08_shop")
-	LocalizationManager.set_language("ar")
+	LocalizationManager.set_language("de")
 	screens.call("show_screen", "Shop")
 	await get_tree().create_timer(0.6).timeout
-	await _shot("08_shop_ar")
+	await _shot("08_shop_de")
 	LocalizationManager.set_language("en")
 	screens.call("hide_all")
 	await get_tree().create_timer(0.6).timeout
@@ -350,7 +355,8 @@ func _run() -> void:
 	await get_tree().create_timer(0.6).timeout
 	if is_instance_valid(monster) and monster.has_method("take_damage"):
 		monster.take_damage(1.0)
-	await get_tree().process_frame
+	# v10 N002: the hit flash of the WowDirector has faded after half a second; the frame before it was a white wash (6.5 % of its pixels at luma 235 or more)
+	await get_tree().create_timer(0.5).timeout
 	_where("04")
 	await _shot("04_combat")
 	_hud_dump("combat")

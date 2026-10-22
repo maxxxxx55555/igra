@@ -1,7 +1,7 @@
 extends "res://scripts/tools/_perf_check_runner.gd"
 ## Where the frame time goes (docs/PERF_PASS.md, Session 23). One windowed run, tools/qa_sim/guarded_windowed res://scenes/tools/perf_ablation_scene.tscn: a view is measured as it stands, then with one part of the frame switched off at a time, the baseline between each pair so the drift of a shared
 ## machine shows. The vertical sync and the frame cap are off, so a frame time is the work and not a multiple of the display's interval. The suburbs (the spawn view) take the parts of PARTS, then every visible child of the HUD and of the post-process
-## overlay in turn, then the 4x MSAA (last: switched back on it does not return until the window changes size); the power station (the D11 of the perf gate, a district with ground fog) takes the two in HEAVY.
+## overlay in turn; the power station (the D11 of the perf gate, a district with ground fog) takes the four in HEAVY; both take the shadows, the glow, the fog, the lights, the shading and the particles of EXTRA (MSAA last).
 ## Every line is `[ablate] <district> <part> frame_p95_ms=<p95> gpu_ms=<mean> draw_calls=<n>`; the saving of a part is its line against the baselines around it. A reading, never a verdict.
 
 const FRAMES: int = 200
@@ -9,8 +9,14 @@ const SETTLE_FRAMES: int = 20
 const PARTS: Array[String] = ["lamp pools hidden", "lamp cones hidden", "window halos hidden", "post-process layers hidden", "HUD hidden"]
 const HEAVY: Array[String] = ["fog cards hidden", "lamp pools hidden", "lamp cones hidden", "window halos hidden"]
 const LAYERS: Array[String] = ["HUD", "PostProcessOverlay"]
+## Measured in both districts after their own parts (R2 of the v10 pass: the GPU time of the shadows, the glow, the fog, the lights, the shading and the particles; TLS_PERF_TIER picks the tier).
+const EXTRA: Array[String] = ["moon shadow off", "flashlight shadow off", "glow off", "env fog off", "spot lights hidden", "omni lights hidden", "all lights hidden", "moon hidden", "lit flat materials", "unshaded materials", "particles hidden", "msaa off", "post-process layers hidden", "HUD hidden"]
+const NONE: Array[String] = []
 
 var _baselines: Array[float] = []
+var _msaa0: int = 0
+var _flat: StandardMaterial3D = null
+var _flat_lit: StandardMaterial3D = null
 
 func _run() -> void:
 	if not await _boot():
@@ -19,16 +25,30 @@ func _run() -> void:
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 	Engine.max_fps = 0
 	print("[ablate] window=%s msaa=%d tier=%d vsync_was=%d" % [get_window().size, get_viewport().msaa_3d, int(SettingsManager.get_setting("graphics_tier", 2)), vsync])
+	_msaa0 = get_viewport().msaa_3d
+	_flat = StandardMaterial3D.new()
+	_flat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	_flat.albedo_color = Color(0.4, 0.4, 0.4)
+	_flat_lit = StandardMaterial3D.new()
+	_flat_lit.albedo_color = Color(0.4, 0.4, 0.4)
+	_flat_lit.roughness = 1.0
+	var only: bool = OS.get_environment("TLS_ABLATE_ONLY") == "1"  # the EXTRA parts alone: no HUD or overlay child sweeps
+	var census: bool = OS.get_environment("TLS_ABLATE_ONLY") == "census"  # the light census alone: a minute of a launch
 	await _full(&"suburbs")
-	await _sweep("suburbs", PARTS)
-	for layer in LAYERS:
-		await _children_sweep("suburbs", layer)
-	_apply("msaa off", true)
-	await _measure("suburbs", "msaa off")
+	_light_census("suburbs")
+	if not census:
+		await _sweep("suburbs", NONE if only else PARTS)
+		if not only:
+			for layer in LAYERS:
+				await _children_sweep("suburbs", layer)
 	if not await _travel(&"power_station"):
 		return
 	await _full(&"power_station")
-	await _sweep("power_station", HEAVY)
+	_light_census("power_station")
+	if census:
+		get_tree().quit(0)
+		return
+	await _sweep("power_station", NONE if only else HEAVY)
 	print("[ablate] DONE baselines %s least %.2f ms" % [_baselines, _baselines.min()])
 	get_tree().quit(0)
 
@@ -36,11 +56,16 @@ func _sweep(district: String, parts: Array[String]) -> void:
 	await _measure(district, "baseline")
 	await _shot(district, "baseline")
 	for part in parts:
-		_apply(part, true)
-		await _measure(district, part)
-		await _shot(district, part)
-		_apply(part, false)
-		await _measure(district, "baseline")
+		await _ablate(district, part)
+	for part in EXTRA:
+		await _ablate(district, part)
+
+func _ablate(district: String, part: String) -> void:
+	_apply(part, true)
+	await _measure(district, part)
+	await _shot(district, part)
+	_apply(part, false)
+	await _measure(district, "baseline")
 
 ## Every child of a main-scene layer that is visible is switched off alone, the baseline after each.
 func _children_sweep(district: String, layer: String) -> void:
@@ -76,10 +101,84 @@ func _apply(part: String, off: bool) -> void:
 		"HUD hidden":
 			(main.get_node("HUD") as CanvasLayer).visible = not off
 		"msaa off":
-			get_viewport().msaa_3d = Viewport.MSAA_DISABLED if off else Viewport.MSAA_4X
+			get_viewport().msaa_3d = Viewport.MSAA_DISABLED if off else _msaa0
+		"moon shadow off":
+			_toggle(get_tree().root.find_children("*", "DirectionalLight3D", true, false), "shadow_enabled", off, false)
+		"flashlight shadow off":
+			_toggle(get_tree().root.find_children("*", "SpotLight3D", true, false), "shadow_enabled", off, false)
+		"glow off":
+			_toggle([_environment()], "glow_enabled", off, false)
+		"env fog off":
+			_toggle([_environment()], "fog_enabled", off, false)
+		"spot lights hidden":
+			_toggle(_lamp_lights("SpotLight"), "visible", off, false)
+		"omni lights hidden":
+			_stop_limiter(off)
+			_toggle(get_tree().root.find_children("*", "OmniLight3D", true, false), "visible", off, false)
+		"all lights hidden":
+			_stop_limiter(off)
+			_toggle(get_tree().root.find_children("*", "OmniLight3D", true, false) + _lamp_lights("SpotLight"), "visible", off, false)
+		"moon hidden":
+			_toggle(get_tree().root.find_children("*", "DirectionalLight3D", true, false), "visible", off, false)
+		"lit flat materials":
+			for kind in ["MeshInstance3D", "MultiMeshInstance3D"]:
+				_toggle(get_tree().root.find_children("*", kind, true, false), "material_override", off, _flat_lit)
+		"unshaded materials":
+			for kind in ["MeshInstance3D", "MultiMeshInstance3D"]:
+				_toggle(get_tree().root.find_children("*", kind, true, false), "material_override", off, _flat)
+		"particles hidden":
+			for kind in ["GPUParticles3D", "CPUParticles3D"]:
+				_toggle(get_tree().root.find_children("*", kind, true, false), "visible", off, false)
+
+func _lamp_lights(child: String) -> Array:
+	var found: Array = []
+	for lamp: Node in get_tree().get_nodes_in_group("streetlights"):
+		var light: Node = lamp.get_node_or_null(child)
+		if light != null:
+			found.append(light)
+	return found
+
+## The limiter shows the nearest eight omni lights again every 0.25 s: a part that hides them stops it.
+func _stop_limiter(off: bool) -> void:
+	get_tree().root.get_node("LightLimiter").set_process(not off)
+
+## Which omni lights the frame carries and who owns them: the LightLimiter shows the nearest eight whatever their owner meant, so a light of energy 0 can hold a slot of the lighting loop.
+func _light_census(district: String) -> void:
+	var owners: Dictionary = {}
+	var shown: int = 0
+	var idle: int = 0
+	var all: Array[Node] = get_tree().root.find_children("*", "OmniLight3D", true, false)
+	for node in all:
+		var light := node as OmniLight3D
+		if not light.is_visible_in_tree():
+			continue
+		shown += 1
+		idle += 1 if light.light_energy <= 0.001 else 0
+		var key: String = "%s (energy %.2f, range %.1f)" % [String(light.get_parent().name).rstrip("0123456789@"), light.light_energy, light.omni_range]
+		owners[key] = int(owners.get(key, 0)) + 1
+	print("[ablate] %s omni lights: %d in the tree, %d shown, %d of them with energy 0; shown by owner: %s" % [district, all.size(), shown, idle, owners])
+
+func _environment() -> Environment:
+	return (get_tree().root.find_child("WorldEnvironment", true, false) as WorldEnvironment).environment
+
+## `prop` of each object goes to `value`, or back to what it was (kept on the object as one-element meta: a null value would delete the entry).
+func _toggle(objects: Array, prop: String, off: bool, value: Variant) -> void:
+	var key := "ablate_" + prop
+	for object: Object in objects:
+		if off:
+			object.set_meta(key, [object.get(prop)])
+			object.set(prop, value)
+		elif object.has_meta(key):
+			object.set(prop, (object.get_meta(key) as Array)[0])
+			object.remove_meta(key)
 
 ## The district at FULL power, where its lamps, their cones and its lit panes are all drawn (the perf gate measures the stage that a new game spawns in, and a part that a lower stage hides costs nothing there).
 func _full(id: StringName) -> void:
+	if OS.get_environment("TLS_ABLATE_AS_GATE") == "1":  # the stage a new game spawns in, which is what the perf gate measures
+		for i in 120:
+			await get_tree().process_frame
+		print("[ablate] %s power stage %d (as the gate has it)" % [id, PowerGrid.get_stage(id)])
+		return
 	for parent in PowerGrid.get_district(id).powered_by:
 		PowerGrid.get_district(parent).stage = DistrictData.Stage.FULL
 	PowerGrid.advance_district(id, DistrictData.Stage.FULL)
@@ -98,6 +197,8 @@ func _boot() -> bool:
 		return false
 	SaveSystem.mark_onboard_done()
 	QualityManager.enabled = false  # a measurement reads one tier: the quality manager steps it under 30 FPS (CORRECTION_LOG 241)
+	if OS.get_environment("TLS_PERF_TIER") != "":
+		SettingsManager.set_graphics_tier(int(OS.get_environment("TLS_PERF_TIER")))
 	Routes.start_game()
 	if not await _wait_until(func() -> bool: return GameManager.is_playing() and get_tree().get_first_node_in_group("player") != null, 20.0):
 		printerr("[ablate] never reached gameplay")

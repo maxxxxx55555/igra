@@ -6,10 +6,10 @@ extends Node
 ## owns land on the bus their sound belongs to.
 ## Scene: scenes/tools/audio_bus_check_scene.tscn (headless). Ends "[audio-bus] DONE fails=N".
 
-## bus -> [index, send, effect count of the layout]; the three world buses carry one reverb each (A2), the Music bus a compressor, a reverb and a limiter (S26). Godot routes a send that points at the same or a
+## bus -> [index, send, effect count of the layout]; the three world buses carry one reverb each (A2), the Music bus a compressor, a reverb and a limiter (S26), and Master ends in one hard limiter (N084, MASTER1, f957123). Godot routes a send that points at the same or a
 ## later index straight to Master, so every send must sit at a lower index than its bus.
 const GRAPH := {
-	"Master": [0, "", 0],
+	"Master": [0, "", 1],
 	"Music": [1, "Master", 3],
 	"SFX": [2, "Master", 0],
 	"Voice": [3, "Master", 0],

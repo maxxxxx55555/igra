@@ -2,12 +2,12 @@
 
 extends Node
 
-## LocalizationManager - 13 jazykov, system font fallback, RTL
+## LocalizationManager - 6 jazykov (v10 E6: en ru de es fr pt_BR), system font fallback, RTL
 signal language_changed(lang: String)
 
 const LANG_DIR: String = "res://data/i18n/"
 
-const SUPPORTED: Array = ["ru","en","es","de","fr","it","pt_BR","tr","ja","ko","zh","zh_TW","ar"]
+const SUPPORTED: Array = ["ru","en","es","de","fr","pt_BR"]
 
 ## Эндонимы: язык подписан на самом себе, как ждёт игрок в списке языков.
 ## Раньше здесь была латинская транслитерация ("Nihongo", "Zhongwen(Jian)") —
@@ -15,11 +15,10 @@ const SUPPORTED: Array = ["ru","en","es","de","fr","it","pt_BR","tr","ja","ko","
 ## в _setup_system_font(), и подписи можно писать родным письмом.
 const LANG_NAMES: Dictionary = {
 	"ru": "Русский", "en": "English", "es": "Español", "de": "Deutsch",
-	"fr": "Français", "it": "Italiano", "pt_BR": "Português (BR)", "tr": "Türkçe",
-	"ja": "日本語", "ko": "한국어", "zh": "简体中文", "zh_TW": "繁體中文",
-	"ar": "العربية"}
+	"fr": "Français", "pt_BR": "Português (BR)"}
 
-const RTL_LANGS: Array = ["ar"]
+## No supported language reads right to left since Arabic left in v10 E6; is_rtl() and the layouts that ask it stay for the day one comes back.
+const RTL_LANGS: Array = []
 
 ## Основной шрифт игры (латиница/кириллица). В нём нет иероглифов и арабской
 ## вязи, поэтому к нему цепляется системный шрифт как fallback.
@@ -86,8 +85,6 @@ func _apply_font_to_theme(theme: Theme, font: Font) -> void:
 
 func _detect_system_lang() -> String:
 	var loc = OS.get_locale()
-	if loc.begins_with("zh_TW") or loc.begins_with("zh-Hant"): return "zh_TW"
-	if loc.begins_with("zh"): return "zh"
 	if loc.begins_with("pt_BR"): return "pt_BR"
 	var short = loc.substr(0, 2)
 	if short in SUPPORTED: return short

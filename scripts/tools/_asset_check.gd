@@ -26,7 +26,7 @@ func _check_sfx_bank() -> void:
 	for s in surfaces:
 		var sample: String = String(fs.MATERIALS.get(s, {}).get("sample", "step_" + s))
 		sample_names.append(sample)
-		if not ResourceLoader.exists("res://assets/audio/sfx/%s.wav" % sample):
+		if BaseMonster.cue_path(sample).is_empty():
 			missing.append(sample)
 	_ok(missing.is_empty(), "S9.2 шаги по поверхностям (%d/%d)%s" % [
 		surfaces.size() - missing.size(), surfaces.size(),
@@ -38,7 +38,7 @@ func _check_sfx_bank() -> void:
 		"mon_watcher_scream", "mon_hunter_roar", "monster_destroyer_hum"]
 	var cue_missing: Array = []
 	for c in cues:
-		if not ResourceLoader.exists("res://assets/audio/sfx/%s.wav" % c):
+		if BaseMonster.cue_path(c).is_empty():
 			cue_missing.append(c)
 	_ok(cue_missing.is_empty(), "S9.3 звуки монстров (%d/%d)%s" % [
 		cues.size() - cue_missing.size(), cues.size(),
@@ -47,10 +47,10 @@ func _check_sfx_bank() -> void:
 	# Sample data must be non-empty, else playback is silent.
 	var empty: Array = []
 	for n in (sample_names + cues):
-		var p := "res://assets/audio/sfx/%s.wav" % n
-		if ResourceLoader.exists(p):
-			var w: AudioStreamWAV = load(p)
-			if w == null or w.data.size() < 512:
+		var p: String = BaseMonster.cue_path(n)
+		if not p.is_empty():
+			var w := load(p) as AudioStream
+			if w == null or w.get_length() < 0.005:
 				empty.append(n)
 	_ok(empty.is_empty(), "все новые WAV непустые%s" % ("" if empty.is_empty() else " пустые: " + ", ".join(empty)))
 
@@ -146,9 +146,10 @@ func _check_music() -> void:
 		var p: String = moods[m]
 		if not FileAccess.file_exists(p + ".import"):
 			no_import.append(p.get_file())
-	for d in MusicDirector.AMBIENT_BY_DISTRICT.values():
-		if not FileAccess.file_exists(String(d) + ".import"):
-			no_import.append(String(d).get_file())
+	for table in [MusicDirector.AMBIENCE_DARK_BY_DISTRICT, MusicDirector.AMBIENCE_LIT_BY_DISTRICT]:
+		for d in table.values():
+			if not FileAccess.file_exists(String(d) + ".import"):
+				no_import.append(String(d).get_file())
 	_ok(no_import.is_empty(), "треки импортированы (попадут в APK)%s" % ("" if no_import.is_empty() else " нет: " + ", ".join(no_import)))
 
 	## .import не в репозитории (см. .gitignore) - на свежем клоне loop_mode/
@@ -184,7 +185,7 @@ func _check_music() -> void:
 			not_looped.append(String(moods[m]).get_file() + "(не загрузился)")
 	_ok(not_looped.is_empty(), "треки непустые и зациклены%s" % ("" if not_looped.is_empty() else ": " + ", ".join(not_looped)))
 
-	var districts: Dictionary = MusicDirector.AMBIENT_BY_DISTRICT
+	var districts: Dictionary = MusicDirector.AMBIENCE_LIT_BY_DISTRICT
 	_ok(districts.size() >= 2, "эмбиент задан для %d районов" % districts.size())
 	var uniq: Dictionary = {}
 	for k in districts:

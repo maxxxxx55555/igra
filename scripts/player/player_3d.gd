@@ -24,6 +24,9 @@ var hp: float = 100.0
 ## (см. base_monster.gd), _inflict_statuses() раньше был no-op без этого метода.
 var status_fx: Node = null
 var stamina: float = 100.0
+## v10 N032: at 0 the sprint is over until a quarter of the bar is back (it refilled in the same frame and the player ran on at 96 % of full speed for as long as Shift was held).
+var _winded: bool = false
+const RUN_RESUME_FRACTION: float = 0.25
 var battery: float = 100.0
 var look_dir: Vector3 = Vector3.FORWARD
 var flashlight_enabled: bool = true
@@ -283,6 +286,7 @@ func _ready() -> void:
 	var mh = stats.max_hp if (stats and stats.max_hp > 0) else 100.0
 	hp = float(mh)
 	stamina = stats.stamina_max
+	_winded = false
 	battery = float(battery_max)
 
 	if OS.has_feature("mobile"):
@@ -567,12 +571,12 @@ func _physics_process(delta: float) -> void:
 			desired = State.CROUCH
 		elif InputService.is_stealth_toggled():
 			desired = State.STEALTH
-		elif InputService.is_run_held() and stamina > 0.0:
+		elif InputService.is_run_held() and _can_run():
 			desired = State.RUN
 		else:
 			desired = State.WALK
 
-	if desired == State.RUN and stamina <= 0.0:
+	if desired == State.RUN and not _can_run():
 		desired = State.WALK
 
 	if desired != current_state:
@@ -826,6 +830,9 @@ func _enter_state(s: State) -> void:
 		State.STEALTH:
 			EventBus.player_stealth_changed.emit(true)
 
+func _can_run() -> bool:
+	return stamina > 0.0 and not _winded
+
 func _update_stamina(delta: float) -> void:
 	var prev := stamina
 	var drain_mult := 1.0
@@ -839,6 +846,10 @@ func _update_stamina(delta: float) -> void:
 		stamina = maxf(0.0, stamina - stats.stamina_drain_per_sec * drain_mult * delta)
 	else:
 		stamina = minf(stats.stamina_max, stamina + stats.stamina_regen_per_sec * delta)
+	if stamina <= 0.0:
+		_winded = true
+	elif _winded and stamina >= stats.stamina_max * RUN_RESUME_FRACTION:
+		_winded = false
 	if absf(stamina - prev) > 0.01:
 		EventBus.player_stamina_changed.emit(stamina / stats.stamina_max)
 
@@ -1034,7 +1045,7 @@ func trigger_strobe() -> bool:
 		if m.has_method("stun"):
 			m.call("stun", STROBE_STUN)
 			hits += 1
-	_strobe_flash()
+	_strobe_effects()
 	EventBus.noise_emitted.emit(Vector2(global_position.x, global_position.z), 4.0)
 	if hits > 0:
 		EventBus.inventory_notice.emit(LocalizationManager.t("STROBE_HIT"))
@@ -1400,7 +1411,10 @@ func _update_low_battery_flicker() -> void:
 		and not bool(SettingsManager.get_setting("reduce_flash", false))
 	if flicker:
 		_flickering = true
-		flashlight.light_energy = _base_flashlight_energy * (1.0 + (randf() * 2.0 - 1.0) * flashlight_stats.flicker_intensity)
+		var now: int = Time.get_ticks_msec()
+		if now >= _flicker_next_msec:
+			_flicker_next_msec = now + FLICKER_HOLD_MSEC
+			flashlight.light_energy = _base_flashlight_energy * (1.0 + (randf() * 2.0 - 1.0) * flashlight_stats.flicker_intensity)
 	elif _flickering:
 		_flickering = false
 		flashlight.light_energy = _base_flashlight_energy
@@ -1438,6 +1452,9 @@ var _flashlight_stability_maxed: bool = false
 var _flashlight_drain_cut: float = 0.0
 var _base_flashlight_energy: float = -1.0
 var _flickering: bool = false
+## v10 N034: the swing of the low-battery light was drawn on every physics frame (60 a second on the default settings); the light now changes at most three times a second (WCAG 2.3.1, docs/GAMEFEEL_SPEC.md).
+const FLICKER_HOLD_MSEC: int = 340
+var _flicker_next_msec: int = 0
 const BATTERY_PER_SKILL_LVL: float = 25.0
 
 func refresh_battery_max() -> void:
@@ -1454,4 +1471,8 @@ func refresh_flashlight_range() -> void:
 	var skill_lvl: int = SkillTreeManager.get_skill_level(&"light_radius") if SkillTreeManager else 0
 	flashlight.spot_range = _scene_flashlight_range * (1.0 + 0.2 * skill_lvl) + _upgrade_range_bonus
 
-
+## The flash of the strobe flashlight and its sparks in front of the lens (scenes/vfx/vfx_strobe.tscn, W7); the sparks are not made with Reduce Flash.
+func _strobe_effects() -> void:
+	_strobe_flash()
+	if not bool(SettingsManager.get_setting("reduce_flash", false)):
+		preload("res://scripts/effects/vfx_pool.gd").spawn(preload("res://scenes/vfx/vfx_strobe.tscn"), flashlight.global_position - flashlight.global_transform.basis.z * 0.6, get_tree())

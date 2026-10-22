@@ -12,44 +12,59 @@ const SCENES: Dictionary = {
 	&"rifle": preload("res://scenes/weapons/weapon_rifle.tscn"),
 	&"shotgun": preload("res://scenes/weapons/weapon_shotgun.tscn"),
 }
-const MODEL: PackedScene = preload("res://scenes/weapons/weapon_model.tscn")
-## Viewmodel length per weapon: the placeholder model is one pistol-sized set of boxes.
-const MODEL_LENGTH: Dictionary = {&"pistol": 1.0, &"rifle": 2.4, &"shotgun": 2.1}
+## C6: each gun has its own viewmodel (weapon_meshes.gd); the part that works on a shot, the slide, the bolt or the pump, goes back RACK_M and forward again in RACK_SEC.
+const _Weapons := preload("res://scripts/art/weapon_meshes.gd")
+const RACK_M: float = 0.035
+const RACK_SEC: float = 0.12
 ## Where the drawn weapon sits in the camera's frame: right hand, a little below the view.
 const HOLD_OFFSET := Vector3(0.22, -0.2, -0.45)
+## The muzzle turns a little toward the middle of the view, which shows the side of the gun and not only its back.
+const HOLD_YAW: float = 0.14
+const _Motion := preload("res://scripts/weapons/viewmodel_motion.gd")
 
 var equipped: StringName = &""
 var _weapons: Dictionary = {}
-var _model_material := StandardMaterial3D.new()
+var _motion := _Motion.new()
 
 func _ready() -> void:
-	_model_material.albedo_color = Color(0.15, 0.16, 0.18)
-	_model_material.metallic = 0.6
-	_model_material.roughness = 0.5
 	for id in ProgressTracker.get_weapons():
 		_spawn(StringName(id))
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	var weapon := get_current_weapon()
 	var cam := get_viewport().get_camera_3d()
 	if weapon != null and cam != null:
-		weapon.global_transform = cam.global_transform * Transform3D(Basis(), HOLD_OFFSET)
+		weapon.global_transform = cam.global_transform * Transform3D(Basis(Vector3.UP, HOLD_YAW), HOLD_OFFSET) * _motion.offset(delta, cam.global_transform.basis, weapon.is_reloading())
+
+## The moving part of a gun (Slide, Bolt or Pump, the second child of its model) works back and forward; still with Motion Comfort and Reduce UI Motion.
+func _rack(model: Node3D) -> void:
+	var part := model.get_child(1) as Node3D
+	if _Motion.calm() or part == null:
+		return
+	if part.has_meta(&"rack"):
+		var old: Variant = part.get_meta(&"rack")
+		if old is Tween:
+			(old as Tween).kill()
+	var tween := part.create_tween()
+	tween.tween_property(part, "position:z", RACK_M, RACK_SEC * 0.3)
+	tween.tween_property(part, "position:z", 0.0, RACK_SEC * 0.7)
+	part.set_meta(&"rack", tween)
 
 func _spawn(id: StringName) -> void:
 	var weapon := (SCENES[id] as PackedScene).instantiate() as WeaponBase
 	weapon.visible = false
 	weapon.manager = self
 	weapon.set_shooter(get_parent() as Node3D)
-	weapon.fired.connect(func() -> void: ProgressTracker.shots += 1)
+	var model := _Weapons.model(id)
+	weapon.fired.connect(func() -> void:
+		ProgressTracker.shots += 1
+		_motion.kick(weapon.recoil)
+		_rack(model))
+	weapon.reloaded.connect(_rack.bind(model))
 	weapon.ammo_changed.connect(func(_current: int, _mag: int) -> void:
 		if weapon == get_current_weapon():
 			_emit_ammo())
 	add_child(weapon)
-	var model := MODEL.instantiate() as Node3D
-	model.scale = Vector3(1.0, 1.0, float(MODEL_LENGTH[id]))
-	for part in model.get_children():
-		if part is CSGShape3D:
-			(part as CSGShape3D).material = _model_material
 	weapon.add_child(model)
 	_weapons[id] = weapon
 
@@ -59,6 +74,7 @@ func unlock(id: StringName) -> bool:
 		return false
 	_spawn(id)
 	EventBus.inventory_notice.emit(LocalizationManager.tf("WEAPON_FOUND", [_display_name(id)]))
+	EventBus.inventory_changed.emit()  # the bar shows the slot of a gun from now on
 	return true
 
 func is_unlocked(id: StringName) -> bool:

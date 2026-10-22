@@ -323,8 +323,8 @@ func _despawn_status_icon(status: int, icon: Control) -> void:
 	tw.tween_property(icon, "modulate:a", 0.0, 0.2)
 	tw.tween_callback(icon.queue_free)
 
-## T13: сравнение оружия при переключении. WeaponManager сейчас не привязан
-## ни к одному игровому узлу (боевая система на мили) — ищем его мягко,
+## T13: сравнение оружия при переключении. WeaponManager — узел игрока
+## (player_3d.gd, оружие находят в мире) — ищем его по имени мягко,
 ## без него виджет просто не появляется.
 func _setup_weapon_compare() -> void:
 	var player := get_tree().get_first_node_in_group("player")
@@ -1753,6 +1753,7 @@ func _on_quick_slots_changed(key: String, _value: Variant) -> void:
 		_slot_items = _QUICK_SLOTS.read()
 		_apply_slot_bindings()
 
+## C9: the keys and the taps both name a slot of the six, whether it is on the bar or not: the bar hides slots, it does not renumber them (the key 4 is the medkit with or without the pistol found).
 func _on_quick_slot_key(index: int) -> void:
 	_use_quick_slot(index)
 
@@ -1806,6 +1807,7 @@ func _refresh_slot_badges() -> void:
 	var inv := get_tree().root.get_node_or_null("InventoryManager")
 	if not inv:
 		return
+	_show_slots()
 	for i in _slot_items.size():
 		var slot := get_node_or_null("BottomCenter/Slot" + str(i))
 		var badge: Label = slot.get_node_or_null("Badge") if slot else null
@@ -1820,6 +1822,29 @@ func _refresh_slot_badges() -> void:
 		badge.text = str(inv.count_of(item_id))
 		badge.visible = item_id != &"flashlight"
 
+## C8: only the slots of QuickSlots.visible_slots() are on the bar. One that appears does so with a scale and a fade of _SLOT_REVEAL_SEC (not with Reduce Flash); the first call, the bar being built, is silent.
+const _SLOT_REVEAL_SEC: float = 0.25
+var _slots_shown: bool = false
+
+func _show_slots() -> void:
+	var shown: Array[int] = _QUICK_SLOTS.visible_slots()
+	var calm: bool = bool(SettingsManager.get_setting("reduce_flash", false))
+	for i in _slot_items.size():
+		var slot := get_node_or_null("BottomCenter/Slot" + str(i)) as Control
+		if slot == null:
+			continue
+		var now: bool = shown.has(i)
+		if now and not slot.visible and _slots_shown and not calm:
+			slot.pivot_offset = slot.size / 2.0
+			slot.modulate.a = 0.0
+			slot.scale = Vector2(0.6, 0.6)
+			var tw := slot.create_tween().set_parallel(true)
+			tw.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+			tw.tween_property(slot, "modulate:a", 1.0, _SLOT_REVEAL_SEC)
+			tw.tween_property(slot, "scale", Vector2.ONE, _SLOT_REVEAL_SEC)
+		slot.visible = now
+	_slots_shown = true
+
 ## docs/GAMEFEEL_SPEC.md, "New events to juice": item_picked_up -> a brief
 ## flash on the quick slot that received the item, opacity ramp only, <= 120 ms,
 ## skipped entirely under reduce_flash (that spec's toggle for HUD flash beats).
@@ -1829,7 +1854,7 @@ const _SLOT_FLASH_SEC: float = 0.12
 const _SLOT_FLASH_ALPHA: float = 0.45
 const _SLOT_FLASH_NAME: String = "PickupFlash"
 
-func _on_item_picked_up(item_id: StringName) -> void:
+func _on_item_picked_up(item_id: StringName, _amount: int = 1) -> void:
 	var index := _slot_items.find(item_id)
 	if index < 0:
 		return

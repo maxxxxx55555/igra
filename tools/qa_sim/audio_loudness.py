@@ -3,7 +3,7 @@
 
 usage: python tools/qa_sim/audio_loudness.py [--write docs/AUDIO_LOUDNESS_TABLE.md] [--check] [--demo]
 Categories are directories of assets/audio. A file shorter than 0.4 s has no integrated loudness (R128 gates it); it is reported by its mean volume (volumedetect) in a column of its own.
---check fails when a file's true peak is above PEAK_LIMIT_DB (the directive's -1 dBFS) or when ffmpeg is missing.
+--check fails when a file's true peak is above PEAK_LIMIT_DB (the canon of -1.5 dBFS since v10 N030, the directive said -1), when a loop of music_manager.gd jumps where its end meets its start (F13: a click on every turn), or when ffmpeg is missing.
 """
 import pathlib
 import re
@@ -23,11 +23,14 @@ CATEGORIES = {
 }
 # The directive's targets (-14 music, -10 sfx, -20 ambient) and the canon of docs/PRODUCTION_BIBLE.md and docs/STYLE_GUIDE.md section 5 as measured in docs/AUDIO_CONSISTENCY.md.
 DIRECTIVE_LUFS = {"music": -14.0, "sfx": -10.0, "ambient beds": -20.0, "ambient details": -20.0}
-PEAK_LIMIT_DB = -1.0
+PEAK_LIMIT_DB = -1.5  # v10 N030: the canon of docs/STYLE_GUIDE.md section 5 (the gate stood at the directive's -1.0 and 17 files sat between the two; they are under -1.5 now)
 CANON_PEAK_DB = -1.5  # docs/STYLE_GUIDE.md section 5: true peak at most -1.5 dBFS
 SPREAD_LU = 3.0
 SUFFIXES = {".ogg", ".wav", ".mp3"}
 GATED = -69.0
+# F13: the step between the last and the first sample of a loop (full scale is 1.0). The generated tracks read 0.000 to 0.037 once music_post.py closed their seams; a hard cut reads 0.1 and more.
+SEAM_LIMIT = 0.04
+LOOP_CONSTANTS = ("TRACKS", "BATTLE_VARIANTS", "BOSS_PHASES", "AMBIENCE_DARK_BY_DISTRICT", "AMBIENCE_LIT_BY_DISTRICT", "LAYERS")
 
 
 def ffmpeg():
@@ -90,17 +93,40 @@ def table(rows):
     return "\n".join(lines)
 
 
+def loop_files():
+    """The files music_manager.gd plays as loops: what its loop constants name, less the victory figure (a one-shot)."""
+    src = (ROOT / "scripts/systems/music_manager.gd").read_text(encoding="utf-8")
+    found = []
+    for name in LOOP_CONSTANTS:
+        m = re.search(r"(?ms)^const %s\b[^=]*=\s*[\[{](.*?)^[\]}]" % name, src)
+        if m:
+            found += [p for p in re.findall(r'res://(assets/audio/[^"]+\.ogg)', m.group(1)) if "music_victory" not in p]
+    return sorted(set(found))
+
+
+def seam_step(audio):
+    return abs(float(audio[0]) - float(audio[-1]))
+
+
 def main(argv):
     if "--demo" in argv:
+        import numpy as np
+        t = np.arange(44100) / 44100.0
+        assert seam_step(np.sin(2 * np.pi * 4 * t)) < SEAM_LIMIT < seam_step(0.5 * np.sin(2 * np.pi * 4.25 * t)), "a closed loop passes and a hard cut fails"
         rows = {"x": [("a.ogg", -14.0, -3.0, None), ("b.ogg", -21.0, -0.5, None), ("c.ogg", None, None, -30.0), ("d.ogg", -14.5, -3.0, None)]}
         s = summary(rows)[0]
         assert s[1] == 4 and s[4] == 1 and s[5] == ["b.ogg"] and s[6] == ["b.ogg"]
-        print("audio_loudness demo: a file over the peak limit, a file far from the median and a gated file are all counted")
+        print("audio_loudness demo: a file over the peak limit, a file far from the median and a gated file are all counted; a hard-cut loop is over the seam limit and a closed one is not")
         return 0
     rows = collect(ffmpeg())
     text = table(rows)
     print(text)
     over = [f for _, _, _, _, _, loud, _ in summary(rows) for f in loud]
+    import music_post
+    steps = [(p, seam_step(music_post.decode(ROOT / p))) for p in loop_files()]
+    clicks = [(p, s) for p, s in steps if s > SEAM_LIMIT]
+    print("\nLoop seams (the step between the last and the first sample, limit %.2f): %d loops, %d over: %s" % (SEAM_LIMIT, len(steps), len(clicks), ", ".join("%s %.3f" % (p.rsplit("/", 1)[-1], s) for p, s in clicks) or "none"))
+    over += [p for p, _ in clicks]
     if "--write" in argv:
         pathlib.Path(argv[argv.index("--write") + 1]).write_text("# Loudness of the shipped audio (Session 23)\n\nMeasured by `python tools/qa_sim/audio_loudness.py --write docs/AUDIO_LOUDNESS_TABLE.md` (ffmpeg ebur128, integrated loudness and true peak of each file).\n\n" + text + "\n\nFiles over the peak limit:\n\n" + ("\n".join("- `%s`" % f for f in over) if over else "none") + "\n", encoding="utf-8")
     return 1 if ("--check" in argv and over) else 0

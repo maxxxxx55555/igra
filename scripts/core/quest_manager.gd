@@ -29,26 +29,24 @@ func _ready() -> void:
 
 func _init_quests() -> void:
 	var quest_data := [
-		# --- Сюжет (5): ремонт энергосети города ---
+		# v10 N043: the objective list shows the first three, and the third was the cable box of the tenth district. The first seven are what the first district works on (its power switch, its fuses, scrap, cells, a supply, the Shadows of the suburbs, a secret: a street holds two or three of an item, so most are finished over the next districts); the rest wait for a later district.
 		["q_repair_district1", "Q_REPAIR_DISTRICT1_TITLE", "Q_REPAIR_DISTRICT1_DESC", "REPAIR", "suburbs", 1, 100, []],
 		["q_find_fuses", "Q_FIND_FUSES_TITLE", "Q_FIND_FUSES_DESC", "COLLECT", "fuse", 3, 50, []],
+		["q_collect_scrap", "Q_COLLECT_SCRAP_TITLE", "Q_COLLECT_SCRAP_DESC", "COLLECT", "scrap", 10, 40, []],
+		["q_collect_battery", "Q_COLLECT_BATTERY_TITLE", "Q_COLLECT_BATTERY_DESC", "COLLECT", "battery", 4, 45, []],
+		["q_collect_medkit", "Q_COLLECT_MEDKIT_TITLE", "Q_COLLECT_MEDKIT_DESC", "COLLECT", "medkit", 3, 55, []],
+		["q_kill_shadow", "Q_KILL_SHADOW_TITLE", "Q_KILL_SHADOW_DESC", "KILL", "shadow", 7, 70, []],
+		["q_secrets_1", "Q_SECRETS_1_TITLE", "Q_SECRETS_1_DESC", "SECRET", "secret", 1, 30, []],
+		# --- the others, in the order of the districts they are met in ---
 		["q_connect_cables", "Q_CONNECT_CABLES_TITLE", "Q_CONNECT_CABLES_DESC", "INTERACT", "cable_node", 1, 75, [["scrap", 4]]],
 		["q_find_engineers", "Q_FIND_ENGINEERS_TITLE", "Q_FIND_ENGINEERS_DESC", "EXPLORE", "engineer_camp", 1, 120, [["medkit", 1]]],
 		["q_explore_school", "Q_EXPLORE_SCHOOL_TITLE", "Q_EXPLORE_SCHOOL_DESC", "EXPLORE", "school_zone", 1, 150, [["gear", 2]]],
-		# --- Бой (5) ---
 		["q_kill_runner", "Q_KILL_RUNNER_TITLE", "Q_KILL_RUNNER_DESC", "KILL", "hunter", 5, 60, []],
 		["q_kill_tank", "Q_KILL_TANK_TITLE", "Q_KILL_TANK_DESC", "KILL", "destroyer", 3, 90, [["battery", 1]]],
 		["q_kill_sniper", "Q_KILL_SNIPER_TITLE", "Q_KILL_SNIPER_DESC", "KILL", "sharpshooter", 4, 80, []],
 		["q_kill_squad", "Q_KILL_SQUAD_TITLE", "Q_KILL_SQUAD_DESC", "KILL", "hound", 6, 100, [["transistor", 2]]],
-		["q_kill_shadow", "Q_KILL_SHADOW_TITLE", "Q_KILL_SHADOW_DESC", "KILL", "shadow", 7, 70, []],
-		# --- Сбор (5) ---
-		["q_collect_scrap", "Q_COLLECT_SCRAP_TITLE", "Q_COLLECT_SCRAP_DESC", "COLLECT", "scrap", 10, 40, []],
-		["q_collect_battery", "Q_COLLECT_BATTERY_TITLE", "Q_COLLECT_BATTERY_DESC", "COLLECT", "battery", 4, 45, []],
-		["q_collect_medkit", "Q_COLLECT_MEDKIT_TITLE", "Q_COLLECT_MEDKIT_DESC", "COLLECT", "medkit", 3, 55, []],
 		["q_collect_cable", "Q_COLLECT_CABLE_TITLE", "Q_COLLECT_CABLE_DESC", "COLLECT", "cable", 8, 60, []],
 		["q_collect_components", "Q_COLLECT_COMPONENTS_TITLE", "Q_COLLECT_COMPONENTS_DESC", "COLLECT", "transistor", 10, 70, []],
-		# --- Секреты (3) ---
-		["q_secrets_1", "Q_SECRETS_1_TITLE", "Q_SECRETS_1_DESC", "SECRET", "secret", 1, 30, []],
 		["q_secrets_2", "Q_SECRETS_2_TITLE", "Q_SECRETS_2_DESC", "SECRET", "secret", 2, 30, []],
 		["q_secrets_3", "Q_SECRETS_3_TITLE", "Q_SECRETS_3_DESC", "SECRET", "secret", 3, 40, [["blueprint_flashlight_brightness", 1]]],
 		["q_craft_items", "Q_CRAFT_ITEMS_TITLE", "Q_CRAFT_ITEMS_DESC", "CRAFT", "craft", 5, 65, [["scrap", 3]]],
@@ -69,13 +67,13 @@ func _on_enemy_killed(monster_id: StringName) -> void:
 		if q.type == "KILL" and not q.done and sid.contains(q.target):
 			_tick(q, 1)
 
-func _on_item_picked(item_id: StringName) -> void:
+func _on_item_picked(item_id: StringName, amount: int) -> void:
 	var sid := String(item_id)
 	for qid in quests:
 		var q = quests[qid]
 		if q.type == "COLLECT" and not q.done:
 			if sid == q.target or sid.begins_with(q.target):
-				_tick(q, 1)
+				_tick(q, amount)
 
 func _on_district_restored(district_id: StringName, _stage: int) -> void:
 	# Was "or stage >= 2", which fired for ANY district since this handler
@@ -109,7 +107,7 @@ func _on_secret_found(secret_id: StringName) -> void:
 			_tick(q, 1)
 
 func _tick(q: Dictionary, n: int) -> void:
-	q.progress += n
+	q.progress = mini(int(q.progress) + n, int(q.target_count))  # a crate of three on the ninth of ten scrap
 	quest_updated.emit()
 	quest_progress.emit(String(q.id), int(q.progress), int(q.target_count))
 	if q.progress >= q.target_count:

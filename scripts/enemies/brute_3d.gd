@@ -36,6 +36,7 @@ func _handle_light_reaction(_delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	if _winding_up and ai_state != State.DEAD:
+		_update_anim(delta)
 		_tick_windup(delta)
 		return
 	super._physics_process(delta)
@@ -49,7 +50,7 @@ func _state_chase(delta: float) -> void:
 	if dist <= attack_range and attack_timer <= 0.0:
 		_windup_timer = WINDUP_TIME
 		_winding_up = true
-		_telegraph.cue()
+		_telegraph.cue(WINDUP_TIME)
 		return
 	_move_to(chase_speed)
 

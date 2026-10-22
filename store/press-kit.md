@@ -11,7 +11,7 @@ the half-lit-city ending still is cleared, ending text/Architect identity never 
 - **Title:** Last Streetlight / Последний фонарь
 - **Tagline:** "Restore the light. Every streetlight is life." / «Верни свет. Каждый фонарь — жизнь.»
 - **Genre:** Stealth-horror FPS, single-player, offline-first
-- **Hook:** 11 connected districts, one continuous blackout city — every street
+- **Hook:** 11 districts, one blackout city relit one district at a time — every street
   you restore stays lit. The flashlight is your gun, your eyes, and your giveaway.
 - **Platforms/controls:** Android (touch + double-tap dodge) and PC (WASD+mouse),
   same game, same save file — export/import it between devices, no account, no server.
@@ -21,12 +21,12 @@ the half-lit-city ending still is cleared, ending text/Architect identity never 
 
 | # | What | Source of truth |
 |---|---|---|
-| 11 | Connected districts, one continuous city, zero loading screens | `data/districts/*.tres` (11 files), `docs/CONTENT_PIPELINE_AUDIT.md` §9 |
+| 11 | Districts, relit one at a time and reached from the city map | `data/districts/*.tres` (11 files), `docs/CONTENT_PIPELINE_AUDIT.md` §9 |
 | 88 | Lore notes (8 per district × 11) | `content/districts/*/lore_notes.json` (recounted 2026-09-13: 8 × 11 = 88) |
-| 13 | Fully localized languages at launch | `data/i18n/*.json` (ar, de, en, es, fr, it, ja, ko, pt_BR, ru, tr, zh, zh_TW); `tools/i18n_audit.py` → MISSING: 0 (`docs/artifacts/final_gate_report.md`) |
+| 6 | Fully localized languages at launch | `data/i18n/*.json` (de, en, es, fr, pt_BR, ru); `tools/i18n_audit.py` → MISSING: 0 (`docs/artifacts/final_gate_report.md`) |
 | 31 | Achievements (20 core, incl. secret ones, + 11 district-full) | `scripts/systems/achievements_manager.gd` ach_01–ach_20 + `ach_district_*` (Batch 13, `docs/PLAYER_VISIBLE_CHANGES.md`) |
-| 30 | Daily challenges (rotating templates, same for all players per UTC day; 7/30/100-day streak bonuses) | `data/daily_challenges.json` (30 templates, streak rewards verified in shipped data) |
-| 12 | Enemy types, each with own senses/weaknesses (incl. the final boss) | `scripts/enemies/*_3d.gd` (12 files) + `data/monsters/*.tres` (12 files), PLAN.md §GDD-conformance table |
+| 58 | Daily challenges (rotating templates, same for all players per UTC day; 7/30/100-day streak bonuses) | `content/daily_challenges.json` (60 templates, 58 offered: the 11 districts cap two), streak rewards verified in shipped data |
+| 11 | Enemy types met in play, each with own senses/weaknesses (incl. the final boss); the twelfth, the Tvar, is defined and never spawned | `data/monsters/*.tres` (12 files), `tools/qa_sim/listing_audit.py` counts the kinds the game spawns |
 | 5 | Endings, decided by how much city + truth you recover | `scripts/systems/endings_manager.gd` (`Ending` enum) + `tools/qa_sim/endings_sim.py` PASS — all 5 reachable (`docs/artifacts/final_gate_report.md`) |
 | 4 | Skill-tree branches | `tools/qa_sim/balance_sim.py` PASS (`docs/artifacts/final_gate_report.md`) |
 
@@ -39,7 +39,7 @@ the half-lit-city ending still is cleared, ending text/Architect identity never 
   checks all PASS**; saves are HMAC-signed (was plain checksum) — `docs/artifacts/security_report.md`.
 - Autoplay bot completes the **11/11 district spine in the clear majority of runs**
   (real combat, real revives, boss engagement).
-- Time-to-win window per balance sim: **3–6 hours** per run; 5 endings + New Game+ for replay.
+- Play time: not measured with players yet (a scripted run that knows the route reaches the end in about eight minutes of game time, a first playthrough takes longer); 5 endings + New Game+ for replay.
 
 - **Kit contents (paths verified on disk 2026-09-13):**
   `store/trailer/presskit_1600x900.png` (header),
@@ -54,7 +54,7 @@ the half-lit-city ending still is cleared, ending text/Architect identity never 
   these carry the exact shipped cinematic stack: district LUT + bloom + vignette + chroma + grain),
   `store/feature-graphic.png` (1024×500), `store/icon-512.png`, `store/icon-adaptive/`,
   `store/screenshots/` (8 upload-ready 1920×1080 EN shots),
-  `store/listing.md` (store copy, 13 locales), `store/changelog.md` (v1.0 notes).
+  `store/listing.md` (store copy, 6 locales), `store/changelog.md` (v1.0 notes).
 
 ## Review-copy instructions (for the owner)
 
@@ -65,8 +65,8 @@ the half-lit-city ending still is cleared, ending text/Architect identity never 
    districts for the first 2 weeks; no ending footage; the Keeper/Architect
    identity is the game's one ungoogleable — keep it that way.
 4. Known-launch-facts reviewers may cite (numbers from the fact sheet above):
-   11 districts, 88 lore notes, 12 enemy types, 5 endings, 31 achievements,
-   60 daily challenges, 13 languages, workbench crafting, HMAC-signed
+   11 districts, 88 lore notes, 11 enemy types, 5 endings, 31 achievements,
+   58 daily challenges, 6 languages, workbench crafting, HMAC-signed
    checksum-verified saves with automatic backup recovery, offline-first with
    no account. See also the release-state block above for gate numbers.
 
@@ -88,14 +88,14 @@ Hi <name>,
 <One line on why them: e.g. "loved your <outlet> piece on <game>.">
 
 LAST STREETLIGHT is a stealth-horror FPS about bringing the light back
-to a dead city: 11 connected districts, zero loading screens, and every
+to a dead city: 11 districts, relit one at a time, and every
 street you save stays lit. Tagline: "Restore the light. Every streetlight
 is life."
 
 Review build: <APK/AAB link + expiry>
 Press kit (art, fact sheet, trailer stills): <this repo's store/ link or zip>
-Play time: 3–6 h to win (balance-sim verified) · 5 endings + New Game+ ·
-31 achievements · 60 daily challenges · 13 languages · Android + PC (same save file)
+Play time: not yet measured with players · 5 endings + New Game+ ·
+31 achievements · 58 daily challenges · 6 languages · Android + PC (same save file)
 
 Only ask: please keep coverage to the first districts for 2 weeks and keep
 the endings unspoiled. Happy to do a <written/video> interview any time.

@@ -11,6 +11,9 @@ const FONT_PX: int = 96
 const SIGN_H: float = 1.0
 const SIGN_Y: float = 1.2
 const SIGNS: int = 5
+## The clear space between two signs on one face, and the tries a sign has to find it.
+const GAP: float = 0.4
+const PLACE_TRIES: int = 24
 ## How much of its own glow the paint shows, by power stage (DARK, PARTIAL, STREETS, FULL); at DARK the signs are all but gone.
 const LIT_BY_STAGE: Array[float] = [0.45, 0.6, 0.8, 1.0]
 const HAZARD: Array[String] = ["ОПАСНО", "ВЫСОКОЕ НАПРЯЖЕНИЕ", "ВХОД ВОСПРЕЩЁН", "ПРОХОД ЗАПРЕЩЁН", "НЕ ВХОДИТЬ"]
@@ -39,6 +42,34 @@ static func font_px(word: String, font: Font) -> int:
 	var wide: float = font.get_string_size(word, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_PX).x
 	return mini(FONT_PX, int(FONT_PX * ATLAS_W / (wide * 1.06)))
 
+## How much of the 1024 px row of the atlas the letters of `word` fill, and the width in metres of that sign (a row is ATLAS_W / ROW_PX signs tall).
+static func fill_of(word: String, font: Font) -> float:
+	return clampf(font.get_string_size(word, HORIZONTAL_ALIGNMENT_LEFT, -1, font_px(word, font)).x / ATLAS_W * 1.06, 0.05, 1.0)
+
+static func width_of(fill: float) -> float:
+	return fill * ATLAS_W / ROW_PX * SIGN_H
+
+## Where each sign goes, as (face, x): a face wide enough for it and clear of the signs already on it by GAP (v10 N013: the word of the power station and its hazard word were drawn over each other).
+## ponytail: 24 tries per sign, the last one stands when none is clear (a district with a single narrow block face), a packing search when that ever shows in a frame.
+static func place(widths: Array[float], sign_w: Array[float], rng: RandomNumberGenerator) -> Array[Vector2]:
+	var spots: Array[Vector2] = []
+	for i in sign_w.size():
+		var spot := Vector2.ZERO
+		for _try in PLACE_TRIES:
+			var k: int = rng.randi() % widths.size()
+			var span: float = maxf(0.0, widths[k] * 0.5 - sign_w[i] * 0.5 - 0.6)
+			spot = Vector2(k, rng.randf_range(-span, span))
+			if widths[k] >= sign_w[i] + 1.4 and _clear(spots, sign_w, spot, sign_w[i]):
+				break
+		spots.append(spot)
+	return spots
+
+static func _clear(spots: Array[Vector2], sign_w: Array[float], at: Vector2, w: float) -> bool:
+	for j in spots.size():
+		if spots[j].x == at.x and absf(spots[j].y - at.y) < (sign_w[j] + w) * 0.5 + GAP:
+			return false
+	return true
+
 ## `fronts` are the front faces of the skyline's blocks at the ground (z toward the street) and `widths` their widths; the signs are laid on them from a stream of the district's own.
 static func build(parent: Node3D, district_id: StringName, fronts: Array[Transform3D], widths: Array[float]) -> void:
 	if DisplayServer.get_name() == "headless" or fronts.is_empty():
@@ -63,7 +94,7 @@ static func build(parent: Node3D, district_id: StringName, fronts: Array[Transfo
 		label.add_theme_font_size_override("font_size", px)
 		label.add_theme_color_override("font_color", Color.WHITE)
 		viewport.add_child(label)
-		fills.append(clampf(font.get_string_size(words[i], HORIZONTAL_ALIGNMENT_LEFT, -1, px).x / ATLAS_W * 1.06, 0.05, 1.0))
+		fills.append(fill_of(words[i], font))
 	parent.add_child(viewport)
 	await parent.get_tree().process_frame
 	await RenderingServer.frame_post_draw
@@ -81,16 +112,13 @@ static func build(parent: Node3D, district_id: StringName, fronts: Array[Transfo
 	mm.instance_count = SIGNS
 	var rng := RandomNumberGenerator.new()
 	rng.seed = hash("signs_" + String(district_id))
+	var sign_w: Array[float] = []
+	for i in SIGNS:
+		sign_w.append(width_of(fills[i % words.size()]))
+	var spots: Array[Vector2] = place(widths, sign_w, rng)
 	for i in SIGNS:
 		var row: int = i % words.size()
-		var width: float = fills[row] * ATLAS_W / ROW_PX * SIGN_H
-		var k: int = rng.randi() % fronts.size()
-		for _try in 6:
-			if widths[k] >= width + 1.4:
-				break
-			k = rng.randi() % fronts.size()
-		var span: float = maxf(0.0, widths[k] * 0.5 - width * 0.5 - 0.6)
-		mm.set_instance_transform(i, fronts[k] * Transform3D(Basis.from_scale(Vector3(width, SIGN_H, 1.0)), Vector3(rng.randf_range(-span, span), SIGN_Y, 0.07)))
+		mm.set_instance_transform(i, fronts[int(spots[i].x)] * Transform3D(Basis.from_scale(Vector3(sign_w[i], SIGN_H, 1.0)), Vector3(spots[i].y, SIGN_Y, 0.07)))
 		mm.set_instance_custom_data(i, Color(float(row), fills[row], rng.randf(), _paint(words[row])))
 	var mat := ShaderMaterial.new()
 	mat.shader = _SHADER

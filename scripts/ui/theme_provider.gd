@@ -58,6 +58,14 @@ static func _btn_stylebox(tex: Texture2D) -> StyleBoxTexture:
 	sb.content_margin_bottom = 8.0
 	return sb
 
+static var _heading: Font
+
+## The face of the buttons, for a Label that heads a screen (v10 N016): a plain Label takes the body face of its theme.
+static func heading_font() -> Font:
+	if _heading == null:
+		_heading = build_theme().get_font(&"font", &"Button")
+	return _heading
+
 static func build_theme() -> Theme:
 	var theme := Theme.new()
 	var font_body: Font = _load_font("res://assets/fonts/RobotoCondensed-Regular.ttf", ThemeDB.fallback_font)
@@ -162,4 +170,24 @@ static func build_theme() -> Theme:
 	sb_bg.set_content_margin_all(SCROLLBAR_MARGIN)
 	theme.set_stylebox("scroll", "VScrollBar", sb_bg)
 	theme.set_stylebox("scroll", "HScrollBar", sb_bg)
+	return _scale(theme, font_heading, font_mono)
+
+## W9 of docs/VISUAL_PASS.md section 8: the type scale (Display 44, Huge 30, Title 22, Body 16, Small 13, Mono 15) as label variations that a screen picks by name (theme_type_variation), the titles on the heading face, and the
+## option buttons given the brass focus ring and the dimmed disabled fill of the buttons.
+const FONT_SIZE_DISPLAY: int = 44
+const FONT_SIZE_HUGE: int = 30
+const FONT_SIZE_SMALL: int = 13
+const FONT_SIZE_MONO: int = 15
+
+static func _scale(theme: Theme, heading: Font, mono: Font) -> Theme:
+	var scale: Dictionary = {
+		&"DisplayLabel": [FONT_SIZE_DISPLAY, heading], &"HugeLabel": [FONT_SIZE_HUGE, heading], &"TitleLabel": [FONT_SIZE_TITLE, heading],
+		&"SmallLabel": [FONT_SIZE_SMALL, null], &"MonoLabel": [FONT_SIZE_MONO, mono]}
+	for variation: StringName in scale:
+		theme.set_type_variation(variation, &"Label")
+		theme.set_font_size(&"font_size", variation, int(scale[variation][0]))
+		if scale[variation][1] != null:
+			theme.set_font(&"font", variation, scale[variation][1])
+	for state in ["focus", "disabled"]:
+		theme.set_stylebox(state, "OptionButton", theme.get_stylebox(state, "Button"))
 	return theme

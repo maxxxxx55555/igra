@@ -248,6 +248,199 @@ ONBOARD_SPEC = {
 }
 
 
+# -- monster icons, skill icons, the stealth branch header (v10 D3, D7): what the game asks for and the shipped set lacks --
+# The icons that exist are the shipped ones and are never rewritten; only a missing file is drawn. Hard edges, flat colours of the palette, as the shipped set.
+OLIVE = (143, 148, 100)
+BLUE = (74, 154, 181)
+FRAME_FILL = (13, 18, 26)
+ICONS = ROOT / "assets" / "textures" / "icons_v2"
+SKILLS = ROOT / "assets" / "textures" / "icons" / "skills"
+FRAME_TEMPLATE = SKILLS / "inventory_space_96.png"
+HEADER_TEMPLATE = ICONS / "branches" / "utility_header_256x64.png"
+
+
+def pictogram(size: int = 64):
+    im = new_canvas(size)
+    return im, ImageDraw.Draw(im)
+
+
+def line(d, pts, color, w=2):
+    d.line(pts, fill=color + (255,), width=w)
+
+
+def outline(d, pts, color=BONE, w=2):
+    d.line(pts + [pts[0]], fill=color + (255,), width=w)
+
+
+def dot(d, c, r, color):
+    d.ellipse((c[0] - r, c[1] - r, c[0] + r, c[1] + r), fill=color + (255,))
+
+
+def icon_rotter() -> Image.Image:
+    im, d = pictogram()
+    outline(d, [(26, 20), (38, 20), (41, 40), (23, 40)])
+    d.ellipse((26, 6, 38, 18), outline=BONE + (255,), width=2)
+    dot(d, (30, 12), 1, EMBER)
+    dot(d, (34, 12), 1, EMBER)
+    line(d, [(26, 23), (10, 30)], OLIVE)
+    line(d, [(38, 23), (54, 30)], OLIVE)
+    dot(d, (10, 30), 2, EMBER)
+    dot(d, (54, 30), 2, EMBER)
+    line(d, [(28, 40), (25, 58)], OLIVE)
+    line(d, [(36, 40), (43, 56)], OLIVE)  # one leg drags
+    return im
+
+
+def icon_hound() -> Image.Image:
+    im, d = pictogram()
+    d.ellipse((12, 26, 44, 42), outline=BONE + (255,), width=2)
+    outline(d, [(44, 28), (54, 25), (60, 31), (55, 36), (44, 37)])
+    outline(d, [(48, 25), (50, 18), (54, 25)])
+    dot(d, (53, 29), 1, EMBER)
+    for x0, x1 in ((18, 16), (24, 26), (34, 33), (41, 45)):
+        line(d, [(x0, 41), (x1, 56)], OLIVE)
+    line(d, [(12, 30), (5, 22)], BONE)
+    return im
+
+
+def icon_brute() -> Image.Image:
+    im, d = pictogram()
+    d.ellipse((27, 5, 37, 15), outline=BONE + (255,), width=2)
+    dot(d, (30, 10), 1, EMBER)
+    dot(d, (34, 10), 1, EMBER)
+    outline(d, [(14, 19), (50, 19), (54, 44), (10, 44)])
+    line(d, [(14, 22), (6, 42)], OLIVE, 3)
+    line(d, [(50, 22), (58, 42)], OLIVE, 3)
+    d.rectangle((2, 41, 10, 49), fill=EMBER + (255,))
+    d.rectangle((54, 41, 62, 49), fill=EMBER + (255,))
+    line(d, [(24, 44), (24, 59)], OLIVE, 3)
+    line(d, [(40, 44), (40, 59)], OLIVE, 3)
+    return im
+
+
+def icon_burner() -> Image.Image:
+    im, d = pictogram()
+    d.ellipse((26, 14, 38, 26), outline=BONE + (255,), width=2)
+    dot(d, (30, 20), 1, EMBER)
+    dot(d, (34, 20), 1, EMBER)
+    d.polygon([(32, 0), (38, 8), (35, 8), (36, 13), (28, 13), (29, 8), (26, 8)], fill=EMBER + (255,))
+    d.polygon([(32, 6), (34, 11), (30, 11)], fill=BRASS + (255,))
+    outline(d, [(24, 28), (40, 28), (42, 46), (22, 46)])
+    d.rectangle((43, 30, 47, 42), fill=OLIVE + (255,))  # the fuel tank on its back
+    line(d, [(24, 30), (12, 40)], OLIVE)
+    dot(d, (12, 40), 3, EMBER)  # the burning hand
+    line(d, [(28, 46), (26, 60)], OLIVE)
+    line(d, [(36, 46), (38, 60)], OLIVE)
+    return im
+
+
+def icon_sharpshooter() -> Image.Image:
+    im, d = pictogram()
+    d.ellipse((26, 8, 38, 20), outline=BONE + (255,), width=2)
+    dot(d, (30, 14), 1, BLUE)
+    dot(d, (34, 14), 1, BLUE)
+    outline(d, [(25, 23), (39, 23), (41, 42), (23, 42)])
+    line(d, [(6, 36), (58, 18)], BONE)  # the rifle
+    dot(d, (58, 18), 2, EMBER)  # the red dot of its laser
+    line(d, [(28, 42), (26, 58)], OLIVE)
+    line(d, [(36, 42), (38, 58)], OLIVE)
+    line(d, [(28, 28), (22, 34)], OLIVE)
+    return im
+
+
+def icon_tvar() -> Image.Image:
+    im, d = pictogram()
+    outline(d, [(32, 7), (45, 11), (54, 22), (50, 36), (55, 47), (44, 52), (33, 47), (22, 56), (12, 48), (15, 35), (9, 23), (20, 12)])
+    dot(d, (25, 26), 2, BLUE)
+    dot(d, (39, 26), 2, BLUE)
+    dot(d, (32, 36), 2, EMBER)
+    for x0, x1 in ((20, 17), (33, 33), (44, 48)):
+        line(d, [(x0, 52), (x1, 62)], OLIVE)
+    return im
+
+
+def recolored(src: pathlib.Path, color) -> Image.Image:
+    """The template with its ember (the frame and its faint lines, whatever their alpha) turned into `color`."""
+    im = Image.open(src).convert("RGBA")
+    px = im.load()
+    for y in range(im.height):
+        for x in range(im.width):
+            r, g, b, a = px[x, y]
+            if a and r > g + 40 and r > b + 40:
+                px[x, y] = color + (a,)
+    return im
+
+
+def skill_frame():
+    im = recolored(FRAME_TEMPLATE, OLIVE)
+    d = ImageDraw.Draw(im)
+    d.rectangle((20, 22, 76, 74), fill=FRAME_FILL + (255,))  # the room of the pictogram, cleared
+    return im, d
+
+
+def skill_silent_steps() -> Image.Image:
+    im, d = skill_frame()
+    d.ellipse((34, 40, 52, 70), fill=BONE + (255,))
+    d.ellipse((38, 30, 50, 40), fill=BONE + (255,))
+    for x, y in ((36, 26), (41, 23), (46, 23), (51, 26)):
+        dot(d, (x, y), 2, BONE)
+    d.line((26, 70, 64, 28), fill=EMBER + (255,), width=4)  # a slash: the steps make no sound
+    return im
+
+
+def skill_cold_trail() -> Image.Image:
+    im, d = skill_frame()
+    for i, r in enumerate((4, 3, 3, 2)):
+        dot(d, (26 + i * 11, 66 - i * 9), r, BONE)
+    cx, cy = 60, 32
+    for dx, dy in ((0, -12), (0, 12), (-11, -6), (11, 6), (-11, 6), (11, -6)):
+        d.line((cx, cy, cx + dx, cy + dy), fill=BLUE + (255,), width=3)
+    return im
+
+
+def skill_low_profile() -> Image.Image:
+    im, d = skill_frame()
+    dot(d, (36, 44), 6, BONE)
+    d.polygon([(26, 52), (46, 50), (62, 62), (62, 70), (26, 70)], fill=BONE + (255,))
+    d.polygon([(66, 30), (76, 30), (76, 42), (82, 42), (71, 54), (60, 42), (66, 42)], fill=EMBER + (255,))  # an arrow down
+    return im
+
+
+def skill_quiet_pace() -> Image.Image:
+    im, d = skill_frame()
+    d.polygon([(26, 42), (36, 42), (48, 32), (48, 64), (36, 54), (26, 54)], fill=BONE + (255,))
+    d.arc((46, 40, 58, 56), -60, 60, fill=BONE + (255,), width=3)
+    d.line((56, 34, 72, 62), fill=EMBER + (255,), width=4)
+    return im
+
+
+def header_stealth() -> Image.Image:
+    im = recolored(HEADER_TEMPLATE, OLIVE)
+    d = ImageDraw.Draw(im)
+    d.rectangle((16, 12, 110, 52), fill=(0, 0, 0, 0))  # the pictograms of the template, cleared
+    d.ellipse((26, 22, 68, 42), outline=BONE + (255,), width=3)
+    dot(d, (47, 32), 5, EMBER)
+    d.line((24, 46, 72, 16), fill=BONE + (255,), width=3)  # an eye that is hidden
+    return im
+
+
+ICON_SPEC = {
+    **{ICONS / f"monster_{n}_64.png": (fn, 64) for n, fn in (("rotter", icon_rotter), ("hound", icon_hound), ("brute", icon_brute), ("burner", icon_burner), ("sharpshooter", icon_sharpshooter), ("tvar", icon_tvar))},
+    **{SKILLS / f"{n}_96.png": (fn, 96) for n, fn in (("silent_steps", skill_silent_steps), ("cold_trail", skill_cold_trail), ("low_profile", skill_low_profile), ("quiet_pace", skill_quiet_pace))},
+    ICONS / "branches" / "stealth_header_256x64.png": (header_stealth, 0),
+}
+
+
+def build_icons() -> int:
+    wrote = 0
+    for path, (fn, _) in ICON_SPEC.items():
+        if not path.exists():
+            save(fn(), path)
+            wrote += 1
+    print(f"wrote {wrote} of {len(ICON_SPEC)} missing icons")
+    return wrote
+
+
 def build() -> None:
     for name, fn in TOUCH_SPEC.items():
         save(fn(), TOUCH / name)
@@ -255,6 +448,7 @@ def build() -> None:
         save(fn(), ONBOARD / name)
     print(f"wrote {len(TOUCH_SPEC)} touch glyphs -> {TOUCH}")
     print(f"wrote {len(ONBOARD_SPEC)} onboard stills -> {ONBOARD}")
+    build_icons()
 
 
 def check() -> int:
@@ -288,6 +482,12 @@ def check() -> int:
         ex = im.convert("RGB").getextrema()
         if any(lo < LO or hi > HI for lo, hi in ex):
             fails.append(f"{name} RGB extrema {ex} outside [{LO},{HI}]")
+    for path, (_, size) in ICON_SPEC.items():
+        if not path.exists():
+            fails.append(f"{path.name} missing"); continue
+        im = Image.open(path)
+        if size and im.size != (size, size):
+            fails.append(f"{path.name} is {im.size}, want ({size},{size})")
     for f in fails:
         print("  FAIL", f)
     print("mobile art pass check:", "GREEN" if not fails else f"{len(fails)} FAIL")

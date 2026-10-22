@@ -21,9 +21,9 @@ const PALETTES := {
 	&"suburbs": [[Color("#141917"), Color("#181e1c"), Color("#1c2321")], Color(0.07, 0.09, 0.09)],
 	&"residential": [[Color("#17171e"), Color("#1c1c25"), Color("#21212c")], Color(0.085, 0.085, 0.115)],
 	&"park": [[Color("#101a15"), Color("#14201b"), Color("#182621")], Color(0.05, 0.11, 0.09)],
-	&"hospital": [[Color("#101a20"), Color("#142129"), Color("#18282f")], Color(0.05, 0.10, 0.14)],
+	&"hospital": [[Color("#121a1f"), Color("#162027"), Color("#1a262d")], Color(0.05, 0.10, 0.14)],
 	&"gas_station": [[Color("#1b1613"), Color("#211b17"), Color("#27201b")], Color(0.115, 0.09, 0.085)],
-	&"police": [[Color("#0e1320"), Color("#131a2a"), Color("#182034")], Color(0.05, 0.07, 0.15)],
+	&"police": [[Color("#10141d"), Color("#151a26"), Color("#1a202e")], Color(0.05, 0.07, 0.15)],
 	&"warehouses": [[Color("#1d1514"), Color("#241b19"), Color("#2b211f")], Color(0.12, 0.085, 0.085)],
 	&"industrial": [[Color("#1c1715"), Color("#241e1b"), Color("#2b2421")], Color(0.115, 0.09, 0.09)],
 	&"substation": [[Color("#14181c"), Color("#191e23"), Color("#1e242a")], Color(0.09, 0.10, 0.115)],
@@ -187,7 +187,7 @@ func _add_multimesh(node_name: String, mesh: Mesh, xforms: Array[Transform3D], t
 		# A faint cold self-glow so the blocks read as silhouettes against the sky; the shader weathers the panels (the tier of the graphics sets how much).
 		_facade_mat = ShaderMaterial.new()
 		_facade_mat.shader = _FACADE
-		var hue := Vector3.ONE.lerp(Vector3(glow.r, glow.g, glow.b) / maxf(glow.r, maxf(glow.g, glow.b)), GLOW_HUE)
+		var hue := Vector3.ONE.lerp(Vector3(glow.r, glow.g, glow.b) / maxf(glow.r, maxf(glow.g, glow.b)), _glow_hue(glow))
 		_facade_mat.set_shader_parameter("glow", hue / ((hue.x + hue.y + hue.z) / 3.0))
 		_set_detail()
 		EventBus.settings_changed.connect(_set_detail)
@@ -277,3 +277,12 @@ func _light_windows(stage: int) -> void:
 		mm.set_instance_color(i, color)
 		if _halos != null:
 			_halos.multimesh.set_instance_color(i, glow)
+
+## B13: the share of the glow's hue a facade keeps is GLOW_HUE, and no more than what holds the saturation of the facade band inside 0.30 to 0.36 in every district: the police and the hospital, whose glows are the most
+## chromatic, stood at 0.46 and 0.45 against 0.27 to 0.34 elsewhere (KNOWN_ISSUES, Session 27). The product of the share and the chroma of the glow is held at GLOW_CHROMA_CAP.
+const GLOW_CHROMA_CAP: float = 0.12
+
+static func _glow_hue(glow: Color) -> float:
+	var top: float = maxf(glow.r, maxf(glow.g, glow.b))
+	var chroma: float = 1.0 - minf(glow.r, minf(glow.g, glow.b)) / maxf(top, 0.001)
+	return minf(GLOW_HUE, GLOW_CHROMA_CAP / maxf(chroma, 0.01))

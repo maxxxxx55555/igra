@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""P0 truth gate: static, per-string checks across all 13 locale JSON files
+"""P0 truth gate: static, per-string checks across all 6 locale JSON files
 in data/i18n/ that tools/flow_check.py doesn't do (flow_check only proves
 audio files referenced in code exist on disk, plus signal/bus wiring - it
 never opens the locale JSONs). Checks, per the ponytail order-pass spec:
@@ -12,7 +12,7 @@ never opens the locale JSONs). Checks, per the ponytail order-pass spec:
 
 NOT covered here (needs a live engine, see tools/qa_sim/gui_explore_runner.gd
 for the runtime half of this gate - it already proves the Settings title
-differs per locale and survives a live language switch for 13/13 locales):
+differs per locale and survives a live language switch for 6/6 locales):
   - "differs from previous locale" - only meaningfully spot-checked live so
     far, not swept across all 1291 keys.
   - "survives save/reload" - needs an actual process restart, not built yet.
@@ -44,7 +44,7 @@ SHORT_STRING_FLOOR = 12
 # under 3x).
 SHORT_STRING_RATIO_CAP = 3.0
 BASE_LOCALE = "en"
-SUPPORTED = ["ru", "en", "es", "de", "fr", "it", "pt_BR", "tr", "ja", "ko", "zh", "zh_TW", "ar"]
+SUPPORTED = ["ru", "en", "es", "de", "fr", "pt_BR"]
 
 SCRIPT_RANGES = {
     "cjk": (0x4E00, 0x9FFF),

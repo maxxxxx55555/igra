@@ -5,7 +5,7 @@ extends Node
 
 const BUDGET_D1: int = 200   ## GDD/Production Bible asset budget, district 1
 const BUDGET_D11: int = 350  ## same, district 11 (busiest)
-const BUDGET_P95_MS: float = 33.0  ## frame time, 95th percentile, 30 FPS (the dev iGPU, windowed)
+const BUDGET_P95_MS: float = 33.0  ## frame time, 95th percentile, 30 FPS (the dev iGPU, windowed); read with the vsync and the frame cap off, see _run()
 const BUDGET_VRAM_MIB: float = 512.0  ## the mobile video memory budget (PRODUCTION_BIBLE: 400 MiB; the directive's 512)
 
 func _ready() -> void:
@@ -23,6 +23,8 @@ func _run() -> void:
 	# a fresh profile opens the onboarding cards on game_started: they pause the tree and dim the frame, and these runs measure the game
 	SaveSystem.mark_onboard_done()
 	QualityManager.enabled = false  # a measurement reads one tier: the quality manager steps it under 30 FPS (CORRECTION_LOG 241)
+	if OS.get_environment("TLS_PERF_TIER") != "":
+		SettingsManager.set_graphics_tier(int(OS.get_environment("TLS_PERF_TIER")))  # 0 Low, 1 Medium, 2 High, 3 Ultra: the default is the profile's
 	Routes.start_game()
 	if not await _wait_until(func() -> bool: return GameManager.is_playing(), 10.0):
 		printerr("[perf] never entered PLAYING")
@@ -62,9 +64,14 @@ func _run() -> void:
 		return
 	await _print_breakdown(district)
 	print("[perf] %s steady draw_calls=%d (everything shown again, after the breakdown)" % [district, _calls()])
+	# The interval a player sees is the display's vsync and the tier's frame cap (Low and Medium cap at 30 FPS: it reads 33.33 ms whatever the cost, over the 33.0 budget by construction).
+	# It is printed once; the budget reads the cost of the frame, so the p95 reads below run with the vsync and the cap off (R2 of the v10 pass, docs/KNOWN_ISSUES.md).
+	var d1_interval := await _frame_p95_ms(300)
+	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+	Engine.max_fps = 0
 	var d1_p95 := await _median_p95()
 	var d1_vram: float = Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) / 1048576.0
-	print("[perf] %s frame_p95_ms=%0.2f texture_mem_mib=%0.1f video_mem_mib=%0.1f" % [district, d1_p95,
+	print("[perf] %s frame_p95_ms=%0.2f interval_p95_ms=%0.2f texture_mem_mib=%0.1f video_mem_mib=%0.1f" % [district, d1_p95, d1_interval,
 		Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED) / 1048576.0, d1_vram])
 	var particles := 0
 	for node in get_tree().root.find_children("*", "GPUParticles3D", true, false):
@@ -172,7 +179,15 @@ func _frame_p95_ms(n: int) -> float:
 		script += Performance.get_monitor(Performance.TIME_PROCESS) * 1000.0
 		phys += Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS) * 1000.0
 	print("[perf] mean over %d frames: gpu_ms=%0.2f render_cpu_ms=%0.2f process_ms=%0.2f physics_ms=%0.2f" % [n, gpu / n, cpu / n, script / n, phys / n])
+	# process_ms and physics_ms are the engine's WORST frame of the last second (Performance.TIME_PROCESS is a per-second maximum), so they read hitches, not the mean: the slow frames are listed here by index.
+	var order := PackedFloat64Array(ms)
 	ms.sort()
+	var median: float = ms[ms.size() / 2]
+	var slow: PackedStringArray = []
+	for i in order.size():
+		if order[i] > maxf(3.0 * median, 25.0) and slow.size() < 14:
+			slow.append("%d:%.0f" % [i, order[i]])
+	print("[perf] median %.2f ms, worst %.1f ms, slow frames (index:ms, over max(3 x median, 25 ms)): %s" % [median, ms.back(), ", ".join(slow) if not slow.is_empty() else "none"])
 	return ms[int(ms.size() * 0.95)]
 
 func _menu_reachable() -> bool:

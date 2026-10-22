@@ -23,13 +23,13 @@ one else is left to do: get the power grid running again, district by
 district, street by street.
 
 WHAT'S ACTUALLY IN THE BOX
-- 11 connected districts, one continuous city map — no procedural
-  filler, no level-select screen
-- 12 enemy types, including a mini-boss and a final boss, each with
+- 11 districts, relit one at a time and reached from the city map — no
+  procedural filler
+- 11 enemy types, ten hunters and a final boss, each with
   distinct senses, weaknesses, and behavior
 - 5 different endings, decided by how much of the city — and how much
   of the truth — you actually recover
-- 13 languages, fully localized
+- 6 languages, fully localized
 - A 5-layer adaptive music system that shifts with the danger around
   you — dark ambient, restored-district warmth, rising threat, and a
   combat layer, crossfading as you go

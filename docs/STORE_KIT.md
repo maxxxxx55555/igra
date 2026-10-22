@@ -107,8 +107,8 @@ Authored for the 11 locales that had only a short description: **es, de, fr, it,
 ko, zh, zh_TW, ar**. EN and RU keep the master full description in
 [store/listing.md](../store/listing.md) — byte-untouched, still the source of truth. Aims:
 
-- **Same claims, same numbers as the master** — 11 districts, 12 enemy types, 5 endings,
-  13 languages, 5 adaptive music layers, 60 daily challenges, 31 achievements, New Game+,
+- **Same claims, same numbers as the master** — 11 districts, 11 enemy types, 5 endings,
+  6 languages, 5 adaptive music layers, 60 daily challenges, 31 achievements, New Game+,
   crafting/workbench, noise-and-visibility stealth, offline, no paid content, touch + PC share
   one save file. Nothing invented; nothing unbacked added.
 - **Keeper voice** — terse, second person, archaic lean, ellipses, no exclamation marks.

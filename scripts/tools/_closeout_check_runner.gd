@@ -31,6 +31,16 @@ const Rc27 := preload("res://scripts/tools/rc16/s27_checks.gd")
 const Rc28 := preload("res://scripts/tools/rc16/s28_checks.gd")
 const Rc28Sweep := preload("res://scripts/tools/rc16/s28_sweep_checks.gd")
 const Rc28Audio := preload("res://scripts/tools/rc16/s28_audio_checks.gd")
+const Rc29 := preload("res://scripts/tools/rc16/s29_checks.gd")
+const Rc29Look := preload("res://scripts/tools/rc16/s29_look_checks.gd")
+const Rc29Pick := preload("res://scripts/tools/rc16/s29_pickup_checks.gd")
+const Rc29Bar := preload("res://scripts/tools/rc16/s29_bar_checks.gd")
+const Rc29Leak := preload("res://scripts/tools/rc16/s29_leak_checks.gd")
+const Rc29Music := preload("res://scripts/tools/rc16/s29_music_checks.gd")
+const Rc29Sfx := preload("res://scripts/tools/rc16/s29_sfx_checks.gd")
+const Rc29Atk := preload("res://scripts/tools/rc16/s29_attack_cases.gd")
+const Rc29Play := preload("res://scripts/tools/rc16/s29_play_checks.gd")
+const Rc29Fix := preload("res://scripts/tools/rc16/s29_fix_checks.gd")
 
 var _checked: int = 0
 var _fails: int = 0
@@ -119,6 +129,19 @@ func _run() -> void:
 		await Rc28.run(self)
 		await Rc28Sweep.run(self)
 		Rc28Audio.run(self)
+		_finish()
+		return
+	if OS.get_environment("CLOSEOUT_ONLY") == "s29":
+		await Rc29.run(self)
+		await Rc29Look.run(self)
+		await Rc29Pick.run(self)
+		await Rc29Bar.run(self)
+		await Rc29Leak.run(self)
+		Rc29Music.run(self)
+		Rc29Sfx.run(self)
+		Rc29Atk.run(self)
+		await Rc29Play.run(self)
+		await Rc29Fix.run(self)
 		_finish()
 		return
 	if OS.get_environment("CLOSEOUT_ONLY") == "rtl":
@@ -227,6 +250,16 @@ func _rc16_checks() -> void:
 	await Rc28.run(self)
 	await Rc28Sweep.run(self)
 	Rc28Audio.run(self)
+	await Rc29.run(self)
+	await Rc29Look.run(self)
+	await Rc29Pick.run(self)
+	await Rc29Bar.run(self)
+	await Rc29Leak.run(self)
+	Rc29Music.run(self)
+	Rc29Sfx.run(self)
+	Rc29Atk.run(self)
+	await Rc29Play.run(self)
+	await Rc29Fix.run(self)
 
 ## A monster standing still in the far corner of the world: its collider answers rays, its AI never runs
 ## (a disabled process mode would also take the collider out of the physics space).

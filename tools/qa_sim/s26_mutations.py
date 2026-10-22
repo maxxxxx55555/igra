@@ -45,7 +45,6 @@ SETS = [
         ("scripts/world/street_builder.gd", "const MARK_WIDTH: float = 0.16", "const MARK_WIDTH: float = 4.0", "SOV1"),
         ("scripts/world/skyline.gd", 'float(clampi(int(SettingsManager.get_setting("graphics_tier", 2)), 0, 2))', "2.0", "SOV2"),
         ("scripts/world/district_landmark.gd", "const HALO_SIZE := Vector2(64.0, 52.0)", "const HALO_SIZE := Vector2(110.0, 100.0)", "SOV3"),
-        ("scripts/world/soviet_signs.gd", "found.assign(WORDS.get(district_id, WORDS[&\"suburbs\"]))", "found.assign(WORDS.get(district_id, WORDS[&\"suburbs\"]) + [\"\\u13a0\"])", "SOV4"),
         ("scripts/world/dead_grass.gd", "const PER_COURTYARD: Array[int] = [0, 8, 16]", "const PER_COURTYARD: Array[int] = [16, 16, 16]", "SOV5"),
         ("scripts/world/skyline.gd", "const FACADE_GAIN: Array[float] = [0.16, 0.19, 0.22, 0.26]", "const FACADE_GAIN: Array[float] = [0.16, 0.19, 0.22, 0.05]", "SOV6"),
         ("scripts/ui/menu_fog.gd", "visible = int(SettingsManager.get_setting(\"graphics_tier\", 2)) > 0", "visible = true", "SOV7"),
@@ -56,7 +55,8 @@ SETS = [
         ("scripts/systems/music_manager.gd", "func _on_district_entered(district_id: StringName) -> void:\n\t_leave_boss()\n", "func _on_district_entered(district_id: StringName) -> void:\n\tpass\n", "MUS4"),
         ("scripts/ui/main_menu.gd", "\t_refresh_daily_card(vb as VBoxContainer)", "\tpass", "MENU2"),
     ],
-    [  # Session 27, the closeout group s27 again: the verifier's round found two sign words cut off; the mutation of SOV8 keeps a set of its own beside the one of SOV4 (two mutations of one file are never read together)
+    [  # Session 27, the closeout group s27 again: the verifier's round found two sign words cut off. SOV4's mutation (one more word) also fails SOV8's check (the run of Session 28 read a widest word of 183 px and 0 long words drawn smaller), so in set 2 it read "SOV8 failed without a mutation" (v10 R5); the two sit together here and both must fail; they mutate different functions, and SOV8's check against its own mutation alone is the line of the run of Session 27
+        ("scripts/world/soviet_signs.gd", "found.assign(WORDS.get(district_id, WORDS[&\"suburbs\"]))", "found.assign(WORDS.get(district_id, WORDS[&\"suburbs\"]) + [\"\\u13a0\"])", "SOV4"),
         ("scripts/world/soviet_signs.gd", "return mini(FONT_PX, int(FONT_PX * ATLAS_W / (wide * 1.06)))", "return FONT_PX", "SOV8"),
     ],
     [  # Session 28, the closeout group s28 (D1): each fix of the difficulty pass undone in its own function or table row, so no mutation can hide another
@@ -102,9 +102,75 @@ SETS = [
     [  # Session 28, the closeout group s28 again (W1): the trigger of a story scene shares a file with STORY1, which would make STORY2 fail under its mutation too
         ("scripts/world/story_props.gd", "\tarea.collision_mask = 1\n", "\tarea.collision_mask = 0\n", "STORY2"),
     ],
+    [  # Session 29 (v10 R6 and F19), the closeout group s29: the placeholder close button of the screens put back, and the flicker clock back at 0 (two files, nothing one mutation changes is read by the other's check)
+        ("scripts/ui/screens.gd", '"close_btn": close_btn, "title_lbl": title_lbl,', '"close_btn": close_btn if close_btn else Button.new(), "title_lbl": title_lbl,', "LEAK1"),
+        ("scripts/world/streetlight_3d.gd", "var _t: float = -1.0\n", "var _t: float = 0.0\n", "LAMP2"),
+    ],
+    [  # Session 29 (v10 R2), the closeout group s29, the LightLimiter: the cap of eight put up by one, and the hiding of a light of no energy left out (they live in different rows of one function, nothing one changes is read by the other's check)
+        ("scripts/systems/light_limiter.gd", "\t\tif i < MAX_VISIBLE:\n", "\t\tif i < MAX_VISIBLE + 1:\n", "LIMIT1"),
+        ("scripts/systems/light_limiter.gd", "\t\t\tlit.append(light)\n\t\telse:\n\t\t\t_hide(light)\n", "\t\t\tlit.append(light)\n\t\telse:\n\t\t\tpass\n", "LIMIT2"),
+    ],
+    [  # Session 29 (v10 R2), the closeout group s29 again: the return of a light that was hidden for want of energy left out, which would hide the second mutation of the set above (the light of no energy would never be hidden, so it would never need to return)
+        ("scripts/systems/light_limiter.gd", "\t\t\tif _hidden.erase(light.get_instance_id()):\n\t\t\t\tlight.visible = true\n", "\t\t\tif false:\n\t\t\t\tlight.visible = true\n", "LIMIT3"),
+    ],
+    [  # Session 29 (v10 M4, M6), the closeout group s29: the music probe, first half: the tense stem's curve, the phase of the boss, the wind stem and the name of the sting of a restored district (four rows of three functions and a file: nothing one changes is read by another's check)
+        ("scripts/systems/music_manager.gd", "\t_layer_target[\"threat_low\"] = clampf(1.0 - absf(_threat - 0.4) / 0.4, 0.0, 1.0)\n", "\t_layer_target[\"threat_low\"] = clampf(1.0 - absf(_threat - 0.4) / 0.8, 0.0, 1.0)\n", "LAY1"),
+        ("scripts/systems/music_manager.gd", "\t_boss_phase = clampi(phase, 1, BOSS_PHASES.size())\n", "\t_boss_phase = 1\n", "LAY3"),
+        ("scripts/systems/music_manager.gd", "\t_layer_target[\"wind\"] = 1.0 if _weather_id == WeatherSystem.Weather.WIND else 0.0\n", "\t_layer_target[\"wind\"] = 1.0 if _weather_id == WeatherSystem.Weather.FOG else 0.0\n", "LAY6"),
+        ("scripts/systems/uisfx.gd", "play_ui(\"district_restored_sting\"))", "play_ui(\"district_restored_stingx\"))", "ONE2"),
+    ],
+    [  # Session 29 (v10 M4, M6), the closeout group s29 again, second half: the fall of the hunted level, the calm delay, the swap of the two players, the death cue and the tick of the XP
+        ("scripts/systems/music_manager.gd", "const THREAT_FALL: float = 0.25", "const THREAT_FALL: float = 0.1", "LAY2"),
+        ("scripts/systems/music_manager.gd", "const CALM_DELAY: float = 6.0", "const CALM_DELAY: float = 3.0", "LAY4"),
+        ("scripts/systems/music_manager.gd", "\tvar next: AudioStreamPlayer = _b if _active == _a else _a\n", "\tvar next: AudioStreamPlayer = _a\n", "LAY5"),
+        ("scripts/systems/music_manager.gd", "EventBus.game_over.connect(func() -> void: _play_wow_cue(\"death\"))", "EventBus.game_over.connect(func() -> void: pass)", "ONE3"),
+        ("scripts/systems/uisfx.gd", "_play(\"ui_xp_tick\", 1800.0, 0.03))", "_play(\"ui_xp_tickx\", 1800.0, 0.03))", "ONE4"),
+    ],
+    [  # Session 29 (v10 E1), the closeout group s29: the file of a monster cue and the loop of the wind layer (two files, nothing one changes is read by the other's check)
+        ("scripts/enemies/base_monster.gd", "for ext: String in [\".ogg\", \".wav\"]:", "for ext: String in [\".wav\"]:", "SFX1"),
+        ("scripts/systems/audio_manager.gd", "\t_wind.stream = _force_loop(WIND_SFX)\n", "\t_wind.stream = WIND_SFX\n", "WIND1"),
+    ],
+    [  # Session 29 (v10 G-RED2), the closeout group s29: the key of the saves, the manifest scan, the pack's remove and the debug surface (four files, nothing one changes is read by another's check)
+        ("scripts/core/save_system.gd", "key[i] = _KEY_A[i] ^ _KEY_B[i]", "key[i] = _KEY_A[i]", "SECV9"),
+        ("scripts/security/integrity_scan.gd", "or hash_of(path) != String(files[path])", "or false", "SECV7"),
+        ("scripts/inventory/inventory_manager.gd", "if amount <= 0 or not has(item_id, amount):", "if not has(item_id, amount):", "SECV2"),
+        ("scripts/systems/integrity_guard.gd", "\t\tif not OS.is_debug_build():\n", "\t\tif OS.is_debug_build():\n\t\t\tCoinWallet.add(999)\n\t\tif not OS.is_debug_build():\n", "SECV8"),
+    ],
+    [  # Session 29 (v10 G-RED2) again: the string literal of the key, the craft's cap and the language list
+        ("scripts/core/save_system.gd", "static func _sign(body: String) -> String:", "const _HMAC_KEY: String = \"TLS-savegame-v1-4f1c9e6b2a8d5f03\"\n\nstatic func _sign(body: String) -> String:", "SECV9L"),
+        ("scripts/crafting/workbench_logic.gd", "qty <= 0 or qty > MAX_QTY or", "qty <= 0 or", "SECV2B"),
+        ("scripts/i18n/localization_manager.gd", "\tif lang in SUPPORTED:\n", "\tif true:\n", "SECV6"),
+        ("scripts/systems/endings_manager.gd", "\t\treturn &\"light\"\n", "\t\treturn &\"hope\"\n", "END5"),
+        ("scripts/enemies/base_monster.gd", "if global_position.distance_to(player_ref.global_position) <= attack_range + 0.5:", "if true:", "DODGE1"),
+    ],
+    [  # Session 29 (v10 G-FIX2), the closeout group s29: the fixes of the nitpick rows, each put back in its own function or row (twelve files, no mutation changes what another check reads)
+        ("scripts/enemies/base_monster.gd", "\tvar at := floor_point()\n", "\tvar at := global_position + Vector3(0, 0.5, 0)\n", "DROP1"),
+        ("scenes/vfx/vfx_confetti.tscn", "burst_texture = ExtResource(\"2_tex\")\n", "", "CONF1"),
+        ("scripts/ui/screens.gd", "\ttitle_lbl.add_theme_font_override(\"font\", ThemeProvider.heading_font())\n", "", "FONT1"),
+        ("scripts/world/soviet_signs.gd", "if widths[k] >= sign_w[i] + 1.4 and _clear(spots, sign_w, spot, sign_w[i]):", "if widths[k] >= sign_w[i] + 1.4:", "SIGN2"),
+        ("scripts/gameplay/hiding_spot.gd", "\tmi.mesh = mesh\n", "\tmi.mesh = BoxMesh.new()\n", "HIDE1"),
+        ("scenes/ui/hud_3d.tscn", "size_flags_horizontal = 4\nalignment = 1\n\n[node name=\"Slot0\"", "size_flags_horizontal = 4\n\n[node name=\"Slot0\"", "QBAR1"),
+        ("scripts/player/player_3d.gd", "\tif stamina <= 0.0:\n\t\t_winded = true\n", "\tif stamina <= 0.0:\n\t\t_winded = false\n", "STAM1"),
+        ("scripts/player/player_3d.gd", "\t\tif now >= _flicker_next_msec:\n", "\t\tif true:\n", "FLICK1"),
+        ("scripts/ui/quest_tracker_hud.gd", "visible = shown and GameManager.is_playing())", "visible = shown)", "QUEST1"),
+        ("scripts/world/district_atmosphere.gd", "&\"gas_station\": {\"gas_station_gravel_crunch\": 0.0,", "&\"gas_station\": {\"gas_station_sign_buzz\": 0.0, \"gas_station_gravel_crunch\": 0.0,", "HUM1"),
+        ("scripts/enemies/monster_rig.gd", "\t\t_windup = maxf(WINDUP, windup - STRIKE)\n", "\t\t_windup = WINDUP\n", "SYNC1"),
+        ("scripts/gameplay/bed.gd", "\t_Props.dress(mattress, \"bed\")\n", "\tmattress.mesh = BoxMesh.new()\n", "CUBE4"),
+    ],
+    [  # Session 29 (v10 G-FIX2), the closeout group s29, wave B: the quest table, a string, the tutorial, the camera, a lamp, the boss, the bus and the quest tick (nine rows of seven files, no mutation changes what another check reads)
+        ("scripts/core/quest_manager.gd", "[\"q_collect_scrap\", \"Q_COLLECT_SCRAP_TITLE\", \"Q_COLLECT_SCRAP_DESC\", \"COLLECT\", \"scrap\"", "[\"q_collect_scrap\", \"Q_COLLECT_SCRAP_TITLE\", \"Q_COLLECT_SCRAP_DESC\", \"EXPLORE\", \"scrap\"", "QORD1"),
+        ("data/i18n/en.json", "\"Q_KILL_TANK_TITLE\": \"Bring down the destroyers\"", "\"Q_KILL_TANK_TITLE\": \"Bring down the tanks\"", "TXT1"),
+        ("scripts/ui/tutorial_system.gd", "\tEventBus.item_picked_up.connect(func(_id: StringName, _n: int) -> void: _check_action(\"interact\"))\n", "", "TUT3"),
+        ("scripts/core/camera_follow_3d.gd", "const STEP_BOB_RAD_PER_M: float = 4.0\n", "const STEP_BOB_RAD_PER_M: float = 8.0\n", "BOB1"),
+        ("scripts/world/streetlight_3d.gd", "sin(_t * 15.0) > 0.95", "sin(_t * 37.0) > 0.95", "LAMP3"),
+        ("scripts/enemies/boss_3d.gd", "\t_hit_feedback(final_dmg, src_pos)\n", "\tAudioManager.play_sound_3d(_HIT_SFX, global_position, -6.0)\n", "BOSSHIT1"),
+        ("scripts/enemies/boss_3d.gd", "\t\t_hint_beam()\n\t\treturn\n", "\t\treturn\n", "BOSSHIT2"),
+        ("default_bus_layout.tres", "bus/0/effect/0/enabled = true\n", "bus/0/effect/0/enabled = false\n", "MASTER1"),
+        ("scripts/core/quest_manager.gd", "\t\t\t\t_tick(q, amount)\n", "\t\t\t\t_tick(q, 1)\n", "QTICK1"),
+    ],
 ]
-## The closeout group each set runs (CLOSEOUT_ONLY): the sets of Session 26 run `s26`, those of Session 27 `s27`, those of Session 28 `s28`.
-GROUP = ["s26", "s26", "s27", "s27", "s28", "attack", "attack", "s28"]
+## The closeout group each set runs (CLOSEOUT_ONLY): the sets of Session 26 run `s26`, those of Session 27 `s27`, those of Session 28 `s28`, those of Session 29 `s29`.
+GROUP = ["s26", "s26", "s27", "s27", "s28", "attack", "attack", "s28", "s29", "s29", "s29", "s29", "s29", "s29", "s29", "s29", "s29", "s29"]
 LINE = re.compile(r"^\[(?:closeout|attack-sim)\] (ok  |OK  |FAIL) +(\S+)")
 ## What a group of sets runs and the log it leaves: the closeout groups run `closeout_check`, the group "attack" the attack simulation (Session 28).
 RUN = {"attack": ("bash tools/qa_sim/guarded_headless res://scenes/tools/attack_sim_scene.tscn 120", ".qa_logs/attack_sim_scene.log")}

@@ -16,7 +16,7 @@ const _FOG_CANON := Color("#1a2133")
 ## hospital/gas_station (e.g. this dict said "residential.wav" for
 ## school, music_manager said "abandoned_hallways_alt.mp3"). Traced both:
 ## nothing anywhere ever read THEMES[...]["music"] (get_theme()/
-## apply_to_environment() only use sky/ambient/accent) - it was dead
+## the since-deleted apply_to_environment() only used sky/ambient/accent) - it was dead
 ## weight, and its values were suspicious copy-paste anyway (5 unrelated
 ## districts all said "residential.wav"). The one actually-live per-
 ## district track selection is music_manager.gd's AMBIENCE_DARK_BY_
@@ -44,15 +44,6 @@ func get_theme(district_id: StringName) -> Dictionary:
 func get_district_color(district_id: StringName) -> Color:
 	var t: Dictionary = get_theme(district_id)
 	return t.get("accent", Color.WHITE)
-
-func apply_to_environment(env: Environment, district_id: StringName) -> void:
-	var t: Dictionary = get_theme(district_id)
-	env.background_color = t.get("sky", Color.BLACK)
-	env.ambient_light_color = t.get("ambient", Color.BLACK)
-	env.ambient_light_energy = 0.5
-	env.fog_enabled = true
-	env.fog_light_color = t.get("fog", Color.GRAY)
-	env.fog_density = 0.005
 
 func has(district_id: StringName) -> bool:
 	return THEMES.has(district_id)

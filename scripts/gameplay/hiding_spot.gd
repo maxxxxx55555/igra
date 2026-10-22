@@ -12,6 +12,8 @@ class_name HidingSpot
 ## Where the player steps out: the unit direction from the spot toward the street.
 @export var exit_dir: Vector3 = Vector3(0.0, 0.0, 1.0)
 
+const _Meshes := preload("res://scripts/art/hiding_meshes.gd")
+
 const TYPE_SIZES := {
 	"locker":   Vector3(0.9, 2.0, 0.7),
 	"dumpster": Vector3(1.8, 1.2, 1.0),
@@ -38,27 +40,18 @@ func _ready() -> void:
 	if get_child_count() == 0:
 		_build_visual()
 
-## Procedural body so spots are visible and block movement without art assets.
+## Procedural body so spots are visible and block movement without art assets: a mesh of parts (hiding_meshes.gd) over the box that is the collider.
 func _build_visual() -> void:
-	var size: Vector3 = TYPE_SIZES.get(spot_type, TYPE_SIZES["locker"])
-	var col: Color = TYPE_COLORS.get(spot_type, TYPE_COLORS["locker"])
+	var kind: String = spot_type if TYPE_SIZES.has(spot_type) else "locker"
+	var size: Vector3 = TYPE_SIZES[kind]
 
 	var mi := MeshInstance3D.new()
 	mi.name = "Mesh"
-	var box := BoxMesh.new()
-	box.size = size
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = col
-	mat.roughness = 0.9
-	if spot_type == "dumpster":
-		var tex: Texture2D = load("res://assets/textures/surfaces/dumpster_metal_512.png")
-		if tex:
-			mat.albedo_texture = tex
-			mat.metallic = 0.5
-			mat.roughness = 0.55
-	box.material = mat
-	mi.mesh = box
-	mi.position = Vector3(0, size.y * 0.5, 0)
+	var mesh: ArrayMesh = _Meshes.mesh_for(kind)
+	mi.mesh = mesh
+	var materials: Array[Material] = _Meshes.materials_for(kind, TYPE_COLORS[kind])
+	for s in mesh.get_surface_count():
+		mi.set_surface_override_material(s, materials[s])
 	add_child(mi)
 
 	var body := StaticBody3D.new()

@@ -82,7 +82,9 @@ tools/autopilot_report/
 
 # Local git worktrees (not part of history)
 .claude/worktrees/
-.qa_logs/
+.qa_logs/*
+!.qa_logs/WORKQUEUE.tsv
+!.qa_logs/evidence/
 
 # Release signing material (C9): NEVER commit. Keystore + env file with its password.
 .signing/

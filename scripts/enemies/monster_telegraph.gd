@@ -12,6 +12,8 @@ const WARN_DURATION: float = 0.4
 @export var cue_range: float = 12.0
 ## When the last cue began (Time.get_ticks_msec), so a check can tell the cue from the hit that follows it.
 var last_cue_msec: int = -1
+## How long the windup that cue opened lasts (s): the body winds up for as long (monster_rig.gd), so the arm comes down when the hit lands (v10 N033: the Hunter and the Brute hit 1.0 s after the cue, the arm was back at rest at 0.8 s).
+var last_cue_windup: float = WARN_DURATION
 
 ## GAME_AUDIT/arena design audit P8: _mesh_owner used to be resolved once in
 ## _ready() by scanning only direct children - too early (base_monster.gd
@@ -28,8 +30,9 @@ func warn(attack_callback: Callable) -> void:
 	tw.tween_callback(attack_callback)
 
 ## The sight and the sound of an attack that is about to land, without the attack: the windups of the Crawler, the Hunter and the Brute call it, and warn() is a cue and a callback.
-func cue() -> void:
+func cue(windup: float = WARN_DURATION) -> void:
 	last_cue_msec = Time.get_ticks_msec()
+	last_cue_windup = windup
 	if _mesh_owner == null or not is_instance_valid(_mesh_owner):
 		_mesh_owner = _find_mesh(get_parent())
 	_flash()

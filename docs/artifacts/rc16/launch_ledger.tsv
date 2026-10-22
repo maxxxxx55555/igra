@@ -160,3 +160,68 @@ n	utc	head	id	exit	command
 159	20261018T091010Z	7e88ae9	s28_v1h_7e88ae9	0	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/5fa8d500-393b-43b7-95de-04d09fcc9e42/scratchpad/s28_l11.sh
 160	20261018T092535Z	fd58c5e	s28_v1i_fd58c5e	0	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/5fa8d500-393b-43b7-95de-04d09fcc9e42/scratchpad/s28_l12.sh
 161	20261018T095724Z	3cb2ad7	s28_f1_3cb2ad7	0	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/5fa8d500-393b-43b7-95de-04d09fcc9e42/scratchpad/s28_f1.sh
+162	20261020T172408Z	3ca44bb	s29_base_compile_3ca44bb	0	bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 300
+163	20261020T173319Z	3ca44bb	s29_base_botN_3ca44bb	0	bash tools/qa_sim/autoplay_bot
+164	20261020T175617Z	ca08f2f	s29_base_botH_3ca44bb	2	bash tools/qa_sim/autoplay_bot
+165	20261020T184404Z	2f20128	s29_a_rig1_2f20128	1	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s29_a1.sh
+166	20261020T184826Z	2f20128	s29_a_rig2_wip	0	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s29_a2.sh
+167	20261020T185103Z	2f20128	s29_a_frames2_wip2	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/anim_frames_scene.tscn 240
+168	20261020T190621Z	1de8a08	s29_a_rig3_1de8a08	0	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s29_a1.sh
+169	20261020T191526Z	efc0123	s29_a8_full_efc0123wip	0	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s29_full.sh
+170	20261020T191955Z	97d323f	s29_a8_full_97d323f	0	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s29_full.sh
+171	20261020T192429Z	83b3b5b	s29_a9_frames_83b3b5b	0	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s29_a9.sh
+172	20261020T192644Z	584e04f	s29_a10_botN_584e04f	0	bash tools/qa_sim/autoplay_bot
+173	20261020T194815Z	584e04f	s29_a10_botH_584e04f	1	bash tools/qa_sim/autoplay_bot
+174	20261020T204527Z	5fc66d6	s29_b1_look_wip	1	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s29_a1.sh
+175	20261020T204724Z	5fc66d6	s29_b1_look_wip2	1	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s29_a1.sh
+176	20261020T204817Z	5fc66d6	s29_b1_look_wip3	0	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s29_a1.sh
+177	20261020T204903Z	5fc66d6	s29_b1_full_wip	1	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s29_full.sh
+178	20261020T205343Z	5fc66d6	s29_b1_full2_wip	0	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s29_full.sh
+179	20261020T225251Z	f6882ac	s29_b3_wet_wip	1	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s29_a1.sh
+180	20261020T225335Z	f6882ac	s29_b3_wet_wip2	0	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s29_a1.sh
+181	20261020T225419Z	f6882ac	s29_b3_full_wip	0	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s29_full.sh
+182	20261020T231914Z	3b97aa7	s29_b_chain_3b97aa7	1	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s29_b_chain.sh
+183	20261021T000417Z	c77a0cb	s29_c_wip1	1	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s29_a1.sh
+184	20261021T000851Z	c77a0cb	s29_c_wip2	1	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s29_a1.sh
+185	20261021T001050Z	362c5f4	s29_bc_chain_362c5f4	1	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s29_b_chain.sh
+186	20261021T002141Z	362c5f4	s29_c_wip3	0	bash C:/Users/Maxsim/AppData/Local/Temp/claude/C--Users-Maxsim-Desktop-TLS-Build-THE-LAST-STREETLIGHT/1b7febd1-9c60-4db2-8f84-207d10a1b816/scratchpad/s29_a1.sh
+187	20261021T002300Z	f51a735	s29_bc_botN_f51a735	0	bash tools/qa_sim/autoplay_bot
+188	20261021T004708Z	f51a735	s29_bc_botH_f51a735	1	bash tools/qa_sim/autoplay_bot
+189	20261021T094154Z	08d3a60	v10_r1_08d3a60	0	bash .qa_logs/v10_r1.sh
+190	20261021T095827Z	27c3cfd	v10_r2_27c3cfd	0	bash .qa_logs/v10_r2.sh
+191	20261021T101246Z	b9f8a87	v10_r2b_b9f8a87	0	bash .qa_logs/v10_r2b.sh
+192	20261021T103114Z	a1ddacb	v10_r2c_a1ddacb	0	bash .qa_logs/v10_r2c.sh
+193	20261021T103412Z	09f5ddd	v10_r2c2_09f5ddd	0	bash .qa_logs/v10_r2c.sh
+194	20261021T104051Z	09f5ddd	v10_f19_uncommitted	0	bash .qa_logs/v10_f19.sh
+195	20261021T105346Z	4cbd0d3	v10_import_4cbd0d3	0	bash .qa_logs/v10_import.sh
+196	20261021T105705Z	4cdd994	v10_ac1_4cdd994	0	bash .qa_logs/v10_ac1.sh
+197	20261021T110544Z	4ff0b56	v10_ac2_4ff0b56	0	bash .qa_logs/v10_ac2.sh
+198	20261021T111540Z	5fcb4cf	v10_ac3_ablation	0	bash .qa_logs/v10_ac3.sh
+199	20261021T114132Z	cf9a7ff	v10_ac4_census	0	bash .qa_logs/v10_ac4.sh
+200	20261021T145448Z	cf9a7ff	v10_limit_wip	0	bash .qa_logs/v10_limit.sh
+201	20261021T145654Z	cf9a7ff	v10_limit2_wip	0	bash .qa_logs/v10_limit2.sh
+202	20261021T145809Z	0383414	v10_full_0383414	0	bash .qa_logs/v10_full.sh
+203	20261021T150421Z	c1827cd	v10_mut_subset_0383414	0	bash .qa_logs/v10_mut_subset.sh
+204	20261021T150719Z	141bc4d	v10_mut_subset2_limit	0	bash .qa_logs/v10_mut_subset.sh
+205	20261021T151007Z	141bc4d	v10_m2_music	0	bash .qa_logs/v10_m2.sh
+206	20261021T152027Z	14484f3	v10_m6_music_probe	0	bash .qa_logs/v10_m6.sh
+207	20261021T152320Z	14484f3	v10_m4b_probe	0	bash .qa_logs/v10_m4b.sh
+208	20261021T152635Z	418a044	v10_mut_subset3_music	0	bash .qa_logs/v10_mut_subset.sh
+209	20261021T154458Z	e78a8dc	v10_ac5_e78a8dc	0	bash .qa_logs/v10_ac5.sh
+210	20261021T155538Z	e78a8dc	v10_hudp6_e78a8dc	0	bash tools/qa_sim/closeout_check 300
+211	20261021T160859Z	1acf92b	v10_bot_1acf92b	0	bash .qa_logs/v10_bot_inner.sh
+212	20261021T172526Z	a91ef95	v10_e_a91ef95	0	bash .qa_logs/v10_e_gates.sh
+213	20261021T173237Z	6950c65	v10_leak_6950c65	0	bash .qa_logs/v10_leak.sh
+214	20261021T173937Z	8ba3d8f	v10_export_8ba3d8f	0	bash -c set -a; . .signing/release.env; set +a; /c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/Godot_v4.7-stable_win64_console.exe --headless --path . --export-release "Android" build/tls.aab 2>&1 | tee .qa_logs/v10_export.log
+215	20261021T200112Z	cfe0f41	v10_nit_cfe0f41	0	bash .qa_logs/v10_nit.sh
+216	20261022T005235Z	95371bd	v10_quick_95371bd	0	bash .qa_logs/v10_quick.sh
+217	20261022T005911Z	2f86790	v10_flash_2f86790	0	bash .qa_logs/v10_flash_sweep.sh
+218	20261022T063759Z	9373d92	v10_quick2_9373d92	0	bash .qa_logs/v10_quick2.sh
+219	20261022T105622Z	f957123	v10_quick3_f957123	0	bash .qa_logs/v10_quick3.sh
+220	20261022T125737Z	413703d	v10_quick4_413703d	0	bash .qa_logs/v10_quick4.sh
+221	20261022T130554Z	e0836dc	v10_quick5_e0836dc	3	bash .qa_logs/v10_quick5.sh
+222	20261022T131426Z	55296a4	v10_win_55296a4	0	bash .qa_logs/v10_win.sh
+223	20261022T171626Z	8da7237	v10_land_closeout_8da7237	0	bash tools/qa_sim/closeout_check 900
+224	20261022T172028Z	6563e91	v10_land_export1_6563e91	0	bash -lc set
+225	20261022T172051Z	6563e91	v10_land_export1b_6563e91	1	bash .qa_logs/export1.sh
+226	20261022T174311Z	32e7453	v10_land_checkall_32e7453	5	bash .qa_logs/l3_checkall.sh

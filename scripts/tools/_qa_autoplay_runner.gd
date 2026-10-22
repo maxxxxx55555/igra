@@ -28,7 +28,8 @@ const REACH := 2.7          # interactor REACH is 3.2; stop a little inside
 const PICKUP_TOUCH := 1.4
 const SOFTLOCK_SEC := 45.0
 const HARD_TIMEOUT_SEC := 900.0
-const BOSS_FIGHT_SEC := 240.0
+## The bot's deadline for the Architect, not the game's: v10 F15 read the fights of the last runs after the animation and pickup passes: Normal 140 to 167 s, Hard 203 and 215 s (wins), and one Hard run that had the boss at 26 % of its health when 240 s ran out (14 deaths; ~325 s at its rate). The fight itself is untouched.
+const BOSS_FIGHT_SEC := 420.0
 const STUCK_NUDGE_SEC := 2.0
 ## player_3d.gd:544 normalizes the move direction before applying speed
 ## (`dir.normalized() * final_speed`) — a shorter joystick vector moves the
@@ -792,4 +793,10 @@ func _finish() -> void:
 	if not won:
 		code = 2 if _fails.size() > 0 and String(_fails[0]).begins_with("SOFTLOCK") else 1
 	if OS.get_environment("QA_NO_QUIT") != "1":
+		# A player still sounding at quit keeps its playback alive in the AudioServer when the engine counts the objects left (46 of the 81 of a run with deaths, v10 R6).
+		for p: Node in get_tree().root.find_children("*", "AudioStreamPlayer", true, false):
+			(p as AudioStreamPlayer).stop()
+		for p3: Node in get_tree().root.find_children("*", "AudioStreamPlayer3D", true, false):
+			(p3 as AudioStreamPlayer3D).stop()
+		await get_tree().create_timer(0.3).timeout
 		get_tree().quit(code)

@@ -63,7 +63,7 @@ func _ready() -> void:
 	add_child(ducker)
 	_wind = _make_player(&"Environment")
 	_wind.name = "WindLayer"
-	_wind.stream = WIND_SFX
+	_wind.stream = _force_loop(WIND_SFX)
 	_wind.volume_db = -26.0
 	# CONTENT UX / FINAL INTEGRATION wave: real mastered rain over metal
 	# roofs/cars replaces the procedural white-noise placeholder.
@@ -93,11 +93,12 @@ func _ready() -> void:
 	EventBus.player_detected.connect(func(_id: StringName) -> void: _one_shot(_gen_growl(), -12.0, &"Combat"))
 	EventBus.enemy_attack.connect(func(_dmg: int) -> void: _one_shot(_gen_growl(), -8.0, &"Combat"))
 	# Озвучка игровых событий (раньше были немыми).
-	EventBus.item_picked_up.connect(func(_id: StringName) -> void: _one_shot(_gen_pickup(), -10.0, &"UI"))
+	EventBus.item_picked_up.connect(func(_id: StringName, _n: int) -> void: _one_shot(_gen_pickup(), -10.0, &"UI"))
 	EventBus.purchase_success.connect(func(_id: StringName) -> void: _one_shot(_gen_coin(), -8.0, &"UI"))
 	EventBus.purchase_failed.connect(func(_id: String, _r: String) -> void: _one_shot(_gen_error(), -12.0, &"UI"))
 	EventBus.puzzle_solved.connect(func(_p: StringName, _d: StringName) -> void: _one_shot(_gen_success(), -6.0, &"UI"))
-	EventBus.district_restored.connect(func(_a: StringName, _b: int) -> void: _one_shot(_gen_powerup(), -4.0, &"UI"))
+	EventBus.district_restored.connect(func(_a: StringName, _b: int) -> void:
+		if not _has_ui_sting("district_restored_sting"): _one_shot(_gen_powerup(), -4.0, &"UI"))
 	# Пять событий теперь озвучивает UISFX настоящими стингерами на шине UI
 	# (docs/CERT_UIAUDIO.md §4). Процедурный вариант остаётся запасным и молчит,
 	# пока файл стингера на месте, иначе на событие звучали бы оба сразу.
@@ -118,12 +119,12 @@ static func _has_ui_sting(name: String) -> bool:
 	return ResourceLoader.exists("res://assets/audio/ui/ui_" + name + ".ogg")
 
 const HURT_SFX := preload("res://assets/audio/sfx/sfx_hurt.wav")
-const WIND_SFX := preload("res://assets/audio/sfx/amb_wind.wav")
+const WIND_SFX := preload("res://assets/audio/sfx/amb_wind.ogg")
 const FLASHLIGHT_ON_SFX := preload("res://assets/audio/sfx/sfx_flashlight_on.wav")
 const FLASHLIGHT_OFF_SFX := preload("res://assets/audio/sfx/sfx_flashlight_off.wav")
 const RAIN_SFX := preload("res://assets/audio/one_shots/rain_on_metal_loop.ogg")
-const THUNDER_NEAR_SFX := preload("res://assets/audio/one_shots/thunder_near.wav")
-const THUNDER_FAR_SFX := preload("res://assets/audio/one_shots/thunder_far.wav")
+const THUNDER_NEAR_SFX := preload("res://assets/audio/one_shots/thunder_near.ogg")
+const THUNDER_FAR_SFX := preload("res://assets/audio/one_shots/thunder_far.ogg")
 const HEARTBEAT_SFX := preload("res://assets/audio/one_shots/heartbeat_low_loop.ogg")
 const BREATH_SFX := preload("res://assets/audio/one_shots/breath_low_loop.ogg")
 const LOW_HP_THRESHOLD: float = 0.30

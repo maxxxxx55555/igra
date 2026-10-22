@@ -41,7 +41,7 @@ keystore/release_password=<the password you set above>
 
 **AAB export — blocked, not attempted:** this machine has no Android SDK (`ANDROID_HOME`
 unset, no `sdkmanager`/`adb` on PATH), and `export_presets.cfg` has
-`gradle_build/use_gradle_build=true` + `target_sdk=34`, so a signed `.aab` needs the SDK's
+`gradle_build/use_gradle_build=true` (the SDK levels are the template's: minimum 24, target 36), so a signed `.aab` needs the SDK's
 build-tools and a Gradle run, not just the Godot editor. Exact install commands (PowerShell):
 
 ```powershell

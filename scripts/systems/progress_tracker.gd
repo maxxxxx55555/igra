@@ -62,7 +62,7 @@ func _ready() -> void:
 	EventBus.quest_completed.connect(func(id: String) -> void: _add_photo("quest_" + id))
 	EventBus.district_entered.connect(func(id: StringName) -> void: _add_photo("district_%s_entered" % id))
 	EventBus.district_stage_changed.connect(_on_stage_photo)
-func _on_item_picked_up(item_id: StringName) -> void:
+func _on_item_picked_up(item_id: StringName, _amount: int = 1) -> void:
 	items_picked += 1
 	var id := String(item_id)
 	if ARTIFACT_ITEMS.has(id):

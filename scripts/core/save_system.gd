@@ -18,10 +18,20 @@ const MAX_SLOTS: int = 4
 ## impossible without a backend this game doesn't have (see
 ## docs/KNOWN_ISSUES.md). This still stops the common case (a text editor on
 ## the JSON) which the old plain hash didn't.
-const _HMAC_KEY: String = "TLS-savegame-v1-4f1c9e6b2a8d5f03"
+## v10 G-RED2 (V9): the key is two byte tables that meet in _key(), not a string constant, so `strings` on the bundle does not show it. The scope is the one above: every install has the same key,
+## because Export Save has to be verifiable on a new phone; this keeps out the text editor and the `strings` reader, not a decompiler. The value is unchanged, so no signed file on a device breaks.
+const _KEY_A: PackedByteArray = [26, 41, 178, 210, 145, 108, 44, 253, 63, 83, 14, 240, 30, 207, 16, 229, 135, 149, 180, 136, 195, 159, 242, 136, 175, 16, 125, 243, 219, 245, 228, 153]
+const _KEY_B: PackedByteArray = [78, 101, 225, 255, 226, 13, 90, 152, 88, 50, 99, 149, 51, 185, 33, 200, 179, 243, 133, 235, 250, 250, 196, 234, 157, 113, 69, 151, 238, 147, 212, 170]
+
+static func _key() -> PackedByteArray:
+	var key := PackedByteArray()
+	key.resize(_KEY_A.size())
+	for i: int in _KEY_A.size():
+		key[i] = _KEY_A[i] ^ _KEY_B[i]
+	return key
 
 static func _sign(body: String) -> String:
-	return Crypto.new().hmac_digest(HashingContext.HASH_SHA256, _HMAC_KEY.to_utf8_buffer(), body.to_utf8_buffer()).hex_encode()
+	return Crypto.new().hmac_digest(HashingContext.HASH_SHA256, _key(), body.to_utf8_buffer()).hex_encode()
 
 ## Signed side files (NG+, flashlight upgrades, achievements, daily):
 ## {"hmac": _sign(body), "data_json": body}. write_signed() returns false

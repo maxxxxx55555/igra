@@ -1,0 +1,74 @@
+# proof v10_bot_1acf92b
+# utc 20261021T160859Z
+# head 1acf92b (uncommitted paths: 0)
+# env none
+# cmd bash .qa_logs/v10_bot_inner.sh
+# power: Online 42
+# STEP bot normal
+# Godot binary: /c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/godot
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  [32mWIN [0m seed 1  ([bot s1]   result       : WIN)
+deaths counted 6, revive lines 6
+  [32mWIN [0m seed 2  ([bot s2]   result       : WIN)
+deaths counted 0, revive lines 0
+  [32mWIN [0m seed 3  ([bot s3]   result       : WIN)
+deaths counted 0, revive lines 0
+
+──────────────────────────────────────
+autoplay bot: 3/3 seeds won, 0 softlock(s)
+bot death counters below their revive lines: 0
+  user-data guard: 0 file(s) restored byte-identical
+# STEP bot normal rc=0
+[bot s1]   result       : WIN
+[bot s1]   deaths       : 6
+[bot s1]   cost         : difficulty 1, 54 hits taken, 648 health lost, 6 items used, first death at 347.3 s
+WARNING: 81 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+ERROR: 19 resources still in use at exit (run with --verbose for details).
+[bot s2]   result       : WIN
+[bot s2]   deaths       : 0
+[bot s2]   cost         : difficulty 1, 15 hits taken, 180 health lost, 5 items used, first death at -1.0 s
+WARNING: 35 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+[bot s3]   result       : WIN
+[bot s3]   deaths       : 0
+[bot s3]   cost         : difficulty 1, 18 hits taken, 216 health lost, 6 items used, first death at -1.0 s
+WARNING: 35 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+# STEP bot hard
+# Godot binary: /c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/godot
+  user-data guard: 0 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  [32mWIN [0m seed 1  ([bot s1]   result       : WIN)
+deaths counted 2, revive lines 2
+  [32mWIN [0m seed 2  ([bot s2]   result       : WIN)
+deaths counted 1, revive lines 1
+  [31mNO-WIN[0m seed 3 (rc=1)
+       [bot s3] t=288.1 all 11 districts FULL — final night; bot is standing in power_station
+       [bot s3] FAIL boss not defeated within 240s — spine proven, boss is a skill gate
+       [bot s3] ── RUN SUMMARY ──────────────────────────────
+       [bot s3]   result       : NOT WON
+       [bot s3]   districts FULL: 11/11
+       [bot s3]   deaths       : 14
+       [bot s3]   stage timeline: suburbs:0@6.0, suburbs:1@16.5, suburbs:2@18.3, suburbs:3@36.9, residential:0@38.1, residential:1@45.0, residential:2@45.9, residential:3@47.0, park:0@48.1, park:1@64.6, park:2@72.0, park:3@93.6, school:0@94.7, school:1@102.8, school:2@103.8, school:3@104.9, hospital:0@106.2, hospital:1@116.3, hospital:2@127.0, hospital:3@144.1, gas_station:0@145.2, gas_station:1@152.3, gas_station:2@153.3, gas_station:3@154.4, police:0@155.5, police:1@164.2, police:2@183.5, police:3@203.3, warehouses:0@204.4, warehouses:1@211.5, warehouses:2@212.4, warehouses:3@213.5, industrial:0@214.7, industrial:1@222.2, industrial:2@230.7, industrial:3@243.6, substation:0@244.7, substation:1@252.1, substation:2@253.1, substation:3@254.1, power_station:0@255.3, power_station:1@268.2, power_station:2@269.2
+       [bot s3]   part economy : suburbs stage 0->1 @t=16.5 | suburbs stage 1->2 @t=18.3 | suburbs stage 2->3 @t=36.8 | residential stage 0->1 @t=44.9 | residential stage 1->2 @t=45.9 | residential stage 2->3 @t=47.0 | park stage 0->1 @t=64.6 | park stage 1->2 @t=72.0 | park stage 2->3 @t=93.6 | school stage 0->1 @t=102.8 | school stage 1->2 @t=103.8 | school stage 2->3 @t=104.9 | hospital stage 0->1 @t=116.3 | hospital stage 1->2 @t=127.0 | hospital stage 2->3 @t=144.1 | gas_station stage 0->1 @t=152.3 | gas_station stage 1->2 @t=153.3 | gas_station stage 2->3 @t=154.3 | police stage 0->1 @t=164.2 | police stage 1->2 @t=183.5 | police stage 2->3 @t=203.2 | warehouses stage 0->1 @t=211.4 | warehouses stage 1->2 @t=212.4 | warehouses stage 2->3 @t=213.5 | industrial stage 0->1 @t=222.1 | industrial stage 1->2 @t=230.7 | industrial stage 2->3 @t=243.6 | substation stage 0->1 @t=252.1 | substation stage 1->2 @t=253.1 | substation stage 2->3 @t=254.1 | power_station stage 0->1 @t=268.1 | power_station stage 1->2 @t=269.2
+       [bot s3]   FAIL: boss not defeated within 240s — spine proven, boss is a skill gate
+deaths counted 14, revive lines 14
+
+──────────────────────────────────────
+autoplay bot: 2/3 seeds won, 0 softlock(s)
+bot death counters below their revive lines: 0
+  user-data guard: 0 file(s) restored byte-identical
+# STEP bot hard rc=1
+[bot s1]   result       : WIN
+[bot s1]   deaths       : 2
+[bot s1]   cost         : difficulty 2, 25 hits taken, 375 health lost, 7 items used, first death at 491.8 s
+WARNING: 81 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+ERROR: 19 resources still in use at exit (run with --verbose for details).
+[bot s2]   result       : WIN
+[bot s2]   deaths       : 1
+[bot s2]   cost         : difficulty 2, 20 hits taken, 300 health lost, 7 items used, first death at 486.3 s
+WARNING: 65 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+ERROR: 13 resources still in use at exit (run with --verbose for details).
+[bot s3]   result       : NOT WON
+[bot s3]   deaths       : 14
+[bot s3]   cost         : difficulty 2, 76 hits taken, 1140 health lost, 8 items used, first death at 336.6 s
+WARNING: 35 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+# STEP done
+# EXIT=0

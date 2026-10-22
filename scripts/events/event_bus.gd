@@ -28,7 +28,7 @@ signal enemy_died(position: Vector3)
 signal enemy_damaged(monster: Node3D, amount: float)
 signal enemy_killed(monster_id: StringName)
 signal enemy_spawned(enemy: Node3D)
-signal item_picked_up(item_id: StringName)
+signal item_picked_up(item_id: StringName, amount: int)  # amount: the items of the pickup (a crate of the street holds two or three), what the collect quests count
 signal player_died
 
 signal achievement_unlocked(achievement_id: String)

@@ -39,7 +39,8 @@ func _ready() -> void:
 		if state == GameManager.GameState.PLAYING and _container.visible:
 			_FADE.show_for([_container], _SHOW_SEC))
 
-	EventBus.hud_visibility_changed.connect(func(shown: bool) -> void: visible = shown)
+	# v10 N044: closing a screen shows the HUD again whatever the state is; the list is for play (it drew over the main menu after a run)
+	EventBus.hud_visibility_changed.connect(func(shown: bool) -> void: visible = shown and GameManager.is_playing())
 	QuestManager.quest_started.connect(_refresh)
 	QuestManager.quest_completed.connect(_refresh)
 	QuestManager.quest_progress.connect(_refresh)

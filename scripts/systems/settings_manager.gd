@@ -4,7 +4,7 @@ const BUSES := ["Master", "SFX", "Music", "Voice", "Ambient"]
 ## строит список по SUPPORTED, а индекс выбранного пункта хранит в
 ## _settings["language"], который здесь ищется через LANGUAGES.find(). При разном
 ## порядке сохранённый индекс указывал на чужой язык.
-const LANGUAGES := ["ru", "en", "es", "de", "fr", "it", "pt_BR", "tr", "ja", "ko", "zh", "zh_TW", "ar"]
+const LANGUAGES := ["ru", "en", "es", "de", "fr", "pt_BR"]
 const CFG_PATH := "user://settings.cfg"
 const _InputRemap := preload("res://scripts/systems/input_remap.gd")
 const _DynamicResolution := preload("res://scripts/systems/dynamic_resolution.gd")
@@ -464,9 +464,9 @@ func _apply_arachnophobia() -> void:
 		# `enemy.is_instance_valid()` was a runtime error — Node has no such
 		# method; it's the global `is_instance_valid(obj)`.
 		if is_instance_valid(enemy):
-			var mesh := enemy.find_child("BodyMesh", true, false) as MeshInstance3D
-			if mesh:
-				mesh.visible = not enabled
+			var body := enemy.find_child("VisualRoot", true, false) as Node3D
+			if body:
+				body.visible = not enabled
 				var alt := enemy.find_child("AltMesh", true, false) as MeshInstance3D
 				if alt:
 					alt.visible = enabled

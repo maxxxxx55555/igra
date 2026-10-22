@@ -80,8 +80,8 @@ pick = read("scripts/pickups/item_pickup_3d.gd")
 check("подбор не шлёт RPC самому себе", "rpc_id(" not in code_only(pick),
       "RPC в одиночной игре уходит OfflineMultiplayerPeer с id=1")
 check("подбор кладёт вещь в инвентарь", "inventory.try_add(" in pick)
-check("высота лута фиксируется после спавна", "_capture_base_y" in pick,
-      "DistrictLoot задаёт позицию уже ПОСЛЕ add_child/_ready")
+check("предмет лежит на земле: меш садится на начало узла и не покачивается", "get_aabb().position.y" in read("scripts/art/pickup_meshes.gd") and "sin(" not in code_only(pick),
+      "DistrictLoot задаёт позицию уже ПОСЛЕ add_child/_ready: меш стоит от начала узла, а не от захваченной высоты")
 inv = read("scripts/inventory/inventory_manager.gd")
 check("инвентарь шлёт item_picked_up", "EventBus.item_picked_up.emit(" in inv)
 check("инвентарь не шлёт RPC вне сети", "_is_networked()" in inv)

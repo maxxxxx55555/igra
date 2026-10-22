@@ -11,22 +11,14 @@ extends Node3D
 ## paradigm from scratch.
 
 const PUZZLE_ID: String = "fuse_substation"
+const _Props := preload("res://scripts/art/prop_meshes.gd")
 
 var _body: StaticBody3D
 
 func _ready() -> void:
 	add_to_group("interactable")
 	var mesh := MeshInstance3D.new()
-	var bm := BoxMesh.new()
-	bm.size = Vector3(0.6, 1.0, 0.4)
-	mesh.mesh = bm
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = Color(0.16, 0.16, 0.2)
-	mat.emission_enabled = true
-	mat.emission = Color(0.788, 0.635, 0.290)
-	mat.emission_energy_multiplier = 0.5
-	mesh.material_override = mat
-	mesh.position = Vector3(0, 0.5, 0)
+	_Props.dress(mesh, "cable_box")
 	add_child(mesh)
 	_body = StaticBody3D.new()
 	var cs := CollisionShape3D.new()

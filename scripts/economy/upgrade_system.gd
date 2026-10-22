@@ -64,7 +64,7 @@ func reset() -> void:
 	apply_all()
 func is_applied(upgrade_id: StringName) -> bool:
 	return _applied.get(upgrade_id, false)
-func _on_pickup(item_id: StringName) -> void:
+func _on_pickup(item_id: StringName, _amount: int = 1) -> void:
 	var s := String(item_id)
 	if s.begins_with(BLUEPRINT_PREFIX):
 		# the four blueprints on the streets name the shop's upgrades: blueprint_backpack_slots is upgrade_backpack_slots
