@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "_contract": "World-bible press clippings. faction/character refs must exist in content/world/*.json; reveal via {district, min_stage}; en text is i18n source. Pre-blackout clippings are Act II foreshadowing found in later districts.",
+  "clippings": [
+    {
+      "id": "news_rolling_outages",
+      "source_en": "City Herald, front page",
+      "date_en": "day of the blackout",
+      "faction_refs": ["faction_city_power"],
+      "i18n_keys": { "title": "WORLD_NEWS_OUTAGES_TITLE", "text": "WORLD_NEWS_OUTAGES_TEXT" },
+      "en": {
+        "title": "Rolling Outages Begin Tonight",
+        "text": "CITY POWER COMPANY announces planned rolling outages, Tuesday 22:00-23:00, suburban feeders first. 'A maintenance formality,' says the director. Asked about the night-shift request for feeder four, the director ended the call."
+      },
+      "reveal": { "district": "suburbs", "min_stage": 0 }
+    },
+    {
+      "id": "news_arena_collection",
+      "source_en": "Civic leaflet, reproduced in the Herald",
+      "date_en": "nights 1-3",
+      "faction_refs": [],
+      "i18n_keys": { "title": "WORLD_NEWS_ARENA_TITLE", "text": "WORLD_NEWS_ARENA_TEXT" },
+      "en": {
+        "title": "Collection Point at the Central Arena",
+        "text": "Residents are to proceed orderly to the central arena. Documents and one bag per person. Do not remain outdoors after dark. The Herald notes the order carries no signature and no office, and that the arena's own lights were seen off at press time."
+      },
+      "reveal": { "district": "suburbs", "min_stage": 1 }
+    },
+    {
+      "id": "news_trees_listen",
+      "source_en": "Parks beat, page 6",
+      "date_en": "3 weeks pre-blackout",
+      "faction_refs": ["faction_city_power"],
+      "i18n_keys": { "title": "WORLD_NEWS_TREES_TITLE", "text": "WORLD_NEWS_TREES_TEXT" },
+      "en": {
+        "title": "Park Closed After 'Tree' Complaints",
+        "text": "The central park closes until further notice following repeated complaints that the trees 'lean toward the lamps to listen'. The parks office: trees do not listen. Night gardeners, unnamed, add that the leaning started the week the new feeder hummed."
+      },
+      "reveal": { "district": "park", "min_stage": 0 }
+    },
+    {
+      "id": "news_architect_denied",
+      "source_en": "Herald archives, found in hospital records",
+      "date_en": "9 years pre-blackout",
+      "faction_refs": ["faction_project_architect"],
+      "i18n_keys": { "title": "WORLD_NEWS_ARCHITECT_TITLE", "text": "WORLD_NEWS_ARCHITECT_TEXT" },
+      "en": {
+        "title": "Council Denies 'Grid Memory' Program",
+        "text": "The council denies funding any 'Project Architect' to 'store what the lamps have seen'. The denial names the project by title, which no reporter had used. The program's test feeders, records show, were wired through the hospital sub-feed and the park line."
+      },
+      "reveal": { "district": "hospital", "min_stage": 2 }
+    },
+    {
+      "id": "news_meter_anomaly",
+      "source_en": "Herald utilities column",
+      "date_en": "6 years pre-blackout",
+      "faction_refs": ["faction_city_power", "faction_project_architect"],
+      "i18n_keys": { "title": "WORLD_NEWS_METERS_TITLE", "text": "WORLD_NEWS_METERS_TEXT" },
+      "en": {
+        "title": "Meters Run Backwards on Three Streets",
+        "text": "Apartment meters on three residential streets record negative draw at night. City Power blames 'faulty drums'. A retired meterman: a backwards meter is not a faulty drum, it is a tap. Something downstream is paying current into the wires, not taking it."
+      },
+      "reveal": { "district": "residential", "min_stage": 2 }
+    }
+  ]
+}
