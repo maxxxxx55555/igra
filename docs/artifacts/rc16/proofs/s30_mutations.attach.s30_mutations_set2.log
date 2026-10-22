@@ -1,0 +1,26 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+[closeout] ok   the player spawned
+[closeout] FAIL SOV1 the lane marking is a dash of 1.20 m by 4.00 m and the road, the sidewalk and the paint use the road shader (shaded true)
+[closeout] FAIL SOV2 the blocks use the facade shader, a block gets 22 roof boxes and balconies, and the detail follows the graphics tier (Low 2, High 2)
+[closeout] FAIL SOV3 the halo of a landmark is 110 m by 100 m at an opacity of 0.17 when the district is FULL
+[closeout] ok   SOV4 the districts have 31 sign words and every letter is in the engine's font (missing: none)
+[closeout] ok   SOV8 every sign word fits the 1024 px row of the atlas (the widest is 960 px; 2 long words are drawn smaller)
+[closeout] FAIL SOV5 the dead grass holds 144 tufts and shows [144, 144, 144] of them at Low, Medium and High
+[closeout] FAIL SOV6 the blocks glow at 0.16 (DARK) to 0.05 (FULL) and the sign paint at 0.45 to 1.00: a restored district reads lighter, a dark one an outline
+[closeout] FAIL SOV7 the menu draws fog and grain between its hero art and its title (High true, Low true) and the title is stencilled (true)
+[closeout] FAIL MENU2 the daily card of the menu follows a language change (en to ru: the title reads Daily Challenge)
+[closeout] FAIL MUS1 the Architect announces its phases [2] and the music takes the theme of the phase it is told (3 then 3, a new fight starts at 1)
+[closeout] FAIL MUS3 a new run ends the boss theme (held in a fight: true; after the run starts: flag true, phase 3, mood 1)
+[closeout] FAIL MUS4 a change of district ends the boss theme (flag true, phase 1)
+ERROR: Resource file not found: res://assets/audio/music/police_x.ogg (expected type: unknown)
+   at: _load (core/io/resource_loader.cpp:325)
+   GDScript backtrace (most recent call first):
+       [0] _tracks (res://scripts/tools/rc16/s27_checks.gd:178)
+       [1] run (res://scripts/tools/rc16/s27_checks.gd:30)
+       [2] _menu (res://scripts/tools/rc16/s27_checks.gd:136)
+[closeout] FAIL MUS2 the 12 generated tracks the music manager names load as Ogg streams of 25 s or more (bad: ["police_x.ogg"])
+[closeout] FAIL CRED1 the music credit says Google Lyria in all 6 locales and the widest line (ru, 378 px) fits the 600 px column of the credits scene
+[closeout] DONE checks=15 fails=12
+WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)

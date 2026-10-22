@@ -1,0 +1,267 @@
+# proof s30_mutations
+# utc 20261022T183257Z
+# head efd96345 (uncommitted paths: 0)
+# env none
+# cmd bash -c python tools/qa_sim/s26_mutations.py apply 0; bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; CLOSEOUT_ONLY=s26 bash tools/qa_sim/closeout_check 400; cp .qa_logs/closeout_check.log .qa_logs/s30_mutations_set0.log; python tools/qa_sim/s26_mutations.py restore; python tools/qa_sim/s26_mutations.py apply 1; bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; CLOSEOUT_ONLY=s26 bash tools/qa_sim/closeout_check 400; cp .qa_logs/closeout_check.log .qa_logs/s30_mutations_set1.log; python tools/qa_sim/s26_mutations.py restore; python tools/qa_sim/s26_mutations.py apply 2; bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; CLOSEOUT_ONLY=s27 bash tools/qa_sim/closeout_check 400; cp .qa_logs/closeout_check.log .qa_logs/s30_mutations_set2.log; python tools/qa_sim/s26_mutations.py restore; python tools/qa_sim/s26_mutations.py apply 3; bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; CLOSEOUT_ONLY=s27 bash tools/qa_sim/closeout_check 400; cp .qa_logs/closeout_check.log .qa_logs/s30_mutations_set3.log; python tools/qa_sim/s26_mutations.py restore; python tools/qa_sim/s26_mutations.py apply 4; bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; CLOSEOUT_ONLY=s28 bash tools/qa_sim/closeout_check 400; cp .qa_logs/closeout_check.log .qa_logs/s30_mutations_set4.log; python tools/qa_sim/s26_mutations.py restore; python tools/qa_sim/s26_mutations.py apply 5; bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; bash tools/qa_sim/guarded_headless res://scenes/tools/attack_sim_scene.tscn 120; cp .qa_logs/attack_sim_scene.log .qa_logs/s30_mutations_set5.log; python tools/qa_sim/s26_mutations.py restore; python tools/qa_sim/s26_mutations.py apply 6; bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; bash tools/qa_sim/guarded_headless res://scenes/tools/attack_sim_scene.tscn 120; cp .qa_logs/attack_sim_scene.log .qa_logs/s30_mutations_set6.log; python tools/qa_sim/s26_mutations.py restore; python tools/qa_sim/s26_mutations.py apply 7; bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; CLOSEOUT_ONLY=s28 bash tools/qa_sim/closeout_check 400; cp .qa_logs/closeout_check.log .qa_logs/s30_mutations_set7.log; python tools/qa_sim/s26_mutations.py restore; python tools/qa_sim/s26_mutations.py apply 8; bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; CLOSEOUT_ONLY=s29 bash tools/qa_sim/closeout_check 400; cp .qa_logs/closeout_check.log .qa_logs/s30_mutations_set8.log; python tools/qa_sim/s26_mutations.py restore; python tools/qa_sim/s26_mutations.py apply 9; bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; CLOSEOUT_ONLY=s29 bash tools/qa_sim/closeout_check 400; cp .qa_logs/closeout_check.log .qa_logs/s30_mutations_set9.log; python tools/qa_sim/s26_mutations.py restore; python tools/qa_sim/s26_mutations.py apply 10; bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; CLOSEOUT_ONLY=s29 bash tools/qa_sim/closeout_check 400; cp .qa_logs/closeout_check.log .qa_logs/s30_mutations_set10.log; python tools/qa_sim/s26_mutations.py restore; python tools/qa_sim/s26_mutations.py apply 11; bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; CLOSEOUT_ONLY=s29 bash tools/qa_sim/closeout_check 400; cp .qa_logs/closeout_check.log .qa_logs/s30_mutations_set11.log; python tools/qa_sim/s26_mutations.py restore; python tools/qa_sim/s26_mutations.py apply 12; bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; CLOSEOUT_ONLY=s29 bash tools/qa_sim/closeout_check 400; cp .qa_logs/closeout_check.log .qa_logs/s30_mutations_set12.log; python tools/qa_sim/s26_mutations.py restore; python tools/qa_sim/s26_mutations.py apply 13; bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; CLOSEOUT_ONLY=s29 bash tools/qa_sim/closeout_check 400; cp .qa_logs/closeout_check.log .qa_logs/s30_mutations_set13.log; python tools/qa_sim/s26_mutations.py restore; python tools/qa_sim/s26_mutations.py apply 14; bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; CLOSEOUT_ONLY=s29 bash tools/qa_sim/closeout_check 400; cp .qa_logs/closeout_check.log .qa_logs/s30_mutations_set14.log; python tools/qa_sim/s26_mutations.py restore; python tools/qa_sim/s26_mutations.py apply 15; bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; CLOSEOUT_ONLY=s29 bash tools/qa_sim/closeout_check 400; cp .qa_logs/closeout_check.log .qa_logs/s30_mutations_set15.log; python tools/qa_sim/s26_mutations.py restore; python tools/qa_sim/s26_mutations.py apply 16; bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; CLOSEOUT_ONLY=s29 bash tools/qa_sim/closeout_check 400; cp .qa_logs/closeout_check.log .qa_logs/s30_mutations_set16.log; python tools/qa_sim/s26_mutations.py restore; python tools/qa_sim/s26_mutations.py apply 17; bash tools/qa_sim/guarded_headless res://scenes/tools/compile_gate_scene.tscn 120; CLOSEOUT_ONLY=s29 bash tools/qa_sim/closeout_check 400; cp .qa_logs/closeout_check.log .qa_logs/s30_mutations_set17.log; python tools/qa_sim/s26_mutations.py restore
+s26_mutations: apply 0 done (10 mutations)
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL ACHSIG1 the first lit streetlight unlocks First Light
+[closeout] FAIL ACHSIG2 one district FULL unlocks Electrician and its own district achievement, not Beacon
+[closeout] FAIL ACHSIG3 every district FULL unlocks Beacon
+[closeout] FAIL ACHSIG4 the 50th Shadow unlocks Shadow Hunter, the 49th does not
+[closeout] FAIL ACHSIG5 the last document unlocks Librarian
+[closeout] FAIL ACH15M GameManager hears game_over before AchievementManager, so the ending is resolved when Darkness is asked (slots -1 and 1)
+[closeout] FAIL ACH15 a death with only the power station lit is Survivor and does not unlock Darkness (ending survivor)
+[closeout] FAIL ACHRUN1 a New Game starts the marks of Quiet as a Mouse and Without a Scratch empty (seen_park true, hurt_school true)
+[closeout] FAIL DAILY2 the daily selector walks past a template over the 11 districts (day 0 over, day 3 over) and keeps one with no per-run cap (day 2 kills)
+[closeout] FAIL AUD6 the Music bus ends in an enabled limiter under the -1.5 dB ceiling of the audio truth gate (slot 2 of 4, ceiling -2.0)
+[closeout] DONE checks=14 fails=10
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 11 file(s) restored byte-identical
+s26_mutations: restore done
+s26_mutations: apply 1 done (2 mutations)
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL ACHRUN2 it keeps the profile's counters and what is unlocked (Shadow Hunter 0, First Light true)
+[closeout] FAIL DAILY3 two days that select the same template do not share progress: the same day keeps it (2 of 2), the next day starts empty (2)
+[closeout] DONE checks=14 fails=2
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 11 file(s) restored byte-identical
+s26_mutations: restore done
+s26_mutations: apply 2 done (12 mutations)
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL SOV1 the lane marking is a dash of 1.20 m by 4.00 m and the road, the sidewalk and the paint use the road shader (shaded true)
+[closeout] FAIL SOV2 the blocks use the facade shader, a block gets 22 roof boxes and balconies, and the detail follows the graphics tier (Low 2, High 2)
+[closeout] FAIL SOV3 the halo of a landmark is 110 m by 100 m at an opacity of 0.17 when the district is FULL
+[closeout] FAIL SOV5 the dead grass holds 144 tufts and shows [144, 144, 144] of them at Low, Medium and High
+[closeout] FAIL SOV6 the blocks glow at 0.16 (DARK) to 0.05 (FULL) and the sign paint at 0.45 to 1.00: a restored district reads lighter, a dark one an outline
+[closeout] FAIL SOV7 the menu draws fog and grain between its hero art and its title (High true, Low true) and the title is stencilled (true)
+[closeout] FAIL MENU2 the daily card of the menu follows a language change (en to ru: the title reads Daily Challenge)
+[closeout] FAIL MUS1 the Architect announces its phases [2] and the music takes the theme of the phase it is told (3 then 3, a new fight starts at 1)
+[closeout] FAIL MUS3 a new run ends the boss theme (held in a fight: true; after the run starts: flag true, phase 3, mood 1)
+[closeout] FAIL MUS4 a change of district ends the boss theme (flag true, phase 1)
+[closeout] FAIL MUS2 the 12 generated tracks the music manager names load as Ogg streams of 25 s or more (bad: ["police_x.ogg"])
+[closeout] FAIL CRED1 the music credit says Google Lyria in all 6 locales and the widest line (ru, 378 px) fits the 600 px column of the credits scene
+[closeout] DONE checks=15 fails=12
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 11 file(s) restored byte-identical
+s26_mutations: restore done
+s26_mutations: apply 3 done (2 mutations)
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL SOV4 the districts have 42 sign words and every letter is in the engine's font (missing: Ꭰ in suburbs, Ꭰ in residential, Ꭰ in park, Ꭰ in school, Ꭰ in hospital, Ꭰ in gas_station, Ꭰ in police, Ꭰ in warehouses, Ꭰ in industrial, Ꭰ in substation, Ꭰ in power_station)
+[closeout] FAIL SOV8 every sign word fits the 1024 px row of the atlas (the widest is 1094 px; 0 long words are drawn smaller)
+[closeout] DONE checks=15 fails=2
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 11 file(s) restored byte-identical
+s26_mutations: restore done
+s26_mutations: apply 4 done (24 mutations)
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL TEL1 telegraphs: 1 of 7 attacks wait 300 ms or more after the cue (gaps [-1, -1, 383, -1, -1, -1, -1] ms) and the cue lasts 0.40 s of game time (0.35 s at least)
+[closeout] FAIL TEL2 windups: 2 of 3 (Crawler, Hunter, Brute) carry the cue at their start and last [0.5, 1.0, 1.0] s (0.4 s at least)
+[closeout] FAIL TEL3 architect melee: the swing waits -1 ms after its cue (300 ms at least) and starts a cooldown (true)
+[closeout] FAIL TEL4 beam ring: 0 ring of ember marks the place a falling beam lands for as long as it falls (1 wanted)
+[closeout] FAIL TEL5 beam cue: the Architect's flash and sound go off when a beam is sent (false)
+[closeout] FAIL TEL6 beam fall: a beam takes 0.56 s to land (0.7 s at least)
+[closeout] FAIL TEL7 reach: no monster attacks from further than it sees; out of bounds: ["watcher 18 of 12 m"]
+[closeout] FAIL DIF1 hit cap: a hit of 100 takes [8.0, 12.0, 12.0] HP at Easy, Normal and Hard (8, 12 and 15 wanted)
+[closeout] FAIL DIF3 hit cap at New Game+: a hit of 100 takes 12.00 HP at Normal and level 2 (15.6 wanted: the enemy damage bonus of the level scales the cap)
+[closeout] FAIL DIF2 monster scale: a Crawler has [35.0, 50.0, 50.0] hit points and hits for [15.0, 20.0, 25.0] at Easy, Normal and Hard (0.7 and 1.3 times the hit points, 0.75 and 1.25 times the damage wanted)
+[closeout] FAIL ESC1 escape: the spawn points of all 11 districts are 4.5 m or more from the arrival crossroads (12 m wanted) and 7.5 m or less from a streetlight pole (20 m wanted); out of bounds: ["suburbs (-12.0, 0.0, -10.0)", "residential (-12.0, 0.0, -10.0)", "park (-12.0, 0.0, -10.0)", "school (-12.0, 0.0, -10.0)", "hospital (-12.0, 0.0, -10.0)", "gas_station (-12.0, 0.0, -10.0)", "police (-12.0, 0.0, -10.0)", "warehouses (-12.0, 0.0, -10.0)", "industrial (-12.0, 0.0, -10.0)", "substation (-12.0, 0.0, -10.0)", "power_station (-12.0, 0.0, -10.0)"]
+[closeout] FAIL RET1 respawn: the battery comes back as [0.0, 10.0, 70.0] after a death with 0, 10 and 70 (25, 25 and 70 wanted), health true, a player that was not respawned is untouched (true)
+[closeout] FAIL WAKE1 a Hunter 6 m behind the player is awake (false) and one in the far corner sleeps (true): the heavy kinds switch off out of the view and stay on within the wake radius
+[closeout] FAIL BAT0 the Architect in his second phase takes nothing out of the beam (true) and swings there after a cue (cue false, hit true); inside the beam he does not swing (false)
+[closeout] FAIL PICK1 a pickup on a full pack stays in the world (false) and the pack gains nothing (true)
+[closeout] FAIL SAVE1 a save written with the player out of the world reads back whole (false: no vitals, no position) and loads (true); a load inside a fade leaves the fade ended (true)
+[closeout] FAIL V1A the details of batch A stand: window shader true, halos true, light cones true, the cone follows the power false
+[closeout] FAIL V1B the cones and the halos sort after the other transparent objects (render priority 0): the flashlight turned them into cream pyramids and pale blocks at the default
+[closeout] FAIL BURST1 every burst keeps the scale of its particles (7 bursts): ["vfx_blood.tscn", "vfx_blood_hit.tscn", "vfx_confetti.tscn", "vfx_hit_spark.tscn", "vfx_muzzle_flash.tscn", "vfx_sparkle.tscn", "vfx_strobe.tscn"]
+[closeout] FAIL MOTE1 the dust motes in the beams keep the scale of their particles (2.5 to 6 cm, not the 1 m of their quad)
+[closeout] FAIL ENDC1 every ending title is read against the win screen at 3 to 1 or better: the worst is dark at 1.13 to 1
+[closeout] FAIL STORY1 the story scenes: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] a district (two or three each, off by: ["suburbs 0", "residential 0", "park 0", "school 0", "hospital 0", "gas_station 0", "police 0", "warehouses 0", "industrial 0", "substation 0", "power_station 0"]), the three kinds stand: []
+[closeout] FAIL MUS5 a bed turns over: the start moves by at least 0.00 of its length between two turns, 8 turns start in 1 places, three variants take turns (true)
+[closeout] FAIL MUS6 the stems crossfade on the hunted level: calm { "bed": -12.0000057220459, "low": -59.9999771118164, "high": -60.0 }, tense { "bed": -12.0000057220459, "low": -12.0000057220459, "high": -60.0 }, combat { "bed": -18.0205879211426, "low": -59.9999771118164, "high": -60.0 } (dB: the bed, the tense stem, the combat stem)
+[closeout] DONE checks=26 fails=24
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 11 file(s) restored byte-identical
+s26_mutations: restore done
+s26_mutations: apply 5 done (8 mutations)
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+engine errors in the log:
+SCRIPT ERROR: Invalid call. Nonexistent 'int' constructor.
+SCRIPT ERROR: Invalid call. Nonexistent 'int' constructor.
+  res://scenes/tools/attack_sim_scene.tscn rc=1 (log: .qa_logs/attack_sim_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+s26_mutations: restore done
+s26_mutations: apply 6 done (2 mutations)
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/attack_sim_scene.tscn rc=1 (log: .qa_logs/attack_sim_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+s26_mutations: restore done
+s26_mutations: apply 7 done (1 mutations)
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL STORY2 a walk into a story trigger is heard once and ends it: heard [], wanted exactly one [Cold ash in a barrel. Whoever lived here left.]
+[closeout] DONE checks=26 fails=1
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 11 file(s) restored byte-identical
+s26_mutations: restore done
+s26_mutations: apply 8 done (2 mutations)
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL LEAK1 no screen holds a close button outside the tree (14 screens, 0 without a close button, 6 orphans)
+[closeout] FAIL LAMP2 twelve lit lamps stand on 1 of 13 phases of the flicker (one when they flicker in step)
+[closeout] DONE checks=87 fails=2
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 11 file(s) restored byte-identical
+s26_mutations: restore done
+s26_mutations: apply 9 done (2 mutations)
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL LIMIT1 of nine lit lights the eight nearest are shown and the ninth is hidden (8 of the eight shown, ninth true)
+[closeout] FAIL LIMIT2 a light of no energy and the glow of a lamp that is out stay off (idle true, glow false)
+[closeout] DONE checks=87 fails=2
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 11 file(s) restored byte-identical
+s26_mutations: restore done
+s26_mutations: apply 10 done (1 mutations)
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL LIMIT3 the light that was hidden for want of energy comes back when it is lit (idle false)
+[closeout] DONE checks=87 fails=1
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 11 file(s) restored byte-identical
+s26_mutations: restore done
+s26_mutations: apply 11 done (4 mutations)
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL LAY1 the stems follow a monster at 25, 15, 8 and 3 m (25 m: calm 1.00 tense 0.50 combat 0.00 action 0.00; 15 m: calm 1.00 tense 0.83 combat 0.13 action 0.00; 8 m: calm 0.50 tense 0.25 combat 1.00 action 1.00; 3 m: calm 0.50 tense 0.25 combat 1.00 action 1.00)
+[closeout] FAIL LAY3 the three phases of the Architect play three themes (res://assets/audio/music/music_boss_dark_p1.ogg, res://assets/audio/music/music_boss_dark_p1.ogg, res://assets/audio/music/music_boss_dark_p1.ogg)
+[closeout] FAIL LAY6 the weather raises its stem (1: rain 1 wind 0; 3: rain 1 wind 0; 4: rain 0 wind 0; 0: rain 0 wind 0; 2: rain 0 wind 1)
+[closeout] FAIL ONE2 district_restored plays the sting on the UI bus ({ "ui_xp_tick.wav": "UI", "ui_heal_soft.wav": "UI" })
+[closeout] DONE checks=87 fails=4
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 11 file(s) restored byte-identical
+s26_mutations: restore done
+s26_mutations: apply 12 done (5 mutations)
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL LAY2 the hunted level reads 1.00 one second after a monster comes to 3 m, 0.70 three seconds after it goes and 0.59 at four
+[closeout] FAIL LAY4 the combat hold lasts 3.0 s: held at 5.5 s false, released into the calm mood at 6.5 s true
+[closeout] FAIL LAY5 a new mood swaps the A and B players (A, B, A: false)
+[closeout] FAIL ONE3 game_over plays the cue of a death on the Music bus (none on Music)
+[closeout] FAIL ONE4 xp_gained ticks and a healing consumable plays the soft note on the UI bus, a battery does not ({ "ui_district_restored_sting.ogg": "UI", "": "UI", "ui_heal_soft.wav": "UI" }, battery quiet true)
+[closeout] DONE checks=87 fails=5
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 11 file(s) restored byte-identical
+s26_mutations: restore done
+s26_mutations: apply 13 done (2 mutations)
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL SFX1 every monster cue file resolves to a stream (30 cues, unresolved ["mon_brute_attack", "mon_brute_death", "mon_brute_step", "mon_burner_attack"])
+[closeout] FAIL WIND1 the wind layer of the AudioManager loops (AudioStreamOggVorbis)
+[closeout] DONE checks=87 fails=2
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 11 file(s) restored byte-identical
+s26_mutations: restore done
+s26_mutations: apply 14 done (4 mutations)
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL SECV9 the save key is no string literal of save_system.gd (true) and signs as before (false)
+[closeout] FAIL SECV7 the manifest of 37 files flags no honest tree (0), flags a forged hash and a missing file (1) and clears when put back (0)
+[closeout] FAIL SECV2 a craft of -5, 0, 2^40 and 2^62 and a remove of -3 are refused and the pack is as it was (refused true, negative remove true)
+[closeout] FAIL SECV8 256 shipped scripts: no print of a secret, no cheat word and no grant within six lines of OS.is_debug_build() (["res://scripts/systems/integrity_guard.gd:112"])
+[closeout] DONE checks=87 fails=4
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 11 file(s) restored byte-identical
+s26_mutations: restore done
+s26_mutations: apply 15 done (5 mutations)
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL SECV9 the save key is no string literal of save_system.gd (false) and signs as before (true)
+[closeout] FAIL SECV6 an item id the database lacks is refused (true) and five language codes outside the six leave ru as it was (false)
+[closeout] FAIL SECV2 a craft of -5, 0, 2^40 and 2^62 and a remove of -3 are refused and the pack is as it was (refused false, negative remove false)
+[closeout] FAIL DODGE1 7 of 7 attacks sent their cue and none hit a player who stepped out of reach after it (hit anyway: ["shadow_3d", "watcher_3d", "rotter_3d", "hound_3d", "burner_3d", "sharpshooter_3d"])
+[closeout] FAIL END5 a win with every district FULL and every document, the bunker not opened, is the Light ending (hope)
+[closeout] DONE checks=87 fails=5
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 11 file(s) restored byte-identical
+s26_mutations: restore done
+s26_mutations: apply 16 done (12 mutations)
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL GROUND1 pickups rest on the ground, drop in 0.25 m once, do not bob and turn only the keys, blueprints and guns (["live medkit: starts 0.09 over, rests 0.000, bottom 0.000, turns 0.00", "live key: starts 0.25 over, rests 0.000, bottom 0.000, turns 0.25", "live rifle: starts 0.25 over, rests 0.000, bottom -0.000, turns 0.25", "still medkit: starts 0.00 over, rests 0.000, bottom 0.000, turns 0.00", "still key: starts 0.00 over, rests 0.000, bottom 0.000, turns 0.00", "still rifle: starts 0.00 over, rests 0.000, bottom -0.000, turns 0.00"])
+[closeout] FAIL DROP1 the loot of 12 of 12 monsters lies on the floor under them (worst gap 1.700 m)
+[closeout] FAIL CONF1 the burst of a finished quest is a texture of soft sparks (false) and 20 of them (24 at most)
+[closeout] FAIL SIGN2 no two signs of a facade overlap: 2 pairs in the 11 districts, 273 in 200 seeds of a tight facade
+[closeout] FAIL HIDE1 the 6 hiding spots are meshes of two surfaces inside the box of their collider (the sizes of the baseline) and fill it (off: ["locker", "dumpster", "car", "crate", "bush", "dark_corner"])
+[closeout] FAIL CUBE4 the secret, the workbench, the bed, the switch, the cable box and the generator are meshes of parts on the floor (off: ["bed"]), the secret and the workbench hold 0 lights
+[closeout] FAIL HUM1 the 32 detail loops listed hold none of the 9 hums (listed: ["gas_station_sign_buzz"]) and all of them exist (missing: ["gas_station_sign_buzz"])
+[closeout] FAIL QBAR1 no slot of the quick bar expands ([]) and the bar centres its slots (false)
+[closeout] FAIL STAM1 the sprint ends at 0 stamina (false), stays off while the bar refills (false) and is back at 2.8 of 100 (false)
+[closeout] FAIL SYNC1 the arm of the Hunter and of the Brute comes down within 0.06 s of the hit (off: ["hunter_3d peak 0.50 s, hit 1.00 s", "brute_3d peak 0.50 s, hit 1.00 s"])
+[closeout] FAIL FLICK1 the light of a 5 % battery changed 240 times in 240 frames (2 allowed for the time they took: one per 340 ms)
+[closeout] FAIL QUEST1 the objective list stays hidden when a screen closes out of play (false) and shows in play (true)
+[closeout] FAIL FONT1 the headings of the shop card (false), of the ending (true) and of the skill tree (true) are set in the face of the buttons
+[closeout] DONE checks=87 fails=13
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 11 file(s) restored byte-identical
+s26_mutations: restore done
+s26_mutations: apply 17 done (9 mutations)
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/compile_gate_scene.tscn rc=0 (log: .qa_logs/compile_gate_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL QTICK1 a crate of 2 fuses counts 1 on the quest (it went in: true) and a refund of one counts none (1, in: true)
+[closeout] FAIL QORD1 the first five quests are ["REPAIR suburbs", "fuse 2 of 3", "EXPLORE scrap", "battery 2 of 4", "medkit 1 of 3"]; the first district makes progress on each (off: ["q_collect_scrap"])
+[closeout] FAIL TXT1 the quests and the tutorial name the districts, the monsters and the power switch of the game in the 6 languages (off: ["en Q_KILL_TANK_TITLE"])
+[closeout] FAIL TUT3 picking an item up completes the pickup hint (step 3 of 11 moved on: false)
+[closeout] FAIL BOB1 the eye bobs 3.8 Hz walking and 6.1 Hz sprinting (1.5 to 2.5 and 3.5 at most)
+[closeout] FAIL LAMP3 a lit lamp dipped 24 times in 4 s (12 at most: three a second)
+[closeout] FAIL BOSSHIT1 a hit on the Architect gives a damage number (0) and the hit marker (0)
+[closeout] FAIL BOSSHIT2 two blows outside the beam in the second phase take nothing off (hp 798 of 798) and give one hint (0)
+[closeout] FAIL MASTER1 the Master bus has a hard limiter at 99.0 dB (-1 dB or lower)
+[closeout] DONE checks=87 fails=9
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 11 file(s) restored byte-identical
+s26_mutations: restore done
+# EXIT=0

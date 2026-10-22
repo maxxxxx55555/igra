@@ -1,0 +1,96 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+[closeout] ok   the player spawned
+[closeout] ok   ANIM1 the 12 monster scenes build the rig and have a look (missing: [])
+[closeout] ok   ANIM1 every id of data/monsters (12) has a gait row (without: [])
+[closeout] ok   ANIM2 the legs swing with the speed (0.23 rad at most), the two sides in opposite phase
+[closeout] ok   ANIM2 the legs stand still at rest (0.000 rad)
+[closeout] ok   ANIM3 twenty kills count twenty, a second hit on a falling body counts nothing (counted 20, dead 20)
+[closeout] ok   ANIM3 every one of the twenty bodies lies down (20 of 20)
+[closeout] ok   ANIM4 windup 0.40 s draws the arm back (-1.50 rad), the strike 0.10 s throws it forward (1.20), recover 0.30 s
+[closeout] ok   ANIM5 the head turns to the player at 6 rad/s or less (0.100 in one frame), stops at 0.70 rad and faces forward in a chase (0.000)
+[closeout] ok   ANIM6 a hit pushes the body back 0.080 m (0.08 m at most) and it returns (0.0000)
+[closeout] ok   ANIM6 a heavy hit delays the next attack (attack_timer 0.25)
+[closeout] ok   ANIM7 the feet of every monster stand on the floor of its capsule (off: [])
+[closeout] ok   ANIM8 the arachnophobia mode swaps the crawler for its blob and back (swapped true, back true)
+[closeout] ok   ANIM9 the eye bobs 0.0743 m over a run of steps (0.078 m at most, 0.035 m a side plus the breath) and 0.0000 m with Motion Comfort
+[closeout] ok   ANIM9 a sprint leans the eye 0.0300 m down (0.03 m) and Motion Comfort holds it level (-0.0002 m)
+[closeout] ok   ANIM9 a shot kicks the weapon back 0.027 m (0.04 m at most) and it is still after 4 frames (4 at most)
+[closeout] ok   ANIM9 a reload dips the weapon -0.120 m and tilts it 0.54 rad, and it comes back (-0.0000 m)
+[closeout] ok   ANIM9 a turn of the view leaves the weapon 0.120 rad behind (0.12 at most) and it catches up (0.005 rad after 0.25 s)
+[closeout] ok   ANIM9 Motion Comfort (true) and Reduce UI Motion (true) hold the weapon still
+[closeout] ok   LOOK1 one WorldEnvironment in the main scene (1), the boot order in one function (true) copies the preset's keys (true), assigns the night camera attributes (true) and leaves ACES (true), no per-district environment (true)
+[closeout] ok   LOOK1 the table of the graphics tier is applied again on a change (fog density 0.012 at Low, 0.015 at Ultra)
+[closeout] ok   WET1 the road tiles carry no overlay in the clear (true), the wet overlay with the rain's wetness 0.7 and the reflection 0.85 at High (true), no reflection at Low (true), wetness 1.0 in a storm (true)
+[closeout] ok   LAMP1 the lamp heads wear the flicker material (true), lit [0.0, 0.45] by stage (0, and 0.45 once the ramp of the partial stage is over), a restore ramps it (0.00 at once, 1.00 after 1.5 s), 2.0 at full (2.0), Reduce Flash stills it (true)
+[closeout] ok   SHADOW1 one ContactShadows MultiMesh (true) with 62 blobs for 62 poles and props, the blob of a monster 2 cm over the street under its feet (true, lift -0.388), 0 separate blob meshes, none on the Low tier (true)
+[closeout] ok   WX1 the rain emits in rain (share 0.7) and in a storm (1.0) and not in the clear, the drops only in fog (["false/0.3/false", "true/0.7/false", "true/1.0/false", "false/0.3/true"]), the rain stands 12.0 m over the camera, the strobe throws sparks (1 burst playing, with Reduce Flash: 0)
+[closeout] ok   PAR1 the menu hero wears the parallax shader (true), a drag moves it by 0.100, 0.040 on the Low tier (0.4 of it), Motion Comfort holds it still (true)
+[closeout] ok   THEME1 the type scale [44, 30, 22, 13, 15] (44 30 22 13 15), the titles on Bebas (true), the option button's 2 px brass focus ring (true) and a disabled box of its own (true)
+[closeout] ok   MOON1 the moon's shadow bias follows the district: park (0.054, 1.08), suburbs (0.06, 1.2), unknown (0.06, 1.2)
+[closeout] ok   PBR1 the factory's _plain takes a texture set (true) and a set that has no files leaves the material as it was (true)
+[closeout] ok   SAT1 the share of the glow's hue times its chroma is held at 0.12 or less in every district (worst: park 0.120), the police keep 0.18 of it and the suburbs the whole 0.50
+[closeout] ok   MESH1 49 items in 36 families, 41 outlines, none a crate or a box or over 400 triangles ([])
+[closeout] ok   MAT1 scrap, metal, gear, plank and the pages give no light (true), a key glows on its bow at 0.6 or less and not on its shank (true), a cell glows
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+[closeout] ok   CUBE1 no pickup of the 11 districts holds a light (0 lights)
+[closeout] ok   CUBE2 at most 12 pickups a district (12 allowed) and the nearest two are 5.5 m apart (5 allowed; warehouses: @Area3D@1948 (6.276985, 0.05, 8.382338) and @Area3D@1966 (1.128291, 0.05, 6.413798)), every district holds its repair parts in stacks of two and its blueprint (["suburbs 6", "residential 10", "park 8", "school 10", "hospital 10", "gas_station 10", "police 12", "warehouses 12", "industrial 12", "substation 8", "power_station 8"])
+[closeout] ok   CUBE3 no pickup mesh is a bare box (0), the 11 districts hold 99 notes (99: one on the ground and the lore notes to pin), 88 of them pinned on poles
+[closeout] ok   QTICK1 a crate of 2 fuses counts 2 on the quest (it went in: true) and a refund of one counts none (2, in: true)
+[closeout] ok   GROUND1 pickups rest on the ground, drop in 0.25 m once, do not bob and turn only the keys, blueprints and guns (["live medkit: starts 0.24 over, rests 0.000, bottom 0.000, turns 0.00", "live key: starts 0.25 over, rests 0.000, bottom 0.000, turns 0.25", "live rifle: starts 0.25 over, rests 0.000, bottom -0.000, turns 0.25", "still medkit: starts 0.00 over, rests 0.000, bottom 0.000, turns 0.00", "still key: starts 0.00 over, rests 0.000, bottom 0.000, turns 0.00", "still rifle: starts 0.00 over, rests 0.000, bottom -0.000, turns 0.00"])
+[closeout] ok   GLOW1 9 pickups near the camera, 8 of them glowing: 6 pools (6 at most), the strength 0.46; one at 12.5 m: 1 pool at 0.27 (about half); all beyond 16 m: 0
+[closeout] ok   WEAPON1 three viewmodels of three outlines, each of 600 triangles at most with a Body and its Slide, Bolt or Pump (true); a shot sends the slide back and it returns (true) and not with Motion Comfort (true)
+[closeout] ok   WCMP1 the weapon comparison of the HUD is connected to the WeaponManager of the player
+[closeout] ok   QSLOT1 the bar of an empty run is [&"flashlight"] and [&"pistol", &"flashlight"] once the pistol is found (slot 1 on screen: true)
+[closeout] ok   QSLOT2 every key and tap uses the slot of the six it stands for, with 0, 1, 2 and 3 guns found (["0 guns: [&\"battery\", &\"medkit\", &\"flashlight\"]", "1 guns: [&\"pistol\", &\"battery\", &\"medkit\", &\"flashlight\"]", "2 guns: [&\"pistol\", &\"rifle\", &\"battery\", &\"medkit\", &\"flashlight\"]", "3 guns: [&\"pistol\", &\"rifle\", &\"battery\", &\"medkit\", &\"flashlight\"]"])
+[closeout] ok   LEAK1 no screen holds a close button outside the tree (14 screens, 6 without a close button, 0 orphans)
+[closeout] ok   LAMP2 twelve lit lamps stand on 8 of 13 phases of the flicker (one when they flicker in step)
+[closeout] ok   LIMIT1 of nine lit lights the eight nearest are shown and the ninth is hidden (8 of the eight shown, ninth false)
+[closeout] ok   LIMIT2 a light of no energy and the glow of a lamp that is out stay off (idle false, glow false)
+[closeout] ok   LIMIT3 the light that was hidden for want of energy comes back when it is lit (idle true)
+[closeout] ok   LAY1 the stems follow a monster at 25, 15, 8 and 3 m (25 m: calm 1.00 tense 0.00 combat 0.00 action 0.00; 15 m: calm 1.00 tense 0.65 combat 0.13 action 0.00; 8 m: calm 0.50 tense 0.00 combat 1.00 action 1.00; 3 m: calm 0.50 tense 0.00 combat 1.00 action 1.00)
+[closeout] ok   LAY2 the hunted level reads 1.00 one second after a monster comes to 3 m, 0.25 three seconds after it goes and 0.00 at four
+[closeout] ok   LAY2 the combat stem rises 47.8 dB and the calm stems fall from -72.0 to -78.0 dB (sum of both beds)
+[closeout] ok   LAY3 the three phases of the Architect play three themes (res://assets/audio/music/music_boss_dark_p1.ogg, res://assets/audio/music/music_boss_dark_p2.ogg, res://assets/audio/music/music_boss_dark_p3.ogg)
+[closeout] ok   LAY4 the combat hold lasts 6.0 s: held at 5.5 s true, released into the calm mood at 6.5 s true
+[closeout] ok   LAY5 a new mood swaps the A and B players (A, B, A: true)
+[closeout] ok   LAY6 the weather raises its stem (1: rain 1 wind 0; 3: rain 1 wind 0; 4: rain 0 wind 1; 0: rain 0 wind 0; 2: rain 0 wind 0)
+[closeout] ok   ONE1 the four one-shots exist with the lengths of the recipe (ui_district_restored_sting.ogg 2.00, cue_death.ogg 8.00, ui_xp_tick.wav 0.06, ui_heal_soft.wav 0.30)
+[closeout] ok   ONE2 district_restored plays the sting on the UI bus ({ "ui_district_restored_sting.ogg": "UI", "ui_xp_tick.wav": "UI", "ui_heal_soft.wav": "UI" })
+[closeout] ok   ONE3 game_over plays the cue of a death on the Music bus (cue_death.ogg on Music)
+[closeout] ok   ONE4 xp_gained ticks and a healing consumable plays the soft note on the UI bus, a battery does not ({ "ui_district_restored_sting.ogg": "UI", "ui_xp_tick.wav": "UI", "ui_heal_soft.wav": "UI" }, battery quiet true)
+[closeout] FAIL SFX1 every monster cue file resolves to a stream (30 cues, unresolved ["mon_brute_attack", "mon_brute_death", "mon_brute_step", "mon_burner_attack"])
+[closeout] FAIL WIND1 the wind layer of the AudioManager loops (AudioStreamOggVorbis)
+[closeout] ok   SECV9 the save key is no string literal of save_system.gd (true) and signs as before (true)
+[closeout] ok   SECV7 the manifest of 37 files flags no honest tree (0), flags a forged hash and a missing file (2) and clears when put back (0)
+[closeout] ok   SECV6 an item id the database lacks is refused (true) and five language codes outside the six leave ru as it was (true)
+[closeout] ok   SECV2 a craft of -5, 0, 2^40 and 2^62 and a remove of -3 are refused and the pack is as it was (refused true, negative remove false)
+[closeout] ok   SECV8 256 shipped scripts: no print of a secret, no cheat word and no grant within six lines of OS.is_debug_build() ([])
+[closeout] ok   DODGE1 7 of 7 attacks sent their cue and none hit a player who stepped out of reach after it (hit anyway: [])
+[closeout] ok   END5 a win with every district FULL and every document, the bunker not opened, is the Light ending (light)
+[closeout] ok   DROP1 the loot of 12 of 12 monsters lies on the floor under them (worst gap 0.000 m)
+[closeout] ok   CONF1 the burst of a finished quest is a texture of soft sparks (true) and 20 of them (24 at most)
+[closeout] ok   SIGN2 no two signs of a facade overlap: 0 pairs in the 11 districts, 0 in 200 seeds of a tight facade
+[closeout] ok   HIDE1 the 6 hiding spots are meshes of two surfaces inside the box of their collider (the sizes of the baseline) and fill it (off: [])
+[closeout] ok   CUBE4 the secret, the workbench, the bed, the switch, the cable box and the generator are meshes of parts on the floor (off: []), the secret and the workbench hold 0 lights
+[closeout] ok   HUM1 the 31 detail loops listed hold none of the 9 hums (listed: []) and all of them exist (missing: [])
+[closeout] ok   QBAR1 no slot of the quick bar expands ([]) and the bar centres its slots (true)
+[closeout] ok   STAM1 the sprint ends at 0 stamina (true), stays off while the bar refills (true) and is back at 25.2 of 100 (true)
+[closeout] ok   SYNC1 the arm of the Hunter and of the Brute comes down within 0.06 s of the hit (off: [])
+[closeout] ok   FLICK1 the light of a 5 % battery changed 1 times in 240 frames (2 allowed for the time they took: one per 340 ms)
+[closeout] ok   QUEST1 the objective list stays hidden when a screen closes out of play (true) and shows in play (true)
+[closeout] ok   QORD1 the first five quests are ["REPAIR suburbs", "fuse 2 of 3", "scrap 3 of 10", "battery 2 of 4", "medkit 1 of 3"]; the first district makes progress on each (off: [])
+[closeout] ok   TXT1 the quests and the tutorial name the districts, the monsters and the power switch of the game in the 6 languages (off: [])
+[closeout] ok   TUT3 picking an item up completes the pickup hint (step 3 of 11 moved on: true)
+[closeout] ok   BOB1 the eye bobs 1.9 Hz walking and 3.1 Hz sprinting (1.5 to 2.5 and 3.5 at most)
+[closeout] ok   LAMP3 a lit lamp dipped 10 times in 4 s (12 at most: three a second)
+[closeout] ok   BOSSHIT1 a hit on the Architect gives a damage number (1) and the hit marker (1)
+[closeout] ok   BOSSHIT2 two blows outside the beam in the second phase take nothing off (hp 798 of 798) and give one hint (1)
+[closeout] ok   MASTER1 the Master bus has a hard limiter at -1.0 dB (-1 dB or lower)
+[closeout] ok   FONT1 the headings of the shop card (true), of the ending (true) and of the skill tree (true) are set in the face of the buttons
+[closeout] DONE checks=87 fails=2
+WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)

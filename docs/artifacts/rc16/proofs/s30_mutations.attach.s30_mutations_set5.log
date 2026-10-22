@@ -1,0 +1,137 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+WARNING: IntegrityGuard: resources (res://content/captions.json, res://content/daily_challenges.json, res://content/districts/gas_station/item_spawns.json, res://content/districts/gas_station/lore_notes.json, res://content/districts/hospital/item_spawns.json)
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] flag (res://scripts/systems/integrity_guard.gd:69)
+       [1] _scan_resources (res://scripts/systems/integrity_guard.gd:91)
+[attack-sim] OK  achievements.cfg written
+[attack-sim] OK  forged achievements.cfg (wrong hmac) is rejected, not trusted
+[attack-sim] OK  honestly-signed achievements.cfg still round-trips
+[attack-sim] OK  legacy unsigned achievements.cfg is trusted once (compat, not a wipe)
+[attack-sim] OK  legacy file is re-signed on load, not left plain forever
+[attack-sim] OK  forged ng_plus=99 is clamped to MAX_NG_PLUS (3), got 3
+[attack-sim] OK  forged file can't seat both exclusive modifiers (sprint+whisper) at once
+[attack-sim] OK  forged file can't seat more modifiers (3) than unlocked levels (3)
+[attack-sim] OK  unsigned ng_plus_data.json is rejected, not adopted (got ng_plus=0 active=false)
+[attack-sim] OK  Reset Progress clears NewGamePlus's own save file, not just SaveSystem's
+[attack-sim] OK  unsigned flashlight_upgrades.cfg is rejected, not adopted (got 0, expected unchanged 0)
+[attack-sim] OK  forged tls_daily.json (wrong hmac) is rejected, not trusted
+[attack-sim] OK  daily: a clock set back after a claim does not reopen an earlier day
+[attack-sim] OK  ProgressTracker's first_light grant actually unlocks the real ach_01 row
+[attack-sim] OK  achievement reward pays exactly once (100), not double (got 0 -> 100)
+[attack-sim] OK  forged district stage 99 clamps to FULL, got 3
+[attack-sim] OK  forged scrap count 999999 clamps to max_stack (3), got 3
+[attack-sim] OK  forged secrets 9999 clamps to the real total (26), got 26
+[attack-sim] OK  forged shadow_kills (9999) can't exceed kills (5), got 5
+[attack-sim] OK  forged done=true with progress=0 is not accepted as a real completion
+WARNING: [SaveSystem] district/progress данные не прошли отдельную проверку подписи — сброшены
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _verify_progress (res://scripts/core/save_system.gd:300)
+       [1] _read_envelope (res://scripts/core/save_system.gd:287)
+       [2] _write_atomic (res://scripts/core/save_system.gd:224)
+       [3] _check_district_id_and_player_pos_validated (res://scripts/security/attack_sim.gd:397)
+       [4] _ready (res://scripts/security/attack_sim.gd:44)
+WARNING: [SaveSystem] district/progress данные не прошли отдельную проверку подписи — сброшены
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _verify_progress (res://scripts/core/save_system.gd:300)
+       [1] _read_envelope (res://scripts/core/save_system.gd:287)
+       [2] _read_validated (res://scripts/core/save_system.gd:326)
+       [3] load_all (res://scripts/core/save_system.gd:385)
+       [4] _check_district_id_and_player_pos_validated (res://scripts/security/attack_sim.gd:402)
+       [5] _ready (res://scripts/security/attack_sim.gd:44)
+[attack-sim] OK  forged district id 'hacked_evil_district' is not adopted (current_district=suburbs)
+[attack-sim] OK  a player_pos that overflows to non-finite is treated as 'no saved position', not applied
+[attack-sim] OK  IntegrityGuard is registered as a live autoload (was dormant per R-01)
+[attack-sim] OK  IntegrityGuard's live economy check clamps an absurd wallet value (got 999999, cap 999999)
+[attack-sim] OK  non-finite remote player position is rejected, not re-emitted
+[attack-sim] OK  unknown district in remote player state is rejected
+[attack-sim] OK  a valid remote player state still gets through
+[attack-sim] OK  unknown district in remote power event is rejected
+[attack-sim] OK  a valid remote power event still gets through
+[attack-sim] OK  absurd huge coins clamps to MAX_COINS
+[attack-sim] OK  negative coins clamps to 0
+[attack-sim] OK  non-numeric coins field doesn't crash or desync (0)
+[attack-sim] OK  malicious district_id ../../../../etc/passwd doesn't crash the scene factory
+[attack-sim] OK  malicious district_id res://project.godot doesn't crash the scene factory
+[attack-sim] OK  malicious district_id <script> doesn't crash the scene factory
+[attack-sim] OK  malicious district_id  doesn't crash the scene factory
+[attack-sim] OK  a validly-signed save from another slot is rejected by slot_id, not silently adopted as this slot (loaded=false coins=111)
+[attack-sim] OK  slot B still loads fine under its own, correct slot_id
+[attack-sim] OK  release build gets no ad provider, debug keeps the stub (release=<null>)
+[attack-sim] OK  legacy leaderboard keeps only well-formed entries and is re-saved signed (1 kept)
+[attack-sim] OK  tampered signed leaderboard is rejected
+[attack-sim] OK  SPD0 the watchdog is a live autoload for the cases of Session 28
+WARNING: IntegrityGuard: speed (time scale 4.00)
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] flag (res://scripts/systems/integrity_guard.gd:69)
+       [1] _watch_time_scale (res://scripts/systems/integrity_guard.gd:172)
+       [2] _speed (res://scripts/tools/rc16/s28_attack_cases.gd:66)
+       [3] run (res://scripts/tools/rc16/s28_attack_cases.gd:30)
+       [4] _ready (res://scripts/security/attack_sim.gd:52)
+[attack-sim] FAIL SPD1 a game speed of 4 injected into a release build is put back to 4.00 and logged as 'speed' (tampered true)
+[attack-sim] OK  SPD1 the slow motion of a hit-stop (0.4) is not a speed hack
+[attack-sim] FAIL VIT1 a health of 9999 against a maximum of 100 is clamped to 100 and logged as 'speed'
+[attack-sim] OK  VIT1 a health 4 % over its maximum is a rounding: clamped, not flagged (100)
+[attack-sim] FAIL ECO1 a wallet of 123,456,789 is clamped to 999999 and logged as 'speed'
+[attack-sim] FAIL ECO1 a negative wallet is clamped to 0 and flagged
+WARNING: IntegrityGuard: ngplus (the level or the modifiers were over what a run earns)
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] flag (res://scripts/systems/integrity_guard.gd:69)
+       [1] _check_economy (res://scripts/systems/integrity_guard.gd:133)
+       [2] _new_game_plus (res://scripts/tools/rc16/s28_attack_cases.gd:108)
+       [3] run (res://scripts/tools/rc16/s28_attack_cases.gd:33)
+       [4] _ready (res://scripts/security/attack_sim.gd:52)
+[attack-sim] OK  NGB1 a New Game+ level of 99 with five modifiers is corrected to level 3 with 3 and logged as 'ngplus'
+WARNING: [SaveSystem] district/progress данные не прошли отдельную проверку подписи — сброшены
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _verify_progress (res://scripts/core/save_system.gd:300)
+       [1] _read_envelope (res://scripts/core/save_system.gd:287)
+       [2] _write_atomic (res://scripts/core/save_system.gd:224)
+       [3] _absurd_save (res://scripts/tools/rc16/s28_attack_cases.gd:120)
+       [4] run (res://scripts/tools/rc16/s28_attack_cases.gd:35)
+       [5] _ready (res://scripts/security/attack_sim.gd:52)
+WARNING: [SaveSystem] district/progress данные не прошли отдельную проверку подписи — сброшены
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _verify_progress (res://scripts/core/save_system.gd:300)
+       [1] _read_envelope (res://scripts/core/save_system.gd:287)
+       [2] _read_validated (res://scripts/core/save_system.gd:326)
+       [3] load_all (res://scripts/core/save_system.gd:385)
+       [4] _absurd_save (res://scripts/tools/rc16/s28_attack_cases.gd:127)
+       [5] run (res://scripts/tools/rc16/s28_attack_cases.gd:35)
+       [6] _ready (res://scripts/security/attack_sim.gd:52)
+[attack-sim] FAIL SAV2 a signed save with level 9999, 9999 skill points, 1e30 vitals and 1e15 coins loads clamped: level 9999 (cap 60), points 9998, coins 999999, move_speed 2 of 2, vitals { "hp": 1000.0, "stamina": 0.0, "battery": 1000.0 }
+[attack-sim] FAIL DLY4 a restored daily file pays nothing twice: the claim paid 600, the replay 600 more, the streak 1 then 1
+[attack-sim] OK  DLY5 a deleted daily file does not reopen the day that was claimed (completed today: true)
+[attack-sim] FAIL ACH2 an achievement unlocked again (a restored achievements file) pays its coins once: 100 the first time, 100 the second
+SCRIPT ERROR: Invalid call. Nonexistent 'int' constructor.
+   at: difficulty_scale (res://scripts/systems/settings_manager.gd:306)
+   GDScript backtrace (most recent call first):
+       [0] difficulty_scale (res://scripts/systems/settings_manager.gd:306)
+       [1] _config_tamper (res://scripts/tools/rc16/s28_attack_cases.gd:226)
+       [2] run (res://scripts/tools/rc16/s28_attack_cases.gd:38)
+       [3] _ready (res://scripts/security/attack_sim.gd:52)
+SCRIPT ERROR: Invalid call. Nonexistent 'int' constructor.
+   at: difficulty_scale (res://scripts/systems/settings_manager.gd:306)
+   GDScript backtrace (most recent call first):
+       [0] difficulty_scale (res://scripts/systems/settings_manager.gd:306)
+       [1] _config_tamper (res://scripts/tools/rc16/s28_attack_cases.gd:226)
+       [2] run (res://scripts/tools/rc16/s28_attack_cases.gd:38)
+       [3] _ready (res://scripts/security/attack_sim.gd:52)
+[attack-sim] FAIL CFG1 a hostile settings file (a number out of range, a word, a list, a dictionary in the difficulty and in Hardcore, volumes of 9 and -3, an ads flag) leaves the rules in range; wrong: ["99 -> 99", "-3 -> -3", "2 -> 2", "abc -> abc", "[1, 2] -> [1, 2]", "{ \"a\": 1 } -> { \"a\": 1 }", "1.7 -> 1.7", "hard -> hard"]
+[attack-sim] FAIL OVL1 no shipped script loads a resource pack, runs a process or compiles a string ([]) and the scan names a repackaged data file ([]) and a missing one (["res://data/no_such_file.json"])
+[attack-sim] DONE fails=9
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+WARNING: 12 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 4 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
