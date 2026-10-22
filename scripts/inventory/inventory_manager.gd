@@ -136,7 +136,7 @@ func try_add(item_id: StringName, amount: int = 1, announce: bool = true) -> boo
 	return true
 ## All or nothing, like try_add: asked for more than the pack holds it takes nothing (it used to take what there was and answer false).
 func remove(item_id: StringName, amount: int = 1) -> bool:
-	if not has(item_id, amount):
+	if amount <= 0 or not has(item_id, amount):  # v10 G-RED2: a negative amount used to answer true and take nothing
 		return false
 	var remaining := amount
 	for i in slots.size():

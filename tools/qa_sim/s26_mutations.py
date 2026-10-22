@@ -130,9 +130,22 @@ SETS = [
         ("scripts/enemies/base_monster.gd", "for ext: String in [\".ogg\", \".wav\"]:", "for ext: String in [\".wav\"]:", "SFX1"),
         ("scripts/systems/audio_manager.gd", "\t_wind.stream = _force_loop(WIND_SFX)\n", "\t_wind.stream = WIND_SFX\n", "WIND1"),
     ],
+    [  # Session 29 (v10 G-RED2), the closeout group s29: the key of the saves, the manifest scan, the pack's remove and the debug surface (four files, nothing one changes is read by another's check)
+        ("scripts/core/save_system.gd", "key[i] = _KEY_A[i] ^ _KEY_B[i]", "key[i] = _KEY_A[i]", "SECV9"),
+        ("scripts/security/integrity_scan.gd", "or hash_of(path) != String(files[path])", "or false", "SECV7"),
+        ("scripts/inventory/inventory_manager.gd", "if amount <= 0 or not has(item_id, amount):", "if not has(item_id, amount):", "SECV2"),
+        ("scripts/systems/integrity_guard.gd", "\t\tif not OS.is_debug_build():\n", "\t\tif OS.is_debug_build():\n\t\t\tCoinWallet.add(999)\n\t\tif not OS.is_debug_build():\n", "SECV8"),
+    ],
+    [  # Session 29 (v10 G-RED2) again: the string literal of the key, the craft's cap and the language list
+        ("scripts/core/save_system.gd", "static func _sign(body: String) -> String:", "const _HMAC_KEY: String = \"TLS-savegame-v1-4f1c9e6b2a8d5f03\"\n\nstatic func _sign(body: String) -> String:", "SECV9L"),
+        ("scripts/crafting/workbench_logic.gd", "qty <= 0 or qty > MAX_QTY or", "qty <= 0 or", "SECV2B"),
+        ("scripts/i18n/localization_manager.gd", "\tif lang in SUPPORTED:\n", "\tif true:\n", "SECV6"),
+        ("scripts/systems/endings_manager.gd", "\t\treturn &\"light\"\n", "\t\treturn &\"hope\"\n", "END5"),
+        ("scripts/enemies/base_monster.gd", "if global_position.distance_to(player_ref.global_position) <= attack_range + 0.5:", "if true:", "DODGE1"),
+    ],
 ]
 ## The closeout group each set runs (CLOSEOUT_ONLY): the sets of Session 26 run `s26`, those of Session 27 `s27`, those of Session 28 `s28`, those of Session 29 `s29`.
-GROUP = ["s26", "s26", "s27", "s27", "s28", "attack", "attack", "s28", "s29", "s29", "s29", "s29", "s29", "s29"]
+GROUP = ["s26", "s26", "s27", "s27", "s28", "attack", "attack", "s28", "s29", "s29", "s29", "s29", "s29", "s29", "s29", "s29"]
 LINE = re.compile(r"^\[(?:closeout|attack-sim)\] (ok  |OK  |FAIL) +(\S+)")
 ## What a group of sets runs and the log it leaves: the closeout groups run `closeout_check`, the group "attack" the attack simulation (Session 28).
 RUN = {"attack": ("bash tools/qa_sim/guarded_headless res://scenes/tools/attack_sim_scene.tscn 120", ".qa_logs/attack_sim_scene.log")}

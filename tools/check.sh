@@ -414,6 +414,11 @@ if "$PY" tools/qa_sim/s26_mutations.py --demo >/dev/null 2>&1; then
 else
   bad "s26_mutations --demo (см. 'python tools/qa_sim/s26_mutations.py --demo')"
 fi
+if "$PY" tools/qa_sim/coverage_matrix.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/audio_loudness.py --demo >/dev/null 2>&1; then
+  ok "coverage_matrix and audio_loudness --demo (a mechanic with a passing log line is hit and one without is a miss; a hard-cut loop is over the seam limit and a closed one is not)"
+else
+  bad "coverage_matrix / audio_loudness --demo (см. 'python tools/qa_sim/coverage_matrix.py --demo')"
+fi
 if "$PY" tools/qa_sim/listing_audit.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/listing_audit.py >/dev/null 2>&1; then
   ok "listing_audit (6 locales: title, short and full limits, the same numbers in every language, the English numbers are what the code holds)"
 else

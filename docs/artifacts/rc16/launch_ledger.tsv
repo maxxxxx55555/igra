@@ -213,3 +213,4 @@ n	utc	head	id	exit	command
 212	20261021T172526Z	a91ef95	v10_e_a91ef95	0	bash .qa_logs/v10_e_gates.sh
 213	20261021T173237Z	6950c65	v10_leak_6950c65	0	bash .qa_logs/v10_leak.sh
 214	20261021T173937Z	8ba3d8f	v10_export_8ba3d8f	0	bash -c set -a; . .signing/release.env; set +a; /c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/Godot_v4.7-stable_win64_console.exe --headless --path . --export-release "Android" build/tls.aab 2>&1 | tee .qa_logs/v10_export.log
+215	20261021T200112Z	cfe0f41	v10_nit_cfe0f41	0	bash .qa_logs/v10_nit.sh
