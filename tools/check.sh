@@ -158,6 +158,9 @@ if [[ $RC -eq 0 ]]; then PASS=$((PASS+8)); else FAIL=$((FAIL+RC)); fi
 # Сцены: комментарии в .tscn, ресурсы в роли [node], битые $NodePath.
 head_ "Сцены и ссылки на ноды"
 if "$PY" tools/scene_node_check.py; then ok "scene_node_check"; else bad "scene_node_check"; fi
+# [connection] сцены -> метод, которого нет в скрипте цели (находка верификатора S30:
+# шесть мёртвых связей в settings_screen.tscn, движок писал ERROR на каждое открытие экрана).
+if "$PY" tools/qa_sim/tscn_connections_check.py; then ok "tscn_connections_check"; else bad "tscn_connections_check"; fi
 
 # Ключевой игровой цикл: меню -> уровень -> подбор -> пауза -> меню.
 head_ "Игровой цикл"

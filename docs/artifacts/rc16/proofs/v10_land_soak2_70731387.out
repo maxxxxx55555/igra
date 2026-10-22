@@ -1,0 +1,13 @@
+# proof v10_land_soak2_70731387
+# utc 20261022T190239Z
+# head 70731387 (uncommitted paths: 6)
+# env none
+# cmd bash .qa_logs/soak10.sh
+.qa_logs/soak10.sh: line 1: ﻿#!/usr/bin/env: No such file or directory
+== soak start 20261022T190240Z head=70731387
+   battery_percent=37
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  soak soak rc=0 (log: .qa_logs/soak_soak.log, 10 minute lines, 0 stress lines)
+  user-data guard: 11 file(s) restored byte-identical
+== soak rc=0
+# EXIT=0

@@ -1,0 +1,24 @@
+# proof v10_land_bot_hard_1aa13bb
+# utc 20261022T180453Z
+# head 1aa13bb0 (uncommitted paths: 0)
+# env none
+# cmd bash .qa_logs/l4_bot_hard.sh
+== bot HARD seeds 1 2 3 start 20261022T180454Z head=1aa13bb0
+# Godot binary: /c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/Godot_v4.7-stable_win64_console.exe
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  [32mWIN [0m seed 1  ([bot s1]   result       : WIN)
+deaths counted 3, revive lines 3
+  [32mWIN [0m seed 2  ([bot s2]   result       : WIN)
+deaths counted 2, revive lines 2
+  [32mWIN [0m seed 3  ([bot s3]   result       : WIN)
+deaths counted 2, revive lines 2
+
+──────────────────────────────────────
+autoplay bot: 3/3 seeds won, 0 softlock(s)
+bot death counters below their revive lines: 0
+  user-data guard: 11 file(s) restored byte-identical
+== bot hard rc=0
+[bot s1]   result       : WIN
+[bot s2]   result       : WIN
+[bot s3]   result       : WIN
+# EXIT=0
