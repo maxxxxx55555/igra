@@ -113,3 +113,7 @@ absorb, because Session 23 had already written each one from the code (the Jules
 | Cross-audit | `docs/CROSS_AUDIT.md` | a document, read by the verifier rounds of Session 23 |
 | CI workflows | `.github/workflows/pr-sims.yml`, `.github/workflows/weekly-full.yml`, `.github/workflows/static.yml` | `actionlint` through `tools/lint_changed.py` (static gate) |
 
+| `origin/pass/v10.0.0-ship` | the v10.0.0-ship programme: 66 commits over `3ca44bb` (the pass that this land pass finishes) | the base of `land/v10.0.0`; nothing is missing from it here | kept: the only base of this pass; `land/v10.0.0` carries it plus the land-pass commits |
+| `origin/pass/v1.0.0-ship` | an earlier draft of the same programme: 28 commits, superseded by `pass/v10.0.0-ship` | superseded; its work is inside `pass/v10.0.0-ship` | kept: superseded by the v10 pass, read-only |
+| `origin/dsh/work` | empty branch created by another agent and never used; tip `3ca44bb` | no commit of its own, nothing to absorb | kept: empty and unused, recorded in `docs/KNOWN_ISSUES.md` section "Session 30" |
+| `origin/land/v10.0.0` | the landing branch of Session 30: `pass/v10.0.0-ship` plus the two engine-gate alignments and the land evidence | the pass itself; the PR into protected `main` is the landing | kept until the PR merges into `main`; then `main` names the same commit |

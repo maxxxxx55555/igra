@@ -1,4 +1,4 @@
-# Known issues
+﻿# Known issues
 
 ## OPEN (2026-10-21, Session 28, closed out by Session 29): what the masterpiece pass finished and what it left
 
@@ -1795,7 +1795,7 @@ The export filter `assets/textures/icons/*.png` was meant for the 12 legacy achi
 
 ## Session 30 / land pass (2026-10-22): stray branches, dispositioned (X0)
 
-- **origin/oc/visual-w10 (627f489, 3 commits from 3ca44bb) — NOT MERGED.** Its scripts/world_env_setup.gd hunk (+43/-2) repeats the W2 camera attributes and the W10 moon shadow bias that pv10 already carries and verified (6882ac, 3b97aa7), and its _wire_visual_materials is an alternative W5 wiring whose consumers already exist in pv10 (scripts/world/street_wetness.gd, scripts/world/lamp_head.gd, scripts/world/street_props.gd). Its 11 before/after frames stay reference only. No merge commit from it exists on land/v10.0.0.
+- **origin/oc/visual-w10 (627f489, 3 commits from 3ca44bb) — NOT MERGED.** Its scripts/world_env_setup.gd hunk (+43/-2) repeats the W2 camera attributes and the W10 moon shadow bias that pv10 already carries and verified ( 6882ac, 3b97aa7), and its _wire_visual_materials is an alternative W5 wiring whose consumers already exist in pv10 (scripts/world/street_wetness.gd, scripts/world/lamp_head.gd, scripts/world/street_props.gd). Its 11 before/after frames stay reference only. No merge commit from it exists on land/v10.0.0.
 - **origin/dsh/work (3ca44bb) — empty and unused**, left as-is; no merge from it.
 - **origin/pass/v1.0.0-ship (c7911c1) — superseded** by pass/v10.0.0-ship; left alone, not merged.
 - Landing goes through a PR into protected main (PR required, enforce_admins, no force-push, no deletions). The protection is not weakened and the gh api -X DELETE .../protection form is not run.
