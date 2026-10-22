@@ -1792,3 +1792,10 @@ The export filter `assets/textures/icons/*.png` was meant for the 12 legacy achi
 | The music variants `_b` and `_c` of the eight district beds are not made: the beds turn over from another point of the same file (`docs/TZ_DECISIONS.md`, BED-28), and their rights stay unverifiable here | `docs/MUSIC_RECIPE.md`, B1 to B8 | Owner step: the eight prompts, the take, `tools/qa_sim/music_post.py` and the rights row. |
 | Hard was measured, not played: it costs the bot more health, lives and time than Normal, and nobody has felt it | `docs/DIFFICULTY_INTENT.md` section 3 | Owner row D-1: a human at Hard through the gas station and the Architect. |
 | Nothing of this pass ran on a phone, and the strings it added (the story lines of the scenes, the ending and daily notices) are machine translations in 13 locales | `docs/RESUME_NOTE.md` | Owner rows: one run on a device of the minimum tier, and a native reading of the new strings. |
+
+## Session 30 / land pass (2026-10-22): stray branches, dispositioned (X0)
+
+- **origin/oc/visual-w10 (627f489, 3 commits from 3ca44bb) — NOT MERGED.** Its scripts/world_env_setup.gd hunk (+43/-2) repeats the W2 camera attributes and the W10 moon shadow bias that pv10 already carries and verified (6882ac, 3b97aa7), and its _wire_visual_materials is an alternative W5 wiring whose consumers already exist in pv10 (scripts/world/street_wetness.gd, scripts/world/lamp_head.gd, scripts/world/street_props.gd). Its 11 before/after frames stay reference only. No merge commit from it exists on land/v10.0.0.
+- **origin/dsh/work (3ca44bb) — empty and unused**, left as-is; no merge from it.
+- **origin/pass/v1.0.0-ship (c7911c1) — superseded** by pass/v10.0.0-ship; left alone, not merged.
+- Landing goes through a PR into protected main (PR required, enforce_admins, no force-push, no deletions). The protection is not weakened and the gh api -X DELETE .../protection form is not run.
