@@ -1,0 +1,13 @@
+# proof v10_land_powerline_c4d6bd8
+# utc 20261022T192003Z
+# head c4d6bd80 (uncommitted paths: 2)
+# env none
+# cmd powershell.exe -NoProfile -Command [System.Windows.Forms.SystemInformation]::PowerStatus | Format-List PowerLineStatus,BatteryChargeStatus,BatteryLifePercent
+Unable to find type [System.Windows.Forms.SystemInformation].
+At line:1 char:1
++ [System.Windows.Forms.SystemInformation]::PowerStatus | Format-List P ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (System.Windows.Forms.SystemInformation:TypeName) [], RuntimeException
+    + FullyQualifiedErrorId : TypeNotFound
+ 
+# EXIT=1

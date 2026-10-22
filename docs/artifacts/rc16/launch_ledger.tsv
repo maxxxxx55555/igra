@@ -235,3 +235,4 @@ n	utc	head	id	exit	command
 234	20261022T185914Z	70731387	v10_land_perf3b_70731387	0	bash .qa_logs/perf3.sh
 235	20261022T190227Z	70731387	v10_land_soak_70731387	0	bash .qa_logs/soak10.sh
 236	20261022T190239Z	70731387	v10_land_soak2_70731387	0	bash .qa_logs/soak10.sh
+237	20261022T191717Z	c4d6bd80	v10_land_perf3ac_c4d6bd8	0	bash .qa_logs/perf3.sh
