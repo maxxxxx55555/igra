@@ -7,7 +7,7 @@ lore, endings — with no paywalled content and no season pass.
 Text verified line-by-line against `docs/PLAYER_VISIBLE_CHANGES.md` and
 `docs/artifacts/final_gate_report.md` (RC FINAL v2, 2026-09-13);
 claim-by-claim cross-table: `docs/CERT_STORESYNC.md`.
-The 11 non-master locales paste the same block in-language from
+The 4 non-master locales paste the same block in-language from
 `store/listing.md`'s per-locale sections (changelog-specific
 transcreation is an owner/pre-launch polish step, not a claim).
 

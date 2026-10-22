@@ -73,8 +73,8 @@ human for:
 - Upload to an internal/closed testing track before production.
 - **Music licence, before any upload (Session 27).** The 12 music tracks were made in the Gemini app (Google Lyria, SynthID-watermarked). Google's Terms say Google claims no ownership of content created with its services and say
   nothing on commercial use of Gemini-app music, so the rights are not verified here (`docs/ASSET_LICENSES.md`, section "Session 27 M1"). Read the Gemini Apps terms of your account and accept them, or replace the files
-  (`docs/GEMINI_HANDOFF.md` lists the targets and prompts). The way back: the eight district tracks are the lit beds named in `AMBIENCE_LIT_BY_DISTRICT`, and the synthesized `*_lit.ogg` they replaced are still in
-  `assets/audio/ambience/districts/` (point the eight entries back); delete the three `music_boss_dark_p*.ogg` and the boss keeps the single theme `music_boss_dark.wav`; for the menu move
+  (`docs/GEMINI_HANDOFF.md` lists the targets and prompts). The way back is git: the eight district tracks are the lit beds named in `AMBIENCE_LIT_BY_DISTRICT`; the synthesized `*_lit.ogg` they replaced and `music_boss_dark.wav` were deleted in the v10 pass
+  (`git show 3ca44bb:<path>` brings one back, then point its entry back); for the menu move
   `_QUARANTINE/assets/audio/music/abandoned_hallways.mp3` back and point `Mood.MENU` at it (one line).
 
 ## CC0 asset reference repo (TRUTH WAVE ask)

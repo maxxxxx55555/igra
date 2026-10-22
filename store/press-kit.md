@@ -23,10 +23,10 @@ the half-lit-city ending still is cleared, ending text/Architect identity never 
 |---|---|---|
 | 11 | Districts, relit one at a time and reached from the city map | `data/districts/*.tres` (11 files), `docs/CONTENT_PIPELINE_AUDIT.md` §9 |
 | 88 | Lore notes (8 per district × 11) | `content/districts/*/lore_notes.json` (recounted 2026-09-13: 8 × 11 = 88) |
-| 13 | Fully localized languages at launch | `data/i18n/*.json` (ar, de, en, es, fr, it, ja, ko, pt_BR, ru, tr, zh, zh_TW); `tools/i18n_audit.py` → MISSING: 0 (`docs/artifacts/final_gate_report.md`) |
+| 6 | Fully localized languages at launch | `data/i18n/*.json` (de, en, es, fr, pt_BR, ru); `tools/i18n_audit.py` → MISSING: 0 (`docs/artifacts/final_gate_report.md`) |
 | 31 | Achievements (20 core, incl. secret ones, + 11 district-full) | `scripts/systems/achievements_manager.gd` ach_01–ach_20 + `ach_district_*` (Batch 13, `docs/PLAYER_VISIBLE_CHANGES.md`) |
-| 30 | Daily challenges (rotating templates, same for all players per UTC day; 7/30/100-day streak bonuses) | `data/daily_challenges.json` (30 templates, streak rewards verified in shipped data) |
-| 12 | Enemy types, each with own senses/weaknesses (incl. the final boss) | `scripts/enemies/*_3d.gd` (12 files) + `data/monsters/*.tres` (12 files), PLAN.md §GDD-conformance table |
+| 58 | Daily challenges (rotating templates, same for all players per UTC day; 7/30/100-day streak bonuses) | `content/daily_challenges.json` (60 templates, 58 offered: the 11 districts cap two), streak rewards verified in shipped data |
+| 11 | Enemy types met in play, each with own senses/weaknesses (incl. the final boss); the twelfth, the Tvar, is defined and never spawned | `data/monsters/*.tres` (12 files), `tools/qa_sim/listing_audit.py` counts the kinds the game spawns |
 | 5 | Endings, decided by how much city + truth you recover | `scripts/systems/endings_manager.gd` (`Ending` enum) + `tools/qa_sim/endings_sim.py` PASS — all 5 reachable (`docs/artifacts/final_gate_report.md`) |
 | 4 | Skill-tree branches | `tools/qa_sim/balance_sim.py` PASS (`docs/artifacts/final_gate_report.md`) |
 

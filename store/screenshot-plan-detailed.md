@@ -276,8 +276,8 @@ camera; there are no camera presets (see §0).
 - **Resolution/aspect:** 1920×1080. **Language:** **EN first**, then Settings → **Русский**
   and re-capture the identical frame — the RU listing ships its own-language shot.
 - **File:** `shot08_city_map_1920x1080_en.png` + `shot08_city_map_1920x1080_ru.png`.
-- **Optional companion crop:** Settings → Language list (13 locales visible: ru, en, es, de,
-  fr, it, pt_BR, tr, ja, ko, zh, zh_TW, ar) — `shot09_language_list_1920x1080_en.png`,
+- **Optional companion crop:** Settings → Language list (6 locales visible: ru, en, es, de,
+  fr, pt_BR) — `shot09_language_list_1920x1080_en.png`,
   only if time remains; not one of the 8.
 
 ## 4. Post-capture QA checklist (2 min)
