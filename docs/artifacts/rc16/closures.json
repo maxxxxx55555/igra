@@ -3750,8 +3750,8 @@
  },
  {
   "id": "S27-S1",
-  "claim": "The final frames were shot at f8c0de0: the compile gate rc 0, the release set (the eight frames cited), the density frames and the English and Russian store frames; each frame carries its hash and UTC time (AF3).",
-  "cmd": "compile gate; final_frames_scene; density_frames final27, store (English) and store (Russian) (launch 10, row 144)",
+  "claim": "The release frame set was re-shot at 55296a4 after the E10 deletions (the f8c0de0 set is retired): the compile gate rc 0 and the eight store frames cited here; each frame carries its hash and UTC time (AF3). The original session-27 quotes below are kept from that run's log.",
+  "cmd": "compile gate; final_frames_scene; density_frames store (English) - re-shot in R3/B16 at 55296a4 (launch row 222)",
   "proof": "s27_s1_f8c0de0",
   "attach": "density_frames_store_en.log",
   "quotes": [
@@ -3759,14 +3759,14 @@
    "[density] state district=residential view=04_block weather=0 stage=3 tier=2 ambient=0.160"
   ],
   "frames": [
-   "docs/stills/store/01_main_menu_after_f8c0de0_20261017T063627Z.png",
-   "docs/stills/store/02_district_day_full_after_f8c0de0_20261017T063645Z.png",
-   "docs/stills/store/03_district_night_dark_after_f8c0de0_20261017T063639Z.png",
-   "docs/stills/store/04_combat_after_f8c0de0_20261017T063650Z.png",
-   "docs/stills/store/05_boss_after_f8c0de0_20261017T063652Z.png",
-   "docs/stills/store/06_victory_ngplus_after_f8c0de0_20261017T063655Z.png",
-   "docs/stills/store/07_skill_tree_after_f8c0de0_20261017T063646Z.png",
-   "docs/stills/store/08_shop_after_f8c0de0_20261017T063647Z.png"
+   "docs/stills/store/01_main_menu_after_55296a4_20261022T133004Z.png",
+   "docs/stills/store/02_district_day_full_after_55296a4_20261022T133020Z.png",
+   "docs/stills/store/03_district_night_dark_after_55296a4_20261022T133015Z.png",
+   "docs/stills/store/04_combat_after_55296a4_20261022T133025Z.png",
+   "docs/stills/store/05_boss_after_55296a4_20261022T133027Z.png",
+   "docs/stills/store/06_victory_ngplus_after_55296a4_20261022T133029Z.png",
+   "docs/stills/store/07_skill_tree_after_55296a4_20261022T133021Z.png",
+   "docs/stills/store/08_shop_after_55296a4_20261022T133022Z.png"
   ],
   "commit": "f8c0de0"
  },
