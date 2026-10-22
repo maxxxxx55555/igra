@@ -233,3 +233,5 @@ n	utc	head	id	exit	command
 232	20261022T185350Z	70731387	v10_land_audio_truth	0	bash -c tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 300; echo run1=\True; tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 300; echo run2=\True
 233	20261022T185550Z	70731387	v10_land_perf3_70731387	1	bash .qa_logs/perf3.sh
 234	20261022T185914Z	70731387	v10_land_perf3b_70731387	0	bash .qa_logs/perf3.sh
+235	20261022T190227Z	70731387	v10_land_soak_70731387	0	bash .qa_logs/soak10.sh
+236	20261022T190239Z	70731387	v10_land_soak2_70731387	0	bash .qa_logs/soak10.sh
