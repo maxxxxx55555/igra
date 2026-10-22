@@ -160,3 +160,15 @@ Runners-up, in order: N026 and N027 (the dark beds and detail loops are steady 4
 - Pass coverage (c): the 14 rows are N032 to N037 and N058 to N065; N066 belongs to (e) and N067 to (e) and (c). Pass (b): its 9 rows are N026 to N031, N072, N078 and N084 (N072 and N084 are inside the 9, not on top of them). The contact sheets built from the pose frames are 9, not 10 (plus the portrait sheet and two icon sheets, which are not pose frames).
 - Performance: the Medium tier reads 9.0 to 12.5 ms of GPU and the High tier 10.5 to 12.3 ms (the closing block says 10.5 to 12.5 for both).
 - Onboarding: the pause is scripts/ui/onboarding_overlay.gd:53-55 and the stage handler :49-51 (the open item cites :61-62).
+
+### Count table (Session 30, after the fix pass)
+
+| Severity | Rows | FIXED | DEFER | open |
+|---|---:|---:|---:|---:|
+| BLOCKER | 4 | 4 | 0 | 0 |
+| MAJOR | 23 | 21 | 2 | 0 |
+| MINOR | 47 | 14 | 33 | 0 |
+| COSMETIC | 10 | 3 | 7 | 0 |
+| **TOTAL** | **84** | **42** | **42** | **0** |
+
+**Verdict (one line):** no open BLOCKER (4 of 4 fixed); both MAJOR DEFERs (N001 the pole under the torch, N014 the beam's far edge) are one owner-eye look decision with a phone (U13); the 33 MINOR and 7 COSMETIC DEFERs are canon decisions or UNVERIFIABLE-HERE rows; no hidden task is left unrecorded (the queue recount X1 accounts for every open row).
