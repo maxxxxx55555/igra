@@ -1,0 +1,14 @@
+# proof v10_land_audio_truth
+# utc 20261022T185350Z
+# head 70731387 (uncommitted paths: 1)
+# env none
+# cmd bash -c tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 300; echo run1=\True; tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 300; echo run2=\True
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/audio_truth_gate_scene.tscn rc=0 (log: .qa_logs/audio_truth_gate_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+run1=True
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/audio_truth_gate_scene.tscn rc=0 (log: .qa_logs/audio_truth_gate_scene.log)
+  user-data guard: 11 file(s) restored byte-identical
+run2=True
+# EXIT=0
