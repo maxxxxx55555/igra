@@ -1,0 +1,15 @@
+# proof v10_timing_semantics_evidence
+# utc 20261022T213504Z
+# head 4535883f (uncommitted paths: 3)
+# env none
+# cmd bash .qa_logs/timing_semantics_grep.sh
+fps=30
+[timing] fps=30 delta_mean=0.02392
+[timing] fps=30 sim_delta_mean=0.03333
+fps=60
+[timing] fps=60 delta_mean=0.01206
+[timing] fps=60 sim_delta_mean=0.01666
+fps=120
+[timing] fps=120 delta_mean=0.00602
+[timing] fps=120 sim_delta_mean=0.00833
+# EXIT=0
