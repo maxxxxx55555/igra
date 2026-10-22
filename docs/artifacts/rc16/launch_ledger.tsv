@@ -225,3 +225,4 @@ n	utc	head	id	exit	command
 224	20261022T172028Z	6563e91	v10_land_export1_6563e91	0	bash -lc set
 225	20261022T172051Z	6563e91	v10_land_export1b_6563e91	1	bash .qa_logs/export1.sh
 226	20261022T174311Z	32e7453	v10_land_checkall_32e7453	5	bash .qa_logs/l3_checkall.sh
+227	20261022T180453Z	1aa13bb0	v10_land_bot_hard_1aa13bb	0	bash .qa_logs/l4_bot_hard.sh
