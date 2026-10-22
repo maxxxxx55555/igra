@@ -2520,3 +2520,12 @@ OpenCode/Cline session has started work).
 2. Open OpenCode Desktop on this repo, checkout `oc/visual-w10` — it auto-reads `AGENTS.md`.
 3. Open Cline Desktop on this repo, checkout `cl/a11y-i18n` — it auto-reads `.clinerules/zone.md`.
 4. When both are done: say "MERGE NOW" (or just wait — this tool checks both RUN_STATE files).
+
+## Session 30 (2026-10-22): v10.0.0-LAND ledger
+
+- Launches: 223 closeout gate 611/0 (`v10_land_closeout_8da7237`); 224 the AAB export (`v10_land_export2_6563e91`, the host cancelled the wrapper after the bundle was written, the file verified complete); 225 `check.sh --all` (`v10_land_checkall_32e7453`, 87 pass / 5 fail); 226 the bot (`v10_land_bot_32e7453`, Normal + Hard 3 seeds, `QA_TIME_SCALE=4`). Rows 223-226 appended to `docs/artifacts/rc16/launch_ledger.tsv`. Export budget: 2 of 2 used (attempt 1 stopped on the missing `android/.build_version`, attempt 2 wrote the bundle). Subagents: 0 of 4.
+- Gates at `a7713ef`: closeout 611/0; `check.sh --all` 87/5 with three of the five fixed on the branch; `autoload_api_check_scene` and `audio_bus_check_scene` now green after `30abbfd`; `branch_absorb_sim` 8 branches / 0 fail; `press_kit --check` green; `doc_ctrl_check` 0 control characters.
+- The two remaining fails: `proofs_audit_sim` (shallow clone, 159 rows unresolvable — a full-history clone is required; the fetched branches are `--filter=blob:none` refs only) and `timing_equiv` (the frame-time margin check; 15/15 equivalence keys read ok).
+- Bundle: 69,938,779 bytes (66.7 MiB), version code 5, sha256 `8fa22d0108833b7d1448e7e2426990c4a00628675fc4a05ccec9cfb37676b6d4`; signed with `.signing/tls-release.keystore` via `GODOT_ANDROID_KEYSTORE_RELEASE_*` of `.signing/release.env`; `default_bus_layout.tres` was rewritten by the export and restored from HEAD (L2).
+- Landing: PR #22 `land/v10.0.0` -> `main`; main protection re-applied on 2026-10-22 20:19 after the API showed it removed at 20:17 (the owner's setting: PR required, `enforce_admins`, no force-push, no deletions).
+- Queue: X1 recount 58 -> 20 OPEN; L1/L2 closed; the true remainder is named in the STATE line of PR #22.

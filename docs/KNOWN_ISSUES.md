@@ -1799,3 +1799,11 @@ The export filter `assets/textures/icons/*.png` was meant for the 12 legacy achi
 - **origin/dsh/work (3ca44bb) — empty and unused**, left as-is; no merge from it.
 - **origin/pass/v1.0.0-ship (c7911c1) — superseded** by pass/v10.0.0-ship; left alone, not merged.
 - Landing goes through a PR into protected main (PR required, enforce_admins, no force-push, no deletions). The protection is not weakened and the gh api -X DELETE .../protection form is not run.
+
+## Session 30 (v10.0.0-LAND): what is genuinely still open
+
+- **`check.sh --all` is 87 pass / 5 fail at `a7713ef`** and NOT green here: `proofs_audit_sim` needs a full-history clone (this one is shallow; 159 closure rows cannot resolve their commits, and the S27 frame set was re-shot by E10), and `timing_equiv` reports the mean frame time margin (the 15 equivalence keys themselves read ok). The other three of the five were fixed on the landing branch.
+- **The verifier's one read-only round and the 600 s soak were not run in this pass** (no subagent context here, and the round budget went to the export, the battery and the bot).
+- **DOD22 is a FINDING, not a task**: its row says the bot floor is 3/3 at Hard, the pass head reads 3/3 Normal and 2/3 Hard with 0 softlocks; `PROMPT_v10.0.0-LAND` §7's own condition is >=1 win each.
+- **`v10.0.0` is not tagged** because §7 is not fully met; the work is landed by PR #22 instead.
+- **Owner-only rows unchanged**: keystore/Play Console upload, a phone run of the minimum tier, native reading of the transcreated strings, the music licence, the AppLovin key. `docs/store/HUMAN_CHECKLIST.md` is the list.

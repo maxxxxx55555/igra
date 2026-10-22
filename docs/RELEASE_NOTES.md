@@ -29,3 +29,18 @@ The "Architect Project" disaster plunged the city into permanent night. You are 
 - 6 языков: английский, русский, немецкий, испанский, французский и бразильский португальский
 - в этой версии нет рекламы и покупок внутри игры; игра работает без интернета
 
+
+## v10.0.0 (2026-10-22)
+
+The last light got brighter. This release is the v10.0.0-ship pass, verified and landed by the
+land pass: 611 closeout checks green, a fresh signed bundle at 66.7 MiB (down from 127 MB), and the
+stealth loop as it was signed off.
+
+- Stores, cards and endings: the eleven district cards, the five ending plates and the three weapon
+  renders are in the build, with the locked card variants derived from their lit twins.
+- Audio: one generation of the eleven lit beds, the long one-shots on OGG, the hunted-layer music
+  mix and the Master hard limiter (no clip at the sum of music, ambience and a shot).
+- Readability: the window interiors and the late-evening grade of every district, the contact
+  shadows under props and pickups, the weather driven by the signal payload.
+- Stability: save integrity and the launch guard hold through a crash; the new vectors SECV2/6/7/8/9
+  hold in the closeout.
