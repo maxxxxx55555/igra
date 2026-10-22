@@ -350,7 +350,8 @@ func _run() -> void:
 	await get_tree().create_timer(0.6).timeout
 	if is_instance_valid(monster) and monster.has_method("take_damage"):
 		monster.take_damage(1.0)
-	await get_tree().process_frame
+	# v10 N002: the hit flash of the WowDirector has faded after half a second; the frame before it was a white wash (6.5 % of its pixels at luma 235 or more)
+	await get_tree().create_timer(0.5).timeout
 	_where("04")
 	await _shot("04_combat")
 	_hud_dump("combat")
