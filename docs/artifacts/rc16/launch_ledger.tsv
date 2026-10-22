@@ -238,3 +238,5 @@ n	utc	head	id	exit	command
 237	20261022T191717Z	c4d6bd80	v10_land_perf3ac_c4d6bd8	0	bash .qa_logs/perf3.sh
 238	20261022T213158Z	f71bda1d	v10_timing_af2_scratch	1	bash tools/qa_sim/timing_equiv af2scratch
 239	20261022T213336Z	4535883f	v10_timing_af2_post	0	bash tools/qa_sim/timing_equiv af2post
+240	20261022T220718Z	bec6ac84	v10_a2_s29_baseline	0	bash .qa_logs/a2_s29_baseline.sh
+241	20261022T225536Z	bec6ac84	v10_a2_s29_after	0	bash .qa_logs/a2_s29_baseline.sh
