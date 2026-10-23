@@ -63,7 +63,12 @@ func _physics_process(delta: float) -> void:
 			if active.has(s):
 				var dmg: float = float(active[s]["dps"])
 				if dmg > 0.0:
-					mob.take_damage(dmg, Vector3.ZERO, _dot_damage_type(s))
+					# N037: a DoT tick on the player is not a monster hit - no hurt sound,
+					# no regen reset, no mercy window (the player's apply_dot path).
+					if mob.has_method("apply_dot"):
+						mob.apply_dot(dmg, _dot_damage_type(s))
+					else:
+						mob.take_damage(dmg, Vector3.ZERO, _dot_damage_type(s))
 	for s in expired:
 		_expire(s)
 

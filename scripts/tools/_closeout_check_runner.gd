@@ -41,6 +41,7 @@ const Rc29Sfx := preload("res://scripts/tools/rc16/s29_sfx_checks.gd")
 const Rc29Atk := preload("res://scripts/tools/rc16/s29_attack_cases.gd")
 const Rc29Play := preload("res://scripts/tools/rc16/s29_play_checks.gd")
 const Rc29Fix := preload("res://scripts/tools/rc16/s29_fix_checks.gd")
+const Rc30 := preload("res://scripts/tools/rc16/s30_checks.gd")
 
 var _checked: int = 0
 var _fails: int = 0
@@ -142,6 +143,10 @@ func _run() -> void:
 		Rc29Atk.run(self)
 		await Rc29Play.run(self)
 		await Rc29Fix.run(self)
+		_finish()
+		return
+	if OS.get_environment("CLOSEOUT_ONLY") == "s30":
+		await Rc30.run(self)
 		_finish()
 		return
 	if OS.get_environment("CLOSEOUT_ONLY") == "rtl":

@@ -891,6 +891,20 @@ func get_noise_level() -> float:
 		weather_mod = ws.get_noise_modifier()
 	return noise_level + weather_mod
 
+## N037: a damage-over-time tick is not a monster hit: it takes its health without
+## the hurt sound, the direction indicator, the phone vibration, the regen reset or
+## the 0.8 s mercy window, and a tick that falls inside an open window is not swallowed.
+func apply_dot(amount: float, _type: EnemyRosterData.DamageType = EnemyRosterData.DamageType.BLUNT) -> void:
+	if _net_active and not is_multiplayer_authority():
+		return
+	if hp <= 0.0 or GameManager.is_win():
+		return
+	hp = clampf(hp - amount / SettingsManager.difficulty_scale("player_hp"), 0.0, stats.max_hp)
+	EventBus.player_health_changed.emit(hp / stats.max_hp)
+	if hp <= 0.0:
+		gameplay_active = false
+		EventBus.game_over.emit()
+
 func take_damage(amount: float, _src_pos: Vector3 = Vector3.ZERO, _type: EnemyRosterData.DamageType = EnemyRosterData.DamageType.BLUNT) -> void:
 	if _net_active and not is_multiplayer_authority():
 		# Урон по puppet-копии: переслать владельцу, локально не применять

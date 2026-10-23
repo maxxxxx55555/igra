@@ -1,0 +1,6 @@
+  user-data guard: 12 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] FAIL DOT1 pre-fix: apply_dot missing - a tick goes through take_damage like a monster hit
+[closeout] FAIL DOT2 pre-fix: apply_dot missing - a tick inside the mercy window is swallowed
+[closeout] DONE checks=3 fails=2
+  closeout_check rc=1 (log: .qa_logs/closeout_check.log)
+  user-data guard: 12 file(s) restored byte-identical
