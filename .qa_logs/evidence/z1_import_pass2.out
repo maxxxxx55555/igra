@@ -1,0 +1,71 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Started Инициализация проекта (5 steps)[39m[0m
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Сканирование структуры файлов…[39m[0m
+WARNING: Detected another project.godot at res://THE_LAST_STREETLIGHT. The folder will be ignored.
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3485)
+[  16% ] [90m[1mfirst_scan_filesystem[22m | Загрузка глобальных имен классов…[39m[0m
+[  33% ] [90m[1mfirst_scan_filesystem[22m | Проверка GDExtensions…[39m[0m
+[  50% ] [90m[1mfirst_scan_filesystem[22m | Создание скриптов автозагрузки…[39m[0m
+[  66% ] [90m[1mfirst_scan_filesystem[22m | Инициализация плагинов…[39m[0m
+[  83% ] [90m[1mfirst_scan_filesystem[22m | Начало сканирование файлов…[39m[0m
+[92m[ DONE ][39m [1mfirst_scan_filesystem[22m
+[0m
+[   0% ] [90m[1mupdate_scripts_classes[22m | Started Регистрация глобальных классов… (2 steps)[39m[0m
+[   0% ] [90m[1mupdate_scripts_classes[22m | BehaviorNode[39m[0m
+[  33% ] [90m[1mupdate_scripts_classes[22m | WeightBar[39m[0m
+[92m[ DONE ][39m [1mupdate_scripts_classes[22m
+[0m
+[   0% ] [90m[1m_update_scan_actions[22m | Started Сканирование действий… (45 steps)[39m[0m
+[   0% ] [90m[1m_update_scan_actions[22m | usage.webp[39m[0m
+[   2% ] [90m[1m_update_scan_actions[22m | gdextension_c_running.webp[39m[0m
+[   4% ] [90m[1m_update_scan_actions[22m | draw_godot_mouth_animation.webp[39m[0m
+[   6% ] [90m[1m_update_scan_actions[22m | draw_godot_rotation.webp[39m[0m
+[   8% ] [90m[1m_update_scan_actions[22m | environment_hdr_autoexp.webp[39m[0m
+[  10% ] [90m[1m_update_scan_actions[22m | particle_accel_linear.webp[39m[0m
+[  13% ] [90m[1m_update_scan_actions[22m | particle_accel_radial.webp[39m[0m
+[  15% ] [90m[1m_update_scan_actions[22m | particle_accel_tangent.webp[39m[0m
+[  17% ] [90m[1m_update_scan_actions[22m | particle_animate.webp[39m[0m
+[  19% ] [90m[1m_update_scan_actions[22m | particle_animate_lifetime.webp[39m[0m
+[  21% ] [90m[1m_update_scan_actions[22m | particle_attractor.webp[39m[0m
+[  23% ] [90m[1m_update_scan_actions[22m | particle_attractor_box.webp[39m[0m
+[  26% ] [90m[1m_update_scan_actions[22m | particle_attractor_direction.webp[39m[0m
+[  28% ] [90m[1m_update_scan_actions[22m | particle_attractor_sphere.webp[39m[0m
+[  30% ] [90m[1m_update_scan_actions[22m | particle_attractor_vector.webp[39m[0m
+[  32% ] [90m[1m_update_scan_actions[22m | particle_basic_system.webp[39m[0m
+[  34% ] [90m[1m_update_scan_actions[22m | particle_collision.webp[39m[0m
+[  36% ] [90m[1m_update_scan_actions[22m | particle_collision_box.webp[39m[0m
+[  39% ] [90m[1m_update_scan_actions[22m | particle_collision_sdf.webp[39m[0m
+[  41% ] [90m[1m_update_scan_actions[22m | particle_collision_sphere.webp[39m[0m
+[  43% ] [90m[1m_update_scan_actions[22m | particle_complex_emission.webp[39m[0m
+[  45% ] [90m[1m_update_scan_actions[22m | particle_coords.webp[39m[0m
+[  47% ] [90m[1m_update_scan_actions[22m | particle_direction.webp[39m[0m
+[  50% ] [90m[1m_update_scan_actions[22m | particle_gravity.webp[39m[0m
+[  52% ] [90m[1m_update_scan_actions[22m | particle_heightfield_res.webp[39m[0m
+[  54% ] [90m[1m_update_scan_actions[22m | particle_interpolate.webp[39m[0m
+[  56% ] [90m[1m_update_scan_actions[22m | particle_preprocess.webp[39m[0m
+[  58% ] [90m[1m_update_scan_actions[22m | particle_speed_scale.webp[39m[0m
+[  60% ] [90m[1m_update_scan_actions[22m | particle_spread.webp[39m[0m
+[  63% ] [90m[1m_update_scan_actions[22m | particle_sub_chain.webp[39m[0m
+[  65% ] [90m[1m_update_scan_actions[22m | particle_tangent.webp[39m[0m
+[  67% ] [90m[1m_update_scan_actions[22m | particle_trails.webp[39m[0m
+[  69% ] [90m[1m_update_scan_actions[22m | particle_tube_align.webp[39m[0m
+[  71% ] [90m[1m_update_scan_actions[22m | particle_tube_curve.webp[39m[0m
+[  73% ] [90m[1m_update_scan_actions[22m | particle_turbulence.webp[39m[0m
+[  76% ] [90m[1m_update_scan_actions[22m | particle_turbulence_speed.webp[39m[0m
+[  78% ] [90m[1m_update_scan_actions[22m | particle_two_draw_passes.webp[39m[0m
+[  80% ] [90m[1m_update_scan_actions[22m | animtree_blendspacepoints.webp[39m[0m
+[  82% ] [90m[1m_update_scan_actions[22m | blending2.webp[39m[0m
+[  84% ] [90m[1m_update_scan_actions[22m | blending4.webp[39m[0m
+[  86% ] [90m[1m_update_scan_actions[22m | blending5.webp[39m[0m
+[  89% ] [90m[1m_update_scan_actions[22m | chroma_key_video.webp[39m[0m
+[  91% ] [90m[1m_update_scan_actions[22m | containers_aspectratio_drag.webp[39m[0m
+[  93% ] [90m[1m_update_scan_actions[22m | containers_center_drag.webp[39m[0m
+[  95% ] [90m[1m_update_scan_actions[22m | containers_hflow_drag.webp[39m[0m
+[92m[ DONE ][39m [1m_update_scan_actions[22m
+[0m
+[   0% ] [90m[1mloading_editor_layout[22m | Started Загрузка редактора (5 steps)[39m[0m
+[   0% ] [90m[1mloading_editor_layout[22m | Загрузка макета редактора…[39m[0m
+[  16% ] [90m[1mloading_editor_layout[22m | Загрузка док-панели…[39m[0m
+[92m[ DONE ][39m [1mloading_editor_layout[22m
+[0m

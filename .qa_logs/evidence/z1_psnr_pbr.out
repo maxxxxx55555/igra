@@ -1,0 +1,28 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+PSNR assets/textures/pbr/ceramic_tile_albedo.png 53.06
+PSNR assets/textures/pbr/ceramic_tile_normal.png 49.90
+PSNR assets/textures/pbr/ceramic_tile_rough.png inf
+PSNR assets/textures/pbr/cracked_concrete_albedo.png 52.32
+PSNR assets/textures/pbr/cracked_concrete_normal.png 45.23
+PSNR assets/textures/pbr/cracked_concrete_rough.png 62.83
+PSNR assets/textures/pbr/dead_grass_albedo.png 52.13
+PSNR assets/textures/pbr/dead_grass_normal.png 45.52
+PSNR assets/textures/pbr/dead_grass_rough.png inf
+PSNR assets/textures/pbr/painted_brick_albedo.png 54.54
+PSNR assets/textures/pbr/painted_brick_normal.png 45.99
+PSNR assets/textures/pbr/painted_brick_rough.png inf
+PSNR assets/textures/pbr/panel_facade_albedo.png 54.07
+PSNR assets/textures/pbr/panel_facade_normal.png 54.95
+PSNR assets/textures/pbr/panel_facade_rough.png inf
+PSNR assets/textures/pbr/plywood_albedo.png 54.20
+PSNR assets/textures/pbr/plywood_normal.png 55.00
+PSNR assets/textures/pbr/plywood_rough.png 67.84
+PSNR assets/textures/pbr/rusted_metal_albedo.png 52.18
+PSNR assets/textures/pbr/rusted_metal_normal.png 52.24
+PSNR assets/textures/pbr/rusted_metal_rough.png 59.12
+PSNR assets/textures/pbr/wet_asphalt_albedo.png 56.17
+PSNR assets/textures/pbr/wet_asphalt_normal.png 56.93
+PSNR assets/textures/pbr/wet_asphalt_rough.png 62.90
+PSNR_SUMMARY min=45.23 mean=54.36 n=24
+[qa-guard] profile restored byte-identical
