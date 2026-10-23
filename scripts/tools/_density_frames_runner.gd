@@ -151,6 +151,10 @@ func _view(id: StringName, view: Dictionary) -> void:
 		dressing.visible = true
 		await get_tree().process_frame
 		await _snap("%s_%s" % [id, view["name"]], "after")
+	elif _label == "twin":  # F19 re-measure: two frames of one state ~3 s apart, the dressing never touched - the delta is the frame-to-frame drift and nothing else
+		await _snap("%s_%s" % [id, view["name"]], "before")
+		await get_tree().create_timer(3.0).timeout
+		await _snap("%s_%s" % [id, view["name"]], "after")
 	elif _Views.SWITCHED.has(_label):
 		var state := "%s_%s%s" % [id, view["name"], _tag()]  # the control and the boosted diagnostic do not take the names of the pairs they stand beside
 		_Views.switch(_label, get_tree(), false)
