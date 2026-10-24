@@ -49,7 +49,7 @@ no engine, no audio generation. Forward spec: `docs/MUSIC_SPEC.md`.
 |---|---|---|---|
 | `music/music_victory.wav` | 14.5 s victory figure **loops forever** on the win screen under the 120 s `cue_victory` arc — `_force_loop` is applied to every Mood track, VICTORY included | `music_manager.gd:291` `_force_loop` called in `_load()` for all `TRACKS`; `_on_game_won()` → `set_mood(VICTORY)`; consumers grep: only music_manager | REPLACE with a ≥60 s victory bed at the same path (MUSIC_SPEC §e) or exempt VICTORY from `_force_loop` (CODE-owned) |
 | `music/abandoned_hallways.mp3` (MENU) | whole-file MP3 loop; MP3 encoder padding makes the 234 s wrap seam audible (gapless unreliable), and it is the only MP3 the engine plays | consumers grep: `music_manager.gd:23` only; `ls music/*.mp3` → 2 files | transcode OGG with 3 ms zero-edge fades (house seam style), or retire per MUSIC_SPEC §a |
-| wow cues + `ui/*_sting.ogg` | correctly NOT looped — pass | `_play_wow_cue` uses bare `.play()` (`music_manager.gd:435`); `uisfx.play_ui` plays + frees on `finished` | none (recorded as verified) |
+| wow cues + `ui/*_sting.ogg` | correctly NOT looped — pass | `_play_wow_cue` uses bare `.play()` (`music_manager.gd:507-512`); `uisfx.play_ui` plays + frees on `finished` | none (recorded as verified) |
 | district beds | correctly loop whole-file with 3 ms zero edges — pass | `district_atmosphere.gd` sets `AudioStreamOggVorbis.loop`; README cert | none |
 | `ambience/ambient_dark_loop.ogg`, `ambient_lit_loop.ogg` | loop flags moot — 0 consumers | grep `ambient_dark_loop\|ambient_lit_loop` scripts+scenes → 0 files (legacy pre-district beds, 120 s class) | retire to `_pre_norm/` or delete (row d6) |
 

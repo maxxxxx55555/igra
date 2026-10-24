@@ -1,0 +1,5 @@
+coverage pistol 1.00
+coverage rifle 0.14
+coverage shotgun 0.16
+FAIL pistol alpha coverage 1.00 is far off the family median 0.16 (N068 split)
+weapon_icon_style_check: 1 finding(s)

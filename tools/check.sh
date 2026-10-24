@@ -162,6 +162,9 @@ if "$PY" tools/scene_node_check.py; then ok "scene_node_check"; else bad "scene_
 # шесть мёртвых связей в settings_screen.tscn, движок писал ERROR на каждое открытие экрана).
 if "$PY" tools/qa_sim/tscn_connections_check.py; then ok "tscn_connections_check"; else bad "tscn_connections_check"; fi
 
+# s31 (v10.0.0-close): the bundle record's signature honesty - a debug-signed bundle may never be marked shippable.
+if "$PY" tools/qa_sim/bundle_signature_check.py; then ok "bundle_signature_check"; else bad "bundle_signature_check"; fi
+
 # Ключевой игровой цикл: меню -> уровень -> подбор -> пауза -> меню.
 head_ "Игровой цикл"
 if "$PY" tools/flow_check.py; then ok "flow_check"; else bad "flow_check"; fi
