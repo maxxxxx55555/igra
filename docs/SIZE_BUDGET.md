@@ -153,8 +153,8 @@ definition), `store/play_final` (`docs/SESSION_REPORT_SHIP.md`: zero script/scen
 not import into game scenes").
 
 **Found, correctly NOT excluded (kept from the first pass)**: `audio/ambience/{ambient_dark_loop,
-ambient_lit_loop,threat_high_loop,threat_low_loop}.ogg` (4 files) — `docs/REPORT_ASSETS.md:20`
-documents their game-code wiring as a deliberate open decision; `docs/TRAILER_STORYBOARD.md`/
+ambient_lit_loop,threat_high_loop,threat_low_loop}.ogg` (4 files) — `docs/REPORT_ASSETS.md:418-419` (sfx + ambience originals, 37 files archived; 27 files normalized),
+documents their provenance; their game-code wiring stays a deliberate open decision; `docs/TRAILER_STORYBOARD.md`/
 `store/trailer.md` already plan to use them.
 
 **Not reached this pass**: `textures/surfaces/` (24, live directory, needs per-file work),
