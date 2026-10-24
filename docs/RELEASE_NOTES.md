@@ -44,3 +44,5 @@ stealth loop as it was signed off.
   shadows under props and pickups, the weather driven by the signal payload.
 - Stability: save integrity and the launch guard hold through a crash; the new vectors SECV2/6/7/8/9
   hold in the closeout.
+
+- The damage-over-time ticks (bleed, burn, poison) no longer count as monster hits: they take their health quietly - no hurt sound, no camera shake, no 0.8 s invulnerability after every tick, and a tick inside a hit's grace window is no longer swallowed.
