@@ -169,17 +169,20 @@ func _start() -> void:
 		if not await _wait(func() -> bool:
 				var s := get_tree().current_scene
 				return s != null and s.name == "MainMenu", 14.0):
-			_fail("menu not reached in 14s (state=%d)" % GameManager.current_state); return _finish()
+			_fail("menu not reached in 14s (state=%d)" % GameManager.current_state); call_deferred("_finish")
+			return
 		# The bot plays the game as tuned (Normal), whatever difficulty the profile holds (monsters scale with it); QA_DIFFICULTY 0, 1 or 2 asks for Easy, Normal or Hard.
 		SettingsManager.set_difficulty(int(OS.get_environment("QA_DIFFICULTY")) if OS.get_environment("QA_DIFFICULTY") != "" else 1)
 		SaveSystem.mark_onboard_done()
 		Routes.start_game()
 	if not await _wait(func() -> bool: return GameManager.is_playing(), 15.0):
-		_fail("New Game never reached PLAYING"); return _finish()
+		_fail("New Game never reached PLAYING"); call_deferred("_finish")
+		return
 	if not await _wait(func() -> bool:
 			_player = get_tree().get_first_node_in_group("player")
 			return _player_ok(), 15.0):
-		_fail("player never spawned"); return _finish()
+		_fail("player never spawned"); call_deferred("_finish")
+		return
 	await get_tree().create_timer(2.0).timeout
 	_player = get_tree().get_first_node_in_group("player")
 	var ss := get_node_or_null("/root/SaveSystem")
@@ -206,7 +209,8 @@ func _process(delta: float) -> void:
 	if _win_seen or GameManager.is_win():
 		_log("WIN ending fired")
 		_phase = "won"
-		return _finish()
+		call_deferred("_finish")
+		return
 
 	_hb += delta
 	if _hb >= 5.0:
@@ -303,7 +307,8 @@ func _process(delta: float) -> void:
 			_menu_recoveries += 1
 			if _menu_recoveries > 40:
 				_fail("PLAYING->MENU %d times — recovery not holding" % _menu_recoveries)
-				return _finish()
+				call_deferred("_finish")
+				return
 			var ss := get_node_or_null("/root/SaveSystem")
 			if ss != null and ss.has_method("has_save") and ss.has_save():
 				GameManager.continue_game()
@@ -411,7 +416,8 @@ func _tick_boss(delta: float) -> void:
 		_log("finale: engaging the Architect (deadline %.0fs)" % BOSS_FIGHT_SEC)
 	if _now() > _boss_deadline:
 		_fail("boss not defeated within %.0fs — spine proven, boss is a skill gate" % BOSS_FIGHT_SEC)
-		return _finish()
+		call_deferred("_finish")
+		return
 	var boss := get_tree().get_first_node_in_group("boss")
 	if boss == null or not is_instance_valid(boss):
 		# maybe already dead and win pending
@@ -702,7 +708,8 @@ func _watchdog(delta: float) -> void:
 	if _player_ok() and not _player.global_position.is_finite():
 		_fail("INVARIANT_FAIL pos — global_position=%s phase=%s district=%s" % [
 			str(_player.global_position), _phase, _current_district()])
-		return _finish()
+		call_deferred("_finish")
+		return
 
 	# finale: once all 11 are FULL, move to the boss phase
 	var pg := get_node_or_null("/root/PowerGrid")
@@ -718,7 +725,8 @@ func _watchdog(delta: float) -> void:
 			_phase, _current_district(), _spine_i, _have_target,
 			str(_player.global_position.round()) if is_instance_valid(_player) else "?", sc]
 		_fail("SOFTLOCK: no progress for %.0fs — %s" % [SOFTLOCK_SEC, ctx])
-		return _finish()
+		call_deferred("_finish")
+		return
 
 	# local stuck: position unchanged while trying to move -> nudge sideways
 	if _player_ok():
@@ -798,5 +806,14 @@ func _finish() -> void:
 			(p as AudioStreamPlayer).stop()
 		for p3: Node in get_tree().root.find_children("*", "AudioStreamPlayer3D", true, false):
 			(p3 as AudioStreamPlayer3D).stop()
+		# Z5 R6: the bot's teardown — the pooled VFX bursts of WowDirector live on the
+		# root to be replayed; freed here so the exit counts a clean tree.
+		var wow := get_node_or_null("/root/WowDirector")
+		if wow != null and wow.get("_bursts") is Dictionary:
+			var bursts: Dictionary = wow.get("_bursts")
+			for fx: Variant in bursts.values():
+				if fx is Node and is_instance_valid(fx):
+					(fx as Node).free()
+			bursts.clear()
 		await get_tree().create_timer(0.3).timeout
 		get_tree().quit(code)
