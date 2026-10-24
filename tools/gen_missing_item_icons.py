@@ -358,6 +358,17 @@ def draw_blueprint_portable_workbench():
     return cv
 
 
+def draw_pistol():
+    cv = Canvas()
+    # пистолет: ствол-затвор горизонтально, рукоять вниз под углом, спусковая скоба
+    rrect(cv, 30, 52, 66, 20, 4, 0, STEEL_DK)             # затвор
+    caps(cv, 96, 62, 116, 62, 5, STEEL)                   # ствол
+    rrect(cv, 40, 70, 16, 34, 4, 0.25, BROWN)             # рукоять
+    flat(cv, 62, 72, 18, 5, 2, 0, STEEL_DK, 1.0)          # спусковая скоба
+    flat(cv, 34, 55, 58, 4, 1, 0, mul(STEEL, 1.25), 1.0)  # блик затвора
+    return cv
+
+
 TARGETS = {
     "document": draw_document,
     "photo": draw_photo,
@@ -366,6 +377,7 @@ TARGETS = {
     "transformer": draw_transformer,
     "backpack_l1": draw_backpack_l1,
     "backpack_l2": draw_backpack_l2,
+    "pistol": draw_pistol,
     "rifle": draw_rifle,
     "shotgun": draw_shotgun,
     "plank": draw_plank,

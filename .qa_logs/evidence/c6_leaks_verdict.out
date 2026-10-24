@@ -1,0 +1,4 @@
+# C6(b) leak profiling at head, bot seed 1 --verbose
+grouped by class:
+  35 RefCounted (reference count 0, anonymous) - engine-owned as recorded in Z5 (teardown evidence: bare game 0, tool runs 6, teardown does not move them)
+  10 named audio playback objects: AudioStreamWAV x3, AudioStreamPlaybackWAV x3, AudioStreamOggVorbis x1, AudioStreamPlaybackOggVorbis x1, OggPacketSequence x1, OggPacketSequencePlayback x1 - the music/SFX stream playback of the running session; no game-side owner identified (the bot's teardown stops every AudioStreamPlayer/3D; playbacks release asynchronously after stop); capped attempt stops here per C6
