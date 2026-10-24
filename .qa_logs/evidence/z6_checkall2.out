@@ -1,0 +1,214 @@
+
+── Статические проверки (Godot не нужен)
+  FAIL ссылки на ресурсы (261 битых)
+          refs\escoria\addons\escoria-core\ui_library\theme.tres -> addons/escoria-core/ui_library/fonts/caslonantique.tres
+          refs\escoria\addons\escoria-core\ui_library\fonts\caslonantique.tres -> addons/escoria-core/ui_library/fonts/caslonantique.ttf
+          refs\escoria\addons\escoria-ui-keyboard-9verbs\theme.tres -> addons/escoria-ui-keyboard-9verbs/fonts/caslonantique.tres
+          refs\escoria\addons\escoria-ui-keyboard-9verbs\fonts\caslonantique.tres -> addons/escoria-ui-keyboard-9verbs/fonts/caslonantique.ttf
+          refs\escoria\addons\escoria-ui-simplemouse\theme.tres -> addons/escoria-ui-simplemouse/fonts/caslonantique.tres
+          refs\escoria\addons\escoria-ui-simplemouse\fonts\caslonantique.tres -> addons/escoria-ui-simplemouse/fonts/caslonantique.ttf
+          refs\escoria\game\characters\mark\mark_animations.tres -> addons/escoria-core/game/core-scripts/resources/esc_animationresource.gd
+          refs\escoria\game\characters\mark\mark_animations.tres -> addons/escoria-core/game/core-scripts/resources/esc_directionangle.gd
+          refs\escoria\game\characters\mark\mark_animations.tres -> addons/escoria-core/game/core-scripts/resources/esc_animationname.gd
+          refs\escoria\game\characters\mark\mark_animations_jester.tres -> addons/escoria-core/game/core-scripts/resources/esc_animationresource.gd
+  OK   автозагрузки (56 шт., 0 битых)
+  OK   вызовы к автозагрузкам (0 несуществующих)
+  OK   локализация: 6 языков x 1566 ключей, паритет=True
+  OK   ключи из кода найдены в словаре (0 потеряно)
+  OK   плейсхолдеры ru/en (0 расхождений)
+  OK   validate_list (197 записей, 0 отсутствуют)
+  OK   критический путь игры (8/8)
+  OK   музыкальные треки на диске (0 нет)
+
+── Сцены и ссылки на ноды
+── Комментарии в файлах ресурсов (Godot их не поддерживает)
+  OK   проверено 667 файлов
+
+── Ресурсы, ошибочно объявленные как [node]
+  OK   проверено 179 сцен
+
+── Ссылки $NodePath на несуществующие ноды сцены
+  OK   проверено 122 пар скрипт/сцена
+
+──────────────────────────────────────────────────
+Всё чисто.
+  [32mOK[0m   scene_node_check
+tscn_connections_check: 172 scene(s), 0 finding(s)
+  [32mOK[0m   tscn_connections_check
+
+── Игровой цикл
+  OK    главная сцена — boot_loading                                        
+  OK    boot уводит в меню                                                  
+  OK    кнопка «Играть» стартует игру                                       
+  OK    start_game ведёт в игровую сцену                                    
+  OK    игровая сцена существует                                            
+  OK    экран загрузки уходит в игру                                        
+  OK    подбор не шлёт RPC самому себе                                      
+  OK    подбор кладёт вещь в инвентарь                                      
+  OK    предмет лежит на земле: меш садится на начало узла и не покачивается
+  OK    инвентарь шлёт item_picked_up                                       
+  OK    инвентарь не шлёт RPC вне сети                                      
+  OK    сигнал подбора кто-то слушает                                       
+  OK    лут раскладывается по районам                                       
+  OK    HUD: нода NoiseLabel есть в сцене                                   
+  OK    HUD: нода NoiseF есть в сцене                                       
+  OK    HUD: нода VisibilityLabel есть в сцене                              
+  OK    HUD: нода VisibilityF есть в сцене                                  
+  OK    HUD показывает здоровье                                             
+  OK    HUD показывает батарею                                              
+  OK    HUD показывает шум                                                  
+  OK    HUD прячется под блокирующими экранами                              
+  OK    игрок отдаёт уровень шума                                           
+  OK    игрок шлёт изменение батареи                                        
+  OK    Escape ставит паузу                                                 
+  OK    Escape сперва закрывает справочники                                 
+  OK    пауза морозит дерево                                                
+  OK    снятие паузы размораживает                                          
+  OK    в паузе есть выход в меню                                           
+  OK    затемнение работает на паузе                                        
+  OK    UIManager работает на паузе                                         
+  OK    смерть игрока кем-то обрабатывается                                 
+  OK    смерть переводит в состояние DEAD                                   
+  OK    экран смерти открывается по состоянию                               
+  OK    экран победы открывается по состоянию                               
+  OK    с экрана смерти можно выйти в меню                                  
+  OK    «Заново» перезагружает сцену                                        
+  OK    кодекс открывается                                                  
+  OK    кодекс закрывается                                                  
+  OK    карта переключается клавишей                                        
+  OK    журнал переключается клавишей                                       
+  OK    действие ui_pause объявлено в проекте                               
+  OK    действие city_map_toggle объявлено в проекте                        
+  OK    действие journal_toggle объявлено в проекте                         
+  OK    действие encyclopedia_toggle объявлено в проекте                    
+  OK    аудио-шина Master существует                                        
+  OK    аудио-шина Music существует                                         
+  OK    аудио-шина SFX существует                                           
+  OK    аудио-шина Ambient существует                                       
+  OK    аудио-шина UI существует                                            
+  OK    аудио-шина Footsteps существует                                     
+  OK    аудио-шина Combat существует                                        
+  OK    аудио-шина Environment существует                                   
+  OK    Master не заглушен на старте                                        
+  OK    все аудиофайлы из кода на диске                                     
+  FAIL  все preload/load ведут в существующие файлы                            <- refs\AppLovin-MAX-Godot\addons\applovin_max\AppLovinMAXEditorPlugin.gd:5 res://addons/applovin_max/Example/Textures/applovin_max_logo.png; refs\escoria\addons\escoria-core\game\escoria.gd:51 res://addons/escoria-core/game/core-scripts/esc/compiler/esc_interpreter_factory.gd; refs\escoria\addons\escoria-core\game\esc_autoload.gd:64 res://addons/escoria-core/tools/logging/esc_logger.gd
+  OK    арность подписок на сигналы совпадает                               
+
+────────────────────────────────────────────────────────────
+Провалено: 1 из 56
+  [31mFAIL[0m flow_check
+
+── Контент: глубина и удержание
+  [32mOK[0m   audit_content_depth
+  [32mOK[0m   validate_retention
+
+── Truth gates: visual/i18n (данные уже в репозитории)
+  [32mOK[0m   visual_truth_gate (gate self-consistency on committed frames; R0 lock = LUT pin below)
+  [32mOK[0m   visual_truth_gate --demo (defect patterns fail, canon patterns pass)
+  [32mOK[0m   visual_truth_gate fails all four committed corruption frames
+  [32mOK[0m   visual_truth_gate passes the sign-off and beauty frames
+  [32mOK[0m   R0 root cause pinned (11 district LUTs import as Texture3D)
+  [32mOK[0m   i18n_truth_gate
+  [32mOK[0m   user_data_guard --demo (snapshot/restore профиля)
+  [32mOK[0m   hardcoded_text_gate (no untranslated words assigned to .text)
+  [32mOK[0m   puzzle_economy_sim (STATIC_AUDIT #31 reachability)
+  [32mOK[0m   endings_sim (all 5 GDD endings reachable)
+  [32mOK[0m   balance_sim (economy/battery/skill-branch/time-to-win, Easy/Normal/Hard by the numbers)
+  [32mOK[0m   lighting_stage_sim (DARK/PARTIAL/STREETS/FULL pairwise-distinct)
+  [32mOK[0m   project_input_check (action blocks only in [input], every action the scripts read is defined)
+  [32mOK[0m   settings_consumer_check (every Settings control has a named reader or applier)
+  [31mFAIL[0m tscn_header_check (см. 'python tools/qa_sim/tscn_header_check.py')
+  [32mOK[0m   a11y_check (every a11y toggle traces UI -> real effect; 9 of 9 features; every single removal of a reader, row, key or default is caught)
+  [32mOK[0m   drawcall_estimate (structural draw-call/light estimate, D1)
+  [32mOK[0m   no mirrored yaw formula (atan2(-v.x, -v.z) faces v)
+  [32mOK[0m   release_export_check (SECURITY_PATCH_SPEC C-08/D-04: no committed encryption key or debug keystore creds)
+
+── rc16: lint, frame-independence inventory, AF2/AF3/AF5 tools (Godot не нужен)
+  [32mOK[0m   ruff E9,F on tools/ and scripts/ (syntax and pyflakes correctness)
+  [32mOK[0m   bash -n on every shell script, hook and wrapper
+  [32mOK[0m   timing_inventory (no per-frame constant step outside the whitelist: frame-independent timing)
+  [32mOK[0m   timing_compare --demo (the tool's self-check)
+  [32mOK[0m   af2_both_ways --demo (the tool's self-check)
+  [32mOK[0m   af3_frame_check --demo (the tool's self-check)
+  [31mFAIL[0m af3_frame_check (см. 'python tools/qa_sim/af3_frame_check.py')
+  [31mFAIL[0m lint_changed (см. 'python tools/lint_changed.py')
+  [31mFAIL[0m af5_check (см. 'python tools/af5_check.py')
+  [32mOK[0m   doc_ctrl_check (no control character in docs/: a heredoc once ate the backslashes of two paths)
+  [32mOK[0m   integrity manifest (data/integrity_manifest.json holds the SHA-256 of every content and data JSON; the game scans it at start)
+  [32mOK[0m   title_check (the game is Last Streetlight: no capital 'The' before the name in the locales, scenes, scripts, presets or store kit)
+  [31mFAIL[0m privacy_audit (см. 'python tools/qa_sim/privacy_audit.py --check')
+  [32mOK[0m   store_answers (every content-rating and Data safety answer of store/IARC_ANSWERS.md still holds against the code)
+  [32mOK[0m   i18n_placeholder_fuzz (specifiers, call arity, literal keys, Latin stubs, cognates and the glossary agree in all 6 locales)
+  [32mOK[0m   daily_sim (every daily template is ticked by a wired signal and reachable; the streak tiers 7, 30 and 100 pay)
+  [32mOK[0m   achievements_sim (all 31 achievements have a trigger that a real EventBus path reaches: docs/ACHIEVEMENT_TRIGGER_SPEC.md)
+  [32mOK[0m   save_migration_sim (SAVE_VERSION 3 and BACKUP_DEPTH 3 are what the matrix and the SAVEMIG check are written for)
+  [32mOK[0m   ngplus_table (every New Game+ number the game shows or stores is read by a script: docs/NGPLUS_TABLE.md)
+  [32mOK[0m   s23_mutations --demo (the AF2 mutation judge tells a vacuous check from a biting one and finds a stray failure)
+  [32mOK[0m   s26_mutations --demo (the same judge for the two runs of Session 26: Darkness, the run marks, the daily selector, the achievement handlers)
+  [32mOK[0m   coverage_matrix and audio_loudness --demo (a mechanic with a passing log line is hit and one without is a miss; a hard-cut loop is over the seam limit and a closed one is not)
+  [32mOK[0m   hum_scan and bed_synth --demo (a sine and mains hum are hums, noise and a ringing note in silence are not; a synthesized bed is periodic and not a hum)
+  [32mOK[0m   listing_audit (6 locales: title, short and full limits, the same numbers in every language, the English numbers are what the code holds)
+  [32mOK[0m   press kit and music brief (store/PRESS_KIT.md is what the code says; every lit bed of music_manager.gd has a brief)
+  [32mOK[0m   consistency_check (the fonts are the canon set, the UI icons one brass family, no new font size, even spacing, facade chroma under 25 %: docs/UI_CONSISTENCY.md)
+  [32mOK[0m   difficulty_curve (no district is harder when restored, no step of the enemy strength over x2.2: docs/DIFFICULTY_CURVE.md)
+  [32mOK[0m   telegraph_audit (every hit a monster lands is announced by a flash and a sound of 0.4 s or a cued windup: docs/DIFFICULTY_INTENT.md R1)
+  [32mOK[0m   frame tools (store_frames_check, benchmark_frames and density_measure each tell a good frame from a bad one on a fixture: store/SCREENSHOT_RECIPES.md)
+  [32mOK[0m   gitignore_check (every generated, exported and secret path is ignored, the evidence is not, no tracked file hides behind a rule: docs/CLEANUP_LEDGER.md)
+  [31mFAIL[0m branch_absorb_sim (см. 'python tools/qa_sim/branch_absorb_sim.py --check docs/ABSORB_PLAN.md')
+  [32mOK[0m   gemini_handoff (docs/GEMINI_HANDOFF.md matches the music brief, the recipe, the prompt list and the card brief it is made from)
+  [31mFAIL[0m proofs_audit_sim (см. 'python tools/qa_sim/proofs_audit_sim.py')
+  [32mOK[0m   secret_scan (no key, token, private key or assigned secret in any tracked text file: docs/CLEANUP_LEDGER.md section 7)
+  [31mFAIL[0m export_refs_check (см. 'python tools/qa_sim/export_refs_check.py')
+
+── Проверки в движке (нужен Godot 4.x)
+  user-data guard: 12 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+tools/check.sh: line 624:  2084 Segmentation fault      timeout 240 "$GODOT" --editor --quit --path . > /dev/null 2>&1
+  [31mFAIL[0m реимпорт ассетов (оконный) не завершился
+  [31mFAIL[0m компиляция всех скриптов (таймаут 90s)
+         ERROR: BUG: Unreferenced static string to 0: @export_enum
+            at: unref (core/string/string_name.cpp:117)
+         ERROR: BUG: Unreferenced static string to 0: @export
+            at: unref (core/string/string_name.cpp:117)
+         ERROR: BUG: Unreferenced static string to 0: @icon
+            at: unref (core/string/string_name.cpp:117)
+         ERROR: BUG: Unreferenced static string to 0: @tool
+            at: unref (core/string/string_name.cpp:117)
+         WARNING: A Thread object is being destroyed without its completion having been realized.
+         Please call wait_to_finish() on it to ensure correct cleanup.
+            at: ~Thread (core/os/thread.cpp:102)
+         ERROR: 7 RID allocations of type '23NavMeshGeometryParser2D' were leaked at exit.
+         ERROR: 6 RID allocations of type '23NavMeshGeometryParser3D' were leaked at exit.
+         ERROR: Pages in use exist at exit in PagedAllocator: N12VariantPools11BucketLargeE
+            at: ~PagedAllocator (./core/templates/paged_allocator.h:170)
+  [32mOK[0m   арность сигналов
+  [32mOK[0m   API автозагрузок
+  [32mOK[0m   локализация
+  [32mOK[0m   ассеты
+  [32mOK[0m   прогон 3D-сцены
+  [32mOK[0m   целостность сейва
+  [32mOK[0m   крафт-флоу + концовки
+  [32mOK[0m   adversarial: achievement/NG+/economy/district-id forgery
+  [32mOK[0m   boot-flow (меню/новая игра/сейв)
+  [32mOK[0m   footstep-маппер (surface x speed)
+  [32mOK[0m   QaLaunchGuard: snapshot/restore профиля (синтетический каталог)
+tools/check.sh: line 573:  2228 Illegal instruction     env -u TLS_UDG_GUARDED timeout 60 "$GODOT" --headless --path . res://scenes/tools/qa_guard_e2e_scene.tscn -- "$1" > /dev/null 2>&1
+tools/check.sh: line 574:  2230 Illegal instruction     env -u TLS_UDG_GUARDED timeout 60 "$GODOT" --headless --path . --quit-after 2 > /dev/null 2>&1
+  [32mOK[0m   QaLaunchGuard: жизненный цикл (выход, крах, восстановление) на реальном профиле
+  [32mOK[0m   аудио: тишина до первого ввода
+  [32mOK[0m   аудио: граф шин A01
+  [32mOK[0m   лут: под каждым предметом есть пол (X21)
+  [32mOK[0m   единая тема: chrome виден на всех экранах
+  [32mOK[0m   настройки: тир графики и accessibility переживают рестарт
+  [32mOK[0m   accessibility: reduce_flash/time_fx/ui_motion гейтят juice-сайты
+  [32mOK[0m   вёрстка: все экраны UIManager в кадре
+  [32mOK[0m   rc15 closeout: оружие/чертежи/фото/укрытия/инвентарь/достижения/сложность/Back
+  [32mOK[0m   GOLD MASTER suite (autoloads/input/districts/save-load/endings/i18n/soak)
+  [2mпропуск[0m перф-бюджет (draw calls, только --windowed) (нужен --windowed, не OK/FAIL)
+  [2mпропуск[0m аудио: Music bus не в тишине (только --windowed) (нужен --windowed, не OK/FAIL)
+  [32mOK[0m   тач-инпут (joystick/deadzone/HUD-кнопки)
+  [32mOK[0m   timing_equiv: gameplay quantities agree at 30, 60 and 120 FPS of simulated time
+  user-data guard: 12 file(s) restored byte-identical
+  [32mOK[0m   user-data guard: профиль игрока восстановлен байт-в-байт
+
+──────────────────────────────────────
+[31mПровалено: 12[0m, пройдено: 74
