@@ -46,3 +46,5 @@ stealth loop as it was signed off.
   hold in the closeout.
 
 - The damage-over-time ticks (bleed, burn, poison) no longer count as monster hits: they take their health quietly - no hurt sound, no camera shake, no 0.8 s invulnerability after every tick, and a tick inside a hit's grace window is no longer swallowed.
+
+- The three weapon icons (pistol, rifle, shotgun) now share one hand-drawn flat style in the quick bar.
