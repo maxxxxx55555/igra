@@ -136,9 +136,10 @@ SETS = [
         ("scripts/inventory/inventory_manager.gd", "if amount <= 0 or not has(item_id, amount):", "if not has(item_id, amount):", "SECV2"),
         ("scripts/systems/integrity_guard.gd", "\t\tif not OS.is_debug_build():\n", "\t\tif OS.is_debug_build():\n\t\t\tCoinWallet.add(999)\n\t\tif not OS.is_debug_build():\n", "SECV8"),
     ],
-    [  # Session 29 (v10 G-RED2) again: the string literal of the key, the craft's cap and the language list
-        ("scripts/core/save_system.gd", "static func _sign(body: String) -> String:", "const _HMAC_KEY: String = \"TLS-savegame-v1-4f1c9e6b2a8d5f03\"\n\nstatic func _sign(body: String) -> String:", "SECV9L"),
-        ("scripts/crafting/workbench_logic.gd", "qty <= 0 or qty > MAX_QTY or", "qty <= 0 or", "SECV2B"),
+    [  # Session 29 (v10 G-RED2) again: the language list. A2 (Session 30): two rows here named SECV9L and SECV2B, check ids
+       # that never existed; their mutations DID work (they made the real SECV9/SECV2 checks fail), which the judge read as
+       # "failed without a mutation" strays. The tool's own rule is one mutation per check (demo asserts unique ids) and both
+       # checks already bite in set 13, so the two rows were dead config and are deleted (owner A2 authorization).
         ("scripts/i18n/localization_manager.gd", "\tif lang in SUPPORTED:\n", "\tif true:\n", "SECV6"),
         ("scripts/systems/endings_manager.gd", "\t\treturn &\"light\"\n", "\t\treturn &\"hope\"\n", "END5"),
         ("scripts/enemies/base_monster.gd", "if global_position.distance_to(player_ref.global_position) <= attack_range + 0.5:", "if true:", "DODGE1"),

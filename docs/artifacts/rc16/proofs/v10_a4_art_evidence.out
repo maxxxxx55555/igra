@@ -1,0 +1,25 @@
+# proof v10_a4_art_evidence
+# utc 20261023T024040Z
+# head 5ae3f3ed (uncommitted paths: 20)
+# env none
+# cmd bash .qa_logs/a4_evidence.sh
+== A4 art verification 20261023T024041Z head=5ae3f3ed
+D2       files=49 missing=0 no_sidecar=0
+   ids sampled: alcohol, ancient_key, audio_log, backpack_l1, backpack_l2, battery ...
+D4       files=22 missing=0 no_sidecar=0
+D5       files=5 missing=0 no_sidecar=0
+D6       files=3 missing=0 no_sidecar=0
+A4_ART verdict=PASS problems=0
+== ENDC1 from the full closeout 611/0:
+[closeout] ok   ENDC1 every ending title is read against the win screen at 3 to 1 or better: the worst is dark at 4.69 to 1
+== contact sheets (read by eye in the session):
+   total 1140
+   drwxr-xr-x 1 Maxsim 197121      0 окт 23 05:16 .
+   drwxr-xr-x 1 Maxsim 197121      0 окт 23 05:40 ..
+   -rw-r--r-- 1 Maxsim 197121 205815 окт 23 05:16 d2_items.png
+   -rw-r--r-- 1 Maxsim 197121 838050 окт 23 05:16 d4_cards.png
+   -rw-r--r-- 1 Maxsim 197121  55314 окт 23 05:16 d5_endings.png
+   -rw-r--r-- 1 Maxsim 197121   7280 окт 23 05:16 d6_renders.png
+== D2 extra files beside the 49 id icons (HUD icon_* variants, legacy):
+66
+# EXIT=0

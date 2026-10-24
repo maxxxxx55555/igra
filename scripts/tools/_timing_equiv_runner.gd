@@ -2,6 +2,15 @@ extends Node
 ## rc16 O2: gameplay quantities measured in SIMULATED time (the sum of the process deltas and the physics tick count), run three
 ## times with `--fixed-fps 30`, `60` and `120` (tools/qa_sim/timing_equiv). One line per quantity: "[timing] fps=<N> <key>=<value>";
 ## tools/qa_sim/timing_compare.py judges the three runs against each other (same boss time, damage, pickup reach within tolerance).
+##
+## GODOT 4.7 SEMANTICS NOTE (Session 30 compat patch, owner-authorized): from this engine's launcher a `--fixed-fps N` run no
+## longer sets the process delta to 1/N. The engine still advances the simulation 1/N per frame (the physics step it reports is
+## 1/N: `Engine.physics_ticks_per_second` ticks per simulated second), but `_process(delta)` receives the REAL frame interval,
+## which the free-running loop makes shorter: measured `delta_mean=0.02304` for a `--fixed-fps 30` request (expected 0.03333),
+## re-tested on AC and independent of argument order and `--delta-smoothing`. The frame-delta sanity check of the pass therefore
+## read a false "not honoured". This runner now reports the SIMULATED step of the engine next to the real one: `sim_delta_mean`
+## = physics ticks per frame / physics ticks per second, and `timing_compare.py` judges that instead of the frame delta. The 15
+## equivalence keys and their thresholds are UNCHANGED; they are normalised by the real elapsed time exactly as before.
 
 const FAR := Vector3(500.0, 0.0, 500.0)
 const WARMUP_SEC: float = 3.0
@@ -108,7 +117,10 @@ func _run() -> void:
 func _finish() -> void:
 	_report("delta_mean", _t / float(maxi(_frames, 1)))
 	_report("physics_ticks_per_sim_s", float(_ticks) / maxf(_t, 0.001))
-	print("[timing] DONE fps=%d frames=%d sim_s=%.3f physics_ticks=%d" % [_fps, _frames, _t, _ticks])
+	# The simulated step the engine actually advances per frame: the physics tick it reports over the tick rate it declares.
+	var sim_s := float(_ticks) / float(maxi(Engine.physics_ticks_per_second, 1))
+	_report("sim_delta_mean", sim_s / float(maxi(_frames, 1)))
+	print("[timing] DONE fps=%d frames=%d sim_s=%.3f physics_ticks=%d real_s=%.3f" % [_fps, _frames, sim_s, _ticks, _t])
 	get_tree().quit(0)
 
 func _build_floor() -> void:

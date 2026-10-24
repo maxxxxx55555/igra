@@ -74,6 +74,9 @@ static func dress(holder: Node3D, piece: MeshInstance3D, item_id: StringName, se
 		piece.set_surface_override_material(s, materials[s])
 	var rest: float = -mesh.get_aabb().position.y
 	piece.position.y = rest
+	# A2 (Session 30): the drop-in's declared start in a meta, so the GROUND1 closeout check can read it deterministically
+	# instead of sampling a live position one frame later (a long frame made it read 0.09 over instead of 0.25).
+	piece.set_meta(&"settle_from", rest + (SETTLE_DROP_M if (settle and piece.is_inside_tree() and not bool(SettingsManager.get_setting("reduce_ui_motion", false))) else 0.0))
 	holder.set_meta(&"glow", glow_of(item_id))
 	if piece.has_meta(&"settle"):  # get_meta with a null default prints an engine error when the key is absent
 		var old: Variant = piece.get_meta(&"settle")

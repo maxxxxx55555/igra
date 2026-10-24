@@ -1,0 +1,20 @@
+# proof v10_a2_s29_baseline
+# utc 20261022T220718Z
+# head bec6ac84 (uncommitted paths: 0)
+# env none
+# cmd bash .qa_logs/a2_s29_baseline.sh
+== s29 group baseline start 20261022T220719Z head=bec6ac84
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] DONE checks=87 fails=0
+  closeout_check rc=0 (log: .qa_logs/closeout_check.log)
+  user-data guard: 11 file(s) restored byte-identical
+== closeout s29 rc=0
+== the three disputed checks:
+[closeout] ok   GROUND1 pickups rest on the ground, drop in 0.25 m once, do not bob and turn only the keys, blueprints and guns (["live medkit: starts 0.24 over, rests 0.000, bottom 0.000, turns 0.00", "live key: starts 0.25 over, rests 0.000, bottom 0.000, turns 0.25", "live rifle: starts 0.25 over, rests 0.000, bottom -0.000, turns 0.25", "still medkit: starts 0.00 over, rests 0.000, bottom 0.000, turns 0.00", "still key: starts 0.00 over, rests 0.000, bottom 0.000, turns 0.00", "still rifle: starts 0.00 over, rests 0.000, bottom -0.000, turns 0.00"])
+[closeout] ok   SECV9 the save key is no string literal of save_system.gd (true) and signs as before (true)
+[closeout] ok   SECV2 a craft of -5, 0, 2^40 and 2^62 and a remove of -3 are refused and the pack is as it was (refused true, negative remove false)
+== all FAIL lines in the s29 run:
+(no FAIL line)
+== DONE line:
+[closeout] DONE checks=87 fails=0
+# EXIT=0

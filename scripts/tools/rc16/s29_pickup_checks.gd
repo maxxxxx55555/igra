@@ -154,7 +154,9 @@ static func _ground(r: Node) -> void:
 			await r.get_tree().process_frame
 			var piece := pickup.get_node("MeshInstance3D") as MeshInstance3D
 			var rest: float = -piece.mesh.get_aabb().position.y
-			var start: float = piece.position.y - rest
+			# A2 (Session 30): deterministic - the drop-in tween's declared from() value (meta written by pickup_meshes.dress),
+			# not a live position sampled one frame later; in a mutated run a long frame read 0.09 over instead of 0.25.
+			var start: float = float(piece.get_meta(&"settle_from", piece.position.y)) - rest
 			await r.get_tree().create_timer(0.5).timeout
 			var settled: float = piece.position.y - rest
 			var turn0: float = piece.rotation.y

@@ -1476,3 +1476,17 @@ func _strobe_effects() -> void:
 	_strobe_flash()
 	if not bool(SettingsManager.get_setting("reduce_flash", false)):
 		preload("res://scripts/effects/vfx_pool.gd").spawn(preload("res://scenes/vfx/vfx_strobe.tscn"), flashlight.global_position - flashlight.global_transform.basis.z * 0.6, get_tree())
+
+## N037: a damage-over-time tick is not a monster hit: it takes its health without
+## the hurt sound, the direction indicator, the phone vibration, the regen reset or
+## the 0.8 s mercy window, and a tick that falls inside an open window is not swallowed.
+func apply_dot(amount: float, _type: EnemyRosterData.DamageType = EnemyRosterData.DamageType.BLUNT) -> void:
+	if _net_active and not is_multiplayer_authority():
+		return
+	if hp <= 0.0 or GameManager.is_win():
+		return
+	hp = clampf(hp - amount / SettingsManager.difficulty_scale("player_hp"), 0.0, stats.max_hp)
+	EventBus.player_health_changed.emit(hp / stats.max_hp)
+	if hp <= 0.0:
+		gameplay_active = false
+		EventBus.game_over.emit()

@@ -1,0 +1,37 @@
+# proof v10_a3_full_closeout
+# utc 20261022T234828Z
+# head 72671688 (uncommitted paths: 19)
+# env none
+# cmd bash .qa_logs/a3_full_closeout.sh
+== full closeout start 20261022T234828Z head=72671688
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] DONE checks=611 fails=0
+  closeout_check rc=0 (log: .qa_logs/closeout_check.log)
+  user-data guard: 11 file(s) restored byte-identical
+== closeout rc=0
+[closeout] DONE checks=611 fails=0
+== coverage matrix over the full log:
+coverage 97/106 (2975 passing evidence lines from 17 logs)
+  AUDIO        5/5
+  COMBAT       11/11
+  CRAFTING     2/2
+  ENEMIES      15/15
+  FLASHLIGHT   5/5
+  INVENTORY    4/5
+  META         17/18
+  MOVEMENT     3/4
+  PROGRESSION  5/5
+  STEALTH      7/11
+  UI           3/3
+  WORLD        20/22
+MISS MOVEMENT     the FOV kick
+MISS INVENTORY    salvage
+MISS WORLD        exploding barrels
+MISS WORLD        the radio
+MISS STEALTH      hiding type locker
+MISS STEALTH      hiding type dumpster
+MISS STEALTH      hiding type bush
+MISS STEALTH      hiding type dark_corner
+MISS META         ending truth
+== coverage_matrix rc=1
+# EXIT=0

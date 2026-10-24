@@ -1,0 +1,35 @@
+# proof v10_a3_accept
+# utc 20261023T020058Z
+# head 72671688 (uncommitted paths: 27)
+# env none
+# cmd bash .qa_logs/a3_accept.sh
+== A3 acceptance 20261023T020059Z head=72671688
+  user-data guard: 11 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+[closeout] DONE checks=611 fails=0
+  closeout_check rc=0 (log: .qa_logs/closeout_check.log)
+  user-data guard: 11 file(s) restored byte-identical
+== closeout rc=0
+[closeout] DONE checks=611 fails=0
+[closeout] ok   I9.4 salvage: an enhanced battery taken apart returns half its parts (battery 1, cable 1, enhanced battery left 0)
+[closeout] ok   SLV1 salvaging in a full pack keeps the item and gives nothing (enhanced battery 1 of 1, parts 0 of 0)
+[closeout] ok   HIDE1 the 6 hiding spots (locker, dumpster, car, crate, bush, dark_corner) are meshes of two surfaces inside the box of their collider (the sizes of the baseline) and fill it (off: [])
+== a11y rc=0
+== endings rc=0
+== coverage:
+coverage 104/106 (3119 passing evidence lines from 20 logs)
+  AUDIO        5/5
+  COMBAT       11/11
+  CRAFTING     2/2
+  ENEMIES      15/15
+  FLASHLIGHT   5/5
+  INVENTORY    5/5
+  META         18/18
+  MOVEMENT     4/4
+  PROGRESSION  5/5
+  STEALTH      11/11
+  UI           3/3
+  WORLD        20/22
+MISS WORLD        exploding barrels  [waiver: A3 (Session 30): no passing line names it - the compile gate lists res://scenes/gameplay/exploding_barrel.tscn without a marker, _probe_inst.gd would print it (ok: <path>) but no scene runs that probe (orphaned), and the full closeout 611 checks, a11y and the static battery never name it; follow-up: spawn barrels in a district or drop the scene]
+MISS WORLD        the radio  [waiver: A3 (Session 30): no passing line names it - the HUD radio (scripts/ui/radio.gd) appears only in minimap.gd comments, the pickup family table and a11y_check's internal mutation table, never in gate output; follow-up: a HUD check that logs the panel, or an owner row if the panel is cut content]
+== coverage rc=0
+# EXIT=0

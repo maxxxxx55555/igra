@@ -142,7 +142,7 @@ static func _hiding_meshes(r: Node) -> void:
 		if not fine:
 			off.append(kind)
 		spot.queue_free()
-	r._ok(off.is_empty() and HidingSpot.TYPE_SIZES.size() == _HIDE_SIZES.size(), "HIDE1 the %d hiding spots are meshes of two surfaces inside the box of their collider (the sizes of the baseline) and fill it (off: %s)" % [HidingSpot.TYPE_SIZES.size(), off])
+	r._ok(off.is_empty() and HidingSpot.TYPE_SIZES.size() == _HIDE_SIZES.size(), "HIDE1 the %d hiding spots (locker, dumpster, car, crate, bush, dark_corner) are meshes of two surfaces inside the box of their collider (the sizes of the baseline) and fill it (off: %s)" % [HidingSpot.TYPE_SIZES.size(), off])
 
 ## QBAR1: the six slots of the quick bar do not expand (the one slot of an empty run took the 384 px of the whole bar) and the bar centres what is on it.
 static func _quick_bar(r: Node) -> void:

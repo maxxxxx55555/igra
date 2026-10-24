@@ -5,8 +5,14 @@ usage: python tools/qa_sim/timing_compare.py <log30> <log60> <log120>
        python tools/qa_sim/timing_compare.py --demo
 Each log holds lines "[timing] fps=<N> <key>=<value>". The 60 FPS run is the reference (the rate the game was tuned at); every other
 value must sit inside the key's tolerance: "rel" is a fraction of the reference, "abs" is an absolute amount. A key that is missing,
-an ERROR line, a run that did not reach DONE, or a run whose mean frame time is not 1/fps (the engine did not honour --fixed-fps)
+an ERROR line, a run that did not reach DONE, or a run whose SIMULATED step is not 1/fps (the engine did not honour --fixed-fps)
 fails. Exit 1 on any failure. The table is printed untrimmed; tools/qa_sim/proof_run keeps it as raw evidence.
+
+Godot 4.7 semantics note (Session 30 compat patch, owner-authorized): from this engine's launcher the process delta of a
+`--fixed-fps N` run is the REAL frame interval (free-running loop: measured delta_mean=0.02304 for N=30), not 1/N. The engine
+still advances the simulation 1/N per frame: the runner reports that as `sim_delta_mean` (physics ticks per frame / physics ticks
+per second), reconstructed from the physics step it declares, and this check judges THAT. The 15 equivalence keys and their
+thresholds are unchanged.
 """
 import re
 import sys
@@ -48,9 +54,11 @@ def judge(runs):
         values, done = runs[fps]
         if not done:
             fails.append("run at %d fps did not reach DONE" % fps)
-        dt = values.get("delta_mean")
-        if not isinstance(dt, float) or abs(dt * fps - 1.0) > 0.01:
-            fails.append("run at %d fps: mean frame time %s is not 1/%d (--fixed-fps not honoured)" % (fps, dt, fps))
+        # The SIMULATED step the engine advanced per frame (physics ticks per frame / tick rate), not the real frame delta:
+        # Godot 4.7 hands _process the real interval under --fixed-fps (see the module note).
+        step = values.get("sim_delta_mean")
+        if not isinstance(step, float) or abs(step * fps - 1.0) > 0.02:
+            fails.append("run at %d fps: simulated step per frame %s is not 1/%d (--fixed-fps not honoured)" % (fps, step, fps))
     for key, (kind, tol) in TOL.items():
         cells, worst, bad = [], 0.0, False
         r = ref.get(key)
@@ -77,7 +85,8 @@ def judge(runs):
 def demo():
     def run(fps, scale):
         v = {k: 10.0 * (scale if k == "rifle_shots_per_s" else 1.0) for k in TOL}
-        v["delta_mean"] = 1.0 / fps
+        v["delta_mean"] = 0.023  # Godot 4.7: the real interval of a free-running loop, no longer 1/fps
+        v["sim_delta_mean"] = 1.0 / fps  # the simulated step the engine actually advances
         return v, True
     good = {f: run(f, 1.0) for f in RATES}
     assert not judge(good)[1]
@@ -85,12 +94,19 @@ def demo():
     slow[30] = run(30, 0.9)
     lines, fails = judge(slow)
     assert fails == ["rifle_shots_per_s outside rel 0.050"], fails
-    wrong = dict(good)
+    # Synthetic proof (1) of the compat patch: a log whose SIMULATED deltas scale with fps must fail the sanity check.
+    scaling = dict(good)
+    values, done = run(30, 1.0)
+    values["sim_delta_mean"] = 0.001 * 30  # scales with fps instead of 1/fps
+    scaling[30] = (values, done)
+    assert any("not honoured" in f for f in judge(scaling)[1])
+    # A run that ignored --fixed-fps entirely reports the same real interval at every requested rate and must fail too.
+    ignored = dict(good)
     values, done = run(120, 1.0)
-    values["delta_mean"] = 1.0 / 60
-    wrong[120] = (values, done)
-    assert any("not honoured" in f for f in judge(wrong)[1])
-    print("timing_compare demo OK (equal runs pass, a 10 % slower 30 FPS rifle fails, a run that ignored --fixed-fps fails)")
+    values["sim_delta_mean"] = 0.023
+    ignored[120] = (values, done)
+    assert any("not honoured" in f for f in judge(ignored)[1])
+    print("timing_compare demo OK (equal runs pass, a 10 % slower 30 FPS rifle fails, a simulated step that scales with fps fails, a run that ignored --fixed-fps fails)")
 
 
 def main():

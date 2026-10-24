@@ -133,7 +133,7 @@ def main():
         print(f"  {ending:9s} {'REACHABLE  ' if hit else 'UNREACHABLE'}  <- {seen.get(ending, '(no state produces it)')}")
     print()
     if ok:
-        print("PASS: all 5 GDD endings reachable.")
+        print("PASS: all 5 GDD endings reachable (light, hope, survivor, dark, truth ending).")
         return 0
     print("FAIL: some endings unreachable.")
     return 1

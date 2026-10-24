@@ -1,0 +1,120 @@
+== items: 49 ids from data/items/*.tres (item_icons.gd:4 template)
+OK  item assets/textures/items/alcohol.png
+OK  item assets/textures/items/ancient_key.png
+OK  item assets/textures/items/audio_log.png
+OK  item assets/textures/items/backpack_l1.png
+OK  item assets/textures/items/backpack_l2.png
+OK  item assets/textures/items/battery.png
+OK  item assets/textures/items/battery_l2.png
+OK  item assets/textures/items/blueprint_backpack_capacity.png
+OK  item assets/textures/items/blueprint_backpack_slots.png
+OK  item assets/textures/items/blueprint_battery_l2.png
+OK  item assets/textures/items/blueprint_enhanced_battery.png
+OK  item assets/textures/items/blueprint_flashlight_battery.png
+OK  item assets/textures/items/blueprint_flashlight_brightness.png
+OK  item assets/textures/items/blueprint_portable_workbench.png
+OK  item assets/textures/items/blueprint_strobe_flashlight.png
+OK  item assets/textures/items/blueprint_uv_flashlight.png
+OK  item assets/textures/items/bottle.png
+OK  item assets/textures/items/cable.png
+OK  item assets/textures/items/case.png
+OK  item assets/textures/items/circuit.png
+OK  item assets/textures/items/coin.png
+OK  item assets/textures/items/document.png
+OK  item assets/textures/items/enhanced_battery.png
+OK  item assets/textures/items/fabric.png
+OK  item assets/textures/items/firework.png
+OK  item assets/textures/items/fuse.png
+OK  item assets/textures/items/gas_canister.png
+OK  item assets/textures/items/gear.png
+OK  item assets/textures/items/gunpowder.png
+OK  item assets/textures/items/key.png
+OK  item assets/textures/items/lockpick.png
+OK  item assets/textures/items/makeshift_lamp.png
+OK  item assets/textures/items/medkit.png
+OK  item assets/textures/items/metal.png
+OK  item assets/textures/items/molotov.png
+OK  item assets/textures/items/motor.png
+OK  item assets/textures/items/noise_bomb.png
+OK  item assets/textures/items/paper.png
+OK  item assets/textures/items/photo.png
+OK  item assets/textures/items/plank.png
+OK  item assets/textures/items/radio_part.png
+OK  item assets/textures/items/repair_kit.png
+OK  item assets/textures/items/scope_lens.png
+OK  item assets/textures/items/scrap.png
+OK  item assets/textures/items/serum.png
+OK  item assets/textures/items/tool.png
+OK  item assets/textures/items/transformer.png
+OK  item assets/textures/items/transistor.png
+OK  item assets/textures/items/wiring.png
+item pngs beyond the 49 ids (variants/HUD, allowed): 17
+== cards: 11 districts x lit+locked (collection_ui.gd:105)
+BAD card assets/textures/cards/card_suburbs_512.png (no .import sidecar)
+BAD card assets/textures/cards/card_suburbs_locked_512.png (no .import sidecar)
+BAD card assets/textures/cards/card_residential_512.png (no .import sidecar)
+BAD card assets/textures/cards/card_residential_locked_512.png (no .import sidecar)
+BAD card assets/textures/cards/card_park_512.png (no .import sidecar)
+BAD card assets/textures/cards/card_park_locked_512.png (no .import sidecar)
+BAD card assets/textures/cards/card_school_512.png (no .import sidecar)
+BAD card assets/textures/cards/card_school_locked_512.png (no .import sidecar)
+BAD card assets/textures/cards/card_hospital_512.png (no .import sidecar)
+BAD card assets/textures/cards/card_hospital_locked_512.png (no .import sidecar)
+BAD card assets/textures/cards/card_gas_station_512.png (no .import sidecar)
+BAD card assets/textures/cards/card_gas_station_locked_512.png (no .import sidecar)
+BAD card assets/textures/cards/card_police_512.png (no .import sidecar)
+BAD card assets/textures/cards/card_police_locked_512.png (no .import sidecar)
+BAD card assets/textures/cards/card_warehouses_512.png (no .import sidecar)
+BAD card assets/textures/cards/card_warehouses_locked_512.png (no .import sidecar)
+BAD card assets/textures/cards/card_industrial_512.png (no .import sidecar)
+BAD card assets/textures/cards/card_industrial_locked_512.png (no .import sidecar)
+BAD card assets/textures/cards/card_substation_512.png (no .import sidecar)
+BAD card assets/textures/cards/card_substation_locked_512.png (no .import sidecar)
+BAD card assets/textures/cards/card_power_station_512.png (no .import sidecar)
+BAD card assets/textures/cards/card_power_station_locked_512.png (no .import sidecar)
+== endings: 5 ENDING_DATA keys (endings_manager.gd)
+BAD ending assets/store/endings/ending_light.png (no .import sidecar)
+BAD ending assets/store/endings/ending_hope.png (no .import sidecar)
+BAD ending assets/store/endings/ending_survivor.png (no .import sidecar)
+BAD ending assets/store/endings/ending_dark.png (no .import sidecar)
+BAD ending assets/store/endings/ending_truth.png (no .import sidecar)
+== renders: 3 weapons (weapon_compare_ui.gd:84)
+OK  render assets/textures/renders_v2/weapons/pistol_render_256.png
+OK  render assets/textures/renders_v2/weapons/rifle_render_256.png
+OK  render assets/textures/renders_v2/weapons/shotgun_render_256.png
+== pbr wiring: 2 sets named by _plain (pbr_sets.gd template)
+OK  pbr assets/textures/pbr/plywood_albedo.png
+OK  pbr-optional assets/textures/pbr/plywood_normal.png
+OK  pbr-optional assets/textures/pbr/plywood_rough.png
+OK  pbr assets/textures/pbr/rusted_metal_albedo.png
+OK  pbr-optional assets/textures/pbr/rusted_metal_normal.png
+OK  pbr-optional assets/textures/pbr/rusted_metal_rough.png
+pbr sets on disk but not wired (export-excluded per export_presets.cfg): ceramic_tile,cracked_concrete,dead_grass,painted_brick,panel_facade,wet_asphalt
+SUMMARY items=49 cards=22 endings=5 renders=3 pbr=2 FAILS=27
+FAIL card:assets/textures/cards/card_suburbs_512.png
+FAIL card:assets/textures/cards/card_suburbs_locked_512.png
+FAIL card:assets/textures/cards/card_residential_512.png
+FAIL card:assets/textures/cards/card_residential_locked_512.png
+FAIL card:assets/textures/cards/card_park_512.png
+FAIL card:assets/textures/cards/card_park_locked_512.png
+FAIL card:assets/textures/cards/card_school_512.png
+FAIL card:assets/textures/cards/card_school_locked_512.png
+FAIL card:assets/textures/cards/card_hospital_512.png
+FAIL card:assets/textures/cards/card_hospital_locked_512.png
+FAIL card:assets/textures/cards/card_gas_station_512.png
+FAIL card:assets/textures/cards/card_gas_station_locked_512.png
+FAIL card:assets/textures/cards/card_police_512.png
+FAIL card:assets/textures/cards/card_police_locked_512.png
+FAIL card:assets/textures/cards/card_warehouses_512.png
+FAIL card:assets/textures/cards/card_warehouses_locked_512.png
+FAIL card:assets/textures/cards/card_industrial_512.png
+FAIL card:assets/textures/cards/card_industrial_locked_512.png
+FAIL card:assets/textures/cards/card_substation_512.png
+FAIL card:assets/textures/cards/card_substation_locked_512.png
+FAIL card:assets/textures/cards/card_power_station_512.png
+FAIL card:assets/textures/cards/card_power_station_locked_512.png
+FAIL ending:assets/store/endings/ending_light.png
+FAIL ending:assets/store/endings/ending_hope.png
+FAIL ending:assets/store/endings/ending_survivor.png
+FAIL ending:assets/store/endings/ending_dark.png
+FAIL ending:assets/store/endings/ending_truth.png
