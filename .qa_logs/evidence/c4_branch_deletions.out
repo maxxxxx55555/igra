@@ -1,0 +1,10 @@
+# C4 branch deletions (owner-authorized by the v10.0.0-close prompt)
+prechecks (merge-base --is-ancestor origin/<b> origin/main):
+  dsh/work ancestor=YES
+  pass/v1.0.0-ship ancestor=YES
+  pass/v10.0.0-ship ancestor=YES
+  oc/visual-w10 ancestor=NO dispositioned=KNOWN_ISSUES.md:1798 (unique hunk duplicated by pv10, X0)
+deleted:
+0
+  0 remain on origin
+branch_absorb_sim: 6 branches FAIL 0 PASS 6
