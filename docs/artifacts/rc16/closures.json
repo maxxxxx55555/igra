@@ -3750,25 +3750,25 @@
  },
  {
   "id": "S27-S1",
-  "claim": "The release frame set was re-shot at 55296a4 after the E10 deletions (the f8c0de0 set is retired): the compile gate rc 0 and the eight store frames cited here; each frame carries its hash and UTC time (AF3). The original session-27 quotes below are kept from that run's log.",
-  "cmd": "compile gate; final_frames_scene; density_frames store (English) - re-shot in R3/B16 at 55296a4 (launch row 222)",
-  "proof": "s27_s1_f8c0de0",
-  "attach": "density_frames_store_en.log",
+  "claim": "The release frame set was re-shot at eb2b03c9 by the close pass (the 55296a4 set retired with C1): final_frames_scene windowed rc 0, the eight store frames cited here carry their hash and UTC (AF3 frames=8 fail=0), each frame read",
+  "cmd": "final_frames_scene (guarded_windowed); stamp_frames --only the 8 stems; af3_frame_check",
+  "proof": "close_c1_frames_cc8288f2",
   "quotes": [
-   "[density] start label=store hash=f8c0de0",
-   "[density] state district=residential view=04_block weather=0 stage=3 tier=2 ambient=0.160"
+   "# provenance: re-run on host MAXSIM-5500U",
+   "[final] DONE frames=18",
+   "af3 frames=8 fail=0"
   ],
   "frames": [
-   "docs/stills/store/01_main_menu_after_55296a4_20261022T133004Z.png",
-   "docs/stills/store/02_district_day_full_after_55296a4_20261022T133020Z.png",
-   "docs/stills/store/03_district_night_dark_after_55296a4_20261022T133015Z.png",
-   "docs/stills/store/04_combat_after_55296a4_20261022T133025Z.png",
-   "docs/stills/store/05_boss_after_55296a4_20261022T133027Z.png",
-   "docs/stills/store/06_victory_ngplus_after_55296a4_20261022T133029Z.png",
-   "docs/stills/store/07_skill_tree_after_55296a4_20261022T133021Z.png",
-   "docs/stills/store/08_shop_after_55296a4_20261022T133022Z.png"
+   "docs/stills/store/01_main_menu_after_eb2b03c9_20261024T074644Z.png",
+   "docs/stills/store/02_district_day_full_after_eb2b03c9_20261024T074705Z.png",
+   "docs/stills/store/03_district_night_dark_after_eb2b03c9_20261024T074658Z.png",
+   "docs/stills/store/04_combat_after_eb2b03c9_20261024T074710Z.png",
+   "docs/stills/store/05_boss_after_eb2b03c9_20261024T074713Z.png",
+   "docs/stills/store/06_victory_ngplus_after_eb2b03c9_20261024T074716Z.png",
+   "docs/stills/store/07_skill_tree_after_eb2b03c9_20261024T074706Z.png",
+   "docs/stills/store/08_shop_after_eb2b03c9_20261024T074707Z.png"
   ],
-  "commit": "f8c0de0"
+  "commit": "eb2b03c9"
  },
  {
   "id": "S27-F1-PERF",

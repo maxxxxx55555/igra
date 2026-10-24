@@ -1,0 +1,17 @@
+# provenance: re-run on host MAXSIM-5500U (Windows, Godot 4.7.stable.official.5b4e0cb0f) at head cc8288f2 by the v10.0.0-close pass C1/C3, 2026-10-24T08:08:34Z
+# STEP final_frames rc=0
+[final] DONE frames=18
+# STEP stamp_frames rc=0
+stamp_frames: 8 frame(s) copied to docs\stills\store
+# STEP af3 rc=0
+af3 frames=8 fail=0
+# frames sha256:
+cbbd917b569821d802ace7881b6b61bf13f2d82496bdcb1f12da878b70915fc5 *docs/stills/store/01_main_menu_after_eb2b03c9_20261024T074644Z.png
+1889418051d0ec882b44f3d5cce0cbe68579db5e8d03d0f0afaf6a28d8efb7ec *docs/stills/store/02_district_day_full_after_eb2b03c9_20261024T074705Z.png
+60d59e4112a25559308b9faed580e52d914a1c68a6acf1255f2bcca2f5c4b91a *docs/stills/store/03_district_night_dark_after_eb2b03c9_20261024T074658Z.png
+7502f2fe45977defd4efe5957e85c8c2afb3c673c367b5298264a84c9bb44d3b *docs/stills/store/04_combat_after_eb2b03c9_20261024T074710Z.png
+11bd5005a06df97e68e1014caec50c233459916852d3951c819c6de5a111a20c *docs/stills/store/05_boss_after_eb2b03c9_20261024T074713Z.png
+89e88c9a65dafb15084d18cb9eea3c407b7d514dfdffbbe8e9bdf856ba369f47 *docs/stills/store/06_victory_ngplus_after_eb2b03c9_20261024T074716Z.png
+b8a6f376044bc8239441869046a8dc86a4c6f076e9ef1040a79d785aded92560 *docs/stills/store/07_skill_tree_after_eb2b03c9_20261024T074706Z.png
+d15ee039fb1428302e8b0f084b13c993e9b60c2e8223a84a8fae87dad41c73a7 *docs/stills/store/08_shop_after_eb2b03c9_20261024T074707Z.png
+# EXIT=0
