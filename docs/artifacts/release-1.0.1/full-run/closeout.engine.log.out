@@ -1,0 +1,986 @@
+# proof closeout
+# utc 20261026T100424Z
+# head 10627bb3 (uncommitted paths: 2)
+# env QA_SOAK_SEC=20 TLS_UDG_GUARDED=1 
+# cmd /workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --headless --path /workspace/scratch/e4e8279ce462/release-delivery-check/qa-project res://scenes/tools/closeout_check_scene.tscn
+WARNING: Couldn't get executable path from /proc/self/exe, using argv[0]
+     at: get_executable_path (drivers/unix/os_unix.cpp:1157)
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[closeout] ok   the player spawned
+[closeout] ok   V03 ThemeProvider headings use the emboldened Bebas Neue
+[closeout] ok   V03 the project theme Button font is the bold variation
+[closeout] ok   S04 suburbs has hiding spots (3)
+[closeout] ok   S04 residential has hiding spots (3)
+[closeout] ok   S04 park has hiding spots (3)
+[closeout] ok   S04 school has hiding spots (3)
+[closeout] ok   S04 hospital has hiding spots (3)
+[closeout] ok   S04 gas_station has hiding spots (3)
+[closeout] ok   S04 police has hiding spots (3)
+[closeout] ok   S04 warehouses has hiding spots (3)
+[closeout] ok   S04 industrial has hiding spots (3)
+[closeout] ok   S04 substation has hiding spots (3)
+[closeout] ok   S04 power_station has hiding spots (3)
+[closeout] ok   G25 the three guns lie in D2, D7 and D8 ({ &"residential": "pistol", &"police": "rifle", &"warehouses": "shotgun" })
+[closeout] ok   G21 the five blueprints lie in D2, D4, D7, D8 and D9 ({ &"residential": "blueprint_enhanced_battery", &"school": "blueprint_uv_flashlight", &"police": "blueprint_strobe_flashlight", &"warehouses": "blueprint_portable_workbench", &"industrial": "blueprint_battery_l2" })
+[closeout] ok   G21 a workbench stands in D1, D7 and D9 ([&"suburbs", &"police", &"industrial"])
+[closeout] ok   ach_19 the bed stands in D1 ([&"suburbs"])
+[closeout] ok   G21 the boards for the portable workbench lie in D8 (5)
+[closeout] ok   G25 ammo lies in D2-D11, twice from the gas station on (16 boxes: 4 single and 6 double)
+[closeout] ok   G25 the player owns a WeaponManager
+[closeout] ok   G25 the player starts empty-handed (melee)
+[closeout] ok   G25 a gun is found once and kept in ProgressTracker
+[closeout] ok   G25 ammo goes to the shared reserve
+[closeout] ok   G25 the pistol is drawn by its slot
+[closeout] ok   G25 the same slot again lowers the weapon
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+[closeout] ok   G25 the pistol fires
+[closeout] ok   G25 a shot costs a round
+[closeout] ok   G25 a pistol hit hurts the monster (50.0 -> 25.8)
+[closeout] ok   G25 an empty magazine does not fire
+[closeout] ok   G25 the reload starts with rounds in reserve
+[closeout] ok   G25 the reload draws the magazine from the reserve (12 in, 12 left)
+[closeout] ok   G25 no reload without reserve
+[closeout] ok   G25 the shotgun's pellets hurt at close range (25.8 -> -5.3)
+[closeout] ok   C03 auto-aim off leaves the aim alone
+[closeout] ok   C03 auto-aim on pulls the aim toward the monster
+[closeout] ok   G25 the HUD's first two quick slots are the weapons
+[closeout] ok   G25 quick slot 1 draws the pistol
+[closeout] ok   G25 quick slot 2 draws the long gun carried (the shotgun)
+[closeout] ok   G25 quick slot 2 again lowers it
+[closeout] ok   G25 weapons and ammo are in the save
+[closeout] ok   G25 a forged save cannot add a weapon or overfill the reserve
+[closeout] ok   S02 flashlight on, walking: the monster's own sight (6.0 m)
+[closeout] ok   S02 running adds 20% (7.2 m)
+[closeout] ok   S02 crouching halves it (3.0 m)
+[closeout] ok   S02 light off halves it and the dark caps it at 3 m ((3.0, 1.0))
+[closeout] ok   S02 crouching with the light off: 1.5 m
+[closeout] ok   S04 entering a spot: visibility 0 and the event fired
+[closeout] ok   S04 a hidden player is seen from 0 m
+[closeout] ok   S04 the view dims while hidden
+[closeout] ok   S04 the player passes through the spot's own collider
+[closeout] ok   S04 leaving a spot restores visibility
+[closeout] ok   S04 the dimming ends
+[closeout] ok   S04 the player steps out on the street side with the collider solid again
+[closeout] ok   G21 no recipe without its blueprint
+[closeout] ok   G21 the strobe needs its blueprint and a workbench first
+[closeout] ok   G21 a blueprint is learned on pickup and does not take a slot
+[closeout] ok   G21 a learned recipe still needs its parts
+[closeout] ok   G21 a learned recipe with its parts can be crafted
+[closeout] ok   G21 crafting spends the parts and gives the ability
+[closeout] ok   G21 an ability is crafted once
+[closeout] ok   G21 the built strobe works
+[closeout] ok   STROBE1 a monster 12 degrees off the aim is stunned, one 50 degrees off is not (6 / 0)
+[closeout] ok   G21 the enhanced battery is crafted from two batteries and a cable
+[closeout] ok   G21 using it raises the flashlight capacity by 20% (120)
+[closeout] ok   G21 battery L2 is crafted from an enhanced battery, two cables and a transformer
+[closeout] ok   G21 battery L2 raises the capacity to +40% (140)
+[closeout] ok   G21 the UV light needs its blueprint and a workbench first
+[closeout] ok   G21 the UV light is crafted
+[closeout] ok   G21 the UV light switches on
+[closeout] ok   G21 the UV cone hurts what stands in it (50.0 -> 43.9 in 1.3 s)
+[closeout] ok   G21 the UV light switches off
+[closeout] ok   G21 the portable workbench is crafted from boards, metal and a tool
+[closeout] ok   G21 the portable workbench key opens the workbench screen
+[closeout] ok   G21 the screen lists the base recipes and the five learned blueprints (13)
+[closeout] ok   G21 a result the pack cannot carry gives the parts back
+[closeout] ok   G26 the game can give 200 photos or more (203)
+[closeout] ok   G26 a found document is a photo, once
+[closeout] ok   G26 the first kill of a monster kind is a photo, a minion is not
+[closeout] ok   G26 a district lit and saved gives a photo each
+[closeout] ok   G26 a photo id that could be a path is refused
+[closeout] ok   G26 the album sorts photos into its three categories
+[closeout] ok   G26 the 50th photo unlocks Photographer
+[closeout] ok   G26 Seeker waits for the 100th
+[closeout] ok   G26 the album shows the count (50 / 203 photos)
+[closeout] ok   G26 the Codex has a Photos tab
+[closeout] ok   the Shadow carries its own id (quests, the bestiary and Shadow Hunter read it)
+[closeout] ok   ach_07 a broken chain starts the count again
+[closeout] ok   ach_07 ten combo-3 chains in a row unlock Combo Master
+[closeout] ok   ach_11 5000 coins unlock Economist
+[closeout] ok   ach_08 five minutes over 39 kg unlock Overloaded
+[closeout] ok   ach_06 being noticed in District 3 forfeits Quiet as a Mouse
+[closeout] ok   ach_06 District 3 restored unnoticed unlocks it
+[closeout] ok   ach_12 damage in District 4 forfeits Without a Scratch
+[closeout] ok   ach_12 District 4 restored unhurt unlocks it
+[closeout] ok   ach_20 five hallucinations unlock Who's There
+[closeout] ok   ach_16 / ach_18 a fast hardcore win unlocks Speedrunner and Iron Man
+[closeout] ok   ach_19 sleeping in the bed heals and unlocks Midsummer Night's Dream
+[closeout] ok   V.5 the inventory screen opens
+[closeout] ok   V.5 one cell per stack (2)
+[closeout] ok   I9.13 the Common filter leaves the one common stack of two (1 cells)
+[closeout] ok   I9.13 All shows every stack again (2 cells)
+[closeout] ok   I9.8 sorting by weight puts the heaviest stack, the medkit, first (medkit)
+[closeout] ok   I9.2 the item detail shows name, rarity, weight and effect (Battery | Common | 0.6 kg (x2) | Recharges the flashlight by 35%)
+[closeout] ok   V.5 Use consumes one battery and recharges the light
+[closeout] ok   V.5 the first press of Drop only asks
+[closeout] ok   V.5 the second press throws the stack away
+[closeout] ok   V.5 the inventory screen closes
+[closeout] ok   the pause menu offers inventory
+[closeout] ok   the pause menu offers SHOP_COINS
+[closeout] ok   the pause menu offers CRAFT_UPGRADE
+[closeout] ok   the pause menu offers PAUSE_SAVE_QUIT
+[closeout] ok   I9.4 salvage: an enhanced battery taken apart returns half its parts (battery 1, cable 1, enhanced battery left 0)
+[closeout] ok   MN2 shadow_3d has the GDD health 30 and damage 15 (30.0 / 15.0)
+[closeout] ok   MN2 shadow_3d chases at 4.0 m/s, the GDD 1.2x of the 3.0 m/s walk is 3.6
+[closeout] ok   MN2 crawler_3d has the GDD health 50 and damage 20 (50.0 / 20.0)
+[closeout] ok   MN2 crawler_3d chases at 4.8 m/s, the GDD 1.5x of the 3.0 m/s walk is 4.5
+[closeout] ok   MN2 watcher_3d has the GDD health 80 and damage 12 (80.0 / 12.0)
+[closeout] ok   MN2 watcher_3d chases at 2.8 m/s, the GDD 1.0x of the 3.0 m/s walk is 3.0
+[closeout] ok   MN2 hunter_3d has the GDD health 120 and damage 35 (120.0 / 35.0)
+[closeout] ok   MN2 hunter_3d chases at 2.7 m/s, the GDD 0.9x of the 3.0 m/s walk is 2.7
+[closeout] ok   MN2 destroyer_3d has the GDD health 200 and damage 25 (200.0 / 25.0)
+[closeout] ok   MN2 destroyer_3d chases at 2.0 m/s, the GDD 0.7x of the 3.0 m/s walk is 2.1
+[closeout] ok   MN2 sharpshooter_3d has the GDD health 60 and damage 50 (60.0 / 50.0)
+[closeout] ok   MN2 sharpshooter_3d chases at 1.8 m/s, the GDD 0.6x of the 3.0 m/s walk is 1.8
+[closeout] ok   MN2 brute_3d has the GDD health 350 and damage 30 (350.0 / 30.0)
+[closeout] ok   MN2 brute_3d chases at 1.5 m/s, the GDD 0.5x of the 3.0 m/s walk is 1.5
+[closeout] ok   MN2 burner_3d has the GDD health 90 and damage 15 (90.0 / 15.0)
+[closeout] ok   MN2 burner_3d chases at 3.0 m/s, the GDD 1.0x of the 3.0 m/s walk is 3.0
+[closeout] ok   MN2 rotter_3d has the GDD health 140 and damage 10 (140.0 / 10.0)
+[closeout] ok   MN2 rotter_3d chases at 1.2 m/s, the GDD 0.4x of the 3.0 m/s walk is 1.2
+[closeout] ok   MN2 hound_3d has the GDD health 40 and damage 18 (40.0 / 18.0)
+[closeout] ok   MN2 hound_3d chases at 5.4 m/s, the GDD 1.8x of the 3.0 m/s walk is 5.4
+[closeout] ok   MN2 tvar_3d has the GDD health 1200 and damage 40 (1200.0 / 40.0)
+[closeout] ok   MN2 tvar_3d chases at 3.0 m/s, the GDD 1.0x of the 3.0 m/s walk is 3.0
+[closeout] ok   MN2 boss_architect_3d has the GDD health 800 and damage 40 (800.0 / 40.0)
+[closeout] ok   MN2 boss_architect_3d chases at 3.2 m/s, the GDD 1.1x of the 3.0 m/s walk is 3.3
+[closeout] ok   CT13 the standing capsule is 1.6 m
+[closeout] ok   CT13 crouching shrinks the capsule to 1.2 m (1.20)
+[closeout] ok   CT13 crouching lowers the eye (1.30)
+[closeout] ok   CT13 a low ceiling keeps the player crouched (1.20)
+[closeout] ok   CT13 the player stands up once there is room (1.60)
+[closeout] ok   CT6 a quick swipe down toggles the crouch
+[closeout] ok   CT6 a second swipe stands up
+[closeout] ok   CT6 a slow drag (a look) does not crouch
+[closeout] ok   CT6 a short swipe does not crouch
+[closeout] ok   CT6 a swipe on the joystick side does not crouch
+[closeout] ok   Crouch Input Disabled: nothing crouches the player
+[closeout] ok   Crouch Input Button: the key crouches at once
+[closeout] ok   Crouch Input Long Press: a tap does not crouch
+[closeout] ok   Crouch Input Long Press: a hold crouches
+[closeout] ok   MN4 a corpse drops loot 30% of the time (169 of 600)
+[closeout] ok   MN4 every drop is a battery, a medkit or scrap
+[closeout] ok   MN4 the Sharpshooter drops a box of rounds
+[closeout] ok   LOOT2 a rebuilt district lays out what was left on the street (5 of 6, one picked up)
+[closeout] ok   LOOT2 the item that was picked up is the one that stays gone (suburbs:0)
+[closeout] ok   LOOT2 a third visit changes nothing (5)
+[closeout] ok   FIN1 a loaded game with every district FULL starts the final night when its player enters the power station
+[closeout] ok   FIN1 a new game (all DARK) does not
+[closeout] ok   FIN1 a new run clears the announcement flag
+[closeout] ok   INV2 a pack grown by the skill is as big after a load (17 of 17)
+[closeout] ok   INV2 the item in an extra slot is still there
+[closeout] ok   INV2 a file cannot ask for 500 slots (64)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+[closeout] ok   SET1 a change in the Settings screen reaches the config file by itself (text size 2, Master 0.37)
+[closeout] ok   SET1 a game file does not overwrite this device's volume or text size
+[closeout] ok   SET1 it does put back the run's own rules (difficulty, hardcore)
+[closeout] ok   PUZ1 a solved puzzle is still solved after a save and a load
+[closeout] ok   PUZ1 a forged puzzle id is ignored (1 solved)
+[closeout] ok   SAVE2 two saves in a row leave a valid file and a valid backup
+[closeout] ok   SAVE2 and no temp file behind
+[closeout] ok   SAVE3 a position with a string is dropped, numbers pass
+[closeout] ok   UPG1 the backpack blueprint from the warehouses applies its upgrade
+[closeout] ok   UPG1 and the pack has the four slots at once (16 of 16)
+[closeout] ok   UPG1 a workbench blueprint is not an upgrade
+[closeout] ok   MN6 a crawler_3d hit puts BLEED on the player
+[closeout] ok   MN6 a hunter_3d hit puts BLEED on the player
+[closeout] ok   MN6 a destroyer_3d hit puts STUN on the player
+[closeout] ok   MN6 a burner_3d hit puts BURN on the player
+[closeout] ok   MN6 a rotter_3d hit puts POISON on the player
+[closeout] ok   MN6 SLOW halves the player's speed
+[closeout] ok   MN6 STUN holds the player in place
+[closeout] ok   DAILY1 a new player announces its light at once (true), so the dark-segment daily does not count lit time
+[closeout] ok   H3.12 the status row shows the STUN icon
+[closeout] ok   H3.12 the icon goes when the status ends
+[closeout] ok   MN7 a Hunter that sees the player shouts: a Hound 8 m away comes to look
+[closeout] ok   MN7 a monster 40 m away does not hear the shout
+[closeout] ok   MN7 a gunshot (22 m) sends the monster beside it to investigate
+[closeout] ok   MN7 a gunshot 60 m away is not heard
+[closeout] ok   Auto-save off: the autosave writes nothing
+[closeout] ok   Auto-save on: the autosave writes
+[closeout] ok   Button Size scales the touch buttons (1.40)
+[closeout] ok   AC3 Text Size Large scales the whole UI (1.15)
+[closeout] ok   AC3 Text Size Medium is the normal scale
+[closeout] ok   AC4 High Contrast survives a graphics tier change
+[closeout] ok   ST7 forged counters are clamped
+[closeout] ok   ST7 forged kill rows are dropped
+[closeout] ok   ST7 a kill is counted by type
+[closeout] ok   ST7 crafting is counted
+[closeout] ok   ST7 four tabs: Overall, Combat, Exploration, Collection
+[closeout] ok   ST7 twenty or more rows (24)
+[closeout] ok   ST7 the level row shows the real level
+[closeout] ok   E7.15 shadow danger is DANGER_LOW (0)
+[closeout] ok   E7.15 watcher danger is DANGER_LOW (0)
+[closeout] ok   E7.15 crawler danger is DANGER_MEDIUM (1)
+[closeout] ok   E7.15 hound danger is DANGER_MEDIUM (1)
+[closeout] ok   E7.15 hunter danger is DANGER_HIGH (2)
+[closeout] ok   E7.15 brute danger is DANGER_HIGH (2)
+[closeout] ok   E7.15 boss danger is DANGER_CRITICAL (3)
+[closeout] ok   E7.15 tvar danger is DANGER_CRITICAL (3)
+[closeout] ok   E7.16 the detail has a ENC_STAT_DANGER row
+[closeout] ok   E7.16 the detail has a ENC_STAT_HABITAT row
+[closeout] ok   E7.16 the detail has a ENC_STAT_LOOT row
+[closeout] ok   E7.15 the Hunter reads High
+[closeout] ok   E7.16 the Hunter's habitat names the park
+[closeout] ok   H3.8 a fading light shows the battery hint
+[closeout] ok   AC7 Hints off: no hint
+[closeout] ok   AC7 the Keeper's Pact silences the hints
+[closeout] ok   H3.14 the log keeps a pickup notice with its stamp ([0.13])
+[closeout] ok   DL2 the streak multiplier is x1.5 / x2 / x3 at 3 / 5 / 7 days
+[closeout] ok   DL2 the fifth day pays double (780 + 0)
+[closeout] note this headless run: active camera /root/CloseoutRunner/Main3D/Camera3D, first-person view true
+[closeout] ok   MV1 one second of the stick forward walks 2.84 m (a person walks 1.4 to 3.5 m/s)
+[closeout] ok   MV2 a fall gathers speed: 1.35 m in half a second (g = 9.8 gives 1.2)
+[closeout] ok   MV2 the fall ends on the ground (y 0.86)
+[closeout] ok   MV3 the block between four streets is floor (hit GroundBody)
+[closeout] ok   MV3 a wall stops the player at the building fronts (x 31.8)
+[closeout] ok   MV4 holding a direction is not a dodge (stamina 100)
+[closeout] ok   MV4 a quick second press after a release is a dodge (stamina 85)
+[closeout] ok   FL6 at 0% the light goes out
+[closeout] ok   FL6 a battery lights it again
+[closeout] ok   FL6 a light switched off by hand stays off after a recharge
+[closeout] ok   ON1 a running game with no profile mark opens the onboarding cards and holds the game
+[closeout] ok   ON1 the card sits in the middle of the screen (0 px off)
+[closeout] ok   ON1 seven cards later the game runs and the profile remembers
+[closeout] ok   CB4 a hit remembers the monster that landed it (crawler)
+[closeout] ok   CB4 the death screen names the monster
+[closeout] ok   CB4 the death screen shows DEATH_TIME
+[closeout] ok   CB4 the death screen shows DEATH_DISTRICTS
+[closeout] ok   CB4 the death screen shows DEATH_DOCS
+[closeout] ok   SH1 the game scene carries the Screens layer
+[closeout] ok   SH1 the Shop card shows every catalog item (7 cards of 7)
+[closeout] ok   SH1 the rows scroll in an area that ends above the Close button (1118 <= 1159)
+[closeout] ok   SH1 the scroll reaches the last row (range 64 px, rows end 62 px below the area)
+[closeout] ok   SH1 the pack icons are the size they were asked for (22 px, 128 when the size was lost)
+[closeout] ok   SH1 Buy with an empty wallet buys nothing
+[closeout] ok   SH1 Buy with coins grants the item, spends the price and marks the card (coins 5000 -> 3800)
+[closeout] ok   SH1 the coin header follows the wallet (COINS: 3800)
+[closeout] ok   MAP1 one city map exists once K opens it (1: /root/UIManager/@CanvasLayer@3/city_map)
+[closeout] ok   MAP1 closing it leaves no map on screen (0 visible)
+[closeout] ok   HUD1 the message-log button is on screen
+[closeout] ok   HUD1 the message-log button covers nothing in the stat panel ()
+[closeout] ok   SCR1 the New Game+ screen covers the window ((1920.0, 1920.0) of (1920.0, 1920.0) at (0.0, 0.0))
+[closeout] ok   SCR1 the New Game+ column is centred and no wider than 600 px (560.0 at 960.0)
+[closeout] ok   SCR1 the cached New Game+ screen starts every visit fresh
+[closeout] ok   SCR1 the skill tree has not been opened yet
+[closeout] ok   SCR1 the T key opens the skill tree from a fresh game
+[closeout] ok   SCR1 the skill tree covers the window ((1920.0, 1920.0) at (0.0, 0.0))
+[closeout] ok   SCR1 the branch tabs have room for the skills (1792 px tall; the tab bar alone is about 30)
+[closeout] ok   LANG1 a save written while the game shows de carries de (not the settings default)
+[closeout] ok   LANG1 the settings file carries it too (de)
+[closeout] ok   RESP1 the dead player of the scene being left does not take the respawn
+[closeout] ok   RESP1 the new player respawns at half health with the battery it died with (hp 50, battery 37)
+[closeout] ok   WIN1 what the Architect threw does not outlive him
+[closeout] ok   WIN1 after the victory a hit takes no health (5)
+[closeout] ok   WIN1 a death after the win leaves the win (state 5)
+[closeout] ok   SV2 the file just written loads
+[closeout] ok   SV2 health, stamina and battery come back from the save (61 / 42 / 33)
+[closeout] ok   SV2 a block with a non-number, a NaN or no dictionary is dropped
+[closeout] ok   SV2 a forged number is clamped ({ "hp": 1000.0, "stamina": 0.0, "battery": 5.0 })
+[closeout] ok   SV2 a dead player saves no vitals (Continue would bring back 0 health)
+[closeout] ok   HP1 in peace health comes back slowly (52.4 after a second at 50, not 68)
+[closeout] ok   HP1 two seconds after a hit nothing has come back (40.0)
+[closeout] ok   difficulty Easy: monsters at 70% health, 75% damage (35.0 / 15.0)
+[closeout] ok   difficulty Hard: monsters at 130% health, 125% damage (65.0 / 25.0)
+[closeout] ok   MENU1 the menu state opens the main-menu screen
+[closeout] ok   the Settings scene opens
+[closeout] ok   MENU1 the main-menu screen is gone once Settings is the scene (it covered Settings, Difficulty and Credits)
+[closeout] ok   the Settings scene has a Back button
+[closeout] ok   Back returns from Settings to the main menu
+[closeout] ok   DIFF1 a pick sets the difficulty (2)
+[closeout] ok   DIFF1 and starts nothing: the wallet is kept (777 of 777) and the game is not running
+[closeout] ok   HC1 in a running game the Hardcore box cannot be changed
+[closeout] ok   HC1 nor can a save be imported under a running world
+[closeout] ok   HC1 ticking Hardcore in the middle of a run does not make its death delete the save
+[closeout] ok   HC1 unticking it in the middle of a hardcore run does not cancel the wipe
+[closeout] ok   PUZ1 the wipe (a new game) clears the solved puzzles
+[closeout] ok   DEAD1 a lethal hit takes the controls away
+[closeout] ok   DEAD1 a hit on a dead player is not a second death (1, was 1)
+[closeout] ok   DEAD1 the dead player does not walk (0.00 m in 0.6 s of the stick)
+[closeout] ok   MELEE1 a swing damages a monster 1.6 m ahead, for every kind (missed: )
+[closeout] ok   G13 the combo deals the GDD 5.1 damage, 8 / 12 / 20 (it was 14 / 21 / 35 while no swing could land on a monster)
+[closeout] ok   CRAWL1 an idle crawler stands still instead of running on at its last velocity ((0.0, 0.0, 0.0))
+[closeout] ok   CRAWL1 an investigating crawler goes to the spot it heard instead of standing (velocity (-1.909188, 0.0, -1.909188))
+[closeout] ok   TUT1 with the light on the flashlight hint is skipped (step 2)
+[closeout] ok   TUT1 with the light off the flashlight hint stays
+[closeout] ok   TUT2 the flashlight_toggle key completes the flashlight hint
+[closeout] ok   TUT2 the stealth key completes the crouch hint
+[closeout] ok   TUT2 the attack key completes the attack hint
+[closeout] ok   TUT2 the inventory_toggle key completes the inventory hint
+[closeout] ok   TUT2 moving completes the move hint
+[closeout] ok   TUT2 repairing a district completes the generator hint
+[closeout] ok   TUT2 a double tap completes the dodge hint
+[closeout] ok   STREET1 every marking tile stands at least 1 cm above the road tiles (0.020 m)
+[closeout] ok   SCROLL1 a vertical scroll bar of the UI theme is at least 8 px wide (10)
+[closeout] ok   WIN2 a win with every district FULL and few documents shows Hope, not the ending left from before (hope, 'Hope')
+[closeout] ok   ach_14 a win with every document, every district and three secrets unlocks Truth
+[closeout] ok   HELP1 every row of the help screen names a real action and a translated text without a format placeholder ()
+[closeout] ok   H3.2 the quick bar holds six slots on screen: two weapons, battery, medkit, grenade and the light as the special (6 slot nodes, 6 inside the (1920.0, 1920.0) screen)
+[closeout] ok   TIER1 the Graphics Tier names follow the language (ru: Низкое (30fps, 720p), Среднее (30fps, 1080p), Высокое (60fps, 1080p), Ультра (60fps, 1440p))
+[closeout] ok   PERF2 the moon casts no shadow in a dark district (energy 0.12)
+[closeout] ok   PERF2 and does in a restored one (energy 0.40)
+[closeout] ok   PERF2 and not at the Low shadow quality
+[closeout] ok   PERF1 street collision is a few strips on the tile surface (1 StaticBody3D, at most 40; 0 of 24 road and sidewalk points off the street at y 0.05-0.07; 0 of 4 block centres solid)
+[closeout] ok   PERF2 40 hit effects through the pool leave at most 24 bursts alive and replay one (5 alive, replayed true)
+[closeout] ok   PERF6 a finished burst parks itself and the next spawn replays it instead of making one (parked true, bursts 1 -> 1)
+[closeout] ok   PERF3 the old district is out of the tree as load_district returns and one district root is left (true, 1 children)
+[closeout] ok   PERF4 the load stats name the district and time the load, the streets and the props ({ "scene_ms": 0.741, "enemies_ms": 1.733, "loot_ms": 6.125, "district": "residential", "total_ms": 18.342, "streets_ms": 0.772, "props_ms": 17.635 })
+[closeout] ok   PERF5 the preloader asked the loader for 6 paths after the build and every one exists
+[closeout] ok   PERF7 an OmniLight3D that enters the tree joins the light limiter's group
+[closeout] ok   FIRE1 a shot starts the cooldown
+[closeout] ok   FIRE1 the cooldown runs on the physics tick: the rifle is ready 0.5 s after a shot with _process off
+[closeout] ok   CT7 the camera exposes its zoom factor
+[closeout] ok   CT7 the camera rests at zoom 1.0
+[closeout] ok   CT7 two fingers spreading from 300 to 450 px zoom in to the 1.35 limit (1.350)
+[closeout] ok   CT7 the pinch does not turn the view
+[closeout] ok   CT7 the fingers closing back to 300 px zoom out to 1.35 x 300 / 450 = 0.9 (0.901)
+[closeout] ok   CT7 letting go keeps the zoom
+[closeout] ok   CT7 one finger still turns the view
+[closeout] ok   CT7 a finger that lands long after the first looks around and does not zoom
+[closeout] ok   CT7 a trackpad magnify gesture zooms in too
+[closeout] ok   E11 the refund path ran: the transformer did not fit and the transistor came back
+[closeout] ok   E11 the refunded transistor is not counted as found (1 -> 1)
+[closeout] ok   E11 a real pickup of a transistor still counts once (1 -> 2)
+[closeout] ok   E13 the open inventory counts as a blocking screen
+[closeout] ok   E13 the battery drains by about 0.222 in 1 s behind the open inventory (0.226)
+[closeout] ok   CAM1 the interior blend covers the same share of the way in 0.1 s at 30 and at 120 FPS (0.953 / 0.953)
+[closeout] ok   CAM1 one 60 FPS frame still closes 40% of the gap (0.400)
+[closeout] ok   UIFX1 the tier table while sprinting: Low the vignette alone, Medium + grain, High + chromatic aberration, Ultra + motion blur up to 0.35 (Low..Ultra: V, VG, VGC, VGCB; blur 0.35; 1.2 s after the sprint: VGC)
+[closeout] ok   UIFX2 a hit pulses the chromatic aberration up to 2 px and it is gone 0.5 s later, the layer hidden again (1.47 px, gone true)
+[closeout] ok   UIFX2 the pulse stays 0 at the Low tier and under Reduce Flash (0.00 px, 0.00 px)
+[closeout] ok   QS2 untouched, the six bindings are the bar's own order and the HUD reads them from the setting
+[closeout] ok   QS2 dragging the medkit cell onto quick slot 1 binds it (drag data { "quick_item": &"medkit" }, the target accepts true, the HUD's slot 1 is medkit)
+[closeout] ok   QS2 key 1 then uses a medkit (true, one of 2 gone, health up from 40)
+[closeout] ok   QS2 a right-click on the slot puts the default item back (pistol)
+[closeout] ok   QS2 a saved list that is not six known items falls back to the defaults
+[closeout] ok   UIFX3 hovering a button scales it to 1.05 about its centre in 0.12 s and back, and Reduce UI Motion keeps it at 1.0 (1.050, centred true, 1.000, 1.000)
+[closeout] ok   UIFX5 a hit shakes the health bar by at most 4 px and it is on its exact place 0.4 s later, and under Reduce Screen Shake it does not move at all (shaken, home, still, home: [true, true, true, true])
+[closeout] ok   UIFX4 a monster hit for 5 shows that number and it is back in the pool of 12 after 1.0 s (shown ["5"], pool 12, signal true)
+[closeout] ok   UIFX6 an opened screen rises and fades in, then rests on its exact place at full alpha after 0.5 s (rising true, home true)
+[closeout] ok   MENUBG1 four background changes show ["GENERATOR", "NIGHT", "GENERATOR", "NIGHT"]: night and generator-on, no day
+[closeout] ok   TO1 a toast is on screen at 2.7 s and gone by 3.5 s (shown true, at 2.7 s true, gone true)
+[closeout] ok   ATK1 the attack button is grey at 4 stamina and not at 5 or 100 ([(0.5, 0.5, 0.5, 1.0), (1.0, 1.0, 1.0, 1.0), (1.0, 1.0, 1.0, 1.0)])
+[closeout] ok   UIFX7 a back-buffer copy sits between the blur and the chroma layers and is on exactly while the blur is (order true, on with the blur true, off without true)
+[closeout] ok   E1A a fresh game has a well-formed run name (f54516b21c82c1a5)
+[closeout] ok   E1A the name is in the signed save and a Continue or a Retry brings the same one back (file f54516b21c82c1a5, loaded f54516b21c82c1a5)
+[closeout] ok   E1A winning banks the run once: one level more and its name in the ledger (level 1 of 1, ledger ["f54516b21c82c1a5"])
+[closeout] ok   E1B the same run winning again banks nothing (accepted false, level 1 of 1, ledger ["f54516b21c82c1a5"])
+[closeout] ok   E1B and the player is told once, in words (["This night is already counted."])
+[closeout] ok   E1B a different run still banks its level (level 2)
+[closeout] ok   E1D a refused activation shows its reason on the screen (level 2 of 2, toast This night is already counted.)
+[closeout] ok   E1C a forged ledger of 500 entries loads as at most 64 well-formed names, the newest kept (64)
+[closeout] ok   AUD1 a positional sound is low-passed at 2400.0 Hz with a drop of -14.0 dB (player @AudioStreamPlayer3D@603:<AudioStreamPlayer3D#492713285150>)
+[closeout] ok   AUD1 and so are the footsteps (2400.0)
+[closeout] ok   AUD4 40 sounds share a pool of at most 12 players (5 players were added)
+[closeout] ok   AUD2 the reverb of the Footsteps, Combat and Environment buses is off at Low and on at Medium, High, Ultra (["0F=false", "0C=false", "0E=false", "1F=true", "1C=true", "1E=true", "2F=true", "2C=true", "2E=true", "3F=true", "3C=true", "3E=true"])
+[closeout] ok   AUD3 one physics timer senses the place every 0.25 s (1 found)
+[closeout] ok   AUD3 the reverb is wet 0.040 in the open (rests at 0.040) and 0.300 walled in (grows to 0.300)
+[closeout] ok   AUD3 and the room is bigger walled in (room size 0.35 in the open, 0.70 walled in)
+[closeout] ok   AUD5 the dark bed table lists the districts in the order of DistrictSceneFactory.DISTRICTS ([&"suburbs", &"residential", &"park", &"school", &"hospital", &"gas_station", &"police", &"warehouses", &"industrial", &"substation", &"power_station"])
+[closeout] ok   AUD5 entering the park asks the loader thread for the beds of [&"residential", &"school"] (status [3, 1])
+[closeout] ok   AUD5 and the bed of power_station is let go of (cached false)
+[closeout] ok   AUD5 while the bed of the park itself stays
+[closeout] ok   BEAUTY1 the HUD grain pass samples the screen with a plain linear filter and no mipmap filter (uniform sampler2D screen_tex : hint_screen_texture, filter_linear; // read 1:1 at SCREEN_UV: no coarser level is ever used)
+[closeout] ok   BEAUTY2 a hit starts the damage vignette on its peak: the beat runs on age, not TIME, a hit sets age 0 and strength 1 at once and the strength is 0 when the fade is over (float beat = 0.55 + 0.45 * cos(age * pulse_bpm * 6.283185 / 60.0);; age 0.0, strength 1.0, then 0.61 at 0.2 s, 0.00 at 1.0 s)
+[closeout] ok   BEAUTY3 the HUD grain hash has no 127.1 / 311.7 multipliers (a 10 px repeat) and is the 0.1031 / 33.33 hash
+[closeout] ok   BEAUTY4 the post-process grain hashes the pixel with the 0.1031 hash and has no 234.34 / 435.345 multipliers (409 characters of shader)
+[closeout] ok   CLOSE1 the skill tree's Close button follows the language in all 6 (wrong: [])
+[closeout] ok   SHOP1 every Buy button is inside its card and the grid, 6 languages x 3 text sizes (18 cases; no cards: []; outside: []; first outside: ; English grid width at the three text sizes [514.0, 514.0, 514.0] px)
+[closeout] ok   SHOP2 the coin header and the scroll area lie inside the shop panel, 6 languages x 3 text sizes (18 cases; outside: []; first outside: )
+[closeout] ok   PAUSE1 the HUD's Pause button pauses the game (menu open true, tree paused true, state 3)
+[closeout] ok   LANG1 after a language switch the pause menu shows in the new language (panel alpha 1.00, shade alpha 0.55, title 'Pause')
+[closeout] ok   guard EX3 the pack takes exactly its 40.0 kg (80 metal: true) and refuses one more (false)
+[closeout] ok   guard EX4 at 0 charge the light stays off and does not strobe; the writers stay within 0 to 100 (0.0, on false, strobe false, 100.0, 100.0)
+[closeout] ok   guard EX5 a truncated New Game+ file is refused and the level in memory stays (2, active true)
+[closeout] ok   guard EX7 a day claimed and then its file deleted still reads as completed today: the profile counted the claim (true)
+WARNING: CrazyGames stub active: SDK не подключён, реклама отключена, игра продолжает работать
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] initialize (res://scripts/monetization/stub_crazy_games.gd:20)
+         [1] set_provider (res://scripts/monetization/ad_service.gd:72)
+         [2] _ads_without_sdk (res://scripts/tools/rc16/exploit_checks.gd:176)
+         [3] run (res://scripts/tools/rc16/exploit_checks.gd:22)
+         [4] _pause_menu_after_a_language (res://scripts/tools/rc16/exploit_checks.gd:74)
+[closeout] ok   guard EX10 no reward is paid with no ad SDK (the release provider) nor with the web stub
+[closeout] ok   guard tools the full-loop runner scripts/tools/_loop_runner.gd compiles
+[closeout] ok   EX1 a save with no player in the tree holds no position: written [], a load takes (inf, inf, inf) (INF is the spawn)
+[closeout] ok   STRK1 a New Game keeps the daily streak (4 of 4, day mark kept true) and Reset progress clears it (0)
+[closeout] ok   HCD1 the death screen of a Hardcore run shows the run it ends (3 districts, 1 documents; shows 'Time survived: 0:00 | Districts restored: 3 / 11 (27%) | Documents found: 1 / 101'; the save is wiped true)
+[closeout] ok   TUTL1 after a language switch the tutorial hint shows in the new language (en 'Sneak. Slow steps carry less sound.', now 'Schleich. Langsame Schritte sind leiser.', de 'Schleich. Langsame Schritte sind leiser.')
+[closeout] ok   RMV1 remove(5) of 3 metal takes nothing and answers false (answered false, 3 metal left at 1.5 of 1.5 kg); remove(3) takes them (true)
+[closeout] ok   guard QST2 a pending quest does not pay while the game is not playing (done false)
+[closeout] ok   QST1 a quest that did not fit pays when the pack has room (waited true; then done true, coins 150 of 150, blueprint 1)
+[closeout] ok   CRF1 a craft in a full pack with a quest waiting keeps its slot (staged true; crafted true, lockpick 1 of 1, metal 0 of 0, quest still waiting true)
+[closeout] ok   SLV1 salvaging in a full pack keeps the item and gives nothing (enhanced battery 1 of 1, parts 0 of 0)
+[closeout] ok   RST1 Restart goes back to the last save and leaves the game playing (answered true, state 2, tree paused false, coins 700 of 700, 1200 before)
+[closeout] ok   RST1b the pause menu's Restart button goes through GameManager.restart_from_save (source of scripts/ui/pause_menu.gd)
+[closeout] ok   HUDP2 the battery is eight whole segments behind seven gaps (0.31 lights 3 of 8: true, gaps 7)
+[closeout] ok   HUDP3 one map in play: the minimap is off by default (true) and on by its setting (true), the radar fills its frame (true), no RADAR caption
+[closeout] ok   HUDP5 the Map button shows only with a touch screen (touch false, shown false) and the Pause button rests dim on a keyboard
+[closeout] ok   HUDP4 the objective list is on screen (true, at x 1600), lets every click through (true) and shows when an objective changes (alpha 1.00)
+[closeout] ok   TRLR1 Trailer Mode hides the objective list (true), the notice (true) and the toast stack (true), and they are back with it off (true)
+[closeout] ok   HUDP1 the health and stamina rows rest faded (alpha 0.00, 0.00), wake on a hit (1.00, 1.00) and hold a moment after the value is whole (true)
+[closeout] ok   HUDP8 the interact prompt fades in (true), is part way out after 0.1 s (true, alpha 0.00) and hidden after 0.5 s (true)
+[closeout] ok   HUDP9 the touch action buttons are on screen and clear of each other ([[P: (1784.0, 1784.0), S: (88.0, 88.0)], [P: (1696.0, 1808.0), S: (72.0, 64.0)], [P: (1612.0, 1808.0), S: (72.0, 64.0)], [P: (1796.0, 1704.0), S: (64.0, 64.0)]])
+[closeout] ok   HUDP10 the joystick fades only its ring: a container keeps alpha 1 as the thumb goes down (1.00) and lifts (1.00), the ring goes full (1.00) and rests (0.55)
+[closeout] ok   HUDP11 the eight touch buttons stay on screen and clear of each other at Button Size 0.8, 1.0 and 1.5 (touch HUD true, found 8, problems [])
+[closeout] ok   HUDP7 the crosshair wakes on a shot (true) and is faded 6 s later (true, alpha 0.00)
+[closeout] ok   HUDP6 the HUD holds in 18 language and Text Size pairs: every caption fits its label, the corners stay on screen ([])
+[closeout] ok   A11Y1 subtitles: nothing with the toggle off (true), size, color and background follow their settings (problems []), a Keeper caption shows (true), an achievement toast does not (true)
+[closeout] ok   A11Y2 sound cues: quiet with the toggle off (true), a whisper is captioned (true) and flashes the edge (true), Reduce Flash keeps the caption and holds the flash (true), the same cue flashes again after its window (true)
+[closeout] ok   A11Y3 remap: Jump to J (true) and the InputMap reads it (true), Move Up to J swaps (true), Reset to Default (true), a saved choice loads back (true), put back (true)
+[closeout] ok   A11Y4 difficulty presets: damage taken per 12 hit [8.0, 12.0, 12.0] (Easy 8, Normal 12, Hard 12), spare repair parts [3, 0, 0] (3, 0, 0), a revive offer [true, true, false] (yes, yes, no)
+[closeout] ok   A11Y5 clear objectives: a contextual item fades without it (alpha 0.00) and stays with it (alpha 1.00)
+[closeout] ok   A11Y6 edge highlight: no rim with it off (true), a rim at 3 m (true), none at 30 m (true), gone when switched off (true)
+[closeout] ok   A11Y7 motion comfort: shake and sprint blur work with it off (trauma 1.00, blur true) and stop with it on (trauma 0.00, blur false)
+[closeout] ok   A11Y8 one-handed: 8 buttons found (8) in the left half, on screen and clear of each other and the joystick (problems []); Sprint latches (true) and lets go (true); double-tap window 0.60 against 0.30; the plain mode holds (true)
+[closeout] ok   AUD1 ducking: a voice line dips the Music and Ambient buses by -12.0 dB (their Amplify effects true), the volume slider is not touched (true), 3.5 s later the dip is 0.00 dB
+[closeout] ok   AUD2 reverb zones: a tunnel zone sets room 0.95 wet 0.45 (true), the rays do not undo it (true), another zone's exit does not release it (true), its own exit does (true), a zone box around the player enters by itself (true)
+[closeout] ok   AUD3 surfaces: the shape metadata gives ["concrete", "metal", "grass", "wood", "puddle"] for ["concrete", "metal", "grass", "wood", "puddle"] (steps ["footsteps/concrete_jog", "footsteps/metal_jog"]), the road is dry, wet in a shower and a puddle in a storm (["asphalt_dry", "asphalt_wet", "puddle"]), the street strips are tagged ["asphalt_dry", "concrete"]
+[closeout] ok   VFX1 shell ejection: a case is thrown (true), falls to the street (lowest -0.002 m) and bounces (true), goes back to the pool after its life (true), none at Effects Low (true)
+[closeout] ok   VFX2 directional blood: a new burst flies along +X (true), the same burst reused without a direction flies along its own (0.0, 1.0, 0.0) (true)
+[closeout] ok   VFX3 dust motes: an emitter under the lit lamp 4 m away (true, beams 1), none under the lamp that is out or the one 60 m away (true), none at Effects Low (true)
+[closeout] ok   VFX4 manhole: surface metal, steam 14 particles, cover top 0.070 against road top 0.060 (+0.01 lift: true)
+[closeout] ok   VFX5 rain lens: shown in a shower at Ultra, hidden in clear weather, hidden below Ultra, shown in a storm at Ultra, hidden with Motion Comfort ([true, true, true, true, true])
+[closeout] ok   VFX6 particle budget: the world's own emitters draw 154, with every pooled burst in flight (5 of each scene) 426 (budget 500), 454 in a storm (limit 1000), the pool's worst case 290 plus the world 444
+[closeout] ok   AI1 noise bomb: it popped on landing (true), the monster 14 m away goes to look at the spot (true), the one 36 m away, beyond the radius of 24 m, stays (true)
+[closeout] ok   AI2 group alert: the neighbour 6 m away goes to look (true), the one 30 m away stays (true), one already chasing keeps chasing (true), a hound's call reaches 12 m (true)
+[closeout] ok   AI3 last known place: leaving the detect area while chased starts a search (true) at the player's last place (true) for 10 s (true)
+[closeout] ok   AI4 difficulty hooks: the search lasts [7.0, 10.0, 13.0] s (7, 10, 13), the reaction time is [0.5, 0.0, 0.0] s (0.5, 0, 0), an Easy monster stands still while it notices (true)
+[closeout] ok   AI5 detection gradient: after a jump of the player's noise to 0.8 the bar is at [0.15, 0.3, 0.45, 0.6, 0.75, 0.8] of its width on the first six polls (it glides by 0.15), a value of 0.25 has a colour of its own (0.5805, 0.588, 0.298, 1.0) between green and brass (true)
+[closeout] ok   BOSS1 boss jump: 0 of 40 jumps landed beyond a wall 1 m from the player (0 wanted), 39 of 40 moved the boss (30 at least)
+[closeout] ok   JUICE1 hit-stop: a run at 2x dips to 0.50x, is back at 2.0x after 82 ms of real time (80 ms asked), and does nothing with Reduce Time Effects (true)
+[closeout] ok   JUICE5 hit-stop at the end of a slow-motion: the cinematic wrote 1.0 during the dip of a run at 0.5x and the time scale reads 1.00x 200 ms later (0.50x is the scale the dip found)
+[closeout] ok   JUICE2 melee hit-stop: time slows to 0.25x on a landed hit and 0.25x on a combo's last hit, and is back at 1.0x 0.3 s later
+[closeout] ok   JUICE3 screen shake: the camera moves 0.0159 m at most (limit 0.016 m), 3.85 px of 1080p at 5 m with a 48 degree view (limit 4 px), a damage hit 1.13 px (least 0.5)
+[closeout] ok   JUICE4 camera: sprint punch 5.0 degrees, landing punch 2.0, with Motion Comfort 0.0; a landing after 0.5 s in the air kicks 0.92, after 0.1 s 0.00
+[closeout] ok   POL3 idle breath: the eye moves 0.0080 m over a breath (0.006 to 0.01) and 0.0000 m with Motion Comfort
+[closeout] ok   JUICE5 bursts: wired to a find true and a quest true and the daily true, none at Effects Low (true), two made (true) and played again (true)
+[closeout] ok   WEAPON1 weapon feel: recoil shotgun 1.00, pistol 0.45, rifle 0.35; a shotgun shot kicks the view 0.040 rad and half a second later it is at 0.000; none with Motion Comfort (true); a tactical reload takes 0.80 of an empty one
+[closeout] ok   MOVE1 the walk eases: 0.42 m/s after one step, 3.00 after twelve, 2.96 at full speed; after letting go 1.71 after one step and 0.00 after ten
+[closeout] ok   POL1 ui feedback: button, check box and tabs wired (true), the HUD's button and a screen's own click left alone (true), press 0.95 then back (true), hover 1.050 (ThemeSetup's swell) with the tick wired, then back (true), still with Reduce UI Motion (true)
+[closeout] ok   POL2 screens ease: the codex slides in (true) and rests (true), a close is closed for the logic at once (true) while it is still drawn (true), hidden after the fade with its alpha back (true), an open during the fade stays (true), Reduce UI Motion hides at once (true)
+[closeout] ok   TUT1 hints: the first hint shows (true), changes language with a switch (You wake up. The city has gone dark. to Du wachst auf. Die Stadt liegt im Dunkeln.), is back with a new run (true), one hint panel only (1)
+[closeout] ok   TUT2 onboarding: a Skip button is on the overlay (true), the game was paused behind it (true) and Skip closes it and unpauses (true)
+WARNING: IntegrityGuard: speed (monotonic 11.0 s against wall 31.0 s)
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] flag (res://scripts/systems/integrity_guard.gd:69)
+         [1] _watch_clocks (res://scripts/systems/integrity_guard.gd:86)
+         [2] _clocks (res://scripts/tools/rc16/sec23_checks.gd:36)
+         [3] run (res://scripts/tools/rc16/sec23_checks.gd:11)
+         [4] _rc16_checks (res://scripts/tools/_closeout_check_runner.gd:248)
+         [5] run (res://scripts/tools/rc16/feel_checks.gd:26)
+         [6] _tutorial (res://scripts/tools/rc16/feel_checks.gd:373)
+[closeout] ok   SEC1 speed clocks: in step true, parted true; one off window is not a verdict (true), a normal window after it clears it (true), two in a row flag a speed hack (true)
+WARNING: IntegrityGuard: check_untainted (the emulator of a test)
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] flag (res://scripts/systems/integrity_guard.gd:69)
+         [1] _log_and_leaderboard (res://scripts/tools/rc16/sec23_checks.gd:49)
+         [2] run (res://scripts/tools/rc16/sec23_checks.gd:12)
+         [3] _rc16_checks (res://scripts/tools/_closeout_check_runner.gd:248)
+         [4] run (res://scripts/tools/rc16/feel_checks.gd:26)
+         [5] _tutorial (res://scripts/tools/rc16/feel_checks.gd:373)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (be)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (85)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (af)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (b2)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Missing e6 a9 UTF-8 continuation byte
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (a9)
+WARNING: IntegrityGuard: check_tainted (a changed data file)
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] flag (res://scripts/systems/integrity_guard.gd:69)
+         [1] _log_and_leaderboard (res://scripts/tools/rc16/sec23_checks.gd:54)
+         [2] run (res://scripts/tools/rc16/sec23_checks.gd:12)
+         [3] _rc16_checks (res://scripts/tools/_closeout_check_runner.gd:248)
+         [4] run (res://scripts/tools/rc16/feel_checks.gd:26)
+         [5] _tutorial (res://scripts/tools/rc16/feel_checks.gd:373)
+[closeout] ok   SEC2 log and leaderboard: a flag adds a line (true) and the file is encrypted (true), a tainting flag stops the leaderboard (true) and a clean guard records (true)
+[closeout] ok   SEC3 data scan: every file of the manifest is in the game and hashes as listed (true), a changed hash (true), a missing file (true) and a missing manifest (true) are named, line ends do not matter (true)
+[closeout] ok   SEC4 android flags: emulator models are told from phones (true, true), the checks leave the guard alone off Android (true)
+[closeout] ok   PERF1 dynamic resolution at the 60 FPS cap: 1.5 s under 30 FPS keeps 1.0 (true), 2 s drops to 0.7 (true), the band holds it (true), 3.5 s over 45 FPS holds (true) and 4 s restores 1.0 (true); a dip into the band restarts the count, and the second return takes 8 s (true, then true)
+[closeout] ok   PERF4 dynamic resolution at the 30 FPS cap: 6 s at 29.5 FPS keep the full scale (true), 2 s at 24 drop it to 0.7 (true)
+[closeout] ok   PERF5 dynamic resolution at the 30 FPS cap: 29.5 FPS brings the full scale back after 4.0 s
+[closeout] ok   PERF6 dynamic resolution: the wait before the second return, after a drop 2 s after the first, is 8.0 s, before the first 4.0 s
+[closeout] ok   PERF7 dynamic resolution: a drop 40 s after the last return waits 4.0 s again, as the first did (4.0 s)
+[closeout] ok   QM1 quality manager: 4.5 s at 24 FPS keeps the tier (true), 5 s drops it to 1 with the 30 FPS cap (true), 15 s at 29.5 FPS neither drops it again nor raises it (true), the raise comes (true) with the 60 FPS cap, and a minute at 60 FPS goes no higher than the player's tier (true)
+[closeout] ok   QM2 quality manager: the wait before a raise is 20.0 s after the first drop and 40.0 s after the second
+[closeout] ok   QM3 quality manager: after a drop to tier 1 the saved ceiling is 2 (the player's 2)
+[closeout] ok   QM4 quality manager: the player's own change to tier 1 is saved as the ceiling (1)
+[closeout] ok   PERF2 shader warm-up: the blur, chroma and rain-lens layers are found (3) and visible as before ([false, true, false] then [false, true, false])
+[closeout] ok   PERF3 perf gate edges: all met at the limits (true), D1 200 fails (true), D11 350 fails (true), p95 33.1 ms fails (true), 512.1 MiB fails (true), Session 22's numbers pass (true)
+[closeout] ok   LEAK1 loot: 13 drops of 60 rolls lie beside the monster, 0 are left once its parent is freed
+[closeout] ok   MSAA1 the 3D samples follow the tier: Low, Medium, High, Ultra read [0, 1, 1, 2] (off, 2x, 2x, 4x)
+[closeout] ok   ENV1 entering a district lights it by its own stage: stage 0 reads ambient 0.030, the lighting of stage 3 0.160, and district_entered brings 0.030 back
+[savemig] case=g0 | no version key | loaded=true source=main progress_kept=true version=3 quarantined=false
+[savemig] case=g1 | version 1 | loaded=true source=main progress_kept=true version=3 quarantined=false
+[savemig] case=g2 | version 2 | loaded=true source=main progress_kept=true version=3 quarantined=false
+[savemig] case=g3 | version 3, the current one | loaded=true source=main progress_kept=true version=3.0 quarantined=false
+WARNING: [SaveSystem] основной сейв не читается (версия сейва новее билда): user://s23_savemig/slot.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] _case (res://scripts/tools/rc16/s2_checks.gd:102)
+         [2] _save_matrix (res://scripts/tools/rc16/s2_checks.gd:42)
+         [3] run (res://scripts/tools/rc16/s2_checks.gd:34)
+         [4] _rc16_checks (res://scripts/tools/_closeout_check_runner.gd:250)
+         [5] run (res://scripts/tools/rc16/perf23_checks.gd:17)
+         [6] _warm_up (res://scripts/tools/rc16/perf23_checks.gd:124)
+         [7] _warm_shaders (res://scripts/post_process_overlay.gd:65)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://s23_savemig/slot.save.corrupt-1793009172.92731, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] _case (res://scripts/tools/rc16/s2_checks.gd:102)
+         [2] _save_matrix (res://scripts/tools/rc16/s2_checks.gd:42)
+         [3] run (res://scripts/tools/rc16/s2_checks.gd:34)
+         [4] _rc16_checks (res://scripts/tools/_closeout_check_runner.gd:250)
+         [5] run (res://scripts/tools/rc16/perf23_checks.gd:17)
+         [6] _warm_up (res://scripts/tools/rc16/perf23_checks.gd:124)
+         [7] _warm_shaders (res://scripts/post_process_overlay.gd:65)
+[savemig] case=g4 | version 4, newer than the build | loaded=false source=none progress_kept=false version=0 quarantined=true
+WARNING: [SaveSystem] основной сейв не читается (не совпала чек-сумма): user://s23_savemig/slot.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] _case (res://scripts/tools/rc16/s2_checks.gd:102)
+         [2] _save_matrix (res://scripts/tools/rc16/s2_checks.gd:42)
+         [3] run (res://scripts/tools/rc16/s2_checks.gd:34)
+         [4] _rc16_checks (res://scripts/tools/_closeout_check_runner.gd:250)
+         [5] run (res://scripts/tools/rc16/perf23_checks.gd:17)
+         [6] _warm_up (res://scripts/tools/rc16/perf23_checks.gd:124)
+         [7] _warm_shaders (res://scripts/post_process_overlay.gd:65)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://s23_savemig/slot.save.corrupt-1793009172.92776, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] _case (res://scripts/tools/rc16/s2_checks.gd:102)
+         [2] _save_matrix (res://scripts/tools/rc16/s2_checks.gd:42)
+         [3] run (res://scripts/tools/rc16/s2_checks.gd:34)
+         [4] _rc16_checks (res://scripts/tools/_closeout_check_runner.gd:250)
+         [5] run (res://scripts/tools/rc16/perf23_checks.gd:17)
+         [6] _warm_up (res://scripts/tools/rc16/perf23_checks.gd:124)
+         [7] _warm_shaders (res://scripts/post_process_overlay.gd:65)
+[savemig] case=f1 | no hmac | loaded=false source=none progress_kept=false version=0 quarantined=true
+WARNING: [SaveSystem] основной сейв не читается (не совпала чек-сумма): user://s23_savemig/slot.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] _case (res://scripts/tools/rc16/s2_checks.gd:102)
+         [2] _save_matrix (res://scripts/tools/rc16/s2_checks.gd:42)
+         [3] run (res://scripts/tools/rc16/s2_checks.gd:34)
+         [4] _rc16_checks (res://scripts/tools/_closeout_check_runner.gd:250)
+         [5] run (res://scripts/tools/rc16/perf23_checks.gd:17)
+         [6] _warm_up (res://scripts/tools/rc16/perf23_checks.gd:124)
+         [7] _warm_shaders (res://scripts/post_process_overlay.gd:65)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://s23_savemig/slot.save.corrupt-1793009172.92815, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] _case (res://scripts/tools/rc16/s2_checks.gd:102)
+         [2] _save_matrix (res://scripts/tools/rc16/s2_checks.gd:42)
+         [3] run (res://scripts/tools/rc16/s2_checks.gd:34)
+         [4] _rc16_checks (res://scripts/tools/_closeout_check_runner.gd:250)
+         [5] run (res://scripts/tools/rc16/perf23_checks.gd:17)
+         [6] _warm_up (res://scripts/tools/rc16/perf23_checks.gd:124)
+         [7] _warm_shaders (res://scripts/post_process_overlay.gd:65)
+[savemig] case=f2 | wrong hmac | loaded=false source=none progress_kept=false version=0 quarantined=true
+WARNING: [SaveSystem] основной сейв не читается (не совпала чек-сумма): user://s23_savemig/slot.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] _case (res://scripts/tools/rc16/s2_checks.gd:102)
+         [2] _save_matrix (res://scripts/tools/rc16/s2_checks.gd:42)
+         [3] run (res://scripts/tools/rc16/s2_checks.gd:34)
+         [4] _rc16_checks (res://scripts/tools/_closeout_check_runner.gd:250)
+         [5] run (res://scripts/tools/rc16/perf23_checks.gd:17)
+         [6] _warm_up (res://scripts/tools/rc16/perf23_checks.gd:124)
+         [7] _warm_shaders (res://scripts/post_process_overlay.gd:65)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://s23_savemig/slot.save.corrupt-1793009172.9285, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] _case (res://scripts/tools/rc16/s2_checks.gd:102)
+         [2] _save_matrix (res://scripts/tools/rc16/s2_checks.gd:42)
+         [3] run (res://scripts/tools/rc16/s2_checks.gd:34)
+         [4] _rc16_checks (res://scripts/tools/_closeout_check_runner.gd:250)
+         [5] run (res://scripts/tools/rc16/perf23_checks.gd:17)
+         [6] _warm_up (res://scripts/tools/rc16/perf23_checks.gd:124)
+         [7] _warm_shaders (res://scripts/post_process_overlay.gd:65)
+[savemig] case=f3 | plain checksum, the pre-hmac format | loaded=false source=none progress_kept=false version=0 quarantined=true
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://s23_savemig/slot.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] _case (res://scripts/tools/rc16/s2_checks.gd:102)
+         [2] _save_matrix (res://scripts/tools/rc16/s2_checks.gd:42)
+         [3] run (res://scripts/tools/rc16/s2_checks.gd:34)
+         [4] _rc16_checks (res://scripts/tools/_closeout_check_runner.gd:250)
+         [5] run (res://scripts/tools/rc16/perf23_checks.gd:17)
+         [6] _warm_up (res://scripts/tools/rc16/perf23_checks.gd:124)
+         [7] _warm_shaders (res://scripts/post_process_overlay.gd:65)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://s23_savemig/slot.save.corrupt-1793009172.92885, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] _case (res://scripts/tools/rc16/s2_checks.gd:102)
+         [2] _save_matrix (res://scripts/tools/rc16/s2_checks.gd:42)
+         [3] run (res://scripts/tools/rc16/s2_checks.gd:34)
+         [4] _rc16_checks (res://scripts/tools/_closeout_check_runner.gd:250)
+         [5] run (res://scripts/tools/rc16/perf23_checks.gd:17)
+         [6] _warm_up (res://scripts/tools/rc16/perf23_checks.gd:124)
+         [7] _warm_shaders (res://scripts/post_process_overlay.gd:65)
+[savemig] case=f4 | not JSON | loaded=false source=none progress_kept=false version=0 quarantined=true
+WARNING: [SaveSystem] основной сейв не читается (не совпала чек-сумма): user://s23_savemig/slot.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] _case (res://scripts/tools/rc16/s2_checks.gd:102)
+         [2] _save_matrix (res://scripts/tools/rc16/s2_checks.gd:42)
+         [3] run (res://scripts/tools/rc16/s2_checks.gd:34)
+         [4] _rc16_checks (res://scripts/tools/_closeout_check_runner.gd:250)
+         [5] run (res://scripts/tools/rc16/perf23_checks.gd:17)
+         [6] _warm_up (res://scripts/tools/rc16/perf23_checks.gd:124)
+         [7] _warm_shaders (res://scripts/post_process_overlay.gd:65)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://s23_savemig/slot.save.corrupt-1793009172.92999, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] _case (res://scripts/tools/rc16/s2_checks.gd:102)
+         [2] _save_matrix (res://scripts/tools/rc16/s2_checks.gd:42)
+         [3] run (res://scripts/tools/rc16/s2_checks.gd:34)
+         [4] _rc16_checks (res://scripts/tools/_closeout_check_runner.gd:250)
+         [5] run (res://scripts/tools/rc16/perf23_checks.gd:17)
+         [6] _warm_up (res://scripts/tools/rc16/perf23_checks.gd:124)
+         [7] _warm_shaders (res://scripts/post_process_overlay.gd:65)
+[savemig] case=f5 | empty data_json | loaded=false source=none progress_kept=false version=0 quarantined=true
+WARNING: [SaveSystem] district/progress данные не прошли отдельную проверку подписи — сброшены
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _verify_progress (res://scripts/core/save_system.gd:307)
+         [1] _read_envelope (res://scripts/core/save_system.gd:294)
+         [2] _read_validated (res://scripts/core/save_system.gd:333)
+         [3] _case (res://scripts/tools/rc16/s2_checks.gd:102)
+         [4] _save_matrix (res://scripts/tools/rc16/s2_checks.gd:42)
+         [5] run (res://scripts/tools/rc16/s2_checks.gd:34)
+         [6] _rc16_checks (res://scripts/tools/_closeout_check_runner.gd:250)
+         [7] run (res://scripts/tools/rc16/perf23_checks.gd:17)
+         [8] _warm_up (res://scripts/tools/rc16/perf23_checks.gd:124)
+         [9] _warm_shaders (res://scripts/post_process_overlay.gd:65)
+[savemig] case=p1 | no progress_hmac | loaded=true source=main progress_kept=false version=3.0 quarantined=false
+WARNING: [SaveSystem] district/progress данные не прошли отдельную проверку подписи — сброшены
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _verify_progress (res://scripts/core/save_system.gd:307)
+         [1] _read_envelope (res://scripts/core/save_system.gd:294)
+         [2] _read_validated (res://scripts/core/save_system.gd:333)
+         [3] _case (res://scripts/tools/rc16/s2_checks.gd:102)
+         [4] _save_matrix (res://scripts/tools/rc16/s2_checks.gd:42)
+         [5] run (res://scripts/tools/rc16/s2_checks.gd:34)
+         [6] _rc16_checks (res://scripts/tools/_closeout_check_runner.gd:250)
+         [7] run (res://scripts/tools/rc16/perf23_checks.gd:17)
+         [8] _warm_up (res://scripts/tools/rc16/perf23_checks.gd:124)
+         [9] _warm_shaders (res://scripts/post_process_overlay.gd:65)
+[savemig] case=p2 | wrong progress_hmac | loaded=true source=main progress_kept=false version=3.0 quarantined=false
+WARNING: [SaveSystem] основной сейв не читается (не совпала чек-сумма): user://s23_savemig/slot.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] _case (res://scripts/tools/rc16/s2_checks.gd:102)
+         [2] _save_matrix (res://scripts/tools/rc16/s2_checks.gd:42)
+         [3] run (res://scripts/tools/rc16/s2_checks.gd:34)
+         [4] _rc16_checks (res://scripts/tools/_closeout_check_runner.gd:250)
+         [5] run (res://scripts/tools/rc16/perf23_checks.gd:17)
+         [6] _warm_up (res://scripts/tools/rc16/perf23_checks.gd:124)
+         [7] _warm_shaders (res://scripts/post_process_overlay.gd:65)
+WARNING: [SaveSystem] восстановлено из .bak: user://s23_savemig/slot.save
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:344)
+         [1] _case (res://scripts/tools/rc16/s2_checks.gd:102)
+         [2] _save_matrix (res://scripts/tools/rc16/s2_checks.gd:42)
+         [3] run (res://scripts/tools/rc16/s2_checks.gd:34)
+         [4] _rc16_checks (res://scripts/tools/_closeout_check_runner.gd:250)
+         [5] run (res://scripts/tools/rc16/perf23_checks.gd:17)
+         [6] _warm_up (res://scripts/tools/rc16/perf23_checks.gd:124)
+         [7] _warm_shaders (res://scripts/post_process_overlay.gd:65)
+[savemig] case=b1 | main wrong, .bak good | loaded=true source=bak progress_kept=true version=3.0 quarantined=false
+WARNING: [SaveSystem] основной сейв не читается (не совпала чек-сумма): user://s23_savemig/slot.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] _case (res://scripts/tools/rc16/s2_checks.gd:102)
+         [2] _save_matrix (res://scripts/tools/rc16/s2_checks.gd:42)
+         [3] run (res://scripts/tools/rc16/s2_checks.gd:34)
+         [4] _rc16_checks (res://scripts/tools/_closeout_check_runner.gd:250)
+         [5] run (res://scripts/tools/rc16/perf23_checks.gd:17)
+         [6] _warm_up (res://scripts/tools/rc16/perf23_checks.gd:124)
+         [7] _warm_shaders (res://scripts/post_process_overlay.gd:65)
+WARNING: [SaveSystem] восстановлено из .bak2: user://s23_savemig/slot.save
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:344)
+         [1] _case (res://scripts/tools/rc16/s2_checks.gd:102)
+         [2] _save_matrix (res://scripts/tools/rc16/s2_checks.gd:42)
+         [3] run (res://scripts/tools/rc16/s2_checks.gd:34)
+         [4] _rc16_checks (res://scripts/tools/_closeout_check_runner.gd:250)
+         [5] run (res://scripts/tools/rc16/perf23_checks.gd:17)
+         [6] _warm_up (res://scripts/tools/rc16/perf23_checks.gd:124)
+         [7] _warm_shaders (res://scripts/post_process_overlay.gd:65)
+[savemig] case=b2 | main and .bak wrong, .bak2 and .bak3 good | loaded=true source=bak2 progress_kept=true version=3.0 quarantined=false
+WARNING: [SaveSystem] основной сейв не читается (не совпала чек-сумма): user://s23_savemig/slot.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] _case (res://scripts/tools/rc16/s2_checks.gd:102)
+         [2] _save_matrix (res://scripts/tools/rc16/s2_checks.gd:42)
+         [3] run (res://scripts/tools/rc16/s2_checks.gd:34)
+         [4] _rc16_checks (res://scripts/tools/_closeout_check_runner.gd:250)
+         [5] run (res://scripts/tools/rc16/perf23_checks.gd:17)
+         [6] _warm_up (res://scripts/tools/rc16/perf23_checks.gd:124)
+         [7] _warm_shaders (res://scripts/post_process_overlay.gd:65)
+WARNING: [SaveSystem] восстановлено из .bak3: user://s23_savemig/slot.save
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:344)
+         [1] _case (res://scripts/tools/rc16/s2_checks.gd:102)
+         [2] _save_matrix (res://scripts/tools/rc16/s2_checks.gd:42)
+         [3] run (res://scripts/tools/rc16/s2_checks.gd:34)
+         [4] _rc16_checks (res://scripts/tools/_closeout_check_runner.gd:250)
+         [5] run (res://scripts/tools/rc16/perf23_checks.gd:17)
+         [6] _warm_up (res://scripts/tools/rc16/perf23_checks.gd:124)
+         [7] _warm_shaders (res://scripts/post_process_overlay.gd:65)
+[savemig] case=b3 | main, .bak and .bak2 wrong, .bak3 good | loaded=true source=bak3 progress_kept=true version=3.0 quarantined=false
+WARNING: [SaveSystem] основной сейв не читается (не совпала чек-сумма): user://s23_savemig/slot.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] _case (res://scripts/tools/rc16/s2_checks.gd:102)
+         [2] _save_matrix (res://scripts/tools/rc16/s2_checks.gd:42)
+         [3] run (res://scripts/tools/rc16/s2_checks.gd:34)
+         [4] _rc16_checks (res://scripts/tools/_closeout_check_runner.gd:250)
+         [5] run (res://scripts/tools/rc16/perf23_checks.gd:17)
+         [6] _warm_up (res://scripts/tools/rc16/perf23_checks.gd:124)
+         [7] _warm_shaders (res://scripts/post_process_overlay.gd:65)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://s23_savemig/slot.save.corrupt-1793009172.93339, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] _case (res://scripts/tools/rc16/s2_checks.gd:102)
+         [2] _save_matrix (res://scripts/tools/rc16/s2_checks.gd:42)
+         [3] run (res://scripts/tools/rc16/s2_checks.gd:34)
+         [4] _rc16_checks (res://scripts/tools/_closeout_check_runner.gd:250)
+         [5] run (res://scripts/tools/rc16/perf23_checks.gd:17)
+         [6] _warm_up (res://scripts/tools/rc16/perf23_checks.gd:124)
+         [7] _warm_shaders (res://scripts/post_process_overlay.gd:65)
+[savemig] case=b4 | all four wrong | loaded=false source=none progress_kept=false version=0 quarantined=true
+[savemig] case=b5 | main good, .bak good | loaded=true source=main progress_kept=true version=3.0 quarantined=false
+WARNING: [SaveSystem] основной сейв не читается (версия сейва новее билда): user://s23_savemig/slot.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] _case (res://scripts/tools/rc16/s2_checks.gd:102)
+         [2] _save_matrix (res://scripts/tools/rc16/s2_checks.gd:42)
+         [3] run (res://scripts/tools/rc16/s2_checks.gd:34)
+         [4] _rc16_checks (res://scripts/tools/_closeout_check_runner.gd:250)
+         [5] run (res://scripts/tools/rc16/perf23_checks.gd:17)
+         [6] _warm_up (res://scripts/tools/rc16/perf23_checks.gd:124)
+         [7] _warm_shaders (res://scripts/post_process_overlay.gd:65)
+WARNING: [SaveSystem] восстановлено из .bak: user://s23_savemig/slot.save
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:344)
+         [1] _case (res://scripts/tools/rc16/s2_checks.gd:102)
+         [2] _save_matrix (res://scripts/tools/rc16/s2_checks.gd:42)
+         [3] run (res://scripts/tools/rc16/s2_checks.gd:34)
+         [4] _rc16_checks (res://scripts/tools/_closeout_check_runner.gd:250)
+         [5] run (res://scripts/tools/rc16/perf23_checks.gd:17)
+         [6] _warm_up (res://scripts/tools/rc16/perf23_checks.gd:124)
+         [7] _warm_shaders (res://scripts/post_process_overlay.gd:65)
+[savemig] case=b6 | main newer than the build, .bak good | loaded=true source=bak progress_kept=true version=3.0 quarantined=false
+[closeout] ok   SAVEMIG the loader against 18 save generations and faults: all as the matrix says
+[closeout] ok   DAILY1 the daily file: ResourceLoader sees content/daily_challenges.json (true) and the manager holds 60 templates (60 expected)
+[closeout] ok   NGP1 New Game+ player damage: a bullet 25.0 at level 0 and 30.0 at level 2 (x1.20), a melee hit 9.7 then 11.6 (x1.20)
+[dens] district=suburbs blocks=9 min_solid=4 (without the dressing 0) min_scatter=12 (0) min_lamps=4
+[dens] district=residential blocks=9 min_solid=3 (without the dressing 0) min_scatter=12 (0) min_lamps=4
+[dens] district=park blocks=9 min_solid=2 (without the dressing 0) min_scatter=16 (0) min_lamps=4
+[dens] district=school blocks=9 min_solid=6 (without the dressing 0) min_scatter=12 (0) min_lamps=4
+[dens] district=hospital blocks=9 min_solid=4 (without the dressing 0) min_scatter=5 (0) min_lamps=4
+[dens] district=gas_station blocks=9 min_solid=6 (without the dressing 0) min_scatter=10 (0) min_lamps=4
+[dens] district=police blocks=9 min_solid=6 (without the dressing 0) min_scatter=6 (0) min_lamps=4
+[dens] district=warehouses blocks=9 min_solid=7 (without the dressing 0) min_scatter=8 (0) min_lamps=4
+[dens] district=industrial blocks=9 min_solid=7 (without the dressing 0) min_scatter=8 (0) min_lamps=4
+[dens] district=substation blocks=9 min_solid=3 (without the dressing 0) min_scatter=5 (0) min_lamps=4
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+[dens] district=power_station blocks=9 min_solid=6 (without the dressing 0) min_scatter=6 (0) min_lamps=4
+[closeout] ok   FOLIAGE1 canopies: a sway shader (true) of 0.08 m, 0.00 m with Motion Comfort and 0.08 m after, in the old dark teal (true)
+[closeout] ok   POOL1 lamp pools: the pools of the lamps and the halo of the landmark are not drawn at the DARK stage (true) and are drawn from the next (true)
+[closeout] ok   FOG1 ground fog: 3 cards in a fog district, 0 in the suburbs, 0 at the Low tier
+[closeout] ok   DENS1 density: every block of every district holds 2 solid props, 4 scattered pieces and 2 lamps at least (under the floor: none), 11 of 11 districts have a landmark and 11 a lit rest spot
+[closeout] ok   MANH1 manholes: 11 of 11 districts hold an iron cover in the road with a thread of steam
+[closeout] ok   UISFX1 a button freed in its first frame raises no engine error ([])
+[closeout] ok   SHADER1 the 23 shader files compile with no engine error ([])
+[closeout] ok   ACHSIG1 the first lit streetlight unlocks First Light
+[closeout] ok   ACHSIG2 one district FULL unlocks Electrician and its own district achievement, not Beacon
+[closeout] ok   ACHSIG3 every district FULL unlocks Beacon
+[closeout] ok   ACHSIG4 the 50th Shadow unlocks Shadow Hunter, the 49th does not
+[closeout] ok   ACHSIG5 the last document unlocks Librarian
+[closeout] ok   ACH15 a death with the grid unfinished is the Dark ending and unlocks Darkness (ending dark)
+[closeout] ok   ACH15M GameManager hears game_over before AchievementManager, so the ending is resolved when Darkness is asked (slots 0 and 2)
+[closeout] ok   ACH15 a death with only the power station lit is Survivor and does not unlock Darkness (ending survivor)
+[closeout] ok   ACHRUN1 a New Game starts the marks of Quiet as a Mouse and Without a Scratch empty (seen_park false, hurt_school false)
+[closeout] ok   ACHRUN2 it keeps the profile's counters and what is unlocked (Shadow Hunter 7, First Light true)
+[closeout] ok   DAILY2 the daily selector walks past a template over the 11 districts (day 0 fits, day 3 fits) and keeps one with no per-run cap (day 2 kills)
+[closeout] ok   DAILY3 two days that select the same template do not share progress: the same day keeps it (2 of 2), the next day starts empty (0)
+[closeout] ok   AUD6 the Music bus ends in an enabled limiter under the -1.5 dB ceiling of the audio truth gate (slot 2 of 4, ceiling -2.0)
+[closeout] ok   SOV1 the lane marking is a dash of 1.20 m by 0.16 m and the road, the sidewalk and the paint use the road shader (shaded true)
+[closeout] ok   SOV2 the blocks use the facade shader, a block gets 22 roof boxes and balconies, and the detail follows the graphics tier (Low 0, High 2)
+[closeout] ok   SOV3 the halo of a landmark is 64 m by 52 m at an opacity of 0.17 when the district is FULL
+[closeout] ok   SOV4 the districts have 31 sign words and every letter is in the engine's font (missing: none)
+[closeout] ok   SOV8 every sign word fits the 1024 px row of the atlas (the widest is 964 px; 3 long words are drawn smaller)
+[closeout] ok   SOV5 the dead grass holds 144 tufts and shows [0, 72, 144] of them at Low, Medium and High
+[closeout] ok   SOV6 the blocks glow at 0.16 (DARK) to 0.26 (FULL) and the sign paint at 0.45 to 1.00: a restored district reads lighter, a dark one an outline
+[closeout] ok   SOV7 the menu draws fog and grain between its hero art and its title (High true, Low false) and the title is stencilled (true)
+[closeout] ok   MENU2 the daily card of the menu follows a language change (en to ru: the title reads Daily Challenge)
+[closeout] ok   MUS1 the Architect announces its phases [2, 3] and the music takes the theme of the phase it is told (3 then 3, a new fight starts at 1)
+[closeout] ok   MUS3 a new run ends the boss theme (held in a fight: true; after the run starts: flag false, phase 1, mood 1)
+[closeout] ok   MUS4 a change of district ends the boss theme (flag false, phase 1)
+[closeout] ok   MUS2 the 12 generated tracks the music manager names load as Ogg streams of 25 s or more (bad: [])
+[closeout] ok   CRED1 the music credit says Google Lyria in all 6 locales and the widest line (ru, 403 px) fits the 600 px column of the credits scene
+[closeout] ok   TEL1 telegraphs: 7 of 7 attacks wait 300 ms or more after the cue (gaps [384, 385, 387, 390, 393, 395, 398] ms) and the cue lasts 0.40 s of game time (0.35 s at least)
+[closeout] ok   TEL2 windups: 3 of 3 (Crawler, Hunter, Brute) carry the cue at their start and last [0.5, 1.0, 1.0] s (0.4 s at least)
+[closeout] ok   TEL3 architect melee: the swing waits 391 ms after its cue (300 ms at least) and starts a cooldown (true)
+[closeout] ok   TEL4 beam ring: 1 ring of ember marks the place a falling beam lands for as long as it falls (1 wanted)
+[closeout] ok   TEL5 beam cue: the Architect's flash and sound go off when a beam is sent (true)
+[closeout] ok   TEL6 beam fall: a beam takes 0.80 s to land (0.7 s at least)
+[closeout] ok   TEL7 reach: no monster attacks from further than it sees; out of bounds: []
+[closeout] ok   DIF1 hit cap: a hit of 100 takes [8.0, 12.0, 15.0] HP at Easy, Normal and Hard (8, 12 and 15 wanted)
+[closeout] ok   DIF3 hit cap at New Game+: a hit of 100 takes 15.60 HP at Normal and level 2 (15.6 wanted: the enemy damage bonus of the level scales the cap)
+[closeout] ok   DIF2 monster scale: a Crawler has [35.0, 50.0, 65.0] hit points and hits for [15.0, 20.0, 25.0] at Easy, Normal and Hard (0.7 and 1.3 times the hit points, 0.75 and 1.25 times the damage wanted)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+[closeout] ok   ESC1 escape: the spawn points of all 11 districts are 15.0 m or more from the arrival crossroads (12 m wanted) and 7.5 m or less from a streetlight pole (20 m wanted); out of bounds: []
+[closeout] ok   RET1 respawn: the battery comes back as [25.0, 25.0, 70.0] after a death with 0, 10 and 70 (25, 25 and 70 wanted), health true, a player that was not respawned is untouched (true)
+[closeout] ok   WAKE1 a Hunter 6 m behind the player is awake (true) and one in the far corner sleeps (true): the heavy kinds switch off out of the view and stay on within the wake radius
+[closeout] ok   BAT0 the Architect in his second phase takes nothing out of the beam (true) and swings there after a cue (cue true, hit true); inside the beam he does not swing (false)
+[closeout] ok   PICK1 a pickup on a full pack stays in the world (true) and the pack gains nothing (true)
+[closeout] ok   SAVE1 a save written with the player out of the world reads back whole (true: no vitals, no position) and loads (true); a load inside a fade leaves the fade ended (true)
+[closeout] ok   V1A the details of batch A stand: window shader true, halos true, light cones true, the cone follows the power true
+[closeout] ok   V1B the cones and the halos sort after the other transparent objects (render priority 5): the flashlight turned them into cream pyramids and pale blocks at the default
+[closeout] ok   BURST1 every burst keeps the scale of its particles (7 bursts): []
+[closeout] ok   MOTE1 the dust motes in the beams keep the scale of their particles (2.5 to 6 cm, not the 1 m of their quad)
+[closeout] ok   ENDC1 every ending title is read against the win screen at 3 to 1 or better: the worst is dark at 4.57 to 1
+[closeout] ok   STORY1 the story scenes: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3] a district (two or three each, off by: []), the three kinds stand: ["StoryHook_barricade", "StoryHook_evacuation", "StoryHook_camp"]
+[closeout] ok   STORY2 a walk into a story trigger is heard once and ends it: ok
+[closeout] ok   MUS5 a bed turns over: the start moves by at least 0.38 of its length between two turns, 8 turns start in 8 places, three variants take turns (true)
+[closeout] ok   MUS6 the stems crossfade on the hunted level: calm { "bed": -12.0000057220459, "low": -59.9998779296875, "high": -59.9999771118164 }, tense { "bed": -12.0000057220459, "low": -12.0000057220459, "high": -59.9999771118164 }, combat { "bed": -18.0205879211426, "low": -59.9999771118164, "high": -12.0000057220459 } (dB: the bed, the tense stem, the combat stem)
+[closeout] ok   ANIM1 the 12 monster scenes build the rig and have a look (missing: [])
+[closeout] ok   ANIM1 every id of data/monsters (12) has a gait row (without: [])
+[closeout] ok   ANIM2 the legs swing with the speed (0.23 rad at most), the two sides in opposite phase
+[closeout] ok   ANIM2 the legs stand still at rest (0.000 rad)
+[closeout] ok   ANIM3 twenty kills count twenty, a second hit on a falling body counts nothing (counted 20, dead 20)
+[closeout] ok   ANIM3 every one of the twenty bodies lies down (20 of 20)
+[closeout] ok   ANIM4 windup 0.40 s draws the arm back (-1.50 rad), the strike 0.10 s throws it forward (1.20), recover 0.30 s
+[closeout] ok   ANIM5 the head turns to the player at 6 rad/s or less (0.100 in one frame), stops at 0.70 rad and faces forward in a chase (0.000)
+[closeout] ok   ANIM6 a hit pushes the body back 0.080 m (0.08 m at most) and it returns (0.0000)
+[closeout] ok   ANIM6 a heavy hit delays the next attack (attack_timer 0.25)
+[closeout] ok   ANIM7 the feet of every monster stand on the floor of its capsule (off: [])
+[closeout] ok   ANIM8 the arachnophobia mode swaps the crawler for its blob and back (swapped true, back true)
+[closeout] ok   ANIM9 the eye bobs 0.0767 m over a run of steps (0.078 m at most, 0.035 m a side plus the breath) and 0.0000 m with Motion Comfort
+[closeout] ok   ANIM9 a sprint leans the eye 0.0300 m down (0.03 m) and Motion Comfort holds it level (-0.0002 m)
+[closeout] ok   ANIM9 a shot kicks the weapon back 0.027 m (0.04 m at most) and it is still after 4 frames (4 at most)
+[closeout] ok   ANIM9 a reload dips the weapon -0.120 m and tilts it 0.54 rad, and it comes back (-0.0000 m)
+[closeout] ok   ANIM9 a turn of the view leaves the weapon 0.120 rad behind (0.12 at most) and it catches up (0.005 rad after 0.25 s)
+[closeout] ok   ANIM9 Motion Comfort (true) and Reduce UI Motion (true) hold the weapon still
+[closeout] ok   LOOK1 one WorldEnvironment in the main scene (1), the boot order in one function (true) copies the preset's keys (true), assigns the night camera attributes (true) and leaves ACES (true), no per-district environment (true)
+[closeout] ok   LOOK1 the table of the graphics tier is applied again on a change (fog density 0.012 at Low, 0.015 at Ultra)
+[closeout] ok   WET1 the road tiles carry no overlay in the clear (true), the wet overlay with the rain's wetness 0.7 and the reflection 0.85 at High (true), no reflection at Low (true), wetness 1.0 in a storm (true)
+[closeout] ok   LAMP1 the lamp heads wear the flicker material (true), lit [0.0, 0.45] by stage (0, and 0.45 once the ramp of the partial stage is over), a restore ramps it (0.00 at once, 1.00 after 1.5 s), 2.0 at full (2.0), Reduce Flash stills it (true)
+[closeout] ok   SHADOW1 one ContactShadows MultiMesh (true) with 62 blobs for 62 poles and props, the blob of a monster 2 cm over the street under its feet (true, lift -0.388), 0 separate blob meshes, none on the Low tier (true)
+[closeout] ok   WX1 the rain emits in rain (share 0.7) and in a storm (1.0) and not in the clear, the drops only in fog (["false/0.3/false", "true/0.7/false", "true/1.0/false", "false/0.3/true"]), the rain stands 12.0 m over the camera, the strobe throws sparks (1 burst playing, with Reduce Flash: 0)
+[closeout] ok   PAR1 the menu hero wears the parallax shader (true), a drag moves it by 0.100, 0.040 on the Low tier (0.4 of it), Motion Comfort holds it still (true)
+[closeout] ok   THEME1 the type scale [44, 30, 22, 13, 15] (44 30 22 13 15), the titles on Bebas (true), the option button's 2 px brass focus ring (true) and a disabled box of its own (true)
+[closeout] ok   MOON1 the moon's shadow bias follows the district: park (0.054, 1.08), suburbs (0.06, 1.2), unknown (0.06, 1.2)
+[closeout] ok   PBR1 the factory's _plain takes a texture set (true) and a set that has no files leaves the material as it was (true)
+[closeout] ok   SAT1 the share of the glow's hue times its chroma is held at 0.12 or less in every district (worst: park 0.120), the police keep 0.18 of it and the suburbs the whole 0.50
+[closeout] ok   MESH1 49 items in 36 families, 41 outlines, none a crate or a box or over 400 triangles ([])
+[closeout] ok   MAT1 scrap, metal, gear, plank and the pages give no light (true), a key glows on its bow at 0.6 or less and not on its shank (true), a cell glows
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+[closeout] ok   CUBE1 no pickup of the 11 districts holds a light (0 lights)
+[closeout] ok   CUBE2 at most 12 pickups a district (12 allowed) and the nearest two are 5.5 m apart (5 allowed; warehouses: @Area3D@39702 (6.276985, 0.05, 8.382338) and @Area3D@39720 (1.128291, 0.05, 6.413798)), every district holds its repair parts in stacks of two and its blueprint (["suburbs 6", "residential 10", "park 8", "school 10", "hospital 10", "gas_station 10", "police 12", "warehouses 12", "industrial 12", "substation 8", "power_station 8"])
+[closeout] ok   CUBE3 no pickup mesh is a bare box (0), the 11 districts hold 99 notes (99: one on the ground and the lore notes to pin), 88 of them pinned on poles
+[closeout] ok   QTICK1 a crate of 2 fuses counts 2 on the quest (it went in: true) and a refund of one counts none (2, in: true)
+[closeout] ok   GROUND1 pickups rest on the ground, drop in 0.25 m once, do not bob and turn only the keys, blueprints and guns (["live medkit: starts 0.25 over, rests 0.000, bottom 0.000, turns 0.00", "live key: starts 0.25 over, rests 0.000, bottom 0.000, turns 0.25", "live rifle: starts 0.25 over, rests 0.000, bottom -0.000, turns 0.25", "still medkit: starts 0.00 over, rests 0.000, bottom 0.000, turns 0.00", "still key: starts 0.00 over, rests 0.000, bottom 0.000, turns 0.00", "still rifle: starts 0.00 over, rests 0.000, bottom -0.000, turns 0.00"])
+[closeout] ok   GLOW1 9 pickups near the camera, 8 of them glowing: 6 pools (6 at most), the strength 0.46; one at 12.5 m: 1 pool at 0.27 (about half); all beyond 16 m: 0
+[closeout] ok   WEAPON1 three viewmodels of three outlines, each of 600 triangles at most with a Body and its Slide, Bolt or Pump (true); a shot sends the slide back and it returns (true) and not with Motion Comfort (true)
+[closeout] ok   WCMP1 the weapon comparison of the HUD is connected to the WeaponManager of the player
+[closeout] ok   QSLOT1 the bar of an empty run is [&"flashlight"] and [&"pistol", &"flashlight"] once the pistol is found (slot 1 on screen: true)
+[closeout] ok   QSLOT2 every key and tap uses the slot of the six it stands for, with 0, 1, 2 and 3 guns found (["0 guns: [&\"battery\", &\"medkit\", &\"flashlight\"]", "1 guns: [&\"pistol\", &\"battery\", &\"medkit\", &\"flashlight\"]", "2 guns: [&\"pistol\", &\"rifle\", &\"battery\", &\"medkit\", &\"flashlight\"]", "3 guns: [&\"pistol\", &\"rifle\", &\"battery\", &\"medkit\", &\"flashlight\"]"])
+[closeout] ok   LEAK1 no screen holds a close button outside the tree (14 screens, 6 without a close button, 0 orphans)
+[closeout] ok   LAMP2 twelve lit lamps stand on 8 of 13 phases of the flicker (one when they flicker in step)
+[closeout] ok   LIMIT1 of nine lit lights the eight nearest are shown and the ninth is hidden (8 of the eight shown, ninth false)
+[closeout] ok   LIMIT2 a light of no energy and the glow of a lamp that is out stay off (idle false, glow false)
+[closeout] ok   LIMIT3 the light that was hidden for want of energy comes back when it is lit (idle true)
+[closeout] ok   LAY1 the stems follow a monster at 25, 15, 8 and 3 m (25 m: calm 1.00 tense 0.00 combat 0.00 action 0.00; 15 m: calm 1.00 tense 0.65 combat 0.13 action 0.00; 8 m: calm 0.50 tense 0.00 combat 1.00 action 1.00; 3 m: calm 0.50 tense 0.00 combat 1.00 action 1.00)
+[closeout] ok   LAY2 the hunted level reads 1.00 one second after a monster comes to 3 m, 0.25 three seconds after it goes and 0.00 at four
+[closeout] ok   LAY2 the combat stem rises 47.8 dB and the calm stems fall from -72.0 to -78.0 dB (sum of both beds)
+[closeout] ok   LAY3 the three phases of the Architect play three themes (res://assets/audio/music/music_boss_dark_p1.ogg, res://assets/audio/music/music_boss_dark_p2.ogg, res://assets/audio/music/music_boss_dark_p3.ogg)
+[closeout] ok   LAY4 the combat hold lasts 6.0 s: held at 5.5 s true, released into the calm mood at 6.5 s true
+[closeout] ok   LAY5 a new mood swaps the A and B players (A, B, A: true)
+[closeout] ok   LAY6 the weather raises its stem (1: rain 1 wind 0; 3: rain 1 wind 0; 4: rain 0 wind 1; 0: rain 0 wind 0; 2: rain 0 wind 0)
+[closeout] ok   ONE1 the four one-shots exist with the lengths of the recipe (ui_district_restored_sting.ogg 2.00, cue_death.ogg 8.00, ui_xp_tick.wav 0.06, ui_heal_soft.wav 0.30)
+[closeout] ok   ONE2 district_restored plays the sting on the UI bus ({ "ui_district_restored_sting.ogg": "UI", "ui_xp_tick.wav": "UI", "ui_heal_soft.wav": "UI" })
+[closeout] ok   ONE3 game_over plays the cue of a death on the Music bus (cue_death.ogg on Music)
+[closeout] ok   ONE4 xp_gained ticks and a healing consumable plays the soft note on the UI bus, a battery does not ({ "ui_district_restored_sting.ogg": "UI", "ui_xp_tick.wav": "UI", "ui_heal_soft.wav": "UI" }, battery quiet true)
+[closeout] ok   SFX1 every monster cue file resolves to a stream (30 cues, unresolved [])
+[closeout] ok   WIND1 the wind layer of the AudioManager loops (AudioStreamOggVorbis)
+[closeout] ok   SECV9 the save key is no string literal of save_system.gd (true) and signs as before (true)
+[closeout] ok   SECV7 the manifest of 37 files flags no honest tree (0), flags a forged hash and a missing file (2) and clears when put back (0)
+[closeout] ok   SECV6 an item id the database lacks is refused (true) and five language codes outside the six leave ru as it was (true)
+[closeout] ok   SECV2 a craft of -5, 0, 2^40 and 2^62 and a remove of -3 are refused and the pack is as it was (refused true, negative remove false)
+[closeout] ok   SECV8 257 shipped scripts: no print of a secret, no cheat word and no grant within six lines of OS.is_debug_build() ([])
+[closeout] ok   DODGE1 7 of 7 attacks sent their cue and none hit a player who stepped out of reach after it (hit anyway: [])
+[closeout] ok   END5 a win with every district FULL and every document, the bunker not opened, is the Light ending (light)
+[closeout] ok   DROP1 the loot of 12 of 12 monsters lies on the floor under them (worst gap 0.000 m)
+[closeout] ok   CONF1 the burst of a finished quest is a texture of soft sparks (true) and 20 of them (24 at most)
+[closeout] ok   SIGN2 no two signs of a facade overlap: 0 pairs in the 11 districts, 0 in 200 seeds of a tight facade
+[closeout] ok   HIDE1 the 6 hiding spots (locker, dumpster, car, crate, bush, dark_corner) are meshes of two surfaces inside the box of their collider (the sizes of the baseline) and fill it (off: [])
+[closeout] ok   CUBE4 the secret, the workbench, the bed, the switch, the cable box and the generator are meshes of parts on the floor (off: []), the secret and the workbench hold 0 lights
+[closeout] ok   HUM1 the 31 detail loops listed hold none of the 9 hums (listed: []) and all of them exist (missing: [])
+[closeout] ok   QBAR1 no slot of the quick bar expands ([]) and the bar centres its slots (true)
+[closeout] ok   STAM1 the sprint ends at 0 stamina (true), stays off while the bar refills (true) and is back at 25.2 of 100 (true)
+[closeout] ok   SYNC1 the arm of the Hunter and of the Brute comes down within 0.06 s of the hit (off: [])
+[closeout] ok   FLICK1 the light of a 5 % battery changed 1 times in 240 frames (2 allowed for the time they took: one per 340 ms)
+[closeout] ok   QUEST1 the objective list stays hidden when a screen closes out of play (true) and shows in play (true)
+[closeout] ok   QORD1 the first five quests are ["REPAIR suburbs", "fuse 2 of 3", "scrap 3 of 10", "battery 2 of 4", "medkit 1 of 3"]; the first district makes progress on each (off: [])
+[closeout] ok   TXT1 the quests and the tutorial name the districts, the monsters and the power switch of the game in the 6 languages (off: [])
+[closeout] ok   TUT3 picking an item up completes the pickup hint (step 3 of 11 moved on: true)
+[closeout] ok   BOB1 the eye bobs 1.9 Hz walking and 3.1 Hz sprinting (1.5 to 2.5 and 3.5 at most)
+[closeout] ok   LAMP3 a lit lamp dipped 10 times in 4 s (12 at most: three a second)
+[closeout] ok   BOSSHIT1 a hit on the Architect gives a damage number (1) and the hit marker (1)
+[closeout] ok   BOSSHIT2 two blows outside the beam in the second phase take nothing off (hp 798 of 798) and give one hint (1)
+[closeout] ok   MASTER1 the Master bus has a hard limiter at -1.0 dB (-1 dB or lower)
+[closeout] ok   FONT1 the headings of the shop card (true), of the ending (true) and of the skill tree (true) are set in the face of the buttons
+[closeout] DONE checks=611 fails=0
+WARNING: 64 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 27 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
+# EXIT=0

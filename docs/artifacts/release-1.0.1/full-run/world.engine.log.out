@@ -1,0 +1,61 @@
+# proof world
+# utc 20261026T100224Z
+# head 10627bb3 (uncommitted paths: 2)
+# env QA_SOAK_SEC=20 TLS_UDG_GUARDED=1 
+# cmd /workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --headless --path /workspace/scratch/e4e8279ce462/release-delivery-check/qa-project res://scenes/tools/game_test_3d_scene.tscn
+WARNING: Couldn't get executable path from /proc/self/exe, using argv[0]
+     at: get_executable_path (drivers/unix/os_unix.cpp:1157)
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[3dtest] phase0 scene loaded, waiting for world
+[3dtest] [OK] player spawned
+[3dtest] [OK] camera follows the player ((-8.0, 2.896017, -8.0) vs (-8.0, 1.2, -8.0))
+[3dtest] [OK] street builder exists
+[3dtest] [OK] the HUD hit marker rests invisible (opacity setting must not raise it)
+[3dtest] [OK] monsters spawned: 6
+[3dtest] [OK] pickups spawned: 6
+[3dtest] [OK] generator uses registered fuel item
+[3dtest] [OK] monster faces where it moves (forward (1.0, 0.0, 0.0) for +X)
+[3dtest] phase1 combat: damage Shadow
+[3dtest] [OK] monster hp 30.0 -> 20.0
+[3dtest] [OK] the tree runs while the swing plays (paused false)
+[3dtest] [OK] melee swing damages the monster in front (hp 20.0 -> -3.66666666666668)
+[3dtest] [OK] a swing touching a wall is not consumed
+[3dtest] [OK] a swing is not spent on the player's own body
+[3dtest] phase2 inventory
+[3dtest] [OK] inventory add battery
+[3dtest] [OK] battery count 0 -> 1
+[3dtest] phase3 flashlight battery
+[3dtest] [OK] battery 99.7925925925924 -> 89.7925925925924
+[3dtest] [OK] battery restored
+[3dtest] phase4 generator puzzle
+[3dtest] [OK] PowerSwitch exists
+[3dtest] [OK] district stage after repair: 1
+[3dtest] phase5 save/load
+[3dtest] [OK] save_slot(3)
+[3dtest] [OK] has_save
+[3dtest] [OK] load_slot(3)
+[3dtest] phase6 coins/shop
+[3dtest] [OK] coins 107 -> 207
+[3dtest] [OK] upgrade item exists
+[3dtest] [OK] upgrade bought: coins 707
+[3dtest] [OK] upgrade applied
+[3dtest] phase7 boss architect
+[3dtest] [OK] boss spawned
+[3dtest] [OK] boss DetectArea connected: 1
+[3dtest] [OK] boss P1 damage: hp=575.0
+[3dtest] [OK] boss phase P1 at >66%: 0
+[3dtest] [OK] boss phase P2 at <66%: 1
+[3dtest] [OK] boss P2 light-gated: hp=500.0
+[3dtest] [OK] boss energy ball spawned: 2
+[3dtest] [OK] boss minion cap 3: 4 -> 7
+[3dtest] [OK] boss phase P3 at <33%: 2
+[3dtest] [OK] boss P3 vulnerable: hp=181.25
+[3dtest] phase8 death screen
+[3dtest] [OK] death screen opened via UIManager (state=4)
+[3dtest] ALL PASSED
+WARNING: 30 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 12 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
+# EXIT=0

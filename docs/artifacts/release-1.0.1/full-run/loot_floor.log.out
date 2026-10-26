@@ -1,0 +1,1 @@
+proof_run loot_floor: exit=0 -> .qa_logs/proofs/loot_floor.out (30 lines)

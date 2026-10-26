@@ -1,0 +1,1 @@
+proof_run accessibility: exit=0 -> .qa_logs/proofs/accessibility.out (18 lines)

@@ -1,0 +1,1 @@
+proof_run profile: exit=0 -> .qa_logs/proofs/profile.out (12 lines)

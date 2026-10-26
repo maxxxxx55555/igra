@@ -1,0 +1,4 @@
+276e815ce4e970e705b3b707afe8b5f3d04e8922e22cebdbc5044cc1f9461d93  LastStreetlight-1.0.1-web.zip
+20d4e05c90802bacee87e51eb85bb93f32dc5d05211c1e8cf235cb6399a6397d  LastStreetlight-1.0.1-windows.zip
+7bfb2c645926c41fac1c72cba5f93a1591829cd91c5dc0b44f92347affd0f7da  release-report.json
+9817be322d8cd630c66e928e60d21c8bd16f5b9ea264530f3b0e4beabd7cd7ad  verification-logs.zip

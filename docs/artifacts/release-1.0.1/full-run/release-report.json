@@ -1,0 +1,438 @@
+{
+  "schema": 1,
+  "source_commit": "10627bb3316785e934010bb963db76bf39ae2642",
+  "started_utc": "2026-10-26T10:00:35.378898+00:00",
+  "state": "BUILDS_CREATED_MANUAL_REVIEW_PENDING",
+  "checks": [
+    {
+      "name": "godot_version",
+      "exit_code": 0,
+      "seconds": 0.27,
+      "log": "logs/godot_version.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 0,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "static",
+      "exit_code": 0,
+      "seconds": 45.23,
+      "log": "logs/static.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 0,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "qa_import",
+      "exit_code": 0,
+      "seconds": 49.06,
+      "log": "logs/qa_import.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 0,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "profile",
+      "exit_code": 0,
+      "seconds": 1.17,
+      "log": "logs/profile.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 0,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "compile",
+      "exit_code": 0,
+      "seconds": 4.13,
+      "log": "logs/compile.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 0,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "all_scripts",
+      "exit_code": 0,
+      "seconds": 3.63,
+      "log": "logs/all_scripts.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 0,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "signals",
+      "exit_code": 0,
+      "seconds": 1.12,
+      "log": "logs/signals.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 0,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "api",
+      "exit_code": 0,
+      "seconds": 1.17,
+      "log": "logs/api.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 0,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "localization",
+      "exit_code": 0,
+      "seconds": 1.12,
+      "log": "logs/localization.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 0,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "assets",
+      "exit_code": 0,
+      "seconds": 1.22,
+      "log": "logs/assets.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 0,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "world",
+      "exit_code": 0,
+      "seconds": 9.39,
+      "log": "logs/world.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 1,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "save",
+      "exit_code": 0,
+      "seconds": 1.22,
+      "log": "logs/save.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 0,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "craft",
+      "exit_code": 0,
+      "seconds": 1.12,
+      "log": "logs/craft.log",
+      "known_dummy_teardown_messages": 2,
+      "resource_retention_messages": 1,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "security",
+      "exit_code": 0,
+      "seconds": 1.52,
+      "log": "logs/security.log",
+      "known_dummy_teardown_messages": 2,
+      "resource_retention_messages": 1,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "boot",
+      "exit_code": 0,
+      "seconds": 65.12,
+      "log": "logs/boot.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 1,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "footsteps",
+      "exit_code": 0,
+      "seconds": 1.22,
+      "log": "logs/footsteps.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 0,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "save_guard",
+      "exit_code": 0,
+      "seconds": 1.12,
+      "log": "logs/save_guard.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 0,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "audio_start",
+      "exit_code": 0,
+      "seconds": 1.32,
+      "log": "logs/audio_start.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 0,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "audio_bus",
+      "exit_code": 0,
+      "seconds": 1.62,
+      "log": "logs/audio_bus.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 0,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "loot_floor",
+      "exit_code": 0,
+      "seconds": 26.89,
+      "log": "logs/loot_floor.log",
+      "known_dummy_teardown_messages": 2,
+      "resource_retention_messages": 1,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "theme",
+      "exit_code": 0,
+      "seconds": 1.32,
+      "log": "logs/theme.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 0,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "settings",
+      "exit_code": 0,
+      "seconds": 1.27,
+      "log": "logs/settings.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 0,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "accessibility",
+      "exit_code": 0,
+      "seconds": 1.12,
+      "log": "logs/accessibility.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 0,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "layout",
+      "exit_code": 0,
+      "seconds": 2.62,
+      "log": "logs/layout.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 0,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "release_polish",
+      "exit_code": 0,
+      "seconds": 2.87,
+      "log": "logs/release_polish.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 0,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "closeout",
+      "exit_code": 0,
+      "seconds": 137.95,
+      "log": "logs/closeout.log",
+      "known_dummy_teardown_messages": 10,
+      "resource_retention_messages": 1,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "goldmaster",
+      "exit_code": 0,
+      "seconds": 28.65,
+      "log": "logs/goldmaster.log",
+      "known_dummy_teardown_messages": 4,
+      "resource_retention_messages": 0,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "touch",
+      "exit_code": 0,
+      "seconds": 1.52,
+      "log": "logs/touch.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 0,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "bot_1",
+      "exit_code": 0,
+      "seconds": 130.32,
+      "log": "logs/bot_1.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 1,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "bot_counters_1",
+      "exit_code": 0,
+      "seconds": 0.02,
+      "log": "logs/bot_counters_1.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 0,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "bot_2",
+      "exit_code": 0,
+      "seconds": 137.55,
+      "log": "logs/bot_2.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 1,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "bot_counters_2",
+      "exit_code": 0,
+      "seconds": 0.01,
+      "log": "logs/bot_counters_2.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 0,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "bot_3",
+      "exit_code": 0,
+      "seconds": 131.15,
+      "log": "logs/bot_3.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 0,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "bot_counters_3",
+      "exit_code": 0,
+      "seconds": 0.01,
+      "log": "logs/bot_counters_3.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 0,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "timing_30",
+      "exit_code": 0,
+      "seconds": 7.79,
+      "log": "logs/timing_30.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 1,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "timing_60",
+      "exit_code": 0,
+      "seconds": 9.09,
+      "log": "logs/timing_60.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 1,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "timing_120",
+      "exit_code": 0,
+      "seconds": 11.59,
+      "log": "logs/timing_120.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 1,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "timing_compare",
+      "exit_code": 0,
+      "seconds": 0.03,
+      "log": "logs/timing_compare.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 0,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "export_import",
+      "exit_code": 0,
+      "seconds": 49.19,
+      "log": "logs/export_import.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 0,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "export_windows",
+      "exit_code": 0,
+      "seconds": 5.43,
+      "log": "logs/export_windows.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 0,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "export_web",
+      "exit_code": 0,
+      "seconds": 4.78,
+      "log": "logs/export_web.log",
+      "known_dummy_teardown_messages": 0,
+      "resource_retention_messages": 0,
+      "dummy_texture_retention_messages": 0,
+      "result": "PASS"
+    }
+  ],
+  "manual_review": {
+    "real_device_controls_audio_performance": "PENDING",
+    "asset_music_rights": "PENDING",
+    "android_store_signing_and_testing": "PENDING"
+  },
+  "artifacts": [
+    {
+      "file": "LastStreetlight-1.0.1-windows.zip",
+      "bytes": 79889826,
+      "sha256": "20d4e05c90802bacee87e51eb85bb93f32dc5d05211c1e8cf235cb6399a6397d"
+    },
+    {
+      "file": "LastStreetlight-1.0.1-web.zip",
+      "bytes": 52308553,
+      "sha256": "276e815ce4e970e705b3b707afe8b5f3d04e8922e22cebdbc5044cc1f9461d93"
+    }
+  ],
+  "source_tree_dirty": false,
+  "godot_version": "# proof godot_version\n# utc 20261026T100035Z\n# head 10627bb3 (uncommitted paths: 0)\n# env none\n# cmd /workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --headless --path /workspace/scratch/e4e8279ce462/igra --version\n4.7.2.stable.official.ed1daf0bf\n# EXIT=0",
+  "finished_utc": "2026-10-26T10:15:31.245745+00:00"
+}

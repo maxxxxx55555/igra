@@ -1,0 +1,56 @@
+# proof assets
+# utc 20261026T100223Z
+# head 10627bb3 (uncommitted paths: 2)
+# env QA_SOAK_SEC=20 TLS_UDG_GUARDED=1 
+# cmd /workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --headless --path /workspace/scratch/e4e8279ce462/release-delivery-check/qa-project res://scenes/tools/asset_check_scene.tscn
+WARNING: Couldn't get executable path from /proc/self/exe, using argv[0]
+     at: get_executable_path (drivers/unix/os_unix.cpp:1157)
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[asset-check] OK  ItemDatabase заполнен (49 предметов)
+[asset-check] OK  у всех предметов есть icon (49/49)
+[asset-check] OK  PNG есть для всех предметов
+[asset-check] OK  draw_icon(battery) рисует спрайт
+[asset-check] OK  draw_icon(gear) рисует спрайт
+[asset-check] OK  draw_icon(serum) рисует спрайт
+[asset-check] OK  draw_icon(blueprint_backpack_slots) рисует спрайт
+[asset-check] OK  AudioManager._gen_pickup есть
+[asset-check] OK  AudioManager._gen_coin есть
+[asset-check] OK  AudioManager._gen_success есть
+[asset-check] OK  AudioManager._gen_fanfare есть
+[asset-check] OK  AudioManager._gen_chime есть
+[asset-check] OK  AudioManager._gen_powerup есть
+[asset-check] OK  AudioManager._gen_error есть
+[asset-check] OK  AudioManager._gen_thud есть
+[asset-check] OK  AudioManager._gen_boom есть
+[asset-check] OK  _gen_pickup даёт непустой WAV
+[asset-check] OK  item_picked_up озвучен
+[asset-check] OK  puzzle_solved озвучен
+[asset-check] OK  achievement_unlocked озвучен
+[asset-check] OK  player_damaged озвучен
+[asset-check] OK  S9.2 шаги по поверхностям (7/7)
+[asset-check] OK  S9.2 лязг для тяжёлого груза
+[asset-check] OK  S9.3 звуки монстров (6/6)
+[asset-check] OK  все новые WAV непустые
+[asset-check] OK  FootstepSystem знает все поверхности
+[asset-check] OK  все треки настроений на диске
+[asset-check] OK  треки импортированы (попадут в APK)
+[asset-check] OK  треки непустые и зациклены
+[asset-check] OK  эмбиент задан для 11 районов
+[asset-check] OK  районы звучат по-разному (11 уникальных трека)
+[asset-check] OK  смена района переключает музыку
+[asset-check] OK  substation даёт свой эмбиент
+[asset-check] OK  возврат в suburbs возвращает трек
+[asset-check] OK  иконка есть: icon.png
+[asset-check] OK  icon.png размер 512x512 (нужно 512)
+[asset-check] OK  иконка есть: foreground_1080x1080.png
+[asset-check] OK  foreground_1080x1080.png размер 1080x1080 (нужно 1080)
+[asset-check] OK  иконка есть: background_1080x1080.png
+[asset-check] OK  background_1080x1080.png размер 1080x1080 (нужно 1080)
+[asset-check] OK  project.godot использует icon.png
+[asset-check] OK  Android launcher icons привязаны
+[asset-check] OK  INTERNET разрешён (нужен для LAN-мультиплеера)
+[asset-check] DONE fails=0
+WARNING: 5 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+# EXIT=0

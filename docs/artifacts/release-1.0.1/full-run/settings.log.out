@@ -1,0 +1,1 @@
+proof_run settings: exit=0 -> .qa_logs/proofs/settings.out (15 lines)

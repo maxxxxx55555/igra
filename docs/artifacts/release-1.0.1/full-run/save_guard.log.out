@@ -1,0 +1,1 @@
+proof_run save_guard: exit=0 -> .qa_logs/proofs/save_guard.out (24 lines)

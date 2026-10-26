@@ -1,20 +1,24 @@
-# Release work checkpoint
+# Release work complete
 
-Branch: release/mega-finish, public baseline release/v10.1.0 (a4b1943).
-User authorized whole-game fixes and a self-contained authenticated uploader.
-Remote main is unchanged; no owner GitHub writes were made from this environment.
+Branch: release/mega-finish; public baseline a4b1943.
+Validated source: 10627bb3316785e934010bb963db76bf39ae2642.
+Remote owner main is unchanged; writes here used only disposable local remotes.
 
-Done: run identity/save migration, focus/quit checkpointing, startup audio,
-unknown-achievement guard, quest refresh, ending audio teardown, responsive
-localized terminal screens with art, UI above world effects, quiet rejection of
-corrupt signed side files and QA snapshots, unused drag preview cleanup.
-39 regression checks; 611 closeout checks; full engine matrix passed in development.
-8 canonical frames and 11 ending/small-locale frames captured on Mesa llvmpipe.
-Windows and Web export successfully; final end-to-end pipeline verification next.
+Done: run identity/save migration, lifecycle checkpointing, startup audio gate,
+unknown-achievement rejection, quest refresh, ending audio cleanup, responsive
+localized ending/death screens with art and retained Hardcore statistics,
+UI above world effects, quiet malformed signed/QA file rejection, drag cleanup.
 
-Mega script: embedded SHA256-checked Git bundle, GitHub browser login, repository
-permission check, atomic creation of a NEW branch, remote commit verification,
-pinned private toolchain, isolated QA profiles, bot/timing gates, exports,
-SHA256/report/logs and draft release assets. Android uses the owner's signing key.
-PowerShell tested against disposable Git remotes; no main/existing-ref overwrite.
-Manual native device/audio/performance, signing and store/rights review are pending.
+One full pipeline: 41/41 stages; static 69; closeout 611; new regression 39;
+GOLDMASTER/touch pass; bots 3/3 WIN with correct counters; timing 15/15 keys.
+Windows/Web release archives, SHA256 report and complete logs generated.
+15 release-tool tests pass; full 12.8 MB PowerShell payload replayed to a local
+remote with main preserved. Native embedded Linux boot smoke: 600 frames.
+8 canonical and 11 ending/locale native Mesa frames captured.
+
+Delivery: one self-contained Igra-MegaRelease.ps1 with verified source bundle,
+GitHub browser login, repository permission checks, atomic NEW-branch creation,
+remote SHA verification, pinned toolchain, isolated QA, builds and draft assets.
+Android optional with the owner's existing key. Source saved before long builds.
+Manual device/audio/performance, rights, Android signing and stores are pending.
+Details and hashes: docs/RELEASE_1_0_1.md and docs/artifacts/release-1.0.1/full-run/.

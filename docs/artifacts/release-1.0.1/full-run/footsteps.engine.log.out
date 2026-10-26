@@ -1,0 +1,32 @@
+# proof footsteps
+# utc 20261026T100343Z
+# head 10627bb3 (uncommitted paths: 2)
+# env QA_SOAK_SEC=20 TLS_UDG_GUARDED=1 
+# cmd /workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --headless --path /workspace/scratch/e4e8279ce462/release-delivery-check/qa-project res://scenes/tools/footstep_check_scene.tscn
+WARNING: Couldn't get executable path from /proc/self/exe, using argv[0]
+     at: get_executable_path (drivers/unix/os_unix.cpp:1157)
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[footstep] asphalt_dry/3 -> step_asphalt_dry pitch 0.85 OK
+[footstep] asphalt_dry/1 -> step_asphalt_dry pitch 0.94 OK
+[footstep] asphalt_dry/2 -> step_asphalt_dry pitch 1.05 OK
+[footstep] asphalt_wet/3 -> step_asphalt_wet pitch 0.83 OK
+[footstep] asphalt_wet/1 -> step_asphalt_wet pitch 0.92 OK
+[footstep] asphalt_wet/2 -> step_asphalt_wet pitch 1.03 OK
+[footstep] concrete/3 -> footsteps/concrete_walk pitch 0.96 OK
+[footstep] concrete/1 -> footsteps/concrete_jog pitch 0.96 OK
+[footstep] concrete/2 -> footsteps/concrete_sprint pitch 0.96 OK
+[footstep] wood/3 -> footsteps/wood_walk pitch 0.95 OK
+[footstep] wood/1 -> footsteps/wood_jog pitch 0.95 OK
+[footstep] wood/2 -> footsteps/wood_sprint pitch 0.95 OK
+[footstep] metal/3 -> footsteps/metal_walk pitch 0.95 OK
+[footstep] metal/1 -> footsteps/metal_jog pitch 0.95 OK
+[footstep] metal/2 -> footsteps/metal_sprint pitch 0.95 OK
+[footstep] puddle/3 -> step_puddle pitch 0.81 OK
+[footstep] puddle/1 -> step_puddle pitch 0.90 OK
+[footstep] puddle/2 -> step_puddle pitch 1.01 OK
+[footstep] glass/3 -> step_glass pitch 0.86 OK
+[footstep] glass/1 -> step_glass pitch 0.96 OK
+[footstep] glass/2 -> step_glass pitch 1.08 OK
+[footstep-check] DONE fails=0
+# EXIT=0

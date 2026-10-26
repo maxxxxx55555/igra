@@ -1,0 +1,1 @@
+proof_run localization: exit=0 -> .qa_logs/proofs/localization.out (27 lines)

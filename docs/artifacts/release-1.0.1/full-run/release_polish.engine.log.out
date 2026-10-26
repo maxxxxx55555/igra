@@ -1,0 +1,50 @@
+# proof release_polish
+# utc 20261026T100421Z
+# head 10627bb3 (uncommitted paths: 2)
+# env QA_SOAK_SEC=20 TLS_UDG_GUARDED=1 
+# cmd /workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --headless --path /workspace/scratch/e4e8279ce462/release-delivery-check/qa-project res://scenes/tools/release_polish_check_scene.tscn
+WARNING: Couldn't get executable path from /proc/self/exe, using argv[0]
+     at: get_executable_path (drivers/unix/os_unix.cpp:1157)
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[release-polish] OK new run clears counters
+[release-polish] OK main save preserves run identity independently of settings
+[release-polish] OK slot writes run metadata
+[release-polish] OK slot restores run metadata
+[release-polish] OK invalid field types rejected
+[release-polish] OK nonfinite counters rejected
+[release-polish] OK negative counters clamp
+[release-polish] OK legacy defaults restore
+[release-polish] OK legacy envelope migration loads
+[release-polish] OK unknown achievement grants nothing
+[release-polish] OK focus loss checkpoints and pauses
+[release-polish] OK menu unpauses
+[release-polish] OK menu checkpoints active run
+[release-polish] OK close checkpoint writes
+[release-polish] OK Auto-save off respected
+[release-polish] OK sting silent before input
+[release-polish] OK sample silent before input
+[release-polish] OK fallback silent before input
+[release-polish] OK input enables UI feedback
+[release-polish] OK world postprocessing draws below UI
+[release-polish] OK ending illustration: light
+[release-polish] OK ending illustration: hope
+[release-polish] OK ending illustration: survivor
+[release-polish] OK ending illustration: dark
+[release-polish] OK ending illustration: truth
+[release-polish] OK ending music stops on menu
+[release-polish] OK Hardcore summary survives wipe and retranslation
+[release-polish] OK small title fits: ru
+[release-polish] OK last action reachable: ru
+[release-polish] OK small title fits: en
+[release-polish] OK last action reachable: en
+[release-polish] OK small title fits: es
+[release-polish] OK last action reachable: es
+[release-polish] OK small title fits: de
+[release-polish] OK last action reachable: de
+[release-polish] OK small title fits: fr
+[release-polish] OK last action reachable: fr
+[release-polish] OK small title fits: pt_BR
+[release-polish] OK last action reachable: pt_BR
+[release-polish] DONE checks=39 fails=0
+# EXIT=0

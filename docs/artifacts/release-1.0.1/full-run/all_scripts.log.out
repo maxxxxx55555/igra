@@ -1,0 +1,1 @@
+proof_run all_scripts: exit=0 -> .qa_logs/proofs/all_scripts.out (12 lines)
