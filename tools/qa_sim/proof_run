@@ -32,10 +32,12 @@ settings="$(env | grep -E '^(TLS_|CLOSEOUT_|QA_|TIMING_)' | sort | tr '\n' ' ')"
 	echo "# head ${head_} (uncommitted paths: ${dirty})"
 	echo "# env ${settings:-none}"
 	echo "# cmd $*"
-} > "$out"
-"$@" >> "$out" 2>&1
-rc=$?
-echo "# EXIT=${rc}" >> "$out"
+	# Keep one open descriptor: reopening an append handle on a synchronized
+	# filesystem can observe an old length and overwrite the command's tail.
+	"$@"
+	rc=$?
+	echo "# EXIT=${rc}"
+} > "$out" 2>&1
 for f in "${attach[@]+"${attach[@]}"}"; do
 	[[ -f "$f" ]] && cp "$f" ".qa_logs/proofs/${id}.attach.$(basename "$f")"
 done

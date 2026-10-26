@@ -11,9 +11,10 @@ test_incomplete_zero_exit_fails (__main__.JudgeTests.test_incomplete_zero_exit_f
 test_only_exact_dummy_backend_diagnostic_is_classified (__main__.JudgeTests.test_only_exact_dummy_backend_diagnostic_is_classified) ... ok
 test_profile_configuration_and_roundtrip (__main__.JudgeTests.test_profile_configuration_and_roundtrip) ... ok
 test_profile_refuses_owner_path (__main__.JudgeTests.test_profile_refuses_owner_path) ... ok
+test_proof_preserves_a_large_output_tail_and_failure_exit (__main__.JudgeTests.test_proof_preserves_a_large_output_tail_and_failure_exit) ... ok
 test_real_errors_fail_even_after_done (__main__.JudgeTests.test_real_errors_fail_even_after_done) ... ok
 
 ----------------------------------------------------------------------
-Ran 14 tests in 5.454s
+Ran 15 tests in 5.651s
 
 OK

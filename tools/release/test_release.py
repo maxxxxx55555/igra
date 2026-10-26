@@ -17,6 +17,23 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class JudgeTests(unittest.TestCase):
+    def test_proof_preserves_a_large_output_tail_and_failure_exit(self):
+        bash = shutil.which("bash")
+        if not bash:
+            self.skipTest("Bash is needed for the proof wrapper")
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory)
+            self.assertEqual(subprocess.run(["git", "init", str(project)], capture_output=True).returncode, 0)
+            script = project / "tools/qa_sim/proof_run"
+            script.parent.mkdir(parents=True)
+            shutil.copy2(ROOT / "tools/qa_sim/proof_run", script)
+            child = 'import sys; print("x" * 800000); print("REQUIRED_DONE_MARKER"); sys.exit(7)'
+            result = subprocess.run([bash, str(script), "burst", "--", sys.executable, "-c", child], capture_output=True)
+            self.assertEqual(result.returncode, 7, result.stdout + result.stderr)
+            output = (project / ".qa_logs/proofs/burst.out").read_text()
+            self.assertTrue(output.endswith("REQUIRED_DONE_MARKER\n# EXIT=7\n"))
+            self.assertEqual(output.count("x" * 800000), 1)
+
     def test_first_import_restores_the_original_theme_even_after_failure(self):
         with tempfile.TemporaryDirectory() as directory:
             project = Path(directory)

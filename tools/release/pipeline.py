@@ -272,14 +272,22 @@ class Pipeline:
         # Godot's own Gradle source archive; reject any unexpected traversal.
         android_build = project / "android/build"
         android_build.mkdir(parents=True, exist_ok=True)
+        (android_build / ".gdignore").write_text("\n", encoding="utf-8")
         with zipfile.ZipFile(source) as files:
             for member in files.infolist():
                 target = (android_build / member.filename).resolve()
                 if android_build.resolve() not in target.parents and target != android_build.resolve():
                     raise RuntimeError("Unsafe Android template path")
             files.extractall(android_build)
+            if os.name != "nt":
+                for member in files.infolist():
+                    mode = (member.external_attr >> 16) & 0o777
+                    if mode:
+                        (android_build / member.filename).chmod(mode)
         (project / "android/.build_version").write_text("4.7.2.stable", encoding="utf-8")
         self.export(project, "Android", "android", "LastStreetlight-1.0.1.aab")
+        self.command("android_package_audit", [sys.executable, "tools/qa_sim/release_export_check.py", "--aab",
+                     str(self.out / "builds/android/LastStreetlight-1.0.1.aab")], timeout=300)
 
     def run(self):
         try:
