@@ -11,12 +11,23 @@ import tempfile
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from pipeline import configure_profile, judge, verified_profile, reset_profile  # noqa: E402
+from pipeline import configure_profile, import_configuration, judge, verified_profile, reset_profile  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 
 
 class JudgeTests(unittest.TestCase):
+    def test_first_import_restores_the_original_theme_even_after_failure(self):
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory)
+            data = b'[gui]\r\ntheme/custom="res://assets/ui/theme_tls.tres"\r\n'
+            (project / "project.godot").write_bytes(data)
+            with self.assertRaises(RuntimeError):
+                with import_configuration(project):
+                    self.assertIn('theme/custom=""', (project / "project.godot").read_text())
+                    raise RuntimeError("import failed")
+            self.assertEqual((project / "project.godot").read_bytes(), data)
+
     def test_incomplete_zero_exit_fails(self):
         with self.assertRaises(RuntimeError):
             judge("started", 0, r"DONE fails=0")
@@ -137,6 +148,12 @@ sys.exit(19)
         self.assertEqual(self.git("--git-dir", str(self.remote), "rev-parse", "refs/heads/release/test"), self.head)
         self.assertEqual(self.git("--git-dir", str(self.remote), "rev-parse", "refs/heads/main"), self.base)
         self.assertEqual(self.git("--git-dir", str(self.remote), "show", "release/test:game.txt"), "real game fixes")
+
+    def test_inherited_git_worktree_cannot_redirect_the_checkout(self):
+        result = self.run_script(GIT_DIR=str(self.source / ".git"), GIT_WORK_TREE=str(self.source))
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual(self.git("-C", str(self.source), "branch", "--show-current"), "release-payload")
+        self.assertEqual((self.source / "game.txt").read_text(), "real game fixes\n")
 
     def test_main_and_read_only_are_rejected(self):
         result = self.run_script(branch="main")

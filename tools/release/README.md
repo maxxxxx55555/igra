@@ -56,6 +56,9 @@ directory. Only that exact disposable directory can be cleared between tests.
 Original game saves/settings are not reset. The export copy retains the game's
 real name and user directory; test settings are never shipped. The original
 audio bus layout is restored after editor import in each copy.
+During the very first import the copy's custom GUI theme is deferred until its
+fonts have been imported. The original project configuration is restored even
+if that import fails; normal QA and exported games use the original theme.
 
 ## Android signing
 

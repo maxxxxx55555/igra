@@ -1,5 +1,6 @@
 """Check the game, export artifacts, record evidence. Never labels untested builds ready."""
 import argparse
+from contextlib import contextmanager
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -88,6 +89,20 @@ def configure_profile(project, name):
     text = re.sub(r'^config/(?:use_custom_user_dir|custom_user_dir_name)=.*\n?', '', text, flags=re.M)
     text = text.replace("[application]", '[application]\nconfig/use_custom_user_dir=true\nconfig/custom_user_dir_name="' + name + '"', 1)
     config.write_text(text, encoding="utf-8")
+
+
+@contextmanager
+def import_configuration(project):
+    """A fresh editor cannot load a font-backed custom theme before importing fonts."""
+    path = project / "project.godot"
+    original = path.read_bytes()
+    text = original.decode("utf-8")
+    text = re.sub(r'(?m)^theme/custom\s*=.*$', 'theme/custom=""', text)
+    path.write_text(text, encoding="utf-8")
+    try:
+        yield
+    finally:
+        path.write_bytes(original)
 
 
 def verified_profile(output, expected):
@@ -194,6 +209,11 @@ class Pipeline:
             args += ["--", *user_args]
         return self.engine(name, self.qa, args, marker, timeout, env)
 
+    def import_project(self, project, name):
+        with import_configuration(project):
+            self.engine(name, project, ["--editor", "--import", "--quit"], timeout=600)
+        shutil.copy2(self.source / "default_bus_layout.tres", project / "default_bus_layout.tres")
+
     def add_artifact(self, path):
         if not path.is_file() or path.stat().st_size == 0:
             raise RuntimeError(f"Empty or missing artifact: {path}")
@@ -273,8 +293,7 @@ class Pipeline:
                          marker=r"Всё зелёное.*Проверок пройдено:")
             copy_project(self.source, self.qa)
             configure_profile(self.qa, self.profile_name)
-            self.engine("qa_import", self.qa, ["--editor", "--import", "--quit"], timeout=600)
-            shutil.copy2(self.source / "default_bus_layout.tres", self.qa / "default_bus_layout.tres")
+            self.import_project(self.qa, "qa_import")
             output = self.gate("profile", "release_profile_check", r"\[release-profile\] DONE fails=0", 120)
             self.profile = verified_profile(output, self.profile_name)
             for gate in GATES:
@@ -294,8 +313,7 @@ class Pipeline:
             self.save_report()
             build = self.out / "export-project"
             copy_project(self.source, build)
-            self.engine("export_import", build, ["--editor", "--import", "--quit"], timeout=600)
-            shutil.copy2(self.source / "default_bus_layout.tres", build / "default_bus_layout.tres")
+            self.import_project(build, "export_import")
             self.export(build, "Windows Desktop", "windows", "LastStreetlight.exe")
             self.export(build, "Web", "web", "index.html")
             if self.args.android_sdk:

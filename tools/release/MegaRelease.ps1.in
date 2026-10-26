@@ -26,6 +26,12 @@ $script:BundleText = @'
 '@
 $script:Checkout = $null
 $script:BranchUrl = $null
+$script:SavedGitEnvironment = @{}
+$gitPathVariables = @('GIT_DIR', 'GIT_WORK_TREE', 'GIT_INDEX_FILE', 'GIT_OBJECT_DIRECTORY', 'GIT_COMMON_DIR', 'GIT_ALTERNATE_OBJECT_DIRECTORIES', 'GIT_CONFIG_COUNT', 'GIT_CONFIG_PARAMETERS', 'GIT_TEMPLATE_DIR')
+foreach ($key in $gitPathVariables) {
+    $script:SavedGitEnvironment[$key] = [Environment]::GetEnvironmentVariable($key, 'Process')
+    [Environment]::SetEnvironmentVariable($key, [NullString]::Value, 'Process')
+}
 
 function Find-App([string]$Name) {
     $item = Get-Command $Name -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1
@@ -234,7 +240,12 @@ try {
     if ($script:Checkout) { Write-Host ('Рабочие файлы сохранены: ' + $script:Checkout) }
     exit 1
 } finally {
+    foreach ($key in $gitPathVariables) {
+        $previous = $script:SavedGitEnvironment[$key]
+        if ($null -eq $previous) { $previous = [NullString]::Value }
+        [Environment]::SetEnvironmentVariable($key, $previous, 'Process')
+    }
     foreach ($key in @('GODOT_ANDROID_KEYSTORE_RELEASE_PATH', 'GODOT_ANDROID_KEYSTORE_RELEASE_USER', 'GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD')) {
-        [Environment]::SetEnvironmentVariable($key, $null, 'Process')
+        [Environment]::SetEnvironmentVariable($key, [NullString]::Value, 'Process')
     }
 }
