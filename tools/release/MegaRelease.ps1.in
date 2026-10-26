@@ -1,0 +1,240 @@
+#requires -Version 5.1
+<#
+Last Streetlight: source recovery, GitHub authentication, checks, Windows/Web
+builds, optional signed Android AAB, draft release with checksums and logs.
+Run the generated self-contained Igra-MegaRelease.ps1, not this template.
+#>
+[CmdletBinding()]
+param(
+    [string]$Repository,
+    [string]$Branch,
+    [string]$WorkRoot,
+    [switch]$SourceOnly,
+    [switch]$Android,
+    [string]$AndroidSdk,
+    [string]$JavaHome
+)
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+Import-Module "$PSHOME/Modules/Microsoft.PowerShell.Utility/Microsoft.PowerShell.Utility.psd1" -ErrorAction Stop
+$script:SourceHead = '@@HEAD@@'
+$script:SourceBase = 'a4b1943d1d6fbcee4eeffeff795b0a959fdb8dea'
+$script:BundleHash = '@@SHA256@@'
+$script:SourceUrl = 'https://github.com/maxxxxx55555/igra.git'
+$script:BundleText = @'
+@@BUNDLE@@
+'@
+$script:Checkout = $null
+$script:BranchUrl = $null
+
+function Find-App([string]$Name) {
+    $item = Get-Command $Name -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1
+    if ($null -ne $item) { return $item.Source }
+    return $null
+}
+
+function Invoke-Checked([string]$Exe, [string[]]$Arguments) {
+    $old = $ErrorActionPreference
+    try {
+        $ErrorActionPreference = 'Continue'
+        & $Exe @Arguments | Out-Host
+        $code = $LASTEXITCODE
+    } finally { $ErrorActionPreference = $old }
+    if ($code -ne 0) { throw "Command failed ($code): $Exe" }
+}
+
+function Read-Native([string]$Exe, [string[]]$Arguments) {
+    $old = $ErrorActionPreference
+    try {
+        $ErrorActionPreference = 'Continue'
+        $lines = @(& $Exe @Arguments 2>&1 | ForEach-Object { "$_" })
+        $code = $LASTEXITCODE
+    } finally { $ErrorActionPreference = $old }
+    if ($code -ne 0) { throw "Command failed ($code): $Exe`n$($lines -join "`n")" }
+    return ($lines -join "`n")
+}
+
+function Refresh-Path {
+    if ([Environment]::OSVersion.Platform -eq [PlatformID]::Win32NT) {
+        $env:PATH = [Environment]::GetEnvironmentVariable('Path', 'Machine') + ';' + [Environment]::GetEnvironmentVariable('Path', 'User') + ';' + $env:PATH
+        foreach ($dir in @('Git\cmd', 'GitHub CLI')) {
+            $env:PATH += ';' + [IO.Path]::Combine($env:ProgramFiles, $dir)
+        }
+    }
+}
+
+function Ensure-App([string]$Name, [string]$Package) {
+    $found = Find-App $Name
+    if ($found) { return $found }
+    $winget = Find-App 'winget'
+    if (-not $winget) { throw "Install $Name ($Package), then run this script again. Windows App Installer/winget is unavailable." }
+    Invoke-Checked $winget @('install', '--id', $Package, '--exact', '--source', 'winget', '--accept-source-agreements', '--accept-package-agreements')
+    Refresh-Path
+    $found = Find-App $Name
+    if (-not $found) { throw "$Name was installed. Reopen PowerShell and run the script again." }
+    return $found
+}
+
+function Normalize-Repository([string]$Value) {
+    $Value = $Value.Trim().TrimEnd('/') -replace '\.git$', ''
+    $Value = $Value -replace '^https://github\.com/', ''
+    if ($Value -notmatch '^[A-Za-z0-9][A-Za-z0-9-]{0,38}/[A-Za-z0-9_.-]+$' -or $Value.EndsWith('/.') -or $Value.EndsWith('/..')) {
+        throw 'Use owner/repository or an https://github.com/owner/repository URL.'
+    }
+    return $Value
+}
+
+function Git-Read([string[]]$Arguments) {
+    return Read-Native $script:Git (@('-c', 'credential.helper=', '-c', 'credential.https://github.com.helper=!gh auth git-credential') + $Arguments)
+}
+
+function Find-Python {
+    $py = Find-App 'py'
+    if ($py) {
+        try { return (Read-Native $py @('-3.12', '-c', 'import sys; print(sys.executable)')).Trim() } catch { }
+    }
+    if ([Environment]::OSVersion.Platform -eq [PlatformID]::Win32NT) {
+        $candidate = [IO.Path]::Combine($env:LOCALAPPDATA, 'Programs\Python\Python312\python.exe')
+        if ([IO.File]::Exists($candidate)) { return $candidate }
+        $winget = Find-App 'winget'
+        if (-not $winget) { throw 'Install Python 3.12 from python.org and run this script again.' }
+        Invoke-Checked $winget @('install', '--id', 'Python.Python.3.12', '--exact', '--source', 'winget', '--scope', 'user', '--accept-source-agreements', '--accept-package-agreements')
+        Refresh-Path
+        if ([IO.File]::Exists($candidate)) { return $candidate }
+        $py = Find-App 'py'
+        if ($py) { return (Read-Native $py @('-3.12', '-c', 'import sys; print(sys.executable)')).Trim() }
+    }
+    throw 'Python 3.12 was not found. Reopen PowerShell after installing it.'
+}
+
+function Read-SecretEnv([string]$Name, [string]$Prompt) {
+    $secure = Read-Host $Prompt -AsSecureString
+    $pointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
+    try { [Environment]::SetEnvironmentVariable($Name, [Runtime.InteropServices.Marshal]::PtrToStringBSTR($pointer), 'Process') }
+    finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($pointer); $secure.Dispose() }
+}
+
+try {
+    $bytes = [Convert]::FromBase64String($script:BundleText)
+    $sha = [Security.Cryptography.SHA256]::Create()
+    try { $actual = ([BitConverter]::ToString($sha.ComputeHash($bytes))).Replace('-', '').ToLowerInvariant() } finally { $sha.Dispose() }
+    if ($actual -ne $script:BundleHash) { throw 'Embedded source checksum mismatch. Nothing has been uploaded.' }
+    if (-not $Repository) { $Repository = Read-Host 'Репозиторий GitHub (Enter = maxxxxx55555/igra)' }
+    if ([string]::IsNullOrWhiteSpace($Repository)) { $Repository = 'maxxxxx55555/igra' }
+    $Repository = Normalize-Repository $Repository
+    if (-not $Branch) { $Branch = 'release/1.0.1-' + [DateTime]::UtcNow.ToString('yyyyMMdd-HHmmss') + '-' + [Guid]::NewGuid().ToString('N').Substring(0, 6) }
+    if ($Branch -ieq 'main' -or $Branch -ieq 'master' -or $Branch.StartsWith('refs/') -or $Branch.StartsWith('-')) { throw 'Choose a new release branch; main/master are protected by this script.' }
+    $script:Git = Ensure-App 'git' 'Git.Git'
+    $script:Gh = Ensure-App 'gh' 'GitHub.cli'
+    $env:PATH = [IO.Path]::GetDirectoryName($script:Gh) + [IO.Path]::PathSeparator + $env:PATH
+    $null = Git-Read @('check-ref-format', '--branch', $Branch)
+    try { $null = Read-Native $script:Gh @('auth', 'status', '--hostname', 'github.com') }
+    catch {
+        Write-Host 'Войдите в GitHub в открывшемся браузере. Пароль и токен в этот скрипт вводить не нужно.'
+        Invoke-Checked $script:Gh @('auth', 'login', '--hostname', 'github.com', '--git-protocol', 'https', '--web', '--skip-ssh-key')
+        $null = Read-Native $script:Gh @('auth', 'status', '--hostname', 'github.com')
+    }
+    $repoInfo = (Read-Native $script:Gh @('repo', 'view', $Repository, '--json', 'viewerPermission,isArchived')) | ConvertFrom-Json
+    if ($repoInfo.isArchived -or $repoInfo.viewerPermission -notin @('WRITE', 'MAINTAIN', 'ADMIN')) { throw "The active GitHub account cannot push to $Repository. Use gh auth switch or request access." }
+    if (-not $WorkRoot) {
+        $base = [Environment]::GetFolderPath('LocalApplicationData')
+        if (-not $base) { $base = [IO.Path]::GetTempPath() }
+        $WorkRoot = [IO.Path]::Combine($base, 'IgraRelease')
+    }
+    $job = [IO.Path]::Combine([IO.Path]::GetFullPath($WorkRoot), [DateTime]::UtcNow.ToString('yyyyMMdd-HHmmss') + '-' + [Guid]::NewGuid().ToString('N').Substring(0, 8))
+    $null = [IO.Directory]::CreateDirectory($job)
+    $bundle = [IO.Path]::Combine($job, 'release-source.bundle')
+    [IO.File]::WriteAllBytes($bundle, $bytes)
+    $bytes = $null
+    $script:BundleText = $null
+    $script:Checkout = [IO.Path]::Combine($job, 'source')
+    $url = 'https://github.com/' + $Repository + '.git'
+    $existing = Git-Read @('ls-remote', '--heads', $url, ('refs/heads/' + $Branch))
+    if ($existing.Trim()) { throw "Branch $Branch already exists. Select a new name; no branch will be overwritten." }
+    $null = Git-Read @('-c', 'core.autocrlf=false', 'clone', '--no-checkout', '--no-tags', $url, $script:Checkout)
+    $null = Git-Read @('-C', $script:Checkout, 'config', 'core.autocrlf', 'false')
+    try { $null = Git-Read @('-C', $script:Checkout, 'cat-file', '-e', ($script:SourceBase + '^{commit}')) }
+    catch { $null = Git-Read @('-C', $script:Checkout, 'fetch', '--no-tags', $script:SourceUrl, $script:SourceBase) }
+    $null = Git-Read @('-C', $script:Checkout, 'bundle', 'verify', $bundle)
+    $heads = Git-Read @('bundle', 'list-heads', $bundle)
+    if ($heads -notmatch ('(?m)^' + [regex]::Escape($script:SourceHead) + ' refs/heads/release-payload$')) { throw 'Unexpected embedded bundle head.' }
+    $null = Git-Read @('-C', $script:Checkout, 'fetch', '--no-tags', $bundle, 'refs/heads/release-payload')
+    $null = Git-Read @('-C', $script:Checkout, 'checkout', '-b', $Branch, $script:SourceHead)
+    if ((Git-Read @('-C', $script:Checkout, 'rev-parse', 'HEAD')).Trim() -ne $script:SourceHead) { throw 'Restored source revision does not match.' }
+    $null = Git-Read @('-C', $script:Checkout, 'merge-base', '--is-ancestor', $script:SourceBase, 'HEAD')
+    # Atomic creation: even if another user creates this branch after ls-remote,
+    # the empty expected lease rejects the race. No existing branch can be replaced.
+    $pushArgs = @('-C', $script:Checkout, 'push', '--porcelain', ('--force-with-lease=refs/heads/' + $Branch + ':'), 'origin', ('HEAD:refs/heads/' + $Branch))
+    try { $null = Git-Read $pushArgs }
+    catch {
+        if ($_.Exception.Message -notmatch 'workflow.*scope|scope.*workflow') { throw }
+        Write-Host 'GitHub запросил разрешение workflow для CI-файла. Подтвердите его в браузере.'
+        Invoke-Checked $script:Gh @('auth', 'refresh', '--hostname', 'github.com', '--scopes', 'workflow')
+        $null = Git-Read $pushArgs
+    }
+    $remote = Git-Read @('-C', $script:Checkout, 'ls-remote', '--heads', 'origin', ('refs/heads/' + $Branch))
+    if ($remote -notmatch ('(?m)^' + $script:SourceHead + '\s+refs/heads/' + [regex]::Escape($Branch) + '$')) { throw 'Upload could not be verified against GitHub.' }
+    $script:BranchUrl = 'https://github.com/' + $Repository + '/tree/' + $Branch
+    Write-Host ('SOURCE_SAVED: ' + $script:BranchUrl) -ForegroundColor Green
+    if ($SourceOnly) { Write-Host 'SourceOnly: сборки и проверки не запускались.'; exit 0 }
+    if ([Environment]::OSVersion.Platform -ne [PlatformID]::Win32NT) { throw 'The interactive mega build driver requires Windows. Source upload succeeded; Python pipeline is also available on Linux.' }
+    $python = Find-Python
+    $venv = [IO.Path]::Combine($job, 'venv')
+    Invoke-Checked $python @('-m', 'venv', $venv)
+    $python = [IO.Path]::Combine($venv, 'Scripts\python.exe')
+    $env:PATH = [IO.Path]::GetDirectoryName($python) + ';' + $env:PATH
+    $env:PYTHONUTF8 = '1'
+    $env:PYTHONIOENCODING = 'utf-8'
+    $requirements = [IO.Path]::Combine($script:Checkout, 'tools\release\requirements.txt')
+    Invoke-Checked $python @('-m', 'pip', 'install', '--disable-pip-version-check', '-r', $requirements)
+    $gitRoot = [IO.Path]::GetDirectoryName([IO.Path]::GetDirectoryName($script:Git))
+    $bash = [IO.Path]::Combine($gitRoot, 'bin\bash.exe')
+    if (-not [IO.File]::Exists($bash)) { $bash = [IO.Path]::Combine($gitRoot, 'usr\bin\bash.exe') }
+    if (-not [IO.File]::Exists($bash)) { throw 'Git for Windows Bash is missing. Reinstall Git for Windows.' }
+    $toolRoot = [IO.Path]::Combine([IO.Path]::GetFullPath($WorkRoot), 'toolchain-4.7.2')
+    $provisionArgs = @([IO.Path]::Combine($script:Checkout, 'tools\release\provision.py'), '--root', $toolRoot)
+    if ($Android) { $provisionArgs += '--android' }
+    Invoke-Checked $python $provisionArgs
+    $chain = [IO.File]::ReadAllText([IO.Path]::Combine($toolRoot, 'toolchain.json')) | ConvertFrom-Json
+    $output = [IO.Path]::Combine($job, 'verification')
+    $pipelineArgs = @([IO.Path]::Combine($script:Checkout, 'tools\release\pipeline.py'), '--source', $script:Checkout, '--output', $output, '--godot', $chain.godot, '--templates', $chain.templates, '--bash', $bash)
+    if ($Android) {
+        if (-not $AndroidSdk) { $AndroidSdk = Read-Host 'Путь к Android SDK с cmdline-tools/latest (лицензии sdkmanager должны быть приняты)' }
+        if (-not $JavaHome) { $JavaHome = Read-Host 'Путь к JDK 17 (JAVA_HOME)' }
+        $sdkManager = [IO.Path]::Combine($AndroidSdk, 'cmdline-tools\latest\bin\sdkmanager.bat')
+        $javaExe = [IO.Path]::Combine($JavaHome, 'bin\java.exe')
+        if (-not [IO.File]::Exists($sdkManager) -or -not [IO.File]::Exists($javaExe)) { throw 'Android SDK command-line tools/latest or JDK 17 path is invalid.' }
+        $env:JAVA_HOME = $JavaHome
+        $env:ANDROID_HOME = $AndroidSdk
+        Invoke-Checked $sdkManager @('--licenses', ('--sdk_root=' + $AndroidSdk))
+        Invoke-Checked $sdkManager @(('--sdk_root=' + $AndroidSdk), 'platform-tools', 'platforms;android-36', 'build-tools;36.1.0', 'ndk;29.0.14206865', 'cmake;3.10.2.4988404')
+        $keyPath = (Read-Host 'Путь к вашему существующему release/upload keystore').Trim('"')
+        if (-not [IO.File]::Exists($keyPath)) { throw 'Release keystore not found. No replacement signing key will be generated.' }
+        $env:GODOT_ANDROID_KEYSTORE_RELEASE_PATH = [IO.Path]::GetFullPath($keyPath)
+        $env:GODOT_ANDROID_KEYSTORE_RELEASE_USER = Read-Host 'Alias ключа'
+        Read-SecretEnv 'GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD' 'Пароль keystore (скрытый ввод)'
+        $pipelineArgs += @('--android-sdk', $AndroidSdk, '--java-home', $JavaHome)
+    }
+    Invoke-Checked $python $pipelineArgs
+    $artifacts = [IO.Path]::Combine($output, 'artifacts')
+    $report = [IO.File]::ReadAllText([IO.Path]::Combine($artifacts, 'release-report.json')) | ConvertFrom-Json
+    if ($report.state -ne 'BUILDS_CREATED_MANUAL_REVIEW_PENDING' -or $report.source_commit -ne $script:SourceHead) { throw 'Build report is incomplete or belongs to a different revision.' }
+    $tag = 'candidate-1.0.1-' + [DateTime]::UtcNow.ToString('yyyyMMdd-HHmmss') + '-' + [Guid]::NewGuid().ToString('N').Substring(0, 6)
+    $notes = [IO.Path]::Combine($job, 'release-notes.md')
+    $body = "Last Streetlight 1.0.1 release candidate`n`nSource: $($script:BranchUrl)`nCommit: $($script:SourceHead)`n`nAutomated source, engine, three-seed playthrough and 30/60/120 FPS checks passed. Windows and Web builds, SHA256SUMS and full verification logs are attached.`n`nManual device controls/audio/performance, asset/music rights, and Android signing/store/device acceptance are pending. This is a draft, not a store approval.`n"
+    [IO.File]::WriteAllText($notes, $body, [Text.UTF8Encoding]::new($false))
+    $releaseArgs = @('release', 'create', $tag, '--repo', $Repository, '--target', $script:SourceHead, '--draft', '--title', 'Last Streetlight 1.0.1 candidate', '--notes-file', $notes)
+    $releaseArgs += @([IO.Directory]::GetFiles($artifacts))
+    Invoke-Checked $script:Gh $releaseArgs
+    Write-Host ('Готовы сборки и черновик релиза: https://github.com/' + $Repository + '/releases') -ForegroundColor Green
+    Write-Host ('Файлы и отчёты: ' + $artifacts)
+} catch {
+    Write-Host ('Остановлено: ' + $_.Exception.Message) -ForegroundColor Red
+    if ($script:BranchUrl) { Write-Host ('Исходники уже сохранены в GitHub: ' + $script:BranchUrl) }
+    if ($script:Checkout) { Write-Host ('Рабочие файлы сохранены: ' + $script:Checkout) }
+    exit 1
+} finally {
+    foreach ($key in @('GODOT_ANDROID_KEYSTORE_RELEASE_PATH', 'GODOT_ANDROID_KEYSTORE_RELEASE_USER', 'GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD')) {
+        [Environment]::SetEnvironmentVariable($key, $null, 'Process')
+    }
+}

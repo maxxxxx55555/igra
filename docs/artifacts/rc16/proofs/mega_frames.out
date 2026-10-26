@@ -1,0 +1,26 @@
+# proof mega_frames
+# utc 20261026T085855Z
+# head 7e996993 (uncommitted paths: 29)
+# env TLS_CAPTURE_HASH=7e996993 
+# cmd bash /workspace/scratch/e4e8279ce462/run_visual.sh timeout 900 /workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --path . --resolution 1280x720 --audio-driver Dummy res://scenes/tools/release_frames_scene.tscn
+WARNING: Couldn't get executable path from /proc/self/exe, using argv[0]
+     at: get_executable_path (drivers/unix/os_unix.cpp:1157)
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+WARNING: Couldn't get executable path from /proc/self/exe, using argv[0]
+     at: get_executable_path (drivers/unix/os_unix.cpp:1157)
+WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver.
+     at: set_use_vsync (platform/linuxbsd/x11/gl_manager_x11.cpp:372)
+OpenGL API 4.5 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.2 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 20.1.2, 256 bits)
+
+[release-frames] frame 01_main_menu result=0
+[final] facing 28 of 96 street lights
+[final] 03 camera /root/Main3D/Camera3D at (-8.0, 2.557478, -8.0), player at (-8.0, 0.860233, -8.0) hp=100.0, paused=false
+[release-frames] frame 03_district_night_dark result=0
+[release-frames] frame 02_district_day_full result=0
+[release-frames] frame 07_skill_tree result=0
+[release-frames] frame 08_shop result=0
+[final] 04 camera /root/Main3D/Camera3D at (3.511302, 2.548901, -12.05593), player at (3.511302, 0.850102, -12.05593) hp=100.0, paused=false
+[release-frames] frame 04_combat result=0
+[final] 05 camera /root/Main3D/Camera3D at (-2.029505, 2.563524, -10.51551), player at (-2.029505, 0.859939, -10.51551) hp=100.0, paused=false
+[final] 05 boss at (2.578226, 1.2, -12.45685)
+# EXIT=0

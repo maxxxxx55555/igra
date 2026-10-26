@@ -93,15 +93,15 @@ is the quiet machine, not the change.
 | 9 | Texture format | ETC2/ASTC (`GDD.md:387`) | rc14: `rendering/textures/vram_compression/import_etc2_astc=true` in `project.godot`; the 520 VRAM-compressed textures now import BPTC (desktop) and ASTC (Android) | `project.godot`, `.import` scan | CONFIG, done |
 | 10 | Package size | Play caps the base module at 200 MB compressed download; check the current limit in Play Console at upload | Signed AAB **183.1 MB** (rc14, arm64-v8a): base module about 27 MB compressed (libs 24.5, dex 1.8, res 0.7); game data in the install-time asset pack, 155.1 MB compressed. The old 205.5 MB was a desktop PCK | `docs/RELEASE_ARTIFACTS.md` | MEASURED rc14; per-device download size is read in Play Console |
 | 11 | Audio, exported | music < 100 MB, SFX < 50 MB | music 37.2 MiB; non-music 24.0 MiB (sfx, one-shots, ambience without `wav_src`, UI, jingles, ending music, `_build`) | file sizes | STATIC-ESTIMATE |
-| 12 | Renderer | — | `gl_compatibility` on desktop and mobile (`project.godot:272-273`) | project.godot | CONFIG |
+| 12 | Renderer | — | `gl_compatibility` on desktop and mobile (`project.godot:273-274`) | project.godot | CONFIG |
 | 13 | Tier effects | GDD C06 | rc14 (`c785b2c`): the no-op SSIL, SSR and volumetric-fog keys are gone from `visual_quality.tres` (13 keys per tier); SSAO is the one tier effect left, and Compatibility supports it | `world_env_setup.gd`, `visual_quality.tres` | CONFIG |
 | 14 | Resolution scaling | — | rc14 (`c785b2c`): the bogus `scaling_3d/fsr_upscale` key is removed; Compatibility uses bilinear. The Render Scale slider (0.5-1.0) sets `Viewport.scaling_3d_scale` (`settings_manager.gd`) | project.godot | CONFIG; the slider's effect is NEEDS-GODOT-RECONFIRM |
-| 15 | MSAA 3D | — | the project default is `msaa_3d=1` (2x, `project.godot:278`) and the tier picks off, 2x, 2x or 4x (Low to Ultra, `scripts/world_env_setup.gd:20`, `MSAA_BY_TIER`, applied at `:172`); it was 4x on every tier before Session 23 | project.godot | CONFIG; the saving is MEASURED (Session 23) |
+| 15 | MSAA 3D | — | the project default is `msaa_3d=1` (2x, `project.godot:279`) and the tier picks off, 2x, 2x or 4x (Low to Ultra, `scripts/world_env_setup.gd:20`, `MSAA_BY_TIER`, applied at `:172`); it was 4x on every tier before Session 23 | project.godot | CONFIG; the saving is MEASURED (Session 23) |
 | 16 | Frame rate | 30–60 FPS | Desktop iGPU, windowed 1080p: p95 **33.3-34.2 ms** D1 and **40.3-40.4 ms** D11 on quiet runs (§0); device FPS never measured. `max_fps=60` | perf probe (§0) | MEASURED rc14 (desktop); device NEEDS-GODOT-RECONFIRM |
 | 17 | Shader warm-up | — | None: no warm-up or precompile code anywhere. Compatibility compiles each material variant on first use | code scan | STATIC; the first-use hitch is NEEDS-GODOT-RECONFIRM |
 | 18 | Polygons per district | < 50K | **1.34 M** primitives per frame in D1 and in D11 (rc14, §0): about 27x the budget | perf probe (§0) | MEASURED rc14, **OVER** |
-| 19 | Shadows | — | Directional 2048², soft filter 1 (`project.godot:275-276`); the flashlight casts shadows on desktop and none on mobile (`player_3d.gd:252-254`) | project.godot, player | CONFIG |
-| 20 | LOD | — | `mesh_lod/threshold_pixels=0.75` (`project.godot:280`) | project.godot | CONFIG |
+| 19 | Shadows | — | Directional 2048², soft filter 1 (`project.godot:276-277`); the flashlight casts shadows on desktop and none on mobile (`player_3d.gd:252-254`) | project.godot, player | CONFIG |
+| 20 | LOD | — | `mesh_lod/threshold_pixels=0.75` (`project.godot:281`) | project.godot | CONFIG |
 
 ## 2. Re-measure list for Local, in this order
 

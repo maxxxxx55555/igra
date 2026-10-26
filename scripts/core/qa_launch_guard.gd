@@ -136,7 +136,13 @@ static func snapshot(base: String, snap: String, pid: int) -> bool:
 
 ## The manifest when snap is complete and every file still matches it, else {}.
 static func read_manifest(snap: String) -> Dictionary:
-	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(snap + "/" + MANIFEST))
+	var path: String = snap + "/" + MANIFEST
+	if not FileAccess.file_exists(path):
+		return {}
+	var parser := JSON.new()
+	if parser.parse(FileAccess.get_file_as_string(path)) != OK:
+		return {}
+	var data: Variant = parser.data
 	if not (data is Dictionary) or not (data.get("files") is Dictionary):
 		return {}
 	for rel in data["files"]:

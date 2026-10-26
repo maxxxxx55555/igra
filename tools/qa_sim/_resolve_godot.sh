@@ -18,7 +18,7 @@
 # (typically because the sandbox has no outbound HTTPS — in that case
 # the caller prints the error and aborts).
 set -uo pipefail
-cd "$(dirname "${BASH_SOURCE[0]}")/../.."
+cd "$(dirname "${BASH_SOURCE[0]}")/../.." || exit 2
 
 REPO_ROOT="$(pwd)"
 CACHE_DIR="$REPO_ROOT/tools/.bin"
@@ -73,36 +73,26 @@ _probe() {
 
 echo "# no Godot found locally; attempting download..." >&2
 mkdir -p "$CACHE_DIR"
-for _ver in 4.3 4.2.2 4.2.1; do
-  for _url in \
-    "https://github.com/godotengine/godot/releases/download/${_ver}-stable/Godot_v${_ver}-stable_linux_headless.64.zip" \
-    "https://downloads.tuxfamily.org/godotengine/${_ver}/Godot_v${_ver}-stable_linux_headless.64.zip"; do
-    _probe "$_url" || continue
-    _zip="$CACHE_DIR/godot-headless-${_ver}.zip"
-    if _download "$_url" "$_zip"; then
-      if command -v unzip >/dev/null 2>&1; then
-        unzip -o "$_zip" -d "$CACHE_DIR" >/dev/null 2>&1
-        # Expected: Godot_vX.Y-stable_linux_headless.64 inside zip
-        for _bin in "$CACHE_DIR"/Godot_v*_linux_headless.64 "$CACHE_DIR"/Godot_v*_linux.x86_64; do
-          if [[ -x "$_bin" ]] || [[ -f "$_bin" ]]; then
-            chmod +x "$_bin" 2>/dev/null || true
-            ln -sf "$(basename "$_bin")" "$CACHE_DIR/godot4" 2>/dev/null || cp "$_bin" "$CACHE_DIR/godot4"
-            chmod +x "$CACHE_DIR/godot4"
-            rm -f "$_zip"
-            echo "$CACHE_DIR/godot4"
-            exit 0
-          fi
-        done
-      fi
-    fi
-  done
-done
+# Godot 4's standard binary supports --headless; no separate headless archive exists.
+_ver=4.7.2
+_url="https://github.com/godotengine/godot-builds/releases/download/${_ver}-stable/Godot_v${_ver}-stable_linux.x86_64.zip"
+_zip="$CACHE_DIR/godot-${_ver}.zip"
+_bin="$CACHE_DIR/Godot_v${_ver}-stable_linux.x86_64"
+if _probe "$_url" && _download "$_url" "$_zip" && command -v unzip >/dev/null 2>&1 \
+  && unzip -o "$_zip" -d "$CACHE_DIR" >/dev/null 2>&1 && [[ -f "$_bin" ]]; then
+  chmod +x "$_bin"
+  ln -sf "$(basename "$_bin")" "$CACHE_DIR/godot4" 2>/dev/null || cp "$_bin" "$CACHE_DIR/godot4"
+  chmod +x "$CACHE_DIR/godot4"
+  rm -f "$_zip"
+  echo "$CACHE_DIR/godot4"
+  exit 0
+fi
 
 # Give up.
 cat >&2 <<EOF
 ERROR: Godot 4 engine binary not found, and auto-download failed.
 
-Install Godot 4 (any 4.2+) and do one of:
+Install Godot 4.7.2 and do one of:
   - export GODOT=/absolute/path/to/godot
   - put \`godot4\` or \`godot\` on your PATH
   - drop a Linux Godot binary at tools/.bin/godot4 (chmod +x)

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """s31 (v10.0.0-close): the bundle record's signature honesty.
 
-usage: python tools/qa_sim/bundle_signature_check.py [--artifacts docs/RELEASE_ARTIFACTS.md] [--checklist docs/RELEASE_CHECKLIST.md] [--demo]
+usage: python tools/qa_sim/bundle_signature_check.py [--artifacts docs/RELEASE_ARTIFACTS.md] [--checklist docs/release_checklist.md] [--demo]
 FAIL when a bundle the record marks DEBUG-SIGNED is also marked uploadable or shippable in the same file: the debug-signed
 bundle must never be uploaded (Play rejects its signature), so the record may only name it with a do-not-upload line.
 --demo proves it both ways: a debug line that also says shippable FAILs, the do-not-upload line passes.
@@ -36,7 +36,7 @@ def main(argv):
     if "--demo" in argv:
         return demo()
     texts = []
-    for flag, default in (("--artifacts", "docs/RELEASE_ARTIFACTS.md"), ("--checklist", "docs/RELEASE_CHECKLIST.md")):
+    for flag, default in (("--artifacts", "docs/RELEASE_ARTIFACTS.md"), ("--checklist", "docs/release_checklist.md")):
         path = argv[argv.index(flag) + 1] if flag in argv else default
         texts.append((path, open(path, encoding="utf-8").read()))
     fails = [f.replace("FAIL", "FAIL %s:" % p, 1) for p, t in texts for f in findings(t)]

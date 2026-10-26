@@ -17,6 +17,7 @@ func _ready() -> void:
 	_check_missing_progress_hmac_rejected()
 	_check_fuzz_50_mutants()
 	_check_export_import()
+	_check_signed_fields()
 	_cleanup()
 	print("[save-integrity] DONE fails=", _fails)
 	get_tree().quit(0 if _fails == 0 else 1)
@@ -30,6 +31,17 @@ func _ok(cond: bool, what: String) -> void:
 
 func _path() -> String:
 	return "user://tls_savegame_slot%d.save" % _SLOT
+
+func _check_signed_fields() -> void:
+	var path: String = "user://_qa_signed_probe.save"
+	SaveSystem.write_signed(path, {"value": 7})
+	_ok(SaveSystem.read_signed(path) == {"value": 7}, "signed side file round trip")
+	for content: String in ["{broken", JSON.stringify({"hmac": [], "data_json": {}}), JSON.stringify({"hmac": SaveSystem._sign("{broken"), "data_json": "{broken"})]:
+		var file := FileAccess.open(path, FileAccess.WRITE)
+		file.store_string(content)
+		file.close()
+		_ok(SaveSystem.read_signed(path) == null, "malformed signed data rejected quietly")
+	DirAccess.remove_absolute(path)
 
 func _check_round_trip() -> void:
 	CoinWallet.from_dict({})

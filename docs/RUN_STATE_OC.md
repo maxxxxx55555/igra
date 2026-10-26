@@ -1,16 +1,20 @@
 # Release work checkpoint
 
-Branch: release/mega-finish, based on public release/v10.1.0 (a4b1943).
-User authorized complete game fixes and delivery through a self-contained script.
-The script must create a NEW remote branch; main must remain unchanged.
+Branch: release/mega-finish, public baseline release/v10.1.0 (a4b1943).
+User authorized whole-game fixes and a self-contained authenticated uploader.
+Remote main is unchanged; no owner GitHub writes were made from this environment.
 
-Completed: run identity/save migration, focus/quit checkpointing, startup audio,
-unknown achievement guard, quest refresh, ending audio teardown, responsive
-localized terminal screens with ending art, UI above world postprocessing.
-New regression scene: 39 checks passed on Godot 4.7.2 headless.
+Done: run identity/save migration, focus/quit checkpointing, startup audio,
+unknown-achievement guard, quest refresh, ending audio teardown, responsive
+localized terminal screens with art, UI above world effects, quiet rejection of
+corrupt signed side files and QA snapshots, unused drag preview cleanup.
+39 regression checks; 611 closeout checks; full engine matrix passed in development.
+8 canonical frames and 11 ending/small-locale frames captured on Mesa llvmpipe.
+Windows and Web export successfully; final end-to-end pipeline verification next.
 
-In progress: pinned toolchain, real QA/build pipeline, browser GitHub login,
-verified source upload, Windows/Web artifacts and a GitHub draft release.
-PowerShell bootstrap tests use only disposable local remotes; no owner push here.
-Next: complete engine matrix, refresh canonical frames, export, package and verify.
-Device/store acceptance and asset rights require owner review.
+Mega script: embedded SHA256-checked Git bundle, GitHub browser login, repository
+permission check, atomic creation of a NEW branch, remote commit verification,
+pinned private toolchain, isolated QA profiles, bot/timing gates, exports,
+SHA256/report/logs and draft release assets. Android uses the owner's signing key.
+PowerShell tested against disposable Git remotes; no main/existing-ref overwrite.
+Manual native device/audio/performance, signing and store/rights review are pending.

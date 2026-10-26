@@ -67,7 +67,7 @@ for n,p in auto:
       |set(re.findall(r'^signal (\w+)',t,re.M))
       |set(re.findall(r'^enum (\w+)',t,re.M)))
 builtin={'has_signal','has_method','call','get','set','connect','emit','is_connected',
- 'call_deferred','get_node_or_null','free','queue_free','add_child','get_children',
+ 'call_deferred','get_node_or_null','free','queue_free','add_child','get_children','get_child_count',
  'set_deferred','duplicate','get_class','notification','is_inside_tree','get_parent'}
 errs=[]
 if mem:
@@ -506,6 +506,7 @@ else
   if ! command -v "$GODOT" >/dev/null 2>&1; then
     echo "  ${DIM}Godot не найден в PATH. Укажите путь: GODOT=/путь/к/godot ./tools/check.sh${OFF}"
     echo "  ${DIM}Скачать: https://godotengine.org/download${OFF}"
+    bad "Godot is required for a complete check; use --static for static checks only"
   else
     # Engine gates run the real game on the owner's user:// profile (New
     # Game, autosave, forged upgrade cfgs): snapshot it, restore on any exit.
@@ -525,11 +526,12 @@ else
     run_gate() { # имя, сцена, [таймаут-с]
       local name="$1" scene="$2" t="${3:-90}"
       if [[ ! -f "${scene#res://}" ]]; then
-        echo "  ${DIM}пропуск${OFF} $name (нет $scene)"; return
+        bad "$name (missing $scene)"; return
       fi
       local out
       out=$(timeout "$t" "$GODOT" --headless --path . "$scene" 2>&1)
       local rc=$?
+      if [[ "$scene" == *closeout_check_scene.tscn ]] && ! printf '%s\n' "$out" | grep -aEq '^\[closeout\] DONE .*fails=0([[:space:]]|$)'; then rc=1; fi
       mkdir -p .qa_logs; printf '%s\n' "$out" > ".qa_logs/gate_$(basename "${scene%.tscn}").log"
       local hits; hits=$(printf '%s\n' "$out" | grep -aE "$BAD" | head -5)
       if [[ $rc -eq 0 && -n "$hits" ]]; then bad "$name (engine errors in the log)"; echo "$hits" | sed 's/^/         /'
@@ -606,6 +608,7 @@ else
     # P6 soak). Built 2026-09 but never wired in until now (P2 matrix-sweep
     # finding). Short soak here for check.sh speed; QA_SOAK_SEC=120 default
     # for a real soak run standalone.
+    run_gate "release lifecycle, terminal layouts and audio" "res://scenes/tools/release_polish_check_scene.tscn" 120
     QA_SOAK_SEC="${QA_SOAK_SEC:-20}" run_gate "GOLD MASTER suite (autoloads/input/districts/save-load/endings/i18n/soak)" "res://scenes/tools/qa_headless_suite_scene.tscn" 120
     # Draw-call budget: --headless всегда даёт draw_calls=0 (dummy renderer) -
     # гейт сам это обнаруживает и молча пропускает (SKIP, не OK/FAIL). Реальная

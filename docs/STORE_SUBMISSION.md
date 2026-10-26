@@ -183,7 +183,7 @@ Answer the form with these; **trust the rating IARC computes**. The expected res
 | Controlled substances | **Yes, a reference only.** The English strings name an item "Alcohol" (`ITEM_ALCOHOL`), an ingredient of the medkit and of the thrown fire bottle, and say nothing of anyone drinking it; the lore uses "drink" of a power grid. No tobacco, no drugs, no depiction of use. Answer Yes to a question about references to alcohol and No to one about depiction or use | `store/IARC_ANSWERS.md` (the pattern `\balcohol\b` over `data/i18n/en.json`), `scripts/crafting/workbench_logic.gd` |
 | Gambling | No real or simulated gambling, no loot boxes; daily rewards are deterministic | `scripts/systems/daily_challenge_manager.gd` |
 | Crude humour | No | |
-| Users interact / user-generated content | **No.** No chat, no user content, no sharing of location. The "Share" button only copies text to the clipboard | `scripts/ui/win_screen.gd:103` |
+| Users interact / user-generated content | **No.** No chat, no user content, no sharing of location. The "Share" button only copies text to the clipboard | `scripts/ui/win_screen.gd:94` |
 | Digital purchases | **No.** There are no in-app purchases; the shop spends coins earned in play | `scripts/economy/shop_service.gd:3` |
 | Unrestricted internet access | No: the App has no web view, no browser call and no network feature (§3.4 of the policy) | `docs/artifacts/rc16/proofs/s20_net_reach.out` |
 

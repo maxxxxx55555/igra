@@ -1,0 +1,1526 @@
+# proof mega_frames_complete
+# utc 20261026T090303Z
+# head 7e996993 (uncommitted paths: 35)
+# env TLS_CAPTURE_HASH=7e996993 
+# cmd bash /workspace/scratch/e4e8279ce462/run_visual.sh timeout 600 /workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --verbose --path . --resolution 1280x720 --audio-driver Dummy res://scenes/tools/release_frames_scene.tscn
+WARNING: Couldn't get executable path from /proc/self/exe, using argv[0]
+     at: get_executable_path (drivers/unix/os_unix.cpp:1157)
+WorkerThreadPool: 9 threads, 2 max low-priority.
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+TextServer: Added interface "Dummy"
+TextServer: Added interface "ICU / HarfBuzz / Graphite (Built-in)"
+SDL: Init OK!
+Accessibility: AccessKit driver loaded.
+Xshape 1.1 detected.
+Xinerama 1.1 detected.
+Xrandr 1.6 detected.
+Xrender 0.11 detected.
+Xinput 2.2 detected.
+XInput: Refreshing devices.
+XInput: No touch devices found.
+Input method started.
+WARNING: Couldn't get executable path from /proc/self/exe, using argv[0]
+     at: get_executable_path (drivers/unix/os_unix.cpp:1157)
+Detecting GPUs, set DRI_PRIME in the environment to override GPU detection logic.
+Only one GPU found, using default.
+Accessibility: window 0 adapter created.
+WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver.
+     at: set_use_vsync (platform/linuxbsd/x11/gl_manager_x11.cpp:372)
+XcursorGetTheme could not get cursor theme
+Failed loading custom cursor: crossed_circle
+DBus 1.14.10 detected.
+Using "default" pen tablet driver...
+Shader 'CanvasSdfShaderGLES3' SHA256: abf356c5c158e897c1737becd3e6532eb221c967f6121798daab7bfe96f2ce42
+Shader 'SkeletonShaderGLES3' SHA256: b724bbf96cb191c3ae0b22461482bd5d8f988f0884b3957c98bc8282be770042
+Shader 'ParticlesShaderGLES3' SHA256: e395289efaf6eb901f37fa52ee46789f3fed87c5d9721839dd1efbd72c3654f8
+Shader 'ParticlesCopyShaderGLES3' SHA256: 22a76bde134d7d817978f4d1aff359654d43eeaafe93ce29c4b2479f08797240
+Shader 'CopyShaderGLES3' SHA256: b0faebd6925ff1c833511b8c8f5903495c10d50a2e0380eccc8928f02753a292
+Shader 'CubemapFilterShaderGLES3' SHA256: b609d6da4f54d6088e153d0529646c1ae7652585a5cfd976768f9045952120e2
+Shader 'GlowShaderGLES3' SHA256: 8f5fe5d3855cfde58ee491780c7ef8f87450649ccee7c499d11dac3127823727
+Shader 'PostShaderGLES3' SHA256: bc75cc50626db27e4022969ac2e0db5def83d6ef6bad584c4e142e19decd1e6c
+Shader 'FeedShaderGLES3' SHA256: 91c6c80fb626be963e0d35c9015450afdb94c21a9a5a724e204bb741159a3006
+Shader 'CanvasShaderGLES3' SHA256: 50e14a659485d647a4c471ff8cdd8c47a4c9f524840fd40fea402971ed8505c1
+Shader 'CanvasOcclusionShaderGLES3' SHA256: 6ae9571e2fd4347046b3e02c28910aa22c11964bfb6632690d8a04a5a3830b2d
+Shader 'SceneShaderGLES3' SHA256: 7d48dc451e6650f858cdcfe9b203ad43b4ba2a776d56dc49d3fb1ecc58b81b7d
+Shader 'SkyShaderGLES3' SHA256: 08e30f232d8d7c6701b8679fcb635418b8bf98a70969a29aad4fcff8eb5e115f
+Shader 'TexBlitShaderGLES3' SHA256: 0b620eaf8020cc83aa48c482a62589eab6cc981c4ab72fd0d99898a3c1811cfa
+OpenGL API 4.5 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.2 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 20.1.2, 256 bits)
+
+TextServer: Primary interface set to: "ICU / HarfBuzz / Graphite (Built-in)".
+Loading resource: res://assets/ui/theme_tls.tres remapped: res://assets/ui/theme_tls.tres
+Loading resource: res://assets/fonts/BebasNeue-Regular.ttf remapped: res://assets/fonts/BebasNeue-Regular.ttf
+Loading resource: res://.godot/imported/BebasNeue-Regular.ttf-7a75156d35bda4b35a4dba5fd3b7b0ab.fontdata remapped: res://.godot/imported/BebasNeue-Regular.ttf-7a75156d35bda4b35a4dba5fd3b7b0ab.fontdata
+Completed load for: 'res://assets/fonts/BebasNeue-Regular.ttf' remapped 'res://assets/fonts/BebasNeue-Regular.ttf' at thread -1
+Loading resource: res://assets/fonts/RobotoCondensed-Regular.ttf remapped: res://assets/fonts/RobotoCondensed-Regular.ttf
+Loading resource: res://.godot/imported/RobotoCondensed-Regular.ttf-4056b016815703f83b9034c7aa9a5282.fontdata remapped: res://.godot/imported/RobotoCondensed-Regular.ttf-4056b016815703f83b9034c7aa9a5282.fontdata
+Completed load for: 'res://assets/fonts/RobotoCondensed-Regular.ttf' remapped 'res://assets/fonts/RobotoCondensed-Regular.ttf' at thread -1
+Loading resource: res://assets/fonts/ShareTechMono-Regular.ttf remapped: res://assets/fonts/ShareTechMono-Regular.ttf
+Loading resource: res://.godot/imported/ShareTechMono-Regular.ttf-e284e7c8df68d7d931beb3b0762d7c17.fontdata remapped: res://.godot/imported/ShareTechMono-Regular.ttf-e284e7c8df68d7d931beb3b0762d7c17.fontdata
+Completed load for: 'res://assets/fonts/ShareTechMono-Regular.ttf' remapped 'res://assets/fonts/ShareTechMono-Regular.ttf' at thread -1
+Completed load for: 'res://assets/ui/theme_tls.tres' remapped 'res://assets/ui/theme_tls.tres' at thread -1
+Loading resource: res://default_bus_layout.tres remapped: res://default_bus_layout.tres
+Completed load for: 'res://default_bus_layout.tres' remapped 'res://default_bus_layout.tres' at thread -1
+CORE API HASH: 2004498165
+EDITOR API HASH: 1696660745
+SceneTreeFTI: traversal method DEFAULT
+Loading resource: res://scripts/core/qa_launch_guard.gd remapped: res://scripts/core/qa_launch_guard.gd
+Completed load for: 'res://scripts/core/qa_launch_guard.gd' remapped 'res://scripts/core/qa_launch_guard.gd' at thread -1
+Loading resource: res://scripts/ui/fade_transition.gd remapped: res://scripts/ui/fade_transition.gd
+Completed load for: 'res://scripts/ui/fade_transition.gd' remapped 'res://scripts/ui/fade_transition.gd' at thread -1
+Loading resource: res://scripts/systems/object_pool.gd remapped: res://scripts/systems/object_pool.gd
+Completed load for: 'res://scripts/systems/object_pool.gd' remapped 'res://scripts/systems/object_pool.gd' at thread -1
+Loading resource: res://scripts/systems/light_limiter.gd remapped: res://scripts/systems/light_limiter.gd
+Completed load for: 'res://scripts/systems/light_limiter.gd' remapped 'res://scripts/systems/light_limiter.gd' at thread -1
+Loading resource: res://scripts/theme_setup.gd remapped: res://scripts/theme_setup.gd
+Loading resource: res://data/districts/district_suburbs.tres remapped: res://data/districts/district_suburbs.tres
+Loading resource: res://scripts/world/district_data.gd remapped: res://scripts/world/district_data.gd
+Completed load for: 'res://scripts/world/district_data.gd' remapped 'res://scripts/world/district_data.gd' at thread -1
+Completed load for: 'res://data/districts/district_suburbs.tres' remapped 'res://data/districts/district_suburbs.tres' at thread -1
+Loading resource: res://data/districts/district_residential.tres remapped: res://data/districts/district_residential.tres
+Completed load for: 'res://data/districts/district_residential.tres' remapped 'res://data/districts/district_residential.tres' at thread -1
+Loading resource: res://data/districts/district_park.tres remapped: res://data/districts/district_park.tres
+Completed load for: 'res://data/districts/district_park.tres' remapped 'res://data/districts/district_park.tres' at thread -1
+Loading resource: res://data/districts/district_school.tres remapped: res://data/districts/district_school.tres
+Completed load for: 'res://data/districts/district_school.tres' remapped 'res://data/districts/district_school.tres' at thread -1
+Loading resource: res://data/districts/district_hospital.tres remapped: res://data/districts/district_hospital.tres
+Completed load for: 'res://data/districts/district_hospital.tres' remapped 'res://data/districts/district_hospital.tres' at thread -1
+Loading resource: res://data/districts/district_gas_station.tres remapped: res://data/districts/district_gas_station.tres
+Completed load for: 'res://data/districts/district_gas_station.tres' remapped 'res://data/districts/district_gas_station.tres' at thread -1
+Loading resource: res://data/districts/district_police.tres remapped: res://data/districts/district_police.tres
+Completed load for: 'res://data/districts/district_police.tres' remapped 'res://data/districts/district_police.tres' at thread -1
+Loading resource: res://data/districts/district_warehouses.tres remapped: res://data/districts/district_warehouses.tres
+Completed load for: 'res://data/districts/district_warehouses.tres' remapped 'res://data/districts/district_warehouses.tres' at thread -1
+Loading resource: res://data/districts/district_industrial.tres remapped: res://data/districts/district_industrial.tres
+Completed load for: 'res://data/districts/district_industrial.tres' remapped 'res://data/districts/district_industrial.tres' at thread -1
+Loading resource: res://data/districts/district_substation.tres remapped: res://data/districts/district_substation.tres
+Completed load for: 'res://data/districts/district_substation.tres' remapped 'res://data/districts/district_substation.tres' at thread -1
+Loading resource: res://data/districts/district_power_station.tres remapped: res://data/districts/district_power_station.tres
+Completed load for: 'res://data/districts/district_power_station.tres' remapped 'res://data/districts/district_power_station.tres' at thread -1
+Loading resource: res://data/shop/upgrade_flashlight_brightness.tres remapped: res://data/shop/upgrade_flashlight_brightness.tres
+Loading resource: res://scripts/economy/shop_item.gd remapped: res://scripts/economy/shop_item.gd
+Completed load for: 'res://scripts/economy/shop_item.gd' remapped 'res://scripts/economy/shop_item.gd' at thread -1
+Completed load for: 'res://data/shop/upgrade_flashlight_brightness.tres' remapped 'res://data/shop/upgrade_flashlight_brightness.tres' at thread -1
+Loading resource: res://data/shop/upgrade_flashlight_battery.tres remapped: res://data/shop/upgrade_flashlight_battery.tres
+Completed load for: 'res://data/shop/upgrade_flashlight_battery.tres' remapped 'res://data/shop/upgrade_flashlight_battery.tres' at thread -1
+Loading resource: res://data/shop/upgrade_backpack_capacity.tres remapped: res://data/shop/upgrade_backpack_capacity.tres
+Completed load for: 'res://data/shop/upgrade_backpack_capacity.tres' remapped 'res://data/shop/upgrade_backpack_capacity.tres' at thread -1
+Loading resource: res://data/shop/upgrade_backpack_slots.tres remapped: res://data/shop/upgrade_backpack_slots.tres
+Completed load for: 'res://data/shop/upgrade_backpack_slots.tres' remapped 'res://data/shop/upgrade_backpack_slots.tres' at thread -1
+Loading resource: res://data/shop/skin_survivor_ashen.tres remapped: res://data/shop/skin_survivor_ashen.tres
+Completed load for: 'res://data/shop/skin_survivor_ashen.tres' remapped 'res://data/shop/skin_survivor_ashen.tres' at thread -1
+Loading resource: res://data/shop/skin_survivor_rust.tres remapped: res://data/shop/skin_survivor_rust.tres
+Completed load for: 'res://data/shop/skin_survivor_rust.tres' remapped 'res://data/shop/skin_survivor_rust.tres' at thread -1
+Loading resource: res://data/shop/bundle_starter.tres remapped: res://data/shop/bundle_starter.tres
+Completed load for: 'res://data/shop/bundle_starter.tres' remapped 'res://data/shop/bundle_starter.tres' at thread -1
+Loading resource: res://data/balance/flashlight_stats.tres remapped: res://data/balance/flashlight_stats.tres
+Loading resource: res://scripts/player/flashlight_stats.gd remapped: res://scripts/player/flashlight_stats.gd
+Completed load for: 'res://scripts/player/flashlight_stats.gd' remapped 'res://scripts/player/flashlight_stats.gd' at thread -1
+Completed load for: 'res://data/balance/flashlight_stats.tres' remapped 'res://data/balance/flashlight_stats.tres' at thread -1
+Loading resource: res://data/balance/inventory_stats.tres remapped: res://data/balance/inventory_stats.tres
+Loading resource: res://scripts/inventory/inventory_stats.gd remapped: res://scripts/inventory/inventory_stats.gd
+Completed load for: 'res://scripts/inventory/inventory_stats.gd' remapped 'res://scripts/inventory/inventory_stats.gd' at thread -1
+Completed load for: 'res://data/balance/inventory_stats.tres' remapped 'res://data/balance/inventory_stats.tres' at thread -1
+Loading resource: res://data/items/battery.tres remapped: res://data/items/battery.tres
+Completed load for: 'res://data/items/battery.tres' remapped 'res://data/items/battery.tres' at thread -1
+Loading resource: res://data/items/medkit.tres remapped: res://data/items/medkit.tres
+Completed load for: 'res://data/items/medkit.tres' remapped 'res://data/items/medkit.tres' at thread -1
+Loading resource: res://data/items/key.tres remapped: res://data/items/key.tres
+Completed load for: 'res://data/items/key.tres' remapped 'res://data/items/key.tres' at thread -1
+Loading resource: res://data/items/scrap.tres remapped: res://data/items/scrap.tres
+Completed load for: 'res://data/items/scrap.tres' remapped 'res://data/items/scrap.tres' at thread -1
+Loading resource: res://data/items/cable.tres remapped: res://data/items/cable.tres
+Completed load for: 'res://data/items/cable.tres' remapped 'res://data/items/cable.tres' at thread -1
+Loading resource: res://data/items/fuse.tres remapped: res://data/items/fuse.tres
+Completed load for: 'res://data/items/fuse.tres' remapped 'res://data/items/fuse.tres' at thread -1
+Loading resource: res://data/items/blueprint_flashlight_brightness.tres remapped: res://data/items/blueprint_flashlight_brightness.tres
+Completed load for: 'res://data/items/blueprint_flashlight_brightness.tres' remapped 'res://data/items/blueprint_flashlight_brightness.tres' at thread -1
+Loading resource: res://data/items/blueprint_flashlight_battery.tres remapped: res://data/items/blueprint_flashlight_battery.tres
+Completed load for: 'res://data/items/blueprint_flashlight_battery.tres' remapped 'res://data/items/blueprint_flashlight_battery.tres' at thread -1
+Loading resource: res://data/items/blueprint_backpack_capacity.tres remapped: res://data/items/blueprint_backpack_capacity.tres
+Completed load for: 'res://data/items/blueprint_backpack_capacity.tres' remapped 'res://data/items/blueprint_backpack_capacity.tres' at thread -1
+Loading resource: res://data/items/blueprint_backpack_slots.tres remapped: res://data/items/blueprint_backpack_slots.tres
+Completed load for: 'res://data/items/blueprint_backpack_slots.tres' remapped 'res://data/items/blueprint_backpack_slots.tres' at thread -1
+Loading resource: res://data/items/gear.tres remapped: res://data/items/gear.tres
+Completed load for: 'res://data/items/gear.tres' remapped 'res://data/items/gear.tres' at thread -1
+Loading resource: res://data/items/wiring.tres remapped: res://data/items/wiring.tres
+Completed load for: 'res://data/items/wiring.tres' remapped 'res://data/items/wiring.tres' at thread -1
+Loading resource: res://data/items/circuit.tres remapped: res://data/items/circuit.tres
+Completed load for: 'res://data/items/circuit.tres' remapped 'res://data/items/circuit.tres' at thread -1
+Loading resource: res://data/items/transistor.tres remapped: res://data/items/transistor.tres
+Completed load for: 'res://data/items/transistor.tres' remapped 'res://data/items/transistor.tres' at thread -1
+Loading resource: res://data/items/motor.tres remapped: res://data/items/motor.tres
+Completed load for: 'res://data/items/motor.tres' remapped 'res://data/items/motor.tres' at thread -1
+Loading resource: res://data/items/radio_part.tres remapped: res://data/items/radio_part.tres
+Completed load for: 'res://data/items/radio_part.tres' remapped 'res://data/items/radio_part.tres' at thread -1
+Loading resource: res://data/items/scope_lens.tres remapped: res://data/items/scope_lens.tres
+Completed load for: 'res://data/items/scope_lens.tres' remapped 'res://data/items/scope_lens.tres' at thread -1
+Loading resource: res://data/items/serum.tres remapped: res://data/items/serum.tres
+Completed load for: 'res://data/items/serum.tres' remapped 'res://data/items/serum.tres' at thread -1
+Loading resource: res://data/items/gas_canister.tres remapped: res://data/items/gas_canister.tres
+Completed load for: 'res://data/items/gas_canister.tres' remapped 'res://data/items/gas_canister.tres' at thread -1
+Loading resource: res://data/items/ancient_key.tres remapped: res://data/items/ancient_key.tres
+Completed load for: 'res://data/items/ancient_key.tres' remapped 'res://data/items/ancient_key.tres' at thread -1
+Loading resource: res://data/items/transformer.tres remapped: res://data/items/transformer.tres
+Completed load for: 'res://data/items/transformer.tres' remapped 'res://data/items/transformer.tres' at thread -1
+Loading resource: res://data/items/tool.tres remapped: res://data/items/tool.tres
+Completed load for: 'res://data/items/tool.tres' remapped 'res://data/items/tool.tres' at thread -1
+Loading resource: res://data/items/coin.tres remapped: res://data/items/coin.tres
+Completed load for: 'res://data/items/coin.tres' remapped 'res://data/items/coin.tres' at thread -1
+Loading resource: res://data/items/backpack_l1.tres remapped: res://data/items/backpack_l1.tres
+Completed load for: 'res://data/items/backpack_l1.tres' remapped 'res://data/items/backpack_l1.tres' at thread -1
+Loading resource: res://data/items/backpack_l2.tres remapped: res://data/items/backpack_l2.tres
+Completed load for: 'res://data/items/backpack_l2.tres' remapped 'res://data/items/backpack_l2.tres' at thread -1
+Loading resource: res://data/items/document.tres remapped: res://data/items/document.tres
+Completed load for: 'res://data/items/document.tres' remapped 'res://data/items/document.tres' at thread -1
+Loading resource: res://data/items/audio_log.tres remapped: res://data/items/audio_log.tres
+Completed load for: 'res://data/items/audio_log.tres' remapped 'res://data/items/audio_log.tres' at thread -1
+Loading resource: res://data/items/photo.tres remapped: res://data/items/photo.tres
+Completed load for: 'res://data/items/photo.tres' remapped 'res://data/items/photo.tres' at thread -1
+Loading resource: res://data/items/fabric.tres remapped: res://data/items/fabric.tres
+Completed load for: 'res://data/items/fabric.tres' remapped 'res://data/items/fabric.tres' at thread -1
+Loading resource: res://data/items/alcohol.tres remapped: res://data/items/alcohol.tres
+Completed load for: 'res://data/items/alcohol.tres' remapped 'res://data/items/alcohol.tres' at thread -1
+Loading resource: res://data/items/gunpowder.tres remapped: res://data/items/gunpowder.tres
+Completed load for: 'res://data/items/gunpowder.tres' remapped 'res://data/items/gunpowder.tres' at thread -1
+Loading resource: res://data/items/case.tres remapped: res://data/items/case.tres
+Completed load for: 'res://data/items/case.tres' remapped 'res://data/items/case.tres' at thread -1
+Loading resource: res://data/items/metal.tres remapped: res://data/items/metal.tres
+Completed load for: 'res://data/items/metal.tres' remapped 'res://data/items/metal.tres' at thread -1
+Loading resource: res://data/items/paper.tres remapped: res://data/items/paper.tres
+Completed load for: 'res://data/items/paper.tres' remapped 'res://data/items/paper.tres' at thread -1
+Loading resource: res://data/items/bottle.tres remapped: res://data/items/bottle.tres
+Completed load for: 'res://data/items/bottle.tres' remapped 'res://data/items/bottle.tres' at thread -1
+Loading resource: res://data/items/noise_bomb.tres remapped: res://data/items/noise_bomb.tres
+Completed load for: 'res://data/items/noise_bomb.tres' remapped 'res://data/items/noise_bomb.tres' at thread -1
+Loading resource: res://data/items/lockpick.tres remapped: res://data/items/lockpick.tres
+Completed load for: 'res://data/items/lockpick.tres' remapped 'res://data/items/lockpick.tres' at thread -1
+Loading resource: res://data/items/repair_kit.tres remapped: res://data/items/repair_kit.tres
+Completed load for: 'res://data/items/repair_kit.tres' remapped 'res://data/items/repair_kit.tres' at thread -1
+Loading resource: res://data/items/firework.tres remapped: res://data/items/firework.tres
+Completed load for: 'res://data/items/firework.tres' remapped 'res://data/items/firework.tres' at thread -1
+Loading resource: res://data/items/molotov.tres remapped: res://data/items/molotov.tres
+Completed load for: 'res://data/items/molotov.tres' remapped 'res://data/items/molotov.tres' at thread -1
+Loading resource: res://data/items/makeshift_lamp.tres remapped: res://data/items/makeshift_lamp.tres
+Completed load for: 'res://data/items/makeshift_lamp.tres' remapped 'res://data/items/makeshift_lamp.tres' at thread -1
+Loading resource: res://data/items/plank.tres remapped: res://data/items/plank.tres
+Completed load for: 'res://data/items/plank.tres' remapped 'res://data/items/plank.tres' at thread -1
+Loading resource: res://data/items/enhanced_battery.tres remapped: res://data/items/enhanced_battery.tres
+Completed load for: 'res://data/items/enhanced_battery.tres' remapped 'res://data/items/enhanced_battery.tres' at thread -1
+Loading resource: res://data/items/battery_l2.tres remapped: res://data/items/battery_l2.tres
+Completed load for: 'res://data/items/battery_l2.tres' remapped 'res://data/items/battery_l2.tres' at thread -1
+Loading resource: res://data/items/blueprint_enhanced_battery.tres remapped: res://data/items/blueprint_enhanced_battery.tres
+Completed load for: 'res://data/items/blueprint_enhanced_battery.tres' remapped 'res://data/items/blueprint_enhanced_battery.tres' at thread -1
+Loading resource: res://data/items/blueprint_uv_flashlight.tres remapped: res://data/items/blueprint_uv_flashlight.tres
+Completed load for: 'res://data/items/blueprint_uv_flashlight.tres' remapped 'res://data/items/blueprint_uv_flashlight.tres' at thread -1
+Loading resource: res://data/items/blueprint_strobe_flashlight.tres remapped: res://data/items/blueprint_strobe_flashlight.tres
+Completed load for: 'res://data/items/blueprint_strobe_flashlight.tres' remapped 'res://data/items/blueprint_strobe_flashlight.tres' at thread -1
+Loading resource: res://data/items/blueprint_portable_workbench.tres remapped: res://data/items/blueprint_portable_workbench.tres
+Completed load for: 'res://data/items/blueprint_portable_workbench.tres' remapped 'res://data/items/blueprint_portable_workbench.tres' at thread -1
+Loading resource: res://data/items/blueprint_battery_l2.tres remapped: res://data/items/blueprint_battery_l2.tres
+Completed load for: 'res://data/items/blueprint_battery_l2.tres' remapped 'res://data/items/blueprint_battery_l2.tres' at thread -1
+Loading resource: res://data/monsters/monster_shadow.tres remapped: res://data/monsters/monster_shadow.tres
+Loading resource: res://scripts/enemies/monster_data.gd remapped: res://scripts/enemies/monster_data.gd
+Completed load for: 'res://scripts/enemies/monster_data.gd' remapped 'res://scripts/enemies/monster_data.gd' at thread -1
+Completed load for: 'res://data/monsters/monster_shadow.tres' remapped 'res://data/monsters/monster_shadow.tres' at thread -1
+Loading resource: res://data/monsters/monster_crawler.tres remapped: res://data/monsters/monster_crawler.tres
+Completed load for: 'res://data/monsters/monster_crawler.tres' remapped 'res://data/monsters/monster_crawler.tres' at thread -1
+Loading resource: res://data/monsters/monster_watcher.tres remapped: res://data/monsters/monster_watcher.tres
+Completed load for: 'res://data/monsters/monster_watcher.tres' remapped 'res://data/monsters/monster_watcher.tres' at thread -1
+Loading resource: res://data/monsters/monster_hunter.tres remapped: res://data/monsters/monster_hunter.tres
+Completed load for: 'res://data/monsters/monster_hunter.tres' remapped 'res://data/monsters/monster_hunter.tres' at thread -1
+Loading resource: res://data/monsters/monster_destroyer.tres remapped: res://data/monsters/monster_destroyer.tres
+Completed load for: 'res://data/monsters/monster_destroyer.tres' remapped 'res://data/monsters/monster_destroyer.tres' at thread -1
+Loading resource: res://data/monsters/monster_boss.tres remapped: res://data/monsters/monster_boss.tres
+Loading resource: res://assets/textures/enemies/architect_512.png remapped: res://assets/textures/enemies/architect_512.png
+Loading resource: res://.godot/imported/architect_512.png-3ea6a474012d8b20dd5e038d77e1178b.ctex remapped: res://.godot/imported/architect_512.png-3ea6a474012d8b20dd5e038d77e1178b.ctex
+Completed load for: 'res://assets/textures/enemies/architect_512.png' remapped 'res://assets/textures/enemies/architect_512.png' at thread -1
+Completed load for: 'res://data/monsters/monster_boss.tres' remapped 'res://data/monsters/monster_boss.tres' at thread -1
+Loading resource: res://data/monsters/monster_sharpshooter.tres remapped: res://data/monsters/monster_sharpshooter.tres
+Loading resource: res://assets/textures/enemies/sniper_512.png remapped: res://assets/textures/enemies/sniper_512.png
+Loading resource: res://.godot/imported/sniper_512.png-cb15fb481df79faf0df3e81af10ffd3b.ctex remapped: res://.godot/imported/sniper_512.png-cb15fb481df79faf0df3e81af10ffd3b.ctex
+Completed load for: 'res://assets/textures/enemies/sniper_512.png' remapped 'res://assets/textures/enemies/sniper_512.png' at thread -1
+Completed load for: 'res://data/monsters/monster_sharpshooter.tres' remapped 'res://data/monsters/monster_sharpshooter.tres' at thread -1
+Loading resource: res://data/monsters/monster_brute.tres remapped: res://data/monsters/monster_brute.tres
+Loading resource: res://assets/textures/enemies/brute_512.png remapped: res://assets/textures/enemies/brute_512.png
+Loading resource: res://.godot/imported/brute_512.png-37521dfdf6ab4ac77ba201793977fcb6.ctex remapped: res://.godot/imported/brute_512.png-37521dfdf6ab4ac77ba201793977fcb6.ctex
+Completed load for: 'res://assets/textures/enemies/brute_512.png' remapped 'res://assets/textures/enemies/brute_512.png' at thread -1
+Completed load for: 'res://data/monsters/monster_brute.tres' remapped 'res://data/monsters/monster_brute.tres' at thread -1
+Loading resource: res://data/monsters/monster_burner.tres remapped: res://data/monsters/monster_burner.tres
+Loading resource: res://assets/textures/enemies/burner_512.png remapped: res://assets/textures/enemies/burner_512.png
+Loading resource: res://.godot/imported/burner_512.png-c93a8b009b247bc9cd7f436cff610f6e.ctex remapped: res://.godot/imported/burner_512.png-c93a8b009b247bc9cd7f436cff610f6e.ctex
+Completed load for: 'res://assets/textures/enemies/burner_512.png' remapped 'res://assets/textures/enemies/burner_512.png' at thread -1
+Completed load for: 'res://data/monsters/monster_burner.tres' remapped 'res://data/monsters/monster_burner.tres' at thread -1
+Loading resource: res://data/monsters/monster_rotter.tres remapped: res://data/monsters/monster_rotter.tres
+Loading resource: res://assets/textures/enemies/rotter_512.png remapped: res://assets/textures/enemies/rotter_512.png
+Loading resource: res://.godot/imported/rotter_512.png-50a6f2c95217f46320e1866048350e48.ctex remapped: res://.godot/imported/rotter_512.png-50a6f2c95217f46320e1866048350e48.ctex
+Completed load for: 'res://assets/textures/enemies/rotter_512.png' remapped 'res://assets/textures/enemies/rotter_512.png' at thread -1
+Completed load for: 'res://data/monsters/monster_rotter.tres' remapped 'res://data/monsters/monster_rotter.tres' at thread -1
+Loading resource: res://data/monsters/monster_hound.tres remapped: res://data/monsters/monster_hound.tres
+Loading resource: res://assets/textures/enemies/hound_512.png remapped: res://assets/textures/enemies/hound_512.png
+Loading resource: res://.godot/imported/hound_512.png-ce7193976c2d6a51ea4d78d37684e6a7.ctex remapped: res://.godot/imported/hound_512.png-ce7193976c2d6a51ea4d78d37684e6a7.ctex
+Completed load for: 'res://assets/textures/enemies/hound_512.png' remapped 'res://assets/textures/enemies/hound_512.png' at thread -1
+Completed load for: 'res://data/monsters/monster_hound.tres' remapped 'res://data/monsters/monster_hound.tres' at thread -1
+Loading resource: res://data/monsters/monster_tvar.tres remapped: res://data/monsters/monster_tvar.tres
+Loading resource: res://assets/textures/enemies/tvar_512.png remapped: res://assets/textures/enemies/tvar_512.png
+Loading resource: res://.godot/imported/tvar_512.png-84669fb000e8eece6ba42dcbba131833.ctex remapped: res://.godot/imported/tvar_512.png-84669fb000e8eece6ba42dcbba131833.ctex
+Completed load for: 'res://assets/textures/enemies/tvar_512.png' remapped 'res://assets/textures/enemies/tvar_512.png' at thread -1
+Completed load for: 'res://data/monsters/monster_tvar.tres' remapped 'res://data/monsters/monster_tvar.tres' at thread -1
+Loading resource: res://scenes/pickups/item_pickup_3d.tscn remapped: res://scenes/pickups/item_pickup_3d.tscn
+Loading resource: res://scripts/pickups/item_pickup_3d.gd remapped: res://scripts/pickups/item_pickup_3d.gd
+Loading resource: res://assets/audio/sfx/ui_hover.wav remapped: res://assets/audio/sfx/ui_hover.wav
+Loading resource: res://.godot/imported/ui_hover.wav-eacb3655c6edd16c309106c266f283e3.sample remapped: res://.godot/imported/ui_hover.wav-eacb3655c6edd16c309106c266f283e3.sample
+Completed load for: 'res://assets/audio/sfx/ui_hover.wav' remapped 'res://assets/audio/sfx/ui_hover.wav' at thread -1
+Loading resource: res://assets/audio/sfx/sfx_hurt.wav remapped: res://assets/audio/sfx/sfx_hurt.wav
+Loading resource: res://.godot/imported/sfx_hurt.wav-aa030d0c9bb7faca8aa221e7fcadd95b.sample remapped: res://.godot/imported/sfx_hurt.wav-aa030d0c9bb7faca8aa221e7fcadd95b.sample
+Completed load for: 'res://assets/audio/sfx/sfx_hurt.wav' remapped 'res://assets/audio/sfx/sfx_hurt.wav' at thread -1
+Loading resource: res://assets/audio/sfx/amb_wind.ogg remapped: res://assets/audio/sfx/amb_wind.ogg
+Loading resource: res://.godot/imported/amb_wind.ogg-8a685f02bf14173c0630a20a50c0a97c.oggvorbisstr remapped: res://.godot/imported/amb_wind.ogg-8a685f02bf14173c0630a20a50c0a97c.oggvorbisstr
+Completed load for: 'res://assets/audio/sfx/amb_wind.ogg' remapped 'res://assets/audio/sfx/amb_wind.ogg' at thread -1
+Loading resource: res://assets/audio/sfx/sfx_flashlight_on.wav remapped: res://assets/audio/sfx/sfx_flashlight_on.wav
+Loading resource: res://.godot/imported/sfx_flashlight_on.wav-bad6f0d2f8db825ddd3072324c046ed6.sample remapped: res://.godot/imported/sfx_flashlight_on.wav-bad6f0d2f8db825ddd3072324c046ed6.sample
+Completed load for: 'res://assets/audio/sfx/sfx_flashlight_on.wav' remapped 'res://assets/audio/sfx/sfx_flashlight_on.wav' at thread -1
+Loading resource: res://assets/audio/sfx/sfx_flashlight_off.wav remapped: res://assets/audio/sfx/sfx_flashlight_off.wav
+Loading resource: res://.godot/imported/sfx_flashlight_off.wav-8eac1813380c8d1b68148f47dce1fbe3.sample remapped: res://.godot/imported/sfx_flashlight_off.wav-8eac1813380c8d1b68148f47dce1fbe3.sample
+Completed load for: 'res://assets/audio/sfx/sfx_flashlight_off.wav' remapped 'res://assets/audio/sfx/sfx_flashlight_off.wav' at thread -1
+Loading resource: res://assets/audio/one_shots/rain_on_metal_loop.ogg remapped: res://assets/audio/one_shots/rain_on_metal_loop.ogg
+Loading resource: res://.godot/imported/rain_on_metal_loop.ogg-f90c90920ed11c618057f0e6d6d5afd8.oggvorbisstr remapped: res://.godot/imported/rain_on_metal_loop.ogg-f90c90920ed11c618057f0e6d6d5afd8.oggvorbisstr
+Completed load for: 'res://assets/audio/one_shots/rain_on_metal_loop.ogg' remapped 'res://assets/audio/one_shots/rain_on_metal_loop.ogg' at thread -1
+Loading resource: res://assets/audio/one_shots/thunder_near.ogg remapped: res://assets/audio/one_shots/thunder_near.ogg
+Loading resource: res://.godot/imported/thunder_near.ogg-fa486f9a507d45c01423d0a58a816d39.oggvorbisstr remapped: res://.godot/imported/thunder_near.ogg-fa486f9a507d45c01423d0a58a816d39.oggvorbisstr
+Completed load for: 'res://assets/audio/one_shots/thunder_near.ogg' remapped 'res://assets/audio/one_shots/thunder_near.ogg' at thread -1
+Loading resource: res://assets/audio/one_shots/thunder_far.ogg remapped: res://assets/audio/one_shots/thunder_far.ogg
+Loading resource: res://.godot/imported/thunder_far.ogg-984b94d189ed3b04e776831ca03a6a4f.oggvorbisstr remapped: res://.godot/imported/thunder_far.ogg-984b94d189ed3b04e776831ca03a6a4f.oggvorbisstr
+Completed load for: 'res://assets/audio/one_shots/thunder_far.ogg' remapped 'res://assets/audio/one_shots/thunder_far.ogg' at thread -1
+Loading resource: res://assets/audio/one_shots/heartbeat_low_loop.ogg remapped: res://assets/audio/one_shots/heartbeat_low_loop.ogg
+Loading resource: res://.godot/imported/heartbeat_low_loop.ogg-2c42ad47a47642b4092d9a10022df51a.oggvorbisstr remapped: res://.godot/imported/heartbeat_low_loop.ogg-2c42ad47a47642b4092d9a10022df51a.oggvorbisstr
+Completed load for: 'res://assets/audio/one_shots/heartbeat_low_loop.ogg' remapped 'res://assets/audio/one_shots/heartbeat_low_loop.ogg' at thread -1
+Loading resource: res://assets/audio/one_shots/breath_low_loop.ogg remapped: res://assets/audio/one_shots/breath_low_loop.ogg
+Loading resource: res://.godot/imported/breath_low_loop.ogg-c624f30289e3f39fd08da3d03643ebd2.oggvorbisstr remapped: res://.godot/imported/breath_low_loop.ogg-c624f30289e3f39fd08da3d03643ebd2.oggvorbisstr
+Completed load for: 'res://assets/audio/one_shots/breath_low_loop.ogg' remapped 'res://assets/audio/one_shots/breath_low_loop.ogg' at thread -1
+Completed load for: 'res://scripts/pickups/item_pickup_3d.gd' remapped 'res://scripts/pickups/item_pickup_3d.gd' at thread -1
+Completed load for: 'res://scenes/pickups/item_pickup_3d.tscn' remapped 'res://scenes/pickups/item_pickup_3d.tscn' at thread -1
+Loading resource: res://scenes/pickups/document_pickup.tscn remapped: res://scenes/pickups/document_pickup.tscn
+Loading resource: res://scripts/document_pickup.gd remapped: res://scripts/document_pickup.gd
+Completed load for: 'res://scripts/document_pickup.gd' remapped 'res://scripts/document_pickup.gd' at thread -1
+Completed load for: 'res://scenes/pickups/document_pickup.tscn' remapped 'res://scenes/pickups/document_pickup.tscn' at thread -1
+Loading resource: res://scenes/props/secret.tscn remapped: res://scenes/props/secret.tscn
+Loading resource: res://scripts/world/secret.gd remapped: res://scripts/world/secret.gd
+Completed load for: 'res://scripts/world/secret.gd' remapped 'res://scripts/world/secret.gd' at thread -1
+Completed load for: 'res://scenes/props/secret.tscn' remapped 'res://scenes/props/secret.tscn' at thread -1
+Loading resource: res://scenes/pickups/weapon_pickup.tscn remapped: res://scenes/pickups/weapon_pickup.tscn
+Loading resource: res://scripts/gameplay/weapon_pickup.gd remapped: res://scripts/gameplay/weapon_pickup.gd
+Loading resource: res://scenes/weapons/weapon_pistol.tscn remapped: res://scenes/weapons/weapon_pistol.tscn
+Loading resource: res://scripts/weapons/weapon_pistol.gd remapped: res://scripts/weapons/weapon_pistol.gd
+Loading resource: res://assets/audio/sfx/sfx_shoot.wav remapped: res://assets/audio/sfx/sfx_shoot.wav
+Loading resource: res://.godot/imported/sfx_shoot.wav-6cdfe86568f186133a4783d65b0d9e13.sample remapped: res://.godot/imported/sfx_shoot.wav-6cdfe86568f186133a4783d65b0d9e13.sample
+Completed load for: 'res://assets/audio/sfx/sfx_shoot.wav' remapped 'res://assets/audio/sfx/sfx_shoot.wav' at thread -1
+Loading resource: res://assets/audio/sfx/sfx_reload.wav remapped: res://assets/audio/sfx/sfx_reload.wav
+Loading resource: res://.godot/imported/sfx_reload.wav-0a077f1f25f329a981230bd1fbb0652c.sample remapped: res://.godot/imported/sfx_reload.wav-0a077f1f25f329a981230bd1fbb0652c.sample
+Completed load for: 'res://assets/audio/sfx/sfx_reload.wav' remapped 'res://assets/audio/sfx/sfx_reload.wav' at thread -1
+Loading resource: res://assets/audio/sfx/sfx_hit.wav remapped: res://assets/audio/sfx/sfx_hit.wav
+Loading resource: res://.godot/imported/sfx_hit.wav-bd2056d85bc290aa7d5ffadccc125975.sample remapped: res://.godot/imported/sfx_hit.wav-bd2056d85bc290aa7d5ffadccc125975.sample
+Completed load for: 'res://assets/audio/sfx/sfx_hit.wav' remapped 'res://assets/audio/sfx/sfx_hit.wav' at thread -1
+Loading resource: res://data/balance/enemy_stats.tres remapped: res://data/balance/enemy_stats.tres
+Completed load for: 'res://data/balance/enemy_stats.tres' remapped 'res://data/balance/enemy_stats.tres' at thread -1
+Loading resource: res://scenes/pickups/ammo_pickup.tscn remapped: res://scenes/pickups/ammo_pickup.tscn
+Loading resource: res://scripts/gameplay/ammo_pickup.gd remapped: res://scripts/gameplay/ammo_pickup.gd
+Completed load for: 'res://scripts/gameplay/ammo_pickup.gd' remapped 'res://scripts/gameplay/ammo_pickup.gd' at thread -1
+Completed load for: 'res://scenes/pickups/ammo_pickup.tscn' remapped 'res://scenes/pickups/ammo_pickup.tscn' at thread -1
+Loading resource: res://scenes/vfx/vfx_hit_spark.tscn remapped: res://scenes/vfx/vfx_hit_spark.tscn
+Loading resource: res://assets/textures/fx/spark_alt_64.png remapped: res://assets/textures/fx/spark_alt_64.png
+Loading resource: res://.godot/imported/spark_alt_64.png-afc6f04774821a62fd52a241eb8a8ad0.bptc.ctex remapped: res://.godot/imported/spark_alt_64.png-afc6f04774821a62fd52a241eb8a8ad0.bptc.ctex
+Completed load for: 'res://assets/textures/fx/spark_alt_64.png' remapped 'res://assets/textures/fx/spark_alt_64.png' at thread -1
+Completed load for: 'res://scenes/vfx/vfx_hit_spark.tscn' remapped 'res://scenes/vfx/vfx_hit_spark.tscn' at thread -1
+Loading resource: res://scenes/vfx/vfx_blood.tscn remapped: res://scenes/vfx/vfx_blood.tscn
+Loading resource: res://assets/textures/fx/blood_splatter.png remapped: res://assets/textures/fx/blood_splatter.png
+Loading resource: res://.godot/imported/blood_splatter.png-42a5343a336b04a53f937485599e74d3.bptc.ctex remapped: res://.godot/imported/blood_splatter.png-42a5343a336b04a53f937485599e74d3.bptc.ctex
+Completed load for: 'res://assets/textures/fx/blood_splatter.png' remapped 'res://assets/textures/fx/blood_splatter.png' at thread -1
+Completed load for: 'res://scenes/vfx/vfx_blood.tscn' remapped 'res://scenes/vfx/vfx_blood.tscn' at thread -1
+Loading resource: res://scenes/vfx/vfx_blood_hit.tscn remapped: res://scenes/vfx/vfx_blood_hit.tscn
+Completed load for: 'res://scenes/vfx/vfx_blood_hit.tscn' remapped 'res://scenes/vfx/vfx_blood_hit.tscn' at thread -1
+Loading resource: res://scenes/vfx/vfx_sparkle.tscn remapped: res://scenes/vfx/vfx_sparkle.tscn
+Loading resource: res://assets/textures/fx/save_sparkle_64.png remapped: res://assets/textures/fx/save_sparkle_64.png
+Loading resource: res://.godot/imported/save_sparkle_64.png-49d0bcb06f9eddf65b8544752c86a580.bptc.ctex remapped: res://.godot/imported/save_sparkle_64.png-49d0bcb06f9eddf65b8544752c86a580.bptc.ctex
+Completed load for: 'res://assets/textures/fx/save_sparkle_64.png' remapped 'res://assets/textures/fx/save_sparkle_64.png' at thread -1
+Completed load for: 'res://scenes/vfx/vfx_sparkle.tscn' remapped 'res://scenes/vfx/vfx_sparkle.tscn' at thread -1
+Loading resource: res://scenes/vfx/vfx_confetti.tscn remapped: res://scenes/vfx/vfx_confetti.tscn
+Loading resource: res://assets/textures/fx/spark.png remapped: res://assets/textures/fx/spark.png
+Loading resource: res://.godot/imported/spark.png-2d4fba1759a5760c66a2d313c4534bee.bptc.ctex remapped: res://.godot/imported/spark.png-2d4fba1759a5760c66a2d313c4534bee.bptc.ctex
+Completed load for: 'res://assets/textures/fx/spark.png' remapped 'res://assets/textures/fx/spark.png' at thread -1
+Completed load for: 'res://scenes/vfx/vfx_confetti.tscn' remapped 'res://scenes/vfx/vfx_confetti.tscn' at thread -1
+Completed load for: 'res://scripts/weapons/weapon_pistol.gd' remapped 'res://scripts/weapons/weapon_pistol.gd' at thread -1
+Loading resource: res://scenes/vfx/vfx_muzzle_flash.tscn remapped: res://scenes/vfx/vfx_muzzle_flash.tscn
+Loading resource: res://assets/textures/fx/muzzle_flash.png remapped: res://assets/textures/fx/muzzle_flash.png
+Loading resource: res://.godot/imported/muzzle_flash.png-608b54bdc93bc8e7fde67ebaf25ea379.bptc.ctex remapped: res://.godot/imported/muzzle_flash.png-608b54bdc93bc8e7fde67ebaf25ea379.bptc.ctex
+Completed load for: 'res://assets/textures/fx/muzzle_flash.png' remapped 'res://assets/textures/fx/muzzle_flash.png' at thread -1
+Completed load for: 'res://scenes/vfx/vfx_muzzle_flash.tscn' remapped 'res://scenes/vfx/vfx_muzzle_flash.tscn' at thread -1
+Completed load for: 'res://scenes/weapons/weapon_pistol.tscn' remapped 'res://scenes/weapons/weapon_pistol.tscn' at thread -1
+Loading resource: res://scenes/weapons/weapon_rifle.tscn remapped: res://scenes/weapons/weapon_rifle.tscn
+Loading resource: res://scripts/weapons/weapon_rifle.gd remapped: res://scripts/weapons/weapon_rifle.gd
+Completed load for: 'res://scripts/weapons/weapon_rifle.gd' remapped 'res://scripts/weapons/weapon_rifle.gd' at thread -1
+Completed load for: 'res://scenes/weapons/weapon_rifle.tscn' remapped 'res://scenes/weapons/weapon_rifle.tscn' at thread -1
+Loading resource: res://scenes/weapons/weapon_shotgun.tscn remapped: res://scenes/weapons/weapon_shotgun.tscn
+Loading resource: res://scripts/weapons/weapon_shotgun.gd remapped: res://scripts/weapons/weapon_shotgun.gd
+Completed load for: 'res://scripts/weapons/weapon_shotgun.gd' remapped 'res://scripts/weapons/weapon_shotgun.gd' at thread -1
+Completed load for: 'res://scenes/weapons/weapon_shotgun.tscn' remapped 'res://scenes/weapons/weapon_shotgun.tscn' at thread -1
+Completed load for: 'res://scripts/gameplay/weapon_pickup.gd' remapped 'res://scripts/gameplay/weapon_pickup.gd' at thread -1
+Completed load for: 'res://scenes/pickups/weapon_pickup.tscn' remapped 'res://scenes/pickups/weapon_pickup.tscn' at thread -1
+Loading resource: res://scenes/gameplay/craft_station.tscn remapped: res://scenes/gameplay/craft_station.tscn
+Loading resource: res://scripts/gameplay/craft_station.gd remapped: res://scripts/gameplay/craft_station.gd
+Completed load for: 'res://scripts/gameplay/craft_station.gd' remapped 'res://scripts/gameplay/craft_station.gd' at thread -1
+Completed load for: 'res://scenes/gameplay/craft_station.tscn' remapped 'res://scenes/gameplay/craft_station.tscn' at thread -1
+Loading resource: res://scenes/enemies/shadow_3d.tscn remapped: res://scenes/enemies/shadow_3d.tscn
+Loading resource: res://scripts/enemies/shadow_3d.gd remapped: res://scripts/enemies/shadow_3d.gd
+Completed load for: 'res://scripts/enemies/shadow_3d.gd' remapped 'res://scripts/enemies/shadow_3d.gd' at thread -1
+Completed load for: 'res://scenes/enemies/shadow_3d.tscn' remapped 'res://scenes/enemies/shadow_3d.tscn' at thread -1
+Loading resource: res://scenes/enemies/crawler_3d.tscn remapped: res://scenes/enemies/crawler_3d.tscn
+Loading resource: res://scripts/enemies/crawler_3d.gd remapped: res://scripts/enemies/crawler_3d.gd
+Completed load for: 'res://scripts/enemies/crawler_3d.gd' remapped 'res://scripts/enemies/crawler_3d.gd' at thread -1
+Completed load for: 'res://scenes/enemies/crawler_3d.tscn' remapped 'res://scenes/enemies/crawler_3d.tscn' at thread -1
+Loading resource: res://scenes/enemies/hunter_3d.tscn remapped: res://scenes/enemies/hunter_3d.tscn
+Loading resource: res://scripts/enemies/hunter_3d.gd remapped: res://scripts/enemies/hunter_3d.gd
+Completed load for: 'res://scripts/enemies/hunter_3d.gd' remapped 'res://scripts/enemies/hunter_3d.gd' at thread -1
+Loading resource: res://scripts/enemies/monster_telegraph.gd remapped: res://scripts/enemies/monster_telegraph.gd
+Completed load for: 'res://scripts/enemies/monster_telegraph.gd' remapped 'res://scripts/enemies/monster_telegraph.gd' at thread -1
+Loading resource: res://scripts/components/visibility_enabler.gd remapped: res://scripts/components/visibility_enabler.gd
+Completed load for: 'res://scripts/components/visibility_enabler.gd' remapped 'res://scripts/components/visibility_enabler.gd' at thread -1
+Completed load for: 'res://scenes/enemies/hunter_3d.tscn' remapped 'res://scenes/enemies/hunter_3d.tscn' at thread -1
+Loading resource: res://scenes/enemies/watcher_3d.tscn remapped: res://scenes/enemies/watcher_3d.tscn
+Loading resource: res://scripts/enemies/watcher_3d.gd remapped: res://scripts/enemies/watcher_3d.gd
+Completed load for: 'res://scripts/enemies/watcher_3d.gd' remapped 'res://scripts/enemies/watcher_3d.gd' at thread -1
+Completed load for: 'res://scenes/enemies/watcher_3d.tscn' remapped 'res://scenes/enemies/watcher_3d.tscn' at thread -1
+Loading resource: res://scenes/enemies/destroyer_3d.tscn remapped: res://scenes/enemies/destroyer_3d.tscn
+Loading resource: res://scripts/enemies/destroyer_3d.gd remapped: res://scripts/enemies/destroyer_3d.gd
+Completed load for: 'res://scripts/enemies/destroyer_3d.gd' remapped 'res://scripts/enemies/destroyer_3d.gd' at thread -1
+Completed load for: 'res://scenes/enemies/destroyer_3d.tscn' remapped 'res://scenes/enemies/destroyer_3d.tscn' at thread -1
+Loading resource: res://scenes/enemies/sharpshooter_3d.tscn remapped: res://scenes/enemies/sharpshooter_3d.tscn
+Loading resource: res://scripts/enemies/sharpshooter_3d.gd remapped: res://scripts/enemies/sharpshooter_3d.gd
+Completed load for: 'res://scripts/enemies/sharpshooter_3d.gd' remapped 'res://scripts/enemies/sharpshooter_3d.gd' at thread -1
+Completed load for: 'res://scenes/enemies/sharpshooter_3d.tscn' remapped 'res://scenes/enemies/sharpshooter_3d.tscn' at thread -1
+Loading resource: res://scenes/enemies/brute_3d.tscn remapped: res://scenes/enemies/brute_3d.tscn
+Loading resource: res://scripts/enemies/brute_3d.gd remapped: res://scripts/enemies/brute_3d.gd
+Completed load for: 'res://scripts/enemies/brute_3d.gd' remapped 'res://scripts/enemies/brute_3d.gd' at thread -1
+Completed load for: 'res://scenes/enemies/brute_3d.tscn' remapped 'res://scenes/enemies/brute_3d.tscn' at thread -1
+Loading resource: res://scenes/enemies/burner_3d.tscn remapped: res://scenes/enemies/burner_3d.tscn
+Loading resource: res://scripts/enemies/burner_3d.gd remapped: res://scripts/enemies/burner_3d.gd
+Completed load for: 'res://scripts/enemies/burner_3d.gd' remapped 'res://scripts/enemies/burner_3d.gd' at thread -1
+Completed load for: 'res://scenes/enemies/burner_3d.tscn' remapped 'res://scenes/enemies/burner_3d.tscn' at thread -1
+Loading resource: res://scenes/enemies/rotter_3d.tscn remapped: res://scenes/enemies/rotter_3d.tscn
+Loading resource: res://scripts/enemies/rotter_3d.gd remapped: res://scripts/enemies/rotter_3d.gd
+Completed load for: 'res://scripts/enemies/rotter_3d.gd' remapped 'res://scripts/enemies/rotter_3d.gd' at thread -1
+Completed load for: 'res://scenes/enemies/rotter_3d.tscn' remapped 'res://scenes/enemies/rotter_3d.tscn' at thread -1
+Loading resource: res://scenes/enemies/hound_3d.tscn remapped: res://scenes/enemies/hound_3d.tscn
+Loading resource: res://scripts/enemies/hound_3d.gd remapped: res://scripts/enemies/hound_3d.gd
+Completed load for: 'res://scripts/enemies/hound_3d.gd' remapped 'res://scripts/enemies/hound_3d.gd' at thread -1
+Completed load for: 'res://scenes/enemies/hound_3d.tscn' remapped 'res://scenes/enemies/hound_3d.tscn' at thread -1
+Completed load for: 'res://scripts/theme_setup.gd' remapped 'res://scripts/theme_setup.gd' at thread -1
+Loading resource: res://scripts/net/lan_network.gd remapped: res://scripts/net/lan_network.gd
+Completed load for: 'res://scripts/net/lan_network.gd' remapped 'res://scripts/net/lan_network.gd' at thread -1
+Loading resource: res://scripts/_bootstrap.gd remapped: res://scripts/_bootstrap.gd
+Completed load for: 'res://scripts/_bootstrap.gd' remapped 'res://scripts/_bootstrap.gd' at thread -1
+Loading resource: res://scripts/world/world_bootstrap.gd remapped: res://scripts/world/world_bootstrap.gd
+Completed load for: 'res://scripts/world/world_bootstrap.gd' remapped 'res://scripts/world/world_bootstrap.gd' at thread -1
+Loading resource: res://scripts/systems/uisfx.gd remapped: res://scripts/systems/uisfx.gd
+Completed load for: 'res://scripts/systems/uisfx.gd' remapped 'res://scripts/systems/uisfx.gd' at thread -1
+Loading resource: res://scripts/lighting/light_grid.gd remapped: res://scripts/lighting/light_grid.gd
+Completed load for: 'res://scripts/lighting/light_grid.gd' remapped 'res://scripts/lighting/light_grid.gd' at thread -1
+Loading resource: res://scripts/systems/day_night.gd remapped: res://scripts/systems/day_night.gd
+Completed load for: 'res://scripts/systems/day_night.gd' remapped 'res://scripts/systems/day_night.gd' at thread -1
+Loading resource: res://scripts/world/district_atmosphere.gd remapped: res://scripts/world/district_atmosphere.gd
+Completed load for: 'res://scripts/world/district_atmosphere.gd' remapped 'res://scripts/world/district_atmosphere.gd' at thread -1
+Loading resource: res://scripts/systems/quality_manager.gd remapped: res://scripts/systems/quality_manager.gd
+Completed load for: 'res://scripts/systems/quality_manager.gd' remapped 'res://scripts/systems/quality_manager.gd' at thread -1
+Loading resource: res://scripts/world/finale_director.gd remapped: res://scripts/world/finale_director.gd
+Loading resource: res://scenes/enemies/boss_architect_3d.tscn remapped: res://scenes/enemies/boss_architect_3d.tscn
+Loading resource: res://scripts/enemies/boss_3d.gd remapped: res://scripts/enemies/boss_3d.gd
+Completed load for: 'res://scripts/enemies/boss_3d.gd' remapped 'res://scripts/enemies/boss_3d.gd' at thread -1
+Completed load for: 'res://scenes/enemies/boss_architect_3d.tscn' remapped 'res://scenes/enemies/boss_architect_3d.tscn' at thread -1
+Completed load for: 'res://scripts/world/finale_director.gd' remapped 'res://scripts/world/finale_director.gd' at thread -1
+Loading resource: res://scripts/multiplayer/lan_discovery.gd remapped: res://scripts/multiplayer/lan_discovery.gd
+Completed load for: 'res://scripts/multiplayer/lan_discovery.gd' remapped 'res://scripts/multiplayer/lan_discovery.gd' at thread -1
+Loading resource: res://scripts/multiplayer/network_manager.gd remapped: res://scripts/multiplayer/network_manager.gd
+Completed load for: 'res://scripts/multiplayer/network_manager.gd' remapped 'res://scripts/multiplayer/network_manager.gd' at thread -1
+Loading resource: res://scripts/systems/noise_propagation.gd remapped: res://scripts/systems/noise_propagation.gd
+Completed load for: 'res://scripts/systems/noise_propagation.gd' remapped 'res://scripts/systems/noise_propagation.gd' at thread -1
+Loading resource: res://scripts/systems/local_leaderboard.gd remapped: res://scripts/systems/local_leaderboard.gd
+Completed load for: 'res://scripts/systems/local_leaderboard.gd' remapped 'res://scripts/systems/local_leaderboard.gd' at thread -1
+Loading resource: res://scripts/systems/daily_challenge_manager.gd remapped: res://scripts/systems/daily_challenge_manager.gd
+Completed load for: 'res://scripts/systems/daily_challenge_manager.gd' remapped 'res://scripts/systems/daily_challenge_manager.gd' at thread -1
+Loading resource: res://scripts/systems/captions_manager.gd remapped: res://scripts/systems/captions_manager.gd
+Completed load for: 'res://scripts/systems/captions_manager.gd' remapped 'res://scripts/systems/captions_manager.gd' at thread -1
+Loading resource: res://scripts/ui/tutorial_system.gd remapped: res://scripts/ui/tutorial_system.gd
+Completed load for: 'res://scripts/ui/tutorial_system.gd' remapped 'res://scripts/ui/tutorial_system.gd' at thread -1
+Loading resource: res://scripts/economy/rewards_manager.gd remapped: res://scripts/economy/rewards_manager.gd
+Completed load for: 'res://scripts/economy/rewards_manager.gd' remapped 'res://scripts/economy/rewards_manager.gd' at thread -1
+Loading resource: res://scripts/systems/random_events.gd remapped: res://scripts/systems/random_events.gd
+Loading resource: res://assets/audio/sfx/mon_shadow_teleport.wav remapped: res://assets/audio/sfx/mon_shadow_teleport.wav
+Loading resource: res://.godot/imported/mon_shadow_teleport.wav-fe121dca9738aef56d7642f9498e907e.sample remapped: res://.godot/imported/mon_shadow_teleport.wav-fe121dca9738aef56d7642f9498e907e.sample
+Completed load for: 'res://assets/audio/sfx/mon_shadow_teleport.wav' remapped 'res://assets/audio/sfx/mon_shadow_teleport.wav' at thread -1
+Completed load for: 'res://scripts/systems/random_events.gd' remapped 'res://scripts/systems/random_events.gd' at thread -1
+Loading resource: res://scripts/systems/play_integrity_service.gd remapped: res://scripts/systems/play_integrity_service.gd
+Completed load for: 'res://scripts/systems/play_integrity_service.gd' remapped 'res://scripts/systems/play_integrity_service.gd' at thread -1
+Loading resource: res://scripts/ui/screen_flow_manager.gd remapped: res://scripts/ui/screen_flow_manager.gd
+Completed load for: 'res://scripts/ui/screen_flow_manager.gd' remapped 'res://scripts/ui/screen_flow_manager.gd' at thread -1
+Loaded system CA certificates
+Loading resource: res://scenes/tools/release_frames_scene.tscn remapped: res://scenes/tools/release_frames_scene.tscn
+Loading resource: res://scripts/tools/_release_frames.gd remapped: res://scripts/tools/_release_frames.gd
+Completed load for: 'res://scripts/tools/_release_frames.gd' remapped 'res://scripts/tools/_release_frames.gd' at thread -1
+Completed load for: 'res://scenes/tools/release_frames_scene.tscn' remapped 'res://scenes/tools/release_frames_scene.tscn' at thread -1
+ERROR: The process 156 does not exist or is not a child of the calling process.
+   at: _check_pid_is_running (drivers/unix/os_unix.cpp:863)
+   GDScript backtrace (most recent call first):
+       [0] _enter_tree (res://scripts/core/qa_launch_guard.gd:57)
+[qa-guard] restored the profile left by an interrupted QA run
+Loading resource: res://assets/textures/ui/btn_tex_normal.png remapped: res://assets/textures/ui/btn_tex_normal.png
+Loading resource: res://.godot/imported/btn_tex_normal.png-6c1610f3aba72c8b56c3770a495ae51e.bptc.ctex remapped: res://.godot/imported/btn_tex_normal.png-6c1610f3aba72c8b56c3770a495ae51e.bptc.ctex
+Completed load for: 'res://assets/textures/ui/btn_tex_normal.png' remapped 'res://assets/textures/ui/btn_tex_normal.png' at thread -1
+Loading resource: res://assets/textures/ui/btn_tex_hover.png remapped: res://assets/textures/ui/btn_tex_hover.png
+Loading resource: res://.godot/imported/btn_tex_hover.png-86c15740990e6fbd2b9a0d4e8e231ef8.bptc.ctex remapped: res://.godot/imported/btn_tex_hover.png-86c15740990e6fbd2b9a0d4e8e231ef8.bptc.ctex
+Completed load for: 'res://assets/textures/ui/btn_tex_hover.png' remapped 'res://assets/textures/ui/btn_tex_hover.png' at thread -1
+Loading resource: res://assets/textures/ui/btn_tex_pressed.png remapped: res://assets/textures/ui/btn_tex_pressed.png
+Loading resource: res://.godot/imported/btn_tex_pressed.png-40ec9e9291291a469069fb0101d0527c.bptc.ctex remapped: res://.godot/imported/btn_tex_pressed.png-40ec9e9291291a469069fb0101d0527c.bptc.ctex
+Completed load for: 'res://assets/textures/ui/btn_tex_pressed.png' remapped 'res://assets/textures/ui/btn_tex_pressed.png' at thread -1
+Loading resource: res://assets/textures/ui/btn_tex_disabled.png remapped: res://assets/textures/ui/btn_tex_disabled.png
+Loading resource: res://.godot/imported/btn_tex_disabled.png-d0c8f1fa7b004cc9ba09d128765949ee.bptc.ctex remapped: res://.godot/imported/btn_tex_disabled.png-d0c8f1fa7b004cc9ba09d128765949ee.bptc.ctex
+Completed load for: 'res://assets/textures/ui/btn_tex_disabled.png' remapped 'res://assets/textures/ui/btn_tex_disabled.png' at thread -1
+Loading resource: res://assets/textures/items/battery.png remapped: res://assets/textures/items/battery.png
+Loading resource: res://.godot/imported/battery.png-9947f95ad73944d76ec6c1984fb8dd0b.bptc.ctex remapped: res://.godot/imported/battery.png-9947f95ad73944d76ec6c1984fb8dd0b.bptc.ctex
+Completed load for: 'res://assets/textures/items/battery.png' remapped 'res://assets/textures/items/battery.png' at thread -1
+Loading resource: res://assets/textures/items/medkit.png remapped: res://assets/textures/items/medkit.png
+Loading resource: res://.godot/imported/medkit.png-7bd86f0bba9046d400298c17b94fd5ea.bptc.ctex remapped: res://.godot/imported/medkit.png-7bd86f0bba9046d400298c17b94fd5ea.bptc.ctex
+Completed load for: 'res://assets/textures/items/medkit.png' remapped 'res://assets/textures/items/medkit.png' at thread -1
+Loading resource: res://assets/textures/items/key.png remapped: res://assets/textures/items/key.png
+Loading resource: res://.godot/imported/key.png-4a4ac4defb90020414329b3cc57e10ec.bptc.ctex remapped: res://.godot/imported/key.png-4a4ac4defb90020414329b3cc57e10ec.bptc.ctex
+Completed load for: 'res://assets/textures/items/key.png' remapped 'res://assets/textures/items/key.png' at thread -1
+Loading resource: res://assets/textures/items/scrap.png remapped: res://assets/textures/items/scrap.png
+Loading resource: res://.godot/imported/scrap.png-8d438c5f576a60e50aab2257ea27f81e.bptc.ctex remapped: res://.godot/imported/scrap.png-8d438c5f576a60e50aab2257ea27f81e.bptc.ctex
+Completed load for: 'res://assets/textures/items/scrap.png' remapped 'res://assets/textures/items/scrap.png' at thread -1
+Loading resource: res://assets/textures/items/cable.png remapped: res://assets/textures/items/cable.png
+Loading resource: res://.godot/imported/cable.png-fe44293c14cbabd4587a627dc6dccde6.bptc.ctex remapped: res://.godot/imported/cable.png-fe44293c14cbabd4587a627dc6dccde6.bptc.ctex
+Completed load for: 'res://assets/textures/items/cable.png' remapped 'res://assets/textures/items/cable.png' at thread -1
+Loading resource: res://assets/textures/items/fuse.png remapped: res://assets/textures/items/fuse.png
+Loading resource: res://.godot/imported/fuse.png-458ba8043d7f92abc135241512118c51.bptc.ctex remapped: res://.godot/imported/fuse.png-458ba8043d7f92abc135241512118c51.bptc.ctex
+Completed load for: 'res://assets/textures/items/fuse.png' remapped 'res://assets/textures/items/fuse.png' at thread -1
+Loading resource: res://assets/textures/items/blueprint_flashlight_brightness.png remapped: res://assets/textures/items/blueprint_flashlight_brightness.png
+Loading resource: res://.godot/imported/blueprint_flashlight_brightness.png-381bb833c8906ad7e0ec9075d0496f36.bptc.ctex remapped: res://.godot/imported/blueprint_flashlight_brightness.png-381bb833c8906ad7e0ec9075d0496f36.bptc.ctex
+Completed load for: 'res://assets/textures/items/blueprint_flashlight_brightness.png' remapped 'res://assets/textures/items/blueprint_flashlight_brightness.png' at thread -1
+Loading resource: res://assets/textures/items/blueprint_flashlight_battery.png remapped: res://assets/textures/items/blueprint_flashlight_battery.png
+Loading resource: res://.godot/imported/blueprint_flashlight_battery.png-6f700e404616c36807f708111e41f688.bptc.ctex remapped: res://.godot/imported/blueprint_flashlight_battery.png-6f700e404616c36807f708111e41f688.bptc.ctex
+Completed load for: 'res://assets/textures/items/blueprint_flashlight_battery.png' remapped 'res://assets/textures/items/blueprint_flashlight_battery.png' at thread -1
+Loading resource: res://assets/textures/items/blueprint_backpack_capacity.png remapped: res://assets/textures/items/blueprint_backpack_capacity.png
+Loading resource: res://.godot/imported/blueprint_backpack_capacity.png-049f968d36e957c08d98313445c05476.bptc.ctex remapped: res://.godot/imported/blueprint_backpack_capacity.png-049f968d36e957c08d98313445c05476.bptc.ctex
+Completed load for: 'res://assets/textures/items/blueprint_backpack_capacity.png' remapped 'res://assets/textures/items/blueprint_backpack_capacity.png' at thread -1
+Loading resource: res://assets/textures/items/blueprint_backpack_slots.png remapped: res://assets/textures/items/blueprint_backpack_slots.png
+Loading resource: res://.godot/imported/blueprint_backpack_slots.png-e7ee5c037534ae6cde376b1507c8d23a.bptc.ctex remapped: res://.godot/imported/blueprint_backpack_slots.png-e7ee5c037534ae6cde376b1507c8d23a.bptc.ctex
+Completed load for: 'res://assets/textures/items/blueprint_backpack_slots.png' remapped 'res://assets/textures/items/blueprint_backpack_slots.png' at thread -1
+Loading resource: res://assets/textures/items/gear.png remapped: res://assets/textures/items/gear.png
+Loading resource: res://.godot/imported/gear.png-6e11d423a13a53345dc02b97f7dea15d.bptc.ctex remapped: res://.godot/imported/gear.png-6e11d423a13a53345dc02b97f7dea15d.bptc.ctex
+Completed load for: 'res://assets/textures/items/gear.png' remapped 'res://assets/textures/items/gear.png' at thread -1
+Loading resource: res://assets/textures/items/wiring.png remapped: res://assets/textures/items/wiring.png
+Loading resource: res://.godot/imported/wiring.png-0a32950f57d41208b0eb014bea2ba9b3.bptc.ctex remapped: res://.godot/imported/wiring.png-0a32950f57d41208b0eb014bea2ba9b3.bptc.ctex
+Completed load for: 'res://assets/textures/items/wiring.png' remapped 'res://assets/textures/items/wiring.png' at thread -1
+Loading resource: res://assets/textures/items/circuit.png remapped: res://assets/textures/items/circuit.png
+Loading resource: res://.godot/imported/circuit.png-da01e416d8e91791ce0022006c930bf8.bptc.ctex remapped: res://.godot/imported/circuit.png-da01e416d8e91791ce0022006c930bf8.bptc.ctex
+Completed load for: 'res://assets/textures/items/circuit.png' remapped 'res://assets/textures/items/circuit.png' at thread -1
+Loading resource: res://assets/textures/items/transistor.png remapped: res://assets/textures/items/transistor.png
+Loading resource: res://.godot/imported/transistor.png-124db0d032cc9aeeba3fbb2f65c05c4b.bptc.ctex remapped: res://.godot/imported/transistor.png-124db0d032cc9aeeba3fbb2f65c05c4b.bptc.ctex
+Completed load for: 'res://assets/textures/items/transistor.png' remapped 'res://assets/textures/items/transistor.png' at thread -1
+Loading resource: res://assets/textures/items/motor.png remapped: res://assets/textures/items/motor.png
+Loading resource: res://.godot/imported/motor.png-59f165588ef6c26ab862e6cfd0fc9064.bptc.ctex remapped: res://.godot/imported/motor.png-59f165588ef6c26ab862e6cfd0fc9064.bptc.ctex
+Completed load for: 'res://assets/textures/items/motor.png' remapped 'res://assets/textures/items/motor.png' at thread -1
+Loading resource: res://assets/textures/items/radio_part.png remapped: res://assets/textures/items/radio_part.png
+Loading resource: res://.godot/imported/radio_part.png-3bd0cc0f330f4e9c84e79820c9fd3c77.bptc.ctex remapped: res://.godot/imported/radio_part.png-3bd0cc0f330f4e9c84e79820c9fd3c77.bptc.ctex
+Completed load for: 'res://assets/textures/items/radio_part.png' remapped 'res://assets/textures/items/radio_part.png' at thread -1
+Loading resource: res://assets/textures/items/scope_lens.png remapped: res://assets/textures/items/scope_lens.png
+Loading resource: res://.godot/imported/scope_lens.png-be3c3ee53cd8d8f54f1198bf99ea2222.bptc.ctex remapped: res://.godot/imported/scope_lens.png-be3c3ee53cd8d8f54f1198bf99ea2222.bptc.ctex
+Completed load for: 'res://assets/textures/items/scope_lens.png' remapped 'res://assets/textures/items/scope_lens.png' at thread -1
+Loading resource: res://assets/textures/items/serum.png remapped: res://assets/textures/items/serum.png
+Loading resource: res://.godot/imported/serum.png-95fd195d81cfac89b6f95c07fab57a62.bptc.ctex remapped: res://.godot/imported/serum.png-95fd195d81cfac89b6f95c07fab57a62.bptc.ctex
+Completed load for: 'res://assets/textures/items/serum.png' remapped 'res://assets/textures/items/serum.png' at thread -1
+Loading resource: res://assets/textures/items/gas_canister.png remapped: res://assets/textures/items/gas_canister.png
+Loading resource: res://.godot/imported/gas_canister.png-faac859ceaa0e628b144737bde53e8d8.bptc.ctex remapped: res://.godot/imported/gas_canister.png-faac859ceaa0e628b144737bde53e8d8.bptc.ctex
+Completed load for: 'res://assets/textures/items/gas_canister.png' remapped 'res://assets/textures/items/gas_canister.png' at thread -1
+Loading resource: res://assets/textures/items/ancient_key.png remapped: res://assets/textures/items/ancient_key.png
+Loading resource: res://.godot/imported/ancient_key.png-0df70e922eccae4793ecaa9f17341be7.bptc.ctex remapped: res://.godot/imported/ancient_key.png-0df70e922eccae4793ecaa9f17341be7.bptc.ctex
+Completed load for: 'res://assets/textures/items/ancient_key.png' remapped 'res://assets/textures/items/ancient_key.png' at thread -1
+Loading resource: res://assets/textures/items/transformer.png remapped: res://assets/textures/items/transformer.png
+Loading resource: res://.godot/imported/transformer.png-c86aa572c67c60adc8850c7d3d3e1f92.bptc.ctex remapped: res://.godot/imported/transformer.png-c86aa572c67c60adc8850c7d3d3e1f92.bptc.ctex
+Completed load for: 'res://assets/textures/items/transformer.png' remapped 'res://assets/textures/items/transformer.png' at thread -1
+Loading resource: res://assets/textures/items/tool.png remapped: res://assets/textures/items/tool.png
+Loading resource: res://.godot/imported/tool.png-554592e2b29b4662f95696d2e26d5f47.bptc.ctex remapped: res://.godot/imported/tool.png-554592e2b29b4662f95696d2e26d5f47.bptc.ctex
+Completed load for: 'res://assets/textures/items/tool.png' remapped 'res://assets/textures/items/tool.png' at thread -1
+Loading resource: res://assets/textures/items/coin.png remapped: res://assets/textures/items/coin.png
+Loading resource: res://.godot/imported/coin.png-dbfa18440be81d385496357775cd9675.bptc.ctex remapped: res://.godot/imported/coin.png-dbfa18440be81d385496357775cd9675.bptc.ctex
+Completed load for: 'res://assets/textures/items/coin.png' remapped 'res://assets/textures/items/coin.png' at thread -1
+Loading resource: res://assets/textures/items/backpack_l1.png remapped: res://assets/textures/items/backpack_l1.png
+Loading resource: res://.godot/imported/backpack_l1.png-d96d312b318cb7da510fad2242468eb9.bptc.ctex remapped: res://.godot/imported/backpack_l1.png-d96d312b318cb7da510fad2242468eb9.bptc.ctex
+Completed load for: 'res://assets/textures/items/backpack_l1.png' remapped 'res://assets/textures/items/backpack_l1.png' at thread -1
+Loading resource: res://assets/textures/items/backpack_l2.png remapped: res://assets/textures/items/backpack_l2.png
+Loading resource: res://.godot/imported/backpack_l2.png-23bbaf1a7dbd72b07f86e9a3d6021123.bptc.ctex remapped: res://.godot/imported/backpack_l2.png-23bbaf1a7dbd72b07f86e9a3d6021123.bptc.ctex
+Completed load for: 'res://assets/textures/items/backpack_l2.png' remapped 'res://assets/textures/items/backpack_l2.png' at thread -1
+Loading resource: res://assets/textures/items/document.png remapped: res://assets/textures/items/document.png
+Loading resource: res://.godot/imported/document.png-d26fc714af09a16d81b7c01786a98ea0.bptc.ctex remapped: res://.godot/imported/document.png-d26fc714af09a16d81b7c01786a98ea0.bptc.ctex
+Completed load for: 'res://assets/textures/items/document.png' remapped 'res://assets/textures/items/document.png' at thread -1
+Loading resource: res://assets/textures/items/audio_log.png remapped: res://assets/textures/items/audio_log.png
+Loading resource: res://.godot/imported/audio_log.png-a7b38e51079e8a2a504920fdd62c4809.bptc.ctex remapped: res://.godot/imported/audio_log.png-a7b38e51079e8a2a504920fdd62c4809.bptc.ctex
+Completed load for: 'res://assets/textures/items/audio_log.png' remapped 'res://assets/textures/items/audio_log.png' at thread -1
+Loading resource: res://assets/textures/items/photo.png remapped: res://assets/textures/items/photo.png
+Loading resource: res://.godot/imported/photo.png-dbcc7e0515c27a37442590b0e178039b.bptc.ctex remapped: res://.godot/imported/photo.png-dbcc7e0515c27a37442590b0e178039b.bptc.ctex
+Completed load for: 'res://assets/textures/items/photo.png' remapped 'res://assets/textures/items/photo.png' at thread -1
+Loading resource: res://assets/textures/items/fabric.png remapped: res://assets/textures/items/fabric.png
+Loading resource: res://.godot/imported/fabric.png-b4a0e7a147c0995f6b27c47213eba9ce.bptc.ctex remapped: res://.godot/imported/fabric.png-b4a0e7a147c0995f6b27c47213eba9ce.bptc.ctex
+Completed load for: 'res://assets/textures/items/fabric.png' remapped 'res://assets/textures/items/fabric.png' at thread -1
+Loading resource: res://assets/textures/items/alcohol.png remapped: res://assets/textures/items/alcohol.png
+Loading resource: res://.godot/imported/alcohol.png-0204fcba057330e9823fc05f10c09a81.bptc.ctex remapped: res://.godot/imported/alcohol.png-0204fcba057330e9823fc05f10c09a81.bptc.ctex
+Completed load for: 'res://assets/textures/items/alcohol.png' remapped 'res://assets/textures/items/alcohol.png' at thread -1
+Loading resource: res://assets/textures/items/gunpowder.png remapped: res://assets/textures/items/gunpowder.png
+Loading resource: res://.godot/imported/gunpowder.png-8252ca0207c882c6fa4b747627caafac.bptc.ctex remapped: res://.godot/imported/gunpowder.png-8252ca0207c882c6fa4b747627caafac.bptc.ctex
+Completed load for: 'res://assets/textures/items/gunpowder.png' remapped 'res://assets/textures/items/gunpowder.png' at thread -1
+Loading resource: res://assets/textures/items/case.png remapped: res://assets/textures/items/case.png
+Loading resource: res://.godot/imported/case.png-2b5de6bc161923850e1d85ea9dfbe90a.bptc.ctex remapped: res://.godot/imported/case.png-2b5de6bc161923850e1d85ea9dfbe90a.bptc.ctex
+Completed load for: 'res://assets/textures/items/case.png' remapped 'res://assets/textures/items/case.png' at thread -1
+Loading resource: res://assets/textures/items/metal.png remapped: res://assets/textures/items/metal.png
+Loading resource: res://.godot/imported/metal.png-eb1319e9a7c28645d6b84b8385ea50cd.bptc.ctex remapped: res://.godot/imported/metal.png-eb1319e9a7c28645d6b84b8385ea50cd.bptc.ctex
+Completed load for: 'res://assets/textures/items/metal.png' remapped 'res://assets/textures/items/metal.png' at thread -1
+Loading resource: res://assets/textures/items/paper.png remapped: res://assets/textures/items/paper.png
+Loading resource: res://.godot/imported/paper.png-889f8ff146bfd31a4644a27a4f1ff9f2.bptc.ctex remapped: res://.godot/imported/paper.png-889f8ff146bfd31a4644a27a4f1ff9f2.bptc.ctex
+Completed load for: 'res://assets/textures/items/paper.png' remapped 'res://assets/textures/items/paper.png' at thread -1
+Loading resource: res://assets/textures/items/bottle.png remapped: res://assets/textures/items/bottle.png
+Loading resource: res://.godot/imported/bottle.png-af5ee8e7980027cdcc5a55668ab52c97.bptc.ctex remapped: res://.godot/imported/bottle.png-af5ee8e7980027cdcc5a55668ab52c97.bptc.ctex
+Completed load for: 'res://assets/textures/items/bottle.png' remapped 'res://assets/textures/items/bottle.png' at thread -1
+Loading resource: res://assets/textures/items/noise_bomb.png remapped: res://assets/textures/items/noise_bomb.png
+Loading resource: res://.godot/imported/noise_bomb.png-9d530a18a130226aba81233147018c79.bptc.ctex remapped: res://.godot/imported/noise_bomb.png-9d530a18a130226aba81233147018c79.bptc.ctex
+Completed load for: 'res://assets/textures/items/noise_bomb.png' remapped 'res://assets/textures/items/noise_bomb.png' at thread -1
+Loading resource: res://assets/textures/items/lockpick.png remapped: res://assets/textures/items/lockpick.png
+Loading resource: res://.godot/imported/lockpick.png-9f158d276aead648aecf4441b70b14d2.bptc.ctex remapped: res://.godot/imported/lockpick.png-9f158d276aead648aecf4441b70b14d2.bptc.ctex
+Completed load for: 'res://assets/textures/items/lockpick.png' remapped 'res://assets/textures/items/lockpick.png' at thread -1
+Loading resource: res://assets/textures/items/repair_kit.png remapped: res://assets/textures/items/repair_kit.png
+Loading resource: res://.godot/imported/repair_kit.png-f99bf577608b22c16ec6ebf4b9da2e6a.bptc.ctex remapped: res://.godot/imported/repair_kit.png-f99bf577608b22c16ec6ebf4b9da2e6a.bptc.ctex
+Completed load for: 'res://assets/textures/items/repair_kit.png' remapped 'res://assets/textures/items/repair_kit.png' at thread -1
+Loading resource: res://assets/textures/items/firework.png remapped: res://assets/textures/items/firework.png
+Loading resource: res://.godot/imported/firework.png-3972f50bd29d8928499b2ba5c278ecb9.bptc.ctex remapped: res://.godot/imported/firework.png-3972f50bd29d8928499b2ba5c278ecb9.bptc.ctex
+Completed load for: 'res://assets/textures/items/firework.png' remapped 'res://assets/textures/items/firework.png' at thread -1
+Loading resource: res://assets/textures/items/molotov.png remapped: res://assets/textures/items/molotov.png
+Loading resource: res://.godot/imported/molotov.png-b5861900bc92ff28b8c2a65f0453751e.bptc.ctex remapped: res://.godot/imported/molotov.png-b5861900bc92ff28b8c2a65f0453751e.bptc.ctex
+Completed load for: 'res://assets/textures/items/molotov.png' remapped 'res://assets/textures/items/molotov.png' at thread -1
+Loading resource: res://assets/textures/items/makeshift_lamp.png remapped: res://assets/textures/items/makeshift_lamp.png
+Loading resource: res://.godot/imported/makeshift_lamp.png-23e7f9aea36f2d7022d2d93270646fef.bptc.ctex remapped: res://.godot/imported/makeshift_lamp.png-23e7f9aea36f2d7022d2d93270646fef.bptc.ctex
+Completed load for: 'res://assets/textures/items/makeshift_lamp.png' remapped 'res://assets/textures/items/makeshift_lamp.png' at thread -1
+Loading resource: res://assets/textures/items/plank.png remapped: res://assets/textures/items/plank.png
+Loading resource: res://.godot/imported/plank.png-7b7e486f7de4ebc94048ae48c37ec0ba.ctex remapped: res://.godot/imported/plank.png-7b7e486f7de4ebc94048ae48c37ec0ba.ctex
+Completed load for: 'res://assets/textures/items/plank.png' remapped 'res://assets/textures/items/plank.png' at thread -1
+Loading resource: res://assets/textures/items/enhanced_battery.png remapped: res://assets/textures/items/enhanced_battery.png
+Loading resource: res://.godot/imported/enhanced_battery.png-138732bf5cf9b302e9243917bc1f46d0.ctex remapped: res://.godot/imported/enhanced_battery.png-138732bf5cf9b302e9243917bc1f46d0.ctex
+Completed load for: 'res://assets/textures/items/enhanced_battery.png' remapped 'res://assets/textures/items/enhanced_battery.png' at thread -1
+Loading resource: res://assets/textures/items/battery_l2.png remapped: res://assets/textures/items/battery_l2.png
+Loading resource: res://.godot/imported/battery_l2.png-7c7300e46b20a28ca5359759611ddda4.ctex remapped: res://.godot/imported/battery_l2.png-7c7300e46b20a28ca5359759611ddda4.ctex
+Completed load for: 'res://assets/textures/items/battery_l2.png' remapped 'res://assets/textures/items/battery_l2.png' at thread -1
+Loading resource: res://assets/textures/items/blueprint_enhanced_battery.png remapped: res://assets/textures/items/blueprint_enhanced_battery.png
+Loading resource: res://.godot/imported/blueprint_enhanced_battery.png-6ff4178593b05ec4ca1a0afa9644837d.ctex remapped: res://.godot/imported/blueprint_enhanced_battery.png-6ff4178593b05ec4ca1a0afa9644837d.ctex
+Completed load for: 'res://assets/textures/items/blueprint_enhanced_battery.png' remapped 'res://assets/textures/items/blueprint_enhanced_battery.png' at thread -1
+Loading resource: res://assets/textures/items/blueprint_uv_flashlight.png remapped: res://assets/textures/items/blueprint_uv_flashlight.png
+Loading resource: res://.godot/imported/blueprint_uv_flashlight.png-c69b35f0e5a5fddef861219cc397c5f6.ctex remapped: res://.godot/imported/blueprint_uv_flashlight.png-c69b35f0e5a5fddef861219cc397c5f6.ctex
+Completed load for: 'res://assets/textures/items/blueprint_uv_flashlight.png' remapped 'res://assets/textures/items/blueprint_uv_flashlight.png' at thread -1
+Loading resource: res://assets/textures/items/blueprint_strobe_flashlight.png remapped: res://assets/textures/items/blueprint_strobe_flashlight.png
+Loading resource: res://.godot/imported/blueprint_strobe_flashlight.png-7c893f9f27f9b006bee5f15516e30153.ctex remapped: res://.godot/imported/blueprint_strobe_flashlight.png-7c893f9f27f9b006bee5f15516e30153.ctex
+Completed load for: 'res://assets/textures/items/blueprint_strobe_flashlight.png' remapped 'res://assets/textures/items/blueprint_strobe_flashlight.png' at thread -1
+Loading resource: res://assets/textures/items/blueprint_portable_workbench.png remapped: res://assets/textures/items/blueprint_portable_workbench.png
+Loading resource: res://.godot/imported/blueprint_portable_workbench.png-fc846a7865fb403a6db15080b5ea53d1.ctex remapped: res://.godot/imported/blueprint_portable_workbench.png-fc846a7865fb403a6db15080b5ea53d1.ctex
+Completed load for: 'res://assets/textures/items/blueprint_portable_workbench.png' remapped 'res://assets/textures/items/blueprint_portable_workbench.png' at thread -1
+Loading resource: res://assets/textures/items/blueprint_battery_l2.png remapped: res://assets/textures/items/blueprint_battery_l2.png
+Loading resource: res://.godot/imported/blueprint_battery_l2.png-4b55ebd897650fff8905a280fcb48b18.ctex remapped: res://.godot/imported/blueprint_battery_l2.png-4b55ebd897650fff8905a280fcb48b18.ctex
+Completed load for: 'res://assets/textures/items/blueprint_battery_l2.png' remapped 'res://assets/textures/items/blueprint_battery_l2.png' at thread -1
+Loading resource: res://scripts/ui/minimap.gd remapped: res://scripts/ui/minimap.gd
+Loading resource: res://assets/textures/ui/minimap_frame_256.png remapped: res://assets/textures/ui/minimap_frame_256.png
+Loading resource: res://.godot/imported/minimap_frame_256.png-19bb90cce8c4715390c2235eeee12537.bptc.ctex remapped: res://.godot/imported/minimap_frame_256.png-19bb90cce8c4715390c2235eeee12537.bptc.ctex
+Completed load for: 'res://assets/textures/ui/minimap_frame_256.png' remapped 'res://assets/textures/ui/minimap_frame_256.png' at thread -1
+Loading resource: res://assets/textures/ui/minimap_player_arrow_32.png remapped: res://assets/textures/ui/minimap_player_arrow_32.png
+Loading resource: res://.godot/imported/minimap_player_arrow_32.png-9b87df370fe6b22bdf1a746e196e9e6d.bptc.ctex remapped: res://.godot/imported/minimap_player_arrow_32.png-9b87df370fe6b22bdf1a746e196e9e6d.bptc.ctex
+Completed load for: 'res://assets/textures/ui/minimap_player_arrow_32.png' remapped 'res://assets/textures/ui/minimap_player_arrow_32.png' at thread -1
+Completed load for: 'res://scripts/ui/minimap.gd' remapped 'res://scripts/ui/minimap.gd' at thread -1
+Loading resource: res://scripts/ui/weather_overlay.gd remapped: res://scripts/ui/weather_overlay.gd
+Completed load for: 'res://scripts/ui/weather_overlay.gd' remapped 'res://scripts/ui/weather_overlay.gd' at thread -1
+Loading resource: res://scripts/ui/photo_mode.gd remapped: res://scripts/ui/photo_mode.gd
+Completed load for: 'res://scripts/ui/photo_mode.gd' remapped 'res://scripts/ui/photo_mode.gd' at thread -1
+Loading resource: res://scripts/ui/quest_tracker_hud.gd remapped: res://scripts/ui/quest_tracker_hud.gd
+Completed load for: 'res://scripts/ui/quest_tracker_hud.gd' remapped 'res://scripts/ui/quest_tracker_hud.gd' at thread -1
+Loading resource: res://scripts/ui/subtitle_manager.gd remapped: res://scripts/ui/subtitle_manager.gd
+Completed load for: 'res://scripts/ui/subtitle_manager.gd' remapped 'res://scripts/ui/subtitle_manager.gd' at thread -1
+Loading resource: res://scenes/ui/main_menu.tscn remapped: res://scenes/ui/main_menu.tscn
+Loading resource: res://scripts/ui/main_menu.gd remapped: res://scripts/ui/main_menu.gd
+Loading resource: res://assets/shaders/stencil_title.gdshader remapped: res://assets/shaders/stencil_title.gdshader
+Completed load for: 'res://assets/shaders/stencil_title.gdshader' remapped 'res://assets/shaders/stencil_title.gdshader' at thread -1
+Loading resource: res://assets/shaders/menu_fog.gdshader remapped: res://assets/shaders/menu_fog.gdshader
+Completed load for: 'res://assets/shaders/menu_fog.gdshader' remapped 'res://assets/shaders/menu_fog.gdshader' at thread -1
+Completed load for: 'res://scripts/ui/main_menu.gd' remapped 'res://scripts/ui/main_menu.gd' at thread -1
+Completed load for: 'res://scenes/ui/main_menu.tscn' remapped 'res://scenes/ui/main_menu.tscn' at thread -1
+Loading resource: res://scripts/ui/menu_background.gd remapped: res://scripts/ui/menu_background.gd
+Completed load for: 'res://scripts/ui/menu_background.gd' remapped 'res://scripts/ui/menu_background.gd' at thread -1
+Loading resource: res://assets/textures/screens_v2/menu_hero.png remapped: res://assets/textures/screens_v2/menu_hero.png
+Loading resource: res://.godot/imported/menu_hero.png-b2afe055cafdde99b8adcb4d67a7bc3a.bptc.ctex remapped: res://.godot/imported/menu_hero.png-b2afe055cafdde99b8adcb4d67a7bc3a.bptc.ctex
+Completed load for: 'res://assets/textures/screens_v2/menu_hero.png' remapped 'res://assets/textures/screens_v2/menu_hero.png' at thread -1
+Loading resource: res://assets/shaders/menu_parallax.gdshader remapped: res://assets/shaders/menu_parallax.gdshader
+Completed load for: 'res://assets/shaders/menu_parallax.gdshader' remapped 'res://assets/shaders/menu_parallax.gdshader' at thread -1
+Loading resource: res://assets/audio/music/layer_dark.ogg remapped: res://assets/audio/music/layer_dark.ogg
+Loading resource: res://.godot/imported/layer_dark.ogg-414fbac590f3b621a398682ef9e3eb46.oggvorbisstr remapped: res://.godot/imported/layer_dark.ogg-414fbac590f3b621a398682ef9e3eb46.oggvorbisstr
+Completed load for: 'res://assets/audio/music/layer_dark.ogg' remapped 'res://assets/audio/music/layer_dark.ogg' at thread -1
+Loading resource: res://assets/audio/music/layer_lit.ogg remapped: res://assets/audio/music/layer_lit.ogg
+Loading resource: res://.godot/imported/layer_lit.ogg-0b77cc55dedf9bb22700aad0f54758a3.oggvorbisstr remapped: res://.godot/imported/layer_lit.ogg-0b77cc55dedf9bb22700aad0f54758a3.oggvorbisstr
+Completed load for: 'res://assets/audio/music/layer_lit.ogg' remapped 'res://assets/audio/music/layer_lit.ogg' at thread -1
+Loading resource: res://assets/audio/music/layer_threat_low.ogg remapped: res://assets/audio/music/layer_threat_low.ogg
+Loading resource: res://.godot/imported/layer_threat_low.ogg-bf9d3125190eb722c07390fe3eafbbc1.oggvorbisstr remapped: res://.godot/imported/layer_threat_low.ogg-bf9d3125190eb722c07390fe3eafbbc1.oggvorbisstr
+Completed load for: 'res://assets/audio/music/layer_threat_low.ogg' remapped 'res://assets/audio/music/layer_threat_low.ogg' at thread -1
+Loading resource: res://assets/audio/music/layer_threat_high.ogg remapped: res://assets/audio/music/layer_threat_high.ogg
+Loading resource: res://.godot/imported/layer_threat_high.ogg-35c3a2ed08acaca37decec8cd022bb46.oggvorbisstr remapped: res://.godot/imported/layer_threat_high.ogg-35c3a2ed08acaca37decec8cd022bb46.oggvorbisstr
+Completed load for: 'res://assets/audio/music/layer_threat_high.ogg' remapped 'res://assets/audio/music/layer_threat_high.ogg' at thread -1
+Loading resource: res://assets/audio/music/layer_action.ogg remapped: res://assets/audio/music/layer_action.ogg
+Loading resource: res://.godot/imported/layer_action.ogg-75e0938d5304593fba6af6b031f19c6e.oggvorbisstr remapped: res://.godot/imported/layer_action.ogg-75e0938d5304593fba6af6b031f19c6e.oggvorbisstr
+Completed load for: 'res://assets/audio/music/layer_action.ogg' remapped 'res://assets/audio/music/layer_action.ogg' at thread -1
+Loading resource: res://assets/audio/ambience/weather/rain_loop.ogg remapped: res://assets/audio/ambience/weather/rain_loop.ogg
+Loading resource: res://.godot/imported/rain_loop.ogg-50573adbbd0166ae608404e3d9d9d773.oggvorbisstr remapped: res://.godot/imported/rain_loop.ogg-50573adbbd0166ae608404e3d9d9d773.oggvorbisstr
+Completed load for: 'res://assets/audio/ambience/weather/rain_loop.ogg' remapped 'res://assets/audio/ambience/weather/rain_loop.ogg' at thread -1
+Loading resource: res://assets/audio/ambience/weather/wind_loop.ogg remapped: res://assets/audio/ambience/weather/wind_loop.ogg
+Loading resource: res://.godot/imported/wind_loop.ogg-5fbc0773587bed39f2b4b2fd89711d5e.oggvorbisstr remapped: res://.godot/imported/wind_loop.ogg-5fbc0773587bed39f2b4b2fd89711d5e.oggvorbisstr
+Completed load for: 'res://assets/audio/ambience/weather/wind_loop.ogg' remapped 'res://assets/audio/ambience/weather/wind_loop.ogg' at thread -1
+Loading resource: res://assets/audio/ambience/action_sting_loop.ogg remapped: res://assets/audio/ambience/action_sting_loop.ogg
+Loading resource: res://.godot/imported/action_sting_loop.ogg-ffd07f7f2844521996362a3552e036aa.oggvorbisstr remapped: res://.godot/imported/action_sting_loop.ogg-ffd07f7f2844521996362a3552e036aa.oggvorbisstr
+Completed load for: 'res://assets/audio/ambience/action_sting_loop.ogg' remapped 'res://assets/audio/ambience/action_sting_loop.ogg' at thread -1
+Loading resource: res://assets/fonts/Rajdhani-Regular.ttf remapped: res://assets/fonts/Rajdhani-Regular.ttf
+Loading resource: res://.godot/imported/Rajdhani-Regular.ttf-5fcd79b70fa9294d379f147c1febd9cc.fontdata remapped: res://.godot/imported/Rajdhani-Regular.ttf-5fcd79b70fa9294d379f147c1febd9cc.fontdata
+Completed load for: 'res://assets/fonts/Rajdhani-Regular.ttf' remapped 'res://assets/fonts/Rajdhani-Regular.ttf' at thread -1
+Loading resource: res://scripts/tools/_release_frames_runner.gd remapped: res://scripts/tools/_release_frames_runner.gd
+Completed load for: 'res://scripts/tools/_release_frames_runner.gd' remapped 'res://scripts/tools/_release_frames_runner.gd' at thread -1
+Loading resource: res://scenes/ui/boot_loading.tscn remapped: res://scenes/ui/boot_loading.tscn
+Loading resource: res://scripts/boot_loading.gd remapped: res://scripts/boot_loading.gd
+Completed load for: 'res://scripts/boot_loading.gd' remapped 'res://scripts/boot_loading.gd' at thread -1
+Completed load for: 'res://scenes/ui/boot_loading.tscn' remapped 'res://scenes/ui/boot_loading.tscn' at thread -1
+Loading resource: res://scenes/ui/splash.tscn remapped: res://scenes/ui/splash.tscn
+Loading resource: res://scripts/splash.gd remapped: res://scripts/splash.gd
+Completed load for: 'res://scripts/splash.gd' remapped 'res://scripts/splash.gd' at thread -1
+Loading resource: res://assets/ui/icon.png remapped: res://assets/ui/icon.png
+Loading resource: res://.godot/imported/icon.png-b2186b5b4a56bd57079f80a9dcb82304.ctex remapped: res://.godot/imported/icon.png-b2186b5b4a56bd57079f80a9dcb82304.ctex
+Completed load for: 'res://assets/ui/icon.png' remapped 'res://assets/ui/icon.png' at thread -1
+Completed load for: 'res://scenes/ui/splash.tscn' remapped 'res://scenes/ui/splash.tscn' at thread -1
+Loading resource: res://scenes/ui/boot_loading.tscn remapped: res://scenes/ui/boot_loading.tscn
+Completed load for: 'res://scenes/ui/boot_loading.tscn' remapped 'res://scenes/ui/boot_loading.tscn' at thread -1
+Loading resource: res://scenes/ui/main_menu.tscn remapped: res://scenes/ui/main_menu.tscn
+Completed load for: 'res://scenes/ui/main_menu.tscn' remapped 'res://scenes/ui/main_menu.tscn' at thread -1
+Loading resource: res://assets/textures/screens_v2/menu_hero.png remapped: res://assets/textures/screens_v2/menu_hero.png
+Loading resource: res://.godot/imported/menu_hero.png-b2afe055cafdde99b8adcb4d67a7bc3a.bptc.ctex remapped: res://.godot/imported/menu_hero.png-b2afe055cafdde99b8adcb4d67a7bc3a.bptc.ctex
+Completed load for: 'res://assets/textures/screens_v2/menu_hero.png' remapped 'res://assets/textures/screens_v2/menu_hero.png' at thread -1
+Loading resource: res://assets/shaders/menu_parallax.gdshader remapped: res://assets/shaders/menu_parallax.gdshader
+Completed load for: 'res://assets/shaders/menu_parallax.gdshader' remapped 'res://assets/shaders/menu_parallax.gdshader' at thread -1
+[release-frames] capture begin 01_main_menu
+[release-frames] frame 01_main_menu result=0
+Loading resource: res://scenes/ui/pre_loading.tscn remapped: res://scenes/ui/pre_loading.tscn
+Loading resource: res://scripts/ui/pre_loading.gd remapped: res://scripts/ui/pre_loading.gd
+Completed load for: 'res://scripts/ui/pre_loading.gd' remapped 'res://scripts/ui/pre_loading.gd' at thread -1
+Completed load for: 'res://scenes/ui/pre_loading.tscn' remapped 'res://scenes/ui/pre_loading.tscn' at thread -1
+Loading resource: res://scenes/main_3d.tscn remapped: res://scenes/main_3d.tscn
+Loading resource: res://scenes/environment/world_env.tscn remapped: res://scenes/environment/world_env.tscn
+Loading resource: res://assets/textures/sky/night_sky_panorama_2048x1024.png remapped: res://assets/textures/sky/night_sky_panorama_2048x1024.png
+Loading resource: res://.godot/imported/night_sky_panorama_2048x1024.png-d6b555c178eb00270d5b1d63a0047ab9.bptc.ctex remapped: res://.godot/imported/night_sky_panorama_2048x1024.png-d6b555c178eb00270d5b1d63a0047ab9.bptc.ctex
+Completed load for: 'res://assets/textures/sky/night_sky_panorama_2048x1024.png' remapped 'res://assets/textures/sky/night_sky_panorama_2048x1024.png' at thread -1
+Completed load for: 'res://scenes/environment/world_env.tscn' remapped 'res://scenes/environment/world_env.tscn' at thread -1
+Loading resource: res://scenes/ui/hud_3d.tscn remapped: res://scenes/ui/hud_3d.tscn
+Loading resource: res://scripts/ui/hud_3d.gd remapped: res://scripts/ui/hud_3d.gd
+Completed load for: 'res://scripts/ui/hud_3d.gd' remapped 'res://scripts/ui/hud_3d.gd' at thread -1
+Loading resource: res://assets/ui/ui_heart.svg remapped: res://assets/ui/ui_heart.svg
+Loading resource: res://.godot/imported/ui_heart.svg-ad0af7a74c4cdb12e9219739cf4b9903.ctex remapped: res://.godot/imported/ui_heart.svg-ad0af7a74c4cdb12e9219739cf4b9903.ctex
+Completed load for: 'res://assets/ui/ui_heart.svg' remapped 'res://assets/ui/ui_heart.svg' at thread -1
+Loading resource: res://assets/textures/ui_v2/bar_track_256x8.png remapped: res://assets/textures/ui_v2/bar_track_256x8.png
+Loading resource: res://.godot/imported/bar_track_256x8.png-1338f6217a769963a174cdde69b72bbc.bptc.ctex remapped: res://.godot/imported/bar_track_256x8.png-1338f6217a769963a174cdde69b72bbc.bptc.ctex
+Completed load for: 'res://assets/textures/ui_v2/bar_track_256x8.png' remapped 'res://assets/textures/ui_v2/bar_track_256x8.png' at thread -1
+Loading resource: res://assets/textures/ui/crosshair_64.png remapped: res://assets/textures/ui/crosshair_64.png
+Loading resource: res://.godot/imported/crosshair_64.png-e33d66462cd69eb4bc899567a1716ba1.bptc.ctex remapped: res://.godot/imported/crosshair_64.png-e33d66462cd69eb4bc899567a1716ba1.bptc.ctex
+Completed load for: 'res://assets/textures/ui/crosshair_64.png' remapped 'res://assets/textures/ui/crosshair_64.png' at thread -1
+Loading resource: res://assets/textures/ui/hitmarker_64.png remapped: res://assets/textures/ui/hitmarker_64.png
+Loading resource: res://.godot/imported/hitmarker_64.png-d18ac51a2f0d3a1ae834eb8af51e6d9f.bptc.ctex remapped: res://.godot/imported/hitmarker_64.png-d18ac51a2f0d3a1ae834eb8af51e6d9f.bptc.ctex
+Completed load for: 'res://assets/textures/ui/hitmarker_64.png' remapped 'res://assets/textures/ui/hitmarker_64.png' at thread -1
+Loading resource: res://assets/ui/ui_interact.svg remapped: res://assets/ui/ui_interact.svg
+Loading resource: res://.godot/imported/ui_interact.svg-d2bacd17f72e0750dc32d85c4bdd641f.ctex remapped: res://.godot/imported/ui_interact.svg-d2bacd17f72e0750dc32d85c4bdd641f.ctex
+Completed load for: 'res://assets/ui/ui_interact.svg' remapped 'res://assets/ui/ui_interact.svg' at thread -1
+Loading resource: res://assets/ui/ui_battery.svg remapped: res://assets/ui/ui_battery.svg
+Loading resource: res://.godot/imported/ui_battery.svg-dc768b0daa79778733e0d9a3bd27c788.ctex remapped: res://.godot/imported/ui_battery.svg-dc768b0daa79778733e0d9a3bd27c788.ctex
+Completed load for: 'res://assets/ui/ui_battery.svg' remapped 'res://assets/ui/ui_battery.svg' at thread -1
+Loading resource: res://assets/ui/ui_pause.svg remapped: res://assets/ui/ui_pause.svg
+Loading resource: res://.godot/imported/ui_pause.svg-0e0c0dd2d5495c27de22c009d3b5ea01.ctex remapped: res://.godot/imported/ui_pause.svg-0e0c0dd2d5495c27de22c009d3b5ea01.ctex
+Completed load for: 'res://assets/ui/ui_pause.svg' remapped 'res://assets/ui/ui_pause.svg' at thread -1
+Completed load for: 'res://scenes/ui/hud_3d.tscn' remapped 'res://scenes/ui/hud_3d.tscn' at thread -1
+Loading resource: res://scenes/player/player_3d.tscn remapped: res://scenes/player/player_3d.tscn
+Loading resource: res://scripts/player/player_3d.gd remapped: res://scripts/player/player_3d.gd
+Loading resource: res://scenes/vfx/vfx_strobe.tscn remapped: res://scenes/vfx/vfx_strobe.tscn
+Loading resource: res://assets/textures/fx/strobe_flash_128.png remapped: res://assets/textures/fx/strobe_flash_128.png
+Loading resource: res://.godot/imported/strobe_flash_128.png-cebdf4805be015f550ca6d767bd48d5d.bptc.ctex remapped: res://.godot/imported/strobe_flash_128.png-cebdf4805be015f550ca6d767bd48d5d.bptc.ctex
+Completed load for: 'res://assets/textures/fx/strobe_flash_128.png' remapped 'res://assets/textures/fx/strobe_flash_128.png' at thread -1
+Completed load for: 'res://scenes/vfx/vfx_strobe.tscn' remapped 'res://scenes/vfx/vfx_strobe.tscn' at thread -1
+Loading resource: res://assets/audio/sfx/shot_heavy.ogg remapped: res://assets/audio/sfx/shot_heavy.ogg
+Loading resource: res://.godot/imported/shot_heavy.ogg-25c8eb18691a1273a242ce96afc97582.oggvorbisstr remapped: res://.godot/imported/shot_heavy.ogg-25c8eb18691a1273a242ce96afc97582.oggvorbisstr
+Completed load for: 'res://assets/audio/sfx/shot_heavy.ogg' remapped 'res://assets/audio/sfx/shot_heavy.ogg' at thread -1
+Completed load for: 'res://scripts/player/player_3d.gd' remapped 'res://scripts/player/player_3d.gd' at thread -1
+Loading resource: res://data/balance/player_stats.tres remapped: res://data/balance/player_stats.tres
+Loading resource: res://scripts/player/player_stats.gd remapped: res://scripts/player/player_stats.gd
+Completed load for: 'res://scripts/player/player_stats.gd' remapped 'res://scripts/player/player_stats.gd' at thread -1
+Completed load for: 'res://data/balance/player_stats.tres' remapped 'res://data/balance/player_stats.tres' at thread -1
+Completed load for: 'res://scenes/player/player_3d.tscn' remapped 'res://scenes/player/player_3d.tscn' at thread -1
+Loading resource: res://scenes/ui/splash.tscn remapped: res://scenes/ui/splash.tscn
+Loading resource: res://assets/ui/icon.png remapped: res://assets/ui/icon.png
+Loading resource: res://.godot/imported/icon.png-b2186b5b4a56bd57079f80a9dcb82304.ctex remapped: res://.godot/imported/icon.png-b2186b5b4a56bd57079f80a9dcb82304.ctex
+Completed load for: 'res://assets/ui/icon.png' remapped 'res://assets/ui/icon.png' at thread -1
+Completed load for: 'res://scenes/ui/splash.tscn' remapped 'res://scenes/ui/splash.tscn' at thread -1
+Loading resource: res://scripts/core/camera_follow_3d.gd remapped: res://scripts/core/camera_follow_3d.gd
+Completed load for: 'res://scripts/core/camera_follow_3d.gd' remapped 'res://scripts/core/camera_follow_3d.gd' at thread -1
+Loading resource: res://scenes/ui/screens.tscn remapped: res://scenes/ui/screens.tscn
+Loading resource: res://scripts/ui/screens.gd remapped: res://scripts/ui/screens.gd
+Completed load for: 'res://scripts/ui/screens.gd' remapped 'res://scripts/ui/screens.gd' at thread -1
+Completed load for: 'res://scenes/ui/screens.tscn' remapped 'res://scenes/ui/screens.tscn' at thread -1
+Loading resource: res://scripts/post_process_overlay.gd remapped: res://scripts/post_process_overlay.gd
+Completed load for: 'res://scripts/post_process_overlay.gd' remapped 'res://scripts/post_process_overlay.gd' at thread -1
+Loading resource: res://scripts/world_env_setup.gd remapped: res://scripts/world_env_setup.gd
+Loading resource: res://scenes/vfx/vfx_rain.tscn remapped: res://scenes/vfx/vfx_rain.tscn
+Completed load for: 'res://scenes/vfx/vfx_rain.tscn' remapped 'res://scenes/vfx/vfx_rain.tscn' at thread -1
+Loading resource: res://scenes/vfx/vfx_dust.tscn remapped: res://scenes/vfx/vfx_dust.tscn
+Loading resource: res://assets/textures/fx/dust.png remapped: res://assets/textures/fx/dust.png
+Loading resource: res://.godot/imported/dust.png-8e236544bb2ab8fa80c0dba3261e1e6e.bptc.ctex remapped: res://.godot/imported/dust.png-8e236544bb2ab8fa80c0dba3261e1e6e.bptc.ctex
+Completed load for: 'res://assets/textures/fx/dust.png' remapped 'res://assets/textures/fx/dust.png' at thread -1
+Completed load for: 'res://scenes/vfx/vfx_dust.tscn' remapped 'res://scenes/vfx/vfx_dust.tscn' at thread -1
+Completed load for: 'res://scripts/world_env_setup.gd' remapped 'res://scripts/world_env_setup.gd' at thread -1
+Loading resource: res://scripts/main_3d.gd remapped: res://scripts/main_3d.gd
+Completed load for: 'res://scripts/main_3d.gd' remapped 'res://scripts/main_3d.gd' at thread -1
+Loading resource: res://scripts/fog_setup.gd remapped: res://scripts/fog_setup.gd
+Completed load for: 'res://scripts/fog_setup.gd' remapped 'res://scripts/fog_setup.gd' at thread -1
+Loading resource: res://scripts/effects/screen_shake.gd remapped: res://scripts/effects/screen_shake.gd
+Completed load for: 'res://scripts/effects/screen_shake.gd' remapped 'res://scripts/effects/screen_shake.gd' at thread -1
+Loading resource: res://scripts/world/streetlight_spawner.gd remapped: res://scripts/world/streetlight_spawner.gd
+Completed load for: 'res://scripts/world/streetlight_spawner.gd' remapped 'res://scripts/world/streetlight_spawner.gd' at thread -1
+Loading resource: res://scripts/ui/ending_screen.gd remapped: res://scripts/ui/ending_screen.gd
+Completed load for: 'res://scripts/ui/ending_screen.gd' remapped 'res://scripts/ui/ending_screen.gd' at thread -1
+Loading resource: res://scripts/net/lan_menu.gd remapped: res://scripts/net/lan_menu.gd
+Completed load for: 'res://scripts/net/lan_menu.gd' remapped 'res://scripts/net/lan_menu.gd' at thread -1
+Loading resource: res://scripts/ui/toast_manager.gd remapped: res://scripts/ui/toast_manager.gd
+Completed load for: 'res://scripts/ui/toast_manager.gd' remapped 'res://scripts/ui/toast_manager.gd' at thread -1
+Loading resource: res://scripts/ui/onboarding_overlay.gd remapped: res://scripts/ui/onboarding_overlay.gd
+Completed load for: 'res://scripts/ui/onboarding_overlay.gd' remapped 'res://scripts/ui/onboarding_overlay.gd' at thread -1
+Completed load for: 'res://scenes/main_3d.tscn' remapped 'res://scenes/main_3d.tscn' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://scripts/enemies/status_effects.gd remapped: res://scripts/enemies/status_effects.gd
+Completed load for: 'res://scripts/enemies/status_effects.gd' remapped 'res://scripts/enemies/status_effects.gd' at thread -1
+Loading resource: res://assets/shaders/flashlight_cone.gdshader remapped: res://assets/shaders/flashlight_cone.gdshader
+Completed load for: 'res://assets/shaders/flashlight_cone.gdshader' remapped 'res://assets/shaders/flashlight_cone.gdshader' at thread -1
+Loading resource: res://scripts/systems/footstep_system.gd remapped: res://scripts/systems/footstep_system.gd
+Completed load for: 'res://scripts/systems/footstep_system.gd' remapped 'res://scripts/systems/footstep_system.gd' at thread -1
+Loading resource: res://assets/audio/sfx/step_clank.wav remapped: res://assets/audio/sfx/step_clank.wav
+Loading resource: res://.godot/imported/step_clank.wav-da1a3ac4d84159021cd6f64730f8a282.sample remapped: res://.godot/imported/step_clank.wav-da1a3ac4d84159021cd6f64730f8a282.sample
+Completed load for: 'res://assets/audio/sfx/step_clank.wav' remapped 'res://assets/audio/sfx/step_clank.wav' at thread -1
+Loading resource: res://assets/audio/sfx/step_asphalt_dry.wav remapped: res://assets/audio/sfx/step_asphalt_dry.wav
+Loading resource: res://.godot/imported/step_asphalt_dry.wav-f1a010089b74d773371b48360d6e08dd.sample remapped: res://.godot/imported/step_asphalt_dry.wav-f1a010089b74d773371b48360d6e08dd.sample
+Completed load for: 'res://assets/audio/sfx/step_asphalt_dry.wav' remapped 'res://assets/audio/sfx/step_asphalt_dry.wav' at thread -1
+Loading resource: res://assets/audio/sfx/step_asphalt_wet.wav remapped: res://assets/audio/sfx/step_asphalt_wet.wav
+Loading resource: res://.godot/imported/step_asphalt_wet.wav-c7da5ed03c37ea568d5833deb395810b.sample remapped: res://.godot/imported/step_asphalt_wet.wav-c7da5ed03c37ea568d5833deb395810b.sample
+Completed load for: 'res://assets/audio/sfx/step_asphalt_wet.wav' remapped 'res://assets/audio/sfx/step_asphalt_wet.wav' at thread -1
+Loading resource: res://assets/audio/sfx/footstep_concrete.wav remapped: res://assets/audio/sfx/footstep_concrete.wav
+Loading resource: res://.godot/imported/footstep_concrete.wav-c7177f9654ae24fcd5e843823724e60b.sample remapped: res://.godot/imported/footstep_concrete.wav-c7177f9654ae24fcd5e843823724e60b.sample
+Completed load for: 'res://assets/audio/sfx/footstep_concrete.wav' remapped 'res://assets/audio/sfx/footstep_concrete.wav' at thread -1
+Loading resource: res://assets/audio/sfx/footstep_wood.wav remapped: res://assets/audio/sfx/footstep_wood.wav
+Loading resource: res://.godot/imported/footstep_wood.wav-b00b76cf1cc3053f8bded53fd8d81f6b.sample remapped: res://.godot/imported/footstep_wood.wav-b00b76cf1cc3053f8bded53fd8d81f6b.sample
+Completed load for: 'res://assets/audio/sfx/footstep_wood.wav' remapped 'res://assets/audio/sfx/footstep_wood.wav' at thread -1
+Loading resource: res://assets/audio/sfx/footstep_metal.wav remapped: res://assets/audio/sfx/footstep_metal.wav
+Loading resource: res://.godot/imported/footstep_metal.wav-20e7afd276571ac5881d14bccaca20b0.sample remapped: res://.godot/imported/footstep_metal.wav-20e7afd276571ac5881d14bccaca20b0.sample
+Completed load for: 'res://assets/audio/sfx/footstep_metal.wav' remapped 'res://assets/audio/sfx/footstep_metal.wav' at thread -1
+Loading resource: res://assets/audio/sfx/step_puddle.wav remapped: res://assets/audio/sfx/step_puddle.wav
+Loading resource: res://.godot/imported/step_puddle.wav-9bed03dde1391c7d9217fc0ec6851003.sample remapped: res://.godot/imported/step_puddle.wav-9bed03dde1391c7d9217fc0ec6851003.sample
+Completed load for: 'res://assets/audio/sfx/step_puddle.wav' remapped 'res://assets/audio/sfx/step_puddle.wav' at thread -1
+Loading resource: res://assets/audio/sfx/step_glass.wav remapped: res://assets/audio/sfx/step_glass.wav
+Loading resource: res://.godot/imported/step_glass.wav-42a0affcacae958cd6d0623a2bc5c580.sample remapped: res://.godot/imported/step_glass.wav-42a0affcacae958cd6d0623a2bc5c580.sample
+Completed load for: 'res://assets/audio/sfx/step_glass.wav' remapped 'res://assets/audio/sfx/step_glass.wav' at thread -1
+Loading resource: res://assets/audio/sfx/footsteps/concrete_walk.wav remapped: res://assets/audio/sfx/footsteps/concrete_walk.wav
+Loading resource: res://.godot/imported/concrete_walk.wav-1da84943a58b81d65947a159fb8e1a5c.sample remapped: res://.godot/imported/concrete_walk.wav-1da84943a58b81d65947a159fb8e1a5c.sample
+Completed load for: 'res://assets/audio/sfx/footsteps/concrete_walk.wav' remapped 'res://assets/audio/sfx/footsteps/concrete_walk.wav' at thread -1
+Loading resource: res://assets/audio/sfx/footsteps/concrete_jog.wav remapped: res://assets/audio/sfx/footsteps/concrete_jog.wav
+Loading resource: res://.godot/imported/concrete_jog.wav-167540f507a5f34bf2051b976cfb5183.sample remapped: res://.godot/imported/concrete_jog.wav-167540f507a5f34bf2051b976cfb5183.sample
+Completed load for: 'res://assets/audio/sfx/footsteps/concrete_jog.wav' remapped 'res://assets/audio/sfx/footsteps/concrete_jog.wav' at thread -1
+Loading resource: res://assets/audio/sfx/footsteps/concrete_sprint.wav remapped: res://assets/audio/sfx/footsteps/concrete_sprint.wav
+Loading resource: res://.godot/imported/concrete_sprint.wav-d51cfa4686521005dcd1f43b7713bbcd.sample remapped: res://.godot/imported/concrete_sprint.wav-d51cfa4686521005dcd1f43b7713bbcd.sample
+Completed load for: 'res://assets/audio/sfx/footsteps/concrete_sprint.wav' remapped 'res://assets/audio/sfx/footsteps/concrete_sprint.wav' at thread -1
+Loading resource: res://assets/audio/sfx/footsteps/metal_walk.wav remapped: res://assets/audio/sfx/footsteps/metal_walk.wav
+Loading resource: res://.godot/imported/metal_walk.wav-549a4ae2a3acfb4dcf4fc188f8bff8be.sample remapped: res://.godot/imported/metal_walk.wav-549a4ae2a3acfb4dcf4fc188f8bff8be.sample
+Completed load for: 'res://assets/audio/sfx/footsteps/metal_walk.wav' remapped 'res://assets/audio/sfx/footsteps/metal_walk.wav' at thread -1
+Loading resource: res://assets/audio/sfx/footsteps/metal_jog.wav remapped: res://assets/audio/sfx/footsteps/metal_jog.wav
+Loading resource: res://.godot/imported/metal_jog.wav-d0b9c25323510cc3e1829caed25466bc.sample remapped: res://.godot/imported/metal_jog.wav-d0b9c25323510cc3e1829caed25466bc.sample
+Completed load for: 'res://assets/audio/sfx/footsteps/metal_jog.wav' remapped 'res://assets/audio/sfx/footsteps/metal_jog.wav' at thread -1
+Loading resource: res://assets/audio/sfx/footsteps/metal_sprint.wav remapped: res://assets/audio/sfx/footsteps/metal_sprint.wav
+Loading resource: res://.godot/imported/metal_sprint.wav-866f5bf1ab6f322c02f9a3b9eb98b88f.sample remapped: res://.godot/imported/metal_sprint.wav-866f5bf1ab6f322c02f9a3b9eb98b88f.sample
+Completed load for: 'res://assets/audio/sfx/footsteps/metal_sprint.wav' remapped 'res://assets/audio/sfx/footsteps/metal_sprint.wav' at thread -1
+Loading resource: res://assets/audio/sfx/footsteps/wood_walk.wav remapped: res://assets/audio/sfx/footsteps/wood_walk.wav
+Loading resource: res://.godot/imported/wood_walk.wav-7f2187544d52c3301380d079b3090b02.sample remapped: res://.godot/imported/wood_walk.wav-7f2187544d52c3301380d079b3090b02.sample
+Completed load for: 'res://assets/audio/sfx/footsteps/wood_walk.wav' remapped 'res://assets/audio/sfx/footsteps/wood_walk.wav' at thread -1
+Loading resource: res://assets/audio/sfx/footsteps/wood_jog.wav remapped: res://assets/audio/sfx/footsteps/wood_jog.wav
+Loading resource: res://.godot/imported/wood_jog.wav-a6bf44ec375fd0ad1325069430165655.sample remapped: res://.godot/imported/wood_jog.wav-a6bf44ec375fd0ad1325069430165655.sample
+Completed load for: 'res://assets/audio/sfx/footsteps/wood_jog.wav' remapped 'res://assets/audio/sfx/footsteps/wood_jog.wav' at thread -1
+Loading resource: res://assets/audio/sfx/footsteps/wood_sprint.wav remapped: res://assets/audio/sfx/footsteps/wood_sprint.wav
+Loading resource: res://.godot/imported/wood_sprint.wav-49a88a5ed20b3b4382704ed64f35b50f.sample remapped: res://.godot/imported/wood_sprint.wav-49a88a5ed20b3b4382704ed64f35b50f.sample
+Completed load for: 'res://assets/audio/sfx/footsteps/wood_sprint.wav' remapped 'res://assets/audio/sfx/footsteps/wood_sprint.wav' at thread -1
+Loading resource: res://assets/audio/sfx/footsteps/grass_walk.wav remapped: res://assets/audio/sfx/footsteps/grass_walk.wav
+Loading resource: res://.godot/imported/grass_walk.wav-ad261d0cd30d7c7ab5566818b2f1a1b6.sample remapped: res://.godot/imported/grass_walk.wav-ad261d0cd30d7c7ab5566818b2f1a1b6.sample
+Completed load for: 'res://assets/audio/sfx/footsteps/grass_walk.wav' remapped 'res://assets/audio/sfx/footsteps/grass_walk.wav' at thread -1
+Loading resource: res://assets/audio/sfx/footsteps/grass_jog.wav remapped: res://assets/audio/sfx/footsteps/grass_jog.wav
+Loading resource: res://.godot/imported/grass_jog.wav-8277fa609bb0ffe6a5f5fcd23ea0d5e7.sample remapped: res://.godot/imported/grass_jog.wav-8277fa609bb0ffe6a5f5fcd23ea0d5e7.sample
+Completed load for: 'res://assets/audio/sfx/footsteps/grass_jog.wav' remapped 'res://assets/audio/sfx/footsteps/grass_jog.wav' at thread -1
+Loading resource: res://assets/audio/sfx/footsteps/grass_sprint.wav remapped: res://assets/audio/sfx/footsteps/grass_sprint.wav
+Loading resource: res://.godot/imported/grass_sprint.wav-7b2ac3309897e7b82c36ee44d83653f8.sample remapped: res://.godot/imported/grass_sprint.wav-7b2ac3309897e7b82c36ee44d83653f8.sample
+Completed load for: 'res://assets/audio/sfx/footsteps/grass_sprint.wav' remapped 'res://assets/audio/sfx/footsteps/grass_sprint.wav' at thread -1
+Loading resource: res://assets/audio/sfx/footsteps/gravel_walk.wav remapped: res://assets/audio/sfx/footsteps/gravel_walk.wav
+Loading resource: res://.godot/imported/gravel_walk.wav-7fd0860a26eaa563a41f0d24e8498d37.sample remapped: res://.godot/imported/gravel_walk.wav-7fd0860a26eaa563a41f0d24e8498d37.sample
+Completed load for: 'res://assets/audio/sfx/footsteps/gravel_walk.wav' remapped 'res://assets/audio/sfx/footsteps/gravel_walk.wav' at thread -1
+Loading resource: res://assets/audio/sfx/footsteps/gravel_jog.wav remapped: res://assets/audio/sfx/footsteps/gravel_jog.wav
+Loading resource: res://.godot/imported/gravel_jog.wav-0bbe5cf00fcc5f1e772edb9d745fd382.sample remapped: res://.godot/imported/gravel_jog.wav-0bbe5cf00fcc5f1e772edb9d745fd382.sample
+Completed load for: 'res://assets/audio/sfx/footsteps/gravel_jog.wav' remapped 'res://assets/audio/sfx/footsteps/gravel_jog.wav' at thread -1
+Loading resource: res://assets/audio/sfx/footsteps/gravel_sprint.wav remapped: res://assets/audio/sfx/footsteps/gravel_sprint.wav
+Loading resource: res://.godot/imported/gravel_sprint.wav-90a4566b231f4575824ea5fdcba2290f.sample remapped: res://.godot/imported/gravel_sprint.wav-90a4566b231f4575824ea5fdcba2290f.sample
+Completed load for: 'res://assets/audio/sfx/footsteps/gravel_sprint.wav' remapped 'res://assets/audio/sfx/footsteps/gravel_sprint.wav' at thread -1
+Loading resource: res://assets/audio/sfx/footsteps/tile_walk.wav remapped: res://assets/audio/sfx/footsteps/tile_walk.wav
+Loading resource: res://.godot/imported/tile_walk.wav-65c673b7ed2b675c7af41ca0279cf1df.sample remapped: res://.godot/imported/tile_walk.wav-65c673b7ed2b675c7af41ca0279cf1df.sample
+Completed load for: 'res://assets/audio/sfx/footsteps/tile_walk.wav' remapped 'res://assets/audio/sfx/footsteps/tile_walk.wav' at thread -1
+Loading resource: res://assets/audio/sfx/footsteps/tile_jog.wav remapped: res://assets/audio/sfx/footsteps/tile_jog.wav
+Loading resource: res://.godot/imported/tile_jog.wav-39cd33a39c2873ea710d1d8364e3d4e0.sample remapped: res://.godot/imported/tile_jog.wav-39cd33a39c2873ea710d1d8364e3d4e0.sample
+Completed load for: 'res://assets/audio/sfx/footsteps/tile_jog.wav' remapped 'res://assets/audio/sfx/footsteps/tile_jog.wav' at thread -1
+Loading resource: res://assets/audio/sfx/footsteps/tile_sprint.wav remapped: res://assets/audio/sfx/footsteps/tile_sprint.wav
+Loading resource: res://.godot/imported/tile_sprint.wav-0f82ebad158d010c0f88a1ddd329a881.sample remapped: res://.godot/imported/tile_sprint.wav-0f82ebad158d010c0f88a1ddd329a881.sample
+Completed load for: 'res://assets/audio/sfx/footsteps/tile_sprint.wav' remapped 'res://assets/audio/sfx/footsteps/tile_sprint.wav' at thread -1
+Loading resource: res://assets/textures/ui_v2/quickslot_v2_72.png remapped: res://assets/textures/ui_v2/quickslot_v2_72.png
+Loading resource: res://.godot/imported/quickslot_v2_72.png-fa5e499539a3bf6287e56306de22c559.bptc.ctex remapped: res://.godot/imported/quickslot_v2_72.png-fa5e499539a3bf6287e56306de22c559.bptc.ctex
+Completed load for: 'res://assets/textures/ui_v2/quickslot_v2_72.png' remapped 'res://assets/textures/ui_v2/quickslot_v2_72.png' at thread -1
+Loading resource: res://assets/textures/items/pistol.png remapped: res://assets/textures/items/pistol.png
+Loading resource: res://.godot/imported/pistol.png-36453b47f7ebf7f2b501f2b46b7bad72.bptc.ctex remapped: res://.godot/imported/pistol.png-36453b47f7ebf7f2b501f2b46b7bad72.bptc.ctex
+Completed load for: 'res://assets/textures/items/pistol.png' remapped 'res://assets/textures/items/pistol.png' at thread -1
+Loading resource: res://assets/textures/items/rifle.png remapped: res://assets/textures/items/rifle.png
+Loading resource: res://.godot/imported/rifle.png-78266781df0b883bc9b8a7ac2c8f5741.ctex remapped: res://.godot/imported/rifle.png-78266781df0b883bc9b8a7ac2c8f5741.ctex
+Completed load for: 'res://assets/textures/items/rifle.png' remapped 'res://assets/textures/items/rifle.png' at thread -1
+Loading resource: res://assets/textures/items/flashlight.png remapped: res://assets/textures/items/flashlight.png
+Loading resource: res://.godot/imported/flashlight.png-75eec4f5ebf8188f9635ca2715c18807.bptc.ctex remapped: res://.godot/imported/flashlight.png-75eec4f5ebf8188f9635ca2715c18807.bptc.ctex
+Completed load for: 'res://assets/textures/items/flashlight.png' remapped 'res://assets/textures/items/flashlight.png' at thread -1
+Loading resource: res://scripts/ui/radar.gd remapped: res://scripts/ui/radar.gd
+Completed load for: 'res://scripts/ui/radar.gd' remapped 'res://scripts/ui/radar.gd' at thread -1
+Loading resource: res://scripts/ui/weapon_compare_ui.gd remapped: res://scripts/ui/weapon_compare_ui.gd
+Completed load for: 'res://scripts/ui/weapon_compare_ui.gd' remapped 'res://scripts/ui/weapon_compare_ui.gd' at thread -1
+Loading resource: res://assets/shaders/ui_panel.gdshader remapped: res://assets/shaders/ui_panel.gdshader
+Completed load for: 'res://assets/shaders/ui_panel.gdshader' remapped 'res://assets/shaders/ui_panel.gdshader' at thread -1
+Loading resource: res://scripts/ui/quick_wheel_ui.gd remapped: res://scripts/ui/quick_wheel_ui.gd
+Completed load for: 'res://scripts/ui/quick_wheel_ui.gd' remapped 'res://scripts/ui/quick_wheel_ui.gd' at thread -1
+Loading resource: res://assets/shaders/grain_overlay.gdshader remapped: res://assets/shaders/grain_overlay.gdshader
+Completed load for: 'res://assets/shaders/grain_overlay.gdshader' remapped 'res://assets/shaders/grain_overlay.gdshader' at thread -1
+Loading resource: res://scenes/effects/damage_indicator.tscn remapped: res://scenes/effects/damage_indicator.tscn
+Loading resource: res://scripts/effects/damage_indicator.gd remapped: res://scripts/effects/damage_indicator.gd
+Completed load for: 'res://scripts/effects/damage_indicator.gd' remapped 'res://scripts/effects/damage_indicator.gd' at thread -1
+Completed load for: 'res://scenes/effects/damage_indicator.tscn' remapped 'res://scenes/effects/damage_indicator.tscn' at thread -1
+Loading resource: res://assets/shaders/damage_vignette.gdshader remapped: res://assets/shaders/damage_vignette.gdshader
+Completed load for: 'res://assets/shaders/damage_vignette.gdshader' remapped 'res://assets/shaders/damage_vignette.gdshader' at thread -1
+Loading resource: res://assets/textures/screens_v2/loading_street.png remapped: res://assets/textures/screens_v2/loading_street.png
+Loading resource: res://.godot/imported/loading_street.png-cb640c6571001e09d1943dfbe1f17dc8.bptc.ctex remapped: res://.godot/imported/loading_street.png-cb640c6571001e09d1943dfbe1f17dc8.bptc.ctex
+Completed load for: 'res://assets/textures/screens_v2/loading_street.png' remapped 'res://assets/textures/screens_v2/loading_street.png' at thread -1
+Loading resource: res://assets/textures/maps_v2/grid_panel_512.png remapped: res://assets/textures/maps_v2/grid_panel_512.png
+Loading resource: res://.godot/imported/grid_panel_512.png-4175d700e2ec37a01c3ef562c2790f0e.bptc.ctex remapped: res://.godot/imported/grid_panel_512.png-4175d700e2ec37a01c3ef562c2790f0e.bptc.ctex
+Completed load for: 'res://assets/textures/maps_v2/grid_panel_512.png' remapped 'res://assets/textures/maps_v2/grid_panel_512.png' at thread -1
+Loading resource: res://assets/shaders/motion_blur.gdshader remapped: res://assets/shaders/motion_blur.gdshader
+Completed load for: 'res://assets/shaders/motion_blur.gdshader' remapped 'res://assets/shaders/motion_blur.gdshader' at thread -1
+Loading resource: res://assets/env/night_environment_desktop.tres remapped: res://assets/env/night_environment_desktop.tres
+Completed load for: 'res://assets/env/night_environment_desktop.tres' remapped 'res://assets/env/night_environment_desktop.tres' at thread -1
+Loading resource: res://assets/env/camera_attributes_night.tres remapped: res://assets/env/camera_attributes_night.tres
+Completed load for: 'res://assets/env/camera_attributes_night.tres' remapped 'res://assets/env/camera_attributes_night.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/textures/luts/lut_suburbs.png remapped: res://assets/textures/luts/lut_suburbs.png
+Loading resource: res://.godot/imported/lut_suburbs.png-e49c304518a7a4bb2e2a37e7f103c392.ctex3d remapped: res://.godot/imported/lut_suburbs.png-e49c304518a7a4bb2e2a37e7f103c392.ctex3d
+Completed load for: 'res://assets/textures/luts/lut_suburbs.png' remapped 'res://assets/textures/luts/lut_suburbs.png' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://scripts/world/world_runtime.gd remapped: res://scripts/world/world_runtime.gd
+Loading resource: res://assets/shaders/soviet_road.gdshader remapped: res://assets/shaders/soviet_road.gdshader
+Completed load for: 'res://assets/shaders/soviet_road.gdshader' remapped 'res://assets/shaders/soviet_road.gdshader' at thread -1
+Loading resource: res://scenes/props/streetlight_3d.tscn remapped: res://scenes/props/streetlight_3d.tscn
+Loading resource: res://scripts/world/streetlight_3d.gd remapped: res://scripts/world/streetlight_3d.gd
+Completed load for: 'res://scripts/world/streetlight_3d.gd' remapped 'res://scripts/world/streetlight_3d.gd' at thread -1
+Loading resource: res://assets/mesh/mesh_streetlight_pole.res remapped: res://assets/mesh/mesh_streetlight_pole.res
+Completed load for: 'res://assets/mesh/mesh_streetlight_pole.res' remapped 'res://assets/mesh/mesh_streetlight_pole.res' at thread -1
+Completed load for: 'res://scenes/props/streetlight_3d.tscn' remapped 'res://scenes/props/streetlight_3d.tscn' at thread -1
+Loading resource: res://assets/env/mat_foliage_sway.tres remapped: res://assets/env/mat_foliage_sway.tres
+Loading resource: res://assets/shaders/foliage_sway.gdshader remapped: res://assets/shaders/foliage_sway.gdshader
+Completed load for: 'res://assets/shaders/foliage_sway.gdshader' remapped 'res://assets/shaders/foliage_sway.gdshader' at thread -1
+Completed load for: 'res://assets/env/mat_foliage_sway.tres' remapped 'res://assets/env/mat_foliage_sway.tres' at thread -1
+Loading resource: res://assets/mesh/mesh_trash_can.res remapped: res://assets/mesh/mesh_trash_can.res
+Completed load for: 'res://assets/mesh/mesh_trash_can.res' remapped 'res://assets/mesh/mesh_trash_can.res' at thread -1
+Loading resource: res://assets/mesh/mesh_hydrant.res remapped: res://assets/mesh/mesh_hydrant.res
+Completed load for: 'res://assets/mesh/mesh_hydrant.res' remapped 'res://assets/mesh/mesh_hydrant.res' at thread -1
+Loading resource: res://assets/mesh/mesh_bench.res remapped: res://assets/mesh/mesh_bench.res
+Completed load for: 'res://assets/mesh/mesh_bench.res' remapped 'res://assets/mesh/mesh_bench.res' at thread -1
+Loading resource: res://assets/shaders/height_fog_card.gdshader remapped: res://assets/shaders/height_fog_card.gdshader
+Completed load for: 'res://assets/shaders/height_fog_card.gdshader' remapped 'res://assets/shaders/height_fog_card.gdshader' at thread -1
+Loading resource: res://assets/textures/fx/smoke_puff.png remapped: res://assets/textures/fx/smoke_puff.png
+Loading resource: res://.godot/imported/smoke_puff.png-84047e5ed1f9802c93241ebeec8fe34d.bptc.ctex remapped: res://.godot/imported/smoke_puff.png-84047e5ed1f9802c93241ebeec8fe34d.bptc.ctex
+Completed load for: 'res://assets/textures/fx/smoke_puff.png' remapped 'res://assets/textures/fx/smoke_puff.png' at thread -1
+Loading resource: res://assets/shaders/lamp_cone.gdshader remapped: res://assets/shaders/lamp_cone.gdshader
+Completed load for: 'res://assets/shaders/lamp_cone.gdshader' remapped 'res://assets/shaders/lamp_cone.gdshader' at thread -1
+Loading resource: res://assets/shaders/window_halo.gdshader remapped: res://assets/shaders/window_halo.gdshader
+Completed load for: 'res://assets/shaders/window_halo.gdshader' remapped 'res://assets/shaders/window_halo.gdshader' at thread -1
+Loading resource: res://assets/shaders/soviet_window.gdshader remapped: res://assets/shaders/soviet_window.gdshader
+Completed load for: 'res://assets/shaders/soviet_window.gdshader' remapped 'res://assets/shaders/soviet_window.gdshader' at thread -1
+Loading resource: res://assets/shaders/soviet_facade.gdshader remapped: res://assets/shaders/soviet_facade.gdshader
+Completed load for: 'res://assets/shaders/soviet_facade.gdshader' remapped 'res://assets/shaders/soviet_facade.gdshader' at thread -1
+Loading resource: res://assets/shaders/soviet_sign.gdshader remapped: res://assets/shaders/soviet_sign.gdshader
+Completed load for: 'res://assets/shaders/soviet_sign.gdshader' remapped 'res://assets/shaders/soviet_sign.gdshader' at thread -1
+Loading resource: res://assets/shaders/dead_grass.gdshader remapped: res://assets/shaders/dead_grass.gdshader
+Completed load for: 'res://assets/shaders/dead_grass.gdshader' remapped 'res://assets/shaders/dead_grass.gdshader' at thread -1
+Completed load for: 'res://scripts/world/world_runtime.gd' remapped 'res://scripts/world/world_runtime.gd' at thread -1
+Loading resource: res://scripts/multiplayer/multiplayer_manager.gd remapped: res://scripts/multiplayer/multiplayer_manager.gd
+Completed load for: 'res://scripts/multiplayer/multiplayer_manager.gd' remapped 'res://scripts/multiplayer/multiplayer_manager.gd' at thread -1
+Loading resource: res://scenes/districts/suburbs.tscn remapped: res://scenes/districts/suburbs.tscn
+Loading resource: res://scripts/world/power_switch.gd remapped: res://scripts/world/power_switch.gd
+Completed load for: 'res://scripts/world/power_switch.gd' remapped 'res://scripts/world/power_switch.gd' at thread -1
+Loading resource: res://scripts/world/district_trigger.gd remapped: res://scripts/world/district_trigger.gd
+Completed load for: 'res://scripts/world/district_trigger.gd' remapped 'res://scripts/world/district_trigger.gd' at thread -1
+Loading resource: res://scripts/visual/emissive_windows.gd remapped: res://scripts/visual/emissive_windows.gd
+Completed load for: 'res://scripts/visual/emissive_windows.gd' remapped 'res://scripts/visual/emissive_windows.gd' at thread -1
+Completed load for: 'res://scenes/districts/suburbs.tscn' remapped 'res://scenes/districts/suburbs.tscn' at thread -1
+Loading resource: res://assets/env/mat_wet_asphalt.tres remapped: res://assets/env/mat_wet_asphalt.tres
+Loading resource: res://assets/shaders/wet_asphalt.gdshader remapped: res://assets/shaders/wet_asphalt.gdshader
+Completed load for: 'res://assets/shaders/wet_asphalt.gdshader' remapped 'res://assets/shaders/wet_asphalt.gdshader' at thread -1
+Completed load for: 'res://assets/env/mat_wet_asphalt.tres' remapped 'res://assets/env/mat_wet_asphalt.tres' at thread -1
+Loading resource: res://assets/textures/environment/asphalt.png remapped: res://assets/textures/environment/asphalt.png
+Loading resource: res://.godot/imported/asphalt.png-118afb431483e4c2036882e392894a19.bptc.ctex remapped: res://.godot/imported/asphalt.png-118afb431483e4c2036882e392894a19.bptc.ctex
+Completed load for: 'res://assets/textures/environment/asphalt.png' remapped 'res://assets/textures/environment/asphalt.png' at thread -1
+Loading resource: res://assets/textures/environment/concrete.png remapped: res://assets/textures/environment/concrete.png
+Loading resource: res://.godot/imported/concrete.png-929c020726ee5e3bd75a824da4b8e3ba.bptc.ctex remapped: res://.godot/imported/concrete.png-929c020726ee5e3bd75a824da4b8e3ba.bptc.ctex
+Completed load for: 'res://assets/textures/environment/concrete.png' remapped 'res://assets/textures/environment/concrete.png' at thread -1
+Loading resource: res://assets/textures/surfaces/dumpster_metal_512.png remapped: res://assets/textures/surfaces/dumpster_metal_512.png
+Loading resource: res://.godot/imported/dumpster_metal_512.png-29f4dcd25b5ac91c937c5dfb8d24831b.bptc.ctex remapped: res://.godot/imported/dumpster_metal_512.png-29f4dcd25b5ac91c937c5dfb8d24831b.bptc.ctex
+Completed load for: 'res://assets/textures/surfaces/dumpster_metal_512.png' remapped 'res://assets/textures/surfaces/dumpster_metal_512.png' at thread -1
+Loading resource: res://assets/audio/ambience/district_details/suburbs_dog_bark.ogg remapped: res://assets/audio/ambience/district_details/suburbs_dog_bark.ogg
+Loading resource: res://assets/audio/ambience/districts/suburbs_dark.ogg remapped: res://assets/audio/ambience/districts/suburbs_dark.ogg
+Loading resource: res://assets/audio/ambience/districts/residential_dark.ogg remapped: res://assets/audio/ambience/districts/residential_dark.ogg
+Loading resource: res://.godot/imported/suburbs_dog_bark.ogg-06f3a51f83a6cdb4649b00e5cfda18f6.oggvorbisstr remapped: res://.godot/imported/suburbs_dog_bark.ogg-06f3a51f83a6cdb4649b00e5cfda18f6.oggvorbisstr
+Loading resource: res://.godot/imported/suburbs_dark.ogg-ab98ba66b8ab80a241358e814dfcce93.oggvorbisstr remapped: res://.godot/imported/suburbs_dark.ogg-ab98ba66b8ab80a241358e814dfcce93.oggvorbisstr
+Loading resource: res://.godot/imported/residential_dark.ogg-106ea239e8a53fd0bc0eb2a880e26106.oggvorbisstr remapped: res://.godot/imported/residential_dark.ogg-106ea239e8a53fd0bc0eb2a880e26106.oggvorbisstr
+Completed load for: 'res://assets/audio/ambience/district_details/suburbs_dog_bark.ogg' remapped 'res://assets/audio/ambience/district_details/suburbs_dog_bark.ogg' at thread -1
+Completed load for: 'res://assets/audio/ambience/districts/suburbs_dark.ogg' remapped 'res://assets/audio/ambience/districts/suburbs_dark.ogg' at thread 0
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/audio/ambience/districts/residential_dark.ogg' remapped 'res://assets/audio/ambience/districts/residential_dark.ogg' at thread 1
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://scenes/districts/residential.tscn remapped: res://scenes/districts/residential.tscn
+Loading resource: res://assets/textures/surfaces/bench_wood_512.png remapped: res://assets/textures/surfaces/bench_wood_512.png
+Loading resource: res://.godot/imported/bench_wood_512.png-f6194a573ac30282ba4f46fac4236591.bptc.ctex remapped: res://.godot/imported/bench_wood_512.png-f6194a573ac30282ba4f46fac4236591.bptc.ctex
+Completed load for: 'res://scenes/districts/residential.tscn' remapped 'res://scenes/districts/residential.tscn' at thread 2
+Completed load for: 'res://assets/textures/surfaces/bench_wood_512.png' remapped 'res://assets/textures/surfaces/bench_wood_512.png' at thread 3
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/env/mat_lamp_flicker.tres remapped: res://assets/env/mat_lamp_flicker.tres
+Loading resource: res://assets/shaders/streetlight_flicker.gdshader remapped: res://assets/shaders/streetlight_flicker.gdshader
+Completed load for: 'res://assets/shaders/streetlight_flicker.gdshader' remapped 'res://assets/shaders/streetlight_flicker.gdshader' at thread -1
+Completed load for: 'res://assets/env/mat_lamp_flicker.tres' remapped 'res://assets/env/mat_lamp_flicker.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/shaders/contact_shadow.gdshader remapped: res://assets/shaders/contact_shadow.gdshader
+Completed load for: 'res://assets/shaders/contact_shadow.gdshader' remapped 'res://assets/shaders/contact_shadow.gdshader' at thread -1
+Loading resource: res://assets/shaders/pickup_glow.gdshader remapped: res://assets/shaders/pickup_glow.gdshader
+Completed load for: 'res://assets/shaders/pickup_glow.gdshader' remapped 'res://assets/shaders/pickup_glow.gdshader' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/textures/pbr/plywood_albedo.png remapped: res://assets/textures/pbr/plywood_albedo.png
+Loading resource: res://.godot/imported/plywood_albedo.png-5f424a0fef0747f86909c4d6239d1d93.bptc.ctex remapped: res://.godot/imported/plywood_albedo.png-5f424a0fef0747f86909c4d6239d1d93.bptc.ctex
+Completed load for: 'res://assets/textures/pbr/plywood_albedo.png' remapped 'res://assets/textures/pbr/plywood_albedo.png' at thread -1
+Loading resource: res://assets/textures/pbr/plywood_normal.png remapped: res://assets/textures/pbr/plywood_normal.png
+Loading resource: res://.godot/imported/plywood_normal.png-483c92ed91e5d25d08683edd090b8a93.bptc.ctex remapped: res://.godot/imported/plywood_normal.png-483c92ed91e5d25d08683edd090b8a93.bptc.ctex
+Completed load for: 'res://assets/textures/pbr/plywood_normal.png' remapped 'res://assets/textures/pbr/plywood_normal.png' at thread -1
+Loading resource: res://assets/textures/pbr/plywood_rough.png remapped: res://assets/textures/pbr/plywood_rough.png
+Loading resource: res://.godot/imported/plywood_rough.png-3c24222bee4b692a4d9ec2e4514b60e8.bptc.ctex remapped: res://.godot/imported/plywood_rough.png-3c24222bee4b692a4d9ec2e4514b60e8.bptc.ctex
+Completed load for: 'res://assets/textures/pbr/plywood_rough.png' remapped 'res://assets/textures/pbr/plywood_rough.png' at thread -1
+Loading resource: res://assets/textures/pbr/rusted_metal_albedo.png remapped: res://assets/textures/pbr/rusted_metal_albedo.png
+Loading resource: res://.godot/imported/rusted_metal_albedo.png-8e15a9a1ffe8775c11485605736651db.bptc.ctex remapped: res://.godot/imported/rusted_metal_albedo.png-8e15a9a1ffe8775c11485605736651db.bptc.ctex
+Completed load for: 'res://assets/textures/pbr/rusted_metal_albedo.png' remapped 'res://assets/textures/pbr/rusted_metal_albedo.png' at thread -1
+Loading resource: res://assets/textures/pbr/rusted_metal_normal.png remapped: res://assets/textures/pbr/rusted_metal_normal.png
+Loading resource: res://.godot/imported/rusted_metal_normal.png-0ec271a8df28e5af0c16f6b0f6343802.bptc.ctex remapped: res://.godot/imported/rusted_metal_normal.png-0ec271a8df28e5af0c16f6b0f6343802.bptc.ctex
+Completed load for: 'res://assets/textures/pbr/rusted_metal_normal.png' remapped 'res://assets/textures/pbr/rusted_metal_normal.png' at thread -1
+Loading resource: res://assets/textures/pbr/rusted_metal_rough.png remapped: res://assets/textures/pbr/rusted_metal_rough.png
+Loading resource: res://.godot/imported/rusted_metal_rough.png-e09e559124ebe59415aead3ad82d637f.bptc.ctex remapped: res://.godot/imported/rusted_metal_rough.png-e09e559124ebe59415aead3ad82d637f.bptc.ctex
+Completed load for: 'res://assets/textures/pbr/rusted_metal_rough.png' remapped 'res://assets/textures/pbr/rusted_metal_rough.png' at thread -1
+load_threaded_request(): Another threaded load for resource path 'res://assets/audio/ambience/districts/suburbs_dark.ogg' has been initiated. Not an error.
+load_threaded_request(): Another threaded load for resource path 'res://assets/audio/ambience/districts/residential_dark.ogg' has been initiated. Not an error.
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+[final] facing 28 of 96 street lights
+[final] 03 camera /root/Main3D/Camera3D at (-8.0, 2.557468, -8.0), player at (-8.0, 0.860233, -8.0) hp=100.0, paused=false
+[release-frames] capture begin 03_district_night_dark
+[release-frames] frame 03_district_night_dark result=0
+Loading resource: res://scenes/ui/hud_3d.tscn remapped: res://scenes/ui/hud_3d.tscn
+Loading resource: res://assets/ui/ui_heart.svg remapped: res://assets/ui/ui_heart.svg
+Loading resource: res://.godot/imported/ui_heart.svg-ad0af7a74c4cdb12e9219739cf4b9903.ctex remapped: res://.godot/imported/ui_heart.svg-ad0af7a74c4cdb12e9219739cf4b9903.ctex
+Completed load for: 'res://assets/ui/ui_heart.svg' remapped 'res://assets/ui/ui_heart.svg' at thread -1
+Loading resource: res://assets/textures/ui_v2/bar_track_256x8.png remapped: res://assets/textures/ui_v2/bar_track_256x8.png
+Loading resource: res://.godot/imported/bar_track_256x8.png-1338f6217a769963a174cdde69b72bbc.bptc.ctex remapped: res://.godot/imported/bar_track_256x8.png-1338f6217a769963a174cdde69b72bbc.bptc.ctex
+Completed load for: 'res://assets/textures/ui_v2/bar_track_256x8.png' remapped 'res://assets/textures/ui_v2/bar_track_256x8.png' at thread -1
+Loading resource: res://assets/textures/ui/crosshair_64.png remapped: res://assets/textures/ui/crosshair_64.png
+Loading resource: res://.godot/imported/crosshair_64.png-e33d66462cd69eb4bc899567a1716ba1.bptc.ctex remapped: res://.godot/imported/crosshair_64.png-e33d66462cd69eb4bc899567a1716ba1.bptc.ctex
+Completed load for: 'res://assets/textures/ui/crosshair_64.png' remapped 'res://assets/textures/ui/crosshair_64.png' at thread -1
+Loading resource: res://assets/textures/ui/hitmarker_64.png remapped: res://assets/textures/ui/hitmarker_64.png
+Loading resource: res://.godot/imported/hitmarker_64.png-d18ac51a2f0d3a1ae834eb8af51e6d9f.bptc.ctex remapped: res://.godot/imported/hitmarker_64.png-d18ac51a2f0d3a1ae834eb8af51e6d9f.bptc.ctex
+Completed load for: 'res://assets/textures/ui/hitmarker_64.png' remapped 'res://assets/textures/ui/hitmarker_64.png' at thread -1
+Loading resource: res://assets/ui/ui_interact.svg remapped: res://assets/ui/ui_interact.svg
+Loading resource: res://.godot/imported/ui_interact.svg-d2bacd17f72e0750dc32d85c4bdd641f.ctex remapped: res://.godot/imported/ui_interact.svg-d2bacd17f72e0750dc32d85c4bdd641f.ctex
+Completed load for: 'res://assets/ui/ui_interact.svg' remapped 'res://assets/ui/ui_interact.svg' at thread -1
+Loading resource: res://assets/ui/ui_battery.svg remapped: res://assets/ui/ui_battery.svg
+Loading resource: res://.godot/imported/ui_battery.svg-dc768b0daa79778733e0d9a3bd27c788.ctex remapped: res://.godot/imported/ui_battery.svg-dc768b0daa79778733e0d9a3bd27c788.ctex
+Completed load for: 'res://assets/ui/ui_battery.svg' remapped 'res://assets/ui/ui_battery.svg' at thread -1
+Loading resource: res://assets/ui/ui_pause.svg remapped: res://assets/ui/ui_pause.svg
+Loading resource: res://.godot/imported/ui_pause.svg-0e0c0dd2d5495c27de22c009d3b5ea01.ctex remapped: res://.godot/imported/ui_pause.svg-0e0c0dd2d5495c27de22c009d3b5ea01.ctex
+Completed load for: 'res://assets/ui/ui_pause.svg' remapped 'res://assets/ui/ui_pause.svg' at thread -1
+Completed load for: 'res://scenes/ui/hud_3d.tscn' remapped 'res://scenes/ui/hud_3d.tscn' at thread -1
+Loading resource: res://scripts/ui/virtual_joystick.gd remapped: res://scripts/ui/virtual_joystick.gd
+Completed load for: 'res://scripts/ui/virtual_joystick.gd' remapped 'res://scripts/ui/virtual_joystick.gd' at thread -1
+Loading resource: res://assets/textures/touch/touch_joy_base_256.png remapped: res://assets/textures/touch/touch_joy_base_256.png
+Loading resource: res://.godot/imported/touch_joy_base_256.png-523e32796f370f703fba73e5ef451b01.bptc.ctex remapped: res://.godot/imported/touch_joy_base_256.png-523e32796f370f703fba73e5ef451b01.bptc.ctex
+Completed load for: 'res://assets/textures/touch/touch_joy_base_256.png' remapped 'res://assets/textures/touch/touch_joy_base_256.png' at thread -1
+Loading resource: res://assets/textures/touch/touch_joy_knob_256.png remapped: res://assets/textures/touch/touch_joy_knob_256.png
+Loading resource: res://.godot/imported/touch_joy_knob_256.png-3adda98a049e83eadc70a873cc4daa75.bptc.ctex remapped: res://.godot/imported/touch_joy_knob_256.png-3adda98a049e83eadc70a873cc4daa75.bptc.ctex
+Completed load for: 'res://assets/textures/touch/touch_joy_knob_256.png' remapped 'res://assets/textures/touch/touch_joy_knob_256.png' at thread -1
+Loading resource: res://assets/textures/ui_v2/quickslot_v2_72.png remapped: res://assets/textures/ui_v2/quickslot_v2_72.png
+Loading resource: res://.godot/imported/quickslot_v2_72.png-fa5e499539a3bf6287e56306de22c559.bptc.ctex remapped: res://.godot/imported/quickslot_v2_72.png-fa5e499539a3bf6287e56306de22c559.bptc.ctex
+Completed load for: 'res://assets/textures/ui_v2/quickslot_v2_72.png' remapped 'res://assets/textures/ui_v2/quickslot_v2_72.png' at thread -1
+Loading resource: res://assets/textures/items/pistol.png remapped: res://assets/textures/items/pistol.png
+Loading resource: res://.godot/imported/pistol.png-36453b47f7ebf7f2b501f2b46b7bad72.bptc.ctex remapped: res://.godot/imported/pistol.png-36453b47f7ebf7f2b501f2b46b7bad72.bptc.ctex
+Completed load for: 'res://assets/textures/items/pistol.png' remapped 'res://assets/textures/items/pistol.png' at thread -1
+Loading resource: res://assets/textures/items/rifle.png remapped: res://assets/textures/items/rifle.png
+Loading resource: res://.godot/imported/rifle.png-78266781df0b883bc9b8a7ac2c8f5741.ctex remapped: res://.godot/imported/rifle.png-78266781df0b883bc9b8a7ac2c8f5741.ctex
+Completed load for: 'res://assets/textures/items/rifle.png' remapped 'res://assets/textures/items/rifle.png' at thread -1
+Loading resource: res://assets/textures/items/flashlight.png remapped: res://assets/textures/items/flashlight.png
+Loading resource: res://.godot/imported/flashlight.png-75eec4f5ebf8188f9635ca2715c18807.bptc.ctex remapped: res://.godot/imported/flashlight.png-75eec4f5ebf8188f9635ca2715c18807.bptc.ctex
+Completed load for: 'res://assets/textures/items/flashlight.png' remapped 'res://assets/textures/items/flashlight.png' at thread -1
+Loading resource: res://assets/shaders/ui_panel.gdshader remapped: res://assets/shaders/ui_panel.gdshader
+Completed load for: 'res://assets/shaders/ui_panel.gdshader' remapped 'res://assets/shaders/ui_panel.gdshader' at thread -1
+Loading resource: res://assets/shaders/grain_overlay.gdshader remapped: res://assets/shaders/grain_overlay.gdshader
+Completed load for: 'res://assets/shaders/grain_overlay.gdshader' remapped 'res://assets/shaders/grain_overlay.gdshader' at thread -1
+Loading resource: res://scenes/effects/damage_indicator.tscn remapped: res://scenes/effects/damage_indicator.tscn
+Completed load for: 'res://scenes/effects/damage_indicator.tscn' remapped 'res://scenes/effects/damage_indicator.tscn' at thread -1
+Loading resource: res://assets/shaders/damage_vignette.gdshader remapped: res://assets/shaders/damage_vignette.gdshader
+Completed load for: 'res://assets/shaders/damage_vignette.gdshader' remapped 'res://assets/shaders/damage_vignette.gdshader' at thread -1
+Loading resource: res://scenes/ui/hud_3d.tscn remapped: res://scenes/ui/hud_3d.tscn
+Loading resource: res://assets/ui/ui_heart.svg remapped: res://assets/ui/ui_heart.svg
+Loading resource: res://.godot/imported/ui_heart.svg-ad0af7a74c4cdb12e9219739cf4b9903.ctex remapped: res://.godot/imported/ui_heart.svg-ad0af7a74c4cdb12e9219739cf4b9903.ctex
+Completed load for: 'res://assets/ui/ui_heart.svg' remapped 'res://assets/ui/ui_heart.svg' at thread -1
+Loading resource: res://assets/textures/ui_v2/bar_track_256x8.png remapped: res://assets/textures/ui_v2/bar_track_256x8.png
+Loading resource: res://.godot/imported/bar_track_256x8.png-1338f6217a769963a174cdde69b72bbc.bptc.ctex remapped: res://.godot/imported/bar_track_256x8.png-1338f6217a769963a174cdde69b72bbc.bptc.ctex
+Completed load for: 'res://assets/textures/ui_v2/bar_track_256x8.png' remapped 'res://assets/textures/ui_v2/bar_track_256x8.png' at thread -1
+Loading resource: res://assets/textures/ui/crosshair_64.png remapped: res://assets/textures/ui/crosshair_64.png
+Loading resource: res://.godot/imported/crosshair_64.png-e33d66462cd69eb4bc899567a1716ba1.bptc.ctex remapped: res://.godot/imported/crosshair_64.png-e33d66462cd69eb4bc899567a1716ba1.bptc.ctex
+Completed load for: 'res://assets/textures/ui/crosshair_64.png' remapped 'res://assets/textures/ui/crosshair_64.png' at thread -1
+Loading resource: res://assets/textures/ui/hitmarker_64.png remapped: res://assets/textures/ui/hitmarker_64.png
+Loading resource: res://.godot/imported/hitmarker_64.png-d18ac51a2f0d3a1ae834eb8af51e6d9f.bptc.ctex remapped: res://.godot/imported/hitmarker_64.png-d18ac51a2f0d3a1ae834eb8af51e6d9f.bptc.ctex
+Completed load for: 'res://assets/textures/ui/hitmarker_64.png' remapped 'res://assets/textures/ui/hitmarker_64.png' at thread -1
+Loading resource: res://assets/ui/ui_interact.svg remapped: res://assets/ui/ui_interact.svg
+Loading resource: res://.godot/imported/ui_interact.svg-d2bacd17f72e0750dc32d85c4bdd641f.ctex remapped: res://.godot/imported/ui_interact.svg-d2bacd17f72e0750dc32d85c4bdd641f.ctex
+Completed load for: 'res://assets/ui/ui_interact.svg' remapped 'res://assets/ui/ui_interact.svg' at thread -1
+Loading resource: res://assets/ui/ui_battery.svg remapped: res://assets/ui/ui_battery.svg
+Loading resource: res://.godot/imported/ui_battery.svg-dc768b0daa79778733e0d9a3bd27c788.ctex remapped: res://.godot/imported/ui_battery.svg-dc768b0daa79778733e0d9a3bd27c788.ctex
+Completed load for: 'res://assets/ui/ui_battery.svg' remapped 'res://assets/ui/ui_battery.svg' at thread -1
+Loading resource: res://assets/ui/ui_pause.svg remapped: res://assets/ui/ui_pause.svg
+Loading resource: res://.godot/imported/ui_pause.svg-0e0c0dd2d5495c27de22c009d3b5ea01.ctex remapped: res://.godot/imported/ui_pause.svg-0e0c0dd2d5495c27de22c009d3b5ea01.ctex
+Completed load for: 'res://assets/ui/ui_pause.svg' remapped 'res://assets/ui/ui_pause.svg' at thread -1
+Completed load for: 'res://scenes/ui/hud_3d.tscn' remapped 'res://scenes/ui/hud_3d.tscn' at thread -1
+Loading resource: res://assets/textures/ui_v2/quickslot_v2_72.png remapped: res://assets/textures/ui_v2/quickslot_v2_72.png
+Loading resource: res://.godot/imported/quickslot_v2_72.png-fa5e499539a3bf6287e56306de22c559.bptc.ctex remapped: res://.godot/imported/quickslot_v2_72.png-fa5e499539a3bf6287e56306de22c559.bptc.ctex
+Completed load for: 'res://assets/textures/ui_v2/quickslot_v2_72.png' remapped 'res://assets/textures/ui_v2/quickslot_v2_72.png' at thread -1
+Loading resource: res://assets/textures/items/pistol.png remapped: res://assets/textures/items/pistol.png
+Loading resource: res://.godot/imported/pistol.png-36453b47f7ebf7f2b501f2b46b7bad72.bptc.ctex remapped: res://.godot/imported/pistol.png-36453b47f7ebf7f2b501f2b46b7bad72.bptc.ctex
+Completed load for: 'res://assets/textures/items/pistol.png' remapped 'res://assets/textures/items/pistol.png' at thread -1
+Loading resource: res://assets/textures/items/rifle.png remapped: res://assets/textures/items/rifle.png
+Loading resource: res://.godot/imported/rifle.png-78266781df0b883bc9b8a7ac2c8f5741.ctex remapped: res://.godot/imported/rifle.png-78266781df0b883bc9b8a7ac2c8f5741.ctex
+Completed load for: 'res://assets/textures/items/rifle.png' remapped 'res://assets/textures/items/rifle.png' at thread -1
+Loading resource: res://assets/textures/items/flashlight.png remapped: res://assets/textures/items/flashlight.png
+Loading resource: res://.godot/imported/flashlight.png-75eec4f5ebf8188f9635ca2715c18807.bptc.ctex remapped: res://.godot/imported/flashlight.png-75eec4f5ebf8188f9635ca2715c18807.bptc.ctex
+Completed load for: 'res://assets/textures/items/flashlight.png' remapped 'res://assets/textures/items/flashlight.png' at thread -1
+Loading resource: res://assets/shaders/ui_panel.gdshader remapped: res://assets/shaders/ui_panel.gdshader
+Completed load for: 'res://assets/shaders/ui_panel.gdshader' remapped 'res://assets/shaders/ui_panel.gdshader' at thread -1
+Loading resource: res://assets/shaders/grain_overlay.gdshader remapped: res://assets/shaders/grain_overlay.gdshader
+Completed load for: 'res://assets/shaders/grain_overlay.gdshader' remapped 'res://assets/shaders/grain_overlay.gdshader' at thread -1
+Loading resource: res://scenes/effects/damage_indicator.tscn remapped: res://scenes/effects/damage_indicator.tscn
+Completed load for: 'res://scenes/effects/damage_indicator.tscn' remapped 'res://scenes/effects/damage_indicator.tscn' at thread -1
+Loading resource: res://assets/shaders/damage_vignette.gdshader remapped: res://assets/shaders/damage_vignette.gdshader
+Completed load for: 'res://assets/shaders/damage_vignette.gdshader' remapped 'res://assets/shaders/damage_vignette.gdshader' at thread -1
+Loading resource: res://assets/audio/music/cue_first_light.ogg remapped: res://assets/audio/music/cue_first_light.ogg
+Loading resource: res://.godot/imported/cue_first_light.ogg-56cc022a2e158333aed01f4e2c8d7113.oggvorbisstr remapped: res://.godot/imported/cue_first_light.ogg-56cc022a2e158333aed01f4e2c8d7113.oggvorbisstr
+Completed load for: 'res://assets/audio/music/cue_first_light.ogg' remapped 'res://assets/audio/music/cue_first_light.ogg' at thread -1
+[release-frames] capture begin 02_district_day_full
+[release-frames] frame 02_district_day_full result=0
+Loading resource: res://scenes/ui/skill_tree_ui.tscn remapped: res://scenes/ui/skill_tree_ui.tscn
+Loading resource: res://scripts/ui/skill_tree_ui.gd remapped: res://scripts/ui/skill_tree_ui.gd
+Loading resource: res://scenes/ui/skill_tree_tab.tscn remapped: res://scenes/ui/skill_tree_tab.tscn
+Loading resource: res://scripts/ui/skill_tree_tab.gd remapped: res://scripts/ui/skill_tree_tab.gd
+Loading resource: res://scenes/ui/skill_button.tscn remapped: res://scenes/ui/skill_button.tscn
+Loading resource: res://scripts/ui/skill_button.gd remapped: res://scripts/ui/skill_button.gd
+Completed load for: 'res://scripts/ui/skill_button.gd' remapped 'res://scripts/ui/skill_button.gd' at thread -1
+Completed load for: 'res://scenes/ui/skill_button.tscn' remapped 'res://scenes/ui/skill_button.tscn' at thread -1
+Completed load for: 'res://scripts/ui/skill_tree_tab.gd' remapped 'res://scripts/ui/skill_tree_tab.gd' at thread -1
+Completed load for: 'res://scenes/ui/skill_tree_tab.tscn' remapped 'res://scenes/ui/skill_tree_tab.tscn' at thread -1
+Completed load for: 'res://scripts/ui/skill_tree_ui.gd' remapped 'res://scripts/ui/skill_tree_ui.gd' at thread -1
+Completed load for: 'res://scenes/ui/skill_tree_ui.tscn' remapped 'res://scenes/ui/skill_tree_ui.tscn' at thread -1
+Loading resource: res://assets/textures/icons/skills/damage_boost_1_96.png remapped: res://assets/textures/icons/skills/damage_boost_1_96.png
+Loading resource: res://.godot/imported/damage_boost_1_96.png-fb6c1ef1b3228e84424ec06173e776cf.bptc.ctex remapped: res://.godot/imported/damage_boost_1_96.png-fb6c1ef1b3228e84424ec06173e776cf.bptc.ctex
+Completed load for: 'res://assets/textures/icons/skills/damage_boost_1_96.png' remapped 'res://assets/textures/icons/skills/damage_boost_1_96.png' at thread -1
+Loading resource: res://assets/textures/icons/skills/damage_boost_2_96.png remapped: res://assets/textures/icons/skills/damage_boost_2_96.png
+Loading resource: res://.godot/imported/damage_boost_2_96.png-9f13216edd0dfe6188a1b158bdbcc52f.bptc.ctex remapped: res://.godot/imported/damage_boost_2_96.png-9f13216edd0dfe6188a1b158bdbcc52f.bptc.ctex
+Completed load for: 'res://assets/textures/icons/skills/damage_boost_2_96.png' remapped 'res://assets/textures/icons/skills/damage_boost_2_96.png' at thread -1
+Loading resource: res://assets/textures/icons/skills/crit_chance_96.png remapped: res://assets/textures/icons/skills/crit_chance_96.png
+Loading resource: res://.godot/imported/crit_chance_96.png-8a211926935f0b764fcb5f1c61f0d794.bptc.ctex remapped: res://.godot/imported/crit_chance_96.png-8a211926935f0b764fcb5f1c61f0d794.bptc.ctex
+Completed load for: 'res://assets/textures/icons/skills/crit_chance_96.png' remapped 'res://assets/textures/icons/skills/crit_chance_96.png' at thread -1
+Loading resource: res://assets/textures/icons/skills/fire_rate_96.png remapped: res://assets/textures/icons/skills/fire_rate_96.png
+Loading resource: res://.godot/imported/fire_rate_96.png-428ca73b80cbffe36e71b354a15c586b.bptc.ctex remapped: res://.godot/imported/fire_rate_96.png-428ca73b80cbffe36e71b354a15c586b.bptc.ctex
+Completed load for: 'res://assets/textures/icons/skills/fire_rate_96.png' remapped 'res://assets/textures/icons/skills/fire_rate_96.png' at thread -1
+Loading resource: res://assets/textures/icons/skills/reload_speed_96.png remapped: res://assets/textures/icons/skills/reload_speed_96.png
+Loading resource: res://.godot/imported/reload_speed_96.png-98785f0e9736e401d74a35d29fbd5745.bptc.ctex remapped: res://.godot/imported/reload_speed_96.png-98785f0e9736e401d74a35d29fbd5745.bptc.ctex
+Completed load for: 'res://assets/textures/icons/skills/reload_speed_96.png' remapped 'res://assets/textures/icons/skills/reload_speed_96.png' at thread -1
+Loading resource: res://assets/textures/icons/skills/max_health_96.png remapped: res://assets/textures/icons/skills/max_health_96.png
+Loading resource: res://.godot/imported/max_health_96.png-9a925e897d05eebff155135a28c5013a.bptc.ctex remapped: res://.godot/imported/max_health_96.png-9a925e897d05eebff155135a28c5013a.bptc.ctex
+Completed load for: 'res://assets/textures/icons/skills/max_health_96.png' remapped 'res://assets/textures/icons/skills/max_health_96.png' at thread -1
+Loading resource: res://assets/textures/icons/skills/health_regen_96.png remapped: res://assets/textures/icons/skills/health_regen_96.png
+Loading resource: res://.godot/imported/health_regen_96.png-db3db6f9a56da5edcd2945779ce7b652.bptc.ctex remapped: res://.godot/imported/health_regen_96.png-db3db6f9a56da5edcd2945779ce7b652.bptc.ctex
+Completed load for: 'res://assets/textures/icons/skills/health_regen_96.png' remapped 'res://assets/textures/icons/skills/health_regen_96.png' at thread -1
+Loading resource: res://assets/textures/icons/skills/stamina_boost_96.png remapped: res://assets/textures/icons/skills/stamina_boost_96.png
+Loading resource: res://.godot/imported/stamina_boost_96.png-65ee895e5fe03f59e5681b4d97091c0f.bptc.ctex remapped: res://.godot/imported/stamina_boost_96.png-65ee895e5fe03f59e5681b4d97091c0f.bptc.ctex
+Completed load for: 'res://assets/textures/icons/skills/stamina_boost_96.png' remapped 'res://assets/textures/icons/skills/stamina_boost_96.png' at thread -1
+Loading resource: res://assets/textures/icons/skills/battery_capacity_96.png remapped: res://assets/textures/icons/skills/battery_capacity_96.png
+Loading resource: res://.godot/imported/battery_capacity_96.png-1634e1cb3c611459e91f0bcacba27adf.bptc.ctex remapped: res://.godot/imported/battery_capacity_96.png-1634e1cb3c611459e91f0bcacba27adf.bptc.ctex
+Completed load for: 'res://assets/textures/icons/skills/battery_capacity_96.png' remapped 'res://assets/textures/icons/skills/battery_capacity_96.png' at thread -1
+Loading resource: res://assets/textures/icons/skills/light_radius_96.png remapped: res://assets/textures/icons/skills/light_radius_96.png
+Loading resource: res://.godot/imported/light_radius_96.png-013061d4aaa0d52df2827254b7262f2c.bptc.ctex remapped: res://.godot/imported/light_radius_96.png-013061d4aaa0d52df2827254b7262f2c.bptc.ctex
+Completed load for: 'res://assets/textures/icons/skills/light_radius_96.png' remapped 'res://assets/textures/icons/skills/light_radius_96.png' at thread -1
+Loading resource: res://assets/textures/icons/skills/inventory_space_96.png remapped: res://assets/textures/icons/skills/inventory_space_96.png
+Loading resource: res://.godot/imported/inventory_space_96.png-606bf65e91a72d625241649274bd1cbc.bptc.ctex remapped: res://.godot/imported/inventory_space_96.png-606bf65e91a72d625241649274bd1cbc.bptc.ctex
+Completed load for: 'res://assets/textures/icons/skills/inventory_space_96.png' remapped 'res://assets/textures/icons/skills/inventory_space_96.png' at thread -1
+Loading resource: res://assets/textures/icons/skills/move_speed_96.png remapped: res://assets/textures/icons/skills/move_speed_96.png
+Loading resource: res://.godot/imported/move_speed_96.png-8ca27b0806679d7d8f6c8420be7476da.bptc.ctex remapped: res://.godot/imported/move_speed_96.png-8ca27b0806679d7d8f6c8420be7476da.bptc.ctex
+Completed load for: 'res://assets/textures/icons/skills/move_speed_96.png' remapped 'res://assets/textures/icons/skills/move_speed_96.png' at thread -1
+Loading resource: res://assets/textures/icons/skills/xp_boost_96.png remapped: res://assets/textures/icons/skills/xp_boost_96.png
+Loading resource: res://.godot/imported/xp_boost_96.png-adc104a2a9ee5d076f2afd47687202ad.bptc.ctex remapped: res://.godot/imported/xp_boost_96.png-adc104a2a9ee5d076f2afd47687202ad.bptc.ctex
+Completed load for: 'res://assets/textures/icons/skills/xp_boost_96.png' remapped 'res://assets/textures/icons/skills/xp_boost_96.png' at thread -1
+Loading resource: res://assets/textures/icons/skills/loot_luck_96.png remapped: res://assets/textures/icons/skills/loot_luck_96.png
+Loading resource: res://.godot/imported/loot_luck_96.png-4b9d1e3e64ab407ccd5366f881700e53.bptc.ctex remapped: res://.godot/imported/loot_luck_96.png-4b9d1e3e64ab407ccd5366f881700e53.bptc.ctex
+Completed load for: 'res://assets/textures/icons/skills/loot_luck_96.png' remapped 'res://assets/textures/icons/skills/loot_luck_96.png' at thread -1
+Loading resource: res://assets/textures/icons/skills/silent_steps_96.png remapped: res://assets/textures/icons/skills/silent_steps_96.png
+Loading resource: res://.godot/imported/silent_steps_96.png-9a07f8cd7da68d8135b622341c9414e6.ctex remapped: res://.godot/imported/silent_steps_96.png-9a07f8cd7da68d8135b622341c9414e6.ctex
+Completed load for: 'res://assets/textures/icons/skills/silent_steps_96.png' remapped 'res://assets/textures/icons/skills/silent_steps_96.png' at thread -1
+Loading resource: res://assets/textures/icons/skills/cold_trail_96.png remapped: res://assets/textures/icons/skills/cold_trail_96.png
+Loading resource: res://.godot/imported/cold_trail_96.png-ec8929ce8585bf25dbc4495479e87b2d.ctex remapped: res://.godot/imported/cold_trail_96.png-ec8929ce8585bf25dbc4495479e87b2d.ctex
+Completed load for: 'res://assets/textures/icons/skills/cold_trail_96.png' remapped 'res://assets/textures/icons/skills/cold_trail_96.png' at thread -1
+Loading resource: res://assets/textures/icons/skills/low_profile_96.png remapped: res://assets/textures/icons/skills/low_profile_96.png
+Loading resource: res://.godot/imported/low_profile_96.png-3a9b61e96dc960db3b60501bac76727f.ctex remapped: res://.godot/imported/low_profile_96.png-3a9b61e96dc960db3b60501bac76727f.ctex
+Completed load for: 'res://assets/textures/icons/skills/low_profile_96.png' remapped 'res://assets/textures/icons/skills/low_profile_96.png' at thread -1
+Loading resource: res://assets/textures/icons/skills/quiet_pace_96.png remapped: res://assets/textures/icons/skills/quiet_pace_96.png
+Loading resource: res://.godot/imported/quiet_pace_96.png-584266e4118cbda59583d33f5e3098d0.ctex remapped: res://.godot/imported/quiet_pace_96.png-584266e4118cbda59583d33f5e3098d0.ctex
+Completed load for: 'res://assets/textures/icons/skills/quiet_pace_96.png' remapped 'res://assets/textures/icons/skills/quiet_pace_96.png' at thread -1
+[release-frames] capture begin 07_skill_tree
+[release-frames] frame 07_skill_tree result=0
+Loading resource: res://assets/textures/items/backpack.png remapped: res://assets/textures/items/backpack.png
+Loading resource: res://.godot/imported/backpack.png-31576670d60c647710c392eba16545ff.bptc.ctex remapped: res://.godot/imported/backpack.png-31576670d60c647710c392eba16545ff.bptc.ctex
+Completed load for: 'res://assets/textures/items/backpack.png' remapped 'res://assets/textures/items/backpack.png' at thread -1
+[release-frames] capture begin 08_shop
+[release-frames] frame 08_shop result=0
+Loading resource: res://assets/audio/sfx/monster_crawler_scrape.ogg remapped: res://assets/audio/sfx/monster_crawler_scrape.ogg
+Loading resource: res://.godot/imported/monster_crawler_scrape.ogg-a6c19d8788dee0b4d36418385380a89a.oggvorbisstr remapped: res://.godot/imported/monster_crawler_scrape.ogg-a6c19d8788dee0b4d36418385380a89a.oggvorbisstr
+Completed load for: 'res://assets/audio/sfx/monster_crawler_scrape.ogg' remapped 'res://assets/audio/sfx/monster_crawler_scrape.ogg' at thread -1
+Loading resource: res://assets/audio/sfx/monster_crawler_scrape.ogg remapped: res://assets/audio/sfx/monster_crawler_scrape.ogg
+Loading resource: res://.godot/imported/monster_crawler_scrape.ogg-a6c19d8788dee0b4d36418385380a89a.oggvorbisstr remapped: res://.godot/imported/monster_crawler_scrape.ogg-a6c19d8788dee0b4d36418385380a89a.oggvorbisstr
+Completed load for: 'res://assets/audio/sfx/monster_crawler_scrape.ogg' remapped 'res://assets/audio/sfx/monster_crawler_scrape.ogg' at thread -1
+Loading resource: res://assets/audio/sfx/sfx_enemy_warn.wav remapped: res://assets/audio/sfx/sfx_enemy_warn.wav
+Loading resource: res://.godot/imported/sfx_enemy_warn.wav-07db258163f8312c0db1ef13a1e9d33b.sample remapped: res://.godot/imported/sfx_enemy_warn.wav-07db258163f8312c0db1ef13a1e9d33b.sample
+Completed load for: 'res://assets/audio/sfx/sfx_enemy_warn.wav' remapped 'res://assets/audio/sfx/sfx_enemy_warn.wav' at thread -1
+[final] 04 camera /root/Main3D/Camera3D at (2.125946, 2.548151, -15.78515), player at (2.125946, 0.850114, -15.78515) hp=100.0, paused=false
+[release-frames] capture begin 04_combat
+[release-frames] frame 04_combat result=0
+Loading resource: res://assets/audio/music/cue_grid_cascade.ogg remapped: res://assets/audio/music/cue_grid_cascade.ogg
+Loading resource: res://.godot/imported/cue_grid_cascade.ogg-6c16dc941caf1179a7da0168c0f1a5fa.oggvorbisstr remapped: res://.godot/imported/cue_grid_cascade.ogg-6c16dc941caf1179a7da0168c0f1a5fa.oggvorbisstr
+Completed load for: 'res://assets/audio/music/cue_grid_cascade.ogg' remapped 'res://assets/audio/music/cue_grid_cascade.ogg' at thread -1
+Loading resource: res://assets/textures/icons_v2/event_breaker_48.png remapped: res://assets/textures/icons_v2/event_breaker_48.png
+Loading resource: res://.godot/imported/event_breaker_48.png-e05248a645666541fe03bd3efedd1155.bptc.ctex remapped: res://.godot/imported/event_breaker_48.png-e05248a645666541fe03bd3efedd1155.bptc.ctex
+Completed load for: 'res://assets/textures/icons_v2/event_breaker_48.png' remapped 'res://assets/textures/icons_v2/event_breaker_48.png' at thread -1
+Loading resource: res://assets/audio/music/power_station.ogg remapped: res://assets/audio/music/power_station.ogg
+Loading resource: res://assets/audio/ambience/district_details/power_station_hv_whine.ogg remapped: res://assets/audio/ambience/district_details/power_station_hv_whine.ogg
+Loading resource: res://.godot/imported/power_station.ogg-3c27ac5d70cd7d0b0fde20080db399f2.oggvorbisstr remapped: res://.godot/imported/power_station.ogg-3c27ac5d70cd7d0b0fde20080db399f2.oggvorbisstr
+Loading resource: res://.godot/imported/power_station_hv_whine.ogg-836cd284361be96e3bb6007ace9b4c86.oggvorbisstr remapped: res://.godot/imported/power_station_hv_whine.ogg-836cd284361be96e3bb6007ace9b4c86.oggvorbisstr
+Loading resource: res://assets/audio/music/substation.ogg remapped: res://assets/audio/music/substation.ogg
+Loading resource: res://.godot/imported/substation.ogg-bff2afe1fba0e66afd14f41ce79f7015.oggvorbisstr remapped: res://.godot/imported/substation.ogg-bff2afe1fba0e66afd14f41ce79f7015.oggvorbisstr
+Completed load for: 'res://assets/audio/ambience/district_details/power_station_hv_whine.ogg' remapped 'res://assets/audio/ambience/district_details/power_station_hv_whine.ogg' at thread -1
+Loading resource: res://assets/textures/luts/lut_power_station.png remapped: res://assets/textures/luts/lut_power_station.png
+Loading resource: res://.godot/imported/lut_power_station.png-6295a1ccf02e638953d2a0f6ff430e96.ctex3d remapped: res://.godot/imported/lut_power_station.png-6295a1ccf02e638953d2a0f6ff430e96.ctex3d
+Completed load for: 'res://assets/textures/luts/lut_power_station.png' remapped 'res://assets/textures/luts/lut_power_station.png' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Completed load for: 'res://assets/audio/music/substation.ogg' remapped 'res://assets/audio/music/substation.ogg' at thread 8
+Completed load for: 'res://assets/audio/music/power_station.ogg' remapped 'res://assets/audio/music/power_station.ogg' at thread 7
+Loading resource: res://scenes/districts/power_station.tscn remapped: res://scenes/districts/power_station.tscn
+Completed load for: 'res://scenes/districts/power_station.tscn' remapped 'res://scenes/districts/power_station.tscn' at thread -1
+Loading resource: res://assets/env/mat_wet_asphalt.tres remapped: res://assets/env/mat_wet_asphalt.tres
+Completed load for: 'res://assets/env/mat_wet_asphalt.tres' remapped 'res://assets/env/mat_wet_asphalt.tres' at thread -1
+load_threaded_request(): Another threaded load for resource path 'res://assets/audio/music/power_station.ogg' has been initiated. Not an error.
+load_threaded_request(): Another threaded load for resource path 'res://assets/audio/music/substation.ogg' has been initiated. Not an error.
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://scenes/districts/substation.tscn remapped: res://scenes/districts/substation.tscn
+Loading resource: res://scripts/world/cable_box_interactable.gd remapped: res://scripts/world/cable_box_interactable.gd
+Loading resource: res://assets/textures/icons_v2/event_siren_48.png remapped: res://assets/textures/icons_v2/event_siren_48.png
+Loading resource: res://.godot/imported/event_siren_48.png-83198892a013b0537b91a3584dbfbe65.bptc.ctex remapped: res://.godot/imported/event_siren_48.png-83198892a013b0537b91a3584dbfbe65.bptc.ctex
+Completed load for: 'res://assets/textures/icons_v2/event_siren_48.png' remapped 'res://assets/textures/icons_v2/event_siren_48.png' at thread -1
+Completed load for: 'res://scripts/world/cable_box_interactable.gd' remapped 'res://scripts/world/cable_box_interactable.gd' at thread 0
+Completed load for: 'res://scenes/districts/substation.tscn' remapped 'res://scenes/districts/substation.tscn' at thread 0
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/env/mat_lamp_flicker.tres remapped: res://assets/env/mat_lamp_flicker.tres
+Completed load for: 'res://assets/env/mat_lamp_flicker.tres' remapped 'res://assets/env/mat_lamp_flicker.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+Loading resource: res://assets/audio/sfx/architect_sting.ogg remapped: res://assets/audio/sfx/architect_sting.ogg
+Loading resource: res://.godot/imported/architect_sting.ogg-440dbcbf6a38fd5056c6b12ecae8dfa2.oggvorbisstr remapped: res://.godot/imported/architect_sting.ogg-440dbcbf6a38fd5056c6b12ecae8dfa2.oggvorbisstr
+Completed load for: 'res://assets/audio/sfx/architect_sting.ogg' remapped 'res://assets/audio/sfx/architect_sting.ogg' at thread -1
+load_threaded_request(): Another threaded load for resource path 'res://assets/audio/music/power_station.ogg' has been initiated. Not an error.
+load_threaded_request(): Another threaded load for resource path 'res://assets/audio/music/substation.ogg' has been initiated. Not an error.
+Loading resource: res://assets/config/visual_quality.tres remapped: res://assets/config/visual_quality.tres
+Completed load for: 'res://assets/config/visual_quality.tres' remapped 'res://assets/config/visual_quality.tres' at thread -1
+[final] 05 camera /root/Main3D/Camera3D at (-9.372791, 2.564075, -14.57438), player at (-9.372791, 0.860205, -14.57438) hp=100.0, paused=false
+[final] 05 boss at (-10.3948, 1.2, -19.46881)
+[release-frames] capture begin 05_boss
+[release-frames] frame 05_boss result=0
+Loading resource: res://scripts/ui/win_screen.gd remapped: res://scripts/ui/win_screen.gd
+Completed load for: 'res://scripts/ui/win_screen.gd' remapped 'res://scripts/ui/win_screen.gd' at thread -1
+Loading resource: res://assets/audio/music/cue_victory.ogg remapped: res://assets/audio/music/cue_victory.ogg
+Loading resource: res://.godot/imported/cue_victory.ogg-d8913290d0ed8043be9b5eaf6dad3acb.oggvorbisstr remapped: res://.godot/imported/cue_victory.ogg-d8913290d0ed8043be9b5eaf6dad3acb.oggvorbisstr
+Completed load for: 'res://assets/audio/music/cue_victory.ogg' remapped 'res://assets/audio/music/cue_victory.ogg' at thread -1
+Loading resource: res://assets/audio/jingles/ending_hope_sting.ogg remapped: res://assets/audio/jingles/ending_hope_sting.ogg
+Loading resource: res://.godot/imported/ending_hope_sting.ogg-6616c9ee22b683a352f902336e09fe46.oggvorbisstr remapped: res://.godot/imported/ending_hope_sting.ogg-6616c9ee22b683a352f902336e09fe46.oggvorbisstr
+Completed load for: 'res://assets/audio/jingles/ending_hope_sting.ogg' remapped 'res://assets/audio/jingles/ending_hope_sting.ogg' at thread -1
+Loading resource: res://assets/store/endings/ending_hope.png remapped: res://assets/store/endings/ending_hope.png
+Loading resource: res://.godot/imported/ending_hope.png-369637f0bc9f2969f71bd594edc24d22.ctex remapped: res://.godot/imported/ending_hope.png-369637f0bc9f2969f71bd594edc24d22.ctex
+Completed load for: 'res://assets/store/endings/ending_hope.png' remapped 'res://assets/store/endings/ending_hope.png' at thread -1
+Loading resource: res://assets/audio/sfx/sfx_enemy_warn.wav remapped: res://assets/audio/sfx/sfx_enemy_warn.wav
+Loading resource: res://.godot/imported/sfx_enemy_warn.wav-07db258163f8312c0db1ef13a1e9d33b.sample remapped: res://.godot/imported/sfx_enemy_warn.wav-07db258163f8312c0db1ef13a1e9d33b.sample
+Completed load for: 'res://assets/audio/sfx/sfx_enemy_warn.wav' remapped 'res://assets/audio/sfx/sfx_enemy_warn.wav' at thread -1
+[release-frames] capture begin 06_victory_ngplus
+[release-frames] frame 06_victory_ngplus result=0
+[final] DONE frames=18
+[qa-guard] profile restored byte-identical
+ERROR: Texture with GL ID of 148: leaked 349524 bytes.
+   at: ~Utilities (drivers/gles3/storage/utilities.cpp:82)
+ERROR: Texture with GL ID of 154: leaked 349524 bytes.
+   at: ~Utilities (drivers/gles3/storage/utilities.cpp:82)
+WARNING: 9 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+XR: Clearing primary interface
+XR: Removed interface "Native mobile"
+XR: Removed interface "OpenXR"
+Accessibility: window 0 adapter destroyed.
+Leaked instance: RefCounted:9223372375620324321 - Reference count: 0
+Leaked instance: RefCounted:9223372375670655976 - Reference count: 0
+Leaked instance: RefCounted:9223372374697577821 - Reference count: 0
+Leaked instance: RefCounted:9223372374764686686 - Reference count: 0
+Leaked instance: RefCounted:9223372375771319657 - Reference count: 0
+Leaked instance: RefCounted:9223372375653879147 - Reference count: 0
+Leaked instance: RefCounted:9223372488245777567 - Reference count: 0
+Leaked instance: RefCounted:9223372488312886432 - Reference count: 0
+Leaked instance: RefCounted:9223372495678084274 - Reference count: 0
+Hint: Leaked instances typically happen when nodes are removed from the scene tree (with `remove_child()`) but not freed (with `free()` or `queue_free()`).
+# EXIT=0

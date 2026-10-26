@@ -3759,14 +3759,14 @@
    "af3 frames=8 fail=0"
   ],
   "frames": [
-   "docs/stills/store/01_main_menu_after_8011d8de_20261024T095409Z.png",
-   "docs/stills/store/02_district_day_full_after_8011d8de_20261024T095427Z.png",
-   "docs/stills/store/03_district_night_dark_after_8011d8de_20261024T095421Z.png",
-   "docs/stills/store/04_combat_after_8011d8de_20261024T095432Z.png",
-   "docs/stills/store/05_boss_after_8011d8de_20261024T095435Z.png",
-   "docs/stills/store/06_victory_ngplus_after_8011d8de_20261024T095438Z.png",
-   "docs/stills/store/07_skill_tree_after_8011d8de_20261024T095428Z.png",
-   "docs/stills/store/08_shop_after_8011d8de_20261024T095429Z.png"
+   "docs/stills/archive/pre_mega_1.0.1/01_main_menu_after_8011d8de_20261024T095409Z.png",
+   "docs/stills/archive/pre_mega_1.0.1/02_district_day_full_after_8011d8de_20261024T095427Z.png",
+   "docs/stills/archive/pre_mega_1.0.1/03_district_night_dark_after_8011d8de_20261024T095421Z.png",
+   "docs/stills/archive/pre_mega_1.0.1/04_combat_after_8011d8de_20261024T095432Z.png",
+   "docs/stills/archive/pre_mega_1.0.1/05_boss_after_8011d8de_20261024T095435Z.png",
+   "docs/stills/archive/pre_mega_1.0.1/06_victory_ngplus_after_8011d8de_20261024T095438Z.png",
+   "docs/stills/archive/pre_mega_1.0.1/07_skill_tree_after_8011d8de_20261024T095428Z.png",
+   "docs/stills/archive/pre_mega_1.0.1/08_shop_after_8011d8de_20261024T095429Z.png"
   ],
   "commit": "8011d8de"
  },

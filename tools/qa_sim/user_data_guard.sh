@@ -66,9 +66,10 @@ udg_restore() {
 		echo "  user-data guard: FAIL snapshot $UDG_SNAP missing or incomplete - nothing restored or removed"
 		return 1
 	fi
+	_udg_list "$UDG_DIR" > "$UDG_SNAP/current"
 	while IFS= read -r f; do
 		grep -qxF -- "$f" "$UDG_SNAP/list" || rm -f -- "$UDG_DIR/$f"
-	done < <(_udg_list "$UDG_DIR")
+	done < "$UDG_SNAP/current"
 	while IFS= read -r f; do
 		mkdir -p "$UDG_DIR/$(dirname "$f")"
 		cp -p "$UDG_SNAP/files/$f" "$UDG_DIR/$f"

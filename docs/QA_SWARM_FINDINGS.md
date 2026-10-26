@@ -37,7 +37,7 @@ fix disposition below; P2 items are recorded for the record, not all fixed this 
 | P1 | Texture compression migration incomplete — `assets/textures/enemies/*.png.import` still `compress/mode=0` (RGBA8) while most other categories are `mode=2` (VRAM/ETC2); enemies are the highest-res, most-visible-on-screen assets | `assets/textures/enemies/*.png.import` | Deferred to P4's eyes-on pass — recompressing textures needs visual verification before/after, not a blind batch edit |
 | P1 | Mobile environment has `glow_enabled=true` at `glow_intensity=0.4` — a relatively expensive post-effect for tile-based mobile GPUs | `assets/env/night_environment_mobile.tres:32,34` | Deferred to P4 — visual/perf tradeoff needs eyes-on judgment, not a blind toggle |
 | P1 | Rain VFX ships fixed at 300 particles with no quality-tier scaling | `scenes/vfx/vfx_rain.tscn:31`, `scripts/systems/quality_manager.gd` (no particle scaling found) | Deferred — moderate effort, lower priority than security/accessibility this pass |
-| P2 | Mobile renderer/shadow/MSAA/LOD defaults already sensible (`gl_compatibility`, 1024 shadow, msaa=2, FSR scale 0.8) | `project.godot:272-280` | Positive finding, no action needed |
+| P2 | Mobile renderer/shadow/MSAA/LOD defaults already sensible (`gl_compatibility`, 1024 shadow, msaa=2, FSR scale 0.8) | `project.godot:273-281` | Positive finding, no action needed |
 | P2 | `etc2_astc`+`bptc`+`s3tc` all shipped together, bloats APK download size | `export_presets.cfg:38,76-77` | Deferred — install-size friction, not a runtime risk |
 | P2 | Android min/target SDK fields not directly confirmed in `export_presets.cfg` | needs owner check | Deferred — quick owner double-check, not a code fix |
 

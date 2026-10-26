@@ -50,13 +50,18 @@ static func write_signed(path: String, data: Variant) -> bool:
 static func read_signed(path: String) -> Variant:
 	if not FileAccess.file_exists(path):
 		return null
-	var envelope: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	var parser := JSON.new()
+	if parser.parse(FileAccess.get_file_as_string(path)) != OK:
+		return null
+	var envelope: Variant = parser.data
 	if not (envelope is Dictionary) or not envelope.has("hmac") or not envelope.has("data_json"):
+		return null
+	if not (envelope["hmac"] is String) or not (envelope["data_json"] is String):
 		return null
 	var body := String(envelope["data_json"])
 	if String(envelope["hmac"]) != _sign(body):
 		return null
-	return JSON.parse_string(body)
+	return parser.data if parser.parse(body) == OK else null
 
 ## RELEASE CONVERGENCE STEP 6 (anti "lost phone"): the live save is the one
 ## Continue reads (SAVE_PATH, via has_save()/load_all()) - the 4-slot API

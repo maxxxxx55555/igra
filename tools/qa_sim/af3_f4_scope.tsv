@@ -44,3 +44,9 @@ data/i18n/pt_BR.json	535275978fb3	3165fe89b39f	*no_frame_shows_the_credits*
 data/i18n/ru.json	8990e1940b95	1676a5401863	*no_frame_shows_the_credits*
 scripts/systems/music_manager.gd	36b8dfb18b3b	261a22cf82b9	*no_frame_hears_audio*
 scripts/world/soviet_signs.gd	9479ebec3a6d	290168856fbb	*no_kept_frame_shows_a_hospital_or_substation_sign*
+# Mega 1.0.1: missing/malformed QA snapshot JSON is rejected before parsing; debug-only profile recovery, no rendered/gameplay state changes.
+scripts/core/qa_launch_guard.gd	9914d75d0df8e55a397c194a9f3ecdc684502b37	5049ae17b2ce1bcdc6baaf69ce83de6663625ad2	*no_frame_shows_qa_snapshot_json*
+# Mega 1.0.1: quiet malformed-save rejection / free the unused preview on programmatic drag-data queries; no kept frame exercises these cases.
+scripts/core/save_system.gd	cbd93b761491e72572a06251b7c508975813e122	de1953b54f0ea132369b2080a441cb5e5a8db5a4	*no_frame_reads_a_corrupt_signed_side_file*
+# Mega 1.0.1: quiet malformed-save rejection / free the unused preview on programmatic drag-data queries; no kept frame exercises these cases.
+scripts/ui/quick_slot_cell.gd	7faf319e8223a3f8d33d3742245554f511ce59b7	39a6667d83100a574d2ac43645b00a3df327a674	*no_frame_calls_drag_callback_outside_a_drag*

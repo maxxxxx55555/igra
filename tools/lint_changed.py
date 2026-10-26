@@ -163,7 +163,7 @@ def demo():
     }
     wanted = {"good.gd": 0, "syntax.gd": 1, "space.gd": 1, "same.gd": 1, "unused.py": 1, "cd.sh": 1}
     wrong = []
-    with tempfile.TemporaryDirectory(dir=ROOT) as tmp:
+    with tempfile.TemporaryDirectory(prefix=".lint-demo-", dir=ROOT) as tmp:
         folder = pathlib.Path(tmp)
         for name, body in fixtures.items():
             (folder / name).write_text(body, encoding="utf-8", newline="\n")

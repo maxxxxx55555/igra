@@ -1,0 +1,76 @@
+# proof mega_terminal_frames
+# utc 20261026T090109Z
+# head 7e996993 (uncommitted paths: 31)
+# env TLS_CAPTURE_HASH=7e996993 
+# cmd bash /workspace/scratch/e4e8279ce462/run_visual.sh timeout 300 /workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --path . --resolution 1280x720 --audio-driver Dummy res://scenes/tools/release_polish_check_scene.tscn -- --capture
+WARNING: Couldn't get executable path from /proc/self/exe, using argv[0]
+     at: get_executable_path (drivers/unix/os_unix.cpp:1157)
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+WARNING: Couldn't get executable path from /proc/self/exe, using argv[0]
+     at: get_executable_path (drivers/unix/os_unix.cpp:1157)
+WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver.
+     at: set_use_vsync (platform/linuxbsd/x11/gl_manager_x11.cpp:372)
+OpenGL API 4.5 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.2 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 20.1.2, 256 bits)
+
+ERROR: The process 35 does not exist or is not a child of the calling process.
+   at: _check_pid_is_running (drivers/unix/os_unix.cpp:863)
+   GDScript backtrace (most recent call first):
+       [0] _enter_tree (res://scripts/core/qa_launch_guard.gd:57)
+[qa-guard] restored the profile left by an interrupted QA run
+[release-polish] OK new run clears counters
+[release-polish] OK main save preserves run identity independently of settings
+[release-polish] OK slot writes run metadata
+[release-polish] OK slot restores run metadata
+[release-polish] OK invalid field types rejected
+[release-polish] OK nonfinite counters rejected
+[release-polish] OK negative counters clamp
+[release-polish] OK legacy defaults restore
+[release-polish] OK legacy envelope migration loads
+[release-polish] OK unknown achievement grants nothing
+[release-polish] OK focus loss checkpoints and pauses
+[release-polish] OK menu unpauses
+[release-polish] OK menu checkpoints active run
+[release-polish] OK close checkpoint writes
+[release-polish] OK Auto-save off respected
+[release-polish] OK sting silent before input
+[release-polish] OK sample silent before input
+[release-polish] OK fallback silent before input
+[release-polish] OK input enables UI feedback
+[release-polish] OK world postprocessing draws below UI
+[release-polish] OK ending illustration: light
+[release-polish] OK capture ending_light
+[release-polish] OK ending illustration: hope
+[release-polish] OK capture ending_hope
+[release-polish] OK ending illustration: survivor
+[release-polish] OK capture ending_survivor
+[release-polish] OK ending illustration: dark
+[release-polish] OK capture ending_dark
+[release-polish] OK ending illustration: truth
+[release-polish] OK capture ending_truth
+[release-polish] OK ending music stops on menu
+[release-polish] OK Hardcore summary survives wipe and retranslation
+[release-polish] OK small title fits: ru
+[release-polish] OK last action reachable: ru
+[release-polish] OK capture ending_small_ru
+[release-polish] OK small title fits: en
+[release-polish] OK last action reachable: en
+[release-polish] OK capture ending_small_en
+[release-polish] OK small title fits: es
+[release-polish] OK last action reachable: es
+[release-polish] OK capture ending_small_es
+[release-polish] OK small title fits: de
+[release-polish] OK last action reachable: de
+[release-polish] OK capture ending_small_de
+[release-polish] OK small title fits: fr
+[release-polish] OK last action reachable: fr
+[release-polish] OK capture ending_small_fr
+[release-polish] OK small title fits: pt_BR
+[release-polish] OK last action reachable: pt_BR
+[release-polish] OK capture ending_small_pt_BR
+[release-polish] DONE checks=50 fails=0
+[qa-guard] profile restored byte-identical
+WARNING: 44 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 22 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
+# EXIT=0
