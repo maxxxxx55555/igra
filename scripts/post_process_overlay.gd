@@ -31,7 +31,8 @@ var _blur_strength: float = 0.0
 var _player: Node = null
 
 func _ready() -> void:
-	layer = 100
+	# Screen-texture effects must sample the world before any interface canvas.
+	layer = -1
 	# Blur and chroma sample SCREEN_TEXTURE, so they must draw before the
 	# grain/vignette overlays (plain color layers, no screen sampling) or they
 	# would pick up their tint on the offset taps.

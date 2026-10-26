@@ -378,6 +378,7 @@ func _save() -> void:
 		"last_daily_time": _last_daily_time,
 		"onboard_done": _onboard_done,
 		"run_id": _run_id,
+		"run": GameManager.run_data(),
 	}
 	_write_atomic(SAVE_PATH, payload)
 
@@ -393,6 +394,7 @@ func load_all() -> bool:
 	Encyclopedia.from_dict(data.get("encyclopedia", {}))
 	ProgressTracker.from_dict(data.get("progress", {}))
 	SettingsManager.apply_run_settings(data.get("settings", {}))
+	GameManager.restore_run(data.get("run", {}))
 	PuzzleSystem.from_dict(data.get("puzzles", {}))
 	_pending_player_pos = _parse_player_pos(data.get("player_pos", null))
 	_pending_vitals = _parse_vitals(data.get("vitals", null))
@@ -433,6 +435,7 @@ func mark_onboard_done() -> void:
 
 func reset_all() -> void:
 	_run_id = _new_run_id()
+	GameManager.reset_run()
 	PowerGrid.reset()
 	UpgradeSystem.reset()
 	CoinWallet.from_dict({})
@@ -637,6 +640,7 @@ func save_slot(slot: int) -> bool:
 		"last_daily_time": _last_daily_time,
 		"onboard_done": _onboard_done,
 		"run_id": _run_id,
+		"run": GameManager.run_data(),
 		"timestamp": Time.get_unix_time_from_system(),
 		"slot_id": slot,
 	}
@@ -662,6 +666,7 @@ func load_slot(slot: int) -> bool:
 	Encyclopedia.from_dict(data.get("encyclopedia", {}))
 	ProgressTracker.from_dict(data.get("progress", {}))
 	SettingsManager.apply_run_settings(data.get("settings", {}))
+	GameManager.restore_run(data.get("run", {}))
 	PuzzleSystem.from_dict(data.get("puzzles", {}))
 	_pending_player_pos = _parse_player_pos(data.get("player_pos", null))
 	_pending_vitals = _parse_vitals(data.get("vitals", null))

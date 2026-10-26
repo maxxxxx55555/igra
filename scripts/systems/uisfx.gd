@@ -74,6 +74,8 @@ func _wire_late_autoloads() -> void:
 ## Одиночный проигрыш стингера на шине UI. Имя — без префикса "ui_" и без
 ## расширения: play_ui("boss_sting") -> res://assets/audio/ui/ui_boss_sting.ogg
 func play_ui(sound: String) -> void:
+	if not _can_play():
+		return
 	var path := _UI_DIR + "ui_" + sound + ".ogg"
 	if not ResourceLoader.exists(path):
 		return
@@ -156,6 +158,8 @@ func pickup() -> void:
 	_beep(1200.0, 0.09)
 
 func _play(file: String, fallback_freq: float, fallback_dur: float) -> void:
+	if not _can_play():
+		return
 	var path := _DIR + file + ".wav"
 	if ResourceLoader.exists(path):
 		var p := AudioStreamPlayer.new()
@@ -168,6 +172,8 @@ func _play(file: String, fallback_freq: float, fallback_dur: float) -> void:
 		_beep(fallback_freq, fallback_dur)
 
 func _beep(freq: float, dur: float) -> void:
+	if not _can_play():
+		return
 	var sr := 22050
 	var n := int(sr * dur)
 	var data := PackedByteArray()
@@ -187,3 +193,7 @@ func _beep(freq: float, dur: float) -> void:
 	add_child(p)
 	p.play()
 	p.finished.connect(p.queue_free)
+
+func _can_play() -> bool:
+	var music := get_node_or_null("/root/MusicManager")
+	return music != null and bool(music.get("_audio_unlocked"))

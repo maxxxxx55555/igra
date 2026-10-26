@@ -36,8 +36,8 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_build_ui()
 	EventBus.game_state_changed.connect(func(state: int) -> void:
-		if state == GameManager.GameState.PLAYING and _container.visible:
-			_FADE.show_for([_container], _SHOW_SEC))
+		if state == GameManager.GameState.PLAYING:
+			_refresh())
 
 	# v10 N044: closing a screen shows the HUD again whatever the state is; the list is for play (it drew over the main menu after a run)
 	EventBus.hud_visibility_changed.connect(func(shown: bool) -> void: visible = shown and GameManager.is_playing())
