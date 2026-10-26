@@ -6,6 +6,7 @@ const FRAMES: Array[String] = ["01_main_menu", "02_district_day_full", "03_distr
 func _capture(frame: String, _half: bool) -> void:
 	if frame not in FRAMES:
 		return
+	print("[release-frames] capture begin " + frame)
 	var hash_: String = OS.get_environment("TLS_CAPTURE_HASH")
 	if hash_.is_empty():
 		printerr("[release-frames] committed runtime hash required")
