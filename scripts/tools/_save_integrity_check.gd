@@ -35,7 +35,8 @@ func _path() -> String:
 func _check_signed_fields() -> void:
 	var path: String = "user://_qa_signed_probe.save"
 	SaveSystem.write_signed(path, {"value": 7})
-	_ok(SaveSystem.read_signed(path) == {"value": 7}, "signed side file round trip")
+	var restored: Variant = SaveSystem.read_signed(path)
+	_ok(restored is Dictionary and int(restored.get("value", -1)) == 7, "signed side file round trip")
 	for content: String in ["{broken", JSON.stringify({"hmac": [], "data_json": {}}), JSON.stringify({"hmac": SaveSystem._sign("{broken"), "data_json": "{broken"})]:
 		var file := FileAccess.open(path, FileAccess.WRITE)
 		file.store_string(content)

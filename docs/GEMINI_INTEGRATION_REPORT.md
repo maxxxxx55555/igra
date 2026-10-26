@@ -73,7 +73,7 @@ this pass:
   (`scripts/enemies/base_monster.gd:768`) and `_handle_dodge` (`scripts/player/player_3d.gd:1308`) emits nothing.
 - `ach_37` ("activate 50 streetlights") cannot be reached within one run: the signal fires once per district when it crosses into STREETS (`scripts/world/power_grid.gd:65`,
   `scripts/systems/achievements_manager.gd:382`) and there are 11 districts. A counter on it would persist across New Game runs (`PowerGrid.reset()`, called at
-  `scripts/core/save_system.gd:433`, re-arms the signal, and nothing resets the achievements' progress), so it would take five playthroughs.
+  `scripts/core/save_system.gd:435`, re-arms the signal, and nothing resets the achievements' progress), so it would take five playthroughs.
 - No row is already satisfied by a shipped achievement (the nearest: `ach_36`, "10,000 coins", against `ach_11`, "5,000 coins", on the same poll; `ach_37` against `ach_01`, on
   the same signal).
 

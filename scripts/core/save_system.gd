@@ -61,7 +61,9 @@ static func read_signed(path: String) -> Variant:
 	var body := String(envelope["data_json"])
 	if String(envelope["hmac"]) != _sign(body):
 		return null
-	return parser.data if parser.parse(body) == OK else null
+	if parser.parse(body) != OK:
+		return null
+	return parser.data
 
 ## RELEASE CONVERGENCE STEP 6 (anti "lost phone"): the live save is the one
 ## Continue reads (SAVE_PATH, via has_save()/load_all()) - the 4-slot API
