@@ -9,14 +9,93 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from types import SimpleNamespace
+from unittest.mock import Mock, patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from pipeline import configure_profile, import_configuration, judge, verified_profile, reset_profile  # noqa: E402
+from pipeline import Pipeline, configure_profile, import_configuration, judge, verified_profile, reset_profile  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "tools/qa_sim"))
+import aab_check  # noqa: E402
 
 
 class JudgeTests(unittest.TestCase):
+    def test_android_requires_all_audits_and_propagates_failure(self):
+        pipeline = object.__new__(Pipeline)
+        pipeline.args = SimpleNamespace(bundletool="official.jar")
+        pipeline.command = Mock()
+        pipeline.audit_android(Path("release.aab"))
+        calls = pipeline.command.call_args_list
+        self.assertEqual(len(calls), 2)
+        self.assertIn("--secrets", calls[0].args[1])
+        self.assertEqual(calls[0].args[1][-2:], ["--bundletool", "official.jar"])
+        self.assertEqual(calls[0].kwargs["marker"], r"aab_check: PASS\b")
+        self.assertIn("tools/qa_sim/release_export_check.py", calls[1].args[1])
+        for failure in (0, 1):
+            pipeline.command.reset_mock(side_effect=True)
+            pipeline.command.side_effect = [None] * failure + [RuntimeError("audit rejected")]
+            with self.assertRaisesRegex(RuntimeError, "audit rejected"):
+                pipeline.audit_android(Path("release.aab"))
+            self.assertEqual(pipeline.command.call_count, failure + 1)
+
+    def test_manifest_rejects_wrong_release_debug_and_missing_tool(self):
+        expected = aab_check.release_identity()
+        xml = ('<manifest xmlns:android="http://schemas.android.com/apk/res/android" '
+               'package="{package}" android:versionCode="{versionCode}" '
+               'android:versionName="{versionName}"><application /></manifest>').format(**expected)
+        self.assertEqual(aab_check.manifest_identity(xml), expected)
+        with tempfile.TemporaryDirectory() as directory:
+            jar = Path(directory) / "bundletool.jar"
+            jar.touch()
+            with patch.object(aab_check, "tool", return_value=(0, xml)) as command:
+                self.assertEqual(aab_check.manifest_check(Path("release.aab"), jar), 0)
+                self.assertIn("--bundle=release.aab", command.call_args.args)
+                self.assertTrue(command.call_args.kwargs["stdout_only"])
+            invalid = [xml.replace(expected[key], "wrong", 1) for key in expected]
+            invalid += ["<manifest", xml.replace("<application />", ""),
+                        xml.replace("<application />", '<application android:debuggable="true" />')]
+            for data in invalid:
+                with patch.object(aab_check, "tool", return_value=(0, data)):
+                    self.assertEqual(aab_check.manifest_check(Path("release.aab"), jar), 1)
+            with patch.object(aab_check, "tool", return_value=(1, xml)):
+                self.assertEqual(aab_check.manifest_check(Path("release.aab"), jar), 1)
+            self.assertEqual(aab_check.manifest_check(Path("release.aab"), ""), 1)
+        old, current = "11" * 32, "ab" * 32
+        self.assertEqual(aab_check.recorded_signer(f"SHA-256 fingerprint `{old}`\nSHA-256 fingerprint `{current}`"), current)
+        self.assertEqual(aab_check.recorded_signer("Old certificate " + old), "")
+
+    def test_cold_import_requires_clean_retry_and_keeps_diagnostics(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            project = root / "qa"
+            project.mkdir()
+            (project / "project.godot").write_text('[gui]\ntheme/custom="theme"\n')
+            (root / "default_bus_layout.tres").write_text("original buses")
+            for code, retry_fails in ((0, False), (0, True), (124, False)):
+                pipeline = object.__new__(Pipeline)
+                pipeline.source = root
+                pipeline.report = {"checks": []}
+                pipeline.save_report = Mock()
+                def run(name, *_args, **_kwargs):
+                    item = {"name": name, "exit_code": code, "result": "FAIL", "error": "preload error"}
+                    pipeline.report["checks"].append(item)
+                    if name == "import" or retry_fails:
+                        raise RuntimeError("preload error")
+                    item.update(exit_code=0, result="PASS")
+                pipeline.engine = Mock(side_effect=run)
+                if code or retry_fails:
+                    with self.assertRaises(RuntimeError):
+                        pipeline.import_project(project, "import")
+                    self.assertEqual(pipeline.report["checks"][0]["result"], "FAIL")
+                else:
+                    pipeline.import_project(project, "import")
+                    self.assertEqual(pipeline.report["checks"][0]["result"], "RECOVERED_IMPORT")
+                    self.assertEqual(pipeline.report["checks"][0]["error"], "preload error")
+                    self.assertEqual((project / "default_bus_layout.tres").read_text(), "original buses")
+                self.assertEqual(pipeline.engine.call_count, 1 if code else 2)
+                self.assertIn('theme/custom="theme"', (project / "project.godot").read_text())
+
     def test_proof_preserves_a_large_output_tail_and_failure_exit(self):
         bash = shutil.which("bash")
         if not bash:
@@ -33,6 +112,13 @@ class JudgeTests(unittest.TestCase):
             output = (project / ".qa_logs/proofs/burst.out").read_text()
             self.assertTrue(output.endswith("REQUIRED_DONE_MARKER\n# EXIT=7\n"))
             self.assertEqual(output.count("x" * 800000), 1)
+            child = 'for n in 1 2 3; do "$1" -c "print(\'child-\' + \'$n\' + \'x\' * 200000)"; done; exit 9'
+            result = subprocess.run([bash, str(script), "nested", "--", bash, "-c", child, "fixture", sys.executable], capture_output=True)
+            self.assertEqual(result.returncode, 9, result.stdout + result.stderr)
+            output = (project / ".qa_logs/proofs/nested.out").read_text()
+            self.assertTrue(output.endswith("# EXIT=9\n"))
+            for number in (1, 2, 3):
+                self.assertEqual(output.count(f"child-{number}" + "x" * 200000), 1)
 
     def test_first_import_restores_the_original_theme_even_after_failure(self):
         with tempfile.TemporaryDirectory() as directory:

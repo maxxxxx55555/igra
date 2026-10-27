@@ -1,24 +1,26 @@
-# Release work complete
+# Single-file source delivery — 2026-10-27
 
-Branch: release/mega-finish; public baseline a4b1943.
-Validated source: 10627bb3316785e934010bb963db76bf39ae2642.
-Remote owner main is unchanged; writes here used only disposable local remotes.
+Branch: work/single-script-final, based on public PR #31 bf563cc9.
+Main read: aacc5d8c; no owner remote write, merge, release or Console action.
+One PowerShell contains source bundle, full AI handoff and transport report.
+SourceHead in that file is authoritative; no previous chat file is required.
+Default mode uploads a new branch; -Instructions prints the handoff offline.
 
-Done: run identity/save migration, lifecycle checkpointing, startup audio gate,
-unknown-achievement rejection, quest refresh, ending audio cleanup, responsive
-localized ending/death screens with art and retained Hardcore statistics,
-UI above world effects, quiet malformed signed/QA file rejection, drag cleanup.
+Source fixes: unknown grant cleanup/audit; mandatory 0.037 loop gate;
+15 de/fr/pt_BR labels and glossary/integrity update; Android signer, integrity,
+manifest/version and package audits; pinned official bundletool provision;
+complete nested proof logging; one strict cold-import retry with diagnostics.
+District stats helper retained. Six locales, 1566 keys, 31 achievements.
 
-One full pipeline: 41/41 stages; static 69; closeout 611; new regression 39;
-GOLDMASTER/touch pass; bots 3/3 WIN with correct counters; timing 15/15 keys.
-Windows/Web release archives, SHA256 report and complete logs generated.
-15 release-tool tests pass; full 12.8 MB PowerShell payload replayed to a local
-remote with main preserved. Native embedded Linux boot smoke: 600 frames.
-8 canonical and 11 ending/locale native Mesa frames captured.
+Verification: 11 release tests pass, 7 real-PowerShell tests skipped.
+Configured native changed-file lint: 0 findings. Locale truth/fuzz and
+integrity checks pass. AAB/audio fixtures and log/exit regressions pass.
+Evidence and limits: docs/SINGLE_SCRIPT_VERIFICATION.md.
+Transport checks run on the packaged file before delivery; their report is
+inside its final comment. Local disposable remotes are the only push targets.
 
-Delivery: one self-contained Igra-MegaRelease.ps1 with verified source bundle,
-GitHub browser login, repository permission checks, atomic NEW-branch creation,
-remote SHA verification, pinned toolchain, isolated QA, builds and draft assets.
-Android optional with the owner's existing key. Source saved before long builds.
-Manual device/audio/performance, rights, Android signing and stores are pending.
-Details and hashes: docs/RELEASE_1_0_1.md and docs/artifacts/release-1.0.1/full-run/.
+Pending: eight real AF3 captures, full engine battery twice, three WIN seeds,
+windowed performance/audio/visual checks, signed AAB and physical device review.
+Old store frames were not restamped and no validation threshold was weakened.
+The owner supplies contact, signing key, rights decisions and Console steps.
+Continue in docs/RELEASE_HANDOFF_20261027.md, embedded in the same PowerShell.
