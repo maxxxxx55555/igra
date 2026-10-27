@@ -26,13 +26,13 @@ def sha256(path):
     return digest.hexdigest()
 
 
-def download(cache, name, expected):
+def download(cache, name, expected, base=BASE):
     path = cache / name
     if path.is_file() and sha256(path) == expected:
         return path
     temp = path.with_suffix(path.suffix + ".partial")
     print(f"Downloading official {name} (templates: approximately 1.3 GB)", flush=True)
-    request = urllib.request.Request(BASE + name, headers={"User-Agent": "Igra-Release/1.0.1"})
+    request = urllib.request.Request(base + name, headers={"User-Agent": "Igra-Release/1.0.1"})
     with urllib.request.urlopen(request, timeout=120) as remote, temp.open("wb") as local:
         shutil.copyfileobj(remote, local, 1024 * 1024)
     if sha256(temp) != expected:
@@ -75,6 +75,10 @@ def provision(root, android=False):
         for template in names:
             extract_file(files, "templates/" + template, templates / template)
     result = {"godot": str(editor_dir / name), "templates": str(templates), "version": VERSION}
+    if android:
+        result["bundletool"] = str(download(cache, "bundletool-all-1.18.3.jar",
+            "a099cfa1543f55593bc2ed16a70a7c67fe54b1747bb7301f37fdfd6d91028e29",
+            "https://github.com/google/bundletool/releases/download/1.18.3/"))
     (root / "toolchain.json").write_text(json.dumps(result, indent=2), encoding="utf-8")
     print(json.dumps(result), flush=True)
     return result

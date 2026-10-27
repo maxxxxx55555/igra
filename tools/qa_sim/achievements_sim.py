@@ -115,7 +115,8 @@ def analyse():
     triggers = manager_triggers(lines)
     links = connections(lines)
     external = external_unlocks()
-    rows, bad = [], []
+    rows, bad = [], ["%s:%d: unknown external achievement %s" % (rel, line, aid)
+                     for aid, (rel, line) in external.items() if aid not in ids]
     for aid in ids:
         found = [t for t in triggers if t[0] == aid or (t[0] == "ach_district_*" and aid.startswith("ach_district_"))]
         if found:

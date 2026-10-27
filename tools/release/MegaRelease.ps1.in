@@ -1,7 +1,8 @@
 #requires -Version 5.1
 <#
-Last Streetlight: source recovery, GitHub authentication, checks, Windows/Web
-builds, optional signed Android AAB, draft release with checksums and logs.
+Last Streetlight: source changes and complete AI handoff in one file.
+Default: upload source to a new branch. -Instructions: read handoff offline.
+-Build: checks/Windows/Web/draft release. -Android: include signed Android AAB.
 Run the generated self-contained Igra-MegaRelease.ps1, not this template.
 #>
 [CmdletBinding()]
@@ -10,6 +11,8 @@ param(
     [string]$Branch,
     [string]$WorkRoot,
     [switch]$SourceOnly,
+    [switch]$Instructions,
+    [switch]$Build,
     [switch]$Android,
     [string]$AndroidSdk,
     [string]$JavaHome
@@ -18,9 +21,14 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 Import-Module "$PSHOME/Modules/Microsoft.PowerShell.Utility/Microsoft.PowerShell.Utility.psd1" -ErrorAction Stop
 $script:SourceHead = '@@HEAD@@'
-$script:SourceBase = 'a4b1943d1d6fbcee4eeffeff795b0a959fdb8dea'
+$script:SourceBase = 'bf563cc9353dd1fb3717943b416530e6a9e4fb2c'
 $script:BundleHash = '@@SHA256@@'
 $script:SourceUrl = 'https://github.com/maxxxxx55555/igra.git'
+$script:HandoffText = @'
+@@HANDOFF@@
+'@
+if ($Instructions) { Write-Output $script:HandoffText; exit 0 }
+if ($SourceOnly -and ($Build -or $Android)) { throw 'SourceOnly cannot be combined with Build or Android.' }
 $script:BundleText = @'
 @@BUNDLE@@
 '@
@@ -182,8 +190,16 @@ try {
     if ($remote -notmatch ('(?m)^' + $script:SourceHead + '\s+refs/heads/' + [regex]::Escape($Branch) + '$')) { throw 'Upload could not be verified against GitHub.' }
     $script:BranchUrl = 'https://github.com/' + $Repository + '/tree/' + $Branch
     Write-Host ('SOURCE_SAVED: ' + $script:BranchUrl) -ForegroundColor Green
-    if ($SourceOnly) { Write-Host 'SourceOnly: сборки и проверки не запускались.'; exit 0 }
+    $handoffPath = [IO.Path]::Combine($job, 'CONTINUE.md')
+    [IO.File]::WriteAllText($handoffPath, $script:HandoffText, [Text.UTF8Encoding]::new($false))
+    Write-Host ('Рабочая копия: ' + $script:Checkout)
+    Write-Host ('Инструкции: ' + $handoffPath)
+    if ($SourceOnly -or (-not $Build -and -not $Android)) {
+        Write-Host 'Исходники сохранены в новой ветке. Следующий шаг: свежие кадры AF3 и проверки из CONTINUE.md.'
+        exit 0
+    }
     if ([Environment]::OSVersion.Platform -ne [PlatformID]::Win32NT) { throw 'The interactive mega build driver requires Windows. Source upload succeeded; Python pipeline is also available on Linux.' }
+    $null = Ensure-App 'ffmpeg' 'Gyan.FFmpeg'
     $python = Find-Python
     $venv = [IO.Path]::Combine($job, 'venv')
     Invoke-Checked $python @('-m', 'venv', $venv)
@@ -219,7 +235,7 @@ try {
         $env:GODOT_ANDROID_KEYSTORE_RELEASE_PATH = [IO.Path]::GetFullPath($keyPath)
         $env:GODOT_ANDROID_KEYSTORE_RELEASE_USER = Read-Host 'Alias ключа'
         Read-SecretEnv 'GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD' 'Пароль keystore (скрытый ввод)'
-        $pipelineArgs += @('--android-sdk', $AndroidSdk, '--java-home', $JavaHome)
+        $pipelineArgs += @('--android-sdk', $AndroidSdk, '--java-home', $JavaHome, '--bundletool', $chain.bundletool)
     }
     Invoke-Checked $python $pipelineArgs
     $artifacts = [IO.Path]::Combine($output, 'artifacts')

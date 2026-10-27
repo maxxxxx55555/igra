@@ -1,5 +1,8 @@
 # RELEASE_CHECKLIST.md — human-only steps to ship
 
+Current instructions: `docs/RELEASE_HANDOFF_20261027.md`. Older wave results
+below are historical evidence, not fresh passes of this candidate.
+
 ## 0. TL;DR — the irreducible human minimum
 
 Everything code / content / store-side is **done by agents** (RELEASE
@@ -88,23 +91,10 @@ upload a build off a red gate.
 
 ## 1. Android keystore (release signing)
 
-The repo only ships a **debug** keystore (`tls_debug.keystore`) — safe for
-local testing, never for a real upload. Generate the real one and keep it
-**outside this git repo**, backed up somewhere durable (losing it means
-you can never update the app on Play Store again under the same listing):
-
-```bash
-keytool -genkey -v -keystore release.keystore -alias tlsrelease -keyalg RSA -keysize 2048 -validity 10000
-```
-
-Then open `export_presets.cfg` and fill in:
-```
-keystore/release=<path to release.keystore>
-keystore/release_user=tlsrelease
-keystore/release_password=<the password you set above>
-```
-(`tools/make_keystore.ps1` in this repo can run the same `keytool`
-command for you on Windows if you'd rather not type it by hand.)
+Use the existing private upload key documented in docs/RELEASE_ARTIFACTS.md.
+Do not generate a replacement signing identity. Leave tracked keystore fields
+empty and supply credentials through the GODOT_ANDROID_KEYSTORE_RELEASE_*
+environment variables. Keep two private backups. See docs/RELEASE_HANDOFF_20261027.md.
 
 ## 2. AppLovin MAX — get a real SDK key
 

@@ -41,7 +41,7 @@ scripts/         — GDScript (.gd)
   monetization/  — AdService (AppLovin MAX, за фича-флагом)
   tools/         — гейты качества и разовые пробники (_asset_check.gd и т.п.)
 assets/          — текстуры, звук, шрифты, UI-графика
-data/            — i18n (13 языков), предметы, балансировочные .tres
+data/            — i18n (6 языков), предметы, балансировочные .tres
 docs/            — GDD, Production Bible, история волн разработки, отчёты сессий
 tools/           — гейты (check.sh, flow_check.py, scene_node_check.py), скрипты сборки
 ```
@@ -53,11 +53,10 @@ tools/           — гейты (check.sh, flow_check.py, scene_node_check.py), 
 ## Сборка APK (Android)
 
 ### Требования
-- Godot 4.7 с Android Export Template
-- Android SDK (min SDK 29, target SDK 34)
+- Godot 4.7.2 с Android Export Template
+- Android SDK (min SDK 29, target SDK 36)
 - JDK 17+
-- Keystore (debug: `tls_debug.keystore` — уже в репозитории; **релизный
-  keystore ещё не создан**, см. `PLAN.md` и `docs/RELEASE_FINAL.md`)
+- Существующий приватный release/upload keystore; см. `docs/RELEASE_HANDOFF_20261027.md`.
 
 ### Команды
 ```bash
@@ -103,7 +102,7 @@ Godot_v4.7-stable_win64_console.exe --windowed --path . scenes/tools/boot_check_
 Проект прошёл множество волн разработки (полная история — в
 `docs/HANDOFF.md` и `docs/SESSION_REPORT_*.md`). Ядро игры полностью
 играбельно: меню → новая игра → 11 районов, электросеть, стелс, бой,
-крафт, скилл-дерево, 5 концовок, сохранения, 13 языков интерфейса.
+крафт, скилл-дерево, 5 концовок, сохранения, 6 языков интерфейса.
 
 **Для актуального разбора «что готово / что нет» и плана дальнейших
 работ — читай `PLAN.md` в корне репозитория.** Он написан специально,
@@ -124,6 +123,6 @@ Godot_v4.7-stable_win64_console.exe --windowed --path . scenes/tools/boot_check_
   default_bus_layout.tres`.
 - Не удаляй файлы, пока не доказано, что они мертвы **и** не запланированы
   как фича (урок из `hiding_spot.gd` — см. `CLAUDE.md`).
-- Полная поддержка 13 языков обязательна для любой новой строки текста —
+- Полная поддержка 6 языков обязательна для любой новой строки текста —
   через `LocalizationManager.t()`, никогда через нативный `tr()` Godot на
   «сырое» предложение (это реальный баг, который уже несколько раз чинили).

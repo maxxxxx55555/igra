@@ -211,7 +211,15 @@ class Pipeline:
 
     def import_project(self, project, name):
         with import_configuration(project):
-            self.engine(name, project, ["--editor", "--import", "--quit"], timeout=600)
+            try:
+                self.engine(name, project, ["--editor", "--import", "--quit"], timeout=600)
+            except RuntimeError:
+                first = self.report["checks"][-1]
+                if first["name"] != name or first["exit_code"] != 0:
+                    raise
+                self.engine(name + "_verify", project, ["--editor", "--import", "--quit"], timeout=600)
+                first.update(result="RECOVERED_IMPORT", recovered_by=name + "_verify")
+                self.save_report()
         shutil.copy2(self.source / "default_bus_layout.tres", project / "default_bus_layout.tres")
 
     def add_artifact(self, path):
@@ -257,6 +265,9 @@ class Pipeline:
         if any(not self.env.get(key) for key in keys):
             raise RuntimeError("Existing Android release keystore credentials are required")
         self.env.update({"JAVA_HOME": str(java), "ANDROID_HOME": str(sdk), "ANDROID_SDK_ROOT": str(sdk)})
+        self.env["PATH"] = str(java / "bin") + os.pathsep + self.env.get("PATH", "")
+        if not self.args.bundletool or not Path(self.args.bundletool).is_file():
+            raise RuntimeError("Android requires --bundletool from provision.py --android")
         required = ["platform-tools", "platforms/android-36", "build-tools/36.1.0", "ndk/29.0.14206865", "cmake/3.10.2.4988404"]
         if any(not (sdk / directory).is_dir() for directory in required):
             raise RuntimeError("Android SDK packages are incomplete. Run the mega PowerShell driver with -Android to install them.")
@@ -286,8 +297,13 @@ class Pipeline:
                         (android_build / member.filename).chmod(mode)
         (project / "android/.build_version").write_text("4.7.2.stable", encoding="utf-8")
         self.export(project, "Android", "android", "LastStreetlight-1.0.1.aab")
+        self.audit_android(self.out / "builds/android/LastStreetlight-1.0.1.aab")
+
+    def audit_android(self, bundle):
+        self.command("android_signature_integrity", [sys.executable, "tools/qa_sim/aab_check.py", str(bundle),
+                     "--secrets", "--bundletool", self.args.bundletool], timeout=300, marker=r"aab_check: PASS\b")
         self.command("android_package_audit", [sys.executable, "tools/qa_sim/release_export_check.py", "--aab",
-                     str(self.out / "builds/android/LastStreetlight-1.0.1.aab")], timeout=300)
+                     str(bundle)], timeout=300)
 
     def run(self):
         try:
@@ -357,5 +373,6 @@ if __name__ == "__main__":
     parser.add_argument("--templates", default="")
     parser.add_argument("--android-sdk", default="")
     parser.add_argument("--java-home", default="")
+    parser.add_argument("--bundletool", default="")
     parser.add_argument("--allow-dirty", action="store_true", help="Development only; report records a dirty source tree")
     Pipeline(parser.parse_args()).run()

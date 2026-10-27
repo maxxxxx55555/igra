@@ -10,9 +10,6 @@
   "%d / %d photos": [
    "fr"
   ],
-  "ACTIVE": [
-   "fr"
-  ],
   "AUDIO": [
    "de",
    "es",
@@ -60,9 +57,6 @@
    "de",
    "fr"
   ],
-  "DISTRICTS": [
-   "fr"
-  ],
   "DOCUMENTS": [
    "fr"
   ],
@@ -71,9 +65,6 @@
   ],
   "Deuteranopia": [
    "pt_BR"
-  ],
-  "District": [
-   "fr"
   ],
   "Document": [
    "fr"
@@ -104,7 +95,6 @@
    "fr"
   ],
   "Journal": [
-   "de",
    "fr"
   ],
   "Last Streetlight": [
@@ -113,9 +103,6 @@
    "fr",
    "pt_BR",
    "ru"
-  ],
-  "Level: %d/%d": [
-   "de"
   ],
   "Marat": [
    "de",
@@ -150,9 +137,6 @@
   "Protanopia": [
    "pt_BR"
   ],
-  "Quests": [
-   "de"
-  ],
   "RADAR": [
    "de",
    "es",
@@ -178,24 +162,16 @@
    "fr"
   ],
   "SLOT ": [
-   "de",
-   "pt_BR"
+   "de"
   ],
   "SPRINT": [
-   "de",
-   "fr"
+   "de"
   ],
   "Server: %s : %d": [
    "de"
   ],
-  "Slot %d": [
-   "de",
-   "pt_BR"
-  ],
   "Speedrunner": [
-   "de",
-   "fr",
-   "pt_BR"
+   "de"
   ],
   "Sprinter": [
    "de"
@@ -218,9 +194,6 @@
   ],
   "Type": [
    "fr"
-  ],
-  "UPGRADES": [
-   "de"
   ],
   "Ultra": [
    "de",
@@ -560,7 +533,7 @@
   "quests": {
    "key": "CODEX_TAB_QUESTS",
    "locales": {
-    "de": "Quests",
+    "de": "Aufträge",
     "en": "Quests",
     "es": "Misiones",
     "fr": "Quêtes",

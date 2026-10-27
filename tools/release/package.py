@@ -6,7 +6,7 @@ from pathlib import Path
 import subprocess
 import tempfile
 
-BASE = "a4b1943d1d6fbcee4eeffeff795b0a959fdb8dea"
+BASE = "bf563cc9353dd1fb3717943b416530e6a9e4fb2c"
 ROOT = Path(__file__).resolve().parents[2]
 
 
@@ -34,6 +34,10 @@ def package(target):
     encoded = base64.b64encode(data).decode("ascii")
     wrapped = "\n".join(encoded[i:i + 100] for i in range(0, len(encoded), 100))
     template = (ROOT / "tools/release/MegaRelease.ps1.in").read_text(encoding="utf-8")
+    handoff = (ROOT / "docs/RELEASE_HANDOFF_20261027.md").read_text(encoding="utf-8")
+    if any(line.startswith("'@") for line in handoff.splitlines()):
+        raise ValueError("Invalid PowerShell literal terminator in handoff")
+    template = template.replace("@@HANDOFF@@", handoff.rstrip())
     text = template.replace("@@HEAD@@", head).replace("@@SHA256@@", hashlib.sha256(data).hexdigest()).replace("@@BUNDLE@@", wrapped)
     target = Path(target).resolve()
     target.parent.mkdir(parents=True, exist_ok=True)

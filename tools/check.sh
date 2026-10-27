@@ -219,7 +219,10 @@ else
   bad "visual_truth_gate lets $gate_missed committed corruption frame(s) through"
 fi
 # The sign-off frames are the committed ones: a run of final_frames_scene leaves more frames in that folder (the boot screen, menu variants, HUD states) and a loading screen is no world frame (CORRECTION_LOG 250).
-mapfile -t sign_off < <(git ls-files 'docs/stills/final/*.png')
+sign_off=()
+while IFS= read -r frame; do
+  [[ -n "$frame" ]] && sign_off+=("$frame")
+done <<< "$(git ls-files 'docs/stills/final/*.png')"
 if "$PY" tools/qa_sim/visual_truth_gate.py "${sign_off[@]}" docs/stills/beauty/after/*.png >/dev/null 2>&1; then
   ok "visual_truth_gate passes the sign-off and beauty frames"
 else
@@ -431,11 +434,18 @@ else
   bad "hum_scan / bed_synth --demo (см. 'python tools/qa_sim/hum_scan.py --demo')"
 fi
 if command -v ffmpeg >/dev/null 2>&1; then
+  if "$PY" tools/qa_sim/audio_loudness.py --seams >/dev/null 2>&1; then
+    ok "audio loop seams (every declared loop, limit 0.037)"
+  else
+    bad "audio loop seams (python tools/qa_sim/audio_loudness.py --seams)"
+  fi
   if "$PY" tools/qa_sim/hum_scan.py --check >/dev/null 2>&1; then
     ok "hum_scan (no dark bed and no district detail loop is a steady low tone: the owner's no-hum rule)"
   else
     bad "hum_scan (см. 'python tools/qa_sim/hum_scan.py --check')"
   fi
+else
+  bad "ffmpeg is required for the audio gates"
 fi
 if "$PY" tools/qa_sim/listing_audit.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/listing_audit.py >/dev/null 2>&1; then
   ok "listing_audit (6 locales: title, short and full limits, the same numbers in every language, the English numbers are what the code holds)"

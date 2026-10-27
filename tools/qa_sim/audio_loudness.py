@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Loudness measurement of the shipped audio (Session 23, CON1): integrated loudness (LUFS, EBU R128) and true peak (dBFS) of every file of each category, with ffmpeg.
 
-usage: python tools/qa_sim/audio_loudness.py [--write docs/AUDIO_LOUDNESS_TABLE.md] [--check] [--demo]
+usage: python tools/qa_sim/audio_loudness.py [--write docs/AUDIO_LOUDNESS_TABLE.md] [--check] [--seams] [--demo]
 Categories are directories of assets/audio. A file shorter than 0.4 s has no integrated loudness (R128 gates it); it is reported by its mean volume (volumedetect) in a column of its own.
 --check fails when a file's true peak is above PEAK_LIMIT_DB (the canon of -1.5 dBFS since v10 N030, the directive said -1), when a loop of music_manager.gd jumps where its end meets its start (F13: a click on every turn), or when ffmpeg is missing.
 """
@@ -29,7 +29,7 @@ SPREAD_LU = 3.0
 SUFFIXES = {".ogg", ".wav", ".mp3"}
 GATED = -69.0
 # F13: the step between the last and the first sample of a loop (full scale is 1.0). The generated tracks read 0.000 to 0.037 once music_post.py closed their seams; a hard cut reads 0.1 and more.
-SEAM_LIMIT = 0.04
+SEAM_LIMIT = 0.037
 LOOP_CONSTANTS = ("TRACKS", "BATTLE_VARIANTS", "BOSS_PHASES", "AMBIENCE_DARK_BY_DISTRICT", "AMBIENCE_LIT_BY_DISTRICT", "LAYERS")
 
 
@@ -99,13 +99,25 @@ def loop_files():
     found = []
     for name in LOOP_CONSTANTS:
         m = re.search(r"(?ms)^const %s\b[^=]*=\s*[\[{](.*?)^[\]}]" % name, src)
+        if not m:
+            raise ValueError("Loop declaration missing: " + name)
         if m:
             found += [p for p in re.findall(r'res://(assets/audio/[^"]+\.ogg)', m.group(1)) if "music_victory" not in p]
+    if not found:
+        raise ValueError("No loop files discovered")
     return sorted(set(found))
 
 
 def seam_step(audio):
     return abs(float(audio[0]) - float(audio[-1]))
+
+
+def check_seams():
+    import music_post
+    steps = [(p, seam_step(music_post.decode(ROOT / p))) for p in loop_files()]
+    clicks = [(p, s) for p, s in steps if s > SEAM_LIMIT]
+    print("\nLoop seams (the step between the last and the first sample, limit %.3f): %d loops, %d over: %s" % (SEAM_LIMIT, len(steps), len(clicks), ", ".join("%s %.3f" % (p.rsplit("/", 1)[-1], s) for p, s in clicks) or "none"))
+    return clicks
 
 
 def main(argv):
@@ -118,14 +130,14 @@ def main(argv):
         assert s[1] == 4 and s[4] == 1 and s[5] == ["b.ogg"] and s[6] == ["b.ogg"]
         print("audio_loudness demo: a file over the peak limit, a file far from the median and a gated file are all counted; a hard-cut loop is over the seam limit and a closed one is not")
         return 0
+    if "--seams" in argv:
+        ffmpeg()
+        return 1 if check_seams() else 0
     rows = collect(ffmpeg())
     text = table(rows)
     print(text)
     over = [f for _, _, _, _, _, loud, _ in summary(rows) for f in loud]
-    import music_post
-    steps = [(p, seam_step(music_post.decode(ROOT / p))) for p in loop_files()]
-    clicks = [(p, s) for p, s in steps if s > SEAM_LIMIT]
-    print("\nLoop seams (the step between the last and the first sample, limit %.2f): %d loops, %d over: %s" % (SEAM_LIMIT, len(steps), len(clicks), ", ".join("%s %.3f" % (p.rsplit("/", 1)[-1], s) for p, s in clicks) or "none"))
+    clicks = check_seams()
     over += [p for p, _ in clicks]
     if "--write" in argv:
         pathlib.Path(argv[argv.index("--write") + 1]).write_text("# Loudness of the shipped audio (Session 23)\n\nMeasured by `python tools/qa_sim/audio_loudness.py --write docs/AUDIO_LOUDNESS_TABLE.md` (ffmpeg ebur128, integrated loudness and true peak of each file).\n\n" + text + "\n\nFiles over the peak limit:\n\n" + ("\n".join("- `%s`" % f for f in over) if over else "none") + "\n", encoding="utf-8")

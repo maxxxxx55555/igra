@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """AAB facts (Session 21): what docs/RELEASE_ARTIFACTS.md states about a built bundle, read from the file itself.
 
-usage: python tools/qa_sim/aab_check.py <bundle.aab> [--secrets] [--against <older.aab>] [--demo]
+usage: python tools/qa_sim/aab_check.py <bundle.aab> --bundletool <official.jar> [--secrets] [--against <older.aab>] [--demo]
 One line per fact, exit 1 when one is wrong:
   size, sha256, entries   the file
   jar      `jarsigner -verify` prints "jar verified."
@@ -16,6 +16,8 @@ One line per fact, exit 1 when one is wrong:
   --against  the entries of another bundle that are gone, new or changed (name and CRC; the signature files and the pack index change on every export)
 A packed file that is not the game is the other check: tools/qa_sim/release_export_check.py --aab.
 """
+import argparse
+import configparser
 import hashlib
 import json
 import os
@@ -26,6 +28,7 @@ import subprocess
 import sys
 import tempfile
 import zipfile
+import xml.etree.ElementTree as ET
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import export_refs_check as refs  # noqa: E402
@@ -70,12 +73,62 @@ def fingerprint(text):
     return m.group(1).replace(":", "").lower() if m else ""
 
 
-def tool(*cmd):
+def recorded_signer(text):
+    keys = re.findall(r"SHA-256 fingerprint `([0-9A-Fa-f]{64})`", text)
+    return keys[-1].lower() if keys else ""
+
+
+def release_identity(root=ROOT):
+    config = configparser.ConfigParser(interpolation=None)
+    config.read(root / "export_presets.cfg", encoding="utf-8")
+    sections = [s for s in config.sections() if config[s].get("name") == '"Android"']
+    if len(sections) != 1:
+        raise ValueError("Exactly one Android export preset is required")
+    options = config[sections[0] + ".options"]
+    return {"package": json.loads(options["package/unique_name"]),
+            "versionCode": str(options.getint("version/code")),
+            "versionName": json.loads(options["version/name"])}
+
+
+def manifest_identity(xml):
+    root = ET.fromstring(xml)
+    if root.tag != "manifest":
+        raise ValueError("Expected a manifest root")
+    ns = "{http://schemas.android.com/apk/res/android}"
+    app = root.find("application")
+    if app is None or app.get(ns + "debuggable", "false") != "false":
+        raise ValueError("Missing application or debuggable release")
+    return {"package": root.attrib["package"],
+            "versionCode": root.attrib[ns + "versionCode"],
+            "versionName": root.attrib[ns + "versionName"]}
+
+
+def manifest_check(path, bundletool):
+    if not bundletool or not pathlib.Path(bundletool).is_file():
+        print("manifest MISSING bundletool: supply --bundletool <official.jar>")
+        return 1
+    rc, out = tool("java", "-jar", str(bundletool), "dump", "manifest",
+                   "--bundle=" + str(path), "--module=base", stdout_only=True)
+    if rc:
+        print("manifest bundletool failed (rc %d)" % rc)
+        return 1
+    try:
+        actual, expected = manifest_identity(out), release_identity()
+    except (ET.ParseError, KeyError, ValueError, configparser.Error) as error:
+        print("manifest unreadable: %s" % error)
+        return 1
+    for key in expected:
+        print("manifest %s=%s expected=%s: %s" %
+              (key, actual[key], expected[key], "ok" if actual[key] == expected[key] else "MISMATCH"))
+    return int(actual != expected)
+
+
+def tool(*cmd, stdout_only=False):
     exe = shutil.which(cmd[0])
     if exe is None:
         return -1, cmd[0] + " not found"
     r = subprocess.run([exe, *cmd[1:]], capture_output=True, text=True, encoding="utf-8", errors="replace")
-    return r.returncode, r.stdout + r.stderr
+    return r.returncode, r.stdout if stdout_only else r.stdout + r.stderr
 
 
 LIST_MAX = 40  # entries named per class by --against
@@ -96,8 +149,8 @@ def compare(path, older):
             print("  %-7s ... and %d more" % (label, len(names) - LIST_MAX))
 
 
-def facts(path, secrets):
-    bad = 0
+def facts(path, secrets, bundletool):
+    bad = manifest_check(path, bundletool)
     data = path.read_bytes()
     print("size    %d bytes" % len(data))
     print("sha256  %s" % hashlib.sha256(data).hexdigest())
@@ -121,14 +174,14 @@ def facts(path, secrets):
             outside = [n for n in names if not n.startswith("META-INF/")]
             hits = [count_entries(z, outside, w) for w in wanted]
             print("secrets %d value(s) of the environment searched in %d entries: %d hits (path, password)" % (len(wanted), len(outside), sum(hits)))
-            bad += (not wanted) + (sum(hits) > 0)
-    rc, out = tool("jarsigner", "-verify", str(path))
-    verified = "jar verified." in out
+            bad += (len(wanted) != 2) + (sum(hits) > 0)
+    rc, out = tool("jarsigner", "-J-Duser.language=en", "-J-Duser.country=US", "-verify", str(path))
+    verified = rc == 0 and "jar verified." in out
     print("jar     %s" % ("jar verified." if verified else "NOT VERIFIED (rc %d)" % rc))
-    rc, out = tool("keytool", "-printcert", "-jarfile", str(path))
+    rc, out = tool("keytool", "-J-Duser.language=en", "-J-Duser.country=US", "-printcert", "-jarfile", str(path))
     fp = fingerprint(out)
-    recorded = re.sub(r"[^0-9a-f]", "", ARTIFACTS.read_text(encoding="utf-8").lower()) if ARTIFACTS.exists() else ""
-    match = bool(fp) and fp in recorded
+    recorded = recorded_signer(ARTIFACTS.read_text(encoding="utf-8")) if ARTIFACTS.exists() else ""
+    match = rc == 0 and bool(fp) and fp == recorded
     print("signer  %s: %s" % (fp[:16] + "..." if fp else "no certificate read", "signer_match=yes" if match else "signer_match=NO"))
     return bad + (not verified) + (not match)
 
@@ -158,16 +211,21 @@ def demo():
 
 
 def main():
-    args = sys.argv[1:]
-    if "--demo" in args:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("bundle", nargs="?", type=pathlib.Path)
+    parser.add_argument("--bundletool", default=os.environ.get("BUNDLETOOL_JAR", ""))
+    parser.add_argument("--against", type=pathlib.Path)
+    parser.add_argument("--secrets", action="store_true")
+    parser.add_argument("--demo", action="store_true")
+    args = parser.parse_args()
+    if args.demo:
         demo()
         return 0
-    paths = [a for i, a in enumerate(args) if not a.startswith("--") and not (i and args[i - 1] == "--against")]
-    if not paths:
-        raise SystemExit(__doc__)
-    bad = facts(pathlib.Path(paths[0]), "--secrets" in args)
-    if "--against" in args:
-        compare(pathlib.Path(paths[0]), pathlib.Path(args[args.index("--against") + 1]))
+    if args.bundle is None:
+        parser.error("bundle is required")
+    bad = facts(args.bundle, args.secrets, args.bundletool)
+    if args.against:
+        compare(args.bundle, args.against)
     print("aab_check: %s" % ("PASS" if bad == 0 else "FAIL (%d)" % bad))
     return 1 if bad else 0
 

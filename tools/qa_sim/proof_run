@@ -32,12 +32,18 @@ settings="$(env | grep -E '^(TLS_|CLOSEOUT_|QA_|TIMING_)' | sort | tr '\n' ' ')"
 	echo "# head ${head_} (uncommitted paths: ${dirty})"
 	echo "# env ${settings:-none}"
 	echo "# cmd $*"
-	# Keep one open descriptor: reopening an append handle on a synchronized
-	# filesystem can observe an old length and overwrite the command's tail.
+	# One tee process owns the output file; children write to the pipe.
 	"$@"
 	rc=$?
 	echo "# EXIT=${rc}"
-} > "$out" 2>&1
+	exit "$rc"
+} 2>&1 | tee "$out" >/dev/null
+pipe_status=("${PIPESTATUS[@]}")
+rc=${pipe_status[0]}
+if [[ ${pipe_status[1]} -ne 0 ]]; then
+	echo "proof_run: could not write the complete log" >&2
+	exit "${pipe_status[1]}"
+fi
 for f in "${attach[@]+"${attach[@]}"}"; do
 	[[ -f "$f" ]] && cp "$f" ".qa_logs/proofs/${id}.attach.$(basename "$f")"
 done

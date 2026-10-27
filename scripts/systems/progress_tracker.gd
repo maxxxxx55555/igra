@@ -185,12 +185,6 @@ func _post() -> void:
 func _check_achievements() -> void:
 	if not _ach_done.get("first_light", false) and puzzles >= 1:
 		_grant("first_light")
-	if not _ach_done.get("district_one", false) and _districts_restored() >= 1:
-		_grant("district_one")
-	if not _ach_done.get("shadow_slayer", false) and shadow_kills >= 1:
-		_grant("shadow_slayer")
-	if not _ach_done.get("secret_hunter", false) and secrets >= 3:
-		_grant("secret_hunter")
 ## BREAK_REPORT B7: this used to emit EventBus.achievement_unlocked directly
 ## with these short ids ("first_light" etc.), bypassing AchievementManager
 ## entirely - the real ach_* row (ach_01 for "first_light") never actually

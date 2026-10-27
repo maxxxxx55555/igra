@@ -114,7 +114,8 @@ class BootstrapTests(unittest.TestCase):
         self.git("-C", str(self.source), "bundle", "create", str(bundle), "release-payload", "^" + self.base)
         data = bundle.read_bytes()
         text = (ROOT / "tools/release/MegaRelease.ps1.in").read_text(encoding="utf-8")
-        text = text.replace("a4b1943d1d6fbcee4eeffeff795b0a959fdb8dea", self.base)
+        text = text.replace("@@HANDOFF@@", "Fixture handoff")
+        text = text.replace("bf563cc9353dd1fb3717943b416530e6a9e4fb2c", self.base)
         self.text = text.replace("@@HEAD@@", self.head).replace("@@SHA256@@", hashlib.sha256(data).hexdigest()).replace("@@BUNDLE@@", base64.b64encode(data).decode())
         self.bin = self.root / "bin"
         self.bin.mkdir()

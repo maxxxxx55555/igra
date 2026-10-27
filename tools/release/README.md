@@ -1,20 +1,12 @@
-# Last Streetlight 1.0.1 release candidate
+# Single-file source delivery
 
-The generated **Igra-MegaRelease.ps1** includes the actual game changes as a
-SHA256-checked Git bundle. It is not a prompt for another AI and does not rely on
-an earlier chat, patch download, local game folder, or the old upload-only script.
-
-Run it on Windows 10/11 from an ordinary PowerShell window:
-
-```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Igra-MegaRelease.ps1
-```
-
-`ExecutionPolicy Bypass` applies only to this process. GitHub CLI stores its own
-login using its normal credential flow. Global Git configuration, main branch,
-and existing project folders are preserved. Git/GitHub CLI/Python installations may use
-Windows' own installer prompts when absent. Downloaded executables are official;
-Godot 4.7.2 editor and export templates have pinned SHA256 hashes.
+Use Igra-MegaRelease(2).ps1. Default mode uploads a new source branch only.
+-Instructions prints the embedded handoff offline. -Build opts into the
+Windows/Web checks and draft release; -Android also builds signed Android.
+AF3 frames still require real recapture before a build can pass.
+Read docs/RELEASE_HANDOFF_20261027.md for the complete current instructions.
+The bundle prerequisite is the pinned public PR #31 commit bf563cc9;
+the driver fetches it from the original repository when necessary.
 
 ## What happens
 
@@ -29,7 +21,7 @@ Godot 4.7.2 editor and export templates have pinned SHA256 hashes.
    Create a unique `release/1.0.1-...` branch. An empty expected remote lease
    prevents even a concurrent branch creation from being overwritten. Verify
    the uploaded commit by reading the remote. Only then print `SOURCE_SAVED`.
-4. Install a private Python environment and official Godot editor/templates.
+4. Install ffmpeg and a private Python environment and official Godot editor/templates.
    The templates download is approximately **1.3 GB**. Allow **10 GB free disk**
    for the source, editor, templates, two project copies, logs and artifacts.
 5. Run the static battery, full script/scene compile, localization, save/security,
