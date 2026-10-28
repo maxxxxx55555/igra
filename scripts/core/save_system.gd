@@ -153,10 +153,10 @@ func _adopt_run_id(raw: Variant) -> void:
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	call_deferred("_adopt_profile")
-	EventBus.district_restored.connect(func(_a, _b): autosave())
-	EventBus.puzzle_solved.connect(func(_a, _b): autosave())
-	EventBus.purchase_success.connect(func(_a): autosave())
-	EventBus.secret_found.connect(func(_a): autosave())
+	EventBus.district_restored.connect(func(_a, _b): autosave(), CONNECT_DEFERRED)
+	EventBus.puzzle_solved.connect(func(_a, _b): autosave(), CONNECT_DEFERRED)
+	EventBus.purchase_success.connect(func(_a): autosave(), CONNECT_DEFERRED)
+	EventBus.secret_found.connect(func(_a): autosave(), CONNECT_DEFERRED)
 
 func _process(delta: float) -> void:
 	if not GameManager.is_playing():
@@ -577,7 +577,7 @@ func get_daily_streak() -> int:
 func daily_counted_today() -> bool:
 	return _last_daily_time > 0 and floori(Time.get_unix_time_from_system() / 86400.0) == floori(float(_last_daily_time) / 86400.0)
 
-func increment_daily_streak() -> void:
+func increment_daily_streak(save_now: bool = true) -> void:
 	if daily_counted_today():
 		return
 	var now := Time.get_unix_time_from_system()
@@ -586,7 +586,8 @@ func increment_daily_streak() -> void:
 		_daily_streak = 0
 	_daily_streak += 1
 	_last_daily_time = int(now)
-	_save()
+	if save_now:
+		_save()
 
 func _current_district() -> String:
 	var dm := get_node_or_null("/root/DistrictManager")

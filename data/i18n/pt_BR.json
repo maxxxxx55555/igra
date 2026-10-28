@@ -1564,5 +1564,9 @@
   "STORY_CAMP": "Cinza fria num barril. Quem morava aqui foi embora.",
   "STORY_BARRICADE": "Caixas atravessando a rua. Ela resistiu, eles não.",
   "STORY_EVACUATION": "Malas onde caíram. Ninguém voltou.",
-  "DAILY_DONE_NOTICE": "DESAFIO DIÁRIO CONCLUÍDO: +%d moedas"
+  "DAILY_DONE_NOTICE": "DESAFIO DIÁRIO CONCLUÍDO: +%d moedas",
+  "THERMAL_COLD": "Frio",
+  "THERMAL_LABEL": "Calor",
+  "THERMAL_WARM": "Quente",
+  "THERMAL_WARMING": "Fresco"
 }

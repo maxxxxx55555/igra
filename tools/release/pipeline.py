@@ -87,7 +87,9 @@ def configure_profile(project, name):
     text = config.read_text(encoding="utf-8")
     text = re.sub(r'^config/name="[^"]*"$', f'config/name="{name}"', text, flags=re.M)
     text = re.sub(r'^config/(?:use_custom_user_dir|custom_user_dir_name)=.*\n?', '', text, flags=re.M)
-    text = text.replace("[application]", '[application]\nconfig/use_custom_user_dir=true\nconfig/custom_user_dir_name="' + name + '"', 1)
+    # A unique application name also keeps the shell user-data guard on the
+    # exact same directory as Godot. Custom directories use a different root.
+    text = text.replace("[application]", '[application]\nconfig/use_custom_user_dir=false', 1)
     config.write_text(text, encoding="utf-8")
 
 
@@ -188,17 +190,17 @@ class Pipeline:
         self.save_report()
         return output
 
-    def engine(self, name, project, extra, marker=None, timeout=240, env=None):
+    def engine(self, name, project, extra, marker=None, timeout=240, env=None, windowed=False):
         run_env = dict(env or self.env)
         # The proof wrapper records the source revision without changing the checkout.
         git_dir = subprocess.check_output(["git", "-C", str(self.source), "rev-parse", "--absolute-git-dir"], text=True).strip()
         run_env.update({"GIT_DIR": git_dir.replace("\\", "/"), "GIT_WORK_TREE": self.source.as_posix()})
         raw = project / ".qa_logs" / "proofs" / (name + ".out")
         command = [self.args.bash, (project / "tools/qa_sim/proof_run").as_posix(), "--launch", name, "--", self.args.godot.replace("\\", "/"),
-                   "--headless", "--path", project.as_posix(), *extra]
+                   "--windowed" if windowed else "--headless", "--path", project.as_posix(), *extra]
         return self.command(name, command, cwd=project, timeout=timeout, env=run_env, marker=marker, engine=True, raw=raw)
 
-    def gate(self, name, scene, marker, timeout, extra=(), env_extra=None, user_args=()):
+    def gate(self, name, scene, marker, timeout, extra=(), env_extra=None, user_args=(), windowed=False):
         if self.profile:
             reset_profile(self.profile, self.profile_name)
         env = dict(self.env, TLS_UDG_GUARDED="1", QA_SOAK_SEC="20")
@@ -207,7 +209,22 @@ class Pipeline:
         args = [*extra, f"res://scenes/tools/{scene}_scene.tscn"]
         if user_args:
             args += ["--", *user_args]
-        return self.engine(name, self.qa, args, marker, timeout, env)
+        return self.engine(name, self.qa, args, marker, timeout, env, windowed=windowed)
+
+    def full_battery(self):
+        git_dir = subprocess.check_output(["git", "-C", str(self.source), "rev-parse", "--absolute-git-dir"], text=True).strip()
+        env = dict(self.env, GIT_DIR=git_dir.replace("\\", "/"), GIT_WORK_TREE=self.qa.as_posix(),
+                   TLS_SKIP_REIMPORT="1", QA_SOAK_SEC="20")
+        for number in (1, 2):
+            reset_profile(self.profile, self.profile_name)
+            name = f"full_battery_{number}"
+            try:
+                self.command(name, [self.args.bash, "tools/check.sh", "--all"], cwd=self.qa,
+                             timeout=5400, env=env, marker=r"Всё зелёное.*Проверок пройдено:", engine=True)
+            finally:
+                logs = self.qa / ".qa_logs"
+                if logs.exists():
+                    shutil.copytree(logs, self.out / "logs" / name, dirs_exist_ok=True)
 
     def import_project(self, project, name):
         with import_configuration(project):
@@ -322,6 +339,10 @@ class Pipeline:
             self.profile = verified_profile(output, self.profile_name)
             for gate in GATES:
                 self.gate(*gate)
+            if self.args.full_release:
+                self.full_battery()
+                self.gate("windowed_performance", "perf_check", r"\[perf\] DONE fails=0\b", 600, windowed=True)
+                self.gate("windowed_audio", "audio_truth_gate", r"\[audio-truth\] PASS overall", 180, windowed=True)
             for seed in (1, 2, 3):
                 output = self.gate(f"bot_{seed}", "qa_autoplay", rf"\[bot s{seed}\]   result.*WIN", 1200,
                                    env_extra={"QA_SEED": str(seed), "QA_TIME_SCALE": "4"})
@@ -335,6 +356,11 @@ class Pipeline:
             self.command("timing_compare", [sys.executable, "tools/qa_sim/timing_compare.py", *timing_logs], marker="PASS")
             self.report["state"] = "AUTOMATION_PASSED"
             self.save_report()
+            if self.args.verify_only:
+                self.report["state"] = "GAME_CHECKS_PASSED_MANUAL_REVIEW_PENDING"
+                self.save_report()
+                print(self.report["state"] + ": " + str(self.out / "artifacts"), flush=True)
+                return
             build = self.out / "export-project"
             copy_project(self.source, build)
             self.import_project(build, "export_import")
@@ -374,5 +400,7 @@ if __name__ == "__main__":
     parser.add_argument("--android-sdk", default="")
     parser.add_argument("--java-home", default="")
     parser.add_argument("--bundletool", default="")
+    parser.add_argument("--verify-only", action="store_true", help="Run checks and bots without exports or a release")
+    parser.add_argument("--full-release", action="store_true", help="Also run check.sh --all twice and real windowed GPU/audio probes")
     parser.add_argument("--allow-dirty", action="store_true", help="Development only; report records a dirty source tree")
     Pipeline(parser.parse_args()).run()

@@ -1564,5 +1564,9 @@
   "STORY_CAMP": "De la cendre froide dans un bidon. Celui qui vivait ici est parti.",
   "STORY_BARRICADE": "Des caisses en travers de la rue. Elle a tenu, pas eux.",
   "STORY_EVACUATION": "Des valises là où elles sont tombées. Personne n'est revenu.",
-  "DAILY_DONE_NOTICE": "DÉFI DU JOUR ACCOMPLI : +%d pièces"
+  "DAILY_DONE_NOTICE": "DÉFI DU JOUR ACCOMPLI : +%d pièces",
+  "THERMAL_COLD": "Froid",
+  "THERMAL_LABEL": "Chaleur",
+  "THERMAL_WARM": "Chaud",
+  "THERMAL_WARMING": "Frais"
 }

@@ -38,6 +38,10 @@ def package(target):
     if any(line.startswith("'@") for line in handoff.splitlines()):
         raise ValueError("Invalid PowerShell literal terminator in handoff")
     template = template.replace("@@HANDOFF@@", handoff.rstrip())
+    checklist = (ROOT / "docs/PLAY_CONSOLE_CHECKLIST.md").read_text(encoding="utf-8")
+    if any(line.startswith("'@") for line in checklist.splitlines()):
+        raise ValueError("Invalid PowerShell literal terminator in checklist")
+    template = template.replace("@@PLAY_CHECKLIST@@", checklist.rstrip())
     text = template.replace("@@HEAD@@", head).replace("@@SHA256@@", hashlib.sha256(data).hexdigest()).replace("@@BUNDLE@@", wrapped)
     target = Path(target).resolve()
     target.parent.mkdir(parents=True, exist_ok=True)

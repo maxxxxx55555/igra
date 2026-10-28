@@ -58,6 +58,7 @@ var _log_rows: VBoxContainer
 var _stack: VBoxContainer
 var _queue: Array[Dictionary] = []
 var _visible_count: int = 0
+var _hud_visible: bool = true
 ## 3.14: newest last, capped at HISTORY_MAX.
 var _history: Array[Dictionary] = []
 
@@ -90,6 +91,12 @@ func _ready() -> void:
 	EventBus.hud_visibility_changed.connect(_on_hud_visibility)
 	LocalizationManager.language_changed.connect(_retranslate)
 	_retranslate()
+	_on_hud_visibility(not UIManager.is_hud_blocked())
+	EventBus.settings_changed.connect(_on_setting_changed)
+
+func _on_setting_changed(key: String, _value: Variant) -> void:
+	if key == "trailer_mode":
+		_on_hud_visibility(_hud_visible)
 
 func _on_toast_requested(text: String, type: String) -> void:
 	var entry := _record(text, type)
@@ -240,10 +247,13 @@ func _apply_log_scroll() -> void:
 ## A blocking screen (pause, codex, city map) hides the HUD; the log follows it
 ## instead of drawing a 360 px panel over the open menu.
 func _on_hud_visibility(v: bool) -> void:
+	_hud_visible = v
 	_header.visible = v
-	_stack.visible = not bool(SettingsManager.get_setting("trailer_mode", false))
+	_stack.visible = v and not bool(SettingsManager.get_setting("trailer_mode", false))
 	if not v:
 		_log_panel.visible = false
+	else:
+		_pump()
 
 func _retranslate(_lang: Variant = null) -> void:
 	_log_toggle.text = LocalizationManager.t("HUD_LOG_TOGGLE")
@@ -252,6 +262,8 @@ func _retranslate(_lang: Variant = null) -> void:
 		_rebuild_log()
 
 func _pump() -> void:
+	if not _stack.visible:
+		return
 	while _visible_count < MAX_VISIBLE and not _queue.is_empty():
 		_show(_queue.pop_front())
 

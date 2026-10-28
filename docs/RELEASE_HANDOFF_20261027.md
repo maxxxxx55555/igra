@@ -28,6 +28,10 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File ".\Igra-MegaRelease(2).p
 ```
 
 -SourceOnly — совместимый с прежним файлом синоним обычного запуска.
+-CheckGame — проверки и боты без экспорта и черновика релиза; два полных
+check.sh --all и реальные оконные GPU/audio gates включены. Полный успешный
+отчёт имеет статус GAME_CHECKS_PASSED_MANUAL_REVIEW_PENDING.
+-PlayChecklist — отдельный список действий в Play Console без установки и входа.
 -Build включает проверки, сборки Windows/Web и черновик GitHub Release.
 -Android включает тот же конвейер плюс подписанный AAB. Автоматической
 публикации в Play Console нет. Полная сборка заблокируется до исправления AF3.
@@ -53,7 +57,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File ".\Igra-MegaRelease(2).p
    больше не принимается. bundletool 1.18.3 скачивается с google/bundletool,
    SHA256 a099cfa1543f55593bc2ed16a70a7c67fe54b1747bb7301f37fdfd6d91028e29.
 4. Переведены 15 интерфейсных подписей в de/fr/pt_BR; словарь и integrity
-   manifest обновлены. Поддерживаются ru/en/es/de/fr/pt_BR, 1566 ключей.
+   manifest обновлены. Поддерживаются ru/en/es/de/fr/pt_BR, 1570 ключей, включая четыре подписи тепла района.
 5. Список кадров читается без /dev/fd. Proof logs пишет один tee-процесс:
    сохраняются вложенный вывод и настоящий exit footer. При ошибке записи
    лога команда не выдаёт успех.
@@ -62,6 +66,15 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File ".\Igra-MegaRelease(2).p
    отчёте; RECOVERED_IMPORT ставится только после чистого повторного импорта.
    Повторяющиеся ошибки, timeout и ненулевой exit останавливают сборку.
    Все compile/resource gates выполняются после импорта.
+
+7. «Первый свет» выдаётся при включении улиц; исправлены требования Truth,
+   порядок autosave секрета и сохранения ежедневной награды. Колесо использует
+   сохранённые привязки и сохраняет паузу. Тепло района подключено к HUD без
+   отдельного выживания. Первый HUD-кадр читает реальные сохранённые значения.
+8. Новый рисунок ночного города, композиция меню слева, читаемый HUD/задачи,
+   адаптивный магазин и иконки колеса. Уведомления ждут закрытия модальных
+   экранов. Смена качества сохраняет настройки постобработки района.
+   Детали и привязки проверок: docs/RELEASE_COMPLETION_20261028.md.
 
 ## Уже было в PR — не переделывать по устаревшим предположениям
 
@@ -107,6 +120,7 @@ bash tools/qa_sim/proof_run --launch final_all_2 -- bash tools/check.sh --all
 bash tools/qa_sim/proof_run --launch final_headless -- bash tools/qa_sim/headless_suite
 QA_SEEDS="1 2 3" bash tools/qa_sim/proof_run --launch final_bot -- bash tools/qa_sim/autoplay_bot
 bash tools/qa_sim/proof_run --launch final_perf -- bash tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn
+bash tools/qa_sim/proof_run --launch final_audio -- bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn
 python tools/flow_check.py
 python tools/scene_node_check.py
 python tools/lint_changed.py
@@ -114,8 +128,9 @@ python tools/release/test_release.py
 ```
 
 Нужны маркеры завершения, отсутствие script/resource errors и три WIN с
-проверенными счётчиками. Exit 0 сам по себе недостаточен. Python pipeline
-не заменяет два буквальных запуска check.sh --all. Не засчитывай пропуски
+проверенными счётчиками. Exit 0 сам по себе недостаточен. Режим -CheckGame и -Build/-Android выполняет
+оба буквальных запуска check.sh --all через --full-release; обычный Python
+pipeline требует этот флаг явно. Не засчитывай пропуски
 PowerShell-тестов как успешное выполнение. Результаты прежних временных
 копий не являются доказательствами нового SourceHead. Свежие результаты
 пакета записаны в docs/SINGLE_SCRIPT_VERIFICATION.md; оставшиеся engine,
@@ -140,6 +155,9 @@ python tools/qa_sim/release_export_check.py --aab <новый.aab>
 полные логи в RELEASE_ARTIFACTS. Старые code 5/6 не являются новой сборкой.
 Документация инструмента: https://developer.android.com/tools/bundletool ;
 https://github.com/google/bundletool/releases/tag/1.18.3 .
+
+Полный список Console: docs/PLAY_CONSOLE_CHECKLIST.md, он также встроен в
+этот PowerShell и доступен через -PlayChecklist.
 
 Владелец предоставляет реальный privacy contact и проверяет URL политики,
 подтверждает коммерческие права на музыку либо разрешает замену, выполняет

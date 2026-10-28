@@ -50,7 +50,9 @@ def extract_file(archive, member, target):
     target.chmod(target.stat().st_mode | stat.S_IXUSR)
 
 
-def provision(root, android=False):
+def provision(root, android=False, editor_only=False):
+    if android and editor_only:
+        raise ValueError("Android exports require templates")
     root = Path(root).resolve()
     cache = root / "downloads"
     cache.mkdir(parents=True, exist_ok=True)
@@ -67,13 +69,14 @@ def provision(root, android=False):
     # Godot's supported self-contained mode keeps templates/settings inside this folder.
     (editor_dir / "_sc_").touch()
     templates = editor_dir / "editor_data" / "export_templates" / f"{VERSION}.stable"
-    archive = download(cache, *ASSETS["templates"])
-    names = ["version.txt", "windows_release_x86_64.exe", "web_nothreads_release.zip", "web_nothreads_debug.zip"]
-    if android:
-        names += ["android_release.apk", "android_debug.apk", "android_source.zip"]
-    with zipfile.ZipFile(archive) as files:
-        for template in names:
-            extract_file(files, "templates/" + template, templates / template)
+    if not editor_only:
+        archive = download(cache, *ASSETS["templates"])
+        names = ["version.txt", "windows_release_x86_64.exe", "web_nothreads_release.zip", "web_nothreads_debug.zip"]
+        if android:
+            names += ["android_release.apk", "android_debug.apk", "android_source.zip"]
+        with zipfile.ZipFile(archive) as files:
+            for template in names:
+                extract_file(files, "templates/" + template, templates / template)
     result = {"godot": str(editor_dir / name), "templates": str(templates), "version": VERSION}
     if android:
         result["bundletool"] = str(download(cache, "bundletool-all-1.18.3.jar",
@@ -88,5 +91,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", required=True)
     parser.add_argument("--android", action="store_true")
+    parser.add_argument("--editor-only", action="store_true")
     args = parser.parse_args()
-    provision(args.root, args.android)
+    provision(args.root, args.android, args.editor_only)

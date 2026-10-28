@@ -161,16 +161,17 @@ func _complete() -> void:
 		return  # the profile counted today's claim already: this is a restored file, and it pays nothing twice
 	var streak := 0
 	if SaveSystem != null and SaveSystem.has_method("increment_daily_streak"):
-		SaveSystem.increment_daily_streak()
+		SaveSystem.increment_daily_streak(false)
 		streak = SaveSystem.get_daily_streak()
 	var reward := roundi(int(_today.get("reward", 0)) * streak_multiplier(streak))
 	var wallet := get_node_or_null("/root/CoinWallet")
 	if wallet != null and wallet.has_method("add"):
 		wallet.add(reward)
 	reward += _streak_bonus(streak)
+	SaveSystem.save_all()
+	_save_state()
 	EventBus.inventory_notice.emit(LocalizationManager.tf("DAILY_DONE_NOTICE", [reward]))
 	completed.emit(reward)
-	_save_state()
 
 func _streak_bonus(streak: int) -> int:
 	var bonus := 0

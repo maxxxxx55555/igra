@@ -1,5 +1,7 @@
 extends CanvasLayer
 
+const _SHOP_LAYOUT := preload("res://scripts/ui/shop_layout.gd")
+
 const UI_MANAGER_IDS: Dictionary = {}
 
 signal panel_ready(name: String)
@@ -39,6 +41,7 @@ func _ready() -> void:
 	layer = 25
 	_build_menu_bg()
 	_build_all_screens()
+	get_viewport().size_changed.connect(_on_viewport_resized)
 	# Static audit 2026-09-08: every screen's shared "Close" button was
 	# built once in _build_screen() and never retranslated (screens
 	# themselves are cached, never rebuilt, so a language change while a
@@ -79,6 +82,10 @@ func _build_screen(name: String) -> void:
 	var card_w: float = 560.0
 	var card_h: float = vp.y * 0.7
 	card_h = clampf(card_h, 300, 520)
+	if name == "Shop":
+		var shop_size: Vector2 = _SHOP_LAYOUT.extent(vp)
+		card_w = shop_size.x
+		card_h = shop_size.y
 	var card := ColorRect.new()
 	card.color = PANEL_COLOR
 	card.size = Vector2(card_w, card_h)
@@ -130,6 +137,7 @@ func _build_screen(name: String) -> void:
 	_screen_data[name] = {
 		"underlay": underlay, "card": card, "content": content,
 		"close_btn": close_btn, "title_lbl": title_lbl,
+		"border": border, "inner": inner, "header_line": header_line,
 	}
 
 ## V2 SKIN WIRING P4: card background art for the screens.gd-routed
@@ -204,6 +212,8 @@ func show_screen(name: String) -> void:
 		var mr := bg_node.get_global_rect()
 		var covers := (mr.position.x <= vr.position.x + 1 and mr.position.y <= vr.position.y + 1 and mr.size.x >= vr.size.x - 2 and mr.size.y >= vr.size.y - 2)
 	var d: Dictionary = _screen_data[name]
+	if name == "Shop":
+		_SHOP_LAYOUT.fit(d, get_viewport().get_visible_rect().size)
 	d.underlay.visible = true
 	d.card.visible = true
 	d.underlay.modulate = Color(1, 1, 1, 0)
@@ -217,6 +227,12 @@ func show_screen(name: String) -> void:
 	tween.play()
 	_populate_screen(name)
 	EventBus.ui_screen_opened.emit(name)
+
+func _on_viewport_resized() -> void:
+	if _screen_data.has("Shop"):
+		_SHOP_LAYOUT.fit(_screen_data["Shop"], get_viewport().get_visible_rect().size)
+		if _active_screen == "Shop":
+			_populate_screen("Shop")
 
 func hide_all() -> void:
 	var bg_node := find_child("MenuBG", true, false) as ColorRect
@@ -924,7 +940,7 @@ func build_Events(content: ColorRect, card: ColorRect, cw: float, ch: float) -> 
 ## The shop's rows start below the coin header and end above the Close button; a row is 80 px, or as tall as its Buy button needs.
 const SHOP_TOP := 36.0
 const SHOP_CLOSE_ZONE := 44.0
-const SHOP_ROW := 80.0
+const SHOP_ROW := 180.0
 ## Upgrades and the kit borrow the pack icons; the skins keep the generic square.
 const SHOP_ICON: Dictionary = {
 	&"upgrade_flashlight_brightness": &"flashlight", &"upgrade_flashlight_battery": &"battery",
@@ -941,7 +957,7 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 	header.size = Vector2(content.size.x, 30)
 	header.position = Vector2(0, 0)
 	header.add_theme_color_override("font_color", Color(0.788, 0.635, 0.290))
-	header.add_theme_font_size_override("font_size", 18)
+	header.add_theme_font_size_override("font_size", 22)
 	header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	header.text = LocalizationManager.t("SCR_MONETY_2") + str(CoinWallet.get_coins())
 	# Каталог: ShopService (CoinWallet-магазин). IAP-паки (Kind.COIN_PACK) исключены — донат/реклама отключены.
@@ -958,13 +974,18 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	var grid_container := GridContainer.new()
 	grid_container.name = "ShopGrid"
-	grid_container.columns = 2
+	grid_container.columns = 2 if content.size.x >= 600.0 else 1
+	grid_container.add_theme_constant_override("h_separation", 12)
+	grid_container.add_theme_constant_override("v_separation", 12)
 	grid_container.mouse_filter = Control.MOUSE_FILTER_PASS
 	scroll.add_child(grid_container)
 	var item_icons := preload("res://scripts/ui/item_icons.gd")
-	var card_w := (content.size.x - 10) / 2.0
+	var card_w: float = (content.size.x - 24.0 - 12.0 * (grid_container.columns - 1)) / grid_container.columns
 	var card_style := StyleBoxFlat.new()
-	card_style.bg_color = Color(0.047, 0.063, 0.086, 0.6)
+	card_style.bg_color = ThemeProvider.COLOR_BG_PANEL2
+	card_style.border_color = ThemeProvider.COLOR_BORDER
+	card_style.set_border_width_all(1)
+	card_style.set_content_margin_all(14)
 	for it in items:
 		## A panel sizes the card from its content and a vertical box places it: absolute child positions land one card width off under the
 		## right-to-left layout of Arabic (launches 21 to 23, CORRECTION_LOG 113).
@@ -974,31 +995,32 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 		card_item.mouse_filter = Control.MOUSE_FILTER_PASS
 		grid_container.add_child(card_item)
 		var column := VBoxContainer.new()
-		column.add_theme_constant_override("separation", 0)
+		column.add_theme_constant_override("separation", 6)
 		card_item.add_child(column)
 		var icon_parent := Control.new()
-		icon_parent.custom_minimum_size = Vector2(22, 22)
+		icon_parent.custom_minimum_size = Vector2(42, 42)
 		icon_parent.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		icon_parent.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		column.add_child(icon_parent)
-		item_icons.draw_icon(icon_parent, SHOP_ICON.get(it.id, it.id), 22.0)
+		item_icons.draw_icon(icon_parent, SHOP_ICON.get(it.id, it.id), 42.0)
 		var name_lbl := Label.new()
 		name_lbl.text = it.get("desc", it.id)
 		name_lbl.add_theme_color_override("font_color", Color(0.847, 0.824, 0.769))
-		name_lbl.add_theme_font_size_override("font_size", 13)
+		name_lbl.add_theme_font_size_override("font_size", 20)
 		name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		name_lbl.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		name_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		column.add_child(name_lbl)
 		var price: float = it.get("price_coins", 0)
 		# IAP-путь удалён — только монеты.
 		var pl := Label.new()
 		pl.text = str(int(price)) + LocalizationManager.t("SCR_MONET")
 		pl.add_theme_color_override("font_color", Color(0.788, 0.635, 0.290))
-		pl.add_theme_font_size_override("font_size", 13)
+		pl.add_theme_font_size_override("font_size", 20)
 		pl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		column.add_child(pl)
-		var btn := _make_btn(LocalizationManager.t("SCR_KUPIT"), Vector2.ZERO, Vector2(120, 20))
-		btn.custom_minimum_size.x = 120.0
+		var btn := _make_btn(LocalizationManager.t("SCR_KUPIT"), Vector2.ZERO, Vector2(220, 44))
+		btn.custom_minimum_size = Vector2(220.0, 44.0)
+		btn.add_theme_font_size_override("font_size", 22)
 		btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		btn.pressed.connect(_on_buy.bind(it.id, btn))
 		column.add_child(btn)

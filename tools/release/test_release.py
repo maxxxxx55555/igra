@@ -21,6 +21,58 @@ import aab_check  # noqa: E402
 
 
 class JudgeTests(unittest.TestCase):
+    def test_full_battery_runs_twice_and_keeps_failed_pass_logs(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            pipeline = object.__new__(Pipeline)
+            pipeline.args = SimpleNamespace(bash="bash")
+            pipeline.source = root / "source"
+            pipeline.qa = root / "qa"
+            pipeline.out = root / "output"
+            pipeline.env = {"GODOT": "godot"}
+            pipeline.profile_name = "__TLS_QA_" + "c" * 32
+            pipeline.profile = root / pipeline.profile_name
+            logs = pipeline.qa / ".qa_logs"
+            logs.mkdir(parents=True)
+            (logs / "engine.log").write_text("full diagnostic")
+            pipeline.command = Mock()
+            with patch("pipeline.subprocess.check_output", return_value="/fixture/git"):
+                pipeline.full_battery()
+                self.assertEqual(pipeline.command.call_count, 2)
+                for call in pipeline.command.call_args_list:
+                    self.assertEqual(call.args[1], ["bash", "tools/check.sh", "--all"])
+                    self.assertEqual(call.kwargs["env"]["GIT_WORK_TREE"], pipeline.qa.as_posix())
+                pipeline.command = Mock(side_effect=RuntimeError("gate failed"))
+                with self.assertRaisesRegex(RuntimeError, "gate failed"):
+                    pipeline.full_battery()
+                self.assertEqual(pipeline.command.call_count, 1)
+            self.assertEqual((pipeline.out / "logs/full_battery_1/engine.log").read_text(), "full diagnostic")
+
+    def test_verify_only_never_exports_and_archives_its_checks(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            pipeline = object.__new__(Pipeline)
+            pipeline.args = SimpleNamespace(allow_dirty=False, full_release=False, verify_only=True, bash="bash")
+            pipeline.source = root / "source"
+            pipeline.out = root / "output"
+            pipeline.qa = root / "qa"
+            (pipeline.out / "logs").mkdir(parents=True)
+            (pipeline.out / "artifacts").mkdir()
+            pipeline.report = {"checks": []}
+            pipeline.env = {}
+            pipeline.profile = None
+            pipeline.profile_name = "__TLS_QA_" + "d" * 32
+            for name in ("engine", "gate", "command", "save_report", "import_project", "export", "android"):
+                setattr(pipeline, name, Mock(return_value="4.7.2.stable"))
+            with patch("pipeline.subprocess.check_output", return_value=""), patch("pipeline.copy_project"), \
+                    patch("pipeline.configure_profile"), patch("pipeline.verified_profile", return_value=root / pipeline.profile_name):
+                pipeline.run()
+            self.assertEqual(pipeline.report["state"], "GAME_CHECKS_PASSED_MANUAL_REVIEW_PENDING")
+            pipeline.export.assert_not_called()
+            pipeline.android.assert_not_called()
+            self.assertTrue((pipeline.out / "artifacts/verification-logs.zip").is_file())
+            self.assertTrue((pipeline.out / "artifacts/SHA256SUMS.txt").is_file())
+
     def test_android_requires_all_audits_and_propagates_failure(self):
         pipeline = object.__new__(Pipeline)
         pipeline.args = SimpleNamespace(bundletool="official.jar")
@@ -164,7 +216,8 @@ class JudgeTests(unittest.TestCase):
             (project / "project.godot").write_text('[application]\nconfig/name="Last Streetlight"\n', encoding="utf-8")
             name = "__TLS_QA_" + "a" * 32
             configure_profile(project, name)
-            self.assertIn('config/use_custom_user_dir=true', (project / "project.godot").read_text())
+            self.assertIn('config/use_custom_user_dir=false', (project / "project.godot").read_text())
+            self.assertNotIn('config/custom_user_dir_name=', (project / "project.godot").read_text())
             path = project / name
             path.mkdir()
             output = "[release-profile] " + json.dumps({"name": name, "path": str(path)})
@@ -201,6 +254,7 @@ class BootstrapTests(unittest.TestCase):
         data = bundle.read_bytes()
         text = (ROOT / "tools/release/MegaRelease.ps1.in").read_text(encoding="utf-8")
         text = text.replace("@@HANDOFF@@", "Fixture handoff")
+        text = text.replace("@@PLAY_CHECKLIST@@", "Fixture Play checklist")
         text = text.replace("bf563cc9353dd1fb3717943b416530e6a9e4fb2c", self.base)
         self.text = text.replace("@@HEAD@@", self.head).replace("@@SHA256@@", hashlib.sha256(data).hexdigest()).replace("@@BUNDLE@@", base64.b64encode(data).decode())
         self.bin = self.root / "bin"

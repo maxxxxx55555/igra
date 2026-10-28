@@ -37,14 +37,22 @@ the driver fetches it from the original repository when necessary.
 7. Upload those files to a **GitHub draft release**, tied to that exact commit.
    Builds are release assets, not oversized binary commits in the source branch.
 
+`-CheckGame` runs checks without exports or a draft. It provisions only the
+editor, runs the engine gates, two literal `check.sh --all` passes, three bots,
+30/60/120 FPS comparison and real windowed performance/audio probes. A headless
+SKIP cannot satisfy the windowed probes. It ends at
+`GAME_CHECKS_PASSED_MANUAL_REVIEW_PENDING`. `-Build` and `-Android` also include
+the same full-release checks. `-PlayChecklist` prints the included owner actions
+offline. Fresh AF3 frames must be committed and the script repackaged first.
+
 The source is uploaded before tool installation and long verification. If a later
 stage fails, the console gives the existing remote branch and local working path;
 the failed stage's full log and report remain under `verification`. A failure is
 never printed as a completed release. The optional `-SourceOnly` stops after
 verified source upload and explicitly skips checks/builds.
 
-QA runs a separate project copy with an engine-verified random custom user-data
-directory. Only that exact disposable directory can be cleared between tests.
+QA runs a separate project copy with an engine-verified random application name and disposable user-data
+directory, matching the shell guard's path. Only that exact disposable directory can be cleared between tests.
 Original game saves/settings are not reset. The export copy retains the game's
 real name and user directory; test settings are never shipped. The original
 audio bus layout is restored after editor import in each copy.
@@ -103,5 +111,5 @@ branch creation and failed remote verification. Those tests never contact or
 push to the owner's GitHub repository.
 
 `python tools/release/package.py <output.ps1>` builds the self-contained file
-from a clean, committed tree. The bundle has public prerequisite `a4b1943`; it
+from a clean, committed tree. The bundle has public prerequisite `bf563cc9353dd1fb3717943b416530e6a9e4fb2c`; it
 preserves the newer public release art and all original project history.

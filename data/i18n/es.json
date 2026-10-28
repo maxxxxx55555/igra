@@ -1564,5 +1564,9 @@
   "STORY_CAMP": "Ceniza fría en un barril. Quien vivía aquí se fue.",
   "STORY_BARRICADE": "Cajas cruzando la calle. Aguantó ella, no ellos.",
   "STORY_EVACUATION": "Maletas donde cayeron. Nadie volvió.",
-  "DAILY_DONE_NOTICE": "RETO DIARIO COMPLETADO: +%d monedas"
+  "DAILY_DONE_NOTICE": "RETO DIARIO COMPLETADO: +%d monedas",
+  "THERMAL_COLD": "Frío",
+  "THERMAL_LABEL": "Calor",
+  "THERMAL_WARM": "Cálido",
+  "THERMAL_WARMING": "Fresco"
 }

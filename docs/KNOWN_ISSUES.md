@@ -1,5 +1,18 @@
 ﻿# Known issues
 
+## Source pass 2026-10-28; runtime acceptance pending
+
+The dated records below are historical. Current fixes and exact runtime
+regressions are in `RELEASE_COMPLETION_20261028.md`. Loop seams are now a
+mandatory static gate, all four recipe one-shots exist in the pinned PR,
+and the current locale set is six. This pass fixes the early First Light
+grant, Truth eligibility, milestone/daily persistence, quick-wheel bindings
+and modal pause, initial HUD values and quality-switch district grading.
+New menu/shop/HUD art and layout still need fresh Godot captures.
+Fresh full-engine/bot results, AF3, physical-device checks, signing, rights
+and store actions remain pending; earlier dated PASS records do not certify
+this new source revision.
+
 ## OPEN (2026-10-21, Session 28, closed out by Session 29): what the masterpiece pass finished and what it left
 
 Closed by Session 28 (every one with a gate and a mutation that bites, `docs/artifacts/rc16/proofs/s28_*`): the attack telegraphs (TEL1-TEL7, `tools/qa_sim/telegraph_audit.py`); the hit cap of `12 x damage_cap x NG+`, the Watcher's reach of 6 m, the first spawn point, the respawn battery floor, the park that opens with the Shadow, the ammo that doubles from the gas station and the wake of the heavy kinds within 10 m (DIF1-DIF3, ESC1, RET1, WAKE1, BAT0); the security extension (SPD1, VIT1, ECO1, NGB1, DLY4, DLY5, ACH2, SAV2, CFG1, OVL1, SAVE1, PICK1, LANG1, EX3, EX4, EX10, HC1); the hunted-level stem mixing (MUS5, MUS6); the story props (STORY1, STORY2); the window and lamp detail (V1A, V1B: the cream pyramids were a render-order bug, fixed by a render priority, a transparency sort and a distance fade); the burst scale (BURST1); the ending title contrast (ENDC1); DAILY-28 and CURVE-28.

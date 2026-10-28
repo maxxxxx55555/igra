@@ -2,6 +2,7 @@
 <#
 Last Streetlight: source changes and complete AI handoff in one file.
 Default: upload source to a new branch. -Instructions: read handoff offline.
+-CheckGame: Godot and bots only. -PlayChecklist: offline Console actions.
 -Build: checks/Windows/Web/draft release. -Android: include signed Android AAB.
 Run the generated self-contained Igra-MegaRelease.ps1, not this template.
 #>
@@ -12,6 +13,8 @@ param(
     [string]$WorkRoot,
     [switch]$SourceOnly,
     [switch]$Instructions,
+    [switch]$PlayChecklist,
+    [switch]$CheckGame,
     [switch]$Build,
     [switch]$Android,
     [string]$AndroidSdk,
@@ -27,8 +30,13 @@ $script:SourceUrl = 'https://github.com/maxxxxx55555/igra.git'
 $script:HandoffText = @'
 @@HANDOFF@@
 '@
+$script:PlayChecklistText = @'
+@@PLAY_CHECKLIST@@
+'@
 if ($Instructions) { Write-Output $script:HandoffText; exit 0 }
-if ($SourceOnly -and ($Build -or $Android)) { throw 'SourceOnly cannot be combined with Build or Android.' }
+if ($PlayChecklist) { Write-Output $script:PlayChecklistText; exit 0 }
+if ($CheckGame -and ($Build -or $Android)) { throw 'Choose CheckGame, Build or Android.' }
+if ($SourceOnly -and ($Build -or $Android -or $CheckGame)) { throw 'SourceOnly cannot be combined with CheckGame, Build or Android.' }
 $script:BundleText = @'
 @@BUNDLE@@
 '@
@@ -194,7 +202,7 @@ try {
     [IO.File]::WriteAllText($handoffPath, $script:HandoffText, [Text.UTF8Encoding]::new($false))
     Write-Host ('Рабочая копия: ' + $script:Checkout)
     Write-Host ('Инструкции: ' + $handoffPath)
-    if ($SourceOnly -or (-not $Build -and -not $Android)) {
+    if ($SourceOnly -or (-not $Build -and -not $Android -and -not $CheckGame)) {
         Write-Host 'Исходники сохранены в новой ветке. Следующий шаг: свежие кадры AF3 и проверки из CONTINUE.md.'
         exit 0
     }
@@ -216,10 +224,12 @@ try {
     $toolRoot = [IO.Path]::Combine([IO.Path]::GetFullPath($WorkRoot), 'toolchain-4.7.2')
     $provisionArgs = @([IO.Path]::Combine($script:Checkout, 'tools\release\provision.py'), '--root', $toolRoot)
     if ($Android) { $provisionArgs += '--android' }
+    if ($CheckGame) { $provisionArgs += '--editor-only' }
     Invoke-Checked $python $provisionArgs
     $chain = [IO.File]::ReadAllText([IO.Path]::Combine($toolRoot, 'toolchain.json')) | ConvertFrom-Json
     $output = [IO.Path]::Combine($job, 'verification')
-    $pipelineArgs = @([IO.Path]::Combine($script:Checkout, 'tools\release\pipeline.py'), '--source', $script:Checkout, '--output', $output, '--godot', $chain.godot, '--templates', $chain.templates, '--bash', $bash)
+    $pipelineArgs = @([IO.Path]::Combine($script:Checkout, 'tools\release\pipeline.py'), '--source', $script:Checkout, '--output', $output, '--godot', $chain.godot, '--templates', $chain.templates, '--bash', $bash, '--full-release')
+    if ($CheckGame) { $pipelineArgs += '--verify-only' }
     if ($Android) {
         if (-not $AndroidSdk) { $AndroidSdk = Read-Host 'Путь к Android SDK с cmdline-tools/latest (лицензии sdkmanager должны быть приняты)' }
         if (-not $JavaHome) { $JavaHome = Read-Host 'Путь к JDK 17 (JAVA_HOME)' }
@@ -240,10 +250,17 @@ try {
     Invoke-Checked $python $pipelineArgs
     $artifacts = [IO.Path]::Combine($output, 'artifacts')
     $report = [IO.File]::ReadAllText([IO.Path]::Combine($artifacts, 'release-report.json')) | ConvertFrom-Json
+    if ($CheckGame) {
+        if ($report.state -ne 'GAME_CHECKS_PASSED_MANUAL_REVIEW_PENDING' -or $report.source_commit -ne $script:SourceHead) { throw 'Game check report is incomplete or belongs to a different revision.' }
+        Write-Host ('Проверки Godot и ботов пройдены. Ручная проверка устройства и кадров: PENDING. Отчёт: ' + $artifacts) -ForegroundColor Green
+        exit 0
+    }
     if ($report.state -ne 'BUILDS_CREATED_MANUAL_REVIEW_PENDING' -or $report.source_commit -ne $script:SourceHead) { throw 'Build report is incomplete or belongs to a different revision.' }
     $tag = 'candidate-1.0.1-' + [DateTime]::UtcNow.ToString('yyyyMMdd-HHmmss') + '-' + [Guid]::NewGuid().ToString('N').Substring(0, 6)
     $notes = [IO.Path]::Combine($job, 'release-notes.md')
-    $body = "Last Streetlight 1.0.1 release candidate`n`nSource: $($script:BranchUrl)`nCommit: $($script:SourceHead)`n`nAutomated source, engine, three-seed playthrough and 30/60/120 FPS checks passed. Windows and Web builds, SHA256SUMS and full verification logs are attached.`n`nManual device controls/audio/performance, asset/music rights, and Android signing/store/device acceptance are pending. This is a draft, not a store approval.`n"
+    $androidStatus = 'Android AAB was not requested; signing and device acceptance remain pending.'
+    if ($Android) { $androidStatus = 'Signed Android AAB and signature/manifest/package audits passed. Physical Android and Play acceptance remain pending.' }
+    $body = "Last Streetlight 1.0.1 release candidate`n`nSource: $($script:BranchUrl)`nCommit: $($script:SourceHead)`n`nAutomated source, engine, three-seed playthrough and 30/60/120 FPS checks passed. Windows and Web builds, SHA256SUMS and full verification logs are attached.`n`nManual device controls/audio/performance and asset/music rights remain pending. $androidStatus This is a draft, not a store approval.`n"
     [IO.File]::WriteAllText($notes, $body, [Text.UTF8Encoding]::new($false))
     $releaseArgs = @('release', 'create', $tag, '--repo', $Repository, '--target', $script:SourceHead, '--draft', '--title', 'Last Streetlight 1.0.1 candidate', '--notes-file', $notes)
     $releaseArgs += @([IO.Directory]::GetFiles($artifacts))

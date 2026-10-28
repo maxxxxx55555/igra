@@ -1564,5 +1564,9 @@
   "STORY_CAMP": "Kalte Asche in einer Tonne. Wer hier lebte, ging.",
   "STORY_BARRICADE": "Kisten quer über die Straße. Sie hielt, die Menschen nicht.",
   "STORY_EVACUATION": "Koffer liegen, wo sie fielen. Niemand kam zurück.",
-  "DAILY_DONE_NOTICE": "TAGESAUFGABE ERLEDIGT: +%d Münzen"
+  "DAILY_DONE_NOTICE": "TAGESAUFGABE ERLEDIGT: +%d Münzen",
+  "THERMAL_COLD": "Kalt",
+  "THERMAL_LABEL": "Wärme",
+  "THERMAL_WARM": "Angenehm",
+  "THERMAL_WARMING": "Kühl"
 }

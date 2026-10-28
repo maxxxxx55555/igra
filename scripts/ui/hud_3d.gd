@@ -2,8 +2,8 @@ extends CanvasLayer
 
 const BAR_W: float = 220.0
 const BAR_H: float = 10.0
-const BAR_ROW_PITCH: float = 32.0
-const BAR_ROW_TOP: float = 24.0
+const BAR_ROW_PITCH: float = 40.0
+const BAR_ROW_TOP: float = 28.0
 ## The flashlight charge is eight segments (ART_UI_STYLE: "segmented scale"); the other rows are slim bars that show while they matter.
 const _PIPS: int = 8
 const _ROWS: int = 5
@@ -87,8 +87,12 @@ func _ready() -> void:
 		var p_stats = player.get("stats")
 		var p_max_hp = p_stats.max_hp if (p_stats and "max_hp" in p_stats and p_stats.max_hp > 0) else 100.0
 		hp_ratio = clampf(p_hp / p_max_hp, 0.0, 1.0) if (p_hp != null) else 1.0
-		var p_bat = player.get("battery")
-		bat_ratio = clampf(p_bat / 100.0, 0.0, 1.0) if (p_bat != null) else 1.0
+		var p_stam: Variant = player.get("stamina")
+		var max_stamina: float = float(p_stats.stamina_max) if p_stats and "stamina_max" in p_stats else 100.0
+		stam_ratio = clampf(float(p_stam) / maxf(0.001, max_stamina), 0.0, 1.0) if p_stam != null else 1.0
+		var p_bat: Variant = player.get("battery")
+		var max_charge: float = float(player.get("battery_max")) if "battery_max" in player else 100.0
+		bat_ratio = clampf(float(p_bat) / maxf(0.001, max_charge), 0.0, 1.0) if p_bat != null else 1.0
 	# _hp/_stam/_bat are the HUD's own memory of the last reported values (the
 	# bars' widths are painted straight from the ratios above). Leaving _hp at its
 	# 1.0 default meant a run that starts already hurt - continue after death, a
@@ -142,7 +146,7 @@ func _ready() -> void:
 	EventBus.inventory_notice.connect(func(msg: String): _show_notice(msg))
 	EventBus.player_detected.connect(_on_monster_spotted)
 	EventBus.enemy_hp_updated.connect(_on_enemy_hp_updated)
-	enemy_name_label.add_theme_font_size_override("font_size", 18)
+	enemy_name_label.add_theme_font_size_override("font_size", 22)
 	enemy_name_label.add_theme_color_override("font_color", Color(0.706, 0.271, 0.184))
 	enemy_name_label.visible = false
 	enemy_hp_bar.visible = false
@@ -153,6 +157,7 @@ func _ready() -> void:
 	# scene's placeholder "0 / 0" up for the first poll interval.
 	_poll_weapon_state()
 	_setup_status_row()
+	_setup_thermal_comfort()
 	_setup_enemy_resist_label()
 	_setup_weapon_compare()
 	_setup_quick_wheel()
@@ -237,6 +242,11 @@ const _STATUS_ICON_SIZE: float = 32.0
 
 var _status_row: HBoxContainer = null
 var _status_icons: Dictionary = {}  # {int: Control}
+
+func _setup_thermal_comfort() -> void:
+	var badge: Label = preload("res://scripts/ui/hud_thermal_badge.gd").new()
+	badge.name = "ThermalComfort"
+	_status_row.add_child(badge)
 
 func _setup_status_row() -> void:
 	_status_row = HBoxContainer.new()
@@ -392,6 +402,14 @@ func _sync_damage_indicator_visibility() -> void:
 
 ## T15: колесо быстрых слотов (удержание + аналоговый выбор из 6).
 var _quick_wheel: Control = null
+
+func _on_touch_wheel_pressed() -> void:
+	if is_instance_valid(_quick_wheel):
+		_quick_wheel.open()
+
+func _on_touch_wheel_released() -> void:
+	if is_instance_valid(_quick_wheel):
+		_quick_wheel.close(true)
 
 func _setup_quick_wheel() -> void:
 	var wheel_script := load("res://scripts/ui/quick_wheel_ui.gd")
@@ -810,15 +828,15 @@ func _add_captions() -> void:
 		lbl.text = d[0]
 		lbl.mouse_filter = 2
 		lbl.add_theme_color_override("font_color", Color(0.682, 0.714, 0.749))
-		lbl.add_theme_font_size_override("font_size", 12)
+		lbl.add_theme_font_size_override("font_size", 18)
 		lbl.add_theme_color_override("font_outline_color", outline_col)
 		lbl.add_theme_constant_override("outline_size", 2)
 		lbl.add_theme_color_override("font_shadow_color", shadow_col)
 		lbl.add_theme_constant_override("shadow_offset_x", 1)
 		lbl.add_theme_constant_override("shadow_offset_y", 1)
 		d[1].add_child(lbl)
-		var cap_h: float = maxf(lbl.get_combined_minimum_size().y, 12.0)
-		lbl.size = Vector2(120, cap_h)
+		var cap_h: float = maxf(lbl.get_combined_minimum_size().y, 22.0)
+		lbl.size = Vector2(BAR_W, cap_h)
 		lbl.position = Vector2(0, -cap_h - 2.0)
 		var bar: Control = d[1]
 		bar.position.y = float(row) * (BAR_ROW_PITCH)
@@ -836,8 +854,8 @@ func _add_captions() -> void:
 	for val: Label in [hp_val, stam_val, bat_val]:
 		val.offset_left = BAR_W + 8.0
 		val.offset_right = BAR_W + 48.0
-		val.offset_top = (BAR_H - 19.0) * 0.5
-		val.offset_bottom = val.offset_top + 19.0
+		val.offset_top = (BAR_H - 24.0) * 0.5
+		val.offset_bottom = val.offset_top + 24.0
 		val.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	_layout_extra_rows(1)
 	var tl: Control = $TopLeft
@@ -856,12 +874,12 @@ func _layout_extra_rows(start_row: int) -> void:
 		if caption == null:
 			continue
 		var top := float(row) * BAR_ROW_PITCH + BAR_ROW_TOP
-		# The grid of the rows above: a 12 px caption over a bar of the same width and height.
-		caption.add_theme_font_size_override("font_size", 12)
+		# Keep captions and bars on the same readable row grid.
+		caption.add_theme_font_size_override("font_size", 18)
 		caption.add_theme_color_override("font_color", Color(0.682, 0.714, 0.749))
-		var cap_h: float = maxf(caption.get_combined_minimum_size().y, 12.0)
+		var cap_h: float = maxf(caption.get_combined_minimum_size().y, 22.0)
 		caption.offset_left = 0.0
-		caption.offset_right = 120.0
+		caption.offset_right = BAR_W
 		caption.offset_top = top - cap_h - 2.0
 		caption.offset_bottom = top - 2.0
 		for bar in [r[2], r[1]]:
@@ -912,8 +930,7 @@ func _wake_combat() -> void:
 func _setup_number_fonts() -> void:
 	for lbl in [hp_val, stam_val, bat_val]:
 		lbl.add_theme_color_override("font_color", Color(0.847, 0.824, 0.769))
-		lbl.add_theme_font_size_override("font_size", 13)
-		lbl.text = "100"
+		lbl.add_theme_font_size_override("font_size", 18)
 
 func _apply_text_outlines() -> void:
 	var outline_col := Color(0.047, 0.063, 0.086, 1.0)
@@ -1112,9 +1129,9 @@ func _setup_enemy_resist_label() -> void:
 	_resist_label.offset_left = -200.0
 	_resist_label.offset_top = 120.0
 	_resist_label.offset_right = 200.0
-	_resist_label.offset_bottom = 140.0
+	_resist_label.offset_bottom = 144.0
 	_resist_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_resist_label.add_theme_font_size_override("font_size", 13)
+	_resist_label.add_theme_font_size_override("font_size", 18)
 	_resist_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_resist_label.visible = false
 	add_child(_resist_label)
@@ -1649,9 +1666,9 @@ func _add_side_buttons(isv: Node) -> void:
 	var strobe := mk.call("BtnStrobe", "⚡", func() -> void: _request_strobe()) as Button
 	anchored.call(strobe, 200.0, 232.0)
 	# T15: колесо быстрых слотов — держать, вести пальцем, отпустить.
-	var wheel := mk.call("BtnWheel", "◎", func() -> void: if _quick_wheel: _quick_wheel.open()) as Button
+	var wheel := mk.call("BtnWheel", "◎", _on_touch_wheel_pressed) as Button
 	anchored.call(wheel, 276.0, 232.0)
-	wheel.button_up.connect(func() -> void: if _quick_wheel: _quick_wheel.close(true))
+	wheel.button_up.connect(_on_touch_wheel_released)
 	_rest_touch_controls()
 
 ## The touch controls rest see-through and wake to full for 0.4 s on a press; the joystick ring wakes from virtual_joystick.gd and stays full
