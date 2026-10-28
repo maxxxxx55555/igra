@@ -1,6 +1,18 @@
 ﻿# Known issues
 
-## Source pass 2026-10-28; runtime acceptance pending
+## OPEN (2026-10-28, Session 36): runtime acceptance of the source pass of 2026-10-28, and what it leaves
+
+Closed with an engine (head `76529eaa`; the rows are the Session 36 block of `docs/RUN_STATE.md`): the source pass runs. Compile and arity read 0, the closeout reads 625 of 625 (its first run read six failures, all in the checks and not in the game), the autoplay bot won 3 of 3 seeds on Normal and 3 of 3 on Hard with no softlock, `qa_guard_e2e`, the audio truth gate, the density frames (55 per setting), AF3 on the 8 store frames and the static gates pass; the signed Android bundle (version code 7) passes `aab_check` and the Windows build starts with no script error.
+
+- **Perf is not settled on this laptop.** The High tier gate (p95 at most 33 ms) read 33.65 and 33.21 ms in one run of `a5664feb` and 21.37 and 21.12 ms in the next, with another program's Godot runs on the same CPU; the A/B of the art pass (before, with, before, with) passed both sides in its first round and failed both in its second, so nothing is attributable to the art. Draw calls are 104 to 115 against 200 and video memory 191 MiB against 512. Nobody has measured a phone.
+- **The ten-minute soak ends slower than it starts** (p95 18.06 to 32.32 ms, 215 frames over 50 ms; static memory +6.55 MiB, 160 objects, 25 nodes, 0 orphans). The machine was shared, so a hot laptop and a slow leak both fit: read it again on a cold, quiet one before calling it a leak.
+- **The bundle was never booted** and the new menu, shop and HUD layout were never seen on a phone; the engine's runs are desktop and GL Compatibility.
+- **The twelve music tracks have no verified commercial rights** (`docs/ASSET_LICENSES.md`, `RELEASE_CHECKLIST.md` section 10: owner step 1).
+- **The checks of the source pass have no mutation rows** (the five that Session 36 fixed and the new ones were run green, never made to fail on purpose).
+- **The surfaces are photographs, the things on them are not**: the road, the sidewalk and the prop surfaces are CC0 scans (Poly Haven) and the trees are bare limbs, but the monsters, the buildings and the props are still primitives. Real models and animation are the next art step and need an artist or a CC0 kit (Kenney, Quaternius) and a licence row each.
+- **35 ObjectDB instances are still freed only at the exit of a bot run** (benign, as before).
+
+## Source pass 2026-10-28; runtime acceptance done in Session 36
 
 The dated records below are historical. Current fixes and exact runtime
 regressions are in `RELEASE_COMPLETION_20261028.md`. Loop seams are now a
@@ -9,9 +21,10 @@ and the current locale set is six. This pass fixes the early First Light
 grant, Truth eligibility, milestone/daily persistence, quick-wheel bindings
 and modal pause, initial HUD values and quality-switch district grading.
 New menu/shop/HUD art and layout still need fresh Godot captures.
-Fresh full-engine/bot results, AF3, physical-device checks, signing, rights
-and store actions remain pending; earlier dated PASS records do not certify
-this new source revision.
+Fresh full-engine and bot results, AF3 and the signing were done in Session
+36 (the section above); physical-device checks, rights and store actions
+remain pending. Earlier dated PASS records do not certify this source
+revision, the Session 36 records do.
 
 ## OPEN (2026-10-21, Session 28, closed out by Session 29): what the masterpiece pass finished and what it left
 

@@ -274,3 +274,4 @@ n	utc	head	id	exit	command
 273	20261028T154106Z	d4a4358b	s36_ab_d4a4358b	0	bash .qa_logs/s36_ab.sh
 274	20261028T155353Z	561cbb24	s36_g1_561cbb24	0	bash .qa_logs/s36_g1.sh
 275	20261028T162035Z	561cbb24	s36_gm3_561cbb24	0	bash tools/qa_sim/guarded_headless res://scenes/tools/qa_headless_suite_scene.tscn 240
+276	20261028T162211Z	76529eaa	s36_g2_76529eaa	0	bash .qa_logs/s36_g2.sh
