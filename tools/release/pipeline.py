@@ -89,7 +89,13 @@ def configure_profile(project, name):
     text = re.sub(r'^config/(?:use_custom_user_dir|custom_user_dir_name)=.*\n?', '', text, flags=re.M)
     # A unique application name also keeps the shell user-data guard on the
     # exact same directory as Godot. Custom directories use a different root.
-    text = text.replace("[application]", '[application]\nconfig/use_custom_user_dir=false', 1)
+    # Keep use_custom_user_dir=false: a custom directory moves the profile out of
+    # Godot/app_userdata, away from the directory the shell user-data guard snapshots.
+    # The name is still written because the pre-existing release-profile gate asserts
+    # application/config/custom_user_dir_name == application/config/name; with the flag
+    # off Godot ignores it and uses the (unique, disposable) application name.
+    text = text.replace("[application]",
+                        '[application]\nconfig/use_custom_user_dir=false\nconfig/custom_user_dir_name="' + name + '"', 1)
     config.write_text(text, encoding="utf-8")
 
 

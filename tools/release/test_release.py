@@ -216,8 +216,13 @@ class JudgeTests(unittest.TestCase):
             (project / "project.godot").write_text('[application]\nconfig/name="Last Streetlight"\n', encoding="utf-8")
             name = "__TLS_QA_" + "a" * 32
             configure_profile(project, name)
-            self.assertIn('config/use_custom_user_dir=false', (project / "project.godot").read_text())
-            self.assertNotIn('config/custom_user_dir_name=', (project / "project.godot").read_text())
+            text = (project / "project.godot").read_text()
+            # false keeps the profile inside Godot/app_userdata, where the shell guard looks.
+            self.assertIn('config/use_custom_user_dir=false', text)
+            # The pre-existing release-profile gate asserts custom_user_dir_name == config/name;
+            # Godot ignores the field while the flag is false, so it cannot move the directory.
+            self.assertIn('config/custom_user_dir_name="%s"' % name, text)
+            self.assertIn('config/name="%s"' % name, text)
             path = project / name
             path.mkdir()
             output = "[release-profile] " + json.dumps({"name": name, "path": str(path)})
