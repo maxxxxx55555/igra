@@ -16,7 +16,7 @@ Installed (`.specify/`, `.claude/skills/speckit-*`) — owner asked to always us
 - Never delete a file unless proven dead *and* not a planned feature (lesson: `hiding_spot.gd`).
 - Zero shipped: TODO, FIXME, commented-out code, debug prints, BOM.
 - Autoloads via `/root`; `PROCESS_MODE_ALWAYS` on anything that runs while paused. An autoload script must not name a world class (`DistrictSceneFactory` did it): it moves the compile order and a `preload`ed scene came out empty (rc16, `e32fa77`).
-- Full i18n, 13 locales, every user-facing string.
+- Full i18n, 6 locales (en, ru, de, es, fr, pt_BR), every user-facing string.
 - Small English imperative commits; push every 2-3.
 
 ## Validation gates — run after every change
