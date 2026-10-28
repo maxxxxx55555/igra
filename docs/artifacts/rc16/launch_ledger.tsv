@@ -264,3 +264,6 @@ n	utc	head	id	exit	command
 263	20261028T114227Z	cd92f125	godot_version	0	C:/Users/Maxsim/AppData/Local/IgraRelease/toolchain-4.7.2/godot/Godot_v4.7.2-stable_win64_console.exe --headless --path C:/Users/Maxsim/AppData/Local/IgraRelease/20261028-102606-b379d227/source --version
 264	20261028T132912Z	dc47fb8c	s36_a_dc47fb8c	0	bash .qa_logs/s36_a.sh
 265	20261028T134019Z	dc47fb8c	s36_b_dc47fb8c	0	bash .qa_logs/s36_b.sh
+266	20261028T135147Z	64fd2690	s36_c_64fd2690	0	bash .qa_logs/s36_c.sh
+267	20261028T145412Z	64fd2690	s36_gm64fd2690	0	bash tools/qa_sim/guarded_headless res://scenes/tools/qa_headless_suite_scene.tscn 240
+268	20261028T145716Z	64fd2690	s36_gm64fd2690	0	bash tools/qa_sim/guarded_headless res://scenes/tools/qa_headless_suite_scene.tscn 240
