@@ -271,3 +271,4 @@ n	utc	head	id	exit	command
 270	20261028T151153Z	a5664feb	s36_e_a5664feb	0	bash .qa_logs/s36_e.sh
 271	20261028T153342Z	a5664feb	s36_f_a5664feb	0	bash .qa_logs/s36_f.sh
 272	20261028T153836Z	a5664feb	s36_g_a5664feb	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 600
+273	20261028T154106Z	d4a4358b	s36_ab_d4a4358b	0	bash .qa_logs/s36_ab.sh
