@@ -76,7 +76,7 @@ All 11 districts ship complete — story, lore and endings included. No
 paywalled content, no season pass. Fully offline: this blackout is a
 survival game, and the story is yours to drive.
 
-Made with AI help: part of the music (Google Lyria), some of the in-game textures and the key art of this store page are AI-generated.
+Made with AI help: part of the music (Google Lyria), the painted menu, screen backdrops, city map and district cards, some of the in-game textures and the key art of this store page are AI-generated.
 ```
 
 ### RU
@@ -120,7 +120,7 @@ Made with AI help: part of the music (Google Lyria), some of the in-game texture
 платного контента и сезонных пропусков. Полностью офлайн: этот
 блэкаут — игра на выживание, где историю ведёшь ты.
 
-Сделано с помощью ИИ: часть музыки (Google Lyria), часть игровых текстур и ключевая графика этой страницы созданы ИИ.
+Сделано с помощью ИИ: часть музыки (Google Lyria), нарисованные меню, фоны экранов, карта города и карточки районов, часть игровых текстур и ключевая графика этой страницы созданы ИИ.
 ```
 
 ---
@@ -244,7 +244,7 @@ Tu linterna es a la vez tu única arma contra parte de lo que te caza, tu única
 
 Táctil: joystick virtual y botones, esquiva con doble toque. PC: WASD y ratón, la misma partida. El juego llega completo el día uno —historia, archivos y finales incluidos— y se juega sin conexión: un survival narrativo. Sin contenido de pago ni pase de temporada.
 
-Hecho con ayuda de IA: parte de la música (Google Lyria), algunas texturas del juego y la imagen principal de esta página son generadas por IA.
+Hecho con ayuda de IA: parte de la música (Google Lyria), el menú pintado, los fondos de las pantallas, el mapa de la ciudad y las tarjetas de distrito, algunas texturas del juego y la imagen principal de esta página son generados por IA.
 ```
 - **Feature bullets:**
   - Una sola ciudad a oscuras: 11 distritos que eliges en el mapa y enciendes de uno en uno.
@@ -285,7 +285,7 @@ Deine Taschenlampe ist zugleich deine einzige Waffe gegen einen Teil dessen, was
 
 Touch: virtueller Joystick und Aktionstasten, Ausweichen per Doppeltipp. PC: WASD und Maus, dasselbe Spiel. Die ganze Stadt ist ab Tag eins fertig — Geschichte, Archive und Enden inklusive. Komplett offline: ein story-getriebenes Survival-Spiel. Keine kostenpflichtigen Inhalte, kein Season Pass.
 
-Mit KI-Hilfe gemacht: ein Teil der Musik (Google Lyria), einige Texturen im Spiel und die Titelgrafik dieser Seite sind KI-generiert.
+Mit KI-Hilfe gemacht: ein Teil der Musik (Google Lyria), das gemalte Menü, die Bildschirmhintergründe, die Stadtkarte und die Distriktkarten, einige Texturen im Spiel und die Titelgrafik dieser Seite sind KI-generiert.
 ```
 - **Feature bullets:**
   - Eine einzige Stadt im Blackout: 11 Bezirke, die du auf der Stadtkarte wählst und einzeln erleuchtest.
@@ -326,7 +326,7 @@ Ta lampe torche est à la fois ta seule arme contre une partie de ce qui te traq
 
 Tactile : joystick virtuel et boutons, esquive en double-tap. PC : WASD et souris, la même partie. La ville entière dès le jour un — intrigue, archives et fins incluses. Entièrement hors ligne : un survival narratif. Aucun contenu payant, aucun pass saisonnier.
 
-Réalisé avec l'aide de l'IA : une partie de la musique (Google Lyria), certaines textures du jeu et l'image principale de cette page sont générées par IA.
+Réalisé avec l'aide de l'IA : une partie de la musique (Google Lyria), le menu peint, les fonds d'écran, la carte de la ville et les cartes de quartier, certaines textures du jeu et l'image principale de cette page sont générés par IA.
 ```
 - **Feature bullets:**
   - Une seule ville dans le noir : 11 districts que tu choisis sur la carte et rallumes un par un.
@@ -367,7 +367,7 @@ Sua lanterna é ao mesmo tempo sua única arma contra parte do que te caça, seu
 
 Toque: joystick virtual e botões, esquiva com toque duplo. PC: WASD e mouse, o mesmo jogo. A cidade inteira desde o primeiro dia — história, documentos e finais inclusos. Totalmente offline: um survival narrativo. Sem conteúdo pago, sem passe de temporada.
 
-Feito com ajuda de IA: parte da música (Google Lyria), algumas texturas do jogo e a imagem principal desta página são geradas por IA.
+Feito com ajuda de IA: parte da música (Google Lyria), o menu pintado, os fundos das telas, o mapa da cidade e os cartões de distrito, algumas texturas do jogo e a imagem principal desta página são geradas por IA.
 ```
 - **Feature bullets:**
   - Uma única cidade no apagão: 11 distritos que você escolhe no mapa e acende um a um.

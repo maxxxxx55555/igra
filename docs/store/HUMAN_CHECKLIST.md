@@ -77,8 +77,9 @@ human for:
   bundle: no accounts, no analytics, and no ad SDK in the shipped build (0 dex
   entries name `Lcom/applovin/`). Paste that URL into the Play Console and
   keep the Data Safety answers the same as the page says.
+- AI-generated content answer (Play, Steam): yes. The music (12 tracks, Gemini app, Google Lyria) and the pre-made images (`docs/ART_PASS_2.md` and the earlier rows of `docs/ASSET_LICENSES.md`) are AI-generated; nothing is generated at run time; the credits (`CREDITS_MUSIC`, `CREDITS_ART`) and the listing's AI line say so. Say it in those words and do not call the art hand-made (the Google Terms of Service forbid presenting generative AI content as human-made).
 - Upload to an internal/closed testing track before production.
-- **Music licence, before any upload (Session 27).** The 12 music tracks were made in the Gemini app (Google Lyria, SynthID-watermarked). Google's Terms say Google claims no ownership of content created with its services and say
+- **Music licence (Session 27; decided in Session 37: A, ship the tracks labelled as AI, `docs/MUSIC_RIGHTS_MEMO.md`; the owner may veto, and the way back is below).** The 12 music tracks were made in the Gemini app (Google Lyria, SynthID-watermarked). Google's Terms say Google claims no ownership of content created with its services and say
   nothing on commercial use of Gemini-app music, so the rights are not verified here (`docs/ASSET_LICENSES.md`, section "Session 27 M1"). Read the Gemini Apps terms of your account and accept them, or replace the files
   (`docs/GEMINI_HANDOFF.md` lists the targets and prompts). The way back is git: the eight district tracks are the lit beds named in `AMBIENCE_LIT_BY_DISTRICT`; the synthesized `*_lit.ogg` they replaced and `music_boss_dark.wav` were deleted in the v10 pass
   (`git show 3ca44bb:<path>` brings one back, then point its entry back); for the menu move

@@ -545,3 +545,8 @@ The owner allowed the download of free CC0 textures on 2026-10-28; the sources a
 ## Art pass 2 (2026-10-28, arena release agent)
 
 The 29 repainted 2D files of `docs/ART_PASS_2.md` (menu hero, five screen backdrops, city map, grid panel, 11 district cards, 11 locked variants) are AI-generated imagery produced in this pass and are the project's own assets; the style canon and the locked-variant derivation are recorded there. They replace earlier generated/painted files at the same paths; no third-party licence is involved. Environment textures remain the CC0 Poly Haven scans of art pass 1 with their rows above. **Review note (Session 37):** the pass did not record which generator, model version or prompts made the images (it ran in a sandbox without the engine), so the output terms of that tool cannot be cited here (UNVERIFIABLE-HERE: the owner names the tool before the store listing). The images are machine output, so the stores' AI-content answer covers them as it covers the music (`docs/store/HUMAN_CHECKLIST.md`), and a work with no human author may carry no copyright of its own in some jurisdictions, the United States among them.
+
+## Session 37 decisions (2026-10-28)
+
+- Music rights (the twelve Gemini-app tracks of Session 27 M1): decision **A**, ship them labelled as AI, recorded in `docs/MUSIC_RIGHTS_MEMO.md` with its reasons and conditions; the owner may veto.
+- Art pass 2 images: the tool that made them is still unnamed. The commit author tag of the pass reads "Qwen arena agent": that is the agent that ran it, not necessarily the image model. The credits (`CREDITS_ART`), the listing and the store AI answers say that the art is partly AI-generated.
