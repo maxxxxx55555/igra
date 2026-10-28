@@ -131,11 +131,12 @@ static func _limb(leg: bool, thickness: float, length: float, form: Dictionary) 
 		foot[1] = r * 0.8
 		foot[2] = r * 2.0
 		foot[0] = Vector3(0.0, -length * 0.5, -r * 1.0)
+		foot.append(Vector3.DOWN)  # the section of the foot stays horizontal whatever the slope of the shin, so the sole is flat and level with the ground
 	else:
 		rings.append([Vector3(0.0, -length * 0.5 - claw * length * 0.4, -claw * length), r * 0.15, r * 0.15, 1.0, 0.0])
 	return _loft(rings, LIMB_SIDES)
 
-## Rings -> a closed, faceted mesh (one normal per face) with a vertex colour per vertex. A ring is [centre, half width, half depth, shade, ragged]; its frame follows the path (width across x, depth along the other axis).
+## Rings -> a closed, faceted mesh (one normal per face) with a vertex colour per vertex. A ring is [centre, half width, half depth, shade, ragged] and may carry the axis of its section as a sixth element; its frame follows the path (width across x, depth along the other axis).
 ## Triangles are wound clockwise from outside, as the engine wants them.
 static func _loft(rings: Array, sides: int, shade: Callable = Callable()) -> ArrayMesh:
 	var n: int = rings.size()
@@ -145,7 +146,7 @@ static func _loft(rings: Array, sides: int, shade: Callable = Callable()) -> Arr
 	for i in n:
 		var ring: Array = rings[i]
 		var c: Vector3 = ring[0]
-		var t: Vector3 = ((rings[mini(i + 1, n - 1)][0] as Vector3) - (rings[maxi(i - 1, 0)][0] as Vector3)).normalized()
+		var t: Vector3 = ring[5] if ring.size() > 5 else ((rings[mini(i + 1, n - 1)][0] as Vector3) - (rings[maxi(i - 1, 0)][0] as Vector3)).normalized()
 		var s: Vector3 = (Vector3.RIGHT - t * t.x).normalized()
 		var f: Vector3 = s.cross(t)
 		for k in sides:
