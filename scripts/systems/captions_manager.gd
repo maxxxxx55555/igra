@@ -47,9 +47,9 @@ func _fire(kind: String, code_id: String) -> void:
 		var ref: Dictionary = row.get("ref", {})
 		if String(ref.get("kind", "")) != kind:
 			continue
-		# Достижение прилетает и коротким именем ("first_light" из
-		# ProgressTracker._grant), и кодовым ("ach_01" из AchievementManager),
-		# поэтому сверяем обе формы, а не одну.
+		# Достижение прилетает и коротким именем ("first_light" — алиас
+		# в AchievementManager.unlock), и кодовым ("ach_01" из того же
+		# менеджера), поэтому сверяем обе формы, а не одну.
 		if String(ref.get("code_id", "")) != code_id and String(ref.get("id", "")) != code_id:
 			continue
 		var id := String(row.get("id", ""))
