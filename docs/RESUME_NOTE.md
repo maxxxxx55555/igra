@@ -1,5 +1,11 @@
 # Resume note (2026-10-08, rc16 sign-off)
 
+## NEXT-ROW (Session 37, 2026-10-28; no tag): read this block first; the Session 36 block under it still stands
+
+**Where everything is.** The repainted 2D art of the other agent (the menu hero, four screen backdrops, the city map, the grid panel, 22 district cards; `docs/ART_PASS_2.md`) is in `main` after review and a fix commit (the pull request `release/1.0.2-artpass2-20261028`: `gh pr list --state merged --head release/1.0.2-artpass2-20261028`). The signed bundle of Session 36 (version code 7) was built before it and does not carry it. The rows are the Session 37 block of `docs/RUN_STATE.md`.
+
+**The owner decides:** upload version code 7 now, or ask for a version code 8 export that carries the new menu and cards (it needs the machine with `.signing/` and about half an hour; the size will grow by about 7 MB). Everything else of the Session 36 block stands; two things are new: name the tool that made the 29 images (a row of `docs/ASSET_LICENSES.md` asks for it) and list the images, as well as the music, in the store's AI-content answer.
+
 ## NEXT-ROW (Session 36, 2026-10-28; no tag): read this block first; the Session 28 block under it is history
 
 **Where everything is.** The branch `release/final-1.0.1` (merged into `main` by a pull request: `gh pr list --state merged --head release/final-1.0.1`) carries the four release branches (they are one history), the source pass of 2026-10-28 (run by an engine for the first time in this session), art pass 1 (CC0 photographed surfaces, bare trees), the refreshed store frames and press kit and the record of the signed bundle. `build/tls.aab` (ignored by git, 73,073,177 bytes, **version code 7**, sha256 `2b1c9295b075039450f9dcd2f621bd175611919a35ec7138fd9740c863067844`) is the one to upload; every bundle with a lower version code is superseded (`docs/RELEASE_ARTIFACTS.md`, last section). The rows are the Session 36 block of `docs/RUN_STATE.md`; what is open is the top section of `docs/KNOWN_ISSUES.md`.
