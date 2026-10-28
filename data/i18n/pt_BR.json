@@ -31,7 +31,7 @@
   "ACH_15_DESC": "Alcance o final ruim",
   "ACH_15_NAME": "Escuridão",
   "ACH_16_DESC": "Termine o jogo em menos de 4 horas",
-  "ACH_16_NAME": "Speedrunner",
+  "ACH_16_NAME": "Velocista",
   "ACH_17_DESC": "Colete 200 fotos",
   "ACH_17_NAME": "Colecionador",
   "ACH_18_DESC": "Termine o jogo no modo Hardcore",
@@ -509,7 +509,7 @@
   "SCR_SILNO_SNIZHAET_VIDIMOST": "Reduz drasticamente a visibilidade",
   "SCR_SKLADSKOY_KOMPLEKS": "Armazéns",
   "SCR_SKRYTYH_DOSTIZHENIY_NET": "NENHUMA CONQUISTA OCULTA",
-  "SCR_SLOT": "SLOT ",
+  "SCR_SLOT": "ESPAÇO ",
   "SCR_SLOZHNO": "Difícil",
   "SCR_SLOZHNOST": "Dificuldade",
   "SCR_SOHRANENO": "Salvo",
@@ -603,7 +603,7 @@
   "Shadow Quality": "Qualidade das sombras",
   "Skill Points: %d": "Pontos de habilidade: %d",
   "Skip Tutorial": "Pular tutorial",
-  "Slot %d": "Slot %d",
+  "Slot %d": "Espaço %d",
   "Slot %d deleted": "Slot %d excluído",
   "Survival": "Sobrevivência",
   "TIP_1": "Sua lanterna é sua única aliada.",
@@ -1564,5 +1564,9 @@
   "STORY_CAMP": "Cinza fria num barril. Quem morava aqui foi embora.",
   "STORY_BARRICADE": "Caixas atravessando a rua. Ela resistiu, eles não.",
   "STORY_EVACUATION": "Malas onde caíram. Ninguém voltou.",
-  "DAILY_DONE_NOTICE": "DESAFIO DIÁRIO CONCLUÍDO: +%d moedas"
+  "DAILY_DONE_NOTICE": "DESAFIO DIÁRIO CONCLUÍDO: +%d moedas",
+  "THERMAL_COLD": "Frio",
+  "THERMAL_LABEL": "Calor",
+  "THERMAL_WARM": "Quente",
+  "THERMAL_WARMING": "Fresco"
 }

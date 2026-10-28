@@ -33,18 +33,21 @@ func _run() -> void:
 	var we: WorldEnvironment = root.find_child("WorldEnvironment", true, false)
 	var env: Environment = we.environment
 	var low_glow := env.glow_intensity
+	var low_fog := env.fog_density
 	var low_ssao := env.ssao_enabled
 	print("[settings-persist] tier=Low glow_intensity=%.2f ssao=%s" % [low_glow, low_ssao])
 
 	SettingsManager.set_graphics_tier(2)  # High
 	await get_tree().process_frame
 	var high_glow := env.glow_intensity
+	var high_fog := env.fog_density
 	var high_ssao := env.ssao_enabled
 	print("[settings-persist] tier=High glow_intensity=%.2f ssao=%s" % [high_glow, high_ssao])
 
 	# SSAO is a Forward+ effect: the compatibility renderer the game ships on keeps it off at every tier
 	var screen_space := RenderingServer.get_current_rendering_method() == "forward_plus"
-	var tier_switch_ok: bool = not is_equal_approx(low_glow, high_glow) and low_ssao == false and high_ssao == screen_space
+	# the district's bloom preset is applied after the tier, at boot and on a change of tier (GRADE1), so the glow is the district's and the tier shows in the fog
+	var tier_switch_ok: bool = not is_equal_approx(low_fog, high_fog) and low_ssao == false and high_ssao == screen_space
 	print("[settings-persist] item12 graphics preset switch applies to live Environment: ", tier_switch_ok)
 	if not tier_switch_ok:
 		bad += 1

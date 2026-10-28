@@ -67,7 +67,7 @@ for n,p in auto:
       |set(re.findall(r'^signal (\w+)',t,re.M))
       |set(re.findall(r'^enum (\w+)',t,re.M)))
 builtin={'has_signal','has_method','call','get','set','connect','emit','is_connected',
- 'call_deferred','get_node_or_null','free','queue_free','add_child','get_children',
+ 'call_deferred','get_node_or_null','free','queue_free','add_child','get_children','get_child_count',
  'set_deferred','duplicate','get_class','notification','is_inside_tree','get_parent'}
 errs=[]
 if mem:
@@ -219,7 +219,10 @@ else
   bad "visual_truth_gate lets $gate_missed committed corruption frame(s) through"
 fi
 # The sign-off frames are the committed ones: a run of final_frames_scene leaves more frames in that folder (the boot screen, menu variants, HUD states) and a loading screen is no world frame (CORRECTION_LOG 250).
-mapfile -t sign_off < <(git ls-files 'docs/stills/final/*.png')
+sign_off=()
+while IFS= read -r frame; do
+  [[ -n "$frame" ]] && sign_off+=("$frame")
+done <<< "$(git ls-files 'docs/stills/final/*.png')"
 if "$PY" tools/qa_sim/visual_truth_gate.py "${sign_off[@]}" docs/stills/beauty/after/*.png >/dev/null 2>&1; then
   ok "visual_truth_gate passes the sign-off and beauty frames"
 else
@@ -431,11 +434,18 @@ else
   bad "hum_scan / bed_synth --demo (см. 'python tools/qa_sim/hum_scan.py --demo')"
 fi
 if command -v ffmpeg >/dev/null 2>&1; then
+  if "$PY" tools/qa_sim/audio_loudness.py --seams >/dev/null 2>&1; then
+    ok "audio loop seams (every declared loop, limit 0.037)"
+  else
+    bad "audio loop seams (python tools/qa_sim/audio_loudness.py --seams)"
+  fi
   if "$PY" tools/qa_sim/hum_scan.py --check >/dev/null 2>&1; then
     ok "hum_scan (no dark bed and no district detail loop is a steady low tone: the owner's no-hum rule)"
   else
     bad "hum_scan (см. 'python tools/qa_sim/hum_scan.py --check')"
   fi
+else
+  bad "ffmpeg is required for the audio gates"
 fi
 if "$PY" tools/qa_sim/listing_audit.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/listing_audit.py >/dev/null 2>&1; then
   ok "listing_audit (6 locales: title, short and full limits, the same numbers in every language, the English numbers are what the code holds)"
@@ -506,6 +516,7 @@ else
   if ! command -v "$GODOT" >/dev/null 2>&1; then
     echo "  ${DIM}Godot не найден в PATH. Укажите путь: GODOT=/путь/к/godot ./tools/check.sh${OFF}"
     echo "  ${DIM}Скачать: https://godotengine.org/download${OFF}"
+    bad "Godot is required for a complete check; use --static for static checks only"
   else
     # Engine gates run the real game on the owner's user:// profile (New
     # Game, autosave, forged upgrade cfgs): snapshot it, restore on any exit.
@@ -525,11 +536,12 @@ else
     run_gate() { # имя, сцена, [таймаут-с]
       local name="$1" scene="$2" t="${3:-90}"
       if [[ ! -f "${scene#res://}" ]]; then
-        echo "  ${DIM}пропуск${OFF} $name (нет $scene)"; return
+        bad "$name (missing $scene)"; return
       fi
       local out
       out=$(timeout "$t" "$GODOT" --headless --path . "$scene" 2>&1)
       local rc=$?
+      if [[ "$scene" == *closeout_check_scene.tscn ]] && ! printf '%s\n' "$out" | grep -aEq '^\[closeout\] DONE .*fails=0([[:space:]]|$)'; then rc=1; fi
       mkdir -p .qa_logs; printf '%s\n' "$out" > ".qa_logs/gate_$(basename "${scene%.tscn}").log"
       local hits; hits=$(printf '%s\n' "$out" | grep -aE "$BAD" | head -5)
       if [[ $rc -eq 0 && -n "$hits" ]]; then bad "$name (engine errors in the log)"; echo "$hits" | sed 's/^/         /'
@@ -606,6 +618,7 @@ else
     # P6 soak). Built 2026-09 but never wired in until now (P2 matrix-sweep
     # finding). Short soak here for check.sh speed; QA_SOAK_SEC=120 default
     # for a real soak run standalone.
+    run_gate "release lifecycle, terminal layouts and audio" "res://scenes/tools/release_polish_check_scene.tscn" 120
     QA_SOAK_SEC="${QA_SOAK_SEC:-20}" run_gate "GOLD MASTER suite (autoloads/input/districts/save-load/endings/i18n/soak)" "res://scenes/tools/qa_headless_suite_scene.tscn" 120
     # Draw-call budget: --headless всегда даёт draw_calls=0 (dummy renderer) -
     # гейт сам это обнаруживает и молча пропускает (SKIP, не OK/FAIL). Реальная

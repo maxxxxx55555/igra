@@ -9,7 +9,8 @@ extends Control
 ## а заодно показываем итоговую статистику забега.
 
 ## The panel behind the ending: the colour of an ending's title is read against it (ENDC1).
-const BG := Color(0.12, 0.09, 0.02, 0.92)
+const _LAYOUT := preload("res://scripts/ui/terminal_layout.gd")
+const BG := _LAYOUT.PANEL_COLOR
 
 var _title: Label = null
 var _subtitle: Label = null
@@ -27,26 +28,16 @@ func _ready() -> void:
 	var endings := get_node_or_null("/root/EndingsManager")
 	if endings != null:
 		endings.ending_reached.connect(func(_id: StringName) -> void: _refresh())
+	LocalizationManager.language_changed.connect(_refresh.unbind(1))
 	_refresh()
 
 func _build() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
-	set_anchors_preset(Control.PRESET_FULL_RECT)
-	theme = ThemeProvider.build_theme()
-	var bg := ColorRect.new()
-	bg.color = BG
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	add_child(bg)
-	var vb := VBoxContainer.new()
-	vb.set_anchors_preset(Control.PRESET_CENTER)
-	# Grow both ways: a centre anchor alone grows the box right and down from the
-	# centre, so the whole panel sat off-centre (docs/stills/final/06 at rc14).
-	vb.grow_horizontal = Control.GROW_DIRECTION_BOTH
-	vb.grow_vertical = Control.GROW_DIRECTION_BOTH
-	vb.add_theme_constant_override("separation", 16)
-	add_child(vb)
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var vb: VBoxContainer = _LAYOUT.build(self)
 
 	_title = Label.new()
+	_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_title.add_theme_font_size_override("font_size", 28)
 	_title.add_theme_font_override("font", ThemeProvider.heading_font())
 	_title.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
@@ -54,13 +45,13 @@ func _build() -> void:
 	vb.add_child(_title)
 
 	_subtitle = Label.new()
-	_subtitle.custom_minimum_size = Vector2(620, 0)
 	_subtitle.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_subtitle.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
 	vb.add_child(_subtitle)
 
 	_stats = Label.new()
+	_stats.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_stats.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_stats.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
 	vb.add_child(_stats)
@@ -70,7 +61,7 @@ func _build() -> void:
 	# NG+ confirm screen (multipliers shown there) rather than jumping
 	# straight into a harder run unannounced.
 	_more_btn = Button.new()
-	_more_btn.focus_mode = Control.FOCUS_NONE
+	_more_btn.focus_mode = Control.FOCUS_ALL
 	_more_btn.custom_minimum_size = Vector2(220, 44)
 	_more_btn.pressed.connect(func() -> void: UIManager.open(&"new_game_plus"))
 	vb.add_child(_more_btn)
@@ -82,13 +73,13 @@ func _build() -> void:
 	# pastes it wherever they like. Honest scope: not an Android
 	# Intent.ACTION_SEND (that needs a small plugin — see GAP_TO_IDEAL.md).
 	_share_btn = Button.new()
-	_share_btn.focus_mode = Control.FOCUS_NONE
+	_share_btn.focus_mode = Control.FOCUS_ALL
 	_share_btn.custom_minimum_size = Vector2(220, 44)
 	_share_btn.pressed.connect(_on_share_pressed)
 	vb.add_child(_share_btn)
 
 	_menu_btn = Button.new()
-	_menu_btn.focus_mode = Control.FOCUS_NONE
+	_menu_btn.focus_mode = Control.FOCUS_ALL
 	_menu_btn.custom_minimum_size = Vector2(220, 44)
 	_menu_btn.pressed.connect(func() -> void: GameManager.return_to_menu())
 	vb.add_child(_menu_btn)
@@ -109,6 +100,7 @@ func _refresh() -> void:
 	var data: Dictionary = {}
 	if em != null and em.has_method("get_ending_data"):
 		data = em.get_ending_data()
+		_LAYOUT.set_ending(self, em.get_ending())
 	_title.text = String(data.get("title", LocalizationManager.t("VICTORY_TITLE")))
 	_subtitle.text = String(data.get("description", ""))
 	if data.has("color"):

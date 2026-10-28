@@ -27,6 +27,7 @@ func is_win() -> bool: return current_state == GameState.WIN
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	get_tree().auto_accept_quit = false
 	# Master-шина раньше глушилась здесь безусловно и нигде не размьючивалась —
 	# игра запускалась полностью беззвучной. Громкостью владеет SettingsManager.
 	AudioServer.set_bus_mute(0, false)
@@ -39,6 +40,41 @@ func _ready() -> void:
 	EventBus.game_over.connect(_on_player_game_over)
 	AdService.reward_granted.connect(_on_ad_reward)
 	_change_state(GameState.MENU)
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_APPLICATION_PAUSED or what == NOTIFICATION_APPLICATION_FOCUS_OUT:
+		checkpoint_run()
+		pause_game()
+	elif what == NOTIFICATION_WM_CLOSE_REQUEST:
+		checkpoint_run()
+		get_tree().quit()
+
+func checkpoint_run() -> void:
+	if current_state in [GameState.PLAYING, GameState.PAUSED]:
+		SaveSystem.autosave()
+
+func reset_run() -> void:
+	play_time = 0.0
+	enemies_killed = 0
+	run_hardcore = false
+	_respawn_battery = -1.0
+
+func run_data() -> Dictionary:
+	return {"play_time": play_time, "kills": enemies_killed, "hardcore": run_hardcore}
+
+func restore_run(raw: Variant) -> void:
+	var data: Dictionary = raw if raw is Dictionary else {}
+	var elapsed: Variant = data.get("play_time", ProgressTracker.time_played)
+	var kills: Variant = data.get("kills", ProgressTracker.kills)
+	var hardcore: Variant = data.get("hardcore", SettingsManager.get_setting("hardcore", false))
+	play_time = 0.0
+	enemies_killed = 0
+	if (elapsed is float or elapsed is int) and is_finite(float(elapsed)):
+		play_time = clampf(float(elapsed), 0.0, 315360000.0)
+	if (kills is float or kills is int) and is_finite(float(kills)):
+		enemies_killed = int(clampf(float(kills), 0.0, 2147483647.0))
+	run_hardcore = hardcore if hardcore is bool else false
+	_respawn_battery = -1.0
 
 ## Step 5: rewarded-ad payouts land here so every consumer (death screen's
 ## revive button, a future HUD battery-boost button) shares one place that
@@ -136,7 +172,6 @@ func continue_game() -> void:
 	if not SaveSystem.load_all():
 		EventBus.inventory_notice.emit(LocalizationManager.t("NO_SAVE"))
 		return
-	run_hardcore = bool(SettingsManager.get_setting("hardcore", false))
 	_enter_play_and_reload()
 
 ## Pause > Restart: back to the last save the way the menu's Continue goes (its pack, quests and vitals), a new game while no save
@@ -198,6 +233,7 @@ func trigger_win() -> void:
 	EventBus.game_won.emit()
 
 func return_to_menu() -> void:
+	checkpoint_run()
 	get_tree().paused = false
 	var was_menu := current_state == GameState.MENU
 	UIManager.close_all_blocking()

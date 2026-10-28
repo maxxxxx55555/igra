@@ -50,7 +50,7 @@ brightness, and `docs/DENSITY_MEASURED.md` has the same pairs frame by frame (th
 | SSAO, SSIL, SSR, desktop only | **not applicable** | they are Forward+ features; the preset asks for SSAO only when the rendering method is `forward_plus` (`scripts/world_env_setup.gd:213`) and the game runs Compatibility, so none runs; the wet-asphalt shader carries its own substitute for SSR |
 | Auto-exposure with night-safe limits | **not applicable** | no `CameraAttributes` is used; auto-exposure is not in the Compatibility renderer |
 | Visual quality presets | **in** | section 4 |
-| Shader and material warm-up | **partly** | the post-process shaders (blur, chroma, rain lens) are each drawn for two frames at strength 0 at the start (`_warm_shaders`, `scripts/post_process_overlay.gd:55`); the world's own shaders compile when the first district is built, behind the loading screen |
+| Shader and material warm-up | **partly** | the post-process shaders (blur, chroma, rain lens) are each drawn for two frames at strength 0 at the start (`_warm_shaders`, `scripts/post_process_overlay.gd:56`); the world's own shaders compile when the first district is built, behind the loading screen |
 
 ## 4. Quality presets: Low, Medium, High, Ultra
 

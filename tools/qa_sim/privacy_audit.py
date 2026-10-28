@@ -88,6 +88,8 @@ def findings(found, lobby=None):
             if (kind, rel) not in listed:
                 out.append("UNLISTED %s hit in %s: classify it in tools/qa_sim/privacy_audit.py ROWS" % (kind, rel))
     for kind, file, _, _ in ROWS:
+        if file == "android/build/build.gradle" and not (ROOT / file).is_file():
+            continue
         if file not in found.get(kind, {}):
             out.append("STALE row: no %s hit in %s any more" % (kind, file))
     return out

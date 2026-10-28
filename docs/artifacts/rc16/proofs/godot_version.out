@@ -1,0 +1,7 @@
+# proof godot_version
+# utc 20261028T114227Z
+# head cd92f125 (uncommitted paths: 0)
+# env none
+# cmd C:/Users/Maxsim/AppData/Local/IgraRelease/toolchain-4.7.2/godot/Godot_v4.7.2-stable_win64_console.exe --headless --path C:/Users/Maxsim/AppData/Local/IgraRelease/20261028-102606-b379d227/source --version
+4.7.2.stable.official.ed1daf0bf
+# EXIT=0

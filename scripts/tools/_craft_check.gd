@@ -96,4 +96,7 @@ func _run() -> void:
 		if not c[1]:
 			fails += 1
 	print("[craft-check] DONE fails=", fails)
+	# Flush the queued station and its mesh/material teardown before closing.
+	await get_tree().process_frame
+	await get_tree().process_frame
 	get_tree().quit(0 if fails == 0 else 1)

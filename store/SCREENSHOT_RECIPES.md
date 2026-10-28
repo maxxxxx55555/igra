@@ -78,3 +78,7 @@ The frames were shot again at `f8c0de0`, the runtime of the final pass of Sessio
 
 The panel facades with their seams and stains and the slab joints of the pavement show in every kept frame (`docs/TZ_DECISIONS.md`, SLAB-27 to GLOW-27); the stencil signs are legible only in the close views of `docs/stills/density` (the view 08_sign). A page that needs brighter art is better served by the eight composed frames of `store/screenshots` (`shot01` to `shot08`, `shot_p1` to `shot_p3`), which stay;
 these are the in-engine captures of the build, and which of them go to the store is the owner's choice (`docs/store/HUMAN_CHECKLIST.md`). The upload itself (Play Console) is the owner's.
+
+## 7. Session 32 (v10.1.0-release) re-shoot
+
+The ten kept frames were re-shot at `6e74fa73` (the release head; every frame name carries the hash and UTC) and READ again: post-art panels, lamp pools, no floating cubes, the RU pair with the HUD in Russian. `store_frames_check` 10 frames 0 faults. The eight composed `shot*.png` frames of the pre-art era are RETIRED from `store/screenshots/` (K2: uploading them would advertise a game that no longer exists); the in-engine captures of `store/screenshots/recipes/` are the store set. Size note: the pipeline's native output is 960x540 (16:9, RGB, no alpha - `CAPTURE_SIZE` of `_rc16_probe_runner.gd`); Play accepts 960x540 for the phone and the 7"/10" tablet slots alike, and upscaling to 1920x1080 would be a lie about resolution, so the set ships at the native size (a scripts/tools edit to widen `CAPTURE_SIZE` is outside this pass's R0).

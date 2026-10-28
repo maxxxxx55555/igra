@@ -17,7 +17,10 @@ func _get_drag_data(_at_position: Vector2) -> Variant:
 	preview.name = "DragPreview"
 	preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	ITEM_ICONS.draw_icon(preview, item_id, PREVIEW_SIZE)
-	set_drag_preview(preview)
+	if is_inside_tree() and get_viewport().gui_is_dragging():
+		set_drag_preview(preview)
+	else:
+		preview.free()
 	return {DRAG_KEY: item_id}
 
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:

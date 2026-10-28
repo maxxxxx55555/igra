@@ -1,0 +1,9 @@
+PASS ru -- missing=0 mixed=0 overflow=0
+PASS es -- missing=0 mixed=0 overflow=0
+PASS de -- missing=0 mixed=0 overflow=0
+PASS fr -- missing=0 mixed=0 overflow=0
+PASS pt_BR -- missing=0 mixed=0 overflow=0
+5/5 locales PASS
+i18n_placeholder_fuzz: 1570 key(s), 504 call(s), 0 finding(s)
+integrity manifest: 37 file(s), matches
+achievements_sim: 31 achievement(s), 0 finding(s)

@@ -1,0 +1,1 @@
+proof_run bot_1: exit=0 -> .qa_logs/proofs/bot_1.out (306 lines)

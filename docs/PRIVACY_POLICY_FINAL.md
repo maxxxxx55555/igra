@@ -110,11 +110,11 @@ This file replaces `store/privacy-policy-template.md` and the draft `docs/PRIVAC
 | No network client, no analytics SDK, no URL in the game | `docs/PRIVACY_AUDIT.md` (generated; the static gate keeps it true) |
 | No multiplayer mode is reachable | `docs/PRIVACY_AUDIT.md` (the lobby is named by no file but its own two) and `docs/A10_multiplayer_decision.md` |
 | Android cloud backup is off | `android/build/src/main/AndroidManifest.xml:20` `allowBackup` is `false` |
-| The save is signed, not sent, and kept with three backups | `scripts/core/save_system.gd:23` `_sign` makes an HMAC-SHA256 of the save body; `scripts/core/save_system.gd:227` `BACKUP_DEPTH` is 3 |
+| The save is signed, not sent, and kept with three backups | `scripts/core/save_system.gd:23` `_sign` makes an HMAC-SHA256 of the save body; `scripts/core/save_system.gd:234` `BACKUP_DEPTH` is 3 |
 | The integrity log is encrypted and local | `scripts/security/security_log.gd:14` `open_encrypted_with_pass` writes it in the private storage |
-| Export Save writes to Downloads on a button | `scripts/core/save_system.gd:68` `get_system_dir` |
-| Share copies to the clipboard only | `scripts/ui/win_screen.gd:142` `clipboard_set` |
-| Reset progress exists | `scripts/core/save_system.gd:424` `reset_all` |
+| Export Save writes to Downloads on a button | `scripts/core/save_system.gd:75` `get_system_dir` |
+| Share copies to the clipboard only | `scripts/ui/win_screen.gd:134` `clipboard_set` |
+| Reset progress exists | `scripts/core/save_system.gd:433` `reset_all` |
 
 ## Children
 

@@ -50,13 +50,20 @@ static func write_signed(path: String, data: Variant) -> bool:
 static func read_signed(path: String) -> Variant:
 	if not FileAccess.file_exists(path):
 		return null
-	var envelope: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	var parser := JSON.new()
+	if parser.parse(FileAccess.get_file_as_string(path)) != OK:
+		return null
+	var envelope: Variant = parser.data
 	if not (envelope is Dictionary) or not envelope.has("hmac") or not envelope.has("data_json"):
+		return null
+	if not (envelope["hmac"] is String) or not (envelope["data_json"] is String):
 		return null
 	var body := String(envelope["data_json"])
 	if String(envelope["hmac"]) != _sign(body):
 		return null
-	return JSON.parse_string(body)
+	if parser.parse(body) != OK:
+		return null
+	return parser.data
 
 ## RELEASE CONVERGENCE STEP 6 (anti "lost phone"): the live save is the one
 ## Continue reads (SAVE_PATH, via has_save()/load_all()) - the 4-slot API
@@ -146,10 +153,10 @@ func _adopt_run_id(raw: Variant) -> void:
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	call_deferred("_adopt_profile")
-	EventBus.district_restored.connect(func(_a, _b): autosave())
-	EventBus.puzzle_solved.connect(func(_a, _b): autosave())
-	EventBus.purchase_success.connect(func(_a): autosave())
-	EventBus.secret_found.connect(func(_a): autosave())
+	EventBus.district_restored.connect(func(_a, _b): autosave(), CONNECT_DEFERRED)
+	EventBus.puzzle_solved.connect(func(_a, _b): autosave(), CONNECT_DEFERRED)
+	EventBus.purchase_success.connect(func(_a): autosave(), CONNECT_DEFERRED)
+	EventBus.secret_found.connect(func(_a): autosave(), CONNECT_DEFERRED)
 
 func _process(delta: float) -> void:
 	if not GameManager.is_playing():
@@ -378,6 +385,7 @@ func _save() -> void:
 		"last_daily_time": _last_daily_time,
 		"onboard_done": _onboard_done,
 		"run_id": _run_id,
+		"run": GameManager.run_data(),
 	}
 	_write_atomic(SAVE_PATH, payload)
 
@@ -393,6 +401,7 @@ func load_all() -> bool:
 	Encyclopedia.from_dict(data.get("encyclopedia", {}))
 	ProgressTracker.from_dict(data.get("progress", {}))
 	SettingsManager.apply_run_settings(data.get("settings", {}))
+	GameManager.restore_run(data.get("run", {}))
 	PuzzleSystem.from_dict(data.get("puzzles", {}))
 	_pending_player_pos = _parse_player_pos(data.get("player_pos", null))
 	_pending_vitals = _parse_vitals(data.get("vitals", null))
@@ -433,6 +442,7 @@ func mark_onboard_done() -> void:
 
 func reset_all() -> void:
 	_run_id = _new_run_id()
+	GameManager.reset_run()
 	PowerGrid.reset()
 	UpgradeSystem.reset()
 	CoinWallet.from_dict({})
@@ -567,7 +577,7 @@ func get_daily_streak() -> int:
 func daily_counted_today() -> bool:
 	return _last_daily_time > 0 and floori(Time.get_unix_time_from_system() / 86400.0) == floori(float(_last_daily_time) / 86400.0)
 
-func increment_daily_streak() -> void:
+func increment_daily_streak(save_now: bool = true) -> void:
 	if daily_counted_today():
 		return
 	var now := Time.get_unix_time_from_system()
@@ -576,7 +586,8 @@ func increment_daily_streak() -> void:
 		_daily_streak = 0
 	_daily_streak += 1
 	_last_daily_time = int(now)
-	_save()
+	if save_now:
+		_save()
 
 func _current_district() -> String:
 	var dm := get_node_or_null("/root/DistrictManager")
@@ -637,6 +648,7 @@ func save_slot(slot: int) -> bool:
 		"last_daily_time": _last_daily_time,
 		"onboard_done": _onboard_done,
 		"run_id": _run_id,
+		"run": GameManager.run_data(),
 		"timestamp": Time.get_unix_time_from_system(),
 		"slot_id": slot,
 	}
@@ -662,6 +674,7 @@ func load_slot(slot: int) -> bool:
 	Encyclopedia.from_dict(data.get("encyclopedia", {}))
 	ProgressTracker.from_dict(data.get("progress", {}))
 	SettingsManager.apply_run_settings(data.get("settings", {}))
+	GameManager.restore_run(data.get("run", {}))
 	PuzzleSystem.from_dict(data.get("puzzles", {}))
 	_pending_player_pos = _parse_player_pos(data.get("player_pos", null))
 	_pending_vitals = _parse_vitals(data.get("vitals", null))

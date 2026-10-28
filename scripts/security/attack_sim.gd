@@ -180,21 +180,8 @@ func _check_daily_clock_rollback_rejected() -> void:
 	DailyChallengeManager._today_id = saved[4]
 
 # ── ProgressTracker short-id grants must go through the real API ─────────
-## BREAK_REPORT B7: ProgressTracker._grant() used to emit
-## EventBus.achievement_unlocked directly with short ids ("first_light"),
-## bypassing AchievementManager.unlock() entirely - the real ach_01 row
-## never actually unlocked (missing from the trophy list forever), while
-## rewards_manager.gd's blanket "any emit pays REWARD_ACHIEVEMENT" handler
-## paid coins anyway since it doesn't check which id fired. Drives the
-## real signal (EventBus.puzzle_solved) rather than calling _grant()
-## directly, so this proves the whole chain, not just the one function.
+## First Light belongs to the first powered street, not the first repaired fuse.
 func _check_progress_tracker_grant_unlocks_real_achievement() -> void:
-	# Full isolation, not just "first_light": _check_achievements() also
-	# grants district_one/shadow_slayer/secret_hunter from whatever state
-	# PowerGrid/kills/secrets happen to be in - a boot default (or an
-	# earlier check) can leave one of those already satisfied, which paid
-	# out a second, real 100 coins and made this look like a double-pay
-	# bug in the fix being tested here, when it was really test isolation.
 	PowerGrid.reset()
 	ProgressTracker.puzzles = 0
 	ProgressTracker.shadow_kills = 0
@@ -202,17 +189,22 @@ func _check_progress_tracker_grant_unlocks_real_achievement() -> void:
 	ProgressTracker._ach_done.clear()
 	AchievementManager._unlocked.erase("ach_01")
 	CoinWallet.from_dict({})
+	PowerGrid._set_stage_direct(&"suburbs", DistrictData.Stage.PARTIAL)
+	EventBus.puzzle_solved.emit(&"fuse_substation", &"substation")
+	_ok(not AchievementManager.is_unlocked(&"ach_01"),
+		"repairing a fuse before STREETS does not unlock First Light")
 	var before: int = CoinWallet.get_coins()
 	var expected_reward: int = int(RewardsManager.REWARD_ACHIEVEMENT * NewGamePlus.get_modifier_multiplier("rewards"))
-	EventBus.puzzle_solved.emit(&"fuse_substation", &"substation")
-	_ok(AchievementManager.is_unlocked(&"ach_01"),
-		"ProgressTracker's first_light grant actually unlocks the real ach_01 row")
+	PowerGrid.advance_district(&"suburbs", DistrictData.Stage.STREETS)
+	_ok(AchievementManager.is_unlocked(&"ach_01"), "powering the first street unlocks ach_01")
 	_ok(CoinWallet.get_coins() == before + expected_reward,
-		"achievement reward pays exactly once (%d), not double (got %d -> %d)" % [
-			expected_reward, before, CoinWallet.get_coins()])
+		"First Light pays exactly one achievement reward")
+	EventBus.streetlight_activated.emit(&"suburbs")
+	_ok(CoinWallet.get_coins() == before + expected_reward, "a repeated streetlight event cannot pay twice")
 	AchievementManager._unlocked.erase("ach_01")
 	AchievementManager._save()
 	CoinWallet.from_dict({})
+	PowerGrid.reset()
 
 # ── NG+ level forgery ───────────────────────────────────────────────────
 ## SECURITY_PATCH_SPEC P-03: ng_plus_data.json is now a signed envelope

@@ -1,0 +1,1 @@
+proof_run theme: exit=0 -> .qa_logs/proofs/theme.out (16 lines)

@@ -42,6 +42,7 @@ const Rc29Atk := preload("res://scripts/tools/rc16/s29_attack_cases.gd")
 const Rc29Play := preload("res://scripts/tools/rc16/s29_play_checks.gd")
 const Rc29Fix := preload("res://scripts/tools/rc16/s29_fix_checks.gd")
 const Rc30 := preload("res://scripts/tools/rc16/s30_checks.gd")
+const FinalSource := preload("res://scripts/tools/rc16/release_completion.gd")
 
 var _checked: int = 0
 var _fails: int = 0
@@ -71,6 +72,12 @@ func _run() -> void:
 	_player = get_tree().get_first_node_in_group("player") as Node3D
 	_ok(_player != null, "the player spawned")
 	if _player == null:
+		_finish()
+		return
+	if OS.get_environment("CLOSEOUT_ONLY") == "final":
+		await FinalSource.run(self)
+		_check_daily()
+		await _check_victory_screen_shows_this_ending()
 		_finish()
 		return
 	if OS.get_environment("CLOSEOUT_ONLY") == "rc16":
@@ -221,6 +228,7 @@ func _run() -> void:
 	await _check_tier_names()
 	_check_the_moon_shadow_follows_its_light()
 	await _rc16_checks()
+	await FinalSource.run(self)
 	_finish()
 
 func _finish() -> void:
@@ -1107,6 +1115,11 @@ func _check_daily() -> void:
 		if int(row.get("days", -1)) == 5:
 			bonus += int(row.get("reward", 0))
 	_ok(CoinWallet.get_coins() - coins == roundi(base * 2.0) + bonus, "DL2 the fifth day pays double (%d + %d)" % [roundi(base * 2.0), bonus])
+	var persisted: Dictionary = SaveSystem._read_validated(SaveSystem.SAVE_PATH)
+	_ok(FinalSource.same_json(persisted.get("wallet", {}), CoinWallet.to_dict()) and int(persisted.get("last_daily_time", 0)) == SaveSystem._last_daily_time, "DAILYSAVE1 the persisted claim includes its entire reward")
+	var paid_wallet: Dictionary = CoinWallet.to_dict()
+	m._complete()
+	_ok(CoinWallet.to_dict() == paid_wallet, "DAILYSAVE2 an already claimed reward cannot pay twice")
 	SaveSystem._daily_streak = streak_before
 	SaveSystem._last_daily_time = last_before
 	# _complete() also wrote "done today" with the progress it had; a later gate on the same profile reads that file
@@ -1252,7 +1265,7 @@ func _check_shop() -> void:
 	var biggest := 0.0
 	for icon in grid.find_children("IconTex_*", "TextureRect", true, false):
 		biggest = maxf(biggest, (icon as Control).size.x)
-	_ok(biggest > 0.0 and biggest <= 30.0, "SH1 the pack icons are the size they were asked for (%.0f px, 128 when the size was lost)" % biggest)
+	_ok(biggest > 0.0 and biggest <= 44.0, "SH1 the pack icons are the size they were asked for (%.0f px of 42, 128 when the size was lost)" % biggest)
 	var buy := grid.get_child(0).find_children("*", "Button", true, false)[0] as Button
 	var owned_before := _shop_owned_count()
 	buy.pressed.emit()
@@ -1822,15 +1835,28 @@ func _check_victory_screen_shows_this_ending() -> void:
 		"WIN2 a win with every district FULL and few documents shows Hope, not the ending left from before (%s, '%s')" % [EndingsManager.get_ending(), title.text])
 	GameManager._change_state(GameManager.GameState.PLAYING)
 	UIManager.close(&"win")
-	# every document, every district and three secrets earn the Truth ending, and with it its achievement
+	# The Truth achievement follows the same bunker requirement as the ending.
 	var docs_before: Dictionary = ProgressTracker._docs.duplicate()
 	var secrets_before: int = ProgressTracker.secrets
+	var secret_ids_before: Dictionary = ProgressTracker._secrets_found.duplicate()
+	var truth_before: bool = AchievementManager.is_unlocked(&"ach_14")
+	ProgressTracker._secrets_found.erase(ProgressTracker.BUNKER_SECRET_ID)
+	AchievementManager._unlocked.erase(&"ach_14")
 	for i in Endings.get_total_documents():
 		ProgressTracker._docs["closeout_doc_%d" % i] = true
 	ProgressTracker.secrets = 3
 	GameManager.trigger_win()
 	await get_tree().process_frame
-	_ok(AchievementManager.is_unlocked(&"ach_14"), "ach_14 a win with every document, every district and three secrets unlocks Truth")
+	_ok(EndingsManager.get_ending() == &"light" and not AchievementManager.is_unlocked(&"ach_14"), "TRUTH1 other secrets do not substitute for the bunker")
+	GameManager._change_state(GameManager.GameState.PLAYING)
+	UIManager.close(&"win")
+	ProgressTracker._secrets_found[ProgressTracker.BUNKER_SECRET_ID] = true
+	GameManager.trigger_win()
+	await get_tree().process_frame
+	_ok(EndingsManager.get_ending() == &"truth" and AchievementManager.is_unlocked(&"ach_14"), "TRUTH2 the real bunker unlocks Truth and its achievement")
+	ProgressTracker._secrets_found = secret_ids_before
+	if not truth_before:
+		AchievementManager._unlocked.erase(&"ach_14")
 	ProgressTracker._docs = docs_before
 	ProgressTracker.secrets = secrets_before
 	GameManager._change_state(GameManager.GameState.PLAYING)

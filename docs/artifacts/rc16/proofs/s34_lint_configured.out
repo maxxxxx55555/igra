@@ -1,0 +1,8 @@
+# proof s34_lint_configured
+# utc 20261027T190544Z
+# head 38ecfce (uncommitted paths: 3)
+# env none
+# cmd python tools/lint_changed.py --base bf563cc9353dd1fb3717943b416530e6a9e4fb2c
+
+lint_changed: 1 gd, 7 py, 2 sh, 1 workflow, skipped tools for: none, 0 finding(s)
+# EXIT=0

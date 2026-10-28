@@ -1,0 +1,46 @@
+# proof s34_release_tests
+# utc 20261027T190317Z
+# head 38ecfce (uncommitted paths: 1)
+# env none
+# cmd python tools/release/test_release.py
+test_another_repository_fetches_public_bundle_prerequisite (__main__.BootstrapTests.test_another_repository_fetches_public_bundle_prerequisite) ... skipped 'Set IGRA_TEST_PWSH to a real PowerShell executable/wrapper'
+test_browser_auth_and_verified_remote_source (__main__.BootstrapTests.test_browser_auth_and_verified_remote_source) ... skipped 'Set IGRA_TEST_PWSH to a real PowerShell executable/wrapper'
+test_corrupt_bundle_and_existing_branch_are_rejected (__main__.BootstrapTests.test_corrupt_bundle_and_existing_branch_are_rejected) ... skipped 'Set IGRA_TEST_PWSH to a real PowerShell executable/wrapper'
+test_inherited_git_worktree_cannot_redirect_the_checkout (__main__.BootstrapTests.test_inherited_git_worktree_cannot_redirect_the_checkout) ... skipped 'Set IGRA_TEST_PWSH to a real PowerShell executable/wrapper'
+test_main_and_read_only_are_rejected (__main__.BootstrapTests.test_main_and_read_only_are_rejected) ... skipped 'Set IGRA_TEST_PWSH to a real PowerShell executable/wrapper'
+test_race_does_not_overwrite_a_branch (__main__.BootstrapTests.test_race_does_not_overwrite_a_branch) ... skipped 'Set IGRA_TEST_PWSH to a real PowerShell executable/wrapper'
+test_unverified_push_is_not_reported_saved (__main__.BootstrapTests.test_unverified_push_is_not_reported_saved) ... skipped 'Set IGRA_TEST_PWSH to a real PowerShell executable/wrapper'
+test_android_requires_all_audits_and_propagates_failure (__main__.JudgeTests.test_android_requires_all_audits_and_propagates_failure) ... ok
+test_cold_import_requires_clean_retry_and_keeps_diagnostics (__main__.JudgeTests.test_cold_import_requires_clean_retry_and_keeps_diagnostics) ... ok
+test_failure_exit_and_missing_marker (__main__.JudgeTests.test_failure_exit_and_missing_marker) ... ok
+test_first_import_restores_the_original_theme_even_after_failure (__main__.JudgeTests.test_first_import_restores_the_original_theme_even_after_failure) ... ok
+test_incomplete_zero_exit_fails (__main__.JudgeTests.test_incomplete_zero_exit_fails) ... ok
+test_manifest_rejects_wrong_release_debug_and_missing_tool (__main__.JudgeTests.test_manifest_rejects_wrong_release_debug_and_missing_tool) ... ok
+test_only_exact_dummy_backend_diagnostic_is_classified (__main__.JudgeTests.test_only_exact_dummy_backend_diagnostic_is_classified) ... ok
+test_profile_configuration_and_roundtrip (__main__.JudgeTests.test_profile_configuration_and_roundtrip) ... ok
+test_profile_refuses_owner_path (__main__.JudgeTests.test_profile_refuses_owner_path) ... ok
+test_proof_preserves_a_large_output_tail_and_failure_exit (__main__.JudgeTests.test_proof_preserves_a_large_output_tail_and_failure_exit) ... ok
+test_real_errors_fail_even_after_done (__main__.JudgeTests.test_real_errors_fail_even_after_done) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.216s
+
+OK (skipped=7)
+manifest package=com.maxsimkasky.laststreetlight expected=com.maxsimkasky.laststreetlight: ok
+manifest versionCode=7 expected=7: ok
+manifest versionName=1.0.1 expected=1.0.1: ok
+manifest package=wrong expected=com.maxsimkasky.laststreetlight: MISMATCH
+manifest versionCode=7 expected=7: ok
+manifest versionName=1.0.1 expected=1.0.1: ok
+manifest package=com.maxsimkasky.laststreetlight expected=com.maxsimkasky.laststreetlight: ok
+manifest versionCode=wrong expected=7: MISMATCH
+manifest versionName=1.0.1 expected=1.0.1: ok
+manifest package=com.maxsimkasky.laststreetlight expected=com.maxsimkasky.laststreetlight: ok
+manifest versionCode=7 expected=7: ok
+manifest versionName=wrong expected=1.0.1: MISMATCH
+manifest unreadable: unclosed token: line 1, column 0
+manifest unreadable: Missing application or debuggable release
+manifest unreadable: Missing application or debuggable release
+manifest bundletool failed (rc 1)
+manifest MISSING bundletool: supply --bundletool <official.jar>
+# EXIT=0

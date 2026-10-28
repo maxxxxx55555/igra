@@ -1,0 +1,306 @@
+# proof bot_2
+# utc 20261026T100922Z
+# head 10627bb3 (uncommitted paths: 2)
+# env QA_SEED=2 QA_SOAK_SEC=20 QA_TIME_SCALE=4 TLS_UDG_GUARDED=1 
+# cmd /workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --headless --path /workspace/scratch/e4e8279ce462/release-delivery-check/qa-project res://scenes/tools/qa_autoplay_scene.tscn
+WARNING: Couldn't get executable path from /proc/self/exe, using argv[0]
+     at: get_executable_path (drivers/unix/os_unix.cpp:1157)
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[bot s2] t=1.0 inventory notice: Photo added (1)
+[bot s2] t=1.5 New Game stable, player at (-8.0, 1.0, -8.0)
+[bot s2] t=2.3 inventory notice: Photo added (2)
+[bot s2] t=2.3 inventory notice: DOCUMENT FOUND: Recorder: Grid Crew Log 2
+[bot s2] t=2.7 hb ph=spine st=2 want=suburbs cur=suburbs si=0 sc=0 mr=0 ppos=(4.0, 1.0, -7.0) valid=true in_tree=true finite=true tgt=(10.0, 0.0, -6.0) tdist=5.8 npu=5 col=StreetCollision col=StreetCollision col=StreetCollision pack=1.0/40kg slots=1/12 batteries=0 charge=98 itarget=@Node3D@225 aim_dot=1.00 yaw=-98
+[bot s2] t=4.0 hb ph=spine st=2 want=suburbs cur=suburbs si=0 sc=0 mr=0 ppos=(8.0, 1.0, 3.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=5.0 npu=4 col=StreetCollision col=StreetCollision col=StreetCollision pack=4.0/40kg slots=2/12 batteries=0 charge=97 itarget=none aim_dot=1.00 yaw=177
+[bot s2] t=4.2 inventory notice: +100 coins for an achievement
+[bot s2] t=4.2 inventory notice: Suburbs: partial power restored
+[bot s2] t=4.7 inventory notice: Photo added (3)
+[bot s2] t=4.7 inventory notice: Suburbs: streetlights are on
+[bot s2] t=5.2 hb ph=spine st=2 want=suburbs cur=suburbs si=0 sc=20 mr=0 ppos=(4.0, 1.0, 2.0) valid=true in_tree=true finite=true tgt=(-7.0, 0.0, -17.0) tdist=22.3 npu=3 col=GroundBody col=GroundBody col=GroundBody pack=2.9/40kg slots=3/12 batteries=0 charge=96 itarget=none aim_dot=1.00 yaw=29
+[bot s2] t=5.4 inventory notice: Cold ash in a barrel. Whoever lived here left.
+[bot s2] t=6.5 hb ph=spine st=2 want=suburbs cur=suburbs si=0 sc=20 mr=0 ppos=(-4.0, 1.0, -10.0) valid=true in_tree=true finite=true tgt=(-7.0, 0.0, -17.0) tdist=7.9 npu=3 col=StreetCollision col=StreetCollision col=StreetCollision pack=2.9/40kg slots=3/12 batteries=0 charge=95 itarget=none aim_dot=1.00 yaw=29
+[bot s2] t=7.7 hb ph=spine st=2 want=suburbs cur=suburbs si=0 sc=20 mr=0 ppos=(-3.0, 1.0, -10.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=21.7 npu=2 near=@CharacterBody3D@199@1.5 col=StreetCollision col=StreetCollision col=StreetCollision pack=3.0/40kg slots=4/12 batteries=0 charge=94 itarget=none aim_dot=1.00 yaw=-149
+[bot s2] t=9.0 hb ph=spine st=2 want=suburbs cur=suburbs si=0 sc=20 mr=0 ppos=(4.0, 1.0, 2.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=7.3 npu=2 near=@CharacterBody3D@199@2.8 col=GroundBody col=GroundBody col=StreetCollision pack=3.0/40kg slots=4/12 batteries=0 charge=93 itarget=none aim_dot=1.00 yaw=-149
+[bot s2] t=9.4 inventory notice: Photo added (4)
+[bot s2] t=9.4 inventory notice: Photo added (5)
+[bot s2] t=9.4 inventory notice: +100 coins for an achievement
+[bot s2] t=9.4 inventory notice: +100 coins for an achievement
+[bot s2] t=9.4 inventory notice: Photo added (6)
+[bot s2] t=9.4 inventory notice: QUEST COMPLETE: Restore power to the suburbs (+100 coins)
+[bot s2] t=9.4 inventory notice: +200 coins for a district
+[bot s2] t=9.4 inventory notice: Suburbs: district fully restored
+[bot s2] t=9.4 suburbs FULL (9.4s)
+[bot s2] t=9.7 inventory notice: Photo added (7)
+[bot s2] t=9.7 Travel -> residential (map button)
+[bot s2] t=10.2 hb ph=spine st=2 want=residential cur=residential si=1 sc=35 mr=0 ppos=(-4.0, 1.0, -4.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=16.5 npu=8 col=StreetCollision col=StreetCollision col=StreetCollision pack=2.9/40kg slots=4/12 batteries=0 charge=92 itarget=none aim_dot=1.00 yaw=-135
+[bot s2] t=11.5 inventory notice: Residential blocks: partial power restored
+[bot s2] t=11.5 hb ph=spine st=2 want=residential cur=residential si=1 sc=45 mr=0 ppos=(7.0, 1.0, 7.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=2.2 npu=8 col=StreetCollision col=StreetCollision col=StreetCollision pack=1.4/40kg slots=3/12 batteries=0 charge=91 itarget=PowerSwitch aim_dot=1.00 yaw=-135
+[bot s2] t=11.7 inventory notice: Photo added (8)
+[bot s2] t=11.7 inventory notice: Residential blocks: streetlights are on
+[bot s2] t=12.0 inventory notice: Photo added (9)
+[bot s2] t=12.0 inventory notice: +100 coins for an achievement
+[bot s2] t=12.0 inventory notice: Blueprint applied: upgrade unlocked
+[bot s2] t=12.0 inventory notice: Photo added (10)
+[bot s2] t=12.0 inventory notice: QUEST COMPLETE: Restore the residential district (+150 coins)
+[bot s2] t=12.0 inventory notice: +300 coins for a district
+[bot s2] t=12.0 inventory notice: Residential blocks: district fully restored
+[bot s2] t=12.0 residential FULL (12.0s)
+[bot s2] t=12.3 inventory notice: Photo added (11)
+[bot s2] t=12.3 Travel -> park (map button)
+[bot s2] t=12.8 hb ph=spine st=2 want=park cur=park si=2 sc=70 mr=0 ppos=(-3.0, 1.0, -7.0) valid=true in_tree=true finite=true tgt=(-1.0, 0.0, -7.0) tdist=1.7 npu=7 col=StreetCollision col=StreetCollision col=StreetCollision pack=1.1/40kg slots=2/12 batteries=0 charge=90 itarget=none aim_dot=1.00 yaw=-100
+[bot s2] t=14.0 hb ph=spine st=2 want=park cur=park si=2 sc=70 mr=0 ppos=(-10.0, 1.0, 2.0) valid=true in_tree=true finite=true tgt=(-16.0, 0.0, 9.0) tdist=8.6 npu=6 near=Hound@4.1 col=StreetCollision col=StreetCollision col=StreetCollision pack=1.7/40kg slots=3/12 batteries=2 charge=88 itarget=none aim_dot=1.00 yaw=141
+[bot s2] t=15.2 hb ph=spine st=2 want=park cur=park si=2 sc=70 mr=0 ppos=(-9.0, 1.0, 8.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=16.9 npu=5 col=StreetCollision col=StreetCollision col=StreetCollision pack=4.7/40kg slots=4/12 batteries=2 charge=87 itarget=none aim_dot=1.00 yaw=-90
+[bot s2] t=16.0 inventory notice: Photo added (12)
+[bot s2] t=16.0 inventory notice: DOCUMENT FOUND: Photo: The Carousel in Summer
+[bot s2] t=16.5 hb ph=spine st=2 want=park cur=park si=2 sc=70 mr=0 ppos=(5.0, 1.0, 8.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=2.9 npu=5 near=Hunter@5.0 col=StreetCollision col=StreetCollision col=StreetCollision pack=4.7/40kg slots=4/12 batteries=2 charge=86 itarget=none aim_dot=1.00 yaw=-90
+[bot s2] t=16.5 inventory notice: Park: partial power restored
+[bot s2] t=17.8 hb ph=spine st=2 want=park cur=park si=2 sc=80 mr=0 ppos=(12.0, 1.0, 7.0) valid=true in_tree=true finite=true tgt=(16.0, 0.0, 9.0) tdist=5.0 npu=5 near=Hunter@3.8 col=StreetCollision col=StreetCollision col=StreetCollision pack=3.2/40kg slots=4/12 batteries=2 charge=85 itarget=none aim_dot=1.00 yaw=-111
+[bot s2] t=18.1 inventory notice: Photo added (13)
+[bot s2] t=18.1 inventory notice: QUEST COMPLETE: Find the fuses (+50 coins)
+[bot s2] t=18.6 inventory notice: Photo added (14)
+[bot s2] t=18.6 inventory notice: Park: streetlights are on
+[bot s2] t=19.0 hb ph=spine st=2 want=park cur=park si=2 sc=90 mr=0 ppos=(8.0, 1.0, 4.0) valid=true in_tree=true finite=true tgt=(-7.0, 0.0, -21.0) tdist=28.7 npu=4 near=Hunter@3.0 col=StreetCollision col=StreetCollision col=StreetCollision pack=3.6/40kg slots=5/12 batteries=2 charge=84 itarget=none aim_dot=1.00 yaw=31
+[bot s2] t=19.4 inventory notice: Cold ash in a barrel. Whoever lived here left.
+[bot s2] t=19.6 inventory notice: Footsteps behind you. Nobody is there.
+[bot s2] t=20.2 hb ph=spine st=2 want=park cur=park si=2 sc=90 mr=0 ppos=(0.0, 1.0, -8.0) valid=true in_tree=true finite=true tgt=(-7.0, 0.0, -21.0) tdist=14.4 npu=4 col=StreetCollision col=StreetCollision col=StreetCollision pack=3.6/40kg slots=5/12 batteries=2 charge=83 itarget=none aim_dot=1.00 yaw=31
+[bot s2] t=21.5 hb ph=spine st=2 want=park cur=park si=2 sc=90 mr=0 ppos=(-6.0, 1.0, -20.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=31.1 npu=4 col=StreetCollision col=StreetCollision col=StreetCollision pack=3.7/40kg slots=6/12 batteries=2 charge=82 itarget=none aim_dot=1.00 yaw=-152
+[bot s2] t=22.7 hb ph=spine st=2 want=park cur=park si=2 sc=90 mr=0 ppos=(0.0, 1.0, -7.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=16.8 npu=3 col=StreetCollision col=StreetCollision col=StreetCollision pack=3.7/40kg slots=6/12 batteries=2 charge=81 itarget=none aim_dot=1.00 yaw=-152
+[bot s2] t=24.0 hb ph=spine st=2 want=park cur=park si=2 sc=90 mr=0 ppos=(7.0, 1.0, 6.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=2.6 npu=3 col=StreetCollision col=StreetCollision col=StreetCollision pack=3.7/40kg slots=6/12 batteries=2 charge=80 itarget=PowerSwitch aim_dot=1.00 yaw=-152
+[bot s2] t=24.0 inventory notice: Photo added (15)
+[bot s2] t=24.0 inventory notice: +100 coins for an achievement
+[bot s2] t=24.0 inventory notice: +400 coins for a district
+[bot s2] t=24.0 inventory notice: Park: district fully restored
+[bot s2] t=24.0 park FULL (24.0s)
+[bot s2] t=24.3 inventory notice: Photo added (16)
+[bot s2] t=24.3 Travel -> school (map button)
+[bot s2] t=24.4 inventory notice: Photo added (17)
+[bot s2] t=24.4 inventory notice: QUEST COMPLETE: Explore the old school (+150 coins)
+[bot s2] t=24.9 inventory notice: Photo added (18)
+[bot s2] t=24.9 inventory notice: QUEST COMPLETE: Batteries (+45 coins)
+[bot s2] t=25.3 hb ph=spine st=2 want=school cur=school si=3 sc=105 mr=0 ppos=(-5.0, 1.0, 0.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=15.1 npu=8 col=StreetCollision col=StreetCollision col=StreetCollision pack=4.8/40kg slots=7/12 batteries=4 charge=78 itarget=none aim_dot=1.00 yaw=-121
+[bot s2] t=25.4 inventory notice: Cases left where they fell. Nobody came back.
+[bot s2] t=26.4 inventory notice: School: partial power restored
+[bot s2] t=26.5 hb ph=spine st=2 want=school cur=school si=3 sc=115 mr=0 ppos=(7.0, 1.0, 8.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=1.3 npu=8 col=StreetCollision col=StreetCollision col=StreetCollision pack=3.3/40kg slots=6/12 batteries=4 charge=77 itarget=PowerSwitch aim_dot=1.00 yaw=-121
+[bot s2] t=26.7 inventory notice: Photo added (19)
+[bot s2] t=26.7 inventory notice: School: streetlights are on
+[bot s2] t=26.9 inventory notice: Photo added (20)
+[bot s2] t=26.9 inventory notice: +100 coins for an achievement
+[bot s2] t=26.9 inventory notice: +100 coins for an achievement
+[bot s2] t=26.9 inventory notice: +500 coins for a district
+[bot s2] t=26.9 inventory notice: School: district fully restored
+[bot s2] t=26.9 school FULL (26.9s)
+[bot s2] t=27.2 inventory notice: Photo added (21)
+[bot s2] t=27.2 Travel -> hospital (map button)
+[bot s2] t=27.5 inventory notice: Photo added (22)
+[bot s2] t=27.5 inventory notice: DOCUMENT FOUND: Recorder: Grid Crew Log 9
+[bot s2] t=27.8 hb ph=spine st=2 want=hospital cur=hospital si=4 sc=140 mr=0 ppos=(-2.0, 1.0, -7.0) valid=true in_tree=true finite=true tgt=(12.0, 0.0, -3.0) tdist=14.2 npu=9 col=StreetCollision col=StreetCollision col=StreetCollision pack=2.9/40kg slots=4/12 batteries=4 charge=76 itarget=none aim_dot=1.00 yaw=-105
+[bot s2] t=29.0 hb ph=spine st=2 want=hospital cur=hospital si=4 sc=140 mr=0 ppos=(10.0, 1.0, -2.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=10.7 npu=8 col=StreetCollision col=StreetCollision col=StreetCollision pack=5.9/40kg slots=5/12 batteries=4 charge=75 itarget=none aim_dot=1.00 yaw=167
+[bot s2] t=29.8 inventory notice: Hospital: partial power restored
+[bot s2] t=30.3 hb ph=spine st=2 want=hospital cur=hospital si=4 sc=150 mr=0 ppos=(3.0, 1.0, 4.0) valid=true in_tree=true finite=true tgt=(-7.0, 0.0, 0.0) tdist=11.3 npu=8 col=GroundBody col=GroundBody col=GroundBody pack=4.4/40kg slots=5/12 batteries=4 charge=74 itarget=none aim_dot=1.00 yaw=71
+[bot s2] t=31.6 hb ph=spine st=2 want=hospital cur=hospital si=4 sc=150 mr=0 ppos=(-3.0, 1.0, 2.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=12.9 npu=7 near=Crawler@4.6 col=StreetCollision col=StreetCollision col=StreetCollision pack=5.2/40kg slots=6/12 batteries=4 charge=73 itarget=none aim_dot=1.00 yaw=-117
+[bot s2] t=32.5 inventory notice: Photo added (23)
+[bot s2] t=32.5 inventory notice: Hospital: streetlights are on
+[bot s2] t=32.8 hb ph=spine st=2 want=hospital cur=hospital si=4 sc=160 mr=0 ppos=(4.0, 1.0, 5.0) valid=true in_tree=true finite=true tgt=(-14.0, 0.0, -7.0) tdist=22.1 npu=7 near=Crawler@0.7 col=StreetCollision col=StreetCollision col=StreetCollision pack=4.8/40kg slots=6/12 batteries=4 charge=72 itarget=none aim_dot=1.00 yaw=55
+[bot s2] t=34.1 hb ph=spine st=2 want=hospital cur=hospital si=4 sc=160 mr=0 ppos=(-8.0, 1.0, -3.0) valid=true in_tree=true finite=true tgt=(-14.0, 0.0, -7.0) tdist=7.9 npu=7 near=Crawler@2.2 col=StreetCollision col=StreetCollision col=StreetCollision pack=4.8/40kg slots=6/12 batteries=4 charge=71 itarget=none aim_dot=1.00 yaw=55
+[bot s2] t=35.4 hb ph=spine st=2 want=hospital cur=hospital si=4 sc=160 mr=0 ppos=(-8.0, 1.0, -3.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=19.3 npu=6 near=Crawler@1.3 col=StreetCollision col=StreetCollision col=StreetCollision pack=4.9/40kg slots=7/12 batteries=4 charge=69 itarget=none aim_dot=1.00 yaw=-125
+[bot s2] t=36.6 hb ph=spine st=2 want=hospital cur=hospital si=4 sc=160 mr=0 ppos=(4.0, 1.0, 5.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=5.1 npu=6 near=Crawler@2.4 col=StreetCollision col=StreetCollision col=StreetCollision pack=4.9/40kg slots=7/12 batteries=4 charge=68 itarget=none aim_dot=1.00 yaw=-125
+[bot s2] t=36.9 inventory notice: Photo added (24)
+[bot s2] t=36.9 inventory notice: +100 coins for an achievement
+[bot s2] t=36.9 inventory notice: +600 coins for a district
+[bot s2] t=36.9 inventory notice: Hospital: district fully restored
+[bot s2] t=36.9 hospital FULL (36.9s)
+[bot s2] t=37.2 inventory notice: Photo added (25)
+[bot s2] t=37.2 Travel -> gas_station (map button)
+[bot s2] t=37.9 hb ph=spine st=2 want=gas_station cur=gas_station si=5 sc=175 mr=0 ppos=(-2.0, 1.0, -2.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=14.4 npu=8 col=GroundBody col=GroundBody col=GroundBody pack=4.8/40kg slots=7/12 batteries=4 charge=67 itarget=none aim_dot=1.00 yaw=-135
+[bot s2] t=38.1 inventory notice: The lights went out in one of the districts!
+[bot s2] t=38.9 inventory notice: Gas station: partial power restored
+[bot s2] t=39.2 hb ph=spine st=2 want=gas_station cur=gas_station si=5 sc=185 mr=0 ppos=(8.0, 1.0, 8.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=1.0 npu=8 col=Body col=Body pack=3.3/40kg slots=6/12 batteries=4 charge=66 itarget=PowerSwitch aim_dot=0.99 yaw=-154
+[bot s2] t=39.2 inventory notice: Photo added (26)
+[bot s2] t=39.2 inventory notice: Gas station: streetlights are on
+[bot s2] t=39.5 inventory notice: Photo added (27)
+[bot s2] t=39.5 inventory notice: +100 coins for an achievement
+[bot s2] t=39.5 inventory notice: +700 coins for a district
+[bot s2] t=39.5 inventory notice: Gas station: district fully restored
+[bot s2] t=39.5 gas_station FULL (39.5s)
+[bot s2] t=39.8 inventory notice: Photo added (28)
+[bot s2] t=39.8 Travel -> police (map button)
+[bot s2] t=40.4 inventory notice: Crates across the street. It held, they didn't.
+[bot s2] t=40.4 hb ph=spine st=2 want=police cur=police si=6 sc=210 mr=0 ppos=(-4.0, 1.0, -2.0) valid=true in_tree=true finite=true tgt=(7.0, 0.0, 12.0) tdist=17.6 npu=8 col=StreetCollision col=StreetCollision col=StreetCollision pack=3.0/40kg slots=5/12 batteries=4 charge=65 itarget=none aim_dot=1.00 yaw=-144
+[bot s2] t=41.7 hb ph=spine st=2 want=police cur=police si=6 sc=210 mr=0 ppos=(5.0, 1.0, 10.0) valid=true in_tree=true finite=true tgt=(7.0, 0.0, 12.0) tdist=3.2 npu=8 near=Watcher@4.0 near=Destroyer@4.5 col=StreetCollision col=StreetCollision col=StreetCollision pack=3.0/40kg slots=5/12 batteries=4 charge=64 itarget=none aim_dot=1.00 yaw=-144
+[bot s2] t=41.9 inventory notice: Photo added (29)
+[bot s2] t=41.9 inventory notice: QUEST COMPLETE: Cables (+60 coins)
+[bot s2] t=42.0 inventory notice: Police station: partial power restored
+[bot s2] t=42.9 hb ph=spine st=2 want=police cur=police si=6 sc=220 mr=0 ppos=(2.0, 1.0, 1.0) valid=true in_tree=true finite=true tgt=(-7.0, 0.0, -14.0) tdist=18.2 npu=7 col=GroundBody col=GroundBody col=GroundBody pack=4.5/40kg slots=6/12 batteries=4 charge=63 itarget=none aim_dot=1.00 yaw=30
+[bot s2] t=44.2 hb ph=spine st=2 want=police cur=police si=6 sc=220 mr=0 ppos=(-5.0, 1.0, -8.0) valid=true in_tree=true finite=true tgt=(-7.0, 0.0, -14.0) tdist=6.7 npu=7 col=StreetCollision col=StreetCollision col=StreetCollision pack=4.5/40kg slots=6/12 batteries=4 charge=62 itarget=none aim_dot=1.00 yaw=24
+[bot s2] t=45.4 hb ph=spine st=2 want=police cur=police si=6 sc=220 mr=0 ppos=(-3.0, 1.0, -7.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=18.6 npu=6 col=StreetCollision col=StreetCollision col=StreetCollision pack=5.3/40kg slots=7/12 batteries=4 charge=60 itarget=none aim_dot=1.00 yaw=-145
+[bot s2] t=46.7 hb ph=spine st=2 want=police cur=police si=6 sc=220 mr=0 ppos=(5.0, 1.0, 3.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=5.5 npu=6 near=Destroyer@3.1 col=StreetCollision col=StreetCollision col=StreetCollision pack=5.3/40kg slots=7/12 batteries=4 charge=59 itarget=none aim_dot=1.00 yaw=-147
+[bot s2] t=46.9 inventory notice: Photo added (30)
+[bot s2] t=47.0 inventory notice: Police station: streetlights are on
+[bot s2] t=47.9 hb ph=spine st=2 want=police cur=police si=6 sc=230 mr=0 ppos=(4.0, 1.0, -3.0) valid=true in_tree=true finite=true tgt=(-2.0, 0.0, -21.0) tdist=18.0 npu=6 near=Destroyer@4.6 col=StreetCollision col=StreetCollision col=StreetCollision pack=4.9/40kg slots=7/12 batteries=4 charge=58 itarget=none aim_dot=1.00 yaw=18
+[bot s2] t=49.2 hb ph=spine st=2 want=police cur=police si=6 sc=230 mr=0 ppos=(-1.0, 1.0, -17.0) valid=true in_tree=true finite=true tgt=(-2.0, 0.0, -21.0) tdist=4.0 npu=6 near=@CharacterBody3D@4195@4.2 col=GroundBody col=GroundBody col=GroundBody pack=4.9/40kg slots=7/12 batteries=4 charge=57 itarget=none aim_dot=1.00 yaw=18
+[bot s2] t=50.4 hb ph=spine st=2 want=police cur=police si=6 sc=230 mr=0 ppos=(2.0, 1.0, -10.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=18.8 npu=5 col=StreetCollision col=StreetCollision col=StreetCollision pack=5.0/40kg slots=8/12 batteries=4 charge=56 itarget=none aim_dot=1.00 yaw=-161
+[bot s2] t=51.7 hb ph=spine st=2 want=police cur=police si=6 sc=230 mr=0 ppos=(6.0, 1.0, 3.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=5.6 npu=5 col=StreetCollision col=StreetCollision col=StreetCollision pack=5.0/40kg slots=8/12 batteries=4 charge=55 itarget=none aim_dot=1.00 yaw=-163
+[bot s2] t=51.9 inventory notice: Photo added (31)
+[bot s2] t=52.0 inventory notice: +100 coins for an achievement
+[bot s2] t=52.0 inventory notice: +800 coins for a district
+[bot s2] t=52.0 inventory notice: Police station: district fully restored
+[bot s2] t=52.0 police FULL (52.0s)
+[bot s2] t=52.0 inventory notice: +100 coins for an achievement
+[bot s2] t=52.2 inventory notice: Photo added (32)
+[bot s2] t=52.3 Travel -> warehouses (map button)
+[bot s2] t=52.9 hb ph=spine st=2 want=warehouses cur=warehouses si=7 sc=245 mr=0 ppos=(-2.0, 1.0, -3.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=14.9 npu=9 col=GroundBody col=GroundBody col=GroundBody pack=4.9/40kg slots=8/12 batteries=4 charge=54 itarget=none aim_dot=1.00 yaw=-136
+[bot s2] t=54.0 inventory notice: Warehouse complex: partial power restored
+[bot s2] t=54.2 hb ph=spine st=2 want=warehouses cur=warehouses si=7 sc=255 mr=0 ppos=(8.0, 1.0, 8.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=1.0 npu=9 col=StreetCollision col=StreetCollision col=Body col=Body pack=3.4/40kg slots=7/12 batteries=4 charge=53 itarget=PowerSwitch aim_dot=1.00 yaw=-136
+[bot s2] t=54.3 inventory notice: Photo added (33)
+[bot s2] t=54.3 inventory notice: Warehouse complex: streetlights are on
+[bot s2] t=54.6 inventory notice: Photo added (34)
+[bot s2] t=54.6 inventory notice: +100 coins for an achievement
+[bot s2] t=54.6 inventory notice: +900 coins for a district
+[bot s2] t=54.6 inventory notice: Warehouse complex: district fully restored
+[bot s2] t=54.6 warehouses FULL (54.6s)
+[bot s2] t=54.9 inventory notice: Photo added (35)
+[bot s2] t=54.9 Travel -> industrial (map button)
+[bot s2] t=54.9 inventory notice: Photo added (36)
+[bot s2] t=54.9 inventory notice: QUEST COMPLETE: Find the missing engineers (+120 coins)
+[bot s2] t=54.9 inventory notice: Photo added (37)
+[bot s2] t=54.9 inventory notice: DOCUMENT FOUND: Switchgear Room — The Winding Refusal
+[bot s2] t=55.5 hb ph=spine st=2 want=industrial cur=industrial si=8 sc=280 mr=0 ppos=(-2.0, 1.0, -5.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=16.9 npu=9 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.0/40kg slots=6/12 batteries=4 charge=52 itarget=none aim_dot=1.00 yaw=-142
+[bot s2] t=56.7 hb ph=spine st=2 want=industrial cur=industrial si=8 sc=280 mr=0 ppos=(6.0, 1.0, 6.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=3.3 npu=9 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.0/40kg slots=6/12 batteries=4 charge=50 itarget=none aim_dot=1.00 yaw=-142
+[bot s2] t=56.8 inventory notice: Industrial zone: partial power restored
+[bot s2] t=57.3 inventory notice: Photo added (38)
+[bot s2] t=57.3 inventory notice: Blueprint learned: Blueprint: battery L2
+[bot s2] t=58.0 hb ph=spine st=2 want=industrial cur=industrial si=8 sc=290 mr=0 ppos=(-5.0, 1.0, 12.0) valid=true in_tree=true finite=true tgt=(-6.0, 0.0, 13.0) tdist=1.3 npu=8 col=StreetCollision col=StreetCollision col=StreetCollision pack=6.3/40kg slots=7/12 batteries=4 charge=49 itarget=none aim_dot=1.00 yaw=117
+[bot s2] t=59.0 inventory notice: Photo added (39)
+[bot s2] t=59.0 inventory notice: Industrial zone: streetlights are on
+[bot s2] t=59.2 hb ph=spine st=2 want=industrial cur=industrial si=8 sc=300 mr=0 ppos=(7.0, 1.0, 7.0) valid=true in_tree=true finite=true tgt=(14.0, 0.0, -10.0) tdist=18.5 npu=7 col=StreetCollision col=StreetCollision col=StreetCollision pack=5.9/40kg slots=7/12 batteries=4 charge=48 itarget=none aim_dot=1.00 yaw=-25
+[bot s2] t=59.4 inventory notice: Footsteps behind you. Nobody is there.
+[bot s2] t=59.4 inventory notice: Photo added (40)
+[bot s2] t=59.4 inventory notice: QUEST COMPLETE: Medkits (+55 coins)
+[bot s2] t=60.5 hb ph=spine st=2 want=industrial cur=industrial si=8 sc=300 mr=0 ppos=(12.0, 1.0, -6.0) valid=true in_tree=true finite=true tgt=(14.0, 0.0, -10.0) tdist=4.8 npu=6 col=StreetCollision col=StreetCollision col=StreetCollision pack=6.9/40kg slots=7/12 batteries=4 charge=47 itarget=none aim_dot=1.00 yaw=-25
+[bot s2] t=60.8 inventory notice: Photo added (41)
+[bot s2] t=60.8 inventory notice: QUEST COMPLETE: Components (+70 coins)
+[bot s2] t=61.7 hb ph=spine st=2 want=industrial cur=industrial si=8 sc=300 mr=0 ppos=(11.0, 1.0, 0.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=8.7 npu=5 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.0/40kg slots=8/12 batteries=4 charge=46 itarget=none aim_dot=1.00 yaw=161
+[bot s2] t=62.3 inventory notice: Photo added (42)
+[bot s2] t=62.3 inventory notice: +100 coins for an achievement
+[bot s2] t=62.3 inventory notice: +1000 coins for a district
+[bot s2] t=62.3 inventory notice: Industrial zone: district fully restored
+[bot s2] t=62.3 industrial FULL (62.3s)
+[bot s2] t=62.6 inventory notice: Photo added (43)
+[bot s2] t=62.6 Travel -> substation (map button)
+[bot s2] t=63.0 hb ph=spine st=2 want=substation cur=substation si=9 sc=315 mr=0 ppos=(-5.0, 1.0, -5.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=18.5 npu=6 col=StreetCollision col=StreetCollision col=StreetCollision pack=6.9/40kg slots=8/12 batteries=4 charge=45 itarget=none aim_dot=1.00 yaw=-136
+[bot s2] t=63.3 inventory notice: Crates across the street. It held, they didn't.
+[bot s2] t=64.2 hb ph=spine st=2 want=substation cur=substation si=9 sc=315 mr=0 ppos=(5.0, 1.0, 5.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=4.9 npu=6 col=StreetCollision col=StreetCollision col=StreetCollision pack=6.9/40kg slots=8/12 batteries=4 charge=44 itarget=none aim_dot=1.00 yaw=-136
+[bot s2] t=64.5 inventory notice: Substation: partial power restored
+[bot s2] t=64.7 inventory notice: Photo added (44)
+[bot s2] t=64.7 inventory notice: Substation: streetlights are on
+[bot s2] t=65.0 inventory notice: Photo added (45)
+[bot s2] t=65.0 inventory notice: +100 coins for an achievement
+[bot s2] t=65.0 inventory notice: +1100 coins for a district
+[bot s2] t=65.0 inventory notice: Substation: district fully restored
+[bot s2] t=65.0 substation FULL (65.0s)
+[bot s2] t=65.3 inventory notice: Photo added (46)
+[bot s2] t=65.3 Travel -> power_station (map button)
+[bot s2] t=65.5 hb ph=spine st=2 want=power_station cur=power_station si=10 sc=350 mr=0 ppos=(-6.0, 1.0, -8.0) valid=true in_tree=true finite=true tgt=(12.0, 0.0, -10.0) tdist=17.9 npu=6 col=StreetCollision col=StreetCollision col=StreetCollision pack=5.0/40kg slots=5/12 batteries=4 charge=43 itarget=none aim_dot=1.00 yaw=-84
+[bot s2] t=66.8 hb ph=spine st=2 want=power_station cur=power_station si=10 sc=350 mr=0 ppos=(8.0, 1.0, -10.0) valid=true in_tree=true finite=true tgt=(12.0, 0.0, -10.0) tdist=4.0 npu=4 col=StreetCollision col=StreetCollision col=StreetCollision pack=6.8/40kg slots=6/12 batteries=4 charge=42 itarget=none aim_dot=1.00 yaw=-84
+[bot s2] t=68.0 hb ph=spine st=2 want=power_station cur=power_station si=10 sc=350 mr=0 ppos=(9.0, 1.0, 0.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=8.5 npu=3 col=StreetCollision col=StreetCollision col=StreetCollision pack=9.8/40kg slots=7/12 batteries=4 charge=40 itarget=none aim_dot=1.00 yaw=172
+[bot s2] t=68.6 inventory notice: Power station: partial power restored
+[bot s2] t=68.8 inventory notice: Photo added (47)
+[bot s2] t=68.8 inventory notice: Power station: streetlights are on
+[bot s2] t=69.3 hb ph=spine st=2 want=power_station cur=power_station si=10 sc=370 mr=0 ppos=(6.0, 1.0, 4.0) valid=true in_tree=true finite=true tgt=(-9.0, 0.0, -14.0) tdist=23.6 npu=3 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.9/40kg slots=7/12 batteries=4 charge=39 itarget=none aim_dot=1.00 yaw=39
+[bot s2] t=70.5 hb ph=spine st=2 want=power_station cur=power_station si=10 sc=370 mr=0 ppos=(-3.0, 1.0, -6.0) valid=true in_tree=true finite=true tgt=(-9.0, 0.0, -14.0) tdist=10.1 npu=3 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.9/40kg slots=7/12 batteries=4 charge=38 itarget=none aim_dot=1.00 yaw=39
+[bot s2] t=71.8 hb ph=spine st=2 want=power_station cur=power_station si=10 sc=370 mr=0 ppos=(-6.0, 1.0, -10.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=23.0 npu=2 col=StreetCollision col=StreetCollision col=StreetCollision pack=8.0/40kg slots=8/12 batteries=4 charge=37 itarget=none aim_dot=1.00 yaw=-142
+[bot s2] t=73.0 hb ph=spine st=2 want=power_station cur=power_station si=10 sc=370 mr=0 ppos=(2.0, 1.0, 1.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=9.5 npu=2 col=GroundBody col=GroundBody col=GroundBody pack=8.0/40kg slots=8/12 batteries=4 charge=36 itarget=none aim_dot=1.00 yaw=-142
+[bot s2] t=73.7 inventory notice: Photo added (48)
+[bot s2] t=73.7 inventory notice: +100 coins for an achievement
+[bot s2] t=73.7 inventory notice: +100 coins for an achievement
+[bot s2] t=73.7 inventory notice: Return to the power station
+[bot s2] t=73.7 inventory notice: +1200 coins for a district
+[bot s2] t=73.7 inventory notice: Power station: district fully restored
+[bot s2] t=73.7 inventory notice: Photo added (49)
+[bot s2] t=73.7 all 11 districts FULL — final night; bot is standing in power_station
+[bot s2] t=73.7 finale: engaging the Architect (deadline 420s)
+[bot s2] t=73.7 inventory notice: Creature blinded!
+[bot s2] t=74.3 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=883 mr=0 ppos=(10.0, 1.0, 10.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=3.0 npu=2 boss_pos=(11.0, 1.0, 12.0) boss_dist=1.9 boss_hp=794.75/800.0 battery=30.2111111111216 fl_on=true stam=100.0 stun=0.0 atk=none ai=4 near=BossArchitect@1.9 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.9/40kg slots=8/12 batteries=4 charge=30 itarget=none aim_dot=-0.97 yaw=-153
+[bot s2] t=75.4 inventory notice: Ammo +12
+[bot s2] t=75.8 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=896 mr=0 ppos=(12.0, 1.0, 6.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=4.4 npu=2 boss_pos=(11.0, 1.0, 12.0) boss_dist=5.7 boss_hp=768.5/800.0 battery=29.0888888888993 fl_on=true stam=100.0 stun=0.0 atk=none ai=4 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.9/40kg slots=8/12 batteries=4 charge=29 itarget=none aim_dot=0.58 yaw=168
+[bot s2] t=77.2 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=909 mr=0 ppos=(12.0, 1.0, 6.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=4.4 npu=2 boss_pos=(11.0, 1.0, 12.0) boss_dist=5.7 boss_hp=742.25/800.0 battery=27.9777777777881 fl_on=true stam=100.0 stun=0.0 atk=none ai=4 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.9/40kg slots=8/12 batteries=4 charge=28 itarget=none aim_dot=0.58 yaw=168
+[bot s2] t=78.5 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=912 mr=0 ppos=(11.0, 1.0, 9.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=3.7 npu=2 boss_pos=(11.0, 1.0, 12.0) boss_dist=2.6 boss_hp=737.0/800.0 battery=26.8629629629732 fl_on=true stam=98.7333333333333 stun=0.0 atk=active ai=4 near=BossArchitect@2.6 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.9/40kg slots=8/12 batteries=4 charge=27 itarget=none aim_dot=-0.17 yaw=168
+[bot s2] t=78.8 inventory notice: A distress signal somewhere in the city…
+[bot s2] t=80.0 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=921 mr=0 ppos=(11.0, 1.0, 10.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=3.8 npu=2 boss_pos=(11.0, 1.0, 12.0) boss_dist=2.1 boss_hp=718.625/800.0 battery=25.7407407407509 fl_on=true stam=100.0 stun=0.0 atk=recovery ai=4 near=BossArchitect@2.1 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.9/40kg slots=8/12 batteries=4 charge=26 itarget=none aim_dot=-0.29 yaw=168
+[bot s2] t=81.4 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=927 mr=0 ppos=(11.0, 1.0, 10.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=4.0 npu=2 boss_pos=(11.0, 1.0, 12.0) boss_dist=1.6 boss_hp=705.5/800.0 battery=24.6222222222323 fl_on=true stam=100.0 stun=0.0 atk=none ai=4 near=BossArchitect@1.6 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.9/40kg slots=8/12 batteries=4 charge=25 itarget=none aim_dot=-0.42 yaw=168
+[bot s2] t=82.9 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=944 mr=0 ppos=(14.0, 1.0, 6.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=6.8 npu=2 boss_pos=(11.0, 1.0, 12.0) boss_dist=7.1 boss_hp=671.375/800.0 battery=23.5111111111211 fl_on=true stam=100.0 stun=0.0 atk=none ai=4 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.9/40kg slots=8/12 batteries=4 charge=24 itarget=none aim_dot=0.76 yaw=150
+[bot s2] t=84.2 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=947 mr=0 ppos=(13.0, 1.0, 8.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=4.9 npu=2 boss_pos=(11.0, 1.0, 12.0) boss_dist=4.0 boss_hp=666.125/800.0 battery=22.3962962963062 fl_on=true stam=100.0 stun=0.0 atk=none ai=4 near=BossArchitect@4.0 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.9/40kg slots=8/12 batteries=4 charge=22 itarget=none aim_dot=0.42 yaw=150
+[bot s2] t=85.7 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=963 mr=0 ppos=(9.0, 1.0, 5.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=3.4 npu=2 boss_pos=(11.0, 1.0, 12.0) boss_dist=7.2 boss_hp=634.625/800.0 battery=21.2851851851951 fl_on=true stam=93.0666666666667 stun=0.0 atk=none ai=4 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.9/40kg slots=8/12 batteries=4 charge=21 itarget=none aim_dot=0.85 yaw=-166
+[bot s2] t=87.0 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=965 mr=0 ppos=(10.0, 1.0, 8.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=2.0 npu=2 boss_pos=(11.0, 1.0, 12.0) boss_dist=4.1 boss_hp=629.375/800.0 battery=20.1703703703802 fl_on=true stam=100.0 stun=0.0 atk=none ai=4 near=BossArchitect@4.1 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.9/40kg slots=8/12 batteries=4 charge=20 itarget=none aim_dot=-0.18 yaw=-166
+[bot s2] t=88.5 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=974 mr=0 ppos=(9.0, 1.0, 6.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=2.5 npu=2 boss_pos=(11.0, 1.0, 12.0) boss_dist=6.0 boss_hp=611.0/800.0 battery=49.0481481481581 fl_on=true stam=88.7333333333333 stun=0.0 atk=none ai=4 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.6/40kg slots=8/12 batteries=3 charge=49 itarget=none aim_dot=0.68 yaw=-166
+[bot s2] t=89.7 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=974 mr=0 ppos=(9.0, 1.0, 4.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=4.6 npu=2 boss_pos=(11.0, 1.0, 12.0) boss_dist=8.6 boss_hp=611.0/800.0 battery=47.9370370370471 fl_on=true stam=100.0 stun=0.0 atk=none ai=4 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.6/40kg slots=8/12 batteries=3 charge=48 itarget=none aim_dot=0.92 yaw=-166
+[bot s2] t=90.1 inventory notice: Creature blinded!
+[bot s2] t=91.2 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=988 mr=0 ppos=(10.0, 1.0, 11.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=3.9 npu=2 boss_pos=(11.0, 1.0, 12.0) boss_dist=0.9 boss_hp=584.75/800.0 battery=41.814814814825 fl_on=true stam=98.7333333333333 stun=0.0 atk=active ai=4 near=BossArchitect@0.9 col=StreetCollision col=StreetCollision col=BossArchitect col=StreetCollision pack=7.6/40kg slots=8/12 batteries=3 charge=42 itarget=none aim_dot=-0.96 yaw=-159
+[bot s2] t=92.6 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=998 mr=0 ppos=(10.0, 1.0, 12.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=5.1 npu=2 boss_pos=(11.0, 1.0, 12.0) boss_dist=0.9 boss_hp=563.75/800.0 battery=40.7037037037141 fl_on=true stam=100.0 stun=0.0 atk=recovery ai=4 near=BossArchitect@0.9 col=BossArchitect col=StreetCollision pack=7.6/40kg slots=8/12 batteries=3 charge=41 itarget=none aim_dot=0.33 yaw=-45
+[bot s2] t=94.0 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1011 mr=0 ppos=(8.0, 1.0, 15.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=6.7 npu=2 boss_pos=(12.0, 1.0, 11.0) boss_dist=5.4 boss_hp=537.5/800.0 battery=34.5851851851957 fl_on=true stam=100.0 stun=0.0 atk=none ai=4 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.6/40kg slots=8/12 batteries=3 charge=35 itarget=none aim_dot=0.71 yaw=-45
+[bot s2] t=95.3 inventory notice: Photo added (50)
+[bot s2] t=95.3 inventory notice: +100 coins for an achievement
+[bot s2] t=95.3 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1011 mr=0 ppos=(10.0, 1.0, 12.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=5.0 npu=2 boss_pos=(13.0, 1.0, 10.0) boss_dist=4.0 boss_hp=537.5/800.0 battery=33.4740740740847 fl_on=true stam=100.0 stun=0.0 atk=none ai=4 near=BossArchitect@4.0 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.6/40kg slots=8/12 batteries=3 charge=33 itarget=none aim_dot=0.31 yaw=-45
+[bot s2] t=96.1 inventory notice: Creature blinded!
+[bot s2] t=96.7 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1019 mr=0 ppos=(11.0, 1.0, 12.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=4.8 npu=3 boss_pos=(14.0, 1.0, 9.0) boss_dist=4.5 boss_hp=521.75/800.0 battery=27.3555555555662 fl_on=true stam=100.0 stun=0.0 atk=none ai=4 near=BossArchitect@4.5 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.6/40kg slots=8/12 batteries=3 charge=27 itarget=none aim_dot=0.10 yaw=-45
+[bot s2] t=98.1 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1027 mr=0 ppos=(13.0, 1.0, 9.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=5.5 npu=3 boss_pos=(14.0, 1.0, 9.0) boss_dist=1.3 boss_hp=506.0/800.0 battery=26.2370370370476 fl_on=true stam=100.0 stun=0.0 atk=none ai=4 near=BossArchitect@1.3 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.6/40kg slots=8/12 batteries=3 charge=26 itarget=none aim_dot=-0.49 yaw=-45
+[bot s2] t=98.6 inventory notice: Photo added (51)
+[bot s2] t=98.6 inventory notice: QUEST COMPLETE: No escape for shadows (+70 coins)
+[bot s2] t=99.4 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1035 mr=0 ppos=(14.0, 1.0, 9.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=5.7 npu=3 boss_pos=(14.0, 1.0, 9.0) boss_dist=0.9 boss_hp=490.25/800.0 battery=25.118518518529 fl_on=true stam=100.0 stun=0.0 atk=none ai=4 near=BossArchitect@0.9 col=BossArchitect col=StreetCollision pack=7.6/40kg slots=8/12 batteries=3 charge=25 itarget=none aim_dot=-0.55 yaw=-45
+[bot s2] t=100.8 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1045 mr=0 ppos=(14.0, 1.0, 9.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=6.1 npu=3 boss_pos=(15.0, 1.0, 7.0) boss_dist=1.8 boss_hp=469.25/800.0 battery=24.0000000000105 fl_on=true stam=100.0 stun=0.0 atk=none ai=4 near=BossArchitect@1.8 near=BossMinion2@4.5 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.6/40kg slots=8/12 batteries=3 charge=24 itarget=none aim_dot=-0.63 yaw=-45
+[bot s2] t=102.0 inventory notice: A distress signal somewhere in the city…
+[bot s2] t=102.2 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1059 mr=0 ppos=(15.0, 1.0, 8.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=6.8 npu=5 boss_pos=(17.0, 1.0, 5.0) boss_dist=3.8 boss_hp=441.6875/800.0 battery=22.8814814814919 fl_on=true stam=100.0 stun=0.0 atk=none ai=4 near=BossArchitect@3.8 near=BossMinion2@3.6 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.6/40kg slots=8/12 batteries=3 charge=23 itarget=none aim_dot=-0.72 yaw=-45
+[bot s2] t=103.5 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1059 mr=0 ppos=(17.0, 1.0, 6.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=9.3 npu=6 boss_pos=(20.0, 1.0, 3.0) boss_dist=4.3 boss_hp=441.6875/800.0 battery=21.7703703703807 fl_on=true stam=100.0 stun=0.0 atk=none ai=4 near=BossArchitect@4.3 near=BossMinion2@1.9 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.6/40kg slots=8/12 batteries=3 charge=22 itarget=none aim_dot=-0.86 yaw=-45
+[bot s2] t=105.0 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1076 mr=0 ppos=(16.0, 1.0, 6.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=8.7 npu=6 boss_pos=(23.0, 1.0, 0.0) boss_dist=9.4 boss_hp=407.5625/800.0 battery=20.6592592592695 fl_on=true stam=100.0 stun=0.0 atk=none ai=4 near=BossMinion2@2.0 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.6/40kg slots=8/12 batteries=3 charge=21 itarget=none aim_dot=-0.84 yaw=-45
+[bot s2] t=105.7 inventory notice: Creature blinded!
+[bot s2] t=106.3 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1080 mr=0 ppos=(19.0, 1.0, 4.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=11.7 npu=6 boss_pos=(27.0, 1.0, -4.0) boss_dist=10.9 boss_hp=399.6875/800.0 battery=49.5444444444547 fl_on=true stam=96.2 stun=0.0 atk=none ai=4 near=BossMinion1@4.7 near=BossMinion2@3.4 col=GroundBody col=GroundBody col=GroundBody pack=7.3/40kg slots=8/12 batteries=2 charge=50 itarget=none aim_dot=-0.91 yaw=-45
+[bot s2] t=107.6 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1084 mr=0 ppos=(21.0, 1.0, 2.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=14.5 npu=7 boss_pos=(27.0, 1.0, -4.0) boss_dist=7.9 boss_hp=391.8125/800.0 battery=48.42962962964 fl_on=true stam=100.0 stun=0.0 atk=none ai=4 near=BossMinion1@4.4 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.3/40kg slots=8/12 batteries=2 charge=48 itarget=none aim_dot=-0.95 yaw=-45
+[bot s2] t=108.4 inventory notice: Creature blinded!
+[bot s2] t=108.8 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1084 mr=0 ppos=(23.0, 1.0, -1.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=17.5 npu=8 boss_pos=(27.0, 1.0, -4.0) boss_dist=4.7 boss_hp=391.8125/800.0 battery=42.3185185185291 fl_on=true stam=100.0 stun=0.0 atk=none ai=4 near=BossArchitect@4.7 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.3/40kg slots=8/12 batteries=2 charge=42 itarget=none aim_dot=-0.96 yaw=-45
+[bot s2] t=110.2 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1088 mr=0 ppos=(23.0, 1.0, 0.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=17.2 npu=8 boss_pos=(27.0, 1.0, -4.0) boss_dist=5.0 boss_hp=383.9375/800.0 battery=41.2037037037144 fl_on=true stam=87.8 stun=0.0 atk=none ai=4 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.3/40kg slots=8/12 batteries=2 charge=41 itarget=none aim_dot=-0.96 yaw=-45
+[bot s2] t=111.0 inventory notice: Creature blinded!
+[bot s2] t=111.5 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1096 mr=0 ppos=(22.0, 1.0, 1.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=15.8 npu=8 boss_pos=(27.0, 1.0, -4.0) boss_dist=6.5 boss_hp=368.1875/800.0 battery=35.0851851851961 fl_on=true stam=90.8333333333334 stun=0.0 atk=none ai=4 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.3/40kg slots=8/12 batteries=2 charge=35 itarget=none aim_dot=-0.95 yaw=-45
+[bot s2] t=112.9 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1104 mr=0 ppos=(20.0, 1.0, 2.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=13.6 npu=9 boss_pos=(27.0, 1.0, -4.0) boss_dist=8.8 boss_hp=352.4375/800.0 battery=33.9666666666777 fl_on=true stam=90.0666666666667 stun=0.0 atk=recovery ai=4 near=BossMinion1@4.3 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.3/40kg slots=8/12 batteries=2 charge=34 itarget=none aim_dot=-0.94 yaw=-45
+[bot s2] t=113.9 inventory notice: Creature blinded!
+[bot s2] t=114.2 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1108 mr=0 ppos=(23.0, 1.0, 0.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=16.6 npu=9 boss_pos=(27.0, 1.0, -4.0) boss_dist=5.7 boss_hp=344.5625/800.0 battery=27.851851851863 fl_on=true stam=100.0 stun=0.0 atk=none ai=6 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.3/40kg slots=8/12 batteries=2 charge=28 itarget=none aim_dot=-0.96 yaw=-45
+[bot s2] t=115.6 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1112 mr=0 ppos=(21.0, 1.0, 2.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=14.1 npu=9 boss_pos=(27.0, 1.0, -4.0) boss_dist=8.3 boss_hp=336.6875/800.0 battery=26.7370370370481 fl_on=true stam=84.6666666666667 stun=0.0 atk=active ai=4 near=BossMinion1@4.4 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.3/40kg slots=8/12 batteries=2 charge=27 itarget=none aim_dot=-0.94 yaw=-45
+[bot s2] t=116.8 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1112 mr=0 ppos=(20.0, 1.0, 3.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=12.8 npu=10 boss_pos=(27.0, 1.0, -4.0) boss_dist=9.7 boss_hp=336.6875/800.0 battery=25.6259259259369 fl_on=true stam=100.0 stun=0.0 atk=none ai=4 near=BossMinion1@4.3 near=BossMinion2@4.5 col=GroundBody col=GroundBody col=GroundBody pack=7.3/40kg slots=8/12 batteries=2 charge=26 itarget=none aim_dot=-0.93 yaw=-45
+[bot s2] t=118.1 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1116 mr=0 ppos=(22.0, 1.0, 1.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=15.7 npu=11 boss_pos=(27.0, 1.0, -4.0) boss_dist=6.6 boss_hp=328.8125/800.0 battery=24.511111111122 fl_on=true stam=100.0 stun=0.0 atk=none ai=4 near=BossMinion1@5.0 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.3/40kg slots=8/12 batteries=2 charge=25 itarget=none aim_dot=-0.95 yaw=-45
+[bot s2] t=119.4 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1116 mr=0 ppos=(24.0, 1.0, -1.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=18.8 npu=11 boss_pos=(27.0, 1.0, -4.0) boss_dist=3.4 boss_hp=328.8125/800.0 battery=23.4000000000108 fl_on=true stam=100.0 stun=0.0 atk=none ai=4 near=BossArchitect@3.4 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.3/40kg slots=8/12 batteries=2 charge=23 itarget=none aim_dot=-0.97 yaw=-45
+[bot s2] t=120.8 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1123 mr=0 ppos=(24.0, 1.0, -2.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=19.2 npu=11 boss_pos=(27.0, 1.0, -4.0) boss_dist=3.0 boss_hp=313.0625/800.0 battery=22.2814814814922 fl_on=true stam=96.8666666666667 stun=0.0 atk=windup ai=4 near=BossArchitect@3.0 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.3/40kg slots=8/12 batteries=2 charge=22 itarget=none aim_dot=-0.97 yaw=-45
+[bot s2] t=122.1 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1135 mr=0 ppos=(26.0, 1.0, -3.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=21.2 npu=12 boss_pos=(27.0, 1.0, -4.0) boss_dist=0.9 boss_hp=289.4375/800.0 battery=21.1629629629736 fl_on=true stam=100.0 stun=0.0 atk=recovery ai=4 near=BossArchitect@0.9 col=BossArchitect col=StreetCollision pack=7.3/40kg slots=8/12 batteries=2 charge=21 itarget=none aim_dot=-0.98 yaw=-45
+[bot s2] t=123.6 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1149 mr=0 ppos=(27.0, 1.0, -4.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=22.6 npu=12 boss_pos=(28.0, 1.0, -5.0) boss_dist=0.9 boss_hp=261.875/800.0 battery=20.0407407407513 fl_on=true stam=95.9333333333333 stun=0.0 atk=windup ai=4 near=BossArchitect@0.9 col=StreetCollision col=StreetCollision col=StreetCollision pack=7.3/40kg slots=8/12 batteries=2 charge=20 itarget=none aim_dot=-0.98 yaw=-45
+[bot s2] t=125.2 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1169 mr=0 ppos=(23.0, 1.0, -8.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=21.5 npu=12 boss_pos=(24.0, 1.0, -7.0) boss_dist=0.9 boss_hp=222.5/800.0 battery=48.9259259259366 fl_on=true stam=100.0 stun=0.0 atk=none ai=4 near=BossArchitect@0.9 col=BossArchitect col=StreetCollision pack=7.0/40kg slots=8/12 batteries=1 charge=49 itarget=none aim_dot=-0.51 yaw=-102
+[bot s2] t=126.7 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1192 mr=0 ppos=(22.0, 1.0, -8.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=21.5 npu=13 boss_pos=(23.0, 1.0, -8.0) boss_dist=0.9 boss_hp=175.25/800.0 battery=47.8111111111218 fl_on=true stam=100.0 stun=0.0 atk=none ai=4 near=BossArchitect@0.9 col=StreetCollision col=StreetCollision col=BossArchitect pack=6.0/40kg slots=8/12 batteries=1 charge=48 itarget=none aim_dot=-0.21 yaw=-118
+[bot s2] t=126.8 inventory notice: Creature blinded!
+[bot s2] t=127.2 inventory notice: A collapse drew the creatures' attention!
+[bot s2] t=128.2 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1206 mr=0 ppos=(14.0, 1.0, -13.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=21.4 npu=13 boss_pos=(14.0, 1.0, -12.0) boss_dist=0.9 boss_hp=149.0/800.0 battery=41.6888888888998 fl_on=true stam=100.0 stun=0.0 atk=none ai=3 near=BossArchitect@0.9 col=GroundBody col=GroundBody col=BossArchitect pack=5.0/40kg slots=8/12 batteries=1 charge=42 itarget=none aim_dot=0.18 yaw=-115
+[bot s2] t=129.7 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1225 mr=0 ppos=(9.0, 1.0, -15.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=22.7 npu=13 boss_pos=(10.0, 1.0, -14.0) boss_dist=0.9 boss_hp=109.625/800.0 battery=40.5777777777887 fl_on=true stam=100.0 stun=0.0 atk=recovery ai=3 near=BossArchitect@0.9 col=StreetCollision col=StreetCollision col=BossArchitect pack=4.0/40kg slots=8/12 batteries=1 charge=41 itarget=none aim_dot=0.38 yaw=-115
+[bot s2] t=131.2 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1241 mr=0 ppos=(5.0, 1.0, -17.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=24.8 npu=14 boss_pos=(6.0, 1.0, -16.0) boss_dist=0.9 boss_hp=78.125/800.0 battery=34.462962962974 fl_on=true stam=100.0 stun=0.0 atk=none ai=3 near=BossArchitect@0.9 col=BossArchitect col=StreetCollision pack=3.0/40kg slots=7/12 batteries=1 charge=34 itarget=none aim_dot=0.54 yaw=-115
+[bot s2] t=132.7 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1250 mr=0 ppos=(-6.0, 1.0, -22.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=32.7 npu=14 boss_pos=(-5.0, 1.0, -21.0) boss_dist=0.9 boss_hp=59.75/800.0 battery=33.3407407407519 fl_on=true stam=100.0 stun=0.0 atk=none ai=3 near=BossArchitect@0.9 col=BossArchitect col=StreetCollision pack=3.0/40kg slots=7/12 batteries=1 charge=33 itarget=none aim_dot=0.77 yaw=-115
+[bot s2] t=133.6 inventory notice: +100 coins for an achievement
+[bot s2] t=133.6 revived after death (1 total)
+[bot s2] t=134.1 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1263 mr=0 ppos=(-3.0, 1.0, -20.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=30.4 npu=14 boss_pos=(-4.0, 1.0, -21.0) boss_dist=0.9 boss_hp=33.5/800.0 battery=27.3074074074186 fl_on=true stam=100.0 stun=0.0 atk=none ai=3 near=BossArchitect@0.9 col=BossArchitect pack=3.0/40kg slots=7/12 batteries=1 charge=27 itarget=none aim_dot=-0.67 yaw=69
+[bot s2] t=135.6 hb ph=boss st=2 want=power_station cur=power_station si=10 sc=1272 mr=0 ppos=(8.0, 1.0, -16.0) valid=true in_tree=true finite=true tgt=(8.0, 0.0, 8.0) tdist=23.8 npu=15 boss_pos=(7.0, 1.0, -16.0) boss_dist=0.9 boss_hp=15.125/800.0 battery=26.1851851851963 fl_on=true stam=100.0 stun=0.0 atk=none ai=3 near=BossArchitect@0.9 col=BossArchitect col=StreetCollision pack=3.0/40kg slots=7/12 batteries=1 charge=26 itarget=none aim_dot=-0.39 yaw=68
+[bot s2] t=136.0 inventory notice: +100 coins for an achievement
+[bot s2] t=136.0 inventory notice: +100 coins for an achievement
+[bot s2] t=136.1 inventory notice: Photo added (52)
+[bot s2] t=136.1 WIN ending fired
+[bot s2] ── RUN SUMMARY ──────────────────────────────
+[bot s2]   result       : WIN
+[bot s2]   wall time    : 136.1s
+[bot s2]   districts FULL: 11/11
+[bot s2]   deaths       : 1
+[bot s2]   cost         : difficulty 1, 26 hits taken, 312 health lost, 7 items used, first death at 133.6 s
+[bot s2]   coins earned : 10987 (wallet 10987)
+[bot s2]   nudges       : 15 (>1 means the win leaned on nudge rescues, not clean nav — docs/REDTEAM_CHALLENGE.md TG-PLAY)
+[bot s2]   onboarding   : first_interactable=4.2 first_secret_hint=2.7 first_secret_found=-1.0 first_district_full=9.4
+[bot s2]   stage timeline: suburbs:0@1.5, suburbs:1@4.2, suburbs:2@4.7, suburbs:3@9.4, residential:0@9.7, residential:1@11.5, residential:2@11.7, residential:3@12.0, park:0@12.3, park:1@16.6, park:2@18.6, park:3@24.0, school:0@24.3, school:1@26.4, school:2@26.7, school:3@26.9, hospital:0@27.3, hospital:1@29.8, hospital:2@32.5, hospital:3@36.9, gas_station:0@37.2, gas_station:1@39.0, gas_station:2@39.2, gas_station:3@39.5, police:0@39.8, police:1@42.0, police:2@47.0, police:3@52.0, warehouses:0@52.3, warehouses:1@54.0, warehouses:2@54.3, warehouses:3@54.6, industrial:0@54.9, industrial:1@56.8, industrial:2@59.0, industrial:3@62.3, substation:0@62.6, substation:1@64.5, substation:2@64.7, substation:3@65.0, power_station:0@65.3, power_station:1@68.6, power_station:2@68.9
+[bot s2]   part economy : suburbs stage 0->1 @t=4.2 | suburbs stage 1->2 @t=4.7 | suburbs stage 2->3 @t=9.4 | residential stage 0->1 @t=11.5 | residential stage 1->2 @t=11.7 | residential stage 2->3 @t=12.0 | park stage 0->1 @t=16.6 | park stage 1->2 @t=18.6 | park stage 2->3 @t=24.0 | school stage 0->1 @t=26.4 | school stage 1->2 @t=26.7 | school stage 2->3 @t=26.9 | hospital stage 0->1 @t=29.8 | hospital stage 1->2 @t=32.5 | hospital stage 2->3 @t=36.9 | gas_station stage 0->1 @t=39.0 | gas_station stage 1->2 @t=39.2 | gas_station stage 2->3 @t=39.5 | police stage 0->1 @t=42.0 | police stage 1->2 @t=47.0 | police stage 2->3 @t=52.0 | warehouses stage 0->1 @t=54.0 | warehouses stage 1->2 @t=54.3 | warehouses stage 2->3 @t=54.6 | industrial stage 0->1 @t=56.8 | industrial stage 1->2 @t=59.0 | industrial stage 2->3 @t=62.3 | substation stage 0->1 @t=64.5 | substation stage 1->2 @t=64.7 | substation stage 2->3 @t=65.0 | power_station stage 0->1 @t=68.6 | power_station stage 1->2 @t=68.9
+[bot s2] ── END ──────────────────────────────────────
+WARNING: 39 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 1 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
+# EXIT=0

@@ -1,0 +1,29 @@
+# proof boot
+# utc 20261026T100237Z
+# head 10627bb3 (uncommitted paths: 2)
+# env QA_SOAK_SEC=20 TLS_UDG_GUARDED=1 
+# cmd /workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --headless --path /workspace/scratch/e4e8279ce462/release-delivery-check/qa-project res://scenes/tools/boot_check_scene.tscn
+WARNING: Couldn't get executable path from /proc/self/exe, using argv[0]
+     at: get_executable_path (drivers/unix/os_unix.cpp:1157)
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[boot] t=0.0s phase0 runner ready
+[boot] t=1.1s phase1 menu reachable
+[boot] t=2.6s phase2 New Game started, player spawned
+[boot] t=3.5s phase2b no ad before input — OK
+[boot] t=3.5s phase3 sustaining 60s gameplay
+[boot] t=13.5s heartbeat 10/60s — playing, player alive
+[boot] t=23.6s heartbeat 20/60s — playing, player alive
+[boot] t=33.6s heartbeat 30/60s — playing, player alive
+[boot] t=43.6s heartbeat 40/60s — playing, player alive
+[boot] t=53.6s heartbeat 50/60s — playing, player alive
+[boot] t=63.6s heartbeat 60/60s — playing, player alive
+[boot] t=63.6s phase4 save
+[boot] t=63.6s phase5 quit-to-menu
+[boot] t=63.8s phase6 load
+[boot] DONE fails=0
+WARNING: 10 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 2 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
+# EXIT=0

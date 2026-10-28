@@ -1,0 +1,1 @@
+proof_run goldmaster: exit=0 -> .qa_logs/proofs/goldmaster.out (51 lines)

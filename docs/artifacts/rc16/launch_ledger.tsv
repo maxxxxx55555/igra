@@ -244,3 +244,34 @@ n	utc	head	id	exit	command
 243	20261022T230800Z	b27e5a33	v10_land_mutations_s31	0	python tools/qa_sim/s26_mutations.py run --tag s31
 244	20261022T234828Z	72671688	v10_a3_full_closeout	0	bash .qa_logs/a3_full_closeout.sh
 245	20261023T020058Z	72671688	v10_a3_accept	0	bash .qa_logs/a3_accept.sh
+246	20261026T084306Z	a4b1943d	mega_import	0	timeout 240 /workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --headless --editor --import --path /workspace/scratch/e4e8279ce462/import-project --quit
+247	20261026T084924Z	a4b1943d	mega_polish	0	timeout 100 /workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --headless --path . res://scenes/tools/release_polish_check_scene.tscn
+248	20261026T085855Z	7e996993	mega_frames	0	bash /workspace/scratch/e4e8279ce462/run_visual.sh timeout 900 /workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --path . --resolution 1280x720 --audio-driver Dummy res://scenes/tools/release_frames_scene.tscn
+249	20261026T090109Z	7e996993	mega_terminal_frames	0	bash /workspace/scratch/e4e8279ce462/run_visual.sh timeout 300 /workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --path . --resolution 1280x720 --audio-driver Dummy res://scenes/tools/release_polish_check_scene.tscn -- --capture
+250	20261026T090303Z	7e996993	mega_frames_complete	0	bash /workspace/scratch/e4e8279ce462/run_visual.sh timeout 600 /workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --verbose --path . --resolution 1280x720 --audio-driver Dummy res://scenes/tools/release_frames_scene.tscn
+251	20261026T092251Z	586b9341	godot_version	0	/workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --headless --path /workspace/scratch/e4e8279ce462/igra --version
+252	20261026T092428Z	586b9341	mega_linux_export	0	/workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --headless --path /workspace/scratch/e4e8279ce462/export-check/export-project --export-release Linux Smoke /workspace/scratch/e4e8279ce462/export-check/LastStreetlight.x86_64
+253	20261026T092433Z	586b9341	mega_native_release_smoke	0	timeout 120 /workspace/scratch/e4e8279ce462/export-check/LastStreetlight.x86_64 --headless --audio-driver Dummy --quit-after 600
+254	20261026T093051Z	b93b464e	godot_version	0	/workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --headless --path /workspace/scratch/e4e8279ce462/igra --version
+255	20261026T093442Z	b93b464e	mega_signed_roundtrip_fix	0	timeout 150 /workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --headless --path /workspace/scratch/e4e8279ce462/full-release-verified/qa-project res://scenes/tools/save_integrity_check_scene.tscn
+256	20261026T093618Z	4ce6d19f	godot_version	0	/workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --headless --path /workspace/scratch/e4e8279ce462/igra --version
+257	20261026T095017Z	4ce6d19f	mega_closeout_isolated	0	timeout 900 /workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --headless --path /workspace/scratch/e4e8279ce462/full-release-final/qa-project res://scenes/tools/closeout_check_scene.tscn
+258	20261026T095534Z	4ce6d19f	mega_closeout_log_fixed	0	timeout 900 /workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --headless --path /workspace/scratch/e4e8279ce462/full-release-final/qa-project res://scenes/tools/closeout_check_scene.tscn
+259	20261026T100035Z	10627bb3	godot_version	0	/workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --headless --path /workspace/scratch/e4e8279ce462/igra --version
+260	20261028T104622Z	0287a08d	final_frames	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 600
+261	20261028T110950Z	6715c006	godot_version	0	C:/Users/Maxsim/AppData/Local/IgraRelease/toolchain-4.7.2/godot/Godot_v4.7.2-stable_win64_console.exe --headless --path C:/Users/Maxsim/AppData/Local/IgraRelease/20261028-102606-b379d227/source --version
+262	20261028T112313Z	790dba09	godot_version	0	C:/Users/Maxsim/AppData/Local/IgraRelease/toolchain-4.7.2/godot/Godot_v4.7.2-stable_win64_console.exe --headless --path C:/Users/Maxsim/AppData/Local/IgraRelease/20261028-102606-b379d227/source --version
+263	20261028T114227Z	cd92f125	godot_version	0	C:/Users/Maxsim/AppData/Local/IgraRelease/toolchain-4.7.2/godot/Godot_v4.7.2-stable_win64_console.exe --headless --path C:/Users/Maxsim/AppData/Local/IgraRelease/20261028-102606-b379d227/source --version
+264	20261028T132912Z	dc47fb8c	s36_a_dc47fb8c	0	bash .qa_logs/s36_a.sh
+265	20261028T134019Z	dc47fb8c	s36_b_dc47fb8c	0	bash .qa_logs/s36_b.sh
+266	20261028T135147Z	64fd2690	s36_c_64fd2690	0	bash .qa_logs/s36_c.sh
+267	20261028T145412Z	64fd2690	s36_gm64fd2690	0	bash tools/qa_sim/guarded_headless res://scenes/tools/qa_headless_suite_scene.tscn 240
+268	20261028T145716Z	64fd2690	s36_gm64fd2690	0	bash tools/qa_sim/guarded_headless res://scenes/tools/qa_headless_suite_scene.tscn 240
+269	20261028T150519Z	97820583	s36_d_97820583	0	bash .qa_logs/s36_d.sh
+270	20261028T151153Z	a5664feb	s36_e_a5664feb	0	bash .qa_logs/s36_e.sh
+271	20261028T153342Z	a5664feb	s36_f_a5664feb	0	bash .qa_logs/s36_f.sh
+272	20261028T153836Z	a5664feb	s36_g_a5664feb	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 600
+273	20261028T154106Z	d4a4358b	s36_ab_d4a4358b	0	bash .qa_logs/s36_ab.sh
+274	20261028T155353Z	561cbb24	s36_g1_561cbb24	0	bash .qa_logs/s36_g1.sh
+275	20261028T162035Z	561cbb24	s36_gm3_561cbb24	0	bash tools/qa_sim/guarded_headless res://scenes/tools/qa_headless_suite_scene.tscn 240
+276	20261028T162211Z	76529eaa	s36_g2_76529eaa	0	bash .qa_logs/s36_g2.sh

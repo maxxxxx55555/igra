@@ -1,5 +1,31 @@
 ﻿# Known issues
 
+## OPEN (2026-10-28, Session 36): runtime acceptance of the source pass of 2026-10-28, and what it leaves
+
+Closed with an engine (head `76529eaa`; the rows are the Session 36 block of `docs/RUN_STATE.md`): the source pass runs. Compile and arity read 0, the closeout reads 625 of 625 (its first run read six failures, all in the checks and not in the game), the autoplay bot won 3 of 3 seeds on Normal and 3 of 3 on Hard with no softlock, `qa_guard_e2e`, the audio truth gate, the density frames (55 per setting), AF3 on the 8 store frames and the static gates pass; the signed Android bundle (version code 7) passes `aab_check` and the Windows build starts with no script error.
+
+- **Perf is not settled on this laptop.** The High tier gate (p95 at most 33 ms) read 33.65 and 33.21 ms in one run of `a5664feb` and 21.37 and 21.12 ms in the next, with another program's Godot runs on the same CPU; the A/B of the art pass (before, with, before, with) passed both sides in its first round and failed both in its second, so nothing is attributable to the art. Draw calls are 104 to 115 against 200 and video memory 191 MiB against 512. Nobody has measured a phone.
+- **The ten-minute soak ends slower than it starts** (p95 18.06 to 32.32 ms, 215 frames over 50 ms; static memory +6.55 MiB, 160 objects, 25 nodes, 0 orphans). The machine was shared, so a hot laptop and a slow leak both fit: read it again on a cold, quiet one before calling it a leak.
+- **The bundle was never booted** and the new menu, shop and HUD layout were never seen on a phone; the engine's runs are desktop and GL Compatibility.
+- **The twelve music tracks have no verified commercial rights** (`docs/ASSET_LICENSES.md`, `RELEASE_CHECKLIST.md` section 10: owner step 1).
+- **The checks of the source pass have no mutation rows** (the five that Session 36 fixed and the new ones were run green, never made to fail on purpose).
+- **The surfaces are photographs, the things on them are not**: the road, the sidewalk and the prop surfaces are CC0 scans (Poly Haven) and the trees are bare limbs, but the monsters, the buildings and the props are still primitives. Real models and animation are the next art step and need an artist or a CC0 kit (Kenney, Quaternius) and a licence row each.
+- **35 ObjectDB instances are still freed only at the exit of a bot run** (benign, as before).
+
+## Source pass 2026-10-28; runtime acceptance done in Session 36
+
+The dated records below are historical. Current fixes and exact runtime
+regressions are in `RELEASE_COMPLETION_20261028.md`. Loop seams are now a
+mandatory static gate, all four recipe one-shots exist in the pinned PR,
+and the current locale set is six. This pass fixes the early First Light
+grant, Truth eligibility, milestone/daily persistence, quick-wheel bindings
+and modal pause, initial HUD values and quality-switch district grading.
+New menu/shop/HUD art and layout still need fresh Godot captures.
+Fresh full-engine and bot results, AF3 and the signing were done in Session
+36 (the section above); physical-device checks, rights and store actions
+remain pending. Earlier dated PASS records do not certify this source
+revision, the Session 36 records do.
+
 ## OPEN (2026-10-21, Session 28, closed out by Session 29): what the masterpiece pass finished and what it left
 
 Closed by Session 28 (every one with a gate and a mutation that bites, `docs/artifacts/rc16/proofs/s28_*`): the attack telegraphs (TEL1-TEL7, `tools/qa_sim/telegraph_audit.py`); the hit cap of `12 x damage_cap x NG+`, the Watcher's reach of 6 m, the first spawn point, the respawn battery floor, the park that opens with the Shadow, the ammo that doubles from the gas station and the wake of the heavy kinds within 10 m (DIF1-DIF3, ESC1, RET1, WAKE1, BAT0); the security extension (SPD1, VIT1, ECO1, NGB1, DLY4, DLY5, ACH2, SAV2, CFG1, OVL1, SAVE1, PICK1, LANG1, EX3, EX4, EX10, HC1); the hunted-level stem mixing (MUS5, MUS6); the story props (STORY1, STORY2); the window and lamp detail (V1A, V1B: the cream pyramids were a render-order bug, fixed by a render priority, a transparency sort and a distance fade); the burst scale (BURST1); the ending title contrast (ENDC1); DAILY-28 and CURVE-28.
@@ -82,7 +108,7 @@ Measured with `CLOSEOUT_ONLY=rtl` (`rtl_screens_note` in `scripts/tools/rc16/fin
 ## CLOSED (2026-10-11, rc17 R0): the shop in Arabic drew its content outside the panel
 
 In Arabic the coin header, the scroll area and the six item cards of the shop stand about one panel width to the right of the panel, which stays empty (frame `docs/stills/rc16_f1/A06_shop_ar_after_74f710b_20261008T091603Z.png`, read once). Found by reading that frame. SHOP1 passes in Arabic because it checks each Buy button against its own card and the grid, not the grid against the panel.
-Cause, as far as launches 21 to 23 show: the shop and the other Screens cards set `.position` on Controls that have no parent yet; under the right-to-left layout of Arabic that offset lands one parent width away (a Buy button at the card's x plus 322.5 px with an Arabic card, minus 187.5 px with a left-to-right card; derived from the printed rects, which the check grows by its 0.5 px tolerance, so the card's own x is the printed 1725.333 plus 0.5: `docs/artifacts/rc16/proofs/f1_post2_3840ac9.out`, `docs/artifacts/rc16/proofs/f1_post3_7bc23c6.out`). The cards of the shop are containers now (below), so each Buy button stays inside its card; `header.position = Vector2(0, 0)` (`scripts/ui/screens.gd:941`) and `scroll.position = Vector2(0, SHOP_TOP)` (`scripts/ui/screens.gd:956`) still use absolute positions, and so do the other Screens cards; eight of them were measured in Arabic since (the OPEN entry above), Loading, PhotoMode, PuzzleCables, StoryScene and FinalNight were not.
+Cause, as far as launches 21 to 23 show: the shop and the other Screens cards set `.position` on Controls that have no parent yet; under the right-to-left layout of Arabic that offset lands one parent width away (a Buy button at the card's x plus 322.5 px with an Arabic card, minus 187.5 px with a left-to-right card; derived from the printed rects, which the check grows by its 0.5 px tolerance, so the card's own x is the printed 1725.333 plus 0.5: `docs/artifacts/rc16/proofs/f1_post2_3840ac9.out`, `docs/artifacts/rc16/proofs/f1_post3_7bc23c6.out`). The cards of the shop are containers now (below), so each Buy button stays inside its card; `header.position = Vector2(0, 0)` (`scripts/ui/screens.gd:958`) and `scroll.position = Vector2(0, SHOP_TOP)` (`scripts/ui/screens.gd:973`) still use absolute positions, and so do the other Screens cards; eight of them were measured in Arabic since (the OPEN entry above), Loading, PhotoMode, PuzzleCables, StoryScene and FinalNight were not.
 Fixed: `_populate_shop` attaches the coin header and the scroll area to the panel's content before it sizes and places them (`scripts/ui/screens.gd:939`, `scripts/ui/screens.gd:954`). The closeout check SHOP2 (the card encloses the header and the scroll area, 13 languages x 3 text sizes) fails on the shop code of `03fd367` in Arabic at the three sizes (`docs/artifacts/rc16/proofs/r0_af2_pre_b82bfef.out`: the header at x 1433.3 against the content's 913.3, one content width of 520 px to the right) and passes on the fix (`docs/artifacts/rc16/proofs/r0_af2_post_b82bfef.out`: 39 cases, none outside); headless, CORRECTION_LOG 147.
 
 ## CLOSED (2026-10-08, RC16 FINISH F1): two defects of rc15 found by the S8 frame read
@@ -188,7 +214,7 @@ scattered magenta/purple particle-like dots, and at least one object rendering a
 magenta/purple rings. The HUD (health/stamina/battery bars, radar, all text) renders perfectly
 clean and readable on top of it — this is a 3D-world-rendering-only problem, not a whole-engine
 or UI-layer problem. GPU: `ATI Technologies Inc. — AMD Radeon(TM) Graphics` (integrated),
-renderer: `gl_compatibility` (`project.godot:272-273`, used for both desktop and mobile presets).
+renderer: `gl_compatibility` (`project.godot:273-274`, used for both desktop and mobile presets).
 
 **Ruled out already**: not an import-cache issue (ran a full `--headless --import` immediately
 before capturing, zero texture-load errors in the capture log); not shader compile failures

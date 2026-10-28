@@ -234,6 +234,8 @@ func get_all() -> Array:
 	return result
 
 func _unlock(achievement_id: StringName) -> void:
+	if not ACHIEVEMENTS.has(achievement_id):
+		return
 	# GAME_AUDIT/arena design audit P6: the Ghost NG+ modifier's "no
 	# achievements" cost only worked for the handful of callers routed
 	# through the public unlock() wrapper below - _check_unlock() (27 of the

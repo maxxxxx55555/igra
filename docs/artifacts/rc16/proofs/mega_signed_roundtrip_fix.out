@@ -1,0 +1,872 @@
+# proof mega_signed_roundtrip_fix
+# utc 20261026T093442Z
+# head b93b464e (uncommitted paths: 5)
+# env TLS_UDG_GUARDED=1 
+# cmd timeout 150 /workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --headless --path /workspace/scratch/e4e8279ce462/full-release-verified/qa-project res://scenes/tools/save_integrity_check_scene.tscn
+WARNING: Couldn't get executable path from /proc/self/exe, using argv[0]
+     at: get_executable_path (drivers/unix/os_unix.cpp:1157)
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[save-integrity] OK  save_slot пишет файл
+[save-integrity] OK  файл слота существует
+[save-integrity] OK  load_slot читает файл
+[save-integrity] OK  данные пережили save->load (777)
+[save-integrity] OK  .bak создаётся при перезаписи
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_bak_recovery (res://scripts/tools/_save_integrity_check.gd:72)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:12)
+WARNING: [SaveSystem] восстановлено из .bak: user://tls_savegame_slot97.save
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:344)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_bak_recovery (res://scripts/tools/_save_integrity_check.gd:72)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:12)
+[save-integrity] OK  битый основной файл -> восстановление из .bak
+[save-integrity] OK  .bak содержит предыдущее валидное состояние (111)
+WARNING: [SaveSystem] основной сейв не читается (не совпала чек-сумма): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_corrupt_rejected (res://scripts/tools/_save_integrity_check.gd:82)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:13)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.32328, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_corrupt_rejected (res://scripts/tools/_save_integrity_check.gd:82)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:13)
+[save-integrity] OK  чек-сумма не сошлась -> load_slot отказывает, а не подставляет мусор
+[save-integrity] OK  3 резервные копии существуют после 4 записей
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_backup_rotation (res://scripts/tools/_save_integrity_check.gd:106)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:14)
+WARNING: [SaveSystem] восстановлено из .bak: user://tls_savegame_slot97.save
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:344)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_backup_rotation (res://scripts/tools/_save_integrity_check.gd:106)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:14)
+[save-integrity] OK  ротация хранит 3 последних состояния по порядку (было 40, .bak дал 30)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_backup_rotation (res://scripts/tools/_save_integrity_check.gd:115)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:14)
+WARNING: [SaveSystem] восстановлено из .bak2: user://tls_savegame_slot97.save
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:344)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_backup_rotation (res://scripts/tools/_save_integrity_check.gd:115)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:14)
+[save-integrity] OK  .bak2 достижим, когда основной и .bak оба биты (20)
+WARNING: [SaveSystem] district/progress данные не прошли отдельную проверку подписи — сброшены
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _verify_progress (res://scripts/core/save_system.gd:307)
+         [1] _read_envelope (res://scripts/core/save_system.gd:294)
+         [2] _read_validated (res://scripts/core/save_system.gd:333)
+         [3] load_slot (res://scripts/core/save_system.gd:663)
+         [4] _check_progress_signature (res://scripts/tools/_save_integrity_check.gd:159)
+         [5] _ready (res://scripts/tools/_save_integrity_check.gd:15)
+[save-integrity] OK  forged district-FULL state is rejected even with a valid outer envelope
+WARNING: [SaveSystem] основной сейв не читается (не совпала чек-сумма): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_legacy_checksum_rejected (res://scripts/tools/_save_integrity_check.gd:191)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:16)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33132, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_legacy_checksum_rejected (res://scripts/tools/_save_integrity_check.gd:191)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:16)
+[save-integrity] OK  legacy checksum-only envelope (correct checksum, no hmac) is rejected, not trusted-once
+WARNING: [SaveSystem] district/progress данные не прошли отдельную проверку подписи — сброшены
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _verify_progress (res://scripts/core/save_system.gd:307)
+         [1] _read_envelope (res://scripts/core/save_system.gd:294)
+         [2] _read_validated (res://scripts/core/save_system.gd:333)
+         [3] load_slot (res://scripts/core/save_system.gd:663)
+         [4] _check_missing_progress_hmac_rejected (res://scripts/tools/_save_integrity_check.gd:219)
+         [5] _ready (res://scripts/tools/_save_integrity_check.gd:17)
+[save-integrity] OK  missing progress_hmac is treated as failed, not skipped (valid outer envelope, no progress_hmac at all)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (84)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33401, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33419, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (f8)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33437, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33451, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33465, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (9e)
+WARNING: [SaveSystem] основной сейв не читается (не совпала чек-сумма): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33483, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33502, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (fc)
+Unicode parsing error: Byte 24 is not a correct continuation byte after df
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (83)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33519, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33532, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33543, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (91)
+WARNING: [SaveSystem] основной сейв не читается (не совпала чек-сумма): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.3356, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33576, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+Unicode parsing error: Byte 79 is not a correct continuation byte after cc
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (b7)
+Unicode parsing error: Overlong encoding (c0 ad)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (ad)
+Unicode parsing error: Byte a is not a correct continuation byte after f0
+Unicode parsing error: Byte 7b is not a correct continuation byte after f5
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (a6)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (b4)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33603, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33619, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33631, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (a3)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33644, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33659, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (88)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (a4)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (fd)
+Unicode parsing error: Byte c1 is not a correct continuation byte after e6 bc
+Unicode parsing error: Byte 64 is not a correct continuation byte after c1
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33682, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33696, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33707, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (93)
+WARNING: [SaveSystem] основной сейв не читается (не совпала чек-сумма): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33727, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.3374, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Missing e7 8c UTF-8 continuation byte
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (8c)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33757, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33776, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33788, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (8d)
+WARNING: [SaveSystem] основной сейв не читается (не совпала чек-сумма): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33807, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.3382, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (9f)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (82)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Missing c7 UTF-8 continuation byte
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33837, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33849, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.3386, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+Unicode parsing error: Byte 3a is not a correct continuation byte after dd
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33879, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33896, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (a5)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (aa)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (a3)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33917, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.3393, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33941, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+Unicode parsing error: Byte 64 is not a correct continuation byte after dd
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.33954, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.3397, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (8f)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (91)
+Unicode parsing error: Byte 79 is not a correct continuation byte after d2
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (a9)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (b6)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (9f)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (f8)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.34027, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.34041, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.34053, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (8d)
+WARNING: [SaveSystem] основной сейв не читается (не совпала чек-сумма): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.3408, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.34096, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (8b)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (bb)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.34113, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.34126, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.34138, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+Unicode parsing error: Byte 3a is not a correct continuation byte after dd
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.3415, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.34166, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (bc)
+Unicode parsing error: Byte f1 is not a correct continuation byte after cf
+Unicode parsing error: Byte 1f is not a correct continuation byte after f1
+Unicode parsing error: Byte b3 is not a correct continuation byte after f4
+Unicode parsing error, some characters were replaced with � (U+FFFD): Invalid UTF-8 leading byte (b3)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.34185, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.34198, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] основной сейв не читается (битый JSON): user://tls_savegame_slot97.save — пробую резервные
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:337)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+WARNING: [SaveSystem] сейв и резервные копии не читаются — карантин в user://tls_savegame_slot97.save.corrupt-1793007283.3421, старт с чистого состояния
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _read_validated (res://scripts/core/save_system.gd:349)
+         [1] load_slot (res://scripts/core/save_system.gd:663)
+         [2] _check_fuzz_50_mutants (res://scripts/tools/_save_integrity_check.gd:265)
+         [3] _ready (res://scripts/tools/_save_integrity_check.gd:18)
+[save-integrity] OK  fuzz: 50/50 mutants processed without crashing the process
+[save-integrity] OK  экспорт отказывает, если сейва ещё нет
+[save-integrity] OK  экспорт пишет файл в Downloads
+[save-integrity] OK  импорт читает файл из Downloads
+[save-integrity] OK  импорт вернул исходные (333) данные, не последние (999) — было 333
+[save-integrity] OK  импорт отказывает на битом файле экспорта
+[save-integrity] OK  signed side file round trip
+[save-integrity] OK  malformed signed data rejected quietly
+[save-integrity] OK  malformed signed data rejected quietly
+[save-integrity] OK  malformed signed data rejected quietly
+[save-integrity] DONE fails=0
+# EXIT=0

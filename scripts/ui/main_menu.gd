@@ -6,6 +6,7 @@ extends Control
 ## LocalizationManager и обновляются при смене языка.
 
 const _FOG := preload("res://scripts/ui/menu_fog.gd")
+const _LAYOUT := preload("res://scripts/ui/main_menu_layout.gd")
 const _STENCIL := preload("res://assets/shaders/stencil_title.gdshader")
 
 ## Кнопка -> ключ перевода.
@@ -35,6 +36,8 @@ func _ready() -> void:
 	_start_flicker()
 	_ensure_continue(vb as VBoxContainer)
 	_install_daily_card(vb as VBoxContainer)
+	_LAYOUT.install(self, vb as VBoxContainer)
+	resized.connect(_layout_menu)
 	_connect(vb, "Continue", func() -> void:
 		# continue_game() поднимает состояние автолоадов; сцену открываем сами.
 		GameManager.continue_game()
@@ -77,22 +80,21 @@ func _install_fog() -> void:
 	var hero := get_node_or_null("MenuHeroV2")
 	move_child(fog, (hero.get_index() + 1) if hero != null else 1)
 
-## The hero art's lamp glow and ground pool are near-white (233, 231, 227): the style guide's brightest tone is bone #d8d2c4
-## (docs/STYLE_GUIDE.md section 2), so the art is multiplied down to it. The brass cone keeps its hue.
+## A restrained warm tint keeps the street artwork inside the night palette.
 const HERO_TINT := Color(0.93, 0.91, 0.86)
 
 ## V2 SKIN WIRING P4: real hero art (streetlight + silhouette) over the
 ## procedural skyline above - inserted between them so both keep working,
 ## just visually replaced (no code removed, matches "additive only").
 func _install_hero_bg_v2(after: Node) -> void:
-	var path := "res://assets/textures/screens_v2/menu_hero.png"
+	var path := "res://assets/ui/menu_city.png"
 	if get_node_or_null("MenuHeroV2") != null or not ResourceLoader.exists(path):
 		return
 	var hero := TextureRect.new()
 	hero.name = "MenuHeroV2"
 	hero.texture = load(path)
 	hero.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	hero.stretch_mode = TextureRect.STRETCH_SCALE
+	hero.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	hero.modulate = HERO_TINT
 	preload("res://scripts/ui/menu_parallax.gd").attach(self, hero)  # B9: the backdrop drifts with the pointer
 	hero.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -111,7 +113,8 @@ func _style_title(vb: VBoxContainer) -> void:
 	# draws as two line breaks: a blank line between the words.
 	title.text = title.text.replace("\r", "")
 	title.add_theme_color_override("font_outline_color", Color(0.047, 0.062, 0.086))
-	title.add_theme_constant_override("outline_size", 12)
+	title.add_theme_font_override("font", ThemeProvider.heading_font())
+	title.add_theme_constant_override("outline_size", 2)
 	# V2 of Session 27: the title card is stencilled, one cut across the letters and their outline (assets/shaders/stencil_title.gdshader)
 	var stencil := ShaderMaterial.new()
 	stencil.shader = _STENCIL
@@ -156,10 +159,10 @@ const _DAILY_TEXT_KEYS: Dictionary = {
 	"light_streets": "DAILY_LIGHT_STREETS", "restore_districts": "DAILY_RESTORE_DISTRICTS",
 	"play_minutes": "DAILY_PLAY_MINUTES",
 }
-## The menu's small print sits over the lamp's bright glow: the title's own dark outline, thinner, keeps it legible.
+## A thin outline keeps the small print legible through the moving fog.
 func _legible(line: Label) -> void:
 	line.add_theme_color_override("font_outline_color", Color(0.047, 0.062, 0.086))
-	line.add_theme_constant_override("outline_size", 5)
+	line.add_theme_constant_override("outline_size", 2)
 
 func _install_daily_card(vb: VBoxContainer) -> void:
 	if vb.get_node_or_null("DailyCard") == null:
@@ -255,6 +258,12 @@ func _apply_localization(_lang: Variant = null) -> void:
 			b.text = LocalizationManager.t(String(LABELS[node_name]))
 	_apply_ngp_status(vb)
 	_refresh_daily_card(vb as VBoxContainer)
+	_layout_menu.call_deferred()
+
+func _layout_menu() -> void:
+	var column := get_node_or_null("VBox") as VBoxContainer
+	if column != null:
+		_LAYOUT.fit(self, column)
 
 ## arena design audit P3: neither button told the player NG+ was active or
 ## which one actually starts a run - "Continue" resumes the exact save,

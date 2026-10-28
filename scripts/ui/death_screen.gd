@@ -1,4 +1,6 @@
 extends Control
+const _LAYOUT := preload("res://scripts/ui/terminal_layout.gd")
+var _summary: Dictionary = {}
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_build()
@@ -12,53 +14,31 @@ var _b2: Button
 
 func _build() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
-	set_anchors_preset(Control.PRESET_FULL_RECT)
-	theme = ThemeProvider.build_theme()
-	# V2 SKIN WIRING P4: real background art over the old flat tint.
-	var bg_path := "res://assets/textures/screens_v2/death_loom.png"
-	if ResourceLoader.exists(bg_path):
-		var bg_tex := TextureRect.new()
-		bg_tex.texture = load(bg_path)
-		bg_tex.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		bg_tex.stretch_mode = TextureRect.STRETCH_SCALE
-		bg_tex.set_anchors_preset(Control.PRESET_FULL_RECT)
-		add_child(bg_tex)
-		var tint := ColorRect.new()
-		tint.color = Color(0.09, 0.02, 0.02, 0.45)
-		tint.set_anchors_preset(Control.PRESET_FULL_RECT)
-		add_child(tint)
-	else:
-		var bg := ColorRect.new()
-		bg.color = Color(0.09, 0.02, 0.02, 0.92)
-		bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-		add_child(bg)
-	var vb := VBoxContainer.new()
-	vb.set_anchors_preset(Control.PRESET_CENTER)
-	# Grow both ways: a centre anchor alone grows the box right and down from the
-	# centre, so the whole panel sat off-centre (docs/stills/final/06 at rc14).
-	vb.grow_horizontal = Control.GROW_DIRECTION_BOTH
-	vb.grow_vertical = Control.GROW_DIRECTION_BOTH
-	vb.add_theme_constant_override("separation", 16)
-	add_child(vb)
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var vb: VBoxContainer = _LAYOUT.build(self)
 	_t = Label.new()
+	_t.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_t.add_theme_font_size_override("font_size", 28)
 	_t.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
 	_t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vb.add_child(_t)
 	_s = Label.new()
+	_s.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_s.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_s.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
 	vb.add_child(_s)
 	_d = Label.new()
+	_d.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_d.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_d.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
 	vb.add_child(_d)
 	# The screen is built once and shown on every death: the figures are read when it appears.
 	visibility_changed.connect(func() -> void:
 		if visible:
+			_capture_summary()
 			_apply_localization())
 	_b = Button.new()
-	_b.focus_mode = Control.FOCUS_NONE
+	_b.focus_mode = Control.FOCUS_ALL
 	# respawn_after_death() (G16) не трогает дерево сцен, поэтому одного его
 	# мало: без перезагрузки на экране оставался бы тот же мёртвый игрок с
 	# 0 HP. Перезагружаем игровую сцену, как делает меню.
@@ -67,21 +47,28 @@ func _build() -> void:
 		Routes.restart_game())
 	vb.add_child(_b)
 	_b2 = Button.new()
-	_b2.focus_mode = Control.FOCUS_NONE
+	_b2.focus_mode = Control.FOCUS_ALL
 	_b2.pressed.connect(func() -> void: GameManager.return_to_menu())
 	vb.add_child(_b2)
+	_capture_summary()
 	_apply_localization()
+
+func _capture_summary() -> void:
+	_summary = {"killer": ProgressTracker.last_hit_by, "seconds": int(GameManager.play_time),
+		"districts": int(ProgressTracker.get_stats()["districts"]), "total": PowerGrid.all_districts().size(),
+		"docs": ProgressTracker.count_docs()}
+	_LAYOUT.set_ending(self, EndingsManager.get_ending())
 
 func _apply_localization() -> void:
 	_t.text = LocalizationManager.t("DEATH_TITLE")
-	var killer := ProgressTracker.last_hit_by
+	var killer: StringName = _summary.get("killer", &"")
 	_s.text = LocalizationManager.tf("DEATH_KILLED_BY", [LocalizationManager.name_for("MONSTER_", killer, String(killer).capitalize())]) if killer != &"" else LocalizationManager.t("DEATH_BY")
-	var seconds := int(GameManager.play_time)
-	var districts: int = ProgressTracker.get_stats()["districts"]
-	var total: int = PowerGrid.all_districts().size()
+	var seconds: int = _summary.get("seconds", 0)
+	var districts: int = _summary.get("districts", 0)
+	var total: int = _summary.get("total", 0)
 	_d.text = "\n".join([
 		LocalizationManager.tf("DEATH_TIME", ["%d:%02d" % [seconds / 60, seconds % 60]]),
 		LocalizationManager.tf("DEATH_DISTRICTS", [districts, total, 100 * districts / maxi(total, 1)]),
-		LocalizationManager.tf("DEATH_DOCS", [ProgressTracker.count_docs(), Endings.get_total_documents()])])
+		LocalizationManager.tf("DEATH_DOCS", [_summary.get("docs", 0), Endings.get_total_documents()])])
 	_b.text = LocalizationManager.t("retry")
 	_b2.text = LocalizationManager.t("back_menu")

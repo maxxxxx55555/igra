@@ -77,6 +77,7 @@ static func _post_fx_tiers(r: Node) -> void:
 ## One hit through the real signal at a tier and Reduce Flash setting; the aberration on screen 0.05 s later.
 static func _hit_at(r: Node, tier: int, reduce_flash: bool) -> float:
 	SettingsManager.set_graphics_tier(tier)
+	_overlay(r).call("set_chroma_amount", 0.0)  # a change of tier applies the district's post-processing again (GRADE1): nothing from the district, so only the hit can show
 	SettingsManager.set_setting("reduce_flash", reduce_flash)
 	EventBus.player_damaged.emit(5.0)
 	await r.get_tree().create_timer(0.05).timeout

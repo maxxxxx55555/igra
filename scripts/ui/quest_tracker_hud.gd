@@ -4,8 +4,8 @@ class_name QuestTrackerHUD
 # S5.3: HUD quest tracker - right top under minimap
 # Shows up to 3 active objectives with progress, optional direction arrow
 
-const PANEL_WIDTH := 300
-const PANEL_HEIGHT := 200
+const PANEL_WIDTH := 360
+const PANEL_HEIGHT := 224
 const PANEL_MARGIN := 20
 ## Below the top-right maps, not just below the radar. The comment here used to
 ## read "ниже миникарты" at 140, which was never true: the radar spans y 16..180
@@ -35,9 +35,10 @@ const _FADE := preload("res://scripts/ui/hud_fade.gd")
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_build_ui()
+	get_viewport().size_changed.connect(_layout_panel)
 	EventBus.game_state_changed.connect(func(state: int) -> void:
-		if state == GameManager.GameState.PLAYING and _container.visible:
-			_FADE.show_for([_container], _SHOW_SEC))
+		if state == GameManager.GameState.PLAYING:
+			_refresh())
 
 	# v10 N044: closing a screen shows the HUD again whatever the state is; the list is for play (it drew over the main menu after a run)
 	EventBus.hud_visibility_changed.connect(func(shown: bool) -> void: visible = shown and GameManager.is_playing())
@@ -65,10 +66,7 @@ func _build_ui() -> void:
 	_container = VBoxContainer.new()
 	_container.name = "QuestHUDContainer"
 	_container.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	_container.offset_left = -(PANEL_WIDTH + PANEL_MARGIN)
-	_container.offset_right = -PANEL_MARGIN
-	_container.offset_top = PANEL_TOP
-	_container.offset_bottom = PANEL_TOP + PANEL_HEIGHT
+	_layout_panel()
 	_container.add_theme_constant_override("separation", 8)
 	add_child(_container)
 
@@ -84,9 +82,10 @@ func _build_ui() -> void:
 	# Title
 	_title_lbl = Label.new()
 	_title_lbl.text = LocalizationManager.t("QUEST_OBJECTIVES")
-	_title_lbl.add_theme_font_size_override("font_size", 14)
+	_title_lbl.add_theme_font_size_override("font_size", 22)
 	_title_lbl.add_theme_color_override("font_color", ThemeProvider.COLOR_AMBER)
-	_title_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_title_lbl.add_theme_font_override("font", ThemeProvider.heading_font())
+	_title_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	inner_vb.add_child(_title_lbl)
 
 	# Objectives list
@@ -96,11 +95,19 @@ func _build_ui() -> void:
 
 	_container.visible = false
 
+func _layout_panel() -> void:
+	var width: float = minf(float(PANEL_WIDTH), get_viewport().get_visible_rect().size.x * 0.34)
+	_container.offset_left = -(width + PANEL_MARGIN)
+	_container.offset_right = -PANEL_MARGIN
+	_container.offset_top = PANEL_TOP
+	_container.offset_bottom = PANEL_TOP + PANEL_HEIGHT
+
 func _make_stylebox() -> StyleBoxFlat:
 	var sb := StyleBoxFlat.new()
 	sb.bg_color = Color(0.04, 0.05, 0.07, 0.85)
 	# GDD 11.4: panel fill + 1 px panel-edge frame + light drop shadow. The
 	# amber accent stays on the title and the checkbox row, not on the frame.
+	sb.set_content_margin_all(12.0)
 	sb.border_color = ThemeProvider.COLOR_BORDER
 	sb.shadow_color = Color(0.0, 0.0, 0.0, 0.35)
 	sb.shadow_size = 4
@@ -156,7 +163,7 @@ func _refresh(_a: Variant = null, _b: Variant = null, _c: Variant = null) -> voi
 
 		var obj_lbl := Label.new()
 		obj_lbl.text = "%s (%d/%d)" % [QuestManager.get_title(quest), current, target]
-		obj_lbl.add_theme_font_size_override("font_size", 13)
+		obj_lbl.add_theme_font_size_override("font_size", 20)
 		obj_lbl.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT)
 		obj_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		# Без растяжения контейнер выдаёт метке минимальную ширину, и перенос
@@ -188,7 +195,7 @@ func _refresh(_a: Variant = null, _b: Variant = null, _c: Variant = null) -> voi
 		var more := Label.new()
 		more.name = "MoreActiveLabel"
 		more.text = LocalizationManager.tf("QUEST_MORE_ACTIVE", [active_quests.size() - count])
-		more.add_theme_font_size_override("font_size", 12)
+		more.add_theme_font_size_override("font_size", 18)
 		more.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
 		_objectives_vbox.add_child(more)
 	_ignore_input(_container)

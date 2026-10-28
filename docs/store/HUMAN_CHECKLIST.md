@@ -65,11 +65,18 @@ human for:
   Store this file and its password outside the repo. Paste the path into
   `export_presets.cfg`'s `keystore/release`/`keystore/release_user`/
   `keystore/release_password` before the final signed build.
+  (Done in Session 32 with a fresh key, `docs/RELEASE_ARTIFACTS.md`: the
+  bundle of Session 36 is signed with it, and the preset keeps its fields
+  empty on purpose because Godot reads the passwords from the environment.
+  What is left is to copy `.signing/` off this machine.)
 - Data Safety form + IARC content rating questionnaire in Play Console
   (notes on expected answers already in `docs/store/play_store.md`).
-- Privacy policy: needs an actual hosted URL. A short "no data collected"
-  policy is accurate for the current build (no accounts, no analytics SDK)
-  — just needs to be published somewhere and linked.
+- Privacy policy: published (Session 36) at https://maxxxxx55555.github.io/igra/
+  (GitHub Pages from the `gh-pages` branch, English and Russian, contact
+  maxzimkasky@gmail.com). Its "no data collected" text is accurate for the
+  bundle: no accounts, no analytics, and no ad SDK in the shipped build (0 dex
+  entries name `Lcom/applovin/`). Paste that URL into the Play Console and
+  keep the Data Safety answers the same as the page says.
 - Upload to an internal/closed testing track before production.
 - **Music licence, before any upload (Session 27).** The 12 music tracks were made in the Gemini app (Google Lyria, SynthID-watermarked). Google's Terms say Google claims no ownership of content created with its services and say
   nothing on commercial use of Gemini-app music, so the rights are not verified here (`docs/ASSET_LICENSES.md`, section "Session 27 M1"). Read the Gemini Apps terms of your account and accept them, or replace the files

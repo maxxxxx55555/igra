@@ -1,0 +1,32 @@
+# proof craft
+# utc 20261026T100235Z
+# head 10627bb3 (uncommitted paths: 2)
+# env QA_SOAK_SEC=20 TLS_UDG_GUARDED=1 
+# cmd /workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --headless --path /workspace/scratch/e4e8279ce462/release-delivery-check/qa-project res://scenes/tools/craft_check_scene.tscn
+WARNING: Couldn't get executable path from /proc/self/exe, using argv[0]
+     at: get_executable_path (drivers/unix/os_unix.cpp:1157)
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[craft-check] OK  inventory autoload
+[craft-check] OK  can craft battery (cable+fuse)
+[craft-check] OK  cannot craft medkit (no fabric)
+[craft-check] OK  battery crafted
+[craft-check] OK  cable spent
+[craft-check] OK  fuse spent
+[craft-check] OK  medkit craftable (fabric2+alcohol1)
+[craft-check] OK  medkit crafted
+[craft-check] OK  station is interactable
+[craft-check] OK  endings empty on fresh run
+[craft-check] OK  survivor ending (station up, school+gas_station left)
+[craft-check] OK  light ending (all + no docs)
+[craft-check] OK  light ending with all docs
+[craft-check] DONE fails=0
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+WARNING: 16 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 4 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
+# EXIT=0

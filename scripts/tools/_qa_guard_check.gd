@@ -58,6 +58,8 @@ func _run(base: String, snap: String) -> void:
 	Guard.remove_tree(snap + ".tmp")
 	_write(snap + "/files/tls_savegame.save", "no manifest")
 	_check(Guard.restore(base, snap) == -2 and _untouched(base), "snapshot without a manifest is refused")
+	_write(snap + "/" + Guard.MANIFEST, "{broken")
+	_check(Guard.restore(base, snap) == -2 and _untouched(base), "invalid JSON manifest is refused without a parser error")
 	Guard.remove_tree(snap)
 	_check(Guard.snapshot(base, snap, 4242), "second snapshot taken")
 	_write(snap + "/files/saves/slot1.save", "bit rot")

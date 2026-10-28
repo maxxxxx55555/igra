@@ -1,0 +1,27 @@
+# proof localization
+# utc 20261026T100222Z
+# head 10627bb3 (uncommitted paths: 2)
+# env QA_SOAK_SEC=20 TLS_UDG_GUARDED=1 
+# cmd /workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --headless --path /workspace/scratch/e4e8279ce462/release-delivery-check/qa-project res://scenes/tools/i18n_check_scene.tscn
+WARNING: Couldn't get executable path from /proc/self/exe, using argv[0]
+     at: get_executable_path (drivers/unix/os_unix.cpp:1157)
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[i18n] [OK] en.json loaded: 1566 keys
+[i18n] [OK] de: missing 0 []
+[i18n] [OK] de: extra 0 []
+[i18n] [OK] de: bad values 0 []
+[i18n] [OK] es: missing 0 []
+[i18n] [OK] es: extra 0 []
+[i18n] [OK] es: bad values 0 []
+[i18n] [OK] fr: missing 0 []
+[i18n] [OK] fr: extra 0 []
+[i18n] [OK] fr: bad values 0 []
+[i18n] [OK] pt_BR: missing 0 []
+[i18n] [OK] pt_BR: extra 0 []
+[i18n] [OK] pt_BR: bad values 0 []
+[i18n] [OK] ru: missing 0 []
+[i18n] [OK] ru: extra 0 []
+[i18n] [OK] ru: bad values 0 []
+[i18n] fails=0
+# EXIT=0

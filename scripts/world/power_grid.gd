@@ -27,6 +27,16 @@ func get_district(id: StringName) -> DistrictData:
 func get_stage(id: StringName) -> int:
 	var d := get_district(id)
 	return d.stage if d != null else DistrictData.Stage.DARK
+## The restored grid improves comfort without introducing a survival meter.
+func get_thermal_comfort(id: StringName) -> StringName:
+	match get_stage(id):
+		DistrictData.Stage.DARK:
+			return &"cold"
+		DistrictData.Stage.FULL:
+			return &"warm"
+		_:
+			return &"warming"
+
 func all_districts() -> Array:
 	return _by_id.values()
 func is_unlocked(id: StringName) -> bool:

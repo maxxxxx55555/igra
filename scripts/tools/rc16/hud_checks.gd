@@ -4,7 +4,7 @@ extends RefCounted
 ## three Text Sizes (the game's UI scales) and holds the corner clusters inside the screen.
 
 const FADE_WAIT_SEC: float = 4.0
-const CAPTION_W: float = 120.0  # the width hud_3d.gd gives a caption
+const CAPTION_W: float = 220.0  # the width hud_3d.gd gives a caption
 const HUD_SCENE := preload("res://scenes/ui/hud_3d.tscn")
 
 static func run(r: Node) -> void:

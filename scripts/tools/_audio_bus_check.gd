@@ -107,6 +107,11 @@ func _check_probes() -> int:
 	if not pooled:
 		fails += _fail("play_sfx(bus) left every pooled player on its old bus")
 	var ui := get_node("/root/UISFX")
+	# UI feedback is intentionally locked until the same real-input gate as music.
+	var press := InputEventKey.new()
+	press.pressed = true
+	press.keycode = KEY_ENTER
+	MusicManager._input(press)
 	var first := ui.get_child_count()
 	ui.error()
 	ui.pickup()

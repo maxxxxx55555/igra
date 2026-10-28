@@ -1,0 +1,30 @@
+# proof loot_floor
+# utc 20261026T100348Z
+# head 10627bb3 (uncommitted paths: 2)
+# env QA_SOAK_SEC=20 TLS_UDG_GUARDED=1 
+# cmd /workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --headless --path /workspace/scratch/e4e8279ce462/release-delivery-check/qa-project res://scenes/tools/loot_floor_check_scene.tscn
+WARNING: Couldn't get executable path from /proc/self/exe, using argv[0]
+     at: get_executable_path (drivers/unix/os_unix.cpp:1157)
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[lootfloor] suburbs spots=19 floating=0 []
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+ERROR: Parameter "material" is null.
+   at: material_get_instance_shader_parameters (servers/rendering/dummy/storage/material_storage.cpp:264)
+[lootfloor] residential spots=22 floating=0 []
+[lootfloor] park spots=21 floating=0 []
+[lootfloor] school spots=22 floating=0 []
+[lootfloor] hospital spots=22 floating=0 []
+[lootfloor] gas_station spots=22 floating=0 []
+[lootfloor] police spots=24 floating=0 []
+[lootfloor] warehouses spots=24 floating=0 []
+[lootfloor] industrial spots=24 floating=0 []
+[lootfloor] substation spots=20 floating=0 []
+[lootfloor] power_station spots=20 floating=0 []
+[lootfloor] DONE fails=0
+WARNING: 29 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 2 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
+# EXIT=0

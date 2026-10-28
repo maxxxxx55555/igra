@@ -1,0 +1,1 @@
+proof_run release_polish: exit=0 -> .qa_logs/proofs/release_polish.out (50 lines)

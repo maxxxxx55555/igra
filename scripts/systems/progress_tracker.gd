@@ -4,6 +4,7 @@ var kills: int = 0
 var shadow_kills: int = 0
 var puzzles: int = 0
 var time_played: float = 0.0
+## Legacy short-id marks remain readable in older run saves.
 var _ach_done: Dictionary = {}
 var _docs: Dictionary = {}
 ## Какие именно секреты найдены. Счётчика `secrets` хватало достижениям, но
@@ -53,8 +54,8 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	EventBus.secret_found.connect(_on_secret_found)
 	EventBus.enemy_killed.connect(_on_kill)
-	EventBus.puzzle_solved.connect(func(_a, _b): puzzles += 1; _post())
-	EventBus.district_restored.connect(func(_a, _b): _unlock_doc(DOC_ON_DISTRICT); _post())
+	EventBus.puzzle_solved.connect(func(_a, _b): puzzles += 1)
+	EventBus.district_restored.connect(func(_a, _b): _unlock_doc(DOC_ON_DISTRICT))
 	EventBus.item_picked_up.connect(_on_item_picked_up)
 	EventBus.game_over.connect(func() -> void: deaths += 1)
 	EventBus.game_started.connect(func() -> void: last_hit_by = &"")
@@ -160,7 +161,6 @@ func _on_secret_found(id: StringName) -> void:
 	secrets += 1
 	_add_photo("secret_" + key)
 	_unlock_doc(DOC_ON_SECRET)
-	_post()
 
 func is_secret_found(id: String) -> bool:
 	return _secrets_found.get(id, false)
@@ -178,34 +178,7 @@ func _on_kill(id: StringName) -> void:
 		_add_photo("creature_" + String(id))
 	if id == &"shadow":
 		shadow_kills += 1
-	_post()
-func _post() -> void:
-	_check_achievements()
-# Явные проверки (без лямбд в const — они не видят поля экземпляра в GDScript 4).
-func _check_achievements() -> void:
-	if not _ach_done.get("first_light", false) and puzzles >= 1:
-		_grant("first_light")
-	if not _ach_done.get("district_one", false) and _districts_restored() >= 1:
-		_grant("district_one")
-	if not _ach_done.get("shadow_slayer", false) and shadow_kills >= 1:
-		_grant("shadow_slayer")
-	if not _ach_done.get("secret_hunter", false) and secrets >= 3:
-		_grant("secret_hunter")
-## BREAK_REPORT B7: this used to emit EventBus.achievement_unlocked directly
-## with these short ids ("first_light" etc.), bypassing AchievementManager
-## entirely - the real ach_* row (ach_01 for "first_light") never actually
-## unlocked or persisted (missing from the trophy list forever), while
-## rewards_manager.gd's blanket "any achievement_unlocked emit pays
-## REWARD_ACHIEVEMENT coins" handler paid out anyway, since it doesn't
-## check which id fired. Other callers (photo_mode.gd, victory_screen.gd)
-## already go through the real API for the exact same short-id ->
-## ach_* mapping (achievements_manager.gd's own unlock()); this one just
-## never had been wired the same way. _ach_done stays as this class's own
-## "don't re-check the condition every frame" latch, separate from
-## AchievementManager's real _unlocked state.
-func _grant(id: String) -> void:
-	_ach_done[id] = true
-	AchievementManager.unlock(id)
+
 func _unlock_doc(id: String) -> void:
 	if _docs.get(id, false):
 		return

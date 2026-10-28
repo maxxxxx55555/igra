@@ -1,0 +1,34 @@
+# proof timing_60
+# utc 20261026T101359Z
+# head 10627bb3 (uncommitted paths: 2)
+# env QA_SOAK_SEC=20 TLS_UDG_GUARDED=1 
+# cmd /workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --headless --path /workspace/scratch/e4e8279ce462/release-delivery-check/qa-project --fixed-fps 60 res://scenes/tools/timing_equiv_scene.tscn -- --tfps=60
+WARNING: Couldn't get executable path from /proc/self/exe, using argv[0]
+     at: get_executable_path (drivers/unix/os_unix.cpp:1157)
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[timing] fps=60 timer_1s=1.00000
+[timing] fps=60 tween_1s=0.98333
+[timing] fps=60 walk_mps=2.94744
+[timing] fps=60 sprint_mps=4.78720
+[timing] fps=60 stamina_drain_per_s=22.00000
+[timing] fps=60 battery_drain_per_s=0.22222
+[timing] fps=60 rifle_shots_per_s=7.50000
+[timing] fps=60 rifle_reload_s=2.20000
+[timing] fps=60 pistol_shots_per_s=3.15789
+[timing] fps=60 melee_swings_per_s=1.49688
+[timing] fps=60 monster_hits_per_s=0.66574
+[timing] fps=60 monster_damage_per_s=6.65742
+[timing] fps=60 player_damage_per_s=6.65742
+[timing] fps=60 pickup_reach_m=1.25000
+[timing] fps=60 boss_hp0=800.00000
+[timing] fps=60 boss_ttk_s=18.54583
+[timing] fps=60 delta_mean=0.01170
+[timing] fps=60 physics_ticks_per_sim_s=85.48240
+[timing] fps=60 sim_delta_mean=0.01666
+[timing] DONE fps=60 frames=8348 sim_s=139.117 physics_ticks=8347 real_s=97.646
+WARNING: 30 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 6 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
+# EXIT=0

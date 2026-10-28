@@ -223,6 +223,11 @@ func _on_settings_changed(key: String, value: Variant) -> void:
 	if key != "graphics_tier":
 		return
 	_apply_graphics_tier(int(value))
+	var district_manager: Node = get_node_or_null("/root/DistrictManager")
+	if district_manager != null:
+		var district_id := StringName(district_manager.current_district)
+		_apply_lut(district_id)
+		_apply_postfx(district_id)
 
 func _on_weather_changed(_weather: int, _name: String, _fog: float, _rain: float) -> void:
 	if not is_inside_tree():

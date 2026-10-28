@@ -38,6 +38,11 @@ static func _look(r: Node) -> void:
 		setup.set("_we", scratch)
 		setup.set("_env", scratch.environment)
 		setup.call("_boot_look")
+		var postfx: Array = [scratch.environment.glow_bloom, scratch.environment.glow_intensity, scratch.environment.glow_strength, scratch.environment.glow_hdr_threshold, scratch.environment.adjustment_color_correction]
+		for changed_tier: int in [0, 3]:
+			setup.call("_on_settings_changed", "graphics_tier", changed_tier)
+			var changed: Array = [scratch.environment.glow_bloom, scratch.environment.glow_intensity, scratch.environment.glow_strength, scratch.environment.glow_hdr_threshold, scratch.environment.adjustment_color_correction]
+			r._ok(changed == postfx, "GRADE1 district post-processing stays consistent after a graphics-tier change")
 		setup.set("_we", keep_we if is_instance_valid(keep_we) else null)
 		setup.set("_env", keep_env)
 	var env: Environment = scratch.environment

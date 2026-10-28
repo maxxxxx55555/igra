@@ -1,0 +1,10 @@
+# proof final_frames
+# utc 20261028T104622Z
+# head 0287a08d (uncommitted paths: 1)
+# env TLS_FRAMES_OUT=res://.qa_logs/final_frames/ 
+# cmd bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 600
+  user-data guard: 12 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/final_frames_scene.tscn rc=0 (log: .qa_logs/final_frames_scene.log)
+  user-data guard: 12 file(s) restored byte-identical
+[safe-delete][SAFE_DELETE_INVALID_PATH] embedded drive prefix is not allowed
+# EXIT=0

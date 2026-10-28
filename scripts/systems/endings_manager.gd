@@ -66,7 +66,7 @@ func evaluate_death_ending() -> void:
 ## Revive / retry / new game leaves the DEAD or WIN screen — kill any ending
 ## sting (the Dark full track loops, so it must be stopped explicitly).
 func _on_state_changed(state: int) -> void:
-	if state == GameManager.GameState.PLAYING and _sting_player.playing:
+	if state in [GameManager.GameState.PLAYING, GameManager.GameState.MENU] and _sting_player.playing:
 		_sting_player.stop()
 
 func _evaluate_ending(is_death: bool = false) -> void:

@@ -1,0 +1,44 @@
+# proof touch
+# utc 20261026T100711Z
+# head 10627bb3 (uncommitted paths: 2)
+# env QA_SOAK_SEC=20 TLS_UDG_GUARDED=1 
+# cmd /workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --headless --path /workspace/scratch/e4e8279ce462/release-delivery-check/qa-project res://scenes/tools/touch_probe_scene.tscn
+WARNING: Couldn't get executable path from /proc/self/exe, using argv[0]
+     at: get_executable_path (drivers/unix/os_unix.cpp:1157)
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[touch-probe] OK  touch-down at center stays inside dead-zone
+[touch-probe] OK  drag to the rim drives InputService move_dir (x=1.00)
+[touch-probe] OK  release zeroes move_dir
+[touch-probe] OK  dead-zone setting is live (same drag: dz=0.15 -> 0.56, dz=0.6 -> 0.19)
+[touch-probe] OK  HUD exposes BtnInteract
+[touch-probe] OK  BtnInteract.button_down has a listener
+[touch-probe] OK  BtnInteract.button_down -> InputService.interact_requested
+[touch-probe] OK  HUD exposes BtnAttack
+[touch-probe] OK  BtnAttack.button_down -> InputService.attack_requested
+[touch-probe] OK  joystick touch response is same-frame (0.018ms, budget 1 frame/16.7ms)
+[touch-probe] OK  joystick reports active immediately on touch-down
+[touch-probe] OK  knob press-scale animates in-budget (100ms, target 80-120ms, +-1 frame)
+[touch-probe] OK  haptic call fires in-budget on touch-down (0.005ms, budget 50ms)
+[touch-probe] OK  interact-pulse Tween starts on proximity
+[touch-probe] OK  interact-pulse fires in-budget on proximity (0.045ms, budget 100ms)
+[touch-probe] OK  calibration advances past the drag step (step=1)
+[touch-probe] OK  calibration advances past the interact step (step=2)
+[touch-probe] OK  calibration marks itself done on finish
+[touch-probe] OK  calibration overlay frees itself when done
+[touch-probe] OK  Codex.open_tab(&help) switches to the Help tab
+[touch-probe] OK  Help page instantiated and visible
+[touch-probe] OK  Codex.open_tab(&collection) switches to the Collection tab
+[touch-probe] OK  Collection page instantiated and visible
+[touch-probe] OK  Collection shows one card per district (11)
+[touch-probe] OK  record_run() -> get_top_runs() round-trips
+[touch-probe] OK  Stats screen shows the leaderboard section once a run exists
+[touch-probe] OK  today's daily challenge loaded from data/daily_challenges.json
+[touch-probe] OK  challenge has a target and a reward
+[touch-probe] OK  achievement roster >= 31 (20 original + 11 per-district) — found 31
+[touch-probe] OK  district_restored(suburbs, FULL) unlocks/keeps ach_district_suburbs unlocked
+[touch-probe] OK  Share text is built and fully substituted (98 chars, no leftover %d/%s)
+[touch-probe] OK  200 fuzzed touch events, 0 non-finite move vectors
+[touch-probe] OK  touch_sensitivity stays clamped under fuzzed input
+[touch-probe] DONE fails=0
+# EXIT=0

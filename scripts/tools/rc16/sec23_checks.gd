@@ -51,13 +51,14 @@ static func _log_and_leaderboard(r: Node) -> void:
 	var raw: String = FileAccess.get_file_as_bytes(_Log.PATH).get_string_from_utf8()
 	var encrypted: bool = not raw.contains("check_untainted") and not raw.contains("emulator")
 	var runs0: Array = (LocalLeaderboard.get("_runs") as Array).duplicate()
+	LocalLeaderboard.set("_runs", [])  # a profile with ten records is full: the eleventh pushes one out and the count does not move
 	guard.call("flag", "check_tainted", "a changed data file")
 	var tainted: bool = guard.tampered
 	LocalLeaderboard.record_run(12.0, 3, 2, "light")
-	var blocked: bool = (LocalLeaderboard.get("_runs") as Array).size() == runs0.size()
+	var blocked: bool = (LocalLeaderboard.get("_runs") as Array).is_empty()
 	guard.set("tampered", false)
 	LocalLeaderboard.record_run(12.0, 3, 2, "light")
-	var recorded: bool = (LocalLeaderboard.get("_runs") as Array).size() == runs0.size() + 1
+	var recorded: bool = (LocalLeaderboard.get("_runs") as Array).size() == 1
 	LocalLeaderboard.set("_runs", runs0)
 	LocalLeaderboard.call("_save")
 	guard.set("tampered", tampered0)
