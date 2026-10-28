@@ -1,5 +1,5 @@
 extends "res://scripts/tools/_look_frames_runner.gd"
-## Monster line-up (session 36, art pass 2): the twelve monsters in the lamplight of the suburbs' street, four to a frame at 7 m and the boss with two, each frame dark and then with the flashlight on, every monster
+## Monster line-up (session 36, art pass 2): the twelve monsters in the lamplight of the suburbs' street, four to a frame at 4.5 m, the boss among them, each frame dark and then with the flashlight on, every monster
 ## in the peak of its stride and turned to the camera. Their AI and physics are off, so nothing moves while the frame is taken.
 ## Windowed: TLS_FRAMES_HASH=<label> tools/qa_sim/guarded_windowed res://scenes/tools/monster_frames_scene.tscn 300
 ## Frames -> .qa_logs/frames/monsters_<a|b|c>[_lit]_<label>_<UTC>.png. A saved frame proves nothing until it is read.
@@ -11,14 +11,17 @@ const BATCHES: Array = [
 ]
 const GAP: float = 1.9
 const AHEAD_Z: float = 14.0
+## 4.5 m from the line-up, the eyes a little above the monsters' waists.
+const VIEW := {"at": Vector3(-8.0, 0.1, 18.5), "look": Vector3(-8.0, 1.2, 14.0), "pitch": -0.04, "stage": 3, "light": false}
 
 func _run() -> void:
 	if not await _enter_game():
 		return
+	get_window().size = Vector2i(1600, 900)
 	_raise(&"suburbs", 3)
 	await _transition(&"suburbs", "look")
 	_freeze_monsters()
-	_place(STREET)
+	_place(VIEW)
 	_flashlight(_player_node(), false)
 	await get_tree().create_timer(3.0).timeout
 	for batch in BATCHES.size():
@@ -31,6 +34,14 @@ func _run() -> void:
 			monster.queue_free()
 	print("[lframes] DONE hash=%s" % _hash)
 	get_tree().quit(0)
+
+## The frame at the size of the window (the parent shrinks it to 960 x 540): a shape is judged by its detail.
+func _frame(state: String) -> void:
+	await RenderingServer.frame_post_draw
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://.qa_logs/frames/"))
+	var file := "%s_%s_%s.png" % [state, _hash, _utc()]
+	get_tree().root.get_texture().get_image().save_png(ProjectSettings.globalize_path("res://.qa_logs/frames/" + file))
+	print("[lframes] frame %s" % file)
 
 ## One monster on the street at `at`, facing the player, in the peak of its stride, its AI and physics off.
 func _stand(scene: String, at: Vector3) -> Node3D:

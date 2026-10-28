@@ -71,9 +71,9 @@ func build(monster: Node3D, id: StringName) -> void:
 	_mat = StandardMaterial3D.new()
 	_mat.albedo_color = _look["tint"]
 	_mat.vertex_color_use_as_albedo = true  # the sockets of a skull are a darker vertex colour (monster_meshes.gd); a hit flash copies the material, so it keeps them
-	_mat.roughness = 0.72
+	_mat.roughness = 0.9
 	_mat.rim_enabled = true  # a dark body in a dark street reads by its edge against the lamps
-	_mat.rim = 0.5
+	_mat.rim = 0.3
 	_mat.rim_tint = 0.4
 	if _look.has("emit"):
 		_mat.emission_enabled = true

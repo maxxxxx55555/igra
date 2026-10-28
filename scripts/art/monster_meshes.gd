@@ -135,7 +135,7 @@ static func _limb(leg: bool, thickness: float, length: float, form: Dictionary) 
 		rings.append([Vector3(0.0, -length * 0.5 - claw * length * 0.4, -claw * length), r * 0.15, r * 0.15, 1.0, 0.0])
 	return _loft(rings, LIMB_SIDES)
 
-## Rings -> a closed mesh with smooth normals and a vertex colour per vertex. A ring is [centre, half width, half depth, shade, ragged]; its frame follows the path (width across x, depth along the other axis).
+## Rings -> a closed, faceted mesh (one normal per face) with a vertex colour per vertex. A ring is [centre, half width, half depth, shade, ragged]; its frame follows the path (width across x, depth along the other axis).
 ## Triangles are wound clockwise from outside, as the engine wants them.
 static func _loft(rings: Array, sides: int, shade: Callable = Callable()) -> ArrayMesh:
 	var n: int = rings.size()
@@ -177,20 +177,21 @@ static func _loft(rings: Array, sides: int, shade: Callable = Callable()) -> Arr
 				idx.append_array([mid, base + k, base + k1])
 			else:
 				idx.append_array([mid, base + k1, base + k])
-	var normals := PackedVector3Array()
-	normals.resize(verts.size())
+	# one normal per face and no shared vertices: the monsters are faceted, like the facades and the bare trees of the street
+	var flat_v := PackedVector3Array()
+	var flat_n := PackedVector3Array()
+	var flat_c := PackedColorArray()
 	for j in range(0, idx.size(), 3):
-		var face: Vector3 = (verts[idx[j + 2]] - verts[idx[j]]).cross(verts[idx[j + 1]] - verts[idx[j]])
+		var face: Vector3 = (verts[idx[j + 2]] - verts[idx[j]]).cross(verts[idx[j + 1]] - verts[idx[j]]).normalized()
 		for m in 3:
-			normals[idx[j + m]] += face
-	for j in normals.size():
-		normals[j] = normals[j].normalized()
+			flat_v.append(verts[idx[j + m]])
+			flat_n.append(face)
+			flat_c.append(cols[idx[j + m]])
 	var arrays: Array = []
 	arrays.resize(Mesh.ARRAY_MAX)
-	arrays[Mesh.ARRAY_VERTEX] = verts
-	arrays[Mesh.ARRAY_NORMAL] = normals
-	arrays[Mesh.ARRAY_COLOR] = cols
-	arrays[Mesh.ARRAY_INDEX] = idx
+	arrays[Mesh.ARRAY_VERTEX] = flat_v
+	arrays[Mesh.ARRAY_NORMAL] = flat_n
+	arrays[Mesh.ARRAY_COLOR] = flat_c
 	var mesh := ArrayMesh.new()
 	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 	return mesh
