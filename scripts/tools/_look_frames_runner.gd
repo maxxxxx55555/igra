@@ -85,23 +85,25 @@ func _weather(kind: int) -> void:
 	WeatherSystem.current = kind
 	WeatherSystem.call("_emit")
 
-func _run() -> void:
+func _menu_up() -> bool:
+	var cs := get_tree().current_scene
+	return cs != null and cs.scene_file_path == Routes.MENU
+
+## The game started and the world pinned, as every look frame needs it; false when it cannot be (the failure is reported, or the run ended because there is no display).
+func _enter_game() -> bool:
 	if DisplayServer.get_name() == "headless":
 		print("[lframes] SKIP headless - frames need a real display")
 		get_tree().quit(3)
-		return
+		return false
 	_hash = OS.get_environment("TLS_FRAMES_HASH") if OS.has_environment("TLS_FRAMES_HASH") else "unknown"
 	var ads := get_node_or_null("/root/AdService")
 	if ads:
 		ads.enabled = false
-	var menu_up := func() -> bool:
-		var cs := get_tree().current_scene
-		return cs != null and cs.scene_file_path == Routes.MENU
-	if not await _wait_until(menu_up, 15.0):
+	if not await _wait_until(_menu_up, 15.0):
 		Routes.goto(Routes.MENU)
-		if not await _wait_until(menu_up, 10.0):
+		if not await _wait_until(_menu_up, 10.0):
 			_fail("main menu never came up")
-			return
+			return false
 	get_window().size = WINDOW_SIZE
 	await get_tree().create_timer(1.0).timeout
 	SaveSystem.mark_onboard_done()
@@ -109,12 +111,17 @@ func _run() -> void:
 	var playing := func() -> bool: return GameManager.is_playing() and get_tree().get_first_node_in_group("player") != null
 	if not await _wait_until(playing, 20.0):
 		_fail("never reached gameplay")
-		return
+		return false
 	LocalizationManager.set_language("en")
 	SettingsManager.set_setting("trailer_mode", true)
 	_pin_world()
 	TutorialSystem.call("_skip_tutorial")
 	await get_tree().create_timer(3.0).timeout
+	return true
+
+func _run() -> void:
+	if not await _enter_game():
+		return
 	var player := _player_node()
 	# suburbs, restored: dry, then in rain
 	_raise(&"suburbs", 3)
@@ -202,7 +209,7 @@ func _run() -> void:
 		await _frame("facade_%s" % id)
 	# the main menu: the backdrop still, then dragged
 	Routes.goto(Routes.MENU)
-	if not await _wait_until(menu_up, 10.0):
+	if not await _wait_until(_menu_up, 10.0):
 		_fail("main menu did not come back")
 		return
 	await get_tree().create_timer(2.0).timeout
