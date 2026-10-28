@@ -47,7 +47,9 @@ def declared_signals():
 
 def streak_rule():
     text = SAVE.read_text(encoding="utf-8").replace("\r\n", "\n")
-    m = re.search(r"func increment_daily_streak\(\) -> void:\n(.*?)\n\n", text, re.S)
+    # The signature gained an optional save_now flag when the daily claim began
+    # persisting reward and claim together; the streak rule itself is unchanged.
+    m = re.search(r"func increment_daily_streak\([^)]*\) -> void:\n(.*?)\n\n", text, re.S)
     gap = re.search(r"now - last > 86400 \* (\d+)", m.group(1)) if m else None
     return int(gap.group(1)) if gap else None
 

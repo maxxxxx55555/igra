@@ -259,3 +259,4 @@ n	utc	head	id	exit	command
 258	20261026T095534Z	4ce6d19f	mega_closeout_log_fixed	0	timeout 900 /workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --headless --path /workspace/scratch/e4e8279ce462/full-release-final/qa-project res://scenes/tools/closeout_check_scene.tscn
 259	20261026T100035Z	10627bb3	godot_version	0	/workspace/scratch/e4e8279ce462/engine/Godot_v4.7.2-stable_linux.x86_64 --headless --path /workspace/scratch/e4e8279ce462/igra --version
 260	20261028T104622Z	0287a08d	final_frames	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/final_frames_scene.tscn 600
+261	20261028T110950Z	6715c006	godot_version	0	C:/Users/Maxsim/AppData/Local/IgraRelease/toolchain-4.7.2/godot/Godot_v4.7.2-stable_win64_console.exe --headless --path C:/Users/Maxsim/AppData/Local/IgraRelease/20261028-102606-b379d227/source --version

@@ -38,10 +38,11 @@ and what was found. It was read at `HEAD` of Session 26; the three rows that cha
 2. **`ach_15` paid on every death.** "Darkness" is the title of the Dark ending; a death with the power station restored and the grid not whole resolves to Survivor (`scripts/systems/endings_manager.gd:112-115`)
    and used to pay it too. It now needs the Dark ending (ACH15, both cases; ACH15M, `GameManager` hears `game_over` before `AchievementManager` does, so the ending is resolved when Darkness
    is asked). A death with every district restored (the finale) is Dark too and pays, as before.
-3. **Three unlocks the catalog does not know (owner row).** `ProgressTracker` grants `district_one`, `shadow_slayer` and `secret_hunter` by
-   `_grant("district_one")` (`scripts/systems/progress_tracker.gd:189`), `_grant("shadow_slayer")` (`scripts/systems/progress_tracker.gd:191`) and `_grant("secret_hunter")`
-   (`scripts/systems/progress_tracker.gd:193`), through `AchievementManager.unlock`, whose map holds none of them, so they unlock ids that are not in the
-   catalog: the player hears the fanfare and gets 100 coins each (`scripts/economy/rewards_manager.gd:13`) for an achievement that never appears in the list.
-   Making them real is a content wave (three names, three descriptions, 13 locales, three medals); removing them takes 300 coins out of the economy. Neither was done.
+3. **Three unlocks the catalog did not know — now removed.** `ProgressTracker` used to grant `district_one`, `shadow_slayer` and `secret_hunter`
+   through `AchievementManager.unlock`, whose map holds none of them, so they unlocked ids that were not in the
+   catalog: the player heard the fanfare and got 100 coins each (`scripts/economy/rewards_manager.gd:13`) for an achievement that never appeared in the list.
+   Those calls are gone, so this path can no longer pay for an unknown id, and the static audit now fails on any
+   external unlock the catalog does not hold (`tools/qa_sim/achievements_sim.py`, the "unknown external achievement" rows).
+   Making them real would be a content wave (three names, three descriptions, 13 locales, three medals); removal took the 300 coins out of the economy.
 4. **Thresholds are margins, not certainties.** `ach_17` needs 200 of 203 photos, `ach_08` needs 39 of a 40 kg pack. They are reachable and tested; a future change that
    removes one photo source or lowers the pack by 2 kg makes them unreachable with no gate telling: `G26` and `ach_08` are the gates.
