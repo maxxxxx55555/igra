@@ -1,4 +1,4 @@
-# ART PASS 2 — the premium-noir repaint of the wired 2D art (2026-10-26)
+# ART PASS 2 — the premium-noir repaint of the wired 2D art (2026-10-28)
 
 Arena release agent, sandbox session. The complaint that started it: the game
 reads flat and cheap — the menu was a low-contrast vector silhouette, the
@@ -50,7 +50,7 @@ new lit card, so locked cards stay one family with the old convention.
 
 The five big screens and the city map are stored as 256-colour palette PNGs
 with Floyd–Steinberg dither — the house format those slots already used
-(`P` mode in the old files) — cutting the payload roughly in half with no
+(`P` mode in the old files of the four screens; the menu hero and the map were RGB) — cutting the payload roughly in half with no
 visible banding at their display sizes. Cards stay RGB.
 
 ## What this pass deliberately did NOT touch
@@ -66,14 +66,12 @@ visible banding at their display sizes. Cards stay RGB.
 
 ## Verification and open items
 
-- Verified here (fresh Linux clone, 2026-10-26): `bash tools/check.sh
+- Verified here (fresh Linux clone, 2026-10-28): `bash tools/check.sh
   --static` green, `flow_check`, `scene_node_check`, `af5_check` 0 findings,
   `consistency_check` green (it measures the skyline facade palettes and the
   `assets/ui/ui_*.svg` family — neither touched), evidence in
   `.qa_logs/evidence/artpass2_static.out`.
-- OPEN (engine machine, after merge): re-shoot the eight store frames and
-  re-run AF3 (`store/SCREENSHOT_RECIPES.md`), the menu frame above all — the
-  shipped frames predate this art. One eyes-on look at the menu on the target
-  phone (title contrast over the new backdrop; the title keeps its deep
-  outline from rc14).
+- DONE (Session 37, engine machine, 2026-10-28): the eight store frames were re-shot at `04a3f8f1` after an import of the new textures (a first attempt shot before the import showed the old menu art
+  and was thrown away: the engine loads the imported copy), `af3_frame_check` reads 8 frames and 0 fail, and the menu frame was read: the brass title and the buttons stay legible over the new hero.
+- OPEN (owner): one eyes-on look at the menu on the target phone (title contrast over the new backdrop; the title keeps its deep outline from rc14).
 - OPEN (owner): pick A/B/C of `docs/MUSIC_RIGHTS_MEMO.md`.
