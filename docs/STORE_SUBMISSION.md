@@ -217,7 +217,7 @@ the user's own "Export Save" to the Downloads folder. If the Console's wording m
 | App category and tags | Game, Action; tags per `docs/store/play_store.md` |
 | Price | Free |
 | Contact | an email address is required; the same one as in the policy |
-| AI-generated content | The game generates nothing with AI at run time (no network, no model). Its pre-made assets include AI-generated art (the rows of `docs/ASSET_LICENSES.md`) and, since Session 27, 12 AI-generated music tracks (Google Lyria through the Gemini app); the credits screen says so in 13 locales (`CREDITS_MUSIC`). The commercial rights of the music are UNVERIFIABLE-HERE: owner step 1 of `docs/store/HUMAN_CHECKLIST.md` |
+| AI-generated content | The game generates nothing with AI at run time (no network, no model). Its pre-made assets include AI-generated art (the rows of `docs/ASSET_LICENSES.md`) and, since Session 27, 12 AI-generated music tracks (Google Lyria through the Gemini app); since Session 37 also the 29 repainted images of the menu, the screen backdrops, the city map and the district cards (`docs/ART_PASS_2.md`); the credits screen says so in the 6 locales (`CREDITS_MUSIC`, `CREDITS_ART`). The commercial rights of the music: decision A of `docs/MUSIC_RIGHTS_MEMO.md` (2026-10-28), a risk that is accepted, not a certainty |
 
 ## 7. The steps, in order
 

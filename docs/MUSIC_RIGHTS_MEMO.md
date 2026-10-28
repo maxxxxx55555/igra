@@ -66,3 +66,13 @@ C. **License replacements.** CC0/licensed library tracks that satisfy the
 
 Whatever is picked, record it as a dated row in `docs/ASSET_LICENSES.md`
 and in the release acceptance record. Do not let the decision stay implicit.
+
+## Decision (2026-10-28, Session 37): A
+
+The owner handed the open owner rows of the release to the project agent in chat on 2026-10-28 ("do what remains for you"), and `CLAUDE.md` makes the agent the decider of design questions who justifies the choice in the docs, so this
+row is decided here, and the owner may veto it.
+
+**A: ship the twelve tracks, labelled as AI.** Why: the terms read on 2026-10-28 say that Google claims no ownership of what a user generates (the Google Terms of Service, the Gemini API terms) and say nothing against commercial use;
+the strict reading of 5(e) concerns the API, not the Gemini app that made these tracks; B costs a quality step-down and a new run of the seam and loudness gates for a risk that the texts do not raise; C found nothing to license.
+The conditions that go with A: the tracks stay labelled (`CREDITS_MUSIC`, the AI line of the listing, the Play and Steam AI answers); nothing presents them as human-made (Google Terms of Service, "Don't abuse our services"); the way back to B
+stays documented (`docs/store/HUMAN_CHECKLIST.md`, music row); and the decision is read again if Google answers the open forum question against it.
