@@ -295,7 +295,11 @@ func _p2b_combat() -> void:
 		flash_meshes = vr.find_children("*", "MeshInstance3D", true, false).filter(func(n: Node) -> bool: return n.material_override != null)
 	var mats_before: Array = flash_meshes.map(func(n: Node) -> Material: return n.material_override)
 	m.take_damage(25.0)
-	await get_tree().create_timer(0.3).timeout
+	# the flash hands the material back after 0.1 s of tween time: wait until it has (a loaded machine stretches a fixed 0.3 s), up to 1.5 s
+	var waited: float = 0.0
+	while waited < 1.5 and flash_meshes.any(func(n: Node) -> bool: return is_instance_valid(n) and n.has_meta(&"hit_flash_orig")):
+		await get_tree().create_timer(0.1).timeout
+		waited += 0.1
 	for i in flash_meshes.size():
 		if is_instance_valid(flash_meshes[i]) and flash_meshes[i].material_override != mats_before[i]:
 			_fail("P2b hit flash did not restore the monster material on %s" % flash_meshes[i].name)
