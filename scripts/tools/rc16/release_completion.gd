@@ -20,6 +20,10 @@ static func run(r: Node) -> void:
 	await _secret_save(r)
 	r._playing()
 
+## A save is JSON: a number comes back from it as a float, and {"a": 1} == {"a": 1.0} is false, so the live value takes the same trip before the two are compared.
+static func same_json(saved: Variant, live: Variant) -> bool:
+	return saved == JSON.parse_string(JSON.stringify(live))
+
 static func _initial_vitals(r: Node) -> void:
 	var player: Node = r._player
 	var keep_stats: Resource = player.get("stats")
@@ -121,7 +125,7 @@ static func _secret_save(r: Node) -> void:
 	var saved_progress: Dictionary = saved.get("progress", {})
 	r._ok((saved_progress.get("secret_ids", []) as Array).has("release_secret_probe") and int(saved_progress.get("secrets", -1)) == ProgressTracker.secrets,
 		"SECRETSAVE1 the milestone save contains the collected secret and its counter")
-	r._ok(saved.get("wallet", {}) == CoinWallet.to_dict() and saved.get("inventory", {}) == InventoryManager.to_dict(),
+	r._ok(same_json(saved.get("wallet", {}), CoinWallet.to_dict()) and same_json(saved.get("inventory", {}), InventoryManager.to_dict()),
 		"SECRETSAVE2 the same save contains the item's inventory and all synchronous rewards")
 	InventoryManager.from_dict(inventory)
 	ProgressTracker.from_dict(progress)

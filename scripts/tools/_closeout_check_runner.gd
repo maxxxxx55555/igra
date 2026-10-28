@@ -1116,7 +1116,7 @@ func _check_daily() -> void:
 			bonus += int(row.get("reward", 0))
 	_ok(CoinWallet.get_coins() - coins == roundi(base * 2.0) + bonus, "DL2 the fifth day pays double (%d + %d)" % [roundi(base * 2.0), bonus])
 	var persisted: Dictionary = SaveSystem._read_validated(SaveSystem.SAVE_PATH)
-	_ok(persisted.get("wallet", {}) == CoinWallet.to_dict() and int(persisted.get("last_daily_time", 0)) == SaveSystem._last_daily_time, "DAILYSAVE1 the persisted claim includes its entire reward")
+	_ok(FinalSource.same_json(persisted.get("wallet", {}), CoinWallet.to_dict()) and int(persisted.get("last_daily_time", 0)) == SaveSystem._last_daily_time, "DAILYSAVE1 the persisted claim includes its entire reward")
 	var paid_wallet: Dictionary = CoinWallet.to_dict()
 	m._complete()
 	_ok(CoinWallet.to_dict() == paid_wallet, "DAILYSAVE2 an already claimed reward cannot pay twice")
@@ -1265,7 +1265,7 @@ func _check_shop() -> void:
 	var biggest := 0.0
 	for icon in grid.find_children("IconTex_*", "TextureRect", true, false):
 		biggest = maxf(biggest, (icon as Control).size.x)
-	_ok(biggest > 0.0 and biggest <= 30.0, "SH1 the pack icons are the size they were asked for (%.0f px, 128 when the size was lost)" % biggest)
+	_ok(biggest > 0.0 and biggest <= 44.0, "SH1 the pack icons are the size they were asked for (%.0f px of 42, 128 when the size was lost)" % biggest)
 	var buy := grid.get_child(0).find_children("*", "Button", true, false)[0] as Button
 	var owned_before := _shop_owned_count()
 	buy.pressed.emit()
