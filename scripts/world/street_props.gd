@@ -11,7 +11,7 @@ var _pole: CylinderMesh
 var _lamp: SphereMesh
 var _bench: BoxMesh
 var _trunk: CylinderMesh
-var _leaf: SphereMesh
+var _leaf: Mesh
 var _cone: CylinderMesh
 
 ## P2 (THEME UNIFICATION wave): same batching for the other static,
@@ -66,9 +66,7 @@ func _ready() -> void:
 	_init_meshes()
 	call_deferred("build")
 
-## Segment counts of the batched props: a canopy of 16 x 8 is 256 triangles, a bulb 8 x 4 is 64.
-const CANOPY_SEGMENTS := 16
-const CANOPY_RINGS := 8
+## Segment counts of the batched props: a bulb of 8 x 4 is 64 triangles.
 const BULB_SEGMENTS := 8
 const BULB_RINGS := 4
 const POST_SEGMENTS := 8
@@ -93,11 +91,7 @@ func _init_meshes() -> void:
 	_trunk.height = 2.5
 	_trunk.radial_segments = POST_SEGMENTS
 	_trunk.rings = 1
-	_leaf = SphereMesh.new()
-	_leaf.radius = 1.2
-	_leaf.height = 2.4
-	_leaf.radial_segments = CANOPY_SEGMENTS
-	_leaf.rings = CANOPY_RINGS
+	_leaf = _TreeMeshes.build()
 	_cone = CylinderMesh.new()
 	_cone.top_radius = 0.0
 	_cone.bottom_radius = 0.35
@@ -276,7 +270,9 @@ func _spawn_cone(center: Vector3, road: Dictionary) -> void:
 
 ## The canopies sway (assets/shaders/foliage_sway.gdshader); with Motion Comfort or Reduce UI Motion they stand still, also when it is switched while the district is up.
 const _LEAVES := preload("res://assets/env/mat_foliage_sway.tres")
-const LEAF_COLOR := Color(0.09, 0.16, 0.15)
+const _TreeMeshes := preload("res://scripts/art/tree_meshes.gd")
+## The city is dead: the trees are bare, and their limbs are the dark bark of the trunk, not a canopy.
+const LEAF_COLOR := Color(0.105, 0.09, 0.078)
 const SWAY_M: float = 0.08
 const GUST_M: float = 0.05
 var _leaf_mat: ShaderMaterial = null

@@ -76,7 +76,7 @@ static func _cards(root: Node3D) -> int:
 		count += 1 if String(child.name).begins_with("FogCard") else 0
 	return count
 
-## FOLIAGE1: the canopies of the street trees carry the sway shader in the dark teal of the old flat material, and Motion Comfort stops the sway at once.
+## FOLIAGE1: the trees of the street are bare limbs (scripts/art/tree_meshes.gd, 400 triangles at most) that carry the sway shader in the dark bark colour, and Motion Comfort stops the sway at once.
 ## FOG1: the four fog districts hold three fog cards, the others none, and no district holds one at the Low tier.
 ## POOL1: a pool of light or a halo of opacity 0 (the DARK stage) is hidden, not drawn blind.
 static func _atmosphere(r: Node) -> void:
@@ -87,6 +87,8 @@ static func _atmosphere(r: Node) -> void:
 	var mat: ShaderMaterial = leaves.material_override as ShaderMaterial if leaves != null else null
 	var swaying: float = float(mat.get_shader_parameter("sway_strength")) if mat != null else -1.0
 	var colour: Color = mat.get_shader_parameter("leaf_color") if mat != null else Color.WHITE
+	var limbs: Mesh = leaves.multimesh.mesh if leaves != null else null
+	var triangles: int = (limbs.surface_get_arrays(0)[Mesh.ARRAY_VERTEX] as PackedVector3Array).size() / 3 if limbs is ArrayMesh else -1
 	SettingsManager.set_setting("reduce_camera_motion", true)
 	var still: float = float(mat.get_shader_parameter("sway_strength")) if mat != null else -1.0
 	SettingsManager.set_setting("reduce_camera_motion", false)
@@ -112,6 +114,6 @@ static func _atmosphere(r: Node) -> void:
 	low.queue_free()
 	SettingsManager.set_setting("graphics_tier", tier0)
 	await r.get_tree().process_frame
-	r._ok(mat != null and swaying > 0.0 and still == 0.0 and restored == swaying and colour.is_equal_approx(Color(0.09, 0.16, 0.15)), "FOLIAGE1 canopies: a sway shader (%s) of %.2f m, %.2f m with Motion Comfort and %.2f m after, in the old dark teal (%s)" % [mat != null, swaying, still, restored, colour.is_equal_approx(Color(0.09, 0.16, 0.15))])
+	r._ok(mat != null and swaying > 0.0 and still == 0.0 and restored == swaying and colour.is_equal_approx(Color(0.105, 0.09, 0.078)) and triangles > 0 and triangles <= 400, "FOLIAGE1 bare trees: a sway shader (%s) of %.2f m, %.2f m with Motion Comfort and %.2f m after, in the dark bark colour (%s), %d triangles" % [mat != null, swaying, still, restored, colour.is_equal_approx(Color(0.105, 0.09, 0.078)), triangles])
 	r._ok(rests and wakes, "POOL1 lamp pools: the pools of the lamps and the halo of the landmark are not drawn at the DARK stage (%s) and are drawn from the next (%s)" % [rests, wakes])
 	r._ok(fogged == 3 and plain == 0 and at_low == 0, "FOG1 ground fog: %d cards in a fog district, %d in the suburbs, %d at the Low tier" % [fogged, plain, at_low])

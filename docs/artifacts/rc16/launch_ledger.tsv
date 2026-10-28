@@ -267,3 +267,4 @@ n	utc	head	id	exit	command
 266	20261028T135147Z	64fd2690	s36_c_64fd2690	0	bash .qa_logs/s36_c.sh
 267	20261028T145412Z	64fd2690	s36_gm64fd2690	0	bash tools/qa_sim/guarded_headless res://scenes/tools/qa_headless_suite_scene.tscn 240
 268	20261028T145716Z	64fd2690	s36_gm64fd2690	0	bash tools/qa_sim/guarded_headless res://scenes/tools/qa_headless_suite_scene.tscn 240
+269	20261028T150519Z	97820583	s36_d_97820583	0	bash .qa_logs/s36_d.sh
