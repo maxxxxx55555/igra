@@ -183,15 +183,13 @@ func _face(p: Node3D, at: Vector3) -> void:
 	p.look_at(Vector3(at.x, p.global_position.y, at.z), Vector3.UP)
 
 ## Street trees are collision-free MultiMesh instances, so a raycast never sees
-## them: a sight line counts as blocked when a canopy (radius 1.2) stands within
-## 1.8 m of it on the ground plane.
+## them: a sight line counts as blocked when a tree (its limbs spread about 1.2 m round it)
+## stands within 1.8 m of it on the ground plane. The trees are the batch the street props name.
 func _canopies() -> Array[Vector2]:
 	var out: Array[Vector2] = []
-	for n in get_tree().root.find_children("*", "MultiMeshInstance3D", true, false):
+	for n in get_tree().root.find_children("TreeLeavesBatched", "MultiMeshInstance3D", true, false):
 		var mmi := n as MultiMeshInstance3D
-		if mmi.multimesh == null or not (mmi.multimesh.mesh is SphereMesh):
-			continue
-		if (mmi.multimesh.mesh as SphereMesh).radius < 1.0:
+		if mmi.multimesh == null:
 			continue
 		for i in mmi.multimesh.instance_count:
 			var at := mmi.global_transform * mmi.multimesh.get_instance_transform(i).origin
