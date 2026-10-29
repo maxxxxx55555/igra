@@ -92,6 +92,7 @@ func _build_ui() -> void:
 	# Objectives list
 	_objectives_vbox = VBoxContainer.new()
 	_objectives_vbox.add_theme_constant_override("separation", 6)
+	_objectives_vbox.custom_minimum_size = Vector2(0.0, 62.0)  # room for a title that wraps to a second line: the panel kept its height of one line and lost its bottom edge
 	inner_vb.add_child(_objectives_vbox)
 
 	_container.visible = false
