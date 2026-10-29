@@ -17,6 +17,8 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 MANAGER = ROOT / "scripts" / "systems" / "daily_challenge_manager.gd"
 BUS = ROOT / "scripts" / "events" / "event_bus.gd"
 SAVE = ROOT / "scripts" / "core" / "save_system.gd"
+MENU = ROOT / "scripts" / "ui" / "main_menu.gd"
+EN = ROOT / "data" / "i18n" / "en.json"
 # What one run can offer of each countable thing: the districts (restore_districts and light_streets tick once per district: EventBus.district_restored and
 # EventBus.streetlight_activated), the secrets of content/secrets.json, minutes in a day.
 CAP = {"restore_districts": 11, "find_secrets": None, "light_streets": 11, "play_minutes": 24 * 60, "kill_enemies": None, "photo_subject": None, "no_flashlight_segment": None}
@@ -72,11 +74,20 @@ def simulate(rewards, multipliers, base):
     return paid, milestones
 
 
-def findings(used, data, ticks, signals, gap, skipped_types=()):
+def menu_texts():
+    """The type to dictionary key map of the daily card in the main menu, and the keys of the English dictionary."""
+    m = re.search(r"const _DAILY_TEXT_KEYS: Dictionary = \{(.*?)\}", MENU.read_text(encoding="utf-8"), re.S)
+    return dict(re.findall(r'"([a-z_]+)": "([A-Z_]+)"', m.group(1))) if m else {}, set(json.loads(EN.read_text(encoding="utf-8")))
+
+
+def findings(used, data, ticks, signals, gap, skipped_types=(), texts=None):
     out = []
     cap = dict(CAP)
     cap["find_secrets"] = None
     types = collections.Counter(t["type"] for t in data["templates"])
+    for kind in types if texts else ():
+        if texts[0].get(kind) not in texts[1]:
+            out.append("NO TEXT %s: the menu card has no dictionary key for the type" % kind)
     for t in data["templates"]:
         if t["type"] not in ticks and t["type"] not in ("play_minutes", "no_flashlight_segment"):
             out.append("DEAD %s: nothing ticks the type %s" % (t["id"], t["type"]))
@@ -126,14 +137,16 @@ def main(argv):
         assert any(b.startswith("DEAD x: nothing ticks") for b in bad) and any("declares no signal" in b for b in bad) and any(b.startswith("UNREACHABLE y") for b in bad)
         bad, _ = findings(None, data, {"kill_enemies", "restore_districts"}, {"a"}, 2, {"restore_districts"})
         assert not any(b.startswith("UNREACHABLE") for b in bad), "a type the selector walks past is not a finding"
+        bad, _ = findings(None, data, {"kill_enemies", "restore_districts"}, {"a"}, 2, texts=({"restore_districts": "R"}, {"R"}))
+        assert [b.split(":")[0] for b in bad if b.startswith("NO TEXT")] == ["NO TEXT ghost"], "only the type without a key is a finding"
         _, miles = simulate([{"days": 7, "reward": 1}, {"days": 30, "reward": 1}, {"days": 100, "reward": 1}], [], 1)
         assert miles == [7, 30, 100]
-        print("daily_sim demo: a dead type, a missing signal, an unreachable target and the three streak tiers are all found")
+        print("daily_sim demo: a dead type, a missing signal, an unreachable target, a type without card text and the three streak tiers are all found")
         return 0
     used, data, legacy = load()
     ticks, _ = ticked_types()
     skipped = per_run_types()
-    bad, types = findings(used, data, ticks, declared_signals(), streak_rule(), skipped)
+    bad, types = findings(used, data, ticks, declared_signals(), streak_rule(), skipped, menu_texts())
     if secrets_count() < 24:
         bad.append("the secrets file holds %d, fewer than the 24 a find_secrets target can ask for" % secrets_count())
     for line in bad:

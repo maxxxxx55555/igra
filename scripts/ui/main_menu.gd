@@ -157,7 +157,8 @@ func _ensure_continue(vb: VBoxContainer) -> void:
 const _DAILY_TEXT_KEYS: Dictionary = {
 	"kill_enemies": "DAILY_KILL_ENEMIES", "find_secrets": "DAILY_FIND_SECRETS",
 	"light_streets": "DAILY_LIGHT_STREETS", "restore_districts": "DAILY_RESTORE_DISTRICTS",
-	"play_minutes": "DAILY_PLAY_MINUTES",
+	"play_minutes": "DAILY_PLAY_MINUTES", "photo_subject": "DAILY_PHOTO_SUBJECT",
+	"no_flashlight_segment": "DAILY_NO_FLASHLIGHT_SEGMENT",
 }
 ## A thin outline keeps the small print legible through the moving fog.
 func _legible(line: Label) -> void:

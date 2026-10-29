@@ -1095,6 +1095,8 @@
   "DAILY_LIGHT_STREETS": "Зажги улицы в %d районах",
   "DAILY_RESTORE_DISTRICTS": "Полностью восстанови %d районов",
   "DAILY_PLAY_MINUTES": "Играй %d минут",
+  "DAILY_PHOTO_SUBJECT": "Сфотографируй сюжеты: %d",
+  "DAILY_NO_FLASHLIGHT_SEGMENT": "Фонарик выключен: %d x 30 с",
   "DAILY_CHALLENGE_TITLE": "Ежедневное задание",
   "DAILY_STREAK_LABEL": "Серия: %d дней (x%.1f)",
   "DAILY_COMPLETED_LABEL": "Выполнено!",
