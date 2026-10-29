@@ -149,7 +149,7 @@ def proposal():
 
 def apply(who):
     if not re.search(r"\w+.*\d{4}-\d{2}-\d{2}", who):
-        sys.exit('--approved-by wants a name and a date, e.g. "Maxsim 2026-10-30"')
+        sys.exit('--approved-by wants a name and a date, e.g. "Maxsim 2026-10-29"')
     cut = cut_all()
     out_dir = ROOT / "assets" / "textures" / "items"
     for item, name in sorted(ICON_OF.items()):

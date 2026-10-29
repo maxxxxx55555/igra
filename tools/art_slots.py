@@ -174,7 +174,7 @@ def apply(name, who):
     if not src.exists():
         sys.exit("nothing staged for " + name)
     if not re.search(r"\w+.*\d{4}-\d{2}-\d{2}", who):
-        sys.exit('--approved-by wants a name and a date, e.g. "Maxsim 2026-10-30"')
+        sys.exit('--approved-by wants a name and a date, e.g. "Maxsim 2026-10-29"')
     img = Image.open(src).convert("RGB")
     img.save(ROOT / s["path"], compress_level=9)
     if name.startswith("card_"):
