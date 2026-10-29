@@ -1,0 +1,10 @@
+# proof s37_c6_ebfd8705
+# utc 20261029T062020Z
+# head ebfd8705 (uncommitted paths: 19)
+# env none
+# cmd bash .qa_logs/s37_all.sh
+check.sh --all rc=1
+  FAIL реимпорт ассетов (оконный) не завершился
+Провалено: 1, пройдено: 96
+# STEP done
+# EXIT=0

@@ -314,3 +314,5 @@ n	utc	head	id	exit	command
 313	20261029T023054Z	cf6caa11	s37_c2_cf6caa11	0	bash .qa_logs/s37_all.sh
 314	20261029T024755Z	90b6db50	s37_x9_90b6db50	0	bash .qa_logs/s37_x9.sh
 315	20261029T030211Z	d5afe71d	s37_c3_d5afe71d	0	bash .qa_logs/s37_all.sh
+316	20261029T062020Z	ebfd8705	s37_c6_ebfd8705	0	bash .qa_logs/s37_all.sh
+317	20261029T063312Z	ebfd8705	s37_e1_ebfd8705	0	bash -c timeout 240 ./godot_extracted/Godot_v4.7-stable_win64_console.exe --editor --quit --path . > /dev/null 2>&1; echo "editor reimport rc=$?"; git checkout -- default_bus_layout.tres 2>/dev/null; git status --short | grep -v "^??" | head -3
