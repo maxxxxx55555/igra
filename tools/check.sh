@@ -555,7 +555,8 @@ else
       local hits; hits=$(printf '%s\n' "$out" | grep -aE "$BAD" | head -5)
       if [[ $rc -eq 0 && -n "$hits" ]]; then bad "$name (engine errors in the log)"; echo "$hits" | sed 's/^/         /'
       elif [[ $rc -eq 0 ]]; then ok "$name"
-      elif [[ $rc -eq 3 ]]; then echo "  ${DIM}пропуск${OFF} $name (нужен --windowed, не OK/FAIL)"
+      elif [[ $rc -eq 3 ]] && printf '%s
+' "$out" | grep -aq 'SKIP'; then echo "  ${DIM}пропуск${OFF} $name (нужен --windowed, не OK/FAIL)"  # the gate says SKIP itself: 3 is also the exit code of a probe with three fails
       elif [[ $rc -eq 124 ]]; then bad "$name (таймаут ${t}s)"; echo "$out" | tail -15 | sed 's/^/         /'
       else bad "$name (код $rc)"; echo "$out" | grep -aE "FAIL|fails=[1-9]" | head -12 | sed 's/^/         /'; echo "$out" | tail -15 | sed 's/^/         /'; fi
     }
