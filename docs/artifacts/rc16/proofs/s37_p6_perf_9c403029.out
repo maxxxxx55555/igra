@@ -1,0 +1,9 @@
+# proof s37_p6_perf_9c403029
+# utc 20261029T082649Z
+# head 9c403029 (uncommitted paths: 21)
+# env none
+# cmd bash tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn 240
+  user-data guard: 12 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/perf_check_scene.tscn rc=0 (log: .qa_logs/perf_check_scene.log)
+  user-data guard: 12 file(s) restored byte-identical
+# EXIT=0

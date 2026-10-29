@@ -136,6 +136,12 @@ def cover(img, size):
     return img.crop((left, top, left + size[0], top + size[1]))
 
 
+def rolloff(img, knee=236, keep=0.25):
+    """No pure white (prohibition 6 of v7): what rises over the knee is squeezed into the last few levels, so a lamp stays the brightest thing and nothing clips."""
+    a = np.asarray(img.convert("RGB")).astype(np.float32)
+    return Image.fromarray(np.clip(np.where(a > knee, knee + (a - knee) * keep, a), 0, 255).astype(np.uint8), "RGB")
+
+
 def board(name, candidate, s):
     """Candidate | the sheet's tile | what the slot holds now, each scaled to 540 px high, labelled outside the art."""
     sheet, box = s["tile"]
@@ -159,7 +165,7 @@ def fit(folder):
         found = [p for ext in ("png", "jpg", "jpeg", "webp") for p in [pathlib.Path(folder) / ("%s.%s" % (name, ext))] if p.exists()]
         if not found:
             continue
-        img = cover(Image.open(found[0]).convert("RGB"), s["size"])
+        img = rolloff(cover(Image.open(found[0]).convert("RGB"), s["size"]))
         img.save(STAGED / (name + ".png"), compress_level=9)
         board(name, img, s).save(BOARDS / (name + "_board.png"), compress_level=9)
         problems = verdict(img)
@@ -196,6 +202,7 @@ def demo():
     assert verdict(night) == [], verdict(night)
     assert any("white" in p for p in verdict(Image.new("RGB", (64, 64), (255, 255, 255)))), "white is refused"
     assert cover(night, (192, 108)).size == (192, 108), "cover cuts to the slot size"
+    assert not any("white" in p for p in verdict(rolloff(Image.new("RGB", (64, 64), (255, 255, 255))))), "the roll-off leaves no clipped white"
     lit = Image.new("RGB", (4, 4), (200, 150, 100))
     assert locked(lit).getpixel((0, 0)) == (int((200 / 255 * 0.439 + 0.038) * 255), int((150 / 255 * 0.436 + 0.052) * 255), int((100 / 255 * 0.527 + 0.05) * 255)), "the locked card follows the affine"
     for s in table.values():
