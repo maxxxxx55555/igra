@@ -277,12 +277,17 @@ func _p2b_combat() -> void:
 	holder.add_child(inst)
 	await get_tree().process_frame
 	await get_tree().process_frame
+	# the last district change can still hold the tree paused (the fade of a transition pauses it, and check.sh --all met it paused): a paused tree ticks no tween, so the hit flash would never hand the material back
+	var unpaused: float = 0.0
+	while get_tree().paused and unpaused < 5.0:
+		await get_tree().create_timer(0.1).timeout
+		unpaused += 0.1
 	var monsters := get_tree().get_nodes_in_group("monsters")
 	if monsters.is_empty():
 		_fail("P2b no monsters in group after building suburbs")
 		holder.queue_free()
 		return
-	var m: Node = _live_monster(monsters)
+	var m: Node = monsters[0]
 	var hp0: float = float(m.get("hp")) if m.get("hp") != null else -1.0
 	if not m.has_method("take_damage"):
 		_fail("P2b monster has no take_damage()")
@@ -1222,10 +1227,3 @@ func _finish() -> void:
 		print("[qa] FAIL ", f)
 	print("[qa] DONE fails=", _fails.size())
 	get_tree().quit(mini(_fails.size(), 250))
-
-## The first monster of the group that runs: a parked pooled monster is in the group too (check.sh --all met a parked Shadow first), and the tween of its hit flash never ticks, so the material is never handed back.
-func _live_monster(monsters: Array[Node]) -> Node:
-	for candidate in monsters:
-		if candidate.can_process():
-			return candidate
-	return monsters[0]
