@@ -304,3 +304,5 @@ n	utc	head	id	exit	command
 303	20261029T011721Z	2c346b18	s37_y_2c346b18	0	bash .qa_logs/s37_p2f.sh
 304	20261029T012030Z	17e68cd7	s37_t2_17e68cd7	0	bash .qa_logs/s37_t2.sh
 305	20261029T013556Z	17e68cd7	s37_z_b1	0	bash .qa_logs/s37_ui2.sh
+306	20261029T013828Z	3df6b264	s37_a1_3df6b264	0	bash .qa_logs/s37_f.sh
+307	20261029T015345Z	1cc33a65	s37_a2_1cc33a65	0	bash .qa_logs/s37_f.sh

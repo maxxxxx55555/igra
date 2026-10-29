@@ -1,0 +1,17 @@
+# proof s37_t_46f68849
+# utc 20261029T002924Z
+# head 46f68849 (uncommitted paths: 28)
+# env none
+# cmd bash .qa_logs/s37_t.sh
+check.sh --all rc=4
+  FAIL af3_frame_check (см. 'python tools/qa_sim/af3_frame_check.py')
+  FAIL af5_check (см. 'python tools/af5_check.py')
+  FAIL branch_absorb_sim (см. 'python tools/qa_sim/branch_absorb_sim.py --check docs/ABSORB_PLAN.md')
+  FAIL GOLD MASTER suite (autoloads/input/districts/save-load/endings/i18n/soak) (код 1)
+Провалено: 4, пройдено: 92
+[qa] t=6.6s P2b diag: 6 monsters, first Shadow mode 0 can_process false visible true in_tree true
+[qa] FAIL P2b hit flash did not restore the monster material on BodyMesh
+[qa] t=8.2s P2b combat: hp 30.0 -> 5.0 — OK
+[qa] FAIL P2b hit flash did not restore the monster material on BodyMesh
+# STEP done
+# EXIT=0

@@ -1,0 +1,22 @@
+# proof s37_t2_17e68cd7
+# utc 20261029T012030Z
+# head 17e68cd7 (uncommitted paths: 30)
+# env none
+# cmd bash .qa_logs/s37_t2.sh
+check.sh --all rc=3
+  FAIL af5_check (см. 'python tools/af5_check.py')
+  FAIL rc15 closeout: оружие/чертежи/фото/укрытия/инвентарь/достижения/сложность/Back (код 1)
+  FAIL GOLD MASTER suite (autoloads/input/districts/save-load/endings/i18n/soak) (код 1)
+Провалено: 3, пройдено: 93
+[qa] t=8.0s P2b diag mesh BodyMesh: waited 1.5 meta true same_as_before false class StandardMaterial3D scale 1.00 paused true
+[qa] t=8.0s P2b diag mesh HeadMesh: waited 1.5 meta true same_as_before false class StandardMaterial3D scale 1.00 paused true
+[qa] t=8.1s P2b diag mesh ArmMesh: waited 1.5 meta true same_as_before false class StandardMaterial3D scale 1.00 paused true
+[qa] t=8.1s P2b diag mesh ArmMesh: waited 1.5 meta true same_as_before false class StandardMaterial3D scale 1.00 paused true
+[qa] t=8.1s P2b diag mesh LegMesh: waited 1.5 meta true same_as_before false class StandardMaterial3D scale 1.00 paused true
+[qa] t=8.1s P2b diag mesh LegMesh: waited 1.5 meta true same_as_before false class StandardMaterial3D scale 1.00 paused true
+[qa] FAIL P2b hit flash did not restore the monster material on BodyMesh
+[qa] t=8.1s P2b combat: hp 30.0 -> 5.0 — OK
+[qa] t=10.0s P2b diag pick: Shadow boss false mode 0 can_process true scale 1.00 paused false
+[qa] FAIL P2b hit flash did not restore the monster material on BodyMesh
+# STEP done
+# EXIT=0

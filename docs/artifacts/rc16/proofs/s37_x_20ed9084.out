@@ -1,0 +1,81 @@
+# proof s37_x_20ed9084
+# utc 20261028T204220Z
+# head 20ed9084 (uncommitted paths: 24)
+# env none
+# cmd bash .qa_logs/s37_x.sh
+store and key password: the same
+# STEP export_android 23:42:20
+# STEP export_android rc=0 23:44:36
+bundle: 80367715 bytes sha256 8620efab569ab226e42f3276f849ec3e498b6fc4218a747160f7ff98c3927e3e
+# STEP aab_check 23:44:36
+manifest package=com.maxsimkasky.laststreetlight expected=com.maxsimkasky.laststreetlight: ok
+manifest versionCode=8 expected=8: ok
+manifest versionName=1.0.1 expected=1.0.1: ok
+size    80367715 bytes
+sha256  8620efab569ab226e42f3276f849ec3e498b6fc4218a747160f7ff98c3927e3e
+entries 2461
+label   base/resources.pb names Last Streetlight: ok
+adsdk   0 dex entries name Lcom/applovin/: ok
+integrity 37 file(s) of the manifest, 0 missing or with other bytes: ok
+refs    0 file(s) or patterns named by the shipped files are not in the bundle: ok
+secrets 2 value(s) of the environment searched in 2458 entries: 0 hits (path, password)
+jar     jar verified.
+signer  a4a7c2c27e7892f1...: signer_match=yes
+against tls_s36_vcode7_2b1c9295.aab: 0 entries gone, 0 new, 42 with other bytes
+  changed BUNDLE-METADATA/com.android.tools.build.profiles/baseline.prof
+  changed META-INF/MANIFEST.MF
+  changed META-INF/TLS_RELE.RSA
+  changed META-INF/TLS_RELE.SF
+  changed assetPackInstallTime/assets/.godot/imported/card_gas_station_512.png-230994ed8b0a813e665a423fecc440a9.ctex
+  changed assetPackInstallTime/assets/.godot/imported/card_gas_station_locked_512.png-8dec781ca67fd1f3c34cf9080ef8e269.ctex
+  changed assetPackInstallTime/assets/.godot/imported/card_hospital_512.png-bf47dc9c1b29b78d2c845e61d57b9e93.ctex
+  changed assetPackInstallTime/assets/.godot/imported/card_hospital_locked_512.png-4f90516ce31d228d9be5fd43e3e9591c.ctex
+  changed assetPackInstallTime/assets/.godot/imported/card_industrial_512.png-375dcbd0b098ae08d7bb66abf483536e.ctex
+  changed assetPackInstallTime/assets/.godot/imported/card_industrial_locked_512.png-f2b053aaa7f609a534e0f0c9ea6a682f.ctex
+  changed assetPackInstallTime/assets/.godot/imported/card_park_512.png-1d563aca93b29d70d9c64e82682d3b3b.ctex
+  changed assetPackInstallTime/assets/.godot/imported/card_park_locked_512.png-3d770c5837be3e9bf615c379041ea99e.ctex
+  changed assetPackInstallTime/assets/.godot/imported/card_police_512.png-84be423858dfd49941289187c37a425c.ctex
+  changed assetPackInstallTime/assets/.godot/imported/card_police_locked_512.png-c1dee25b01f3d99b80b7d2c1b590407e.ctex
+  changed assetPackInstallTime/assets/.godot/imported/card_power_station_512.png-1421725ea29fa582d7cffd1dd78e7f82.ctex
+  changed assetPackInstallTime/assets/.godot/imported/card_power_station_locked_512.png-71936755b1da93efcdab89a6bddf4f43.ctex
+  changed assetPackInstallTime/assets/.godot/imported/card_residential_512.png-0b5254b133fdf8ce81a26c39b7a2a30a.ctex
+  changed assetPackInstallTime/assets/.godot/imported/card_residential_locked_512.png-d25bf5146c897ca7d5f85057203f4712.ctex
+  changed assetPackInstallTime/assets/.godot/imported/card_school_512.png-86d59f2052424af161a9d421ee59726e.ctex
+  changed assetPackInstallTime/assets/.godot/imported/card_school_locked_512.png-4098f4422d8229e793a464ee7a754234.ctex
+  changed assetPackInstallTime/assets/.godot/imported/card_substation_512.png-fc3f19c63bcf0f492462a77f42748452.ctex
+  changed assetPackInstallTime/assets/.godot/imported/card_substation_locked_512.png-ae3be3be66183a9cd512289cd615907b.ctex
+  changed assetPackInstallTime/assets/.godot/imported/card_suburbs_512.png-c1f12b5dab95373733b5c383ea76a0d8.ctex
+  changed assetPackInstallTime/assets/.godot/imported/card_suburbs_locked_512.png-60489f59280994181efc6631b631e643.ctex
+  changed assetPackInstallTime/assets/.godot/imported/card_warehouses_512.png-958402ca1abe62a00312cb7615b15d36.ctex
+  changed assetPackInstallTime/assets/.godot/imported/card_warehouses_locked_512.png-93032b22e5faffedbd5aa9dbce9b538d.ctex
+  changed assetPackInstallTime/assets/.godot/imported/character_dim.png-a50c1780c59c2ce7f7b6432fe3d3fcba.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/city_iso_2048.png-71d9ccd607d2b35ab4012cd2367806fc.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/death_loom.png-bae87c31dc7a64b4874520d77e03e35f.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/grid_panel_512.png-4175d700e2ec37a01c3ef562c2790f0e.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/journal_paper.png-04ac0fbe3bac24f20e4ebe311486d4a8.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/loading_street.png-cb640c6571001e09d1943dfbe1f17dc8.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/menu_city.png-59f52fd2d7e91e8660cd5426d698efd9.ctex
+  changed assetPackInstallTime/assets/assets.sparsepck
+  changed assetPackInstallTime/assets/data/i18n/de.json
+  changed assetPackInstallTime/assets/data/i18n/en.json
+  changed assetPackInstallTime/assets/data/i18n/es.json
+  changed assetPackInstallTime/assets/data/i18n/fr.json
+  changed assetPackInstallTime/assets/data/i18n/pt_BR.json
+  changed assetPackInstallTime/assets/data/i18n/ru.json
+  changed ... and 2 more
+aab_check: PASS
+# STEP aab_check rc=0 23:44:51
+# STEP release_export_check 23:44:51
+NOTE: keystore/release is empty - expected pre-release state (no signed release build cut yet), not a failure
+NOTE: keystore/release_user is empty - expected pre-release state (no signed release build cut yet), not a failure
+NOTE: keystore/release_password is empty - expected pre-release state (no signed release build cut yet), not a failure
+build\tls.aab: 0 packed file(s) that are not the game
+
+PASS
+# STEP release_export_check rc=0 23:44:51
+# STEP export_refs 23:44:51
+export_refs_check: 502 shipped file(s) read for the Android preset against the bundle, 0 violation(s), 0 note(s)
+# STEP export_refs rc=0 23:44:56
+ M docs/artifacts/rc16/launch_ledger.tsv
+# STEP done
+# EXIT=0
