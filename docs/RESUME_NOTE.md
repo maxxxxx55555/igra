@@ -1,5 +1,13 @@
 # Resume note (2026-10-08, rc16 sign-off)
 
+## NEXT-ROW (Session 37, MEGA_PROMPT v7, 2026-10-30; no tag): read this block first; the Session 37 block under it still stands
+
+**Where everything is.** Main holds the colour work of pull request 38 (no layout change) and version code 9; the branch `release/1.0.3-v7` holds what v7 asked for that needs no image: the canon in `docs/VISUAL_REMAINING.md` (section "MEGA_PROMPT v7"), `tools/art_slots.py`, the icon proposal, `tools/qa_sim/music_audit.py`, the sting duck. The branch `release/1.0.2-sheets` (tip `6ac5fa91`) is the archived rebuild of screens that v7 rules out; it is not in main and is not to be merged.
+
+**The owner does (in this order):** (1) say how the full-size images are made: your generator, or yes to Gemini in your Chrome (the agent then needs your explicit yes to open it and to save each image); the briefs are in `docs/art/generation_briefs.txt`; (2) look at `.qa_logs/approvals/icons_board.png` (old flat icons beside the sheet's own) and either approve the replacement
+(`python tools/harvest_sheets.py --apply --approved-by "NAME DATE"`) or refuse it; (3) put the three missing sheets (the world sheet: roads, walls, doors and windows and power, city objects) into `docs/art/style_reference/`; (4) when images exist: `python tools/art_slots.py --fit <folder>`, look at the boards in `.qa_logs/approvals/`, approve each with
+`python tools/art_slots.py --apply <slot> --approved-by "NAME DATE"`; (5) the old list stays: the phone, the Play Console forms, a copy of `.signing/` off this machine, the old remote branches (`docs/KNOWN_ISSUES.md`).
+
 ## NEXT-ROW (Session 37, 2026-10-28; no tag): read this block first; the Session 36 block under it still stands
 
 **Where everything is.** The repainted 2D art of the other agent (the menu hero, four screen backdrops, the city map, the grid panel, 22 district cards; `docs/ART_PASS_2.md`) is in `main` after review and a fix commit (the pull request `release/1.0.2-artpass2-20261028`: `gh pr list --state merged --head release/1.0.2-artpass2-20261028`). The signed bundle of Session 36 (version code 7) was built before it and does not carry it; version code 8 does; version code 9 adds the faceted monsters (pull request 37) and the owner canon UI (the pull request of `release/1.0.2-canon`: `gh pr list --state merged --head release/1.0.2-canon`). The rows are the Session 37 block of `docs/RUN_STATE.md`.

@@ -60,15 +60,15 @@ pass could.
 | Balance sim | DARK +100% repair-part margin, 0 dead-ends, 4 skill branches, 4.9h time-to-win (DARK) | `59d09b3` |
 | `docs/HONEST_ASSESSMENT.md` | candid pre-launch read, 5.5/10, cites the eyes-on-playtest gap explicitly | `ff35718` |
 | `docs/VISUAL_AUDIO_SPEC.md` | LUT moods, wow-cue specs, 8 audio-gap contract, screenshot rules — for Arena | `be00cb9` |
-| Hooks — daily challenges, Collection Album, leaderboard, One More Run, 31 achievements, Share | no server required, all data-driven, 13 locales | `6100436`..`7e8c67b` |
+| Hooks — daily challenges, Collection Album, leaderboard, One More Run, 31 achievements, Share | no server required, all data-driven, 6 locales | `6100436`..`7e8c67b` |
 | `docs/SIMPLIFICATION_AUDIT.md` | 4 requested rewrites checked, 0 attempted — already-idiomatic code, evidence per category | `ddd0830` |
 | Touch/fuzz headless gate | `touch_probe_scene.tscn`, 23/23 incl. a 200-event fuzz pass | `3522d89` |
 | `tools/qa_sim/headless_suite` verification gate | 12 autoloads · 11 districts + loot · 5 endings · save/load+lang · combat · 1061 keys ×13 at runtime · soak | `f3bd1e3` |
 | District-load / pickup engine errors | fixed — rebuild deferred out of the physics signal (0 "Function blocked" errors) | `2101311` |
-| i18n — 13 locales, every user-facing string | 1061 keys × 13, 0 MISSING at runtime | `a712dd1`, prior |
+| i18n — 6 locales (en, ru, de, es, fr, pt_BR; the thirteen of earlier passes were cut to these), every user-facing string | 1577 keys × 6, 0 MISSING at runtime | `a712dd1`, prior |
 | i18n — native-speaker QA on the 11 non-EN/RU locales | 10 CRITICAL + 458 HIGH fixes applied (468 strings); `docs/NATIVE_QA_FINDINGS.md` | `653d0a8` |
 | Content — 11/11 districts, 88 lore notes | packed, wired, translated | prior waves |
-| Store listing — **13 locales** | title/tagline from shipped i18n; short≤80/full/bullets/tags transcreated then native-QA'd; EN+RU master untouched | `3babbff`, `653d0a8` |
+| Store listing — **6 locales** | title/tagline from shipped i18n; short≤80/full/bullets/tags transcreated then native-QA'd; EN+RU master untouched | `3babbff`, `653d0a8` |
 | Android adaptive icon | `store/icon-adaptive/` fg+bg 1080, safe-zone + extrema verified, wired in `export_presets.cfg` | `3babbff` |
 | Review-response playbook | `store/review-responses.md` — 5 classes × EN+RU | `3babbff` |
 | Screenshot capture plan | `store/screenshot-plan-detailed.md` — 8 shots + exact recipes + <60-min clock | `b4a04db` |
@@ -276,7 +276,7 @@ superseded (copies are in `..\_BACKUPS\2026-10-16_07-21_bundles` and `..\_BACKUP
 3. **Run it on a phone.** Two things changed that only a phone can judge: the Music bus now ends in a limiter at -2 dB (listen to a fight: does the music distort at its
    loudest beat?), and the level-up and reward toast has a dark outline (read it over a lit street).
 4. **Decide** (each is a row, not a fault): (a) the three unlocks `district_one`, `shadow_slayer` and `secret_hunter` that the catalog does not list (`docs/ACHIEVEMENT_REACHABILITY.md`):
-   make them real achievements (3 names, 3 descriptions, 13 locales, 3 medals) or remove them (300 coins less in the economy); (b) the daily challenge `streets_12` and
+   make them real achievements (3 names, 3 descriptions, 6 locales, 3 medals) or remove them (300 coins less in the economy); (b) the daily challenge `streets_12` and
    `streets_16` (the selector never offers them: no run lights 12 districts): write 11-district versions in `content/daily_challenges.json` (the file is hashed in
    `data/integrity_manifest.json`) or leave them, and whether the listing's "60 daily challenges" should say 58; (c) `data/ng_plus_config.json` (read by no script:
    `docs/NGPLUS_TABLE.md`): delete it or wire it; (d) the endings art (`assets/store/endings`, planned and unwired); (e) the cream slab of the lit road and the brass halo
