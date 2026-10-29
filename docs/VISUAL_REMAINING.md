@@ -238,17 +238,17 @@ Statuses are PASS, FAIL, BLOCKED (an external prerequisite named) or NOT_APPLICA
 
 | Row | Requirement (mapping of the v8 prompt, section 7) | Status | Evidence of this pass |
 |---|---|---|---|
-| V01 | first-person integrity | PASS | the windowed perf run through two districts (row 348), the bots (S38V8-BOTS), `release lifecycle, terminal layouts and audio` in the full battery (`docs/artifacts/rc16/proofs/s38_all_5cedfa03.out:188`); no first-person code changed in the pass |
+| V01 | first-person integrity | PASS | the windowed perf run through two districts (row 348), the bots (S38V8-BOTS), `release lifecycle, terminal layouts and audio` in the full battery (`docs/artifacts/rc16/proofs/s38_last_dd00ba27.out:188`); no first-person code changed in the pass |
 | V02 | environment coverage | PASS | the district spine and the 3D scene run in the full battery, the bots on six seeds (1, 2, 3, 7, 11, 42), the perf gate in two districts; the density frames were not re-shot |
 | V03 | material consistency | BLOCKED | closeup frames read by Claude only; the Opus pass is the named evidence and has not run |
-| V04 | lighting and visibility | PASS | `lighting_stage_sim` (`docs/artifacts/rc16/proofs/s38_all_5cedfa03.out:114`), the Music bus gate; no zone was brightened (the new sky keeps the gradient of the old one and its stars are smaller) |
+| V04 | lighting and visibility | PASS | `lighting_stage_sim` (`docs/artifacts/rc16/proofs/s38_last_dd00ba27.out:114`), the Music bus gate; no zone was brightened (the new sky keeps the gradient of the old one and its stars are smaller) |
 | V05 | inventory behaviour | PASS | the closeout inventory checks (627 of 627, V.5, I9.x and the new I1.1), the populated and the empty frame |
-| V06 | UI states | PASS | the layout gate (`s38_all_5cedfa03.out:186`), the unified theme (`:183`), `a11y_check` (`:118`), 16 screens in frames; hover, pressed and disabled states were not shot |
+| V06 | UI states | PASS | the layout gate (`s38_last_dd00ba27.out:186`), the unified theme (`:183`), `a11y_check` (`:118`), 16 screens in frames; hover, pressed and disabled states were not shot |
 | V07 | every screen opened and verified | PASS | the layout gate opens every UIManager screen; the 16 screens of row 352 were read |
-| V08 | input and comfort | PASS | `project_input_check`, `settings_consumer_check`, `a11y_check` in the full battery and the windowed touch probe (S38V8-WINDOWED); a real phone touch is phase P6 |
-| V09 | persistence | PASS | `целостность сейва`, `save_migration_sim` (`s38_all_5cedfa03.out:142`), the settings restart gate (`:184`), the save-slot parity of the closeout |
-| V10 | end-to-end journey | PASS | the GOLD MASTER suite (`s38_all_5cedfa03.out:189`) and the autoplay bot on six seeds (S38V8-BOTS) |
+| V08 | input and comfort | PASS | `project_input_check`, `settings_consumer_check`, `a11y_check` in the full battery the windowed touch probe (S38V8-WINDOWED) and the headless one (`s38_last_dd00ba27.out:192`); a real phone touch is phase P6 |
+| V09 | persistence | PASS | `целостность сейва`, `save_migration_sim` (`s38_last_dd00ba27.out:142`), the settings restart gate (`:184`), the save-slot parity of the closeout |
+| V10 | end-to-end journey | PASS | the GOLD MASTER suite (`s38_last_dd00ba27.out:189`) and the autoplay bot on six seeds (S38V8-BOTS) |
 | V11 | technical integrity | PASS | compile, arity, API, asset and scene-node gates and the shader and ObjectDB checks of the full battery; no ERROR line in the Windows boot; the 12 minute soak was not re-run in this pass (S37V7-FINAL2: orphans 0) |
-| V12 | release presentation | PASS | the store frames, the press kit (`s38_all_5cedfa03.out:151`), `hardcoded_text_gate` (`:110`); the music rights stay the owner's step 1 of `RELEASE_CHECKLIST.md` section 10 |
+| V12 | release presentation | PASS | the store frames, the press kit (`s38_last_dd00ba27.out:151`), `hardcoded_text_gate` (`:110`); the music rights stay the owner's step 1 of `RELEASE_CHECKLIST.md` section 10 |
 | V13 | target and package | BLOCKED | PASS for Windows and the bundle checks (rows 345 to 351); the Android bundle was not launched on a device |
 | V14 | final consistency | BLOCKED | the Opus review of the exact candidate has not run; the rows above carry no BLOCKED counted as verified |

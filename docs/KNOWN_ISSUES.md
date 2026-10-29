@@ -8,7 +8,7 @@ Closed in the branch `release/final-v7` (the rows are the Session 38 block of `d
 - **Facade variety is the tint and the weathering seed of each building** (`assets/shaders/soviet_facade.gdshader`) and nothing more: families of facades are meshes the repo does not have.
 - **`QUEST_MORE_ACTIVE` is unused**: the "+N more objectives" label went with the collapse of the panel; the key stays in the six locales until a cleanup of the dictionary.
 - **The stars of the new sky are one pixel**: on a phone at 1080p they may read as dust or vanish; the owner's eye on the device decides (`tools/gen_night_sky.py` holds the star count and the peak at its top).
-- **Exit code 3 of a probe means both "3 fails" and "needs a window"**: `tools/check.sh:558` prints a skip for it, so a windowed-only gate with exactly 3 failures hides there; found with the touch probe of 2026-10-29 and not changed, because 3 is the exit code every windowed-only gate uses for the skip.
+- **Exit code 3 of a probe means both "3 fails" and "needs a window"**: `tools/check.sh:558` prints a skip for it, so a windowed-only gate with exactly 3 failures hides there; found with the touch probe of 2026-10-29, which `check.sh --all` showed as skipped until its three fails were fixed; not changed, because 3 is the exit code every windowed-only gate uses for the skip.
 - **Two scripts over the 300 line limit of the style rules were touched**: `scripts/ui/inventory_ui.gd` (355 lines) and `scripts/world/street_props.gd` (363) were over it before the pass (340 and 360); a split is a refactor of its own.
 
 ## OPEN (2026-10-29, Session 37, MEGA_PROMPT v7): what blocks the visual overhaul and what is staged

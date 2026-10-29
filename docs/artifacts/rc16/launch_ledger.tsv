@@ -356,3 +356,4 @@ n	utc	head	id	exit	command
 355	20261029T182122Z	512f5d3a	s38_botA_512f5d3a	0	bash tools/qa_sim/autoplay_bot
 356	20261029T182823Z	4fb018d3	s38_botB_512f5d3a	0	bash tools/qa_sim/autoplay_bot
 357	20261029T183514Z	4fb018d3	s38_touch2_4fb018d3	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/touch_probe_scene.tscn 120
+358	20261029T184423Z	dd00ba27	s38_last_dd00ba27	0	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
