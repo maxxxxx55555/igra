@@ -21,7 +21,7 @@ session:
    publish the text at any stable URL (§3).
 3. **Play Console.** Create the app, answer the IARC content-rating
    questionnaire (exact answers in §5.2d), paste the listing from
-   `store/listing.md` (13 locales; the 11 non-EN/RU sections were
+   `store/listing.md` (6 locales; the 4 non-EN/RU sections were
    transcreated and then reviewed against a full native-speaker QA pass —
    `docs/NATIVE_QA_FINDINGS.md`), the adaptive icon is in
    `store/icon-adaptive/`, art from `store/`. Capture the 8 phone

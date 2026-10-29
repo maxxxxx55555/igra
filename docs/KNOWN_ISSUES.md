@@ -1,5 +1,16 @@
 ﻿# Known issues
 
+## OPEN (2026-10-29, Session 37): what the delivery of art pass 2 and version code 8 closed and left
+
+Closed: art pass 2 was reviewed, fixed and merged (`docs/ART_PASS_2.md`); version code 8 is exported and recorded (`docs/RELEASE_ARTIFACTS.md`, last section); the music rights are decided as A (`docs/MUSIC_RIGHTS_MEMO.md`); the eight store frames are re-shot at the version 8 content; the privacy page is live with a real contact (HTTP 200, no placeholder left).
+
+- **The monsters are still primitives on `main`**: the shape work is on the unmerged branch `art/monsters-pass2` (the generator `scripts/art/monster_meshes.gd`); it needs the bot runs, the frames and a look before it merges.
+- **Perf and the soak were read on a shared machine** (the Session 36 rows below): they want a cold, quiet read; nobody has booted either bundle on a device.
+- **The checks of the source pass have no mutation rows** (as in Session 36).
+- **Size:** version code 8 is 76.64 MiB (80.37 MB decimal), accepted for 1.0.1 (decision of 2026-10-29): the Play limit for a base module is far above it and no gate covers the size; a texture-compression pilot (`docs/artifacts/apk_size_report.md`) is the way down if a size target comes back.
+- **Owner only:** the Play Console forms, a phone, a copy of `.signing/` off this machine, and the deletion of eleven old remote branches (the agent's attempt was refused by the permission classifier; the command is in `docs/RESUME_NOTE.md`).
+- **The tool of art pass 2** is named in `docs/ASSET_LICENSES.md` (Session 37 decisions); its output terms were not read here.
+
 ## OPEN (2026-10-28, Session 36): runtime acceptance of the source pass of 2026-10-28, and what it leaves
 
 Closed with an engine (head `76529eaa`; the rows are the Session 36 block of `docs/RUN_STATE.md`): the source pass runs. Compile and arity read 0, the closeout reads 625 of 625 (its first run read six failures, all in the checks and not in the game), the autoplay bot won 3 of 3 seeds on Normal and 3 of 3 on Hard with no softlock, `qa_guard_e2e`, the audio truth gate, the density frames (55 per setting), AF3 on the 8 store frames and the static gates pass; the signed Android bundle (version code 7) passes `aab_check` and the Windows build starts with no script error.
@@ -7,7 +18,7 @@ Closed with an engine (head `76529eaa`; the rows are the Session 36 block of `do
 - **Perf is not settled on this laptop.** The High tier gate (p95 at most 33 ms) read 33.65 and 33.21 ms in one run of `a5664feb` and 21.37 and 21.12 ms in the next, with another program's Godot runs on the same CPU; the A/B of the art pass (before, with, before, with) passed both sides in its first round and failed both in its second, so nothing is attributable to the art. Draw calls are 104 to 115 against 200 and video memory 191 MiB against 512. Nobody has measured a phone.
 - **The ten-minute soak ends slower than it starts** (p95 18.06 to 32.32 ms, 215 frames over 50 ms; static memory +6.55 MiB, 160 objects, 25 nodes, 0 orphans). The machine was shared, so a hot laptop and a slow leak both fit: read it again on a cold, quiet one before calling it a leak.
 - **The bundle was never booted** and the new menu, shop and HUD layout were never seen on a phone; the engine's runs are desktop and GL Compatibility.
-- **The twelve music tracks have no verified commercial rights** (`docs/ASSET_LICENSES.md`, `RELEASE_CHECKLIST.md` section 10: owner step 1).
+- **The twelve music tracks have no verified commercial rights** (`docs/ASSET_LICENSES.md`, `RELEASE_CHECKLIST.md` section 10: owner step 1). **CLOSED 2026-10-28 by decision A** (`docs/MUSIC_RIGHTS_MEMO.md`: ship them labelled as AI).
 - **The checks of the source pass have no mutation rows** (the five that Session 36 fixed and the new ones were run green, never made to fail on purpose).
 - **The surfaces are photographs, the things on them are not**: the road, the sidewalk and the prop surfaces are CC0 scans (Poly Haven) and the trees are bare limbs, but the monsters, the buildings and the props are still primitives. Real models and animation are the next art step and need an artist or a CC0 kit (Kenney, Quaternius) and a licence row each.
 - **35 ObjectDB instances are still freed only at the exit of a bot run** (benign, as before).
