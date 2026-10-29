@@ -1,0 +1,9 @@
+# proof s37_c3_d5afe71d
+# utc 20261029T030211Z
+# head d5afe71d (uncommitted paths: 24)
+# env none
+# cmd bash .qa_logs/s37_all.sh
+check.sh --all rc=0
+Всё зелёное. Проверок пройдено: 96
+# STEP done
+# EXIT=0
