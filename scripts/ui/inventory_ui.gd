@@ -172,6 +172,9 @@ func _refresh() -> void:
 		var data := ItemDatabase.get_item(slot["item_id"])
 		if data != null and (_filter < 0 or int(data.rarity) == _filter):
 			_grid.add_child(_cell(index, data, int(slot["count"])))
+	if _filter < 0:
+		for _free in InventoryManager.slots.size() - _used_slots():
+			_grid.add_child(_empty_cell())
 	_refresh_detail()
 	_refresh_side()
 	_refresh_quick_strip()
@@ -223,6 +226,18 @@ func _used_slots() -> int:
 		if slot != null:
 			used += 1
 	return used
+
+## The free slots of the pack drawn as empty cells, so a pack with little in it does not read as a blank panel.
+func _empty_cell() -> Panel:
+	var cell := Panel.new()
+	cell.custom_minimum_size = CELL
+	cell.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var box := StyleBoxFlat.new()
+	box.bg_color = ThemeProvider.COLOR_BG_PANEL2
+	box.set_border_width_all(1)
+	box.border_color = ThemeProvider.COLOR_BORDER
+	cell.add_theme_stylebox_override("panel", box)
+	return cell
 
 func _cell(index: int, data: ItemData, count: int) -> Button:
 	var button: Button = QUICK_CELL.new()
