@@ -7,7 +7,7 @@ const PANEL := ThemeProvider.COLOR_BG_PANEL
 const BRASS_DIM := ThemeProvider.COLOR_AMBER_DIM
 const BONE_TEXT := ThemeProvider.COLOR_TEXT
 const GOOD := Color("#5f8a4e")
-const BAD := Color("#b4452f")
+const BAD := Color("#c0392b")
 const VISIBLE_TIME := 3.0
 
 ## Строка: [i18n_key, getter(WeaponBase)->float, lower_is_better]

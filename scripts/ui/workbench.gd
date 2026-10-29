@@ -299,7 +299,7 @@ func _build_salvage_panel() -> void:
 	title.add_theme_color_override("font_color", BONE_TEXT)
 	title.add_theme_font_size_override("font_size", 14)
 	_salvage_panel.add_child(title)
-	title.add_theme_color_override("font_outline_color", Color(0.047, 0.063, 0.086, 1.0))
+	title.add_theme_color_override("font_outline_color", Color(0.0235294, 0.0588235, 0.0745098, 1.0))
 	title.add_theme_constant_override("outline_size", 2)
 
 	var scroll := ScrollContainer.new()

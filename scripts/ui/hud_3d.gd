@@ -27,7 +27,7 @@ const _WEAPON_SLOTS: Array = [[&"pistol"], [&"rifle", &"shotgun"]]
 ## follows _slot_items.
 const _QUICK_SLOTS := preload("res://scripts/ui/quick_slots.gd")
 const _SLOT_SPECIAL_COLOR := Color(0.788, 0.635, 0.290)
-const _SLOT_FALLBACK_COLOR := Color(0.165, 0.200, 0.251)
+const _SLOT_FALLBACK_COLOR := Color(0.352941, 0.290196, 0.164706)
 
 var _slot_items: Array = _SLOT_ITEMS.duplicate()
 var _hp: float = 1.0
@@ -75,7 +75,7 @@ func _ready() -> void:
 	_apply_touch_visibility()
 	_fix_radar_anchor()
 	InputService.quick_slot_requested.connect(_on_quick_slot_key)
-	hp_fill.color = Color(0.706, 0.271, 0.184)
+	hp_fill.color = Color(0.752941, 0.223529, 0.168627)
 	stam_fill.color = Color(0.373, 0.541, 0.306)
 	bat_fill.color = Color(0.788, 0.635, 0.290)
 	var player := get_tree().get_first_node_in_group("player")
@@ -147,7 +147,7 @@ func _ready() -> void:
 	EventBus.player_detected.connect(_on_monster_spotted)
 	EventBus.enemy_hp_updated.connect(_on_enemy_hp_updated)
 	enemy_name_label.add_theme_font_size_override("font_size", 22)
-	enemy_name_label.add_theme_color_override("font_color", Color(0.706, 0.271, 0.184))
+	enemy_name_label.add_theme_color_override("font_color", Color(0.752941, 0.223529, 0.168627))
 	enemy_name_label.visible = false
 	enemy_hp_bar.visible = false
 	prompt.visible = false
@@ -232,7 +232,7 @@ func _setup_nv_poll() -> void:
 ## in the PR. DOT (BLEED/BURN/POISON) and SLOW are real on the player: the HUD
 ## reads the same `status_fx.active` the tick loop writes.
 const _STATUS_ICONS: Dictionary = {
-	EnemyRosterData.Status.BLEED: ["🩸", Color(0.706, 0.271, 0.184), "res://assets/textures/ui/status_bleed.png"],
+	EnemyRosterData.Status.BLEED: ["🩸", Color(0.752941, 0.223529, 0.168627), "res://assets/textures/ui/status_bleed.png"],
 	EnemyRosterData.Status.BURN: ["🔥", Color(0.851, 0.408, 0.176), "res://assets/textures/ui/status_burn.png"],
 	EnemyRosterData.Status.POISON: ["☠", Color(0.373, 0.541, 0.306), "res://assets/textures/ui/status_poison.png"],
 	EnemyRosterData.Status.SLOW: ["🐌", Color(0.541, 0.451, 0.220), "res://assets/textures/ui/status_slow.png"],
@@ -301,7 +301,7 @@ func _spawn_status_icon(status: int) -> Control:
 		lbl.add_theme_font_size_override("font_size", 16)
 		vb.add_child(lbl)
 	var bar_bg := ColorRect.new()
-	bar_bg.color = Color(0.047, 0.063, 0.086)
+	bar_bg.color = Color(0.0235294, 0.0588235, 0.0745098)
 	bar_bg.custom_minimum_size = Vector2(_STATUS_ICON_SIZE - 8.0, 3.0)
 	vb.add_child(bar_bg)
 	var bar_fill := ColorRect.new()
@@ -480,7 +480,7 @@ func _poll_noise_visibility() -> void:
 const GLIDE_PER_TICK: float = 0.15  # of a full bar, per 0.1 s poll
 const _CALM := Color(0.373, 0.541, 0.306)  # stamina
 const _WARN := Color(0.788, 0.635, 0.290)  # brass
-const _LOUD := Color(0.706, 0.271, 0.184)  # ember
+const _LOUD := Color(0.752941, 0.223529, 0.168627)  # ember
 var _noise_shown: float = 0.0
 var _vis_shown: float = 0.0
 
@@ -507,8 +507,8 @@ var _hit_tween: Tween
 const _CROSSHAIR_NAMES: Dictionary = {
 	"default": Color(0.541, 0.451, 0.220, 0.85),   # brass-dim, hipfire
 	"aim": Color(0.788, 0.635, 0.290, 0.95),        # brass, aiming down sights
-	"enemy":  Color(0.706, 0.271, 0.184, 0.95),     # ember
-	"disabled": Color(0.165, 0.200, 0.251, 0.6),    # panel-edge (недоступно/прицел-вне-врага)
+	"enemy":  Color(0.752941, 0.223529, 0.168627, 0.95),     # ember
+	"disabled": Color(0.352941, 0.290196, 0.164706, 0.6),    # panel-edge (недоступно/прицел-вне-врага)
 }
 
 func _update_crosshair(state: StringName) -> void:
@@ -665,7 +665,7 @@ func _set_weight_color(w: Control, ratio: float) -> void:
 	elif ratio < 0.8:
 		w.modulate = Color(0.788, 0.635, 0.290)
 	else:
-		w.modulate = Color(0.706, 0.271, 0.184)
+		w.modulate = Color(0.752941, 0.223529, 0.168627)
 
 func _on_game_state(state: int) -> void:
 	visible = state == GameManager.GameState.PLAYING or state == GameManager.GameState.PAUSED
@@ -820,14 +820,14 @@ func _add_captions() -> void:
 		[LocalizationManager.t("HUD_HP"), $TopLeft/HP, 3],
 		[LocalizationManager.t("HUD_STAMINA"), $TopLeft/Stam, 4]
 	]
-	var outline_col := Color(0.047, 0.063, 0.086, 1.0)
+	var outline_col := Color(0.0235294, 0.0588235, 0.0745098, 1.0)
 	var shadow_col := Color(0.0, 0.0, 0.0, 0.5)
 	for d in data:
 		var row: int = d[2]
 		var lbl := Label.new()
 		lbl.text = d[0]
 		lbl.mouse_filter = 2
-		lbl.add_theme_color_override("font_color", Color(0.682, 0.714, 0.749))
+		lbl.add_theme_color_override("font_color", Color(0.541176, 0.541176, 0.521569))
 		lbl.add_theme_font_size_override("font_size", 18)
 		lbl.add_theme_color_override("font_outline_color", outline_col)
 		lbl.add_theme_constant_override("outline_size", 2)
@@ -876,7 +876,7 @@ func _layout_extra_rows(start_row: int) -> void:
 		var top := float(row) * BAR_ROW_PITCH + BAR_ROW_TOP
 		# Keep captions and bars on the same readable row grid.
 		caption.add_theme_font_size_override("font_size", 18)
-		caption.add_theme_color_override("font_color", Color(0.682, 0.714, 0.749))
+		caption.add_theme_color_override("font_color", Color(0.541176, 0.541176, 0.521569))
 		var cap_h: float = maxf(caption.get_combined_minimum_size().y, 22.0)
 		caption.offset_left = 0.0
 		caption.offset_right = BAR_W
@@ -929,11 +929,11 @@ func _wake_combat() -> void:
 
 func _setup_number_fonts() -> void:
 	for lbl in [hp_val, stam_val, bat_val]:
-		lbl.add_theme_color_override("font_color", Color(0.847, 0.824, 0.769))
+		lbl.add_theme_color_override("font_color", Color(0.847059, 0.835294, 0.8))
 		lbl.add_theme_font_size_override("font_size", 18)
 
 func _apply_text_outlines() -> void:
-	var outline_col := Color(0.047, 0.063, 0.086, 1.0)
+	var outline_col := Color(0.0235294, 0.0588235, 0.0745098, 1.0)
 	var shadow_col := Color(0.0, 0.0, 0.0, 0.5)
 	for lbl in [hp_val, stam_val, bat_val, prompt, notice]:
 		if lbl:
@@ -960,8 +960,8 @@ func _outline_recursive(node: Node, oc: Color, sc: Color) -> void:
 ## (_poll_noise_visibility): RUN 0.8, WALK 0.4, STEALTH 0.3.
 ## Gated by reduce_flash (a11y_probe_scene already proves that toggle
 ## suppresses juice like this).
-const _VIGNETTE_BG_DEEP := Color(0.047, 0.062, 0.086)
-const _VIGNETTE_EMBER := Color(0.706, 0.271, 0.184)
+const _VIGNETTE_BG_DEEP := Color(0.0235294, 0.0588235, 0.0745098)
+const _VIGNETTE_EMBER := Color(0.752941, 0.223529, 0.168627)
 const _VIGNETTE_PULSE_RATE: float = 0.006  # radians per ms (~1 s period)
 ## Cached for the per-frame vignette; re-fetched only after the player is freed.
 var _vignette_player: Node = null
@@ -971,7 +971,7 @@ var _noise_reduce_flash_t: float = 0.0
 func _process(delta: float) -> void:
 	if _bat < 0.25:
 		var pulse: float = sin(Time.get_ticks_msec() * 0.0095) * 0.5 + 0.5
-		bat_fill.color = Color(0.788, 0.635, 0.290).lerp(Color(0.706, 0.271, 0.184), pulse)
+		bat_fill.color = Color(0.788, 0.635, 0.290).lerp(Color(0.752941, 0.223529, 0.168627), pulse)
 	else:
 		bat_fill.color = Color(0.788, 0.635, 0.290)
 	_process_noise_vignette(delta)
@@ -1731,7 +1731,7 @@ func _setup_slot_placeholders() -> void:
 		# forever zero. A permanent "0" next to a slot that works reads as broken;
 		# the badge only means something for the five item slots.
 		badge.visible = item_id != &"flashlight"
-		badge.add_theme_color_override("font_color", Color(0.847, 0.824, 0.769))
+		badge.add_theme_color_override("font_color", Color(0.847059, 0.835294, 0.8))
 		badge.add_theme_font_size_override("font_size", 11)
 		badge.position = Vector2(34, 34)
 		slot.add_child(badge)

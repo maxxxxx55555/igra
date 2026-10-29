@@ -64,7 +64,7 @@ func _ready() -> void:
 
 func _build() -> void:
 	var bg := ColorRect.new()
-	bg.color = Color(0.047, 0.063, 0.086, 0.94)
+	bg.color = Color(0.0235294, 0.0588235, 0.0745098, 0.94)
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
 

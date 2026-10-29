@@ -14,6 +14,8 @@ import re
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "tools"))
+import retint_ui_chrome  # noqa: E402  (the table of the old token colours and the files that hold UI colours)
 CANON_FONTS = {"RobotoCondensed-Regular.ttf", "BebasNeue-Regular.ttf", "ShareTechMono-Regular.ttf", "Rajdhani-Regular.ttf", "OpenDyslexic-Regular.ttf"}
 BRASS = "#c9a24a"
 SIZE_LADDER = {8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 20, 22, 24, 28, 30, 32, 36, 44, 64}  # 15 and 30: the Mono and Huge steps of the type scale of docs/VISUAL_PASS.md W9 (theme_provider.gd)
@@ -116,6 +118,8 @@ def report():
     c = ui_colours()
     on = sum(n for h, n in c.items() if h in PALETTE)
     out += ["", "Hex colours of UI scripts and scenes: %d literals, %d distinct, %d (%.0f %%) in the ten tokens of the palette; off the palette: %s" % (sum(c.values()), len(c), on, 100.0 * on / max(1, sum(c.values())), " ".join(sorted(h for h in c if h not in PALETTE)))]
+    stale = ["%s:%d" % (p.relative_to(ROOT).as_posix(), n) for p, text in shipped(retint_ui_chrome.TEXT_GLOBS) for n, line in enumerate(text.splitlines(), 1) if retint_ui_chrome.retint_text(line) != line]
+    bad += ["a colour of the old tokens at " + s for s in stale]
     fac = facades()
     out += ["", "Facade palettes of the skyline (chroma of each of the three colours, 0..1; the canon facade #0f151d is %.2f)" % chroma("0f151d"), "", "| District | Chroma |", "|---|---|"]
     for district, colours in sorted(fac.items()):
@@ -131,6 +135,7 @@ def demo():
     assert {int(n) for n in re.findall(r"theme_override_font_sizes/font_size = (\d+)", "theme_override_font_sizes/font_size = 22")} == {22}
     text, bad = report()
     assert "Fonts named" in text and isinstance(bad, list)
+    assert retint_ui_chrome.retint_text('Color("#141b24")') != 'Color("#141b24")', "an old token colour is found"
     print("consistency_check demo: the chroma, the size reader and the report are in order")
     return 0
 

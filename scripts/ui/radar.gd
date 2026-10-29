@@ -60,7 +60,7 @@ func _scan_entities() -> void:
 	if not _player:
 		return
 	var pp := _player.global_position
-	
+
 	# Lights
 	var lights := get_tree().get_nodes_in_group("lights")
 	for l in lights:
@@ -68,7 +68,7 @@ func _scan_entities() -> void:
 			var dist: float = l.global_position.distance_to(pp)
 			if dist <= world_range_m:
 				_entities.append({"pos": l.global_position, "type": "light", "dist": dist})
-	
+
 	# Interactives (including pickups and objectives)
 	var interactives := get_tree().get_nodes_in_group("interact")
 	for i in interactives:
@@ -88,7 +88,7 @@ func _scan_entities() -> void:
 			var dist: float = o.global_position.distance_to(pp)
 			if dist <= world_range_m:
 				_entities.append({"pos": o.global_position, "type": "interact", "dist": dist})
-	
+
 	# Props
 	var props := get_tree().get_nodes_in_group("props")
 	for p in props:
@@ -114,7 +114,7 @@ func _draw() -> void:
 	var center := Vector2(size.x / 2.0, size.y / 2.0)
 	var pp := _player.global_position
 	# фон круга — panel alpha0.6
-	draw_circle(center, radar_radius_px, Color(0.078, 0.106, 0.141, 0.6))
+	draw_circle(center, radar_radius_px, Color(0.0588235, 0.0745098, 0.0784314, 0.6))
 	# круглая рамка — brass
 	draw_arc(center, radar_radius_px, 0.0, TAU, 48, Color(0.541, 0.451, 0.220), 2.0)
 	# игрок — brass точка
@@ -128,7 +128,7 @@ func _draw() -> void:
 	draw_colored_polygon(tri, Color(0.788, 0.635, 0.290))
 	var scale_f := radar_radius_px / world_range_m
 	var clip_radius := radar_radius_px - 4.0
-	
+
 	# Draw non-enemy entities (lights, interactives, props)
 	for ent in _entities:
 		var dx: float = ent.pos.x - pp.x
@@ -141,9 +141,9 @@ func _draw() -> void:
 			"light", "interact":
 				draw_circle(ep, 2.0, Color(0.788, 0.635, 0.290))
 			"prop":
-				draw_circle(ep, 1.5, Color(0.682, 0.714, 0.749, 0.5))
-	
-	# Draw enemies (ember color #b4452f)
+				draw_circle(ep, 1.5, Color(0.541176, 0.541176, 0.521569, 0.5))
+
+	# Draw enemies (ember color #c0392b)
 	for enemy_pos in _enemy_positions:
 		var dx: float = enemy_pos.x - pp.x
 		var dz: float = enemy_pos.z - pp.z
@@ -151,9 +151,9 @@ func _draw() -> void:
 		if lv.length() > clip_radius:
 			lv = lv.normalized() * clip_radius
 		var ep := center + lv
-		# Ember color: #b4452f
-		draw_circle(ep, 2.5, Color(0.706, 0.271, 0.184))  # Approximate ember #b4452f
-	
+		# Ember color: #c0392b
+		draw_circle(ep, 2.5, Color(0.752941, 0.223529, 0.168627))  # Approximate ember #c0392b
+
 	var tick_positions := [Vector2(center.x, 0.05 * size.y), Vector2(center.x, 0.95 * size.y), Vector2(0.05 * size.x, center.y), Vector2(0.95 * size.x, center.y)]
 	for t in tick_positions:
 		draw_rect(Rect2(t.x - 1, t.y - 4, 2, 8), Color(0.541, 0.451, 0.220))

@@ -33,7 +33,7 @@ static func draw_icon(parent: Control, item_id: StringName, size: float) -> void
 			var cap := ColorRect.new()
 			cap.size = Vector2(size * 0.3, size * 0.1)
 			cap.position = Vector2(size * 0.35, size * 0.05)
-			cap.color = Color(0.706, 0.271, 0.184)
+			cap.color = Color(0.752941, 0.223529, 0.168627)
 			cap.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			draw.add_child(cap)
 			var contact := ColorRect.new()
@@ -47,13 +47,13 @@ static func draw_icon(parent: Control, item_id: StringName, size: float) -> void
 			var cross_h := ColorRect.new()
 			cross_h.size = Vector2(size * 0.5, size * 0.18)
 			cross_h.position = Vector2(size * 0.25, size * 0.41)
-			cross_h.color = Color(0.706, 0.271, 0.184)
+			cross_h.color = Color(0.752941, 0.223529, 0.168627)
 			cross_h.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			draw.add_child(cross_h)
 			var cross_v := ColorRect.new()
 			cross_v.size = Vector2(size * 0.18, size * 0.5)
 			cross_v.position = Vector2(size * 0.41, size * 0.25)
-			cross_v.color = Color(0.706, 0.271, 0.184)
+			cross_v.color = Color(0.752941, 0.223529, 0.168627)
 			cross_v.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			draw.add_child(cross_v)
 		&"key":
@@ -61,19 +61,19 @@ static func draw_icon(parent: Control, item_id: StringName, size: float) -> void
 			var shaft := ColorRect.new()
 			shaft.size = Vector2(size * 0.15, size * 0.6)
 			shaft.position = Vector2(size * 0.55, size * 0.2)
-			shaft.color = Color(0.682, 0.714, 0.749)
+			shaft.color = Color(0.541176, 0.541176, 0.521569)
 			shaft.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			draw.add_child(shaft)
 			var head := ColorRect.new()
 			head.size = Vector2(size * 0.35, size * 0.35)
 			head.position = Vector2(size * 0.15, size * 0.25)
-			head.color = Color(0.682, 0.714, 0.749)
+			head.color = Color(0.541176, 0.541176, 0.521569)
 			head.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			draw.add_child(head)
 			var hole := ColorRect.new()
 			hole.size = Vector2(size * 0.12, size * 0.12)
 			hole.position = Vector2(size * 0.265, size * 0.365)
-			hole.color = Color(0.078, 0.106, 0.141)
+			hole.color = Color(0.0588235, 0.0745098, 0.0784314)
 			hole.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			draw.add_child(hole)
 		&"cable":
@@ -87,13 +87,13 @@ static func draw_icon(parent: Control, item_id: StringName, size: float) -> void
 			var end_l := ColorRect.new()
 			end_l.size = Vector2(size * 0.1, size * 0.25)
 			end_l.position = Vector2(size * 0.2, size * 0.375)
-			end_l.color = Color(0.682, 0.714, 0.749)
+			end_l.color = Color(0.541176, 0.541176, 0.521569)
 			end_l.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			draw.add_child(end_l)
 			var end_r := ColorRect.new()
 			end_r.size = Vector2(size * 0.1, size * 0.25)
 			end_r.position = Vector2(size * 0.7, size * 0.375)
-			end_r.color = Color(0.682, 0.714, 0.749)
+			end_r.color = Color(0.541176, 0.541176, 0.521569)
 			end_r.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			draw.add_child(end_r)
 		&"fuse":
@@ -107,13 +107,13 @@ static func draw_icon(parent: Control, item_id: StringName, size: float) -> void
 			var pin_l := ColorRect.new()
 			pin_l.size = Vector2(size * 0.08, size * 0.15)
 			pin_l.position = Vector2(size * 0.18, size * 0.425)
-			pin_l.color = Color(0.682, 0.714, 0.749)
+			pin_l.color = Color(0.541176, 0.541176, 0.521569)
 			pin_l.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			draw.add_child(pin_l)
 			var pin_r := ColorRect.new()
 			pin_r.size = Vector2(size * 0.08, size * 0.15)
 			pin_r.position = Vector2(size * 0.74, size * 0.425)
-			pin_r.color = Color(0.682, 0.714, 0.749)
+			pin_r.color = Color(0.541176, 0.541176, 0.521569)
 			pin_r.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			draw.add_child(pin_r)
 		&"scrap", &"tool":
@@ -130,7 +130,7 @@ static func draw_icon(parent: Control, item_id: StringName, size: float) -> void
 			var body := ColorRect.new()
 			body.size = Vector2(size * 0.25, size * 0.6)
 			body.position = Vector2(size * 0.37, size * 0.2)
-			body.color = Color(0.682, 0.714, 0.749)
+			body.color = Color(0.541176, 0.541176, 0.521569)
 			body.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			draw.add_child(body)
 			var head := ColorRect.new()
@@ -150,7 +150,7 @@ static func draw_icon(parent: Control, item_id: StringName, size: float) -> void
 			var body := ColorRect.new()
 			body.size = Vector2(size * 0.55, size * 0.5)
 			body.position = Vector2(size * 0.225, size * 0.25)
-			body.color = Color(0.078, 0.106, 0.141)
+			body.color = Color(0.0588235, 0.0745098, 0.0784314)
 			body.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			draw.add_child(body)
 			var strap_l := ColorRect.new()
@@ -175,7 +175,7 @@ static func draw_icon(parent: Control, item_id: StringName, size: float) -> void
 				coin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 				draw.add_child(coin)
 		_:
-			draw.color = Color(0.165, 0.200, 0.251)
+			draw.color = Color(0.352941, 0.290196, 0.164706)
 			var q := ColorRect.new()
 			q.size = Vector2(size * 0.4, size * 0.4)
 			q.position = Vector2(size * 0.3, size * 0.3)

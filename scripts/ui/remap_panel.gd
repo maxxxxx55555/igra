@@ -14,7 +14,7 @@ func _ready() -> void:
 	layer = 130
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	var dim := ColorRect.new()
-	dim.color = Color(0.047, 0.063, 0.086, 0.82)
+	dim.color = Color(0.0235294, 0.0588235, 0.0745098, 0.82)
 	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
 	dim.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(dim)
