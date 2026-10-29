@@ -5,11 +5,14 @@ extends "res://scripts/tools/_monster_frames_runner.gd"
 
 const SCREENS: Array[StringName] = [&"inventory", &"city_map", &"skill_tree", &"workbench", &"pause", &"settings", &"death", &"win", &"new_game_plus"]
 const CODEX: Array[StringName] = [&"journal", &"quests", &"achievements", &"stats", &"bestiary", &"help", &"collection"]
+const PACK: Array = [[&"battery", 2], [&"medkit", 1], [&"serum", 1], [&"fuse", 2], [&"circuit", 2], [&"cable", 3], [&"scrap", 6], [&"alcohol", 1]]
 
 func _run() -> void:
 	if not await _enter_game():
 		return
 	get_window().size = Vector2i(1600, 900)
+	for stack: Array in PACK:  # a pack with stacks of several rarities and free slots left: the populated state of the grid
+		InventoryManager.try_add(stack[0], stack[1])
 	await get_tree().create_timer(1.0).timeout
 	for id in SCREENS:
 		UIManager.open(id)
