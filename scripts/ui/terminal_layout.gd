@@ -1,6 +1,6 @@
 extends RefCounted
 ## Terminal screens retain physical readability after viewport/text scaling.
-const PANEL_COLOR := Color(0.078, 0.106, 0.141, 0.95)
+const PANEL_COLOR := Color(0.0588235, 0.0745098, 0.0784314, 0.95)
 
 static func build(screen: Control) -> VBoxContainer:
 	screen.theme = ThemeProvider.build_theme()
@@ -12,7 +12,7 @@ static func build(screen: Control) -> VBoxContainer:
 	art.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	screen.add_child(art)
 	var shade := ColorRect.new()
-	shade.color = Color(0.047, 0.063, 0.086, 0.45)
+	shade.color = Color(0.0235294, 0.0588235, 0.0745098, 0.45)
 	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	screen.add_child(shade)

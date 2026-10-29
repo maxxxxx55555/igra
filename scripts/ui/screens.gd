@@ -25,13 +25,14 @@ const SCREEN_LIST: Array[String] = [
 ]
 const BRASS: Color = Color(0.788, 0.635, 0.290)
 const BRASS_DIM: Color = Color(0.541, 0.451, 0.220)
-const STEEL_TEXT: Color = Color(0.682, 0.714, 0.749)
-const BONE_TEXT: Color = Color(0.847, 0.824, 0.769)
-const EMPER: Color = Color(0.706, 0.271, 0.184)
+const STEEL_TEXT: Color = Color(0.541176, 0.541176, 0.521569)
+const BONE_TEXT: Color = Color(0.847059, 0.835294, 0.8)
+const EMPER: Color = Color(0.752941, 0.223529, 0.168627)
 const STAMINA_GREEN: Color = Color(0.373, 0.541, 0.306)
-const PANEL_COLOR: Color = Color(0.078, 0.106, 0.141, 0.94)
-const PANEL_EDGE: Color = Color(0.165, 0.200, 0.251)
-const OUTLINE_COLOR: Color = Color(0.047, 0.063, 0.086, 1.0)
+const PANEL_COLOR: Color = Color(0.0588235, 0.0745098, 0.0784314, 0.94)
+const PANEL_EDGE: Color = Color(0.352941, 0.290196, 0.164706)
+const INSET_FILL: Color = ThemeProvider.COLOR_BG_PANEL2
+const OUTLINE_COLOR: Color = Color(0.0235294, 0.0588235, 0.0745098, 1.0)
 const SHADOW_COLOR: Color = Color(0.0, 0.0, 0.0, 0.5)
 var _active_screen: String = ""
 var _screen_data: Dictionary = {}
@@ -57,7 +58,7 @@ func _ready() -> void:
 func _build_menu_bg() -> void:
 	var bg_full := ColorRect.new()
 	bg_full.name = "MenuBG"
-	bg_full.color = Color(0.047, 0.063, 0.086, 1.0)
+	bg_full.color = Color(0.0235294, 0.0588235, 0.0745098, 1.0)
 	bg_full.mouse_filter = Control.MOUSE_FILTER_STOP
 	bg_full.visible = false
 	add_child(bg_full)
@@ -73,7 +74,7 @@ func _build_all_screens() -> void:
 func _build_screen(name: String) -> void:
 	var vp := get_viewport().get_visible_rect().size
 	var underlay := ColorRect.new()
-	underlay.color = Color(0.047, 0.063, 0.086, 0.0)
+	underlay.color = Color(0.0235294, 0.0588235, 0.0745098, 0.0)
 	underlay.size = vp
 	underlay.mouse_filter = Control.MOUSE_FILTER_STOP
 	underlay.name = name
@@ -314,7 +315,7 @@ func build_Loading(content: ColorRect, card: ColorRect, cw: float, ch: float, d:
 	_apply_outline(load_title)
 	content.add_child(load_title)
 	var bar_bg := ColorRect.new()
-	bar_bg.color = PANEL_EDGE
+	bar_bg.color = INSET_FILL
 	bar_bg.size = Vector2(200, 8)
 	bar_bg.position = Vector2(content.size.x / 2.0 - 100, 44)
 	content.add_child(bar_bg)
@@ -448,7 +449,7 @@ func build_Bestiary(content: ColorRect, card: ColorRect, cw: float, ch: float) -
 		frame.size = Vector2(vbox.size.x - 10, 100)
 		vbox.add_child(frame)
 		var silhouette := ColorRect.new()
-		silhouette.color = PANEL_EDGE
+		silhouette.color = INSET_FILL
 		silhouette.size = Vector2(64, 80)
 		silhouette.position = Vector2(8, 10)
 		frame.add_child(silhouette)
@@ -524,7 +525,7 @@ func build_FlashlightUpgrade(content: ColorRect, card: ColorRect, cw: float, ch:
 		var lvl: int = int(b["level"])
 		var mx: int = maxi(1, int(b["max"]))
 		var bar_bg := ColorRect.new()
-		bar_bg.color = PANEL_EDGE
+		bar_bg.color = INSET_FILL
 		bar_bg.size = Vector2(110, 10)
 		bar_bg.position = Vector2(120, py + 6)
 		content.add_child(bar_bg)
@@ -755,7 +756,7 @@ func build_StoryScene(card: ColorRect, cw: float, ch: float, d: Dictionary) -> v
 		content.queue_free()
 		d.content = null
 	var preview := ColorRect.new()
-	preview.color = PANEL_EDGE
+	preview.color = INSET_FILL
 	preview.size = Vector2(cw - 40, ch - 120)
 	preview.position = Vector2(20, 56)
 	card.add_child(preview)
@@ -810,7 +811,7 @@ func build_FinalNight(content: ColorRect, card: ColorRect, cw: float, ch: float,
 	_apply_outline(mission)
 	content.add_child(mission)
 	var minimap := ColorRect.new()
-	minimap.color = PANEL_EDGE
+	minimap.color = INSET_FILL
 	minimap.size = Vector2(120, 120)
 	minimap.position = Vector2(content.size.x - 130, content.size.y - 140)
 	content.add_child(minimap)
@@ -1005,7 +1006,7 @@ func _populate_shop(content: ColorRect, card: ColorRect) -> void:
 		item_icons.draw_icon(icon_parent, SHOP_ICON.get(it.id, it.id), 42.0)
 		var name_lbl := Label.new()
 		name_lbl.text = it.get("desc", it.id)
-		name_lbl.add_theme_color_override("font_color", Color(0.847, 0.824, 0.769))
+		name_lbl.add_theme_color_override("font_color", Color(0.847059, 0.835294, 0.8))
 		name_lbl.add_theme_font_size_override("font_size", 20)
 		name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		name_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART

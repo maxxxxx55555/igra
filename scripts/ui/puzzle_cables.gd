@@ -11,12 +11,12 @@ const SOURCE_COLORS := {
 	"green": Color(0.15, 0.7, 0.15),
 	"amber": Color(0.788, 0.635, 0.290)
 }
-const PANEL := Color("#141b24")
-const PANEL_EDGE := Color("#2a3340")
-const BRASS := Color("#c9a24a")
-const BRASS_DIM := Color("#8a7338")
-const EMBER := Color("#b4452f")
-const STEEL_TEXT := Color("#aeb6bf")
+const PANEL := ThemeProvider.COLOR_BG_PANEL
+const PANEL_EDGE := ThemeProvider.COLOR_BORDER
+const BRASS := ThemeProvider.COLOR_AMBER
+const BRASS_DIM := ThemeProvider.COLOR_AMBER_DIM
+const EMBER := ThemeProvider.COLOR_DANGER
+const STEEL_TEXT := ThemeProvider.COLOR_TEXT_DIM
 
 const LEVELS := [
 	{

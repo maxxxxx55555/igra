@@ -1095,6 +1095,8 @@
   "DAILY_LIGHT_STREETS": "Light up %d districts' streets",
   "DAILY_RESTORE_DISTRICTS": "Fully restore %d districts",
   "DAILY_PLAY_MINUTES": "Play for %d minutes",
+  "DAILY_PHOTO_SUBJECT": "Photograph subjects: %d",
+  "DAILY_NO_FLASHLIGHT_SEGMENT": "Flashlight off: %d x 30 s",
   "DAILY_CHALLENGE_TITLE": "Daily Challenge",
   "DAILY_STREAK_LABEL": "Streak: %d days (x%.1f)",
   "DAILY_COMPLETED_LABEL": "Completed!",

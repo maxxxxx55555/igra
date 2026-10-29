@@ -44,7 +44,7 @@ static func _subtitles_follow_settings(r: Node) -> void:
 	var silent: bool = String(bar.call("shown_text")) == ""
 	SettingsManager.set_setting("subtitles", true)
 	var sizes: Array[int] = [18, 24, 32]
-	var colors: Array[Color] = [Color("#d8d2c4"), Color("#e6cf6e"), Color("#7fc4d9")]
+	var colors: Array[Color] = [Color("#d8d5cc"), Color("#e6cf6e"), Color("#7fc4d9")]
 	var alphas: Array[float] = [0.0, 0.5, 1.0]
 	var bad: Array[String] = []
 	for pick: int in 3:

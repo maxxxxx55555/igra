@@ -7,16 +7,16 @@ class_name ThemeProvider
 extends RefCounted
 
 # ── Цветовые токены (docs/ART_UI_STYLE.md) ─────────────────────────────
-const COLOR_BG_DARK   := Color("#0c1016")   # bg-deep
-const COLOR_BG_PANEL  := Color("#141b24")   # panel
-const COLOR_BG_PANEL2 := Color("#1b232e")   # panel-hover (чуть светлее)
-const COLOR_BORDER    := Color("#2a3340")   # panel-edge
+const COLOR_BG_DARK   := Color("#060f13")   # bg-deep (owner canon 2026-10-29, docs/STYLE_GUIDE.md section 8)
+const COLOR_BG_PANEL  := Color("#0f1314")   # panel
+const COLOR_BG_PANEL2 := Color("#1c1e1d")   # panel-hover (чуть светлее)
+const COLOR_BORDER    := Color("#5a4a2a")   # panel-edge: the 1 px bronze of the canon
 const COLOR_AMBER     := Color("#c9a24a")   # brass — акцент, активное
 const COLOR_AMBER_DIM := Color("#8a7338")   # brass-dim — неактивное
-const COLOR_AMBER_HI  := Color("#d8d2c4")   # bone — заголовки
-const COLOR_TEXT      := Color("#d8d2c4")   # bone-text
-const COLOR_TEXT_DIM  := Color("#aeb6bf")   # steel-text
-const COLOR_DANGER    := Color("#b4452f")   # ember
+const COLOR_AMBER_HI  := Color("#d8d5cc")   # bone — заголовки
+const COLOR_TEXT      := Color("#d8d5cc")   # bone-text
+const COLOR_TEXT_DIM  := Color("#8a8a85")   # steel-text
+const COLOR_DANGER    := Color("#c0392b")   # ember
 
 const FONT_SIZE_BODY: int = 16
 const SCROLLBAR_MARGIN: float = 5.0

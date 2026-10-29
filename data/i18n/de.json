@@ -1095,6 +1095,8 @@
   "DAILY_LIGHT_STREETS": "Erleuchte die Straßen in %d Bezirken",
   "DAILY_RESTORE_DISTRICTS": "Stelle %d Bezirke vollständig wieder her",
   "DAILY_PLAY_MINUTES": "Spiele %d Minuten",
+  "DAILY_PHOTO_SUBJECT": "Fotografiere Motive: %d",
+  "DAILY_NO_FLASHLIGHT_SEGMENT": "Taschenlampe aus: %d x 30 s",
   "DAILY_CHALLENGE_TITLE": "Tägliche Herausforderung",
   "DAILY_STREAK_LABEL": "Serie: %d Tage (x%.1f)",
   "DAILY_COMPLETED_LABEL": "Erledigt!",

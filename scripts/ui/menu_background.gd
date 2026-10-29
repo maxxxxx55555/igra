@@ -20,7 +20,7 @@ const _SKY := {
 }
 const _WINDOW := {
 	BgTheme.NIGHT: Color(0.788, 0.635, 0.290),
-	BgTheme.GENERATOR: Color(0.706, 0.271, 0.184),
+	BgTheme.GENERATOR: Color(0.752941, 0.223529, 0.168627),
 }
 const _LIT_CHANCE := {BgTheme.NIGHT: 0.5, BgTheme.GENERATOR: 0.85}
 

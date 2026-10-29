@@ -29,6 +29,8 @@ read as "unlit" by default and may only gain warmth from an in-world light sourc
 | stamina | `#5f8a4e` | stamina only |
 | teal | `#4a9ab5` | info only |
 
+Moved by the owner canon of 2026-10-29 (section 8; GDD section 11.2 is superseded): bg-deep `#060f13`, panel `#0f1314`, panel-edge `#5a4a2a`, steel `#8a8a85`, bone `#d8d5cc`, ember `#c0392b`; the UI reads them from `ThemeProvider`.
+
 Banned everywhere (art included): pure `#000000`/`#ffffff`, neon, saturation > ~40% on
 surfaces (> 60% on small accents). Darkest texel in sampled tiles ≈ `#101418`, brightest
 ≈ `#d8d2c4` line art.
@@ -120,3 +122,5 @@ coloured outlines on a dark aerial ground). Images are RGB PNG, never palette-qu
 Preamble of every generation, verbatim: "Semi-realistic gritty survival-horror game art, photographic PBR micro-detail, first-person eye-level view (camera 1.6 m, ~55 mm lens), night: near-black desaturated blue-teal shadows (#0f1314, #060f13), one warm
 sodium amber key light (#d4a94e) with a volumetric cone and wet-asphalt reflection, thin cold fog, subtle film grain, weathered surfaces, amber accents only from light sources, no pure white highlights, no text, no logos, no watermark, no UI elements."
 plus one line for the subject.
+
+The tokens are held in code, not copied: `ThemeProvider` owns them, the screens read them, and `tools/retint_ui_chrome.py` moves a literal copy of an old token in a UI theme, scene or script (and the flat chrome PNGs); `tools/qa_sim/consistency_check.py --check` fails on a colour of the old tokens in those files. The bronze `#5a4a2a` is a 1 px border and a line, never a fill: an inset row, a bar background or a silhouette takes `COLOR_BG_PANEL2` (`#1c1e1d`).

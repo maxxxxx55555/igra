@@ -93,8 +93,8 @@ func show_notification(msg: String) -> void:
 		_toast = Label.new()
 		_toast.name = "Toast"
 		_toast.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		_toast.add_theme_color_override("font_color", Color("#d8d2c4"))  # bone-text
-		_toast.add_theme_color_override("font_outline_color", Color("#0c1016"))  # bg-deep: bone on a lit road is 1.5:1 without it
+		_toast.add_theme_color_override("font_color", Color("#d8d5cc"))  # bone-text
+		_toast.add_theme_color_override("font_outline_color", Color("#060f13"))  # bg-deep: bone on a lit road is 1.5:1 without it
 		_toast.add_theme_constant_override("outline_size", 4)
 		_toast.add_theme_font_size_override("font_size", 20)
 		_toast.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)

@@ -35,7 +35,7 @@ layout_mode = 2
 text = "Skill description goes here"
 horizontal_alignment = 1
 theme_override_font_sizes/font_size = 12
-theme_override_colors/font_color = Color(0.6824, 0.7137, 0.7490, 1)
+theme_override_colors/font_color = Color(0.541176, 0.541176, 0.521569, 1)
 autowrap_mode = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
@@ -63,6 +63,6 @@ layout_mode = 2
 text = "Requires: ..."
 horizontal_alignment = 1
 theme_override_font_sizes/font_size = 10
-theme_override_colors/font_color = Color(0.7059, 0.2706, 0.1843, 1)
+theme_override_colors/font_color = Color(0.752941, 0.223529, 0.168627, 1)
 autowrap_mode = 3
 visible = true

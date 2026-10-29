@@ -5,7 +5,7 @@
   {"file": "scripts/player/player_3d.gd", "text": "_combo_count += 1", "why": "an event counter (one per landed swing phase), advanced from the fixed physics tick"},
   {"file": "scripts/systems/integrity_guard.gd", "text": "_missing_player_ticks += 1", "why": "counts watchdog ticks: the watchdog runs once per WATCHDOG_INTERVAL (1.0 s) off a delta timer, so three ticks are three seconds at any frame rate"},
   {"file": "scripts/systems/footstep_system.gd", "text": "if weight_kg > WEIGHT_CLANK_THRESHOLD and _step_counter % 4 == 0:", "why": "_step_counter counts emitted footsteps (an event count): every fourth step of a heavy pack clanks"},
-  {"file": "scripts/ui/hud_3d.gd", "text": "bat_fill.color = Color(0.788, 0.635, 0.290).lerp(Color(0.706, 0.271, 0.184), pulse)", "why": "a colour blend by a sine of the wall clock (pulse), not a per-frame step"},
+  {"file": "scripts/ui/hud_3d.gd", "text": "bat_fill.color = Color(0.788, 0.635, 0.290).lerp(Color(0.752941, 0.223529, 0.168627), pulse)", "why": "a colour blend by a sine of the wall clock (pulse), not a per-frame step"},
   {"file": "scripts/ui/hud_3d.gd", "text": "var c := Color(_VIGNETTE_BG_DEEP, v.color.a).lerp(Color(_VIGNETTE_EMBER, v.color.a), pulse)", "why": "a colour blend by a sine of the wall clock (pulse), not a per-frame step"},
   {"file": "scripts/ui/menu_background.gd", "text": "wy += 10", "why": "pixel stepping of the skyline texture generator (once per theme change), not motion"},
   {"file": "scripts/ui/menu_background.gd", "text": "wx += 8", "why": "pixel stepping of the skyline texture generator (once per theme change), not motion"},

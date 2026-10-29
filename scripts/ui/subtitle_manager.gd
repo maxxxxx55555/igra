@@ -5,8 +5,8 @@ extends Control
 
 const SIZES: Array[int] = [18, 24, 32]
 const BG_ALPHA: Array[float] = [0.0, 0.5, 1.0]
-const COLORS: Array[Color] = [Color("#d8d2c4"), Color("#e6cf6e"), Color("#7fc4d9")]  # white (bone), yellow, cyan: lifted from the palette
-const INK := Color("#0c1016")
+const COLORS: Array[Color] = [Color("#d8d5cc"), Color("#e6cf6e"), Color("#7fc4d9")]  # white (bone), yellow, cyan: lifted from the palette
+const INK := Color("#060f13")
 const FLASH_COLOR := Color("#c9a24a")
 const FLASH_EDGE_PX: int = 10
 const FLASH_ALPHA: float = 0.55

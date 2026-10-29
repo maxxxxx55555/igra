@@ -2,13 +2,13 @@ extends Control
 
 @export var enable_character_screen: bool = true
 
-const PANEL := Color("#141b24")
-const PANEL_EDGE := Color("#2a3340")
-const BRASS := Color("#c9a24a")
-const BRASS_DIM := Color("#8a7338")
-const EMBER := Color("#b4452f")
-const STEEL_TEXT := Color("#aeb6bf")
-const BONE_TEXT := Color("#d8d2c4")
+const PANEL := ThemeProvider.COLOR_BG_PANEL
+const INSET_FILL := ThemeProvider.COLOR_BG_PANEL2
+const BRASS := ThemeProvider.COLOR_AMBER
+const BRASS_DIM := ThemeProvider.COLOR_AMBER_DIM
+const EMBER := ThemeProvider.COLOR_DANGER
+const STEEL_TEXT := ThemeProvider.COLOR_TEXT_DIM
+const BONE_TEXT := ThemeProvider.COLOR_TEXT
 const STAMINA := Color("#5f8a4e")
 
 var _player: Node = null
@@ -62,7 +62,7 @@ func _build_ui() -> void:
 		lbl.add_theme_font_size_override("font_size", 10)
 		add_child(lbl)
 		var bar_bg := ColorRect.new()
-		bar_bg.color = PANEL_EDGE
+		bar_bg.color = INSET_FILL
 		bar_bg.size = Vector2(100, 8)
 		bar_bg.position = Vector2(left_x, y + 20)
 		add_child(bar_bg)
@@ -84,27 +84,27 @@ func _build_ui() -> void:
 	var center_x := size.x * 0.35
 	var center_y := 10.0
 	var silhouette := ColorRect.new()
-	silhouette.color = PANEL_EDGE
+	silhouette.color = INSET_FILL
 	silhouette.size = Vector2(80, 120)
 	silhouette.position = Vector2(center_x, center_y)
 	add_child(silhouette)
 	var head := ColorRect.new()
-	head.color = PANEL_EDGE
+	head.color = INSET_FILL
 	head.size = Vector2(24, 24)
 	head.position = Vector2(28, 4)
 	silhouette.add_child(head)
 	var body := ColorRect.new()
-	body.color = PANEL_EDGE
+	body.color = INSET_FILL
 	body.size = Vector2(40, 40)
 	body.position = Vector2(20, 32)
 	silhouette.add_child(body)
 	var hood := ColorRect.new()
-	hood.color = PANEL_EDGE
+	hood.color = INSET_FILL
 	hood.size = Vector2(30, 12)
 	hood.position = Vector2(25, 0)
 	silhouette.add_child(hood)
 	var backpack := ColorRect.new()
-	backpack.color = PANEL_EDGE
+	backpack.color = INSET_FILL
 	backpack.size = Vector2(16, 30)
 	backpack.position = Vector2(8, 34)
 	silhouette.add_child(backpack)

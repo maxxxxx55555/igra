@@ -18,7 +18,7 @@ func _build() -> void:
 	theme = ThemeProvider.build_theme()
 
 	var bg := ColorRect.new()
-	bg.color = Color(0.0784, 0.1059, 0.1412, 0.92)
+	bg.color = Color(0.0588235, 0.0745098, 0.0784314, 0.92)
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
 

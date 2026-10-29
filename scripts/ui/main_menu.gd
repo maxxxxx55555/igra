@@ -112,7 +112,7 @@ func _style_title(vb: VBoxContainer) -> void:
 	# A CRLF checkout turns the scene's two-line title into CR+LF, which the Label
 	# draws as two line breaks: a blank line between the words.
 	title.text = title.text.replace("\r", "")
-	title.add_theme_color_override("font_outline_color", Color(0.047, 0.062, 0.086))
+	title.add_theme_color_override("font_outline_color", Color(0.0235294, 0.0588235, 0.0745098))
 	title.add_theme_font_override("font", ThemeProvider.heading_font())
 	title.add_theme_constant_override("outline_size", 2)
 	# V2 of Session 27: the title card is stencilled, one cut across the letters and their outline (assets/shaders/stencil_title.gdshader)
@@ -157,11 +157,12 @@ func _ensure_continue(vb: VBoxContainer) -> void:
 const _DAILY_TEXT_KEYS: Dictionary = {
 	"kill_enemies": "DAILY_KILL_ENEMIES", "find_secrets": "DAILY_FIND_SECRETS",
 	"light_streets": "DAILY_LIGHT_STREETS", "restore_districts": "DAILY_RESTORE_DISTRICTS",
-	"play_minutes": "DAILY_PLAY_MINUTES",
+	"play_minutes": "DAILY_PLAY_MINUTES", "photo_subject": "DAILY_PHOTO_SUBJECT",
+	"no_flashlight_segment": "DAILY_NO_FLASHLIGHT_SEGMENT",
 }
 ## A thin outline keeps the small print legible through the moving fog.
 func _legible(line: Label) -> void:
-	line.add_theme_color_override("font_outline_color", Color(0.047, 0.062, 0.086))
+	line.add_theme_color_override("font_outline_color", Color(0.0235294, 0.0588235, 0.0745098))
 	line.add_theme_constant_override("outline_size", 2)
 
 func _install_daily_card(vb: VBoxContainer) -> void:

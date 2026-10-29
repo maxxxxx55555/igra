@@ -300,3 +300,17 @@ n	utc	head	id	exit	command
 299	20261029T005807Z	cc159e8e	s37_u_cc159e8e	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/gui_explore_scene.tscn 240
 300	20261029T005915Z	cc159e8e	s37_v_b0	0	bash .qa_logs/s37_ui.sh
 301	20261029T010217Z	b10707f1	s37_w_b10707f1	0	bash .qa_logs/s37_f.sh
+302	20261029T010447Z	2c346b18	s37_x2_2c346b18	0	bash .qa_logs/s37_all.sh
+303	20261029T011721Z	2c346b18	s37_y_2c346b18	0	bash .qa_logs/s37_p2f.sh
+304	20261029T012030Z	17e68cd7	s37_t2_17e68cd7	0	bash .qa_logs/s37_t2.sh
+305	20261029T013556Z	17e68cd7	s37_z_b1	0	bash .qa_logs/s37_ui2.sh
+306	20261029T013828Z	3df6b264	s37_a1_3df6b264	0	bash .qa_logs/s37_f.sh
+307	20261029T015345Z	1cc33a65	s37_a2_1cc33a65	0	bash .qa_logs/s37_f.sh
+308	20261029T015653Z	f5056630	s37_c1_f5056630	0	bash .qa_logs/s37_all.sh
+309	20261029T022124Z	ff3869c3	s37_a3_ff3869c3	0	bash .qa_logs/s37_f.sh
+310	20261029T022225Z	ff3869c3	s37_z_b2	0	bash .qa_logs/s37_ui2.sh
+311	20261029T022702Z	9a5148c8	s37_a4_9a5148c8	0	bash .qa_logs/s37_f.sh
+312	20261029T022802Z	9a5148c8	s37_z_b3	0	bash .qa_logs/s37_ui2.sh
+313	20261029T023054Z	cf6caa11	s37_c2_cf6caa11	0	bash .qa_logs/s37_all.sh
+314	20261029T024755Z	90b6db50	s37_x9_90b6db50	0	bash .qa_logs/s37_x9.sh
+315	20261029T030211Z	d5afe71d	s37_c3_d5afe71d	0	bash .qa_logs/s37_all.sh

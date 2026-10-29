@@ -1,0 +1,80 @@
+# proof s37_m2_46f68849
+# utc 20261028T230859Z
+# head 46f68849 (uncommitted paths: 26)
+# env none
+# cmd bash .qa_logs/s37_m.sh
+# STEP check_all 02:09:00
+
+──────────────────────────────────────
+Провалено: 3, пройдено: 94
+  FAIL af3_frame_check (см. 'python tools/qa_sim/af3_frame_check.py')
+  FAIL branch_absorb_sim (см. 'python tools/qa_sim/branch_absorb_sim.py --check docs/ABSORB_PLAN.md')
+  FAIL GOLD MASTER suite (autoloads/input/districts/save-load/endings/i18n/soak) (код 1)
+         [qa] FAIL P2b hit flash did not restore the monster material on BodyMesh
+         [qa] FAIL P2b hit flash did not restore the monster material on BodyMesh
+         [qa] FAIL P2b hit flash did not restore the monster material on BodyMesh
+  пропуск перф-бюджет (draw calls, только --windowed) (нужен --windowed, не OK/FAIL)
+  пропуск аудио: Music bus не в тишине (только --windowed) (нужен --windowed, не OK/FAIL)
+# STEP check_all rc=3 02:24:18
+# STEP qa_guard_e2e 02:24:18
+  user-data guard: 12 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/qa_guard_e2e_scene.tscn rc=0 (log: .qa_logs/qa_guard_e2e_scene.log)
+  user-data guard: 12 file(s) restored byte-identical
+# STEP qa_guard_e2e rc=0 02:24:35
+# STEP bot_normal 02:24:35
+# Godot binary: /c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/godot
+  user-data guard: 12 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  [32mWIN [0m seed 1  ([bot s1]   result       : WIN)
+deaths counted 1, revive lines 1
+  [32mWIN [0m seed 2  ([bot s2]   result       : WIN)
+deaths counted 0, revive lines 0
+  [32mWIN [0m seed 3  ([bot s3]   result       : WIN)
+deaths counted 0, revive lines 0
+
+──────────────────────────────────────
+autoplay bot: 3/3 seeds won, 0 softlock(s)
+bot death counters below their revive lines: 0
+  user-data guard: 12 file(s) restored byte-identical
+# STEP bot_normal rc=0 02:47:53
+[bot s1]   result       : WIN
+[bot s1]   wall time    : 436.2s
+[bot s1]   deaths       : 1
+WARNING: 35 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+[bot s2]   result       : WIN
+[bot s2]   wall time    : 444.0s
+[bot s2]   deaths       : 0
+WARNING: 35 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+[bot s3]   result       : WIN
+[bot s3]   wall time    : 479.1s
+[bot s3]   deaths       : 0
+WARNING: 35 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+# STEP bot_hard 02:47:54
+# Godot binary: /c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/godot
+  user-data guard: 12 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  [32mWIN [0m seed 1  ([bot s1]   result       : WIN)
+deaths counted 2, revive lines 2
+  [32mWIN [0m seed 2  ([bot s2]   result       : WIN)
+deaths counted 2, revive lines 2
+  [32mWIN [0m seed 3  ([bot s3]   result       : WIN)
+deaths counted 2, revive lines 2
+
+──────────────────────────────────────
+autoplay bot: 3/3 seeds won, 0 softlock(s)
+bot death counters below their revive lines: 0
+  user-data guard: 12 file(s) restored byte-identical
+# STEP bot_hard rc=0 03:12:43
+[bot s1]   result       : WIN
+[bot s1]   wall time    : 461.0s
+[bot s1]   deaths       : 2
+WARNING: 35 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+[bot s2]   result       : WIN
+[bot s2]   wall time    : 469.8s
+[bot s2]   deaths       : 2
+WARNING: 35 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+[bot s3]   result       : WIN
+[bot s3]   wall time    : 518.8s
+[bot s3]   deaths       : 2
+WARNING: 35 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+ M docs/artifacts/rc16/launch_ledger.tsv
+# STEP done
+# EXIT=0

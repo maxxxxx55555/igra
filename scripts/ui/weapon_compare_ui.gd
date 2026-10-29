@@ -3,11 +3,11 @@ extends CanvasLayer
 ## T13: сравнение оружия бок о бок при переключении — лучше=зелёный, хуже=красный.
 ## GDD §V.5 9.8 "сравнение оружия side-by-side".
 
-const PANEL := Color("#141b24")
-const BRASS_DIM := Color("#8a7338")
-const BONE_TEXT := Color("#d8d2c4")
+const PANEL := ThemeProvider.COLOR_BG_PANEL
+const BRASS_DIM := ThemeProvider.COLOR_AMBER_DIM
+const BONE_TEXT := ThemeProvider.COLOR_TEXT
 const GOOD := Color("#5f8a4e")
-const BAD := Color("#b4452f")
+const BAD := Color("#c0392b")
 const VISIBLE_TIME := 3.0
 
 ## Строка: [i18n_key, getter(WeaponBase)->float, lower_is_better]

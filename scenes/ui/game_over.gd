@@ -9,13 +9,13 @@ func _ready() -> void:
 
 func _build_ui() -> void:
     var bg := ColorRect.new()
-    bg.color = Color("#0c1016")
+    bg.color = Color("#060f13")
     bg.mouse_filter = Control.MOUSE_FILTER_STOP
     add_child(bg)
 
     var title := Label.new()
     title.text = tr("DEATH_TITLE")
-    title.add_theme_color_override("font_color", Color("#b4452f"))
+    title.add_theme_color_override("font_color", Color("#c0392b"))
     title.add_theme_font_size_override("font_size", 36)
     title.size = Vector2(600, 60)
     title.position = Vector2(get_viewport().size.x / 2.0 - 300, 150)
@@ -24,7 +24,7 @@ func _build_ui() -> void:
 
     var subtitle := Label.new()
     subtitle.text = tr("DEATH_BY")
-    subtitle.add_theme_color_override("font_color", Color("#aeb6bf"))
+    subtitle.add_theme_color_override("font_color", Color("#8a8a85"))
     subtitle.add_theme_font_size_override("font_size", 18)
     subtitle.size = Vector2(600, 30)
     subtitle.position = Vector2(get_viewport().size.x / 2.0 - 300, 220)

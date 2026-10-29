@@ -29,7 +29,7 @@ func _build_stats() -> void:
 
 		var label := Label.new()
 		label.text = LocalizationManager.t(key)
-		label.add_theme_color_override("font_color", Color("aeb6bf"))
+		label.add_theme_color_override("font_color", ThemeProvider.COLOR_TEXT_DIM)
 		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		row.add_child(label)
 

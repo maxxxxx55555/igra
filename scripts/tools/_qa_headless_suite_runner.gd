@@ -155,6 +155,8 @@ func _p1_new_game() -> void:
 	if not menu_ok:
 		_fail("P1 menu not reachable in 12s")
 		return
+	# the onboarding cards hold the tree paused until a player skips them (closeout check ON1 covers them): on a profile that never saw them they would freeze every later phase, the hit flash included
+	SaveSystem.mark_onboard_done()
 	Routes.start_game()
 	var playing := await _wait_until(func() -> bool: return GameManager.is_playing(), 10.0)
 	if not playing:
@@ -282,7 +284,7 @@ func _p2b_combat() -> void:
 		_fail("P2b no monsters in group after building suburbs")
 		holder.queue_free()
 		return
-	var m: Node = _live_monster(monsters)
+	var m: Node = monsters[0]
 	var hp0: float = float(m.get("hp")) if m.get("hp") != null else -1.0
 	if not m.has_method("take_damage"):
 		_fail("P2b monster has no take_damage()")
@@ -1222,10 +1224,3 @@ func _finish() -> void:
 		print("[qa] FAIL ", f)
 	print("[qa] DONE fails=", _fails.size())
 	get_tree().quit(mini(_fails.size(), 250))
-
-## The first monster of the group that runs: a parked pooled monster is in the group too (check.sh --all met a parked Shadow first), and the tween of its hit flash never ticks, so the material is never handed back.
-func _live_monster(monsters: Array[Node]) -> Node:
-	for candidate in monsters:
-		if candidate.can_process():
-			return candidate
-	return monsters[0]

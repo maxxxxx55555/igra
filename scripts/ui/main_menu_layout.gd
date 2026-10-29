@@ -4,7 +4,7 @@ extends RefCounted
 static func install(screen: Control, column: VBoxContainer) -> void:
 	var gradient := Gradient.new()
 	gradient.offsets = PackedFloat32Array([0.0, 0.58, 1.0])
-	gradient.colors = PackedColorArray([Color(0.047, 0.063, 0.086, 0.94), Color(0.047, 0.063, 0.086, 0.48), Color(0.047, 0.063, 0.086, 0.08)])
+	gradient.colors = PackedColorArray([Color(0.0235294, 0.0588235, 0.0745098, 0.94), Color(0.0235294, 0.0588235, 0.0745098, 0.48), Color(0.0235294, 0.0588235, 0.0745098, 0.08)])
 	var texture := GradientTexture2D.new()
 	texture.gradient = gradient
 	texture.fill_from = Vector2.ZERO

@@ -1095,6 +1095,8 @@
   "DAILY_LIGHT_STREETS": "Ilumine as ruas de %d distritos",
   "DAILY_RESTORE_DISTRICTS": "Restaure completamente %d distritos",
   "DAILY_PLAY_MINUTES": "Jogue por %d minutos",
+  "DAILY_PHOTO_SUBJECT": "Fotografe motivos: %d",
+  "DAILY_NO_FLASHLIGHT_SEGMENT": "Lanterna desligada: %d x 30 s",
   "DAILY_CHALLENGE_TITLE": "Desafio diário",
   "DAILY_STREAK_LABEL": "Sequência: %d dias (x%.1f)",
   "DAILY_COMPLETED_LABEL": "Concluído!",

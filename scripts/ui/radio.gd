@@ -2,13 +2,13 @@ extends Control
 
 @export var enable_radio: bool = true
 
-const PANEL := Color("#141b24")
-const PANEL_EDGE := Color("#2a3340")
-const BRASS := Color("#c9a24a")
-const BRASS_DIM := Color("#8a7338")
-const EMBER := Color("#b4452f")
-const STEEL_TEXT := Color("#aeb6bf")
-const BONE_TEXT := Color("#d8d2c4")
+const PANEL := ThemeProvider.COLOR_BG_PANEL
+const INSET_FILL := ThemeProvider.COLOR_BG_PANEL2
+const BRASS := ThemeProvider.COLOR_AMBER
+const BRASS_DIM := ThemeProvider.COLOR_AMBER_DIM
+const EMBER := ThemeProvider.COLOR_DANGER
+const STEEL_TEXT := ThemeProvider.COLOR_TEXT_DIM
+const BONE_TEXT := ThemeProvider.COLOR_TEXT
 const STAMINA := Color("#5f8a4e")
 
 const CHANNELS := [
@@ -109,7 +109,7 @@ func _build_ui() -> void:
 	_player_panel.add_child(_channel_name)
 
 	var waveform_bg := ColorRect.new()
-	waveform_bg.color = PANEL_EDGE
+	waveform_bg.color = INSET_FILL
 	waveform_bg.size = Vector2(_player_panel.size.x - 20, 60)
 	waveform_bg.position = Vector2(10, 34)
 	_player_panel.add_child(waveform_bg)

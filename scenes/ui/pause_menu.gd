@@ -13,20 +13,20 @@ func _ready() -> void:
 func _build_ui() -> void:
     var bg := ColorRect.new()
     bg.name = "Bg"
-    bg.color = Color("#0c1016")
+    bg.color = Color("#060f13")
     bg.mouse_filter = Control.MOUSE_FILTER_STOP
     add_child(bg)
 
     var panel := ColorRect.new()
     panel.name = "Panel"
-    panel.color = Color("#141b24")
+    panel.color = Color("#0f1314")
     panel.size = Vector2(400, 500)
     panel.position = Vector2(get_viewport().size.x / 2.0 - 200, get_viewport().size.y / 2.0 - 250)
     bg.add_child(panel)
 
     var title := Label.new()
     title.text = tr("SETTINGS_PAUSE")
-    title.add_theme_color_override("font_color", Color("#d8d2c4"))
+    title.add_theme_color_override("font_color", Color("#d8d5cc"))
     title.add_theme_font_size_override("font_size", 24)
     title.size = Vector2(400, 40)
     title.position = Vector2(0, 20)
@@ -60,8 +60,8 @@ func _build_ui() -> void:
 
 func _make_btn_style() -> StyleBoxFlat:
     var sb := StyleBoxFlat.new()
-    sb.bg_color = Color("#141b24")
-    sb.border_color = Color("#2a3340")
+    sb.bg_color = Color("#0f1314")
+    sb.border_color = Color("#5a4a2a")
     sb.border_width_left = 1
     sb.border_width_right = 1
     sb.border_width_top = 1

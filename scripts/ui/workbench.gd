@@ -2,13 +2,13 @@ extends Control
 
 @export var enable_workbench: bool = true
 
-const PANEL := Color("#141b24")
-const PANEL_EDGE := Color("#2a3340")
-const BRASS := Color("#c9a24a")
-const BRASS_DIM := Color("#8a7338")
-const EMBER := Color("#b4452f")
-const STEEL_TEXT := Color("#aeb6bf")
-const BONE_TEXT := Color("#d8d2c4")
+const PANEL := ThemeProvider.COLOR_BG_PANEL
+const INSET_FILL := ThemeProvider.COLOR_BG_PANEL2
+const BRASS := ThemeProvider.COLOR_AMBER
+const BRASS_DIM := ThemeProvider.COLOR_AMBER_DIM
+const EMBER := ThemeProvider.COLOR_DANGER
+const STEEL_TEXT := ThemeProvider.COLOR_TEXT_DIM
+const BONE_TEXT := ThemeProvider.COLOR_TEXT
 const STAMINA := Color("#5f8a4e")
 
 const Logic := preload("res://scripts/crafting/workbench_logic.gd")
@@ -110,7 +110,7 @@ func _build_craft_panel() -> void:
 	for i in RECIPES.size():
 		var r := RECIPES[i]
 		var row = ColorRect.new()
-		row.color = PANEL_EDGE
+		row.color = INSET_FILL
 		row.custom_minimum_size = Vector2(list_w - 6, 34)
 		row.size = Vector2(list_w - 6, 34)
 		row.visible = Logic.is_available(r)
@@ -299,7 +299,7 @@ func _build_salvage_panel() -> void:
 	title.add_theme_color_override("font_color", BONE_TEXT)
 	title.add_theme_font_size_override("font_size", 14)
 	_salvage_panel.add_child(title)
-	title.add_theme_color_override("font_outline_color", Color(0.047, 0.063, 0.086, 1.0))
+	title.add_theme_color_override("font_outline_color", Color(0.0235294, 0.0588235, 0.0745098, 1.0))
 	title.add_theme_constant_override("outline_size", 2)
 
 	var scroll := ScrollContainer.new()
@@ -340,7 +340,7 @@ func _refresh_salvage() -> void:
 		var item_id = slot["item_id"]
 		var cnt = slot["count"]
 		var row = ColorRect.new()
-		row.color = PANEL_EDGE
+		row.color = INSET_FILL
 		row.custom_minimum_size = Vector2(_salvage_vbox.size.x - 6, 30)
 		row.size = Vector2(_salvage_vbox.size.x - 6, 30)
 		_salvage_vbox.add_child(row)

@@ -1,0 +1,10 @@
+# proof s37_x2_2c346b18
+# utc 20261029T010447Z
+# head 2c346b18 (uncommitted paths: 27)
+# env none
+# cmd bash .qa_logs/s37_all.sh
+check.sh --all rc=1
+  FAIL GOLD MASTER suite (autoloads/input/districts/save-load/endings/i18n/soak) (код 1)
+Провалено: 1, пройдено: 95
+# STEP done
+# EXIT=0

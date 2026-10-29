@@ -35,7 +35,7 @@ static func _placeholder(rel: String) -> Texture2D:
 			if x == 0 or x == 63 or y == 0 or y == 63:
 				img.set_pixel(x, y, Color("c9a24a"))
 			if x == y or x == 63 - y:
-				img.set_pixel(x, y, Color("b4452f"))
+				img.set_pixel(x, y, Color("c0392b"))
 	return ImageTexture.create_from_image(img)
 
 static func _color_for(rel: String) -> Color:

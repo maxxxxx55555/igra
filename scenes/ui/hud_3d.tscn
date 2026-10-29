@@ -10,7 +10,7 @@
 [ext_resource type="Texture2D" path="res://assets/ui/ui_pause.svg" id="6_pause"]
 
 [sub_resource type="StyleBoxFlat" id="style_joystick"]
-bg_color = Color(0.078, 0.106, 0.141, 0.0)
+bg_color = Color(0.0588235, 0.0745098, 0.0784314, 0.0)
 border_width_left = 3
 border_width_right = 3
 border_width_top = 3
@@ -22,12 +22,12 @@ corner_radius_bottom_left = 80
 corner_radius_bottom_right = 80
 
 [sub_resource type="StyleBoxFlat" id="style_slot"]
-bg_color = Color(0.0784314, 0.105882, 0.141176, 1)
+bg_color = Color(0.0588235, 0.0745098, 0.0784314, 1)
 border_width_left = 1
 border_width_right = 1
 border_width_top = 1
 border_width_bottom = 1
-border_color = Color(0.165, 0.200, 0.251, 1.0)
+border_color = Color(0.352941, 0.290196, 0.164706, 1.0)
 corner_radius_top_left = 0
 corner_radius_top_right = 0
 corner_radius_bottom_left = 0
@@ -83,7 +83,7 @@ anchor_bottom = 1.0
 mouse_filter = 2
 
 [node name="HPF" type="ColorRect" parent="TopLeft/HP"]
-color = Color(0.706, 0.271, 0.184, 1.0)
+color = Color(0.752941, 0.223529, 0.168627, 1.0)
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_bottom = 1.0
@@ -195,7 +195,7 @@ offset_left = 88.0
 offset_top = 66.0
 offset_right = 310.0
 offset_bottom = 78.0
-color = Color(0.165, 0.200, 0.251, 1.0)
+color = Color(0.352941, 0.290196, 0.164706, 1.0)
 mouse_filter = 2
 
 [node name="NoiseF" type="ColorRect" parent="TopLeft"]
@@ -219,7 +219,7 @@ offset_left = 88.0
 offset_top = 86.0
 offset_right = 310.0
 offset_bottom = 98.0
-color = Color(0.165, 0.200, 0.251, 1.0)
+color = Color(0.352941, 0.290196, 0.164706, 1.0)
 mouse_filter = 2
 
 [node name="VisibilityF" type="ColorRect" parent="TopLeft"]
@@ -258,7 +258,7 @@ offset_bottom = 56.0
 mouse_filter = 2
 text = "0 / 0"
 horizontal_alignment = 2
-theme_override_colors/font_color = Color(0.847, 0.824, 0.769, 1)
+theme_override_colors/font_color = Color(0.847059, 0.835294, 0.8, 1)
 theme_override_font_sizes/font_size = 24
 
 [node name="TopRight" type="VBoxContainer" parent="."]
@@ -464,7 +464,7 @@ mouse_filter = 2
 
 [node name="HitMarker" type="TextureRect" parent="."]
 texture = ExtResource("10_hitmarker")
-modulate = Color(0.706, 0.271, 0.184, 0.0)
+modulate = Color(0.752941, 0.223529, 0.168627, 0.0)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -497,7 +497,7 @@ visible = false
 text = ""
 
 [node name="EnemyHPBar" type="ColorRect" parent="."]
-color = Color(0.706, 0.271, 0.184, 1.0)
+color = Color(0.752941, 0.223529, 0.168627, 1.0)
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 0.0

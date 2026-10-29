@@ -12,13 +12,13 @@ declarations, §7 the steps. It consolidates and, where they had drifted, correc
 
 | Fact | Value | Where it was read |
 |---|---|---|
-| File | `build/tls.aab` (gitignored, on the build machine only), **127,147,642 bytes** | `docs/RELEASE_ARTIFACTS.md`, the v9.1.0-store section for export 1 |
-| sha256 | `3677759869c5b01b195fd2664e8126143f4cefdc9b8c644538503231429f987e` | same; check it with `sha256sum build/tls.aab` before the upload |
-| Built from | `c353736` (its runtime is that of `9a60359`, the head of the last chain), no uncommitted path; the fixes of Sessions 20 to 26 are in it (§9) and the work of Session 27: the Soviet visual pass, 12 generated music tracks, the Architect's phase themes and the credits line | ledger row 147, `s27_export_c353736` |
-| Package name | `com.maxsimkasky.laststreetlight`: **permanent once uploaded** (the `com.tls.game` of `docs/store/play_store.md` is stale) | the manifest of this bundle, `docs/artifacts/rc16/proofs/s27_aab_manifest_c353736.out` |
-| Version | code **4**, name "1.0" | the manifest of this bundle (`s27_aab_manifest_c353736.out`) |
-| App label | "Last Streetlight" in `base/resources.pb`, the resource table that holds the app name (CRC-identical to the entry of the bundle whose label Session 19 verified: 42 entries of the label resource) | `docs/artifacts/rc16/proofs/s27_aab_check_c353736.out` (`label ... ok`) |
-| SDK levels | min 24, **target 36**; the preset's `min_sdk=29` and `target_sdk=34` (`export_presets.cfg:29-30`) are not read by this export | the manifest of this bundle (`s27_aab_manifest_c353736.out`); Play's minimum target API: **check in Console** |
+| File | `build/tls.aab` (gitignored, on the build machine only), **80,375,902 bytes** | `docs/RELEASE_ARTIFACTS.md`, the v1.0.2-canon section (the last) |
+| sha256 | `08c8e320d77c6550e7515c8c0ab970bfc9e3e726b4ecfe9c5eccd73ab52c3b88` | same; check it with `sha256sum build/tls.aab` before the upload |
+| Built from | `90b6db50`, no uncommitted path (the commits after it change documents and the ledger only); the fixes of Sessions 20 to 26 are in it (§9), the work of Session 27 (the Soviet visual pass, 12 generated music tracks, the Architect's phase themes, the credits line) and of Sessions 36 and 37 (art passes 1 and 2, the faceted monsters, the owner canon UI) | ledger row 314, `s37_x9_90b6db50` |
+| Package name | `com.maxsimkasky.laststreetlight`: **permanent once uploaded** (the `com.tls.game` of `docs/store/play_store.md` is stale) | the manifest of this bundle, `docs/artifacts/rc16/proofs/s37_aab_manifest_90b6db50.out` |
+| Version | code **9**, name "1.0.1" | the manifest of this bundle (`s37_aab_manifest_90b6db50.out`) |
+| App label | "Last Streetlight" in `base/resources.pb`, the resource table that holds the app name | `docs/artifacts/rc16/proofs/s37_x9_90b6db50.out` (`label ... ok`) |
+| SDK levels | min **29**, **target 36**, as the preset says (`target_sdk` at `export_presets.cfg:29-30`) | the manifest of this bundle (`s37_aab_manifest_90b6db50.out`); Play's minimum target API: **check in Console** |
 | ABI | arm64-v8a only (`architectures/armeabi-v7a=false`): 32-bit-only phones are not offered the game | `export_presets.cfg:14-15` |
 | Permissions | `INTERNET` and `VIBRATE` only; no `AD_ID`, no storage, no location, no camera, no microphone | the manifest of this bundle |
 | Application flags | `allowBackup=false` (no Android cloud backup of the saves), `isGame=true`, OpenGL ES 3.0 required | the manifest of this bundle |
@@ -229,7 +229,7 @@ Each step names where the detail lives; it does not repeat it.
 4. **Make the images** with the command of §2, and read each of the seven files once.
 5. **Host the policy** of §3 and note its URL.
 6. **Play Console:** create the app and fill the dashboard with §6, the rating with §4 and the data safety form with §5 (`docs/RELEASE_RUNBOOK.md` §3 is the click path); main listing from §2 and `store/listing.md`; translations from `docs/STORE_KIT.md`.
-7. **Internal testing:** upload `build/tls.aab` as "1.0 (4)" over the v8 release if one is in the track, add testers, start the rollout (`docs/RELEASE_RUNBOOK.md` §3.6).
+7. **Internal testing:** upload `build/tls.aab` as "1.0.1 (9)" over an earlier release if one is in the track, add testers, start the rollout (`docs/RELEASE_RUNBOOK.md` §3.6).
 8. **Closed testing** if the dashboard demands it for a new personal account (12 testers for 14 days at the time of writing; **check in Console**), then production with a staged rollout (§3.7 and §3.8 of the runbook).
 9. **Every upload after the first** needs `version/code` raised (`export_presets.cfg:16`; the bundle of Session 27 carries 4).
 
