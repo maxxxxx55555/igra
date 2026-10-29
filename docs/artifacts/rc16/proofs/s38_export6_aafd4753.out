@@ -1,0 +1,61 @@
+# proof s38_export6_aafd4753
+# utc 20261029T171556Z
+# head aafd4753 (uncommitted paths: 23)
+# env none
+# cmd bash .qa_logs/s38_export_vc12.sh
+store and key password: the same
+# STEP export_android 20:15:57
+# STEP export_android rc=0 20:20:13
+bundle: 93787781 bytes sha256 aad3e8ab9717150677d633df9d93ff2f5f28104c919fbf0b042c4cab2ac043c4
+# STEP aab_check 20:20:14
+manifest package=com.maxsimkasky.laststreetlight expected=com.maxsimkasky.laststreetlight: ok
+manifest versionCode=12 expected=12: ok
+manifest versionName=1.0.1 expected=1.0.1: ok
+size    93787781 bytes
+sha256  aad3e8ab9717150677d633df9d93ff2f5f28104c919fbf0b042c4cab2ac043c4
+entries 2465
+label   base/resources.pb names Last Streetlight: ok
+adsdk   0 dex entries name Lcom/applovin/: ok
+integrity 37 file(s) of the manifest, 0 missing or with other bytes: ok
+refs    0 file(s) or patterns named by the shipped files are not in the bundle: ok
+secrets 2 value(s) of the environment searched in 2462 entries: 0 hits (path, password)
+jar     jar verified.
+signer  a4a7c2c27e7892f1...: signer_match=yes
+against tls_s37_vcode11.aab: 2 entries gone, 4 new, 15 with other bytes
+  gone    assetPackInstallTime/assets/.godot/imported/night_sky_panorama_2048x1024.png-d6b555c178eb00270d5b1d63a0047ab9.astc.ctex
+  gone    assetPackInstallTime/assets/assets/textures/sky/night_sky_panorama_2048x1024.png.import
+  new     assetPackInstallTime/assets/.godot/imported/night_sky_panorama_4096x2048.png-888d7c26f38e29a3a9f2db3a10239d3a.ctex
+  new     assetPackInstallTime/assets/assets/textures/sky/night_sky_panorama_4096x2048.png.import
+  new     assetPackInstallTime/assets/scripts/world/lamp_hardware.gd.remap
+  new     assetPackInstallTime/assets/scripts/world/lamp_hardware.gdc
+  changed BUNDLE-METADATA/com.android.tools.build.profiles/baseline.prof
+  changed META-INF/MANIFEST.MF
+  changed META-INF/TLS_RELE.RSA
+  changed META-INF/TLS_RELE.SF
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-3b15f6f83fe56d5bce9f32d8a1541a01-world_env.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-4aad388701cafd72b9425ff7cffc9617-night_environment_mobile.res
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-a6b13c20d4bb7f45527ba0d6dbcdd6ca-night_environment_desktop.res
+  changed assetPackInstallTime/assets/.godot/uid_cache.bin
+  changed assetPackInstallTime/assets/assets.sparsepck
+  changed assetPackInstallTime/assets/assets/shaders/soviet_road.gdshader
+  changed assetPackInstallTime/assets/scripts/ui/inventory_ui.gdc
+  changed assetPackInstallTime/assets/scripts/ui/quest_tracker_hud.gdc
+  changed assetPackInstallTime/assets/scripts/world/street_props.gdc
+  changed base/dex/classes.dex
+  changed base/manifest/AndroidManifest.xml
+aab_check: PASS
+# STEP aab_check rc=0 20:20:41
+# STEP release_export_check 20:20:41
+NOTE: keystore/release is empty - expected pre-release state (no signed release build cut yet), not a failure
+NOTE: keystore/release_user is empty - expected pre-release state (no signed release build cut yet), not a failure
+NOTE: keystore/release_password is empty - expected pre-release state (no signed release build cut yet), not a failure
+build\tls.aab: 0 packed file(s) that are not the game
+
+PASS
+# STEP release_export_check rc=0 20:20:42
+# STEP export_refs 20:20:42
+export_refs_check: 504 shipped file(s) read for the Android preset against the bundle, 0 violation(s), 0 note(s)
+# STEP export_refs rc=0 20:20:51
+ M docs/artifacts/rc16/launch_ledger.tsv
+# STEP done
+# EXIT=0

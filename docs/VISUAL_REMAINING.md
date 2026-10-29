@@ -214,3 +214,41 @@ slots are to be replaced by generated art, none is touched until an image reache
 | card_substation | the slot `assets/textures/cards/card_substation_512.png` filled with a full-size image (side by side: `.qa_logs/approvals/card_substation_board.png`) | APPROVED by the owner by delegation (standing instruction of 2026-10-29: finish the work without their hands), checked by Claude 2026-10-29 |
 | card_power_station | the slot `assets/textures/cards/card_power_station_512.png` filled with a full-size image (side by side: `.qa_logs/approvals/card_power_station_board.png`) | APPROVED by the owner by delegation (standing instruction of 2026-10-29: finish the work without their hands), checked by Claude 2026-10-29 |
 | B8 | the 45 item icons that the sheet has a match for, cut out of sheet 3 (`tools/harvest_sheets.py`; side by side: `.qa_logs/approvals/icons_board.png`) | APPROVED by the owner by delegation (their instruction of 2026-10-29 to finish everything without them, after the readiness report), checked by Claude 2026-10-29 |
+| W1 | the eight PBR sets of the world raised to 1024 px (24 PNGs in `assets/textures/pbr/`, 1k CC0 maps of Poly Haven, `tools/gen_polyhaven_textures.py <dir> --size 1024`; 6 MiB more video memory) | APPROVED by the owner by delegation (their yes to the download and their instruction of 2026-10-29 to finish without their hands), checked by Claude 2026-10-29 in the store frames and the perf gate |
+| M2 | the eleven tracks brought to the matrix without new material (`tools/qa_sim/music_extend.sh`: tempo, three passes joined, seam and level by `music_post.py`) | APPROVED by the owner by delegation, checked by `python tools/qa_sim/music_audit.py` (25 of 25 KEEP) and the Music bus gate (peak -13.4 dB, row 353); no ear has heard them |
+| S1 | the night sky of `tools/gen_night_sky.py`: 4096 x 2048, one-pixel stars on the old gradient; the white dots of the night view are gone | APPROVED by the owner by delegation, checked by Claude 2026-10-29: `docs/stills/store/03_district_night_dark_after_5cedfa03_20261029T175419Z.png` against the same place at `be26ec5a` (`git show 5cedfa03:docs/stills/store/03_district_night_dark_after_be26ec5a_20261029T143624Z.png`) |
+| H1 | the objectives panel shows the current step only, and keeps its bottom border for a wrapped title | APPROVED by the owner by delegation, checked by Claude 2026-10-29: store frames 02 and 03 at `5cedfa03` against `be26ec5a` |
+| L1 | the streetlight hardware (foot and shade, `scripts/world/lamp_hardware.gd`) and the rusted pole | APPROVED by the owner by delegation, checked by Claude 2026-10-29: store frames 02 and 03; 105 draw calls in the perf gate |
+| I1 | the pack draws its free slots as empty cells | APPROVED by the owner by delegation, checked by Claude 2026-10-29: `.qa_logs/frames/ui_inventory_v8_20261029T172247Z.png` and `ui_inventory_v8b_20261029T181903Z.png`; the closeout check I1.1 |
+| R1 | every sidewalk slab its own tone | APPROVED by the owner by delegation, checked by Claude 2026-10-29: the lit sidewalk of store frames 02 and 03 |
+
+### Release gates and acceptance (v8 FINAL, 2026-10-29)
+
+Statuses are PASS, FAIL, BLOCKED (an external prerequisite named) or NOT_APPLICABLE; a row counts as PASS only for what a launch of this pass exercised (the launch rows are those of `docs/artifacts/rc16/launch_ledger.tsv`, the proofs are in `docs/artifacts/rc16/proofs/`). Nobody but Claude looked at a frame, and nobody heard a track. The approvals journal of the v8 prompt (`docs/VISUAL_APPROVALS.md`) is the batch table above: one file for it was enough, so no new file was made.
+
+| Gate | Requirement | Status | Reason and evidence |
+|---|---|---|---|
+| G0 | baseline and scope recorded | PASS | baseline `main` `28e52578`, the plan and the scope in `docs/RUN_STATE.md` (S38V8-ABSORB), the batch table above |
+| G1 | shared foundations in one playable first-person area, one real interaction, a populated inventory | PASS | the suburbs street of store frames 02 and 03 (tokens, lamp hardware, tracker, sky); a populated pack (`ui_inventory_v8b_20261029T181903Z.png`, 7 of 12); the use of an item is the closeout check V.5 |
+| G2 | a reference-quality area passes in motion, close range, HUD on and off, all lighting states | FAIL | the 3D world is boxes and cylinders (five imported meshes) against the sheets; no movement was reviewed; only Claude looked at frames |
+| G3 | complete rollout per the coverage matrix, legacy styling and placeholders hunted | FAIL | B9, facade families and real meshes are not done (`docs/KNOWN_ISSUES.md`); the 2D slots, the icons, the sky and the UI canon are rolled out |
+| G4 | functional and visual integration: journey, states, saves, resize, input, regression | BLOCKED | the functional half is V09 and V10; the visual half is frames read by Claude and has no movement review and no phone input: the owner's eye and a phone |
+| G5 | target performance, real release exports, the packaged build launched outside the editor | BLOCKED | Windows exported and booted outside the editor (rows 350, 351) and the windowed perf inside budget on the dev machine (row 348); the Android bundle is built and verified (row 345) and was never booted on a device; the perf read was on a shared machine |
+| G6 | final review against every requirement, baseline frozen, release report | BLOCKED | the separate Opus pass (phase P9) has not run; the open P2 of G2 and G3 stop the freeze |
+
+| Row | Requirement (mapping of the v8 prompt, section 7) | Status | Evidence of this pass |
+|---|---|---|---|
+| V01 | first-person integrity | PASS | the windowed perf run through two districts (row 348), the bots (S38V8-BOTS), `release lifecycle, terminal layouts and audio` in the full battery (`docs/artifacts/rc16/proofs/s38_all_5cedfa03.out:188`); no first-person code changed in the pass |
+| V02 | environment coverage | PASS | the district spine and the 3D scene run in the full battery, the bots on six seeds (1, 2, 3, 7, 11, 42), the perf gate in two districts; the density frames were not re-shot |
+| V03 | material consistency | BLOCKED | closeup frames read by Claude only; the Opus pass is the named evidence and has not run |
+| V04 | lighting and visibility | PASS | `lighting_stage_sim` (`docs/artifacts/rc16/proofs/s38_all_5cedfa03.out:114`), the Music bus gate; no zone was brightened (the new sky keeps the gradient of the old one and its stars are smaller) |
+| V05 | inventory behaviour | PASS | the closeout inventory checks (627 of 627, V.5, I9.x and the new I1.1), the populated and the empty frame |
+| V06 | UI states | PASS | the layout gate (`s38_all_5cedfa03.out:186`), the unified theme (`:183`), `a11y_check` (`:118`), 16 screens in frames; hover, pressed and disabled states were not shot |
+| V07 | every screen opened and verified | PASS | the layout gate opens every UIManager screen; the 16 screens of row 352 were read |
+| V08 | input and comfort | PASS | `project_input_check`, `settings_consumer_check`, `a11y_check` in the full battery and the windowed touch probe (S38V8-WINDOWED); a real phone touch is phase P6 |
+| V09 | persistence | PASS | `целостность сейва`, `save_migration_sim` (`s38_all_5cedfa03.out:142`), the settings restart gate (`:184`), the save-slot parity of the closeout |
+| V10 | end-to-end journey | PASS | the GOLD MASTER suite (`s38_all_5cedfa03.out:189`) and the autoplay bot on six seeds (S38V8-BOTS) |
+| V11 | technical integrity | PASS | compile, arity, API, asset and scene-node gates and the shader and ObjectDB checks of the full battery; no ERROR line in the Windows boot; the 12 minute soak was not re-run in this pass (S37V7-FINAL2: orphans 0) |
+| V12 | release presentation | PASS | the store frames, the press kit (`s38_all_5cedfa03.out:151`), `hardcoded_text_gate` (`:110`); the music rights stay the owner's step 1 of `RELEASE_CHECKLIST.md` section 10 |
+| V13 | target and package | BLOCKED | PASS for Windows and the bundle checks (rows 345 to 351); the Android bundle was not launched on a device |
+| V14 | final consistency | BLOCKED | the Opus review of the exact candidate has not run; the rows above carry no BLOCKED counted as verified |

@@ -1,0 +1,26 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 Core Profile Context 22.20.44.221025 - Compatibility - Using Device: ATI Technologies Inc. - AMD Radeon(TM) Graphics
+
+[lframes] frame ui_inventory_v8b_20261029T181903Z.png
+[lframes] frame ui_city_map_v8b_20261029T181905Z.png
+[lframes] frame ui_skill_tree_v8b_20261029T181908Z.png
+[lframes] frame ui_workbench_v8b_20261029T181909Z.png
+[lframes] frame ui_pause_v8b_20261029T181911Z.png
+[lframes] frame ui_settings_v8b_20261029T181913Z.png
+[lframes] frame ui_death_v8b_20261029T181915Z.png
+[lframes] frame ui_win_v8b_20261029T181917Z.png
+[lframes] frame ui_new_game_plus_v8b_20261029T181919Z.png
+[lframes] frame ui_codex_journal_v8b_20261029T181921Z.png
+[lframes] frame ui_codex_quests_v8b_20261029T181923Z.png
+[lframes] frame ui_codex_achievements_v8b_20261029T181925Z.png
+[lframes] frame ui_codex_stats_v8b_20261029T181927Z.png
+[lframes] frame ui_codex_bestiary_v8b_20261029T181929Z.png
+[lframes] frame ui_codex_help_v8b_20261029T181931Z.png
+[lframes] frame ui_codex_collection_v8b_20261029T181933Z.png
+[lframes] DONE hash=v8b
+ERROR: Texture with GL ID of 147: leaked 349524 bytes.
+   at: ~Utilities (drivers/gles3/storage/utilities.cpp:82)
+ERROR: Texture with GL ID of 152: leaked 349524 bytes.
+   at: ~Utilities (drivers/gles3/storage/utilities.cpp:82)
+WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)

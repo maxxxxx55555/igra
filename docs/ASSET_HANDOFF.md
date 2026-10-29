@@ -45,7 +45,7 @@ All deterministic generators live in %TEMP%/opencode/tls_gen/ (gen_textures.py, 
 |---|---|---|
 | assets/audio/ambience/districts/[district]_dark.ogg x11 | 36 s seamless, 55-324 KB | MusicManager/AmbiencePlayer district switch: crossfade 1.5 s on district_id change; loop=true in import; all RMS -18 dBFS |
 | assets/audio/ambience/districts/{suburbs,hospital,power_station}_lit.ogg | 36 s | same player, DAY/GENERATOR mode variant |
-| assets/textures/sky/night_sky_panorama_2048x1024.png | 45 KB indexed | WorldEnvironment PanoramaSky backdrop; horizon glow at bottom edge (v=1.0); NO moon baked |
+| assets/textures/sky/night_sky_panorama_4096x2048.png | 4096 x 2048 RGB, VRAM compressed on import | WorldEnvironment PanoramaSky backdrop (`tools/gen_night_sky.py`); horizon glow at bottom edge (v=1.0); one-pixel stars; NO moon baked |
 | assets/textures/sky/moon_glow_256.png | 27 KB RGBA | separate Sprite3D/billboard if a moon event is ever staged (design says no permanent moon) |
 | assets/textures/fx/{burn_loop,poison_drip,stun_stars,slow_trail,bleed_pulse,loot_glint,save_sparkle,taser_arc}_*.png | 1-3 KB | StatusEffects VFX (particles/HUD): burn/poison/stun/slow/bleed map 1:1 to GDD status ids; loot_glint -> pickup pulse; save_sparkle -> checkpoint flash; taser_arc -> projectile sprite |
 | assets/audio normalization | done | 37 files now -14/-18 LUFS in place; originals in assets/audio/_pre_norm/ (exclude from import); 10 legacy files upsampled 22.05k->44.1k (list in AUDIO_LOUDNESS.md) |
