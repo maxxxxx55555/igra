@@ -2,7 +2,7 @@
 
 ## OPEN (2026-10-29, Session 38, MEGA_PROMPT v8 FINAL): what the v8 pass closed and what keeps the status at INCOMPLETE
 
-Closed in the branch `release/final-v7` (the rows are the Session 38 block of `docs/RUN_STATE.md`): the white dots of the night view (the stars of the old sky were blobs, the sky is redrawn), the objectives panel (one row), the streetlight (foot, shade, rusted pole), the empty pack (the free slots are drawn as cells), the grid of equal sidewalk slabs (a tone per slab); version code 12 is the bundle; a touch probe that failed on 5 days of 60 is fixed.
+Closed in the branch `release/v8-final` (pull request 44; the rows are the Session 38 block of `docs/RUN_STATE.md`): the white dots of the night view (the stars of the old sky were blobs, the sky is redrawn), the objectives panel (one row), the streetlight (foot, shade, rusted pole), the empty pack (the free slots are drawn as cells), the grid of equal sidewalk slabs (a tone per slab); version code 12 is the bundle; a touch probe that failed on 5 days of 60 is fixed.
 
 - **Release status is INCOMPLETE** (`docs/VISUAL_REMAINING.md`, "Release gates and acceptance (v8 FINAL)"): G2 and G3 FAIL (the 3D world is primitive meshes with no set pieces and no facade families: an open P2), G4, G5 and G6 BLOCKED (a phone, a cold quiet read, the separate Opus pass), and V03, V13 and V14 BLOCKED.
 - **Facade variety is the tint and the weathering seed of each building** (`assets/shaders/soviet_facade.gdshader`) and nothing more: families of facades are meshes the repo does not have.
