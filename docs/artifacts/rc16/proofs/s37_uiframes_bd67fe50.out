@@ -1,0 +1,9 @@
+# proof s37_uiframes_bd67fe50
+# utc 20261029T115230Z
+# head bd67fe50 (uncommitted paths: 23)
+# env none
+# cmd bash -c TLS_FRAMES_HASH=v10art bash tools/qa_sim/guarded_windowed res://scenes/tools/ui_frames_scene.tscn 300
+  user-data guard: 12 file(s) snapshotted from C:\Users\Maxsim\AppData\Roaming/Godot/app_userdata/Last Streetlight
+  res://scenes/tools/ui_frames_scene.tscn rc=0 (log: .qa_logs/ui_frames_scene.log)
+  user-data guard: 12 file(s) restored byte-identical
+# EXIT=0
