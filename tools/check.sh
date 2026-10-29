@@ -398,6 +398,15 @@ if "$PY" tools/qa_sim/daily_sim.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/
 else
   bad "daily_sim (см. 'python tools/qa_sim/daily_sim.py')"
 fi
+if "$PY" -c "import numpy, PIL" >/dev/null 2>&1; then
+  if "$PY" tools/art_slots.py --demo >/dev/null 2>&1 && "$PY" tools/harvest_sheets.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/music_audit.py --demo >/dev/null 2>&1; then
+    ok "art_slots, harvest_sheets and music_audit demos (the slot table and its canon check, the icon cut, the tempo and loop verdicts: docs/VISUAL_REMAINING.md, MEGA_PROMPT v7)"
+  else
+    bad "art_slots / harvest_sheets / music_audit demos (см. 'python tools/art_slots.py --demo')"
+  fi
+else
+  echo "  ${DIM}пропуск${OFF} art_slots, harvest_sheets, music_audit demos (no numpy and Pillow here)"
+fi
 if "$PY" tools/qa_sim/achievements_sim.py --demo >/dev/null 2>&1 && "$PY" tools/qa_sim/achievements_sim.py >/dev/null 2>&1; then
   ok "achievements_sim (all 31 achievements have a trigger that a real EventBus path reaches: docs/ACHIEVEMENT_TRIGGER_SPEC.md)"
 else

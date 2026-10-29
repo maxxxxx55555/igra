@@ -1,0 +1,59 @@
+Generation briefs for the full-size art slots (written by tools/art_slots.py --briefs; the canon is MEGA_PROMPT v7, docs/VISUAL_REMAINING.md).
+Each brief is the preamble below, a space, and the subject of the slot. Name the image <slot>.png and put it in one folder, then: python tools/art_slots.py --fit <folder>.
+Reference for img2img: the tile of the sheets named on each line (docs/art/style_reference/).
+
+PREAMBLE: Semi-realistic gritty survival-horror game art, photographic PBR micro-detail, first-person eye-level view (camera 1.6 m, ~55 mm lens), night: near-black desaturated blue-teal shadows (#0f1314, #060f13), one warm sodium amber key light (#d4a94e) with a volumetric cone and wet-asphalt reflection, thin cold fog, subtle film grain, weathered surfaces, amber accents only from light sources, no pure white highlights, no text, no logos, no watermark, no UI elements, NOT flat design, NOT cartoon, NOT vector style.
+
+menu_city  (1920x1080, goes to assets/ui/menu_city.png; tile sheet_2_screens (8, 8, 290, 278))
+  a first-person eye-level street in fog at night, one street lamp on the right with a light cone and a puddle reflection, the left third darker and quieter for the menu panels, a distant silhouette
+
+loading_street  (1920x1080, goes to assets/textures/screens_v2/loading_street.png; tile sheet_2_screens (8, 8, 290, 278))
+  a first-person street, a row of dark lamp posts with the nearest one lit, snow and fog; no progress bar (the bar is code)
+
+death_loom  (1920x1080, goes to assets/textures/screens_v2/death_loom.png; tile sheet_2_screens (302, 8, 568, 276))
+  a first-person fallen gaze, the flashlight beam along the ground, a monster silhouette far away in backlight; no captions
+
+character_dim  (1920x1080, goes to assets/textures/screens_v2/character_dim.png; tile sheet_2_screens (522, 290, 1048, 538))
+  a survivor in full length with a backpack and a flashlight in the cone of a street light (third person is allowed here only), a street behind
+
+journal_paper  (1920x1080, goes to assets/textures/screens_v2/journal_paper.png; tile sheet_2_screens (10, 290, 508, 538))
+  aged sepia paper: a manuscript, a blueprint, a photo on tape, no readable text
+
+city_iso  (2048x2048, goes to assets/textures/maps_v2/city_iso_2048.png; tile sheet_1_ui_map_panels (26, 88, 780, 515))
+  a dark aerial base of the city with a hex node for each district outlined in a status colour (green, yellow, red) and a glow on the restored ones; isometry is allowed here only
+
+grid_panel  (512x512, goes to assets/textures/maps_v2/grid_panel_512.png; tile sheet_1_ui_map_panels (796, 38, 1050, 312))
+  a dark schematic of the power grid: poles and transformer nodes, amber and green glowing nodes, thin lines; isometry is allowed here only
+
+card_suburbs  (512x512, goes to assets/textures/cards/card_suburbs_512.png; tile sheet_4_store_feature (19, 385, 100, 433))
+  a first-person vignette of the signature of the district: a quiet suburban street of low houses at night, one porch light, a child's bicycle on a lawn, fog; darkness and amber, grain
+
+card_residential  (512x512, goes to assets/textures/cards/card_residential_512.png; tile sheet_4_store_feature (112, 385, 203, 433))
+  a first-person vignette of the signature of the district: a courtyard between apartment blocks, laundry lines, a few lit windows, an overturned pram; darkness and amber, grain
+
+card_park  (512x512, goes to assets/textures/cards/card_park_512.png; tile sheet_4_store_feature (207, 385, 300, 433))
+  a first-person vignette of the signature of the district: a park path under bare trees, one lamp over a bench, a swing set in silhouette, fog; darkness and amber, grain
+
+card_school  (512x512, goes to assets/textures/cards/card_school_512.png; tile sheet_4_store_feature (306, 385, 398, 433))
+  a first-person vignette of the signature of the district: a school entrance, desks piled into a barricade behind the doors, a stopped clock above; darkness and amber, grain
+
+card_hospital  (512x512, goes to assets/textures/cards/card_hospital_512.png; tile sheet_4_store_feature (19, 447, 107, 497))
+  a first-person vignette of the signature of the district: a hospital entrance, an overturned gurney and drag marks on the ground, a failing red sign; darkness and amber, grain
+
+card_gas_station  (512x512, goes to assets/textures/cards/card_gas_station_512.png; tile sheet_4_store_feature (112, 447, 203, 497))
+  a first-person vignette of the signature of the district: gas station canopies over dead pumps, one flickering canopy lamp, a wet forecourt; darkness and amber, grain
+
+card_police  (512x512, goes to assets/textures/cards/card_police_512.png; tile sheet_4_store_feature (207, 447, 300, 497))
+  a first-person vignette of the signature of the district: a police precinct front, an abandoned patrol car with its door open and a blinking marker lamp; darkness and amber, grain
+
+card_warehouses  (512x512, goes to assets/textures/cards/card_warehouses_512.png; tile sheet_4_store_feature (306, 447, 398, 497))
+  a first-person vignette of the signature of the district: a warehouse yard, stacked containers, a loading dock under one work lamp, a forklift in silhouette; darkness and amber, grain
+
+card_industrial  (512x512, goes to assets/textures/cards/card_industrial_512.png; tile sheet_4_store_feature (19, 510, 137, 560))
+  a first-person vignette of the signature of the district: an industrial zone, pipes and chimneys against the sky, steam, a rusted gantry, one sodium lamp; darkness and amber, grain
+
+card_substation  (512x512, goes to assets/textures/cards/card_substation_512.png; tile sheet_4_store_feature (144, 510, 255, 560))
+  a first-person vignette of the signature of the district: a substation yard, transformers, a heap of luggage and a snapped cable on the ground; darkness and amber, grain
+
+card_power_station  (512x512, goes to assets/textures/cards/card_power_station_512.png; tile sheet_4_store_feature (262, 510, 398, 560))
+  a first-person vignette of the signature of the district: a turbine hall, huge dark machinery, catwalks, one emergency lamp, cold fog; darkness and amber, grain

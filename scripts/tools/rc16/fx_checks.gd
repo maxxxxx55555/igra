@@ -18,6 +18,7 @@ const PARTICLE_BUDGET: int = 500  # PRODUCTION_BIBLE.md section 4: particles, co
 static func run(r: Node) -> void:
 	r._playing()
 	await _ducking(r)
+	await _sting_ducking(r)
 	await _reverb_zone(r)
 	await _surfaces(r)
 	await _shells(r)
@@ -47,6 +48,22 @@ static func _ducking(r: Node) -> void:
 	await r.get_tree().create_timer(3.0).timeout
 	var back: float = float(ducker.get("_db"))
 	r._ok(is_equal_approx(down, -12.0) and amp_down and slider_kept and absf(back) < 0.01, "AUD1 ducking: a voice line dips the Music and Ambient buses by %.1f dB (their Amplify effects %s), the volume slider is not touched (%s), 3.5 s later the dip is %.2f dB" % [down, amp_down, slider_kept, back])
+
+## AUD1b: a sting (an achievement here) dips the same two buses by 6 dB for a shorter hold and gives them back; a deeper dip that is held is not lifted by it.
+static func _sting_ducking(r: Node) -> void:
+	var ducker: Node = AudioManager.get_node_or_null("Ducker")
+	EventBus.achievement_unlocked.emit("sting_check")
+	await r.get_tree().create_timer(0.5).timeout
+	var dipped: float = float(ducker.get("_db"))
+	await r.get_tree().create_timer(2.5).timeout
+	var back: float = float(ducker.get("_db"))
+	ducker.call("duck")
+	await r.get_tree().create_timer(0.4).timeout
+	EventBus.achievement_unlocked.emit("sting_check")
+	await r.get_tree().create_timer(0.2).timeout
+	var kept: float = float(ducker.get("_db"))
+	await r.get_tree().create_timer(3.0).timeout
+	r._ok(is_equal_approx(dipped, -6.0) and absf(back) < 0.01 and is_equal_approx(kept, -12.0), "AUD1b a sting dips Music and Ambient by 6 dB and gives them back (%.1f, then %.2f); during a 12 dB dip it lifts nothing (%.1f)" % [dipped, back, kept])
 
 ## AUD2: a reverb zone replaces what the rays sense (a tunnel is long and wet), the rays do not undo it, and leaving hands the reverb back.
 static func _reverb_zone(r: Node) -> void:

@@ -1,0 +1,8 @@
+# proof s37_e1_ebfd8705
+# utc 20261029T063312Z
+# head ebfd8705 (uncommitted paths: 21)
+# env none
+# cmd bash -c timeout 240 ./godot_extracted/Godot_v4.7-stable_win64_console.exe --editor --quit --path . > /dev/null 2>&1; echo "editor reimport rc=$?"; git checkout -- default_bus_layout.tres 2>/dev/null; git status --short | grep -v "^??" | head -3
+editor reimport rc=0
+ M docs/artifacts/rc16/launch_ledger.tsv
+# EXIT=0
