@@ -122,7 +122,7 @@ The brightness of dark zones is stealth balance: no batch raises it (`lighting_s
 | v7-0 | the sheets branch `release/1.0.2-sheets` (rebuilt shop, flashlight upgrade, city map, pack grid and weather cards; a rounded grey chrome; the icons written into `assets/`) | decisions 3 of v7 and prohibitions 3 and 7 | NOT MERGED, archived: it was never in main (the branch, tip `6ac5fa91`, keeps it); main holds only the colour work of pull request 38, which changes no layout |
 | U2 | the baked copies of the old tokens in the UI themes, scenes and scripts moved to the canon (35 files, `tools/retint_ui_chrome.py`), inset fills on `COLOR_BG_PANEL2` instead of the bronze border (workbench rows, bar backgrounds, silhouettes) | the unify probe failed on the slot panel of `hud_3d.tscn`; the workbench frame showed brown blocks; frames `docs/stills/store/*_after_9a5148c8_*` and `.qa_logs/frames/ui_*_b3_*` | APPROVED by delegation, not reviewed per batch: one revert of the merge commit undoes it |
 
-## MEGA_PROMPT v7 (the owner's final prompt of 2026-10-30): decisions, slots, prohibitions
+## MEGA_PROMPT v7 (the owner's final prompt of 2026-10-29): decisions, slots, prohibitions
 
 This section is the canon of the visual overhaul; it replaces the earlier reading of the sheets (the first two canon passes of Session 37 rebuilt screens and recoloured the chrome, which the decisions below rule out). The slot table is in `tools/art_slots.py`
 (`--check` audits the repo against it, `--briefs` writes `docs/art/generation_briefs.txt`, `--fit` and `--apply` take an image made outside the repo to its slot with a side-by-side board and an approvals row).
@@ -190,7 +190,7 @@ Every district tells its story without text, in the canon of the sheets: (1) 3 t
 (2) layers of life by decals (a minimal decal support with gates if there is none): missing-person posters, district graffiti marks, puddles, tracks, litter, leaflets, and 3 or more variants of a bin or a bench; (3) light moments: shafts of light from windows and breaches, wires in silhouette against the sky, one distant flash per district (budget), weather touches;
 (4) all of it in the darkness of the canon: interest is silhouette, rhythm of light and detail, not brightness and not coloured patches; stealth readability and `lighting_stage_sim` and GRADE1 stay whole; (5) the batch goes through the journal as the others: before/after frames per district and the owner's APPROVED on each.
 
-### Audit of 2026-10-30 (`python tools/art_slots.py --check`)
+### Audit of 2026-10-29 (`python tools/art_slots.py --check`)
 
 Six of the seven full-screen slots are palette PNGs of 256 colours (`menu_city`, `loading_street`, `death_loom`, `character_dim`, `journal_paper`, `city_iso`) and `grid_panel` is quantised too; `menu_city` and `loading_street` clip white on 0.4 percent of the frame; the eleven cards are RGB and hold the canon. These are art pass 2 of the other agent; the
 slots are to be replaced by generated art, none is touched until an image reaches `--fit`. The item icons of `assets/textures/items` are flat vector drawings (forbidden by prohibition 1); the replacement by the sheet's own icons is staged by `tools/harvest_sheets.py` for the owner's approval of the replacement itself.

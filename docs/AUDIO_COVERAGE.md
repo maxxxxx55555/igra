@@ -490,3 +490,12 @@ The numbers a script can read; the ear is the owner's (the listening sheet). KEE
 | `substation` | district | 34 | 0.010 | -18.0 | 103 (0.36) | 1588 | RE-EDIT: loop of 34 s (at least 60) |
 | `suburbs` | district | 37 | 0.000 | -18.0 | 185 (0.32) | 619 | RE-EDIT: loop of 37 s (at least 60) |
 | `warehouses` | district | 38 | 0.006 | -18.0 | 152 (0.40) | 1814 | RE-EDIT: loop of 38 s (at least 60) |
+
+## Briefs for the tracks the audit marks REPLACE or RE-EDIT (MEGA_PROMPT v7 phase 3)
+
+The owner generates them (the Gemini app, the Music skill, Flash-Lite selector only, as in Session 27); a take is cut by `python tools/qa_sim/music_post.py <take> <target.ogg> --loop 60` (it picks the steadiest stretch, closes the seam and levels to -18 LUFS) and read again by `python tools/qa_sim/music_audit.py --write`. Ask for 75 s or more so that a steady 60 s stretch exists: instrumental, no voices, no recognisable hook, a dark mix.
+
+- `music_combat` (REPLACE, 129 BPM against 90 to 110): "Instrumental industrial combat loop for a first-person survival horror game: dry metallic percussion over a low distorted pulse at 100 BPM, a dissonant minor pad underneath, no melody, no bright lead, no voices, dark and dense, seamless loop of 75 seconds."
+- `music_tension` (REPLACE, 185 read as 92 against 70 to 85): "Instrumental rising tension bed for a first-person survival horror game: a slow rising dissonant pad over a soft low pulse at 78 BPM, distant metal scrapes, no melody, no voices, restrained and cold, seamless loop of 75 seconds."
+- `music_battle` (RE-EDIT, 117 BPM and a loop of 24 s): the combat prompt above at 105 BPM; a stretch of the shipped file fixes the tempo and not the length.
+- `gas_station`, `hospital`, `police`, `power_station`, `school`, `substation`, `suburbs`, `warehouses` (RE-EDIT, loops of 28 to 40 s against 60 s): the mood of the shipped file (its theme is in `tools/gen_audio.py` DISTRICTS), asked again for 75 s at 60 to 80 BPM. A longer loop made of the same bars is the same repetition, so these are new material and not an edit; the dark beds stay near silence with wind and a pulse (the matrix above).
