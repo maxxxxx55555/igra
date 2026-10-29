@@ -357,3 +357,20 @@ n	utc	head	id	exit	command
 356	20261029T182823Z	4fb018d3	s38_botB_512f5d3a	0	bash tools/qa_sim/autoplay_bot
 357	20261029T183514Z	4fb018d3	s38_touch2_4fb018d3	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/touch_probe_scene.tscn 120
 358	20261029T184423Z	dd00ba27	s38_last_dd00ba27	0	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
+359	20261029T214727Z	0529c870	s38_inv1_0529c870	0	bash -c TLS_FRAMES_HASH=rec1 bash tools/qa_sim/guarded_windowed res://scenes/tools/ui_frames_scene.tscn 300
+360	20261029T220106Z	0529c870	s38_rec2_0529c870	0	bash -c TLS_CAPTURE_HASH=0529c870 bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
+361	20261029T220411Z	0529c870	s38_rec3_0529c870	0	bash -c TLS_CAPTURE_HASH=0529c870 bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
+362	20261029T220511Z	0529c870	s38_rec3ui_0529c870	0	bash -c TLS_FRAMES_HASH=rec3 bash tools/qa_sim/guarded_windowed res://scenes/tools/ui_frames_scene.tscn 300
+363	20261029T220758Z	0529c870	s38_rec4_0529c870	0	bash -c TLS_CAPTURE_HASH=0529c870 bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
+364	20261029T221151Z	b958e2d0	s38_export8_b958e2d0	0	bash .qa_logs/s38_export_vc13.sh
+365	20261029T221439Z	b958e2d0	s38_store2_b958e2d0	0	bash -c TLS_CAPTURE_HASH=b958e2d0 bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
+366	20261029T221538Z	b958e2d0	s38_ui3_b958e2d0	0	bash -c TLS_FRAMES_HASH=rec bash tools/qa_sim/guarded_windowed res://scenes/tools/ui_frames_scene.tscn 300
+367	20261029T221649Z	b958e2d0	s38_perf2_b958e2d0	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/perf_check_scene.tscn 240
+368	20261029T221802Z	b958e2d0	s38_audio2_b958e2d0	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/audio_truth_gate_scene.tscn 120
+369	20261029T221902Z	b958e2d0	s38_touch3_b958e2d0	0	bash tools/qa_sim/guarded_windowed res://scenes/tools/touch_probe_scene.tscn 120
+370	20261029T221922Z	b958e2d0	s38_botC_b958e2d0	0	bash tools/qa_sim/autoplay_bot
+371	20261029T222622Z	b958e2d0	s38_botD_b958e2d0	0	bash tools/qa_sim/autoplay_bot
+372	20261029T223300Z	b958e2d0	s38_all2_b958e2d0	2	bash -c TLS_SKIP_REIMPORT=1 bash tools/check.sh --all
+373	20261029T224502Z	b958e2d0	s38_winexport2_b958e2d0	0	/c/Users/Maxsim/Desktop/TLS_Build/godot_extracted/Godot_v4.7-stable_win64_console.exe --headless --path . --export-release Windows Desktop build/windows/LastStreetlight.exe
+374	20261029T224557Z	b958e2d0	s38_winboot2_b958e2d0	0	bash -c source tools/qa_sim/user_data_guard.sh; udg_snapshot || exit 99; trap udg_restore EXIT; timeout 120 ./build/windows/LastStreetlight.exe --quit-after 1500; echo "exe exit $?"
+375	20261029T224717Z	b958e2d0	s38_bot7a_b958e2d0	0	bash tools/qa_sim/autoplay_bot

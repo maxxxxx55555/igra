@@ -252,3 +252,32 @@ Statuses are PASS, FAIL, BLOCKED (an external prerequisite named) or NOT_APPLICA
 | V12 | release presentation | PASS | the store frames, the press kit (`s38_last_dd00ba27.out:151`), `hardcoded_text_gate` (`:110`); the music rights stay the owner's step 1 of `RELEASE_CHECKLIST.md` section 10 |
 | V13 | target and package | BLOCKED | PASS for Windows and the bundle checks (rows 345 to 351); the Android bundle was not launched on a device |
 | V14 | final consistency | BLOCKED | the Opus review of the exact candidate has not run; the rows above carry no BLOCKED counted as verified |
+
+| I2 | the inventory screen rebuilt from Plate A of the recovery brief (three columns, 112 px slots, an inspector, a footer; `scripts/ui/inventory_ui.gd`, `scripts/ui/inv_kit.gd`) | APPROVED by the owner by delegation (their standing instruction to finish without their hands), checked by Claude 2026-10-30 in the frames `ui_inventory_rec_20261029T221618Z.png`, the near-capacity, filtered-empty and empty ones; the owner has not looked |
+| L2 | the streetlight as one built mesh (`scripts/world/lamp_hardware.gd`), the spot narrowed and warmer | APPROVED by the owner by delegation, checked by Claude 2026-10-30: `docs/stills/store/02_district_day_full_after_b958e2d0_20261029T221519Z.png`; the pole still reads olive under the lamp |
+| F1 | facade relief: frames, ledges, cornice, pilasters, pipes, doorways, boarded panes (`scripts/world/facade_relief.gd`) | APPROVED by the owner by delegation, checked by Claude 2026-10-30 in the same frame; the blocks are still boxes |
+| P1 | paving flags of 0.5 m and a crack network on the sidewalk and the asphalt (`assets/shaders/soviet_road.gdshader`) | APPROVED by the owner by delegation, checked by Claude 2026-10-30 in the same frame |
+| G1 | a clean image: grain, vignette, chroma, bloom and the dust specks made subtle | APPROVED by the owner by delegation, checked by Claude 2026-10-30 in the store frames |
+
+### Recovery brief of 2026-10-30: the checks C1 to C7 and the gates A to F
+
+The brief supersedes the art direction of the v8 prompt and the table above stands as its record. Statuses as before; the owner told the agent on 2026-10-30 to stop the visual work, so the open rows stay open.
+
+| Check | Result | Reason and evidence |
+|---|---|---|
+| C1 | PASS for the layout and the pack states, not for drag | the frames of the populated, near-capacity, filtered-empty and empty pack; use, drop, sort and the filters by the closeout checks (627 of 627, row 372); drag onto the quick bar and equip were not exercised by a check or by hand in this pass |
+| C2 | FAIL | the lamp, the paving and the facade relief changed (`02` and `03` of the store set against the same views at `5cedfa03`), the plaza is still boxes with relief: the brief calls that a failed visual task |
+| C3 | NOT RUN | no close or oblique capture of a facade, the street, the lamp and the equipment was made |
+| C4 | NOT RUN for the review | the bots won 6 of 6 seeds (rows 370, 371) and the perf gate walks two districts, but no recorded traversal was reviewed for pacing, clipping, pop-in and shimmer |
+| C5 | PARTIAL | the inventory was rebuilt and shot; the other screens were not restyled and are shot at both sizes only where the rows below say so |
+| C6 | PASS (headless) | the GOLD MASTER suite, the save and settings gates and the bots, `docs/artifacts/rc16/proofs/s38_all2_b958e2d0.out` |
+| C7 | BLOCKED for Android, PASS for Windows | the bundle is built and checked (row 364) and was never launched on a device; the Windows build booted outside the editor (row 374) |
+
+| Gate | Status | Reason |
+|---|---|---|
+| A | PASS | active paths and baselines recorded (`docs/RUN_STATE.md`, S38R-GATE-A) |
+| B | FAIL | the inventory composition is replaced; the street view is improved but still reads as the block plaza |
+| C | PASS | the remaining mismatches are recorded with a place and a correction (S38R-DEFECTS) |
+| D | FAIL | the shared kit and the world rules reach the inventory and the street only; the other screens and districts were not propagated to |
+| E | BLOCKED | the candidate is built and the Windows build launched; the phone and the visual checks C3 and C4 are missing |
+| F | INCOMPLETE | the status is reported, not READY |

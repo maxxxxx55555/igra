@@ -1,5 +1,15 @@
 ﻿# Known issues
 
+## OPEN (2026-10-30, Session 38, the visual recovery brief): what the rebuilt inventory and street left
+
+The owner sent a brief that supersedes the visual prompts and then told the agent to stop the visual work; what was done is in the Session 38 block of `docs/RUN_STATE.md` (S38R rows) and the open defects are its S38R-DEFECTS row.
+
+- **The world is still boxes with relief** (G2 and G3 FAIL, C2 FAIL): the facades need authored or CC0 meshes with modelled openings and several families; the electrical equipment, the wrecks and the first-person hands need meshes the repo does not have.
+- **The minimap is points in an empty ring** (`scripts/ui/minimap.gd`) and **a reward and a level-up are two separate floating lines**: the brief asks for streets on the minimap and one notification queue; the checks `hud_checks.gd` and `sec_checks.gd` read `UIManager._toast` and change with the queue.
+- **Only the inventory uses the new kit** (`scripts/ui/inv_kit.gd`); the menu, the map, the settings and the other screens keep the older chrome.
+- **The sidewalk tiles (4 m) overlap the road lanes** (`scripts/world/street_builder.gd`): a raised curb and a separate sidewalk need the layout and the collisions changed together; the paving is a shader only.
+- **No close or oblique capture and no reviewed traversal** (C3, C4) were made.
+
 ## OPEN (2026-10-29, Session 38, MEGA_PROMPT v8 FINAL): what the v8 pass closed and what keeps the status at INCOMPLETE
 
 Closed in the branch `release/v8-final` (pull request 44; the rows are the Session 38 block of `docs/RUN_STATE.md`): the white dots of the night view (the stars of the old sky were blobs, the sky is redrawn), the objectives panel (one row), the streetlight (foot, shade, rusted pole), the empty pack (the free slots are drawn as cells), the grid of equal sidewalk slabs (a tone per slab); version code 12 is the bundle; a touch probe that failed on 5 days of 60 is fixed.

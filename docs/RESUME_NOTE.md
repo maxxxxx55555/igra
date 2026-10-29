@@ -1,5 +1,11 @@
 # Resume note (2026-10-08, rc16 sign-off)
 
+## NEXT-ROW (Session 38, the visual recovery brief, 2026-10-30; no tag): read this block first; the blocks under it still stand
+
+**State.** The branch `release/v8-final` (pull request 44, not merged: the permission classifier refused the agent's merge, so `gh pr merge 44 --merge` is the owner's) holds the v8 pass and the recovery work; `build/tls.aab` is version code 13 (95,713,565 bytes, sha256 `a0e33f16…`, `docs/RELEASE_ARTIFACTS.md`, last section) and `build/windows/LastStreetlight.exe` boots outside the editor; **Release status is INCOMPLETE** (the gates and rows in `docs/VISUAL_REMAINING.md`; the rows in `docs/RUN_STATE.md`, S38R). The owner told the agent to stop the visual work: the world art is open and is listed in `docs/KNOWN_ISSUES.md`.
+
+**The owner does (in this order):** (1) merge pull request 44 if the result is acceptable; (2) upload `build/tls.aab` (version code 13) to Internal testing, install it on a phone and play twenty minutes; (3) the Play Console forms with `docs/STORE_SUBMISSION.md`; (4) a copy of `.signing/` off this machine; (5) the old remote branches (the command is in the Session 37 block below); (6) a separate Opus pass on the exact candidate; (7) decide how the world art goes on (authored or CC0 meshes).
+
 ## NEXT-ROW (Session 38, MEGA_PROMPT v8 FINAL, 2026-10-29; no tag): read this block first; the Session 37 blocks under it still stand
 
 **State.** The branch `release/v8-final` (pull request 44, 25 of 25 checks green; the permission classifier refused the agent's merge into `main`, so if it is not merged yet `gh pr merge 44 --merge` does it) holds the v8 pass; `build/tls.aab` is version code 12 (95,698,020 bytes, sha256 `57184330…`, `docs/RELEASE_ARTIFACTS.md`, last section); the Windows build `build/windows/LastStreetlight.exe` boots outside the editor; **Release status is INCOMPLETE** (the gates and rows in `docs/VISUAL_REMAINING.md`, "Release gates and acceptance (v8 FINAL)"; the launch rows in `docs/RUN_STATE.md`, Session 38).
