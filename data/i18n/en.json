@@ -1312,7 +1312,6 @@
   "HUD_LEGEND_PLAYER": "You (player)",
   "HUD_LEGEND_CURRENT": "Current district",
   "HUD_HINT_DARK": "Find a light source — a power switch or your flashlight.",
-  "QUEST_MORE_ACTIVE": "+%d more objectives",
   "HUD_MELEE": "MELEE",
   "HUD_LEGEND_MARKER": "Radio signal",
   "HUD_ENEMY_RESIST_WEAK": "WEAK TO MELEE ×%.1f",
