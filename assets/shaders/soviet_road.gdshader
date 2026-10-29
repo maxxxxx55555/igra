@@ -61,6 +61,8 @@ void fragment() {
 				c *= 1.0 - 0.28 * repaired - 0.2 * repaired * step(-0.012, max(reach.x, reach.y));
 			} else if (surface > 0.5) {
 				float row = floor(v_xz.y / 1.5);
+				float slab = floor((v_xz.x + 1.25 * hash12(vec2(row, 1.0))) / 1.25);
+				c *= 0.84 + 0.32 * hash12(vec2(slab, row) + 17.0);  // every slab its own tone: a lit sidewalk is not a grid of equal slabs
 				vec2 seam = abs(fract(vec2((v_xz.x + 1.25 * hash12(vec2(row, 1.0))) / 1.25, v_xz.y / 1.5) + 0.5) - 0.5) * vec2(1.25, 1.5);
 				float aa = fwidth(v_xz.x) + fwidth(v_xz.y);
 				c *= 1.0 - 0.42 * (1.0 - smoothstep(0.008 + aa, 0.03 + aa * 1.5, min(seam.x, seam.y))) / (1.0 + aa * 10.0);
