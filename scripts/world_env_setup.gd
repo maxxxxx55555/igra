@@ -302,7 +302,7 @@ func _apply_postfx(district_id: StringName) -> void:
 		overlay.set_chroma_amount(float(chroma.get("amount_px_1080p", 0.0)))
 	var grain: Dictionary = preset.get("grain", {})
 	if overlay.has_method("set_grain_intensity"):
-		overlay.set_grain_intensity(float(grain.get("intensity", 0.1)))
+		overlay.set_grain_intensity(float(grain.get("intensity", 0.03)))
 
 func _find_postfx_overlay() -> Node:
 	if is_instance_valid(_postfx_overlay):

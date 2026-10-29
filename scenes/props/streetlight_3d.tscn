@@ -27,10 +27,10 @@ mesh = ExtResource("2_pole")
 material_override = SubResource("pole_mat")
 
 [node name="SpotLight" type="SpotLight3D" parent="."]
-light_color = Color(0.788, 0.635, 0.290, 1.0)
+light_color = Color(0.96, 0.70, 0.36, 1.0)
 light_energy = 3.0
 light_indirect_energy = 0.3
-spot_angle = 45.0
+spot_angle = 38.0
 spot_attenuation = 0.8
 spot_range = 12.0
 shadow_enabled = false
@@ -41,7 +41,7 @@ position = Vector3(1.16, 4.2, 0)
 rotation = Vector3(-1.5708, 0, 0)
 
 [node name="Glow" type="OmniLight3D" parent="."]
-light_color = Color(0.788, 0.635, 0.290, 1.0)
+light_color = Color(0.96, 0.70, 0.36, 1.0)
 light_energy = 1.0
 light_indirect_energy = 0.0
 shadow_enabled = false

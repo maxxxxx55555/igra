@@ -4,13 +4,13 @@ extends Node
 ## RANGE_M has none. A child of the district's StreetProps, so a rebuilt district takes it with it. The Effects setting at Low draws none.
 
 const EMITTERS: int = 4
-const EMITTER_AMOUNT: int = 14
+const EMITTER_AMOUNT: int = 6
 const RANGE_M: float = 28.0
 const SCAN_SEC: float = 1.0
 const BEAM_DROP_M: float = 2.2  # the middle of the beam under the lamp head
 const BEAM_BOX := Vector3(1.3, 2.2, 1.3)  # half sizes
 const MOTE_TEXTURE := preload("res://assets/textures/fx/dust.png")
-const MOTE_COLOR := Color(0.95, 0.86, 0.62, 0.45)
+const MOTE_COLOR := Color(0.95, 0.86, 0.62, 0.3)
 
 var _emitters: Array[GPUParticles3D] = []
 var _timer: float = 0.0
@@ -34,7 +34,7 @@ func _ready() -> void:
 		mat.initial_velocity_max = 0.09
 		mat.gravity = Vector3.ZERO
 		mat.scale_min = 0.025
-		mat.scale_max = 0.06
+		mat.scale_max = 0.035
 		mat.color = MOTE_COLOR
 		emitter.process_material = mat
 		var quad := QuadMesh.new()

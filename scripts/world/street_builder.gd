@@ -63,7 +63,7 @@ func _make_road_mesh() -> BoxMesh:
 func _make_sidewalk_mesh() -> BoxMesh:
 	var m := BoxMesh.new()
 	m.size = Vector3(tile_size, TILE_THICKNESS, tile_size)
-	m.material = _surface(_TEX_CONCRETE, Vector3(0.220, 0.225, 0.220), 0.1156, 0.0, 1.0)
+	m.material = _surface(_TEX_CONCRETE, Vector3(0.140, 0.143, 0.140), 0.1156, 0.0, 1.0)
 	return m
 
 func _make_marking_mesh() -> BoxMesh:

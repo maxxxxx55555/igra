@@ -7,7 +7,7 @@
 //   tint     : the tile's mean albedo, linear.
 //   mean_lum : the mean luminance of `tex`, so the texture only varies the tint around its mean (1.0 with no texture).
 //   detail   : 0 the plain tile (Low tier), 1 patches, 2 adds the slab joints or the repair rectangles (`surface`), damp patches and chipped paint.
-//   surface  : 1 concrete slabs (a joint every 1.25 m across and 1.5 m along, the rows shifted), 2 asphalt (dark rectangles where it was repaired), 0 neither.
+//   surface  : 1 paving flags of 0.5 m in a running bond (each its own tone, joints, cracks), 2 asphalt (dark rectangles where it was repaired), 0 neither.
 //   paint    : 1 for the lane dashes (chips, never damp).
 //   damp     : how much of the road reads wet (darker, and smoother down to 0.6: the style guide keeps every surface matte, nothing is glossy).
 //   tint_b, mix_b : a second tint in large patches (the dead grass and bare earth of a courtyard, the ground plane of the skyline); 0 for the street.
@@ -39,6 +39,28 @@ float vnoise(vec2 p) {
 			mix(hash12(i + vec2(0.0, 1.0)), hash12(i + vec2(1.0, 1.0)), u.x), u.y);
 }
 
+// Cracks as a polygonal network: where the nearest and the second nearest point of a jittered grid are equally far (a Voronoi edge), inside patches that are a few metres wide.
+float crack_net(vec2 p, float aa) {
+	vec2 cell = floor(p * 1.7);
+	vec2 at = fract(p * 1.7);
+	float first = 8.0;
+	float second = 8.0;
+	for (int j = -1; j <= 1; j++) {
+		for (int i = -1; i <= 1; i++) {
+			vec2 g = vec2(float(i), float(j));
+			float d = length(g + vec2(hash12(cell + g), hash12(cell + g + 37.0)) - at);
+			if (d < first) {
+				second = first;
+				first = d;
+			} else if (d < second) {
+				second = d;
+			}
+		}
+	}
+	float edge = second - first;
+	return (1.0 - smoothstep(0.0, 0.03 + aa, edge)) * smoothstep(0.58, 0.68, vnoise(p * 0.3 + vec2(3.0, 1.0))) / (1.0 + aa * 6.0);
+}
+
 void vertex() {
 	v_xz = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xz;
 }
@@ -59,13 +81,19 @@ void fragment() {
 				vec2 reach = abs(inside) - (vec2(0.18, 0.2) + 0.12 * vec2(hash12(cell + 7.0), hash12(cell + 13.0)));
 				float repaired = step(max(reach.x, reach.y), 0.0) * step(0.86, hash12(cell));
 				c *= 1.0 - 0.28 * repaired - 0.2 * repaired * step(-0.012, max(reach.x, reach.y));
+				c *= 1.0 - 0.3 * crack_net(v_xz + vec2(40.0, 17.0), fwidth(v_xz.x) + fwidth(v_xz.y));
 			} else if (surface > 0.5) {
-				float row = floor(v_xz.y / 1.5);
-				float slab = floor((v_xz.x + 1.25 * hash12(vec2(row, 1.0))) / 1.25);
-				c *= 0.84 + 0.32 * hash12(vec2(slab, row) + 17.0);  // every slab its own tone: a lit sidewalk is not a grid of equal slabs
-				vec2 seam = abs(fract(vec2((v_xz.x + 1.25 * hash12(vec2(row, 1.0))) / 1.25, v_xz.y / 1.5) + 0.5) - 0.5) * vec2(1.25, 1.5);
+				// paving flags of 0.5 m laid in a running bond, each with its own tone and its own joints (the recovery brief: no oversized uniform tile grid), and cracks that run through patches of the pavement
+				vec2 flag = v_xz / 0.5;
+				float course = floor(flag.y);
+				float shift = 0.5 * mod(course, 2.0);
+				vec2 inside = vec2(fract(flag.x + shift), fract(flag.y));
+				vec2 cell = vec2(floor(flag.x + shift), course);
+				c *= 0.78 + 0.44 * hash12(cell + 17.0);
+				vec2 seam = min(inside, 1.0 - inside) * 0.5;
 				float aa = fwidth(v_xz.x) + fwidth(v_xz.y);
-				c *= 1.0 - 0.42 * (1.0 - smoothstep(0.008 + aa, 0.03 + aa * 1.5, min(seam.x, seam.y))) / (1.0 + aa * 10.0);
+				c *= 1.0 - 0.6 * (1.0 - smoothstep(0.005 + aa, 0.014 + aa * 1.5, min(seam.x, seam.y))) / (1.0 + aa * 10.0);
+				c *= 1.0 - 0.4 * crack_net(v_xz, aa);
 			}
 			c *= 1.0 - 0.5 * paint * smoothstep(0.52, 0.62, vnoise(v_xz * 6.0 + vec2(2.0, 5.0)));
 			wet = smoothstep(0.58, 0.76, vnoise(v_xz * 0.21 + vec2(11.0, 4.0))) * damp * (1.0 - paint);

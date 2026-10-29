@@ -35,7 +35,6 @@ var _lamp_local_positions: Array[Vector3] = []
 ## distance, read as a starfield.
 const _LampHead := preload("res://scripts/world/lamp_head.gd")
 const _HARDWARE := preload("res://scripts/world/lamp_hardware.gd")
-const _PBR := preload("res://scripts/world/pbr_sets.gd")
 var _lamp_mat: ShaderMaterial
 var _district_id: StringName = &""
 
@@ -190,17 +189,14 @@ func _spawn_pole_pair(center: Vector3, road: Dictionary, district_id: StringName
 
 ## P3: matches streetlight_3d.tscn's Pole/Lamp mesh+material exactly so the
 ## batched version is visually identical to the per-instance one it replaces.
-const _POLE_MESH := preload("res://assets/mesh/mesh_streetlight_pole.res")
 const _LAMP_HEAD_OFFSET := Vector3(1.16, 4.2, 0.0)
 
 func _build_streetlight_multimesh() -> void:
 	if _lamp_local_positions.is_empty():
 		return
-	var pole_mat: StandardMaterial3D = _PBR.apply(StandardMaterial3D.new(), "rusted_metal")
-	pole_mat.albedo_color = Color(0.42, 0.44, 0.48)  # the rust grain tinted dark: under the sodium light the plain blue-gray read as a yellow stick
 	var pole_mm := MultiMesh.new()
 	pole_mm.transform_format = MultiMesh.TRANSFORM_3D
-	pole_mm.mesh = _POLE_MESH
+	pole_mm.mesh = _HARDWARE.pole_mesh()
 	pole_mm.instance_count = _lamp_local_positions.size()
 	var lamp_mesh := SphereMesh.new()
 	lamp_mesh.radius = 0.08
@@ -220,19 +216,18 @@ func _build_streetlight_multimesh() -> void:
 	for i in _lamp_local_positions.size():
 		var pos: Vector3 = _lamp_local_positions[i]
 		pole_mm.set_instance_transform(i, Transform3D(Basis(), pos))
-		lamp_mm.set_instance_transform(i, Transform3D(Basis(), pos + _LAMP_HEAD_OFFSET))
+		lamp_mm.set_instance_transform(i, Transform3D(Basis.from_scale(Vector3(1.9, 0.7, 1.9)), pos + _LAMP_HEAD_OFFSET))  # the lens: a flat disc under the hood
 	var pole_mmi := MultiMeshInstance3D.new()
 	pole_mmi.name = "StreetlightPolesBatched"
 	pole_mmi.set_meta("spots", _lamp_local_positions)
 	pole_mmi.multimesh = pole_mm
-	pole_mmi.material_override = pole_mat
+	pole_mmi.material_override = _HARDWARE.material()
 	add_child(pole_mmi)
 	var lamp_mmi := MultiMeshInstance3D.new()
 	lamp_mmi.name = "StreetlightLampsBatched"
 	lamp_mmi.multimesh = lamp_mm
 	lamp_mmi.material_override = _lamp_mat
 	add_child(lamp_mmi)
-	_HARDWARE.build(self, _lamp_local_positions, _LAMP_HEAD_OFFSET, pole_mat, BULB_SEGMENTS)
 
 func _on_stage_changed(id: StringName, stage: int) -> void:
 	if id == _district_id:
@@ -301,7 +296,7 @@ func _build_prop_multimesh() -> void:
 		_prop_material(_TEX_BENCH, Color(0.30, 0.26, 0.22), 0.85, 0.0), "BenchesBatched")
 	if not _tree_positions.is_empty():
 		_build_one_multimesh(_raised(_tree_positions, 1.25), _trunk,
-			_prop_material("", Color(0.17, 0.15, 0.125), 0.95, 0.0), "TreeTrunksBatched")
+			_prop_material("", Color(0.075, 0.066, 0.056), 0.95, 0.0), "TreeTrunksBatched")
 		_build_one_multimesh(_raised(_tree_positions, 3.4), _leaf, _leaf_material(), "TreeLeavesBatched")
 	if not _cone_positions.is_empty():
 		var cone_mat := _prop_material("", Color(0.706, 0.271, 0.184), 0.6, 0.0)

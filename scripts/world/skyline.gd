@@ -35,6 +35,7 @@ const _HALOS := preload("res://scripts/world/window_halos.gd")
 const _FACADE := preload("res://assets/shaders/soviet_facade.gdshader")
 const _ROAD := preload("res://assets/shaders/soviet_road.gdshader")
 const _SIGNS := preload("res://scripts/world/soviet_signs.gd")
+const _RELIEF := preload("res://scripts/world/facade_relief.gd")
 const _GRASS := preload("res://scripts/world/dead_grass.gd")
 ## The emission of the mean channel of a block's self-glow, by power stage (DARK, PARTIAL, STREETS, FULL): a restored district reads lighter, a dark one stays a faint outline against the sky. The glow of a district
 ## sets the hue and not the brightness. Read off the sweep of the wall line of `tools/qa_sim/density_frames` (the median of the wall band over the black floor of 22 to 25: 0.15 stood it at +3, 0.20 at +8, 0.26 at +20,
@@ -93,6 +94,8 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 	var tints: Array[Color] = []
 	var panes: Array[Transform3D] = []
 	var no_tints: Array[Color] = []
+	var frames: Array[Transform3D] = []
+	var frame_tints: Array[Color] = []
 	for side in 4:
 		var turn := Basis(Vector3.UP, side * PI * 0.5)
 		# North and south rings run past the corners, east and west stop short of them.
@@ -110,18 +113,23 @@ func build(district_id: StringName, half_extent: float, with_windows: bool) -> v
 			blocks.append(Transform3D(turn * Basis.from_scale(Vector3(w, h, d)), turn * Vector3(cx, h * 0.5, -edge - d * 0.5)))
 			var tint: Color = facades[rng.randi() % facades.size()]
 			tints.append(tint)
-			_fronts.append(Transform3D(turn, turn * Vector3(cx, 0.0, -edge)))
+			var front := Transform3D(turn, turn * Vector3(cx, 0.0, -edge))
+			_fronts.append(front)
 			_widths.append(w)
-			_dress_block(extra, Transform3D(turn, turn * Vector3(cx, 0.0, -edge)), Vector3(w, h, d), tint, balconies if with_windows else 0.0, blocks, tints)
+			_dress_block(extra, front, Vector3(w, h, d), tint, balconies if with_windows else 0.0, blocks, tints)
 			if with_windows:
+				_RELIEF.dress(extra, front, Vector3(w, h, d), tint, blocks, tints)
+				var bone := tint.lightened(0.3)
 				var y := 2.6
 				while y < h - 1.4:
 					var x := cx - w * 0.5 + 1.2
 					while x < cx + w * 0.5 - 1.0:
-						panes.append(Transform3D(turn, turn * Vector3(x, y, -edge + 0.04)))
+						if _RELIEF.window(extra, front, Vector3(x - cx, y, 0.0), bone, frames, frame_tints, blocks, tints):
+							panes.append(Transform3D(turn, turn * Vector3(x, y, -edge + 0.04)))
 						x += 2.2
 					y += 2.6
 	_add_multimesh("Blocks", BoxMesh.new(), blocks, tints, false, palette[1])
+	_add_frames(frames, frame_tints)
 	_apply_gain(PowerGrid.get_stage(district_id))
 	EventBus.district_stage_changed.connect(_on_stage_changed)
 	if not panes.is_empty():
@@ -162,6 +170,25 @@ func _dress_block(rng: RandomNumberGenerator, frame: Transform3D, size: Vector3,
 				_put(blocks, tints, frame, Vector3(x, y - 0.72, 0.375), Vector3(1.5, 0.14, 0.75), lighter)
 			x += 2.2
 		y += 2.6
+
+## The frames of the panes, one mesh drawn for each in a second batch that shares the facade material (the glow and the power stage follow the blocks).
+func _add_frames(xforms: Array[Transform3D], tints: Array[Color]) -> void:
+	if xforms.is_empty():
+		return
+	var mm := MultiMesh.new()
+	mm.transform_format = MultiMesh.TRANSFORM_3D
+	mm.use_colors = true
+	mm.mesh = _RELIEF.frame_mesh()
+	mm.instance_count = xforms.size()
+	for i in xforms.size():
+		mm.set_instance_transform(i, xforms[i])
+		mm.set_instance_color(i, tints[i])
+	var mmi := MultiMeshInstance3D.new()
+	mmi.name = "WindowFrames"
+	mmi.multimesh = mm
+	mmi.material_override = _facade_mat
+	mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	add_child(mmi)
 
 func _put(blocks: Array[Transform3D], tints: Array[Color], frame: Transform3D, at: Vector3, size: Vector3, tint: Color) -> void:
 	blocks.append(frame * Transform3D(Basis.from_scale(size), at))
