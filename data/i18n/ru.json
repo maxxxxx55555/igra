@@ -1570,5 +1570,9 @@
   "THERMAL_COLD": "Холодно",
   "THERMAL_LABEL": "Тепло",
   "THERMAL_WARM": "Тепло",
-  "THERMAL_WARMING": "Прохладно"
+  "THERMAL_WARMING": "Прохладно",
+  "INV_SORT_LABEL": "Сортировка",
+  "INV_NOT_EQUIPPABLE": "Этот предмет нельзя надеть",
+  "INV_PACK_EMPTY": "Рюкзак пуст",
+  "INV_FILTER_EMPTY": "Нет предметов такой редкости"
 }

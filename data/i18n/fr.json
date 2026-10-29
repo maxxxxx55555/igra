@@ -1570,5 +1570,9 @@
   "THERMAL_COLD": "Froid",
   "THERMAL_LABEL": "Chaleur",
   "THERMAL_WARM": "Chaud",
-  "THERMAL_WARMING": "Frais"
+  "THERMAL_WARMING": "Frais",
+  "INV_SORT_LABEL": "Trier",
+  "INV_NOT_EQUIPPABLE": "Cet objet ne peut pas être équipé",
+  "INV_PACK_EMPTY": "Ton sac est vide",
+  "INV_FILTER_EMPTY": "Rien de cette rareté"
 }

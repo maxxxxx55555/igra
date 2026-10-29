@@ -5,6 +5,7 @@ extends "res://scripts/tools/_monster_frames_runner.gd"
 
 const SCREENS: Array[StringName] = [&"inventory", &"city_map", &"skill_tree", &"workbench", &"pause", &"settings", &"death", &"win", &"new_game_plus"]
 const CODEX: Array[StringName] = [&"journal", &"quests", &"achievements", &"stats", &"bestiary", &"help", &"collection"]
+const FILL: Array[StringName] = [&"plank", &"gear", &"transistor", &"wiring"]
 const PACK: Array = [[&"battery", 2], [&"medkit", 1], [&"serum", 1], [&"fuse", 2], [&"circuit", 2], [&"cable", 3], [&"scrap", 6], [&"alcohol", 1]]
 
 func _run() -> void:
@@ -20,6 +21,7 @@ func _run() -> void:
 		await _frame("ui_" + String(id))
 		UIManager.close(id)
 		await get_tree().create_timer(0.4).timeout
+	await _inventory_states()
 	for tab in CODEX:
 		UIManager.open_codex(tab)
 		await get_tree().create_timer(0.8).timeout
@@ -28,3 +30,22 @@ func _run() -> void:
 		await get_tree().create_timer(0.4).timeout
 	print("[lframes] DONE hash=%s" % _hash)
 	get_tree().quit(0)
+
+## The states of the pack the recovery brief asks to see (C1): a filter with nothing in it, a pack with one slot free, a pack with nothing in it.
+func _inventory_states() -> void:
+	UIManager.open(&"inventory")
+	await get_tree().create_timer(0.6).timeout
+	var ui: Control = UIManager._get_screen(&"inventory")
+	ui._on_filter(4)
+	await get_tree().create_timer(0.5).timeout
+	await _frame("ui_inventory_filtered_empty")
+	ui._on_filter(0)
+	for id in FILL:
+		InventoryManager.try_add(id, 1)
+	await get_tree().create_timer(0.5).timeout
+	await _frame("ui_inventory_near_capacity")
+	InventoryManager.from_dict({})
+	await get_tree().create_timer(0.5).timeout
+	await _frame("ui_inventory_empty")
+	UIManager.close(&"inventory")
+	await get_tree().create_timer(0.4).timeout

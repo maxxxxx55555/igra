@@ -1570,5 +1570,9 @@
   "THERMAL_COLD": "Cold",
   "THERMAL_LABEL": "Warmth",
   "THERMAL_WARM": "Warm",
-  "THERMAL_WARMING": "Cool"
+  "THERMAL_WARMING": "Cool",
+  "INV_SORT_LABEL": "Sort",
+  "INV_NOT_EQUIPPABLE": "This item cannot be equipped",
+  "INV_PACK_EMPTY": "Your pack is empty",
+  "INV_FILTER_EMPTY": "Nothing of this rarity"
 }

@@ -1570,5 +1570,9 @@
   "THERMAL_COLD": "Frío",
   "THERMAL_LABEL": "Calor",
   "THERMAL_WARM": "Cálido",
-  "THERMAL_WARMING": "Fresco"
+  "THERMAL_WARMING": "Fresco",
+  "INV_SORT_LABEL": "Ordenar",
+  "INV_NOT_EQUIPPABLE": "Este objeto no se puede equipar",
+  "INV_PACK_EMPTY": "Tu mochila está vacía",
+  "INV_FILTER_EMPTY": "Nada de esta rareza"
 }
