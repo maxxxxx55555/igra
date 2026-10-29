@@ -65,7 +65,7 @@ Measure before optimizing. If a required art feature exceeds budget, replace its
 
 Refactor the live `scripts/ui/inventory_ui.gd`; do not revive the archived `inventory_panel.tscn` implementation.
 
-- Use a responsive three-column composition: equipment left, item area center, persistent inspector right.
+- On wide layouts, use a responsive three-column composition: equipment left, item area center, persistent inspector right. Phone reflow follows the rule below.
 - Keep real weight, capacity, equipment, items, selection, quick slots, filters, and actions. Never add filler items or fabricate gear.
 - At the twelve-slot reference capacity, show a stable four-column by three-row grid with large cells and intentional empty states. Expanded inventories use bounded scrolling or paging without losing original inventory indices.
 - Move sorting and supported filtering into one compact toolbar. Remove the active full-width pill/cut-corner toolbar family.
