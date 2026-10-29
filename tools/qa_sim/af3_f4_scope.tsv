@@ -52,3 +52,5 @@ scripts/core/save_system.gd	cbd93b761491e72572a06251b7c508975813e122	9f0e1c49937
 scripts/ui/quick_slot_cell.gd	7faf319e8223a3f8d33d3742245554f511ce59b7	39a6667d83100a574d2ac43645b00a3df327a674	*no_frame_calls_drag_callback_outside_a_drag*
 # Session 37: the Android version code 8 to 9 (the bundle of the owner canon UI); it is read by the store, no frame shows it.
 export_presets.cfg	3cbd444fedddcf370264177a56cd2f0ce1446b72	34533c51dadcf52dd189241dd6f10bd0965d6f4e	*no_frame_shows_the_android_version_code*
+# Session 37 v7: the sting duck of 6 dB in the ducker is heard, never drawn; no frame shows it.
+scripts/systems/audio_ducker.gd	d5e5c98015dd0db46068eb84103b163fa9b5506b	e560e1c142dd0074fcd2a440a53f838a2c5a9e5c	*no_frame_hears_the_sting_duck*
