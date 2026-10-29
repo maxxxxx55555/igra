@@ -6,6 +6,9 @@ extends Node
 ## asserts the InputService state they are supposed to drive actually
 ## changes. No visible window; NO-GODOT headless-only policy respected.
 
+const JOYSTICK_SCRIPT: Script = preload("res://scripts/ui/virtual_joystick.gd")
+const HUD_SCENE: PackedScene = preload("res://scenes/ui/hud_3d.tscn")
+
 var _fails: PackedStringArray = []
 
 func _ok(cond: bool, msg: String) -> void:
@@ -79,9 +82,11 @@ func _probe_daily_challenge() -> void:
 			for i in target: EventBus.streetlight_activated.emit("probe_%d" % i)
 		"restore_districts":
 			for i in target: EventBus.district_restored.emit(StringName("probe_%d" % i), 3)
-		"play_minutes":
+		"photo_subject":
+			for i in target: EventBus.photo_captured.emit("probe_%d" % i)
+		"play_minutes", "no_flashlight_segment":
 			pass  # time-based; skip forcing completion, just check progress API exists
-	if type != "play_minutes":
+	if type not in ["play_minutes", "no_flashlight_segment"]:
 		_ok(DailyChallengeManager.is_completed_today(), "%d x %s completes the challenge" % [target, type])
 		_ok(CoinWallet.get_coins() > wallet_before, "completion pays the coin reward")
 		_ok(SaveSystem.get_daily_streak() > streak_before, "completion bumps the daily streak")
@@ -120,7 +125,7 @@ func _probe_help_screen() -> void:
 	codex.queue_free()
 
 func _probe_joystick() -> void:
-	var js_script: Script = load("res://scripts/ui/virtual_joystick.gd")
+	var js_script: Script = JOYSTICK_SCRIPT
 	var js := Control.new()
 	js.set_script(js_script)
 	js.size = Vector2(160, 160)
@@ -183,7 +188,7 @@ func _probe_joystick() -> void:
 ## cannot prove a real device's actual perceived feel — see
 ## docs/KNOWN_ISSUES.md for that honest boundary.
 func _probe_touch_timing() -> void:
-	var js_script: Script = load("res://scripts/ui/virtual_joystick.gd")
+	var js_script: Script = JOYSTICK_SCRIPT
 	var js := Control.new()
 	js.set_script(js_script)
 	js.size = Vector2(160, 160)
@@ -241,7 +246,7 @@ func _probe_touch_timing() -> void:
 	# 4. Interact-pulse fires within 100ms of proximity
 	# (EventBus.player_interact_available -> hud_3d._pulse_interact_button
 	# starts a Tween the same call, no defer).
-	var hud_scene: PackedScene = load("res://scenes/ui/hud_3d.tscn")
+	var hud_scene: PackedScene = HUD_SCENE
 	var hud := hud_scene.instantiate()
 	get_tree().root.add_child(hud)
 	var t2 := Time.get_ticks_usec()
@@ -286,7 +291,7 @@ func _probe_touch_calibration() -> void:
 
 func _probe_buttons() -> void:
 	var hud_script: Script = load("res://scripts/ui/hud_3d.gd")
-	var hud_scene: PackedScene = load("res://scenes/ui/hud_3d.tscn")
+	var hud_scene: PackedScene = HUD_SCENE
 	var hud := hud_scene.instantiate()
 	get_tree().root.add_child(hud)
 	# BtnInteract/BtnAttack wiring (_setup_button_feedback) runs
@@ -353,7 +358,7 @@ func _probe_achievements_and_share() -> void:
 func _fuzz_touch_and_settings() -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 20260911  # deterministic — a failure must reproduce
-	var js_script: Script = load("res://scripts/ui/virtual_joystick.gd")
+	var js_script: Script = JOYSTICK_SCRIPT
 	var js := Control.new()
 	js.set_script(js_script)
 	js.size = Vector2(160, 160)
