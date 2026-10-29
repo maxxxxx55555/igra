@@ -60,6 +60,8 @@ func _spawn(scene: String) -> Node3D:
 	var monster := (load("res://scenes/enemies/%s.tscn" % scene) as PackedScene).instantiate() as Node3D
 	monster.set("_music_started", true)
 	_vp.add_child(monster)
+	if OS.has_environment("TLS_FRAMES_LIFT"):  # the canon tints are nearly black: a lifted grey (0..1) shows the form
+		((monster.get("_rig") as Node).get("_mat") as StandardMaterial3D).albedo_color = Color.WHITE * float(OS.get_environment("TLS_FRAMES_LIFT"))
 	var capsule := (monster.get_node("CollisionShape3D") as CollisionShape3D).shape as CapsuleShape3D
 	monster.position = Vector3(0.0, capsule.height * 0.5, 0.0)
 	monster.set_physics_process(false)

@@ -107,3 +107,14 @@ Then, on a machine that can render (this sandbox now can — see
 open `res://scenes/main_3d.tscn`, step through a district transition per
 weather/stage, and eyeball the moon shadow edge, the fog card placement
 candidates, and the wet-asphalt/foliage assignment before wiring W3-W5/L1.
+
+## Visual overhaul protocol and approvals journal (owner canon of 2026-10-29)
+
+Every visual batch is one commit and one row below (APPROVED, REWORK(n) or REVERTED, and the basis of the approval); one revert undoes a batch. A batch is held by the static battery, by a frame that was looked at, and for the 3D world by the gates of
+lighting and combat. The style is `docs/STYLE_GUIDE.md` section 8 and the sheets of `docs/art/style_reference/`; UI chrome (chamfers, the brass icon family, the fonts) stays as `docs/UI_CONSISTENCY.md` has it, art does not draw buttons, frames or HUD icons.
+The brightness of dark zones is stealth balance: no batch raises it (`lighting_stage_sim`, GRADE1).
+
+| Batch | Content | Basis | Status |
+|---|---|---|---|
+| pass 2 | 29 repainted 2D slots of the other agent (`docs/ART_PASS_2.md`) | merged in PR 34 after review | stays until replaced; the owner called it bad on 2026-10-29; a replacement needs an image model, which the agent does not have |
+| M1 | monsters: lofted faceted shapes (`scripts/art/monster_meshes.gd`), same nodes, pivots and hitboxes | the owner's standing instruction of 2026-10-29 to finish everything; frames in `.qa_logs/evidence/monsters/`, bots 3 of 3 at Normal and Hard | APPROVED by delegation, not reviewed per batch: the owner can revert the merge commit |

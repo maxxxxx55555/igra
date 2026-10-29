@@ -98,3 +98,25 @@ restore the seam, then clamp the palette — in that order. The same wrap-blend 
 `<district>_<surface>[_lit].png`, `crest_<district>_96.png`, `<district>_loading.png`,
 `<district>_<detail>.ogg` for ambience one-shots, `<district>_dark|_lit.ogg` for beds.
 Lowercase snake_case, no spaces, no version suffixes in shipped paths.
+
+## 8. Owner canon of 2026-10-29 (the sheets in `docs/art/style_reference/`)
+
+The owner's sheets (UI map and panels, screens, item icons, store feature) fix the look of every surface. Only the style is taken from them (palette, light, detail, the language of the node map). Their layout is a top-down 2D concept and the game is
+first-person 3D with its own UI structure, so nothing is drawn that the game does not have (skins, bundles, a team page, a title with "THE") and what the game has and the sheets lack (the flashlight cone, the visibility metric, the weather states,
+the endings) is drawn in the same canon.
+
+| Role | Hex | Note |
+|---|---|---|
+| darks | `#020c10 #0f1314 #060f13 #1c1e1d #000104 #060b0d` | near-black with a cold blue-teal undertone; `#32312b` is the only warm dark |
+| panel | one step lighter than its background | 1 px bronze border, `#5a4a2a` to `#6b5a33` |
+| accents (from light and status only) | sodium amber `#d4a94e`, heading gold `#c9a24a`, status `#7dc242` `#e0c341` `#c0392b` | |
+| text | `#d8d5cc`, secondary `#8a8a85` | never pure white |
+
+Light: one warm key per composition (a streetlight or the flashlight) with a volumetric cone and a wet reflection, a cold ambient everywhere else, desaturated shadows, highlights that do not clip (the glass of a lamp stays at or under `#e8d9b0`), thin cold
+fog, film grain. Detail: semi-realistic PBR grit (weathering, rust streaks, cracks); documents are sepia paper with handwriting and a photo on tape; item icons are PBR renders with a warm key on a transparent ground; monsters are human-sized dark
+silhouettes with a cold rim and one warm bounce. The views of the game are eye level (1.6 m, about 55 mm, the horizon in the upper third); the isometric view belongs only to `maps_v2/city_iso_2048.png` and `maps_v2/grid_panel_512.png` (hex nodes with
+coloured outlines on a dark aerial ground). Images are RGB PNG, never palette-quantised (the banding lesson of Session 27).
+
+Preamble of every generation, verbatim: "Semi-realistic gritty survival-horror game art, photographic PBR micro-detail, first-person eye-level view (camera 1.6 m, ~55 mm lens), night: near-black desaturated blue-teal shadows (#0f1314, #060f13), one warm
+sodium amber key light (#d4a94e) with a volumetric cone and wet-asphalt reflection, thin cold fog, subtle film grain, weathered surfaces, amber accents only from light sources, no pure white highlights, no text, no logos, no watermark, no UI elements."
+plus one line for the subject.

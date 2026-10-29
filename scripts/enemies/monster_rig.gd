@@ -4,6 +4,7 @@ extends Node
 ## stat, hitbox or AI state depends on it, and the hit flash (MonsterTelegraph, BaseMonster._hit_flash) keeps working because the parts share one StandardMaterial3D.
 
 const _Looks := preload("res://scripts/enemies/monster_looks.gd")
+const _Shapes := preload("res://scripts/art/monster_meshes.gd")
 const WINDUP: float = 0.4
 const STRIKE: float = 0.1
 const RECOVER: float = 0.3
@@ -48,48 +49,11 @@ var _alt_synced: bool = false
 static func _hash(v: Vector3) -> float:
 	return fposmod(sin(v.dot(Vector3(12.9898, 78.233, 37.719))) * 43758.5453, 1.0)
 
-static func _rough(src: PrimitiveMesh, amount: float) -> ArrayMesh:
-	var arrays: Array = src.get_mesh_arrays()
-	var verts: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
-	for i in verts.size():
-		var cell: Vector3 = (verts[i] * 8.0).round()
-		verts[i] += (Vector3(_hash(cell), _hash(cell + Vector3.ONE * 17.0), _hash(cell + Vector3.ONE * 31.0)) - Vector3.ONE * 0.5) * amount
-	arrays[Mesh.ARRAY_VERTEX] = verts
-	var out := ArrayMesh.new()
-	out.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
-	return out
-
-static func _mesh(spec: Array) -> Mesh:
-	var key: String = str(spec.slice(0, 4))
-	if _meshes.has(key):
-		return _meshes[key]
-	var a: float = spec[1]
-	var b: float = spec[2]
-	var c: float = spec[3]
-	var src: PrimitiveMesh
-	if spec[0] == "cyl":
-		var cyl := CylinderMesh.new()
-		cyl.top_radius = a
-		cyl.bottom_radius = b
-		cyl.height = c
-		cyl.radial_segments = 8
-		cyl.rings = 2
-		src = cyl
-	elif spec[0] == "box":
-		var box := BoxMesh.new()
-		box.size = Vector3(a, b, c)
-		box.subdivide_width = 1
-		box.subdivide_height = 2
-		box.subdivide_depth = 1
-		src = box
-	else:
-		var sph := SphereMesh.new()
-		sph.radius = a
-		sph.height = a * 2.0
-		sph.radial_segments = 10
-		sph.rings = 5
-		src = sph
-	_meshes[key] = _rough(src, clampf((a + b + c) / 3.0 * 0.1, 0.008, 0.05))
+## One mesh per shape and form, shared by every monster of a kind (monster_meshes.gd builds it).
+static func _mesh(spec: Array, form: Dictionary, head: bool) -> Mesh:
+	var key: String = str(spec.slice(0, 4)) + str(form) + str(head)
+	if not _meshes.has(key):
+		_meshes[key] = _Shapes.build(spec, form, head)
 	return _meshes[key]
 
 func build(monster: Node3D, id: StringName) -> void:
@@ -106,7 +70,11 @@ func build(monster: Node3D, id: StringName) -> void:
 	monster.add_child(_root)
 	_mat = StandardMaterial3D.new()
 	_mat.albedo_color = _look["tint"]
+	_mat.vertex_color_use_as_albedo = true  # the sockets of a skull are a darker vertex colour (monster_meshes.gd); a hit flash copies the material, so it keeps them
 	_mat.roughness = 0.9
+	_mat.rim_enabled = true  # a dark body in a dark street reads by its edge against the lamps
+	_mat.rim = 0.3
+	_mat.rim_tint = 0.4
 	if _look.has("emit"):
 		_mat.emission_enabled = true
 		_mat.emission = _look["emit"]
@@ -121,16 +89,16 @@ func build(monster: Node3D, id: StringName) -> void:
 	_torso.position.y = _hip_y
 	_root.add_child(_torso)
 	_part("BodyMesh", body, _torso, -_hip_y, _mat)
-	_head = _part("HeadMesh", _look["head"], _torso, -_hip_y, _mat)
+	_head = _part("HeadMesh", _look["head"], _torso, -_hip_y, _mat, true)
 	_legs = _limbs(legs, _root, 0.0, "Leg")
 	_arms = _limbs(_look["arms"], _torso, -_hip_y, "Arm")
 	if id == &"crawler":
 		_alt(monster)
 
-func _part(part_name: String, spec: Array, parent: Node3D, dy: float, mat: Material) -> MeshInstance3D:
+func _part(part_name: String, spec: Array, parent: Node3D, dy: float, mat: Material, head: bool = false) -> MeshInstance3D:
 	var mi := MeshInstance3D.new()
 	mi.name = part_name
-	mi.mesh = _mesh(spec)
+	mi.mesh = _mesh(spec, _look.get("form", {}), head)
 	mi.material_override = mat
 	mi.position = Vector3(0.0, float(spec[4]) + dy, float(spec[5]))
 	parent.add_child(mi)
@@ -147,7 +115,7 @@ func _limbs(spec: Array, parent: Node3D, dy: float, tag: String) -> Array[Node3D
 		var z: float = float(spec[5]) * (-1.0 if i < 2 else 1.0) if count == 4 else float(spec[5])
 		pivot.position = Vector3((-1.0 if i % 2 == 0 else 1.0) * float(spec[3]), float(spec[4]) + dy, z)
 		parent.add_child(pivot)
-		var limb := _part("%sMesh" % tag, ["box", spec[1], length, spec[1], -length * 0.5, 0.0], pivot, 0.0, _mat)
+		var limb := _part("%sMesh" % tag, [tag.to_lower(), spec[1], length, 0.0, -length * 0.5, 0.0], pivot, 0.0, _mat)
 		limb.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		out.append(pivot)
 	return out
