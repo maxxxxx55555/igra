@@ -32,14 +32,14 @@ reads this file first**, per the rule added to `CLAUDE.md`.
 
 | Token | Hex | Use |
 |---|---|---|
-| bg-deep | `#0c1016` | Screen backgrounds |
-| panel | `#141b24` | UI panels |
-| panel-edge | `#2a3340` | Borders |
+| bg-deep | `#060f13` | Screen backgrounds |
+| panel | `#0f1314` | UI panels |
+| panel-edge | `#5a4a2a` | Borders (the 1 px bronze of the owner canon, `docs/STYLE_GUIDE.md` section 8) |
 | brass | `#c9a24a` | Accents, flashlight |
 | brass-dim | `#8a7338` | Inactive accents |
-| ember | `#b4452f` | Danger, HP |
-| steel-text | `#aeb6bf` | Body text |
-| bone-text | `#d8d2c4` | Headings |
+| ember | `#c0392b` | Danger, HP |
+| steel-text | `#8a8a85` | Body text |
+| bone-text | `#d8d5cc` | Headings |
 | stamina | `#5f8a4e` | Stamina |
 | teal | `#4a9ab5` | Info |
 

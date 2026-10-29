@@ -10,10 +10,10 @@ const QUICK_SLOTS := preload("res://scripts/ui/quick_slots.gd")
 const RADIUS: float = 184.0
 const DEADZONE: float = 18.0
 const SLOT_COUNT: int = 6
-const PANEL := Color("#141b24")
-const BRASS := Color("#c9a24a")
+const PANEL := ThemeProvider.COLOR_BG_PANEL
+const BRASS := ThemeProvider.COLOR_AMBER
 const BRASS_DIM := Color("#3a3226")
-const BONE := Color("#d8d2c4")
+const BONE := ThemeProvider.COLOR_TEXT
 
 ## V2 SKIN WIRING P1: same slot chrome as hud_3d.gd's quickslots, drawn under
 ## each wedge's icon position. Loaded once; null (skipped) if missing on disk.

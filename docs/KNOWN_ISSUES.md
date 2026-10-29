@@ -9,6 +9,8 @@ Closed: art pass 2 was reviewed, fixed and merged (`docs/ART_PASS_2.md`); versio
 - **The checks of the source pass have no mutation rows** (as in Session 36).
 - **Size:** version code 8 is 76.64 MiB (80.37 MB decimal), accepted for 1.0.1 (decision of 2026-10-29): the Play limit for a base module is far above it and no gate covers the size; a texture-compression pilot (`docs/artifacts/apk_size_report.md`) is the way down if a size target comes back.
 - **Owner only:** the Play Console forms, a phone, a copy of `.signing/` off this machine, and the deletion of eleven old remote branches (the agent's attempt was refused by the permission classifier; the command is in `docs/RESUME_NOTE.md`).
+- **The hit-flash check of the GOLD MASTER suite failed only inside `check.sh --all`** (Sessions 36 and 37): the fade of the last district change still held the tree paused, so no tween ticked; the check now waits for an unpaused tree (`s37_t2_46f68849` read `paused true`).
+- **Owner canon, what an agent could not do**: the sheets of 2026-10-29 ask for new raster art (menu, backdrops, cards, map, icons, encyclopedia portraits) and a listening acceptance of the music: an image model, the owner's ears and a phone are needed; the UI palette and chrome, the monsters and the records are done (`docs/VISUAL_REMAINING.md`).
 - **The tool of art pass 2** is named in `docs/ASSET_LICENSES.md` (Session 37 decisions); its output terms were not read here.
 
 ## OPEN (2026-10-28, Session 36): runtime acceptance of the source pass of 2026-10-28, and what it leaves

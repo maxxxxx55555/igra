@@ -18,7 +18,8 @@ CANON_FONTS = {"RobotoCondensed-Regular.ttf", "BebasNeue-Regular.ttf", "ShareTec
 BRASS = "#c9a24a"
 SIZE_LADDER = {8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 20, 22, 24, 28, 30, 32, 36, 44, 64}  # 15 and 30: the Mono and Huge steps of the type scale of docs/VISUAL_PASS.md W9 (theme_provider.gd)
 MAX_FACADE_CHROMA = 0.25
-PALETTE = {"0c1016", "141b24", "2a3340", "c9a24a", "8a7338", "b4452f", "aeb6bf", "d8d2c4", "5f8a4e", "4a9ab5"}
+PALETTE = {"0c1016", "141b24", "2a3340", "c9a24a", "8a7338", "b4452f", "aeb6bf", "d8d2c4", "5f8a4e", "4a9ab5",
+           "060f13", "0f1314", "1c1e1d", "5a4a2a", "8a8a85", "d8d5cc", "c0392b"}  # the last seven: the owner canon of 2026-10-29
 
 
 def shipped(globs):

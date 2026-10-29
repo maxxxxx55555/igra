@@ -29,6 +29,8 @@ read as "unlit" by default and may only gain warmth from an in-world light sourc
 | stamina | `#5f8a4e` | stamina only |
 | teal | `#4a9ab5` | info only |
 
+Moved by the owner canon of 2026-10-29 (section 8; GDD section 11.2 is superseded): bg-deep `#060f13`, panel `#0f1314`, panel-edge `#5a4a2a`, steel `#8a8a85`, bone `#d8d5cc`, ember `#c0392b`; the UI reads them from `ThemeProvider`.
+
 Banned everywhere (art included): pure `#000000`/`#ffffff`, neon, saturation > ~40% on
 surfaces (> 60% on small accents). Darkest texel in sampled tiles ≈ `#101418`, brightest
 ≈ `#d8d2c4` line art.
