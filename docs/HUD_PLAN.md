@@ -69,7 +69,7 @@ This table is the plan as it was written before the work; the Outcome section be
 | 19 | Weight bar | hud_3d.tscn WeightBar | KEEP | no textures, draws nothing: no action | - |
 | 20 | Status icons, quest tracker, district banner, toasts, tutorial card, vignettes, grain, flashes | various | KEEP | already contextual or transient: no action | - |
 | 21 | HUD scale | new setting | - | `hud_scale` slider in Settings, applied to the stat block and the radar | 3 |
-| 22 | Quest tracker | scripts/ui/quest_tracker_hud.gd, UIManager overlay | CONTEXTUAL | anchored to the screen (it was off screen); shown 8 s after an objective changes, faded at rest | 1 |
+| 22 | Quest tracker | scripts/ui/quest_tracker_hud.gd, UIManager overlay | CONTEXTUAL | anchored to the screen (it was off screen); shown 8 s after an objective changes, faded at rest; the current objective only, with no "+N more" line (the full list is the journal's, v8 contract) | 1 |
 | 23 | Touch action cluster (Attack, Interact, Sprint, Stealth) | hud_3d.tscn BottomRight | TOUCH | anchored at the corner so the offsets mean what they say; no overlap with the side buttons | 2 |
 
 ## Batches (each at most 3 items, one windowed launch, BEFORE and AFTER read)
