@@ -320,3 +320,8 @@ n	utc	head	id	exit	command
 319	20261029T083326Z	5dcff9ad	s37_p5_botA_5dcff9ad	0	bash tools/qa_sim/autoplay_bot
 320	20261029T084018Z	5dcff9ad	s37_p5_botB_5dcff9ad	0	bash tools/qa_sim/autoplay_bot
 321	20261029T084650Z	5dcff9ad	s37_p6_all2_5dcff9ad	0	bash tools/check.sh --all
+322	20261029T114459Z	bd67fe50	s37_export_bd67fe50	1	bash -c set -a; . .signing/release.env; set +a; "$GODOT_BIN" --headless --path . --export-release "Android" build/tls.aab
+323	20261029T114605Z	bd67fe50	s37_export2_bd67fe50	1	bash -c set -a; . .signing/release.env; set +a; "$GODOT_BIN" --headless --verbose --path . --export-release "Android" build/tls.aab
+324	20261029T114912Z	bd67fe50	s37_export3_bd67fe50	0	bash .qa_logs/s37_export_vc10.sh
+325	20261029T115230Z	bd67fe50	s37_uiframes_bd67fe50	0	bash -c TLS_FRAMES_HASH=v10art bash tools/qa_sim/guarded_windowed res://scenes/tools/ui_frames_scene.tscn 300
+326	20261029T115404Z	bd67fe50	s37_storeframes_bd67fe50	0	bash -c TLS_CAPTURE_HASH=bd67fe50 bash tools/qa_sim/guarded_windowed res://scenes/tools/release_frames_scene.tscn 300
