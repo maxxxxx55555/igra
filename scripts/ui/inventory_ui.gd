@@ -43,7 +43,7 @@ var _grid: GridContainer
 var _note: Label
 var _preview: TextureRect
 var _detail: VBoxContainer
-var _actions: HBoxContainer
+var _actions: VBoxContainer
 var _close: Button
 var _sort_label: Label
 var _quick_title: Label
@@ -135,31 +135,31 @@ func _build_equipment() -> void:
 
 func _build_items() -> void:
 	_put(_panel(KIT.box(KIT.PANEL, KIT.EDGE_DIM)), Rect2(280, 138, 568, 424))
-	var filters := _put(HBoxContainer.new(), Rect2(288, 144, 372, 30)) as HBoxContainer
+	var filters := _put(HBoxContainer.new(), Rect2(288, 144, 544, 28)) as HBoxContainer
 	filters.add_theme_constant_override("separation", 0)
 	for i in RARITY_KEYS.size() + 1:
 		var tab := _tab(_on_filter.bind(i))
 		filters.add_child(tab)
 		_filter_buttons.append(tab)
-	_put(_bar(Color(KIT.EDGE, 0.6)), Rect2(662, 150, 1, 18))
-	var sorts := _put(HBoxContainer.new(), Rect2(670, 144, 170, 30)) as HBoxContainer
+	var sorts := _put(HBoxContainer.new(), Rect2(288, 174, 544, 26)) as HBoxContainer
 	sorts.add_theme_constant_override("separation", 0)
 	_sort_label = KIT.label("", 13, KIT.TEXT_DIM)
 	_sort_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_sort_label.custom_minimum_size.x = 64.0
 	sorts.add_child(_sort_label)
 	for i in SORT_MODES.size():
 		var tab := _tab(_on_sort.bind(i))
 		tab.add_theme_font_size_override("font_size", 14)
 		sorts.add_child(tab)
 		_sort_buttons.append(tab)
-	var scroll := _put(ScrollContainer.new(), Rect2(328, 178, 480, 352)) as ScrollContainer
+	var scroll := _put(ScrollContainer.new(), Rect2(328, 206, 480, 352)) as ScrollContainer
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	_grid = GridContainer.new()
 	_grid.columns = COLUMNS
 	_grid.add_theme_constant_override("h_separation", GAP)
 	_grid.add_theme_constant_override("v_separation", GAP)
 	scroll.add_child(_grid)
-	_note = _put(KIT.label("", 16, KIT.TEXT_DIM), Rect2(328, 330, 472, 40)) as Label
+	_note = _put(KIT.label("", 16, KIT.TEXT_DIM), Rect2(328, 360, 472, 40)) as Label
 	_note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 
 func _build_inspector() -> void:
@@ -170,10 +170,10 @@ func _build_inspector() -> void:
 	_preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	_preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_put(_preview, Rect2(940, 156, 224, 164))
-	_detail = _put(VBoxContainer.new(), Rect2(884, 336, 336, 156)) as VBoxContainer
+	_detail = _put(VBoxContainer.new(), Rect2(884, 334, 336, 124)) as VBoxContainer
 	_detail.add_theme_constant_override("separation", 4)
-	_actions = _put(HBoxContainer.new(), Rect2(884, 504, 336, 44)) as HBoxContainer
-	_actions.add_theme_constant_override("separation", GAP)
+	_actions = _put(VBoxContainer.new(), Rect2(884, 464, 336, 84)) as VBoxContainer
+	_actions.add_theme_constant_override("separation", 6)
 
 func _build_footer() -> void:
 	_put(_panel(KIT.box(KIT.PANEL, KIT.EDGE_DIM)), Rect2(44, 584, 1192, 88))
@@ -198,11 +198,11 @@ func _build_footer() -> void:
 		target.add_child(icon_box)
 		strip.add_child(target)
 		_quick_targets.append(target)
-	_quick_hint = _put(KIT.label("", 14, KIT.TEXT_DIM), Rect2(448, 612, 236, 52)) as Label
+	_quick_hint = _put(KIT.label("", 13, KIT.TEXT_DIM), Rect2(448, 610, 262, 56)) as Label
 	_quick_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_vitals = _put(KIT.label("", 16, KIT.TEXT), Rect2(704, 596, 264, 68)) as Label
+	_vitals = _put(KIT.label("", 15, KIT.TEXT), Rect2(718, 596, 262, 68)) as Label
 	_vitals.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_hints = _put(KIT.label("", 14, KIT.TEXT_DIM), Rect2(984, 596, 240, 68)) as Label
+	_hints = _put(KIT.label("", 14, KIT.TEXT_DIM), Rect2(990, 596, 234, 68)) as Label
 	_hints.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_hints.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 
@@ -264,6 +264,9 @@ func _refresh() -> void:
 		_filter_buttons[i + 1].text = LocalizationManager.t(RARITY_KEYS[i]).to_upper()
 	for i in _filter_buttons.size():
 		KIT.style_button(_filter_buttons[i], &"tab", i == _filter + 1)
+		KIT.fit(_filter_buttons[i], 108.0, 16, 12)
+	for tab in _sort_buttons:
+		KIT.fit(tab, 150.0, 14, 12)
 	for cell in _grid.get_children():
 		cell.queue_free()
 	var first := -1
@@ -347,9 +350,16 @@ func _refresh_detail() -> void:
 	_detail.add_child(_line(LocalizationManager.t(RARITY_KEYS[clampi(int(data.rarity), 0, RARITY_KEYS.size() - 1)]), 15, KIT.TEXT_DIM))
 	_detail.add_child(_line(LocalizationManager.tf("INV_ITEM_WEIGHT", [data.weight * count, count]), 16))
 	_detail.add_child(_line(_effect_text(data), 16))
-	_actions.add_child(_action(LocalizationManager.t("INV_USE").to_upper(), data.consumable, LocalizationManager.t("INV_NOT_USABLE"), func() -> void: _on_use()))
-	_actions.add_child(_action(LocalizationManager.t("INV_EQUIP").to_upper(), data.equip_slot != ItemData.EquipSlot.NONE, LocalizationManager.t("INV_NOT_EQUIPPABLE"), func() -> void: _on_equip()))
-	_actions.add_child(_action(LocalizationManager.t("INV_DROP_CONFIRM" if _drop_armed else "INV_DROP").to_upper(), true, "", func() -> void: _on_drop(), &"danger"))
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", GAP)
+	_actions.add_child(row)
+	row.add_child(_action(LocalizationManager.t("INV_USE").to_upper(), data.consumable, LocalizationManager.t("INV_NOT_USABLE"), func() -> void: _on_use()))
+	row.add_child(_action(LocalizationManager.t("INV_EQUIP").to_upper(), data.equip_slot != ItemData.EquipSlot.NONE, LocalizationManager.t("INV_NOT_EQUIPPABLE"), func() -> void: _on_equip()))
+	var drop := _action(LocalizationManager.t("INV_DROP_CONFIRM" if _drop_armed else "INV_DROP").to_upper(), true, "", func() -> void: _on_drop(), &"danger")
+	_actions.add_child(drop)
+	for button: Button in [row.get_child(0), row.get_child(1)]:
+		KIT.fit(button, 164.0, 18, 13)
+	KIT.fit(drop, 336.0, 18, 13)
 
 func _effect_text(data: ItemData) -> String:
 	match data.effect:
@@ -393,6 +403,7 @@ func _refresh_equipment() -> void:
 		var row := _action("%s   %s" % [LocalizationManager.t(String(EQUIP_KEYS[equip_slot])).to_upper(), shown], not worn.is_empty(), "",
 			func() -> void: InventoryManager.unequip_item(equip_slot), &"row")
 		row.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		row.clip_text = true
 		row.custom_minimum_size = Vector2(192.0, 30.0)
 		row.add_theme_font_size_override("font_size", 15)
 		_equip_rows.add_child(row)

@@ -70,6 +70,15 @@ static func style_button(button: Button, kind: StringName, active: bool = false)
 	button.add_theme_color_override("font_pressed_color", AMBER)
 	button.add_theme_color_override("font_disabled_color", Color(TEXT_DIM, 0.45))
 
+## The largest font size from `max_size` down to `min_size` at which the text of a button, in the face its theme gives it, fits `width` less its padding: a longer language than English (German, Russian) shrinks the text
+## before it clips. Call it once the button is in the tree, after its text is set.
+static func fit(button: Button, width: float, max_size: int, min_size: int) -> void:
+	var font := button.get_theme_font("font")
+	var size := max_size
+	while size > min_size and font.get_string_size(button.text, HORIZONTAL_ALIGNMENT_LEFT, -1, size).x > width - 16.0:
+		size -= 1
+	button.add_theme_font_size_override("font_size", size)
+
 ## A label in the face of a heading (Bebas) or of the body (the theme's), with the palette's colour and a size in design pixels.
 static func label(text: String, size: int, color: Color = TEXT, heading: bool = false) -> Label:
 	var item := Label.new()
