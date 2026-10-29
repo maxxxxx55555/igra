@@ -164,6 +164,7 @@ This section is the canon of the visual overhaul; it replaces the earlier readin
 6. No pure white and no saturated surface colours; the canon palette: darks `#020c10 #0f1314 #060f13 #1c1e1d #32312b`, amber `#d4a94e` and `#c9a24a` only from light sources, statuses `#7dc242 #e0c341 #c0392b`, text `#d8d5cc`.
 7. No new asset in main without a side-by-side of it with the tile of the sheet in the request for approval and an APPROVED row in the journal below.
 8. The owner is not asked about anything in the decisions above.
+9. No new game elements: no mechanic, item, quest, interactive, screen, menu entry, mode, HUD component or UI node that the current game lacks; only the art layers of existing wired slots are replaced. Elements of the sheets that the game does not have (a round minimap, a joystick and round buttons, skins, IAP packs, "project team", weather thumbnails without a wired slot) are never added. The one exception is the B9 decoration (set pieces and layers of life): non-interactive, no change to any mechanic, assembled from the existing prop systems, and only with the owner's APPROVED before/after frames for each district (prompt (6) of 2026-10-29).
 
 ### Canon preamble of every generation (verbatim, plus the subject line of the slot)
 
@@ -186,7 +187,7 @@ detail read as relief and albedo and not as glow; the side-by-side with the tile
 
 ### World interest pass (B9)
 
-Every district tells its story without text, in the canon of the sheets: (1) 3 to 5 set pieces per district from `docs/CONTENT_WORLD_BIBLE.md`, assembled from the existing prop systems (`street_props.gd` and the prop families of the sheets), no new system (a missing prop is a new wired texture or mesh by the specification of the sheets, with gates);
+Every district tells its story without text, in the canon of the sheets: (1) 3 to 5 set pieces per district from `docs/CONTENT_WORLD_BIBLE.md`, assembled from the existing prop systems (`street_props.gd` and the prop families of the sheets), no new system (a missing prop is a new wired texture or mesh by the specification of the sheets, with gates); the set pieces are non-interactive decor, with no new mechanic, item, quest or interactive (prohibition 9);
 (2) layers of life by decals (a minimal decal support with gates if there is none): missing-person posters, district graffiti marks, puddles, tracks, litter, leaflets, and 3 or more variants of a bin or a bench; (3) light moments: shafts of light from windows and breaches, wires in silhouette against the sky, one distant flash per district (budget), weather touches;
 (4) all of it in the darkness of the canon: interest is silhouette, rhythm of light and detail, not brightness and not coloured patches; stealth readability and `lighting_stage_sim` and GRADE1 stay whole; (5) the batch goes through the journal as the others: before/after frames per district and the owner's APPROVED on each.
 
