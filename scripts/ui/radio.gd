@@ -3,7 +3,7 @@ extends Control
 @export var enable_radio: bool = true
 
 const PANEL := ThemeProvider.COLOR_BG_PANEL
-const PANEL_EDGE := ThemeProvider.COLOR_BORDER
+const INSET_FILL := ThemeProvider.COLOR_BG_PANEL2
 const BRASS := ThemeProvider.COLOR_AMBER
 const BRASS_DIM := ThemeProvider.COLOR_AMBER_DIM
 const EMBER := ThemeProvider.COLOR_DANGER
@@ -109,7 +109,7 @@ func _build_ui() -> void:
 	_player_panel.add_child(_channel_name)
 
 	var waveform_bg := ColorRect.new()
-	waveform_bg.color = PANEL_EDGE
+	waveform_bg.color = INSET_FILL
 	waveform_bg.size = Vector2(_player_panel.size.x - 20, 60)
 	waveform_bg.position = Vector2(10, 34)
 	_player_panel.add_child(waveform_bg)

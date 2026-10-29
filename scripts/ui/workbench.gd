@@ -3,7 +3,7 @@ extends Control
 @export var enable_workbench: bool = true
 
 const PANEL := ThemeProvider.COLOR_BG_PANEL
-const PANEL_EDGE := ThemeProvider.COLOR_BORDER
+const INSET_FILL := ThemeProvider.COLOR_BG_PANEL2
 const BRASS := ThemeProvider.COLOR_AMBER
 const BRASS_DIM := ThemeProvider.COLOR_AMBER_DIM
 const EMBER := ThemeProvider.COLOR_DANGER
@@ -110,7 +110,7 @@ func _build_craft_panel() -> void:
 	for i in RECIPES.size():
 		var r := RECIPES[i]
 		var row = ColorRect.new()
-		row.color = PANEL_EDGE
+		row.color = INSET_FILL
 		row.custom_minimum_size = Vector2(list_w - 6, 34)
 		row.size = Vector2(list_w - 6, 34)
 		row.visible = Logic.is_available(r)
@@ -340,7 +340,7 @@ func _refresh_salvage() -> void:
 		var item_id = slot["item_id"]
 		var cnt = slot["count"]
 		var row = ColorRect.new()
-		row.color = PANEL_EDGE
+		row.color = INSET_FILL
 		row.custom_minimum_size = Vector2(_salvage_vbox.size.x - 6, 30)
 		row.size = Vector2(_salvage_vbox.size.x - 6, 30)
 		_salvage_vbox.add_child(row)
