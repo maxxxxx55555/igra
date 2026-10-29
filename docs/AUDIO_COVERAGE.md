@@ -469,29 +469,30 @@ The numbers a script can read; the ear is the owner's (the listening sheet). KEE
 | `cue_first_light` | cue | 60 | 0.000 | -18.1 | 185 (0.66) | 2848 | KEEP |
 | `cue_grid_cascade` | cue | 90 | 0.000 | -18.0 | 185 (0.95) | 2725 | KEEP |
 | `cue_victory` | cue | 120 | 0.000 | -18.1 | 185 (0.49) | 1447 | KEEP |
-| `gas_station` | district | 35 | 0.037 | -18.0 | 108 (0.47) | 1478 | RE-EDIT: loop of 35 s (at least 60) |
-| `hospital` | district | 40 | 0.003 | -18.0 | 117 (0.47) | 1293 | RE-EDIT: loop of 40 s (at least 60) |
+| `gas_station` | district | 75 | 0.000 | -18.0 | 108 (0.24) | 1444 | KEEP |
+| `hospital` | district | 75 | 0.002 | -18.0 | 117 (0.37) | 1178 | KEEP |
 | `layer_action` | layer | 60 | 0.001 | -18.1 | 117 (0.43) | 4151 | KEEP |
 | `layer_dark` | layer | 118 | 0.003 | -17.9 | - (0.00) | 78 | KEEP |
 | `layer_lit` | layer | 118 | 0.000 | -18.0 | - (0.09) | 164 | KEEP |
 | `layer_threat_high` | layer | 60 | 0.000 | -18.0 | 89 (0.49) | 2176 | KEEP |
 | `layer_threat_low` | layer | 60 | 0.000 | -18.0 | 60 (0.45) | 100 | KEEP |
-| `music_battle` | combat | 24 | 0.000 | -18.0 | 117 (0.43) | 3151 | RE-EDIT: loop of 24 s (at least 60); 117 BPM (or 59, 235), the row says 90 to 110 |
+| `music_battle` | combat | 65 | 0.010 | -18.0 | 108 (0.25) | 3022 | KEEP |
 | `music_boss_dark_p1` | boss | 45 | 0.008 | -18.0 | 108 (0.27) | 685 | KEEP |
 | `music_boss_dark_p2` | boss | 45 | 0.002 | -18.1 | 108 (0.47) | 3100 | KEEP |
 | `music_boss_dark_p3` | boss | 45 | 0.007 | -18.1 | 123 (0.29) | 2398 | KEEP |
-| `music_combat` | combat | 45 | 0.003 | -18.0 | 129 (0.51) | 5199 | REPLACE: loop of 45 s (at least 60); 129 BPM (or 65, 258), the row says 90 to 110 |
+| `music_combat` | combat | 75 | 0.012 | -18.0 | 99 (0.37) | 4691 | KEEP |
 | `music_menu_dark` | menu | 120 | 0.001 | -18.1 | 129 (0.58) | 531 | KEEP |
-| `music_tension` | tension | 24 | 0.012 | -18.0 | 185 (0.51) | 925 | REPLACE: loop of 24 s (at least 60); 185 BPM (or 92, 369), the row says 70 to 85 |
+| `music_tension` | tension | 70 | 0.004 | -18.0 | 161 (0.43) | 827 | KEEP |
 | `music_victory` | victory | 14 | 0.013 | -17.9 | 185 (0.91) | 891 | KEEP |
-| `police` | district | 28 | 0.008 | -18.0 | 62 (0.45) | 1519 | RE-EDIT: loop of 28 s (at least 60) |
-| `power_station` | district | 32 | 0.010 | -18.0 | 108 (0.42) | 1972 | RE-EDIT: loop of 32 s (at least 60) |
-| `school` | district | 34 | 0.010 | -18.1 | 108 (0.30) | 1255 | RE-EDIT: loop of 34 s (at least 60) |
-| `substation` | district | 34 | 0.010 | -18.0 | 103 (0.36) | 1588 | RE-EDIT: loop of 34 s (at least 60) |
-| `suburbs` | district | 37 | 0.000 | -18.0 | 185 (0.32) | 619 | RE-EDIT: loop of 37 s (at least 60) |
-| `warehouses` | district | 38 | 0.006 | -18.0 | 152 (0.40) | 1814 | RE-EDIT: loop of 38 s (at least 60) |
-
+| `police` | district | 69 | 0.026 | -18.0 | - (0.14) | 1483 | KEEP |
+| `power_station` | district | 75 | 0.028 | -18.1 | 103 (0.15) | 1967 | KEEP |
+| `school` | district | 75 | 0.005 | -18.1 | 103 (0.15) | 1197 | KEEP |
+| `substation` | district | 75 | 0.020 | -18.0 | 103 (0.23) | 1573 | KEEP |
+| `suburbs` | district | 75 | 0.016 | -18.0 | 172 (0.29) | 620 | KEEP |
+| `warehouses` | district | 75 | 0.004 | -18.0 | 144 (0.23) | 1815 | KEEP |
 ## Briefs for the tracks the audit marks REPLACE or RE-EDIT (MEGA_PROMPT v7 phase 3)
+
+**Handled on 2026-10-29 without new material** by `tools/qa_sim/music_extend.sh`: a tempo stretch where a row was missed (`music_combat` x0.814, `music_tension` x0.848, `music_battle` x0.897) and, for the eleven tracks, a loop of 65 to 75 s made of three passes of the track at the tempo and 5 % either side with 1 s crossfades, cut and levelled by `music_post.py`; the audit above reads 25 KEEP. The briefs below stay the way to new material; the owner's ear has not heard the result (the originals are in the git history and in `.qa_logs/music_orig/`).
 
 The owner generates them (the Gemini app, the Music skill, Flash-Lite selector only, as in Session 27); a take is cut by `python tools/qa_sim/music_post.py <take> <target.ogg> --loop 60` (it picks the steadiest stretch, closes the seam and levels to -18 LUFS) and read again by `python tools/qa_sim/music_audit.py --write`. Ask for 75 s or more so that a steady 60 s stretch exists: instrumental, no voices, no recognisable hook, a dark mix.
 

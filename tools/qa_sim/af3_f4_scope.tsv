@@ -55,3 +55,4 @@ export_presets.cfg	3cbd444fedddcf370264177a56cd2f0ce1446b72	34533c51dadcf52dd189
 # Session 37 v7: the sting duck of 6 dB in the ducker is heard, never drawn; no frame shows it.
 scripts/systems/audio_ducker.gd	d5e5c98015dd0db46068eb84103b163fa9b5506b	e560e1c142dd0074fcd2a440a53f838a2c5a9e5c	*no_frame_hears_the_sting_duck*
 export_presets.cfg	34533c51dadcf52dd189241dd6f10bd0965d6f4e	7fdf0b1077d8c078dc69bacf52df4f23625c2d60	*no_frame_shows_the_android_version_code*
+export_presets.cfg	7fdf0b1077d8c078dc69bacf52df4f23625c2d60	edc75c3e0d50cf4f1190c5766cfde18a2f3a06cc	*no_frame_shows_the_android_version_code*
