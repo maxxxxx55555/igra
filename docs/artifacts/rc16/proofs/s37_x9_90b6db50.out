@@ -1,0 +1,83 @@
+# proof s37_x9_90b6db50
+# utc 20261029T024755Z
+# head 90b6db50 (uncommitted paths: 26)
+# env none
+# cmd bash .qa_logs/s37_x9.sh
+store and key password: the same
+# STEP export_android 05:47:56
+# STEP export_android rc=0 05:49:55
+bundle: 80375902 bytes sha256 08c8e320d77c6550e7515c8c0ab970bfc9e3e726b4ecfe9c5eccd73ab52c3b88
+# STEP aab_check 05:49:55
+manifest package=com.maxsimkasky.laststreetlight expected=com.maxsimkasky.laststreetlight: ok
+manifest versionCode=9 expected=9: ok
+manifest versionName=1.0.1 expected=1.0.1: ok
+size    80375902 bytes
+sha256  08c8e320d77c6550e7515c8c0ab970bfc9e3e726b4ecfe9c5eccd73ab52c3b88
+entries 2463
+label   base/resources.pb names Last Streetlight: ok
+adsdk   0 dex entries name Lcom/applovin/: ok
+integrity 37 file(s) of the manifest, 0 missing or with other bytes: ok
+refs    0 file(s) or patterns named by the shipped files are not in the bundle: ok
+secrets 2 value(s) of the environment searched in 2460 entries: 0 hits (path, password)
+jar     jar verified.
+signer  a4a7c2c27e7892f1...: signer_match=yes
+against tls_s37_vcode8.aab: 0 entries gone, 2 new, 88 with other bytes
+  new     assetPackInstallTime/assets/scripts/art/monster_meshes.gd.remap
+  new     assetPackInstallTime/assets/scripts/art/monster_meshes.gdc
+  changed BUNDLE-METADATA/com.android.tools.build.profiles/baseline.prof
+  changed META-INF/MANIFEST.MF
+  changed META-INF/TLS_RELE.RSA
+  changed META-INF/TLS_RELE.SF
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-0084dca552d5c580923498b4772cbfe7-skill_button.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-0ed51c62093e1c93af7834120fc212f2-skill_tree_ui.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-1f14c609521b342beafd236e757bed9c-credits.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-3c41ccebfc547fb0f28695a81adc5bee-stats_screen.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-40f2be3c2a64b209c26808bacd77b454-boot_loading.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-45e35a12bea193284ea15a6d851fb379-photo_album.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-49cefb575a91ebb5dc739cb122aef27f-pre_loading.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-597225e8f73e8a23a72a55117662c42a-theme_tls.res
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-66a3bce33f25c13c6fdcd8b3d18cb164-difficulty_screen.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-79dd3ab530fc0aed4f9ba21f09ab2efd-main_menu.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-9f23d844a6900439d146f128bc2bc4c4-splash.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-b2d63c612343d1f81cf91773f7f2b713-confirm_quit.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-bfa2debe0c23981cbbcb58d798e1ff9e-daily_events.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-de254b77e2e14394365fde8021eef8bf-hud_3d.scn
+  changed assetPackInstallTime/assets/.godot/exported/133200997/export-f29c82e562540505af7e842ff332696b-theme_main.res
+  changed assetPackInstallTime/assets/.godot/global_script_class_cache.cfg
+  changed assetPackInstallTime/assets/.godot/imported/bar_frame_256x24.png-7a40efba992fe42d39c0457848b450b3.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/bar_track_256x8.png-1338f6217a769963a174cdde69b72bbc.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/btn_action_128.png-770efcef437307d41282d49c34c5ae77.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/btn_crouch_128.png-bf515cc2988af6ce2426d8a76d989e70.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/btn_dodge_128.png-4211bafcfa19046812ebc15736b0e20e.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/btn_flashlight_128.png-e94ae2341acbb4ab839f2e77e8839827.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/btn_jump_128.png-8895f41e77e891d37d27d1d636b3083f.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/btn_secondary_normal_256x64.png-56063869c253b2a24bc31933f1b60c13.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/btn_special_hold_128.png-cd399dd169634129561435e89617d743.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/btn_tex_disabled.png-d0c8f1fa7b004cc9ba09d128765949ee.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/btn_tex_hover.png-86c15740990e6fbd2b9a0d4e8e231ef8.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/btn_tex_normal.png-6c1610f3aba72c8b56c3770a495ae51e.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/btn_tex_pressed.png-40ec9e9291291a469069fb0101d0527c.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/equip_slot_v2_96.png-fa4b1849efcacea44ffb1982306426e2.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/inventory_slot.png-a3c52091015c53c565c0c7ded7a7c0e7.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/minimap_frame_256.png-19bb90cce8c4715390c2235eeee12537.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/panel_small_128.png-3de2c32e6de7bc21402b0c6f5a128649.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/progress_frame.png-b924de061e4fd40dd7356cd089faf328.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/quickslot_v2_72.png-fa5e499539a3bf6287e56306de22c559.astc.ctex
+  changed assetPackInstallTime/assets/.godot/imported/save_icon_brass_64.png-6a0f210a7883c70764a9a5c5fe0a9f13.astc.ctex
+  changed ... and 48 more
+aab_check: PASS
+# STEP aab_check rc=0 05:50:09
+# STEP release_export_check 05:50:09
+NOTE: keystore/release is empty - expected pre-release state (no signed release build cut yet), not a failure
+NOTE: keystore/release_user is empty - expected pre-release state (no signed release build cut yet), not a failure
+NOTE: keystore/release_password is empty - expected pre-release state (no signed release build cut yet), not a failure
+build\tls.aab: 0 packed file(s) that are not the game
+
+PASS
+# STEP release_export_check rc=0 05:50:10
+# STEP export_refs 05:50:10
+export_refs_check: 503 shipped file(s) read for the Android preset against the bundle, 0 violation(s), 0 note(s)
+# STEP export_refs rc=0 05:50:16
+ M docs/artifacts/rc16/launch_ledger.tsv
+# STEP done
+# EXIT=0

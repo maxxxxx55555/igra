@@ -122,3 +122,5 @@ coloured outlines on a dark aerial ground). Images are RGB PNG, never palette-qu
 Preamble of every generation, verbatim: "Semi-realistic gritty survival-horror game art, photographic PBR micro-detail, first-person eye-level view (camera 1.6 m, ~55 mm lens), night: near-black desaturated blue-teal shadows (#0f1314, #060f13), one warm
 sodium amber key light (#d4a94e) with a volumetric cone and wet-asphalt reflection, thin cold fog, subtle film grain, weathered surfaces, amber accents only from light sources, no pure white highlights, no text, no logos, no watermark, no UI elements."
 plus one line for the subject.
+
+The tokens are held in code, not copied: `ThemeProvider` owns them, the screens read them, and `tools/retint_ui_chrome.py` moves a literal copy of an old token in a UI theme, scene or script (and the flat chrome PNGs); `tools/qa_sim/consistency_check.py --check` fails on a colour of the old tokens in those files. The bronze `#5a4a2a` is a 1 px border and a line, never a fill: an inset row, a bar background or a silhouette takes `COLOR_BG_PANEL2` (`#1c1e1d`).

@@ -1,0 +1,10 @@
+# proof s37_c2_cf6caa11
+# utc 20261029T023054Z
+# head cf6caa11 (uncommitted paths: 24)
+# env none
+# cmd bash .qa_logs/s37_all.sh
+check.sh --all rc=1
+  FAIL timing_inventory (см. 'python tools/qa_sim/timing_inventory.py --gate')
+Провалено: 1, пройдено: 95
+# STEP done
+# EXIT=0

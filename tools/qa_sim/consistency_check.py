@@ -20,7 +20,7 @@ CANON_FONTS = {"RobotoCondensed-Regular.ttf", "BebasNeue-Regular.ttf", "ShareTec
 BRASS = "#c9a24a"
 SIZE_LADDER = {8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 20, 22, 24, 28, 30, 32, 36, 44, 64}  # 15 and 30: the Mono and Huge steps of the type scale of docs/VISUAL_PASS.md W9 (theme_provider.gd)
 MAX_FACADE_CHROMA = 0.25
-PALETTE = {"0c1016", "141b24", "2a3340", "c9a24a", "8a7338", "b4452f", "aeb6bf", "d8d2c4", "5f8a4e", "4a9ab5",
+PALETTE = {"c9a24a", "8a7338", "5f8a4e", "4a9ab5",
            "060f13", "0f1314", "1c1e1d", "5a4a2a", "8a8a85", "d8d5cc", "c0392b"}  # the last seven: the owner canon of 2026-10-29
 
 
@@ -117,7 +117,7 @@ def report():
     bad += ["odd spacing %d" % v for v in sp if v % 2]
     c = ui_colours()
     on = sum(n for h, n in c.items() if h in PALETTE)
-    out += ["", "Hex colours of UI scripts and scenes: %d literals, %d distinct, %d (%.0f %%) in the ten tokens of the palette; off the palette: %s" % (sum(c.values()), len(c), on, 100.0 * on / max(1, sum(c.values())), " ".join(sorted(h for h in c if h not in PALETTE)))]
+    out += ["", "Hex colours of UI scripts and scenes: %d literals, %d distinct, %d (%.0f %%) in the eleven tokens of the palette; off the palette: %s" % (sum(c.values()), len(c), on, 100.0 * on / max(1, sum(c.values())), " ".join(sorted(h for h in c if h not in PALETTE)))]
     stale = ["%s:%d" % (p.relative_to(ROOT).as_posix(), n) for p, text in shipped(retint_ui_chrome.TEXT_GLOBS) for n, line in enumerate(text.splitlines(), 1) if retint_ui_chrome.retint_text(line) != line]
     bad += ["a colour of the old tokens at " + s for s in stale]
     fac = facades()
