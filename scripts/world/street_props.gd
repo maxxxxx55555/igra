@@ -34,6 +34,8 @@ var _lamp_local_positions: Array[Vector3] = []
 ## namesake beat. Before rc15 the heads glowed at 1.6 in every stage and, from a
 ## distance, read as a starfield.
 const _LampHead := preload("res://scripts/world/lamp_head.gd")
+const _HARDWARE := preload("res://scripts/world/lamp_hardware.gd")
+const _PBR := preload("res://scripts/world/pbr_sets.gd")
 var _lamp_mat: ShaderMaterial
 var _district_id: StringName = &""
 
@@ -194,8 +196,8 @@ const _LAMP_HEAD_OFFSET := Vector3(1.16, 4.2, 0.0)
 func _build_streetlight_multimesh() -> void:
 	if _lamp_local_positions.is_empty():
 		return
-	var pole_mat := StandardMaterial3D.new()
-	pole_mat.albedo_color = Color(0.165, 0.200, 0.251, 1.0)
+	var pole_mat: StandardMaterial3D = _PBR.apply(StandardMaterial3D.new(), "rusted_metal")
+	pole_mat.albedo_color = Color(0.42, 0.44, 0.48)  # the rust grain tinted dark: under the sodium light the plain blue-gray read as a yellow stick
 	var pole_mm := MultiMesh.new()
 	pole_mm.transform_format = MultiMesh.TRANSFORM_3D
 	pole_mm.mesh = _POLE_MESH
@@ -230,6 +232,7 @@ func _build_streetlight_multimesh() -> void:
 	lamp_mmi.multimesh = lamp_mm
 	lamp_mmi.material_override = _lamp_mat
 	add_child(lamp_mmi)
+	_HARDWARE.build(self, _lamp_local_positions, _LAMP_HEAD_OFFSET, pole_mat, BULB_SEGMENTS)
 
 func _on_stage_changed(id: StringName, stage: int) -> void:
 	if id == _district_id:
